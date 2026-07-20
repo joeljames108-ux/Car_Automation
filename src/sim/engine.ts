@@ -15,6 +15,7 @@ import {
   INFO_FEATURE_COSTS, INFO_AI_SAFETY_COSTS, INFO_REMOTE_APP_COSTS,
   INFO_AI_SECURITY_COSTS, INFO_PRODUCTIVITY_COSTS,
   INFO_MUSIC_OPTIONS, INFO_VIDEO_OPTIONS, INFO_GAMING_OPTIONS,
+  HYBRID_ARCHITECTURES, MOTOR_PLACEMENTS,
 } from "./constants";
 import {
   CLUSTER_LEVELS, INFOTAINMENT_SCREENS, SCREEN_TECH_OPTIONS,
@@ -134,34 +135,47 @@ function simulateCombustion(engine: EngineConfig): EngineSim {
   const turboLag = isForced ? clamp(0.8 - engine.boostPressure * 0.1 - engine.intercoolerEff * 0.2, 0.1, 1.5) : 0;
 
   // ---- Hybrid / MGU calculations ----
-  let mguHPower = 0, mguKPower = 0;
+  let mguHPower = 0;
   let combinedPower = peakPower;
   let combinedTorque = peakTorque;
   let batteryWeight = 0, batteryCost = 0, batteryEnergy = 0;
   let regenEfficiency = 0, energyRecoveryPerLap = 0, deployDuration = 0;
 
-  const isHybrid = engine.layout === "hybrid" || engine.hasMguH || engine.hasMguK;
+  const isHybrid = engine.hybridArchitecture !== "none";
+  const arch = HYBRID_ARCHITECTURES[engine.hybridArchitecture] || HYBRID_ARCHITECTURES.none;
+  const placement = MOTOR_PLACEMENTS[engine.motorPlacement] || MOTOR_PLACEMENTS.p0;
 
   if (engine.hasMguH && isForced) {
     const mguHMode = MGU_H_MODES[engine.mguHMode];
     mguHPower = engine.boostPressure > 0 ? clamp(engine.boostPressure * 30 * mguHMode.recoveryFactor, 0, 80) : 0;
   }
 
-  if (engine.hasMguK) {
-    mguKPower = clamp(engine.mguKPower, 0, 200);
-    regenEfficiency = clamp(0.6 + engine.regenLevel * 0.35, 0.4, 0.95);
-  }
+  const motorPowerKW = clamp(engine.hybridMotorPower, 0, arch.maxMotorPower);
 
   if (isHybrid && engine.batteryCapacity > 0) {
     const batt = BATTERY_CHEMISTRIES[engine.batteryChemistry];
-    batteryWeight = engine.batteryCapacity * batt.weightPerKwh;
-    batteryCost = engine.batteryCapacity * batt.costPerKwh;
-    batteryEnergy = engine.batteryCapacity * 0.85; // usable
-    const electricPowerKW = mguKPower + mguHPower;
-    combinedPower = peakPower + electricPowerKW * HP_PER_KW;
-    combinedTorque = peakTorque + (mguKPower > 0 ? mguKPower * 4 : 0);
-    energyRecoveryPerLap = (mguKPower * 0.3 + mguHPower * 0.2) * 0.8;
-    deployDuration = batteryEnergy / Math.max(electricPowerKW, 1) * 3600;
+    
+    // Battery capacity constrained by architecture
+    const clampedCapacity = clamp(engine.batteryCapacity, arch.minBattery, arch.maxBattery);
+    batteryWeight = clampedCapacity * batt.weightPerKwh;
+    batteryCost = clampedCapacity * batt.costPerKwh;
+    batteryEnergy = clampedCapacity * 0.85; // usable
+
+    // Combined outputs depend on hybrid architecture
+    if (engine.hybridArchitecture === "range_extender") {
+      // Series hybrid: only the electric motor drives the wheels!
+      combinedPower = motorPowerKW * HP_PER_KW;
+      combinedTorque = motorPowerKW * 4.0;
+    } else {
+      // Parallel / Mild / Full hybrids: combined ICE + electric assist
+      combinedPower = peakPower + motorPowerKW * HP_PER_KW;
+      combinedTorque = peakTorque + (motorPowerKW * 4.5 * placement.regenEfficiency);
+    }
+
+    // Regen & Recovery
+    regenEfficiency = placement.regenEfficiency * clamp(0.6 + engine.regenLevel * 0.35, 0.4, 0.95);
+    energyRecoveryPerLap = (motorPowerKW * 0.35 * regenEfficiency * arch.regenMultiplier + mguHPower * 0.2) * 0.8;
+    deployDuration = batteryEnergy / Math.max(motorPowerKW + mguHPower, 1) * 3600;
   }
 
   // Engine weight
@@ -169,7 +183,10 @@ function simulateCombustion(engine: EngineConfig): EngineSim {
   const pistonWeight = PISTON_TYPES[engine.pistons].weightFactor;
   let engineWeight = layout.weightBase * (0.6 + 0.4 * (displacement / 4000)) *
     crankWeight * pistonWeight * vt.weightFactor * intake.weightFactor;
-  if (engine.layout === "hybrid") engineWeight += 80;
+  
+  if (isHybrid) {
+    engineWeight += arch.weightPenalty * placement.weightFactor;
+  }
   engineWeight += batteryWeight;
 
   // Engine cost
@@ -177,7 +194,7 @@ function simulateCombustion(engine: EngineConfig): EngineSim {
     CRANK_MATERIALS[engine.crank].costFactor * PISTON_TYPES[engine.pistons].costFactor *
     vt.costFactor * intake.costFactor * fuel.costFactor;
   if (isHybrid) {
-    engineCost += batteryCost + mguKPower * 200 + mguHPower * 300;
+    engineCost = engineCost * arch.costFactor + batteryCost + (motorPowerKW * 180 * placement.costFactor) + (mguHPower * 300);
   }
   engineCost = clamp(engineCost, 2000, 120000);
 
@@ -201,14 +218,17 @@ function simulateCombustion(engine: EngineConfig): EngineSim {
   let emissionsEngine = Math.round(180 + displacement / 20 - thermalEfficiency * 200);
   if (engine.exhaustCat) emissionsEngine = Math.round(emissionsEngine * 0.6);
   if (isForced) emissionsEngine = Math.round(emissionsEngine * 0.85);
-  if (isHybrid) emissionsEngine = Math.round(emissionsEngine * 0.6);
+  if (isHybrid) emissionsEngine = Math.round(emissionsEngine * arch.efficiencyBonus);
   emissionsEngine = clamp(emissionsEngine, 0, 400);
 
   // Fuel economy
-  const fuelEconomyEngine = clamp(
+  let fuelEconomyEngine = clamp(
     (30 / (displacement / 1000)) * thermalEfficiency / 0.3 * (isForced ? 0.85 : 1) * fuel.efficiencyFactor,
     3, 25
   );
+  if (isHybrid) {
+    fuelEconomyEngine = clamp(fuelEconomyEngine * arch.efficiencyBonus, 1.5, 25);
+  }
 
   return {
     displacement: Math.round(displacement), cylinderCount: cyl, powerCurve,
@@ -218,7 +238,7 @@ function simulateCombustion(engine: EngineConfig): EngineSim {
     knockRisk, octaneRequired, bsfc: Math.round(bsfc), turboLag, boostPressure: engine.boostPressure,
     engineWeight: Math.round(engineWeight), engineCost: Math.round(engineCost),
     reliability, nvhEngine,
-    mguHPower: Math.round(mguHPower), mguKPower: Math.round(mguKPower),
+    mguHPower: Math.round(mguHPower), mguKPower: Math.round(motorPowerKW),
     combinedPower: Math.round(combinedPower), combinedTorque: Math.round(combinedTorque),
     batteryWeight: Math.round(batteryWeight), batteryCost: Math.round(batteryCost),
     batteryEnergy: Math.round(batteryEnergy * 10) / 10, electricRange: 0,

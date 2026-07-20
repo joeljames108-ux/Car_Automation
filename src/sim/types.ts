@@ -48,10 +48,11 @@ export interface EngineConfig {
   exhaustValved: boolean;
 
   // ---- Hybrid / EV ----
+  hybridArchitecture: "none" | "mhev" | "fhev" | "phev" | "range_extender";
+  motorPlacement: "p0" | "p1" | "p2" | "p3" | "p4" | "p2_p4";
+  hybridMotorPower: number; // kW (0-500)
   hasMguH: boolean;        // Motor Generator Unit - Heat (turbo compounding)
   mguHMode: "off" | "charge" | "deploy" | "auto";
-  hasMguK: boolean;        // Motor Generator Unit - Kinetic (brake regen)
-  mguKPower: number;       // kW (0-200)
   batteryCapacity: number; // kWh (0-10 for hybrid, 0-120 for EV)
   batteryChemistry: "nimh" | "lfp" | "nmc" | "solid_state";
   deployMode: "qualifying" | "race" | "save" | "attack" | "endurance";

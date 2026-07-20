@@ -110,6 +110,39 @@ export const FUEL_SYSTEMS: Record<FuelSystemType, {
   dual_injection:  { label: "Dual Injection",   efficiencyFactor: 0.98, costFactor: 1.8, powerFactor: 1.02, afrStoich: 14.7 },
 };
 
+export const HYBRID_ARCHITECTURES: Record<string, {
+  label: string;
+  minBattery: number; // kWh
+  maxBattery: number; // kWh
+  maxMotorPower: number; // kW
+  costFactor: number;
+  weightPenalty: number; // kg
+  regenMultiplier: number; // 0-1
+  efficiencyBonus: number; // factor on fuel consumption (lower is better, e.g. 0.8)
+}> = {
+  none:            { label: "None",           minBattery: 0,   maxBattery: 0,   maxMotorPower: 0,   costFactor: 1.0, weightPenalty: 0,   regenMultiplier: 0.0,  efficiencyBonus: 1.0 },
+  mhev:            { label: "Mild (MHEV)",     minBattery: 0.5, maxBattery: 2,   maxMotorPower: 25,  costFactor: 1.1, weightPenalty: 40,  regenMultiplier: 0.4,  efficiencyBonus: 0.88 },
+  fhev:            { label: "Full (FHEV)",     minBattery: 1.0, maxBattery: 4,   maxMotorPower: 120, costFactor: 1.25, weightPenalty: 90, regenMultiplier: 0.85, efficiencyBonus: 0.72 },
+  phev:            { label: "Plug-in (PHEV)",  minBattery: 8.0, maxBattery: 30,  maxMotorPower: 250, costFactor: 1.45, weightPenalty: 220, regenMultiplier: 0.9,  efficiencyBonus: 0.55 },
+  range_extender:  { label: "Series (REx)",    minBattery: 10.0, maxBattery: 40,  maxMotorPower: 300, costFactor: 1.4, weightPenalty: 180, regenMultiplier: 0.9,  efficiencyBonus: 0.6 },
+};
+
+export const MOTOR_PLACEMENTS: Record<string, {
+  label: string;
+  regenEfficiency: number; // 0-1
+  weightFactor: number;
+  costFactor: number;
+  drivetrainImpact: string;
+  packagingComplexity: number; // 0-1
+}> = {
+  p0:   { label: "P0 (Belt-driven Starter Generator)", regenEfficiency: 0.45, weightFactor: 1.0,  costFactor: 1.0,  drivetrainImpact: "None",           packagingComplexity: 0.1 },
+  p1:   { label: "P1 (Crankshaft Mounted Motor)",      regenEfficiency: 0.7,  weightFactor: 1.2,  costFactor: 1.3,  drivetrainImpact: "None",           packagingComplexity: 0.3 },
+  p2:   { label: "P2 (Gearbox Input Shaft)",          regenEfficiency: 0.85, weightFactor: 1.3,  costFactor: 1.6,  drivetrainImpact: "Allows EV Mode", packagingComplexity: 0.6 },
+  p3:   { label: "P3 (Gearbox Output Shaft)",         regenEfficiency: 0.88, weightFactor: 1.35, costFactor: 1.7,  drivetrainImpact: "Allows EV Mode", packagingComplexity: 0.7 },
+  p4:   { label: "P4 (Rear Axle / Electric AWD)",     regenEfficiency: 0.95, weightFactor: 1.6,  costFactor: 2.2,  drivetrainImpact: "Forces e-AWD",   packagingComplexity: 0.9 },
+  p2_p4:{ label: "P2+P4 (Dual Motor AWD)",            regenEfficiency: 0.98, weightFactor: 2.2,  costFactor: 3.2,  drivetrainImpact: "Forces e-AWD",   packagingComplexity: 1.0 },
+};
+
 // ---------- Battery & MGU ----------
 
 export const BATTERY_CHEMISTRIES: Record<string, {
@@ -888,7 +921,7 @@ export function defaultEngine(): EngineConfig {
     coolingRadiator: 0.6, coolingOilCooler: 0.5, coolingWaterPump: 0.6, coolingFanSpeed: 0.5,
     exhaustPrimaryLength: 850, exhaustCollectorDia: 65, exhaustCat: true, exhaustValved: false,
     hasMguH: false, mguHMode: "off",
-    hasMguK: false, mguKPower: 0, batteryCapacity: 0, batteryChemistry: "nmc",
+    hybridArchitecture: "none", motorPlacement: "p0", hybridMotorPower: 0, batteryCapacity: 0, batteryChemistry: "nmc",
     deployMode: "race", regenLevel: 0.5, motorLayout: "none", evMotorPower: 0, evMotorType: "pmac",
   };
 }

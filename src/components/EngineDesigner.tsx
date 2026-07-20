@@ -2,14 +2,14 @@ import { Cog, Zap, Gauge, Thermometer, DollarSign, Battery, Activity } from "luc
 import { useDesign } from "../state/DesignContext";
 import { Section, Slider, Select, ChoiceGrid, Toggle, StatTile } from "./ui/Controls";
 import { LineChart } from "./ui/LineChart";
-import { ENGINE_LAYOUTS, CRANK_MATERIALS, PISTON_TYPES, VALVETRAIN_TYPES, INTAKE_TYPES, FUEL_SYSTEMS, BATTERY_CHEMISTRIES, EV_MOTOR_TYPES, HYBRID_DEPLOY_MODES, MGU_H_MODES } from "../sim/constants";
+import { ENGINE_LAYOUTS, CRANK_MATERIALS, PISTON_TYPES, VALVETRAIN_TYPES, INTAKE_TYPES, FUEL_SYSTEMS, BATTERY_CHEMISTRIES, EV_MOTOR_TYPES, HYBRID_DEPLOY_MODES, MGU_H_MODES, HYBRID_ARCHITECTURES, MOTOR_PLACEMENTS } from "../sim/constants";
 import type { EngineLayout, CrankMaterial, PistonType, ValvetrainType, IntakeType, FuelSystemType, EngineConfig } from "../sim/types";
 
 export function EngineDesigner() {
   const { design, sim, updateEngine } = useDesign();
   const eng = design.engine;
   const isElectric = eng.layout === "electric";
-  const isHybrid = eng.layout === "hybrid" || eng.hasMguH || eng.hasMguK;
+  const isHybrid = eng.layout === "hybrid" || eng.hybridArchitecture !== "none" || eng.hasMguH;
   const isForced = eng.intake !== "na";
 
   const powerSeries = [
@@ -100,17 +100,67 @@ export function EngineDesigner() {
                   <Select label="Motor Layout" value={eng.motorLayout} options={[{ value: "none", label: "Single" }, { value: "front", label: "Front" }, { value: "rear", label: "Rear" }, { value: "both", label: "Dual Motor" }]} onChange={(v) => updateEngine({ motorLayout: v as EngineConfig["motorLayout"] })} />
                 </>
               )}
+
+              {!isElectric && (
+                <Select
+                  label="Hybrid Architecture"
+                  value={eng.hybridArchitecture}
+                  options={(Object.keys(HYBRID_ARCHITECTURES) as string[]).map((arch) => ({
+                    value: arch,
+                    label: HYBRID_ARCHITECTURES[arch].label,
+                  }))}
+                  onChange={(v) => {
+                    const newArch = v as EngineConfig["hybridArchitecture"];
+                    const caps = HYBRID_ARCHITECTURES[newArch];
+                    updateEngine({
+                      hybridArchitecture: newArch,
+                      batteryCapacity: caps.minBattery,
+                      hybridMotorPower: Math.min(eng.hybridMotorPower, caps.maxMotorPower),
+                    });
+                  }}
+                />
+              )}
+
+              {isHybrid && !isElectric && eng.hybridArchitecture !== "none" && (
+                <>
+                  <Select
+                    label="Motor Placement"
+                    value={eng.motorPlacement}
+                    options={(Object.keys(MOTOR_PLACEMENTS) as string[]).map((p) => ({
+                      value: p,
+                      label: MOTOR_PLACEMENTS[p].label,
+                    }))}
+                    onChange={(v) => updateEngine({ motorPlacement: v as EngineConfig["motorPlacement"] })}
+                  />
+                  <Slider
+                    label="Electric Motor Power"
+                    value={eng.hybridMotorPower}
+                    min={5}
+                    max={HYBRID_ARCHITECTURES[eng.hybridArchitecture]?.maxMotorPower || 200}
+                    step={5}
+                    unit="kW"
+                    onChange={(v) => updateEngine({ hybridMotorPower: v })}
+                  />
+                </>
+              )}
+
               <Select label="Battery Chemistry" value={eng.batteryChemistry} options={(Object.keys(BATTERY_CHEMISTRIES) as string[]).map((b) => ({ value: b, label: BATTERY_CHEMISTRIES[b].label }))} onChange={(v) => updateEngine({ batteryChemistry: v as EngineConfig["batteryChemistry"] })} />
-              <Slider label="Battery Capacity" value={eng.batteryCapacity} min={isElectric ? 20 : 0.5} max={isElectric ? 120 : 10} step={0.5} unit="kWh" onChange={(v) => updateEngine({ batteryCapacity: v })} />
+              
+              <Slider
+                label="Battery Capacity"
+                value={eng.batteryCapacity}
+                min={isElectric ? 20 : (HYBRID_ARCHITECTURES[eng.hybridArchitecture]?.minBattery || 0.5)}
+                max={isElectric ? 120 : (HYBRID_ARCHITECTURES[eng.hybridArchitecture]?.maxBattery || 10)}
+                step={0.5}
+                unit="kWh"
+                onChange={(v) => updateEngine({ batteryCapacity: v })}
+              />
+
               {isHybrid && !isElectric && (
                 <>
                   <Toggle label="MGU-H (Heat Recovery)" value={eng.hasMguH} onChange={(v) => updateEngine({ hasMguH: v })} />
                   {eng.hasMguH && (
                     <Select label="MGU-H Mode" value={eng.mguHMode} options={(Object.keys(MGU_H_MODES) as string[]).map((m) => ({ value: m, label: MGU_H_MODES[m].label }))} onChange={(v) => updateEngine({ mguHMode: v as EngineConfig["mguHMode"] })} />
-                  )}
-                  <Toggle label="MGU-K (Kinetic Recovery)" value={eng.hasMguK} onChange={(v) => updateEngine({ hasMguK: v })} />
-                  {eng.hasMguK && (
-                    <Slider label="MGU-K Power" value={eng.mguKPower} min={20} max={200} step={5} unit="kW" onChange={(v) => updateEngine({ mguKPower: v })} />
                   )}
                   <Select label="Deploy Mode" value={eng.deployMode} options={(Object.keys(HYBRID_DEPLOY_MODES) as string[]).map((d) => ({ value: d, label: HYBRID_DEPLOY_MODES[d].label }))} onChange={(v) => updateEngine({ deployMode: v as EngineConfig["deployMode"] })} />
                 </>
@@ -121,7 +171,7 @@ export function EngineDesigner() {
               <p className="text-[10px] text-slate-600 mt-3">
                 {isElectric
                   ? `Range: ${sim.electricRange} km · Efficiency: ${(sim.regenEfficiency * 100).toFixed(0)}% regen`
-                  : `MGU-H: ${sim.mguHPower} kW · MGU-K: ${sim.mguKPower} kW · Battery: ${sim.batteryEnergy} kWh`}
+                  : `Architecture: ${HYBRID_ARCHITECTURES[eng.hybridArchitecture]?.label || "None"} · Motor: ${sim.mguKPower} kW (${MOTOR_PLACEMENTS[eng.motorPlacement]?.label || "None"}) · Battery: ${sim.batteryEnergy} kWh`}
               </p>
             )}
           </Section>
