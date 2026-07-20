@@ -940,3 +940,408 @@ export interface SimResult {
   // Lap times
   lapTimes: { trackId: TrackId; trackName: string; time: number; topSpeed: number; avgSpeed: number }[];
 }
+
+// ===================================================================
+// VEHICLE GARAGE & LINEAGE
+// ===================================================================
+
+export type VehicleVariantType = "base" | "trim" | "facelift" | "generation" | "special_edition";
+
+export interface GarageVehicle {
+  id: string;
+  name: string;
+  modelName: string;           // e.g. "Falcon"
+  variantName: string;         // e.g. "GT", "Sport", "Base"
+  variantType: VehicleVariantType;
+  generation: number;          // 1, 2, 3...
+  design: VehicleDesign;
+  sim: SimResult;
+  parentId: string | null;     // lineage reference
+  childIds: string[];
+  createdAt: string;
+  updatedAt: string;
+  tags: string[];
+  notes: string;
+  // Lifecycle
+  isLaunched: boolean;
+  launchMonth: number | null;
+  discontinuedMonth: number | null;
+  totalUnitsSold: number;
+  // Quick stats for grid display
+  peakPower: number;
+  weight: number;
+  topSpeed: number;
+  price: number;
+  overallRating: number;       // 0-100 computed
+}
+
+export interface VehicleLineage {
+  rootId: string;
+  modelName: string;
+  nodes: { id: string; name: string; generation: number; variantType: VehicleVariantType; parentId: string | null }[];
+}
+
+// ===================================================================
+// DYNAMIC ECONOMY & MARKET
+// ===================================================================
+
+export type RegulationType = "emissions" | "safety" | "ev_mandate" | "fuel_economy" | "noise" | "recycling";
+export type MarketEventType = "oil_crisis" | "ev_boom" | "material_shortage" | "tech_breakthrough" | "recession" | "luxury_boom" | "suv_craze" | "green_mandate";
+
+export interface MarketSegmentDemand {
+  segment: PlatformType;
+  demand: number;              // 0-1 relative demand
+  growthRate: number;          // -0.5 to 0.5 monthly
+  averagePrice: number;       // $
+  competitorCount: number;
+}
+
+export interface Regulation {
+  id: string;
+  type: RegulationType;
+  name: string;
+  description: string;
+  effectiveMonth: number;
+  severity: number;            // 0-1
+  region: "global" | "na" | "eu" | "asia";
+  penalty: number;             // $ per violation
+}
+
+export interface MarketEvent {
+  id: string;
+  type: MarketEventType;
+  name: string;
+  description: string;
+  startMonth: number;
+  durationMonths: number;
+  effects: {
+    fuelPriceMultiplier?: number;
+    materialCostMultiplier?: number;
+    evDemandBonus?: number;
+    luxuryDemandBonus?: number;
+    suvDemandBonus?: number;
+  };
+}
+
+export interface EconomyState {
+  month: number;
+  fuelPrice: number;           // $/gallon
+  fuelPriceHistory: { month: number; price: number }[];
+  materialCosts: {
+    steel: number; aluminum: number; carbon_fiber: number;
+    titanium: number; lithium: number; copper: number;
+    rare_earth: number; rubber: number;
+  };
+  materialCostHistory: { month: number; costs: Record<string, number> }[];
+  segmentDemand: MarketSegmentDemand[];
+  activeRegulations: Regulation[];
+  upcomingRegulations: Regulation[];
+  activeEvents: MarketEvent[];
+  eventHistory: MarketEvent[];
+  customerPreferences: {
+    evAdoption: number;        // 0-1
+    suvPreference: number;     // 0-1
+    luxuryDemand: number;      // 0-1
+    performanceDemand: number; // 0-1
+    safetyPriority: number;    // 0-1
+    techPriority: number;      // 0-1
+    ecoFriendly: number;       // 0-1
+  };
+  inflation: number;           // annual %
+  interestRate: number;        // annual %
+  gdpGrowth: number;           // annual %
+}
+
+// ===================================================================
+// MOTORSPORT DIVISION
+// ===================================================================
+
+export type MotorsportCategory = "gt" | "formula" | "hypercar" | "touring" | "rally" | "endurance";
+export type TeamStatus = "inactive" | "developing" | "competing" | "champion";
+
+export interface RaceDriver {
+  id: string;
+  name: string;
+  nationality: string;
+  skill: number;               // 0-100
+  experience: number;          // 0-100
+  consistency: number;         // 0-100
+  wetSkill: number;            // 0-100
+  aggression: number;          // 0-100
+  salary: number;              // $ per season
+  contractMonths: number;
+}
+
+export interface MotorsportTeam {
+  id: string;
+  name: string;
+  category: MotorsportCategory;
+  status: TeamStatus;
+  baseVehicleId: string | null;// garage vehicle used as base
+  drivers: RaceDriver[];
+  budget: number;              // $ per season
+  developmentPoints: number;   // earned from races
+  techTransferPool: number;    // points to transfer to/from production
+  seasonResults: SeasonResult[];
+  currentSeason: number;
+  wins: number;
+  podiums: number;
+  championships: number;
+}
+
+export interface SeasonResult {
+  season: number;
+  category: MotorsportCategory;
+  position: number;            // championship position
+  points: number;
+  wins: number;
+  podiums: number;
+  dnfs: number;
+  bestFinish: number;
+  raceResults: { round: number; trackId: TrackId; position: number; points: number }[];
+  techPointsEarned: number;
+}
+
+export interface MotorsportState {
+  teams: MotorsportTeam[];
+  currentSeason: number;
+  techTransferHistory: {
+    month: number;
+    direction: "race_to_production" | "production_to_race";
+    category: string;
+    bonus: string;
+    points: number;
+  }[];
+  totalTechTransferred: number;
+}
+
+// ===================================================================
+// DIGITAL TWIN
+// ===================================================================
+
+export type TwinEventType =
+  | "design_created" | "design_modified" | "test_completed" | "simulation_run"
+  | "manufacturing_started" | "vehicle_launched" | "customer_feedback"
+  | "warranty_claim" | "race_entry" | "race_result" | "facelift" | "generation"
+  | "recall" | "award" | "review_published";
+
+export interface TwinEvent {
+  id: string;
+  vehicleId: string;
+  type: TwinEventType;
+  month: number;
+  title: string;
+  description: string;
+  data?: Record<string, number | string | boolean>;
+  severity?: "info" | "success" | "warning" | "danger";
+}
+
+export interface DigitalTwinData {
+  vehicleId: string;
+  events: TwinEvent[];
+  metricsOverTime: {
+    month: number;
+    unitsSold: number;
+    customerSatisfaction: number;
+    warrantyClaimRate: number;
+    reliabilityScore: number;
+    marketShare: number;
+  }[];
+  totalWarrantyClaims: number;
+  totalUnitsProduced: number;
+  totalRevenue: number;
+  lifetimeRating: number;      // 0-100
+}
+
+// ===================================================================
+// SAFETY CENTER
+// ===================================================================
+
+export type CrumpleZoneType = "none" | "basic" | "progressive" | "advanced" | "adaptive";
+export type AirbagType = "none" | "front" | "front_side" | "full_curtain" | "full_360" | "external";
+export type SafetyCageType = "none" | "reinforced_pillars" | "safety_cell" | "carbon_monocoque" | "full_cage";
+export type SeatbeltType = "three_point" | "pretensioner" | "load_limiter" | "active_belt" | "four_point";
+export type PedestrianSafetyType = "none" | "active_hood" | "bumper_airbag" | "full_pedestrian";
+
+export interface SafetyConfig {
+  frontCrumple: CrumpleZoneType;
+  rearCrumple: CrumpleZoneType;
+  sideCrumple: CrumpleZoneType;
+  airbagType: AirbagType;
+  airbagCount: number;         // 2-12
+  safetyCage: SafetyCageType;
+  seatbeltType: SeatbeltType;
+  pedestrianSafety: PedestrianSafetyType;
+  childSafetyAnchors: number;  // 0-4
+  rolloverProtection: boolean;
+  doorBeams: boolean;
+  energyAbsorbingSteeringColumn: boolean;
+  collapsiblePedals: boolean;
+  fireSuppressionSystem: boolean;
+  eCallSystem: boolean;
+  postCrashBatteryDisconnect: boolean;
+}
+
+export interface SafetySimResult {
+  frontalCrashScore: number;   // 0-100
+  sideCrashScore: number;      // 0-100
+  rearCrashScore: number;      // 0-100
+  rolloverScore: number;       // 0-100
+  pedestrianScore: number;     // 0-100
+  childSafetyScore: number;    // 0-100
+  overallScore: number;        // 0-100
+  ncapStars: number;           // 1-5
+  safetyWeight: number;        // kg added
+  safetyCost: number;          // $ added
+  activeFeatureBonus: number;  // 0-1 from ADAS
+}
+
+// ===================================================================
+// ENGINEERING WORKFLOW PIPELINE
+// ===================================================================
+
+export type WorkflowStage =
+  | "research" | "concept" | "design" | "simulation" | "prototype"
+  | "testing" | "redesign" | "manufacturing" | "sales" | "feedback" | "next_gen";
+
+export interface WorkflowStep {
+  stage: WorkflowStage;
+  status: "locked" | "available" | "in_progress" | "completed" | "skipped";
+  startedMonth: number | null;
+  completedMonth: number | null;
+  qualityScore: number;        // 0-100 (higher = better execution)
+  skipPenalty: number;          // 0-1 penalty for skipping
+  monthsRequired: number;      // base months to complete
+  monthsSpent: number;
+}
+
+export interface WorkflowPipeline {
+  vehicleId: string;
+  steps: WorkflowStep[];
+  currentStage: WorkflowStage;
+  overallProgress: number;     // 0-1
+  qualityMultiplier: number;   // product of all step qualities
+}
+
+// ===================================================================
+// CUSTOMER FEEDBACK & SALES
+// ===================================================================
+
+export interface CustomerFeedback {
+  vehicleId: string;
+  month: number;
+  satisfaction: number;        // 0-100
+  reliability: number;         // 0-100
+  valueForMoney: number;       // 0-100
+  performance: number;         // 0-100
+  comfort: number;             // 0-100
+  technology: number;          // 0-100
+  design: number;              // 0-100
+  complaints: string[];
+  praises: string[];
+  recommendRate: number;       // 0-1 (Net Promoter Score basis)
+  warrantyClaims: number;
+  totalReviews: number;
+}
+
+export type LaunchEventType = "auto_show" | "online_reveal" | "private_event" | "press_launch" | "dealer_launch";
+export type PricingStrategy = "premium" | "competitive" | "value" | "penetration" | "skimming";
+export type MarketSegmentTarget = "economy" | "mainstream" | "premium" | "luxury" | "ultra_luxury" | "hypercar";
+
+export interface SalesConfig {
+  vehicleId: string;
+  targetPrice: number;
+  pricingStrategy: PricingStrategy;
+  marketSegment: MarketSegmentTarget;
+  launchEvent: LaunchEventType;
+  marketingBudget: number;     // $
+  dealerMargin: number;        // 0-0.3
+  targetVolume: number;        // units per year
+  regions: ("na" | "eu" | "asia" | "middle_east" | "oceania")[];
+  warrantyYears: number;
+  warrantyMiles: number;
+}
+
+export interface SalesResult {
+  vehicleId: string;
+  month: number;
+  unitsSold: number;
+  revenue: number;
+  profit: number;
+  marketShare: number;         // 0-1
+  customerAcquisitionCost: number;
+  breakEvenMonth: number | null;
+  cumulativeUnits: number;
+  cumulativeRevenue: number;
+  cumulativeProfit: number;
+  regionBreakdown: Record<string, number>;
+}
+
+// ===================================================================
+// LIVING AI COMPETITORS
+// ===================================================================
+
+export type CompetitorStrategy = "innovation" | "value" | "luxury" | "performance" | "balanced";
+
+export interface AICompanyProfile {
+  id: string;
+  name: string;
+  logo: string;                // emoji or icon key
+  color: string;               // hex
+  strategy: CompetitorStrategy;
+  founded: number;             // month
+  cash: number;
+  brandValue: number;          // 0-100
+  techLevel: number;           // 0-100
+  marketShare: number;         // 0-1
+  vehicles: AICompetitorVehicle[];
+  patents: string[];
+  specialties: string[];
+  aggressiveness: number;      // 0-1
+  reactionSpeed: number;       // 0-1 (how fast they respond to player)
+}
+
+export interface AICompetitorVehicle {
+  id: string;
+  name: string;
+  segment: PlatformType;
+  price: number;
+  power: number;
+  weight: number;
+  topSpeed: number;
+  accel0_100: number;
+  safetyRating: number;
+  techScore: number;
+  customerRating: number;
+  launchMonth: number;
+  salesPerMonth: number;
+  isActive: boolean;
+}
+
+export interface AICompetitorAction {
+  month: number;
+  companyId: string;
+  companyName: string;
+  type: "launch" | "patent" | "price_cut" | "recall" | "breakthrough" | "expansion" | "partnership" | "motorsport_win";
+  title: string;
+  description: string;
+  impact: string;
+}
+
+export interface CompanyState {
+  garage: GarageVehicle[];
+  economy: EconomyState;
+  motorsport: MotorsportState;
+  digitalTwins: Record<string, DigitalTwinData>;
+  aiCompetitors: AICompanyProfile[];
+  competitorActions: AICompetitorAction[];
+  salesData: Record<string, SalesResult[]>;
+  customerFeedback: Record<string, CustomerFeedback[]>;
+  workflows: Record<string, WorkflowPipeline>;
+  companyName: string;
+  companyFounded: number;      // month
+  totalRevenue: number;
+  totalProfit: number;
+  reputation: number;          // 0-100
+  employeeCount: number;
+}

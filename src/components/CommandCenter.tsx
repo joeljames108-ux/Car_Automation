@@ -3,9 +3,10 @@ import {
   LayoutDashboard, Wind, Battery, Zap, Thermometer, Layers,
   CircleDot, Flag, DollarSign, ShieldCheck, Star,
   Bot, TrendingUp, AlertTriangle, Check, ArrowRight, Gauge,
-  Activity, Car,
+  Activity, Car, Fuel, Trophy, Warehouse,
 } from "lucide-react";
 import { useDesign } from "../state/DesignContext";
+import { useCompany } from "../state/CompanyContext";
 import { Section, StatTile } from "./ui/Controls";
 import { LineChart } from "./ui/LineChart";
 import { computeScores, computeSummary } from "../sim/reviews";
@@ -37,6 +38,7 @@ function formatLap(seconds: number): string {
 
 export function CommandCenter() {
   const { design, sim } = useDesign();
+  const { company } = useCompany();
   const scores = useMemo(() => computeScores(design, sim), [design, sim]);
   const summary = useMemo(() => computeSummary(scores), [scores]);
 
@@ -64,9 +66,49 @@ export function CommandCenter() {
   const tire = TIRE_COMPOUNDS[design.vehicle.tireCompound];
 
   const overallHealth = computeOverallHealth(sim, summary.overall);
+  const totalMsWins = company.motorsport.teams.reduce((s, t) => s + t.wins, 0);
+
+  function fmtMoney(n: number) {
+    if (n >= 1_000_000) return `$${(n / 1_000_000).toFixed(1)}M`;
+    if (n >= 1_000) return `$${(n / 1_000).toFixed(0)}k`;
+    return `$${n.toFixed(0)}`;
+  }
 
   return (
     <div className="space-y-4 stagger">
+      {/* Company Status Strip */}
+      <div className="grid grid-cols-3 sm:grid-cols-6 gap-2">
+        <div className="bg-base-900 border border-base-800 rounded-xl p-3 text-center hover:border-base-700 transition-all">
+          <Fuel size={12} className="mx-auto text-warn-400 mb-1" />
+          <div className="font-mono text-sm text-warn-400">${company.economy.fuelPrice.toFixed(2)}</div>
+          <div className="text-[9px] text-slate-600">Fuel $/gal</div>
+        </div>
+        <div className="bg-base-900 border border-base-800 rounded-xl p-3 text-center hover:border-base-700 transition-all">
+          <Warehouse size={12} className="mx-auto text-accent-400 mb-1" />
+          <div className="font-mono text-sm text-accent-300">{company.garage.length}</div>
+          <div className="text-[9px] text-slate-600">Garage</div>
+        </div>
+        <div className="bg-base-900 border border-base-800 rounded-xl p-3 text-center hover:border-base-700 transition-all">
+          <Trophy size={12} className="mx-auto text-yellow-400 mb-1" />
+          <div className="font-mono text-sm text-yellow-400">{totalMsWins}</div>
+          <div className="text-[9px] text-slate-600">Race Wins</div>
+        </div>
+        <div className="bg-base-900 border border-base-800 rounded-xl p-3 text-center hover:border-base-700 transition-all">
+          <DollarSign size={12} className="mx-auto text-ok-400 mb-1" />
+          <div className="font-mono text-sm text-ok-400">{fmtMoney(company.totalRevenue)}</div>
+          <div className="text-[9px] text-slate-600">Revenue</div>
+        </div>
+        <div className="bg-base-900 border border-base-800 rounded-xl p-3 text-center hover:border-base-700 transition-all">
+          <Star size={12} className="mx-auto text-purple-400 mb-1" />
+          <div className="font-mono text-sm text-purple-400">{company.reputation}</div>
+          <div className="text-[9px] text-slate-600">Reputation</div>
+        </div>
+        <div className="bg-base-900 border border-base-800 rounded-xl p-3 text-center hover:border-base-700 transition-all">
+          <Activity size={12} className="mx-auto text-blue-400 mb-1" />
+          <div className="font-mono text-sm text-blue-400">Mo.{company.economy.month}</div>
+          <div className="text-[9px] text-slate-600">Game Month</div>
+        </div>
+      </div>
       {/* Hero banner */}
       <div className="panel p-5 relative overflow-hidden">
         <div className="absolute inset-0 opacity-20 pointer-events-none"
