@@ -2,6 +2,7 @@ import { Car, Palette, Disc, Lightbulb, Layers, Wind, Gauge } from "lucide-react
 import { useDesign } from "../state/DesignContext";
 import { Section, Slider, Select, ChoiceGrid, Toggle, StatTile } from "./ui/Controls";
 import { CFDView } from "./ui/CFDView";
+
 import {
   BODY_TYPES, RIM_DESIGNS, RIM_FINISHES, PAINT_FINISHES,
   HEADLIGHT_TYPES, TAILLIGHT_TYPES, BODY_KITS, SPOILER_TYPES,
@@ -27,7 +28,7 @@ function BodyPreview({ bodyType, finish }: {
 }) {
   return (
     <div className="relative bg-gradient-to-b from-base-900 to-base-950 rounded-lg overflow-hidden border border-base-800">
-      <img src="/image.png" alt="Koenigsegg Jesko" className="w-full h-auto block" />
+      <img src="/agera.png" alt="Car Preview" className="w-full h-auto block" />
 
       {/* finish label */}
       <div className="absolute top-2 left-2 text-[9px] font-mono text-slate-500 uppercase tracking-wider">
