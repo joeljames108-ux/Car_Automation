@@ -29,6 +29,7 @@ import type {
   EngineConfig, EngineSim, VehicleDesign, VehicleConfig, SimResult,
   TrackId, InfotainmentConfig, InfotainmentSim,
 } from "./types";
+import { simulateChassis } from "./chassisSim";
 
 const RHO_AIR = 1.225;
 const GRAVITY = 9.81;
@@ -1208,6 +1209,17 @@ export function simulate(design: VehicleDesign): SimResult {
   const profitMargin = (targetPrice - totalCost) / Math.max(targetPrice, 1);
   const luxuryRating = clamp(interior.luxuryRating + info.luxuryScore * 2, 0, 10);
 
+  // ---- Phase 1: Chassis engineering simulation ----
+  const chassisSim = simulateChassis(
+    design.vehicle.chassisEng,
+    design.vehicle.suspensionGeo,
+    design.vehicle.steeringEng,
+    design.vehicle.brakesEng,
+    design.vehicle.tiresEng,
+    design.vehicle.wheelsEng,
+    perf.weight + info.weight,
+  );
+
   return {
     displacement: eng.displacement, cylinderCount: eng.cylinderCount,
     powerCurve: eng.powerCurve, peakPower: eng.combinedPower, peakTorque: eng.combinedTorque,
@@ -1244,6 +1256,7 @@ export function simulate(design: VehicleDesign): SimResult {
     interiorWeight: interior.interiorWeight + info.weight, interiorCost: interior.interiorCost + info.totalCost,
     comfortRating: interior.comfortRating, luxuryRating,
     infotainment: info,
+    chassisSim,
     lapTimes,
   };
 }

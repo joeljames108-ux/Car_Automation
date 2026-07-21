@@ -2,6 +2,10 @@ import { createContext, useContext, useState, useMemo, useCallback, type ReactNo
 import { simulate } from "../sim/engine";
 import { defaultDesign } from "../sim/constants";
 import type { VehicleDesign, SimResult, EngineConfig, VehicleConfig, AeroConfig, InteriorConfig, ElectronicsConfig, ManufacturingConfig, ExteriorConfig, AeroResearchConfig, InfotainmentConfig } from "../sim/types";
+import type {
+  ChassisEngineeringConfig, SuspensionGeometryConfig, SteeringConfig,
+  BrakeConfig, TireEngineeringConfig, WheelEngineeringConfig,
+} from "../sim/types/chassis";
 
 export type UnitSystem = "metric" | "imperial";
 
@@ -19,6 +23,13 @@ interface DesignContextValue {
   updateElectronics: (patch: Partial<ElectronicsConfig>) => void;
   updateManufacturing: (patch: Partial<ManufacturingConfig>) => void;
   updateInfotainment: (patch: Partial<InfotainmentConfig>) => void;
+  // Phase 1: Chassis engineering
+  updateChassisEng: (patch: Partial<ChassisEngineeringConfig>) => void;
+  updateSuspensionGeo: (patch: Partial<SuspensionGeometryConfig>) => void;
+  updateSteeringEng: (patch: Partial<SteeringConfig>) => void;
+  updateBrakesEng: (patch: Partial<BrakeConfig>) => void;
+  updateTiresEng: (patch: Partial<TireEngineeringConfig>) => void;
+  updateWheelsEng: (patch: Partial<WheelEngineeringConfig>) => void;
   setDesign: (d: VehicleDesign) => void;
   resetDesign: () => void;
 }
@@ -70,11 +81,37 @@ export function DesignProvider({ children }: { children: ReactNode }) {
     setDesignState((d) => ({ ...d, infotainment: { ...d.infotainment, ...patch }, updatedAt: new Date().toISOString() }));
   }, []);
 
+  // Phase 1: Chassis engineering updaters
+  const updateChassisEng = useCallback((patch: Partial<ChassisEngineeringConfig>) => {
+    setDesignState((d) => ({ ...d, vehicle: { ...d.vehicle, chassisEng: { ...d.vehicle.chassisEng, ...patch } }, updatedAt: new Date().toISOString() }));
+  }, []);
+
+  const updateSuspensionGeo = useCallback((patch: Partial<SuspensionGeometryConfig>) => {
+    setDesignState((d) => ({ ...d, vehicle: { ...d.vehicle, suspensionGeo: { ...d.vehicle.suspensionGeo, ...patch } }, updatedAt: new Date().toISOString() }));
+  }, []);
+
+  const updateSteeringEng = useCallback((patch: Partial<SteeringConfig>) => {
+    setDesignState((d) => ({ ...d, vehicle: { ...d.vehicle, steeringEng: { ...d.vehicle.steeringEng, ...patch } }, updatedAt: new Date().toISOString() }));
+  }, []);
+
+  const updateBrakesEng = useCallback((patch: Partial<BrakeConfig>) => {
+    setDesignState((d) => ({ ...d, vehicle: { ...d.vehicle, brakesEng: { ...d.vehicle.brakesEng, ...patch } }, updatedAt: new Date().toISOString() }));
+  }, []);
+
+  const updateTiresEng = useCallback((patch: Partial<TireEngineeringConfig>) => {
+    setDesignState((d) => ({ ...d, vehicle: { ...d.vehicle, tiresEng: { ...d.vehicle.tiresEng, ...patch } }, updatedAt: new Date().toISOString() }));
+  }, []);
+
+  const updateWheelsEng = useCallback((patch: Partial<WheelEngineeringConfig>) => {
+    setDesignState((d) => ({ ...d, vehicle: { ...d.vehicle, wheelsEng: { ...d.vehicle.wheelsEng, ...patch } }, updatedAt: new Date().toISOString() }));
+  }, []);
+
   const resetDesign = useCallback(() => setDesignState(defaultDesign()), []);
 
   const value: DesignContextValue = {
     design, sim, units, setUnits,
     updateEngine, updateVehicle, updateAero, updateAeroResearch, updateExterior, updateInterior, updateElectronics, updateManufacturing, updateInfotainment,
+    updateChassisEng, updateSuspensionGeo, updateSteeringEng, updateBrakesEng, updateTiresEng, updateWheelsEng,
     setDesign, resetDesign,
   };
 

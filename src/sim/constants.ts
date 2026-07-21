@@ -11,6 +11,10 @@ import type {
   InfoDisplayConfig, InfoDisplayTech, InfoOsTier, InfoVoiceLevel, InfoAssistantPersonality,
   InfoNavTier, InfoConnectivityTier, InfotainmentConfig,
 } from "./types";
+import {
+  defaultChassisEngineering, defaultSuspensionGeometry, defaultSteering,
+  defaultBrakes, defaultTires, defaultWheels,
+} from "./constants/chassisConstants";
 
 function clamp(v: number, lo: number, hi: number): number {
   return Math.max(lo, Math.min(hi, v));
@@ -921,7 +925,10 @@ export function defaultEngine(): EngineConfig {
     coolingRadiator: 0.6, coolingOilCooler: 0.5, coolingWaterPump: 0.6, coolingFanSpeed: 0.5,
     exhaustPrimaryLength: 850, exhaustCollectorDia: 65, exhaustCat: true, exhaustValved: false,
     hasMguH: false, mguHMode: "off",
-    hybridArchitecture: "none", motorPlacement: "p0", hybridMotorPower: 0, batteryCapacity: 0, batteryChemistry: "nmc",
+    hybridArchitecture: "none", hybridCoupling: "parallel",
+    hybridFrontMotorEnabled: false, hybridFrontMotorType: "pmac", hybridFrontMotorPower: 0,
+    hybridRearMotorEnabled: false, hybridRearMotorType: "pmac", hybridRearMotorPower: 0,
+    batteryCapacity: 0, batteryChemistry: "nmc",
     deployMode: "race", regenLevel: 0.5, motorLayout: "none", evMotorPower: 0, evMotorType: "pmac",
   };
 }
@@ -1156,6 +1163,13 @@ export function defaultVehicle(): VehicleConfig {
     electronics: { abs: true, tractionControl: 0.5, stabilityControl: 0.3, launchControl: true, ecuMap: "sport", dataLogging: true, telemetryLevel: 0.5 },
     interior: defaultInterior(),
     ballast: 0, ballastPositionX: 0, ballastPositionY: 0, ballastPositionZ: 0,
+    // Phase 1: deep chassis engineering
+    chassisEng: defaultChassisEngineering(),
+    suspensionGeo: defaultSuspensionGeometry(),
+    steeringEng: defaultSteering(),
+    brakesEng: defaultBrakes(),
+    tiresEng: defaultTires(),
+    wheelsEng: defaultWheels(),
   };
 }
 

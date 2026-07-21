@@ -2,6 +2,16 @@
 // TYPES — Apex Engineer vehicle design simulator
 // ===================================================================
 
+// Re-export chassis engineering types for convenience
+export type {
+  VehicleArchitecture, CrashStructureLevel,
+  ChassisEngineeringConfig, SuspensionGeometryConfig, SteeringConfig,
+  BrakeConfig, TireEngineeringConfig, WheelEngineeringConfig,
+  BrakeRotorMaterial, BrakePadCompound, WheelMaterial, TireConstruction,
+  RackType, PowerAssistType,
+  ChassisSimResult,
+} from "./types/chassis";
+
 // ---------- Engine ----------
 
 export type EngineLayout =
@@ -48,9 +58,14 @@ export interface EngineConfig {
   exhaustValved: boolean;
 
   // ---- Hybrid / EV ----
-  hybridArchitecture: "none" | "mhev" | "fhev" | "phev" | "range_extender";
-  motorPlacement: "p0" | "p1" | "p2" | "p3" | "p4" | "p2_p4";
-  hybridMotorPower: number; // kW (0-500)
+  hybridArchitecture: "none" | "p0" | "p1" | "p2" | "p3" | "p4";
+  hybridCoupling: "series" | "parallel" | "through_the_road";
+  hybridFrontMotorEnabled: boolean;
+  hybridFrontMotorType: "pmac" | "induction" | "wound_rotor" | "axial_flux";
+  hybridFrontMotorPower: number; // kW
+  hybridRearMotorEnabled: boolean;
+  hybridRearMotorType: "pmac" | "induction" | "wound_rotor" | "axial_flux";
+  hybridRearMotorPower: number; // kW
   hasMguH: boolean;        // Motor Generator Unit - Heat (turbo compounding)
   mguHMode: "off" | "charge" | "deploy" | "auto";
   batteryCapacity: number; // kWh (0-10 for hybrid, 0-120 for EV)
@@ -200,6 +215,13 @@ export interface VehicleConfig {
   ballastPositionX: number;// -1 (rear) to 1 (front)
   ballastPositionY: number;// -1 (right) to 1 (left)
   ballastPositionZ: number;// -1 (low) to 1 (high)
+  // ---- Phase 1: Deep chassis engineering sub-configs ----
+  chassisEng: import("./types/chassis").ChassisEngineeringConfig;
+  suspensionGeo: import("./types/chassis").SuspensionGeometryConfig;
+  steeringEng: import("./types/chassis").SteeringConfig;
+  brakesEng: import("./types/chassis").BrakeConfig;
+  tiresEng: import("./types/chassis").TireEngineeringConfig;
+  wheelsEng: import("./types/chassis").WheelEngineeringConfig;
 }
 
 export interface AeroConfig {
@@ -937,6 +959,9 @@ export interface SimResult {
 
   // Infotainment & AI
   infotainment: InfotainmentSim;
+
+  // ---- Phase 1: Chassis engineering outputs ----
+  chassisSim: import("./types/chassis").ChassisSimResult;
 
   // Lap times
   lapTimes: { trackId: TrackId; trackName: string; time: number; topSpeed: number; avgSpeed: number }[];
