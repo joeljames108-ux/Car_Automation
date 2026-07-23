@@ -337,11 +337,102 @@ const LIVERY_COLORS = [
   "#1a237e", "#d32f2f", "#00695c", "#e65100", "#4a148c",
 ];
 
-// ---------- Initial state ----------
+// ---------- Initial state with 200+ AI Teams & Drivers ----------
+
+const AI_TEAM_PREFIXES = [
+  "Scuderia", "Team", "Racing", "Motorsport", "Dynamics", "Engineering", "Performance",
+  "Works", "Corsa", "Automotive", "Precision", "Apex", "Veloce", "Kurogane", "Bavaria",
+  "Nordic", "Silverstone", "Monaco", "Redline", "Speedworks", "GP", "Squadra", "Rennsport"
+];
+
+const AI_TEAM_NAMES = [
+  "Veloce Scuderia", "Nordic Motorsport", "Bavaria Sport", "Kurogane Racing", "Silverstone Dynamics",
+  "Redline Engineering", "Speedworks Corsa", "Monaco GP", "Apex Performance", "Titan Racing",
+  "Phantom Motorsport", "Vanguard Corsa", "Horizon Works", "Zephyr Dynamics", "Starlight GP",
+  "Thunderbird Racing", "Ironclad Motorsport", "Olympus Racing", "Supernova Performance", "Valiant Corsa",
+  "Aero Tech", "Hyperion Dynamics", "Zenith Racing", "Ignition Works", "Pegasus Motorsport",
+  "Chronos GP", "Vortex Performance", "Aegis Racing", "Solstice Motorsport", "Equinox Corsa",
+  "Nebula Racing", "Pulse Dynamics", "Kinetic Motorsport", "Astral Performance", "Fortress Racing"
+];
 
 export function initialMotorsportState(): MotorsportState {
+  const categories: MotorsportCategory[] = ["gt", "formula", "hypercar", "touring", "rally", "endurance"];
+  const teams: MotorsportTeam[] = [];
+
+  let idCounter = 1;
+  // Generate 35 teams per category = 210 total rival teams
+  categories.forEach(category => {
+    for (let i = 0; i < 35; i++) {
+      const prefix = AI_TEAM_PREFIXES[i % AI_TEAM_PREFIXES.length];
+      const baseName = AI_TEAM_NAMES[i % AI_TEAM_NAMES.length];
+      const teamName = `${prefix} ${baseName} #${i + 1}`;
+      
+      const driver1Name = YOUNG_TALENT_NAMES[(i * 2) % YOUNG_TALENT_NAMES.length];
+      const driver2Name = YOUNG_TALENT_NAMES[(i * 2 + 1) % YOUNG_TALENT_NAMES.length];
+      const nat1 = NATIONALITIES[(i * 2) % NATIONALITIES.length];
+      const nat2 = NATIONALITIES[(i * 2 + 1) % NATIONALITIES.length];
+
+      const driver1: RaceDriver = {
+        id: `ai_drv_${idCounter}_1`,
+        name: `${driver1Name} (AI)`,
+        nationality: nat1,
+        skill: Math.floor(65 + seededRandom(idCounter * 10, 1) * 32),
+        experience: Math.floor(50 + seededRandom(idCounter * 10, 2) * 45),
+        consistency: Math.floor(60 + seededRandom(idCounter * 10, 3) * 35),
+        wetSkill: Math.floor(60 + seededRandom(idCounter * 10, 4) * 35),
+        aggression: Math.floor(40 + seededRandom(idCounter * 10, 5) * 50),
+        salary: 1_200_000,
+        contractMonths: 24,
+        contractEndSeason: 3,
+      };
+
+      const driver2: RaceDriver = {
+        id: `ai_drv_${idCounter}_2`,
+        name: `${driver2Name} (AI)`,
+        nationality: nat2,
+        skill: Math.floor(60 + seededRandom(idCounter * 10, 6) * 30),
+        experience: Math.floor(40 + seededRandom(idCounter * 10, 7) * 45),
+        consistency: Math.floor(55 + seededRandom(idCounter * 10, 8) * 35),
+        wetSkill: Math.floor(55 + seededRandom(idCounter * 10, 9) * 35),
+        aggression: Math.floor(45 + seededRandom(idCounter * 10, 10) * 45),
+        salary: 900_000,
+        contractMonths: 24,
+        contractEndSeason: 3,
+      };
+
+      teams.push({
+        id: `ai_team_${idCounter}`,
+        name: teamName,
+        category,
+        status: "competing",
+        baseVehicleId: null,
+        drivers: [driver1, driver2],
+        budget: Math.floor(15_000_000 + seededRandom(idCounter, 12) * 40_000_000),
+        developmentPoints: Math.floor(seededRandom(idCounter, 13) * 500),
+        techTransferPool: 0,
+        seasonResults: [],
+        currentSeason: 1,
+        wins: Math.floor(seededRandom(idCounter, 14) * 5),
+        podiums: Math.floor(seededRandom(idCounter, 15) * 12),
+        championships: seededRandom(idCounter, 16) > 0.85 ? 1 : 0,
+        strategy: defaultStrategy(),
+        teamMorale: 75,
+        facilityLevel: i % 4 === 0 ? "elite" : i % 3 === 0 ? "advanced" : "standard",
+        engineSupplier: "Rival Works",
+        driverDevLogs: [],
+        penaltyPoints: 0,
+        fastestLaps: Math.floor(seededRandom(idCounter, 17) * 4),
+        polePositions: Math.floor(seededRandom(idCounter, 18) * 6),
+        sponsors: [],
+        liveryColor: LIVERY_COLORS[i % LIVERY_COLORS.length],
+      });
+
+      idCounter++;
+    }
+  });
+
   return {
-    teams: [],
+    teams,
     currentSeason: 1,
     techTransferHistory: [],
     totalTechTransferred: 0,
