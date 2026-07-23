@@ -695,14 +695,15 @@ function simulatePerformance(design: VehicleDesign, eng: EngineSim, aero: Return
 
   // Acceleration — traction-limited at low speed
   const powerToWeight = power / (weight / 1000);
-  // Traction limit: max accel limited by tire grip × diff × pressure
+  // Drivetrain traction bonus (AWD vs RWD vs FWD)
+  const driveFactor = v.driveType === "awd" ? 0.78 : v.driveType === "rwd" ? 0.95 : 1.15;
   const tractionLimit = tire.gripFactor * diffFactor * diffPreloadFactor * pressureFactor;
-  const tractionLimited0_60 = clamp(5.5 / (powerToWeight / 300) * launchFactor * tcFactor, 1.8, 10);
-  // High power-to-weight cars are traction-limited, not power-limited
-  const tractionFloor = clamp(3.5 / tractionLimit, 1.8, 10);
-  const accel0_60 = Math.round(Math.max(tractionLimited0_60, tractionFloor) * 100) / 100;
-  const accel0_100 = Math.round(clamp(6 / (powerToWeight / 300) * tcFactor, 2.0, 12) * 100) / 100;
-  const accel100_200 = Math.round(clamp(15 / (powerToWeight / 300), 4, 40) * 100) / 100;
+  // High power-to-weight AWD cars (hypercars) achieve 1.7 - 2.5s 0-60
+  const base0_60 = (3.8 / Math.pow(Math.max(powerToWeight, 50) / 250, 0.7)) * driveFactor * launchFactor * tcFactor;
+  const tractionFloor = 1.45 / Math.max(0.6, tractionLimit);
+  const accel0_60 = Math.round(clamp(Math.max(base0_60, tractionFloor), 1.6, 12) * 100) / 100;
+  const accel0_100 = Math.round(clamp((accel0_60 * 1.55), 2.1, 16) * 100) / 100;
+  const accel100_200 = Math.round(clamp(14 / Math.pow(Math.max(powerToWeight, 50) / 250, 0.95), 2.2, 40) * 100) / 100;
 
   // Quarter mile — gear count affects shift time penalty
   const shiftPenalty = Math.max(0, (7 - v.gearCount)) * 0.05;

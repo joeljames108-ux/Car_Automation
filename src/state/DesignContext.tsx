@@ -8,12 +8,15 @@ import type {
 } from "../sim/types/chassis";
 
 export type UnitSystem = "metric" | "imperial";
+export type CarConceptFocus = "budget" | "track" | "luxury" | "balanced";
 
 interface DesignContextValue {
   design: VehicleDesign;
   sim: SimResult;
   units: UnitSystem;
   setUnits: (u: UnitSystem) => void;
+  carConcept: CarConceptFocus;
+  setCarConcept: (concept: CarConceptFocus) => void;
   updateEngine: (patch: Partial<EngineConfig>) => void;
   updateVehicle: (patch: Partial<VehicleConfig>) => void;
   updateAero: (patch: Partial<AeroConfig>) => void;
@@ -39,6 +42,7 @@ const DesignContext = createContext<DesignContextValue | null>(null);
 export function DesignProvider({ children }: { children: ReactNode }) {
   const [design, setDesignState] = useState<VehicleDesign>(() => defaultDesign());
   const [units, setUnits] = useState<UnitSystem>("metric");
+  const [carConcept, setCarConcept] = useState<CarConceptFocus>("balanced");
   const sim = useMemo(() => simulate(design), [design]);
 
   const setDesign = useCallback((d: VehicleDesign) => {
@@ -109,7 +113,7 @@ export function DesignProvider({ children }: { children: ReactNode }) {
   const resetDesign = useCallback(() => setDesignState(defaultDesign()), []);
 
   const value: DesignContextValue = {
-    design, sim, units, setUnits,
+    design, sim, units, setUnits, carConcept, setCarConcept,
     updateEngine, updateVehicle, updateAero, updateAeroResearch, updateExterior, updateInterior, updateElectronics, updateManufacturing, updateInfotainment,
     updateChassisEng, updateSuspensionGeo, updateSteeringEng, updateBrakesEng, updateTiresEng, updateWheelsEng,
     setDesign, resetDesign,

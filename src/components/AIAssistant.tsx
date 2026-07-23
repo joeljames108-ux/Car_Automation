@@ -1,7 +1,7 @@
 import { useMemo, useState, useEffect } from "react";
 import {
   Bot, AlertTriangle, Lightbulb, TrendingUp, X, Check, Info,
-  Wrench, Trophy, DollarSign, Leaf, Cpu, Zap, RotateCcw,
+  Wrench, Trophy, DollarSign, Leaf, Cpu, Zap, RotateCcw, Target,
 } from "lucide-react";
 import { useDesign } from "../state/DesignContext";
 
@@ -48,7 +48,7 @@ function round(v: number, dp = 1) {
 }
 
 export function AIAssistant() {
-  const { design, sim, updateEngine, updateVehicle, updateAero, updateAeroResearch, updateExterior, updateInterior } = useDesign();
+  const { design, sim, carConcept, setCarConcept, updateEngine, updateVehicle, updateAero, updateAeroResearch, updateExterior, updateInterior } = useDesign();
   const [open, setOpen] = useState(true);
   const [engineer, setEngineer] = useState<EngineerId>("chief");
   const [mode, setMode] = useState<ModeId>("intermediate");
@@ -76,9 +76,25 @@ export function AIAssistant() {
     if (sim.aeroBalance < 0.42 || sim.aeroBalance > 0.62) w.push({ id: "imbalance", category: "Aero", severity: "critical", text: `Aero imbalance (${(sim.aeroBalance * 100).toFixed(0)}% rear) — adjust balance.` });
     if (sim.totalCost > 90000) w.push({ id: "cost", category: "Manufacturing", severity: "critical", text: "Cost too high for target market." });
     if (sim.manufacturing.defectRate > 8) w.push({ id: "defects", category: "Manufacturing", severity: "warning", text: "Complex assembly raising defect rate." });
-    if (sim.reliability < 0.6) w.push({ id: "reliability", category: "Manufacturing", severity: "critical", text: "Low reliability will hurt warranty costs." });
+    // --- Concept-specific Warnings ---
+    if (carConcept === "budget" && sim.totalCost > 28000) {
+      w.push({ id: "concept_budget_cost", category: "Manufacturing", severity: "critical", text: `[Budget Target Violation] Production cost ($${sim.totalCost.toLocaleString()}) exceeds budget target ($28,000 max).` });
+    }
+    if (carConcept === "track" && sim.weight > 1350) {
+      w.push({ id: "concept_track_weight", category: "Chassis", severity: "warning", text: `[Track Target Violation] Curb weight (${sim.weight}kg) is too high for peak lap times (target < 1,350kg).` });
+    }
+    if (carConcept === "track" && sim.dragCoeff > 0.36) {
+      w.push({ id: "concept_track_drag", category: "Aero", severity: "warning", text: `[Track Target Violation] High drag coefficient (${sim.dragCoeff.toFixed(2)} Cd) limiting high-speed straight performance.` });
+    }
+    if (carConcept === "luxury" && v.interior.soundDeadening < 0.6) {
+      w.push({ id: "concept_luxury_nvh", category: "Manufacturing", severity: "warning", text: `[Luxury Target Violation] High cabin noise (NVH). Increase sound deadening for luxury compliance.` });
+    }
+    if (carConcept === "luxury" && sim.luxuryScore < 0.7) {
+      w.push({ id: "concept_luxury_comfort", category: "Manufacturing", severity: "critical", text: `[Luxury Target Violation] Luxury rating (${(sim.luxuryScore * 100).toFixed(0)}%) is below luxury standards.` });
+    }
+
     return w;
-  }, [sim, e.turboSize, v.chassis]);
+  }, [sim, e.turboSize, v.chassis, carConcept]);
 
   const activeWarnings = warnings.filter((w) => !dismissed.has(w.id));
 
@@ -302,6 +318,32 @@ export function AIAssistant() {
             </div>
 
             <div className="flex-1" />
+
+            {/* Car Concept Philosophy Selector */}
+            <div className="hidden lg:flex items-center gap-1 bg-base-950 px-2 py-1 rounded-xl border border-cyan-500/30">
+              <span className="text-[10px] font-mono text-cyan-400 flex items-center gap-1 font-bold">
+                <Target size={11} /> PHILOSOPHY:
+              </span>
+              {(["budget", "track", "luxury", "balanced"] as const).map((c) => (
+                <button
+                  key={c}
+                  onClick={() => setCarConcept(c)}
+                  className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase transition-all border ${
+                    carConcept === c
+                      ? c === "budget"
+                        ? "bg-emerald-500/20 border-emerald-500/40 text-emerald-300"
+                        : c === "track"
+                        ? "bg-amber-500/20 border-amber-500/40 text-amber-300"
+                        : c === "luxury"
+                        ? "bg-purple-500/20 border-purple-500/40 text-purple-300"
+                        : "bg-cyan-500/20 border-cyan-500/40 text-cyan-300"
+                      : "bg-base-900 border-transparent text-slate-500 hover:text-slate-300"
+                  }`}
+                >
+                  {c}
+                </button>
+              ))}
+            </div>
 
             {/* Engineer picker */}
             <div className="flex items-center gap-0.5 bg-base-900 rounded-lg p-0.5 border border-base-800">

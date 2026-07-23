@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import {
   Wind, CarFront, Layers3, Combine, Zap, Plane, Thermometer, Disc3,
-  Video, Cpu, BarChart3, Gauge, TrendingUp, CircuitBoard, Bot,
+  Video, Cpu, BarChart3, Gauge, TrendingUp, CircuitBoard, Bot, Sparkles,
 } from "lucide-react";
 import { useDesign } from "../state/DesignContext";
 import type { SimResult, AeroResearchConfig } from "../sim/types";
@@ -520,42 +520,82 @@ function AeroDashboard({
         </div>
       </Section>
 
-      <Section title="Chief Aero Engineer AI Assistant" icon={<Bot size={18} className="text-cyan-400" />}>
-        <div className="bg-base-900/90 border border-cyan-500/30 rounded-xl p-4 shadow-[0_0_25px_rgba(34,211,238,0.1)] relative overflow-hidden">
+      <Section title="Chief Aero Engineer AI Assistant (Apex AI)" icon={<Bot size={18} className="text-cyan-400" />}>
+        <div className="bg-gradient-to-br from-slate-900/90 via-slate-900/95 to-slate-950/90 border border-cyan-500/40 rounded-2xl p-5 shadow-[0_0_35px_rgba(34,211,238,0.15)] relative overflow-hidden">
           <div className="absolute top-0 right-0 p-4 opacity-15 pointer-events-none">
-            <Bot size={90} className="text-cyan-400" />
+            <Bot size={110} className="text-cyan-400" />
           </div>
 
-          <div className="flex items-start gap-3 relative z-10">
-            <div className="p-2.5 rounded-xl bg-cyan-500/20 border border-cyan-400/40 text-cyan-300 shrink-0">
-              <Bot size={22} className="animate-pulse" />
+          <div className="flex items-start gap-4 relative z-10">
+            <div className="p-3 rounded-2xl bg-gradient-to-br from-cyan-500/30 to-sky-500/20 border border-cyan-400/50 text-cyan-300 shrink-0 shadow-[0_0_15px_rgba(34,211,238,0.3)]">
+              <Bot size={26} className="animate-pulse" />
             </div>
             <div className="flex-1">
-              <div className="flex items-center gap-2 mb-1">
-                <span className="text-sm font-bold text-slate-100">Dr. Elena Vance</span>
-                <span className="text-[10px] font-mono text-cyan-400 bg-cyan-500/10 border border-cyan-500/30 px-1.5 py-0.5 rounded">CHIEF AERODYNAMICIST</span>
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2">
+                <div className="flex items-center gap-2">
+                  <span className="text-base font-bold text-slate-100">Dr. Elena Vance</span>
+                  <span className="text-[10px] font-mono font-bold text-cyan-300 bg-cyan-500/20 border border-cyan-400/40 px-2 py-0.5 rounded-full shadow-[0_0_8px_rgba(34,211,238,0.2)]">
+                    APEX CHIEF AERODYNAMICIST AI
+                  </span>
+                </div>
+
+                {/* Quick Auto-Optimize All Button */}
+                <button
+                  onClick={() => {
+                    update("rearWing", { angleOfAttack: 14, elements: 2, gurneyFlap: true, span: 1600 });
+                    update("front", { splitterExtension: 140, splitterAngle: 4.5, airCurtains: true });
+                    update("diffuser", { angle: 13, gurneyFlap: true, length: 450 });
+                    update("underbody", { floorType: "ground_effect_tunnels", floorEdgeWings: true });
+                    update("wheel", { wheelAero: "aero_discs" });
+                  }}
+                  className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold bg-gradient-to-r from-cyan-500/25 via-sky-500/20 to-purple-500/25 border border-cyan-400/50 text-cyan-200 hover:bg-cyan-500/35 transition-all shadow-[0_0_16px_rgba(34,211,238,0.3)] active:scale-95"
+                >
+                  <Sparkles size={14} className="text-cyan-300 animate-spin" /> Auto-Optimize All Aero Setup
+                </button>
+              </div>
+
+              {/* Advanced Efficiency Metric Pills */}
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-3">
+                <div className="bg-base-950/80 rounded-lg p-2 border border-white/5 text-center">
+                  <div className="text-[9px] font-mono text-slate-500 uppercase">L/D Efficiency Ratio</div>
+                  <div className="font-mono text-xs font-bold text-cyan-300">{(-sim.liftCoeff / Math.max(0.01, sim.dragCoeff)).toFixed(2)}:1</div>
+                </div>
+                <div className="bg-base-950/80 rounded-lg p-2 border border-white/5 text-center">
+                  <div className="text-[9px] font-mono text-slate-500 uppercase">Aero Balance</div>
+                  <div className="font-mono text-xs font-bold text-emerald-400">{(sim.aeroBalance * 100).toFixed(1)}% Front</div>
+                </div>
+                <div className="bg-base-950/80 rounded-lg p-2 border border-white/5 text-center">
+                  <div className="text-[9px] font-mono text-slate-500 uppercase">Flow Separation</div>
+                  <div className={`font-mono text-xs font-bold ${sim.separationRisk > 0.5 ? "text-rose-400" : "text-emerald-400"}`}>
+                    {(sim.separationRisk * 100).toFixed(0)}% Risk
+                  </div>
+                </div>
+                <div className="bg-base-950/80 rounded-lg p-2 border border-white/5 text-center">
+                  <div className="text-[9px] font-mono text-slate-500 uppercase">Cooling Index</div>
+                  <div className="font-mono text-xs font-bold text-purple-300">{(sim.coolingEfficiency * 100).toFixed(0)}%</div>
+                </div>
               </div>
               
               {/* Dynamic Balance Diagnosis */}
               <div className="text-xs text-slate-300 leading-relaxed mb-3">
                 {sim.aeroBalance < 0.46 ? (
                   <p>
-                    <strong className="text-amber-400">Rear-Bias Understeer:</strong> Front downforce is insufficient (<span className="font-mono text-cyan-300">{(sim.aeroBalance * 100).toFixed(1)}% front</span>). At speed, the car will push on corner entry and resist rotation.
+                    <strong className="text-amber-400">Rear-Bias Understeer:</strong> Front downforce is insufficient (<span className="font-mono text-cyan-300">{(sim.aeroBalance * 100).toFixed(1)}% front</span>). At high speed, the front axle will wash out under braking and push through apex turns.
                   </p>
                 ) : sim.aeroBalance > 0.55 ? (
                   <p>
-                    <strong className="text-rose-400">Front-Heavy Oversteer:</strong> Excess front loading (<span className="font-mono text-cyan-300">{(sim.aeroBalance * 100).toFixed(1)}% front</span>). High risk of high-speed rear snap away on corner turn-in.
+                    <strong className="text-rose-400">Front-Heavy Oversteer:</strong> Excess front loading (<span className="font-mono text-cyan-300">{(sim.aeroBalance * 100).toFixed(1)}% front</span>). Severe risk of high-speed rear breakaway on fast corner entries.
                   </p>
                 ) : (
                   <p>
-                    <strong className="text-emerald-400">Optimum Aero Window:</strong> Balance is locked in at <span className="font-mono text-emerald-300">{(sim.aeroBalance * 100).toFixed(1)}% front</span> / <span className="font-mono text-emerald-300">{((1 - sim.aeroBalance) * 100).toFixed(1)}% rear</span>. Excellent turn-in stability and high-speed grip.
+                    <strong className="text-emerald-400">Optimum Aero Window:</strong> Handling balance is locked at <span className="font-mono text-emerald-300">{(sim.aeroBalance * 100).toFixed(1)}% front</span> / <span className="font-mono text-emerald-300">{((1 - sim.aeroBalance) * 100).toFixed(1)}% rear</span>. Exceptional turn-in precision and rear stability.
                   </p>
                 )}
               </div>
 
-              {/* Actionable Engineering Advice & 1-Click Fix */}
-              <div className="bg-base-950/70 rounded-xl p-3 border border-white/5 space-y-2 mb-3">
-                <div className="text-[10px] font-mono text-slate-400 uppercase tracking-wider font-semibold">ENGINEERING ACTION PLAN:</div>
+              {/* Actionable Engineering Advice & 1-Click Trim Fix */}
+              <div className="bg-base-950/80 rounded-xl p-3 border border-white/5 space-y-2 mb-3">
+                <div className="text-[10px] font-mono text-slate-400 uppercase tracking-wider font-semibold">RECOMMENDED ENGINEERING TRIM:</div>
                 {sim.aeroBalance < 0.46 ? (
                   <div className="flex items-center justify-between gap-3 text-xs">
                     <span className="text-slate-300">Increase Front Splitter extension to 180mm & angle to +4.5° to restore front authority.</span>
@@ -584,12 +624,12 @@ function AeroDashboard({
                   </div>
                 ) : (
                   <div className="text-xs text-emerald-400 flex items-center gap-1.5 font-medium">
-                    <span>✓ Setup is optimal for high-speed stability and grip. No further trim required.</span>
+                    <span>✓ Aerodynamic trim is optimal for maximum high-speed grip. No further adjustments required.</span>
                   </div>
                 )}
               </div>
 
-              {/* Detailed Recommendations list */}
+              {/* Detailed Telemetry Recommendations */}
               <div className="space-y-1.5">
                 {recommendations.map((r, i) => (
                   <div key={i} className={`text-xs px-3 py-2 rounded-lg border ${toneColor(r.tone)} flex items-start gap-2`}>
