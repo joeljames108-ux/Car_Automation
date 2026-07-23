@@ -6,7 +6,7 @@ import type {
   MotorsportState, MotorsportTeam, MotorsportCategory, SeasonResult,
   RaceDriver, TrackId, TeamStatus, TeamStrategy, MotorsportRegulation,
   CategoryGuide, ComplianceResult, ChampionshipStanding,
-  DriverDevelopmentLog, FacilityLevel, TireChoice, Sponsor, SponsorTier,
+  DriverDevelopmentLog, FacilityLevel, Sponsor, SponsorTier,
 } from "./types";
 
 function clamp(v: number, lo: number, hi: number) { return Math.max(lo, Math.min(hi, v)); }
@@ -677,26 +677,51 @@ export function simulateSeason(
     let polePositions = 0;
     let penaltyPoints = 0;
 
+    // Check regulation compliance — Non-compliant vehicles are penalised / disqualified
+    const isHybrid = vehiclePower > 700 || vehicleReliability > 0.85; // baseline check
+    const compliance = evaluateCompliance(vehiclePower, vehicleWeight, isHybrid, team.category);
+    const compliancePenalty = compliance.passed ? 1.0 : (compliance.overallScore / 100);
+
+    // If severe non-compliance (< 50% score), team is disqualified from competing this season
+    if (compliance.overallScore < 50) {
+      penaltyPoints += 10;
+      team.penaltyPoints += 10;
+      team.teamMorale = Math.max(10, team.teamMorale - 25);
+      const disqResult: SeasonResult = {
+        season: newState.currentSeason,
+        category: team.category,
+        position: 12,
+        points: 0,
+        wins: 0, podiums: 0, dnfs: calendar.rounds, bestFinish: 0,
+        raceResults: calendar.tracks.map((t, idx) => ({
+          round: idx + 1, trackId: t, position: 0, points: 0, penaltyPoints: 2,
+        })),
+        techPointsEarned: 0, fastestLaps: 0, polePositions: 0,
+        penaltyPoints: 10, standings: [],
+      };
+      team.seasonResults = [...team.seasonResults, disqResult];
+      newState.teams[ti] = team;
+      continue;
+    }
+
     // Sponsor bonus — higher-tier sponsors give performance boost
     const sponsorBonus = team.sponsors.reduce((s, sp) => {
       const tierValue = sp.tier === "title" ? 4 : sp.tier === "major" ? 2 : sp.tier === "technical" ? 1.5 : 0.5;
       return s + tierValue;
     }, 0);
 
-    // Strategy bonuses — now more meaningful
+    // Strategy bonuses
     const tireStrategyBonus = (() => {
       const tires = team.strategy.tireStrategy;
       if (tires.length === 0) return 0;
-      // Mixed strategies are better than single compound
       const uniqueCompounds = new Set(tires).size;
       return uniqueCompounds * 1.5;
     })();
 
     const fuelLoadBonus = (() => {
-      // Lighter fuel = faster but risks running out
-      if (team.strategy.fuelLoad < 0.5) return 3; // risky but fast
+      if (team.strategy.fuelLoad < 0.5) return 3;
       if (team.strategy.fuelLoad < 0.7) return 2;
-      if (team.strategy.fuelLoad > 0.95) return -1; // heavy
+      if (team.strategy.fuelLoad > 0.95) return -1;
       return 0;
     })();
 
@@ -721,12 +746,12 @@ export function simulateSeason(
     for (let round = 0; round < calendar.rounds; round++) {
       const trackId = calendar.tracks[round % calendar.tracks.length];
 
-      // Performance score based on vehicle + team + driver + strategy + facility + sponsors
+      // Performance score based on vehicle + team + driver + strategy + facility + sponsors + compliance
       const avgDriverSkill = team.drivers.reduce((s, d) => s + d.skill, 0) / team.drivers.length;
       const avgConsistency = team.drivers.reduce((s, d) => s + d.consistency, 0) / team.drivers.length;
-      const vehicleScore = (vehiclePower / 10 - vehicleWeight / 100 + vehicleAeroScore * 50) / 100;
+      const vehicleScore = ((vehiclePower / 10 - vehicleWeight / 100 + vehicleAeroScore * 50) / 100) * compliancePenalty;
       const teamDevBonus = team.developmentPoints * 0.01;
-      const moraleBonus = (team.teamMorale - 50) * 0.08; // morale above 50 helps, below 50 hurts
+      const moraleBonus = (team.teamMorale - 50) * 0.08;
       const performanceScore = (vehicleScore * bopFactor) + avgDriverSkill * 0.5 + teamDevBonus +
         facilityBonus * 0.3 + strategyBonus * 0.3 + sponsorBonus * 0.2 + moraleBonus;
 

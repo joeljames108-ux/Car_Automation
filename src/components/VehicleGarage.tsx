@@ -198,6 +198,12 @@ export function VehicleGarage() {
   const [view, setView] = useState<"grid" | "tree">("grid");
   const [saveName, setSaveName] = useState({ model: "", variant: "" });
   const [showSaveDialog, setShowSaveDialog] = useState(false);
+  const [variantModal, setVariantModal] = useState<{
+    open: boolean;
+    parentVehicle: GarageVehicle | null;
+    variantType: VehicleVariantType;
+    variantName: string;
+  }>({ open: false, parentVehicle: null, variantType: "facelift", variantName: "" });
 
   const filtered = useMemo(() =>
     company.garage.filter(v =>
@@ -228,8 +234,19 @@ export function VehicleGarage() {
   }
 
   function handleCreateVariant(v: GarageVehicle, type: VehicleVariantType) {
-    const suffix = VARIANT_LABELS[type];
-    saveToGarage(v.design, v.sim, v.modelName, suffix, type, v.id);
+    setVariantModal({
+      open: true,
+      parentVehicle: v,
+      variantType: type,
+      variantName: type === "facelift" ? `${v.modelName} LCI / Facelift` : type === "generation" ? `Next-Gen ${v.modelName}` : type === "special_edition" ? `${v.modelName} Track Edition` : `${v.variantName} Sport`,
+    });
+  }
+
+  function confirmCreateVariant() {
+    if (!variantModal.parentVehicle || !variantModal.variantName.trim()) return;
+    const p = variantModal.parentVehicle;
+    saveToGarage(p.design, p.sim, p.modelName, variantModal.variantName, variantModal.variantType, p.id);
+    setVariantModal({ open: false, parentVehicle: null, variantType: "facelift", variantName: "" });
   }
 
   return (
@@ -293,6 +310,60 @@ export function VehicleGarage() {
           </button>
         )}
       </div>
+
+      {/* Create Facelift / Generation Modal */}
+      {variantModal.open && variantModal.parentVehicle && (
+        <div className="panel p-5 border-accent-500/40 bg-base-900/90 backdrop-blur-md space-y-4">
+          <div className="flex items-center justify-between border-b border-base-800 pb-3">
+            <h3 className="text-sm font-semibold text-slate-100 flex items-center gap-2">
+              <GitBranch size={16} className="text-accent-400" />
+              Develop {VARIANT_LABELS[variantModal.variantType]} — {variantModal.parentVehicle.name}
+            </h3>
+            <button onClick={() => setVariantModal(m => ({ ...m, open: false }))} className="text-xs text-slate-500 hover:text-slate-300">✕</button>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+            <div className="bg-base-850 rounded-xl p-3 border border-base-800">
+              <div className="text-[10px] text-slate-500 mb-1">Base Platform</div>
+              <div className="font-semibold text-slate-200">{variantModal.parentVehicle.modelName}</div>
+              <div className="text-[10px] text-slate-500 mt-0.5">Gen {variantModal.parentVehicle.generation}</div>
+            </div>
+            <div className="bg-base-850 rounded-xl p-3 border border-base-800">
+              <div className="text-[10px] text-slate-500 mb-1">Variant Category</div>
+              <div className="font-semibold text-accent-300 capitalize">{VARIANT_LABELS[variantModal.variantType]}</div>
+              <div className="text-[10px] text-slate-500 mt-0.5">
+                {variantModal.variantType === "facelift" ? "Mid-cycle refresh (LCI)" : variantModal.variantType === "generation" ? "Next-gen overhaul" : "Trim/Performance edition"}
+              </div>
+            </div>
+            <div className="bg-base-850 rounded-xl p-3 border border-base-800">
+              <div className="text-[10px] text-slate-500 mb-1">Tooling Cost Discount</div>
+              <div className="font-mono font-bold text-ok-400">
+                {variantModal.variantType === "facelift" ? "65% Saved" : variantModal.variantType === "trim" ? "80% Saved" : "25% Saved"}
+              </div>
+              <div className="text-[10px] text-slate-500 mt-0.5">Carries over chassis R&D</div>
+            </div>
+          </div>
+
+          <div>
+            <label className="label-mono block mb-1">New Variant / Model Name</label>
+            <input
+              value={variantModal.variantName}
+              onChange={e => setVariantModal(m => ({ ...m, variantName: e.target.value }))}
+              placeholder="e.g. GTS Edition, LCI Refresh, Mk II"
+              className="w-full bg-base-850 border border-base-700 rounded-lg px-3 py-2 text-sm text-slate-200 focus:border-accent-500 focus:outline-none"
+            />
+          </div>
+
+          <div className="flex justify-end gap-2 pt-2 border-t border-base-800">
+            <button onClick={() => setVariantModal(m => ({ ...m, open: false }))} className="px-4 py-2 rounded-lg text-xs text-slate-400 hover:bg-base-800 transition-all">
+              Cancel
+            </button>
+            <button onClick={confirmCreateVariant} className="px-4 py-2 rounded-lg text-xs font-semibold bg-accent-500/20 border border-accent-500/40 text-accent-300 hover:bg-accent-500/30 transition-all">
+              Derive {VARIANT_LABELS[variantModal.variantType]}
+            </button>
+          </div>
+        </div>
+      )}
 
       {/* Controls */}
       <div className="flex items-center gap-2 flex-wrap">

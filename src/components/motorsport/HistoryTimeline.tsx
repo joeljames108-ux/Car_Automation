@@ -3,12 +3,10 @@
 // ===================================================================
 import { useState } from "react";
 import { Clock, Trophy, ChevronDown, ChevronUp } from "lucide-react";
-import { useCompany } from "../../state/CompanyContext";
 import { CATEGORY_LABELS, CATEGORY_COLORS } from "./TeamCard";
 import type { MotorsportTeam } from "../../sim/types";
 
 export function HistoryTimeline({ selectedTeam }: { selectedTeam: MotorsportTeam | null }) {
-  const { company } = useCompany();
   const [expandedSeason, setExpandedSeason] = useState<number | null>(null);
 
   if (!selectedTeam || selectedTeam.seasonResults.length === 0) {

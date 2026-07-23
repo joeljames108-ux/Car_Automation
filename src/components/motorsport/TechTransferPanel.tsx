@@ -5,7 +5,6 @@ import { useState } from "react";
 import { ArrowRightLeft, ArrowRight, ArrowLeft, Clock, Zap } from "lucide-react";
 import { useCompany } from "../../state/CompanyContext";
 import type { MotorsportTeam } from "../../sim/types";
-import { CATEGORY_LABELS } from "./TeamCard";
 
 export function TechTransferPanel({ selectedTeam }: { selectedTeam: MotorsportTeam | null }) {
   const { company, transferMotorsportTech } = useCompany();

@@ -2,16 +2,10 @@
 // CREATE TEAM FORM — Multi-step team creation wizard
 // ===================================================================
 import { useState } from "react";
-import { Plus, ChevronRight, Palette } from "lucide-react";
+import { Plus, ChevronRight } from "lucide-react";
 import { useCompany } from "../../state/CompanyContext";
 import { CATEGORY_LABELS, CATEGORY_COLORS } from "./TeamCard";
 import type { MotorsportCategory } from "../../sim/types";
-
-const LIVERY_PRESETS = [
-  "#e63946", "#2196f3", "#4caf50", "#ff9800", "#9c27b0",
-  "#00bcd4", "#ff5722", "#3f51b5", "#009688", "#f44336",
-  "#1a237e", "#d32f2f", "#00695c", "#e65100",
-];
 
 export function CreateTeamForm({ onClose }: { onClose: () => void }) {
   const { createMotorsportTeam, company } = useCompany();
@@ -41,7 +35,7 @@ export function CreateTeamForm({ onClose }: { onClose: () => void }) {
       <div className="relative">
         {/* Step indicator */}
         <div className="flex items-center gap-2 mb-5">
-          {steps.map((s, i) => (
+          {steps.map((_, i) => (
             <div key={i} className="flex items-center gap-2">
               <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold transition-all ${
                 i === step ? "bg-accent-500/30 text-accent-300 border border-accent-500/50" :

@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import {
   Wind, CarFront, Layers3, Combine, Zap, Plane, Thermometer, Disc3,
-  Video, Cpu, BarChart3, Gauge, TrendingUp, CircuitBoard, AlertTriangle,
+  Video, Cpu, BarChart3, Gauge, TrendingUp, CircuitBoard, Bot,
 } from "lucide-react";
 import { useDesign } from "../state/DesignContext";
 import type { SimResult, AeroResearchConfig } from "../sim/types";
@@ -65,10 +65,54 @@ export function AeroLab() {
   return (
     <div className="space-y-4">
       <div className="panel p-3">
-        <div className="flex items-center gap-2 mb-2">
-          <Wind size={18} className="text-accent-400" />
-          <h2 className="text-sm font-semibold text-slate-200">Aerodynamics Research Center</h2>
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-3">
+          <div className="flex items-center gap-2">
+            <Wind size={20} className="text-accent-400" />
+            <div>
+              <h2 className="text-sm font-semibold text-slate-100">Aerodynamics Research Center</h2>
+              <p className="text-[10px] text-slate-500">Fine-tune downforce distribution & flow efficiency</p>
+            </div>
+          </div>
+          
+          {/* Quick Aero Balance Presets */}
+          <div className="flex items-center gap-1.5 flex-wrap">
+            <span className="text-[10px] text-slate-400 font-mono font-semibold mr-1">AUTO BALANCE:</span>
+            <button
+              onClick={() => {
+                update("rearWing", { angleOfAttack: 12, elements: 2, gurneyFlap: true });
+                update("front", { splitterExtension: 120, splitterAngle: 4 });
+                update("diffuser", { angle: 12 });
+              }}
+              className="px-2.5 py-1 rounded-lg text-xs font-semibold bg-ok-500/15 border border-ok-500/30 text-ok-400 hover:bg-ok-500/25 transition-all shadow-sm"
+              title="Set perfect 50/50 front-rear downforce distribution"
+            >
+              ⚖️ Perfect 50/50
+            </button>
+            <button
+              onClick={() => {
+                update("rearWing", { angleOfAttack: 22, elements: 3, gurneyFlap: true });
+                update("front", { splitterExtension: 220, splitterAngle: 8, divePlanes: 2 });
+                update("diffuser", { angle: 18, gurneyFlap: true });
+              }}
+              className="px-2.5 py-1 rounded-lg text-xs font-semibold bg-accent-500/15 border border-accent-500/30 text-accent-300 hover:bg-accent-500/25 transition-all shadow-sm"
+              title="Maximize total downforce for technical circuits"
+            >
+              🏎️ Max Downforce
+            </button>
+            <button
+              onClick={() => {
+                update("rearWing", { angleOfAttack: 2, elements: 1, gurneyFlap: false });
+                update("front", { splitterExtension: 40, splitterAngle: 1, divePlanes: 0 });
+                update("diffuser", { angle: 6, gurneyFlap: false });
+              }}
+              className="px-2.5 py-1 rounded-lg text-xs font-semibold bg-purple-500/15 border border-purple-500/30 text-purple-300 hover:bg-purple-500/25 transition-all shadow-sm"
+              title="Minimize drag coefficient for maximum top speed"
+            >
+              🚀 Low Drag Speed
+            </button>
+          </div>
         </div>
+
         <div className="flex flex-wrap gap-1">
           {DEPTS.map((d) => (
             <button
@@ -322,7 +366,7 @@ export function AeroLab() {
             </Section>
           )}
 
-          {dept === "dashboard" && <AeroDashboard sim={sim} ar={ar} />}
+          {dept === "dashboard" && <AeroDashboard sim={sim} ar={ar} update={update} />}
         </div>
 
         {/* Right rail: live metrics + visualization */}
@@ -366,7 +410,13 @@ export function AeroLab() {
   );
 }
 
-function AeroDashboard({ sim, ar }: { sim: SimResult; ar: AeroResearchConfig }) {
+function AeroDashboard({
+  sim, ar, update,
+}: {
+  sim: SimResult;
+  ar: AeroResearchConfig;
+  update: <K extends keyof AeroResearchConfig>(key: K, patch: Partial<AeroResearchConfig[K]>) => void;
+}) {
   const trackPredictions = useMemo(() => {
     const tracks = ["monza", "silverstone", "lemans", "monaco", "hungaroring"] as const;
     return tracks.map((id) => {
@@ -470,13 +520,86 @@ function AeroDashboard({ sim, ar }: { sim: SimResult; ar: AeroResearchConfig }) 
         </div>
       </Section>
 
-      <Section title="Aero Optimization AI" icon={<AlertTriangle size={16} />}>
-        <div className="space-y-2">
-          {recommendations.map((r, i) => (
-            <div key={i} className={`text-xs px-3 py-2 rounded-lg border ${toneColor(r.tone)}`}>
-              {r.text}
+      <Section title="Chief Aero Engineer AI Assistant" icon={<Bot size={18} className="text-cyan-400" />}>
+        <div className="bg-base-900/90 border border-cyan-500/30 rounded-xl p-4 shadow-[0_0_25px_rgba(34,211,238,0.1)] relative overflow-hidden">
+          <div className="absolute top-0 right-0 p-4 opacity-15 pointer-events-none">
+            <Bot size={90} className="text-cyan-400" />
+          </div>
+
+          <div className="flex items-start gap-3 relative z-10">
+            <div className="p-2.5 rounded-xl bg-cyan-500/20 border border-cyan-400/40 text-cyan-300 shrink-0">
+              <Bot size={22} className="animate-pulse" />
             </div>
-          ))}
+            <div className="flex-1">
+              <div className="flex items-center gap-2 mb-1">
+                <span className="text-sm font-bold text-slate-100">Dr. Elena Vance</span>
+                <span className="text-[10px] font-mono text-cyan-400 bg-cyan-500/10 border border-cyan-500/30 px-1.5 py-0.5 rounded">CHIEF AERODYNAMICIST</span>
+              </div>
+              
+              {/* Dynamic Balance Diagnosis */}
+              <div className="text-xs text-slate-300 leading-relaxed mb-3">
+                {sim.aeroBalance < 0.46 ? (
+                  <p>
+                    <strong className="text-amber-400">Rear-Bias Understeer:</strong> Front downforce is insufficient (<span className="font-mono text-cyan-300">{(sim.aeroBalance * 100).toFixed(1)}% front</span>). At speed, the car will push on corner entry and resist rotation.
+                  </p>
+                ) : sim.aeroBalance > 0.55 ? (
+                  <p>
+                    <strong className="text-rose-400">Front-Heavy Oversteer:</strong> Excess front loading (<span className="font-mono text-cyan-300">{(sim.aeroBalance * 100).toFixed(1)}% front</span>). High risk of high-speed rear snap away on corner turn-in.
+                  </p>
+                ) : (
+                  <p>
+                    <strong className="text-emerald-400">Optimum Aero Window:</strong> Balance is locked in at <span className="font-mono text-emerald-300">{(sim.aeroBalance * 100).toFixed(1)}% front</span> / <span className="font-mono text-emerald-300">{((1 - sim.aeroBalance) * 100).toFixed(1)}% rear</span>. Excellent turn-in stability and high-speed grip.
+                  </p>
+                )}
+              </div>
+
+              {/* Actionable Engineering Advice & 1-Click Fix */}
+              <div className="bg-base-950/70 rounded-xl p-3 border border-white/5 space-y-2 mb-3">
+                <div className="text-[10px] font-mono text-slate-400 uppercase tracking-wider font-semibold">ENGINEERING ACTION PLAN:</div>
+                {sim.aeroBalance < 0.46 ? (
+                  <div className="flex items-center justify-between gap-3 text-xs">
+                    <span className="text-slate-300">Increase Front Splitter extension to 180mm & angle to +4.5° to restore front authority.</span>
+                    <button
+                      onClick={() => {
+                        update("front", { splitterExtension: 180, splitterAngle: 4.5 });
+                        update("rearWing", { angleOfAttack: Math.max(2, ar.rearWing.angleOfAttack - 3) });
+                      }}
+                      className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-cyan-500/20 border border-cyan-400/40 text-cyan-300 hover:bg-cyan-500/30 transition-all shrink-0"
+                    >
+                      Apply Front Trim
+                    </button>
+                  </div>
+                ) : sim.aeroBalance > 0.55 ? (
+                  <div className="flex items-center justify-between gap-3 text-xs">
+                    <span className="text-slate-300">Add +4.0° Rear Wing AoA & Gurney flap to plant the rear axle.</span>
+                    <button
+                      onClick={() => {
+                        update("rearWing", { angleOfAttack: Math.min(28, ar.rearWing.angleOfAttack + 5), gurneyFlap: true });
+                        update("diffuser", { angle: 14 });
+                      }}
+                      className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-cyan-500/20 border border-cyan-400/40 text-cyan-300 hover:bg-cyan-500/30 transition-all shrink-0"
+                    >
+                      Apply Rear Trim
+                    </button>
+                  </div>
+                ) : (
+                  <div className="text-xs text-emerald-400 flex items-center gap-1.5 font-medium">
+                    <span>✓ Setup is optimal for high-speed stability and grip. No further trim required.</span>
+                  </div>
+                )}
+              </div>
+
+              {/* Detailed Recommendations list */}
+              <div className="space-y-1.5">
+                {recommendations.map((r, i) => (
+                  <div key={i} className={`text-xs px-3 py-2 rounded-lg border ${toneColor(r.tone)} flex items-start gap-2`}>
+                    <span className="shrink-0 mt-0.5">•</span>
+                    <span>{r.text}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
         </div>
       </Section>
     </>

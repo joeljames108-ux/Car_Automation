@@ -81,26 +81,28 @@ function AppInner() {
   return (
     <div className={`min-h-screen bg-base-950 flex flex-col grid-bg transition-opacity duration-700 ${booted ? "opacity-100" : "opacity-0"}`}>
       {/* Header */}
-      <header className="border-b border-base-800 bg-base-900/80 backdrop-blur-md sticky top-0 z-40">
+      <header className="border-b border-white/10 bg-[#0b0f19]/70 backdrop-blur-xl sticky top-0 z-40 shadow-[0_4px_30px_rgba(0,0,0,0.5)]">
         <div className="max-w-[1700px] mx-auto px-4 h-14 flex items-center gap-3">
           {/* Logo */}
           <div className="flex items-center gap-2 shrink-0">
-            <svg viewBox="0 0 24 24" className="h-7 w-7 text-accent-400 animate-pulse-glow rounded-lg" fill="currentColor">
+            <svg viewBox="0 0 24 24" className="h-7 w-7 text-cyan-400 animate-pulse-glow rounded-lg drop-shadow-[0_0_10px_rgba(34,211,238,0.5)]" fill="currentColor">
               <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
             </svg>
-            <span className="text-sm font-bold tracking-tight gradient-text hidden sm:block">APEX ENGINEER</span>
+            <span className="text-sm font-bold tracking-wider gradient-text hidden sm:block">APEX ENGINEER</span>
           </div>
 
           {/* Nav — two groups */}
-          <div className="flex items-center gap-1 flex-1 overflow-x-auto">
+          <div className="flex items-center gap-1.5 flex-1 overflow-x-auto">
             {/* Design group */}
-            <div className="flex items-center gap-0.5 bg-base-850 rounded-lg p-1 border border-base-800">
+            <div className="flex items-center gap-0.5 bg-slate-900/60 backdrop-blur-md rounded-xl p-1 border border-white/5 shadow-inner">
               {designStages.map((s) => (
                 <button
                   key={s.id}
                   onClick={() => setStage(s.id)}
-                  className={`flex items-center gap-1 px-2.5 py-1.5 rounded-md text-[11px] font-medium transition-all whitespace-nowrap ${
-                    stage === s.id ? "bg-accent-500/20 text-accent-300 shadow-sm" : "text-slate-400 hover:text-slate-200 hover:bg-base-800/50"
+                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[11px] font-semibold transition-all duration-200 whitespace-nowrap ${
+                    stage === s.id
+                      ? "bg-gradient-to-r from-cyan-500/25 to-sky-500/20 text-cyan-200 border border-cyan-400/40 shadow-[0_0_12px_rgba(34,211,238,0.25)]"
+                      : "text-slate-400 hover:text-slate-100 hover:bg-white/5"
                   }`}
                 >
                   {s.icon}
@@ -110,16 +112,18 @@ function AppInner() {
             </div>
 
             {/* Divider */}
-            <div className="h-6 w-px bg-base-700 mx-0.5 shrink-0" />
+            <div className="h-6 w-px bg-white/10 mx-0.5 shrink-0" />
 
             {/* World group */}
-            <div className="flex items-center gap-0.5 bg-base-900 rounded-lg p-1 border border-accent-500/20">
+            <div className="flex items-center gap-0.5 bg-slate-900/60 backdrop-blur-md rounded-xl p-1 border border-purple-500/10 shadow-inner">
               {worldStages.map((s) => (
                 <button
                   key={s.id}
                   onClick={() => setStage(s.id)}
-                  className={`flex items-center gap-1 px-2.5 py-1.5 rounded-md text-[11px] font-medium transition-all whitespace-nowrap ${
-                    stage === s.id ? "bg-accent-500/20 text-accent-300 shadow-sm" : "text-slate-400 hover:text-slate-200 hover:bg-base-800/50"
+                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[11px] font-semibold transition-all duration-200 whitespace-nowrap ${
+                    stage === s.id
+                      ? "bg-gradient-to-r from-cyan-500/25 to-purple-500/20 text-cyan-200 border border-cyan-400/40 shadow-[0_0_12px_rgba(34,211,238,0.25)]"
+                      : "text-slate-400 hover:text-slate-100 hover:bg-white/5"
                   }`}
                 >
                   {s.icon}

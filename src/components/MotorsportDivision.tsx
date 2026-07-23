@@ -7,7 +7,8 @@ import {
   Medal, AlertTriangle, Zap, Gauge, Shield,
   Play, History, BookOpen, Target, BarChart3,
   Star, CheckCircle, XCircle, Info, ChevronRight,
-  Search, TrendingUp, Award, Settings, Wrench,
+  Search, TrendingUp, Award, Settings, Wrench, Radio, Calendar,
+  Building2, Gavel,
 } from "lucide-react";
 import { useCompany } from "../state/CompanyContext";
 import { useDesign } from "../state/DesignContext";
@@ -264,12 +265,49 @@ export function MotorsportDivision() {
     attractMotorsportSponsor, refreshSponsorMarket,
   } = useCompany();
   const { sim, design } = useDesign();
-  const [activeTab, setActiveTab] = useState<"teams" | "guide" | "strategy" | "season" | "analytics" | "transfer" | "history">("teams");
+  const [activeTab, setActiveTab] = useState<"teams" | "guide" | "strategy" | "calendar" | "governing" | "season" | "analytics" | "transfer" | "history">("teams");
   const [selectedTeamId, setSelectedTeamId] = useState<string | null>(null);
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [transferPoints, setTransferPoints] = useState(10);
   const [transferDir, setTransferDir] = useState<"race_to_production" | "production_to_race">("race_to_production");
   const [guideCategory, setGuideCategory] = useState<MotorsportCategory>("gt");
+
+  const [showLiveRaceModal, setShowLiveRaceModal] = useState(false);
+  const [liveRaceState, setLiveRaceState] = useState<{
+    round: number;
+    totalRounds: number;
+    trackName: string;
+    lap: number;
+    totalLaps: number;
+    isPlaying: boolean;
+    standings: { rank: number; name: string; gap: string; pts: number; isPlayer: boolean; pitStops: number }[];
+    feed: { time: string; text: string; type: "overtake" | "pit" | "crash" | "fastest" | "info" }[];
+  } | null>(null);
+
+  const handleStartLiveRace = () => {
+    setShowLiveRaceModal(true);
+    const calendar = getSeasonCalendar(guideCategory);
+    setLiveRaceState({
+      round: 1,
+      totalRounds: calendar.rounds,
+      trackName: TRACKS[calendar.tracks[0]]?.name || "Monza Circuit",
+      lap: 1,
+      totalLaps: 30,
+      isPlaying: true,
+      standings: [
+        { rank: 1, name: company.motorsport.teams[0]?.name || "Apex Racing", gap: "LEADER", pts: 25, isPlayer: true, pitStops: 0 },
+        { rank: 2, name: "Veloce Scuderia", gap: "+0.842s", pts: 18, isPlayer: false, pitStops: 0 },
+        { rank: 3, name: "Nordic Motorsport", gap: "+2.150s", pts: 15, isPlayer: false, pitStops: 0 },
+        { rank: 4, name: "Bavaria Sport", gap: "+3.910s", pts: 12, isPlayer: false, pitStops: 0 },
+        { rank: 5, name: "Kurogane Racing", gap: "+5.420s", pts: 10, isPlayer: false, pitStops: 0 },
+        { rank: 6, name: "Silverstone Dynamics", gap: "+7.100s", pts: 8, isPlayer: false, pitStops: 0 },
+      ],
+      feed: [
+        { time: "LAP 1", text: "GREEN FLAG! Cars launch into Turn 1 with heavy braking.", type: "info" },
+        { time: "LAP 1", text: "Apex Racing holds P1 into the chicane after a strong start!", type: "overtake" },
+      ]
+    });
+  };
 
   const selectedTeam = company.motorsport.teams.find(t => t.id === selectedTeamId) ?? null;
 
@@ -294,6 +332,8 @@ export function MotorsportDivision() {
     { id: "teams" as const, label: "Teams" },
     { id: "guide" as const, label: "Guide" },
     { id: "strategy" as const, label: "Strategy" },
+    { id: "calendar" as const, label: "Calendar" },
+    { id: "governing" as const, label: "Governing Body" },
     { id: "season" as const, label: "Season" },
     { id: "analytics" as const, label: "Analytics" },
     { id: "transfer" as const, label: "Tech Transfer" },
@@ -956,6 +996,192 @@ export function MotorsportDivision() {
         </div>
       )}
 
+      {/* ===================== CALENDAR TAB ===================== */}
+      {activeTab === "calendar" && (
+        <div className="space-y-4">
+          <div className="panel p-5">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+              <div>
+                <h3 className="text-base font-bold text-slate-100 flex items-center gap-2">
+                  <Calendar size={18} className="text-cyan-400" /> Season Championship Calendar
+                </h3>
+                <p className="text-xs text-slate-500">Official grand prix schedule, circuit characteristics, & weekend status</p>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-mono text-slate-400">Category:</span>
+                <div className="flex gap-1 flex-wrap">
+                  {(Object.keys(CATEGORY_LABELS) as MotorsportCategory[]).map(cat => (
+                    <button
+                      key={cat}
+                      onClick={() => setGuideCategory(cat)}
+                      className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition-all border ${
+                        guideCategory === cat ? CATEGORY_COLORS[cat] : "bg-base-850 border-base-800 text-slate-400 hover:border-base-700"
+                      }`}
+                    >
+                      {CATEGORY_LABELS[cat]}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Circuit Grid (FC26 / F1 Style Weekend Cards) */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+              {getSeasonCalendar(guideCategory).tracks.map((trackId, idx) => {
+                const track = TRACKS[trackId];
+                if (!track) return null;
+                const roundNum = idx + 1;
+                return (
+                  <div key={trackId} className="bg-base-950/80 rounded-xl p-4 border border-white/5 hover:border-cyan-400/40 transition-all card-hover flex flex-col justify-between relative overflow-hidden">
+                    <div className="absolute top-0 right-0 p-3 opacity-10 font-mono font-black text-4xl text-slate-400 pointer-events-none">
+                      R{roundNum}
+                    </div>
+
+                    <div>
+                      <div className="flex items-center justify-between mb-2">
+                        <span className="text-[10px] font-mono font-bold text-cyan-400 bg-cyan-500/10 border border-cyan-500/30 px-2 py-0.5 rounded-full">
+                          ROUND {roundNum}
+                        </span>
+                        <span className="text-xs font-semibold text-slate-400 flex items-center gap-1">
+                          🏁 {track.country}
+                        </span>
+                      </div>
+
+                      <h4 className="text-sm font-bold text-slate-100 mb-1">{track.name}</h4>
+                      <p className="text-[11px] text-slate-400 mb-3">{track.length} km · {track.highSpeed ? "High Speed Circuit" : "Technical Circuit"}</p>
+
+                      <div className="grid grid-cols-3 gap-1.5 text-center text-[10px] font-mono bg-base-900/80 rounded-lg p-2 mb-3 border border-base-800">
+                        <div>
+                          <div className="text-slate-500 font-sans text-[9px]">Length</div>
+                          <div className="text-slate-200 font-bold">{track.length} km</div>
+                        </div>
+                        <div>
+                          <div className="text-slate-500 font-sans text-[9px]">Pace Type</div>
+                          <div className="text-slate-200 font-bold">{track.highSpeed ? "Speed" : "Tech"}</div>
+                        </div>
+                        <div>
+                          <div className="text-slate-500 font-sans text-[9px]">Elevation</div>
+                          <div className="text-slate-200 font-bold">{track.altitudeChange || 15}m</div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center justify-between pt-2 border-t border-white/5 text-xs">
+                      <span className="text-slate-500 font-mono">STATUS:</span>
+                      <span className="text-emerald-400 font-semibold flex items-center gap-1">
+                        <CheckCircle size={12} /> CONFIRMED
+                      </span>
+                    </div>
+                  </div>
+                );
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ===================== GOVERNING BODY TAB ===================== */}
+      {activeTab === "governing" && (
+        <div className="space-y-4">
+          <div className="panel p-6 border-cyan-500/30 relative overflow-hidden">
+            <div className="absolute top-0 right-0 p-6 opacity-10 pointer-events-none">
+              <Building2 size={140} className="text-cyan-400" />
+            </div>
+
+            <div className="relative z-10 flex items-start justify-between gap-4 mb-6">
+              <div className="flex items-center gap-3">
+                <div className="p-3 rounded-2xl bg-cyan-500/20 border border-cyan-400/40 text-cyan-300 shadow-[0_0_20px_rgba(34,211,238,0.2)]">
+                  <Building2 size={24} />
+                </div>
+                <div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs font-mono font-bold text-cyan-400 uppercase tracking-widest">WORLD MOTORSPORT COUNCIL</span>
+                    <span className="bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 text-[9px] font-bold px-2 py-0.5 rounded-full">OFFICIAL GOVERNING BODY</span>
+                  </div>
+                  <h2 className="text-xl font-bold text-slate-100">FIA International Motorsport Authority</h2>
+                  <p className="text-xs text-slate-400">Regulating technical specifications, race calendars, budget caps & pit protocols</p>
+                </div>
+              </div>
+
+              {/* Category selector */}
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-mono text-slate-400">Series:</span>
+                <div className="flex gap-1 flex-wrap">
+                  {(Object.keys(CATEGORY_LABELS) as MotorsportCategory[]).map(cat => (
+                    <button
+                      key={cat}
+                      onClick={() => setGuideCategory(cat)}
+                      className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition-all border ${
+                        guideCategory === cat ? CATEGORY_COLORS[cat] : "bg-base-850 border-base-800 text-slate-400 hover:border-base-700"
+                      }`}
+                    >
+                      {CATEGORY_LABELS[cat]}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Official Directives & Regulations Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
+              <div className="bg-base-950/80 rounded-xl p-4 border border-white/5">
+                <div className="text-[10px] font-mono text-slate-500 uppercase mb-1">Max Power Output</div>
+                <div className="text-xl font-black font-mono text-cyan-300">{CATEGORY_REGULATIONS[guideCategory].maxPowerHp} HP</div>
+                <div className="text-[10px] text-slate-500 mt-1">Enforced by fuel flow restrictors</div>
+              </div>
+              <div className="bg-base-950/80 rounded-xl p-4 border border-white/5">
+                <div className="text-[10px] font-mono text-slate-500 uppercase mb-1">Minimum Car Weight</div>
+                <div className="text-xl font-black font-mono text-slate-200">{CATEGORY_REGULATIONS[guideCategory].minWeightKg} kg</div>
+                <div className="text-[10px] text-slate-500 mt-1">Post-race ballast scrutiny</div>
+              </div>
+              <div className="bg-base-950/80 rounded-xl p-4 border border-white/5">
+                <div className="text-[10px] font-mono text-slate-500 uppercase mb-1">Budget Cap Mandate</div>
+                <div className="text-xl font-black font-mono text-emerald-400">
+                  {CATEGORY_REGULATIONS[guideCategory].maxBudgetCap > 0 ? `$${(CATEGORY_REGULATIONS[guideCategory].maxBudgetCap / 1e6).toFixed(0)}M` : "NO CAP"}
+                </div>
+                <div className="text-[10px] text-slate-500 mt-1">Financial fair play audit</div>
+              </div>
+              <div className="bg-base-950/80 rounded-xl p-4 border border-white/5">
+                <div className="text-[10px] font-mono text-slate-500 uppercase mb-1">Mandatory Pit Stops</div>
+                <div className="text-xl font-black font-mono text-purple-400">{CATEGORY_REGULATIONS[guideCategory].mandatoryPitStops} Stops</div>
+                <div className="text-[10px] text-slate-500 mt-1">Multi-compound tire rules</div>
+              </div>
+            </div>
+
+            {/* Official Regulation Mandates List */}
+            <div className="bg-base-950/60 rounded-xl p-4 border border-white/5 space-y-3">
+              <h4 className="text-xs font-bold text-slate-200 uppercase tracking-wider flex items-center gap-2">
+                <Gavel size={14} className="text-yellow-400" /> Active Technical Directives ({CATEGORY_LABELS[guideCategory]})
+              </h4>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-xs">
+                <div className="bg-base-900/60 p-3 rounded-lg border border-base-800 flex items-center justify-between">
+                  <span className="text-slate-300">Balance of Performance (BoP):</span>
+                  <span className={`font-semibold ${CATEGORY_REGULATIONS[guideCategory].bopEnabled ? "text-emerald-400" : "text-slate-500"}`}>
+                    {CATEGORY_REGULATIONS[guideCategory].bopEnabled ? "ACTIVE (STRICT)" : "DISABLED"}
+                  </span>
+                </div>
+                <div className="bg-base-900/60 p-3 rounded-lg border border-base-800 flex items-center justify-between">
+                  <span className="text-slate-300">Hybrid / EV Architecture:</span>
+                  <span className={`font-semibold ${CATEGORY_REGULATIONS[guideCategory].evRequirement ? "text-cyan-400" : "text-slate-500"}`}>
+                    {CATEGORY_REGULATIONS[guideCategory].evRequirement ? "MANDATORY" : "OPTIONAL"}
+                  </span>
+                </div>
+                <div className="bg-base-900/60 p-3 rounded-lg border border-base-800 flex items-center justify-between">
+                  <span className="text-slate-300">Tire Sets Per Race Weekend:</span>
+                  <span className="font-semibold text-slate-200">{CATEGORY_REGULATIONS[guideCategory].maxTireSetsPerRace} Sets Max</span>
+                </div>
+                <div className="bg-base-900/60 p-3 rounded-lg border border-base-800 flex items-center justify-between">
+                  <span className="text-slate-300">Air Intake Restrictor Plate:</span>
+                  <span className={`font-semibold ${CATEGORY_REGULATIONS[guideCategory].restrictorPlate ? "text-amber-400" : "text-slate-500"}`}>
+                    {CATEGORY_REGULATIONS[guideCategory].restrictorPlate ? "REQUIRED" : "NOT REQUIRED"}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* ===================== SEASON TAB ===================== */}
       {activeTab === "season" && (
         <div className="space-y-4">
@@ -984,6 +1210,31 @@ export function MotorsportDivision() {
                 <div className="text-[9px] text-slate-600">reliability</div>
               </div>
             </div>
+            <div className="space-y-2 mb-4">
+              <div className="bg-base-850 rounded-xl p-3 border border-base-800 flex items-center justify-between text-xs">
+                <div className="flex items-center gap-2">
+                  <Shield size={14} className="text-warn-400" />
+                  <span className="text-slate-300">Technical Scrutiny Checks</span>
+                </div>
+                <span className="text-[10px] text-slate-500">Non-compliant designs risk pace penalties or DSQ</span>
+              </div>
+              {company.motorsport.teams.map(t => {
+                const isHybrid = design.engine.layout === "hybrid" || design.engine.hybridArchitecture !== "none" || design.engine.hasMguH;
+                const c = evaluateCompliance(sim.peakPower, sim.weight, isHybrid, t.category);
+                return (
+                  <div key={t.id} className="flex items-center justify-between bg-base-850/80 rounded-lg px-3 py-1.5 text-xs">
+                    <span className="text-slate-300 font-medium">{t.name} ({CATEGORY_LABELS[t.category]})</span>
+                    <span className={`text-[10px] font-semibold px-2 py-0.5 rounded border ${
+                      c.passed ? "text-ok-400 bg-ok-500/10 border-ok-500/30" :
+                      c.overallScore >= 50 ? "text-warn-400 bg-warn-500/10 border-warn-500/30" :
+                      "text-danger-400 bg-danger-500/10 border-danger-500/30"
+                    }`}>
+                      {c.passed ? "PASSED (100%)" : c.overallScore >= 50 ? `PENALIZED (${c.overallScore}%)` : `DSQ RISK (${c.overallScore}%)`}
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
             {company.motorsport.teams.filter(t => t.status === "competing").length === 0 ? (
               <div className="text-center py-4">
                 <AlertTriangle size={20} className="mx-auto text-warn-400 mb-2" />
@@ -992,10 +1243,10 @@ export function MotorsportDivision() {
               </div>
             ) : (
               <button
-                onClick={() => simulateMotorsportSeason(sim.peakPower, sim.weight, sim.downforce / 100, sim.reliability)}
-                className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-accent-500/15 border border-accent-500/40 text-accent-300 hover:bg-accent-500/25 transition-all text-sm font-semibold"
+                onClick={() => handleStartLiveRace()}
+                className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-gradient-to-r from-cyan-500/20 to-sky-500/20 border border-cyan-400/50 text-cyan-200 hover:bg-cyan-500/30 transition-all text-sm font-bold shadow-[0_0_20px_rgba(34,211,238,0.2)]"
               >
-                <Play size={14} /> Simulate Season {company.motorsport.currentSeason}
+                <Play size={16} className="text-cyan-400 fill-cyan-400" /> Start Live Season Simulation {company.motorsport.currentSeason}
               </button>
             )}
           </div>
@@ -1300,6 +1551,135 @@ export function MotorsportDivision() {
               </div>
             ))
           )}
+        </div>
+      )}
+      {/* ===================== LIVE RACE TELEMETRY MODAL ===================== */}
+      {showLiveRaceModal && liveRaceState && (
+        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-xl flex items-center justify-center p-4 animate-fade-in">
+          <div className="bg-slate-900 border border-cyan-500/30 rounded-2xl max-w-4xl w-full p-6 shadow-[0_0_50px_rgba(34,211,238,0.2)] flex flex-col gap-5 max-h-[90vh] overflow-y-auto">
+            {/* Header */}
+            <div className="flex items-center justify-between border-b border-white/10 pb-4">
+              <div className="flex items-center gap-3">
+                <div className="p-2.5 rounded-xl bg-cyan-500/20 border border-cyan-400/40 text-cyan-300">
+                  <Radio size={20} className="animate-pulse" />
+                </div>
+                <div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs font-mono font-bold text-cyan-400 uppercase tracking-widest">LIVE TELEMETRY FEED</span>
+                    <span className="bg-red-500/20 text-red-400 border border-red-500/40 text-[9px] font-bold px-2 py-0.5 rounded-full animate-pulse">RACE ACTIVE</span>
+                  </div>
+                  <h2 className="text-lg font-bold text-slate-100">Round {liveRaceState.round}/{liveRaceState.totalRounds} — {liveRaceState.trackName}</h2>
+                </div>
+              </div>
+              <button
+                onClick={() => {
+                  setShowLiveRaceModal(false);
+                  simulateMotorsportSeason(sim.peakPower, sim.weight, sim.downforce / 100, sim.reliability);
+                }}
+                className="px-4 py-2 rounded-xl text-xs font-bold bg-cyan-500/20 border border-cyan-400/40 text-cyan-300 hover:bg-cyan-500/30 transition-all shadow-[0_0_12px_rgba(34,211,238,0.2)]"
+              >
+                Skip to Final Results ➔
+              </button>
+            </div>
+
+            {/* Lap Counter & Control Bar */}
+            <div className="bg-base-950/80 rounded-xl p-4 border border-white/5 flex items-center justify-between">
+              <div className="flex items-center gap-4">
+                <div>
+                  <div className="label-mono">Current Lap</div>
+                  <div className="font-mono text-2xl font-black text-cyan-300">{liveRaceState.lap} <span className="text-xs text-slate-500 font-normal">/ {liveRaceState.totalLaps}</span></div>
+                </div>
+                <div className="h-8 w-px bg-white/10" />
+                <div>
+                  <div className="label-mono">Track Conditions</div>
+                  <div className="text-xs font-semibold text-emerald-400 flex items-center gap-1">Dry · 24°C Track</div>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => {
+                    if (liveRaceState.lap < liveRaceState.totalLaps) {
+                      setLiveRaceState(prev => prev ? ({
+                        ...prev,
+                        lap: prev.lap + 1,
+                        feed: [
+                          {
+                            time: `LAP ${prev.lap + 1}`,
+                            text: prev.lap % 4 === 0 ? "Apex Racing sets personal best sector 2 time!" : "Drivers maintaining gap on main straight.",
+                            type: prev.lap % 4 === 0 ? "fastest" : "info"
+                          },
+                          ...prev.feed
+                        ]
+                      }) : null);
+                    }
+                  }}
+                  className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-base-850 border border-base-700 text-slate-300 hover:bg-base-800"
+                >
+                  Step Lap ➔
+                </button>
+                <button
+                  onClick={() => {
+                    setShowLiveRaceModal(false);
+                    simulateMotorsportSeason(sim.peakPower, sim.weight, sim.downforce / 100, sim.reliability);
+                  }}
+                  className="px-4 py-1.5 rounded-lg text-xs font-bold bg-ok-500/20 border border-ok-500/40 text-ok-300 hover:bg-ok-500/30"
+                >
+                  Finish Season
+                </button>
+              </div>
+            </div>
+
+            {/* Split Screen: Live Leaderboard + Radio Feed */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {/* Live Standings */}
+              <div className="bg-base-950/60 rounded-xl p-4 border border-white/5">
+                <h3 className="text-xs font-bold text-slate-300 uppercase tracking-wider mb-3 flex items-center gap-2">
+                  <Trophy size={14} className="text-yellow-400" /> Live Race Leaderboard
+                </h3>
+                <div className="space-y-1.5">
+                  {liveRaceState.standings.map((s) => (
+                    <div
+                      key={s.rank}
+                      className={`flex items-center justify-between px-3 py-2 rounded-lg text-xs font-mono border transition-all ${
+                        s.isPlayer
+                          ? "bg-cyan-500/15 border-cyan-400/40 text-cyan-200 font-bold shadow-[0_0_10px_rgba(34,211,238,0.15)]"
+                          : "bg-base-850/50 border-base-800 text-slate-300"
+                      }`}
+                    >
+                      <div className="flex items-center gap-2">
+                        <span className={`w-5 text-center font-bold ${s.rank === 1 ? "text-yellow-400" : s.rank <= 3 ? "text-slate-200" : "text-slate-500"}`}>P{s.rank}</span>
+                        <span>{s.name}</span>
+                        {s.isPlayer && <span className="text-[9px] bg-cyan-400/20 text-cyan-300 px-1 rounded">YOU</span>}
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <span className="text-slate-400 text-[11px]">{s.gap}</span>
+                        <span className="text-slate-500 text-[10px]">{s.pitStops} PIT</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Race Radio & Event Ticker */}
+              <div className="bg-base-950/60 rounded-xl p-4 border border-white/5 flex flex-col">
+                <h3 className="text-xs font-bold text-slate-300 uppercase tracking-wider mb-3 flex items-center gap-2">
+                  <Radio size={14} className="text-cyan-400" /> Pit Wall Commentary Ticker
+                </h3>
+                <div className="space-y-2 flex-1 overflow-y-auto max-h-60 pr-1">
+                  {liveRaceState.feed.map((f, i) => (
+                    <div key={i} className="text-xs bg-base-850/60 rounded-lg p-2.5 border border-base-800/80">
+                      <div className="flex items-center justify-between mb-1">
+                        <span className="text-[10px] font-mono text-cyan-400 font-bold">{f.time}</span>
+                        <span className="text-[9px] text-slate-500 font-mono uppercase">{f.type}</span>
+                      </div>
+                      <p className="text-slate-300 text-[11px] leading-relaxed">{f.text}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       )}
     </div>
