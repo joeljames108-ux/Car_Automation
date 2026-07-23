@@ -1,7 +1,6 @@
 import { Car, Palette, Disc, Lightbulb, Layers, Wind, Gauge } from "lucide-react";
 import { useDesign } from "../state/DesignContext";
 import { Section, Slider, Select, ChoiceGrid, Toggle, StatTile } from "./ui/Controls";
-import { CFDView } from "./ui/CFDView";
 
 import {
   BODY_TYPES, RIM_DESIGNS, RIM_FINISHES, PAINT_FINISHES,
@@ -242,8 +241,6 @@ export function ExteriorDesigner() {
             finish={ext.paintFinish}
           />
         </Section>
-
-        <CFDView aero={design.vehicle.aero} dragCoeff={sim.dragCoeff} liftCoeff={sim.liftCoeff} downforce={sim.downforce} />
 
         <Section title="Exterior Impact" icon={<Wind size={16} />}>
           <div className="grid grid-cols-2 gap-2">

@@ -205,6 +205,67 @@ export function DigitalTwin() {
             </div>
           </div>
 
+          {/* Automated Quality Control & Recall Panel */}
+          <div className="panel p-4 bg-gradient-to-r from-base-900 via-base-850 to-base-900 border border-base-700">
+            <div className="flex items-center justify-between flex-wrap gap-2 mb-3">
+              <div>
+                <h3 className="text-xs font-bold text-slate-200 uppercase tracking-wider flex items-center gap-1.5">
+                  <AlertTriangle size={14} className="text-yellow-400" /> Digital Twin Quality Control & Recalls
+                </h3>
+                <p className="text-[11px] text-slate-400 mt-0.5">
+                  Monitor real-time warranty claim rates and trigger engineering fixes to prevent customer churn.
+                </p>
+              </div>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={() => {
+                    addTwinEvent(selectedId, {
+                      vehicleId: selectedId,
+                      type: "recall",
+                      month: company.economy.month,
+                      title: "Voluntary Quality Recall Campaign",
+                      description: "Issued dealer service bulletin replacing faulty brake pads & ECU firmware.",
+                      severity: "warning",
+                    });
+                  }}
+                  className="px-3 py-1.5 rounded-lg text-xs font-bold bg-yellow-500/20 border border-yellow-500/40 text-yellow-300 hover:bg-yellow-500/30 transition-all flex items-center gap-1"
+                >
+                  <AlertTriangle size={12} /> Issue Recall Bulletin ($25k)
+                </button>
+                <button
+                  onClick={() => {
+                    addTwinEvent(selectedId, {
+                      vehicleId: selectedId,
+                      type: "design_modified",
+                      month: company.economy.month,
+                      title: "Factory Quality Control Audit",
+                      description: "Recalibrated assembly line robotics to improve panel fit & structural rigidity.",
+                      severity: "success",
+                    });
+                  }}
+                  className="px-3 py-1.5 rounded-lg text-xs font-bold bg-ok-500/20 border border-ok-500/40 text-ok-300 hover:bg-ok-500/30 transition-all flex items-center gap-1"
+                >
+                  <CheckCircle2 size={12} /> Factory Quality Audit ($10k)
+                </button>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs font-mono">
+              <div className="bg-base-900/80 p-2.5 rounded-lg border border-base-800 flex items-center justify-between">
+                <span className="text-slate-400">Current 0-60 Spec:</span>
+                <strong className="text-ok-400 font-bold">{vehicle.sim.accel0_60}s</strong>
+              </div>
+              <div className="bg-base-900/80 p-2.5 rounded-lg border border-base-800 flex items-center justify-between">
+                <span className="text-slate-400">Peak Downforce:</span>
+                <strong className="text-cyan-400 font-bold">{vehicle.sim.downforce} N</strong>
+              </div>
+              <div className="bg-base-900/80 p-2.5 rounded-lg border border-base-800 flex items-center justify-between">
+                <span className="text-slate-400">Top Speed:</span>
+                <strong className="text-accent-300 font-bold">{vehicle.sim.topSpeed} km/h</strong>
+              </div>
+            </div>
+          </div>
+
           {/* Metrics chart */}
           {metricsData.length > 0 && (
             <div className="panel p-4">

@@ -115,7 +115,7 @@ export function EngineDesigner() {
                     updateEngine({
                       hybridArchitecture: newArch,
                       batteryCapacity: caps.minBattery,
-                      hybridMotorPower: Math.min(eng.hybridMotorPower, caps.maxMotorPower),
+                      hybridMotorPower: newArch === "none" ? 0 : Math.max(60, Math.min(eng.hybridMotorPower || 60, caps.maxMotorPower)),
                     });
                   }}
                 />
@@ -168,16 +168,56 @@ export function EngineDesigner() {
               <Slider label="Regen Level" value={eng.regenLevel} min={0} max={1} step={0.05} format={(v) => `${(v * 100).toFixed(0)}%`} onChange={(v) => updateEngine({ regenLevel: v })} />
             </div>
             {(isHybrid || isElectric) && (
-              <p className="text-[10px] text-slate-600 mt-3">
-                {isElectric
-                  ? `Range: ${sim.electricRange} km · Efficiency: ${(sim.regenEfficiency * 100).toFixed(0)}% regen`
-                  : `Architecture: ${HYBRID_ARCHITECTURES[eng.hybridArchitecture]?.label || "None"} · Motor: ${sim.mguKPower} kW (${MOTOR_PLACEMENTS[eng.motorPlacement]?.label || "None"}) · Battery: ${sim.batteryEnergy} kWh`}
-              </p>
+              <div className="mt-3 p-3 bg-base-900 rounded-xl border border-base-800 space-y-1 font-mono text-xs">
+                {isElectric ? (
+                  <div className="flex items-center justify-between">
+                    <span className="text-slate-400">Pure EV Range:</span>
+                    <strong className="text-ok-400 font-bold">{sim.electricRange} km</strong>
+                  </div>
+                ) : (
+                  <>
+                    <div className="flex items-center justify-between">
+                      <span className="text-slate-400">ICE Combustion Power:</span>
+                      <span className="text-slate-200">{sim.peakPower} hp ({sim.displacement}cc V12)</span>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-slate-400">Electric Assist Power:</span>
+                      <span className="text-accent-300">+{Math.round(sim.mguKPower * 1.341)} hp ({sim.mguKPower} kW)</span>
+                    </div>
+                    <div className="flex items-center justify-between pt-1 border-t border-base-800">
+                      <span className="text-slate-300 font-bold">Total Hybrid Output:</span>
+                      <strong className="text-ok-400 font-bold text-sm">{sim.combinedPower} hp / {sim.combinedTorque} Nm</strong>
+                    </div>
+                    {sim.electricRange > 0 && (
+                      <div className="flex items-center justify-between text-[11px]">
+                        <span className="text-slate-500">Pure EV Mode Range:</span>
+                        <span className="text-cyan-400">{sim.electricRange} km</span>
+                      </div>
+                    )}
+                  </>
+                )}
+              </div>
             )}
           </Section>
         )}
 
-        <Section title="ECU" icon={<Activity size={16} />}>
+        <Section title="ECU & Eco Technology" icon={<Activity size={16} />}>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
+            <Select
+              label="ECU Calibration Map"
+              value={eng.ecuMapMode || "balanced"}
+              options={[
+                { value: "economy", label: "🍃 Eco Lean-Burn (-0.8 L/100km)" },
+                { value: "balanced", label: "⚖️ Balanced Daily" },
+                { value: "sport", label: "🏎️ Sport (+0.5 L/100km)" },
+                { value: "race", label: "🏁 Race Track (+1.2 L/100km)" },
+              ]}
+              onChange={(v) => updateEngine({ ecuMapMode: v as EngineConfig["ecuMapMode"] })}
+            />
+            <div className="pt-5">
+              <Toggle label="Automatic Start-Stop System (-0.6 L/100km)" value={eng.hasStartStop || false} onChange={(v) => updateEngine({ hasStartStop: v })} />
+            </div>
+          </div>
           <div className="grid grid-cols-2 gap-3">
             <Slider label="RPM Limiter" value={eng.rpmLimiter} min={4000} max={20000} step={100} unit="rpm" onChange={(v) => updateEngine({ rpmLimiter: v })} />
             <Slider label="Redline" value={eng.redline} min={3500} max={18000} step={100} unit="rpm" onChange={(v) => updateEngine({ redline: v })} />

@@ -1,6 +1,6 @@
 import {
   ENGINE_LAYOUTS, CRANK_MATERIALS, PISTON_TYPES, VALVETRAIN_TYPES, INTAKE_TYPES,
-  FUEL_SYSTEMS, PLATFORMS, CHASSIS_TYPES, SUSPENSION_TYPES, TRANSMISSION_TYPES,
+  FUEL_SYSTEMS, PLATFORMS, CHASSIS_TYPES, SUSPENSION_TYPES, TRANSMISSION_TYPES, BRAKE_TYPES,
   TIRE_COMPOUNDS, BATTERY_CHEMISTRIES, EV_MOTOR_TYPES, MGU_H_MODES,
   TRACKS, SEAT_TYPES, SEAT_MATERIALS, DASHBOARD_MATERIALS, STEERING_WHEEL_TYPES,
   STEERING_MATERIALS, PEDAL_SETS, SHIFT_KNOBS, ROLL_CAGES, clamp,
@@ -179,6 +179,11 @@ function simulateCombustion(engine: EngineConfig): EngineSim {
     deployDuration = batteryEnergy / Math.max(motorPowerKW + mguHPower, 1) * 3600;
   }
 
+  // Electric Range calculation for PHEV/FHEV/EV (km)
+  const electricRange = (isElectric || isHybrid) && batteryEnergy > 0
+    ? Math.round((batteryEnergy * 1000) / (220 + (batteryWeight + (isHybrid ? 600 : 0)) * 0.12))
+    : 0;
+
   // Engine weight
   const crankWeight = CRANK_MATERIALS[engine.crank].weightFactor;
   const pistonWeight = PISTON_TYPES[engine.pistons].weightFactor;
@@ -227,9 +232,14 @@ function simulateCombustion(engine: EngineConfig): EngineSim {
     (30 / (displacement / 1000)) * thermalEfficiency / 0.3 * (isForced ? 0.85 : 1) * fuel.efficiencyFactor,
     3, 25
   );
+  if (engine.hasStartStop) fuelEconomyEngine -= 0.6;
+  if (engine.ecuMapMode === "economy") fuelEconomyEngine -= 0.8;
+  if (engine.ecuMapMode === "sport") fuelEconomyEngine += 0.5;
+  if (engine.ecuMapMode === "race") fuelEconomyEngine += 1.2;
   if (isHybrid) {
     fuelEconomyEngine = clamp(fuelEconomyEngine * arch.efficiencyBonus, 1.5, 25);
   }
+  fuelEconomyEngine = clamp(fuelEconomyEngine, 1.2, 25);
 
   return {
     displacement: Math.round(displacement), cylinderCount: cyl, powerCurve,
@@ -242,7 +252,7 @@ function simulateCombustion(engine: EngineConfig): EngineSim {
     mguHPower: Math.round(mguHPower), mguKPower: Math.round(motorPowerKW),
     combinedPower: Math.round(combinedPower), combinedTorque: Math.round(combinedTorque),
     batteryWeight: Math.round(batteryWeight), batteryCost: Math.round(batteryCost),
-    batteryEnergy: Math.round(batteryEnergy * 10) / 10, electricRange: 0,
+    batteryEnergy: Math.round(batteryEnergy * 10) / 10, electricRange,
     regenEfficiency, energyRecoveryPerLap: Math.round(energyRecoveryPerLap * 10) / 10,
     deployDuration: Math.round(deployDuration), isElectric: false, isHybrid,
     emissionsEngine, fuelEconomyEngine: Math.round(fuelEconomyEngine * 10) / 10,
@@ -696,13 +706,13 @@ function simulatePerformance(design: VehicleDesign, eng: EngineSim, aero: Return
   // Acceleration — traction-limited at low speed
   const powerToWeight = power / (weight / 1000);
   // Drivetrain traction bonus (AWD vs RWD vs FWD)
-  const driveFactor = v.driveType === "awd" ? 0.78 : v.driveType === "rwd" ? 0.95 : 1.15;
+  const driveFactor = v.driveType === "awd" ? 0.88 : v.driveType === "rwd" ? 1.02 : 1.22;
   const tractionLimit = tire.gripFactor * diffFactor * diffPreloadFactor * pressureFactor;
-  // High power-to-weight AWD cars (hypercars) achieve 1.7 - 2.5s 0-60
-  const base0_60 = (3.8 / Math.pow(Math.max(powerToWeight, 50) / 250, 0.7)) * driveFactor * launchFactor * tcFactor;
-  const tractionFloor = 1.45 / Math.max(0.6, tractionLimit);
-  const accel0_60 = Math.round(clamp(Math.max(base0_60, tractionFloor), 1.6, 12) * 100) / 100;
-  const accel0_100 = Math.round(clamp((accel0_60 * 1.55), 2.1, 16) * 100) / 100;
+  // Physics-accurate power-to-weight scaling: ~300hp/1350kg RWD ~ 4.4s, AWD ~ 3.9s, 600hp AWD ~ 2.8s
+  const base0_60 = (5.2 / Math.pow(Math.max(powerToWeight, 50) / 250, 0.65)) * driveFactor * launchFactor * tcFactor;
+  const tractionFloor = 1.65 / Math.max(0.6, tractionLimit);
+  const accel0_60 = Math.round(clamp(Math.max(base0_60, tractionFloor), 1.8, 14) * 100) / 100;
+  const accel0_100 = Math.round(clamp((accel0_60 * 1.48), 2.3, 18) * 100) / 100;
   const accel100_200 = Math.round(clamp(14 / Math.pow(Math.max(powerToWeight, 50) / 250, 0.95), 2.2, 40) * 100) / 100;
 
   // Quarter mile — gear count affects shift time penalty
@@ -714,11 +724,13 @@ function simulatePerformance(design: VehicleDesign, eng: EngineSim, aero: Return
   const halfMile = Math.round(clamp(24 / Math.pow(powerToWeight / 300, 0.45) * (1 + aero.dragCoeff * 0.15), 13, 32) * 100) / 100;
   const halfMileSpeed = Math.round(clamp(quarterMileSpeed * 1.18, 120, 380));
 
-  // Braking — brake bias affects balance; optimal ~0.62 front
+  // Braking — brake bias, disc material, and caliper piston count affect stopping force & heat fade
+  const brakeMat = BRAKE_TYPES[v.brakeType || "cast_iron"];
+  const pistonFactor = 1 + (v.brakePistonCount || 4) * 0.03; // 2, 4, 6, 8 pistons
   const biasOpt = 0.62;
   const biasFactor = clamp(1 - Math.abs(v.brakeBias - biasOpt) * 0.3, 0.8, 1.05);
-  const brakeForce = v.brakeDiscSize * 0.8 * (0.5 + v.brakePadCompound * 0.5) * (v.electronics.abs ? 1.15 : 1) * biasFactor;
-  const brakingDist = Math.round(clamp(10000 / brakeForce * (weight / 1000), 28, 80));
+  const brakeForce = v.brakeDiscSize * 0.8 * (0.5 + v.brakePadCompound * 0.5) * brakeMat.stoppingPower * pistonFactor * (v.electronics.abs ? 1.15 : 1) * biasFactor;
+  const brakingDist = Math.round(clamp((10000 / brakeForce * (weight / 1000)) / (brakeMat.weightFactor), 24, 80));
 
   // Lateral G — suspension tuning affects mechanical grip
   const susAvg = (SUSPENSION_TYPES[v.suspensionFront].gripFactor + SUSPENSION_TYPES[v.suspensionRear].gripFactor) / 2;

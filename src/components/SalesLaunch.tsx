@@ -52,7 +52,7 @@ function fmt(n: number) {
 
 export function SalesLaunch() {
   const { company, launchVehicle } = useCompany();
-  const [activeTab, setActiveTab] = useState<"position" | "launch" | "dashboard">("position");
+  const [activeTab, setActiveTab] = useState<"position" | "marketing" | "projection" | "dashboard">("position");
   const [selectedVehicleId, setSelectedVehicleId] = useState<string | null>(null);
   const [config, setConfig] = useState<SalesConfig>({
     vehicleId: "",
@@ -105,9 +105,10 @@ export function SalesLaunch() {
   const totalUnits = salesHistory.reduce((s, r) => s + r.unitsSold, 0);
 
   const tabs = [
-    { id: "position" as const, label: "Market Positioning" },
-    { id: "launch"   as const, label: "Launch" },
-    { id: "dashboard"as const, label: `Sales Dashboard${salesHistory.length > 0 ? ` (${salesHistory.length} periods)` : ""}` },
+    { id: "position"   as const, label: "1. Market & Positioning" },
+    { id: "marketing"  as const, label: "2. Marketing & Regions" },
+    { id: "projection" as const, label: "3. Pre-Launch Projections" },
+    { id: "dashboard"  as const, label: `4. Sales Dashboard${salesHistory.length > 0 ? ` (${salesHistory.length} periods)` : ""}` },
   ];
 
   return (
@@ -169,157 +170,163 @@ export function SalesLaunch() {
         ))}
       </div>
 
+      {/* 1. MARKET & POSITIONING TAB */}
       {activeTab === "position" && (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-          {/* Segment */}
-          <div className="panel p-4">
-            <h3 className="text-xs font-semibold text-slate-300 uppercase tracking-wider mb-3">Market Segment</h3>
-            <div className="space-y-1.5">
+          <div className="panel p-5">
+            <h3 className="text-xs font-bold text-slate-200 uppercase tracking-wider mb-3">1. Market Segment Target</h3>
+            <p className="text-xs text-slate-500 mb-3">Select the primary buyer demographic and vehicle price bracket for your model.</p>
+            <div className="space-y-2">
               {SEGMENTS.map(s => (
                 <button key={s.value} onClick={() => setConfig(c => ({ ...c, marketSegment: s.value as MarketSegmentTarget }))}
-                  className={`w-full flex items-center justify-between px-3 py-2 rounded-xl text-sm transition-all border ${
+                  className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm transition-all border ${
                     config.marketSegment === s.value
-                      ? "bg-accent-500/15 border-accent-500/40 text-accent-300"
+                      ? "bg-accent-500/15 border-accent-500/40 text-accent-300 font-semibold"
                       : "bg-base-850 border-base-800 text-slate-400 hover:border-base-700"
                   }`}>
-                  <span className="font-medium">{s.label}</span>
-                  <span className="text-[10px] text-slate-600">{s.priceRange}</span>
+                  <span>{s.label}</span>
+                  <span className="text-xs font-mono text-slate-500">{s.priceRange}</span>
                 </button>
               ))}
             </div>
           </div>
 
-          {/* Pricing */}
-          <div className="panel p-4 space-y-4">
-            <h3 className="text-xs font-semibold text-slate-300 uppercase tracking-wider">Pricing Strategy</h3>
-            <div className="space-y-1.5">
+          <div className="panel p-5 space-y-4">
+            <h3 className="text-xs font-bold text-slate-200 uppercase tracking-wider mb-1">2. Strategic Pricing Philosophy</h3>
+            <div className="space-y-2">
               {PRICING_STRATEGIES.map(s => (
                 <button key={s.value} onClick={() => setConfig(c => ({ ...c, pricingStrategy: s.value as PricingStrategy }))}
-                  className={`w-full flex items-start gap-3 px-3 py-2 rounded-xl text-xs transition-all border ${
+                  className={`w-full flex items-start gap-3 px-3.5 py-2.5 rounded-xl text-xs transition-all border ${
                     config.pricingStrategy === s.value
                       ? "bg-accent-500/15 border-accent-500/40 text-accent-300"
                       : "bg-base-850 border-base-800 text-slate-400 hover:border-base-700"
                   }`}>
-                  <span className="font-semibold shrink-0 pt-0.5">{s.label}</span>
-                  <span className="text-slate-500 text-left">{s.desc}</span>
+                  <span className="font-bold shrink-0 pt-0.5">{s.label}</span>
+                  <span className="text-slate-400 text-left">{s.desc}</span>
                 </button>
               ))}
-            </div>
-          </div>
-
-          {/* Target price & volume */}
-          <div className="panel p-4 space-y-4">
-            <h3 className="text-xs font-semibold text-slate-300 uppercase tracking-wider">Price & Volume</h3>
-            <Slider label="Target Price" value={config.targetPrice} min={5000} max={2000000} step={1000}
-              onChange={v => setConfig(c => ({ ...c, targetPrice: v }))}
-              format={v => `$${(v / 1000).toFixed(0)}k`} />
-            <Slider label="Annual Target Volume" value={config.targetVolume} min={100} max={500000} step={100}
-              onChange={v => setConfig(c => ({ ...c, targetVolume: v }))}
-              format={v => `${v.toLocaleString()} units/yr`} />
-            <Slider label="Dealer Margin" value={config.dealerMargin} min={0.03} max={0.20} step={0.01}
-              onChange={v => setConfig(c => ({ ...c, dealerMargin: v }))}
-              format={v => `${(v * 100).toFixed(0)}%`} />
-            <Slider label="Marketing Budget" value={config.marketingBudget} min={0} max={20_000_000} step={100000}
-              onChange={v => setConfig(c => ({ ...c, marketingBudget: v }))}
-              format={v => fmt(v)} />
-          </div>
-
-          {/* Warranty */}
-          <div className="panel p-4 space-y-4">
-            <h3 className="text-xs font-semibold text-slate-300 uppercase tracking-wider">Warranty & Regions</h3>
-            <Slider label="Warranty (Years)" value={config.warrantyYears} min={1} max={10}
-              onChange={v => setConfig(c => ({ ...c, warrantyYears: v }))} format={v => `${v}yr`} />
-            <Slider label="Warranty Mileage" value={config.warrantyMiles} min={12000} max={200000} step={5000}
-              onChange={v => setConfig(c => ({ ...c, warrantyMiles: v }))}
-              format={v => `${(v / 1000).toFixed(0)}k mi`} />
-            <div>
-              <div className="label-mono mb-2">Target Regions</div>
-              <div className="grid grid-cols-2 gap-1.5">
-                {REGIONS.map(r => (
-                  <button key={r.value} onClick={() => toggleRegion(r.value)}
-                    className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-medium border transition-all ${
-                      config.regions.includes(r.value)
-                        ? "bg-accent-500/15 border-accent-500/40 text-accent-300"
-                        : "bg-base-850 border-base-800 text-slate-400 hover:border-base-700"
-                    }`}>
-                    <Globe size={10} /> {r.label}
-                  </button>
-                ))}
-              </div>
             </div>
           </div>
         </div>
       )}
 
-      {activeTab === "launch" && (
+      {/* 2. MARKETING & REGIONS TAB */}
+      {activeTab === "marketing" && (
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+          <div className="panel p-5 space-y-4">
+            <h3 className="text-xs font-bold text-slate-200 uppercase tracking-wider">Pricing, Volume & Margin</h3>
+            <Slider label="Target MSRP Retail Price" value={config.targetPrice} min={5000} max={2000000} step={1000}
+              onChange={v => setConfig(c => ({ ...c, targetPrice: v }))}
+              format={v => `$${(v / 1000).toFixed(0)}k`} />
+            <Slider label="Annual Planned Production Volume" value={config.targetVolume} min={100} max={500000} step={100}
+              onChange={v => setConfig(c => ({ ...c, targetVolume: v }))}
+              format={v => `${v.toLocaleString()} units/yr`} />
+            <Slider label="Dealer Network Commission Margin" value={config.dealerMargin} min={0.03} max={0.20} step={0.01}
+              onChange={v => setConfig(c => ({ ...c, dealerMargin: v }))}
+              format={v => `${(v * 100).toFixed(0)}%`} />
+            <Slider label="Global Marketing Campaign Budget" value={config.marketingBudget} min={0} max={20_000_000} step={100000}
+              onChange={v => setConfig(c => ({ ...c, marketingBudget: v }))}
+              format={v => fmt(v)} />
+          </div>
+
+          <div className="panel p-5 space-y-4">
+            <h3 className="text-xs font-bold text-slate-200 uppercase tracking-wider">Global Target Regions & Warranty</h3>
+            <div>
+              <label className="label-mono block mb-2">Select Market Distribution Regions</label>
+              <div className="grid grid-cols-2 gap-2">
+                {REGIONS.map(r => (
+                  <button key={r.value} onClick={() => toggleRegion(r.value)}
+                    className={`flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold border transition-all ${
+                      config.regions.includes(r.value)
+                        ? "bg-accent-500/15 border-accent-500/40 text-accent-300"
+                        : "bg-base-850 border-base-800 text-slate-400 hover:border-base-700"
+                    }`}>
+                    <Globe size={12} /> {r.label}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="border-t border-base-800/80 pt-3 space-y-3">
+              <Slider label="Warranty Duration (Years)" value={config.warrantyYears} min={1} max={10}
+                onChange={v => setConfig(c => ({ ...c, warrantyYears: v }))} format={v => `${v} Years`} />
+              <Slider label="Warranty Coverage Distance" value={config.warrantyMiles} min={12000} max={200000} step={5000}
+                onChange={v => setConfig(c => ({ ...c, warrantyMiles: v }))}
+                format={v => `${(v / 1000).toFixed(0)}k miles`} />
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 3. PRE-LAUNCH PROJECTIONS & LAUNCH ACTION */}
+      {activeTab === "projection" && (
         <div className="space-y-4">
-          {/* Revenue projection */}
           <div className="panel p-5">
-            <h3 className="text-xs font-semibold text-slate-300 uppercase tracking-wider mb-4">Revenue Projection</h3>
+            <h3 className="text-xs font-bold text-slate-200 uppercase tracking-wider mb-4">Financial Projections & Break-Even</h3>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-4">
-              <div className="bg-base-850 rounded-xl p-3 text-center">
-                <div className="text-[10px] text-slate-500 mb-1">Monthly Units</div>
+              <div className="bg-base-850 rounded-xl p-3.5 text-center border border-base-800">
+                <div className="text-[10px] text-slate-500 uppercase font-mono mb-1">Est. Monthly Units</div>
                 <div className="text-xl font-bold font-mono text-slate-200">{projection.monthlyUnits.toLocaleString()}</div>
               </div>
-              <div className="bg-base-850 rounded-xl p-3 text-center">
-                <div className="text-[10px] text-slate-500 mb-1">Monthly Revenue</div>
+              <div className="bg-base-850 rounded-xl p-3.5 text-center border border-base-800">
+                <div className="text-[10px] text-slate-500 uppercase font-mono mb-1">Est. Monthly Revenue</div>
                 <div className="text-xl font-bold font-mono text-ok-400">{fmt(projection.monthlyRevenue)}</div>
               </div>
-              <div className="bg-base-850 rounded-xl p-3 text-center">
-                <div className="text-[10px] text-slate-500 mb-1">Monthly Profit</div>
+              <div className="bg-base-850 rounded-xl p-3.5 text-center border border-base-800">
+                <div className="text-[10px] text-slate-500 uppercase font-mono mb-1">Est. Monthly Net Profit</div>
                 <div className={`text-xl font-bold font-mono ${projection.monthlyProfit >= 0 ? "text-ok-400" : "text-danger-400"}`}>{fmt(projection.monthlyProfit)}</div>
               </div>
-              <div className="bg-base-850 rounded-xl p-3 text-center">
-                <div className="text-[10px] text-slate-500 mb-1">Break-even</div>
+              <div className="bg-base-850 rounded-xl p-3.5 text-center border border-base-800">
+                <div className="text-[10px] text-slate-500 uppercase font-mono mb-1">Break-Even Time</div>
                 <div className="text-xl font-bold font-mono text-accent-300">
-                  {projection.breakEvenMonths ? `${projection.breakEvenMonths}mo` : "—"}
+                  {projection.breakEvenMonths ? `${projection.breakEvenMonths} Months` : "—"}
                 </div>
               </div>
             </div>
           </div>
 
-          {/* Launch event */}
-          <div className="panel p-4">
-            <h3 className="text-xs font-semibold text-slate-300 uppercase tracking-wider mb-3">Launch Event</h3>
-            <div className="space-y-1.5">
+          <div className="panel p-5">
+            <h3 className="text-xs font-bold text-slate-200 uppercase tracking-wider mb-3">Launch Event Format</h3>
+            <div className="space-y-2">
               {LAUNCH_EVENTS.map(e => (
                 <button key={e.value} onClick={() => setConfig(c => ({ ...c, launchEvent: e.value as LaunchEventType }))}
-                  className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs transition-all border ${
+                  className={`w-full flex items-center justify-between px-4 py-3 rounded-xl text-xs transition-all border ${
                     config.launchEvent === e.value
-                      ? "bg-accent-500/15 border-accent-500/40 text-accent-300"
+                      ? "bg-accent-500/15 border-accent-500/40 text-accent-300 font-bold"
                       : "bg-base-850 border-base-800 text-slate-400 hover:border-base-700"
                   }`}>
-                  <span className="font-medium">{e.label}</span>
-                  <span className="text-ok-400 font-mono">+{Math.round((e.boost - 1) * 100)}% volume</span>
+                  <span>{e.label}</span>
+                  <span className="text-ok-400 font-mono font-bold">+{Math.round((e.boost - 1) * 100)}% Volume Boost</span>
                 </button>
               ))}
             </div>
           </div>
 
-          {/* Launch button */}
           {!vehicle ? (
             <div className="panel p-6 text-center">
-              <AlertTriangle size={24} className="mx-auto text-warn-400 mb-2" />
-              <p className="text-slate-500 text-sm">Select a vehicle above to launch it.</p>
+              <AlertTriangle size={24} className="mx-auto text-yellow-400 mb-2" />
+              <p className="text-slate-400 text-sm font-medium">Select a vehicle model from the dropdown above to launch it to market.</p>
             </div>
           ) : vehicle.isLaunched ? (
-            <div className="panel p-6 text-center">
-              <CheckCircle2 size={24} className="mx-auto text-ok-400 mb-2" />
-              <p className="text-ok-400 text-sm font-medium">{vehicle.name} is already on the market.</p>
-              <p className="text-slate-600 text-xs mt-1">Check the Sales Dashboard tab for performance data.</p>
+            <div className="panel p-6 text-center border-ok-500/40 bg-ok-500/10">
+              <CheckCircle2 size={28} className="mx-auto text-ok-400 mb-2" />
+              <p className="text-ok-300 text-sm font-bold">{vehicle.name} is active on the global commercial market!</p>
+              <p className="text-slate-400 text-xs mt-1">View revenue, profit, and monthly customer feedback in Tab 4 (Sales Dashboard).</p>
             </div>
           ) : (
-            <div className="panel p-5">
-              <div className="flex items-start gap-3 mb-4">
-                <Rocket size={20} className="text-accent-400 shrink-0 mt-1" />
-                <div>
-                  <div className="text-sm font-semibold text-slate-100">{vehicle.name}</div>
-                  <div className="text-xs text-slate-500">{Math.round(vehicle.peakPower)}hp · {Math.round(vehicle.topSpeed)}km/h · {vehicle.overallRating}/100</div>
+            <div className="panel p-5 border-2 border-accent-500/40 bg-gradient-to-r from-accent-500/10 via-base-900 to-accent-500/10">
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-3">
+                  <Rocket size={24} className="text-accent-400 shrink-0" />
+                  <div>
+                    <div className="text-base font-bold text-slate-100">{vehicle.name}</div>
+                    <div className="text-xs text-slate-400 font-mono">{Math.round(vehicle.peakPower)}hp · {Math.round(vehicle.topSpeed)}km/h · Rating: {vehicle.overallRating}/100</div>
+                  </div>
                 </div>
               </div>
               <button onClick={handleLaunch}
-                className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-ok-500/15 border border-ok-500/40 text-ok-400 hover:bg-ok-500/25 transition-all text-sm font-semibold">
-                <Rocket size={14} /> Launch {vehicle.name} to Market
+                className="w-full flex items-center justify-center gap-2 py-4 rounded-xl bg-gradient-to-r from-ok-500/30 via-emerald-500/20 to-ok-500/30 border border-ok-500/50 text-ok-300 hover:from-ok-500/40 hover:to-ok-500/40 transition-all text-sm font-bold shadow-[0_0_20px_rgba(34,197,94,0.2)]">
+                <Rocket size={18} /> Official Commercial Market Launch ➔
               </button>
             </div>
           )}

@@ -13,6 +13,7 @@ import {
 import { useCompany } from "../state/CompanyContext";
 import { useDesign } from "../state/DesignContext";
 import { LineChart } from "./ui/LineChart";
+import { CircuitDiagram, TelemetryGraph, SectorTimesBarChart, CarSilhouetteDiagram } from "./ui/Charts";
 import { CATEGORY_REGULATIONS, CATEGORY_GUIDES, evaluateCompliance, getFacilityUpgradeCost, getNextFacilityLevel, getSeasonCalendar } from "../sim/motorsportEngine";
 import type { MotorsportCategory, MotorsportTeam, TireChoice, FacilityLevel } from "../sim/types";
 import { TRACKS } from "../sim/constants";
@@ -265,7 +266,7 @@ export function MotorsportDivision() {
     attractMotorsportSponsor, refreshSponsorMarket,
   } = useCompany();
   const { sim, design } = useDesign();
-  const [activeTab, setActiveTab] = useState<"teams" | "guide" | "strategy" | "calendar" | "governing" | "season" | "analytics" | "transfer" | "history">("teams");
+  const [activeTab, setActiveTab] = useState<"teams" | "summary" | "hq" | "staff" | "parts" | "votes" | "guide" | "strategy" | "calendar" | "governing" | "season" | "analytics" | "transfer" | "history">("teams");
   const [selectedTeamId, setSelectedTeamId] = useState<string | null>(null);
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [transferPoints, setTransferPoints] = useState(10);
@@ -309,7 +310,7 @@ export function MotorsportDivision() {
     });
   };
 
-  const selectedTeam = company.motorsport.teams.find(t => t.id === selectedTeamId) ?? null;
+  const selectedTeam = company.motorsport.teams.find(t => t.id === selectedTeamId) ?? company.motorsport.teams[0] ?? null;
 
   // Compliance check
   const isHybrid = design.engine.layout === "hybrid" || design.engine.hybridArchitecture !== "none" || design.engine.hasMguH;
@@ -330,6 +331,11 @@ export function MotorsportDivision() {
 
   const tabs = [
     { id: "teams" as const, label: "Teams" },
+    { id: "summary" as const, label: "Season Summary" },
+    { id: "hq" as const, label: "HQ Infrastructure" },
+    { id: "staff" as const, label: "Staff & Pit Crew" },
+    { id: "parts" as const, label: "Parts R&D" },
+    { id: "votes" as const, label: "Political Voting" },
     { id: "guide" as const, label: "Guide" },
     { id: "strategy" as const, label: "Strategy" },
     { id: "calendar" as const, label: "Calendar" },
@@ -627,6 +633,276 @@ export function MotorsportDivision() {
               </div>
             </div>
           )}
+        </div>
+      )}
+
+      {/* ===================== SEASON SUMMARY TAB ===================== */}
+      {activeTab === "summary" && (
+        <div className="space-y-4">
+          <div className="panel p-5">
+            <div className="flex items-center justify-between mb-4">
+              <div>
+                <span className="text-[10px] font-mono text-cyan-400 font-bold uppercase tracking-widest">OFFICIAL SEASON RECAP</span>
+                <h3 className="text-lg font-black text-slate-100 flex items-center gap-2">
+                  <Trophy size={20} className="text-yellow-400" /> Motorsport Season {company.motorsport.currentSeason - 1} Summary
+                </h3>
+              </div>
+              <span className="px-3 py-1 rounded-full text-xs font-mono font-bold bg-yellow-500/20 border border-yellow-500/40 text-yellow-300">
+                COMPLETED
+              </span>
+            </div>
+
+            {company.motorsport.teams.length === 0 ? (
+              <div className="text-center py-8">
+                <p className="text-xs text-slate-500">No completed seasons on record yet.</p>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {/* Champions Showcase Banner */}
+                {company.motorsport.teams.map(t => {
+                  const lastRes = t.seasonResults[t.seasonResults.length - 1];
+                  if (!lastRes) return null;
+                  const isChamp = lastRes.position === 1;
+
+                  return (
+                    <div key={t.id} className={`p-4 rounded-xl border space-y-3 ${
+                      isChamp ? "bg-gradient-to-r from-yellow-500/15 via-amber-500/5 to-yellow-500/15 border-yellow-500/40" : "bg-base-850/60 border-base-800"
+                    }`}>
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2">
+                          <h4 className="text-base font-bold text-slate-100">{t.name}</h4>
+                          <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full border ${CATEGORY_COLORS[t.category]}`}>
+                            {CATEGORY_LABELS[t.category]}
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-2 font-mono font-bold text-sm">
+                          {isChamp && <span className="text-yellow-400 font-bold text-xs bg-yellow-500/20 px-2 py-0.5 rounded border border-yellow-500/40">👑 WORLD CHAMPION</span>}
+                          <span className={isChamp ? "text-yellow-400 text-base font-black" : "text-slate-300"}>P{lastRes.position}</span>
+                        </div>
+                      </div>
+
+                      {/* Performance Summary Metrics */}
+                      <div className="grid grid-cols-2 sm:grid-cols-6 gap-2 text-center">
+                        <div className="bg-base-900/60 p-2 rounded-lg border border-base-800">
+                          <div className="text-xs font-mono font-bold text-slate-200">{lastRes.points} PTS</div>
+                          <div className="text-[9px] text-slate-500 uppercase">Season Points</div>
+                        </div>
+                        <div className="bg-base-900/60 p-2 rounded-lg border border-base-800">
+                          <div className="text-xs font-mono font-bold text-ok-400">{lastRes.wins} Wins</div>
+                          <div className="text-[9px] text-slate-500 uppercase">Victories</div>
+                        </div>
+                        <div className="bg-base-900/60 p-2 rounded-lg border border-base-800">
+                          <div className="text-xs font-mono font-bold text-accent-300">{lastRes.podiums} Podiums</div>
+                          <div className="text-[9px] text-slate-500 uppercase">Podiums</div>
+                        </div>
+                        <div className="bg-base-900/60 p-2 rounded-lg border border-base-800">
+                          <div className="text-xs font-mono font-bold text-purple-400">{lastRes.fastestLaps} FL</div>
+                          <div className="text-[9px] text-slate-500 uppercase">Fastest Laps</div>
+                        </div>
+                        <div className="bg-base-900/60 p-2 rounded-lg border border-base-800">
+                          <div className="text-xs font-mono font-bold text-blue-400">{lastRes.polePositions} Poles</div>
+                          <div className="text-[9px] text-slate-500 uppercase">Poles</div>
+                        </div>
+                        <div className="bg-base-900/60 p-2 rounded-lg border border-base-800">
+                          <div className="text-xs font-mono font-bold text-cyan-300">+{lastRes.techPointsEarned} R&D</div>
+                          <div className="text-[9px] text-slate-500 uppercase">Tech Earned</div>
+                        </div>
+                      </div>
+
+                      {/* Financial & Morale End of Season Outcome */}
+                      <div className="flex items-center justify-between text-xs font-mono bg-base-900/40 p-2.5 rounded-lg border border-base-800/80 text-slate-400">
+                        <span>Season Financial Balance: <strong className="text-ok-400">${(t.budget / 1e6).toFixed(1)}M remaining</strong></span>
+                        <span>Team Morale: <strong className="text-cyan-300">{t.teamMorale}%</strong></span>
+                        <span>Drivers Contracted: <strong className="text-slate-200">{t.drivers.length}/2 Active</strong></span>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* ===================== HQ INFRASTRUCTURE TAB ===================== */}
+      {activeTab === "hq" && (
+        <div className="space-y-4">
+          <div className="panel p-5">
+            <h3 className="text-sm font-bold text-slate-100 mb-1 flex items-center gap-2">
+              <Building2 size={16} className="text-accent-400" /> Team Headquarters & R&D Facilities
+            </h3>
+            <p className="text-xs text-slate-400 mb-4">
+              Construct and upgrade specialized facilities to boost aerodynamic efficiency, part manufacturing speed, telemetry accuracy, and driver development.
+            </p>
+
+            {(!selectedTeam?.hqBuildings || selectedTeam.hqBuildings.length === 0) ? (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                {[
+                  { name: "Wind Tunnel", level: 2, desc: "+10% Downforce R&D efficiency", cost: "$10.0M", active: true },
+                  { name: "CFD Supercomputer", level: 1, desc: "+8% Drag reduction modeling", cost: "$8.0M", active: true },
+                  { name: "Design Center", level: 2, desc: "Unlocks high-performance illegal part projects", cost: "$12.0M", active: true },
+                  { name: "Telemetry & Data Lab", level: 1, desc: "+10% Tire wear simulation precision", cost: "$6.0M", active: true },
+                  { name: "Driver Simulator", level: 2, desc: "+2 Driver skill gain per season", cost: "$15.0M", active: true },
+                  { name: "Parts Factory", level: 1, desc: "+20% Component manufacturing speed", cost: "$10.0M", active: true },
+                  { name: "Scouting Headquarters", level: 1, desc: "Reveals hidden talent stats globally", cost: "$5.0M", active: true },
+                  { name: "Staff Facilities & Lounge", level: 2, desc: "+10 Team morale & lower salary demands", cost: "$4.0M", active: true },
+                ].map((b, i) => (
+                  <div key={i} className="bg-base-850 p-4 rounded-xl border border-base-800 flex items-center justify-between">
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-sm font-semibold text-slate-100">{b.name}</span>
+                        <span className="text-[10px] font-mono font-bold bg-accent-500/15 border border-accent-500/30 text-accent-300 px-2 py-0.5 rounded-full">
+                          LVL {b.level}/5
+                        </span>
+                      </div>
+                      <p className="text-xs text-slate-400 mt-1">{b.desc}</p>
+                    </div>
+                    <button className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-accent-500/20 border border-accent-500/40 text-accent-300 hover:bg-accent-500/30 transition-all shrink-0">
+                      Upgrade ({b.cost})
+                    </button>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                {selectedTeam.hqBuildings.map(b => (
+                  <div key={b.id} className="bg-base-850 p-4 rounded-xl border border-base-800 flex items-center justify-between">
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-sm font-semibold text-slate-100">{b.name}</span>
+                        <span className="text-[10px] font-mono font-bold bg-accent-500/15 border border-accent-500/30 text-accent-300 px-2 py-0.5 rounded-full">
+                          LVL {b.level}/{b.maxLevel}
+                        </span>
+                      </div>
+                      <p className="text-xs text-slate-400 mt-1">{b.description}</p>
+                      <div className="text-[10px] font-mono text-ok-400 mt-1">{b.effectDescription}</div>
+                    </div>
+                    <button className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-accent-500/20 border border-accent-500/40 text-accent-300 hover:bg-accent-500/30 transition-all shrink-0">
+                      Upgrade (${(b.buildCost / 1e6).toFixed(1)}M)
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* ===================== STAFF & PIT CREW TAB ===================== */}
+      {activeTab === "staff" && (
+        <div className="space-y-4">
+          <div className="panel p-5">
+            <h3 className="text-sm font-bold text-slate-100 mb-1 flex items-center gap-2">
+              <Users size={16} className="text-purple-400" /> Key Staff & Pit Crew Management
+            </h3>
+            <p className="text-xs text-slate-400 mb-4">
+              Hire elite Head Engineers, Race Strategists, and Pit Crew Chiefs to shave crucial tenths during pit stops and optimize development.
+            </p>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+              {[
+                { name: "Adrian Newcomb", role: "Head Engineer", skill: 94, morale: 90, salary: "$3.5M/yr", spec: "Ground Effect Aerodynamics" },
+                { name: "Hannah Schmitz", role: "Race Strategist", skill: 92, morale: 95, salary: "$2.8M/yr", spec: "Undercut & Wet Timing" },
+                { name: "Diego Rossi", role: "Pit Crew Chief", skill: 88, morale: 82, salary: "$1.5M/yr", spec: "Sub-2.0s Pit Stops" },
+              ].map((s, i) => (
+                <div key={i} className="bg-base-850 p-4 rounded-xl border border-base-800 space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-bold text-purple-400 uppercase tracking-wider">{s.role}</span>
+                    <span className="text-xs font-mono text-slate-300 font-bold">{s.salary}</span>
+                  </div>
+                  <h4 className="text-base font-bold text-slate-100">{s.name}</h4>
+                  <div className="text-xs text-slate-400">Specialty: <span className="text-slate-200 font-medium">{s.spec}</span></div>
+                  <div className="flex items-center justify-between text-xs pt-2 border-t border-base-800">
+                    <span className="text-slate-400">Skill Rating: <span className="font-mono text-accent-300 font-bold">{s.skill}/100</span></span>
+                    <span className="text-slate-400">Morale: <span className="font-mono text-ok-400 font-bold">{s.morale}%</span></span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ===================== PARTS R&D TAB ===================== */}
+      {activeTab === "parts" && (
+        <div className="space-y-4">
+          <div className="panel p-5">
+            <h3 className="text-sm font-bold text-slate-100 mb-1 flex items-center gap-2">
+              <Wrench size={16} className="text-warn-400" /> Motorsport Component Development
+            </h3>
+            <p className="text-xs text-slate-400 mb-4">
+              Develop high-performance engine mappings, aero wings, light gearboxes, and brakes. Risk installing illegal breakthrough components for massive pace gains!
+            </p>
+
+            <div className="space-y-3">
+              {[
+                { name: "Ultra-High Downforce Rear Wing", cat: "Aerodynamics", perf: "+18 Pace", rel: "+5%", cost: "$4.2M", risk: "Legal (0% Risk)", status: "Installed" },
+                { name: "Experimental Flexible Floor", cat: "Chassis", perf: "+25 Pace", rel: "-10%", cost: "$6.5M", risk: "HIGH ILLEGAL RISK (35% Inspection Penalty)", status: "In Development" },
+                { name: "Ceramic Composite Brakes", cat: "Brakes", perf: "+12 Pace", rel: "+15%", cost: "$2.8M", risk: "Legal (0% Risk)", status: "Installed" },
+              ].map((p, i) => (
+                <div key={i} className="bg-base-850 p-4 rounded-xl border border-base-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <h4 className="text-sm font-bold text-slate-100">{p.name}</h4>
+                      <span className="text-[10px] font-mono bg-base-800 border border-base-700 text-slate-300 px-2 py-0.5 rounded">{p.cat}</span>
+                    </div>
+                    <div className="text-xs text-slate-400 mt-1 flex items-center gap-3">
+                      <span>Perf: <strong className="text-ok-400 font-mono">{p.perf}</strong></span>
+                      <span>Reliability: <strong className="text-accent-300 font-mono">{p.rel}</strong></span>
+                      <span>Cost: <strong className="text-slate-200 font-mono">{p.cost}</strong></span>
+                    </div>
+                    <div className="text-[10px] font-semibold mt-1 text-amber-400">{p.risk}</div>
+                  </div>
+                  <span className="px-3 py-1.5 rounded-lg text-xs font-bold bg-ok-500/20 text-ok-300 border border-ok-500/30 self-start sm:self-center">
+                    {p.status}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ===================== POLITICAL VOTING TAB ===================== */}
+      {activeTab === "votes" && (
+        <div className="space-y-4">
+          <div className="panel p-5">
+            <h3 className="text-sm font-bold text-slate-100 mb-1 flex items-center gap-2">
+              <Gavel size={16} className="text-yellow-400" /> Governing Body Political Rule Voting
+            </h3>
+            <p className="text-xs text-slate-400 mb-4">
+              Cast your team's vote on proposed regulation changes. Sway political decisions to favor your team's engineering strengths or handicap rival constructors.
+            </p>
+
+            <div className="space-y-3">
+              {[
+                { title: "Standardized Front Wing Aerodynamics", desc: "Mandate uniform front wing aero to cut development costs.", effect: "Reduces top team aero advantage by 15%, budget cap lowered.", for: 6, against: 4 },
+                { title: "Sprint Race Qualifying Format", desc: "Introduce a Saturday 100km sprint race for extra championship points.", effect: "Increases season points potential by 10%, increases engine wear.", for: 8, against: 2 },
+                { title: "Relax Inspection Penalty for Experimental Parts", desc: "Relax strict inspection penalties for experimental engine mapping.", effect: "Increases performance ceiling by 8%, increases risk of disqualification.", for: 3, against: 7 },
+              ].map((v, i) => (
+                <div key={i} className="bg-base-850 p-4 rounded-xl border border-base-800 space-y-3">
+                  <div className="flex items-center justify-between">
+                    <h4 className="text-sm font-bold text-slate-100">{v.title}</h4>
+                    <span className="text-xs font-mono text-yellow-400 bg-yellow-500/10 border border-yellow-500/30 px-2 py-0.5 rounded">
+                      Votes: {v.for} FOR / {v.against} AGAINST
+                    </span>
+                  </div>
+                  <p className="text-xs text-slate-400">{v.desc}</p>
+                  <div className="text-xs font-mono text-cyan-300 bg-cyan-500/10 p-2 rounded-lg border border-cyan-500/20">
+                    Impact: {v.effect}
+                  </div>
+                  <div className="flex items-center gap-2 pt-1">
+                    <button className="px-4 py-1.5 rounded-lg text-xs font-bold bg-ok-500/20 border border-ok-500/40 text-ok-300 hover:bg-ok-500/30 transition-all">
+                      Vote FOR
+                    </button>
+                    <button className="px-4 py-1.5 rounded-lg text-xs font-bold bg-danger-500/20 border border-danger-500/40 text-danger-300 hover:bg-danger-500/30 transition-all">
+                      Vote AGAINST
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       )}
 
@@ -1679,6 +1955,42 @@ export function MotorsportDivision() {
                   ))}
                 </div>
               </div>
+            </div>
+
+            {/* Visual Diagrams & Graphs: Circuit Layout + Telemetry + Sector Splits + Aero Vector Diagram */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <CircuitDiagram
+                trackName={liveRaceState.trackName}
+                country="International"
+                lengthKm={5.79}
+                turns={11}
+              />
+              <TelemetryGraph
+                telemetryPoints={[
+                  { distancePercent: 0, speedKmh: 310, gear: 8, throttlePct: 100, brakePct: 0 },
+                  { distancePercent: 15, speedKmh: 110, gear: 3, throttlePct: 0, brakePct: 100 },
+                  { distancePercent: 30, speedKmh: 195, gear: 5, throttlePct: 80, brakePct: 0 },
+                  { distancePercent: 45, speedKmh: 285, gear: 7, throttlePct: 100, brakePct: 0 },
+                  { distancePercent: 60, speedKmh: 140, gear: 4, throttlePct: 10, brakePct: 90 },
+                  { distancePercent: 75, speedKmh: 240, gear: 6, throttlePct: 95, brakePct: 0 },
+                  { distancePercent: 90, speedKmh: 330, gear: 8, throttlePct: 100, brakePct: 0 },
+                  { distancePercent: 100, speedKmh: 315, gear: 8, throttlePct: 100, brakePct: 0 },
+                ]}
+              />
+              <SectorTimesBarChart
+                s1={24.312}
+                s2={32.840}
+                s3={22.105}
+                bestS1={24.100}
+                bestS2={32.400}
+                bestS3={21.800}
+              />
+              <CarSilhouetteDiagram
+                powerHp={sim.peakPower}
+                downforceKg={sim.downforce}
+                weightKg={sim.weight}
+                aeroBalancePct={53}
+              />
             </div>
           </div>
         </div>

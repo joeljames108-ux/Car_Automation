@@ -206,6 +206,72 @@ export function StrategyPanel({ selectedTeam }: { selectedTeam: MotorsportTeam |
               </label>
             ))}
           </div>
+
+          {/* Engine Pace Mode */}
+          <div>
+            <label className="label-mono block mb-2">Engine Mode / Fuel Mixing</label>
+            <div className="grid grid-cols-3 gap-1.5">
+              {[
+                { id: "save_engine", label: "Save Engine", desc: "Low wear, slow pace" },
+                { id: "neutral", label: "Neutral", desc: "Standard map" },
+                { id: "push", label: "Push Engine", desc: "High power & wear" },
+              ].map(m => (
+                <button key={m.id} onClick={() => updateStrategy(selectedTeam.id, { enginePaceMode: m.id as any })}
+                  className={`px-2 py-2 rounded-lg text-[10px] font-medium transition-all border ${
+                    (selectedTeam.strategy.enginePaceMode || "neutral") === m.id
+                      ? "bg-purple-500/20 border-purple-500/50 text-purple-300"
+                      : "bg-base-850 border-base-800 text-slate-400"
+                  }`}>
+                  <div className="font-semibold text-xs">{m.label}</div>
+                  <div className="opacity-60">{m.desc}</div>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Driver Risk Level */}
+          <div>
+            <label className="label-mono block mb-2">Driver Driving Aggression</label>
+            <div className="grid grid-cols-3 gap-1.5">
+              {[
+                { id: "safe", label: "Conserve Tires", desc: "Minimal crash risk" },
+                { id: "normal", label: "Balanced", desc: "Standard race pace" },
+                { id: "push_limits", label: "Push to Limit", desc: "High overtake/lockup risk" },
+              ].map(r => (
+                <button key={r.id} onClick={() => updateStrategy(selectedTeam.id, { driverRiskLevel: r.id as any })}
+                  className={`px-2 py-2 rounded-lg text-[10px] font-medium transition-all border ${
+                    (selectedTeam.strategy.driverRiskLevel || "normal") === r.id
+                      ? "bg-amber-500/20 border-amber-500/50 text-amber-300"
+                      : "bg-base-850 border-base-800 text-slate-400"
+                  }`}>
+                  <div className="font-semibold text-xs">{r.label}</div>
+                  <div className="opacity-60">{r.desc}</div>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Pit Stop Risk */}
+          <div className="md:col-span-2">
+            <label className="label-mono block mb-2">Pit Crew Speed vs Risk</label>
+            <div className="grid grid-cols-3 gap-1.5">
+              {[
+                { id: "safe_slow", label: "Safe Pit Stop (2.8s)", desc: "0% wheel nut mistake chance" },
+                { id: "balanced", label: "Standard Stop (2.2s)", desc: "5% mistake risk" },
+                { id: "aggressive_fast", label: "Sub-1.9s Ultra Pit", desc: "20% risk of stuck wheel nut" },
+              ].map(p => (
+                <button key={p.id} onClick={() => updateStrategy(selectedTeam.id, { pitStopRisk: p.id as any })}
+                  className={`px-2 py-2 rounded-lg text-[10px] font-medium transition-all border ${
+                    (selectedTeam.strategy.pitStopRisk || "balanced") === p.id
+                      ? "bg-ok-500/20 border-ok-500/50 text-ok-300"
+                      : "bg-base-850 border-base-800 text-slate-400"
+                  }`}>
+                  <div className="font-semibold text-xs">{p.label}</div>
+                  <div className="opacity-60">{p.desc}</div>
+                </button>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
     </div>

@@ -237,7 +237,7 @@ function avg(scores: CategoryScore[]): number {
   return scores.reduce((a, b) => a + b.score, 0) / scores.length;
 }
 
-export function computeSummary(scores: ReviewScores): ReviewSummary {
+export function computeSummary(scores: ReviewScores, segment?: string): ReviewSummary {
   const performance = avg(scores.performance);
   const comfort = avg(scores.comfort);
   const interior = avg(scores.interior);
@@ -245,7 +245,17 @@ export function computeSummary(scores: ReviewScores): ReviewSummary {
   const safety = avg(scores.safety);
   const ownership = avg(scores.ownership);
   const value = avg(scores.value);
-  const overall = (performance + comfort + interior + technology + safety + ownership + value) / 7;
+
+  let overall = (performance + comfort + interior + technology + safety + ownership + value) / 7;
+  // Segment-dynamic weighting: Budget buyers prioritize fuel economy & ownership cost above raw speed!
+  if (segment === "economy") {
+    overall = (ownership * 0.30) + (value * 0.25) + (safety * 0.15) + (comfort * 0.15) + (performance * 0.15);
+  } else if (segment === "mainstream") {
+    overall = (ownership * 0.25) + (value * 0.20) + (safety * 0.20) + (comfort * 0.20) + (performance * 0.15);
+  } else if (segment === "hypercar" || segment === "ultra_luxury") {
+    overall = (performance * 0.40) + (technology * 0.20) + (interior * 0.20) + (comfort * 0.10) + (ownership * 0.10);
+  }
+
   return {
     overall: Math.round(overall * 10) / 10,
     performance: Math.round(performance * 10) / 10,

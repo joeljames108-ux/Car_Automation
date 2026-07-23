@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import {
   Wind, CarFront, Layers3, Combine, Zap, Plane, Thermometer, Disc3,
-  Video, Cpu, BarChart3, Gauge, TrendingUp, CircuitBoard, Bot, Sparkles,
+  Video, BarChart3, Gauge, TrendingUp, CircuitBoard, Bot, Sparkles,
 } from "lucide-react";
 import { useDesign } from "../state/DesignContext";
 import type { SimResult, AeroResearchConfig } from "../sim/types";
@@ -10,18 +10,18 @@ import { CFDView } from "./ui/CFDView";
 import { LineChart } from "./ui/LineChart";
 import {
   FRONT_BUMPER_SHAPES, SIDEPOD_INLET_POSITIONS, UNDERBODY_FLOOR_TYPES,
-  WHEEL_AERO_TYPES, MIRROR_AERO_TYPES, CFD_QUALITIES, AERO_MODES,
+  WHEEL_AERO_TYPES, MIRROR_AERO_TYPES, AERO_MODES,
   ENDPLATE_DESIGNS, OIL_COOLER_PLACEMENTS, TRACKS,
 } from "../sim/constants";
 import type {
   FrontBumperShape, UnderbodyFloorType, WheelAeroType, MirrorAeroType,
-  CfdQuality, AeroMode,
+  AeroMode,
 } from "../sim/types";
 
 type Dept =
   | "front" | "sidepod" | "diffuser" | "underbody" | "active"
   | "rearwing" | "cooling" | "wheel" | "mirror" | "windtunnel"
-  | "cfd" | "dashboard";
+  | "dashboard";
 
 const DEPTS: { id: Dept; label: string; icon: React.ReactNode }[] = [
   { id: "front",      label: "Front Aero",      icon: <CarFront size={14} /> },
@@ -34,7 +34,6 @@ const DEPTS: { id: Dept; label: string; icon: React.ReactNode }[] = [
   { id: "wheel",      label: "Wheel Aero",       icon: <Disc3 size={14} /> },
   { id: "mirror",     label: "Mirrors",          icon: <Video size={14} /> },
   { id: "windtunnel", label: "Wind Tunnel",      icon: <Wind size={14} /> },
-  { id: "cfd",        label: "CFD Supercomputer",icon: <Cpu size={14} /> },
   { id: "dashboard",  label: "Aero Dashboard",   icon: <BarChart3 size={14} /> },
 ];
 
@@ -110,6 +109,38 @@ export function AeroLab() {
             >
               🚀 Low Drag Speed
             </button>
+          </div>
+        </div>
+
+        {/* Live Delta Performance Telemetry Header */}
+        <div className="bg-base-900/90 rounded-xl p-3 border border-base-800 grid grid-cols-2 sm:grid-cols-4 gap-3 text-center">
+          <div className="bg-base-850/60 p-2 rounded-lg border border-base-800/80">
+            <div className="text-[10px] text-slate-500 font-mono uppercase">Drag Cd</div>
+            <div className="text-sm font-bold font-mono text-slate-200">{sim.dragCoeff.toFixed(3)}</div>
+            <div className={`text-[10px] font-mono font-semibold ${sim.dragCoeff < 0.32 ? "text-ok-400" : sim.dragCoeff > 0.45 ? "text-danger-400" : "text-slate-400"}`}>
+              {sim.dragCoeff < 0.32 ? "🟢 Low Drag (Fast Straights)" : sim.dragCoeff > 0.45 ? "🔴 High Drag Penalty" : "⚪ Balanced"}
+            </div>
+          </div>
+          <div className="bg-base-850/60 p-2 rounded-lg border border-base-800/80">
+            <div className="text-[10px] text-slate-500 font-mono uppercase">Downforce Load</div>
+            <div className="text-sm font-bold font-mono text-cyan-300">{sim.downforce} N</div>
+            <div className={`text-[10px] font-mono font-semibold ${sim.downforce > 1500 ? "text-ok-400" : "text-accent-400"}`}>
+              {sim.downforce > 1500 ? "🟢 High Cornering Grip" : "⚪ Moderate Downforce"}
+            </div>
+          </div>
+          <div className="bg-base-850/60 p-2 rounded-lg border border-base-800/80">
+            <div className="text-[10px] text-slate-500 font-mono uppercase">Top Speed Impact</div>
+            <div className="text-sm font-bold font-mono text-accent-300">{sim.topSpeed} km/h</div>
+            <div className="text-[10px] font-mono text-slate-400">
+              {sim.topSpeed > 330 ? "⚡ Hypercar Pace" : "🏎️ Sports Pace"}
+            </div>
+          </div>
+          <div className="bg-base-850/60 p-2 rounded-lg border border-base-800/80">
+            <div className="text-[10px] text-slate-500 font-mono uppercase">Est. Lap Time Impact</div>
+            <div className="text-sm font-bold font-mono text-ok-400">{(sim.lapTimes[0]?.time ? `${sim.lapTimes[0].time.toFixed(2)}s` : "-")}</div>
+            <div className="text-[10px] font-mono text-ok-400 font-semibold">
+              {sim.downforce > 1200 ? "🟢 Lap Shaved: -1.45s" : "⚪ Baseline Pace"}
+            </div>
           </div>
         </div>
 
@@ -336,33 +367,6 @@ export function AeroLab() {
               <div className="mt-3">
                 <Toggle label="Rolling Road" value={ar.windTunnel.rollingRoad} onChange={(v) => update("windTunnel", { rollingRoad: v })} />
               </div>
-            </Section>
-          )}
-
-          {dept === "cfd" && (
-            <Section title="CFD Supercomputer" icon={<Cpu size={16} />}>
-              <label className="label-mono mb-1.5 block">Simulation Quality</label>
-              <ChoiceGrid<CfdQuality>
-                value={ar.cfd.quality}
-                options={(Object.keys(CFD_QUALITIES) as CfdQuality[]).map((q) => ({ value: q, label: CFD_QUALITIES[q].label }))}
-                onChange={(v) => update("cfd", { quality: v })}
-                columns={5}
-              />
-              <div className="grid grid-cols-3 gap-2 mt-3 text-[10px]">
-                <div className="bg-base-850 rounded p-2 border border-base-800 text-center">
-                  <div className="label-mono text-slate-500">Accuracy</div>
-                  <div className="font-mono text-slate-300">{(CFD_QUALITIES[ar.cfd.quality].accuracyFactor * 100).toFixed(0)}%</div>
-                </div>
-                <div className="bg-base-850 rounded p-2 border border-base-800 text-center">
-                  <div className="label-mono text-slate-500">Sim Time</div>
-                  <div className="font-mono text-slate-300">{CFD_QUALITIES[ar.cfd.quality].timeFactor.toFixed(1)}×</div>
-                </div>
-                <div className="bg-base-850 rounded p-2 border border-base-800 text-center">
-                  <div className="label-mono text-slate-500">Cost</div>
-                  <div className="font-mono text-slate-300">{CFD_QUALITIES[ar.cfd.quality].costFactor.toFixed(1)}×</div>
-                </div>
-              </div>
-              <p className="text-[11px] text-slate-500 mt-3">Higher fidelity CFD subtly improves the realized drag coefficient and lowers flow-separation risk through better-informed design choices.</p>
             </Section>
           )}
 

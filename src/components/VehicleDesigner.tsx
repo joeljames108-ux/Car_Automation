@@ -1,20 +1,12 @@
-import { Car, Wind, Disc, Settings, Cpu, Shield } from "lucide-react";
+import { Car, Disc, Settings, Cpu, Shield } from "lucide-react";
 import { useDesign } from "../state/DesignContext";
 import { Section, Slider, Select, ChoiceGrid, Toggle, StatTile } from "./ui/Controls";
-import { LineChart } from "./ui/LineChart";
-import { CFDView } from "./ui/CFDView";
-import { PLATFORMS, CHASSIS_TYPES, SUSPENSION_TYPES, TRANSMISSION_TYPES, TIRE_COMPOUNDS } from "../sim/constants";
-import type { PlatformType, ChassisType, SuspensionType, TransmissionType, TireCompound, VehicleConfig } from "../sim/types";
+import { PLATFORMS, CHASSIS_TYPES, SUSPENSION_TYPES, TRANSMISSION_TYPES, BRAKE_TYPES, TIRE_COMPOUNDS } from "../sim/constants";
+import type { PlatformType, ChassisType, SuspensionType, TransmissionType, BrakeType, TireCompound, VehicleConfig } from "../sim/types";
 
 export function VehicleDesigner() {
-  const { design, sim, updateVehicle, updateAero, updateElectronics } = useDesign();
+  const { design, sim, updateVehicle, updateElectronics } = useDesign();
   const v = design.vehicle;
-  const a = v.aero;
-
-  const dragSeries = [
-    { data: sim.dragVsSpeed.map((d) => ({ x: d.speed, y: d.drag })), color: "#22d3ee", fill: true },
-    { data: sim.dragVsSpeed.map((d) => ({ x: d.speed, y: d.downforce })), color: "#22c55e" },
-  ];
 
   return (
     <div className="grid grid-cols-1 xl:grid-cols-3 gap-4">
@@ -51,8 +43,13 @@ export function VehicleDesigner() {
         </Section>
 
         <Section title="Brakes & Wheels" icon={<Disc size={16} />}>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-3">
+            <Select<BrakeType> label="Brake Disc Material" value={v.brakeType || "cast_iron"} options={(Object.keys(BRAKE_TYPES) as BrakeType[]).map((b) => ({ value: b, label: BRAKE_TYPES[b].label }))} onChange={(val) => updateVehicle({ brakeType: val })} />
+            <Select label="Caliper Pistons" value={String(v.brakePistonCount || 4)} options={[{ value: "2", label: "2-Piston Floating" }, { value: "4", label: "4-Piston Monobloc" }, { value: "6", label: "6-Piston High Performance" }, { value: "8", label: "8-Piston Endurance / Race" }]} onChange={(val) => updateVehicle({ brakePistonCount: Number(val) })} />
+          </div>
+          <p className="text-[11px] text-slate-500 mb-3">{BRAKE_TYPES[v.brakeType || "cast_iron"].description}</p>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-            <Slider label="Brake Disc" value={v.brakeDiscSize} min={280} max={420} unit="mm" onChange={(val) => updateVehicle({ brakeDiscSize: val })} />
+            <Slider label="Brake Disc" value={v.brakeDiscSize} min={280} max={440} unit="mm" onChange={(val) => updateVehicle({ brakeDiscSize: val })} />
             <Slider label="Brake Pad" value={v.brakePadCompound} min={0} max={1} step={0.05} format={(val) => `${(val * 100).toFixed(0)}%`} onChange={(val) => updateVehicle({ brakePadCompound: val })} />
             <Slider label="Brake Bias" value={v.brakeBias} min={0.3} max={0.8} step={0.01} format={(val) => `${(val * 100).toFixed(0)}%F`} onChange={(val) => updateVehicle({ brakeBias: val })} />
             <Slider label="Wheel Dia." value={v.wheelDiameter} min={15} max={22} unit='"' onChange={(val) => updateVehicle({ wheelDiameter: val })} />
@@ -63,32 +60,13 @@ export function VehicleDesigner() {
         </Section>
 
         <Section title="Transmission" icon={<Cpu size={16} />}>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            <Select<TransmissionType> label="Gearbox" value={v.transmission} options={(Object.keys(TRANSMISSION_TYPES) as TransmissionType[]).map((t) => ({ value: t, label: TRANSMISSION_TYPES[t].label }))} onChange={(val) => updateVehicle({ transmission: val })} />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-2">
+            <Select<TransmissionType> label="Gearbox Type" value={v.transmission} options={(Object.keys(TRANSMISSION_TYPES) as TransmissionType[]).map((t) => ({ value: t, label: TRANSMISSION_TYPES[t].label }))} onChange={(val) => updateVehicle({ transmission: val, gearCount: TRANSMISSION_TYPES[val].gearCount })} />
             <Slider label="Final Drive" value={v.finalDrive} min={2.5} max={5.5} step={0.1} onChange={(val) => updateVehicle({ finalDrive: val })} />
             <Select label="Differential" value={v.diffType} options={[{ value: "open", label: "Open" }, { value: "lsd", label: "LSD" }, { value: "torsen", label: "Torsen" }, { value: "active", label: "Active" }, { value: "locked", label: "Locked" }]} onChange={(val) => updateVehicle({ diffType: val as VehicleConfig["diffType"] })} />
             <Slider label="Diff Preload" value={v.diffPreload} min={0} max={1} step={0.05} format={(val) => `${(val * 100).toFixed(0)}%`} onChange={(val) => updateVehicle({ diffPreload: val })} />
           </div>
-        </Section>
-
-        <Section title="Aerodynamics" icon={<Wind size={16} />}>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-            <Slider label="Body Shape" value={a.bodyShape} min={0} max={1} step={0.05} format={(val) => `${(val * 100).toFixed(0)}%`} onChange={(val) => updateAero({ bodyShape: val })} />
-            <Slider label="Body Width" value={a.bodyWidth} min={1700} max={2100} unit="mm" onChange={(val) => updateAero({ bodyWidth: val })} />
-            <Slider label="Roof Height" value={a.roofHeight} min={1000} max={1400} unit="mm" onChange={(val) => updateAero({ roofHeight: val })} />
-            <Slider label="Ride Height" value={a.rideHeight} min={40} max={200} unit="mm" onChange={(val) => updateAero({ rideHeight: val })} />
-            <Slider label="Splitter Length" value={a.splitterLength} min={0} max={400} unit="mm" onChange={(val) => updateAero({ splitterLength: val })} />
-            <Slider label="Wing Width" value={a.wingWidth} min={0} max={1800} unit="mm" onChange={(val) => updateAero({ wingWidth: val })} />
-            <Slider label="Wing Angle" value={a.wingAngle} min={0} max={30} step={0.5} unit="°" onChange={(val) => updateAero({ wingAngle: val })} />
-            <Slider label="Wing Height" value={a.wingHeight} min={0} max={400} unit="mm" onChange={(val) => updateAero({ wingHeight: val })} />
-            <Slider label="Diffuser Angle" value={a.diffuserAngle} min={0} max={25} step={0.5} unit="°" onChange={(val) => updateAero({ diffuserAngle: val })} />
-            <Select label="Underbody" value={a.underbody} options={[{ value: "flat", label: "Flat" }, { value: "flat_floor", label: "Flat Floor" }, { value: "ground_effect", label: "Ground Effect" }, { value: "venturi", label: "Venturi" }, { value: "skirts", label: "Skirts" }]} onChange={(val) => updateAero({ underbody: val as VehicleConfig["aero"]["underbody"] })} />
-          </div>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mt-3">
-            <Toggle label="Canards" value={a.canards} onChange={(val) => updateAero({ canards: val })} />
-            <Toggle label="DRS" value={a.drs} onChange={(val) => updateAero({ drs: val })} />
-            <Toggle label="Side Pods" value={a.sidePods} onChange={(val) => updateAero({ sidePods: val })} />
-          </div>
+          <p className="text-[11px] text-slate-500">{TRANSMISSION_TYPES[v.transmission].description}</p>
         </Section>
 
         <Section title="Electronics" icon={<Shield size={16} />}>
@@ -104,16 +82,6 @@ export function VehicleDesigner() {
 
       {/* Right column */}
       <div className="space-y-4">
-        <CFDView aero={a} dragCoeff={sim.dragCoeff} liftCoeff={sim.liftCoeff} downforce={sim.downforce} />
-
-        <Section title="Aero Forces" icon={<Wind size={16} />}>
-          <LineChart series={dragSeries} xLabel="Speed" xUnit="km/h" yLabel="Force" yUnit="N" height={180} />
-          <div className="flex justify-between text-[10px] text-slate-500 mt-1">
-            <span className="flex items-center gap-1"><span className="h-2 w-3 bg-accent-400 rounded-sm" />Drag</span>
-            <span className="flex items-center gap-1"><span className="h-2 w-3 bg-ok-500 rounded-sm" />Downforce</span>
-          </div>
-        </Section>
-
         <Section title="Vehicle Stats" icon={<Car size={16} />}>
           <div className="grid grid-cols-2 gap-2">
             <StatTile label="Total Weight" value={sim.weight} unit="kg" accent="accent" />

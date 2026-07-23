@@ -56,6 +56,8 @@ export interface EngineConfig {
   exhaustCollectorDia: number;  // mm
   exhaustCat: boolean;
   exhaustValved: boolean;
+  hasStartStop: boolean;
+  ecuMapMode: "economy" | "balanced" | "sport" | "race";
 
   // ---- Hybrid / EV ----
   hybridArchitecture: "none" | "mhev" | "fhev" | "phev" | "range_extender";
@@ -177,7 +179,8 @@ export interface ExteriorConfig {
 
 export type ChassisType = "tube_frame" | "monocoque" | "carbon_tub" | "aluminum_spaceframe" | "steel_unibody";
 export type SuspensionType = "macpherson" | "double_wishbone" | "multilink" | "torsion_bar" | "pushrod" | "pullrod";
-export type TransmissionType = "manual_5" | "manual_6" | "seq_6" | "seq_7" | "dct_7" | "dct_8" | "cvt" | "single_speed";
+export type BrakeType = "cast_iron" | "slotted_steel" | "carbon_ceramic" | "carbon_carbon" | "regenerative_hybrid";
+export type TransmissionType = "manual_5" | "manual_6" | "manual_7" | "seq_6" | "seq_7" | "seq_8" | "dct_7" | "dct_8" | "dct_9" | "dog_leg" | "cvt" | "single_speed";
 export type TireCompound = "hard" | "medium" | "soft" | "supersoft" | "slick" | "wet" | "intermediate";
 
 export interface VehicleConfig {
@@ -198,7 +201,9 @@ export interface VehicleConfig {
   toeR: number;
   antiRollBarF: number;    // 0-1
   antiRollBarR: number;
+  brakeType: BrakeType;
   brakeDiscSize: number;   // mm
+  brakePistonCount: number;// 2, 4, 6, 8 pistons
   brakePadCompound: number;// 0-1
   brakeBias: number;       // 0-1 (0 = full rear, 1 = full front)
   wheelDiameter: number;   // inches
@@ -1156,6 +1161,60 @@ export interface CategoryGuide {
   strategyTips: string[];
 }
 
+// ---------- Motorsport Manager Extended Features ----------
+
+export type HQBuildingType = "wind_tunnel" | "cfd_rig" | "design_center" | "telemetry_lab" | "simulator" | "factory" | "scouting_office" | "staff_housing";
+
+export interface HQBuilding {
+  id: HQBuildingType;
+  name: string;
+  level: number; // 0 (not built) to 5 (max)
+  maxLevel: number;
+  buildCost: number;
+  maintenanceCostPerSeason: number;
+  description: string;
+  effectDescription: string;
+}
+
+export type StaffRole = "head_engineer" | "race_strategist" | "scout_master" | "pit_crew_chief";
+
+export interface StaffMember {
+  id: string;
+  name: string;
+  role: StaffRole;
+  skill: number; // 1-100
+  morale: number; // 0-100
+  salary: number; // $ per season
+  specialty: string;
+  contractEndSeason: number;
+}
+
+export type ComponentCategory = "engine_tuning" | "aerodynamics" | "chassis_rigidity" | "gearbox" | "brakes" | "suspension";
+
+export interface PartDevelopmentProject {
+  id: string;
+  name: string;
+  category: ComponentCategory;
+  performanceBonus: number; // +1 to +25
+  reliabilityBonus: number; // +1 to +20
+  cost: number;
+  progressPercent: number; // 0 to 100
+  isIllegalRisk: boolean; // performance boost but risk of penalty
+  riskFactor: number; // 0-100% fail/penalty chance
+  status: "in_progress" | "installed" | "scrapped" | "banned";
+}
+
+export interface RuleVoteProposal {
+  id: string;
+  title: string;
+  description: string;
+  effectSummary: string;
+  votesFor: number;
+  votesAgainst: number;
+  playerVote?: "for" | "against" | "abstain";
+  passed?: boolean;
+}
+
 // ---------- Team Strategy ----------
 
 export interface TeamStrategy {
@@ -1167,6 +1226,10 @@ export interface TeamStrategy {
   wetStrategy: "stay_out" | "immediate_pit" | "wait_one_lap";
   undercut: boolean;              // pit earlier than rivals
   overcut: boolean;               // pit later than rivals
+  // Motorsport Manager tactics
+  enginePaceMode?: "push" | "neutral" | "save_engine";
+  driverRiskLevel?: "safe" | "normal" | "push_limits" | "qualifying_trim";
+  pitStopRisk?: "safe_slow" | "balanced" | "aggressive_fast";
 }
 
 // ---------- Driver Development ----------
@@ -1239,6 +1302,11 @@ export interface MotorsportTeam {
   polePositions: number;          // all-time
   sponsors: Sponsor[];            // active sponsors
   liveryColor: string;            // team livery hex color
+  // --- Motorsport Manager Additions ---
+  hqBuildings?: HQBuilding[];
+  staffMembers?: StaffMember[];
+  partProjects?: PartDevelopmentProject[];
+  activeRuleVotes?: RuleVoteProposal[];
 }
 
 export interface SeasonResult {
@@ -1258,6 +1326,10 @@ export interface SeasonResult {
     fastestLap?: boolean;
     polePosition?: boolean;
     penaltyPoints?: number;
+    sector1Sec?: number;
+    sector2Sec?: number;
+    sector3Sec?: number;
+    totalLapSec?: number;
   }[];
   techPointsEarned: number;
   // --- New fields ---

@@ -5,6 +5,7 @@ import { useMemo } from "react";
 import { TrendingUp, Users, BarChart3 } from "lucide-react";
 import { useCompany } from "../../state/CompanyContext";
 import { LineChart } from "../ui/LineChart";
+import { DonutChart } from "../ui/Charts";
 import { FACILITY_COLORS } from "./TeamCard";
 import type { MotorsportTeam } from "../../sim/types";
 
@@ -166,11 +167,12 @@ export function AnalyticsPanel({ selectedTeam }: { selectedTeam: MotorsportTeam 
         </div>
       )}
 
-      {/* Team Overview */}
-      <div className="glass-panel p-4">
-        <h3 className="text-xs font-semibold text-slate-300 uppercase tracking-wider mb-3 flex items-center gap-1.5">
-          <BarChart3 size={12} className="text-blue-400" /> Team Overview
+      {/* Team Overview & Budget Breakdown */}
+      <div className="glass-panel p-4 space-y-4">
+        <h3 className="text-xs font-semibold text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
+          <BarChart3 size={12} className="text-blue-400" /> Team Financial & Operational Overview
         </h3>
+        
         <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
           {[
             { label: "Budget", value: `$${(selectedTeam.budget / 1e6).toFixed(0)}M`, color: "text-accent-300" },
@@ -184,6 +186,22 @@ export function AnalyticsPanel({ selectedTeam }: { selectedTeam: MotorsportTeam 
               <div className={`font-mono text-sm font-bold ${s.color} ${'capitalize' in s ? 'capitalize' : ''}`}>{s.value}</div>
             </div>
           ))}
+        </div>
+
+        {/* Sponsor & Financial Allocation Donut Chart */}
+        <div className="bg-base-850/40 p-4 rounded-xl border border-base-800">
+          <div className="text-xs font-bold text-slate-200 mb-3">Sponsor Revenue & Financial Allocation Breakdown</div>
+          <DonutChart
+            segments={[
+              { label: "Base Budget", value: Math.round(selectedTeam.budget / 1e6), color: "#22d3ee" },
+              ...selectedTeam.sponsors.map((sp, idx) => ({
+                label: `${sp.name} (${sp.tier})`,
+                value: Math.round(sp.revenue / 1e6),
+                color: idx === 0 ? "#fbbf24" : idx === 1 ? "#a855f7" : "#22c55e"
+              }))
+            ]}
+            totalLabel="FINANCES ($M)"
+          />
         </div>
       </div>
     </div>

@@ -7,6 +7,7 @@ import type {
   RaceDriver, TrackId, TeamStatus, TeamStrategy, MotorsportRegulation,
   CategoryGuide, ComplianceResult, ChampionshipStanding,
   DriverDevelopmentLog, FacilityLevel, Sponsor, SponsorTier,
+  HQBuilding, StaffMember, RuleVoteProposal, PartDevelopmentProject,
 } from "./types";
 
 function clamp(v: number, lo: number, hi: number) { return Math.max(lo, Math.min(hi, v)); }
@@ -305,18 +306,101 @@ export function defaultStrategy(): TeamStrategy {
     wetStrategy: "immediate_pit",
     undercut: false,
     overcut: false,
+    enginePaceMode: "neutral",
+    driverRiskLevel: "normal",
+    pitStopRisk: "balanced",
   };
+}
+
+// ---------- Motorsport Manager Default Initializers & Helpers ----------
+
+export function defaultHQBuildings(): HQBuilding[] {
+  return [
+    { id: "wind_tunnel", name: "Wind Tunnel", level: 1, maxLevel: 5, buildCost: 10_000_000, maintenanceCostPerSeason: 1_500_000, description: "Provides direct aerodynamic downforce and top speed R&D boosts.", effectDescription: "+5% Aero dev efficiency per level" },
+    { id: "cfd_rig", name: "CFD Supercomputer", level: 1, maxLevel: 5, buildCost: 8_000_000, maintenanceCostPerSeason: 1_000_000, description: "Accelerates digital aerodynamics simulation and reduces drag penalty.", effectDescription: "+8% CFD simulation accuracy" },
+    { id: "design_center", name: "Design Center", level: 1, maxLevel: 5, buildCost: 12_000_000, maintenanceCostPerSeason: 2_000_000, description: "Allows designing illegal & high-performance breakthrough car components.", effectDescription: "Unlocks advanced part projects" },
+    { id: "telemetry_lab", name: "Telemetry & Data Lab", level: 1, maxLevel: 5, buildCost: 6_000_000, maintenanceCostPerSeason: 800_000, description: "Analyzes live race data for better tire degradation and setup precision.", effectDescription: "+10% race strategy precision" },
+    { id: "simulator", name: "Driver Simulator", level: 1, maxLevel: 5, buildCost: 15_000_000, maintenanceCostPerSeason: 1_200_000, description: "Trains team drivers to improve consistency and wet weather handling faster.", effectDescription: "+2 driver skill gain per season" },
+    { id: "factory", name: "Parts Factory", level: 1, maxLevel: 5, buildCost: 10_000_000, maintenanceCostPerSeason: 1_800_000, description: "Speeds up production of newly engineered car components.", effectDescription: "+20% part manufacturing speed" },
+    { id: "scouting_office", name: "Scouting Headquarters", level: 0, maxLevel: 5, buildCost: 5_000_000, maintenanceCostPerSeason: 500_000, description: "Discovers hidden wonderkind drivers and high-skill engineers globally.", effectDescription: "Reveals exact stats of scouted talent" },
+    { id: "staff_housing", name: "Staff Facilities & Lounge", level: 1, maxLevel: 5, buildCost: 4_000_000, maintenanceCostPerSeason: 400_000, description: "Keeps team morale high and reduces staff salary demands.", effectDescription: "+10 team morale boost" },
+  ];
+}
+
+export function defaultStaffMembers(): StaffMember[] {
+  return [
+    { id: "staff_1", name: "Adrian Newcomb", role: "head_engineer", skill: 92, morale: 88, salary: 3_500_000, specialty: "Ground Effect Aerodynamics", contractEndSeason: 3 },
+    { id: "staff_2", name: "Hannah Schmitz", role: "race_strategist", skill: 90, morale: 95, salary: 2_800_000, specialty: "Undercut & Wet Timing", contractEndSeason: 2 },
+    { id: "staff_3", name: "Diego Rossi", role: "pit_crew_chief", skill: 85, morale: 80, salary: 1_500_000, specialty: "Sub-2.0s Wheel Guns", contractEndSeason: 4 },
+  ];
+}
+
+export function defaultRuleProposals(): RuleVoteProposal[] {
+  return [
+    { id: "rule_1", title: "Standardized Front Wings", description: "Mandate uniform front wing aero to cut development costs.", effectSummary: "Reduces top team aero advantage by 15%, budget cap lowered.", votesFor: 6, votesAgainst: 4 },
+    { id: "rule_2", title: "Sprint Race Qualifying format", description: "Introduce a Saturday 100km sprint race for extra championship points.", effectSummary: "Increases season points potential by 10%, increases engine wear.", votesFor: 8, votesAgainst: 2 },
+    { id: "rule_3", title: "Allow Illegal Performance Parts", description: "Relax strict inspection penalties for experimental engine mapping.", effectSummary: "Increases performance ceiling by 8%, increases risk of disqualification.", votesFor: 3, votesAgainst: 7 },
+  ];
 }
 
 // ---------- Season calendar ----------
 
 const SEASON_CALENDARS: Record<MotorsportCategory, { rounds: number; tracks: TrackId[] }> = {
-  gt: { rounds: 8, tracks: ["monza", "spa", "silverstone", "nurburgring", "suzuka", "interlagos", "bathurst", "redbullring"] },
-  formula: { rounds: 10, tracks: ["monza", "spa", "silverstone", "suzuka", "interlagos", "monaco", "americas", "hungaroring", "zandvoort", "redbullring"] },
-  hypercar: { rounds: 6, tracks: ["lemans", "spa", "monza", "sebring", "fuji", "interlagos"] },
-  touring: { rounds: 8, tracks: ["nurburgring", "hungaroring", "zandvoort", "imola", "redbullring", "silverstone", "bathurst", "suzuka"] },
-  rally: { rounds: 6, tracks: ["nurburgring", "bathurst", "interlagos", "suzuka", "silverstone", "americas"] },
-  endurance: { rounds: 4, tracks: ["lemans", "spa", "sebring", "fuji"] },
+  gt: { 
+    rounds: 36, 
+    tracks: [
+      "monza", "spa", "silverstone", "nurburgring", "suzuka", "interlagos", "bathurst", "redbullring",
+      "laguna", "imola", "hungaroring", "zandvoort", "americas", "miami", "vegas", "fuji",
+      "sebring", "watkins", "roadatlanta", "nordschleife", "monaco", "monza", "spa", "silverstone",
+      "suzuka", "interlagos", "bathurst", "redbullring", "laguna", "imola", "hungaroring", "zandvoort",
+      "americas", "miami", "vegas", "fuji"
+    ] 
+  },
+  formula: { 
+    rounds: 35, 
+    tracks: [
+      "monza", "spa", "silverstone", "suzuka", "interlagos", "monaco", "americas", "hungaroring", "zandvoort", "redbullring",
+      "miami", "vegas", "imola", "fuji", "laguna", "nurburgring", "watkins", "roadatlanta", "bathurst", "sebring",
+      "monza", "spa", "silverstone", "suzuka", "interlagos", "monaco", "americas", "hungaroring", "zandvoort", "redbullring",
+      "miami", "vegas", "imola", "fuji", "laguna"
+    ] 
+  },
+  hypercar: { 
+    rounds: 32, 
+    tracks: [
+      "lemans", "spa", "monza", "sebring", "fuji", "interlagos", "silverstone", "nurburgring",
+      "bathurst", "watkins", "roadatlanta", "americas", "imola", "suzuka", "nordschleife", "redbullring",
+      "lemans", "spa", "monza", "sebring", "fuji", "interlagos", "silverstone", "nurburgring",
+      "bathurst", "watkins", "roadatlanta", "americas", "imola", "suzuka", "nordschleife", "redbullring"
+    ] 
+  },
+  touring: { 
+    rounds: 34, 
+    tracks: [
+      "nurburgring", "hungaroring", "zandvoort", "imola", "redbullring", "silverstone", "bathurst", "suzuka",
+      "laguna", "monza", "spa", "watkins", "roadatlanta", "americas", "interlagos", "fuji",
+      "nurburgring", "hungaroring", "zandvoort", "imola", "redbullring", "silverstone", "bathurst", "suzuka",
+      "laguna", "monza", "spa", "watkins", "roadatlanta", "americas", "interlagos", "fuji", "miami", "vegas"
+    ] 
+  },
+  rally: { 
+    rounds: 30, 
+    tracks: [
+      "nurburgring", "bathurst", "interlagos", "suzuka", "silverstone", "americas", "nordschleife", "laguna",
+      "spa", "monza", "redbullring", "imola", "zandvoort", "hungaroring", "watkins", "roadatlanta",
+      "nurburgring", "bathurst", "interlagos", "suzuka", "silverstone", "americas", "nordschleife", "laguna",
+      "spa", "monza", "redbullring", "imola", "zandvoort", "hungaroring"
+    ] 
+  },
+  endurance: { 
+    rounds: 32, 
+    tracks: [
+      "lemans", "spa", "sebring", "fuji", "monza", "silverstone", "nurburgring", "bathurst",
+      "interlagos", "watkins", "roadatlanta", "americas", "nordschleife", "imola", "suzuka", "redbullring",
+      "lemans", "spa", "sebring", "fuji", "monza", "silverstone", "nurburgring", "bathurst",
+      "interlagos", "watkins", "roadatlanta", "americas", "nordschleife", "imola", "suzuka", "redbullring"
+    ] 
+  },
 };
 
 const POINTS_SYSTEM = [25, 18, 15, 12, 10, 8, 6, 4, 2, 1];
@@ -801,7 +885,14 @@ export function simulateSeason(
       return s + tierValue;
     }, 0);
 
-    // Strategy bonuses
+    // Strategy & HQ & Staff bonuses
+    const hqBonus = (team.hqBuildings || []).reduce((acc, b) => acc + (b.level * 1.5), 0);
+    const staffBonus = (team.staffMembers || []).reduce((acc, s) => acc + (s.skill * 0.05), 0);
+
+    const enginePaceMod = team.strategy.enginePaceMode === "push" ? 5 : team.strategy.enginePaceMode === "save_engine" ? -3 : 0;
+    const driverRiskMod = team.strategy.driverRiskLevel === "push_limits" ? 6 : team.strategy.driverRiskLevel === "safe" ? -2 : 0;
+    const pitRiskMod = team.strategy.pitStopRisk === "aggressive_fast" ? 3 : team.strategy.pitStopRisk === "safe_slow" ? -1 : 0;
+
     const tireStrategyBonus = (() => {
       const tires = team.strategy.tireStrategy;
       if (tires.length === 0) return 0;
@@ -820,6 +911,7 @@ export function simulateSeason(
       (team.strategy.deployMode === "aggressive" ? 4 : team.strategy.deployMode === "qualifying" ? 6 : team.strategy.deployMode === "conservative" ? -1 : 0) +
       (team.strategy.undercut ? 2.5 : 0) +
       (team.strategy.overcut ? 1.5 : 0) +
+      enginePaceMod + driverRiskMod + pitRiskMod + hqBonus + staffBonus +
       tireStrategyBonus +
       fuelLoadBonus;
 
@@ -922,9 +1014,17 @@ export function simulateSeason(
       if (position <= 3) podiums++;
       if (position < bestFinish) bestFinish = position;
 
+      // Sector times calculation
+      const baseLapSec = 75 + (round % 5) * 4 - (performanceScore * 0.15);
+      const s1 = Math.max(18, Math.round((baseLapSec * 0.31 + (seededRandom(round * 31, ti) - 0.5) * 1.2) * 1000) / 1000);
+      const s2 = Math.max(22, Math.round((baseLapSec * 0.43 + (seededRandom(round * 37, ti) - 0.5) * 1.5) * 1000) / 1000);
+      const s3 = Math.max(16, Math.round((baseLapSec * 0.26 + (seededRandom(round * 41, ti) - 0.5) * 1.0) * 1000) / 1000);
+      const totalLapSec = Math.round((s1 + s2 + s3) * 1000) / 1000;
+
       raceResults.push({
         round: round + 1, trackId, position, points: points + (gotFastestLap ? 1 : 0),
         fastestLap: gotFastestLap, polePosition: gotPole, penaltyPoints: roundPenalty,
+        sector1Sec: s1, sector2Sec: s2, sector3Sec: s3, totalLapSec,
       });
     }
 
@@ -999,6 +1099,14 @@ export function simulateSeason(
       return { ...d, skill: log.skillAfter, consistency: log.consistencyAfter, wetSkill: log.wetSkillAfter };
     });
 
+    // Deduct annual salaries & HQ maintenance from budget
+    const totalDriverSalaries = team.drivers.reduce((sum, d) => sum + d.salary, 0);
+    const hqMaintenance = (team.hqBuildings || []).reduce((sum, b) => sum + b.maintenanceCostPerSeason, 0);
+    const sponsorIncome = team.sponsors.reduce((sum, s) => sum + s.revenue, 0);
+    
+    // Net budget adjustment for the season
+    team.budget = Math.max(1_000_000, team.budget + sponsorIncome - totalDriverSalaries - hqMaintenance);
+
     team.seasonResults = [...team.seasonResults, seasonResult];
     team.wins += wins;
     team.podiums += podiums;
@@ -1021,6 +1129,12 @@ export function simulateSeason(
     team.sponsors = team.sponsors.filter(s =>
       s.startSeason + s.contractSeasons > newState.currentSeason
     );
+
+    // Auto-clean expired driver contracts at end of season
+    team.drivers = team.drivers.filter(d => d.contractEndSeason > newState.currentSeason);
+    if (team.drivers.length < 2 && team.status === "competing") {
+      team.status = "developing";
+    }
 
     newState.teams[ti] = team;
   }

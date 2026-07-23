@@ -10,11 +10,11 @@ import { CATEGORY_LABELS, CATEGORY_COLORS } from "./TeamCard";
 export function SeasonSimulator() {
   const { company, simulateMotorsportSeason } = useCompany();
   const { sim } = useDesign();
-  const [showResults, setShowResults] = useState(false);
+  const [showResultsModal, setShowResultsModal] = useState(false);
 
   function handleSimulate() {
     simulateMotorsportSeason(sim.peakPower, sim.weight, sim.downforce / 100, sim.reliability);
-    setShowResults(true);
+    setShowResultsModal(true);
   }
 
   return (
@@ -77,9 +77,8 @@ export function SeasonSimulator() {
               </div>
               <div className="flex items-center gap-2">
                 {last.position === 1 && <Trophy size={16} className="text-yellow-400" />}
-                <span className={`text-lg font-bold font-mono ${
-                  last.position === 1 ? "podium-gold" : last.position === 2 ? "podium-silver" : last.position === 3 ? "podium-bronze" : "text-slate-300"
-                }`}>P{last.position}</span>
+                <span className={`text-lg font-bold font-mono ${last.position === 1 ? "podium-gold" : last.position === 2 ? "podium-silver" : last.position === 3 ? "podium-bronze" : "text-slate-300"
+                  }`}>P{last.position}</span>
               </div>
             </div>
 
@@ -106,38 +105,97 @@ export function SeasonSimulator() {
               </div>
             )}
 
-            {/* Race results strip */}
-            <div className="flex flex-wrap gap-1 mb-4">
+            {/* Race results strip with Sector Splits */}
+            <div className="flex flex-wrap gap-1.5 mb-4">
               {last.raceResults.map(r => (
-                <div key={r.round} className={`text-[10px] px-2.5 py-1.5 rounded-lg font-mono transition-all ${
-                  r.position === 1 ? "bg-yellow-500/20 text-yellow-400 border border-yellow-500/30" :
-                  r.position <= 3 ? "bg-accent-500/15 text-accent-300 border border-accent-500/25" :
-                  r.position === 0 ? "bg-danger-500/15 text-danger-400 border border-danger-500/25" :
-                  "bg-base-850/50 text-slate-500 border border-base-800"
-                }`}>
-                  R{r.round}: {r.position === 0 ? "DNF" : `P${r.position}`}
-                  {r.fastestLap && " ⚡"}
-                  {r.polePosition && " 🏁"}
+                <div key={r.round} className={`text-[10px] px-2.5 py-1.5 rounded-lg font-mono transition-all flex flex-col gap-0.5 ${r.position === 1 ? "bg-yellow-500/20 text-yellow-400 border border-yellow-500/30" :
+                    r.position <= 3 ? "bg-accent-500/15 text-accent-300 border border-accent-500/25" :
+                      r.position === 0 ? "bg-danger-500/15 text-danger-400 border border-danger-500/25" :
+                        "bg-base-850/50 text-slate-400 border border-base-800"
+                  }`}>
+                  <div className="flex items-center justify-between gap-1 font-bold">
+                    <span>R{r.round}: {r.position === 0 ? "DNF" : `P${r.position}`}</span>
+                    <span>{r.fastestLap && "⚡"}{r.polePosition && "🏁"}</span>
+                  </div>
+                  {r.sector1Sec && (
+                    <div className="text-[8px] text-slate-500 font-mono">
+                      S1: {r.sector1Sec}s · S2: {r.sector2Sec}s · S3: {r.sector3Sec}s
+                    </div>
+                  )}
                 </div>
               ))}
+            </div>
+
+            {/* Official World Championship Declaration Banner */}
+            {last.position === 1 ? (
+              <div className="mb-4 bg-gradient-to-r from-yellow-500/20 via-amber-500/10 to-yellow-500/20 border-2 border-yellow-500/40 rounded-xl p-4 text-center shadow-[0_0_30px_rgba(234,179,8,0.2)] animate-pulse">
+                <div className="flex items-center justify-center gap-2 text-yellow-400 font-bold text-xs uppercase tracking-widest mb-1">
+                  <Trophy size={18} className="text-yellow-400 fill-yellow-400" />
+                  OFFICIAL WORLD CHAMPIONSHIP DECLARATION
+                  <Trophy size={18} className="text-yellow-400 fill-yellow-400" />
+                </div>
+                <h2 className="text-lg font-black text-slate-100 tracking-tight">
+                  🏆 {t.name} IS DECLARED {CATEGORY_LABELS[t.category].toUpperCase()} WORLD CHAMPIONS!
+                </h2>
+                <p className="text-xs text-yellow-300/80 mt-1">
+                  Secured P1 in Constructors & Drivers Championship with <strong className="font-mono text-yellow-300">{last.points} Championship Points</strong> & <strong className="font-mono text-yellow-300">{last.wins} Grand Prix Victories</strong>.
+                </p>
+              </div>
+            ) : last.position <= 3 ? (
+              <div className="mb-4 bg-accent-500/10 border border-accent-500/30 rounded-xl p-3 text-center">
+                <div className="flex items-center justify-center gap-2 text-accent-300 font-bold text-xs uppercase tracking-wider">
+                  <Medal size={16} className="text-accent-400" />
+                  WORLD CHAMPIONSHIP PODIUM FINISH — P{last.position}
+                </div>
+                <p className="text-xs text-slate-300 mt-0.5">
+                  Finished on the World Championship Podium with <strong className="font-mono text-accent-300">{last.points} PTS</strong> ({last.wins} Wins, {last.podiums} Podiums).
+                </p>
+              </div>
+            ) : null}
+
+            {/* Official Points System Guide Badge */}
+            <div className="bg-base-900/60 p-2.5 rounded-lg border border-base-800 mb-4 flex items-center justify-between text-[10px] font-mono text-slate-400">
+              <span className="font-bold text-slate-300">FIA WORLD CHAMPIONSHIP POINTS SYSTEM:</span>
+              <span className="text-yellow-400 font-bold">1st: 25pts</span>
+              <span className="text-slate-300 font-bold">2nd: 18pts</span>
+              <span className="text-amber-600 font-bold">3rd: 15pts</span>
+              <span>4th: 12pts</span>
+              <span>5th: 10pts</span>
+              <span>6th: 8pts</span>
+              <span>7th: 6pts</span>
+              <span>8th: 4pts</span>
+              <span>9th: 2pts</span>
+              <span>10th: 1pt</span>
+              <span className="text-cyan-400 font-bold">+1 Fast Lap</span>
             </div>
 
             {/* Championship Standings */}
             {last.standings.length > 0 && (
               <div className="border-t border-base-800/50 pt-3">
-                <div className="text-[10px] text-slate-500 uppercase tracking-wider mb-2 font-semibold">Championship Standings</div>
+                <div className="text-[10px] text-slate-500 uppercase tracking-wider mb-2 font-semibold">Official World Constructors & Drivers Standings</div>
                 <div className="space-y-1">
                   {last.standings.slice(0, 8).map(s => (
-                    <div key={s.teamId} className={`flex items-center gap-2 text-xs px-3 py-1.5 rounded-lg transition-all ${
-                      s.isPlayer ? "bg-accent-500/10 border border-accent-500/20" : "hover:bg-base-850/30"
-                    }`}>
-                      <span className={`w-6 font-mono font-bold ${
-                        s.position === 1 ? "text-yellow-400" : s.position === 2 ? "text-slate-300" : s.position === 3 ? "text-amber-600" : "text-slate-500"
-                      }`}>{s.position}.</span>
-                      <span className={`flex-1 ${s.isPlayer ? "text-accent-300 font-semibold" : "text-slate-400"}`}>{s.teamName}</span>
-                      <span className="font-mono text-slate-300 w-14 text-right">{s.points}pts</span>
-                      <span className="text-[10px] text-slate-600 w-8 text-right">{s.wins}W</span>
-                      {s.gapToLeader > 0 && <span className="text-[10px] text-slate-600 w-10 text-right">-{s.gapToLeader}</span>}
+                    <div key={s.teamId} className={`flex items-center gap-2 text-xs px-3 py-2 rounded-lg transition-all border ${s.position === 1
+                        ? "bg-yellow-500/15 border-yellow-500/40 text-yellow-300 font-bold shadow-[0_0_12px_rgba(234,179,8,0.1)]"
+                        : s.isPlayer
+                          ? "bg-accent-500/10 border-accent-500/30 text-accent-300 font-semibold"
+                          : "bg-base-850/40 border-base-800/60 text-slate-400"
+                      }`}>
+                      <span className={`w-6 font-mono font-bold ${s.position === 1 ? "text-yellow-400" : s.position === 2 ? "text-slate-200" : s.position === 3 ? "text-amber-500" : "text-slate-500"
+                        }`}>
+                        {s.position === 1 ? "👑 P1" : `P${s.position}`}
+                      </span>
+                      <span className={`flex-1 ${s.isPlayer ? "text-accent-300 font-bold" : "text-slate-300"}`}>
+                        {s.teamName} {s.isPlayer && "(YOUR TEAM)"}
+                      </span>
+                      <span className="font-mono text-slate-200 font-bold w-16 text-right">{s.points} PTS</span>
+                      <span className="text-[10px] text-ok-400 font-mono w-10 text-right font-bold">{s.wins} W</span>
+                      <span className="text-[10px] text-accent-400 font-mono w-10 text-right">{s.podiums} Pod</span>
+                      {s.gapToLeader > 0 ? (
+                        <span className="text-[10px] text-slate-500 font-mono w-14 text-right">-{s.gapToLeader} pts</span>
+                      ) : (
+                        <span className="text-[10px] text-yellow-400 font-mono font-bold w-14 text-right">CHAMPION</span>
+                      )}
                     </div>
                   ))}
                 </div>
@@ -146,6 +204,69 @@ export function SeasonSimulator() {
           </div>
         );
       })}
+
+      {/* ===================== END OF SEASON MODAL OVERLAY ===================== */}
+      {showResultsModal && (
+        <div className="fixed inset-0 z-50 bg-black/85 backdrop-blur-xl flex items-center justify-center p-4 animate-fade-in">
+          <div className="bg-slate-900 border-2 border-yellow-500/40 rounded-2xl max-w-3xl w-full p-6 shadow-[0_0_60px_rgba(234,179,8,0.25)] flex flex-col gap-5 max-h-[90vh] overflow-y-auto">
+            <div className="text-center border-b border-white/10 pb-4">
+              <div className="flex items-center justify-center gap-2 text-yellow-400 font-bold text-xs uppercase tracking-widest mb-1">
+                <Trophy size={20} className="text-yellow-400 fill-yellow-400 animate-bounce" />
+                END OF SEASON CEREMONY RECAP
+                <Trophy size={20} className="text-yellow-400 fill-yellow-400 animate-bounce" />
+              </div>
+              <h2 className="text-2xl font-black text-slate-100 tracking-tight">
+                Motorsport Season {company.motorsport.currentSeason - 1} Completed
+              </h2>
+              <p className="text-xs text-slate-400 mt-1">
+                Official World Constructors Championship results & technical awards declared.
+              </p>
+            </div>
+
+            {/* Showcase Cards for Player Teams */}
+            <div className="space-y-3">
+              {company.motorsport.teams.map(t => {
+                const res = t.seasonResults[t.seasonResults.length - 1];
+                if (!res) return null;
+                const isChamp = res.position === 1;
+
+                return (
+                  <div key={t.id} className={`p-4 rounded-xl border flex flex-col sm:flex-row items-center justify-between gap-4 ${
+                    isChamp ? "bg-yellow-500/15 border-yellow-500/50 text-yellow-200" : "bg-base-850 border-base-800"
+                  }`}>
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <h3 className="text-base font-bold text-slate-100">{t.name}</h3>
+                        <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full border ${CATEGORY_COLORS[t.category]}`}>
+                          {CATEGORY_LABELS[t.category]}
+                        </span>
+                      </div>
+                      <div className="text-xs text-slate-400 mt-1 flex items-center gap-3 font-mono">
+                        <span>Rank: <strong className={isChamp ? "text-yellow-400 text-sm font-black" : "text-slate-200"}>P{res.position}</strong></span>
+                        <span>Points: <strong className="text-slate-200">{res.points} PTS</strong></span>
+                        <span>Wins: <strong className="text-ok-400">{res.wins}</strong></span>
+                        <span>Podiums: <strong className="text-accent-300">{res.podiums}</strong></span>
+                      </div>
+                    </div>
+
+                    <div className="text-right shrink-0">
+                      <div className="text-xs font-mono text-cyan-300 font-bold">+{res.techPointsEarned} R&D Tech Points</div>
+                      <div className="text-[10px] text-slate-500 font-mono mt-0.5">Budget Balance: ${(t.budget / 1e6).toFixed(1)}M</div>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            <button
+              onClick={() => setShowResultsModal(false)}
+              className="w-full py-3.5 rounded-xl font-bold text-sm bg-gradient-to-r from-yellow-500/30 via-amber-500/20 to-yellow-500/30 border border-yellow-500/50 text-yellow-300 hover:from-yellow-500/40 hover:to-yellow-500/40 transition-all shadow-[0_0_20px_rgba(234,179,8,0.2)]"
+            >
+              Continue to Season {company.motorsport.currentSeason} ➔
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
