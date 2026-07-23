@@ -1149,7 +1149,7 @@ export function defaultExterior(): ExteriorConfig {
 
 export function defaultVehicle(): VehicleConfig {
   return {
-    platform: "supercar", chassis: "carbon_tub",
+    platform: "supercar", driveType: "awd", chassis: "carbon_tub",
     exterior: defaultExterior(),
     aero: defaultAero(),
     aeroResearch: defaultAeroResearch(),

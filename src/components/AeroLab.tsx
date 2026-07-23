@@ -418,24 +418,27 @@ function AeroDashboard({
   update: <K extends keyof AeroResearchConfig>(key: K, patch: Partial<AeroResearchConfig[K]>) => void;
 }) {
   const trackPredictions = useMemo(() => {
-    const tracks = ["monza", "silverstone", "lemans", "monaco", "hungaroring"] as const;
-    return tracks.map((id) => {
-      const t = TRACKS[id];
-      // crude estimate: high-speed tracks reward low drag; technical tracks reward downforce
-      const dragPenalty = sim.dragCoeff * (t.highSpeed ? 1.4 : 0.7);
-      const dfBonus = (-sim.liftCoeff) * (t.highSpeed ? 0.6 : 1.3);
-      const baseLap = t.length * (t.highSpeed ? 75 : 95);
-      const lapTime = baseLap + dragPenalty * 12 - dfBonus * 8;
-      const topSpeed = 320 - sim.dragCoeff * 110 + (ar.active.enabled ? 8 : 0);
-      const cornering = 120 + (-sim.liftCoeff) * 45;
-      const fuel = 1 + sim.dragCoeff * 0.6 - dfBonus * 0.05;
+    return sim.lapTimes.map((lt) => {
+      const t = TRACKS[lt.trackId];
+      const formatLap = (secs: number) => {
+        const m = Math.floor(secs / 60);
+        const s = (secs % 60).toFixed(3);
+        return m > 0 ? `${m}:${s.padStart(6, "0")}` : `${s}s`;
+      };
+      const fuel = (1 + sim.dragCoeff * 0.4).toFixed(2);
       return {
-        id, name: t.name, country: t.country, length: t.length, highSpeed: t.highSpeed,
-        lapTime: Math.round(lapTime), topSpeed: Math.round(topSpeed),
-        cornering: Math.round(cornering), fuel: fuel.toFixed(2),
+        id: lt.trackId,
+        name: lt.trackName,
+        country: t?.country || "Global",
+        length: t?.length || 4.5,
+        highSpeed: t?.highSpeed || false,
+        lapTime: formatLap(lt.time),
+        topSpeed: `${lt.topSpeed} km/h`,
+        cornering: `${Math.round(lt.avgSpeed)} km/h`,
+        fuel: `${fuel}×`,
       };
     });
-  }, [sim, ar]);
+  }, [sim.lapTimes, sim.dragCoeff]);
 
   const dfAt = (kmh: number) => {
     const ms = kmh / 3.6;
@@ -509,7 +512,7 @@ function AeroDashboard({
                     <div className="text-slate-200">{t.name}</div>
                     <div className="text-[10px] text-slate-500">{t.country} · {t.length} km · {t.highSpeed ? "High-speed" : "Technical"}</div>
                   </td>
-                  <td className="text-right py-1.5 px-2 font-mono text-accent-300">{t.lapTime}s</td>
+                  <td className="text-right py-1.5 px-2 font-mono text-accent-300">{t.lapTime}</td>
                   <td className="text-right py-1.5 px-2 font-mono text-slate-300">{t.topSpeed}</td>
                   <td className="text-right py-1.5 px-2 font-mono text-slate-300">{t.cornering}</td>
                   <td className="text-right py-1.5 px-2 font-mono text-warn-400">{t.fuel}×</td>

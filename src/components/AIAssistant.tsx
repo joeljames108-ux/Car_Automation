@@ -89,8 +89,8 @@ export function AIAssistant() {
     if (carConcept === "luxury" && v.interior.soundDeadening < 0.6) {
       w.push({ id: "concept_luxury_nvh", category: "Manufacturing", severity: "warning", text: `[Luxury Target Violation] High cabin noise (NVH). Increase sound deadening for luxury compliance.` });
     }
-    if (carConcept === "luxury" && sim.luxuryScore < 0.7) {
-      w.push({ id: "concept_luxury_comfort", category: "Manufacturing", severity: "critical", text: `[Luxury Target Violation] Luxury rating (${(sim.luxuryScore * 100).toFixed(0)}%) is below luxury standards.` });
+    if (carConcept === "luxury" && sim.luxuryRating < 0.7) {
+      w.push({ id: "concept_luxury_comfort", category: "Manufacturing", severity: "critical", text: `[Luxury Target Violation] Luxury rating (${(sim.luxuryRating * 100).toFixed(0)}%) is below luxury standards.` });
     }
 
     return w;

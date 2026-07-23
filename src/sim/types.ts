@@ -182,6 +182,7 @@ export type TireCompound = "hard" | "medium" | "soft" | "supersoft" | "slick" | 
 
 export interface VehicleConfig {
   platform: PlatformType;
+  driveType: "fwd" | "rwd" | "awd";
   exterior: ExteriorConfig;
   chassis: ChassisType;
   suspensionFront: SuspensionType;
