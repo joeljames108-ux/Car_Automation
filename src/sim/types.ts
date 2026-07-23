@@ -58,7 +58,7 @@ export interface EngineConfig {
   exhaustValved: boolean;
 
   // ---- Hybrid / EV ----
-  hybridArchitecture: "none" | "p0" | "p1" | "p2" | "p3" | "p4";
+  hybridArchitecture: "none" | "mhev" | "fhev" | "phev" | "range_extender";
   hybridCoupling: "series" | "parallel" | "through_the_road";
   hybridFrontMotorEnabled: boolean;
   hybridFrontMotorType: "pmac" | "induction" | "wound_rotor" | "axial_flux";
@@ -75,6 +75,8 @@ export interface EngineConfig {
   motorLayout: "none" | "front" | "rear" | "both" | "axle_split";
   evMotorPower: number;    // kW (for pure EV)
   evMotorType: "pmac" | "induction" | "wound_rotor" | "axial_flux";
+  motorPlacement: "p0" | "p1" | "p2" | "p3" | "p4" | "p2_p4"; // motor placement position
+  hybridMotorPower: number; // kW, combined hybrid motor power
 }
 
 export interface EngineSim {
@@ -1084,6 +1086,9 @@ export interface EconomyState {
 
 export type MotorsportCategory = "gt" | "formula" | "hypercar" | "touring" | "rally" | "endurance";
 export type TeamStatus = "inactive" | "developing" | "competing" | "champion";
+export type TireChoice = "soft" | "medium" | "hard" | "wet" | "intermediate";
+export type FacilityLevel = "basic" | "standard" | "advanced" | "elite";
+export type SponsorTier = "title" | "major" | "minor" | "technical";
 
 export interface RaceDriver {
   id: string;
@@ -1096,6 +1101,115 @@ export interface RaceDriver {
   aggression: number;          // 0-100
   salary: number;              // $ per season
   contractMonths: number;
+  contractEndSeason: number;   // season when contract expires (0 = indefinite)
+}
+
+export interface Sponsor {
+  id: string;
+  name: string;
+  tier: SponsorTier;
+  revenue: number;             // $ per season
+  logoEmoji: string;           // emoji icon for display
+  reputation: number;          // 0-100 brand reputation
+  contractSeasons: number;     // how many seasons the deal lasts
+  startSeason: number;         // season the deal started
+}
+
+// ---------- Motorsport Regulation ----------
+
+export interface MotorsportRegulation {
+  category: MotorsportCategory;
+  minWeightKg: number;
+  maxPowerHp: number;
+  maxFuelFlowKgH: number;      // kg/h, 0 = unlimited
+  mandatoryPitStops: number;   // minimum per race
+  tireCompoundsAllowed: TireChoice[];
+  maxTireSetsPerRace: number;
+  evRequirement: boolean;      // must include hybrid/EV
+  minDriversPerTeam: number;
+  maxDriversPerTeam: number;
+  bopEnabled: boolean;         // Balance of Performance adjustments
+  maxBudgetCap: number;        // 0 = no cap
+  fuelCapacityLiters: number;  // 0 = unlimited
+  restrictorPlate: boolean;
+}
+
+// ---------- Category Guide ----------
+
+export interface CategoryGuide {
+  category: MotorsportCategory;
+  name: string;
+  description: string;
+  iconicRaces: string[];
+  realWorldSeries: string[];
+  difficulty: number;           // 1-5
+  prestigeTier: number;         // 1-5
+  budgetRange: [number, number]; // [min, max] in $
+  keyConsiderations: string[];
+  recommendedSpecs: {
+    powerRange: [number, number]; // hp
+    weightRange: [number, number]; // kg
+    aeroImportance: "low" | "medium" | "high" | "critical";
+    reliabilityImportance: "low" | "medium" | "high" | "critical";
+  };
+  strategyTips: string[];
+}
+
+// ---------- Team Strategy ----------
+
+export interface TeamStrategy {
+  pitStopCount: number;
+  tireStrategy: TireChoice[];     // tire per stint, e.g. ["soft", "medium", "hard"]
+  fuelLoad: number;               // 0-1 (fraction of capacity)
+  deployMode: "conservative" | "balanced" | "aggressive" | "qualifying";
+  driverStints: number[];         // % of race per driver for endurance (sums to 100)
+  wetStrategy: "stay_out" | "immediate_pit" | "wait_one_lap";
+  undercut: boolean;              // pit earlier than rivals
+  overcut: boolean;               // pit later than rivals
+}
+
+// ---------- Driver Development ----------
+
+export interface DriverDevelopmentLog {
+  driverId: string;
+  season: number;
+  skillBefore: number;
+  skillAfter: number;
+  consistencyBefore: number;
+  consistencyAfter: number;
+  wetSkillBefore: number;
+  wetSkillAfter: number;
+  morale: number;                 // 0-100
+  formRating: number;             // 0-100, recent performance
+  seasonHighlight: string;
+}
+
+// ---------- Championship Standing ----------
+
+export interface ChampionshipStanding {
+  teamId: string;
+  teamName: string;
+  position: number;
+  points: number;
+  wins: number;
+  podiums: number;
+  fastestLaps: number;
+  polePositions: number;
+  gapToLeader: number;
+  isPlayer: boolean;
+}
+
+// ---------- Compliance ----------
+
+export interface ComplianceResult {
+  category: MotorsportCategory;
+  passed: boolean;
+  checks: {
+    label: string;
+    status: "pass" | "fail" | "warning";
+    detail: string;
+  }[];
+  overallScore: number;           // 0-100
 }
 
 export interface MotorsportTeam {
@@ -1103,29 +1217,53 @@ export interface MotorsportTeam {
   name: string;
   category: MotorsportCategory;
   status: TeamStatus;
-  baseVehicleId: string | null;// garage vehicle used as base
+  baseVehicleId: string | null;   // garage vehicle used as base
   drivers: RaceDriver[];
-  budget: number;              // $ per season
-  developmentPoints: number;   // earned from races
-  techTransferPool: number;    // points to transfer to/from production
+  budget: number;                 // $ per season
+  developmentPoints: number;      // earned from races
+  techTransferPool: number;       // points to transfer to/from production
   seasonResults: SeasonResult[];
   currentSeason: number;
   wins: number;
   podiums: number;
   championships: number;
+  // --- Extended fields ---
+  strategy: TeamStrategy;
+  teamMorale: number;             // 0-100
+  facilityLevel: FacilityLevel;
+  engineSupplier: string;
+  driverDevLogs: DriverDevelopmentLog[];
+  penaltyPoints: number;          // accumulated penalties
+  fastestLaps: number;            // all-time
+  polePositions: number;          // all-time
+  sponsors: Sponsor[];            // active sponsors
+  liveryColor: string;            // team livery hex color
 }
 
 export interface SeasonResult {
   season: number;
   category: MotorsportCategory;
-  position: number;            // championship position
+  position: number;               // championship position
   points: number;
   wins: number;
   podiums: number;
   dnfs: number;
   bestFinish: number;
-  raceResults: { round: number; trackId: TrackId; position: number; points: number }[];
+  raceResults: {
+    round: number;
+    trackId: TrackId;
+    position: number;
+    points: number;
+    fastestLap?: boolean;
+    polePosition?: boolean;
+    penaltyPoints?: number;
+  }[];
   techPointsEarned: number;
+  // --- New fields ---
+  fastestLaps: number;
+  polePositions: number;
+  penaltyPoints: number;
+  standings: ChampionshipStanding[];
 }
 
 export interface MotorsportState {
@@ -1139,6 +1277,8 @@ export interface MotorsportState {
     points: number;
   }[];
   totalTechTransferred: number;
+  scoutedDrivers: RaceDriver[];   // young talent available to sign
+  sponsorMarket: Sponsor[];       // sponsors available to attract
 }
 
 // ===================================================================

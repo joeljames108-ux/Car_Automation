@@ -930,6 +930,7 @@ export function defaultEngine(): EngineConfig {
     hybridRearMotorEnabled: false, hybridRearMotorType: "pmac", hybridRearMotorPower: 0,
     batteryCapacity: 0, batteryChemistry: "nmc",
     deployMode: "race", regenLevel: 0.5, motorLayout: "none", evMotorPower: 0, evMotorType: "pmac",
+    motorPlacement: "p0", hybridMotorPower: 0,
   };
 }
 

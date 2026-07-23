@@ -5,14 +5,15 @@
 import { createContext, useContext, useState, useCallback, useMemo, type ReactNode } from "react";
 import { initialEconomyState, advanceEconomy } from "../sim/economyEngine";
 import { initialAICompetitors, advanceCompetitors } from "../sim/aiCompetitors";
-import { initialMotorsportState, createTeam, assignDriver, simulateSeason, transferTech, getAvailableDrivers } from "../sim/motorsportEngine";
+import { initialMotorsportState, createTeam, assignDriver, simulateSeason, transferTech, getAvailableDrivers, scoutDriver, signScoutedDriver, upgradeTeamFacility, updateTeamStrategy, releaseDriver, renewDriverContract, attractSponsor as attractSponsorFn, generateSponsorMarket } from "../sim/motorsportEngine";
 import type {
   CompanyState, GarageVehicle, VehicleDesign, SimResult,
   VehicleVariantType, TwinEvent,
   WorkflowPipeline, WorkflowStep, WorkflowStage,
   CustomerFeedback, SalesConfig, SalesResult,
   SafetyConfig, SafetySimResult,
-  MotorsportCategory, RaceDriver,
+  MotorsportCategory, RaceDriver, TeamStrategy,
+  Sponsor,
 } from "../sim/types";
 
 // ---------- Safety simulation ----------
@@ -156,6 +157,14 @@ interface CompanyContextValue {
   simulateMotorsportSeason: (power: number, weight: number, aeroScore: number, reliability: number) => void;
   transferMotorsportTech: (teamId: string, direction: "race_to_production" | "production_to_race", points: number) => void;
   availableDrivers: (RaceDriver & { id: string })[];
+  scoutNewDriver: () => void;
+  signScouted: (driverId: string, teamId: string) => void;
+  upgradeFacility: (teamId: string) => void;
+  updateStrategy: (teamId: string, strategy: Partial<TeamStrategy>) => void;
+  releaseMotorsportDriver: (teamId: string, driverId: string) => void;
+  renewMotorsportContract: (teamId: string, driverId: string, seasons: number) => void;
+  attractMotorsportSponsor: (teamId: string, sponsorId: string) => void;
+  refreshSponsorMarket: () => void;
   // Digital Twin
   addTwinEvent: (vehicleId: string, event: Omit<TwinEvent, "id">) => void;
   // Safety
@@ -247,6 +256,38 @@ export function CompanyProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const availableDrivers = useMemo(() => getAvailableDrivers(company.motorsport.teams), [company.motorsport.teams]);
+
+  const scoutNewDriver = useCallback(() => {
+    setCompany(s => ({ ...s, motorsport: scoutDriver(s.motorsport, s.motorsport.currentSeason) }));
+  }, []);
+
+  const signScouted = useCallback((driverId: string, teamId: string) => {
+    setCompany(s => ({ ...s, motorsport: signScoutedDriver(s.motorsport, driverId, teamId) }));
+  }, []);
+
+  const upgradeFacility = useCallback((teamId: string) => {
+    setCompany(s => ({ ...s, motorsport: upgradeTeamFacility(s.motorsport, teamId) }));
+  }, []);
+
+  const updateStrategyFn = useCallback((teamId: string, strategy: Partial<TeamStrategy>) => {
+    setCompany(s => ({ ...s, motorsport: updateTeamStrategy(s.motorsport, teamId, strategy) }));
+  }, []);
+
+  const releaseMotorsportDriver = useCallback((teamId: string, driverId: string) => {
+    setCompany(s => ({ ...s, motorsport: releaseDriver(s.motorsport, teamId, driverId) }));
+  }, []);
+
+  const renewMotorsportContract = useCallback((teamId: string, driverId: string, seasons: number) => {
+    setCompany(s => ({ ...s, motorsport: renewDriverContract(s.motorsport, teamId, driverId, seasons) }));
+  }, []);
+
+  const attractMotorsportSponsor = useCallback((teamId: string, sponsorId: string) => {
+    setCompany(s => ({ ...s, motorsport: attractSponsorFn(s.motorsport, teamId, sponsorId) }));
+  }, []);
+
+  const refreshSponsorMarket = useCallback(() => {
+    setCompany(s => ({ ...s, motorsport: generateSponsorMarket(s.motorsport) }));
+  }, []);
 
   // --- Digital Twin ---
   const addTwinEvent = useCallback((vehicleId: string, event: Omit<TwinEvent, "id">) => {
@@ -384,6 +425,8 @@ export function CompanyProvider({ children }: { children: ReactNode }) {
     company, saveToGarage, removeFromGarage, duplicateVehicle,
     advanceEconomyMonth, createMotorsportTeam, assignMotorsportDriver,
     simulateMotorsportSeason, transferMotorsportTech, availableDrivers,
+    scoutNewDriver, signScouted, upgradeFacility, updateStrategy: updateStrategyFn,
+    releaseMotorsportDriver, renewMotorsportContract, attractMotorsportSponsor, refreshSponsorMarket,
     addTwinEvent, safetyConfig, safetySim, updateSafety,
     startWorkflow, advanceWorkflowStep, skipWorkflowStep,
     launchVehicle, setCompanyName, advanceAllSystems,

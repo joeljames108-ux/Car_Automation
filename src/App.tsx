@@ -7,7 +7,7 @@ import {
 } from "lucide-react";
 import { DesignProvider, useDesign } from "./state/DesignContext";
 import { RDProvider } from "./state/RDContext";
-import { CompanyProvider } from "./state/CompanyContext";
+import { CompanyProvider, useCompany } from "./state/CompanyContext";
 import { EngineDesigner } from "./components/EngineDesigner";
 import { VehicleDesigner } from "./components/VehicleDesigner";
 import { ExteriorDesigner } from "./components/ExteriorDesigner";
@@ -71,6 +71,7 @@ function AppInner() {
   const [stage, setStage] = useState<Stage>("command");
   const [dialog, setDialog] = useState<{ open: boolean; mode: "save" | "load" }>({ open: false, mode: "save" });
   const { design, resetDesign, units, setUnits } = useDesign();
+  const { company, advanceAllSystems } = useCompany();
   const [booted, setBooted] = useState(false);
   useEffect(() => { const t = setTimeout(() => setBooted(true), 60); return () => clearTimeout(t); }, []);
 
@@ -126,6 +127,27 @@ function AppInner() {
                 </button>
               ))}
             </div>
+          </div>
+
+          {/* Live Company Quick Status & Fast Advance */}
+          <div className="hidden lg:flex items-center gap-3 bg-base-850/80 border border-base-800 rounded-lg px-2.5 py-1 text-xs shrink-0">
+            <div className="flex items-center gap-1.5">
+              <span className="text-[10px] text-slate-500 font-mono">MO.</span>
+              <span className="font-mono font-bold text-accent-300">{company.economy.month}</span>
+            </div>
+            <div className="h-3 w-px bg-base-700" />
+            <div className="flex items-center gap-1">
+              <span className="text-ok-400 font-mono font-bold">
+                ${(company.totalRevenue / (company.totalRevenue >= 1e6 ? 1e6 : 1e3)).toFixed(1)}{company.totalRevenue >= 1e6 ? "M" : "k"}
+              </span>
+            </div>
+            <button
+              onClick={advanceAllSystems}
+              className="flex items-center gap-1 px-2 py-0.5 rounded bg-accent-500/20 text-accent-300 hover:bg-accent-500/30 text-[10px] font-semibold transition-all"
+              title="Advance month for economy, motorsport, and market systems"
+            >
+              +1 Mo
+            </button>
           </div>
 
           {/* Unit toggle */}

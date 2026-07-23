@@ -10,7 +10,6 @@ import type {
   BrakeConfig, TireEngineeringConfig, WheelEngineeringConfig,
   ChassisSimResult,
 } from "./types/chassis";
-import type { ChassisType, TireCompound } from "./types";
 import { CHASSIS_TYPES, SUSPENSION_TYPES, TIRE_COMPOUNDS } from "./constants";
 import {
   VEHICLE_ARCHITECTURES, CRASH_STRUCTURES, RACK_TYPES, POWER_ASSIST_TYPES,
