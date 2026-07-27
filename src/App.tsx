@@ -257,7 +257,7 @@ function AppInner() {
       <div className="flex-1 max-w-[1700px] mx-auto w-full px-4 py-4 pb-44 flex gap-4">
         <div className="flex-1 min-w-0">
           <div key={stage} className="animate-scale-reveal">
-            {stage === "command"       && <CommandCenter />}
+            {stage === "command"       && <CommandCenter onSelectStage={(st) => setStage(st as Stage)} />}
             {stage === "engine"        && <EngineDesigner />}
             {stage === "vehicle"       && <VehicleDesigner />}
             {stage === "exterior"      && <ExteriorDesigner />}

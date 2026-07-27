@@ -36,7 +36,13 @@ function formatLap(seconds: number): string {
   return `${seconds.toFixed(3)}s`;
 }
 
-export function CommandCenter() {
+import { ChassisHotspotViewer } from "./ChassisHotspotViewer";
+
+interface CommandCenterProps {
+  onSelectStage?: (stage: string) => void;
+}
+
+export function CommandCenter({ onSelectStage }: CommandCenterProps = {}) {
   const { design, sim, carConcept, setCarConcept, uiTheme, setUiTheme } = useDesign();
   const { company } = useCompany();
   const scores = useMemo(() => computeScores(design, sim), [design, sim]);
@@ -76,6 +82,9 @@ export function CommandCenter() {
 
   return (
     <div className="space-y-4 stagger">
+      {/* Interactive Telemetry Chassis Blueprint */}
+      <ChassisHotspotViewer onSelectStage={onSelectStage} />
+
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
         {/* Vehicle Concept Philosophy Selection Card */}
         <div className="bg-gradient-to-br from-slate-900 via-slate-900/90 to-base-950 border border-cyan-500/40 rounded-2xl p-5 shadow-[0_0_30px_rgba(34,211,238,0.15)] relative overflow-hidden">
