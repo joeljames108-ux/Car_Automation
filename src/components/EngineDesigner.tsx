@@ -90,9 +90,9 @@ export function EngineDesigner() {
   const engineLayouts = Object.keys(ENGINE_LAYOUTS) as EngineLayout[];
 
   return (
-    <div className="engine-theme">
+    <div className="engine-theme stagger-enter">
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-4">
-        <div className="xl:col-span-2 space-y-4 stagger">
+        <div className="xl:col-span-2 space-y-4">
           {/* Architecture Section */}
           <Section title="Architecture" icon={<Cog size={16} />}>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
