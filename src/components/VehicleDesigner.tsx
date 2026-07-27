@@ -1,16 +1,44 @@
-import { Car, Disc, Settings, Cpu, Shield } from "lucide-react";
+import { Car, Disc, Settings, Cpu, Shield, Sparkles } from "lucide-react";
 import { useDesign } from "../state/DesignContext";
 import { Section, Slider, Select, ChoiceGrid, Toggle, StatTile } from "./ui/Controls";
 import { PLATFORMS, CHASSIS_TYPES, SUSPENSION_TYPES, TRANSMISSION_TYPES, BRAKE_TYPES, TIRE_COMPOUNDS } from "../sim/constants";
+import { VEHICLE_PRESET_LIBRARY } from "../sim/vehiclePresets";
 import type { PlatformType, ChassisType, SuspensionType, TransmissionType, BrakeType, TireCompound, VehicleConfig } from "../sim/types";
 
 export function VehicleDesigner() {
-  const { design, sim, updateVehicle, updateElectronics } = useDesign();
+  const { design, sim, setDesign, updateVehicle, updateElectronics } = useDesign();
   const v = design.vehicle;
+
+  const handleSelectPreset = (presetId: string) => {
+    const item = VEHICLE_PRESET_LIBRARY.find((p) => p.id === presetId);
+    if (item) {
+      setDesign(item.generator());
+    }
+  };
 
   return (
     <div className="grid grid-cols-1 xl:grid-cols-3 gap-4">
       <div className="xl:col-span-2 space-y-4 stagger">
+        <Section title="Load Vehicle Preset (Price Tiers & Utility Classes)" icon={<Sparkles size={16} />}>
+          <div className="p-3 bg-base-850 rounded-lg border border-base-800">
+            <Select
+              label="Preset Library (By Price Tier & Utility Class)"
+              value=""
+              options={[
+                { value: "", label: "-- Select a Vehicle Class / Budget Preset --" },
+                ...VEHICLE_PRESET_LIBRARY.map((item) => ({
+                  value: item.id,
+                  label: `[${item.groupLabel}] ${item.name} (${item.targetMSRP})`
+                }))
+              ]}
+              onChange={(val) => handleSelectPreset(val)}
+            />
+            <p className="text-[11px] text-slate-500 mt-2">
+              Select any vehicle preset to instantly load realistic specs, chassis, engine tuning, electronics, and budget pricing for that class.
+            </p>
+          </div>
+        </Section>
+
         <Section title="Platform & Chassis" icon={<Car size={16} />}>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             <div>
@@ -49,11 +77,11 @@ export function VehicleDesigner() {
           </div>
           <p className="text-[11px] text-slate-500 mb-3">{BRAKE_TYPES[v.brakeType || "cast_iron"].description}</p>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-            <Slider label="Brake Disc" value={v.brakeDiscSize} min={280} max={440} unit="mm" onChange={(val) => updateVehicle({ brakeDiscSize: val })} />
+            <Slider label="Brake Disc" value={v.brakeDiscSize} min={200} max={440} unit="mm" onChange={(val) => updateVehicle({ brakeDiscSize: val })} />
             <Slider label="Brake Pad" value={v.brakePadCompound} min={0} max={1} step={0.05} format={(val) => `${(val * 100).toFixed(0)}%`} onChange={(val) => updateVehicle({ brakePadCompound: val })} />
             <Slider label="Brake Bias" value={v.brakeBias} min={0.3} max={0.8} step={0.01} format={(val) => `${(val * 100).toFixed(0)}%F`} onChange={(val) => updateVehicle({ brakeBias: val })} />
-            <Slider label="Wheel Dia." value={v.wheelDiameter} min={15} max={22} unit='"' onChange={(val) => updateVehicle({ wheelDiameter: val })} />
-            <Slider label="Wheel Width" value={v.wheelWidth} min={7} max={13} step={0.5} unit='"' onChange={(val) => updateVehicle({ wheelWidth: val })} />
+            <Slider label="Wheel Dia." value={v.wheelDiameter} min={13} max={22} unit='"' onChange={(val) => updateVehicle({ wheelDiameter: val })} />
+            <Slider label="Wheel Width" value={v.wheelWidth} min={4.5} max={13} step={0.5} unit='"' onChange={(val) => updateVehicle({ wheelWidth: val })} />
             <Slider label="Tire Pressure" value={v.tirePressure} min={1.5} max={3.5} step={0.1} unit="bar" onChange={(val) => updateVehicle({ tirePressure: val })} />
             <Select<TireCompound> label="Tire Compound" value={v.tireCompound} options={(Object.keys(TIRE_COMPOUNDS) as TireCompound[]).map((t) => ({ value: t, label: TIRE_COMPOUNDS[t].label }))} onChange={(val) => updateVehicle({ tireCompound: val })} />
           </div>

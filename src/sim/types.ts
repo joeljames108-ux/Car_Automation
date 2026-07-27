@@ -20,9 +20,9 @@ export type EngineLayout =
 
 export type CrankMaterial = "cast_iron" | "forged_steel" | "billet_steel" | "titanium";
 export type PistonType = "cast" | "forged" | "billet" | "ceramic";
-export type ValvetrainType = "ohv" | "sohc" | "dohc" | "dohc_vvl";
+export type ValvetrainType = "ohv_2v" | "ohv" | "sohc_2v" | "sohc" | "dohc" | "dohc_vvl";
 export type IntakeType = "na" | "supercharger" | "turbo_single" | "twin_turbo" | "bi_turbo" | "compound_turbo";
-export type FuelSystemType = "carb" | "tbi" | "port" | "direct" | "dual_injection";
+export type FuelSystemType = "carb_single" | "carb" | "tbi" | "port" | "direct" | "dual_injection";
 
 export interface EngineConfig {
   layout: EngineLayout;
@@ -122,17 +122,23 @@ export interface EngineSim {
 
 // ---------- Vehicle ----------
 
-export type PlatformType = "street_sport" | "supercar" | "hypercar" | "gt" | "prototype" | "rally";
+export type PlatformType =
+  | "budget_economy" | "lower_mid" | "upper_mid" | "premium" | "luxury" | "ultra_luxury"
+  | "exotic" | "supercar" | "hypercar" | "commercial_fleet" | "motorsport"
+  | "economy_hatch" | "economy_compact" | "compact_family" | "midsize_sedan" | "street_sport" | "gt" | "prototype" | "rally";
 
 // ---------- Exterior ----------
 
 export type BodyType =
-  | "sedan" | "coupe" | "hatchback" | "wagon" | "fastback" | "roadster"
-  | "targa" | "ttop" | "convertible" | "suv" | "crossover" | "pickup"
-  | "van" | "shooting_brake" | "gt_coupe" | "spider" | "canopy" | "kammback";
+  | "city_car" | "hatchback" | "sedan" | "wagon" | "coupe" | "convertible" | "roadster"
+  | "sports_car" | "gt_coupe" | "muscle_car" | "pony_car" | "supercar" | "hypercar"
+  | "suv" | "crossover" | "pickup" | "mpv" | "minivan" | "van" | "offroad_4x4"
+  | "commercial" | "limousine" | "taxi" | "police" | "ambulance" | "fire_vehicle"
+  | "rally_car" | "formula_car" | "touring_car" | "gt_race_car" | "drift_car" | "track_car"
+  | "targa" | "ttop" | "fastback" | "shooting_brake" | "spider" | "canopy" | "kammback";
 
 export type RimDesign =
-  | "mesh" | "multi_spoke" | "twin_spoke" | "y_spoke" | "turbine"
+  | "steel_stamped" | "mesh" | "multi_spoke" | "twin_spoke" | "y_spoke" | "turbine"
   | "deep_dish" | "split_5" | "split_6" | "slotted" | "solid_disc";
 
 export type RimFinish = "silver" | "gloss_black" | "matte_black" | "bronze" | "gold" | "chrome" | "gunmetal" | "bronze_cut";
@@ -173,13 +179,13 @@ export interface ExteriorConfig {
   fenderVents: boolean;
   splitter: boolean;
   towHook: boolean;
-  mirrorType: "standard" | "folding" | "carbon" | "camera" | "none";
+  mirrorType: string;
   badgeColor: string;        // hex
 }
 
-export type ChassisType = "tube_frame" | "monocoque" | "carbon_tub" | "aluminum_spaceframe" | "steel_unibody";
-export type SuspensionType = "macpherson" | "double_wishbone" | "multilink" | "torsion_bar" | "pushrod" | "pullrod";
-export type BrakeType = "cast_iron" | "slotted_steel" | "carbon_ceramic" | "carbon_carbon" | "regenerative_hybrid";
+export type ChassisType = "steel_ladder" | "pressed_steel" | "tube_frame" | "monocoque" | "carbon_tub" | "aluminum_spaceframe" | "steel_unibody";
+export type SuspensionType = "torsion_beam" | "leaf_spring" | "macpherson" | "double_wishbone" | "multilink" | "torsion_bar" | "pushrod" | "pullrod";
+export type BrakeType = "drum" | "solid_disc" | "cast_iron" | "slotted_steel" | "carbon_ceramic" | "carbon_carbon" | "regenerative_hybrid";
 export type TransmissionType = "manual_5" | "manual_6" | "manual_7" | "seq_6" | "seq_7" | "seq_8" | "dct_7" | "dct_8" | "dct_9" | "dog_leg" | "cvt" | "single_speed";
 export type TireCompound = "hard" | "medium" | "soft" | "supersoft" | "slick" | "wet" | "intermediate";
 
@@ -412,7 +418,7 @@ export type InfoConnectivityTier = "none" | "wifi_4g" | "wifi_5g" | "satellite";
 export type ClusterLevel = 1 | 2 | 3 | 4 | 5 | 6 | 7;
 export type ConnectivityTier = "basic" | "advanced" | "premium";
 export type AudioTier = "basic" | "economy" | "mid" | "premium" | "luxury" | "ultra_luxury";
-export type ClimateTier = "manual" | "single" | "dual" | "tri" | "four" | "five";
+export type ClimateTier = "none" | "manual" | "single" | "dual" | "tri" | "four" | "five";
 export type SeatTier = "basic" | "mid" | "premium" | "luxury" | "executive" | "ultra_luxury";
 export type LightingTier = "none" | "white" | "multi" | "color64" | "dynamic" | "music_sync" | "welcome";
 export type AdasLevel = 0 | 1 | 2 | 3 | 4 | 5;

@@ -7,7 +7,7 @@ import type {
   RaceDriver, TrackId, TeamStatus, TeamStrategy, MotorsportRegulation,
   CategoryGuide, ComplianceResult, ChampionshipStanding,
   DriverDevelopmentLog, FacilityLevel, Sponsor, SponsorTier,
-  HQBuilding, StaffMember, RuleVoteProposal, PartDevelopmentProject,
+  HQBuilding, StaffMember, RuleVoteProposal,
 } from "./types";
 
 function clamp(v: number, lo: number, hi: number) { return Math.max(lo, Math.min(hi, v)); }

@@ -9,7 +9,6 @@ export function MotorsportHeader() {
   const teams = company.motorsport.teams;
   const totalWins = teams.reduce((s, t) => s + t.wins, 0);
   const totalTitles = teams.reduce((s, t) => s + t.championships, 0);
-  const totalFL = teams.reduce((s, t) => s + t.fastestLaps, 0);
   const totalPodiums = teams.reduce((s, t) => s + t.podiums, 0);
 
   return (

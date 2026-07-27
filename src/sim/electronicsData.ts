@@ -31,6 +31,7 @@ export const CLUSTER_LEVELS: Record<ClusterLevel, { label: string; sub: string }
 
 export const INFOTAINMENT_SCREENS: { value: string; label: string; cost: number; weight: number; power: number; luxury: number }[] = [
   { value: "none", label: "None", cost: 0, weight: 0, power: 0, luxury: 0 },
+  { value: "radio_am_fm", label: "AM/FM Radio", cost: 40, weight: 0.8, power: 5, luxury: 0.01 },
   { value: "lcd_5", label: '5"', cost: 120, weight: 1.2, power: 8, luxury: 0.05 },
   { value: "touch_7", label: '7" Touch', cost: 280, weight: 1.5, power: 12, luxury: 0.1 },
   { value: "hd_8", label: '8" HD', cost: 450, weight: 1.8, power: 15, luxury: 0.15 },
@@ -89,9 +90,10 @@ export const AUDIO_TIERS: Record<AudioTier, { label: string; sub: string; speake
 
 // ---------- 6. Climate Control ----------
 
-export type ClimateTier = "manual" | "single" | "dual" | "tri" | "four" | "five";
+export type ClimateTier = "none" | "manual" | "single" | "dual" | "tri" | "four" | "five";
 
 export const CLIMATE_TIERS: Record<ClimateTier, { label: string; sub: string } & ModuleStats> = {
+  none:   { label: "Ventilation Only", sub: "Heater & blower fan only (No AC)", cost: 50, weight: 2.0, power: 0, luxury: 0.0, tech: 0.0, reliability: 0.05, assembly: 0.2 },
   manual: { label: "Manual AC", sub: "Manual controls", cost: 300, weight: 4.0, power: 0, luxury: 0.02, tech: 0.02, reliability: 0.02, assembly: 0.5 },
   single: { label: "Single-Zone", sub: "Automatic single zone", cost: 600, weight: 5.0, power: 30, luxury: 0.05, tech: 0.08, reliability: 0.01, assembly: 0.7 },
   dual:   { label: "Dual-Zone", sub: "Driver + passenger", cost: 900, weight: 6.0, power: 40, luxury: 0.1, tech: 0.15, reliability: 0, assembly: 0.8 },
@@ -110,9 +112,10 @@ export const CLIMATE_EXTRAS: { key: string; label: string; desc: string; cost: n
 
 // ---------- 7. Seats ----------
 
-export type SeatTier = "basic" | "mid" | "premium" | "luxury" | "executive" | "ultra_luxury";
+export type SeatTier = "bare_budget" | "basic" | "mid" | "premium" | "luxury" | "executive" | "ultra_luxury";
 
 export const SEAT_TIERS: Record<SeatTier, { label: string; sub: string } & ModuleStats> = {
+  bare_budget:  { label: "Bare Budget", sub: "Fixed vinyl / basic foam", cost: 150, weight: 18, power: 0, luxury: 0.0, tech: 0, reliability: 0.05, assembly: 0.5 },
   basic:        { label: "Basic", sub: "Fabric, manual", cost: 400, weight: 25, power: 0, luxury: 0.02, tech: 0, reliability: 0.02, assembly: 1.0 },
   mid:          { label: "Mid", sub: "Fabric, electric", cost: 900, weight: 28, power: 30, luxury: 0.08, tech: 0.05, reliability: 0.01, assembly: 1.5 },
   premium:      { label: "Premium", sub: "Leather", cost: 2200, weight: 32, power: 30, luxury: 0.2, tech: 0.08, reliability: 0, assembly: 2.0 },

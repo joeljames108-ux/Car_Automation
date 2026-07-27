@@ -37,7 +37,7 @@ function formatLap(seconds: number): string {
 }
 
 export function CommandCenter() {
-  const { design, sim, carConcept, setCarConcept } = useDesign();
+  const { design, sim, carConcept, setCarConcept, uiTheme, setUiTheme } = useDesign();
   const { company } = useCompany();
   const scores = useMemo(() => computeScores(design, sim), [design, sim]);
   const summary = useMemo(() => computeSummary(scores), [scores]);
@@ -76,44 +76,87 @@ export function CommandCenter() {
 
   return (
     <div className="space-y-4 stagger">
-      {/* Vehicle Concept Philosophy Selection Card */}
-      <div className="bg-gradient-to-br from-slate-900 via-slate-900/90 to-base-950 border border-cyan-500/40 rounded-2xl p-5 shadow-[0_0_30px_rgba(34,211,238,0.15)] relative overflow-hidden">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 relative z-10">
-          <div className="flex items-center gap-3">
-            <div className="p-3 rounded-2xl bg-cyan-500/20 border border-cyan-400/40 text-cyan-300 shadow-[0_0_15px_rgba(34,211,238,0.2)]">
-              <Target size={24} />
-            </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <span className="text-xs font-mono font-bold text-cyan-400 uppercase tracking-widest">VEHICLE CONCEPT INTENT</span>
-                <span className="bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 text-[9px] font-bold px-2 py-0.5 rounded-full">AI TUNER ACTIVE</span>
+      <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
+        {/* Vehicle Concept Philosophy Selection Card */}
+        <div className="bg-gradient-to-br from-slate-900 via-slate-900/90 to-base-950 border border-cyan-500/40 rounded-2xl p-5 shadow-[0_0_30px_rgba(34,211,238,0.15)] relative overflow-hidden">
+          <div className="flex flex-col gap-4 relative z-10">
+            <div className="flex items-center gap-3">
+              <div className="p-3 rounded-2xl bg-cyan-500/20 border border-cyan-400/40 text-cyan-300 shadow-[0_0_15px_rgba(34,211,238,0.2)]">
+                <Target size={24} />
               </div>
-              <h2 className="text-lg font-bold text-slate-100">Select Design Goal & AI Philosophy</h2>
-              <p className="text-xs text-slate-400">Tunes Apex AI Assistant to guide engineering decisions based on your target build concept</p>
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className="text-xs font-mono font-bold text-cyan-400 uppercase tracking-widest">VEHICLE CONCEPT INTENT</span>
+                  <span className="bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 text-[9px] font-bold px-2 py-0.5 rounded-full">AI TUNER ACTIVE</span>
+                </div>
+                <h2 className="text-lg font-bold text-slate-100">Select Design Goal & AI Philosophy</h2>
+                <p className="text-xs text-slate-400">Tunes Apex AI Assistant to guide engineering decisions based on your target build concept</p>
+              </div>
+            </div>
+
+            {/* Philosophy Concept Cards */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+              {[
+                { id: "budget", label: "Budget Focused", desc: "Max ROI, low cost & high reliability", color: "border-emerald-500/40 text-emerald-300 bg-emerald-500/10" },
+                { id: "track", label: "Track Focused", desc: "Peak lateral G, low weight & high aero", color: "border-amber-500/40 text-amber-300 bg-amber-500/10" },
+                { id: "luxury", label: "Luxury Focused", desc: "Supreme NVH, leather & comfort score", color: "border-purple-500/40 text-purple-300 bg-purple-500/10" },
+                { id: "balanced", label: "Balanced Build", desc: "All-round engineering harmony", color: "border-cyan-500/40 text-cyan-300 bg-cyan-500/10" },
+              ].map((c) => (
+                <button
+                  key={c.id}
+                  onClick={() => setCarConcept(c.id as any)}
+                  className={`p-3 rounded-xl border text-left transition-all ${
+                    carConcept === c.id
+                      ? `${c.color} shadow-[0_0_15px_rgba(34,211,238,0.2)] ring-1 ring-cyan-400`
+                      : "bg-base-950/60 border-white/5 text-slate-400 hover:border-slate-700 hover:text-slate-200"
+                  }`}
+                >
+                  <div className="text-xs font-bold font-mono uppercase mb-0.5">{c.label}</div>
+                  <div className="text-[10px] text-slate-500 leading-tight">{c.desc}</div>
+                </button>
+              ))}
             </div>
           </div>
+        </div>
 
-          {/* Philosophy Concept Cards */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-            {[
-              { id: "budget", label: "Budget Focused", desc: "Max ROI, low cost & high reliability", color: "border-emerald-500/40 text-emerald-300 bg-emerald-500/10" },
-              { id: "track", label: "Track Focused", desc: "Peak lateral G, low weight & high aero", color: "border-amber-500/40 text-amber-300 bg-amber-500/10" },
-              { id: "luxury", label: "Luxury Focused", desc: "Supreme NVH, leather & comfort score", color: "border-purple-500/40 text-purple-300 bg-purple-500/10" },
-              { id: "balanced", label: "Balanced Build", desc: "All-round engineering harmony", color: "border-cyan-500/40 text-cyan-300 bg-cyan-500/10" },
-            ].map((c) => (
-              <button
-                key={c.id}
-                onClick={() => setCarConcept(c.id as any)}
-                className={`p-3 rounded-xl border text-left transition-all ${
-                  carConcept === c.id
-                    ? `${c.color} shadow-[0_0_15px_rgba(34,211,238,0.2)] ring-1 ring-cyan-400`
-                    : "bg-base-950/60 border-white/5 text-slate-400 hover:border-slate-700 hover:text-slate-200"
-                }`}
-              >
-                <div className="text-xs font-bold font-mono uppercase mb-0.5">{c.label}</div>
-                <div className="text-[10px] text-slate-500 leading-tight">{c.desc}</div>
-              </button>
-            ))}
+        {/* Global UI Theme Selection Card */}
+        <div className="bg-gradient-to-br from-slate-900 via-slate-900/90 to-base-950 border border-purple-500/40 rounded-2xl p-5 shadow-[0_0_30px_rgba(168,85,247,0.15)] relative overflow-hidden">
+          <div className="flex flex-col gap-4 relative z-10">
+            <div className="flex items-center gap-3">
+              <div className="p-3 rounded-2xl bg-purple-500/20 border border-purple-400/40 text-purple-300 shadow-[0_0_15px_rgba(168,85,247,0.2)]">
+                <Wind size={24} />
+              </div>
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className="text-xs font-mono font-bold text-purple-400 uppercase tracking-widest">GLOBAL UI SETTINGS</span>
+                </div>
+                <h2 className="text-lg font-bold text-slate-100">Select Interface Theme</h2>
+                <p className="text-xs text-slate-400">Personalize your workspace aesthetics. More themes are in development!</p>
+              </div>
+            </div>
+
+            {/* Theme Option Cards */}
+            <div className="grid grid-cols-2 gap-2">
+              {[
+                { id: "theme1", label: "Theme 1", desc: "Cyan Cyber Glass (Default)", color: "border-cyan-500/40 text-cyan-300 bg-cyan-500/10", activeShadow: "shadow-[0_0_15px_rgba(34,211,238,0.2)] ring-1 ring-cyan-400" },
+                { id: "theme2", label: "Theme 2", desc: "Cosmic Nebula — Deep Purple Sci-Fi", color: "border-purple-500/40 text-purple-300 bg-purple-500/10", activeShadow: "shadow-[0_0_15px_rgba(168,85,247,0.25)] ring-1 ring-purple-400" },
+                { id: "theme3", label: "Theme 3", desc: "Nordic Light Glass — Alabaster White", color: "border-sky-500/40 text-sky-400 bg-sky-500/10", activeShadow: "shadow-[0_0_15px_rgba(14,165,233,0.2)] ring-1 ring-sky-400" },
+                { id: "theme4", label: "Theme 4", desc: "Cyberpunk Amber — Telemetry HUD", color: "border-amber-500/40 text-amber-300 bg-amber-500/10", activeShadow: "shadow-[0_0_15px_rgba(245,158,11,0.2)] ring-1 ring-amber-400" },
+              ].map((t) => (
+                <button
+                  key={t.id}
+                  onClick={() => setUiTheme(t.id as any)}
+                  className={`p-3 rounded-xl border text-left transition-all ${
+                    uiTheme === t.id
+                      ? `${t.color} ${t.activeShadow}`
+                      : "bg-base-950/60 border-white/5 text-slate-400 hover:border-slate-700 hover:text-slate-200"
+                  }`}
+                >
+                  <div className="text-xs font-bold font-mono uppercase mb-0.5">{t.label}</div>
+                  <div className="text-[10px] text-slate-500 leading-tight">{t.desc}</div>
+                </button>
+              ))}
+            </div>
           </div>
         </div>
       </div>

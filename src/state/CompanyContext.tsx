@@ -13,7 +13,6 @@ import type {
   CustomerFeedback, SalesConfig, SalesResult,
   SafetyConfig, SafetySimResult,
   MotorsportCategory, RaceDriver, TeamStrategy,
-  Sponsor,
 } from "../sim/types";
 
 // ---------- Safety simulation ----------

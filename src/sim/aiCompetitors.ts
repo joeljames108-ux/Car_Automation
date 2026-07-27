@@ -50,11 +50,15 @@ function generateVehicle(company: AICompanyProfile, month: number, seed: number)
   const segment = segments[segIdx];
 
   const basePrice: Record<PlatformType, number> = {
-    street_sport: 45000, gt: 85000, supercar: 250000, hypercar: 1500000, prototype: 3000000, rally: 55000,
+    budget_economy: 14500, lower_mid: 22000, upper_mid: 32000, premium: 52000, luxury: 85000, ultra_luxury: 180000,
+    exotic: 220000, supercar: 350000, hypercar: 1800000, commercial_fleet: 38000, motorsport: 120000,
+    economy_hatch: 17500, economy_compact: 21000, compact_family: 27500, midsize_sedan: 33500, street_sport: 45000, gt: 85000, prototype: 3000000, rally: 55000,
   };
 
   const basePower: Record<PlatformType, number> = {
-    street_sport: 350, gt: 500, supercar: 700, hypercar: 1000, prototype: 1200, rally: 380,
+    budget_economy: 75, lower_mid: 120, upper_mid: 175, premium: 280, luxury: 420, ultra_luxury: 560,
+    exotic: 600, supercar: 750, hypercar: 1200, commercial_fleet: 220, motorsport: 480,
+    economy_hatch: 85, economy_compact: 105, compact_family: 145, midsize_sedan: 175, street_sport: 350, gt: 500, prototype: 1200, rally: 380,
   };
 
   const price = basePrice[segment] * (0.8 + seededRandom(seed, 4) * 0.4) * (strategy === "luxury" ? 1.3 : strategy === "value" ? 0.8 : 1.0);

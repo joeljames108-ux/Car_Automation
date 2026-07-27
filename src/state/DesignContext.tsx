@@ -9,6 +9,7 @@ import type {
 
 export type UnitSystem = "metric" | "imperial";
 export type CarConceptFocus = "budget" | "track" | "luxury" | "balanced";
+export type UITheme = "theme1" | "theme2" | "theme3" | "theme4";
 
 interface DesignContextValue {
   design: VehicleDesign;
@@ -17,6 +18,8 @@ interface DesignContextValue {
   setUnits: (u: UnitSystem) => void;
   carConcept: CarConceptFocus;
   setCarConcept: (concept: CarConceptFocus) => void;
+  uiTheme: UITheme;
+  setUiTheme: (theme: UITheme) => void;
   updateEngine: (patch: Partial<EngineConfig>) => void;
   updateVehicle: (patch: Partial<VehicleConfig>) => void;
   updateAero: (patch: Partial<AeroConfig>) => void;
@@ -43,6 +46,7 @@ export function DesignProvider({ children }: { children: ReactNode }) {
   const [design, setDesignState] = useState<VehicleDesign>(() => defaultDesign());
   const [units, setUnits] = useState<UnitSystem>("metric");
   const [carConcept, setCarConcept] = useState<CarConceptFocus>("balanced");
+  const [uiTheme, setUiTheme] = useState<UITheme>("theme1");
   const sim = useMemo(() => simulate(design), [design]);
 
   const setDesign = useCallback((d: VehicleDesign) => {
@@ -113,7 +117,7 @@ export function DesignProvider({ children }: { children: ReactNode }) {
   const resetDesign = useCallback(() => setDesignState(defaultDesign()), []);
 
   const value: DesignContextValue = {
-    design, sim, units, setUnits, carConcept, setCarConcept,
+    design, sim, units, setUnits, carConcept, setCarConcept, uiTheme, setUiTheme,
     updateEngine, updateVehicle, updateAero, updateAeroResearch, updateExterior, updateInterior, updateElectronics, updateManufacturing, updateInfotainment,
     updateChassisEng, updateSuspensionGeo, updateSteeringEng, updateBrakesEng, updateTiresEng, updateWheelsEng,
     setDesign, resetDesign,

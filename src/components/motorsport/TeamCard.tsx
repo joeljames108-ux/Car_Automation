@@ -1,7 +1,7 @@
 // ===================================================================
 // TEAM CARD — Individual team display with glassmorphism + animations
 // ===================================================================
-import { Trophy, Star, Users } from "lucide-react";
+import { Trophy } from "lucide-react";
 import type { MotorsportTeam, MotorsportCategory, FacilityLevel } from "../../sim/types";
 
 const CATEGORY_LABELS: Record<MotorsportCategory, string> = {

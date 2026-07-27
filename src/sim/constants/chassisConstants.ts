@@ -92,6 +92,8 @@ export const BRAKE_ROTOR_MATERIALS: Record<BrakeRotorMaterial, {
   costFactor: number;
   wearRate: number;          // 0-1 (higher = faster wear)
 }> = {
+  drum:            { label: "Enclosed Drum",    frictionCoeff: 0.28, fadeResistance: 0.3,  maxTemp: 450,  weightFactor: 0.85, costFactor: 0.3, wearRate: 0.4 },
+  solid_steel:     { label: "Solid Steel",      frictionCoeff: 0.30, fadeResistance: 0.4,  maxTemp: 550,  weightFactor: 0.90, costFactor: 0.5, wearRate: 0.5 },
   cast_iron:       { label: "Cast Iron",       frictionCoeff: 0.35, fadeResistance: 0.5,  maxTemp: 600,  weightFactor: 1.0,  costFactor: 1.0, wearRate: 0.5 },
   steel:           { label: "Steel",           frictionCoeff: 0.32, fadeResistance: 0.55, maxTemp: 650,  weightFactor: 0.95, costFactor: 1.3, wearRate: 0.6 },
   carbon_ceramic:  { label: "Carbon Ceramic",  frictionCoeff: 0.42, fadeResistance: 0.95, maxTemp: 1200, weightFactor: 0.45, costFactor: 8.0, wearRate: 0.2 },

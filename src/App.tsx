@@ -34,161 +34,229 @@ import { DigitalTwin } from "./components/DigitalTwin";
 import { SafetyCenter } from "./components/SafetyCenter";
 import { SalesLaunch } from "./components/SalesLaunch";
 
+import { CommandPalette } from "./components/CommandPalette";
+import { ToastProvider } from "./components/ToastSystem";
+import { Search, Command as CmdIcon } from "lucide-react";
+
+import { Wrench } from "lucide-react";
+
 type Stage =
   | "command" | "engine" | "vehicle" | "exterior" | "aero" | "interior"
   | "manufacturing" | "infotainment" | "rd" | "simulation" | "testing"
   | "race" | "stats" | "press" | "competitors"
   | "garage" | "compare" | "economy" | "motorsport" | "twin" | "safety" | "sales";
 
-const STAGES: { id: Stage; label: string; icon: React.ReactNode; group: "design" | "world" }[] = [
-  // --- Design & Engineering ---
-  { id: "command",       label: "Command",      icon: <LayoutDashboard size={14} />, group: "design" },
-  { id: "engine",        label: "Engine",        icon: <Cog size={14} />,            group: "design" },
-  { id: "vehicle",       label: "Vehicle",       icon: <Car size={14} />,            group: "design" },
-  { id: "exterior",      label: "Exterior",      icon: <Paintbrush size={14} />,     group: "design" },
-  { id: "aero",          label: "Aero Lab",      icon: <Wind size={14} />,           group: "design" },
-  { id: "interior",      label: "Interior",      icon: <Sofa size={14} />,           group: "design" },
-  { id: "manufacturing", label: "Mfg",           icon: <Factory size={14} />,        group: "design" },
-  { id: "infotainment",  label: "Electronics",   icon: <Monitor size={14} />,        group: "design" },
-  { id: "safety",        label: "Safety",        icon: <ShieldCheck size={14} />,    group: "design" },
-  { id: "rd",            label: "R&D",           icon: <Microscope size={14} />,     group: "design" },
-  { id: "simulation",    label: "Sim",           icon: <Activity size={14} />,       group: "design" },
-  { id: "testing",       label: "Testing",       icon: <FlaskConical size={14} />,   group: "design" },
-  { id: "race",          label: "Race",          icon: <Flag size={14} />,           group: "design" },
-  { id: "stats",         label: "Stats",         icon: <BarChart3 size={14} />,      group: "design" },
-  // --- Company & World ---
-  { id: "garage",        label: "Garage",        icon: <Warehouse size={14} />,         group: "world" },
-  { id: "compare",       label: "Compare",       icon: <GitCompare size={14} />,     group: "world" },
-  { id: "economy",       label: "Economy",       icon: <TrendingUp size={14} />,     group: "world" },
-  { id: "motorsport",    label: "Motorsport",    icon: <Trophy size={14} />,         group: "world" },
-  { id: "twin",          label: "Digital Twin",  icon: <Cpu size={14} />,            group: "world" },
-  { id: "sales",         label: "Sales",         icon: <DollarSign size={14} />,     group: "world" },
-  { id: "press",         label: "Press",         icon: <Newspaper size={14} />,      group: "world" },
-  { id: "competitors",   label: "Rivals",        icon: <GitBranch size={14} />,      group: "world" },
+export type WorkspaceCategory = "engineering" | "simulation" | "world";
+
+interface StageItem {
+  id: Stage;
+  label: string;
+  icon: React.ReactNode;
+  category: WorkspaceCategory;
+}
+
+const STAGES: StageItem[] = [
+  // --- Engineering Studio ---
+  { id: "command",       label: "Command Center", icon: <LayoutDashboard size={14} />, category: "engineering" },
+  { id: "engine",        label: "Engine",         icon: <Cog size={14} />,             category: "engineering" },
+  { id: "vehicle",       label: "Vehicle",        icon: <Car size={14} />,             category: "engineering" },
+  { id: "exterior",      label: "Exterior",       icon: <Paintbrush size={14} />,      category: "engineering" },
+  { id: "aero",          label: "Aero Lab",       icon: <Wind size={14} />,            category: "engineering" },
+  { id: "interior",      label: "Interior",       icon: <Sofa size={14} />,            category: "engineering" },
+  { id: "manufacturing", label: "Manufacturing",  icon: <Factory size={14} />,         category: "engineering" },
+  { id: "infotainment",  label: "Electronics",    icon: <Monitor size={14} />,         category: "engineering" },
+  { id: "safety",        label: "Safety Center",  icon: <ShieldCheck size={14} />,     category: "engineering" },
+  { id: "rd",            label: "R&D Lab",        icon: <Microscope size={14} />,      category: "engineering" },
+
+  // --- Simulation & Testing ---
+  { id: "simulation",    label: "Simulation",     icon: <Activity size={14} />,        category: "simulation" },
+  { id: "testing",       label: "Testing Lab",    icon: <FlaskConical size={14} />,    category: "simulation" },
+  { id: "race",          label: "Race Track",     icon: <Flag size={14} />,            category: "simulation" },
+  { id: "stats",         label: "Telemetry Stats",icon: <BarChart3 size={14} />,       category: "simulation" },
+
+  // --- World & Racing ---
+  { id: "garage",        label: "Garage",         icon: <Warehouse size={14} />,       category: "world" },
+  { id: "compare",       label: "Compare",        icon: <GitCompare size={14} />,      category: "world" },
+  { id: "economy",       label: "Economy",        icon: <TrendingUp size={14} />,      category: "world" },
+  { id: "motorsport",    label: "Motorsport",     icon: <Trophy size={14} />,          category: "world" },
+  { id: "twin",          label: "Digital Twin",   icon: <Cpu size={14} />,             category: "world" },
+  { id: "sales",         label: "Sales",          icon: <DollarSign size={14} />,      category: "world" },
+  { id: "press",         label: "Press Reviews",  icon: <Newspaper size={14} />,       category: "world" },
+  { id: "competitors",   label: "Rivals",         icon: <GitBranch size={14} />,       category: "world" },
+];
+
+const WORKSPACE_CATEGORIES: { id: WorkspaceCategory; label: string; icon: React.ReactNode }[] = [
+  { id: "engineering", label: "Engineering Studio", icon: <Wrench size={14} /> },
+  { id: "simulation",  label: "Sim & Testing",      icon: <Activity size={14} /> },
+  { id: "world",       label: "World & Racing",     icon: <Trophy size={14} /> },
 ];
 
 function AppInner() {
   const [stage, setStage] = useState<Stage>("command");
+  const [activeCategory, setActiveCategory] = useState<WorkspaceCategory>("engineering");
   const [dialog, setDialog] = useState<{ open: boolean; mode: "save" | "load" }>({ open: false, mode: "save" });
-  const { design, resetDesign, units, setUnits } = useDesign();
+  const [cmdPaletteOpen, setCmdPaletteOpen] = useState(false);
+  const { resetDesign, units, setUnits, uiTheme } = useDesign();
   const { company, advanceAllSystems } = useCompany();
   const [booted, setBooted] = useState(false);
+
   useEffect(() => { const t = setTimeout(() => setBooted(true), 60); return () => clearTimeout(t); }, []);
 
-  const designStages = STAGES.filter(s => s.group === "design");
-  const worldStages  = STAGES.filter(s => s.group === "world");
+  // Sync category when stage changes (e.g. from CommandPalette)
+  useEffect(() => {
+    const currentStageItem = STAGES.find(s => s.id === stage);
+    if (currentStageItem && currentStageItem.category !== activeCategory) {
+      setActiveCategory(currentStageItem.category);
+    }
+  }, [stage]);
+
+  // Global Ctrl+K / Cmd+K key listener
+  useEffect(() => {
+    function handleGlobalKeydown(e: KeyboardEvent) {
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") {
+        e.preventDefault();
+        setCmdPaletteOpen((prev) => !prev);
+      }
+    }
+    window.addEventListener("keydown", handleGlobalKeydown);
+    return () => window.removeEventListener("keydown", handleGlobalKeydown);
+  }, []);
+
+  const activeCategoryStages = STAGES.filter(s => s.category === activeCategory);
 
   return (
-    <div className={`min-h-screen bg-base-950 flex flex-col grid-bg transition-opacity duration-700 ${booted ? "opacity-100" : "opacity-0"}`}>
-      {/* Header */}
-      <header className="border-b border-white/10 bg-[#0b0f19]/70 backdrop-blur-xl sticky top-0 z-40 shadow-[0_4px_30px_rgba(0,0,0,0.5)]">
-        <div className="max-w-[1700px] mx-auto px-4 h-14 flex items-center gap-3">
+    <div className={`min-h-screen bg-base-950 flex flex-col grid-bg transition-opacity duration-700 ${booted ? "opacity-100" : "opacity-0"} ${uiTheme}`}>
+      {/* Top Header */}
+      <header className="border-b border-white/10 bg-[#0b0f19]/80 backdrop-blur-xl sticky top-0 z-40 shadow-[0_4px_30px_rgba(0,0,0,0.5)] inner-light">
+        <div className="max-w-[1700px] mx-auto px-4 h-14 flex items-center justify-between gap-4">
           {/* Logo */}
-          <div className="flex items-center gap-2 shrink-0">
+          <div className="flex items-center gap-2.5 shrink-0">
             <svg viewBox="0 0 24 24" className="h-7 w-7 text-cyan-400 animate-pulse-glow rounded-lg drop-shadow-[0_0_10px_rgba(34,211,238,0.5)]" fill="currentColor">
               <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
             </svg>
-            <span className="text-sm font-bold tracking-wider gradient-text hidden sm:block">APEX ENGINEER</span>
-          </div>
-
-          {/* Nav — two groups */}
-          <div className="flex items-center gap-1.5 flex-1 overflow-x-auto">
-            {/* Design group */}
-            <div className="flex items-center gap-0.5 bg-slate-900/60 backdrop-blur-md rounded-xl p-1 border border-white/5 shadow-inner">
-              {designStages.map((s) => (
-                <button
-                  key={s.id}
-                  onClick={() => setStage(s.id)}
-                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[11px] font-semibold transition-all duration-200 whitespace-nowrap ${
-                    stage === s.id
-                      ? "bg-gradient-to-r from-cyan-500/25 to-sky-500/20 text-cyan-200 border border-cyan-400/40 shadow-[0_0_12px_rgba(34,211,238,0.25)]"
-                      : "text-slate-400 hover:text-slate-100 hover:bg-white/5"
-                  }`}
-                >
-                  {s.icon}
-                  <span className="hidden xl:inline">{s.label}</span>
-                </button>
-              ))}
-            </div>
-
-            {/* Divider */}
-            <div className="h-6 w-px bg-white/10 mx-0.5 shrink-0" />
-
-            {/* World group */}
-            <div className="flex items-center gap-0.5 bg-slate-900/60 backdrop-blur-md rounded-xl p-1 border border-purple-500/10 shadow-inner">
-              {worldStages.map((s) => (
-                <button
-                  key={s.id}
-                  onClick={() => setStage(s.id)}
-                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[11px] font-semibold transition-all duration-200 whitespace-nowrap ${
-                    stage === s.id
-                      ? "bg-gradient-to-r from-cyan-500/25 to-purple-500/20 text-cyan-200 border border-cyan-400/40 shadow-[0_0_12px_rgba(34,211,238,0.25)]"
-                      : "text-slate-400 hover:text-slate-100 hover:bg-white/5"
-                  }`}
-                >
-                  {s.icon}
-                  <span className="hidden xl:inline">{s.label}</span>
-                </button>
-              ))}
+            <div>
+              <span className="text-sm font-extrabold tracking-wider gradient-text block leading-none">APEX ENGINEER</span>
+              <span className="text-[9px] text-slate-500 font-mono tracking-widest uppercase">Design Studio</span>
             </div>
           </div>
 
-          {/* Live Company Quick Status & Fast Advance */}
-          <div className="hidden lg:flex items-center gap-3 bg-base-850/80 border border-base-800 rounded-lg px-2.5 py-1 text-xs shrink-0">
-            <div className="flex items-center gap-1.5">
-              <span className="text-[10px] text-slate-500 font-mono">MO.</span>
-              <span className="font-mono font-bold text-accent-300">{company.economy.month}</span>
-            </div>
-            <div className="h-3 w-px bg-base-700" />
-            <div className="flex items-center gap-1">
-              <span className="text-ok-400 font-mono font-bold">
-                ${(company.totalRevenue / (company.totalRevenue >= 1e6 ? 1e6 : 1e3)).toFixed(1)}{company.totalRevenue >= 1e6 ? "M" : "k"}
-              </span>
-            </div>
+          {/* Workspace Category Switcher Pills */}
+          <div className="flex items-center gap-1.5 bg-base-900/90 backdrop-blur-md rounded-xl p-1 border border-white/10 shadow-inner">
+            {WORKSPACE_CATEGORIES.map((cat) => {
+              const isActive = activeCategory === cat.id;
+              return (
+                <button
+                  key={cat.id}
+                  onClick={() => {
+                    setActiveCategory(cat.id);
+                    // Select first stage of the category if current stage isn't in it
+                    const firstInCat = STAGES.find(s => s.category === cat.id);
+                    if (firstInCat && !STAGES.filter(s => s.category === cat.id).some(s => s.id === stage)) {
+                      setStage(firstInCat.id);
+                    }
+                  }}
+                  className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all whitespace-nowrap ripple-effect haptic-press ${
+                    isActive
+                      ? "bg-gradient-to-r from-cyan-500/30 to-purple-500/25 text-cyan-200 border border-cyan-400/50 shadow-[0_0_15px_rgba(34,211,238,0.3)] aurora-glow"
+                      : "text-slate-400 hover:text-slate-200 hover:bg-white/5"
+                  }`}
+                >
+                  {cat.icon}
+                  <span>{cat.label}</span>
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Right Control Bar */}
+          <div className="flex items-center gap-2 shrink-0">
+            {/* Command Palette Trigger */}
             <button
-              onClick={advanceAllSystems}
-              className="flex items-center gap-1 px-2 py-0.5 rounded bg-accent-500/20 text-accent-300 hover:bg-accent-500/30 text-[10px] font-semibold transition-all"
-              title="Advance month for economy, motorsport, and market systems"
+              onClick={() => setCmdPaletteOpen(true)}
+              className="flex items-center gap-2 bg-base-850/90 hover:bg-slate-800 border border-slate-700/80 rounded-lg px-2.5 py-1.5 text-xs text-slate-400 hover:text-slate-200 transition-all hidden md:flex"
+              title="Open Command Palette (Ctrl+K)"
             >
-              +1 Mo
+              <Search size={13} className="text-cyan-400" />
+              <span className="text-[11px]">Search...</span>
+              <kbd className="px-1.5 py-0.5 rounded bg-slate-800 border border-slate-700 text-[10px] font-mono text-slate-300 flex items-center gap-0.5">
+                <CmdIcon size={9} /> K
+              </kbd>
             </button>
-          </div>
 
-          {/* Unit toggle */}
-          <div className="flex items-center gap-1 bg-base-850 rounded-lg p-1 border border-base-800 shrink-0">
-            <button onClick={() => setUnits("metric")} className={`flex items-center gap-1 px-2 py-1 rounded text-xs font-medium transition-all ${units === "metric" ? "bg-accent-500/20 text-accent-300" : "text-slate-500 hover:text-slate-300"}`}>
-              <Ruler size={11} /> <span className="hidden sm:inline">Metric</span>
-            </button>
-            <button onClick={() => setUnits("imperial")} className={`px-2 py-1 rounded text-xs font-medium transition-all ${units === "imperial" ? "bg-accent-500/20 text-accent-300" : "text-slate-500 hover:text-slate-300"}`}>
-              <span className="hidden sm:inline">Imperial</span><span className="sm:hidden">Imp</span>
-            </button>
-          </div>
+            {/* Live Economy Snapshot */}
+            <div className="hidden lg:flex items-center gap-2 bg-base-850/80 border border-base-800 rounded-lg px-2.5 py-1 text-xs">
+              <div className="flex items-center gap-1">
+                <span className="text-[10px] text-slate-500 font-mono">MO.</span>
+                <span className="font-mono font-bold text-accent-300">{company.economy.month}</span>
+              </div>
+              <div className="h-3 w-px bg-base-700" />
+              <div className="flex items-center gap-1">
+                <span className="text-ok-400 font-mono font-bold">
+                  ${(company.totalRevenue / (company.totalRevenue >= 1e6 ? 1e6 : 1e3)).toFixed(1)}{company.totalRevenue >= 1e6 ? "M" : "k"}
+                </span>
+              </div>
+              <button
+                onClick={advanceAllSystems}
+                className="flex items-center gap-1 px-1.5 py-0.5 rounded bg-accent-500/20 text-accent-300 hover:bg-accent-500/30 text-[10px] font-semibold transition-all"
+                title="Advance month"
+              >
+                +1 Mo
+              </button>
+            </div>
 
-          <input
-            value={design.name}
-            onChange={() => {}}
-            className="bg-base-850 border border-base-800 rounded-lg px-3 py-1.5 text-sm text-slate-300 w-40 focus:border-accent-500 focus:outline-none hidden md:block"
-            readOnly
-          />
+            {/* Unit Toggle */}
+            <div className="flex items-center gap-0.5 bg-base-850 rounded-lg p-0.5 border border-base-800">
+              <button onClick={() => setUnits("metric")} className={`px-2 py-1 rounded text-[11px] font-medium transition-all ${units === "metric" ? "bg-accent-500/20 text-accent-300 font-bold" : "text-slate-500 hover:text-slate-300"}`}>
+                <Ruler size={11} className="inline mr-1" />Metric
+              </button>
+              <button onClick={() => setUnits("imperial")} className={`px-2 py-1 rounded text-[11px] font-medium transition-all ${units === "imperial" ? "bg-accent-500/20 text-accent-300 font-bold" : "text-slate-500 hover:text-slate-300"}`}>
+                Imperial
+              </button>
+            </div>
 
-          <div className="flex items-center gap-1 shrink-0">
-            <button onClick={() => setDialog({ open: true, mode: "save" })} className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs text-slate-400 hover:text-slate-200 hover:bg-base-800 transition-all">
-              <Save size={13} /> <span className="hidden sm:inline">Save</span>
-            </button>
-            <button onClick={() => setDialog({ open: true, mode: "load" })} className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs text-slate-400 hover:text-slate-200 hover:bg-base-800 transition-all">
-              <FolderOpen size={13} /> <span className="hidden sm:inline">Load</span>
-            </button>
-            <button onClick={resetDesign} className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs text-slate-400 hover:text-slate-200 hover:bg-base-800 transition-all">
-              <RotateCcw size={13} />
-            </button>
+            {/* Save / Load / Reset */}
+            <div className="flex items-center gap-1">
+              <button onClick={() => setDialog({ open: true, mode: "save" })} className="p-1.5 rounded-lg text-slate-400 hover:text-slate-200 hover:bg-base-800 transition-all" title="Save Design">
+                <Save size={14} />
+              </button>
+              <button onClick={() => setDialog({ open: true, mode: "load" })} className="p-1.5 rounded-lg text-slate-400 hover:text-slate-200 hover:bg-base-800 transition-all" title="Load Design">
+                <FolderOpen size={14} />
+              </button>
+              <button onClick={resetDesign} className="p-1.5 rounded-lg text-slate-400 hover:text-slate-200 hover:bg-base-800 transition-all" title="Reset to Defaults">
+                <RotateCcw size={14} />
+              </button>
+            </div>
           </div>
         </div>
       </header>
 
+      {/* Sub-Navigation Bar (Frosted Glass Module Switcher) */}
+      <nav className="border-b border-white/5 bg-[#0b0f19]/60 backdrop-blur-md sticky top-14 z-30 shadow-md">
+        <div className="max-w-[1700px] mx-auto px-4 py-2 flex items-center gap-1.5 overflow-x-auto no-scrollbar">
+          {activeCategoryStages.map((s) => {
+            const isCurrent = stage === s.id;
+            return (
+              <button
+                key={s.id}
+                onClick={() => setStage(s.id)}
+                className={`flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all whitespace-nowrap ripple-effect haptic-press ${
+                  isCurrent
+                    ? "bg-gradient-to-r from-cyan-500/30 to-sky-500/20 text-cyan-100 border border-cyan-400/50 shadow-[0_0_12px_rgba(34,211,238,0.25)] neon-underline font-bold"
+                    : "text-slate-400 hover:text-slate-100 hover:bg-white/5 border border-transparent"
+                }`}
+              >
+                <span className={isCurrent ? "text-cyan-300" : "text-slate-500"}>{s.icon}</span>
+                <span>{s.label}</span>
+              </button>
+            );
+          })}
+        </div>
+      </nav>
+
       {/* Main content */}
       <div className="flex-1 max-w-[1700px] mx-auto w-full px-4 py-4 pb-44 flex gap-4">
         <div className="flex-1 min-w-0">
-          <div key={stage} className="animate-fade-in-up">
+          <div key={stage} className="animate-scale-reveal">
             {stage === "command"       && <CommandCenter />}
             {stage === "engine"        && <EngineDesigner />}
             {stage === "vehicle"       && <VehicleDesigner />}
@@ -213,7 +281,7 @@ function AppInner() {
             {stage === "competitors"   && <Competitors />}
           </div>
         </div>
-        <div className="hidden lg:block w-48 shrink-0">
+        <div className="hidden lg:block w-80 shrink-0">
           <div className="sticky top-20">
             <StatRail />
           </div>
@@ -226,7 +294,22 @@ function AppInner() {
         onClose={() => setDialog({ open: false, mode: dialog.mode })}
       />
 
+      <CommandPalette
+        isOpen={cmdPaletteOpen}
+        onClose={() => setCmdPaletteOpen(false)}
+        onSelectStage={(s) => setStage(s as Stage)}
+      />
+
       <AIAssistant />
+
+      {/* Cosmic sparkle for Theme 2 */}
+      {uiTheme === "theme2" && <div className="cosmic-sparkle" />}
+
+      {/* Ambient floating orbs & light leak for atmospheric depth */}
+      <div className="ambient-orb ambient-orb-1" />
+      <div className="ambient-orb ambient-orb-2" />
+      <div className="ambient-orb ambient-orb-3" />
+      <div className="light-leak" />
     </div>
   );
 }
@@ -236,9 +319,12 @@ export default function App() {
     <DesignProvider>
       <RDProvider>
         <CompanyProvider>
-          <AppInner />
+          <ToastProvider>
+            <AppInner />
+          </ToastProvider>
         </CompanyProvider>
       </RDProvider>
     </DesignProvider>
   );
 }
+

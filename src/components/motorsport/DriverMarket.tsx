@@ -2,7 +2,7 @@
 // DRIVER MARKET — Browse, scout, hire, manage contracts
 // ===================================================================
 import { useState } from "react";
-import { Users, Search, UserPlus, UserMinus, RefreshCw, FileText } from "lucide-react";
+import { Users, Search, UserPlus, UserMinus, RefreshCw } from "lucide-react";
 import { useCompany } from "../../state/CompanyContext";
 import type { MotorsportTeam, RaceDriver } from "../../sim/types";
 

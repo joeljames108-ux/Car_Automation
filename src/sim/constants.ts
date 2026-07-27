@@ -78,8 +78,10 @@ export const VALVETRAIN_TYPES: Record<ValvetrainType, {
   rpmFactor: number;
   efficiencyFactor: number;
 }> = {
+  ohv_2v: { label: "OHV 2V (Pushrod Economy)", valvesPerCyl: 2, weightFactor: 0.75, costFactor: 0.5, rpmFactor: 0.7, efficiencyFactor: 0.78 },
   ohv: { label: "OHV (Pushrod)", valvesPerCyl: 2, weightFactor: 0.8, costFactor: 0.7, rpmFactor: 0.75, efficiencyFactor: 0.8 },
-  sohc: { label: "SOHC", valvesPerCyl: 3, weightFactor: 1.0, costFactor: 1.0, rpmFactor: 0.9, efficiencyFactor: 0.85 },
+  sohc_2v: { label: "SOHC 2V (Economy)", valvesPerCyl: 2, weightFactor: 0.9, costFactor: 0.75, rpmFactor: 0.85, efficiencyFactor: 0.82 },
+  sohc: { label: "SOHC 4V", valvesPerCyl: 4, weightFactor: 1.0, costFactor: 1.0, rpmFactor: 0.9, efficiencyFactor: 0.85 },
   dohc: { label: "DOHC", valvesPerCyl: 4, weightFactor: 1.1, costFactor: 1.2, rpmFactor: 1.0, efficiencyFactor: 0.93 },
   dohc_vvl: { label: "DOHC + VVL", valvesPerCyl: 4, weightFactor: 1.15, costFactor: 1.6, rpmFactor: 1.15, efficiencyFactor: 0.98 },
 };
@@ -107,10 +109,11 @@ export const FUEL_SYSTEMS: Record<FuelSystemType, {
   powerFactor: number;
   afrStoich: number;
 }> = {
-  carb: { label: "Carburetor", efficiencyFactor: 0.85, costFactor: 0.4, powerFactor: 0.9, afrStoich: 14.7 },
-  tbi: { label: "Throttle Body Inj", efficiencyFactor: 0.88, costFactor: 0.6, powerFactor: 0.93, afrStoich: 14.7 },
-  port: { label: "Port Injection", efficiencyFactor: 0.92, costFactor: 1.0, powerFactor: 0.96, afrStoich: 14.7 },
-  direct: { label: "Direct Injection", efficiencyFactor: 0.96, costFactor: 1.4, powerFactor: 1.0, afrStoich: 14.7 },
+  carb_single: { label: "Single Carburetor", efficiencyFactor: 0.80, costFactor: 0.3, powerFactor: 0.85, afrStoich: 14.7 },
+  carb: { label: "Dual Carburetor", efficiencyFactor: 0.85, costFactor: 0.4, powerFactor: 0.9, afrStoich: 14.7 },
+  tbi: { label: "Throttle Body Inj (TBI)", efficiencyFactor: 0.88, costFactor: 0.55, powerFactor: 0.93, afrStoich: 14.7 },
+  port: { label: "Port Injection (MPI)", efficiencyFactor: 0.92, costFactor: 1.0, powerFactor: 0.96, afrStoich: 14.7 },
+  direct: { label: "Direct Injection (GDI)", efficiencyFactor: 0.96, costFactor: 1.4, powerFactor: 1.0, afrStoich: 14.7 },
   dual_injection: { label: "Dual Injection", efficiencyFactor: 0.98, costFactor: 1.8, powerFactor: 1.02, afrStoich: 14.7 },
 };
 
@@ -216,19 +219,40 @@ export const BODY_TYPES: Record<BodyType, {
   costFactor: number;
   description: string;
 }> = {
+  city_car: { label: "City Car", origin: "Global", dragDelta: 0.04, liftDelta: 0.04, frontalDelta: 0.88, weightDelta: -80, costFactor: 0.8, description: "Ultra-compact urban commuter" },
   sedan: { label: "Sedan", origin: "Global", dragDelta: 0.00, liftDelta: 0.02, frontalDelta: 1.00, weightDelta: 0, costFactor: 1.0, description: "Three-box, four-door — balanced and practical" },
   coupe: { label: "Coupe", origin: "Global", dragDelta: -0.01, liftDelta: 0.01, frontalDelta: 0.97, weightDelta: -20, costFactor: 1.1, description: "Two-door, sloping roofline" },
   hatchback: { label: "Hatchback", origin: "Europe", dragDelta: 0.02, liftDelta: 0.03, frontalDelta: 0.95, weightDelta: -40, costFactor: 0.9, description: "Compact, cut-off tail — agile" },
   wagon: { label: "Wagon / Estate", origin: "Europe", dragDelta: -0.01, liftDelta: 0.00, frontalDelta: 1.02, weightDelta: 30, costFactor: 1.1, description: "Extended roof, long load floor" },
   fastback: { label: "Fastback", origin: "USA / Europe", dragDelta: -0.04, liftDelta: -0.02, frontalDelta: 0.96, weightDelta: -10, costFactor: 1.3, description: "Roofline runs to the tail — low drag" },
   roadster: { label: "Roadster", origin: "UK / Italy", dragDelta: 0.03, liftDelta: 0.04, frontalDelta: 0.93, weightDelta: -60, costFactor: 1.5, description: "Open two-seater, no fixed roof" },
+  sports_car: { label: "Sports Car", origin: "Global", dragDelta: -0.02, liftDelta: 0.00, frontalDelta: 0.94, weightDelta: -50, costFactor: 1.4, description: "Performance focused light body" },
+  muscle_car: { label: "Muscle Car", origin: "USA", dragDelta: 0.03, liftDelta: 0.02, frontalDelta: 1.08, weightDelta: 80, costFactor: 1.2, description: "Aggressive wide stance high displacement" },
+  pony_car: { label: "Pony Car", origin: "USA", dragDelta: 0.01, liftDelta: 0.01, frontalDelta: 1.02, weightDelta: 40, costFactor: 1.15, description: "Compact sporty coupe" },
+  supercar: { label: "Supercar Body", origin: "Italy", dragDelta: -0.05, liftDelta: -0.10, frontalDelta: 0.92, weightDelta: -100, costFactor: 2.8, description: "Low drag aerodynamic mid-engine layout" },
+  hypercar: { label: "Hypercar Body", origin: "Global", dragDelta: -0.07, liftDelta: -0.20, frontalDelta: 0.89, weightDelta: -120, costFactor: 5.0, description: "Active aero carbon shell" },
   targa: { label: "Targa", origin: "Germany", dragDelta: 0.01, liftDelta: 0.02, frontalDelta: 0.96, weightDelta: -30, costFactor: 1.4, description: "Removable roof panel, full roll bar" },
   ttop: { label: "T-Top", origin: "USA", dragDelta: 0.02, liftDelta: 0.03, frontalDelta: 0.97, weightDelta: -20, costFactor: 1.3, description: "Two removable roof panels" },
   convertible: { label: "Convertible", origin: "Global", dragDelta: 0.04, liftDelta: 0.05, frontalDelta: 0.98, weightDelta: 20, costFactor: 1.6, description: "Folding soft or hard top" },
   suv: { label: "SUV", origin: "USA", dragDelta: 0.06, liftDelta: 0.04, frontalDelta: 1.12, weightDelta: 120, costFactor: 1.2, description: "Tall, high ground clearance" },
   crossover: { label: "Crossover", origin: "Global", dragDelta: 0.03, liftDelta: 0.02, frontalDelta: 1.05, weightDelta: 60, costFactor: 1.1, description: "Raised hatchback stance" },
   pickup: { label: "Pickup", origin: "USA", dragDelta: 0.07, liftDelta: 0.05, frontalDelta: 1.15, weightDelta: 150, costFactor: 1.2, description: "Cab plus open cargo bed" },
+  mpv: { label: "MPV", origin: "Global", dragDelta: 0.05, liftDelta: 0.04, frontalDelta: 1.12, weightDelta: 100, costFactor: 1.1, description: "Multi-purpose passenger vehicle" },
+  minivan: { label: "Minivan", origin: "USA / Japan", dragDelta: 0.06, liftDelta: 0.05, frontalDelta: 1.16, weightDelta: 140, costFactor: 1.15, description: "Family passenger van" },
   van: { label: "Van", origin: "Germany / Japan", dragDelta: 0.08, liftDelta: 0.06, frontalDelta: 1.20, weightDelta: 180, costFactor: 1.0, description: "Box-shaped, max cargo volume" },
+  offroad_4x4: { label: "Off-Road 4x4", origin: "Global", dragDelta: 0.09, liftDelta: 0.07, frontalDelta: 1.22, weightDelta: 200, costFactor: 1.3, description: "Rugged high clearance 4WD" },
+  commercial: { label: "Commercial Vehicle", origin: "Global", dragDelta: 0.10, liftDelta: 0.08, frontalDelta: 1.25, weightDelta: 250, costFactor: 0.9, description: "Heavy utility commercial chassis" },
+  limousine: { label: "Limousine", origin: "Global", dragDelta: 0.02, liftDelta: 0.02, frontalDelta: 1.10, weightDelta: 350, costFactor: 2.5, description: "Extended wheelbase luxury coach" },
+  taxi: { label: "Taxi Fleet", origin: "Global", dragDelta: 0.01, liftDelta: 0.02, frontalDelta: 1.00, weightDelta: 20, costFactor: 0.95, description: "High durability fleet passenger" },
+  police: { label: "Police Interceptor", origin: "USA", dragDelta: 0.02, liftDelta: 0.03, frontalDelta: 1.05, weightDelta: 70, costFactor: 1.25, description: "Pursuit reinforced law enforcement" },
+  ambulance: { label: "Ambulance", origin: "Global", dragDelta: 0.12, liftDelta: 0.08, frontalDelta: 1.30, weightDelta: 400, costFactor: 1.8, description: "Medical emergency unit" },
+  fire_vehicle: { label: "Fire Vehicle", origin: "Global", dragDelta: 0.15, liftDelta: 0.10, frontalDelta: 1.40, weightDelta: 600, costFactor: 2.0, description: "Heavy duty fire emergency truck" },
+  rally_car: { label: "Rally Spec", origin: "Europe", dragDelta: 0.03, liftDelta: -0.05, frontalDelta: 1.00, weightDelta: -60, costFactor: 2.2, description: "Reinforced roll cage long travel" },
+  formula_car: { label: "Formula Single Seater", origin: "Global", dragDelta: -0.10, liftDelta: -0.40, frontalDelta: 0.75, weightDelta: -300, costFactor: 4.5, description: "Open wheel high downforce" },
+  touring_car: { label: "Touring Race Spec", origin: "Europe", dragDelta: -0.03, liftDelta: -0.15, frontalDelta: 0.98, weightDelta: -120, costFactor: 2.0, description: "Circuit race modified sedan" },
+  gt_race_car: { label: "GT Race Spec", origin: "Global", dragDelta: -0.05, liftDelta: -0.25, frontalDelta: 0.96, weightDelta: -150, costFactor: 3.0, description: "FIA GT race body" },
+  drift_car: { label: "Drift Spec", origin: "Japan", dragDelta: 0.01, liftDelta: -0.02, frontalDelta: 0.98, weightDelta: -80, costFactor: 1.6, description: "High angle steering drift rig" },
+  track_car: { label: "Track Day Toy", origin: "Global", dragDelta: -0.04, liftDelta: -0.20, frontalDelta: 0.92, weightDelta: -140, costFactor: 2.4, description: "Lightweight track aero package" },
   shooting_brake: { label: "Shooting Brake", origin: "UK", dragDelta: -0.02, liftDelta: -0.01, frontalDelta: 0.99, weightDelta: 10, costFactor: 1.5, description: "Estate-style two-door grand tourer" },
   gt_coupe: { label: "GT Coupe", origin: "Italy / UK", dragDelta: -0.03, liftDelta: -0.02, frontalDelta: 0.98, weightDelta: 20, costFactor: 1.8, description: "Long-hood grand tourer" },
   spider: { label: "Spider", origin: "Italy", dragDelta: 0.03, liftDelta: 0.04, frontalDelta: 0.92, weightDelta: -70, costFactor: 1.6, description: "Lightweight open Italian roadster" },
@@ -243,6 +267,7 @@ export const RIM_DESIGNS: Record<RimDesign, {
   costFactor: number;
   brakeCooling: number;  // 0-1
 }> = {
+  steel_stamped: { label: "Stamped Steel Wheels", weightFactor: 1.25, aeroFactor: 1.02, costFactor: 0.4, brakeCooling: 0.5 },
   mesh: { label: "Mesh", weightFactor: 1.0, aeroFactor: 0.98, costFactor: 1.0, brakeCooling: 0.7 },
   multi_spoke: { label: "Multi-Spoke", weightFactor: 1.05, aeroFactor: 1.00, costFactor: 1.0, brakeCooling: 0.6 },
   twin_spoke: { label: "Twin-Spoke", weightFactor: 0.95, aeroFactor: 0.97, costFactor: 1.1, brakeCooling: 0.7 },
@@ -377,9 +402,22 @@ export const PLATFORMS: Record<PlatformType, {
   wheelbaseBase: number;
   trackWidthBase: number;
 }> = {
+  budget_economy: { label: "Budget / Economy", weightBase: 950, dragBase: 0.32, liftBase: 0.08, frontalAreaBase: 1.9, costFactor: 0.18, wheelbaseBase: 2400, trackWidthBase: 1450 },
+  lower_mid: { label: "Lower Mid-Range", weightBase: 1100, dragBase: 0.30, liftBase: 0.05, frontalAreaBase: 1.95, costFactor: 0.28, wheelbaseBase: 2550, trackWidthBase: 1480 },
+  upper_mid: { label: "Upper Mid-Range", weightBase: 1300, dragBase: 0.28, liftBase: 0.03, frontalAreaBase: 2.1, costFactor: 0.42, wheelbaseBase: 2700, trackWidthBase: 1540 },
+  premium: { label: "Premium Tier", weightBase: 1500, dragBase: 0.27, liftBase: 0.02, frontalAreaBase: 2.2, costFactor: 0.65, wheelbaseBase: 2850, trackWidthBase: 1580 },
+  luxury: { label: "Luxury Tier", weightBase: 1850, dragBase: 0.26, liftBase: 0.0, frontalAreaBase: 2.3, costFactor: 1.1, wheelbaseBase: 3000, trackWidthBase: 1620 },
+  ultra_luxury: { label: "Ultra Luxury", weightBase: 2250, dragBase: 0.28, liftBase: 0.0, frontalAreaBase: 2.4, costFactor: 2.2, wheelbaseBase: 3300, trackWidthBase: 1660 },
+  exotic: { label: "Exotic GT / Sports", weightBase: 1420, dragBase: 0.31, liftBase: -0.05, frontalAreaBase: 2.05, costFactor: 1.8, wheelbaseBase: 2680, trackWidthBase: 1610 },
+  supercar: { label: "Supercar", weightBase: 1380, dragBase: 0.33, liftBase: -0.15, frontalAreaBase: 2.0, costFactor: 2.8, wheelbaseBase: 2650, trackWidthBase: 1640 },
+  hypercar: { label: "Hypercar", weightBase: 1250, dragBase: 0.32, liftBase: -0.3, frontalAreaBase: 1.95, costFactor: 5.2, wheelbaseBase: 2700, trackWidthBase: 1650 },
+  commercial_fleet: { label: "Commercial / Heavy Fleet", weightBase: 1950, dragBase: 0.42, liftBase: 0.1, frontalAreaBase: 2.8, costFactor: 0.45, wheelbaseBase: 3100, trackWidthBase: 1680 },
+  motorsport: { label: "Pure Racing Chassis", weightBase: 1050, dragBase: 0.36, liftBase: -0.5, frontalAreaBase: 1.85, costFactor: 3.5, wheelbaseBase: 2600, trackWidthBase: 1620 },
+  economy_hatch: { label: "Economy Hatchback", weightBase: 950, dragBase: 0.32, liftBase: 0.08, frontalAreaBase: 1.9, costFactor: 0.20, wheelbaseBase: 2420, trackWidthBase: 1450 },
+  economy_compact: { label: "Economy Compact Sedan", weightBase: 1050, dragBase: 0.30, liftBase: 0.05, frontalAreaBase: 1.95, costFactor: 0.25, wheelbaseBase: 2520, trackWidthBase: 1470 },
+  compact_family: { label: "Compact Family Car", weightBase: 1120, dragBase: 0.29, liftBase: 0.04, frontalAreaBase: 2.0, costFactor: 0.32, wheelbaseBase: 2650, trackWidthBase: 1520 },
+  midsize_sedan: { label: "Midsize Family Sedan", weightBase: 1280, dragBase: 0.28, liftBase: 0.03, frontalAreaBase: 2.15, costFactor: 0.40, wheelbaseBase: 2780, trackWidthBase: 1560 },
   street_sport: { label: "Street Sport", weightBase: 1350, dragBase: 0.34, liftBase: 0.05, frontalAreaBase: 2.1, costFactor: 1.0, wheelbaseBase: 2600, trackWidthBase: 1550 },
-  supercar: { label: "Supercar", weightBase: 1450, dragBase: 0.33, liftBase: 0.0, frontalAreaBase: 2.0, costFactor: 2.5, wheelbaseBase: 2650, trackWidthBase: 1600 },
-  hypercar: { label: "Hypercar", weightBase: 1250, dragBase: 0.32, liftBase: -0.1, frontalAreaBase: 1.95, costFactor: 5.0, wheelbaseBase: 2700, trackWidthBase: 1650 },
   gt: { label: "GT Race Car", weightBase: 1250, dragBase: 0.35, liftBase: -0.3, frontalAreaBase: 2.0, costFactor: 3.0, wheelbaseBase: 2600, trackWidthBase: 1620 },
   prototype: { label: "LMP Prototype", weightBase: 950, dragBase: 0.30, liftBase: -0.5, frontalAreaBase: 1.8, costFactor: 8.0, wheelbaseBase: 2800, trackWidthBase: 1500 },
   rally: { label: "Rally Car", weightBase: 1200, dragBase: 0.38, liftBase: 0.1, frontalAreaBase: 2.0, costFactor: 2.0, wheelbaseBase: 2550, trackWidthBase: 1580 },
@@ -392,6 +430,8 @@ export const CHASSIS_TYPES: Record<ChassisType, {
   safetyFactor: number;
   costFactor: number;
 }> = {
+  steel_ladder: { label: "Steel Ladder Frame", weightFactor: 1.45, rigidityFactor: 0.55, safetyFactor: 0.65, costFactor: 0.35 },
+  pressed_steel: { label: "Pressed Steel Spaceframe", weightFactor: 1.35, rigidityFactor: 0.60, safetyFactor: 0.68, costFactor: 0.40 },
   tube_frame: { label: "Tube Frame", weightFactor: 1.1, rigidityFactor: 0.7, safetyFactor: 0.75, costFactor: 0.8 },
   monocoque: { label: "Aluminum Monocoque", weightFactor: 1.0, rigidityFactor: 0.8, safetyFactor: 0.85, costFactor: 1.2 },
   carbon_tub: { label: "Carbon Fiber Tub", weightFactor: 0.6, rigidityFactor: 1.0, safetyFactor: 0.95, costFactor: 3.5 },
@@ -406,6 +446,8 @@ export const SUSPENSION_TYPES: Record<SuspensionType, {
   costFactor: number;
   adjustability: number;
 }> = {
+  torsion_beam: { label: "Torsion Beam Rear Axle", gripFactor: 0.78, weightFactor: 0.65, costFactor: 0.35, adjustability: 0.2 },
+  leaf_spring: { label: "Leaf Spring Rear Axle", gripFactor: 0.72, weightFactor: 0.70, costFactor: 0.28, adjustability: 0.1 },
   macpherson: { label: "MacPherson", gripFactor: 0.82, weightFactor: 0.8, costFactor: 0.6, adjustability: 0.4 },
   double_wishbone: { label: "Double Wishbone", gripFactor: 0.92, weightFactor: 1.0, costFactor: 1.0, adjustability: 0.8 },
   multilink: { label: "Multilink", gripFactor: 0.95, weightFactor: 1.1, costFactor: 1.3, adjustability: 0.9 },
@@ -422,6 +464,8 @@ export const BRAKE_TYPES: Record<BrakeType, {
   costFactor: number;
   description: string;
 }> = {
+  drum: { label: "Drum Brakes", stoppingPower: 0.75, fadeResistance: 0.3, weightFactor: 0.85, costFactor: 0.2, description: "Enclosed drum & shoe system — ultra low cost, high heat fade" },
+  solid_disc: { label: "Solid Steel Discs", stoppingPower: 0.88, fadeResistance: 0.4, weightFactor: 0.90, costFactor: 0.35, description: "Non-vented solid steel discs — affordable city commuter braking" },
   cast_iron: { label: "Cast Iron Discs", stoppingPower: 1.0, fadeResistance: 0.5, weightFactor: 1.0, costFactor: 0.5, description: "Standard heavy iron discs — budget friendly, prone to fade" },
   slotted_steel: { label: "Slotted Steel Discs", stoppingPower: 1.15, fadeResistance: 0.7, weightFactor: 0.95, costFactor: 0.9, description: "Slotted grooves clear gas & debris — strong street/track balance" },
   carbon_ceramic: { label: "Carbon Ceramic Discs", stoppingPower: 1.35, fadeResistance: 0.95, weightFactor: 0.65, costFactor: 3.5, description: "Ultra-lightweight ceramic composite — virtually immune to heat fade" },
@@ -482,7 +526,8 @@ export const SEAT_TYPES: Record<string, {
   comfort: number;     // 0-1
   safety: number;      // 0-1
 }> = {
-  standard: { label: "Standard", weight: 18, cost: 300, support: 0.3, comfort: 0.8, safety: 0.6 },
+  bench_seat: { label: "Front Bench Seat", weight: 22, cost: 150, support: 0.2, comfort: 0.65, safety: 0.5 },
+  standard: { label: "Standard Bucket", weight: 18, cost: 300, support: 0.3, comfort: 0.8, safety: 0.6 },
   sport: { label: "Sport", weight: 15, cost: 800, support: 0.6, comfort: 0.7, safety: 0.7 },
   bucket: { label: "Bucket", weight: 12, cost: 1500, support: 0.8, comfort: 0.5, safety: 0.8 },
   carbon_bucket: { label: "Carbon Bucket", weight: 7, cost: 4500, support: 0.9, comfort: 0.4, safety: 0.9 },
@@ -496,6 +541,7 @@ export const SEAT_MATERIALS: Record<string, {
   gripFactor: number;
   comfortFactor: number;
 }> = {
+  vinyl: { label: "Vinyl / Durable Plastic", weightFactor: 1.05, costFactor: 0.6, gripFactor: 0.5, comfortFactor: 0.5 },
   cloth: { label: "Cloth", weightFactor: 1.0, costFactor: 1.0, gripFactor: 0.7, comfortFactor: 0.8 },
   alcantara: { label: "Alcantara", weightFactor: 0.9, costFactor: 2.5, gripFactor: 0.95, comfortFactor: 0.7 },
   leather: { label: "Leather", weightFactor: 1.1, costFactor: 2.0, gripFactor: 0.6, comfortFactor: 0.9 },
@@ -510,7 +556,8 @@ export const DASHBOARD_MATERIALS: Record<string, {
   luxuryFactor: number;
   weightFactor: number;
 }> = {
-  plastic: { label: "Plastic", weight: 8, cost: 100, luxuryFactor: 0.2, weightFactor: 1.0 },
+  hollow_plastic: { label: "Hollow Molded Plastic", weight: 6, cost: 50, luxuryFactor: 0.1, weightFactor: 0.8 },
+  plastic: { label: "Standard Molded Plastic", weight: 8, cost: 100, luxuryFactor: 0.2, weightFactor: 1.0 },
   soft_touch: { label: "Soft-Touch", weight: 9, cost: 300, luxuryFactor: 0.5, weightFactor: 1.1 },
   carbon_fiber: { label: "Carbon Fiber", weight: 3, cost: 2000, luxuryFactor: 0.8, weightFactor: 0.4 },
   alcantara: { label: "Alcantara", weight: 4, cost: 1500, luxuryFactor: 0.85, weightFactor: 0.5 },

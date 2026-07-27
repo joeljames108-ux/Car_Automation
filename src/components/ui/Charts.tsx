@@ -494,6 +494,7 @@ export function CarSilhouetteDiagram({ powerHp, downforceKg, weightKg, aeroBalan
           <h4 className="text-xs font-bold text-slate-200">High-Velocity Pressure Vector Map</h4>
         </div>
         <div className="flex items-center gap-2 text-[10px] font-mono text-slate-400">
+          <span>Power: <strong className="text-amber-400">{powerHp}hp</strong></span>
           <span>Downforce: <strong className="text-cyan-300">{downforceKg}kg</strong></span>
           <span>Weight: <strong className="text-slate-200">{weightKg}kg</strong></span>
         </div>

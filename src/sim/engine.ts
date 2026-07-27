@@ -180,7 +180,7 @@ function simulateCombustion(engine: EngineConfig): EngineSim {
   }
 
   // Electric Range calculation for PHEV/FHEV/EV (km)
-  const electricRange = (isElectric || isHybrid) && batteryEnergy > 0
+  const electricRange = isHybrid && batteryEnergy > 0
     ? Math.round((batteryEnergy * 1000) / (220 + (batteryWeight + (isHybrid ? 600 : 0)) * 0.12))
     : 0;
 
@@ -202,7 +202,7 @@ function simulateCombustion(engine: EngineConfig): EngineSim {
   if (isHybrid) {
     engineCost = engineCost * arch.costFactor + batteryCost + (motorPowerKW * 180 * placement.costFactor) + (mguHPower * 300);
   }
-  engineCost = clamp(engineCost, 2000, 120000);
+  engineCost = clamp(engineCost, 500, 120000);
 
   // Reliability
   const heatStress = clamp((effectiveCR - 9) / 6, 0, 1);
@@ -781,12 +781,12 @@ function simulatePerformance(design: VehicleDesign, eng: EngineSim, aero: Return
   const manufacturingCost = materialCost + laborCost + toolingCost + assemblyCost + warrantyCost + overheadCost;
 
   const vehicleCost = Math.round(
-    platform.costFactor * 5000 + aero.aeroCost + interior.interiorCost +
-    trans.costFactor * 2000 + v.brakeDiscSize * 20 +
-    v.wheelDiameter * v.wheelWidth * 50
+    (platform.costFactor * 4000 + aero.aeroCost + interior.interiorCost +
+    trans.costFactor * 1800 + v.brakeDiscSize * 15 +
+    v.wheelDiameter * v.wheelWidth * 45) * Math.max(0.15, platform.costFactor)
   );
   const totalCost = vehicleCost + eng.engineCost + manufacturingCost;
-  const targetPrice = Math.round(totalCost * (1.2 + platform.costFactor * 0.15));
+  const targetPrice = Math.round(totalCost * (1.15 + platform.costFactor * 0.12));
   const profitMargin = (targetPrice - totalCost) / targetPrice;
 
   // Ratings

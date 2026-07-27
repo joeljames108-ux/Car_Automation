@@ -73,7 +73,7 @@ export interface SteeringConfig {
 
 // ---------- Brake Engineering ----------
 
-export type BrakeRotorMaterial = "cast_iron" | "steel" | "carbon_ceramic" | "tungsten_carbide";
+export type BrakeRotorMaterial = "drum" | "solid_steel" | "cast_iron" | "steel" | "carbon_ceramic" | "tungsten_carbide";
 export type BrakePadCompound = "street" | "sport" | "race" | "endurance";
 
 export interface BrakeConfig {
