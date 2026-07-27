@@ -66,7 +66,6 @@ const STAGES: StageItem[] = [
   { id: "manufacturing", label: "Manufacturing",  icon: <Factory size={14} />,         category: "engineering" },
   { id: "infotainment",  label: "Electronics",    icon: <Monitor size={14} />,         category: "engineering" },
   { id: "safety",        label: "Safety Center",  icon: <ShieldCheck size={14} />,     category: "engineering" },
-  { id: "rd",            label: "R&D Lab",        icon: <Microscope size={14} />,      category: "engineering" },
 
   // --- Simulation & Testing ---
   { id: "simulation",    label: "Simulation",     icon: <Activity size={14} />,        category: "simulation" },
@@ -266,7 +265,6 @@ function AppInner() {
             {stage === "manufacturing" && <ManufacturingDesigner />}
             {stage === "infotainment"  && <InfotainmentDesigner />}
             {stage === "safety"        && <SafetyCenter />}
-            {stage === "rd"            && <RDCenter />}
             {stage === "simulation"    && <SimulationDashboard />}
             {stage === "testing"       && <TestingLab />}
             {stage === "race"          && <RaceSimulator />}

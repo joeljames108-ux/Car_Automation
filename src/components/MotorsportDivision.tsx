@@ -611,28 +611,7 @@ export function MotorsportDivision() {
             </div>
           )}
 
-          {/* Facility Upgrade */}
-          {selectedTeam && (
-            <div className="panel p-4">
-              <h3 className="text-xs font-semibold text-slate-300 uppercase tracking-wider mb-3 flex items-center gap-1.5">
-                <Wrench size={12} className="text-blue-400" /> Team Facilities
-              </h3>
-              <div className="flex items-center justify-between bg-base-850 rounded-xl px-4 py-3">
-                <div>
-                  <div className="text-sm font-medium text-slate-200">
-                    Current: <span className={`capitalize font-semibold ${FACILITY_COLORS[selectedTeam.facilityLevel]}`}>{selectedTeam.facilityLevel}</span>
-                  </div>
-                  <div className="text-[10px] text-slate-500">Better facilities earn more dev points and improve driver development</div>
-                </div>
-                {getNextFacilityLevel(selectedTeam.facilityLevel) && (
-                  <button onClick={() => upgradeFacility(selectedTeam.id)}
-                    className="px-3 py-1.5 rounded-lg text-xs font-medium bg-blue-500/15 border border-blue-500/30 text-blue-300 hover:bg-blue-500/25 transition-all shrink-0">
-                    Upgrade to {getNextFacilityLevel(selectedTeam.facilityLevel)} · ${(getFacilityUpgradeCost(selectedTeam.facilityLevel) / 1_000_000).toFixed(0)}M
-                  </button>
-                )}
-              </div>
-            </div>
-          )}
+          {/* Facilities upgrade section removed as requested */}
         </div>
       )}
 
