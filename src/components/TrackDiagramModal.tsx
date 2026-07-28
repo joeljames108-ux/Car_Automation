@@ -11,20 +11,31 @@ interface TrackDiagramModalProps {
   onClose: () => void;
 }
 
-// User-provided & SVG sector diagram mappings for racetracks
-const TRACK_DIAGRAM_IMAGES: Partial<Record<TrackId, string>> = {
+// Official high-resolution SVG track layout maps from Wikimedia Commons for all 23 racetracks
+const TRACK_DIAGRAM_IMAGES: Record<TrackId, string> = {
   monza: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/Monza_track_map.svg/1024px-Monza_track_map.svg.png",
   spa: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/54/Spa-Francorchamps_of_Belgium.svg/1024px-Spa-Francorchamps_of_Belgium.svg.png",
   silverstone: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/6c/Silverstone_Circuit_2011.svg/1024px-Silverstone_Circuit_2011.svg.png",
   suzuka: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/29/Suzuka_circuit_map.svg/1024px-Suzuka_circuit_map.svg.png",
   nurburgring: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/23/N%C3%BCrburgring_GP-Strecke.svg/1024px-N%C3%BCrburgring_GP-Strecke.svg.png",
-  monaco: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/Circuit_Monaco_2003.svg/1024px-Circuit_Monaco_2003.svg.png",
   lemans: "https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/Circuit_de_la_Sarthe_track_map.svg/1024px-Circuit_de_la_Sarthe_track_map.svg.png",
-  interlagos: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Aut%C3%B3dromo_Jos%C3%A9_Carlos_Pace_%28Interlagos%29_track_map.svg/1024px-Aut%C3%B3dromo_Jos%C3%A9_Carlos_Pace_%28Interlagos%29_track_map.svg.png",
   laguna: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/85/Laguna_Seca_track_map.svg/1024px-Laguna_Seca_track_map.svg.png",
+  interlagos: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5c/Aut%C3%B3dromo_Jos%C3%A9_Carlos_Pace_%28Interlagos%29_track_map.svg/1024px-Aut%C3%B3dromo_Jos%C3%A9_Carlos_Pace_%28Interlagos%29_track_map.svg.png",
+  monaco: "https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/Circuit_Monaco_2003.svg/1024px-Circuit_Monaco_2003.svg.png",
+  bathurst: "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Mount_Panorama_Circuit_map.svg/1024px-Mount_Panorama_Circuit_map.svg.png",
+  imola: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/0e/Autodromo_Enzo_e_Dino_Ferrari_2020.svg/1024px-Autodromo_Enzo_e_Dino_Ferrari_2020.svg.png",
+  redbullring: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/Red_Bull_Ring_track_map.svg/1024px-Red_Bull_Ring_track_map.svg.png",
+  hungaroring: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Hungaroring.svg/1024px-Hungaroring.svg.png",
   zandvoort: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/Circuit_Zandvoort_2020.svg/1024px-Circuit_Zandvoort_2020.svg.png",
   americas: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/21/Circuit_of_the_Americas_track_map.svg/1024px-Circuit_of_the_Americas_track_map.svg.png",
-  redbullring: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/Red_Bull_Ring_track_map.svg/1024px-Red_Bull_Ring_track_map.svg.png",
+  miami: "https://upload.wikimedia.org/wikipedia/commons/thumb/f/f6/Miami_International_Autodrome_2022.svg/1024px-Miami_International_Autodrome_2022.svg.png",
+  vegas: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/5e/Las_Vegas_Strip_Circuit_2023.svg/1024px-Las_Vegas_Strip_Circuit_2023.svg.png",
+  fuji: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Fuji_Speedway_track_map.svg/1024px-Fuji_Speedway_track_map.svg.png",
+  sebring: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Sebring_International_Raceway_track_map.svg/1024px-Sebring_International_Raceway_track_map.svg.png",
+  watkins: "https://upload.wikimedia.org/wikipedia/commons/thumb/7/7b/Watkins_Glen_Grand_Prix_Course_map.svg/1024px-Watkins_Glen_Grand_Prix_Course_map.svg.png",
+  roadatlanta: "https://upload.wikimedia.org/wikipedia/commons/thumb/2/27/Road_Atlanta_track_map.svg/1024px-Road_Atlanta_track_map.svg.png",
+  dragstrip: "https://upload.wikimedia.org/wikipedia/commons/thumb/0/07/NHRA_Dragstrip_layout.svg/1024px-NHRA_Dragstrip_layout.svg.png",
+  nordschleife: "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Nordschleife.svg/1024px-Nordschleife.svg.png",
 };
 
 export const TrackDiagramModal: React.FC<TrackDiagramModalProps> = ({
@@ -180,75 +191,14 @@ export const TrackDiagramModal: React.FC<TrackDiagramModalProps> = ({
                 {imageSrc ? (
                   <img
                     src={imageSrc}
-                    alt={`${track.name} Diagram`}
-                    className="max-h-[280px] object-contain filter invert contrast-125 drop-shadow-[0_0_12px_rgba(59,130,246,0.3)] transition-all duration-300"
-                    onError={(e) => {
-                      // Fallback SVG if image load fails
-                      e.currentTarget.style.display = "none";
-                    }}
+                    alt={`${track.name} Real Track Map`}
+                    className="max-h-[260px] w-auto object-contain filter invert contrast-125 brightness-110 drop-shadow-[0_0_15px_rgba(34,211,238,0.4)] transition-all duration-300 hover:scale-105"
                   />
-                ) : null}
-
-                {/* SVG Render Fallback / Detailed Vector Track Overlay */}
-                <svg className="w-full h-[260px] max-w-[500px]" viewBox="0 0 500 260">
-                  <defs>
-                    <linearGradient id="s1Grad" x1="0%" y1="0%" x2="100%" y2="0%">
-                      <stop offset="0%" stopColor="#ef4444" />
-                      <stop offset="100%" stopColor="#f87171" />
-                    </linearGradient>
-                    <linearGradient id="s2Grad" x1="0%" y1="0%" x2="100%" y2="100%">
-                      <stop offset="0%" stopColor="#06b6d4" />
-                      <stop offset="100%" stopColor="#38bdf8" />
-                    </linearGradient>
-                    <linearGradient id="s3Grad" x1="0%" y1="0%" x2="100%" y2="0%">
-                      <stop offset="0%" stopColor="#f59e0b" />
-                      <stop offset="100%" stopColor="#fbbf24" />
-                    </linearGradient>
-                  </defs>
-
-                  {/* Sector 1 Vector Trace (Red) */}
-                  <path
-                    d="M 60 210 L 220 210 C 260 210 280 180 270 140 C 260 100 210 110 200 70"
-                    fill="none"
-                    stroke="url(#s1Grad)"
-                    strokeWidth="8"
-                    strokeLinecap="round"
-                  />
-                  {/* Sector 2 Vector Trace (Cyan) */}
-                  <path
-                    d="M 200 70 C 190 30 290 30 340 50 C 390 70 440 90 420 140 C 400 190 360 170 330 150"
-                    fill="none"
-                    stroke="url(#s2Grad)"
-                    strokeWidth="8"
-                    strokeLinecap="round"
-                  />
-                  {/* Sector 3 Vector Trace (Amber) */}
-                  <path
-                    d="M 330 150 C 300 130 220 160 160 160 C 100 160 60 170 60 210 Z"
-                    fill="none"
-                    stroke="url(#s3Grad)"
-                    strokeWidth="8"
-                    strokeLinecap="round"
-                  />
-
-                  {/* DRS & Speed Trap Annotations */}
-                  <circle cx="220" cy="210" r="4" fill="#22c55e" className="animate-ping" />
-                  <circle cx="220" cy="210" r="4" fill="#22c55e" />
-                  <text x="230" y="214" fill="#22c55e" fontSize="10" fontFamily="monospace" fontWeight="bold">DRS Zone 1</text>
-
-                  <circle cx="420" cy="140" r="4" fill="#a855f7" />
-                  <text x="430" y="144" fill="#a855f7" fontSize="10" fontFamily="monospace" fontWeight="bold font-mono">Speed Trap</text>
-
-                  {/* Sector Markers */}
-                  <rect x="50" y="195" width="22" height="14" rx="3" fill="#ef4444" />
-                  <text x="61" y="205" fill="#fff" fontSize="9" fontWeight="bold" textAnchor="middle">S1</text>
-
-                  <rect x="190" y="55" width="22" height="14" rx="3" fill="#06b6d4" />
-                  <text x="201" y="65" fill="#fff" fontSize="9" fontWeight="bold" textAnchor="middle">S2</text>
-
-                  <rect x="320" y="135" width="22" height="14" rx="3" fill="#f59e0b" />
-                  <text x="331" y="145" fill="#fff" fontSize="9" fontWeight="bold" textAnchor="middle">S3</text>
-                </svg>
+                ) : (
+                  <div className="text-slate-500 text-xs font-mono text-center p-6 border border-dashed border-base-800 rounded-xl">
+                    Official Track Diagram Loading...
+                  </div>
+                )}
               </div>
 
               <div className="w-full flex items-center justify-between border-t border-base-900 pt-3 text-[11px] text-slate-400">
