@@ -1543,12 +1543,12 @@ button, select, input, a, .panel, .glass-panel, .card-hover {
 }
 
 /* ==========================================================================
-   THEME 3 — "Nordic Light Glass" (Minimalist Alabaster White & Ice Blue)
+   THEME 3 — "Apex Luxury Lounge" (Dark Frosted Glass & Atmospheric Interior)
    ========================================================================== */
 .theme3 {
   position: relative;
-  background-color: #f1f5f9 !important;
-  color: #0f172a !important;
+  background-color: #080c14 !important;
+  color: #f1f5f9 !important;
 }
 
 .theme3::before {
@@ -1558,93 +1558,100 @@ button, select, input, a, .panel, .glass-panel, .card-hover {
   z-index: 0;
   pointer-events: none;
   background:
-    radial-gradient(ellipse 90% 60% at 15% -15%, rgba(56, 189, 248, 0.18), transparent 70%),
-    radial-gradient(ellipse 70% 50% at 85% 15%, rgba(14, 165, 233, 0.12), transparent 70%),
-    radial-gradient(ellipse 80% 60% at 50% 115%, rgba(125, 211, 252, 0.15), transparent 70%);
+    linear-gradient(to bottom, rgba(8, 12, 20, 0.4), rgba(6, 9, 15, 0.75)),
+    url("https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=2000&auto=format&fit=crop");
+  background-size: cover;
+  background-position: center;
+  filter: contrast(110%) brightness(85%);
 }
 
 /* Header for Theme 3 */
 .theme3 header {
-  background: rgba(255, 255, 255, 0.75) !important;
-  backdrop-filter: blur(24px) saturate(180%);
-  -webkit-backdrop-filter: blur(24px) saturate(180%);
-  border-bottom: 1px solid rgba(14, 165, 233, 0.2) !important;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04) !important;
+  background: rgba(13, 18, 30, 0.65) !important;
+  backdrop-filter: blur(28px) saturate(190%);
+  -webkit-backdrop-filter: blur(28px) saturate(190%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12) !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5) !important;
 }
 
-/* Panels for Theme 3 */
+/* Panels for Theme 3 — Dark Frosted Glass Cards */
 .theme3 .panel {
-  background: rgba(255, 255, 255, 0.75) !important;
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
-  border: 1px solid rgba(14, 165, 233, 0.22) !important;
+  background: linear-gradient(135deg, rgba(20, 27, 44, 0.65) 0%, rgba(10, 14, 24, 0.75) 100%) !important;
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(24px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.14) !important;
   box-shadow:
-    0 12px 32px -8px rgba(15, 23, 42, 0.08),
-    inset 0 1px 1px 0 rgba(255, 255, 255, 0.8) !important;
-  color: #0f172a !important;
+    0 24px 48px -12px rgba(0, 0, 0, 0.6),
+    inset 0 1px 1px 0 rgba(255, 255, 255, 0.15) !important;
+  border-radius: 1.25rem !important;
+  color: #f1f5f9 !important;
 }
 
 .theme3 .panel:hover {
-  background: rgba(255, 255, 255, 0.88) !important;
-  border-color: rgba(2, 132, 199, 0.45) !important;
-  box-shadow: 0 16px 40px -10px rgba(14, 165, 233, 0.15) !important;
+  background: linear-gradient(135deg, rgba(25, 34, 55, 0.72) 0%, rgba(12, 18, 30, 0.82) 100%) !important;
+  border-color: rgba(56, 189, 248, 0.4) !important;
+  box-shadow:
+    0 30px 60px -15px rgba(0, 0, 0, 0.75),
+    0 0 25px rgba(56, 189, 248, 0.18) !important;
 }
 
 .theme3 .panel-glow {
-  background: rgba(255, 255, 255, 0.85) !important;
-  backdrop-filter: blur(24px);
-  border: 1px solid rgba(2, 132, 199, 0.5) !important;
-  box-shadow: 0 0 25px rgba(2, 132, 199, 0.2) !important;
+  background: linear-gradient(135deg, rgba(22, 30, 49, 0.75) 0%, rgba(11, 16, 28, 0.85) 100%) !important;
+  backdrop-filter: blur(28px);
+  border: 1px solid rgba(56, 189, 248, 0.5) !important;
+  box-shadow: 0 0 35px rgba(56, 189, 248, 0.25) !important;
 }
 
 .theme3 .glass-panel {
-  background: rgba(241, 245, 249, 0.7) !important;
-  backdrop-filter: blur(16px);
-  border-color: rgba(14, 165, 233, 0.2) !important;
-  color: #0f172a !important;
+  background: rgba(15, 22, 36, 0.65) !important;
+  backdrop-filter: blur(20px);
+  border-color: rgba(255, 255, 255, 0.12) !important;
+  color: #f1f5f9 !important;
 }
 
-/* Overrides for background classes in Theme 3 */
-.theme3 .bg-base-950 { background-color: #f8fafc !important; }
-.theme3 .bg-base-900 { background-color: rgba(255, 255, 255, 0.8) !important; color: #0f172a !important; }
-.theme3 .bg-base-850 { background-color: rgba(241, 245, 249, 0.85) !important; color: #0f172a !important; }
-.theme3 .bg-base-800 { background-color: rgba(226, 232, 240, 0.75) !important; color: #0f172a !important; }
+/* Background Overrides for Theme 3 */
+.theme3 .bg-base-950 { background-color: rgba(8, 12, 20, 0.6) !important; }
+.theme3 .bg-base-900 { background-color: rgba(16, 22, 36, 0.65) !important; color: #f1f5f9 !important; }
+.theme3 .bg-base-850 { background-color: rgba(22, 30, 48, 0.6) !important; color: #f1f5f9 !important; }
+.theme3 .bg-base-800 { background-color: rgba(28, 38, 60, 0.55) !important; color: #f1f5f9 !important; }
 
-/* Text Overrides for Theme 3 */
-.theme3 .text-slate-100,
-.theme3 .text-slate-200,
-.theme3 .text-slate-300 { color: #0f172a !important; }
-.theme3 .text-slate-400 { color: #334155 !important; }
+/* Text & Accent Overrides for Theme 3 */
+.theme3 .text-slate-100 { color: #ffffff !important; }
+.theme3 .text-slate-200 { color: #f1f5f9 !important; }
+.theme3 .text-slate-300 { color: #cbd5e1 !important; }
+.theme3 .text-slate-400 { color: #94a3b8 !important; }
 .theme3 .text-slate-500 { color: #64748b !important; }
-.theme3 .label-mono { color: #0369a1 !important; }
-.theme3 .font-mono { color: #0f172a; }
+.theme3 .label-mono { color: #38bdf8 !important; letter-spacing: 0.12em !important; }
 
 .theme3 .text-accent-400,
-.theme3 .text-cyan-400 { color: #0284c7 !important; }
+.theme3 .text-cyan-400 { color: #38bdf8 !important; }
 
 /* Buttons for Theme 3 */
 .theme3 .btn-primary {
-  background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%) !important;
-  color: #ffffff !important;
-  border: 1px solid #0284c7 !important;
-  box-shadow: 0 4px 14px rgba(2, 132, 199, 0.3) !important;
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.35) 0%, rgba(14, 165, 233, 0.25) 100%) !important;
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(56, 189, 248, 0.5) !important;
+  color: #e0f2fe !important;
+  box-shadow: 0 4px 16px rgba(14, 165, 233, 0.25) !important;
 }
 .theme3 .btn-primary:hover {
-  background: linear-gradient(135deg, #0369a1 0%, #075985 100%) !important;
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.5) 0%, rgba(14, 165, 233, 0.4) 100%) !important;
+  box-shadow: 0 0 24px rgba(56, 189, 248, 0.45) !important;
 }
 .theme3 .btn-secondary {
-  background: rgba(241, 245, 249, 0.8) !important;
-  border: 1px solid rgba(203, 213, 225, 0.8) !important;
-  color: #334155 !important;
+  background: rgba(20, 27, 44, 0.6) !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  color: #cbd5e1 !important;
 }
 
-/* Range sliders in Theme 3 */
+/* Range Sliders for Theme 3 */
 .theme3 input[type="range"]::-webkit-slider-runnable-track {
-  background: #cbd5e1 !important;
+  background: rgba(30, 41, 59, 0.8) !important;
 }
 .theme3 input[type="range"]::-webkit-slider-thumb {
-  background: #0284c7 !important;
+  background: #38bdf8 !important;
   border: 2px solid #ffffff !important;
+  box-shadow: 0 0 12px rgba(56, 189, 248, 0.6) !important;
 }
 
 /* ==========================================================================
