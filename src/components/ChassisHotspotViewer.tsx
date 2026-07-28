@@ -189,62 +189,123 @@ export function ChassisHotspotViewer({ onSelectStage }: ChassisHotspotViewerProp
               className="animate-[dash_12s_linear_infinite]"
             />
 
-            {/* CAR CHASSIS SILHOUETTE WIREFRAME */}
-            {/* Main Body Outer Frame */}
-            <path
-              d="M 80 160 
-                 C 90 140, 130 120, 200 115 
-                 L 320 100 
-                 C 380 75, 520 75, 580 100 
-                 L 660 115 
-                 C 720 120, 750 140, 760 160 
-                 C 750 180, 720 200, 660 205 
-                 L 580 220 
-                 C 520 245, 380 245, 320 220 
-                 L 200 205 
-                 C 130 200, 90 180, 80 160 Z"
-              fill="rgba(15, 23, 42, 0.75)"
-              stroke="url(#cyanGrad)"
-              strokeWidth="2.5"
-              className="transition-all duration-300"
-            />
+            {/* HIGH-TECH HYPERCAR TOP-VIEW CHASSIS DIAGRAM */}
+            <g className="transition-all duration-300">
+              {/* Diffuser Tunnel Outer Glow */}
+              <path
+                d="M 640 100 L 755 90 L 760 230 L 640 220 Z"
+                fill="rgba(168, 85, 247, 0.08)"
+                stroke="rgba(168, 85, 247, 0.4)"
+                strokeWidth="1"
+                strokeDasharray="4,4"
+              />
 
-            {/* Cockpit Canopy Outline */}
-            <path
-              d="M 330 115 
-                 C 370 90, 490 90, 530 115 
-                 L 540 160 
-                 L 530 205 
-                 C 490 230, 370 230, 330 205 Z"
-              fill="rgba(34, 211, 238, 0.08)"
-              stroke="rgba(34, 211, 238, 0.5)"
-              strokeWidth="1.5"
-              strokeDasharray="3,3"
-            />
+              {/* Rear Wing Foil Structure */}
+              <path
+                d="M 670 85 L 750 82 C 758 82, 762 88, 760 95 L 758 225 C 758 232, 752 238, 745 238 L 670 235 Z"
+                fill="rgba(192, 132, 252, 0.12)"
+                stroke="#c084fc"
+                strokeWidth="1.8"
+              />
+              <line x1="670" y1="85" x2="750" y2="85" stroke="#e9d5ff" strokeWidth="2" />
+              <line x1="670" y1="235" x2="750" y2="235" stroke="#e9d5ff" strokeWidth="2" />
+              <rect x="710" y="80" width="30" height="160" rx="3" fill="rgba(192, 132, 252, 0.15)" stroke="#c084fc" strokeWidth="1" />
 
-            {/* Front Splitter Contour */}
-            <path d="M 60 160 Q 75 125, 110 125 L 110 195 Q 75 195, 60 160 Z" fill="rgba(52, 211, 153, 0.15)" stroke="#34d399" strokeWidth="1.5" />
+              {/* Front Aerodynamic Splitter Plate */}
+              <path
+                d="M 50 160 Q 65 105, 125 105 L 140 105 L 140 215 L 125 215 Q 65 215, 50 160 Z"
+                fill="rgba(52, 211, 153, 0.12)"
+                stroke="#34d399"
+                strokeWidth="2"
+              />
+              <path d="M 50 160 L 140 160" stroke="#34d399" strokeWidth="1" strokeDasharray="3,3" />
 
-            {/* Rear Wing Winglet Outline */}
-            <path d="M 720 110 L 760 110 L 765 210 L 720 210 Z" fill="rgba(192, 132, 252, 0.15)" stroke="#c084fc" strokeWidth="1.5" />
+              {/* Main Hypercar Monocoque & Body Outer Frame */}
+              <path
+                d="M 55 160 
+                   C 65 130, 95 108, 145 108 
+                   L 175 108
+                   C 185 98, 205 92, 245 92 
+                   L 260 108
+                   C 310 105, 340 110, 360 112 
+                   C 380 96, 440 94, 520 112 
+                   L 550 100 
+                   C 610 98, 670 105, 730 120 
+                   C 755 130, 765 145, 765 160 
+                   C 765 175, 755 190, 730 200 
+                   C 670 215, 610 222, 550 220 
+                   L 520 208 
+                   C 440 226, 380 224, 360 208 
+                   C 340 210, 310 215, 260 212 
+                   L 245 228 
+                   C 205 228, 185 222, 175 212 
+                   L 145 212 
+                   C 95 212, 65 190, 55 160 Z"
+                fill="rgba(11, 19, 38, 0.85)"
+                stroke="url(#cyanGrad)"
+                strokeWidth="2.8"
+              />
 
-            {/* Front Wheels (Left & Right) */}
-            <rect x="180" y="80" width="65" height="30" rx="6" fill="#0f172a" stroke="#f59e0b" strokeWidth="2" />
-            <rect x="180" y="210" width="65" height="30" rx="6" fill="#0f172a" stroke="#f59e0b" strokeWidth="2" />
+              {/* Sidepods & Intake Ducts */}
+              <path d="M 280 108 C 340 98, 480 98, 540 108 L 530 125 C 470 118, 350 118, 290 125 Z" fill="rgba(34, 211, 238, 0.15)" stroke="#22d3ee" strokeWidth="1.2" />
+              <path d="M 280 212 C 340 222, 480 222, 540 212 L 530 195 C 470 202, 350 202, 290 195 Z" fill="rgba(34, 211, 238, 0.15)" stroke="#22d3ee" strokeWidth="1.2" />
 
-            {/* Rear Wheels (Left & Right) */}
-            <rect x="550" y="75" width="75" height="35" rx="6" fill="#0f172a" stroke="#f59e0b" strokeWidth="2" />
-            <rect x="550" y="210" width="75" height="35" rx="6" fill="#0f172a" stroke="#f59e0b" strokeWidth="2" />
+              {/* Teardrop Cockpit Canopy & Roof Scoop */}
+              <path
+                d="M 330 130 
+                   C 360 105, 460 105, 510 130 
+                   C 525 145, 530 160, 530 160 
+                   C 530 160, 525 175, 510 190 
+                   C 460 215, 360 215, 330 190 
+                   C 315 175, 310 160, 310 160 
+                   C 310 160, 315 145, 330 130 Z"
+                fill="rgba(14, 165, 233, 0.12)"
+                stroke="#0ea5e9"
+                strokeWidth="1.8"
+              />
+              {/* Windshield & Rear Deck Strakes */}
+              <path d="M 350 135 C 380 122, 430 122, 450 135 L 450 185 C 430 198, 380 198, 350 185 Z" fill="none" stroke="rgba(56, 189, 248, 0.4)" strokeWidth="1" strokeDasharray="2,2" />
 
-            {/* Brake Discs Indicators */}
-            <circle cx="212" cy="95" r="10" fill="none" stroke="#fb7185" strokeWidth="2" strokeDasharray="3,2" />
-            <circle cx="212" cy="225" r="10" fill="none" stroke="#fb7185" strokeWidth="2" strokeDasharray="3,2" />
-            <circle cx="587" cy="92" r="12" fill="none" stroke="#fb7185" strokeWidth="2" strokeDasharray="3,2" />
-            <circle cx="587" cy="227" r="12" fill="none" stroke="#fb7185" strokeWidth="2" strokeDasharray="3,2" />
+              {/* High-Performance Wheels with Radial Brake Rotors & Calipers */}
+              {/* Front Left Wheel */}
+              <g>
+                <rect x="170" y="70" width="78" height="34" rx="7" fill="#090d16" stroke="#f59e0b" strokeWidth="2" />
+                <line x1="170" y1="87" x2="248" y2="87" stroke="#f59e0b" strokeWidth="1" strokeDasharray="3,3" />
+                <circle cx="209" cy="87" r="11" fill="none" stroke="#fb7185" strokeWidth="2.5" strokeDasharray="4,2" />
+                <rect x="202" y="73" width="14" height="6" rx="2" fill="#ef4444" />
+              </g>
+              {/* Front Right Wheel */}
+              <g>
+                <rect x="170" y="216" width="78" height="34" rx="7" fill="#090d16" stroke="#f59e0b" strokeWidth="2" />
+                <line x1="170" y1="233" x2="248" y2="233" stroke="#f59e0b" strokeWidth="1" strokeDasharray="3,3" />
+                <circle cx="209" cy="233" r="11" fill="none" stroke="#fb7185" strokeWidth="2.5" strokeDasharray="4,2" />
+                <rect x="202" y="241" width="14" height="6" rx="2" fill="#ef4444" />
+              </g>
+              {/* Rear Left Wheel */}
+              <g>
+                <rect x="545" y="66" width="86" height="38" rx="8" fill="#090d16" stroke="#f59e0b" strokeWidth="2" />
+                <line x1="545" y1="85" x2="631" y2="85" stroke="#f59e0b" strokeWidth="1" strokeDasharray="3,3" />
+                <circle cx="588" cy="85" r="13" fill="none" stroke="#fb7185" strokeWidth="2.5" strokeDasharray="4,2" />
+                <rect x="580" y="69" width="16" height="7" rx="2" fill="#ef4444" />
+              </g>
+              {/* Rear Right Wheel */}
+              <g>
+                <rect x="545" y="216" width="86" height="38" rx="8" fill="#090d16" stroke="#f59e0b" strokeWidth="2" />
+                <line x1="545" y1="235" x2="631" y2="235" stroke="#f59e0b" strokeWidth="1" strokeDasharray="3,3" />
+                <circle cx="588" cy="235" r="13" fill="none" stroke="#fb7185" strokeWidth="2.5" strokeDasharray="4,2" />
+                <rect x="580" y="244" width="16" height="7" rx="2" fill="#ef4444" />
+              </g>
 
-            {/* Engine Block Contour */}
-            <rect x="230" y="135" width="70" height="50" rx="8" fill="rgba(34, 211, 238, 0.15)" stroke="#22d3ee" strokeWidth="1.5" />
-            <text x="265" y="164" fill="#22d3ee" fontSize="10" fontFamily="monospace" textAnchor="middle" fontWeight="bold">ENGINE</text>
+              {/* Powertrain Engine Block & Exhaust Manifold Detail */}
+              <g>
+                <rect x="215" y="130" width="70" height="60" rx="6" fill="rgba(34, 211, 238, 0.18)" stroke="#22d3ee" strokeWidth="1.8" />
+                <circle cx="235" cy="145" r="6" fill="none" stroke="#38bdf8" strokeWidth="1.5" />
+                <circle cx="265" cy="145" r="6" fill="none" stroke="#38bdf8" strokeWidth="1.5" />
+                <circle cx="235" cy="175" r="6" fill="none" stroke="#38bdf8" strokeWidth="1.5" />
+                <circle cx="265" cy="175" r="6" fill="none" stroke="#38bdf8" strokeWidth="1.5" />
+                <text x="250" y="163" fill="#22d3ee" fontSize="9" fontFamily="monospace" textAnchor="middle" fontWeight="bold">ICE POWER</text>
+              </g>
+            </g>
 
             {/* HOTSPOT TARGET RETICLES WITH COLOR-CODED STATUS RINGS */}
             {hotspots.map((hs) => {
