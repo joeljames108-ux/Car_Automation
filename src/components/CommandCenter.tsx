@@ -154,7 +154,7 @@ export function CommandCenter({ onSelectStage }: CommandCenterProps = {}) {
                 { id: "theme1", label: "Theme 1", desc: "Cyan Cyber Glass (Default)", color: "border-cyan-500/40 text-cyan-300 bg-cyan-500/10", activeShadow: "shadow-[0_0_15px_rgba(34,211,238,0.2)] ring-1 ring-cyan-400" },
                 { id: "theme2", label: "Theme 2", desc: "Cosmic Nebula — Deep Purple Sci-Fi", color: "border-purple-500/40 text-purple-300 bg-purple-500/10", activeShadow: "shadow-[0_0_15px_rgba(168,85,247,0.25)] ring-1 ring-purple-400" },
                 { id: "theme3", label: "Theme 3", desc: "Nordic Light Glass — Alabaster White", color: "border-sky-500/40 text-sky-400 bg-sky-500/10", activeShadow: "shadow-[0_0_15px_rgba(14,165,233,0.2)] ring-1 ring-sky-400" },
-                { id: "theme4", label: "Theme 4", desc: "Cyberpunk Amber — Telemetry HUD", color: "border-amber-500/40 text-amber-300 bg-amber-500/10", activeShadow: "shadow-[0_0_15px_rgba(245,158,11,0.2)] ring-1 ring-amber-400" },
+                { id: "theme4", label: "High-Tech", desc: "Cyberpunk Glass Lounge — City Penthouse", color: "border-cyan-500/40 text-cyan-300 bg-cyan-500/10", activeShadow: "shadow-[0_0_15px_rgba(34,211,238,0.25)] ring-1 ring-cyan-400" },
               ].map((t) => (
                 <button
                   key={t.id}

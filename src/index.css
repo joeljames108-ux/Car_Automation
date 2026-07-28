@@ -1655,15 +1655,15 @@ button, select, input, a, .panel, .glass-panel, .card-hover {
 }
 
 /* ==========================================================================
-   THEME 4 — "Cyberpunk Futuristic Glass Lounge" (Exact Photo Reference Match)
+   THEME 4 — "High-Tech" (Futuristic Cyberpunk Penthouse Glass Lounge)
    ========================================================================== */
 .theme4 {
   position: relative;
-  background-color: #070d18 !important;
+  background-color: #060c18 !important;
   color: #ffffff !important;
 }
 
-/* Photorealistic Cyberpunk Glass Lounge / Penthouse Dome Background */
+/* Photorealistic Cyberpunk Penthouse Dome City Skyline Background */
 .theme4::before {
   content: '';
   position: fixed;
@@ -1671,34 +1671,34 @@ button, select, input, a, .panel, .glass-panel, .card-hover {
   z-index: 0;
   pointer-events: none;
   background:
-    linear-gradient(to bottom, rgba(8, 14, 26, 0.45), rgba(4, 8, 16, 0.75)),
+    linear-gradient(to bottom, rgba(6, 12, 24, 0.4), rgba(3, 7, 14, 0.78)),
     url("https://images.unsplash.com/photo-1519501025264-65ba15a82390?q=80&w=2000&auto=format&fit=crop");
   background-size: cover;
   background-position: center;
-  filter: contrast(115%) brightness(92%);
+  filter: contrast(118%) brightness(90%);
 }
 
-/* Header for Theme 4 (Cyan Neon Glow Edge & Dark Glass) */
+/* High-Tech Header (Glass Backdrop + Cyan Neon Glow Rim) */
 .theme4 header {
-  background: rgba(10, 18, 32, 0.75) !important;
+  background: rgba(8, 16, 30, 0.75) !important;
   backdrop-filter: blur(28px) saturate(180%);
   -webkit-backdrop-filter: blur(28px) saturate(180%);
-  border-bottom: 1px solid rgba(56, 189, 248, 0.3) !important;
+  border-bottom: 1px solid rgba(56, 189, 248, 0.35) !important;
   box-shadow:
-    0 4px 30px rgba(0, 0, 0, 0.7),
-    0 0 25px rgba(56, 189, 248, 0.15) !important;
+    0 4px 30px rgba(0, 0, 0, 0.75),
+    0 0 25px rgba(56, 189, 248, 0.18) !important;
 }
 
-/* Translucent Frosted Glass Cards matching Theme 4 Cyberpunk Reference Photos */
+/* Translucent Frosted Cyan-Tinted Glass Panels (Built from scratch to match photos) */
 .theme4 .panel {
-  background: linear-gradient(135deg, rgba(16, 26, 46, 0.68) 0%, rgba(10, 18, 34, 0.75) 100%) !important;
-  backdrop-filter: blur(24px) saturate(170%);
-  -webkit-backdrop-filter: blur(24px) saturate(170%);
-  border: 1px solid rgba(56, 189, 248, 0.28) !important;
+  background: linear-gradient(135deg, rgba(14, 24, 44, 0.7) 0%, rgba(8, 16, 32, 0.78) 100%) !important;
+  backdrop-filter: blur(26px) saturate(175%);
+  -webkit-backdrop-filter: blur(26px) saturate(175%);
+  border: 1px solid rgba(56, 189, 248, 0.32) !important;
   box-shadow:
-    0 20px 48px -10px rgba(0, 0, 0, 0.7),
-    0 0 20px rgba(34, 211, 238, 0.1),
-    inset 0 1px 1px 0 rgba(255, 255, 255, 0.2) !important;
+    0 24px 50px -10px rgba(0, 0, 0, 0.75),
+    0 0 25px rgba(34, 211, 238, 0.12),
+    inset 0 1px 1px 0 rgba(255, 255, 255, 0.22) !important;
   border-radius: 1.25rem !important;
   color: #ffffff !important;
   transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease, border-color 0.35s ease !important;
@@ -1706,47 +1706,47 @@ button, select, input, a, .panel, .glass-panel, .card-hover {
 }
 
 .theme4 .panel:hover {
-  background: linear-gradient(135deg, rgba(20, 32, 56, 0.76) 0%, rgba(12, 22, 40, 0.82) 100%) !important;
-  border-color: rgba(56, 189, 248, 0.65) !important;
+  background: linear-gradient(135deg, rgba(18, 30, 54, 0.78) 0%, rgba(10, 20, 38, 0.84) 100%) !important;
+  border-color: rgba(56, 189, 248, 0.7) !important;
   transform: perspective(1000px) translateY(-4px) rotateX(1.5deg) rotateY(-1.5deg) scale(1.01) !important;
   box-shadow:
-    0 30px 60px -10px rgba(0, 0, 0, 0.85),
-    0 0 35px rgba(56, 189, 248, 0.35) !important;
+    0 32px 64px -10px rgba(0, 0, 0, 0.88),
+    0 0 40px rgba(56, 189, 248, 0.4) !important;
 }
 
 .theme4 .panel-glow {
-  background: linear-gradient(135deg, rgba(22, 36, 62, 0.8) 0%, rgba(12, 22, 40, 0.85) 100%) !important;
-  backdrop-filter: blur(28px);
-  border: 1.5px solid rgba(56, 189, 248, 0.75) !important;
-  box-shadow: 0 0 40px rgba(56, 189, 248, 0.4) !important;
+  background: linear-gradient(135deg, rgba(20, 34, 60, 0.82) 0%, rgba(10, 20, 38, 0.88) 100%) !important;
+  backdrop-filter: blur(30px);
+  border: 1.5px solid rgba(56, 189, 248, 0.8) !important;
+  box-shadow: 0 0 45px rgba(56, 189, 248, 0.45) !important;
   transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease !important;
 }
 
 .theme4 .panel-glow:hover {
   transform: perspective(1000px) translateY(-5px) rotateX(2deg) rotateY(-2deg) scale(1.015) !important;
-  box-shadow: 0 0 50px rgba(56, 189, 248, 0.6) !important;
+  box-shadow: 0 0 55px rgba(56, 189, 248, 0.65) !important;
 }
 
 .theme4 .glass-panel {
-  background: rgba(14, 22, 38, 0.68) !important;
-  backdrop-filter: blur(22px);
-  border: 1px solid rgba(56, 189, 248, 0.22) !important;
+  background: rgba(12, 20, 36, 0.7) !important;
+  backdrop-filter: blur(24px);
+  border: 1px solid rgba(56, 189, 248, 0.25) !important;
   color: #ffffff !important;
   transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.35s ease !important;
 }
 
 .theme4 .glass-panel:hover {
   transform: perspective(1000px) translateY(-3px) rotateX(1deg) rotateY(-1deg) scale(1.008) !important;
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.75), 0 0 25px rgba(56, 189, 248, 0.28) !important;
+  box-shadow: 0 18px 42px rgba(0, 0, 0, 0.78), 0 0 28px rgba(56, 189, 248, 0.3) !important;
 }
 
-/* Background Overrides for Theme 4 */
-.theme4 .bg-base-950 { background-color: rgba(9, 15, 26, 0.78) !important; }
-.theme4 .bg-base-900 { background-color: rgba(16, 26, 44, 0.72) !important; color: #ffffff !important; }
-.theme4 .bg-base-850 { background-color: rgba(22, 34, 56, 0.68) !important; color: #ffffff !important; }
-.theme4 .bg-base-800 { background-color: rgba(28, 42, 68, 0.65) !important; color: #ffffff !important; }
+/* Background Overrides for High-Tech Theme 4 */
+.theme4 .bg-base-950 { background-color: rgba(8, 14, 24, 0.8) !important; }
+.theme4 .bg-base-900 { background-color: rgba(14, 24, 42, 0.74) !important; color: #ffffff !important; }
+.theme4 .bg-base-850 { background-color: rgba(20, 32, 54, 0.7) !important; color: #ffffff !important; }
+.theme4 .bg-base-800 { background-color: rgba(26, 40, 66, 0.66) !important; color: #ffffff !important; }
 
-/* Text & Accent Overrides for Theme 4 (Ice Cyan + Magenta Highlights) */
+/* Text & Accent Overrides for High-Tech Theme 4 */
 .theme4 .text-slate-100 { color: #ffffff !important; }
 .theme4 .text-slate-200 { color: #ffffff !important; }
 .theme4 .text-slate-300 { color: #e2e8f0 !important; }
@@ -1757,89 +1757,89 @@ button, select, input, a, .panel, .glass-panel, .card-hover {
 .theme4 .text-accent-400,
 .theme4 .text-cyan-400 { color: #38bdf8 !important; }
 
-/* Active & Selected State Highlights (Solid Cyan Neon Pill matching Theme 4 Reference Photos) */
+/* Active & Selected State Highlights (Solid Ice Cyan Neon Pill matching Reference Photos) */
 .theme4 .bg-cyan-500\/20,
 .theme4 .bg-accent-500\/20,
 .theme4 .bg-blue-500\/20 {
   background-color: #38bdf8 !important;
-  color: #070d18 !important;
+  color: #060c18 !important;
   font-weight: 700 !important;
-  box-shadow: 0 0 16px rgba(56, 189, 248, 0.5) !important;
+  box-shadow: 0 0 18px rgba(56, 189, 248, 0.55) !important;
 }
 
-/* Buttons for Theme 4 */
+/* Buttons for High-Tech Theme 4 */
 .theme4 .btn-primary {
   background: linear-gradient(135deg, #0284c7 0%, #38bdf8 100%) !important;
-  color: #070d18 !important;
+  color: #060c18 !important;
   font-weight: 700 !important;
   border: 1px solid #38bdf8 !important;
-  box-shadow: 0 4px 20px rgba(56, 189, 248, 0.5) !important;
+  box-shadow: 0 4px 22px rgba(56, 189, 248, 0.55) !important;
 }
 .theme4 .btn-primary:hover {
   background: linear-gradient(135deg, #38bdf8 0%, #7dd3fc 100%) !important;
-  box-shadow: 0 0 30px rgba(56, 189, 248, 0.7) !important;
+  box-shadow: 0 0 32px rgba(56, 189, 248, 0.75) !important;
 }
 .theme4 .btn-secondary {
-  background: rgba(22, 34, 56, 0.7) !important;
-  border: 1px solid rgba(56, 189, 248, 0.3) !important;
+  background: rgba(20, 32, 54, 0.72) !important;
+  border: 1px solid rgba(56, 189, 248, 0.32) !important;
   color: #e2e8f0 !important;
 }
 
-/* Range Sliders in Theme 4 */
+/* Range Sliders in High-Tech Theme 4 */
 .theme4 input[type="range"]::-webkit-slider-runnable-track {
-  background: rgba(30, 48, 78, 0.8) !important;
+  background: rgba(28, 46, 76, 0.82) !important;
 }
 .theme4 input[type="range"]::-webkit-slider-thumb {
   background: #38bdf8 !important;
   border: 2px solid #ffffff !important;
-  box-shadow: 0 0 18px rgba(56, 189, 248, 0.9) !important;
+  box-shadow: 0 0 20px rgba(56, 189, 248, 0.95) !important;
 }
 
-/* Engine Choice Grid Buttons in Theme 4 */
+/* Engine Choice Grid Buttons in High-Tech Theme 4 */
 .theme4 .engine-choice-btn {
-  background: rgba(22, 34, 56, 0.65) !important;
-  border: 1px solid rgba(56, 189, 248, 0.25) !important;
+  background: rgba(20, 32, 54, 0.68) !important;
+  border: 1px solid rgba(56, 189, 248, 0.28) !important;
   color: #ffffff !important;
   transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease !important;
 }
 .theme4 .engine-choice-btn:hover {
-  background: rgba(28, 44, 72, 0.85) !important;
-  border-color: rgba(56, 189, 248, 0.55) !important;
+  background: rgba(26, 42, 70, 0.88) !important;
+  border-color: rgba(56, 189, 248, 0.6) !important;
   transform: perspective(800px) translateY(-2px) scale(1.025) !important;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5), 0 0 20px rgba(56, 189, 248, 0.35) !important;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.5), 0 0 22px rgba(56, 189, 248, 0.4) !important;
 }
 .theme4 .engine-choice-btn.active {
   background: #38bdf8 !important;
   border-color: #38bdf8 !important;
-  color: #070d18 !important;
+  color: #060c18 !important;
   font-weight: 700 !important;
-  box-shadow: 0 0 20px rgba(56, 189, 248, 0.6) !important;
+  box-shadow: 0 0 22px rgba(56, 189, 248, 0.65) !important;
 }
 .theme4 .engine-choice-icon {
   background: rgba(255, 255, 255, 0.15) !important;
   color: #ffffff !important;
 }
 .theme4 .engine-choice-btn.active .engine-choice-icon {
-  background: rgba(7, 13, 24, 0.25) !important;
-  color: #070d18 !important;
+  background: rgba(6, 12, 24, 0.25) !important;
+  color: #060c18 !important;
 }
 
-/* 3D Perspective Slant Transform for Theme 4 Live Stats Rail (Matches Reference Photos Right Side) */
+/* 3D Perspective Slant Transform for High-Tech Theme 4 Live Stats Rail */
 .theme4 .stat-rail-container {
   transform: perspective(1000px) rotateY(-12deg) rotateX(4deg) scale(0.98);
   transform-origin: right center;
   transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease;
-  box-shadow: -20px 20px 50px rgba(0, 0, 0, 0.75), 0 0 30px rgba(56, 189, 248, 0.2);
+  box-shadow: -20px 20px 50px rgba(0, 0, 0, 0.78), 0 0 35px rgba(56, 189, 248, 0.22);
 }
 
 .theme4 .stat-rail-container:hover {
   transform: perspective(1000px) rotateY(-3deg) rotateX(1deg) scale(1.02);
-  box-shadow: -30px 30px 60px rgba(0, 0, 0, 0.9), 0 0 40px rgba(56, 189, 248, 0.4);
+  box-shadow: -30px 30px 60px rgba(0, 0, 0, 0.92), 0 0 45px rgba(56, 189, 248, 0.45);
 }
 
-/* Ambient Orbs for Theme 4 */
-.theme4 .ambient-orb-1 { background: radial-gradient(circle, rgba(56, 189, 248, 0.25), transparent 70%); }
-.theme4 .ambient-orb-2 { background: radial-gradient(circle, rgba(236, 72, 153, 0.2), transparent 70%); }
-.theme4 .ambient-orb-3 { background: radial-gradient(circle, rgba(168, 85, 247, 0.18), transparent 70%); }
+/* Ambient Orbs for High-Tech Theme 4 */
+.theme4 .ambient-orb-1 { background: radial-gradient(circle, rgba(56, 189, 248, 0.28), transparent 70%); }
+.theme4 .ambient-orb-2 { background: radial-gradient(circle, rgba(236, 72, 153, 0.22), transparent 70%); }
+.theme4 .ambient-orb-3 { background: radial-gradient(circle, rgba(168, 85, 247, 0.2), transparent 70%); }
 
 
