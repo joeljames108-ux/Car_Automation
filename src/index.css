@@ -1663,6 +1663,80 @@ button, select, input, a, .panel, .glass-panel, .card-hover {
   box-shadow: 0 0 14px rgba(56, 189, 248, 0.8) !important;
 }
 
+/* Override All Purple Accents in Theme 3 to White / Ice Cyan matching Reference Photos */
+.theme3 .text-purple-100,
+.theme3 .text-purple-200,
+.theme3 .text-purple-300,
+.theme3 .text-purple-400,
+.theme3 .text-purple-500,
+.theme3 .text-purple-400\/70,
+.theme3 .text-purple-400\/60,
+.theme3 .text-purple-400\/50,
+.theme3 .text-purple-400\/40 {
+  color: #ffffff !important;
+}
+
+.theme3 .bg-purple-500\/10,
+.theme3 .bg-purple-500\/20,
+.theme3 .bg-purple-500\/30,
+.theme3 .bg-purple-900\/20,
+.theme3 .bg-purple-950\/30 {
+  background-color: rgba(56, 189, 248, 0.15) !important;
+  color: #ffffff !important;
+}
+
+.theme3 .border-purple-500\/30,
+.theme3 .border-purple-500\/40,
+.theme3 .border-purple-500\/50 {
+  border-color: rgba(255, 255, 255, 0.15) !important;
+}
+
+/* AI Engineer Card & Assistant Override for Theme 3 */
+.theme3 .ai-engineer-card,
+.theme3 .ai-suggestion-card {
+  background: rgba(18, 25, 41, 0.75) !important;
+  border: 1px solid rgba(255, 255, 255, 0.14) !important;
+  color: #ffffff !important;
+}
+.theme3 .ai-engineer-avatar {
+  background: linear-gradient(135deg, #0284c7, #38bdf8) !important;
+  box-shadow: 0 4px 12px rgba(56, 189, 248, 0.3) !important;
+  color: #ffffff !important;
+}
+
+/* Engine Choice Grid Buttons in Theme 3 */
+.theme3 .engine-choice-btn {
+  background: rgba(23, 32, 52, 0.6) !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  color: #ffffff !important;
+}
+.theme3 .engine-choice-btn:hover {
+  background: rgba(30, 42, 68, 0.8) !important;
+  border-color: rgba(56, 189, 248, 0.4) !important;
+}
+.theme3 .engine-choice-btn.active {
+  background: #38bdf8 !important;
+  border-color: #38bdf8 !important;
+  color: #0b101d !important;
+  font-weight: 700 !important;
+  box-shadow: 0 0 14px rgba(56, 189, 248, 0.4) !important;
+}
+.theme3 .engine-choice-icon {
+  background: rgba(255, 255, 255, 0.15) !important;
+  color: #ffffff !important;
+}
+.theme3 .engine-choice-btn.active .engine-choice-icon {
+  background: rgba(11, 16, 29, 0.2) !important;
+  color: #0b101d !important;
+}
+
+/* Engine Toggle Buttons in Theme 3 */
+.theme3 .engine-toggle-btn.active {
+  background: #38bdf8 !important;
+  color: #0b101d !important;
+  font-weight: 700 !important;
+}
+
 /* ==========================================================================
    THEME 4 — "Cyberpunk Telemetry HUD" (Tactical Amber & Obsidian Black)
    ========================================================================== */
