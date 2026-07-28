@@ -1543,14 +1543,15 @@ button, select, input, a, .panel, .glass-panel, .card-hover {
 }
 
 /* ==========================================================================
-   THEME 3 — "Apex Luxury Lounge" (Exact Reference Photo Palette)
+   THEME 3 — "Apex Architectural Stone Lounge" (Exact 2nd Photo Reference Match)
    ========================================================================== */
 .theme3 {
   position: relative;
-  background-color: #0b101d !important;
+  background-color: #0d121c !important;
   color: #ffffff !important;
 }
 
+/* Photorealistic Architectural Stone & Glass Lounge Background */
 .theme3::before {
   content: '';
   position: fixed;
@@ -1558,64 +1559,64 @@ button, select, input, a, .panel, .glass-panel, .card-hover {
   z-index: 0;
   pointer-events: none;
   background:
-    linear-gradient(to bottom, rgba(11, 16, 29, 0.4), rgba(7, 10, 18, 0.7)),
-    url("https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?q=80&w=2000&auto=format&fit=crop");
+    linear-gradient(to bottom, rgba(13, 18, 28, 0.45), rgba(8, 12, 20, 0.75)),
+    url("https://images.unsplash.com/photo-1600585154340-be6161a56a0c?q=80&w=2000&auto=format&fit=crop");
   background-size: cover;
   background-position: center;
-  filter: contrast(105%) brightness(90%);
+  filter: contrast(108%) brightness(88%);
 }
 
 /* Header for Theme 3 */
 .theme3 header {
-  background: rgba(13, 19, 33, 0.8) !important;
-  backdrop-filter: blur(24px) saturate(180%);
-  -webkit-backdrop-filter: blur(24px) saturate(180%);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4) !important;
+  background: rgba(14, 20, 32, 0.75) !important;
+  backdrop-filter: blur(28px) saturate(180%);
+  -webkit-backdrop-filter: blur(28px) saturate(180%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12) !important;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5) !important;
 }
 
-/* Panels for Theme 3 — Dark Translucent Panels matching Reference Photo */
+/* Translucent Frosted Glass Cards matching 2nd Reference Photo */
 .theme3 .panel {
-  background: rgba(18, 25, 41, 0.72) !important;
-  backdrop-filter: blur(20px) saturate(160%);
-  -webkit-backdrop-filter: blur(20px) saturate(160%);
-  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  background: rgba(20, 28, 45, 0.65) !important;
+  backdrop-filter: blur(22px) saturate(160%);
+  -webkit-backdrop-filter: blur(22px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
   box-shadow:
-    0 16px 40px -10px rgba(0, 0, 0, 0.5),
-    inset 0 1px 1px 0 rgba(255, 255, 255, 0.12) !important;
+    0 20px 48px -10px rgba(0, 0, 0, 0.6),
+    inset 0 1px 1px 0 rgba(255, 255, 255, 0.18) !important;
   border-radius: 1rem !important;
   color: #ffffff !important;
 }
 
 .theme3 .panel:hover {
-  background: rgba(22, 31, 50, 0.78) !important;
-  border-color: rgba(56, 189, 248, 0.35) !important;
+  background: rgba(24, 34, 54, 0.72) !important;
+  border-color: rgba(56, 189, 248, 0.4) !important;
   box-shadow:
-    0 20px 48px -10px rgba(0, 0, 0, 0.65),
-    0 0 20px rgba(56, 189, 248, 0.15) !important;
+    0 24px 56px -10px rgba(0, 0, 0, 0.75),
+    0 0 24px rgba(56, 189, 248, 0.2) !important;
 }
 
 .theme3 .panel-glow {
-  background: rgba(22, 31, 50, 0.8) !important;
-  backdrop-filter: blur(24px);
-  border: 1px solid rgba(56, 189, 248, 0.6) !important;
-  box-shadow: 0 0 30px rgba(56, 189, 248, 0.25) !important;
+  background: rgba(24, 34, 54, 0.75) !important;
+  backdrop-filter: blur(26px);
+  border: 1px solid rgba(56, 189, 248, 0.65) !important;
+  box-shadow: 0 0 35px rgba(56, 189, 248, 0.3) !important;
 }
 
 .theme3 .glass-panel {
-  background: rgba(16, 23, 38, 0.7) !important;
-  backdrop-filter: blur(18px);
-  border-color: rgba(255, 255, 255, 0.12) !important;
+  background: rgba(18, 25, 41, 0.65) !important;
+  backdrop-filter: blur(20px);
+  border-color: rgba(255, 255, 255, 0.14) !important;
   color: #ffffff !important;
 }
 
 /* Background Overrides for Theme 3 */
-.theme3 .bg-base-950 { background-color: rgba(11, 16, 29, 0.75) !important; }
-.theme3 .bg-base-900 { background-color: rgba(18, 25, 41, 0.75) !important; color: #ffffff !important; }
-.theme3 .bg-base-850 { background-color: rgba(23, 32, 52, 0.7) !important; color: #ffffff !important; }
-.theme3 .bg-base-800 { background-color: rgba(30, 42, 68, 0.65) !important; color: #ffffff !important; }
+.theme3 .bg-base-950 { background-color: rgba(13, 18, 28, 0.7) !important; }
+.theme3 .bg-base-900 { background-color: rgba(20, 28, 45, 0.68) !important; color: #ffffff !important; }
+.theme3 .bg-base-850 { background-color: rgba(26, 36, 58, 0.65) !important; color: #ffffff !important; }
+.theme3 .bg-base-800 { background-color: rgba(32, 44, 70, 0.6) !important; color: #ffffff !important; }
 
-/* Text & Accent Overrides for Theme 3 - High Contrast & Vibrant Cyan */
+/* Text & Accent Overrides for Theme 3 */
 .theme3 .text-slate-100 { color: #ffffff !important; }
 .theme3 .text-slate-200 { color: #ffffff !important; }
 .theme3 .text-slate-300 { color: #e2e8f0 !important; }
@@ -1626,7 +1627,7 @@ button, select, input, a, .panel, .glass-panel, .card-hover {
 .theme3 .text-accent-400,
 .theme3 .text-cyan-400 { color: #38bdf8 !important; }
 
-/* Active & Selected State Highlights matching Reference Photo (Bright Vibrant Cyan) */
+/* Active & Selected State Highlights (Solid Ice Cyan Pill matching 2nd Photo) */
 .theme3 .bg-cyan-500\/20,
 .theme3 .bg-accent-500\/20,
 .theme3 .bg-blue-500\/20 {
@@ -1641,29 +1642,29 @@ button, select, input, a, .panel, .glass-panel, .card-hover {
   color: #0b101d !important;
   font-weight: 700 !important;
   border: 1px solid #38bdf8 !important;
-  box-shadow: 0 4px 16px rgba(56, 189, 248, 0.4) !important;
+  box-shadow: 0 4px 18px rgba(56, 189, 248, 0.45) !important;
 }
 .theme3 .btn-primary:hover {
   background: #7dd3fc !important;
-  box-shadow: 0 0 24px rgba(56, 189, 248, 0.6) !important;
+  box-shadow: 0 0 28px rgba(56, 189, 248, 0.65) !important;
 }
 .theme3 .btn-secondary {
-  background: rgba(23, 32, 52, 0.7) !important;
-  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  background: rgba(26, 36, 58, 0.65) !important;
+  border: 1px solid rgba(255, 255, 255, 0.16) !important;
   color: #e2e8f0 !important;
 }
 
-/* Range Sliders for Theme 3 - Cyan Thumb & Bright Track */
+/* Range Sliders for Theme 3 */
 .theme3 input[type="range"]::-webkit-slider-runnable-track {
   background: rgba(51, 65, 85, 0.8) !important;
 }
 .theme3 input[type="range"]::-webkit-slider-thumb {
   background: #38bdf8 !important;
   border: 2px solid #ffffff !important;
-  box-shadow: 0 0 14px rgba(56, 189, 248, 0.8) !important;
+  box-shadow: 0 0 16px rgba(56, 189, 248, 0.85) !important;
 }
 
-/* Override All Purple Accents in Theme 3 to White / Ice Cyan matching Reference Photos */
+/* Overriding All Purple Accents to Clean White & Ice Cyan */
 .theme3 .text-purple-100,
 .theme3 .text-purple-200,
 .theme3 .text-purple-300,
@@ -1681,37 +1682,37 @@ button, select, input, a, .panel, .glass-panel, .card-hover {
 .theme3 .bg-purple-500\/30,
 .theme3 .bg-purple-900\/20,
 .theme3 .bg-purple-950\/30 {
-  background-color: rgba(56, 189, 248, 0.15) !important;
+  background-color: rgba(56, 189, 248, 0.18) !important;
   color: #ffffff !important;
 }
 
 .theme3 .border-purple-500\/30,
 .theme3 .border-purple-500\/40,
 .theme3 .border-purple-500\/50 {
-  border-color: rgba(255, 255, 255, 0.15) !important;
+  border-color: rgba(255, 255, 255, 0.16) !important;
 }
 
 /* AI Engineer Card & Assistant Override for Theme 3 */
 .theme3 .ai-engineer-card,
 .theme3 .ai-suggestion-card {
-  background: rgba(18, 25, 41, 0.75) !important;
-  border: 1px solid rgba(255, 255, 255, 0.14) !important;
+  background: rgba(20, 28, 45, 0.72) !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
   color: #ffffff !important;
 }
 .theme3 .ai-engineer-avatar {
   background: linear-gradient(135deg, #0284c7, #38bdf8) !important;
-  box-shadow: 0 4px 12px rgba(56, 189, 248, 0.3) !important;
+  box-shadow: 0 4px 14px rgba(56, 189, 248, 0.4) !important;
   color: #ffffff !important;
 }
 
 /* Engine Choice Grid Buttons in Theme 3 */
 .theme3 .engine-choice-btn {
-  background: rgba(23, 32, 52, 0.6) !important;
-  border: 1px solid rgba(255, 255, 255, 0.12) !important;
+  background: rgba(26, 36, 58, 0.6) !important;
+  border: 1px solid rgba(255, 255, 255, 0.14) !important;
   color: #ffffff !important;
 }
 .theme3 .engine-choice-btn:hover {
-  background: rgba(30, 42, 68, 0.8) !important;
+  background: rgba(32, 44, 70, 0.8) !important;
   border-color: rgba(56, 189, 248, 0.4) !important;
 }
 .theme3 .engine-choice-btn.active {
@@ -1719,14 +1720,14 @@ button, select, input, a, .panel, .glass-panel, .card-hover {
   border-color: #38bdf8 !important;
   color: #0b101d !important;
   font-weight: 700 !important;
-  box-shadow: 0 0 14px rgba(56, 189, 248, 0.4) !important;
+  box-shadow: 0 0 16px rgba(56, 189, 248, 0.45) !important;
 }
 .theme3 .engine-choice-icon {
   background: rgba(255, 255, 255, 0.15) !important;
   color: #ffffff !important;
 }
 .theme3 .engine-choice-btn.active .engine-choice-icon {
-  background: rgba(11, 16, 29, 0.2) !important;
+  background: rgba(11, 16, 29, 0.25) !important;
   color: #0b101d !important;
 }
 
