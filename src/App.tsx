@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import {
   Cog, Car, Activity, Flag, BarChart3, Save, FolderOpen, RotateCcw,
   Sofa, Factory, FlaskConical, Ruler, Paintbrush, Wind, Newspaper,
@@ -37,6 +36,7 @@ import { SalesLaunch } from "./components/SalesLaunch";
 
 import { CommandPalette } from "./components/CommandPalette";
 import { ToastProvider } from "./components/ToastSystem";
+import { ThermalAlertMonitor } from "./components/ThermalAlertMonitor";
 import { Search, Command as CmdIcon } from "lucide-react";
 
 import { Wrench } from "lucide-react";
@@ -98,6 +98,17 @@ function AppInner() {
   const [cmdPaletteOpen, setCmdPaletteOpen] = useState(false);
   const { resetDesign, units, setUnits, uiTheme } = useDesign();
   const { company, advanceAllSystems } = useCompany();
+  const [booted, setBooted] = useState(false);
+
+  useEffect(() => { const t = setTimeout(() => setBooted(true), 60); return () => clearTimeout(t); }, []);
+
+  // Sync category when stage changes (e.g. from CommandPalette)
+  useEffect(() => {
+    const currentStageItem = STAGES.find(s => s.id === stage);
+    if (currentStageItem && currentStageItem.category !== activeCategory) {
+      setActiveCategory(currentStageItem.category);
+    }
+  }, [stage]);
 
   // Global Ctrl+K / Cmd+K key listener
   useEffect(() => {
@@ -114,49 +125,47 @@ function AppInner() {
   const activeCategoryStages = STAGES.filter(s => s.category === activeCategory);
 
   return (
-    <div className={`min-h-screen flex flex-col font-sans transition-colors duration-500 selection:bg-cyan-500/30 selection:text-cyan-200 ${uiTheme === "theme2" ? "cosmic-theme" : "dark-slate-theme"}`}>
-      {/* Header (Frosted Glassmorphism Header Bar) */}
-      <header className="border-b border-white/10 bg-[#070a12]/80 backdrop-blur-xl sticky top-0 z-40 shadow-2xl transition-all">
+    <div className={`min-h-screen bg-base-950 flex flex-col grid-bg transition-opacity duration-700 ${booted ? "opacity-100" : "opacity-0"} ${uiTheme}`}>
+      {/* Top Header */}
+      <header className="border-b border-white/10 bg-[#0b0f19]/80 backdrop-blur-xl sticky top-0 z-40 shadow-[0_4px_30px_rgba(0,0,0,0.5)] inner-light">
         <div className="max-w-[1700px] mx-auto px-4 h-14 flex items-center justify-between gap-4">
-          
-          {/* Logo & Category Switcher */}
-          <div className="flex items-center gap-6">
-            <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-xl bg-gradient-to-br from-cyan-400 to-sky-600 flex items-center justify-center shadow-[0_0_20px_rgba(34,211,238,0.4)] border border-cyan-300/30">
-                <Car size={18} className="text-white drop-shadow" />
-              </div>
-              <div>
-                <span className="font-extrabold tracking-tight text-white text-base bg-clip-text text-transparent bg-gradient-to-r from-white via-slate-200 to-cyan-400">APEX</span>
-                <span className="text-[10px] uppercase tracking-widest text-cyan-400 font-mono font-bold block -mt-1">ENGINEER</span>
-              </div>
+          {/* Logo */}
+          <div className="flex items-center gap-2.5 shrink-0">
+            <svg viewBox="0 0 24 24" className="h-7 w-7 text-cyan-400 animate-pulse-glow rounded-lg drop-shadow-[0_0_10px_rgba(34,211,238,0.5)]" fill="currentColor">
+              <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
+            </svg>
+            <div>
+              <span className="text-sm font-extrabold tracking-wider gradient-text block leading-none">APEX ENGINEER</span>
+              <span className="text-[9px] text-slate-500 font-mono tracking-widest uppercase">Design Studio</span>
             </div>
+          </div>
 
-            {/* Workspace Category Tabs */}
-            <div className="hidden sm:flex items-center gap-1 bg-base-900/80 backdrop-blur-md p-1 rounded-xl border border-white/10 shadow-inner">
-              {WORKSPACE_CATEGORIES.map((cat) => {
-                const isActive = activeCategory === cat.id;
-                return (
-                  <button
-                    key={cat.id}
-                    onClick={() => {
-                      setActiveCategory(cat.id);
-                      const firstInCat = STAGES.find(s => s.category === cat.id);
-                      if (firstInCat && !STAGES.filter(s => s.category === cat.id).some(s => s.id === stage)) {
-                        setStage(firstInCat.id);
-                      }
-                    }}
-                    className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all whitespace-nowrap ${
-                      isActive
-                        ? "bg-gradient-to-r from-cyan-500/30 to-purple-500/25 text-cyan-200 border border-cyan-400/50 shadow-[0_0_15px_rgba(34,211,238,0.3)]"
-                        : "text-slate-400 hover:text-slate-200 hover:bg-white/5"
-                    }`}
-                  >
-                    {cat.icon}
-                    <span>{cat.label}</span>
-                  </button>
-                );
-              })}
-            </div>
+          {/* Workspace Category Switcher Pills */}
+          <div className="flex items-center gap-1.5 bg-base-900/90 backdrop-blur-md rounded-xl p-1 border border-white/10 shadow-inner">
+            {WORKSPACE_CATEGORIES.map((cat) => {
+              const isActive = activeCategory === cat.id;
+              return (
+                <button
+                  key={cat.id}
+                  onClick={() => {
+                    setActiveCategory(cat.id);
+                    // Select first stage of the category if current stage isn't in it
+                    const firstInCat = STAGES.find(s => s.category === cat.id);
+                    if (firstInCat && !STAGES.filter(s => s.category === cat.id).some(s => s.id === stage)) {
+                      setStage(firstInCat.id);
+                    }
+                  }}
+                  className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all whitespace-nowrap ripple-effect haptic-press ${
+                    isActive
+                      ? "bg-gradient-to-r from-cyan-500/30 to-purple-500/25 text-cyan-200 border border-cyan-400/50 shadow-[0_0_15px_rgba(34,211,238,0.3)] aurora-glow"
+                      : "text-slate-400 hover:text-slate-200 hover:bg-white/5"
+                  }`}
+                >
+                  {cat.icon}
+                  <span>{cat.label}</span>
+                </button>
+              );
+            })}
           </div>
 
           {/* Right Control Bar */}
@@ -164,7 +173,7 @@ function AppInner() {
             {/* Command Palette Trigger */}
             <button
               onClick={() => setCmdPaletteOpen(true)}
-              className="flex items-center gap-2 bg-base-850/90 hover:bg-slate-800 border border-slate-700/80 rounded-lg px-2.5 py-1.5 text-xs text-slate-400 hover:text-slate-200 transition-all hidden md:flex shadow-inner"
+              className="flex items-center gap-2 bg-base-850/90 hover:bg-slate-800 border border-slate-700/80 rounded-lg px-2.5 py-1.5 text-xs text-slate-400 hover:text-slate-200 transition-all hidden md:flex"
               title="Open Command Palette (Ctrl+K)"
             >
               <Search size={13} className="text-cyan-400" />
@@ -222,7 +231,7 @@ function AppInner() {
       </header>
 
       {/* Sub-Navigation Bar (Frosted Glass Module Switcher) */}
-      <nav className="border-b border-white/10 bg-[#070a12]/60 backdrop-blur-xl sticky top-14 z-30 shadow-lg">
+      <nav className="border-b border-white/5 bg-[#0b0f19]/60 backdrop-blur-md sticky top-14 z-30 shadow-md">
         <div className="max-w-[1700px] mx-auto px-4 py-2 flex items-center gap-1.5 overflow-x-auto no-scrollbar">
           {activeCategoryStages.map((s) => {
             const isCurrent = stage === s.id;
@@ -230,9 +239,9 @@ function AppInner() {
               <button
                 key={s.id}
                 onClick={() => setStage(s.id)}
-                className={`flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all whitespace-nowrap ${
+                className={`flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all whitespace-nowrap ripple-effect haptic-press ${
                   isCurrent
-                    ? "bg-gradient-to-r from-cyan-500/30 to-sky-500/20 text-cyan-100 border border-cyan-400/50 shadow-[0_0_15px_rgba(34,211,238,0.3)] font-bold"
+                    ? "bg-gradient-to-r from-cyan-500/30 to-sky-500/20 text-cyan-100 border border-cyan-400/50 shadow-[0_0_12px_rgba(34,211,238,0.25)] neon-underline font-bold"
                     : "text-slate-400 hover:text-slate-100 hover:bg-white/5 border border-transparent"
                 }`}
               >
@@ -244,40 +253,32 @@ function AppInner() {
         </div>
       </nav>
 
-      {/* Main content with Smooth Framer Motion Animated Page Transitions */}
+      {/* Main content */}
       <div className="flex-1 max-w-[1700px] mx-auto w-full px-4 py-4 pb-44 flex gap-4">
         <div className="flex-1 min-w-0">
-          <AnimatePresence mode="wait">
-            <motion.div
-              key={stage}
-              initial={{ opacity: 0, y: 12, scale: 0.99 }}
-              animate={{ opacity: 1, y: 0, scale: 1 }}
-              exit={{ opacity: 0, y: -12, scale: 0.99 }}
-              transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
-            >
-              {stage === "command"       && <CommandCenter onSelectStage={(st) => setStage(st as Stage)} />}
-              {stage === "engine"        && <EngineDesigner />}
-              {stage === "vehicle"       && <VehicleDesigner />}
-              {stage === "exterior"      && <ExteriorDesigner />}
-              {stage === "aero"          && <AeroLab />}
-              {stage === "interior"      && <InteriorsDesigner />}
-              {stage === "manufacturing" && <ManufacturingDesigner />}
-              {stage === "infotainment"  && <InfotainmentDesigner />}
-              {stage === "safety"        && <SafetyCenter />}
-              {stage === "simulation"    && <SimulationDashboard />}
-              {stage === "testing"       && <TestingLab />}
-              {stage === "race"          && <RaceSimulator />}
-              {stage === "stats"         && <DetailedStats />}
-              {stage === "press"         && <PressReviews />}
-              {stage === "garage"        && <VehicleGarage />}
-              {stage === "compare"       && <EngineeringComparison />}
-              {stage === "economy"       && <DynamicEconomy />}
-              {stage === "motorsport"    && <MotorsportDivision />}
-              {stage === "twin"          && <DigitalTwin />}
-              {stage === "sales"         && <SalesLaunch />}
-              {stage === "competitors"   && <Competitors />}
-            </motion.div>
-          </AnimatePresence>
+          <div key={stage} className="animate-scale-reveal">
+            {stage === "command"       && <CommandCenter onSelectStage={(st) => setStage(st as Stage)} />}
+            {stage === "engine"        && <EngineDesigner />}
+            {stage === "vehicle"       && <VehicleDesigner />}
+            {stage === "exterior"      && <ExteriorDesigner />}
+            {stage === "aero"          && <AeroLab />}
+            {stage === "interior"      && <InteriorsDesigner />}
+            {stage === "manufacturing" && <ManufacturingDesigner />}
+            {stage === "infotainment"  && <InfotainmentDesigner />}
+            {stage === "safety"        && <SafetyCenter />}
+            {stage === "simulation"    && <SimulationDashboard />}
+            {stage === "testing"       && <TestingLab />}
+            {stage === "race"          && <RaceSimulator />}
+            {stage === "stats"         && <DetailedStats />}
+            {stage === "press"         && <PressReviews />}
+            {stage === "garage"        && <VehicleGarage />}
+            {stage === "compare"       && <EngineeringComparison />}
+            {stage === "economy"       && <DynamicEconomy />}
+            {stage === "motorsport"    && <MotorsportDivision />}
+            {stage === "twin"          && <DigitalTwin />}
+            {stage === "sales"         && <SalesLaunch />}
+            {stage === "competitors"   && <Competitors />}
+          </div>
         </div>
         <div className="hidden lg:block w-80 shrink-0">
           <div className="sticky top-20">
@@ -299,6 +300,7 @@ function AppInner() {
       />
 
       <AIAssistant />
+      <ThermalAlertMonitor />
 
       {/* Cosmic sparkle for Theme 2 */}
       {uiTheme === "theme2" && <div className="cosmic-sparkle" />}

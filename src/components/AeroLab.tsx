@@ -13,6 +13,7 @@ import {
   WHEEL_AERO_TYPES, MIRROR_AERO_TYPES, AERO_MODES,
   ENDPLATE_DESIGNS, OIL_COOLER_PLACEMENTS, TRACKS,
 } from "../sim/constants";
+import { PresetQuickSelect } from "./PresetQuickSelect";
 import type {
   FrontBumperShape, UnderbodyFloorType, WheelAeroType, MirrorAeroType,
   AeroMode,
@@ -63,6 +64,7 @@ export function AeroLab() {
 
   return (
     <div className="space-y-4">
+      <PresetQuickSelect />
       <div className="panel p-3">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-3">
           <div className="flex items-center gap-2">

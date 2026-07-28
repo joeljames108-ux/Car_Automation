@@ -12,6 +12,20 @@ export function ChassisHotspotViewer({ onSelectStage }: ChassisHotspotViewerProp
 
   const dispLiters = (sim.displacement / 1000).toFixed(1);
 
+  // Calculate component status rings (Green / Yellow / Red) based on live simulation stats
+  const engineStatus = (sim.knockRisk || 0) > 0.45 ? "red" : (sim.coolingMargin || 0.5) < 0.25 ? "yellow" : "green";
+  const frontAeroStatus = (sim.dragCoeff || 0.3) > 0.45 ? "yellow" : "green";
+  const rearAeroStatus = (sim.aeroBalance || 50) < 35 || (sim.aeroBalance || 50) > 65 ? "yellow" : "green";
+  const wheelStatus = (sim.lateralG || 1.2) < 0.9 ? "yellow" : "green";
+  const brakeStatus = (sim.brakingDist || 35) > 42 ? "red" : (sim.brakingDist || 35) > 36 ? "yellow" : "green";
+  const ecuStatus = (sim.reliability || 0.8) < 0.65 ? "red" : (sim.reliability || 0.8) < 0.8 ? "yellow" : "green";
+
+  const getRingColor = (status: "green" | "yellow" | "red") => {
+    if (status === "red") return { stroke: "#ef4444", fill: "rgba(239, 68, 68, 0.2)", glow: "rgba(239, 68, 68, 0.7)", border: "border-red-500/80 text-red-300 bg-red-500/10" };
+    if (status === "yellow") return { stroke: "#eab308", fill: "rgba(234, 179, 8, 0.2)", glow: "rgba(234, 179, 8, 0.7)", border: "border-yellow-500/80 text-yellow-300 bg-yellow-500/10" };
+    return { stroke: "#22c55e", fill: "rgba(34, 197, 94, 0.15)", glow: "rgba(34, 197, 94, 0.6)", border: "border-emerald-500/80 text-emerald-300 bg-emerald-500/10" };
+  };
+
   const hotspots = [
     {
       id: "engine",
@@ -24,6 +38,8 @@ export function ChassisHotspotViewer({ onSelectStage }: ChassisHotspotViewerProp
       detail: `${design.engine.layout.toUpperCase()} ${sim.cylinderCount} Cyl (${dispLiters}L)`,
       color: "from-cyan-500/20 to-blue-500/10 border-cyan-400/60 text-cyan-300",
       glowColor: "rgba(34, 211, 238, 0.6)",
+      status: engineStatus,
+      ring: getRingColor(engineStatus),
     },
     {
       id: "front-aero",
@@ -36,6 +52,8 @@ export function ChassisHotspotViewer({ onSelectStage }: ChassisHotspotViewerProp
       detail: `Splitter ${design.vehicle.aero?.splitterLength || 100}mm | Floor: ${(design.vehicle.aero?.underbody || "flat").replace("_", " ")}`,
       color: "from-emerald-500/20 to-teal-500/10 border-emerald-400/60 text-emerald-300",
       glowColor: "rgba(52, 211, 153, 0.6)",
+      status: frontAeroStatus,
+      ring: getRingColor(frontAeroStatus),
     },
     {
       id: "rear-aero",
@@ -48,6 +66,8 @@ export function ChassisHotspotViewer({ onSelectStage }: ChassisHotspotViewerProp
       detail: `Rear Wing Angle ${design.vehicle.aero?.wingAngle || 0}° | Diffuser ${design.vehicle.aero?.diffuserAngle || 0}°`,
       color: "from-purple-500/20 to-fuchsia-500/10 border-purple-400/60 text-purple-300",
       glowColor: "rgba(192, 132, 252, 0.6)",
+      status: rearAeroStatus,
+      ring: getRingColor(rearAeroStatus),
     },
     {
       id: "wheels",
@@ -60,6 +80,8 @@ export function ChassisHotspotViewer({ onSelectStage }: ChassisHotspotViewerProp
       detail: `Wheel Width ${design.vehicle.wheelWidth || 9}" | Diameter ${design.vehicle.wheelDiameter || 19}"`,
       color: "from-amber-500/20 to-yellow-500/10 border-amber-400/60 text-amber-300",
       glowColor: "rgba(251, 191, 36, 0.6)",
+      status: wheelStatus,
+      ring: getRingColor(wheelStatus),
     },
     {
       id: "brakes",
@@ -72,6 +94,8 @@ export function ChassisHotspotViewer({ onSelectStage }: ChassisHotspotViewerProp
       detail: `Disc Size ${design.vehicle.brakeDiscSize || 380}mm | Bias ${((design.vehicle.brakeBias || 0.6) * 100).toFixed(0)}% F`,
       color: "from-rose-500/20 to-red-500/10 border-rose-400/60 text-rose-300",
       glowColor: "rgba(251, 113, 133, 0.6)",
+      status: brakeStatus,
+      ring: getRingColor(brakeStatus),
     },
     {
       id: "electronics",
@@ -84,6 +108,8 @@ export function ChassisHotspotViewer({ onSelectStage }: ChassisHotspotViewerProp
       detail: `ADAS Assist Level ${design.infotainment?.adasLevel || 0} | Drive ECU Active`,
       color: "from-indigo-500/20 to-violet-500/10 border-indigo-400/60 text-indigo-300",
       glowColor: "rgba(129, 140, 248, 0.6)",
+      status: ecuStatus,
+      ring: getRingColor(ecuStatus),
     },
   ];
 
@@ -220,7 +246,7 @@ export function ChassisHotspotViewer({ onSelectStage }: ChassisHotspotViewerProp
             <rect x="230" y="135" width="70" height="50" rx="8" fill="rgba(34, 211, 238, 0.15)" stroke="#22d3ee" strokeWidth="1.5" />
             <text x="265" y="164" fill="#22d3ee" fontSize="10" fontFamily="monospace" textAnchor="middle" fontWeight="bold">ENGINE</text>
 
-            {/* HOTSPOT TARGET RETICLES */}
+            {/* HOTSPOT TARGET RETICLES WITH COLOR-CODED STATUS RINGS */}
             {hotspots.map((hs) => {
               const isSelected = activeHotspot === hs.id;
               return (
@@ -230,27 +256,34 @@ export function ChassisHotspotViewer({ onSelectStage }: ChassisHotspotViewerProp
                   onMouseEnter={() => setActiveHotspot(hs.id)}
                   onClick={() => onSelectStage && onSelectStage(hs.stage)}
                 >
-                  {/* Outer Pulsing Glow Circle */}
+                  {/* Outer Pulsing Status Ring */}
                   <circle
                     cx={hs.cx}
                     cy={hs.cy}
-                    r={isSelected ? 22 : 16}
+                    r={isSelected ? 24 : 18}
                     fill="none"
-                    stroke={hs.glowColor}
-                    strokeWidth={isSelected ? 2.5 : 1.5}
-                    className="transition-all duration-300 animate-ping opacity-60"
+                    stroke={hs.ring.stroke}
+                    strokeWidth={isSelected ? 3 : 2}
+                    className="transition-all duration-300 animate-ping opacity-75"
                   />
-                  {/* Inner Solid Interactive Node */}
+                  {/* Status Ring Aura Background */}
                   <circle
                     cx={hs.cx}
                     cy={hs.cy}
-                    r={isSelected ? 14 : 10}
-                    fill="#0b0f19"
-                    stroke={hs.glowColor}
+                    r={isSelected ? 16 : 12}
+                    fill={hs.ring.fill}
+                    stroke={hs.ring.stroke}
                     strokeWidth={2.5}
                     className="transition-all duration-200 shadow-lg"
                   />
-                  {/* Target Crosshair lines */}
+                  {/* Inner Target Point */}
+                  <circle
+                    cx={hs.cx}
+                    cy={hs.cy}
+                    r={4}
+                    fill={hs.ring.stroke}
+                  />
+                  {/* Crosshair lines */}
                   <line x1={hs.cx - 5} y1={hs.cy} x2={hs.cx + 5} y2={hs.cy} stroke="#fff" strokeWidth="1.5" />
                   <line x1={hs.cx} y1={hs.cy - 5} x2={hs.cx} y2={hs.cy + 5} stroke="#fff" strokeWidth="1.5" />
                 </g>
@@ -276,7 +309,9 @@ export function ChassisHotspotViewer({ onSelectStage }: ChassisHotspotViewerProp
                     {currentHotspotObj.icon}
                     <span>{currentHotspotObj.label}</span>
                   </div>
-                  <ArrowRight size={12} className="opacity-70" />
+                  <span className={`text-[9px] font-mono font-bold uppercase px-1.5 py-0.5 rounded border ${currentHotspotObj.ring.border}`}>
+                    {currentHotspotObj.status}
+                  </span>
                 </div>
                 <div className="text-sm font-bold text-white mb-0.5">{currentHotspotObj.stat}</div>
                 <div className="text-[11px] text-slate-400 leading-tight">{currentHotspotObj.detail}</div>

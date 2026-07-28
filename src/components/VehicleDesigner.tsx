@@ -3,6 +3,7 @@ import { useDesign } from "../state/DesignContext";
 import { Section, Slider, Select, ChoiceGrid, Toggle, StatTile } from "./ui/Controls";
 import { PLATFORMS, CHASSIS_TYPES, SUSPENSION_TYPES, TRANSMISSION_TYPES, BRAKE_TYPES, TIRE_COMPOUNDS } from "../sim/constants";
 import { VEHICLE_PRESET_LIBRARY } from "../sim/vehiclePresets";
+import { PresetQuickSelect } from "./PresetQuickSelect";
 import type { PlatformType, ChassisType, SuspensionType, TransmissionType, BrakeType, TireCompound, VehicleConfig } from "../sim/types";
 
 export function VehicleDesigner() {
@@ -17,8 +18,10 @@ export function VehicleDesigner() {
   };
 
   return (
-    <div className="grid grid-cols-1 xl:grid-cols-3 gap-4">
-      <div className="xl:col-span-2 space-y-4 stagger">
+    <div className="space-y-4">
+      <PresetQuickSelect />
+      <div className="grid grid-cols-1 xl:grid-cols-3 gap-4">
+        <div className="xl:col-span-2 space-y-4 stagger">
         <Section title="Load Vehicle Preset (Price Tiers & Utility Classes)" icon={<Sparkles size={16} />}>
           <div className="p-3 bg-base-850 rounded-lg border border-base-800">
             <Select
@@ -126,5 +129,6 @@ export function VehicleDesigner() {
         </Section>
       </div>
     </div>
-  );
+  </div>
+);
 }

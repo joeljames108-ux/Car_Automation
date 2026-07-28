@@ -6,6 +6,8 @@ import { LineChart } from "./ui/LineChart";
 import { ENGINE_LAYOUTS, CRANK_MATERIALS, PISTON_TYPES, VALVETRAIN_TYPES, INTAKE_TYPES, FUEL_SYSTEMS, BATTERY_CHEMISTRIES, EV_MOTOR_TYPES, HYBRID_DEPLOY_MODES, MGU_H_MODES, HYBRID_ARCHITECTURES, MOTOR_PLACEMENTS } from "../sim/constants";
 import type { EngineLayout, CrankMaterial, PistonType, ValvetrainType, IntakeType, FuelSystemType, EngineConfig } from "../sim/types";
 
+import { PresetQuickSelect } from "./PresetQuickSelect";
+
 // Engine layout → icon mapping
 const LAYOUT_ICONS: Record<string, React.ReactNode> = {
   i3: <Cog size={11} />,
@@ -90,7 +92,8 @@ export function EngineDesigner() {
   const engineLayouts = Object.keys(ENGINE_LAYOUTS) as EngineLayout[];
 
   return (
-    <div className="engine-theme stagger-enter">
+    <div className="space-y-4 stagger-enter">
+      <PresetQuickSelect />
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-4">
         <div className="xl:col-span-2 space-y-4">
           {/* Architecture Section */}
