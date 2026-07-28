@@ -42,8 +42,8 @@ export function EngineDesigner() {
 
   // Power & Torque chart — pink/magenta torque + teal power with dual fill
   const powerSeries = [
-    { data: sim.powerCurve.map((p) => ({ x: p.rpm, y: p.power })), color: "#22d3ee", fill: true },
-    { data: sim.powerCurve.map((p) => ({ x: p.rpm, y: p.torque })), color: "#e879a0", fill: true },
+    { data: sim.powerCurve.map((p) => ({ x: p.rpm, y: p.power })), color: "#22d3ee", fill: true, label: "Power", unit: " hp" },
+    { data: sim.powerCurve.map((p) => ({ x: p.rpm, y: p.torque })), color: "#e879a0", fill: true, label: "Torque", unit: " Nm" },
   ];
 
   // Generate live warnings based on sim
