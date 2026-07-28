@@ -281,7 +281,7 @@ function AppInner() {
           </div>
         </div>
         <div className="hidden lg:block w-80 shrink-0">
-          <div className="sticky top-20">
+          <div className="sticky top-20 stat-rail-container">
             <StatRail />
           </div>
         </div>

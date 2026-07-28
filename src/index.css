@@ -1731,11 +1731,16 @@ button, select, input, a, .panel, .glass-panel, .card-hover {
   color: #0b101d !important;
 }
 
-/* Engine Toggle Buttons in Theme 3 */
-.theme3 .engine-toggle-btn.active {
-  background: #38bdf8 !important;
-  color: #0b101d !important;
-  font-weight: 700 !important;
+/* 3D Perspective Slant Transform for Theme 3 Live Stats Rail (Matches 2nd Reference Photo Right Side) */
+.theme3 .stat-rail-container {
+  transform: perspective(1000px) rotateY(-12deg) rotateX(4deg) scale(0.98);
+  transform-origin: right center;
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: -20px 20px 50px rgba(0, 0, 0, 0.7);
+}
+
+.theme3 .stat-rail-container:hover {
+  transform: perspective(1000px) rotateY(-4deg) rotateX(1deg) scale(1);
 }
 
 /* ==========================================================================
