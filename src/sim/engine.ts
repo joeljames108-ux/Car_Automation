@@ -30,6 +30,7 @@ import type {
   TrackId, InfotainmentConfig, InfotainmentSim,
 } from "./types";
 import { simulateChassis } from "./chassisSim";
+import { simulateLap as physicsSimulateLap } from "./physics/lapSimulator";
 
 const RHO_AIR = 1.225;
 const GRAVITY = 9.81;
@@ -915,41 +916,67 @@ export function simulateTesting(design: VehicleDesign, _eng: EngineSim, aero: Re
 }
 
 // ===================================================================
-// LAP TIME SIMULATION
+// LAP TIME SIMULATION (Physics-based via lap simulator)
 // ===================================================================
 
-export function simulateLapTimes(design: VehicleDesign, aero: ReturnType<typeof simulateAero>, perf: ReturnType<typeof simulatePerformance>) {
-  const v = design.vehicle;
-  const tire = TIRE_COMPOUNDS[v.tireCompound];
-  const susAvg = (SUSPENSION_TYPES[v.suspensionFront].gripFactor + SUSPENSION_TYPES[v.suspensionRear].gripFactor) / 2;
-  const trans = TRANSMISSION_TYPES[v.transmission];
+export function simulateLapTimes(design: VehicleDesign, _aero: ReturnType<typeof simulateAero>, _perf: ReturnType<typeof simulatePerformance>) {
+  const aero = _aero;
+  const perf = _perf;
+  const eng = simulateEngine(design.engine);
   const trackIds = Object.keys(TRACKS) as TrackId[];
 
+  // Build a minimal SimResult shim for the physics engine
+  const simShim = {
+    displacement: eng.displacement, cylinderCount: eng.cylinderCount, powerCurve: eng.powerCurve,
+    peakPower: eng.combinedPower || 0, peakTorque: eng.combinedTorque || 0,
+    peakPowerRpm: eng.peakPowerRpm || 6000, peakTorqueRpm: eng.peakTorqueRpm || 4500,
+    redline: eng.redline || 7000, maxPistonSpeed: 0,
+    thermalEfficiency: 0, knockRisk: 0, octaneRequired: 0, bsfc: 0,
+    turboLag: 0, boostPressure: 0, engineWeight: 0, engineCost: 0,
+    reliability: 0.8, nvh: 0, noise: 0, emissions: 0, fuelEconomy: perf.fuelEconomy || 8,
+    coolingMargin: 0.5,
+    mguHPower: 0, mguKPower: 0, combinedPower: eng.combinedPower || 0,
+    combinedTorque: eng.combinedTorque || 0, batteryWeight: 0, batteryCost: 0,
+    batteryEnergy: 0, electricRange: 0, regenEfficiency: 0,
+    isElectric: design.engine.layout === 'electric',
+    isHybrid: design.engine.hybridArchitecture !== 'none',
+    dragCoeff: aero.dragCoeff, frontalArea: aero.frontalArea,
+    downforce: aero.downforce, liftCoeff: aero.liftCoeff,
+    centerOfPressure: aero.centerOfPressure, aeroBalance: aero.aeroBalance,
+    groundEffect: aero.groundEffect, separationRisk: aero.separationRisk,
+    weight: perf.weight, weightDistFront: perf.weightDistFront,
+    cgHeight: perf.cgHeight, topSpeed: perf.topSpeed,
+  } as any;
+
+  // Use the physics-based simulator for each track
   const lapTimes = trackIds.map((id) => {
     const track = TRACKS[id];
-    let total = 0;
-    let topSpeedLap = 0;
-
-    for (const seg of track.segments) {
-      if (seg.type === "straight") {
-        const target = Math.min(perf.topSpeed, perf.topSpeed * (0.6 + 0.4 * clamp(seg.length / 1000, 0.1, 1)));
-        const avg = target * 0.72 * trans.efficiency;
-        total += (seg.length / 1000) / (avg / 3.6) * 3600;
-        topSpeedLap = Math.max(topSpeedLap, target);
-      } else {
-        const radius = seg.length;
-        const aeroG = aero.downforce / (perf.weight * GRAVITY) * tire.gripFactor * (track.highSpeed ? 1 : 0.7);
-        const latG = clamp(tire.gripFactor * susAvg + aeroG, 0.6, 3.5);
-        const vMax = Math.sqrt(latG * GRAVITY * radius);
-        const arcDist = (seg.arc / 360) * 2 * Math.PI * radius;
-        total += arcDist / vMax;
-      }
+    try {
+      const result = physicsSimulateLap(design, simShim, {
+        trackId: id,
+        driverSkill: 'pro',
+        ambientTemp: 22,
+        trackTemp: 30,
+        weatherGrip: 1.0,
+        fuelLoad: 20,
+        lapNumber: 1,
+      });
+      return {
+        trackId: id, trackName: track.name,
+        time: result.totalTime,
+        topSpeed: result.topSpeed,
+        avgSpeed: result.averageSpeed,
+      };
+    } catch {
+      // Fallback: if physics sim fails, use a basic estimate
+      const basicTime = (track.length * 1000) / (perf.topSpeed * 0.45 / 3.6);
+      return {
+        trackId: id, trackName: track.name,
+        time: Math.round(basicTime * 1000) / 1000,
+        topSpeed: Math.round(perf.topSpeed * 0.85),
+        avgSpeed: Math.round(perf.topSpeed * 0.45 * 10) / 10,
+      };
     }
-
-    return {
-      trackId: id, trackName: track.name, time: Math.round(total * 1000) / 1000,
-      topSpeed: Math.round(topSpeedLap), avgSpeed: Math.round((track.length / (total / 3600)) * 10) / 10,
-    };
   });
 
   return { lapTimes, bestLapTrack: lapTimes.reduce((a, b) => a.time < b.time ? a : b).trackId, bestLapTime: lapTimes.reduce((a, b) => a.time < b.time ? a : b).time };

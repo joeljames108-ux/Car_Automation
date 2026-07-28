@@ -6,6 +6,7 @@ import type {
   RaceConfig, RaceResult, LapRecord, CornerAnalysis, CompetitorResult,
   StrategySuggestion, VehicleDesign, SimResult, TrackId, WeatherType,
 } from "./types";
+import { simulateLap as physicsSimulateLap } from "./physics/lapSimulator";
 
 const GRAVITY = 9.81;
 const KMH_TO_MS = 1 / 3.6;
@@ -554,26 +555,40 @@ export function simulateRace(design: VehicleDesign, sim: SimResult, config: Race
 }
 
 function estimateBaseLap(sim: SimResult, track: typeof TRACKS[TrackId], design: VehicleDesign): number {
-  const tire = TIRE_COMPOUNDS[design.vehicle.tireCompound];
-  const susF = SUSPENSION_TYPES[design.vehicle.suspensionFront];
-  const susR = SUSPENSION_TYPES[design.vehicle.suspensionRear];
-  const susAvg = (susF.gripFactor + susR.gripFactor) / 2;
-  let total = 0;
-  for (const seg of track.segments) {
-    if (seg.type === "straight") {
-      const target = Math.min(sim.topSpeed, sim.topSpeed * (0.6 + 0.4 * clamp(seg.length / 1000, 0.1, 1)));
-      const avg = target * 0.72;
-      total += (seg.length / 1000) / (avg / 3.6) * 3600;
-    } else {
-      const radius = seg.length;
-      const aeroG = sim.downforce / (sim.weight * GRAVITY) * tire.gripFactor * (track.highSpeed ? 1 : 0.7);
-      const latG = clamp(tire.gripFactor * susAvg + aeroG, 0.6, 3.5);
-      const vMax = Math.sqrt(latG * GRAVITY * radius);
-      const arcDist = (seg.arc / 360) * 2 * Math.PI * radius;
-      total += arcDist / vMax;
+  try {
+    const res = physicsSimulateLap(design, sim, {
+      trackId: track.id,
+      driverSkill: "pro",
+      ambientTemp: 22,
+      trackTemp: 30,
+      weatherGrip: 1.0,
+      fuelLoad: 20,
+      lapNumber: 1,
+    });
+    return res.totalTime;
+  } catch {
+    // Fallback if physics fails
+    const tire = TIRE_COMPOUNDS[design.vehicle.tireCompound];
+    const susF = SUSPENSION_TYPES[design.vehicle.suspensionFront];
+    const susR = SUSPENSION_TYPES[design.vehicle.suspensionRear];
+    const susAvg = (susF.gripFactor + susR.gripFactor) / 2;
+    let total = 0;
+    for (const seg of track.segments) {
+      if (seg.type === "straight") {
+        const target = Math.min(sim.topSpeed, sim.topSpeed * (0.6 + 0.4 * clamp(seg.length / 1000, 0.1, 1)));
+        const avg = target * 0.72;
+        total += (seg.length / 1000) / (avg / 3.6) * 3600;
+      } else {
+        const radius = seg.length;
+        const aeroG = sim.downforce / (sim.weight * GRAVITY) * tire.gripFactor * (track.highSpeed ? 1 : 0.7);
+        const latG = clamp(tire.gripFactor * susAvg + aeroG, 0.6, 3.5);
+        const vMax = Math.sqrt(latG * GRAVITY * radius);
+        const arcDist = (seg.arc / 360) * 2 * Math.PI * radius;
+        total += arcDist / vMax;
+      }
     }
+    return total;
   }
-  return total;
 }
 
 function generateCompetitors(config: RaceConfig, baseLapTime: number) {
