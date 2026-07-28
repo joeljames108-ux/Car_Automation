@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import { useRef, type ReactNode } from "react";
 
 export function Section({ title, icon, children, className = "" }: {
   title: string; icon?: ReactNode; children: ReactNode; className?: string;
@@ -16,11 +16,15 @@ export function Section({ title, icon, children, className = "" }: {
   );
 }
 
-export function Slider({ label, value, min, max, step = 1, onChange, format, unit, hint }: {
+export function Slider({ label, value, min, max, step = 1, onChange, format, unit, hint, defaultValue }: {
   label: string; value: number; min: number; max: number; step?: number;
-  onChange: (v: number) => void; format?: (v: number) => string; unit?: string; hint?: string;
+  onChange: (v: number) => void; format?: (v: number) => string; unit?: string; hint?: string; defaultValue?: number;
 }) {
   const percentage = Math.min(100, Math.max(0, ((value - min) / (max - min)) * 100));
+
+  // Store initial baseline value to calculate live differential delta (+X / -X)
+  const initialRef = useRef<number>(defaultValue !== undefined ? defaultValue : value);
+  const diff = Math.round((value - initialRef.current) * 100) / 100;
 
   return (
     <div className="group/slider relative my-1">
@@ -28,9 +32,27 @@ export function Slider({ label, value, min, max, step = 1, onChange, format, uni
         <label className="label-mono flex items-center gap-1">
           {label}
         </label>
-        <span className="font-mono text-xs font-bold text-accent-300 bg-accent-500/10 px-2 py-0.5 rounded border border-accent-500/20 shadow-sm transition-all duration-200 group-hover/slider:border-accent-400 group-hover/slider:bg-accent-500/20">
-          {format ? format(value) : value}{unit && <span className="text-slate-400 text-[10px] ml-1">{unit}</span>}
-        </span>
+
+        <div className="flex items-center gap-1.5">
+          {/* Live Differential Delta Badge (+X / -X) */}
+          {diff !== 0 && (
+            <span
+              className={`font-mono text-[10px] font-bold px-1.5 py-0.2 rounded animate-in fade-in zoom-in-90 duration-150 ${
+                diff > 0
+                  ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30"
+                  : "bg-rose-500/20 text-rose-400 border border-rose-500/30"
+              }`}
+              title={`Adjusted from initial value: ${initialRef.current}${unit || ""}`}
+            >
+              {diff > 0 ? `+${diff}` : `${diff}`}
+            </span>
+          )}
+
+          {/* Current Slider Value Badge */}
+          <span className="font-mono text-xs font-bold text-accent-300 bg-accent-500/10 px-2 py-0.5 rounded border border-accent-500/20 shadow-sm transition-all duration-200 group-hover/slider:border-accent-400 group-hover/slider:bg-accent-500/20">
+            {format ? format(value) : value}{unit && <span className="text-slate-400 text-[10px] ml-1">{unit}</span>}
+          </span>
+        </div>
       </div>
       
       <div className="relative flex items-center h-5">
