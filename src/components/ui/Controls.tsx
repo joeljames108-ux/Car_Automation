@@ -1,5 +1,30 @@
-import { useState, useEffect, useMemo, useRef, type ReactNode } from "react";
-import debounce from "lodash-es/debounce";
+import { useState, useEffect, useMemo, useRef, useCallback, type ReactNode } from "react";
+
+function useCustomDebounce<T extends (...args: any[]) => void>(fn: T, delay: number) {
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const fnRef = useRef(fn);
+
+  useEffect(() => {
+    fnRef.current = fn;
+  }, [fn]);
+
+  const debounced = useCallback((...args: Parameters<T>) => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+    timeoutRef.current = setTimeout(() => {
+      fnRef.current(...args);
+    }, delay);
+  }, [delay]);
+
+  const cancel = useCallback(() => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
+  }, []);
+
+  return useMemo(() => ({ debounced, cancel }), [debounced, cancel]);
+}
 
 export function Section({ title, icon, children, className = "" }: {
   title: string; icon?: ReactNode; children: ReactNode; className?: string;
@@ -33,18 +58,14 @@ export function Slider({ label, value, min, max, step = 1, onChange, format, uni
   }, [value]);
 
   // Debounced parent onChange update to eliminate re-simulation lag
-  const debouncedOnChange = useMemo(() => {
-    return debounce((val: number) => {
-      onChange(val);
-    }, 16); // 1 frame debounce (16ms)
-  }, [onChange]);
+  const { debounced: debouncedOnChange, cancel } = useCustomDebounce(onChange, 16);
 
   // Clean up debounce timer
   useEffect(() => {
     return () => {
-      debouncedOnChange.cancel();
+      cancel();
     };
-  }, [debouncedOnChange]);
+  }, [cancel]);
 
   const handleInputChange = (newVal: number) => {
     const clamped = Math.min(max, Math.max(min, Math.round(newVal / step) * step));
