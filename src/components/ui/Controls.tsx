@@ -1,4 +1,5 @@
-import { useRef, type ReactNode } from "react";
+import { useState, useEffect, useMemo, useRef, type ReactNode } from "react";
+import debounce from "lodash-es/debounce";
 
 export function Section({ title, icon, children, className = "" }: {
   title: string; icon?: ReactNode; children: ReactNode; className?: string;
@@ -20,14 +21,55 @@ export function Slider({ label, value, min, max, step = 1, onChange, format, uni
   label: string; value: number; min: number; max: number; step?: number;
   onChange: (v: number) => void; format?: (v: number) => string; unit?: string; hint?: string; defaultValue?: number;
 }) {
-  const percentage = Math.min(100, Math.max(0, ((value - min) / (max - min)) * 100));
+  // Local immediate state for silky smooth 60fps slider dragging
+  const [localVal, setLocalVal] = useState<number>(value);
+  const isDraggingRef = useRef(false);
+
+  // Sync external value updates when not dragging
+  useEffect(() => {
+    if (!isDraggingRef.current) {
+      setLocalVal(value);
+    }
+  }, [value]);
+
+  // Debounced parent onChange update to eliminate re-simulation lag
+  const debouncedOnChange = useMemo(() => {
+    return debounce((val: number) => {
+      onChange(val);
+    }, 16); // 1 frame debounce (16ms)
+  }, [onChange]);
+
+  // Clean up debounce timer
+  useEffect(() => {
+    return () => {
+      debouncedOnChange.cancel();
+    };
+  }, [debouncedOnChange]);
+
+  const handleInputChange = (newVal: number) => {
+    const clamped = Math.min(max, Math.max(min, Math.round(newVal / step) * step));
+    // Precise float rounding to prevent JS IEEE 754 precision artifacts (e.g. 11.500000000000002)
+    const rounded = parseFloat(clamped.toFixed(3));
+    setLocalVal(rounded);
+    debouncedOnChange(rounded);
+  };
+
+  const handleStepAdjust = (dir: 1 | -1) => {
+    const nextVal = localVal + dir * step;
+    const clamped = Math.min(max, Math.max(min, Math.round(nextVal / step) * step));
+    const rounded = parseFloat(clamped.toFixed(3));
+    setLocalVal(rounded);
+    onChange(rounded);
+  };
+
+  const percentage = Math.min(100, Math.max(0, ((localVal - min) / (max - min)) * 100));
 
   // Store initial baseline value to calculate live differential delta (+X / -X)
   const initialRef = useRef<number>(defaultValue !== undefined ? defaultValue : value);
-  const diff = Math.round((value - initialRef.current) * 100) / 100;
+  const diff = Math.round((localVal - initialRef.current) * 100) / 100;
 
   return (
-    <div className="group/slider relative my-1">
+    <div className="group/slider relative my-1 select-none">
       <div className="flex justify-between items-baseline mb-1.5">
         <label className="label-mono flex items-center gap-1">
           {label}
@@ -50,34 +92,63 @@ export function Slider({ label, value, min, max, step = 1, onChange, format, uni
 
           {/* Current Slider Value Badge */}
           <span className="font-mono text-xs font-bold text-accent-300 bg-accent-500/10 px-2 py-0.5 rounded border border-accent-500/20 shadow-sm transition-all duration-200 group-hover/slider:border-accent-400 group-hover/slider:bg-accent-500/20">
-            {format ? format(value) : value}{unit && <span className="text-slate-400 text-[10px] ml-1">{unit}</span>}
+            {format ? format(localVal) : localVal}{unit && <span className="text-slate-400 text-[10px] ml-1">{unit}</span>}
           </span>
         </div>
       </div>
       
-      <div className="relative flex items-center h-5">
-        {/* Custom Progress Fill Track overlay */}
-        <div className="absolute left-0 top-1/2 -translate-y-1/2 h-1.5 w-full bg-slate-800/80 rounded-full overflow-hidden pointer-events-none border border-slate-700/50">
-          <div
-            className="h-full bg-gradient-to-r from-cyan-500 via-sky-400 to-accent-300 transition-all duration-75 rounded-full shadow-[0_0_10px_rgba(56,189,248,0.5)]"
-            style={{ width: `${percentage}%` }}
+      {/* Slider Track with Fine-Tuning + and - Stepper Buttons */}
+      <div className="flex items-center gap-2">
+        {/* Decrement (-) Fine-Tune Button */}
+        <button
+          type="button"
+          onClick={() => handleStepAdjust(-1)}
+          disabled={localVal <= min}
+          className="w-6 h-6 rounded-md bg-base-800 border border-slate-700/60 flex items-center justify-center text-slate-300 hover:text-white hover:bg-slate-700/80 hover:border-cyan-500/50 disabled:opacity-30 disabled:pointer-events-none transition-all active:scale-90 shrink-0 font-bold text-xs shadow-sm"
+          title={`Decrease by ${step}${unit || ""}`}
+        >
+          -
+        </button>
+
+        <div className="relative flex-1 flex items-center h-5">
+          {/* Custom Progress Fill Track overlay */}
+          <div className="absolute left-0 top-1/2 -translate-y-1/2 h-1.5 w-full bg-slate-800/80 rounded-full overflow-hidden pointer-events-none border border-slate-700/50">
+            <div
+              className="h-full bg-gradient-to-r from-cyan-500 via-sky-400 to-accent-300 rounded-full shadow-[0_0_10px_rgba(56,189,248,0.5)]"
+              style={{ width: `${percentage}%` }}
+            />
+          </div>
+          
+          {/* Range Input element */}
+          <input
+            type="range"
+            min={min}
+            max={max}
+            step={step}
+            value={localVal}
+            onMouseDown={() => { isDraggingRef.current = true; }}
+            onMouseUp={() => { isDraggingRef.current = false; onChange(localVal); }}
+            onTouchStart={() => { isDraggingRef.current = true; }}
+            onTouchEnd={() => { isDraggingRef.current = false; onChange(localVal); }}
+            onChange={(e) => handleInputChange(parseFloat(e.target.value))}
+            className="relative z-10 w-full appearance-none bg-transparent cursor-pointer h-full"
           />
         </div>
-        
-        {/* Range Input element */}
-        <input
-          type="range"
-          min={min}
-          max={max}
-          step={step}
-          value={value}
-          onChange={(e) => onChange(parseFloat(e.target.value))}
-          className="relative z-10 w-full appearance-none bg-transparent cursor-pointer h-full"
-        />
+
+        {/* Increment (+) Fine-Tune Button */}
+        <button
+          type="button"
+          onClick={() => handleStepAdjust(1)}
+          disabled={localVal >= max}
+          className="w-6 h-6 rounded-md bg-base-800 border border-slate-700/60 flex items-center justify-center text-slate-300 hover:text-white hover:bg-slate-700/80 hover:border-cyan-500/50 disabled:opacity-30 disabled:pointer-events-none transition-all active:scale-90 shrink-0 font-bold text-xs shadow-sm"
+          title={`Increase by ${step}${unit || ""}`}
+        >
+          +
+        </button>
       </div>
 
       {/* Subtle min/max scale indicators on hover */}
-      <div className="flex justify-between items-center text-[9px] font-mono text-slate-500/60 opacity-0 group-hover/slider:opacity-100 transition-opacity duration-200 mt-0.5 px-0.5">
+      <div className="flex justify-between items-center text-[9px] font-mono text-slate-500/60 opacity-0 group-hover/slider:opacity-100 transition-opacity duration-200 mt-0.5 px-7">
         <span>{min}{unit}</span>
         <span>{max}{unit}</span>
       </div>
