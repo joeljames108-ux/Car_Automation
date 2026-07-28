@@ -20,20 +20,47 @@ export function Slider({ label, value, min, max, step = 1, onChange, format, uni
   label: string; value: number; min: number; max: number; step?: number;
   onChange: (v: number) => void; format?: (v: number) => string; unit?: string; hint?: string;
 }) {
+  const percentage = Math.min(100, Math.max(0, ((value - min) / (max - min)) * 100));
+
   return (
-    <div>
-      <div className="flex justify-between items-baseline mb-1">
-        <label className="label-mono">{label}</label>
-        <span className="font-mono text-xs text-accent-300">
-          {format ? format(value) : value}{unit && <span className="text-slate-500 ml-0.5">{unit}</span>}
+    <div className="group/slider relative my-1">
+      <div className="flex justify-between items-baseline mb-1.5">
+        <label className="label-mono flex items-center gap-1">
+          {label}
+        </label>
+        <span className="font-mono text-xs font-bold text-accent-300 bg-accent-500/10 px-2 py-0.5 rounded border border-accent-500/20 shadow-sm transition-all duration-200 group-hover/slider:border-accent-400 group-hover/slider:bg-accent-500/20">
+          {format ? format(value) : value}{unit && <span className="text-slate-400 text-[10px] ml-1">{unit}</span>}
         </span>
       </div>
-      <input
-        type="range" min={min} max={max} step={step} value={value}
-        onChange={(e) => onChange(parseFloat(e.target.value))}
-        className="w-full"
-      />
-      {hint && <p className="text-[10px] text-slate-600 mt-0.5">{hint}</p>}
+      
+      <div className="relative flex items-center h-5">
+        {/* Custom Progress Fill Track overlay */}
+        <div className="absolute left-0 top-1/2 -translate-y-1/2 h-1.5 w-full bg-slate-800/80 rounded-full overflow-hidden pointer-events-none border border-slate-700/50">
+          <div
+            className="h-full bg-gradient-to-r from-cyan-500 via-sky-400 to-accent-300 transition-all duration-75 rounded-full shadow-[0_0_10px_rgba(56,189,248,0.5)]"
+            style={{ width: `${percentage}%` }}
+          />
+        </div>
+        
+        {/* Range Input element */}
+        <input
+          type="range"
+          min={min}
+          max={max}
+          step={step}
+          value={value}
+          onChange={(e) => onChange(parseFloat(e.target.value))}
+          className="relative z-10 w-full appearance-none bg-transparent cursor-pointer h-full"
+        />
+      </div>
+
+      {/* Subtle min/max scale indicators on hover */}
+      <div className="flex justify-between items-center text-[9px] font-mono text-slate-500/60 opacity-0 group-hover/slider:opacity-100 transition-opacity duration-200 mt-0.5 px-0.5">
+        <span>{min}{unit}</span>
+        <span>{max}{unit}</span>
+      </div>
+
+      {hint && <p className="text-[10px] text-slate-400/80 mt-0.5">{hint}</p>}
     </div>
   );
 }
