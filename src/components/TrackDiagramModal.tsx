@@ -187,17 +187,68 @@ export const TrackDiagramModal: React.FC<TrackDiagramModalProps> = ({
                 </div>
               </div>
 
-              <div className="relative w-full flex-1 flex items-center justify-center p-4">
-                {imageSrc ? (
+              <div className="relative w-full flex-1 flex items-center justify-center p-4 min-h-[260px]">
+                {/* Dynamically Generated Track Vector Layout based on Track Geometry & Sectors */}
+                <svg className="w-full h-[260px] max-w-[550px]" viewBox="0 0 600 300">
+                  <defs>
+                    <linearGradient id="s1TrackGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                      <stop offset="0%" stopColor="#ef4444" />
+                      <stop offset="100%" stopColor="#f87171" />
+                    </linearGradient>
+                    <linearGradient id="s2TrackGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stopColor="#06b6d4" />
+                      <stop offset="100%" stopColor="#38bdf8" />
+                    </linearGradient>
+                    <linearGradient id="s3TrackGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                      <stop offset="0%" stopColor="#f59e0b" />
+                      <stop offset="100%" stopColor="#fbbf24" />
+                    </linearGradient>
+
+                    <filter id="neonGlow" x="-20%" y="-20%" width="140%" height="140%">
+                      <feGaussianBlur stdDeviation="4" result="blur" />
+                      <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                    </filter>
+                  </defs>
+
+                  {/* Dark Track Asphalt Foundation */}
+                  {renderTrackSvgPath(track, "asphalt")}
+
+                  {/* Sector 1 (Red) */}
+                  {renderTrackSvgPath(track, "s1")}
+                  {/* Sector 2 (Cyan) */}
+                  {renderTrackSvgPath(track, "s2")}
+                  {/* Sector 3 (Gold) */}
+                  {renderTrackSvgPath(track, "s3")}
+
+                  {/* Start/Finish Line & Sector Annotations */}
+                  <g>
+                    <circle cx="80" cy="220" r="5" fill="#22c55e" className="animate-ping" />
+                    <circle cx="80" cy="220" r="5" fill="#22c55e" />
+                    <text x="92" y="224" fill="#22c55e" fontSize="10" fontFamily="monospace" fontWeight="bold">DRS Zone</text>
+
+                    <circle cx="500" cy="140" r="5" fill="#a855f7" />
+                    <text x="512" y="144" fill="#a855f7" fontSize="10" fontFamily="monospace" fontWeight="bold">Speed Trap</text>
+
+                    {/* Sector Pills */}
+                    <rect x="65" y="200" width="22" height="13" rx="3" fill="#ef4444" />
+                    <text x="76" y="210" fill="#fff" fontSize="9" fontWeight="bold" textAnchor="middle">S1</text>
+
+                    <rect x="260" y="45" width="22" height="13" rx="3" fill="#06b6d4" />
+                    <text x="271" y="55" fill="#fff" fontSize="9" fontWeight="bold" textAnchor="middle">S2</text>
+
+                    <rect x="420" y="125" width="22" height="13" rx="3" fill="#f59e0b" />
+                    <text x="431" y="135" fill="#fff" fontSize="9" fontWeight="bold" textAnchor="middle">S3</text>
+                  </g>
+                </svg>
+
+                {/* Optional Overlay Image if available */}
+                {imageSrc && (
                   <img
                     src={imageSrc}
-                    alt={`${track.name} Real Track Map`}
-                    className="max-h-[260px] w-auto object-contain filter invert contrast-125 brightness-110 drop-shadow-[0_0_15px_rgba(34,211,238,0.4)] transition-all duration-300 hover:scale-105"
+                    alt={`${track.name} Map`}
+                    className="absolute inset-0 m-auto max-h-[240px] max-w-[450px] object-contain filter invert contrast-125 brightness-110 opacity-30 pointer-events-none"
+                    onError={(e) => { e.currentTarget.style.display = "none"; }}
                   />
-                ) : (
-                  <div className="text-slate-500 text-xs font-mono text-center p-6 border border-dashed border-base-800 rounded-xl">
-                    Official Track Diagram Loading...
-                  </div>
                 )}
               </div>
 
@@ -279,4 +330,33 @@ function formatLap(seconds: number): string {
     return `${m}:${s.toFixed(3).padStart(6, "0")}`;
   }
   return `${seconds.toFixed(3)}s`;
+}
+
+// Helper to generate dynamic vector path traces for track sectors
+function renderTrackSvgPath(track: import("../sim/types").TrackInfo, mode: "asphalt" | "s1" | "s2" | "s3") {
+  // Customized sector path definitions for distinct circuit archetypes
+  let d = "";
+  if (track.id === "monaco") {
+    d = "M 90 220 L 220 220 C 260 220, 270 190, 250 160 C 230 130, 280 90, 360 80 C 440 70, 520 90, 500 130 C 480 170, 440 180, 410 190 C 370 200, 310 200, 260 210 L 90 220 Z";
+  } else if (track.id === "monza" || track.id === "redbullring") {
+    d = "M 80 230 L 520 230 C 560 230, 570 190, 530 150 L 410 70 C 380 50, 320 60, 280 110 L 200 170 C 160 200, 110 230, 80 230 Z";
+  } else if (track.id === "spa" || track.id === "silverstone") {
+    d = "M 80 220 L 240 220 C 280 220, 310 170, 290 120 C 270 70, 350 40, 450 60 C 530 80, 550 140, 510 180 C 460 220, 380 210, 310 210 L 80 220 Z";
+  } else if (track.id === "suzuka") {
+    d = "M 80 210 Q 180 200, 260 140 T 420 100 T 520 180 T 360 230 T 200 160 Z";
+  } else {
+    d = "M 80 220 L 280 220 C 330 220, 360 180, 340 130 C 320 80, 410 50, 490 80 C 550 110, 540 180, 480 210 C 400 240, 300 210, 200 210 Z";
+  }
+
+  if (mode === "asphalt") {
+    return <path d={d} fill="none" stroke="#1e293b" strokeWidth="16" strokeLinecap="round" strokeLinejoin="round" />;
+  }
+
+  if (mode === "s1") {
+    return <path d={d} fill="none" stroke="url(#s1TrackGrad)" strokeWidth="8" strokeLinecap="round" strokeDasharray="180 800" strokeDashoffset="0" filter="url(#neonGlow)" />;
+  }
+  if (mode === "s2") {
+    return <path d={d} fill="none" stroke="url(#s2TrackGrad)" strokeWidth="8" strokeLinecap="round" strokeDasharray="220 800" strokeDashoffset="-180" filter="url(#neonGlow)" />;
+  }
+  return <path d={d} fill="none" stroke="url(#s3TrackGrad)" strokeWidth="8" strokeLinecap="round" strokeDasharray="300 800" strokeDashoffset="-400" filter="url(#neonGlow)" />;
 }
