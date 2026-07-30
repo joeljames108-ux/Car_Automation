@@ -151,7 +151,7 @@ export function StatRail() {
 
           {/* Popover Tooltip Card */}
           {hoveredLabel === s.label && (
-            <div className="absolute right-full mr-2 top-0 z-50 w-64 p-3 bg-base-950/95 border border-cyan-500/40 rounded-xl shadow-2xl backdrop-blur-xl animate-scale-reveal text-left pointer-events-none">
+            <div className="glass-panel absolute right-full mr-2 top-0 z-50 w-64 p-3 bg-base-950/95 border border-cyan-500/40 rounded-xl shadow-2xl backdrop-blur-xl animate-scale-reveal text-left pointer-events-none">
               <div className="flex items-center gap-1.5 text-xs font-bold text-cyan-300 mb-1">
                 <Info size={13} className="text-cyan-400" />
                 {s.tooltipTitle}

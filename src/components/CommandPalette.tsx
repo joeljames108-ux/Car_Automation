@@ -67,7 +67,7 @@ export function CommandPalette({ isOpen, onClose, onSelectStage }: CommandPalett
       { id: "theme_1", category: "Themes", title: "Theme 1 — Cyan Cyber Glass", subtitle: "Default Liquid Glass", icon: <Palette size={16} />, action: () => { setUiTheme("theme1"); success("Theme Switched", "Activated Theme 1 — Cyan Cyber Glass"); } },
       { id: "theme_2", category: "Themes", title: "Theme 2 — Cosmic Nebula", subtitle: "Deep Purple Sci-Fi", icon: <Palette size={16} />, action: () => { setUiTheme("theme2"); success("Theme Switched", "Activated Theme 2 — Cosmic Nebula"); } },
       { id: "theme_3", category: "Themes", title: "Theme 3 — Nordic Light Glass", subtitle: "Minimalist Alabaster White", icon: <Palette size={16} />, action: () => { setUiTheme("theme3"); success("Theme Switched", "Activated Theme 3 — Nordic Light Glass"); } },
-      { id: "theme_4", category: "Themes", title: "Theme 4 — Cyberpunk Telemetry HUD", subtitle: "Tactical Amber & Black", icon: <Palette size={16} />, action: () => { setUiTheme("theme4"); success("Theme Switched", "Activated Theme 4 — Cyberpunk Telemetry HUD"); } },
+      { id: "theme_4", category: "Themes", title: "Theme 4 — Vision Glass", subtitle: "Spatial Glass Lounge", icon: <Palette size={16} />, action: () => { setUiTheme("theme4"); success("Theme Switched", "Activated Theme 4 — Vision Glass"); } },
 
       // Actions
       { id: "act_reset", category: "Actions", title: "Reset Current Vehicle", subtitle: "Restore factory default specs", icon: <Sparkles size={16} />, action: () => { resetDesign(); info("Vehicle Reset", "Restored default engineering specs"); } },

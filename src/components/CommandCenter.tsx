@@ -91,7 +91,7 @@ export function CommandCenter({ onSelectStage }: CommandCenterProps = {}) {
 
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
         {/* Vehicle Concept Philosophy Selection Card */}
-        <div className="bg-gradient-to-br from-slate-900 via-slate-900/90 to-base-950 border border-cyan-500/40 rounded-2xl p-5 shadow-[0_0_30px_rgba(34,211,238,0.15)] relative overflow-hidden">
+        <div className="panel border border-cyan-500/40 rounded-2xl p-5 shadow-[0_0_30px_rgba(34,211,238,0.15)] relative overflow-hidden">
           <div className="flex flex-col gap-4 relative z-10">
             <div className="flex items-center gap-3">
               <div className="p-3 rounded-2xl bg-cyan-500/20 border border-cyan-400/40 text-cyan-300 shadow-[0_0_15px_rgba(34,211,238,0.2)]">
@@ -133,7 +133,7 @@ export function CommandCenter({ onSelectStage }: CommandCenterProps = {}) {
         </div>
 
         {/* Global UI Theme Selection Card */}
-        <div className="bg-gradient-to-br from-slate-900 via-slate-900/90 to-base-950 border border-purple-500/40 rounded-2xl p-5 shadow-[0_0_30px_rgba(168,85,247,0.15)] relative overflow-hidden">
+        <div className="panel border border-purple-500/40 rounded-2xl p-5 shadow-[0_0_30px_rgba(168,85,247,0.15)] relative overflow-hidden">
           <div className="flex flex-col gap-4 relative z-10">
             <div className="flex items-center gap-3">
               <div className="p-3 rounded-2xl bg-purple-500/20 border border-purple-400/40 text-purple-300 shadow-[0_0_15px_rgba(168,85,247,0.2)]">
@@ -154,7 +154,7 @@ export function CommandCenter({ onSelectStage }: CommandCenterProps = {}) {
                 { id: "theme1", label: "Theme 1", desc: "Cyan Cyber Glass (Default)", color: "border-cyan-500/40 text-cyan-300 bg-cyan-500/10", activeShadow: "shadow-[0_0_15px_rgba(34,211,238,0.2)] ring-1 ring-cyan-400" },
                 { id: "theme2", label: "Theme 2", desc: "Cosmic Nebula — Deep Purple Sci-Fi", color: "border-purple-500/40 text-purple-300 bg-purple-500/10", activeShadow: "shadow-[0_0_15px_rgba(168,85,247,0.25)] ring-1 ring-purple-400" },
                 { id: "theme3", label: "Theme 3", desc: "Nordic Light Glass — Alabaster White", color: "border-sky-500/40 text-sky-400 bg-sky-500/10", activeShadow: "shadow-[0_0_15px_rgba(14,165,233,0.2)] ring-1 ring-sky-400" },
-                { id: "theme4", label: "High-Tech", desc: "Cyberpunk Glass Lounge — City Penthouse", color: "border-cyan-500/40 text-cyan-300 bg-cyan-500/10", activeShadow: "shadow-[0_0_15px_rgba(34,211,238,0.25)] ring-1 ring-cyan-400" },
+                { id: "theme4", label: "Vision Glass", desc: "Spatial Glass — Apple Vision Pro Lounge", color: "border-sky-300/40 text-sky-200 bg-sky-500/10", activeShadow: "shadow-[0_0_15px_rgba(147,197,253,0.15)] ring-1 ring-sky-300" },
               ].map((t) => (
                 <button
                   key={t.id}

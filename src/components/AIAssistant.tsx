@@ -304,7 +304,7 @@ export function AIAssistant() {
   return (
     <div className="fixed bottom-0 left-0 right-0 z-50 pointer-events-none">
       <div className="max-w-[1600px] mx-auto px-4 pb-3 pointer-events-auto">
-        <div className="rounded-2xl border border-base-700 bg-base-900/95 backdrop-blur-md shadow-2xl overflow-hidden">
+        <div className="rounded-2xl border border-base-700 bg-base-900/95 backdrop-blur-md shadow-2xl overflow-hidden ai-assistant-container">
           {/* Top bar: engineer + mode + collapse */}
           <div className="flex items-center gap-2 px-3 py-2 border-b border-base-800 bg-base-850/60">
             <div className="flex items-center gap-2">

@@ -116,7 +116,7 @@ export function ChassisHotspotViewer({ onSelectStage }: ChassisHotspotViewerProp
   const currentHotspotObj = hotspots.find((h) => h.id === activeHotspot);
 
   return (
-    <div className="bg-slate-900/75 backdrop-blur-xl border border-cyan-500/30 rounded-2xl p-5 shadow-[0_0_40px_rgba(0,0,0,0.5)] relative overflow-hidden group">
+    <div className="panel backdrop-blur-xl border border-cyan-500/30 rounded-2xl p-5 shadow-[0_0_40px_rgba(0,0,0,0.5)] relative overflow-hidden group">
       {/* Background ambient lighting */}
       <div className="absolute -top-24 -right-24 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl pointer-events-none" />

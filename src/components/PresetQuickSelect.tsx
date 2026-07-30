@@ -120,7 +120,7 @@ export function PresetQuickSelect() {
   };
 
   return (
-    <div className="bg-gradient-to-r from-base-950 via-slate-900 to-base-950 border border-base-800 rounded-2xl p-4 mb-4 shadow-xl">
+    <div className="panel border border-base-800 rounded-2xl p-4 mb-4 shadow-xl">
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
           <div className="p-1.5 rounded-lg bg-accent-500/20 text-accent-400 border border-accent-500/30">
@@ -141,7 +141,7 @@ export function PresetQuickSelect() {
           <div
             key={p.id}
             onClick={() => applyPreset(p)}
-            className="group relative bg-base-900/90 border border-base-800 hover:border-accent-500/50 rounded-xl p-3 cursor-pointer transition-all duration-200 hover:shadow-lg hover:shadow-accent-500/5 hover:-translate-y-0.5 flex flex-col justify-between"
+            className="group relative glass-panel border border-base-800 hover:border-accent-500/50 rounded-xl p-3 cursor-pointer transition-all duration-200 hover:shadow-lg hover:shadow-accent-500/5 hover:-translate-y-0.5 flex flex-col justify-between"
           >
             <div>
               <div className="flex items-center justify-between mb-2">

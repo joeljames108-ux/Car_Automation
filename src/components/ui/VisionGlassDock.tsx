@@ -1,0 +1,238 @@
+import { useState, useRef, useEffect, useCallback } from "react";
+import type { ReactNode } from "react";
+
+interface StageItem {
+  id: string;
+  label: string;
+  icon: ReactNode;
+  category: string;
+}
+
+interface CategoryItem {
+  id: string;
+  label: string;
+  icon: ReactNode;
+}
+
+interface VisionGlassDockProps {
+  stages: StageItem[];
+  categories: CategoryItem[];
+  activeCategory: string;
+  activeStage: string;
+  onSelectCategory: (id: string) => void;
+  onSelectStage: (id: string) => void;
+}
+
+export function VisionGlassDock({
+  stages, categories, activeCategory, activeStage,
+  onSelectCategory, onSelectStage,
+}: VisionGlassDockProps) {
+  const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
+  const [hoveredCat, setHoveredCat] = useState<string | null>(null);
+  const dockRef = useRef<HTMLDivElement>(null);
+  const [isExpanded, setIsExpanded] = useState(true);
+
+  const activeCategoryStages = stages.filter((s) => s.category === activeCategory);
+
+  // Magnification effect calculation
+  const getMagnification = useCallback((idx: number) => {
+    if (hoveredIdx === null) return 1;
+    const distance = Math.abs(idx - hoveredIdx);
+    if (distance === 0) return 1.25;
+    if (distance === 1) return 1.12;
+    if (distance === 2) return 1.04;
+    return 1;
+  }, [hoveredIdx]);
+
+  return (
+    <div
+      style={{
+        position: "absolute",
+        bottom: 12,
+        left: "50%",
+        transform: "translateX(-50%)",
+        zIndex: 50,
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        gap: 6,
+      }}
+    >
+      {/* ── Active Module Label (floating above dock) ── */}
+      <div
+        key={activeStage}
+        style={{
+          fontSize: 10,
+          fontWeight: 700,
+          color: "#94a3b8",
+          letterSpacing: "0.06em",
+          textTransform: "uppercase" as const,
+          opacity: 0.7,
+          animation: "vg-dock-label-in 0.3s ease-out",
+        }}
+      >
+        {stages.find((s) => s.id === activeStage)?.label ?? ""}
+      </div>
+
+      {/* ── Main Dock Bar ── */}
+      <div
+        ref={dockRef}
+        style={{
+          display: "flex",
+          alignItems: "flex-end",
+          gap: 3,
+          // High-fidelity visionOS light glass
+          background: "rgba(255,255,255,0.72)",
+          backdropFilter: "blur(50px) saturate(200%)",
+          WebkitBackdropFilter: "blur(50px) saturate(200%)",
+          border: "1px solid rgba(255,255,255,0.65)",
+          boxShadow:
+            "0 12px 50px rgba(0,0,0,0.18), " +
+            "0 4px 16px rgba(0,0,0,0.08), " +
+            "inset 0 1px 0 rgba(255,255,255,0.90), " +
+            "inset 0 -1px 1px rgba(0,0,0,0.04)",
+          borderRadius: 22,
+          padding: "5px 8px",
+          transition: "all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)",
+        }}
+      >
+        {/* ── Category Buttons ── */}
+        {categories.map((cat) => {
+          const active = activeCategory === cat.id;
+          const isHov = hoveredCat === cat.id;
+          return (
+            <button
+              key={cat.id}
+              onClick={() => {
+                onSelectCategory(cat.id);
+                // Auto-select first in category if not already there
+                const first = stages.find((s) => s.category === cat.id);
+                const stagesInCat = stages.filter((s) => s.category === cat.id);
+                if (first && !stagesInCat.some((s) => s.id === activeStage)) {
+                  onSelectStage(first.id);
+                }
+              }}
+              onMouseEnter={() => setHoveredCat(cat.id)}
+              onMouseLeave={() => setHoveredCat(null)}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: 5,
+                padding: "6px 14px",
+                borderRadius: 16,
+                fontSize: 11,
+                fontWeight: active ? 700 : 500,
+                background: active
+                  ? "rgba(0,122,255,0.14)"
+                  : isHov
+                  ? "rgba(0,0,0,0.04)"
+                  : "transparent",
+                color: active ? "#007aff" : "#636366",
+                border: active
+                  ? "1px solid rgba(0,122,255,0.20)"
+                  : "1px solid transparent",
+                cursor: "pointer",
+                whiteSpace: "nowrap" as const,
+                transition: "all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1)",
+                transform: isHov && !active ? "translateY(-2px)" : "none",
+              }}
+            >
+              <span style={{ display: "flex", alignItems: "center" }}>{cat.icon}</span>
+              <span>{cat.label}</span>
+            </button>
+          );
+        })}
+
+        {/* ── Divider ── */}
+        <div
+          style={{
+            width: 1,
+            height: 20,
+            background: "rgba(0,0,0,0.10)",
+            margin: "0 4px",
+            alignSelf: "center",
+            borderRadius: 1,
+          }}
+        />
+
+        {/* ── Module Stage Buttons (with macOS Dock magnification) ── */}
+        {activeCategoryStages.map((s, idx) => {
+          const cur = activeStage === s.id;
+          const mag = getMagnification(idx);
+          const isHov = hoveredIdx === idx;
+
+          return (
+            <button
+              key={s.id}
+              onClick={() => onSelectStage(s.id)}
+              title={s.label}
+              onMouseEnter={() => setHoveredIdx(idx)}
+              onMouseLeave={() => setHoveredIdx(null)}
+              style={{
+                display: "flex",
+                alignItems: "center",
+                gap: 5,
+                padding: `${Math.round(5 * mag)}px ${Math.round(11 * mag)}px`,
+                borderRadius: Math.round(14 * mag),
+                fontSize: Math.round(11 * mag),
+                fontWeight: cur ? 700 : 400,
+                background: cur
+                  ? "rgba(0,122,255,0.15)"
+                  : isHov
+                  ? "rgba(0,0,0,0.05)"
+                  : "transparent",
+                color: cur ? "#007aff" : "#8e8e93",
+                border: "none",
+                cursor: "pointer",
+                whiteSpace: "nowrap" as const,
+                transition: "all 0.18s cubic-bezier(0.34, 1.56, 0.64, 1)",
+                transform: `scale(${mag})`,
+                transformOrigin: "bottom center",
+              }}
+            >
+              <span
+                style={{
+                  color: cur ? "#007aff" : "#aeaeb2",
+                  display: "flex",
+                  alignItems: "center",
+                  transition: "color 0.2s ease",
+                }}
+              >
+                {s.icon}
+              </span>
+              <span>{s.label}</span>
+            </button>
+          );
+        })}
+      </div>
+
+      {/* ── Active Indicator Dot ── */}
+      <div
+        style={{
+          display: "flex",
+          gap: 4,
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        {activeCategoryStages.map((s) => (
+          <div
+            key={s.id}
+            style={{
+              width: activeStage === s.id ? 8 : 4,
+              height: 4,
+              borderRadius: 3,
+              background: activeStage === s.id
+                ? "#007aff"
+                : "rgba(255,255,255,0.25)",
+              transition: "all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)",
+              boxShadow: activeStage === s.id
+                ? "0 0 6px rgba(0,122,255,0.5)"
+                : "none",
+            }}
+          />
+        ))}
+      </div>
+    </div>
+  );
+}

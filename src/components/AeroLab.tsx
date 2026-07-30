@@ -14,6 +14,9 @@ import {
   ENDPLATE_DESIGNS, OIL_COOLER_PLACEMENTS, TRACKS,
 } from "../sim/constants";
 import { PresetQuickSelect } from "./PresetQuickSelect";
+import { ModernAnalogDial } from "./ui/ModernAnalogDial";
+import { GlassSlider } from "./ui/GlassSlider";
+import { SpatialReferenceSuite } from "./ui/SpatialReferenceSuite";
 import type {
   FrontBumperShape, UnderbodyFloorType, WheelAeroType, MirrorAeroType,
   AeroMode,
@@ -55,7 +58,7 @@ function MetricBar({ label, value, accent = "accent" }: { label: string; value: 
 }
 
 export function AeroLab() {
-  const { design, sim, updateAeroResearch } = useDesign();
+  const { design, sim, updateAeroResearch, uiTheme } = useDesign();
   const ar = design.vehicle.aeroResearch;
   const [dept, setDept] = useState<Dept>("dashboard");
 
@@ -64,7 +67,56 @@ export function AeroLab() {
 
   return (
     <div className="space-y-4">
+      {/* UI 4: Modern Analog Dial & Gradient Sliders Showcase (As seen in Reference Photo) */}
+      {uiTheme === "theme4" && (
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-2">
+          <ModernAnalogDial
+            title="AERODYNAMIC PROFILE"
+            value={ar.rearWing.angleOfAttack}
+            min={0}
+            max={40}
+            unit="°"
+            sublabel="L/D Ratio"
+            onChange={(val) => update("rearWing", { angleOfAttack: val })}
+          />
+          <div className="flex flex-col gap-3 justify-center">
+            <GlassSlider
+              label="CFD Visualization Intensity"
+              value={80}
+              min={0}
+              max={100}
+              unit="%"
+            />
+            <GlassSlider
+              label="Ride Height (mm)"
+              value={design.vehicle.aero?.rideHeight ?? 80}
+              min={40}
+              max={120}
+              unit="mm"
+              onChange={(v) => updateAeroResearch({ windTunnel: { ...ar.windTunnel, rideHeight: v } })}
+            />
+          </div>
+          <div className="flex flex-col gap-3 justify-center">
+            <GlassSlider
+              label="Downforce Load Balance"
+              value={52}
+              min={30}
+              max={70}
+              unit="% Front"
+            />
+            <GlassSlider
+              label="Active Aero Sensitivity"
+              value={75}
+              min={0}
+              max={100}
+              unit="%"
+            />
+          </div>
+        </div>
+      )}
+
       <PresetQuickSelect />
+
       <div className="panel p-3">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-3">
           <div className="flex items-center gap-2">
@@ -164,8 +216,14 @@ export function AeroLab() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 xl:grid-cols-3 gap-4">
-        <div className="xl:col-span-2 space-y-4">
+      {dept === "dashboard" ? (
+        <div className="space-y-4">
+          <SpatialReferenceSuite />
+          <AeroDashboard sim={sim} ar={ar} update={update} />
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 xl:grid-cols-3 gap-4">
+          <div className="xl:col-span-2 space-y-4">
           {dept === "front" && (
             <Section title="Front Aero Designer" icon={<CarFront size={16} />}>
               <Select<FrontBumperShape>
@@ -371,8 +429,6 @@ export function AeroLab() {
               </div>
             </Section>
           )}
-
-          {dept === "dashboard" && <AeroDashboard sim={sim} ar={ar} update={update} />}
         </div>
 
         {/* Right rail: live metrics + visualization */}
@@ -398,20 +454,19 @@ export function AeroLab() {
             </div>
           </Section>
 
-          {dept !== "dashboard" && (
-            <Section title="Drag & Downforce vs Speed" icon={<CircuitBoard size={16} />}>
-              <LineChart
-                series={[
-                  { data: sim.dragVsSpeed.map((p) => ({ x: p.speed, y: p.downforce })), color: "#22d3ee", label: "Downforce (N)" },
-                  { data: sim.dragVsSpeed.map((p) => ({ x: p.speed, y: p.drag })), color: "#f59e0b", label: "Drag (N)" },
-                ]}
-                xLabel="Speed" xUnit="km/h"
-                height={170}
-              />
-            </Section>
-          )}
+          <Section title="Drag & Downforce vs Speed" icon={<CircuitBoard size={16} />}>
+            <LineChart
+              series={[
+                { data: sim.dragVsSpeed.map((p) => ({ x: p.speed, y: p.downforce })), color: "#22d3ee", label: "Downforce (N)" },
+                { data: sim.dragVsSpeed.map((p) => ({ x: p.speed, y: p.drag })), color: "#f59e0b", label: "Drag (N)" },
+              ]}
+              xLabel="Speed" xUnit="km/h"
+              height={170}
+            />
+          </Section>
         </div>
       </div>
+      )}
     </div>
   );
 }

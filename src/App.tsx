@@ -1,10 +1,12 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Cog, Car, Activity, Flag, BarChart3, Save, FolderOpen, RotateCcw,
   Sofa, Factory, FlaskConical, Ruler, Paintbrush, Wind, Newspaper,
   Monitor, Microscope, LayoutDashboard, Trophy, Warehouse, GitCompare,
   TrendingUp, ShieldCheck, DollarSign, Cpu, GitBranch,
+  LayoutGrid, Bell, SlidersHorizontal,
 } from "lucide-react";
+import { EngineeringLog } from "./components/EngineeringLog";
 import { DesignProvider, useDesign } from "./state/DesignContext";
 import { RDProvider } from "./state/RDContext";
 import { CompanyProvider, useCompany } from "./state/CompanyContext";
@@ -38,6 +40,9 @@ import { CommandPalette } from "./components/CommandPalette";
 import { ToastProvider } from "./components/ToastSystem";
 import { ThermalAlertMonitor } from "./components/ThermalAlertMonitor";
 import { Search, Command as CmdIcon } from "lucide-react";
+import { VisionGlassHeader } from "./components/ui/VisionGlassHeader";
+import { VisionGlassDock } from "./components/ui/VisionGlassDock";
+import { VisionGlassToolbar } from "./components/ui/VisionGlassToolbar";
 
 import { Wrench } from "lucide-react";
 
@@ -58,38 +63,79 @@ interface StageItem {
 
 const STAGES: StageItem[] = [
   // --- Engineering Studio ---
-  { id: "command",       label: "Command Center", icon: <LayoutDashboard size={14} />, category: "engineering" },
-  { id: "engine",        label: "Engine",         icon: <Cog size={14} />,             category: "engineering" },
-  { id: "vehicle",       label: "Vehicle",        icon: <Car size={14} />,             category: "engineering" },
-  { id: "exterior",      label: "Exterior",       icon: <Paintbrush size={14} />,      category: "engineering" },
-  { id: "aero",          label: "Aero Lab",       icon: <Wind size={14} />,            category: "engineering" },
-  { id: "interior",      label: "Interior",       icon: <Sofa size={14} />,            category: "engineering" },
-  { id: "manufacturing", label: "Manufacturing",  icon: <Factory size={14} />,         category: "engineering" },
-  { id: "infotainment",  label: "Electronics",    icon: <Monitor size={14} />,         category: "engineering" },
-  { id: "safety",        label: "Safety Center",  icon: <ShieldCheck size={14} />,     category: "engineering" },
+  { id: "command", label: "Command Center", icon: <LayoutDashboard size={14} />, category: "engineering" },
+  { id: "engine", label: "Engine", icon: <Cog size={14} />, category: "engineering" },
+  { id: "vehicle", label: "Vehicle", icon: <Car size={14} />, category: "engineering" },
+  { id: "exterior", label: "Exterior", icon: <Paintbrush size={14} />, category: "engineering" },
+  { id: "aero", label: "Aero Lab", icon: <Wind size={14} />, category: "engineering" },
+  { id: "interior", label: "Interior", icon: <Sofa size={14} />, category: "engineering" },
+  { id: "manufacturing", label: "Manufacturing", icon: <Factory size={14} />, category: "engineering" },
+  { id: "infotainment", label: "Electronics", icon: <Monitor size={14} />, category: "engineering" },
+  { id: "safety", label: "Safety Center", icon: <ShieldCheck size={14} />, category: "engineering" },
 
   // --- Simulation & Testing ---
-  { id: "simulation",    label: "Simulation",     icon: <Activity size={14} />,        category: "simulation" },
-  { id: "testing",       label: "Testing Lab",    icon: <FlaskConical size={14} />,    category: "simulation" },
-  { id: "race",          label: "Race Track",     icon: <Flag size={14} />,            category: "simulation" },
-  { id: "stats",         label: "Telemetry Stats",icon: <BarChart3 size={14} />,       category: "simulation" },
+  { id: "simulation", label: "Simulation", icon: <Activity size={14} />, category: "simulation" },
+  { id: "testing", label: "Testing Lab", icon: <FlaskConical size={14} />, category: "simulation" },
+  { id: "race", label: "Race Track", icon: <Flag size={14} />, category: "simulation" },
+  { id: "stats", label: "Telemetry Stats", icon: <BarChart3 size={14} />, category: "simulation" },
 
   // --- World & Racing ---
-  { id: "garage",        label: "Garage",         icon: <Warehouse size={14} />,       category: "world" },
-  { id: "compare",       label: "Compare",        icon: <GitCompare size={14} />,      category: "world" },
-  { id: "economy",       label: "Economy",        icon: <TrendingUp size={14} />,      category: "world" },
-  { id: "motorsport",    label: "Motorsport",     icon: <Trophy size={14} />,          category: "world" },
-  { id: "twin",          label: "Digital Twin",   icon: <Cpu size={14} />,             category: "world" },
-  { id: "sales",         label: "Sales",          icon: <DollarSign size={14} />,      category: "world" },
-  { id: "press",         label: "Press Reviews",  icon: <Newspaper size={14} />,       category: "world" },
-  { id: "competitors",   label: "Rivals",         icon: <GitBranch size={14} />,       category: "world" },
+  { id: "garage", label: "Garage", icon: <Warehouse size={14} />, category: "world" },
+  { id: "compare", label: "Compare", icon: <GitCompare size={14} />, category: "world" },
+  { id: "economy", label: "Economy", icon: <TrendingUp size={14} />, category: "world" },
+  { id: "motorsport", label: "Motorsport", icon: <Trophy size={14} />, category: "world" },
+  { id: "twin", label: "Digital Twin", icon: <Cpu size={14} />, category: "world" },
+  { id: "sales", label: "Sales", icon: <DollarSign size={14} />, category: "world" },
+  { id: "press", label: "Press Reviews", icon: <Newspaper size={14} />, category: "world" },
+  { id: "competitors", label: "Rivals", icon: <GitBranch size={14} />, category: "world" },
 ];
 
 const WORKSPACE_CATEGORIES: { id: WorkspaceCategory; label: string; icon: React.ReactNode }[] = [
   { id: "engineering", label: "Engineering Studio", icon: <Wrench size={14} /> },
-  { id: "simulation",  label: "Sim & Testing",      icon: <Activity size={14} /> },
-  { id: "world",       label: "World & Racing",     icon: <Trophy size={14} /> },
+  { id: "simulation", label: "Sim & Testing", icon: <Activity size={14} /> },
+  { id: "world", label: "World & Racing", icon: <Trophy size={14} /> },
 ];
+
+// Error Boundary to catch runtime crashes
+class VisionGlassErrorBoundary extends React.Component<
+  { children: React.ReactNode },
+  { hasError: boolean; error: Error | null }
+> {
+  constructor(props: { children: React.ReactNode }) {
+    super(props);
+    this.state = { hasError: false, error: null };
+  }
+  static getDerivedStateFromError(error: Error) {
+    return { hasError: true, error };
+  }
+  componentDidCatch(error: Error, info: React.ErrorInfo) {
+    console.error("Vision Glass Error:", error, info);
+  }
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div style={{
+          position: "fixed", inset: 0, background: "#1a1a2e",
+          display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center",
+          color: "#fff", fontFamily: "monospace", padding: 40,
+        }}>
+          <h1 style={{ color: "#ff6b6b", fontSize: 24, marginBottom: 16 }}>⚠️ Vision Glass Error</h1>
+          <pre style={{ color: "#ffd93d", fontSize: 14, maxWidth: "80vw", overflow: "auto", whiteSpace: "pre-wrap" }}>
+            {this.state.error?.message}
+          </pre>
+          <pre style={{ color: "#94a3b8", fontSize: 11, marginTop: 12, maxWidth: "80vw", overflow: "auto", whiteSpace: "pre-wrap" }}>
+            {this.state.error?.stack}
+          </pre>
+          <button onClick={() => this.setState({ hasError: false, error: null })}
+            style={{ marginTop: 24, padding: "8px 24px", background: "#007AFF", color: "#fff", border: "none", borderRadius: 8, cursor: "pointer", fontSize: 14, fontWeight: 600 }}>
+            Try Again
+          </button>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
 
 function AppInner() {
   const [stage, setStage] = useState<Stage>("command");
@@ -123,7 +169,143 @@ function AppInner() {
   }, []);
 
   const activeCategoryStages = STAGES.filter(s => s.category === activeCategory);
+  const isVisionGlass = uiTheme === "theme4";
 
+  // ===== UI 4: Vision Glass — Completely separate UI/UX =====
+  if (isVisionGlass) {
+    return (
+      <VisionGlassErrorBoundary>
+        <div
+          className="theme4"
+          style={{
+            position: "fixed", inset: 0,
+            background: "#111118",
+            fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif",
+            display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "flex-start",
+            overflow: "hidden",
+            opacity: booted ? 1 : 0, transition: "opacity 0.7s ease",
+          }}
+        >
+          {/* === Golden Warm Bokeh background image for Vision Glass === */}
+          <div style={{
+            position: "absolute", inset: 0, zIndex: 0,
+            backgroundImage: "url('/bokeh-bg.png')",
+            backgroundSize: "cover", backgroundPosition: "center",
+            filter: "brightness(0.9) saturate(1.25) contrast(1.05)",
+          }} />
+          {/* Luminous warm golden ambient light leaks overlay */}
+          <div style={{
+            position: "absolute", inset: 0, zIndex: 1, pointerEvents: "none",
+            background: "radial-gradient(ellipse 80% 60% at 70% 20%, rgba(255, 215, 130, 0.22), transparent 70%), radial-gradient(ellipse 60% 50% at 20% 80%, rgba(255, 190, 90, 0.15), transparent 65%)",
+          }} />
+          {/* ===== Left Vertical Toolbar (Phase 7 Component) ===== */}
+          <VisionGlassToolbar
+            actions={[
+              { id: "command", icon: <LayoutGrid size={17} />, label: "Dashboard", onClick: () => setStage("command"), isActive: stage === "command" },
+              { id: "search", icon: <Search size={17} />, label: "Search (Ctrl+K)", onClick: () => setCmdPaletteOpen(true) },
+              { id: "simulation", icon: <Activity size={17} />, label: "Analytics", onClick: () => setStage("simulation"), isActive: stage === "simulation" },
+              { id: "safety", icon: <Bell size={17} />, label: "Safety & Alerts", onClick: () => setStage("safety"), isActive: stage === "safety" },
+              { id: "vehicle", icon: <SlidersHorizontal size={17} />, label: "Vehicle Controls", onClick: () => setStage("vehicle"), isActive: stage === "vehicle" },
+            ]}
+          />
+
+          {/* ===== Floating Glass Window ===== */}
+          <div style={{
+            position: "relative", zIndex: 10,
+            width: "min(96vw, 1440px)",
+            marginTop: 16, marginBottom: 16,
+            borderRadius: 28,
+            background: "rgba(255, 252, 245, 0.52)",
+            backdropFilter: "blur(60px) saturate(220%)",
+            WebkitBackdropFilter: "blur(60px) saturate(220%)",
+            border: "1px solid rgba(255, 255, 255, 0.75)",
+            boxShadow: "0 24px 80px rgba(0, 0, 0, 0.12), 0 6px 24px rgba(0, 0, 0, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.90)",
+            display: "flex", flexDirection: "column",
+            height: "calc(100vh - 32px)",
+            overflow: "hidden",
+          }}>
+
+            {/* ── HEADER BAR (Phase 3 Component) ── */}
+            <VisionGlassHeader
+              month={company.economy.month}
+              totalRevenue={company.totalRevenue}
+              units={units}
+              onSetUnits={setUnits}
+              onSave={() => setDialog({ open: true, mode: "save" })}
+              onLoad={() => setDialog({ open: true, mode: "load" })}
+              onReset={resetDesign}
+              onSearch={() => setCmdPaletteOpen(true)}
+              onAdvanceMonth={advanceAllSystems}
+            />
+
+            {/* ── SCROLLABLE CONTENT ── */}
+            <div className="vision-glass-content" style={{
+              flex: 1, overflowY: "auto", overflowX: "hidden",
+              padding: "16px 20px 80px 20px",
+            }}>
+              <div style={{ display: "flex", gap: 16 }}>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div key={stage}>
+                    {stage === "command" && <CommandCenter onSelectStage={(st) => setStage(st as Stage)} />}
+                    {stage === "engine" && <EngineDesigner />}
+                    {stage === "vehicle" && <VehicleDesigner />}
+                    {stage === "exterior" && <ExteriorDesigner />}
+                    {stage === "aero" && <AeroLab />}
+                    {stage === "interior" && <InteriorsDesigner />}
+                    {stage === "manufacturing" && <ManufacturingDesigner />}
+                    {stage === "infotainment" && <InfotainmentDesigner />}
+                    {stage === "safety" && <SafetyCenter />}
+                    {stage === "simulation" && <SimulationDashboard />}
+                    {stage === "testing" && <TestingLab />}
+                    {stage === "race" && <RaceSimulator />}
+                    {stage === "stats" && <DetailedStats />}
+                    {stage === "press" && <PressReviews />}
+                    {stage === "garage" && <VehicleGarage />}
+                    {stage === "compare" && <EngineeringComparison />}
+                    {stage === "economy" && <DynamicEconomy />}
+                    {stage === "motorsport" && <MotorsportDivision />}
+                    {stage === "twin" && <DigitalTwin />}
+                    {stage === "sales" && <SalesLaunch />}
+                    {stage === "competitors" && <Competitors />}
+                  </div>
+                </div>
+
+                {/* Right Sidebar — Engineering Log + Telemetry Rail */}
+                <div className="hidden xl:flex flex-col gap-4" style={{ width: 300, flexShrink: 0 }}>
+                  <div style={{ position: "sticky", top: 8, display: "flex", flexDirection: "column", gap: 12 }}>
+                    {/* Engineering Log Panel (Matching Reference Photo) */}
+                    <EngineeringLog />
+                    {/* Live Stat Rail */}
+                    <div className="stat-rail-container">
+                      <StatRail />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* ── BOTTOM DOCK (Phase 4 Component) ── */}
+            <VisionGlassDock
+              stages={STAGES}
+              categories={WORKSPACE_CATEGORIES}
+              activeCategory={activeCategory}
+              activeStage={stage}
+              onSelectCategory={(id) => setActiveCategory(id as WorkspaceCategory)}
+              onSelectStage={(id) => setStage(id as Stage)}
+            />
+          </div>
+
+          {/* Overlays */}
+          <SaveLoadDialog open={dialog.open} mode={dialog.mode} onClose={() => setDialog({ open: false, mode: dialog.mode })} />
+          <CommandPalette isOpen={cmdPaletteOpen} onClose={() => setCmdPaletteOpen(false)} onSelectStage={(s) => setStage(s as Stage)} />
+          <AIAssistant />
+          <ThermalAlertMonitor />
+        </div>
+      </VisionGlassErrorBoundary>
+    );
+  }
+
+  // ===== Themes 1, 2, 3: Original Layout (UNCHANGED) =====
   return (
     <div className={`min-h-screen bg-base-950 flex flex-col grid-bg transition-opacity duration-700 ${booted ? "opacity-100" : "opacity-0"} ${uiTheme}`}>
       {/* Top Header */}
@@ -149,17 +331,15 @@ function AppInner() {
                   key={cat.id}
                   onClick={() => {
                     setActiveCategory(cat.id);
-                    // Select first stage of the category if current stage isn't in it
                     const firstInCat = STAGES.find(s => s.category === cat.id);
                     if (firstInCat && !STAGES.filter(s => s.category === cat.id).some(s => s.id === stage)) {
                       setStage(firstInCat.id);
                     }
                   }}
-                  className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all whitespace-nowrap ripple-effect haptic-press ${
-                    isActive
-                      ? "bg-gradient-to-r from-cyan-500/30 to-purple-500/25 text-cyan-200 border border-cyan-400/50 shadow-[0_0_15px_rgba(34,211,238,0.3)] aurora-glow"
-                      : "text-slate-400 hover:text-slate-200 hover:bg-white/5"
-                  }`}
+                  className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all whitespace-nowrap ripple-effect haptic-press ${isActive
+                    ? "bg-gradient-to-r from-cyan-500/30 to-purple-500/25 text-cyan-200 border border-cyan-400/50 shadow-[0_0_15px_rgba(34,211,238,0.3)] aurora-glow"
+                    : "text-slate-400 hover:text-slate-200 hover:bg-white/5"
+                    }`}
                 >
                   {cat.icon}
                   <span>{cat.label}</span>
@@ -170,7 +350,6 @@ function AppInner() {
 
           {/* Right Control Bar */}
           <div className="flex items-center gap-2 shrink-0">
-            {/* Command Palette Trigger */}
             <button
               onClick={() => setCmdPaletteOpen(true)}
               className="flex items-center gap-2 bg-base-850/90 hover:bg-slate-800 border border-slate-700/80 rounded-lg px-2.5 py-1.5 text-xs text-slate-400 hover:text-slate-200 transition-all hidden md:flex"
@@ -183,7 +362,6 @@ function AppInner() {
               </kbd>
             </button>
 
-            {/* Live Economy Snapshot */}
             <div className="hidden lg:flex items-center gap-2 bg-base-850/80 border border-base-800 rounded-lg px-2.5 py-1 text-xs">
               <div className="flex items-center gap-1">
                 <span className="text-[10px] text-slate-500 font-mono">MO.</span>
@@ -204,7 +382,6 @@ function AppInner() {
               </button>
             </div>
 
-            {/* Unit Toggle */}
             <div className="flex items-center gap-0.5 bg-base-850 rounded-lg p-0.5 border border-base-800">
               <button onClick={() => setUnits("metric")} className={`px-2 py-1 rounded text-[11px] font-medium transition-all ${units === "metric" ? "bg-accent-500/20 text-accent-300 font-bold" : "text-slate-500 hover:text-slate-300"}`}>
                 <Ruler size={11} className="inline mr-1" />Metric
@@ -214,7 +391,6 @@ function AppInner() {
               </button>
             </div>
 
-            {/* Save / Load / Reset */}
             <div className="flex items-center gap-1">
               <button onClick={() => setDialog({ open: true, mode: "save" })} className="p-1.5 rounded-lg text-slate-400 hover:text-slate-200 hover:bg-base-800 transition-all" title="Save Design">
                 <Save size={14} />
@@ -230,7 +406,7 @@ function AppInner() {
         </div>
       </header>
 
-      {/* Sub-Navigation Bar (Frosted Glass Module Switcher) */}
+      {/* Sub-Navigation Bar */}
       <nav className="border-b border-white/5 bg-[#0b0f19]/60 backdrop-blur-md sticky top-14 z-30 shadow-md">
         <div className="max-w-[1700px] mx-auto px-4 py-2 flex items-center gap-1.5 overflow-x-auto no-scrollbar">
           {activeCategoryStages.map((s) => {
@@ -239,11 +415,10 @@ function AppInner() {
               <button
                 key={s.id}
                 onClick={() => setStage(s.id)}
-                className={`flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all whitespace-nowrap ripple-effect haptic-press ${
-                  isCurrent
-                    ? "bg-gradient-to-r from-cyan-500/30 to-sky-500/20 text-cyan-100 border border-cyan-400/50 shadow-[0_0_12px_rgba(34,211,238,0.25)] neon-underline font-bold"
-                    : "text-slate-400 hover:text-slate-100 hover:bg-white/5 border border-transparent"
-                }`}
+                className={`flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all whitespace-nowrap ripple-effect haptic-press ${isCurrent
+                  ? "bg-gradient-to-r from-cyan-500/30 to-sky-500/20 text-cyan-100 border border-cyan-400/50 shadow-[0_0_12px_rgba(34,211,238,0.25)] neon-underline font-bold"
+                  : "text-slate-400 hover:text-slate-100 hover:bg-white/5 border border-transparent"
+                  }`}
               >
                 <span className={isCurrent ? "text-cyan-300" : "text-slate-500"}>{s.icon}</span>
                 <span>{s.label}</span>
@@ -257,27 +432,27 @@ function AppInner() {
       <div className="flex-1 max-w-[1700px] mx-auto w-full px-4 py-4 pb-44 flex gap-4">
         <div className="flex-1 min-w-0">
           <div key={stage} className="animate-scale-reveal">
-            {stage === "command"       && <CommandCenter onSelectStage={(st) => setStage(st as Stage)} />}
-            {stage === "engine"        && <EngineDesigner />}
-            {stage === "vehicle"       && <VehicleDesigner />}
-            {stage === "exterior"      && <ExteriorDesigner />}
-            {stage === "aero"          && <AeroLab />}
-            {stage === "interior"      && <InteriorsDesigner />}
+            {stage === "command" && <CommandCenter onSelectStage={(st) => setStage(st as Stage)} />}
+            {stage === "engine" && <EngineDesigner />}
+            {stage === "vehicle" && <VehicleDesigner />}
+            {stage === "exterior" && <ExteriorDesigner />}
+            {stage === "aero" && <AeroLab />}
+            {stage === "interior" && <InteriorsDesigner />}
             {stage === "manufacturing" && <ManufacturingDesigner />}
-            {stage === "infotainment"  && <InfotainmentDesigner />}
-            {stage === "safety"        && <SafetyCenter />}
-            {stage === "simulation"    && <SimulationDashboard />}
-            {stage === "testing"       && <TestingLab />}
-            {stage === "race"          && <RaceSimulator />}
-            {stage === "stats"         && <DetailedStats />}
-            {stage === "press"         && <PressReviews />}
-            {stage === "garage"        && <VehicleGarage />}
-            {stage === "compare"       && <EngineeringComparison />}
-            {stage === "economy"       && <DynamicEconomy />}
-            {stage === "motorsport"    && <MotorsportDivision />}
-            {stage === "twin"          && <DigitalTwin />}
-            {stage === "sales"         && <SalesLaunch />}
-            {stage === "competitors"   && <Competitors />}
+            {stage === "infotainment" && <InfotainmentDesigner />}
+            {stage === "safety" && <SafetyCenter />}
+            {stage === "simulation" && <SimulationDashboard />}
+            {stage === "testing" && <TestingLab />}
+            {stage === "race" && <RaceSimulator />}
+            {stage === "stats" && <DetailedStats />}
+            {stage === "press" && <PressReviews />}
+            {stage === "garage" && <VehicleGarage />}
+            {stage === "compare" && <EngineeringComparison />}
+            {stage === "economy" && <DynamicEconomy />}
+            {stage === "motorsport" && <MotorsportDivision />}
+            {stage === "twin" && <DigitalTwin />}
+            {stage === "sales" && <SalesLaunch />}
+            {stage === "competitors" && <Competitors />}
           </div>
         </div>
         <div className="hidden lg:block w-80 shrink-0">
@@ -302,10 +477,8 @@ function AppInner() {
       <AIAssistant />
       <ThermalAlertMonitor />
 
-      {/* Cosmic sparkle for Theme 2 */}
       {uiTheme === "theme2" && <div className="cosmic-sparkle" />}
 
-      {/* Ambient floating orbs & light leak for atmospheric depth */}
       <div className="ambient-orb ambient-orb-1" />
       <div className="ambient-orb ambient-orb-2" />
       <div className="ambient-orb ambient-orb-3" />
