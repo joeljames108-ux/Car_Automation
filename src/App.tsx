@@ -146,6 +146,69 @@ function AppInner() {
   const { company, advanceAllSystems } = useCompany();
   const [booted, setBooted] = useState(false);
 
+  // Phase 1 Scroll Animation Physics (120Hz / 60fps rAF lerp engine)
+  const scrollRef = React.useRef<HTMLDivElement>(null);
+  const bgRef = React.useRef<HTMLDivElement>(null);
+  const lightRef = React.useRef<HTMLDivElement>(null);
+  const progressFillRef = React.useRef<HTMLDivElement>(null);
+
+  const scrollPhysics = React.useRef({
+    currentScroll: 0,
+    targetScroll: 0,
+    animating: false,
+  });
+
+  useEffect(() => {
+    if (uiTheme !== "theme4") return;
+
+    let rafId: number;
+
+    const renderFrame = () => {
+      const state = scrollPhysics.current;
+      // High-precision lerp for 120Hz silk smooth motion
+      state.currentScroll += (state.targetScroll - state.currentScroll) * 0.16;
+      const diff = Math.abs(state.targetScroll - state.currentScroll);
+
+      if (bgRef.current) {
+        bgRef.current.style.transform = `translate3d(0, ${(state.currentScroll * -0.05).toFixed(2)}px, 0)`;
+      }
+      if (lightRef.current) {
+        lightRef.current.style.transform = `translate3d(0, ${(state.currentScroll * -0.10).toFixed(2)}px, 0)`;
+      }
+
+      if (diff > 0.05) {
+        rafId = requestAnimationFrame(renderFrame);
+      } else {
+        state.animating = false;
+      }
+    };
+
+    const el = scrollRef.current;
+    if (!el) return;
+
+    const onScroll = () => {
+      const totalHeight = el.scrollHeight - el.clientHeight;
+      const currentScroll = el.scrollTop;
+      scrollPhysics.current.targetScroll = currentScroll;
+
+      if (totalHeight > 0 && progressFillRef.current) {
+        const prog = Math.min(1, Math.max(0, currentScroll / totalHeight));
+        progressFillRef.current.style.width = `${(prog * 100).toFixed(2)}%`;
+      }
+
+      if (!scrollPhysics.current.animating) {
+        scrollPhysics.current.animating = true;
+        rafId = requestAnimationFrame(renderFrame);
+      }
+    };
+
+    el.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      el.removeEventListener("scroll", onScroll);
+      if (rafId) cancelAnimationFrame(rafId);
+    };
+  }, [uiTheme, stage]);
+
   useEffect(() => { const t = setTimeout(() => setBooted(true), 60); return () => clearTimeout(t); }, []);
 
   // Sync category when stage changes (e.g. from CommandPalette)
@@ -187,17 +250,27 @@ function AppInner() {
           }}
         >
           {/* === Golden Warm Bokeh background image for Vision Glass === */}
-          <div style={{
-            position: "absolute", inset: 0, zIndex: 0,
-            backgroundImage: "url('/bokeh-bg.png')",
-            backgroundSize: "cover", backgroundPosition: "center",
-            filter: "brightness(0.9) saturate(1.25) contrast(1.05)",
-          }} />
+          <div
+            ref={bgRef}
+            className="vision-parallax-layer"
+            style={{
+              position: "absolute", inset: 0, zIndex: 0,
+              backgroundImage: "url('/bokeh-bg.png')",
+              backgroundSize: "cover", backgroundPosition: "center",
+              filter: "brightness(0.9) saturate(1.25) contrast(1.05)",
+              willChange: "transform",
+            }}
+          />
           {/* Luminous warm golden ambient light leaks overlay */}
-          <div style={{
-            position: "absolute", inset: 0, zIndex: 1, pointerEvents: "none",
-            background: "radial-gradient(ellipse 80% 60% at 70% 20%, rgba(255, 215, 130, 0.22), transparent 70%), radial-gradient(ellipse 60% 50% at 20% 80%, rgba(255, 190, 90, 0.15), transparent 65%)",
-          }} />
+          <div
+            ref={lightRef}
+            className="vision-parallax-layer"
+            style={{
+              position: "absolute", inset: 0, zIndex: 1, pointerEvents: "none",
+              background: "radial-gradient(ellipse 80% 60% at 70% 20%, rgba(255, 215, 130, 0.22), transparent 70%), radial-gradient(ellipse 60% 50% at 20% 80%, rgba(255, 190, 90, 0.15), transparent 65%)",
+              willChange: "transform",
+            }}
+          />
           {/* ===== Left Vertical Toolbar (Phase 7 Component) ===== */}
           <VisionGlassToolbar
             actions={[
@@ -238,11 +311,24 @@ function AppInner() {
               onAdvanceMonth={advanceAllSystems}
             />
 
-            {/* ── SCROLLABLE CONTENT ── */}
-            <div className="vision-glass-content" style={{
-              flex: 1, overflowY: "auto", overflowX: "hidden",
-              padding: "16px 20px 80px 20px",
-            }}>
+            {/* ── SPATIAL GLASS SCROLL PROGRESS INDICATOR BAR (Phase 1) ── */}
+            <div className="vision-scroll-indicator-bar">
+              <div
+                ref={progressFillRef}
+                className="vision-scroll-indicator-fill"
+                style={{ width: "0%" }}
+              />
+            </div>
+
+            {/* ── SCROLLABLE CONTENT WITH MOMENTUM (Phase 1) ── */}
+            <div
+              ref={scrollRef}
+              className="vision-glass-content vision-scroll-momentum"
+              style={{
+                flex: 1, overflowY: "auto", overflowX: "hidden",
+                padding: "16px 20px 80px 20px",
+              }}
+            >
               <div style={{ display: "flex", gap: 16 }}>
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <div key={stage}>
