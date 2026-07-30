@@ -49,14 +49,16 @@ function ToolbarButton({ action }: { action: ToolbarAction }) {
           cursor: "pointer",
           color: action.isActive ? "#007aff" : isHovered ? "#1c1c1e" : "#636366",
           background: action.isActive
-            ? "rgba(0, 122, 255, 0.14)"
+            ? "rgba(0, 122, 255, 0.16)"
             : isHovered
-            ? "rgba(0, 0, 0, 0.06)"
+            ? "rgba(255, 255, 255, 0.65)"
             : "transparent",
-          transition: "all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1)",
-          transform: isHovered ? "scale(1.12)" : "scale(1)",
-          boxShadow: action.isActive
-            ? "0 0 12px rgba(0, 136, 255, 0.20), inset 0 1px 0 rgba(0, 136, 255, 0.10)"
+          transition: "all 0.28s cubic-bezier(0.34, 1.56, 0.64, 1)",
+          transform: isHovered ? "scale(1.16) translateY(-2px)" : "scale(1)",
+          boxShadow: isHovered
+            ? "0 6px 16px rgba(0, 0, 0, 0.10), inset 0 1px 0 rgba(255, 255, 255, 0.85)"
+            : action.isActive
+            ? "0 0 12px rgba(0, 136, 255, 0.25), inset 0 1px 0 rgba(0, 136, 255, 0.15)"
             : "none",
         }}
       >

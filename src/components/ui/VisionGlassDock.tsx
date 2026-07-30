@@ -123,18 +123,23 @@ export function VisionGlassDock({
                 fontSize: 11,
                 fontWeight: active ? 700 : 500,
                 background: active
-                  ? "rgba(0,122,255,0.14)"
+                  ? "rgba(0,122,255,0.16)"
                   : isHov
-                  ? "rgba(0,0,0,0.04)"
+                  ? "rgba(255,255,255,0.65)"
                   : "transparent",
-                color: active ? "#007aff" : "#636366",
+                color: active ? "#007aff" : isHov ? "#1c1c1e" : "#636366",
                 border: active
-                  ? "1px solid rgba(0,122,255,0.20)"
+                  ? "1px solid rgba(0,122,255,0.25)"
+                  : isHov
+                  ? "1px solid rgba(255,255,255,0.85)"
                   : "1px solid transparent",
                 cursor: "pointer",
                 whiteSpace: "nowrap" as const,
-                transition: "all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1)",
-                transform: isHov && !active ? "translateY(-2px)" : "none",
+                transition: "all 0.28s cubic-bezier(0.34, 1.56, 0.64, 1)",
+                transform: isHov ? "translateY(-4px) scale(1.05)" : "none",
+                boxShadow: isHov
+                  ? "0 6px 16px rgba(0,0,0,0.10), inset 0 1px 0 rgba(255,255,255,0.9)"
+                  : "none",
               }}
             >
               <span style={{ display: "flex", alignItems: "center" }}>{cat.icon}</span>
