@@ -121,44 +121,44 @@ export function StatRail() {
       {stats.map((s) => (
         <div
           key={s.label}
-          className="relative flex gap-1.5 animate-slide-up group"
+          className="relative flex items-center gap-1.5 animate-slide-up group"
           onMouseEnter={() => setHoveredLabel(s.label)}
           onMouseLeave={() => setHoveredLabel(null)}
         >
           {/* Current value */}
-          <div className="flex-1 flex items-center gap-2 bg-base-900 border border-base-800 rounded-lg px-3 py-2 transition-all duration-300 hover:border-accent-500/50 hover:bg-base-850 glass-shimmer hover-lift inner-light stat-value-glow cursor-help">
-            <span className="text-accent-400 transition-transform duration-300 group-hover:scale-110 icon-bounce">{s.icon}</span>
+          <div className="flex-1 min-w-0 flex items-center gap-2 bg-base-900 border border-base-800 rounded-lg px-3 py-2 transition-all duration-200 hover:border-cyan-500/50 hover:bg-base-850 cursor-help">
+            <span className="text-accent-400 transition-transform duration-200 group-hover:scale-110 shrink-0">{s.icon}</span>
             <div className="flex-1 min-w-0">
               <div className="text-[10px] text-slate-500 uppercase tracking-wider flex items-center justify-between">
-                <span>{s.label}</span>
-                <HelpCircle size={10} className="opacity-0 group-hover:opacity-100 text-cyan-400 transition-opacity" />
+                <span className="truncate">{s.label}</span>
+                <HelpCircle size={10} className="opacity-0 group-hover:opacity-100 text-cyan-400 transition-opacity shrink-0 ml-1" />
               </div>
-              <div className="font-mono text-sm text-slate-200 transition-colors value-transition">
+              <div className="font-mono text-sm text-slate-200 truncate">
                 {s.value}<span className="text-xs text-slate-500 ml-0.5">{s.unit}</span>
               </div>
             </div>
           </div>
 
           {/* Comparison value */}
-          <div className="flex-1 flex items-center gap-2 bg-base-900/60 border border-base-800/50 rounded-lg px-2.5 py-2 transition-all duration-300 hover:border-purple-500/20 glass-shimmer">
+          <div className="flex-1 min-w-0 flex items-center gap-2 bg-base-900/60 border border-base-800/50 rounded-lg px-2.5 py-2 transition-all duration-200 hover:border-purple-500/30">
             <div className="flex-1 min-w-0">
-              <div className="text-[10px] text-purple-400/50 uppercase tracking-wider">{s.label}</div>
-              <div className="font-mono text-sm text-purple-300/70 transition-colors value-transition">
-                {s.prevValue}<span className="text-xs text-purple-400/40 ml-0.5">{s.unit}</span>
+              <div className="text-[10px] text-purple-400/70 uppercase tracking-wider truncate">{s.label}</div>
+              <div className="font-mono text-sm text-purple-300/80 truncate">
+                {s.prevValue}<span className="text-xs text-purple-400/50 ml-0.5">{s.unit}</span>
               </div>
             </div>
           </div>
 
           {/* Popover Tooltip Card */}
           {hoveredLabel === s.label && (
-            <div className="glass-panel absolute right-full mr-2 top-0 z-50 w-64 p-3 bg-base-950/95 border border-cyan-500/40 rounded-xl shadow-2xl backdrop-blur-xl animate-scale-reveal text-left pointer-events-none">
-              <div className="flex items-center gap-1.5 text-xs font-bold text-cyan-300 mb-1">
-                <Info size={13} className="text-cyan-400" />
-                {s.tooltipTitle}
+            <div className="stat-rail-popover absolute right-full mr-3 top-0 z-50 w-64 p-3.5 bg-white/95 border border-cyan-500/50 rounded-xl shadow-2xl backdrop-blur-xl animate-scale-reveal text-left pointer-events-none">
+              <div className="flex items-center gap-1.5 text-xs font-bold text-cyan-400 mb-1">
+                <Info size={14} className="text-cyan-400 shrink-0" />
+                <span>{s.tooltipTitle}</span>
               </div>
               <p className="text-[11px] text-slate-300 leading-relaxed">{s.tooltipDesc}</p>
               {s.subMetric && (
-                <div className="mt-2 pt-1.5 border-t border-slate-800 flex items-center justify-between text-[10px] font-mono text-slate-400">
+                <div className="mt-2 pt-1.5 border-t border-slate-800/60 flex items-center justify-between text-[10px] font-mono text-slate-400">
                   <span>SPEC METRIC:</span>
                   <span className="text-cyan-400 font-semibold">{s.subMetric}</span>
                 </div>

@@ -3560,8 +3560,9 @@ a,
 .theme4 .vision-glass-content .bg-slate-950\/90,
 .theme4 .vision-glass-content .bg-slate-950\/95,
 .theme4 .vision-glass-content .bg-base-950\/95,
-.theme4 .line-chart-tooltip {
-  background-color: rgba(255, 253, 248, 0.94) !important;
+.theme4 .line-chart-tooltip,
+.theme4 .stat-rail-popover {
+  background-color: rgba(255, 253, 248, 0.96) !important;
   backdrop-filter: blur(40px) saturate(210%) !important;
   -webkit-backdrop-filter: blur(40px) saturate(210%) !important;
   border-color: rgba(0, 122, 255, 0.40) !important;
@@ -3569,7 +3570,8 @@ a,
   color: #1c1c1e !important;
 }
 
-.theme4 .line-chart-tooltip .text-slate-400 {
+.theme4 .line-chart-tooltip .text-slate-400,
+.theme4 .stat-rail-popover .text-slate-400 {
   color: #1c1c1e !important;
   font-weight: 800 !important;
 }
