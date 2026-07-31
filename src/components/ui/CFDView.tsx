@@ -19,7 +19,7 @@ type VizMode = "pressure" | "velocity" | "streamlines" | "turbulence" | "wake" |
 
 const VIEW_W = 800;
 const VIEW_H = 360;
-const PARTICLE_COUNT = 220;
+const PARTICLE_COUNT = 360;
 
 const MODE_LABELS: Record<VizMode, { label: string; icon: React.ReactNode }> = {
   pressure: { label: "Pressure", icon: <Gauge size={11} /> },
@@ -55,11 +55,11 @@ export function CFDView({ aero, dragCoeff, liftCoeff, downforce, className = "" 
   // Car profile points (side silhouette of a sports car)
   const carProfile = useMemo(() => buildCarProfile(aero), [aero]);
 
-  // Initialize particles
+  // Initialize particles evenly across viewport width
   useEffect(() => {
     const ps: Particle[] = [];
     for (let i = 0; i < PARTICLE_COUNT; i++) {
-      ps.push(spawnParticle());
+      ps.push(spawnParticle(true));
     }
     particlesRef.current = ps;
   }, []);
@@ -339,14 +339,14 @@ interface Particle {
   life: number; maxLife: number; trail: { x: number; y: number }[];
 }
 
-function spawnParticle(): Particle {
+function spawnParticle(spreadEvenly = false): Particle {
   return {
-    x: -20 + Math.random() * 40,
-    y: 40 + Math.random() * (VIEW_H - 80),
-    vx: 1.5 + Math.random() * 1,
+    x: spreadEvenly ? Math.random() * (VIEW_W + 40) - 20 : -30 + Math.random() * 30,
+    y: 20 + Math.random() * (VIEW_H - 40),
+    vx: 2.5 + Math.random() * 1.2,
     vy: 0,
     life: 0,
-    maxLife: 300 + Math.random() * 200,
+    maxLife: 220 + Math.random() * 180,
     trail: [],
   };
 }
@@ -411,19 +411,20 @@ function drawScene(ctx: CanvasRenderingContext2D, c: DrawCtx) {
   const W = VIEW_W, H = VIEW_H;
   ctx.clearRect(0, 0, W, H);
 
-  // Background gradient (studio)
-  const bgGrad = ctx.createLinearGradient(0, 0, 0, H);
-  bgGrad.addColorStop(0, "#0a0e17");
-  bgGrad.addColorStop(0.7, "#070a12");
-  bgGrad.addColorStop(1, "#050709");
+  // Deep High-Tech Studio Environment Background
+  const bgGrad = ctx.createRadialGradient(W * 0.38, H * 0.5, 50, W / 2, H / 2, W * 0.7);
+  bgGrad.addColorStop(0, "#0e1726");
+  bgGrad.addColorStop(0.5, "#070b14");
+  bgGrad.addColorStop(1, "#030509");
   ctx.fillStyle = bgGrad;
   ctx.fillRect(0, 0, W, H);
 
-  // Subtle grid
+  // Animated Precision Laser Grid
   if (c.showGrid) {
-    ctx.strokeStyle = "rgba(100, 116, 139, 0.06)";
+    const gridOffset = (c.frame * c.speed * 0.4) % 40;
+    ctx.strokeStyle = "rgba(0, 122, 255, 0.08)";
     ctx.lineWidth = 1;
-    for (let x = 0; x < W; x += 40) {
+    for (let x = -gridOffset; x < W; x += 40) {
       ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke();
     }
     for (let y = 0; y < H; y += 40) {
@@ -431,73 +432,74 @@ function drawScene(ctx: CanvasRenderingContext2D, c: DrawCtx) {
     }
   }
 
-  // Ground line
+  // Ground Line & Laser Track
   const groundY = H * 0.68;
-  ctx.strokeStyle = "rgba(100, 116, 139, 0.15)";
-  ctx.lineWidth = 1;
+  ctx.strokeStyle = "rgba(0, 122, 255, 0.30)";
+  ctx.lineWidth = 1.5;
   ctx.beginPath();
   ctx.moveTo(0, groundY);
   ctx.lineTo(W, groundY);
   ctx.stroke();
 
-  // Ground reflection
+  // Ground Aerodynamic Mirror Reflection
   const reflGrad = ctx.createLinearGradient(0, groundY, 0, H);
-  reflGrad.addColorStop(0, "rgba(34, 211, 238, 0.04)");
+  reflGrad.addColorStop(0, "rgba(0, 122, 255, 0.12)");
+  reflGrad.addColorStop(0.5, "rgba(52, 211, 153, 0.04)");
   reflGrad.addColorStop(1, "rgba(0, 0, 0, 0)");
   ctx.fillStyle = reflGrad;
   ctx.fillRect(0, groundY, W, H - groundY);
 
-  // Apply camera transform
+  // Apply Camera Orbit / Zoom Transforms
   ctx.save();
   ctx.translate(W / 2, H / 2);
   ctx.scale(c.zoom, c.zoom);
   ctx.rotate(c.cameraAngle * Math.PI / 180 * 0.3);
   ctx.translate(-W / 2, -H / 2);
 
-  // Draw pressure/velocity heatmap behind car
+  // 1. Heatmap overlay behind car
   if (c.mode === "pressure" || c.mode === "velocity") {
     drawHeatmap(ctx, c);
   }
 
-  // Draw ground effect under car
+  // 2. Ground effect underbody flow
   if (c.mode === "ground" || c.cutaway === "underfloor") {
     drawGroundEffect(ctx, c);
   }
 
-  // Update and draw particles (streamlines)
+  // 3. Update & render 360 streamline particles
   if (c.mode === "streamlines" || c.mode === "velocity" || c.mode === "pressure" || c.mode === "wake" || c.mode === "turbulence") {
     updateParticles(ctx, c);
     drawParticles(ctx, c);
   }
 
-  // Draw wake/turbulence
+  // 4. Wake vortices & turbulent smoke
   if (c.mode === "wake" || c.mode === "turbulence") {
     drawWake(ctx, c);
   }
 
-  // Draw velocity vectors
+  // 5. Flow vectors
   if (c.showVectors) {
     drawVectors(ctx, c);
   }
 
-  // Draw car
+  // 6. Detailed 3D Hypercar Silhouette
   if (c.showCar) {
     drawCar(ctx, c);
   }
 
   ctx.restore();
 
-  // Vignette
-  const vignette = ctx.createRadialGradient(W / 2, H / 2, W * 0.3, W / 2, H / 2, W * 0.7);
+  // Cinematic Studio Vignette
+  const vignette = ctx.createRadialGradient(W / 2, H / 2, W * 0.35, W / 2, H / 2, W * 0.75);
   vignette.addColorStop(0, "rgba(0,0,0,0)");
-  vignette.addColorStop(1, "rgba(0,0,0,0.4)");
+  vignette.addColorStop(1, "rgba(0,0,0,0.5)");
   ctx.fillStyle = vignette;
   ctx.fillRect(0, 0, W, H);
 }
 
 function drawHeatmap(ctx: CanvasRenderingContext2D, c: DrawCtx) {
   const W = VIEW_W, H = VIEW_H;
-  const cellSize = 12;
+  const cellSize = 10;
   const cols = Math.ceil(W / cellSize);
   const rows = Math.ceil(H / cellSize);
   const groundY = H * 0.68;
@@ -514,25 +516,25 @@ function drawHeatmap(ctx: CanvasRenderingContext2D, c: DrawCtx) {
       let p = 0;
       // Front stagnation (high pressure)
       const dFront = Math.hypot(fx - 0.3, fy * 0.5);
-      p += Math.exp(-dFront * dFront * 8) * 0.9;
+      p += Math.exp(-dFront * dFront * 8) * 0.95;
       // Rear wake (low pressure)
       const dRear = Math.hypot(fx - 0.6, fy * 0.4);
-      p -= Math.exp(-dRear * dRear * 6) * 0.5;
+      p -= Math.exp(-dRear * dRear * 6) * 0.55;
       // Underbody (low pressure = downforce)
       if (y > groundY - 20 && y < groundY && x > carFront + 20 && x < carCenter + 120) {
-        p -= 0.3 * Math.abs(c.liftCoeff);
+        p -= 0.35 * Math.abs(c.liftCoeff);
       }
       // Wing area
       const wingX = carCenter + 130;
       const wingY = groundY - 50 - c.aero.wingHeight / 30;
       const dWing = Math.hypot((x - wingX) / 60, (y - wingY) / 30);
-      p -= Math.exp(-dWing * dWing * 3) * 0.4;
+      p -= Math.exp(-dWing * dWing * 3) * 0.45;
 
       const color = c.mode === "velocity"
         ? velocityColor(c.airSpeed, p, x, y, carCenter, groundY)
         : pressureColor(p);
       ctx.fillStyle = color;
-      ctx.globalAlpha = 0.35;
+      ctx.globalAlpha = 0.32;
       ctx.fillRect(x, y, cellSize, cellSize);
     }
   }
@@ -549,16 +551,15 @@ function pressureColor(p: number): string {
 }
 
 function velocityColor(_baseSpeed: number, _p: number, x: number, y: number, carCx: number, groundY: number): string {
-  // Velocity increases over roof, decreases in wake
   const dx = (x - carCx) / 200;
   const overCar = Math.exp(-Math.pow(dx, 2) * 3) * (y < groundY - 30 && y > groundY - 100 ? 1 : 0);
   const inWake = x > carCx + 100 && y > groundY - 80 && y < groundY + 20;
   let v = 0.5 + overCar * 0.4 - (inWake ? 0.3 : 0);
   v = clamp(v, 0, 1);
-  if (v < 0.25) return lerpColor("#1e40af", "#22c55e", v / 0.25);
-  if (v < 0.5) return lerpColor("#22c55e", "#eab308", (v - 0.25) / 0.25);
-  if (v < 0.75) return lerpColor("#eab308", "#f97316", (v - 0.5) / 0.25);
-  return lerpColor("#f97316", "#ef4444", (v - 0.75) / 0.25);
+  if (v < 0.25) return lerpColor("#007aff", "#22d3ee", v / 0.25);
+  if (v < 0.5) return lerpColor("#22d3ee", "#10b981", (v - 0.25) / 0.25);
+  if (v < 0.75) return lerpColor("#10b981", "#f59e0b", (v - 0.5) / 0.25);
+  return lerpColor("#f59e0b", "#ef4444", (v - 0.75) / 0.25);
 }
 
 function drawGroundEffect(ctx: CanvasRenderingContext2D, c: DrawCtx) {
@@ -570,18 +571,18 @@ function drawGroundEffect(ctx: CanvasRenderingContext2D, c: DrawCtx) {
 
   // Underbody flow
   const grad = ctx.createLinearGradient(front, groundY, rear, groundY);
-  grad.addColorStop(0, "rgba(34, 211, 238, 0.5)");
-  grad.addColorStop(0.5, "rgba(34, 197, 94, 0.6)");
-  grad.addColorStop(1, "rgba(239, 68, 68, 0.5)");
+  grad.addColorStop(0, "rgba(0, 122, 255, 0.6)");
+  grad.addColorStop(0.5, "rgba(52, 211, 153, 0.7)");
+  grad.addColorStop(1, "rgba(239, 68, 68, 0.6)");
   ctx.fillStyle = grad;
-  ctx.globalAlpha = 0.4;
+  ctx.globalAlpha = 0.5;
   ctx.fillRect(front + 10, groundY - rideH - 2, rear - front - 20, rideH + 4);
   ctx.globalAlpha = 1;
 
   // Diffuser expansion
   if (c.aero.diffuserAngle > 0) {
-    ctx.strokeStyle = "rgba(239, 68, 68, 0.4)";
-    ctx.lineWidth = 1.5;
+    ctx.strokeStyle = "rgba(239, 68, 68, 0.6)";
+    ctx.lineWidth = 2;
     for (let i = 0; i < 5; i++) {
       const sx = rear - 30 + i * 8;
       ctx.beginPath();
@@ -592,12 +593,12 @@ function drawGroundEffect(ctx: CanvasRenderingContext2D, c: DrawCtx) {
   }
 
   // Flow arrows under car
-  ctx.strokeStyle = "rgba(34, 211, 238, 0.6)";
-  ctx.lineWidth = 1;
+  ctx.strokeStyle = "rgba(0, 122, 255, 0.8)";
+  ctx.lineWidth = 1.2;
   for (let i = 0; i < 8; i++) {
-    const ax = front + 20 + i * 30 + (c.frame * c.speed * 0.5) % 30;
+    const ax = front + 20 + i * 30 + (c.frame * c.speed * 0.6) % 30;
     const ay = groundY - rideH / 2;
-    drawArrow(ctx, ax, ay, ax + 12, ay);
+    drawArrow(ctx, ax, ay, ax + 14, ay);
   }
 }
 
@@ -608,71 +609,70 @@ function updateParticles(_ctx: CanvasRenderingContext2D, c: DrawCtx) {
   const carFront = carCenter - 140;
   const carRear = carCenter + 140;
   const roofY = groundY - 70 - (c.aero.roofHeight - 1100) * 0.08;
-  const dt = c.speed * 0.5;
+  const dt = c.speed * 0.65;
 
   for (const p of c.particles) {
     p.life += dt;
-    // Store trail
     p.trail.push({ x: p.x, y: p.y });
-    if (p.trail.length > 15) p.trail.shift();
+    if (p.trail.length > 18) p.trail.shift();
 
     // Base flow velocity
-    p.vx = 1.5 + c.airSpeed / 200;
+    p.vx = 2.0 + c.airSpeed / 160;
     p.vy = 0;
 
-    // Flow around front - split up/down
-    if (p.x > carFront - 20 && p.x < carFront + 20) {
+    // Flow around front - split up/down smoothly
+    if (p.x > carFront - 35 && p.x < carFront + 25) {
       const yRel = (p.y - groundY + 40) / 80;
       if (p.y < groundY - 20) {
-        p.vy = -0.8 - yRel * 0.5; // up over hood
+        p.vy = -1.2 - yRel * 0.6; // curve up over nose
       } else {
-        p.vy = 0.5; // down under splitter
-        p.vx *= 0.7;
+        p.vy = 0.6; // down under splitter
+        p.vx *= 0.75;
       }
     }
 
     // Climb windshield
-    if (p.x > carFront + 40 && p.x < carFront + 100 && p.y < groundY - 20) {
-      p.vy = -0.6;
+    if (p.x > carFront + 35 && p.x < carFront + 105 && p.y < groundY - 15) {
+      p.vy = -0.7;
     }
 
     // Accelerate over roof
-    if (p.x > carFront + 100 && p.x < carRear - 40 && p.y < roofY + 10) {
-      p.vy = -0.2;
-      p.vx *= 1.15;
+    if (p.x > carFront + 105 && p.x < carRear - 35 && p.y < roofY + 15) {
+      p.vy = -0.15;
+      p.vx *= 1.22;
     }
 
-    // Detach behind rear
-    if (p.x > carRear - 20 && p.x < carRear + 60) {
-      if (p.y < groundY - 30) {
-        p.vy = 0.3 + Math.sin(p.life * 0.1 + p.x * 0.05) * 0.4;
+    // Detach behind rear wing / fastback
+    if (p.x > carRear - 25 && p.x < carRear + 65) {
+      if (p.y < groundY - 25) {
+        p.vy = 0.4 + Math.sin(p.life * 0.12 + p.x * 0.05) * 0.5;
       }
     }
 
-    // Wake turbulence
-    if (p.x > carRear + 20 && p.x < carRear + 200) {
-      const turb = Math.sin(p.life * 0.08 + p.y * 0.05) * 0.8;
-      p.vy += turb * 0.3;
-      p.vx *= 0.9;
+    // Wake turbulence & vortices
+    if (p.x > carRear + 20 && p.x < carRear + 220) {
+      const turb = Math.sin(p.life * 0.09 + p.y * 0.06) * 1.1;
+      p.vy += turb * 0.35;
+      p.vx *= 0.92;
     }
 
-    // Wheel vortex
+    // Wheel wake turbulence
     const wheelX = carFront + 30;
     const wheelY = groundY;
     if (Math.hypot(p.x - wheelX, p.y - wheelY) < 40 && p.x > wheelX) {
-      p.vy += Math.sin(p.life * 0.15) * 0.5;
+      p.vy += Math.sin(p.life * 0.18) * 0.6;
     }
     const wheelX2 = carRear - 30;
     if (Math.hypot(p.x - wheelX2, p.y - wheelY) < 40 && p.x > wheelX2) {
-      p.vy += Math.sin(p.life * 0.15) * 0.4;
+      p.vy += Math.sin(p.life * 0.18) * 0.5;
     }
 
     p.x += p.vx * dt;
     p.y += p.vy * dt;
 
-    // Respawn
-    if (p.x > W + 20 || p.life > p.maxLife || p.y < 0 || p.y > H) {
-      Object.assign(p, spawnParticle());
+    // Respawn smoothly when exiting screen edge or expiring
+    if (p.x > W + 25 || p.life > p.maxLife || p.y < 0 || p.y > H) {
+      Object.assign(p, spawnParticle(false));
     }
   }
 }
@@ -680,15 +680,22 @@ function updateParticles(_ctx: CanvasRenderingContext2D, c: DrawCtx) {
 function drawParticles(ctx: CanvasRenderingContext2D, c: DrawCtx) {
   for (const p of c.particles) {
     const speed = Math.hypot(p.vx, p.vy);
-    const alpha = clamp(speed / 3, 0.15, 0.7);
-    const color = c.mode === "turbulence" || c.mode === "wake"
-      ? `rgba(168, 139, 250, ${alpha})`
-      : `rgba(34, 211, 238, ${alpha})`;
+    const alpha = clamp(speed / 3.5, 0.25, 0.85);
 
-    // Draw trail
+    let strokeColor = `rgba(34, 211, 238, ${alpha})`;
+    if (c.mode === "turbulence" || c.mode === "wake") {
+      strokeColor = `rgba(192, 132, 252, ${alpha})`;
+    } else if (c.mode === "velocity") {
+      const vNorm = clamp(speed / 4, 0, 1);
+      if (vNorm > 0.7) strokeColor = `rgba(245, 158, 11, ${alpha})`;
+      else if (vNorm > 0.4) strokeColor = `rgba(16, 185, 129, ${alpha})`;
+      else strokeColor = `rgba(0, 122, 255, ${alpha})`;
+    }
+
+    // Glowing Trail
     if (p.trail.length > 1) {
-      ctx.strokeStyle = color;
-      ctx.lineWidth = 0.8;
+      ctx.strokeStyle = strokeColor;
+      ctx.lineWidth = 1.2;
       ctx.beginPath();
       ctx.moveTo(p.trail[0].x, p.trail[0].y);
       for (let i = 1; i < p.trail.length; i++) {
@@ -698,10 +705,10 @@ function drawParticles(ctx: CanvasRenderingContext2D, c: DrawCtx) {
       ctx.stroke();
     }
 
-    // Particle head
-    ctx.fillStyle = color;
+    // Glowing Particle Head
+    ctx.fillStyle = strokeColor;
     ctx.beginPath();
-    ctx.arc(p.x, p.y, 1.2, 0, Math.PI * 2);
+    ctx.arc(p.x, p.y, 1.6, 0, Math.PI * 2);
     ctx.fill();
   }
 }
@@ -799,18 +806,40 @@ function drawCar(ctx: CanvasRenderingContext2D, c: DrawCtx) {
   const groundY = VIEW_H * 0.68;
   const carCenter = VIEW_W * 0.38;
 
-  // Shadow under car
-  ctx.fillStyle = "rgba(0, 0, 0, 0.5)";
+  // 1. Aerodynamic Ground Contact Shadow & Underbody Air Suction Glow
+  ctx.fillStyle = "rgba(0, 0, 0, 0.65)";
   ctx.beginPath();
-  ctx.ellipse(carCenter, groundY + 4, 160, 8, 0, 0, Math.PI * 2);
+  ctx.ellipse(carCenter, groundY + 4, 160, 9, 0, 0, Math.PI * 2);
   ctx.fill();
 
-  // Car body with gradient (studio lighting)
+  const venturiGlow = ctx.createLinearGradient(carCenter - 120, groundY, carCenter + 120, groundY);
+  venturiGlow.addColorStop(0, "rgba(0, 122, 255, 0.25)");
+  venturiGlow.addColorStop(0.5, "rgba(16, 185, 129, 0.35)");
+  venturiGlow.addColorStop(1, "rgba(239, 68, 68, 0.25)");
+  ctx.fillStyle = venturiGlow;
+  ctx.fillRect(carCenter - 120, groundY - 4, 240, 6);
+
+  // 2. Xenon Headlight Projection Beam (Front Air Flow Illumination)
+  const headX = pts[1].x + 5;
+  const headY = pts[1].y + 3;
+  const lightCone = ctx.createRadialGradient(headX, headY, 2, headX - 120, headY, 140);
+  lightCone.addColorStop(0, "rgba(255, 255, 255, 0.95)");
+  lightCone.addColorStop(0.3, "rgba(0, 122, 255, 0.40)");
+  lightCone.addColorStop(1, "rgba(0, 122, 255, 0)");
+  ctx.fillStyle = lightCone;
+  ctx.beginPath();
+  ctx.moveTo(headX, headY - 4);
+  ctx.lineTo(headX - 140, headY - 30);
+  ctx.lineTo(headX - 140, headY + 30);
+  ctx.closePath();
+  ctx.fill();
+
+  // 3. Car body with carbon-fiber metallic finish
   const bodyGrad = ctx.createLinearGradient(0, groundY - 80, 0, groundY);
-  bodyGrad.addColorStop(0, "#3a4a6b");
-  bodyGrad.addColorStop(0.3, "#2a3650");
-  bodyGrad.addColorStop(0.7, "#1e2839");
-  bodyGrad.addColorStop(1, "#141a28");
+  bodyGrad.addColorStop(0, "#2d3748");
+  bodyGrad.addColorStop(0.3, "#1a202c");
+  bodyGrad.addColorStop(0.7, "#0f172a");
+  bodyGrad.addColorStop(1, "#090d16");
 
   ctx.fillStyle = bodyGrad;
   ctx.beginPath();
@@ -825,8 +854,8 @@ function drawCar(ctx: CanvasRenderingContext2D, c: DrawCtx) {
   ctx.closePath();
   ctx.fill();
 
-  // Rim light (top edge)
-  ctx.strokeStyle = "rgba(100, 150, 200, 0.4)";
+  // Studio Specular Highlight Edge
+  ctx.strokeStyle = "rgba(255, 255, 255, 0.65)";
   ctx.lineWidth = 1.5;
   ctx.beginPath();
   ctx.moveTo(pts[0].x, pts[0].y);
@@ -835,9 +864,9 @@ function drawCar(ctx: CanvasRenderingContext2D, c: DrawCtx) {
   }
   ctx.stroke();
 
-  // Highlight on roof
+  // Roofline Highlight
   const roofPts = pts.slice(4, 8);
-  ctx.strokeStyle = "rgba(200, 220, 255, 0.25)";
+  ctx.strokeStyle = "rgba(0, 122, 255, 0.70)";
   ctx.lineWidth = 2;
   ctx.beginPath();
   ctx.moveTo(roofPts[0].x, roofPts[0].y);
@@ -846,8 +875,8 @@ function drawCar(ctx: CanvasRenderingContext2D, c: DrawCtx) {
   }
   ctx.stroke();
 
-  // Windows
-  ctx.fillStyle = "rgba(20, 30, 50, 0.7)";
+  // Tinted Windshield Glass
+  ctx.fillStyle = "rgba(15, 23, 42, 0.85)";
   ctx.beginPath();
   const winFront = pts[4];
   const winRear = pts[7];
@@ -858,80 +887,92 @@ function drawCar(ctx: CanvasRenderingContext2D, c: DrawCtx) {
   ctx.closePath();
   ctx.fill();
 
-  // Wheels
+  // Dynamic Spinning Alloy Wheels with Carbon Ceramic Rotor Glow
   const wheelFront = pts[0];
   const wheelRear = pts[pts.length - 3];
-  drawWheel(ctx, wheelFront.x + 30, groundY, 14);
-  drawWheel(ctx, wheelRear.x - 25, groundY, 14);
+  drawWheel(ctx, wheelFront.x + 30, groundY - 2, 14, c.frame, c.speed);
+  drawWheel(ctx, wheelRear.x - 25, groundY - 2, 14, c.frame, c.speed);
 
-  // Wing
+  // Active Rear Wing Assembly
   if (c.aero.wingAngle > 0 || c.aero.wingHeight > 100) {
     const wingX = carCenter + 130;
     const wingY = groundY - 50 - c.aero.wingHeight / 30;
+    const effectiveAngle = c.aero.drs ? 2 : c.aero.wingAngle;
     ctx.save();
     ctx.translate(wingX, wingY);
-    ctx.rotate(-c.aero.wingAngle * Math.PI / 180 * 0.3);
-    // Wing
-    ctx.fillStyle = "#1a2030";
-    ctx.fillRect(-25, -2, 50, 4);
-    ctx.strokeStyle = "rgba(100, 150, 200, 0.3)";
-    ctx.lineWidth = 1;
-    ctx.strokeRect(-25, -2, 50, 4);
-    // Supports
-    ctx.fillStyle = "#2a3650";
-    ctx.fillRect(-20, 2, 2, 15);
-    ctx.fillRect(18, 2, 2, 15);
+    ctx.rotate(-effectiveAngle * Math.PI / 180 * 0.3);
+    
+    // Wing Airfoil
+    ctx.fillStyle = "#0f172a";
+    ctx.fillRect(-26, -3, 52, 5);
+    ctx.strokeStyle = c.aero.drs ? "#10b981" : "rgba(0, 122, 255, 0.8)";
+    ctx.lineWidth = 1.5;
+    ctx.strokeRect(-26, -3, 52, 5);
+    
+    // Support Pylons
+    ctx.fillStyle = "#334155";
+    ctx.fillRect(-20, 2, 3, 16);
+    ctx.fillRect(17, 2, 3, 16);
     ctx.restore();
   }
 
-  // Splitter
+  // Front Aero Splitter
   if (c.aero.splitterLength > 0) {
-    ctx.fillStyle = "#1a2030";
-    ctx.fillRect(pts[0].x - 5, groundY - 6, c.aero.splitterLength / 5, 3);
+    ctx.fillStyle = "#0f172a";
+    ctx.fillRect(pts[0].x - 8, groundY - 7, c.aero.splitterLength / 4, 4);
+    ctx.strokeStyle = "#007aff";
+    ctx.lineWidth = 1;
+    ctx.strokeRect(pts[0].x - 8, groundY - 7, c.aero.splitterLength / 4, 4);
   }
 
-  // Diffuser fins
+  // Rear Diffuser Fins
   if (c.aero.diffuserAngle > 0) {
-    ctx.strokeStyle = "rgba(60, 80, 120, 0.6)";
-    ctx.lineWidth = 1;
+    ctx.strokeStyle = "#ef4444";
+    ctx.lineWidth = 1.5;
     const diffX = pts[pts.length - 4].x;
     for (let i = 0; i < 4; i++) {
       ctx.beginPath();
       ctx.moveTo(diffX + i * 8, groundY - 8);
-      ctx.lineTo(diffX + i * 8 + 10, groundY - 8 - c.aero.diffuserAngle * 0.5);
+      ctx.lineTo(diffX + i * 8 + 12, groundY - 8 - c.aero.diffuserAngle * 0.6);
       ctx.stroke();
     }
   }
 
-  // Mirrors
-  ctx.fillStyle = "#2a3650";
+  // Side Mirrors
+  ctx.fillStyle = "#1e293b";
   ctx.beginPath();
   ctx.ellipse(pts[4].x + 15, pts[4].y + 12, 4, 2.5, -0.3, 0, Math.PI * 2);
   ctx.fill();
 
-  // Headlight
-  ctx.fillStyle = "rgba(200, 220, 255, 0.3)";
+  // LED Headlight Bulb
+  ctx.fillStyle = "#ffffff";
   ctx.beginPath();
-  ctx.ellipse(pts[1].x + 5, pts[1].y + 3, 6, 2, 0, 0, Math.PI * 2);
+  ctx.ellipse(pts[1].x + 5, pts[1].y + 3, 4, 2, 0, 0, Math.PI * 2);
   ctx.fill();
 
-  // Taillight
-  ctx.fillStyle = "rgba(239, 68, 68, 0.3)";
+  // Crimson LED Taillight Strip & Diffuser Rain Light
+  const tailX = pts[pts.length - 4].x - 5;
+  const tailY = pts[pts.length - 4].y + 3;
+  ctx.fillStyle = "#ef4444";
   ctx.beginPath();
-  ctx.ellipse(pts[pts.length - 4].x - 5, pts[pts.length - 4].y + 3, 5, 2, 0, 0, Math.PI * 2);
+  ctx.ellipse(tailX, tailY, 5, 2, 0, 0, Math.PI * 2);
   ctx.fill();
 
-  // Cutaway views
+  // Rain light pulse
+  if (c.frame % 30 < 15) {
+    ctx.fillStyle = "#ef4444";
+    ctx.fillRect(tailX - 2, groundY - 12, 4, 4);
+  }
+
+  // Cutaway Overlay Views
   if (c.cutaway === "cooling") {
-    ctx.strokeStyle = "rgba(34, 211, 238, 0.5)";
-    ctx.lineWidth = 1;
-    // Radiator airflow
+    ctx.strokeStyle = "rgba(52, 211, 153, 0.8)";
+    ctx.lineWidth = 1.5;
     ctx.beginPath();
     ctx.moveTo(pts[1].x, pts[1].y);
     ctx.lineTo(pts[1].x + 40, pts[1].y + 15);
     ctx.lineTo(pts[1].x + 40, groundY - 30);
     ctx.stroke();
-    // Cooling ducts
     for (let i = 0; i < 3; i++) {
       ctx.beginPath();
       ctx.moveTo(pts[2].x + i * 15, pts[2].y);
@@ -939,36 +980,42 @@ function drawCar(ctx: CanvasRenderingContext2D, c: DrawCtx) {
       ctx.stroke();
     }
   }
-
-  if (c.cutaway === "underfloor") {
-    // Already drawn in drawGroundEffect
-  }
 }
 
-function drawWheel(ctx: CanvasRenderingContext2D, x: number, y: number, r: number) {
-  // Tire
-  ctx.fillStyle = "#0a0d15";
+function drawWheel(ctx: CanvasRenderingContext2D, x: number, y: number, r: number, frame: number, speed: number) {
+  // Tire Outer Rubber
+  ctx.fillStyle = "#090d16";
   ctx.beginPath();
   ctx.arc(x, y, r, 0, Math.PI * 2);
   ctx.fill();
-  // Rim
-  ctx.fillStyle = "#2a3650";
+
+  // Hot Glowing Carbon-Ceramic Brake Disc Ring
+  ctx.fillStyle = "rgba(249, 115, 22, 0.45)";
   ctx.beginPath();
-  ctx.arc(x, y, r * 0.6, 0, Math.PI * 2);
+  ctx.arc(x, y, r * 0.72, 0, Math.PI * 2);
   ctx.fill();
-  // Spokes
-  ctx.strokeStyle = "#475569";
-  ctx.lineWidth = 1;
+
+  // Rim Base
+  ctx.fillStyle = "#1e293b";
+  ctx.beginPath();
+  ctx.arc(x, y, r * 0.65, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Spinning 5-Spoke Alloy Wheels
+  const angleOffset = (frame * speed * 0.15) % (Math.PI * 2);
+  ctx.strokeStyle = "#94a3b8";
+  ctx.lineWidth = 1.8;
   for (let i = 0; i < 5; i++) {
-    const a = (i / 5) * Math.PI * 2;
+    const a = angleOffset + (i / 5) * Math.PI * 2;
     ctx.beginPath();
     ctx.moveTo(x, y);
-    ctx.lineTo(x + Math.cos(a) * r * 0.55, y + Math.sin(a) * r * 0.55);
+    ctx.lineTo(x + Math.cos(a) * r * 0.6, y + Math.sin(a) * r * 0.6);
     ctx.stroke();
   }
-  // Outer ring
-  ctx.strokeStyle = "#3a4a6b";
-  ctx.lineWidth = 1.5;
+
+  // Outer Aluminum Rim Bezel
+  ctx.strokeStyle = "#e2e8f0";
+  ctx.lineWidth = 1.2;
   ctx.beginPath();
   ctx.arc(x, y, r, 0, Math.PI * 2);
   ctx.stroke();
