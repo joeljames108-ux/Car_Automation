@@ -71,17 +71,17 @@ export function ModernAnalogDial({
     <div
       className="modern-analog-card"
       style={{
-        background: "rgba(28, 34, 46, 0.72)",
-        backdropFilter: "blur(50px) saturate(190%)",
-        WebkitBackdropFilter: "blur(50px) saturate(190%)",
-        border: "1px solid rgba(255, 255, 255, 0.18)",
+        background: "rgba(255, 252, 245, 0.58)",
+        backdropFilter: "blur(50px) saturate(210%)",
+        WebkitBackdropFilter: "blur(50px) saturate(210%)",
+        border: "1px solid rgba(255, 255, 255, 0.75)",
         borderRadius: 24,
         padding: "16px",
-        boxShadow: "0 20px 50px rgba(0, 0, 0, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.25)",
+        boxShadow: "0 16px 40px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.90)",
         display: "flex",
         flexDirection: "column",
         gap: 14,
-        color: "#f8fafc",
+        color: "#1c1c1e",
         width: "100%",
         maxWidth: 340,
       }}
@@ -89,10 +89,10 @@ export function ModernAnalogDial({
       {/* Title Header */}
       {title && (
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-          <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: "0.08em", color: "#94a3b8", textTransform: "uppercase" }}>
+          <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: "0.08em", color: "#1c1c1e", textTransform: "uppercase" }}>
             {title}
           </div>
-          <span style={{ width: 6, height: 6, borderRadius: "50%", backgroundColor: "#38bdf8", boxShadow: "0 0 8px #38bdf8" }} />
+          <span style={{ width: 6, height: 6, borderRadius: "50%", backgroundColor: "#007aff", boxShadow: "0 0 8px rgba(0, 122, 255, 0.6)" }} />
         </div>
       )}
 
@@ -101,10 +101,10 @@ export function ModernAnalogDial({
         <div style={{ position: "relative", width: 170, height: 170, display: "flex", alignItems: "center", justifyContent: "center" }}>
           <svg width={170} height={170} viewBox="0 0 160 160">
             {/* Ambient Backlight Glow */}
-            <circle cx={center} cy={center} r={radius} fill="none" stroke="rgba(0, 136, 255, 0.08)" strokeWidth={strokeWidth + 12} />
+            <circle cx={center} cy={center} r={radius} fill="none" stroke="rgba(0, 122, 255, 0.06)" strokeWidth={strokeWidth + 12} />
             
             {/* Background Track Arc */}
-            <path d={bgArcPath} fill="none" stroke="rgba(255, 255, 255, 0.12)" strokeWidth={strokeWidth} strokeLinecap="round" />
+            <path d={bgArcPath} fill="none" stroke="rgba(0, 0, 0, 0.08)" strokeWidth={strokeWidth} strokeLinecap="round" />
             
             {/* Active Vibrant Color-Corrected Arc */}
             <path
@@ -113,13 +113,13 @@ export function ModernAnalogDial({
               stroke="url(#analogArcGradient)"
               strokeWidth={strokeWidth}
               strokeLinecap="round"
-              style={{ filter: "drop-shadow(0 0 8px rgba(0, 136, 255, 0.8))" }}
+              style={{ filter: "drop-shadow(0 0 6px rgba(0, 122, 255, 0.5))" }}
             />
 
             {/* Gradient definition */}
             <defs>
               <linearGradient id="analogArcGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="#0088ff" />
+                <stop offset="0%" stopColor="#007aff" />
                 <stop offset="50%" stopColor="#38bdf8" />
                 <stop offset="100%" stopColor="#34d399" />
               </linearGradient>
@@ -131,17 +131,17 @@ export function ModernAnalogDial({
               y1={center}
               x2={needleEndPos.x}
               y2={needleEndPos.y}
-              stroke="#0088ff"
+              stroke="#007aff"
               strokeWidth={2.5}
               strokeLinecap="round"
-              style={{ filter: "drop-shadow(0 0 6px rgba(0, 136, 255, 0.9))" }}
+              style={{ filter: "drop-shadow(0 0 6px rgba(0, 122, 255, 0.6))" }}
             />
 
             {/* Center Cap Pin */}
-            <circle cx={center} cy={center} r={6} fill="#ffffff" stroke="#0088ff" strokeWidth={2} style={{ filter: "drop-shadow(0 2px 6px rgba(0,0,0,0.5))" }} />
+            <circle cx={center} cy={center} r={6} fill="#ffffff" stroke="#007aff" strokeWidth={2} style={{ filter: "drop-shadow(0 2px 4px rgba(0,0,0,0.15))" }} />
 
             {/* Glowing Indicator Knob */}
-            <circle cx={knobPos.x} cy={knobPos.y} r={7} fill="#0088ff" stroke="#ffffff" strokeWidth={2} style={{ filter: "drop-shadow(0 0 10px rgba(0, 136, 255, 1))" }} />
+            <circle cx={knobPos.x} cy={knobPos.y} r={7} fill="#007aff" stroke="#ffffff" strokeWidth={2} style={{ filter: "drop-shadow(0 0 8px rgba(0, 122, 255, 0.8))" }} />
           </svg>
 
           {/* Outer Tick Numbers */}
@@ -158,7 +158,7 @@ export function ModernAnalogDial({
                     top: pos.y - 8,
                     fontSize: 10,
                     fontWeight: 700,
-                    color: "#94a3b8",
+                    color: "#636366",
                     width: 20,
                     textAlign: "center",
                     fontFamily: "monospace",
@@ -172,16 +172,16 @@ export function ModernAnalogDial({
 
           {/* Central Value Readout */}
           <div style={{ position: "absolute", display: "flex", flexDirection: "column", alignItems: "center" }}>
-            <div style={{ fontSize: 30, fontWeight: 900, color: "#ffffff", lineHeight: 1, textShadow: "0 2px 10px rgba(0,0,0,0.5)" }}>
+            <div style={{ fontSize: 30, fontWeight: 900, color: "#1c1c1e", lineHeight: 1 }}>
               {val}{unit}
             </div>
-            <div style={{ fontSize: 10, fontWeight: 700, color: "#94a3b8", letterSpacing: "0.12em", marginTop: 2 }}>
+            <div style={{ fontSize: 10, fontWeight: 700, color: "#636366", letterSpacing: "0.12em", marginTop: 2 }}>
               {sublabel}
             </div>
           </div>
 
           {/* Bottom Angle Bounds (40° - 40°) */}
-          <div style={{ position: "absolute", bottom: 12, width: "100%", display: "flex", justifyContent: "space-between", padding: "0 20px", fontSize: 10, fontWeight: 700, color: "#64748b" }}>
+          <div style={{ position: "absolute", bottom: 12, width: "100%", display: "flex", justifyContent: "space-between", padding: "0 20px", fontSize: 10, fontWeight: 700, color: "#636366" }}>
             <span>40°</span>
             <span>40°</span>
           </div>
@@ -192,38 +192,38 @@ export function ModernAnalogDial({
           <button
             onClick={() => handleUpdate(val - step)}
             style={{
-              background: "rgba(255, 255, 255, 0.08)",
-              border: "1px solid rgba(255, 255, 255, 0.16)",
+              background: "rgba(255, 255, 255, 0.65)",
+              border: "1px solid rgba(255, 255, 255, 0.85)",
               borderRadius: 12,
               width: 38,
               height: 32,
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              color: "#ffffff",
+              color: "#1c1c1e",
               cursor: "pointer",
               transition: "all 0.2s ease",
-              boxShadow: "0 2px 8px rgba(0,0,0,0.2)",
+              boxShadow: "0 2px 8px rgba(0, 0, 0, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.90)",
             }}
           >
             <Minus size={14} />
           </button>
-          <span style={{ fontSize: 12, fontWeight: 700, color: "#cbd5e1", fontFamily: "monospace" }}>{val}{unit}</span>
+          <span style={{ fontSize: 12, fontWeight: 800, color: "#1c1c1e", fontFamily: "monospace" }}>{val}{unit}</span>
           <button
             onClick={() => handleUpdate(val + step)}
             style={{
-              background: "rgba(255, 255, 255, 0.08)",
-              border: "1px solid rgba(255, 255, 255, 0.16)",
+              background: "rgba(255, 255, 255, 0.65)",
+              border: "1px solid rgba(255, 255, 255, 0.85)",
               borderRadius: 12,
               width: 38,
               height: 32,
               display: "flex",
               alignItems: "center",
               justifyContent: "center",
-              color: "#ffffff",
+              color: "#1c1c1e",
               cursor: "pointer",
               transition: "all 0.2s ease",
-              boxShadow: "0 2px 8px rgba(0,0,0,0.2)",
+              boxShadow: "0 2px 8px rgba(0, 0, 0, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.90)",
             }}
           >
             <Plus size={14} />
@@ -233,7 +233,7 @@ export function ModernAnalogDial({
 
       {/* Actions Row (Downforce+, Balance+, Drag-) */}
       <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
-        <div style={{ fontSize: 10, fontWeight: 700, color: "#64748b", textTransform: "uppercase" }}>Actions</div>
+        <div style={{ fontSize: 10, fontWeight: 700, color: "#636366", textTransform: "uppercase" }}>Actions</div>
         <div style={{ display: "flex", gap: 6, width: "100%" }}>
           {[
             { key: "downforce", label: "+ Downforce+", icon: <Zap size={11} /> },
@@ -255,10 +255,10 @@ export function ModernAnalogDial({
                   borderRadius: 12,
                   fontSize: 10,
                   fontWeight: 700,
-                  background: isActive ? "#0088ff" : "rgba(255, 255, 255, 0.07)",
-                  color: isActive ? "#ffffff" : "#94a3b8",
-                  border: isActive ? "1px solid rgba(255, 255, 255, 0.30)" : "1px solid rgba(255, 255, 255, 0.10)",
-                  boxShadow: isActive ? "0 4px 16px rgba(0, 136, 255, 0.50)" : "none",
+                  background: isActive ? "#007aff" : "rgba(255, 255, 255, 0.55)",
+                  color: isActive ? "#ffffff" : "#3a3a3c",
+                  border: isActive ? "1px solid rgba(255, 255, 255, 0.40)" : "1px solid rgba(255, 255, 255, 0.75)",
+                  boxShadow: isActive ? "0 4px 16px rgba(0, 122, 255, 0.35)" : "none",
                   cursor: "pointer",
                   transition: "all 0.2s ease",
                 }}
@@ -272,9 +272,9 @@ export function ModernAnalogDial({
       </div>
 
       {/* Controls Section 1: Lightning & CFD Visualization Intensity */}
-      <div style={{ background: "rgba(255,255,255,0.04)", borderRadius: 14, padding: "10px 12px", border: "1px solid rgba(255,255,255,0.08)", display: "flex", flexDirection: "column", gap: 8 }}>
+      <div style={{ background: "rgba(255, 255, 255, 0.45)", borderRadius: 14, padding: "10px 12px", border: "1px solid rgba(0, 0, 0, 0.06)", display: "flex", flexDirection: "column", gap: 8 }}>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-          <span style={{ fontSize: 11, fontWeight: 700, color: "#cbd5e1" }}>Lightning</span>
+          <span style={{ fontSize: 11, fontWeight: 700, color: "#1c1c1e" }}>Lightning</span>
           {/* Custom Switch Toggle */}
           <button
             onClick={() => setLightningEnabled(!lightningEnabled)}
@@ -282,7 +282,7 @@ export function ModernAnalogDial({
               width: 36,
               height: 20,
               borderRadius: 12,
-              background: lightningEnabled ? "#0088ff" : "rgba(255,255,255,0.15)",
+              background: lightningEnabled ? "#007aff" : "rgba(0, 0, 0, 0.12)",
               position: "relative",
               border: "none",
               cursor: "pointer",
@@ -299,47 +299,47 @@ export function ModernAnalogDial({
                 top: 2,
                 left: lightningEnabled ? 18 : 2,
                 transition: "all 0.2s ease",
-                boxShadow: "0 1px 3px rgba(0,0,0,0.3)",
+                boxShadow: "0 1px 3px rgba(0,0,0,0.2)",
               }}
             />
           </button>
         </div>
 
         <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
-          <div style={{ fontSize: 11, fontWeight: 600, color: "#94a3b8" }}>CFD Visualization Intensity</div>
+          <div style={{ fontSize: 11, fontWeight: 600, color: "#3a3a3c" }}>CFD Visualization Intensity</div>
           <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-            <Zap size={12} style={{ color: "#38bdf8" }} />
+            <Zap size={12} style={{ color: "#007aff" }} />
             <input
               type="range"
               min={0}
               max={100}
               value={cfdIntensity}
               onChange={(e) => setCfdIntensity(Number(e.target.value))}
-              style={{ flex: 1, accentColor: "#0088ff", cursor: "pointer" }}
+              style={{ flex: 1, accentColor: "#007aff", cursor: "pointer" }}
             />
-            <span style={{ fontSize: 10, fontWeight: 700, color: "#38bdf8", width: 30, textAlign: "right" }}>{cfdIntensity}%</span>
+            <span style={{ fontSize: 10, fontWeight: 800, color: "#007aff", width: 30, textAlign: "right" }}>{cfdIntensity}%</span>
           </div>
         </div>
       </div>
 
       {/* Controls Section 2: Wireframe & Last Login timestamp */}
-      <div style={{ background: "rgba(255,255,255,0.04)", borderRadius: 14, padding: "10px 12px", border: "1px solid rgba(255,255,255,0.08)", display: "flex", flexDirection: "column", gap: 10 }}>
+      <div style={{ background: "rgba(255, 255, 255, 0.45)", borderRadius: 14, padding: "10px 12px", border: "1px solid rgba(0, 0, 0, 0.06)", display: "flex", flexDirection: "column", gap: 10 }}>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-            <span style={{ fontSize: 11, fontWeight: 700, color: "#cbd5e1" }}>CFD Visualization Intensity</span>
-            <Info size={12} style={{ color: "#64748b" }} />
+            <span style={{ fontSize: 11, fontWeight: 700, color: "#1c1c1e" }}>CFD Visualization Intensity</span>
+            <Info size={12} style={{ color: "#636366" }} />
           </div>
         </div>
 
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-          <span style={{ fontSize: 11, fontWeight: 600, color: "#94a3b8" }}>Wireframe</span>
+          <span style={{ fontSize: 11, fontWeight: 600, color: "#3a3a3c" }}>Wireframe</span>
           <button
             onClick={() => setWireframeEnabled(!wireframeEnabled)}
             style={{
               width: 36,
               height: 20,
               borderRadius: 12,
-              background: wireframeEnabled ? "#0088ff" : "rgba(255,255,255,0.15)",
+              background: wireframeEnabled ? "#007aff" : "rgba(0, 0, 0, 0.12)",
               position: "relative",
               border: "none",
               cursor: "pointer",
@@ -356,15 +356,15 @@ export function ModernAnalogDial({
                 top: 2,
                 left: wireframeEnabled ? 18 : 2,
                 transition: "all 0.2s ease",
-                boxShadow: "0 1px 3px rgba(0,0,0,0.3)",
+                boxShadow: "0 1px 3px rgba(0,0,0,0.2)",
               }}
             />
           </button>
         </div>
 
-        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", borderTop: "1px solid rgba(255,255,255,0.06)", paddingTop: 8, fontSize: 10, color: "#64748b" }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", borderTop: "1px solid rgba(0,0,0,0.06)", paddingTop: 8, fontSize: 10, color: "#636366" }}>
           <span>Last Logn at 8:02 AM</span>
-          <button style={{ background: "rgba(255,255,255,0.08)", border: "none", borderRadius: "50%", width: 20, height: 20, display: "flex", alignItems: "center", justifyContent: "center", color: "#cbd5e1", cursor: "pointer" }}>
+          <button style={{ background: "rgba(255, 255, 255, 0.65)", border: "none", borderRadius: "50%", width: 20, height: 20, display: "flex", alignItems: "center", justifyContent: "center", color: "#1c1c1e", cursor: "pointer" }}>
             <ArrowRight size={11} />
           </button>
         </div>

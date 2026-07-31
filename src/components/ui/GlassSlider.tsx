@@ -33,27 +33,28 @@ export function GlassSlider({
 
   return (
     <div
+      className="glass-slider-card"
       style={{
-        background: "rgba(255, 255, 255, 0.08)",
-        backdropFilter: "blur(40px) saturate(180%)",
-        WebkitBackdropFilter: "blur(40px) saturate(180%)",
-        border: "1px solid rgba(255, 255, 255, 0.14)",
+        background: "rgba(255, 252, 245, 0.58)",
+        backdropFilter: "blur(40px) saturate(210%)",
+        WebkitBackdropFilter: "blur(40px) saturate(210%)",
+        border: "1px solid rgba(255, 255, 255, 0.75)",
         borderRadius: 20,
-        padding: "12px 16px",
+        padding: "14px 18px",
         display: "flex",
         flexDirection: "column",
         gap: 8,
-        color: "#f1f5f9",
-        boxShadow: "0 8px 32px rgba(0, 0, 0, 0.20), inset 0 1px 0 rgba(255, 255, 255, 0.18)",
+        color: "#1c1c1e",
+        boxShadow: "0 8px 32px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.90)",
       }}
     >
       {/* Label and Value Row */}
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", fontSize: 11, fontWeight: 600 }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 6, color: "#e2e8f0" }}>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", fontSize: 11, fontWeight: 700 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 6, color: "#1c1c1e" }}>
           {icon}
           <span>{label}</span>
         </div>
-        <span style={{ fontWeight: 800, color: "#0088ff", fontFamily: "monospace" }}>
+        <span style={{ fontWeight: 800, color: "#007aff", fontFamily: "monospace" }}>
           {val}{unit}
         </span>
       </div>
@@ -66,8 +67,8 @@ export function GlassSlider({
             position: "absolute",
             inset: 0,
             borderRadius: 4,
-            background: `linear-gradient(to right, #0088ff 0%, #0088ff ${percentage}%, rgba(255, 255, 255, 0.15) ${percentage}%, rgba(255, 255, 255, 0.15) 100%)`,
-            boxShadow: "inset 0 1px 2px rgba(0, 0, 0, 0.3)",
+            background: `linear-gradient(to right, #007aff 0%, #007aff ${percentage}%, rgba(0, 0, 0, 0.08) ${percentage}%, rgba(0, 0, 0, 0.08) 100%)`,
+            boxShadow: "inset 0 1px 2px rgba(0, 0, 0, 0.10)",
           }}
         />
 
@@ -100,8 +101,8 @@ export function GlassSlider({
             height: 18,
             borderRadius: "50%",
             background: "#ffffff",
-            border: "2px solid #0088ff",
-            boxShadow: "0 0 10px rgba(0, 136, 255, 0.8), 0 2px 6px rgba(0, 0, 0, 0.4)",
+            border: "2px solid #007aff",
+            boxShadow: "0 2px 8px rgba(0, 0, 0, 0.15), 0 0 10px rgba(0, 122, 255, 0.3)",
             pointerEvents: "none",
             zIndex: 5,
             transition: "left 0.05s ease-out",
