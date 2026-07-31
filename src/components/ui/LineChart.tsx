@@ -95,7 +95,7 @@ export function LineChart({
     <div className="w-full relative select-none" style={{ height }}>
       {/* Dynamic Hover Tooltip Banner */}
       {hoverIndex !== null && activeRpm !== null && (
-        <div className="absolute top-1 left-2 z-20 flex items-center gap-3 bg-base-950/90 border border-cyan-500/40 rounded-lg px-2.5 py-1 backdrop-blur-md shadow-lg pointer-events-none text-xs font-mono animate-in fade-in zoom-in-95 duration-100">
+        <div className="line-chart-tooltip absolute top-1 left-2 z-20 flex items-center gap-3 bg-white/90 border border-cyan-500/40 rounded-lg px-3 py-1.5 backdrop-blur-md shadow-lg pointer-events-none text-xs font-mono animate-in fade-in zoom-in-95 duration-100">
           <span className="text-slate-400 font-bold">{activeRpm} RPM:</span>
           {series.map((s, idx) => {
             const pt = s.data[hoverIndex];

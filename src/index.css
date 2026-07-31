@@ -3559,13 +3559,19 @@ a,
 /* Chassis Hotspot & StatRail Popover Tooltip Cards */
 .theme4 .vision-glass-content .bg-slate-950\/90,
 .theme4 .vision-glass-content .bg-slate-950\/95,
-.theme4 .vision-glass-content .bg-base-950\/95 {
+.theme4 .vision-glass-content .bg-base-950\/95,
+.theme4 .line-chart-tooltip {
   background-color: rgba(255, 253, 248, 0.94) !important;
   backdrop-filter: blur(40px) saturate(210%) !important;
   -webkit-backdrop-filter: blur(40px) saturate(210%) !important;
-  border-color: rgba(0, 122, 255, 0.30) !important;
+  border-color: rgba(0, 122, 255, 0.40) !important;
   box-shadow: 0 16px 48px rgba(0, 0, 0, 0.16), 0 4px 16px rgba(0, 0, 0, 0.08) !important;
   color: #1c1c1e !important;
+}
+
+.theme4 .line-chart-tooltip .text-slate-400 {
+  color: #1c1c1e !important;
+  font-weight: 800 !important;
 }
 
 .theme4 .vision-glass-content .bg-base-950\/95 *,
