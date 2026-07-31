@@ -6,7 +6,6 @@ import {
 import { useDesign } from "../../state/DesignContext";
 import { Section } from "./Controls";
 import type { AeroConfig } from "../../sim/types";
-import { ModernAnalogClock } from "./ModernAnalogClock";
 
 interface CFDProps {
   aero: AeroConfig;
@@ -156,74 +155,65 @@ export function CFDView({ aero, dragCoeff, liftCoeff, downforce, className = "" 
         </div>
       </div>
 
-      {/* Canvas viewport */}
+      {/* Live Data Stat Strip (Outside Canvas Diagram) */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-2 mb-2">
+        <div className="bg-white/60 backdrop-blur-md rounded-xl p-2 border border-white/80 text-center shadow-sm">
+          <div className="text-[9px] font-extrabold uppercase text-slate-500 tracking-wider">Drag Cd</div>
+          <div className="text-xs font-mono font-black text-[#1c1c1e]">{dragCoeff.toFixed(3)}</div>
+        </div>
+        <div className="bg-white/60 backdrop-blur-md rounded-xl p-2 border border-white/80 text-center shadow-sm">
+          <div className="text-[9px] font-extrabold uppercase text-slate-500 tracking-wider">Front Lift</div>
+          <div className="text-xs font-mono font-black text-[#007aff]">{frontLift} kg</div>
+        </div>
+        <div className="bg-white/60 backdrop-blur-md rounded-xl p-2 border border-white/80 text-center shadow-sm">
+          <div className="text-[9px] font-extrabold uppercase text-slate-500 tracking-wider">Rear Down</div>
+          <div className="text-xs font-mono font-black text-[#059669]">{rearDown} kg</div>
+        </div>
+        <div className="bg-white/60 backdrop-blur-md rounded-xl p-2 border border-white/80 text-center shadow-sm">
+          <div className="text-[9px] font-extrabold uppercase text-slate-500 tracking-wider">Drag Force</div>
+          <div className="text-xs font-mono font-black text-[#1c1c1e]">{dragForce} N</div>
+        </div>
+        <div className="bg-white/60 backdrop-blur-md rounded-xl p-2 border border-white/80 text-center shadow-sm">
+          <div className="text-[9px] font-extrabold uppercase text-slate-500 tracking-wider">Flow Sep</div>
+          <div className="text-xs font-mono font-black text-[#1c1c1e]">{(sim.separationRisk * 100).toFixed(0)}%</div>
+        </div>
+        <div className="bg-white/60 backdrop-blur-md rounded-xl p-2 border border-white/80 text-center shadow-sm">
+          <div className="text-[9px] font-extrabold uppercase text-slate-500 tracking-wider">Velocity</div>
+          <div className="text-xs font-mono font-black text-[#007aff]">{airVelocity} km/h</div>
+        </div>
+        <div className="bg-white/60 backdrop-blur-md rounded-xl p-2 border border-white/80 text-center shadow-sm">
+          <div className="text-[9px] font-extrabold uppercase text-slate-500 tracking-wider">Pressure</div>
+          <div className="text-xs font-mono font-black text-[#1c1c1e]">{pressure} kPa</div>
+        </div>
+        <div className="bg-white/60 backdrop-blur-md rounded-xl p-2 border border-white/80 text-center shadow-sm">
+          <div className="text-[9px] font-extrabold uppercase text-slate-500 tracking-wider">Ride Height</div>
+          <div className="text-xs font-mono font-black text-[#1c1c1e]">{aero.rideHeight} mm</div>
+        </div>
+      </div>
+
+      {/* Clean Unobstructed Canvas Viewport */}
       <div
-        className="relative bg-gradient-to-b from-base-950 to-black rounded-lg overflow-hidden border border-base-800 cursor-grab active:cursor-grabbing"
+        className="relative bg-gradient-to-b from-slate-900 via-slate-950 to-black rounded-xl overflow-hidden border border-white/80 shadow-md cursor-grab active:cursor-grabbing group"
         onMouseDown={onMouseDown} onMouseMove={onMouseMove} onMouseUp={onMouseUp} onMouseLeave={onMouseUp}
         onWheel={onWheel}
       >
         <canvas ref={canvasRef} width={VIEW_W} height={VIEW_H} className="w-full block" style={{ imageRendering: "auto" }} />
 
-        {/* Reference Image Wall Clock Overlay - top left */}
-        <div className="absolute top-3 left-3 z-20 pointer-events-auto">
-          <ModernAnalogClock size={92} variant="wall-light" showLiveBadge={true} label="" />
+        {/* Camera controls hint */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[9px] text-white/50 font-mono pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity bg-black/60 px-3 py-1 rounded-full backdrop-blur-sm border border-white/20">
+          DRAG TO ROTATE · SCROLL TO ZOOM
         </div>
+      </div>
 
-        {/* Reference Image Quick Viz Mode Pills - top right */}
-        <div className="absolute top-3 right-3 z-20 flex items-center gap-1.5 backdrop-blur-md bg-black/40 p-1.5 rounded-full border border-white/15 shadow-lg">
-          {[
-            { id: "velocity", label: "CFD: Velocity" },
-            { id: "pressure", label: "CFD: Pressure" },
-            { id: "streamlines", label: "CFD: Streamlines" },
-          ].map((item) => {
-            const isActive = mode === item.id;
-            return (
-              <button
-                key={item.id}
-                onClick={() => setMode(item.id as VizMode)}
-                className={`px-3 py-1 rounded-full text-[10px] font-bold transition-all ${
-                  isActive
-                    ? "bg-white/90 text-slate-900 shadow-md scale-105"
-                    : "text-slate-300 hover:text-white hover:bg-white/10"
-                }`}
-              >
-                {item.label}
-              </button>
-            );
-          })}
-        </div>
-
-        {/* Data overlay - top left below clock */}
-        <div className="absolute top-28 left-3 space-y-0.5 font-mono text-[10px] pointer-events-none bg-black/50 p-2 rounded-lg backdrop-blur-sm border border-white/10">
-          <DataLine label="Cd" value={dragCoeff.toFixed(3)} />
-          <DataLine label="Front Lift" value={`${frontLift} kg`} tone={frontLift > 20 ? "warn" : "ok"} />
-          <DataLine label="Rear Down" value={`${rearDown} kg`} tone="ok" />
-          <DataLine label="Drag Force" value={`${dragForce} N`} />
-        </div>
-
-        {/* Data overlay - right column */}
-        <div className="absolute top-16 right-3 space-y-0.5 font-mono text-[10px] text-right pointer-events-none bg-black/50 p-2 rounded-lg backdrop-blur-sm border border-white/10">
-          <DataLine label="Flow Sep" value={`${(sim.separationRisk * 100).toFixed(0)}%`} tone={sim.separationRisk > 0.5 ? "danger" : "ok"} />
-          <DataLine label="Velocity" value={`${airVelocity} km/h`} />
-          <DataLine label="Pressure" value={`${pressure} kPa`} />
-          <DataLine label="Ride Ht" value={`${aero.rideHeight} mm`} />
-        </div>
-
-        {/* Mode label - bottom left */}
-        <div className="absolute bottom-2 left-2 font-mono text-[10px] text-slate-400 pointer-events-none uppercase tracking-widest bg-black/60 px-2 py-0.5 rounded border border-white/10">
+      {/* Map Label & Heatmap Legend Row (Outside Canvas Diagram) */}
+      <div className="flex items-center justify-between mt-2 px-3 py-1.5 bg-white/50 backdrop-blur-md rounded-xl border border-white/80 text-[#1c1c1e]">
+        <div className="font-mono text-[10px] font-extrabold text-slate-700 uppercase tracking-wider">
           {MODE_LABELS[mode].label} Map
         </div>
-
-        {/* Legend - bottom right */}
-        <div className="absolute bottom-2 right-2 flex items-center gap-1.5 pointer-events-none bg-black/60 px-2 py-1 rounded border border-white/10">
-          <span className="font-mono text-[9px] text-slate-400">LOW</span>
-          <div className="w-20 h-2 rounded-full" style={{ background: "linear-gradient(to right, #1e40af, #22c55e, #eab308, #f97316, #ef4444)" }} />
-          <span className="font-mono text-[9px] text-slate-400">HIGH</span>
-        </div>
-
-        {/* Camera controls hint */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[9px] text-slate-700 font-mono pointer-events-none opacity-0 hover:opacity-100 transition-opacity">
-          DRAG TO ROTATE · SCROLL TO ZOOM
+        <div className="flex items-center gap-2">
+          <span className="font-mono text-[9px] font-extrabold text-slate-500">LOW</span>
+          <div className="w-24 h-2.5 rounded-full shadow-inner" style={{ background: "linear-gradient(to right, #1e40af, #22c55e, #eab308, #f97316, #ef4444)" }} />
+          <span className="font-mono text-[9px] font-extrabold text-slate-500">HIGH</span>
         </div>
       </div>
 
