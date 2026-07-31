@@ -3,7 +3,7 @@ import {
   LayoutDashboard, Wind, Battery, Zap, Thermometer, Layers,
   CircleDot, Flag, DollarSign, ShieldCheck, Star,
   Bot, TrendingUp, AlertTriangle, Check, ArrowRight, Gauge,
-  Activity, Car, Fuel, Trophy, Warehouse, Target,
+  Activity, Car, Fuel, Trophy, Warehouse, Target, Cog, Factory, Sofa,
 } from "lucide-react";
 import { useDesign } from "../state/DesignContext";
 import { useCompany } from "../state/CompanyContext";
@@ -243,12 +243,12 @@ export function CommandCenter({ onSelectStage }: CommandCenterProps = {}) {
       {/* Vehicle specs */}
       <Section title="Vehicle Specifications" icon={<Car size={16} />}>
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-2">
-          <StatTile label="Architecture" value={layout.label} />
-          <StatTile label="Displacement" value={sim.displacement} unit="cc" />
-          <StatTile label="Chassis" value={chassis.label} />
-          <StatTile label="Tire" value={tire.label} />
-          <StatTile label="Weight" value={sim.weight} unit="kg" accent="accent" />
-          <StatTile label="Power" value={sim.peakPower} unit="hp" accent="accent" />
+          <StatTile label="Architecture" value={layout.label} icon={<Cog size={11} className="text-cyan-400 shrink-0" />} />
+          <StatTile label="Displacement" value={sim.displacement} unit="cc" icon={<Fuel size={11} className="text-cyan-400 shrink-0" />} />
+          <StatTile label="Chassis" value={chassis.label} icon={<Car size={11} className="text-amber-400 shrink-0" />} />
+          <StatTile label="Tire" value={tire.label} icon={<CircleDot size={11} className="text-emerald-400 shrink-0" />} />
+          <StatTile label="Weight" value={sim.weight} unit="kg" accent="accent" icon={<Zap size={11} className="text-amber-400 shrink-0" />} />
+          <StatTile label="Power" value={sim.peakPower} unit="hp" accent="accent" icon={<Gauge size={11} className="text-cyan-400 shrink-0" />} />
         </div>
       </Section>
 
@@ -336,7 +336,7 @@ export function CommandCenter({ onSelectStage }: CommandCenterProps = {}) {
           <div className="space-y-1 max-h-40 overflow-y-auto">
             {sortedLaps.slice(0, 6).map((lap, i) => (
               <div key={lap.trackId} className="flex items-center justify-between text-xs py-1 px-2 rounded hover:bg-base-850/50">
-                <span className="text-slate-400">{i + 1}. {lap.trackName}</span>
+                <span className="text-slate-400 flex items-center gap-1.5"><Flag size={11} className="text-cyan-400 shrink-0" />{i + 1}. {lap.trackName}</span>
                 <span className="font-mono text-accent-300">{formatLap(lap.time)}</span>
               </div>
             ))}
@@ -352,10 +352,10 @@ export function CommandCenter({ onSelectStage }: CommandCenterProps = {}) {
             <StatTile label="Quality Score" value={sim.manufacturing.qualityScore.toFixed(0)} unit="/100" accent="ok" />
           </div>
           <div className="space-y-2">
-            <CostBar label="Engine" value={sim.engineCost} total={sim.totalCost} color="#22d3ee" />
-            <CostBar label="Body/Chassis" value={sim.vehicleCost - sim.engineCost} total={sim.totalCost} color="#f59e0b" />
-            <CostBar label="Interior" value={sim.interiorCost} total={sim.totalCost} color="#22c55e" />
-            <CostBar label="Manufacturing" value={sim.totalCost - sim.vehicleCost - sim.interiorCost} total={sim.totalCost} color="#a78bfa" />
+            <CostBar label="Engine" value={sim.engineCost} total={sim.totalCost} color="#22d3ee" icon={<Cog size={13} className="text-cyan-400 shrink-0" />} />
+            <CostBar label="Body/Chassis" value={sim.vehicleCost - sim.engineCost} total={sim.totalCost} color="#f59e0b" icon={<Car size={13} className="text-amber-400 shrink-0" />} />
+            <CostBar label="Interior" value={sim.interiorCost} total={sim.totalCost} color="#22c55e" icon={<Sofa size={13} className="text-emerald-400 shrink-0" />} />
+            <CostBar label="Manufacturing" value={sim.totalCost - sim.vehicleCost - sim.interiorCost} total={sim.totalCost} color="#a78bfa" icon={<Factory size={13} className="text-purple-400 shrink-0" />} />
           </div>
         </Section>
       </div>
@@ -620,12 +620,15 @@ function SystemBar({ label, value, good, icon, invert }: {
   );
 }
 
-function CostBar({ label, value, total, color }: { label: string; value: number; total: number; color: string }) {
+function CostBar({ label, value, total, color, icon }: { label: string; value: number; total: number; color: string; icon?: React.ReactNode }) {
   const pct = total > 0 ? (value / total) * 100 : 0;
   return (
     <div>
       <div className="flex justify-between text-xs mb-1">
-        <span className="text-slate-400">{label}</span>
+        <span className="flex items-center gap-1.5 text-slate-400">
+          {icon}
+          <span>{label}</span>
+        </span>
         <span className="font-mono text-slate-200">${(value / 1000).toFixed(1)}k <span className="text-slate-600">({pct.toFixed(0)}%)</span></span>
       </div>
       <div className="h-2.5 bg-base-850 rounded-full overflow-hidden">

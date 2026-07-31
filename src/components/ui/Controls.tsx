@@ -238,8 +238,8 @@ export function Toggle({ label, value, onChange }: {
 
 type Accent = "accent" | "ok" | "warn" | "danger" | "default";
 
-export function StatTile({ label, value, unit, sub, accent = "default" }: {
-  label: string; value: string | number; unit?: string; sub?: string; accent?: Accent;
+export function StatTile({ label, value, unit, sub, accent = "default", icon }: {
+  label: string; value: string | number; unit?: string; sub?: string; accent?: Accent; icon?: ReactNode;
 }) {
   const colorMap: Record<Accent, string> = {
     accent: "text-accent-300",
@@ -250,7 +250,10 @@ export function StatTile({ label, value, unit, sub, accent = "default" }: {
   };
   return (
     <div className="bg-base-850 border border-base-800 rounded-lg px-3 py-2 transition-all duration-300 hover:border-base-700 hover:bg-base-800/60">
-      <div className="label-mono mb-0.5">{label}</div>
+      <div className="label-mono mb-0.5 flex items-center gap-1">
+        {icon}
+        <span>{label}</span>
+      </div>
       <div className={`font-mono text-base font-semibold ${colorMap[accent]} transition-colors`}>
         {value}
         {unit && <span className="text-xs text-slate-500 ml-0.5">{unit}</span>}

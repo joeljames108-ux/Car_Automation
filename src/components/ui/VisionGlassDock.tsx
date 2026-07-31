@@ -81,19 +81,21 @@ export function VisionGlassDock({
           display: "flex",
           alignItems: "flex-end",
           gap: 3,
-          // High-fidelity visionOS light glass
+          // Apple Liquid Glass dock
           background: "rgba(255,255,255,0.72)",
           backdropFilter: "blur(50px) saturate(200%)",
           WebkitBackdropFilter: "blur(50px) saturate(200%)",
-          border: "1px solid rgba(255,255,255,0.65)",
+          border: "1.5px solid rgba(255,220,180,0.40)",
           boxShadow:
             "0 12px 50px rgba(0,0,0,0.18), " +
             "0 4px 16px rgba(0,0,0,0.08), " +
             "inset 0 1px 0 rgba(255,255,255,0.90), " +
-            "inset 0 -1px 1px rgba(0,0,0,0.04)",
+            "inset 0 -1px 1px rgba(0,0,0,0.04), " +
+            "0 0 20px rgba(200,180,255,0.08)",
           borderRadius: 22,
           padding: "5px 8px",
           transition: "all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)",
+          animation: "vg-prismatic-border 6s ease-in-out infinite",
         }}
       >
         {/* ── Category Buttons ── */}

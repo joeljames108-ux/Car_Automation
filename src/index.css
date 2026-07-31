@@ -2434,15 +2434,18 @@ a,
   border-color: rgba(255, 255, 255, 0.85) !important;
 }
 
-/* --- Header — Light Frosted Glass Bar --- */
+/* --- Header — Liquid Glass Bar with Prismatic Edge --- */
 .theme4 header {
   background: rgba(255, 255, 255, 0.52) !important;
   backdrop-filter: blur(50px) saturate(180%);
   -webkit-backdrop-filter: blur(50px) saturate(180%);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.45) !important;
+  border-bottom: 1px solid transparent !important;
+  border-image: linear-gradient(90deg, rgba(255,255,255,0.3), rgba(255,200,150,0.4) 25%, rgba(180,220,255,0.4) 50%, rgba(200,180,255,0.35) 75%, rgba(255,255,255,0.3)) 1 !important;
   box-shadow:
     0 1px 0 rgba(0, 0, 0, 0.04),
-    0 4px 20px rgba(0, 0, 0, 0.08) !important;
+    0 4px 20px rgba(0, 0, 0, 0.08),
+    0 1px 12px rgba(200, 180, 255, 0.10) !important;
+  position: relative !important;
 }
 
 /* Force header text to dark */
@@ -2527,12 +2530,6 @@ a,
   box-shadow: 0 12px 32px rgba(0, 0, 0, 0.10), inset 0 1.5px 0 rgba(255, 255, 255, 0.90) !important;
 }
 
-.theme4 .glass-panel:hover {
-  transform: translateY(-1px) !important;
-  background: rgba(255, 255, 255, 0.48) !important;
-  border-color: rgba(255, 255, 255, 0.50) !important;
-  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.10), inset 0 1px 0 rgba(255, 255, 255, 0.5) !important;
-}
 
 /* ================================================================
    BACKGROUND UTILITY OVERRIDES — All Light Glass
@@ -3736,6 +3733,161 @@ a,
 .theme4 .vision-glass-content button:active {
   transform: scale(0.96) translateY(1px) !important;
   transition: transform 0.08s ease !important;
+}
+
+/* ==============================================================================
+   APPLE LIQUID GLASS EFFECTS — Prismatic Caustics, Refraction, Ambient Sweep
+   ============================================================================== */
+
+/* === Keyframe Animations === */
+
+/* Slow ambient light sweep across glass surfaces */
+@keyframes vg-liquid-light-sweep {
+  0%   { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+/* Prismatic border shimmer — shifts hue around the edge */
+@keyframes vg-prismatic-border {
+  0%   { border-color: rgba(255, 200, 150, 0.40); }
+  20%  { border-color: rgba(255, 220, 180, 0.35); }
+  40%  { border-color: rgba(180, 220, 255, 0.40); }
+  60%  { border-color: rgba(200, 180, 255, 0.35); }
+  80%  { border-color: rgba(255, 180, 200, 0.35); }
+  100% { border-color: rgba(255, 200, 150, 0.40); }
+}
+
+/* Subtle caustic ripple for inner glass */
+@keyframes vg-caustic-pulse {
+  0%, 100% { opacity: 0.35; transform: scale(1); }
+  50%      { opacity: 0.55; transform: scale(1.02); }
+}
+
+/* === Liquid Glass Panels — Prismatic Border Shimmer === */
+.theme4 .vision-glass-content .panel,
+.theme4 .vision-glass-content .panel-glow,
+.theme4 .vision-glass-content .glass-panel {
+  border: 1.5px solid rgba(255, 220, 180, 0.40) !important;
+  animation: vg-prismatic-border 6s ease-in-out infinite !important;
+}
+
+/* === Liquid Glass Refraction Layer (::before) — Ambient Light Sweep === */
+.theme4 .vision-glass-content .panel::before,
+.theme4 .vision-glass-content .panel-glow::before {
+  content: "" !important;
+  position: absolute !important;
+  inset: 0 !important;
+  border-radius: inherit !important;
+  background: linear-gradient(
+    105deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.01) 20%,
+    rgba(255, 255, 255, 0.12) 45%,
+    rgba(200, 220, 255, 0.08) 55%,
+    rgba(255, 255, 255, 0.01) 80%,
+    transparent 100%
+  ) !important;
+  background-size: 200% 100% !important;
+  animation: vg-liquid-light-sweep 8s ease-in-out infinite !important;
+  pointer-events: none !important;
+  z-index: 1 !important;
+  mix-blend-mode: overlay !important;
+}
+
+/* === Inner Stat Tiles — Subtle Caustic Shimmer === */
+.theme4 .vision-glass-content .bg-base-850::before,
+.theme4 .vision-glass-content div.bg-base-850::before {
+  content: "" !important;
+  position: absolute !important;
+  top: -1px !important;
+  left: 10% !important;
+  right: 10% !important;
+  height: 1px !important;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 220, 180, 0.50) 20%,
+    rgba(180, 220, 255, 0.55) 50%,
+    rgba(200, 180, 255, 0.45) 80%,
+    transparent
+  ) !important;
+  border-radius: 1px !important;
+  animation: vg-caustic-pulse 4s ease-in-out infinite !important;
+  pointer-events: none !important;
+}
+
+/* Make stat tiles position:relative for the caustic pseudo-element */
+.theme4 .vision-glass-content .bg-base-850,
+.theme4 .vision-glass-content div.bg-base-850 {
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+/* === Edge Caustic Light Lines on Main Panels === */
+.theme4 .vision-glass-content .panel > *:first-child::before {
+  content: "" !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: 5% !important;
+  right: 5% !important;
+  height: 1px !important;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 200, 150, 0.60) 15%,
+    rgba(255, 255, 255, 0.80) 35%,
+    rgba(180, 220, 255, 0.60) 55%,
+    rgba(200, 180, 255, 0.50) 75%,
+    transparent
+  ) !important;
+  pointer-events: none !important;
+  z-index: 2 !important;
+}
+
+/* === Hover: Intensified Liquid Glass Refraction === */
+.theme4 .vision-glass-content .panel:hover::before,
+.theme4 .vision-glass-content .panel-glow:hover::before {
+  animation: vg-liquid-light-sweep 3s ease-in-out infinite !important;
+  background: linear-gradient(
+    105deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.03) 15%,
+    rgba(255, 255, 255, 0.18) 42%,
+    rgba(200, 220, 255, 0.12) 55%,
+    rgba(255, 200, 180, 0.06) 70%,
+    transparent 100%
+  ) !important;
+  background-size: 200% 100% !important;
+}
+
+/* === Bottom Dock Liquid Glass Edge === */
+.theme4 > div:last-child {
+  position: relative;
+}
+
+/* === AI Assistant Bar — Liquid Glass Bottom Edge Caustic === */
+.theme4 .ai-assistant-container {
+  position: relative !important;
+}
+
+.theme4 .ai-assistant-container::before {
+  content: "" !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: 8% !important;
+  right: 8% !important;
+  height: 1px !important;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 200, 150, 0.45) 20%,
+    rgba(180, 220, 255, 0.50) 50%,
+    rgba(200, 180, 255, 0.40) 80%,
+    transparent
+  ) !important;
+  pointer-events: none !important;
+  z-index: 5 !important;
+  animation: vg-caustic-pulse 5s ease-in-out infinite !important;
 }
 
 /* ── BORDER COLORS → subtle dark hairlines ── */

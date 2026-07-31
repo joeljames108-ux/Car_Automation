@@ -168,15 +168,16 @@ export function VisionGlassToolbar({ actions }: VisionGlassToolbarProps) {
         background: "rgba(255, 252, 245, 0.58)",
         backdropFilter: "blur(50px) saturate(220%)",
         WebkitBackdropFilter: "blur(50px) saturate(220%)",
-        border: "1px solid rgba(255, 255, 255, 0.75)",
+        border: "1.5px solid rgba(255, 220, 180, 0.40)",
         borderRadius: 22,
         padding: "12px 8px",
         boxShadow:
           "0 16px 40px rgba(0, 0, 0, 0.10), " +
           "0 4px 12px rgba(0, 0, 0, 0.05), " +
-          "inset 0 1px 0 rgba(255, 255, 255, 0.90)",
+          "inset 0 1px 0 rgba(255, 255, 255, 0.90), " +
+          "0 0 16px rgba(200, 180, 255, 0.08)",
         gap: 4,
-        animation: "vg-toolbar-entrance 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both",
+        animation: "vg-toolbar-entrance 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both, vg-prismatic-border 6s ease-in-out infinite",
       }}
     >
       {/* Top section — navigation */}

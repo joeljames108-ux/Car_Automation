@@ -282,7 +282,7 @@ function AppInner() {
             ]}
           />
 
-          {/* ===== Floating Glass Window ===== */}
+          {/* ===== Floating Liquid Glass Window ===== */}
           <div style={{
             position: "relative", zIndex: 10,
             width: "min(96vw, 1440px)",
@@ -291,11 +291,12 @@ function AppInner() {
             background: "rgba(255, 252, 245, 0.52)",
             backdropFilter: "blur(60px) saturate(220%)",
             WebkitBackdropFilter: "blur(60px) saturate(220%)",
-            border: "1px solid rgba(255, 255, 255, 0.75)",
-            boxShadow: "0 24px 80px rgba(0, 0, 0, 0.12), 0 6px 24px rgba(0, 0, 0, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.90)",
+            border: "1.5px solid rgba(255, 220, 180, 0.40)",
+            boxShadow: "0 24px 80px rgba(0, 0, 0, 0.12), 0 6px 24px rgba(0, 0, 0, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.90), 0 0 24px rgba(200, 180, 255, 0.08)",
             display: "flex", flexDirection: "column",
             height: "calc(100vh - 32px)",
             overflow: "hidden",
+            animation: "vg-prismatic-border 8s ease-in-out infinite",
           }}>
 
             {/* ── HEADER BAR (Phase 3 Component) ── */}
