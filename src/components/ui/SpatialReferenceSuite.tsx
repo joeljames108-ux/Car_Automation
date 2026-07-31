@@ -20,14 +20,15 @@ export function SpatialReferenceSuite() {
         position: "relative",
         borderRadius: 28,
         padding: "16px",
-        background: "rgba(22, 28, 38, 0.60)",
-        backdropFilter: "blur(60px) saturate(190%)",
-        WebkitBackdropFilter: "blur(60px) saturate(190%)",
-        border: "1px solid rgba(255, 255, 255, 0.18)",
-        boxShadow: "0 32px 100px rgba(0, 0, 0, 0.50), inset 0 1px 0 rgba(255, 255, 255, 0.25)",
+        background: "rgba(255, 252, 245, 0.52)",
+        backdropFilter: "blur(60px) saturate(210%)",
+        WebkitBackdropFilter: "blur(60px) saturate(210%)",
+        border: "1px solid rgba(255, 255, 255, 0.75)",
+        boxShadow: "0 24px 80px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.90)",
         display: "flex",
         flexDirection: "column",
         gap: 16,
+        color: "#1c1c1e",
       }}
     >
       {/* Top Main Grid Layout (Reference Photo Layout) */}
@@ -48,7 +49,7 @@ export function SpatialReferenceSuite() {
         {/* Column 2 (Center): CFD Live Simulation Window + 3 Sub-Cards */}
         <div className="lg:col-span-6 flex flex-col gap-4">
           {/* CFD Wind Tunnel Live View */}
-          <div className="relative rounded-2xl overflow-hidden border border-white/15 shadow-2xl">
+          <div className="relative rounded-2xl overflow-hidden border border-white/75 shadow-lg">
             <CFDView
               aero={design.vehicle.aero}
               dragCoeff={sim.dragCoeff}
@@ -62,25 +63,26 @@ export function SpatialReferenceSuite() {
             {/* Card 1: VEHICLE CONFIGURATION */}
             <div
               style={{
-                background: "rgba(255, 255, 255, 0.07)",
-                backdropFilter: "blur(30px)",
-                border: "1px solid rgba(255, 255, 255, 0.14)",
+                background: "rgba(255, 255, 255, 0.55)",
+                backdropFilter: "blur(30px) saturate(210%)",
+                border: "1px solid rgba(255, 255, 255, 0.75)",
                 borderRadius: 20,
                 padding: "12px",
                 display: "flex",
                 flexDirection: "column",
                 gap: 10,
+                boxShadow: "0 4px 16px rgba(0, 0, 0, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.85)",
               }}
             >
-              <div style={{ fontSize: 10, fontWeight: 800, letterSpacing: "0.08em", color: "#94a3b8", textTransform: "uppercase" }}>
+              <div style={{ fontSize: 10, fontWeight: 800, letterSpacing: "0.08em", color: "#1c1c1e", textTransform: "uppercase" }}>
                 VEHICLE CONFIGURATION
               </div>
 
               {/* Technical 3D Suspension Diagram */}
-              <div style={{ position: "relative", height: 80, display: "flex", alignItems: "center", justifyContent: "center", background: "rgba(0,0,0,0.25)", borderRadius: 12, border: "1px solid rgba(255,255,255,0.06)" }}>
+              <div style={{ position: "relative", height: 80, display: "flex", alignItems: "center", justifyContent: "center", background: "rgba(255, 255, 255, 0.65)", borderRadius: 12, border: "1px solid rgba(0,0,0,0.06)" }}>
                 <svg width="120" height="70" viewBox="0 0 120 70">
-                  <path d="M20 50 L40 30 L80 30 L100 50 M40 30 L40 15 L80 15 L80 30" stroke="#38bdf8" strokeWidth="2" fill="none" />
-                  <circle cx="20" cy="50" r="10" fill="none" stroke="#94a3b8" strokeWidth="2" />
+                  <path d="M20 50 L40 30 L80 30 L100 50 M40 30 L40 15 L80 15 L80 30" stroke="#007aff" strokeWidth="2" fill="none" />
+                  <circle cx="20" cy="50" r="10" fill="none" stroke="#636366" strokeWidth="2" />
                   <line x1="20" y1="50" x2="40" y2="30" stroke="#34d399" strokeWidth="2" />
                   <line x1="80" y1="30" x2="100" y2="50" stroke="#34d399" strokeWidth="2" />
                 </svg>
@@ -89,7 +91,7 @@ export function SpatialReferenceSuite() {
               {/* Ride Height Slider */}
               <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                  <span style={{ fontSize: 10, fontWeight: 700, color: "#cbd5e1" }}>Ride Height (mm)</span>
+                  <span style={{ fontSize: 10, fontWeight: 700, color: "#1c1c1e" }}>Ride Height (mm)</span>
                   {/* Blue Toggle Switch */}
                   <button
                     onClick={() => setRideHeight(rideHeight === 105 ? 85 : 105)}
@@ -97,7 +99,7 @@ export function SpatialReferenceSuite() {
                       width: 30,
                       height: 16,
                       borderRadius: 10,
-                      background: "#0088ff",
+                      background: "#007aff",
                       position: "relative",
                       border: "none",
                       cursor: "pointer",
@@ -112,44 +114,45 @@ export function SpatialReferenceSuite() {
                   max={160}
                   value={rideHeight}
                   onChange={(e) => setRideHeight(Number(e.target.value))}
-                  style={{ accentColor: "#0088ff", width: "100%", cursor: "pointer" }}
+                  style={{ accentColor: "#007aff", width: "100%", cursor: "pointer" }}
                 />
               </div>
 
               {/* White Pill Input Element */}
-              <div style={{ background: "#ffffff", color: "#0f172a", borderRadius: 14, padding: "6px 12px", fontSize: 11, fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+              <div style={{ background: "rgba(255, 255, 255, 0.85)", color: "#1c1c1e", borderRadius: 14, padding: "6px 12px", fontSize: 11, fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "space-between", border: "1px solid rgba(0,0,0,0.06)" }}>
                 <span>Standard Aero Mode</span>
-                <span style={{ fontSize: 10, color: "#64748b" }}>✓</span>
+                <span style={{ fontSize: 10, color: "#007aff" }}>✓</span>
               </div>
             </div>
 
             {/* Card 2: CFD LAB DATA */}
             <div
               style={{
-                background: "rgba(255, 255, 255, 0.07)",
-                backdropFilter: "blur(30px)",
-                border: "1px solid rgba(255, 255, 255, 0.14)",
+                background: "rgba(255, 255, 255, 0.55)",
+                backdropFilter: "blur(30px) saturate(210%)",
+                border: "1px solid rgba(255, 255, 255, 0.75)",
                 borderRadius: 20,
                 padding: "12px",
                 display: "flex",
                 flexDirection: "column",
                 gap: 10,
+                boxShadow: "0 4px 16px rgba(0, 0, 0, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.85)",
               }}
             >
-              <div style={{ fontSize: 10, fontWeight: 800, letterSpacing: "0.08em", color: "#94a3b8", textTransform: "uppercase" }}>
+              <div style={{ fontSize: 10, fontWeight: 800, letterSpacing: "0.08em", color: "#1c1c1e", textTransform: "uppercase" }}>
                 CFD LAB DATA
               </div>
 
-              <div style={{ fontSize: 11, color: "#cbd5e1", lineHeight: 1.4 }}>
-                <div>Drag Cd: <span style={{ fontWeight: 800, color: "#ffffff" }}>{sim.dragCoeff.toFixed(3)}</span></div>
-                <div>Front/Rear Lift: <span style={{ fontWeight: 800, color: "#34d399" }}>+0.067 / +0.101</span></div>
+              <div style={{ fontSize: 11, color: "#3a3a3c", lineHeight: 1.4 }}>
+                <div>Drag Cd: <span style={{ fontWeight: 800, color: "#1c1c1e" }}>{sim.dragCoeff.toFixed(3)}</span></div>
+                <div>Front/Rear Lift: <span style={{ fontWeight: 800, color: "#007aff" }}>+0.067 / +0.101</span></div>
               </div>
 
               {/* Camera ISmart Cam Toggle */}
-              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", background: "rgba(255,255,255,0.05)", padding: "6px 10px", borderRadius: 12 }}>
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", background: "rgba(255,255,255,0.65)", padding: "6px 10px", borderRadius: 12, border: "1px solid rgba(0,0,0,0.06)" }}>
                 <div>
-                  <div style={{ fontSize: 10, fontWeight: 700, color: "#ffffff" }}>Camera</div>
-                  <div style={{ fontSize: 9, color: "#94a3b8" }}>ISmart Cam</div>
+                  <div style={{ fontSize: 10, fontWeight: 700, color: "#1c1c1e" }}>Camera</div>
+                  <div style={{ fontSize: 9, color: "#636366" }}>ISmart Cam</div>
                 </div>
                 <button
                   onClick={() => setCameraSmart(!cameraSmart)}
@@ -157,7 +160,7 @@ export function SpatialReferenceSuite() {
                     width: 32,
                     height: 18,
                     borderRadius: 10,
-                    background: cameraSmart ? "#0088ff" : "rgba(255,255,255,0.2)",
+                    background: cameraSmart ? "#007aff" : "rgba(0,0,0,0.12)",
                     position: "relative",
                     border: "none",
                     cursor: "pointer",
@@ -168,11 +171,11 @@ export function SpatialReferenceSuite() {
               </div>
 
               {/* Wireframe Vehicle Thumbnail Box */}
-              <div style={{ height: 60, background: "#000000", borderRadius: 12, border: "1px solid rgba(255,255,255,0.12)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <div style={{ height: 60, background: "rgba(255, 255, 255, 0.65)", borderRadius: 12, border: "1px solid rgba(0,0,0,0.06)", display: "flex", alignItems: "center", justifyContent: "center" }}>
                 <svg width="100" height="40" viewBox="0 0 100 40">
-                  <path d="M10 28 L30 15 L70 15 L90 28 Z" stroke="#38bdf8" strokeWidth="1" fill="none" strokeDasharray="2 2" />
-                  <circle cx="25" cy="28" r="6" stroke="#38bdf8" fill="none" />
-                  <circle cx="75" cy="28" r="6" stroke="#38bdf8" fill="none" />
+                  <path d="M10 28 L30 15 L70 15 L90 28 Z" stroke="#007aff" strokeWidth="1.5" fill="none" strokeDasharray="2 2" />
+                  <circle cx="25" cy="28" r="6" stroke="#007aff" fill="none" />
+                  <circle cx="75" cy="28" r="6" stroke="#007aff" fill="none" />
                 </svg>
               </div>
             </div>
@@ -180,25 +183,26 @@ export function SpatialReferenceSuite() {
             {/* Card 3: AERO FORCES OVER VELOCITY */}
             <div
               style={{
-                background: "rgba(255, 255, 255, 0.07)",
-                backdropFilter: "blur(30px)",
-                border: "1px solid rgba(255, 255, 255, 0.14)",
+                background: "rgba(255, 255, 255, 0.55)",
+                backdropFilter: "blur(30px) saturate(210%)",
+                border: "1px solid rgba(255, 255, 255, 0.75)",
                 borderRadius: 20,
                 padding: "12px",
                 display: "flex",
                 flexDirection: "column",
                 gap: 10,
+                boxShadow: "0 4px 16px rgba(0, 0, 0, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.85)",
               }}
             >
               <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                <div style={{ fontSize: 10, fontWeight: 800, letterSpacing: "0.08em", color: "#94a3b8", textTransform: "uppercase" }}>
+                <div style={{ fontSize: 10, fontWeight: 800, letterSpacing: "0.08em", color: "#1c1c1e", textTransform: "uppercase" }}>
                   AERO FORCES OVER VELOCITY
                 </div>
-                <HelpCircle size={12} style={{ color: "#64748b" }} />
+                <HelpCircle size={12} style={{ color: "#636366" }} />
               </div>
 
               {/* Time Period Filter Pills (Monthly / Weekly) */}
-              <div style={{ display: "flex", gap: 4, background: "rgba(255,255,255,0.08)", padding: 2, borderRadius: 10, width: "fit-content" }}>
+              <div style={{ display: "flex", gap: 4, background: "rgba(255,255,255,0.65)", padding: 2, borderRadius: 10, width: "fit-content", border: "1px solid rgba(0,0,0,0.06)" }}>
                 <button
                   onClick={() => setTimePeriod("monthly")}
                   style={{
@@ -206,8 +210,8 @@ export function SpatialReferenceSuite() {
                     borderRadius: 8,
                     fontSize: 9,
                     fontWeight: 700,
-                    background: timePeriod === "monthly" ? "#ffffff" : "transparent",
-                    color: timePeriod === "monthly" ? "#0f172a" : "#94a3b8",
+                    background: timePeriod === "monthly" ? "#007aff" : "transparent",
+                    color: timePeriod === "monthly" ? "#ffffff" : "#636366",
                     border: "none",
                     cursor: "pointer",
                   }}
@@ -221,8 +225,8 @@ export function SpatialReferenceSuite() {
                     borderRadius: 8,
                     fontSize: 9,
                     fontWeight: 700,
-                    background: timePeriod === "weekly" ? "#ffffff" : "transparent",
-                    color: timePeriod === "weekly" ? "#0f172a" : "#94a3b8",
+                    background: timePeriod === "weekly" ? "#007aff" : "transparent",
+                    color: timePeriod === "weekly" ? "#ffffff" : "#636366",
                     border: "none",
                     cursor: "pointer",
                   }}
@@ -243,11 +247,11 @@ export function SpatialReferenceSuite() {
                       width={18}
                       height={h}
                       rx={4}
-                      fill="rgba(255, 255, 255, 0.12)"
+                      fill="rgba(0, 122, 255, 0.14)"
                     />
                   ))}
                   {/* Blue Line Curve */}
-                  <path d="M 10 70 Q 60 50 110 65 T 190 30" fill="none" stroke="#0088ff" strokeWidth="2.5" />
+                  <path d="M 10 70 Q 60 50 110 65 T 190 30" fill="none" stroke="#007aff" strokeWidth="2.5" />
                   {/* Red Line Curve */}
                   <path d="M 10 35 Q 60 55 110 75 T 190 85" fill="none" stroke="#ef4444" strokeWidth="2.5" />
                   {/* Green Line Curve */}
@@ -255,7 +259,7 @@ export function SpatialReferenceSuite() {
                 </svg>
 
                 {/* X Axis Month Labels */}
-                <div style={{ display: "flex", justifyContent: "space-between", fontSize: 8, color: "#94a3b8", fontFamily: "monospace", marginTop: 2 }}>
+                <div style={{ display: "flex", justifyContent: "space-between", fontSize: 8, color: "#636366", fontFamily: "monospace", marginTop: 2, fontWeight: 700 }}>
                   <span>Jan</span>
                   <span>Feb</span>
                   <span>Mar</span>
@@ -279,14 +283,15 @@ export function SpatialReferenceSuite() {
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
-          background: "rgba(255, 255, 255, 0.88)",
-          backdropFilter: "blur(30px) saturate(190%)",
-          WebkitBackdropFilter: "blur(30px) saturate(190%)",
+          background: "rgba(255, 252, 245, 0.78)",
+          backdropFilter: "blur(30px) saturate(210%)",
+          WebkitBackdropFilter: "blur(30px) saturate(210%)",
           borderRadius: 28,
+          border: "1px solid rgba(255, 255, 255, 0.85)",
           padding: "6px 12px",
           width: "max-content",
           margin: "0 auto",
-          boxShadow: "0 10px 40px rgba(0,0,0,0.25)",
+          boxShadow: "0 10px 30px rgba(0, 0, 0, 0.08)",
         }}
       >
         <div style={{ display: "flex", gap: 4 }}>
@@ -300,10 +305,10 @@ export function SpatialReferenceSuite() {
                   padding: "6px 16px",
                   borderRadius: 20,
                   fontSize: 11,
-                  fontWeight: isActive ? 800 : 500,
-                  background: isActive ? "#ffffff" : "transparent",
-                  color: isActive ? "#0f172a" : "#475569",
-                  boxShadow: isActive ? "0 4px 12px rgba(0,0,0,0.12)" : "none",
+                  fontWeight: isActive ? 800 : 600,
+                  background: isActive ? "#007aff" : "transparent",
+                  color: isActive ? "#ffffff" : "#636366",
+                  boxShadow: isActive ? "0 4px 12px rgba(0, 122, 255, 0.30)" : "none",
                   border: "none",
                   cursor: "pointer",
                   transition: "all 0.2s ease",
@@ -316,7 +321,7 @@ export function SpatialReferenceSuite() {
         </div>
 
         {/* Avatar badge */}
-        <div style={{ marginLeft: 12, width: 28, height: 28, borderRadius: "50%", background: "#0088ff", display: "flex", alignItems: "center", justifyContent: "center", color: "#fff" }}>
+        <div style={{ marginLeft: 12, width: 28, height: 28, borderRadius: "50%", background: "#007aff", display: "flex", alignItems: "center", justifyContent: "center", color: "#fff" }}>
           <User size={16} />
         </div>
       </div>
@@ -328,9 +333,10 @@ export function SpatialReferenceSuite() {
           bottom: 16,
           right: 24,
           zIndex: 30,
-          background: "rgba(22, 28, 38, 0.85)",
-          backdropFilter: "blur(30px)",
-          border: "1px solid rgba(255, 255, 255, 0.20)",
+          background: "rgba(255, 252, 245, 0.85)",
+          backdropFilter: "blur(30px) saturate(210%)",
+          WebkitBackdropFilter: "blur(30px) saturate(210%)",
+          border: "1px solid rgba(255, 255, 255, 0.85)",
           borderRadius: 20,
           padding: "6px 14px",
           display: "flex",
@@ -338,11 +344,11 @@ export function SpatialReferenceSuite() {
           gap: 6,
           fontSize: 11,
           fontWeight: 700,
-          color: "#ffffff",
-          boxShadow: "0 8px 24px rgba(0,0,0,0.4)",
+          color: "#1c1c1e",
+          boxShadow: "0 8px 24px rgba(0, 0, 0, 0.08)",
         }}
       >
-        <Bot size={14} style={{ color: "#38bdf8" }} />
+        <Bot size={14} style={{ color: "#007aff" }} />
         <span>Apex AI</span>
         <span style={{ background: "#ef4444", color: "#fff", borderRadius: "50%", width: 14, height: 14, fontSize: 9, display: "flex", alignItems: "center", justifyContent: "center", fontWeight: 900 }}>
           1

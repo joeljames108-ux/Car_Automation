@@ -139,20 +139,20 @@ export function CFDView({ aero, dragCoeff, liftCoeff, downforce, className = "" 
   return (
     <Section title="CFD Lab — Wind Tunnel #3" icon={<Wind size={16} />} className={className}>
       {/* Header bar */}
-      <div className="flex items-center justify-between mb-2 px-3 py-1.5 bg-base-950 rounded-lg border border-base-800 font-mono text-[10px]">
-        <div className="flex items-center gap-3 text-slate-400">
+      <div className="flex items-center justify-between mb-2 px-3 py-1.5 bg-white/50 backdrop-blur-md rounded-lg border border-white/70 font-mono text-[10px] text-[#1c1c1e]">
+        <div className="flex items-center gap-3 text-slate-700 font-bold">
           <span className="flex items-center gap-1">
-            <span className={`w-1.5 h-1.5 rounded-full ${simRunning ? "bg-ok-400 animate-pulse" : "bg-slate-600"}`} />
+            <span className={`w-1.5 h-1.5 rounded-full ${simRunning ? "bg-[#059669] animate-pulse" : "bg-slate-400"}`} />
             {simRunning ? "SIMULATION RUNNING" : "READY"}
           </span>
-          <span className="text-slate-600">|</span>
-          <span>AIR SPEED: <span className="text-accent-300">{airSpeed} km/h</span></span>
-          <span className="text-slate-600">|</span>
-          <span>Re: <span className="text-slate-300">{(airSpeed * 21000).toLocaleString(undefined, { maximumFractionDigits: 0 })}</span></span>
+          <span className="text-slate-400">|</span>
+          <span>AIR SPEED: <span className="text-[#007aff] font-bold">{airSpeed} km/h</span></span>
+          <span className="text-slate-400">|</span>
+          <span>Re: <span className="text-slate-800 font-bold">{(airSpeed * 21000).toLocaleString(undefined, { maximumFractionDigits: 0 })}</span></span>
         </div>
         <div className="flex items-center gap-2">
-          <span className="text-slate-500">MESH: 2.4M cells</span>
-          {simRunning && <span className="text-accent-300">{simProgress.toFixed(0)}%</span>}
+          <span className="text-slate-600 font-bold">MESH: 2.4M cells</span>
+          {simRunning && <span className="text-[#007aff] font-bold">{simProgress.toFixed(0)}%</span>}
         </div>
       </div>
 
@@ -233,8 +233,10 @@ export function CFDView({ aero, dragCoeff, liftCoeff, downforce, className = "" 
           <button
             key={m}
             onClick={() => setMode(m)}
-            className={`flex items-center gap-1 px-2 py-1 rounded text-[10px] font-medium transition-all ${
-              mode === m ? "bg-accent-500/20 text-accent-300 border border-accent-500/40" : "bg-base-850 text-slate-400 border border-base-800 hover:text-slate-200"
+            className={`flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-bold transition-all border ${
+              mode === m
+                ? "bg-[#007aff] text-white border-[#007aff] shadow-sm scale-105"
+                : "bg-white/60 text-[#1c1c1e] border-white/80 hover:bg-white/80"
             }`}
           >
             {MODE_LABELS[m].icon}{MODE_LABELS[m].label}
@@ -251,7 +253,7 @@ export function CFDView({ aero, dragCoeff, liftCoeff, downforce, className = "" 
         <div className="relative">
           <button
             onClick={() => setCutaway(cutaway === "none" ? "body" : cutaway === "body" ? "underfloor" : cutaway === "underfloor" ? "cooling" : "none")}
-            className="flex items-center gap-1 px-2 py-1 rounded text-[10px] font-medium bg-base-850 text-slate-400 border border-base-800 hover:text-slate-200 transition-all"
+            className="flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-bold bg-white/60 text-[#1c1c1e] border border-white/80 hover:bg-white/80 transition-all"
           >
             <ChevronDown size={10} /> Cutaway: {cutaway === "none" ? "Off" : cutaway}
           </button>
@@ -259,22 +261,22 @@ export function CFDView({ aero, dragCoeff, liftCoeff, downforce, className = "" 
       </div>
 
       {/* Simulation controls */}
-      <div className="flex items-center gap-2 mt-2 px-3 py-2 bg-base-950 rounded-lg border border-base-800">
+      <div className="flex items-center gap-2 mt-2 px-3 py-2 bg-white/50 backdrop-blur-md rounded-xl border border-white/80 text-[#1c1c1e]">
         <button
           onClick={() => setPlaying(!playing)}
-          className="flex items-center justify-center w-7 h-7 rounded-lg bg-accent-500/20 border border-accent-500/40 text-accent-300 hover:bg-accent-500/30 transition-all"
+          className="flex items-center justify-center w-7 h-7 rounded-lg bg-[#007aff] text-white shadow-sm hover:bg-[#0066cc] transition-all"
         >
           {playing ? <Pause size={13} /> : <Play size={13} />}
         </button>
         <button
           onClick={runSimulation}
-          className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-ok-500/20 border border-ok-500/40 text-ok-300 text-[10px] font-medium hover:bg-ok-500/30 transition-all"
+          className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-[#059669] text-white text-[10px] font-bold shadow-sm hover:bg-[#047857] transition-all"
         >
           <Play size={11} /> Run Sim
         </button>
         <button
           onClick={reset}
-          className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-base-800 border border-base-700 text-slate-400 text-[10px] font-medium hover:text-slate-200 transition-all"
+          className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-white/70 border border-white/90 text-[#1c1c1e] text-[10px] font-bold hover:bg-white transition-all"
         >
           <RotateCcw size={11} /> Reset
         </button>
@@ -329,8 +331,10 @@ function ToggleChip({ active, onClick, icon, label }: { active: boolean; onClick
   return (
     <button
       onClick={onClick}
-      className={`flex items-center gap-1 px-2 py-1 rounded text-[10px] font-medium transition-all border ${
-        active ? "bg-accent-500/20 text-accent-300 border-accent-500/40" : "bg-base-850 text-slate-500 border-base-800 hover:text-slate-300"
+      className={`flex items-center gap-1 px-2.5 py-1 rounded-full text-[10px] font-bold transition-all border ${
+        active
+          ? "bg-[#007aff] text-white border-[#007aff] shadow-sm scale-105"
+          : "bg-white/60 text-[#1c1c1e] border-white/80 hover:bg-white/80"
       }`}
     >
       {icon}{label}

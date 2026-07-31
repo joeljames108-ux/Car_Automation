@@ -66,16 +66,16 @@ export function ModernAnalogClock({
             display: "flex",
             alignItems: "center",
             gap: 5,
-            background: "rgba(15, 23, 42, 0.85)",
-            backdropFilter: "blur(12px)",
-            WebkitBackdropFilter: "blur(12px)",
-            border: "1px solid rgba(255, 255, 255, 0.20)",
+            background: "rgba(255, 252, 245, 0.90)",
+            backdropFilter: "blur(12px) saturate(210%)",
+            WebkitBackdropFilter: "blur(12px) saturate(210%)",
+            border: "1px solid rgba(0, 122, 255, 0.35)",
             borderRadius: 20,
             padding: "2px 8px",
             fontSize: 10,
             fontWeight: 800,
-            color: "#f8fafc",
-            boxShadow: "0 4px 12px rgba(0,0,0,0.30)",
+            color: "#1c1c1e",
+            boxShadow: "0 4px 12px rgba(0, 0, 0, 0.08)",
           }}
         >
           <span
