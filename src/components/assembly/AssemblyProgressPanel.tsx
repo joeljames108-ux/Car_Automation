@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   CheckCircle2,
   Circle,
@@ -12,6 +12,8 @@ import {
   DollarSign,
   ShieldCheck,
   ChevronRight,
+  Clock,
+  Award,
 } from "lucide-react";
 import {
   ENGINE_ASSEMBLY_COMPONENTS,
@@ -20,6 +22,7 @@ import {
 } from "../../sim/assemblyTypes";
 import { ProgressBar } from "../ui/Controls";
 import { AnimatedCounter } from "../ui/AnimatedCounter";
+import { EngineAudioVisualizer } from "./EngineAudioVisualizer";
 
 interface AssemblyProgressPanelProps {
   installedComponents: ComponentId[];
@@ -55,6 +58,28 @@ export function AssemblyProgressPanel({
   className = "",
 }: AssemblyProgressPanelProps) {
   const [showResetConfirm, setShowResetConfirm] = useState(false);
+  const [elapsedSeconds, setElapsedSeconds] = useState(0);
+
+  // Timer counter for elapsed assembly time
+  useEffect(() => {
+    if (installedComponents.length === 0 || isAssemblyComplete) return;
+
+    const interval = setInterval(() => {
+      setElapsedSeconds((prev) => prev + 1);
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, [installedComponents.length, isAssemblyComplete]);
+
+  // Format seconds into MM:SS
+  const formatTime = (secs: number) => {
+    const mins = Math.floor(secs / 60);
+    const s = secs % 60;
+    return `${mins}:${s < 10 ? "0" : ""}${s}`;
+  };
+
+  // Calculate precision Quality Rating percentage
+  const qualityScore = Math.min(100, Math.round(75 + (installedComponents.length / 12) * 20 + (currentStats.reliability > 100 ? 5 : 0)));
 
   return (
     <div className={`flex flex-col bg-base-900/90 border border-base-800 rounded-2xl p-4 backdrop-blur-xl shadow-2xl h-full select-none ${className}`}>
@@ -63,7 +88,7 @@ export function AssemblyProgressPanel({
         <div className="flex items-center justify-between">
           <h3 className="text-xs font-bold text-slate-100 uppercase tracking-wider flex items-center gap-1.5">
             <Sparkles size={14} className="text-cyan-400" />
-            Assembly Progress
+            Assembly Dashboard
           </h3>
           <span className="text-xs font-mono font-bold text-cyan-300">
             {progressPercentage}%
@@ -72,6 +97,16 @@ export function AssemblyProgressPanel({
 
         {/* Smooth Fill Progress Bar */}
         <ProgressBar value={progressPercentage} max={100} color="bg-cyan-400" />
+
+        {/* Speed Metrics & Quality Bar */}
+        <div className="flex items-center justify-between pt-1 text-[10px] font-mono text-slate-400">
+          <span className="flex items-center gap-1">
+            <Clock size={11} className="text-cyan-400" /> Time: {formatTime(elapsedSeconds)}
+          </span>
+          <span className="flex items-center gap-1 text-emerald-300 font-bold">
+            <Award size={11} className="text-emerald-400" /> Quality: {qualityScore}%
+          </span>
+        </div>
       </div>
 
       {/* Next Recommended Component Action Banner */}
@@ -103,7 +138,7 @@ export function AssemblyProgressPanel({
             <Check size={18} />
           </div>
           <h4 className="text-xs font-bold text-emerald-300">Engine Assembly 100% Complete!</h4>
-          <p className="text-[10px] text-slate-300 font-mono">All 12 precision parts installed & torque verified.</p>
+          <p className="text-[10px] text-slate-300 font-mono">Factory Quality Rating: {qualityScore}%</p>
         </div>
       )}
 
@@ -146,12 +181,12 @@ export function AssemblyProgressPanel({
         </div>
       </div>
 
-      {/* Assembly Checklist */}
-      <div className="flex-1 overflow-y-auto pr-1 mb-3 scrollbar-thin scrollbar-thumb-base-750">
+      {/* Vertical Timeline Build Checklist */}
+      <div className="flex-1 min-h-0 overflow-y-auto pr-1 mb-3 scrollbar-thin scrollbar-thumb-base-750">
         <h4 className="text-[10px] font-mono text-slate-400 uppercase tracking-wider mb-2">
-          Engine Build Checklist ({installedComponents.length}/{ENGINE_ASSEMBLY_COMPONENTS.length})
+          Vertical Build Timeline ({installedComponents.length}/{ENGINE_ASSEMBLY_COMPONENTS.length})
         </h4>
-        <div className="space-y-1.5">
+        <div className="relative pl-3 space-y-2 border-l border-base-750 ml-1.5">
           {ENGINE_ASSEMBLY_COMPONENTS.map((comp) => {
             const isDone = installedComponents.includes(comp.id);
             const isCurrent = activeComponentId === comp.id;
@@ -159,7 +194,7 @@ export function AssemblyProgressPanel({
             return (
               <div
                 key={comp.id}
-                className={`flex items-center justify-between p-2 rounded-lg text-xs font-mono transition-all ${
+                className={`relative flex items-center justify-between p-2 rounded-lg text-xs font-mono transition-all ${
                   isDone
                     ? "bg-emerald-950/20 text-emerald-300 border border-emerald-500/20"
                     : isCurrent
@@ -167,11 +202,22 @@ export function AssemblyProgressPanel({
                     : "bg-base-850/50 text-slate-400 border border-base-800"
                 }`}
               >
+                {/* Timeline Connector Dot */}
+                <div
+                  className={`absolute -left-[19px] top-1/2 -translate-y-1/2 w-3 h-3 rounded-full border ${
+                    isDone
+                      ? "bg-emerald-400 border-emerald-300 shadow-[0_0_8px_rgba(52,211,153,0.8)]"
+                      : isCurrent
+                      ? "bg-cyan-400 border-cyan-300 animate-ping"
+                      : "bg-base-800 border-base-700"
+                  }`}
+                />
+
                 <div className="flex items-center gap-2 truncate">
                   {isDone ? (
                     <CheckCircle2 size={13} className="text-emerald-400 shrink-0" />
                   ) : isCurrent ? (
-                    <Play size={13} className="text-cyan-400 shrink-0 animate-bounce" />
+                    <Play size={13} className="text-cyan-400 shrink-0" />
                   ) : (
                     <Circle size={13} className="text-slate-600 shrink-0" />
                   )}
@@ -184,8 +230,11 @@ export function AssemblyProgressPanel({
         </div>
       </div>
 
-      {/* Bottom Controls Bar */}
-      <div className="pt-3 border-t border-base-800 flex items-center justify-between gap-2">
+      {/* Real-Time Engine Audio Synthesizer & Telemetry Panel */}
+      <EngineAudioVisualizer className="mt-2 shrink-0" />
+
+      {/* Assembly Control Action Buttons */}
+      <div className="pt-2 border-t border-base-800 flex items-center justify-between gap-2 mt-auto">
         <button
           onClick={onToggleExplodedView}
           className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 px-2 rounded-xl text-[11px] font-mono font-bold transition-all border ${
@@ -200,24 +249,26 @@ export function AssemblyProgressPanel({
         {!showResetConfirm ? (
           <button
             onClick={() => setShowResetConfirm(true)}
-            className="flex items-center justify-center gap-1.5 py-1.5 px-3 rounded-xl bg-rose-500/10 text-rose-300 border border-rose-500/30 hover:bg-rose-500/20 text-[11px] font-mono transition-all"
+            className="p-1.5 rounded-xl bg-base-800 text-rose-400 border border-base-750 hover:bg-rose-500/10 transition-colors"
+            title="Reset Assembly"
           >
-            <RotateCcw size={13} /> Reset
+            <RotateCcw size={14} />
           </button>
         ) : (
-          <div className="flex items-center gap-1 animate-scale-reveal">
+          <div className="flex items-center gap-1">
             <button
               onClick={() => {
                 onResetAssembly();
                 setShowResetConfirm(false);
+                setElapsedSeconds(0);
               }}
-              className="py-1 px-2.5 rounded-lg bg-rose-600 text-white text-[10px] font-mono font-bold hover:bg-rose-500"
+              className="px-2 py-1 rounded-lg bg-rose-500 text-white text-[10px] font-mono font-bold hover:bg-rose-600 transition-all"
             >
-              Confirm
+              Reset All
             </button>
             <button
               onClick={() => setShowResetConfirm(false)}
-              className="py-1 px-2 rounded-lg bg-base-750 text-slate-300 text-[10px] font-mono"
+              className="px-2 py-1 rounded-lg bg-base-800 text-slate-400 text-[10px] font-mono hover:bg-base-750"
             >
               Cancel
             </button>

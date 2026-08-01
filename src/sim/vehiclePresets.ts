@@ -23,6 +23,49 @@ export function createBaseDesign(name: string, platform: PlatformType, bodyType:
   return d;
 }
 
+export function createV12Hybrid1000HpDesign(): VehicleDesign {
+  const v = createBaseDesign("Apex Valkyrie V12 Hybrid 1000", "hypercar", "hypercar");
+  v.engine.layout = "v12";
+  v.engine.bore = 92;
+  v.engine.stroke = 80; // ~6.4L V12
+  v.engine.redline = 9200;
+  v.engine.rpmLimiter = 9200;
+  v.engine.valvetrain = "dohc_vvl";
+  v.engine.crank = "forged_steel";
+  v.engine.pistons = "forged";
+  v.engine.intake = "na";
+  v.engine.fuelSystem = "direct";
+  v.engine.hybridArchitecture = "phev";
+  v.engine.hybridMotorPower = 180; // 180 kW = 241 HP electric assist
+  v.engine.batteryCapacity = 16;
+  v.engine.batteryChemistry = "solid_state";
+  v.engine.motorPlacement = "p2";
+  v.engine.regenLevel = 0.8;
+
+  // 21 Comprehensive Hybrid & EV Subsystems
+  v.engine.powerElectronicsType = "silicon_carbide_sic";
+  v.engine.voltageArchitecture = 800;
+  v.engine.hybridTransmission = "dct_hybrid";
+  v.engine.regenBrakingTech = "brake_by_wire";
+  v.engine.thermalManagement = "liquid_chiller";
+  v.engine.chargingTech = "nacs";
+  v.engine.engineStrategy = "auto_start_stop";
+  v.engine.sensorSuite = "ai_telemetry_pro";
+  v.engine.emissionsTech = "three_way_cat";
+  v.engine.safetySystems = "pyro_fuse_orange_lines";
+  v.engine.futureTech = "solid_state_structural";
+  v.engine.sportsHybridTech = "electric_torque_fill";
+
+  v.vehicle.driveType = "awd";
+  v.vehicle.enginePosition = "mid";
+  v.vehicle.transmissionType = "dct_7";
+  v.vehicle.brakeType = "carbon_ceramic";
+  v.vehicle.tireCompound = "semislick";
+  v.vehicle.aero.wingAngle = 14;
+  v.vehicle.aero.underbody = "ground_effect";
+  return v;
+}
+
 export const VEHICLE_PRESET_LIBRARY: VehiclePresetItem[] = [
   // ================= PRICE TIERS =================
   {
@@ -151,6 +194,16 @@ export const VEHICLE_PRESET_LIBRARY: VehiclePresetItem[] = [
       v.engine.evMotorPower = 300;
       return v;
     }
+  },
+  {
+    id: "v12_hybrid_1000hp",
+    name: "Apex 1000 HP V12 Hybrid Hypercar",
+    category: "price",
+    groupLabel: "By Price Tiers",
+    targetMSRP: "$1,800,000 – $2,500,000",
+    expectedPower: "1,000 HP",
+    description: "6.4L Naturally Aspirated 9,200 RPM V12 + 180kW Solid-State Hybrid Electric Drive (1,000 HP Total Output)",
+    generator: () => createV12Hybrid1000HpDesign(),
   },
 
   // ================= UTILITY CLASSES =================

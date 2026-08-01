@@ -237,9 +237,12 @@ export const BATTERY_CHEMISTRIES: Record<string, {
   thermalStability: number; // 0-1
 }> = {
   nimh: { label: "NiMH", energyDensity: 0.065, weightPerKwh: 15.4, costPerKwh: 200, cycleLife: 500, dischargeRate: 5, thermalStability: 0.7 },
-  lfp: { label: "LiFePO4", energyDensity: 0.12, weightPerKwh: 8.3, costPerKwh: 120, cycleLife: 3000, dischargeRate: 10, thermalStability: 0.95 },
-  nmc: { label: "NMC", energyDensity: 0.18, weightPerKwh: 5.6, costPerKwh: 150, cycleLife: 1500, dischargeRate: 15, thermalStability: 0.8 },
-  solid_state: { label: "Solid State", energyDensity: 0.30, weightPerKwh: 3.3, costPerKwh: 400, cycleLife: 5000, dischargeRate: 20, thermalStability: 1.0 },
+  li_ion: { label: "Lithium-Ion", energyDensity: 0.16, weightPerKwh: 6.25, costPerKwh: 135, cycleLife: 1200, dischargeRate: 12, thermalStability: 0.8 },
+  lfp: { label: "LiFePO4 (LFP)", energyDensity: 0.12, weightPerKwh: 8.3, costPerKwh: 110, cycleLife: 3500, dischargeRate: 10, thermalStability: 0.98 },
+  nmc: { label: "NMC", energyDensity: 0.19, weightPerKwh: 5.2, costPerKwh: 140, cycleLife: 1800, dischargeRate: 15, thermalStability: 0.82 },
+  nca: { label: "NCA", energyDensity: 0.22, weightPerKwh: 4.55, costPerKwh: 160, cycleLife: 1400, dischargeRate: 18, thermalStability: 0.78 },
+  sodium_ion: { label: "Sodium-Ion", energyDensity: 0.10, weightPerKwh: 10.0, costPerKwh: 75, cycleLife: 4000, dischargeRate: 8, thermalStability: 0.95 },
+  solid_state: { label: "Solid-State", energyDensity: 0.32, weightPerKwh: 3.1, costPerKwh: 350, cycleLife: 5000, dischargeRate: 25, thermalStability: 1.0 },
 };
 
 export const EV_MOTOR_TYPES: Record<string, {
@@ -251,10 +254,58 @@ export const EV_MOTOR_TYPES: Record<string, {
   weight: number;         // kg per motor
 }> = {
   pmac: { label: "PMAC", efficiency: 0.95, powerDensity: 5.0, costFactor: 1.2, torqueFactor: 0.95, weight: 45 },
-  induction: { label: "Induction", efficiency: 0.90, powerDensity: 3.5, costFactor: 0.8, torqueFactor: 0.8, weight: 55 },
-  wound_rotor: { label: "Wound Rotor", efficiency: 0.93, powerDensity: 4.0, costFactor: 1.5, torqueFactor: 0.9, weight: 50 },
-  axial_flux: { label: "Axial Flux", efficiency: 0.96, powerDensity: 8.0, costFactor: 2.5, torqueFactor: 1.0, weight: 25 },
+  pmsm: { label: "PMSM (Permanent Magnet Synchronous)", efficiency: 0.97, powerDensity: 6.2, costFactor: 1.4, torqueFactor: 0.98, weight: 38 },
+  induction: { label: "Induction Motor", efficiency: 0.90, powerDensity: 3.5, costFactor: 0.8, torqueFactor: 0.8, weight: 55 },
+  bldc: { label: "Brushless DC (BLDC)", efficiency: 0.92, powerDensity: 4.2, costFactor: 1.0, torqueFactor: 0.88, weight: 48 },
+  switched_reluctance: { label: "Switched Reluctance (SRM)", efficiency: 0.89, powerDensity: 3.8, costFactor: 0.7, torqueFactor: 0.82, weight: 52 },
+  radial_flux: { label: "Radial Flux Motor", efficiency: 0.94, powerDensity: 5.2, costFactor: 1.1, torqueFactor: 0.92, weight: 42 },
+  axial_flux: { label: "Axial Flux Motor", efficiency: 0.98, powerDensity: 9.5, costFactor: 2.8, torqueFactor: 1.0, weight: 22 },
 };
+
+// ── 21 COMPREHENSIVE HYBRID & EV SUBSYSTEMS DICTIONARIES ──
+export const POWER_ELECTRONICS_TYPES = {
+  standard_igbt: { label: "Standard Silicon IGBT Inverter (400V)", efficiency: 0.92, heatLossKw: 4.2, costFactor: 1.0 },
+  silicon_carbide_sic: { label: "Silicon Carbide (SiC) Inverter (800V)", efficiency: 0.98, heatLossKw: 1.1, costFactor: 2.2 },
+  gallium_nitride_gan: { label: "Gallium Nitride (GaN) Electronics (900V)", efficiency: 0.99, heatLossKw: 0.6, costFactor: 3.5 },
+} as const;
+
+export const HYBRID_TRANSMISSION_TYPES = {
+  ecvt: { label: "eCVT Power-Split Device", efficiency: 0.93, costFactor: 1.2 },
+  power_split_planetary: { label: "Planetary Gear Set Power Split", efficiency: 0.94, costFactor: 1.3 },
+  dct_hybrid: { label: "Dual-Clutch Hybrid Transmission", efficiency: 0.96, costFactor: 1.8 },
+  amt_hybrid: { label: "Automated Manual Hybrid Transmission", efficiency: 0.91, costFactor: 1.1 },
+  single_speed_reduction: { label: "Single-Speed Direct Reduction Gear", efficiency: 0.98, costFactor: 0.8 },
+  multispeed_hybrid: { label: "Multi-Speed Hybrid Transmission", efficiency: 0.97, costFactor: 2.4 },
+} as const;
+
+export const REGEN_BRAKING_TYPES = {
+  brake_by_wire: { label: "Brake-by-Wire Electro-Hydraulic", regenEfficiency: 0.88, pedalFeel: "Linear" },
+  brake_blending: { label: "Active Brake Blending Controller", regenEfficiency: 0.82, pedalFeel: "Smooth" },
+  one_pedal_driving: { label: "One-Pedal Drive with Hold", regenEfficiency: 0.95, pedalFeel: "Aggressive" },
+  predictive_regen: { label: "GPS & Traffic Predictive Regeneration", regenEfficiency: 0.98, pedalFeel: "Smart" },
+} as const;
+
+export const THERMAL_MANAGEMENT_TYPES = {
+  liquid_chiller: { label: "Active Liquid Cooling Chiller", thermalStability: 0.95, weightKg: 18 },
+  refrigerant_direct: { label: "Direct Refrigerant Submerged Cooling", thermalStability: 0.99, weightKg: 12 },
+  air_cooling: { label: "Forced Air Cooling", thermalStability: 0.70, weightKg: 6 },
+  heat_pump_waste_heat: { label: "Heat Pump + Waste Heat Recovery", thermalStability: 0.96, weightKg: 14 },
+} as const;
+
+export const CHARGING_TECH_TYPES = {
+  nacs: { label: "NACS (Tesla Universal Standard 350kW)", fastChargeMinutes: 15 },
+  ccs2: { label: "CCS Type 2 Combined Charging (300kW)", fastChargeMinutes: 18 },
+  chademo: { label: "CHAdeMO DC Fast Charging (150kW)", fastChargeMinutes: 30 },
+  wireless_dynamic: { label: "Wireless Inductive Dynamic Road Charging", fastChargeMinutes: 20 },
+  v2g_v2h_v2l: { label: "V2G / V2H / V2L Bidirectional Power Station", fastChargeMinutes: 12 },
+} as const;
+
+export const SPORTS_HYBRID_TECH_TYPES = {
+  electric_torque_fill: { label: "Electric Torque Fill (Eliminates Turbo Lag)", torqueBoostNm: 220 },
+  e_turbo: { label: "eTurbo Exhaust Heat Recovery & Spool Assist", boostBarAdded: 0.6 },
+  e_axle_vectoring: { label: "Twin eAxle Motor Torque Vectoring", corneringGDelta: 0.25 },
+  launch_control_boost: { label: "Launch Control Max Discharging Punch", zeroToSixtySecDelta: -0.35 },
+} as const;
 
 export const HYBRID_DEPLOY_MODES: Record<string, {
   label: string;
@@ -1191,26 +1242,37 @@ export const ASSEMBLY_LINES: Record<string, { label: string; efficiency: number;
 
 export function defaultEngine(): EngineConfig {
   return {
-    layout: "v8",
-    bore: 92, stroke: 86, rodLength: 150, compressionRatio: 11.5,
-    crank: "forged_steel", pistons: "forged", valvetrain: "dohc",
-    camDuration: 280, camLift: 11, camTiming: 0, valveAngle: 21, valveSize: 36,
+    layout: "v12",
+    bore: 92, stroke: 80, rodLength: 150, compressionRatio: 12.2,
+    crank: "forged_steel", pistons: "forged", valvetrain: "dohc_vvl",
+    camDuration: 285, camLift: 12, camTiming: 0, valveAngle: 21, valveSize: 38,
     intake: "na", turboSize: 0, boostPressure: 0, wastegateSize: 0, intercoolerEff: 0,
     turboHousing: "cast_iron", compressorAR: 0.6, turbineAR: 0.8, turbineWheelDia: 55,
     intercoolerType: "none", wastegateType: "none", bovType: "none",
     antiLag: false, boostController: "none",
-    fuelSystem: "port", afr: 13, ignitionTiming: 28,
-    rpmLimiter: 7500, redline: 7000,
-    coolingRadiator: 0.6, coolingOilCooler: 0.5, coolingWaterPump: 0.6, coolingFanSpeed: 0.5,
-    exhaustPrimaryLength: 850, exhaustCollectorDia: 65, exhaustCat: true, exhaustValved: false,
-    hasStartStop: false, ecuMapMode: "balanced",
+    fuelSystem: "direct", afr: 12.8, ignitionTiming: 32,
+    rpmLimiter: 9200, redline: 9200,
+    coolingRadiator: 0.8, coolingOilCooler: 0.7, coolingWaterPump: 0.8, coolingFanSpeed: 0.7,
+    exhaustPrimaryLength: 850, exhaustCollectorDia: 75, exhaustCat: false, exhaustValved: true,
+    hasStartStop: false, ecuMapMode: "performance",
     hasMguH: false, mguHMode: "off",
-    hybridArchitecture: "none", hybridCoupling: "parallel",
+    hybridArchitecture: "phev", hybridCoupling: "parallel",
     hybridFrontMotorEnabled: false, hybridFrontMotorType: "pmac", hybridFrontMotorPower: 0,
-    hybridRearMotorEnabled: false, hybridRearMotorType: "pmac", hybridRearMotorPower: 0,
-    batteryCapacity: 0, batteryChemistry: "nmc",
-    deployMode: "race", regenLevel: 0.5, motorLayout: "none", evMotorPower: 0, evMotorType: "pmac",
-    motorPlacement: "p0", hybridMotorPower: 0,
+    batteryCapacity: 16, batteryChemistry: "solid_state",
+    deployMode: "qualifying", regenLevel: 0.8, motorLayout: "mid", evMotorPower: 0, evMotorType: "pmac",
+    motorPlacement: "p2", hybridMotorPower: 180,
+    powerElectronicsType: "silicon_carbide_sic",
+    voltageArchitecture: 800,
+    hybridTransmission: "dct_hybrid",
+    regenBrakingTech: "brake_by_wire",
+    thermalManagement: "liquid_chiller",
+    chargingTech: "nacs",
+    engineStrategy: "auto_start_stop",
+    sensorSuite: "ai_telemetry_pro",
+    emissionsTech: "three_way_cat",
+    safetySystems: "pyro_fuse_orange_lines",
+    futureTech: "solid_state_structural",
+    sportsHybridTech: "electric_torque_fill",
   };
 }
 
@@ -1429,7 +1491,7 @@ export function defaultExterior(): ExteriorConfig {
 
 export function defaultVehicle(): VehicleConfig {
   return {
-    platform: "supercar", driveType: "awd", enginePosition: "mid", chassis: "carbon_tub",
+    platform: "hypercar", driveType: "awd", enginePosition: "mid", chassis: "carbon_tub",
     exterior: defaultExterior(),
     aero: defaultAero(),
     aeroResearch: defaultAeroResearch(),
@@ -1763,8 +1825,8 @@ export function defaultInfotainment(): InfotainmentConfig {
 
 export function defaultDesign(): VehicleDesign {
   return {
-    name: "Untitled Design",
-    description: "",
+    name: "Apex Valkyrie V12 Hybrid 1000",
+    description: "6.4L 9,200 RPM V12 Combustion Engine + 180kW Solid-State Hybrid Drive (1,000 HP Total Output)",
     engine: defaultEngine(),
     vehicle: defaultVehicle(),
     manufacturing: defaultManufacturing(),

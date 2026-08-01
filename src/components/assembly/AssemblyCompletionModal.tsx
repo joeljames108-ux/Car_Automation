@@ -14,6 +14,7 @@ import {
   X,
   RotateCcw,
   ArrowRight,
+  Sliders,
 } from "lucide-react";
 import { EngineSVG } from "./EngineSVG";
 import { ENGINE_ASSEMBLY_COMPONENTS } from "../../sim/assemblyTypes";
@@ -39,6 +40,7 @@ export function AssemblyCompletionModal({
   stats,
 }: AssemblyCompletionModalProps) {
   const [isRunningEngine, setIsRunningEngine] = useState(false);
+  const [throttlePos, setThrottlePos] = useState(0); // 0% to 100%
   const [rpm, setRpm] = useState(850);
   const [boost, setBoost] = useState(0.2);
 
@@ -49,7 +51,7 @@ export function AssemblyCompletionModal({
     }
   }, [isOpen]);
 
-  // Live telemetry animation when engine is running
+  // Live telemetry calculation based on throttle position slider
   useEffect(() => {
     if (!isRunningEngine) {
       setRpm(0);
@@ -57,24 +59,28 @@ export function AssemblyCompletionModal({
       return;
     }
 
-    setRpm(950);
-    setBoost(0.3);
+    // Calculate RPM & Boost from throttle position (0 - 100%)
+    const targetRpm = Math.round(950 + (throttlePos / 100) * 7550);
+    const targetBoost = parseFloat((0.3 + (throttlePos / 100) * 2.1).toFixed(2));
 
-    const interval = setInterval(() => {
-      setRpm((prev) => 900 + Math.floor(Math.random() * 150));
-      setBoost((prev) => parseFloat((0.25 + Math.random() * 0.15).toFixed(2)));
-    }, 400);
+    setRpm(targetRpm);
+    setBoost(targetBoost);
 
-    return () => clearInterval(interval);
-  }, [isRunningEngine]);
+    if (throttlePos > 10) {
+      playAssemblySound("rev");
+    }
+  }, [isRunningEngine, throttlePos]);
 
   if (!isOpen) return null;
 
   const allComponentIds = ENGINE_ASSEMBLY_COMPONENTS.map((c) => c.id);
 
+  // Tachometer Needle Rotation Angle (-120deg to +120deg)
+  const needleRotation = -120 + (rpm / 8500) * 240;
+
   return createPortal(
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/85 backdrop-blur-2xl animate-stage-transition-enter select-none">
-      {/* Dynamic Background Rays */}
+      {/* Dynamic Background Rays & Confetti Effect */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_30%,rgba(34,211,238,0.15),transparent_70%)] pointer-events-none" />
 
       {/* Main Dialog Modal Container */}
@@ -94,11 +100,11 @@ export function AssemblyCompletionModal({
                   FACTORY VERIFIED
                 </span>
                 <span className="text-[10px] font-mono text-slate-400 uppercase tracking-widest">
-                  100% Complete
+                  100% Precision Build
                 </span>
               </div>
               <h2 className="text-xl font-bold text-slate-100 mt-0.5">
-                Engine Assembly Successful!
+                Engine Dyno & Telemetry Testing
               </h2>
             </div>
           </div>
@@ -114,7 +120,7 @@ export function AssemblyCompletionModal({
         {/* Center Grid: Engine SVG + Live Telemetry */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
           {/* Left Column: Assembled Engine Canvas */}
-          <div className="relative bg-base-950/90 border border-base-800 rounded-2xl p-4 flex flex-col items-center justify-center min-h-[300px] overflow-hidden">
+          <div className="relative bg-base-950/90 border border-base-800 rounded-2xl p-4 flex flex-col items-center justify-center min-h-[310px] overflow-hidden">
             <EngineSVG
               installedComponents={allComponentIds}
               activeComponentId={null}
@@ -122,48 +128,116 @@ export function AssemblyCompletionModal({
               hoveredComponentId={null}
               isExplodedView={false}
               isAssemblyComplete={true}
-              className="max-h-[280px]"
+              className="max-h-[260px]"
             />
 
-            {/* Start Engine & Rev Action Buttons */}
-            <div className="flex gap-2 mt-4">
-              <button
-                onClick={() => {
-                  const nextState = !isRunningEngine;
-                  setIsRunningEngine(nextState);
-                  if (nextState) playAssemblySound("starter");
-                }}
-                className={`flex-1 flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl text-xs font-mono font-bold transition-all shadow-lg active:scale-95 cursor-pointer ${
-                  isRunningEngine
-                    ? "bg-rose-500 text-white shadow-[0_0_20px_rgba(244,63,94,0.4)] animate-pulse"
-                    : "bg-gradient-to-r from-cyan-500 to-sky-500 text-black shadow-[0_0_20px_rgba(34,211,238,0.3)] hover:brightness-110"
-                }`}
-              >
-                <Flame size={16} />
-                {isRunningEngine ? "Stop Engine" : "Start Engine"}
-              </button>
-
-              {isRunningEngine && (
+            {/* Start Engine & Throttle Controls */}
+            <div className="w-full space-y-2 mt-3">
+              <div className="flex gap-2">
                 <button
                   onClick={() => {
-                    playAssemblySound("rev");
-                    setRpm(8500);
-                    setBoost(2.4);
-                    setTimeout(() => {
-                      setRpm(950);
-                      setBoost(0.3);
-                    }, 800);
+                    const nextState = !isRunningEngine;
+                    setIsRunningEngine(nextState);
+                    if (nextState) playAssemblySound("starter");
+                    else setThrottlePos(0);
                   }}
-                  className="flex items-center justify-center gap-1.5 py-2.5 px-4 rounded-xl bg-amber-500 text-black font-mono text-xs font-bold hover:bg-amber-400 shadow-[0_0_16px_rgba(245,158,11,0.4)] active:scale-95 cursor-pointer"
+                  className={`flex-1 flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl text-xs font-mono font-bold transition-all shadow-lg active:scale-95 cursor-pointer ${
+                    isRunningEngine
+                      ? "bg-rose-500 text-white shadow-[0_0_20px_rgba(244,63,94,0.4)] animate-pulse"
+                      : "bg-gradient-to-r from-cyan-500 to-sky-500 text-black shadow-[0_0_20px_rgba(34,211,238,0.3)] hover:brightness-110"
+                  }`}
                 >
-                  <Gauge size={16} /> REV (8,500 RPM)
+                  <Flame size={16} />
+                  {isRunningEngine ? "Stop Engine" : "Start Engine"}
                 </button>
+
+                {isRunningEngine && (
+                  <button
+                    onClick={() => {
+                      playAssemblySound("rev");
+                      setThrottlePos(100);
+                      setTimeout(() => setThrottlePos(0), 800);
+                    }}
+                    className="flex items-center justify-center gap-1.5 py-2.5 px-4 rounded-xl bg-amber-500 text-black font-mono text-xs font-bold hover:bg-amber-400 shadow-[0_0_16px_rgba(245,158,11,0.4)] active:scale-95 cursor-pointer"
+                  >
+                    <Gauge size={16} /> REV MAX
+                  </button>
+                )}
+              </div>
+
+              {/* Throttle Position Slider */}
+              {isRunningEngine && (
+                <div className="flex items-center gap-3 p-2 rounded-xl bg-base-900 border border-cyan-500/30">
+                  <Sliders size={14} className="text-cyan-400 shrink-0" />
+                  <span className="text-[10px] font-mono text-slate-300 font-bold shrink-0">
+                    Throttle: {throttlePos}%
+                  </span>
+                  <input
+                    type="range"
+                    min="0"
+                    max="100"
+                    value={throttlePos}
+                    onChange={(e) => setThrottlePos(Number(e.target.value))}
+                    className="w-full accent-cyan-400 cursor-pointer"
+                  />
+                </div>
               )}
             </div>
           </div>
 
-          {/* Right Column: Final Stats Summary & Live Telemetry */}
+          {/* Right Column: Circular SVG Tachometer & Live Telemetry */}
           <div className="space-y-4">
+            {/* Circular Tachometer Dial */}
+            <div className="flex items-center justify-center bg-base-950/90 border border-base-800 rounded-2xl p-4 relative">
+              <svg viewBox="0 0 200 130" className="w-48 h-32 overflow-visible">
+                {/* Dial Arc */}
+                <path
+                  d="M 30 110 A 80 80 0 1 1 170 110"
+                  fill="none"
+                  stroke="#1e293b"
+                  strokeWidth="12"
+                  strokeLinecap="round"
+                />
+                {/* Redline Arc */}
+                <path
+                  d="M 140 35 A 80 80 0 0 1 170 110"
+                  fill="none"
+                  stroke="#f43f5e"
+                  strokeWidth="12"
+                  strokeLinecap="round"
+                />
+                {/* Active RPM Fill Arc */}
+                <path
+                  d="M 30 110 A 80 80 0 1 1 170 110"
+                  fill="none"
+                  stroke="#22d3ee"
+                  strokeWidth="4"
+                  strokeDasharray="300"
+                  strokeDashoffset={300 - (rpm / 8500) * 300}
+                  className="transition-all duration-200"
+                />
+
+                {/* Rotating Needle */}
+                <g
+                  style={{
+                    transform: `rotate(${needleRotation}deg)`,
+                    transformOrigin: "100px 110px",
+                    transition: "transform 0.15s cubic-bezier(0.16, 1, 0.3, 1)",
+                  }}
+                >
+                  <line x1="100" y1="110" x2="100" y2="40" stroke="#22d3ee" strokeWidth="3" strokeLinecap="round" />
+                  <circle cx="100" cy="110" r="8" fill="#0f172a" stroke="#22d3ee" strokeWidth="2" />
+                </g>
+
+                <text x="100" y="95" fill="#f8fafc" fontSize="16" fontFamily="monospace" textAnchor="middle" fontWeight="bold">
+                  {rpm}
+                </text>
+                <text x="100" y="110" fill="#64748b" fontSize="8" fontFamily="monospace" textAnchor="middle">
+                  RPM
+                </text>
+              </svg>
+            </div>
+
             {/* Final Stats Summary Grid */}
             <div className="grid grid-cols-2 gap-3">
               <div className="bg-base-850 border border-base-750 rounded-2xl p-3">
@@ -199,47 +273,6 @@ export function AssemblyCompletionModal({
                 </span>
                 <div className="text-lg font-mono font-bold text-amber-300 mt-1">
                   ${stats.cost.toLocaleString()}
-                </div>
-              </div>
-            </div>
-
-            {/* Live Engine Vitals Telemetry Panel (When Running) */}
-            <div className="bg-base-950/80 border border-cyan-500/30 rounded-2xl p-3.5 space-y-2">
-              <span className="text-[10px] font-mono text-cyan-400 font-bold uppercase tracking-widest block flex items-center gap-1">
-                <Sparkles size={11} /> LIVE TELEMETRY SENSORS
-              </span>
-
-              <div className="grid grid-cols-2 gap-2 text-xs font-mono">
-                <div className="flex items-center justify-between p-2 rounded-xl bg-base-900 border border-base-800">
-                  <span className="text-slate-400 flex items-center gap-1">
-                    <Gauge size={12} className="text-cyan-400" /> Idle Speed
-                  </span>
-                  <span className="font-bold text-cyan-300">{rpm} RPM</span>
-                </div>
-
-                <div className="flex items-center justify-between p-2 rounded-xl bg-base-900 border border-base-800">
-                  <span className="text-slate-400 flex items-center gap-1">
-                    <Wind size={12} className="text-amber-400" /> Boost
-                  </span>
-                  <span className="font-bold text-amber-300">{boost} bar</span>
-                </div>
-
-                <div className="flex items-center justify-between p-2 rounded-xl bg-base-900 border border-base-800">
-                  <span className="text-slate-400 flex items-center gap-1">
-                    <Thermometer size={12} className="text-rose-400" /> Coolant
-                  </span>
-                  <span className="font-bold text-slate-200">
-                    {isRunningEngine ? "88°C" : "--"}
-                  </span>
-                </div>
-
-                <div className="flex items-center justify-between p-2 rounded-xl bg-base-900 border border-base-800">
-                  <span className="text-slate-400 flex items-center gap-1">
-                    <CheckCircle2 size={12} className="text-emerald-400" /> Oil Press.
-                  </span>
-                  <span className="font-bold text-emerald-300">
-                    {isRunningEngine ? "4.2 bar" : "--"}
-                  </span>
                 </div>
               </div>
             </div>

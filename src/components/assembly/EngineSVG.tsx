@@ -1,4 +1,5 @@
 import { ComponentId, AssemblyPhase, ENGINE_ASSEMBLY_COMPONENTS } from "../../sim/assemblyTypes";
+import { EngineConfig } from "../../sim/types";
 
 interface EngineSVGProps {
   installedComponents: ComponentId[];
@@ -7,7 +8,8 @@ interface EngineSVGProps {
   hoveredComponentId: ComponentId | null;
   isExplodedView: boolean;
   isAssemblyComplete: boolean;
-  layout?: "i4" | "v6" | "v8";
+  layout?: string;
+  engineConfig?: Partial<EngineConfig>;
   className?: string;
 }
 
@@ -18,6 +20,7 @@ export function EngineSVG({
   hoveredComponentId,
   isExplodedView,
   isAssemblyComplete,
+  engineConfig,
   className = "",
 }: EngineSVGProps) {
 
@@ -36,9 +39,9 @@ export function EngineSVG({
       if (isExplodedView && meta) {
         offsetX = meta.explodedOffset.x;
         offsetY = meta.explodedOffset.y;
-        opacity = 0.55; // Floating transparent outline in exploded view
+        opacity = 0.55;
       } else {
-        opacity = 0.15; // Hidden/ghost outline when not in exploded view
+        opacity = 0.15;
       }
     }
 
@@ -66,78 +69,191 @@ export function EngineSVG({
   const exhaustState = getPartState("exhaust_headers");
   const turboState = getPartState("turbocharger");
 
+  // Active spotlight location
+  const activeMeta = activeComponentId ? ENGINE_ASSEMBLY_COMPONENTS.find(c => c.id === activeComponentId) : null;
+  const spotlightX = activeMeta ? activeMeta.slotPosition.x : 250;
+  const spotlightY = activeMeta ? activeMeta.slotPosition.y : 225;
+
   return (
     <div className={`relative w-full h-full flex items-center justify-center select-none ${className}`}>
-      {/* Laser Target Reticle Overlay for Active Component Alignment */}
+      {/* Laser Target Reticle Overlay */}
       {activeComponentId && (
         <div className="absolute inset-0 pointer-events-none z-30 flex items-center justify-center">
-          <div className="w-48 h-48 border border-cyan-400/40 rounded-full animate-ping opacity-25" />
-          <div className="absolute w-64 h-[1px] bg-gradient-to-r from-transparent via-cyan-400/50 to-transparent" />
-          <div className="absolute h-64 w-[1px] bg-gradient-to-b from-transparent via-cyan-400/50 to-transparent" />
+          <div className="w-56 h-56 border border-amber-500/50 rounded-full animate-ping opacity-35" />
+          <div className="absolute w-80 h-[1px] bg-gradient-to-r from-transparent via-amber-500/60 to-transparent" />
+          <div className="absolute h-80 w-[1px] bg-gradient-to-b from-transparent via-amber-500/60 to-transparent" />
         </div>
       )}
 
       <svg
         viewBox="0 0 500 450"
-        className="w-full h-full max-h-[500px] overflow-visible drop-shadow-[0_20px_50px_rgba(0,0,0,0.8)]"
+        className="w-full h-full max-h-[500px] overflow-visible filter drop-shadow-[0_20px_45px_rgba(100,60,40,0.25)]"
       >
-        <defs>
-          {/* Metallic Gradients */}
-          <linearGradient id="metal-block" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stopColor="#334155" />
-            <stop offset="50%" stopColor="#1e293b" />
-            <stop offset="100%" stopColor="#0f172a" />
-          </linearGradient>
+        {/* CAD Engineering Background Grid Overlay */}
+        <rect width="500" height="450" fill="url(#cad-grid)" className="pointer-events-none" />
 
-          <linearGradient id="metal-crank" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#94a3b8" />
-            <stop offset="50%" stopColor="#64748b" />
+        <defs>
+          {/* ── 1. PHOTOREALISTIC METALLIC & MATERIAL GRADIENTS ── */}
+          {/* CNC Brushed Aluminum Cylinder Head */}
+          <linearGradient id="brushed-head" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="#ffffff" />
+            <stop offset="12%" stopColor="#e2e8f0" />
+            <stop offset="45%" stopColor="#cbd5e1" />
+            <stop offset="75%" stopColor="#94a3b8" />
+            <stop offset="92%" stopColor="#64748b" />
             <stop offset="100%" stopColor="#334155" />
           </linearGradient>
 
-          <linearGradient id="metal-piston" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#38bdf8" />
-            <stop offset="60%" stopColor="#0284c7" />
-            <stop offset="100%" stopColor="#0369a1" />
+          {/* Slate Blue Cast Iron Engine Block */}
+          <linearGradient id="slate-block" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stopColor="#5b708b" />
+            <stop offset="25%" stopColor="#415671" />
+            <stop offset="60%" stopColor="#2c3b4e" />
+            <stop offset="85%" stopColor="#1e293b" />
+            <stop offset="100%" stopColor="#111827" />
           </linearGradient>
 
+          {/* Anodized Steel-Blue/Gunmetal Pistons */}
+          <linearGradient id="blue-piston" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="#7da2ca" />
+            <stop offset="18%" stopColor="#50759e" />
+            <stop offset="55%" stopColor="#325073" />
+            <stop offset="85%" stopColor="#1c334d" />
+            <stop offset="100%" stopColor="#0d1b2a" />
+          </linearGradient>
+
+          {/* Forged Steel Connecting Rods & Crankshaft */}
+          <linearGradient id="forged-steel" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stopColor="#ffffff" />
+            <stop offset="18%" stopColor="#cbd5e1" />
+            <stop offset="50%" stopColor="#8a95a5" />
+            <stop offset="82%" stopColor="#475569" />
+            <stop offset="100%" stopColor="#1e293b" />
+          </linearGradient>
+
+          {/* 3D Round Cylindrical Pipe Gradient for Aluminum Intake */}
+          <linearGradient id="pipe-cylinder-3d" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="#ffffff" />
+            <stop offset="22%" stopColor="#f1f5f9" />
+            <stop offset="55%" stopColor="#94a3b8" />
+            <stop offset="82%" stopColor="#475569" />
+            <stop offset="100%" stopColor="#1e293b" />
+          </linearGradient>
+
+          {/* Blue Silicone Hose Couplers */}
+          <linearGradient id="blue-silicone" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="#60a5fa" />
+            <stop offset="30%" stopColor="#2563eb" />
+            <stop offset="70%" stopColor="#1d4ed8" />
+            <stop offset="90%" stopColor="#1e3a8a" />
+            <stop offset="100%" stopColor="#0f172a" />
+          </linearGradient>
+
+          {/* Heat-Treated Copper Exhaust Runners */}
+          <linearGradient id="copper-heat-treated" x1="0" y1="0" x2="1" y2="0.8">
+            <stop offset="0%" stopColor="#fff7ed" />
+            <stop offset="15%" stopColor="#ffedd5" />
+            <stop offset="40%" stopColor="#fb923c" />
+            <stop offset="70%" stopColor="#ea580c" />
+            <stop offset="88%" stopColor="#9a3412" />
+            <stop offset="100%" stopColor="#431407" />
+          </linearGradient>
+
+          {/* Polished Stainless Steel Downpipe */}
+          <linearGradient id="stainless-downpipe" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stopColor="#ffffff" />
+            <stop offset="25%" stopColor="#cbd5e1" />
+            <stop offset="60%" stopColor="#64748b" />
+            <stop offset="88%" stopColor="#334155" />
+            <stop offset="100%" stopColor="#0f172a" />
+          </linearGradient>
+
+          {/* Cast Aluminum Turbo Housing */}
+          <linearGradient id="turbo-housing" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stopColor="#ffffff" />
+            <stop offset="22%" stopColor="#e2e8f0" />
+            <stop offset="60%" stopColor="#94a3b8" />
+            <stop offset="88%" stopColor="#475569" />
+            <stop offset="100%" stopColor="#1e293b" />
+          </linearGradient>
+
+          {/* Golden Impeller Wheel Hub */}
+          <linearGradient id="gold-hub" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stopColor="#fef08a" />
+            <stop offset="30%" stopColor="#facc15" />
+            <stop offset="70%" stopColor="#d97706" />
+            <stop offset="100%" stopColor="#78350f" />
+          </linearGradient>
+
+          {/* Subtle Thin Copper Head Gasket */}
           <linearGradient id="copper-gasket" x1="0" y1="0" x2="1" y2="0">
-            <stop offset="0%" stopColor="#f97316" />
-            <stop offset="50%" stopColor="#ea580c" />
-            <stop offset="100%" stopColor="#c2410c" />
+            <stop offset="0%" stopColor="#d4a574" />
+            <stop offset="50%" stopColor="#b8834a" />
+            <stop offset="100%" stopColor="#8b6332" />
           </linearGradient>
 
-          <linearGradient id="turbo-gold" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stopColor="#fbbf24" />
-            <stop offset="50%" stopColor="#d97706" />
-            <stop offset="100%" stopColor="#92400e" />
+          {/* Inner Cylinder Bore Depth Gradient */}
+          <linearGradient id="bore-depth-gradient" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stopColor="#090d16" />
+            <stop offset="15%" stopColor="#111827" />
+            <stop offset="50%" stopColor="#0a0f1d" />
+            <stop offset="85%" stopColor="#111827" />
+            <stop offset="100%" stopColor="#090d16" />
           </linearGradient>
 
-          {/* Glow Filters */}
-          <filter id="glow-cyan" x="-20%" y="-20%" width="140%" height="140%">
-            <feGaussianBlur stdDeviation="4" result="blur" />
-            <feComposite in="SourceGraphic" in2="blur" operator="over" />
+          {/* Combustion Chamber Flame Glow Gradient */}
+          <radialGradient id="combustion-glow" cx="0.5" cy="0.5" r="0.5">
+            <stop offset="0%" stopColor="#fef08a" stopOpacity="0.9" />
+            <stop offset="35%" stopColor="#f97316" stopOpacity="0.75" />
+            <stop offset="70%" stopColor="#dc2626" stopOpacity="0.4" />
+            <stop offset="100%" stopColor="#7f1d1d" stopOpacity="0" />
+          </radialGradient>
+
+          {/* Airflow Velocity Streamline Gradient */}
+          <linearGradient id="intake-airflow" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stopColor="#38bdf8" stopOpacity="0" />
+            <stop offset="50%" stopColor="#38bdf8" stopOpacity="0.85" />
+            <stop offset="100%" stopColor="#0284c7" stopOpacity="0" />
+          </linearGradient>
+
+          {/* ── 2. SVG TEXTURE PATTERNS ── */}
+          <pattern id="cad-grid" width="20" height="20" patternUnits="userSpaceOnUse">
+            <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#94a3b8" strokeWidth="0.5" opacity="0.12" />
+          </pattern>
+
+          <pattern id="honing-crosshatch" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+            <line x1="0" y1="0" x2="0" y2="8" stroke="#475569" strokeWidth="0.8" opacity="0.45" />
+            <line x1="0" y1="0" x2="8" y2="0" stroke="#475569" strokeWidth="0.8" opacity="0.45" />
+          </pattern>
+
+          {/* ── 3. SPECULAR & DEEP DROP SHADOW FILTERS ── */}
+          <filter id="soft-shadow-3d" x="-30%" y="-30%" width="160%" height="160%">
+            <feDropShadow dx="3" dy="10" stdDeviation="8" floodColor="#3c2415" floodOpacity="0.35" />
           </filter>
 
-          <filter id="glow-active" x="-30%" y="-30%" width="160%" height="160%">
-            <feGaussianBlur stdDeviation="8" result="blur" />
-            <feComponentTransfer in="blur" result="glow">
-              <feFuncA type="linear" slope="0.8" />
-            </feComponentTransfer>
-            <feMerge>
-              <feMergeNode in="glow" />
-              <feMergeNode in="SourceGraphic" />
-            </feMerge>
+          <filter id="heat-shimmer-filter" x="-20%" y="-20%" width="140%" height="140%">
+            <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="2" result="noise">
+              <animate attributeName="baseFrequency" values="0.04;0.07;0.04" dur="2s" repeatCount="indefinite" />
+            </feTurbulence>
+            <feDisplacementMap in="SourceGraphic" in2="noise" scale="3" xChannelSelector="R" yChannelSelector="G" />
           </filter>
         </defs>
 
-        {/* Center Origin Reference Grid (subtle engineering crosshairs) */}
-        <g stroke="rgba(255,255,255,0.04)" strokeWidth="1" strokeDasharray="4 4">
-          <line x1="250" y1="20" x2="250" y2="430" />
-          <line x1="20" y1="225" x2="480" y2="225" />
-        </g>
+        {/* Studio Lighting Ambient Glow Circle */}
+        {activeComponentId && (
+          <circle
+            cx={spotlightX}
+            cy={spotlightY}
+            r="160"
+            fill="url(#brushed-head)"
+            opacity="0.12"
+            className="transition-all duration-700 ease-out"
+          >
+            <animate attributeName="r" values="140;170;140" dur="3s" repeatCount="indefinite" />
+          </circle>
+        )}
 
-        {/* ── 1. ENGINE BLOCK (Core Structural Hub) ── */}
+        {/* ── 1. ENGINE BLOCK (Slate Blue Cast Iron Base with 3D Ribs & Lugs) ── */}
         <g
           id="block"
           className={`transition-all duration-700 ease-out ${
@@ -147,36 +263,74 @@ export function EngineSVG({
             transform: `translate(${blockState.offsetX}px, ${blockState.offsetY}px)`,
             opacity: blockState.opacity,
           }}
+          filter={blockState.isInstalled ? "url(#soft-shadow-3d)" : undefined}
         >
-          {/* Main Block Shell */}
-          <rect
-            x="160"
-            y="160"
-            width="180"
-            height="150"
-            rx="12"
-            fill="url(#metal-block)"
-            stroke={blockState.isHovered || blockState.isActive ? "#22d3ee" : blockState.isInstalled ? "#475569" : "#334155"}
-            strokeWidth={blockState.isHovered || blockState.isActive ? "3" : "2"}
-            filter={blockState.isHovered ? "url(#glow-cyan)" : undefined}
-          />
-          {/* Cylinder Bores (4 inline bore sleeves) */}
-          <rect x="175" y="170" width="32" height="110" rx="4" fill="#0f172a" stroke="#334155" strokeWidth="1.5" />
-          <rect x="215" y="170" width="32" height="110" rx="4" fill="#0f172a" stroke="#334155" strokeWidth="1.5" />
-          <rect x="253" y="170" width="32" height="110" rx="4" fill="#0f172a" stroke="#334155" strokeWidth="1.5" />
-          <rect x="293" y="170" width="32" height="110" rx="4" fill="#0f172a" stroke="#334155" strokeWidth="1.5" />
+          {/* Billet Oil Dipstick Tube & Yellow Pull Handle */}
+          <g>
+            <path d="M 146 235 C 130 235 118 215 114 185" fill="none" stroke="url(#pipe-cylinder-3d)" strokeWidth="4" strokeLinecap="round" />
+            <circle cx="114" cy="180" r="5" fill="#facc15" stroke="#713f12" strokeWidth="1.5" />
+          </g>
 
-          {/* Coolant Passages / Water Jacket Lines */}
-          <circle cx="170" cy="180" r="3" fill="#0284c7" />
-          <circle cx="330" cy="180" r="3" fill="#0284c7" />
-          <circle cx="170" cy="260" r="3" fill="#0284c7" />
-          <circle cx="330" cy="260" r="3" fill="#0284c7" />
-          <text x="250" y="240" fill="#64748b" fontSize="10" fontFamily="monospace" textAnchor="middle" fontWeight="bold">
-            ENGINE BLOCK
+          {/* Main Slate Blue Block Shell */}
+          <path
+            d="M 148 148 L 352 148 Q 356 148 356 154 L 356 302 Q 356 310 344 310 L 156 310 Q 144 310 144 302 L 144 154 Q 144 148 148 148 Z"
+            fill="url(#slate-block)"
+            stroke={blockState.isHovered || blockState.isActive ? "#38bdf8" : "#2c3b4e"}
+            strokeWidth="2.5"
+          />
+
+          {/* Heavy Duty Block Side Mounting Lugs */}
+          <g fill="#253346" stroke="#172230" strokeWidth="1.5">
+            <rect x="134" y="174" width="12" height="28" rx="3" />
+            <circle cx="140" cy="188" r="3" fill="#0f172a" stroke="#475569" strokeWidth="1" />
+
+            <rect x="134" y="238" width="12" height="28" rx="3" />
+            <circle cx="140" cy="252" r="3" fill="#0f172a" stroke="#475569" strokeWidth="1" />
+
+            <rect x="354" y="174" width="12" height="28" rx="3" />
+            <circle cx="360" cy="188" r="3" fill="#0f172a" stroke="#475569" strokeWidth="1" />
+
+            <rect x="354" y="238" width="12" height="28" rx="3" />
+            <circle cx="360" cy="252" r="3" fill="#0f172a" stroke="#475569" strokeWidth="1" />
+          </g>
+
+          {/* Horizontal Reinforcement Structural Ribs */}
+          <line x1="145" y1="185" x2="355" y2="185" stroke="#1e293b" strokeWidth="2.5" opacity="0.6" />
+          <line x1="145" y1="215" x2="355" y2="215" stroke="#1e293b" strokeWidth="2.5" opacity="0.6" />
+          <line x1="145" y1="265" x2="355" y2="265" stroke="#1e293b" strokeWidth="2.5" opacity="0.6" />
+
+          {/* Oil Gallery Threaded Plugs */}
+          <circle cx="152" cy="165" r="3.5" fill="#334155" stroke="#0f172a" strokeWidth="1" />
+          <circle cx="152" cy="290" r="3.5" fill="#334155" stroke="#0f172a" strokeWidth="1" />
+
+          {/* 4 Precision Cylinder Bores */}
+          {[172, 212, 252, 292].map((xPos, idx) => (
+            <g key={`bore-${idx}`}>
+              <rect x={xPos} y="158" width="36" height="124" rx="4" fill="#0c1322" stroke="#1e2d42" strokeWidth="2" />
+              <rect x={xPos + 1} y="159" width="34" height="122" fill="url(#honing-crosshatch)" />
+              {/* Cylinder Bore Wall Highlights */}
+              <line x1={xPos + 1} y1="158" x2={xPos + 1} y2="282" stroke="#64748b" strokeWidth="1.2" opacity="0.6" />
+              <line x1={xPos + 35} y1="158" x2={xPos + 35} y2="282" stroke="#334155" strokeWidth="1.2" opacity="0.6" />
+            </g>
+          ))}
+
+          {/* Laser Debossed Engine Block Text */}
+          <text
+            x="250"
+            y="242"
+            fill="#1e293b"
+            fontSize="9"
+            fontFamily="monospace"
+            textAnchor="middle"
+            fontWeight="900"
+            letterSpacing="2.5"
+            opacity="0.9"
+          >
+            ENGINE BLOCK (CAST STEEL)
           </text>
         </g>
 
-        {/* ── 2. CRANKSHAFT & MAIN BEARINGS ── */}
+        {/* ── 2. FORGED STEEL CRANKSHAFT WITH DETAILED COUNTERWEIGHTS & SNOUT ── */}
         <g
           id="crankshaft"
           className={`transition-all duration-700 ease-out ${
@@ -186,25 +340,71 @@ export function EngineSVG({
             transform: `translate(${crankState.offsetX}px, ${crankState.offsetY}px)`,
             opacity: crankState.opacity,
           }}
+          filter={crankState.isInstalled ? "url(#soft-shadow-3d)" : undefined}
         >
-          {/* Main Crank Shaft Axis */}
+          {/* Main Forged Crank Shaft Axis */}
           <path
-            d="M 165 310 Q 195 290 215 310 T 255 310 T 295 310 T 335 310"
+            d="M 90 305 L 375 305"
             fill="none"
-            stroke="url(#metal-crank)"
-            strokeWidth="14"
+            stroke="url(#forged-steel)"
+            strokeWidth="16"
             strokeLinecap="round"
           />
-          {/* Counterweights */}
-          <circle cx="195" cy="322" r="16" fill="#475569" stroke={crankState.isHovered ? "#22d3ee" : "#334155"} strokeWidth="2" />
-          <circle cx="235" cy="298" r="16" fill="#475569" stroke={crankState.isHovered ? "#22d3ee" : "#334155"} strokeWidth="2" />
-          <circle cx="275" cy="322" r="16" fill="#475569" stroke={crankState.isHovered ? "#22d3ee" : "#334155"} strokeWidth="2" />
-          <circle cx="315" cy="298" r="16" fill="#475569" stroke={crankState.isHovered ? "#22d3ee" : "#334155"} strokeWidth="2" />
-          {/* Flywheel Ring Gear flange */}
-          <rect x="150" y="295" width="12" height="30" rx="3" fill="#64748b" />
+
+          {/* Polished Main Journals */}
+          {[168, 208, 250, 290, 332].map((xPos, idx) => (
+            <g key={`journal-${idx}`}>
+              <rect x={xPos} y="296" width="14" height="18" rx="2" fill="url(#pipe-cylinder-3d)" stroke="#475569" strokeWidth="1" />
+              <line x1={xPos + 2} y1="298" x2={xPos + 12} y2="298" stroke="#ffffff" strokeWidth="1" opacity="0.7" />
+            </g>
+          ))}
+
+          {/* 4 Swept D-Shaped Counterweight Webs with Drill Holes */}
+          {[
+            { cx: 190, cy: 320, rot: 0 },
+            { cx: 230, cy: 290, rot: 180 },
+            { cx: 270, cy: 320, rot: 0 },
+            { cx: 310, cy: 290, rot: 180 },
+          ].map((cw, idx) => (
+            <g key={`counterweight-${idx}`}>
+              <path
+                d={`M ${cw.cx - 20} ${cw.cy - 8} Q ${cw.cx} ${cw.cy + 24} ${cw.cx + 20} ${cw.cy - 8} Z`}
+                fill="url(#forged-steel)"
+                stroke="#334155"
+                strokeWidth="1.8"
+              />
+              {/* Precision Weight Balance Drill Holes */}
+              <circle cx={cw.cx - 8} cy={cw.cy + 6} r="3" fill="#0f172a" stroke="#64748b" strokeWidth="1" />
+              <circle cx={cw.cx + 8} cy={cw.cy + 6} r="3" fill="#0f172a" stroke="#64748b" strokeWidth="1" />
+              <circle cx={cw.cx} cy={cw.cy + 12} r="3.5" fill="#0f172a" stroke="#64748b" strokeWidth="1" />
+            </g>
+          ))}
+
+          {/* Left Extended Crankshaft Snout (3 Stepped Diameter Sections) */}
+          <g fill="url(#forged-steel)" stroke="#334155" strokeWidth="1.2">
+            {/* Step 1: Main Seal Journal */}
+            <rect x="126" y="297" width="18" height="16" rx="2" />
+            {/* Step 2: Timing Gear Journal */}
+            <rect x="106" y="299" width="20" height="12" rx="2" />
+            {/* Step 3: Keyed Snout Tip */}
+            <rect x="85" y="301" width="21" height="8" rx="1.5" />
+          </g>
+          {/* Keyway Slot */}
+          <rect x="90" y="303" width="10" height="4" fill="#0f172a" rx="1" />
+
+          {/* Right Flywheel Flange with 6-Bolt Circle Pattern */}
+          <g>
+            <rect x="352" y="288" width="18" height="34" rx="3" fill="url(#forged-steel)" stroke="#334155" strokeWidth="1.5" />
+            <circle cx="361" cy="293" r="2" fill="#0f172a" stroke="#ffffff" strokeWidth="0.5" />
+            <circle cx="361" cy="301" r="2" fill="#0f172a" stroke="#ffffff" strokeWidth="0.5" />
+            <circle cx="361" cy="309" r="2" fill="#0f172a" stroke="#ffffff" strokeWidth="0.5" />
+            <circle cx="361" cy="317" r="2" fill="#0f172a" stroke="#ffffff" strokeWidth="0.5" />
+            {/* Ring Gear Starter Teeth */}
+            <line x1="369" y1="288" x2="369" y2="322" stroke="#64748b" strokeWidth="2" strokeDasharray="3 2" />
+          </g>
         </g>
 
-        {/* ── 3. CONNECTING RODS ── */}
+        {/* ── 3. FORGED STEEL H-BEAM CONNECTING RODS ── */}
         <g
           id="rods"
           className="transition-all duration-700 ease-out"
@@ -213,14 +413,28 @@ export function EngineSVG({
             opacity: rodState.opacity,
           }}
         >
-          {/* 4 H-Beam Connecting Rods linking Crankshaft to Pistons */}
-          <rect x="187" y="210" width="8" height="80" rx="2" fill="#94a3b8" stroke="#475569" />
-          <rect x="227" y="200" width="8" height="80" rx="2" fill="#94a3b8" stroke="#475569" />
-          <rect x="265" y="210" width="8" height="80" rx="2" fill="#94a3b8" stroke="#475569" />
-          <rect x="305" y="200" width="8" height="80" rx="2" fill="#94a3b8" stroke="#475569" />
+          {[
+            { x: 184, y: 194, h: 104 },
+            { x: 224, y: 184, h: 104 },
+            { x: 264, y: 194, h: 104 },
+            { x: 304, y: 184, h: 104 },
+          ].map((rod, idx) => (
+            <g key={`rod-${idx}`}>
+              {/* Forged Steel H-Beam Shank */}
+              <rect x={rod.x} y={rod.y} width="12" height={rod.h} rx="4" fill="url(#forged-steel)" stroke="#334155" strokeWidth="1.5" />
+              {/* Recessed H-Beam Center Channel */}
+              <rect x={rod.x + 2.5} y={rod.y + 10} width="7" height={rod.h - 22} rx="1.5" fill="#172230" />
+              {/* Small-End Wrist Pin Bushing (Bronze) */}
+              <circle cx={rod.x + 6} cy={rod.y + 5} r="4" fill="none" stroke="#b45309" strokeWidth="1.5" />
+              {/* Big-End Rod Cap Split Line & ARP Fasteners */}
+              <line x1={rod.x} y1={rod.y + rod.h - 10} x2={rod.x + 12} y2={rod.y + rod.h - 10} stroke="#0f172a" strokeWidth="1.5" />
+              <circle cx={rod.x + 2.5} cy={rod.y + rod.h - 5} r="1.8" fill="#ffffff" stroke="#334155" strokeWidth="0.8" />
+              <circle cx={rod.x + 9.5} cy={rod.y + rod.h - 5} r="1.8" fill="#ffffff" stroke="#334155" strokeWidth="0.8" />
+            </g>
+          ))}
         </g>
 
-        {/* ── 4. PISTONS (Reciprocating Assemblies) ── */}
+        {/* ── 4. ANODIZED GUNMETAL/BLUE PISTONS WITH RING LANDS ── */}
         <g
           id="pistons"
           className={`transition-all duration-700 ease-out ${
@@ -230,50 +444,31 @@ export function EngineSVG({
             transform: `translate(${pistonState.offsetX}px, ${pistonState.offsetY}px)`,
             opacity: pistonState.opacity,
           }}
+          filter={pistonState.isInstalled ? "url(#soft-shadow-3d)" : undefined}
         >
-          {/* Piston 1 */}
-          <rect x="177" y="180" width="28" height="32" rx="4" fill="url(#metal-piston)" stroke={pistonState.isHovered ? "#38bdf8" : "#0284c7"} strokeWidth="2" />
-          <line x1="177" y1="186" x2="205" y2="186" stroke="#0f172a" strokeWidth="1.5" />
-          <line x1="177" y1="192" x2="205" y2="192" stroke="#0f172a" strokeWidth="1.5" />
-
-          {/* Piston 2 */}
-          <rect x="217" y="172" width="28" height="32" rx="4" fill="url(#metal-piston)" stroke={pistonState.isHovered ? "#38bdf8" : "#0284c7"} strokeWidth="2" />
-          <line x1="217" y1="178" x2="245" y2="178" stroke="#0f172a" strokeWidth="1.5" />
-          <line x1="217" y1="184" x2="245" y2="184" stroke="#0f172a" strokeWidth="1.5" />
-
-          {/* Piston 3 */}
-          <rect x="255" y="180" width="28" height="32" rx="4" fill="url(#metal-piston)" stroke={pistonState.isHovered ? "#38bdf8" : "#0284c7"} strokeWidth="2" />
-          <line x1="255" y1="186" x2="283" y2="186" stroke="#0f172a" strokeWidth="1.5" />
-          <line x1="255" y1="192" x2="283" y2="192" stroke="#0f172a" strokeWidth="1.5" />
-
-          {/* Piston 4 */}
-          <rect x="295" y="172" width="28" height="32" rx="4" fill="url(#metal-piston)" stroke={pistonState.isHovered ? "#38bdf8" : "#0284c7"} strokeWidth="2" />
-          <line x1="295" y1="178" x2="323" y2="178" stroke="#0f172a" strokeWidth="1.5" />
-          <line x1="295" y1="184" x2="323" y2="184" stroke="#0f172a" strokeWidth="1.5" />
+          {[
+            { x: 174, y: 162, h: 40 },
+            { x: 214, y: 152, h: 40 },
+            { x: 254, y: 162, h: 40 },
+            { x: 294, y: 152, h: 40 },
+          ].map((p, idx) => (
+            <g key={`piston-${idx}`}>
+              {/* Metallic Anodized Crown & Skirt */}
+              <rect x={p.x} y={p.y} width="32" height={p.h} rx="5" fill="url(#blue-piston)" stroke="#1e3a5f" strokeWidth="2" />
+              {/* Crown Top Bevel Specular Highlight */}
+              <line x1={p.x + 2} y1={p.y + 2} x2={p.x + 30} y2={p.y + 2} stroke="#94b8d4" strokeWidth="1.8" />
+              {/* 3 Distinct Compression & Oil Scraper Rings */}
+              <line x1={p.x} y1={p.y + 8} x2={p.x + 32} y2={p.y + 8} stroke="#f8fafc" strokeWidth="1.2" />
+              <line x1={p.x} y1={p.y + 14} x2={p.x + 32} y2={p.y + 14} stroke="#cbd5e1" strokeWidth="1.2" />
+              <line x1={p.x} y1={p.y + 20} x2={p.x + 32} y2={p.y + 20} stroke="#0f172a" strokeWidth="1.5" />
+              {/* Wrist Pin Bore & Hollow Pin */}
+              <circle cx={p.x + 16} cy={p.y + 28} r="5" fill="#0f172a" stroke="#cbd5e1" strokeWidth="1.5" />
+              <circle cx={p.x + 16} cy={p.y + 28} r="2.5" fill="#475569" />
+            </g>
+          ))}
         </g>
 
-        {/* ── 5. OIL PAN / SUMP ── */}
-        <g
-          id="oil_pan"
-          className="transition-all duration-700 ease-out"
-          style={{
-            transform: `translate(${panState.offsetX}px, ${panState.offsetY}px)`,
-            opacity: panState.opacity,
-          }}
-        >
-          <path
-            d="M 160 310 L 175 370 L 325 370 L 340 310 Z"
-            fill="#1e293b"
-            stroke={panState.isHovered ? "#22d3ee" : "#334155"}
-            strokeWidth="2"
-          />
-          {/* Oil level fluid line */}
-          <path d="M 180 355 L 320 355" stroke="#eab308" strokeWidth="3" opacity="0.6" strokeDasharray="6 3" />
-          {/* Drain plug */}
-          <rect x="310" y="367" width="10" height="6" fill="#94a3b8" />
-        </g>
-
-        {/* ── 6. HEAD GASKET ── */}
+        {/* ── 5. SUBTLE COPPER HEAD GASKET ── */}
         <g
           id="head_gasket"
           className="transition-all duration-700 ease-out"
@@ -282,14 +477,10 @@ export function EngineSVG({
             opacity: gasketState.opacity,
           }}
         >
-          <rect x="155" y="152" width="190" height="8" rx="2" fill="url(#copper-gasket)" stroke="#c2410c" strokeWidth="1" />
-          <circle cx="189" cy="156" r="6" fill="#0f172a" />
-          <circle cx="229" cy="156" r="6" fill="#0f172a" />
-          <circle cx="267" cy="156" r="6" fill="#0f172a" />
-          <circle cx="307" cy="156" r="6" fill="#0f172a" />
+          <rect x="142" y="144" width="216" height="5" rx="2" fill="url(#copper-gasket)" stroke="#9a3412" strokeWidth="0.8" opacity="0.95" />
         </g>
 
-        {/* ── 7. CYLINDER HEAD ── */}
+        {/* ── 6. BRUSHED ALUMINUM CNC CYLINDER HEAD (Wider Body & Domes) ── */}
         <g
           id="cylinder_head"
           className="transition-all duration-700 ease-out"
@@ -297,28 +488,63 @@ export function EngineSVG({
             transform: `translate(${headState.offsetX}px, ${headState.offsetY}px)`,
             opacity: headState.opacity,
           }}
+          filter={headState.isInstalled ? "url(#soft-shadow-3d)" : undefined}
         >
+          {/* Spark Plugs & Ignition Coil Packs */}
+          {[190, 230, 270, 310].map((spx, idx) => (
+            <g key={`sparkplug-${idx}`}>
+              <rect x={spx - 3} y="44" width="6" height="16" rx="1.5" fill="#f8fafc" stroke="#64748b" strokeWidth="0.8" />
+              <rect x={spx - 4} y="42" width="8" height="4" rx="1" fill="#1e293b" />
+              <line x1={spx} y1="36" x2={spx} y2="42" stroke="#ea580c" strokeWidth="1.5" />
+            </g>
+          ))}
+
+          {/* Main Brushed Aluminum Cylinder Head Block */}
           <rect
-            x="155"
-            y="70"
-            width="190"
-            height="80"
+            x="142"
+            y="58"
+            width="216"
+            height="86"
             rx="8"
-            fill="url(#metal-block)"
-            stroke={headState.isHovered || headState.isActive ? "#22d3ee" : "#475569"}
-            strokeWidth="2"
+            fill="url(#brushed-head)"
+            stroke={headState.isHovered || headState.isActive ? "#38bdf8" : "#94a3b8"}
+            strokeWidth="2.5"
           />
-          {/* Combustion Domes */}
-          <path d="M 175 150 A 16 16 0 0 1 207 150 Z" fill="#0f172a" />
-          <path d="M 215 150 A 16 16 0 0 1 247 150 Z" fill="#0f172a" />
-          <path d="M 253 150 A 16 16 0 0 1 285 150 Z" fill="#0f172a" />
-          <path d="M 293 150 A 16 16 0 0 1 325 150 Z" fill="#0f172a" />
-          <text x="250" y="115" fill="#94a3b8" fontSize="9" fontFamily="monospace" textAnchor="middle" fontWeight="bold">
-            CYLINDER HEAD
+          {/* Top Edge Bevel & Machined Flange Lip */}
+          <line x1="142" y1="62" x2="358" y2="62" stroke="#ffffff" strokeWidth="2" />
+
+          {/* 4 Combustion Dome Cutout Scallops along bottom edge */}
+          {[190, 230, 270, 310].map((cx, idx) => (
+            <g key={`dome-${idx}`}>
+              <path d={`M ${cx - 15} 144 A 15 15 0 0 1 ${cx + 15} 144 Z`} fill="#1e293b" opacity="0.3" />
+              {isAssemblyComplete && (
+                <path d={`M ${cx - 15} 144 A 15 15 0 0 1 ${cx + 15} 144 Z`} fill="url(#combustion-glow)" className="animate-pulse" />
+              )}
+            </g>
+          ))}
+
+          {/* Recessed Deck Hex Bolts Across Top Rim */}
+          {[158, 192, 226, 260, 294, 328, 345].map((bx, idx) => (
+            <circle key={`head-bolt-${idx}`} cx={bx} cy="66" r="3.5" fill="#475569" stroke="#1e293b" strokeWidth="1" />
+          ))}
+
+          {/* Laser Debossed Typography */}
+          <text
+            x="250"
+            y="105"
+            fill="#334155"
+            fontSize="9.5"
+            fontFamily="monospace"
+            textAnchor="middle"
+            fontWeight="900"
+            letterSpacing="2.5"
+            opacity="0.95"
+          >
+            CYLINDER HEAD (CNC PORTED)
           </text>
         </g>
 
-        {/* ── 8. VALVES & SPRINGS ── */}
+        {/* ── 7. DUAL VALVE SPRINGS, STEMS & MUSHROOM HEADS ── */}
         <g
           id="valves"
           className="transition-all duration-700 ease-out"
@@ -327,22 +553,24 @@ export function EngineSVG({
             opacity: valveState.opacity,
           }}
         >
-          {/* Intake Valves (Cyan) */}
-          <line x1="183" y1="90" x2="183" y2="140" stroke="#38bdf8" strokeWidth="3" />
-          <polygon points="177,142 189,142 183,136" fill="#38bdf8" />
-
-          <line x1="223" y1="90" x2="223" y2="140" stroke="#38bdf8" strokeWidth="3" />
-          <polygon points="217,142 229,142 223,136" fill="#38bdf8" />
-
-          {/* Exhaust Valves (Coral / Orange) */}
-          <line x1="199" y1="90" x2="199" y2="140" stroke="#fb923c" strokeWidth="3" />
-          <polygon points="193,142 205,142 199,136" fill="#fb923c" />
-
-          <line x1="239" y1="90" x2="239" y2="140" stroke="#fb923c" strokeWidth="3" />
-          <polygon points="233,142 245,142 239,136" fill="#fb923c" />
+          {[174, 184, 214, 224, 254, 264, 294, 304].map((vx, idx) => (
+            <g key={`valve-${idx}`}>
+              {/* Thick Stem */}
+              <line x1={vx} y1="68" x2={vx} y2="136" stroke="#334155" strokeWidth="3.5" />
+              <line x1={vx - 0.5} y1="68" x2={vx - 0.5} y2="136" stroke="#ffffff" strokeWidth="0.8" opacity="0.7" />
+              {/* Dual Valve Coil Springs */}
+              {[78, 84, 90, 96, 102].map((sy, sidx) => (
+                <line key={`spring-${sidx}`} x1={vx - 4} y1={sy} x2={vx + 4} y2={sy} stroke="#94a3b8" strokeWidth="2" strokeLinecap="round" />
+              ))}
+              {/* Titanium Retainer Cap */}
+              <rect x={vx - 5} y="71" width="10" height="5" rx="1.5" fill="#e2e8f0" stroke="#475569" strokeWidth="0.8" />
+              {/* Mushroom Valve Disc Head */}
+              <path d={`M ${vx - 7} 136 L ${vx + 7} 136 L ${vx + 3} 128 L ${vx - 3} 128 Z`} fill="#475569" stroke="#1e293b" strokeWidth="1" />
+            </g>
+          ))}
         </g>
 
-        {/* ── 9. CAMSHAFTS ── */}
+        {/* ── 8. CAMSHAFTS & DRIVE SPROCKETS ── */}
         <g
           id="camshaft"
           className="transition-all duration-700 ease-out"
@@ -351,18 +579,15 @@ export function EngineSVG({
             opacity: camState.opacity,
           }}
         >
-          {/* Dual Overhead Camshaft Shafts */}
-          <line x1="165" y1="80" x2="335" y2="80" stroke="url(#metal-crank)" strokeWidth="8" strokeLinecap="round" />
-          {/* Cam Lobes */}
-          <polygon points="183,72 187,88 179,88" fill="#cbd5e1" />
-          <polygon points="223,72 227,88 219,88" fill="#cbd5e1" />
-          <polygon points="263,72 267,88 259,88" fill="#cbd5e1" />
-          <polygon points="303,72 307,88 299,88" fill="#cbd5e1" />
-          {/* Cam Sprocket Gear */}
-          <circle cx="160" cy="80" r="14" fill="#475569" stroke="#64748b" strokeWidth="2" strokeDasharray="3 3" />
+          {/* Dual Overhead Camshaft Sprocket Gears */}
+          <circle cx="146" cy="72" r="9" fill="url(#forged-steel)" stroke="#334155" strokeWidth="1.5" strokeDasharray="3 1.5" />
+          <circle cx="146" cy="86" r="9" fill="url(#forged-steel)" stroke="#334155" strokeWidth="1.5" strokeDasharray="3 1.5" />
+
+          <line x1="150" y1="72" x2="350" y2="72" stroke="url(#forged-steel)" strokeWidth="9" strokeLinecap="round" />
+          <line x1="150" y1="86" x2="350" y2="86" stroke="url(#forged-steel)" strokeWidth="9" strokeLinecap="round" />
         </g>
 
-        {/* ── 10. INTAKE MANIFOLD ── */}
+        {/* ── 9. DUAL Y-PIPE POLISHED ALUMINUM INTAKE & BLUE SILICONE COUPLERS ── */}
         <g
           id="intake_manifold"
           className="transition-all duration-700 ease-out"
@@ -370,79 +595,208 @@ export function EngineSVG({
             transform: `translate(${intakeState.offsetX}px, ${intakeState.offsetY}px)`,
             opacity: intakeState.opacity,
           }}
+          filter={intakeState.isInstalled ? "url(#soft-shadow-3d)" : undefined}
         >
-          {/* Curved Runner Plenum Pipes */}
+          {/* Main Top Intake Runner (Curved Aluminum Pipe) */}
           <path
-            d="M 60 110 L 110 110 C 140 110 145 95 155 95"
+            d="M 60 76 C 90 76 110 82 142 82"
             fill="none"
-            stroke="#0ea5e9"
-            strokeWidth="12"
+            stroke="url(#pipe-cylinder-3d)"
+            strokeWidth="18"
             strokeLinecap="round"
           />
           <path
-            d="M 60 110 L 110 110 C 140 110 145 125 155 125"
+            d="M 60 76 C 90 76 110 82 142 82"
             fill="none"
-            stroke="#0ea5e9"
-            strokeWidth="12"
+            stroke="#ffffff"
+            strokeWidth="3"
+            strokeLinecap="round"
+            opacity="0.6"
+          />
+
+          {/* Main Bottom Intake Runner (Curved Aluminum Pipe) */}
+          <path
+            d="M 60 124 C 90 124 110 118 142 118"
+            fill="none"
+            stroke="url(#pipe-cylinder-3d)"
+            strokeWidth="18"
             strokeLinecap="round"
           />
-          {/* Throttle Body Body */}
-          <rect x="45" y="95" width="20" height="30" rx="4" fill="#334155" stroke="#38bdf8" strokeWidth="1.5" />
-          <circle cx="55" cy="110" r="6" fill="#38bdf8" />
+          <path
+            d="M 60 124 C 90 124 110 118 142 118"
+            fill="none"
+            stroke="#ffffff"
+            strokeWidth="3"
+            strokeLinecap="round"
+            opacity="0.6"
+          />
+
+          {/* Blue Silicone Hose Couplers with Stainless Clamps */}
+          <g>
+            <rect x="62" y="66" width="22" height="20" rx="4" fill="url(#blue-silicone)" stroke="#1d4ed8" strokeWidth="1.5" />
+            <rect x="64" y="67" width="4" height="18" fill="#f8fafc" />
+            <rect x="78" y="67" width="4" height="18" fill="#f8fafc" />
+
+            <rect x="62" y="114" width="22" height="20" rx="4" fill="url(#blue-silicone)" stroke="#1d4ed8" strokeWidth="1.5" />
+            <rect x="64" y="115" width="4" height="18" fill="#f8fafc" />
+            <rect x="78" y="115" width="4" height="18" fill="#f8fafc" />
+          </g>
+
+          {/* Left Intake Inlet Flange */}
+          <circle cx="102" cy="100" r="16" fill="url(#pipe-cylinder-3d)" stroke="#475569" strokeWidth="2" />
+          <circle cx="102" cy="100" r="10" fill="#0f172a" />
         </g>
 
-        {/* ── 11. EXHAUST HEADERS ── */}
+        {/* ── 10. GLOWING HEAT-TREATED COPPER EXHAUST RUNNERS ── */}
         <g
           id="exhaust_headers"
-          className="transition-all duration-700 ease-out"
+          className={`transition-all duration-700 ease-out ${
+            isAssemblyComplete ? "filter-heat-shimmer" : ""
+          }`}
           style={{
             transform: `translate(${exhaustState.offsetX}px, ${exhaustState.offsetY}px)`,
             opacity: exhaustState.opacity,
           }}
+          filter={exhaustState.isInstalled ? "url(#soft-shadow-3d)" : undefined}
         >
-          {/* Tubular Collector Pipes */}
+          {/* Top Primary Copper Runner */}
           <path
-            d="M 345 95 C 360 95 380 120 410 130"
+            d="M 358 82 C 385 82 405 95 415 118"
             fill="none"
-            stroke="#f97316"
-            strokeWidth="10"
+            stroke="url(#copper-heat-treated)"
+            strokeWidth="16"
             strokeLinecap="round"
           />
+          {/* Specular Highlight on Copper Tube */}
           <path
-            d="M 345 125 C 360 125 380 130 410 130"
+            d="M 358 80 C 385 80 405 93 415 116"
             fill="none"
-            stroke="#ea580c"
-            strokeWidth="10"
+            stroke="#ffedd5"
+            strokeWidth="2.5"
+            strokeLinecap="round"
+            opacity="0.75"
+          />
+
+          {/* Bottom Primary Copper Runner */}
+          <path
+            d="M 358 128 C 385 128 405 125 415 120"
+            fill="none"
+            stroke="url(#copper-heat-treated)"
+            strokeWidth="16"
             strokeLinecap="round"
           />
-          {/* Exhaust Collector Flange */}
-          <rect x="405" y="118" width="12" height="24" rx="3" fill="#78350f" />
+
+          {/* Collector Merger Ring */}
+          <circle cx="415" cy="119" r="10" fill="#ea580c" stroke="#7c2d12" strokeWidth="2" />
         </g>
 
-        {/* ── 12. TURBOCHARGER ── */}
+        {/* ── 11. DETAILED TURBOCHARGER & STAINLESS DOWNPIPE LOOP ── */}
         <g
           id="turbocharger"
           className={`transition-all duration-700 ease-out ${
-            turboState.isActive ? "animate-spin-slow" : ""
+            isAssemblyComplete ? "filter-heat-shimmer" : ""
           }`}
           style={{
             transform: `translate(${turboState.offsetX}px, ${turboState.offsetY}px)`,
             opacity: turboState.opacity,
           }}
+          filter={turboState.isInstalled ? "url(#soft-shadow-3d)" : undefined}
         >
-          {/* Compressor Snail Housing */}
+          {/* Looping Heavy-Duty Stainless Downpipe under Turbo */}
           <path
-            d="M 410 180 C 440 150 460 190 430 210 C 410 220 395 195 410 180 Z"
-            fill="url(#turbo-gold)"
-            stroke={turboState.isHovered ? "#fbbf24" : "#d97706"}
-            strokeWidth="2"
+            d="M 415 155 C 420 185 440 215 425 230 C 405 240 375 230 365 205 C 358 190 358 175 362 165"
+            fill="none"
+            stroke="url(#stainless-downpipe)"
+            strokeWidth="18"
+            strokeLinecap="round"
           />
-          {/* Turbine Impeller Wheel */}
-          <circle cx="425" cy="190" r="14" fill="#0f172a" stroke="#fbbf24" strokeWidth="2" />
-          <path d="M 425 180 L 425 200 M 415 190 L 435 190 M 418 183 L 432 197 M 418 197 L 432 183" stroke="#fbbf24" strokeWidth="2" />
-          {/* Wastegate Actuator Canister */}
-          <rect x="445" y="165" width="16" height="20" rx="3" fill="#64748b" />
-          <line x1="435" y1="175" x2="445" y2="175" stroke="#94a3b8" strokeWidth="2" />
+          <path
+            d="M 415 153 C 420 183 440 213 425 228 C 405 238 375 228 365 203"
+            fill="none"
+            stroke="#ffffff"
+            strokeWidth="3"
+            strokeLinecap="round"
+            opacity="0.65"
+          />
+
+          {/* Downpipe V-Band Clamps */}
+          <circle cx="423" cy="165" r="10" fill="none" stroke="#f8fafc" strokeWidth="2.5" />
+          <circle cx="364" cy="200" r="10" fill="none" stroke="#f8fafc" strokeWidth="2.5" />
+
+          {/* Cast Aluminum Compressor Volute Housing */}
+          <path
+            d="M 405 110 C 445 80 475 125 445 160 C 415 168 392 142 405 110 Z"
+            fill="url(#turbo-housing)"
+            stroke={turboState.isHovered ? "#38bdf8" : "#475569"}
+            strokeWidth="2.5"
+          />
+
+          {/* Impeller Wheel Well & Multi-Blade Rotor */}
+          <g className={isAssemblyComplete ? "animate-spin-slow" : ""}>
+            <circle cx="432" cy="132" r="18" fill="#0f172a" stroke="#d97706" strokeWidth="2.5" />
+            <circle cx="432" cy="132" r="7" fill="url(#gold-hub)" />
+            {/* 10 Curved Compressor Blades */}
+            {[0, 36, 72, 108, 144, 180, 216, 252, 288, 324].map((ang, bidx) => (
+              <line
+                key={`blade-${bidx}`}
+                x1={432 + 7 * Math.cos((ang * Math.PI) / 180)}
+                y1={132 + 7 * Math.sin((ang * Math.PI) / 180)}
+                x2={432 + 16 * Math.cos((ang * Math.PI) / 180)}
+                y2={132 + 16 * Math.sin((ang * Math.PI) / 180)}
+                stroke="#fef08a"
+                strokeWidth="2"
+                strokeLinecap="round"
+              />
+            ))}
+          </g>
+
+          {/* Wastegate Actuator Canister & Control Arm */}
+          <rect x="455" y="102" width="18" height="24" rx="4" fill="url(#pipe-cylinder-3d)" stroke="#334155" strokeWidth="1.5" />
+          <line x1="442" y1="114" x2="455" y2="114" stroke="#94a3b8" strokeWidth="3" />
+        </g>
+
+        {/* ── 12. BRUSHED STEEL OIL PAN SUMP & RULER SCALE PLATE ── */}
+        <g
+          id="oil_pan"
+          className="transition-all duration-700 ease-out"
+          style={{
+            transform: `translate(${panState.offsetX}px, ${panState.offsetY}px)`,
+            opacity: panState.opacity,
+          }}
+          filter={panState.isInstalled ? "url(#soft-shadow-3d)" : undefined}
+        >
+          {/* Brushed Steel Oil Pan Sump Shell */}
+          <path
+            d="M 156 310 L 168 360 Q 172 368 184 368 L 316 368 Q 328 368 332 360 L 344 310 Z"
+            fill="url(#pipe-cylinder-3d)"
+            stroke={panState.isHovered ? "#38bdf8" : "#475569"}
+            strokeWidth="2.5"
+          />
+
+          {/* Front Scale Recessed Calibration Plate */}
+          <rect x="172" y="324" width="156" height="30" rx="5" fill="url(#forged-steel)" stroke="#334155" strokeWidth="1.5" />
+
+          {/* Engraved Ruler Calibration Scale Ticks */}
+          {[
+            180, 186, 192, 198, 204, 210, 216, 222, 228, 234, 240, 246, 252, 258, 264, 270, 276, 282, 288, 294, 300, 306,
+            312, 318, 324,
+          ].map((tx, idx) => (
+            <line
+              key={`tick-${idx}`}
+              x1={tx}
+              y1="328"
+              x2={tx}
+              y2={idx % 5 === 0 ? "342" : "335"}
+              stroke="#0f172a"
+              strokeWidth={idx % 5 === 0 ? "1.8" : "1"}
+            />
+          ))}
+
+          {/* Central Triangular Pointer Needle */}
+          <polygon points="247,348 253,348 250,328" fill="#0f172a" stroke="#ffffff" strokeWidth="1" />
+
+          {/* Hex Oil Pan Drain Plug */}
+          <circle cx="328" cy="360" r="3.5" fill="#334155" stroke="#0f172a" strokeWidth="1" />
         </g>
       </svg>
     </div>

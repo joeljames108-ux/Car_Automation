@@ -5,6 +5,9 @@
 // with RPM-dependent behavior, turbo lag, and hybrid boost modeling.
 
 import type { EngineConfig, EngineSim } from '../types';
+import { calculateIMEP } from './combustionModel';
+import { calculateBMEP } from './frictionModel';
+import { evaluateKnock } from './knockModel';
 
 // ---------------------------------------------------------------------------
 // Public types
@@ -134,41 +137,49 @@ export function generateTorqueCurve(engine: EngineConfig, engineSim: EngineSim):
     // 1. Volumetric efficiency at this RPM
     const ve = baseVolumetricEfficiency(frac, engine.camDuration, engine.camLift, vtFactor);
 
-    // 2. Base torque from displacement and VE (simplified thermodynamic)
-    // T = (VE × displacement × rho_air × BMEP_factor) / (4π)
-    // We use an empirical formula: T ≈ dispL × VE × 110 × CR_factor × fuel_eff
-    let torque = dispL * ve * 110 * crFactor * fuelEff * ignFactor * afrFactor;
-
-    // 3. Forced induction boost
+    // 2. Forced induction boost & effective VE
     let boostBar = 0;
     if (isTurbo) {
       const boostFrac = turboBoostFraction(rpm, engine.turboSize, redline);
       boostBar = engine.boostPressure * boostFrac;
-      const boostMultiplier = 1 + boostBar * 0.65 * icEff; // ~65% of boost translates to torque gain
-      torque *= boostMultiplier;
     } else if (isSupercharged) {
-      // Supercharger: linear boost, no lag, but parasitic loss
-      const scBoost = engine.boostPressure * Math.min(1, frac * 1.2);
-      boostBar = scBoost;
-      const parasiticLoss = 1 - scBoost * 0.06; // ~6% loss per bar
-      torque *= (1 + scBoost * 0.60) * parasiticLoss;
+      boostBar = engine.boostPressure * Math.min(1, frac * 1.2);
     }
+    const effectiveVe = ve * (1 + boostBar * 0.70 * icEff);
 
-    // 4. Exhaust tuning bonus (primary length affects mid-range torque)
+    // 3. Thermodynamic Indicated Mean Effective Pressure (IMEP)
+    const combustionRes = calculateIMEP({
+      compressionRatio: engine.compressionRatio,
+      volumetricEfficiency: effectiveVe,
+      fuelLHV: 44.0, // MJ/kg gasoline
+      stoichAFR: 14.7,
+      actualAFR: engine.afr || 13.0,
+      combustionDurationDeg: 45,
+      gamma: 1.32,
+    });
+
+    // 4. Mechanical Friction & Pumping Losses (FMEP + PMEP)
+    const frictionRes = calculateBMEP(combustionRes.imepGross, {
+      rpm,
+      redline,
+      boreMm: engine.bore,
+      strokeMm: engine.stroke,
+      cylinderCount: cylinders,
+      valvetrainType: engine.valvetrain,
+      peakCylinderPressureBar: combustionRes.cylinderPeakPressureEstimate,
+      boostPressureBar: boostBar,
+      isThrottled: true,
+      throttlePosition: 1.0, // WOT torque curve
+    });
+
+    // 5. Torque from Brake Mean Effective Pressure: Torque (N·m) = (BMEP_bar * 100,000 * Disp_m³) / (4 * π)
+    const dispM3 = dispL / 1000;
+    let torque = (frictionRes.bmep * 100000 * dispM3) / (4 * Math.PI) * fuelEff * ignFactor * afrFactor;
+
+    // 6. Exhaust tuning bonus (primary length resonance)
     const exhTuningRpm = 330000 / Math.max(engine.exhaustPrimaryLength, 200);
     const exhBonus = 1 + 0.03 * Math.exp(-(((rpm - exhTuningRpm) / 1500) ** 2));
     torque *= exhBonus;
-
-    // 5. High-RPM fall-off (breathing limits, friction losses)
-    if (frac > 0.85) {
-      const falloff = 1 - (frac - 0.85) * (frac - 0.85) * 4.5;
-      torque *= Math.max(0.6, falloff);
-    }
-
-    // 6. Low-RPM warmup (engines produce less torque near idle)
-    if (frac < 0.15) {
-      torque *= 0.5 + frac / 0.15 * 0.5;
-    }
 
     // Power in kW: P = T × ω = T × (2π × rpm / 60) / 1000
     const powerKw = (torque * 2 * Math.PI * rpm) / 60000;

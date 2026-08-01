@@ -3,9 +3,7 @@ import { Zap, Flag, Shield, Fuel, Flame, Gauge, ArrowRight } from "lucide-react"
 import { useDesign } from "../state/DesignContext";
 import { useToast } from "./ToastSystem";
 import { ZoomableGlassCard } from "./ui/ZoomableGlassCard";
-import { VEHICLE_PRESET_LIBRARY } from "../sim/vehiclePresets";
-import { createBaseDesign } from "../sim/vehiclePresets";
-import type { VehicleDesign } from "../sim/types";
+import { VEHICLE_PRESET_LIBRARY, createBaseDesign, createV12Hybrid1000HpDesign } from "../sim/vehiclePresets";
 
 export interface PresetCardItem {
   id: string;
@@ -23,6 +21,16 @@ export function PresetQuickSelect() {
   const toast = useToast();
 
   const presets: PresetCardItem[] = [
+    {
+      id: "v12_hybrid_1000hp",
+      title: "1000 HP V12 Hybrid Valkyrie",
+      badge: "V12 Hybrid 1000 HP",
+      badgeColor: "bg-purple-500/20 text-purple-300 border-purple-500/40",
+      icon: <Flame size={18} className="text-purple-400 animate-pulse" />,
+      description: "6.4L Screaming 9,200 RPM V12 + 180kW Solid-State PHEV Electric Drive generating 1,000 HP total output.",
+      stats: "1,000 HP • 6.4L V12 + 180kW Hybrid • Carbon Ceramic AWD",
+      generator: () => createV12Hybrid1000HpDesign(),
+    },
   {
     id: "sprint_race",
     title: "Sprint Race Setup",

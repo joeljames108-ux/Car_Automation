@@ -197,35 +197,57 @@ function simulateCombustion(engine: EngineConfig): EngineSim {
   const motorPowerKW = clamp(engine.hybridMotorPower, 0, arch.maxMotorPower);
 
   if (isHybrid && engine.batteryCapacity > 0) {
-    const batt = BATTERY_CHEMISTRIES[engine.batteryChemistry];
+    const batt = BATTERY_CHEMISTRIES[engine.batteryChemistry] || BATTERY_CHEMISTRIES.solid_state;
     
+    // SiC / GaN Inverter efficiency multiplier
+    const peEff = engine.powerElectronicsType === "gallium_nitride_gan" ? 0.99 : engine.powerElectronicsType === "silicon_carbide_sic" ? 0.98 : 0.92;
+    
+    // Sports Hybrid Performance Tech Boosts (Torque Fill & eTurbo)
+    const torqueFillBoost = engine.sportsHybridTech === "electric_torque_fill" ? 45 : 0;
+    const eTurboPowerBoostKw = engine.sportsHybridTech === "e_turbo" ? 30 : 0;
+
     // Battery capacity constrained by architecture
     const clampedCapacity = clamp(engine.batteryCapacity, arch.minBattery, arch.maxBattery);
     batteryWeight = clampedCapacity * batt.weightPerKwh;
     batteryCost = clampedCapacity * batt.costPerKwh;
     batteryEnergy = clampedCapacity * 0.85; // usable
 
+    const totalMotorKw = (motorPowerKW + eTurboPowerBoostKw) * peEff;
+
     // Combined outputs depend on hybrid architecture
     if (engine.hybridArchitecture === "range_extender") {
       // Series hybrid: only the electric motor drives the wheels!
-      combinedPower = motorPowerKW * HP_PER_KW;
-      combinedTorque = motorPowerKW * 4.0;
+      combinedPower = totalMotorKw * HP_PER_KW;
+      combinedTorque = totalMotorKw * 4.0 + torqueFillBoost;
     } else {
       // Parallel / Mild / Full hybrids: combined ICE + electric assist
-      combinedPower = peakPower + motorPowerKW * HP_PER_KW;
-      combinedTorque = peakTorque + (motorPowerKW * 4.5 * placement.regenEfficiency);
+      combinedPower = peakPower + totalMotorKw * HP_PER_KW;
+      combinedTorque = peakTorque + (totalMotorKw * 4.5 * placement.regenEfficiency) + torqueFillBoost;
     }
 
     // Regen & Recovery
-    regenEfficiency = placement.regenEfficiency * clamp(0.6 + engine.regenLevel * 0.35, 0.4, 0.95);
-    energyRecoveryPerLap = (motorPowerKW * 0.35 * regenEfficiency * arch.regenMultiplier + mguHPower * 0.2) * 0.8;
-    deployDuration = batteryEnergy / Math.max(motorPowerKW + mguHPower, 1) * 3600;
+    regenEfficiency = placement.regenEfficiency * clamp(0.6 + engine.regenLevel * 0.35, 0.4, 0.98) * peEff;
+    energyRecoveryPerLap = (totalMotorKw * 0.35 * regenEfficiency * arch.regenMultiplier + mguHPower * 0.2) * 0.8;
+    deployDuration = batteryEnergy / Math.max(totalMotorKw + mguHPower, 1) * 3600;
   }
 
   // Electric Range calculation for PHEV/FHEV/EV (km)
   const electricRange = isHybrid && batteryEnergy > 0
     ? Math.round((batteryEnergy * 1000) / (220 + (batteryWeight + (isHybrid ? 600 : 0)) * 0.12))
     : 0;
+
+  // ---- 21 Comprehensive Hybrid & EV Subsystems Physics & Cost Models ----
+  const transmissionEff = engine.hybridTransmission === "single_speed_reduction" ? 0.98 : engine.hybridTransmission === "dct_hybrid" ? 0.96 : engine.hybridTransmission === "power_split_planetary" ? 0.94 : 0.93;
+  const thermalStabilityFactor = engine.thermalManagement === "refrigerant_direct" ? 0.99 : engine.thermalManagement === "liquid_chiller" ? 0.95 : engine.thermalManagement === "heat_pump_waste_heat" ? 0.96 : 0.70;
+  
+  // Power electronics cost and weight deltas
+  if (engine.powerElectronicsType === "silicon_carbide_sic") { engineCost += 3500; engineWeight += 4; }
+  if (engine.powerElectronicsType === "gallium_nitride_gan") { engineCost += 6500; engineWeight += 2; }
+  if (engine.thermalManagement === "liquid_chiller") { engineCost += 1800; engineWeight += 18; }
+  if (engine.thermalManagement === "refrigerant_direct") { engineCost += 3200; engineWeight += 12; }
+  if (engine.chargingTech === "v2g_v2h_v2l") { engineCost += 1500; }
+  if (engine.sensorSuite === "ai_telemetry_pro") { engineCost += 2200; }
+  if (engine.sportsHybridTech === "e_axle_vectoring") { engineCost += 4800; engineWeight += 22; }
 
   // Engine weight
   const crankWeight = CRANK_MATERIALS[engine.crank].weightFactor;
@@ -258,13 +280,13 @@ function simulateCombustion(engine: EngineConfig): EngineSim {
   if (isHybrid) {
     engineCost = engineCost * arch.costFactor + batteryCost + (motorPowerKW * 180 * placement.costFactor) + (mguHPower * 300);
   }
-  engineCost = clamp(engineCost, 500, 180000);
+  engineCost = clamp(engineCost, 500, 220000);
 
-  // Reliability
-  const heatStress = clamp((effectiveCR - 9) / 6, 0, 1);
+  // Reliability & Thermal Stability
+  const heatStress = clamp((effectiveCR - 9) / 6, 0, 1) * (1.05 - thermalStabilityFactor * 0.2);
   const rpmStress = clamp((effectiveRedline - 6000) / 4000, 0, 1);
   const boostStress = clamp(engine.boostPressure / 2.5, 0, 1);
-  const hybridStress = isHybrid ? 0.05 : 0;
+  const hybridStress = isHybrid ? 0.04 : 0;
   // Turbo reliability modifiers
   const turboHousingReliability = isForced ? turboHousing.durability * 0.08 : 0;
   const antiLagStress = engine.antiLag ? 0.08 : 0;
@@ -274,16 +296,17 @@ function simulateCombustion(engine: EngineConfig): EngineSim {
   const reliability = clamp(
     0.95 - heatStress * 0.2 - rpmStress * 0.25 - boostStress * 0.2 - hybridStress - antiLagStress +
     turboHousingReliability + bovProtection +
-    cooling * 0.1 + (materialStrength - 0.75) * 0.2,
+    cooling * 0.12 + (materialStrength - 0.75) * 0.2 + (thermalStabilityFactor - 0.7) * 0.1,
     0.3, 0.99
   );
 
   // NVH
   const nvhEngine = clamp(0.4 + layout.balanceFactor * 0.3 + vt.rpmFactor * 0.1 - boostStress * 0.1, 0.2, 0.95);
 
-  // Emissions
+  // Emissions (GPF, DPF, SCR, EGR tech reductions)
   let emissionsEngine = Math.round(180 + displacement / 20 - thermalEfficiency * 200);
   if (engine.exhaustCat) emissionsEngine = Math.round(emissionsEngine * 0.6);
+  if (engine.emissionsTech === "gpf_dpf" || engine.emissionsTech === "scr_adblue") emissionsEngine = Math.round(emissionsEngine * 0.35);
   if (isForced) emissionsEngine = Math.round(emissionsEngine * 0.85);
   if (isHybrid) emissionsEngine = Math.round(emissionsEngine * arch.efficiencyBonus);
   emissionsEngine = clamp(emissionsEngine, 0, 400);

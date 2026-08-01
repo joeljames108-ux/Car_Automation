@@ -14,18 +14,30 @@ export interface ComponentAnimationConfig {
   rotationDegrees: number;
   vibrateOnInsert: boolean;
   flashOnLock: boolean;
-  repeatCount: number; // e.g. 4x for 4 cylinders on pistons
+  repeatCount: number;
+  // Physics Spring Dynamics Parameters
+  springStiffness: number;
+  springDamping: number;
+  springMass: number;
+  // Trajectory Arc Offset
+  arcControlPoints: { x: number; y: number };
+  // Sub-step Torque Count (e.g. 4x head bolts)
+  torqueSubSteps?: number;
 }
 
 export const COMPONENT_ANIMATION_PRESETS: Record<ComponentId, ComponentAnimationConfig> = {
   block: {
     id: "block",
-    timings: { picking: 350, traveling: 500, aligning: 300, inserting: 400, locking: 200, confirming: 350 },
-    totalDuration: 2100,
+    timings: { picking: 350, traveling: 500, aligning: 300, inserting: 400, locking: 250, confirming: 350 },
+    totalDuration: 2150,
     rotationDegrees: 0,
     vibrateOnInsert: true,
     flashOnLock: true,
     repeatCount: 1,
+    springStiffness: 120,
+    springDamping: 14,
+    springMass: 3.5,
+    arcControlPoints: { x: -40, y: -60 },
   },
   crankshaft: {
     id: "crankshaft",
@@ -35,6 +47,10 @@ export const COMPONENT_ANIMATION_PRESETS: Record<ComponentId, ComponentAnimation
     vibrateOnInsert: true,
     flashOnLock: true,
     repeatCount: 1,
+    springStiffness: 140,
+    springDamping: 12,
+    springMass: 2.8,
+    arcControlPoints: { x: 50, y: -80 },
   },
   pistons: {
     id: "pistons",
@@ -43,7 +59,11 @@ export const COMPONENT_ANIMATION_PRESETS: Record<ComponentId, ComponentAnimation
     rotationDegrees: 0,
     vibrateOnInsert: true,
     flashOnLock: true,
-    repeatCount: 4, // Multi-piston sequence
+    repeatCount: 4,
+    springStiffness: 180,
+    springDamping: 10,
+    springMass: 1.2,
+    arcControlPoints: { x: -20, y: -40 },
   },
   rods: {
     id: "rods",
@@ -53,6 +73,10 @@ export const COMPONENT_ANIMATION_PRESETS: Record<ComponentId, ComponentAnimation
     vibrateOnInsert: true,
     flashOnLock: false,
     repeatCount: 4,
+    springStiffness: 200,
+    springDamping: 9,
+    springMass: 1.0,
+    arcControlPoints: { x: 30, y: -30 },
   },
   oil_pan: {
     id: "oil_pan",
@@ -62,6 +86,10 @@ export const COMPONENT_ANIMATION_PRESETS: Record<ComponentId, ComponentAnimation
     vibrateOnInsert: false,
     flashOnLock: false,
     repeatCount: 1,
+    springStiffness: 160,
+    springDamping: 11,
+    springMass: 1.8,
+    arcControlPoints: { x: 0, y: 50 },
   },
   head_gasket: {
     id: "head_gasket",
@@ -71,15 +99,24 @@ export const COMPONENT_ANIMATION_PRESETS: Record<ComponentId, ComponentAnimation
     vibrateOnInsert: false,
     flashOnLock: false,
     repeatCount: 1,
+    springStiffness: 220,
+    springDamping: 8,
+    springMass: 0.6,
+    arcControlPoints: { x: 0, y: -40 },
   },
   cylinder_head: {
     id: "cylinder_head",
-    timings: { picking: 400, traveling: 550, aligning: 350, inserting: 450, locking: 250, confirming: 400 },
-    totalDuration: 2400,
+    timings: { picking: 400, traveling: 550, aligning: 350, inserting: 450, locking: 300, confirming: 400 },
+    totalDuration: 2450,
     rotationDegrees: 0,
     vibrateOnInsert: true,
     flashOnLock: true,
     repeatCount: 1,
+    springStiffness: 130,
+    springDamping: 13,
+    springMass: 3.0,
+    arcControlPoints: { x: 40, y: -70 },
+    torqueSubSteps: 6,
   },
   camshaft: {
     id: "camshaft",
@@ -89,6 +126,10 @@ export const COMPONENT_ANIMATION_PRESETS: Record<ComponentId, ComponentAnimation
     vibrateOnInsert: false,
     flashOnLock: false,
     repeatCount: 1,
+    springStiffness: 170,
+    springDamping: 10,
+    springMass: 1.5,
+    arcControlPoints: { x: -30, y: -50 },
   },
   valves: {
     id: "valves",
@@ -97,7 +138,11 @@ export const COMPONENT_ANIMATION_PRESETS: Record<ComponentId, ComponentAnimation
     rotationDegrees: 0,
     vibrateOnInsert: false,
     flashOnLock: false,
-    repeatCount: 16, // 16 valve springs
+    repeatCount: 16,
+    springStiffness: 240,
+    springDamping: 7,
+    springMass: 0.5,
+    arcControlPoints: { x: 0, y: -30 },
   },
   intake_manifold: {
     id: "intake_manifold",
@@ -107,6 +152,10 @@ export const COMPONENT_ANIMATION_PRESETS: Record<ComponentId, ComponentAnimation
     vibrateOnInsert: false,
     flashOnLock: false,
     repeatCount: 1,
+    springStiffness: 160,
+    springDamping: 10,
+    springMass: 1.4,
+    arcControlPoints: { x: -60, y: -30 },
   },
   exhaust_headers: {
     id: "exhaust_headers",
@@ -116,15 +165,23 @@ export const COMPONENT_ANIMATION_PRESETS: Record<ComponentId, ComponentAnimation
     vibrateOnInsert: false,
     flashOnLock: false,
     repeatCount: 1,
+    springStiffness: 160,
+    springDamping: 10,
+    springMass: 1.6,
+    arcControlPoints: { x: 60, y: -30 },
   },
   turbocharger: {
     id: "turbocharger",
-    timings: { picking: 450, traveling: 650, aligning: 400, inserting: 500, locking: 250, confirming: 450 },
-    totalDuration: 2700,
+    timings: { picking: 450, traveling: 650, aligning: 400, inserting: 500, locking: 300, confirming: 450 },
+    totalDuration: 2750,
     rotationDegrees: 45,
     vibrateOnInsert: true,
     flashOnLock: true,
     repeatCount: 1,
+    springStiffness: 130,
+    springDamping: 12,
+    springMass: 2.2,
+    arcControlPoints: { x: 80, y: 40 },
   },
 };
 

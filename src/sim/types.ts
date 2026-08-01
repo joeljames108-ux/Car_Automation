@@ -71,25 +71,39 @@ export interface EngineConfig {
   ecuMapMode: "economy" | "balanced" | "sport" | "race";
 
   // ---- Hybrid / EV ----
-  hybridArchitecture: "none" | "mhev" | "fhev" | "phev" | "range_extender";
+  hybridArchitecture: "none" | "mhev" | "fhev" | "phev" | "series" | "parallel" | "series_parallel" | "range_extender" | "through_the_road";
   hybridCoupling: "series" | "parallel" | "through_the_road";
   hybridFrontMotorEnabled: boolean;
-  hybridFrontMotorType: "pmac" | "induction" | "wound_rotor" | "axial_flux";
+  hybridFrontMotorType: "pmac" | "pmsm" | "induction" | "bldc" | "switched_reluctance" | "axial_flux" | "radial_flux";
   hybridFrontMotorPower: number; // kW
   hybridRearMotorEnabled: boolean;
-  hybridRearMotorType: "pmac" | "induction" | "wound_rotor" | "axial_flux";
+  hybridRearMotorType: "pmac" | "pmsm" | "induction" | "bldc" | "switched_reluctance" | "axial_flux" | "radial_flux";
   hybridRearMotorPower: number; // kW
   hasMguH: boolean;        // Motor Generator Unit - Heat (turbo compounding)
   mguHMode: "off" | "charge" | "deploy" | "auto";
   batteryCapacity: number; // kWh (0-10 for hybrid, 0-120 for EV)
-  batteryChemistry: "nimh" | "lfp" | "nmc" | "solid_state";
+  batteryChemistry: "nimh" | "li_ion" | "lfp" | "nmc" | "nca" | "solid_state" | "sodium_ion";
   deployMode: "qualifying" | "race" | "save" | "attack" | "endurance";
   regenLevel: number;      // 0-1, braking regen aggressiveness
-  motorLayout: "none" | "front" | "rear" | "both" | "axle_split";
+  motorLayout: "none" | "front" | "rear" | "both" | "axle_split" | "in_wheel" | "triple_motor";
   evMotorPower: number;    // kW (for pure EV)
-  evMotorType: "pmac" | "induction" | "wound_rotor" | "axial_flux";
+  evMotorType: "pmac" | "pmsm" | "induction" | "bldc" | "switched_reluctance" | "axial_flux" | "radial_flux";
   motorPlacement: "p0" | "p1" | "p2" | "p3" | "p4" | "p2_p4"; // motor placement position
   hybridMotorPower: number; // kW, combined hybrid motor power
+
+  // ---- 21 Comprehensive Hybrid & EV Subsystems ----
+  powerElectronicsType?: "standard_igbt" | "silicon_carbide_sic" | "gallium_nitride_gan";
+  voltageArchitecture?: 400 | 800 | 900;
+  hybridTransmission?: "ecvt" | "power_split_planetary" | "dct_hybrid" | "amt_hybrid" | "single_speed_reduction" | "multispeed_hybrid";
+  regenBrakingTech?: "brake_by_wire" | "brake_blending" | "one_pedal_driving" | "predictive_regen";
+  thermalManagement?: "liquid_chiller" | "refrigerant_direct" | "air_cooling" | "heat_pump_waste_heat";
+  chargingTech?: "nacs" | "ccs2" | "chademo" | "wireless_dynamic" | "v2g_v2h_v2l";
+  engineStrategy?: "auto_start_stop" | "cylinder_deactivation" | "decel_fuel_cut" | "predictive_hcu";
+  sensorSuite?: "standard_obd2" | "can_fd_ethernet" | "ai_telemetry_pro";
+  emissionsTech?: "three_way_cat" | "gpf_dpf" | "scr_adblue" | "lean_nox_egr";
+  safetySystems?: "hv_crash_disconnect" | "thermal_runaway_detect" | "pyro_fuse_orange_lines";
+  futureTech?: "solid_state_structural" | "axial_flux_800v" | "hydrogen_supercap_solar";
+  sportsHybridTech?: "electric_torque_fill" | "e_turbo" | "e_axle_vectoring" | "launch_control_boost";
 }
 
 export interface EngineSim {

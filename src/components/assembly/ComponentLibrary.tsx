@@ -10,12 +10,13 @@ import {
   Sparkles,
   Cog,
   Wrench,
+  Layers,
 } from "lucide-react";
 import {
   ENGINE_ASSEMBLY_COMPONENTS,
   ComponentId,
   AssemblyPhase,
-  AssemblyComponentMeta,
+  MaterialGrade,
 } from "../../sim/assemblyTypes";
 
 interface ComponentLibraryProps {
@@ -42,6 +43,20 @@ export function ComponentLibrary({
   className = "",
 }: ComponentLibraryProps) {
   const [activeTab, setActiveTab] = useState<CategoryFilter>("All");
+  const [selectedVariants, setSelectedVariants] = useState<Record<ComponentId, MaterialGrade>>({
+    block: "cast",
+    crankshaft: "forged",
+    pistons: "forged",
+    rods: "forged",
+    camshaft: "forged",
+    head_gasket: "forged",
+    cylinder_head: "billet",
+    valves: "titanium",
+    intake_manifold: "billet",
+    exhaust_headers: "forged",
+    turbocharger: "titanium",
+    oil_pan: "cast",
+  });
 
   const filteredComponents = ENGINE_ASSEMBLY_COMPONENTS.filter((comp) => {
     if (activeTab === "All") return true;
@@ -49,6 +64,20 @@ export function ComponentLibrary({
   });
 
   const categories: CategoryFilter[] = ["All", "Core", "Bottom End", "Top End", "Induction & Exhaust"];
+
+  const handleVariantChange = (compKey: ComponentId, variant: MaterialGrade) => {
+    setSelectedVariants((prev) => ({ ...prev, [compKey]: variant }));
+  };
+
+  const getCategoryBorder = (category: string) => {
+    switch (category) {
+      case "Core": return "border-l-4 border-l-cyan-400";
+      case "Bottom End": return "border-l-4 border-l-pink-400";
+      case "Top End": return "border-l-4 border-l-emerald-400";
+      case "Induction & Exhaust": return "border-l-4 border-l-amber-400";
+      default: return "border-l-4 border-l-cyan-400";
+    }
+  };
 
   return (
     <div className={`flex flex-col bg-base-900/90 border border-base-800 rounded-2xl p-4 backdrop-blur-xl shadow-2xl h-full select-none ${className}`}>
@@ -60,7 +89,7 @@ export function ComponentLibrary({
           </div>
           <div>
             <h3 className="text-xs font-bold text-slate-100 uppercase tracking-wider">Component Tray</h3>
-            <span className="text-[10px] text-slate-400 font-mono">Select parts to assemble</span>
+            <span className="text-[10px] text-slate-400 font-mono">Select parts & materials</span>
           </div>
         </div>
         <span className="px-2 py-0.5 rounded-full bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 text-[10px] font-mono font-bold">
@@ -68,7 +97,7 @@ export function ComponentLibrary({
         </span>
       </div>
 
-      {/* Category Tabs */}
+      {/* Category Filter Tabs */}
       <div className="flex items-center gap-1 overflow-x-auto pb-2 mb-3 scrollbar-none">
         {categories.map((cat) => (
           <button
@@ -85,13 +114,18 @@ export function ComponentLibrary({
         ))}
       </div>
 
-      {/* Component Cards List */}
-      <div className="flex-1 overflow-y-auto space-y-2.5 pr-1 scrollbar-thin scrollbar-thumb-base-750">
+      {/* 3D Component Cards List */}
+      <div className="flex-1 min-h-0 overflow-y-auto space-y-2.5 pr-1 scrollbar-thin scrollbar-thumb-base-750">
         {filteredComponents.map((comp) => {
           const isInstalled = installedComponents.includes(comp.id);
           const isActive = activeComponentId === comp.id;
-          const isHovered = hoveredComponentId === comp.id;
           const isAvailable = canInstall(comp.id);
+          const currentVariant = selectedVariants[comp.id] || "cast";
+
+          // Calculate stat delta multipliers based on chosen material variant
+          const variantObj = comp.variants.find((v) => v.id === currentVariant) || comp.variants[0];
+          const calculatedHp = Math.round(comp.statDeltas.hp * (variantObj ? variantObj.hpMultiplier : 1));
+          const calculatedCost = Math.round(comp.statDeltas.cost * (variantObj ? variantObj.costMultiplier : 1));
 
           // Get missing dependency names if locked
           const missingDeps = comp.dependencies
@@ -104,13 +138,13 @@ export function ComponentLibrary({
               key={comp.id}
               onMouseEnter={() => onHoverComponent(comp.id)}
               onMouseLeave={() => onHoverComponent(null)}
-              className={`group relative p-3 rounded-xl border transition-all duration-200 ${
+              className={`group relative p-3 rounded-xl border transition-all duration-200 assembly-card-3d ${getCategoryBorder(comp.category)} ${
                 isActive
-                  ? "bg-cyan-950/40 border-cyan-400 shadow-[0_0_16px_rgba(34,211,238,0.3)] scale-[1.01]"
+                  ? "bg-cyan-950/40 border-cyan-400 shadow-[0_0_20px_rgba(34,211,238,0.4)] scale-[1.01]"
                   : isInstalled
-                  ? "bg-emerald-950/20 border-emerald-500/30 opacity-80"
+                  ? "bg-emerald-950/20 border-emerald-500/30 opacity-85"
                   : isAvailable
-                  ? "bg-base-850 border-base-750 hover:border-cyan-500/50 hover:bg-base-800/80 interactive-card cursor-pointer"
+                  ? "bg-base-850 border-base-750 hover:border-cyan-500/50 hover:bg-base-800/80 cursor-pointer"
                   : "bg-base-900/60 border-base-800/60 opacity-60 cursor-not-allowed"
               }`}
             >
@@ -136,7 +170,7 @@ export function ComponentLibrary({
                   </div>
                 </div>
 
-                {/* Status Badge */}
+                {/* Status / Install Button */}
                 <div>
                   {isInstalled ? (
                     <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 border border-emerald-500/30 text-[9.5px] font-mono font-bold">
@@ -161,10 +195,30 @@ export function ComponentLibrary({
                 </div>
               </div>
 
-              {/* Description */}
-              <p className="text-[10.5px] text-slate-400 leading-relaxed mb-2 line-clamp-2">
-                {comp.description}
-              </p>
+              {/* Material Grade Selector Buttons */}
+              {!isInstalled && (
+                <div className="flex items-center gap-1 mb-2 overflow-x-auto scrollbar-none">
+                  <span className="text-[9px] font-mono text-slate-400 flex items-center gap-0.5 pr-1">
+                    <Layers size={9} /> Material:
+                  </span>
+                  {comp.variants.map((v) => (
+                    <button
+                      key={v.id}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleVariantChange(comp.id, v.id);
+                      }}
+                      className={`px-1.5 py-0.5 rounded text-[9px] font-mono transition-all ${
+                        currentVariant === v.id
+                          ? "bg-cyan-500/25 text-cyan-300 border border-cyan-500/50 font-bold"
+                          : "bg-base-800 text-slate-400 border border-base-750 hover:bg-base-750"
+                      }`}
+                    >
+                      {v.id.toUpperCase()}
+                    </button>
+                  ))}
+                </div>
+              )}
 
               {/* Locked Dependency Warning */}
               {!isAvailable && !isInstalled && missingDeps.length > 0 && (
@@ -178,7 +232,7 @@ export function ComponentLibrary({
               <div className="grid grid-cols-3 gap-1 pt-1.5 border-t border-white/5 text-[9.5px] font-mono">
                 <span className="flex items-center gap-0.5 text-cyan-300">
                   <TrendingUp size={9} />
-                  <span>+{comp.statDeltas.hp} HP</span>
+                  <span>+{calculatedHp} HP</span>
                 </span>
                 <span className="flex items-center gap-0.5 text-pink-300">
                   <Zap size={9} />
@@ -186,7 +240,7 @@ export function ComponentLibrary({
                 </span>
                 <span className="flex items-center gap-0.5 text-amber-300">
                   <DollarSign size={9} />
-                  <span>+${comp.statDeltas.cost}</span>
+                  <span>+${calculatedCost}</span>
                 </span>
               </div>
             </div>

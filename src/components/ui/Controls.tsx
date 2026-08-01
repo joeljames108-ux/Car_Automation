@@ -29,18 +29,39 @@ function useCustomDebounce<T extends (...args: any[]) => void>(fn: T, delay: num
   return useMemo(() => ({ debounced, cancel }), [debounced, cancel]);
 }
 
-export function Section({ title, icon, children, className = "" }: {
-  title: string; icon?: ReactNode; children: ReactNode; className?: string;
+export function Section({ title, icon, children, className = "", collapsible = false, defaultOpen = true }: {
+  title: string; icon?: ReactNode; children: ReactNode; className?: string; collapsible?: boolean; defaultOpen?: boolean;
 }) {
+  const [isOpen, setIsOpen] = useState(defaultOpen);
+
   return (
     <div className={`panel p-4 transition-shadow duration-300 hover:shadow-[0_8px_32px_-12px_rgba(0,0,0,0.4)] ${className}`}>
       {title && (
-        <h3 className="text-xs font-semibold text-slate-300 mb-3 flex items-center gap-1.5 uppercase tracking-wider">
-          {icon}
-          {title}
-        </h3>
+        <div
+          onClick={() => collapsible && setIsOpen((prev) => !prev)}
+          className={`flex items-center justify-between mb-3 ${
+            collapsible ? "cursor-pointer select-none group" : ""
+          }`}
+        >
+          <h3 className="text-xs font-semibold text-slate-300 flex items-center gap-1.5 uppercase tracking-wider group-hover:text-cyan-300 transition-colors">
+            {icon}
+            {title}
+          </h3>
+          {collapsible && (
+            <div className="p-1 rounded-md bg-base-800/80 text-slate-400 group-hover:text-cyan-300 group-hover:bg-base-750 transition-all">
+              <ChevronDown
+                size={14}
+                className={`transition-transform duration-300 ${isOpen ? "rotate-180" : "rotate-0"}`}
+              />
+            </div>
+          )}
+        </div>
       )}
-      {children}
+      {(!collapsible || isOpen) && (
+        <div className="animate-stage-transition-enter">
+          {children}
+        </div>
+      )}
     </div>
   );
 }

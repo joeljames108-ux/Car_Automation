@@ -6316,3 +6316,92 @@ button:active,
     transform: scale(1.4);
   }
 }
+
+/* 5. Particle Burst Keyframes */
+@keyframes particleBurst {
+  0% {
+    opacity: 1;
+    transform: translate(0, 0) scale(1);
+  }
+  70% {
+    opacity: 0.8;
+  }
+  100% {
+    opacity: 0;
+    transform: translate(var(--tw-translate-x, 0), var(--tw-translate-y, 0)) scale(0.2);
+  }
+}
+
+/* 6. Cinematic Viewport Camera Shake on Heavy Part Lock */
+.animate-camera-shake {
+  animation: cameraShake 0.35s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+}
+
+@keyframes cameraShake {
+  10%, 90% { transform: translate3d(-2px, 1px, 0) scale(1.12); }
+  20%, 80% { transform: translate3d(3px, -2px, 0) scale(1.12); }
+  30%, 50%, 70% { transform: translate3d(-4px, 3px, 0) scale(1.12); }
+  40%, 60% { transform: translate3d(4px, -1px, 0) scale(1.12); }
+}
+
+/* 7. Ken Burns Viewport Ambient Drift */
+.animate-ken-burns {
+  animation: cameraKenBurns 18s ease-in-out infinite alternate;
+}
+
+@keyframes cameraKenBurns {
+  0% { transform: scale(1) translate(0px, 0px); }
+  50% { transform: scale(1.04) translate(-6px, -4px); }
+  100% { transform: scale(1.02) translate(8px, 4px); }
+}
+
+/* 8. Heat Shimmer Exhaust Filter Class */
+.filter-heat-shimmer {
+  filter: url(#heat-shimmer-filter) drop-shadow(0 0 12px rgba(249, 115, 22, 0.6));
+}
+
+/* 9. 3D Component Library Card Perspective */
+.assembly-card-3d {
+  perspective: 1000px;
+  transform-style: preserve-3d;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.2s ease, box-shadow 0.2s ease;
+}
+.assembly-card-3d:hover {
+  transform: translateY(-4px) rotateX(4deg) rotateY(-2deg) translateZ(8px);
+}
+
+/* 10. Reciprocating Piston Cycle Animation */
+.animate-piston-cycle {
+  animation: pistonCycle 0.8s ease-in-out infinite alternate;
+}
+
+@keyframes pistonCycle {
+  0% { transform: translateY(0px); }
+  100% { transform: translateY(22px); }
+}
+
+/* 11. Combustion Chamber Ignition Flash */
+.animate-combustion-flash {
+  animation: combustionFlash 0.4s ease-in-out infinite alternate;
+}
+
+@keyframes combustionFlash {
+  0% { opacity: 0.15; transform: scale(0.98); }
+  100% { opacity: 0.95; transform: scale(1.04); filter: drop-shadow(0 0 16px rgba(250, 204, 21, 0.9)); }
+}
+
+/* 12. Turbo Charger Impeller Spin */
+.animate-spin-slow {
+  animation: turboSpin 4s linear infinite;
+  transform-origin: 428px 190px;
+}
+
+@keyframes turboSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* 13. Cyber CAD Glowing Filter Utility */
+.filter-glow-cyan {
+  filter: drop-shadow(0 0 12px rgba(34, 211, 238, 0.75)) drop-shadow(0 0 4px rgba(56, 189, 248, 0.9));
+}
