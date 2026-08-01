@@ -13,7 +13,7 @@ import { ComponentLibrary } from "./assembly/ComponentLibrary";
 import { EngineAssemblyViewer } from "./assembly/EngineAssemblyViewer";
 import { AssemblyProgressPanel } from "./assembly/AssemblyProgressPanel";
 import { AssemblyCompletionModal } from "./assembly/AssemblyCompletionModal";
-import { Play } from "lucide-react";
+import { Play, Sparkles } from "lucide-react";
 
 // Engine layout → icon mapping
 const LAYOUT_ICONS: Record<string, React.ReactNode> = {
