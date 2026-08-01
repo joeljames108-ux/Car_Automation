@@ -16,6 +16,7 @@ export type {
 
 export type EngineLayout =
   | "i3" | "i4" | "i6" | "v6" | "v8" | "v10" | "v12"
+  | "w12" | "w16" | "w18"
   | "boxer4" | "boxer6" | "rotary" | "hybrid" | "electric";
 
 export type CrankMaterial = "cast_iron" | "forged_steel" | "billet_steel" | "titanium";
@@ -43,6 +44,16 @@ export interface EngineConfig {
   boostPressure: number;   // bar
   wastegateSize: number;   // mm
   intercoolerEff: number;  // 0-1
+  // ---- Turbo Mechanics ----
+  turboHousing: "cast_iron" | "inconel" | "titanium" | "ceramic_coated";
+  compressorAR: number;    // A/R ratio 0.3-1.2
+  turbineAR: number;       // A/R ratio 0.4-1.4
+  turbineWheelDia: number; // mm 30-100
+  intercoolerType: "none" | "air_to_air" | "air_to_water" | "water_spray" | "cryogenic";
+  wastegateType: "none" | "internal" | "external_38mm" | "external_44mm" | "external_60mm" | "screamer_pipe";
+  bovType: "none" | "recirculating" | "vent_to_atmosphere" | "hybrid_bov" | "compressor_surge";
+  antiLag: boolean;
+  boostController: "none" | "manual" | "electronic" | "closed_loop" | "map_switching";
   fuelSystem: FuelSystemType;
   afr: number;
   ignitionTiming: number;  // degrees BTDC
@@ -189,9 +200,13 @@ export type BrakeType = "drum" | "solid_disc" | "cast_iron" | "slotted_steel" | 
 export type TransmissionType = "manual_5" | "manual_6" | "manual_7" | "seq_6" | "seq_7" | "seq_8" | "dct_7" | "dct_8" | "dct_9" | "dog_leg" | "cvt" | "single_speed";
 export type TireCompound = "hard" | "medium" | "soft" | "supersoft" | "slick" | "wet" | "intermediate";
 
+export type EnginePosition = "front" | "mid" | "rear";
+export type DriveType = "fwd" | "rwd" | "awd";
+
 export interface VehicleConfig {
   platform: PlatformType;
-  driveType: "fwd" | "rwd" | "awd";
+  driveType: DriveType;
+  enginePosition: EnginePosition;
   exterior: ExteriorConfig;
   chassis: ChassisType;
   suspensionFront: SuspensionType;

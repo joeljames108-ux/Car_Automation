@@ -48,7 +48,7 @@ function round(v: number, dp = 1) {
 }
 
 export function AIAssistant() {
-  const { design, sim, carConcept, setCarConcept, updateEngine, updateVehicle, updateAero, updateAeroResearch, updateExterior, updateInterior } = useDesign();
+  const { design, sim, carConcept, setCarConcept, updateEngine, updateVehicle, updateAero, updateAeroResearch, updateExterior, updateInterior, updateElectronics, updateManufacturing } = useDesign();
   const [open, setOpen] = useState(true);
   const [engineer, setEngineer] = useState<EngineerId>("chief");
   const [mode, setMode] = useState<ModeId>("intermediate");
@@ -200,6 +200,323 @@ export function AIAssistant() {
         apply: () => updateEngine({ boostPressure: clamp(round(e.boostPressure - 0.2, 2), 0, 4) }),
       });
     }
+
+    // ═══════════════ NEW SUGGESTION RULES ═══════════════
+
+    // --- Drivetrain: High power FWD warning ---
+    if (v.driveType === "fwd" && sim.peakPower > 300) {
+      s.push({
+        id: "fwd_power_overload",
+        title: "Convert FWD to AWD for high-power traction",
+        detail: `At ${sim.peakPower} HP, Front-Wheel Drive suffers from heavy torque steer and wheelspin on launch as weight transfers away from front tires.`,
+        impacts: [
+          { label: "0-60 Acceleration", delta: "-0.6s", tone: "good" },
+          { label: "Launch traction", delta: "+40%", tone: "good" },
+          { label: "Weight", delta: "+75 kg", tone: "bad" },
+        ],
+        apply: () => updateVehicle({ driveType: "awd" }),
+      });
+    }
+
+    // --- Drivetrain: High power RWD track/supercar AWD suggestion ---
+    if (v.driveType === "rwd" && sim.peakPower > 550 && carConcept === "track") {
+      s.push({
+        id: "rwd_awd_track_upgrade",
+        title: "Upgrade to AWD for maximum exit traction",
+        detail: `With ${sim.peakPower} HP on track, All-Wheel Drive puts full power to the ground early out of corners without rear wheelspin.`,
+        impacts: [
+          { label: "Corner exit grip", delta: "+25%", tone: "good" },
+          { label: "0-60 Launch", delta: "-0.4s", tone: "good" },
+        ],
+        apply: () => updateVehicle({ driveType: "awd" }),
+      });
+    }
+
+    // --- Engine Position: Rear Engine Brake Bias suggestion ---
+    if (v.enginePosition === "rear" && v.brakeBias > 0.60) {
+      s.push({
+        id: "rear_engine_brake_bias",
+        title: "Adjust brake bias to 52% for Rear Engine",
+        detail: "With 62% of car weight over the rear wheels in a rear-engine layout, rear brakes can take much more stopping load without locking.",
+        impacts: [
+          { label: "Braking distance", delta: "-3.5 m", tone: "good" },
+          { label: "Brake balance", delta: "+optimal", tone: "good" },
+        ],
+        apply: () => updateVehicle({ brakeBias: 0.52 }),
+      });
+    }
+
+    // --- Suspension: Mismatched spring rates ---
+    if (Math.abs(v.springRateF - v.springRateR) > 80) {
+      const stiffer = v.springRateF > v.springRateR ? "front" : "rear";
+      s.push({
+        id: "spring_mismatch",
+        title: `Rebalance spring rates (${stiffer} is much stiffer)`,
+        detail: `The ${stiffer} spring rate is ${Math.abs(v.springRateF - v.springRateR)} N/mm stiffer than the other end. This creates unbalanced handling.`,
+        impacts: [
+          { label: "Handling balance", delta: "+15%", tone: "good" },
+          { label: "Tire wear", delta: "-even", tone: "good" },
+        ],
+        apply: () => {
+          const avg = Math.round((v.springRateF + v.springRateR) / 2);
+          updateVehicle({ springRateF: clamp(avg + 10, 40, 300), springRateR: clamp(avg - 10, 40, 300) });
+        },
+      });
+    }
+
+    // --- Suspension: Very stiff for road car ---
+    if (v.springRateF > 200 && carConcept !== "track") {
+      s.push({
+        id: "springs_too_stiff",
+        title: "Soften front springs for road comfort",
+        detail: "Front spring rate above 200 N/mm makes the ride very harsh on public roads. Softening improves ride quality without major handling loss.",
+        impacts: [
+          { label: "Comfort", delta: "+20%", tone: "good" },
+          { label: "Cornering grip", delta: "-3%", tone: "bad" },
+        ],
+        apply: () => updateVehicle({ springRateF: clamp(v.springRateF - 40, 40, 300) }),
+      });
+    }
+
+    // --- Brakes: Heavy car with small discs ---
+    if (sim.weight > 1500 && v.brakeDiscSize < 330) {
+      s.push({
+        id: "brake_upgrade",
+        title: "Upgrade brake disc to 350mm",
+        detail: `At ${sim.weight}kg, your ${v.brakeDiscSize}mm discs may fade under hard braking. Larger discs absorb more heat and provide stronger stopping power.`,
+        impacts: [
+          { label: "Braking", delta: "+12%", tone: "good" },
+          { label: "Cost", delta: "+$350", tone: "bad" },
+          { label: "Weight", delta: "+2.5 kg", tone: "bad" },
+        ],
+        apply: () => updateVehicle({ brakeDiscSize: 350 }),
+      });
+    }
+
+    // --- Brakes: Dangerous brake bias ---
+    if (v.brakeBias < 0.52) {
+      s.push({
+        id: "brake_bias_danger",
+        title: "Increase front brake bias to 60%",
+        detail: "Rear-biased braking (below 52% front) causes rear wheel lock-up and instability. Unsafe for road use.",
+        impacts: [
+          { label: "Safety", delta: "+critical", tone: "good" },
+          { label: "Braking stability", delta: "+25%", tone: "good" },
+        ],
+        apply: () => updateVehicle({ brakeBias: 0.60 }),
+      });
+    }
+
+    // --- Tires: Track concept with non-performance tires ---
+    if (carConcept === "track" && (v.tireCompound === "hard" || v.tireCompound === "medium")) {
+      s.push({
+        id: "tire_compound_track",
+        title: "Switch to semi-slick tires",
+        detail: "Track-focused builds need performance tires. Semi-slicks provide dramatically more grip than standard road tires.",
+        impacts: [
+          { label: "Grip", delta: "+35%", tone: "good" },
+          { label: "Lap time", delta: "-3-5s", tone: "good" },
+          { label: "Tire life", delta: "-50%", tone: "bad" },
+        ],
+        apply: () => updateVehicle({ tireCompound: "slick" }),
+      });
+    }
+
+    // --- Electronics: High-power car without TC ---
+    if (sim.peakPower > 350 && v.electronics.tractionControl < 0.2 && !v.electronics.launchControl) {
+      s.push({
+        id: "add_tc",
+        title: "Enable traction control (50%)",
+        detail: `With ${sim.peakPower}hp and minimal traction control, wheelspin will limit real-world acceleration. TC helps put power down safely.`,
+        impacts: [
+          { label: "Acceleration", delta: "+0.3s 0-60", tone: "good" },
+          { label: "Safety", delta: "+significant", tone: "good" },
+        ],
+        apply: () => updateElectronics({ tractionControl: 0.5 }),
+      });
+    }
+
+    // --- Electronics: No ABS on road car ---
+    if (!v.electronics.abs && carConcept !== "track") {
+      s.push({
+        id: "add_abs",
+        title: "Enable Anti-lock Braking (ABS)",
+        detail: "ABS is essential for road safety — it prevents wheel lock-up and allows steering during emergency braking.",
+        impacts: [
+          { label: "Safety", delta: "+critical", tone: "good" },
+          { label: "Wet braking", delta: "+40%", tone: "good" },
+          { label: "Cost", delta: "+$180", tone: "bad" },
+        ],
+        apply: () => updateElectronics({ abs: true }),
+      });
+    }
+
+    // --- Interior: Heavy interior on track car ---
+    if (carConcept === "track" && v.interior.soundDeadening > 0.4) {
+      s.push({
+        id: "strip_interior",
+        title: "Remove sound deadening for weight savings",
+        detail: "Sound deadening adds 10-20kg. On a track car, every kg matters. Remove it to improve lap times.",
+        impacts: [
+          { label: "Weight", delta: "-12 kg", tone: "good" },
+          { label: "Lap time", delta: "-0.2s", tone: "good" },
+          { label: "Comfort", delta: "-40%", tone: "bad" },
+        ],
+        apply: () => updateInterior({ soundDeadening: 0.05 }),
+      });
+    }
+
+    // --- Interior: Luxury concept with basic materials ---
+    if (carConcept === "luxury" && v.interior.seatMaterial === "cloth") {
+      s.push({
+        id: "luxury_seats",
+        title: "Upgrade to leather seats",
+        detail: "Cloth seats don't match luxury positioning. Leather dramatically improves perceived quality and luxury rating.",
+        impacts: [
+          { label: "Luxury rating", delta: "+20%", tone: "good" },
+          { label: "Market appeal", delta: "+15%", tone: "good" },
+          { label: "Cost", delta: "+$800", tone: "bad" },
+        ],
+        apply: () => updateInterior({ seatMaterial: "leather" }),
+      });
+    }
+
+    // --- Interior: Track car without roll cage ---
+    if (carConcept === "track" && v.interior.rollCage === "none") {
+      s.push({
+        id: "add_rollcage",
+        title: "Install half roll cage",
+        detail: "A roll cage is essential safety equipment for track use. It also dramatically improves chassis rigidity.",
+        impacts: [
+          { label: "Safety", delta: "+critical", tone: "good" },
+          { label: "Chassis rigidity", delta: "+30%", tone: "good" },
+          { label: "Weight", delta: "+25 kg", tone: "bad" },
+        ],
+        apply: () => updateInterior({ rollCage: "half" as any }),
+      });
+    }
+
+    // --- Aero: Active aero recommendation for high-speed cars ---
+    if (sim.topSpeed > 280 && !ar.active.drs) {
+      s.push({
+        id: "active_drs",
+        title: "Enable DRS (Drag Reduction System)",
+        detail: "At your top speed, a DRS system that flattens the wing on straights can significantly improve top speed without sacrificing cornering downforce.",
+        impacts: [
+          { label: "Top speed", delta: "+8-12 km/h", tone: "good" },
+          { label: "Cornering", delta: "unchanged", tone: "neutral" },
+          { label: "Cost", delta: "+$1,200", tone: "bad" },
+        ],
+        apply: () => updateAeroResearch({ active: { ...ar.active, drs: true, enabled: true } }),
+      });
+    }
+
+    // --- Engine: Poor thermal efficiency ---
+    if (sim.thermalEfficiency < 0.28 && e.afr < 13 && e.intake !== "na") {
+      s.push({
+        id: "lean_out_afr",
+        title: "Lean out AFR to 13.5:1 for cruising",
+        detail: "Your air-fuel ratio is very rich. Leaning it out slightly improves fuel economy without losing much power.",
+        impacts: [
+          { label: "Fuel economy", delta: "+8%", tone: "good" },
+          { label: "Efficiency", delta: "+3%", tone: "good" },
+          { label: "Peak power", delta: "-2%", tone: "bad" },
+        ],
+        apply: () => updateEngine({ afr: clamp(round(e.afr + 0.8, 1), 10, 18) }),
+      });
+    }
+
+    // --- Engine: High RPM limiter with weak valvetrain ---
+    if (e.rpmLimiter > 8500 && (e.valvetrain === "ohv" || e.valvetrain === "sohc")) {
+      s.push({
+        id: "valvetrain_upgrade",
+        title: "Upgrade valvetrain to DOHC",
+        detail: "OHV/SOHC valvetrains struggle above 8000 RPM. DOHC supports higher revs safely and improves breathing.",
+        impacts: [
+          { label: "Reliability", delta: "+15%", tone: "good" },
+          { label: "Power @ RPM", delta: "+8%", tone: "good" },
+          { label: "Cost", delta: "+$400", tone: "bad" },
+        ],
+        apply: () => updateEngine({ valvetrain: "dohc" as any }),
+      });
+    }
+
+    // --- Manufacturing: High-end materials with low factory tier ---
+    if ((v.chassis === "carbon_tub" || v.chassis === "aluminum_spaceframe") && design.manufacturing.factoryTier === "boutique") {
+      s.push({
+        id: "factory_upgrade",
+        title: "Upgrade factory to Small Batch tier",
+        detail: "Advanced chassis materials require better tooling and climate control. A boutique facility will produce high defect rates with premium materials.",
+        impacts: [
+          { label: "Defect rate", delta: "-40%", tone: "good" },
+          { label: "Quality", delta: "+significant", tone: "good" },
+          { label: "Cost", delta: "+$2,000/unit", tone: "bad" },
+        ],
+        apply: () => updateManufacturing({ factoryTier: "small_batch" }),
+      });
+    }
+
+    // --- Concept: Budget car with expensive options ---
+    if (carConcept === "budget" && v.interior.infotainmentSize > 12) {
+      s.push({
+        id: "budget_screen",
+        title: "Downsize infotainment to 8\" screen",
+        detail: "A 12\"+ screen is expensive for a budget car. An 8\" screen covers essential features at much lower cost.",
+        impacts: [
+          { label: "Cost", delta: "-$400", tone: "good" },
+          { label: "Weight", delta: "-0.5 kg", tone: "good" },
+          { label: "Tech appeal", delta: "-10%", tone: "bad" },
+        ],
+        apply: () => updateInterior({ infotainmentSize: 8 }),
+      });
+    }
+
+    // --- Concept: Budget car with premium paint ---
+    if (carConcept === "budget" && (v.exterior.paintFinish === "pearl" || v.exterior.paintFinish === "matte")) {
+      s.push({
+        id: "budget_paint",
+        title: "Switch to solid paint finish",
+        detail: "Pearl and matte finishes add $500-$1000 to production cost. Solid paint is perfectly fine for budget positioning.",
+        impacts: [
+          { label: "Cost", delta: "-$700", tone: "good" },
+          { label: "Luxury appeal", delta: "-15%", tone: "bad" },
+        ],
+        apply: () => updateExterior({ paintFinish: "solid" as any }),
+      });
+    }
+
+    // --- Ride height too low for road car ---
+    if (v.rideHeight < 80 && carConcept !== "track") {
+      s.push({
+        id: "raise_ride_height",
+        title: "Raise ride height to 110mm",
+        detail: `Ride height of ${v.rideHeight}mm is too low for daily driving. You'll scrape on speed bumps and driveways.`,
+        impacts: [
+          { label: "Practicality", delta: "+significant", tone: "good" },
+          { label: "Ground clearance", delta: "+30mm", tone: "good" },
+          { label: "Center of gravity", delta: "+slight", tone: "bad" },
+        ],
+        apply: () => updateVehicle({ rideHeight: 110 }),
+      });
+    }
+
+    // --- Excessive camber for road car ---
+    if (v.camberF < -3.0 && carConcept !== "track") {
+      s.push({
+        id: "reduce_camber",
+        title: "Reduce front camber to -1.5°",
+        detail: `Front camber of ${v.camberF}° causes extreme inner tire wear on the street. -1.5° provides good cornering without rapid wear.`,
+        impacts: [
+          { label: "Tire life", delta: "+60%", tone: "good" },
+          { label: "Braking grip", delta: "+10%", tone: "good" },
+          { label: "Peak cornering", delta: "-5%", tone: "bad" },
+        ],
+        apply: () => updateVehicle({ camberF: -1.5 }),
+      });
+    }
+
+    // ═══════════════ END NEW RULES ═══════════════
+
     if (s.length === 0) {
       s.push({
         id: "balanced",
@@ -210,7 +527,7 @@ export function AIAssistant() {
       });
     }
     return s;
-  }, [sim, e, v, a, ar, updateEngine, updateVehicle, updateAeroResearch]);
+  }, [sim, e, v, a, ar, design.manufacturing, carConcept, updateEngine, updateVehicle, updateAeroResearch, updateElectronics, updateManufacturing, updateInterior, updateExterior]);
 
   // Track active suggestion within bounds
   useEffect(() => {

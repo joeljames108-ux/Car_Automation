@@ -18,6 +18,8 @@ export function createBaseDesign(name: string, platform: PlatformType, bodyType:
   d.name = name;
   d.vehicle.platform = platform;
   d.vehicle.exterior.bodyType = bodyType;
+  d.vehicle.driveType = "fwd";
+  d.vehicle.enginePosition = "front";
   return d;
 }
 

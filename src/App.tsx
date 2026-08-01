@@ -357,15 +357,15 @@ function AppInner() {
                   </div>
                 </div>
 
-                {/* Right Sidebar — Engineering Log + Telemetry Rail */}
+                {/* Right Sidebar — Live Stats (Top) + Engineering Log (Bottom) */}
                 <div className="hidden xl:flex flex-col gap-4" style={{ width: 300, flexShrink: 0 }}>
                   <div style={{ position: "sticky", top: 8, display: "flex", flexDirection: "column", gap: 12 }}>
-                    {/* Engineering Log Panel (Matching Reference Photo) */}
-                    <EngineeringLog />
-                    {/* Live Stat Rail */}
+                    {/* Live Stat Rail (Top) */}
                     <div className="stat-rail-container">
                       <StatRail />
                     </div>
+                    {/* Engineering Log Panel (Bottom) */}
+                    <EngineeringLog />
                   </div>
                 </div>
               </div>
@@ -518,7 +518,7 @@ function AppInner() {
       {/* Main content */}
       <div className="flex-1 max-w-[1700px] mx-auto w-full px-4 py-4 pb-44 flex gap-4">
         <div className="flex-1 min-w-0">
-          <div key={stage} className="animate-scale-reveal">
+          <div key={stage} className="stage-transition-enter">
             {stage === "command" && <CommandCenter onSelectStage={(st) => setStage(st as Stage)} />}
             {stage === "engine" && <EngineDesigner />}
             {stage === "vehicle" && <VehicleDesigner />}

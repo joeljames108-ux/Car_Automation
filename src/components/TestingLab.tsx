@@ -1,3 +1,4 @@
+import { useId } from "react";
 import { useDesign, fmtSpeed, fmtDistance } from "../state/DesignContext";
 import { Section, StatTile } from "./ui/Controls";
 import { Wind, ShieldAlert, Disc, CircleDot, Spline, Star, Activity, Thermometer, AlertTriangle } from "lucide-react";
@@ -152,22 +153,135 @@ function ScoreBar({ label, value }: { label: string; value: number }) {
 }
 
 function GaugeMeter({ value, max, label }: { value: number; max: number; label: string }) {
-  const pct = Math.min((value / max) * 100, 100);
-  const angle = (pct / 100) * 180 - 90;
+  const gradientId = useId();
+  const pct = Math.max(0, Math.min(1, value / max));
+  
+  // 180° Top Semi-Circle Arc (sweeps clockwise over top from 270° left to 450° right)
+  const W = 170;
+  const H = 120;
+  const cx = 85;
+  const cy = 80;
+  const r = 54;
+  const strokeWidth = 8;
+
+  const startAngle = 270;
+  const endAngle = 450;
+  const totalAngle = endAngle - startAngle;
+  const activeAngle = startAngle + pct * totalAngle;
+
+  const polarToCartesian = (x: number, y: number, radius: number, angleInDegrees: number) => {
+    const angleInRadians = ((angleInDegrees - 90) * Math.PI) / 180.0;
+    return {
+      x: x + radius * Math.cos(angleInRadians),
+      y: y + radius * Math.sin(angleInRadians),
+    };
+  };
+
+  const describeArc = (x: number, y: number, radius: number, start: number, end: number) => {
+    const startPt = polarToCartesian(x, y, radius, start);
+    const endPt = polarToCartesian(x, y, radius, end);
+    const largeArc = end - start <= 180 ? "0" : "1";
+    return `M ${startPt.x.toFixed(1)} ${startPt.y.toFixed(1)} A ${radius} ${radius} 0 ${largeArc} 1 ${endPt.x.toFixed(1)} ${endPt.y.toFixed(1)}`;
+  };
+
+  const bgArc = describeArc(cx, cy, r, startAngle, endAngle);
+  const activeArc = describeArc(cx, cy, r, startAngle, Math.max(startAngle + 0.1, activeAngle));
+  const knobPos = polarToCartesian(cx, cy, r, activeAngle);
+  const needleEnd = polarToCartesian(cx, cy, r - 14, activeAngle);
+
+  const ticks = [
+    { label: "0", angle: 270 },
+    { label: `${(max / 2).toFixed(1)}`, angle: 360 },
+    { label: `${max.toFixed(1)}`, angle: 450 },
+  ];
+
   return (
-    <div className="flex flex-col items-center">
-      <div className="relative w-32 h-16 overflow-hidden">
-        <div className="absolute inset-0 flex items-end justify-center">
-          <div className="w-32 h-32 rounded-full border-4 border-base-800 border-b-transparent" />
-        </div>
+    <div className="flex flex-col items-center select-none">
+      <div className="relative" style={{ width: W, height: H }}>
+        <svg width={W} height={H} viewBox={`0 0 ${W} ${H}`} className="overflow-visible">
+          <defs>
+            <linearGradient id={gradientId} x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor="#0066ff" />
+              <stop offset="50%" stopColor="#00c8ff" />
+              <stop offset="100%" stopColor="#34d399" />
+            </linearGradient>
+          </defs>
+
+          {/* Ambient Track Glow */}
+          <path d={bgArc} fill="none" stroke="rgba(0, 122, 255, 0.08)" strokeWidth={strokeWidth + 10} strokeLinecap="round" />
+
+          {/* Background Track Arc */}
+          <path d={bgArc} fill="none" stroke="rgba(0, 0, 0, 0.08)" strokeWidth={strokeWidth} strokeLinecap="round" />
+
+          {/* Active Vibrant Arc */}
+          <path
+            d={activeArc}
+            fill="none"
+            stroke={`url(#${gradientId})`}
+            strokeWidth={strokeWidth}
+            strokeLinecap="round"
+            style={{ filter: "drop-shadow(0 0 6px rgba(0, 122, 255, 0.5))", transition: "all 0.3s ease-out" }}
+          />
+
+          {/* Needle Indicator */}
+          <line
+            x1={cx}
+            y1={cy}
+            x2={needleEnd.x}
+            y2={needleEnd.y}
+            stroke="#0066ff"
+            strokeWidth="2.5"
+            strokeLinecap="round"
+            style={{ filter: "drop-shadow(0 0 4px rgba(0, 102, 255, 0.6))", transition: "all 0.3s ease-out" }}
+          />
+
+          {/* Center Pivot Pin */}
+          <circle cx={cx} cy={cy} r="5" fill="#ffffff" stroke="#0066ff" strokeWidth="2" style={{ filter: "drop-shadow(0 2px 4px rgba(0,0,0,0.15))" }} />
+
+          {/* Glowing Indicator Knob */}
+          <circle cx={knobPos.x} cy={knobPos.y} r="6.5" fill="#0066ff" stroke="#ffffff" strokeWidth="2" style={{ filter: "drop-shadow(0 0 6px rgba(0, 122, 255, 0.8))" }} />
+
+          {/* Scale Ticks */}
+          {ticks.map((t, i) => {
+            const pos = polarToCartesian(cx, cy, r + 15, t.angle);
+            return (
+              <text
+                key={i}
+                x={pos.x}
+                y={pos.y + 3}
+                fontSize="9"
+                fontWeight="700"
+                fill="#3a3a3c"
+                textAnchor="middle"
+                fontFamily="monospace"
+              >
+                {t.label}
+              </text>
+            );
+          })}
+        </svg>
+
+        {/* Value Readout & Label (Centered underneath pivot pin) */}
         <div
-          className="absolute bottom-0 left-1/2 w-1 h-14 bg-accent-400 origin-bottom transition-transform duration-500"
-          style={{ transform: `translateX(-50%) rotate(${angle}deg)` }}
-        />
-        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-3 h-3 rounded-full bg-accent-400" />
+          style={{
+            position: "absolute",
+            top: cy + 10,
+            left: 0,
+            right: 0,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            pointerEvents: "none",
+          }}
+        >
+          <div className="font-mono text-base font-black text-cyan-400 leading-none">
+            {value.toFixed(2)} <span className="text-xs font-bold">G</span>
+          </div>
+          <div className="label-mono text-[9px] text-slate-500 font-bold tracking-widest uppercase mt-1">
+            {label}
+          </div>
+        </div>
       </div>
-      <div className="font-mono text-sm text-accent-300">{value.toFixed(2)}</div>
-      <div className="label-mono text-[10px] text-slate-500">{label}</div>
     </div>
   );
 }

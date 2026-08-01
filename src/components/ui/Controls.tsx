@@ -1,4 +1,7 @@
 import { useState, useEffect, useMemo, useRef, useCallback, type ReactNode } from "react";
+import { ChevronDown, Check, Zap } from "lucide-react";
+import { ApexTooltip } from "./ApexTooltip";
+import { AnimatedCounter } from "./AnimatedCounter";
 
 function useCustomDebounce<T extends (...args: any[]) => void>(fn: T, delay: number) {
   const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -90,17 +93,22 @@ export function Slider({ label, value, min, max, step = 1, onChange, format, uni
   const diff = Math.round((localVal - initialRef.current) * 100) / 100;
 
   return (
-    <div className="group/slider relative my-1 select-none">
-      <div className="flex justify-between items-baseline mb-1.5">
-        <label className="label-mono flex items-center gap-1">
-          {label}
-        </label>
+    <div className="slider-card-capsule group/slider relative my-2 p-3.5 sm:p-4 rounded-3xl bg-base-850/80 border border-base-750 backdrop-blur-xl shadow-md transition-all duration-200 hover:border-cyan-500/40 select-none">
+      {/* Header Row: Icon + Label (Left), Delta + Value (Right) */}
+      <div className="flex justify-between items-center mb-2.5">
+        <div className="flex items-center gap-2 min-w-0">
+          <Zap size={14} className="slider-icon text-cyan-400 shrink-0" />
+          <label className="text-xs font-bold tracking-wide text-slate-100 flex items-center gap-1 truncate">
+            {label}
+          </label>
+          <ApexTooltip label={label} />
+        </div>
 
-        <div className="flex items-center gap-1.5">
+        <div className="flex items-center gap-2 shrink-0">
           {/* Live Differential Delta Badge (+X / -X) */}
           {diff !== 0 && (
             <span
-              className={`font-mono text-[10px] font-bold px-1.5 py-0.2 rounded animate-in fade-in zoom-in-90 duration-150 ${
+              className={`font-mono text-[10px] font-bold px-2 py-0.5 rounded-full animate-in fade-in zoom-in-90 duration-150 ${
                 diff > 0
                   ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30"
                   : "bg-rose-500/20 text-rose-400 border border-rose-500/30"
@@ -111,31 +119,31 @@ export function Slider({ label, value, min, max, step = 1, onChange, format, uni
             </span>
           )}
 
-          {/* Current Slider Value Badge */}
-          <span className="font-mono text-xs font-bold text-accent-300 bg-accent-500/10 px-2 py-0.5 rounded border border-accent-500/20 shadow-sm transition-all duration-200 group-hover/slider:border-accent-400 group-hover/slider:bg-accent-500/20">
-            {format ? format(localVal) : localVal}{unit && <span className="text-slate-400 text-[10px] ml-1">{unit}</span>}
+          {/* Current Slider Value */}
+          <span className="slider-value-text font-mono text-sm font-extrabold text-cyan-400 tracking-tight">
+            {format ? format(localVal) : localVal}{unit && <span className="text-slate-400 text-xs font-normal ml-1">{unit}</span>}
           </span>
         </div>
       </div>
       
-      {/* Slider Track with Fine-Tuning + and - Stepper Buttons */}
-      <div className="flex items-center gap-2">
+      {/* Slider Track with Stepper Controls */}
+      <div className="flex items-center gap-2.5">
         {/* Decrement (-) Fine-Tune Button */}
         <button
           type="button"
           onClick={() => handleStepAdjust(-1)}
           disabled={localVal <= min}
-          className="w-6 h-6 rounded-md bg-base-800 border border-slate-700/60 flex items-center justify-center text-slate-300 hover:text-white hover:bg-slate-700/80 hover:border-cyan-500/50 disabled:opacity-30 disabled:pointer-events-none transition-all active:scale-90 shrink-0 font-bold text-xs shadow-sm"
+          className="slider-step-btn w-6 h-6 rounded-lg bg-base-800 border border-slate-700/60 flex items-center justify-center text-slate-200 hover:text-cyan-400 hover:border-cyan-400/50 disabled:opacity-20 disabled:pointer-events-none transition-all active:scale-90 shrink-0 font-bold text-xs shadow-sm cursor-pointer"
           title={`Decrease by ${step}${unit || ""}`}
         >
           -
         </button>
 
         <div className="relative flex-1 flex items-center h-5">
-          {/* Custom Progress Fill Track overlay */}
-          <div className="absolute left-0 top-1/2 -translate-y-1/2 h-1.5 w-full bg-slate-800/80 rounded-full overflow-hidden pointer-events-none border border-slate-700/50">
+          {/* Custom Solid Blue Progress Track */}
+          <div className="slider-track-container absolute left-0 top-1/2 -translate-y-1/2 h-3 w-full bg-slate-900/90 rounded-full overflow-hidden pointer-events-none border border-slate-700/60 shadow-inner">
             <div
-              className="h-full bg-gradient-to-r from-cyan-500 via-sky-400 to-accent-300 rounded-full shadow-[0_0_10px_rgba(56,189,248,0.5)]"
+              className="slider-track-fill h-full bg-cyan-500 rounded-full shadow-[0_0_10px_rgba(34,211,238,0.5)] transition-[width] duration-75"
               style={{ width: `${percentage}%` }}
             />
           </div>
@@ -161,39 +169,84 @@ export function Slider({ label, value, min, max, step = 1, onChange, format, uni
           type="button"
           onClick={() => handleStepAdjust(1)}
           disabled={localVal >= max}
-          className="w-6 h-6 rounded-md bg-base-800 border border-slate-700/60 flex items-center justify-center text-slate-300 hover:text-white hover:bg-slate-700/80 hover:border-cyan-500/50 disabled:opacity-30 disabled:pointer-events-none transition-all active:scale-90 shrink-0 font-bold text-xs shadow-sm"
+          className="slider-step-btn w-6 h-6 rounded-lg bg-base-800 border border-slate-700/60 flex items-center justify-center text-slate-200 hover:text-cyan-400 hover:border-cyan-400/50 disabled:opacity-20 disabled:pointer-events-none transition-all active:scale-90 shrink-0 font-bold text-xs shadow-sm cursor-pointer"
           title={`Increase by ${step}${unit || ""}`}
         >
           +
         </button>
       </div>
 
-      {/* Subtle min/max scale indicators on hover */}
-      <div className="flex justify-between items-center text-[9px] font-mono text-slate-500/60 opacity-0 group-hover/slider:opacity-100 transition-opacity duration-200 mt-0.5 px-7">
-        <span>{min}{unit}</span>
-        <span>{max}{unit}</span>
-      </div>
-
-      {hint && <p className="text-[10px] text-slate-400/80 mt-0.5">{hint}</p>}
+      {hint && <p className="text-[10px] text-slate-400/80 mt-1.5 px-0.5">{hint}</p>}
     </div>
   );
 }
 
 export function Select<T extends string>({ label, value, options, onChange }: {
-  label: string; value: T; options: { value: T; label: string }[]; onChange: (v: T) => void;
+  label?: string; value: T; options: { value: T; label: string }[]; onChange: (v: T) => void;
 }) {
+  const [isOpen, setIsOpen] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  // Close dropdown menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
+        setIsOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const selectedOption = options.find((o) => o.value === value) || options[0];
+
   return (
-    <div>
-      {label && <label className="label-mono mb-1.5 block">{label}</label>}
-      <select
-        value={value}
-        onChange={(e) => onChange(e.target.value as T)}
-        className="w-full bg-base-850 border border-base-700 rounded-lg px-3 py-2 text-sm text-slate-200 focus:border-accent-500 focus:outline-none transition-colors"
+    <div ref={containerRef} className="relative w-full select-none">
+      {label && (
+        <label className="label-mono mb-1.5 flex items-center gap-1.5">
+          {label}
+          <ApexTooltip label={label} />
+        </label>
+      )}
+      
+      {/* Trigger Button */}
+      <button
+        type="button"
+        onClick={() => setIsOpen(!isOpen)}
+        className="custom-glass-select-trigger w-full bg-base-850 border border-base-700 rounded-xl px-3.5 py-2 text-xs font-semibold flex items-center justify-between gap-2 transition-all cursor-pointer hover:border-cyan-400/50 shadow-sm text-left"
       >
-        {options.map((o) => (
-          <option key={o.value} value={o.value}>{o.label}</option>
-        ))}
-      </select>
+        <span className="truncate">{selectedOption ? selectedOption.label : String(value)}</span>
+        <ChevronDown size={14} className={`transition-transform duration-200 shrink-0 text-slate-400 ${isOpen ? "rotate-180 text-cyan-400" : ""}`} />
+      </button>
+
+      {/* Custom Glass Dropdown Menu Popup */}
+      {isOpen && (
+        <div
+          className="custom-glass-select-dropdown absolute top-full left-0 right-0 mt-1.5 z-50 rounded-2xl p-1.5 shadow-2xl backdrop-blur-3xl border border-white/20 animate-scale-reveal flex flex-col gap-0.5 max-h-60 overflow-y-auto"
+        >
+          {options.map((o) => {
+            const isSelected = o.value === value;
+            return (
+              <button
+                key={String(o.value)}
+                type="button"
+                onClick={() => {
+                  onChange(o.value);
+                  setIsOpen(false);
+                }}
+                className={`custom-glass-select-option w-full text-left px-3 py-2 rounded-xl text-xs font-semibold flex items-center justify-between gap-2 transition-all cursor-pointer ${
+                  isSelected
+                    ? "is-selected font-bold"
+                    : ""
+                }`}
+              >
+                <span className="truncate">{o.label}</span>
+                {isSelected && <Check size={13} className="shrink-0 text-cyan-500" />}
+              </button>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
 }
@@ -228,18 +281,22 @@ export function Toggle({ label, value, onChange }: {
       onClick={() => onChange(!value)}
       className="flex items-center justify-between w-full py-1"
     >
-      <span className="label-mono">{label}</span>
+      <span className="label-mono flex items-center gap-1.5">
+        {label}
+        <span onClick={(e) => e.stopPropagation()}>
+          <ApexTooltip label={label} />
+        </span>
+      </span>
       <span className={`relative w-9 h-5 rounded-full transition-colors duration-300 ${value ? "bg-accent-500 shadow-[0_0_8px_rgba(34,211,238,0.4)]" : "bg-base-700"}`}>
         <span className={`absolute top-0.5 left-0.5 h-4 w-4 rounded-full bg-white transition-transform duration-300 ease-out ${value ? "translate-x-4" : ""}`} />
       </span>
     </button>
   );
 }
-
 type Accent = "accent" | "ok" | "warn" | "danger" | "default";
 
-export function StatTile({ label, value, unit, sub, accent = "default", icon }: {
-  label: string; value: string | number; unit?: string; sub?: string; accent?: Accent; icon?: ReactNode;
+export function StatTile({ label, value, unit, sub, accent = "default", icon, decimals }: {
+  label: string; value: string | number; unit?: string; sub?: string; accent?: Accent; icon?: ReactNode; decimals?: number;
 }) {
   const colorMap: Record<Accent, string> = {
     accent: "text-accent-300",
@@ -248,17 +305,46 @@ export function StatTile({ label, value, unit, sub, accent = "default", icon }: 
     danger: "text-danger-400",
     default: "text-slate-200",
   };
+
+  const isNumeric = typeof value === "number";
+
   return (
-    <div className="bg-base-850 border border-base-800 rounded-lg px-3 py-2 transition-all duration-300 hover:border-base-700 hover:bg-base-800/60">
-      <div className="label-mono mb-0.5 flex items-center gap-1">
+    <div className="bg-base-850 border border-base-800 rounded-xl px-3.5 py-2.5 interactive-card transition-all duration-300 hover:border-cyan-500/30">
+      <div className="label-mono mb-1 flex items-center gap-1.5 text-[11px] text-slate-400">
         {icon}
         <span>{label}</span>
       </div>
-      <div className={`font-mono text-base font-semibold ${colorMap[accent]} transition-colors`}>
-        {value}
-        {unit && <span className="text-xs text-slate-500 ml-0.5">{unit}</span>}
+      <div className={`font-mono text-base font-bold ${colorMap[accent]} transition-colors flex items-baseline gap-1`}>
+        {isNumeric ? (
+          <AnimatedCounter value={value as number} decimals={decimals ?? (Number.isInteger(value as number) ? 0 : 1)} />
+        ) : (
+          <span>{value}</span>
+        )}
+        {unit && <span className="text-xs font-normal text-slate-400">{unit}</span>}
       </div>
-      {sub && <div className="text-[10px] text-slate-600 mt-0.5">{sub}</div>}
+      {sub && <div className="text-[10px] text-slate-500 mt-0.5 truncate">{sub}</div>}
+    </div>
+  );
+}
+
+export function ProgressBar({ value, max = 100, label, color = "bg-accent-500", className = "" }: {
+  value: number; max?: number; label?: string; color?: string; className?: string;
+}) {
+  const pct = Math.min(100, Math.max(0, (value / max) * 100));
+  return (
+    <div className={`w-full ${className}`}>
+      {label && (
+        <div className="flex justify-between items-center text-xs mb-1 font-mono text-slate-300">
+          <span>{label}</span>
+          <span>{pct.toFixed(0)}%</span>
+        </div>
+      )}
+      <div className="w-full h-2 rounded-full bg-base-800 overflow-hidden border border-base-700/50">
+        <div
+          className={`h-full ${color} smooth-progress-fill rounded-full shadow-[0_0_8px_rgba(34,211,238,0.4)]`}
+          style={{ width: `${pct}%` }}
+        />
+      </div>
     </div>
   );
 }

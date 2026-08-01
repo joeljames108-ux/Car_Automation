@@ -1,5 +1,6 @@
-import { useState } from "react";
-import { Gauge, Wind, Disc, Activity, Cpu, Sparkles, Navigation, ArrowRight } from "lucide-react";
+import { useState, useEffect } from "react";
+import { createPortal } from "react-dom";
+import { Gauge, Wind, Disc, Activity, Cpu, Sparkles, Navigation, ArrowRight, Maximize2, ArrowLeft, X } from "lucide-react";
 import { useDesign } from "../state/DesignContext";
 
 interface ChassisHotspotViewerProps {
@@ -9,6 +10,38 @@ interface ChassisHotspotViewerProps {
 export function ChassisHotspotViewer({ onSelectStage }: ChassisHotspotViewerProps) {
   const { design, sim } = useDesign();
   const [activeHotspot, setActiveHotspot] = useState<string | null>(null);
+  const [isZoomed, setIsZoomed] = useState(false);
+  const [modalRendered, setModalRendered] = useState(false);
+  const [modalActive, setModalActive] = useState(false);
+
+  const openZoomModal = () => {
+    setIsZoomed(true);
+    setModalRendered(true);
+    requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        setModalActive(true);
+      });
+    });
+  };
+
+  const closeZoomModal = () => {
+    setIsZoomed(false);
+    setModalActive(false);
+    setTimeout(() => {
+      setModalRendered(false);
+    }, 400);
+  };
+
+  useEffect(() => {
+    if (isZoomed) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isZoomed]);
 
   const dispLiters = (sim.displacement / 1000).toFixed(1);
 
@@ -146,174 +179,36 @@ export function ChassisHotspotViewer({ onSelectStage }: ChassisHotspotViewerProp
         </div>
       </div>
 
-      {/* SVG Chassis Blueprint */}
-      <div className="relative w-full overflow-x-auto py-2 flex justify-center items-center">
-        <div className="relative w-[800px] h-[300px] flex-shrink-0">
+      {/* Technical Chassis Blueprint Diagram Image with Interactive Overlay */}
+      <div className="relative w-full overflow-x-auto py-2 flex justify-center items-center group">
+        <button
+          onClick={openZoomModal}
+          className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity bg-slate-900/90 border border-cyan-500/50 text-cyan-400 p-2 rounded-full shadow-lg z-30 hover:bg-cyan-950 active:scale-95 cursor-pointer flex items-center gap-1.5 text-xs font-mono font-bold px-3"
+          title="Click to Zoom Chassis Blueprint"
+        >
+          <Maximize2 size={12} />
+          <span>Zoom Blueprint</span>
+        </button>
+        <div className="relative w-[800px] h-[300px] flex-shrink-0 rounded-2xl overflow-hidden border border-cyan-500/30 bg-slate-950/80 shadow-[0_0_30px_rgba(0,0,0,0.5)]">
+          {/* Blueprint Image */}
+          <img
+            src="/chassis_hotspots_diagram.png"
+            alt="F1 Supercar Chassis Telemetry Blueprint"
+            className="w-full h-full object-contain filter drop-shadow-[0_0_15px_rgba(34,211,238,0.25)]"
+          />
+
+          {/* SVG Overlay Layer for Reticles */}
           <svg
             viewBox="0 0 800 300"
-            className="w-full h-full drop-shadow-[0_0_20px_rgba(34,211,238,0.15)]"
+            className="absolute inset-0 w-full h-full pointer-events-none"
           >
-            <defs>
-              {/* Grid pattern background */}
-              <pattern id="chassisGrid" width="20" height="20" patternUnits="userSpaceOnUse">
-                <path d="M 20 0 L 0 0 0 20" fill="none" stroke="rgba(34, 211, 238, 0.07)" strokeWidth="1" />
-              </pattern>
-              {/* Cyan gradient line */}
-              <linearGradient id="cyanGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stopColor="#22d3ee" stopOpacity="0.8" />
-                <stop offset="100%" stopColor="#a855f7" stopOpacity="0.8" />
-              </linearGradient>
-            </defs>
-
-            {/* Grid Fill */}
-            <rect width="800" height="300" fill="url(#chassisGrid)" rx="12" />
-
-            {/* Center Axis Lines */}
-            <line x1="50" y1="160" x2="750" y2="160" stroke="rgba(34, 211, 238, 0.2)" strokeDasharray="4,4" strokeWidth="1" />
-
-            {/* Aerodynamic Airflow Particles Visualizer */}
-            <path
-              d="M 50 140 Q 200 130, 300 110 T 600 110 T 750 150"
-              fill="none"
-              stroke="rgba(34, 211, 238, 0.3)"
-              strokeWidth="1.5"
-              strokeDasharray="8,6"
-              className="animate-[dash_10s_linear_infinite]"
-            />
-            <path
-              d="M 50 180 Q 200 190, 300 210 T 600 210 T 750 170"
-              fill="none"
-              stroke="rgba(168, 85, 247, 0.3)"
-              strokeWidth="1.5"
-              strokeDasharray="8,6"
-              className="animate-[dash_12s_linear_infinite]"
-            />
-
-            {/* HIGH-TECH HYPERCAR TOP-VIEW CHASSIS DIAGRAM */}
-            <g className="transition-all duration-300">
-              {/* Diffuser Tunnel Outer Glow */}
-              <path
-                d="M 640 100 L 755 90 L 760 230 L 640 220 Z"
-                fill="rgba(168, 85, 247, 0.08)"
-                stroke="rgba(168, 85, 247, 0.4)"
-                strokeWidth="1"
-                strokeDasharray="4,4"
-              />
-
-              {/* Rear Wing Foil Structure */}
-              <path
-                d="M 670 85 L 750 82 C 758 82, 762 88, 760 95 L 758 225 C 758 232, 752 238, 745 238 L 670 235 Z"
-                fill="rgba(192, 132, 252, 0.12)"
-                stroke="#c084fc"
-                strokeWidth="1.8"
-              />
-              <line x1="670" y1="85" x2="750" y2="85" stroke="#e9d5ff" strokeWidth="2" />
-              <line x1="670" y1="235" x2="750" y2="235" stroke="#e9d5ff" strokeWidth="2" />
-              <rect x="710" y="80" width="30" height="160" rx="3" fill="rgba(192, 132, 252, 0.15)" stroke="#c084fc" strokeWidth="1" />
-
-              {/* Front Aerodynamic Splitter Plate */}
-              <path
-                d="M 50 160 Q 65 105, 125 105 L 140 105 L 140 215 L 125 215 Q 65 215, 50 160 Z"
-                fill="rgba(52, 211, 153, 0.12)"
-                stroke="#34d399"
-                strokeWidth="2"
-              />
-              <path d="M 50 160 L 140 160" stroke="#34d399" strokeWidth="1" strokeDasharray="3,3" />
-
-              {/* Main Hypercar Monocoque & Body Outer Frame */}
-              <path
-                d="M 55 160 
-                   C 65 130, 95 108, 145 108 
-                   L 175 108
-                   C 185 98, 205 92, 245 92 
-                   L 260 108
-                   C 310 105, 340 110, 360 112 
-                   C 380 96, 440 94, 520 112 
-                   L 550 100 
-                   C 610 98, 670 105, 730 120 
-                   C 755 130, 765 145, 765 160 
-                   C 765 175, 755 190, 730 200 
-                   C 670 215, 610 222, 550 220 
-                   L 520 208 
-                   C 440 226, 380 224, 360 208 
-                   C 340 210, 310 215, 260 212 
-                   L 245 228 
-                   C 205 228, 185 222, 175 212 
-                   L 145 212 
-                   C 95 212, 65 190, 55 160 Z"
-                fill="rgba(11, 19, 38, 0.85)"
-                stroke="url(#cyanGrad)"
-                strokeWidth="2.8"
-              />
-
-              {/* Sidepods & Intake Ducts */}
-              <path d="M 280 108 C 340 98, 480 98, 540 108 L 530 125 C 470 118, 350 118, 290 125 Z" fill="rgba(34, 211, 238, 0.15)" stroke="#22d3ee" strokeWidth="1.2" />
-              <path d="M 280 212 C 340 222, 480 222, 540 212 L 530 195 C 470 202, 350 202, 290 195 Z" fill="rgba(34, 211, 238, 0.15)" stroke="#22d3ee" strokeWidth="1.2" />
-
-              {/* Teardrop Cockpit Canopy & Roof Scoop */}
-              <path
-                d="M 330 130 
-                   C 360 105, 460 105, 510 130 
-                   C 525 145, 530 160, 530 160 
-                   C 530 160, 525 175, 510 190 
-                   C 460 215, 360 215, 330 190 
-                   C 315 175, 310 160, 310 160 
-                   C 310 160, 315 145, 330 130 Z"
-                fill="rgba(14, 165, 233, 0.12)"
-                stroke="#0ea5e9"
-                strokeWidth="1.8"
-              />
-              {/* Windshield & Rear Deck Strakes */}
-              <path d="M 350 135 C 380 122, 430 122, 450 135 L 450 185 C 430 198, 380 198, 350 185 Z" fill="none" stroke="rgba(56, 189, 248, 0.4)" strokeWidth="1" strokeDasharray="2,2" />
-
-              {/* High-Performance Wheels with Radial Brake Rotors & Calipers */}
-              {/* Front Left Wheel */}
-              <g>
-                <rect x="170" y="70" width="78" height="34" rx="7" fill="#090d16" stroke="#f59e0b" strokeWidth="2" />
-                <line x1="170" y1="87" x2="248" y2="87" stroke="#f59e0b" strokeWidth="1" strokeDasharray="3,3" />
-                <circle cx="209" cy="87" r="11" fill="none" stroke="#fb7185" strokeWidth="2.5" strokeDasharray="4,2" />
-                <rect x="202" y="73" width="14" height="6" rx="2" fill="#ef4444" />
-              </g>
-              {/* Front Right Wheel */}
-              <g>
-                <rect x="170" y="216" width="78" height="34" rx="7" fill="#090d16" stroke="#f59e0b" strokeWidth="2" />
-                <line x1="170" y1="233" x2="248" y2="233" stroke="#f59e0b" strokeWidth="1" strokeDasharray="3,3" />
-                <circle cx="209" cy="233" r="11" fill="none" stroke="#fb7185" strokeWidth="2.5" strokeDasharray="4,2" />
-                <rect x="202" y="241" width="14" height="6" rx="2" fill="#ef4444" />
-              </g>
-              {/* Rear Left Wheel */}
-              <g>
-                <rect x="545" y="66" width="86" height="38" rx="8" fill="#090d16" stroke="#f59e0b" strokeWidth="2" />
-                <line x1="545" y1="85" x2="631" y2="85" stroke="#f59e0b" strokeWidth="1" strokeDasharray="3,3" />
-                <circle cx="588" cy="85" r="13" fill="none" stroke="#fb7185" strokeWidth="2.5" strokeDasharray="4,2" />
-                <rect x="580" y="69" width="16" height="7" rx="2" fill="#ef4444" />
-              </g>
-              {/* Rear Right Wheel */}
-              <g>
-                <rect x="545" y="216" width="86" height="38" rx="8" fill="#090d16" stroke="#f59e0b" strokeWidth="2" />
-                <line x1="545" y1="235" x2="631" y2="235" stroke="#f59e0b" strokeWidth="1" strokeDasharray="3,3" />
-                <circle cx="588" cy="235" r="13" fill="none" stroke="#fb7185" strokeWidth="2.5" strokeDasharray="4,2" />
-                <rect x="580" y="244" width="16" height="7" rx="2" fill="#ef4444" />
-              </g>
-
-              {/* Powertrain Engine Block & Exhaust Manifold Detail */}
-              <g>
-                <rect x="215" y="130" width="70" height="60" rx="6" fill="rgba(34, 211, 238, 0.18)" stroke="#22d3ee" strokeWidth="1.8" />
-                <circle cx="235" cy="145" r="6" fill="none" stroke="#38bdf8" strokeWidth="1.5" />
-                <circle cx="265" cy="145" r="6" fill="none" stroke="#38bdf8" strokeWidth="1.5" />
-                <circle cx="235" cy="175" r="6" fill="none" stroke="#38bdf8" strokeWidth="1.5" />
-                <circle cx="265" cy="175" r="6" fill="none" stroke="#38bdf8" strokeWidth="1.5" />
-                <text x="250" y="163" fill="#22d3ee" fontSize="9" fontFamily="monospace" textAnchor="middle" fontWeight="bold">ICE POWER</text>
-              </g>
-            </g>
-
             {/* HOTSPOT TARGET RETICLES WITH COLOR-CODED STATUS RINGS */}
             {hotspots.map((hs) => {
               const isSelected = activeHotspot === hs.id;
               return (
                 <g
                   key={hs.id}
-                  className="cursor-pointer group/reticle"
+                  className="cursor-pointer group/reticle pointer-events-auto"
                   onMouseEnter={() => setActiveHotspot(hs.id)}
                   onClick={() => onSelectStage && onSelectStage(hs.stage)}
                 >
@@ -389,6 +284,64 @@ export function ChassisHotspotViewer({ onSelectStage }: ChassisHotspotViewerProp
           )}
         </div>
       </div>
+
+      {/* Ultra-Smooth Spatial Glass Lightbox Modal for Blueprint Viewer */}
+      {modalRendered && createPortal(
+        <div 
+          className={`schematic-backdrop ${modalActive ? "active" : ""}`}
+          onClick={closeZoomModal}
+        >
+          <div 
+            className="schematic-modal-container max-w-5xl"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {/* Top Bar with Back & Close */}
+            <div className="w-full flex items-center justify-between border-b border-blue-200/50 pb-3.5 mb-4">
+              <button
+                onClick={closeZoomModal}
+                className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-500/10 text-[#007aff] border border-blue-400/30 text-xs font-mono font-bold hover:bg-blue-500/20 transition-all shadow-sm active:scale-95 cursor-pointer"
+              >
+                <ArrowLeft size={14} /> Back
+              </button>
+              <div className="flex items-center gap-2 text-xs font-mono font-bold uppercase tracking-widest text-slate-700">
+                <Navigation size={14} className="text-[#007aff]" />
+                Interactive Telemetry Chassis Blueprint
+              </div>
+              <button
+                onClick={closeZoomModal}
+                className="p-1.5 rounded-full text-slate-400 hover:text-slate-700 hover:bg-slate-200/50 transition-colors cursor-pointer"
+                title="Close"
+              >
+                <X size={18} />
+              </button>
+            </div>
+
+            {/* High-Resolution Expanded Blueprint Box */}
+            <div className="relative w-full h-[420px] bg-slate-950 border border-cyan-500/40 rounded-2xl overflow-hidden shadow-inner flex items-center justify-center p-2">
+              <img
+                src="/chassis_hotspots_diagram.png"
+                alt="F1 Supercar Chassis Telemetry Blueprint"
+                className="w-full h-full object-contain filter drop-shadow-[0_0_25px_rgba(34,211,238,0.35)]"
+              />
+            </div>
+
+            {/* Hotspot Diagnostics Grid */}
+            <div className="w-full grid grid-cols-2 sm:grid-cols-3 gap-2.5 mt-4 pt-3.5 border-t border-blue-200/40">
+              {hotspots.map((hs) => (
+                <div key={hs.id} className="bg-white/85 border border-blue-200/50 rounded-2xl p-3 text-left shadow-sm backdrop-blur-md">
+                  <div className="flex items-center gap-1.5 text-xs font-bold text-slate-800 mb-1">
+                    {hs.icon}
+                    <span>{hs.label}</span>
+                  </div>
+                  <div className="text-xs font-mono font-bold text-[#007aff]">{hs.stat}</div>
+                  <div className="text-[10px] text-slate-500 font-mono mt-0.5">{hs.detail}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>,
+        document.body
+      )}
     </div>
   );
 }

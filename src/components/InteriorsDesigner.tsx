@@ -2,6 +2,7 @@ import { Sofa, Palette, Volume2, Snowflake, Shield, Gauge, Sparkles, Armchair } 
 import { useDesign } from "../state/DesignContext";
 import { Section, Slider, Select, ChoiceGrid, Toggle, StatTile } from "./ui/Controls";
 import { SEAT_TYPES, SEAT_MATERIALS, DASHBOARD_MATERIALS, STEERING_WHEEL_TYPES, STEERING_MATERIALS, PEDAL_SETS, SHIFT_KNOBS, ROLL_CAGES } from "../sim/constants";
+import { RealisticDashboardPreview } from "./ui/RealisticDashboardPreview";
 
 export function InteriorsDesigner() {
   const { design, sim, updateInterior } = useDesign();
@@ -102,23 +103,9 @@ export function InteriorsDesigner() {
               <input type="color" value={i.accentColor} onChange={(e) => updateInterior({ accentColor: e.target.value })} className="w-full h-10 rounded-lg bg-base-850 border border-base-700 cursor-pointer" />
             </div>
           </div>
-          {/* Interior preview */}
-          <div className="mt-3 rounded-lg overflow-hidden border border-base-800" style={{ background: i.interiorColor }}>
-            <div className="p-6 flex items-center justify-center gap-4" style={{ background: `linear-gradient(180deg, ${i.interiorColor} 0%, ${i.interiorColor}dd 100%)` }}>
-              <div className="rounded-lg px-4 py-2 text-xs font-mono" style={{ color: i.accentColor, border: `1px solid ${i.accentColor}40` }}>
-                Dashboard Preview
-              </div>
-              <div className="rounded-full h-8 w-8 flex items-center justify-center" style={{ border: `2px solid ${i.accentColor}` }}>
-                <span className="text-[8px]" style={{ color: i.accentColor }}>SW</span>
-              </div>
-            </div>
-            <div className="flex justify-center gap-2 pb-4">
-              {Array.from({ length: i.seatCount }).map((_, idx) => (
-                <div key={idx} className="rounded-lg h-12 w-10 flex items-center justify-center" style={{ background: `${i.accentColor}30`, border: `1px solid ${i.accentColor}60` }}>
-                  <Armchair size={16} style={{ color: i.accentColor }} />
-                </div>
-              ))}
-            </div>
+          {/* Ultra-realistic supercar dashboard cockpit preview */}
+          <div className="mt-4">
+            <RealisticDashboardPreview interior={i} />
           </div>
         </Section>
 

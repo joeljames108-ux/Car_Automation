@@ -411,30 +411,30 @@ function drawScene(ctx: CanvasRenderingContext2D, c: DrawCtx) {
   const W = VIEW_W, H = VIEW_H;
   ctx.clearRect(0, 0, W, H);
 
-  // Deep High-Tech Studio Environment Background
+  // Deep High-Tech CFD Wind Tunnel Background
   const bgGrad = ctx.createRadialGradient(W * 0.38, H * 0.5, 50, W / 2, H / 2, W * 0.7);
-  bgGrad.addColorStop(0, "#0e1726");
-  bgGrad.addColorStop(0.5, "#070b14");
-  bgGrad.addColorStop(1, "#030509");
+  bgGrad.addColorStop(0, "#0a1322");
+  bgGrad.addColorStop(0.5, "#050912");
+  bgGrad.addColorStop(1, "#020408");
   ctx.fillStyle = bgGrad;
   ctx.fillRect(0, 0, W, H);
 
-  // Animated Precision Laser Grid
+  // Green Fine Mesh Grid Backdrop (Matching Reference Photo)
   if (c.showGrid) {
-    const gridOffset = (c.frame * c.speed * 0.4) % 40;
-    ctx.strokeStyle = "rgba(0, 122, 255, 0.08)";
-    ctx.lineWidth = 1;
-    for (let x = -gridOffset; x < W; x += 40) {
+    const gridOffset = (c.frame * c.speed * 0.3) % 24;
+    ctx.strokeStyle = "rgba(34, 197, 94, 0.16)";
+    ctx.lineWidth = 0.8;
+    for (let x = -gridOffset; x < W; x += 24) {
       ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke();
     }
-    for (let y = 0; y < H; y += 40) {
+    for (let y = 0; y < H; y += 24) {
       ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke();
     }
   }
 
   // Ground Line & Laser Track
   const groundY = H * 0.68;
-  ctx.strokeStyle = "rgba(0, 122, 255, 0.30)";
+  ctx.strokeStyle = "rgba(34, 197, 94, 0.35)";
   ctx.lineWidth = 1.5;
   ctx.beginPath();
   ctx.moveTo(0, groundY);
@@ -443,8 +443,8 @@ function drawScene(ctx: CanvasRenderingContext2D, c: DrawCtx) {
 
   // Ground Aerodynamic Mirror Reflection
   const reflGrad = ctx.createLinearGradient(0, groundY, 0, H);
-  reflGrad.addColorStop(0, "rgba(0, 122, 255, 0.12)");
-  reflGrad.addColorStop(0.5, "rgba(52, 211, 153, 0.04)");
+  reflGrad.addColorStop(0, "rgba(34, 197, 94, 0.12)");
+  reflGrad.addColorStop(0.5, "rgba(0, 122, 255, 0.04)");
   reflGrad.addColorStop(1, "rgba(0, 0, 0, 0)");
   ctx.fillStyle = reflGrad;
   ctx.fillRect(0, groundY, W, H - groundY);
@@ -487,7 +487,13 @@ function drawScene(ctx: CanvasRenderingContext2D, c: DrawCtx) {
     drawCar(ctx, c);
   }
 
+  // 7. Reference Photo Overlay Badges & Pin Callouts
+  drawCalloutsAndPiP(ctx, c);
+
   ctx.restore();
+
+  // Reference Photo Right Column Overlay Panels (Pressure/Velocity Scales & Cd vs Re Curve)
+  drawRightOverlays(ctx, c);
 
   // Cinematic Studio Vignette
   const vignette = ctx.createRadialGradient(W / 2, H / 2, W * 0.35, W / 2, H / 2, W * 0.75);
@@ -495,6 +501,278 @@ function drawScene(ctx: CanvasRenderingContext2D, c: DrawCtx) {
   vignette.addColorStop(1, "rgba(0,0,0,0.5)");
   ctx.fillStyle = vignette;
   ctx.fillRect(0, 0, W, H);
+}
+
+function drawCalloutsAndPiP(ctx: CanvasRenderingContext2D, c: DrawCtx) {
+  const W = VIEW_W, H = VIEW_H;
+  const groundY = H * 0.68;
+  const carCenter = W * 0.38;
+  const wheelFrontX = carCenter - 110;
+  const wheelRearX = carCenter + 115;
+
+  // ── Top-Left PiP Window: "FLOW VISUALIZATION" (Zoom of Rear Wheel & Wake Vortices) ──
+  ctx.save();
+  ctx.fillStyle = "rgba(10, 20, 30, 0.85)";
+  ctx.strokeStyle = "rgba(255, 255, 255, 0.85)";
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  ctx.roundRect(16, 16, 175, 105, 10);
+  ctx.fill();
+  ctx.stroke();
+
+  // PiP Header Badge
+  ctx.fillStyle = "rgba(255, 255, 255, 0.15)";
+  ctx.beginPath();
+  ctx.roundRect(20, 20, 120, 16, 4);
+  ctx.fill();
+  ctx.fillStyle = "#ffffff";
+  ctx.font = "bold 9px monospace";
+  ctx.fillText("FLOW VISUALIZATION", 25, 32);
+
+  // PiP Zoom Viewport graphics (rear wheel detail)
+  ctx.save();
+  ctx.beginPath();
+  ctx.roundRect(22, 40, 163, 75, 6);
+  ctx.clip();
+  ctx.fillStyle = "#070c16";
+  ctx.fillRect(22, 40, 163, 75);
+
+  // Mini grid inside PiP
+  ctx.strokeStyle = "rgba(34, 197, 94, 0.25)";
+  ctx.lineWidth = 0.8;
+  for (let x = 22; x < 185; x += 12) {
+    ctx.beginPath(); ctx.moveTo(x, 40); ctx.lineTo(x, 115); ctx.stroke();
+  }
+  for (let y = 40; y < 115; y += 12) {
+    ctx.beginPath(); ctx.moveTo(22, y); ctx.lineTo(185, y); ctx.stroke();
+  }
+
+  // Mini rear wheel
+  drawWheel(ctx, 60, 95, 20, c.frame, c.speed);
+
+  // Mini turbulent wake eddies
+  const t = c.frame * 0.05 * c.speed;
+  ctx.strokeStyle = "rgba(34, 211, 238, 0.85)";
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  for (let a = 0; a < Math.PI * 4; a += 0.2) {
+    const r = 18 * (1 - a / (Math.PI * 4));
+    const wx = 125 + Math.cos(a + t) * r;
+    const wy = 75 + Math.sin(a + t) * r * 0.6;
+    if (a === 0) ctx.moveTo(wx, wy); else ctx.lineTo(wx, wy);
+  }
+  ctx.stroke();
+  ctx.restore();
+  ctx.restore();
+
+  // Reticle circle on rear wheel connected to Top-Left PiP
+  ctx.strokeStyle = "#38bdf8";
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  ctx.arc(wheelRearX, groundY - 2, 18, 0, Math.PI * 2);
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(191, 70);
+  ctx.lineTo(wheelRearX - 18, groundY - 10);
+  ctx.stroke();
+
+  // ── Bottom-Left PiP Window: Zoom of Front Wheel & Splitter Stagnation ──
+  ctx.save();
+  ctx.fillStyle = "rgba(10, 20, 30, 0.85)";
+  ctx.strokeStyle = "rgba(255, 255, 255, 0.85)";
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  ctx.roundRect(16, H - 120, 175, 105, 10);
+  ctx.fill();
+  ctx.stroke();
+
+  // PiP Viewport graphics (front wheel detail)
+  ctx.save();
+  ctx.beginPath();
+  ctx.roundRect(22, H - 114, 163, 93, 6);
+  ctx.clip();
+  ctx.fillStyle = "#070c16";
+  ctx.fillRect(22, H - 114, 163, 93);
+
+  // Mini grid
+  ctx.strokeStyle = "rgba(34, 197, 94, 0.25)";
+  ctx.lineWidth = 0.8;
+  for (let x = 22; x < 185; x += 12) {
+    ctx.beginPath(); ctx.moveTo(x, H - 114); ctx.lineTo(x, H - 21); ctx.stroke();
+  }
+
+  // Mini front wheel & nose
+  drawWheel(ctx, 110, H - 45, 18, c.frame, c.speed);
+  ctx.fillStyle = "#1e293b";
+  ctx.fillRect(35, H - 55, 60, 10);
+
+  // Mini stagnation streamlines
+  ctx.strokeStyle = "#22c55e";
+  ctx.lineWidth = 1.5;
+  for (let i = 0; i < 4; i++) {
+    const sy = H - 90 + i * 15;
+    ctx.beginPath();
+    ctx.moveTo(25, sy);
+    ctx.quadraticCurveTo(80, sy, 140, sy - 15);
+    ctx.stroke();
+  }
+  ctx.restore();
+  ctx.restore();
+
+  // Reticle circle on front wheel connected to Bottom-Left PiP
+  ctx.strokeStyle = "#38bdf8";
+  ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  ctx.arc(wheelFrontX, groundY - 2, 18, 0, Math.PI * 2);
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(191, H - 70);
+  ctx.lineTo(wheelFrontX - 18, groundY - 10);
+  ctx.stroke();
+
+  // ── Callout Pins & Labels ──
+  // 1. "Pressure Drag Center" Pin Badge on Car Roof/Center
+  const dragPinX = carCenter;
+  const dragPinY = groundY - 55;
+  ctx.fillStyle = "#38bdf8";
+  ctx.beginPath(); ctx.arc(dragPinX, dragPinY, 4, 0, Math.PI * 2); ctx.fill();
+  ctx.strokeStyle = "#ffffff"; ctx.lineWidth = 1.5; ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(dragPinX, dragPinY); ctx.lineTo(dragPinX, dragPinY - 16); ctx.stroke();
+  ctx.fillStyle = "rgba(15, 23, 42, 0.88)";
+  ctx.strokeStyle = "rgba(255, 255, 255, 0.70)";
+  ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.roundRect(dragPinX + 4, dragPinY - 32, 95, 24, 6); ctx.fill(); ctx.stroke();
+  ctx.fillStyle = "#ffffff"; ctx.font = "bold 9px monospace";
+  ctx.fillText("Pressure Drag", dragPinX + 12, dragPinY - 20);
+  ctx.fillText("Center", dragPinX + 28, dragPinY - 10);
+
+  // 2. "Turbulent Wake Region" Callout
+  const wakeX = carCenter + 180;
+  const wakeY = groundY - 70;
+  ctx.strokeStyle = "rgba(255, 255, 255, 0.70)"; ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(wakeX + 60, wakeY); ctx.lineTo(wakeX + 10, wakeY + 25); ctx.stroke();
+  ctx.fillStyle = "rgba(15, 23, 42, 0.88)";
+  ctx.beginPath(); ctx.roundRect(wakeX + 60, wakeY - 12, 105, 22, 6); ctx.fill(); ctx.stroke();
+  ctx.fillStyle = "#ffffff"; ctx.font = "bold 9px monospace";
+  ctx.fillText("Turbulent Wake", wakeX + 68, wakeY + 2);
+  ctx.fillText("Region", wakeX + 88, wakeY + 12);
+
+  // 3. "Laminar Boundary Layer" Callout
+  const boundX = carCenter + 175;
+  const boundY = groundY + 18;
+  ctx.strokeStyle = "rgba(255, 255, 255, 0.70)"; ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(boundX + 65, boundY); ctx.lineTo(boundX + 5, boundY - 12); ctx.stroke();
+  ctx.fillStyle = "rgba(15, 23, 42, 0.88)";
+  ctx.beginPath(); ctx.roundRect(boundX + 65, boundY - 10, 110, 22, 6); ctx.fill(); ctx.stroke();
+  ctx.fillStyle = "#ffffff"; ctx.font = "bold 9px monospace";
+  ctx.fillText("Laminar Boundary", boundX + 72, boundY + 3);
+  ctx.fillText("Layer", boundX + 100, boundY + 13);
+}
+
+function drawRightOverlays(ctx: CanvasRenderingContext2D, c: DrawCtx) {
+  const W = VIEW_W, H = VIEW_H;
+
+  // ── Top-Right Active Simulation Badge ──
+  ctx.save();
+  ctx.fillStyle = "rgba(15, 23, 42, 0.88)";
+  ctx.strokeStyle = "rgba(255, 255, 255, 0.70)";
+  ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.roundRect(W - 245, 16, 228, 85, 8); ctx.fill(); ctx.stroke();
+  ctx.fillStyle = "#ffffff"; ctx.font = "bold 9px monospace";
+  ctx.fillText("ACTIVE SIMULATION: [MODEL_X_WAKE_ANALYSIS_V4]", W - 238, 30);
+
+  // Toggles inside Active Simulation Badge
+  ctx.fillStyle = "#38bdf8"; ctx.beginPath(); ctx.arc(W - 232, 46, 4, 0, Math.PI * 2); ctx.fill();
+  ctx.fillStyle = "#cbd5e1"; ctx.font = "8px monospace";
+  ctx.fillText("Mesh Resolution: Fine", W - 222, 49);
+
+  ctx.fillStyle = "#38bdf8"; ctx.beginPath(); ctx.arc(W - 232, 61, 4, 0, Math.PI * 2); ctx.fill();
+  ctx.fillStyle = "#cbd5e1"; ctx.font = "8px monospace";
+  ctx.fillText("Turbulence Model: k-omega SST", W - 222, 64);
+
+  // Hint at bottom of badge
+  ctx.fillStyle = "#94a3b8"; ctx.font = "bold 8px monospace";
+  ctx.fillText("DRAG TO ROTATE · SCROLL TO ZOOM", W - 225, 88);
+  ctx.restore();
+
+  // ── Right Column Dual Pressure & Velocity Color Scales ──
+  ctx.save();
+  ctx.fillStyle = "rgba(15, 23, 42, 0.85)";
+  ctx.strokeStyle = "rgba(255, 255, 255, 0.75)";
+  ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.roundRect(W - 85, 110, 70, 205, 8); ctx.fill(); ctx.stroke();
+
+  // Pressure (P) Scale
+  ctx.fillStyle = "#ffffff"; ctx.font = "bold 10px monospace";
+  ctx.fillText("P", W - 78, 126);
+  const pGrad = ctx.createLinearGradient(0, 132, 0, 220);
+  pGrad.addColorStop(0, "#ef4444");
+  pGrad.addColorStop(0.3, "#f97316");
+  pGrad.addColorStop(0.5, "#22c55e");
+  pGrad.addColorStop(0.7, "#007aff");
+  pGrad.addColorStop(1, "#1e40af");
+  ctx.fillStyle = pGrad;
+  ctx.fillRect(W - 78, 132, 12, 90);
+  ctx.fillStyle = "#cbd5e1"; ctx.font = "7px monospace";
+  ctx.fillText("3000", W - 62, 136);
+  ctx.fillText("2000", W - 62, 151);
+  ctx.fillText("1000", W - 62, 166);
+  ctx.fillText("0", W - 62, 181);
+  ctx.fillText("-1000", W - 62, 196);
+  ctx.fillText("-2000", W - 62, 211);
+  ctx.fillText("-3000", W - 62, 224);
+
+  // Velocity (|V|) Scale
+  ctx.fillStyle = "#ffffff"; ctx.font = "bold 10px monospace";
+  ctx.fillText("|V|", W - 78, 240);
+  const vGrad = ctx.createLinearGradient(0, 245, 0, 305);
+  vGrad.addColorStop(0, "#ef4444");
+  vGrad.addColorStop(0.4, "#22c55e");
+  vGrad.addColorStop(1, "#007aff");
+  ctx.fillStyle = vGrad;
+  ctx.fillRect(W - 78, 245, 12, 60);
+  ctx.fillStyle = "#cbd5e1"; ctx.font = "7px monospace";
+  ctx.fillText("1.00", W - 62, 249);
+  ctx.fillText("0.66", W - 62, 273);
+  ctx.fillText("0.00", W - 62, 305);
+  ctx.restore();
+
+  // ── Bottom-Right Cd vs. Reynolds' Number Chart Inset ──
+  ctx.save();
+  ctx.fillStyle = "rgba(15, 23, 42, 0.88)";
+  ctx.strokeStyle = "rgba(255, 255, 255, 0.75)";
+  ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.roundRect(W - 195, H - 130, 180, 115, 8); ctx.fill(); ctx.stroke();
+
+  ctx.fillStyle = "#ffffff"; ctx.font = "bold 9px monospace";
+  ctx.fillText("Cd vs. Reynolds' Number", W - 185, H - 116);
+
+  // Chart axes
+  ctx.strokeStyle = "rgba(255, 255, 255, 0.4)"; ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(W - 170, H - 105); ctx.lineTo(W - 170, H - 35); ctx.lineTo(W - 25, H - 35);
+  ctx.stroke();
+
+  // Parabolic Cd curve
+  ctx.strokeStyle = "#38bdf8"; ctx.lineWidth = 1.5;
+  ctx.beginPath();
+  ctx.moveTo(W - 165, H - 95);
+  ctx.quadraticCurveTo(W - 130, H - 45, W - 30, H - 42);
+  ctx.stroke();
+
+  // Pulsing Active Operating Point Dot
+  const activeDotX = W - 115;
+  const activeDotY = H - 54;
+  ctx.fillStyle = "#38bdf8"; ctx.beginPath(); ctx.arc(activeDotX, activeDotY, 4, 0, Math.PI * 2); ctx.fill();
+  ctx.strokeStyle = "#ffffff"; ctx.lineWidth = 1; ctx.stroke();
+
+  // Axis Labels
+  ctx.fillStyle = "#94a3b8"; ctx.font = "7px monospace";
+  ctx.fillText("0", W - 172, H - 25);
+  ctx.fillText("10000", W - 120, H - 25);
+  ctx.fillText("30000", W - 45, H - 25);
+  ctx.fillText("Reynolds' Number", W - 120, H - 16);
+  ctx.restore();
 }
 
 function drawHeatmap(ctx: CanvasRenderingContext2D, c: DrawCtx) {
@@ -716,42 +994,27 @@ function drawParticles(ctx: CanvasRenderingContext2D, c: DrawCtx) {
 function drawWake(ctx: CanvasRenderingContext2D, c: DrawCtx) {
   const groundY = VIEW_H * 0.68;
   const carRear = VIEW_W * 0.38 + 140;
-  const t = c.frame * 0.02 * c.speed;
+  const t = c.frame * 0.04 * c.speed;
 
-  // Vortex spirals behind car
-  for (let i = 0; i < 3; i++) {
-    const cx = carRear + 40 + i * 60;
-    const cy = groundY - 40 - i * 10;
-    const radius = 15 + i * 8;
-    ctx.strokeStyle = `rgba(168, 139, 250, ${0.3 - i * 0.07})`;
-    ctx.lineWidth = 1.2;
+  // Intricate recirculation vortex swirls (Matching Reference Photo)
+  const vortices = [
+    { cx: carRear + 35, cy: groundY - 55, r: 24, dir: 1 },
+    { cx: carRear + 85, cy: groundY - 35, r: 32, dir: -1 },
+    { cx: carRear + 145, cy: groundY - 45, r: 40, dir: 1 },
+  ];
+
+  vortices.forEach((v, idx) => {
+    ctx.strokeStyle = idx % 2 === 0 ? "rgba(34, 211, 238, 0.85)" : "rgba(192, 132, 252, 0.85)";
+    ctx.lineWidth = 1.5;
     ctx.beginPath();
-    for (let a = 0; a < Math.PI * 4; a += 0.15) {
-      const r = radius * (1 - a / (Math.PI * 4));
-      const x = cx + Math.cos(a + t + i) * r;
-      const y = cy + Math.sin(a + t + i) * r * 0.6;
-      if (a === 0) ctx.moveTo(x, y);
-      else ctx.lineTo(x, y);
+    for (let a = 0; a < Math.PI * 6; a += 0.15) {
+      const radius = v.r * (1 - a / (Math.PI * 6));
+      const x = v.cx + Math.cos(v.dir * a + t + idx) * radius * 1.2;
+      const y = v.cy + Math.sin(v.dir * a + t + idx) * radius * 0.7;
+      if (a === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
     }
     ctx.stroke();
-  }
-
-  // Turbulent smoke
-  ctx.globalAlpha = 0.15;
-  for (let i = 0; i < 20; i++) {
-    const phase = (t + i * 0.3) % 1;
-    const x = carRear + phase * 250;
-    const y = groundY - 30 - Math.sin(t * 3 + i) * 25 - phase * 20;
-    const r = 8 + phase * 15;
-    const grad = ctx.createRadialGradient(x, y, 0, x, y, r);
-    grad.addColorStop(0, "rgba(168, 139, 250, 0.3)");
-    grad.addColorStop(1, "rgba(168, 139, 250, 0)");
-    ctx.fillStyle = grad;
-    ctx.beginPath();
-    ctx.arc(x, y, r, 0, Math.PI * 2);
-    ctx.fill();
-  }
-  ctx.globalAlpha = 1;
+  });
 }
 
 function drawVectors(ctx: CanvasRenderingContext2D, c: DrawCtx) {

@@ -175,6 +175,7 @@ export function VisionGlassDock({
               title={s.label}
               onMouseEnter={() => setHoveredIdx(idx)}
               onMouseLeave={() => setHoveredIdx(null)}
+              className={cur ? "dock-item-active" : ""}
               style={{
                 display: "flex",
                 alignItems: "center",

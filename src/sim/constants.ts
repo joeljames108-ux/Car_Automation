@@ -1,6 +1,6 @@
 import type {
   EngineLayout, CrankMaterial, PistonType, ValvetrainType, IntakeType, FuelSystemType,
-  PlatformType, ChassisType, SuspensionType, TransmissionType, BrakeType, TireCompound,
+  PlatformType, ChassisType, SuspensionType, TransmissionType, BrakeType, TireCompound, EnginePosition, DriveType,
   TrackId, DriverSkill, WeatherType, InteriorConfig, TrackInfo,
   EngineConfig, AeroConfig, VehicleConfig, VehicleDesign,
   FrameMaterial, ManufacturingProcess, FactoryTier, AutomationLevel, QcLevel, ManufacturingConfig,
@@ -38,6 +38,9 @@ export const ENGINE_LAYOUTS: Record<EngineLayout, {
   v8: { label: "V8", cylinders: 8, weightBase: 220, costFactor: 1.3, balanceFactor: 0.8, rpmFactor: 0.95, sizeFactor: 1.0 },
   v10: { label: "V10", cylinders: 10, weightBase: 260, costFactor: 1.6, balanceFactor: 0.75, rpmFactor: 1.1, sizeFactor: 1.2 },
   v12: { label: "V12", cylinders: 12, weightBase: 300, costFactor: 2.0, balanceFactor: 1.0, rpmFactor: 1.0, sizeFactor: 1.4 },
+  w12: { label: "W12", cylinders: 12, weightBase: 280, costFactor: 2.4, balanceFactor: 0.88, rpmFactor: 0.92, sizeFactor: 1.0 },
+  w16: { label: "W16", cylinders: 16, weightBase: 400, costFactor: 4.5, balanceFactor: 0.82, rpmFactor: 0.85, sizeFactor: 1.15 },
+  w18: { label: "W18", cylinders: 18, weightBase: 450, costFactor: 5.5, balanceFactor: 0.78, rpmFactor: 0.8, sizeFactor: 1.25 },
   boxer4: { label: "Boxer-4", cylinders: 4, weightBase: 130, costFactor: 1.1, balanceFactor: 0.85, rpmFactor: 1.0, sizeFactor: 1.0 },
   boxer6: { label: "Boxer-6", cylinders: 6, weightBase: 180, costFactor: 1.3, balanceFactor: 0.95, rpmFactor: 1.0, sizeFactor: 1.2 },
   rotary: { label: "Rotary", cylinders: 2, weightBase: 90, costFactor: 1.4, balanceFactor: 0.6, rpmFactor: 1.5, sizeFactor: 0.5 },
@@ -115,6 +118,78 @@ export const FUEL_SYSTEMS: Record<FuelSystemType, {
   port: { label: "Port Injection (MPI)", efficiencyFactor: 0.92, costFactor: 1.0, powerFactor: 0.96, afrStoich: 14.7 },
   direct: { label: "Direct Injection (GDI)", efficiencyFactor: 0.96, costFactor: 1.4, powerFactor: 1.0, afrStoich: 14.7 },
   dual_injection: { label: "Dual Injection", efficiencyFactor: 0.98, costFactor: 1.8, powerFactor: 1.02, afrStoich: 14.7 },
+};
+
+// ---------- Turbo Mechanics ----------
+
+export const TURBO_HOUSINGS: Record<string, {
+  label: string;
+  heatTolerance: number;  // 0-1 (higher = better at high EGT)
+  weightFactor: number;
+  costFactor: number;
+  durability: number;     // 0-1
+}> = {
+  cast_iron: { label: "Cast Iron", heatTolerance: 0.65, weightFactor: 1.3, costFactor: 0.6, durability: 0.85 },
+  inconel: { label: "Inconel 718", heatTolerance: 0.95, weightFactor: 1.0, costFactor: 3.0, durability: 0.95 },
+  titanium: { label: "Titanium", heatTolerance: 0.80, weightFactor: 0.55, costFactor: 4.5, durability: 0.88 },
+  ceramic_coated: { label: "Ceramic Coated", heatTolerance: 0.90, weightFactor: 1.1, costFactor: 2.0, durability: 0.78 },
+};
+
+export const INTERCOOLER_TYPES: Record<string, {
+  label: string;
+  coolingEff: number;     // 0-1 base cooling efficiency
+  pressureDrop: number;   // 0-1 (lower = better flow)
+  weightFactor: number;
+  costFactor: number;
+}> = {
+  none: { label: "None", coolingEff: 0, pressureDrop: 0, weightFactor: 1.0, costFactor: 0 },
+  air_to_air: { label: "Air-to-Air (FMIC)", coolingEff: 0.70, pressureDrop: 0.06, weightFactor: 1.15, costFactor: 1.0 },
+  air_to_water: { label: "Air-to-Water", coolingEff: 0.85, pressureDrop: 0.04, weightFactor: 1.25, costFactor: 2.0 },
+  water_spray: { label: "Water Spray IC", coolingEff: 0.92, pressureDrop: 0.05, weightFactor: 1.30, costFactor: 2.5 },
+  cryogenic: { label: "Cryogenic (Race)", coolingEff: 0.98, pressureDrop: 0.02, weightFactor: 1.45, costFactor: 8.0 },
+};
+
+export const WASTEGATE_TYPES: Record<string, {
+  label: string;
+  flowCapacity: number;  // 0-1 (how much exhaust gas can bypass)
+  responseTime: number;  // 0-1 (higher = faster response)
+  costFactor: number;
+  noiseFactor: number;   // 0-1 (higher = louder)
+}> = {
+  none: { label: "None", flowCapacity: 0, responseTime: 0, costFactor: 0, noiseFactor: 0 },
+  internal: { label: "Internal Actuator", flowCapacity: 0.5, responseTime: 0.6, costFactor: 1.0, noiseFactor: 0.2 },
+  external_38mm: { label: "External 38mm", flowCapacity: 0.65, responseTime: 0.75, costFactor: 1.8, noiseFactor: 0.5 },
+  external_44mm: { label: "External 44mm", flowCapacity: 0.8, responseTime: 0.8, costFactor: 2.2, noiseFactor: 0.6 },
+  external_60mm: { label: "External 60mm", flowCapacity: 0.95, responseTime: 0.85, costFactor: 3.0, noiseFactor: 0.7 },
+  screamer_pipe: { label: "Screamer Pipe (Race)", flowCapacity: 1.0, responseTime: 0.95, costFactor: 3.5, noiseFactor: 1.0 },
+};
+
+export const BOV_TYPES: Record<string, {
+  label: string;
+  surgeProtection: number;  // 0-1 (higher = better compressor protection)
+  spoolRetention: number;   // 0-1 (higher = turbo stays spooled on throttle lift)
+  costFactor: number;
+  noiseFactor: number;      // 0-1 (higher = louder)
+}> = {
+  none: { label: "None", surgeProtection: 0, spoolRetention: 0.5, costFactor: 0, noiseFactor: 0 },
+  recirculating: { label: "Recirculating", surgeProtection: 0.85, spoolRetention: 0.9, costFactor: 1.0, noiseFactor: 0.1 },
+  vent_to_atmosphere: { label: "Vent-to-Atmosphere", surgeProtection: 0.95, spoolRetention: 0.3, costFactor: 1.5, noiseFactor: 0.9 },
+  hybrid_bov: { label: "Hybrid (Dual-Port)", surgeProtection: 0.92, spoolRetention: 0.7, costFactor: 2.2, noiseFactor: 0.5 },
+  compressor_surge: { label: "Surge (No BOV)", surgeProtection: 0, spoolRetention: 1.0, costFactor: 0, noiseFactor: 0.7 },
+};
+
+export const BOOST_CONTROLLERS: Record<string, {
+  label: string;
+  accuracy: number;      // 0-1 (boost target accuracy)
+  responseTime: number;  // 0-1 (higher = faster correction)
+  costFactor: number;
+  overboostProtection: number; // 0-1
+}> = {
+  none: { label: "None (Wastegate Only)", accuracy: 0.4, responseTime: 0.3, costFactor: 0, overboostProtection: 0.2 },
+  manual: { label: "Manual Boost Controller", accuracy: 0.55, responseTime: 0.4, costFactor: 0.8, overboostProtection: 0.3 },
+  electronic: { label: "Electronic (EBC)", accuracy: 0.8, responseTime: 0.75, costFactor: 1.5, overboostProtection: 0.7 },
+  closed_loop: { label: "Closed-Loop PID", accuracy: 0.95, responseTime: 0.92, costFactor: 3.0, overboostProtection: 0.95 },
+  map_switching: { label: "Map-Switch (Multi-Map)", accuracy: 0.9, responseTime: 0.88, costFactor: 4.0, overboostProtection: 0.9 },
 };
 
 export const HYBRID_ARCHITECTURES: Record<string, {
@@ -421,6 +496,94 @@ export const PLATFORMS: Record<PlatformType, {
   gt: { label: "GT Race Car", weightBase: 1250, dragBase: 0.35, liftBase: -0.3, frontalAreaBase: 2.0, costFactor: 3.0, wheelbaseBase: 2600, trackWidthBase: 1620 },
   prototype: { label: "LMP Prototype", weightBase: 950, dragBase: 0.30, liftBase: -0.5, frontalAreaBase: 1.8, costFactor: 8.0, wheelbaseBase: 2800, trackWidthBase: 1500 },
   rally: { label: "Rally Car", weightBase: 1200, dragBase: 0.38, liftBase: 0.1, frontalAreaBase: 2.0, costFactor: 2.0, wheelbaseBase: 2550, trackWidthBase: 1580 },
+};
+
+export const DRIVE_TYPES: Record<DriveType, {
+  label: string;
+  shortLabel: string;
+  efficiency: number;
+  weightDelta: number;
+  costDelta: number;
+  launchTractionMultiplier: number;
+  cornerExitTraction: number;
+  understeerBias: number;
+  description: string;
+}> = {
+  fwd: {
+    label: "Front-Wheel Drive (FWD)",
+    shortLabel: "FWD",
+    efficiency: 0.89,
+    weightDelta: -30,
+    costDelta: -600,
+    launchTractionMultiplier: 0.82,
+    cornerExitTraction: 0.88,
+    understeerBias: 0.45,
+    description: "Engine powers front wheels. Lightest and most cost-effective layout, but limited by front weight transfer during launch and power understeer.",
+  },
+  rwd: {
+    label: "Rear-Wheel Drive (RWD)",
+    shortLabel: "RWD",
+    efficiency: 0.85,
+    weightDelta: 0,
+    costDelta: 0,
+    launchTractionMultiplier: 1.05,
+    cornerExitTraction: 1.02,
+    understeerBias: -0.20,
+    description: "Engine powers rear wheels. Uncorrupted steering feel, excellent weight transfer on launch, and natural power-oversteer characteristics.",
+  },
+  awd: {
+    label: "All-Wheel Drive (AWD)",
+    shortLabel: "AWD",
+    efficiency: 0.81,
+    weightDelta: 75,
+    costDelta: 2200,
+    launchTractionMultiplier: 1.45,
+    cornerExitTraction: 1.25,
+    understeerBias: 0.10,
+    description: "Power distributed to all 4 wheels. Unbeatable launch and bad-weather traction at the expense of added weight, cost, and mechanical drag.",
+  },
+};
+
+export const ENGINE_POSITIONS: Record<EnginePosition, {
+  label: string;
+  shortLabel: string;
+  weightDistFront: number;
+  polarInertiaFactor: number;
+  costDelta: number;
+  weightDelta: number;
+  brakingBiasOptimal: number;
+  description: string;
+}> = {
+  front: {
+    label: "Front-Mounted Engine",
+    shortLabel: "Front-Engine",
+    weightDistFront: 0.58,
+    polarInertiaFactor: 1.12,
+    costDelta: 0,
+    weightDelta: 0,
+    brakingBiasOptimal: 0.64,
+    description: "Engine mounted over or ahead of front axle. Predictable understeer-biased handling, large cabin space, but nose-heavy under hard braking.",
+  },
+  mid: {
+    label: "Mid-Engine Layout",
+    shortLabel: "Mid-Engine",
+    weightDistFront: 0.44,
+    polarInertiaFactor: 0.88,
+    costDelta: 1500,
+    weightDelta: 15,
+    brakingBiasOptimal: 0.56,
+    description: "Engine mounted between axles behind cabin. Centralized mass provides ultra-fast turn-in, near-ideal 44/56 weight balance, and high cornering speeds.",
+  },
+  rear: {
+    label: "Rear Engine Layout",
+    shortLabel: "Rear-Engine",
+    weightDistFront: 0.38,
+    polarInertiaFactor: 1.25,
+    costDelta: 1200,
+    weightDelta: 25,
+    brakingBiasOptimal: 0.52,
+    description: "Engine mounted behind rear axle. Tremendous rear acceleration traction and light steering, but high pendulum effect risking lift-off oversteer.",
+  },
 };
 
 export const CHASSIS_TYPES: Record<ChassisType, {
@@ -1033,6 +1196,9 @@ export function defaultEngine(): EngineConfig {
     crank: "forged_steel", pistons: "forged", valvetrain: "dohc",
     camDuration: 280, camLift: 11, camTiming: 0, valveAngle: 21, valveSize: 36,
     intake: "na", turboSize: 0, boostPressure: 0, wastegateSize: 0, intercoolerEff: 0,
+    turboHousing: "cast_iron", compressorAR: 0.6, turbineAR: 0.8, turbineWheelDia: 55,
+    intercoolerType: "none", wastegateType: "none", bovType: "none",
+    antiLag: false, boostController: "none",
     fuelSystem: "port", afr: 13, ignitionTiming: 28,
     rpmLimiter: 7500, redline: 7000,
     coolingRadiator: 0.6, coolingOilCooler: 0.5, coolingWaterPump: 0.6, coolingFanSpeed: 0.5,
@@ -1263,7 +1429,7 @@ export function defaultExterior(): ExteriorConfig {
 
 export function defaultVehicle(): VehicleConfig {
   return {
-    platform: "supercar", driveType: "awd", chassis: "carbon_tub",
+    platform: "supercar", driveType: "awd", enginePosition: "mid", chassis: "carbon_tub",
     exterior: defaultExterior(),
     aero: defaultAero(),
     aeroResearch: defaultAeroResearch(),

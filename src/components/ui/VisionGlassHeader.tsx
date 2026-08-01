@@ -173,20 +173,22 @@ export function VisionGlassHeader({
           onClick={onSearch}
           onMouseEnter={() => setHovered("search")}
           onMouseLeave={() => setHovered(null)}
+          className="expanding-search-input btn-interactive flex items-center justify-between gap-2"
           style={{
-            display: "flex", alignItems: "center", gap: 5,
-            background: hovered === "search" ? "rgba(255,255,255,0.10)" : "rgba(255,255,255,0.06)",
-            border: "1px solid rgba(255,255,255,0.10)",
+            background: hovered === "search" ? "rgba(255,255,255,0.12)" : "rgba(255,255,255,0.06)",
+            border: hovered === "search" ? "1px solid rgba(56,189,248,0.4)" : "1px solid rgba(255,255,255,0.10)",
             borderRadius: 10, padding: "4px 10px",
             fontSize: 10, color: "#cbd5e1", cursor: "pointer",
-            transition: "all 0.2s ease",
+            boxShadow: hovered === "search" ? "0 0 12px rgba(56,189,248,0.2)" : "none",
           }}
         >
-          <Search size={12} style={{ color: "#38bdf8" }} />
-          <span>Search</span>
+          <div className="flex items-center gap-1.5">
+            <Search size={12} style={{ color: "#38bdf8" }} />
+            <span className="font-medium text-slate-200">Search Studio...</span>
+          </div>
           <span style={{
             fontSize: 9, color: "#64748b", background: "rgba(255,255,255,0.06)",
-            padding: "1px 4px", borderRadius: 4, fontFamily: "monospace",
+            padding: "1px 5px", borderRadius: 4, fontFamily: "monospace",
           }}>
             ⌘K
           </span>

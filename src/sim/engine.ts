@@ -1,7 +1,7 @@
 import {
   ENGINE_LAYOUTS, CRANK_MATERIALS, PISTON_TYPES, VALVETRAIN_TYPES, INTAKE_TYPES,
   FUEL_SYSTEMS, PLATFORMS, CHASSIS_TYPES, SUSPENSION_TYPES, TRANSMISSION_TYPES, BRAKE_TYPES,
-  TIRE_COMPOUNDS, BATTERY_CHEMISTRIES, EV_MOTOR_TYPES, MGU_H_MODES,
+  TIRE_COMPOUNDS, DRIVE_TYPES, ENGINE_POSITIONS, BATTERY_CHEMISTRIES, EV_MOTOR_TYPES, MGU_H_MODES,
   TRACKS, SEAT_TYPES, SEAT_MATERIALS, DASHBOARD_MATERIALS, STEERING_WHEEL_TYPES,
   STEERING_MATERIALS, PEDAL_SETS, SHIFT_KNOBS, ROLL_CAGES, clamp,
   FRAME_MATERIALS, MANUFACTURING_PROCESSES, FACTORY_TIERS, AUTOMATION_LEVELS,
@@ -16,6 +16,7 @@ import {
   INFO_AI_SECURITY_COSTS, INFO_PRODUCTIVITY_COSTS,
   INFO_MUSIC_OPTIONS, INFO_VIDEO_OPTIONS, INFO_GAMING_OPTIONS,
   HYBRID_ARCHITECTURES, MOTOR_PLACEMENTS,
+  TURBO_HOUSINGS, INTERCOOLER_TYPES, WASTEGATE_TYPES, BOV_TYPES, BOOST_CONTROLLERS,
 } from "./constants";
 import {
   CLUSTER_LEVELS, INFOTAINMENT_SCREENS, SCREEN_TECH_OPTIONS,
@@ -66,10 +67,22 @@ function simulateCombustion(engine: EngineConfig): EngineSim {
   const fuelVE = fuel.efficiencyFactor;
   const camVE = clamp((engine.camDuration - 240) / 120, 0, 1) * 0.15;
 
-  // Boost
+  // Boost — enhanced turbo mechanics
   const isForced = engine.intake !== "na";
-  const pr = isForced ? 1 + engine.boostPressure : 1;
-  const intercoolerEff = engine.intercoolerEff;
+  const turboHousing = TURBO_HOUSINGS[engine.turboHousing] || TURBO_HOUSINGS.cast_iron;
+  const icType = INTERCOOLER_TYPES[engine.intercoolerType] || INTERCOOLER_TYPES.none;
+  const wgType = WASTEGATE_TYPES[engine.wastegateType] || WASTEGATE_TYPES.none;
+  const bovData = BOV_TYPES[engine.bovType] || BOV_TYPES.none;
+  const boostCtrl = BOOST_CONTROLLERS[engine.boostController] || BOOST_CONTROLLERS.none;
+
+  // Effective intercooler efficiency combines slider setting + intercooler type
+  const effectiveICEff = isForced ? clamp(engine.intercoolerEff * (0.4 + icType.coolingEff * 0.6), 0, 0.98) : 0;
+  // Pressure drop from intercooler piping
+  const icPressureLoss = isForced ? icType.pressureDrop * engine.boostPressure : 0;
+  const effectiveBoost = isForced ? Math.max(0, engine.boostPressure - icPressureLoss) : 0;
+
+  const pr = isForced ? 1 + effectiveBoost : 1;
+  const intercoolerEff = effectiveICEff;
   const tempRatio = Math.pow(pr, 0.286);
   const densityRatio = pr / (tempRatio * (1 - intercoolerEff * 0.3));
 
@@ -100,9 +113,15 @@ function simulateCombustion(engine: EngineConfig): EngineSim {
     let veAtRpm = (baseVE + camVE) * vtVE * fuelVE * (0.7 + 0.3 * camCurve);
     if (isForced) veAtRpm *= densityRatio;
 
-    // Turbo lag effect at low rpm
+    // Turbo lag effect at low rpm — influenced by turbine wheel size & A/R
     if (isForced && rpm < 3000) {
-      veAtRpm *= 0.7 + 0.3 * (rpm / 3000);
+      // Larger turbine wheel = more lag; lower compressor A/R = faster spool
+      const spoolPenalty = clamp(engine.turbineWheelDia / 80, 0.5, 1.5);
+      const arSpoolBonus = clamp(1.2 - engine.compressorAR, 0, 0.4);
+      const antiLagBonus = engine.antiLag ? 0.15 : 0;
+      const bovRetention = bovData.spoolRetention * 0.05;
+      const lagFactor = clamp(0.7 + 0.3 * (rpm / 3000) - spoolPenalty * 0.1 + arSpoolBonus + antiLagBonus + bovRetention, 0.4, 1.0);
+      veAtRpm *= lagFactor;
     }
 
     const crBonus = (engine.compressionRatio - 9) * 0.3;
@@ -113,6 +132,10 @@ function simulateCombustion(engine: EngineConfig): EngineSim {
     let bmep = (15 * veAtRpm + crBonus) * fuel.powerFactor * ignitionFactor * afrFactor;
     bmep *= 1 - intake.parasiticLoss;
     if (engine.layout === "rotary") bmep *= 0.7;
+    // W-engines: complex intake manifolding & multi-bank VE losses
+    if (engine.layout === "w12") bmep *= 0.92;
+    if (engine.layout === "w16") bmep *= 0.88;
+    if (engine.layout === "w18") bmep *= 0.85;
 
     const torque = (bmep * displacement) / 126;
     const power = (torque * rpm) / 9549 * HP_PER_KW;
@@ -133,8 +156,27 @@ function simulateCombustion(engine: EngineConfig): EngineSim {
   // BSFC
   const bsfc = clamp(300 / (thermalEfficiency / 0.3), 200, 450);
 
-  // Turbo lag
-  const turboLag = isForced ? clamp(0.8 - engine.boostPressure * 0.1 - engine.intercoolerEff * 0.2, 0.1, 1.5) : 0;
+  // Turbo lag — comprehensive model
+  let turboLag = 0;
+  if (isForced) {
+    // Base lag from turbine inertia (larger wheel = more lag)
+    const wheelInertia = engine.turbineWheelDia / 55;  // normalized to 55mm ref
+    // A/R ratio effect: higher turbine A/R = more lag, lower compressor A/R = less lag
+    const arLagEffect = engine.turbineAR * 0.3 - engine.compressorAR * 0.1;
+    // Wastegate response helps control transient boost
+    const wgResponse = wgType.responseTime * 0.15;
+    // Boost controller improves transient accuracy
+    const ctrlResponse = boostCtrl.responseTime * 0.1;
+    // Anti-lag system fires fuel into exhaust manifold to keep turbo spooled
+    const antiLagReduction = engine.antiLag ? 0.35 : 0;
+    // BOV spool retention
+    const bovBonus = bovData.spoolRetention * 0.08;
+
+    turboLag = clamp(
+      0.5 * wheelInertia + arLagEffect - wgResponse - ctrlResponse - antiLagReduction - bovBonus,
+      0.05, 2.0
+    );
+  }
 
   // ---- Hybrid / MGU calculations ----
   let mguHPower = 0;
@@ -190,7 +232,11 @@ function simulateCombustion(engine: EngineConfig): EngineSim {
   const pistonWeight = PISTON_TYPES[engine.pistons].weightFactor;
   let engineWeight = layout.weightBase * (0.6 + 0.4 * (displacement / 4000)) *
     crankWeight * pistonWeight * vt.weightFactor * intake.weightFactor;
-  
+  // Turbo component weight contributions
+  if (isForced) {
+    engineWeight += turboHousing.weightFactor * 12;  // turbo housing ~12-16 kg
+    engineWeight += icType.weightFactor * 8;         // intercooler ~8-12 kg
+  }
   if (isHybrid) {
     engineWeight += arch.weightPenalty * placement.weightFactor;
   }
@@ -200,20 +246,34 @@ function simulateCombustion(engine: EngineConfig): EngineSim {
   let engineCost = 3000 * layout.costFactor * (0.5 + displacement / 2000) *
     CRANK_MATERIALS[engine.crank].costFactor * PISTON_TYPES[engine.pistons].costFactor *
     vt.costFactor * intake.costFactor * fuel.costFactor;
+  // Turbo component cost contributions
+  if (isForced) {
+    engineCost += turboHousing.costFactor * 800;
+    engineCost += icType.costFactor * 600;
+    engineCost += wgType.costFactor * 300;
+    engineCost += bovData.costFactor * 150;
+    engineCost += boostCtrl.costFactor * 400;
+    if (engine.antiLag) engineCost += 2500;
+  }
   if (isHybrid) {
     engineCost = engineCost * arch.costFactor + batteryCost + (motorPowerKW * 180 * placement.costFactor) + (mguHPower * 300);
   }
-  engineCost = clamp(engineCost, 500, 120000);
+  engineCost = clamp(engineCost, 500, 180000);
 
   // Reliability
   const heatStress = clamp((effectiveCR - 9) / 6, 0, 1);
   const rpmStress = clamp((effectiveRedline - 6000) / 4000, 0, 1);
   const boostStress = clamp(engine.boostPressure / 2.5, 0, 1);
   const hybridStress = isHybrid ? 0.05 : 0;
+  // Turbo reliability modifiers
+  const turboHousingReliability = isForced ? turboHousing.durability * 0.08 : 0;
+  const antiLagStress = engine.antiLag ? 0.08 : 0;
+  const bovProtection = isForced ? bovData.surgeProtection * 0.04 : 0;
   const cooling = (engine.coolingRadiator + engine.coolingOilCooler + engine.coolingWaterPump + engine.coolingFanSpeed) / 4;
   const materialStrength = (CRANK_MATERIALS[engine.crank].strengthFactor + PISTON_TYPES[engine.pistons].strengthFactor) / 2;
   const reliability = clamp(
-    0.95 - heatStress * 0.2 - rpmStress * 0.25 - boostStress * 0.2 - hybridStress +
+    0.95 - heatStress * 0.2 - rpmStress * 0.25 - boostStress * 0.2 - hybridStress - antiLagStress +
+    turboHousingReliability + bovProtection +
     cooling * 0.1 + (materialStrength - 0.75) * 0.2,
     0.3, 0.99
   );
@@ -646,6 +706,8 @@ function simulatePerformance(design: VehicleDesign, eng: EngineSim, aero: Return
   const mirror = MIRROR_TYPES[ext.mirrorType];
   const rimDesign = RIM_DESIGNS[ext.rimDesign];
   const rimFinish = RIM_FINISHES[ext.rimFinish];
+  const drive = DRIVE_TYPES[v.driveType || "rwd"] || DRIVE_TYPES.rwd;
+  const enginePos = ENGINE_POSITIONS[v.enginePosition || "front"] || ENGINE_POSITIONS.front;
 
   const exteriorWeight =
     bodyType.weightDelta + kit.weightDelta + spoiler.weight + roofScoop.weight +
@@ -653,7 +715,8 @@ function simulatePerformance(design: VehicleDesign, eng: EngineSim, aero: Return
     (ext.hoodScoop ? 3 : 0) + (ext.sideSkirts ? 5 : 0) + (ext.splitter ? 4 : 0) +
     (ext.fenderVents ? 1 : 0) + (ext.towHook ? 0.5 : 0) +
     // wheel weight scales with diameter & width vs base 19x10.5
-    (ext.rimDiameter * ext.rimWidth * 1.8 - 19 * 10.5 * 1.8) * rimDesign.weightFactor * rimFinish.weightFactor;
+    (ext.rimDiameter * ext.rimWidth * 1.8 - 19 * 10.5 * 1.8) * rimDesign.weightFactor * rimFinish.weightFactor +
+    drive.weightDelta + enginePos.weightDelta;
 
   const aeroWeight = aero.aeroWeight;
   const power = eng.combinedPower;
@@ -661,10 +724,10 @@ function simulatePerformance(design: VehicleDesign, eng: EngineSim, aero: Return
   const weight = bodyWeight + exteriorWeight + eng.engineWeight + aeroWeight + interior.interiorWeight + v.ballast;
 
   // Weight distribution
-  const enginePosBias = eng.isElectric ? 0.5 : 0.42; // mid-engine default
+  const enginePosBias = eng.isElectric ? 0.50 : enginePos.weightDistFront;
   let weightDistFront = enginePosBias + v.ballastPositionX * 0.05;
-  if (eng.isElectric && v.electronics.ecuMap === "eco") weightDistFront = 0.5;
-  weightDistFront = clamp(weightDistFront, 0.35, 0.65);
+  if (eng.isElectric && v.electronics.ecuMap === "eco") weightDistFront = 0.50;
+  weightDistFront = clamp(weightDistFront, 0.32, 0.68);
 
   // CG height
   const cgHeight = clamp(
@@ -693,7 +756,7 @@ function simulatePerformance(design: VehicleDesign, eng: EngineSim, aero: Return
   // Top speed — solve P = aeroCoeff * v³ + rollForce * v iteratively
   const aeroCoeff = 0.5 * RHO_AIR * aero.frontalArea * aero.dragCoeff;
   const rollForce = tire.rollingResistance * weight * GRAVITY * 0.013;
-  const wheelPowerW = power * 745.7 * trans.efficiency; // hp → watts
+  const wheelPowerW = power * 745.7 * trans.efficiency * (drive.efficiency / 0.85); // hp → watts with layout mechanical loss
   // Final drive affects achievable top speed — too short lowers vMax, too tall bogs
   const fdOpt = 3.7;
   const finalDriveFactor = clamp(1 - Math.abs(v.finalDrive - fdOpt) * 0.03, 0.85, 1.05);
@@ -706,10 +769,11 @@ function simulatePerformance(design: VehicleDesign, eng: EngineSim, aero: Return
 
   // Acceleration — traction-limited at low speed
   const powerToWeight = power / (weight / 1000);
-  // Drivetrain traction bonus (AWD vs RWD vs FWD)
-  const driveFactor = v.driveType === "awd" ? 0.88 : v.driveType === "rwd" ? 1.02 : 1.22;
-  const tractionLimit = tire.gripFactor * diffFactor * diffPreloadFactor * pressureFactor;
-  // Physics-accurate power-to-weight scaling: ~300hp/1350kg RWD ~ 4.4s, AWD ~ 3.9s, 600hp AWD ~ 2.8s
+  // Drivetrain & engine position launch traction
+  const launchMult = drive.launchTractionMultiplier * (1 + (0.50 - weightDistFront) * 0.4);
+  const driveFactor = 1 / Math.max(0.6, launchMult);
+  const tractionLimit = tire.gripFactor * diffFactor * diffPreloadFactor * pressureFactor * drive.cornerExitTraction;
+  // Physics-accurate power-to-weight scaling
   const base0_60 = (5.2 / Math.pow(Math.max(powerToWeight, 50) / 250, 0.65)) * driveFactor * launchFactor * tcFactor;
   const tractionFloor = 1.65 / Math.max(0.6, tractionLimit);
   const accel0_60 = Math.round(clamp(Math.max(base0_60, tractionFloor), 1.8, 14) * 100) / 100;
@@ -728,26 +792,23 @@ function simulatePerformance(design: VehicleDesign, eng: EngineSim, aero: Return
   // Braking — brake bias, disc material, and caliper piston count affect stopping force & heat fade
   const brakeMat = BRAKE_TYPES[v.brakeType || "cast_iron"];
   const pistonFactor = 1 + (v.brakePistonCount || 4) * 0.03; // 2, 4, 6, 8 pistons
-  const biasOpt = 0.62;
-  const biasFactor = clamp(1 - Math.abs(v.brakeBias - biasOpt) * 0.3, 0.8, 1.05);
+  const biasOpt = enginePos.brakingBiasOptimal;
+  const biasFactor = clamp(1 - Math.abs(v.brakeBias - biasOpt) * 0.35, 0.75, 1.05);
   const brakeForce = v.brakeDiscSize * 0.8 * (0.5 + v.brakePadCompound * 0.5) * brakeMat.stoppingPower * pistonFactor * (v.electronics.abs ? 1.15 : 1) * biasFactor;
   const brakingDist = Math.round(clamp((10000 / brakeForce * (weight / 1000)) / (brakeMat.weightFactor), 24, 80));
 
-  // Lateral G — suspension tuning affects mechanical grip
+  // Lateral G — suspension tuning & polar moment of inertia affect mechanical grip
   const susAvg = (SUSPENSION_TYPES[v.suspensionFront].gripFactor + SUSPENSION_TYPES[v.suspensionRear].gripFactor) / 2;
-  // Spring rate: stiffer = better response but too stiff loses grip on bumps. Optimal ~170 N/mm
   const springAvg = (v.springRateF + v.springRateR) / 2;
   const springFactor = clamp(1 - Math.abs(springAvg - 170) * 0.0008, 0.85, 1.08);
-  // Damper: moderate damping optimal (~0.5)
   const damperAvg = (v.damperF + v.damperR) / 2;
   const damperFactor = clamp(1 - Math.abs(damperAvg - 0.5) * 0.2, 0.85, 1.05);
-  // Camber: slight negative optimal (~-2.5°)
   const camberAvg = (v.camberF + v.camberR) / 2;
   const camberFactor = clamp(1 - Math.abs(camberAvg - (-2.5)) * 0.03, 0.85, 1.05);
-  // Anti-roll bar: moderate optimal (~0.5)
   const arbAvg = (v.antiRollBarF + v.antiRollBarR) / 2;
   const arbFactor = clamp(1 - Math.abs(arbAvg - 0.5) * 0.15, 0.88, 1.05);
-  const mechanicalGrip = tire.gripFactor * susAvg * springFactor * damperFactor * camberFactor * arbFactor * pressureFactor;
+  const agilityFactor = 1 / enginePos.polarInertiaFactor;
+  const mechanicalGrip = tire.gripFactor * susAvg * springFactor * damperFactor * camberFactor * arbFactor * pressureFactor * agilityFactor;
   const aeroG = aero.downforce / (weight * GRAVITY) * tire.gripFactor;
   const lateralG = Math.round(clamp(mechanicalGrip + aeroG, 0.6, 3.5) * 100) / 100;
   const skidpad = Math.round((2 * 30 / (lateralG * GRAVITY)) * 100) / 100;

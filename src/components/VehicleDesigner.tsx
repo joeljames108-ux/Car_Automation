@@ -1,10 +1,10 @@
 import { Car, Disc, Settings, Cpu, Shield, Sparkles } from "lucide-react";
 import { useDesign } from "../state/DesignContext";
 import { Section, Slider, Select, ChoiceGrid, Toggle, StatTile } from "./ui/Controls";
-import { PLATFORMS, CHASSIS_TYPES, SUSPENSION_TYPES, TRANSMISSION_TYPES, BRAKE_TYPES, TIRE_COMPOUNDS } from "../sim/constants";
+import { PLATFORMS, CHASSIS_TYPES, SUSPENSION_TYPES, TRANSMISSION_TYPES, BRAKE_TYPES, TIRE_COMPOUNDS, DRIVE_TYPES, ENGINE_POSITIONS } from "../sim/constants";
 import { VEHICLE_PRESET_LIBRARY } from "../sim/vehiclePresets";
 import { PresetQuickSelect } from "./PresetQuickSelect";
-import type { PlatformType, ChassisType, SuspensionType, TransmissionType, BrakeType, TireCompound, VehicleConfig } from "../sim/types";
+import type { PlatformType, ChassisType, SuspensionType, TransmissionType, BrakeType, TireCompound, DriveType, EnginePosition, VehicleConfig } from "../sim/types";
 
 export function VehicleDesigner() {
   const { design, sim, setDesign, updateVehicle, updateElectronics } = useDesign();
@@ -39,6 +39,82 @@ export function VehicleDesigner() {
             <p className="text-[11px] text-slate-500 mt-2">
               Select any vehicle preset to instantly load realistic specs, chassis, engine tuning, electronics, and budget pricing for that class.
             </p>
+          </div>
+        </Section>
+
+        {/* Dedicated Top Section: Drivetrain Layout (FWD / RWD / AWD) & Engine Placement */}
+        <Section title="Drivetrain Layout & Engine Placement" icon={<Cpu size={16} className="text-cyan-400" />}>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="bg-cyan-950/20 border border-cyan-500/30 rounded-xl p-3">
+              <label className="label-mono mb-2 flex items-center justify-between font-bold text-cyan-300">
+                <span>Drivetrain (Drive Type)</span>
+                <span className="px-2 py-0.5 rounded bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 text-[11px] font-mono">
+                  {DRIVE_TYPES[v.driveType || "rwd"]?.shortLabel || "RWD"}
+                </span>
+              </label>
+              <ChoiceGrid<DriveType>
+                value={v.driveType || "rwd"}
+                options={(Object.keys(DRIVE_TYPES) as DriveType[]).map((dt) => ({
+                  value: dt,
+                  label: DRIVE_TYPES[dt].label
+                }))}
+                onChange={(val) => updateVehicle({ driveType: val })}
+                columns={1}
+              />
+              <p className="text-[11px] text-slate-300 mt-2 bg-base-900/80 p-2 rounded-lg border border-base-700/60 leading-relaxed">
+                {DRIVE_TYPES[v.driveType || "rwd"]?.description}
+              </p>
+            </div>
+
+            <div className="bg-purple-950/20 border border-purple-500/30 rounded-xl p-3">
+              <label className="label-mono mb-2 flex items-center justify-between font-bold text-purple-300">
+                <span>Engine Placement (Position)</span>
+                <span className="px-2 py-0.5 rounded bg-purple-500/20 text-purple-300 border border-purple-500/30 text-[11px] font-mono">
+                  {ENGINE_POSITIONS[v.enginePosition || "front"]?.shortLabel || "Front-Engine"}
+                </span>
+              </label>
+              <ChoiceGrid<EnginePosition>
+                value={v.enginePosition || "front"}
+                options={(Object.keys(ENGINE_POSITIONS) as EnginePosition[]).map((ep) => ({
+                  value: ep,
+                  label: ENGINE_POSITIONS[ep].label
+                }))}
+                onChange={(val) => updateVehicle({ enginePosition: val })}
+                columns={1}
+              />
+              <p className="text-[11px] text-slate-300 mt-2 bg-base-900/80 p-2 rounded-lg border border-base-700/60 leading-relaxed">
+                {ENGINE_POSITIONS[v.enginePosition || "front"]?.description}
+              </p>
+            </div>
+          </div>
+
+          {/* Live Physics Summary Tiles for Drivetrain & Engine Placement */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mt-3 pt-3 border-t border-base-800">
+            <StatTile
+              label="Weight Balance"
+              value={`${(sim.weightDistFront * 100).toFixed(0)} / ${(100 - sim.weightDistFront * 100).toFixed(0)}`}
+              unit="% F/R"
+              accent="accent"
+              sub={v.enginePosition === "mid" ? "Neutral Balance" : v.enginePosition === "rear" ? "Rear Heavy" : "Nose Heavy"}
+            />
+            <StatTile
+              label="Drive Efficiency"
+              value={`${((DRIVE_TYPES[v.driveType || "rwd"]?.efficiency || 0.85) * 100).toFixed(0)}%`}
+              accent="ok"
+              sub={v.driveType === "fwd" ? "High Efficiency" : v.driveType === "awd" ? "Driveline Loss" : "Standard RWD"}
+            />
+            <StatTile
+              label="Launch Traction"
+              value={`${((DRIVE_TYPES[v.driveType || "rwd"]?.launchTractionMultiplier || 1.0) * 100).toFixed(0)}%`}
+              accent="accent"
+              sub={v.driveType === "awd" ? "All 4 Wheels" : v.driveType === "fwd" ? "Front Unloads" : "Rear Load Transfer"}
+            />
+            <StatTile
+              label="Turn-in Agility"
+              value={`${((1 / (ENGINE_POSITIONS[v.enginePosition || "front"]?.polarInertiaFactor || 1.0)) * 100).toFixed(0)}%`}
+              accent="ok"
+              sub={v.enginePosition === "mid" ? "Fast Yaw Response" : v.enginePosition === "rear" ? "Pendulum Effect" : "Understeer Bias"}
+            />
           </div>
         </Section>
 

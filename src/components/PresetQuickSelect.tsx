@@ -2,6 +2,7 @@ import React from "react";
 import { Zap, Flag, Shield, Fuel, Flame, Gauge, ArrowRight } from "lucide-react";
 import { useDesign } from "../state/DesignContext";
 import { useToast } from "./ToastSystem";
+import { ZoomableGlassCard } from "./ui/ZoomableGlassCard";
 import { VEHICLE_PRESET_LIBRARY } from "../sim/vehiclePresets";
 import { createBaseDesign } from "../sim/vehiclePresets";
 import type { VehicleDesign } from "../sim/types";
@@ -138,36 +139,65 @@ export function PresetQuickSelect() {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
         {presets.map((p) => (
-          <div
+          <ZoomableGlassCard
             key={p.id}
-            onClick={() => applyPreset(p)}
-            className="group relative glass-panel border border-base-800 hover:border-accent-500/50 rounded-xl p-3 cursor-pointer transition-all duration-200 hover:shadow-lg hover:shadow-accent-500/5 hover:-translate-y-0.5 flex flex-col justify-between"
-          >
-            <div>
-              <div className="flex items-center justify-between mb-2">
-                <span className={`text-[9px] font-semibold font-mono px-2 py-0.5 rounded-full border ${p.badgeColor}`}>
-                  {p.badge}
-                </span>
-                <span className="opacity-0 group-hover:opacity-100 text-accent-400 transition-opacity">
-                  <ArrowRight size={14} />
-                </span>
-              </div>
-              <div className="flex items-center gap-2 mb-1.5">
-                <div className="p-1.5 rounded-lg bg-base-950 border border-base-800 group-hover:border-accent-500/30 transition-colors">
-                  {p.icon}
+            title={p.title}
+            badge={p.badge}
+            subtitle={p.stats}
+            expandedContent={
+              <div className="flex flex-col gap-3">
+                <div className="flex items-center gap-3">
+                  <div className="p-3 rounded-2xl bg-blue-500/10 border border-blue-400/30 text-[#007aff]">
+                    {p.icon}
+                  </div>
+                  <div>
+                    <h3 className="text-base font-bold text-slate-800">{p.title}</h3>
+                    <p className="text-xs text-slate-500 font-mono">{p.stats}</p>
+                  </div>
                 </div>
-                <h4 className="text-xs font-bold text-slate-200 group-hover:text-white transition-colors">
-                  {p.title}
-                </h4>
+                <p className="text-xs text-slate-600 leading-relaxed bg-white/80 p-3.5 rounded-xl border border-blue-200/40">
+                  {p.description}
+                </p>
+                <button
+                  onClick={() => applyPreset(p)}
+                  className="w-full py-2.5 rounded-xl bg-[#007aff] text-white font-mono font-bold text-xs flex items-center justify-center gap-2 shadow-md hover:bg-blue-600 transition-all"
+                >
+                  <span>Apply Specification Blueprint</span>
+                  <ArrowRight size={14} />
+                </button>
               </div>
-              <p className="text-[11px] text-slate-400 leading-snug line-clamp-2 mb-2">
-                {p.description}
-              </p>
+            }
+          >
+            <div
+              onClick={() => applyPreset(p)}
+              className="group relative glass-panel border border-base-800 hover:border-accent-500/50 rounded-xl p-3 cursor-pointer transition-all duration-200 hover:shadow-lg hover:shadow-accent-500/5 hover:-translate-y-0.5 flex flex-col justify-between"
+            >
+              <div>
+                <div className="flex items-center justify-between mb-2">
+                  <span className={`text-[9px] font-semibold font-mono px-2 py-0.5 rounded-full border ${p.badgeColor}`}>
+                    {p.badge}
+                  </span>
+                  <span className="opacity-0 group-hover:opacity-100 text-accent-400 transition-opacity">
+                    <ArrowRight size={14} />
+                  </span>
+                </div>
+                <div className="flex items-center gap-2 mb-1.5">
+                  <div className="p-1.5 rounded-lg bg-base-950 border border-base-800 group-hover:border-accent-500/30 transition-colors">
+                    {p.icon}
+                  </div>
+                  <h4 className="text-xs font-bold text-slate-200 group-hover:text-white transition-colors">
+                    {p.title}
+                  </h4>
+                </div>
+                <p className="text-[11px] text-slate-400 leading-snug line-clamp-2 mb-2">
+                  {p.description}
+                </p>
+              </div>
+              <div className="pt-2 border-t border-base-850/80 text-[10px] font-mono text-accent-300/80 truncate">
+                {p.stats}
+              </div>
             </div>
-            <div className="pt-2 border-t border-base-850/80 text-[10px] font-mono text-accent-300/80 truncate">
-              {p.stats}
-            </div>
-          </div>
+          </ZoomableGlassCard>
         ))}
       </div>
     </div>

@@ -46,7 +46,7 @@ export function DesignProvider({ children }: { children: ReactNode }) {
   const [design, setDesignState] = useState<VehicleDesign>(() => defaultDesign());
   const [units, setUnits] = useState<UnitSystem>("metric");
   const [carConcept, setCarConcept] = useState<CarConceptFocus>("balanced");
-  const [uiTheme, setUiTheme] = useState<UITheme>("theme1");
+  const [uiTheme, setUiTheme] = useState<UITheme>("theme4");
   const sim = useMemo(() => simulate(design), [design]);
 
   const setDesign = useCallback((d: VehicleDesign) => {

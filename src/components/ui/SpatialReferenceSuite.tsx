@@ -42,7 +42,7 @@ export function SpatialReferenceSuite() {
             max={40}
             unit="°"
             sublabel="L/D"
-            ticks={["3.5", "3.0", "2.5", "2.0", "2.5", "3.0", "3.5"]}
+            ticks={["0°", "10°", "20°", "30°", "40°"]}
           />
         </div>
 
