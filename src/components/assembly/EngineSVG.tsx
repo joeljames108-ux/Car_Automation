@@ -1,5 +1,28 @@
 import { ComponentId, AssemblyPhase, ENGINE_ASSEMBLY_COMPONENTS } from "../../sim/assemblyTypes";
 import { EngineConfig } from "../../sim/types";
+import { WBankLayoutRenderer } from "./layoutRenderers/WBankLayoutRenderer";
+import { FlatBoxerLayoutRenderer } from "./layoutRenderers/FlatBoxerLayoutRenderer";
+import { RotaryWankelRenderer } from "./layoutRenderers/RotaryWankelRenderer";
+import { RadialAircraftRenderer } from "./layoutRenderers/RadialAircraftRenderer";
+import { ApexHybridLayoutRenderer } from "./layoutRenderers/ApexHybridLayoutRenderer";
+import { InlineLayoutRenderer } from "./layoutRenderers/InlineLayoutRenderer";
+import { VBankLayoutRenderer } from "./layoutRenderers/VBankLayoutRenderer";
+
+import { EVBatteryCasingRenderer } from "./evRenderers/EVBatteryCasingRenderer";
+import { EVCellModulesRenderer } from "./evRenderers/EVCellModulesRenderer";
+import { EVBusbarGridRenderer } from "./evRenderers/EVBusbarGridRenderer";
+import { EVBMSRenderer } from "./evRenderers/EVBMSRenderer";
+import { EVCoolingPlateRenderer } from "./evRenderers/EVCoolingPlateRenderer";
+import { EVInverterRenderer } from "./evRenderers/EVInverterRenderer";
+import { EVStatorCoilsRenderer } from "./evRenderers/EVStatorCoilsRenderer";
+import { EVRotorShaftRenderer } from "./evRenderers/EVRotorShaftRenderer";
+import { EVGearboxRenderer } from "./evRenderers/EVGearboxRenderer";
+import { EVPDUUnitRenderer } from "./evRenderers/EVPDUUnitRenderer";
+import { EVRegenBoostRenderer } from "./evRenderers/EVRegenBoostRenderer";
+import { EVCoolingReservoirRenderer } from "./evRenderers/EVCoolingReservoirRenderer";
+
+import { AssemblyLaserGuidance } from "./animationFX/AssemblyLaserGuidance";
+import { AssemblySparkFlashes } from "./animationFX/AssemblySparkFlashes";
 
 interface EngineSVGProps {
   installedComponents: ComponentId[];
@@ -10,6 +33,7 @@ interface EngineSVGProps {
   isAssemblyComplete: boolean;
   layout?: string;
   engineConfig?: Partial<EngineConfig>;
+  onHoverComponent?: (id: ComponentId | null) => void;
   className?: string;
 }
 
@@ -20,9 +44,211 @@ export function EngineSVG({
   hoveredComponentId,
   isExplodedView,
   isAssemblyComplete,
+  layout,
   engineConfig,
+  onHoverComponent,
   className = "",
 }: EngineSVGProps) {
+  const currentLayout = (layout || engineConfig?.layout || "v12").toLowerCase();
+
+  // Dynamic Layout Metadata Generator for 25 Engine Block Configurations
+  const getLayoutSpec = (ly: string) => {
+    switch (ly) {
+      case "i3":
+        return {
+          label: "APEX-I3 SPEC-03 CAST STEEL",
+          cyls: [185, 250, 315],
+          width: 50,
+          bankAngle: "0° Inline",
+          bx: 145, bw: 210, bh: 238,
+          category: "inline",
+          bolts: [{ x: 160, y: 118 }, { x: 217, y: 118 }, { x: 283, y: 118 }, { x: 340, y: 118 }, { x: 160, y: 332 }, { x: 217, y: 332 }, { x: 283, y: 332 }, { x: 340, y: 332 }],
+        };
+      case "i4":
+        return {
+          label: "APEX-I4 SPEC-04 TURBO",
+          cyls: [165, 220, 275, 330],
+          width: 44,
+          bankAngle: "0° Inline",
+          bx: 135, bw: 230, bh: 238,
+          category: "inline",
+          bolts: [{ x: 148, y: 118 }, { x: 202, y: 118 }, { x: 256, y: 118 }, { x: 310, y: 118 }, { x: 352, y: 118 }, { x: 148, y: 332 }, { x: 202, y: 332 }, { x: 256, y: 332 }, { x: 310, y: 332 }, { x: 352, y: 332 }],
+        };
+      case "i6":
+        return {
+          label: "APEX-I6 SPEC-06 TWIN-TURBO",
+          cyls: [135, 180, 225, 270, 315, 360],
+          width: 34,
+          bankAngle: "0° Straight-6",
+          bx: 105, bw: 290, bh: 238,
+          category: "inline",
+          bolts: [{ x: 118, y: 118 }, { x: 160, y: 118 }, { x: 202, y: 118 }, { x: 248, y: 118 }, { x: 292, y: 118 }, { x: 336, y: 118 }, { x: 382, y: 118 }, { x: 118, y: 332 }, { x: 160, y: 332 }, { x: 202, y: 332 }, { x: 248, y: 332 }, { x: 292, y: 332 }, { x: 336, y: 332 }, { x: 382, y: 332 }],
+        };
+      case "v4":
+        return {
+          label: "APEX-V4 MOTOGP 16500-RPM",
+          cyls: [180, 230, 280, 330],
+          width: 42,
+          bankAngle: "90° V4 Race",
+          bx: 135, bw: 230, bh: 238,
+          category: "vbank",
+          bolts: [{ x: 148, y: 118 }, { x: 205, y: 118 }, { x: 295, y: 118 }, { x: 352, y: 118 }, { x: 148, y: 332 }, { x: 205, y: 332 }, { x: 295, y: 332 }, { x: 352, y: 332 }],
+        };
+      case "v6":
+        return {
+          label: "APEX-V6 SPEC-06 60-DEG",
+          cyls: [165, 225, 285, 345],
+          width: 46,
+          bankAngle: "60° V-Bank",
+          bx: 125, bw: 250, bh: 238,
+          category: "vbank",
+          bolts: [{ x: 140, y: 118 }, { x: 195, y: 118 }, { x: 250, y: 118 }, { x: 305, y: 118 }, { x: 360, y: 118 }, { x: 140, y: 332 }, { x: 195, y: 332 }, { x: 250, y: 332 }, { x: 305, y: 332 }, { x: 360, y: 332 }],
+        };
+      case "v8":
+        return {
+          label: "APEX-V8 SPEC-08 CROSSPLANE",
+          cyls: [160, 220, 280, 340],
+          width: 46,
+          bankAngle: "90° V8 Crossplane",
+          bx: 116, bw: 268, bh: 238,
+          category: "vbank",
+          bolts: [{ x: 136, y: 118 }, { x: 193, y: 118 }, { x: 250, y: 118 }, { x: 307, y: 118 }, { x: 364, y: 118 }, { x: 136, y: 332 }, { x: 193, y: 332 }, { x: 250, y: 332 }, { x: 307, y: 332 }, { x: 364, y: 332 }],
+        };
+      case "v10":
+        return {
+          label: "APEX-V10 SPEC-10 EXOTIC",
+          cyls: [145, 195, 245, 295, 345],
+          width: 38,
+          bankAngle: "90° V10",
+          bx: 110, bw: 280, bh: 238,
+          category: "vbank",
+          bolts: [{ x: 125, y: 118 }, { x: 170, y: 118 }, { x: 220, y: 118 }, { x: 270, y: 118 }, { x: 320, y: 118 }, { x: 365, y: 118 }, { x: 125, y: 332 }, { x: 170, y: 332 }, { x: 220, y: 332 }, { x: 270, y: 332 }, { x: 320, y: 332 }, { x: 365, y: 332 }],
+        };
+      case "w12":
+        return {
+          label: "APEX-W12 TWIN-TURBO",
+          cyls: [152, 204, 256, 308],
+          width: 46,
+          bankAngle: "72°/15° W12",
+          bx: 116, bw: 268, bh: 238,
+          category: "wbank",
+          bolts: [{ x: 136, y: 118 }, { x: 193, y: 118 }, { x: 250, y: 118 }, { x: 307, y: 118 }, { x: 364, y: 118 }, { x: 136, y: 332 }, { x: 193, y: 332 }, { x: 250, y: 332 }, { x: 307, y: 332 }, { x: 364, y: 332 }],
+        };
+      case "w16":
+        return {
+          label: "APEX-W16 QUAD-TURBO HYPERCAR",
+          cyls: [145, 195, 245, 295, 345],
+          width: 38,
+          bankAngle: "90°/15° W16",
+          bx: 100, bw: 300, bh: 245,
+          category: "wbank",
+          bolts: [{ x: 115, y: 118 }, { x: 165, y: 118 }, { x: 220, y: 118 }, { x: 280, y: 118 }, { x: 335, y: 118 }, { x: 385, y: 118 }, { x: 115, y: 332 }, { x: 165, y: 332 }, { x: 220, y: 332 }, { x: 280, y: 332 }, { x: 335, y: 332 }, { x: 385, y: 332 }],
+        };
+      case "w18":
+        return {
+          label: "APEX-W18 TRIPLE-VR6 6.3L",
+          cyls: [130, 175, 220, 265, 310, 355],
+          width: 32,
+          bankAngle: "72°/15° W18",
+          bx: 95, bw: 310, bh: 245,
+          category: "wbank",
+          bolts: [{ x: 110, y: 118 }, { x: 155, y: 118 }, { x: 200, y: 118 }, { x: 250, y: 118 }, { x: 295, y: 118 }, { x: 340, y: 118 }, { x: 385, y: 118 }, { x: 110, y: 332 }, { x: 155, y: 332 }, { x: 200, y: 332 }, { x: 250, y: 332 }, { x: 295, y: 332 }, { x: 340, y: 332 }, { x: 385, y: 332 }],
+        };
+      case "boxer4":
+        return {
+          label: "APEX-H4 BOXER SUB-ZERO",
+          cyls: [175, 227, 279, 331],
+          width: 46,
+          bankAngle: "180° Flat-4",
+          bx: 100, bw: 300, bh: 180,
+          category: "flat",
+          bolts: [{ x: 120, y: 148 }, { x: 180, y: 148 }, { x: 250, y: 148 }, { x: 320, y: 148 }, { x: 380, y: 148 }, { x: 120, y: 302 }, { x: 180, y: 302 }, { x: 250, y: 302 }, { x: 320, y: 302 }, { x: 380, y: 302 }],
+        };
+      case "boxer6":
+        return {
+          label: "APEX-H6 BOXER 9000-RPM",
+          cyls: [152, 204, 256, 308],
+          width: 46,
+          bankAngle: "180° Flat-6",
+          bx: 90, bw: 320, bh: 180,
+          category: "flat",
+          bolts: [{ x: 110, y: 148 }, { x: 170, y: 148 }, { x: 250, y: 148 }, { x: 330, y: 148 }, { x: 390, y: 148 }, { x: 110, y: 302 }, { x: 170, y: 302 }, { x: 250, y: 302 }, { x: 330, y: 302 }, { x: 390, y: 302 }],
+        };
+      case "rotary":
+        return {
+          label: "APEX-ROTARY WANKEL 13B-REW",
+          cyls: [195, 285],
+          width: 60,
+          bankAngle: "Planetary Orbit",
+          bx: 135, bw: 230, bh: 230,
+          category: "rotary",
+          bolts: [{ x: 150, y: 118 }, { x: 250, y: 118 }, { x: 350, y: 118 }, { x: 150, y: 322 }, { x: 250, y: 322 }, { x: 350, y: 322 }],
+        };
+      case "radial":
+        return {
+          label: "APEX-RADIAL R-2800 9-CYL",
+          cyls: [152, 204, 256, 308],
+          width: 46,
+          bankAngle: "360° Radial Ring",
+          bx: 90, bw: 320, bh: 320,
+          category: "radial",
+          bolts: [{ x: 120, y: 85 }, { x: 250, y: 70 }, { x: 380, y: 85 }, { x: 120, y: 375 }, { x: 250, y: 390 }, { x: 380, y: 375 }],
+        };
+      case "vr6":
+        return {
+          label: "APEX-VR6 15-DEG NARROW",
+          cyls: [150, 190, 230, 270, 310, 350],
+          width: 34,
+          bankAngle: "15° VR-Bank",
+          bx: 120, bw: 260, bh: 238,
+          category: "vr",
+          bolts: [{ x: 135, y: 118 }, { x: 180, y: 118 }, { x: 225, y: 118 }, { x: 275, y: 118 }, { x: 320, y: 118 }, { x: 365, y: 118 }, { x: 135, y: 332 }, { x: 180, y: 332 }, { x: 225, y: 332 }, { x: 275, y: 332 }, { x: 320, y: 332 }, { x: 365, y: 332 }],
+        };
+      case "twin":
+        return {
+          label: "APEX-TWIN 270-DEG CROSSPLANE",
+          cyls: [210, 290],
+          width: 56,
+          bankAngle: "270° Parallel Twin",
+          bx: 155, bw: 190, bh: 238,
+          category: "inline",
+          bolts: [{ x: 170, y: 118 }, { x: 250, y: 118 }, { x: 330, y: 118 }, { x: 170, y: 332 }, { x: 250, y: 332 }, { x: 330, y: 332 }],
+        };
+      case "thumper":
+        return {
+          label: "APEX-THUMPER 450CC 4-STROKE",
+          cyls: [250],
+          width: 68,
+          bankAngle: "0° Single Bore",
+          bx: 175, bw: 150, bh: 238,
+          category: "inline",
+          bolts: [{ x: 190, y: 118 }, { x: 310, y: 118 }, { x: 190, y: 332 }, { x: 310, y: 332 }],
+        };
+      case "apex_hybrid":
+        return {
+          label: "APEX SPEC-X HYBRID TRI-MOTOR",
+          cyls: [152, 204, 256, 308],
+          width: 46,
+          bankAngle: "60° V12 + 800V EV",
+          bx: 105, bw: 290, bh: 245,
+          category: "hybrid",
+          bolts: [{ x: 125, y: 118 }, { x: 185, y: 118 }, { x: 250, y: 118 }, { x: 315, y: 118 }, { x: 375, y: 118 }, { x: 125, y: 332 }, { x: 185, y: 332 }, { x: 250, y: 332 }, { x: 315, y: 332 }, { x: 375, y: 332 }],
+        };
+      case "v12":
+      default:
+        return {
+          label: "APEX-V12 SPEC-01  CAST STEEL",
+          cyls: [152, 204, 256, 308],
+          width: 46,
+          bankAngle: "60° V12 GT",
+          bx: 116, bw: 268, bh: 238,
+          category: "vbank",
+          bolts: [{ x: 136, y: 118 }, { x: 193, y: 118 }, { x: 250, y: 118 }, { x: 307, y: 118 }, { x: 364, y: 118 }, { x: 136, y: 332 }, { x: 193, y: 332 }, { x: 250, y: 332 }, { x: 307, y: 332 }, { x: 364, y: 332 }],
+        };
+    }
+  };
+
+  const layoutSpec = getLayoutSpec(currentLayout);
 
   // Helper to determine component visibility, exploded offset, or active highlight state
   const getPartState = (id: ComponentId) => {
@@ -56,6 +282,12 @@ export function EngineSVG({
     };
   };
 
+  const isEV =
+    currentLayout === "electric" ||
+    currentLayout === "hybrid" ||
+    (engineConfig as any)?.isElectric ||
+    (engineConfig as any)?.powertrainType === "electric";
+
   const blockState = getPartState("block");
   const crankState = getPartState("crankshaft");
   const pistonState = getPartState("pistons");
@@ -76,58 +308,187 @@ export function EngineSVG({
 
   return (
     <div className={`relative w-full h-full flex items-center justify-center select-none ${className}`}>
-      {/* Laser Target Reticle Overlay */}
-      {activeComponentId && (
-        <div className="absolute inset-0 pointer-events-none z-30 flex items-center justify-center">
-          <div className="w-56 h-56 border border-amber-500/50 rounded-full animate-ping opacity-35" />
-          <div className="absolute w-80 h-[1px] bg-gradient-to-r from-transparent via-amber-500/60 to-transparent" />
-          <div className="absolute h-80 w-[1px] bg-gradient-to-b from-transparent via-amber-500/60 to-transparent" />
-        </div>
-      )}
-
       <svg
         viewBox="0 0 500 450"
-        className="w-full h-full max-h-[500px] overflow-visible filter drop-shadow-[0_20px_45px_rgba(100,60,40,0.25)]"
+        className="w-full h-full max-h-[500px] overflow-visible filter drop-shadow-[0_20px_50px_rgba(15,23,42,0.85)]"
       >
         {/* CAD Engineering Background Grid Overlay */}
         <rect width="500" height="450" fill="url(#cad-grid)" className="pointer-events-none" />
 
         <defs>
-          {/* ── 1. PHOTOREALISTIC METALLIC & MATERIAL GRADIENTS ── */}
+          {/* ── 1. ULTRA-REALISTIC METALLIC RECIPES & HIGH-CONTRAST GRADIENTS ── */}
+
+          {/* Recipe 1: High-Contrast Chrome 3D Gradient */}
+          <linearGradient id="chrome-3d" x1="0%" y1="0%" x2="100%" y2="100%">
+            <stop offset="0%" stopColor="#2b3038"/>
+            <stop offset="20%" stopColor="#8b95a1"/>
+            <stop offset="40%" stopColor="#ffffff"/> {/* Bright Reflection */}
+            <stop offset="45%" stopColor="#ffffff"/>
+            <stop offset="50%" stopColor="#1a1d24"/> {/* Horizon Line Shadow */}
+            <stop offset="80%" stopColor="#677381"/>
+            <stop offset="100%" stopColor="#0f1115"/>
+          </linearGradient>
+
+          {/* Recipe 4: Anodized Steel-Blue/Gunmetal Alloy (Pistons & Couplers) */}
+          <linearGradient id="anodized-blue" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stopColor="#60a5fa"/>
+            <stop offset="20%" stopColor="#3b82f6"/>
+            <stop offset="40%" stopColor="#ffffff"/> {/* Bright Reflection */}
+            <stop offset="45%" stopColor="#ffffff"/>
+            <stop offset="50%" stopColor="#1d4ed8"/> {/* Horizon Line Shadow */}
+            <stop offset="80%" stopColor="#1e3a8a"/>
+            <stop offset="100%" stopColor="#0f172a"/>
+          </linearGradient>
+
+          {/* Exact Cylinder Tube 3D Specular Gradient Matching Reference Artwork */}
+          <linearGradient id="cylinder-tube-3d" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stopColor="#1e242f" />
+            <stop offset="5%" stopColor="#8b95a1" />
+            <stop offset="13%" stopColor="#ffffff" /> {/* Crisp Primary Specular Band */}
+            <stop offset="20%" stopColor="#e2e8f0" />
+            <stop offset="48%" stopColor="#64748b" />
+            <stop offset="78%" stopColor="#334155" />
+            <stop offset="100%" stopColor="#0f172a" />
+          </linearGradient>
+
+          {/* Exact Engine Block Casing Shading Gradient Matching Reference Artwork */}
+          <linearGradient id="slate-block-artwork" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stopColor="#ffffff" />
+            <stop offset="4%" stopColor="#cbd5e1" />
+            <stop offset="18%" stopColor="#64748b" />
+            <stop offset="35%" stopColor="#475569" />
+            <stop offset="50%" stopColor="#1e293b" />
+            <stop offset="78%" stopColor="#475569" />
+            <stop offset="96%" stopColor="#1e293b" />
+            <stop offset="100%" stopColor="#090d16" />
+          </linearGradient>
+
+          {/* Machined Silver 3D Engine Block Alloy */}
+          <linearGradient id="slate-block" href="#slate-block-artwork" />
+
           {/* CNC Brushed Aluminum Cylinder Head */}
           <linearGradient id="brushed-head" x1="0" y1="0" x2="0" y2="1">
             <stop offset="0%" stopColor="#ffffff" />
-            <stop offset="12%" stopColor="#e2e8f0" />
-            <stop offset="45%" stopColor="#cbd5e1" />
-            <stop offset="75%" stopColor="#94a3b8" />
-            <stop offset="92%" stopColor="#64748b" />
-            <stop offset="100%" stopColor="#334155" />
+            <stop offset="18%" stopColor="#f1f5f9" />
+            <stop offset="42%" stopColor="#ffffff" />
+            <stop offset="50%" stopColor="#475569" />
+            <stop offset="80%" stopColor="#cbd5e1" />
+            <stop offset="100%" stopColor="#1e293b" />
           </linearGradient>
 
-          {/* Slate Blue Cast Iron Engine Block */}
-          <linearGradient id="slate-block" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stopColor="#5b708b" />
-            <stop offset="25%" stopColor="#415671" />
-            <stop offset="60%" stopColor="#2c3b4e" />
+          {/* Cast Metallic Grain Specular Shimmer */}
+          <linearGradient id="cast-grain-shimmer" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="#ffffff" stopOpacity="0.5" />
+            <stop offset="15%" stopColor="#cbd5e1" stopOpacity="0.2" />
+            <stop offset="50%" stopColor="#000000" stopOpacity="0" />
+            <stop offset="85%" stopColor="#000000" stopOpacity="0.3" />
+            <stop offset="100%" stopColor="#000000" stopOpacity="0.6" />
+          </linearGradient>
+
+          {/* Top Machined Deck Surface Gradient (CNC Stainless/Alloy Deck) */}
+          <linearGradient id="machined-deck-bevel" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="#ffffff" />
+            <stop offset="25%" stopColor="#e2e8f0" />
+            <stop offset="45%" stopColor="#ffffff" />
+            <stop offset="60%" stopColor="#94a3b8" />
+            <stop offset="90%" stopColor="#475569" />
+            <stop offset="100%" stopColor="#1e293b" />
+          </linearGradient>
+
+          {/* 3D Cylinder Sleeve Steel Ring Bevel */}
+          <linearGradient id="sleeve-steel-rim" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stopColor="#ffffff" />
+            <stop offset="20%" stopColor="#e2e8f0" />
+            <stop offset="50%" stopColor="#94a3b8" />
+            <stop offset="80%" stopColor="#475569" />
+            <stop offset="100%" stopColor="#0f172a" />
+          </linearGradient>
+
+          {/* Super-Polished Mirror Chrome Journal Finish */}
+          <linearGradient id="journal-polished-chrome" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="#2b3038" />
+            <stop offset="18%" stopColor="#8b95a1" />
+            <stop offset="38%" stopColor="#ffffff" /> {/* Bright Reflection */}
+            <stop offset="42%" stopColor="#ffffff" />
+            <stop offset="48%" stopColor="#1a1d24" /> {/* Horizon Line Shadow */}
+            <stop offset="78%" stopColor="#677381" />
+            <stop offset="100%" stopColor="#0f1115" />
+          </linearGradient>
+
+          {/* 3D Volumetric Forged Steel Crank Shaft Axis */}
+          <linearGradient id="crank-forged-3d" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="#ffffff" />
+            <stop offset="20%" stopColor="#cbd5e1" />
+            <stop offset="40%" stopColor="#ffffff" />
+            <stop offset="50%" stopColor="#334155" />
+            <stop offset="82%" stopColor="#64748b" />
+            <stop offset="100%" stopColor="#0f172a" />
+          </linearGradient>
+
+          {/* 3D Volumetric Main Bearing Cap Cast Iron Shading */}
+          <linearGradient id="main-bearing-cap-cast-iron" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stopColor="#94a3b8" />
+            <stop offset="20%" stopColor="#64748b" />
+            <stop offset="50%" stopColor="#334155" />
+            <stop offset="80%" stopColor="#1e293b" />
+            <stop offset="100%" stopColor="#0f172a" />
+          </linearGradient>
+
+          {/* Tri-Metal Copper-Lead Babbitt Bearing Shell Insert */}
+          <linearGradient id="tri-metal-bearing-shell" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stopColor="#b45309" />
+            <stop offset="15%" stopColor="#d97706" />
+            <stop offset="35%" stopColor="#ffffff" />
+            <stop offset="65%" stopColor="#cbd5e1" />
+            <stop offset="85%" stopColor="#d97706" />
+            <stop offset="100%" stopColor="#92400e" />
+          </linearGradient>
+
+          {/* Translucent Coolant Water Jacket Fluid Flow */}
+          <linearGradient id="coolant-jacket-flow" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stopColor="#38bdf8" stopOpacity="0.85" />
+            <stop offset="35%" stopColor="#0284c7" stopOpacity="0.7" />
+            <stop offset="70%" stopColor="#0369a1" stopOpacity="0.75" />
+            <stop offset="100%" stopColor="#075985" stopOpacity="0.9" />
+          </linearGradient>
+
+          {/* Heavy Duty 3D Casting Mounting Lug Gradient */}
+          <linearGradient id="mounting-lug-3d" x1="0" y1="0" x2="1" y2="0.8">
+            <stop offset="0%" stopColor="#ffffff" />
+            <stop offset="25%" stopColor="#94a3b8" />
+            <stop offset="50%" stopColor="#475569" />
             <stop offset="85%" stopColor="#1e293b" />
-            <stop offset="100%" stopColor="#111827" />
+            <stop offset="100%" stopColor="#0f172a" />
           </linearGradient>
 
-          {/* Anodized Steel-Blue/Gunmetal Pistons */}
-          <linearGradient id="blue-piston" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#7da2ca" />
-            <stop offset="18%" stopColor="#50759e" />
-            <stop offset="55%" stopColor="#325073" />
-            <stop offset="85%" stopColor="#1c334d" />
-            <stop offset="100%" stopColor="#0d1b2a" />
+          {/* 3D Threaded Head Bolt Boss Metal Shading */}
+          <linearGradient id="bolt-boss-3d" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stopColor="#ffffff" />
+            <stop offset="35%" stopColor="#ffffff" />
+            <stop offset="50%" stopColor="#475569" />
+            <stop offset="80%" stopColor="#64748b" />
+            <stop offset="100%" stopColor="#1e293b" />
           </linearGradient>
+
+          {/* CNC Machined Aluminum Plaque Metallic Gradient */}
+          <linearGradient id="plaque-metal" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0%" stopColor="#ffffff" />
+            <stop offset="25%" stopColor="#e2e8f0" />
+            <stop offset="45%" stopColor="#ffffff" />
+            <stop offset="65%" stopColor="#94a3b8" />
+            <stop offset="100%" stopColor="#475569" />
+          </linearGradient>
+
+          {/* Alias blue-piston to anodized-blue */}
+          <linearGradient id="blue-piston" href="#anodized-blue" />
 
           {/* Forged Steel Connecting Rods & Crankshaft */}
           <linearGradient id="forged-steel" x1="0" y1="0" x2="1" y2="0">
             <stop offset="0%" stopColor="#ffffff" />
-            <stop offset="18%" stopColor="#cbd5e1" />
-            <stop offset="50%" stopColor="#8a95a5" />
-            <stop offset="82%" stopColor="#475569" />
+            <stop offset="20%" stopColor="#cbd5e1" />
+            <stop offset="42%" stopColor="#ffffff" />
+            <stop offset="50%" stopColor="#475569" />
+            <stop offset="82%" stopColor="#64748b" />
             <stop offset="100%" stopColor="#1e293b" />
           </linearGradient>
 
@@ -135,27 +496,22 @@ export function EngineSVG({
           <linearGradient id="pipe-cylinder-3d" x1="0" y1="0" x2="0" y2="1">
             <stop offset="0%" stopColor="#ffffff" />
             <stop offset="22%" stopColor="#f1f5f9" />
-            <stop offset="55%" stopColor="#94a3b8" />
-            <stop offset="82%" stopColor="#475569" />
+            <stop offset="42%" stopColor="#ffffff" />
+            <stop offset="50%" stopColor="#475569" />
+            <stop offset="82%" stopColor="#64748b" />
             <stop offset="100%" stopColor="#1e293b" />
           </linearGradient>
 
           {/* Blue Silicone Hose Couplers */}
-          <linearGradient id="blue-silicone" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="#60a5fa" />
-            <stop offset="30%" stopColor="#2563eb" />
-            <stop offset="70%" stopColor="#1d4ed8" />
-            <stop offset="90%" stopColor="#1e3a8a" />
-            <stop offset="100%" stopColor="#0f172a" />
-          </linearGradient>
+          <linearGradient id="blue-silicone" href="#anodized-blue" />
 
-          {/* Heat-Treated Copper Exhaust Runners */}
+          {/* Heat-Treated Copper Exhaust Runners with High-Contrast Metallic Glow */}
           <linearGradient id="copper-heat-treated" x1="0" y1="0" x2="1" y2="0.8">
             <stop offset="0%" stopColor="#fff7ed" />
-            <stop offset="15%" stopColor="#ffedd5" />
-            <stop offset="40%" stopColor="#fb923c" />
-            <stop offset="70%" stopColor="#ea580c" />
-            <stop offset="88%" stopColor="#9a3412" />
+            <stop offset="20%" stopColor="#ffedd5" />
+            <stop offset="42%" stopColor="#ffffff" /> {/* Bright Specular Highlight */}
+            <stop offset="50%" stopColor="#ea580c" />
+            <stop offset="82%" stopColor="#9a3412" />
             <stop offset="100%" stopColor="#431407" />
           </linearGradient>
 
@@ -163,8 +519,9 @@ export function EngineSVG({
           <linearGradient id="stainless-downpipe" x1="0" y1="0" x2="1" y2="1">
             <stop offset="0%" stopColor="#ffffff" />
             <stop offset="25%" stopColor="#cbd5e1" />
-            <stop offset="60%" stopColor="#64748b" />
-            <stop offset="88%" stopColor="#334155" />
+            <stop offset="42%" stopColor="#ffffff" />
+            <stop offset="50%" stopColor="#334155" />
+            <stop offset="88%" stopColor="#64748b" />
             <stop offset="100%" stopColor="#0f172a" />
           </linearGradient>
 
@@ -172,22 +529,26 @@ export function EngineSVG({
           <linearGradient id="turbo-housing" x1="0" y1="0" x2="1" y2="1">
             <stop offset="0%" stopColor="#ffffff" />
             <stop offset="22%" stopColor="#e2e8f0" />
-            <stop offset="60%" stopColor="#94a3b8" />
-            <stop offset="88%" stopColor="#475569" />
+            <stop offset="42%" stopColor="#ffffff" />
+            <stop offset="50%" stopColor="#475569" />
+            <stop offset="88%" stopColor="#64748b" />
             <stop offset="100%" stopColor="#1e293b" />
           </linearGradient>
 
           {/* Golden Impeller Wheel Hub */}
           <linearGradient id="gold-hub" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stopColor="#fef08a" />
-            <stop offset="30%" stopColor="#facc15" />
-            <stop offset="70%" stopColor="#d97706" />
-            <stop offset="100%" stopColor="#78350f" />
+            <stop offset="0%" stopColor="#ffffff" />
+            <stop offset="25%" stopColor="#fef08a" />
+            <stop offset="42%" stopColor="#ffffff" />
+            <stop offset="50%" stopColor="#d97706" />
+            <stop offset="85%" stopColor="#78350f" />
+            <stop offset="100%" stopColor="#451a03" />
           </linearGradient>
 
           {/* Subtle Thin Copper Head Gasket */}
           <linearGradient id="copper-gasket" x1="0" y1="0" x2="1" y2="0">
             <stop offset="0%" stopColor="#d4a574" />
+            <stop offset="40%" stopColor="#ffffff" />
             <stop offset="50%" stopColor="#b8834a" />
             <stop offset="100%" stopColor="#8b6332" />
           </linearGradient>
@@ -201,34 +562,50 @@ export function EngineSVG({
             <stop offset="100%" stopColor="#090d16" />
           </linearGradient>
 
-          {/* Combustion Chamber Flame Glow Gradient */}
+          {/* Combustion Chamber Flame Glow Gradient (Matching Gauge Redline Rose #f43f5e) */}
           <radialGradient id="combustion-glow" cx="0.5" cy="0.5" r="0.5">
-            <stop offset="0%" stopColor="#fef08a" stopOpacity="0.9" />
-            <stop offset="35%" stopColor="#f97316" stopOpacity="0.75" />
-            <stop offset="70%" stopColor="#dc2626" stopOpacity="0.4" />
-            <stop offset="100%" stopColor="#7f1d1d" stopOpacity="0" />
+            <stop offset="0%" stopColor="#38bdf8" stopOpacity="0.95" /> {/* Cyan Ignition Core */}
+            <stop offset="35%" stopColor="#f43f5e" stopOpacity="0.85" /> {/* Telemetry Rose Flame */}
+            <stop offset="70%" stopColor="#e11d48" stopOpacity="0.5" />
+            <stop offset="100%" stopColor="#881337" stopOpacity="0" />
           </radialGradient>
 
           {/* Airflow Velocity Streamline Gradient */}
           <linearGradient id="intake-airflow" x1="0" y1="0" x2="1" y2="0">
             <stop offset="0%" stopColor="#38bdf8" stopOpacity="0" />
             <stop offset="50%" stopColor="#38bdf8" stopOpacity="0.85" />
-            <stop offset="100%" stopColor="#0284c7" stopOpacity="0" />
+            <stop offset="100%" stopColor="#06b6d4" stopOpacity="0" />
           </linearGradient>
 
           {/* ── 2. SVG TEXTURE PATTERNS ── */}
           <pattern id="cad-grid" width="20" height="20" patternUnits="userSpaceOnUse">
-            <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#94a3b8" strokeWidth="0.5" opacity="0.12" />
+            <path d="M 20 0 L 0 0 0 20" fill="none" stroke="#38bdf8" strokeWidth="0.5" opacity="0.1" />
           </pattern>
 
           <pattern id="honing-crosshatch" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
-            <line x1="0" y1="0" x2="0" y2="8" stroke="#475569" strokeWidth="0.8" opacity="0.45" />
-            <line x1="0" y1="0" x2="8" y2="0" stroke="#475569" strokeWidth="0.8" opacity="0.45" />
+            <line x1="0" y1="0" x2="0" y2="8" stroke="#64748b" strokeWidth="0.8" opacity="0.45" />
+            <line x1="0" y1="0" x2="8" y2="0" stroke="#64748b" strokeWidth="0.8" opacity="0.45" />
           </pattern>
 
           {/* ── 3. SPECULAR & DEEP DROP SHADOW FILTERS ── */}
+          <filter id="3d-light" x="-30%" y="-30%" width="160%" height="160%">
+            <feGaussianBlur in="SourceAlpha" stdDeviation="3" result="blur"/>
+            <feSpecularLighting in="blur" surfaceScale="5" specularConstant="1" 
+                                specularExponent="20" lighting-color="#ffffff" result="specular">
+              <fePointLight x="-500" y="-500" z="300"/>
+            </feSpecularLighting>
+            <feComposite in="SourceGraphic" in2="specular" operator="arithmetic" k1="0" k2="1" k3="1" k4="0"/>
+          </filter>
+
+          {/* Recipe 3: Brushed Metal Texture Filter */}
+          <filter id="brushed-metal">
+            <feTurbulence type="fractalNoise" baseFrequency="0.05 0.95" numOctaves="2" result="noise"/>
+            <feColorMatrix type="matrix" values="0.3 0 0 0 0  0.3 0 0 0 0  0.3 0 0 0 0  0 0 0 0.15 0"/>
+            <feComposite in2="SourceGraphic" operator="in"/>
+          </filter>
+
           <filter id="soft-shadow-3d" x="-30%" y="-30%" width="160%" height="160%">
-            <feDropShadow dx="3" dy="10" stdDeviation="8" floodColor="#3c2415" floodOpacity="0.35" />
+            <feDropShadow dx="2" dy="8" stdDeviation="6" floodColor="#020617" floodOpacity="0.75" />
           </filter>
 
           <filter id="heat-shimmer-filter" x="-20%" y="-20%" width="140%" height="140%">
@@ -253,87 +630,95 @@ export function EngineSVG({
           </circle>
         )}
 
-        {/* ── 1. ENGINE BLOCK (Slate Blue Cast Iron Base with 3D Ribs & Lugs) ── */}
-        <g
-          id="block"
-          className={`transition-all duration-700 ease-out ${
-            blockState.isActive ? "filter-glow-active" : ""
-          } ${!blockState.isInstalled && isExplodedView ? "animate-pulse" : ""}`}
-          style={{
-            transform: `translate(${blockState.offsetX}px, ${blockState.offsetY}px)`,
-            opacity: blockState.opacity,
-          }}
-          filter={blockState.isInstalled ? "url(#soft-shadow-3d)" : undefined}
-        >
-          {/* Billet Oil Dipstick Tube & Yellow Pull Handle */}
-          <g>
-            <path d="M 146 235 C 130 235 118 215 114 185" fill="none" stroke="url(#pipe-cylinder-3d)" strokeWidth="4" strokeLinecap="round" />
-            <circle cx="114" cy="180" r="5" fill="#facc15" stroke="#713f12" strokeWidth="1.5" />
+        {/* ── EV POWERTRAIN 3D VECTOR MECHANICS SYSTEM ── */}
+        {isEV ? (
+          <g id="ev-powertrain-full-assembly">
+            <EVBatteryCasingRenderer layoutSpec={layoutSpec} blockState={blockState} onHoverComponent={onHoverComponent} />
+            <EVCellModulesRenderer layoutSpec={layoutSpec} componentState={crankState} onHoverComponent={onHoverComponent} />
+            <EVBusbarGridRenderer layoutSpec={layoutSpec} componentState={rodState} onHoverComponent={onHoverComponent} />
+            <EVBMSRenderer layoutSpec={layoutSpec} componentState={pistonState} onHoverComponent={onHoverComponent} />
+            <EVCoolingPlateRenderer layoutSpec={layoutSpec} componentState={gasketState} onHoverComponent={onHoverComponent} />
+            <EVInverterRenderer layoutSpec={layoutSpec} componentState={headState} onHoverComponent={onHoverComponent} />
+            <EVStatorCoilsRenderer layoutSpec={layoutSpec} componentState={valveState} onHoverComponent={onHoverComponent} />
+            <EVRotorShaftRenderer layoutSpec={layoutSpec} componentState={camState} onHoverComponent={onHoverComponent} />
+            <EVGearboxRenderer layoutSpec={layoutSpec} componentState={intakeState} onHoverComponent={onHoverComponent} />
+            <EVPDUUnitRenderer layoutSpec={layoutSpec} componentState={exhaustState} onHoverComponent={onHoverComponent} />
+            <EVRegenBoostRenderer layoutSpec={layoutSpec} componentState={turboState} onHoverComponent={onHoverComponent} />
+            <EVCoolingReservoirRenderer layoutSpec={layoutSpec} componentState={panState} onHoverComponent={onHoverComponent} />
           </g>
+        ) : (
+          <g id="ice-engine-full-assembly">
+        {/* ── 1. ENGINE BLOCK (Modular Layout Renderers for 25 Engine Configurations) ── */}
+        {(() => {
+          if (currentLayout === "rotary") {
+            return (
+              <RotaryWankelRenderer
+                layoutSpec={layoutSpec}
+                blockState={blockState}
+                onHoverComponent={onHoverComponent}
+              />
+            );
+          }
+          if (currentLayout === "radial") {
+            return (
+              <RadialAircraftRenderer
+                layoutSpec={layoutSpec}
+                blockState={blockState}
+                onHoverComponent={onHoverComponent}
+              />
+            );
+          }
+          if (currentLayout === "apex_hybrid") {
+            return (
+              <ApexHybridLayoutRenderer
+                layoutSpec={layoutSpec}
+                blockState={blockState}
+                onHoverComponent={onHoverComponent}
+              />
+            );
+          }
+          if (layoutSpec.category === "wbank") {
+            return (
+              <WBankLayoutRenderer
+                layoutSpec={layoutSpec}
+                blockState={blockState}
+                onHoverComponent={onHoverComponent}
+              />
+            );
+          }
+          if (layoutSpec.category === "flat") {
+            return (
+              <FlatBoxerLayoutRenderer
+                layoutSpec={layoutSpec}
+                blockState={blockState}
+                onHoverComponent={onHoverComponent}
+              />
+            );
+          }
+          if (layoutSpec.category === "inline") {
+            return (
+              <InlineLayoutRenderer
+                layoutSpec={layoutSpec}
+                blockState={blockState}
+                onHoverComponent={onHoverComponent}
+              />
+            );
+          }
+          return (
+            <VBankLayoutRenderer
+              layoutSpec={layoutSpec}
+              blockState={blockState}
+              onHoverComponent={onHoverComponent}
+            />
+          );
+        })()}
 
-          {/* Main Slate Blue Block Shell */}
-          <path
-            d="M 148 148 L 352 148 Q 356 148 356 154 L 356 302 Q 356 310 344 310 L 156 310 Q 144 310 144 302 L 144 154 Q 144 148 148 148 Z"
-            fill="url(#slate-block)"
-            stroke={blockState.isHovered || blockState.isActive ? "#38bdf8" : "#2c3b4e"}
-            strokeWidth="2.5"
-          />
-
-          {/* Heavy Duty Block Side Mounting Lugs */}
-          <g fill="#253346" stroke="#172230" strokeWidth="1.5">
-            <rect x="134" y="174" width="12" height="28" rx="3" />
-            <circle cx="140" cy="188" r="3" fill="#0f172a" stroke="#475569" strokeWidth="1" />
-
-            <rect x="134" y="238" width="12" height="28" rx="3" />
-            <circle cx="140" cy="252" r="3" fill="#0f172a" stroke="#475569" strokeWidth="1" />
-
-            <rect x="354" y="174" width="12" height="28" rx="3" />
-            <circle cx="360" cy="188" r="3" fill="#0f172a" stroke="#475569" strokeWidth="1" />
-
-            <rect x="354" y="238" width="12" height="28" rx="3" />
-            <circle cx="360" cy="252" r="3" fill="#0f172a" stroke="#475569" strokeWidth="1" />
-          </g>
-
-          {/* Horizontal Reinforcement Structural Ribs */}
-          <line x1="145" y1="185" x2="355" y2="185" stroke="#1e293b" strokeWidth="2.5" opacity="0.6" />
-          <line x1="145" y1="215" x2="355" y2="215" stroke="#1e293b" strokeWidth="2.5" opacity="0.6" />
-          <line x1="145" y1="265" x2="355" y2="265" stroke="#1e293b" strokeWidth="2.5" opacity="0.6" />
-
-          {/* Oil Gallery Threaded Plugs */}
-          <circle cx="152" cy="165" r="3.5" fill="#334155" stroke="#0f172a" strokeWidth="1" />
-          <circle cx="152" cy="290" r="3.5" fill="#334155" stroke="#0f172a" strokeWidth="1" />
-
-          {/* 4 Precision Cylinder Bores */}
-          {[172, 212, 252, 292].map((xPos, idx) => (
-            <g key={`bore-${idx}`}>
-              <rect x={xPos} y="158" width="36" height="124" rx="4" fill="#0c1322" stroke="#1e2d42" strokeWidth="2" />
-              <rect x={xPos + 1} y="159" width="34" height="122" fill="url(#honing-crosshatch)" />
-              {/* Cylinder Bore Wall Highlights */}
-              <line x1={xPos + 1} y1="158" x2={xPos + 1} y2="282" stroke="#64748b" strokeWidth="1.2" opacity="0.6" />
-              <line x1={xPos + 35} y1="158" x2={xPos + 35} y2="282" stroke="#334155" strokeWidth="1.2" opacity="0.6" />
-            </g>
-          ))}
-
-          {/* Laser Debossed Engine Block Text */}
-          <text
-            x="250"
-            y="242"
-            fill="#1e293b"
-            fontSize="9"
-            fontFamily="monospace"
-            textAnchor="middle"
-            fontWeight="900"
-            letterSpacing="2.5"
-            opacity="0.9"
-          >
-            ENGINE BLOCK (CAST STEEL)
-          </text>
-        </g>
-
-        {/* ── 2. FORGED STEEL CRANKSHAFT WITH DETAILED COUNTERWEIGHTS & SNOUT ── */}
+        {/* ── 2. FORGED STEEL CRANKSHAFT WITH 3D VOLUMETRIC MAIN BEARINGS & CAPS ── */}
         <g
           id="crankshaft"
-          className={`transition-all duration-700 ease-out ${
+          onMouseEnter={() => onHoverComponent?.("crankshaft")}
+          onMouseLeave={() => onHoverComponent?.(null)}
+          className={`cursor-pointer transition-all duration-700 ease-out ${
             crankState.isActive ? "filter-glow-active" : ""
           }`}
           style={{
@@ -342,102 +727,179 @@ export function EngineSVG({
           }}
           filter={crankState.isInstalled ? "url(#soft-shadow-3d)" : undefined}
         >
-          {/* Main Forged Crank Shaft Axis */}
+          {/* Main Forged Steel Crank Shaft Cylindrical Axis */}
           <path
-            d="M 90 305 L 375 305"
+            d={`M ${layoutSpec.bx - 30} 305 L ${layoutSpec.bx + layoutSpec.bw + 30} 305`}
             fill="none"
-            stroke="url(#forged-steel)"
-            strokeWidth="16"
+            stroke="url(#crank-forged-3d)"
+            strokeWidth="22"
             strokeLinecap="round"
           />
+          {/* Main Axis Top Specular Highlight Line */}
+          <line x1={layoutSpec.bx - 28} y1="295" x2={layoutSpec.bx + layoutSpec.bw + 28} y2="295" stroke="#ffffff" strokeWidth="2.8" opacity="0.95" />
+          <line x1={layoutSpec.bx - 28} y1="298" x2={layoutSpec.bx + layoutSpec.bw + 28} y2="298" stroke="#e2e8f0" strokeWidth="1.2" opacity="0.7" />
 
-          {/* Polished Main Journals */}
-          {[168, 208, 250, 290, 332].map((xPos, idx) => (
-            <g key={`journal-${idx}`}>
-              <rect x={xPos} y="296" width="14" height="18" rx="2" fill="url(#pipe-cylinder-3d)" stroke="#475569" strokeWidth="1" />
-              <line x1={xPos + 2} y1="298" x2={xPos + 12} y2="298" stroke="#ffffff" strokeWidth="1" opacity="0.7" />
+          {/* Super-Polished Mirror Chrome Main Journals & 3D Main Bearing Shell Caps (Dynamically mapped over layoutSpec.cyls) */}
+          {layoutSpec.cyls.map((cxPos, idx) => (
+            <g key={`main-journal-cap-${idx}`}>
+              {/* 3D Cast Iron Main Bearing Cap Pedestal (Underneath Journal) */}
+              <rect x={cxPos - 12} y="302" width="24" height="20" rx="4" fill="url(#main-bearing-cap-cast-iron)" stroke="#090d16" strokeWidth="1.8" />
+              <line x1={cxPos - 11} y1="303.5" x2={cxPos + 11} y2="303.5" stroke="#f8fafc" strokeWidth="1.2" opacity="0.9" />
+              
+              {/* Tri-Metal Copper-Lead Babbitt Bearing Shell Half Insert */}
+              <rect x={cxPos - 9.5} y="295" width="19" height="11" rx="2" fill="url(#tri-metal-bearing-shell)" stroke="#78350f" strokeWidth="1" />
+
+              {/* Polished Mirror Chrome Journal Surface */}
+              <rect x={cxPos - 8} y="293" width="16" height="24" rx="3" fill="url(#journal-polished-chrome)" stroke="#090d16" strokeWidth="1.2" />
+              <line x1={cxPos - 6} y1="295" x2={cxPos + 6} y2="295" stroke="#ffffff" strokeWidth="1.8" />
+              <line x1={cxPos - 6} y1="301" x2={cxPos + 6} y2="301" stroke="#ffffff" strokeWidth="1" opacity="0.8" />
+              
+              {/* Journal Center Oiling Hole Port */}
+              <circle cx={cxPos} cy="305" r="2.2" fill="#020617" stroke="#38bdf8" strokeWidth="0.8" />
+
+              {/* Dual ARP Main Cap Studs with 12-Point Hex Nuts */}
+              <g fill="url(#bolt-boss-3d)" stroke="#090d16" strokeWidth="0.9">
+                <circle cx={cxPos - 9} cy="316" r="2.8" />
+                <polygon points={`${cxPos - 9},314.5 ${cxPos - 7.2},315.2 ${cxPos - 7.2},316.8 ${cxPos - 9},317.5 ${cxPos - 10.8},316.8 ${cxPos - 10.8},315.2`} fill="#ffffff" />
+                <circle cx={cxPos + 9} cy="316" r="2.8" />
+                <polygon points={`${cxPos + 9},314.5 ${cxPos + 10.8},315.2 ${cxPos + 10.8},316.8 ${cxPos + 9},317.5 ${cxPos + 7.2},316.8 ${cxPos + 7.2},315.2`} fill="#ffffff" />
+              </g>
             </g>
           ))}
 
-          {/* 4 Swept D-Shaped Counterweight Webs with Drill Holes */}
-          {[
-            { cx: 190, cy: 320, rot: 0 },
-            { cx: 230, cy: 290, rot: 180 },
-            { cx: 270, cy: 320, rot: 0 },
-            { cx: 310, cy: 290, rot: 180 },
-          ].map((cw, idx) => (
-            <g key={`counterweight-${idx}`}>
-              <path
-                d={`M ${cw.cx - 20} ${cw.cy - 8} Q ${cw.cx} ${cw.cy + 24} ${cw.cx + 20} ${cw.cy - 8} Z`}
-                fill="url(#forged-steel)"
-                stroke="#334155"
-                strokeWidth="1.8"
-              />
-              {/* Precision Weight Balance Drill Holes */}
-              <circle cx={cw.cx - 8} cy={cw.cy + 6} r="3" fill="#0f172a" stroke="#64748b" strokeWidth="1" />
-              <circle cx={cw.cx + 8} cy={cw.cy + 6} r="3" fill="#0f172a" stroke="#64748b" strokeWidth="1" />
-              <circle cx={cw.cx} cy={cw.cy + 12} r="3.5" fill="#0f172a" stroke="#64748b" strokeWidth="1" />
-            </g>
-          ))}
+          {/* Swept 3D Forged Steel Counterweight Webs with Precision Balance Drills */}
+          {layoutSpec.cyls.map((cxPos, idx) => {
+            const isEven = idx % 2 === 0;
+            const cw = { cx: cxPos, cy: isEven ? 324 : 286 };
+            return (
+              <g key={`counterweight-${idx}`}>
+                {/* Swept D-Shaped Forged Web Body */}
+                <path
+                  d={`M ${cw.cx - 24} ${cw.cy - 12} Q ${cw.cx} ${cw.cy + 28} ${cw.cx + 24} ${cw.cy - 12} Z`}
+                  fill="url(#crank-forged-3d)"
+                  stroke="#090d16"
+                  strokeWidth="2.5"
+                />
+                {/* Web Bevel Edge Specular Highlight Arc */}
+                <path
+                  d={`M ${cw.cx - 20} ${cw.cy - 10} Q ${cw.cx} ${cw.cy + 24} ${cw.cx + 20} ${cw.cy - 10} Z`}
+                  fill="none"
+                  stroke="#ffffff"
+                  strokeWidth="1.5"
+                  opacity="0.85"
+                />
+                {/* 3 Precision Balance Drill Holes with Inset Conical Depth Shading */}
+                <g>
+                  <circle cx={cw.cx - 10} cy={cw.cy + 6} r="3.5" fill="#020617" stroke="#475569" strokeWidth="1" />
+                  <circle cx={cw.cx - 10} cy={cw.cy + 6} r="1.8" fill="#1e293b" />
+                  
+                  <circle cx={cw.cx + 10} cy={cw.cy + 6} r="3.5" fill="#020617" stroke="#475569" strokeWidth="1" />
+                  <circle cx={cw.cx + 10} cy={cw.cy + 6} r="1.8" fill="#1e293b" />
+                  
+                  <circle cx={cw.cx} cy={cw.cy + 14} r="4" fill="#020617" stroke="#475569" strokeWidth="1" />
+                  <circle cx={cw.cx} cy={cw.cy + 14} r="2" fill="#1e293b" />
+                </g>
+              </g>
+            );
+          })}
 
-          {/* Left Extended Crankshaft Snout (3 Stepped Diameter Sections) */}
-          <g fill="url(#forged-steel)" stroke="#334155" strokeWidth="1.2">
-            {/* Step 1: Main Seal Journal */}
-            <rect x="126" y="297" width="18" height="16" rx="2" />
-            {/* Step 2: Timing Gear Journal */}
-            <rect x="106" y="299" width="20" height="12" rx="2" />
+          {/* Left Extended 3-Step Crankshaft Snout & Woodruff Keyway */}
+          <g fill="url(#crank-forged-3d)" stroke="#090d16" strokeWidth="1.8">
+            {/* Step 1: Front Main Seal Journal */}
+            <rect x={layoutSpec.bx + 6} y="295" width="22" height="20" rx="3" />
+            <line x1={layoutSpec.bx + 7} y1="296" x2={layoutSpec.bx + 27} y2="296" stroke="#ffffff" strokeWidth="1.8" opacity="0.95" />
+            
+            {/* Step 2: Timing Gear Drive Journal */}
+            <rect x={layoutSpec.bx - 14} y="297" width="20" height="16" rx="2" />
+            <line x1={layoutSpec.bx - 13} y1="298" x2={layoutSpec.bx + 5} y2="298" stroke="#ffffff" strokeWidth="1.5" opacity="0.9" />
+            
             {/* Step 3: Keyed Snout Tip */}
-            <rect x="85" y="301" width="21" height="8" rx="1.5" />
+            <rect x={layoutSpec.bx - 35} y="299" width="21" height="12" rx="1.5" />
+            <line x1={layoutSpec.bx - 34} y1="300" x2={layoutSpec.bx - 15} y2="300" stroke="#ffffff" strokeWidth="1.2" opacity="0.8" />
           </g>
-          {/* Keyway Slot */}
-          <rect x="90" y="303" width="10" height="4" fill="#0f172a" rx="1" />
 
-          {/* Right Flywheel Flange with 6-Bolt Circle Pattern */}
+          {/* Precision Keyway Drive Slot & Woodruff Key */}
+          <rect x={layoutSpec.bx - 30} y="303" width="13" height="4.5" fill="#020617" rx="1" stroke="#475569" strokeWidth="0.8" />
+          <rect x={layoutSpec.bx - 28} y="304" width="9" height="2.5" fill="#38bdf8" rx="0.5" />
+
+          {/* Right Rear Flywheel Flange with 8-Bolt Pattern & Pilot Bearing */}
           <g>
-            <rect x="352" y="288" width="18" height="34" rx="3" fill="url(#forged-steel)" stroke="#334155" strokeWidth="1.5" />
-            <circle cx="361" cy="293" r="2" fill="#0f172a" stroke="#ffffff" strokeWidth="0.5" />
-            <circle cx="361" cy="301" r="2" fill="#0f172a" stroke="#ffffff" strokeWidth="0.5" />
-            <circle cx="361" cy="309" r="2" fill="#0f172a" stroke="#ffffff" strokeWidth="0.5" />
-            <circle cx="361" cy="317" r="2" fill="#0f172a" stroke="#ffffff" strokeWidth="0.5" />
-            {/* Ring Gear Starter Teeth */}
-            <line x1="369" y1="288" x2="369" y2="322" stroke="#64748b" strokeWidth="2" strokeDasharray="3 2" />
+            {/* Main Flange Disc */}
+            <rect x={layoutSpec.bx + layoutSpec.bw + 10} y="284" width="22" height="42" rx="4" fill="url(#crank-forged-3d)" stroke="#090d16" strokeWidth="2.2" />
+            <line x1={layoutSpec.bx + layoutSpec.bw + 11} y1="285.5" x2={layoutSpec.bx + layoutSpec.bw + 31} y2="285.5" stroke="#ffffff" strokeWidth="2.2" opacity="0.95" />
+            
+            {/* Center Pilot Bearing Recess */}
+            <circle cx={layoutSpec.bx + layoutSpec.bw + 21} cy="305" r="5.5" fill="#020617" stroke="#cbd5e1" strokeWidth="1.2" />
+            <circle cx={layoutSpec.bx + layoutSpec.bw + 21} cy="305" r="2.8" fill="#b45309" stroke="#fef08a" strokeWidth="0.8" />
+
+            {/* 8-Bolt Circle Pattern */}
+            <circle cx={layoutSpec.bx + layoutSpec.bw + 21} cy="289" r="2.2" fill="#020617" stroke="#ffffff" strokeWidth="0.8" />
+            <circle cx={layoutSpec.bx + layoutSpec.bw + 21} cy="297" r="2.2" fill="#020617" stroke="#ffffff" strokeWidth="0.8" />
+            <circle cx={layoutSpec.bx + layoutSpec.bw + 21} cy="313" r="2.2" fill="#020617" stroke="#ffffff" strokeWidth="0.8" />
+            <circle cx={layoutSpec.bx + layoutSpec.bw + 21} cy="321" r="2.2" fill="#020617" stroke="#ffffff" strokeWidth="0.8" />
+
+            {/* Starter Ring Gear Teeth */}
+            <line x1={layoutSpec.bx + layoutSpec.bw + 30} y1="284" x2={layoutSpec.bx + layoutSpec.bw + 30} y2="326" stroke="#090d16" strokeWidth="3.5" strokeDasharray="3 2" />
           </g>
         </g>
 
-        {/* ── 3. FORGED STEEL H-BEAM CONNECTING RODS ── */}
+        {/* ── 3. FORGED STEEL H-BEAM CONNECTING RODS & ARP FASTENERS ── */}
         <g
           id="rods"
-          className="transition-all duration-700 ease-out"
+          onMouseEnter={() => onHoverComponent?.("rods")}
+          onMouseLeave={() => onHoverComponent?.(null)}
+          className="cursor-pointer transition-all duration-700 ease-out"
           style={{
             transform: `translate(${rodState.offsetX}px, ${rodState.offsetY}px)`,
             opacity: rodState.opacity,
           }}
         >
-          {[
-            { x: 184, y: 194, h: 104 },
-            { x: 224, y: 184, h: 104 },
-            { x: 264, y: 194, h: 104 },
-            { x: 304, y: 184, h: 104 },
-          ].map((rod, idx) => (
-            <g key={`rod-${idx}`}>
-              {/* Forged Steel H-Beam Shank */}
-              <rect x={rod.x} y={rod.y} width="12" height={rod.h} rx="4" fill="url(#forged-steel)" stroke="#334155" strokeWidth="1.5" />
-              {/* Recessed H-Beam Center Channel */}
-              <rect x={rod.x + 2.5} y={rod.y + 10} width="7" height={rod.h - 22} rx="1.5" fill="#172230" />
-              {/* Small-End Wrist Pin Bushing (Bronze) */}
-              <circle cx={rod.x + 6} cy={rod.y + 5} r="4" fill="none" stroke="#b45309" strokeWidth="1.5" />
-              {/* Big-End Rod Cap Split Line & ARP Fasteners */}
-              <line x1={rod.x} y1={rod.y + rod.h - 10} x2={rod.x + 12} y2={rod.y + rod.h - 10} stroke="#0f172a" strokeWidth="1.5" />
-              <circle cx={rod.x + 2.5} cy={rod.y + rod.h - 5} r="1.8" fill="#ffffff" stroke="#334155" strokeWidth="0.8" />
-              <circle cx={rod.x + 9.5} cy={rod.y + rod.h - 5} r="1.8" fill="#ffffff" stroke="#334155" strokeWidth="0.8" />
-            </g>
-          ))}
+          {layoutSpec.cyls.map((cxPos, idx) => {
+            const isOdd = idx % 2 === 1;
+            const rodY = isOdd ? 184 : 194;
+            const rodH = 104;
+            const rod = { x: cxPos, y: rodY, h: rodH };
+            return (
+              <g key={`rod-${idx}`}>
+                {/* Forged Steel H-Beam Outer Shank */}
+                <rect x={rod.x - 7} y={rod.y} width="14" height={rod.h} rx="5" fill="url(#forged-steel)" stroke="#090d16" strokeWidth="2.2" />
+                {/* Top Chamfer Specular Highlight Line */}
+                <line x1={rod.x - 6} y1={rod.y + 2} x2={rod.x + 6} y2={rod.y + 2} stroke="#ffffff" strokeWidth="2" opacity="0.98" />
+                <line x1={rod.x - 6} y1={rod.y + 4} x2={rod.x + 6} y2={rod.y + 4} stroke="#ffffff" strokeWidth="0.9" opacity="0.6" />
+
+                {/* Recessed H-Beam Center Channel */}
+                <rect x={rod.x - 4.5} y={rod.y + 10} width="9" height={rod.h - 22} rx="2.5" fill="#020617" stroke="#475569" strokeWidth="0.8" />
+                {/* Center Channel Polished Specular Reflection Streak */}
+                <line x1={rod.x - 2.5} y1={rod.y + 12} x2={rod.x - 2.5} y2={rod.y + rod.h - 14} stroke="url(#journal-polished-chrome)" strokeWidth="1.8" />
+                <line x1={rod.x - 1} y1={rod.y + 12} x2={rod.x - 1} y2={rod.y + rod.h - 14} stroke="#ffffff" strokeWidth="0.9" opacity="0.8" />
+
+                {/* Small-End Wrist Pin Bushing (Phosphor Bronze Sleeve) */}
+                <circle cx={rod.x} cy={rod.y + 6} r="5.2" fill="none" stroke="#d97706" strokeWidth="2.8" />
+                <circle cx={rod.x} cy={rod.y + 6} r="3" fill="#020617" />
+                {/* Small-End Oiling Hole */}
+                <circle cx={rod.x} cy={rod.y + 2} r="1.2" fill="#020617" />
+
+                {/* Big-End Rod Cap Precision Split Line */}
+                <line x1={rod.x - 7.5} y1={rod.y + rod.h - 10} x2={rod.x + 7.5} y2={rod.y + rod.h - 10} stroke="#090d16" strokeWidth="2.8" />
+
+                {/* Dual ARP 2000 12-Point Hex Rod Cap Fasteners */}
+                <g fill="url(#bolt-boss-3d)" stroke="#090d16" strokeWidth="0.9">
+                  <circle cx={rod.x - 4} cy={rod.y + rod.h - 5} r="2.8" />
+                  <polygon points={`${rod.x - 4},${rod.y + rod.h - 6.5} ${rod.x - 2.5},${rod.y + rod.h - 5.8} ${rod.x - 2.5},${rod.y + rod.h - 4.2} ${rod.x - 4},${rod.y + rod.h - 3.5} ${rod.x - 5.5},${rod.y + rod.h - 4.2} ${rod.x - 5.5},${rod.y + rod.h - 5.8}`} fill="#ffffff" />
+                  <circle cx={rod.x + 4} cy={rod.y + rod.h - 5} r="2.8" />
+                  <polygon points={`${rod.x + 4},${rod.y + rod.h - 6.5} ${rod.x + 5.5},${rod.y + rod.h - 5.8} ${rod.x + 5.5},${rod.y + rod.h - 4.2} ${rod.x + 4},${rod.y + rod.h - 3.5} ${rod.x + 2.5},${rod.y + rod.h - 4.2} ${rod.x + 2.5},${rod.y + rod.h - 5.8}`} fill="#ffffff" />
+                </g>
+              </g>
+            );
+          })}
         </g>
 
-        {/* ── 4. ANODIZED GUNMETAL/BLUE PISTONS WITH RING LANDS ── */}
+        {/* ── 4. ANODIZED BILLET ALUMINUM PISTONS & POLISHED METALLIC RINGS ── */}
         <g
           id="pistons"
-          className={`transition-all duration-700 ease-out ${
+          onMouseEnter={() => onHoverComponent?.("pistons")}
+          onMouseLeave={() => onHoverComponent?.(null)}
+          className={`cursor-pointer transition-all duration-700 ease-out ${
             isAssemblyComplete ? "animate-piston-cycle" : ""
           }`}
           style={{
@@ -446,211 +908,280 @@ export function EngineSVG({
           }}
           filter={pistonState.isInstalled ? "url(#soft-shadow-3d)" : undefined}
         >
-          {[
-            { x: 174, y: 162, h: 40 },
-            { x: 214, y: 152, h: 40 },
-            { x: 254, y: 162, h: 40 },
-            { x: 294, y: 152, h: 40 },
-          ].map((p, idx) => (
-            <g key={`piston-${idx}`}>
-              {/* Metallic Anodized Crown & Skirt */}
-              <rect x={p.x} y={p.y} width="32" height={p.h} rx="5" fill="url(#blue-piston)" stroke="#1e3a5f" strokeWidth="2" />
-              {/* Crown Top Bevel Specular Highlight */}
-              <line x1={p.x + 2} y1={p.y + 2} x2={p.x + 30} y2={p.y + 2} stroke="#94b8d4" strokeWidth="1.8" />
-              {/* 3 Distinct Compression & Oil Scraper Rings */}
-              <line x1={p.x} y1={p.y + 8} x2={p.x + 32} y2={p.y + 8} stroke="#f8fafc" strokeWidth="1.2" />
-              <line x1={p.x} y1={p.y + 14} x2={p.x + 32} y2={p.y + 14} stroke="#cbd5e1" strokeWidth="1.2" />
-              <line x1={p.x} y1={p.y + 20} x2={p.x + 32} y2={p.y + 20} stroke="#0f172a" strokeWidth="1.5" />
-              {/* Wrist Pin Bore & Hollow Pin */}
-              <circle cx={p.x + 16} cy={p.y + 28} r="5" fill="#0f172a" stroke="#cbd5e1" strokeWidth="1.5" />
-              <circle cx={p.x + 16} cy={p.y + 28} r="2.5" fill="#475569" />
-            </g>
-          ))}
+          {layoutSpec.cyls.map((cxPos, idx) => {
+            const isOdd = idx % 2 === 1;
+            const pY = isOdd ? 152 : 162;
+            const p = { x: cxPos, y: pY, h: 44 };
+            const pWidth = Math.max(30, layoutSpec.width - 6);
+            const pRadius = pWidth / 2;
+            return (
+              <g key={`piston-${idx}`}>
+                {/* Metallic Anodized Blue Billet Crown & Side Skirt (Mated inside cylinder bores!) */}
+                <rect x={p.x - pRadius} y={p.y} width={pWidth} height={p.h} rx="6" fill="url(#anodized-blue)" stroke="#090d16" strokeWidth="2.5" />
+                
+                {/* CNC Machined Piston Crown Top Deck & Bevel Highlight */}
+                <path d={`M ${p.x - pRadius + 2} ${p.y + 4} L ${p.x + pRadius - 2} ${p.y + 4} L ${p.x + pRadius - 4} ${p.y + 1} L ${p.x - pRadius + 4} ${p.y + 1} Z`} fill="url(#machined-deck-bevel)" />
+                <line x1={p.x - pRadius + 3} y1={p.y + 2} x2={p.x + pRadius - 3} y2={p.y + 2} stroke="#ffffff" strokeWidth="2.5" opacity="0.98" />
+
+                {/* Recessed Dual CNC Valve Relief Cutouts */}
+                <ellipse cx={p.x - 9} cy={p.y + 3} rx="5.5" ry="2.2" fill="#020617" opacity="0.8" />
+                <ellipse cx={p.x - 9} cy={p.y + 3} rx="4.5" ry="1.5" fill="url(#machined-deck-bevel)" opacity="0.7" />
+                
+                <ellipse cx={p.x + 9} cy={p.y + 3} rx="5.5" ry="2.2" fill="#020617" opacity="0.8" />
+                <ellipse cx={p.x + 9} cy={p.y + 3} rx="4.5" ry="1.5" fill="url(#machined-deck-bevel)" opacity="0.7" />
+
+                {/* 3 Distinct 3D Metallic Ring Lands */}
+                {/* Top Nitrided Stainless Compression Ring (Chrome Finish with Gap) */}
+                <rect x={p.x - 21} y={p.y + 8} width="42" height="2.8" rx="1" fill="url(#journal-polished-chrome)" stroke="#090d16" strokeWidth="0.9" />
+                <line x1={p.x - 20} y1={p.y + 9} x2={p.x + 20} y2={p.y + 9} stroke="#ffffff" strokeWidth="1.2" />
+                <line x1={p.x - 2} y1={p.y + 8} x2={p.x + 1} y2={p.y + 8} stroke="#020617" strokeWidth="2" />
+
+                {/* Second Molybdenum Wiper Ring */}
+                <rect x={p.x - 20.5} y={p.y + 14} width="41" height="2.8" rx="1" fill="url(#chrome-3d)" stroke="#090d16" strokeWidth="0.9" />
+                <line x1={p.x - 19} y1={p.y + 15} x2={p.x + 19} y2={p.y + 15} stroke="#ffffff" strokeWidth="1" />
+
+                {/* Bottom 3-Piece Oil Control Ring Assembly with Serpentine Expander Spring */}
+                <rect x={p.x - 20.5} y={p.y + 20} width="41" height="3.2" rx="1" fill="#1e293b" stroke="#090d16" strokeWidth="0.9" />
+                <line x1={p.x - 19} y1={p.y + 21.5} x2={p.x + 19} y2={p.y + 21.5} stroke="#fba518" strokeWidth="1.4" strokeDasharray="2 1" />
+
+                {/* Pin Boss Skirt Chamfer & Hollow Hardened Steel Wrist Pin */}
+                <rect x={p.x - 10} y={p.y + 26} width="20" height="13" rx="3.5" fill="url(#chrome-3d)" stroke="#090d16" strokeWidth="1.2" />
+                <circle cx={p.x} cy={p.y + 32} r="6.5" fill="url(#journal-polished-chrome)" stroke="#090d16" strokeWidth="2.2" />
+                <circle cx={p.x} cy={p.y + 32} r="3.2" fill="#020617" />
+                {/* Internal Circlip Wire Retainer Ring Groove */}
+                <circle cx={p.x} cy={p.y + 32} r="5.2" fill="none" stroke="#ffffff" strokeWidth="0.9" strokeDasharray="5 2" />
+              </g>
+            );
+          })}
         </g>
 
-        {/* ── 5. SUBTLE COPPER HEAD GASKET ── */}
+        {/* ── 5. MULTILAYER STEEL (MLS) HEAD GASKET WITH COPPER STOPPER BEADS ── */}
         <g
           id="head_gasket"
-          className="transition-all duration-700 ease-out"
+          onMouseEnter={() => onHoverComponent?.("head_gasket")}
+          onMouseLeave={() => onHoverComponent?.(null)}
+          className="cursor-pointer transition-all duration-700 ease-out"
           style={{
             transform: `translate(${gasketState.offsetX}px, ${gasketState.offsetY}px)`,
             opacity: gasketState.opacity,
           }}
         >
-          <rect x="142" y="144" width="216" height="5" rx="2" fill="url(#copper-gasket)" stroke="#9a3412" strokeWidth="0.8" opacity="0.95" />
+          {/* Main MLS Copper Head Gasket Body (Mated on top of block deck at Y: 106!) */}
+          <rect x={layoutSpec.bx + 2} y="104" width={layoutSpec.bw - 4} height="8" rx="2.5" fill="url(#copper-gasket)" stroke="#090d16" strokeWidth="2" opacity="0.98" />
+          <line x1={layoutSpec.bx + 4} y1="105.5" x2={layoutSpec.bx + layoutSpec.bw - 4} y2="105.5" stroke="#ffffff" strokeWidth="1.5" opacity="0.9" />
+          
+          {/* Combustion Stopper Ring Seals (Dynamically aligned with layoutSpec.cyls!) */}
+          {layoutSpec.cyls.map((gx, idx) => (
+            <ellipse key={`gasket-ring-${idx}`} cx={gx} cy="108" rx={layoutSpec.width / 2 - 1} ry="2.8" fill="none" stroke="#fba518" strokeWidth="1.6" />
+          ))}
         </g>
 
-        {/* ── 6. BRUSHED ALUMINUM CNC CYLINDER HEAD (Wider Body & Domes) ── */}
+        {/* ── 6. BRUSHED ALUMINUM CNC CYLINDER HEAD & DUAL DOME CHAMBERS ── */}
         <g
           id="cylinder_head"
-          className="transition-all duration-700 ease-out"
+          onMouseEnter={() => onHoverComponent?.("cylinder_head")}
+          onMouseLeave={() => onHoverComponent?.(null)}
+          className="cursor-pointer transition-all duration-700 ease-out"
           style={{
             transform: `translate(${headState.offsetX}px, ${headState.offsetY}px)`,
             opacity: headState.opacity,
           }}
           filter={headState.isInstalled ? "url(#soft-shadow-3d)" : undefined}
         >
-          {/* Spark Plugs & Ignition Coil Packs */}
-          {[190, 230, 270, 310].map((spx, idx) => (
+          {/* Spark Plugs & Ignition Coil Packs (Dynamically aligned with layoutSpec.cyls!) */}
+          {layoutSpec.cyls.map((spx, idx) => (
             <g key={`sparkplug-${idx}`}>
-              <rect x={spx - 3} y="44" width="6" height="16" rx="1.5" fill="#f8fafc" stroke="#64748b" strokeWidth="0.8" />
-              <rect x={spx - 4} y="42" width="8" height="4" rx="1" fill="#1e293b" />
-              <line x1={spx} y1="36" x2={spx} y2="42" stroke="#ea580c" strokeWidth="1.5" />
+              <rect x={spx - 4} y="16" width="8" height="22" rx="2.5" fill="#f8fafc" stroke="#090d16" strokeWidth="1.2" />
+              <rect x={spx - 6} y="14" width="12" height="6" rx="2" fill="#0f172a" />
+              <line x1={spx} y1="8" x2={spx} y2="14" stroke="#ea580c" strokeWidth="2.5" />
             </g>
           ))}
 
-          {/* Main Brushed Aluminum Cylinder Head Block */}
+          {/* Main Brushed Aluminum Cylinder Head Block (Mated on top of Head Gasket at Y: 104!) */}
           <rect
-            x="142"
-            y="58"
-            width="216"
-            height="86"
-            rx="8"
+            x={layoutSpec.bx + 2}
+            y="36"
+            width={layoutSpec.bw - 4}
+            height="70"
+            rx="10"
             fill="url(#brushed-head)"
-            stroke={headState.isHovered || headState.isActive ? "#38bdf8" : "#94a3b8"}
-            strokeWidth="2.5"
+            stroke={headState.isHovered || headState.isActive ? "#38bdf8" : "#090d16"}
+            strokeWidth="3.8"
           />
           {/* Top Edge Bevel & Machined Flange Lip */}
-          <line x1="142" y1="62" x2="358" y2="62" stroke="#ffffff" strokeWidth="2" />
+          <line x1={layoutSpec.bx + 4} y1="39" x2={layoutSpec.bx + layoutSpec.bw - 4} y2="39" stroke="#ffffff" strokeWidth="2.8" opacity="0.95" />
 
-          {/* 4 Combustion Dome Cutout Scallops along bottom edge */}
-          {[190, 230, 270, 310].map((cx, idx) => (
+          {/* Combustion Dome Cutout Scallops along bottom deck */}
+          {layoutSpec.cyls.map((cx, idx) => (
             <g key={`dome-${idx}`}>
-              <path d={`M ${cx - 15} 144 A 15 15 0 0 1 ${cx + 15} 144 Z`} fill="#1e293b" opacity="0.3" />
+              <path d={`M ${cx - layoutSpec.width / 2.3} 106 A ${layoutSpec.width / 2.3} ${layoutSpec.width / 2.3} 0 0 1 ${cx + layoutSpec.width / 2.3} 106 Z`} fill="#020617" opacity="0.6" />
               {isAssemblyComplete && (
-                <path d={`M ${cx - 15} 144 A 15 15 0 0 1 ${cx + 15} 144 Z`} fill="url(#combustion-glow)" className="animate-pulse" />
+                <path d={`M ${cx - layoutSpec.width / 2.3} 106 A ${layoutSpec.width / 2.3} ${layoutSpec.width / 2.3} 0 0 1 ${cx + layoutSpec.width / 2.3} 106 Z`} fill="url(#combustion-glow)" className="animate-pulse" />
               )}
             </g>
           ))}
 
-          {/* Recessed Deck Hex Bolts Across Top Rim */}
-          {[158, 192, 226, 260, 294, 328, 345].map((bx, idx) => (
-            <circle key={`head-bolt-${idx}`} cx={bx} cy="66" r="3.5" fill="#475569" stroke="#1e293b" strokeWidth="1" />
+          {/* Recessed Deck Hex Head Bolts Across Top Rim */}
+          {[136, 175, 214, 250, 290, 329, 364].map((bx, idx) => (
+            <circle key={`head-bolt-${idx}`} cx={bx} cy="46" r="4.5" fill="#334155" stroke="#090d16" strokeWidth="1.4" />
           ))}
 
           {/* Laser Debossed Typography */}
           <text
             x="250"
-            y="105"
-            fill="#334155"
-            fontSize="9.5"
+            y="76"
+            fill="#090d16"
+            fontSize="10"
             fontFamily="monospace"
             textAnchor="middle"
             fontWeight="900"
-            letterSpacing="2.5"
+            letterSpacing="2.8"
             opacity="0.95"
           >
             CYLINDER HEAD (CNC PORTED)
           </text>
         </g>
 
-        {/* ── 7. DUAL VALVE SPRINGS, STEMS & MUSHROOM HEADS ── */}
+        {/* ── 7. DUAL HELICAL SPRINGS, TITANIUM RETAINERS & 45-DEGREE MUSHROOM VALVES ── */}
         <g
           id="valves"
-          className="transition-all duration-700 ease-out"
+          onMouseEnter={() => onHoverComponent?.("valves")}
+          onMouseLeave={() => onHoverComponent?.(null)}
+          className="cursor-pointer transition-all duration-700 ease-out"
           style={{
             transform: `translate(${valveState.offsetX}px, ${valveState.offsetY}px)`,
             opacity: valveState.opacity,
           }}
         >
-          {[174, 184, 214, 224, 254, 264, 294, 304].map((vx, idx) => (
+          {layoutSpec.cyls.flatMap((cx) => [cx - 10, cx + 10]).map((vx, idx) => (
             <g key={`valve-${idx}`}>
-              {/* Thick Stem */}
-              <line x1={vx} y1="68" x2={vx} y2="136" stroke="#334155" strokeWidth="3.5" />
-              <line x1={vx - 0.5} y1="68" x2={vx - 0.5} y2="136" stroke="#ffffff" strokeWidth="0.8" opacity="0.7" />
-              {/* Dual Valve Coil Springs */}
-              {[78, 84, 90, 96, 102].map((sy, sidx) => (
-                <line key={`spring-${sidx}`} x1={vx - 4} y1={sy} x2={vx + 4} y2={sy} stroke="#94a3b8" strokeWidth="2" strokeLinecap="round" />
+              {/* Bronze Valve Guide Sleeve in Head Casting */}
+              <rect x={vx - 3.5} y="48" width="7" height="34" rx="2" fill="none" stroke="#b45309" strokeWidth="1.8" opacity="0.95" />
+
+              {/* Polished Mirror Chrome Hardened Valve Stem */}
+              <line x1={vx} y1="42" x2={vx} y2="108" stroke="url(#journal-polished-chrome)" strokeWidth="3.5" />
+              <line x1={vx - 0.8} y1="42" x2={vx - 0.8} y2="108" stroke="#ffffff" strokeWidth="1.2" opacity="0.95" />
+
+              {/* 3D Helical Spiraling Dual Valve Springs (Outer & Inner Coils) */}
+              {[50, 58, 66, 74].map((sy, sidx) => (
+                <g key={`coil-${sidx}`}>
+                  {/* Back Coil Loop Arc */}
+                  <path d={`M ${vx - 6} ${sy} Q ${vx} ${sy - 2.5} ${vx + 6} ${sy}`} fill="none" stroke="#090d16" strokeWidth="2.8" />
+                  {/* Front Helical Coil Arc with 3D Highlight */}
+                  <path d={`M ${vx - 6.5} ${sy + 4} Q ${vx} ${sy + 8.5} ${vx + 6.5} ${sy + 4}`} fill="none" stroke="#94a3b8" strokeWidth="3.2" strokeLinecap="round" />
+                  <path d={`M ${vx - 5.5} ${sy + 3.5} Q ${vx} ${sy + 7.5} ${vx + 5.5} ${sy + 3.5}`} fill="none" stroke="#ffffff" strokeWidth="1.2" strokeLinecap="round" opacity="0.9" />
+                </g>
               ))}
-              {/* Titanium Retainer Cap */}
-              <rect x={vx - 5} y="71" width="10" height="5" rx="1.5" fill="#e2e8f0" stroke="#475569" strokeWidth="0.8" />
-              {/* Mushroom Valve Disc Head */}
-              <path d={`M ${vx - 7} 136 L ${vx + 7} 136 L ${vx + 3} 128 L ${vx - 3} 128 Z`} fill="#475569" stroke="#1e293b" strokeWidth="1" />
+
+              {/* 3D CNC Titanium Valve Retainer Cap with Split Collet Keepers */}
+              <path d={`M ${vx - 7.5} 44 L ${vx + 7.5} 44 L ${vx + 5.5} 50 L ${vx - 5.5} 50 Z`} fill="url(#machined-deck-bevel)" stroke="#090d16" strokeWidth="1.2" />
+              <line x1={vx - 6.5} y1="45" x2={vx + 6.5} y2="45" stroke="#ffffff" strokeWidth="1.2" opacity="0.95" />
+
+              {/* 45-Degree Beveled Mushroom Valve Disc Head */}
+              <g>
+                <path d={`M ${vx - 9} 108 L ${vx + 9} 108 L ${vx + 5} 99 L ${vx - 5} 99 Z`} fill="url(#machined-deck-bevel)" stroke="#090d16" strokeWidth="1.5" />
+                <line x1={vx - 8.5} y1="107" x2={vx + 8.5} y2="107" stroke="#ffffff" strokeWidth="1.2" opacity="0.9" />
+              </g>
             </g>
           ))}
         </g>
 
-        {/* ── 8. CAMSHAFTS & DRIVE SPROCKETS ── */}
+        {/* ── 8. CAMSHAFTS & SPROCKET GEAR TIMING SYSTEM ── */}
         <g
           id="camshaft"
-          className="transition-all duration-700 ease-out"
+          onMouseEnter={() => onHoverComponent?.("camshaft")}
+          onMouseLeave={() => onHoverComponent?.(null)}
+          className="cursor-pointer transition-all duration-700 ease-out"
           style={{
             transform: `translate(${camState.offsetX}px, ${camState.offsetY}px)`,
             opacity: camState.opacity,
           }}
         >
-          {/* Dual Overhead Camshaft Sprocket Gears */}
-          <circle cx="146" cy="72" r="9" fill="url(#forged-steel)" stroke="#334155" strokeWidth="1.5" strokeDasharray="3 1.5" />
-          <circle cx="146" cy="86" r="9" fill="url(#forged-steel)" stroke="#334155" strokeWidth="1.5" strokeDasharray="3 1.5" />
+          {/* Dual Overhead Camshaft Sprocket Gears with Timing Teeth */}
+          <g fill="url(#forged-steel)" stroke="#090d16" strokeWidth="2.2">
+            <circle cx={layoutSpec.bx + 18} cy="46" r="11" strokeDasharray="3 1.5" />
+            <circle cx={layoutSpec.bx + 18} cy="46" r="4.5" fill="#090d16" />
+            <circle cx={layoutSpec.bx + 18} cy="62" r="11" strokeDasharray="3 1.5" />
+            <circle cx={layoutSpec.bx + 18} cy="62" r="4.5" fill="#090d16" />
+          </g>
 
-          <line x1="150" y1="72" x2="350" y2="72" stroke="url(#forged-steel)" strokeWidth="9" strokeLinecap="round" />
-          <line x1="150" y1="86" x2="350" y2="86" stroke="url(#forged-steel)" strokeWidth="9" strokeLinecap="round" />
+          {/* DOHC Camshaft Shaft Bars */}
+          <line x1={layoutSpec.bx + 22} y1="46" x2={layoutSpec.bx + layoutSpec.bw - 18} y2="46" stroke="url(#crank-forged-3d)" strokeWidth="11" strokeLinecap="round" />
+          <line x1={layoutSpec.bx + 23} y1="42.5" x2={layoutSpec.bx + layoutSpec.bw - 19} y2="42.5" stroke="#ffffff" strokeWidth="2" opacity="0.9" />
+
+          <line x1={layoutSpec.bx + 22} y1="62" x2={layoutSpec.bx + layoutSpec.bw - 18} y2="62" stroke="url(#crank-forged-3d)" strokeWidth="11" strokeLinecap="round" />
+          <line x1={layoutSpec.bx + 23} y1="58.5" x2={layoutSpec.bx + layoutSpec.bw - 19} y2="58.5" stroke="#ffffff" strokeWidth="2" opacity="0.9" />
         </g>
 
-        {/* ── 9. DUAL Y-PIPE POLISHED ALUMINUM INTAKE & BLUE SILICONE COUPLERS ── */}
+        {/* ── 9. POLISHED ALUMINUM INTAKE MANIFOLD & THROTTLE BODY ── */}
         <g
           id="intake_manifold"
-          className="transition-all duration-700 ease-out"
+          onMouseEnter={() => onHoverComponent?.("intake_manifold")}
+          onMouseLeave={() => onHoverComponent?.(null)}
+          className="cursor-pointer transition-all duration-700 ease-out"
           style={{
             transform: `translate(${intakeState.offsetX}px, ${intakeState.offsetY}px)`,
             opacity: intakeState.opacity,
           }}
           filter={intakeState.isInstalled ? "url(#soft-shadow-3d)" : undefined}
         >
-          {/* Main Top Intake Runner (Curved Aluminum Pipe) */}
+          {/* Top Intake Runner (Curved Aluminum Pipe Mated to Cylinder Head at left flange) */}
           <path
-            d="M 60 76 C 90 76 110 82 142 82"
+            d={`M ${layoutSpec.bx - 66} 56 C ${layoutSpec.bx - 36} 56 ${layoutSpec.bx - 16} 62 ${layoutSpec.bx + 2} 62`}
             fill="none"
             stroke="url(#pipe-cylinder-3d)"
-            strokeWidth="18"
+            strokeWidth="22"
             strokeLinecap="round"
           />
           <path
-            d="M 60 76 C 90 76 110 82 142 82"
+            d={`M ${layoutSpec.bx - 66} 53.5 C ${layoutSpec.bx - 36} 53.5 ${layoutSpec.bx - 16} 59.5 ${layoutSpec.bx + 2} 59.5`}
             fill="none"
             stroke="#ffffff"
-            strokeWidth="3"
+            strokeWidth="3.2"
             strokeLinecap="round"
-            opacity="0.6"
+            opacity="0.9"
           />
 
-          {/* Main Bottom Intake Runner (Curved Aluminum Pipe) */}
+          {/* Bottom Intake Runner (Curved Aluminum Pipe) */}
           <path
-            d="M 60 124 C 90 124 110 118 142 118"
+            d={`M ${layoutSpec.bx - 66} 94 C ${layoutSpec.bx - 36} 94 ${layoutSpec.bx - 16} 88 ${layoutSpec.bx + 2} 88`}
             fill="none"
             stroke="url(#pipe-cylinder-3d)"
-            strokeWidth="18"
+            strokeWidth="22"
             strokeLinecap="round"
           />
           <path
-            d="M 60 124 C 90 124 110 118 142 118"
+            d={`M ${layoutSpec.bx - 66} 91.5 C ${layoutSpec.bx - 36} 91.5 ${layoutSpec.bx - 16} 85.5 ${layoutSpec.bx + 2} 85.5`}
             fill="none"
             stroke="#ffffff"
-            strokeWidth="3"
+            strokeWidth="3.2"
             strokeLinecap="round"
-            opacity="0.6"
+            opacity="0.9"
           />
 
-          {/* Blue Silicone Hose Couplers with Stainless Clamps */}
+          {/* Blue Silicone Hose Couplers with Stainless T-Bolt Clamps */}
           <g>
-            <rect x="62" y="66" width="22" height="20" rx="4" fill="url(#blue-silicone)" stroke="#1d4ed8" strokeWidth="1.5" />
-            <rect x="64" y="67" width="4" height="18" fill="#f8fafc" />
-            <rect x="78" y="67" width="4" height="18" fill="#f8fafc" />
+            <rect x={layoutSpec.bx - 64} y="45" width="26" height="24" rx="4" fill="url(#anodized-blue)" stroke="#090d16" strokeWidth="2" />
+            <rect x={layoutSpec.bx - 62} y="46" width="4" height="22" fill="#ffffff" />
+            <rect x={layoutSpec.bx - 44} y="46" width="4" height="22" fill="#ffffff" />
 
-            <rect x="62" y="114" width="22" height="20" rx="4" fill="url(#blue-silicone)" stroke="#1d4ed8" strokeWidth="1.5" />
-            <rect x="64" y="115" width="4" height="18" fill="#f8fafc" />
-            <rect x="78" y="115" width="4" height="18" fill="#f8fafc" />
+            <rect x={layoutSpec.bx - 64} y="83" width="26" height="24" rx="4" fill="url(#anodized-blue)" stroke="#090d16" strokeWidth="2" />
+            <rect x={layoutSpec.bx - 62} y="84" width="4" height="22" fill="#ffffff" />
+            <rect x={layoutSpec.bx - 44} y="84" width="4" height="22" fill="#ffffff" />
           </g>
 
-          {/* Left Intake Inlet Flange */}
-          <circle cx="102" cy="100" r="16" fill="url(#pipe-cylinder-3d)" stroke="#475569" strokeWidth="2" />
-          <circle cx="102" cy="100" r="10" fill="#0f172a" />
+          {/* Throttle Body Inlet Flange & Brass Butterfly Valve */}
+          <circle cx={layoutSpec.bx - 31} cy="75" r="20" fill="url(#pipe-cylinder-3d)" stroke="#090d16" strokeWidth="2.8" />
+          <circle cx={layoutSpec.bx - 31} cy="75" r="12.5" fill="#020617" />
+          <ellipse cx={layoutSpec.bx - 31} cy="75" rx="10" ry="3.5" fill="#b45309" stroke="#fef08a" strokeWidth="1" opacity="0.9" />
         </g>
 
-        {/* ── 10. GLOWING HEAT-TREATED COPPER EXHAUST RUNNERS ── */}
+        {/* ── 10. GLOWING HEAT-TREATED COPPER EXHAUST MANIFOLD & HEADERS ── */}
         <g
           id="exhaust_headers"
-          className={`transition-all duration-700 ease-out ${
+          onMouseEnter={() => onHoverComponent?.("exhaust_headers")}
+          onMouseLeave={() => onHoverComponent?.(null)}
+          className={`cursor-pointer transition-all duration-700 ease-out ${
             isAssemblyComplete ? "filter-heat-shimmer" : ""
           }`}
           style={{
@@ -659,41 +1190,42 @@ export function EngineSVG({
           }}
           filter={exhaustState.isInstalled ? "url(#soft-shadow-3d)" : undefined}
         >
-          {/* Top Primary Copper Runner */}
+          {/* Top Primary Copper Runner (Mated to Cylinder Head right side) */}
           <path
-            d="M 358 82 C 385 82 405 95 415 118"
+            d={`M ${layoutSpec.bx + layoutSpec.bw - 2} 58 C ${layoutSpec.bx + layoutSpec.bw + 20} 58 ${layoutSpec.bx + layoutSpec.bw + 36} 70 ${layoutSpec.bx + layoutSpec.bw + 40} 88`}
             fill="none"
             stroke="url(#copper-heat-treated)"
-            strokeWidth="16"
+            strokeWidth="20"
             strokeLinecap="round"
           />
-          {/* Specular Highlight on Copper Tube */}
           <path
-            d="M 358 80 C 385 80 405 93 415 116"
+            d={`M ${layoutSpec.bx + layoutSpec.bw - 2} 55 C ${layoutSpec.bx + layoutSpec.bw + 20} 55 ${layoutSpec.bx + layoutSpec.bw + 36} 67 ${layoutSpec.bx + layoutSpec.bw + 40} 85`}
             fill="none"
             stroke="#ffedd5"
-            strokeWidth="2.5"
+            strokeWidth="3.5"
             strokeLinecap="round"
-            opacity="0.75"
+            opacity="0.9"
           />
 
           {/* Bottom Primary Copper Runner */}
           <path
-            d="M 358 128 C 385 128 405 125 415 120"
+            d={`M ${layoutSpec.bx + layoutSpec.bw - 2} 98 C ${layoutSpec.bx + layoutSpec.bw + 20} 98 ${layoutSpec.bx + layoutSpec.bw + 36} 94 ${layoutSpec.bx + layoutSpec.bw + 40} 88`}
             fill="none"
             stroke="url(#copper-heat-treated)"
-            strokeWidth="16"
+            strokeWidth="20"
             strokeLinecap="round"
           />
 
           {/* Collector Merger Ring */}
-          <circle cx="415" cy="119" r="10" fill="#ea580c" stroke="#7c2d12" strokeWidth="2" />
+          <circle cx={layoutSpec.bx + layoutSpec.bw + 40} cy="88" r="12" fill="#ea580c" stroke="#7c2d12" strokeWidth="2.5" />
         </g>
 
-        {/* ── 11. DETAILED TURBOCHARGER & STAINLESS DOWNPIPE LOOP ── */}
+        {/* ── 11. PERFECTLY ALIGNED 3D VOLUTE SNAIL SCROLL TURBOCHARGER ── */}
         <g
           id="turbocharger"
-          className={`transition-all duration-700 ease-out ${
+          onMouseEnter={() => onHoverComponent?.("turbocharger")}
+          onMouseLeave={() => onHoverComponent?.(null)}
+          className={`cursor-pointer transition-all duration-700 ease-out ${
             isAssemblyComplete ? "filter-heat-shimmer" : ""
           }`}
           style={{
@@ -702,102 +1234,165 @@ export function EngineSVG({
           }}
           filter={turboState.isInstalled ? "url(#soft-shadow-3d)" : undefined}
         >
-          {/* Looping Heavy-Duty Stainless Downpipe under Turbo */}
-          <path
-            d="M 415 155 C 420 185 440 215 425 230 C 405 240 375 230 365 205 C 358 190 358 175 362 165"
-            fill="none"
-            stroke="url(#stainless-downpipe)"
-            strokeWidth="18"
-            strokeLinecap="round"
-          />
-          <path
-            d="M 415 153 C 420 183 440 213 425 228 C 405 238 375 228 365 203"
-            fill="none"
-            stroke="#ffffff"
-            strokeWidth="3"
-            strokeLinecap="round"
-            opacity="0.65"
-          />
+          {/* Stainless Steel Downpipe looping underneath */}
+          <g>
+            <path
+              d={`M ${layoutSpec.bx + layoutSpec.bw + 30} 108 C ${layoutSpec.bx + layoutSpec.bw + 24} 138 ${layoutSpec.bx + layoutSpec.bw + 46} 178 ${layoutSpec.bx + layoutSpec.bw + 32} 196 C ${layoutSpec.bx + layoutSpec.bw + 14} 206 ${layoutSpec.bx + layoutSpec.bw - 14} 194 ${layoutSpec.bx + layoutSpec.bw - 22} 168 C ${layoutSpec.bx + layoutSpec.bw - 28} 152 ${layoutSpec.bx + layoutSpec.bw - 26} 138 ${layoutSpec.bx + layoutSpec.bw - 20} 128`}
+              fill="none"
+              stroke="url(#stainless-downpipe)"
+              strokeWidth="22"
+              strokeLinecap="round"
+            />
+            <path
+              d={`M ${layoutSpec.bx + layoutSpec.bw + 30} 104 C ${layoutSpec.bx + layoutSpec.bw + 24} 134 ${layoutSpec.bx + layoutSpec.bw + 46} 174 ${layoutSpec.bx + layoutSpec.bw + 32} 192 C ${layoutSpec.bx + layoutSpec.bw + 14} 202 ${layoutSpec.bx + layoutSpec.bw - 14} 190 ${layoutSpec.bx + layoutSpec.bw - 22} 164`}
+              fill="none"
+              stroke="#ffffff"
+              strokeWidth="3.8"
+              strokeLinecap="round"
+              opacity="0.9"
+            />
 
-          {/* Downpipe V-Band Clamps */}
-          <circle cx="423" cy="165" r="10" fill="none" stroke="#f8fafc" strokeWidth="2.5" />
-          <circle cx="364" cy="200" r="10" fill="none" stroke="#f8fafc" strokeWidth="2.5" />
-
-          {/* Cast Aluminum Compressor Volute Housing */}
-          <path
-            d="M 405 110 C 445 80 475 125 445 160 C 415 168 392 142 405 110 Z"
-            fill="url(#turbo-housing)"
-            stroke={turboState.isHovered ? "#38bdf8" : "#475569"}
-            strokeWidth="2.5"
-          />
-
-          {/* Impeller Wheel Well & Multi-Blade Rotor */}
-          <g className={isAssemblyComplete ? "animate-spin-slow" : ""}>
-            <circle cx="432" cy="132" r="18" fill="#0f172a" stroke="#d97706" strokeWidth="2.5" />
-            <circle cx="432" cy="132" r="7" fill="url(#gold-hub)" />
-            {/* 10 Curved Compressor Blades */}
-            {[0, 36, 72, 108, 144, 180, 216, 252, 288, 324].map((ang, bidx) => (
-              <line
-                key={`blade-${bidx}`}
-                x1={432 + 7 * Math.cos((ang * Math.PI) / 180)}
-                y1={132 + 7 * Math.sin((ang * Math.PI) / 180)}
-                x2={432 + 16 * Math.cos((ang * Math.PI) / 180)}
-                y2={132 + 16 * Math.sin((ang * Math.PI) / 180)}
-                stroke="#fef08a"
-                strokeWidth="2"
-                strokeLinecap="round"
-              />
-            ))}
+            {/* V-Band Coupling Flange Clamps */}
+            <rect x={layoutSpec.bx + layoutSpec.bw + 24} y="102" width="14" height="20" rx="3.5" fill="url(#machined-deck-bevel)" stroke="#090d16" strokeWidth="1.5" />
+            <rect x={layoutSpec.bx + layoutSpec.bw - 28} y="154" width="14" height="20" rx="3.5" fill="url(#machined-deck-bevel)" stroke="#090d16" strokeWidth="1.5" />
           </g>
 
-          {/* Wastegate Actuator Canister & Control Arm */}
-          <rect x="455" y="102" width="18" height="24" rx="4" fill="url(#pipe-cylinder-3d)" stroke="#334155" strokeWidth="1.5" />
-          <line x1="442" y1="114" x2="455" y2="114" stroke="#94a3b8" strokeWidth="3" />
+          {/* Hot-Side Cast Iron Exhaust Turbine Scroll */}
+          <path
+            d={`M ${layoutSpec.bx + layoutSpec.bw + 12} 72 C ${layoutSpec.bx + layoutSpec.bw - 6} 68 ${layoutSpec.bx + layoutSpec.bw - 16} 90 ${layoutSpec.bx + layoutSpec.bw - 6} 114 C ${layoutSpec.bx + layoutSpec.bw + 8} 130 ${layoutSpec.bx + layoutSpec.bw + 34} 126 ${layoutSpec.bx + layoutSpec.bw + 36} 108 C ${layoutSpec.bx + layoutSpec.bw + 36} 92 ${layoutSpec.bx + layoutSpec.bw + 22} 78 ${layoutSpec.bx + layoutSpec.bw + 12} 72 Z`}
+            fill="url(#copper-heat-treated)"
+            stroke="#431407"
+            strokeWidth="2.8"
+          />
+
+          {/* Cold-Side Billet Aluminum Compressor Volute Snail Scroll Housing */}
+          <g>
+            <path
+              d={`M ${layoutSpec.bx + layoutSpec.bw + 20} 88 C ${layoutSpec.bx + layoutSpec.bw + 20} 54 ${layoutSpec.bx + layoutSpec.bw + 60} 42 ${layoutSpec.bx + layoutSpec.bw + 80} 62 C ${layoutSpec.bx + layoutSpec.bw + 96} 80 ${layoutSpec.bx + layoutSpec.bw + 88} 118 ${layoutSpec.bx + layoutSpec.bw + 58} 124 C ${layoutSpec.bx + layoutSpec.bw + 30} 128 ${layoutSpec.bx + layoutSpec.bw + 16} 108 ${layoutSpec.bx + layoutSpec.bw + 20} 88 Z`}
+              fill="url(#turbo-housing)"
+              stroke={turboState.isHovered ? "#38bdf8" : "#090d16"}
+              strokeWidth="3.5"
+            />
+            <path
+              d={`M ${layoutSpec.bx + layoutSpec.bw + 24} 88 C ${layoutSpec.bx + layoutSpec.bw + 24} 58 ${layoutSpec.bx + layoutSpec.bw + 60} 46 ${layoutSpec.bx + layoutSpec.bw + 76} 64 C ${layoutSpec.bx + layoutSpec.bw + 90} 80 ${layoutSpec.bx + layoutSpec.bw + 82} 114 ${layoutSpec.bx + layoutSpec.bw + 56} 118`}
+              fill="none"
+              stroke="#ffffff"
+              strokeWidth="2.2"
+              opacity="0.9"
+            />
+
+            {/* Top Compressor Discharge Pipe */}
+            <rect x={layoutSpec.bx + layoutSpec.bw + 66} y="32" width="20" height="36" rx="3.5" fill="url(#turbo-housing)" stroke="#090d16" strokeWidth="2.2" />
+            <line x1={layoutSpec.bx + layoutSpec.bw + 68} y1="33" x2={layoutSpec.bx + layoutSpec.bw + 68} y2="64" stroke="#ffffff" strokeWidth="2.2" opacity="0.85" />
+
+            {/* Top Intercooler Coupler Silicone Hose & Clamps */}
+            <rect x={layoutSpec.bx + layoutSpec.bw + 63} y="26" width="26" height="14" rx="2.5" fill="url(#anodized-blue)" stroke="#090d16" strokeWidth="1.5" />
+            <rect x={layoutSpec.bx + layoutSpec.bw + 65} y="27" width="4" height="12" fill="#ffffff" />
+            <rect x={layoutSpec.bx + layoutSpec.bw + 83} y="27" width="4" height="12" fill="#ffffff" />
+          </g>
+
+          {/* Machined Bellmouth Inlet Ring & 10-Blade Golden Impeller */}
+          <g>
+            <circle cx={layoutSpec.bx + layoutSpec.bw + 42} cy="88" r="18" fill="url(#machined-deck-bevel)" stroke="#090d16" strokeWidth="2.8" />
+            <circle cx={layoutSpec.bx + layoutSpec.bw + 42} cy="88" r="14" fill="#020617" stroke="#475569" strokeWidth="1.8" />
+
+            {/* 10-Blade Golden Billet Impeller Wheel */}
+            <g className={isAssemblyComplete ? "animate-spin-slow" : ""}>
+              <circle cx={layoutSpec.bx + layoutSpec.bw + 42} cy="88" r="5.5" fill="url(#gold-hub)" stroke="#78350f" strokeWidth="1" />
+              {[0, 36, 72, 108, 144, 180, 216, 252, 288, 324].map((ang, bidx) => (
+                <g key={`blade-${bidx}`}>
+                  <line
+                    x1={layoutSpec.bx + layoutSpec.bw + 42 + 5.5 * Math.cos((ang * Math.PI) / 180)}
+                    y1={88 + 5.5 * Math.sin((ang * Math.PI) / 180)}
+                    x2={layoutSpec.bx + layoutSpec.bw + 42 + 13 * Math.cos((ang * Math.PI) / 180)}
+                    y2={88 + 13 * Math.sin((ang * Math.PI) / 180)}
+                    stroke="#fef08a"
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                  />
+                  <line
+                    x1={layoutSpec.bx + layoutSpec.bw + 42 + 6 * Math.cos((ang * Math.PI) / 180)}
+                    y1={88 + 6 * Math.sin((ang * Math.PI) / 180)}
+                    x2={layoutSpec.bx + layoutSpec.bw + 42 + 12.5 * Math.cos((ang * Math.PI) / 180)}
+                    y2={88 + 12.5 * Math.sin((ang * Math.PI) / 180)}
+                    stroke="#ffffff"
+                    strokeWidth="1"
+                    opacity="0.9"
+                  />
+                </g>
+              ))}
+              <circle cx={layoutSpec.bx + layoutSpec.bw + 42} cy="88" r="2.5" fill="#e2e8f0" stroke="#090d16" strokeWidth="0.8" />
+            </g>
+          </g>
+
+          {/* Pneumatic Internal Wastegate Actuator Assembly */}
+          <g>
+            <rect x={layoutSpec.bx + layoutSpec.bw + 78} y="88" width="20" height="26" rx="5.5" fill="url(#pipe-cylinder-3d)" stroke="#090d16" strokeWidth="1.8" />
+            <line x1={layoutSpec.bx + layoutSpec.bw + 79} y1="89" x2={layoutSpec.bx + layoutSpec.bw + 97} y2="89" stroke="#ffffff" strokeWidth="1.5" opacity="0.95" />
+            <rect x={layoutSpec.bx + layoutSpec.bw + 98} y="98" width="6" height="4" fill="#38bdf8" rx="1" />
+
+            <line x1={layoutSpec.bx + layoutSpec.bw + 58} y1="100" x2={layoutSpec.bx + layoutSpec.bw + 78} y2="100" stroke="#e2e8f0" strokeWidth="3.5" />
+            <rect x={layoutSpec.bx + layoutSpec.bw + 65} y="98" width="6" height="4" fill="#f8fafc" stroke="#090d16" strokeWidth="0.8" />
+            <circle cx={layoutSpec.bx + layoutSpec.bw + 58} cy="100" r="3.2" fill="#b45309" stroke="#090d16" strokeWidth="1" />
+          </g>
         </g>
 
         {/* ── 12. BRUSHED STEEL OIL PAN SUMP & RULER SCALE PLATE ── */}
         <g
           id="oil_pan"
-          className="transition-all duration-700 ease-out"
+          onMouseEnter={() => onHoverComponent?.("oil_pan")}
+          onMouseLeave={() => onHoverComponent?.(null)}
+          className="cursor-pointer transition-all duration-700 ease-out"
           style={{
             transform: `translate(${panState.offsetX}px, ${panState.offsetY}px)`,
             opacity: panState.opacity,
           }}
           filter={panState.isInstalled ? "url(#soft-shadow-3d)" : undefined}
         >
-          {/* Brushed Steel Oil Pan Sump Shell */}
+          {/* Brushed Steel Oil Pan Sump Shell (Dynamically mated to bottom of engine block at Y: 344!) */}
           <path
-            d="M 156 310 L 168 360 Q 172 368 184 368 L 316 368 Q 328 368 332 360 L 344 310 Z"
+            d={`M ${layoutSpec.bx + 36} 344 L ${layoutSpec.bx + 48} 394 Q ${layoutSpec.bx + 52} 402 ${layoutSpec.bx + 64} 402 L ${layoutSpec.bx + layoutSpec.bw - 64} 402 Q ${layoutSpec.bx + layoutSpec.bw - 52} 402 ${layoutSpec.bx + layoutSpec.bw - 48} 394 L ${layoutSpec.bx + layoutSpec.bw - 36} 344 Z`}
             fill="url(#pipe-cylinder-3d)"
-            stroke={panState.isHovered ? "#38bdf8" : "#475569"}
-            strokeWidth="2.5"
+            stroke={panState.isHovered ? "#38bdf8" : "#090d16"}
+            strokeWidth="3.5"
           />
 
           {/* Front Scale Recessed Calibration Plate */}
-          <rect x="172" y="324" width="156" height="30" rx="5" fill="url(#forged-steel)" stroke="#334155" strokeWidth="1.5" />
+          <rect x={layoutSpec.bx + 52} y="358" width={layoutSpec.bw - 104} height="34" rx="6.5" fill="url(#forged-steel)" stroke="#090d16" strokeWidth="2" />
+          <line x1={layoutSpec.bx + 54} y1="359.5" x2={layoutSpec.bx + layoutSpec.bw - 52} y2="359.5" stroke="#ffffff" strokeWidth="1.5" opacity="0.9" />
 
           {/* Engraved Ruler Calibration Scale Ticks */}
-          {[
-            180, 186, 192, 198, 204, 210, 216, 222, 228, 234, 240, 246, 252, 258, 264, 270, 276, 282, 288, 294, 300, 306,
-            312, 318, 324,
-          ].map((tx, idx) => (
-            <line
-              key={`tick-${idx}`}
-              x1={tx}
-              y1="328"
-              x2={tx}
-              y2={idx % 5 === 0 ? "342" : "335"}
-              stroke="#0f172a"
-              strokeWidth={idx % 5 === 0 ? "1.8" : "1"}
-            />
-          ))}
+          {[...Array(15)].map((_, idx) => {
+            const step = (layoutSpec.bw - 120) / 14;
+            const tx = layoutSpec.bx + 60 + idx * step;
+            return (
+              <line
+                key={`tick-${idx}`}
+                x1={tx}
+                y1="362"
+                x2={tx}
+                y2={idx % 5 === 0 ? "380" : "370"}
+                stroke="#090d16"
+                strokeWidth={idx % 5 === 0 ? "2.2" : "1.2"}
+              />
+            );
+          })}
 
           {/* Central Triangular Pointer Needle */}
-          <polygon points="247,348 253,348 250,328" fill="#0f172a" stroke="#ffffff" strokeWidth="1" />
+          <polygon points={`${layoutSpec.bx + layoutSpec.bw / 2 - 3},386 ${layoutSpec.bx + layoutSpec.bw / 2 + 3},386 ${layoutSpec.bx + layoutSpec.bw / 2},362`} fill="#090d16" stroke="#ffffff" strokeWidth="1.2" />
 
           {/* Hex Oil Pan Drain Plug */}
-          <circle cx="328" cy="360" r="3.5" fill="#334155" stroke="#0f172a" strokeWidth="1" />
+          <circle cx={layoutSpec.bx + layoutSpec.bw - 48} cy="394" r="4.5" fill="#334155" stroke="#090d16" strokeWidth="1.5" />
         </g>
+        </g>
+        )}
+
+        {/* ── 5. NEXT-GEN ROBOTIC ASSEMBLY ANIMATION & PHYSICS FX LAYERS ── */}
+        <AssemblySparkFlashes
+          activeComponentId={activeComponentId}
+          phase={phase}
+          targetPos={{ x: spotlightX, y: spotlightY }}
+        />
       </svg>
     </div>
   );

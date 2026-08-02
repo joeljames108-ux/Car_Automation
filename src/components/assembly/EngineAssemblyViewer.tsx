@@ -17,7 +17,10 @@ import { EngineSVG } from "./EngineSVG";
 import { useInstallAnimation } from "./useInstallAnimation";
 import { playAssemblySound, toggleAssemblyMute } from "./sounds";
 import { AssemblyStatsSync } from "./AssemblyStatsSync";
+import { ParticleEffects } from "./ParticleEffects";
 import { EngineConfig } from "../../sim/types";
+
+import { EngineAudioVisualizer } from "./EngineAudioVisualizer";
 
 interface EngineAssemblyViewerProps {
   installedComponents: ComponentId[];
@@ -30,6 +33,8 @@ interface EngineAssemblyViewerProps {
   onAdvancePhase: (nextPhase: AssemblyPhase) => void;
   onCompleteInstall: () => void;
   onSkipAnimation: () => void;
+  onHoverComponent?: (id: ComponentId | null) => void;
+  onSelectLayout?: (layout: string) => void;
   className?: string;
 }
 
@@ -44,6 +49,8 @@ export function EngineAssemblyViewer({
   onAdvancePhase,
   onCompleteInstall,
   onSkipAnimation,
+  onHoverComponent,
+  onSelectLayout,
   className = "",
 }: EngineAssemblyViewerProps) {
   const [isMuted, setIsMuted] = useState(false);
@@ -88,88 +95,101 @@ export function EngineAssemblyViewer({
     (activeComponentId === "block" || activeComponentId === "cylinder_head" || activeComponentId === "crankshaft" || activeComponentId === "turbocharger");
 
   return (
-    <div
-      className={`relative w-full h-full bg-gradient-to-b from-[#f6ebe0] via-[#eedecf] to-[#e5d3c2] border border-[#e2cfbe] rounded-3xl p-4 overflow-hidden backdrop-blur-2xl shadow-[0_20px_60px_rgba(120,80,60,0.20)] flex flex-col items-center justify-center select-none ${className}`}
-    >
-      {/* Studio Lighting Ambient Glow */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_20%,rgba(255,255,255,0.6),transparent_65%)] pointer-events-none" />
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_80%,rgba(210,170,140,0.3),transparent_70%)] pointer-events-none" />
-
-      {/* Particle Effects Canvas Overlay */}
-      <ParticleEffects
-        activeComponentId={activeComponentId}
-        phase={phase}
-        slotPosition={activeMeta ? activeMeta.slotPosition : { x: 250, y: 225 }}
-      />
-
-      {/* Camera Viewport Canvas */}
+    <div className={`w-full flex flex-col gap-4 ${className}`}>
+      {/* ── ROBOTIC ASSEMBLY VIEWER STAGE ── */}
       <div
-        className={`w-full h-full flex items-center justify-center transition-transform duration-700 ease-out ${
-          isCameraShaking ? "animate-camera-shake" : ""
-        } ${!activeComponentId && !isAssemblyComplete ? "animate-ken-burns" : ""}`}
-        style={{ transform: cameraTransform }}
+        className="relative w-full h-[520px] bg-gradient-to-b from-[#070a12] via-[#0b0f19] to-[#0f172a] border border-cyan-500/30 rounded-3xl p-4 overflow-hidden backdrop-blur-2xl shadow-[0_20px_60px_rgba(0,0,0,0.85)] flex flex-col items-center justify-center select-none"
       >
-        <EngineSVG
-          installedComponents={installedComponents}
+        {/* Studio Lighting Ambient Glow */}
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_20%,rgba(56,189,248,0.12),transparent_65%)] pointer-events-none" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_80%,rgba(15,23,42,0.6),transparent_70%)] pointer-events-none" />
+
+        {/* Particle Effects Canvas Overlay */}
+        <ParticleEffects
           activeComponentId={activeComponentId}
           phase={phase}
-          hoveredComponentId={hoveredComponentId}
-          isExplodedView={isExplodedView}
-          isAssemblyComplete={isAssemblyComplete}
-          engineConfig={engineConfig}
+          slotPosition={activeMeta ? activeMeta.slotPosition : { x: 250, y: 225 }}
         />
-      </div>
 
-      {/* Floating Active Phase Banner on Top Left */}
-      {activeComponentId && activeMeta && (
-        <div className="absolute top-5 left-5 z-30 flex items-center gap-2.5 px-4 py-2 rounded-full bg-white/85 border border-white/70 backdrop-blur-md shadow-md text-xs font-mono text-slate-800">
-          <Sparkles size={14} className="text-amber-500 animate-spin" />
-          <span className="font-extrabold text-slate-900">{activeMeta.name}</span>
-          <span className="text-slate-400">·</span>
-          <span className="text-cyan-700 font-extrabold uppercase tracking-widest">{phase}</span>
+        {/* Camera Viewport Canvas */}
+        <div
+          className={`w-full h-full flex items-center justify-center transition-transform duration-700 ease-out ${
+            isCameraShaking ? "animate-camera-shake" : ""
+          } ${!activeComponentId && !isAssemblyComplete ? "animate-ken-burns" : ""}`}
+          style={{ transform: cameraTransform }}
+        >
+          <EngineSVG
+            installedComponents={installedComponents}
+            activeComponentId={activeComponentId}
+            phase={phase}
+            hoveredComponentId={hoveredComponentId}
+            isExplodedView={isExplodedView}
+            isAssemblyComplete={isAssemblyComplete}
+            engineConfig={engineConfig}
+            onHoverComponent={onHoverComponent}
+          />
         </div>
-      )}
 
-      {/* Floating Action Controls on Top Right */}
-      <div className="absolute top-5 right-5 z-30 flex items-center gap-2">
-        {/* Skip Animation Button */}
-        {activeComponentId && (
-          <button
-            onClick={onSkipAnimation}
-            className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white/80 hover:bg-white text-slate-800 border border-white/80 text-xs font-mono font-bold transition-all shadow-sm active:scale-95 cursor-pointer"
-          >
-            <SkipForward size={13} /> Skip
-          </button>
+        {/* Floating Active Phase Banner on Top Left */}
+        {activeComponentId && activeMeta && (
+          <div className="absolute top-5 left-5 z-30 flex items-center gap-2.5 px-4 py-2 rounded-full bg-[#0b0f19]/90 border border-cyan-500/40 backdrop-blur-md shadow-[0_0_20px_rgba(56,189,248,0.25)] text-xs font-mono text-slate-200">
+            <Sparkles size={14} className="text-cyan-400 animate-spin" />
+            <span className="font-extrabold text-slate-100">{activeMeta.name}</span>
+            <span className="text-slate-500">·</span>
+            <span className="text-cyan-400 font-extrabold uppercase tracking-widest">{phase}</span>
+          </div>
         )}
 
-        {/* Audio Mute Toggle Button */}
-        <button
-          onClick={handleToggleMute}
-          className={`p-2 rounded-full border transition-all cursor-pointer ${
-            isMuted
-              ? "bg-rose-500/10 text-rose-600 border-rose-500/30"
-              : "bg-white/80 text-slate-700 border-white/80 hover:bg-white"
-          }`}
-          title={isMuted ? "Unmute Assembly Audio" : "Mute Assembly Audio"}
-        >
-          {isMuted ? <VolumeX size={15} /> : <Volume2 size={15} />}
-        </button>
+        {/* Floating Action Controls on Top Right */}
+        <div className="absolute top-5 right-5 z-30 flex items-center gap-2">
+          {/* Skip Animation Button */}
+          {activeComponentId && (
+            <button
+              onClick={onSkipAnimation}
+              className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-[#0b0f19]/90 hover:bg-[#161e31] text-cyan-300 border border-cyan-500/30 text-xs font-mono font-bold transition-all shadow-md active:scale-95 cursor-pointer"
+            >
+              <SkipForward size={13} /> Skip
+            </button>
+          )}
+
+          {/* Audio Mute Toggle Button */}
+          <button
+            onClick={handleToggleMute}
+            className={`p-2 rounded-full border transition-all cursor-pointer ${
+              isMuted
+                ? "bg-rose-500/20 text-rose-300 border-rose-500/40"
+                : "bg-[#0b0f19]/90 text-cyan-300 border-cyan-500/30 hover:bg-[#161e31]"
+            }`}
+            title={isMuted ? "Unmute Assembly Sound Effects" : "Mute Assembly Sound Effects"}
+          >
+            {isMuted ? <VolumeX size={15} /> : <Volume2 size={15} />}
+          </button>
+        </div>
+
+        {/* Stat Delta Notification Overlay - ONLY shown on hover! */}
+        <AssemblyStatsSync hoveredComponentId={hoveredComponentId} installedComponents={installedComponents} />
+
+        {/* Bottom Educational Advice Banner */}
+        {activeMeta && (
+          <div className="absolute bottom-5 left-1/2 -translate-x-1/2 z-30 max-w-lg w-full px-5 py-2.5 rounded-2xl bg-white/85 border border-white/70 backdrop-blur-md shadow-lg text-center">
+            <span className="text-[10px] font-mono text-cyan-800 font-extrabold uppercase tracking-widest block">
+              ENGINEERING INSIGHT
+            </span>
+            <p className="text-[11.5px] text-slate-700 font-semibold truncate mt-0.5">
+              {activeMeta.tooltipAdvice}
+            </p>
+          </div>
+        )}
       </div>
 
-      {/* Stat Delta Notification Overlay */}
-      <AssemblyStatsSync lastInstalledId={lastInstalledId} />
-
-      {/* Bottom Educational Advice Banner */}
-      {activeMeta && (
-        <div className="absolute bottom-5 left-1/2 -translate-x-1/2 z-30 max-w-lg w-full px-5 py-2.5 rounded-2xl bg-white/85 border border-white/70 backdrop-blur-md shadow-lg text-center">
-          <span className="text-[10px] font-mono text-cyan-800 font-extrabold uppercase tracking-widest block">
-            ENGINEERING INSIGHT
-          </span>
-          <p className="text-[11.5px] text-slate-700 font-semibold truncate mt-0.5">
-            {activeMeta.tooltipAdvice}
-          </p>
-        </div>
-      )}
+      {/* ── REAL-TIME ENGINE AUDIO SYNTHESIZER & LAYOUT SELECTOR AT END OF ROBOTIC ASSEMBLY ── */}
+      <div className="w-full">
+        <EngineAudioVisualizer
+          currentLayout={engineConfig?.layout || "v12"}
+          rpm={6500}
+          onSelectLayout={onSelectLayout}
+        />
+      </div>
     </div>
   );
 }

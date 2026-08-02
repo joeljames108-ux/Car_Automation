@@ -15,6 +15,8 @@ import { AssemblyProgressPanel } from "./assembly/AssemblyProgressPanel";
 import { AssemblyTabSwitcher } from "./assembly/AssemblyTabSwitcher";
 import { AssemblyCompletionModal } from "./assembly/AssemblyCompletionModal";
 import { HybridTelemetrySuite } from "./HybridTelemetrySuite";
+import { EngineAudioVisualizer } from "./assembly/EngineAudioVisualizer";
+import { ApexAgentConsole } from "./agents/ApexAgentConsole";
 import { Play, Sparkles } from "lucide-react";
 
 // Engine layout → icon mapping
@@ -241,6 +243,7 @@ export function EngineDesigner() {
                 isAssemblyComplete={assembly.isAssemblyComplete}
                 engineConfig={eng}
                 onAdvancePhase={assembly.advancePhase}
+                onHoverComponent={assembly.setHoveredComponentId}
                 onCompleteInstall={() => {
                   const completedId = assembly.activeComponentId;
                   assembly.completeInstall();
@@ -248,9 +251,7 @@ export function EngineDesigner() {
                   if (completedId === "crankshaft") updateEngine({ crank: "forged_steel" });
                   if (completedId === "cylinder_head") updateEngine({ valvetrain: "dohc_vvl" });
                   if (completedId === "turbocharger") updateEngine({ intake: "turbo_single", boostPressure: 1.4 });
-                  if (completedId === "oil_pan") updateEngine({ oilPan: "baffled_sump" });
-                  if (completedId === "exhaust_headers") updateEngine({ exhaustHeader: "long_tube_headers" });
-                  if (completedId === "intake_manifold") updateEngine({ intake: "na_twin" });
+                  if (completedId === "intake_manifold") updateEngine({ intake: "na" });
                   
                   if (assembly.installedComponents.length + 1 === 12) {
                     setShowCompletionModal(true);
@@ -277,6 +278,7 @@ export function EngineDesigner() {
                 isAssemblyComplete={assembly.isAssemblyComplete}
                 onResetAssembly={assembly.resetAssembly}
                 onToggleExplodedView={assembly.toggleExplodedView}
+                engineConfig={eng}
               />
             </div>
           </div>
@@ -287,14 +289,48 @@ export function EngineDesigner() {
             onClose={() => setShowCompletionModal(false)}
             onReset={assembly.resetAssembly}
             stats={assembly.currentStats}
+            layout={eng.layout}
+            engineConfig={eng}
           />
         </div>
       ) : (
         <>
+          {/* Inline Auto-Optimize Preset Tuning Bar (Translucent Liquid Glass) */}
+          <div className="flex flex-wrap items-center justify-between gap-3 p-3 rounded-2xl bg-white/40 dark:bg-base-900/60 border border-white/60 dark:border-cyan-500/30 backdrop-blur-2xl shadow-[0_8px_32px_rgba(0,0,0,0.06)] mb-3">
+            <div className="flex items-center gap-2">
+              <Sparkles size={16} className="text-cyan-500 animate-pulse" />
+              <span className="text-xs font-mono font-extrabold text-slate-800 dark:text-cyan-300 uppercase tracking-wider">
+                AUTO OPTIMIZE TARGET:
+              </span>
+            </div>
+            <div className="flex items-center gap-1.5 flex-wrap">
+              {([
+                { id: "performance" as OptimizeGoal, icon: <TrendingUp size={12} />, label: "Performance" },
+                { id: "cost" as OptimizeGoal, icon: <DollarSign size={12} />, label: "Lowest Cost" },
+                { id: "reliability" as OptimizeGoal, icon: <Wrench size={12} />, label: "Reliability" },
+                { id: "efficiency" as OptimizeGoal, icon: <Leaf size={12} />, label: "Efficiency" },
+                { id: "luxury" as OptimizeGoal, icon: <Flame size={12} />, label: "Luxury" },
+              ]).map((opt) => (
+                <button
+                  key={opt.id}
+                  onClick={() => setOptimizeGoal(opt.id)}
+                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer ${
+                    optimizeGoal === opt.id
+                      ? "bg-cyan-500 text-black shadow-[0_0_14px_rgba(34,211,238,0.5)] scale-[1.02]"
+                      : "bg-white/40 dark:bg-base-800/50 text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-white/65 dark:hover:bg-base-750 border border-white/50 dark:border-base-700 backdrop-blur-md"
+                  }`}
+                >
+                  {opt.icon}
+                  {opt.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
           <PresetQuickSelect />
 
           {/* 3-Column Ergonomic Studio Grid */}
-          <div className="grid grid-cols-1 xl:grid-cols-3 gap-4 items-start pb-16">
+          <div className="grid grid-cols-1 xl:grid-cols-3 gap-4 items-start pb-4">
             
             {/* COLUMN 1: Engine Layout & Architecture */}
             <div className="space-y-4">
@@ -338,6 +374,9 @@ export function EngineDesigner() {
                   <Maximize2 size={12} /> HUD
                 </button>
               </div>
+
+              {/* Real-Time Engine Audio Synthesizer Box (Below Engine Diagram) */}
+              <EngineAudioVisualizer currentLayout={eng.layout} rpm={sim.peakPowerRpm || 6500} />
 
               {/* Architecture Section */}
               <Section title="Architecture" icon={<Cog size={16} />}>
@@ -419,46 +458,49 @@ export function EngineDesigner() {
                   </div>
                 </div>
               </Section>
+
+              {/* Internals with Compact AI Card (Phase 7) */}
+              {!isElectric && (
+                <Section title="Internals" icon={<Cog size={16} />}>
+                  {/* Compact AI Engineer Bar */}
+                  <div className="flex flex-wrap items-center justify-between gap-2 p-2 mb-3 rounded-xl bg-purple-950/30 border border-purple-500/30 text-xs font-mono">
+                    <div className="flex items-center gap-1.5">
+                      <div className="p-1 rounded-lg bg-purple-500/20 text-purple-300">
+                        <Bot size={14} />
+                      </div>
+                      <span className="font-bold text-purple-200 text-xs">Apex AI</span>
+                    </div>
+                    <div className="flex items-center gap-1.5">
+                      <div className="engine-toggle-bar">
+                        {(["budget", "track", "luxury", "balanced"] as Philosophy[]).map((p) => (
+                          <button
+                            key={p}
+                            onClick={() => setPhilosophy(p)}
+                            className={`engine-toggle-btn ${philosophy === p ? "active" : ""}`}
+                          >
+                            {p}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="space-y-2.5">
+                    <Select<CrankMaterial> label="Crankshaft" value={eng.crank} options={(Object.keys(CRANK_MATERIALS) as CrankMaterial[]).map((c) => ({ value: c, label: CRANK_MATERIALS[c].label }))} onChange={(v) => updateEngine({ crank: v })} />
+                    <Select<PistonType> label="Pistons" value={eng.pistons} options={(Object.keys(PISTON_TYPES) as PistonType[]).map((p) => ({ value: p, label: PISTON_TYPES[p].label }))} onChange={(v) => updateEngine({ pistons: v })} />
+                    <Select<ValvetrainType> label="Valvetrain" value={eng.valvetrain} options={(Object.keys(VALVETRAIN_TYPES) as ValvetrainType[]).map((v) => ({ value: v, label: VALVETRAIN_TYPES[v].label }))} onChange={(v) => updateEngine({ valvetrain: v })} />
+                    <Slider label="Cam Duration" value={eng.camDuration} min={240} max={340} unit="°" onChange={(v) => updateEngine({ camDuration: v })} />
+                    <Slider label="Cam Lift" value={eng.camLift} min={6} max={16} step={0.5} unit="mm" onChange={(v) => updateEngine({ camLift: v })} />
+                    <Slider label="Cam Timing" value={eng.camTiming} min={-10} max={10} step={0.5} unit="°" onChange={(v) => updateEngine({ camTiming: v })} />
+                  </div>
+                </Section>
+              )}
             </div>
 
-            {/* COLUMN 2: Engine Internals, Fuel, Turbo, Cooling, ECU Controls */}
+            {/* COLUMN 2: Fuel, Turbo, Cooling, ECU & Hybrid Controls */}
             <div className="space-y-4">
               {!isElectric && (
                 <>
-                  {/* Internals with Compact AI Card (Phase 7) */}
-                  <Section title="Internals" icon={<Cog size={16} />}>
-                    {/* Compact AI Engineer Bar */}
-                    <div className="flex flex-wrap items-center justify-between gap-2 p-2 mb-3 rounded-xl bg-purple-950/30 border border-purple-500/30 text-xs font-mono">
-                      <div className="flex items-center gap-1.5">
-                        <div className="p-1 rounded-lg bg-purple-500/20 text-purple-300">
-                          <Bot size={14} />
-                        </div>
-                        <span className="font-bold text-purple-200 text-xs">Apex AI</span>
-                      </div>
-                      <div className="flex items-center gap-1.5">
-                        <div className="engine-toggle-bar">
-                          {(["budget", "track", "luxury", "balanced"] as Philosophy[]).map((p) => (
-                            <button
-                              key={p}
-                              onClick={() => setPhilosophy(p)}
-                              className={`engine-toggle-btn ${philosophy === p ? "active" : ""}`}
-                            >
-                              {p}
-                            </button>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="space-y-2.5">
-                      <Select<CrankMaterial> label="Crankshaft" value={eng.crank} options={(Object.keys(CRANK_MATERIALS) as CrankMaterial[]).map((c) => ({ value: c, label: CRANK_MATERIALS[c].label }))} onChange={(v) => updateEngine({ crank: v })} />
-                      <Select<PistonType> label="Pistons" value={eng.pistons} options={(Object.keys(PISTON_TYPES) as PistonType[]).map((p) => ({ value: p, label: PISTON_TYPES[p].label }))} onChange={(v) => updateEngine({ pistons: v })} />
-                      <Select<ValvetrainType> label="Valvetrain" value={eng.valvetrain} options={(Object.keys(VALVETRAIN_TYPES) as ValvetrainType[]).map((v) => ({ value: v, label: VALVETRAIN_TYPES[v].label }))} onChange={(v) => updateEngine({ valvetrain: v })} />
-                      <Slider label="Cam Duration" value={eng.camDuration} min={240} max={340} unit="°" onChange={(v) => updateEngine({ camDuration: v })} />
-                      <Slider label="Cam Lift" value={eng.camLift} min={6} max={16} step={0.5} unit="mm" onChange={(v) => updateEngine({ camLift: v })} />
-                      <Slider label="Cam Timing" value={eng.camTiming} min={-10} max={10} step={0.5} unit="°" onChange={(v) => updateEngine({ camTiming: v })} />
-                    </div>
-                  </Section>
 
                   {/* Live Warnings */}
                   {warnings.length > 0 && (
@@ -566,140 +608,150 @@ export function EngineDesigner() {
                 </>
               )}
 
-              {/* Electric / Hybrid Section */}
+              {/* Electric / Hybrid Section — Horizontal Grid Architecture */}
               {(isElectric || isHybrid) && (
-                <Section title={isElectric ? "Electric Powertrain" : "Hybrid System & MGU"} icon={<Battery size={16} />}>
-                  <div className="space-y-2.5">
-                    {isElectric && (
-                      <>
-                        <Select label="Motor Type" value={eng.evMotorType} options={(Object.keys(EV_MOTOR_TYPES) as string[]).map((m) => ({ value: m, label: EV_MOTOR_TYPES[m].label }))} onChange={(v) => updateEngine({ evMotorType: v as EngineConfig["evMotorType"] })} />
-                        <Slider label="Motor Power" value={eng.evMotorPower} min={50} max={1500} step={10} unit="kW" onChange={(v) => updateEngine({ evMotorPower: v })} />
-                        <Select label="Motor Layout" value={eng.motorLayout} options={[{ value: "none", label: "Single" }, { value: "front", label: "Front" }, { value: "rear", label: "Rear" }, { value: "both", label: "Dual Motor" }]} onChange={(v) => updateEngine({ motorLayout: v as EngineConfig["motorLayout"] })} />
-                      </>
-                    )}
+                <Section title={isElectric ? "Electric Powertrain" : "Hybrid System & MGU Architecture"} icon={<Battery size={16} />}>
+                  <div className="space-y-4">
+                    {/* Subsystem Cards — Full Column Width for High Readability */}
+                    <div className="space-y-3">
+                      
+                      {/* SUB-CARD 1: Architecture & Electric Motor */}
+                      <div className="p-3.5 rounded-xl bg-base-950/80 border border-cyan-500/30 space-y-3">
+                        <div className="flex items-center gap-2 pb-2 border-b border-base-800">
+                          <Zap size={15} className="text-cyan-400" />
+                          <h4 className="text-xs font-bold text-slate-200 uppercase font-mono tracking-wider">Architecture & Motor</h4>
+                        </div>
+                        {isElectric && (
+                          <>
+                            <Select label="Motor Type" value={eng.evMotorType} options={(Object.keys(EV_MOTOR_TYPES) as string[]).map((m) => ({ value: m, label: EV_MOTOR_TYPES[m].label }))} onChange={(v) => updateEngine({ evMotorType: v as EngineConfig["evMotorType"] })} />
+                            <Slider label="Motor Power" value={eng.evMotorPower} min={50} max={1500} step={10} unit="kW" onChange={(v) => updateEngine({ evMotorPower: v })} />
+                            <Select label="Motor Layout" value={eng.motorLayout} options={[{ value: "none", label: "Single" }, { value: "front", label: "Front" }, { value: "rear", label: "Rear" }, { value: "both", label: "Dual Motor" }]} onChange={(v) => updateEngine({ motorLayout: v as EngineConfig["motorLayout"] })} />
+                          </>
+                        )}
+                        {!isElectric && (
+                          <Select
+                            label="Hybrid Architecture"
+                            value={eng.hybridArchitecture}
+                            options={(Object.keys(HYBRID_ARCHITECTURES) as string[]).map((arch) => ({
+                              value: arch,
+                              label: HYBRID_ARCHITECTURES[arch].label,
+                            }))}
+                            onChange={(v) => {
+                              const newArch = v as EngineConfig["hybridArchitecture"];
+                              const caps = HYBRID_ARCHITECTURES[newArch];
+                              updateEngine({
+                                hybridArchitecture: newArch,
+                                batteryCapacity: caps.minBattery,
+                                hybridMotorPower: newArch === "none" ? 0 : Math.max(60, Math.min(eng.hybridMotorPower || 60, caps.maxMotorPower)),
+                              });
+                            }}
+                          />
+                        )}
+                        {isHybrid && !isElectric && eng.hybridArchitecture !== "none" && (
+                          <>
+                            <Select
+                              label="Motor Placement"
+                              value={eng.motorPlacement}
+                              options={(Object.keys(MOTOR_PLACEMENTS) as string[]).map((p) => ({
+                                value: p,
+                                label: MOTOR_PLACEMENTS[p].label,
+                              }))}
+                              onChange={(v) => updateEngine({ motorPlacement: v as EngineConfig["motorPlacement"] })}
+                            />
+                            <Slider
+                              label="Electric Motor Power"
+                              value={eng.hybridMotorPower}
+                              min={5}
+                              max={HYBRID_ARCHITECTURES[eng.hybridArchitecture]?.maxMotorPower || 200}
+                              step={5}
+                              unit="kW"
+                              onChange={(v) => updateEngine({ hybridMotorPower: v })}
+                            />
+                          </>
+                        )}
+                      </div>
 
-                    {!isElectric && (
-                      <Select
-                        label="Hybrid Architecture"
-                        value={eng.hybridArchitecture}
-                        options={(Object.keys(HYBRID_ARCHITECTURES) as string[]).map((arch) => ({
-                          value: arch,
-                          label: HYBRID_ARCHITECTURES[arch].label,
-                        }))}
-                        onChange={(v) => {
-                          const newArch = v as EngineConfig["hybridArchitecture"];
-                          const caps = HYBRID_ARCHITECTURES[newArch];
-                          updateEngine({
-                            hybridArchitecture: newArch,
-                            batteryCapacity: caps.minBattery,
-                            hybridMotorPower: newArch === "none" ? 0 : Math.max(60, Math.min(eng.hybridMotorPower || 60, caps.maxMotorPower)),
-                          });
-                        }}
-                      />
-                    )}
-
-                    {isHybrid && !isElectric && eng.hybridArchitecture !== "none" && (
-                      <>
-                        <Select
-                          label="Motor Placement"
-                          value={eng.motorPlacement}
-                          options={(Object.keys(MOTOR_PLACEMENTS) as string[]).map((p) => ({
-                            value: p,
-                            label: MOTOR_PLACEMENTS[p].label,
-                          }))}
-                          onChange={(v) => updateEngine({ motorPlacement: v as EngineConfig["motorPlacement"] })}
-                        />
+                      {/* SUB-CARD 2: Battery & Charging */}
+                      <div className="p-3.5 rounded-xl bg-base-950/80 border border-emerald-500/30 space-y-3">
+                        <div className="flex items-center gap-2 pb-2 border-b border-base-800">
+                          <Battery size={15} className="text-emerald-400" />
+                          <h4 className="text-xs font-bold text-slate-200 uppercase font-mono tracking-wider">Battery & Charging</h4>
+                        </div>
+                        <Select label="Battery Chemistry" value={eng.batteryChemistry || "solid_state"} options={(Object.keys(BATTERY_CHEMISTRIES) as string[]).map((b) => ({ value: b, label: BATTERY_CHEMISTRIES[b].label }))} onChange={(v) => updateEngine({ batteryChemistry: v as EngineConfig["batteryChemistry"] })} />
                         <Slider
-                          label="Electric Motor Power"
-                          value={eng.hybridMotorPower}
-                          min={5}
-                          max={HYBRID_ARCHITECTURES[eng.hybridArchitecture]?.maxMotorPower || 200}
-                          step={5}
-                          unit="kW"
-                          onChange={(v) => updateEngine({ hybridMotorPower: v })}
+                          label="Battery Capacity"
+                          value={eng.batteryCapacity || 16}
+                          min={isElectric ? 20 : (HYBRID_ARCHITECTURES[eng.hybridArchitecture]?.minBattery || 0.5)}
+                          max={isElectric ? 120 : (HYBRID_ARCHITECTURES[eng.hybridArchitecture]?.maxBattery || 25)}
+                          step={0.5}
+                          unit="kWh"
+                          onChange={(v) => updateEngine({ batteryCapacity: v })}
                         />
-                      </>
-                    )}
+                        <Select
+                          label="Charging & V2G Power"
+                          value={eng.chargingTech || "nacs"}
+                          options={(Object.keys(CHARGING_TECH_TYPES) as (keyof typeof CHARGING_TECH_TYPES)[]).map((k) => ({ value: k, label: CHARGING_TECH_TYPES[k].label }))}
+                          onChange={(v) => updateEngine({ chargingTech: v as EngineConfig["chargingTech"] })}
+                        />
+                        <Select
+                          label="Regen Braking Tech"
+                          value={eng.regenBrakingTech || "brake_by_wire"}
+                          options={(Object.keys(REGEN_BRAKING_TYPES) as (keyof typeof REGEN_BRAKING_TYPES)[]).map((k) => ({ value: k, label: REGEN_BRAKING_TYPES[k].label }))}
+                          onChange={(v) => updateEngine({ regenBrakingTech: v as EngineConfig["regenBrakingTech"] })}
+                        />
+                        <Slider label="Regen Harvest Level" value={eng.regenLevel || 0.8} min={0} max={1} step={0.05} format={(v) => `${(v * 100).toFixed(0)}%`} onChange={(v) => updateEngine({ regenLevel: v })} />
+                      </div>
 
-                    <Select label="Battery Chemistry" value={eng.batteryChemistry || "solid_state"} options={(Object.keys(BATTERY_CHEMISTRIES) as string[]).map((b) => ({ value: b, label: BATTERY_CHEMISTRIES[b].label }))} onChange={(v) => updateEngine({ batteryChemistry: v as EngineConfig["batteryChemistry"] })} />
-                    
-                    <Slider
-                      label="Battery Capacity"
-                      value={eng.batteryCapacity || 16}
-                      min={isElectric ? 20 : (HYBRID_ARCHITECTURES[eng.hybridArchitecture]?.minBattery || 0.5)}
-                      max={isElectric ? 120 : (HYBRID_ARCHITECTURES[eng.hybridArchitecture]?.maxBattery || 25)}
-                      step={0.5}
-                      unit="kWh"
-                      onChange={(v) => updateEngine({ batteryCapacity: v })}
-                    />
-
-                    {/* ── 21 COMPREHENSIVE HYBRID & EV SUBSYSTEM CONTROLS ── */}
-                    <div className="pt-3 border-t border-base-800 space-y-2.5">
-                      <Select
-                        label="Power Electronics Inverter (SiC / GaN)"
-                        value={eng.powerElectronicsType || "silicon_carbide_sic"}
-                        options={(Object.keys(POWER_ELECTRONICS_TYPES) as (keyof typeof POWER_ELECTRONICS_TYPES)[]).map((k) => ({ value: k, label: POWER_ELECTRONICS_TYPES[k].label }))}
-                        onChange={(v) => updateEngine({ powerElectronicsType: v as EngineConfig["powerElectronicsType"] })}
-                      />
-
-                      <Select
-                        label="Hybrid Transmission System"
-                        value={eng.hybridTransmission || "dct_hybrid"}
-                        options={(Object.keys(HYBRID_TRANSMISSION_TYPES) as (keyof typeof HYBRID_TRANSMISSION_TYPES)[]).map((k) => ({ value: k, label: HYBRID_TRANSMISSION_TYPES[k].label }))}
-                        onChange={(v) => updateEngine({ hybridTransmission: v as EngineConfig["hybridTransmission"] })}
-                      />
-
-                      <Select
-                        label="Regenerative Braking Technology"
-                        value={eng.regenBrakingTech || "brake_by_wire"}
-                        options={(Object.keys(REGEN_BRAKING_TYPES) as (keyof typeof REGEN_BRAKING_TYPES)[]).map((k) => ({ value: k, label: REGEN_BRAKING_TYPES[k].label }))}
-                        onChange={(v) => updateEngine({ regenBrakingTech: v as EngineConfig["regenBrakingTech"] })}
-                      />
-
-                      <Select
-                        label="Thermal Management & Battery Chiller"
-                        value={eng.thermalManagement || "liquid_chiller"}
-                        options={(Object.keys(THERMAL_MANAGEMENT_TYPES) as (keyof typeof THERMAL_MANAGEMENT_TYPES)[]).map((k) => ({ value: k, label: THERMAL_MANAGEMENT_TYPES[k].label }))}
-                        onChange={(v) => updateEngine({ thermalManagement: v as EngineConfig["thermalManagement"] })}
-                      />
-
-                      <Select
-                        label="Charging & V2G / V2H Bidirectional Power"
-                        value={eng.chargingTech || "nacs"}
-                        options={(Object.keys(CHARGING_TECH_TYPES) as (keyof typeof CHARGING_TECH_TYPES)[]).map((k) => ({ value: k, label: CHARGING_TECH_TYPES[k].label }))}
-                        onChange={(v) => updateEngine({ chargingTech: v as EngineConfig["chargingTech"] })}
-                      />
-
-                      <Select
-                        label="Sports Hybrid Performance Suite"
-                        value={eng.sportsHybridTech || "electric_torque_fill"}
-                        options={(Object.keys(SPORTS_HYBRID_TECH_TYPES) as (keyof typeof SPORTS_HYBRID_TECH_TYPES)[]).map((k) => ({ value: k, label: SPORTS_HYBRID_TECH_TYPES[k].label }))}
-                        onChange={(v) => updateEngine({ sportsHybridTech: v as EngineConfig["sportsHybridTech"] })}
-                      />
+                      {/* SUB-CARD 3: Power Electronics & Transmission */}
+                      <div className="p-3.5 rounded-xl bg-base-950/80 border border-purple-500/30 space-y-3">
+                        <div className="flex items-center gap-2 pb-2 border-b border-base-800">
+                          <Activity size={15} className="text-purple-400" />
+                          <h4 className="text-xs font-bold text-slate-200 uppercase font-mono tracking-wider">Electronics & Chiller</h4>
+                        </div>
+                        <Select
+                          label="Power Electronics (SiC / GaN)"
+                          value={eng.powerElectronicsType || "silicon_carbide_sic"}
+                          options={(Object.keys(POWER_ELECTRONICS_TYPES) as (keyof typeof POWER_ELECTRONICS_TYPES)[]).map((k) => ({ value: k, label: POWER_ELECTRONICS_TYPES[k].label }))}
+                          onChange={(v) => updateEngine({ powerElectronicsType: v as EngineConfig["powerElectronicsType"] })}
+                        />
+                        <Select
+                          label="Hybrid Transmission"
+                          value={eng.hybridTransmission || "dct_hybrid"}
+                          options={(Object.keys(HYBRID_TRANSMISSION_TYPES) as (keyof typeof HYBRID_TRANSMISSION_TYPES)[]).map((k) => ({ value: k, label: HYBRID_TRANSMISSION_TYPES[k].label }))}
+                          onChange={(v) => updateEngine({ hybridTransmission: v as EngineConfig["hybridTransmission"] })}
+                        />
+                        <Select
+                          label="Thermal Management Chiller"
+                          value={eng.thermalManagement || "liquid_chiller"}
+                          options={(Object.keys(THERMAL_MANAGEMENT_TYPES) as (keyof typeof THERMAL_MANAGEMENT_TYPES)[]).map((k) => ({ value: k, label: THERMAL_MANAGEMENT_TYPES[k].label }))}
+                          onChange={(v) => updateEngine({ thermalManagement: v as EngineConfig["thermalManagement"] })}
+                        />
+                        <Select
+                          label="Sports Hybrid Suite"
+                          value={eng.sportsHybridTech || "electric_torque_fill"}
+                          options={(Object.keys(SPORTS_HYBRID_TECH_TYPES) as (keyof typeof SPORTS_HYBRID_TECH_TYPES)[]).map((k) => ({ value: k, label: SPORTS_HYBRID_TECH_TYPES[k].label }))}
+                          onChange={(v) => updateEngine({ sportsHybridTech: v as EngineConfig["sportsHybridTech"] })}
+                        />
+                      </div>
                     </div>
 
+                    {/* FULL-WIDTH ROW: MGU-H & Energy Recovery Deployment */}
                     {isHybrid && !isElectric && (
-                      <>
-                        <Toggle label="MGU-H (Heat Recovery Turbo Compounding)" value={eng.hasMguH || false} onChange={(v) => updateEngine({ hasMguH: v })} />
+                      <div className="p-3.5 rounded-xl bg-gradient-to-r from-base-950 via-cyan-950/30 to-base-950 border border-cyan-500/40 grid grid-cols-1 md:grid-cols-3 gap-3 items-center">
+                        <Toggle label="MGU-H Turbo Heat Recovery" value={eng.hasMguH || false} onChange={(v) => updateEngine({ hasMguH: v })} />
                         {eng.hasMguH && (
                           <Select label="MGU-H Mode" value={eng.mguHMode || "auto"} options={(Object.keys(MGU_H_MODES) as string[]).map((m) => ({ value: m, label: MGU_H_MODES[m].label }))} onChange={(v) => updateEngine({ mguHMode: v as EngineConfig["mguHMode"] })} />
                         )}
                         <Select label="Deploy Mode" value={eng.deployMode || "qualifying"} options={(Object.keys(HYBRID_DEPLOY_MODES) as string[]).map((d) => ({ value: d, label: HYBRID_DEPLOY_MODES[d].label }))} onChange={(v) => updateEngine({ deployMode: v as EngineConfig["deployMode"] })} />
-                      </>
+                      </div>
                     )}
-                    <Slider label="Regen Level" value={eng.regenLevel || 0.8} min={0} max={1} step={0.05} format={(v) => `${(v * 100).toFixed(0)}%`} onChange={(v) => updateEngine({ regenLevel: v })} />
-                  </div>
-                  
-                  {/* Live 21-Category Hybrid Physics Telemetry Suite */}
-                  <div className="mt-4 pt-3 border-t border-cyan-500/30">
-                    <HybridTelemetrySuite />
                   </div>
                 </Section>
               )}
             </div>
 
-            {/* COLUMN 3: Sticky Live Stats, Power Chart & Telemetry Sidebar (Phase 6) */}
-            <div className="space-y-4 xl:sticky xl:top-4 max-h-[calc(100vh-140px)] overflow-y-auto pr-1 scrollbar-thin scrollbar-thumb-base-750">
+            {/* COLUMN 3: Live Stats, Power Chart & Telemetry Sidebar */}
+            <div className="space-y-4">
               <Section title="Power & Torque" icon={<Zap size={16} />}>
                 <LineChart series={powerSeries} xLabel="RPM" yLabel="hp / Nm" height={190} />
                 <div className="flex justify-between text-[10px] text-slate-500 mt-1">
@@ -774,36 +826,25 @@ export function EngineDesigner() {
             </div>
           </div>
 
-          {/* Floating Auto-Optimize Toolbar (Phase 9) */}
-          <div className="fixed bottom-14 left-1/2 -translate-x-1/2 z-40 max-w-2xl w-full px-3 py-2 rounded-2xl bg-base-900/90 border border-cyan-500/40 backdrop-blur-xl shadow-[0_10px_35px_rgba(0,0,0,0.85)]">
-            <div className="flex items-center justify-between gap-2 overflow-x-auto scrollbar-none">
-              <span className="text-[10px] font-mono text-cyan-300 uppercase tracking-widest font-bold whitespace-nowrap px-1">
-                AUTO OPTIMIZE:
-              </span>
-              <div className="flex items-center gap-1.5">
-                {([
-                  { id: "performance" as OptimizeGoal, icon: <TrendingUp size={11} />, label: "Performance" },
-                  { id: "cost" as OptimizeGoal, icon: <DollarSign size={11} />, label: "Lowest Cost" },
-                  { id: "reliability" as OptimizeGoal, icon: <Wrench size={11} />, label: "Reliability" },
-                  { id: "efficiency" as OptimizeGoal, icon: <Leaf size={11} />, label: "Efficiency" },
-                  { id: "luxury" as OptimizeGoal, icon: <Flame size={11} />, label: "Luxury" },
-                ]).map((opt) => (
-                  <button
-                    key={opt.id}
-                    onClick={() => setOptimizeGoal(opt.id)}
-                    className={`flex items-center gap-1 px-2.5 py-1 rounded-lg text-[10px] font-mono font-semibold transition-all cursor-pointer whitespace-nowrap ${
-                      optimizeGoal === opt.id
-                        ? "bg-cyan-500 text-black font-bold shadow-[0_0_10px_rgba(34,211,238,0.4)]"
-                        : "bg-base-800/80 text-slate-300 hover:text-white hover:bg-base-750"
-                    }`}
-                  >
-                    {opt.icon}
-                    {opt.label}
-                  </button>
-                ))}
-              </div>
-            </div>
+          {/* Full-Width Workstation Console: Autonomous AI Agent Suite */}
+          <div className="w-full mt-6 mb-6">
+            <ApexAgentConsole
+              engineConfig={eng}
+              installedComponents={assembly.installedComponents}
+              activeComponentId={assembly.activeComponentId}
+              phase={assembly.phase}
+              powerHp={sim.peakPower}
+              weightKg={sim.engineWeight + 1200}
+              onApplyTuning={(changes) => updateEngine(changes)}
+            />
           </div>
+
+          {/* Wide Full-Width Workstation Console: 21 Hybrid & EV Telemetry Suite */}
+          {(isHybrid || isElectric) && (
+            <div className="w-full mt-4 mb-24 pb-8">
+              <HybridTelemetrySuite />
+            </div>
+          )}
         </>
       )}
 

@@ -16,7 +16,7 @@ import {
   INFO_AI_SECURITY_COSTS, INFO_PRODUCTIVITY_COSTS,
   INFO_MUSIC_OPTIONS, INFO_VIDEO_OPTIONS, INFO_GAMING_OPTIONS,
   HYBRID_ARCHITECTURES, MOTOR_PLACEMENTS,
-  TURBO_HOUSINGS, INTERCOOLER_TYPES, WASTEGATE_TYPES, BOV_TYPES, BOOST_CONTROLLERS,
+  TURBO_HOUSINGS, INTERCOOLER_TYPES, WASTEGATE_TYPES, BOV_TYPES, BOOST_CONTROLLERS, defaultInfotainment,
 } from "./constants";
 import {
   CLUSTER_LEVELS, INFOTAINMENT_SCREENS, SCREEN_TECH_OPTIONS,
@@ -236,19 +236,6 @@ function simulateCombustion(engine: EngineConfig): EngineSim {
     ? Math.round((batteryEnergy * 1000) / (220 + (batteryWeight + (isHybrid ? 600 : 0)) * 0.12))
     : 0;
 
-  // ---- 21 Comprehensive Hybrid & EV Subsystems Physics & Cost Models ----
-  const transmissionEff = engine.hybridTransmission === "single_speed_reduction" ? 0.98 : engine.hybridTransmission === "dct_hybrid" ? 0.96 : engine.hybridTransmission === "power_split_planetary" ? 0.94 : 0.93;
-  const thermalStabilityFactor = engine.thermalManagement === "refrigerant_direct" ? 0.99 : engine.thermalManagement === "liquid_chiller" ? 0.95 : engine.thermalManagement === "heat_pump_waste_heat" ? 0.96 : 0.70;
-  
-  // Power electronics cost and weight deltas
-  if (engine.powerElectronicsType === "silicon_carbide_sic") { engineCost += 3500; engineWeight += 4; }
-  if (engine.powerElectronicsType === "gallium_nitride_gan") { engineCost += 6500; engineWeight += 2; }
-  if (engine.thermalManagement === "liquid_chiller") { engineCost += 1800; engineWeight += 18; }
-  if (engine.thermalManagement === "refrigerant_direct") { engineCost += 3200; engineWeight += 12; }
-  if (engine.chargingTech === "v2g_v2h_v2l") { engineCost += 1500; }
-  if (engine.sensorSuite === "ai_telemetry_pro") { engineCost += 2200; }
-  if (engine.sportsHybridTech === "e_axle_vectoring") { engineCost += 4800; engineWeight += 22; }
-
   // Engine weight
   const crankWeight = CRANK_MATERIALS[engine.crank].weightFactor;
   const pistonWeight = PISTON_TYPES[engine.pistons].weightFactor;
@@ -280,6 +267,20 @@ function simulateCombustion(engine: EngineConfig): EngineSim {
   if (isHybrid) {
     engineCost = engineCost * arch.costFactor + batteryCost + (motorPowerKW * 180 * placement.costFactor) + (mguHPower * 300);
   }
+
+  // ---- 21 Comprehensive Hybrid & EV Subsystems Physics & Cost Models ----
+  const transmissionEff = engine.hybridTransmission === "single_speed_reduction" ? 0.98 : engine.hybridTransmission === "dct_hybrid" ? 0.96 : engine.hybridTransmission === "power_split_planetary" ? 0.94 : 0.93;
+  const thermalStabilityFactor = engine.thermalManagement === "refrigerant_direct" ? 0.99 : engine.thermalManagement === "liquid_chiller" ? 0.95 : engine.thermalManagement === "heat_pump_waste_heat" ? 0.96 : 0.70;
+  
+  // Power electronics cost and weight deltas
+  if (engine.powerElectronicsType === "silicon_carbide_sic") { engineCost += 3500; engineWeight += 4; }
+  if (engine.powerElectronicsType === "gallium_nitride_gan") { engineCost += 6500; engineWeight += 2; }
+  if (engine.thermalManagement === "liquid_chiller") { engineCost += 1800; engineWeight += 18; }
+  if (engine.thermalManagement === "refrigerant_direct") { engineCost += 3200; engineWeight += 12; }
+  if (engine.chargingTech === "v2g_v2h_v2l") { engineCost += 1500; }
+  if (engine.sensorSuite === "ai_telemetry_pro") { engineCost += 2200; }
+  if (engine.sportsHybridTech === "e_axle_vectoring") { engineCost += 4800; engineWeight += 22; }
+
   engineCost = clamp(engineCost, 500, 220000);
 
   // Reliability & Thermal Stability
@@ -1321,7 +1322,7 @@ export function simulate(design: VehicleDesign): SimResult {
   const eng = simulateEngine(design.engine);
   const aero = simulateAero(design.vehicle);
   const interior = simulateInterior(design.vehicle);
-  const info = simulateInfotainment(design.infotainment);
+  const info = simulateInfotainment(design.infotainment || defaultInfotainment());
   const perf = simulatePerformance(design, eng, aero, interior);
   const mfg = simulateManufacturing(design, perf);
   const testing = simulateTesting(design, eng, aero, perf);

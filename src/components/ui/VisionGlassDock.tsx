@@ -81,17 +81,16 @@ export function VisionGlassDock({
           display: "flex",
           alignItems: "flex-end",
           gap: 3,
-          // Apple Liquid Glass dock
-          background: "rgba(255,255,255,0.72)",
+          // Apple Vision OS Translucent Light Glass dock
+          background: "rgba(255, 255, 255, 0.78)",
           backdropFilter: "blur(50px) saturate(200%)",
           WebkitBackdropFilter: "blur(50px) saturate(200%)",
-          border: "1.5px solid rgba(255,220,180,0.40)",
+          border: "1.5px solid rgba(255, 255, 255, 0.90)",
           boxShadow:
-            "0 12px 50px rgba(0,0,0,0.18), " +
-            "0 4px 16px rgba(0,0,0,0.08), " +
-            "inset 0 1px 0 rgba(255,255,255,0.90), " +
-            "inset 0 -1px 1px rgba(0,0,0,0.04), " +
-            "0 0 20px rgba(200,180,255,0.08)",
+            "0 14px 45px rgba(0, 0, 0, 0.12), " +
+            "0 4px 16px rgba(0, 0, 0, 0.06), " +
+            "inset 0 1px 0 rgba(255, 255, 255, 0.95), " +
+            "0 0 25px rgba(255, 220, 180, 0.25)",
           borderRadius: 22,
           padding: "5px 8px",
           transition: "all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)",
@@ -125,22 +124,22 @@ export function VisionGlassDock({
                 fontSize: 11,
                 fontWeight: active ? 700 : 500,
                 background: active
-                  ? "rgba(0,122,255,0.16)"
+                  ? "rgba(0, 122, 255, 0.16)"
                   : isHov
-                  ? "rgba(255,255,255,0.65)"
+                  ? "rgba(255, 255, 255, 0.65)"
                   : "transparent",
-                color: active ? "#007aff" : isHov ? "#1c1c1e" : "#636366",
+                color: active ? "#007aff" : isHov ? "#1c1c1e" : "#475569",
                 border: active
-                  ? "1px solid rgba(0,122,255,0.25)"
+                  ? "1px solid rgba(0, 122, 255, 0.30)"
                   : isHov
-                  ? "1px solid rgba(255,255,255,0.85)"
+                  ? "1px solid rgba(255, 255, 255, 0.85)"
                   : "1px solid transparent",
                 cursor: "pointer",
                 whiteSpace: "nowrap" as const,
                 transition: "all 0.28s cubic-bezier(0.34, 1.56, 0.64, 1)",
                 transform: isHov ? "translateY(-4px) scale(1.05)" : "none",
                 boxShadow: isHov
-                  ? "0 6px 16px rgba(0,0,0,0.10), inset 0 1px 0 rgba(255,255,255,0.9)"
+                  ? "0 6px 16px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.9)"
                   : "none",
               }}
             >
@@ -155,7 +154,7 @@ export function VisionGlassDock({
           style={{
             width: 1,
             height: 20,
-            background: "rgba(0,0,0,0.10)",
+            background: "rgba(0,0,0,0.12)",
             margin: "0 4px",
             alignSelf: "center",
             borderRadius: 1,
@@ -185,12 +184,12 @@ export function VisionGlassDock({
                 fontSize: Math.round(11 * mag),
                 fontWeight: cur ? 700 : 400,
                 background: cur
-                  ? "rgba(0,122,255,0.15)"
+                  ? "rgba(0, 122, 255, 0.16)"
                   : isHov
-                  ? "rgba(0,0,0,0.05)"
+                  ? "rgba(0, 0, 0, 0.05)"
                   : "transparent",
-                color: cur ? "#007aff" : "#8e8e93",
-                border: "none",
+                color: cur ? "#007aff" : "#64748b",
+                border: cur ? "1px solid rgba(0, 122, 255, 0.30)" : "none",
                 cursor: "pointer",
                 whiteSpace: "nowrap" as const,
                 transition: "all 0.18s cubic-bezier(0.34, 1.56, 0.64, 1)",
@@ -200,7 +199,7 @@ export function VisionGlassDock({
             >
               <span
                 style={{
-                  color: cur ? "#007aff" : "#aeaeb2",
+                  color: cur ? "#007aff" : "#64748b",
                   display: "flex",
                   alignItems: "center",
                   transition: "color 0.2s ease",

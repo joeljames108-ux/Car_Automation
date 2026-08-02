@@ -281,10 +281,10 @@ export function ChoiceGrid<T extends string>({ value, options, onChange, columns
         <button
           key={o.value}
           onClick={() => onChange(o.value)}
-          className={`px-2.5 py-1.5 rounded-lg text-xs font-medium transition-all border ${
+          className={`px-3 py-2 rounded-xl text-xs font-mono font-bold transition-all border cursor-pointer ${
             value === o.value
-              ? "bg-accent-500/20 border-accent-500/50 text-accent-300"
-              : "bg-base-850 border-base-800 text-slate-400 hover:border-base-700"
+              ? "bg-cyan-500 text-black border-cyan-400 shadow-[0_0_14px_rgba(34,211,238,0.5)] scale-[1.02]"
+              : "bg-base-850/80 border-base-750 text-slate-300 hover:text-slate-100 hover:bg-white/5"
           }`}
         >
           {o.label}

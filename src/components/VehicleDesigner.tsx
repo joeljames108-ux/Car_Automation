@@ -119,17 +119,22 @@ export function VehicleDesigner() {
         </Section>
 
         <Section title="Platform & Chassis" icon={<Car size={16} />}>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+          <div className="space-y-3">
             <div>
-              <label className="label-mono mb-1.5 block">Platform</label>
+              <label className="label-mono mb-1.5 flex items-center justify-between font-bold">
+                <span>Vehicle Platform Tier & Class</span>
+                <span className="text-cyan-500 font-bold font-mono text-xs">{PLATFORMS[v.platform]?.label}</span>
+              </label>
               <ChoiceGrid<PlatformType>
                 value={v.platform}
                 options={(Object.keys(PLATFORMS) as PlatformType[]).map((p) => ({ value: p, label: PLATFORMS[p].label }))}
                 onChange={(val) => updateVehicle({ platform: val })}
-                columns={3}
+                columns={4}
               />
             </div>
-            <Select<ChassisType> label="Chassis" value={v.chassis} options={(Object.keys(CHASSIS_TYPES) as ChassisType[]).map((c) => ({ value: c, label: CHASSIS_TYPES[c].label }))} onChange={(val) => updateVehicle({ chassis: val })} />
+            <div className="pt-2 border-t border-slate-200/50 dark:border-base-800">
+              <Select<ChassisType> label="Chassis Architecture" value={v.chassis} options={(Object.keys(CHASSIS_TYPES) as ChassisType[]).map((c) => ({ value: c, label: CHASSIS_TYPES[c].label }))} onChange={(val) => updateVehicle({ chassis: val })} />
+            </div>
           </div>
         </Section>
 
@@ -154,14 +159,16 @@ export function VehicleDesigner() {
             <Select<BrakeType> label="Brake Disc Material" value={v.brakeType || "cast_iron"} options={(Object.keys(BRAKE_TYPES) as BrakeType[]).map((b) => ({ value: b, label: BRAKE_TYPES[b].label }))} onChange={(val) => updateVehicle({ brakeType: val })} />
             <Select label="Caliper Pistons" value={String(v.brakePistonCount || 4)} options={[{ value: "2", label: "2-Piston Floating" }, { value: "4", label: "4-Piston Monobloc" }, { value: "6", label: "6-Piston High Performance" }, { value: "8", label: "8-Piston Endurance / Race" }]} onChange={(val) => updateVehicle({ brakePistonCount: Number(val) })} />
           </div>
-          <p className="text-[11px] text-slate-500 mb-3">{BRAKE_TYPES[v.brakeType || "cast_iron"].description}</p>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+          <p className="text-[11px] text-slate-500 mb-3 font-mono">{BRAKE_TYPES[v.brakeType || "cast_iron"].description}</p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
             <Slider label="Brake Disc" value={v.brakeDiscSize} min={200} max={440} unit="mm" onChange={(val) => updateVehicle({ brakeDiscSize: val })} />
             <Slider label="Brake Pad" value={v.brakePadCompound} min={0} max={1} step={0.05} format={(val) => `${(val * 100).toFixed(0)}%`} onChange={(val) => updateVehicle({ brakePadCompound: val })} />
             <Slider label="Brake Bias" value={v.brakeBias} min={0.3} max={0.8} step={0.01} format={(val) => `${(val * 100).toFixed(0)}%F`} onChange={(val) => updateVehicle({ brakeBias: val })} />
             <Slider label="Wheel Dia." value={v.wheelDiameter} min={13} max={22} unit='"' onChange={(val) => updateVehicle({ wheelDiameter: val })} />
             <Slider label="Wheel Width" value={v.wheelWidth} min={4.5} max={13} step={0.5} unit='"' onChange={(val) => updateVehicle({ wheelWidth: val })} />
             <Slider label="Tire Pressure" value={v.tirePressure} min={1.5} max={3.5} step={0.1} unit="bar" onChange={(val) => updateVehicle({ tirePressure: val })} />
+          </div>
+          <div className="mt-3 pt-3 border-t border-slate-200/50 dark:border-base-800">
             <Select<TireCompound> label="Tire Compound" value={v.tireCompound} options={(Object.keys(TIRE_COMPOUNDS) as TireCompound[]).map((t) => ({ value: t, label: TIRE_COMPOUNDS[t].label }))} onChange={(val) => updateVehicle({ tireCompound: val })} />
           </div>
         </Section>
@@ -173,7 +180,7 @@ export function VehicleDesigner() {
             <Select label="Differential" value={v.diffType} options={[{ value: "open", label: "Open" }, { value: "lsd", label: "LSD" }, { value: "torsen", label: "Torsen" }, { value: "active", label: "Active" }, { value: "locked", label: "Locked" }]} onChange={(val) => updateVehicle({ diffType: val as VehicleConfig["diffType"] })} />
             <Slider label="Diff Preload" value={v.diffPreload} min={0} max={1} step={0.05} format={(val) => `${(val * 100).toFixed(0)}%`} onChange={(val) => updateVehicle({ diffPreload: val })} />
           </div>
-          <p className="text-[11px] text-slate-500">{TRANSMISSION_TYPES[v.transmission].description}</p>
+          <p className="text-[11px] text-slate-500 font-mono mt-1">{TRANSMISSION_TYPES[v.transmission].description}</p>
         </Section>
 
         <Section title="Electronics" icon={<Shield size={16} />}>
@@ -201,6 +208,32 @@ export function VehicleDesigner() {
             <StatTile label="Skidpad" value={sim.skidpad} unit="m" />
             <StatTile label="Drag Cd" value={sim.dragCoeff.toFixed(3)} accent="accent" />
             <StatTile label="Downforce" value={sim.downforce} unit="N" accent="ok" />
+          </div>
+        </Section>
+
+        {/* Dynamic Chassis & Aero Telemetry Panel */}
+        <Section title="Chassis & Aero Telemetry" icon={<Sparkles size={16} />}>
+          <div className="space-y-2.5 text-xs font-mono">
+            <div className="p-2.5 rounded-xl bg-white/40 dark:bg-base-950/60 border border-white/60 dark:border-base-800 space-y-1">
+              <div className="flex justify-between text-slate-600 dark:text-slate-400 font-bold">
+                <span>Front/Rear Weight Bias</span>
+                <span className="text-cyan-600 dark:text-cyan-400">{(sim.weightDistFront * 100).toFixed(0)}% F / {(100 - sim.weightDistFront * 100).toFixed(0)}% R</span>
+              </div>
+              <div className="w-full h-2 rounded-full bg-slate-200 dark:bg-base-800 overflow-hidden flex">
+                <div style={{ width: `${sim.weightDistFront * 100}%` }} className="bg-cyan-500 h-full transition-all" />
+                <div style={{ width: `${(1 - sim.weightDistFront) * 100}%` }} className="bg-purple-500 h-full transition-all" />
+              </div>
+            </div>
+
+            <div className="p-2.5 rounded-xl bg-white/40 dark:bg-base-950/60 border border-white/60 dark:border-base-800 space-y-1">
+              <div className="flex justify-between text-slate-600 dark:text-slate-400 font-bold">
+                <span>Aerodynamic Efficiency</span>
+                <span className="text-emerald-600 dark:text-emerald-400 font-bold">{(sim.downforce / (sim.dragCoeff * 1000 + 1)).toFixed(2)} L/D</span>
+              </div>
+              <p className="text-[10px] text-slate-500 dark:text-slate-400">
+                High downforce to drag ratio for cornering stability.
+              </p>
+            </div>
           </div>
         </Section>
       </div>

@@ -3,6 +3,7 @@ import { Wrench, Activity, Layers } from "lucide-react";
 import { ComponentLibrary } from "./ComponentLibrary";
 import { AssemblyProgressPanel } from "./AssemblyProgressPanel";
 import type { ComponentId, AssemblyComponentMeta, AssemblyPhase } from "../../sim/assemblyTypes";
+import { EngineConfig } from "../../sim/types";
 
 interface AssemblyTabSwitcherProps {
   installedComponents: ComponentId[];
@@ -25,6 +26,7 @@ interface AssemblyTabSwitcherProps {
   isAssemblyComplete: boolean;
   onResetAssembly: () => void;
   onToggleExplodedView: () => void;
+  engineConfig?: Partial<EngineConfig>;
   className?: string;
 }
 
@@ -43,6 +45,7 @@ export function AssemblyTabSwitcher({
   isAssemblyComplete,
   onResetAssembly,
   onToggleExplodedView,
+  engineConfig,
   className = "",
 }: AssemblyTabSwitcherProps) {
   const [activeTab, setActiveTab] = useState<"parts" | "dashboard" | "both">("both");
@@ -50,7 +53,7 @@ export function AssemblyTabSwitcher({
   return (
     <div className={`flex flex-col h-full ${className}`}>
       {/* Tab Selector Pill Header */}
-      <div className="flex items-center justify-between p-1.5 mb-2 rounded-xl bg-base-900/90 border border-base-800 backdrop-blur-md shrink-0">
+      <div className="flex items-center justify-between p-1.5 mb-2 rounded-xl bg-[#0b0f19]/90 border border-slate-800/80 backdrop-blur-md shrink-0">
         <div className="flex items-center gap-1">
           <button
             onClick={() => setActiveTab("parts")}
@@ -60,7 +63,7 @@ export function AssemblyTabSwitcher({
                 : "text-slate-400 hover:text-slate-200 hover:bg-base-800/60 border border-transparent"
             }`}
           >
-            <Wrench size={13} /> Parts ({installedComponents.length}/12)
+            <Wrench size={13} /> Parts
           </button>
           <button
             onClick={() => setActiveTab("dashboard")}
@@ -70,13 +73,13 @@ export function AssemblyTabSwitcher({
                 : "text-slate-400 hover:text-slate-200 hover:bg-base-800/60 border border-transparent"
             }`}
           >
-            <Activity size={13} /> Build Dashboard ({progressPercentage}%)
+            <Activity size={13} /> Telemetry
           </button>
         </div>
 
         <button
           onClick={() => setActiveTab("both")}
-          className={`hidden sm:flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-[11px] font-mono font-semibold transition-all cursor-pointer ${
+          className={`hidden sm:flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-mono font-semibold transition-all cursor-pointer ${
             activeTab === "both"
               ? "bg-base-800 text-slate-100 border border-base-700"
               : "text-slate-500 hover:text-slate-300"
@@ -99,6 +102,7 @@ export function AssemblyTabSwitcher({
               canInstall={canInstall}
               onStartInstall={onStartInstall}
               onHoverComponent={onHoverComponent}
+              engineConfig={engineConfig}
             />
           </div>
         )}
@@ -116,6 +120,7 @@ export function AssemblyTabSwitcher({
               onStartInstall={onStartInstall}
               onResetAssembly={onResetAssembly}
               onToggleExplodedView={onToggleExplodedView}
+              engineConfig={engineConfig}
             />
           </div>
         )}

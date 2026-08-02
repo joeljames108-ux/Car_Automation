@@ -20,6 +20,8 @@ import { EngineSVG } from "./EngineSVG";
 import { ENGINE_ASSEMBLY_COMPONENTS } from "../../sim/assemblyTypes";
 import { playAssemblySound } from "./sounds";
 
+import { EngineConfig } from "../../sim/types";
+
 interface AssemblyCompletionModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -31,6 +33,8 @@ interface AssemblyCompletionModalProps {
     reliability: number;
     cost: number;
   };
+  layout?: string;
+  engineConfig?: Partial<EngineConfig>;
 }
 
 export function AssemblyCompletionModal({
@@ -38,6 +42,8 @@ export function AssemblyCompletionModal({
   onClose,
   onReset,
   stats,
+  layout,
+  engineConfig,
 }: AssemblyCompletionModalProps) {
   const [isRunningEngine, setIsRunningEngine] = useState(false);
   const [throttlePos, setThrottlePos] = useState(0); // 0% to 100%
@@ -79,24 +85,24 @@ export function AssemblyCompletionModal({
   const needleRotation = -120 + (rpm / 8500) * 240;
 
   return createPortal(
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/85 backdrop-blur-2xl animate-stage-transition-enter select-none">
-      {/* Dynamic Background Rays & Confetti Effect */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_30%,rgba(34,211,238,0.15),transparent_70%)] pointer-events-none" />
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#020617]/90 backdrop-blur-2xl animate-stage-transition-enter select-none">
+      {/* Dynamic Background Rays & Glow Effect */}
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_30%,rgba(56,189,248,0.15),transparent_70%)] pointer-events-none" />
 
       {/* Main Dialog Modal Container */}
-      <div className="relative w-full max-w-4xl bg-base-900 border border-cyan-500/40 rounded-3xl p-6 sm:p-8 shadow-[0_25px_70px_rgba(0,0,0,0.9)] flex flex-col gap-6 overflow-hidden">
+      <div className="relative w-full max-w-4xl bg-[#070a12]/95 border border-cyan-500/30 rounded-3xl p-6 sm:p-8 shadow-[0_25px_80px_rgba(0,0,0,0.95)] flex flex-col gap-6 overflow-hidden">
         {/* Light Sweep Particle Flare */}
         <div className="absolute -top-24 -left-24 w-48 h-48 bg-cyan-400/20 blur-3xl pointer-events-none" />
 
         {/* Top Header */}
-        <div className="flex items-center justify-between border-b border-base-800 pb-4">
+        <div className="flex items-center justify-between border-b border-slate-800/80 pb-4">
           <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-2xl bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
+            <div className="p-2.5 rounded-2xl bg-cyan-500/20 text-cyan-400 border border-cyan-500/30">
               <CheckCircle2 size={24} />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-[10px] font-mono font-bold">
+                <span className="px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 text-[10px] font-mono font-bold">
                   FACTORY VERIFIED
                 </span>
                 <span className="text-[10px] font-mono text-slate-400 uppercase tracking-widest">
@@ -111,7 +117,7 @@ export function AssemblyCompletionModal({
 
           <button
             onClick={onClose}
-            className="p-2 rounded-full text-slate-400 hover:text-white hover:bg-base-800 transition-colors cursor-pointer"
+            className="p-2 rounded-full text-slate-400 hover:text-white hover:bg-slate-800/60 transition-colors cursor-pointer"
           >
             <X size={20} />
           </button>
@@ -120,7 +126,7 @@ export function AssemblyCompletionModal({
         {/* Center Grid: Engine SVG + Live Telemetry */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
           {/* Left Column: Assembled Engine Canvas */}
-          <div className="relative bg-base-950/90 border border-base-800 rounded-2xl p-4 flex flex-col items-center justify-center min-h-[310px] overflow-hidden">
+          <div className="relative bg-[#0b0f19]/80 border border-slate-800/80 rounded-2xl p-4 flex flex-col items-center justify-center min-h-[310px] overflow-hidden">
             <EngineSVG
               installedComponents={allComponentIds}
               activeComponentId={null}
@@ -128,6 +134,8 @@ export function AssemblyCompletionModal({
               hoveredComponentId={null}
               isExplodedView={false}
               isAssemblyComplete={true}
+              layout={layout}
+              engineConfig={engineConfig}
               className="max-h-[260px]"
             />
 
@@ -167,7 +175,7 @@ export function AssemblyCompletionModal({
 
               {/* Throttle Position Slider */}
               {isRunningEngine && (
-                <div className="flex items-center gap-3 p-2 rounded-xl bg-base-900 border border-cyan-500/30">
+                <div className="flex items-center gap-3 p-2 rounded-xl bg-[#070a12]/90 border border-cyan-500/30">
                   <Sliders size={14} className="text-cyan-400 shrink-0" />
                   <span className="text-[10px] font-mono text-slate-300 font-bold shrink-0">
                     Throttle: {throttlePos}%
@@ -188,7 +196,7 @@ export function AssemblyCompletionModal({
           {/* Right Column: Circular SVG Tachometer & Live Telemetry */}
           <div className="space-y-4">
             {/* Circular Tachometer Dial */}
-            <div className="flex items-center justify-center bg-base-950/90 border border-base-800 rounded-2xl p-4 relative">
+            <div className="flex items-center justify-center bg-[#0b0f19]/80 border border-slate-800/80 rounded-2xl p-4 relative">
               <svg viewBox="0 0 200 130" className="w-48 h-32 overflow-visible">
                 {/* Dial Arc */}
                 <path
@@ -210,7 +218,7 @@ export function AssemblyCompletionModal({
                 <path
                   d="M 30 110 A 80 80 0 1 1 170 110"
                   fill="none"
-                  stroke="#22d3ee"
+                  stroke="#38bdf8"
                   strokeWidth="4"
                   strokeDasharray="300"
                   strokeDashoffset={300 - (rpm / 8500) * 300}
@@ -225,8 +233,8 @@ export function AssemblyCompletionModal({
                     transition: "transform 0.15s cubic-bezier(0.16, 1, 0.3, 1)",
                   }}
                 >
-                  <line x1="100" y1="110" x2="100" y2="40" stroke="#22d3ee" strokeWidth="3" strokeLinecap="round" />
-                  <circle cx="100" cy="110" r="8" fill="#0f172a" stroke="#22d3ee" strokeWidth="2" />
+                  <line x1="100" y1="110" x2="100" y2="40" stroke="#38bdf8" strokeWidth="3" strokeLinecap="round" />
+                  <circle cx="100" cy="110" r="8" fill="#0f172a" stroke="#38bdf8" strokeWidth="2" />
                 </g>
 
                 <text x="100" y="95" fill="#f8fafc" fontSize="16" fontFamily="monospace" textAnchor="middle" fontWeight="bold">
@@ -240,7 +248,7 @@ export function AssemblyCompletionModal({
 
             {/* Final Stats Summary Grid */}
             <div className="grid grid-cols-2 gap-3">
-              <div className="bg-base-850 border border-base-750 rounded-2xl p-3">
+              <div className="bg-[#0b0f19]/80 border border-slate-800/80 rounded-2xl p-3">
                 <span className="text-[10px] font-mono text-slate-400 flex items-center gap-1">
                   <TrendingUp size={12} className="text-cyan-400" /> Peak Power
                 </span>
@@ -249,7 +257,7 @@ export function AssemblyCompletionModal({
                 </div>
               </div>
 
-              <div className="bg-base-850 border border-base-750 rounded-2xl p-3">
+              <div className="bg-[#0b0f19]/80 border border-slate-800/80 rounded-2xl p-3">
                 <span className="text-[10px] font-mono text-slate-400 flex items-center gap-1">
                   <Zap size={12} className="text-pink-400" /> Peak Torque
                 </span>
@@ -258,7 +266,7 @@ export function AssemblyCompletionModal({
                 </div>
               </div>
 
-              <div className="bg-base-850 border border-base-750 rounded-2xl p-3">
+              <div className="bg-[#0b0f19]/80 border border-slate-800/80 rounded-2xl p-3">
                 <span className="text-[10px] font-mono text-slate-400 flex items-center gap-1">
                   <ShieldCheck size={12} className="text-emerald-400" /> Durability
                 </span>
@@ -267,7 +275,7 @@ export function AssemblyCompletionModal({
                 </div>
               </div>
 
-              <div className="bg-base-850 border border-base-750 rounded-2xl p-3">
+              <div className="bg-[#0b0f19]/80 border border-slate-800/80 rounded-2xl p-3">
                 <span className="text-[10px] font-mono text-slate-400 flex items-center gap-1">
                   <DollarSign size={12} className="text-amber-400" /> Total Cost
                 </span>
@@ -280,13 +288,13 @@ export function AssemblyCompletionModal({
         </div>
 
         {/* Bottom Modal Actions */}
-        <div className="flex items-center justify-between border-t border-base-800 pt-4">
+        <div className="flex items-center justify-between border-t border-slate-800/80 pt-4">
           <button
             onClick={() => {
               onReset();
               onClose();
             }}
-            className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-rose-500/10 text-rose-300 border border-rose-500/30 hover:bg-rose-500/20 text-xs font-mono font-semibold transition-all"
+            className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-rose-500/10 text-rose-300 border border-rose-500/30 hover:bg-rose-500/20 text-xs font-mono font-semibold transition-all cursor-pointer"
           >
             <RotateCcw size={14} /> Disassemble Engine
           </button>

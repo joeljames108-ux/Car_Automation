@@ -1,6 +1,7 @@
 // ===================================================================
 // APEX ENGINEER — REAL-TIME ENGINE AUDIO SPECTRUM VISUALIZER
 // Real-time FFT Audio Spectrum, Firing Frequency Telemetry, Layout Sound Switcher
+// Frosted Translucent Liquid Glass Studio Workstation Component
 // ===================================================================
 
 import { useState, useEffect, useRef } from "react";
@@ -12,18 +13,51 @@ import {
   calculateFiringFrequency,
 } from "./engineAudioEngine";
 
+export function mapEngineLayoutToAudioLayout(layout?: string): EngineLayoutId {
+  if (!layout) return "i4";
+  switch (layout.toLowerCase()) {
+    case "i3":
+    case "i4":
+      return "i4";
+    case "i6":
+    case "v6":
+      return "v6_60";
+    case "v8":
+      return "v8_crossplane";
+    case "v10":
+      return "v10";
+    case "v12":
+    case "w12":
+    case "w16":
+    case "w18":
+      return "v12";
+    case "boxer4":
+      return "boxer4_uel";
+    case "boxer6":
+      return "boxer6";
+    case "rotary":
+      return "rotary_13b";
+    case "hybrid":
+      return "ev_dual_motor";
+    default:
+      return (ENGINE_FIRING_ORDERS[layout as EngineLayoutId] ? (layout as EngineLayoutId) : "i4");
+  }
+}
+
 interface EngineAudioVisualizerProps {
-  currentLayout?: EngineLayoutId;
+  currentLayout?: EngineLayoutId | string;
   rpm?: number;
+  onSelectLayout?: (layout: string) => void;
   className?: string;
 }
 
 export function EngineAudioVisualizer({
   currentLayout = "i4",
   rpm = 6500,
+  onSelectLayout,
   className = "",
 }: EngineAudioVisualizerProps) {
-  const [activeLayout, setActiveLayout] = useState<EngineLayoutId>(currentLayout);
+  const [activeLayout, setActiveLayout] = useState<EngineLayoutId>(() => mapEngineLayoutToAudioLayout(currentLayout));
   const [activeRpm, setActiveRpm] = useState<number>(rpm);
   const [isMuted, setIsMuted] = useState<boolean>(apexAudio.getMuteState());
   const [isPlayingTest, setIsPlayingTest] = useState<boolean>(false);
@@ -31,11 +65,15 @@ export function EngineAudioVisualizer({
 
   // Sync prop changes
   useEffect(() => {
-    setActiveLayout(currentLayout);
+    if (currentLayout) {
+      setActiveLayout(mapEngineLayoutToAudioLayout(currentLayout));
+    }
   }, [currentLayout]);
 
   useEffect(() => {
-    setActiveRpm(rpm);
+    if (rpm) {
+      setActiveRpm(rpm);
+    }
   }, [rpm]);
 
   // Real-time Canvas FFT Spectrum Animation Loop
@@ -102,49 +140,51 @@ export function EngineAudioVisualizer({
 
   return (
     <div
-      className={`w-full bg-slate-900/95 border border-slate-800 rounded-3xl p-4 backdrop-blur-2xl shadow-2xl text-left select-none ${className}`}
+      className={`w-full bg-white/40 dark:bg-slate-900/90 border border-white/60 dark:border-slate-800 rounded-2xl p-3.5 backdrop-blur-2xl shadow-[0_8px_32px_rgba(0,0,0,0.06)] text-left select-none space-y-3 ${className}`}
     >
-      {/* Header Bar */}
-      <div className="flex items-center justify-between mb-3">
-        <div className="flex items-center gap-2">
-          <div className="p-2 rounded-xl bg-cyan-500/10 text-cyan-400 border border-cyan-500/30">
-            <Radio size={18} className="animate-pulse" />
+      {/* Top Header Bar */}
+      <div className="flex flex-wrap items-center justify-between gap-2">
+        <div className="flex items-center gap-2.5 min-w-0">
+          <div className="p-2 rounded-xl bg-cyan-500/20 text-cyan-600 dark:text-cyan-400 border border-cyan-500/30 shrink-0 shadow-sm">
+            <Radio size={16} className="animate-pulse" />
           </div>
-          <div>
-            <div className="text-[10px] font-mono text-cyan-400 uppercase tracking-widest font-extrabold">
+          <div className="min-w-0">
+            <div className="text-[10px] font-mono text-cyan-600 dark:text-cyan-400 uppercase tracking-widest font-extrabold truncate">
               REAL-TIME ENGINE AUDIO SYNTHESIZER
             </div>
-            <div className="text-sm font-extrabold text-white tracking-tight">{profile.description}</div>
+            <div className="text-xs font-bold text-slate-800 dark:text-slate-100 truncate">
+              {profile.description}
+            </div>
           </div>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1.5 shrink-0">
           {/* Mute Toggle */}
           <button
             onClick={handleToggleMute}
-            className={`p-2 rounded-xl border transition-all cursor-pointer ${
+            className={`p-1.5 rounded-xl border transition-all cursor-pointer ${
               isMuted
-                ? "bg-rose-500/20 text-rose-400 border-rose-500/40"
-                : "bg-slate-800 hover:bg-slate-700 text-slate-300 border-slate-700"
+                ? "bg-rose-500/20 text-rose-500 border-rose-500/40"
+                : "bg-white/60 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-white/80 dark:border-slate-700 hover:bg-white/80"
             }`}
             title={isMuted ? "Unmute Engine Sound" : "Mute Engine Sound"}
           >
-            {isMuted ? <VolumeX size={16} /> : <Volume2 size={16} />}
+            {isMuted ? <VolumeX size={15} /> : <Volume2 size={15} />}
           </button>
 
-          {/* Test Rev Audio Trigger */}
+          {/* Test Rev Audio Trigger (Never Wraps) */}
           <button
             onClick={handleTestFire}
             disabled={isPlayingTest}
-            className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-400 hover:to-orange-500 text-slate-950 font-extrabold text-xs tracking-wide transition-all shadow-md active:scale-95 cursor-pointer disabled:opacity-50"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-black font-extrabold text-[11px] font-mono whitespace-nowrap transition-all shadow-sm active:scale-95 cursor-pointer disabled:opacity-50 shrink-0"
           >
             {isPlayingTest ? (
               <>
-                <Flame size={14} className="animate-spin text-slate-950" /> REVVING...
+                <Flame size={13} className="animate-spin text-black" /> REVVING...
               </>
             ) : (
               <>
-                <Play size={14} fill="currentColor" /> TEST FIRE REV
+                <Play size={13} fill="currentColor" /> TEST FIRE REV
               </>
             )}
           </button>
@@ -152,49 +192,50 @@ export function EngineAudioVisualizer({
       </div>
 
       {/* Real-time FFT Frequency Canvas & Telemetry Panel */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-2.5">
         {/* FFT Canvas */}
-        <div className="md:col-span-2 relative h-28 bg-slate-950/80 border border-slate-800 rounded-2xl overflow-hidden flex items-center justify-center">
-          <canvas ref={canvasRef} width={380} height={110} className="w-full h-full" />
-          <div className="absolute top-2 left-2 px-2 py-0.5 rounded bg-slate-900/90 text-[9px] font-mono text-cyan-400 border border-cyan-500/30">
+        <div className="md:col-span-2 relative h-24 bg-white/50 dark:bg-slate-950/80 border border-white/60 dark:border-slate-800 rounded-xl overflow-hidden flex items-center justify-center">
+          <canvas ref={canvasRef} width={380} height={96} className="w-full h-full" />
+          <div className="absolute top-1.5 left-2 px-1.5 py-0.5 rounded bg-white/80 dark:bg-slate-900/90 text-[9px] font-mono font-bold text-cyan-600 dark:text-cyan-400 border border-cyan-500/30">
             FFT SPECTRUM ANALYZER
           </div>
         </div>
 
-        {/* Live Audio Telemetry Stats */}
-        <div className="p-3 rounded-2xl bg-slate-950/60 border border-slate-800/80 flex flex-col justify-between text-xs font-mono">
-          <div className="flex items-center justify-between text-slate-400">
-            <span>FIRING FREQ:</span>
-            <span className="text-amber-400 font-bold">{Math.round(firingFreq.fundamental)} Hz</span>
+        {/* Live Audio Telemetry Stats (No Text Squishing) */}
+        <div className="p-2.5 rounded-xl bg-white/50 dark:bg-slate-950/60 border border-white/60 dark:border-slate-800/80 backdrop-blur-md flex flex-col justify-center gap-1.5 text-[11px] font-mono">
+          <div className="flex items-center justify-between text-slate-600 dark:text-slate-400 whitespace-nowrap">
+            <span className="font-bold">FIRING FREQ:</span>
+            <span className="text-amber-600 dark:text-amber-400 font-extrabold ml-1">{Math.round(firingFreq.fundamental)} Hz</span>
           </div>
-          <div className="flex items-center justify-between text-slate-400">
-            <span>2ND HARMONIC:</span>
-            <span className="text-cyan-400 font-bold">{Math.round(firingFreq.secondary)} Hz</span>
+          <div className="flex items-center justify-between text-slate-600 dark:text-slate-400 whitespace-nowrap">
+            <span className="font-bold">2ND HARMONIC:</span>
+            <span className="text-cyan-600 dark:text-cyan-400 font-extrabold ml-1">{Math.round(firingFreq.secondary)} Hz</span>
           </div>
-          <div className="flex items-center justify-between text-slate-400">
-            <span>REDLINE:</span>
-            <span className="text-rose-400 font-bold">{profile.defaultRedlineRpm} RPM</span>
+          <div className="flex items-center justify-between text-slate-600 dark:text-slate-400 whitespace-nowrap">
+            <span className="font-bold">REDLINE:</span>
+            <span className="text-rose-600 dark:text-rose-400 font-extrabold ml-1">{profile.defaultRedlineRpm} RPM</span>
           </div>
-          <div className="flex items-center justify-between text-slate-400">
-            <span>CYLINDERS:</span>
-            <span className="text-emerald-400 font-bold">{profile.cylinders} CYL</span>
+          <div className="flex items-center justify-between text-slate-600 dark:text-slate-400 whitespace-nowrap">
+            <span className="font-bold">CYLINDERS:</span>
+            <span className="text-emerald-600 dark:text-emerald-400 font-extrabold ml-1">{profile.cylinders} CYL</span>
           </div>
         </div>
       </div>
 
       {/* Layout Audio Switcher Pills */}
-      <div className="flex items-center gap-1.5 mt-3 overflow-x-auto pb-1 scrollbar-none">
+      <div className="flex items-center gap-1 overflow-x-auto no-scrollbar pt-0.5">
         {(Object.keys(ENGINE_FIRING_ORDERS) as EngineLayoutId[]).map((layoutKey) => (
           <button
             key={layoutKey}
             onClick={() => {
               setActiveLayout(layoutKey);
-              apexAudio.updateEngineAudio({ layout: layoutKey, rpm: activeRpm, throttle: 0.5 });
+              apexAudio.updateEngineAudio({ layout: layoutKey, rpm: activeRpm, throttle: 0.5, engineLoad: 0.5 });
+              onSelectLayout?.(layoutKey);
             }}
-            className={`px-3 py-1.5 rounded-xl text-xs font-mono font-extrabold uppercase transition-all whitespace-nowrap cursor-pointer ${
+            className={`px-2.5 py-1 rounded-lg text-[10px] font-mono font-extrabold uppercase transition-all whitespace-nowrap cursor-pointer shrink-0 ${
               activeLayout === layoutKey
-                ? "bg-cyan-500 text-slate-950 border border-cyan-400 shadow-md shadow-cyan-500/20"
-                : "bg-slate-800/80 hover:bg-slate-700 text-slate-300 border border-slate-700/80"
+                ? "bg-cyan-500 text-black shadow-sm font-bold scale-[1.02]"
+                : "bg-white/50 dark:bg-slate-800/80 hover:bg-white/80 dark:hover:bg-slate-700 text-slate-700 dark:text-slate-300 border border-white/60 dark:border-slate-700/80"
             }`}
           >
             {layoutKey.replace("_", " ")}

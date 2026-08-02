@@ -1,0 +1,571 @@
+import React, { useState, useMemo, useEffect } from "react";
+import {
+  Bot, AlertTriangle, Lightbulb, TrendingUp, X, Check, Info,
+  Wrench, Trophy, DollarSign, Leaf, Cpu, Zap, Target, Send, Sparkles, RefreshCw, ShieldCheck, ArrowUpRight, RotateCcw, Sliders
+} from "lucide-react";
+import { useDesign } from "../state/DesignContext";
+import { AIAssistant } from "./AIAssistant";
+
+type Severity = "critical" | "warning" | "info";
+type EngineerId = "chief" | "race" | "production" | "sustainability" | "technology";
+type ModeId = "beginner" | "intermediate" | "expert";
+
+const ENGINEERS: Record<EngineerId, { label: string; icon: React.ReactNode; focus: string; tone: string; desc: string }> = {
+  chief:          { label: "Chief Engineer",        icon: <Wrench size={16} />,    focus: "Technical & Powertrain", tone: "text-cyan-400 border-cyan-500/40 bg-cyan-500/10", desc: "Monitors internal combustion stress, knock thresholds, and structural integrity." },
+  race:           { label: "Race Engineer",         icon: <Trophy size={16} />,    focus: "Lap Time & Aerodynamics",tone: "text-amber-400 border-amber-500/40 bg-amber-500/10", desc: "Optimizes downforce balance, cornering stability, and power-to-weight ratio." },
+  production:     { label: "Production Manager",    icon: <DollarSign size={16} />,focus: "Cost & Manufacturing",    tone: "text-emerald-400 border-emerald-500/40 bg-emerald-500/10", desc: "Controls bill-of-materials cost, defect rates, and assembly line throughput." },
+  sustainability: { label: "Sustainability Expert", icon: <Leaf size={16} />,      focus: "Environmental Efficiency", tone: "text-green-400 border-green-500/40 bg-green-500/10", desc: "Evaluates carbon footprint, brake dust emissions, and fuel economy ratings." },
+  technology:     { label: "Technology Expert",     icon: <Cpu size={16} />,       focus: "800V EV & Electronics",  tone: "text-sky-400 border-sky-500/40 bg-sky-500/10", desc: "Supervises 800V inverter efficiency, cell thermal balancing, and infotainment." },
+};
+
+const MODES: Record<ModeId, { label: string; blurb: string }> = {
+  beginner:     { label: "Beginner",     blurb: "Plain-language explanations for new builders." },
+  intermediate: { label: "Intermediate", blurb: "Engineering suggestions with metrics." },
+  expert:       { label: "Expert",       blurb: "Advanced analysis and tradeoffs." },
+};
+
+function clamp(v: number, lo: number, hi: number) {
+  return Math.max(lo, Math.min(hi, v));
+}
+
+function round(v: number, dp = 1) {
+  const f = Math.pow(10, dp);
+  return Math.round(v * f) / f;
+}
+
+export function ApexAIStudio() {
+  const { design, sim, carConcept, setCarConcept, updateEngine, updateVehicle, updateAero, updateAeroResearch, updateExterior, updateInterior } = useDesign();
+
+  const [engineer, setEngineer] = useState<EngineerId>("chief");
+  const [mode, setMode] = useState<ModeId>("expert");
+  const [activeCategory, setActiveCategory] = useState<"all" | "Engine" | "Chassis" | "Aero" | "Manufacturing">("all");
+  const [dismissed, setDismissed] = useState<Set<string>>(new Set());
+  const [reaction, setReaction] = useState<string | null>(null);
+
+  const [chatInput, setChatInput] = useState("");
+  const [chatMessages, setChatMessages] = useState<Array<{ sender: "user" | "ai"; text: string; time: string }>>([
+    { sender: "ai", text: "Apex AI Neural Studio online. I am actively analyzing engine, chassis, aero, and manufacturing parameters.", time: "Just now" }
+  ]);
+  const [appliedSet, setAppliedSet] = useState<Set<string>>(new Set());
+
+  const e = design.engine;
+  const v = design.vehicle;
+  const a = v.aero;
+  const ar = v.aeroResearch;
+
+  // --- Live warnings derived from sim thresholds ---
+  const warnings = useMemo(() => {
+    const w: Array<{ id: string; category: "Engine" | "Chassis" | "Aero" | "Manufacturing"; severity: Severity; text: string }> = [];
+    if (sim.knockRisk > 0.6) w.push({ id: "knock", category: "Engine", severity: "critical", text: "Knock risk is high — reduce boost or compression." });
+    if (e.turboSize > 0.7 && sim.boostPressure > 2.2) w.push({ id: "turbo_os", category: "Engine", severity: "critical", text: "Turbo overspeed risk at current boost." });
+    if (sim.coolingMargin < 0.4) w.push({ id: "cooling", category: "Engine", severity: "warning", text: "Poor cooling margin for current setup." });
+    if (sim.maxPistonSpeed > 24) w.push({ id: "piston", category: "Engine", severity: "critical", text: "High piston speed threatens reliability." });
+    if (v.chassis === "steel_unibody" && sim.weight > 1600) w.push({ id: "rigidity", category: "Chassis", severity: "warning", text: "Steel unibody is heavy — consider aluminum spaceframe." });
+    if (sim.weight > 2000) w.push({ id: "weight", category: "Chassis", severity: "warning", text: "Excessive vehicle weight hurts performance." });
+    if (sim.separationRisk > 0.55) w.push({ id: "separation", category: "Aero", severity: "critical", text: "Flow separation risk — reduce diffuser/wing aggression." });
+    if (sim.dragCoeff > 0.42) w.push({ id: "drag", category: "Aero", severity: "warning", text: "Excessive drag limiting top speed." });
+    if (sim.aeroBalance < 0.42 || sim.aeroBalance > 0.62) w.push({ id: "imbalance", category: "Aero", severity: "critical", text: `Aero imbalance (${(sim.aeroBalance * 100).toFixed(0)}% rear) — adjust balance.` });
+    if (sim.totalCost > 90000) w.push({ id: "cost", category: "Manufacturing", severity: "critical", text: "Cost too high for target market." });
+    if (sim.manufacturing.defectRate > 8) w.push({ id: "defects", category: "Manufacturing", severity: "warning", text: "Complex assembly raising defect rate." });
+
+    if (carConcept === "budget" && sim.totalCost > 28000) {
+      w.push({ id: "concept_budget_cost", category: "Manufacturing", severity: "critical", text: `[Budget Target Violation] Production cost ($${sim.totalCost.toLocaleString()}) exceeds budget target ($28,000 max).` });
+    }
+    if (carConcept === "track" && sim.weight > 1350) {
+      w.push({ id: "concept_track_weight", category: "Chassis", severity: "warning", text: `[Track Target Violation] Curb weight (${sim.weight}kg) is too high for peak lap times (target < 1,350kg).` });
+    }
+    if (carConcept === "track" && sim.dragCoeff > 0.36) {
+      w.push({ id: "concept_track_drag", category: "Aero", severity: "warning", text: `[Track Target Violation] High drag coefficient (${sim.dragCoeff.toFixed(2)} Cd) limiting high-speed straight performance.` });
+    }
+    if (carConcept === "luxury" && v.interior.soundDeadening < 0.6) {
+      w.push({ id: "concept_luxury_nvh", category: "Manufacturing", severity: "warning", text: `[Luxury Target Violation] High cabin noise (NVH). Increase sound deadening for luxury compliance.` });
+    }
+    if (carConcept === "luxury" && sim.luxuryRating < 0.7) {
+      w.push({ id: "concept_luxury_comfort", category: "Manufacturing", severity: "critical", text: `[Luxury Target Violation] Luxury rating (${(sim.luxuryRating * 100).toFixed(0)}%) is below luxury standards.` });
+    }
+
+    return w;
+  }, [sim, e.turboSize, v.chassis, carConcept, v.interior.soundDeadening]);
+
+  const activeWarnings = warnings.filter((w) => !dismissed.has(w.id) && (activeCategory === "all" || w.category === activeCategory));
+
+  // --- Concrete, applyable suggestions ---
+  const suggestions = useMemo(() => {
+    const list: Array<{
+      id: string;
+      title: string;
+      detail: string;
+      impacts: { label: string; delta: string; tone: "good" | "bad" }[];
+      apply: () => void;
+    }> = [];
+
+    if (sim.coolingMargin < 0.5) {
+      list.push({
+        id: "radiator",
+        title: "Increase Glycol Radiator Size (+15%)",
+        detail: "Larger radiator improves thermal dissipation under continuous high load.",
+        impacts: [
+          { label: "Reliability", delta: "+4%", tone: "good" },
+          { label: "Cost", delta: "+$120", tone: "bad" },
+          { label: "Weight", delta: "+0.8 kg", tone: "bad" },
+        ],
+        apply: () => updateEngine({ coolingRadiator: clamp(e.coolingRadiator + 0.15, 0, 1) }),
+      });
+    }
+
+    if (sim.separationRisk > 0.5 && ar.diffuser.angle > 10) {
+      const cut = Math.min(3, ar.diffuser.angle - 8);
+      list.push({
+        id: "diffuser",
+        title: `Reduce Diffuser Expansion Angle by ${cut}°`,
+        detail: "Prevents boundary layer turbulent separation, keeping underbody airflow attached.",
+        impacts: [
+          { label: "Separation Risk", delta: `-${round(cut / 30 * 0.4, 2)}`, tone: "good" },
+          { label: "Rear Downforce", delta: "-2%", tone: "bad" },
+        ],
+        apply: () => updateAeroResearch({ diffuser: { ...ar.diffuser, angle: clamp(ar.diffuser.angle - cut, 0, 25) } }),
+      });
+    }
+
+    if (sim.aeroBalance < 0.45) {
+      list.push({
+        id: "wing_aoa",
+        title: "Increase Rear Wing AoA by 2°",
+        detail: "Shifts aerodynamic pressure center rearward for high-speed cornering stability.",
+        impacts: [
+          { label: "Rear Grip", delta: "+5%", tone: "good" },
+          { label: "Top Speed", delta: "-3 km/h", tone: "bad" },
+        ],
+        apply: () => updateAeroResearch({ rearWing: { ...ar.rearWing, angleOfAttack: clamp(ar.rearWing.angleOfAttack + 2, 0, 30) } }),
+      });
+    }
+
+    if (sim.weight > 1650 && v.chassis === "steel_unibody") {
+      list.push({
+        id: "chassis",
+        title: "Upgrade to Aluminum Spaceframe Chassis",
+        detail: "Lightweight alloy structure sheds mass while increasing torsional rigidity.",
+        impacts: [
+          { label: "Curb Weight", delta: "-90 kg", tone: "good" },
+          { label: "Unit Cost", delta: "+$2,400", tone: "bad" },
+        ],
+        apply: () => updateVehicle({ chassis: "aluminum_spaceframe" }),
+      });
+    }
+
+    if (sim.reliability < 0.65 && e.boostPressure > 1.2) {
+      list.push({
+        id: "boost",
+        title: "Reduce Turbo Boost Pressure by 0.2 bar",
+        detail: "Lowers peak cylinder stress and thermal strain on head gasket and rods.",
+        impacts: [
+          { label: "Reliability", delta: "+6%", tone: "good" },
+          { label: "Power", delta: "-18 hp", tone: "bad" },
+        ],
+        apply: () => updateEngine({ boostPressure: clamp(round(e.boostPressure - 0.2, 2), 0, 4) }),
+      });
+    }
+
+    return list;
+  }, [sim, e, v, ar, updateEngine, updateAeroResearch, updateVehicle]);
+
+  // --- Auto-Optimization Preset Logic ---
+  const handleAutoOptimize = (preset: string) => {
+    if (preset === "performance") {
+      updateEngine({ boostPressure: clamp(round(e.boostPressure + 0.3, 2), 0, 4), camLift: clamp(e.camLift + 1, 5, 18), ignitionTiming: clamp(e.ignitionTiming + 2, 0, 40) });
+      updateAeroResearch({ rearWing: { ...ar.rearWing, angleOfAttack: clamp(ar.rearWing.angleOfAttack + 3, 0, 30) }, diffuser: { ...ar.diffuser, angle: clamp(ar.diffuser.angle + 2, 0, 25) } });
+    } else if (preset === "cost") {
+      updateVehicle({ chassis: v.chassis === "carbon_tub" ? "aluminum_spaceframe" : v.chassis, wheelDiameter: clamp(v.wheelDiameter - 1, 15, 22) });
+      updateInterior({ seatMaterial: "cloth", dashboardMaterial: "plastic", infotainmentSize: clamp(v.interior.infotainmentSize - 2, 5, 17) });
+      updateExterior({ bodyKit: "none", spoilerType: "lip" });
+    } else if (preset === "reliability") {
+      updateEngine({ boostPressure: clamp(round(e.boostPressure - 0.2, 2), 0, 4), coolingRadiator: clamp(e.coolingRadiator + 0.2, 0, 1), rpmLimiter: clamp(e.rpmLimiter - 500, 4000, 12000) });
+    } else if (preset === "efficiency") {
+      updateEngine({ afr: clamp(round(e.afr + 0.5, 1), 10, 18), boostPressure: clamp(round(e.boostPressure - 0.1, 2), 0, 4) });
+      updateAeroResearch({ wheel: { ...ar.wheel, wheelAero: "aero_discs" }, front: { ...ar.front, activeGrilleShutters: true } });
+      updateAero({ bodyShape: clamp(a.bodyShape + 0.15, 0, 1) });
+    } else if (preset === "luxury") {
+      updateInterior({ seatMaterial: "leather", dashboardMaterial: "wood", infotainmentSize: clamp(v.interior.infotainmentSize + 3, 5, 17), ambientLighting: clamp(v.interior.ambientLighting + 0.3, 0, 1), soundDeadening: clamp(v.interior.soundDeadening + 0.3, 0, 1) });
+      updateExterior({ paintFinish: "pearl", rimFinish: "chrome" });
+    }
+  };
+
+  const handleSendMessage = (textToSend?: string) => {
+    const query = textToSend || chatInput;
+    if (!query.trim()) return;
+
+    const userMsg = { sender: "user" as const, text: query, time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) };
+    setChatMessages((prev) => [...prev, userMsg]);
+    if (!textToSend) setChatInput("");
+
+    setTimeout(() => {
+      let reply = "";
+      const lower = query.toLowerCase();
+
+      if (lower.includes("aero") || lower.includes("downforce") || lower.includes("drag")) {
+        reply = `Apex AI Aero Analysis: Drag Coeff is ${sim.dragCoeff.toFixed(2)} Cd with ${(sim.aeroBalance * 100).toFixed(0)}% rear bias. Installing aero wheel discs will trim drag by ~0.010 Cd.`;
+      } else if (lower.includes("cost") || lower.includes("budget") || lower.includes("price")) {
+        reply = `Apex AI Cost Analysis: Current unit cost is $${sim.totalCost.toLocaleString()}. Switching chassis to aluminum spaceframe or reducing wheel diameter saves up to $2,400.`;
+      } else if (lower.includes("knock") || lower.includes("engine") || lower.includes("power")) {
+        reply = `Apex AI Powertrain Analysis: Knock Risk is ${(sim.knockRisk * 100).toFixed(0)}%. Maximum piston speed is ${sim.maxPistonSpeed.toFixed(1)} m/s. Reduce boost or increase radiator cooling capacity.`;
+      } else if (lower.includes("ev") || lower.includes("battery") || lower.includes("motor")) {
+        reply = `Apex AI EV Analysis: 800V SiC Inverter efficiency is operating at 98.8%. Dual axial-flux motors deliver maximum zero-RPM torque.`;
+      } else {
+        reply = `Apex AI Advisor: Analyzing complete vehicle telemetry package... All parameters evaluated under ${ENGINEERS[engineer].label} perspective.`;
+      }
+
+      setChatMessages((prev) => [
+        ...prev,
+        { sender: "ai" as const, text: reply, time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }) },
+      ]);
+    }, 500);
+  };
+
+  const handleApplySuggestion = (s: { id: string; apply: () => void }) => {
+    s.apply();
+    setAppliedSet((prev) => new Set(prev).add(s.id));
+  };
+
+  return (
+    <div className="w-full flex flex-col gap-6 text-slate-100 select-none pb-16 animate-fade-in">
+      {/* ── TOP HERO BANNER: APEX AI NEURAL COMMAND STUDIO ── */}
+      <div className="relative p-6 rounded-3xl bg-gradient-to-r from-slate-900/90 via-cyan-950/40 to-slate-900/90 border border-cyan-500/30 backdrop-blur-2xl shadow-2xl overflow-hidden">
+        <div className="absolute top-0 right-0 w-96 h-96 bg-cyan-500/10 rounded-full filter blur-3xl pointer-events-none" />
+
+        <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 relative z-10">
+          <div className="flex items-center gap-3.5">
+            <div className="p-3.5 rounded-2xl bg-cyan-500/20 text-cyan-400 border border-cyan-500/40 shadow-[0_0_20px_rgba(34,211,238,0.3)]">
+              <Bot size={32} />
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <h1 className="text-xl font-black text-slate-100 uppercase tracking-wider">APEX AI CHIEF ENGINEERING STUDIO</h1>
+                <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 text-[10px] font-mono font-bold flex items-center gap-1">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" /> ONLINE v2.4
+                </span>
+              </div>
+              <p className="text-xs text-slate-400 font-mono mt-0.5">
+                Complete neural advisory suite: live warnings, auto-optimizations, concept alignment & interactive terminal.
+              </p>
+            </div>
+          </div>
+
+          {/* Target Concept Philosophy Controls */}
+          <div className="flex items-center gap-2 bg-slate-950/80 px-3 py-2 rounded-2xl border border-cyan-500/30 font-mono">
+            <span className="text-[10px] text-cyan-400 flex items-center gap-1 font-bold">
+              <Target size={13} /> CONCEPT:
+            </span>
+            {(["budget", "track", "luxury", "balanced"] as const).map((c) => (
+              <button
+                key={c}
+                onClick={() => setCarConcept(c)}
+                className={`px-2.5 py-1 rounded-xl text-[11px] font-bold uppercase transition-all border cursor-pointer ${
+                  carConcept === c
+                    ? c === "budget"
+                      ? "bg-emerald-500/20 border-emerald-500/40 text-emerald-300"
+                      : c === "track"
+                      ? "bg-amber-500/20 border-amber-500/40 text-amber-300"
+                      : c === "luxury"
+                      ? "bg-purple-500/20 border-purple-500/40 text-purple-300"
+                      : "bg-cyan-500/20 border-cyan-500/40 text-cyan-300"
+                    : "bg-slate-900 border-slate-800 text-slate-500 hover:text-slate-300"
+                }`}
+              >
+                {c}
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* ── EMBEDDED FULL APEX AI ASSISTANT SUITE ── */}
+      <AIAssistant embedded={true} />
+
+      {/* ── AUTO-OPTIMIZATION ONE-CLICK ACTION PRESETS BAR ── */}
+      <div className="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 backdrop-blur-xl shadow-xl flex flex-wrap items-center justify-between gap-3">
+        <div className="flex items-center gap-2">
+          <Zap size={16} className="text-cyan-400" />
+          <span className="text-xs font-bold text-slate-100 uppercase tracking-wider">One-Click Auto Optimizers</span>
+        </div>
+
+        <div className="flex flex-wrap items-center gap-2">
+          {[
+            { id: "performance", label: "Max Performance", icon: <Trophy size={13} />, color: "text-amber-400 border-amber-500/40 bg-amber-500/10 hover:bg-amber-500/20" },
+            { id: "cost", label: "Lowest Cost", icon: <DollarSign size={13} />, color: "text-emerald-400 border-emerald-500/40 bg-emerald-500/10 hover:bg-emerald-500/20" },
+            { id: "reliability", label: "Max Reliability", icon: <Wrench size={13} />, color: "text-cyan-400 border-cyan-500/40 bg-cyan-500/10 hover:bg-cyan-500/20" },
+            { id: "efficiency", label: "Best Efficiency", icon: <Leaf size={13} />, color: "text-green-400 border-green-500/40 bg-green-500/10 hover:bg-green-500/20" },
+            { id: "luxury", label: "Luxury Focus", icon: <Cpu size={13} />, color: "text-purple-400 border-purple-500/40 bg-purple-500/10 hover:bg-purple-500/20" },
+          ].map((p) => (
+            <button
+              key={p.id}
+              onClick={() => handleAutoOptimize(p.id)}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-xs font-mono font-bold transition-all cursor-pointer shadow-md ${p.color}`}
+            >
+              {p.icon}
+              {p.label}
+            </button>
+          ))}
+
+          <button
+            onClick={() => setDismissed(new Set())}
+            className="flex items-center gap-1 px-3 py-1.5 rounded-xl border border-slate-700 bg-slate-950 text-slate-400 hover:text-slate-200 text-xs font-mono transition-all cursor-pointer"
+          >
+            <RotateCcw size={12} /> Reset Alerts
+          </button>
+        </div>
+      </div>
+
+      {/* ── AI ADVISORY BOARD PERSONAS & MODE SELECTOR ── */}
+      <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4">
+        {/* Personas Grid */}
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-2.5 flex-1">
+          {(Object.keys(ENGINEERS) as EngineerId[]).map((id) => {
+            const eng = ENGINEERS[id];
+            const isSelected = engineer === id;
+
+            return (
+              <button
+                key={id}
+                onClick={() => setEngineer(id)}
+                className={`p-3 rounded-2xl border transition-all text-left flex flex-col justify-between gap-1.5 cursor-pointer ${
+                  isSelected
+                    ? `${eng.tone} shadow-lg scale-[1.02]`
+                    : "bg-slate-900/60 border-slate-800/80 text-slate-400 hover:text-slate-200 hover:border-slate-700"
+                }`}
+              >
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2 font-bold text-xs">
+                    {eng.icon}
+                    <span>{eng.label}</span>
+                  </div>
+                  {isSelected && <Check size={14} className="text-cyan-400" />}
+                </div>
+                <span className="text-[10px] font-mono opacity-80">{eng.focus}</span>
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Mode Selector */}
+        <div className="flex items-center gap-1 bg-slate-950 p-1.5 rounded-2xl border border-slate-800 shrink-0 self-start md:self-auto font-mono text-xs">
+          {(Object.keys(MODES) as ModeId[]).map((mId) => (
+            <button
+              key={mId}
+              onClick={() => setMode(mId)}
+              className={`px-3 py-1.5 rounded-xl font-bold transition-all cursor-pointer ${
+                mode === mId ? "bg-cyan-500/20 text-cyan-300 border border-cyan-500/40" : "text-slate-500 hover:text-slate-300"
+              }`}
+            >
+              {MODES[mId].label}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* ── MAIN CONTENT GRID: LIVE WARNINGS, OPTIMIZATION FEED & TERMINAL CHAT ── */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        {/* Left Column (7 Cols): Filterable Warnings & Actionable Suggestions */}
+        <div className="lg:col-span-7 flex flex-col gap-5">
+          {/* Live Diagnostic Warnings */}
+          <div className="p-5 rounded-2xl bg-slate-900/80 border border-slate-800 backdrop-blur-xl shadow-xl space-y-3">
+            <div className="flex items-center justify-between flex-wrap gap-2">
+              <h3 className="text-xs font-bold text-slate-100 uppercase tracking-wider flex items-center gap-2">
+                <AlertTriangle size={15} className="text-amber-400" />
+                Live Diagnostic Warnings ({activeWarnings.length})
+              </h3>
+
+              {/* Filter Tabs */}
+              <div className="flex items-center gap-1 bg-slate-950 p-1 rounded-xl border border-slate-800 font-mono text-[10px]">
+                {(["all", "Engine", "Chassis", "Aero", "Manufacturing"] as const).map((cat) => (
+                  <button
+                    key={cat}
+                    onClick={() => setActiveCategory(cat)}
+                    className={`px-2 py-0.5 rounded-lg font-semibold transition-all uppercase cursor-pointer ${
+                      activeCategory === cat ? "bg-cyan-500/20 text-cyan-300 border border-cyan-500/40" : "text-slate-500 hover:text-slate-300"
+                    }`}
+                  >
+                    {cat}
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {activeWarnings.length === 0 ? (
+              <div className="p-4 rounded-xl bg-emerald-950/20 border border-emerald-500/30 text-emerald-300 text-xs flex items-center gap-2">
+                <ShieldCheck size={16} /> All vehicle parameters operating within safe engineering limits.
+              </div>
+            ) : (
+              <div className="space-y-2 max-h-60 overflow-y-auto pr-1">
+                {activeWarnings.map((w) => (
+                  <div
+                    key={w.id}
+                    className={`p-3 rounded-xl border text-xs flex items-start justify-between gap-3 ${
+                      w.severity === "critical"
+                        ? "bg-rose-950/30 border-rose-500/40 text-rose-200"
+                        : "bg-amber-950/20 border-amber-500/30 text-amber-200"
+                    }`}
+                  >
+                    <div className="space-y-0.5">
+                      <span className="text-[9px] font-mono font-bold uppercase tracking-wider opacity-75">
+                        [{w.category}] {w.severity}
+                      </span>
+                      <p className="font-medium">{w.text}</p>
+                    </div>
+                    <button
+                      onClick={() => setDismissed((prev) => new Set(prev).add(w.id))}
+                      className="text-slate-500 hover:text-slate-300 transition-colors p-1 cursor-pointer"
+                      title="Dismiss Alert"
+                    >
+                      <X size={13} />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          {/* Actionable Engineering Suggestions */}
+          <div className="p-5 rounded-2xl bg-slate-900/80 border border-slate-800 backdrop-blur-xl shadow-xl space-y-3">
+            <h3 className="text-xs font-bold text-slate-100 uppercase tracking-wider flex items-center gap-2">
+              <Lightbulb size={15} className="text-cyan-400" />
+              Recommended Parameter Optimizations ({suggestions.length})
+            </h3>
+
+            {suggestions.length === 0 ? (
+              <div className="p-4 rounded-xl bg-slate-950/60 border border-slate-800 text-slate-400 text-xs">
+                No immediate parameter changes needed for current vehicle configuration.
+              </div>
+            ) : (
+              <div className="space-y-3">
+                {suggestions.map((s) => {
+                  const isApplied = appliedSet.has(s.id);
+                  return (
+                    <div
+                      key={s.id}
+                      className="p-4 rounded-xl bg-slate-950/60 border border-slate-800 hover:border-cyan-500/40 transition-all space-y-2.5"
+                    >
+                      <div className="flex items-center justify-between">
+                        <h4 className="text-xs font-bold text-slate-200 flex items-center gap-1.5">
+                          <Sparkles size={13} className="text-cyan-400" />
+                          {s.title}
+                        </h4>
+                        <button
+                          onClick={() => handleApplySuggestion(s)}
+                          disabled={isApplied}
+                          className={`px-3 py-1 rounded-lg text-xs font-mono font-bold transition-all flex items-center gap-1 cursor-pointer ${
+                            isApplied
+                              ? "bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 cursor-default"
+                              : "bg-cyan-500 text-black hover:bg-cyan-400 active:scale-95 shadow-md"
+                          }`}
+                        >
+                          {isApplied ? (
+                            <>
+                              <Check size={12} /> Applied
+                            </>
+                          ) : (
+                            <>
+                              Apply <ArrowUpRight size={12} />
+                            </>
+                          )}
+                        </button>
+                      </div>
+
+                      <p className="text-[11px] text-slate-400">{s.detail}</p>
+
+                      {/* Impact Deltas Badges */}
+                      <div className="flex items-center gap-2 pt-1 font-mono text-[10px]">
+                        {s.impacts.map((imp, idx) => (
+                          <span
+                            key={idx}
+                            className={`px-2 py-0.5 rounded-md border ${
+                              imp.tone === "good"
+                                ? "bg-emerald-950/40 border-emerald-500/30 text-emerald-300"
+                                : "bg-rose-950/30 border-rose-500/30 text-rose-300"
+                            }`}
+                          >
+                            {imp.label}: {imp.delta}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Right Column (5 Cols): Interactive Apex AI Terminal Chat */}
+        <div className="lg:col-span-5 flex flex-col gap-4">
+          <div className="p-5 rounded-2xl bg-slate-900/90 border border-cyan-500/30 backdrop-blur-xl shadow-2xl flex flex-col h-[580px]">
+            {/* Terminal Header */}
+            <div className="flex items-center justify-between pb-3 border-b border-slate-800 mb-3">
+              <div className="flex items-center gap-2">
+                <Bot size={16} className="text-cyan-400" />
+                <span className="text-xs font-bold text-slate-100 uppercase tracking-wider">Apex AI Interactive Terminal</span>
+              </div>
+              <span className="text-[10px] font-mono text-slate-400">{ENGINEERS[engineer].label} active</span>
+            </div>
+
+            {/* Chat Messages Stream */}
+            <div className="flex-1 min-h-0 overflow-y-auto space-y-3 pr-1 scrollbar-thin scrollbar-thumb-slate-800">
+              {chatMessages.map((msg, idx) => (
+                <div
+                  key={idx}
+                  className={`flex flex-col gap-1 ${msg.sender === "user" ? "items-end" : "items-start"}`}
+                >
+                  <div
+                    className={`max-w-[88%] p-3 rounded-2xl text-xs leading-relaxed ${
+                      msg.sender === "user"
+                        ? "bg-cyan-500 text-black font-medium rounded-tr-none"
+                        : "bg-slate-950 border border-slate-800 text-slate-200 rounded-tl-none"
+                    }`}
+                  >
+                    {msg.text}
+                  </div>
+                  <span className="text-[9px] font-mono text-slate-500">{msg.time}</span>
+                </div>
+              ))}
+            </div>
+
+            {/* Quick Prompt Presets */}
+            <div className="py-2 flex items-center gap-1.5 overflow-x-auto scrollbar-none border-t border-slate-800 mt-2">
+              {[
+                "Optimize aero downforce",
+                "Reduce vehicle cost",
+                "Fix engine knock risk",
+                "Check 800V EV efficiency"
+              ].map((preset, i) => (
+                <button
+                  key={i}
+                  onClick={() => handleSendMessage(preset)}
+                  className="px-2.5 py-1 rounded-lg bg-slate-950 border border-slate-800 text-slate-400 hover:text-slate-200 text-[10px] font-mono whitespace-nowrap transition-all cursor-pointer"
+                >
+                  {preset}
+                </button>
+              ))}
+            </div>
+
+            {/* Input Form */}
+            <div className="flex items-center gap-2 pt-2">
+              <input
+                type="text"
+                value={chatInput}
+                onChange={(e) => setChatInput(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && handleSendMessage()}
+                placeholder="Ask Apex AI for vehicle optimization strategies..."
+                className="flex-1 bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-100 placeholder-slate-500 focus:outline-none focus:border-cyan-500 transition-all font-mono"
+              />
+              <button
+                onClick={() => handleSendMessage()}
+                className="p-2 rounded-xl bg-cyan-500 text-black hover:bg-cyan-400 transition-all shadow-md active:scale-95 cursor-pointer"
+              >
+                <Send size={15} />
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}

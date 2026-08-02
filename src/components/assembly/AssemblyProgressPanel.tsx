@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import {
   CheckCircle2,
   Circle,
@@ -16,10 +16,11 @@ import {
   Award,
 } from "lucide-react";
 import {
-  ENGINE_ASSEMBLY_COMPONENTS,
   ComponentId,
   AssemblyComponentMeta,
+  getAssemblyComponents,
 } from "../../sim/assemblyTypes";
+import { EngineConfig } from "../../sim/types";
 import { ProgressBar } from "../ui/Controls";
 import { AnimatedCounter } from "../ui/AnimatedCounter";
 import { EngineAudioVisualizer } from "./EngineAudioVisualizer";
@@ -41,6 +42,7 @@ interface AssemblyProgressPanelProps {
   onStartInstall: (id: ComponentId) => void;
   onResetAssembly: () => void;
   onToggleExplodedView: () => void;
+  engineConfig?: Partial<EngineConfig>;
   className?: string;
 }
 
@@ -55,6 +57,7 @@ export function AssemblyProgressPanel({
   onStartInstall,
   onResetAssembly,
   onToggleExplodedView,
+  engineConfig,
   className = "",
 }: AssemblyProgressPanelProps) {
   const [showResetConfirm, setShowResetConfirm] = useState(false);
@@ -81,10 +84,12 @@ export function AssemblyProgressPanel({
   // Calculate precision Quality Rating percentage
   const qualityScore = Math.min(100, Math.round(75 + (installedComponents.length / 12) * 20 + (currentStats.reliability > 100 ? 5 : 0)));
 
+  const assemblyComponents = useMemo(() => getAssemblyComponents(engineConfig), [engineConfig]);
+
   return (
-    <div className={`flex flex-col bg-base-900/90 border border-base-800 rounded-2xl p-4 backdrop-blur-xl shadow-2xl h-full select-none ${className}`}>
+    <div className={`flex flex-col bg-[#0b0f19]/90 border border-slate-800/80 rounded-2xl p-4 backdrop-blur-xl shadow-2xl h-full select-none ${className}`}>
       {/* Top Header & Progress Bar */}
-      <div className="pb-3 border-b border-base-800 mb-3 space-y-2">
+      <div className="pb-3 border-b border-slate-800/80 mb-3 space-y-2">
         <div className="flex items-center justify-between">
           <h3 className="text-xs font-bold text-slate-100 uppercase tracking-wider flex items-center gap-1.5">
             <Sparkles size={14} className="text-cyan-400" />
@@ -137,7 +142,7 @@ export function AssemblyProgressPanel({
           <div className="inline-flex p-1.5 rounded-full bg-emerald-500/20 text-emerald-400">
             <Check size={18} />
           </div>
-          <h4 className="text-xs font-bold text-emerald-300">Engine Assembly 100% Complete!</h4>
+          <h4 className="text-xs font-bold text-emerald-300">Assembly 100% Complete!</h4>
           <p className="text-[10px] text-slate-300 font-mono">Factory Quality Rating: {qualityScore}%</p>
         </div>
       )}
@@ -184,10 +189,10 @@ export function AssemblyProgressPanel({
       {/* Vertical Timeline Build Checklist */}
       <div className="flex-1 min-h-0 overflow-y-auto pr-1 mb-3 scrollbar-thin scrollbar-thumb-base-750">
         <h4 className="text-[10px] font-mono text-slate-400 uppercase tracking-wider mb-2">
-          Vertical Build Timeline ({installedComponents.length}/{ENGINE_ASSEMBLY_COMPONENTS.length})
+          Vertical Build Timeline ({installedComponents.length}/{assemblyComponents.length})
         </h4>
         <div className="relative pl-3 space-y-2 border-l border-base-750 ml-1.5">
-          {ENGINE_ASSEMBLY_COMPONENTS.map((comp) => {
+          {assemblyComponents.map((comp) => {
             const isDone = installedComponents.includes(comp.id);
             const isCurrent = activeComponentId === comp.id;
 
@@ -229,9 +234,6 @@ export function AssemblyProgressPanel({
           })}
         </div>
       </div>
-
-      {/* Real-Time Engine Audio Synthesizer & Telemetry Panel */}
-      <EngineAudioVisualizer className="mt-2 shrink-0" />
 
       {/* Assembly Control Action Buttons */}
       <div className="pt-2 border-t border-base-800 flex items-center justify-between gap-2 mt-auto">

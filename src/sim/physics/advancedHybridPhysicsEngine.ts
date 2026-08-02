@@ -563,7 +563,7 @@ export function evaluateFullHybridPhysicsSuite(engineConfig: EngineConfig, simRe
   // 5. Regen Braking
   const regenOutput = calculateRegenBrakingPhysics({
     tech: engineConfig.regenBrakingTech || "brake_by_wire",
-    vehicleMassKg: simResult.curbWeight,
+    vehicleMassKg: simResult?.weight || 1450,
     initialSpeedKmh: 100,
     targetSpeedKmh: 0,
     regenLevelFraction: engineConfig.regenLevel || 0.8,
@@ -580,9 +580,9 @@ export function evaluateFullHybridPhysicsSuite(engineConfig: EngineConfig, simRe
   // 7. Sports Hybrid Tech
   const sportsOutput = calculateSportsHybridPhysics({
     tech: engineConfig.sportsHybridTech || "electric_torque_fill",
-    engineTorqueNm: simResult.engine.peakTorque,
-    enginePowerHp: simResult.engine.peakPower,
-    vehicleMassKg: simResult.curbWeight,
+    engineTorqueNm: simResult?.peakTorque || 720,
+    enginePowerHp: simResult?.peakPower || 759,
+    vehicleMassKg: simResult?.weight || 1450,
   });
 
   return {

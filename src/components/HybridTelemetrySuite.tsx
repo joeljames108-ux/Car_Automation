@@ -1,16 +1,17 @@
 // ===================================================================
 // APEX ENGINEER — 21 HYBRID & EV TECHNOLOGY TELEMETRY SUITE
 // Live Electrochemical, Thermal ODE, SiC/GaN Loss & eAxle Analytics
+// Frosted Translucent Liquid Glassmorphic Studio Workstation Component
 // ===================================================================
 
 import { useState, useMemo } from "react";
-import { Zap, Battery, Thermometer, ShieldAlert, Cpu, Activity, Gauge, RefreshCw, BarChart2, Flame, Wind, Maximize2, Sparkles, Sliders } from "lucide-react";
+import { Zap, Battery, Thermometer, ShieldAlert, Cpu, Activity, Gauge, RefreshCw, BarChart2, Flame, Wind, Maximize2, Sparkles, Sliders, ChevronRight } from "lucide-react";
 import { useDesign } from "../state/DesignContext";
-import { evaluateFullHybridPhysicsSuite, calculateMotorPhysics, calculateBatteryPhysics, calculatePowerElectronicsPhysics, calculateHybridTransmissionPhysics, calculateRegenBrakingPhysics, calculateChargingPhysics, calculateSportsHybridPhysics } from "../sim/physics/advancedHybridPhysicsEngine";
+import { evaluateFullHybridPhysicsSuite } from "../sim/physics/advancedHybridPhysicsEngine";
 
 export function HybridTelemetrySuite() {
-  const { currentDesign, updateEngine } = useDesign();
-  const eng = currentDesign.engine;
+  const { design, sim } = useDesign();
+  const eng = design.engine;
 
   const [testSpeedKmh, setTestSpeedKmh] = useState(120);
   const [testSocPercent, setTestSocPercent] = useState(80);
@@ -18,43 +19,44 @@ export function HybridTelemetrySuite() {
 
   // Run Master 21-Category Physics Evaluation
   const physicsData = useMemo(() => {
-    return evaluateFullHybridPhysicsSuite(eng, {
-      curbWeight: 1450,
-      engine: { peakPower: 759, peakTorque: 720 } as any,
-    } as any);
-  }, [eng, testSpeedKmh, testSocPercent]);
+    return evaluateFullHybridPhysicsSuite(eng, sim);
+  }, [eng, sim, testSpeedKmh, testSocPercent]);
 
   return (
-    <div className="space-y-4 p-4 rounded-2xl bg-gradient-to-b from-base-950 via-base-900 to-base-950 border border-cyan-500/30 backdrop-blur-2xl shadow-2xl">
-      {/* Header Banner */}
-      <div className="flex items-center justify-between p-3 rounded-xl bg-cyan-950/30 border border-cyan-500/40">
-        <div className="flex items-center gap-3">
-          <div className="p-2 rounded-lg bg-cyan-500/20 text-cyan-400 border border-cyan-500/30">
-            <Zap size={20} className="animate-pulse" />
-          </div>
-          <div>
-            <h3 className="text-sm font-bold text-slate-100 font-mono tracking-wider flex items-center gap-2">
-              21 HYBRID & EV SUBSYSTEM PHYSICS TELEMETRY SUITE
-              <span className="px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 text-[10px] font-mono border border-cyan-500/40">
-                REAL-TIME ODE PHYSICS
-              </span>
-            </h3>
-            <p className="text-xs text-slate-400 font-mono mt-0.5">
-              SiC/GaN Inverter Switching · Liquid Chiller Thermal ODE · Axial Flux Magnetic Vectoring
-            </p>
+    <div className="space-y-4 p-4 md:p-5 rounded-2xl bg-white/40 dark:bg-base-900/60 border border-white/60 dark:border-cyan-500/30 backdrop-blur-2xl shadow-[0_8px_32px_rgba(0,0,0,0.06)] transition-all">
+      {/* Translucent Header Banner */}
+      <div className="space-y-3 p-3.5 rounded-xl bg-white/40 dark:bg-base-950/60 border border-white/60 dark:border-cyan-500/30 backdrop-blur-xl shadow-sm">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+          <div className="flex items-center gap-2.5">
+            <div className="p-2 rounded-xl bg-cyan-500/20 text-cyan-600 dark:text-cyan-400 border border-cyan-500/30 shrink-0 shadow-sm">
+              <Zap size={20} className="animate-pulse" />
+            </div>
+            <div>
+              <div className="flex flex-wrap items-center gap-2">
+                <h3 className="text-xs font-extrabold text-slate-800 dark:text-slate-100 font-mono tracking-wider">
+                  21 HYBRID & EV TELEMETRY SUITE
+                </h3>
+                <span className="px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-700 dark:text-cyan-300 text-[9px] font-mono font-bold border border-cyan-500/40 uppercase tracking-wider shrink-0">
+                  REAL-TIME ODE PHYSICS
+                </span>
+              </div>
+              <p className="text-[11px] text-slate-600 dark:text-slate-400 font-mono mt-0.5">
+                SiC/GaN Switching · Submerged Cooling · Axial Vectoring
+              </p>
+            </div>
           </div>
         </div>
 
-        {/* Navigation Tabs */}
-        <div className="flex items-center gap-1 bg-base-950 p-1 rounded-xl border border-base-800">
+        {/* Scrollable Translucent Navigation Tabs */}
+        <div className="flex items-center gap-1 overflow-x-auto no-scrollbar p-1 rounded-xl bg-white/40 dark:bg-base-950/60 border border-white/60 dark:border-base-800 backdrop-blur-md">
           {(["overview", "motors", "battery", "inverter", "regen", "sports"] as const).map((tab) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
-              className={`px-3 py-1.5 rounded-lg text-xs font-mono font-bold capitalize transition-all cursor-pointer ${
+              className={`px-3 py-1 rounded-lg text-xs font-mono font-bold capitalize transition-all cursor-pointer whitespace-nowrap shrink-0 ${
                 activeTab === tab
-                  ? "bg-cyan-500 text-black shadow-[0_0_12px_rgba(34,211,238,0.5)]"
-                  : "text-slate-400 hover:text-slate-200 hover:bg-white/5"
+                  ? "bg-cyan-500 text-black shadow-[0_0_12px_rgba(34,211,238,0.5)] scale-[1.02]"
+                  : "text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-white/60 dark:hover:bg-white/10 border border-transparent"
               }`}
             >
               {tab}
@@ -65,64 +67,72 @@ export function HybridTelemetrySuite() {
 
       {/* TAB 1: OVERVIEW TELEMETRY GRID */}
       {activeTab === "overview" && (
-        <div className="grid grid-cols-4 gap-3">
-          <div className="p-3.5 rounded-xl bg-base-900/90 border border-cyan-500/20 space-y-1">
-            <span className="text-[10px] font-mono uppercase text-slate-400 block">Total Combined Power</span>
-            <div className="text-xl font-bold font-mono text-cyan-300 flex items-baseline gap-1">
-              {physicsData.sportsOutput.boostedPowerHp + Math.round((eng.hybridMotorPower || 180) * 1.341)}
-              <span className="text-xs text-slate-400">HP</span>
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div className="p-3.5 rounded-xl bg-white/50 dark:bg-base-950/60 border border-white/60 dark:border-cyan-500/30 backdrop-blur-md space-y-1.5 shadow-sm hover:bg-white/70 dark:hover:bg-base-950/80 hover:border-cyan-500/60 transition-all">
+            <span className="text-[10px] font-mono font-bold uppercase text-slate-600 dark:text-slate-400 tracking-wider block">Total Combined Power</span>
+            <div className="flex items-baseline gap-1.5">
+              <span className="text-xl font-extrabold font-mono text-cyan-600 dark:text-cyan-300">
+                {physicsData.sportsOutput.boostedPowerHp + Math.round((eng.hybridMotorPower || 180) * 1.341)}
+              </span>
+              <span className="text-xs font-bold font-mono text-cyan-700 dark:text-cyan-400">HP</span>
             </div>
-            <p className="text-[10px] text-slate-400 font-mono">ICE + Electric Assist (SiC Inverter)</p>
+            <p className="text-[10px] text-slate-500 dark:text-slate-400 font-mono pt-1 border-t border-slate-200/50 dark:border-base-800">ICE V12 + Electric Assist (SiC Inverter)</p>
           </div>
 
-          <div className="p-3.5 rounded-xl bg-base-900/90 border border-cyan-500/20 space-y-1">
-            <span className="text-[10px] font-mono uppercase text-slate-400 block">Inverter Efficiency (SiC/GaN)</span>
-            <div className="text-xl font-bold font-mono text-emerald-400 flex items-baseline gap-1">
-              {(physicsData.peOutput.inverterEfficiencyFraction * 100).toFixed(1)}%
-              <span className="text-xs text-slate-400">eff</span>
+          <div className="p-3.5 rounded-xl bg-white/50 dark:bg-base-950/60 border border-white/60 dark:border-cyan-500/30 backdrop-blur-md space-y-1.5 shadow-sm hover:bg-white/70 dark:hover:bg-base-950/80 hover:border-cyan-500/60 transition-all">
+            <span className="text-[10px] font-mono font-bold uppercase text-slate-600 dark:text-slate-400 tracking-wider block">Inverter Efficiency</span>
+            <div className="flex items-baseline gap-1.5">
+              <span className="text-xl font-extrabold font-mono text-emerald-600 dark:text-emerald-400">
+                {(physicsData.peOutput.inverterEfficiencyFraction * 100).toFixed(1)}%
+              </span>
+              <span className="text-xs font-bold font-mono text-emerald-700 dark:text-emerald-300">eff</span>
             </div>
-            <p className="text-[10px] text-slate-400 font-mono">{eng.voltageArchitecture || 800}V High Voltage Rail</p>
+            <p className="text-[10px] text-slate-500 dark:text-slate-400 font-mono pt-1 border-t border-slate-200/50 dark:border-base-800">{eng.voltageArchitecture || 800}V High Voltage Rail</p>
           </div>
 
-          <div className="p-3.5 rounded-xl bg-base-900/90 border border-cyan-500/20 space-y-1">
-            <span className="text-[10px] font-mono uppercase text-slate-400 block">Battery Pack Temp (Liquid Chiller)</span>
-            <div className="text-xl font-bold font-mono text-amber-400 flex items-baseline gap-1">
-              {physicsData.batteryOutput.packTemperatureC}°C
-              <span className="text-xs text-slate-400">steady</span>
+          <div className="p-3.5 rounded-xl bg-white/50 dark:bg-base-950/60 border border-white/60 dark:border-cyan-500/30 backdrop-blur-md space-y-1.5 shadow-sm hover:bg-white/70 dark:hover:bg-base-950/80 hover:border-cyan-500/60 transition-all">
+            <span className="text-[10px] font-mono font-bold uppercase text-slate-600 dark:text-slate-400 tracking-wider block">Battery Pack Temp</span>
+            <div className="flex items-baseline gap-1.5">
+              <span className="text-xl font-extrabold font-mono text-amber-600 dark:text-amber-400">
+                {physicsData.batteryOutput.packTemperatureC}°C
+              </span>
+              <span className="text-xs font-bold font-mono text-amber-700 dark:text-amber-300">steady</span>
             </div>
-            <p className="text-[10px] text-slate-400 font-mono">SOH: {(physicsData.batteryOutput.stateOfHealthFraction * 100).toFixed(0)}% Optimal</p>
+            <p className="text-[10px] text-slate-500 dark:text-slate-400 font-mono pt-1 border-t border-slate-200/50 dark:border-base-800">SOH: {(physicsData.batteryOutput.stateOfHealthFraction * 100).toFixed(0)}% Optimal</p>
           </div>
 
-          <div className="p-3.5 rounded-xl bg-base-900/90 border border-cyan-500/20 space-y-1">
-            <span className="text-[10px] font-mono uppercase text-slate-400 block">NACS 350kW Fast Charge</span>
-            <div className="text-xl font-bold font-mono text-cyan-400 flex items-baseline gap-1">
-              {physicsData.chargingOutput.chargeTimeMinutes}
-              <span className="text-xs text-slate-400">mins (10-80%)</span>
+          <div className="p-3.5 rounded-xl bg-white/50 dark:bg-base-950/60 border border-white/60 dark:border-cyan-500/30 backdrop-blur-md space-y-1.5 shadow-sm hover:bg-white/70 dark:hover:bg-base-950/80 hover:border-cyan-500/60 transition-all">
+            <span className="text-[10px] font-mono font-bold uppercase text-slate-600 dark:text-slate-400 tracking-wider block">NACS 350kW Fast Charge</span>
+            <div className="flex items-baseline gap-1.5">
+              <span className="text-xl font-extrabold font-mono text-cyan-600 dark:text-cyan-400">
+                {physicsData.chargingOutput.chargeTimeMinutes}
+              </span>
+              <span className="text-xs font-bold font-mono text-slate-700 dark:text-slate-300">mins (10-80%)</span>
             </div>
-            <p className="text-[10px] text-slate-400 font-mono">V2G/V2H: {physicsData.chargingOutput.v2xAvailablePowerKw} kW Output</p>
+            <p className="text-[10px] text-slate-500 dark:text-slate-400 font-mono pt-1 border-t border-slate-200/50 dark:border-base-800">V2G/V2H: {physicsData.chargingOutput.v2xAvailablePowerKw} kW Output</p>
           </div>
         </div>
       )}
 
       {/* TAB 2: ELECTRIC MOTOR MAGNETIC FLUX & FIELD WEAKENING */}
       {activeTab === "motors" && (
-        <div className="p-4 rounded-xl bg-base-900/90 border border-cyan-500/30 space-y-3">
-          <h4 className="text-xs font-bold text-cyan-300 font-mono uppercase flex items-center gap-2">
+        <div className="p-3.5 rounded-xl bg-white/50 dark:bg-base-950/60 border border-white/60 dark:border-cyan-500/30 backdrop-blur-md space-y-2.5">
+          <h4 className="text-xs font-bold text-cyan-700 dark:text-cyan-300 font-mono uppercase flex items-center gap-2">
             <Cpu size={14} /> Electric Motor Electromagnetic Flux & Loss Spectrum
           </h4>
-          <div className="grid grid-cols-3 gap-3">
-            <div className="p-3 rounded-xl bg-base-950 border border-base-800 space-y-1">
-              <span className="text-[10px] text-slate-400 font-mono block">Stator Copper Loss (I²R)</span>
-              <div className="text-lg font-bold font-mono text-amber-400">{physicsData.motorOutput.copperLossKw} kW</div>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+            <div className="p-3 rounded-xl bg-white/40 dark:bg-base-900/60 border border-white/50 dark:border-base-800 space-y-1">
+              <span className="text-[10px] text-slate-600 dark:text-slate-400 font-mono block font-bold">Stator Copper Loss (I²R)</span>
+              <div className="text-base font-bold font-mono text-amber-600 dark:text-amber-400">{physicsData.motorOutput.copperLossKw} kW</div>
             </div>
-            <div className="p-3 rounded-xl bg-base-950 border border-base-800 space-y-1">
-              <span className="text-[10px] text-slate-400 font-mono block">Iron Core Hysteresis Loss</span>
-              <div className="text-lg font-bold font-mono text-amber-400">{physicsData.motorOutput.ironCoreLossKw} kW</div>
+            <div className="p-3 rounded-xl bg-white/40 dark:bg-base-900/60 border border-white/50 dark:border-base-800 space-y-1">
+              <span className="text-[10px] text-slate-600 dark:text-slate-400 font-mono block font-bold">Iron Core Hysteresis Loss</span>
+              <div className="text-base font-bold font-mono text-amber-600 dark:text-amber-400">{physicsData.motorOutput.ironCoreLossKw} kW</div>
             </div>
-            <div className="p-3 rounded-xl bg-base-950 border border-base-800 space-y-1">
-              <span className="text-[10px] text-slate-400 font-mono block">Field Weakening Region Status</span>
-              <div className="text-lg font-bold font-mono text-cyan-400">
-                {physicsData.motorOutput.isFieldWeakeningActive ? "ACTIVE (High-Speed Constant Power)" : "INACTIVE (Max Torque Region)"}
+            <div className="p-3 rounded-xl bg-white/40 dark:bg-base-900/60 border border-white/50 dark:border-base-800 space-y-1">
+              <span className="text-[10px] text-slate-600 dark:text-slate-400 font-mono block font-bold">Field Weakening Status</span>
+              <div className="text-xs font-bold font-mono text-cyan-600 dark:text-cyan-400 mt-0.5">
+                {physicsData.motorOutput.isFieldWeakeningActive ? "ACTIVE (High-Speed)" : "INACTIVE (Max Torque)"}
               </div>
             </div>
           </div>
@@ -131,26 +141,26 @@ export function HybridTelemetrySuite() {
 
       {/* TAB 3: BATTERY ELECTROCHEMICAL & SOH DEGRADATION */}
       {activeTab === "battery" && (
-        <div className="p-4 rounded-xl bg-base-900/90 border border-cyan-500/30 space-y-3">
-          <h4 className="text-xs font-bold text-cyan-300 font-mono uppercase flex items-center gap-2">
+        <div className="p-3.5 rounded-xl bg-white/50 dark:bg-base-950/60 border border-white/60 dark:border-cyan-500/30 backdrop-blur-md space-y-2.5">
+          <h4 className="text-xs font-bold text-cyan-700 dark:text-cyan-300 font-mono uppercase flex items-center gap-2">
             <Battery size={14} /> Battery Electrochemical & SOH Degradation Model
           </h4>
-          <div className="grid grid-cols-4 gap-3">
-            <div className="p-3 rounded-xl bg-base-950 border border-base-800 space-y-1">
-              <span className="text-[10px] text-slate-400 font-mono block">Open Circuit Voltage</span>
-              <div className="text-lg font-bold font-mono text-slate-100">{physicsData.batteryOutput.openCircuitVoltageV} V</div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div className="p-3 rounded-xl bg-white/40 dark:bg-base-900/60 border border-white/50 dark:border-base-800 space-y-1">
+              <span className="text-[10px] text-slate-600 dark:text-slate-400 font-mono block font-bold">Open Circuit Voltage</span>
+              <div className="text-base font-bold font-mono text-slate-800 dark:text-slate-100">{physicsData.batteryOutput.openCircuitVoltageV} V</div>
             </div>
-            <div className="p-3 rounded-xl bg-base-950 border border-base-800 space-y-1">
-              <span className="text-[10px] text-slate-400 font-mono block">Internal Resistance (R_int)</span>
-              <div className="text-lg font-bold font-mono text-emerald-400">{physicsData.batteryOutput.internalResistanceOhm} Ω</div>
+            <div className="p-3 rounded-xl bg-white/40 dark:bg-base-900/60 border border-white/50 dark:border-base-800 space-y-1">
+              <span className="text-[10px] text-slate-600 dark:text-slate-400 font-mono block font-bold">Internal Resistance (R_int)</span>
+              <div className="text-base font-bold font-mono text-emerald-600 dark:text-emerald-400">{physicsData.batteryOutput.internalResistanceOhm} Ω</div>
             </div>
-            <div className="p-3 rounded-xl bg-base-950 border border-base-800 space-y-1">
-              <span className="text-[10px] text-slate-400 font-mono block">Max Continuous Discharge</span>
-              <div className="text-lg font-bold font-mono text-cyan-400">{physicsData.batteryOutput.maxContinuousDischargeKw} kW</div>
+            <div className="p-3 rounded-xl bg-white/40 dark:bg-base-900/60 border border-white/50 dark:border-base-800 space-y-1">
+              <span className="text-[10px] text-slate-600 dark:text-slate-400 font-mono block font-bold">Max Continuous Discharge</span>
+              <div className="text-base font-bold font-mono text-cyan-600 dark:text-cyan-400">{physicsData.batteryOutput.maxContinuousDischargeKw} kW</div>
             </div>
-            <div className="p-3 rounded-xl bg-base-950 border border-base-800 space-y-1">
-              <span className="text-[10px] text-slate-400 font-mono block">Thermal Runaway Risk</span>
-              <div className="text-lg font-bold font-mono text-emerald-400">
+            <div className="p-3 rounded-xl bg-white/40 dark:bg-base-900/60 border border-white/50 dark:border-base-800 space-y-1">
+              <span className="text-[10px] text-slate-600 dark:text-slate-400 font-mono block font-bold">Thermal Runaway Risk</span>
+              <div className="text-base font-bold font-mono text-emerald-600 dark:text-emerald-400">
                 {(physicsData.batteryOutput.thermalRunawayRiskFraction * 100).toFixed(0)}% (SAFE)
               </div>
             </div>
@@ -160,22 +170,22 @@ export function HybridTelemetrySuite() {
 
       {/* TAB 4: SIC / GAN POWER ELECTRONICS */}
       {activeTab === "inverter" && (
-        <div className="p-4 rounded-xl bg-base-900/90 border border-cyan-500/30 space-y-3">
-          <h4 className="text-xs font-bold text-cyan-300 font-mono uppercase flex items-center gap-2">
+        <div className="p-3.5 rounded-xl bg-white/50 dark:bg-base-950/60 border border-white/60 dark:border-cyan-500/30 backdrop-blur-md space-y-2.5">
+          <h4 className="text-xs font-bold text-cyan-700 dark:text-cyan-300 font-mono uppercase flex items-center gap-2">
             <Activity size={14} /> Silicon Carbide (SiC) / GaN Inverter Switching Loss Solver
           </h4>
-          <div className="grid grid-cols-3 gap-3">
-            <div className="p-3 rounded-xl bg-base-950 border border-base-800 space-y-1">
-              <span className="text-[10px] text-slate-400 font-mono block">Conduction Loss (I² × R_on)</span>
-              <div className="text-lg font-bold font-mono text-slate-100">{physicsData.peOutput.conductionLossKw} kW</div>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+            <div className="p-3 rounded-xl bg-white/40 dark:bg-base-900/60 border border-white/50 dark:border-base-800 space-y-1">
+              <span className="text-[10px] text-slate-600 dark:text-slate-400 font-mono block font-bold">Conduction Loss (I² × R_on)</span>
+              <div className="text-base font-bold font-mono text-slate-800 dark:text-slate-100">{physicsData.peOutput.conductionLossKw} kW</div>
             </div>
-            <div className="p-3 rounded-xl bg-base-950 border border-base-800 space-y-1">
-              <span className="text-[10px] text-slate-400 font-mono block">16 kHz Switching Loss</span>
-              <div className="text-lg font-bold font-mono text-slate-100">{physicsData.peOutput.switchingLossKw} kW</div>
+            <div className="p-3 rounded-xl bg-white/40 dark:bg-base-900/60 border border-white/50 dark:border-base-800 space-y-1">
+              <span className="text-[10px] text-slate-600 dark:text-slate-400 font-mono block font-bold">16 kHz Switching Loss</span>
+              <div className="text-base font-bold font-mono text-slate-800 dark:text-slate-100">{physicsData.peOutput.switchingLossKw} kW</div>
             </div>
-            <div className="p-3 rounded-xl bg-base-950 border border-base-800 space-y-1">
-              <span className="text-[10px] text-slate-400 font-mono block">ISO 26262 Isolation Resistance</span>
-              <div className="text-lg font-bold font-mono text-emerald-400">{physicsData.peOutput.isolationResistanceMohm} MΩ</div>
+            <div className="p-3 rounded-xl bg-white/40 dark:bg-base-900/60 border border-white/50 dark:border-base-800 space-y-1">
+              <span className="text-[10px] text-slate-600 dark:text-slate-400 font-mono block font-bold">ISO 26262 Isolation Resistance</span>
+              <div className="text-base font-bold font-mono text-emerald-600 dark:text-emerald-400">{physicsData.peOutput.isolationResistanceMohm} MΩ</div>
             </div>
           </div>
         </div>
@@ -183,22 +193,22 @@ export function HybridTelemetrySuite() {
 
       {/* TAB 5: REGENERATIVE BRAKING & BRAKE BLENDING */}
       {activeTab === "regen" && (
-        <div className="p-4 rounded-xl bg-base-900/90 border border-cyan-500/30 space-y-3">
-          <h4 className="text-xs font-bold text-cyan-300 font-mono uppercase flex items-center gap-2">
+        <div className="p-3.5 rounded-xl bg-white/50 dark:bg-base-950/60 border border-white/60 dark:border-cyan-500/30 backdrop-blur-md space-y-2.5">
+          <h4 className="text-xs font-bold text-cyan-700 dark:text-cyan-300 font-mono uppercase flex items-center gap-2">
             <RefreshCw size={14} /> Regenerative Braking & Kinetic Energy Recovery
           </h4>
-          <div className="grid grid-cols-3 gap-3">
-            <div className="p-3 rounded-xl bg-base-950 border border-base-800 space-y-1">
-              <span className="text-[10px] text-slate-400 font-mono block">Energy Recovered per Stop</span>
-              <div className="text-lg font-bold font-mono text-emerald-400">{physicsData.regenOutput.energyRecoveredKwh} kWh</div>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+            <div className="p-3 rounded-xl bg-white/40 dark:bg-base-900/60 border border-white/50 dark:border-base-800 space-y-1">
+              <span className="text-[10px] text-slate-600 dark:text-slate-400 font-mono block font-bold">Energy Recovered per Stop</span>
+              <div className="text-base font-bold font-mono text-emerald-600 dark:text-emerald-400">{physicsData.regenOutput.energyRecoveredKwh} kWh</div>
             </div>
-            <div className="p-3 rounded-xl bg-base-950 border border-base-800 space-y-1">
-              <span className="text-[10px] text-slate-400 font-mono block">Peak Regenerative Power</span>
-              <div className="text-lg font-bold font-mono text-cyan-400">{physicsData.regenOutput.peakRegenPowerKw} kW</div>
+            <div className="p-3 rounded-xl bg-white/40 dark:bg-base-900/60 border border-white/50 dark:border-base-800 space-y-1">
+              <span className="text-[10px] text-slate-600 dark:text-slate-400 font-mono block font-bold">Peak Regenerative Power</span>
+              <div className="text-base font-bold font-mono text-cyan-600 dark:text-cyan-400">{physicsData.regenOutput.peakRegenPowerKw} kW</div>
             </div>
-            <div className="p-3 rounded-xl bg-base-950 border border-base-800 space-y-1">
-              <span className="text-[10px] text-slate-400 font-mono block">Deceleration G-Force</span>
-              <div className="text-lg font-bold font-mono text-cyan-300">{physicsData.regenOutput.decelerationG} G</div>
+            <div className="p-3 rounded-xl bg-white/40 dark:bg-base-900/60 border border-white/50 dark:border-base-800 space-y-1">
+              <span className="text-[10px] text-slate-600 dark:text-slate-400 font-mono block font-bold">Deceleration G-Force</span>
+              <div className="text-base font-bold font-mono text-cyan-700 dark:text-cyan-300">{physicsData.regenOutput.decelerationG} G</div>
             </div>
           </div>
         </div>
@@ -206,22 +216,22 @@ export function HybridTelemetrySuite() {
 
       {/* TAB 6: SPORTS HYBRID PERFORMANCE TECH */}
       {activeTab === "sports" && (
-        <div className="p-4 rounded-xl bg-base-900/90 border border-cyan-500/30 space-y-3">
-          <h4 className="text-xs font-bold text-cyan-300 font-mono uppercase flex items-center gap-2">
+        <div className="p-3.5 rounded-xl bg-white/50 dark:bg-base-950/60 border border-white/60 dark:border-cyan-500/30 backdrop-blur-md space-y-2.5">
+          <h4 className="text-xs font-bold text-cyan-700 dark:text-cyan-300 font-mono uppercase flex items-center gap-2">
             <Sparkles size={14} /> Sports Hybrid Performance Suite (eTurbo, Torque Fill, eAxle)
           </h4>
-          <div className="grid grid-cols-3 gap-3">
-            <div className="p-3 rounded-xl bg-base-950 border border-base-800 space-y-1">
-              <span className="text-[10px] text-slate-400 font-mono block">Electric Torque Fill Boost</span>
-              <div className="text-lg font-bold font-mono text-emerald-400">+{physicsData.sportsOutput.boostedTorqueNm} Nm</div>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+            <div className="p-3 rounded-xl bg-white/40 dark:bg-base-900/60 border border-white/50 dark:border-base-800 space-y-1">
+              <span className="text-[10px] text-slate-600 dark:text-slate-400 font-mono block font-bold">Electric Torque Fill Boost</span>
+              <div className="text-base font-bold font-mono text-emerald-600 dark:text-emerald-400">+{physicsData.sportsOutput.boostedTorqueNm} Nm</div>
             </div>
-            <div className="p-3 rounded-xl bg-base-950 border border-base-800 space-y-1">
-              <span className="text-[10px] text-slate-400 font-mono block">Turbo Lag Reduction</span>
-              <div className="text-lg font-bold font-mono text-cyan-400">-{physicsData.sportsOutput.turboLagReductionSec}s</div>
+            <div className="p-3 rounded-xl bg-white/40 dark:bg-base-900/60 border border-white/50 dark:border-base-800 space-y-1">
+              <span className="text-[10px] text-slate-600 dark:text-slate-400 font-mono block font-bold">Turbo Lag Reduction</span>
+              <div className="text-base font-bold font-mono text-cyan-600 dark:text-cyan-400">-{physicsData.sportsOutput.turboLagReductionSec}s</div>
             </div>
-            <div className="p-3 rounded-xl bg-base-950 border border-base-800 space-y-1">
-              <span className="text-[10px] text-slate-400 font-mono block">0-60 mph Sprint Delta</span>
-              <div className="text-lg font-bold font-mono text-cyan-300">{physicsData.sportsOutput.zeroToSixtyDeltaSec}s</div>
+            <div className="p-3 rounded-xl bg-white/40 dark:bg-base-900/60 border border-white/50 dark:border-base-800 space-y-1">
+              <span className="text-[10px] text-slate-600 dark:text-slate-400 font-mono block font-bold">0-60 mph Sprint Delta</span>
+              <div className="text-base font-bold font-mono text-cyan-700 dark:text-cyan-300">{physicsData.sportsOutput.zeroToSixtyDeltaSec}s</div>
             </div>
           </div>
         </div>

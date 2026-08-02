@@ -35,11 +35,12 @@ import { MotorsportDivision } from "./components/MotorsportDivision";
 import { DigitalTwin } from "./components/DigitalTwin";
 import { SafetyCenter } from "./components/SafetyCenter";
 import { SalesLaunch } from "./components/SalesLaunch";
+import { ApexAIStudio } from "./components/ApexAIStudio";
 
 import { CommandPalette } from "./components/CommandPalette";
 import { ToastProvider } from "./components/ToastSystem";
 import { ThermalAlertMonitor } from "./components/ThermalAlertMonitor";
-import { Search, Command as CmdIcon } from "lucide-react";
+import { Search, Command as CmdIcon, Bot } from "lucide-react";
 import { VisionGlassHeader } from "./components/ui/VisionGlassHeader";
 import { VisionGlassDock } from "./components/ui/VisionGlassDock";
 import { VisionGlassToolbar } from "./components/ui/VisionGlassToolbar";
@@ -50,7 +51,7 @@ type Stage =
   | "command" | "engine" | "vehicle" | "exterior" | "aero" | "interior"
   | "manufacturing" | "infotainment" | "rd" | "simulation" | "testing"
   | "race" | "stats" | "press" | "competitors"
-  | "garage" | "compare" | "economy" | "motorsport" | "twin" | "safety" | "sales";
+  | "garage" | "compare" | "economy" | "motorsport" | "twin" | "safety" | "sales" | "ai";
 
 export type WorkspaceCategory = "engineering" | "simulation" | "world";
 
@@ -64,6 +65,7 @@ interface StageItem {
 const STAGES: StageItem[] = [
   // --- Engineering Studio ---
   { id: "command", label: "Command Center", icon: <LayoutDashboard size={14} />, category: "engineering" },
+  { id: "ai", label: "Apex AI", icon: <Bot size={14} />, category: "engineering" },
   { id: "engine", label: "Engine", icon: <Cog size={14} />, category: "engineering" },
   { id: "vehicle", label: "Vehicle", icon: <Car size={14} />, category: "engineering" },
   { id: "exterior", label: "Exterior", icon: <Paintbrush size={14} />, category: "engineering" },
@@ -277,6 +279,7 @@ function AppInner() {
               { id: "command", icon: <LayoutGrid size={17} />, label: "Dashboard", onClick: () => setStage("command"), isActive: stage === "command" },
               { id: "search", icon: <Search size={17} />, label: "Search (Ctrl+K)", onClick: () => setCmdPaletteOpen(true) },
               { id: "simulation", icon: <Activity size={17} />, label: "Analytics", onClick: () => setStage("simulation"), isActive: stage === "simulation" },
+              { id: "ai", icon: <Bot size={17} />, label: "Apex AI Studio", onClick: () => setStage("ai"), isActive: stage === "ai" },
               { id: "safety", icon: <Bell size={17} />, label: "Safety & Alerts", onClick: () => setStage("safety"), isActive: stage === "safety" },
               { id: "vehicle", icon: <SlidersHorizontal size={17} />, label: "Vehicle Controls", onClick: () => setStage("vehicle"), isActive: stage === "vehicle" },
             ]}
@@ -327,7 +330,7 @@ function AppInner() {
               className="vision-glass-content vision-scroll-momentum"
               style={{
                 flex: 1, overflowY: "auto", overflowX: "hidden",
-                padding: "16px 20px 80px 20px",
+                padding: "16px 20px 140px 20px",
               }}
             >
               <div style={{ display: "flex", gap: 16 }}>
@@ -392,12 +395,13 @@ function AppInner() {
     );
   }
 
-  // ===== Themes 1, 2, 3: Original Layout (UNCHANGED) =====
+  // ===== Themes 1, 2, 3: Original Layout =====
   return (
-    <div className={`min-h-screen bg-base-950 flex flex-col grid-bg transition-opacity duration-700 ${booted ? "opacity-100" : "opacity-0"} ${uiTheme}`}>
+    <VisionGlassErrorBoundary>
+      <div className={`min-h-screen bg-base-950 flex flex-col grid-bg transition-opacity duration-700 ${booted ? "opacity-100" : "opacity-0"} ${uiTheme}`}>
       {/* Top Header */}
       <header className="border-b border-white/10 bg-[#0b0f19]/80 backdrop-blur-xl sticky top-0 z-40 shadow-[0_4px_30px_rgba(0,0,0,0.5)] inner-light">
-        <div className="max-w-[1700px] mx-auto px-4 h-14 flex items-center justify-between gap-4">
+        <div className="max-w-full px-6 h-14 flex items-center justify-between gap-4">
           {/* Logo */}
           <div className="flex items-center gap-2.5 shrink-0">
             <svg viewBox="0 0 24 24" className="h-7 w-7 text-cyan-400 animate-pulse-glow rounded-lg drop-shadow-[0_0_10px_rgba(34,211,238,0.5)]" fill="currentColor">
@@ -495,7 +499,7 @@ function AppInner() {
 
       {/* Sub-Navigation Bar */}
       <nav className="border-b border-white/5 bg-[#0b0f19]/60 backdrop-blur-md sticky top-14 z-30 shadow-md">
-        <div className="max-w-[1700px] mx-auto px-4 py-2 flex items-center gap-1.5 overflow-x-auto no-scrollbar">
+        <div className="max-w-full px-6 py-2 flex items-center gap-1.5 overflow-x-auto no-scrollbar">
           {activeCategoryStages.map((s) => {
             const isCurrent = stage === s.id;
             return (
@@ -516,10 +520,11 @@ function AppInner() {
       </nav>
 
       {/* Main content */}
-      <div className="flex-1 max-w-[1700px] mx-auto w-full px-4 py-4 pb-44 flex gap-4">
+      <div className="flex-1 max-w-full w-full px-6 py-4 pb-44 flex gap-4">
         <div className="flex-1 min-w-0">
           <div key={stage} className="stage-transition-enter">
             {stage === "command" && <CommandCenter onSelectStage={(st) => setStage(st as Stage)} />}
+            {stage === "ai" && <ApexAIStudio />}
             {stage === "engine" && <EngineDesigner />}
             {stage === "vehicle" && <VehicleDesigner />}
             {stage === "exterior" && <ExteriorDesigner />}
@@ -561,7 +566,6 @@ function AppInner() {
         onSelectStage={(s) => setStage(s as Stage)}
       />
 
-      <AIAssistant />
       <ThermalAlertMonitor />
 
       {uiTheme === "theme2" && <div className="cosmic-sparkle" />}
@@ -571,6 +575,7 @@ function AppInner() {
       <div className="ambient-orb ambient-orb-3" />
       <div className="light-leak" />
     </div>
+    </VisionGlassErrorBoundary>
   );
 }
 

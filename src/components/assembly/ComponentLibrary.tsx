@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import {
   Lock,
   Check,
@@ -13,11 +13,13 @@ import {
   Layers,
 } from "lucide-react";
 import {
-  ENGINE_ASSEMBLY_COMPONENTS,
   ComponentId,
+  AssemblyComponentMeta,
   AssemblyPhase,
   MaterialGrade,
+  getAssemblyComponents,
 } from "../../sim/assemblyTypes";
+import { EngineConfig } from "../../sim/types";
 
 interface ComponentLibraryProps {
   installedComponents: ComponentId[];
@@ -27,8 +29,21 @@ interface ComponentLibraryProps {
   canInstall: (id: ComponentId) => boolean;
   onStartInstall: (id: ComponentId) => void;
   onHoverComponent: (id: ComponentId | null) => void;
+  engineConfig?: Partial<EngineConfig>;
   className?: string;
 }
+
+const COMPONENT_PNG_MAP: Record<string, string> = {
+  block: "/assets/engine/block.png",
+  crankshaft: "/assets/engine/crankshaft.png",
+  rods: "/assets/engine/piston_rod.png",
+  pistons: "/assets/engine/piston_rod.png",
+  cylinder_head: "/assets/engine/cylinder_head.png",
+  intake_manifold: "/assets/engine/intake_manifold.png",
+  exhaust_headers: "/assets/engine/exhaust_headers.png",
+  turbocharger: "/assets/engine/turbocharger.png",
+  oil_pan: "/assets/engine/oil_pan.png",
+};
 
 type CategoryFilter = "All" | "Core" | "Bottom End" | "Top End" | "Induction & Exhaust";
 
@@ -40,6 +55,7 @@ export function ComponentLibrary({
   canInstall,
   onStartInstall,
   onHoverComponent,
+  engineConfig,
   className = "",
 }: ComponentLibraryProps) {
   const [activeTab, setActiveTab] = useState<CategoryFilter>("All");
@@ -58,10 +74,20 @@ export function ComponentLibrary({
     oil_pan: "cast",
   });
 
-  const filteredComponents = ENGINE_ASSEMBLY_COMPONENTS.filter((comp) => {
-    if (activeTab === "All") return true;
-    return comp.category === activeTab;
-  });
+  const assemblyComponents = useMemo(() => getAssemblyComponents(engineConfig), [engineConfig]);
+
+  const isEV =
+    engineConfig?.layout === "electric" ||
+    engineConfig?.layout === "hybrid" ||
+    (engineConfig as any)?.isElectric ||
+    (engineConfig as any)?.powertrainType === "electric";
+
+  const filteredComponents = useMemo(() => {
+    return assemblyComponents.filter((comp) => {
+      if (activeTab === "All") return true;
+      return comp.category === activeTab;
+    });
+  }, [assemblyComponents, activeTab]);
 
   const categories: CategoryFilter[] = ["All", "Core", "Bottom End", "Top End", "Induction & Exhaust"];
 
@@ -88,12 +114,16 @@ export function ComponentLibrary({
             <Wrench size={16} />
           </div>
           <div>
-            <h3 className="text-xs font-bold text-slate-100 uppercase tracking-wider">Component Tray</h3>
-            <span className="text-[10px] text-slate-400 font-mono">Select parts & materials</span>
+            <h3 className="text-xs font-bold text-slate-100 uppercase tracking-wider">
+              {isEV ? "EV Powertrain Tray" : "Component Tray"}
+            </h3>
+            <span className="text-[10px] text-slate-400 font-mono">
+              {isEV ? "Select high-voltage EV components" : "Select parts & materials"}
+            </span>
           </div>
         </div>
         <span className="px-2 py-0.5 rounded-full bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 text-[10px] font-mono font-bold">
-          {installedComponents.length} / {ENGINE_ASSEMBLY_COMPONENTS.length} Installed
+          {installedComponents.length} / {assemblyComponents.length} Installed
         </span>
       </div>
 
@@ -130,7 +160,7 @@ export function ComponentLibrary({
           // Get missing dependency names if locked
           const missingDeps = comp.dependencies
             .filter((depId) => !installedComponents.includes(depId))
-            .map((depId) => ENGINE_ASSEMBLY_COMPONENTS.find((c) => c.id === depId)?.name)
+            .map((depId) => assemblyComponents.find((c) => c.id === depId)?.name)
             .filter(Boolean);
 
           return (
@@ -152,7 +182,7 @@ export function ComponentLibrary({
               <div className="flex items-start justify-between gap-2 mb-1.5">
                 <div className="flex items-center gap-2">
                   <div
-                    className={`p-1.5 rounded-lg border ${
+                    className={`w-9 h-9 rounded-lg border overflow-hidden flex items-center justify-center p-0.5 relative ${
                       isInstalled
                         ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/30"
                         : isAvailable
@@ -160,7 +190,15 @@ export function ComponentLibrary({
                         : "bg-base-800 text-slate-500 border-base-700"
                     }`}
                   >
-                    <Cog size={14} className={isActive ? "animate-spin" : ""} />
+                    {COMPONENT_PNG_MAP[comp.id] ? (
+                      <img
+                        src={COMPONENT_PNG_MAP[comp.id]}
+                        alt={comp.name}
+                        className="w-full h-full object-contain filter drop-shadow-md group-hover:scale-110 transition-transform duration-300"
+                      />
+                    ) : (
+                      <Cog size={14} className={isActive ? "animate-spin" : ""} />
+                    )}
                   </div>
                   <div>
                     <h4 className="text-xs font-bold text-slate-100 group-hover:text-cyan-300 transition-colors">
