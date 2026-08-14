@@ -114,10 +114,20 @@ export const VehicleSVG: React.FC<VehicleSVGProps> = ({
         {/* Blueprint Grid Background */}
         <rect width="950" height="460" fill="url(#cad-grid-sleek)" className="pointer-events-none" />
 
-        {/* Ground Line & Alignment Guides */}
-        <line x1="40" y1="345" x2="910" y2="345" stroke="#38bdf8" strokeWidth="1" strokeDasharray="6 4" opacity="0.35" />
-        <line x1="230" y1="80" x2="230" y2="360" stroke="#38bdf8" strokeWidth="0.8" strokeDasharray="3 3" opacity="0.25" />
-        <line x1="710" y1="80" x2="710" y2="360" stroke="#38bdf8" strokeWidth="0.8" strokeDasharray="3 3" opacity="0.25" />
+        {/* CAD Alignment Datum Grid & Wheelbase Dimensioning */}
+        <g opacity="0.45" className="font-mono text-[9px] pointer-events-none">
+          <line x1="40" y1="345" x2="910" y2="345" stroke="#38bdf8" strokeWidth="1.2" strokeDasharray="6 4" />
+          <line x1="230" y1="70" x2="230" y2="365" stroke="#38bdf8" strokeWidth="1.0" strokeDasharray="4 4" />
+          <line x1="710" y1="70" x2="710" y2="365" stroke="#38bdf8" strokeWidth="1.0" strokeDasharray="4 4" />
+
+          {/* Wheelbase Metric Arrow */}
+          <line x1="230" y1="358" x2="710" y2="358" stroke="#38bdf8" strokeWidth="1" />
+          <polygon points="230,358 238,355 238,361" fill="#38bdf8" />
+          <polygon points="710,358 702,355 702,361" fill="#38bdf8" />
+          <text x="470" y="355" fill="#38bdf8" fontSize="9" textAnchor="middle" fontWeight="bold">
+            WHEELBASE DATUM: 2850 mm
+          </text>
+        </g>
 
         {/* ── 1. DYNAMIC CHASSIS ARCHITECTURE RENDERER (Unibody / Carbon Tub / Spaceframe) ── */}
         <g

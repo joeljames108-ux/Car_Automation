@@ -33,7 +33,7 @@ export const IsoVehicleSubsystems3D: React.FC<IsoVehicleSubsystems3DProps> = ({
 
     let opacity = 1;
     if (!isInstalled && !isActive) {
-      opacity = 0.12;
+      opacity = 0.15;
     }
 
     return {
@@ -63,11 +63,9 @@ export const IsoVehicleSubsystems3D: React.FC<IsoVehicleSubsystems3DProps> = ({
   const aeroState = getPartState("aero_package");
   const ecuState = getPartState("electronics_ecu");
 
-  const originScreen: ScreenPoint2D = { x: 450, y: 220 };
-
   return (
     <g id="iso-3d-vehicle-subsystems-group">
-      {/* ── 1. 3D ISOMETRIC ENGINE BLOCK (VBankBlockCastingIso Rendered in Front/Mid/Rear Slot) ── */}
+      {/* ── 1. 3D ISOMETRIC ENGINE BLOCK (V12 Casting in Engine Slot) ── */}
       <g
         id="iso_engine_bay"
         onMouseEnter={() => onHoverComponent?.("engine_bay")}
@@ -107,13 +105,17 @@ export const IsoVehicleSubsystems3D: React.FC<IsoVehicleSubsystems3DProps> = ({
         className="cursor-pointer transition-all duration-700 ease-out"
         style={{ opacity: transState.opacity }}
       >
-        {/* 3D Gearbox Bellhousing */}
-        <path d="M 300 210 L 360 215 L 360 265 L 300 260 Z" fill="#334155" stroke={transState.isHovered ? "#38bdf8" : "#64748b"} strokeWidth="2" />
+        {/* 3D Gearbox Bellhousing with Cast Cooling Fins */}
+        <path d="M 300 210 L 360 215 L 360 265 L 300 260 Z" fill="url(#al-brushed-metallic)" stroke={transState.isHovered ? "#38bdf8" : "#475569"} strokeWidth="2" />
+        <line x1="310" y1="215" x2="310" y2="258" stroke="#94a3b8" strokeWidth="1" />
+        <line x1="325" y1="216" x2="325" y2="260" stroke="#94a3b8" strokeWidth="1" />
+        <line x1="340" y1="217" x2="340" y2="262" stroke="#94a3b8" strokeWidth="1" />
 
         {(driveType === "rwd" || driveType === "awd") && (
           <g>
-            <line x1="360" y1="250" x2="710" y2="275" stroke="#10b981" strokeWidth="4.5" strokeDasharray="6 3" />
-            <circle cx="710" cy="275" r="16" fill="#0f172a" stroke="#10b981" strokeWidth="2.5" />
+            <line x1="360" y1="250" x2="710" y2="275" stroke="#10b981" strokeWidth="5" strokeDasharray="8 4" />
+            <circle cx="710" cy="275" r="18" fill="#0f172a" stroke="#10b981" strokeWidth="2.5" />
+            <circle cx="710" cy="275" r="10" fill="#334155" stroke="#64748b" strokeWidth="1" />
           </g>
         )}
       </g>
@@ -126,9 +128,13 @@ export const IsoVehicleSubsystems3D: React.FC<IsoVehicleSubsystems3DProps> = ({
         className="cursor-pointer transition-all duration-700 ease-out"
         style={{ opacity: exhaustState.opacity }}
       >
-        <path d="M 280 250 L 320 290 L 540 290 Q 680 290 790 280 L 870 280" fill="none" stroke="#ef4444" strokeWidth="4.5" strokeLinecap="round" />
-        <rect x="390" y="283" width="45" height="14" rx="4" fill="#0f172a" stroke="#ef4444" strokeWidth="2" />
-        <rect x="760" y="272" width="55" height="20" rx="4" fill="#0f172a" stroke="#ef4444" strokeWidth="2" />
+        <path d="M 280 250 L 320 290 L 540 290 Q 680 290 790 280 L 870 280" fill="none" stroke="url(#titanium-weld-tint)" strokeWidth="5.5" strokeLinecap="round" />
+        <rect x="390" y="282" width="48" height="16" rx="4" fill="#0f172a" stroke="#ef4444" strokeWidth="2" />
+        <rect x="760" y="270" width="58" height="22" rx="4" fill="#0f172a" stroke="#ef4444" strokeWidth="2" />
+        
+        {/* Dual Stainless Muffler Exhaust Tips */}
+        <circle cx="875" cy="276" r="4.5" fill="#f8fafc" stroke="#0f172a" strokeWidth="1.5" />
+        <circle cx="875" cy="284" r="4.5" fill="#f8fafc" stroke="#0f172a" strokeWidth="1.5" />
       </g>
 
       {/* ── 4. 3D FRONT SUSPENSION ── */}
@@ -139,8 +145,13 @@ export const IsoVehicleSubsystems3D: React.FC<IsoVehicleSubsystems3DProps> = ({
         className="cursor-pointer transition-all duration-700 ease-out"
         style={{ opacity: suspFrontState.opacity }}
       >
-        <line x1="230" y1="210" x2="230" y2="280" stroke="#38bdf8" strokeWidth="6" strokeLinecap="round" />
-        <path d="M 223 220 L 237 225 L 223 235 L 237 245 L 223 255 L 237 265" fill="none" stroke="#f59e0b" strokeWidth="2.5" />
+        {/* Chrome Damper Shaft & Blue Anodized Body */}
+        <line x1="230" y1="205" x2="230" y2="280" stroke="#0284c7" strokeWidth="7" strokeLinecap="round" />
+        <line x1="230" y1="205" x2="230" y2="245" stroke="#f8fafc" strokeWidth="3" strokeLinecap="round" />
+        {/* Metallic Gold Coil Spring Turns */}
+        <path d="M 221 215 L 239 220 L 221 230 L 239 240 L 221 250 L 239 260 M 221 260 L 239 270" fill="none" stroke="#f59e0b" strokeWidth="3.5" strokeLinecap="round" />
+        {/* Double Wishbone Forged Control Arms */}
+        <path d="M 195 275 L 230 280 L 265 275" fill="none" stroke="#cbd5e1" strokeWidth="3" strokeLinecap="round" />
       </g>
 
       {/* ── 5. 3D REAR SUSPENSION ── */}
@@ -151,11 +162,13 @@ export const IsoVehicleSubsystems3D: React.FC<IsoVehicleSubsystems3DProps> = ({
         className="cursor-pointer transition-all duration-700 ease-out"
         style={{ opacity: suspRearState.opacity }}
       >
-        <line x1="710" y1="210" x2="710" y2="280" stroke="#38bdf8" strokeWidth="6" strokeLinecap="round" />
-        <path d="M 703 220 L 717 225 L 703 235 L 717 245 L 703 255 L 717 265" fill="none" stroke="#f59e0b" strokeWidth="2.5" />
+        <line x1="710" y1="205" x2="710" y2="280" stroke="#0284c7" strokeWidth="7" strokeLinecap="round" />
+        <line x1="710" y1="205" x2="710" y2="245" stroke="#f8fafc" strokeWidth="3" strokeLinecap="round" />
+        <path d="M 701 215 L 719 220 L 701 230 L 719 240 L 701 250 L 719 260 M 701 260 L 719 270" fill="none" stroke="#f59e0b" strokeWidth="3.5" strokeLinecap="round" />
+        <path d="M 675 275 L 710 280 L 745 275" fill="none" stroke="#cbd5e1" strokeWidth="3" strokeLinecap="round" />
       </g>
 
-      {/* ── 6. 3D BRAKES ── */}
+      {/* ── 6. 3D BRAKES (Cross-Drilled Steel Discs + Brembo Red Calipers) ── */}
       <g
         id="iso_brakes"
         onMouseEnter={() => onHoverComponent?.("brakes")}
@@ -163,14 +176,32 @@ export const IsoVehicleSubsystems3D: React.FC<IsoVehicleSubsystems3DProps> = ({
         className="cursor-pointer transition-all duration-700 ease-out"
         style={{ opacity: brakesState.opacity }}
       >
-        <ellipse cx="230" cy="280" rx="34" ry="24" fill="url(#iso-strut-dome-3d)" stroke="#cbd5e1" strokeWidth="2" />
-        <rect x="198" y="258" width="18" height="34" rx="4" fill="#f43f5e" stroke="#fff" strokeWidth="1" />
+        {/* Front Brake Rotor */}
+        <ellipse cx="230" cy="280" rx="36" ry="26" fill="url(#brake-rotor-ring-hdr)" stroke="#cbd5e1" strokeWidth="2.5" />
+        <ellipse cx="230" cy="280" rx="14" ry="10" fill="#0f172a" stroke="#64748b" strokeWidth="1" />
+        {/* Cross-Drilled Rotor Holes */}
+        <circle cx="218" cy="272" r="1.2" fill="#020617" />
+        <circle cx="242" cy="272" r="1.2" fill="#020617" />
+        <circle cx="218" cy="288" r="1.2" fill="#020617" />
+        <circle cx="242" cy="288" r="1.2" fill="#020617" />
+        {/* Brembo Red Caliper */}
+        <rect x="194" y="256" width="20" height="38" rx="5" fill="url(#caliper-brembo-red)" stroke="#ffffff" strokeWidth="1.2" />
+        <circle cx="204" cy="265" r="2" fill="#ffffff" />
+        <circle cx="204" cy="285" r="2" fill="#ffffff" />
 
-        <ellipse cx="710" cy="280" rx="32" ry="22" fill="url(#iso-strut-dome-3d)" stroke="#cbd5e1" strokeWidth="2" />
-        <rect x="682" y="260" width="16" height="32" rx="4" fill="#f43f5e" stroke="#fff" strokeWidth="1" />
+        {/* Rear Brake Rotor */}
+        <ellipse cx="710" cy="280" rx="34" ry="24" fill="url(#brake-rotor-ring-hdr)" stroke="#cbd5e1" strokeWidth="2.5" />
+        <ellipse cx="710" cy="280" rx="13" ry="9" fill="#0f172a" stroke="#64748b" strokeWidth="1" />
+        <circle cx="698" cy="273" r="1.2" fill="#020617" />
+        <circle cx="722" cy="273" r="1.2" fill="#020617" />
+        <circle cx="698" cy="287" r="1.2" fill="#020617" />
+        <circle cx="722" cy="287" r="1.2" fill="#020617" />
+        <rect x="678" y="258" width="18" height="34" rx="5" fill="url(#caliper-brembo-red)" stroke="#ffffff" strokeWidth="1.2" />
+        <circle cx="687" cy="267" r="2" fill="#ffffff" />
+        <circle cx="687" cy="283" r="2" fill="#ffffff" />
       </g>
 
-      {/* ── 7. 3D WHEELS & TIRES ── */}
+      {/* ── 7. 3D WHEELS & TYRES (5-Spoke Alloy Rims + Radial Rubber Tyres) ── */}
       <g
         id="iso_wheels_tires"
         onMouseEnter={() => onHoverComponent?.("wheels_tires")}
@@ -178,13 +209,37 @@ export const IsoVehicleSubsystems3D: React.FC<IsoVehicleSubsystems3DProps> = ({
         className="cursor-pointer transition-all duration-700 ease-out"
         style={{ opacity: wheelsState.opacity }}
       >
-        <ellipse cx="230" cy="280" rx="58" ry="42" fill="none" stroke="#020617" strokeWidth="18" />
-        <ellipse cx="230" cy="280" rx="48" ry="34" fill="none" stroke="#e2e8f0" strokeWidth="3" />
-        <path d="M 230 238 L 230 322 M 182 280 L 278 280" stroke="#cbd5e1" strokeWidth="2.5" />
+        {/* Front Wheel */}
+        <ellipse cx="230" cy="280" rx="60" ry="44" fill="none" stroke="url(#tire-rubber-sidewall-hd)" strokeWidth="16" />
+        <ellipse cx="230" cy="280" rx="49" ry="35" fill="none" stroke="url(#rim-alloy-chrome-hdr)" strokeWidth="3" />
+        {/* 5-Spoke Alloy Geometry */}
+        <g stroke="url(#rim-alloy-chrome-hdr)" strokeWidth="3.5" strokeLinecap="round">
+          <line x1="230" y1="280" x2="230" y2="245" />
+          <line x1="230" y1="280" x2="265" y2="265" />
+          <line x1="230" y1="280" x2="250" y2="310" />
+          <line x1="230" y1="280" x2="210" y2="310" />
+          <line x1="230" y1="280" x2="195" y2="265" />
+        </g>
+        <circle cx="230" cy="280" r="7" fill="#0f172a" stroke="#cbd5e1" strokeWidth="1.5" />
+        {/* Lug Nuts */}
+        <circle cx="227" cy="277" r="1.2" fill="#f8fafc" />
+        <circle cx="233" cy="277" r="1.2" fill="#f8fafc" />
+        <circle cx="230" cy="283" r="1.2" fill="#f8fafc" />
 
-        <ellipse cx="710" cy="280" rx="58" ry="42" fill="none" stroke="#020617" strokeWidth="18" />
-        <ellipse cx="710" cy="280" rx="48" ry="34" fill="none" stroke="#e2e8f0" strokeWidth="3" />
-        <path d="M 710 238 L 710 322 M 662 280 L 758 280" stroke="#cbd5e1" strokeWidth="2.5" />
+        {/* Rear Wheel */}
+        <ellipse cx="710" cy="280" rx="60" ry="44" fill="none" stroke="url(#tire-rubber-sidewall-hd)" strokeWidth="16" />
+        <ellipse cx="710" cy="280" rx="49" ry="35" fill="none" stroke="url(#rim-alloy-chrome-hdr)" strokeWidth="3" />
+        <g stroke="url(#rim-alloy-chrome-hdr)" strokeWidth="3.5" strokeLinecap="round">
+          <line x1="710" y1="280" x2="710" y2="245" />
+          <line x1="710" y1="280" x2="745" y2="265" />
+          <line x1="710" y1="280" x2="730" y2="310" />
+          <line x1="710" y1="280" x2="690" y2="310" />
+          <line x1="710" y1="280" x2="675" y2="265" />
+        </g>
+        <circle cx="710" cy="280" r="7" fill="#0f172a" stroke="#cbd5e1" strokeWidth="1.5" />
+        <circle cx="707" cy="277" r="1.2" fill="#f8fafc" />
+        <circle cx="713" cy="277" r="1.2" fill="#f8fafc" />
+        <circle cx="710" cy="283" r="1.2" fill="#f8fafc" />
       </g>
 
       {/* ── 8. 3D AERODYNAMIC PACKAGE ── */}
@@ -195,8 +250,8 @@ export const IsoVehicleSubsystems3D: React.FC<IsoVehicleSubsystems3DProps> = ({
         className="cursor-pointer transition-all duration-700 ease-out"
         style={{ opacity: aeroState.opacity }}
       >
-        <path d="M 65 270 L 150 270 L 150 282 L 65 276 Z" fill="url(#iso-carbon-twill-3d)" stroke="#10b981" strokeWidth="1.5" />
-        <path d="M 760 110 Q 800 100 860 115 L 855 125 Q 800 110 760 120 Z" fill="url(#iso-carbon-twill-3d)" stroke="#10b981" strokeWidth="2" />
+        <path d="M 65 270 L 150 270 L 150 282 L 65 276 Z" fill="url(#carbon-twill-2x2)" stroke="#10b981" strokeWidth="1.8" />
+        <path d="M 760 110 Q 800 100 860 115 L 855 125 Q 800 110 760 120 Z" fill="url(#carbon-twill-2x2)" stroke="#10b981" strokeWidth="2" />
         <line x1="780" y1="120" x2="800" y2="200" stroke="#10b981" strokeWidth="3" />
         <line x1="830" y1="120" x2="840" y2="205" stroke="#10b981" strokeWidth="3" />
       </g>
@@ -209,8 +264,8 @@ export const IsoVehicleSubsystems3D: React.FC<IsoVehicleSubsystems3DProps> = ({
         className="cursor-pointer transition-all duration-700 ease-out"
         style={{ opacity: ecuState.opacity }}
       >
-        <rect x="400" y="180" width="32" height="22" rx="3" fill="#0f172a" stroke="#a855f7" strokeWidth="2" className="animate-pulse" />
-        <path d="M 400 190 L 260 200 M 415 202 L 480 250 M 432 190 L 700 250" stroke="#a855f7" strokeWidth="1.5" strokeDasharray="4 2" />
+        <rect x="400" y="180" width="34" height="24" rx="4" fill="#0f172a" stroke="#a855f7" strokeWidth="2.2" className="animate-pulse" />
+        <path d="M 400 190 L 260 200 M 415 204 L 480 250 M 434 190 L 700 250" stroke="#a855f7" strokeWidth="1.5" strokeDasharray="5 2" />
       </g>
     </g>
   );
