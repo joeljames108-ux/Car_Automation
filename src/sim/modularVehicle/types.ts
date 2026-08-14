@@ -7,7 +7,7 @@
 // Component engineering data influences vehicle physics & lap-time.
 // ===================================================================
 
-export type {
+import type {
   EngineConfig,
   EngineSim,
   ChassisType,
@@ -17,6 +17,17 @@ export type {
   DriveType,
   EnginePosition,
 } from "../types";
+
+export type {
+  EngineConfig,
+  EngineSim,
+  ChassisType,
+  SuspensionType,
+  BrakeType,
+  TransmissionType,
+  DriveType,
+  EnginePosition,
+};
 
 // ---------- Geometry & Coordinate System ----------
 

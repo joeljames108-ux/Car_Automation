@@ -1,10 +1,12 @@
 // ===================================================================
 // APEX ENGINEER — INTERNAL AUTOMOTIVE AI AGENTS ENGINE
 // Multi-Agent System: Chief Powertrain Agent, Assembly QA Agent, Race Strategy Agent
+// Upgraded with full BaseAgent lifecycle integration
 // ===================================================================
 
 import { EngineConfig } from "../types";
 import { ComponentId, AssemblyPhase } from "../assemblyTypes";
+import { BaseAgent, AgentFinding, AgentIdentity } from "./agentFramework";
 
 export type AgentMode = "powertrain" | "assembly_qa" | "race_strategy" | "chat";
 export type TuningPreset = "track_attack" | "qualifying_max" | "endurance_reliability" | "eco_lean";
@@ -38,10 +40,63 @@ export interface TrackCircuitPrediction {
   optimalPitLap: number;
 }
 
+const CHIEF_POWERTRAIN_IDENTITY: AgentIdentity = {
+  id: "agent_chief_powertrain",
+  name: "Chief Powertrain Engineer",
+  domain: "powertrain",
+  icon: "🏎️",
+  color: "#ef4444",
+  priority: 10,
+  description: "Monitors internal combustion stress, knock thresholds, turbo boost, and power output.",
+  capabilities: ["ECU Tuning", "Boost Management", "Knock Prevention", "Fuel Map Optimization"],
+};
+
 // ── 1. CHIEF POWERTRAIN TUNING AGENT ──
-export class ChiefPowertrainAgent {
+export class ChiefPowertrainAgent extends BaseAgent {
+  constructor() {
+    super(CHIEF_POWERTRAIN_IDENTITY);
+  }
+
+  public analyze(designState: any, simState: any): AgentFinding[] {
+    const findings: AgentFinding[] = [];
+    const config = designState?.engine || {};
+    const knockRisk = simState?.knockRisk || 0.1;
+    const boost = simState?.boostPressure || config.boostPressure || 0;
+    const afr = config.afr || 14.0;
+    const powerHp = simState?.peakPower || 400;
+
+    // 1. High Knock Risk Alert
+    if (knockRisk > 0.55 || (boost > 2.0 && afr > 13.0)) {
+      findings.push({
+        id: `powertrain_knock_${Date.now()}`,
+        agentId: this.identity.id,
+        domain: this.identity.domain,
+        severity: "critical",
+        category: "Engine Detonation",
+        title: "High Knock & Detonation Risk Detected",
+        detail: `Boost pressure (${boost.toFixed(1)} bar) with lean AFR (${afr.toFixed(1)}) increases detonation & piston crown melt risk.`,
+        metrics: { knockRisk, boostPressure: boost, afr },
+        recommendation: {
+          id: "rec_enrich_afr",
+          agentId: this.identity.id,
+          title: "Enrich Air-Fuel Ratio (12.2:1) & Retard Ignition Timing 3°",
+          description: "Enriches fuel charge to cool cylinder temperatures and eliminate pre-ignition knock.",
+          impact: [{ metric: "Knock Risk Level", currentValue: Math.round(knockRisk * 100), projectedValue: 12, unit: "%" }],
+          tradeoffs: ["Minor increase in fuel consumption (+0.4 L/lap)"],
+          confidence: 0.98,
+          changes: { afr: 12.2, ignitionTiming: Math.max(16, (config.ignitionTiming || 24) - 3) },
+          autoApplyable: true,
+        },
+        relatedAgents: ["agent_thermal", "agent_race_strategy"],
+        timestamp: Date.now(),
+      });
+    }
+
+    return findings;
+  }
+
   /**
-   * Generates tailored auto-tuning recommendations and parameter sets for 4 presets
+   * Static helper for backward compatibility with UI components
    */
   static getTuningPreset(preset: TuningPreset, current: Partial<EngineConfig>): TuningRecommendation {
     const isForced = current.intake && current.intake !== "na";
@@ -130,9 +185,6 @@ export class ChiefPowertrainAgent {
     }
   }
 
-  /**
-   * Generates live tuning diagnostics based on current engine parameters
-   */
   static diagnose(config: Partial<EngineConfig>): string[] {
     const insights: string[] = [];
     const afr = config.afr || 14.0;
@@ -157,8 +209,46 @@ export class ChiefPowertrainAgent {
   }
 }
 
+const ASSEMBLY_QA_IDENTITY: AgentIdentity = {
+  id: "agent_assembly_qa",
+  name: "Robotic Assembly Inspector",
+  domain: "assembly_qa",
+  icon: "🤖",
+  color: "#3b82f6",
+  priority: 9,
+  description: "Verifies modular assembly component torque specs, deck clearances, gasket seating, and sequence lock.",
+  capabilities: ["Torque Verification", "Deck Clearance Check", "Missing Component Detection", "Assembly QA"],
+};
+
 // ── 2. ROBOTIC ASSEMBLY QA INSPECTION AGENT ──
-export class RoboticAssemblyQAAgent {
+export class RoboticAssemblyQAAgent extends BaseAgent {
+  constructor() {
+    super(ASSEMBLY_QA_IDENTITY);
+  }
+
+  public analyze(designState: any, simState: any): AgentFinding[] {
+    const findings: AgentFinding[] = [];
+    const installedCount = simState?.installedComponentsCount || 8;
+
+    if (installedCount < 12) {
+      findings.push({
+        id: `qa_incomplete_assembly_${Date.now()}`,
+        agentId: this.identity.id,
+        domain: this.identity.domain,
+        severity: "warning",
+        category: "Assembly QA",
+        title: "Modular Vehicle Subsystem Assembly Incomplete",
+        detail: `Only ${installedCount}/12 required core vehicle components are installed on chassis hardpoints.`,
+        metrics: { installedCount, totalComponents: 12 },
+        recommendation: undefined,
+        relatedAgents: ["agent_manufacturing", "agent_chassis"],
+        timestamp: Date.now(),
+      });
+    }
+
+    return findings;
+  }
+
   static inspectAssembly(installed: ComponentId[], activeId: ComponentId | null, phase: AssemblyPhase): AssemblyQAReport {
     const installedCount = installed.length;
     const qualityScore = Math.min(100, Math.round((installedCount / 12) * 95 + (installed.includes("head_gasket") ? 5 : 0)));
@@ -195,24 +285,60 @@ export class RoboticAssemblyQAAgent {
   }
 }
 
+const RACE_STRATEGY_IDENTITY: AgentIdentity = {
+  id: "agent_race_strategy",
+  name: "Race Operations Strategist",
+  domain: "race_strategy",
+  icon: "🏁",
+  color: "#f43f5e",
+  priority: 9,
+  description: "Simulates circuit lap times (Nürburgring, Spa, Le Mans), fuel burn rates, optimal pit windows, and pace.",
+  capabilities: ["Circuit Lap Prediction", "Pit Strategy", "Fuel Burn Rate", "Pace Optimization"],
+};
+
 // ── 3. MOTORSPORT RACE STRATEGY AGENT ──
-export class RaceStrategyAgent {
+export class RaceStrategyAgent extends BaseAgent {
+  constructor() {
+    super(RACE_STRATEGY_IDENTITY);
+  }
+
+  public analyze(designState: any, simState: any): AgentFinding[] {
+    const findings: AgentFinding[] = [];
+    const power = simState?.power || 400;
+    const weight = simState?.weight || 1500;
+
+    const predictions = RaceStrategyAgent.predictCircuits(power, weight);
+    const nurb = predictions[0];
+
+    findings.push({
+      id: `race_nurburgring_predict_${Date.now()}`,
+      agentId: this.identity.id,
+      domain: this.identity.domain,
+      severity: "info",
+      category: "Circuit Telemetry",
+      title: `Nürburgring Lap Time Target: ${nurb.lapTimeFormatted}`,
+      detail: `Predicted top speed ${nurb.topSpeedKmh} km/h on Döttinger Höhe straight. Optimal pit window: lap ${nurb.optimalPitLap}.`,
+      metrics: { topSpeedKmh: nurb.topSpeedKmh, optimalPitLap: nurb.optimalPitLap },
+      relatedAgents: ["agent_tyres", "agent_aerodynamics"],
+      timestamp: Date.now(),
+    });
+
+    return findings;
+  }
+
   static predictCircuits(powerHp: number, weightKg: number, downforceLevel: number = 0.5): TrackCircuitPrediction[] {
     const p2w = powerHp / Math.max(400, weightKg);
 
-    // Nürburgring Nordschleife
     const nurburgringSecs = Math.max(380, 520 - p2w * 180 - downforceLevel * 15);
     const nurbMins = Math.floor(nurburgringSecs / 60);
     const nurbRemainderSecs = (nurburgringSecs % 60).toFixed(2);
     const nurbFormatted = `${nurbMins}:${Number(nurbRemainderSecs) < 10 ? "0" : ""}${nurbRemainderSecs}`;
 
-    // Spa-Francorchamps
     const spaSecs = Math.max(122, 175 - p2w * 52);
     const spaMins = Math.floor(spaSecs / 60);
     const spaRemainderSecs = (spaSecs % 60).toFixed(2);
     const spaFormatted = `${spaMins}:${Number(spaRemainderSecs) < 10 ? "0" : ""}${spaRemainderSecs}`;
 
-    // Circuit de la Sarthe (Le Mans)
     const leMansSecs = Math.max(200, 260 - p2w * 80);
     const leMansMins = Math.floor(leMansSecs / 60);
     const leMansRemainderSecs = (leMansSecs % 60).toFixed(2);

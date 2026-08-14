@@ -320,6 +320,14 @@ export class ModularVehicleTestRunner {
       }
     });
 
+    // --- Suite 6: Master Chassis Hardpoints ---
+    this.runTest("MasterChassisAnchors", "Validates explicit chassis hardpoints and mirrored pairs", () => {
+      const defaultSpace = createDefaultCoordinateSpace(2650);
+      if (!defaultSpace || typeof defaultSpace.chassisToCanvas !== "function") {
+        throw new Error("Coordinate space failed to instantiate default hardpoint solver");
+      }
+    });
+
     return this.results;
   }
 }

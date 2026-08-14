@@ -1,12 +1,15 @@
 declare const process: { exit: (code: number) => void };
 import { ModularVehicleTestRunner } from "./modularVehicleTestRunner";
+import { AgentFrameworkTestRunner } from "../agents/__tests__/agentFrameworkTests";
 
 console.log("=================================================");
-console.log("  MODULAR VEHICLE ASSEMBLY SYSTEM — PHASE 1 TESTS");
+console.log("  MODULAR VEHICLE & AI AGENT FRAMEWORK TESTS");
 console.log("=================================================");
 
 const runner = new ModularVehicleTestRunner();
-const results = runner.executeAllTests();
+const agentRunner = new AgentFrameworkTestRunner();
+
+const results = [...runner.executeAllTests(), ...agentRunner.executeAllTests()];
 
 let passedCount = 0;
 let failedCount = 0;

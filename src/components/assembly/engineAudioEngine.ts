@@ -741,6 +741,7 @@ export class ApexEngineAudioEngine {
         this.updateEngineAudio({
           layout,
           rpm: currentRpm,
+          engineLoad: 0.8,
           throttle: currentRpm > 2500 ? 0.9 : 0.15,
           forcedInduction: "turbo_single",
           boostPressureBar: 1.4,

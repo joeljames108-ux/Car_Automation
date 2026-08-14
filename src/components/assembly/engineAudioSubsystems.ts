@@ -253,7 +253,7 @@ export class EngineAudioAnalyzer {
 
   public getFrequencyData(): Uint8Array {
     if (this.analyser && this.dataArray) {
-      this.analyser.getByteFrequencyData(this.dataArray);
+      this.analyser.getByteFrequencyData(this.dataArray as any);
       return this.dataArray;
     }
     return new Uint8Array(64);

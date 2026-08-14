@@ -7,12 +7,13 @@ import {
 import { useDesign } from "../state/DesignContext";
 import { AIAssistant } from "./AIAssistant";
 import { ApexAgentConsole } from "./agents/ApexAgentConsole";
+import { AgentDashboard } from "./agents/AgentDashboard";
 import { EngineeringLog } from "./EngineeringLog";
 
 type Severity = "critical" | "warning" | "info";
 type EngineerId = "chief" | "race" | "production" | "sustainability" | "technology";
 type ModeId = "beginner" | "intermediate" | "expert";
-type StudioSubTab = "all" | "advisory" | "agents" | "assistant" | "logs";
+type StudioSubTab = "all" | "dashboard" | "advisory" | "agents" | "assistant" | "logs";
 
 const ENGINEERS: Record<EngineerId, { label: string; icon: React.ReactNode; focus: string; tone: string; desc: string }> = {
   chief:          { label: "Chief Engineer",        icon: <Wrench size={16} />,    focus: "Technical & Powertrain", tone: "text-cyan-400 border-cyan-500/40 bg-cyan-500/10", desc: "Monitors internal combustion stress, knock thresholds, and structural integrity." },
@@ -542,6 +543,7 @@ export function ApexAIStudio() {
         <div className="flex items-center gap-2 mt-6 pt-4 border-t border-slate-800/80 overflow-x-auto scrollbar-none">
           {[
             { id: "all" as const, label: "All-in-One Studio Suite", icon: <Layers size={14} /> },
+            { id: "dashboard" as const, label: "15-Agent Division Grid", icon: <Bot size={14} /> },
             { id: "advisory" as const, label: "Chief Advisory & Diagnostics", icon: <Wrench size={14} /> },
             { id: "agents" as const, label: "Autonomous Multi-Agent Console", icon: <Zap size={14} /> },
             { id: "assistant" as const, label: "AI Assistant Hub", icon: <Bot size={14} /> },
@@ -606,6 +608,10 @@ export function ApexAIStudio() {
             </div>
           </div>
         </div>
+      )}
+
+      {studioTab === "dashboard" && (
+        <AgentDashboard onApplyRecommendation={(rec) => updateEngine(rec.changes)} />
       )}
 
       {studioTab === "advisory" && renderAdvisorySection()}

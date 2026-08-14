@@ -25,7 +25,7 @@ export interface ComponentAnimationConfig {
   torqueSubSteps?: number;
 }
 
-export const COMPONENT_ANIMATION_PRESETS: Record<ComponentId, ComponentAnimationConfig> = {
+export const COMPONENT_ANIMATION_PRESETS: Record<string, ComponentAnimationConfig> = {
   block: {
     id: "block",
     timings: { picking: 350, traveling: 500, aligning: 300, inserting: 400, locking: 250, confirming: 350 },

@@ -40,6 +40,21 @@ import { ApexAIStudio } from "./components/ApexAIStudio";
 import { CommandPalette } from "./components/CommandPalette";
 import { ToastProvider } from "./components/ToastSystem";
 import { ThermalAlertMonitor } from "./components/ThermalAlertMonitor";
+import { AgentNotificationCenter } from "./components/agents/AgentNotificationCenter";
+import { AgentOrchestrator } from "./sim/agents/agentFramework";
+import { AeroDynamicsAgent } from "./sim/agents/domainAgents/aeroDynamicsAgent";
+import { ThermalManagementAgent } from "./sim/agents/domainAgents/thermalManagementAgent";
+import { SuspensionDynamicsAgent } from "./sim/agents/domainAgents/suspensionDynamicsAgent";
+import { BrakeDesignAgent } from "./sim/agents/domainAgents/brakeDesignAgent";
+import { ChassisStructuralAgent } from "./sim/agents/domainAgents/chassisStructuralAgent";
+import { EconomyCostAgent } from "./sim/agents/domainAgents/economyCostAgent";
+import { ElectronicsEVAgent } from "./sim/agents/domainAgents/electronicsEVAgent";
+import { ManufacturingAgent } from "./sim/agents/domainAgents/manufacturingAgent";
+import { SafetyCrashAgent } from "./sim/agents/domainAgents/safetyCrashAgent";
+import { NVHComfortAgent } from "./sim/agents/domainAgents/nvhComfortAgent";
+import { TyreStrategyAgent } from "./sim/agents/domainAgents/tyreStrategyAgent";
+import { RivalStrategistAgent } from "./sim/agents/domainAgents/rivalStrategistAgent";
+import { ChiefPowertrainAgent, RoboticAssemblyQAAgent, RaceStrategyAgent } from "./sim/agents/apexAgentEngine";
 import { Search, Command as CmdIcon, Bot } from "lucide-react";
 import { VisionGlassHeader } from "./components/ui/VisionGlassHeader";
 import { VisionGlassDock } from "./components/ui/VisionGlassDock";
@@ -102,9 +117,10 @@ class VisionGlassErrorBoundary extends React.Component<
   { children: React.ReactNode },
   { hasError: boolean; error: Error | null }
 > {
+  state: { hasError: boolean; error: Error | null } = { hasError: false, error: null };
+
   constructor(props: { children: React.ReactNode }) {
     super(props);
-    this.state = { hasError: false, error: null };
   }
   static getDerivedStateFromError(error: Error) {
     return { hasError: true, error };
@@ -143,7 +159,7 @@ function AppInner() {
   const [activeCategory, setActiveCategory] = useState<WorkspaceCategory>("engineering");
   const [dialog, setDialog] = useState<{ open: boolean; mode: "save" | "load" }>({ open: false, mode: "save" });
   const [cmdPaletteOpen, setCmdPaletteOpen] = useState(false);
-  const { resetDesign, units, setUnits, uiTheme } = useDesign();
+  const { design, sim, carConcept, updateEngine, resetDesign, units, setUnits, uiTheme } = useDesign();
   const { company, advanceAllSystems } = useCompany();
   const [booted, setBooted] = useState(false);
 
@@ -225,11 +241,40 @@ function AppInner() {
     function handleGlobalKeydown(e: KeyboardEvent) {
       if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") {
         e.preventDefault();
-        setCmdPaletteOpen((prev) => !prev);
+        setCmdPaletteOpen((prev: boolean) => !prev);
       }
     }
     window.addEventListener("keydown", handleGlobalKeydown);
     return () => window.removeEventListener("keydown", handleGlobalKeydown);
+  }, []);
+
+  // Initialize Autonomous AI Engineering Division (All 15 Domain Agents)
+  useEffect(() => {
+    const orchestrator = AgentOrchestrator.getInstance();
+    orchestrator.registerAgent(new ChiefPowertrainAgent());
+    orchestrator.registerAgent(new AeroDynamicsAgent());
+    orchestrator.registerAgent(new ThermalManagementAgent());
+    orchestrator.registerAgent(new SuspensionDynamicsAgent());
+    orchestrator.registerAgent(new BrakeDesignAgent());
+    orchestrator.registerAgent(new ChassisStructuralAgent());
+    orchestrator.registerAgent(new EconomyCostAgent());
+    orchestrator.registerAgent(new ElectronicsEVAgent());
+    orchestrator.registerAgent(new ManufacturingAgent());
+    orchestrator.registerAgent(new SafetyCrashAgent());
+    orchestrator.registerAgent(new NVHComfortAgent());
+    orchestrator.registerAgent(new TyreStrategyAgent());
+    orchestrator.registerAgent(new RaceStrategyAgent());
+    orchestrator.registerAgent(new RoboticAssemblyQAAgent());
+    orchestrator.registerAgent(new RivalStrategistAgent());
+
+    orchestrator.start(
+      () => ({ engine: design.engine, vehicle: design.vehicle, carConcept }),
+      () => sim
+    );
+
+    return () => {
+      orchestrator.stop();
+    };
   }, []);
 
   const activeCategoryStages = STAGES.filter(s => s.category === activeCategory);
@@ -566,6 +611,10 @@ function AppInner() {
       />
 
       <ThermalAlertMonitor />
+      <AgentNotificationCenter
+        findings={AgentOrchestrator.getInstance().getAggregateFindings()}
+        onApplyRecommendation={(rec: any) => updateEngine(rec.changes)}
+      />
 
       {uiTheme === "theme2" && <div className="cosmic-sparkle" />}
 

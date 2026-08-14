@@ -110,7 +110,7 @@ export function bridgeEngineToModularComponent(
     },
   ];
 
-  const displacementL = (engineSim.displacement / 1000).toFixed(1);
+  const displacementL = ((engineSim.displacement || 2000) / 1000).toFixed(1);
   const layoutUpper = engineConfig.layout.toUpperCase();
 
   return {
