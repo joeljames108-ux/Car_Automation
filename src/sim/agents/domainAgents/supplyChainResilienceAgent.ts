@@ -33,7 +33,7 @@ export class SupplyChainResilienceAgent extends BaseAgent {
         category: "Material Supply Bottleneck",
         title: "Billet Titanium Lead-Time Delay (16 Weeks)",
         detail: "Aerospace-grade billet titanium stock has a 16-week lead time due to global supply bottlenecks.",
-        metrics: { leadTimeWeeks: 16, supplierRisk: "HIGH" },
+        metrics: { leadTimeWeeks: 16, supplierRiskScore: 9 },
         recommendation: {
           id: "rec_sc_forged",
           agentId: this.identity.id,

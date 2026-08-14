@@ -36,7 +36,7 @@ export class BatteryDegradationLifeAgent extends BaseAgent {
           category: "Battery Degradation",
           title: "NMC Cell Fast-Charge Thermal Wear",
           detail: "Frequent 350kW fast charging degrades NMC cell chemistry capacity down to 78% after 800 charge cycles.",
-          metrics: { capacityRetention800Cycles: 78, chemistry: "NMC 811" },
+          metrics: { capacityRetention800Cycles: 78, cyclesCount: 800 },
           recommendation: {
             id: "rec_batt_solidstate",
             agentId: this.identity.id,

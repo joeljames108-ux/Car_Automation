@@ -33,7 +33,7 @@ export class PitStopOperationsAgent extends BaseAgent {
         category: "Pit Stop Duration",
         title: "5-Lug Wheel Pattern Pit Delay (+1.8s)",
         detail: "Standard 5-lug bolt wheels slow down pit stop wheel swaps by +1.8s compared to motorsport center-lock hubs.",
-        metrics: { pitDurationSec: 4.2, lugType: "5-bolt" },
+        metrics: { pitDurationSec: 4.2, lugCount: 5 },
         recommendation: {
           id: "rec_pit_centerlock",
           agentId: this.identity.id,

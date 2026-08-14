@@ -33,7 +33,7 @@ export class HomologationRegulatoryAgent extends BaseAgent {
         category: "Global Compliance",
         title: "Catalytic Converter Missing — Non-Road Legal",
         detail: "Catless exhaust headers violate Euro 6e and US EPA Tier 3 emissions regulations. Vehicle cannot be registered for street use.",
-        metrics: { co2Emissions: 420, euroStandard: "FAILED" },
+        metrics: { co2Emissions: 420, euroComplianceScore: 0 },
         recommendation: {
           id: "rec_homol_cat",
           agentId: this.identity.id,
