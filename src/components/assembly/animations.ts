@@ -250,7 +250,7 @@ export const COMPONENT_ANIMATION_PRESETS: Record<string, ComponentAnimationConfi
     arcControlPoints: { x: -30, y: 30 },
   },
   exhaust_system: {
-    id: "exhaust_manifold",
+    id: "exhaust_headers",
     timings: { picking: 300, traveling: 400, aligning: 250, inserting: 350, locking: 200, confirming: 300 },
     totalDuration: 1800,
     rotationDegrees: 0,

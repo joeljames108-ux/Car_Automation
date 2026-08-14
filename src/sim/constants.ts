@@ -1258,6 +1258,7 @@ export function defaultEngine(): EngineConfig {
     hasMguH: false, mguHMode: "off",
     hybridArchitecture: "phev", hybridCoupling: "parallel",
     hybridFrontMotorEnabled: false, hybridFrontMotorType: "pmac", hybridFrontMotorPower: 0,
+    hybridRearMotorEnabled: false, hybridRearMotorType: "pmac", hybridRearMotorPower: 0,
     batteryCapacity: 16, batteryChemistry: "solid_state",
     deployMode: "qualifying", regenLevel: 0.8, motorLayout: "rear", evMotorPower: 0, evMotorType: "pmac",
     motorPlacement: "p2", hybridMotorPower: 180,
