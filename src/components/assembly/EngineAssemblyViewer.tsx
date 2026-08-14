@@ -171,18 +171,7 @@ export function EngineAssemblyViewer({
             </button>
           )}
 
-          {/* Audio Mute Toggle Button */}
-          <button
-            onClick={handleToggleMute}
-            className={`p-2 rounded-full border transition-all cursor-pointer ${
-              isMuted
-                ? "bg-rose-500/20 text-rose-300 border-rose-500/40"
-                : "bg-[#0b0f19]/90 text-cyan-300 border-cyan-500/30 hover:bg-[#161e31]"
-            }`}
-            title={isMuted ? "Unmute Assembly Sound Effects" : "Mute Assembly Sound Effects"}
-          >
-            {isMuted ? <VolumeX size={15} /> : <Volume2 size={15} />}
-          </button>
+
         </div>
 
         {/* Stat Delta Notification Overlay - ONLY shown on hover! */}

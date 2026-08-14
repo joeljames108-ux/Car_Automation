@@ -73,39 +73,8 @@ export const VehicleAssemblyProgressPanel: React.FC<VehicleAssemblyProgressPanel
         </button>
       </div>
 
-      {/* Progress Wheel & Key Performance Stats Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-3 p-3.5 rounded-2xl bg-slate-100/80 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800/80">
-        {/* Progress Circular Meter */}
-        <div className="flex flex-col items-center justify-center text-center p-2 border-r border-slate-200 dark:border-slate-800/60">
-          <div className="relative w-16 h-16 flex items-center justify-center">
-            <svg className="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
-              <path
-                strokeWidth="3.5"
-                stroke="currentColor"
-                fill="none"
-                d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-              />
-              <path
-                className="text-cyan-400 transition-all duration-500"
-                strokeDasharray={`${progressPercentage}, 100`}
-                strokeWidth="3.5"
-                strokeLinecap="round"
-                stroke="currentColor"
-                fill="none"
-                d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
-              />
-            </svg>
-            <span className="absolute text-sm font-mono font-extrabold text-cyan-300">
-              {progressPercentage}%
-            </span>
-          </div>
-          <span className="text-[9px] font-mono text-slate-400 font-bold uppercase mt-1">
-            ASSEMBLY COMPLETE
-          </span>
-        </div>
-
-        {/* Live Cumulative Performance Telemetry */}
-        <div className="sm:col-span-2 grid grid-cols-2 gap-2 text-xs font-mono">
+      {/* Key Performance Stats Grid */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-3 p-3 rounded-2xl bg-slate-100/80 dark:bg-slate-950/60 border border-slate-200 dark:border-slate-800/80 text-xs font-mono">
           <div className="bg-slate-900/60 p-2 rounded-xl border border-slate-800">
             <span className="text-[9px] text-slate-400 block font-bold">TOTAL CURB WEIGHT</span>
             <span className="text-cyan-300 font-extrabold text-sm">{currentStats.weight} kg</span>
@@ -128,7 +97,6 @@ export const VehicleAssemblyProgressPanel: React.FC<VehicleAssemblyProgressPanel
             <span className="text-amber-300 font-extrabold text-sm">${currentStats.cost.toLocaleString()}</span>
           </div>
         </div>
-      </div>
 
       {/* Recommended Next Subsystem Spec Card */}
       {nextRecommendedComponent && (

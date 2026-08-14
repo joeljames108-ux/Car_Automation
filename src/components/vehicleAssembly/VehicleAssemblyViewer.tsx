@@ -131,18 +131,7 @@ export const VehicleAssemblyViewer: React.FC<VehicleAssemblyViewerProps> = ({
           </div>
         </div>
 
-        {/* Right: Audio Mute Button */}
-        <div className="flex items-center gap-2 bg-white/90 dark:bg-base-900/90 border border-slate-200 dark:border-slate-800 rounded-2xl p-1.5 backdrop-blur-xl shadow-xl">
-          <button
-            onClick={handleToggleMute}
-            className={`p-2 rounded-xl transition-all ${
-              isMuted ? "bg-red-500/20 text-red-500 border border-red-500/30" : "bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:text-slate-950 dark:hover:text-white"
-            }`}
-            title={isMuted ? "Unmute Assembly Audio" : "Mute Assembly Audio"}
-          >
-            {isMuted ? <VolumeX size={15} /> : <Volume2 size={15} />}
-          </button>
-        </div>
+
       </div>
 
       {/* Main Vehicle SVG CAD Canvas */}

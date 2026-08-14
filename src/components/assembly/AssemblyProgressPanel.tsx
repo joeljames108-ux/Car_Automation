@@ -89,28 +89,15 @@ export function AssemblyProgressPanel({
 
   return (
     <div className={`flex flex-col bg-[#0b0f19]/90 border border-slate-800/80 rounded-2xl p-4 backdrop-blur-xl shadow-2xl h-full select-none ${className}`}>
-      {/* Top Header & Progress Bar */}
-      <div className="pb-3 border-b border-slate-800/80 mb-3 space-y-2">
+      {/* Top Header */}
+      <div className="pb-3 border-b border-slate-800/80 mb-3">
         <div className="flex items-center justify-between">
           <h3 className="text-xs font-bold text-slate-100 uppercase tracking-wider flex items-center gap-1.5">
             <Sparkles size={14} className="text-cyan-400" />
             Assembly Dashboard
           </h3>
-          <span className="text-xs font-mono font-bold text-cyan-300">
-            {progressPercentage}%
-          </span>
-        </div>
-
-        {/* Smooth Fill Progress Bar */}
-        <ProgressBar value={progressPercentage} max={100} color="bg-cyan-400" />
-
-        {/* Speed Metrics & Quality Bar */}
-        <div className="flex items-center justify-between pt-1 text-[10px] font-mono text-slate-400">
-          <span className="flex items-center gap-1">
-            <Clock size={11} className="text-cyan-400" /> Time: {formatTime(elapsedSeconds)}
-          </span>
-          <span className="flex items-center gap-1 text-emerald-300 font-bold">
-            <Award size={11} className="text-emerald-400" /> Quality: {qualityScore}%
+          <span className="flex items-center gap-1 text-[10px] font-mono text-cyan-400">
+            <Clock size={11} /> Time: {formatTime(elapsedSeconds)}
           </span>
         </div>
       </div>

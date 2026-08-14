@@ -60,16 +60,7 @@ export const WBankLayoutRenderer: React.FC<WBankLayoutRendererProps> = ({
       }}
       filter={blockState.isInstalled ? "url(#3d-light)" : undefined}
     >
-      {/* ── ROBOTIC ASSEMBLY GUIDANCE CROSSHAIRS & ALIGNMENT TARGETS ── */}
-      <g stroke="#38bdf8" strokeWidth="1" opacity="0.6" strokeDasharray="3 2">
-        <circle cx={bx - 26} cy="175" r="10" fill="none" stroke="#38bdf8" strokeWidth="1.2" />
-        <line x1={bx - 32} y1="175" x2={bx - 20} y2="175" />
-        <line x1={bx - 26} y1="169" x2={bx - 26} y2="181" />
 
-        <circle cx={bx + bw + 26} cy="175" r="10" fill="none" stroke="#38bdf8" strokeWidth="1.2" />
-        <line x1={bx + bw + 20} y1="175" x2={bx + bw + 32} y2="175" />
-        <line x1={bx + bw + 26} y1="169" x2={bx + bw + 26} y2="181" />
-      </g>
 
       {/* Oil Dipstick Tube & Yellow Pull Handle */}
       <g>

@@ -59,16 +59,7 @@ export const FlatBoxerLayoutRenderer: React.FC<FlatBoxerLayoutRendererProps> = (
       }}
       filter={blockState.isInstalled ? "url(#3d-light)" : undefined}
     >
-      {/* ── ROBOTIC ASSEMBLY GUIDANCE CROSSHAIRS & ALIGNMENT TARGETS ── */}
-      <g stroke="#38bdf8" strokeWidth="1" opacity="0.6" strokeDasharray="3 2">
-        <circle cx={bx - 26} cy="225" r="10" fill="none" stroke="#38bdf8" strokeWidth="1.2" />
-        <line x1={bx - 32} y1="225" x2={bx - 20} y2="225" />
-        <line x1={bx - 26} y1="219" x2={bx - 26} y2="231" />
 
-        <circle cx={bx + bw + 26} cy="225" r="10" fill="none" stroke="#38bdf8" strokeWidth="1.2" />
-        <line x1={bx + bw + 20} y1="225" x2={bx + bw + 32} y2="225" />
-        <line x1={bx + bw + 26} y1="219" x2={bx + bw + 26} y2="231" />
-      </g>
 
       {/* Central Crankcase Split Line Parting Flange (180° Horizontal Split) */}
       <line x1={bx + 10} y1="225" x2={bx + bw - 10} y2="225" stroke="#38bdf8" strokeWidth="2.8" opacity="0.8" />
