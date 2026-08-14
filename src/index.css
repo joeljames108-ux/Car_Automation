@@ -6263,21 +6263,80 @@ button:active,
 /* ENGINE ASSEMBLY SYSTEM — ROBOTIC ANIMATION & VISUAL EFFECTS               */
 /* ═══════════════════════════════════════════════════════════════════════════ */
 
-/* 1. Reciprocating Piston Animation for 100% Completed Engine */
+/* 1. Staggered Kinematic Reciprocating Piston Animations */
 .animate-piston-cycle {
-  animation: assemblyPistonCycle 1.2s ease-in-out infinite alternate;
+  animation: kinematicCrownVertical 1.0s ease-in-out infinite alternate;
 }
 
-@keyframes assemblyPistonCycle {
-  0% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(18px);
-  }
-  100% {
-    transform: translateY(-10px);
-  }
+.piston-anim-vertical {
+  animation: kinematicCrownVertical 1.0s ease-in-out infinite alternate;
+}
+
+.piston-anim-left {
+  animation: kinematicCrownLeftBank 1.0s ease-in-out infinite alternate;
+}
+
+.piston-anim-right {
+  animation: kinematicCrownRightBank 1.0s ease-in-out infinite alternate;
+}
+
+/* Separate Kinematic Sub-Component Classes */
+.piston-crown-left {
+  animation: kinematicCrownLeftBank 1.0s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite alternate;
+}
+
+.piston-crown-right {
+  animation: kinematicCrownRightBank 1.0s cubic-bezier(0.45, 0.05, 0.55, 0.95) infinite alternate;
+}
+
+.rod-shank-left {
+  animation: kinematicRodSwingLeft 1.0s ease-in-out infinite alternate;
+}
+
+.rod-shank-right {
+  animation: kinematicRodSwingRight 1.0s ease-in-out infinite alternate;
+}
+
+.crank-shaft-spin {
+  animation: kinematicCrankSpin 1.0s linear infinite;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+/* ── KINEMATIC KEYFRAME MATHEMATICS ── */
+@keyframes kinematicCrownVertical {
+  0% { transform: translateY(-16px); }
+  50% { transform: translateY(0px); }
+  100% { transform: translateY(18px); }
+}
+
+@keyframes kinematicCrownLeftBank {
+  0% { transform: translate(-14px, -18px); }
+  50% { transform: translate(0px, 0px); }
+  100% { transform: translate(14px, 18px); }
+}
+
+@keyframes kinematicCrownRightBank {
+  0% { transform: translate(14px, -18px); }
+  50% { transform: translate(0px, 0px); }
+  100% { transform: translate(-14px, 18px); }
+}
+
+@keyframes kinematicRodSwingLeft {
+  0% { transform: rotate(-6deg); }
+  50% { transform: rotate(0deg); }
+  100% { transform: rotate(6deg); }
+}
+
+@keyframes kinematicRodSwingRight {
+  0% { transform: rotate(6deg); }
+  50% { transform: rotate(0deg); }
+  100% { transform: rotate(-6deg); }
+}
+
+@keyframes kinematicCrankSpin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 }
 
 /* 2. Turbocharger Impeller Slow Spin Animation */

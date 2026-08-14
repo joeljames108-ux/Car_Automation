@@ -26,6 +26,8 @@ interface AssemblyTabSwitcherProps {
   isAssemblyComplete: boolean;
   onResetAssembly: () => void;
   onToggleExplodedView: () => void;
+  selectedVariants?: Record<string, any>;
+  onSelectVariant?: (id: any, variant: any) => void;
   engineConfig?: Partial<EngineConfig>;
   className?: string;
 }
@@ -45,6 +47,8 @@ export function AssemblyTabSwitcher({
   isAssemblyComplete,
   onResetAssembly,
   onToggleExplodedView,
+  selectedVariants,
+  onSelectVariant,
   engineConfig,
   className = "",
 }: AssemblyTabSwitcherProps) {
@@ -53,36 +57,46 @@ export function AssemblyTabSwitcher({
   return (
     <div className={`flex flex-col h-full ${className}`}>
       {/* Tab Selector Pill Header */}
-      <div className="flex items-center justify-between p-1.5 mb-2 rounded-xl bg-[#0b0f19]/90 border border-slate-800/80 backdrop-blur-md shrink-0">
+      <div className="flex items-center justify-between p-1.5 rounded-xl bg-base-900/80 border border-base-750 mb-3 shrink-0">
         <div className="flex items-center gap-1">
           <button
-            onClick={() => setActiveTab("parts")}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer ${
-              activeTab === "parts"
-                ? "bg-cyan-500/20 text-cyan-200 border border-cyan-500/40 shadow-[0_0_12px_rgba(34,211,238,0.25)]"
-                : "text-slate-400 hover:text-slate-200 hover:bg-base-800/60 border border-transparent"
+            onClick={() => setActiveTab("both")}
+            className={`flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-mono font-bold transition-all ${
+              activeTab === "both"
+                ? "bg-cyan-500 text-black shadow-[0_0_12px_rgba(34,211,238,0.4)]"
+                : "text-slate-400 hover:text-slate-200"
             }`}
           >
-            <Wrench size={13} /> Parts
+            <Layers size={13} /> Split View
+          </button>
+          <button
+            onClick={() => setActiveTab("parts")}
+            className={`flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-mono font-bold transition-all ${
+              activeTab === "parts"
+                ? "bg-cyan-500 text-black shadow-[0_0_12px_rgba(34,211,238,0.4)]"
+                : "text-slate-400 hover:text-slate-200"
+            }`}
+          >
+            <Wrench size={13} /> Parts Library
           </button>
           <button
             onClick={() => setActiveTab("dashboard")}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer ${
+            className={`flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-mono font-bold transition-all ${
               activeTab === "dashboard"
-                ? "bg-cyan-500/20 text-cyan-200 border border-cyan-500/40 shadow-[0_0_12px_rgba(34,211,238,0.25)]"
-                : "text-slate-400 hover:text-slate-200 hover:bg-base-800/60 border border-transparent"
+                ? "bg-cyan-500 text-black shadow-[0_0_12px_rgba(34,211,238,0.4)]"
+                : "text-slate-400 hover:text-slate-200"
             }`}
           >
-            <Activity size={13} /> Telemetry
+            <Activity size={13} /> Dyno Specs
           </button>
         </div>
 
         <button
-          onClick={() => setActiveTab("both")}
-          className={`hidden sm:flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-mono font-semibold transition-all cursor-pointer ${
-            activeTab === "both"
-              ? "bg-base-800 text-slate-100 border border-base-700"
-              : "text-slate-500 hover:text-slate-300"
+          onClick={onToggleExplodedView}
+          className={`flex items-center gap-1 px-2.5 py-1 rounded-lg text-[10px] font-mono font-bold transition-all border ${
+            isExplodedView
+              ? "bg-cyan-500/15 text-cyan-300 border-cyan-500/40"
+              : "text-slate-500 hover:text-slate-300 border-transparent"
           }`}
           title="Show side-by-side stacked view"
         >
@@ -102,6 +116,8 @@ export function AssemblyTabSwitcher({
               canInstall={canInstall}
               onStartInstall={onStartInstall}
               onHoverComponent={onHoverComponent}
+              selectedVariants={selectedVariants}
+              onSelectVariant={onSelectVariant}
               engineConfig={engineConfig}
             />
           </div>

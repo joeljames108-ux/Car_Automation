@@ -15,6 +15,8 @@ export interface FrictionInput {
   boostPressureBar: number;
   isThrottled: boolean;
   throttlePosition: number; // 0.0 to 1.0
+  oilWeight?: "0W-20" | "5W-30" | "10W-60";
+  bearingClearanceMm?: number; // e.g. 0.025 to 0.065 mm
 }
 
 export interface FrictionResult {
@@ -23,14 +25,15 @@ export interface FrictionResult {
   totalLossMep: number; // FMEP + PMEP (bar)
   bmep: number; // Net Brake Mean Effective Pressure (bar) after subtracting losses from IMEP
   parasiticKw: number; // Accessory parasitic loss in kW
+  oilFilmFmep: number; // Hydrodynamic oil film shear loss in bar
 }
 
 /**
- * Calculates FMEP using Chen-Flynn Correlation:
- * FMEP = C1 + C2 * P_max + C3 * V_mean_piston + C4 * (V_mean_piston)^2
+ * Calculates FMEP using Chen-Flynn Correlation + Petroff Hydrodynamic Bearing Shear:
+ * FMEP = C1 + C2 * P_max + C3 * V_mean_piston + C4 * (V_mean_piston)^2 + Petroff_Oil_Shear
  */
 export function calculateFMEP(input: FrictionInput): number {
-  const { rpm, strokeMm, peakCylinderPressureBar, valvetrainType } = input;
+  const { rpm, strokeMm, peakCylinderPressureBar, valvetrainType, oilWeight = "5W-30", bearingClearanceMm = 0.035 } = input;
 
   // Mean piston speed in m/s: V_p = 2 * (stroke / 1000) * (rpm / 60)
   const meanPistonSpeed = 2 * (strokeMm / 1000) * (rpm / 60);
@@ -46,7 +49,18 @@ export function calculateFMEP(input: FrictionInput): number {
   const c3 = 0.08; // Hydrodynamic speed friction (linear)
   const c4 = 0.0012; // Hydrodynamic speed friction (quadratic)
 
-  const fmep = c1 + c2 * peakCylinderPressureBar + c3 * meanPistonSpeed + c4 * (meanPistonSpeed * meanPistonSpeed);
+  const chenFlynnFmep = c1 + c2 * peakCylinderPressureBar + c3 * meanPistonSpeed + c4 * (meanPistonSpeed * meanPistonSpeed);
+
+  // Petroff Hydrodynamic Bearing Oil Film Shear (Bar)
+  // Dynamic viscosity mu (Pa·s) @ 100°C: 0W-20 ~ 0.008, 5W-30 ~ 0.011, 10W-60 ~ 0.022
+  const visMap = { "0W-20": 0.008, "5W-30": 0.011, "10W-60": 0.022 };
+  const dynamicViscosity = visMap[oilWeight] || 0.011;
+  const clearanceRatio = 0.035 / Math.max(0.015, bearingClearanceMm);
+
+  // Petroff Oil Film Friction Mean Effective Pressure
+  const petroffFmep = (2 * Math.PI * Math.PI * dynamicViscosity * (rpm / 60) * clearanceRatio) * 0.015;
+
+  const fmep = chenFlynnFmep + petroffFmep;
   return Math.max(0.2, fmep);
 }
 
@@ -83,11 +97,17 @@ export function calculateBMEP(imepGross: number, input: FrictionInput): Friction
   const meanPistonSpeed = 2 * (input.strokeMm / 1000) * (input.rpm / 60);
   const parasiticKw = 0.5 + 0.0008 * input.cylinderCount * input.rpm + 0.05 * (meanPistonSpeed * meanPistonSpeed);
 
+  const visMap = { "0W-20": 0.008, "5W-30": 0.011, "10W-60": 0.022 };
+  const dynamicViscosity = visMap[input.oilWeight || "5W-30"] || 0.011;
+  const clearanceRatio = 0.035 / Math.max(0.015, input.bearingClearanceMm || 0.035);
+  const oilFilmFmep = (2 * Math.PI * Math.PI * dynamicViscosity * (input.rpm / 60) * clearanceRatio) * 0.015;
+
   return {
     fmep: Math.round(fmep * 100) / 100,
     pmep: Math.round(pmep * 100) / 100,
     totalLossMep: Math.round(totalLossMep * 100) / 100,
     bmep: Math.round(bmep * 100) / 100,
     parasiticKw: Math.round(parasiticKw * 10) / 10,
+    oilFilmFmep: Math.round(oilFilmFmep * 100) / 100,
   };
 }

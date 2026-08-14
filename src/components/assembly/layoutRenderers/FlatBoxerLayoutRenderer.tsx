@@ -22,16 +22,28 @@ interface FlatBoxerLayoutRendererProps {
     offsetY: number;
   };
   onHoverComponent?: (id: ComponentId | null) => void;
+  selectedVariants?: Record<string, string>;
 }
 
 export const FlatBoxerLayoutRenderer: React.FC<FlatBoxerLayoutRendererProps> = ({
   layoutSpec,
   blockState,
   onHoverComponent,
+  selectedVariants,
 }) => {
   const bx = layoutSpec.bx;
   const bw = layoutSpec.bw;
   const bh = layoutSpec.bh;
+  const isBoxer6 = layoutSpec.label.includes("H6") || layoutSpec.label.includes("Boxer-6");
+
+  const blockFill =
+    selectedVariants?.block === "titanium"
+      ? "url(#mat-titanium-spec)"
+      : selectedVariants?.block === "billet"
+      ? "url(#mat-billet-cnc)"
+      : selectedVariants?.block === "forged"
+      ? "url(#mat-forged-alloy)"
+      : "url(#mat-cast-steel)";
 
   return (
     <g
@@ -47,6 +59,17 @@ export const FlatBoxerLayoutRenderer: React.FC<FlatBoxerLayoutRendererProps> = (
       }}
       filter={blockState.isInstalled ? "url(#3d-light)" : undefined}
     >
+      {/* ── ROBOTIC ASSEMBLY GUIDANCE CROSSHAIRS & ALIGNMENT TARGETS ── */}
+      <g stroke="#38bdf8" strokeWidth="1" opacity="0.6" strokeDasharray="3 2">
+        <circle cx={bx - 26} cy="225" r="10" fill="none" stroke="#38bdf8" strokeWidth="1.2" />
+        <line x1={bx - 32} y1="225" x2={bx - 20} y2="225" />
+        <line x1={bx - 26} y1="219" x2={bx - 26} y2="231" />
+
+        <circle cx={bx + bw + 26} cy="225" r="10" fill="none" stroke="#38bdf8" strokeWidth="1.2" />
+        <line x1={bx + bw + 20} y1="225" x2={bx + bw + 32} y2="225" />
+        <line x1={bx + bw + 26} y1="219" x2={bx + bw + 26} y2="231" />
+      </g>
+
       {/* Central Crankcase Split Line Parting Flange (180° Horizontal Split) */}
       <line x1={bx + 10} y1="225" x2={bx + bw - 10} y2="225" stroke="#38bdf8" strokeWidth="2.8" opacity="0.8" />
       <line x1={bx + 10} y1="225" x2={bx + bw - 10} y2="225" stroke="#ffffff" strokeWidth="1.2" opacity="0.9" />
@@ -58,7 +81,7 @@ export const FlatBoxerLayoutRenderer: React.FC<FlatBoxerLayoutRendererProps> = (
         width={bw}
         height={bh}
         rx="16"
-        fill="url(#slate-block-artwork)"
+        fill={blockFill}
         stroke={blockState.isHovered || blockState.isActive ? "#38bdf8" : "#090d16"}
         strokeWidth="3.8"
       />
@@ -94,6 +117,19 @@ export const FlatBoxerLayoutRenderer: React.FC<FlatBoxerLayoutRendererProps> = (
         const cylX = cxPos - cylW / 2;
         return (
           <g key={`flat-cyl-${idx}`}>
+            {/* Water Jacket Envelope */}
+            <rect
+              x={cylX - 2.5}
+              y="142"
+              width={cylW + 5}
+              height="166"
+              rx="8"
+              fill="none"
+              stroke="#38bdf8"
+              strokeWidth="1.2"
+              strokeDasharray="4 2"
+              opacity="0.4"
+            />
             <rect
               x={cylX}
               y="145"
@@ -111,17 +147,23 @@ export const FlatBoxerLayoutRenderer: React.FC<FlatBoxerLayoutRendererProps> = (
             <line x1={cylX + cylW - 3} y1="147" x2={cylX + cylW - 3} y2="303" stroke="#090d16" strokeWidth="2.5" opacity="0.95" />
 
             <ellipse cx={cxPos} cy="149" rx={cylW / 2 - 0.5} ry="5.8" fill="url(#machined-deck-bevel)" stroke="#090d16" strokeWidth="1.8" />
+
+            {/* Firing Order Tag */}
+            <circle cx={cxPos} cy="295" r="6" fill="#090d16" stroke="#38bdf8" strokeWidth="1" />
+            <text x={cxPos} y="297.5" fill="#38bdf8" fontSize="6.5" fontFamily="monospace" textAnchor="middle" fontWeight="bold">
+              {idx + 1}
+            </text>
           </g>
         );
       })}
 
       {/* Debossed Laser Serial Plaque */}
       <g>
-        <rect x={bx + bw / 2 - 74} y="298" width="148" height="18" rx="3.5" fill="url(#plaque-metal)" stroke="#090d16" strokeWidth="2" />
-        <line x1={bx + bw / 2 - 72} y1="299.5" x2={bx + bw / 2 + 72} y2="299.5" stroke="#ffffff" strokeWidth="1.5" opacity="0.95" />
+        <rect x={bx + bw / 2 - 76} y="298" width="152" height="18" rx="3.5" fill="url(#plaque-metal)" stroke="#090d16" strokeWidth="2" />
+        <line x1={bx + bw / 2 - 74} y1="299.5" x2={bx + bw / 2 + 74} y2="299.5" stroke="#ffffff" strokeWidth="1.5" opacity="0.95" />
 
-        <circle cx={bx + bw / 2 - 69} cy="302.5" r="1.2" fill="#090d16" />
-        <circle cx={bx + bw / 2 + 69} cy="302.5" r="1.2" fill="#090d16" />
+        <circle cx={bx + bw / 2 - 70} cy="302.5" r="1.2" fill="#090d16" />
+        <circle cx={bx + bw / 2 + 70} cy="302.5" r="1.2" fill="#090d16" />
 
         <text
           x={bx + bw / 2}

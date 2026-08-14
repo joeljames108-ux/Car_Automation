@@ -1,4 +1,5 @@
-import { Car, Disc, Settings, Cpu, Shield, Sparkles } from "lucide-react";
+import React, { useState } from "react";
+import { Car, Disc, Settings, Cpu, Shield, Sparkles, Wrench, Play } from "lucide-react";
 import { useDesign } from "../state/DesignContext";
 import { Section, Slider, Select, ChoiceGrid, Toggle, StatTile } from "./ui/Controls";
 import { PLATFORMS, CHASSIS_TYPES, SUSPENSION_TYPES, TRANSMISSION_TYPES, BRAKE_TYPES, TIRE_COMPOUNDS, DRIVE_TYPES, ENGINE_POSITIONS } from "../sim/constants";
@@ -6,9 +7,18 @@ import { VEHICLE_PRESET_LIBRARY } from "../sim/vehiclePresets";
 import { PresetQuickSelect } from "./PresetQuickSelect";
 import type { PlatformType, ChassisType, SuspensionType, TransmissionType, BrakeType, TireCompound, DriveType, EnginePosition, VehicleConfig } from "../sim/types";
 
+import { useVehicleAssemblyStore } from "../state/useVehicleAssemblyStore";
+import { VehicleAssemblyViewer } from "./vehicleAssembly/VehicleAssemblyViewer";
+import { VehicleAssemblyTabSwitcher } from "./vehicleAssembly/VehicleAssemblyTabSwitcher";
+import { VehicleCompletionModal } from "./vehicleAssembly/VehicleCompletionModal";
+
 export function VehicleDesigner() {
   const { design, sim, setDesign, updateVehicle, updateElectronics } = useDesign();
   const v = design.vehicle;
+
+  const [vehicleBuildMode, setVehicleBuildMode] = useState(false);
+  const [showCompletionModal, setShowCompletionModal] = useState(false);
+  const vehAssembly = useVehicleAssemblyStore(v);
 
   const handleSelectPreset = (presetId: string) => {
     const item = VEHICLE_PRESET_LIBRARY.find((p) => p.id === presetId);
@@ -19,10 +29,126 @@ export function VehicleDesigner() {
 
   return (
     <div className="space-y-4">
+      {/* Top Navigation & Workspace Mode Switcher */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3.5 rounded-2xl bg-[#0b0f19]/90 border border-cyan-500/30 backdrop-blur-xl shadow-lg">
+        <div className="flex items-center gap-3">
+          <div className="p-2 rounded-xl bg-cyan-500/20 text-cyan-300 border border-cyan-500/40">
+            <Car size={20} />
+          </div>
+          <div>
+            <h3 className="text-sm font-extrabold text-slate-100 tracking-tight flex items-center gap-2">
+              <span>VEHICLE CHASSIS & DRIVETRAIN STUDIO</span>
+              <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/40">
+                APEX CAD
+              </span>
+            </h3>
+            <p className="text-[11px] text-slate-400 font-mono">
+              {vehicleBuildMode
+                ? "3D Robotic Vehicle Assembly Line — Progressive Subsystem Building"
+                : "Standard Parameter Controls — Platform, Suspension, Brakes & Drivetrain"}
+            </p>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => setVehicleBuildMode((prev) => !prev)}
+            className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-mono font-extrabold transition-all shadow-md ${
+              vehicleBuildMode
+                ? "bg-cyan-500 text-slate-950 shadow-[0_0_15px_rgba(6,182,212,0.5)]"
+                : "bg-slate-900 text-cyan-300 border border-cyan-500/40 hover:border-cyan-400 hover:bg-cyan-500/10"
+            }`}
+          >
+            <Wrench size={14} />
+            <span>{vehicleBuildMode ? "EXIT BUILD STUDIO" : "🔧 VEHICLE BUILD STUDIO"}</span>
+          </button>
+        </div>
+      </div>
+
       <PresetQuickSelect />
-      <div className="grid grid-cols-1 xl:grid-cols-3 gap-4">
-        <div className="xl:col-span-2 space-y-4 stagger">
-        <Section title="Load Vehicle Preset (Price Tiers & Utility Classes)" icon={<Sparkles size={16} />}>
+
+      {/* Assembly Mode Viewport */}
+      {vehicleBuildMode ? (
+        <div className="space-y-4 animate-stage-transition-enter">
+          <div className="grid grid-cols-1 xl:grid-cols-12 gap-4 items-start min-h-[480px]">
+            {/* Left Column: Vehicle SVG Assembly Canvas Viewport */}
+            <div className="xl:col-span-7 h-[calc(100vh-170px)] max-h-[660px] overflow-hidden sticky top-4 z-20">
+              <VehicleAssemblyViewer
+                installedComponents={vehAssembly.installedComponents}
+                activeComponentId={vehAssembly.activeComponentId}
+                phase={vehAssembly.phase}
+                hoveredComponentId={vehAssembly.hoveredComponentId}
+                isExplodedView={vehAssembly.isExplodedView}
+                isAssemblyComplete={vehAssembly.isAssemblyComplete}
+                enginePosition={vehAssembly.enginePosition}
+                driveType={vehAssembly.driveType}
+                vehicleConfig={v}
+                onAdvancePhase={vehAssembly.advancePhase}
+                onHoverComponent={vehAssembly.setHoveredComponentId}
+                onSelectEnginePosition={(pos) => {
+                  vehAssembly.setEnginePosition(pos);
+                  updateVehicle({ enginePosition: pos });
+                }}
+                onSelectDriveType={(drive) => {
+                  vehAssembly.setDriveType(drive);
+                  updateVehicle({ driveType: drive });
+                }}
+                onCompleteInstall={() => {
+                  const completedId = vehAssembly.activeComponentId;
+                  vehAssembly.completeInstall();
+                  
+                  if (completedId === "chassis_frame") updateVehicle({ chassis: "monocoque" });
+                  if (completedId === "suspension_front") updateVehicle({ suspensionFront: "double_wishbone" });
+                  if (completedId === "suspension_rear") updateVehicle({ suspensionRear: "multilink" });
+                  if (completedId === "brakes") updateVehicle({ brakeType: "carbon_ceramic" });
+                  if (completedId === "transmission") updateVehicle({ transmission: "dct_7" });
+                  if (completedId === "wheels_tires") updateVehicle({ tireCompound: "slick" });
+                  
+                  if (vehAssembly.installedComponents.length + 1 === 10) {
+                    setShowCompletionModal(true);
+                  }
+                }}
+                onSkipAnimation={vehAssembly.skipCurrentAnimation}
+              />
+            </div>
+
+            {/* Right Column: Tabbed Subsystem Catalog & Dashboard Console */}
+            <div className="xl:col-span-5 h-[calc(100vh-170px)] max-h-[660px] overflow-hidden">
+              <VehicleAssemblyTabSwitcher
+                installedComponents={vehAssembly.installedComponents}
+                activeComponentId={vehAssembly.activeComponentId}
+                phase={vehAssembly.phase}
+                hoveredComponentId={vehAssembly.hoveredComponentId}
+                progressPercentage={vehAssembly.progressPercentage}
+                currentStats={vehAssembly.currentStats}
+                nextRecommendedComponent={vehAssembly.nextRecommendedComponent}
+                isAutoAssembling={vehAssembly.isAutoAssembling}
+                canInstall={vehAssembly.canInstall}
+                onStartInstall={vehAssembly.startInstall}
+                onHoverComponent={vehAssembly.setHoveredComponentId}
+                onResetAssembly={vehAssembly.resetAssembly}
+                onToggleAutoAssemble={() => {
+                  if (vehAssembly.isAutoAssembling) {
+                    vehAssembly.setIsAutoAssembling(false);
+                  } else {
+                    vehAssembly.setIsAutoAssembling(true);
+                    if (vehAssembly.nextRecommendedComponent) {
+                      vehAssembly.startInstall(vehAssembly.nextRecommendedComponent.id);
+                    }
+                  }
+                }}
+                selectedVariants={vehAssembly.selectedVariants}
+                onSelectVariant={vehAssembly.setSelectedVariant}
+                vehicleConfig={v}
+              />
+            </div>
+          </div>
+        </div>
+      ) : (
+        /* Standard Form Controls View */
+        <div className="grid grid-cols-1 xl:grid-cols-3 gap-4">
+          <div className="xl:col-span-2 space-y-4 stagger">
+            <Section title="Load Vehicle Preset (Price Tiers & Utility Classes)" icon={<Sparkles size={16} />}>
           <div className="p-3 bg-base-850 rounded-lg border border-base-800">
             <Select
               label="Preset Library (By Price Tier & Utility Class)"
@@ -238,6 +364,21 @@ export function VehicleDesigner() {
         </Section>
       </div>
     </div>
-  </div>
-);
+  )}
+
+  {/* Vehicle Completion Modal */}
+  <VehicleCompletionModal
+    isOpen={showCompletionModal}
+    onClose={() => setShowCompletionModal(false)}
+    onReset={() => {
+      vehAssembly.resetAssembly();
+      setShowCompletionModal(false);
+    }}
+    stats={vehAssembly.currentStats}
+    enginePosition={vehAssembly.enginePosition}
+    driveType={vehAssembly.driveType}
+    vehicleConfig={v}
+  />
+</div>
+  );
 }

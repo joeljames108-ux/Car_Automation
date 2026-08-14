@@ -65,7 +65,6 @@ interface StageItem {
 const STAGES: StageItem[] = [
   // --- Engineering Studio ---
   { id: "command", label: "Command Center", icon: <LayoutDashboard size={14} />, category: "engineering" },
-  { id: "ai", label: "Apex AI", icon: <Bot size={14} />, category: "engineering" },
   { id: "engine", label: "Engine", icon: <Cog size={14} />, category: "engineering" },
   { id: "vehicle", label: "Vehicle", icon: <Car size={14} />, category: "engineering" },
   { id: "exterior", label: "Exterior", icon: <Paintbrush size={14} />, category: "engineering" },
@@ -337,6 +336,7 @@ function AppInner() {
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <div key={stage}>
                     {stage === "command" && <CommandCenter onSelectStage={(st) => setStage(st as Stage)} />}
+                    {stage === "ai" && <ApexAIStudio />}
                     {stage === "engine" && <EngineDesigner />}
                     {stage === "vehicle" && <VehicleDesigner />}
                     {stage === "exterior" && <ExteriorDesigner />}
@@ -388,7 +388,6 @@ function AppInner() {
           {/* Overlays */}
           <SaveLoadDialog open={dialog.open} mode={dialog.mode} onClose={() => setDialog({ open: false, mode: dialog.mode })} />
           <CommandPalette isOpen={cmdPaletteOpen} onClose={() => setCmdPaletteOpen(false)} onSelectStage={(s) => setStage(s as Stage)} />
-          <AIAssistant />
           <ThermalAlertMonitor />
         </div>
       </VisionGlassErrorBoundary>

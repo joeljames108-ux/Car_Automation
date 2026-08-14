@@ -16,7 +16,9 @@ export type ComponentId =
   | "intake_manifold"
   | "exhaust_headers"
   | "turbocharger"
-  | "oil_pan";
+  | "oil_pan"
+  | "hybrid_motor"
+  | "inverter_ecu";
 
 export type AssemblyPhase =
   | "idle"
@@ -42,7 +44,7 @@ export interface ComponentVariant {
 export interface AssemblyComponentMeta {
   id: ComponentId;
   name: string;
-  category: "Core" | "Bottom End" | "Top End" | "Induction & Exhaust";
+  category: "Core" | "Bottom End" | "Top End" | "Induction & Exhaust" | "Hybrid & Electric";
   description: string;
   dependencies: ComponentId[];
   explodedOffset: { x: number; y: number }; // Exploded view float displacement in SVG px
@@ -58,6 +60,18 @@ export interface AssemblyComponentMeta {
     cost: number;
   };
   tooltipAdvice: string;
+  torqueSpec?: {
+    fastenerName: string;
+    snugNm: number;
+    finalAngleDeg: number;
+    boltCount: number;
+  };
+  clearanceSpec?: {
+    label: string;
+    targetMm: number;
+    minMm: number;
+    maxMm: number;
+  };
 }
 
 const DEFAULT_VARIANTS: ComponentVariant[] = [
@@ -78,9 +92,14 @@ export const ENGINE_ASSEMBLY_COMPONENTS: AssemblyComponentMeta[] = [
     slotPosition: { x: 250, y: 220 },
     estimatedDuration: 1200,
     soundType: "heavy",
-    variants: DEFAULT_VARIANTS,
+    variants: [
+      { id: "cast", label: "Gray Cast Iron (Heavy Duty)", hpMultiplier: 1.0, weightMultiplier: 1.0, costMultiplier: 1.0, reliabilityDelta: 0 },
+      { id: "forged", label: "Cast Aluminum Alloy (Lightweight)", hpMultiplier: 1.20, weightMultiplier: 0.55, costMultiplier: 1.4, reliabilityDelta: 5 },
+      { id: "billet", label: "Compacted Graphite Iron (CGI)", hpMultiplier: 1.40, weightMultiplier: 0.80, costMultiplier: 1.9, reliabilityDelta: 18 },
+      { id: "titanium", label: "Titanium Spec-R (Motorsport)", hpMultiplier: 1.65, weightMultiplier: 0.50, costMultiplier: 4.5, reliabilityDelta: 25 },
+    ],
     statDeltas: { hp: 0, torque: 0, weight: 85, reliability: 100, cost: 2500 },
-    tooltipAdvice: "Precision-honed cylinders ensure minimum friction and maximum ring sealing.",
+    tooltipAdvice: "Gray Iron = Max Durability & Low Cost (~$1.0x). Aluminum = 45% Weight Saving (~$1.4x). CGI = Double Fatigue Strength & Heavy Boost (~$1.9x). Titanium = Formula-1 Spec.",
   },
   {
     id: "crankshaft",
@@ -95,208 +114,257 @@ export const ENGINE_ASSEMBLY_COMPONENTS: AssemblyComponentMeta[] = [
     variants: DEFAULT_VARIANTS,
     statDeltas: { hp: 25, torque: 35, weight: 22, reliability: 5, cost: 1800 },
     tooltipAdvice: "Counter-weighted shaft reduces engine vibration and handles high RPM stress.",
+    torqueSpec: { fastenerName: "Main Cap ARP2000 Bolts", snugNm: 65, finalAngleDeg: 90, boltCount: 14 },
+    clearanceSpec: { label: "Main Journal Oil Clearance", targetMm: 0.038, minMm: 0.025, maxMm: 0.055 },
   },
   {
     id: "pistons",
-    name: "Pistons & Compression Rings",
+    name: "Pistons & Rings",
     category: "Bottom End",
-    description: "High-strength pistons that seal combustion pressure inside the cylinder bore.",
+    description: "Transfers combustion pressure downwards into the connecting rods.",
     dependencies: ["crankshaft"],
-    explodedOffset: { x: -60, y: 0 },
+    explodedOffset: { x: 0, y: -40 },
     slotPosition: { x: 250, y: 190 },
-    estimatedDuration: 1800,
+    estimatedDuration: 1100,
     soundType: "slide",
     variants: DEFAULT_VARIANTS,
-    statDeltas: { hp: 45, torque: 40, weight: 8, reliability: 8, cost: 1200 },
-    tooltipAdvice: "Forged alloy construction tolerates high boost pressures and high cylinder temperatures.",
+    statDeltas: { hp: 45, torque: 30, weight: 8, reliability: 5, cost: 1200 },
+    tooltipAdvice: "Low-friction ceramic-coated piston skirts increase power output and thermal resilience.",
+    clearanceSpec: { label: "Top Ring End Gap", targetMm: 0.45, minMm: 0.35, maxMm: 0.60 },
   },
   {
     id: "rods",
     name: "Connecting Rods & Wrist Pins",
     category: "Bottom End",
-    description: "Links each piston crown directly to the journal of the crankshaft.",
-    dependencies: ["pistons"],
-    explodedOffset: { x: -40, y: 40 },
-    slotPosition: { x: 250, y: 250 },
-    estimatedDuration: 1400,
-    soundType: "metallic",
-    variants: DEFAULT_VARIANTS,
-    statDeltas: { hp: 15, torque: 20, weight: 6, reliability: 6, cost: 800 },
-    tooltipAdvice: "H-beam connecting rods prevent bending under heavy torque load.",
-  },
-  {
-    id: "oil_pan",
-    name: "Sump & Oil Pan",
-    category: "Bottom End",
-    description: "Seals the bottom crankcase and stores engine oil for the pressure lubrication system.",
+    description: "Links the pistons to the crankshaft journals under high tensile load.",
     dependencies: ["crankshaft"],
-    explodedOffset: { x: 0, y: 90 },
-    slotPosition: { x: 250, y: 360 },
+    explodedOffset: { x: 0, y: 20 },
+    slotPosition: { x: 250, y: 250 },
     estimatedDuration: 1000,
     soundType: "click",
     variants: DEFAULT_VARIANTS,
-    statDeltas: { hp: 5, torque: 0, weight: 5, reliability: 10, cost: 350 },
-    tooltipAdvice: "Baffled oil pan keeps oil pickup submerged during high G cornering.",
+    statDeltas: { hp: 20, torque: 15, weight: 6, reliability: 10, cost: 950 },
+    tooltipAdvice: "H-Beam forged steel rods resist bending forces at elevated boost levels.",
+    torqueSpec: { fastenerName: "Rod Cap ARP L19 Fasteners", snugNm: 45, finalAngleDeg: 60, boltCount: 24 },
+    clearanceSpec: { label: "Rod Journal Bearing Clearance", targetMm: 0.040, minMm: 0.028, maxMm: 0.058 },
   },
   {
     id: "head_gasket",
-    name: "Multi-Layer Steel Head Gasket",
+    name: "Cylinder Head Gasket",
     category: "Top End",
-    description: "Creates an airtight seal between the block deck and the cylinder head.",
+    description: "Multi-layer steel seal maintaining cylinder compression and oil/coolant isolation.",
     dependencies: ["pistons", "rods"],
     explodedOffset: { x: 0, y: -25 },
     slotPosition: { x: 250, y: 150 },
     estimatedDuration: 800,
-    soundType: "click",
+    soundType: "slide",
     variants: DEFAULT_VARIANTS,
-    statDeltas: { hp: 0, torque: 0, weight: 1, reliability: 12, cost: 150 },
-    tooltipAdvice: "Multi-layer steel (MLS) prevents coolant leaks under high boost.",
+    statDeltas: { hp: 5, torque: 5, weight: 1, reliability: 15, cost: 350 },
+    tooltipAdvice: "MLS head gaskets withstand severe cylinder peak pressures without blowing.",
   },
   {
     id: "cylinder_head",
-    name: "Cylinder Head & Chambers",
+    name: "Cylinder Head Assembly",
     category: "Top End",
-    description: "Houses combustion chambers, intake/exhaust ports, and spark plug wells.",
+    description: "Houses combustion chambers, intake/exhaust ports, and valve guides.",
     dependencies: ["head_gasket"],
     explodedOffset: { x: 0, y: -70 },
     slotPosition: { x: 250, y: 110 },
     estimatedDuration: 1600,
     soundType: "heavy",
     variants: DEFAULT_VARIANTS,
-    statDeltas: { hp: 65, torque: 50, weight: 28, reliability: 8, cost: 2400 },
-    tooltipAdvice: "CNC ported channels optimize airflow velocity into the cylinder.",
+    statDeltas: { hp: 65, torque: 50, weight: 28, reliability: 10, cost: 3200 },
+    tooltipAdvice: "CNC ported intake runners dramatically increase volumetric efficiency.",
+    torqueSpec: { fastenerName: "Head Stud 12-Point ARP Nuts", snugNm: 85, finalAngleDeg: 90, boltCount: 28 },
   },
   {
     id: "camshaft",
     name: "Camshafts & Timing Gears",
     category: "Top End",
-    description: "Controls the precise opening timing, duration, and lift of intake and exhaust valves.",
+    description: "Controls valve opening/closing timing relative to crankshaft rotation.",
     dependencies: ["cylinder_head"],
     explodedOffset: { x: 0, y: -110 },
     slotPosition: { x: 250, y: 70 },
     estimatedDuration: 1300,
     soundType: "metallic",
     variants: DEFAULT_VARIANTS,
-    statDeltas: { hp: 35, torque: 25, weight: 7, reliability: 5, cost: 950 },
-    tooltipAdvice: "Aggressive cam profiles increase high-RPM horsepower output.",
+    statDeltas: { hp: 35, torque: 20, weight: 12, reliability: 5, cost: 1400 },
+    tooltipAdvice: "High-lift camshaft profiles shift power band higher into the RPM range.",
   },
   {
     id: "valves",
-    name: "Valves & Dual Springs",
+    name: "Valves & Springs",
     category: "Top End",
-    description: "Spring-loaded valves that regulate air intake into the cylinder and exhaust out gases.",
+    description: "Regulates air-fuel intake and exhaust gas evacuation per combustion cycle.",
     dependencies: ["camshaft"],
-    explodedOffset: { x: 30, y: -80 },
+    explodedOffset: { x: 0, y: -80 },
     slotPosition: { x: 250, y: 95 },
     estimatedDuration: 1200,
     soundType: "click",
     variants: DEFAULT_VARIANTS,
-    statDeltas: { hp: 20, torque: 15, weight: 3, reliability: 7, cost: 650 },
-    tooltipAdvice: "Titanium valves prevent valve float up to 9,000 RPM.",
+    statDeltas: { hp: 25, torque: 15, weight: 4, reliability: 8, cost: 1100 },
+    tooltipAdvice: "Titanium valves reduce valvetrain inertia, preventing high-RPM valve float.",
   },
   {
     id: "intake_manifold",
-    name: "Intake Manifold & Throttle",
+    name: "Intake Manifold & Throttle Body",
     category: "Induction & Exhaust",
-    description: "Distributes clean air uniformly to each intake port on the cylinder head.",
-    dependencies: ["valves"],
-    explodedOffset: { x: -90, y: -60 },
-    slotPosition: { x: 180, y: 110 },
+    description: "Distributes clean ambient or pressurized air evenly into cylinder ports.",
+    dependencies: ["cylinder_head"],
+    explodedOffset: { x: -90, y: -40 },
+    slotPosition: { x: 170, y: 95 },
     estimatedDuration: 1100,
-    soundType: "pneumatic",
+    soundType: "slide",
     variants: DEFAULT_VARIANTS,
-    statDeltas: { hp: 30, torque: 20, weight: 6, reliability: 5, cost: 750 },
-    tooltipAdvice: "Tuned runner lengths maximize intake plenum resonance boost.",
+    statDeltas: { hp: 30, torque: 25, weight: 10, reliability: 5, cost: 1250 },
+    tooltipAdvice: "Individual throttle bodies (ITBs) improve immediate throttle response.",
   },
   {
     id: "exhaust_headers",
     name: "Exhaust Manifold & Headers",
     category: "Induction & Exhaust",
-    description: "Channels hot spent exhaust gases away from the engine block.",
-    dependencies: ["valves"],
-    explodedOffset: { x: 90, y: -60 },
-    slotPosition: { x: 320, y: 110 },
-    estimatedDuration: 1200,
-    soundType: "metallic",
+    description: "Scavenges spent exhaust gases away from combustion chambers efficiently.",
+    dependencies: ["cylinder_head"],
+    explodedOffset: { x: 90, y: -40 },
+    slotPosition: { x: 330, y: 95 },
+    estimatedDuration: 1100,
+    soundType: "click",
     variants: DEFAULT_VARIANTS,
-    statDeltas: { hp: 25, torque: 25, weight: 9, reliability: 5, cost: 850 },
-    tooltipAdvice: "Equal-length headers smooth out exhaust pulses for higher scavenging efficiency.",
+    statDeltas: { hp: 28, torque: 32, weight: 12, reliability: 5, cost: 1400 },
+    tooltipAdvice: "Equal-length ceramic-coated headers maximize exhaust scavenging harmonics.",
   },
   {
     id: "turbocharger",
     name: "Turbocharger & Wastegate",
     category: "Induction & Exhaust",
-    description: "Forces compressed ambient air into intake ports for massive horsepower gains.",
+    description: "Uses exhaust energy to force compressed air into intake manifold for massive power output.",
     dependencies: ["exhaust_headers", "intake_manifold"],
-    explodedOffset: { x: 110, y: -100 },
-    slotPosition: { x: 360, y: 90 },
-    estimatedDuration: 1700,
+    explodedOffset: { x: 110, y: -80 },
+    slotPosition: { x: 370, y: 85 },
+    estimatedDuration: 1400,
     soundType: "spool",
     variants: DEFAULT_VARIANTS,
-    statDeltas: { hp: 120, torque: 110, weight: 14, reliability: -8, cost: 3200 },
-    tooltipAdvice: "Ball-bearing turbo reduces spool lag and delivers instant boost pressure.",
+    statDeltas: { hp: 120, torque: 150, weight: 18, reliability: -5, cost: 4500 },
+    tooltipAdvice: "Twin-scroll ball bearing turbos reduce turbo lag while delivering massive boost pressure.",
+  },
+  {
+    id: "oil_pan",
+    name: "Oil Pan & Sump",
+    category: "Bottom End",
+    description: "Holds engine oil reservoir and oil pump pick-up for pressure lubrication.",
+    dependencies: ["block"],
+    explodedOffset: { x: 0, y: 70 },
+    slotPosition: { x: 250, y: 360 },
+    estimatedDuration: 900,
+    soundType: "pneumatic",
+    variants: DEFAULT_VARIANTS,
+    statDeltas: { hp: 5, torque: 5, weight: 8, reliability: 10, cost: 650 },
+    tooltipAdvice: "Baffled dry-sump oil pans prevent oil starvation under extreme cornering G-forces.",
   },
 ];
 
-// ===================================================================
-// ELECTRIC VEHICLE (EV) POWERTRAIN ASSEMBLY COMPONENTS
-// ===================================================================
+const HYBRID_MOTOR_VARIANTS: ComponentVariant[] = [
+  { id: "cast", label: "400V 90kW Radial-Flux Motor", hpMultiplier: 0.65, weightMultiplier: 1.25, costMultiplier: 0.60, reliabilityDelta: 5 },
+  { id: "forged", label: "800V 180kW Axial-Flux Drive", hpMultiplier: 1.0, weightMultiplier: 1.0, costMultiplier: 1.0, reliabilityDelta: 10 },
+  { id: "billet", label: "800V 320kW Dual-Stator Motor", hpMultiplier: 1.45, weightMultiplier: 0.85, costMultiplier: 1.85, reliabilityDelta: 15 },
+  { id: "titanium", label: "900V 480kW Carbon-Rotor HyperDrive", hpMultiplier: 2.10, weightMultiplier: 0.65, costMultiplier: 3.20, reliabilityDelta: 20 },
+];
+
+const INVERTER_ECU_VARIANTS: ComponentVariant[] = [
+  { id: "cast", label: "400V IGBT ECU (10kHz Pulse)", hpMultiplier: 0.80, weightMultiplier: 1.15, costMultiplier: 0.65, reliabilityDelta: 0 },
+  { id: "forged", label: "800V SiC MOSFET Inverter (20kHz)", hpMultiplier: 1.0, weightMultiplier: 1.0, costMultiplier: 1.0, reliabilityDelta: 12 },
+  { id: "billet", label: "Dual SiC Inverter + Vectoring MCU", hpMultiplier: 1.35, weightMultiplier: 0.88, costMultiplier: 1.90, reliabilityDelta: 18 },
+  { id: "titanium", label: "900V Direct-Chilled Formula ECU", hpMultiplier: 1.75, weightMultiplier: 0.70, costMultiplier: 3.40, reliabilityDelta: 25 },
+];
+
+export const HYBRID_ASSEMBLY_COMPONENTS: AssemblyComponentMeta[] = [
+  ...ENGINE_ASSEMBLY_COMPONENTS,
+  {
+    id: "hybrid_motor",
+    name: "Hybrid Electric Drive Motor",
+    category: "Hybrid & Electric",
+    description: "High-power electric drive motor unit providing instant electric torque boost & kinetic energy recovery.",
+    dependencies: ["block", "crankshaft"],
+    explodedOffset: { x: -85, y: 50 },
+    slotPosition: { x: 100, y: 340 },
+    estimatedDuration: 1400,
+    soundType: "metallic",
+    variants: HYBRID_MOTOR_VARIANTS,
+    statDeltas: { hp: 241, torque: 380, weight: 34, reliability: 10, cost: 6500 },
+    tooltipAdvice: "Axial-flux geometry delivers unmatched power density and instant 0-RPM torque.",
+  },
+  {
+    id: "inverter_ecu",
+    name: "Inverter & Hybrid ECU Module",
+    category: "Hybrid & Electric",
+    description: "Silicon Carbide (SiC) power electronics inverter and dual-core hybrid ECU energy management unit.",
+    dependencies: ["hybrid_motor"],
+    explodedOffset: { x: -85, y: -45 },
+    slotPosition: { x: 100, y: 130 },
+    estimatedDuration: 1200,
+    soundType: "click",
+    variants: INVERTER_ECU_VARIANTS,
+    statDeltas: { hp: 15, torque: 20, weight: 8, reliability: 15, cost: 3200 },
+    tooltipAdvice: "Silicon Carbide MOSFETs enable 99% inverter efficiency and ultra-fast switching speeds.",
+  },
+];
+
 export const EV_ASSEMBLY_COMPONENTS: AssemblyComponentMeta[] = [
   {
     id: "block",
-    name: "EV Battery Frame & Chassis Casing",
+    name: "EV Battery Pack Tray & Enclosure",
     category: "Core",
-    description: "Rigid structural aluminum battery tray housing high-voltage cell modules, BMS, and coolant channels.",
+    description: "Structural aluminum battery tray and protective skid plate housing lithium cell modules.",
     dependencies: [],
     explodedOffset: { x: 0, y: 0 },
     slotPosition: { x: 250, y: 220 },
     estimatedDuration: 1200,
     soundType: "heavy",
     variants: DEFAULT_VARIANTS,
-    statDeltas: { hp: 0, torque: 0, weight: 140, reliability: 100, cost: 4500 },
-    tooltipAdvice: "Reinforced underbody battery shield protects cells against road impacts.",
+    statDeltas: { hp: 0, torque: 0, weight: 350, reliability: 100, cost: 8500 },
+    tooltipAdvice: "Reinforced structural battery enclosure contributes to chassis torsional rigidity.",
   },
   {
     id: "crankshaft",
-    name: "800V Lithium-Ion Cell Module Matrix",
+    name: "High-Voltage Lithium-Ion Battery Modules",
     category: "Bottom End",
-    description: "High-density 800V lithium-ion NMC cell array providing ultra-high continuous discharge current.",
+    description: "800V high-density cell modules supplying DC power to drive motors.",
     dependencies: ["block"],
-    explodedOffset: { x: 0, y: 60 },
-    slotPosition: { x: 250, y: 310 },
+    explodedOffset: { x: 0, y: 40 },
+    slotPosition: { x: 250, y: 230 },
     estimatedDuration: 1500,
-    soundType: "click",
+    soundType: "heavy",
     variants: DEFAULT_VARIANTS,
-    statDeltas: { hp: 180, torque: 220, weight: 180, reliability: 15, cost: 6500 },
-    tooltipAdvice: "800V architecture enables ultra-fast 350kW DC charging and reduced thermal load.",
+    statDeltas: { hp: 180, torque: 200, weight: 280, reliability: 10, cost: 12000 },
+    tooltipAdvice: "Solid-state electrolyte cells double energy density while eliminating fire risk.",
   },
   {
     id: "pistons",
-    name: "BMS (Battery Management System)",
+    name: "Battery Management System (BMS)",
     category: "Bottom End",
-    description: "Monitors individual cell voltages, state-of-charge, active balancing, and emergency pyrofuse cutoffs.",
+    description: "Monitors individual cell voltages, state of charge (SoC), and thermal balancing.",
     dependencies: ["crankshaft"],
-    explodedOffset: { x: -60, y: 0 },
-    slotPosition: { x: 250, y: 190 },
-    estimatedDuration: 1200,
+    explodedOffset: { x: 0, y: -20 },
+    slotPosition: { x: 250, y: 210 },
+    estimatedDuration: 1000,
     soundType: "click",
     variants: DEFAULT_VARIANTS,
-    statDeltas: { hp: 20, torque: 30, weight: 4, reliability: 20, cost: 1800 },
-    tooltipAdvice: "Millisecond cell balancing optimizes battery longevity and peak current delivery.",
+    statDeltas: { hp: 10, torque: 10, weight: 4, reliability: 20, cost: 1500 },
+    tooltipAdvice: "Real-time active cell balancing prolongs battery pack life by up to 40%.",
   },
   {
     id: "rods",
-    name: "High-Voltage Solid Copper Busbar Grid",
+    name: "High-Voltage Busbars & Wiring Harness",
     category: "Bottom End",
-    description: "Heavy-gauge solid copper busbars delivering up to 1000A DC current between modules.",
-    dependencies: ["pistons"],
-    explodedOffset: { x: -40, y: 40 },
-    slotPosition: { x: 250, y: 250 },
-    estimatedDuration: 1100,
-    soundType: "metallic",
+    description: "Heavy-gauge copper busbars linking battery module strings in series/parallel.",
+    dependencies: ["crankshaft"],
+    explodedOffset: { x: 0, y: 10 },
+    slotPosition: { x: 250, y: 240 },
+    estimatedDuration: 900,
+    soundType: "slide",
     variants: DEFAULT_VARIANTS,
-    statDeltas: { hp: 40, torque: 50, weight: 12, reliability: 10, cost: 1200 },
-    tooltipAdvice: "Nickel-plated copper prevents resistance heating under full-throttle acceleration.",
+    statDeltas: { hp: 15, torque: 15, weight: 12, reliability: 15, cost: 950 },
+    tooltipAdvice: "Low-resistance solid copper busbars minimize I²R electrical transmission losses.",
   },
   {
     id: "oil_pan",
@@ -413,11 +481,16 @@ export const EV_ASSEMBLY_COMPONENTS: AssemblyComponentMeta[] = [
 ];
 
 export function getAssemblyComponents(engineConfig?: Partial<EngineConfig>): AssemblyComponentMeta[] {
-  const isEV =
-    engineConfig?.layout === "electric" ||
+  const isHybrid =
     engineConfig?.layout === "hybrid" ||
-    (engineConfig as any)?.isElectric ||
-    (engineConfig as any)?.powertrainType === "electric";
+    (engineConfig?.hybridArchitecture && engineConfig.hybridArchitecture !== "none") ||
+    (engineConfig as any)?.isHybrid;
 
-  return isEV ? EV_ASSEMBLY_COMPONENTS : ENGINE_ASSEMBLY_COMPONENTS;
+  const isEV =
+    !isHybrid &&
+    (engineConfig?.layout === "electric" || (engineConfig as any)?.powertrainType === "electric");
+
+  if (isEV) return EV_ASSEMBLY_COMPONENTS;
+  if (isHybrid) return HYBRID_ASSEMBLY_COMPONENTS;
+  return ENGINE_ASSEMBLY_COMPONENTS;
 }

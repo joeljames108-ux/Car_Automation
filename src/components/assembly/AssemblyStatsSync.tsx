@@ -1,25 +1,24 @@
-import {
-  TrendingUp,
-  Zap,
-  DollarSign,
-  ShieldCheck,
-  CheckCircle2,
-} from "lucide-react";
-import { ComponentId, ENGINE_ASSEMBLY_COMPONENTS } from "../../sim/assemblyTypes";
+import { CheckCircle2 } from "lucide-react";
+import { ComponentId, getAssemblyComponents } from "../../sim/assemblyTypes";
+import { StatDeltaBadges, TorqueClearanceReadout } from "./assemblyUIHelpers";
+import { EngineConfig } from "../../sim/types";
 
 interface AssemblyStatsSyncProps {
   hoveredComponentId: ComponentId | null;
   installedComponents?: ComponentId[];
+  engineConfig?: Partial<EngineConfig>;
 }
 
 export function AssemblyStatsSync({
   hoveredComponentId,
   installedComponents = [],
+  engineConfig,
 }: AssemblyStatsSyncProps) {
   // Show tooltip card ONLY when a component is actively hovered
   if (!hoveredComponentId) return null;
 
-  const meta = ENGINE_ASSEMBLY_COMPONENTS.find((c) => c.id === hoveredComponentId);
+  const components = getAssemblyComponents(engineConfig);
+  const meta = components.find((c) => c.id === hoveredComponentId);
   if (!meta) return null;
 
   const isInstalled = installedComponents.includes(hoveredComponentId);
@@ -41,28 +40,12 @@ export function AssemblyStatsSync({
           {isInstalled ? "INSTALLED & TORQUED" : "COMPONENT SPECIFICATIONS"}
         </div>
         <div className="text-sm font-extrabold text-slate-800 tracking-tight">{meta.name}</div>
-        <div className="flex items-center gap-3 mt-1 text-xs font-mono font-bold">
-          {meta.statDeltas.hp > 0 && (
-            <span className="text-blue-600 flex items-center gap-0.5">
-              <TrendingUp size={12} /> +{meta.statDeltas.hp} HP
-            </span>
-          )}
-          {meta.statDeltas.torque > 0 && (
-            <span className="text-slate-800 flex items-center gap-0.5">
-              <Zap size={12} /> +{meta.statDeltas.torque} Nm
-            </span>
-          )}
-          {meta.statDeltas.cost > 0 && (
-            <span className="text-amber-600 flex items-center gap-0.5">
-              <DollarSign size={12} /> +${meta.statDeltas.cost}
-            </span>
-          )}
-          {meta.statDeltas.reliability !== 0 && (
-            <span className="text-slate-700 flex items-center gap-0.5">
-              <ShieldCheck size={12} /> {meta.statDeltas.reliability > 0 ? "+" : ""}{meta.statDeltas.reliability}%
-            </span>
-          )}
-        </div>
+        
+        {/* Shared Stat Delta Badges */}
+        <StatDeltaBadges meta={meta} size="md" className="mt-1" />
+
+        {/* Shared Torque Wrench Spec & Clearance Readout */}
+        <TorqueClearanceReadout meta={meta} variant="compact" />
       </div>
     </div>
   );

@@ -55,16 +55,31 @@ function baseVolumetricEfficiency(
   camDuration: number, // degrees
   camLift: number,     // mm
   valvetrainFactor: number, // from constants
+  currentRpm: number = 4000,
+  valvetrainType: string = "dohc"
 ): number {
   // Longer cam duration shifts peak VE higher in the rev range
-  const peakFrac = 0.55 + (camDuration - 220) / 400 * 0.25; // ~0.55-0.80
-  const width = 0.30 + camLift / 30 * 0.1;                   // wider lift = broader VE
+  const peakFrac = 0.55 + ((camDuration - 220) / 400) * 0.25; // ~0.55-0.80
+  const width = 0.30 + (camLift / 30) * 0.1;                   // wider lift = broader VE
   const gaussian = Math.exp(-((rpmFraction - peakFrac) ** 2) / (2 * width * width));
   // Base VE: street engines ~0.85 peak, race DOHC VVL ~0.98
   const peakVE = 0.78 + valvetrainFactor * 0.20;
-  // Low-RPM VE is decent, mid-RPM peaks, high-RPM falls off
   const lowRpmFloor = 0.60 + valvetrainFactor * 0.05;
-  return Math.max(lowRpmFloor, peakVE * gaussian);
+
+  let ve = Math.max(lowRpmFloor, peakVE * gaussian);
+
+  // Valvetrain Float RPM Threshold Mechanics (OHV ~6200, SOHC ~7200, DOHC ~8800, DOHC VVL ~9800)
+  const floatRpmMap: Record<string, number> = {
+    ohv_2v: 6000, ohv: 6400, sohc_2v: 7000, sohc: 7400, dohc: 8800, dohc_vvl: 9800
+  };
+  const valveFloatThreshold = floatRpmMap[valvetrainType] || 8500;
+
+  if (currentRpm > valveFloatThreshold) {
+    const floatRatio = (currentRpm - valveFloatThreshold) / 1000;
+    ve *= Math.exp(-floatRatio * 1.8); // exponential loss of VE due to valve float
+  }
+
+  return Math.max(0.1, ve);
 }
 
 // Turbo boost ramp: spool-up modeled as sigmoid

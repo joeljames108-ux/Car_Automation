@@ -1,4 +1,5 @@
 import { defaultDesign } from "./constants";
+import { createGT3SpecRDesign } from "./gt3SpecRDesign";
 import type { VehicleDesign, PlatformType, BodyType } from "./types";
 export type PresetCategory = "price" | "utility";
 
@@ -58,15 +59,26 @@ export function createV12Hybrid1000HpDesign(): VehicleDesign {
 
   v.vehicle.driveType = "awd";
   v.vehicle.enginePosition = "mid";
-  v.vehicle.transmissionType = "dct_7";
+  v.vehicle.transmission = "dct_7";
   v.vehicle.brakeType = "carbon_ceramic";
-  v.vehicle.tireCompound = "semislick";
+  v.vehicle.tireCompound = "slick";
   v.vehicle.aero.wingAngle = 14;
   v.vehicle.aero.underbody = "ground_effect";
   return v;
 }
 
 export const VEHICLE_PRESET_LIBRARY: VehiclePresetItem[] = [
+  // ================= MOTORSPORT & CIRCUIT PRESETS =================
+  {
+    id: "gt3_spec_r",
+    name: "Apex GT3 Spec-R Motorsport",
+    category: "price",
+    groupLabel: "Motorsport & Circuit Benchmarks",
+    targetMSRP: "$350,000",
+    expectedPower: "620 HP @ 8,500 RPM",
+    description: "FIA GT3 Circuit Benchmark (Monza 1:46.8, Zandvoort 1:34.2, Red Bull Ring 1:28.3)",
+    generator: () => createGT3SpecRDesign(),
+  },
   // ================= PRICE TIERS =================
   {
     id: "price_budget",

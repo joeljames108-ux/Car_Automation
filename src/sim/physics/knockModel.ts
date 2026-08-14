@@ -5,7 +5,7 @@
 // octane rating requirements, ignition retard compensation, and damage accumulation.
 
 export interface KnockParams {
-  octaneRatingR+M2: number; // e.g. 91, 93, 98, 100 RON
+  "octaneRatingR+M2": number; // e.g. 91, 93, 98, 100 RON
   compressionRatio: number;
   boostPressureBar: number;
   ignitionTimingDegBTDC: number;

@@ -1,11 +1,13 @@
 import React from "react";
-import type { ComponentId, AssemblyPhase } from "../../../sim/assemblyTypes";
+import type { ComponentId, AssemblyPhase, AssemblyComponentMeta } from "../../../sim/assemblyTypes";
+import { getComponentTorqueDisplay } from "../assemblyUIHelpers";
 
 interface RoboticGantryArmOverlayProps {
   activeComponentId: ComponentId | null;
   phase: AssemblyPhase;
   targetPos: { x: number; y: number };
   startPos?: { x: number; y: number };
+  meta?: AssemblyComponentMeta;
 }
 
 export const RoboticGantryArmOverlay: React.FC<RoboticGantryArmOverlayProps> = ({
@@ -13,6 +15,7 @@ export const RoboticGantryArmOverlay: React.FC<RoboticGantryArmOverlayProps> = (
   phase,
   targetPos,
   startPos = { x: 50, y: 380 },
+  meta,
 }) => {
   if (!activeComponentId || phase === "idle" || phase === "complete") return null;
 
@@ -190,9 +193,9 @@ export const RoboticGantryArmOverlay: React.FC<RoboticGantryArmOverlayProps> = (
           </g>
 
           {/* Digital Nm Torque Telemetry Badge */}
-          <rect x="14" y="-20" width="65" height="18" rx="3" fill="#020617" stroke="#f59e0b" strokeWidth="1.2" />
-          <text x="46" y="-8" fill="#f59e0b" fontSize="8" fontFamily="monospace" textAnchor="middle" fontWeight="bold">
-            {phase === "locking" ? "120 Nm LOCKED" : "85 Nm TORQUE"}
+          <rect x="14" y="-20" width="75" height="18" rx="3" fill="#020617" stroke="#f59e0b" strokeWidth="1.2" />
+          <text x="51" y="-8" fill="#f59e0b" fontSize="7.5" fontFamily="monospace" textAnchor="middle" fontWeight="bold">
+            {getComponentTorqueDisplay(meta, phase)}
           </text>
         </g>
       )}

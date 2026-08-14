@@ -1,24 +1,33 @@
 import React from "react";
-import type { ComponentId, AssemblyPhase } from "../../../sim/assemblyTypes";
+import type { ComponentId, AssemblyPhase, AssemblyComponentMeta } from "../../../sim/assemblyTypes";
 
 interface AssemblyTorqueHUDOverlayProps {
   activeComponentId: ComponentId | null;
   phase: AssemblyPhase;
   targetPos: { x: number; y: number };
+  meta?: AssemblyComponentMeta;
 }
 
 export const AssemblyTorqueHUDOverlay: React.FC<AssemblyTorqueHUDOverlayProps> = ({
   activeComponentId,
   phase,
   targetPos,
+  meta,
 }) => {
   if (!activeComponentId || (phase !== "inserting" && phase !== "locking" && phase !== "confirming")) return null;
 
   const tx = targetPos.x;
   const ty = targetPos.y;
 
-  const torqueNm = phase === "confirming" ? 145 : phase === "locking" ? 120 : 75;
-  const boltProgress = phase === "confirming" ? 4 : phase === "locking" ? 3 : 2;
+  const targetNm = meta?.torqueSpec?.snugNm || 100;
+  const torqueNm = phase === "confirming" ? targetNm : phase === "locking" ? Math.round(targetNm * 0.85) : Math.round(targetNm * 0.5);
+
+  const totalBolts = meta?.torqueSpec?.boltCount || 4;
+  const boltProgress = phase === "confirming" ? totalBolts : phase === "locking" ? Math.ceil(totalBolts * 0.75) : Math.ceil(totalBolts * 0.35);
+
+  const fastenerTitle = meta?.torqueSpec?.fastenerName
+    ? meta.torqueSpec.fastenerName.toUpperCase()
+    : "TORQUE SPEC // PRECISION";
 
   return (
     <g id="assembly-torque-hud-system" className="pointer-events-none z-35">
@@ -28,8 +37,8 @@ export const AssemblyTorqueHUDOverlay: React.FC<AssemblyTorqueHUDOverlayProps> =
         <rect x="3" y="3" width="214" height="46" rx="6" fill="none" stroke="#ffffff" strokeWidth="1" opacity="0.8" />
 
         {/* Torque Wrench Icon & Title */}
-        <text x="12" y="18" fill="#38bdf8" fontSize="8" fontFamily="monospace" fontWeight="900" letterSpacing="1">
-          TORQUE CONTROL // ARP SPEC
+        <text x="12" y="18" fill="#38bdf8" fontSize="7" fontFamily="monospace" fontWeight="900" letterSpacing="0.5">
+          {fastenerTitle.slice(0, 28)}
         </text>
 
         {/* Target vs Current Nm Bar Gauge */}
@@ -37,7 +46,7 @@ export const AssemblyTorqueHUDOverlay: React.FC<AssemblyTorqueHUDOverlayProps> =
         <rect
           x="14"
           y="26"
-          width={(116 * (torqueNm / 145))}
+          width={Math.min(116, Math.max(10, (116 * (torqueNm / targetNm))))}
           height="8"
           rx="2"
           fill={phase === "confirming" ? "#10b981" : "#f59e0b"}
@@ -48,9 +57,9 @@ export const AssemblyTorqueHUDOverlay: React.FC<AssemblyTorqueHUDOverlayProps> =
           {torqueNm} Nm
         </text>
 
-        {/* Sub-step Bolt Tightening Indicators (4x Perimeter Bolts) */}
+        {/* Sub-step Bolt Tightening Indicators */}
         <g transform="translate(180, 16)">
-          {[0, 1, 2, 3].map((bIdx) => {
+          {Array.from({ length: Math.min(4, totalBolts) }).map((_, bIdx) => {
             const isDone = bIdx < boltProgress;
             const bx = (bIdx % 2) * 14;
             const by = Math.floor(bIdx / 2) * 14;

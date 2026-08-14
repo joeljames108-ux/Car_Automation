@@ -20,6 +20,7 @@ import {
   AssemblyComponentMeta,
   getAssemblyComponents,
 } from "../../sim/assemblyTypes";
+import { TorqueClearanceReadout } from "./assemblyUIHelpers";
 import { EngineConfig } from "../../sim/types";
 import { ProgressBar } from "../ui/Controls";
 import { AnimatedCounter } from "../ui/AnimatedCounter";
@@ -185,6 +186,11 @@ export function AssemblyProgressPanel({
           </div>
         </div>
       </div>
+
+      {/* Torque Wrench Spec & Precision Clearance Readout Card */}
+      {nextRecommendedComponent && (
+        <TorqueClearanceReadout meta={nextRecommendedComponent} variant="full" className="mb-3" />
+      )}
 
       {/* Vertical Timeline Build Checklist */}
       <div className="flex-1 min-h-0 overflow-y-auto pr-1 mb-3 scrollbar-thin scrollbar-thumb-base-750">

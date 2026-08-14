@@ -17,7 +17,7 @@ import {
   Sliders,
 } from "lucide-react";
 import { EngineSVG } from "./EngineSVG";
-import { ENGINE_ASSEMBLY_COMPONENTS } from "../../sim/assemblyTypes";
+import { getAssemblyComponents } from "../../sim/assemblyTypes";
 import { playAssemblySound } from "./sounds";
 
 import { EngineConfig } from "../../sim/types";
@@ -79,7 +79,7 @@ export function AssemblyCompletionModal({
 
   if (!isOpen) return null;
 
-  const allComponentIds = ENGINE_ASSEMBLY_COMPONENTS.map((c) => c.id);
+  const allComponentIds = getAssemblyComponents(engineConfig).map((c) => c.id);
 
   // Tachometer Needle Rotation Angle (-120deg to +120deg)
   const needleRotation = -120 + (rpm / 8500) * 240;

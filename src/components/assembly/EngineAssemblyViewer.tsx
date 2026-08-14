@@ -11,7 +11,7 @@ import {
 import {
   ComponentId,
   AssemblyPhase,
-  ENGINE_ASSEMBLY_COMPONENTS,
+  getAssemblyComponents,
 } from "../../sim/assemblyTypes";
 import { EngineSVG } from "./EngineSVG";
 import { useInstallAnimation } from "./useInstallAnimation";
@@ -30,6 +30,7 @@ interface EngineAssemblyViewerProps {
   isExplodedView: boolean;
   isAssemblyComplete: boolean;
   engineConfig?: Partial<EngineConfig>;
+  selectedVariants?: Record<string, any>;
   onAdvancePhase: (nextPhase: AssemblyPhase) => void;
   onCompleteInstall: () => void;
   onSkipAnimation: () => void;
@@ -46,6 +47,7 @@ export function EngineAssemblyViewer({
   isExplodedView,
   isAssemblyComplete,
   engineConfig,
+  selectedVariants,
   onAdvancePhase,
   onCompleteInstall,
   onSkipAnimation,
@@ -55,6 +57,7 @@ export function EngineAssemblyViewer({
 }: EngineAssemblyViewerProps) {
   const [isMuted, setIsMuted] = useState(false);
   const [lastInstalledId, setLastInstalledId] = useState<ComponentId | null>(null);
+  const [viewMode, setViewMode] = useState<"3d_iso" | "2d">("3d_iso");
 
   // Hook driving animation transitions
   useInstallAnimation({
@@ -67,6 +70,7 @@ export function EngineAssemblyViewer({
       playAssemblySound("click");
     },
     onPlaySound: (type) => playAssemblySound(type),
+    engineConfig,
   });
 
   const handleToggleMute = () => {
@@ -74,7 +78,7 @@ export function EngineAssemblyViewer({
     setIsMuted(muted);
   };
 
-  const activeMeta = ENGINE_ASSEMBLY_COMPONENTS.find((c) => c.id === activeComponentId);
+  const activeMeta = useMemo(() => getAssemblyComponents(engineConfig).find((c) => c.id === activeComponentId), [engineConfig, activeComponentId]);
 
   // Compute camera zoom and focus pan coordinates based on active component slot
   const cameraTransform = useMemo(() => {
@@ -126,6 +130,8 @@ export function EngineAssemblyViewer({
             isExplodedView={isExplodedView}
             isAssemblyComplete={isAssemblyComplete}
             engineConfig={engineConfig}
+            selectedVariants={selectedVariants}
+            viewMode={viewMode}
             onHoverComponent={onHoverComponent}
           />
         </div>
@@ -142,6 +148,19 @@ export function EngineAssemblyViewer({
 
         {/* Floating Action Controls on Top Right */}
         <div className="absolute top-5 right-5 z-30 flex items-center gap-2">
+          {/* 3D Isometric View Mode Toggle */}
+          <button
+            onClick={() => setViewMode((prev) => (prev === "3d_iso" ? "2d" : "3d_iso"))}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-xs font-mono font-bold transition-all cursor-pointer ${
+              viewMode === "3d_iso"
+                ? "bg-cyan-500/20 text-cyan-200 border-cyan-500/50 shadow-[0_0_12px_rgba(34,211,238,0.3)]"
+                : "bg-[#0b0f19]/90 text-slate-400 border-slate-700 hover:text-slate-200"
+            }`}
+            title="Toggle between 3D Isometric View and 2D Orthographic View"
+          >
+            <Camera size={13} /> {viewMode === "3d_iso" ? "3D Isometric View" : "2D View"}
+          </button>
+
           {/* Skip Animation Button */}
           {activeComponentId && (
             <button
@@ -167,7 +186,7 @@ export function EngineAssemblyViewer({
         </div>
 
         {/* Stat Delta Notification Overlay - ONLY shown on hover! */}
-        <AssemblyStatsSync hoveredComponentId={hoveredComponentId} installedComponents={installedComponents} />
+        <AssemblyStatsSync hoveredComponentId={hoveredComponentId} installedComponents={installedComponents} engineConfig={engineConfig} />
 
         {/* Bottom Educational Advice Banner */}
         {activeMeta && (

@@ -87,3 +87,41 @@ export function calculateIMEP(config: CombustionConfig): CombustionResult {
     cylinderPeakPressureEstimate: Math.max(0, cylinderPeakPressureEstimate),
   };
 }
+
+/**
+ * Calculates Dynamic Compression Ratio based on Intake Valve Closing (IVC) angle (degrees ABDC)
+ * DCR = 1 + (Effective Stroke / Clearance Volume)
+ */
+export function calculateDynamicCompressionRatio(
+  staticCR: number,
+  ivcDegABDC: number = 45
+): number {
+  // IVC typically ranges from 30° (commuter) to 70° (race cam) ABDC
+  const strokeFraction = Math.cos((ivcDegABDC * Math.PI) / 180);
+  const effectiveCR = 1 + (staticCR - 1) * ((1 + strokeFraction) / 2);
+  return Math.round(effectiveCR * 100) / 100;
+}
+
+/**
+ * Evaluates Octane Detonation / Knock Threshold Limit
+ * @returns knockSafetyMargin (positive = safe, negative = knocking/detonation risk)
+ */
+export function evaluateOctaneKnockLimit(
+  staticCR: number,
+  boostPressureBar: number,
+  octaneRating: number = 93, // e.g. 91, 93, 100, 110 (E85/Race)
+  iatCelsius: number = 35 // Intake air temperature
+): number {
+  // Base allowable effective pressure limit for given octane rating
+  // 91 Octane ~ 14 bar limit, 93 Octane ~ 17 bar limit, 110 Octane ~ 35 bar limit
+  const baseAllowableBar = 10 + (octaneRating - 87) * 0.85;
+
+  // Temperature penalty: every 10°C over 30°C reduces knock limit by 0.6 bar
+  const tempPenalty = Math.max(0, (iatCelsius - 30) * 0.06);
+
+  // Current effective charge density factor
+  const effectivePressureDemand = staticCR * 1.1 + boostPressureBar * 8.5;
+
+  const margin = baseAllowableBar - tempPenalty - effectivePressureDemand;
+  return Math.round(margin * 10) / 10;
+}

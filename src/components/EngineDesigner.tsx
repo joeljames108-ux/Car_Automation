@@ -79,7 +79,7 @@ export function EngineDesigner() {
   // Robotic Engine Assembly Line System state
   const [assemblyMode, setAssemblyMode] = useState(false);
   const [showCompletionModal, setShowCompletionModal] = useState(false);
-  const assembly = useAssemblyStore();
+  const assembly = useAssemblyStore(eng);
 
   const openEnlargedModal = () => {
     setIsEnlarged(true);
@@ -242,6 +242,7 @@ export function EngineDesigner() {
                 isExplodedView={assembly.isExplodedView}
                 isAssemblyComplete={assembly.isAssemblyComplete}
                 engineConfig={eng}
+                selectedVariants={assembly.selectedVariants}
                 onAdvancePhase={assembly.advancePhase}
                 onHoverComponent={assembly.setHoveredComponentId}
                 onCompleteInstall={() => {
@@ -278,6 +279,8 @@ export function EngineDesigner() {
                 isAssemblyComplete={assembly.isAssemblyComplete}
                 onResetAssembly={assembly.resetAssembly}
                 onToggleExplodedView={assembly.toggleExplodedView}
+                selectedVariants={assembly.selectedVariants}
+                onSelectVariant={assembly.setSelectedVariant}
                 engineConfig={eng}
               />
             </div>
@@ -407,6 +410,172 @@ export function EngineDesigner() {
                         </button>
                       ))}
                     </div>
+                  </div>
+
+                  {/* PROMINENT HYBRID POWERTRAIN TOGGLE CARD */}
+                  <div className={`p-3.5 rounded-2xl border transition-all ${
+                    eng.hybridArchitecture !== "none"
+                      ? "bg-gradient-to-r from-cyan-950/40 via-purple-950/30 to-base-900 border-cyan-500/50 shadow-[0_0_20px_rgba(34,211,238,0.15)]"
+                      : "bg-base-950/70 border-base-800"
+                  }`}>
+                    <div className="flex items-center justify-between gap-3">
+                      <div className="flex items-center gap-2.5">
+                        <div className={`p-2 rounded-xl border transition-all ${
+                          eng.hybridArchitecture !== "none"
+                            ? "bg-cyan-500/20 text-cyan-300 border-cyan-500/40 shadow-[0_0_10px_rgba(34,211,238,0.3)]"
+                            : "bg-base-900 text-slate-500 border-base-800"
+                        }`}>
+                          <Zap size={18} />
+                        </div>
+                        <div>
+                          <div className="flex items-center gap-2">
+                            <span className="text-xs font-bold font-mono text-slate-100 uppercase tracking-wider">
+                              Hybrid Electric Motor
+                            </span>
+                            <span className={`px-2 py-0.5 rounded-full text-[9px] font-mono font-bold border ${
+                              eng.hybridArchitecture !== "none"
+                                ? "bg-emerald-500/20 text-emerald-300 border-emerald-500/40"
+                                : "bg-slate-800 text-slate-400 border-slate-700"
+                            }`}>
+                              {eng.hybridArchitecture !== "none" ? "HYBRID TOGGLED ON" : "PURE ICE (UNTOGGLED)"}
+                            </span>
+                          </div>
+                          <p className="text-[10px] text-slate-400 font-mono mt-0.5 leading-tight">
+                            {eng.hybridArchitecture !== "none"
+                              ? "Electric motor (800V) + battery pack paired with ICE engine."
+                              : "Untoggled: Pure internal combustion engine (naturally aspirated or turbo ICE, zero electric motor mass)."}
+                          </p>
+                        </div>
+                      </div>
+
+                      {/* Toggle Button Switch */}
+                      <button
+                        onClick={() => {
+                          if (eng.hybridArchitecture !== "none") {
+                            // Untoggle Hybrid -> Pure ICE
+                            updateEngine({
+                              hybridArchitecture: "none",
+                              hasMguH: false,
+                              hybridMotorPower: 0,
+                              batteryCapacity: 0,
+                              layout: eng.layout === "hybrid" ? "v12" : eng.layout,
+                            });
+                          } else {
+                            // Toggle Hybrid ON -> ICE + 800V Electric Motor
+                            updateEngine({
+                              hybridArchitecture: "phev",
+                              hybridMotorPower: 180,
+                              batteryCapacity: 16,
+                              hasMguH: true,
+                            });
+                          }
+                        }}
+                        className={`relative inline-flex h-7 w-14 shrink-0 cursor-pointer rounded-full border-2 transition-colors duration-300 ease-in-out focus:outline-none ${
+                          eng.hybridArchitecture !== "none"
+                            ? "border-cyan-400 bg-gradient-to-r from-cyan-500 to-purple-600 shadow-[0_0_12px_rgba(34,211,238,0.5)]"
+                            : "border-slate-700 bg-slate-900"
+                        }`}
+                        title={eng.hybridArchitecture !== "none" ? "Click to Untoggle Hybrid (Pure ICE Mode)" : "Click to Toggle Hybrid ON (ICE + Electric Motor)"}
+                      >
+                        <span
+                          className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow-lg ring-0 transition duration-300 ease-in-out ${
+                            eng.hybridArchitecture !== "none" ? "translate-x-7" : "translate-x-0.5"
+                          } my-0.5`}
+                        />
+                      </button>
+                    </div>
+
+                    {/* Quick Mode Shortcuts: Pure NA vs Hybrid Boost */}
+                    <div className="flex items-center gap-2 mt-2.5 pt-2 border-t border-base-800 font-mono text-[10px]">
+                      <span className="text-slate-500 uppercase tracking-wider">Quick Presets:</span>
+                      <button
+                        onClick={() => {
+                          updateEngine({
+                            hybridArchitecture: "none",
+                            hasMguH: false,
+                            hybridMotorPower: 0,
+                            batteryCapacity: 0,
+                            intake: "na",
+                            turboSize: 0,
+                            boostPressure: 0,
+                            layout: eng.layout === "hybrid" ? "v12" : eng.layout,
+                          });
+                        }}
+                        className={`px-2 py-1 rounded-lg border transition-all cursor-pointer ${
+                          eng.hybridArchitecture === "none" && eng.intake === "na"
+                            ? "bg-emerald-500/20 text-emerald-300 border-emerald-500/40 font-bold shadow-sm"
+                            : "bg-base-900 text-slate-400 hover:text-slate-200 border-base-800"
+                        }`}
+                      >
+                        🌿 Pure NA ICE (Naturally Aspirated)
+                      </button>
+
+                      <button
+                        onClick={() => {
+                          updateEngine({
+                            hybridArchitecture: "phev",
+                            hybridMotorPower: eng.hybridMotorPower || 180,
+                            batteryCapacity: eng.batteryCapacity || 16,
+                            hasMguH: true,
+                          });
+                        }}
+                        className={`px-2 py-1 rounded-lg border transition-all cursor-pointer ${
+                          eng.hybridArchitecture !== "none"
+                            ? "bg-cyan-500/20 text-cyan-300 border-cyan-500/40 font-bold shadow-sm"
+                            : "bg-base-900 text-slate-400 hover:text-slate-200 border-base-800"
+                        }`}
+                      >
+                        ⚡ Hybrid Electric Assist (Motor + Battery)
+                      </button>
+                    </div>
+
+                    {/* Interactive Hybrid Motor & ECU Configuration Controls */}
+                    {eng.hybridArchitecture !== "none" && (
+                      <div className="mt-3 p-3 rounded-xl bg-cyan-950/20 border border-cyan-500/30 space-y-2.5">
+                        <div className="flex items-center justify-between text-xs font-mono font-bold text-cyan-300">
+                          <span>⚡ Hybrid Drive & ECU Configuration</span>
+                          <span className="px-1.5 py-0.5 rounded bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 text-[10px]">
+                            {Math.round((eng.hybridMotorPower || 180) * 1.341)} HP Boost
+                          </span>
+                        </div>
+
+                        <Slider
+                          label="Electric Motor Output"
+                          value={eng.hybridMotorPower || 180}
+                          min={50}
+                          max={500}
+                          step={10}
+                          unit=" kW"
+                          format={(v) => `${v} kW (${Math.round(v * 1.341)} HP)`}
+                          onChange={(v) => updateEngine({ hybridMotorPower: v })}
+                        />
+
+                        <Slider
+                          label="Hybrid Battery Pack"
+                          value={eng.batteryCapacity || 16}
+                          min={6}
+                          max={60}
+                          step={2}
+                          unit=" kWh"
+                          format={(v) => `${v} kWh`}
+                          onChange={(v) => updateEngine({ batteryCapacity: v })}
+                        />
+
+                        <div className="flex items-center justify-between pt-1">
+                          <span className="text-[11px] font-mono text-slate-300">MGU-H Turbo Recovery</span>
+                          <button
+                            onClick={() => updateEngine({ hasMguH: !eng.hasMguH })}
+                            className={`px-2 py-0.5 rounded text-[10px] font-mono font-bold border transition-all ${
+                              eng.hasMguH
+                                ? "bg-purple-500/20 text-purple-300 border-purple-500/40"
+                                : "bg-base-900 text-slate-500 border-base-800"
+                            }`}
+                          >
+                            {eng.hasMguH ? "⚡ MGU-H ACTIVE" : "DISABLED"}
+                          </button>
+                        </div>
+                      </div>
+                    )}
                   </div>
 
                   {!isElectric && (

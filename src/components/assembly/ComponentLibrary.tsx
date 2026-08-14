@@ -19,6 +19,7 @@ import {
   MaterialGrade,
   getAssemblyComponents,
 } from "../../sim/assemblyTypes";
+import { StatDeltaBadges } from "./assemblyUIHelpers";
 import { EngineConfig } from "../../sim/types";
 
 interface ComponentLibraryProps {
@@ -29,6 +30,8 @@ interface ComponentLibraryProps {
   canInstall: (id: ComponentId) => boolean;
   onStartInstall: (id: ComponentId) => void;
   onHoverComponent: (id: ComponentId | null) => void;
+  selectedVariants?: Record<string, MaterialGrade>;
+  onSelectVariant?: (id: ComponentId, variant: MaterialGrade) => void;
   engineConfig?: Partial<EngineConfig>;
   className?: string;
 }
@@ -45,7 +48,7 @@ const COMPONENT_PNG_MAP: Record<string, string> = {
   oil_pan: "/assets/engine/oil_pan.png",
 };
 
-type CategoryFilter = "All" | "Core" | "Bottom End" | "Top End" | "Induction & Exhaust";
+type CategoryFilter = "All" | "Core" | "Bottom End" | "Top End" | "Induction & Exhaust" | "Hybrid & Electric";
 
 export function ComponentLibrary({
   installedComponents,
@@ -55,11 +58,13 @@ export function ComponentLibrary({
   canInstall,
   onStartInstall,
   onHoverComponent,
+  selectedVariants: propsSelectedVariants,
+  onSelectVariant,
   engineConfig,
   className = "",
 }: ComponentLibraryProps) {
   const [activeTab, setActiveTab] = useState<CategoryFilter>("All");
-  const [selectedVariants, setSelectedVariants] = useState<Record<ComponentId, MaterialGrade>>({
+  const [localSelectedVariants, setLocalSelectedVariants] = useState<Record<string, MaterialGrade>>({
     block: "cast",
     crankshaft: "forged",
     pistons: "forged",
@@ -72,14 +77,16 @@ export function ComponentLibrary({
     exhaust_headers: "forged",
     turbocharger: "titanium",
     oil_pan: "cast",
+    hybrid_motor: "forged",
+    inverter_ecu: "billet",
   });
+
+  const selectedVariants = propsSelectedVariants || localSelectedVariants;
 
   const assemblyComponents = useMemo(() => getAssemblyComponents(engineConfig), [engineConfig]);
 
   const isEV =
     engineConfig?.layout === "electric" ||
-    engineConfig?.layout === "hybrid" ||
-    (engineConfig as any)?.isElectric ||
     (engineConfig as any)?.powertrainType === "electric";
 
   const filteredComponents = useMemo(() => {
@@ -89,10 +96,11 @@ export function ComponentLibrary({
     });
   }, [assemblyComponents, activeTab]);
 
-  const categories: CategoryFilter[] = ["All", "Core", "Bottom End", "Top End", "Induction & Exhaust"];
+  const categories: CategoryFilter[] = ["All", "Core", "Bottom End", "Top End", "Induction & Exhaust", "Hybrid & Electric"];
 
   const handleVariantChange = (compKey: ComponentId, variant: MaterialGrade) => {
-    setSelectedVariants((prev) => ({ ...prev, [compKey]: variant }));
+    setLocalSelectedVariants((prev) => ({ ...prev, [compKey]: variant }));
+    onSelectVariant?.(compKey, variant);
   };
 
   const getCategoryBorder = (category: string) => {
@@ -233,28 +241,31 @@ export function ComponentLibrary({
                 </div>
               </div>
 
-              {/* Material Grade Selector Buttons */}
+              {/* Spec & Material Grade Architecture Selector */}
               {!isInstalled && (
-                <div className="flex items-center gap-1 mb-2 overflow-x-auto scrollbar-none">
-                  <span className="text-[9px] font-mono text-slate-400 flex items-center gap-0.5 pr-1">
-                    <Layers size={9} /> Material:
+                <div className="mb-2 space-y-1">
+                  <span className="text-[9px] font-mono text-slate-400 flex items-center gap-0.5">
+                    <Layers size={9} /> {comp.category === "Hybrid & Electric" ? "Spec Architecture & Voltage:" : "Material Grade:"}
                   </span>
-                  {comp.variants.map((v) => (
-                    <button
-                      key={v.id}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleVariantChange(comp.id, v.id);
-                      }}
-                      className={`px-1.5 py-0.5 rounded text-[9px] font-mono transition-all ${
-                        currentVariant === v.id
-                          ? "bg-cyan-500/25 text-cyan-300 border border-cyan-500/50 font-bold"
-                          : "bg-base-800 text-slate-400 border border-base-750 hover:bg-base-750"
-                      }`}
-                    >
-                      {v.id.toUpperCase()}
-                    </button>
-                  ))}
+                  <div className="grid grid-cols-2 gap-1">
+                    {comp.variants.map((v) => (
+                      <button
+                        key={v.id}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          handleVariantChange(comp.id, v.id);
+                        }}
+                        className={`px-1.5 py-1 rounded text-[9px] font-mono text-left truncate transition-all ${
+                          currentVariant === v.id
+                            ? "bg-cyan-500/25 text-cyan-200 border border-cyan-500/50 font-bold shadow-sm"
+                            : "bg-base-800 text-slate-400 border border-base-750 hover:bg-base-750 hover:text-slate-200"
+                        }`}
+                        title={v.label}
+                      >
+                        {v.label}
+                      </button>
+                    ))}
+                  </div>
                 </div>
               )}
 
@@ -267,20 +278,7 @@ export function ComponentLibrary({
               )}
 
               {/* Stat Impact Badges Grid */}
-              <div className="grid grid-cols-3 gap-1 pt-1.5 border-t border-white/5 text-[9.5px] font-mono">
-                <span className="flex items-center gap-0.5 text-cyan-300">
-                  <TrendingUp size={9} />
-                  <span>+{calculatedHp} HP</span>
-                </span>
-                <span className="flex items-center gap-0.5 text-pink-300">
-                  <Zap size={9} />
-                  <span>+{comp.statDeltas.torque} Nm</span>
-                </span>
-                <span className="flex items-center gap-0.5 text-amber-300">
-                  <DollarSign size={9} />
-                  <span>+${calculatedCost}</span>
-                </span>
-              </div>
+              <StatDeltaBadges meta={comp} variant={variantObj} size="sm" className="pt-1.5 border-t border-white/5" />
             </div>
           );
         })}

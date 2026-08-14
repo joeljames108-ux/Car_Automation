@@ -4,7 +4,10 @@ import {
   AssemblyPhase,
   ENGINE_ASSEMBLY_COMPONENTS,
   AssemblyComponentMeta,
+  getAssemblyComponents,
+  MaterialGrade,
 } from "../sim/assemblyTypes";
+import { EngineConfig } from "../sim/types";
 
 export interface AssemblyState {
   installedComponents: ComponentId[];
@@ -14,9 +17,10 @@ export interface AssemblyState {
   isAutoAssembling: boolean;
   hoveredComponentId: ComponentId | null;
   history: ComponentId[];
+  selectedVariants: Record<string, MaterialGrade>;
 }
 
-export function useAssemblyStore() {
+export function useAssemblyStore(engineConfig?: Partial<EngineConfig>) {
   const [installedComponents, setInstalledComponents] = useState<ComponentId[]>([]);
   const [activeComponentId, setActiveComponentId] = useState<ComponentId | null>(null);
   const [phase, setPhase] = useState<AssemblyPhase>("idle");
@@ -24,24 +28,53 @@ export function useAssemblyStore() {
   const [isAutoAssembling, setIsAutoAssembling] = useState<boolean>(false);
   const [hoveredComponentId, setHoveredComponentId] = useState<ComponentId | null>(null);
   const [history, setHistory] = useState<ComponentId[]>([]);
+  const [selectedVariants, setSelectedVariants] = useState<Record<string, MaterialGrade>>({
+    block: "cast",
+    crankshaft: "forged",
+    pistons: "forged",
+    rods: "forged",
+    camshaft: "forged",
+    head_gasket: "forged",
+    cylinder_head: "billet",
+    valves: "titanium",
+    intake_manifold: "billet",
+    exhaust_headers: "forged",
+    turbocharger: "titanium",
+    oil_pan: "cast",
+    hybrid_motor: "forged",
+    inverter_ecu: "billet",
+  });
+
+  const setSelectedVariant = useCallback((componentId: ComponentId, variant: MaterialGrade) => {
+    setSelectedVariants((prev) => ({
+      ...prev,
+      [componentId]: variant,
+    }));
+  }, []);
+
+  // Dynamically resolve component list based on ICE vs EV vs Hybrid configuration
+  const componentsList = useMemo(() => {
+    return getAssemblyComponents(engineConfig);
+  }, [engineConfig]);
 
   // Check if a component can be installed based on its dependencies
   const canInstall = useCallback(
     (componentId: ComponentId): boolean => {
       if (installedComponents.includes(componentId)) return false;
-      const meta = ENGINE_ASSEMBLY_COMPONENTS.find((c) => c.id === componentId);
+      const meta = componentsList.find((c) => c.id === componentId);
       if (!meta) return false;
       return meta.dependencies.every((dep) => installedComponents.includes(dep));
     },
-    [installedComponents]
+    [installedComponents, componentsList]
   );
 
   // Calculate completion percentage
   const progressPercentage = useMemo(() => {
-    return Math.round((installedComponents.length / ENGINE_ASSEMBLY_COMPONENTS.length) * 100);
-  }, [installedComponents]);
+    if (componentsList.length === 0) return 0;
+    return Math.round((installedComponents.length / componentsList.length) * 100);
+  }, [installedComponents, componentsList]);
 
-  // Calculate live cumulative stat totals from installed components
+  // Calculate live cumulative stat totals from installed components & material variants
   const currentStats = useMemo(() => {
     let hp = 100; // Base bare engine block HP
     let torque = 120; // Base Nm
@@ -50,13 +83,20 @@ export function useAssemblyStore() {
     let cost = 0; // $
 
     installedComponents.forEach((id) => {
-      const meta = ENGINE_ASSEMBLY_COMPONENTS.find((c) => c.id === id);
+      const meta = componentsList.find((c) => c.id === id);
       if (meta) {
-        hp += meta.statDeltas.hp;
-        torque += meta.statDeltas.torque;
-        weight += meta.statDeltas.weight;
-        reliability += meta.statDeltas.reliability;
-        cost += meta.statDeltas.cost;
+        const variantId = selectedVariants[id] || "cast";
+        const variantObj = meta.variants.find((v) => v.id === variantId) || meta.variants[0];
+        const hpMult = variantObj ? variantObj.hpMultiplier : 1;
+        const weightMult = variantObj ? variantObj.weightMultiplier : 1;
+        const costMult = variantObj ? variantObj.costMultiplier : 1;
+        const relDelta = variantObj ? variantObj.reliabilityDelta : 0;
+
+        hp += Math.round(meta.statDeltas.hp * hpMult);
+        torque += Math.round(meta.statDeltas.torque * hpMult);
+        weight += Math.round(meta.statDeltas.weight * weightMult);
+        reliability += relDelta;
+        cost += Math.round(meta.statDeltas.cost * costMult);
       }
     });
 
@@ -67,7 +107,7 @@ export function useAssemblyStore() {
       reliability: Math.min(100, Math.max(0, reliability)),
       cost: Math.max(0, cost),
     };
-  }, [installedComponents]);
+  }, [installedComponents, componentsList, selectedVariants]);
 
   // Start installation sequence for a component
   const startInstall = useCallback(
@@ -125,11 +165,11 @@ export function useAssemblyStore() {
   // Next recommended component to install
   const nextRecommendedComponent = useMemo((): AssemblyComponentMeta | null => {
     return (
-      ENGINE_ASSEMBLY_COMPONENTS.find((c) => !installedComponents.includes(c.id) && canInstall(c.id)) || null
+      componentsList.find((c) => !installedComponents.includes(c.id) && canInstall(c.id)) || null
     );
-  }, [installedComponents, canInstall]);
+  }, [installedComponents, canInstall, componentsList]);
 
-  const isAssemblyComplete = installedComponents.length === ENGINE_ASSEMBLY_COMPONENTS.length;
+  const isAssemblyComplete = installedComponents.length === componentsList.length;
 
   return {
     installedComponents,
@@ -139,6 +179,8 @@ export function useAssemblyStore() {
     isAutoAssembling,
     hoveredComponentId,
     history,
+    selectedVariants,
+    setSelectedVariant,
     progressPercentage,
     currentStats,
     canInstall,

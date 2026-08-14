@@ -1,14 +1,18 @@
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useState, useMemo } from "react";
 import {
-  Bot, AlertTriangle, Lightbulb, TrendingUp, X, Check, Info,
-  Wrench, Trophy, DollarSign, Leaf, Cpu, Zap, Target, Send, Sparkles, RefreshCw, ShieldCheck, ArrowUpRight, RotateCcw, Sliders
+  Bot, AlertTriangle, Lightbulb, X, Check,
+  Wrench, Trophy, DollarSign, Leaf, Cpu, Zap, Target, Send, Sparkles, RotateCcw,
+  ShieldCheck, ArrowUpRight, Layers, FileText
 } from "lucide-react";
 import { useDesign } from "../state/DesignContext";
 import { AIAssistant } from "./AIAssistant";
+import { ApexAgentConsole } from "./agents/ApexAgentConsole";
+import { EngineeringLog } from "./EngineeringLog";
 
 type Severity = "critical" | "warning" | "info";
 type EngineerId = "chief" | "race" | "production" | "sustainability" | "technology";
 type ModeId = "beginner" | "intermediate" | "expert";
+type StudioSubTab = "all" | "advisory" | "agents" | "assistant" | "logs";
 
 const ENGINEERS: Record<EngineerId, { label: string; icon: React.ReactNode; focus: string; tone: string; desc: string }> = {
   chief:          { label: "Chief Engineer",        icon: <Wrench size={16} />,    focus: "Technical & Powertrain", tone: "text-cyan-400 border-cyan-500/40 bg-cyan-500/10", desc: "Monitors internal combustion stress, knock thresholds, and structural integrity." },
@@ -36,11 +40,11 @@ function round(v: number, dp = 1) {
 export function ApexAIStudio() {
   const { design, sim, carConcept, setCarConcept, updateEngine, updateVehicle, updateAero, updateAeroResearch, updateExterior, updateInterior } = useDesign();
 
+  const [studioTab, setStudioTab] = useState<StudioSubTab>("all");
   const [engineer, setEngineer] = useState<EngineerId>("chief");
   const [mode, setMode] = useState<ModeId>("expert");
   const [activeCategory, setActiveCategory] = useState<"all" | "Engine" | "Chassis" | "Aero" | "Manufacturing">("all");
   const [dismissed, setDismissed] = useState<Set<string>>(new Set());
-  const [reaction, setReaction] = useState<string | null>(null);
 
   const [chatInput, setChatInput] = useState("");
   const [chatMessages, setChatMessages] = useState<Array<{ sender: "user" | "ai"; text: string; time: string }>>([
@@ -226,96 +230,10 @@ export function ApexAIStudio() {
     setAppliedSet((prev) => new Set(prev).add(s.id));
   };
 
-  return (
-    <div className="w-full flex flex-col gap-6 text-slate-100 select-none pb-16 animate-fade-in">
-      {/* ── TOP HERO BANNER: APEX AI NEURAL COMMAND STUDIO ── */}
-      <div className="relative p-6 rounded-3xl bg-gradient-to-r from-slate-900/90 via-cyan-950/40 to-slate-900/90 border border-cyan-500/30 backdrop-blur-2xl shadow-2xl overflow-hidden">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-cyan-500/10 rounded-full filter blur-3xl pointer-events-none" />
-
-        <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 relative z-10">
-          <div className="flex items-center gap-3.5">
-            <div className="p-3.5 rounded-2xl bg-cyan-500/20 text-cyan-400 border border-cyan-500/40 shadow-[0_0_20px_rgba(34,211,238,0.3)]">
-              <Bot size={32} />
-            </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <h1 className="text-xl font-black text-slate-100 uppercase tracking-wider">APEX AI CHIEF ENGINEERING STUDIO</h1>
-                <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 text-[10px] font-mono font-bold flex items-center gap-1">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" /> ONLINE v2.4
-                </span>
-              </div>
-              <p className="text-xs text-slate-400 font-mono mt-0.5">
-                Complete neural advisory suite: live warnings, auto-optimizations, concept alignment & interactive terminal.
-              </p>
-            </div>
-          </div>
-
-          {/* Target Concept Philosophy Controls */}
-          <div className="flex items-center gap-2 bg-slate-950/80 px-3 py-2 rounded-2xl border border-cyan-500/30 font-mono">
-            <span className="text-[10px] text-cyan-400 flex items-center gap-1 font-bold">
-              <Target size={13} /> CONCEPT:
-            </span>
-            {(["budget", "track", "luxury", "balanced"] as const).map((c) => (
-              <button
-                key={c}
-                onClick={() => setCarConcept(c)}
-                className={`px-2.5 py-1 rounded-xl text-[11px] font-bold uppercase transition-all border cursor-pointer ${
-                  carConcept === c
-                    ? c === "budget"
-                      ? "bg-emerald-500/20 border-emerald-500/40 text-emerald-300"
-                      : c === "track"
-                      ? "bg-amber-500/20 border-amber-500/40 text-amber-300"
-                      : c === "luxury"
-                      ? "bg-purple-500/20 border-purple-500/40 text-purple-300"
-                      : "bg-cyan-500/20 border-cyan-500/40 text-cyan-300"
-                    : "bg-slate-900 border-slate-800 text-slate-500 hover:text-slate-300"
-                }`}
-              >
-                {c}
-              </button>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* ── EMBEDDED FULL APEX AI ASSISTANT SUITE ── */}
-      <AIAssistant embedded={true} />
-
-      {/* ── AUTO-OPTIMIZATION ONE-CLICK ACTION PRESETS BAR ── */}
-      <div className="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 backdrop-blur-xl shadow-xl flex flex-wrap items-center justify-between gap-3">
-        <div className="flex items-center gap-2">
-          <Zap size={16} className="text-cyan-400" />
-          <span className="text-xs font-bold text-slate-100 uppercase tracking-wider">One-Click Auto Optimizers</span>
-        </div>
-
-        <div className="flex flex-wrap items-center gap-2">
-          {[
-            { id: "performance", label: "Max Performance", icon: <Trophy size={13} />, color: "text-amber-400 border-amber-500/40 bg-amber-500/10 hover:bg-amber-500/20" },
-            { id: "cost", label: "Lowest Cost", icon: <DollarSign size={13} />, color: "text-emerald-400 border-emerald-500/40 bg-emerald-500/10 hover:bg-emerald-500/20" },
-            { id: "reliability", label: "Max Reliability", icon: <Wrench size={13} />, color: "text-cyan-400 border-cyan-500/40 bg-cyan-500/10 hover:bg-cyan-500/20" },
-            { id: "efficiency", label: "Best Efficiency", icon: <Leaf size={13} />, color: "text-green-400 border-green-500/40 bg-green-500/10 hover:bg-green-500/20" },
-            { id: "luxury", label: "Luxury Focus", icon: <Cpu size={13} />, color: "text-purple-400 border-purple-500/40 bg-purple-500/10 hover:bg-purple-500/20" },
-          ].map((p) => (
-            <button
-              key={p.id}
-              onClick={() => handleAutoOptimize(p.id)}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-xs font-mono font-bold transition-all cursor-pointer shadow-md ${p.color}`}
-            >
-              {p.icon}
-              {p.label}
-            </button>
-          ))}
-
-          <button
-            onClick={() => setDismissed(new Set())}
-            className="flex items-center gap-1 px-3 py-1.5 rounded-xl border border-slate-700 bg-slate-950 text-slate-400 hover:text-slate-200 text-xs font-mono transition-all cursor-pointer"
-          >
-            <RotateCcw size={12} /> Reset Alerts
-          </button>
-        </div>
-      </div>
-
-      {/* ── AI ADVISORY BOARD PERSONAS & MODE SELECTOR ── */}
+  // Render sub-components
+  const renderAdvisorySection = () => (
+    <div className="flex flex-col gap-6">
+      {/* AI Advisory Board Personas & Mode Selector */}
       <div className="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-4">
         {/* Personas Grid */}
         <div className="grid grid-cols-2 md:grid-cols-5 gap-2.5 flex-1">
@@ -362,7 +280,7 @@ export function ApexAIStudio() {
         </div>
       </div>
 
-      {/* ── MAIN CONTENT GRID: LIVE WARNINGS, OPTIMIZATION FEED & TERMINAL CHAT ── */}
+      {/* Grid: Diagnostics Warnings + Suggestions & Interactive Terminal */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         {/* Left Column (7 Cols): Filterable Warnings & Actionable Suggestions */}
         <div className="lg:col-span-7 flex flex-col gap-5">
@@ -566,6 +484,151 @@ export function ApexAIStudio() {
           </div>
         </div>
       </div>
+    </div>
+  );
+
+  return (
+    <div className="w-full flex flex-col gap-6 text-slate-100 select-none pb-16 animate-fade-in">
+      {/* ── TOP HERO BANNER: APEX AI CHIEF ENGINEERING & MULTI-AGENT STUDIO ── */}
+      <div className="relative p-6 rounded-3xl bg-gradient-to-r from-slate-900/90 via-cyan-950/40 to-slate-900/90 border border-cyan-500/30 backdrop-blur-2xl shadow-2xl overflow-hidden">
+        <div className="absolute top-0 right-0 w-96 h-96 bg-cyan-500/10 rounded-full filter blur-3xl pointer-events-none" />
+
+        <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 relative z-10">
+          <div className="flex items-center gap-3.5">
+            <div className="p-3.5 rounded-2xl bg-cyan-500/20 text-cyan-400 border border-cyan-500/40 shadow-[0_0_20px_rgba(34,211,238,0.3)]">
+              <Bot size={32} />
+            </div>
+            <div>
+              <div className="flex items-center gap-2">
+                <h1 className="text-xl font-black text-slate-100 uppercase tracking-wider">APEX AI CHIEF ENGINEERING & MULTI-AGENT STUDIO</h1>
+                <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 text-[10px] font-mono font-bold flex items-center gap-1">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" /> ONLINE v2.4
+                </span>
+              </div>
+              <p className="text-xs text-slate-400 font-mono mt-0.5">
+                Complete neural advisory suite: live warnings, multi-agent console, AI assistant, telemetry & auto-tuning presets.
+              </p>
+            </div>
+          </div>
+
+          {/* Target Concept Philosophy Controls */}
+          <div className="flex items-center gap-2 bg-slate-950/80 px-3 py-2 rounded-2xl border border-cyan-500/30 font-mono">
+            <span className="text-[10px] text-cyan-400 flex items-center gap-1 font-bold">
+              <Target size={13} /> CONCEPT:
+            </span>
+            {(["budget", "track", "luxury", "balanced"] as const).map((c) => (
+              <button
+                key={c}
+                onClick={() => setCarConcept(c)}
+                className={`px-2.5 py-1 rounded-xl text-[11px] font-bold uppercase transition-all border cursor-pointer ${
+                  carConcept === c
+                    ? c === "budget"
+                      ? "bg-emerald-500/20 border-emerald-500/40 text-emerald-300"
+                      : c === "track"
+                      ? "bg-amber-500/20 border-amber-500/40 text-amber-300"
+                      : c === "luxury"
+                      ? "bg-purple-500/20 border-purple-500/40 text-purple-300"
+                      : "bg-cyan-500/20 border-cyan-500/40 text-cyan-300"
+                    : "bg-slate-900 border-slate-800 text-slate-500 hover:text-slate-300"
+                }`}
+              >
+                {c}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* ── APEX AI STUDIO SUB-NAVIGATION TABS BAR ── */}
+        <div className="flex items-center gap-2 mt-6 pt-4 border-t border-slate-800/80 overflow-x-auto scrollbar-none">
+          {[
+            { id: "all" as const, label: "All-in-One Studio Suite", icon: <Layers size={14} /> },
+            { id: "advisory" as const, label: "Chief Advisory & Diagnostics", icon: <Wrench size={14} /> },
+            { id: "agents" as const, label: "Autonomous Multi-Agent Console", icon: <Zap size={14} /> },
+            { id: "assistant" as const, label: "AI Assistant Hub", icon: <Bot size={14} /> },
+            { id: "logs" as const, label: "Telemetry Log & AI Stream", icon: <FileText size={14} /> },
+          ].map((tab) => {
+            const isActive = studioTab === tab.id;
+            return (
+              <button
+                key={tab.id}
+                onClick={() => setStudioTab(tab.id)}
+                className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap cursor-pointer ${
+                  isActive
+                    ? "bg-gradient-to-r from-cyan-500/30 to-purple-500/25 text-cyan-200 border border-cyan-400/50 shadow-[0_0_15px_rgba(34,211,238,0.3)]"
+                    : "bg-slate-950/60 border border-slate-800/80 text-slate-400 hover:text-slate-200 hover:bg-slate-900/80"
+                }`}
+              >
+                {tab.icon}
+                <span>{tab.label}</span>
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* ── APEX AI ENGINEER ASSISTANT BAR WINDOW (EMBEDDED) ── */}
+      <AIAssistant embedded={true} />
+
+      {/* ── DYNAMIC SUB-TAB CONTENT DISPLAY ── */}
+      {studioTab === "all" && (
+        <div className="flex flex-col gap-8">
+          {/* Section 1: Chief Advisory Studio */}
+          <div className="space-y-3">
+            <h2 className="text-sm font-bold text-slate-300 uppercase tracking-widest flex items-center gap-2">
+              <Wrench size={16} className="text-cyan-400" /> Chief Advisory & Live Diagnostics Studio
+            </h2>
+            {renderAdvisorySection()}
+          </div>
+
+          {/* Section 2: Autonomous Multi-Agent Console */}
+          <div className="space-y-3">
+            <h2 className="text-sm font-bold text-slate-300 uppercase tracking-widest flex items-center gap-2 pt-4 border-t border-slate-800/80">
+              <Zap size={16} className="text-amber-400" /> Autonomous Multi-Agent Control Console
+            </h2>
+            <ApexAgentConsole
+              engineConfig={design.engine}
+              installedComponents={[]}
+              activeComponentId={null}
+              phase="idle"
+              powerHp={sim.peakPower}
+              weightKg={sim.weight}
+              onApplyTuning={(changes) => updateEngine(changes)}
+            />
+          </div>
+
+          {/* Section 3: Telemetry Log Stream */}
+          <div className="space-y-3">
+            <h2 className="text-sm font-bold text-slate-300 uppercase tracking-widest flex items-center gap-2 pt-4 border-t border-slate-800/80">
+              <FileText size={16} className="text-purple-400" /> Apex AI Telemetry Log & Event Stream
+            </h2>
+            <div className="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 backdrop-blur-xl shadow-xl">
+              <EngineeringLog />
+            </div>
+          </div>
+        </div>
+      )}
+
+      {studioTab === "advisory" && renderAdvisorySection()}
+
+      {studioTab === "agents" && (
+        <ApexAgentConsole
+          engineConfig={design.engine}
+          installedComponents={[]}
+          activeComponentId={null}
+          phase="idle"
+          powerHp={sim.peakPower}
+          weightKg={sim.weight}
+          onApplyTuning={(changes) => updateEngine(changes)}
+        />
+      )}
+
+      {studioTab === "assistant" && <AIAssistant embedded={true} />}
+
+      {studioTab === "logs" && (
+        <div className="p-6 rounded-2xl bg-slate-900/80 border border-slate-800 backdrop-blur-xl shadow-xl">
+          <EngineeringLog />
+        </div>
+      )}
     </div>
   );
 }

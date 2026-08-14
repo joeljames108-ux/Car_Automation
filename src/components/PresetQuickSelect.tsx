@@ -4,6 +4,7 @@ import { useDesign } from "../state/DesignContext";
 import { useToast } from "./ToastSystem";
 import { ZoomableGlassCard } from "./ui/ZoomableGlassCard";
 import { VEHICLE_PRESET_LIBRARY, createBaseDesign, createV12Hybrid1000HpDesign } from "../sim/vehiclePresets";
+import type { VehicleDesign } from "../sim/types";
 
 export interface PresetCardItem {
   id: string;
