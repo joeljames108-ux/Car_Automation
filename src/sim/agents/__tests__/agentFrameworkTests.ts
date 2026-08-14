@@ -9,6 +9,7 @@ import { ThermalManagementAgent } from "../domainAgents/thermalManagementAgent";
 import { SuspensionDynamicsAgent } from "../domainAgents/suspensionDynamicsAgent";
 import { BrakeDesignAgent } from "../domainAgents/brakeDesignAgent";
 import { ChassisStructuralAgent } from "../domainAgents/chassisStructuralAgent";
+import { HomologationRegulatoryAgent } from "../domainAgents/homologationRegulatoryAgent";
 
 export interface AgentTestResult {
   suite: string;
@@ -112,6 +113,15 @@ export class AgentFrameworkTestRunner {
 
       if (findings.length === 0 || findings[0].severity !== "critical") {
         throw new Error("Brake agent failed to detect brake thermal overload");
+      }
+    });
+
+    this.runTest("HomologationRegulatoryAgent", "Triggers critical alert when catalytic converter is missing", () => {
+      const agent = new HomologationRegulatoryAgent();
+      const findings = agent.analyze({ engine: { exhaustCat: false } }, {});
+
+      if (findings.length === 0 || findings[0].severity !== "critical") {
+        throw new Error("Homologation agent failed to detect missing catalytic converter");
       }
     });
 

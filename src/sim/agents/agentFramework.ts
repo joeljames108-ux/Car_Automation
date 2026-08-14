@@ -22,7 +22,17 @@ export type AgentDomain =
   | "tyres"
   | "race_strategy"
   | "assembly_qa"
-  | "rival_strategy";
+  | "rival_strategy"
+  | "transmission"
+  | "infotainment_ux"
+  | "ergonomics"
+  | "homologation"
+  | "supply_chain"
+  | "predictive_maint"
+  | "pit_operations"
+  | "aero_acoustics"
+  | "battery_life"
+  | "sponsor_roi";
 
 export type AgentState = "idle" | "analyzing" | "recommending" | "waiting" | "alert";
 

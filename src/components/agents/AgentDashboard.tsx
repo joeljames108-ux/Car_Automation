@@ -92,7 +92,7 @@ export const AgentDashboard: React.FC<AgentDashboardProps> = ({
 
         <div className="flex items-center gap-2 text-xs">
           <Filter size={14} className="text-slate-400" />
-          {["all", "powertrain", "dynamics", "vehicle", "racing"].map((cat) => (
+          {["all", "powertrain", "dynamics", "vehicle", "racing", "strategy"].map((cat) => (
             <button
               key={cat}
               onClick={() => setFilterCategory(cat)}

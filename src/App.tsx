@@ -54,6 +54,16 @@ import { SafetyCrashAgent } from "./sim/agents/domainAgents/safetyCrashAgent";
 import { NVHComfortAgent } from "./sim/agents/domainAgents/nvhComfortAgent";
 import { TyreStrategyAgent } from "./sim/agents/domainAgents/tyreStrategyAgent";
 import { RivalStrategistAgent } from "./sim/agents/domainAgents/rivalStrategistAgent";
+import { TransmissionDrivetrainAgent } from "./sim/agents/domainAgents/transmissionDrivetrainAgent";
+import { InfotainmentUXAgent } from "./sim/agents/domainAgents/infotainmentUXAgent";
+import { ErgonomicsVisibilityAgent } from "./sim/agents/domainAgents/ergonomicsVisibilityAgent";
+import { HomologationRegulatoryAgent } from "./sim/agents/domainAgents/homologationRegulatoryAgent";
+import { SupplyChainResilienceAgent } from "./sim/agents/domainAgents/supplyChainResilienceAgent";
+import { TelemetryPredictiveMaintenanceAgent } from "./sim/agents/domainAgents/telemetryPredictiveMaintenanceAgent";
+import { PitStopOperationsAgent } from "./sim/agents/domainAgents/pitStopOperationsAgent";
+import { AeroAcousticsWindNoiseAgent } from "./sim/agents/domainAgents/aeroAcousticsWindNoiseAgent";
+import { BatteryDegradationLifeAgent } from "./sim/agents/domainAgents/batteryDegradationLifeAgent";
+import { MotorsportSponsorROIAgent } from "./sim/agents/domainAgents/motorsportSponsorROIAgent";
 import { ChiefPowertrainAgent, RoboticAssemblyQAAgent, RaceStrategyAgent } from "./sim/agents/apexAgentEngine";
 import { Search, Command as CmdIcon, Bot } from "lucide-react";
 import { VisionGlassHeader } from "./components/ui/VisionGlassHeader";
@@ -248,7 +258,7 @@ function AppInner() {
     return () => window.removeEventListener("keydown", handleGlobalKeydown);
   }, []);
 
-  // Initialize Autonomous AI Engineering Division (All 15 Domain Agents)
+  // Initialize Autonomous AI Engineering Division (All 25 Domain Agents)
   useEffect(() => {
     const orchestrator = AgentOrchestrator.getInstance();
     orchestrator.registerAgent(new ChiefPowertrainAgent());
@@ -266,6 +276,16 @@ function AppInner() {
     orchestrator.registerAgent(new RaceStrategyAgent());
     orchestrator.registerAgent(new RoboticAssemblyQAAgent());
     orchestrator.registerAgent(new RivalStrategistAgent());
+    orchestrator.registerAgent(new TransmissionDrivetrainAgent());
+    orchestrator.registerAgent(new InfotainmentUXAgent());
+    orchestrator.registerAgent(new ErgonomicsVisibilityAgent());
+    orchestrator.registerAgent(new HomologationRegulatoryAgent());
+    orchestrator.registerAgent(new SupplyChainResilienceAgent());
+    orchestrator.registerAgent(new TelemetryPredictiveMaintenanceAgent());
+    orchestrator.registerAgent(new PitStopOperationsAgent());
+    orchestrator.registerAgent(new AeroAcousticsWindNoiseAgent());
+    orchestrator.registerAgent(new BatteryDegradationLifeAgent());
+    orchestrator.registerAgent(new MotorsportSponsorROIAgent());
 
     orchestrator.start(
       () => ({ engine: design.engine, vehicle: design.vehicle, carConcept }),
