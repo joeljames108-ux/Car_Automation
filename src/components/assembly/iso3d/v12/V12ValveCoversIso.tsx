@@ -4,6 +4,7 @@ import { projectIso, projectIsoEllipse, type ScreenPoint2D } from "../isoMath";
 
 interface V12ValveCoversIsoProps {
   originScreen?: ScreenPoint2D;
+  explodedAmount?: number;
   componentState?: {
     isInstalled: boolean;
     isActive: boolean;
@@ -20,30 +21,27 @@ interface V12ValveCoversIsoProps {
  * ═══════════════════════════════════════════════════════════════════
  *
  * Left (Bank 1) and Right (Bank 2) CNC Billet Aluminum Valve Covers
- * with Vibrant Orange-Gold Anodized Finish matching the reference image.
- *
- * Mechanical Details:
- *  1. Dual 6061-T6 Billet Aluminum Sculpted Cam Covers
- *  2. Vibrant Orange-Gold Anodized Surface with High-Gloss Specular Reflections
- *  3. 12 Recessed Spark Plug Well Access Port Grommets (6 per Bank)
- *  4. 28x Perimeter M6 Stainless Socket-Head Dress Fasteners
- *  5. CNC Billet Oil Filler Cap with Knurled Bezel & Laser-Etched Badging
+ * with sculpted arched camshaft tunnels, filleted spark plug valley
+ * gutters, and vibrant orange-gold anodized finish.
  */
 export const V12ValveCoversIso: React.FC<V12ValveCoversIsoProps> = ({
-  originScreen = { x: 250, y: 220 },
+  originScreen = { x: 290, y: 245 },
+  explodedAmount = 0,
   componentState,
   onHoverComponent,
 }) => {
+  const expZ = explodedAmount * 28;
+
   const P = useMemo(
-    () => (x: number, y: number, z: number) => projectIso({ x, y, z }, originScreen),
-    [originScreen]
+    () => (x: number, y: number, z: number) => projectIso({ x, y, z: z + expZ }, originScreen),
+    [originScreen, expZ]
   );
 
   const blockLength = 236;
   const coverLength = blockLength - 16;
   const halfCL = coverLength / 2;
   const coverHeight = 22;
-  const coverZBase = 124; // Sits on top of cylinder head at Z=124
+  const coverZBase = 124;
 
   const geometry = useMemo(() => {
     // Bank 1 (Left / Front) Valve Cover
@@ -57,6 +55,10 @@ export const V12ValveCoversIso: React.FC<V12ValveCoversIsoProps> = ({
     const b1TopBL = P(-halfCL, 8, coverZBase + coverHeight + 14);
     const b1TopBR = P(halfCL, 8, coverZBase + coverHeight + 14);
 
+    // Bank 1 Arched Camshaft Tunnel Crown (Upper Peak)
+    const b1CamPeakFL = P(-halfCL, 24, coverZBase + coverHeight + 6);
+    const b1CamPeakFR = P(halfCL, 24, coverZBase + coverHeight + 6);
+
     // Bank 2 (Right / Rear) Valve Cover
     const b2BotFL = P(-halfCL, -8, coverZBase + 14);
     const b2BotFR = P(halfCL, -8, coverZBase + 14);
@@ -67,6 +69,10 @@ export const V12ValveCoversIso: React.FC<V12ValveCoversIsoProps> = ({
     const b2TopFR = P(halfCL, -8, coverZBase + coverHeight + 14);
     const b2TopBL = P(-halfCL, -40, coverZBase + coverHeight);
     const b2TopBR = P(halfCL, -40, coverZBase + coverHeight);
+
+    // Bank 2 Arched Camshaft Tunnel Crown (Upper Peak)
+    const b2CamPeakFL = P(-halfCL, -24, coverZBase + coverHeight + 6);
+    const b2CamPeakFR = P(halfCL, -24, coverZBase + coverHeight + 6);
 
     // Bank 1 6x Spark Plug Well Access Holes
     const b1SparkPlugs: ScreenPoint2D[] = [];
@@ -82,139 +88,117 @@ export const V12ValveCoversIso: React.FC<V12ValveCoversIsoProps> = ({
     return {
       b1BotFL, b1BotFR, b1BotBL, b1BotBR,
       b1TopFL, b1TopFR, b1TopBL, b1TopBR,
+      b1CamPeakFL, b1CamPeakFR,
       b2BotFL, b2BotFR, b2BotBL, b2BotBR,
       b2TopFL, b2TopFR, b2TopBL, b2TopBR,
+      b2CamPeakFL, b2CamPeakFR,
       b1SparkPlugs,
       oilCapPt,
     };
   }, [P, coverLength, halfCL, coverHeight, coverZBase]);
+
+  const isInstalled = componentState ? componentState.isInstalled : true;
+  const opacity = componentState ? componentState.opacity : 1;
+
+  if (!isInstalled && opacity === 0) return null;
 
   return (
     <g
       id="v12-valve-covers-3d"
       onMouseEnter={() => onHoverComponent?.("cylinder_head")}
       onMouseLeave={() => onHoverComponent?.(null)}
-      className="cursor-pointer transition-all duration-700 ease-out"
+      className="cursor-pointer transition-all duration-500 ease-out"
       style={{
+        opacity,
         transform: componentState
           ? `translate(${componentState.offsetX}px, ${componentState.offsetY}px)`
           : undefined,
-        opacity: componentState ? componentState.opacity : 1,
       }}
     >
-      {/* ── 1. DEFINITIONS FOR ORANGE-GOLD ANODIZED SHADERS ── */}
       <defs>
-        {/* Vibrant Orange-Gold Top Deck Gradient */}
-        <linearGradient id="v12-valve-cover-gold-top" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#fde047" />
+        {/* Vibrant Orange-Gold Anodized Aluminum Shader */}
+        <linearGradient id="v12-anodized-orange-gold" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#fef08a" />
           <stop offset="25%" stopColor="#f59e0b" />
-          <stop offset="65%" stopColor="#d97706" />
-          <stop offset="100%" stopColor="#b45309" />
+          <stop offset="60%" stopColor="#ea580c" />
+          <stop offset="85%" stopColor="#c2410c" />
+          <stop offset="100%" stopColor="#7c2d12" />
         </linearGradient>
 
-        {/* Orange-Gold Side Wall Gradient */}
-        <linearGradient id="v12-valve-cover-gold-side" x1="0%" y1="0%" x2="0%" y2="100%">
-          <stop offset="0%" stopColor="#d97706" />
-          <stop offset="40%" stopColor="#b45309" />
-          <stop offset="100%" stopColor="#78350f" />
+        <linearGradient id="v12-valve-specular-ridge" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stopColor="#ffffff" stopOpacity="0.9" />
+          <stop offset="45%" stopColor="#fef08a" stopOpacity="0.7" />
+          <stop offset="100%" stopColor="#ea580c" stopOpacity="0.1" />
         </linearGradient>
       </defs>
 
-      {/* ── 2. BANK 1 (LEFT / FRONT) ORANGE-GOLD VALVE COVER ── */}
-      <g id="v12-bank1-valve-cover">
-        {/* Front Flank */}
-        <polygon
-          points={`${geometry.b1BotFL.x},${geometry.b1BotFL.y} ${geometry.b1BotFR.x},${geometry.b1BotFR.y} ${geometry.b1TopFR.x},${geometry.b1TopFR.y} ${geometry.b1TopFL.x},${geometry.b1TopFL.y}`}
-          fill="url(#v12-valve-cover-gold-side)"
-          stroke="#090d16"
-          strokeWidth="2.0"
-        />
-        {/* Right End Wall */}
-        <polygon
-          points={`${geometry.b1BotFR.x},${geometry.b1BotFR.y} ${geometry.b1BotBR.x},${geometry.b1BotBR.y} ${geometry.b1TopBR.x},${geometry.b1TopBR.y} ${geometry.b1TopFR.x},${geometry.b1TopFR.y}`}
-          fill="url(#v12-valve-cover-gold-side)"
-          stroke="#090d16"
-          strokeWidth="2.0"
-          opacity={0.88}
-        />
-        {/* Top Sloped Deck Surface */}
-        <polygon
-          points={`${geometry.b1TopFL.x},${geometry.b1TopFL.y} ${geometry.b1TopFR.x},${geometry.b1TopFR.y} ${geometry.b1TopBR.x},${geometry.b1TopBR.y} ${geometry.b1TopBL.x},${geometry.b1TopBL.y}`}
-          fill="url(#v12-valve-cover-gold-top)"
-          stroke="#090d16"
-          strokeWidth="2.2"
-        />
+      {/* ── BANK 2 (RIGHT) VALVE COVER WITH ARCHED CAM TUNNELS ── */}
+      <path
+        d={`M ${geometry.b2BotBL.x} ${geometry.b2BotBL.y}
+            L ${geometry.b2BotBR.x} ${geometry.b2BotBR.y}
+            L ${geometry.b2TopBR.x} ${geometry.b2TopBR.y}
+            L ${geometry.b2TopBL.x} ${geometry.b2TopBL.y} Z`}
+        fill="url(#v12-anodized-orange-gold)"
+        stroke="#090d16"
+        strokeWidth="1.6"
+      />
+      {/* Curved Arched Top Face on Bank 2 */}
+      <path
+        d={`M ${geometry.b2TopBL.x} ${geometry.b2TopBL.y}
+            Q ${geometry.b2CamPeakFL.x} ${geometry.b2CamPeakFL.y} ${geometry.b2TopFL.x} ${geometry.b2TopFL.y}
+            L ${geometry.b2TopFR.x} ${geometry.b2TopFR.y}
+            Q ${geometry.b2CamPeakFR.x} ${geometry.b2CamPeakFR.y} ${geometry.b2TopBR.x} ${geometry.b2TopBR.y}
+            Z`}
+        fill="url(#v12-anodized-orange-gold)"
+        stroke="#090d16"
+        strokeWidth="1.6"
+      />
 
-        {/* Specular Front Edge Highlight Beam */}
-        <line
-          x1={geometry.b1TopFL.x}
-          y1={geometry.b1TopFL.y}
-          x2={geometry.b1TopFR.x}
-          y2={geometry.b1TopFR.y}
-          stroke="#ffffff"
-          strokeWidth="1.8"
-          opacity={0.9}
-          strokeLinecap="round"
-        />
+      {/* ── BANK 1 (LEFT) VALVE COVER WITH ARCHED CAM TUNNELS ── */}
+      <path
+        d={`M ${geometry.b1BotFL.x} ${geometry.b1BotFL.y}
+            L ${geometry.b1BotFR.x} ${geometry.b1BotFR.y}
+            L ${geometry.b1TopFR.x} ${geometry.b1TopFR.y}
+            L ${geometry.b1TopFL.x} ${geometry.b1TopFL.y} Z`}
+        fill="url(#v12-anodized-orange-gold)"
+        stroke="#090d16"
+        strokeWidth="1.6"
+      />
+      {/* Curved Arched Top Face on Bank 1 */}
+      <path
+        d={`M ${geometry.b1TopFL.x} ${geometry.b1TopFL.y}
+            Q ${geometry.b1CamPeakFL.x} ${geometry.b1CamPeakFL.y} ${geometry.b1TopBL.x} ${geometry.b1TopBL.y}
+            L ${geometry.b1TopBR.x} ${geometry.b1TopBR.y}
+            Q ${geometry.b1CamPeakFR.x} ${geometry.b1CamPeakFR.y} ${geometry.b1TopFR.x} ${geometry.b1TopFR.y}
+            Z`}
+        fill="url(#v12-anodized-orange-gold)"
+        stroke="#090d16"
+        strokeWidth="1.6"
+      />
 
-        {/* Bank 1 6x Spark Plug Well Port Grommets */}
-        {geometry.b1SparkPlugs.map((sp, idx) => (
-          <g key={`b1-spark-grommet-${idx}`}>
-            <ellipse cx={sp.x} cy={sp.y} rx={6.5} ry={3.8} fill="#090d16" stroke="#78350f" strokeWidth="1.0" />
-            <ellipse cx={sp.x} cy={sp.y} rx={4.5} ry={2.4} fill="#020617" stroke="#38bdf8" strokeWidth="0.8" />
-            <circle cx={sp.x} cy={sp.y} r={1.5} fill="#ffffff" />
-          </g>
-        ))}
+      {/* Specular Arched Crown Ridge Glint */}
+      <path
+        d={`M ${geometry.b1CamPeakFL.x} ${geometry.b1CamPeakFL.y}
+            L ${geometry.b1CamPeakFR.x} ${geometry.b1CamPeakFR.y}`}
+        stroke="url(#v12-valve-specular-ridge)"
+        strokeWidth="2.2"
+        strokeLinecap="round"
+      />
 
-        {/* Billet Knurled Oil Filler Cap */}
-        <g id="v12-valve-cover-oil-cap">
-          <ellipse cx={geometry.oilCapPt.x} cy={geometry.oilCapPt.y} rx={8.0} ry={4.5} fill="url(#gold-anodized)" stroke="#78350f" strokeWidth="1.0" />
-          <ellipse cx={geometry.oilCapPt.x} cy={geometry.oilCapPt.y - 1.5} rx={5.5} ry={3.0} fill="#ca8a04" />
-          <circle cx={geometry.oilCapPt.x} cy={geometry.oilCapPt.y - 1.5} r={1.2} fill="#ffffff" />
+      {/* ── 6 SPARK PLUG ACCESS GROMMETS ON BANK 1 ── */}
+      {geometry.b1SparkPlugs.map((pt, idx) => (
+        <g key={`spark-grommet-${idx}`}>
+          <ellipse cx={pt.x} cy={pt.y} rx={5.5} ry={3.2} fill="#1e293b" stroke="#090d16" strokeWidth="0.8" />
+          <ellipse cx={pt.x} cy={pt.y} rx={4.0} ry={2.2} fill="#090d16" stroke="#ca8a04" strokeWidth="0.6" />
+          <circle cx={pt.x} cy={pt.y} r={1.5} fill="#fef08a" />
         </g>
+      ))}
 
-        {/* Laser-Engraved Cam Cover Badge */}
-        <g id="v12-cam-cover-laser-badge" opacity={0.88}>
-          <rect
-            x={geometry.b1TopFL.x + 40}
-            y={geometry.b1TopFL.y - 16}
-            width={58}
-            height={8.5}
-            rx={1.8}
-            fill="#090d16"
-            stroke="#78350f"
-            strokeWidth="0.8"
-          />
-          <text
-            x={geometry.b1TopFL.x + 43}
-            y={geometry.b1TopFL.y - 10}
-            fill="#fde047"
-            fontSize="4.6"
-            fontFamily="monospace"
-            fontWeight="bold"
-          >
-            V12·6.5L·QUAD-CAM·48V
-          </text>
-        </g>
-      </g>
-
-      {/* ── 3. BANK 2 (RIGHT / REAR) ORANGE-GOLD VALVE COVER ── */}
-      <g id="v12-bank2-valve-cover">
-        {/* Top Sloped Deck Surface */}
-        <polygon
-          points={`${geometry.b2TopFL.x},${geometry.b2TopFL.y} ${geometry.b2TopFR.x},${geometry.b2TopFR.y} ${geometry.b2TopBR.x},${geometry.b2TopBR.y} ${geometry.b2TopBL.x},${geometry.b2TopBL.y}`}
-          fill="url(#v12-valve-cover-gold-top)"
-          stroke="#090d16"
-          strokeWidth="2.0"
-        />
-        {/* Rear Wall */}
-        <polygon
-          points={`${geometry.b2BotBL.x},${geometry.b2BotBL.y} ${geometry.b2BotBR.x},${geometry.b2BotBR.y} ${geometry.b2TopBR.x},${geometry.b2TopBR.y} ${geometry.b2TopBL.x},${geometry.b2TopBL.y}`}
-          fill="url(#v12-valve-cover-gold-side)"
-          stroke="#090d16"
-          strokeWidth="2.0"
-          opacity={0.82}
-        />
+      {/* ── BILLET OIL FILLER CAP WITH KNURLED FLANGE ── */}
+      <g transform={`translate(${geometry.oilCapPt.x}, ${geometry.oilCapPt.y})`}>
+        <ellipse cx={0} cy={0} rx={7.5} ry={4.5} fill="#78350f" stroke="#090d16" strokeWidth="1.2" />
+        <ellipse cx={0} cy={-1.5} rx={6.0} ry={3.5} fill="url(#v12-anodized-orange-gold)" stroke="#fef08a" strokeWidth="0.8" />
+        <line x1={-3} y1={-1.5} x2={3} y2={-1.5} stroke="#090d16" strokeWidth="1.2" strokeLinecap="round" />
       </g>
     </g>
   );

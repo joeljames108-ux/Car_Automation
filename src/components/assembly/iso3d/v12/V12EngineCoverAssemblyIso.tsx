@@ -4,6 +4,7 @@ import { projectIso, projectIsoEllipse, type ScreenPoint2D } from "../isoMath";
 
 interface V12EngineCoverAssemblyIsoProps {
   originScreen?: ScreenPoint2D;
+  explodedAmount?: number;
   componentState?: {
     isInstalled: boolean;
     isActive: boolean;
@@ -21,25 +22,21 @@ interface V12EngineCoverAssemblyIsoProps {
  * ═══════════════════════════════════════════════════════════════════
  *
  * Mode 2 Presentation Cover: Ultra-Lightweight Pre-Preg Dry Carbon Fiber
- * Monocoque Engine Cover with Gold-Anodized Bezel & Quartz ITB Windows.
- *
- * Mechanical Details:
- *  1. Full Autoclaved 2x2 Twill High-Gloss / Matte Dry Carbon Fiber Shroud
- *  2. CNC Billet 7075 Aluminum Gold Anodized Perimeter Raised Frame
- *  3. Transparent Scratch-Resistant Quartz Glass ITB Viewing Viewport
- *  4. 12 Cobalt-Blue ITB Velocity Stack Bells Visible Through Glass
- *  5. Front Dynamic Ram-Air Induction Scoop with Honeycomb Protective Mesh
- *  6. Center Hypercar Emblem Medallion: "V12 6.5L 48-VALVE QUAD-CAM"
+ * Monocoque Engine Cover with sculpted aerodynamic shoulder pontoons,
+ * radiused CNC gold bezel, and transparent quartz ITB viewports.
  */
 export const V12EngineCoverAssemblyIso: React.FC<V12EngineCoverAssemblyIsoProps> = ({
-  originScreen = { x: 250, y: 220 },
+  originScreen = { x: 290, y: 245 },
+  explodedAmount = 0,
   componentState,
   selectedVariant = "carbon",
   onHoverComponent,
 }) => {
+  const expZ = explodedAmount * 55; // Floats +55mm on Z in exploded view
+
   const P = useMemo(
-    () => (x: number, y: number, z: number) => projectIso({ x, y, z }, originScreen),
-    [originScreen]
+    () => (x: number, y: number, z: number) => projectIso({ x, y, z: z + expZ }, originScreen),
+    [originScreen, expZ]
   );
 
   const blockLength = 236;
@@ -47,8 +44,8 @@ export const V12EngineCoverAssemblyIso: React.FC<V12EngineCoverAssemblyIsoProps>
 
   // Cover 3D Boundaries
   const coverZ = 158;
-  const coverH = 30;
-  const coverW = 86;
+  const coverH = 32;
+  const coverW = 88;
   const xS = -halfBL + 10;
   const xE = halfBL - 8;
 
@@ -59,13 +56,19 @@ export const V12EngineCoverAssemblyIso: React.FC<V12EngineCoverAssemblyIsoProps>
     const tBL = P(xS, -coverW / 2, coverZ + coverH);
     const tBR = P(xE, -coverW / 2, coverZ + coverH);
 
+    // Arched Pontoon Crown Control Points (Curves gracefully over valve covers)
+    const pontoonFL = P(xS, coverW / 2 + 10, coverZ + coverH * 0.7);
+    const pontoonFR = P(xE, coverW / 2 + 10, coverZ + coverH * 0.7);
+    const pontoonBL = P(xS, -coverW / 2 - 10, coverZ + coverH * 0.7);
+    const pontoonBR = P(xE, -coverW / 2 - 10, coverZ + coverH * 0.7);
+
     // Bottom Base Flange
     const bFL = P(xS, coverW / 2, coverZ);
     const bFR = P(xE, coverW / 2, coverZ);
     const bBL = P(xS, -coverW / 2, coverZ);
     const bBR = P(xE, -coverW / 2, coverZ);
 
-    // Gold Anodized Raised Frame Bezel
+    // Gold Anodized Raised Frame Bezel (Radiused filleted corners)
     const gfFL = P(xS + 20, coverW / 2 - 8, coverZ + coverH + 4);
     const gfFR = P(xE - 20, coverW / 2 - 8, coverZ + coverH + 4);
     const gfBL = P(xS + 20, -coverW / 2 + 8, coverZ + coverH + 4);
@@ -77,11 +80,12 @@ export const V12EngineCoverAssemblyIso: React.FC<V12EngineCoverAssemblyIsoProps>
     const gwBL = P(xS + 24, -coverW / 2 + 12, coverZ + coverH + 4.5);
     const gwBR = P(xE - 24, -coverW / 2 + 12, coverZ + coverH + 4.5);
 
-    // Front Ram-Air Induction Scoop
-    const raFL = P(xS - 20, 30, coverZ + coverH + 6);
-    const raFR = P(xS + 10, 30, coverZ + coverH + 6);
-    const raBL = P(xS - 20, -8, coverZ + coverH + 6);
-    const raBR = P(xS + 10, -8, coverZ + coverH + 6);
+    // Front Aerodynamic Teardrop Ram-Air Scoop
+    const raNose = P(xS - 26, 0, coverZ + coverH + 7);
+    const raFL = P(xS - 14, 28, coverZ + coverH + 6);
+    const raFR = P(xS + 14, 24, coverZ + coverH + 6);
+    const raBL = P(xS - 14, -28, coverZ + coverH + 6);
+    const raBR = P(xS + 14, -24, coverZ + coverH + 6);
 
     const centerMedallion = P(0, 0, coverZ + coverH + 5.5);
 
@@ -98,145 +102,208 @@ export const V12EngineCoverAssemblyIso: React.FC<V12EngineCoverAssemblyIsoProps>
 
     return {
       tFL, tFR, tBL, tBR,
+      pontoonFL, pontoonFR, pontoonBL, pontoonBR,
       bFL, bFR, bBL, bBR,
       gfFL, gfFR, gfBL, gfBR,
       gwFL, gwFR, gwBL, gwBR,
-      raFL, raFR, raBL, raBR,
+      raNose, raFL, raFR, raBL, raBR,
       centerMedallion,
       portholes,
     };
   }, [P, xS, xE, coverW, coverZ, coverH]);
+
+  const isInstalled = componentState ? componentState.isInstalled : true;
+  const opacity = componentState ? componentState.opacity : 1;
+
+  if (!isInstalled && opacity === 0) return null;
 
   return (
     <g
       id="v12-hypercar-engine-cover-assembly"
       onMouseEnter={() => onHoverComponent?.("engine_cover")}
       onMouseLeave={() => onHoverComponent?.(null)}
-      className="cursor-pointer transition-all duration-700 ease-out"
+      className="cursor-pointer transition-all duration-500 ease-out"
       style={{
+        opacity,
         transform: componentState
           ? `translate(${componentState.offsetX}px, ${componentState.offsetY}px)`
           : undefined,
-        opacity: componentState ? componentState.opacity : 1,
       }}
     >
-      {/* ── 1. AMBIENT SHADOW ── */}
-      <ellipse cx={originScreen.x} cy={originScreen.y + 16} rx={BL_SCALE_SHADOW(blockLength)} ry={32} fill="#000000" opacity={0.7} />
+      <defs>
+        {/* 2x2 Twill High-Gloss Dry Carbon Pattern */}
+        <pattern id="v12-carbon-twill" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+          <rect width="3" height="3" fill="#0f172a" />
+          <rect x="3" width="3" height="3" fill="#1e293b" />
+          <rect y="3" width="3" height="3" fill="#334155" />
+          <rect x="3" y="3" width="3" height="3" fill="#090d16" />
+        </pattern>
 
-      {/* ── 2. BASE CARBON SHROUD FLANGES ── */}
-      <polygon
-        points={`${geometry.bFL.x},${geometry.bFL.y} ${geometry.bFR.x},${geometry.bFR.y} ${geometry.tFR.x},${geometry.tFR.y} ${geometry.tFL.x},${geometry.tFL.y}`}
-        fill="url(#carbon-twill)"
-        stroke="#090d16"
-        strokeWidth="2.2"
-      />
-      <polygon
-        points={`${geometry.bFR.x},${geometry.bFR.y} ${geometry.bBR.x},${geometry.bBR.y} ${geometry.tBR.x},${geometry.tBR.y} ${geometry.tFR.x},${geometry.tFR.y}`}
-        fill="url(#carbon-twill)"
-        stroke="#090d16"
-        strokeWidth="2.2"
-        opacity={0.85}
-      />
+        {/* Carbon Monocoque Curved Surface Gradient */}
+        <linearGradient id="v12-carbon-gloss-hull" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#334155" />
+          <stop offset="35%" stopColor="#1e293b" />
+          <stop offset="70%" stopColor="#0f172a" />
+          <stop offset="100%" stopColor="#020617" />
+        </linearGradient>
 
-      {/* ── 3. TOP CARBON MAIN DECK ── */}
-      <polygon
-        points={`${geometry.tFL.x},${geometry.tFL.y} ${geometry.tFR.x},${geometry.tFR.y} ${geometry.tBR.x},${geometry.tBR.y} ${geometry.tBL.x},${geometry.tBL.y}`}
-        fill="url(#carbon-twill)"
-        stroke="#090d16"
-        strokeWidth="2.4"
-      />
+        {/* CNC Billet Gold Bezel Frame */}
+        <linearGradient id="v12-bezel-gold" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#fef08a" />
+          <stop offset="25%" stopColor="#f59e0b" />
+          <stop offset="65%" stopColor="#d97706" />
+          <stop offset="100%" stopColor="#78350f" />
+        </linearGradient>
 
-      {/* Specular Front Edge Highlight Beam */}
-      <line
-        x1={geometry.tFL.x}
-        y1={geometry.tFL.y}
-        x2={geometry.tFR.x}
-        y2={geometry.tFR.y}
-        stroke="#ffffff"
+        {/* Quartz Glass Window Reflection */}
+        <linearGradient id="v12-quartz-glass" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#38bdf8" stopOpacity="0.45" />
+          <stop offset="30%" stopColor="#ffffff" stopOpacity="0.30" />
+          <stop offset="70%" stopColor="#0284c7" stopOpacity="0.25" />
+          <stop offset="100%" stopColor="#0369a1" stopOpacity="0.40" />
+        </linearGradient>
+      </defs>
+
+      {/* ── 1. SCULPTED CARBON MONOCOQUE SHOULDER PONTOONS (Curved Shell) ── */}
+      <path
+        d={`M ${geometry.bFL.x} ${geometry.bFL.y}
+            C ${geometry.pontoonFL.x} ${geometry.pontoonFL.y}, ${geometry.pontoonFR.x} ${geometry.pontoonFR.y}, ${geometry.tFR.x} ${geometry.tFR.y}
+            L ${geometry.tFL.x} ${geometry.tFL.y}
+            Z`}
+        fill="url(#v12-carbon-gloss-hull)"
+        stroke="#090d16"
         strokeWidth="2.0"
-        opacity={0.92}
+      />
+      <path
+        d={`M ${geometry.bFL.x} ${geometry.bFL.y}
+            C ${geometry.pontoonFL.x} ${geometry.pontoonFL.y}, ${geometry.pontoonFR.x} ${geometry.pontoonFR.y}, ${geometry.tFR.x} ${geometry.tFR.y}
+            L ${geometry.tFL.x} ${geometry.tFL.y}
+            Z`}
+        fill="url(#v12-carbon-twill)"
+        opacity="0.55"
       />
 
-      {/* ── 4. GOLD ANODIZED BEZEL FRAME ── */}
-      <polygon
-        points={`${geometry.gfFL.x},${geometry.gfFL.y} ${geometry.gfFR.x},${geometry.gfFR.y} ${geometry.gfBR.x},${geometry.gfBR.y} ${geometry.gfBL.x},${geometry.gfBL.y}`}
-        fill="url(#gold-anodized)"
+      {/* ── 2. TOP CARBON DECK WITH RADIUSED CORNERS ── */}
+      <path
+        d={`M ${geometry.tFL.x} ${geometry.tFL.y}
+            C ${geometry.tFL.x + 8} ${geometry.tFL.y - 4}, ${geometry.tFR.x - 8} ${geometry.tFR.y - 4}, ${geometry.tFR.x} ${geometry.tFR.y}
+            L ${geometry.tBR.x} ${geometry.tBR.y}
+            C ${geometry.tBR.x - 8} ${geometry.tBR.y + 4}, ${geometry.tBL.x + 8} ${geometry.tBL.y + 4}, ${geometry.tBL.x} ${geometry.tBL.y}
+            Z`}
+        fill="url(#v12-carbon-gloss-hull)"
         stroke="#090d16"
-        strokeWidth="1.8"
+        strokeWidth="2.2"
       />
-      <line
-        x1={geometry.gfFL.x}
-        y1={geometry.gfFL.y}
-        x2={geometry.gfFR.x}
-        y2={geometry.gfFR.y}
-        stroke="#ffffff"
-        strokeWidth="1.4"
-        opacity={0.9}
+      <path
+        d={`M ${geometry.tFL.x} ${geometry.tFL.y}
+            C ${geometry.tFL.x + 8} ${geometry.tFL.y - 4}, ${geometry.tFR.x - 8} ${geometry.tFR.y - 4}, ${geometry.tFR.x} ${geometry.tFR.y}
+            L ${geometry.tBR.x} ${geometry.tBR.y}
+            C ${geometry.tBR.x - 8} ${geometry.tBR.y + 4}, ${geometry.tBL.x + 8} ${geometry.tBL.y + 4}, ${geometry.tBL.x} ${geometry.tBL.y}
+            Z`}
+        fill="url(#v12-carbon-twill)"
+        opacity="0.45"
       />
 
-      {/* ── 5. TRANSPARENT QUARTZ GLASS VIEWING WINDOW ── */}
-      <polygon
-        points={`${geometry.gwFL.x},${geometry.gwFL.y} ${geometry.gwFR.x},${geometry.gwFR.y} ${geometry.gwBR.x},${geometry.gwBR.y} ${geometry.gwBL.x},${geometry.gwBL.y}`}
-        fill="url(#glass-tint)"
+      {/* ── 3. GOLD ANODIZED RAISED BEZEL FRAME (Filleted Perimeter) ── */}
+      <path
+        d={`M ${geometry.gfFL.x} ${geometry.gfFL.y}
+            Q ${geometry.gfFL.x + (geometry.gfFR.x - geometry.gfFL.x) * 0.5} ${geometry.gfFL.y - 3} ${geometry.gfFR.x} ${geometry.gfFR.y}
+            L ${geometry.gfBR.x} ${geometry.gfBR.y}
+            Q ${geometry.gfBR.x + (geometry.gfBL.x - geometry.gfBR.x) * 0.5} ${geometry.gfBR.y + 3} ${geometry.gfBL.x} ${geometry.gfBL.y}
+            Z`}
+        fill="none"
+        stroke="url(#v12-bezel-gold)"
+        strokeWidth="3.2"
+      />
+      <path
+        d={`M ${geometry.gfFL.x} ${geometry.gfFL.y}
+            Q ${geometry.gfFL.x + (geometry.gfFR.x - geometry.gfFL.x) * 0.5} ${geometry.gfFL.y - 3} ${geometry.gfFR.x} ${geometry.gfFR.y}
+            L ${geometry.gfBR.x} ${geometry.gfBR.y}
+            Q ${geometry.gfBR.x + (geometry.gfBL.x - geometry.gfBR.x) * 0.5} ${geometry.gfBR.y + 3} ${geometry.gfBL.x} ${geometry.gfBL.y}
+            Z`}
+        fill="none"
+        stroke="#ffffff"
+        strokeWidth="1.0"
+        opacity="0.9"
+      />
+
+      {/* ── 4. TRANSPARENT QUARTZ GLASS ITB VIEWPORT ── */}
+      <path
+        d={`M ${geometry.gwFL.x} ${geometry.gwFL.y}
+            L ${geometry.gwFR.x} ${geometry.gwFR.y}
+            L ${geometry.gwBR.x} ${geometry.gwBR.y}
+            L ${geometry.gwBL.x} ${geometry.gwBL.y}
+            Z`}
+        fill="url(#v12-quartz-glass)"
         stroke="#38bdf8"
         strokeWidth="1.2"
-        opacity={0.92}
       />
 
-      {/* Specular Reflection Streaks */}
-      <path
-        d={`M ${geometry.gwFL.x + 12} ${geometry.gwFL.y}
-            L ${geometry.gwFR.x - 45} ${geometry.gwFR.y - 16}
-            L ${geometry.gwFR.x - 25} ${geometry.gwFR.y - 16}
-            L ${geometry.gwFL.x + 32} ${geometry.gwFL.y}
-            Z`}
-        fill="#ffffff"
-        opacity={0.26}
+      {/* Diagonal Glass Specular Sheen Streaks */}
+      <line
+        x1={geometry.gwFL.x + 12}
+        y1={geometry.gwFL.y + 8}
+        x2={geometry.gwFR.x - 30}
+        y2={geometry.gwFR.y + 14}
+        stroke="#ffffff"
+        strokeWidth="2.5"
+        strokeLinecap="round"
+        opacity="0.75"
       />
 
-      {/* ── 6. 12 VELOCITY STACKS VISIBLE THROUGH QUARTZ GLASS ── */}
+      {/* ── 5. 12 VELOCITY STACK PORTHOLES UNDER GLASS ── */}
       {geometry.portholes.map((p, idx) => (
-        <g key={`v12-cover-porthole-${idx}`}>
-          {/* Left Bank Trumpet */}
-          <ellipse cx={p.left.x} cy={p.left.y} rx={7.0} ry={4.0} fill="#020617" stroke="url(#v12-stack-cobalt-blue)" strokeWidth="1.4" />
-          <circle cx={p.left.x} cy={p.left.y} r={2.0} fill="#38bdf8" opacity={0.8} />
-
-          {/* Right Bank Trumpet */}
-          <ellipse cx={p.right.x} cy={p.right.y} rx={7.0} ry={4.0} fill="#020617" stroke="url(#v12-stack-cobalt-blue)" strokeWidth="1.4" />
-          <circle cx={p.right.x} cy={p.right.y} r={2.0} fill="#38bdf8" opacity={0.8} />
+        <g key={`porthole-${idx}`}>
+          {/* Left Stack Ring */}
+          <circle cx={p.left.x} cy={p.left.y} r={7.5} fill="#0284c7" fillOpacity="0.45" stroke="#38bdf8" strokeWidth="1.5" />
+          <circle cx={p.left.x} cy={p.left.y} r={4.5} fill="#0f172a" stroke="#ca8a04" strokeWidth="0.8" />
+          {/* Right Stack Ring */}
+          <circle cx={p.right.x} cy={p.right.y} r={7.5} fill="#0284c7" fillOpacity="0.45" stroke="#38bdf8" strokeWidth="1.5" />
+          <circle cx={p.right.x} cy={p.right.y} r={4.5} fill="#0f172a" stroke="#ca8a04" strokeWidth="0.8" />
         </g>
       ))}
 
-      {/* ── 7. FRONT AERODYNAMIC RAM-AIR SCOOP ── */}
-      <polygon
-        points={`${geometry.raFL.x},${geometry.raFL.y} ${geometry.raFR.x},${geometry.raFR.y} ${geometry.raBR.x},${geometry.raBR.y} ${geometry.raBL.x},${geometry.raBL.y}`}
-        fill="url(#carbon-twill)"
-        stroke="#090d16"
-        strokeWidth="2.0"
-      />
-      <circle cx={geometry.raFL.x + 14} cy={geometry.raFL.y - 6} r={9.5} fill="#020617" stroke="#38bdf8" strokeWidth="1.4" />
+      {/* ── 6. FRONT TEARDROP RAM-AIR INDUCTION SCOOP ── */}
+      <g id="v12-cover-ram-scoop">
+        <path
+          d={`M ${geometry.raNose.x} ${geometry.raNose.y}
+              C ${geometry.raFL.x} ${geometry.raFL.y}, ${geometry.raFR.x} ${geometry.raFR.y}, ${geometry.raFR.x} ${geometry.raFR.y}
+              L ${geometry.raBR.x} ${geometry.raBR.y}
+              C ${geometry.raBL.x} ${geometry.raBL.y}, ${geometry.raNose.x} ${geometry.raNose.y}, ${geometry.raNose.x} ${geometry.raNose.y}
+              Z`}
+          fill="url(#v12-carbon-gloss-hull)"
+          stroke="#090d16"
+          strokeWidth="2.2"
+        />
+        {/* Scoop Intake Bellmouth Oval */}
+        <ellipse
+          cx={geometry.raNose.x + 4}
+          cy={geometry.raNose.y}
+          rx={6.5}
+          ry={14.0}
+          fill="#020617"
+          stroke="#f59e0b"
+          strokeWidth="1.5"
+        />
+      </g>
 
-      {/* ── 8. CENTER HYPERCAR MEDALLION BADGE ── */}
-      <g id="v12-center-cover-medallion">
-        <circle cx={geometry.centerMedallion.x} cy={geometry.centerMedallion.y} r={12} fill="url(#gold-anodized)" stroke="#090d16" strokeWidth="2.0" />
-        <circle cx={geometry.centerMedallion.x} cy={geometry.centerMedallion.y} r={9.5} fill="#0f172a" stroke="#78350f" strokeWidth="0.8" />
-        <circle cx={geometry.centerMedallion.x} cy={geometry.centerMedallion.y} r={4.0} fill="#38bdf8" />
+      {/* ── 7. CENTER GOLD HYPERCAR EMBLEM MEDALLION ── */}
+      <g transform={`translate(${geometry.centerMedallion.x}, ${geometry.centerMedallion.y})`}>
+        <ellipse cx={0} cy={0} rx={22} ry={9} fill="url(#v12-bezel-gold)" stroke="#090d16" strokeWidth="1.5" />
+        <ellipse cx={0} cy={0} rx={20} ry={7.5} fill="#090d16" stroke="#ffffff" strokeWidth="0.8" opacity="0.9" />
         <text
-          x={geometry.centerMedallion.x}
-          y={geometry.centerMedallion.y + 18}
-          fill="#facc15"
-          fontSize="4.5"
-          fontFamily="monospace"
+          x={0}
+          y={2.5}
+          fill="#fef08a"
+          fontSize="6.0"
           fontWeight="bold"
+          fontFamily="monospace"
           textAnchor="middle"
+          letterSpacing="0.6"
         >
-          V12·6.5L·48-VALVE·QUAD-CAM
+          V12 · 6.5L
         </text>
       </g>
     </g>
   );
 };
-
-function BL_SCALE_SHADOW(len: number) {
-  return len * 0.54;
-}

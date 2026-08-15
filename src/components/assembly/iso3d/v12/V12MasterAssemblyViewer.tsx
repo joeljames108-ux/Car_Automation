@@ -314,6 +314,7 @@ export const V12MasterAssemblyViewer: React.FC<V12MasterAssemblyViewerProps> = (
               {/* 3. Billet Low-Profile Dry-Sump Oil Pan (Floats -Z in exploded view) */}
               <V12DrySumpPanIso
                 originScreen={originScreen}
+                explodedAmount={explodedSlider}
                 onHoverComponent={handleHover}
               />
 
@@ -332,6 +333,7 @@ export const V12MasterAssemblyViewer: React.FC<V12MasterAssemblyViewerProps> = (
               {/* 6. Front Dual-Pass Aluminum Racing Radiator & Fan (Floats -X in exploded view) */}
               <V12RadiatorAssemblyIso
                 originScreen={originScreen}
+                explodedAmount={explodedSlider}
                 onHoverComponent={handleHover}
               />
 
@@ -352,12 +354,14 @@ export const V12MasterAssemblyViewer: React.FC<V12MasterAssemblyViewerProps> = (
               {/* 9. Vibrant Orange-Gold Billet Valve Covers */}
               <V12ValveCoversIso
                 originScreen={originScreen}
+                explodedAmount={explodedSlider}
                 onHoverComponent={handleHover}
               />
 
               {/* 10. 12 Curved Ram-Air Intake Runners */}
               <V12IntakeManifoldsIso
                 originScreen={originScreen}
+                explodedAmount={explodedSlider}
                 onHoverComponent={handleHover}
               />
 
@@ -387,6 +391,7 @@ export const V12MasterAssemblyViewer: React.FC<V12MasterAssemblyViewerProps> = (
               {/* 14. 6-into-1 Hydroformed Inconel Headers */}
               <V12ExhaustHeadersIso
                 originScreen={originScreen}
+                explodedAmount={explodedSlider}
                 onHoverComponent={handleHover}
               />
 
@@ -405,6 +410,7 @@ export const V12MasterAssemblyViewer: React.FC<V12MasterAssemblyViewerProps> = (
               {/* 17. Bellhousing with Cutaway Window */}
               <V12BellhousingIso
                 originScreen={originScreen}
+                explodedAmount={explodedSlider}
                 onHoverComponent={handleHover}
               />
 
@@ -438,6 +444,7 @@ export const V12MasterAssemblyViewer: React.FC<V12MasterAssemblyViewerProps> = (
               {withEngineCover && (
                 <V12EngineCoverAssemblyIso
                   originScreen={originScreen}
+                  explodedAmount={explodedSlider}
                   onHoverComponent={handleHover}
                 />
               )}

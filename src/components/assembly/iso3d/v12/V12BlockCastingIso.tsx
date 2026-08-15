@@ -186,18 +186,26 @@ export const V12BlockCastingIso: React.FC<V12BlockCastingIsoProps> = ({
         </linearGradient>
       </defs>
 
-      {/* ── 2. CRANKCASE LOWER BEDPLATE SKIRT ── */}
+      {/* ── 2. CRANKCASE LOWER BEDPLATE SKIRT (Curved Casting Draft) ── */}
       <g id="v12-lower-bedplate-skirt">
-        {/* Front Crankcase Wall */}
-        <polygon
-          points={`${geometry.sumpFL.x},${geometry.sumpFL.y} ${geometry.sumpFR.x},${geometry.sumpFR.y} ${geometry.crankFR.x},${geometry.crankFR.y} ${geometry.crankFL.x},${geometry.crankFL.y}`}
+        {/* Front Crankcase Wall with Radiused Belly Contour */}
+        <path
+          d={`M ${geometry.sumpFL.x} ${geometry.sumpFL.y}
+              Q ${(geometry.sumpFL.x + geometry.sumpFR.x) / 2} ${geometry.sumpFL.y - 2} ${geometry.sumpFR.x} ${geometry.sumpFR.y}
+              L ${geometry.crankFR.x} ${geometry.crankFR.y}
+              Q ${(geometry.crankFR.x + geometry.crankFL.x) / 2} ${geometry.crankFL.y - 2} ${geometry.crankFL.x} ${geometry.crankFL.y}
+              Z`}
           fill="url(#v12-al-cast-flank)"
           stroke="#090d16"
           strokeWidth="2.0"
         />
         {/* Right Rear Crankcase Wall */}
-        <polygon
-          points={`${geometry.sumpFR.x},${geometry.sumpFR.y} ${geometry.sumpBR.x},${geometry.sumpBR.y} ${geometry.crankBR.x},${geometry.crankBR.y} ${geometry.crankFR.x},${geometry.crankFR.y}`}
+        <path
+          d={`M ${geometry.sumpFR.x} ${geometry.sumpFR.y}
+              L ${geometry.sumpBR.x} ${geometry.sumpBR.y}
+              L ${geometry.crankBR.x} ${geometry.crankBR.y}
+              L ${geometry.crankFR.x} ${geometry.crankFR.y}
+              Z`}
           fill="url(#v12-al-cast-flank)"
           stroke="#090d16"
           strokeWidth="2.0"
@@ -209,21 +217,19 @@ export const V12BlockCastingIso: React.FC<V12BlockCastingIsoProps> = ({
       <g id="v12-main-bearing-bulkheads">
         {geometry.mainBearings.map((mb, idx) => (
           <g key={`main-bearing-rib-${idx}`}>
-            {/* Structural Vertical Stiffener Rib */}
-            <line
-              x1={mb.frontPt.x}
-              y1={mb.frontPt.y}
-              x2={mb.topPt.x}
-              y2={mb.topPt.y}
+            {/* Structural Vertical Stiffener Rib with Curved Web Base */}
+            <path
+              d={`M ${mb.frontPt.x} ${mb.frontPt.y}
+                  Q ${mb.frontPt.x + 2} ${(mb.frontPt.y + mb.topPt.y) / 2} ${mb.topPt.x} ${mb.topPt.y}`}
+              fill="none"
               stroke="#0f172a"
               strokeWidth="3.2"
               strokeLinecap="round"
             />
-            <line
-              x1={mb.frontPt.x - 0.8}
-              y1={mb.frontPt.y}
-              x2={mb.topPt.x - 0.8}
-              y2={mb.topPt.y}
+            <path
+              d={`M ${mb.frontPt.x - 0.8} ${mb.frontPt.y}
+                  Q ${mb.frontPt.x + 1.2} ${(mb.frontPt.y + mb.topPt.y) / 2} ${mb.topPt.x - 0.8} ${mb.topPt.y}`}
+              fill="none"
               stroke="#cbd5e1"
               strokeWidth="1.2"
               strokeLinecap="round"
@@ -235,11 +241,16 @@ export const V12BlockCastingIso: React.FC<V12BlockCastingIsoProps> = ({
         ))}
       </g>
 
-      {/* ── 4. 60° V-BANK LATERAL CASTING WALLS ── */}
+      {/* ── 4. 60° V-BANK LATERAL CASTING WALLS (Hyperbolic Flank Curve) ── */}
       <g id="v12-vbank-walls">
-        {/* Bank 1 Outer Flank (Left Side) */}
-        <polygon
-          points={`${geometry.crankFL.x},${geometry.crankFL.y} ${geometry.crankFR.x},${geometry.crankFR.y} ${geometry.b1FR.x},${geometry.b1FR.y} ${geometry.b1FL.x},${geometry.b1FL.y}`}
+        {/* Bank 1 Outer Flank with Sculpted Waist Transition */}
+        <path
+          d={`M ${geometry.crankFL.x} ${geometry.crankFL.y}
+              L ${geometry.crankFR.x} ${geometry.crankFR.y}
+              Q ${geometry.b1FR.x - 6} ${(geometry.crankFR.y + geometry.b1FR.y) / 2} ${geometry.b1FR.x} ${geometry.b1FR.y}
+              L ${geometry.b1FL.x} ${geometry.b1FL.y}
+              Q ${geometry.crankFL.x + 6} ${(geometry.crankFL.y + geometry.b1FL.y) / 2} ${geometry.crankFL.x} ${geometry.crankFL.y}
+              Z`}
           fill="url(#v12-al-cast-flank)"
           stroke="#090d16"
           strokeWidth="2.2"

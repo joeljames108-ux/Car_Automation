@@ -4,6 +4,7 @@ import { projectIso, projectIsoEllipse, type ScreenPoint2D } from "../isoMath";
 
 interface V12RadiatorAssemblyIsoProps {
   originScreen?: ScreenPoint2D;
+  explodedAmount?: number;
   componentState?: {
     isInstalled: boolean;
     isActive: boolean;
@@ -20,23 +21,20 @@ interface V12RadiatorAssemblyIsoProps {
  * ═══════════════════════════════════════════════════════════════════
  *
  * Front-Mounted Dual-Pass Heavy-Duty Aluminum Racing Radiator with
- * High-Flow Electric Cooling Fan Shroud and Molded Coolant Plumbing.
- *
- * Mechanical Details:
- *  1. Dual-Pass Aluminum Brazed Core with Micro-Louvered Cooling Fins
- *  2. CNC TIG-Welded Aluminum Side End Tanks with Reinforcement Ribs
- *  3. Billet Aluminum High-Pressure (1.3 Bar) Radiator Cap
- *  4. Curved Aerodynamic Polymer Fan Shroud Housing 7-Blade Electric Fan
- *  5. Lower Mandrel-Bent Polished Brass/Silicone Coolant Return Pipe with T-Bolt Clamps
+ * die-formed radiused end tanks, aerofoil cooling fan bellmouth,
+ * and 3D curved silicone coolant hoses.
  */
 export const V12RadiatorAssemblyIso: React.FC<V12RadiatorAssemblyIsoProps> = ({
-  originScreen = { x: 250, y: 220 },
+  originScreen = { x: 290, y: 245 },
+  explodedAmount = 0,
   componentState,
   onHoverComponent,
 }) => {
+  const expX = explodedAmount * -45; // Radiator floats forward (-X) in exploded view
+
   const P = useMemo(
-    () => (x: number, y: number, z: number) => projectIso({ x, y, z }, originScreen),
-    [originScreen]
+    () => (x: number, y: number, z: number) => projectIso({ x: x + expX, y, z }, originScreen),
+    [originScreen, expX]
   );
 
   const blockLength = 236;
@@ -70,187 +68,185 @@ export const V12RadiatorAssemblyIso: React.FC<V12RadiatorAssemblyIsoProps> = ({
     // Electric Fan Hub Center (Mounted on Rear Shroud)
     const fanCenter = P(radX + radDepth + 6, 0, radBaseZ + radHeight / 2);
 
-    // Lower Coolant Return Pipe Path
-    const pipeStart = P(radX + radDepth, halfW - 20, radBaseZ + 12);
-    const pipeBend1 = P(radX + radDepth + 24, halfW - 12, radBaseZ + 6);
-    const pipeEnd = P(-halfBL + 4, 38, radBaseZ + 18);
+    // Curved Silicone Lower Coolant Return Hose Points
+    const hoseP1 = P(radX + radDepth, halfW - 20, radBaseZ + 12);
+    const hoseCp1 = P(radX + radDepth + 18, halfW - 10, radBaseZ + 6);
+    const hoseCp2 = P(radX + radDepth + 28, halfW + 10, radBaseZ + 8);
+    const hoseP2 = P(-halfBL + 4, 38, radBaseZ + 18);
 
     return {
       fTL, fTR, fBL, fBR,
       rTL, rTR, rBL, rBR,
       capPt,
       fanCenter,
-      pipeStart, pipeBend1, pipeEnd,
+      hoseP1, hoseCp1, hoseCp2, hoseP2,
     };
   }, [P, radX, radWidth, radHeight, radDepth, radBaseZ, halfBL]);
+
+  const isInstalled = componentState ? componentState.isInstalled : true;
+  const opacity = componentState ? componentState.opacity : 1;
+
+  if (!isInstalled && opacity === 0) return null;
 
   return (
     <g
       id="v12-radiator-assembly-3d"
       onMouseEnter={() => onHoverComponent?.("radiator")}
       onMouseLeave={() => onHoverComponent?.(null)}
-      className="cursor-pointer transition-all duration-700 ease-out"
+      className="cursor-pointer transition-all duration-500 ease-out"
       style={{
+        opacity,
         transform: componentState
           ? `translate(${componentState.offsetX}px, ${componentState.offsetY}px)`
           : undefined,
-        opacity: componentState ? componentState.opacity : 1,
       }}
     >
-      {/* ── 1. RADIATOR GRADIENTS ── */}
       <defs>
-        {/* Polished Aluminum End Tanks */}
-        <linearGradient id="v12-rad-tank-aluminum" x1="0%" y1="0%" x2="0%" y2="100%">
-          <stop offset="0%" stopColor="#f1f5f9" />
-          <stop offset="35%" stopColor="#cbd5e1" />
-          <stop offset="70%" stopColor="#94a3b8" />
-          <stop offset="100%" stopColor="#64748b" />
-        </linearGradient>
-
-        {/* Dense Cooling Core Fins */}
-        <linearGradient id="v12-rad-core-fins" x1="0%" y1="0%" x2="100%" y2="0%">
-          <stop offset="0%" stopColor="#334155" />
+        {/* Radiator Brazed Aluminum Core Texture */}
+        <linearGradient id="v12-radiator-core" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#475569" />
+          <stop offset="25%" stopColor="#334155" />
           <stop offset="50%" stopColor="#1e293b" />
+          <stop offset="75%" stopColor="#334155" />
           <stop offset="100%" stopColor="#0f172a" />
         </linearGradient>
 
-        {/* Polished Brass/Gold Lower Coolant Pipe */}
-        <linearGradient id="v12-coolant-pipe-gold" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#fef08a" />
-          <stop offset="30%" stopColor="#eab308" />
-          <stop offset="70%" stopColor="#ca8a04" />
-          <stop offset="100%" stopColor="#854d0e" />
+        {/* Die-Formed Radiator End Tank Curve */}
+        <linearGradient id="v12-end-tank-al" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stopColor="#f1f5f9" />
+          <stop offset="35%" stopColor="#cbd5e1" />
+          <stop offset="70%" stopColor="#64748b" />
+          <stop offset="100%" stopColor="#334155" />
+        </linearGradient>
+
+        {/* High-Pressure Blue Silicone Coolant Hose */}
+        <linearGradient id="v12-silicone-hose" x1="0%" y1="0%" x2="0%" y2="100%">
+          <stop offset="0%" stopColor="#60a5fa" />
+          <stop offset="35%" stopColor="#2563eb" />
+          <stop offset="70%" stopColor="#1d4ed8" />
+          <stop offset="100%" stopColor="#172554" />
         </linearGradient>
       </defs>
 
-      {/* ── 2. RADIATOR CORE & SIDE END TANKS ── */}
-      <g id="v12-rad-core-structure">
-        {/* Core Front Face */}
-        <polygon
-          points={`${geometry.fBL.x},${geometry.fBL.y} ${geometry.fBR.x},${geometry.fBR.y} ${geometry.fTR.x},${geometry.fTR.y} ${geometry.fTL.x},${geometry.fTL.y}`}
-          fill="url(#v12-rad-core-fins)"
-          stroke="#090d16"
-          strokeWidth="2.2"
-        />
-        {/* Top Tank Plate */}
-        <polygon
-          points={`${geometry.fTL.x},${geometry.fTL.y} ${geometry.fTR.x},${geometry.fTR.y} ${geometry.rTR.x},${geometry.rTR.y} ${geometry.rTL.x},${geometry.rTL.y}`}
-          fill="url(#v12-rad-tank-aluminum)"
-          stroke="#090d16"
-          strokeWidth="2.0"
-        />
-        {/* Left Side Tank */}
-        <polygon
-          points={`${geometry.fBL.x},${geometry.fBL.y} ${geometry.rBL.x},${geometry.rBL.y} ${geometry.rTL.x},${geometry.rTL.y} ${geometry.fTL.x},${geometry.fTL.y}`}
-          fill="url(#v12-rad-tank-aluminum)"
-          stroke="#090d16"
-          strokeWidth="2.0"
-        />
+      {/* ── 1. DIE-FORMED RADIATOR END-TANKS (Curved Arched Side Profiles) ── */}
+      <path
+        d={`M ${geometry.fBL.x} ${geometry.fBL.y}
+            Q ${geometry.fBL.x - 8} ${(geometry.fBL.y + geometry.fTL.y) / 2} ${geometry.fTL.x} ${geometry.fTL.y}
+            L ${geometry.rTL.x} ${geometry.rTL.y}
+            Q ${geometry.rTL.x + 6} ${(geometry.rTL.y + geometry.rBL.y) / 2} ${geometry.rBL.x} ${geometry.rBL.y}
+            Z`}
+        fill="url(#v12-end-tank-al)"
+        stroke="#090d16"
+        strokeWidth="1.8"
+      />
 
-        {/* Micro-Louvered Cooling Fin Rows */}
-        {Array.from({ length: 14 }).map((_, i) => {
-          const t = i / 13;
-          const lx1 = geometry.fBL.x + t * (geometry.fTL.x - geometry.fBL.x);
-          const ly1 = geometry.fBL.y + t * (geometry.fTL.y - geometry.fBL.y);
-          const lx2 = geometry.fBR.x + t * (geometry.fTR.x - geometry.fBR.x);
-          const ly2 = geometry.fBR.y + t * (geometry.fTR.y - geometry.fBR.y);
-          return (
-            <line
-              key={`rad-fin-${i}`}
-              x1={lx1}
-              y1={ly1}
-              x2={lx2}
-              y2={ly2}
-              stroke="#64748b"
-              strokeWidth="0.8"
-              opacity={0.7}
-            />
-          );
-        })}
+      {/* ── 2. RADIATOR BRAZED ALUMINUM CORE FACE ── */}
+      <polygon
+        points={`${geometry.fTL.x},${geometry.fTL.y} ${geometry.fTR.x},${geometry.fTR.y} ${geometry.fBR.x},${geometry.fBR.y} ${geometry.fBL.x},${geometry.fBL.y}`}
+        fill="url(#v12-radiator-core)"
+        stroke="#090d16"
+        strokeWidth="2.0"
+      />
 
-        {/* Specular Front Glint on Top Tank */}
-        <line
-          x1={geometry.fTL.x}
-          y1={geometry.fTL.y}
-          x2={geometry.fTR.x}
-          y2={geometry.fTR.y}
-          stroke="#ffffff"
-          strokeWidth="1.8"
-          opacity={0.9}
-        />
-      </g>
+      {/* Micro-Louvered Cooling Fin Horizontal Striations */}
+      {[0.2, 0.35, 0.5, 0.65, 0.8].map((ratio, fidx) => {
+        const x1 = geometry.fTL.x + (geometry.fBL.x - geometry.fTL.x) * ratio;
+        const y1 = geometry.fTL.y + (geometry.fBL.y - geometry.fTL.y) * ratio;
+        const x2 = geometry.fTR.x + (geometry.fBR.x - geometry.fTR.x) * ratio;
+        const y2 = geometry.fTR.y + (geometry.fBR.y - geometry.fTR.y) * ratio;
+        return (
+          <line
+            key={`rad-fin-${fidx}`}
+            x1={x1}
+            y1={y1}
+            x2={x2}
+            y2={y2}
+            stroke="#94a3b8"
+            strokeWidth="0.8"
+            opacity="0.6"
+          />
+        );
+      })}
 
-      {/* ── 3. BILLET HIGH-PRESSURE RADIATOR CAP ── */}
-      <g id="v12-rad-cap">
-        <ellipse cx={geometry.capPt.x} cy={geometry.capPt.y} rx={7.5} ry={4.5} fill="#f1f5f9" stroke="#090d16" strokeWidth="1.0" />
-        <ellipse cx={geometry.capPt.x} cy={geometry.capPt.y - 2} rx={5.5} ry={3.0} fill="#cbd5e1" />
-        <circle cx={geometry.capPt.x} cy={geometry.capPt.y - 2} r={1.2} fill="#ef4444" />
-      </g>
+      {/* ── 3. AEROFOIL ELECTRIC COOLING FAN BELLMOUTH HOUSING ── */}
+      <ellipse
+        cx={geometry.fanCenter.x}
+        cy={geometry.fanCenter.y}
+        rx={34}
+        ry={22}
+        fill="#0f172a"
+        stroke="#38bdf8"
+        strokeWidth="2.0"
+      />
+      <ellipse
+        cx={geometry.fanCenter.x}
+        cy={geometry.fanCenter.y}
+        rx={28}
+        ry={18}
+        fill="#020617"
+        stroke="#64748b"
+        strokeWidth="1.0"
+      />
 
-      {/* ── 4. ELECTRIC COOLING FAN SHROUD & 7 BLADES ── */}
-      <g id="v12-electric-fan-assembly">
-        {/* Polymer Shroud Ring */}
-        <circle cx={geometry.fanCenter.x} cy={geometry.fanCenter.y} r={34} fill="#090d16" stroke="#475569" strokeWidth="2.0" opacity={0.9} />
-        <circle cx={geometry.fanCenter.x} cy={geometry.fanCenter.y} r={30} fill="#020617" stroke="#1e293b" strokeWidth="1.2" />
-
-        {/* Electric Motor Hub Center */}
-        <circle cx={geometry.fanCenter.x} cy={geometry.fanCenter.y} r={12} fill="#1e293b" stroke="#38bdf8" strokeWidth="1.2" />
-        <circle cx={geometry.fanCenter.x} cy={geometry.fanCenter.y} r={5} fill="#090d16" />
-
-        {/* 7 Aerodynamic Curved Fan Blades */}
-        {Array.from({ length: 7 }).map((_, i) => {
-          const rad = (i * (360 / 7) * Math.PI) / 180;
-          const tipX = geometry.fanCenter.x + 27 * Math.cos(rad);
-          const tipY = geometry.fanCenter.y + 27 * Math.sin(rad);
-          const midX = geometry.fanCenter.x + 18 * Math.cos(rad + 0.3);
-          const midY = geometry.fanCenter.y + 18 * Math.sin(rad + 0.3);
-          return (
-            <path
-              key={`fan-blade-${i}`}
-              d={`M ${geometry.fanCenter.x} ${geometry.fanCenter.y} Q ${midX} ${midY} ${tipX} ${tipY}`}
-              fill="none"
-              stroke="#475569"
-              strokeWidth="3.2"
-              strokeLinecap="round"
-              opacity={0.85}
-            />
-          );
-        })}
-      </g>
-
-      {/* ── 5. LOWER COOLANT RETURN PIPE & SILICONE COUPLERS ── */}
-      <g id="v12-coolant-return-plumbing">
-        {/* Pipe Shadow */}
+      {/* 7 Curved Aerofoil Fan Blades */}
+      {[0, 51.4, 102.8, 154.2, 205.6, 257.0, 308.4].map((deg, bidx) => (
         <path
-          d={`M ${geometry.pipeStart.x} ${geometry.pipeStart.y + 4}
-              Q ${geometry.pipeBend1.x} ${geometry.pipeBend1.y + 4} ${geometry.pipeEnd.x} ${geometry.pipeEnd.y + 4}`}
+          key={`fan-blade-${bidx}`}
+          d={`M ${geometry.fanCenter.x} ${geometry.fanCenter.y}
+              Q ${geometry.fanCenter.x + Math.cos((deg * Math.PI) / 180) * 16}
+                ${geometry.fanCenter.y + Math.sin((deg * Math.PI) / 180) * 12}
+                ${geometry.fanCenter.x + Math.cos(((deg + 25) * Math.PI) / 180) * 26}
+                ${geometry.fanCenter.y + Math.sin(((deg + 25) * Math.PI) / 180) * 16}`}
           fill="none"
-          stroke="#020617"
-          strokeWidth="6.5"
-          opacity={0.65}
-        />
-        {/* Gold Polished Tube */}
-        <path
-          d={`M ${geometry.pipeStart.x} ${geometry.pipeStart.y}
-              Q ${geometry.pipeBend1.x} ${geometry.pipeBend1.y} ${geometry.pipeEnd.x} ${geometry.pipeEnd.y}`}
-          fill="none"
-          stroke="url(#v12-coolant-pipe-gold)"
-          strokeWidth="5.5"
+          stroke="#0284c7"
+          strokeWidth="3.2"
           strokeLinecap="round"
         />
-        {/* Specular White Highlight */}
-        <path
-          d={`M ${geometry.pipeStart.x} ${geometry.pipeStart.y - 1.2}
-              Q ${geometry.pipeBend1.x} ${geometry.pipeBend1.y - 1.2} ${geometry.pipeEnd.x} ${geometry.pipeEnd.y - 1.2}`}
-          fill="none"
-          stroke="#ffffff"
-          strokeWidth="1.6"
-          strokeLinecap="round"
-          opacity={0.85}
-        />
-        {/* Silicone Coupler Hose Clamps */}
-        <circle cx={geometry.pipeStart.x + 3} cy={geometry.pipeStart.y} r={4.5} fill="none" stroke="#1e3a8a" strokeWidth="2.5" />
-        <circle cx={geometry.pipeEnd.x - 3} cy={geometry.pipeEnd.y} r={4.5} fill="none" stroke="#1e3a8a" strokeWidth="2.5" />
+      ))}
+
+      {/* Center Fan Motor Hub */}
+      <circle cx={geometry.fanCenter.x} cy={geometry.fanCenter.y} r={7} fill="#1e293b" stroke="#f59e0b" strokeWidth="1.2" />
+      <circle cx={geometry.fanCenter.x} cy={geometry.fanCenter.y} r={3} fill="#090d16" />
+
+      {/* ── 4. CURVED SILICONE COOLANT HOSE WITH T-BOLT HOSE CLAMPS ── */}
+      {/* Hose Drop Shadow */}
+      <path
+        d={`M ${geometry.hoseP1.x} ${geometry.hoseP1.y + 4}
+            C ${geometry.hoseCp1.x} ${geometry.hoseCp1.y + 4}, ${geometry.hoseCp2.x} ${geometry.hoseCp2.y + 4}, ${geometry.hoseP2.x} ${geometry.hoseP2.y + 4}`}
+        fill="none"
+        stroke="#020617"
+        strokeWidth="9.0"
+        strokeLinecap="round"
+        opacity="0.6"
+      />
+      {/* Main Blue Silicone Body */}
+      <path
+        d={`M ${geometry.hoseP1.x} ${geometry.hoseP1.y}
+            C ${geometry.hoseCp1.x} ${geometry.hoseCp1.y}, ${geometry.hoseCp2.x} ${geometry.hoseCp2.y}, ${geometry.hoseP2.x} ${geometry.hoseP2.y}`}
+        fill="none"
+        stroke="url(#v12-silicone-hose)"
+        strokeWidth="8.0"
+        strokeLinecap="round"
+      />
+      {/* Specular Highlight Glint */}
+      <path
+        d={`M ${geometry.hoseP1.x} ${geometry.hoseP1.y - 1.8}
+            C ${geometry.hoseCp1.x} ${geometry.hoseCp1.y - 1.8}, ${geometry.hoseCp2.x} ${geometry.hoseCp2.y - 1.8}, ${geometry.hoseP2.x} ${geometry.hoseP2.y - 1.8}`}
+        fill="none"
+        stroke="#ffffff"
+        strokeWidth="2.0"
+        strokeLinecap="round"
+        opacity="0.85"
+      />
+      {/* Stainless T-Bolt Clamps */}
+      <circle cx={geometry.hoseP1.x + 4} cy={geometry.hoseP1.y} r={4.5} fill="none" stroke="#f1f5f9" strokeWidth="1.8" />
+      <circle cx={geometry.hoseP2.x - 4} cy={geometry.hoseP2.y} r={4.5} fill="none" stroke="#f1f5f9" strokeWidth="1.8" />
+
+      {/* ── 5. BILLET ALUMINUM 1.3 BAR RADIATOR CAP ── */}
+      <g transform={`translate(${geometry.capPt.x}, ${geometry.capPt.y})`}>
+        <ellipse cx={0} cy={0} rx={8.0} ry={4.8} fill="#090d16" stroke="#ca8a04" strokeWidth="1.2" />
+        <ellipse cx={0} cy={-2} rx={6.5} ry={3.8} fill="#f59e0b" stroke="#ffffff" strokeWidth="0.8" />
+        <text x={0} y={0} fill="#090d16" fontSize="5.0" fontWeight="bold" fontFamily="sans-serif" textAnchor="middle">1.3</text>
       </g>
     </g>
   );
