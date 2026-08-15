@@ -143,9 +143,9 @@ export function StickyEngineDiagram({
     if (!activeMeta) return "scale(1) translate(0px, 0px)";
 
     const slot = activeMeta.slotPosition;
-    const panX = (250 - slot.x) * 0.5;
-    const panY = (225 - slot.y) * 0.5;
-    return `scale(1.18) translate(${panX}px, ${panY}px)`;
+    const panX = (290 - slot.x) * 0.35;
+    const panY = (245 - slot.y) * 0.35;
+    return `scale(1.08) translate(${panX}px, ${panY}px)`;
   }, [activeComponentId, phase, activeMeta]);
 
   return (
@@ -222,7 +222,7 @@ export function StickyEngineDiagram({
       </div>
 
       {/* ── CENTRAL SVG STAGE WORKSTATION (TRANSLUCENT) ── */}
-      <div className="relative w-full h-[340px] md:h-[380px] rounded-2xl bg-slate-950/20 border border-white/5 backdrop-blur-md overflow-hidden flex items-center justify-center shadow-inner">
+      <div className="relative w-full h-[400px] md:h-[460px] rounded-2xl bg-slate-950/20 border border-white/5 backdrop-blur-md overflow-hidden flex items-center justify-center shadow-inner">
         {/* Ambient Lighting Cones */}
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_40%,rgba(34,211,238,0.06),transparent_70%)] pointer-events-none" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_80%,rgba(147,51,234,0.05),transparent_65%)] pointer-events-none" />

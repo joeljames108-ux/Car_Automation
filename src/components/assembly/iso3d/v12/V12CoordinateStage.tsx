@@ -2,31 +2,25 @@ import React, { useMemo } from "react";
 import { projectIso, projectIsoEllipse, type ScreenPoint2D, type IsoPoint3D } from "../isoMath";
 
 interface V12CoordinateStageProps {
-  originScreen?: ScreenPoint2D;
+  originScreen?: { x: number; y: number };
   zoomLevel?: number;
   showPodium?: boolean;
+  theme?: "gold" | "rosso" | "stealth" | "emerald";
+  cameraPreset?: "iso" | "top" | "rear" | "front";
   children?: React.ReactNode;
 }
 
 /**
  * ═══════════════════════════════════════════════════════════════════
- * PHASE 1 — MASTER V12 ISOMETRIC COORDINATE FOUNDATION & GLASS PODIUM
+ * PHASE 01 — 30° ISOMETRIC COORDINATE STAGE & TEMPERED GLASS PODIUM
  * ═══════════════════════════════════════════════════════════════════
- *
- * Provides the calibrated 3D Isometric Space and High-End Tempered Glass
- * Display Stage for the Racing-Spec 6.5L 60° V12 Engine Assembly.
- *
- * Features:
- *  1. 30-Degree Axonometric Spatial Transform Engine with Z-Ordering
- *  2. Multi-Tier Tempered Glass Stage with Chamfered Polished Crystal Edges
- *  3. Beveled Brushed Aluminum Perimeter Base Frame with Standoff Risers
- *  4. Multi-Layer Contact Shadow with Gaussian Soft Penumbra
- *  5. Overhead Studio Softbox Rim Lighting Gradients & Specular Glints
  */
 export const V12CoordinateStage: React.FC<V12CoordinateStageProps> = ({
-  originScreen = { x: 250, y: 220 },
+  originScreen = { x: 290, y: 245 },
   zoomLevel = 1.0,
   showPodium = true,
+  theme = "gold",
+  cameraPreset = "iso",
   children,
 }) => {
   const P = useMemo(

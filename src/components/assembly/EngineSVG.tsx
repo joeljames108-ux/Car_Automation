@@ -341,6 +341,15 @@ export function EngineSVG({
     currentLayout === "electric" ||
     (engineConfig as any)?.powertrainType === "electric";
 
+  const isHybridEnabled =
+    currentLayout === "hybrid" ||
+    (engineConfig?.hybridArchitecture && engineConfig.hybridArchitecture !== "none") ||
+    (engineConfig as any)?.isHybrid;
+
+  const isTurboEnabled =
+    (engineConfig as any)?.aspiration !== "NA" &&
+    (engineConfig as any)?.aspiration !== "naturally_aspirated";
+
   const blockState = getPartState("block");
   const crankState = getPartState("crankshaft");
   const pistonState = getPartState("pistons");
@@ -362,17 +371,18 @@ export function EngineSVG({
   // Active spotlight location
   const allCompList = getAssemblyComponents(engineConfig);
   const activeMeta = activeComponentId ? allCompList.find((c: AssemblyComponentMeta) => c.id === activeComponentId) : null;
-  const spotlightX = activeMeta ? activeMeta.slotPosition.x : 250;
-  const spotlightY = activeMeta ? activeMeta.slotPosition.y : 225;
+  const spotlightX = activeMeta ? activeMeta.slotPosition.x : 290;
+  const spotlightY = activeMeta ? activeMeta.slotPosition.y : 245;
 
   return (
     <div className={`relative w-full h-full flex items-center justify-center select-none ${className}`}>
       <svg
-        viewBox="0 0 500 450"
-        className="w-full h-full max-h-[500px] overflow-visible filter drop-shadow-[0_20px_50px_rgba(15,23,42,0.85)]"
+        viewBox="0 0 580 480"
+        preserveAspectRatio="xMidYMid meet"
+        className="w-full h-full max-h-[520px] overflow-visible filter drop-shadow-[0_20px_50px_rgba(15,23,42,0.85)]"
       >
         {/* CAD Engineering Background Grid Overlay */}
-        <rect width="500" height="450" fill="url(#cad-grid)" className="pointer-events-none" />
+        <rect width="580" height="480" fill="url(#cad-grid)" className="pointer-events-none" />
 
         <defs>
           <IsoShadersDefs />
@@ -1673,30 +1683,30 @@ export function EngineSVG({
         )}
 
         {/* ── 11. PERFECTLY ALIGNED 3D VOLUTE SNAIL SCROLL TURBOCHARGER ── */}
-        {viewMode === "3d_iso" ? (
-          <TurbochargerIso
-            layoutSpec={layoutSpec}
-            componentState={turboState}
-            isAssemblyComplete={isAssemblyComplete}
-            selectedVariants={selectedVariants}
-            onHoverComponent={onHoverComponent}
-          />
-        ) : (
-          <g
-            id="turbocharger"
-            onMouseEnter={() => onHoverComponent?.("turbocharger")}
-            onMouseLeave={() => onHoverComponent?.(null)}
-            className={`cursor-pointer transition-all duration-700 ease-out ${
-              isAssemblyComplete ? "filter-heat-shimmer" : ""
-            }`}
-            style={{
-              transform: `translate(${turboState.offsetX}px, ${turboState.offsetY}px)`,
-              opacity: turboState.opacity,
-            }}
-            filter={turboState.isInstalled ? "url(#soft-shadow-3d)" : undefined}
-          >
-            {/* Stainless Steel Downpipe looping underneath */}
-            <g>
+        {isTurboEnabled && (
+          viewMode === "3d_iso" ? (
+            <TurbochargerIso
+              layoutSpec={layoutSpec}
+              componentState={turboState}
+              isAssemblyComplete={isAssemblyComplete}
+              selectedVariants={selectedVariants}
+              onHoverComponent={onHoverComponent}
+            />
+          ) : (
+            <g
+              id="turbocharger"
+              onMouseEnter={() => onHoverComponent?.("turbocharger")}
+              onMouseLeave={() => onHoverComponent?.(null)}
+              className={`cursor-pointer transition-all duration-700 ease-out ${
+                isAssemblyComplete ? "filter-heat-shimmer" : ""
+              }`}
+              style={{
+                transform: `translate(${turboState.offsetX}px, ${turboState.offsetY}px)`,
+                opacity: turboState.opacity,
+              }}
+              filter={turboState.isInstalled ? "url(#soft-shadow-3d)" : undefined}
+            >
+              {/* Stainless Steel Downpipe */}
               <path
                 d={`M ${layoutSpec.bx + layoutSpec.bw + 30} 108 C ${layoutSpec.bx + layoutSpec.bw + 24} 138 ${layoutSpec.bx + layoutSpec.bw + 46} 178 ${layoutSpec.bx + layoutSpec.bw + 32} 196 C ${layoutSpec.bx + layoutSpec.bw + 14} 206 ${layoutSpec.bx + layoutSpec.bw - 14} 194 ${layoutSpec.bx + layoutSpec.bw - 22} 168 C ${layoutSpec.bx + layoutSpec.bw - 28} 152 ${layoutSpec.bx + layoutSpec.bw - 26} 138 ${layoutSpec.bx + layoutSpec.bw - 20} 128`}
                 fill="none"
@@ -1704,99 +1714,17 @@ export function EngineSVG({
                 strokeWidth="22"
                 strokeLinecap="round"
               />
-              <path
-                d={`M ${layoutSpec.bx + layoutSpec.bw + 30} 104 C ${layoutSpec.bx + layoutSpec.bw + 24} 134 ${layoutSpec.bx + layoutSpec.bw + 46} 174 ${layoutSpec.bx + layoutSpec.bw + 32} 192 C ${layoutSpec.bx + layoutSpec.bw + 14} 202 ${layoutSpec.bx + layoutSpec.bw - 14} 190 ${layoutSpec.bx + layoutSpec.bw - 22} 164`}
-                fill="none"
-                stroke="#ffffff"
-                strokeWidth="3.8"
-                strokeLinecap="round"
-                opacity="0.9"
-              />
-
-              {/* V-Band Coupling Flange Clamps */}
-              <rect x={layoutSpec.bx + layoutSpec.bw + 24} y="102" width="14" height="20" rx="3.5" fill="url(#machined-deck-bevel)" stroke="#090d16" strokeWidth="1.5" />
-              <rect x={layoutSpec.bx + layoutSpec.bw - 28} y="154" width="14" height="20" rx="3.5" fill="url(#machined-deck-bevel)" stroke="#090d16" strokeWidth="1.5" />
-            </g>
-
-            {/* Hot-Side Cast Iron Exhaust Turbine Scroll */}
-            <path
-              d={`M ${layoutSpec.bx + layoutSpec.bw + 12} 72 C ${layoutSpec.bx + layoutSpec.bw - 6} 68 ${layoutSpec.bx + layoutSpec.bw - 16} 90 ${layoutSpec.bx + layoutSpec.bw - 6} 114 C ${layoutSpec.bx + layoutSpec.bw + 8} 130 ${layoutSpec.bx + layoutSpec.bw + 34} 126 ${layoutSpec.bx + layoutSpec.bw + 36} 108 C ${layoutSpec.bx + layoutSpec.bw + 36} 92 ${layoutSpec.bx + layoutSpec.bw + 22} 78 ${layoutSpec.bx + layoutSpec.bw + 12} 72 Z`}
-              fill="url(#copper-heat-treated)"
-              stroke="#431407"
-              strokeWidth="2.8"
-            />
-
-            {/* Cold-Side Billet Aluminum Compressor Volute Snail Scroll Housing */}
-            <g>
+              {/* Cold-Side Billet Compressor Housing */}
               <path
                 d={`M ${layoutSpec.bx + layoutSpec.bw + 20} 88 C ${layoutSpec.bx + layoutSpec.bw + 20} 54 ${layoutSpec.bx + layoutSpec.bw + 60} 42 ${layoutSpec.bx + layoutSpec.bw + 80} 62 C ${layoutSpec.bx + layoutSpec.bw + 96} 80 ${layoutSpec.bx + layoutSpec.bw + 88} 118 ${layoutSpec.bx + layoutSpec.bw + 58} 124 C ${layoutSpec.bx + layoutSpec.bw + 30} 128 ${layoutSpec.bx + layoutSpec.bw + 16} 108 ${layoutSpec.bx + layoutSpec.bw + 20} 88 Z`}
                 fill="url(#turbo-housing)"
                 stroke={turboState.isHovered ? "#38bdf8" : "#090d16"}
                 strokeWidth="3.5"
               />
-              <path
-                d={`M ${layoutSpec.bx + layoutSpec.bw + 24} 88 C ${layoutSpec.bx + layoutSpec.bw + 24} 58 ${layoutSpec.bx + layoutSpec.bw + 60} 46 ${layoutSpec.bx + layoutSpec.bw + 76} 64 C ${layoutSpec.bx + layoutSpec.bw + 90} 80 ${layoutSpec.bx + layoutSpec.bw + 82} 114 ${layoutSpec.bx + layoutSpec.bw + 56} 118`}
-                fill="none"
-                stroke="#ffffff"
-                strokeWidth="2.2"
-                opacity="0.9"
-              />
-
-              {/* Top Compressor Discharge Pipe */}
-              <rect x={layoutSpec.bx + layoutSpec.bw + 66} y="32" width="20" height="36" rx="3.5" fill="url(#turbo-housing)" stroke="#090d16" strokeWidth="2.2" />
-              <line x1={layoutSpec.bx + layoutSpec.bw + 68} y1="33" x2={layoutSpec.bx + layoutSpec.bw + 68} y2="64" stroke="#ffffff" strokeWidth="2.2" opacity="0.85" />
-
-              {/* Top Intercooler Coupler Silicone Hose & Clamps */}
-              <rect x={layoutSpec.bx + layoutSpec.bw + 63} y="26" width="26" height="14" rx="2.5" fill="url(#anodized-blue)" stroke="#090d16" strokeWidth="1.5" />
-              <rect x={layoutSpec.bx + layoutSpec.bw + 65} y="27" width="4" height="12" fill="#ffffff" />
-              <rect x={layoutSpec.bx + layoutSpec.bw + 83} y="27" width="4" height="12" fill="#ffffff" />
-            </g>
-
-            {/* Machined Bellmouth Inlet Ring & 10-Blade Golden Impeller */}
-            <g>
               <circle cx={layoutSpec.bx + layoutSpec.bw + 42} cy="88" r="18" fill="url(#machined-deck-bevel)" stroke="#090d16" strokeWidth="2.8" />
               <circle cx={layoutSpec.bx + layoutSpec.bw + 42} cy="88" r="14" fill="#020617" stroke="#475569" strokeWidth="1.8" />
-
-              {/* 10-Blade Golden Billet Impeller Wheel */}
-              <g className={isAssemblyComplete ? "animate-spin-slow" : ""}>
-                <circle cx={layoutSpec.bx + layoutSpec.bw + 42} cy="88" r="5.5" fill="url(#gold-hub)" stroke="#78350f" strokeWidth="1" />
-                {[0, 36, 72, 108, 144, 180, 216, 252, 288, 324].map((ang, bidx) => (
-                  <g key={`blade-${bidx}`}>
-                    <line
-                      x1={layoutSpec.bx + layoutSpec.bw + 42 + 5.5 * Math.cos((ang * Math.PI) / 180)}
-                      y1={88 + 5.5 * Math.sin((ang * Math.PI) / 180)}
-                      x2={layoutSpec.bx + layoutSpec.bw + 42 + 13 * Math.cos((ang * Math.PI) / 180)}
-                      y2={88 + 13 * Math.sin((ang * Math.PI) / 180)}
-                      stroke="#fef08a"
-                      strokeWidth="2.5"
-                      strokeLinecap="round"
-                    />
-                    <line
-                      x1={layoutSpec.bx + layoutSpec.bw + 42 + 6 * Math.cos((ang * Math.PI) / 180)}
-                      y1={88 + 6 * Math.sin((ang * Math.PI) / 180)}
-                      x2={layoutSpec.bx + layoutSpec.bw + 42 + 12.5 * Math.cos((ang * Math.PI) / 180)}
-                      y2={88 + 12.5 * Math.sin((ang * Math.PI) / 180)}
-                      stroke="#ffffff"
-                      strokeWidth="1"
-                      opacity="0.9"
-                    />
-                  </g>
-                ))}
-                <circle cx={layoutSpec.bx + layoutSpec.bw + 42} cy="88" r="2.5" fill="#e2e8f0" stroke="#090d16" strokeWidth="0.8" />
-              </g>
             </g>
-
-            {/* Pneumatic Internal Wastegate Actuator Assembly */}
-            <g>
-              <rect x={layoutSpec.bx + layoutSpec.bw + 78} y="88" width="20" height="26" rx="5.5" fill="url(#pipe-cylinder-3d)" stroke="#090d16" strokeWidth="1.8" />
-              <line x1={layoutSpec.bx + layoutSpec.bw + 79} y1="89" x2={layoutSpec.bx + layoutSpec.bw + 97} y2="89" stroke="#ffffff" strokeWidth="1.5" opacity="0.95" />
-              <rect x={layoutSpec.bx + layoutSpec.bw + 98} y="98" width="6" height="4" fill="#38bdf8" rx="1" />
-
-              <line x1={layoutSpec.bx + layoutSpec.bw + 58} y1="100" x2={layoutSpec.bx + layoutSpec.bw + 78} y2="100" stroke="#e2e8f0" strokeWidth="3.5" />
-              <rect x={layoutSpec.bx + layoutSpec.bw + 65} y="98" width="6" height="4" fill="#f8fafc" stroke="#090d16" strokeWidth="0.8" />
-              <circle cx={layoutSpec.bx + layoutSpec.bw + 58} cy="100" r="3.2" fill="#b45309" stroke="#090d16" strokeWidth="1" />
-            </g>
-          </g>
+          )
         )}
 
         {/* ── 12. BRUSHED STEEL OIL PAN SUMP & RULER SCALE PLATE ── */}
@@ -1936,74 +1864,78 @@ export function EngineSVG({
         )}
 
         {/* ── 13. 800V P2/P4 AXIAL-FLUX HYBRID ELECTRIC MOTOR UNIT ── */}
-        {viewMode === "3d_iso" ? (
-          <HybridMotorIso
-            layoutSpec={layoutSpec}
-            componentState={hybridMotorState}
-            onHoverComponent={onHoverComponent}
-          />
-        ) : (
-          <g
-            id="hybrid_motor"
-            onMouseEnter={() => onHoverComponent?.("hybrid_motor")}
-            onMouseLeave={() => onHoverComponent?.(null)}
-            className="cursor-pointer transition-all duration-700 ease-out"
-            style={{
-              transform: `translate(${hybridMotorState.offsetX}px, ${hybridMotorState.offsetY}px)`,
-              opacity: hybridMotorState.opacity,
-            }}
-            filter={hybridMotorState.isInstalled ? "url(#soft-shadow-3d)" : undefined}
-          >
-            {/* Main Cylindrical Axial-Flux Motor Housing (Mated to crankshaft rear flywheel flange) */}
-            <rect x={layoutSpec.bx - 60} y="290" width="54" height="90" rx="10" fill="url(#anodized-blue)" stroke={hybridMotorState.isHovered ? "#38bdf8" : "#090d16"} strokeWidth="3" />
-            <rect x={layoutSpec.bx - 56} y="294" width="46" height="82" rx="8" fill="none" stroke="#ffffff" strokeWidth="1.8" opacity="0.9" />
+        {isHybridEnabled && (
+          viewMode === "3d_iso" ? (
+            <HybridMotorIso
+              layoutSpec={layoutSpec}
+              componentState={hybridMotorState}
+              onHoverComponent={onHoverComponent}
+            />
+          ) : (
+            <g
+              id="hybrid_motor"
+              onMouseEnter={() => onHoverComponent?.("hybrid_motor")}
+              onMouseLeave={() => onHoverComponent?.(null)}
+              className="cursor-pointer transition-all duration-700 ease-out"
+              style={{
+                transform: `translate(${hybridMotorState.offsetX}px, ${hybridMotorState.offsetY}px)`,
+                opacity: hybridMotorState.opacity,
+              }}
+              filter={hybridMotorState.isInstalled ? "url(#soft-shadow-3d)" : undefined}
+            >
+              {/* Main Cylindrical Axial-Flux Motor Housing */}
+              <rect x={layoutSpec.bx - 60} y="290" width="54" height="90" rx="10" fill="url(#anodized-blue)" stroke={hybridMotorState.isHovered ? "#38bdf8" : "#090d16"} strokeWidth="3" />
+              <rect x={layoutSpec.bx - 56} y="294" width="46" height="82" rx="8" fill="none" stroke="#ffffff" strokeWidth="1.8" opacity="0.9" />
 
-            {/* Copper Stator Winding Coils (Visible through inspection window) */}
-            <rect x={layoutSpec.bx - 50} y="310" width="34" height="50" rx="5" fill="#020617" stroke="#b45309" strokeWidth="2" />
-            <path d={`M ${layoutSpec.bx - 46} 315 L ${layoutSpec.bx - 20} 355 M ${layoutSpec.bx - 46} 325 L ${layoutSpec.bx - 20} 345`} stroke="#f59e0b" strokeWidth="3" strokeDasharray="4 2" />
+              {/* Copper Stator Winding Coils */}
+              <rect x={layoutSpec.bx - 50} y="310" width="34" height="50" rx="5" fill="#020617" stroke="#b45309" strokeWidth="2" />
+              <path d={`M ${layoutSpec.bx - 46} 315 L ${layoutSpec.bx - 20} 355 M ${layoutSpec.bx - 46} 325 L ${layoutSpec.bx - 20} 345`} stroke="#f59e0b" strokeWidth="3" strokeDasharray="4 2" />
 
-            {/* High-Voltage 800V Orange Power Cable Harness */}
-            <path d={`M ${layoutSpec.bx - 33} 290 C ${layoutSpec.bx - 33} 250 ${layoutSpec.bx - 70} 220 ${layoutSpec.bx - 65} 170`} fill="none" stroke="#f97316" strokeWidth="7" strokeLinecap="round" />
-            <path d={`M ${layoutSpec.bx - 33} 290 C ${layoutSpec.bx - 33} 250 ${layoutSpec.bx - 70} 220 ${layoutSpec.bx - 65} 170`} fill="none" stroke="#fef08a" strokeWidth="2" strokeLinecap="round" opacity="0.9" />
+              {/* High-Voltage 800V Orange Power Cable Harness */}
+              <path d={`M ${layoutSpec.bx - 33} 290 C ${layoutSpec.bx - 33} 250 ${layoutSpec.bx - 70} 220 ${layoutSpec.bx - 65} 170`} fill="none" stroke="#f97316" strokeWidth="7" strokeLinecap="round" />
+              <path d={`M ${layoutSpec.bx - 33} 290 C ${layoutSpec.bx - 33} 250 ${layoutSpec.bx - 70} 220 ${layoutSpec.bx - 65} 170`} fill="none" stroke="#fef08a" strokeWidth="2" strokeLinecap="round" opacity="0.9" />
 
-            {/* Gold Rotor Hub Nut */}
-            <circle cx={layoutSpec.bx - 33} cy="335" r="8" fill="url(#gold-hub)" stroke="#090d16" strokeWidth="1.5" />
-            <circle cx={layoutSpec.bx - 33} cy="335" r="4" fill="#090d16" />
-          </g>
+              {/* Gold Rotor Hub Nut */}
+              <circle cx={layoutSpec.bx - 33} cy="335" r="8" fill="url(#gold-hub)" stroke="#090d16" strokeWidth="1.5" />
+              <circle cx={layoutSpec.bx - 33} cy="335" r="4" fill="#090d16" />
+            </g>
+          )
         )}
 
         {/* ── 14. SILICON CARBIDE (SiC) INVERTER & HYBRID ECU CONTROL MODULE ── */}
-        {viewMode === "3d_iso" ? (
-          <InverterECUIso
-            layoutSpec={layoutSpec}
-            componentState={inverterState}
-            onHoverComponent={onHoverComponent}
-          />
-        ) : (
-          <g
-            id="inverter_ecu"
-            onMouseEnter={() => onHoverComponent?.("inverter_ecu")}
-            onMouseLeave={() => onHoverComponent?.(null)}
-            className="cursor-pointer transition-all duration-700 ease-out"
-            style={{
-              transform: `translate(${inverterState.offsetX}px, ${inverterState.offsetY}px)`,
-              opacity: inverterState.opacity,
-            }}
-            filter={inverterState.isInstalled ? "url(#soft-shadow-3d)" : undefined}
-          >
-            {/* Sealed Billet Inverter Housing with Cooling Fins */}
-            <rect x={layoutSpec.bx - 85} y="125" width="60" height="50" rx="8" fill="url(#turbo-housing)" stroke={inverterState.isHovered ? "#38bdf8" : "#090d16"} strokeWidth="2.8" />
-            <rect x={layoutSpec.bx - 82} y="128" width="54" height="44" rx="6" fill="none" stroke="#ffffff" strokeWidth="1.5" opacity="0.9" />
+        {isHybridEnabled && (
+          viewMode === "3d_iso" ? (
+            <InverterECUIso
+              layoutSpec={layoutSpec}
+              componentState={inverterState}
+              onHoverComponent={onHoverComponent}
+            />
+          ) : (
+            <g
+              id="inverter_ecu"
+              onMouseEnter={() => onHoverComponent?.("inverter_ecu")}
+              onMouseLeave={() => onHoverComponent?.(null)}
+              className="cursor-pointer transition-all duration-700 ease-out"
+              style={{
+                transform: `translate(${inverterState.offsetX}px, ${inverterState.offsetY}px)`,
+                opacity: inverterState.opacity,
+              }}
+              filter={inverterState.isInstalled ? "url(#soft-shadow-3d)" : undefined}
+            >
+              {/* Sealed Billet Inverter Housing with Cooling Fins */}
+              <rect x={layoutSpec.bx - 85} y="125" width="60" height="50" rx="8" fill="url(#turbo-housing)" stroke={inverterState.isHovered ? "#38bdf8" : "#090d16"} strokeWidth="2.8" />
+              <rect x={layoutSpec.bx - 82} y="128" width="54" height="44" rx="6" fill="none" stroke="#ffffff" strokeWidth="1.5" opacity="0.9" />
 
-            {/* External Heat Sink Cooling Fins */}
-            {[-75, -67, -59, -51, -43, -35].map((fx, fidx) => (
-              <line key={`fin-${fidx}`} x1={layoutSpec.bx + fx} y1="130" x2={layoutSpec.bx + fx} y2="168" stroke="#090d16" strokeWidth="1.8" />
-            ))}
+              {/* External Heat Sink Cooling Fins */}
+              {[-75, -67, -59, -51, -43, -35].map((fx, fidx) => (
+                <line key={`fin-${fidx}`} x1={layoutSpec.bx + fx} y1="130" x2={layoutSpec.bx + fx} y2="168" stroke="#090d16" strokeWidth="1.8" />
+              ))}
 
-            {/* Pulsing Digital Status LED Indicator */}
-            <circle cx={layoutSpec.bx - 75} cy="138" r="3" fill="#38bdf8" stroke="#090d16" strokeWidth="1" className="animate-pulse" />
-            <text x={layoutSpec.bx - 55} y="141" fill="#38bdf8" fontSize="6.5" fontFamily="monospace" fontWeight="bold">SiC 800V</text>
-          </g>
+              {/* Pulsing Digital Status LED Indicator */}
+              <circle cx={layoutSpec.bx - 75} cy="138" r="3" fill="#38bdf8" stroke="#090d16" strokeWidth="1" className="animate-pulse" />
+              <text x={layoutSpec.bx - 55} y="141" fill="#38bdf8" fontSize="6.5" fontFamily="monospace" fontWeight="bold">SiC 800V</text>
+            </g>
+          )
         )}
         </g>
         )}
