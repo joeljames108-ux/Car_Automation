@@ -65,7 +65,6 @@ import { InverterECUIso } from "./iso3d/InverterECUIso";
 import { RadiatorIso } from "./iso3d/RadiatorIso";
 import { TransmissionIso } from "./iso3d/TransmissionIso";
 import { EngineCoverIso } from "./iso3d/EngineCoverIso";
-import { IsoPhotorealShaders } from "./iso3d/isoPhotorealShaders";
 
 
 interface EngineSVGProps {
@@ -378,7 +377,6 @@ export function EngineSVG({
         <defs>
           <IsoShadersDefs />
           <IsoBlockShaderDefs />
-          <IsoPhotorealShaders />
 
           {/* ── DYNAMIC COMPONENT MATERIAL GRADE SHADERS ── */}
 

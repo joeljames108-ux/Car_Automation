@@ -1,259 +1,295 @@
-import React from "react";
-
-interface ComponentState {
-  isInstalled: boolean;
-  isActive: boolean;
-  isHovered: boolean;
-  offsetX: number;
-  offsetY: number;
-  opacity: number;
-  scale?: number;
-  meta?: any;
-}
+import React, { useMemo } from "react";
+import type { ComponentId } from "../../../sim/assemblyTypes";
+import { projectIso } from "./isoMath";
 
 interface RadiatorIsoProps {
-  layoutSpec?: any;
-  componentState?: ComponentState;
-  radiatorState?: ComponentState;
-  selectedVariants?: any;
-  onHoverComponent?: (id: any) => void;
-  materialFinish?: "aluminum_polished" | "black_thermal_coat" | "carbon_shroud";
+  layoutSpec?: {
+    label: string;
+    cyls: number[];
+    width: number;
+    bx: number;
+    bw: number;
+    bh: number;
+    category?: string;
+  };
+  componentState?: {
+    isInstalled: boolean;
+    isActive: boolean;
+    opacity: number;
+    offsetX: number;
+    offsetY: number;
+  };
+  onHoverComponent?: (id: ComponentId | null) => void;
 }
 
 /**
- * ═════════════════════════════════════════════════════════════════════
- * PHASE 24B: MOTORSPORT ALL-ALUMINUM RADIATOR 12-LAYER ASSEMBLY
- * ═════════════════════════════════════════════════════════════════════
- *
- * Implements full 12-layer hyper-realism architecture for Radiator & Cooling:
- * - Layer 1: Ground AO drop shadow & radiator core ray-cast occlusion
- * - Layer 2: Lower mounting isolator rubber cushions & bracket studs
- * - Layer 3: Dual-pass micro-louvered all-aluminum heat exchanger core matrix
- * - Layer 4: Left & Right stamped 5052 aluminum end tanks with TIG weld beads
- * - Layer 5: High-flow -16AN billet inlet & outlet radiator hose bungs
- * - Layer 6: Coolant flow directional manifold internal divider baffle
- * - Layer 7: SPAL high-output brushless electric cooling fan & aerodynamic shroud
- * - Layer 8: 1.3 Bar high-pressure billet radiator cap with pressure relief lever
- * - Layer 9: Brass petcock drain valve & top bleed screw ports
- * - Layer 10: Digital coolant temperature sensor port & laser-etched serial tag
- * - Layer 11: Multi-tier specular core matrix highlights & end tank gloss reflections
- * - Layer 12: Interactive hover state illumination & thermodynamic heat dissipation glow
+ * Photorealistic 3D Isometric Racing Radiator & Electric Cooling Fan Assembly (Optimized)
+ * Consolidated static paths & memoized 3D trigonometry for 60fps performance.
  */
-export const RadiatorIso: React.FC<RadiatorIsoProps> = ({
+const RadiatorIsoComponent: React.FC<RadiatorIsoProps> = ({
   componentState,
-  radiatorState,
   onHoverComponent,
-  materialFinish = "aluminum_polished",
 }) => {
-  const activeState = componentState || radiatorState || {
-    isInstalled: true,
-    isActive: false,
-    isHovered: false,
-    offsetX: 0,
-    offsetY: 0,
-    opacity: 1,
-  };
+  const originScreen = useMemo(() => ({ x: 250, y: 215 }), []);
+  const BL = 230;
+  const halfL = BL / 2; // 115
 
-  const isInstalled = activeState.isInstalled;
+  const P = useMemo(() => (x: number, y: number, z: number) => projectIso({ x, y, z }, originScreen), [originScreen]);
 
-  const coreFill =
-    materialFinish === "black_thermal_coat"
-      ? "url(#photoreal-castiron-wall)"
-      : materialFinish === "carbon_shroud"
-      ? "url(#photoreal-magnesium-deck)"
-      : "url(#photoreal-billet-deck)";
+  // Radiator 3D Datums
+  const radX = -halfL - 28;
+  const radThickness = 12;
+  const radWidth = 72;
 
-  // Radiator Dimensions in Isometric Pixel Space
-  const centerX = 250;
-  const centerY = 370;
-  const radWidth = 240;
-  const radHeight = 110;
+  // Precomputed 3D Corner Coordinates
+  const {
+    rTopFL, rTopFR, rTopBL, rTopBR,
+    rBotFL, rBotFR, rBotBL, rBotBR,
+    radHoseOutlet, engWaterInlet, capPt,
+    fanCenter, fanBladePathD, finPathD,
+  } = useMemo(() => {
+    const tFL = P(radX, radWidth / 2, 170);
+    const tFR = P(radX + radThickness, radWidth / 2, 170);
+    const tBL = P(radX, -radWidth / 2, 170);
+    const tBR = P(radX + radThickness, -radWidth / 2, 170);
+
+    const bFL = P(radX, radWidth / 2, 60);
+    const bFR = P(radX + radThickness, radWidth / 2, 60);
+    const bBL = P(radX, -radWidth / 2, 60);
+    const bBR = P(radX + radThickness, -radWidth / 2, 60);
+
+    const hose = P(radX + radThickness, 24, 75);
+    const inlet = P(-halfL + 8, 38, 70);
+    const cap = P(radX + 6, -radWidth / 2 + 10, 176);
+    const fan = P(radX + radThickness + 8, 0, 115);
+
+    // Single consolidated path for 7 curved fan blades
+    let fanD = "";
+    [0, 51, 103, 154, 206, 257, 308].forEach((deg) => {
+      const rad = (deg * Math.PI) / 180;
+      const bx = fan.x + 20 * Math.cos(rad);
+      const by = fan.y + 30 * Math.sin(rad);
+      fanD += `M ${fan.x} ${fan.y} Q ${fan.x + 8 * Math.cos(rad + 0.4)} ${fan.y + 12 * Math.sin(rad + 0.4)} ${bx} ${by} `;
+    });
+
+    // Single consolidated path for 16 cooling fins
+    let finD = "";
+    for (let idx = 0; idx < 16; idx++) {
+      const finZ = 68 + idx * 6;
+      const p1 = P(radX + radThickness, radWidth / 2 - 3, finZ);
+      const p2 = P(radX + radThickness, -radWidth / 2 + 3, finZ);
+      finD += `M ${p1.x} ${p1.y} L ${p2.x} ${p2.y} `;
+    }
+
+    return {
+      rTopFL: tFL, rTopFR: tFR, rTopBL: tBL, rTopBR: tBR,
+      rBotFL: bFL, rBotFR: bFR, rBotBL: bBL, rBotBR: bBR,
+      radHoseOutlet: hose, engWaterInlet: inlet, capPt: cap,
+      fanCenter: fan, fanBladePathD: fanD, finPathD: finD,
+    };
+  }, [P, radX, radThickness, radWidth, halfL]);
 
   return (
     <g
-      id="iso3d-radiator-hyperreal-assembly"
-      className="transition-all duration-500 cursor-pointer"
-      onMouseEnter={() => onHoverComponent && onHoverComponent("radiator")}
-      onMouseLeave={() => onHoverComponent && onHoverComponent(null)}
+      id="iso-radiator-assembly-3d"
+      onMouseEnter={() => onHoverComponent?.("block")}
+      onMouseLeave={() => onHoverComponent?.(null)}
+      className="cursor-pointer transition-all duration-700 ease-out"
       style={{
-        transform: `translate(${activeState.offsetX}px, ${activeState.offsetY}px)`,
-        opacity: activeState.opacity,
+        transform: componentState
+          ? `translate(${componentState.offsetX}px, ${componentState.offsetY}px)`
+          : undefined,
+        opacity: componentState?.opacity ?? 1,
       }}
     >
-      {/* ── LAYER 1: GROUND AO DROP SHADOW & RAY-CAST OCCLUSION ── */}
-      <g id="rad-layer1-ao-shadow">
+      {/* ── 1. REAR COOLING FAN SHROUD & BLADES ── */}
+      <g id="radiator-cooling-fan">
         <ellipse
-          cx={centerX}
-          cy={centerY + radHeight / 2 + 25}
-          rx={radWidth * 0.65}
-          ry={24}
-          fill="url(#photoreal-chassis-ground-ao)"
-        />
-      </g>
-
-      {/* ── LAYER 2: LOWER MOUNTING ISOLATORS ── */}
-      <g id="rad-layer2-isolators">
-        <circle cx={centerX - radWidth / 2 + 30} cy={centerY + radHeight / 2 + 8} r="6" fill="#020617" stroke="#475569" strokeWidth="1" />
-        <circle cx={centerX + radWidth / 2 - 30} cy={centerY + radHeight / 2 - 12} r="6" fill="#020617" stroke="#475569" strokeWidth="1" />
-      </g>
-
-      {/* ── LAYER 3: DUAL-PASS MICRO-LOUVERED HEAT EXCHANGER CORE ── */}
-      <g id="rad-layer3-core-matrix">
-        <polygon
-          points={`${centerX - radWidth / 2 + 20},${centerY - radHeight / 2 + 10} ${centerX + radWidth / 2 - 20},${centerY - radHeight / 2 - 15} ${centerX + radWidth / 2 - 20},${centerY + radHeight / 2 - 15} ${centerX - radWidth / 2 + 20},${centerY + radHeight / 2 + 10}`}
-          fill={coreFill}
-          stroke="#64748b"
-          strokeWidth="1.2"
-        />
-        {/* Louvered Fin Tubes Texture (12 horizontal tube lines) */}
-        {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11].map((i) => {
-          const ly = centerY - radHeight / 2 + 12 + i * 8.5;
-          return (
-            <line
-              key={`core-tube-${i}`}
-              x1={centerX - radWidth / 2 + 24}
-              y1={ly + 6}
-              x2={centerX + radWidth / 2 - 24}
-              y2={ly - 16}
-              stroke="#94a3b8"
-              strokeWidth="1"
-              strokeDasharray="4,2"
-            />
-          );
-        })}
-      </g>
-
-      {/* ── LAYER 4: STAMPED 5052 ALUMINUM END TANKS ── */}
-      <g id="rad-layer4-end-tanks">
-        {/* Left End Tank */}
-        <polygon
-          points={`${centerX - radWidth / 2},${centerY - radHeight / 2 + 15} ${centerX - radWidth / 2 + 20},${centerY - radHeight / 2 + 10} ${centerX - radWidth / 2 + 20},${centerY + radHeight / 2 + 10} ${centerX - radWidth / 2},${centerY + radHeight / 2 + 15}`}
-          fill="url(#photoreal-billet-skirt)"
-          stroke="#475569"
-          strokeWidth="1.5"
-        />
-        {/* Right End Tank */}
-        <polygon
-          points={`${centerX + radWidth / 2 - 20},${centerY - radHeight / 2 - 15} ${centerX + radWidth / 2},${centerY - radHeight / 2 - 10} ${centerX + radWidth / 2},${centerY + radHeight / 2 - 10} ${centerX + radWidth / 2 - 20},${centerY + radHeight / 2 - 15}`}
-          fill="url(#photoreal-billet-skirt)"
-          stroke="#475569"
-          strokeWidth="1.5"
-        />
-      </g>
-
-      {/* ── LAYER 5: -16AN INLET & OUTLET WATER PORTS ── */}
-      <g id="rad-layer5-hose-ports">
-        {/* Upper Inlet Neck */}
-        <ellipse cx={centerX - radWidth / 2 + 10} cy={centerY - radHeight / 2 + 28} rx="9" ry="14" fill="#0284c7" stroke="#0369a1" strokeWidth="1.2" />
-        <ellipse cx={centerX - radWidth / 2 + 10} cy={centerY - radHeight / 2 + 28} rx="5" ry="9" fill="url(#photoreal-coolant-flow)" />
-        {/* Lower Outlet Neck */}
-        <ellipse cx={centerX + radWidth / 2 - 10} cy={centerY + radHeight / 2 - 32} rx="9" ry="14" fill="#0284c7" stroke="#0369a1" strokeWidth="1.2" />
-        <ellipse cx={centerX + radWidth / 2 - 10} cy={centerY + radHeight / 2 - 32} rx="5" ry="9" fill="url(#photoreal-coolant-flow)" />
-      </g>
-
-      {/* ── LAYER 6: INTERNAL DIVIDER BAFFLE ── */}
-      <g id="rad-layer6-baffle">
-        <line
-          x1={centerX - radWidth / 2 + 2}
-          y1={centerY + 14}
-          x2={centerX - radWidth / 2 + 18}
-          y2={centerY + 10}
-          stroke="#38bdf8"
+          cx={fanCenter.x}
+          cy={fanCenter.y}
+          rx="24"
+          ry="36"
+          fill="#0f172a"
+          stroke="#090d16"
           strokeWidth="2"
         />
-      </g>
-
-      {/* ── LAYER 7: SPAL BRUSHLESS COOLING FAN & SHROUD ── */}
-      <g id="rad-layer7-fan-shroud">
-        <circle cx={centerX} cy={centerY - 5} r="38" fill="#0b0f17" opacity="0.85" stroke="#334155" strokeWidth="1.2" />
-        {/* 7 Aerodynamic Fan Blades */}
-        {[0, 1, 2, 3, 4, 5, 6].map((i) => {
-          const angle = (i * 360) / 7 * (Math.PI / 180);
-          const bx = centerX + Math.cos(angle) * 32;
-          const by = centerY - 5 + Math.sin(angle) * 32;
-          return (
-            <line
-              key={`fan-blade-${i}`}
-              x1={centerX}
-              y1={centerY - 5}
-              x2={bx}
-              y2={by}
-              stroke="#475569"
-              strokeWidth="2.5"
-              strokeLinecap="round"
-            />
-          );
-        })}
-        {/* Center Fan Motor Hub */}
-        <circle cx={centerX} cy={centerY - 5} r="12" fill="#020617" stroke="#38bdf8" strokeWidth="1" />
-      </g>
-
-      {/* ── LAYER 8: 1.3 BAR BILLET RADIATOR CAP ── */}
-      <g id="rad-layer8-radiator-cap">
-        <ellipse cx={centerX - radWidth / 2 + 10} cy={centerY - radHeight / 2 + 8} rx="8" ry="5" fill="url(#photoreal-tin-gold)" stroke="#713f12" strokeWidth="1" />
-        <circle cx={centerX - radWidth / 2 + 10} cy={centerY - radHeight / 2 + 8} r="2" fill="#020617" />
-      </g>
-
-      {/* ── LAYER 9: DRAIN PETCOCK & BLEED VALVE ── */}
-      <g id="rad-layer9-valves">
-        <polygon
-          points={`${centerX + radWidth / 2 - 12},${centerY + radHeight / 2 + 2} ${centerX + radWidth / 2 - 4},${centerY + radHeight / 2} ${centerX + radWidth / 2 - 4},${centerY + radHeight / 2 + 8} ${centerX + radWidth / 2 - 12},${centerY + radHeight / 2 + 10}`}
-          fill="url(#photoreal-tin-gold)"
+        {/* Electric Motor Hub */}
+        <ellipse
+          cx={fanCenter.x}
+          cy={fanCenter.y}
+          rx="8"
+          ry="12"
+          fill="url(#v12-cast-aluminum-body)"
+          stroke="#090d16"
+          strokeWidth="1.5"
         />
-      </g>
-
-      {/* ── LAYER 10: SERIAL ID & SPECIFICATIONS ── */}
-      <g id="rad-layer10-auxiliary-details">
-        <rect
-          x={centerX - 35}
-          y={centerY + radHeight / 2 - 20}
-          width="70"
-          height="12"
-          rx="2"
-          fill="#0b0f17"
-          stroke="#38bdf8"
-          strokeWidth="0.8"
-          opacity="0.8"
-        />
-        <text
-          x={centerX - 30}
-          y={centerY + radHeight / 2 - 12}
-          fill="#38bdf8"
-          fontSize="6"
-          fontFamily="monospace"
-          fontWeight="bold"
-          letterSpacing="0.8"
-        >
-          DUAL-PASS 52MM
-        </text>
-      </g>
-
-      {/* ── LAYER 11: SPECULAR CORE HIGHLIGHTS ── */}
-      <g id="rad-layer11-specular-highlights" pointerEvents="none">
-        <line
-          x1={centerX - radWidth / 2 + 20}
-          y1={centerY - radHeight / 2 + 10}
-          x2={centerX + radWidth / 2 - 20}
-          y2={centerY - radHeight / 2 - 15}
-          stroke="#ffffff"
-          strokeWidth="1.6"
+        {/* Consolidated 7 Aerodynamic Curved Fan Blades */}
+        <path
+          d={fanBladePathD}
+          fill="none"
+          stroke="#334155"
+          strokeWidth="4"
           strokeLinecap="round"
-          filter="url(#fe-specular-bloom)"
         />
       </g>
 
-      {/* ── LAYER 12: HEAT DISSIPATION COOLANT GLOW ── */}
-      {isInstalled && (
-        <g id="rad-layer12-coolant-thermal-glow" opacity="0.25" pointerEvents="none">
+      {/* ── 2. RADIATOR CORE & ALUMINUM TANKS ── */}
+      <g id="radiator-core">
+        {/* Radiator Rear Face */}
+        <polygon
+          points={`${rTopBL.x},${rTopBL.y} ${rTopBR.x},${rTopBR.y} ${rBotBR.x},${rBotBR.y} ${rBotBL.x},${rBotBL.y}`}
+          fill="url(#v12-cast-aluminum-body-right)"
+          stroke="#090d16"
+          strokeWidth="2"
+        />
+
+        {/* Radiator Top End Tank */}
+        <polygon
+          points={`${rTopFL.x},${rTopFL.y} ${rTopFR.x},${rTopFR.y} ${rTopBR.x},${rTopBR.y} ${rTopBL.x},${rTopBL.y}`}
+          fill="url(#radiator-end-tank)"
+          stroke="#090d16"
+          strokeWidth="2.2"
+        />
+
+        {/* Radiator Front Core Face */}
+        <polygon
+          points={`${rTopFL.x},${rTopFL.y} ${rTopFR.x},${rTopFR.y} ${rBotFR.x},${rBotFR.y} ${rBotFL.x},${rBotFL.y}`}
+          fill="url(#radiator-core-aluminum)"
+          stroke="#090d16"
+          strokeWidth="2.2"
+        />
+
+        {/* Consolidated 16 Horizontal Aluminum Cooling Fin Lines (Single DOM Node) */}
+        <path
+          d={finPathD}
+          fill="none"
+          stroke="#64748b"
+          strokeWidth="1.2"
+          opacity="0.65"
+        />
+
+        {/* Radiator Top Outer Bevel Highlight */}
+        <line
+          x1={rTopFL.x}
+          y1={rTopFL.y}
+          x2={rTopBL.x}
+          y2={rTopBL.y}
+          stroke="#ffffff"
+          strokeWidth="2"
+          opacity="0.95"
+        />
+        <line
+          x1={rTopFL.x}
+          y1={rTopFL.y}
+          x2={rTopFR.x}
+          y2={rTopFR.y}
+          stroke="#ffffff"
+          strokeWidth="2"
+          opacity="0.95"
+        />
+
+        {/* Billet Radiator Pressure Cap */}
+        <g id="radiator-pressure-cap">
           <ellipse
-            cx={centerX}
-            cy={centerY}
-            rx={radWidth * 0.42}
-            ry={radHeight * 0.35}
-            fill="url(#photoreal-coolant-flow)"
+            cx={capPt.x}
+            cy={capPt.y}
+            rx="6.5"
+            ry="4"
+            fill="url(#bolt-boss-raised)"
+            stroke="#090d16"
+            strokeWidth="1.4"
           />
+          <ellipse
+            cx={capPt.x}
+            cy={capPt.y}
+            rx="4.5"
+            ry="2.5"
+            fill="url(#gold-anodized-bolt)"
+            stroke="#78350f"
+            strokeWidth="0.8"
+          />
+          <line x1={capPt.x - 5} y1={capPt.y} x2={capPt.x + 5} y2={capPt.y} stroke="#fef08a" strokeWidth="1.2" />
         </g>
-      )}
+      </g>
+
+      {/* ── 3. CURVED COOLANT CROSSOVER SUPPLY PIPE ── */}
+      <g id="coolant-crossover-pipe">
+        <path
+          d={`M ${radHoseOutlet.x} ${radHoseOutlet.y}
+              C ${radHoseOutlet.x + 20} ${radHoseOutlet.y + 15} ${engWaterInlet.x - 20} ${engWaterInlet.y + 10} ${engWaterInlet.x} ${engWaterInlet.y}`}
+          fill="none"
+          stroke="url(#valve-cover-gold-top)"
+          strokeWidth="9"
+          strokeLinecap="round"
+        />
+        <path
+          d={`M ${radHoseOutlet.x} ${radHoseOutlet.y - 1.5}
+              C ${radHoseOutlet.x + 20} ${radHoseOutlet.y + 13.5} ${engWaterInlet.x - 20} ${engWaterInlet.y + 8.5} ${engWaterInlet.x} ${engWaterInlet.y - 1.5}`}
+          fill="none"
+          stroke="#ffffff"
+          strokeWidth="2.2"
+          strokeLinecap="round"
+          opacity="0.9"
+        />
+        <ellipse
+          cx={radHoseOutlet.x + 3}
+          cy={radHoseOutlet.y + 2}
+          rx="5"
+          ry="7"
+          fill="none"
+          stroke="url(#bearing-saddle-chrome)"
+          strokeWidth="2.5"
+        />
+        <ellipse
+          cx={engWaterInlet.x - 3}
+          cy={engWaterInlet.y + 1}
+          rx="5"
+          ry="7"
+          fill="none"
+          stroke="url(#bearing-saddle-chrome)"
+          strokeWidth="2.5"
+        />
+      </g>
+
+      {/* ── 4. ACRYLIC EXPANSION TANK ON TOP OF RADIATOR (Photo 1 & 2 Reference) ── */}
+      <g id="radiator-expansion-tank">
+        {/* Transparent Acrylic Reservoir Box */}
+        <polygon
+          points={`${rTopBL.x + 10},${rTopBL.y - 30} ${rTopBR.x + 10},${rTopBR.y - 30} ${rTopBR.x + 10},${rTopBR.y} ${rTopBL.x + 10},${rTopBL.y}`}
+          fill="#38bdf8"
+          fillOpacity="0.22"
+          stroke="#38bdf8"
+          strokeWidth="1.2"
+        />
+        <polygon
+          points={`${rTopFL.x + 10},${rTopFL.y - 30} ${rTopFR.x + 10},${rTopFR.y - 30} ${rTopBR.x + 10},${rTopBR.y - 30} ${rTopBL.x + 10},${rTopBL.y - 30}`}
+          fill="#e0f2fe"
+          fillOpacity="0.35"
+          stroke="#bae6fd"
+          strokeWidth="1.2"
+        />
+        {/* Internal Mini Heat-Sink Baffle Plate */}
+        <line
+          x1={rTopFL.x + 18}
+          y1={rTopFL.y - 12}
+          x2={rTopBL.x + 18}
+          y2={rTopBL.y - 12}
+          stroke="#0284c7"
+          strokeWidth="2"
+          opacity="0.7"
+        />
+        <line
+          x1={rTopFL.x + 24}
+          y1={rTopFL.y - 20}
+          x2={rTopBL.x + 24}
+          y2={rTopBL.y - 20}
+          stroke="#0284c7"
+          strokeWidth="2"
+          opacity="0.7"
+        />
+      </g>
     </g>
   );
 };
+
+export const RadiatorIso = React.memo(RadiatorIsoComponent);

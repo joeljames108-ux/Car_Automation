@@ -1,446 +1,307 @@
 import React from "react";
+import type { ComponentId } from "../../../sim/assemblyTypes";
+import {
+  projectIso,
+  projectIsoWBankQuadEllipse,
+  getIsoRibTrapezoid,
+  type ScreenPoint2D,
+} from "./isoMath";
+import { getIsoMaterialFills } from "./isoShaders";
 
 interface W12BlockCastingIsoProps {
-  layoutSpec: any;
+  layoutSpec: {
+    label: string;
+    cyls: number[];
+    width: number;
+    bankAngle: string;
+    bx: number;
+    bw: number;
+    bh: number;
+    category: string;
+    bolts?: { x: number; y: number }[];
+  };
   blockState: {
     isInstalled: boolean;
     isActive: boolean;
     isHovered: boolean;
+    opacity: number;
     offsetX: number;
     offsetY: number;
-    opacity: number;
-    scale?: number;
-    meta?: any;
   };
-  selectedVariants?: any;
-  onHoverComponent?: (id: any) => void;
-  materialFinish?: "billet" | "cast_iron" | "magnesium";
-  showCrossHatch?: boolean;
+  selectedVariants?: Record<string, string>;
+  onHoverComponent?: (id: ComponentId | null) => void;
 }
 
 /**
- * ═════════════════════════════════════════════════════════════════════
- * PHASE 12: W12 TWIN-VR6 QUAD-BANK 12-LAYER W-BLOCK CASTING
- * ═════════════════════════════════════════════════════════════════════
+ * ═══════════════════════════════════════════════════════════════════
+ * W12 ENGINE BLOCK — Dual-VR6 72° Included Angle Quad-Bank Monoblock
+ * ═══════════════════════════════════════════════════════════════════
  *
- * Implements full 12-layer hyper-realism architecture for W12:
- * - Layer 1: Ground AO drop shadow & 72° W-valley ray-cast occlusion
- * - Layer 2: Deep sump pan rails with 28 perimeter bolts & 7 cross-bolted main caps
- * - Layer 3: Main dual-VR6 72° W-bank casting with central apex spine & starter pocket
- * - Layer 4: Front dual-chain timing drive plate cavity & twin water pump housings
- * - Layer 5: 12 Staggered diamond-honed cylinder bores (6 left VR-bank, 6 right VR-bank)
- * - Layer 6: Open-deck water jackets with 8 siamese coolant transfer channels
- * - Layer 7: High-pressure central apex oil gallery with brass end-plugs
- * - Layer 8: Structural valley stiffening bridge gussets & side skirt ribs
- * - Layer 9: 24 Recessed ARP 12-point head stud bosses with hardened washers
- * - Layer 10: Freeze plugs, quad knock sensors, twin turbo drain ports & serial tag
- * - Layer 11: Multi-tier specular edge highlights & razor-sharp bevel lighting
- * - Layer 12: Interactive hover state illumination & thermodynamic heat glow
+ * High-Performance 6.0L Twin-Turbocharged W12 Engine Block Casting
+ * Inspired by: Bentley Continental GT W12, Audi A8 W12, VW Phaeton
+ *
+ * 11 SVG Layers (bottom-up Z-ordering):
+ *  1. Ground shadow (broad compact high-displacement footprint)
+ *  2. Lower crankcase skirt & 7 shared main bearing bulkheads
+ *  3. Main block body casting (compact quad-bank W-silhouette)
+ *  4. Left VR-pair decks (Banks 0 & 1 @ +43.5° and +28.5°)
+ *  5. Right VR-pair decks (Banks 2 & 3 @ -28.5° and -43.5°)
+ *  6. Dual valleys & central apex spine
+ *  7. Cylinder bores (12 quad-staggered chamfered openings + cross-hatch honing)
+ *  8. Multi-stage quad-cam timing chain cover & AWD bellhousing
+ *  9. Structural strengthening ribs & cross-bank coolant channels
+ * 10. Head bolt bosses & high-pressure oil gallery plugs
+ * 11. Specular edge highlights & ambient occlusion shadows
  */
 export const W12BlockCastingIso: React.FC<W12BlockCastingIsoProps> = ({
   blockState,
+  selectedVariants,
   onHoverComponent,
-  materialFinish = "billet",
-  showCrossHatch = true,
 }) => {
-  const isInstalled = blockState.isInstalled;
-  const isTarget = blockState.isActive;
+  const O: ScreenPoint2D = { x: 250, y: 215 };
 
-  const deckFill =
-    materialFinish === "cast_iron"
-      ? "url(#photoreal-castiron-wall)"
-      : materialFinish === "magnesium"
-      ? "url(#photoreal-magnesium-deck)"
-      : "url(#photoreal-billet-deck)";
+  // ─── PRIMARY DIMENSIONS (mm) ───
+  // Extremely compact for a 12-cylinder (only 175mm length vs V12's 230mm)
+  const BL = 175;       // Block Length along X (compact W architecture)
+  const halfL = BL / 2; // 87.5mm
 
-  const skirtFill =
-    materialFinish === "cast_iron"
-      ? "url(#photoreal-castiron-wall)"
-      : materialFinish === "magnesium"
-      ? "url(#photoreal-magnesium-deck)"
-      : "url(#photoreal-billet-skirt)";
+  const BANK_OUTER_Y = 92;    // Outer VR sub-bank flare
+  const BANK_INNER_Y = 32;    // Inner VR sub-bank junction
+  const BANK_OUTER_Z = 166;   // Outer deck height
+  const BANK_INNER_Z = 138;   // Inner deck height
 
-  // W12 Geometry Constants
-  const centerX = 250;
-  const centerY = 205;
-  const bankPitch = 40;
-  const boreRadiusX = 18;
-  const boreRadiusY = 10;
-  const blockHeight = 120;
-  const blockWidth = 275;
+  const CRANK_Z_BOT = 16;     // Pan rail
+  const CRANK_Z_TOP = 100;    // Waist line
+  const CRANK_Y_OUTER = 36;   // Lower crankcase skirt
+  const CRANK_Y_TOP = 46;
+
+  const materialGrade = selectedVariants?.block || "cast";
+  const fills = getIsoMaterialFills(materialGrade);
+
+  // ─── BORE GEOMETRY (3 per bank × 4 banks = 12 total) ───
+  const boreXPositions = [-42, 0, 42];
+
+  // ─── 3D CORNER POINTS ───
+  const sFL = projectIso({ x: -halfL - 12, y: CRANK_Y_OUTER + 10, z: CRANK_Z_BOT - 12 }, O);
+  const sFR = projectIso({ x: halfL + 12, y: CRANK_Y_OUTER + 10, z: CRANK_Z_BOT - 12 }, O);
+  const sBL = projectIso({ x: -halfL - 12, y: -CRANK_Y_OUTER - 10, z: CRANK_Z_BOT - 12 }, O);
+  const sBR = projectIso({ x: halfL + 12, y: -CRANK_Y_OUTER - 10, z: CRANK_Z_BOT - 12 }, O);
+
+  const cFL = projectIso({ x: -halfL, y: CRANK_Y_OUTER, z: CRANK_Z_BOT }, O);
+  const cFR = projectIso({ x: halfL, y: CRANK_Y_OUTER, z: CRANK_Z_BOT }, O);
+  const cBR = projectIso({ x: halfL, y: -CRANK_Y_OUTER, z: CRANK_Z_BOT }, O);
+  const cBL = projectIso({ x: -halfL, y: -CRANK_Y_OUTER, z: CRANK_Z_BOT }, O);
+
+  const wFL = projectIso({ x: -halfL, y: CRANK_Y_TOP, z: CRANK_Z_TOP }, O);
+  const wFR = projectIso({ x: halfL, y: CRANK_Y_TOP, z: CRANK_Z_TOP }, O);
+  const wBR = projectIso({ x: halfL, y: -CRANK_Y_TOP, z: CRANK_Z_TOP }, O);
+
+  // Outer decks
+  const lbOuterFL = projectIso({ x: -halfL, y: BANK_OUTER_Y, z: BANK_OUTER_Z }, O);
+  const lbOuterFR = projectIso({ x: halfL, y: BANK_OUTER_Y, z: BANK_OUTER_Z }, O);
+  const rbOuterFL = projectIso({ x: -halfL, y: -BANK_OUTER_Y, z: BANK_OUTER_Z }, O);
+  const rbOuterFR = projectIso({ x: halfL, y: -BANK_OUTER_Y, z: BANK_OUTER_Z }, O);
+
+  // Center apex spine (between left VR and right VR)
+  const spineFL = projectIso({ x: -halfL, y: 0, z: BANK_OUTER_Z - 10 }, O);
+  const spineFR = projectIso({ x: halfL, y: 0, z: BANK_OUTER_Z - 10 }, O);
 
   return (
     <g
-      id="iso3d-w12-hyperreal-wblock"
-      className="transition-all duration-500 cursor-pointer"
-      onMouseEnter={() => onHoverComponent && onHoverComponent("block")}
-      onMouseLeave={() => onHoverComponent && onHoverComponent(null)}
+      id="iso-block-w12-casting"
+      onMouseEnter={() => onHoverComponent?.("block")}
+      onMouseLeave={() => onHoverComponent?.(null)}
+      className={`cursor-pointer transition-all duration-700 ease-out ${
+        blockState.isActive ? "filter-glow-active" : ""
+      }`}
       style={{
         transform: `translate(${blockState.offsetX}px, ${blockState.offsetY}px)`,
         opacity: blockState.opacity,
       }}
     >
-      {/* ── LAYER 1: GROUND AO DROP SHADOW & VALLEY OCCLUSION ── */}
-      <g id="w12-layer1-ao-shadow">
-        <ellipse
-          cx={centerX}
-          cy={centerY + blockHeight + 36}
-          rx={blockWidth * 0.65}
-          ry={34}
-          fill="url(#photoreal-chassis-ground-ao)"
-        />
-        <path
-          d={`M${centerX - 120} ${centerY + blockHeight + 16}
-             L${centerX + 100} ${centerY + blockHeight - 24}
-             L${centerX + 140} ${centerY + blockHeight - 10}
-             L${centerX - 80} ${centerY + blockHeight + 30} Z`}
-          fill="#000000"
-          opacity="0.75"
-        />
-      </g>
+      {/* ═══ LAYER 1 — GROUND SHADOW ═══ */}
+      <ellipse cx={O.x} cy={O.y + 66} rx={145} ry={32}
+        fill="url(#iso-ground-shadow)" opacity={0.8} />
 
-      {/* ── LAYER 2: LOWER SKIRT, SUMP RAILS & 7 MAIN CAPS ── */}
-      <g id="w12-layer2-skirt-sump-rails">
-        <path
-          d={`M${centerX - 115} ${centerY + blockHeight + 12}
-             L${centerX + 95} ${centerY + blockHeight - 24}
-             L${centerX + 135} ${centerY + blockHeight - 10}
-             L${centerX - 75} ${centerY + blockHeight + 26} Z`}
-          fill="#1e293b"
-          stroke="#475569"
-          strokeWidth="1.2"
-        />
-        {/* Sump Rail Perimeter Bolts */}
-        {[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((i) => {
-          const bx = centerX - 108 + i * 22;
-          const by = centerY + blockHeight + 11 - i * 3.8;
-          return (
-            <g key={`w12-sump-bolt-${i}`}>
-              <circle cx={bx} cy={by} r="3.2" fill="url(#photoreal-arp-black-oxide)" stroke="#0f172a" strokeWidth="0.8" />
-              <circle cx={bx} cy={by} r="1.5" fill="#94a3b8" />
-            </g>
-          );
-        })}
-        {/* 7 Main Bearing Bulkheads */}
-        {[0, 1, 2, 3, 4, 5, 6].map((i) => {
-          const mx = centerX - 85 + i * 36;
-          const my = centerY + blockHeight - 4 - i * 3.8;
-          return (
-            <path
-              key={`w12-main-cap-${i}`}
-              d={`M${mx - 8} ${my}
-                 C${mx - 8} ${my + 16}, ${mx + 12} ${my + 16}, ${mx + 12} ${my}
-                 L${mx + 16} ${my - 2}
-                 C${mx + 16} ${my + 20}, ${mx - 12} ${my + 20}, ${mx - 12} ${my - 2} Z`}
-              fill="#0f172a"
-              stroke="#334155"
-              strokeWidth="1"
-            />
-          );
-        })}
-      </g>
-
-      {/* ── LAYER 3: DUAL-VR6 72° W-BANK MAIN CASTING & APEX SPINE ── */}
-      <g id="w12-layer3-wbank-walls">
-        {/* Front Crankcase 72° W-Profile Face */}
-        <polygon
-          points={`${centerX - 130},${centerY + 25} ${centerX - 20},${centerY + 48} ${centerX},${centerY + 74} ${centerX + 20},${centerY + 48} ${centerX + 130},${centerY + 25} ${centerX + 80},${centerY + blockHeight + 20} ${centerX - 80},${centerY + blockHeight + 20}`}
-          fill={skirtFill}
-          stroke="#64748b"
-          strokeWidth="1.2"
-        />
-        {/* Outer Left Bank Skirt Wall */}
-        <path
-          d={`M${centerX - 130} ${centerY + 25}
-             L${centerX + 15} ${centerY - 26}
-             L${centerX + 100} ${centerY + blockHeight - 24}
-             L${centerX - 80} ${centerY + blockHeight + 20} Z`}
-          fill={skirtFill}
-          stroke="#475569"
-          strokeWidth="1.2"
-        />
-        {/* Deep Valley Chamber Recess */}
-        <polygon
-          points={`${centerX - 20},${centerY + 48} ${centerX + 120},${centerY - 4} ${centerX + 140},${centerY + 8} ${centerX},${centerY + 74}`}
-          fill="url(#photoreal-valley-shadow)"
-          stroke="#1e293b"
-          strokeWidth="1"
-        />
-      </g>
-
-      {/* ── LAYER 4: TIMING DRIVE & WATER PUMP HOUSINGS ── */}
-      <g id="w12-layer4-timing-cavity">
-        <path
-          d={`M${centerX - 110} ${centerY + 32}
-             L${centerX - 18} ${centerY + 54}
-             L${centerX + 18} ${centerY + 54}
-             L${centerX + 110} ${centerY + 32}
-             L${centerX + 75} ${centerY + 85}
-             L${centerX - 75} ${centerY + 85} Z`}
-          fill="#090d16"
-          stroke="#38bdf8"
-          strokeWidth="0.8"
-          strokeDasharray="3,2"
-        />
-        <circle cx={centerX - 55} cy={centerY + 58} r="6" fill="#020617" stroke="#334155" strokeWidth="1" />
-        <circle cx={centerX - 55} cy={centerY + 58} r="2.5" fill="url(#photoreal-tin-gold)" />
-        <circle cx={centerX + 55} cy={centerY + 58} r="6" fill="#020617" stroke="#334155" strokeWidth="1" />
-        <circle cx={centerX + 55} cy={centerY + 58} r="2.5" fill="url(#photoreal-tin-gold)" />
-      </g>
-
-      {/* ── LAYER 5: LEFT & RIGHT TOP DECKS + 12 STAGGERED BORES ── */}
-      <g id="w12-layer5-decks-and-bores">
-        {/* Left VR-Bank Cylinder Head Deck */}
-        <path
-          d={`M${centerX - 130} ${centerY + 25}
-             L${centerX - 25} ${centerY - 16}
-             L${centerX + 120} ${centerY - 72}
-             L${centerX + 15} ${centerY - 26} Z`}
-          fill={deckFill}
-          stroke="#94a3b8"
-          strokeWidth="1.5"
-          filter="url(#fe-cnc-toolpath)"
-        />
-
-        {/* 6 Left Staggered Bores */}
-        {[0, 1, 2, 3, 4, 5].map((cyl) => {
-          const isOdd = cyl % 2 === 1;
-          const cx = centerX - 85 + cyl * 24;
-          const cy = centerY + 8 - cyl * 6.5 + (isOdd ? 8 : -6);
-
-          return (
-            <g key={`w12-left-bore-${cyl}`}>
-              <ellipse cx={cx} cy={cy} rx={boreRadiusX + 2} ry={boreRadiusY + 1.2} fill="url(#photoreal-liner-rim)" />
-              <ellipse cx={cx} cy={cy} rx={boreRadiusX} ry={boreRadiusY} fill="url(#photoreal-bore-depth)" />
-              {showCrossHatch && (
-                <ellipse
-                  cx={cx}
-                  cy={cy}
-                  rx={boreRadiusX - 1}
-                  ry={boreRadiusY - 0.8}
-                  fill="url(#photoreal-diamond-hatch)"
-                  opacity="0.85"
-                />
-              )}
-              <circle cx={cx - 4} cy={cy + 3} r="1.5" fill="url(#photoreal-oil-gallery)" />
-            </g>
-          );
-        })}
-
-        {/* Right VR-Bank Cylinder Head Deck */}
-        <path
-          d={`M${centerX + 20} ${centerY + 48}
-             L${centerX + 130} ${centerY + 25}
-             L${centerX + 265} ${centerY - 24}
-             L${centerX + 155} ${centerY + 2} Z`}
-          fill={deckFill}
-          stroke="#94a3b8"
-          strokeWidth="1.5"
-          filter="url(#fe-cnc-toolpath)"
-        />
-
-        {/* 6 Right Staggered Bores */}
-        {[0, 1, 2, 3, 4, 5].map((cyl) => {
-          const isOdd = cyl % 2 === 1;
-          const cx = centerX + 45 + cyl * 24;
-          const cy = centerY + 28 - cyl * 6.5 + (isOdd ? 8 : -6);
-
-          return (
-            <g key={`w12-right-bore-${cyl}`}>
-              <ellipse cx={cx} cy={cy} rx={boreRadiusX + 2} ry={boreRadiusY + 1.2} fill="url(#photoreal-liner-rim)" />
-              <ellipse cx={cx} cy={cy} rx={boreRadiusX} ry={boreRadiusY} fill="url(#photoreal-bore-depth)" />
-              {showCrossHatch && (
-                <ellipse
-                  cx={cx}
-                  cy={cy}
-                  rx={boreRadiusX - 1}
-                  ry={boreRadiusY - 0.8}
-                  fill="url(#photoreal-diamond-hatch)"
-                  opacity="0.85"
-                />
-              )}
-              <circle cx={cx - 4} cy={cy + 3} r="1.5" fill="url(#photoreal-oil-gallery)" />
-            </g>
-          );
-        })}
-      </g>
-
-      {/* ── LAYER 6: OPEN-DECK WATER JACKET COOLANT PASSAGES ── */}
-      <g id="w12-layer6-coolant-passages">
-        {[0, 1, 2, 3].map((i) => {
-          const wjx = centerX - 62 + i * 42;
-          const wjy = centerY + 5 - i * 6.5;
-          return (
-            <g key={`w12-water-jacket-${i}`}>
-              <path
-                d={`M${wjx - 3} ${wjy - 12}
-                   C${wjx} ${wjy - 14}, ${wjx + 3} ${wjy - 14}, ${wjx + 3} ${wjy - 10}
-                   L${wjx + 3} ${wjy + 6}
-                   C${wjx + 3} ${wjy + 10}, ${wjx - 3} ${wjy + 10}, ${wjx - 3} ${wjy + 6} Z`}
-                fill="url(#photoreal-coolant-flow)"
-                stroke="#38bdf8"
-                strokeWidth="0.8"
-              />
-            </g>
-          );
-        })}
-      </g>
-
-      {/* ── LAYER 7: CENTRAL APEX HIGH-PRESSURE OIL PASSAGE ── */}
-      <g id="w12-layer7-oil-gallery">
-        <line
-          x1={centerX - 10}
-          y1={centerY + 60}
-          x2={centerX + 130}
-          y2={centerY + 8}
-          stroke="url(#photoreal-oil-gallery)"
-          strokeWidth="3.5"
-          strokeLinecap="round"
-          opacity="0.85"
-        />
-        <polygon
-          points={`${centerX - 12},${centerY + 58} ${centerX - 8},${centerY + 56} ${centerX - 6},${centerY + 60} ${centerX - 8},${centerY + 64} ${centerX - 12},${centerY + 62}`}
-          fill="url(#photoreal-tin-gold)"
-          stroke="#713f12"
-          strokeWidth="0.8"
-        />
-      </g>
-
-      {/* ── LAYER 8: STRUCTURAL VALLEY TRUSS GUSSETS ── */}
-      <g id="w12-layer8-valley-gussets">
-        {[0, 1, 2, 3, 4].map((i) => {
-          const vx = centerX + 10 + i * 26;
-          const vy = centerY + 46 - i * 11;
-          return (
-            <g key={`w12-gusset-${i}`}>
-              <polygon
-                points={`${vx - 6},${vy} ${vx + 6},${vy - 3} ${vx + 4},${vy + 12} ${vx - 4},${vy + 12}`}
-                fill="#334155"
-                stroke="#64748b"
-                strokeWidth="0.8"
-              />
-            </g>
-          );
-        })}
-      </g>
-
-      {/* ── LAYER 9: 24 RECESSED ARP 12-POINT HEAD STUD BOSSES ── */}
-      <g id="w12-layer9-head-studs">
-        {[
-          // Left Bank (12 studs)
-          { x: centerX - 118, y: centerY + 12 },
-          { x: centerX - 78, y: centerY + 5 },
-          { x: centerX - 38, y: centerY - 2 },
-          { x: centerX + 2, y: centerY - 9 },
-          { x: centerX + 42, y: centerY - 16 },
-          { x: centerX + 82, y: centerY - 23 },
-          { x: centerX - 70, y: centerY - 26 },
-          { x: centerX - 30, y: centerY - 33 },
-          { x: centerX + 10, y: centerY - 40 },
-          { x: centerX + 50, y: centerY - 47 },
-          { x: centerX + 90, y: centerY - 54 },
-          { x: centerX + 130, y: centerY - 61 },
-          // Right Bank (12 studs)
-          { x: centerX + 32, y: centerY + 34 },
-          { x: centerX + 72, y: centerY + 27 },
-          { x: centerX + 112, y: centerY + 20 },
-          { x: centerX + 152, y: centerY + 13 },
-          { x: centerX + 192, y: centerY + 6 },
-          { x: centerX + 232, y: centerY - 1 },
-          { x: centerX + 74, y: centerY - 4 },
-          { x: centerX + 114, y: centerY - 11 },
-          { x: centerX + 154, y: centerY - 18 },
-          { x: centerX + 194, y: centerY - 25 },
-          { x: centerX + 234, y: centerY - 32 },
-          { x: centerX + 274, y: centerY - 39 },
-        ].map((stud, idx) => (
-          <g key={`w12-head-stud-${idx}`}>
-            <ellipse cx={stud.x} cy={stud.y} rx="5.5" ry="3.2" fill="url(#photoreal-washer-sheen)" stroke="#475569" strokeWidth="0.8" />
-            <circle cx={stud.x} cy={stud.y - 1} r="2.8" fill="url(#photoreal-arp-black-oxide)" stroke="#0f172a" strokeWidth="0.8" />
-            <circle cx={stud.x} cy={stud.y - 1} r="1.2" fill="#38bdf8" opacity="0.85" />
+      {/* ═══ LAYER 2 — LOWER CRANKCASE SKIRT & 7 MAIN BULKHEADS ═══ */}
+      <path
+        d={`M ${sFL.x} ${sFL.y} L ${sFR.x} ${sFR.y} L ${sBR.x} ${sBR.y} L ${sBL.x} ${sBL.y} Z`}
+        fill={fills.right} stroke="#090d16" strokeWidth="1.2" opacity={0.6}
+      />
+      <path
+        d={`M ${sFL.x} ${sFL.y} L ${sFR.x} ${sFR.y} L ${cFR.x} ${cFR.y} L ${cFL.x} ${cFL.y} Z`}
+        fill={fills.left} stroke="#090d16" strokeWidth="1" opacity={0.75}
+      />
+      <path
+        d={`M ${sFR.x} ${sFR.y} L ${sBR.x} ${sBR.y} L ${cBR.x} ${cBR.y} L ${cFR.x} ${cFR.y} Z`}
+        fill={fills.right} stroke="#090d16" strokeWidth="1" opacity={0.7}
+      />
+      {/* 7 Main bearing saddles */}
+      {[-60, -40, -20, 0, 20, 40, 60].map((xPos, i) => {
+        const saddle = projectIso({ x: xPos, y: 0, z: CRANK_Z_BOT + 12 }, O);
+        return (
+          <g key={`w12-saddle-${i}`}>
+            <circle cx={saddle.x} cy={saddle.y} r={7} fill="#020617" stroke="#1e293b" strokeWidth="0.8" opacity={0.75} />
+            <circle cx={saddle.x - 4} cy={saddle.y} r={1.3} fill="#0f172a" stroke="#334155" strokeWidth="0.4" />
+            <circle cx={saddle.x + 4} cy={saddle.y} r={1.3} fill="#0f172a" stroke="#334155" strokeWidth="0.4" />
           </g>
-        ))}
-      </g>
+        );
+      })}
 
-      {/* ── LAYER 10: VALLEY KNOCK SENSORS, TWIN TURBO DRAINS & SERIAL ID ── */}
-      <g id="w12-layer10-auxiliary-casting-details">
-        <g id="w12-knock-sensor-1">
-          <ellipse cx={centerX + 25} cy={centerY + 38} rx="6" ry="4" fill="#334155" stroke="#64748b" strokeWidth="0.8" />
-          <circle cx={centerX + 25} cy={centerY + 37} r="2.2" fill="#020617" />
-        </g>
-        <g id="w12-knock-sensor-2">
-          <ellipse cx={centerX + 95} cy={centerY + 14} rx="6" ry="4" fill="#334155" stroke="#64748b" strokeWidth="0.8" />
-          <circle cx={centerX + 95} cy={centerY + 13} r="2.2" fill="#020617" />
-        </g>
+      {/* ═══ LAYER 3 — MAIN BLOCK BODY (W-SHAPE SILHOUETTE) ═══ */}
+      <path
+        d={`M ${cFL.x} ${cFL.y} L ${cFR.x} ${cFR.y} L ${wFR.x} ${wFR.y} L ${wFL.x} ${wFL.y} Z`}
+        fill={fills.left} stroke="#090d16" strokeWidth="1.4"
+      />
+      <path
+        d={`M ${cFR.x} ${cFR.y} L ${cBR.x} ${cBR.y} L ${wBR.x} ${wBR.y} L ${wFR.x} ${wFR.y} Z`}
+        fill={fills.right} stroke="#090d16" strokeWidth="1.4"
+      />
+      {/* Left outer flank */}
+      <path
+        d={`M ${wFL.x} ${wFL.y} L ${wFR.x} ${wFR.y} L ${lbOuterFR.x} ${lbOuterFR.y} L ${lbOuterFL.x} ${lbOuterFL.y} Z`}
+        fill={fills.left} stroke="#090d16" strokeWidth="1.4"
+      />
+      {/* Right outer flank */}
+      <path
+        d={`M ${wFR.x} ${wFR.y} L ${wBR.x} ${wBR.y} L ${rbOuterFR.x} ${rbOuterFR.y} L ${rbOuterFL.x} ${rbOuterFL.y} Z`}
+        fill={fills.right} stroke="#090d16" strokeWidth="1.4"
+      />
 
-        {/* Twin Turbo Scavenge Return Ports */}
-        <g id="w12-scavenge-port-left">
-          <ellipse cx={centerX - 68} cy={centerY + 85} rx="6.5" ry="4.5" fill="#1e293b" stroke="#64748b" strokeWidth="1" />
-          <circle cx={centerX - 68} cy={centerY + 85} r="2.8" fill="#020617" />
-        </g>
-        <g id="w12-scavenge-port-right">
-          <ellipse cx={centerX + 58} cy={centerY + 72} rx="6.5" ry="4.5" fill="#1e293b" stroke="#64748b" strokeWidth="1" />
-          <circle cx={centerX + 58} cy={centerY + 72} r="2.8" fill="#020617" />
-        </g>
+      {/* ═══ LAYER 4 — LEFT VR-PAIR DECKS (Banks 0 & 1) ═══ */}
+      <path
+        d={`M ${lbOuterFL.x} ${lbOuterFL.y} L ${lbOuterFR.x} ${lbOuterFR.y} L ${spineFR.x} ${spineFR.y} L ${spineFL.x} ${spineFL.y} Z`}
+        fill={fills.top} stroke="#0f172a" strokeWidth="1.5"
+      />
 
-        {/* Laser-Etched Engine Casting Serial Tag */}
-        <rect
-          x={centerX - 25}
-          y={centerY + 94}
-          width="52"
-          height="14"
-          rx="2"
-          fill="#0b0f17"
-          stroke="#38bdf8"
-          strokeWidth="0.8"
-          opacity="0.8"
-        />
-        <text
-          x={centerX - 20}
-          y={centerY + 104}
-          fill="#38bdf8"
-          fontSize="6.5"
-          fontFamily="monospace"
-          fontWeight="bold"
-          letterSpacing="0.8"
-        >
-          APX-W12-60TT
-        </text>
-      </g>
+      {/* ═══ LAYER 5 — RIGHT VR-PAIR DECKS (Banks 2 & 3) ═══ */}
+      <path
+        d={`M ${spineFL.x} ${spineFL.y} L ${spineFR.x} ${spineFR.y} L ${rbOuterFR.x} ${rbOuterFR.y} L ${rbOuterFL.x} ${rbOuterFL.y} Z`}
+        fill={fills.top} stroke="#0f172a" strokeWidth="1.5"
+      />
 
-      {/* ── LAYER 11: SPECULAR EDGE HIGHLIGHTS & FRESNEL GLOW ── */}
-      <g id="w12-layer11-specular-highlights" pointerEvents="none">
-        <line
-          x1={centerX - 130}
-          y1={centerY + 25}
-          x2={centerX + 15}
-          y2={centerY - 26}
-          stroke="#ffffff"
-          strokeWidth="1.6"
-          strokeLinecap="round"
-          filter="url(#fe-specular-bloom)"
-        />
-        <line
-          x1={centerX - 130}
-          y1={centerY + 25}
-          x2={centerX - 80}
-          y2={centerY + blockHeight + 20}
-          stroke="#94a3b8"
-          strokeWidth="1.2"
-        />
-      </g>
+      {/* ═══ LAYER 6 — CENTRAL APEX SPINE ═══ */}
+      <path d={`M ${spineFL.x} ${spineFL.y} L ${spineFR.x} ${spineFR.y}`}
+        stroke="#38bdf8" strokeWidth="1.5" strokeDasharray="8,3" opacity={0.6} />
 
-      {/* ── LAYER 12: REAL-TIME THERMODYNAMIC HEAT SHIMMER ── */}
-      {isInstalled && (
-        <g id="w12-layer12-combustion-thermal-glow" opacity="0.22" pointerEvents="none">
-          <ellipse
-            cx={centerX + 30}
-            cy={centerY + 15}
-            rx={blockWidth * 0.46}
-            ry={30}
-            fill="url(#photoreal-heat-tint)"
-          />
-        </g>
+      {/* ═══ LAYER 7 — CYLINDER BORES (12 Quad-Staggered Openings) ═══ */}
+      {/* 4 Banks × 3 Bores */}
+      {([0, 1, 2, 3] as const).map((bankIdx) => {
+        const ySign = bankIdx < 2 ? 1 : -1;
+        const subOffset = bankIdx % 2 === 0 ? 12 : -12;
+        const bankY = (bankIdx < 2 ? (BANK_OUTER_Y + BANK_INNER_Y) / 2 : -(BANK_OUTER_Y + BANK_INNER_Y) / 2) + subOffset;
+        const bankZ = bankIdx % 2 === 0 ? BANK_OUTER_Z - 5 : BANK_INNER_Z + 5;
+
+        return boreXPositions.map((boreX, idx) => {
+          const boreE = projectIsoWBankQuadEllipse(
+            { x: boreX + (bankIdx % 2 === 1 ? 12 : 0), y: bankY, z: bankZ },
+            17, bankIdx, 72, 15, O
+          );
+          return (
+            <g key={`w12-bore-${bankIdx}-${idx}`}>
+              <ellipse cx={boreE.cx} cy={boreE.cy} rx={boreE.rx + 2} ry={boreE.ry + 1.8}
+                transform={`rotate(${boreE.tiltDeg}, ${boreE.cx}, ${boreE.cy})`}
+                fill="none" stroke="#64748b" strokeWidth="1.5" opacity={0.5} />
+              <ellipse cx={boreE.cx} cy={boreE.cy} rx={boreE.rx} ry={boreE.ry}
+                transform={`rotate(${boreE.tiltDeg}, ${boreE.cx}, ${boreE.cy})`}
+                fill="#020617" stroke="#0f172a" strokeWidth="1.3" />
+              <ellipse cx={boreE.cx} cy={boreE.cy + 1.5} rx={boreE.rx * 0.75} ry={boreE.ry * 0.75}
+                transform={`rotate(${boreE.tiltDeg}, ${boreE.cx}, ${boreE.cy})`}
+                fill="#000000" opacity={0.55} />
+            </g>
+          );
+        });
+      })}
+
+      {/* ═══ LAYER 8 — QUAD-CAM TIMING COVER & BELLHOUSING ═══ */}
+      {(() => {
+        const tcL = projectIso({ x: -halfL - 6, y: BANK_OUTER_Y * 0.75, z: BANK_OUTER_Z - 18 }, O);
+        const tcR = projectIso({ x: -halfL - 6, y: -BANK_OUTER_Y * 0.75, z: BANK_OUTER_Z - 18 }, O);
+        const tcBotL = projectIso({ x: -halfL - 6, y: CRANK_Y_OUTER, z: CRANK_Z_BOT }, O);
+        const tcBotR = projectIso({ x: -halfL - 6, y: -CRANK_Y_OUTER, z: CRANK_Z_BOT }, O);
+        return (
+          <g opacity={0.75}>
+            <path
+              d={`M ${tcL.x} ${tcL.y} L ${tcR.x} ${tcR.y} L ${tcBotR.x} ${tcBotR.y} L ${tcBotL.x} ${tcBotL.y} Z`}
+              fill={fills.left} stroke="#0f172a" strokeWidth="1"
+            />
+            {/* Quad camshaft sprockets */}
+            {[-45, -18, 18, 45].map((yPos, i) => {
+              const cam = projectIso({ x: -halfL - 7, y: yPos, z: BANK_INNER_Z + 12 }, O);
+              return <circle key={`w12-cam-${i}`} cx={cam.x} cy={cam.y} r={5} fill="#020617" stroke="#334155" strokeWidth="0.5" />;
+            })}
+            {(() => {
+              const crankN = projectIso({ x: -halfL - 7, y: 0, z: CRANK_Z_BOT + 18 }, O);
+              return <circle cx={crankN.x} cy={crankN.y} r={8.5} fill="#020617" stroke="#334155" strokeWidth="0.6" />;
+            })()}
+          </g>
+        );
+      })()}
+      {/* Bellhousing */}
+      {(() => {
+        const bhL = projectIso({ x: halfL + 6, y: BANK_OUTER_Y * 0.85, z: BANK_OUTER_Z - 8 }, O);
+        const bhR = projectIso({ x: halfL + 6, y: -BANK_OUTER_Y * 0.85, z: BANK_OUTER_Z - 8 }, O);
+        const bhBotL = projectIso({ x: halfL + 6, y: CRANK_Y_OUTER + 6, z: CRANK_Z_BOT - 6 }, O);
+        const bhBotR = projectIso({ x: halfL + 6, y: -CRANK_Y_OUTER - 6, z: CRANK_Z_BOT - 6 }, O);
+        return (
+          <g opacity={0.7}>
+            <path
+              d={`M ${bhL.x} ${bhL.y} L ${bhR.x} ${bhR.y} L ${bhBotR.x} ${bhBotR.y} L ${bhBotL.x} ${bhBotL.y} Z`}
+              fill={fills.right} stroke="#0f172a" strokeWidth="1"
+            />
+            {(() => {
+              const fw = projectIso({ x: halfL + 7, y: 0, z: CRANK_Z_BOT + 25 }, O);
+              return <circle cx={fw.x} cy={fw.y} r={17} fill="#020617" stroke="#1e293b" strokeWidth="0.8" />;
+            })()}
+          </g>
+        );
+      })()}
+
+      {/* ═══ LAYER 9 — STRUCTURAL GUSSET RIBS ═══ */}
+      {[-35, 0, 35].map((xPos, i) => {
+        const rib = getIsoRibTrapezoid(
+          { x: xPos, y: CRANK_Y_TOP + 4, z: CRANK_Z_TOP + 15 },
+          { x: xPos, y: CRANK_Y_OUTER + 3, z: CRANK_Z_BOT + 8 },
+          5.5, 3.5, O
+        );
+        return (
+          <g key={`w12-rib-${i}`} opacity={0.6}>
+            <path d={rib.frontFace} fill={fills.left} stroke="#1e293b" strokeWidth="0.6" />
+            <path d={rib.topCap} fill={fills.top} stroke="#1e293b" strokeWidth="0.5" />
+          </g>
+        );
+      })}
+
+      {/* ═══ LAYER 10 — HEAD BOLT BOSSES ═══ */}
+      {[-60, -20, 20, 60].map((xPos, i) => {
+        const lbB = projectIso({ x: xPos, y: BANK_OUTER_Y - 6, z: BANK_OUTER_Z }, O);
+        const rbB = projectIso({ x: xPos, y: -BANK_OUTER_Y + 6, z: BANK_OUTER_Z }, O);
+        return (
+          <g key={`w12-bolt-${i}`}>
+            <circle cx={lbB.x} cy={lbB.y} r={2.8} fill={fills.top} stroke="#64748b" strokeWidth="0.7" />
+            <circle cx={lbB.x} cy={lbB.y} r={1.2} fill="#0f172a" />
+            <circle cx={rbB.x} cy={rbB.y} r={2.8} fill={fills.top} stroke="#64748b" strokeWidth="0.7" />
+            <circle cx={rbB.x} cy={rbB.y} r={1.2} fill="#0f172a" />
+          </g>
+        );
+      })}
+
+      {/* ═══ LAYER 11 — SPECULAR HIGHLIGHTS & AO ═══ */}
+      <path d={`M ${lbOuterFL.x} ${lbOuterFL.y} L ${lbOuterFR.x} ${lbOuterFR.y}`}
+        stroke="#e2e8f0" strokeWidth="1.2" opacity={0.5} strokeLinecap="round" />
+      <path d={`M ${rbOuterFL.x} ${rbOuterFL.y} L ${rbOuterFR.x} ${rbOuterFR.y}`}
+        stroke="#cbd5e1" strokeWidth="0.8" opacity={0.35} strokeLinecap="round" />
+
+      {/* Active glow */}
+      {blockState.isActive && (
+        <rect x={O.x - 140} y={O.y - 110} width={280} height={210} rx={8}
+          fill="none" stroke="#38bdf8" strokeWidth="1.5" opacity={0.4}
+          className="animate-pulse" />
+      )}
+      {/* Hover highlight */}
+      {blockState.isHovered && !blockState.isActive && (
+        <rect x={O.x - 140} y={O.y - 110} width={280} height={210} rx={8}
+          fill="#38bdf8" opacity={0.06} />
       )}
     </g>
   );

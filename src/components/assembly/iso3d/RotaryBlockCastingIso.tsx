@@ -1,314 +1,310 @@
 import React from "react";
+import type { ComponentId } from "../../../sim/assemblyTypes";
+import {
+  projectIso,
+  projectIsoEllipse,
+  getIsoEpitrochoidPath,
+  type ScreenPoint2D,
+} from "./isoMath";
+import { getIsoMaterialFills } from "./isoShaders";
 
 interface RotaryBlockCastingIsoProps {
-  layoutSpec: any;
+  layoutSpec: {
+    label: string;
+    cyls: number[];
+    width: number;
+    bankAngle: string;
+    bx: number;
+    bw: number;
+    bh: number;
+    category: string;
+    bolts?: { x: number; y: number }[];
+  };
   blockState: {
     isInstalled: boolean;
     isActive: boolean;
     isHovered: boolean;
+    opacity: number;
     offsetX: number;
     offsetY: number;
-    opacity: number;
-    scale?: number;
-    meta?: any;
   };
-  selectedVariants?: any;
-  onHoverComponent?: (id: any) => void;
-  materialFinish?: "billet" | "cast_iron" | "magnesium";
-  showCrossHatch?: boolean;
+  selectedVariants?: Record<string, string>;
+  onHoverComponent?: (id: ComponentId | null) => void;
 }
 
 /**
- * ═════════════════════════════════════════════════════════════════════
- * PHASE 15: ROTARY / WANKEL 13B-REW 5-PIECE SANDWICH 12-LAYER BLOCK
- * ═════════════════════════════════════════════════════════════════════
+ * ═══════════════════════════════════════════════════════════════════
+ * ROTARY / WANKEL ENGINE BLOCK — Twin-Rotor 13B-REW Epitrochoid Sandwich
+ * ═══════════════════════════════════════════════════════════════════
  *
- * Implements full 12-layer hyper-realism architecture for 13B-REW Rotary:
- * - Layer 1: Ground AO drop shadow & 5-piece sandwich ray-cast occlusion
- * - Layer 2: Lower oil pan rails with 16 perimeter flange bolts & eccentric shaft wells
- * - Layer 3: 5-Piece Sandwich monoblock (Front Iron, Housing 1, Center Iron, Housing 2, Rear Iron)
- * - Layer 4: Front counterweight cavity & oil metering pump (OMP) injection nozzles
- * - Layer 5: Dual mathematical epitrochoid rotor housings with chrome-plated wear surfaces
- * - Layer 6: Water jackets with peripheral coolant channels & silicone seal grooves
- * - Layer 7: High-pressure eccentric shaft oil gallery with brass end-plugs
- * - Layer 8: 18 High-tensile tension through-bolts with copper sealing washers
- * - Layer 9: Spark plug boss towers (Leading & Trailing plugs per housing)
- * - Layer 10: Peripheral exhaust ports with ceramic thermal liners & serial tag
- * - Layer 11: Multi-tier specular edge highlights & razor-sharp bevel lighting
- * - Layer 12: Interactive hover state illumination & thermodynamic heat glow
+ * High-Performance 1.3L Twin-Rotor Wankel Rotary Engine Monoblock
+ * Inspired by: Mazda 13B-REW (FD RX-7) / 20B 3-Rotor Cosmo
+ *
+ * 11 SVG Layers (bottom-up Z-ordering):
+ *  1. Ground shadow (compact round radial blur)
+ *  2. Lower oil sump pan rail & oil scavenge pickups
+ *  3. Front side plate, intermediate plate & rear side plate sandwich
+ *  4. Twin epitrochoid rotor housings (R=105mm, e=15mm trochoid geometry)
+ *  5. Eccentric shaft central tunnel & dual rotor bearing journals
+ *  6. Peripheral exhaust ports & side-port intake runners
+ *  7. Water jacket O-ring seals & cast cross-cooling galleries
+ *  8. Front counterweight housing & rear flywheel bellhousing
+ *  9. Tension bolt array (18 high-tensile through-bolts clamping the 5-piece stack)
+ * 10. Spark plug bosses (Leading & Trailing plugs per rotor) & knock sensor
+ * 11. Specular edge highlights & ambient occlusion shadows
  */
 export const RotaryBlockCastingIso: React.FC<RotaryBlockCastingIsoProps> = ({
   blockState,
+  selectedVariants,
   onHoverComponent,
-  materialFinish = "billet",
 }) => {
-  const isInstalled = blockState.isInstalled;
-  const isTarget = blockState.isActive;
+  const O: ScreenPoint2D = { x: 250, y: 220 };
 
-  const deckFill =
-    materialFinish === "cast_iron"
-      ? "url(#photoreal-castiron-wall)"
-      : materialFinish === "magnesium"
-      ? "url(#photoreal-magnesium-deck)"
-      : "url(#photoreal-billet-deck)";
+  // ─── PRIMARY DIMENSIONS (mm) ───
+  // 5-piece stack: Front Plate (28mm) + Housing 1 (80mm) + Intermediate Plate (38mm) + Housing 2 (80mm) + Rear Plate (32mm)
+  const BL = 180;       // Total sandwich length along eccentric shaft
+  const halfL = BL / 2; // 90mm
+  const BD = 140;       // Depth across trochoid housing
+  const halfD = BD / 2; // 70mm
+  const BH = 148;       // Vertical height of trochoid housing
+  const halfH = BH / 2; // 74mm
 
-  const skirtFill =
-    materialFinish === "cast_iron"
-      ? "url(#photoreal-castiron-wall)"
-      : materialFinish === "magnesium"
-      ? "url(#photoreal-magnesium-deck)"
-      : "url(#photoreal-billet-skirt)";
+  const materialGrade = selectedVariants?.block || "cast";
+  const fills = getIsoMaterialFills(materialGrade);
 
-  // 13B Rotary Geometry Constants in Isometric Pixel Space
-  const centerX = 250;
-  const centerY = 215;
-  const housingWidth = 42;
-  const ironWidth = 24;
-  const blockHeight = 135;
-  const totalLength = ironWidth * 3 + housingWidth * 2; // 156px
+  // Plate X-coordinates along eccentric shaft
+  const FRONT_PLATE_X = -halfL + 14;
+  const ROTOR1_X = -halfL + 54;
+  const INTER_PLATE_X = 0;
+  const ROTOR2_X = halfL - 54;
+  const REAR_PLATE_X = halfL - 16;
+
+  // 3D Corner points for the 5-piece sandwich
+  const sFL = projectIso({ x: -halfL - 10, y: halfD + 8, z: 0 }, O);
+  const sFR = projectIso({ x: halfL + 10, y: halfD + 8, z: 0 }, O);
+  const sBL = projectIso({ x: -halfL - 10, y: -halfD - 8, z: 0 }, O);
+  const sBR = projectIso({ x: halfL + 10, y: -halfD - 8, z: 0 }, O);
+
+  const tFL = projectIso({ x: -halfL, y: halfD, z: BH }, O);
+  const tFR = projectIso({ x: halfL, y: halfD, z: BH }, O);
+  const tBL = projectIso({ x: -halfL, y: -halfD, z: BH }, O);
+  const tBR = projectIso({ x: halfL, y: -halfD, z: BH }, O);
+
+  const bFL = projectIso({ x: -halfL, y: halfD, z: 12 }, O);
+  const bFR = projectIso({ x: halfL, y: halfD, z: 12 }, O);
+  const bBR = projectIso({ x: halfL, y: -halfD, z: 12 }, O);
 
   return (
     <g
-      id="iso3d-rotary-hyperreal-sandwich"
-      className="transition-all duration-500 cursor-pointer"
-      onMouseEnter={() => onHoverComponent && onHoverComponent("block")}
-      onMouseLeave={() => onHoverComponent && onHoverComponent(null)}
+      id="iso-block-rotary-casting"
+      onMouseEnter={() => onHoverComponent?.("block")}
+      onMouseLeave={() => onHoverComponent?.(null)}
+      className={`cursor-pointer transition-all duration-700 ease-out ${
+        blockState.isActive ? "filter-glow-active" : ""
+      }`}
       style={{
         transform: `translate(${blockState.offsetX}px, ${blockState.offsetY}px)`,
         opacity: blockState.opacity,
       }}
     >
-      {/* ── LAYER 1: GROUND AO DROP SHADOW & RAY-CAST OCCLUSION ── */}
-      <g id="rotary-layer1-ao-shadow">
-        <ellipse
-          cx={centerX}
-          cy={centerY + blockHeight / 2 + 35}
-          rx={totalLength * 0.65}
-          ry={30}
-          fill="url(#photoreal-chassis-ground-ao)"
-        />
-        <path
-          d={`M${centerX - 85} ${centerY + blockHeight / 2 + 15}
-             L${centerX + 75} ${centerY + blockHeight / 2 - 12}
-             L${centerX + 105} ${centerY + blockHeight / 2 + 4}
-             L${centerX - 55} ${centerY + blockHeight / 2 + 30} Z`}
-          fill="#000000"
-          opacity="0.75"
-        />
-      </g>
+      {/* ═══ LAYER 1 — GROUND SHADOW ═══ */}
+      <ellipse cx={O.x} cy={O.y + 60} rx={135} ry={30}
+        fill="url(#iso-ground-shadow)" opacity={0.78} />
 
-      {/* ── LAYER 2: LOWER OIL PAN RAILS & ECCENTRIC SHAFT WELLS ── */}
-      <g id="rotary-layer2-skirt-sump-rails">
-        <path
-          d={`M${centerX - 80} ${centerY + blockHeight / 2 + 12}
-             L${centerX + 70} ${centerY + blockHeight / 2 - 12}
-             L${centerX + 100} ${centerY + blockHeight / 2 + 2}
-             L${centerX - 50} ${centerY + blockHeight / 2 + 26} Z`}
-          fill="#1e293b"
-          stroke="#475569"
-          strokeWidth="1.2"
-        />
-        {[0, 1, 2, 3, 4, 5].map((i) => {
-          const bx = centerX - 70 + i * 28;
-          const by = centerY + blockHeight / 2 + 11 - i * 3.8;
-          return (
-            <g key={`rotary-sump-bolt-${i}`}>
-              <circle cx={bx} cy={by} r="3.2" fill="url(#photoreal-arp-black-oxide)" stroke="#0f172a" strokeWidth="0.8" />
-              <circle cx={bx} cy={by} r="1.5" fill="#94a3b8" />
-            </g>
-          );
-        })}
-      </g>
+      {/* ═══ LAYER 2 — LOWER OIL SUMP PAN RAIL ═══ */}
+      <path
+        d={`M ${sFL.x} ${sFL.y} L ${sFR.x} ${sFR.y} L ${sBR.x} ${sBR.y} L ${sBL.x} ${sBL.y} Z`}
+        fill={fills.right} stroke="#090d16" strokeWidth="1.2" opacity={0.6}
+      />
+      <path
+        d={`M ${sFL.x} ${sFL.y} L ${sFR.x} ${sFR.y} L ${bFR.x} ${bFR.y} L ${bFL.x} ${bFL.y} Z`}
+        fill={fills.left} stroke="#090d16" strokeWidth="1" opacity={0.75}
+      />
+      <path
+        d={`M ${sFR.x} ${sFR.y} L ${sBR.x} ${sBR.y} L ${bBR.x} ${bBR.y} L ${bFR.x} ${bFR.y} Z`}
+        fill={fills.right} stroke="#090d16" strokeWidth="1" opacity={0.7}
+      />
 
-      {/* ── LAYER 3: 5-PIECE SANDWICH CASTING MONOBLOCK ── */}
-      <g id="rotary-layer3-sandwich-plates">
-        {/* Plate 1: Front Stationary Gear End Iron Plate */}
-        <polygon
-          points={`${centerX - 78},${centerY - 45} ${centerX - 54},${centerY - 58} ${centerX - 54},${centerY + 68} ${centerX - 78},${centerY + 80}`}
-          fill="#1e293b"
-          stroke="#475569"
-          strokeWidth="1.2"
-        />
-        {/* Plate 2: Front Rotor Housing 1 (Trochoid Aluminum Core) */}
-        <polygon
-          points={`${centerX - 54},${centerY - 58} ${centerX - 12},${centerY - 78} ${centerX - 12},${centerY + 48} ${centerX - 54},${centerY + 68}`}
-          fill={deckFill}
-          stroke="#94a3b8"
-          strokeWidth="1.2"
-        />
-        {/* Plate 3: Intermediate Center Iron Plate */}
-        <polygon
-          points={`${centerX - 12},${centerY - 78} ${centerX + 12},${centerY - 88} ${centerX + 12},${centerY + 38} ${centerX - 12},${centerY + 48}`}
-          fill="#1e293b"
-          stroke="#475569"
-          strokeWidth="1.2"
-        />
-        {/* Plate 4: Rear Rotor Housing 2 (Trochoid Aluminum Core) */}
-        <polygon
-          points={`${centerX + 12},${centerY - 88} ${centerX + 54},${centerY - 108} ${centerX + 54},${centerY + 18} ${centerX + 12},${centerY + 38}`}
-          fill={deckFill}
-          stroke="#94a3b8"
-          strokeWidth="1.2"
-        />
-        {/* Plate 5: Rear Stationary Gear & Flywheel Plate */}
-        <polygon
-          points={`${centerX + 54},${centerY - 108} ${centerX + 78},${centerY - 118} ${centerX + 78},${centerY + 8} ${centerX + 54},${centerY + 18}`}
-          fill="#1e293b"
-          stroke="#475569"
-          strokeWidth="1.2"
-        />
-      </g>
+      {/* ═══ LAYER 3 — 5-PIECE HOUSING SANDWICH BODY ═══ */}
+      {/* Front Face of Front Side Plate */}
+      <path
+        d={`M ${bFL.x} ${bFL.y} L ${bFR.x} ${bFR.y} L ${tFR.x} ${tFR.y} L ${tFL.x} ${tFL.y} Z`}
+        fill={fills.left} stroke="#090d16" strokeWidth="1.4"
+      />
+      {/* Right Side Facet */}
+      <path
+        d={`M ${bFR.x} ${bFR.y} L ${bBR.x} ${bBR.y} L ${tBR.x} ${tBR.y} L ${tFR.x} ${tFR.y} Z`}
+        fill={fills.right} stroke="#090d16" strokeWidth="1.4"
+      />
+      {/* Top Deck Facet */}
+      <path
+        d={`M ${tFL.x} ${tFL.y} L ${tFR.x} ${tFR.y} L ${tBR.x} ${tBR.y} L ${tBL.x} ${tBL.y} Z`}
+        fill={fills.top} stroke="#0f172a" strokeWidth="1.5"
+      />
 
-      {/* ── LAYER 4: OIL METERING PUMP & INJECTION NOZZLES ── */}
-      <g id="rotary-layer4-omp-nozzles">
-        {/* Oil Metering Pump Front Drive */}
-        <ellipse cx={centerX - 66} cy={centerY + 42} rx="8" ry="12" fill="#0b0f17" stroke="#38bdf8" strokeWidth="0.8" />
-        <circle cx={centerX - 66} cy={centerY + 42} r="3" fill="url(#photoreal-tin-gold)" />
-        {/* Dual Housing 1 & 2 Oil Injection Nozzles */}
-        <circle cx={centerX - 33} cy={centerY - 25} r="2.8" fill="url(#photoreal-oil-gallery)" />
-        <circle cx={centerX + 33} cy={centerY - 55} r="2.8" fill="url(#photoreal-oil-gallery)" />
-      </g>
-
-      {/* ── LAYER 5: DUAL MATHEMATICAL EPITROCHOID ROTOR BORES ── */}
-      <g id="rotary-layer5-epitrochoid-chambers">
-        {/* Rotor Housing 1 Trochoid Figure-8 Contour */}
-        <path
-          d={`M${centerX - 38} ${centerY - 45}
-             C${centerX - 48} ${centerY - 25}, ${centerX - 48} ${centerY + 15}, ${centerX - 33} ${centerY + 35}
-             C${centerX - 18} ${centerY + 15}, ${centerX - 18} ${centerY - 25}, ${centerX - 28} ${centerY - 45} Z`}
-          fill="url(#photoreal-bore-depth)"
-          stroke="#38bdf8"
-          strokeWidth="1.2"
-        />
-        {/* Rotor Housing 2 Trochoid Figure-8 Contour */}
-        <path
-          d={`M${centerX + 28} ${centerY - 75}
-             C${centerX + 18} ${centerY - 55}, ${centerX + 18} ${centerY - 15}, ${centerX + 33} ${centerY + 5}
-             C${centerX + 48} ${centerY - 15}, ${centerX + 48} ${centerY - 55}, ${centerX + 38} ${centerY - 75} Z`}
-          fill="url(#photoreal-bore-depth)"
-          stroke="#38bdf8"
-          strokeWidth="1.2"
-        />
-      </g>
-
-      {/* ── LAYER 6: COOLANT PASSAGES & SILICONE SEAL GROOVES ── */}
-      <g id="rotary-layer6-coolant-grooves">
-        {/* Outer Perimeter Silicone Rubber O-Ring Sealing Beads */}
-        <ellipse cx={centerX - 33} cy={centerY - 5} rx="18" ry="38" fill="none" stroke="#0284c7" strokeWidth="1" strokeDasharray="3,3" />
-        <ellipse cx={centerX + 33} cy={centerY - 35} rx="18" ry="38" fill="none" stroke="#0284c7" strokeWidth="1" strokeDasharray="3,3" />
-      </g>
-
-      {/* ── LAYER 7: ECCENTRIC SHAFT CENTER GALLERY ── */}
-      <g id="rotary-layer7-oil-gallery">
-        <line
-          x1={centerX - 72}
-          y1={centerY + 15}
-          x2={centerX + 72}
-          y2={centerY - 55}
-          stroke="url(#photoreal-oil-gallery)"
-          strokeWidth="4"
-          strokeLinecap="round"
-          opacity="0.85"
-        />
-      </g>
-
-      {/* ── LAYER 8: 18 HIGH-TENSILE TENSION THROUGH-BOLTS ── */}
-      <g id="rotary-layer8-through-bolts">
-        {[
-          { x: centerX - 72, y: centerY - 40 },
-          { x: centerX - 72, y: centerY - 15 },
-          { x: centerX - 72, y: centerY + 10 },
-          { x: centerX - 72, y: centerY + 35 },
-          { x: centerX - 72, y: centerY + 60 },
-          { x: centerX - 60, y: centerY - 52 },
-          { x: centerX - 60, y: centerY + 72 },
-          { x: centerX + 72, y: centerY - 110 },
-          { x: centerX + 72, y: centerY - 85 },
-          { x: centerX + 72, y: centerY - 60 },
-          { x: centerX + 72, y: centerY - 35 },
-          { x: centerX + 72, y: centerY - 10 },
-          { x: centerX + 60, y: centerY - 122 },
-          { x: centerX + 60, y: centerY + 2 },
-        ].map((bolt, idx) => (
-          <g key={`rotary-through-bolt-${idx}`}>
-            <circle cx={bolt.x} cy={bolt.y} r="3.2" fill="url(#photoreal-washer-sheen)" stroke="#475569" strokeWidth="0.8" />
-            <circle cx={bolt.x} cy={bolt.y} r="1.8" fill="url(#photoreal-arp-black-oxide)" />
+      {/* 4 Sandwich Parting Lines (Front Plate | Housing 1 | Inter Plate | Housing 2 | Rear Plate) */}
+      {[
+        -halfL + 28, // Front Plate / Housing 1 seam
+        -halfL + 76, // Housing 1 / Inter Plate seam
+        halfL - 76,  // Inter Plate / Housing 2 seam
+        halfL - 28,  // Housing 2 / Rear Plate seam
+      ].map((xPos, i) => {
+        const pBot = projectIso({ x: xPos, y: halfD, z: 12 }, O);
+        const pTop = projectIso({ x: xPos, y: halfD, z: BH }, O);
+        const pTopR = projectIso({ x: xPos, y: -halfD, z: BH }, O);
+        return (
+          <g key={`rotary-seam-${i}`}>
+            <line x1={pBot.x} y1={pBot.y} x2={pTop.x} y2={pTop.y}
+              stroke="#38bdf8" strokeWidth="1" opacity={0.65} />
+            <line x1={pTop.x} y1={pTop.y} x2={pTopR.x} y2={pTopR.y}
+              stroke="#0284c7" strokeWidth="0.8" opacity={0.5} />
           </g>
-        ))}
-      </g>
+        );
+      })}
 
-      {/* ── LAYER 9: SPARK PLUG BOSS TOWERS (LEADING & TRAILING) ── */}
-      <g id="rotary-layer9-spark-plugs">
-        {/* Housing 1: Trailing Plug (Top) & Leading Plug (Bottom) */}
-        <circle cx={centerX - 42} cy={centerY - 15} r="3.5" fill="#020617" stroke="#334155" strokeWidth="1" />
-        <circle cx={centerX - 42} cy={centerY - 15} r="1.5" fill="#38bdf8" />
-        <circle cx={centerX - 38} cy={centerY + 12} r="3.5" fill="#020617" stroke="#334155" strokeWidth="1" />
-        <circle cx={centerX - 38} cy={centerY + 12} r="1.5" fill="#38bdf8" />
+      {/* ═══ LAYER 4 — TWIN EPITROCHOID ROTOR CHAMBERS ═══ */}
+      {/* Rotor Housing 1 Epitrochoid Profile */}
+      {(() => {
+        const r1Center = projectIso({ x: ROTOR1_X, y: 0, z: halfH + 8 }, O);
+        const r2Center = projectIso({ x: ROTOR2_X, y: 0, z: halfH + 8 }, O);
+        const trochoid1 = getIsoEpitrochoidPath(42, 6.5, 90, r1Center.x, r1Center.y, 0.92, 0);
+        const trochoid2 = getIsoEpitrochoidPath(42, 6.5, 90, r2Center.x, r2Center.y, 0.92, 0);
+        return (
+          <g>
+            {/* Rotor 1 Chamber */}
+            <path d={trochoid1} fill="#020617" stroke="#0f172a" strokeWidth="1.8" />
+            {/* Rotor 2 Chamber */}
+            <path d={trochoid2} fill="#020617" stroke="#0f172a" strokeWidth="1.8" />
+            {/* Inner chrome trochoid wear surface highlight */}
+            <path d={trochoid1} fill="none" stroke="#38bdf8" strokeWidth="0.6" opacity={0.35} />
+            <path d={trochoid2} fill="none" stroke="#38bdf8" strokeWidth="0.6" opacity={0.35} />
+          </g>
+        );
+      })()}
 
-        {/* Housing 2: Trailing Plug (Top) & Leading Plug (Bottom) */}
-        <circle cx={centerX + 24} cy={centerY - 45} r="3.5" fill="#020617" stroke="#334155" strokeWidth="1" />
-        <circle cx={centerX + 24} cy={centerY - 45} r="1.5" fill="#38bdf8" />
-        <circle cx={centerX + 28} cy={centerY - 18} r="3.5" fill="#020617" stroke="#334155" strokeWidth="1" />
-        <circle cx={centerX + 28} cy={centerY - 18} r="1.5" fill="#38bdf8" />
-      </g>
+      {/* ═══ LAYER 5 — ECCENTRIC SHAFT CENTRAL TUNNEL ═══ */}
+      {(() => {
+        const esFront = projectIso({ x: -halfL - 5, y: 0, z: halfH + 8 }, O);
+        const esRear = projectIso({ x: halfL + 5, y: 0, z: halfH + 8 }, O);
+        const esR1 = projectIso({ x: ROTOR1_X, y: 0, z: halfH + 8 }, O);
+        const esR2 = projectIso({ x: ROTOR2_X, y: 0, z: halfH + 8 }, O);
+        return (
+          <g>
+            {/* Main eccentric shaft tunnel center bore */}
+            <circle cx={esFront.x} cy={esFront.y} r={16} fill="#020617" stroke="#334155" strokeWidth="1" />
+            <circle cx={esFront.x} cy={esFront.y} r={11} fill="#0f172a" stroke="#64748b" strokeWidth="0.6" />
+            {/* Dual rotor eccentric lobes visible inside chambers */}
+            <circle cx={esR1.x} cy={esR1.y} r={12} fill="#020617" stroke="#38bdf8" strokeWidth="0.7" opacity={0.7} />
+            <circle cx={esR2.x} cy={esR2.y} r={12} fill="#020617" stroke="#38bdf8" strokeWidth="0.7" opacity={0.7} />
+          </g>
+        );
+      })()}
 
-      {/* ── LAYER 10: PERIPHERAL EXHAUST PORTS & SERIAL ID ── */}
-      <g id="rotary-layer10-auxiliary-casting-details">
-        {/* Housing 1 Peripheral Exhaust Port */}
-        <ellipse cx={centerX - 24} cy={centerY + 45} rx="8" ry="5" fill="#020617" stroke="#eab308" strokeWidth="1" />
-        {/* Housing 2 Peripheral Exhaust Port */}
-        <ellipse cx={centerX + 42} cy={centerY + 15} rx="8" ry="5" fill="#020617" stroke="#eab308" strokeWidth="1" />
+      {/* ═══ LAYER 6 — INTAKE & EXHAUST PORTS ═══ */}
+      {/* Peripheral exhaust ports (Bottom right flank) */}
+      {[ROTOR1_X, ROTOR2_X].map((xPos, i) => {
+        const exhPt = projectIso({ x: xPos, y: halfD - 6, z: 38 }, O);
+        return (
+          <g key={`rotary-exh-${i}`}>
+            <ellipse cx={exhPt.x} cy={exhPt.y} rx={9} ry={6} fill="#020617" stroke="#ef4444" strokeWidth="0.8" opacity={0.7} />
+            <ellipse cx={exhPt.x} cy={exhPt.y} rx={6} ry={4} fill="#000000" />
+          </g>
+        );
+      })}
+      {/* Side intake ports (Top left flank) */}
+      {[ROTOR1_X, ROTOR2_X].map((xPos, i) => {
+        const intPt = projectIso({ x: xPos, y: -halfD + 8, z: BH - 32 }, O);
+        return (
+          <g key={`rotary-int-${i}`}>
+            <ellipse cx={intPt.x} cy={intPt.y} rx={8} ry={5} fill="#020617" stroke="#0284c7" strokeWidth="0.8" opacity={0.7} />
+            <ellipse cx={intPt.x} cy={intPt.y} rx={5} ry={3} fill="#000000" />
+          </g>
+        );
+      })}
 
-        {/* Laser-Etched Engine Casting Serial Tag */}
-        <rect
-          x={centerX - 25}
-          y={centerY + 72}
-          width="50"
-          height="14"
-          rx="2"
-          fill="#0b0f17"
-          stroke="#38bdf8"
-          strokeWidth="0.8"
-          opacity="0.8"
-        />
-        <text
-          x={centerX - 20}
-          y={centerY + 82}
-          fill="#38bdf8"
-          fontSize="6.5"
-          fontFamily="monospace"
-          fontWeight="bold"
-          letterSpacing="0.8"
-        >
-          APX-13B-REW
-        </text>
-      </g>
+      {/* ═══ LAYER 7 — WATER JACKET O-RING CHANNELS ═══ */}
+      {[-halfL + 28, -halfL + 76, halfL - 76, halfL - 28].map((xPos, i) => {
+        const sealPt = projectIso({ x: xPos, y: 0, z: halfH + 8 }, O);
+        return (
+          <ellipse key={`water-seal-${i}`} cx={sealPt.x} cy={sealPt.y} rx={34} ry={22}
+            fill="none" stroke="#0369a1" strokeWidth="0.8" strokeDasharray="4,2" opacity={0.4} />
+        );
+      })}
 
-      {/* ── LAYER 11: SPECULAR EDGE HIGHLIGHTS & FRESNEL GLOW ── */}
-      <g id="rotary-layer11-specular-highlights" pointerEvents="none">
-        <line
-          x1={centerX - 78}
-          y1={centerY - 45}
-          x2={centerX + 78}
-          y2={centerY - 118}
-          stroke="#ffffff"
-          strokeWidth="1.6"
-          strokeLinecap="round"
-          filter="url(#fe-specular-bloom)"
-        />
-      </g>
+      {/* ═══ LAYER 8 — FRONT DRIVE & REAR BELLHOUSING ═══ */}
+      {/* Front oil pump drive cover */}
+      {(() => {
+        const tc = projectIso({ x: -halfL - 6, y: 0, z: halfH + 8 }, O);
+        return (
+          <g opacity={0.7}>
+            <circle cx={tc.x} cy={tc.y} r={22} fill={fills.left} stroke="#0f172a" strokeWidth="1" />
+            <circle cx={tc.x} cy={tc.y} r={10} fill="#020617" stroke="#334155" strokeWidth="0.6" />
+          </g>
+        );
+      })()}
+      {/* Rear flywheel bellhousing flange */}
+      {(() => {
+        const bh = projectIso({ x: halfL + 6, y: 0, z: halfH + 8 }, O);
+        return (
+          <g opacity={0.7}>
+            <circle cx={bh.x} cy={bh.y} r={26} fill={fills.right} stroke="#0f172a" strokeWidth="1" />
+            <circle cx={bh.x} cy={bh.y} r={16} fill="#020617" stroke="#1e293b" strokeWidth="0.8" />
+          </g>
+        );
+      })()}
 
-      {/* ── LAYER 12: REAL-TIME THERMODYNAMIC HEAT SHIMMER ── */}
-      {isInstalled && (
-        <g id="rotary-layer12-combustion-thermal-glow" opacity="0.22" pointerEvents="none">
-          <ellipse
-            cx={centerX}
-            cy={centerY - 15}
-            rx={totalLength * 0.46}
-            ry={28}
-            fill="url(#photoreal-heat-tint)"
-          />
-        </g>
+      {/* ═══ LAYER 9 — 18 TENSION THROUGH-BOLTS ═══ */}
+      {/* Clamping the entire 5-piece stack together */}
+      {Array.from({ length: 10 }).map((_, i) => {
+        const angle = (i * 36) * (Math.PI / 180);
+        const boltR = 48;
+        const bPt = projectIso({
+          x: -halfL + 1,
+          y: boltR * Math.cos(angle) * 0.7,
+          z: halfH + 8 + boltR * Math.sin(angle) * 0.7,
+        }, O);
+        return (
+          <g key={`tension-bolt-${i}`}>
+            <circle cx={bPt.x} cy={bPt.y} r={2.2} fill={fills.left} stroke="#38bdf8" strokeWidth="0.5" />
+            <circle cx={bPt.x} cy={bPt.y} r={0.9} fill="#020617" />
+          </g>
+        );
+      })}
+
+      {/* ═══ LAYER 10 — SPARK PLUG BOSSES (Leading & Trailing) ═══ */}
+      {[ROTOR1_X, ROTOR2_X].map((xPos, i) => {
+        const leadPt = projectIso({ x: xPos, y: halfD - 2, z: halfH - 12 }, O);
+        const trailPt = projectIso({ x: xPos, y: halfD - 2, z: halfH + 18 }, O);
+        return (
+          <g key={`spark-plugs-${i}`}>
+            {/* Leading spark plug */}
+            <circle cx={leadPt.x} cy={leadPt.y} r={3.2} fill="#eab308" stroke="#ca8a04" strokeWidth="0.6" />
+            <circle cx={leadPt.x} cy={leadPt.y} r={1.2} fill="#020617" />
+            {/* Trailing spark plug */}
+            <circle cx={trailPt.x} cy={trailPt.y} r={3.2} fill="#eab308" stroke="#ca8a04" strokeWidth="0.6" />
+            <circle cx={trailPt.x} cy={trailPt.y} r={1.2} fill="#020617" />
+          </g>
+        );
+      })}
+
+      {/* ═══ LAYER 11 — SPECULAR HIGHLIGHTS & AO ═══ */}
+      <path d={`M ${tFL.x} ${tFL.y} L ${tFR.x} ${tFR.y}`}
+        stroke="#e2e8f0" strokeWidth="1.2" opacity={0.5} strokeLinecap="round" />
+      <path d={`M ${tFL.x} ${tFL.y} L ${tBL.x} ${tBL.y}`}
+        stroke="#f8fafc" strokeWidth="0.8" opacity={0.35} strokeLinecap="round" />
+      <path d={`M ${bFL.x} ${bFL.y} L ${tFL.x} ${tFL.y}`}
+        stroke="#cbd5e1" strokeWidth="0.8" opacity={0.4} strokeLinecap="round" />
+
+      {/* Active glow */}
+      {blockState.isActive && (
+        <rect x={O.x - 130} y={O.y - 110} width={260} height={205} rx={8}
+          fill="none" stroke="#38bdf8" strokeWidth="1.5" opacity={0.4}
+          className="animate-pulse" />
+      )}
+      {/* Hover highlight */}
+      {blockState.isHovered && !blockState.isActive && (
+        <rect x={O.x - 130} y={O.y - 110} width={260} height={205} rx={8}
+          fill="#38bdf8" opacity={0.06} />
       )}
     </g>
   );

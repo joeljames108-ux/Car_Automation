@@ -1,334 +1,247 @@
-import React from "react";
-
-interface ComponentState {
-  isInstalled: boolean;
-  isActive: boolean;
-  isHovered: boolean;
-  offsetX: number;
-  offsetY: number;
-  opacity: number;
-  scale?: number;
-  meta?: any;
-}
+import React, { useMemo } from "react";
+import type { ComponentId } from "../../../sim/assemblyTypes";
+import { projectIso, projectIso60VEllipse } from "./isoMath";
+import { getIsoMaterialFills } from "./isoShaders";
 
 interface CylinderHeadIsoProps {
-  layoutSpec?: any;
-  componentState?: ComponentState;
-  headState?: ComponentState;
-  selectedVariants?: any;
-  onHoverComponent?: (id: any) => void;
-  materialFinish?: "billet_6061" | "cast_aluminum" | "carbon_composite";
+  layoutSpec: {
+    label: string;
+    cyls: number[];
+    width: number;
+    bx: number;
+    bw: number;
+    bh: number;
+    category?: string;
+  };
+  componentState: {
+    isInstalled: boolean;
+    isActive: boolean;
+    opacity: number;
+    offsetX: number;
+    offsetY: number;
+  };
+  selectedVariants?: Record<string, string>;
+  onHoverComponent?: (id: ComponentId | null) => void;
 }
 
 /**
- * ═════════════════════════════════════════════════════════════════════
- * PHASE 20: CNC BILLET DOHC CYLINDER HEADS 12-LAYER ASSEMBLY
- * ═════════════════════════════════════════════════════════════════════
+ * ═══════════════════════════════════════════════════════════════════
+ * 3D ISOMETRIC CYLINDER HEAD ASSEMBLY — Multi-Architecture CNC Head
+ * ═══════════════════════════════════════════════════════════════════
  *
- * Implements full 12-layer hyper-realism architecture for Cylinder Head:
- * - Layer 1: Ground AO drop shadow & deck mating surface ray-cast occlusion
- * - Layer 2: Lower cylinder head gasket mating deck with coolant transfer ports
- * - Layer 3: Main CNC 5-axis cylinder head monoblock casting with port runners
- * - Layer 4: Front timing belt / chain sprocket drive wells & cam seal bores
- * - Layer 5: Dual overhead camshafts (Intake & Exhaust) with high-lift billet lobes
- * - Layer 6: 16 Dual valve springs with titanium retainers & beryllium-copper seats
- * - Layer 7: High-pressure valvetrain oil gallery & hydraulic lash adjusters
- * - Layer 8: 10 Camshaft journal caps with ARP 12-point hardware
- * - Layer 9: Central spark plug wells with coil-on-plug pencil towers
- * - Layer 10: Direct injection fuel rail bosses, coolant temp sensor & serial tag
- * - Layer 11: Multi-tier specular edge highlights & razor-sharp bevel lighting
- * - Layer 12: Interactive hover state illumination & exhaust valve thermal glow
+ * Dynamically builds precision cylinder heads:
+ * - Inline (I3, I4, I6): Single continuous monoblock DOHC head
+ * - V-Bank (V6, V8, V10, V12): Dual angled bank heads
+ * - Boxer (H4, H6): Dual horizontally opposed bank heads
+ * - VR6: Single wide staggered DOHC head
+ * - W-Bank: Quad-bank multi-valve heads
  */
-export const CylinderHeadIso: React.FC<CylinderHeadIsoProps> = ({
+const CylinderHeadIsoComponent: React.FC<CylinderHeadIsoProps> = ({
+  layoutSpec,
   componentState,
-  headState,
+  selectedVariants,
   onHoverComponent,
-  materialFinish = "billet_6061",
 }) => {
-  const activeState = componentState || headState || {
-    isInstalled: true,
-    isActive: false,
-    isHovered: false,
-    offsetX: 0,
-    offsetY: 0,
-    opacity: 1,
-  };
+  const O = { x: 250, y: 215 };
+  const materialGrade = selectedVariants?.cylinder_head || "billet";
+  const fills = getIsoMaterialFills(materialGrade);
 
-  const isInstalled = activeState.isInstalled;
+  const cat = (layoutSpec.category || "").toLowerCase();
+  const label = (layoutSpec.label || "").toLowerCase();
+  const isV = cat === "vbank" || label.includes("v-") || label.includes("v6") || label.includes("v8") || label.includes("v10") || label.includes("v12");
+  const isBoxer = cat === "flat" || label.includes("boxer") || label.includes("h4") || label.includes("h6");
+  const isW = cat === "wbank" || label.includes("w12") || label.includes("w16") || label.includes("w18");
 
-  const headFill =
-    materialFinish === "cast_aluminum"
-      ? "url(#photoreal-castiron-wall)"
-      : materialFinish === "carbon_composite"
-      ? "url(#photoreal-magnesium-deck)"
-      : "url(#photoreal-billet-deck)";
+  const P = (x: number, y: number, z: number) => projectIso({ x, y, z }, O);
 
-  // Cylinder Head Dimensions in Isometric Pixel Space
-  const startX = 140;
-  const startY = 145;
-  const borePitch = 48;
-  const headHeight = 65;
-  const headLength = 230;
+  // Layout-specific dimension configurations
+  const config = useMemo(() => {
+    if (isBoxer) {
+      const isH6 = label.includes("h6") || label.includes("6");
+      const BL = isH6 ? 186 : 145;
+      const xPositions = isH6 ? [-50, 0, 50] : [-30, 30];
+      return { BL, halfL: BL / 2, isDual: true, isBoxer: true, xPositions };
+    }
+    if (isV || isW) {
+      let BL = 230;
+      let xPositions = [-85, -51, -17, 17, 51, 85];
+      if (label.includes("v6") || label.includes("w12")) {
+        BL = 148;
+        xPositions = [-38, 0, 38];
+      } else if (label.includes("v8") || label.includes("w16")) {
+        BL = 180;
+        xPositions = [-54, -18, 18, 54];
+      } else if (label.includes("v10")) {
+        BL = 205;
+        xPositions = [-70, -35, 0, 35, 70];
+      }
+      return { BL, halfL: BL / 2, isDual: true, isBoxer: false, xPositions };
+    }
+    // Inline (I3, I4, I6)
+    let BL = 175;
+    let xPositions = [-54, -18, 18, 54];
+    if (label.includes("i3") || layoutSpec.cyls.length === 3) {
+      BL = 140;
+      xPositions = [-38, 0, 38];
+    } else if (label.includes("i6") || layoutSpec.cyls.length === 6) {
+      BL = 224;
+      xPositions = [-85, -51, -17, 17, 51, 85];
+    }
+    return { BL, halfL: BL / 2, isDual: false, isBoxer: false, xPositions };
+  }, [isBoxer, isV, isW, label, layoutSpec.cyls.length]);
+
+  const { BL, halfL, isDual, xPositions } = config;
+
+  const Z_BOT = 148;
+  const Z_TOP = 185;
 
   return (
     <g
-      id="iso3d-cylinder-head-hyperreal-assembly"
-      className="transition-all duration-500 cursor-pointer"
-      onMouseEnter={() => onHoverComponent && onHoverComponent("cylinder_head")}
-      onMouseLeave={() => onHoverComponent && onHoverComponent(null)}
+      id="iso-cylinder-head-assembly"
+      onMouseEnter={() => onHoverComponent?.("cylinder_head")}
+      onMouseLeave={() => onHoverComponent?.(null)}
+      className="cursor-pointer transition-all duration-700 ease-out"
       style={{
-        transform: `translate(${activeState.offsetX}px, ${activeState.offsetY}px)`,
-        opacity: activeState.opacity,
+        transform: `translate(${componentState.offsetX}px, ${componentState.offsetY}px)`,
+        opacity: componentState.opacity,
       }}
     >
-      {/* ── LAYER 1: GROUND AO DROP SHADOW & RAY-CAST OCCLUSION ── */}
-      <g id="head-layer1-ao-shadow">
-        <ellipse
-          cx={startX + headLength / 2}
-          cy={startY + headHeight + 25}
-          rx={headLength * 0.6}
-          ry={24}
-          fill="url(#photoreal-chassis-ground-ao)"
-        />
-        <path
-          d={`M${startX - 22} ${startY + headHeight + 14}
-             L${startX + headLength - 12} ${startY + headHeight - 20}
-             L${startX + headLength + 36} ${startY + headHeight - 4}
-             L${startX + 28} ${startY + headHeight + 28} Z`}
-          fill="#000000"
-          opacity="0.75"
-        />
-      </g>
+      {/* ── 1. DUAL BANK HEADS (V-Bank & Boxer) ── */}
+      {isDual ? (
+        <>
+          {/* LEFT BANK CYLINDER HEAD */}
+          {(() => {
+            const botOutFL = P(-halfL - 2, 75, Z_BOT);
+            const botOutFR = P(halfL + 2, 75, Z_BOT);
+            const botInBL = P(-halfL - 2, 16, Z_BOT);
+            const botInBR = P(halfL + 2, 16, Z_BOT);
 
-      {/* ── LAYER 2: HEAD GASKET MATING SURFACE DECK ── */}
-      <g id="head-layer2-gasket-deck">
-        <path
-          d={`M${startX - 20} ${startY + headHeight + 12}
-             L${startX + headLength - 12} ${startY + headHeight - 20}
-             L${startX + headLength + 34} ${startY + headHeight - 4}
-             L${startX + 27} ${startY + headHeight + 24} Z`}
-          fill="#1e293b"
-          stroke="#475569"
-          strokeWidth="1.2"
-        />
-      </g>
+            const topOutFL = P(-halfL - 2, 62, Z_TOP);
+            const topOutFR = P(halfL + 2, 62, Z_TOP);
+            const topInBL = P(-halfL - 2, 24, Z_TOP);
+            const topInBR = P(halfL + 2, 24, Z_TOP);
 
-      {/* ── LAYER 3: MAIN CNC CYLINDER HEAD MONOBLOCK CASTING ── */}
-      <g id="head-layer3-monoblock-walls">
-        {/* Front Profile Face */}
-        <path
-          d={`M${startX - 24} ${startY + 15}
-             L${startX + 32} ${startY + 38}
-             L${startX + 28} ${startY + headHeight + 24}
-             L${startX - 24} ${startY + headHeight + 12} Z`}
-          fill={headFill}
-          stroke="#64748b"
-          strokeWidth="1.2"
-        />
-        {/* Main Exhaust Side Outer Wall */}
-        <path
-          d={`M${startX + 32} ${startY + 38}
-             L${startX + headLength + 36} ${startY + 8}
-             L${startX + headLength + 34} ${startY + headHeight - 4}
-             L${startX + 28} ${startY + headHeight + 24} Z`}
-          fill={headFill}
-          stroke="#475569"
-          strokeWidth="1.2"
-        />
-        {/* Top Valvetrain Tray Deck */}
-        <path
-          d={`M${startX - 24} ${startY + 15}
-             L${startX + 115} ${startY - 38}
-             L${startX + headLength + 115} ${startY - 68}
-             L${startX + headLength + 36} ${startY + 8} Z`}
-          fill="url(#photoreal-billet-deck)"
-          stroke="#94a3b8"
-          strokeWidth="1.5"
-          filter="url(#fe-cnc-toolpath)"
-        />
-      </g>
+            return (
+              <g id="left-bank-head">
+                {/* Left Outer Exhaust Flank */}
+                <path
+                  d={`M ${botOutFL.x} ${botOutFL.y} L ${botOutFR.x} ${botOutFR.y} L ${topOutFR.x} ${topOutFR.y} L ${topOutFL.x} ${topOutFL.y} Z`}
+                  fill={fills.left}
+                  stroke="#090d16"
+                  strokeWidth="1.5"
+                />
+                {/* Left Head Top Deck */}
+                <path
+                  d={`M ${topOutFL.x} ${topOutFL.y} L ${topOutFR.x} ${topOutFR.y} L ${topInBR.x} ${topInBR.y} L ${topInBL.x} ${topInBL.y} Z`}
+                  fill={fills.top}
+                  stroke="#0f172a"
+                  strokeWidth="1.5"
+                />
+                {/* Direct Coil-on-Plug Ignition Packs */}
+                {xPositions.map((bx, i) => {
+                  const cop = P(bx, 43, Z_TOP + 1);
+                  return (
+                    <g key={`lh-cop-${i}`}>
+                      <rect x={cop.x - 6} y={cop.y - 4} width={12} height={8} rx={2} fill="#020617" stroke="#334155" strokeWidth="0.6" />
+                      <circle cx={cop.x} cy={cop.y} r={2.5} fill="#0284c7" stroke="#38bdf8" strokeWidth="0.5" />
+                    </g>
+                  );
+                })}
+              </g>
+            );
+          })()}
 
-      {/* ── LAYER 4: FRONT CAM TIMING SPROCKET RECESSES ── */}
-      <g id="head-layer4-cam-sprocket-bores">
-        {/* Intake Cam Front Drive Boss */}
-        <circle cx={startX + 5} cy={startY + 5} r="10" fill="#090d16" stroke="#38bdf8" strokeWidth="1" />
-        <circle cx={startX + 5} cy={startY + 5} r="4" fill="url(#photoreal-tin-gold)" />
-        {/* Exhaust Cam Front Drive Boss */}
-        <circle cx={startX + 45} cy={startY + 18} r="10" fill="#090d16" stroke="#38bdf8" strokeWidth="1" />
-        <circle cx={startX + 45} cy={startY + 18} r="4" fill="url(#photoreal-tin-gold)" />
-      </g>
+          {/* RIGHT BANK CYLINDER HEAD */}
+          {(() => {
+            const botOutFL = P(-halfL - 2, -75, Z_BOT);
+            const botOutFR = P(halfL + 2, -75, Z_BOT);
+            const botInBL = P(-halfL - 2, -16, Z_BOT);
+            const botInBR = P(halfL + 2, -16, Z_BOT);
 
-      {/* ── LAYER 5: DUAL OVERHEAD CAMSHAFTS (INTAKE & EXHAUST) ── */}
-      <g id="head-layer5-camshafts">
-        {/* Intake Camshaft Tube & High-Lift Lobes */}
-        <line
-          x1={startX + 15}
-          y1={startY - 15}
-          x2={startX + headLength + 15}
-          y2={startY - 45}
-          stroke="url(#photoreal-billet-skirt)"
-          strokeWidth="6"
-          strokeLinecap="round"
-        />
-        {/* Exhaust Camshaft Tube & High-Lift Lobes */}
-        <line
-          x1={startX + 55}
-          y1={startY + 5}
-          x2={startX + headLength + 55}
-          y2={startY - 25}
-          stroke="url(#photoreal-billet-skirt)"
-          strokeWidth="6"
-          strokeLinecap="round"
-        />
-        {/* Billet Cam Lobes (8 Intake + 8 Exhaust) */}
-        {[0, 1, 2, 3].map((cyl) => {
-          const ix = startX + 35 + cyl * borePitch;
-          const iy = startY - 20 - cyl * 6.5;
-          const ex = startX + 75 + cyl * borePitch;
-          const ey = startY - cyl * 6.5;
+            const topOutFL = P(-halfL - 2, -62, Z_TOP);
+            const topOutFR = P(halfL + 2, -62, Z_TOP);
+            const topInBL = P(-halfL - 2, -24, Z_TOP);
+            const topInBR = P(halfL + 2, -24, Z_TOP);
+
+            return (
+              <g id="right-bank-head">
+                <path
+                  d={`M ${botOutFL.x} ${botOutFL.y} L ${botOutFR.x} ${botOutFR.y} L ${topOutFR.x} ${topOutFR.y} L ${topOutFL.x} ${topOutFL.y} Z`}
+                  fill={fills.right}
+                  stroke="#090d16"
+                  strokeWidth="1.5"
+                />
+                <path
+                  d={`M ${topInBL.x} ${topInBL.y} L ${topInBR.x} ${topInBR.y} L ${topOutFR.x} ${topOutFR.y} L ${topOutFL.x} ${topOutFL.y} Z`}
+                  fill={fills.top}
+                  stroke="#0f172a"
+                  strokeWidth="1.5"
+                />
+                {xPositions.map((bx, i) => {
+                  const cop = P(bx, -43, Z_TOP + 1);
+                  return (
+                    <g key={`rh-cop-${i}`}>
+                      <rect x={cop.x - 6} y={cop.y - 4} width={12} height={8} rx={2} fill="#020617" stroke="#334155" strokeWidth="0.6" />
+                      <circle cx={cop.x} cy={cop.y} r={2.5} fill="#0284c7" stroke="#38bdf8" strokeWidth="0.5" />
+                    </g>
+                  );
+                })}
+              </g>
+            );
+          })()}
+        </>
+      ) : (
+        /* ── 2. SINGLE MONOBLOCK CYLINDER HEAD (Inline I3/I4/I6 & VR6) ── */
+        (() => {
+          const bFL = P(-halfL, 46, Z_BOT);
+          const bFR = P(halfL, 46, Z_BOT);
+          const bBR = P(halfL, -46, Z_BOT);
+          const bBL = P(-halfL, -46, Z_BOT);
+
+          const tFL = P(-halfL, 46, Z_TOP);
+          const tFR = P(halfL, 46, Z_TOP);
+          const tBR = P(halfL, -46, Z_TOP);
+          const tBL = P(-halfL, -46, Z_TOP);
+
           return (
-            <g key={`cam-lobes-${cyl}`}>
-              <polygon points={`${ix - 3},${iy - 4} ${ix + 3},${iy - 6} ${ix + 2},${iy + 6} ${ix - 2},${iy + 4}`} fill="url(#photoreal-tin-gold)" />
-              <polygon points={`${ix + 8},${iy - 5} ${ix + 14},${iy - 7} ${ix + 13},${iy + 5} ${ix + 9},${iy + 3}`} fill="url(#photoreal-tin-gold)" />
-              <polygon points={`${ex - 3},${ey - 4} ${ex + 3},${ey - 6} ${ex + 2},${ey + 6} ${ex - 2},${ey + 4}`} fill="url(#photoreal-tin-gold)" />
-              <polygon points={`${ex + 8},${ey - 5} ${ex + 14},${ey - 7} ${ex + 13},${ey + 5} ${ex + 9},${ey + 3}`} fill="url(#photoreal-tin-gold)" />
+            <g id="inline-monoblock-head">
+              {/* Front Face */}
+              <path
+                d={`M ${bFL.x} ${bFL.y} L ${bFR.x} ${bFR.y} L ${tFR.x} ${tFR.y} L ${tFL.x} ${tFL.y} Z`}
+                fill={fills.left}
+                stroke="#090d16"
+                strokeWidth="1.5"
+              />
+              {/* Right Face */}
+              <path
+                d={`M ${bFR.x} ${bFR.y} L ${bBR.x} ${bBR.y} L ${tBR.x} ${tBR.y} L ${tFR.x} ${tFR.y} Z`}
+                fill={fills.right}
+                stroke="#090d16"
+                strokeWidth="1.5"
+              />
+              {/* Top Valve Cover Deck */}
+              <path
+                d={`M ${tFL.x} ${tFL.y} L ${tFR.x} ${tFR.y} L ${tBR.x} ${tBR.y} L ${tBL.x} ${tBL.y} Z`}
+                fill={fills.top}
+                stroke="#0f172a"
+                strokeWidth="1.5"
+              />
+              {/* In-Line Spark Plug / Coil-on-Plug Packs */}
+              {xPositions.map((bx, i) => {
+                const cop = P(bx, 0, Z_TOP + 1);
+                return (
+                  <g key={`inline-cop-${i}`}>
+                    <rect x={cop.x - 7} y={cop.y - 4.5} width={14} height={9} rx={2} fill="#020617" stroke="#334155" strokeWidth="0.6" />
+                    <circle cx={cop.x} cy={cop.y} r={2.8} fill="#0284c7" stroke="#38bdf8" strokeWidth="0.5" />
+                  </g>
+                );
+              })}
             </g>
           );
-        })}
-      </g>
-
-      {/* ── LAYER 6: 16 DUAL VALVE SPRINGS & TITANIUM RETAINERS ── */}
-      <g id="head-layer6-valve-springs">
-        {[0, 1, 2, 3].map((cyl) => {
-          const vx = startX + 40 + cyl * borePitch;
-          const vy = startY - 10 - cyl * 6.5;
-          return (
-            <g key={`valve-springs-${cyl}`}>
-              {/* Dual Intake Springs */}
-              <circle cx={vx - 6} cy={vy - 8} r="4.5" fill="#020617" stroke="#eab308" strokeWidth="1.2" />
-              <circle cx={vx - 6} cy={vy - 8} r="2" fill="#38bdf8" />
-              <circle cx={vx + 6} cy={vy - 10} r="4.5" fill="#020617" stroke="#eab308" strokeWidth="1.2" />
-              <circle cx={vx + 6} cy={vy - 10} r="2" fill="#38bdf8" />
-              {/* Dual Exhaust Springs */}
-              <circle cx={vx + 16} cy={vy + 8} r="4.5" fill="#020617" stroke="#eab308" strokeWidth="1.2" />
-              <circle cx={vx + 16} cy={vy + 8} r="2" fill="#38bdf8" />
-              <circle cx={vx + 28} cy={vy + 6} r="4.5" fill="#020617" stroke="#eab308" strokeWidth="1.2" />
-              <circle cx={vx + 28} cy={vy + 6} r="2" fill="#38bdf8" />
-            </g>
-          );
-        })}
-      </g>
-
-      {/* ── LAYER 7: VALVETRAIN OIL GALLERY ── */}
-      <g id="head-layer7-oil-gallery">
-        <line
-          x1={startX - 10}
-          y1={startY + 15}
-          x2={startX + headLength + 10}
-          y2={startY - 15}
-          stroke="url(#photoreal-oil-gallery)"
-          strokeWidth="3.2"
-          strokeLinecap="round"
-          opacity="0.85"
-        />
-      </g>
-
-      {/* ── LAYER 8: 10 CAMSHAFT JOURNAL BEARING CAPS ── */}
-      <g id="head-layer8-cam-caps">
-        {[0, 1, 2, 3, 4].map((i) => {
-          const cx1 = startX + 15 + i * borePitch;
-          const cy1 = startY - 15 - i * 6.5;
-          const cx2 = startX + 55 + i * borePitch;
-          const cy2 = startY + 5 - i * 6.5;
-          return (
-            <g key={`cam-cap-${i}`}>
-              <rect x={cx1 - 5} y={cy1 - 6} width="10" height="12" rx="2" fill="#334155" stroke="#64748b" strokeWidth="0.8" />
-              <circle cx={cx1 - 2} cy={cy1 - 3} r="1" fill="#38bdf8" />
-              <circle cx={cx1 + 2} cy={cy1 + 3} r="1" fill="#38bdf8" />
-              <rect x={cx2 - 5} y={cy2 - 6} width="10" height="12" rx="2" fill="#334155" stroke="#64748b" strokeWidth="0.8" />
-              <circle cx={cx2 - 2} cy={cy2 - 3} r="1" fill="#38bdf8" />
-              <circle cx={cx2 + 2} cy={cy2 + 3} r="1" fill="#38bdf8" />
-            </g>
-          );
-        })}
-      </g>
-
-      {/* ── LAYER 9: CENTRAL SPARK PLUG WELLS & COIL TOWERS ── */}
-      <g id="head-layer9-spark-plug-wells">
-        {[0, 1, 2, 3].map((cyl) => {
-          const px = startX + 45 + cyl * borePitch;
-          const py = startY - 2 - cyl * 6.5;
-          return (
-            <g key={`plug-well-${cyl}`}>
-              <ellipse cx={px} cy={py} rx="6" ry="4" fill="#020617" stroke="#38bdf8" strokeWidth="1" />
-              <circle cx={px} cy={py} r="2" fill="#eab308" />
-            </g>
-          );
-        })}
-      </g>
-
-      {/* ── LAYER 10: DIRECT INJECTION BOSSES & SERIAL ID ── */}
-      <g id="head-layer10-auxiliary-casting-details">
-        {/* 4 Direct Injection Ports */}
-        {[0, 1, 2, 3].map((cyl) => {
-          const dx = startX + 28 + cyl * borePitch;
-          const dy = startY + 28 - cyl * 6.5;
-          return (
-            <circle key={`di-boss-${cyl}`} cx={dx} cy={dy} r="3" fill="#020617" stroke="#475569" strokeWidth="0.8" />
-          );
-        })}
-
-        {/* Laser-Etched Cylinder Head Serial Tag */}
-        <rect
-          x={startX + 35}
-          y={startY + 48}
-          width="50"
-          height="14"
-          rx="2"
-          fill="#0b0f17"
-          stroke="#38bdf8"
-          strokeWidth="0.8"
-          opacity="0.8"
-        />
-        <text
-          x={startX + 40}
-          y={startY + 58}
-          fill="#38bdf8"
-          fontSize="6.5"
-          fontFamily="monospace"
-          fontWeight="bold"
-          letterSpacing="0.8"
-        >
-          HEAD-CNC-DOHC
-        </text>
-      </g>
-
-      {/* ── LAYER 11: SPECULAR EDGE HIGHLIGHTS & FRESNEL GLOW ── */}
-      <g id="head-layer11-specular-highlights" pointerEvents="none">
-        <line
-          x1={startX - 24}
-          y1={startY + 15}
-          x2={startX + headLength + 36}
-          y2={startY + 8}
-          stroke="#ffffff"
-          strokeWidth="1.6"
-          strokeLinecap="round"
-          filter="url(#fe-specular-bloom)"
-        />
-      </g>
-
-      {/* ── LAYER 12: REAL-TIME THERMODYNAMIC HEAT SHIMMER ── */}
-      {isInstalled && (
-        <g id="head-layer12-combustion-thermal-glow" opacity="0.22" pointerEvents="none">
-          <ellipse
-            cx={startX + headLength / 2}
-            cy={startY}
-            rx={headLength * 0.45}
-            ry={22}
-            fill="url(#photoreal-heat-tint)"
-          />
-        </g>
+        })()
       )}
     </g>
   );
 };
+
+export const CylinderHeadIso = React.memo(CylinderHeadIsoComponent);

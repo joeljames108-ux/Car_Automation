@@ -1,307 +1,201 @@
-import React from "react";
-
-interface ComponentState {
-  isInstalled: boolean;
-  isActive: boolean;
-  isHovered: boolean;
-  offsetX: number;
-  offsetY: number;
-  opacity: number;
-  scale?: number;
-  meta?: any;
-}
+import React, { useMemo } from "react";
+import type { ComponentId } from "../../../sim/assemblyTypes";
+import { projectIso, projectIso60VEllipse, projectIsoEllipse } from "./isoMath";
+import { getIsoMaterialFills } from "./isoShaders";
 
 interface IntakeManifoldIsoProps {
-  layoutSpec?: any;
-  componentState?: ComponentState;
-  intakeState?: ComponentState;
-  selectedVariants?: any;
-  onHoverComponent?: (id: any) => void;
-  materialFinish?: "carbon_weave" | "billet_6061" | "cast_aluminum";
+  layoutSpec: {
+    label: string;
+    cyls: number[];
+    width: number;
+    bx: number;
+    bw: number;
+    bh: number;
+    category?: string;
+  };
+  componentState: {
+    isInstalled: boolean;
+    isActive: boolean;
+    opacity: number;
+    offsetX: number;
+    offsetY: number;
+  };
+  selectedVariants?: Record<string, string>;
+  onHoverComponent?: (id: ComponentId | null) => void;
 }
 
 /**
- * ═════════════════════════════════════════════════════════════════════
- * PHASE 22: ITB & CARBON AIRBOX INTAKE MANIFOLD 12-LAYER ASSEMBLY
- * ═════════════════════════════════════════════════════════════════════
+ * ═══════════════════════════════════════════════════════════════════
+ * 3D ISOMETRIC INTAKE MANIFOLD & ITB SYSTEM — Multi-Architecture
+ * ═══════════════════════════════════════════════════════════════════
  *
- * Implements full 12-layer hyper-realism architecture for Intake Manifold:
- * - Layer 1: Ground AO drop shadow & carbon plenum ray-cast occlusion
- * - Layer 2: CNC Billet head intake mounting flange with O-ring seal grooves
- * - Layer 3: Autoclaved 2x2 twill prepreg carbon fiber intake plenum / airbox
- * - Layer 4: 4 Individual CNC billet throttle bodies (ITBs) with brass plates
- * - Layer 5: 4 High-velocity parabolic bellmouth intake velocity stacks / trumpets
- * - Layer 6: Billet -6AN dual-feed high-pressure fuel rail & mounting stanchions
- * - Layer 7: 4 Bosch EV14 high-impedance direct port fuel injectors
- * - Layer 8: Synchronized roller-bearing throttle actuation shaft & return springs
- * - Layer 9: High-precision contactless Throttle Position Sensor (TPS) & MAP sensor
- * - Layer 10: Boost reference vacuum block, PCV port & laser-etched serial tag
- * - Layer 11: Multi-tier specular carbon gloss highlights & velocity stack lip shine
- * - Layer 12: Interactive hover state illumination & intake airflow resonance glow
+ * Dynamically builds intake systems per architecture:
+ * - Inline (I3, I4, I6): Forward-facing carbon/billet plenum with individual velocity stack runners
+ * - V-Bank (V6, V8, V10, V12): Dual bank individual throttle bodies (ITBs) or cross-ram intake
+ * - Boxer (H4, H6): Symmetrical dual-plenum intake runners
+ * - W-Bank: Central quad-feed plenum box
  */
-export const IntakeManifoldIso: React.FC<IntakeManifoldIsoProps> = ({
+const IntakeManifoldIsoComponent: React.FC<IntakeManifoldIsoProps> = ({
+  layoutSpec,
   componentState,
-  intakeState,
+  selectedVariants,
   onHoverComponent,
-  materialFinish = "carbon_weave",
 }) => {
-  const activeState = componentState || intakeState || {
-    isInstalled: true,
-    isActive: false,
-    isHovered: false,
-    offsetX: 0,
-    offsetY: 0,
-    opacity: 1,
-  };
+  const O = useMemo(() => ({ x: 250, y: 215 }), []);
+  const materialGrade = selectedVariants?.intake_manifold || "carbon";
+  const fills = useMemo(() => getIsoMaterialFills(materialGrade), [materialGrade]);
 
-  const isInstalled = activeState.isInstalled;
+  const cat = (layoutSpec.category || "").toLowerCase();
+  const label = (layoutSpec.label || "").toLowerCase();
+  const isV = cat === "vbank" || label.includes("v-") || label.includes("v6") || label.includes("v8") || label.includes("v10") || label.includes("v12");
+  const isBoxer = cat === "flat" || label.includes("boxer") || label.includes("h4") || label.includes("h6");
+  const isW = cat === "wbank" || label.includes("w12") || label.includes("w16") || label.includes("w18");
 
-  const plenumFill =
-    materialFinish === "carbon_weave"
-      ? "url(#photoreal-billet-skirt)"
-      : materialFinish === "billet_6061"
-      ? "url(#photoreal-billet-deck)"
-      : "url(#photoreal-castiron-wall)";
+  const P = (x: number, y: number, z: number) => projectIso({ x, y, z }, O);
 
-  // Intake Dimensions in Isometric Pixel Space
-  const startX = 140;
-  const startY = 115;
-  const runnerPitch = 48;
-  const plenumLength = 220;
-  const trumpetRadius = 14;
+  const config = useMemo(() => {
+    if (isBoxer) {
+      const isH6 = label.includes("h6") || label.includes("6");
+      const xPositions = isH6 ? [-50, 0, 50] : [-30, 30];
+      return { isDual: true, xPositions, leftY: 45, rightY: -45, topZ: 145 };
+    }
+    if (isV || isW) {
+      let xPositions = [-85, -51, -17, 17, 51, 85];
+      if (label.includes("v6") || label.includes("w12")) {
+        xPositions = [-38, 0, 38];
+      } else if (label.includes("v8") || label.includes("w16")) {
+        xPositions = [-54, -18, 18, 54];
+      } else if (label.includes("v10")) {
+        xPositions = [-70, -35, 0, 35, 70];
+      }
+      return { isDual: true, xPositions, leftY: 42, rightY: -42, topZ: 185 };
+    }
+    // Inline (I3, I4, I6)
+    let xPositions = [-54, -18, 18, 54];
+    if (label.includes("i3") || layoutSpec.cyls.length === 3) {
+      xPositions = [-38, 0, 38];
+    } else if (label.includes("i6") || layoutSpec.cyls.length === 6) {
+      xPositions = [-85, -51, -17, 17, 51, 85];
+    }
+    return { isDual: false, xPositions, leftY: 0, rightY: 0, topZ: 185 };
+  }, [isBoxer, isV, isW, label, layoutSpec.cyls.length]);
+
+  const { isDual, xPositions, leftY, rightY, topZ } = config;
 
   return (
     <g
-      id="iso3d-intake-manifold-hyperreal-assembly"
-      className="transition-all duration-500 cursor-pointer"
-      onMouseEnter={() => onHoverComponent && onHoverComponent("intake")}
-      onMouseLeave={() => onHoverComponent && onHoverComponent(null)}
+      id="iso-intake-manifold-assembly"
+      onMouseEnter={() => onHoverComponent?.("intake_manifold")}
+      onMouseLeave={() => onHoverComponent?.(null)}
+      className="cursor-pointer transition-all duration-700 ease-out"
       style={{
-        transform: `translate(${activeState.offsetX}px, ${activeState.offsetY}px)`,
-        opacity: activeState.opacity,
+        transform: `translate(${componentState.offsetX}px, ${componentState.offsetY}px)`,
+        opacity: componentState.opacity,
       }}
     >
-      {/* ── LAYER 1: GROUND AO DROP SHADOW & RAY-CAST OCCLUSION ── */}
-      <g id="intake-layer1-ao-shadow">
-        <ellipse
-          cx={startX + plenumLength / 2}
-          cy={startY + 75}
-          rx={plenumLength * 0.58}
-          ry={22}
-          fill="url(#photoreal-chassis-ground-ao)"
-        />
-      </g>
+      {/* ── DUAL BANK VELOCITY STACKS (V-Bank & Boxer) ── */}
+      {isDual ? (
+        <>
+          {/* Left Bank ITB Trumpets */}
+          {xPositions.map((bx, idx) => {
+            const basePt = P(bx, leftY, topZ);
+            const topPt = P(bx, leftY, topZ + 36);
+            const bellmouth = projectIso60VEllipse({ x: bx, y: leftY, z: topZ + 36 }, 13, "left", O);
+            return (
+              <g key={`left-stack-${idx}`}>
+                <line x1={basePt.x} y1={basePt.y} x2={topPt.x} y2={topPt.y} stroke={fills.left} strokeWidth="12" strokeLinecap="round" />
+                <ellipse cx={bellmouth.cx} cy={bellmouth.cy} rx={bellmouth.rx} ry={bellmouth.ry}
+                  transform={`rotate(${bellmouth.tiltDeg}, ${bellmouth.cx}, ${bellmouth.cy})`}
+                  fill={fills.top} stroke="#38bdf8" strokeWidth="1.2" />
+                <circle cx={bellmouth.cx} cy={bellmouth.cy} r={4.5} fill="#020617" />
+              </g>
+            );
+          })}
 
-      {/* ── LAYER 2: CNC BILLET HEAD MOUNTING FLANGE ── */}
-      <g id="intake-layer2-head-flange">
-        <path
-          d={`M${startX - 18} ${startY + 65}
-             L${startX + 182} ${startY + 30}
-             L${startX + 192} ${startY + 48}
-             L${startX - 8} ${startY + 83} Z`}
-          fill="#1e293b"
-          stroke="#475569"
-          strokeWidth="1.5"
-        />
-        {/* 4 Intake Port Rubber O-Ring Beads */}
-        {[0, 1, 2, 3].map((i) => {
-          const px = startX + 12 + i * runnerPitch;
-          const py = startY + 68 - i * 6.5;
+          {/* Right Bank ITB Trumpets */}
+          {xPositions.map((bx, idx) => {
+            const basePt = P(bx, rightY, topZ);
+            const topPt = P(bx, rightY, topZ + 36);
+            const bellmouth = projectIso60VEllipse({ x: bx, y: rightY, z: topZ + 36 }, 13, "right", O);
+            return (
+              <g key={`right-stack-${idx}`}>
+                <line x1={basePt.x} y1={basePt.y} x2={topPt.x} y2={topPt.y} stroke={fills.right} strokeWidth="12" strokeLinecap="round" />
+                <ellipse cx={bellmouth.cx} cy={bellmouth.cy} rx={bellmouth.rx} ry={bellmouth.ry}
+                  transform={`rotate(${bellmouth.tiltDeg}, ${bellmouth.cx}, ${bellmouth.cy})`}
+                  fill={fills.top} stroke="#38bdf8" strokeWidth="1.2" />
+                <circle cx={bellmouth.cx} cy={bellmouth.cy} r={4.5} fill="#020617" />
+              </g>
+            );
+          })}
+
+          {/* Central Carbon Fiber Intake Fuel Rail */}
+          {(() => {
+            const railL = P(xPositions[0] - 12, 0, topZ + 22);
+            const railR = P(xPositions[xPositions.length - 1] + 12, 0, topZ + 22);
+            return (
+              <g>
+                <line x1={railL.x} y1={railL.y} x2={railR.x} y2={railR.y} stroke="#0284c7" strokeWidth="5" strokeLinecap="round" />
+                <line x1={railL.x} y1={railL.y - 1} x2={railR.x} y2={railR.y - 1} stroke="#38bdf8" strokeWidth="1.5" strokeLinecap="round" />
+              </g>
+            );
+          })()}
+        </>
+      ) : (
+        /* ── SINGLE INLINE PLENUM & CURVED RUNNERS ── */
+        (() => {
+          const minX = xPositions[0] - 16;
+          const maxX = xPositions[xPositions.length - 1] + 16;
+          const pStart = P(minX, -28, topZ + 20);
+          const pEnd = P(maxX, -28, topZ + 20);
+
           return (
-            <ellipse key={`intake-oring-${i}`} cx={px} cy={py} rx="12" ry="7" fill="#020617" stroke="#0284c7" strokeWidth="1" strokeDasharray="3,2" />
-          );
-        })}
-      </g>
+            <g id="inline-plenum-assembly">
+              {/* Individual curved intake runners */}
+              {xPositions.map((bx, idx) => {
+                const portPt = P(bx, 0, topZ);
+                const plenumPt = P(bx, -28, topZ + 20);
+                return (
+                  <g key={`inline-runner-${idx}`}>
+                    <path
+                      d={`M ${portPt.x} ${portPt.y} Q ${portPt.x - 5} ${portPt.y - 15} ${plenumPt.x} ${plenumPt.y}`}
+                      stroke={fills.left}
+                      strokeWidth="11"
+                      fill="none"
+                      strokeLinecap="round"
+                    />
+                    <path
+                      d={`M ${portPt.x} ${portPt.y} Q ${portPt.x - 5} ${portPt.y - 15} ${plenumPt.x} ${plenumPt.y}`}
+                      stroke="#38bdf8"
+                      strokeWidth="1.2"
+                      fill="none"
+                      opacity="0.4"
+                    />
+                  </g>
+                );
+              })}
 
-      {/* ── LAYER 3: AUTOCLAVED CARBON FIBER AIRBOX PLENUM ── */}
-      <g id="intake-layer3-carbon-plenum">
-        {/* Main Airbox Volumetric Body */}
-        <path
-          d={`M${startX - 22} ${startY + 20}
-             L${startX + 75} ${startY - 25}
-             L${startX + plenumLength + 75} ${startY - 55}
-             L${startX + plenumLength - 15} ${startY - 10}
-             L${startX + plenumLength - 15} ${startY + 25}
-             L${startX - 22} ${startY + 55} Z`}
-          fill={plenumFill}
-          stroke="#0284c7"
-          strokeWidth="1.5"
-        />
-        {/* Carbon Twill Weave Pattern Texture Overlay */}
-        <path
-          d={`M${startX - 22} ${startY + 20}
-             L${startX + 75} ${startY - 25}
-             L${startX + plenumLength + 75} ${startY - 55}
-             L${startX + plenumLength - 15} ${startY - 10} Z`}
-          fill="#000000"
-          opacity="0.3"
-          filter="url(#fe-cnc-toolpath)"
-        />
-      </g>
+              {/* Main Carbon Plenum Chamber Tube */}
+              <line x1={pStart.x} y1={pStart.y} x2={pEnd.x} y2={pEnd.y} stroke="url(#carbon-twill)" strokeWidth="22" strokeLinecap="round" />
+              <line x1={pStart.x} y1={pStart.y} x2={pEnd.x} y2={pEnd.y} stroke="#090d16" strokeWidth="23" strokeLinecap="round" opacity="0.3" />
+              <line x1={pStart.x} y1={pStart.y - 4} x2={pEnd.x} y2={pEnd.y - 4} stroke="#ffffff" strokeWidth="2" opacity="0.6" strokeLinecap="round" />
 
-      {/* ── LAYER 4: 4 INDIVIDUAL BILLET THROTTLE BODIES (ITBs) ── */}
-      <g id="intake-layer4-itb-bodies">
-        {[0, 1, 2, 3].map((i) => {
-          const bx = startX + 12 + i * runnerPitch;
-          const by = startY + 52 - i * 6.5;
-          return (
-            <g key={`itb-body-${i}`}>
-              {/* ITB Housing Barrel */}
-              <ellipse cx={bx} cy={by} rx={trumpetRadius} ry={trumpetRadius * 0.65} fill="url(#photoreal-billet-deck)" stroke="#64748b" strokeWidth="1.2" />
-              {/* Throttle Bore Internal Depth */}
-              <ellipse cx={bx} cy={by} rx={trumpetRadius - 2} ry={(trumpetRadius - 2) * 0.65} fill="url(#photoreal-bore-depth)" />
-              {/* Precision Brass Throttle Butterfly Plate (Partially Open) */}
-              <ellipse cx={bx} cy={by} rx={trumpetRadius - 3} ry={(trumpetRadius - 3) * 0.35} fill="url(#photoreal-tin-gold)" stroke="#854d0e" strokeWidth="0.8" />
-              {/* Stainless Actuation Shaft */}
-              <line x1={bx - trumpetRadius - 2} y1={by} x2={bx + trumpetRadius + 2} y2={by} stroke="#cbd5e1" strokeWidth="1.5" />
+              {/* Big Throttle Body Inlet at front end */}
+              {(() => {
+                const tbPt = P(minX - 10, -28, topZ + 20);
+                return (
+                  <g>
+                    <circle cx={tbPt.x} cy={tbPt.y} r={14} fill="#0f172a" stroke="#38bdf8" strokeWidth="1.5" />
+                    <circle cx={tbPt.x} cy={tbPt.y} r={9} fill="#020617" />
+                    <ellipse cx={tbPt.x} cy={tbPt.y} rx={8} ry={2} fill="#eab308" opacity="0.7" />
+                  </g>
+                );
+              })()}
             </g>
           );
-        })}
-      </g>
-
-      {/* ── LAYER 5: 4 BELLMOUTH INTAKE VELOCITY STACKS ── */}
-      <g id="intake-layer5-velocity-stacks">
-        {[0, 1, 2, 3].map((i) => {
-          const vx = startX + 12 + i * runnerPitch;
-          const vy = startY + 34 - i * 6.5;
-          return (
-            <g key={`velocity-stack-${i}`}>
-              {/* Parabolic Bellmouth Flared Lip */}
-              <ellipse cx={vx} cy={vy} rx={trumpetRadius + 3} ry={(trumpetRadius + 3) * 0.65} fill="url(#photoreal-liner-rim)" stroke="#94a3b8" strokeWidth="1.2" />
-              <ellipse cx={vx} cy={vy} rx={trumpetRadius} ry={trumpetRadius * 0.65} fill="url(#photoreal-bore-depth)" />
-              {/* Specular Lip Reflection Ring */}
-              <ellipse cx={vx} cy={vy - 1} rx={trumpetRadius + 2} ry={(trumpetRadius + 2) * 0.55} fill="none" stroke="#ffffff" strokeWidth="1" filter="url(#fe-specular-bloom)" />
-            </g>
-          );
-        })}
-      </g>
-
-      {/* ── LAYER 6: BILLET -6AN HIGH-PRESSURE FUEL RAIL ── */}
-      <g id="intake-layer6-fuel-rail">
-        <line
-          x1={startX - 10}
-          y1={startY + 72}
-          x2={startX + plenumLength - 20}
-          y2={startY + 42}
-          stroke="url(#photoreal-billet-deck)"
-          strokeWidth="6"
-          strokeLinecap="round"
-        />
-        {/* -6AN Anodized Blue End Fittings */}
-        <circle cx={startX - 12} cy={startY + 72} r="4" fill="#0284c7" stroke="#0369a1" strokeWidth="1" />
-        <circle cx={startX + plenumLength - 18} cy={startY + 42} r="4" fill="#0284c7" stroke="#0369a1" strokeWidth="1" />
-      </g>
-
-      {/* ── LAYER 7: 4 BOSCH EV14 FUEL INJECTORS ── */}
-      <g id="intake-layer7-injectors">
-        {[0, 1, 2, 3].map((i) => {
-          const ix = startX + 12 + i * runnerPitch;
-          const iy = startY + 62 - i * 6.5;
-          return (
-            <g key={`injector-${i}`}>
-              <rect x={ix - 3} y={iy} width="6" height="10" rx="1.5" fill="#0f172a" stroke="#334155" strokeWidth="0.8" />
-              <circle cx={ix} cy={iy + 2} r="1.5" fill="#38bdf8" />
-            </g>
-          );
-        })}
-      </g>
-
-      {/* ── LAYER 8: THROTTLE LINKAGE SHAFT & SPRINGS ── */}
-      <g id="intake-layer8-throttle-linkage">
-        <line
-          x1={startX - 5}
-          y1={startY + 52}
-          x2={startX + plenumLength - 30}
-          y2={startY + 22}
-          stroke="#cbd5e1"
-          strokeWidth="2"
-        />
-        {/* Dual Torsion Return Springs */}
-        <circle cx={startX + 35} cy={startY + 48} r="5" fill="none" stroke="#eab308" strokeWidth="1.2" strokeDasharray="2,2" />
-        <circle cx={startX + 130} cy={startY + 34} r="5" fill="none" stroke="#eab308" strokeWidth="1.2" strokeDasharray="2,2" />
-      </g>
-
-      {/* ── LAYER 9: TPS SENSOR & MAP SENSOR ── */}
-      <g id="intake-layer9-sensors">
-        {/* Contactless Hall-Effect TPS Sensor */}
-        <rect
-          x={startX - 18}
-          y={startY + 44}
-          width="12"
-          height="16"
-          rx="2"
-          fill="#020617"
-          stroke="#38bdf8"
-          strokeWidth="1"
-        />
-        <circle cx={startX - 12} cy={startY + 52} r="2" fill="#38bdf8" />
-
-        {/* 4-Bar MAP Sensor on Plenum Spine */}
-        <rect
-          x={startX + 95}
-          y={startY - 15}
-          width="14"
-          height="10"
-          rx="2"
-          fill="#020617"
-          stroke="#38bdf8"
-          strokeWidth="0.8"
-        />
-      </g>
-
-      {/* ── LAYER 10: VACUUM BLOCK & SERIAL ID ── */}
-      <g id="intake-layer10-auxiliary-details">
-        {/* Laser-Etched Serial Identification Tag */}
-        <rect
-          x={startX + 45}
-          y={startY + 8}
-          width="50"
-          height="12"
-          rx="2"
-          fill="#0b0f17"
-          stroke="#38bdf8"
-          strokeWidth="0.8"
-          opacity="0.8"
-        />
-        <text
-          x={startX + 50}
-          y={startY + 16}
-          fill="#38bdf8"
-          fontSize="6"
-          fontFamily="monospace"
-          fontWeight="bold"
-          letterSpacing="0.8"
-        >
-          APX-ITB-CF50
-        </text>
-      </g>
-
-      {/* ── LAYER 11: SPECULAR CARBON GLOSS HIGHLIGHTS ── */}
-      <g id="intake-layer11-specular-highlights" pointerEvents="none">
-        <line
-          x1={startX - 22}
-          y1={startY + 20}
-          x2={startX + plenumLength + 75}
-          y2={startY - 55}
-          stroke="#ffffff"
-          strokeWidth="1.6"
-          strokeLinecap="round"
-          filter="url(#fe-specular-bloom)"
-        />
-      </g>
-
-      {/* ── LAYER 12: INTAKE AIRFLOW RESONANCE GLOW ── */}
-      {isInstalled && (
-        <g id="intake-layer12-resonance-glow" opacity="0.25" pointerEvents="none">
-          <ellipse
-            cx={startX + plenumLength / 2}
-            cy={startY + 25}
-            rx={plenumLength * 0.45}
-            ry={18}
-            fill="url(#photoreal-coolant-flow)"
-          />
-        </g>
+        })()
       )}
     </g>
   );
 };
+
+export const IntakeManifoldIso = React.memo(IntakeManifoldIsoComponent);

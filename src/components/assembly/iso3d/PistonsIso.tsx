@@ -1,262 +1,317 @@
-import React from "react";
-
-interface ComponentState {
-  isInstalled: boolean;
-  isActive: boolean;
-  isHovered: boolean;
-  offsetX: number;
-  offsetY: number;
-  opacity: number;
-  rotationAngle?: number;
-  scale?: number;
-  meta?: any;
-}
+import React, { useMemo } from "react";
+import type { ComponentId } from "../../../sim/assemblyTypes";
+import { projectIso, projectIsoTiltedEllipse, projectIso60VEllipse, projectIsoFlatEllipse } from "./isoMath";
+import { getPhotorealisticMaterial, SpecularHotspot, ContactShadow, MachiningMark } from "./isoMaterialPipeline";
 
 interface PistonsIsoProps {
-  layoutSpec?: any;
-  componentState?: ComponentState;
-  pistonState?: ComponentState;
+  layoutSpec: {
+    label: string;
+    cyls: number[];
+    width: number;
+    bx: number;
+    bw: number;
+    bh: number;
+    category?: string;
+  };
+  componentState: {
+    isInstalled: boolean;
+    isActive: boolean;
+    opacity: number;
+    offsetX: number;
+    offsetY: number;
+  };
   isAssemblyComplete?: boolean;
-  selectedVariants?: any;
-  onHoverComponent?: (id: any) => void;
-  materialFinish?: "forged_2618" | "ceramic_coated" | "billet";
+  selectedVariants?: Record<string, string>;
+  onHoverComponent?: (id: ComponentId | null) => void;
 }
 
 /**
- * ═════════════════════════════════════════════════════════════════════
- * PHASE 19: FORGED H-BEAM RODS & CNC PISTON ASSEMBLIES 12-LAYER
- * ═════════════════════════════════════════════════════════════════════
+ * ═══════════════════════════════════════════════════════════════════
+ * 3D ISOMETRIC PISTONS & FORGED H-BEAM RODS — Multi-Layout Engine
+ * ═══════════════════════════════════════════════════════════════════
  *
- * Implements full 12-layer hyper-realism architecture for Pistons & Rods:
- * - Layer 1: Ground AO drop shadow & reciprocating piston crown occlusion
- * - Layer 2: Fractured-split big-end rod caps with dual ARP 2000 rod bolts
- * - Layer 3: Forged 4340 H-Beam connecting rod shank with bronze pin bushing
- * - Layer 4: Floating DLC tool steel wrist pin with Spirolox retaining rings
- * - Layer 5: Forged 2618 slipper-skirt piston body with CNC valve reliefs
- * - Layer 6: 3-Piece piston ring pack (Top nitrided, Napier scraper, Oil ring)
- * - Layer 7: Internal piston pin boss oil squirter channels & cooling gallery
- * - Layer 8: Skirt molybdenum dry-film low-friction coating patches
- * - Layer 9: Big-end tri-metal rod bearing shells with oil locating tangs
- * - Layer 10: Laser-etched piston dome identification & matched weight tags
- * - Layer 11: Multi-tier specular crown highlights & razor-sharp bevel lighting
- * - Layer 12: Interactive hover state illumination & combustion thermal glow
+ * Dynamically generates piston assemblies per architecture:
+ * - Inline (I3, I4, I6): Vertical pistons with alternating stroke phasing
+ * - V-Bank (V6, V8, V10, V12): Angled banks with paired connecting rods
+ * - Boxer (H4, H6): Horizontally opposed sideways-firing pistons
+ * - W-Bank (W12, W16, W18): Quad-bank staggered pistons
+ * - Rotary: Triangular rotor profile with apex seals
  */
-export const PistonsIso: React.FC<PistonsIsoProps> = ({
+const PistonsIsoComponent: React.FC<PistonsIsoProps> = ({
+  layoutSpec,
   componentState,
-  pistonState,
+  isAssemblyComplete,
+  selectedVariants,
   onHoverComponent,
-  materialFinish = "forged_2618",
 }) => {
-  const activeState = componentState || pistonState || {
-    isInstalled: true,
-    isActive: false,
-    isHovered: false,
-    offsetX: 0,
-    offsetY: 0,
-    opacity: 1,
-    rotationAngle: 0,
-  };
+  const originScreen = { x: 250, y: 215 };
+  const materialGrade = selectedVariants?.pistons || "forged";
+  const { fills } = getPhotorealisticMaterial(materialGrade, "forged_aluminum");
 
-  const isInstalled = activeState.isInstalled;
-  const rotation = activeState.rotationAngle || 0;
+  const cat = (layoutSpec.category || "").toLowerCase();
+  const label = (layoutSpec.label || "").toLowerCase();
+  const isV = cat === "vbank" || label.includes("v-") || label.includes("v6") || label.includes("v8") || label.includes("v10") || label.includes("v12");
+  const isBoxer = cat === "flat" || label.includes("boxer") || label.includes("h4") || label.includes("h6");
+  const isW = cat === "wbank" || label.includes("w12") || label.includes("w16") || label.includes("w18");
+  const isRotary = cat === "rotary" || label.includes("rotary") || label.includes("wankel");
 
-  const crownFill =
-    materialFinish === "ceramic_coated"
-      ? "url(#photoreal-castiron-wall)"
-      : materialFinish === "billet"
-      ? "url(#photoreal-magnesium-deck)"
-      : "url(#photoreal-billet-deck)";
+  // Build dynamic piston array
+  const pistonList = useMemo(() => {
+    const list: {
+      idx: number;
+      pCrank: { x: number; y: number };
+      pWrist: { x: number; y: number };
+      pCrown: { x: number; y: number };
+      tiltDeg: number;
+      bankSide: "left" | "right" | "inline";
+      rx: number;
+      ry: number;
+    }[] = [];
 
-  // Reciprocating Assembly Geometry
-  const startX = 165;
-  const startY = 175;
-  const borePitch = 48;
-  const pistonRadiusX = 18;
-  const pistonRadiusY = 10;
-  const rodLength = 65;
-  const numPistons = 4;
+    if (isBoxer) {
+      const isH6 = label.includes("h6") || label.includes("6");
+      const xPositions = isH6 ? [-50, 0, 50] : [-30, 30];
+      const crankZ = 43;
+
+      xPositions.forEach((boreX, idx) => {
+        const isOdd = idx % 2 === 1;
+        const stroke = isOdd ? 8 : -8;
+
+        // Left Bank (+Y)
+        const lCrown3D = { x: boreX, y: 88 + stroke, z: crankZ };
+        const lWrist3D = { x: boreX, y: 65 + stroke, z: crankZ };
+        const lCrank3D = { x: boreX, y: 16, z: crankZ };
+
+        const lCrown = projectIso(lCrown3D, originScreen);
+        const lWrist = projectIso(lWrist3D, originScreen);
+        const lCrank = projectIso(lCrank3D, originScreen);
+        const lFlat = projectIsoFlatEllipse(lCrown3D, 18, "left", originScreen);
+
+        list.push({
+          idx: idx * 2,
+          pCrank: lCrank,
+          pWrist: lWrist,
+          pCrown: lCrown,
+          tiltDeg: lFlat.tiltDeg,
+          bankSide: "left",
+          rx: lFlat.rx,
+          ry: lFlat.ry,
+        });
+
+        // Right Bank (-Y)
+        const rCrown3D = { x: boreX, y: -88 - stroke, z: crankZ };
+        const rWrist3D = { x: boreX, y: -65 - stroke, z: crankZ };
+        const rCrank3D = { x: boreX, y: -16, z: crankZ };
+
+        const rCrown = projectIso(rCrown3D, originScreen);
+        const rWrist = projectIso(rWrist3D, originScreen);
+        const rCrank = projectIso(rCrank3D, originScreen);
+        const rFlat = projectIsoFlatEllipse(rCrown3D, 18, "right", originScreen);
+
+        list.push({
+          idx: idx * 2 + 1,
+          pCrank: rCrank,
+          pWrist: rWrist,
+          pCrown: rCrown,
+          tiltDeg: rFlat.tiltDeg,
+          bankSide: "right",
+          rx: rFlat.rx,
+          ry: rFlat.ry,
+        });
+      });
+      return list;
+    }
+
+    if (isV || isW) {
+      let numPairs = 6;
+      let xPositions = [-85, -51, -17, 17, 51, 85];
+      if (label.includes("v6") || label.includes("w12")) {
+        numPairs = 3;
+        xPositions = [-38, 0, 38];
+      } else if (label.includes("v8") || label.includes("w16")) {
+        numPairs = 4;
+        xPositions = [-54, -18, 18, 54];
+      } else if (label.includes("v10")) {
+        numPairs = 5;
+        xPositions = [-70, -35, 0, 35, 70];
+      }
+
+      xPositions.forEach((boreX, idx) => {
+        const isOdd = idx % 2 === 1;
+        const strokeOffset = isOdd ? 8 : -8;
+
+        // Left Bank
+        const leftCrown3D = { x: boreX, y: 50, z: 142.5 + strokeOffset };
+        const leftWrist3D = { x: boreX, y: 38, z: 115 + strokeOffset };
+        const leftCrank3D = { x: boreX, y: 14, z: 60 };
+
+        const leftCrown = projectIso(leftCrown3D, originScreen);
+        const leftWrist = projectIso(leftWrist3D, originScreen);
+        const leftCrank = projectIso(leftCrank3D, originScreen);
+        const leftTilted = projectIso60VEllipse(leftCrown3D, 16, "left", originScreen);
+
+        list.push({
+          idx: idx * 2,
+          pCrank: leftCrank,
+          pWrist: leftWrist,
+          pCrown: leftCrown,
+          tiltDeg: leftTilted.tiltDeg,
+          bankSide: "left",
+          rx: leftTilted.rx,
+          ry: leftTilted.ry,
+        });
+
+        // Right Bank
+        const rightCrown3D = { x: boreX, y: -50, z: 142.5 - strokeOffset };
+        const rightWrist3D = { x: boreX, y: -38, z: 115 - strokeOffset };
+        const rightCrank3D = { x: boreX, y: -14, z: 60 };
+
+        const rightCrown = projectIso(rightCrown3D, originScreen);
+        const rightWrist = projectIso(rightWrist3D, originScreen);
+        const rightCrank = projectIso(rightCrank3D, originScreen);
+        const rightTilted = projectIso60VEllipse(rightCrown3D, 16, "right", originScreen);
+
+        list.push({
+          idx: idx * 2 + 1,
+          pCrank: rightCrank,
+          pWrist: rightWrist,
+          pCrown: rightCrown,
+          tiltDeg: rightTilted.tiltDeg,
+          bankSide: "right",
+          rx: rightTilted.rx,
+          ry: rightTilted.ry,
+        });
+      });
+      return list;
+    }
+
+    // Inline (I3, I4, I6)
+    let inlineXPositions = [-54, -18, 18, 54]; // I4 default
+    if (label.includes("i3") || layoutSpec.cyls.length === 3) {
+      inlineXPositions = [-38, 0, 38];
+    } else if (label.includes("i6") || layoutSpec.cyls.length === 6) {
+      inlineXPositions = [-85, -51, -17, 17, 51, 85];
+    }
+
+    inlineXPositions.forEach((boreX, idx) => {
+      const isOdd = idx % 2 === 1;
+      const strokeOffset = isOdd ? 10 : -10;
+
+      const crown3D = { x: boreX, y: 0, z: 140 + strokeOffset };
+      const wrist3D = { x: boreX, y: 0, z: 112 + strokeOffset };
+      const crank3D = { x: boreX, y: isOdd ? 8 : -8, z: 58 };
+
+      const crown = projectIso(crown3D, originScreen);
+      const wrist = projectIso(wrist3D, originScreen);
+      const crank = projectIso(crank3D, originScreen);
+
+      list.push({
+        idx,
+        pCrank: crank,
+        pWrist: wrist,
+        pCrown: crown,
+        tiltDeg: 0,
+        bankSide: "inline",
+        rx: 18 * Math.cos(Math.PI / 6),
+        ry: 18 * Math.sin(Math.PI / 6),
+      });
+    });
+
+    return list;
+  }, [isBoxer, isV, isW, label, layoutSpec.cyls.length]);
 
   return (
     <g
-      id="iso3d-pistons-hyperreal-assembly"
-      className="transition-all duration-500 cursor-pointer"
-      onMouseEnter={() => onHoverComponent && onHoverComponent("pistons")}
-      onMouseLeave={() => onHoverComponent && onHoverComponent(null)}
+      id="iso-pistons-assembly"
+      onMouseEnter={() => onHoverComponent?.("pistons")}
+      onMouseLeave={() => onHoverComponent?.(null)}
+      className="cursor-pointer transition-all duration-700 ease-out"
       style={{
-        transform: `translate(${activeState.offsetX}px, ${activeState.offsetY}px)`,
-        opacity: activeState.opacity,
+        transform: `translate(${componentState.offsetX}px, ${componentState.offsetY}px)`,
+        opacity: componentState.opacity,
       }}
     >
-      {/* ── LAYER 1: GROUND AO DROP SHADOW & RECIPROCATING OCCLUSION ── */}
-      <g id="piston-layer1-ao-shadow">
-        <ellipse
-          cx={startX + (numPistons * borePitch) / 2 - 20}
-          cy={startY + rodLength + 60}
-          rx={(numPistons * borePitch) * 0.55}
-          ry={16}
-          fill="url(#photoreal-chassis-ground-ao)"
-        />
-      </g>
-
-      {/* ── LAYER 2 THROUGH 12: MULTI-CYLINDER RECIPROCATING PISTONS & RODS ── */}
-      {Array.from({ length: numPistons }).map((_, i) => {
-        const crankOffsetAngle = rotation + i * 180;
-        const strokeDisplacement = Math.sin((crankOffsetAngle * Math.PI) / 180) * 18;
-        const px = startX + i * borePitch;
-        const py = startY - i * 6.5 + strokeDisplacement;
-        const bigEndY = startY + rodLength - i * 6.5 + Math.sin(((rotation + i * 90) * Math.PI) / 180) * 14;
-
+      {pistonList.map((p) => {
         return (
-          <g key={`piston-assembly-${i}`} id={`piston-rod-unit-${i}`}>
-            {/* ── LAYER 2: FRACTURED-SPLIT ROD CAP & ARP 2000 BOLTS ── */}
-            <g id={`rod-cap-${i}`}>
-              <ellipse
-                cx={px}
-                cy={bigEndY + 12}
-                rx="14"
-                ry="9"
-                fill="#1e293b"
-                stroke="#475569"
-                strokeWidth="1.2"
-              />
-              {/* Dual ARP 2000 Rod Bolts */}
-              <circle cx={px - 8} cy={bigEndY + 14} r="2.5" fill="url(#photoreal-arp-black-oxide)" stroke="#0f172a" strokeWidth="0.8" />
-              <circle cx={px + 8} cy={bigEndY + 14} r="2.5" fill="url(#photoreal-arp-black-oxide)" stroke="#0f172a" strokeWidth="0.8" />
-            </g>
-
-            {/* ── LAYER 3: FORGED 4340 H-BEAM CONNECTING ROD SHANK ── */}
-            <g id={`rod-shank-${i}`}>
-              <path
-                d={`M${px - 8} ${py + 26}
-                   L${px - 10} ${bigEndY + 6}
-                   L${px + 10} ${bigEndY + 6}
-                   L${px + 8} ${py + 26} Z`}
-                fill="url(#photoreal-billet-skirt)"
-                stroke="#64748b"
-                strokeWidth="1.2"
-              />
-              {/* H-Beam Center Recessed Channel */}
-              <rect
-                x={px - 4}
-                y={py + 32}
-                width="8"
-                height={Math.max(10, bigEndY - py - 30)}
-                rx="1.5"
-                fill="#0f172a"
-                stroke="#334155"
-                strokeWidth="0.8"
-              />
-            </g>
-
-            {/* ── LAYER 4: FLOATING DLC TOOL STEEL WRIST PIN ── */}
-            <g id={`wrist-pin-${i}`}>
-              <ellipse
-                cx={px}
-                cy={py + 24}
-                rx="7"
-                ry="4"
-                fill="#020617"
-                stroke="#38bdf8"
-                strokeWidth="1"
-              />
-              <circle cx={px} cy={py + 24} r="1.8" fill="url(#photoreal-oil-gallery)" />
-            </g>
-
-            {/* ── LAYER 5: FORGED 2618 SLIPPER-SKIRT PISTON BODY ── */}
-            <g id={`piston-body-${i}`}>
-              {/* Piston Skirt Cylindrical Wall */}
-              <path
-                d={`M${px - pistonRadiusX} ${py}
-                   L${px - pistonRadiusX + 2} ${py + 28}
-                   C${px - pistonRadiusX + 4} ${py + 34}, ${px + pistonRadiusX - 4} ${py + 34}, ${px + pistonRadiusX - 2} ${py + 28}
-                   L${px + pistonRadiusX} ${py} Z`}
-                fill="url(#photoreal-billet-skirt)"
-                stroke="#64748b"
-                strokeWidth="1.2"
-              />
-
-              {/* Moly Skirt Low-Friction Coating Patches */}
-              <rect
-                x={px - pistonRadiusX + 4}
-                y={py + 14}
-                width="8"
-                height="12"
-                rx="2"
-                fill="#0f172a"
-                opacity="0.85"
-              />
-              <rect
-                x={px + pistonRadiusX - 12}
-                y={py + 14}
-                width="8"
-                height="12"
-                rx="2"
-                fill="#0f172a"
-                opacity="0.85"
-              />
-
-              {/* ── LAYER 6: 3-PIECE PISTON RING PACK ── */}
-              <line x1={px - pistonRadiusX + 1} y1={py + 6} x2={px + pistonRadiusX - 1} y2={py + 6} stroke="#020617" strokeWidth="1.2" />
-              <line x1={px - pistonRadiusX + 1} y1={py + 9} x2={px + pistonRadiusX - 1} y2={py + 9} stroke="#020617" strokeWidth="1.2" />
-              <line x1={px - pistonRadiusX + 1} y1={py + 12} x2={px + pistonRadiusX - 1} y2={py + 12} stroke="#d97706" strokeWidth="1.4" />
-
-              {/* ── LAYER 5: CNC PISTON CROWN & VALVE RELIEFS ── */}
-              <ellipse
-                cx={px}
-                cy={py}
-                rx={pistonRadiusX}
-                ry={pistonRadiusY}
-                fill={crownFill}
-                stroke="#94a3b8"
-                strokeWidth="1.5"
-                filter="url(#fe-cnc-toolpath)"
-              />
-
-              {/* Dual CNC Intake Valve Relief Pockets */}
-              <ellipse cx={px - 6} cy={py - 2} rx="5" ry="3" fill="#0f172a" stroke="#334155" strokeWidth="0.8" />
-              <ellipse cx={px + 6} cy={py - 2} rx="5" ry="3" fill="#0f172a" stroke="#334155" strokeWidth="0.8" />
-              {/* Dual CNC Exhaust Valve Relief Pockets */}
-              <ellipse cx={px - 5} cy={py + 4} rx="4" ry="2.5" fill="#0f172a" stroke="#334155" strokeWidth="0.8" />
-              <ellipse cx={px + 5} cy={py + 4} rx="4" ry="2.5" fill="#0f172a" stroke="#334155" strokeWidth="0.8" />
-            </g>
-
-            {/* ── LAYER 10: LASER-ETCHED PISTON WEIGHT TAG ── */}
-            <text
-              x={px - 10}
-              y={py + 1}
-              fill="#38bdf8"
-              fontSize="4"
-              fontFamily="monospace"
-              fontWeight="bold"
-            >
-              410.2g
-            </text>
-
-            {/* ── LAYER 11: SPECULAR CROWN HIGHLIGHTS ── */}
-            <path
-              d={`M${px - pistonRadiusX} ${py}
-                 C${px - pistonRadiusX} ${py - 4}, ${px + pistonRadiusX} ${py - 4}, ${px + pistonRadiusX} ${py}`}
-              stroke="#ffffff"
-              strokeWidth="1.4"
-              fill="none"
-              filter="url(#fe-specular-bloom)"
+          <g key={`piston-${p.idx}`} id={`piston-assembly-${p.idx}`}>
+            {/* 1. FORGED H-BEAM CONNECTING ROD SHANK */}
+            <line
+              x1={p.pCrank.x}
+              y1={p.pCrank.y}
+              x2={p.pWrist.x}
+              y2={p.pWrist.y}
+              stroke="url(#rod-hbeam-shank)"
+              strokeWidth="9"
+              strokeLinecap="round"
+            />
+            {/* H-Beam Center Recess Channel */}
+            <line
+              x1={p.pCrank.x}
+              y1={p.pCrank.y}
+              x2={p.pWrist.x}
+              y2={p.pWrist.y}
+              stroke="#020617"
+              strokeWidth="3.5"
+              strokeLinecap="round"
             />
 
-            {/* ── LAYER 12: COMBUSTION THERMAL GLOW ── */}
-            {isInstalled && (
-              <ellipse
-                cx={px}
-                cy={py}
-                rx={pistonRadiusX}
-                ry={pistonRadiusY}
-                fill="url(#photoreal-heat-tint)"
-                opacity="0.35"
-                pointerEvents="none"
-              />
-            )}
+            {/* 2. BIG END ROD JOURNAL BEARING CAP & ARP FASTENERS */}
+            <circle cx={p.pCrank.x} cy={p.pCrank.y} r="9.5" fill="url(#bearing-saddle-chrome)" stroke="#090d16" strokeWidth="1.5" />
+            <circle cx={p.pCrank.x} cy={p.pCrank.y} r="6.5" fill="url(#wrist-pin-bushing-bronze)" stroke="#090d16" strokeWidth="0.8" />
+            <circle cx={p.pCrank.x - 6} cy={p.pCrank.y + 4} r="1.8" fill="url(#arp-bolt-head-12pt)" stroke="#090d16" strokeWidth="0.6" />
+            <circle cx={p.pCrank.x + 6} cy={p.pCrank.y + 4} r="1.8" fill="url(#arp-bolt-head-12pt)" stroke="#090d16" strokeWidth="0.6" />
+
+            {/* 3. SMALL END PIN BUSHING & CASE-HARDENED WRIST PIN */}
+            <circle cx={p.pWrist.x} cy={p.pWrist.y} r="6.5" fill="url(#wrist-pin-bushing-bronze)" stroke="#090d16" strokeWidth="1" />
+            <circle cx={p.pWrist.x} cy={p.pWrist.y} r="4.2" fill="url(#bearing-saddle-chrome)" stroke="#090d16" strokeWidth="0.8" />
+            <circle cx={p.pWrist.x} cy={p.pWrist.y} r="2" fill="#020617" />
+
+            {/* 4. FORGED RACING PISTON SKIRT & COMPRESSION RING PACK */}
+            <path
+              d={`M ${p.pCrown.x - p.rx} ${p.pCrown.y} L ${p.pWrist.x - p.rx * 0.9} ${p.pWrist.y + 4} L ${p.pWrist.x + p.rx * 0.9} ${p.pWrist.y + 4} L ${p.pCrown.x + p.rx} ${p.pCrown.y} Z`}
+              fill={p.bankSide === "right" ? fills.right : fills.left}
+              stroke="#090d16"
+              strokeWidth="1.5"
+            />
+            {/* Compression Rings */}
+            <line x1={p.pCrown.x - p.rx + 1} y1={p.pCrown.y + 5} x2={p.pCrown.x + p.rx - 1} y2={p.pCrown.y + 5} stroke="#020617" strokeWidth="1.2" />
+            <line x1={p.pCrown.x - p.rx + 1} y1={p.pCrown.y + 8} x2={p.pCrown.x + p.rx - 1} y2={p.pCrown.y + 8} stroke="#020617" strokeWidth="1.2" />
+
+            {/* 5. CNC DOME PISTON CROWN & VALVE RELIEF POCKETS */}
+            <ellipse
+              cx={p.pCrown.x}
+              cy={p.pCrown.y}
+              rx={p.rx}
+              ry={p.ry}
+              transform={p.tiltDeg ? `rotate(${p.tiltDeg}, ${p.pCrown.x}, ${p.pCrown.y})` : undefined}
+              fill={fills.top}
+              stroke="#090d16"
+              strokeWidth="1.5"
+            />
+            {/* Valve Relief Pockets */}
+            <circle
+              cx={p.pCrown.x - p.rx * 0.4}
+              cy={p.pCrown.y}
+              r={p.rx * 0.3}
+              fill="#020617"
+              stroke="#475569"
+              strokeWidth="0.5"
+              opacity="0.75"
+            />
+            <circle
+              cx={p.pCrown.x + p.rx * 0.4}
+              cy={p.pCrown.y}
+              r={p.rx * 0.3}
+              fill="#020617"
+              stroke="#475569"
+              strokeWidth="0.5"
+              opacity="0.75"
+            />
           </g>
         );
       })}
     </g>
   );
 };
+
+export const PistonsIso = React.memo(PistonsIsoComponent);
