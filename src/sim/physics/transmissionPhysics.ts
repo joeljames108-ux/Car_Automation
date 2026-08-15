@@ -269,23 +269,231 @@ export function calculateShiftPoints(
 // Traction limit based on differential and drive type
 // ---------------------------------------------------------------------------
 
-/** Maximum driving force before wheel spin, accounting for diff type */
-export function tractionLimit(
-  normalForceOnDrivenAxle: number,   // N
-  tyreGripCoeff: number,             // μ
-  diffLockFactor: number,            // 0-1
-  driveType: 'fwd' | 'rwd' | 'awd',
-): number {
-  // With an open diff, only the wheel with LESS grip limits traction
-  // With locked diff, both wheels can contribute fully
-  // In reality, weight transfer means inside wheel has less load
-  // Open diff: effective force = μ × min(F_left, F_right) × 2
-  // We model this as: F_max = μ × F_total × (0.5 + 0.5 × lockFactor)
-  const lockEfficiency = 0.55 + 0.45 * diffLockFactor;
-  const force = tyreGripCoeff * normalForceOnDrivenAxle * lockEfficiency;
+// ---------------------------------------------------------------------------
+// Advanced Transmission Physics Modules
+// ---------------------------------------------------------------------------
 
-  // AWD splits torque across both axles (more total grip available)
-  if (driveType === 'awd') return force * 1.65; // ~65% more traction than single-axle
-
-  return force;
+/**
+ * 1. MULTI-PLATE WET CLUTCH & TORQUE CONVERTER THERMAL DYNAMICS
+ */
+export interface ClutchThermalState {
+  clutchTempC: number;
+  slipEnergyJoules: number;
+  isGlazed: boolean;
+  frictionCoeff: number;
+  torqueCapacityNm: number;
 }
+
+export function evaluateClutchSlip(
+  engineTorqueNm: number,
+  deltaOmegaRadS: number, // Speed delta between flywheel and transmission input shaft (rad/s)
+  slipDurationSec: number,
+  clutchType: 'organic' | 'cerametallic' | 'carbon_carbon' | 'wet_multiplate',
+  currentTempC: number = 65,
+): ClutchThermalState {
+  const clutchSpecs = {
+    organic: { baseMu: 0.35, maxTempC: 280, heatCapacityJperKgC: 460, massKg: 3.2, nominalAreaM2: 0.045 },
+    cerametallic: { baseMu: 0.42, maxTempC: 450, heatCapacityJperKgC: 490, massKg: 2.8, nominalAreaM2: 0.042 },
+    carbon_carbon: { baseMu: 0.48, maxTempC: 850, heatCapacityJperKgC: 710, massKg: 1.9, nominalAreaM2: 0.038 },
+    wet_multiplate: { baseMu: 0.14, maxTempC: 220, heatCapacityJperKgC: 520, massKg: 4.5, nominalAreaM2: 0.095 },
+  }[clutchType];
+
+  // Slip Energy: E = Torque * deltaOmega * duration (Joules)
+  const slipEnergyJoules = Math.abs(engineTorqueNm * deltaOmegaRadS * slipDurationSec * 0.5);
+
+  // Thermal Rise: deltaT = Energy / (mass * c_p)
+  const deltaTempC = slipEnergyJoules / (clutchSpecs.massKg * clutchSpecs.heatCapacityJperKgC);
+  const newTempC = currentTempC + deltaTempC;
+
+  // Thermal Fading: mu degrades exponentially past threshold
+  let frictionCoeff = clutchSpecs.baseMu;
+  if (newTempC > clutchSpecs.maxTempC) {
+    const overheatDelta = newTempC - clutchSpecs.maxTempC;
+    frictionCoeff *= Math.max(0.25, Math.exp(-overheatDelta / 80));
+  } else if (newTempC < 100 && clutchType === 'carbon_carbon') {
+    // Carbon-carbon requires heat to generate full friction
+    frictionCoeff *= 0.65 + 0.35 * (newTempC / 100);
+  }
+
+  const isGlazed = newTempC > clutchSpecs.maxTempC * 1.15;
+  const clampingForceN = 12500; // 12.5 kN diaphragm clamping force
+  const meanRadiusM = 0.11; // 110mm mean friction radius
+  const numFrictionPlates = clutchType === 'wet_multiplate' ? 12 : 2;
+
+  // Torque Capacity: T = n * mu * F_clamp * r_mean
+  const torqueCapacityNm = numFrictionPlates * frictionCoeff * clampingForceN * meanRadiusM;
+
+  return {
+    clutchTempC: Math.round(newTempC * 10) / 10,
+    slipEnergyJoules: Math.round(slipEnergyJoules),
+    isGlazed,
+    frictionCoeff: Math.round(frictionCoeff * 1000) / 1000,
+    torqueCapacityNm: Math.round(torqueCapacityNm),
+  };
+}
+
+/**
+ * 2. SYNCHROMESH & DOG-RING SHIFT DYNAMICS WITH G-JERK INDEX
+ */
+export interface ShiftTransientResult {
+  synchronizationTimeSec: number;
+  shiftShockJerkGPerSec: number;
+  dogEngagementSuccess: boolean;
+  rpmDropRatio: number;
+  targetRpm: number;
+}
+
+export function computeShiftTransient(
+  fromGearRatio: number,
+  toGearRatio: number,
+  currentRpm: number,
+  shiftForkForceN: number, // Typical hand force: 150-300 N; Sequential pneumatic: 800-1200 N
+  isDogRing: boolean,
+  vehicleMassKg: number = 1350,
+): ShiftTransientResult {
+  const rpmDropRatio = toGearRatio / fromGearRatio;
+  const targetRpm = Math.round(currentRpm * rpmDropRatio);
+
+  if (isDogRing) {
+    // Dog-ring dog box shifts instantaneously once rev-matched within +/- 150 RPM window
+    const syncTimeSec = 0.045 + Math.random() * 0.015; // ~45-60ms sequential shift
+    // High G-jerk shock due to instantaneous dog tooth mesh
+    const tractiveDeltaN = (toGearRatio - fromGearRatio) * 600;
+    const accelDeltaG = Math.abs(tractiveDeltaN / (vehicleMassKg * 9.81));
+    const shiftShockJerkGPerSec = accelDeltaG / syncTimeSec;
+
+    return {
+      synchronizationTimeSec: Math.round(syncTimeSec * 1000) / 1000,
+      shiftShockJerkGPerSec: Math.round(shiftShockJerkGPerSec * 10) / 10,
+      dogEngagementSuccess: true,
+      rpmDropRatio: Math.round(rpmDropRatio * 1000) / 1000,
+      targetRpm,
+    };
+  }
+
+  // Synchromesh Cone Synchronization Time:
+  // t_sync = (I_cluster * deltaOmega) / (mu_cone * F_fork * r_cone / sin(coneAngle))
+  const coneAngleRad = (7.5 * Math.PI) / 180; // 7.5 deg taper
+  const coneMu = 0.10;
+  const rConeM = 0.038;
+  const clusterInertiaKgM2 = 0.018; // Gear cluster rotational inertia
+  const deltaOmega = (currentRpm - targetRpm) * (2 * Math.PI / 60);
+
+  const synchroTorqueNm = (coneMu * shiftForkForceN * rConeM) / Math.sin(coneAngleRad);
+  const syncTimeSec = Math.max(0.12, (clusterInertiaKgM2 * deltaOmega) / synchroTorqueNm);
+
+  // Smooth synchro taper reduces shift shock jerk
+  const tractiveDeltaN = (toGearRatio - fromGearRatio) * 450;
+  const accelDeltaG = Math.abs(tractiveDeltaN / (vehicleMassKg * 9.81));
+  const shiftShockJerkGPerSec = accelDeltaG / (syncTimeSec * 1.5);
+
+  return {
+    synchronizationTimeSec: Math.round(syncTimeSec * 1000) / 1000,
+    shiftShockJerkGPerSec: Math.round(shiftShockJerkGPerSec * 10) / 10,
+    dogEngagementSuccess: true,
+    rpmDropRatio: Math.round(rpmDropRatio * 1000) / 1000,
+    targetRpm,
+  };
+}
+
+/**
+ * 3. ELECTRONIC ACTIVE LIMITED SLIP DIFFERENTIAL (E-DIFF) & TORQUE VECTORING
+ */
+export interface EDiffTorqueDistribution {
+  leftWheelTorqueNm: number;
+  rightWheelTorqueNm: number;
+  lockupPercentage: number;
+  vectoringYawMomentNm: number;
+}
+
+export function calculateEDiffTorqueSplit(
+  totalInputTorqueNm: number,
+  steeringAngleDeg: number,
+  lateralAccelG: number,
+  yawRateErrorRadS: number, // Desired yaw rate vs actual yaw rate
+  diffRampType: '1.0_way' | '1.5_way' | '2.0_way' | 'active_ediff',
+  trackWidthM: number = 1.62,
+): EDiffTorqueDistribution {
+  let lockupPercentage = 0;
+
+  if (diffRampType === 'active_ediff') {
+    // E-Diff continuously vectors torque to correct understeer/oversteer
+    const baseLock = Math.min(1.0, Math.abs(lateralAccelG) * 0.45);
+    const yawCorrection = yawRateErrorRadS * 1.2;
+    lockupPercentage = Math.max(0.05, Math.min(0.95, baseLock + Math.abs(yawCorrection)));
+
+    // Active torque bias delta between outer and inner wheel
+    const biasFactor = 0.5 + Math.sign(steeringAngleDeg) * (0.15 * Math.abs(lateralAccelG) + yawCorrection * 0.1);
+    const clampedBias = Math.max(0.2, Math.min(0.8, biasFactor));
+
+    const rightWheelTorqueNm = totalInputTorqueNm * clampedBias;
+    const leftWheelTorqueNm = totalInputTorqueNm * (1 - clampedBias);
+    const vectoringYawMomentNm = ((rightWheelTorqueNm - leftWheelTorqueNm) * (trackWidthM / 2)) / 0.33; // wheel radius 0.33m
+
+    return {
+      leftWheelTorqueNm: Math.round(leftWheelTorqueNm),
+      rightWheelTorqueNm: Math.round(rightWheelTorqueNm),
+      lockupPercentage: Math.round(lockupPercentage * 100),
+      vectoringYawMomentNm: Math.round(vectoringYawMomentNm),
+    };
+  }
+
+  // Mechanical Salisbury Clutch-Type LSD (1.0 / 1.5 / 2.0 Way)
+  const isCoast = totalInputTorqueNm < 0;
+  if (diffRampType === '1.0_way') {
+    lockupPercentage = isCoast ? 0 : 0.45;
+  } else if (diffRampType === '1.5_way') {
+    lockupPercentage = isCoast ? 0.25 : 0.60;
+  } else {
+    // 2.0-way lockup equal on accel and decel (motorsport drift / circuit)
+    lockupPercentage = 0.70;
+  }
+
+  const splitHalf = totalInputTorqueNm * 0.5;
+  const transfer = splitHalf * lockupPercentage * (Math.abs(steeringAngleDeg) / 45);
+  const outerMultiplier = steeringAngleDeg >= 0 ? 1 : -1;
+
+  const rightWheelTorqueNm = splitHalf + transfer * outerMultiplier;
+  const leftWheelTorqueNm = splitHalf - transfer * outerMultiplier;
+
+  return {
+    leftWheelTorqueNm: Math.round(leftWheelTorqueNm),
+    rightWheelTorqueNm: Math.round(rightWheelTorqueNm),
+    lockupPercentage: Math.round(lockupPercentage * 100),
+    vectoringYawMomentNm: Math.round(((rightWheelTorqueNm - leftWheelTorqueNm) * trackWidthM) / 0.66),
+  };
+}
+
+/**
+ * 4. OPTIMAL GEAR RATIO PROGRESSION & TOP SPEED EQUILIBRIUM
+ */
+export interface GearRatioStepAnalysis {
+  gear: number;
+  ratio: number;
+  stepRatioToNext: number; // Ratio step (r_k / r_{k+1})
+  maxSpeedKmh: number;
+  engineRpmDropOnUpshift: number;
+}
+
+export function analyzeGearRatioProgression(
+  ratios: number[],
+  finalDrive: number,
+  redlineRpm: number,
+  wheelRadiusM: number = 0.33,
+): GearRatioStepAnalysis[] {
+  return ratios.map((ratio, idx) => {
+    const nextRatio = ratios[idx + 1];
+    const stepRatioToNext = nextRatio ? Math.round((ratio / nextRatio) * 1000) / 1000 : 1.0;
+    const maxSpeedKmh = Math.round(((redlineRpm * 2 * Math.PI * wheelRadiusM * 3.6) / (ratio * finalDrive * 60)) * 10) / 10;
+    const engineRpmDropOnUpshift = nextRatio ? Math.round(redlineRpm * (1 - nextRatio / ratio)) : 0;
+
+    return {
+      gear: idx + 1,
+      ratio,
+      stepRatioToNext,
+      maxSpeedKmh,
+      engineRpmDropOnUpshift,
+    };
+  });
+}
+
