@@ -121,17 +121,28 @@ export const ChassisShaderDefs: React.FC = () => (
       <feDropShadow dx="0" dy="4" stdDeviation="5" floodColor="#020617" floodOpacity="0.6" />
     </filter>
 
-    {/* Reusable Stamped Swage Flange Hole (Large) */}
-    <g id="swage-hole-deep">
-      <ellipse cx="0" cy="0" rx="10" ry="6.5" fill="#0f172a" stroke="#cbd5e1" strokeWidth="1.5" />
-      <ellipse cx="0" cy="0" rx="8.5" ry="5" fill="none" stroke="#64748b" strokeWidth="1" />
-    </g>
+    {/* 16. Finite Element Analysis (FEA) Von Mises Stress Spectrum Gradient */}
+    <linearGradient id="fea-stress-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stopColor="#1e3a8a" />   {/* 0-100 MPa: Elastic Minimal (Navy Blue) */}
+      <stop offset="25%" stopColor="#0284c7" />  {/* 100-250 MPa: Low Load (Sky Blue) */}
+      <stop offset="50%" stopColor="#10b981" />  {/* 250-400 MPa: Nominal Operating (Emerald Green) */}
+      <stop offset="70%" stopColor="#eab308" />  {/* 400-550 MPa: High Stress Yield Warning (Yellow) */}
+      <stop offset="88%" stopColor="#f97316" />  {/* 550-700 MPa: High Plastic Shear (Orange) */}
+      <stop offset="100%" stopColor="#ef4444" /> {/* 700+ MPa: Critical Yield Hotspot (Neon Red) */}
+    </linearGradient>
 
-    {/* Reusable Stamped Swage Flange Hole (Small) */}
-    <g id="swage-hole-sm-deep">
-      <circle cx="0" cy="0" r="5" fill="#0f172a" stroke="#cbd5e1" strokeWidth="1.2" />
-      <circle cx="0" cy="0" r="4.2" fill="none" stroke="#64748b" strokeWidth="0.8" />
-    </g>
+    {/* 17. FEA Radial Node Stress Glow */}
+    <radialGradient id="fea-node-glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stopColor="#ef4444" stopOpacity="0.9" />
+      <stop offset="40%" stopColor="#f59e0b" stopOpacity="0.6" />
+      <stop offset="80%" stopColor="#0284c7" stopOpacity="0.2" />
+      <stop offset="100%" stopColor="#1e3a8a" stopOpacity="0" />
+    </radialGradient>
+
+    {/* 18. FEA Triangular Mesh Overlay Pattern */}
+    <pattern id="fea-tri-mesh" width="30" height="30" patternUnits="userSpaceOnUse">
+      <path d="M 0 0 L 30 0 L 15 30 Z M 30 0 L 30 30 L 15 30 Z" fill="none" stroke="#38bdf8" strokeWidth="0.6" opacity="0.35" />
+    </pattern>
   </defs>
 );
 
