@@ -38,6 +38,17 @@ import { RotaryBlockCastingIso } from "./iso3d/RotaryBlockCastingIso";
 import { RadialBlockCastingIso } from "./iso3d/RadialBlockCastingIso";
 import { ApexHybridBlockCastingIso } from "./iso3d/ApexHybridBlockCastingIso";
 import { VR6BlockCastingIso } from "./iso3d/VR6BlockCastingIso";
+import { I4BlockCastingIso } from "./iso3d/I4BlockCastingIso";
+import { I3BlockCastingIso } from "./iso3d/I3BlockCastingIso";
+import { I6BlockCastingIso } from "./iso3d/I6BlockCastingIso";
+import { V6BlockCastingIso } from "./iso3d/V6BlockCastingIso";
+import { V8BlockCastingIso } from "./iso3d/V8BlockCastingIso";
+import { V10BlockCastingIso } from "./iso3d/V10BlockCastingIso";
+import { BoxerH4BlockCastingIso } from "./iso3d/BoxerH4BlockCastingIso";
+import { BoxerH6BlockCastingIso } from "./iso3d/BoxerH6BlockCastingIso";
+import { W12BlockCastingIso } from "./iso3d/W12BlockCastingIso";
+import { W16BlockCastingIso } from "./iso3d/W16BlockCastingIso";
+import { W18BlockCastingIso } from "./iso3d/W18BlockCastingIso";
 import { EVPowertrainIsoRenderer } from "./iso3d/EVPowertrainIsoRenderer";
 import { CrankshaftIso } from "./iso3d/CrankshaftIso";
 import { PistonsIso } from "./iso3d/PistonsIso";
@@ -51,6 +62,9 @@ import { ExhaustHeadersIso } from "./iso3d/ExhaustHeadersIso";
 import { OilPanIso } from "./iso3d/OilPanIso";
 import { HybridMotorIso } from "./iso3d/HybridMotorIso";
 import { InverterECUIso } from "./iso3d/InverterECUIso";
+import { RadiatorIso } from "./iso3d/RadiatorIso";
+import { TransmissionIso } from "./iso3d/TransmissionIso";
+import { EngineCoverIso } from "./iso3d/EngineCoverIso";
 
 
 interface EngineSVGProps {
@@ -339,6 +353,9 @@ export function EngineSVG({
   const intakeState = getPartState("intake_manifold");
   const exhaustState = getPartState("exhaust_headers");
   const turboState = getPartState("turbocharger");
+  const radiatorState = getPartState("radiator");
+  const transmissionState = getPartState("transmission");
+  const engineCoverState = getPartState("engine_cover");
   const hybridMotorState = getPartState("hybrid_motor");
   const inverterState = getPartState("inverter_ecu");
 
@@ -829,12 +846,35 @@ export function EngineSVG({
           }
           if (layoutSpec.category === "wbank") {
             return viewMode === "3d_iso" ? (
-              <WBankIsoRenderer
-                layoutSpec={layoutSpec}
-                blockState={blockState}
-                onHoverComponent={onHoverComponent}
-                selectedVariants={selectedVariants}
-              />
+              currentLayout === "w12" ? (
+                <W12BlockCastingIso
+                  layoutSpec={layoutSpec}
+                  blockState={blockState}
+                  onHoverComponent={onHoverComponent}
+                  selectedVariants={selectedVariants}
+                />
+              ) : currentLayout === "w16" ? (
+                <W16BlockCastingIso
+                  layoutSpec={layoutSpec}
+                  blockState={blockState}
+                  onHoverComponent={onHoverComponent}
+                  selectedVariants={selectedVariants}
+                />
+              ) : currentLayout === "w18" ? (
+                <W18BlockCastingIso
+                  layoutSpec={layoutSpec}
+                  blockState={blockState}
+                  onHoverComponent={onHoverComponent}
+                  selectedVariants={selectedVariants}
+                />
+              ) : (
+                <WBankIsoRenderer
+                  layoutSpec={layoutSpec}
+                  blockState={blockState}
+                  onHoverComponent={onHoverComponent}
+                  selectedVariants={selectedVariants}
+                />
+              )
             ) : (
               <WBankLayoutRenderer
                 layoutSpec={layoutSpec}
@@ -846,12 +886,28 @@ export function EngineSVG({
           }
           if (layoutSpec.category === "flat") {
             return viewMode === "3d_iso" ? (
-              <BoxerIsoRenderer
-                layoutSpec={layoutSpec}
-                blockState={blockState}
-                onHoverComponent={onHoverComponent}
-                selectedVariants={selectedVariants}
-              />
+              currentLayout === "boxer4" ? (
+                <BoxerH4BlockCastingIso
+                  layoutSpec={layoutSpec}
+                  blockState={blockState}
+                  onHoverComponent={onHoverComponent}
+                  selectedVariants={selectedVariants}
+                />
+              ) : currentLayout === "boxer6" ? (
+                <BoxerH6BlockCastingIso
+                  layoutSpec={layoutSpec}
+                  blockState={blockState}
+                  onHoverComponent={onHoverComponent}
+                  selectedVariants={selectedVariants}
+                />
+              ) : (
+                <BoxerIsoRenderer
+                  layoutSpec={layoutSpec}
+                  blockState={blockState}
+                  onHoverComponent={onHoverComponent}
+                  selectedVariants={selectedVariants}
+                />
+              )
             ) : (
               <FlatBoxerLayoutRenderer
                 layoutSpec={layoutSpec}
@@ -863,12 +919,35 @@ export function EngineSVG({
           }
           if (layoutSpec.category === "inline") {
             return viewMode === "3d_iso" ? (
-              <InlineIsoRenderer
-                layoutSpec={layoutSpec}
-                blockState={blockState}
-                onHoverComponent={onHoverComponent}
-                selectedVariants={selectedVariants}
-              />
+              currentLayout === "i3" ? (
+                <I3BlockCastingIso
+                  layoutSpec={layoutSpec}
+                  blockState={blockState}
+                  onHoverComponent={onHoverComponent}
+                  selectedVariants={selectedVariants}
+                />
+              ) : currentLayout === "i4" ? (
+                <I4BlockCastingIso
+                  layoutSpec={layoutSpec}
+                  blockState={blockState}
+                  onHoverComponent={onHoverComponent}
+                  selectedVariants={selectedVariants}
+                />
+              ) : currentLayout === "i6" ? (
+                <I6BlockCastingIso
+                  layoutSpec={layoutSpec}
+                  blockState={blockState}
+                  onHoverComponent={onHoverComponent}
+                  selectedVariants={selectedVariants}
+                />
+              ) : (
+                <InlineIsoRenderer
+                  layoutSpec={layoutSpec}
+                  blockState={blockState}
+                  onHoverComponent={onHoverComponent}
+                  selectedVariants={selectedVariants}
+                />
+              )
             ) : (
               <InlineLayoutRenderer
                 layoutSpec={layoutSpec}
@@ -880,11 +959,46 @@ export function EngineSVG({
           }
           return viewMode === "3d_iso" ? (
             <g id="v-bank-3d-full-assembly">
-              <VBankBlockCastingIso
+              {currentLayout === "v6" ? (
+                <V6BlockCastingIso
+                  layoutSpec={layoutSpec}
+                  blockState={blockState}
+                  onHoverComponent={onHoverComponent}
+                  selectedVariants={selectedVariants}
+                />
+              ) : currentLayout === "v8" ? (
+                <V8BlockCastingIso
+                  layoutSpec={layoutSpec}
+                  blockState={blockState}
+                  onHoverComponent={onHoverComponent}
+                  selectedVariants={selectedVariants}
+                />
+              ) : currentLayout === "v10" ? (
+                <V10BlockCastingIso
+                  layoutSpec={layoutSpec}
+                  blockState={blockState}
+                  onHoverComponent={onHoverComponent}
+                  selectedVariants={selectedVariants}
+                />
+              ) : (
+                <VBankBlockCastingIso
+                  layoutSpec={layoutSpec}
+                  blockState={blockState}
+                  onHoverComponent={onHoverComponent}
+                  selectedVariants={selectedVariants}
+                />
+              )}
+              {/* 3D Radiator & Electric Cooling Fan Assembly at Front-Left */}
+              <RadiatorIso
                 layoutSpec={layoutSpec}
-                blockState={blockState}
+                componentState={blockState}
                 onHoverComponent={onHoverComponent}
-                selectedVariants={selectedVariants}
+              />
+              {/* 3D Racing Transmission & Bellhousing with Clutch Cutaway at Rear-Right */}
+              <TransmissionIso
+                layoutSpec={layoutSpec}
+                componentState={crankState}
+                onHoverComponent={onHoverComponent}
               />
               <VBankIsoRenderer
                 layoutSpec={layoutSpec}
@@ -1742,6 +1856,85 @@ export function EngineSVG({
           </g>
         )}
 
+        {/* ── 13. RACING RADIATOR & DUAL ELECTRIC COOLING FANS ── */}
+        {viewMode === "3d_iso" ? (
+          <RadiatorIso
+            layoutSpec={layoutSpec}
+            componentState={radiatorState}
+            onHoverComponent={onHoverComponent}
+          />
+        ) : (
+          <g
+            id="radiator"
+            onMouseEnter={() => onHoverComponent?.("radiator")}
+            onMouseLeave={() => onHoverComponent?.(null)}
+            className="cursor-pointer transition-all duration-700 ease-out"
+            style={{
+              transform: `translate(${radiatorState.offsetX}px, ${radiatorState.offsetY}px)`,
+              opacity: radiatorState.opacity,
+            }}
+            filter={radiatorState.isInstalled ? "url(#soft-shadow-3d)" : undefined}
+          >
+            <rect x={layoutSpec.bx - 68} y="150" width="34" height="150" rx="6" fill="url(#turbo-housing)" stroke={radiatorState.isHovered ? "#38bdf8" : "#090d16"} strokeWidth="2.5" />
+            <rect x={layoutSpec.bx - 64} y="160" width="26" height="130" fill="#020617" stroke="#475569" strokeWidth="1" />
+            {Array.from({ length: 14 }).map((_, i) => (
+              <line key={`rfin-${i}`} x1={layoutSpec.bx - 63} y1={165 + i * 9} x2={layoutSpec.bx - 39} y2={165 + i * 9} stroke="#64748b" strokeWidth="1.2" opacity="0.8" />
+            ))}
+          </g>
+        )}
+
+        {/* ── 14. SEQUENTIAL TRANSMISSION & CUTAWAY BELLHOUSING ── */}
+        {viewMode === "3d_iso" ? (
+          <TransmissionIso
+            layoutSpec={layoutSpec}
+            componentState={transmissionState}
+            onHoverComponent={onHoverComponent}
+          />
+        ) : (
+          <g
+            id="transmission"
+            onMouseEnter={() => onHoverComponent?.("transmission")}
+            onMouseLeave={() => onHoverComponent?.(null)}
+            className="cursor-pointer transition-all duration-700 ease-out"
+            style={{
+              transform: `translate(${transmissionState.offsetX}px, ${transmissionState.offsetY}px)`,
+              opacity: transmissionState.opacity,
+            }}
+            filter={transmissionState.isInstalled ? "url(#soft-shadow-3d)" : undefined}
+          >
+            <rect x={layoutSpec.bx + layoutSpec.bw + 8} y="220" width="75" height="110" rx="12" fill="url(#mat-cast-steel)" stroke={transmissionState.isHovered ? "#38bdf8" : "#090d16"} strokeWidth="3" />
+            <rect x={layoutSpec.bx + layoutSpec.bw + 18} y="240" width="55" height="70" rx="8" fill="#020617" stroke="#38bdf8" strokeWidth="1.5" />
+            <circle cx={layoutSpec.bx + layoutSpec.bw + 45} cy="275" r="18" fill="url(#gold-hub)" stroke="#090d16" strokeWidth="1.5" />
+          </g>
+        )}
+
+        {/* ── 15. CARBON-FIBER & GOLD BEZEL ENGINE COVER ── */}
+        {viewMode === "3d_iso" ? (
+          <EngineCoverIso
+            layoutSpec={layoutSpec}
+            componentState={engineCoverState}
+            selectedVariant={selectedVariants?.engine_cover}
+            onHoverComponent={onHoverComponent}
+          />
+        ) : (
+          <g
+            id="engine_cover"
+            onMouseEnter={() => onHoverComponent?.("engine_cover")}
+            onMouseLeave={() => onHoverComponent?.(null)}
+            className="cursor-pointer transition-all duration-700 ease-out"
+            style={{
+              transform: `translate(${engineCoverState.offsetX}px, ${engineCoverState.offsetY}px)`,
+              opacity: engineCoverState.opacity,
+            }}
+            filter={engineCoverState.isInstalled ? "url(#soft-shadow-3d)" : undefined}
+          >
+            <rect x={layoutSpec.bx + 20} y="75" width={layoutSpec.bw - 40} height="55" rx="8" fill="url(#mat-billet-cnc)" stroke={engineCoverState.isHovered ? "#38bdf8" : "#090d16"} strokeWidth="2.5" />
+            <text x={layoutSpec.bx + layoutSpec.bw / 2} y="106" fill="#fef08a" fontSize="10" fontWeight="bold" fontFamily="sans-serif" textAnchor="middle">
+              RACING SPEC EVOLUTION
+            </text>
+          </g>
+        )}
+
         {/* ── 13. 800V P2/P4 AXIAL-FLUX HYBRID ELECTRIC MOTOR UNIT ── */}
         {viewMode === "3d_iso" ? (
           <HybridMotorIso
@@ -1843,6 +2036,70 @@ export function EngineSVG({
           phase={phase}
           targetPos={{ x: spotlightX, y: spotlightY }}
         />
+        {/* ── 6. 3D ISOMETRIC VIEW TITLE BANNER & SPEC METRICS HUD OVERLAY (Matching Reference) ── */}
+        {viewMode === "3d_iso" && (
+          <g id="iso-spec-hud-overlay" className="pointer-events-none">
+            {/* Top Center Title Header Banner */}
+            <g id="iso-title-banner" transform="translate(18, 22)">
+              <rect
+                x="0"
+                y="0"
+                width="310"
+                height="32"
+                rx="6"
+                fill="#070a12"
+                fillOpacity="0.82"
+                stroke="#0284c7"
+                strokeWidth="1.2"
+                strokeOpacity="0.5"
+              />
+              <circle cx="12" cy="16" r="3.5" fill="#38bdf8" className="animate-pulse" />
+              <text x="22" y="14" fill="#f8fafc" fontSize="8.5" fontWeight="bold" fontFamily="sans-serif" letterSpacing="0.3">
+                3D Isometric View: Racing-Spec V12 Engine
+              </text>
+              <text x="22" y="24" fill="#38bdf8" fontSize="6.5" fontWeight="600" fontFamily="monospace" letterSpacing="0.5">
+                INTEGRATED DRY-SUMP SYSTEM WITH TRANSMISSION
+              </text>
+            </g>
+
+            {/* Right-Side Floating Spec Metrics Cards (Photo 2 Reference) */}
+            <g id="iso-spec-cards" transform="translate(378, 20)">
+              {[
+                { label: "Configuration", val: "60° V12" },
+                { label: "Displacement", val: "6.5L" },
+                { label: "Fuel", val: "Direct Injection" },
+                { label: "Max RPM", val: "11,000" },
+                { label: "Lubrication", val: "Dry Sump" },
+                { label: "Sump Tank", val: "Inline Filtration" },
+              ].map((card, cIdx) => (
+                <g key={`spec-card-${cIdx}`} transform={`translate(0, ${cIdx * 25})`}>
+                  {/* Card Background */}
+                  <rect
+                    x="0"
+                    y="0"
+                    width="106"
+                    height="21"
+                    rx="4"
+                    fill="#070a12"
+                    fillOpacity="0.85"
+                    stroke="#1e293b"
+                    strokeWidth="1"
+                  />
+                  {/* Accent Left Bar */}
+                  <rect x="0" y="0" width="2.5" height="21" rx="1" fill="#0284c7" />
+                  {/* Spec Label */}
+                  <text x="7" y="9" fill="#94a3b8" fontSize="5.5" fontWeight="600" fontFamily="sans-serif" textAnchor="start">
+                    {card.label}
+                  </text>
+                  {/* Spec Value */}
+                  <text x="7" y="17" fill="#f8fafc" fontSize="7.5" fontWeight="bold" fontFamily="monospace" textAnchor="start">
+                    {card.val}
+                  </text>
+                </g>
+              ))}
+            </g>
+          </g>
+        )}
       </svg>
     </div>
   );

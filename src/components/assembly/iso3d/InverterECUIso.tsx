@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import type { ComponentId } from "../../../sim/assemblyTypes";
 import { getIsoBoxFacets } from "./isoMath";
 
@@ -21,20 +21,13 @@ interface InverterECUIsoProps {
   onHoverComponent?: (id: ComponentId | null) => void;
 }
 
-export const InverterECUIso: React.FC<InverterECUIsoProps> = ({
+const InverterECUIsoComponent: React.FC<InverterECUIsoProps> = ({
   layoutSpec,
   componentState,
   onHoverComponent,
 }) => {
-  const originScreen = { x: 250, y: 230 };
-
-  const origin3D = {
-    x: -35,
-    y: -30,
-    z: 225, // Mounted over valve cover deck surface!
-  };
-
-  const facets = getIsoBoxFacets(origin3D, 70, 60, 20, originScreen);
+  const originScreen = useMemo(() => ({ x: 250, y: 230 }), []);
+  const facets = useMemo(() => getIsoBoxFacets({ x: -35, y: -30, z: 225 }, 70, 60, 20, originScreen), [originScreen]);
 
   return (
     <g
@@ -47,13 +40,11 @@ export const InverterECUIso: React.FC<InverterECUIsoProps> = ({
         opacity: componentState.opacity,
       }}
     >
-      <path d={facets.left} fill="url(#slate-block-artwork)" stroke="#090d16" strokeWidth="2.2" />
-      <path d={facets.right} fill="url(#slate-block-artwork)" stroke="#090d16" strokeWidth="2.2" />
-      <path d={facets.top} fill="url(#iso-billet-top)" stroke="#090d16" strokeWidth="2.5" />
-      <path d={facets.top} fill="none" stroke="#38bdf8" strokeWidth="1.5" opacity="0.9" />
-
-      {/* Status Signal LED */}
-      <circle cx={facets.top.indexOf("M") !== -1 ? 250 : 250} cy="115" r="2.5" fill="#38bdf8" className="animate-pulse" />
+      <polygon points={facets.top} fill="url(#iso-forged-top)" stroke="#0f172a" strokeWidth="1.5" />
+      <polygon points={facets.left} fill="url(#iso-forged-left)" stroke="#0f172a" strokeWidth="1.5" />
+      <polygon points={facets.right} fill="url(#iso-forged-right)" stroke="#0f172a" strokeWidth="1.5" />
     </g>
   );
 };
+
+export const InverterECUIso = React.memo(InverterECUIsoComponent);

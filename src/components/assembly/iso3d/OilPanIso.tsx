@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import type { ComponentId } from "../../../sim/assemblyTypes";
 import { projectIso } from "./isoMath";
 import { getIsoMaterialFills } from "./isoShaders";
@@ -24,25 +24,17 @@ interface OilPanIsoProps {
 }
 
 /**
- * Photorealistic 3D Isometric High-Performance Billet Aluminium Oil Pan & Dry-Sump Assembly
- *
- * Mated to the bottom crankcase rail of the V12 Engine (Z = 20 down to Z = -20):
- * - Stepped Sump Architecture: Shallow front clearing crossmember & Deep rear oil reservoir bay
- * - Heavy CNC Machined Top Perimeter Flange Rail with 24 Mounting Bolts & Viton Gasket
- * - Cast Cooling Fins & External Structural Stiffness Ribs along bottom sump floor
- * - AN-12 Braided Scavenge Line Fittings & Oil Temperature Sensor Ports
- * - Magnetic Hex Head Drain Plug with Copper Crush Washer
- * - Laser-Etched "V12 MOTORSPORT DRY-SUMP" Identification Badge Plate
+ * Photorealistic 3D Isometric High-Performance Billet Aluminium Oil Pan & Dry-Sump Assembly (Optimized)
  */
-export const OilPanIso: React.FC<OilPanIsoProps> = ({
+const OilPanIsoComponent: React.FC<OilPanIsoProps> = ({
   layoutSpec,
   componentState,
   selectedVariants,
   onHoverComponent,
 }) => {
-  const O = { x: 250, y: 215 }; // Canvas origin sync with V12 block
+  const O = useMemo(() => ({ x: 250, y: 215 }), []);
   const materialGrade = selectedVariants?.oil_pan || "billet";
-  const fills = getIsoMaterialFills(materialGrade);
+  const fills = useMemo(() => getIsoMaterialFills(materialGrade), [materialGrade]);
 
   const BL = 230; // Block length (-115 to +115)
   const halfL = BL / 2;
@@ -369,3 +361,5 @@ export const OilPanIso: React.FC<OilPanIsoProps> = ({
     </g>
   );
 };
+
+export const OilPanIso = React.memo(OilPanIsoComponent);

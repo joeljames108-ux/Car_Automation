@@ -2,10 +2,10 @@ import React, { useState } from "react";
 import { Car, Disc, Settings, Cpu, Shield, Sparkles, Wrench, Play } from "lucide-react";
 import { useDesign } from "../state/DesignContext";
 import { Section, Slider, Select, ChoiceGrid, Toggle, StatTile } from "./ui/Controls";
-import { PLATFORMS, CHASSIS_TYPES, SUSPENSION_TYPES, TRANSMISSION_TYPES, BRAKE_TYPES, TIRE_COMPOUNDS, DRIVE_TYPES, ENGINE_POSITIONS } from "../sim/constants";
+import { PLATFORMS, CHASSIS_TYPES, SUSPENSION_TYPES, BRAKE_TYPES, TIRE_COMPOUNDS, DRIVE_TYPES, ENGINE_POSITIONS } from "../sim/constants";
 import { VEHICLE_PRESET_LIBRARY } from "../sim/vehiclePresets";
 import { PresetQuickSelect } from "./PresetQuickSelect";
-import type { PlatformType, ChassisType, SuspensionType, TransmissionType, BrakeType, TireCompound, DriveType, EnginePosition, VehicleConfig } from "../sim/types";
+import type { PlatformType, ChassisType, SuspensionType, BrakeType, TireCompound, DriveType, EnginePosition, VehicleConfig } from "../sim/types";
 
 import { useVehicleAssemblyStore } from "../state/useVehicleAssemblyStore";
 import { VehicleAssemblyViewer } from "./vehicleAssembly/VehicleAssemblyViewer";
@@ -299,15 +299,6 @@ export function VehicleDesigner() {
           </div>
         </Section>
 
-        <Section title="Transmission" icon={<Cpu size={16} />}>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-2">
-            <Select<TransmissionType> label="Gearbox Type" value={v.transmission} options={(Object.keys(TRANSMISSION_TYPES) as TransmissionType[]).map((t) => ({ value: t, label: TRANSMISSION_TYPES[t].label }))} onChange={(val) => updateVehicle({ transmission: val, gearCount: TRANSMISSION_TYPES[val].gearCount })} />
-            <Slider label="Final Drive" value={v.finalDrive} min={2.5} max={5.5} step={0.1} onChange={(val) => updateVehicle({ finalDrive: val })} />
-            <Select label="Differential" value={v.diffType} options={[{ value: "open", label: "Open" }, { value: "lsd", label: "LSD" }, { value: "torsen", label: "Torsen" }, { value: "active", label: "Active" }, { value: "locked", label: "Locked" }]} onChange={(val) => updateVehicle({ diffType: val as VehicleConfig["diffType"] })} />
-            <Slider label="Diff Preload" value={v.diffPreload} min={0} max={1} step={0.05} format={(val) => `${(val * 100).toFixed(0)}%`} onChange={(val) => updateVehicle({ diffPreload: val })} />
-          </div>
-          <p className="text-[11px] text-slate-500 font-mono mt-1">{TRANSMISSION_TYPES[v.transmission].description}</p>
-        </Section>
 
         <Section title="Electronics" icon={<Shield size={16} />}>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">

@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useMemo } from "react";
 import type { ComponentId } from "../../../sim/assemblyTypes";
-import { projectIso, projectIso60VEllipse } from "./isoMath";
+import { projectIso, projectIso60VEllipse, projectIsoEllipse } from "./isoMath";
 import { getIsoMaterialFills } from "./isoShaders";
 
 interface IntakeManifoldIsoProps {
@@ -25,280 +25,66 @@ interface IntakeManifoldIsoProps {
 }
 
 /**
- * Photorealistic 3D Isometric Individual Velocity Stack (ITB) Intake System
+ * ═══════════════════════════════════════════════════════════════════
+ * 3D ISOMETRIC INTAKE MANIFOLD & ITB SYSTEM — Multi-Architecture
+ * ═══════════════════════════════════════════════════════════════════
  *
- * 12 chrome-polished trumpet funnels (6 per bank) replacing the former plenum boxes.
- * Each stack features:
- * - Tapered bell-mouth trumpet body with chrome gradient
- * - Visible brass butterfly throttle disc inside
- * - Individual port mounting flange ring
- * - Anodized red fuel rail with injectors between stacks
+ * Dynamically builds intake systems per architecture:
+ * - Inline (I3, I4, I6): Forward-facing carbon/billet plenum with individual velocity stack runners
+ * - V-Bank (V6, V8, V10, V12): Dual bank individual throttle bodies (ITBs) or cross-ram intake
+ * - Boxer (H4, H6): Symmetrical dual-plenum intake runners
+ * - W-Bank: Central quad-feed plenum box
  */
-export const IntakeManifoldIso: React.FC<IntakeManifoldIsoProps> = ({
+const IntakeManifoldIsoComponent: React.FC<IntakeManifoldIsoProps> = ({
   layoutSpec,
   componentState,
   selectedVariants,
   onHoverComponent,
 }) => {
-  const O = { x: 250, y: 215 };
+  const O = useMemo(() => ({ x: 250, y: 215 }), []);
   const materialGrade = selectedVariants?.intake_manifold || "carbon";
-  const fills = getIsoMaterialFills(materialGrade);
+  const fills = useMemo(() => getIsoMaterialFills(materialGrade), [materialGrade]);
 
-  const isVEngine = layoutSpec.category === "V" || layoutSpec.label?.includes("V") || layoutSpec.cyls.length >= 8;
-
-  // Bore positions matching V12 block (6 per bank, 34px spacing starting at -85)
-  const BORE_SPACING = 34;
-  const BORE_START_X = -85;
-  const borePositions = Array.from({ length: 6 }, (_, i) => BORE_START_X + i * BORE_SPACING);
-
-  // Bank bore center coordinates (matching VBankBlockCastingIso)
-  const LEFT_BORE_Y = 48;
-  const LEFT_BORE_Z = 145;
-  const RIGHT_BORE_Y = -48;
-  const RIGHT_BORE_Z = 145;
-
-  // Velocity stack dimensions
-  const STACK_HEIGHT = 42;      // Total height of each trumpet
-  const STACK_BASE_R = 8;       // Radius at port base (narrow)
-  const STACK_MOUTH_R = 14;     // Radius at top bellmouth (wide)
-  const STACK_MID_R = 7;        // Narrowest waist
+  const cat = (layoutSpec.category || "").toLowerCase();
+  const label = (layoutSpec.label || "").toLowerCase();
+  const isV = cat === "vbank" || label.includes("v-") || label.includes("v6") || label.includes("v8") || label.includes("v10") || label.includes("v12");
+  const isBoxer = cat === "flat" || label.includes("boxer") || label.includes("h4") || label.includes("h6");
+  const isW = cat === "wbank" || label.includes("w12") || label.includes("w16") || label.includes("w18");
 
   const P = (x: number, y: number, z: number) => projectIso({ x, y, z }, O);
 
-  /**
-   * Render a single velocity stack trumpet at given bank position
-   */
-  const renderVelocityStack = (
-    boreX: number,
-    boreY: number,
-    boreZ: number,
-    bank: "left" | "right",
-    idx: number,
-    prefix: string
-  ) => {
-    // Stack position: sits on top of the bore, extending upward
-    const portBase = P(boreX, boreY, boreZ + 2);   // Bottom (port flange)
-    const stackWaist = P(boreX, boreY, boreZ + 18); // Narrowest point
-    const stackMouth = P(boreX, boreY, boreZ + STACK_HEIGHT); // Top bellmouth
+  const config = useMemo(() => {
+    if (isBoxer) {
+      const isH6 = label.includes("h6") || label.includes("6");
+      const xPositions = isH6 ? [-50, 0, 50] : [-30, 30];
+      return { isDual: true, xPositions, leftY: 45, rightY: -45, topZ: 145 };
+    }
+    if (isV || isW) {
+      let xPositions = [-85, -51, -17, 17, 51, 85];
+      if (label.includes("v6") || label.includes("w12")) {
+        xPositions = [-38, 0, 38];
+      } else if (label.includes("v8") || label.includes("w16")) {
+        xPositions = [-54, -18, 18, 54];
+      } else if (label.includes("v10")) {
+        xPositions = [-70, -35, 0, 35, 70];
+      }
+      return { isDual: true, xPositions, leftY: 42, rightY: -42, topZ: 185 };
+    }
+    // Inline (I3, I4, I6)
+    let xPositions = [-54, -18, 18, 54];
+    if (label.includes("i3") || layoutSpec.cyls.length === 3) {
+      xPositions = [-38, 0, 38];
+    } else if (label.includes("i6") || layoutSpec.cyls.length === 6) {
+      xPositions = [-85, -51, -17, 17, 51, 85];
+    }
+    return { isDual: false, xPositions, leftY: 0, rightY: 0, topZ: 185 };
+  }, [isBoxer, isV, isW, label, layoutSpec.cyls.length]);
 
-    // Get tilted bore ellipse for port flange alignment
-    const boreEllipse = projectIso60VEllipse(
-      { x: boreX, y: boreY, z: boreZ },
-      STACK_BASE_R, bank, O
-    );
-
-    // Bellmouth ellipse (larger, at top)
-    const mouthEllipse = projectIso60VEllipse(
-      { x: boreX, y: boreY, z: boreZ + STACK_HEIGHT },
-      STACK_MOUTH_R, bank, O
-    );
-
-    // Waist ellipse (narrowest)
-    const waistEllipse = projectIso60VEllipse(
-      { x: boreX, y: boreY, z: boreZ + 18 },
-      STACK_MID_R, bank, O
-    );
-
-    // Trumpet body curvature — left/right sides of the trumpet profile
-    const bodyLeftBase = P(boreX, boreY + (bank === "left" ? STACK_BASE_R : -STACK_BASE_R), boreZ + 2);
-    const bodyRightBase = P(boreX, boreY + (bank === "left" ? -STACK_BASE_R : STACK_BASE_R), boreZ + 2);
-    const bodyLeftWaist = P(boreX, boreY + (bank === "left" ? STACK_MID_R : -STACK_MID_R), boreZ + 18);
-    const bodyRightWaist = P(boreX, boreY + (bank === "left" ? -STACK_MID_R : STACK_MID_R), boreZ + 18);
-    const bodyLeftMouth = P(boreX, boreY + (bank === "left" ? STACK_MOUTH_R : -STACK_MOUTH_R), boreZ + STACK_HEIGHT);
-    const bodyRightMouth = P(boreX, boreY + (bank === "left" ? -STACK_MOUTH_R : STACK_MOUTH_R), boreZ + STACK_HEIGHT);
-
-    return (
-      <g key={`${prefix}-velocity-stack-${idx}`}>
-        {/* Trumpet body — chrome polished bell curve */}
-        <path
-          d={`M ${bodyLeftBase.x} ${bodyLeftBase.y}
-              Q ${bodyLeftWaist.x - 2} ${bodyLeftWaist.y} ${bodyLeftMouth.x} ${bodyLeftMouth.y}
-              L ${bodyRightMouth.x} ${bodyRightMouth.y}
-              Q ${bodyRightWaist.x + 2} ${bodyRightWaist.y} ${bodyRightBase.x} ${bodyRightBase.y}
-              Z`}
-          fill="url(#chrome-polished-trumpet)"
-          stroke="#090d16"
-          strokeWidth="1.8"
-        />
-
-        {/* Specular highlight streak down center of trumpet */}
-        <path
-          d={`M ${(bodyLeftBase.x + bodyRightBase.x) / 2} ${(bodyLeftBase.y + bodyRightBase.y) / 2 - 1}
-              Q ${(bodyLeftWaist.x + bodyRightWaist.x) / 2} ${(bodyLeftWaist.y + bodyRightWaist.y) / 2 - 2} ${(bodyLeftMouth.x + bodyRightMouth.x) / 2} ${(bodyLeftMouth.y + bodyRightMouth.y) / 2 - 1}`}
-          fill="none"
-          stroke="#ffffff"
-          strokeWidth="2.5"
-          strokeLinecap="round"
-          opacity="0.85"
-        />
-
-        {/* Second highlight line (chrome double-reflection) */}
-        <path
-          d={`M ${bodyLeftBase.x + 3} ${bodyLeftBase.y - 0.5}
-              Q ${bodyLeftWaist.x + 1} ${bodyLeftWaist.y - 1} ${bodyLeftMouth.x + 2} ${bodyLeftMouth.y - 0.5}`}
-          fill="none"
-          stroke="#e2e8f0"
-          strokeWidth="1.2"
-          strokeLinecap="round"
-          opacity="0.55"
-        />
-
-        {/* Top bellmouth opening — dark interior */}
-        <ellipse
-          cx={mouthEllipse.cx}
-          cy={mouthEllipse.cy}
-          rx={mouthEllipse.rx}
-          ry={mouthEllipse.ry}
-          fill="url(#velocity-stack-bellmouth)"
-          stroke="#090d16"
-          strokeWidth="1.5"
-          transform={`rotate(${mouthEllipse.tiltDeg}, ${mouthEllipse.cx}, ${mouthEllipse.cy})`}
-        />
-
-        {/* Bellmouth electric blue anodized outer lip ring (matching reference image) */}
-        <ellipse
-          cx={mouthEllipse.cx}
-          cy={mouthEllipse.cy}
-          rx={mouthEllipse.rx + 2.5}
-          ry={mouthEllipse.ry + 1.8}
-          fill="url(#electric-blue-lip)"
-          stroke="#090d16"
-          strokeWidth="1.8"
-          transform={`rotate(${mouthEllipse.tiltDeg}, ${mouthEllipse.cx}, ${mouthEllipse.cy})`}
-        />
-
-        {/* Inner chrome rim highlight on blue lip */}
-        <ellipse
-          cx={mouthEllipse.cx}
-          cy={mouthEllipse.cy}
-          rx={mouthEllipse.rx + 0.5}
-          ry={mouthEllipse.ry + 0.3}
-          fill="none"
-          stroke="#ffffff"
-          strokeWidth="1.5"
-          opacity="0.95"
-          transform={`rotate(${mouthEllipse.tiltDeg}, ${mouthEllipse.cx}, ${mouthEllipse.cy})`}
-        />
-
-        {/* Brass butterfly valve disc visible inside (angled) */}
-        <ellipse
-          cx={mouthEllipse.cx}
-          cy={mouthEllipse.cy}
-          rx={mouthEllipse.rx * 0.35}
-          ry={mouthEllipse.ry * 0.9}
-          fill="url(#brass-butterfly-disc)"
-          stroke="#92400e"
-          strokeWidth="0.8"
-          opacity="0.7"
-          transform={`rotate(${mouthEllipse.tiltDeg + 25}, ${mouthEllipse.cx}, ${mouthEllipse.cy})`}
-        />
-
-        {/* Port mounting flange ring at base */}
-        <ellipse
-          cx={boreEllipse.cx}
-          cy={boreEllipse.cy}
-          rx={boreEllipse.rx + 3}
-          ry={boreEllipse.ry + 2}
-          fill="url(#bolt-boss-raised)"
-          stroke="#090d16"
-          strokeWidth="1.3"
-          transform={`rotate(${boreEllipse.tiltDeg}, ${boreEllipse.cx}, ${boreEllipse.cy})`}
-        />
-
-        {/* 2 flange mounting bolts per stack (gold accent) */}
-        {[-1, 1].map((side) => {
-          const boltPt = P(
-            boreX + side * (STACK_BASE_R + 2),
-            boreY,
-            boreZ + 4
-          );
-          return (
-            <circle
-              key={`${prefix}-stack-bolt-${idx}-${side}`}
-              cx={boltPt.x}
-              cy={boltPt.y}
-              r="1.8"
-              fill="url(#gold-anodized-bolt)"
-              stroke="#78350f"
-              strokeWidth="0.6"
-            />
-          );
-        })}
-      </g>
-    );
-  };
-
-  /**
-   * Render a fuel rail with injectors for a bank
-   */
-  const renderFuelRail = (
-    boreY: number,
-    boreZ: number,
-    bank: "left" | "right",
-    prefix: string
-  ) => {
-    const railZ = boreZ + 12; // Rail sits between port base and waist
-    const railStartPt = P(BORE_START_X - 10, boreY, railZ);
-    const railEndPt = P(BORE_START_X + 5 * BORE_SPACING + 10, boreY, railZ);
-
-    return (
-      <g id={`${prefix}-fuel-rail-system`}>
-        {/* Main fuel rail tube (anodized red) */}
-        <line
-          x1={railStartPt.x} y1={railStartPt.y}
-          x2={railEndPt.x} y2={railEndPt.y}
-          stroke="url(#anodized-fuel-rail)"
-          strokeWidth="5"
-          strokeLinecap="round"
-        />
-        {/* Rail highlight streak */}
-        <line
-          x1={railStartPt.x} y1={railStartPt.y - 1.5}
-          x2={railEndPt.x} y2={railEndPt.y - 1.5}
-          stroke="#fca5a5"
-          strokeWidth="1.2"
-          strokeLinecap="round"
-          opacity="0.7"
-        />
-
-        {/* Fuel rail end fitting (AN fitting) */}
-        <circle
-          cx={railEndPt.x + 4}
-          cy={railEndPt.y}
-          r="4"
-          fill="url(#bolt-boss-raised)"
-          stroke="#090d16"
-          strokeWidth="1.2"
-        />
-
-        {/* Individual fuel injectors — 6 per rail */}
-        {borePositions.map((boreX, idx) => {
-          const injBase = P(boreX, boreY, railZ);
-          const injTip = P(boreX, boreY, boreZ + 3);
-          return (
-            <g key={`${prefix}-injector-${idx}`}>
-              {/* Injector body */}
-              <line
-                x1={injBase.x} y1={injBase.y}
-                x2={injTip.x} y2={injTip.y}
-                stroke="#0f172a"
-                strokeWidth="4"
-                strokeLinecap="round"
-              />
-              {/* Injector connector (electrical) */}
-              <circle cx={injBase.x} cy={injBase.y} r="2.5" fill="#0f172a" stroke="#38bdf8" strokeWidth="1" />
-              {/* Injector nozzle tip */}
-              <circle cx={injTip.x} cy={injTip.y} r="1.5" fill="#475569" stroke="#090d16" strokeWidth="0.6" />
-            </g>
-          );
-        })}
-      </g>
-    );
-  };
+  const { isDual, xPositions, leftY, rightY, topZ } = config;
 
   return (
     <g
-      id="iso-intake-manifold-v12-velocity-stacks"
+      id="iso-intake-manifold-assembly"
       onMouseEnter={() => onHoverComponent?.("intake_manifold")}
       onMouseLeave={() => onHoverComponent?.(null)}
       className="cursor-pointer transition-all duration-700 ease-out"
@@ -307,33 +93,109 @@ export const IntakeManifoldIso: React.FC<IntakeManifoldIsoProps> = ({
         opacity: componentState.opacity,
       }}
     >
-      {isVEngine ? (
-        /* ── 12 INDIVIDUAL VELOCITY STACK TRUMPETS FOR V12 (6 per bank) ── */
-        <g id="v12-velocity-stack-intake-system">
-          {/* ── RIGHT BANK (rear/distal) — render first for depth sorting ── */}
-          <g id="right-bank-velocity-stacks">
-            {borePositions.map((boreX, idx) =>
-              renderVelocityStack(boreX, RIGHT_BORE_Y, RIGHT_BORE_Z, "right", idx, "right")
-            )}
-            {renderFuelRail(RIGHT_BORE_Y, RIGHT_BORE_Z, "right", "right")}
-          </g>
+      {/* ── DUAL BANK VELOCITY STACKS (V-Bank & Boxer) ── */}
+      {isDual ? (
+        <>
+          {/* Left Bank ITB Trumpets */}
+          {xPositions.map((bx, idx) => {
+            const basePt = P(bx, leftY, topZ);
+            const topPt = P(bx, leftY, topZ + 36);
+            const bellmouth = projectIso60VEllipse({ x: bx, y: leftY, z: topZ + 36 }, 13, "left", O);
+            return (
+              <g key={`left-stack-${idx}`}>
+                <line x1={basePt.x} y1={basePt.y} x2={topPt.x} y2={topPt.y} stroke={fills.left} strokeWidth="12" strokeLinecap="round" />
+                <ellipse cx={bellmouth.cx} cy={bellmouth.cy} rx={bellmouth.rx} ry={bellmouth.ry}
+                  transform={`rotate(${bellmouth.tiltDeg}, ${bellmouth.cx}, ${bellmouth.cy})`}
+                  fill={fills.top} stroke="#38bdf8" strokeWidth="1.2" />
+                <circle cx={bellmouth.cx} cy={bellmouth.cy} r={4.5} fill="#020617" />
+              </g>
+            );
+          })}
 
-          {/* ── LEFT BANK (front/proximal) — render second (in front) ── */}
-          <g id="left-bank-velocity-stacks">
-            {borePositions.map((boreX, idx) =>
-              renderVelocityStack(boreX, LEFT_BORE_Y, LEFT_BORE_Z, "left", idx, "left")
-            )}
-            {renderFuelRail(LEFT_BORE_Y, LEFT_BORE_Z, "left", "left")}
-          </g>
-        </g>
+          {/* Right Bank ITB Trumpets */}
+          {xPositions.map((bx, idx) => {
+            const basePt = P(bx, rightY, topZ);
+            const topPt = P(bx, rightY, topZ + 36);
+            const bellmouth = projectIso60VEllipse({ x: bx, y: rightY, z: topZ + 36 }, 13, "right", O);
+            return (
+              <g key={`right-stack-${idx}`}>
+                <line x1={basePt.x} y1={basePt.y} x2={topPt.x} y2={topPt.y} stroke={fills.right} strokeWidth="12" strokeLinecap="round" />
+                <ellipse cx={bellmouth.cx} cy={bellmouth.cy} rx={bellmouth.rx} ry={bellmouth.ry}
+                  transform={`rotate(${bellmouth.tiltDeg}, ${bellmouth.cx}, ${bellmouth.cy})`}
+                  fill={fills.top} stroke="#38bdf8" strokeWidth="1.2" />
+                <circle cx={bellmouth.cx} cy={bellmouth.cy} r={4.5} fill="#020617" />
+              </g>
+            );
+          })}
+
+          {/* Central Carbon Fiber Intake Fuel Rail */}
+          {(() => {
+            const railL = P(xPositions[0] - 12, 0, topZ + 22);
+            const railR = P(xPositions[xPositions.length - 1] + 12, 0, topZ + 22);
+            return (
+              <g>
+                <line x1={railL.x} y1={railL.y} x2={railR.x} y2={railR.y} stroke="#0284c7" strokeWidth="5" strokeLinecap="round" />
+                <line x1={railL.x} y1={railL.y - 1} x2={railR.x} y2={railR.y - 1} stroke="#38bdf8" strokeWidth="1.5" strokeLinecap="round" />
+              </g>
+            );
+          })()}
+        </>
       ) : (
-        /* Standard Single Stack Row for Inline Engine */
-        <g id="inline-intake-system">
-          {borePositions.map((boreX, idx) =>
-            renderVelocityStack(boreX, 0, 145, "left", idx, "inline")
-          )}
-        </g>
+        /* ── SINGLE INLINE PLENUM & CURVED RUNNERS ── */
+        (() => {
+          const minX = xPositions[0] - 16;
+          const maxX = xPositions[xPositions.length - 1] + 16;
+          const pStart = P(minX, -28, topZ + 20);
+          const pEnd = P(maxX, -28, topZ + 20);
+
+          return (
+            <g id="inline-plenum-assembly">
+              {/* Individual curved intake runners */}
+              {xPositions.map((bx, idx) => {
+                const portPt = P(bx, 0, topZ);
+                const plenumPt = P(bx, -28, topZ + 20);
+                return (
+                  <g key={`inline-runner-${idx}`}>
+                    <path
+                      d={`M ${portPt.x} ${portPt.y} Q ${portPt.x - 5} ${portPt.y - 15} ${plenumPt.x} ${plenumPt.y}`}
+                      stroke={fills.left}
+                      strokeWidth="11"
+                      fill="none"
+                      strokeLinecap="round"
+                    />
+                    <path
+                      d={`M ${portPt.x} ${portPt.y} Q ${portPt.x - 5} ${portPt.y - 15} ${plenumPt.x} ${plenumPt.y}`}
+                      stroke="#38bdf8"
+                      strokeWidth="1.2"
+                      fill="none"
+                      opacity="0.4"
+                    />
+                  </g>
+                );
+              })}
+
+              {/* Main Carbon Plenum Chamber Tube */}
+              <line x1={pStart.x} y1={pStart.y} x2={pEnd.x} y2={pEnd.y} stroke="url(#carbon-twill)" strokeWidth="22" strokeLinecap="round" />
+              <line x1={pStart.x} y1={pStart.y} x2={pEnd.x} y2={pEnd.y} stroke="#090d16" strokeWidth="23" strokeLinecap="round" opacity="0.3" />
+              <line x1={pStart.x} y1={pStart.y - 4} x2={pEnd.x} y2={pEnd.y - 4} stroke="#ffffff" strokeWidth="2" opacity="0.6" strokeLinecap="round" />
+
+              {/* Big Throttle Body Inlet at front end */}
+              {(() => {
+                const tbPt = P(minX - 10, -28, topZ + 20);
+                return (
+                  <g>
+                    <circle cx={tbPt.x} cy={tbPt.y} r={14} fill="#0f172a" stroke="#38bdf8" strokeWidth="1.5" />
+                    <circle cx={tbPt.x} cy={tbPt.y} r={9} fill="#020617" />
+                    <ellipse cx={tbPt.x} cy={tbPt.y} rx={8} ry={2} fill="#eab308" opacity="0.7" />
+                  </g>
+                );
+              })()}
+            </g>
+          );
+        })()
       )}
     </g>
   );
 };
+
+export const IntakeManifoldIso = React.memo(IntakeManifoldIsoComponent);

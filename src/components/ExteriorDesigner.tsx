@@ -27,7 +27,7 @@ function BodyPreview({ bodyType, finish }: {
 }) {
   return (
     <div className="relative bg-gradient-to-b from-base-900 to-base-950 rounded-lg overflow-hidden border border-base-800">
-      <img src="/agera.png" alt="Car Preview" className="w-full h-auto block" />
+      <img src="/agera.png" alt="Car Preview" loading="lazy" decoding="async" className="w-full h-auto block" />
 
       {/* finish label */}
       <div className="absolute top-2 left-2 text-[9px] font-mono text-slate-500 uppercase tracking-wider">

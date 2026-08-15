@@ -202,6 +202,8 @@ export function ComponentLibrary({
                       <img
                         src={COMPONENT_PNG_MAP[comp.id]}
                         alt={comp.name}
+                        loading="lazy"
+                        decoding="async"
                         className="w-full h-full object-contain filter drop-shadow-md group-hover:scale-110 transition-transform duration-300"
                       />
                     ) : (

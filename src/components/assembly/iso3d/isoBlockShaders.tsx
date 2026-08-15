@@ -32,78 +32,92 @@ export const IsoBlockShaderDefs: React.FC = () => {
         </feMerge>
       </filter>
 
-      {/* ── 2. DEEP CYLINDER BORE RADIAL SHADERS ── */}
+      {/* ── 2. DEEP CYLINDER BORE RADIAL SHADERS (Cobalt Blue with High-Gloss Specular Domes) ── */}
       <radialGradient id="bore-3d-depth" cx="35%" cy="30%" r="70%">
-        <stop offset="0%" stopColor="#475569" stopOpacity="0.9" />
-        <stop offset="25%" stopColor="#1e293b" stopOpacity="0.95" />
-        <stop offset="60%" stopColor="#0f172a" stopOpacity="1" />
-        <stop offset="85%" stopColor="#020617" stopOpacity="1" />
-        <stop offset="100%" stopColor="#000000" stopOpacity="1" />
+        <stop offset="0%" stopColor="#3b82f6" stopOpacity="0.95" />
+        <stop offset="25%" stopColor="#1d4ed8" stopOpacity="1" />
+        <stop offset="60%" stopColor="#1e3a8a" stopOpacity="1" />
+        <stop offset="85%" stopColor="#0f172a" stopOpacity="1" />
+        <stop offset="100%" stopColor="#020617" stopOpacity="1" />
       </radialGradient>
 
-      {/* ── 3. V-BANK WALL & DECK GRADIENTS ── */}
+      <radialGradient id="bore-cobalt-dome" cx="40%" cy="35%" r="65%">
+        <stop offset="0%" stopColor="#60a5fa" />
+        <stop offset="30%" stopColor="#2563eb" />
+        <stop offset="70%" stopColor="#1e3a8a" />
+        <stop offset="100%" stopColor="#0a192f" />
+      </radialGradient>
+
+      <radialGradient id="bore-specular-highlight" cx="30%" cy="25%" r="50%">
+        <stop offset="0%" stopColor="#ffffff" stopOpacity="0.95" />
+        <stop offset="35%" stopColor="#93c5fd" stopOpacity="0.6" />
+        <stop offset="70%" stopColor="#3b82f6" stopOpacity="0.1" />
+        <stop offset="100%" stopColor="#1e3a8a" stopOpacity="0" />
+      </radialGradient>
+
+      {/* ── 3. V-BANK WALL & DECK GRADIENTS (Refined Aluminum Tones) ── */}
       <linearGradient id="v-bank-left-wall" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stopColor="#64748b" />
-        <stop offset="35%" stopColor="#475569" />
-        <stop offset="70%" stopColor="#334155" />
-        <stop offset="100%" stopColor="#1e293b" />
-      </linearGradient>
-
-      <linearGradient id="v-bank-right-wall" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stopColor="#334155" />
-        <stop offset="45%" stopColor="#1e293b" />
-        <stop offset="80%" stopColor="#0f172a" />
-        <stop offset="100%" stopColor="#020617" />
-      </linearGradient>
-
-      <linearGradient id="v-deck-surface-left" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stopColor="#cbd5e1" />
-        <stop offset="40%" stopColor="#94a3b8" />
-        <stop offset="75%" stopColor="#64748b" />
-        <stop offset="100%" stopColor="#475569" />
-      </linearGradient>
-
-      <linearGradient id="v-deck-surface-right" x1="0%" y1="0%" x2="100%" y2="100%">
         <stop offset="0%" stopColor="#94a3b8" />
-        <stop offset="50%" stopColor="#64748b" />
-        <stop offset="85%" stopColor="#475569" />
+        <stop offset="35%" stopColor="#64748b" />
+        <stop offset="70%" stopColor="#475569" />
         <stop offset="100%" stopColor="#334155" />
       </linearGradient>
 
-      <radialGradient id="v-valley-floor" cx="50%" cy="40%" r="60%">
-        <stop offset="0%" stopColor="#1e293b" />
-        <stop offset="40%" stopColor="#0f172a" />
-        <stop offset="85%" stopColor="#020617" />
-        <stop offset="100%" stopColor="#000000" />
-      </radialGradient>
-
-      <linearGradient id="bore-wall-thickness" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stopColor="#e2e8f0" />
-        <stop offset="40%" stopColor="#94a3b8" />
-        <stop offset="80%" stopColor="#475569" />
+      <linearGradient id="v-bank-right-wall" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stopColor="#64748b" />
+        <stop offset="45%" stopColor="#475569" />
+        <stop offset="80%" stopColor="#334155" />
         <stop offset="100%" stopColor="#1e293b" />
       </linearGradient>
 
-      <linearGradient id="lifting-bracket-cast" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stopColor="#94a3b8" />
-        <stop offset="45%" stopColor="#475569" />
+      <linearGradient id="v-deck-surface-left" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stopColor="#f1f5f9" />
+        <stop offset="40%" stopColor="#cbd5e1" />
+        <stop offset="75%" stopColor="#94a3b8" />
+        <stop offset="100%" stopColor="#64748b" />
+      </linearGradient>
+
+      <linearGradient id="v-deck-surface-right" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stopColor="#cbd5e1" />
+        <stop offset="50%" stopColor="#94a3b8" />
+        <stop offset="85%" stopColor="#64748b" />
+        <stop offset="100%" stopColor="#475569" />
+      </linearGradient>
+
+      <radialGradient id="v-valley-floor" cx="50%" cy="40%" r="60%">
+        <stop offset="0%" stopColor="#475569" />
+        <stop offset="40%" stopColor="#334155" />
         <stop offset="85%" stopColor="#1e293b" />
-        <stop offset="100%" stopColor="#090d16" />
+        <stop offset="100%" stopColor="#0f172a" />
+      </radialGradient>
+
+      <linearGradient id="bore-wall-thickness" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stopColor="#ffffff" />
+        <stop offset="40%" stopColor="#cbd5e1" />
+        <stop offset="80%" stopColor="#94a3b8" />
+        <stop offset="100%" stopColor="#64748b" />
+      </linearGradient>
+
+      <linearGradient id="lifting-bracket-cast" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stopColor="#cbd5e1" />
+        <stop offset="45%" stopColor="#94a3b8" />
+        <stop offset="85%" stopColor="#475569" />
+        <stop offset="100%" stopColor="#1e293b" />
       </linearGradient>
 
       {/* ── 9. FORGED H-BEAM CONNECTING ROD SHADERS ── */}
       <linearGradient id="rod-hbeam-shank" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stopColor="#e2e8f0" />
-        <stop offset="25%" stopColor="#94a3b8" />
-        <stop offset="60%" stopColor="#475569" />
-        <stop offset="85%" stopColor="#334155" />
-        <stop offset="100%" stopColor="#1e293b" />
+        <stop offset="0%" stopColor="#f8fafc" />
+        <stop offset="25%" stopColor="#cbd5e1" />
+        <stop offset="60%" stopColor="#94a3b8" />
+        <stop offset="85%" stopColor="#64748b" />
+        <stop offset="100%" stopColor="#334155" />
       </linearGradient>
 
       <linearGradient id="rod-recessed-channel" x1="0%" y1="0%" x2="0%" y2="100%">
-        <stop offset="0%" stopColor="#1e293b" />
-        <stop offset="50%" stopColor="#0f172a" />
-        <stop offset="100%" stopColor="#020617" />
+        <stop offset="0%" stopColor="#475569" />
+        <stop offset="50%" stopColor="#334155" />
+        <stop offset="100%" stopColor="#1e293b" />
       </linearGradient>
 
       <radialGradient id="wrist-pin-bushing-bronze" cx="40%" cy="40%" r="60%">
@@ -123,9 +137,9 @@ export const IsoBlockShaderDefs: React.FC = () => {
 
       <radialGradient id="arp-bolt-head-12pt" cx="35%" cy="35%" r="65%">
         <stop offset="0%" stopColor="#ffffff" />
-        <stop offset="30%" stopColor="#94a3b8" />
-        <stop offset="70%" stopColor="#334155" />
-        <stop offset="100%" stopColor="#090d16" />
+        <stop offset="30%" stopColor="#cbd5e1" />
+        <stop offset="70%" stopColor="#64748b" />
+        <stop offset="100%" stopColor="#1e293b" />
       </radialGradient>
 
       {/* ── 10. MULTI-LAYER STEEL (MLS) CYLINDER HEAD GASKET SHADERS ── */}
@@ -150,201 +164,312 @@ export const IsoBlockShaderDefs: React.FC = () => {
       </linearGradient>
 
       <radialGradient id="bore-rim-specular" cx="45%" cy="40%" r="55%">
-        <stop offset="0%" stopColor="#ffffff" stopOpacity="0.95" />
-        <stop offset="35%" stopColor="#cbd5e1" stopOpacity="0.8" />
-        <stop offset="70%" stopColor="#64748b" stopOpacity="0.4" />
-        <stop offset="100%" stopColor="#1e293b" stopOpacity="0" />
+        <stop offset="0%" stopColor="#ffffff" stopOpacity="0.98" />
+        <stop offset="35%" stopColor="#e2e8f0" stopOpacity="0.85" />
+        <stop offset="70%" stopColor="#94a3b8" stopOpacity="0.5" />
+        <stop offset="100%" stopColor="#475569" stopOpacity="0" />
       </radialGradient>
 
       {/* Honing Pattern inside bores */}
       <pattern id="honing-crosshatch-pattern" width="12" height="12" patternUnits="userSpaceOnUse" patternTransform="rotate(35)">
-        <line x1="0" y1="0" x2="12" y2="12" stroke="#64748b" strokeWidth="0.6" strokeOpacity="0.3" />
-        <line x1="0" y1="12" x2="12" y2="0" stroke="#64748b" strokeWidth="0.6" strokeOpacity="0.3" />
+        <line x1="0" y1="0" x2="12" y2="12" stroke="#60a5fa" strokeWidth="0.7" strokeOpacity="0.35" />
+        <line x1="0" y1="12" x2="12" y2="0" stroke="#60a5fa" strokeWidth="0.7" strokeOpacity="0.35" />
       </pattern>
 
       {/* ── 3. MAIN BEARING SADDLE & JOURNAL SHADERS ── */}
       <linearGradient id="bearing-saddle-chrome" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stopColor="#ffffff" stopOpacity="0.9" />
-        <stop offset="20%" stopColor="#94a3b8" />
-        <stop offset="45%" stopColor="#1e293b" />
+        <stop offset="0%" stopColor="#ffffff" stopOpacity="0.95" />
+        <stop offset="20%" stopColor="#cbd5e1" />
+        <stop offset="45%" stopColor="#475569" />
         <stop offset="70%" stopColor="#e2e8f0" />
-        <stop offset="90%" stopColor="#475569" />
-        <stop offset="100%" stopColor="#0f172a" />
+        <stop offset="90%" stopColor="#64748b" />
+        <stop offset="100%" stopColor="#334155" />
       </linearGradient>
 
       <linearGradient id="journal-oil-hole" x1="0%" y1="0%" x2="0%" y2="100%">
-        <stop offset="0%" stopColor="#020617" />
-        <stop offset="50%" stopColor="#090d16" />
-        <stop offset="100%" stopColor="#000000" />
+        <stop offset="0%" stopColor="#0f172a" />
+        <stop offset="50%" stopColor="#1e293b" />
+        <stop offset="100%" stopColor="#020617" />
       </linearGradient>
 
       {/* ── 4. TRAPEZOIDAL RIB SHADERS (TOP / LEFT / RIGHT FACES) ── */}
       <linearGradient id="rib-face-light" x1="0%" y1="0%" x2="0%" y2="100%">
-        <stop offset="0%" stopColor="#cbd5e1" />
-        <stop offset="40%" stopColor="#94a3b8" />
-        <stop offset="80%" stopColor="#64748b" />
-        <stop offset="100%" stopColor="#475569" />
+        <stop offset="0%" stopColor="#e2e8f0" />
+        <stop offset="40%" stopColor="#cbd5e1" />
+        <stop offset="80%" stopColor="#94a3b8" />
+        <stop offset="100%" stopColor="#64748b" />
       </linearGradient>
 
       <linearGradient id="rib-face-mid" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" stopColor="#94a3b8" />
+        <stop offset="50%" stopColor="#64748b" />
+        <stop offset="100%" stopColor="#475569" />
+      </linearGradient>
+
+      <linearGradient id="rib-face-shadow" x1="0%" y1="0%" x2="0%" y2="100%">
         <stop offset="0%" stopColor="#64748b" />
         <stop offset="50%" stopColor="#475569" />
         <stop offset="100%" stopColor="#334155" />
       </linearGradient>
 
-      <linearGradient id="rib-face-shadow" x1="0%" y1="0%" x2="0%" y2="100%">
-        <stop offset="0%" stopColor="#334155" />
-        <stop offset="50%" stopColor="#1e293b" />
-        <stop offset="100%" stopColor="#0f172a" />
-      </linearGradient>
-
       {/* ── 5. RAISED BOLT BOSS & HEX SOCKET SHADERS ── */}
       <radialGradient id="bolt-boss-raised" cx="35%" cy="35%" r="65%">
-        <stop offset="0%" stopColor="#94a3b8" />
-        <stop offset="50%" stopColor="#64748b" />
-        <stop offset="85%" stopColor="#334155" />
-        <stop offset="100%" stopColor="#0f172a" />
+        <stop offset="0%" stopColor="#cbd5e1" />
+        <stop offset="50%" stopColor="#94a3b8" />
+        <stop offset="85%" stopColor="#64748b" />
+        <stop offset="100%" stopColor="#334155" />
       </radialGradient>
 
       <radialGradient id="hex-socket-recess" cx="50%" cy="50%" r="50%">
-        <stop offset="0%" stopColor="#000000" />
-        <stop offset="70%" stopColor="#090d16" />
-        <stop offset="100%" stopColor="#334155" />
+        <stop offset="0%" stopColor="#0f172a" />
+        <stop offset="70%" stopColor="#1e293b" />
+        <stop offset="100%" stopColor="#475569" />
       </radialGradient>
 
       {/* ── 6. COOLANT WATER JACKET OPENING SHADERS ── */}
       <linearGradient id="water-jacket-opening" x1="0%" y1="0%" x2="0%" y2="100%">
-        <stop offset="0%" stopColor="#083344" />
-        <stop offset="50%" stopColor="#0e7490" stopOpacity="0.8" />
-        <stop offset="100%" stopColor="#020617" />
+        <stop offset="0%" stopColor="#0e7490" />
+        <stop offset="50%" stopColor="#0891b2" stopOpacity="0.8" />
+        <stop offset="100%" stopColor="#164e63" />
       </linearGradient>
 
       {/* ── 7. OIL PAN STAMPED STEEL SUMP TRAY SHADERS ── */}
       <linearGradient id="oil-pan-top-lip" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stopColor="#475569" />
-        <stop offset="50%" stopColor="#334155" />
-        <stop offset="100%" stopColor="#1e293b" />
+        <stop offset="0%" stopColor="#64748b" />
+        <stop offset="50%" stopColor="#475569" />
+        <stop offset="100%" stopColor="#334155" />
       </linearGradient>
 
       <linearGradient id="oil-pan-front-face" x1="0%" y1="0%" x2="0%" y2="100%">
-        <stop offset="0%" stopColor="#e2e8f0" />
+        <stop offset="0%" stopColor="#f1f5f9" />
         <stop offset="40%" stopColor="#cbd5e1" />
         <stop offset="85%" stopColor="#94a3b8" />
         <stop offset="100%" stopColor="#64748b" />
       </linearGradient>
 
       <linearGradient id="oil-pan-side-face" x1="0%" y1="0%" x2="100%" y2="0%">
-        <stop offset="0%" stopColor="#64748b" />
-        <stop offset="60%" stopColor="#475569" />
-        <stop offset="100%" stopColor="#334155" />
+        <stop offset="0%" stopColor="#94a3b8" />
+        <stop offset="60%" stopColor="#64748b" />
+        <stop offset="100%" stopColor="#475569" />
       </linearGradient>
 
       {/* ── 8. SPECULAR EDGE HIGHLIGHTS ── */}
       <linearGradient id="specular-edge-bright" x1="0%" y1="0%" x2="100%" y2="0%">
-        <stop offset="0%" stopColor="#ffffff" stopOpacity="0.9" />
-        <stop offset="50%" stopColor="#ffffff" stopOpacity="0.4" />
+        <stop offset="0%" stopColor="#ffffff" stopOpacity="0.95" />
+        <stop offset="50%" stopColor="#ffffff" stopOpacity="0.5" />
         <stop offset="100%" stopColor="#ffffff" stopOpacity="0" />
       </linearGradient>
 
       <linearGradient id="specular-edge-vertical" x1="0%" y1="0%" x2="0%" y2="100%">
-        <stop offset="0%" stopColor="#ffffff" stopOpacity="0.95" />
-        <stop offset="30%" stopColor="#e2e8f0" stopOpacity="0.7" />
-        <stop offset="70%" stopColor="#94a3b8" stopOpacity="0.3" />
+        <stop offset="0%" stopColor="#ffffff" stopOpacity="0.98" />
+        <stop offset="30%" stopColor="#f1f5f9" stopOpacity="0.8" />
+        <stop offset="70%" stopColor="#cbd5e1" stopOpacity="0.4" />
         <stop offset="100%" stopColor="#ffffff" stopOpacity="0" />
       </linearGradient>
 
-      {/* ── V12 BLOCK-SPECIFIC SHADERS ── */}
+      {/* ── V12 BLOCK-SPECIFIC SHADERS (Bright Machined & Cast Aluminum) ── */}
 
-      {/* Cast aluminium body — dark gunmetal matte casting texture */}
+      {/* Cast aluminium body — crisp silver-slate casting texture */}
       <linearGradient id="v12-cast-aluminum-body" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stopColor="#768a9e" />
-        <stop offset="20%" stopColor="#5a6d84" />
-        <stop offset="50%" stopColor="#44566c" />
-        <stop offset="75%" stopColor="#303f52" />
-        <stop offset="100%" stopColor="#1f2e40" />
+        <stop offset="0%" stopColor="#cbd5e1" />
+        <stop offset="20%" stopColor="#a3b3c6" />
+        <stop offset="50%" stopColor="#8194aa" />
+        <stop offset="75%" stopColor="#647890" />
+        <stop offset="100%" stopColor="#4c5e75" />
       </linearGradient>
 
-      {/* Cast aluminium body — right side (darker for 3D depth) */}
+      {/* Cast aluminium body — right side (slight shadow for 3D depth) */}
       <linearGradient id="v12-cast-aluminum-body-right" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stopColor="#44566c" />
-        <stop offset="30%" stopColor="#303f52" />
-        <stop offset="65%" stopColor="#1f2e40" />
-        <stop offset="100%" stopColor="#131f30" />
+        <stop offset="0%" stopColor="#8194aa" />
+        <stop offset="30%" stopColor="#647890" />
+        <stop offset="65%" stopColor="#4c5e75" />
+        <stop offset="100%" stopColor="#37485e" />
       </linearGradient>
 
       {/* Bright silver machined deck surface */}
       <linearGradient id="v12-machined-deck" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stopColor="#e8edf4" />
-        <stop offset="25%" stopColor="#c8d2e0" />
-        <stop offset="55%" stopColor="#a0afc4" />
-        <stop offset="80%" stopColor="#7a8da6" />
-        <stop offset="100%" stopColor="#5d7090" />
+        <stop offset="0%" stopColor="#ffffff" />
+        <stop offset="25%" stopColor="#e2e8f0" />
+        <stop offset="55%" stopColor="#cbd5e1" />
+        <stop offset="80%" stopColor="#94a3b8" />
+        <stop offset="100%" stopColor="#64748b" />
       </linearGradient>
 
-      {/* Deep crankcase lower section — heavy shadow */}
+      {/* Deep crankcase lower section */}
       <linearGradient id="v12-crankcase-deep" x1="0%" y1="0%" x2="0%" y2="100%">
-        <stop offset="0%" stopColor="#4a5a70" />
-        <stop offset="30%" stopColor="#334155" />
-        <stop offset="65%" stopColor="#1e293b" />
-        <stop offset="100%" stopColor="#0f172a" />
+        <stop offset="0%" stopColor="#8194aa" />
+        <stop offset="30%" stopColor="#64748b" />
+        <stop offset="65%" stopColor="#475569" />
+        <stop offset="100%" stopColor="#334155" />
       </linearGradient>
 
       {/* Deep crankcase right face */}
       <linearGradient id="v12-crankcase-deep-right" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stopColor="#334155" />
-        <stop offset="40%" stopColor="#1e293b" />
-        <stop offset="75%" stopColor="#0f172a" />
-        <stop offset="100%" stopColor="#090d16" />
+        <stop offset="0%" stopColor="#64748b" />
+        <stop offset="40%" stopColor="#475569" />
+        <stop offset="75%" stopColor="#334155" />
+        <stop offset="100%" stopColor="#1e293b" />
       </linearGradient>
 
       {/* Valley ambient occlusion shadow */}
       <radialGradient id="v12-valley-shadow" cx="50%" cy="35%" r="65%">
-        <stop offset="0%" stopColor="#2a3a4e" />
-        <stop offset="30%" stopColor="#1a2535" />
-        <stop offset="60%" stopColor="#0f172a" />
-        <stop offset="85%" stopColor="#060c18" />
-        <stop offset="100%" stopColor="#020408" />
+        <stop offset="0%" stopColor="#4c5e75" />
+        <stop offset="30%" stopColor="#37485e" />
+        <stop offset="60%" stopColor="#253448" />
+        <stop offset="85%" stopColor="#172332" />
+        <stop offset="100%" stopColor="#0c1420" />
       </radialGradient>
 
       {/* Front timing cover face */}
       <linearGradient id="v12-timing-cover-face" x1="0%" y1="0%" x2="0%" y2="100%">
-        <stop offset="0%" stopColor="#7a8da6" />
-        <stop offset="35%" stopColor="#5d7090" />
-        <stop offset="70%" stopColor="#3d4d63" />
-        <stop offset="100%" stopColor="#2a3a4e" />
+        <stop offset="0%" stopColor="#cbd5e1" />
+        <stop offset="35%" stopColor="#94a3b8" />
+        <stop offset="70%" stopColor="#64748b" />
+        <stop offset="100%" stopColor="#475569" />
       </linearGradient>
 
       {/* Rear transmission flange — flat machined */}
       <linearGradient id="v12-transmission-flange" x1="0%" y1="0%" x2="0%" y2="100%">
-        <stop offset="0%" stopColor="#c8d2e0" />
-        <stop offset="40%" stopColor="#94a3b8" />
-        <stop offset="75%" stopColor="#64748b" />
-        <stop offset="100%" stopColor="#475569" />
+        <stop offset="0%" stopColor="#f1f5f9" />
+        <stop offset="40%" stopColor="#cbd5e1" />
+        <stop offset="75%" stopColor="#94a3b8" />
+        <stop offset="100%" stopColor="#64748b" />
       </linearGradient>
 
       {/* Cast reinforcement rib surface */}
       <linearGradient id="v12-rib-cast-surface" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stopColor="#7a8da6" />
-        <stop offset="45%" stopColor="#5d7090" />
-        <stop offset="80%" stopColor="#3d4d63" />
-        <stop offset="100%" stopColor="#2a3a4e" />
+        <stop offset="0%" stopColor="#cbd5e1" />
+        <stop offset="45%" stopColor="#94a3b8" />
+        <stop offset="80%" stopColor="#64748b" />
+        <stop offset="100%" stopColor="#475569" />
       </linearGradient>
 
       {/* Main bearing cap steel finish */}
       <radialGradient id="v12-bearing-cap" cx="40%" cy="35%" r="65%">
-        <stop offset="0%" stopColor="#94a3b8" />
-        <stop offset="35%" stopColor="#64748b" />
-        <stop offset="70%" stopColor="#334155" />
-        <stop offset="100%" stopColor="#1e293b" />
+        <stop offset="0%" stopColor="#cbd5e1" />
+        <stop offset="35%" stopColor="#94a3b8" />
+        <stop offset="70%" stopColor="#64748b" />
+        <stop offset="100%" stopColor="#475569" />
       </radialGradient>
 
-      {/* Crankshaft tunnel bore darkness */}
+      {/* Crankshaft tunnel bore */}
       <radialGradient id="v12-crank-tunnel-bore" cx="50%" cy="50%" r="50%">
-        <stop offset="0%" stopColor="#1e293b" />
-        <stop offset="40%" stopColor="#0f172a" />
-        <stop offset="80%" stopColor="#060c18" />
-        <stop offset="100%" stopColor="#000000" />
+        <stop offset="0%" stopColor="#475569" />
+        <stop offset="40%" stopColor="#334155" />
+        <stop offset="80%" stopColor="#1e293b" />
+        <stop offset="100%" stopColor="#0f172a" />
       </radialGradient>
+
+      {/* ── POLISHED GOLD / BRASS VALVE COVER GRADIENTS ── */}
+      <linearGradient id="valve-cover-gold-top" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stopColor="#fef08a" />
+        <stop offset="20%" stopColor="#f59e0b" />
+        <stop offset="50%" stopColor="#d97706" />
+        <stop offset="80%" stopColor="#b45309" />
+        <stop offset="100%" stopColor="#78350f" />
+      </linearGradient>
+
+      <linearGradient id="valve-cover-gold-side" x1="0%" y1="0%" x2="0%" y2="100%">
+        <stop offset="0%" stopColor="#fbbf24" />
+        <stop offset="30%" stopColor="#d97706" />
+        <stop offset="70%" stopColor="#92400e" />
+        <stop offset="100%" stopColor="#451a03" />
+      </linearGradient>
+
+      <linearGradient id="valve-cover-gold-highlight" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" stopColor="#ffffff" stopOpacity="0.95" />
+        <stop offset="40%" stopColor="#fef08a" stopOpacity="0.8" />
+        <stop offset="75%" stopColor="#f59e0b" stopOpacity="0.3" />
+        <stop offset="100%" stopColor="#b45309" stopOpacity="0" />
+      </linearGradient>
+
+      {/* ── CHROME / MIRROR EXHAUST HEADER GRADIENTS ── */}
+      <linearGradient id="chrome-headers-tube" x1="0%" y1="0%" x2="0%" y2="100%">
+        <stop offset="0%" stopColor="#ffffff" />
+        <stop offset="25%" stopColor="#f1f5f9" />
+        <stop offset="55%" stopColor="#cbd5e1" />
+        <stop offset="80%" stopColor="#94a3b8" />
+        <stop offset="100%" stopColor="#64748b" />
+      </linearGradient>
+
+      <linearGradient id="chrome-merge-collector" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stopColor="#ffffff" />
+        <stop offset="30%" stopColor="#e2e8f0" />
+        <stop offset="65%" stopColor="#94a3b8" />
+        <stop offset="100%" stopColor="#475569" />
+      </linearGradient>
+
+      <linearGradient id="header-flange-dark" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stopColor="#64748b" />
+        <stop offset="50%" stopColor="#475569" />
+        <stop offset="100%" stopColor="#334155" />
+      </linearGradient>
+
+      {/* ── TRANSMISSION & BELLHOUSING GRADIENTS ── */}
+      <linearGradient id="transmission-case-cast" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stopColor="#e2e8f0" />
+        <stop offset="25%" stopColor="#cbd5e1" />
+        <stop offset="55%" stopColor="#94a3b8" />
+        <stop offset="80%" stopColor="#64748b" />
+        <stop offset="100%" stopColor="#475569" />
+      </linearGradient>
+
+      <linearGradient id="clutch-housing-cutaway" x1="0%" y1="0%" x2="0%" y2="100%">
+        <stop offset="0%" stopColor="#334155" />
+        <stop offset="50%" stopColor="#1e293b" />
+        <stop offset="100%" stopColor="#0f172a" />
+      </linearGradient>
+
+      <linearGradient id="clutch-disc-friction" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stopColor="#b45309" />
+        <stop offset="40%" stopColor="#d97706" />
+        <stop offset="80%" stopColor="#92400e" />
+        <stop offset="100%" stopColor="#451a03" />
+      </linearGradient>
+
+      <linearGradient id="pressure-plate-steel" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" stopColor="#ffffff" />
+        <stop offset="35%" stopColor="#cbd5e1" />
+        <stop offset="70%" stopColor="#64748b" />
+        <stop offset="100%" stopColor="#334155" />
+      </linearGradient>
+
+      <linearGradient id="flywheel-ring-gear" x1="0%" y1="0%" x2="0%" y2="100%">
+        <stop offset="0%" stopColor="#94a3b8" />
+        <stop offset="30%" stopColor="#64748b" />
+        <stop offset="70%" stopColor="#475569" />
+        <stop offset="100%" stopColor="#1e293b" />
+      </linearGradient>
+
+      {/* ── RADIATOR SHADERS ── */}
+      <linearGradient id="radiator-core-aluminum" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" stopColor="#f8fafc" />
+        <stop offset="30%" stopColor="#e2e8f0" />
+        <stop offset="70%" stopColor="#cbd5e1" />
+        <stop offset="100%" stopColor="#94a3b8" />
+      </linearGradient>
+
+      <linearGradient id="radiator-end-tank" x1="0%" y1="0%" x2="0%" y2="100%">
+        <stop offset="0%" stopColor="#e2e8f0" />
+        <stop offset="40%" stopColor="#cbd5e1" />
+        <stop offset="80%" stopColor="#94a3b8" />
+        <stop offset="100%" stopColor="#64748b" />
+      </linearGradient>
+
+      {/* ── GLASS DISPLAY PLATFORM SHADERS ── */}
+      <linearGradient id="glass-platform-surface" x1="0%" y1="0%" x2="100%" y2="100%">
+        <stop offset="0%" stopColor="#e0f2fe" stopOpacity="0.4" />
+        <stop offset="40%" stopColor="#f0f9ff" stopOpacity="0.25" />
+        <stop offset="80%" stopColor="#bae6fd" stopOpacity="0.35" />
+        <stop offset="100%" stopColor="#7dd3fc" stopOpacity="0.5" />
+      </linearGradient>
+
+      <linearGradient id="glass-platform-edge" x1="0%" y1="0%" x2="100%" y2="0%">
+        <stop offset="0%" stopColor="#ffffff" stopOpacity="0.9" />
+        <stop offset="35%" stopColor="#38bdf8" stopOpacity="0.7" />
+        <stop offset="70%" stopColor="#0284c7" stopOpacity="0.8" />
+        <stop offset="100%" stopColor="#0369a1" stopOpacity="0.95" />
+      </linearGradient>
 
       {/* ── GOLD ANODIZED ACCENT BOLT ── */}
       <radialGradient id="gold-anodized-bolt" cx="35%" cy="30%" r="65%">
@@ -367,12 +492,12 @@ export const IsoBlockShaderDefs: React.FC = () => {
         <stop offset="100%" stopColor="#1e293b" />
       </linearGradient>
 
-      {/* ── VELOCITY STACK BELLMOUTH (radial — inside of trumpet) ── */}
+      {/* ── VELOCITY STACK BELLMOUTH (radial — deep cobalt dome inside trumpet) ── */}
       <radialGradient id="velocity-stack-bellmouth" cx="40%" cy="35%" r="60%">
-        <stop offset="0%" stopColor="#94a3b8" stopOpacity="0.7" />
-        <stop offset="30%" stopColor="#334155" />
-        <stop offset="65%" stopColor="#0f172a" />
-        <stop offset="100%" stopColor="#000000" />
+        <stop offset="0%" stopColor="#3b82f6" stopOpacity="0.9" />
+        <stop offset="30%" stopColor="#1d4ed8" />
+        <stop offset="65%" stopColor="#1e3a8a" />
+        <stop offset="100%" stopColor="#0f172a" />
       </radialGradient>
 
       {/* ── BRASS BUTTERFLY VALVE DISC ── */}
@@ -393,44 +518,44 @@ export const IsoBlockShaderDefs: React.FC = () => {
 
       {/* ── TURBO VOLUTE CAST IRON ── */}
       <linearGradient id="turbo-volute-cast-iron" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stopColor="#6b7280" />
-        <stop offset="30%" stopColor="#4b5563" />
-        <stop offset="60%" stopColor="#374151" />
-        <stop offset="100%" stopColor="#1f2937" />
+        <stop offset="0%" stopColor="#ffffff" />
+        <stop offset="25%" stopColor="#e2e8f0" />
+        <stop offset="60%" stopColor="#94a3b8" />
+        <stop offset="100%" stopColor="#64748b" />
       </linearGradient>
 
       {/* ── OIL PAN COOLING FIN CHANNEL ── */}
       <linearGradient id="cooling-fin-channel" x1="0%" y1="0%" x2="0%" y2="100%">
-        <stop offset="0%" stopColor="#1e293b" />
-        <stop offset="50%" stopColor="#0f172a" />
-        <stop offset="100%" stopColor="#060c18" />
+        <stop offset="0%" stopColor="#475569" />
+        <stop offset="50%" stopColor="#334155" />
+        <stop offset="100%" stopColor="#1e293b" />
       </linearGradient>
 
       {/* ── CEL-SHADED TECHNICAL ILLUSTRATION GRADIENTS ── */}
 
       {/* Electric Blue Anodized Velocity Stack Rim Lip */}
       <linearGradient id="electric-blue-lip" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stopColor="#7dd3fc" />
-        <stop offset="30%" stopColor="#0284c7" />
-        <stop offset="70%" stopColor="#0369a1" />
-        <stop offset="100%" stopColor="#0c4a6e" />
+        <stop offset="0%" stopColor="#93c5fd" />
+        <stop offset="30%" stopColor="#3b82f6" />
+        <stop offset="70%" stopColor="#1d4ed8" />
+        <stop offset="100%" stopColor="#1e3a8a" />
       </linearGradient>
 
       {/* Blue Cylinder Sleeve Ring Accent */}
       <linearGradient id="blue-sleeve-ring" x1="0%" y1="0%" x2="100%" y2="0%">
-        <stop offset="0%" stopColor="#38bdf8" />
-        <stop offset="40%" stopColor="#0284c7" />
-        <stop offset="80%" stopColor="#075985" />
-        <stop offset="100%" stopColor="#0c4a6e" />
+        <stop offset="0%" stopColor="#60a5fa" />
+        <stop offset="40%" stopColor="#2563eb" />
+        <stop offset="80%" stopColor="#1d4ed8" />
+        <stop offset="100%" stopColor="#1e3a8a" />
       </linearGradient>
 
       {/* Cel-Shaded Steel Engine Block Surface */}
       <linearGradient id="cel-steel-block" x1="0%" y1="0%" x2="100%" y2="100%">
-        <stop offset="0%" stopColor="#64748b" />
-        <stop offset="25%" stopColor="#475569" />
-        <stop offset="60%" stopColor="#334155" />
-        <stop offset="85%" stopColor="#1e293b" />
-        <stop offset="100%" stopColor="#0f172a" />
+        <stop offset="0%" stopColor="#94a3b8" />
+        <stop offset="25%" stopColor="#64748b" />
+        <stop offset="60%" stopColor="#475569" />
+        <stop offset="85%" stopColor="#334155" />
+        <stop offset="100%" stopColor="#1e293b" />
       </linearGradient>
 
       {/* Bright Orange/Copper Accent Gasket Line */}

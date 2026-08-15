@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import type { ComponentId } from "../../../sim/assemblyTypes";
 import { projectIso } from "./isoMath";
 
@@ -21,16 +21,19 @@ interface HybridMotorIsoProps {
   onHoverComponent?: (id: ComponentId | null) => void;
 }
 
-export const HybridMotorIso: React.FC<HybridMotorIsoProps> = ({
+const HybridMotorIsoComponent: React.FC<HybridMotorIsoProps> = ({
   layoutSpec,
   componentState,
   onHoverComponent,
 }) => {
-  const originScreen = { x: 250, y: 230 };
+  const originScreen = useMemo(() => ({ x: 250, y: 230 }), []);
   const block3DWidth = layoutSpec.bw * 0.7;
 
   // Mounted at Rear Flywheel Shaft End: X = -block3DWidth / 2 - 25, Y = 0, Z = 28
-  const hPt = projectIso({ x: -block3DWidth / 2 - 25, y: 0, z: 28 }, originScreen);
+  const hPt = useMemo(
+    () => projectIso({ x: -block3DWidth / 2 - 25, y: 0, z: 28 }, originScreen),
+    [block3DWidth, originScreen]
+  );
 
   return (
     <g
@@ -54,3 +57,5 @@ export const HybridMotorIso: React.FC<HybridMotorIsoProps> = ({
     </g>
   );
 };
+
+export const HybridMotorIso = React.memo(HybridMotorIsoComponent);

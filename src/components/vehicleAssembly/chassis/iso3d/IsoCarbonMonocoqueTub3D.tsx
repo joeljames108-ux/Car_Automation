@@ -32,17 +32,6 @@ export const IsoCarbonMonocoqueTub3D: React.FC<IsoCarbonMonocoqueTub3DProps> = (
 
   return (
     <g id="iso-carbon-monocoque-tub-3d" className="transition-all duration-700 ease-out">
-      {/* ── LAYER 1: GROUND PLANE RADIAL DROP SHADOW ── */}
-      <ellipse cx="475" cy="340" rx="400" ry="26" fill="#020617" opacity="0.75" className="filter blur-md" />
-
-      {/* ── LAYER 2: 3D CARBON TWILL MONOCOQUE BOTTOM FACET ── */}
-      <polygon
-        points={`${pF0_L.x},${pF0_L.y} ${pF0_R.x},${pF0_R.y} ${pR0_R.x},${pR0_R.y} ${pF0_L.x + 700},${pF0_L.y}`}
-        fill="#070a12"
-        stroke="#1e293b"
-        strokeWidth="1.5"
-      />
-
       {/* ── LAYER 3: FRONT CARBON IMPACT CRASH NOSE CONE ── */}
       <polygon
         points={`${pF0_L.x},${pF0_L.y} ${pF0_R.x},${pF0_R.y} ${pF2_R.x},${pF2_R.y} ${pF1_L.x},${pF1_L.y - 10}`}
@@ -94,9 +83,6 @@ export const IsoCarbonMonocoqueTub3D: React.FC<IsoCarbonMonocoqueTub3DProps> = (
       <rect x={pC1_R.x - 20} y={pC1_R.y - 15} width="16" height="30" rx="3" fill="url(#iso-titanium-weld-glow)" stroke="#cbd5e1" strokeWidth="1.5" />
       <circle cx={pC1_R.x - 12} cy={pC1_R.y - 5} r="3" fill="#070a12" />
       <circle cx={pC1_R.x - 12} cy={pC1_R.y + 10} r="3" fill="#070a12" />
-
-      {/* ── LAYER 9: HONEYCOMB CORE CROSS-SECTION CUTOUT ── */}
-      <path d={`M ${pA1_R.x + 40} ${pA1_R.y + 35} L ${pC1_R.x - 40} ${pC1_R.y + 35}`} stroke="#f59e0b" strokeWidth="2.5" strokeDasharray="3 3" />
 
       {/* Chassis Structural Label */}
       <text x="450" y="362" fill="#38bdf8" fontSize="10" fontFamily="monospace" textAnchor="middle" fontWeight="bold">

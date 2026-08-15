@@ -47,6 +47,27 @@ export const IsoSteelUnibodyCasting3D: React.FC<IsoSteelUnibodyCasting3DProps> =
 
         {/* Firewall Bulkhead Structure */}
         <path d="M 285 285 C 275 235 245 225 210 235 C 190 240 180 265 175 285 Z" fill="#020617" stroke="#475569" strokeWidth="1.5" />
+
+        {/* ── STRUCTURAL ENGINE MOUNTING CRADLES (Front, Mid, Rear Subframes) ── */}
+        <g id="engine-chassis-cradles-biw" opacity="0.9">
+          {/* Front Engine Subframe Cradle */}
+          <rect x="200" y="258" width="75" height="12" rx="3" fill="#1e293b" stroke="#38bdf8" strokeWidth="1.5" />
+          <line x1="205" y1="264" x2="270" y2="264" stroke="#94a3b8" strokeWidth="1" />
+          <circle cx="215" cy="264" r="2.5" fill="#f59e0b" />
+          <circle cx="260" cy="264" r="2.5" fill="#f59e0b" />
+
+          {/* Mid-Ship Engine Cradle */}
+          <rect x="430" y="258" width="95" height="12" rx="3" fill="#1e293b" stroke="#38bdf8" strokeWidth="1.5" />
+          <line x1="435" y1="264" x2="520" y2="264" stroke="#94a3b8" strokeWidth="1" />
+          <circle cx="445" cy="264" r="2.5" fill="#f59e0b" />
+          <circle cx="510" cy="264" r="2.5" fill="#f59e0b" />
+
+          {/* Rear Engine Subframe Cradle */}
+          <rect x="670" y="258" width="80" height="12" rx="3" fill="#1e293b" stroke="#38bdf8" strokeWidth="1.5" />
+          <line x1="675" y1="264" x2="745" y2="264" stroke="#94a3b8" strokeWidth="1" />
+          <circle cx="685" cy="264" r="2.5" fill="#f59e0b" />
+          <circle cx="735" cy="264" r="2.5" fill="#f59e0b" />
+        </g>
       </g>
 
       {/* ── LAYER 3: MAIN OUTER BODY-IN-WHITE SHELL (Photorealistic Curves) ── */}

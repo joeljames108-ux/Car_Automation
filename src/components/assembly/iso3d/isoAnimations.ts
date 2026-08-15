@@ -82,6 +82,24 @@ export const COMPONENT_3D_TRAJECTORIES: Record<ComponentId, ComponentIsoTrajecto
     end3D: { x: 0, y: 0, z: -20 },
     easeType: "bounce",
   },
+  radiator: {
+    componentId: "radiator",
+    start3D: { x: -220, y: 0, z: 120 },
+    end3D: { x: 0, y: 0, z: 0 },
+    easeType: "easeOutQuad",
+  },
+  transmission: {
+    componentId: "transmission",
+    start3D: { x: 260, y: 0, z: 60 },
+    end3D: { x: 0, y: 0, z: 0 },
+    easeType: "bounce",
+  },
+  engine_cover: {
+    componentId: "engine_cover",
+    start3D: { x: 0, y: 0, z: 280 },
+    end3D: { x: 0, y: 0, z: 0 },
+    easeType: "bounce",
+  },
   hybrid_motor: {
     componentId: "hybrid_motor",
     start3D: { x: 0, y: -200, z: 0 },

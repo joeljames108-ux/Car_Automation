@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import type { ComponentId } from "../../../sim/assemblyTypes";
 import { projectIso } from "./isoMath";
 import { getIsoMaterialFills } from "./isoShaders";
@@ -24,38 +24,139 @@ interface CrankshaftIsoProps {
   onHoverComponent?: (id: ComponentId | null) => void;
 }
 
-export const CrankshaftIso: React.FC<CrankshaftIsoProps> = ({
+/**
+ * ═══════════════════════════════════════════════════════════════════
+ * 3D ISOMETRIC CRANKSHAFT — Multi-Layout Precision Billet / Forged Crank
+ * ═══════════════════════════════════════════════════════════════════
+ *
+ * Dynamically adapts geometry per engine architecture:
+ * - Inline (I3, I4, I6): Flat-plane / crossplane throws with single rod journals
+ * - V-Bank (V6, V8, V10, V12): Split-pin / dual-rod journals per throw
+ * - Boxer (H4, H6): 180° opposed flat crankshaft throws
+ * - W-Bank (W12, W16, W18): Quad-offset pin pairing
+ * - Rotary: Twin eccentric lobe shaft with counterweights
+ * - Radial: Single master rod crankpin with massive counterweight lobes
+ */
+const CrankshaftIsoComponent: React.FC<CrankshaftIsoProps> = ({
   layoutSpec,
   componentState,
   isAssemblyComplete,
   selectedVariants,
   onHoverComponent,
 }) => {
-  const originScreen = { x: 250, y: 215 };
+  const originScreen = useMemo(() => ({ x: 250, y: 215 }), []);
   const materialGrade = selectedVariants?.crankshaft || "forged";
-  const fills = getIsoMaterialFills(materialGrade);
+  const fills = useMemo(() => getIsoMaterialFills(materialGrade), [materialGrade]);
 
-  const isVEngine = layoutSpec.category === "V" || layoutSpec.label?.includes("V") || layoutSpec.cyls.length >= 8;
+  const cat = (layoutSpec.category || "").toLowerCase();
+  const label = (layoutSpec.label || "").toLowerCase();
+  const isV = cat === "vbank" || label.includes("v-") || label.includes("v6") || label.includes("v8") || label.includes("v10") || label.includes("v12");
+  const isBoxer = cat === "flat" || label.includes("boxer") || label.includes("h4") || label.includes("h6");
+  const isW = cat === "wbank" || label.includes("w12") || label.includes("w16") || label.includes("w18");
+  const isRotary = cat === "rotary" || label.includes("rotary") || label.includes("wankel");
+  const isRadial = cat === "radial" || label.includes("radial");
 
-  // Crankshaft Dimensions
-  const crankZ = 60;
-  const blockW = 220;
+  // Determine geometry parameters based on layout
+  const config = useMemo(() => {
+    if (isRotary) {
+      return {
+        blockW: 160,
+        crankZ: 82,
+        numMains: 3,
+        numThrows: 2,
+        throwSpacing: 54,
+        isDualJournal: false,
+        journalOffset: 0,
+      };
+    }
+    if (isRadial) {
+      return {
+        blockW: 80,
+        crankZ: 120,
+        numMains: 2,
+        numThrows: 1,
+        throwSpacing: 0,
+        isDualJournal: false,
+        journalOffset: 0,
+      };
+    }
+    if (isBoxer) {
+      const isH6 = label.includes("h6") || label.includes("6");
+      const nThrows = isH6 ? 3 : 2;
+      return {
+        blockW: isH6 ? 186 : 145,
+        crankZ: 43,
+        numMains: nThrows + 1,
+        numThrows: nThrows,
+        throwSpacing: isH6 ? 50 : 60,
+        isDualJournal: true,
+        journalOffset: 16,
+      };
+    }
+    if (isW) {
+      const isW16 = label.includes("w16");
+      const isW18 = label.includes("w18");
+      const nThrows = isW18 ? 6 : isW16 ? 4 : 3;
+      return {
+        blockW: isW18 ? 228 : isW16 ? 215 : 175,
+        crankZ: 58,
+        numMains: nThrows + 1,
+        numThrows: nThrows,
+        throwSpacing: isW18 ? 30 : isW16 ? 40 : 42,
+        isDualJournal: true,
+        journalOffset: 15,
+      };
+    }
+    if (isV) {
+      if (label.includes("v6")) {
+        return { blockW: 148, crankZ: 58, numMains: 4, numThrows: 3, throwSpacing: 38, isDualJournal: true, journalOffset: 14 };
+      }
+      if (label.includes("v8")) {
+        return { blockW: 180, crankZ: 58, numMains: 5, numThrows: 4, throwSpacing: 36, isDualJournal: true, journalOffset: 14 };
+      }
+      if (label.includes("v10")) {
+        return { blockW: 205, crankZ: 58, numMains: 6, numThrows: 5, throwSpacing: 35, isDualJournal: true, journalOffset: 14 };
+      }
+      // V12 default
+      return { blockW: 220, crankZ: 60, numMains: 7, numThrows: 6, throwSpacing: 34, isDualJournal: true, journalOffset: 14 };
+    }
+    // Inline configurations (I3, I4, I6)
+    if (label.includes("i3") || layoutSpec.cyls.length === 3) {
+      return { blockW: 140, crankZ: 58, numMains: 4, numThrows: 3, throwSpacing: 38, isDualJournal: false, journalOffset: 0 };
+    }
+    if (label.includes("i6") || layoutSpec.cyls.length === 6) {
+      return { blockW: 224, crankZ: 60, numMains: 7, numThrows: 6, throwSpacing: 34, isDualJournal: false, journalOffset: 0 };
+    }
+    // I4 default
+    return { blockW: 175, crankZ: 58, numMains: 5, numThrows: 4, throwSpacing: 36, isDualJournal: false, journalOffset: 0 };
+  }, [isV, isBoxer, isW, isRotary, isRadial, label, layoutSpec.cyls.length]);
 
-  // Main Shaft End Points
+  const { blockW, crankZ, numMains, numThrows, throwSpacing, isDualJournal, journalOffset } = config;
+
+  // Main shaft line points
   const shaftStartPt = projectIso({ x: -blockW / 2 - 12, y: 0, z: crankZ }, originScreen);
   const shaftEndPt = projectIso({ x: blockW / 2 + 12, y: 0, z: crankZ }, originScreen);
 
-  // 7 Main Bearing Bulkhead Centerlines for 6-Cylinder Bank
-  const mainBearingXList = [-102, -68, -34, 0, 34, 68, 102];
+  // Main bearing centers
+  const mainBearingXList = useMemo(() => {
+    return Array.from({ length: numMains }).map((_, i) => {
+      const t = numMains === 1 ? 0.5 : i / (numMains - 1);
+      return -blockW / 2 + 12 + t * (blockW - 24);
+    });
+  }, [numMains, blockW]);
 
-  // 6 Crankpin Throws for 6 Cylinder Pairs
-  const throwXList = Array.from({ length: 6 }).map((_, idx) => -85 + idx * 34);
+  // Throw centers
+  const throwXList = useMemo(() => {
+    return Array.from({ length: numThrows }).map((_, i) => {
+      return -((numThrows - 1) * throwSpacing) / 2 + i * throwSpacing;
+    });
+  }, [numThrows, throwSpacing]);
 
   const isAnimated = isAssemblyComplete || componentState.isActive;
 
   return (
     <g
-      id="iso-crankshaft-v12-aligned"
+      id="iso-crankshaft-aligned"
       onMouseEnter={() => onHoverComponent?.("crankshaft")}
       onMouseLeave={() => onHoverComponent?.(null)}
       className={`cursor-pointer transition-all duration-700 ease-out ${isAnimated ? "crank-shaft-spin" : ""}`}
@@ -64,100 +165,104 @@ export const CrankshaftIso: React.FC<CrankshaftIsoProps> = ({
         opacity: componentState.opacity,
       }}
     >
-      {/* ── 1. MAIN FORGED STEEL CRANKSHAFT CENTERAXIS SHAFT ── */}
-      <g id="v12-crank-main-shaft">
-        {/* Main Shaft Base Cylinder */}
+      {/* ── 1. MAIN CRANKSHAFT SHAFT AXIS ── */}
+      <g id="crank-main-shaft">
         <line
           x1={shaftStartPt.x}
           y1={shaftStartPt.y}
           x2={shaftEndPt.x}
           y2={shaftEndPt.y}
           stroke="url(#rod-hbeam-shank)"
-          strokeWidth="15"
+          strokeWidth="14"
           strokeLinecap="round"
         />
-        {/* Polished Chrome Main Shaft Specular Highlight Line */}
+        {/* Specular Highlight Line */}
         <line
           x1={shaftStartPt.x}
-          y1={shaftStartPt.y - 3.5}
+          y1={shaftStartPt.y - 3}
           x2={shaftEndPt.x}
-          y2={shaftEndPt.y - 3.5}
+          y2={shaftEndPt.y - 3}
           stroke="#ffffff"
-          strokeWidth="2"
+          strokeWidth="1.8"
           opacity="0.9"
         />
-        {/* Snout Flywheel Flange (Front & Rear Ends) */}
+        {/* Snout & Flywheel Flange */}
         <circle cx={shaftStartPt.x} cy={shaftStartPt.y} r="10" fill="#0f172a" stroke="#090d16" strokeWidth="1.8" />
         <circle cx={shaftEndPt.x} cy={shaftEndPt.y} r="11" fill="url(#bearing-saddle-chrome)" stroke="#090d16" strokeWidth="1.8" />
       </g>
 
-      {/* ── 2. 7 PRECISION MAIN BEARING CAPS & TRI-METAL SHELL INSERTS ── */}
-      <g id="v12-7-main-bearings">
+      {/* ── 2. MAIN BEARING SADDLES & TRI-METAL INSERTS ── */}
+      <g id="crank-main-bearings">
         {mainBearingXList.map((mbX, mbIdx) => {
           const mbCenter = projectIso({ x: mbX, y: 0, z: crankZ }, originScreen);
           return (
-            <g key={`v12-main-bearing-${mbIdx}`}>
-              {/* Main Bearing Cap Saddle Web */}
+            <g key={`main-bearing-${mbIdx}`}>
               <ellipse cx={mbCenter.x} cy={mbCenter.y + 2} rx="10" ry="12" fill={fills.left} stroke="#090d16" strokeWidth="2" />
-              {/* Outer Shell Flange */}
-              <circle cx={mbCenter.x} cy={mbCenter.y} r="9.5" fill="url(#bolt-boss-raised)" stroke="#090d16" strokeWidth="1.5" />
-              {/* Tri-Metal Beryllium Bearing Shell Insert */}
-              <circle cx={mbCenter.x} cy={mbCenter.y} r="7.5" fill="url(#wrist-pin-bushing-bronze)" stroke="#090d16" strokeWidth="1" />
-              {/* Chrome Main Journal Contact Surface */}
-              <circle cx={mbCenter.x} cy={mbCenter.y} r="5.8" fill="url(#bearing-saddle-chrome)" stroke="#ffffff" strokeWidth="0.8" />
-              <circle cx={mbCenter.x} cy={mbCenter.y} r="1.5" fill="url(#journal-oil-hole)" />
-
-              {/* Dual Main Cap Fasteners (ARP 12-Point Stud Bolts) */}
-              <circle cx={mbCenter.x - 7.5} cy={mbCenter.y + 6} r="2.2" fill="url(#arp-bolt-head-12pt)" stroke="#090d16" strokeWidth="0.8" />
-              <circle cx={mbCenter.x + 7.5} cy={mbCenter.y + 6} r="2.2" fill="url(#arp-bolt-head-12pt)" stroke="#090d16" strokeWidth="0.8" />
+              <circle cx={mbCenter.x} cy={mbCenter.y} r="9" fill="url(#bolt-boss-raised)" stroke="#090d16" strokeWidth="1.5" />
+              <circle cx={mbCenter.x} cy={mbCenter.y} r="7" fill="url(#wrist-pin-bushing-bronze)" stroke="#090d16" strokeWidth="1" />
+              <circle cx={mbCenter.x} cy={mbCenter.y} r="5.5" fill="url(#bearing-saddle-chrome)" stroke="#ffffff" strokeWidth="0.8" />
+              <circle cx={mbCenter.x} cy={mbCenter.y} r="1.4" fill="url(#journal-oil-hole)" />
+              {/* Dual Main Cap Fasteners */}
+              <circle cx={mbCenter.x - 7} cy={mbCenter.y + 5.5} r="2" fill="url(#arp-bolt-head-12pt)" stroke="#090d16" strokeWidth="0.7" />
+              <circle cx={mbCenter.x + 7} cy={mbCenter.y + 5.5} r="2" fill="url(#arp-bolt-head-12pt)" stroke="#090d16" strokeWidth="0.7" />
             </g>
           );
         })}
       </g>
 
-      {/* ── 3. 6 CRANKPIN THROWS & DUAL COUNTERWEIGHT WEBS ALIGNED WITH ROD CAPS ── */}
-      <g id="v12-crankpin-throws">
+      {/* ── 3. CRANKPIN THROWS & COUNTERWEIGHT WEBS ── */}
+      <g id="crank-throws">
         {throwXList.map((tpX, tpIdx) => {
           const isOdd = tpIdx % 2 === 1;
-
-          // 3D Points for Left Rod Journal (Y = +14, Z = 60) and Right Rod Journal (Y = -14, Z = 60)
-          const leftJournalPt = projectIso({ x: tpX, y: 14, z: crankZ }, originScreen);
-          const rightJournalPt = projectIso({ x: tpX, y: -14, z: crankZ }, originScreen);
           const webCenterPt = projectIso({ x: tpX, y: 0, z: crankZ }, originScreen);
 
+          if (isDualJournal) {
+            const leftJournalPt = projectIso({ x: tpX, y: journalOffset, z: crankZ }, originScreen);
+            const rightJournalPt = projectIso({ x: tpX, y: -journalOffset, z: crankZ }, originScreen);
+
+            return (
+              <g key={`crank-throw-${tpIdx}`}>
+                {/* Counterweight Web */}
+                <path
+                  d={`M ${webCenterPt.x - 13} ${webCenterPt.y - 5} Q ${webCenterPt.x} ${webCenterPt.y + (isOdd ? 25 : -21)} ${webCenterPt.x + 13} ${webCenterPt.y - 5} Z`}
+                  fill={fills.left}
+                  stroke="#090d16"
+                  strokeWidth="2"
+                />
+                <path
+                  d={`M ${webCenterPt.x - 10} ${webCenterPt.y - 4} Q ${webCenterPt.x} ${webCenterPt.y + (isOdd ? 19 : -16)} ${webCenterPt.x + 10} ${webCenterPt.y - 4} Z`}
+                  fill="none"
+                  stroke="#ffffff"
+                  strokeWidth="1.1"
+                  opacity="0.85"
+                />
+                {/* Precision Drillings */}
+                <circle cx={webCenterPt.x - 5} cy={webCenterPt.y + (isOdd ? 12 : -10)} r="2.8" fill="#020617" stroke="#475569" strokeWidth="0.7" />
+                <circle cx={webCenterPt.x + 5} cy={webCenterPt.y + (isOdd ? 12 : -10)} r="2.8" fill="#020617" stroke="#475569" strokeWidth="0.7" />
+
+                {/* Left Bank Rod Journal Pin */}
+                <ellipse cx={leftJournalPt.x} cy={leftJournalPt.y} rx="6.8" ry="4" fill="url(#bearing-saddle-chrome)" stroke="#090d16" strokeWidth="1.6" />
+                <circle cx={leftJournalPt.x} cy={leftJournalPt.y} r="1.4" fill="url(#journal-oil-hole)" />
+
+                {/* Right Bank Rod Journal Pin */}
+                <ellipse cx={rightJournalPt.x} cy={rightJournalPt.y} rx="6.8" ry="4" fill="url(#bearing-saddle-chrome)" stroke="#090d16" strokeWidth="1.6" />
+                <circle cx={rightJournalPt.x} cy={rightJournalPt.y} r="1.4" fill="url(#journal-oil-hole)" />
+              </g>
+            );
+          }
+
+          // Single Rod Journal (Inline layouts)
+          const journalPt = projectIso({ x: tpX, y: isOdd ? 8 : -8, z: crankZ }, originScreen);
           return (
-            <g key={`v12-crank-throw-${tpIdx}`}>
-              {/* Counterweight Web 1 (Front Side) */}
+            <g key={`crank-throw-inline-${tpIdx}`}>
               <path
-                d={`M ${webCenterPt.x - 14} ${webCenterPt.y - 5} Q ${webCenterPt.x} ${webCenterPt.y + (isOdd ? 26 : -22)} ${webCenterPt.x + 14} ${webCenterPt.y - 5} Z`}
+                d={`M ${webCenterPt.x - 12} ${webCenterPt.y - 4} Q ${webCenterPt.x} ${webCenterPt.y + (isOdd ? 22 : -18)} ${webCenterPt.x + 12} ${webCenterPt.y - 4} Z`}
                 fill={fills.left}
                 stroke="#090d16"
-                strokeWidth="2.2"
+                strokeWidth="1.8"
               />
-              <path
-                d={`M ${webCenterPt.x - 11} ${webCenterPt.y - 4} Q ${webCenterPt.x} ${webCenterPt.y + (isOdd ? 20 : -17)} ${webCenterPt.x + 11} ${webCenterPt.y - 4} Z`}
-                fill="none"
-                stroke="#ffffff"
-                strokeWidth="1.2"
-                opacity="0.85"
-              />
-              {/* CNC Precision Weight-Balance Drillings on Counterweight Web */}
-              <circle cx={webCenterPt.x - 5} cy={webCenterPt.y + (isOdd ? 12 : -10)} r="3" fill="#020617" stroke="#475569" strokeWidth="0.8" />
-              <circle cx={webCenterPt.x + 5} cy={webCenterPt.y + (isOdd ? 12 : -10)} r="3" fill="#020617" stroke="#475569" strokeWidth="0.8" />
-
-              {/* Left Bank Rod Journal Pin (Y = +14, Z = 60 - Exact Left Rod Big End Match!) */}
-              <ellipse cx={leftJournalPt.x} cy={leftJournalPt.y} rx="7" ry="4.2" fill="url(#bearing-saddle-chrome)" stroke="#090d16" strokeWidth="1.8" />
-              <ellipse cx={leftJournalPt.x} cy={leftJournalPt.y} rx="5.2" ry="3" fill="none" stroke="#ffffff" strokeWidth="1.2" opacity="0.9" />
-              <circle cx={leftJournalPt.x} cy={leftJournalPt.y} r="1.5" fill="url(#journal-oil-hole)" />
-
-              {/* Right Bank Rod Journal Pin (Y = -14, Z = 60 - Exact Right Rod Big End Match!) */}
-              <ellipse cx={rightJournalPt.x} cy={rightJournalPt.y} rx="7" ry="4.2" fill="url(#bearing-saddle-chrome)" stroke="#090d16" strokeWidth="1.8" />
-              <ellipse cx={rightJournalPt.x} cy={rightJournalPt.y} rx="5.2" ry="3" fill="none" stroke="#ffffff" strokeWidth="1.4" opacity="0.9" />
-              <circle cx={rightJournalPt.x} cy={rightJournalPt.y} r="1.5" fill="url(#journal-oil-hole)" />
-
-              {/* Crankpin Oil Passages Connecting Main & Rod Journals */}
-              <line x1={webCenterPt.x} y1={webCenterPt.y} x2={leftJournalPt.x} y2={leftJournalPt.y} stroke="#020617" strokeWidth="1.2" strokeDasharray="2 1" />
-              <line x1={webCenterPt.x} y1={webCenterPt.y} x2={rightJournalPt.x} y2={rightJournalPt.y} stroke="#020617" strokeWidth="1.2" strokeDasharray="2 1" />
+              <ellipse cx={journalPt.x} cy={journalPt.y} rx="7" ry="4.2" fill="url(#bearing-saddle-chrome)" stroke="#090d16" strokeWidth="1.6" />
+              <circle cx={journalPt.x} cy={journalPt.y} r="1.4" fill="url(#journal-oil-hole)" />
             </g>
           );
         })}
@@ -165,3 +270,5 @@ export const CrankshaftIso: React.FC<CrankshaftIsoProps> = ({
     </g>
   );
 };
+
+export const CrankshaftIso = React.memo(CrankshaftIsoComponent);

@@ -17,6 +17,9 @@ export type ComponentId =
   | "exhaust_headers"
   | "turbocharger"
   | "oil_pan"
+  | "radiator"
+  | "transmission"
+  | "engine_cover"
   | "hybrid_motor"
   | "inverter_ecu";
 
@@ -261,6 +264,81 @@ export const ENGINE_ASSEMBLY_COMPONENTS: AssemblyComponentMeta[] = [
     statDeltas: { hp: 5, torque: 5, weight: 8, reliability: 10, cost: 650 },
     tooltipAdvice: "Baffled dry-sump oil pans prevent oil starvation under extreme cornering G-forces.",
   },
+  {
+    id: "radiator",
+    name: "Radiator & Cooling Fans",
+    category: "Core",
+    description: "High-efficiency multi-row aluminum racing radiator, dual high-CFM electric puller fans, and expansion reservoir.",
+    dependencies: ["block"],
+    explodedOffset: { x: -80, y: 0 },
+    slotPosition: { x: 110, y: 220 },
+    estimatedDuration: 1100,
+    soundType: "pneumatic",
+    variants: [
+      { id: "cast", label: "OEM Dual-Core Aluminum (32mm)", hpMultiplier: 1.0, weightMultiplier: 1.0, costMultiplier: 1.0, reliabilityDelta: 0 },
+      { id: "forged", label: "Triple-Pass High-Flow Aluminum Core (48mm)", hpMultiplier: 1.05, weightMultiplier: 0.85, costMultiplier: 1.6, reliabilityDelta: 12 },
+      { id: "billet", label: "CNC Billet End-Tank Motorsport Core (56mm)", hpMultiplier: 1.08, weightMultiplier: 0.78, costMultiplier: 2.4, reliabilityDelta: 18 },
+      { id: "titanium", label: "Ultra-Light Core + Dual Brushless Fans (64mm)", hpMultiplier: 1.12, weightMultiplier: 0.65, costMultiplier: 3.8, reliabilityDelta: 25 },
+    ],
+    statDeltas: { hp: 8, torque: 5, weight: 14, reliability: 20, cost: 950 },
+    tooltipAdvice: "Multi-pass crossflow cooling maintains optimal 88°C coolant temps, preventing heat soak and detonation under sustained track load.",
+    torqueSpec: {
+      fastenerName: "M8 Water Neck & Radiator Bracket Bolts",
+      snugNm: 15,
+      finalAngleDeg: 45,
+      boltCount: 6,
+    },
+  },
+  {
+    id: "transmission",
+    name: "Transmission & Clutch Assembly",
+    category: "Bottom End",
+    description: "Cutaway bellhousing, multi-plate clutch, flywheel, precision helical gear shafts, and integrated Transmission Control Unit (TCU).",
+    dependencies: ["block", "crankshaft"],
+    explodedOffset: { x: 80, y: 40 },
+    slotPosition: { x: 390, y: 290 },
+    estimatedDuration: 1400,
+    soundType: "metallic",
+    variants: [
+      { id: "cast", label: "6-Speed Synchronized Manual Transmission", hpMultiplier: 1.0, weightMultiplier: 1.0, costMultiplier: 1.0, reliabilityDelta: 0 },
+      { id: "forged", label: "7-Speed Dual-Clutch (DCT) + Twin-Plate Clutch", hpMultiplier: 1.15, weightMultiplier: 0.92, costMultiplier: 2.2, reliabilityDelta: 10 },
+      { id: "billet", label: "6-Speed Straight-Cut Dog-Ring Sequential Gearbox", hpMultiplier: 1.25, weightMultiplier: 0.80, costMultiplier: 3.2, reliabilityDelta: 18 },
+      { id: "titanium", label: "7-Speed Carbon-Cased Formula Sequential + Paddle Actuation", hpMultiplier: 1.35, weightMultiplier: 0.68, costMultiplier: 4.8, reliabilityDelta: 24 },
+    ],
+    statDeltas: { hp: 35, torque: 45, weight: 62, reliability: 15, cost: 7800 },
+    tooltipAdvice: "Dual-clutch and sequential dog-ring gearboxes provide lightning-fast 25ms upshifts with minimal drivetrain friction loss.",
+    torqueSpec: {
+      fastenerName: "ARP Bellhousing-to-Block Studs",
+      snugNm: 50,
+      finalAngleDeg: 90,
+      boltCount: 10,
+    },
+  },
+  {
+    id: "engine_cover",
+    name: "Engine Cover & Induction Plenum",
+    category: "Top End",
+    description: "Acoustic dress cover with transparent velocity stack inspection windows and front ram-air induction scoop.",
+    dependencies: ["intake_manifold", "cylinder_head"],
+    explodedOffset: { x: 0, y: -90 },
+    slotPosition: { x: 250, y: 80 },
+    estimatedDuration: 1000,
+    soundType: "slide",
+    variants: [
+      { id: "cast", label: "OEM Polycarbonate Engine Beauty Cover", hpMultiplier: 1.0, weightMultiplier: 1.0, costMultiplier: 1.0, reliabilityDelta: 0 },
+      { id: "forged", label: "Brushed Aluminum & Gold Anodized V12 Trim Cover", hpMultiplier: 1.04, weightMultiplier: 0.82, costMultiplier: 1.8, reliabilityDelta: 5 },
+      { id: "billet", label: "Dry Pre-Preg 3K Twill Carbon-Fiber Cover with Gold Frame", hpMultiplier: 1.08, weightMultiplier: 0.55, costMultiplier: 2.8, reliabilityDelta: 10 },
+      { id: "titanium", label: "Forged Carbon-Titanium Aerocover with Ram-Air Ducting", hpMultiplier: 1.15, weightMultiplier: 0.45, costMultiplier: 4.2, reliabilityDelta: 15 },
+    ],
+    statDeltas: { hp: 12, torque: 10, weight: 4, reliability: 5, cost: 2400 },
+    tooltipAdvice: "Carbon-fiber ram-air induction plenums pressurize intake air at high speeds while shielding heat from intake runners.",
+    torqueSpec: {
+      fastenerName: "Titanium M6 Quarter-Turn Fasteners",
+      snugNm: 8,
+      finalAngleDeg: 30,
+      boltCount: 8,
+    },
+  },
 ];
 
 const HYBRID_MOTOR_VARIANTS: ComponentVariant[] = [
@@ -494,3 +572,280 @@ export function getAssemblyComponents(engineConfig?: Partial<EngineConfig>): Ass
   if (isHybrid) return HYBRID_ASSEMBLY_COMPONENTS;
   return ENGINE_ASSEMBLY_COMPONENTS;
 }
+
+// ===================================================================
+// SEQUENTIAL ENGINE BUILDER FLOW — TYPES & STAGES
+// ===================================================================
+
+export type PowertrainMode = "ice" | "electric";
+
+export type VirtualStageId =
+  | "powertrain_select"
+  | "ice_gate"
+  | "ev_gate"
+  | "hybrid_optional"
+  | "finish";
+
+export type BuildStageId = ComponentId | VirtualStageId;
+
+export interface StageDefinition {
+  id: BuildStageId;
+  name: string;
+  shortName: string;
+  subtitle: string;
+  category: "Setup" | "Core" | "Bottom End" | "Top End" | "Induction & Exhaust" | "Hybrid & Electric" | "Summary";
+  isVirtual?: boolean;
+  componentId?: ComponentId;
+  powertrain: "both" | "ice" | "electric";
+  iconName?: string;
+}
+
+export const ICE_STAGE_SEQUENCE: ComponentId[] = [
+  "block",
+  "crankshaft",
+  "pistons",
+  "rods",
+  "head_gasket",
+  "cylinder_head",
+  "camshaft",
+  "valves",
+  "intake_manifold",
+  "exhaust_headers",
+  "turbocharger",
+  "oil_pan",
+  "radiator",
+  "transmission",
+  "engine_cover",
+];
+
+export const EV_STAGE_SEQUENCE: ComponentId[] = [
+  "block",           // EV Battery Pack Tray & Enclosure
+  "crankshaft",      // High-Voltage Lithium-Ion Battery Modules
+  "pistons",         // Battery Management System (BMS)
+  "rods",            // High-Voltage Busbars & Wiring Harness
+  "oil_pan",         // Liquid Cooling Radiator & Pump Reservoir
+  "head_gasket",     // Glycol Thermal Cooling Plate
+  "cylinder_head",   // 800V SiC Inverter Power Module
+  "camshaft",        // Permanent Magnet Rotor Shaft
+  "valves",          // Axial-Flux Electric Stator Coils
+  "intake_manifold", // Single-Speed Reduction Gearbox
+  "exhaust_headers", // High-Voltage Power Distribution Unit (PDU)
+  "turbocharger",    // Regenerative Energy Boost System
+];
+
+export const HYBRID_STAGE_SEQUENCE: ComponentId[] = [
+  "hybrid_motor",
+  "inverter_ecu",
+];
+
+export const STAGE_METADATA_MAP_ICE: Record<ComponentId, { title: string; short: string; subtitle: string; advice: string }> = {
+  block: {
+    title: "Engine Block Architecture",
+    short: "Engine Block",
+    subtitle: "Select cylinder bank architecture, cylinder bore, piston stroke and deck geometry",
+    advice: "Cast iron offers maximum cylinder sleeve rigidity under heavy boost, while aluminum alloy cuts 45% weight."
+  },
+  crankshaft: {
+    title: "Crankshaft & Main Journal Bearings",
+    short: "Crankshaft",
+    subtitle: "Main bearing saddles, counterweights, and cross-plane / flat-plane balance",
+    advice: "Forged 4340 chromoly steel withstands extreme torque spikes and torsional harmonics at high RPM."
+  },
+  pistons: {
+    title: "Pistons & Compression Rings",
+    short: "Pistons",
+    subtitle: "Piston dome design, compression rings, and crown thermal insulation coating",
+    advice: "Low-friction ceramic coated piston skirts reduce cylinder wall friction and improve thermal durability."
+  },
+  rods: {
+    title: "Connecting Rods & Wrist Pins",
+    short: "Connecting Rods",
+    subtitle: "H-Beam / I-Beam rod design, floating wrist pins, and ARP rod bolt specs",
+    advice: "H-Beam forged connecting rods resist buckling forces under intense boost pressures and high cylinder load."
+  },
+  head_gasket: {
+    title: "Multi-Layer Steel Head Gasket",
+    short: "Head Gasket",
+    subtitle: "Multi-layer steel compression sealing with integrated combustion fire rings",
+    advice: "MLS head gaskets seal high cylinder peak combustion pressures without risk of blowout."
+  },
+  cylinder_head: {
+    title: "Cylinder Head & Valvetrain Architecture",
+    short: "Cylinder Head",
+    subtitle: "Combustion chamber CNC porting, valve angle, and SOHC/DOHC valvetrain layout",
+    advice: "CNC-ported intake & exhaust ports dramatically increase volumetric flow efficiency."
+  },
+  camshaft: {
+    title: "Camshafts & Timing Gears",
+    short: "Camshafts",
+    subtitle: "Cam lobe duration, valve lift profile, and variable valve timing phase tuning",
+    advice: "High-lift camshaft profiles breathe better at redline, moving the engine's power curve higher."
+  },
+  valves: {
+    title: "Valves, Springs & Retainers",
+    short: "Valves",
+    subtitle: "Sodium-filled exhaust valves, dual valve springs, and titanium retainers",
+    advice: "Titanium retainers reduce valvetrain mass and eliminate high-RPM valve float."
+  },
+  intake_manifold: {
+    title: "Intake Manifold & Fuel Delivery",
+    short: "Intake & Fuel",
+    subtitle: "Intake plenum volume, throttle bodies, and direct/port fuel injectors",
+    advice: "Individual Throttle Bodies (ITBs) deliver instantaneous throttle response and optimal airflow distribution."
+  },
+  exhaust_headers: {
+    title: "Exhaust Manifold & Scavenging Headers",
+    short: "Exhaust Headers",
+    subtitle: "Equal-length primary runners, collector merge angle, and catalytic converters",
+    advice: "Equal-length ceramic-coated headers maximize pulse scavenging harmonics for higher midrange torque."
+  },
+  turbocharger: {
+    title: "Turbocharging & Wastegate System",
+    short: "Turbocharger",
+    subtitle: "Compressor/turbine A/R sizing, intercooler matrix, and electronic boost control",
+    advice: "Twin-scroll ball-bearing turbos eliminate boost lag while sustaining immense volumetric flow."
+  },
+  oil_pan: {
+    title: "Oil Pan & Integrated Dry-Sump System",
+    short: "Oil Pan & Sump",
+    subtitle: "Baffled wet sump vs multi-stage dry-sump scavenging system and hardlines",
+    advice: "Multi-stage dry-sump lubrication with external reservoir eliminates oil starvation under extreme track G-forces."
+  },
+  radiator: {
+    title: "Cooling Radiator & Electric Fans",
+    short: "Radiator & Fans",
+    subtitle: "Multi-core aluminum crossflow radiator, high-CFM brushless fans and expansion tank",
+    advice: "Multi-pass crossflow cooling maintains optimal 88°C coolant temps, preventing heat soak and detonation under load."
+  },
+  transmission: {
+    title: "Transmission, Bellhousing & Clutch",
+    short: "Transmission",
+    subtitle: "Sequential / dual-clutch transmission, multi-plate clutch, flywheel and TCU",
+    advice: "Dual-clutch and sequential dog-ring gearboxes provide lightning-fast 25ms upshifts with minimal drivetrain power loss."
+  },
+  engine_cover: {
+    title: "Engine Cover & Ram-Air Induction Plenum",
+    short: "Engine Cover",
+    subtitle: "Carbon-fiber aerodynamic dress cover with velocity stack windows and ram-air scoop",
+    advice: "Carbon-fiber ram-air induction plenums pressurize intake air at high speeds while shielding heat from intake runners."
+  },
+  hybrid_motor: {
+    title: "Hybrid Electric Drive Motor",
+    short: "Hybrid Motor",
+    subtitle: "Axial-flux electric motor assist mounted to crankshaft/transmission",
+    advice: "Axial-flux motor geometry generates instantaneous torque from zero RPM to eliminate turbo lag."
+  },
+  inverter_ecu: {
+    title: "Inverter & Hybrid ECU Module",
+    short: "Inverter ECU",
+    subtitle: "Silicon Carbide (SiC) power inverter and dual-core hybrid energy controller",
+    advice: "800V SiC MOSFET power electronics achieve 99% switching efficiency."
+  },
+};
+
+export const STAGE_METADATA_MAP_EV: Record<ComponentId, { title: string; short: string; subtitle: string; advice: string }> = {
+  block: {
+    title: "EV Battery Pack Tray & Structural Enclosure",
+    short: "Battery Tray",
+    subtitle: "Structural aluminum tray, ballistic skid plate and crash crumple zone integration",
+    advice: "Cell-to-pack structural design improves chassis torsional stiffness by over 30%."
+  },
+  crankshaft: {
+    title: "High-Voltage Lithium-Ion Battery Modules",
+    short: "Battery Cells",
+    subtitle: "800V high-density cell modules, series/parallel string arrangements",
+    advice: "Solid-state electrolyte chemistry doubles volumetric energy density while eliminating thermal runaway."
+  },
+  pistons: {
+    title: "Battery Management System (BMS)",
+    short: "BMS Controller",
+    subtitle: "Active cell balancing, SoC/SoH neural estimation, and isolation monitoring",
+    advice: "Active cell balancing extends pack cycle lifespan by over 40% under fast-charging loads."
+  },
+  rods: {
+    title: "High-Voltage Busbars & Wiring Harness",
+    short: "HV Busbars",
+    subtitle: "Solid copper busbars, pyrofuse isolation disconnects, and heavy-gauge conduits",
+    advice: "Low-impedance solid copper busbars minimize electrical transmission resistance and heat generation."
+  },
+  oil_pan: {
+    title: "Liquid Cooling Radiator & Pump Reservoir",
+    short: "Cooling Radiator",
+    subtitle: "Dual-circuit electric coolant pumps, heat exchanger and front air radiator",
+    advice: "Dual-loop thermal management precisely regulates temperature between motor and battery pack."
+  },
+  head_gasket: {
+    title: "Glycol Thermal Cooling Plate",
+    short: "Cooling Plate",
+    subtitle: "Direct-contact micro-channel liquid cooling plate bonded beneath cell modules",
+    advice: "Micro-channel cooling plates ensure cell-to-cell delta remains under 2°C during high-power discharge."
+  },
+  cylinder_head: {
+    title: "800V SiC Inverter Power Module",
+    short: "SiC Inverter",
+    subtitle: "Silicon Carbide MOSFET power modules converting 800V DC to 3-phase AC drive",
+    advice: "SiC power stages handle up to 25kHz switching frequency with minimal thermal loss."
+  },
+  camshaft: {
+    title: "Permanent Magnet Rotor Shaft",
+    short: "Rotor Shaft",
+    subtitle: "Neodymium-iron-boron magnet array with carbon-fiber retention sleeve",
+    advice: "Carbon-fiber wound rotor sleeves prevent centrifugal magnet distortion up to 25,000 RPM."
+  },
+  valves: {
+    title: "Axial-Flux Electric Stator Coils",
+    short: "Stator Coils",
+    subtitle: "Hairpin copper stator windings creating high-density rotating magnetic fields",
+    advice: "Hairpin slot-fill density achieves industry-leading torque per kilogram in electric hypercars."
+  },
+  intake_manifold: {
+    title: "Single-Speed Reduction Gearbox",
+    short: "Reduction Gearbox",
+    subtitle: "Precision helical reduction gears multiplying motor torque to drive axles",
+    advice: "Helical gear geometry minimizes gear mesh noise while handling over 1,500 Nm torque."
+  },
+  exhaust_headers: {
+    title: "High-Voltage Power Distribution Unit (PDU)",
+    short: "HV PDU",
+    subtitle: "Solid-state contactors, DC-DC converter, and auxiliary power distribution",
+    advice: "Solid-state pyrofuse contactors isolate high-voltage systems in under 2 milliseconds."
+  },
+  turbocharger: {
+    title: "Regenerative Energy Boost System",
+    short: "Regen System",
+    subtitle: "Bi-directional kinetic energy recovery generating up to 350kW recharge power",
+    advice: "Integrated torque-vectoring regen stabilizes corner entry while recuperating maximum kinetic energy."
+  },
+  radiator: {
+    title: "EV Radiator Heat Exchanger",
+    short: "Heat Exchanger",
+    subtitle: "Auxiliary front radiator for motor and inverter cooling loops",
+    advice: "Maintains optimal 45°C power electronics operating temperature."
+  },
+  transmission: {
+    title: "Dual-Motor Reduction Gearset",
+    short: "E-Transmission",
+    subtitle: "Integrated electronic differential and planetary gear reduction",
+    advice: "Delivers independent left/right torque vectoring across rear axle."
+  },
+  engine_cover: {
+    title: "Inverter Acoustic Aero Cowl",
+    short: "Motor Cowling",
+    subtitle: "Carbon-composite sound damping and aero cover",
+    advice: "Reduces high-frequency inverter switching noise."
+  },
+  hybrid_motor: {
+    title: "Auxiliary E-Motor",
+    short: "Aux Motor",
+    subtitle: "Secondary electric drive unit",
+    advice: "Provides additional front-axle torque vectoring."
+  },
+  inverter_ecu: {
+    title: "Powertrain MCU",
+    short: "MCU Unit",
+    subtitle: "Vehicle central powertrain control module",
+    advice: "Coordinates multi-motor torque vectoring algorithms."
+  },
+};
+
+

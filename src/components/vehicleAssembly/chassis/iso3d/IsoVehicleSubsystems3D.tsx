@@ -1,8 +1,7 @@
 import React from "react";
 import { VehicleComponentId, VehicleAssemblyComponentMeta, getVehicleAssemblyComponents } from "../../../../sim/vehicleAssemblyTypes";
 import { EnginePosition, DriveType, VehicleConfig } from "../../../../sim/types";
-import { VBankBlockCastingIso } from "../../../assembly/iso3d/VBankBlockCastingIso";
-import { projectIso, ScreenPoint2D } from "../../../assembly/iso3d/isoMath";
+import { VBankLayoutRenderer } from "../../../assembly/layoutRenderers/VBankLayoutRenderer";
 
 interface IsoVehicleSubsystems3DProps {
   installedComponents: VehicleComponentId[];
@@ -63,9 +62,40 @@ export const IsoVehicleSubsystems3D: React.FC<IsoVehicleSubsystems3DProps> = ({
   const aeroState = getPartState("aero_package");
   const ecuState = getPartState("electronics_ecu");
 
+  // Dynamic Transmission Bellhousing Anchor & Drivetrain Offset
+  const transBellX = Math.min(780, engineCoords.x + 50);
+  const transEndX = Math.min(840, transBellX + 60);
+
+  const weightBiasLabel =
+    enginePosition === "mid"
+      ? "MID-ENGINE LAYOUT // 42:58 WEIGHT BIAS"
+      : enginePosition === "rear"
+      ? "REAR-ENGINE LAYOUT // 38:62 WEIGHT BIAS"
+      : "FRONT-ENGINE LAYOUT // 54:46 WEIGHT BIAS";
+
   return (
     <g id="iso-3d-vehicle-subsystems-group">
-      {/* ── 1. 3D ISOMETRIC ENGINE BLOCK (V12 Casting in Engine Slot) ── */}
+      {/* ── ENGINE BAY CHASSIS MOUNT ANCHORS & WEIGHT DISTRIBUTION BADGE ── */}
+      <g opacity="0.9" className="font-mono text-[9px] pointer-events-none">
+        {/* Heavy-Duty Rubber Isolator Engine Mount Bushings */}
+        <rect x={engineCoords.x - 42} y="246" width="18" height="14" rx="4" fill="#0f172a" stroke="#38bdf8" strokeWidth="1.5" />
+        <circle cx={engineCoords.x - 33} cy="253" r="3.5" fill="#f59e0b" stroke="#0f172a" strokeWidth="1" />
+
+        <rect x={engineCoords.x + 24} y="246" width="18" height="14" rx="4" fill="#0f172a" stroke="#38bdf8" strokeWidth="1.5" />
+        <circle cx={engineCoords.x + 33} cy="253" r="3.5" fill="#f59e0b" stroke="#0f172a" strokeWidth="1" />
+
+        {/* Structural Subframe Crossmember Engine Bed */}
+        <rect x={engineCoords.x - 55} y="258" width="110" height="10" rx="3" fill="#1e293b" stroke="#38bdf8" strokeWidth="1.8" />
+        <line x1={engineCoords.x - 50} y1="263" x2={engineCoords.x + 50} y2="263" stroke="#94a3b8" strokeWidth="1" />
+
+        {/* Engine Placement & Weight Distribution HUD Tag */}
+        <text x={engineCoords.x} y="105" fill="#38bdf8" fontSize="8" textAnchor="middle" fontWeight="bold" letterSpacing="0.5">
+          {weightBiasLabel}
+        </text>
+        <line x1={engineCoords.x - 40} y1="110" x2={engineCoords.x + 40} y2="110" stroke="#38bdf8" strokeWidth="1" strokeDasharray="3 3" />
+      </g>
+
+      {/* ── 1. 2D MODE ENGINE BLOCK IN ENGINE BAY (Seated on Chassis Bed Y = 258) ── */}
       <g
         id="iso_engine_bay"
         onMouseEnter={() => onHoverComponent?.("engine_bay")}
@@ -73,17 +103,21 @@ export const IsoVehicleSubsystems3D: React.FC<IsoVehicleSubsystems3DProps> = ({
         className="cursor-pointer transition-all duration-700 ease-out"
         style={{ opacity: engineState.opacity }}
       >
-        <g transform={`translate(${engineCoords.x - 240}, -15) scale(0.65)`}>
-          <VBankBlockCastingIso
+        <g transform={`translate(${engineCoords.x - 125}, 128) scale(0.55)`}>
+          <VBankLayoutRenderer
             layoutSpec={{
-              label: "V12 Spec-R Block",
-              cyls: [6, 6],
-              width: 90,
-              bankAngle: "60°",
-              bx: 250,
-              bw: 120,
-              bh: 90,
+              label: "V12 SPEC-R BILLET ENGINE BLOCK",
+              cyls: [180, 220, 260, 300, 340, 380],
+              width: 32,
+              bankAngle: "60° V-Angle",
+              bx: 140,
+              bw: 280,
+              bh: 230,
               category: "V-Engine",
+              bolts: [
+                { x: 155, y: 120 }, { x: 405, y: 120 },
+                { x: 155, y: 320 }, { x: 405, y: 320 },
+              ],
             }}
             blockState={{
               isInstalled: engineState.isInstalled,
@@ -97,7 +131,7 @@ export const IsoVehicleSubsystems3D: React.FC<IsoVehicleSubsystems3DProps> = ({
         </g>
       </g>
 
-      {/* ── 2. 3D TRANSMISSION & DRIVETRAIN ── */}
+      {/* ── 2. DYNAMIC TRANSMISSION & DRIVETRAIN ALIGNMENT ── */}
       <g
         id="iso_transmission"
         onMouseEnter={() => onHoverComponent?.("transmission")}
@@ -105,22 +139,38 @@ export const IsoVehicleSubsystems3D: React.FC<IsoVehicleSubsystems3DProps> = ({
         className="cursor-pointer transition-all duration-700 ease-out"
         style={{ opacity: transState.opacity }}
       >
-        {/* 3D Gearbox Bellhousing with Cast Cooling Fins */}
-        <path d="M 300 210 L 360 215 L 360 265 L 300 260 Z" fill="url(#al-brushed-metallic)" stroke={transState.isHovered ? "#38bdf8" : "#475569"} strokeWidth="2" />
-        <line x1="310" y1="215" x2="310" y2="258" stroke="#94a3b8" strokeWidth="1" />
-        <line x1="325" y1="216" x2="325" y2="260" stroke="#94a3b8" strokeWidth="1" />
-        <line x1="340" y1="217" x2="340" y2="262" stroke="#94a3b8" strokeWidth="1" />
+        {/* Gearbox Bellhousing (Dynamically moves with Engine Position) */}
+        <path
+          d={`M ${transBellX} 210 L ${transEndX} 215 L ${transEndX} 265 L ${transBellX} 260 Z`}
+          fill="url(#al-brushed-metallic)"
+          stroke={transState.isHovered ? "#38bdf8" : "#475569"}
+          strokeWidth="2"
+        />
+        <line x1={transBellX + 10} y1="215" x2={transBellX + 10} y2="258" stroke="#94a3b8" strokeWidth="1" />
+        <line x1={transBellX + 25} y1="216" x2={transBellX + 25} y2="260" stroke="#94a3b8" strokeWidth="1" />
+        <line x1={transBellX + 40} y1="217" x2={transBellX + 40} y2="262" stroke="#94a3b8" strokeWidth="1" />
 
+        {/* Drivetrain Driveshaft & Differentials Routing based on DriveType and EnginePosition */}
         {(driveType === "rwd" || driveType === "awd") && (
           <g>
-            <line x1="360" y1="250" x2="710" y2="275" stroke="#10b981" strokeWidth="5" strokeDasharray="8 4" />
-            <circle cx="710" cy="275" r="18" fill="#0f172a" stroke="#10b981" strokeWidth="2.5" />
-            <circle cx="710" cy="275" r="10" fill="#334155" stroke="#64748b" strokeWidth="1" />
+            {/* Rear Driveshaft */}
+            <line x1={transEndX} y1="250" x2="710" y2="275" stroke="#10b981" strokeWidth="4" />
+            <circle cx="710" cy="275" r="16" fill="#0f172a" stroke="#10b981" strokeWidth="2" />
+            <circle cx="710" cy="275" r="9" fill="#334155" stroke="#64748b" strokeWidth="1" />
+          </g>
+        )}
+
+        {(driveType === "fwd" || driveType === "awd") && (
+          <g>
+            {/* Front Driveshaft */}
+            <line x1={transBellX} y1="245" x2="230" y2="275" stroke="#a855f7" strokeWidth="4" />
+            <circle cx="230" cy="275" r="16" fill="#0f172a" stroke="#a855f7" strokeWidth="2" />
+            <circle cx="230" cy="275" r="9" fill="#334155" stroke="#64748b" strokeWidth="1" />
           </g>
         )}
       </g>
 
-      {/* ── 3. 3D EXHAUST SYSTEM ── */}
+      {/* ── 3. DYNAMIC EXHAUST SYSTEM ROUTING ── */}
       <g
         id="iso_exhaust_system"
         onMouseEnter={() => onHoverComponent?.("exhaust_system")}
@@ -128,8 +178,15 @@ export const IsoVehicleSubsystems3D: React.FC<IsoVehicleSubsystems3DProps> = ({
         className="cursor-pointer transition-all duration-700 ease-out"
         style={{ opacity: exhaustState.opacity }}
       >
-        <path d="M 280 250 L 320 290 L 540 290 Q 680 290 790 280 L 870 280" fill="none" stroke="url(#titanium-weld-tint)" strokeWidth="5.5" strokeLinecap="round" />
-        <rect x="390" y="282" width="48" height="16" rx="4" fill="#0f172a" stroke="#ef4444" strokeWidth="2" />
+        {/* Exhaust Header originating from Engine Position */}
+        <path
+          d={`M ${engineCoords.x + 30} 250 L ${Math.min(760, engineCoords.x + 80)} 288 L 760 288 Q 800 288 870 280`}
+          fill="none"
+          stroke="url(#titanium-weld-tint)"
+          strokeWidth="5.5"
+          strokeLinecap="round"
+        />
+        <rect x={Math.min(700, engineCoords.x + 120)} y="281" width="45" height="15" rx="4" fill="#0f172a" stroke="#ef4444" strokeWidth="2" />
         <rect x="760" y="270" width="58" height="22" rx="4" fill="#0f172a" stroke="#ef4444" strokeWidth="2" />
         
         {/* Dual Stainless Muffler Exhaust Tips */}

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import type { ComponentId } from "../../../sim/assemblyTypes";
 import { projectIso, projectIso60VEllipse } from "./isoMath";
 import { getIsoMaterialFills } from "./isoShaders";
@@ -25,55 +25,84 @@ interface CamshaftIsoProps {
 }
 
 /**
- * Photorealistic 3D Isometric Quad-Cam DOHC Camshaft & VVT Timing Gear Drive System Renderer
- * Perfectly depth-sorted and aligned across all 12 Cylinders (Distal Rear Bank & Proximal Front Bank):
- * - 4 Precision Forged Camshaft Bars (Rear Intake/Exhaust & Front Intake/Exhaust)
- * - 48 High-Lift CNC Cam Lobes aligned directly above the 48 valve retainers
- * - 4 Large Variable Valve Timing (VVT) Phaser Timing Gears / Sprockets at the front (X = 115)
- * - Synchronized Multi-Row Timing Chain Drive Loop connecting Crankshaft Gear (X = 115, Y = 0, Z = 60) to Quad-Cam Sprockets
+ * ═══════════════════════════════════════════════════════════════════
+ * 3D ISOMETRIC DOHC CAMSHAFTS & VVT PHASERS — Multi-Architecture
+ * ═══════════════════════════════════════════════════════════════════
+ *
+ * Precision hollow billet steel camshafts with CNC ground egg-shaped lobes,
+ * VVT variable valve timing phaser sprockets, and bearing journals.
  */
-export const CamshaftIso: React.FC<CamshaftIsoProps> = ({
+const CamshaftIsoComponent: React.FC<CamshaftIsoProps> = ({
   layoutSpec,
   componentState,
   selectedVariants,
   onHoverComponent,
 }) => {
-  const originScreen = { x: 250, y: 215 };
+  const originScreen = useMemo(() => ({ x: 250, y: 215 }), []);
   const materialGrade = selectedVariants?.camshaft || "forged";
-  const fills = getIsoMaterialFills(materialGrade);
+  const fills = useMemo(() => getIsoMaterialFills(materialGrade), [materialGrade]);
 
-  const isVEngine = layoutSpec.category === "V" || layoutSpec.label?.includes("V") || layoutSpec.cyls.length >= 8;
+  const cat = (layoutSpec.category || "").toLowerCase();
+  const label = (layoutSpec.label || "").toLowerCase();
+  const isV = cat === "vbank" || label.includes("v-") || label.includes("v6") || label.includes("v8") || label.includes("v10") || label.includes("v12");
+  const isBoxer = cat === "flat" || label.includes("boxer") || label.includes("h4") || label.includes("h6");
+  const isW = cat === "wbank" || label.includes("w12") || label.includes("w16") || label.includes("w18");
 
-  const blockW = 230; // Matches V12 block length
+  const isQuadCam = isV || isBoxer || isW;
 
-  // Quad Camshaft Shaft Specifications (Depth Sorted: Rear Distal Y < 0 first, Front Proximal Y > 0 second)
-  const camSpecs: {
-    id: string;
-    bankSide: "left" | "right" | "inline";
-    camType: "intake" | "exhaust";
-    y: number;
-    z: number;
-    tiltDeg: number;
-  }[] = isVEngine
+  const config = useMemo(() => {
+    if (isBoxer) {
+      const isH6 = label.includes("h6") || label.includes("6");
+      const blockW = isH6 ? 186 : 145;
+      const xPositions = isH6 ? [-50, 0, 50] : [-30, 30];
+      return { blockW, xPositions };
+    }
+    if (isV || isW) {
+      let blockW = 230;
+      let xPositions = [-85, -51, -17, 17, 51, 85];
+      if (label.includes("v6") || label.includes("w12")) {
+        blockW = 148;
+        xPositions = [-38, 0, 38];
+      } else if (label.includes("v8") || label.includes("w16")) {
+        blockW = 180;
+        xPositions = [-54, -18, 18, 54];
+      } else if (label.includes("v10")) {
+        blockW = 205;
+        xPositions = [-70, -35, 0, 35, 70];
+      }
+      return { blockW, xPositions };
+    }
+    // Inline (I3, I4, I6)
+    let blockW = 175;
+    let xPositions = [-54, -18, 18, 54];
+    if (label.includes("i3") || layoutSpec.cyls.length === 3) {
+      blockW = 140;
+      xPositions = [-38, 0, 38];
+    } else if (label.includes("i6") || layoutSpec.cyls.length === 6) {
+      blockW = 224;
+      xPositions = [-85, -51, -17, 17, 51, 85];
+    }
+    return { blockW, xPositions };
+  }, [isBoxer, isV, isW, label, layoutSpec.cyls.length]);
+
+  const { blockW, xPositions } = config;
+
+  // Camshaft Shaft Layout Specs
+  const camSpecs = isQuadCam
     ? [
-        // Distal Rear Bank (6 Cylinders Facing Away @ Y < 0)
         { id: "right-intake", bankSide: "right", camType: "intake", y: -52, z: 182, tiltDeg: 30 },
         { id: "right-exhaust", bankSide: "right", camType: "exhaust", y: -36, z: 182, tiltDeg: 30 },
-        // Proximal Front Bank (6 Cylinders Facing Us @ Y > 0)
         { id: "left-exhaust", bankSide: "left", camType: "exhaust", y: 36, z: 182, tiltDeg: -25 },
         { id: "left-intake", bankSide: "left", camType: "intake", y: 52, z: 182, tiltDeg: -25 },
       ]
     : [
-        { id: "inline-intake", bankSide: "inline", camType: "intake", y: 15, z: 185, tiltDeg: 0 },
-        { id: "inline-exhaust", bankSide: "inline", camType: "exhaust", y: -15, z: 185, tiltDeg: 0 },
+        { id: "inline-exhaust", bankSide: "inline", camType: "exhaust", y: 16, z: 182, tiltDeg: 0 },
+        { id: "inline-intake", bankSide: "inline", camType: "intake", y: -16, z: 182, tiltDeg: 0 },
       ];
-
-  // Front Crankshaft Drive Timing Gear Point
-  const crankGearPt = projectIso({ x: blockW / 2 + 10, y: 0, z: 60 }, originScreen);
 
   return (
     <g
-      id="iso-camshafts-v12-quadcam-depth-sorted"
+      id="iso-camshaft-assembly"
       onMouseEnter={() => onHoverComponent?.("camshaft")}
       onMouseLeave={() => onHoverComponent?.(null)}
       className="cursor-pointer transition-all duration-700 ease-out"
@@ -82,181 +111,72 @@ export const CamshaftIso: React.FC<CamshaftIsoProps> = ({
         opacity: componentState.opacity,
       }}
     >
-      {/* ── 1. FRONT QUAD-CAM DOHC TIMING CHAIN / BELT DRIVE LOOP ── */}
-      {isVEngine && (
-        <g id="v12-timing-chain-loop">
-          {/* Crankshaft Drive Timing Gear (X = +125, Y = 0, Z = 60) */}
-          <circle cx={crankGearPt.x} cy={crankGearPt.y} r="12" fill="url(#forged-steel)" stroke="#090d16" strokeWidth="2" />
-          <circle cx={crankGearPt.x} cy={crankGearPt.y} r="12" fill="none" stroke="#ffffff" strokeWidth="1" opacity="0.8" />
-          <circle cx={crankGearPt.x} cy={crankGearPt.y} r="6" fill="#020617" stroke="#38bdf8" strokeWidth="1" />
-
-          {/* Multi-Row Timing Chain Link Lines Connecting Crank Gear to Front Sprockets */}
-          {camSpecs.map((spec) => {
-            const frontSprocket3D = { x: blockW / 2 + 10, y: spec.y, z: spec.z };
-            const sprocPt = projectIso(frontSprocket3D, originScreen);
-
-            return (
-              <g key={`timing-chain-link-${spec.id}`}>
-                <line
-                  x1={crankGearPt.x}
-                  y1={crankGearPt.y}
-                  x2={sprocPt.x}
-                  y2={sprocPt.y}
-                  stroke="#475569"
-                  strokeWidth="3.5"
-                  strokeDasharray="4 2"
-                />
-                <line
-                  x1={crankGearPt.x}
-                  y1={crankGearPt.y}
-                  x2={sprocPt.x}
-                  y2={sprocPt.y}
-                  stroke="#cbd5e1"
-                  strokeWidth="1.2"
-                  opacity="0.9"
-                />
-              </g>
-            );
-          })}
-        </g>
-      )}
-
-      {/* ── 2. FORGED CAMSHAFTS, CAM LOBES & VVT TIMING SPROCKETS ── */}
       {camSpecs.map((cam) => {
-        const { id, bankSide, y, z, tiltDeg } = cam;
-
-        // Camshaft Shaft 3D End Points
-        const camStart3D = { x: -blockW / 2 - 10, y, z };
-        const camEnd3D = { x: blockW / 2 + 10, y, z };
-
-        const camStart = projectIso(camStart3D, originScreen);
-        const camEnd = projectIso(camEnd3D, originScreen);
-
-        const frontSprocketTilted = projectIso60VEllipse(camEnd3D, 11, bankSide === "right" ? "right" : "left", originScreen);
+        const startPt = projectIso({ x: -blockW / 2 - 8, y: cam.y, z: cam.z }, originScreen);
+        const endPt = projectIso({ x: blockW / 2 + 8, y: cam.y, z: cam.z }, originScreen);
 
         return (
-          <g key={`camshaft-assembly-${id}`}>
-            {/* Main Forged Steel Camshaft Bar Axis */}
+          <g key={`camshaft-tube-${cam.id}`} id={`cam-${cam.id}`}>
+            {/* 1. CAMSHAFT MAIN SHAFT TUBE */}
             <line
-              x1={camStart.x}
-              y1={camStart.y}
-              x2={camEnd.x}
-              y2={camEnd.y}
+              x1={startPt.x}
+              y1={startPt.y}
+              x2={endPt.x}
+              y2={endPt.y}
               stroke="url(#rod-hbeam-shank)"
               strokeWidth="9"
               strokeLinecap="round"
             />
-            {/* Polished Chrome Specular Highlight Line */}
+            {/* Specular Highlight Line */}
             <line
-              x1={camStart.x}
-              y1={camStart.y - 2.5}
-              x2={camEnd.x}
-              y2={camEnd.y - 2.5}
+              x1={startPt.x}
+              y1={startPt.y - 2}
+              x2={endPt.x}
+              y2={endPt.y - 2}
               stroke="#ffffff"
-              strokeWidth="1.8"
-              opacity="0.95"
+              strokeWidth="1.5"
+              opacity="0.9"
             />
 
-            {/* Rear End Bearing Journal Flange */}
-            <ellipse
-              cx={camStart.x}
-              cy={camStart.y}
-              rx="6"
-              ry="4"
-              fill="url(#bolt-boss-raised)"
-              stroke="#090d16"
-              strokeWidth="1.2"
-            />
+            {/* 2. FRONT VVT PHASER TIMING GEAR */}
+            <circle cx={startPt.x} cy={startPt.y} r="14" fill="#090d16" />
+            <circle cx={startPt.x} cy={startPt.y} r="12.5" fill={fills.left} stroke="#090d16" strokeWidth="1.5" />
+            <circle cx={startPt.x} cy={startPt.y} r="11" fill="none" stroke="#38bdf8" strokeWidth="1.2" strokeDasharray="3 2" />
+            <circle cx={startPt.x} cy={startPt.y} r="5" fill="url(#bearing-saddle-chrome)" stroke="#090d16" strokeWidth="0.8" />
+            <circle cx={startPt.x} cy={startPt.y} r="2" fill="#020617" />
 
-            {/* Front Variable Valve Timing (VVT) Phaser Timing Sprocket / Gear Cog (matching reference image) */}
-            <g id={`vvt-sprocket-${id}`}>
-              {/* Outer Gear Teeth Disc */}
-              <ellipse
-                cx={frontSprocketTilted.cx}
-                cy={frontSprocketTilted.cy}
-                rx={frontSprocketTilted.rx + 3}
-                ry={frontSprocketTilted.ry + 1.8}
-                fill="url(#camshaft-steel-journal)"
-                stroke="#0f172a"
-                strokeWidth="2.2"
-                transform={`rotate(${frontSprocketTilted.tiltDeg}, ${frontSprocketTilted.cx}, ${frontSprocketTilted.cy})`}
-              />
+            {/* 3. PRECISION GROUND EGG-SHAPED CAM LOBES */}
+            {xPositions.map((bx, idx) => {
+              const isOdd = idx % 2 === 1;
+              const lobe1Pt = projectIso({ x: bx - 7, y: cam.y, z: cam.z }, originScreen);
+              const lobe2Pt = projectIso({ x: bx + 7, y: cam.y, z: cam.z }, originScreen);
 
-              {/* Gear Tooth Notch Details (12 notches around perimeter) */}
-              {[0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330].map((deg, tIdx) => {
-                const rad = (deg * Math.PI) / 180;
-                const tx1 = frontSprocketTilted.cx + Math.cos(rad) * (frontSprocketTilted.rx + 1);
-                const ty1 = frontSprocketTilted.cy + Math.sin(rad) * (frontSprocketTilted.ry + 0.6);
-                const tx2 = frontSprocketTilted.cx + Math.cos(rad) * (frontSprocketTilted.rx + 4);
-                const ty2 = frontSprocketTilted.cy + Math.sin(rad) * (frontSprocketTilted.ry + 2.2);
-                return (
-                  <line
-                    key={`sprocket-tooth-${id}-${tIdx}`}
-                    x1={tx1} y1={ty1}
-                    x2={tx2} y2={ty2}
-                    stroke="#0f172a"
-                    strokeWidth="1.8"
+              return (
+                <g key={`cam-lobes-${cam.id}-${idx}`}>
+                  {/* Lobe 1 */}
+                  <ellipse
+                    cx={lobe1Pt.x}
+                    cy={lobe1Pt.y}
+                    rx="6.5"
+                    ry="9"
+                    transform={`rotate(${cam.tiltDeg + (isOdd ? 45 : -45)}, ${lobe1Pt.x}, ${lobe1Pt.y})`}
+                    fill="url(#bearing-saddle-chrome)"
+                    stroke="#090d16"
+                    strokeWidth="1"
                   />
-                );
-              })}
-
-              {/* Inner VVT Actuator Housing Chamber */}
-              <ellipse
-                cx={frontSprocketTilted.cx}
-                cy={frontSprocketTilted.cy}
-                rx={frontSprocketTilted.rx - 2}
-                ry={frontSprocketTilted.ry - 1.2}
-                fill="url(#bearing-saddle-chrome)"
-                stroke="#0f172a"
-                strokeWidth="1.6"
-                transform={`rotate(${frontSprocketTilted.tiltDeg}, ${frontSprocketTilted.cx}, ${frontSprocketTilted.cy})`}
-              />
-              {/* Central Retention Bolt (Gold Accent) */}
-              <circle
-                cx={frontSprocketTilted.cx}
-                cy={frontSprocketTilted.cy}
-                r="3.2"
-                fill="url(#gold-anodized-bolt)"
-                stroke="#78350f"
-                strokeWidth="1"
-              />
-              <circle
-                cx={frontSprocketTilted.cx}
-                cy={frontSprocketTilted.cy}
-                r="1.4"
-                fill="#451a03"
-              />
-            </g>
-
-            {/* CNC High-Lift Cam Lobes aligned along cylinder locations */}
-            {Array.from({ length: 6 }).map((_, idx) => {
-              const boreX = -85 + idx * 34;
-
-              // Dual Lobes per cylinder (Intake/Exhaust)
-              return [-4, +4].map((dx, lIdx) => {
-                const lobe3D = { x: boreX + dx, y, z };
-                const lobePt = projectIso(lobe3D, originScreen);
-                const isLobeUp = (idx + lIdx) % 2 === 0;
-
-                return (
-                  <g key={`cam-lobe-${id}-${idx}-${lIdx}`} transform={tiltDeg ? `rotate(${tiltDeg}, ${lobePt.x}, ${lobePt.y})` : undefined}>
-                    {/* Eccentric Egg-Shaped High-Lift Cam Lobe Profile */}
-                    <path
-                      d={`M ${lobePt.x - 3.5} ${lobePt.y - 3} Q ${lobePt.x} ${lobePt.y + (isLobeUp ? -11 : 9)} ${lobePt.x + 3.5} ${lobePt.y - 3} Z`}
-                      fill={fills.left}
-                      stroke="#090d16"
-                      strokeWidth="1.5"
-                    />
-                    <path
-                      d={`M ${lobePt.x - 2.5} ${lobePt.y - 2} Q ${lobePt.x} ${lobePt.y + (isLobeUp ? -8 : 7)} ${lobePt.x + 2.5} ${lobePt.y - 2} Z`}
-                      fill="none"
-                      stroke="#ffffff"
-                      strokeWidth="1"
-                      opacity="0.85"
-                    />
-                  </g>
-                );
-              });
+                  {/* Lobe 2 */}
+                  <ellipse
+                    cx={lobe2Pt.x}
+                    cy={lobe2Pt.y}
+                    rx="6.5"
+                    ry="9"
+                    transform={`rotate(${cam.tiltDeg + (isOdd ? -45 : 45)}, ${lobe2Pt.x}, ${lobe2Pt.y})`}
+                    fill="url(#bearing-saddle-chrome)"
+                    stroke="#090d16"
+                    strokeWidth="1"
+                  />
+                </g>
+              );
             })}
           </g>
         );
@@ -264,3 +184,5 @@ export const CamshaftIso: React.FC<CamshaftIsoProps> = ({
     </g>
   );
 };
+
+export const CamshaftIso = React.memo(CamshaftIsoComponent);

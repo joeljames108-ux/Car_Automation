@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import type { ComponentId } from "../../../sim/assemblyTypes";
 import { projectIso, projectIso60VEllipse } from "./isoMath";
 import { getIsoMaterialFills } from "./isoShaders";
@@ -25,20 +25,18 @@ interface CylinderHeadIsoProps {
 }
 
 /**
- * Photorealistic 3D Isometric Dual CNC Billet Aluminium DOHC Cylinder Head Assembly
+ * ═══════════════════════════════════════════════════════════════════
+ * 3D ISOMETRIC CYLINDER HEAD ASSEMBLY — Multi-Architecture CNC Head
+ * ═══════════════════════════════════════════════════════════════════
  *
- * Designed for 60° V12 Engine (30° tilt per bank from vertical)
- * Replaces generic box geometry with precision CNC machined casting contours:
- * - Sloped 60° Bank Tilt (Bottom deck Z=145, Top valve cover deck Z=182)
- * - 6 Scalloped Pent-Roof Combustion Chamber Domes per head with 4 Valve Seats
- * - Outer Side CNC Exhaust Flange Rails with 6 Oval Exhaust Ports & 12 Flange Studs
- * - Inner Valley Side CNC Intake Port Runners
- * - 12 Direct Ignition Coil-on-Plug (COP) Packs & Spark Plug Tube Wells
- * - Front Cam Drive Tunnels & Water Pump Crossover Ports
- * - Cast Reinforcement Ribs & Coolant Passage Freeze Plugs
- * - Machined Chamfer Highlight Edges
+ * Dynamically builds precision cylinder heads:
+ * - Inline (I3, I4, I6): Single continuous monoblock DOHC head
+ * - V-Bank (V6, V8, V10, V12): Dual angled bank heads
+ * - Boxer (H4, H6): Dual horizontally opposed bank heads
+ * - VR6: Single wide staggered DOHC head
+ * - W-Bank: Quad-bank multi-valve heads
  */
-export const CylinderHeadIso: React.FC<CylinderHeadIsoProps> = ({
+const CylinderHeadIsoComponent: React.FC<CylinderHeadIsoProps> = ({
   layoutSpec,
   componentState,
   selectedVariants,
@@ -48,47 +46,58 @@ export const CylinderHeadIso: React.FC<CylinderHeadIsoProps> = ({
   const materialGrade = selectedVariants?.cylinder_head || "billet";
   const fills = getIsoMaterialFills(materialGrade);
 
-  const isVEngine = layoutSpec.category === "V" || layoutSpec.label?.includes("V") || layoutSpec.cyls.length >= 8;
-
-  const BL = 230; // Block length (-115 to +115)
-  const halfL = BL / 2;
-
-  // 60° V-Angle Cylinder Head Coordinates
-  // Left Head: Bottom deck outer Y=+75, inner Y=+16 @ Z=145; Top deck outer Y=+62, inner Y=+24 @ Z=182
-  // Right Head: Bottom deck outer Y=-75, inner Y=-16 @ Z=145; Top deck outer Y=-62, inner Y=-24 @ Z=182
-  const Z_BOT = 145;
-  const Z_TOP = 182;
+  const cat = (layoutSpec.category || "").toLowerCase();
+  const label = (layoutSpec.label || "").toLowerCase();
+  const isV = cat === "vbank" || label.includes("v-") || label.includes("v6") || label.includes("v8") || label.includes("v10") || label.includes("v12");
+  const isBoxer = cat === "flat" || label.includes("boxer") || label.includes("h4") || label.includes("h6");
+  const isW = cat === "wbank" || label.includes("w12") || label.includes("w16") || label.includes("w18");
 
   const P = (x: number, y: number, z: number) => projectIso({ x, y, z }, O);
 
-  // Left Head 3D Corners
-  const lhBotOuterFL = P(-halfL - 2, 75, Z_BOT);
-  const lhBotOuterFR = P(halfL + 2, 75, Z_BOT);
-  const lhBotInnerBL = P(-halfL - 2, 16, Z_BOT);
-  const lhBotInnerBR = P(halfL + 2, 16, Z_BOT);
+  // Layout-specific dimension configurations
+  const config = useMemo(() => {
+    if (isBoxer) {
+      const isH6 = label.includes("h6") || label.includes("6");
+      const BL = isH6 ? 186 : 145;
+      const xPositions = isH6 ? [-50, 0, 50] : [-30, 30];
+      return { BL, halfL: BL / 2, isDual: true, isBoxer: true, xPositions };
+    }
+    if (isV || isW) {
+      let BL = 230;
+      let xPositions = [-85, -51, -17, 17, 51, 85];
+      if (label.includes("v6") || label.includes("w12")) {
+        BL = 148;
+        xPositions = [-38, 0, 38];
+      } else if (label.includes("v8") || label.includes("w16")) {
+        BL = 180;
+        xPositions = [-54, -18, 18, 54];
+      } else if (label.includes("v10")) {
+        BL = 205;
+        xPositions = [-70, -35, 0, 35, 70];
+      }
+      return { BL, halfL: BL / 2, isDual: true, isBoxer: false, xPositions };
+    }
+    // Inline (I3, I4, I6)
+    let BL = 175;
+    let xPositions = [-54, -18, 18, 54];
+    if (label.includes("i3") || layoutSpec.cyls.length === 3) {
+      BL = 140;
+      xPositions = [-38, 0, 38];
+    } else if (label.includes("i6") || layoutSpec.cyls.length === 6) {
+      BL = 224;
+      xPositions = [-85, -51, -17, 17, 51, 85];
+    }
+    return { BL, halfL: BL / 2, isDual: false, isBoxer: false, xPositions };
+  }, [isBoxer, isV, isW, label, layoutSpec.cyls.length]);
 
-  const lhTopOuterFL = P(-halfL - 2, 62, Z_TOP);
-  const lhTopOuterFR = P(halfL + 2, 62, Z_TOP);
-  const lhTopInnerBL = P(-halfL - 2, 24, Z_TOP);
-  const lhTopInnerBR = P(halfL + 2, 24, Z_TOP);
+  const { BL, halfL, isDual, xPositions } = config;
 
-  // Right Head 3D Corners
-  const rhBotOuterFL = P(-halfL - 2, -75, Z_BOT);
-  const rhBotOuterFR = P(halfL + 2, -75, Z_BOT);
-  const rhBotInnerBL = P(-halfL - 2, -16, Z_BOT);
-  const rhBotInnerBR = P(halfL + 2, -16, Z_BOT);
-
-  const rhTopOuterFL = P(-halfL - 2, -62, Z_TOP);
-  const rhTopOuterFR = P(halfL + 2, -62, Z_TOP);
-  const rhTopInnerBL = P(-halfL - 2, -24, Z_TOP);
-  const rhTopInnerBR = P(halfL + 2, -24, Z_TOP);
-
-  // 6 Cylinder Bore positions along X-axis
-  const borePositions = Array.from({ length: 6 }, (_, i) => -85 + i * 34);
+  const Z_BOT = 148;
+  const Z_TOP = 185;
 
   return (
     <g
-      id="iso-cylinder-head-v12-60deg-machined"
+      id="iso-cylinder-head-assembly"
       onMouseEnter={() => onHoverComponent?.("cylinder_head")}
       onMouseLeave={() => onHoverComponent?.(null)}
       className="cursor-pointer transition-all duration-700 ease-out"
@@ -97,301 +106,142 @@ export const CylinderHeadIso: React.FC<CylinderHeadIsoProps> = ({
         opacity: componentState.opacity,
       }}
     >
-      {isVEngine ? (
-        <g id="v12-dual-cnc-cylinder-heads">
-          {/* ═══════════════════════════════════════════════════════════════ */}
-          {/* 1. RIGHT (DISTAL) CYLINDER HEAD ASSEMBLY (Y < 0, Facing Away)  */}
-          {/* ═══════════════════════════════════════════════════════════════ */}
-          <g id="right-distal-cylinder-head">
-            {/* Main Casting Body — Right Head Outer Wall */}
-            <polygon
-              points={`
-                ${rhBotOuterFL.x},${rhBotOuterFL.y}
-                ${rhBotOuterFR.x},${rhBotOuterFR.y}
-                ${rhTopOuterFR.x},${rhTopOuterFR.y}
-                ${rhTopOuterFL.x},${rhTopOuterFL.y}
-              `}
-              fill="url(#v12-cast-aluminum-body-right)"
-              stroke="#090d16"
-              strokeWidth="2.2"
-            />
+      {/* ── 1. DUAL BANK HEADS (V-Bank & Boxer) ── */}
+      {isDual ? (
+        <>
+          {/* LEFT BANK CYLINDER HEAD */}
+          {(() => {
+            const botOutFL = P(-halfL - 2, 75, Z_BOT);
+            const botOutFR = P(halfL + 2, 75, Z_BOT);
+            const botInBL = P(-halfL - 2, 16, Z_BOT);
+            const botInBR = P(halfL + 2, 16, Z_BOT);
 
-            {/* Main Casting Body — Right Head Front Face */}
-            <polygon
-              points={`
-                ${rhBotOuterFL.x},${rhBotOuterFL.y}
-                ${rhBotInnerBL.x},${rhBotInnerBL.y}
-                ${rhTopInnerBL.x},${rhTopInnerBL.y}
-                ${rhTopOuterFL.x},${rhTopOuterFL.y}
-              `}
-              fill="url(#v12-cast-aluminum-body-right)"
-              stroke="#090d16"
-              strokeWidth="2"
-            />
+            const topOutFL = P(-halfL - 2, 62, Z_TOP);
+            const topOutFR = P(halfL + 2, 62, Z_TOP);
+            const topInBL = P(-halfL - 2, 24, Z_TOP);
+            const topInBR = P(halfL + 2, 24, Z_TOP);
 
-            {/* Right Head Top Valve Cover Mounting Flange Deck */}
-            <polygon
-              points={`
-                ${rhTopOuterFL.x},${rhTopOuterFL.y}
-                ${rhTopOuterFR.x},${rhTopOuterFR.y}
-                ${rhTopInnerBR.x},${rhTopInnerBR.y}
-                ${rhTopInnerBL.x},${rhTopInnerBL.y}
-              `}
-              fill="url(#v12-machined-deck)"
-              stroke="#090d16"
-              strokeWidth="2.2"
-            />
-            {/* Top Deck Specular Edge Highlight */}
-            <line
-              x1={rhTopOuterFL.x} y1={rhTopOuterFL.y}
-              x2={rhTopOuterFR.x} y2={rhTopOuterFR.y}
-              stroke="#ffffff"
-              strokeWidth="1.8"
-              opacity="0.85"
-            />
-
-            {/* 6 Oval Exhaust Ports & Mounting Flange Studs along Right Outer Wall */}
-            {borePositions.map((bx, idx) => {
-              const portPt = P(bx, -71, 160);
-              return (
-                <g key={`right-exh-port-${idx}`}>
-                  {/* CNC Machined Exhaust Port Opening */}
-                  <ellipse
-                    cx={portPt.x}
-                    cy={portPt.y}
-                    rx="8"
-                    ry="5"
-                    fill="#020617"
-                    stroke="#475569"
-                    strokeWidth="1.2"
-                    transform={`rotate(30, ${portPt.x}, ${portPt.y})`}
-                  />
-                  <ellipse
-                    cx={portPt.x}
-                    cy={portPt.y}
-                    rx="6.5"
-                    ry="3.8"
-                    fill="url(#water-jacket-opening)"
-                    opacity="0.7"
-                    transform={`rotate(30, ${portPt.x}, ${portPt.y})`}
-                  />
-                  {/* Dual Exhaust Flange Studs */}
-                  <circle cx={portPt.x - 7} cy={portPt.y - 4} r="1.6" fill="url(#bolt-boss-raised)" stroke="#090d16" strokeWidth="0.6" />
-                  <circle cx={portPt.x + 7} cy={portPt.y + 4} r="1.6" fill="url(#bolt-boss-raised)" stroke="#090d16" strokeWidth="0.6" />
-                </g>
-              );
-            })}
-
-            {/* 6 Direct Ignition Coil-on-Plug (COP) Modules in Spark Plug Wells */}
-            {borePositions.map((bx, idx) => {
-              const spPt = P(bx, -43, Z_TOP);
-              return (
-                <g key={`right-cop-module-${idx}`}>
-                  {/* Spark Plug Tube Well Recess */}
-                  <circle cx={spPt.x} cy={spPt.y} r="5" fill="#020617" stroke="#475569" strokeWidth="1" />
-                  {/* COP Ignition Coil Cap */}
-                  <rect x={spPt.x - 3.5} y={spPt.y - 12} width="7" height="12" rx="1.5" fill="#0f172a" stroke="#38bdf8" strokeWidth="1" />
-                  {/* Performance Orange Weatherproof Rubber Seal Boot */}
-                  <rect x={spPt.x - 4.5} y={spPt.y - 15} width="9" height="4" rx="1" fill="#ea580c" stroke="#090d16" strokeWidth="0.7" />
-                  {/* Gold Anodized Securing Stud Nut */}
-                  <circle cx={spPt.x + 5} cy={spPt.y - 8} r="1.5" fill="#fef08a" stroke="#090d16" strokeWidth="0.6" />
-                </g>
-              );
-            })}
-
-            {/* Coolant Passages & Freeze Plugs along Right Head */}
-            {[-65, 0, 65].map((wx, wIdx) => {
-              const plugPt = P(wx, -73, 172);
-              return (
-                <g key={`right-freeze-plug-${wIdx}`}>
-                  <circle cx={plugPt.x} cy={plugPt.y} r="3" fill="url(#bolt-boss-raised)" stroke="#090d16" strokeWidth="0.8" />
-                  <circle cx={plugPt.x} cy={plugPt.y} r="1.4" fill="#020617" />
-                </g>
-              );
-            })}
-          </g>
-
-          {/* ═══════════════════════════════════════════════════════════════ */}
-          {/* 2. LEFT (PROXIMAL) CYLINDER HEAD ASSEMBLY (Y > 0, Facing Us)   */}
-          {/* ═══════════════════════════════════════════════════════════════ */}
-          <g id="left-proximal-cylinder-head">
-            {/* Main Casting Body — Left Head Outer Wall */}
-            <polygon
-              points={`
-                ${lhBotOuterFL.x},${lhBotOuterFL.y}
-                ${lhBotOuterFR.x},${lhBotOuterFR.y}
-                ${lhTopOuterFR.x},${lhTopOuterFR.y}
-                ${lhTopOuterFL.x},${lhTopOuterFL.y}
-              `}
-              fill="url(#v12-cast-aluminum-body)"
-              stroke="#090d16"
-              strokeWidth="2.2"
-            />
-
-            {/* Main Casting Body — Left Head Front Face */}
-            <polygon
-              points={`
-                ${lhBotOuterFL.x},${lhBotOuterFL.y}
-                ${lhBotInnerBL.x},${lhBotInnerBL.y}
-                ${lhTopInnerBL.x},${lhTopInnerBL.y}
-                ${lhTopOuterFL.x},${lhTopOuterFL.y}
-              `}
-              fill="url(#v12-cast-aluminum-body)"
-              stroke="#090d16"
-              strokeWidth="2"
-            />
-
-            {/* Left Head Top Valve Cover Mounting Flange Deck */}
-            <polygon
-              points={`
-                ${lhTopOuterFL.x},${lhTopOuterFL.y}
-                ${lhTopOuterFR.x},${lhTopOuterFR.y}
-                ${lhTopInnerBR.x},${lhTopInnerBR.y}
-                ${lhTopInnerBL.x},${lhTopInnerBL.y}
-              `}
-              fill="url(#v12-machined-deck)"
-              stroke="#090d16"
-              strokeWidth="2.2"
-            />
-            {/* Top Deck Specular Edge Highlight */}
-            <line
-              x1={lhTopOuterFL.x} y1={lhTopOuterFL.y}
-              x2={lhTopOuterFR.x} y2={lhTopOuterFR.y}
-              stroke="#ffffff"
-              strokeWidth="2"
-              opacity="0.95"
-            />
-
-            {/* 6 Oval Exhaust Ports & Mounting Flange Studs along Left Outer Wall */}
-            {borePositions.map((bx, idx) => {
-              const portPt = P(bx, 71, 160);
-              return (
-                <g key={`left-exh-port-${idx}`}>
-                  {/* CNC Machined Exhaust Port Opening */}
-                  <ellipse
-                    cx={portPt.x}
-                    cy={portPt.y}
-                    rx="8"
-                    ry="5"
-                    fill="#020617"
-                    stroke="#475569"
-                    strokeWidth="1.2"
-                    transform={`rotate(-25, ${portPt.x}, ${portPt.y})`}
-                  />
-                  <ellipse
-                    cx={portPt.x}
-                    cy={portPt.y}
-                    rx="6.5"
-                    ry="3.8"
-                    fill="url(#water-jacket-opening)"
-                    opacity="0.7"
-                    transform={`rotate(-25, ${portPt.x}, ${portPt.y})`}
-                  />
-                  {/* Dual Exhaust Flange Studs */}
-                  <circle cx={portPt.x - 7} cy={portPt.y - 4} r="1.6" fill="url(#bolt-boss-raised)" stroke="#090d16" strokeWidth="0.6" />
-                  <circle cx={portPt.x + 7} cy={portPt.y + 4} r="1.6" fill="url(#bolt-boss-raised)" stroke="#090d16" strokeWidth="0.6" />
-                </g>
-              );
-            })}
-
-            {/* Cast Strengthening Ribs along Left Head Outer Wall */}
-            {Array.from({ length: 8 }).map((_, idx) => {
-              const ribX = -85 + idx * 26;
-              const ribBot = P(ribX, 74, Z_BOT + 6);
-              const ribTop = P(ribX, 63, Z_TOP - 6);
-              return (
-                <line
-                  key={`left-head-rib-${idx}`}
-                  x1={ribBot.x} y1={ribBot.y}
-                  x2={ribTop.x} y2={ribTop.y}
-                  stroke="#8b9ab5"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  opacity="0.45"
+            return (
+              <g id="left-bank-head">
+                {/* Left Outer Exhaust Flank */}
+                <path
+                  d={`M ${botOutFL.x} ${botOutFL.y} L ${botOutFR.x} ${botOutFR.y} L ${topOutFR.x} ${topOutFR.y} L ${topOutFL.x} ${topOutFL.y} Z`}
+                  fill={fills.left}
+                  stroke="#090d16"
+                  strokeWidth="1.5"
                 />
-              );
-            })}
-
-            {/* 6 Direct Ignition Coil-on-Plug (COP) Modules in Spark Plug Wells */}
-            {borePositions.map((bx, idx) => {
-              const spPt = P(bx, 43, Z_TOP);
-              return (
-                <g key={`left-cop-module-${idx}`}>
-                  {/* Spark Plug Tube Well Recess */}
-                  <circle cx={spPt.x} cy={spPt.y} r="5" fill="#020617" stroke="#475569" strokeWidth="1" />
-                  {/* COP Ignition Coil Cap */}
-                  <rect x={spPt.x - 3.5} y={spPt.y - 12} width="7" height="12" rx="1.5" fill="#0f172a" stroke="#38bdf8" strokeWidth="1" />
-                  {/* Performance Orange Weatherproof Rubber Seal Boot */}
-                  <rect x={spPt.x - 4.5} y={spPt.y - 15} width="9" height="4" rx="1" fill="#ea580c" stroke="#090d16" strokeWidth="0.7" />
-                  {/* Gold Anodized Securing Stud Nut */}
-                  <circle cx={spPt.x + 5} cy={spPt.y - 8} r="1.5" fill="#fef08a" stroke="#090d16" strokeWidth="0.6" />
-                </g>
-              );
-            })}
-
-            {/* Coolant Passages & Freeze Plugs along Left Head */}
-            {[-65, 0, 65].map((wx, wIdx) => {
-              const plugPt = P(wx, 73, 172);
-              return (
-                <g key={`left-freeze-plug-${wIdx}`}>
-                  <circle cx={plugPt.x} cy={plugPt.y} r="3" fill="url(#bolt-boss-raised)" stroke="#090d16" strokeWidth="0.8" />
-                  <circle cx={plugPt.x} cy={plugPt.y} r="1.4" fill="#020617" />
-                </g>
-              );
-            })}
-
-            {/* Front Water Outlet Flange Port (front of left head) */}
-            {(() => {
-              const waterOutPt = P(halfL + 2, 45, 165);
-              return (
-                <g id="left-head-water-outlet">
-                  <circle cx={waterOutPt.x} cy={waterOutPt.y} r="7" fill="url(#water-jacket-opening)" stroke="#090d16" strokeWidth="1.5" />
-                  <circle cx={waterOutPt.x} cy={waterOutPt.y} r="4.5" fill="#020617" stroke="#0e7490" strokeWidth="1" />
-                  <circle cx={waterOutPt.x - 6} cy={waterOutPt.y - 4} r="1.5" fill="url(#bolt-boss-raised)" stroke="#090d16" strokeWidth="0.6" />
-                  <circle cx={waterOutPt.x + 6} cy={waterOutPt.y + 4} r="1.5" fill="url(#bolt-boss-raised)" stroke="#090d16" strokeWidth="0.6" />
-                </g>
-              );
-            })()}
-
-            {/* Perimeter Valve Cover Flange Bolts (14 per head) */}
-            {[-95, -65, -30, 0, 30, 65, 95].flatMap((bx) => [
-              P(bx, 61, Z_TOP + 1),
-              P(bx, 25, Z_TOP + 1),
-            ]).map((boltPt, bIdx) => (
-              <g key={`left-vc-bolt-${bIdx}`}>
-                <circle cx={boltPt.x} cy={boltPt.y} r="2.4" fill="url(#bolt-boss-raised)" stroke="#090d16" strokeWidth="0.7" />
-                <circle cx={boltPt.x} cy={boltPt.y} r="1.1" fill="#020617" />
+                {/* Left Head Top Deck */}
+                <path
+                  d={`M ${topOutFL.x} ${topOutFL.y} L ${topOutFR.x} ${topOutFR.y} L ${topInBR.x} ${topInBR.y} L ${topInBL.x} ${topInBL.y} Z`}
+                  fill={fills.top}
+                  stroke="#0f172a"
+                  strokeWidth="1.5"
+                />
+                {/* Direct Coil-on-Plug Ignition Packs */}
+                {xPositions.map((bx, i) => {
+                  const cop = P(bx, 43, Z_TOP + 1);
+                  return (
+                    <g key={`lh-cop-${i}`}>
+                      <rect x={cop.x - 6} y={cop.y - 4} width={12} height={8} rx={2} fill="#020617" stroke="#334155" strokeWidth="0.6" />
+                      <circle cx={cop.x} cy={cop.y} r={2.5} fill="#0284c7" stroke="#38bdf8" strokeWidth="0.5" />
+                    </g>
+                  );
+                })}
               </g>
-            ))}
-          </g>
-        </g>
+            );
+          })()}
+
+          {/* RIGHT BANK CYLINDER HEAD */}
+          {(() => {
+            const botOutFL = P(-halfL - 2, -75, Z_BOT);
+            const botOutFR = P(halfL + 2, -75, Z_BOT);
+            const botInBL = P(-halfL - 2, -16, Z_BOT);
+            const botInBR = P(halfL + 2, -16, Z_BOT);
+
+            const topOutFL = P(-halfL - 2, -62, Z_TOP);
+            const topOutFR = P(halfL + 2, -62, Z_TOP);
+            const topInBL = P(-halfL - 2, -24, Z_TOP);
+            const topInBR = P(halfL + 2, -24, Z_TOP);
+
+            return (
+              <g id="right-bank-head">
+                <path
+                  d={`M ${botOutFL.x} ${botOutFL.y} L ${botOutFR.x} ${botOutFR.y} L ${topOutFR.x} ${topOutFR.y} L ${topOutFL.x} ${topOutFL.y} Z`}
+                  fill={fills.right}
+                  stroke="#090d16"
+                  strokeWidth="1.5"
+                />
+                <path
+                  d={`M ${topInBL.x} ${topInBL.y} L ${topInBR.x} ${topInBR.y} L ${topOutFR.x} ${topOutFR.y} L ${topOutFL.x} ${topOutFL.y} Z`}
+                  fill={fills.top}
+                  stroke="#0f172a"
+                  strokeWidth="1.5"
+                />
+                {xPositions.map((bx, i) => {
+                  const cop = P(bx, -43, Z_TOP + 1);
+                  return (
+                    <g key={`rh-cop-${i}`}>
+                      <rect x={cop.x - 6} y={cop.y - 4} width={12} height={8} rx={2} fill="#020617" stroke="#334155" strokeWidth="0.6" />
+                      <circle cx={cop.x} cy={cop.y} r={2.5} fill="#0284c7" stroke="#38bdf8" strokeWidth="0.5" />
+                    </g>
+                  );
+                })}
+              </g>
+            );
+          })()}
+        </>
       ) : (
-        /* Standard Single Volumetric Cylinder Head for Inline Engine */
-        <g id="inline-cylinder-head">
-          <polygon
-            points={`
-              ${lhBotOuterFL.x},${lhBotOuterFL.y}
-              ${lhBotOuterFR.x},${lhBotOuterFR.y}
-              ${lhTopOuterFR.x},${lhTopOuterFR.y}
-              ${lhTopOuterFL.x},${lhTopOuterFL.y}
-            `}
-            fill="url(#v12-cast-aluminum-body)"
-            stroke="#090d16"
-            strokeWidth="2.2"
-          />
-          <polygon
-            points={`
-              ${lhTopOuterFL.x},${lhTopOuterFL.y}
-              ${lhTopOuterFR.x},${lhTopOuterFR.y}
-              ${lhTopInnerBR.x},${lhTopInnerBR.y}
-              ${lhTopInnerBL.x},${lhTopInnerBL.y}
-            `}
-            fill="url(#v12-machined-deck)"
-            stroke="#090d16"
-            strokeWidth="2.2"
-          />
-        </g>
+        /* ── 2. SINGLE MONOBLOCK CYLINDER HEAD (Inline I3/I4/I6 & VR6) ── */
+        (() => {
+          const bFL = P(-halfL, 46, Z_BOT);
+          const bFR = P(halfL, 46, Z_BOT);
+          const bBR = P(halfL, -46, Z_BOT);
+          const bBL = P(-halfL, -46, Z_BOT);
+
+          const tFL = P(-halfL, 46, Z_TOP);
+          const tFR = P(halfL, 46, Z_TOP);
+          const tBR = P(halfL, -46, Z_TOP);
+          const tBL = P(-halfL, -46, Z_TOP);
+
+          return (
+            <g id="inline-monoblock-head">
+              {/* Front Face */}
+              <path
+                d={`M ${bFL.x} ${bFL.y} L ${bFR.x} ${bFR.y} L ${tFR.x} ${tFR.y} L ${tFL.x} ${tFL.y} Z`}
+                fill={fills.left}
+                stroke="#090d16"
+                strokeWidth="1.5"
+              />
+              {/* Right Face */}
+              <path
+                d={`M ${bFR.x} ${bFR.y} L ${bBR.x} ${bBR.y} L ${tBR.x} ${tBR.y} L ${tFR.x} ${tFR.y} Z`}
+                fill={fills.right}
+                stroke="#090d16"
+                strokeWidth="1.5"
+              />
+              {/* Top Valve Cover Deck */}
+              <path
+                d={`M ${tFL.x} ${tFL.y} L ${tFR.x} ${tFR.y} L ${tBR.x} ${tBR.y} L ${tBL.x} ${tBL.y} Z`}
+                fill={fills.top}
+                stroke="#0f172a"
+                strokeWidth="1.5"
+              />
+              {/* In-Line Spark Plug / Coil-on-Plug Packs */}
+              {xPositions.map((bx, i) => {
+                const cop = P(bx, 0, Z_TOP + 1);
+                return (
+                  <g key={`inline-cop-${i}`}>
+                    <rect x={cop.x - 7} y={cop.y - 4.5} width={14} height={9} rx={2} fill="#020617" stroke="#334155" strokeWidth="0.6" />
+                    <circle cx={cop.x} cy={cop.y} r={2.8} fill="#0284c7" stroke="#38bdf8" strokeWidth="0.5" />
+                  </g>
+                );
+              })}
+            </g>
+          );
+        })()
       )}
     </g>
   );
 };
+
+export const CylinderHeadIso = React.memo(CylinderHeadIsoComponent);

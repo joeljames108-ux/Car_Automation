@@ -154,18 +154,115 @@ export const VBankBlockCastingIso: React.FC<VBankBlockCastingIsoProps> = ({
       }}
     >
       {/* ═══════════════════════════════════════════════════════════════ */}
-      {/* LAYER 1: BACKGROUND DROP SHADOW                              */}
+      {/* LAYER 1: 3D ISOMETRIC GLASS DISPLAY PLATFORM & MOUNTING STAND */}
       {/* ═══════════════════════════════════════════════════════════════ */}
-      <g id="layer-1-shadow">
+      <g id="layer-1-glass-platform">
+        {/* Soft shadow underneath glass platform */}
         <ellipse
-          cx={O.x + 12}
-          cy={O.y + 85}
-          rx={145}
-          ry={38}
+          cx={O.x + 10}
+          cy={O.y + 120}
+          rx={200}
+          ry={55}
           fill="#000000"
-          opacity="0.25"
+          opacity="0.3"
           filter="url(#soft-ao-shadow)"
         />
+
+        {/* 3D Glass Display Table Base - Isometric Plinth */}
+        {(() => {
+          // Glass platform coordinates in 3D: Z = -45 to -35, spanning beyond engine
+          const tableXMin = -halfL - 55;
+          const tableXMax = halfL + 75;
+          const tableYMin = -115;
+          const tableYMax = 115;
+          const tableZTop = -35;
+          const tableZBot = -45;
+
+          const gTL = P(tableXMin, tableYMin, tableZTop);
+          const gTR = P(tableXMax, tableYMin, tableZTop);
+          const gBR = P(tableXMax, tableYMax, tableZTop);
+          const gBL = P(tableXMin, tableYMax, tableZTop);
+
+          const bTL = P(tableXMin, tableYMin, tableZBot);
+          const bTR = P(tableXMax, tableYMin, tableZBot);
+          const bBR = P(tableXMax, tableYMax, tableZBot);
+          const bBL = P(tableXMin, tableYMax, tableZBot);
+
+          // Engine mounting pedestal feet
+          const footFrontL = P(halfL - 10, 42, CRANK_Z_BOT);
+          const footFrontLBot = P(halfL - 10, 42, tableZTop);
+          const footRearL = P(-halfL + 25, 42, CRANK_Z_BOT);
+          const footRearLBot = P(-halfL + 25, 42, tableZTop);
+
+          return (
+            <g id="glass-table-plinth">
+              {/* Table Bottom Rim & Chamfer Thickness */}
+              <polygon
+                points={`${gBL.x},${gBL.y} ${gBR.x},${gBR.y} ${bBR.x},${bBR.y} ${bBL.x},${bBL.y}`}
+                fill="url(#glass-platform-edge)"
+                stroke="#0284c7"
+                strokeWidth="1.2"
+                opacity="0.85"
+              />
+              <polygon
+                points={`${gBR.x},${gBR.y} ${gTR.x},${gTR.y} ${bTR.x},${bTR.y} ${bBR.x},${bBR.y}`}
+                fill="url(#v12-cast-aluminum-body-right)"
+                stroke="#0369a1"
+                strokeWidth="1.2"
+                opacity="0.75"
+              />
+
+              {/* Table Glass Top Surface (Semi-transparent with refraction gradient) */}
+              <polygon
+                points={`${gTL.x},${gTL.y} ${gTR.x},${gTR.y} ${gBR.x},${gBR.y} ${gBL.x},${gBL.y}`}
+                fill="url(#glass-platform-surface)"
+                stroke="#ffffff"
+                strokeWidth="1.8"
+                strokeOpacity="0.9"
+              />
+
+              {/* Polished Glass Outer Bevel Perimeter Streak */}
+              <polyline
+                points={`${gTL.x},${gTL.y} ${gBL.x},${gBL.y} ${gBR.x},${gBR.y}`}
+                fill="none"
+                stroke="#ffffff"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                opacity="0.95"
+              />
+              <polyline
+                points={`${gTL.x},${gTL.y} ${gTR.x},${gTR.y} ${gBR.x},${gBR.y}`}
+                fill="none"
+                stroke="#7dd3fc"
+                strokeWidth="1.2"
+                opacity="0.7"
+              />
+
+              {/* Engine Mounting Standoff Brackets (CNC Polished Aluminum Feet) */}
+              <g id="engine-mounting-brackets">
+                {/* Front Mount Leg */}
+                <path
+                  d={`M ${footFrontL.x - 8} ${footFrontL.y} L ${footFrontL.x + 8} ${footFrontL.y} L ${footFrontLBot.x + 14} ${footFrontLBot.y} L ${footFrontLBot.x - 14} ${footFrontLBot.y} Z`}
+                  fill="url(#v12-cast-aluminum-body)"
+                  stroke="#090d16"
+                  strokeWidth="1.5"
+                />
+                <circle cx={footFrontLBot.x - 7} cy={footFrontLBot.y - 2} r="2.5" fill="url(#bolt-boss-raised)" stroke="#090d16" strokeWidth="0.8" />
+                <circle cx={footFrontLBot.x + 7} cy={footFrontLBot.y - 2} r="2.5" fill="url(#bolt-boss-raised)" stroke="#090d16" strokeWidth="0.8" />
+
+                {/* Rear Mount Leg */}
+                <path
+                  d={`M ${footRearL.x - 8} ${footRearL.y} L ${footRearL.x + 8} ${footRearL.y} L ${footRearLBot.x + 14} ${footRearLBot.y} L ${footRearLBot.x - 14} ${footRearLBot.y} Z`}
+                  fill="url(#v12-cast-aluminum-body)"
+                  stroke="#090d16"
+                  strokeWidth="1.5"
+                />
+                <circle cx={footRearLBot.x - 7} cy={footRearLBot.y - 2} r="2.5" fill="url(#bolt-boss-raised)" stroke="#090d16" strokeWidth="0.8" />
+                <circle cx={footRearLBot.x + 7} cy={footRearLBot.y - 2} r="2.5" fill="url(#bolt-boss-raised)" stroke="#090d16" strokeWidth="0.8" />
+              </g>
+            </g>
+          );
+        })()}
       </g>
 
       {/* ═══════════════════════════════════════════════════════════════ */}

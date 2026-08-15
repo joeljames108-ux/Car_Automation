@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import React, { useState, useMemo, useCallback, useRef, useEffect, Suspense } from "react";
 import {
   SkipForward,
   Volume2,
@@ -20,7 +20,10 @@ import { AssemblyStatsSync } from "./AssemblyStatsSync";
 import { ParticleEffects } from "./ParticleEffects";
 import { EngineConfig } from "../../sim/types";
 
-import { EngineAudioVisualizer } from "./EngineAudioVisualizer";
+// Lazy-load heavy audio synthesizer & frequency visualizer
+const EngineAudioVisualizer = React.lazy(() =>
+  import("./EngineAudioVisualizer").then((m) => ({ default: m.EngineAudioVisualizer }))
+);
 
 interface EngineAssemblyViewerProps {
   installedComponents: ComponentId[];
@@ -59,9 +62,38 @@ export function EngineAssemblyViewer({
   const [lastInstalledId, setLastInstalledId] = useState<ComponentId | null>(null);
   const [viewMode, setViewMode] = useState<"3d_iso" | "2d">("3d_iso");
 
+  const [isTabVisible, setIsTabVisible] = useState(!document.hidden);
+  const hoverRafRef = useRef<number | null>(null);
+
+  // Monitor browser tab visibility to pause animations and audio synthesis when hidden
+  useEffect(() => {
+    const handleVisibility = () => {
+      setIsTabVisible(!document.hidden);
+    };
+    document.addEventListener("visibilitychange", handleVisibility);
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibility);
+      if (hoverRafRef.current) cancelAnimationFrame(hoverRafRef.current);
+    };
+  }, []);
+
+  // Throttled hover handler using requestAnimationFrame to prevent re-render thrashing
+  const handleHoverThrottled = useCallback(
+    (id: ComponentId | null) => {
+      if (!onHoverComponent) return;
+      if (hoverRafRef.current) {
+        cancelAnimationFrame(hoverRafRef.current);
+      }
+      hoverRafRef.current = requestAnimationFrame(() => {
+        onHoverComponent(id);
+      });
+    },
+    [onHoverComponent]
+  );
+
   // Hook driving animation transitions
   useInstallAnimation({
-    activeComponentId,
+    activeComponentId: isTabVisible ? activeComponentId : null,
     phase,
     onAdvancePhase,
     onCompleteInstall: () => {
@@ -132,7 +164,7 @@ export function EngineAssemblyViewer({
             engineConfig={engineConfig}
             selectedVariants={selectedVariants}
             viewMode={viewMode}
-            onHoverComponent={onHoverComponent}
+            onHoverComponent={handleHoverThrottled}
           />
         </div>
 
@@ -170,8 +202,6 @@ export function EngineAssemblyViewer({
               <SkipForward size={13} /> Skip
             </button>
           )}
-
-
         </div>
 
         {/* Stat Delta Notification Overlay - ONLY shown on hover! */}
@@ -190,13 +220,21 @@ export function EngineAssemblyViewer({
         )}
       </div>
 
-      {/* ── REAL-TIME ENGINE AUDIO SYNTHESIZER & LAYOUT SELECTOR AT END OF ROBOTIC ASSEMBLY ── */}
+      {/* ── REAL-TIME ENGINE AUDIO SYNTHESIZER & LAYOUT SELECTOR (Lazy Loaded) ── */}
       <div className="w-full">
-        <EngineAudioVisualizer
-          currentLayout={engineConfig?.layout || "v12"}
-          rpm={6500}
-          onSelectLayout={onSelectLayout}
-        />
+        <Suspense
+          fallback={
+            <div className="w-full h-32 rounded-3xl bg-[#0b0f19]/50 border border-slate-800 flex items-center justify-center text-slate-500 font-mono text-xs animate-pulse">
+              Loading Audio Synthesizer Engine...
+            </div>
+          }
+        >
+          <EngineAudioVisualizer
+            currentLayout={engineConfig?.layout || "v12"}
+            rpm={6500}
+            onSelectLayout={onSelectLayout}
+          />
+        </Suspense>
       </div>
     </div>
   );
