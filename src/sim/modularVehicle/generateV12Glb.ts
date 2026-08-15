@@ -601,6 +601,44 @@ export function buildV12EngineScene(explodedAmount: number = 0): THREE.Scene {
   return scene;
 }
 
+import { NodeIO } from "@gltf-transform/core";
+import { ALL_EXTENSIONS, KHRMaterialsClearcoat, KHRMaterialsTransmission, KHRMaterialsIOR } from "@gltf-transform/extensions";
+
+/**
+ * Optimizes a binary GLB buffer using @gltf-transform
+ */
+async function optimizeGlbBuffer(inputBuffer: Buffer): Promise<Buffer> {
+  const io = new NodeIO().registerExtensions(ALL_EXTENSIONS);
+  const document = await io.readBinary(inputBuffer);
+
+  // Add PBR extensions to root document
+  document.createExtension(KHRMaterialsClearcoat).setRequired(false);
+  document.createExtension(KHRMaterialsTransmission).setRequired(false);
+  document.createExtension(KHRMaterialsIOR).setRequired(false);
+
+  // Traverse materials and assign clearcoat/IOR to automotive lacquer and quartz glass
+  for (const material of document.getRoot().listMaterials()) {
+    const name = material.getName();
+    if (name.includes("Dry_Carbon") || name.includes("Anodized")) {
+      const clearcoatExt = document.createExtension(KHRMaterialsClearcoat);
+      const clearcoat = clearcoatExt.createClearcoat().setClearcoatFactor(0.85).setClearcoatRoughnessFactor(0.1);
+      material.setExtension("KHR_materials_clearcoat", clearcoat);
+    }
+    if (name.includes("Quartz")) {
+      const transExt = document.createExtension(KHRMaterialsTransmission);
+      const transmission = transExt.createTransmission().setTransmissionFactor(0.9);
+      material.setExtension("KHR_materials_transmission", transmission);
+      
+      const iorExt = document.createExtension(KHRMaterialsIOR);
+      const ior = iorExt.createIOR().setIOR(1.54);
+      material.setExtension("KHR_materials_ior", ior);
+    }
+  }
+
+  const outputUint8 = await io.writeBinary(document);
+  return Buffer.from(outputUint8);
+}
+
 /**
  * Exports the V12 Engine Scene to binary .glb files
  */
@@ -613,9 +651,9 @@ export async function exportV12GlbFiles() {
 
   // 1. Generate Assembled Master V12 Engine GLB
   const assembledScene = buildV12EngineScene(0);
-  console.log("[1/3] Compiling Fully Assembled V12 Engine 3D Scene Graph...");
+  console.log("[1/4] Compiling Fully Assembled V12 Engine 3D Scene Graph...");
 
-  const assembledBuffer = await new Promise<Buffer>((resolve, reject) => {
+  const rawBuffer = await new Promise<Buffer>((resolve, reject) => {
     exporter.parse(
       assembledScene,
       (gltf) => resolve(Buffer.from(gltf as ArrayBuffer)),
@@ -623,6 +661,9 @@ export async function exportV12GlbFiles() {
       { binary: true }
     );
   });
+
+  console.log("[2/4] Optimizing with @gltf-transform & Khronos PBR Extensions...");
+  const assembledBuffer = await optimizeGlbBuffer(rawBuffer);
 
   // Target paths:
   // a) public/models/v12_racing_engine.glb (for web app 3D viewer)
@@ -632,21 +673,21 @@ export async function exportV12GlbFiles() {
   }
   const publicPath = path.join(publicDir, "v12_racing_engine.glb");
   fs.writeFileSync(publicPath, assembledBuffer);
-  console.log(`[2/3] ✅ Saved Web Application Model: ${publicPath} (${(assembledBuffer.byteLength / 1024).toFixed(1)} KB)`);
+  console.log(`[3/4] ✅ Saved Optimized Web App Asset: ${publicPath} (${(assembledBuffer.byteLength / 1024).toFixed(1)} KB)`);
 
   // b) User Downloads folder for direct opening in 3D viewers (Paint 3D, Blender, Windows 3D Viewer)
   const userDownloadsDir = "C:\\Users\\joelj\\Downloads";
   const userDownloadPath = path.join(userDownloadsDir, "v12_racing_engine_complete.glb");
   try {
     fs.writeFileSync(userDownloadPath, assembledBuffer);
-    console.log(`[3/3] ✅ Saved to Downloads: ${userDownloadPath} (${(assembledBuffer.byteLength / 1024).toFixed(1)} KB)`);
+    console.log(`[4/4] ✅ Saved to Downloads: ${userDownloadPath} (${(assembledBuffer.byteLength / 1024).toFixed(1)} KB)`);
   } catch (err) {
     console.warn("Notice: Could not write to Downloads directory directly:", err);
   }
 
   // 2. Generate Exploded Disassembly View GLB
   const explodedScene = buildV12EngineScene(0.5);
-  const explodedBuffer = await new Promise<Buffer>((resolve, reject) => {
+  const rawExploded = await new Promise<Buffer>((resolve, reject) => {
     exporter.parse(
       explodedScene,
       (gltf) => resolve(Buffer.from(gltf as ArrayBuffer)),
@@ -654,6 +695,7 @@ export async function exportV12GlbFiles() {
       { binary: true }
     );
   });
+  const explodedBuffer = await optimizeGlbBuffer(rawExploded);
   const explodedPath = path.join(userDownloadsDir, "v12_racing_engine_exploded.glb");
   try {
     fs.writeFileSync(explodedPath, explodedBuffer);
@@ -677,4 +719,5 @@ exportV12GlbFiles()
     console.error("Fatal export error:", err);
     process.exit(1);
   });
+
 

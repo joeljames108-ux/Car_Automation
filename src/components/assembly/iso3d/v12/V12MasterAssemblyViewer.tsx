@@ -12,6 +12,8 @@ import {
   Eye,
   Shield,
   Wind,
+  Box,
+  Download,
 } from "lucide-react";
 import type { ComponentId } from "../../../../sim/assemblyTypes";
 import { V12CoordinateStage } from "./V12CoordinateStage";
@@ -37,11 +39,13 @@ import { V12ElectronicsIso } from "./V12ElectronicsIso";
 import { V12WiringLoomIso } from "./V12WiringLoomIso";
 import { V12EngineCoverAssemblyIso } from "./V12EngineCoverAssemblyIso";
 import { V12DynoHUDOverlayIso } from "./V12DynoHUDOverlayIso";
+import { V12WebGLOrbitViewer } from "./V12WebGLOrbitViewer";
 
 export type AspirationMode = "na" | "turbo";
 export type PowertrainOption = "ice" | "hybrid";
 export type CameraPreset = "iso" | "top" | "rear" | "front";
 export type ThemeColor = "gold" | "rosso" | "stealth" | "emerald";
+export type ViewportMode = "2d_iso" | "3d_webgl";
 
 interface V12MasterAssemblyViewerProps {
   initialWithCover?: boolean;
@@ -73,6 +77,7 @@ export const V12MasterAssemblyViewer: React.FC<V12MasterAssemblyViewerProps> = (
   const [activeComponent, setActiveComponent] = useState<ComponentId | null>(null);
 
   // ── Interactive Enhancements ──
+  const [viewportMode, setViewportMode] = useState<ViewportMode>("2d_iso");
   const [explodedSlider, setExplodedSlider] = useState<number>(0); // 0 (assembled) to 1 (fully exploded)
   const [liveRpm, setLiveRpm] = useState<number>(900); // 900 RPM idle to 11000 RPM redline
   const [isRevving, setIsRevving] = useState<boolean>(false);
@@ -159,6 +164,34 @@ export const V12MasterAssemblyViewer: React.FC<V12MasterAssemblyViewerProps> = (
       <div className="flex flex-wrap items-center justify-between gap-2.5 mb-3 px-1 border-b border-white/5 pb-2.5 text-xs font-mono">
         {/* Left: Mode & Powertrain Switchers */}
         <div className="flex flex-wrap items-center gap-1.5">
+          {/* Viewport Mode Switcher: 2D/3D Isometric Vector vs Full 3D WebGL Orbit Viewer */}
+          <div className="flex items-center bg-slate-900/90 p-0.5 rounded-xl border border-white/10 mr-1">
+            <button
+              type="button"
+              onClick={() => setViewportMode("2d_iso")}
+              className={`flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-bold font-mono transition-all cursor-pointer ${
+                viewportMode === "2d_iso"
+                  ? "bg-cyan-500/30 text-cyan-200 border border-cyan-400/50 shadow-sm"
+                  : "text-slate-400 hover:text-white"
+              }`}
+            >
+              <Layers size={12} />
+              <span>3D Iso Schematic</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setViewportMode("3d_webgl")}
+              className={`flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-bold font-mono transition-all cursor-pointer ${
+                viewportMode === "3d_webgl"
+                  ? "bg-purple-500/30 text-purple-200 border border-purple-400/50 shadow-[0_0_12px_rgba(168,85,247,0.35)]"
+                  : "text-slate-400 hover:text-white"
+              }`}
+            >
+              <Box size={12} className="text-purple-400 animate-pulse" />
+              <span>3D WebGL Orbit</span>
+            </button>
+          </div>
+
           {/* 1. Cover Mode Toggle */}
           <button
             type="button"
@@ -205,8 +238,19 @@ export const V12MasterAssemblyViewer: React.FC<V12MasterAssemblyViewerProps> = (
           </button>
         </div>
 
-        {/* Right: Live Dynamic Power & Inspection Badge */}
+        {/* Right: Live Dynamic Power & Direct Download .GLB Button */}
         <div className="flex items-center gap-2">
+          {/* Download 3D GLB Button */}
+          <a
+            href="/models/v12_racing_engine.glb"
+            download="v12_racing_engine_complete.glb"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-extrabold text-xs shadow-[0_0_15px_rgba(16,185,129,0.35)] transition-all cursor-pointer active:scale-95"
+            title="Download Full 3D V12 Engine Model in glTF 2.0 Binary (.GLB) format"
+          >
+            <Download size={13} />
+            <span>Download .GLB</span>
+          </a>
+
           {activeComponent ? (
             <span className="px-2.5 py-1 rounded-lg bg-cyan-500/20 border border-cyan-500/40 text-[11px] font-mono text-cyan-300 font-extrabold animate-pulse">
               INSPECTING: {activeComponent.toUpperCase().replace("_", " ")}
@@ -283,181 +327,185 @@ export const V12MasterAssemblyViewer: React.FC<V12MasterAssemblyViewerProps> = (
         </div>
       </div>
 
-      {/* ── MASTER SVG WORKSTATION (580x480 CALIBRATED VIEWPORT) ── */}
-      <div className="relative w-full h-[400px] md:h-[450px] rounded-2xl bg-slate-950/40 border border-white/5 backdrop-blur-md overflow-hidden flex items-center justify-center shadow-inner">
-        {/* Soft Radial Studio Lights */}
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_35%,rgba(34,211,238,0.08),transparent_70%)] pointer-events-none" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_25%_75%,rgba(245,158,11,0.06),transparent_65%)] pointer-events-none" />
+      {/* ── CENTRAL WORKSTATION: 3D WEBGL ORBIT VIEWER OR MASTER SVG 580x480 VIEWPORT ── */}
+      {viewportMode === "3d_webgl" ? (
+        <V12WebGLOrbitViewer modelUrl="/models/v12_racing_engine.glb" />
+      ) : (
+        <div className="relative w-full h-[400px] md:h-[450px] rounded-2xl bg-slate-950/40 border border-white/5 backdrop-blur-md overflow-hidden flex items-center justify-center shadow-inner">
+          {/* Soft Radial Studio Lights */}
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_35%,rgba(34,211,238,0.08),transparent_70%)] pointer-events-none" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_25%_75%,rgba(245,158,11,0.06),transparent_65%)] pointer-events-none" />
 
-        <div
-          className="w-full h-full flex items-center justify-center transition-transform duration-700 ease-out"
-          style={{ transform: cameraTransform }}
-        >
-          <svg
-            viewBox="0 0 580 480"
-            className="w-full h-full max-h-[500px] overflow-visible drop-shadow-[0_20px_50px_rgba(0,0,0,0.85)]"
-            preserveAspectRatio="xMidYMid meet"
+          <div
+            className="w-full h-full flex items-center justify-center transition-transform duration-700 ease-out"
+            style={{ transform: cameraTransform }}
           >
-            {/* 1. Master Coordinate Stage & Tempered Glass Podium */}
-            <V12CoordinateStage
-              originScreen={originScreen}
-              showPodium={true}
-              theme={colorTheme}
-              cameraPreset={cameraPreset}
+            <svg
+              viewBox="0 0 580 480"
+              className="w-full h-full max-h-[500px] overflow-visible drop-shadow-[0_20px_50px_rgba(0,0,0,0.85)]"
+              preserveAspectRatio="xMidYMid meet"
             >
-              {/* 2. 60° V12 Die-Cast Crankcase & Bedplate */}
-              <V12BlockCastingIso
+              {/* 1. Master Coordinate Stage & Tempered Glass Podium */}
+              <V12CoordinateStage
                 originScreen={originScreen}
-                onHoverComponent={handleHover}
-              />
-
-              {/* 3. Billet Low-Profile Dry-Sump Oil Pan (Floats -Z in exploded view) */}
-              <V12DrySumpPanIso
-                originScreen={originScreen}
-                explodedAmount={explodedSlider}
-                onHoverComponent={handleHover}
-              />
-
-              {/* 4. 4-Tube Scavenge Hardlines & AN Fittings */}
-              <V12DrySumpTubesIso
-                originScreen={originScreen}
-                onHoverComponent={handleHover}
-              />
-
-              {/* 5. Integrated Dry-Sump Reservoir Tank Box & Filter */}
-              <V12DrySumpTankIso
-                originScreen={originScreen}
-                onHoverComponent={handleHover}
-              />
-
-              {/* 6. Front Dual-Pass Aluminum Racing Radiator & Fan (Floats -X in exploded view) */}
-              <V12RadiatorAssemblyIso
-                originScreen={originScreen}
-                explodedAmount={explodedSlider}
-                onHoverComponent={handleHover}
-              />
-
-              {/* 7. Precision 48-Valve Dual Cylinder Heads with Live Firing Combustion Glow */}
-              <V12CylinderHeadsIso
-                originScreen={originScreen}
-                explodedAmount={explodedSlider}
-                activeFiringCyl={V12_FIRING_ORDER[firingOrderIdx]}
-                onHoverComponent={handleHover}
-              />
-
-              {/* 8. Quad-Cam Timing Sprockets & Roller Chains */}
-              <V12TimingTrainIso
-                originScreen={originScreen}
-                onHoverComponent={handleHover}
-              />
-
-              {/* 9. Vibrant Orange-Gold Billet Valve Covers */}
-              <V12ValveCoversIso
-                originScreen={originScreen}
-                explodedAmount={explodedSlider}
-                onHoverComponent={handleHover}
-              />
-
-              {/* 10. 12 Curved Ram-Air Intake Runners */}
-              <V12IntakeManifoldsIso
-                originScreen={originScreen}
-                explodedAmount={explodedSlider}
-                onHoverComponent={handleHover}
-              />
-
-              {/* 11. 12 Cobalt Velocity Stacks / ITBs with Live RPM Butterfly Opening */}
-              <V12VelocityStacksIso
-                originScreen={originScreen}
-                explodedAmount={explodedSlider}
-                throttleRpm={liveRpm}
-                colorTheme={colorTheme}
-                onHoverComponent={handleHover}
-              />
-
-              {/* 12. Dual High-Pressure GDI Fuel Rails & Injectors */}
-              <V12FuelSystemIso
-                originScreen={originScreen}
-                onHoverComponent={handleHover}
-              />
-
-              {/* 13. Optional Turbocharger (Rendered ONLY if aspirationMode === 'turbo') */}
-              {aspirationMode === "turbo" && (
-                <V12TurbochargerIso
+                showPodium={true}
+                theme={colorTheme}
+                cameraPreset={cameraPreset}
+              >
+                {/* 2. 60° V12 Die-Cast Crankcase & Bedplate */}
+                <V12BlockCastingIso
                   originScreen={originScreen}
                   onHoverComponent={handleHover}
                 />
-              )}
 
-              {/* 14. 6-into-1 Hydroformed Inconel Headers */}
-              <V12ExhaustHeadersIso
-                originScreen={originScreen}
-                explodedAmount={explodedSlider}
-                onHoverComponent={handleHover}
-              />
-
-              {/* 15. Forged Chromoly Dual-Mass Flywheel */}
-              <V12FlywheelIso
-                originScreen={originScreen}
-                onHoverComponent={handleHover}
-              />
-
-              {/* 16. Multi-Plate Wet Carbon Clutch Pack */}
-              <V12ClutchPackIso
-                originScreen={originScreen}
-                onHoverComponent={handleHover}
-              />
-
-              {/* 17. Bellhousing with Cutaway Window */}
-              <V12BellhousingIso
-                originScreen={originScreen}
-                explodedAmount={explodedSlider}
-                onHoverComponent={handleHover}
-              />
-
-              {/* 18. 7-Speed Sequential Transaxle Gear Cluster */}
-              <V12GearClusterIso
-                originScreen={originScreen}
-                onHoverComponent={handleHover}
-              />
-
-              {/* 19. Transmission Casing & Splined Output Yoke */}
-              <V12TransmissionCasingIso
-                originScreen={originScreen}
-                onHoverComponent={handleHover}
-              />
-
-              {/* 20. Optional 800V Hybrid ECU & Power Electronics (Rendered ONLY if hybrid) */}
-              {powertrainOption === "hybrid" && (
-                <V12ElectronicsIso
-                  originScreen={originScreen}
-                  onHoverComponent={handleHover}
-                />
-              )}
-
-              {/* 21. Braided Raychem Motorsport Wiring Loom */}
-              <V12WiringLoomIso
-                originScreen={originScreen}
-                onHoverComponent={handleHover}
-              />
-
-              {/* 22. Optional Mode 2 Dry-Carbon Monocoque Engine Cover */}
-              {withEngineCover && (
-                <V12EngineCoverAssemblyIso
+                {/* 3. Billet Low-Profile Dry-Sump Oil Pan (Floats -Z in exploded view) */}
+                <V12DrySumpPanIso
                   originScreen={originScreen}
                   explodedAmount={explodedSlider}
                   onHoverComponent={handleHover}
                 />
-              )}
-            </V12CoordinateStage>
 
-            {/* 23. Interactive Spec Reticle Overlay */}
-            <V12DynoHUDOverlayIso
-              hasCover={withEngineCover}
-              onToggleCover={() => setWithEngineCover((prev) => !prev)}
-            />
-          </svg>
+                {/* 4. 4-Tube Scavenge Hardlines & AN Fittings */}
+                <V12DrySumpTubesIso
+                  originScreen={originScreen}
+                  onHoverComponent={handleHover}
+                />
+
+                {/* 5. Integrated Dry-Sump Reservoir Tank Box & Filter */}
+                <V12DrySumpTankIso
+                  originScreen={originScreen}
+                  onHoverComponent={handleHover}
+                />
+
+                {/* 6. Front Dual-Pass Aluminum Racing Radiator & Fan (Floats -X in exploded view) */}
+                <V12RadiatorAssemblyIso
+                  originScreen={originScreen}
+                  explodedAmount={explodedSlider}
+                  onHoverComponent={handleHover}
+                />
+
+                {/* 7. Precision 48-Valve Dual Cylinder Heads with Live Firing Combustion Glow */}
+                <V12CylinderHeadsIso
+                  originScreen={originScreen}
+                  explodedAmount={explodedSlider}
+                  activeFiringCyl={V12_FIRING_ORDER[firingOrderIdx]}
+                  onHoverComponent={handleHover}
+                />
+
+                {/* 8. Quad-Cam Timing Sprockets & Roller Chains */}
+                <V12TimingTrainIso
+                  originScreen={originScreen}
+                  onHoverComponent={handleHover}
+                />
+
+                {/* 9. Vibrant Orange-Gold Billet Valve Covers */}
+                <V12ValveCoversIso
+                  originScreen={originScreen}
+                  explodedAmount={explodedSlider}
+                  onHoverComponent={handleHover}
+                />
+
+                {/* 10. 12 Curved Ram-Air Intake Runners */}
+                <V12IntakeManifoldsIso
+                  originScreen={originScreen}
+                  explodedAmount={explodedSlider}
+                  onHoverComponent={handleHover}
+                />
+
+                {/* 11. 12 Cobalt Velocity Stacks / ITBs with Live RPM Butterfly Opening */}
+                <V12VelocityStacksIso
+                  originScreen={originScreen}
+                  explodedAmount={explodedSlider}
+                  throttleRpm={liveRpm}
+                  colorTheme={colorTheme}
+                  onHoverComponent={handleHover}
+                />
+
+                {/* 12. Dual High-Pressure GDI Fuel Rails & Injectors */}
+                <V12FuelSystemIso
+                  originScreen={originScreen}
+                  onHoverComponent={handleHover}
+                />
+
+                {/* 13. Optional Turbocharger (Rendered ONLY if aspirationMode === 'turbo') */}
+                {aspirationMode === "turbo" && (
+                  <V12TurbochargerIso
+                    originScreen={originScreen}
+                    onHoverComponent={handleHover}
+                  />
+                )}
+
+                {/* 14. 6-into-1 Hydroformed Inconel Headers */}
+                <V12ExhaustHeadersIso
+                  originScreen={originScreen}
+                  explodedAmount={explodedSlider}
+                  onHoverComponent={handleHover}
+                />
+
+                {/* 15. Forged Chromoly Dual-Mass Flywheel */}
+                <V12FlywheelIso
+                  originScreen={originScreen}
+                  onHoverComponent={handleHover}
+                />
+
+                {/* 16. Multi-Plate Wet Carbon Clutch Pack */}
+                <V12ClutchPackIso
+                  originScreen={originScreen}
+                  onHoverComponent={handleHover}
+                />
+
+                {/* 17. Bellhousing with Cutaway Window */}
+                <V12BellhousingIso
+                  originScreen={originScreen}
+                  explodedAmount={explodedSlider}
+                  onHoverComponent={handleHover}
+                />
+
+                {/* 18. 7-Speed Sequential Transaxle Gear Cluster */}
+                <V12GearClusterIso
+                  originScreen={originScreen}
+                  onHoverComponent={handleHover}
+                />
+
+                {/* 19. Transmission Casing & Splined Output Yoke */}
+                <V12TransmissionCasingIso
+                  originScreen={originScreen}
+                  onHoverComponent={handleHover}
+                />
+
+                {/* 20. Optional 800V Hybrid ECU & Power Electronics (Rendered ONLY if hybrid) */}
+                {powertrainOption === "hybrid" && (
+                  <V12ElectronicsIso
+                    originScreen={originScreen}
+                    onHoverComponent={handleHover}
+                  />
+                )}
+
+                {/* 21. Braided Raychem Motorsport Wiring Loom */}
+                <V12WiringLoomIso
+                  originScreen={originScreen}
+                  onHoverComponent={handleHover}
+                />
+
+                {/* 22. Optional Mode 2 Dry-Carbon Monocoque Engine Cover */}
+                {withEngineCover && (
+                  <V12EngineCoverAssemblyIso
+                    originScreen={originScreen}
+                    explodedAmount={explodedSlider}
+                    onHoverComponent={handleHover}
+                  />
+                )}
+              </V12CoordinateStage>
+
+              {/* 23. Interactive Spec Reticle Overlay */}
+              <V12DynoHUDOverlayIso
+                hasCover={withEngineCover}
+                onToggleCover={() => setWithEngineCover((prev) => !prev)}
+              />
+            </svg>
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };
