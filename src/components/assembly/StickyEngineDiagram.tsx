@@ -77,8 +77,19 @@ export function StickyEngineDiagram({
 }: StickyEngineDiagramProps) {
   const [isMuted, setIsMuted] = useState(false);
   const [viewMode, setViewMode] = useState<"3d_iso" | "2d">("3d_iso");
+  const [isTransitioningView, setIsTransitioningView] = useState(false);
+  const [transitionKey, setTransitionKey] = useState(0);
   const [isTabVisible, setIsTabVisible] = useState(!document.hidden);
   const hoverRafRef = useRef<number | null>(null);
+
+  const handleToggleViewMode = useCallback(() => {
+    setIsTransitioningView(true);
+    setViewMode((prev) => (prev === "3d_iso" ? "2d" : "3d_iso"));
+    setTransitionKey((prev) => prev + 1);
+    setTimeout(() => {
+      setIsTransitioningView(false);
+    }, 600);
+  }, []);
 
   // Monitor visibility to pause animations
   useEffect(() => {
@@ -175,14 +186,14 @@ export function StickyEngineDiagram({
         <div className="flex items-center gap-1.5 shrink-0">
           <button
             type="button"
-            onClick={() => setViewMode((prev) => (prev === "3d_iso" ? "2d" : "3d_iso"))}
-            className={`flex items-center gap-1 px-2.5 py-1 rounded-xl text-[10px] font-mono font-bold transition-all border cursor-pointer ${
+            onClick={handleToggleViewMode}
+            className={`flex items-center gap-1 px-2.5 py-1 rounded-xl text-[10px] font-mono font-bold transition-all border cursor-pointer active:scale-95 ${
               viewMode === "3d_iso"
                 ? "bg-cyan-500/20 text-cyan-200 border-cyan-500/40 shadow-[0_0_10px_rgba(34,211,238,0.3)]"
                 : "bg-base-950/80 text-slate-400 border-slate-800 hover:text-slate-200"
             }`}
           >
-            <Camera size={12} />
+            <Camera size={12} className={isTransitioningView ? "animate-spin" : ""} />
             <span className="hidden sm:inline">{viewMode === "3d_iso" ? "3D Iso" : "2D Ortho"}</span>
           </button>
 
@@ -216,6 +227,9 @@ export function StickyEngineDiagram({
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_40%,rgba(34,211,238,0.06),transparent_70%)] pointer-events-none" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_80%,rgba(147,51,234,0.05),transparent_65%)] pointer-events-none" />
 
+        {/* 2D / 3D Mode Switch Holographic Scanline Sweep */}
+        {isTransitioningView && <div className="engine-view-transition-scanline" />}
+
         {/* Particle Overlay */}
         <ParticleEffects
           activeComponentId={activeComponentId}
@@ -223,9 +237,12 @@ export function StickyEngineDiagram({
           slotPosition={activeMeta ? activeMeta.slotPosition : { x: 250, y: 225 }}
         />
 
-        {/* 3D SVG Workstation Canvas */}
+        {/* 3D SVG Workstation Canvas with Smooth Camera Animation */}
         <div
-          className="w-full h-full flex items-center justify-center transition-transform duration-700 ease-out"
+          key={`engine-stage-canvas-${viewMode}-${transitionKey}`}
+          className={`w-full h-full flex items-center justify-center transition-transform duration-700 ease-out ${
+            viewMode === "3d_iso" ? "engine-canvas-3d-active" : "engine-canvas-2d-active"
+          }`}
           style={{ transform: cameraTransform }}
         >
           <EngineSVG
