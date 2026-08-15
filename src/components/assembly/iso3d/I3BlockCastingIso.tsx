@@ -1,583 +1,415 @@
 import React from "react";
-import type { ComponentId } from "../../../sim/assemblyTypes";
-import {
-  projectIso,
-  projectIsoEllipse,
-  getIsoRibTrapezoid,
-  getIsoBearingWebs,
-  getIsoBoltBossRow,
-  type ScreenPoint2D,
-} from "./isoMath";
-import { getIsoMaterialFills } from "./isoShaders";
 
 interface I3BlockCastingIsoProps {
-  layoutSpec: {
-    label: string;
-    cyls: number[];
-    width: number;
-    bankAngle: string;
-    bx: number;
-    bw: number;
-    bh: number;
-    category: string;
-    bolts?: { x: number; y: number }[];
-  };
+  layoutSpec: any;
   blockState: {
     isInstalled: boolean;
     isActive: boolean;
     isHovered: boolean;
-    opacity: number;
     offsetX: number;
     offsetY: number;
+    opacity: number;
+    scale?: number;
+    meta?: any;
   };
-  selectedVariants?: Record<string, string>;
-  onHoverComponent?: (id: ComponentId | null) => void;
+  selectedVariants?: any;
+  onHoverComponent?: (id: any) => void;
+  materialFinish?: "billet" | "cast_iron" | "magnesium";
+  showCrossHatch?: boolean;
 }
 
 /**
- * ═══════════════════════════════════════════════════════════════════
- * INLINE-3 ENGINE BLOCK — Compact High-Efficiency Turbocharged Casting
- * ═══════════════════════════════════════════════════════════════════
- *
- * Compact 1.0L–1.5L Inline-3 Turbocharged Engine Block
- * Inspired by: Ford EcoBoost 1.0L, BMW B38, Toyota 1KR-VET
- *
- * 11 SVG Layers (bottom-up):
- *  1. Ground shadow
- *  2. Lower crankcase skirt with thick NVH-damping walls
- *  3. Main block body (narrow compact rectangular casting)
- *  4. Open crankcase bays (4 main bearing bulkheads, 3 crank windows)
- *  5. Counter-balance shaft housing (unique to I3 for primary vibration cancellation)
- *  6. Cylinder bores (3 chamfered openings with honing cross-hatch)
- *  7. Water jacket passages & thermostat housing
- *  8. Timing chain cover face & bellhousing flange
- *  9. Head bolt bosses (8 per deck) & structural ribs
- * 10. Oil gallery plugs, knock sensor, casting surface detail
- * 11. Specular highlights & ambient occlusion shadows
+ * ═════════════════════════════════════════════════════════════════════
+ * PHASE 3: INLINE-3 COMPACT VIBRATION-DAMPED MONOBLOCK CASTING
+ * ═════════════════════════════════════════════════════════════════════
  */
 export const I3BlockCastingIso: React.FC<I3BlockCastingIsoProps> = ({
   blockState,
-  selectedVariants,
   onHoverComponent,
+  materialFinish = "billet",
+  showCrossHatch = true,
 }) => {
-  const O: ScreenPoint2D = { x: 250, y: 215 };
+  const isInstalled = blockState.isInstalled;
+  const isTarget = blockState.isActive;
 
-  // ─── PRIMARY DIMENSIONS ───
-  // I3 is the most compact inline — shorter and narrower than I4
-  const BL = 140;       // Block Length (shorter than I4's 175)
-  const halfL = BL / 2;
-  const BD = 88;        // Block Depth (slightly narrower)
-  const halfD = BD / 2;
-  const BH = 148;       // Block Height (slightly shorter)
+  // Dynamic fill selector based on metallurgy
+  const deckFill =
+    materialFinish === "cast_iron"
+      ? "url(#photoreal-castiron-wall)"
+      : materialFinish === "magnesium"
+      ? "url(#photoreal-magnesium-deck)"
+      : "url(#photoreal-billet-deck)";
 
-  const materialGrade = selectedVariants?.block || "cast";
-  const fills = getIsoMaterialFills(materialGrade);
+  const skirtFill =
+    materialFinish === "cast_iron"
+      ? "url(#photoreal-castiron-wall)"
+      : materialFinish === "magnesium"
+      ? "url(#photoreal-magnesium-deck)"
+      : "url(#photoreal-billet-skirt)";
 
-  // ─── KEY Z-HEIGHTS ───
-  const SKIRT_Z = -16;       // Deeper skirt for NVH
-  const PAN_RAIL_Z = 0;
-  const BALANCE_SHAFT_Z = 12; // Counter-balance shaft housing
-  const CRANK_BAY_Z = 24;
-  const CRANK_TOP_Z = 72;
-  const WATER_JACKET_Z = 92;
-  const DECK_Z = BH;
-
-  // ─── BORE GEOMETRY ───
-  const NUM_CYLS = 3;
-  const BORE_RADIUS = 21;    // ~84mm bore
-  const BORE_SPACING = 38;   // Wider spacing for 3-cyl vibration room
-  const boreXPositions = Array.from({ length: NUM_CYLS }, (_, i) =>
-    -((NUM_CYLS - 1) * BORE_SPACING) / 2 + i * BORE_SPACING
-  );
-
-  // ─── 3D CORNER POINTS ───
-  // Skirt (wider flange, deeper for NVH damping)
-  const sFL = projectIso({ x: -halfL - 14, y: halfD + 12, z: SKIRT_Z }, O);
-  const sFR = projectIso({ x: halfL + 14, y: halfD + 12, z: SKIRT_Z }, O);
-  const sBL = projectIso({ x: -halfL - 14, y: -halfD - 12, z: SKIRT_Z }, O);
-  const sBR = projectIso({ x: halfL + 14, y: -halfD - 12, z: SKIRT_Z }, O);
-
-  // Base
-  const bFL = projectIso({ x: -halfL, y: halfD, z: PAN_RAIL_Z }, O);
-  const bFR = projectIso({ x: halfL, y: halfD, z: PAN_RAIL_Z }, O);
-  const bBR = projectIso({ x: halfL, y: -halfD, z: PAN_RAIL_Z }, O);
-  const bBL = projectIso({ x: -halfL, y: -halfD, z: PAN_RAIL_Z }, O);
-
-  // Waist
-  const mFL = projectIso({ x: -halfL, y: halfD, z: CRANK_TOP_Z }, O);
-  const mFR = projectIso({ x: halfL, y: halfD, z: CRANK_TOP_Z }, O);
-  const mBR = projectIso({ x: halfL, y: -halfD, z: CRANK_TOP_Z }, O);
-
-  // Top deck
-  const tFL = projectIso({ x: -halfL, y: halfD, z: DECK_Z }, O);
-  const tFR = projectIso({ x: halfL, y: halfD, z: DECK_Z }, O);
-  const tBL = projectIso({ x: -halfL, y: -halfD, z: DECK_Z }, O);
-  const tBR = projectIso({ x: halfL, y: -halfD, z: DECK_Z }, O);
-
-  // Bearing webs — 4 webs for 3 cylinders
-  const NUM_WEBS = 4;
-  const webs = getIsoBearingWebs(BL, NUM_WEBS, 9, BD * 0.6, 50, CRANK_BAY_Z, O);
-
-  // Head bolt bosses — 4 per row = 8 total
-  const outerBolts = getIsoBoltBossRow(
-    { x: -halfL + 12, y: halfD - 8, z: DECK_Z },
-    { x: halfL - 12, y: halfD - 8, z: DECK_Z },
-    4, 5.5, O
-  );
-  const innerBolts = getIsoBoltBossRow(
-    { x: -halfL + 12, y: -halfD + 8, z: DECK_Z },
-    { x: halfL - 12, y: -halfD + 8, z: DECK_Z },
-    4, 5.5, O
-  );
+  // Inline-3 Geometry Constants in Isometric Pixel Space
+  const startX = 160;
+  const startY = 225;
+  const borePitch = 60;
+  const boreRadiusX = 23;
+  const boreRadiusY = 12.5;
+  const blockHeight = 105;
+  const blockLength = 195;
 
   return (
     <g
-      id="iso-block-i3-casting"
-      onMouseEnter={() => onHoverComponent?.("block")}
-      onMouseLeave={() => onHoverComponent?.(null)}
-      className={`cursor-pointer transition-all duration-700 ease-out ${
-        blockState.isActive ? "filter-glow-active" : ""
-      }`}
+      id="iso3d-i3-hyperreal-monoblock"
+      className="transition-all duration-500 cursor-pointer"
+      onMouseEnter={() => onHoverComponent && onHoverComponent("block")}
+      onMouseLeave={() => onHoverComponent && onHoverComponent(null)}
       style={{
         transform: `translate(${blockState.offsetX}px, ${blockState.offsetY}px)`,
         opacity: blockState.opacity,
       }}
     >
-      {/* ═══ LAYER 1 — GROUND SHADOW ═══ */}
-      <ellipse cx={O.x} cy={O.y + 62} rx={100} ry={25}
-        fill="url(#iso-ground-shadow)" opacity={0.7} />
+      {/* ── LAYER 1: GROUND AO DROP SHADOW & RAY-CAST OCCLUSION ── */}
+      <g id="i3-layer1-ao-shadow">
+        {/* Soft Ambient Ground Shadow */}
+        <ellipse
+          cx={startX + blockLength / 2 - 5}
+          cy={startY + blockHeight + 32}
+          rx={blockLength * 0.62}
+          ry={30}
+          fill="url(#photoreal-chassis-ground-ao)"
+        />
+        {/* Contact Shadow under Sump Rail */}
+        <path
+          d={`M${startX - 18} ${startY + blockHeight + 12}
+             L${startX + blockLength - 12} ${startY + blockHeight - 18}
+             L${startX + blockLength + 30} ${startY + blockHeight - 4}
+             L${startX + 22} ${startY + blockHeight + 28} Z`}
+          fill="#000000"
+          opacity="0.75"
+        />
+      </g>
 
-      {/* ═══ LAYER 2 — LOWER CRANKCASE SKIRT (Thick NVH Walls) ═══ */}
-      {/* Bottom face */}
-      <path
-        d={`M ${sFL.x} ${sFL.y} L ${sFR.x} ${sFR.y} L ${sBR.x} ${sBR.y} L ${sBL.x} ${sBL.y} Z`}
-        fill={fills.right} stroke="#090d16" strokeWidth="1.2" opacity={0.6}
-      />
-      {/* Front transition */}
-      <path
-        d={`M ${sFL.x} ${sFL.y} L ${sFR.x} ${sFR.y} L ${bFR.x} ${bFR.y} L ${bFL.x} ${bFL.y} Z`}
-        fill={fills.left} stroke="#090d16" strokeWidth="1" opacity={0.75}
-      />
-      {/* Right transition */}
-      <path
-        d={`M ${sFR.x} ${sFR.y} L ${sBR.x} ${sBR.y} L ${bBR.x} ${bBR.y} L ${bFR.x} ${bFR.y} Z`}
-        fill={fills.right} stroke="#090d16" strokeWidth="1" opacity={0.7}
-      />
-      {/* Pan rail surface */}
-      <path
-        d={`M ${bFL.x} ${bFL.y} L ${bFR.x} ${bFR.y} L ${bBR.x} ${bBR.y} L ${bBL.x} ${bBL.y} Z`}
-        fill={fills.top} stroke="#0f172a" strokeWidth="0.8" opacity={0.55}
-      />
-      {/* Pan rail bolts — fewer on compact I3 */}
-      {Array.from({ length: 6 }).map((_, i) => {
-        const isLeftSide = i < 3;
-        const xPos = -halfL + 12 + (isLeftSide ? i : i - 3) * ((BL - 24) / 2);
-        const yPos = isLeftSide ? halfD + 8 : -halfD - 8;
-        const pt = projectIso({ x: xPos, y: yPos, z: SKIRT_Z + 2 }, O);
-        return (
-          <circle key={`pan-bolt-${i}`} cx={pt.x} cy={pt.y} r={2}
-            fill="#020617" stroke="#1e293b" strokeWidth="0.5" />
-        );
-      })}
+      {/* ── LAYER 2: LOWER SKIRT, SUMP RAILS & 4 MAIN BULKHEADS ── */}
+      <g id="i3-layer2-skirt-sump-rails">
+        {/* Sump Rail Flange Plate */}
+        <path
+          d={`M${startX - 15} ${startY + blockHeight + 10}
+             L${startX + blockLength - 12} ${startY + blockHeight - 18}
+             L${startX + blockLength + 26} ${startY + blockHeight - 6}
+             L${startX + 24} ${startY + blockHeight + 24} Z`}
+          fill="#1e293b"
+          stroke="#475569"
+          strokeWidth="1.2"
+        />
+        {/* Sump Rail 14 Perimeter Bolt Flanges */}
+        {[0, 1, 2, 3, 4, 5, 6].map((i) => {
+          const bx = startX - 8 + i * 29;
+          const by = startY + blockHeight + 9 - i * 4.2;
+          return (
+            <g key={`sump-bolt-${i}`}>
+              <circle cx={bx} cy={by} r="3.2" fill="url(#photoreal-arp-black-oxide)" stroke="#0f172a" strokeWidth="0.8" />
+              <circle cx={bx} cy={by} r="1.5" fill="#94a3b8" />
+            </g>
+          );
+        })}
+        {/* 4 Cross-Bolted Main Bearing Bulkheads (Crankcase Wells) */}
+        {[0, 1, 2, 3].map((i) => {
+          const mx = startX + i * 60;
+          const my = startY + blockHeight - 4 - i * 3.8;
+          return (
+            <path
+              key={`main-cap-${i}`}
+              d={`M${mx - 8} ${my}
+                 C${mx - 8} ${my + 15}, ${mx + 12} ${my + 15}, ${mx + 12} ${my}
+                 L${mx + 16} ${my - 2}
+                 C${mx + 16} ${my + 19}, ${mx - 12} ${my + 19}, ${mx - 12} ${my - 2} Z`}
+              fill="#0f172a"
+              stroke="#334155"
+              strokeWidth="1"
+            />
+          );
+        })}
+      </g>
 
-      {/* ═══ LAYER 3 — MAIN BLOCK BODY CASTING ═══ */}
-      {/* Front face */}
-      <path
-        d={`M ${bFL.x} ${bFL.y} L ${bFR.x} ${bFR.y} L ${tFR.x} ${tFR.y} L ${tFL.x} ${tFL.y} Z`}
-        fill={fills.left} stroke="#090d16" strokeWidth="1.5"
-      />
-      {/* Right face */}
-      <path
-        d={`M ${bFR.x} ${bFR.y} L ${bBR.x} ${bBR.y} L ${tBR.x} ${tBR.y} L ${tFR.x} ${tFR.y} Z`}
-        fill={fills.right} stroke="#090d16" strokeWidth="1.5"
-      />
-      {/* Waist line */}
-      <path d={`M ${mFL.x} ${mFL.y} L ${mFR.x} ${mFR.y}`}
-        stroke="#334155" strokeWidth="1.2" strokeDasharray="4,3" opacity={0.6} />
-      <path d={`M ${mFR.x} ${mFR.y} L ${mBR.x} ${mBR.y}`}
-        stroke="#1e293b" strokeWidth="1" strokeDasharray="4,3" opacity={0.5} />
-      {/* Casting parting line */}
-      {(() => {
-        const partZ = BH * 0.52;
-        const pFL = projectIso({ x: -halfL, y: halfD, z: partZ }, O);
-        const pFR = projectIso({ x: halfL, y: halfD, z: partZ }, O);
-        const pBR = projectIso({ x: halfL, y: -halfD, z: partZ }, O);
-        return (
-          <>
-            <path d={`M ${pFL.x} ${pFL.y} L ${pFR.x} ${pFR.y}`}
-              stroke="#475569" strokeWidth="0.6" opacity={0.4} />
-            <path d={`M ${pFR.x} ${pFR.y} L ${pBR.x} ${pBR.y}`}
-              stroke="#334155" strokeWidth="0.5" opacity={0.3} />
-          </>
-        );
-      })()}
+      {/* ── LAYER 3: MAIN MONOBLOCK & COUNTERBALANCE SHAFT TUNNEL ── */}
+      <g id="i3-layer3-monoblock-walls">
+        {/* Left Front Crankcase Face */}
+        <path
+          d={`M${startX - 20} ${startY + 22}
+             L${startX + 28} ${startY + 48}
+             L${startX + 25} ${startY + blockHeight + 24}
+             L${startX - 20} ${startY + blockHeight + 10} Z`}
+          fill={skirtFill}
+          stroke="#64748b"
+          strokeWidth="1.2"
+        />
+        {/* Main Side Skirt Wall with Integrated Balance Shaft Bulge */}
+        <path
+          d={`M${startX + 28} ${startY + 48}
+             L${startX + blockLength + 28} ${startY + 16}
+             L${startX + blockLength + 26} ${startY + blockHeight - 6}
+             L${startX + 25} ${startY + blockHeight + 24} Z`}
+          fill={skirtFill}
+          stroke="#475569"
+          strokeWidth="1.2"
+        />
+        {/* Counterbalance Shaft Tunnel Longitudinal Swell */}
+        <path
+          d={`M${startX + 26} ${startY + 72}
+             C${startX + 26} ${startY + 64}, ${startX + blockLength + 26} ${startY + 32}, ${startX + blockLength + 26} ${startY + 40}
+             L${startX + blockLength + 26} ${startY + 56}
+             C${startX + blockLength + 26} ${startY + 48}, ${startX + 26} ${startY + 80}, ${startX + 26} ${startY + 88} Z`}
+          fill="#1e293b"
+          stroke="#38bdf8"
+          strokeWidth="0.8"
+          opacity="0.7"
+        />
+      </g>
 
-      {/* ═══ LAYER 4 — CRANKCASE BAYS & BEARING BULKHEADS ═══ */}
-      {webs.map((web, idx) => (
-        <g key={`bearing-web-${idx}`}>
-          <path d={web.facets.front} fill={fills.left}
-            stroke="#0f172a" strokeWidth="0.8" opacity={0.85} />
-          <path d={web.facets.right} fill={fills.right}
-            stroke="#0f172a" strokeWidth="0.7" opacity={0.75} />
-          <path d={web.facets.top} fill={fills.top}
-            stroke="#1e293b" strokeWidth="0.6" opacity={0.65} />
-          {/* Journal saddle */}
-          {(() => {
-            const saddle = projectIsoEllipse(
-              { x: web.xCenter, y: 0, z: CRANK_BAY_Z + 14 }, 11, O
-            );
-            return (
-              <>
-                <ellipse cx={saddle.cx} cy={saddle.cy} rx={saddle.rx} ry={saddle.ry}
-                  fill="#020617" stroke="#1e293b" strokeWidth="0.8" opacity={0.7} />
-                <circle cx={saddle.cx - saddle.rx - 3} cy={saddle.cy} r={1.6}
-                  fill="#0f172a" stroke="#334155" strokeWidth="0.5" />
-                <circle cx={saddle.cx + saddle.rx + 3} cy={saddle.cy} r={1.6}
-                  fill="#0f172a" stroke="#334155" strokeWidth="0.5" />
-              </>
-            );
-          })()}
+      {/* ── LAYER 4: TIMING DRIVE & OIL PUMP INTEGRATION ── */}
+      <g id="i3-layer4-timing-cavity">
+        {/* Front Timing Chain & Oil Pump Housing */}
+        <path
+          d={`M${startX - 16} ${startY + 28}
+             L${startX + 16} ${startY + 46}
+             L${startX + 14} ${startY + 78}
+             L${startX - 16} ${startY + 65} Z`}
+          fill="#090d16"
+          stroke="#38bdf8"
+          strokeWidth="0.8"
+          strokeDasharray="3,2"
+        />
+        {/* High-Pressure Oil Pump Rotor Port */}
+        <circle cx={startX - 2} cy={startY + 50} r="5" fill="#020617" stroke="#334155" strokeWidth="1" />
+        <circle cx={startX - 2} cy={startY + 50} r="2.2" fill="url(#photoreal-tin-gold)" />
+      </g>
+
+      {/* ── LAYER 5: TOP DECK & 3 HONED CYLINDER BORES ── */}
+      <g id="i3-layer5-deck-and-bores">
+        {/* CNC Milled Cylinder Head Deck Surface */}
+        <path
+          d={`M${startX - 20} ${startY + 22}
+             L${startX + 115} ${startY - 32}
+             L${startX + blockLength + 115} ${startY - 62}
+             L${startX + blockLength + 28} ${startY + 16} Z`}
+          fill={deckFill}
+          stroke="#94a3b8"
+          strokeWidth="1.5"
+          filter="url(#fe-cnc-toolpath)"
+        />
+
+        {/* Deck Outer Chamfer Bevel Highlight */}
+        <path
+          d={`M${startX - 20} ${startY + 22}
+             L${startX + blockLength + 28} ${startY + 16}`}
+          stroke="#ffffff"
+          strokeWidth="1.8"
+          strokeLinecap="round"
+        />
+
+        {/* 3 Cylinder Bores with 45° Diamond Plateau Honing */}
+        {[0, 1, 2].map((cyl) => {
+          const cx = startX + 32 + cyl * borePitch;
+          const cy = startY + 14 - cyl * 7.2;
+
+          return (
+            <g key={`cyl-bore-${cyl}`}>
+              {/* Outer Liner Step Chamfer Rim */}
+              <ellipse cx={cx} cy={cy} rx={boreRadiusX + 2.5} ry={boreRadiusY + 1.5} fill="url(#photoreal-liner-rim)" />
+
+              {/* Recessed Bore Depth Radial Ambient Occlusion */}
+              <ellipse cx={cx} cy={cy} rx={boreRadiusX} ry={boreRadiusY} fill="url(#photoreal-bore-depth)" />
+
+              {/* 45° Diamond Plateau Honing Cross-Hatch Shading */}
+              {showCrossHatch && (
+                <ellipse
+                  cx={cx}
+                  cy={cy}
+                  rx={boreRadiusX - 1}
+                  ry={boreRadiusY - 0.8}
+                  fill="url(#photoreal-diamond-hatch)"
+                  opacity="0.85"
+                />
+              )}
+
+              {/* Top Piston Ring Land Relief Groove */}
+              <ellipse
+                cx={cx}
+                cy={cy + 1.2}
+                rx={boreRadiusX - 2.5}
+                ry={boreRadiusY - 1.2}
+                fill="none"
+                stroke="#0284c7"
+                strokeWidth="0.8"
+                opacity="0.6"
+              />
+
+              {/* Oil Squitter Cooling Jet */}
+              <circle cx={cx - 4} cy={cy + 3} r="1.5" fill="url(#photoreal-oil-gallery)" />
+            </g>
+          );
+        })}
+      </g>
+
+      {/* ── LAYER 6: OPEN-DECK WATER JACKET COOLANT PASSAGES ── */}
+      <g id="i3-layer6-coolant-passages">
+        {[0, 1].map((i) => {
+          const wjx = startX + 62 + i * borePitch;
+          const wjy = startY + 10 - i * 7.2;
+          return (
+            <g key={`water-jacket-port-${i}`}>
+              <path
+                d={`M${wjx - 4} ${wjy - 14}
+                   C${wjx} ${wjy - 16}, ${wjx + 4} ${wjy - 16}, ${wjx + 4} ${wjy - 12}
+                   L${wjx + 4} ${wjy + 8}
+                   C${wjx + 4} ${wjy + 12}, ${wjx - 4} ${wjy + 12}, ${wjx - 4} ${wjy + 8} Z`}
+                fill="url(#photoreal-coolant-flow)"
+                stroke="#38bdf8"
+                strokeWidth="0.8"
+              />
+            </g>
+          );
+        })}
+      </g>
+
+      {/* ── LAYER 7: LONGITUDINAL OIL GALLERY & BRASS END-PLUGS ── */}
+      <g id="i3-layer7-oil-gallery">
+        <line
+          x1={startX - 10}
+          y1={startY + 40}
+          x2={startX + blockLength + 16}
+          y2={startY + 10}
+          stroke="url(#photoreal-oil-gallery)"
+          strokeWidth="3.5"
+          strokeLinecap="round"
+          opacity="0.85"
+        />
+        <polygon
+          points={`${startX - 12},${startY + 38} ${startX - 8},${startY + 36} ${startX - 6},${startY + 40} ${startX - 8},${startY + 44} ${startX - 12},${startY + 42}`}
+          fill="url(#photoreal-tin-gold)"
+          stroke="#713f12"
+          strokeWidth="0.8"
+        />
+      </g>
+
+      {/* ── LAYER 8: ASYMMETRIC NVH STRUCTURAL GUSSET RIBS ── */}
+      <g id="i3-layer8-nvh-ribs">
+        {[0, 1, 2].map((i) => {
+          const rx = startX + 32 + i * 60;
+          const ry = startY + 48 - i * 7;
+          return (
+            <g key={`truss-rib-${i}`}>
+              <polygon
+                points={`${rx},${ry} ${rx + 10},${ry + 1.2} ${rx + 8},${ry + blockHeight - 24} ${rx - 2},${ry + blockHeight - 24}`}
+                fill="#334155"
+                stroke="#64748b"
+                strokeWidth="1"
+              />
+              <line x1={rx + 1} y1={ry + 2} x2={rx - 1} y2={ry + blockHeight - 25} stroke="#94a3b8" strokeWidth="1" />
+            </g>
+          );
+        })}
+      </g>
+
+      {/* ── LAYER 9: 8 RECESSED ARP 12-POINT HEAD STUD BOSSES ── */}
+      <g id="i3-layer9-head-studs">
+        {[
+          { x: startX + 8, y: startY + 28 },
+          { x: startX + 68, y: startY + 21 },
+          { x: startX + 128, y: startY + 14 },
+          { x: startX + 188, y: startY + 7 },
+          { x: startX + 54, y: startY - 17 },
+          { x: startX + 114, y: startY - 24 },
+          { x: startX + 174, y: startY - 31 },
+          { x: startX + 234, y: startY - 38 },
+        ].map((stud, idx) => (
+          <g key={`head-stud-${idx}`}>
+            <ellipse cx={stud.x} cy={stud.y} rx="5.5" ry="3.2" fill="url(#photoreal-washer-sheen)" stroke="#475569" strokeWidth="0.8" />
+            <circle cx={stud.x} cy={stud.y - 1} r="2.8" fill="url(#photoreal-arp-black-oxide)" stroke="#0f172a" strokeWidth="0.8" />
+            <circle cx={stud.x} cy={stud.y - 1} r="1.2" fill="#38bdf8" opacity="0.85" />
+          </g>
+        ))}
+      </g>
+
+      {/* ── LAYER 10: FREEZE PLUGS, KNOCK SENSOR & SERIAL ID ── */}
+      <g id="i3-layer10-auxiliary-casting-details">
+        {/* Brass Freeze Plugs */}
+        {[0, 1].map((i) => {
+          const fpx = startX + 64 + i * 60;
+          const fpy = startY + 72 - i * 7;
+          return (
+            <g key={`freeze-plug-${i}`}>
+              <ellipse cx={fpx} cy={fpy} rx="7.5" ry="11" fill="#0f172a" stroke="#475569" strokeWidth="1" />
+              <ellipse cx={fpx} cy={fpy} rx="6" ry="9" fill="url(#photoreal-tin-gold)" stroke="#854d0e" strokeWidth="0.8" />
+              <ellipse cx={fpx} cy={fpy} rx="2.5" ry="4" fill="#713f12" />
+            </g>
+          );
+        })}
+
+        {/* Side Knock Sensor Pedestal Tower */}
+        <g id="knock-sensor-boss">
+          <ellipse cx={startX + 120} cy={startY + 66} rx="6" ry="4" fill="#334155" stroke="#64748b" strokeWidth="0.8" />
+          <circle cx={startX + 120} cy={startY + 65} r="2.2" fill="#020617" />
         </g>
-      ))}
-      {/* Crankcase bay windows — 3 windows between 4 webs */}
-      {Array.from({ length: NUM_CYLS }).map((_, i) => {
-        const bayX = webs[i].xCenter + (webs[i + 1].xCenter - webs[i].xCenter) / 2;
-        const bayTop = projectIso({ x: bayX, y: halfD - 8, z: CRANK_TOP_Z - 5 }, O);
-        const bayBot = projectIso({ x: bayX, y: halfD - 8, z: CRANK_BAY_Z + 5 }, O);
-        return (
-          <g key={`crank-bay-${i}`}>
-            <rect x={bayTop.x - 8} y={bayTop.y} width={16}
-              height={bayBot.y - bayTop.y} rx={3} ry={3}
-              fill="#020617" stroke="#1e293b" strokeWidth="0.8" opacity={0.8} />
-            <line x1={bayTop.x - 6} y1={bayTop.y + 3} x2={bayTop.x + 6}
-              y2={bayBot.y - 3} stroke="#334155" strokeWidth="0.6" opacity={0.5} />
-          </g>
-        );
-      })}
 
-      {/* ═══ LAYER 5 — COUNTER-BALANCE SHAFT HOUSING (UNIQUE TO I3) ═══ */}
-      {/* I3 engines have inherent primary vibration — a counter-balance shaft
-          is housed in a tunnel running parallel to the crankshaft */}
-      {(() => {
-        // Balance shaft housing — protrudes from right side of block
-        const bsFL = projectIso({ x: -halfL + 15, y: -halfD - 15, z: BALANCE_SHAFT_Z }, O);
-        const bsFR = projectIso({ x: halfL - 15, y: -halfD - 15, z: BALANCE_SHAFT_Z }, O);
-        const bsBL = projectIso({ x: -halfL + 15, y: -halfD - 5, z: BALANCE_SHAFT_Z }, O);
-        const bsBR = projectIso({ x: halfL - 15, y: -halfD - 5, z: BALANCE_SHAFT_Z }, O);
-        const bsTFL = projectIso({ x: -halfL + 15, y: -halfD - 15, z: BALANCE_SHAFT_Z + 22 }, O);
-        const bsTFR = projectIso({ x: halfL - 15, y: -halfD - 15, z: BALANCE_SHAFT_Z + 22 }, O);
-        const bsTBR = projectIso({ x: halfL - 15, y: -halfD - 5, z: BALANCE_SHAFT_Z + 22 }, O);
+        {/* Laser-Etched Engine Casting Serial Tag */}
+        <rect
+          x={startX + 35}
+          y={startY + 82}
+          width="42"
+          height="14"
+          rx="2"
+          fill="#0b0f17"
+          stroke="#38bdf8"
+          strokeWidth="0.8"
+          opacity="0.8"
+        />
+        <text
+          x={startX + 40}
+          y={startY + 92}
+          fill="#38bdf8"
+          fontSize="6.5"
+          fontFamily="monospace"
+          fontWeight="bold"
+          letterSpacing="0.8"
+        >
+          APX-I3-15T
+        </text>
+      </g>
 
-        // Balance shaft bore positions
-        const bsBore1 = projectIsoEllipse(
-          { x: -halfL + 25, y: -halfD - 10, z: BALANCE_SHAFT_Z + 11 }, 6, O
-        );
-        const bsBore2 = projectIsoEllipse(
-          { x: halfL - 25, y: -halfD - 10, z: BALANCE_SHAFT_Z + 11 }, 6, O
-        );
+      {/* ── LAYER 11: SPECULAR EDGE HIGHLIGHTS & FRESNEL GLOW ── */}
+      <g id="i3-layer11-specular-highlights" pointerEvents="none">
+        <line
+          x1={startX - 20}
+          y1={startY + 22}
+          x2={startX + blockLength + 28}
+          y2={startY + 16}
+          stroke="#ffffff"
+          strokeWidth="1.6"
+          strokeLinecap="round"
+          filter="url(#fe-specular-bloom)"
+        />
+        <line
+          x1={startX - 20}
+          y1={startY + 22}
+          x2={startX - 20}
+          y2={startY + blockHeight + 10}
+          stroke="#94a3b8"
+          strokeWidth="1.2"
+        />
+      </g>
 
-        return (
-          <g opacity={0.75}>
-            {/* Housing right face */}
-            <path
-              d={`M ${bsFL.x} ${bsFL.y} L ${bsFR.x} ${bsFR.y} L ${bsTFR.x} ${bsTFR.y} L ${bsTFL.x} ${bsTFL.y} Z`}
-              fill={fills.right} stroke="#0f172a" strokeWidth="0.8"
-            />
-            {/* Housing top face */}
-            <path
-              d={`M ${bsTFL.x} ${bsTFL.y} L ${bsTFR.x} ${bsTFR.y} L ${bsTBR.x} ${bsTBR.y} L ${projectIso({ x: -halfL + 15, y: -halfD - 5, z: BALANCE_SHAFT_Z + 22 }, O).x} ${projectIso({ x: -halfL + 15, y: -halfD - 5, z: BALANCE_SHAFT_Z + 22 }, O).y} Z`}
-              fill={fills.top} stroke="#1e293b" strokeWidth="0.6"
-            />
-            {/* Balance shaft bearing bores */}
-            <ellipse cx={bsBore1.cx} cy={bsBore1.cy} rx={bsBore1.rx} ry={bsBore1.ry}
-              fill="#020617" stroke="#334155" strokeWidth="0.6" />
-            <ellipse cx={bsBore2.cx} cy={bsBore2.cy} rx={bsBore2.rx} ry={bsBore2.ry}
-              fill="#020617" stroke="#334155" strokeWidth="0.6" />
-            {/* Housing mounting bolts */}
-            {[0.2, 0.5, 0.8].map((t, i) => {
-              const boltX = -halfL + 15 + t * (BL - 30);
-              const bPt = projectIso({ x: boltX, y: -halfD - 14, z: BALANCE_SHAFT_Z + 18 }, O);
-              return <circle key={`bs-bolt-${i}`} cx={bPt.x} cy={bPt.y} r={1.5}
-                fill="#0f172a" stroke="#475569" strokeWidth="0.4" />;
-            })}
-            {/* "BALANCE SHAFT" label indicator — machined flat pad */}
-            {(() => {
-              const labelPt = projectIso({ x: 0, y: -halfD - 16, z: BALANCE_SHAFT_Z + 8 }, O);
-              return (
-                <rect x={labelPt.x - 18} y={labelPt.y - 2} width={36} height={4} rx={1}
-                  fill="none" stroke="#475569" strokeWidth="0.4" opacity={0.4} />
-              );
-            })()}
-          </g>
-        );
-      })()}
-
-      {/* ═══ LAYER 6 — CYLINDER BORES (3 Chamfered + Honing) ═══ */}
-      {boreXPositions.map((boreX, idx) => {
-        const boreE = projectIsoEllipse({ x: boreX, y: 0, z: DECK_Z }, BORE_RADIUS, O);
-        const chamferE = projectIsoEllipse({ x: boreX, y: 0, z: DECK_Z }, BORE_RADIUS + 3, O);
-        const depthE = projectIsoEllipse({ x: boreX, y: 0, z: DECK_Z - 12 }, BORE_RADIUS - 1, O);
-        return (
-          <g key={`bore-${idx}`}>
-            <ellipse cx={chamferE.cx} cy={chamferE.cy} rx={chamferE.rx} ry={chamferE.ry}
-              fill="none" stroke="#64748b" strokeWidth="1.8" opacity={0.5} />
-            <ellipse cx={boreE.cx} cy={boreE.cy} rx={boreE.rx} ry={boreE.ry}
-              fill="#020617" stroke="#0f172a" strokeWidth="1.5" />
-            <ellipse cx={depthE.cx} cy={depthE.cy + 4} rx={depthE.rx * 0.85}
-              ry={depthE.ry * 0.85} fill="#000000" opacity={0.6} />
-            {/* Honing cross-hatch */}
-            {Array.from({ length: 3 }).map((_, h) => {
-              const angle = (h * 60 - 30) * (Math.PI / 180);
-              const len = BORE_RADIUS * COS_30_CONST * 0.65;
-              return (
-                <g key={`hone-${idx}-${h}`} opacity={0.25}>
-                  <line x1={boreE.cx - len * Math.cos(angle)}
-                    y1={boreE.cy - len * Math.sin(angle) * 0.5}
-                    x2={boreE.cx + len * Math.cos(angle)}
-                    y2={boreE.cy + len * Math.sin(angle) * 0.5}
-                    stroke="#94a3b8" strokeWidth="0.4" />
-                  <line x1={boreE.cx - len * Math.cos(angle + 1.05)}
-                    y1={boreE.cy - len * Math.sin(angle + 1.05) * 0.5}
-                    x2={boreE.cx + len * Math.cos(angle + 1.05)}
-                    y2={boreE.cy + len * Math.sin(angle + 1.05) * 0.5}
-                    stroke="#94a3b8" strokeWidth="0.35" />
-                </g>
-              );
-            })}
-            <ellipse cx={boreE.cx} cy={boreE.cy} rx={boreE.rx + 0.5}
-              ry={boreE.ry + 0.25} fill="none" stroke="#e2e8f0"
-              strokeWidth="0.6" opacity={0.45} />
-          </g>
-        );
-      })}
-
-      {/* ═══ LAYER 7 — WATER JACKET & THERMOSTAT ═══ */}
-      {/* 2 water jacket passages between the 3 bores */}
-      {Array.from({ length: 2 }).map((_, i) => {
-        const wx = boreXPositions[i] + BORE_SPACING / 2;
-        const wPt = projectIso({ x: wx, y: halfD + 1, z: WATER_JACKET_Z }, O);
-        return (
-          <g key={`water-jacket-${i}`}>
-            <ellipse cx={wPt.x} cy={wPt.y} rx={5.5} ry={3.8}
-              fill="#0c4a6e" stroke="#0369a1" strokeWidth="0.6" opacity={0.55} />
-            <ellipse cx={wPt.x} cy={wPt.y + 0.5} rx={3.8} ry={2.2}
-              fill="#082f49" opacity={0.7} />
-          </g>
-        );
-      })}
-      {/* Thermostat housing */}
-      {(() => {
-        const thPt = projectIso({ x: halfL + 3, y: -halfD * 0.25, z: WATER_JACKET_Z + 12 }, O);
-        return (
-          <g>
-            <circle cx={thPt.x} cy={thPt.y} r={7}
-              fill={fills.right} stroke="#1e293b" strokeWidth="0.8" opacity={0.65} />
-            <circle cx={thPt.x} cy={thPt.y} r={4}
-              fill="#0c4a6e" stroke="#0369a1" strokeWidth="0.5" opacity={0.6} />
-          </g>
-        );
-      })()}
-
-      {/* ═══ LAYER 8 — TIMING CHAIN COVER & BELLHOUSING ═══ */}
-      {(() => {
-        const tcTop = projectIso({ x: -halfL - 6, y: halfD * 0.7, z: DECK_Z - 18 }, O);
-        const tcBot = projectIso({ x: -halfL - 6, y: halfD * 0.7, z: CRANK_BAY_Z }, O);
-        const tcTopR = projectIso({ x: -halfL - 6, y: -halfD * 0.7, z: DECK_Z - 18 }, O);
-        const tcBotR = projectIso({ x: -halfL - 6, y: -halfD * 0.7, z: CRANK_BAY_Z }, O);
-        return (
-          <g opacity={0.7}>
-            <path
-              d={`M ${tcTop.x} ${tcTop.y} L ${tcTopR.x} ${tcTopR.y} L ${tcBotR.x} ${tcBotR.y} L ${tcBot.x} ${tcBot.y} Z`}
-              fill={fills.left} stroke="#0f172a" strokeWidth="1" opacity={0.75}
-            />
-            {/* Crank nose seal bore */}
-            {(() => {
-              const cnPt = projectIso({ x: -halfL - 7, y: 0, z: CRANK_BAY_Z + 16 }, O);
-              return <circle cx={cnPt.x} cy={cnPt.y} r={7}
-                fill="#020617" stroke="#1e293b" strokeWidth="0.6" />;
-            })()}
-            {/* Timing cover bolts */}
-            {[0.2, 0.45, 0.7, 0.95].map((t, i) => {
-              const boltY = -halfD * 0.7 + t * (halfD * 1.4);
-              const bPt = projectIso({ x: -halfL - 7, y: boltY, z: DECK_Z - 28 }, O);
-              return <circle key={`tc-bolt-${i}`} cx={bPt.x} cy={bPt.y} r={1.5}
-                fill="#0f172a" stroke="#334155" strokeWidth="0.4" />;
-            })}
-          </g>
-        );
-      })()}
-      {/* Bellhousing */}
-      {(() => {
-        const bhTop = projectIso({ x: halfL + 5, y: halfD * 0.75, z: CRANK_TOP_Z + 12 }, O);
-        const bhBot = projectIso({ x: halfL + 5, y: halfD * 0.75, z: CRANK_BAY_Z - 5 }, O);
-        const bhTopR = projectIso({ x: halfL + 5, y: -halfD * 0.75, z: CRANK_TOP_Z + 12 }, O);
-        const bhBotR = projectIso({ x: halfL + 5, y: -halfD * 0.75, z: CRANK_BAY_Z - 5 }, O);
-        return (
-          <g opacity={0.65}>
-            <path
-              d={`M ${bhTop.x} ${bhTop.y} L ${bhTopR.x} ${bhTopR.y} L ${bhBotR.x} ${bhBotR.y} L ${bhBot.x} ${bhBot.y} Z`}
-              fill={fills.right} stroke="#0f172a" strokeWidth="1"
-            />
-            {/* Flywheel bore */}
-            {(() => {
-              const fwPt = projectIso({ x: halfL + 6, y: 0, z: CRANK_BAY_Z + 22 }, O);
-              return <circle cx={fwPt.x} cy={fwPt.y} r={12}
-                fill="#020617" stroke="#1e293b" strokeWidth="0.8" />;
-            })()}
-            {/* Bellhousing bolt circle */}
-            {[0, 60, 120, 180, 240, 300].map((ang, i) => {
-              const rad = (ang * Math.PI) / 180;
-              const bPt = projectIso({
-                x: halfL + 6,
-                y: 16 * Math.cos(rad) * 0.5,
-                z: CRANK_BAY_Z + 22 + 16 * Math.sin(rad) * 0.5,
-              }, O);
-              return <circle key={`bh-bolt-${i}`} cx={bPt.x} cy={bPt.y} r={1.6}
-                fill="#0f172a" stroke="#334155" strokeWidth="0.4" />;
-            })}
-          </g>
-        );
-      })()}
-
-      {/* ═══ LAYER 9 — TOP DECK, HEAD BOLTS & RIBS ═══ */}
-      <path
-        d={`M ${tFL.x} ${tFL.y} L ${tFR.x} ${tFR.y} L ${tBR.x} ${tBR.y} L ${tBL.x} ${tBL.y} Z`}
-        fill={fills.top} stroke="#0f172a" strokeWidth="1.5"
-      />
-      {/* Outer bolt row */}
-      {outerBolts.map((bolt, i) => (
-        <g key={`outer-bolt-${i}`}>
-          <ellipse cx={bolt.ellipse.cx} cy={bolt.ellipse.cy}
-            rx={bolt.ellipse.rx} ry={bolt.ellipse.ry}
-            fill={fills.top} stroke="#64748b" strokeWidth="0.8" opacity={0.8} />
-          <ellipse cx={bolt.ellipse.cx} cy={bolt.ellipse.cy}
-            rx={bolt.ellipse.rx * 0.5} ry={bolt.ellipse.ry * 0.5}
-            fill="#0f172a" stroke="#334155" strokeWidth="0.4" />
+      {/* ── LAYER 12: REAL-TIME THERMODYNAMIC HEAT SHIMMER ── */}
+      {isInstalled && (
+        <g id="i3-layer12-combustion-thermal-glow" opacity="0.22" pointerEvents="none">
+          <ellipse
+            cx={startX + blockLength / 2 + 20}
+            cy={startY + 6}
+            rx={blockLength * 0.45}
+            ry={26}
+            fill="url(#photoreal-heat-tint)"
+          />
         </g>
-      ))}
-      {/* Inner bolt row */}
-      {innerBolts.map((bolt, i) => (
-        <g key={`inner-bolt-${i}`}>
-          <ellipse cx={bolt.ellipse.cx} cy={bolt.ellipse.cy}
-            rx={bolt.ellipse.rx} ry={bolt.ellipse.ry}
-            fill={fills.top} stroke="#64748b" strokeWidth="0.7" opacity={0.7} />
-          <ellipse cx={bolt.ellipse.cx} cy={bolt.ellipse.cy}
-            rx={bolt.ellipse.rx * 0.5} ry={bolt.ellipse.ry * 0.5}
-            fill="#0f172a" stroke="#334155" strokeWidth="0.4" />
-        </g>
-      ))}
-      {/* Vertical ribs — 2 ribs between 3 bores */}
-      {[0.33, 0.67].map((t, i) => {
-        const ribX = -halfL + t * BL;
-        const rib = getIsoRibTrapezoid(
-          { x: ribX, y: halfD + 3, z: DECK_Z - 18 },
-          { x: ribX, y: halfD + 3, z: CRANK_TOP_Z + 5 },
-          6, 4, O
-        );
-        return (
-          <g key={`v-rib-${i}`} opacity={0.55}>
-            <path d={rib.frontFace} fill={fills.left} stroke="#1e293b" strokeWidth="0.6" />
-            <path d={rib.leftFace} fill={fills.right} stroke="#0f172a" strokeWidth="0.5" />
-            <path d={rib.topCap} fill={fills.top} stroke="#1e293b" strokeWidth="0.5" />
-          </g>
-        );
-      })}
-      {/* Motor mount */}
-      {(() => {
-        const mmPt = projectIso({ x: -5, y: -halfD - 5, z: CRANK_TOP_Z + 18 }, O);
-        return (
-          <g>
-            <rect x={mmPt.x - 10} y={mmPt.y - 5} width={20} height={10} rx={2}
-              fill={fills.right} stroke="#1e293b" strokeWidth="0.8" opacity={0.6} />
-            <circle cx={mmPt.x - 5} cy={mmPt.y} r={2.2}
-              fill="#020617" stroke="#334155" strokeWidth="0.5" />
-            <circle cx={mmPt.x + 5} cy={mmPt.y} r={2.2}
-              fill="#020617" stroke="#334155" strokeWidth="0.5" />
-          </g>
-        );
-      })()}
-
-      {/* ═══ LAYER 10 — OIL GALLERY PLUGS & SURFACE DETAIL ═══ */}
-      {/* Oil gallery plugs — 2 on front face */}
-      {[0.35, 0.65].map((t, i) => {
-        const plugX = -halfL + t * BL;
-        const plugPt = projectIso({ x: plugX, y: halfD + 1, z: CRANK_TOP_Z - 8 }, O);
-        return (
-          <g key={`oil-plug-${i}`}>
-            <circle cx={plugPt.x} cy={plugPt.y} r={3.2}
-              fill={fills.left} stroke="#475569" strokeWidth="0.6" opacity={0.7} />
-            <circle cx={plugPt.x} cy={plugPt.y} r={1.4} fill="#020617" opacity={0.8} />
-          </g>
-        );
-      })}
-      {/* Casting ID */}
-      {(() => {
-        const stampPt = projectIso({ x: -halfL + 15, y: halfD + 1.5, z: DECK_Z - 38 }, O);
-        return (
-          <g opacity={0.3}>
-            <rect x={stampPt.x} y={stampPt.y} width={28} height={5} rx={1}
-              fill="none" stroke="#64748b" strokeWidth="0.4" />
-            {[0, 1].map((_, li) => (
-              <line key={`stamp-line-${li}`}
-                x1={stampPt.x + 3 + li * 12} y1={stampPt.y + 1.5}
-                x2={stampPt.x + 11 + li * 12} y2={stampPt.y + 3.5}
-                stroke="#64748b" strokeWidth="0.5" />
-            ))}
-          </g>
-        );
-      })()}
-      {/* Knock sensor */}
-      {(() => {
-        const ksPt = projectIso({ x: boreXPositions[1], y: -halfD - 2, z: CRANK_TOP_Z + 4 }, O);
-        return (
-          <g>
-            <circle cx={ksPt.x} cy={ksPt.y} r={3.8}
-              fill={fills.right} stroke="#334155" strokeWidth="0.6" opacity={0.6} />
-            <circle cx={ksPt.x} cy={ksPt.y} r={1.8}
-              fill="#1e293b" stroke="#475569" strokeWidth="0.4" />
-          </g>
-        );
-      })()}
-
-      {/* ═══ LAYER 11 — SPECULAR HIGHLIGHTS & AO ═══ */}
-      <path d={`M ${tFL.x} ${tFL.y} L ${tFR.x} ${tFR.y}`}
-        stroke="#e2e8f0" strokeWidth="1.2" opacity={0.5} strokeLinecap="round" />
-      <path d={`M ${tFL.x} ${tFL.y} L ${tBL.x} ${tBL.y}`}
-        stroke="#f8fafc" strokeWidth="0.8" opacity={0.35} strokeLinecap="round" />
-      <path d={`M ${bFL.x} ${bFL.y} L ${tFL.x} ${tFL.y}`}
-        stroke="#cbd5e1" strokeWidth="0.8" opacity={0.4} strokeLinecap="round" />
-      <path d={`M ${tFR.x} ${tFR.y} L ${tBR.x} ${tBR.y}`}
-        stroke="#94a3b8" strokeWidth="0.6" opacity={0.3} strokeLinecap="round" />
-      {/* AO */}
-      <path d={`M ${tFL.x} ${tFL.y + 2} L ${tFR.x} ${tFR.y + 2}`}
-        stroke="#020617" strokeWidth="2" opacity={0.35} strokeLinecap="round" />
-      <path d={`M ${tFR.x + 1} ${tFR.y + 1} L ${tBR.x + 1} ${tBR.y + 1}`}
-        stroke="#020617" strokeWidth="1.5" opacity={0.25} strokeLinecap="round" />
-      <path d={`M ${sFL.x} ${sFL.y + 1} L ${sFR.x} ${sFR.y + 1}`}
-        stroke="#000000" strokeWidth="1.5" opacity={0.4} strokeLinecap="round" />
-      {/* Environment reflection */}
-      {(() => {
-        const refTop = projectIso({ x: -halfL + 5, y: halfD + 0.5, z: DECK_Z - 22 }, O);
-        const refBot = projectIso({ x: halfL - 5, y: halfD + 0.5, z: DECK_Z - 32 }, O);
-        return (
-          <path d={`M ${refTop.x} ${refTop.y} L ${refBot.x} ${refBot.y}`}
-            stroke="#f8fafc" strokeWidth="1.5" opacity={0.12} strokeLinecap="round" />
-        );
-      })()}
-
-      {/* Active glow */}
-      {blockState.isActive && (
-        <rect x={O.x - 110} y={O.y - 105} width={220} height={195} rx={8}
-          fill="none" stroke="#38bdf8" strokeWidth="1.5" opacity={0.4}
-          className="animate-pulse" />
-      )}
-      {/* Hover highlight */}
-      {blockState.isHovered && !blockState.isActive && (
-        <rect x={O.x - 110} y={O.y - 105} width={220} height={195} rx={8}
-          fill="#38bdf8" opacity={0.06} />
       )}
     </g>
   );
 };
-
-const COS_30_CONST = Math.cos(Math.PI / 6);
