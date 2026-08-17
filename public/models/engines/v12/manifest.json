@@ -1,0 +1,2658 @@
+{
+  "engineType": "v12",
+  "generatedAt": 1786825856678,
+  "components": [
+    {
+      "type": "engine-block",
+      "displayName": "60° V12 Engine Block & Crankcase",
+      "category": "core",
+      "assetPath": "/models/engines/v12/engine-block.glb",
+      "attachmentPoints": [
+        {
+          "id": "Piston_01_Mount",
+          "position": {
+            "x": -0.27,
+            "y": 0.11,
+            "z": 0.22
+          },
+          "rotation": {
+            "x": -0.5235987755982988,
+            "y": 0,
+            "z": 0,
+            "order": "XYZ"
+          },
+          "category": "piston_cylinder_bore",
+          "acceptsType": "piston",
+          "occupied": false,
+          "bankSide": "left",
+          "cylinderIndex": 1,
+          "snappingToleranceRadiusMm": 12
+        },
+        {
+          "id": "Piston_03_Mount",
+          "position": {
+            "x": -0.16200000000000003,
+            "y": 0.11,
+            "z": 0.22
+          },
+          "rotation": {
+            "x": -0.5235987755982988,
+            "y": 0,
+            "z": 0,
+            "order": "XYZ"
+          },
+          "category": "piston_cylinder_bore",
+          "acceptsType": "piston",
+          "occupied": false,
+          "bankSide": "left",
+          "cylinderIndex": 3,
+          "snappingToleranceRadiusMm": 12
+        },
+        {
+          "id": "Piston_05_Mount",
+          "position": {
+            "x": -0.05400000000000002,
+            "y": 0.11,
+            "z": 0.22
+          },
+          "rotation": {
+            "x": -0.5235987755982988,
+            "y": 0,
+            "z": 0,
+            "order": "XYZ"
+          },
+          "category": "piston_cylinder_bore",
+          "acceptsType": "piston",
+          "occupied": false,
+          "bankSide": "left",
+          "cylinderIndex": 5,
+          "snappingToleranceRadiusMm": 12
+        },
+        {
+          "id": "Piston_07_Mount",
+          "position": {
+            "x": 0.05399999999999999,
+            "y": 0.11,
+            "z": 0.22
+          },
+          "rotation": {
+            "x": -0.5235987755982988,
+            "y": 0,
+            "z": 0,
+            "order": "XYZ"
+          },
+          "category": "piston_cylinder_bore",
+          "acceptsType": "piston",
+          "occupied": false,
+          "bankSide": "left",
+          "cylinderIndex": 7,
+          "snappingToleranceRadiusMm": 12
+        },
+        {
+          "id": "Piston_09_Mount",
+          "position": {
+            "x": 0.16199999999999998,
+            "y": 0.11,
+            "z": 0.22
+          },
+          "rotation": {
+            "x": -0.5235987755982988,
+            "y": 0,
+            "z": 0,
+            "order": "XYZ"
+          },
+          "category": "piston_cylinder_bore",
+          "acceptsType": "piston",
+          "occupied": false,
+          "bankSide": "left",
+          "cylinderIndex": 9,
+          "snappingToleranceRadiusMm": 12
+        },
+        {
+          "id": "Piston_11_Mount",
+          "position": {
+            "x": 0.27,
+            "y": 0.11,
+            "z": 0.22
+          },
+          "rotation": {
+            "x": -0.5235987755982988,
+            "y": 0,
+            "z": 0,
+            "order": "XYZ"
+          },
+          "category": "piston_cylinder_bore",
+          "acceptsType": "piston",
+          "occupied": false,
+          "bankSide": "left",
+          "cylinderIndex": 11,
+          "snappingToleranceRadiusMm": 12
+        },
+        {
+          "id": "Piston_02_Mount",
+          "position": {
+            "x": -0.255,
+            "y": -0.11,
+            "z": 0.22
+          },
+          "rotation": {
+            "x": 0.5235987755982988,
+            "y": 0,
+            "z": 0,
+            "order": "XYZ"
+          },
+          "category": "piston_cylinder_bore",
+          "acceptsType": "piston",
+          "occupied": false,
+          "bankSide": "right",
+          "cylinderIndex": 2,
+          "snappingToleranceRadiusMm": 12
+        },
+        {
+          "id": "Piston_04_Mount",
+          "position": {
+            "x": -0.14700000000000002,
+            "y": -0.11,
+            "z": 0.22
+          },
+          "rotation": {
+            "x": 0.5235987755982988,
+            "y": 0,
+            "z": 0,
+            "order": "XYZ"
+          },
+          "category": "piston_cylinder_bore",
+          "acceptsType": "piston",
+          "occupied": false,
+          "bankSide": "right",
+          "cylinderIndex": 4,
+          "snappingToleranceRadiusMm": 12
+        },
+        {
+          "id": "Piston_06_Mount",
+          "position": {
+            "x": -0.03900000000000002,
+            "y": -0.11,
+            "z": 0.22
+          },
+          "rotation": {
+            "x": 0.5235987755982988,
+            "y": 0,
+            "z": 0,
+            "order": "XYZ"
+          },
+          "category": "piston_cylinder_bore",
+          "acceptsType": "piston",
+          "occupied": false,
+          "bankSide": "right",
+          "cylinderIndex": 6,
+          "snappingToleranceRadiusMm": 12
+        },
+        {
+          "id": "Piston_08_Mount",
+          "position": {
+            "x": 0.06899999999999999,
+            "y": -0.11,
+            "z": 0.22
+          },
+          "rotation": {
+            "x": 0.5235987755982988,
+            "y": 0,
+            "z": 0,
+            "order": "XYZ"
+          },
+          "category": "piston_cylinder_bore",
+          "acceptsType": "piston",
+          "occupied": false,
+          "bankSide": "right",
+          "cylinderIndex": 8,
+          "snappingToleranceRadiusMm": 12
+        },
+        {
+          "id": "Piston_10_Mount",
+          "position": {
+            "x": 0.177,
+            "y": -0.11,
+            "z": 0.22
+          },
+          "rotation": {
+            "x": 0.5235987755982988,
+            "y": 0,
+            "z": 0,
+            "order": "XYZ"
+          },
+          "category": "piston_cylinder_bore",
+          "acceptsType": "piston",
+          "occupied": false,
+          "bankSide": "right",
+          "cylinderIndex": 10,
+          "snappingToleranceRadiusMm": 12
+        },
+        {
+          "id": "Piston_12_Mount",
+          "position": {
+            "x": 0.28500000000000003,
+            "y": -0.11,
+            "z": 0.22
+          },
+          "rotation": {
+            "x": 0.5235987755982988,
+            "y": 0,
+            "z": 0,
+            "order": "XYZ"
+          },
+          "category": "piston_cylinder_bore",
+          "acceptsType": "piston",
+          "occupied": false,
+          "bankSide": "right",
+          "cylinderIndex": 12,
+          "snappingToleranceRadiusMm": 12
+        },
+        {
+          "id": "Crankshaft_Mount",
+          "position": {
+            "x": 0,
+            "y": 0,
+            "z": 0.05
+          },
+          "rotation": {
+            "x": 0,
+            "y": 0,
+            "z": 0,
+            "order": "XYZ"
+          },
+          "category": "crankshaft_main_saddle",
+          "acceptsType": "crankshaft",
+          "occupied": false,
+          "bankSide": "center",
+          "torqueSpecNm": 95
+        },
+        {
+          "id": "CylinderHead_Left_Mount",
+          "position": {
+            "x": 0,
+            "y": 0.18,
+            "z": 0.32
+          },
+          "rotation": {
+            "x": -0.5235987755982988,
+            "y": 0,
+            "z": 0,
+            "order": "XYZ"
+          },
+          "category": "cylinder_head_deck",
+          "acceptsType": "cylinder-head-left",
+          "occupied": false,
+          "bankSide": "left",
+          "torqueSpecNm": 125
+        },
+        {
+          "id": "CylinderHead_Right_Mount",
+          "position": {
+            "x": 0.0075,
+            "y": -0.18,
+            "z": 0.32
+          },
+          "rotation": {
+            "x": 0.5235987755982988,
+            "y": 0,
+            "z": 0,
+            "order": "XYZ"
+          },
+          "category": "cylinder_head_deck",
+          "acceptsType": "cylinder-head-right",
+          "occupied": false,
+          "bankSide": "right",
+          "torqueSpecNm": 125
+        },
+        {
+          "id": "OilPan_Mount",
+          "position": {
+            "x": 0,
+            "y": 0,
+            "z": -0.03
+          },
+          "rotation": {
+            "x": 0,
+            "y": 0,
+            "z": 0,
+            "order": "XYZ"
+          },
+          "category": "oil_pan_skirt",
+          "acceptsType": "dry-sump",
+          "occupied": false,
+          "bankSide": "center",
+          "torqueSpecNm": 22
+        },
+        {
+          "id": "TimingChain_Front_Mount",
+          "position": {
+            "x": -0.34,
+            "y": 0,
+            "z": 0.18
+          },
+          "rotation": {
+            "x": 0,
+            "y": 0,
+            "z": 0,
+            "order": "XYZ"
+          },
+          "category": "timing_case_front",
+          "acceptsType": "timing-chain",
+          "occupied": false,
+          "bankSide": "center",
+          "torqueSpecNm": 35
+        },
+        {
+          "id": "Transaxle_Rear_Mount",
+          "position": {
+            "x": 0.34,
+            "y": 0,
+            "z": 0.08
+          },
+          "rotation": {
+            "x": 0,
+            "y": 0,
+            "z": 0,
+            "order": "XYZ"
+          },
+          "category": "transaxle_bellhousing_flange",
+          "acceptsType": "transaxle",
+          "occupied": false,
+          "bankSide": "center",
+          "torqueSpecNm": 75
+        },
+        {
+          "id": "Radiator_Front_Mount",
+          "position": {
+            "x": -0.46,
+            "y": 0,
+            "z": 0.18
+          },
+          "rotation": {
+            "x": 0,
+            "y": 0,
+            "z": 0,
+            "order": "XYZ"
+          },
+          "category": "radiator_chassis_bracket",
+          "acceptsType": "radiator",
+          "occupied": false,
+          "bankSide": "center"
+        },
+        {
+          "id": "EngineCover_Top_Mount",
+          "position": {
+            "x": 0,
+            "y": 0,
+            "z": 0.54
+          },
+          "rotation": {
+            "x": 0,
+            "y": 0,
+            "z": 0,
+            "order": "XYZ"
+          },
+          "category": "engine_cover_stud",
+          "acceptsType": "engine-cover",
+          "occupied": false,
+          "bankSide": "center"
+        },
+        {
+          "id": "OilFilter_Mount",
+          "position": {
+            "x": -0.28,
+            "y": -0.22,
+            "z": -0.07
+          },
+          "rotation": {
+            "x": 0,
+            "y": 0,
+            "z": 0,
+            "order": "XYZ"
+          },
+          "category": "oil_pan_skirt",
+          "acceptsType": "oil-filter",
+          "occupied": false,
+          "bankSide": "right"
+        },
+        {
+          "id": "WaterPump_Mount",
+          "position": {
+            "x": -0.36,
+            "y": 0.08,
+            "z": 0.08
+          },
+          "rotation": {
+            "x": 0,
+            "y": 0,
+            "z": 0,
+            "order": "XYZ"
+          },
+          "category": "timing_case_front",
+          "acceptsType": "water-pump",
+          "occupied": false,
+          "bankSide": "left"
+        }
+      ],
+      "parentType": null,
+      "parentAttachmentPattern": "",
+      "dependencies": [],
+      "instanceCount": 1,
+      "instancePattern": "single",
+      "bankAssignment": "center",
+      "explodedOffset": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "defaultTransform": {
+        "position": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      },
+      "variants": [
+        {
+          "id": "cast",
+          "label": "Gray Cast Iron (Heavy Duty)",
+          "color": 6583435,
+          "metalness": 0.7,
+          "roughness": 0.45
+        },
+        {
+          "id": "forged",
+          "label": "Cast Magnesium-Aluminum Alloy",
+          "color": 9741240,
+          "metalness": 0.75,
+          "roughness": 0.42
+        },
+        {
+          "id": "billet",
+          "label": "Compacted Graphite Iron (CGI)",
+          "color": 13358561,
+          "metalness": 0.85,
+          "roughness": 0.28
+        },
+        {
+          "id": "titanium",
+          "label": "Titanium Monobloc Spec-R",
+          "color": 10980346,
+          "metalness": 0.95,
+          "roughness": 0.12
+        }
+      ],
+      "massKg": 85,
+      "centerOfMassMm": {
+        "x": 0,
+        "y": 0,
+        "z": 110
+      },
+      "costUsd": 4500,
+      "torqueSpec": {
+        "fastenerName": "Main Bearing ARP2000 Studs",
+        "snugNm": 65,
+        "finalAngleDeg": 90,
+        "boltCount": 14
+      },
+      "clearanceSpec": {
+        "label": "Main Journal Bearing Clearance",
+        "targetMm": 0.052,
+        "minMm": 0.045,
+        "maxMm": 0.06
+      },
+      "soundOnInstall": "heavy-drop",
+      "installAnimationDurationMs": 1200,
+      "description": "Structural cornerstone featuring deep-skirt crankcase, 7 cross-bolted main saddles, and 12 Nikasil-plated 88mm bores.",
+      "engineeringNotes": "Handles up to 1,200 HP and 10,500 RPM with CGI matrix structural integrity."
+    },
+    {
+      "type": "crankshaft",
+      "displayName": "Forged Nitrided Steel Crankshaft",
+      "category": "bottom-end",
+      "assetPath": "/models/engines/v12/crankshaft.glb",
+      "attachmentPoints": [
+        {
+          "id": "Crank_Journal_01_Left_Mount",
+          "position": {
+            "x": -0.27,
+            "y": 0,
+            "z": 0.05
+          },
+          "rotation": {
+            "x": -0.5235987755982988,
+            "y": 0,
+            "z": 0,
+            "order": "XYZ"
+          },
+          "category": "connecting_rod_crank_journal",
+          "acceptsType": "connecting-rod",
+          "occupied": false,
+          "bankSide": "left",
+          "cylinderIndex": 1,
+          "torqueSpecNm": 75
+        },
+        {
+          "id": "Crank_Journal_01_Right_Mount",
+          "position": {
+            "x": -0.255,
+            "y": 0,
+            "z": 0.05
+          },
+          "rotation": {
+            "x": 0.5235987755982988,
+            "y": 0,
+            "z": 0,
+            "order": "XYZ"
+          },
+          "category": "connecting_rod_crank_journal",
+          "acceptsType": "connecting-rod",
+          "occupied": false,
+          "bankSide": "right",
+          "cylinderIndex": 2,
+          "torqueSpecNm": 75
+        },
+        {
+          "id": "Crank_Journal_02_Left_Mount",
+          "position": {
+            "x": -0.16200000000000003,
+            "y": 0,
+            "z": 0.05
+          },
+          "rotation": {
+            "x": -0.5235987755982988,
+            "y": 0,
+            "z": 0,
+            "order": "XYZ"
+          },
+          "category": "connecting_rod_crank_journal",
+          "acceptsType": "connecting-rod",
+          "occupied": false,
+          "bankSide": "left",
+          "cylinderIndex": 3,
+          "torqueSpecNm": 75
+        },
+        {
+          "id": "Crank_Journal_02_Right_Mount",
+          "position": {
+            "x": -0.14700000000000002,
+            "y": 0,
+            "z": 0.05
+          },
+          "rotation": {
+            "x": 0.5235987755982988,
+            "y": 0,
+            "z": 0,
+            "order": "XYZ"
+          },
+          "category": "connecting_rod_crank_journal",
+          "acceptsType": "connecting-rod",
+          "occupied": false,
+          "bankSide": "right",
+          "cylinderIndex": 4,
+          "torqueSpecNm": 75
+        },
+        {
+          "id": "Crank_Journal_03_Left_Mount",
+          "position": {
+            "x": -0.05400000000000002,
+            "y": 0,
+            "z": 0.05
+          },
+          "rotation": {
+            "x": -0.5235987755982988,
+            "y": 0,
+            "z": 0,
+            "order": "XYZ"
+          },
+          "category": "connecting_rod_crank_journal",
+          "acceptsType": "connecting-rod",
+          "occupied": false,
+          "bankSide": "left",
+          "cylinderIndex": 5,
+          "torqueSpecNm": 75
+        },
+        {
+          "id": "Crank_Journal_03_Right_Mount",
+          "position": {
+            "x": -0.03900000000000002,
+            "y": 0,
+            "z": 0.05
+          },
+          "rotation": {
+            "x": 0.5235987755982988,
+            "y": 0,
+            "z": 0,
+            "order": "XYZ"
+          },
+          "category": "connecting_rod_crank_journal",
+          "acceptsType": "connecting-rod",
+          "occupied": false,
+          "bankSide": "right",
+          "cylinderIndex": 6,
+          "torqueSpecNm": 75
+        },
+        {
+          "id": "Crank_Journal_04_Left_Mount",
+          "position": {
+            "x": 0.05399999999999999,
+            "y": 0,
+            "z": 0.05
+          },
+          "rotation": {
+            "x": -0.5235987755982988,
+            "y": 0,
+            "z": 0,
+            "order": "XYZ"
+          },
+          "category": "connecting_rod_crank_journal",
+          "acceptsType": "connecting-rod",
+          "occupied": false,
+          "bankSide": "left",
+          "cylinderIndex": 7,
+          "torqueSpecNm": 75
+        },
+        {
+          "id": "Crank_Journal_04_Right_Mount",
+          "position": {
+            "x": 0.06899999999999999,
+            "y": 0,
+            "z": 0.05
+          },
+          "rotation": {
+            "x": 0.5235987755982988,
+            "y": 0,
+            "z": 0,
+            "order": "XYZ"
+          },
+          "category": "connecting_rod_crank_journal",
+          "acceptsType": "connecting-rod",
+          "occupied": false,
+          "bankSide": "right",
+          "cylinderIndex": 8,
+          "torqueSpecNm": 75
+        },
+        {
+          "id": "Crank_Journal_05_Left_Mount",
+          "position": {
+            "x": 0.16199999999999998,
+            "y": 0,
+            "z": 0.05
+          },
+          "rotation": {
+            "x": -0.5235987755982988,
+            "y": 0,
+            "z": 0,
+            "order": "XYZ"
+          },
+          "category": "connecting_rod_crank_journal",
+          "acceptsType": "connecting-rod",
+          "occupied": false,
+          "bankSide": "left",
+          "cylinderIndex": 9,
+          "torqueSpecNm": 75
+        },
+        {
+          "id": "Crank_Journal_05_Right_Mount",
+          "position": {
+            "x": 0.177,
+            "y": 0,
+            "z": 0.05
+          },
+          "rotation": {
+            "x": 0.5235987755982988,
+            "y": 0,
+            "z": 0,
+            "order": "XYZ"
+          },
+          "category": "connecting_rod_crank_journal",
+          "acceptsType": "connecting-rod",
+          "occupied": false,
+          "bankSide": "right",
+          "cylinderIndex": 10,
+          "torqueSpecNm": 75
+        },
+        {
+          "id": "Crank_Journal_06_Left_Mount",
+          "position": {
+            "x": 0.27,
+            "y": 0,
+            "z": 0.05
+          },
+          "rotation": {
+            "x": -0.5235987755982988,
+            "y": 0,
+            "z": 0,
+            "order": "XYZ"
+          },
+          "category": "connecting_rod_crank_journal",
+          "acceptsType": "connecting-rod",
+          "occupied": false,
+          "bankSide": "left",
+          "cylinderIndex": 11,
+          "torqueSpecNm": 75
+        },
+        {
+          "id": "Crank_Journal_06_Right_Mount",
+          "position": {
+            "x": 0.28500000000000003,
+            "y": 0,
+            "z": 0.05
+          },
+          "rotation": {
+            "x": 0.5235987755982988,
+            "y": 0,
+            "z": 0,
+            "order": "XYZ"
+          },
+          "category": "connecting_rod_crank_journal",
+          "acceptsType": "connecting-rod",
+          "occupied": false,
+          "bankSide": "right",
+          "cylinderIndex": 12,
+          "torqueSpecNm": 75
+        },
+        {
+          "id": "Crank_Flywheel_Flange_Mount",
+          "position": {
+            "x": 0.34,
+            "y": 0,
+            "z": 0.05
+          },
+          "rotation": {
+            "x": 0,
+            "y": 0,
+            "z": 0,
+            "order": "XYZ"
+          },
+          "category": "flywheel_crank_flange",
+          "acceptsType": "flywheel",
+          "occupied": false,
+          "bankSide": "center",
+          "torqueSpecNm": 140
+        }
+      ],
+      "parentType": "engine-block",
+      "parentAttachmentPattern": "Crankshaft_Mount",
+      "selfMountPointId": "Crankshaft_Mount",
+      "dependencies": [
+        "engine-block"
+      ],
+      "instanceCount": 1,
+      "instancePattern": "single",
+      "bankAssignment": "center",
+      "explodedOffset": {
+        "x": 0,
+        "y": 0,
+        "z": -0.15
+      },
+      "defaultTransform": {
+        "position": {
+          "x": 0,
+          "y": 0,
+          "z": 0.05
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      },
+      "variants": [
+        {
+          "id": "cast",
+          "label": "Cast Nodular Iron",
+          "color": 6583435,
+          "metalness": 0.75,
+          "roughness": 0.35
+        },
+        {
+          "id": "forged",
+          "label": "Forged 4340 Nitrided Steel",
+          "color": 13358561,
+          "metalness": 0.92,
+          "roughness": 0.15
+        },
+        {
+          "id": "billet",
+          "label": "Billet EN40B Aerospace Steel",
+          "color": 14870768,
+          "metalness": 0.95,
+          "roughness": 0.1
+        },
+        {
+          "id": "titanium",
+          "label": "Ultralight Billet Titanium",
+          "color": 10980346,
+          "metalness": 0.96,
+          "roughness": 0.08
+        }
+      ],
+      "massKg": 22.4,
+      "centerOfMassMm": {
+        "x": 0,
+        "y": 0,
+        "z": 50
+      },
+      "costUsd": 2800,
+      "torqueSpec": {
+        "fastenerName": "Main Cap Cross-Bolts",
+        "snugNm": 65,
+        "finalAngleDeg": 90,
+        "boltCount": 14
+      },
+      "clearanceSpec": {
+        "label": "Crankshaft Thrust Endplay",
+        "targetMm": 0.15,
+        "minMm": 0.1,
+        "maxMm": 0.22
+      },
+      "soundOnInstall": "slide-lock",
+      "installAnimationDurationMs": 1400,
+      "description": "Fully counter-weighted 6-throw crankshaft with gun-drilled main journals and 60° even-fire journal spacing.",
+      "engineeringNotes": "Dynamic balance rating under 0.25 g-mm with micro-polished journals."
+    },
+    {
+      "type": "piston",
+      "displayName": "Forged High-Compression Slipper Piston",
+      "category": "bottom-end",
+      "assetPath": "/models/engines/v12/piston.glb",
+      "attachmentPoints": [
+        {
+          "id": "Piston_WristPin_Mount",
+          "position": {
+            "x": 0,
+            "y": 0,
+            "z": -0.02
+          },
+          "rotation": {
+            "x": 0,
+            "y": 0,
+            "z": 0
+          },
+          "category": "connecting_rod_wrist_pin",
+          "acceptsType": "connecting-rod",
+          "occupied": false
+        }
+      ],
+      "parentType": "engine-block",
+      "parentAttachmentPattern": "Piston_[0-9]{2}_Mount",
+      "dependencies": [
+        "engine-block"
+      ],
+      "instanceCount": 12,
+      "instancePattern": "per-cylinder",
+      "bankAssignment": "center",
+      "explodedOffset": {
+        "x": 0,
+        "y": 0,
+        "z": 0.25
+      },
+      "defaultTransform": {
+        "position": {
+          "x": 0,
+          "y": 0,
+          "z": 0.22
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      },
+      "variants": [
+        {
+          "id": "cast",
+          "label": "OEM Cast Hypereutectic",
+          "color": 9741240,
+          "metalness": 0.7,
+          "roughness": 0.4
+        },
+        {
+          "id": "forged",
+          "label": "Forged 2618 Racing Alloy",
+          "color": 13358561,
+          "metalness": 0.88,
+          "roughness": 0.22
+        },
+        {
+          "id": "billet",
+          "label": "Billet CNC Box-Bridge Crown",
+          "color": 14870768,
+          "metalness": 0.92,
+          "roughness": 0.15
+        },
+        {
+          "id": "titanium",
+          "label": "Titanium Matrix Composite",
+          "color": 10980346,
+          "metalness": 0.95,
+          "roughness": 0.1
+        }
+      ],
+      "massKg": 0.38,
+      "centerOfMassMm": {
+        "x": 0,
+        "y": 0,
+        "z": 15
+      },
+      "costUsd": 185,
+      "clearanceSpec": {
+        "label": "Piston-to-Bore Wall Clearance",
+        "targetMm": 0.085,
+        "minMm": 0.075,
+        "maxMm": 0.095
+      },
+      "soundOnInstall": "metallic-click",
+      "installAnimationDurationMs": 800,
+      "description": "Lightweight slipper-skirt piston with diamond-turned ring lands, gas accumulator grooves, and DLC-coated wrist pin.",
+      "engineeringNotes": "Compression ratio: 12.8:1 (NA) / 9.5:1 (Turbo). Withstands 140 bar peak cylinder pressure."
+    },
+    {
+      "type": "connecting-rod",
+      "displayName": "Titanium H-Beam Connecting Rod",
+      "category": "bottom-end",
+      "assetPath": "/models/engines/v12/connecting-rod.glb",
+      "attachmentPoints": [],
+      "parentType": "crankshaft",
+      "parentAttachmentPattern": "Crank_Journal_[0-9]{2}_(Left|Right)_Mount",
+      "dependencies": [
+        "engine-block",
+        "crankshaft",
+        "piston"
+      ],
+      "instanceCount": 12,
+      "instancePattern": "per-cylinder",
+      "bankAssignment": "center",
+      "explodedOffset": {
+        "x": 0,
+        "y": 0,
+        "z": 0.12
+      },
+      "defaultTransform": {
+        "position": {
+          "x": 0,
+          "y": 0,
+          "z": 0.14
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      },
+      "variants": [
+        {
+          "id": "cast",
+          "label": "Forged Carbon Steel",
+          "color": 6583435,
+          "metalness": 0.78,
+          "roughness": 0.38
+        },
+        {
+          "id": "forged",
+          "label": "4340 Chrome-Moly H-Beam",
+          "color": 13358561,
+          "metalness": 0.9,
+          "roughness": 0.2
+        },
+        {
+          "id": "billet",
+          "label": "Billet Carrillo-Spec Alloy",
+          "color": 14870768,
+          "metalness": 0.94,
+          "roughness": 0.14
+        },
+        {
+          "id": "titanium",
+          "label": "Aerospace Ti-6Al-4V Forged",
+          "color": 10980346,
+          "metalness": 0.96,
+          "roughness": 0.08
+        }
+      ],
+      "massKg": 0.42,
+      "centerOfMassMm": {
+        "x": 0,
+        "y": 0,
+        "z": 65
+      },
+      "costUsd": 260,
+      "torqueSpec": {
+        "fastenerName": "ARP Custom Age 625+ Rod Bolts",
+        "snugNm": 55,
+        "finalAngleDeg": 60,
+        "boltCount": 2
+      },
+      "clearanceSpec": {
+        "label": "Rod Journal Oil Clearance",
+        "targetMm": 0.048,
+        "minMm": 0.04,
+        "maxMm": 0.055
+      },
+      "soundOnInstall": "metallic-click",
+      "installAnimationDurationMs": 900,
+      "description": "140mm center-to-center H-beam connecting rod featuring rifle-drilled forced pin oiling and balanced within 0.5g.",
+      "engineeringNotes": "Rated for 11,000 RPM reciprocating loads with zero fatigue propagation."
+    },
+    {
+      "type": "cylinder-head-left",
+      "displayName": "Bank 1 (Left) DOHC 24-Valve Cylinder Head",
+      "category": "top-end",
+      "assetPath": "/models/engines/v12/cylinder-head-left.glb",
+      "attachmentPoints": [
+        {
+          "id": "ValveCover_Left_Mount",
+          "position": {
+            "x": 0,
+            "y": 0.22,
+            "z": 0.39
+          },
+          "rotation": {
+            "x": -0.5235987755982988,
+            "y": 0,
+            "z": 0,
+            "order": "XYZ"
+          },
+          "category": "valve_cover_rail",
+          "acceptsType": "valve-cover-left",
+          "occupied": false,
+          "bankSide": "left",
+          "torqueSpecNm": 12
+        },
+        {
+          "id": "IntakeManifold_Left_Mount",
+          "position": {
+            "x": 0,
+            "y": 0.12,
+            "z": 0.36
+          },
+          "rotation": {
+            "x": -0.5235987755982988,
+            "y": 0,
+            "z": 0,
+            "order": "XYZ"
+          },
+          "category": "intake_port_flange",
+          "acceptsType": "intake-manifold-left",
+          "occupied": false,
+          "bankSide": "left",
+          "torqueSpecNm": 28
+        },
+        {
+          "id": "ExhaustHeader_Left_Mount",
+          "position": {
+            "x": 0,
+            "y": 0.24,
+            "z": 0.28
+          },
+          "rotation": {
+            "x": -0.5235987755982988,
+            "y": 0,
+            "z": 0,
+            "order": "XYZ"
+          },
+          "category": "exhaust_port_flange",
+          "acceptsType": "exhaust-header-left",
+          "occupied": false,
+          "bankSide": "left",
+          "torqueSpecNm": 45
+        },
+        {
+          "id": "SparkPlug_01_Mount",
+          "position": {
+            "x": -0.25,
+            "y": 0.22,
+            "z": 0.42
+          },
+          "rotation": {
+            "x": -0.5235987755982988,
+            "y": 0,
+            "z": 0,
+            "order": "XYZ"
+          },
+          "category": "spark_plug_well",
+          "acceptsType": "spark-plug",
+          "occupied": false,
+          "bankSide": "left",
+          "cylinderIndex": 1,
+          "torqueSpecNm": 25
+        },
+        {
+          "id": "SparkPlug_03_Mount",
+          "position": {
+            "x": -0.15,
+            "y": 0.22,
+            "z": 0.42
+          },
+          "rotation": {
+            "x": -0.5235987755982988,
+            "y": 0,
+            "z": 0,
+            "order": "XYZ"
+          },
+          "category": "spark_plug_well",
+          "acceptsType": "spark-plug",
+          "occupied": false,
+          "bankSide": "left",
+          "cylinderIndex": 3,
+          "torqueSpecNm": 25
+        },
+        {
+          "id": "SparkPlug_05_Mount",
+          "position": {
+            "x": -0.04999999999999999,
+            "y": 0.22,
+            "z": 0.42
+          },
+          "rotation": {
+            "x": -0.5235987755982988,
+            "y": 0,
+            "z": 0,
+            "order": "XYZ"
+          },
+          "category": "spark_plug_well",
+          "acceptsType": "spark-plug",
+          "occupied": false,
+          "bankSide": "left",
+          "cylinderIndex": 5,
+          "torqueSpecNm": 25
+        },
+        {
+          "id": "SparkPlug_07_Mount",
+          "position": {
+            "x": 0.050000000000000044,
+            "y": 0.22,
+            "z": 0.42
+          },
+          "rotation": {
+            "x": -0.5235987755982988,
+            "y": 0,
+            "z": 0,
+            "order": "XYZ"
+          },
+          "category": "spark_plug_well",
+          "acceptsType": "spark-plug",
+          "occupied": false,
+          "bankSide": "left",
+          "cylinderIndex": 7,
+          "torqueSpecNm": 25
+        },
+        {
+          "id": "SparkPlug_09_Mount",
+          "position": {
+            "x": 0.15000000000000002,
+            "y": 0.22,
+            "z": 0.42
+          },
+          "rotation": {
+            "x": -0.5235987755982988,
+            "y": 0,
+            "z": 0,
+            "order": "XYZ"
+          },
+          "category": "spark_plug_well",
+          "acceptsType": "spark-plug",
+          "occupied": false,
+          "bankSide": "left",
+          "cylinderIndex": 9,
+          "torqueSpecNm": 25
+        },
+        {
+          "id": "SparkPlug_11_Mount",
+          "position": {
+            "x": 0.25,
+            "y": 0.22,
+            "z": 0.42
+          },
+          "rotation": {
+            "x": -0.5235987755982988,
+            "y": 0,
+            "z": 0,
+            "order": "XYZ"
+          },
+          "category": "spark_plug_well",
+          "acceptsType": "spark-plug",
+          "occupied": false,
+          "bankSide": "left",
+          "cylinderIndex": 11,
+          "torqueSpecNm": 25
+        }
+      ],
+      "parentType": "engine-block",
+      "parentAttachmentPattern": "CylinderHead_Left_Mount",
+      "selfMountPointId": "CylinderHead_Left_Mount",
+      "dependencies": [
+        "engine-block",
+        "crankshaft",
+        "piston"
+      ],
+      "instanceCount": 1,
+      "instancePattern": "per-bank",
+      "bankAssignment": "left",
+      "explodedOffset": {
+        "x": 0,
+        "y": 0.15,
+        "z": 0.18
+      },
+      "defaultTransform": {
+        "position": {
+          "x": 0,
+          "y": 0.18,
+          "z": 0.32
+        },
+        "rotation": {
+          "x": -0.5236,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      },
+      "variants": [
+        {
+          "id": "cast",
+          "label": "OEM Cast Aluminum A356",
+          "color": 9741240,
+          "metalness": 0.75,
+          "roughness": 0.42
+        },
+        {
+          "id": "forged",
+          "label": "CNC Ported Racing Aluminum",
+          "color": 13358561,
+          "metalness": 0.88,
+          "roughness": 0.24
+        },
+        {
+          "id": "billet",
+          "label": "Billet CNC Monobloc Head",
+          "color": 14870768,
+          "metalness": 0.92,
+          "roughness": 0.16
+        },
+        {
+          "id": "titanium",
+          "label": "Beryllium-Copper Combustion Core",
+          "color": 10980346,
+          "metalness": 0.95,
+          "roughness": 0.1
+        }
+      ],
+      "massKg": 18.2,
+      "centerOfMassMm": {
+        "x": 0,
+        "y": 0,
+        "z": 50
+      },
+      "costUsd": 3600,
+      "torqueSpec": {
+        "fastenerName": "ARP2000 Head Studs (M11)",
+        "snugNm": 45,
+        "finalAngleDeg": 120,
+        "boltCount": 14
+      },
+      "clearanceSpec": {
+        "label": "Valve Lash Clearance (Cold)",
+        "targetMm": 0.22,
+        "minMm": 0.2,
+        "maxMm": 0.25
+      },
+      "soundOnInstall": "heavy-drop",
+      "installAnimationDurationMs": 1300,
+      "description": "DOHC crossflow cylinder head housing 12 intake (36mm) and 12 exhaust (31mm) sodium-filled titanium valves.",
+      "engineeringNotes": "Combustion chamber volume: 38.5 cc. CNC 5-axis ported runner flow rate: 365 CFM @ 28 in H2O."
+    },
+    {
+      "type": "cylinder-head-right",
+      "displayName": "Bank 2 (Right) DOHC 24-Valve Cylinder Head",
+      "category": "top-end",
+      "assetPath": "/models/engines/v12/cylinder-head-right.glb",
+      "attachmentPoints": [
+        {
+          "id": "ValveCover_Right_Mount",
+          "position": {
+            "x": 0.015,
+            "y": -0.22,
+            "z": 0.39
+          },
+          "rotation": {
+            "x": 0.5235987755982988,
+            "y": 0,
+            "z": 0,
+            "order": "XYZ"
+          },
+          "category": "valve_cover_rail",
+          "acceptsType": "valve-cover-right",
+          "occupied": false,
+          "bankSide": "right",
+          "torqueSpecNm": 12
+        },
+        {
+          "id": "IntakeManifold_Right_Mount",
+          "position": {
+            "x": 0.015,
+            "y": -0.12,
+            "z": 0.36
+          },
+          "rotation": {
+            "x": 0.5235987755982988,
+            "y": 0,
+            "z": 0,
+            "order": "XYZ"
+          },
+          "category": "intake_port_flange",
+          "acceptsType": "intake-manifold-right",
+          "occupied": false,
+          "bankSide": "right",
+          "torqueSpecNm": 28
+        },
+        {
+          "id": "ExhaustHeader_Right_Mount",
+          "position": {
+            "x": 0.015,
+            "y": -0.24,
+            "z": 0.28
+          },
+          "rotation": {
+            "x": 0.5235987755982988,
+            "y": 0,
+            "z": 0,
+            "order": "XYZ"
+          },
+          "category": "exhaust_port_flange",
+          "acceptsType": "exhaust-header-right",
+          "occupied": false,
+          "bankSide": "right",
+          "torqueSpecNm": 45
+        },
+        {
+          "id": "SparkPlug_02_Mount",
+          "position": {
+            "x": -0.235,
+            "y": -0.22,
+            "z": 0.42
+          },
+          "rotation": {
+            "x": 0.5235987755982988,
+            "y": 0,
+            "z": 0,
+            "order": "XYZ"
+          },
+          "category": "spark_plug_well",
+          "acceptsType": "spark-plug",
+          "occupied": false,
+          "bankSide": "right",
+          "cylinderIndex": 2,
+          "torqueSpecNm": 25
+        },
+        {
+          "id": "SparkPlug_04_Mount",
+          "position": {
+            "x": -0.135,
+            "y": -0.22,
+            "z": 0.42
+          },
+          "rotation": {
+            "x": 0.5235987755982988,
+            "y": 0,
+            "z": 0,
+            "order": "XYZ"
+          },
+          "category": "spark_plug_well",
+          "acceptsType": "spark-plug",
+          "occupied": false,
+          "bankSide": "right",
+          "cylinderIndex": 4,
+          "torqueSpecNm": 25
+        },
+        {
+          "id": "SparkPlug_06_Mount",
+          "position": {
+            "x": -0.03499999999999999,
+            "y": -0.22,
+            "z": 0.42
+          },
+          "rotation": {
+            "x": 0.5235987755982988,
+            "y": 0,
+            "z": 0,
+            "order": "XYZ"
+          },
+          "category": "spark_plug_well",
+          "acceptsType": "spark-plug",
+          "occupied": false,
+          "bankSide": "right",
+          "cylinderIndex": 6,
+          "torqueSpecNm": 25
+        },
+        {
+          "id": "SparkPlug_08_Mount",
+          "position": {
+            "x": 0.06500000000000004,
+            "y": -0.22,
+            "z": 0.42
+          },
+          "rotation": {
+            "x": 0.5235987755982988,
+            "y": 0,
+            "z": 0,
+            "order": "XYZ"
+          },
+          "category": "spark_plug_well",
+          "acceptsType": "spark-plug",
+          "occupied": false,
+          "bankSide": "right",
+          "cylinderIndex": 8,
+          "torqueSpecNm": 25
+        },
+        {
+          "id": "SparkPlug_10_Mount",
+          "position": {
+            "x": 0.16500000000000004,
+            "y": -0.22,
+            "z": 0.42
+          },
+          "rotation": {
+            "x": 0.5235987755982988,
+            "y": 0,
+            "z": 0,
+            "order": "XYZ"
+          },
+          "category": "spark_plug_well",
+          "acceptsType": "spark-plug",
+          "occupied": false,
+          "bankSide": "right",
+          "cylinderIndex": 10,
+          "torqueSpecNm": 25
+        },
+        {
+          "id": "SparkPlug_12_Mount",
+          "position": {
+            "x": 0.265,
+            "y": -0.22,
+            "z": 0.42
+          },
+          "rotation": {
+            "x": 0.5235987755982988,
+            "y": 0,
+            "z": 0,
+            "order": "XYZ"
+          },
+          "category": "spark_plug_well",
+          "acceptsType": "spark-plug",
+          "occupied": false,
+          "bankSide": "right",
+          "cylinderIndex": 12,
+          "torqueSpecNm": 25
+        }
+      ],
+      "parentType": "engine-block",
+      "parentAttachmentPattern": "CylinderHead_Right_Mount",
+      "selfMountPointId": "CylinderHead_Right_Mount",
+      "dependencies": [
+        "engine-block",
+        "crankshaft",
+        "piston"
+      ],
+      "instanceCount": 1,
+      "instancePattern": "per-bank",
+      "bankAssignment": "right",
+      "explodedOffset": {
+        "x": 0,
+        "y": -0.15,
+        "z": 0.18
+      },
+      "defaultTransform": {
+        "position": {
+          "x": 0.015,
+          "y": -0.18,
+          "z": 0.32
+        },
+        "rotation": {
+          "x": 0.5236,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      },
+      "variants": [
+        {
+          "id": "cast",
+          "label": "OEM Cast Aluminum A356",
+          "color": 9741240,
+          "metalness": 0.75,
+          "roughness": 0.42
+        },
+        {
+          "id": "forged",
+          "label": "CNC Ported Racing Aluminum",
+          "color": 13358561,
+          "metalness": 0.88,
+          "roughness": 0.24
+        },
+        {
+          "id": "billet",
+          "label": "Billet CNC Monobloc Head",
+          "color": 14870768,
+          "metalness": 0.92,
+          "roughness": 0.16
+        },
+        {
+          "id": "titanium",
+          "label": "Beryllium-Copper Combustion Core",
+          "color": 10980346,
+          "metalness": 0.95,
+          "roughness": 0.1
+        }
+      ],
+      "massKg": 18.2,
+      "centerOfMassMm": {
+        "x": 0,
+        "y": 0,
+        "z": 50
+      },
+      "costUsd": 3600,
+      "torqueSpec": {
+        "fastenerName": "ARP2000 Head Studs (M11)",
+        "snugNm": 45,
+        "finalAngleDeg": 120,
+        "boltCount": 14
+      },
+      "clearanceSpec": {
+        "label": "Valve Lash Clearance (Cold)",
+        "targetMm": 0.22,
+        "minMm": 0.2,
+        "maxMm": 0.25
+      },
+      "soundOnInstall": "heavy-drop",
+      "installAnimationDurationMs": 1300,
+      "description": "Bank 2 DOHC cylinder head mirror-paired with Bank 1, staggered +15mm along crankshaft axis.",
+      "engineeringNotes": "Combustion chamber volume: 38.5 cc. CNC 5-axis ported runner flow rate: 365 CFM @ 28 in H2O."
+    },
+    {
+      "type": "valve-cover-left",
+      "displayName": "Bank 1 Anodized Billet Valve Cover",
+      "category": "covers",
+      "assetPath": "/models/engines/v12/valve-cover-left.glb",
+      "attachmentPoints": [],
+      "parentType": "cylinder-head-left",
+      "parentAttachmentPattern": "ValveCover_Left_Mount",
+      "dependencies": [
+        "cylinder-head-left"
+      ],
+      "instanceCount": 1,
+      "instancePattern": "per-bank",
+      "bankAssignment": "left",
+      "explodedOffset": {
+        "x": 0,
+        "y": 0.12,
+        "z": 0.22
+      },
+      "defaultTransform": {
+        "position": {
+          "x": 0,
+          "y": 0.22,
+          "z": 0.39
+        },
+        "rotation": {
+          "x": -0.5236,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      },
+      "variants": [
+        {
+          "id": "forged",
+          "label": "Billet Gold Anodized",
+          "color": 16096779,
+          "metalness": 0.9,
+          "roughness": 0.2,
+          "clearcoat": 0.75,
+          "clearcoatRoughness": 0.1,
+          "envMapIntensity": 1.4
+        },
+        {
+          "id": "billet",
+          "label": "Apex Cobalt Blue Anodized",
+          "color": 165063,
+          "metalness": 0.85,
+          "roughness": 0.18,
+          "clearcoat": 0.85,
+          "clearcoatRoughness": 0.1,
+          "envMapIntensity": 1.6
+        },
+        {
+          "id": "carbon_fiber",
+          "label": "Autoclaved 2x2 Twill Dry Carbon",
+          "color": 1976635,
+          "metalness": 0.35,
+          "roughness": 0.38,
+          "clearcoat": 0.95,
+          "clearcoatRoughness": 0.08,
+          "envMapIntensity": 1.4
+        },
+        {
+          "id": "billet",
+          "label": "Brushed Raw Aluminum",
+          "color": 14870768,
+          "metalness": 0.9,
+          "roughness": 0.18
+        }
+      ],
+      "massKg": 2.8,
+      "centerOfMassMm": {
+        "x": 0,
+        "y": 0,
+        "z": 20
+      },
+      "costUsd": 850,
+      "torqueSpec": {
+        "fastenerName": "Titanium M6 Perimeter Bolts",
+        "snugNm": 12,
+        "finalAngleDeg": 0,
+        "boltCount": 16
+      },
+      "soundOnInstall": "pneumatic-snap",
+      "installAnimationDurationMs": 800,
+      "description": "CNC machined billet valve cover with internal oil baffle labyrinth and integrated spark plug O-ring sealing wells.",
+      "engineeringNotes": "High-temperature viton perimeter seal with zero leakage up to 2.5 bar crankcase pressure."
+    },
+    {
+      "type": "valve-cover-right",
+      "displayName": "Bank 2 Anodized Billet Valve Cover",
+      "category": "covers",
+      "assetPath": "/models/engines/v12/valve-cover-right.glb",
+      "attachmentPoints": [],
+      "parentType": "cylinder-head-right",
+      "parentAttachmentPattern": "ValveCover_Right_Mount",
+      "dependencies": [
+        "cylinder-head-right"
+      ],
+      "instanceCount": 1,
+      "instancePattern": "per-bank",
+      "bankAssignment": "right",
+      "explodedOffset": {
+        "x": 0,
+        "y": -0.12,
+        "z": 0.22
+      },
+      "defaultTransform": {
+        "position": {
+          "x": 0.015,
+          "y": -0.22,
+          "z": 0.39
+        },
+        "rotation": {
+          "x": 0.5236,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      },
+      "variants": [
+        {
+          "id": "forged",
+          "label": "Billet Gold Anodized",
+          "color": 16096779,
+          "metalness": 0.9,
+          "roughness": 0.2,
+          "clearcoat": 0.75,
+          "clearcoatRoughness": 0.1,
+          "envMapIntensity": 1.4
+        },
+        {
+          "id": "billet",
+          "label": "Apex Cobalt Blue Anodized",
+          "color": 165063,
+          "metalness": 0.85,
+          "roughness": 0.18,
+          "clearcoat": 0.85,
+          "clearcoatRoughness": 0.1,
+          "envMapIntensity": 1.6
+        },
+        {
+          "id": "carbon_fiber",
+          "label": "Autoclaved 2x2 Twill Dry Carbon",
+          "color": 1976635,
+          "metalness": 0.35,
+          "roughness": 0.38,
+          "clearcoat": 0.95,
+          "clearcoatRoughness": 0.08,
+          "envMapIntensity": 1.4
+        },
+        {
+          "id": "billet",
+          "label": "Brushed Raw Aluminum",
+          "color": 14870768,
+          "metalness": 0.9,
+          "roughness": 0.18
+        }
+      ],
+      "massKg": 2.8,
+      "centerOfMassMm": {
+        "x": 0,
+        "y": 0,
+        "z": 20
+      },
+      "costUsd": 850,
+      "torqueSpec": {
+        "fastenerName": "Titanium M6 Perimeter Bolts",
+        "snugNm": 12,
+        "finalAngleDeg": 0,
+        "boltCount": 16
+      },
+      "soundOnInstall": "pneumatic-snap",
+      "installAnimationDurationMs": 800,
+      "description": "Bank 2 matching billet valve cover with oil filler neck and crankcase breather AN-10 fitting.",
+      "engineeringNotes": "High-temperature viton perimeter seal with zero leakage up to 2.5 bar crankcase pressure."
+    },
+    {
+      "type": "intake-manifold-left",
+      "displayName": "Bank 1 Ceramic ITB Intake Manifold",
+      "category": "induction",
+      "assetPath": "/models/engines/v12/intake-manifold-left.glb",
+      "attachmentPoints": [
+        {
+          "id": "FuelRail_Left_Mount",
+          "position": {
+            "x": 0,
+            "y": 0.05,
+            "z": 0.46
+          },
+          "rotation": {
+            "x": 0,
+            "y": 0,
+            "z": 0,
+            "order": "XYZ"
+          },
+          "category": "fuel_rail_boss",
+          "acceptsType": "fuel-rail-left",
+          "occupied": false,
+          "bankSide": "left"
+        },
+        {
+          "id": "VelocityStack_Left_Mount",
+          "position": {
+            "x": 0,
+            "y": 0.08,
+            "z": 0.53
+          },
+          "rotation": {
+            "x": 0,
+            "y": 0,
+            "z": 0,
+            "order": "XYZ"
+          },
+          "category": "intake_port_flange",
+          "acceptsType": "velocity-stack-left",
+          "occupied": false,
+          "bankSide": "left"
+        }
+      ],
+      "parentType": "cylinder-head-left",
+      "parentAttachmentPattern": "IntakeManifold_Left_Mount",
+      "dependencies": [
+        "cylinder-head-left"
+      ],
+      "instanceCount": 1,
+      "instancePattern": "per-bank",
+      "bankAssignment": "left",
+      "explodedOffset": {
+        "x": 0,
+        "y": 0.1,
+        "z": 0.24
+      },
+      "defaultTransform": {
+        "position": {
+          "x": 0,
+          "y": 0.12,
+          "z": 0.36
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      },
+      "variants": [
+        {
+          "id": "ceramic",
+          "label": "Thermal Barrier Ceramic White",
+          "color": 16317180,
+          "metalness": 0.25,
+          "roughness": 0.35,
+          "envMapIntensity": 0.8
+        },
+        {
+          "id": "carbon_fiber",
+          "label": "Autoclaved 2x2 Twill Dry Carbon",
+          "color": 1976635,
+          "metalness": 0.35,
+          "roughness": 0.38,
+          "clearcoat": 0.95,
+          "clearcoatRoughness": 0.08,
+          "envMapIntensity": 1.4
+        },
+        {
+          "id": "billet",
+          "label": "CNC Billet 6061 Flange",
+          "color": 14870768,
+          "metalness": 0.9,
+          "roughness": 0.16
+        }
+      ],
+      "massKg": 4.6,
+      "centerOfMassMm": {
+        "x": 0,
+        "y": 0,
+        "z": 60
+      },
+      "costUsd": 1950,
+      "torqueSpec": {
+        "fastenerName": "Titanium M8 Intake Studs",
+        "snugNm": 28,
+        "finalAngleDeg": 0,
+        "boltCount": 12
+      },
+      "soundOnInstall": "slide-lock",
+      "installAnimationDurationMs": 1000,
+      "description": "6 S-curved individual throttle body intake runners with parabolic ceramic thermal barrier coating.",
+      "engineeringNotes": "Equal-length 280mm runner geometry tuned for 7,800 RPM Helmholtz resonance wave boost."
+    },
+    {
+      "type": "intake-manifold-right",
+      "displayName": "Bank 2 Ceramic ITB Intake Manifold",
+      "category": "induction",
+      "assetPath": "/models/engines/v12/intake-manifold-right.glb",
+      "attachmentPoints": [
+        {
+          "id": "FuelRail_Right_Mount",
+          "position": {
+            "x": 0.015,
+            "y": -0.05,
+            "z": 0.46
+          },
+          "rotation": {
+            "x": 0,
+            "y": 0,
+            "z": 0,
+            "order": "XYZ"
+          },
+          "category": "fuel_rail_boss",
+          "acceptsType": "fuel-rail-right",
+          "occupied": false,
+          "bankSide": "right"
+        },
+        {
+          "id": "VelocityStack_Right_Mount",
+          "position": {
+            "x": 0.015,
+            "y": -0.08,
+            "z": 0.53
+          },
+          "rotation": {
+            "x": 0,
+            "y": 0,
+            "z": 0,
+            "order": "XYZ"
+          },
+          "category": "intake_port_flange",
+          "acceptsType": "velocity-stack-right",
+          "occupied": false,
+          "bankSide": "right"
+        }
+      ],
+      "parentType": "cylinder-head-right",
+      "parentAttachmentPattern": "IntakeManifold_Right_Mount",
+      "dependencies": [
+        "cylinder-head-right"
+      ],
+      "instanceCount": 1,
+      "instancePattern": "per-bank",
+      "bankAssignment": "right",
+      "explodedOffset": {
+        "x": 0,
+        "y": -0.1,
+        "z": 0.24
+      },
+      "defaultTransform": {
+        "position": {
+          "x": 0.015,
+          "y": -0.12,
+          "z": 0.36
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      },
+      "variants": [
+        {
+          "id": "ceramic",
+          "label": "Thermal Barrier Ceramic White",
+          "color": 16317180,
+          "metalness": 0.25,
+          "roughness": 0.35,
+          "envMapIntensity": 0.8
+        },
+        {
+          "id": "carbon_fiber",
+          "label": "Autoclaved 2x2 Twill Dry Carbon",
+          "color": 1976635,
+          "metalness": 0.35,
+          "roughness": 0.38,
+          "clearcoat": 0.95,
+          "clearcoatRoughness": 0.08,
+          "envMapIntensity": 1.4
+        },
+        {
+          "id": "billet",
+          "label": "CNC Billet 6061 Flange",
+          "color": 14870768,
+          "metalness": 0.9,
+          "roughness": 0.16
+        }
+      ],
+      "massKg": 4.6,
+      "centerOfMassMm": {
+        "x": 0,
+        "y": 0,
+        "z": 60
+      },
+      "costUsd": 1950,
+      "torqueSpec": {
+        "fastenerName": "Titanium M8 Intake Studs",
+        "snugNm": 28,
+        "finalAngleDeg": 0,
+        "boltCount": 12
+      },
+      "soundOnInstall": "slide-lock",
+      "installAnimationDurationMs": 1000,
+      "description": "Bank 2 matching ITB intake runners feeding cylinders 2, 4, 6, 8, 10, 12.",
+      "engineeringNotes": "Equal-length 280mm runner geometry tuned for 7,800 RPM Helmholtz resonance wave boost."
+    },
+    {
+      "type": "exhaust-header-left",
+      "displayName": "Bank 1 6-into-1 Inconel Exhaust Header",
+      "category": "exhaust",
+      "assetPath": "/models/engines/v12/exhaust-header-left.glb",
+      "attachmentPoints": [],
+      "parentType": "cylinder-head-left",
+      "parentAttachmentPattern": "ExhaustHeader_Left_Mount",
+      "dependencies": [
+        "cylinder-head-left"
+      ],
+      "instanceCount": 1,
+      "instancePattern": "per-bank",
+      "bankAssignment": "left",
+      "explodedOffset": {
+        "x": 0,
+        "y": 0.2,
+        "z": -0.08
+      },
+      "defaultTransform": {
+        "position": {
+          "x": 0,
+          "y": 0.24,
+          "z": 0.28
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      },
+      "variants": [
+        {
+          "id": "inconel",
+          "label": "Inconel 625 Heat-Tinted Gold",
+          "color": 14251782,
+          "metalness": 0.9,
+          "roughness": 0.26,
+          "clearcoat": 0.4,
+          "clearcoatRoughness": 0.2,
+          "envMapIntensity": 1.5
+        },
+        {
+          "id": "forged",
+          "label": "321 Stainless Steel (Brushed)",
+          "color": 13358561,
+          "metalness": 0.85,
+          "roughness": 0.3
+        },
+        {
+          "id": "titanium",
+          "label": "Titanium Spec-R Heat-Blued",
+          "color": 6514417,
+          "metalness": 0.95,
+          "roughness": 0.12
+        }
+      ],
+      "massKg": 6.4,
+      "centerOfMassMm": {
+        "x": 100,
+        "y": 0,
+        "z": -40
+      },
+      "costUsd": 2800,
+      "torqueSpec": {
+        "fastenerName": "Inconel 718 Exhaust Studs (M8)",
+        "snugNm": 45,
+        "finalAngleDeg": 0,
+        "boltCount": 12
+      },
+      "soundOnInstall": "metallic-click",
+      "installAnimationDurationMs": 1100,
+      "description": "6-into-1 equal-length hydroformed Inconel 625 primary pipes (42mm) merging into a 76mm pyramidal collector.",
+      "engineeringNotes": "Withstands continuous exhaust gas temperatures up to 1,050°C with zero thermal distortion."
+    },
+    {
+      "type": "exhaust-header-right",
+      "displayName": "Bank 2 6-into-1 Inconel Exhaust Header",
+      "category": "exhaust",
+      "assetPath": "/models/engines/v12/exhaust-header-right.glb",
+      "attachmentPoints": [
+        {
+          "id": "Turbocharger_Mount",
+          "position": {
+            "x": 0.5,
+            "y": -0.32,
+            "z": 0.12
+          },
+          "rotation": {
+            "x": 0,
+            "y": 1.5707963267948966,
+            "z": 0,
+            "order": "XYZ"
+          },
+          "category": "turbo_flange",
+          "acceptsType": "turbocharger",
+          "occupied": false,
+          "bankSide": "right",
+          "torqueSpecNm": 55
+        }
+      ],
+      "parentType": "cylinder-head-right",
+      "parentAttachmentPattern": "ExhaustHeader_Right_Mount",
+      "dependencies": [
+        "cylinder-head-right"
+      ],
+      "instanceCount": 1,
+      "instancePattern": "per-bank",
+      "bankAssignment": "right",
+      "explodedOffset": {
+        "x": 0,
+        "y": -0.2,
+        "z": -0.08
+      },
+      "defaultTransform": {
+        "position": {
+          "x": 0.015,
+          "y": -0.24,
+          "z": 0.28
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      },
+      "variants": [
+        {
+          "id": "inconel",
+          "label": "Inconel 625 Heat-Tinted Gold",
+          "color": 14251782,
+          "metalness": 0.9,
+          "roughness": 0.26,
+          "clearcoat": 0.4,
+          "clearcoatRoughness": 0.2,
+          "envMapIntensity": 1.5
+        },
+        {
+          "id": "forged",
+          "label": "321 Stainless Steel (Brushed)",
+          "color": 13358561,
+          "metalness": 0.85,
+          "roughness": 0.3
+        },
+        {
+          "id": "titanium",
+          "label": "Titanium Spec-R Heat-Blued",
+          "color": 6514417,
+          "metalness": 0.95,
+          "roughness": 0.12
+        }
+      ],
+      "massKg": 6.4,
+      "centerOfMassMm": {
+        "x": 100,
+        "y": 0,
+        "z": -40
+      },
+      "costUsd": 2800,
+      "torqueSpec": {
+        "fastenerName": "Inconel 718 Exhaust Studs (M8)",
+        "snugNm": 45,
+        "finalAngleDeg": 0,
+        "boltCount": 12
+      },
+      "soundOnInstall": "metallic-click",
+      "installAnimationDurationMs": 1100,
+      "description": "Bank 2 hydroformed exhaust header terminating in a machined V-band flange for turbocharger coupling.",
+      "engineeringNotes": "Withstands continuous exhaust gas temperatures up to 1,050°C with zero thermal distortion."
+    },
+    {
+      "type": "turbocharger",
+      "displayName": "Twin-Scroll Ceramic Ball-Bearing Turbocharger",
+      "category": "exhaust",
+      "assetPath": "/models/engines/v12/turbocharger.glb",
+      "attachmentPoints": [],
+      "parentType": "exhaust-header-right",
+      "parentAttachmentPattern": "Turbocharger_Mount",
+      "dependencies": [
+        "exhaust-header-right"
+      ],
+      "instanceCount": 1,
+      "instancePattern": "single",
+      "bankAssignment": "right",
+      "explodedOffset": {
+        "x": 0.15,
+        "y": -0.25,
+        "z": 0
+      },
+      "defaultTransform": {
+        "position": {
+          "x": 0.5,
+          "y": -0.32,
+          "z": 0.12
+        },
+        "rotation": {
+          "x": 0,
+          "y": 1.5708,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      },
+      "variants": [
+        {
+          "id": "titanium",
+          "label": "Titanium-Aluminide Billet Wheel (76mm)",
+          "color": 10980346,
+          "metalness": 0.94,
+          "roughness": 0.12
+        },
+        {
+          "id": "billet",
+          "label": "CNC Forged Milled Compressor Wheel",
+          "color": 14870768,
+          "metalness": 0.9,
+          "roughness": 0.18
+        },
+        {
+          "id": "ceramic",
+          "label": "Ceramic Dual Ball Bearing Cartridge",
+          "color": 3718648,
+          "metalness": 0.85,
+          "roughness": 0.22
+        }
+      ],
+      "massKg": 12.8,
+      "centerOfMassMm": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "costUsd": 4200,
+      "torqueSpec": {
+        "fastenerName": "Quick-Release Titanium V-Band Clamp",
+        "snugNm": 55,
+        "finalAngleDeg": 0,
+        "boltCount": 1
+      },
+      "soundOnInstall": "spool-whine",
+      "installAnimationDurationMs": 1200,
+      "description": "Aerospace-grade twin-scroll turbocharger with 76mm billet compressor wheel and dual ceramic ball bearings.",
+      "engineeringNotes": "Max spool RPM: 145,000. Capable of delivering 2.4 bar boost with 78% adiabatic compressor efficiency."
+    },
+    {
+      "type": "dry-sump",
+      "displayName": "4-Stage Scavenge Dry Sump Pan & Tank",
+      "category": "cooling",
+      "assetPath": "/models/engines/v12/dry-sump.glb",
+      "attachmentPoints": [],
+      "parentType": "engine-block",
+      "parentAttachmentPattern": "OilPan_Mount",
+      "dependencies": [
+        "engine-block",
+        "crankshaft"
+      ],
+      "instanceCount": 1,
+      "instancePattern": "single",
+      "bankAssignment": "center",
+      "explodedOffset": {
+        "x": 0,
+        "y": 0,
+        "z": -0.22
+      },
+      "defaultTransform": {
+        "position": {
+          "x": 0,
+          "y": 0,
+          "z": -0.03
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      },
+      "variants": [
+        {
+          "id": "billet",
+          "label": "CNC Billet 6061-T6 Scavenge Pan",
+          "color": 14870768,
+          "metalness": 0.9,
+          "roughness": 0.18
+        },
+        {
+          "id": "cast",
+          "label": "Cast Magnesium Lightweight Sump",
+          "color": 9741240,
+          "metalness": 0.78,
+          "roughness": 0.35
+        },
+        {
+          "id": "forged",
+          "label": "Billet Gold Anodized",
+          "color": 16096779,
+          "metalness": 0.9,
+          "roughness": 0.2,
+          "clearcoat": 0.75,
+          "clearcoatRoughness": 0.1,
+          "envMapIntensity": 1.4
+        }
+      ],
+      "massKg": 11.2,
+      "centerOfMassMm": {
+        "x": 0,
+        "y": 0,
+        "z": -30
+      },
+      "costUsd": 3100,
+      "torqueSpec": {
+        "fastenerName": "Billet M6 Sump Bolts",
+        "snugNm": 22,
+        "finalAngleDeg": 0,
+        "boltCount": 24
+      },
+      "soundOnInstall": "pneumatic-snap",
+      "installAnimationDurationMs": 1000,
+      "description": "Low-profile billet scavenge trough with 4 AN-12 scavenge ports, centrifugal de-aerator tank, and spin-on racing filter.",
+      "engineeringNotes": "Eliminates oil starvation up to 3.5 G lateral cornering loads. Lowers engine center of gravity by 65mm."
+    },
+    {
+      "type": "radiator",
+      "displayName": "High-Efficiency Brazed Aluminum Radiator",
+      "category": "cooling",
+      "assetPath": "/models/engines/v12/radiator.glb",
+      "attachmentPoints": [],
+      "parentType": "engine-block",
+      "parentAttachmentPattern": "Radiator_Front_Mount",
+      "dependencies": [
+        "engine-block"
+      ],
+      "instanceCount": 1,
+      "instancePattern": "single",
+      "bankAssignment": "center",
+      "explodedOffset": {
+        "x": -0.3,
+        "y": 0,
+        "z": 0
+      },
+      "defaultTransform": {
+        "position": {
+          "x": -0.46,
+          "y": 0,
+          "z": 0.18
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      },
+      "variants": [
+        {
+          "id": "forged",
+          "label": "Micro-Louvered Brazed Aluminum Core",
+          "color": 3359061,
+          "metalness": 0.8,
+          "roughness": 0.55
+        },
+        {
+          "id": "titanium",
+          "label": "Ultra-Dense Double Pass Track Spec",
+          "color": 4674921,
+          "metalness": 0.88,
+          "roughness": 0.4
+        }
+      ],
+      "massKg": 8.5,
+      "centerOfMassMm": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "costUsd": 1400,
+      "soundOnInstall": "pneumatic-snap",
+      "installAnimationDurationMs": 1100,
+      "description": "Dual-pass micro-louvered cooling core with carbon fiber fan shroud, 7 aerodynamic blades, and reinforced silicone hoses.",
+      "engineeringNotes": "Dissipates up to 180 kW thermal energy with 85 L/min coolant flow rate at full load."
+    },
+    {
+      "type": "transaxle",
+      "displayName": "7-Speed Sequential Dog-Ring Transaxle",
+      "category": "drivetrain",
+      "assetPath": "/models/engines/v12/transaxle.glb",
+      "attachmentPoints": [],
+      "parentType": "engine-block",
+      "parentAttachmentPattern": "Transaxle_Rear_Mount",
+      "dependencies": [
+        "engine-block",
+        "crankshaft"
+      ],
+      "instanceCount": 1,
+      "instancePattern": "single",
+      "bankAssignment": "center",
+      "explodedOffset": {
+        "x": 0.35,
+        "y": 0,
+        "z": 0
+      },
+      "defaultTransform": {
+        "position": {
+          "x": 0.38,
+          "y": 0,
+          "z": 0.08
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      },
+      "variants": [
+        {
+          "id": "cast",
+          "label": "Cast Magnesium Casing",
+          "color": 6583435,
+          "metalness": 0.78,
+          "roughness": 0.4
+        },
+        {
+          "id": "billet",
+          "label": "CNC Billet Aerospace 7075 Housing",
+          "color": 14870768,
+          "metalness": 0.92,
+          "roughness": 0.16
+        },
+        {
+          "id": "titanium",
+          "label": "Carbon-Magnesium Ultralight Casing",
+          "color": 1976635,
+          "metalness": 0.5,
+          "roughness": 0.3
+        }
+      ],
+      "massKg": 58,
+      "centerOfMassMm": {
+        "x": 200,
+        "y": 0,
+        "z": 0
+      },
+      "costUsd": 18500,
+      "torqueSpec": {
+        "fastenerName": "Bellhousing Titanium M10 Bolts",
+        "snugNm": 75,
+        "finalAngleDeg": 0,
+        "boltCount": 10
+      },
+      "soundOnInstall": "heavy-drop",
+      "installAnimationDurationMs": 1400,
+      "description": "Rear-mounted 7-speed longitudinal sequential transaxle with integrated Salisbury limited-slip differential and CV axle outputs.",
+      "engineeringNotes": "Straight-cut dog rings enable 25ms clutchless paddle-shifts under full throttle torque."
+    },
+    {
+      "type": "engine-cover",
+      "displayName": "Autoclaved Dry-Carbon Monocoque Engine Cover",
+      "category": "covers",
+      "assetPath": "/models/engines/v12/engine-cover.glb",
+      "attachmentPoints": [],
+      "parentType": "engine-block",
+      "parentAttachmentPattern": "EngineCover_Top_Mount",
+      "dependencies": [
+        "engine-block",
+        "cylinder-head-left",
+        "cylinder-head-right"
+      ],
+      "instanceCount": 1,
+      "instancePattern": "single",
+      "bankAssignment": "center",
+      "explodedOffset": {
+        "x": 0,
+        "y": 0,
+        "z": 0.35
+      },
+      "defaultTransform": {
+        "position": {
+          "x": 0,
+          "y": 0,
+          "z": 0.54
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      },
+      "variants": [
+        {
+          "id": "carbon_fiber",
+          "label": "Autoclaved 2x2 Twill Dry Carbon",
+          "color": 1976635,
+          "metalness": 0.35,
+          "roughness": 0.38,
+          "clearcoat": 0.95,
+          "clearcoatRoughness": 0.08,
+          "envMapIntensity": 1.4
+        },
+        {
+          "id": "forged",
+          "label": "Forged Chopped Carbon Matrix",
+          "color": 3359061,
+          "metalness": 0.4,
+          "roughness": 0.3
+        },
+        {
+          "id": "titanium",
+          "label": "Gold Leaf Thermal Reflective Shroud",
+          "color": 16096779,
+          "metalness": 0.95,
+          "roughness": 0.1
+        }
+      ],
+      "massKg": 3.2,
+      "centerOfMassMm": {
+        "x": 0,
+        "y": 0,
+        "z": 20
+      },
+      "costUsd": 3200,
+      "torqueSpec": {
+        "fastenerName": "Quarter-Turn Dzus Fasteners",
+        "snugNm": 8,
+        "finalAngleDeg": 0,
+        "boltCount": 6
+      },
+      "soundOnInstall": "glass-settle",
+      "installAnimationDurationMs": 1000,
+      "description": "Pre-preg carbon fiber shroud with scratch-resistant quartz glass ITB window, ram-air scoop, and CNC gold perimeter bezel.",
+      "engineeringNotes": "Aerodynamic ducting channels 450 CFM ambient airflow directly over the central valley fuel rails."
+    },
+    {
+      "type": "timing-chain",
+      "displayName": "Dual-Roller Motorsport Timing Train",
+      "category": "top-end",
+      "assetPath": "/models/engines/v12/timing-chain.glb",
+      "attachmentPoints": [],
+      "parentType": "engine-block",
+      "parentAttachmentPattern": "TimingChain_Front_Mount",
+      "dependencies": [
+        "engine-block",
+        "crankshaft",
+        "cylinder-head-left",
+        "cylinder-head-right"
+      ],
+      "instanceCount": 1,
+      "instancePattern": "single",
+      "bankAssignment": "center",
+      "explodedOffset": {
+        "x": -0.2,
+        "y": 0,
+        "z": 0
+      },
+      "defaultTransform": {
+        "position": {
+          "x": -0.31,
+          "y": 0,
+          "z": 0.25
+        },
+        "rotation": {
+          "x": 0,
+          "y": 0,
+          "z": 0
+        },
+        "scale": {
+          "x": 1,
+          "y": 1,
+          "z": 1
+        }
+      },
+      "variants": [
+        {
+          "id": "forged",
+          "label": "Hardened Chrome-Alloy Roller Chain",
+          "color": 13358561,
+          "metalness": 0.9,
+          "roughness": 0.2
+        },
+        {
+          "id": "billet",
+          "label": "Billet Adjustable Vernier Cam Gears",
+          "color": 16096779,
+          "metalness": 0.92,
+          "roughness": 0.15
+        }
+      ],
+      "massKg": 3.5,
+      "centerOfMassMm": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "costUsd": 1200,
+      "soundOnInstall": "metallic-click",
+      "installAnimationDurationMs": 900,
+      "description": "Dual-roller heavy-duty timing chain linking the crankshaft snout to 4 adjustable vernier camshaft sprockets.",
+      "engineeringNotes": "Includes hydraulic tensioners and PTFE chain guide dampening pads."
+    }
+  ]
+}

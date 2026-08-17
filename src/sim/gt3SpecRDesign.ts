@@ -1,4 +1,4 @@
-import { createBaseDesign } from "./vehiclePresets";
+import { defaultDesign } from "./constants";
 import type { VehicleDesign } from "./types";
 
 /**
@@ -18,7 +18,10 @@ import type { VehicleDesign } from "./types";
  * - Racing Semi-Slick Compounds (305/30 R19 Front, 335/30 R20 Rear)
  */
 export function createGT3SpecRDesign(): VehicleDesign {
-  const v = createBaseDesign("Apex GT3 Spec-R", "motorsport", "gt_race_car");
+  const v = defaultDesign();
+  v.name = "Apex GT3 Spec-R";
+  v.vehicle.platform = "motorsport";
+  v.vehicle.exterior.bodyType = "gt_race_car";
 
   // Engine Configuration (4.0L Biturbo 620 HP GT3 Spec)
   v.engine.layout = "i6";

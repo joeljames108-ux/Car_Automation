@@ -47,10 +47,13 @@ export type CameraPreset = "iso" | "top" | "rear" | "front";
 export type ThemeColor = "gold" | "rosso" | "stealth" | "emerald";
 export type ViewportMode = "2d_iso" | "3d_webgl";
 
+import type { EngineConfig } from "../../../../sim/types";
+
 interface V12MasterAssemblyViewerProps {
   initialWithCover?: boolean;
   initialAspiration?: AspirationMode;
   initialPowertrain?: PowertrainOption;
+  engineConfig?: EngineConfig;
   onHoverComponent?: (id: ComponentId | null) => void;
   className?: string;
 }
@@ -67,6 +70,7 @@ export const V12MasterAssemblyViewer: React.FC<V12MasterAssemblyViewerProps> = (
   initialWithCover = false,
   initialAspiration = "na",
   initialPowertrain = "ice",
+  engineConfig,
   onHoverComponent,
   className = "",
 }) => {
@@ -329,7 +333,11 @@ export const V12MasterAssemblyViewer: React.FC<V12MasterAssemblyViewerProps> = (
 
       {/* ── CENTRAL WORKSTATION: 3D WEBGL ORBIT VIEWER OR MASTER SVG 580x480 VIEWPORT ── */}
       {viewportMode === "3d_webgl" ? (
-        <V12WebGLOrbitViewer modelUrl="/models/v12_racing_engine.glb" />
+        <V12WebGLOrbitViewer
+          isExploded2D={explodedSlider > 0.05}
+          engineConfig={engineConfig}
+          onSelectComponent2D={(id) => setActiveComponent(id ? (id as any) : null)}
+        />
       ) : (
         <div className="relative w-full h-[400px] md:h-[450px] rounded-2xl bg-slate-950/40 border border-white/5 backdrop-blur-md overflow-hidden flex items-center justify-center shadow-inner">
           {/* Soft Radial Studio Lights */}

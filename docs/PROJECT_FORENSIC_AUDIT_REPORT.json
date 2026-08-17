@@ -1,0 +1,949 @@
+{
+  "auditTimestamp": "2026-08-17T10:58:57.347Z",
+  "projectName": "Modular glTF Vehicle Construction System & Car Automation Simulator",
+  "rootDirectory": "C:\\Users\\joelj\\Downloads\\project-bolt-sb1-a1kjcyhr (3)\\project",
+  "totalSourceFiles": 556,
+  "totalCodeLines": 111056,
+  "totalCommentLines": 7571,
+  "totalBlankLines": 11868,
+  "totalSizeBytes": 5500077,
+  "subsystemBreakdown": {
+    "simulation_core": {
+      "fileCount": 46,
+      "codeLines": 14218,
+      "sizeBytes": 842768
+    },
+    "engine_assembly": {
+      "fileCount": 122,
+      "codeLines": 29229,
+      "sizeBytes": 1370962
+    },
+    "modular_vehicle": {
+      "fileCount": 50,
+      "codeLines": 7790,
+      "sizeBytes": 386781
+    },
+    "exterior_3d": {
+      "fileCount": 131,
+      "codeLines": 16089,
+      "sizeBytes": 722216
+    },
+    "rendering_engine": {
+      "fileCount": 19,
+      "codeLines": 2044,
+      "sizeBytes": 81833
+    },
+    "state_management": {
+      "fileCount": 16,
+      "codeLines": 3955,
+      "sizeBytes": 164691
+    },
+    "ai_agent_framework": {
+      "fileCount": 34,
+      "codeLines": 3271,
+      "sizeBytes": 155972
+    },
+    "ui_components": {
+      "fileCount": 118,
+      "codeLines": 31753,
+      "sizeBytes": 1642612
+    },
+    "asset_pipeline": {
+      "fileCount": 0,
+      "codeLines": 0,
+      "sizeBytes": 0
+    },
+    "testing_verification": {
+      "fileCount": 10,
+      "codeLines": 1475,
+      "sizeBytes": 70543
+    },
+    "documentation_audit": {
+      "fileCount": 10,
+      "codeLines": 1232,
+      "sizeBytes": 61699
+    }
+  },
+  "dependencyGraph": {
+    "totalNodes": 556,
+    "totalEdges": 1126,
+    "directAcyclicGraphValid": true,
+    "cyclicDependencyPaths": [],
+    "subsystemCouplingMatrix": {
+      "simulation_core": {
+        "simulation_core": 32,
+        "engine_assembly": 0,
+        "modular_vehicle": 0,
+        "exterior_3d": 1,
+        "rendering_engine": 0,
+        "state_management": 3,
+        "ai_agent_framework": 25,
+        "ui_components": 32,
+        "asset_pipeline": 0,
+        "testing_verification": 0,
+        "documentation_audit": 0
+      },
+      "engine_assembly": {
+        "simulation_core": 2,
+        "engine_assembly": 175,
+        "modular_vehicle": 0,
+        "exterior_3d": 0,
+        "rendering_engine": 0,
+        "state_management": 14,
+        "ai_agent_framework": 0,
+        "ui_components": 5,
+        "asset_pipeline": 0,
+        "testing_verification": 0,
+        "documentation_audit": 0
+      },
+      "modular_vehicle": {
+        "simulation_core": 21,
+        "engine_assembly": 5,
+        "modular_vehicle": 24,
+        "exterior_3d": 22,
+        "rendering_engine": 1,
+        "state_management": 1,
+        "ai_agent_framework": 1,
+        "ui_components": 13,
+        "asset_pipeline": 0,
+        "testing_verification": 0,
+        "documentation_audit": 0
+      },
+      "exterior_3d": {
+        "simulation_core": 9,
+        "engine_assembly": 0,
+        "modular_vehicle": 2,
+        "exterior_3d": 118,
+        "rendering_engine": 0,
+        "state_management": 22,
+        "ai_agent_framework": 0,
+        "ui_components": 2,
+        "asset_pipeline": 0,
+        "testing_verification": 0,
+        "documentation_audit": 0
+      },
+      "rendering_engine": {
+        "simulation_core": 0,
+        "engine_assembly": 0,
+        "modular_vehicle": 0,
+        "exterior_3d": 0,
+        "rendering_engine": 0,
+        "state_management": 0,
+        "ai_agent_framework": 0,
+        "ui_components": 0,
+        "asset_pipeline": 0,
+        "testing_verification": 0,
+        "documentation_audit": 0
+      },
+      "state_management": {
+        "simulation_core": 12,
+        "engine_assembly": 4,
+        "modular_vehicle": 5,
+        "exterior_3d": 7,
+        "rendering_engine": 0,
+        "state_management": 7,
+        "ai_agent_framework": 2,
+        "ui_components": 1,
+        "asset_pipeline": 0,
+        "testing_verification": 0,
+        "documentation_audit": 0
+      },
+      "ai_agent_framework": {
+        "simulation_core": 4,
+        "engine_assembly": 0,
+        "modular_vehicle": 0,
+        "exterior_3d": 0,
+        "rendering_engine": 0,
+        "state_management": 0,
+        "ai_agent_framework": 32,
+        "ui_components": 0,
+        "asset_pipeline": 0,
+        "testing_verification": 0,
+        "documentation_audit": 0
+      },
+      "ui_components": {
+        "simulation_core": 84,
+        "engine_assembly": 41,
+        "modular_vehicle": 4,
+        "exterior_3d": 1,
+        "rendering_engine": 19,
+        "state_management": 48,
+        "ai_agent_framework": 3,
+        "ui_components": 254,
+        "asset_pipeline": 0,
+        "testing_verification": 0,
+        "documentation_audit": 0
+      },
+      "asset_pipeline": {
+        "simulation_core": 0,
+        "engine_assembly": 0,
+        "modular_vehicle": 0,
+        "exterior_3d": 0,
+        "rendering_engine": 0,
+        "state_management": 0,
+        "ai_agent_framework": 0,
+        "ui_components": 0,
+        "asset_pipeline": 0,
+        "testing_verification": 0,
+        "documentation_audit": 0
+      },
+      "testing_verification": {
+        "simulation_core": 0,
+        "engine_assembly": 0,
+        "modular_vehicle": 7,
+        "exterior_3d": 31,
+        "rendering_engine": 0,
+        "state_management": 1,
+        "ai_agent_framework": 8,
+        "ui_components": 0,
+        "asset_pipeline": 0,
+        "testing_verification": 9,
+        "documentation_audit": 4
+      },
+      "documentation_audit": {
+        "simulation_core": 0,
+        "engine_assembly": 0,
+        "modular_vehicle": 0,
+        "exterior_3d": 0,
+        "rendering_engine": 0,
+        "state_management": 0,
+        "ai_agent_framework": 0,
+        "ui_components": 0,
+        "asset_pipeline": 0,
+        "testing_verification": 0,
+        "documentation_audit": 8
+      }
+    },
+    "maxDependencyDepth": 13,
+    "isolatedModules": [
+      "src/components/assembly/telemetry/CombustionDynoHUD.tsx",
+      "src/components/assembly/telemetry/EVBatteryThermalAnalytics.tsx",
+      "src/components/assembly/telemetry/TransmissionDynoTelemetry.tsx",
+      "src/components/vehicleAssembly/chassis/AluminumSpaceframeRenderer.tsx",
+      "src/components/vehicleAssembly/chassis/CarbonTubRenderer.tsx",
+      "src/components/vehicleAssembly/chassis/ChassisFEAControlPanel.tsx",
+      "src/components/vehicleAssembly/chassis/iso/IsoSteelUnibody3D.tsx",
+      "src/components/vehicleAssembly/chassis/SteelUnibodyRenderer.tsx",
+      "src/components/vehicleAssembly/chassis/TitaniumTubRenderer.tsx",
+      "src/components/vehicleAssembly/chassis/TubularSpaceframeRenderer.tsx",
+      "src/components/vehicleAssembly/exterior/AeroStreamlineOverlay.tsx",
+      "src/engine3d/scene/index.ts",
+      "src/engine3d/shaders/blockFeaStressShader.ts",
+      "src/exterior3d/assets/vehicleGlbAssetLoader.ts",
+      "src/exterior3d/camera/exteriorCameraPresets.ts",
+      "src/exterior3d/docs/automotiveAssetBible.md",
+      "src/exterior3d/generators/chassisFrameExporter.ts",
+      "src/exterior3d/manifests/modularInteriorManifest.ts",
+      "src/exterior3d/materials/paintShaderSystem.ts",
+      "src/exterior3d/types.ts",
+      "src/sim/agents/assistants/comparisonAssistant.ts",
+      "src/sim/agents/assistants/tutorialAssistant.ts",
+      "src/sim/competitorTypes.ts",
+      "src/sim/constants/chassisConstants.ts",
+      "src/sim/electronicsData.ts",
+      "src/sim/modularVehicle/generateV12Glb.ts",
+      "src/sim/modularVehicle/index.ts",
+      "src/sim/modularVehicle/runTransmissionTests.ts",
+      "src/sim/modularVehicle/runV12RacingTests.ts",
+      "src/sim/modularVehicle/types.ts",
+      "src/sim/physics/batteryModel.ts",
+      "src/sim/physics/differentialModel.ts",
+      "src/sim/physics/fuelModel.ts",
+      "src/sim/physics/nvhModel.ts",
+      "src/sim/physics/thermalModel.ts",
+      "src/sim/physics/trackSurfaceModel.ts",
+      "src/sim/physics/turboModel.ts",
+      "src/sim/physics/weatherModel.ts",
+      "src/sim/rdTypes.ts",
+      "src/sim/types/chassis.ts",
+      "src/sim/types/exterior.ts",
+      "src/vite-env.d.ts"
+    ],
+    "highCentralityHubs": [
+      {
+        "modulePath": "src/components/assembly/EngineSVG.tsx",
+        "inDegree": 3,
+        "outDegree": 64
+      },
+      {
+        "modulePath": "src/App.tsx",
+        "inDegree": 1,
+        "outDegree": 61
+      },
+      {
+        "modulePath": "src/components/assembly/iso3d/isoMath.ts",
+        "inDegree": 55,
+        "outDegree": 0
+      },
+      {
+        "modulePath": "src/sim/types.ts",
+        "inDegree": 55,
+        "outDegree": 0
+      },
+      {
+        "modulePath": "src/components/ui/Controls.tsx",
+        "inDegree": 41,
+        "outDegree": 2
+      },
+      {
+        "modulePath": "src/components/vehicleAssembly/exterior/ExteriorSVGCanvas.tsx",
+        "inDegree": 1,
+        "outDegree": 38
+      },
+      {
+        "modulePath": "src/components/assembly/EngineBuilderFlow.tsx",
+        "inDegree": 1,
+        "outDegree": 34
+      },
+      {
+        "modulePath": "src/sim/assemblyTypes.ts",
+        "inDegree": 34,
+        "outDegree": 1
+      },
+      {
+        "modulePath": "src/sim/agents/agentFramework.ts",
+        "inDegree": 32,
+        "outDegree": 1
+      },
+      {
+        "modulePath": "src/state/DesignContext.tsx",
+        "inDegree": 31,
+        "outDegree": 2
+      },
+      {
+        "modulePath": "src/components/assembly/SectionCard.tsx",
+        "inDegree": 29,
+        "outDegree": 0
+      },
+      {
+        "modulePath": "src/components/assembly/InstallButton.tsx",
+        "inDegree": 27,
+        "outDegree": 1
+      },
+      {
+        "modulePath": "src/components/assembly/MaterialGradePicker.tsx",
+        "inDegree": 27,
+        "outDegree": 1
+      },
+      {
+        "modulePath": "src/components/assembly/StatDeltasPanel.tsx",
+        "inDegree": 27,
+        "outDegree": 1
+      },
+      {
+        "modulePath": "src/sim/constants.ts",
+        "inDegree": 28,
+        "outDegree": 0
+      },
+      {
+        "modulePath": "src/exterior3d/scene/ExteriorComponentMesh3D.tsx",
+        "inDegree": 1,
+        "outDegree": 26
+      },
+      {
+        "modulePath": "src/components/assembly/iso3d/isoShaders.tsx",
+        "inDegree": 25,
+        "outDegree": 0
+      },
+      {
+        "modulePath": "src/components/assembly/iso3d/v12/V12MasterAssemblyViewer.tsx",
+        "inDegree": 0,
+        "outDegree": 24
+      },
+      {
+        "modulePath": "src/state/CompanyContext.tsx",
+        "inDegree": 16,
+        "outDegree": 3
+      },
+      {
+        "modulePath": "src/engine3d/store/useEngine3DStore.ts",
+        "inDegree": 14,
+        "outDegree": 4
+      },
+      {
+        "modulePath": "src/state/useExteriorAssemblyStore.ts",
+        "inDegree": 15,
+        "outDegree": 2
+      },
+      {
+        "modulePath": "src/exterior3d/types/vehicleConstructionTypes.ts",
+        "inDegree": 15,
+        "outDegree": 1
+      },
+      {
+        "modulePath": "src/engine3d/materials/pbrMaterialSystem.ts",
+        "inDegree": 15,
+        "outDegree": 0
+      },
+      {
+        "modulePath": "src/engine3d/generators/masterExporter.ts",
+        "inDegree": 0,
+        "outDegree": 14
+      },
+      {
+        "modulePath": "src/components/EngineDesigner.tsx",
+        "inDegree": 1,
+        "outDegree": 12
+      },
+      {
+        "modulePath": "src/components/vehicleAssembly/VehicleSVG.tsx",
+        "inDegree": 3,
+        "outDegree": 10
+      },
+      {
+        "modulePath": "src/sim/physics/lapSimulator.ts",
+        "inDegree": 3,
+        "outDegree": 10
+      },
+      {
+        "modulePath": "src/components/vehicleAssembly/ModularVehicle3DViewport.tsx",
+        "inDegree": 1,
+        "outDegree": 11
+      },
+      {
+        "modulePath": "src/components/VehicleDesigner.tsx",
+        "inDegree": 1,
+        "outDegree": 11
+      },
+      {
+        "modulePath": "src/sim/modularVehicle/exteriorAssemblyTestRunner.ts",
+        "inDegree": 1,
+        "outDegree": 11
+      },
+      {
+        "modulePath": "src/engine3d/generators/engineBlockGenerator.ts",
+        "inDegree": 1,
+        "outDegree": 10
+      },
+      {
+        "modulePath": "src/sim/modularVehicle/modularVehicleConstructionTestRunner.ts",
+        "inDegree": 1,
+        "outDegree": 10
+      },
+      {
+        "modulePath": "src/sim/modularVehicle/__tests__/phases04to08MasterTests.ts",
+        "inDegree": 1,
+        "outDegree": 9
+      },
+      {
+        "modulePath": "src/components/AeroLab.tsx",
+        "inDegree": 1,
+        "outDegree": 8
+      },
+      {
+        "modulePath": "src/components/assembly/StickyEngineDiagram.tsx",
+        "inDegree": 1,
+        "outDegree": 8
+      },
+      {
+        "modulePath": "src/components/CommandCenter.tsx",
+        "inDegree": 1,
+        "outDegree": 8
+      },
+      {
+        "modulePath": "src/components/ui/LineChart.tsx",
+        "inDegree": 9,
+        "outDegree": 0
+      },
+      {
+        "modulePath": "src/sim/agents/__tests__/agentFrameworkTests.ts",
+        "inDegree": 1,
+        "outDegree": 8
+      },
+      {
+        "modulePath": "src/sim/modularVehicle/runTests.ts",
+        "inDegree": 0,
+        "outDegree": 9
+      },
+      {
+        "modulePath": "src/components/assembly/assemblyUIHelpers.tsx",
+        "inDegree": 8,
+        "outDegree": 0
+      },
+      {
+        "modulePath": "src/components/assembly/sounds.ts",
+        "inDegree": 7,
+        "outDegree": 1
+      },
+      {
+        "modulePath": "src/components/PresetQuickSelect.tsx",
+        "inDegree": 4,
+        "outDegree": 4
+      },
+      {
+        "modulePath": "src/sim/exteriorAssemblyTypes.ts",
+        "inDegree": 8,
+        "outDegree": 0
+      },
+      {
+        "modulePath": "src/engine3d/attachmentMaps/v12AttachmentMap.ts",
+        "inDegree": 5,
+        "outDegree": 1
+      },
+      {
+        "modulePath": "src/exterior3d/sockets/chassisAttachmentSockets.ts",
+        "inDegree": 4,
+        "outDegree": 2
+      },
+      {
+        "modulePath": "src/components/motorsport/TeamCard.tsx",
+        "inDegree": 5,
+        "outDegree": 0
+      },
+      {
+        "modulePath": "src/components/ui/AnimatedCounter.tsx",
+        "inDegree": 5,
+        "outDegree": 0
+      },
+      {
+        "modulePath": "src/components/ui/Charts.tsx",
+        "inDegree": 5,
+        "outDegree": 0
+      },
+      {
+        "modulePath": "src/engine3d/types.ts",
+        "inDegree": 5,
+        "outDegree": 0
+      },
+      {
+        "modulePath": "src/exterior3d/manifests/chassis50Manifest.ts",
+        "inDegree": 4,
+        "outDegree": 1
+      },
+      {
+        "modulePath": "src/exterior3d/store/useExterior3DStore.ts",
+        "inDegree": 4,
+        "outDegree": 1
+      },
+      {
+        "modulePath": "src/components/ToastSystem.tsx",
+        "inDegree": 4,
+        "outDegree": 0
+      },
+      {
+        "modulePath": "src/engine3d/manifests/v12Manifest.ts",
+        "inDegree": 4,
+        "outDegree": 0
+      },
+      {
+        "modulePath": "src/sim/constants/exteriorConstants.ts",
+        "inDegree": 4,
+        "outDegree": 0
+      }
+    ]
+  },
+  "renderingPipeline": {
+    "threeJsVersion": "^0.160.0 (r160+)",
+    "canvasRenderersFound": [
+      {
+        "componentName": "ModularVehicle3DViewport",
+        "filePath": "src/components/vehicleAssembly/ModularVehicle3DViewport.tsx",
+        "usesAntialias": true,
+        "usesShadowMap": true,
+        "pixelRatioCapped": true,
+        "toneMappingType": "ACESFilmicToneMapping"
+      }
+    ],
+    "svgRenderersFound": [
+      {
+        "componentName": "EngineSVG",
+        "filePath": "src/components/assembly/EngineSVG.tsx",
+        "elementCountEstimate": 174,
+        "hasDynamicAnimation": true
+      },
+      {
+        "componentName": "TrackDiagramModal",
+        "filePath": "src/components/TrackDiagramModal.tsx",
+        "elementCountEstimate": 11,
+        "hasDynamicAnimation": true
+      },
+      {
+        "componentName": "ExteriorSVGCanvas",
+        "filePath": "src/components/vehicleAssembly/exterior/ExteriorSVGCanvas.tsx",
+        "elementCountEstimate": 3,
+        "hasDynamicAnimation": false
+      },
+      {
+        "componentName": "VehicleSVG",
+        "filePath": "src/components/vehicleAssembly/VehicleSVG.tsx",
+        "elementCountEstimate": 5,
+        "hasDynamicAnimation": false
+      }
+    ],
+    "gltfLoadersConfigured": [
+      {
+        "loaderClass": "renderingPipelineAudit",
+        "supportsDraco": true,
+        "supportsKtx2": true,
+        "supportsMeshopt": true,
+        "filePath": "src/audit/renderingPipelineAudit.ts"
+      },
+      {
+        "loaderClass": "glbAssetLoader",
+        "supportsDraco": false,
+        "supportsKtx2": false,
+        "supportsMeshopt": false,
+        "filePath": "src/engine3d/assets/glbAssetLoader.ts"
+      },
+      {
+        "loaderClass": "ComponentMesh3D",
+        "supportsDraco": false,
+        "supportsKtx2": false,
+        "supportsMeshopt": false,
+        "filePath": "src/engine3d/scene/ComponentMesh3D.tsx"
+      },
+      {
+        "loaderClass": "vehicleGlbAssetLoader",
+        "supportsDraco": false,
+        "supportsKtx2": false,
+        "supportsMeshopt": false,
+        "filePath": "src/exterior3d/assets/vehicleGlbAssetLoader.ts"
+      },
+      {
+        "loaderClass": "universalGlbAssetLoader",
+        "supportsDraco": true,
+        "supportsKtx2": false,
+        "supportsMeshopt": false,
+        "filePath": "src/exterior3d/loaders/universalGlbAssetLoader.ts"
+      }
+    ],
+    "pbrShaderLibrariesFound": [
+      "src/audit/renderingPipelineAudit.ts",
+      "src/engine3d/assets/glbAssetLoader.ts",
+      "src/engine3d/generators/connectingRodGenerator.ts",
+      "src/engine3d/generators/crankshaftGenerator.ts",
+      "src/engine3d/generators/cylinderHeadGenerator.ts",
+      "src/engine3d/generators/drySumpGenerator.ts",
+      "src/engine3d/generators/engineBlockGenerator.ts",
+      "src/engine3d/generators/engineCoverGenerator.ts",
+      "src/engine3d/generators/exhaustHeaderGenerator.ts",
+      "src/engine3d/generators/intakeManifoldGenerator.ts",
+      "src/engine3d/generators/pistonGenerator.ts",
+      "src/engine3d/generators/radiatorGenerator.ts",
+      "src/engine3d/generators/transaxleGenerator.ts",
+      "src/engine3d/generators/turbochargerGenerator.ts",
+      "src/engine3d/generators/valveCoverGenerator.ts",
+      "src/engine3d/materials/blockShaderPipeline.ts",
+      "src/engine3d/materials/pbrMaterialSystem.ts",
+      "src/engine3d/scene/ComponentMesh3D.tsx",
+      "src/engine3d/scene/InstancedPistons3D.tsx",
+      "src/exterior3d/generators/brakeCaliperGenerator.ts",
+      "src/exterior3d/generators/doorPanelGenerator.ts",
+      "src/exterior3d/generators/fenderGenerator.ts",
+      "src/exterior3d/generators/fogLightGenerator.ts",
+      "src/exterior3d/generators/frontSplitterGenerator.ts",
+      "src/exterior3d/generators/frontSuspensionGenerator.ts",
+      "src/exterior3d/generators/headlightGenerator.ts",
+      "src/exterior3d/generators/highFidelitySedanChassisGenerator.ts",
+      "src/exterior3d/generators/hoodPanelGenerator.ts",
+      "src/exterior3d/generators/mirrorGenerator.ts",
+      "src/exterior3d/generators/modularCabinInteriorGenerator.ts",
+      "src/exterior3d/generators/modularChassisFamilyGenerator.ts",
+      "src/exterior3d/generators/modularClosuresGenerator.ts",
+      "src/exterior3d/generators/modularInterior3DGenerator.ts",
+      "src/exterior3d/generators/modularLightingGlassAeroGenerator.ts",
+      "src/exterior3d/generators/rearDiffuserGenerator.ts",
+      "src/exterior3d/generators/rearSuspensionGenerator.ts",
+      "src/exterior3d/generators/rearWindowGenerator.ts",
+      "src/exterior3d/generators/rearWingGenerator.ts",
+      "src/exterior3d/generators/roofPanelGenerator.ts",
+      "src/exterior3d/generators/sideGlassGenerator.ts",
+      "src/exterior3d/generators/sideSkirtGenerator.ts",
+      "src/exterior3d/generators/taillightGenerator.ts",
+      "src/exterior3d/generators/tireGenerator.ts",
+      "src/exterior3d/generators/trunkLidGenerator.ts",
+      "src/exterior3d/generators/wheelGenerator.ts",
+      "src/exterior3d/generators/windshieldGenerator.ts",
+      "src/exterior3d/loaders/universalGlbAssetLoader.ts",
+      "src/exterior3d/materials/automotivePaintResolver.ts",
+      "src/exterior3d/materials/automotivePBRMaterialSystem.ts",
+      "src/exterior3d/materials/exteriorPbrMaterialSystem.ts",
+      "src/exterior3d/materials/pbrMaterialCatalog.ts",
+      "src/exterior3d/materials/sedanMetallurgyShaders.ts",
+      "src/exterior3d/scene/ExteriorComponentMesh3D.tsx",
+      "src/exterior3d/tools/chassisSocketVisualizer.ts",
+      "src/exterior3d/validation/assetQualityGate.ts",
+      "src/sim/modularVehicle/generateV12Glb.ts",
+      "src/sim/modularVehicle/__tests__/phases04to08MasterTests.ts"
+    ],
+    "cameraControllersFound": [
+      "src/audit/renderingPipelineAudit.ts",
+      "src/components/assembly/iso3d/v12/V12MasterAssemblyViewer.tsx",
+      "src/components/vehicleAssembly/MasterVehicleAssemblyDeck.tsx",
+      "src/components/vehicleAssembly/ModularVehicle3DViewport.tsx",
+      "src/components/vehicleAssembly/VehicleConstructionStudio.tsx",
+      "src/engine3d/camera/cameraPresets.ts",
+      "src/engine3d/camera/useCameraControls.ts",
+      "src/engine3d/scene/Engine3DScene.tsx",
+      "src/engine3d/store/useEngine3DStore.ts",
+      "src/engine3d/types.ts",
+      "src/engine3d/ui/Engine3DToolbar.tsx",
+      "src/exterior3d/camera/exteriorCameraPresets.ts",
+      "src/exterior3d/scene/ExteriorScene3D.tsx",
+      "src/exterior3d/store/useExterior3DStore.ts",
+      "src/exterior3d/types/vehicleConstructionTypes.ts",
+      "src/state/useVehicleConstructionStore.ts"
+    ],
+    "lightingRigsFound": [
+      "src/audit/renderingPipelineAudit.ts",
+      "src/components/assembly/EngineSVG.tsx",
+      "src/components/vehicleAssembly/exterior/ExteriorSVGCanvas.tsx",
+      "src/components/vehicleAssembly/exterior/svg/AmbientLightingSVG.tsx",
+      "src/components/vehicleAssembly/MasterVehicleAssemblyDeck.tsx",
+      "src/components/vehicleAssembly/ModularVehicle3DViewport.tsx",
+      "src/exterior3d/generators/modularInterior3DGenerator.ts",
+      "src/exterior3d/manifests/modularInteriorManifest.ts",
+      "src/exterior3d/types/modularInteriorTypes.ts"
+    ]
+  },
+  "technicalDebt": {
+    "overallDebtScore": 40,
+    "deadCodeSuspects": [
+      "src/components/assembly/telemetry/CombustionDynoHUD.tsx",
+      "src/components/assembly/telemetry/EVBatteryThermalAnalytics.tsx",
+      "src/components/assembly/telemetry/TransmissionDynoTelemetry.tsx",
+      "src/components/vehicleAssembly/chassis/AluminumSpaceframeRenderer.tsx",
+      "src/components/vehicleAssembly/chassis/CarbonTubRenderer.tsx",
+      "src/components/vehicleAssembly/chassis/ChassisFEAControlPanel.tsx",
+      "src/components/vehicleAssembly/chassis/iso/IsoSteelUnibody3D.tsx",
+      "src/components/vehicleAssembly/chassis/SteelUnibodyRenderer.tsx",
+      "src/components/vehicleAssembly/chassis/TitaniumTubRenderer.tsx",
+      "src/components/vehicleAssembly/chassis/TubularSpaceframeRenderer.tsx",
+      "src/components/vehicleAssembly/exterior/AeroStreamlineOverlay.tsx",
+      "src/engine3d/scene/index.ts",
+      "src/engine3d/shaders/blockFeaStressShader.ts",
+      "src/exterior3d/assets/vehicleGlbAssetLoader.ts",
+      "src/exterior3d/camera/exteriorCameraPresets.ts",
+      "src/exterior3d/docs/automotiveAssetBible.md",
+      "src/exterior3d/generators/chassisFrameExporter.ts",
+      "src/exterior3d/manifests/modularInteriorManifest.ts",
+      "src/exterior3d/materials/paintShaderSystem.ts",
+      "src/sim/agents/assistants/comparisonAssistant.ts",
+      "src/sim/agents/assistants/tutorialAssistant.ts",
+      "src/sim/competitorTypes.ts",
+      "src/sim/constants/chassisConstants.ts",
+      "src/sim/electronicsData.ts",
+      "src/sim/modularVehicle/generateV12Glb.ts",
+      "src/sim/modularVehicle/index.ts",
+      "src/sim/modularVehicle/runTransmissionTests.ts",
+      "src/sim/modularVehicle/runV12RacingTests.ts",
+      "src/sim/physics/batteryModel.ts",
+      "src/sim/physics/differentialModel.ts",
+      "src/sim/physics/fuelModel.ts",
+      "src/sim/physics/nvhModel.ts",
+      "src/sim/physics/thermalModel.ts",
+      "src/sim/physics/trackSurfaceModel.ts",
+      "src/sim/physics/turboModel.ts",
+      "src/sim/physics/weatherModel.ts",
+      "src/sim/rdTypes.ts",
+      "src/sim/types/chassis.ts",
+      "src/sim/types/exterior.ts",
+      "src/vite-env.d.ts"
+    ],
+    "largeFilesExceeding500Lines": [
+      {
+        "filePath": "src/App.tsx",
+        "lineCount": 664
+      },
+      {
+        "filePath": "src/components/AeroLab.tsx",
+        "lineCount": 712
+      },
+      {
+        "filePath": "src/components/AIAssistant.tsx",
+        "lineCount": 860
+      },
+      {
+        "filePath": "src/components/ApexAIStudio.tsx",
+        "lineCount": 641
+      },
+      {
+        "filePath": "src/components/assembly/engineAudioEngine.ts",
+        "lineCount": 789
+      },
+      {
+        "filePath": "src/components/assembly/EngineBuilderFlow.tsx",
+        "lineCount": 691
+      },
+      {
+        "filePath": "src/components/assembly/EngineSVG.tsx",
+        "lineCount": 2039
+      },
+      {
+        "filePath": "src/components/assembly/EngineWorkshopPanel.tsx",
+        "lineCount": 565
+      },
+      {
+        "filePath": "src/components/assembly/iso3d/I3BlockCastingIso.tsx",
+        "lineCount": 1789
+      },
+      {
+        "filePath": "src/components/assembly/iso3d/I4BlockCastingIso.tsx",
+        "lineCount": 533
+      },
+      {
+        "filePath": "src/components/assembly/iso3d/I6BlockCastingIso.tsx",
+        "lineCount": 535
+      },
+      {
+        "filePath": "src/components/assembly/iso3d/isoBlockShaders.tsx",
+        "lineCount": 615
+      },
+      {
+        "filePath": "src/components/assembly/iso3d/isoMaterialPipeline.tsx",
+        "lineCount": 966
+      },
+      {
+        "filePath": "src/components/assembly/iso3d/isoMath.ts",
+        "lineCount": 896
+      },
+      {
+        "filePath": "src/components/assembly/iso3d/TransmissionIso.tsx",
+        "lineCount": 944
+      },
+      {
+        "filePath": "src/components/assembly/iso3d/v12/V12MasterAssemblyViewer.tsx",
+        "lineCount": 520
+      },
+      {
+        "filePath": "src/components/assembly/iso3d/VBankBlockCastingIso.tsx",
+        "lineCount": 1322
+      },
+      {
+        "filePath": "src/components/CommandCenter.tsx",
+        "lineCount": 696
+      },
+      {
+        "filePath": "src/components/Competitors.tsx",
+        "lineCount": 561
+      },
+      {
+        "filePath": "src/components/MotorsportDivision.tsx",
+        "lineCount": 1980
+      },
+      {
+        "filePath": "src/components/PressReviews.tsx",
+        "lineCount": 565
+      },
+      {
+        "filePath": "src/components/RDCenter.tsx",
+        "lineCount": 649
+      },
+      {
+        "filePath": "src/components/ui/CFDView.tsx",
+        "lineCount": 1305
+      },
+      {
+        "filePath": "src/components/ui/Charts.tsx",
+        "lineCount": 549
+      },
+      {
+        "filePath": "src/components/vehicleAssembly/exterior/ExteriorSVGCanvas.tsx",
+        "lineCount": 676
+      },
+      {
+        "filePath": "src/components/vehicleAssembly/VehicleWorkshopPanel.tsx",
+        "lineCount": 734
+      },
+      {
+        "filePath": "src/engine3d/attachmentMaps/v12AttachmentMap.ts",
+        "lineCount": 817
+      },
+      {
+        "filePath": "src/engine3d/manifests/v12Manifest.ts",
+        "lineCount": 870
+      },
+      {
+        "filePath": "src/engine3d/materials/pbrMaterialSystem.ts",
+        "lineCount": 599
+      },
+      {
+        "filePath": "src/engine3d/types.ts",
+        "lineCount": 1045
+      },
+      {
+        "filePath": "src/exterior3d/manifests/chassis50Manifest.ts",
+        "lineCount": 1358
+      },
+      {
+        "filePath": "src/exterior3d/manifests/exteriorManifest.ts",
+        "lineCount": 508
+      },
+      {
+        "filePath": "src/exterior3d/materials/automotivePBRMaterialSystem.ts",
+        "lineCount": 503
+      },
+      {
+        "filePath": "src/sim/apexKnowledge.ts",
+        "lineCount": 778
+      },
+      {
+        "filePath": "src/sim/assemblyTypes.ts",
+        "lineCount": 852
+      },
+      {
+        "filePath": "src/sim/constants/exteriorConstants.ts",
+        "lineCount": 624
+      },
+      {
+        "filePath": "src/sim/constants.ts",
+        "lineCount": 1841
+      },
+      {
+        "filePath": "src/sim/engine.ts",
+        "lineCount": 1388
+      },
+      {
+        "filePath": "src/sim/exteriorAssemblyTypes.ts",
+        "lineCount": 871
+      },
+      {
+        "filePath": "src/sim/modularVehicle/generateV12Glb.ts",
+        "lineCount": 724
+      },
+      {
+        "filePath": "src/sim/motorsportEngine.ts",
+        "lineCount": 1210
+      },
+      {
+        "filePath": "src/sim/physics/advancedHybridPhysicsEngine.ts",
+        "lineCount": 598
+      },
+      {
+        "filePath": "src/sim/physics/lapSimulator.ts",
+        "lineCount": 530
+      },
+      {
+        "filePath": "src/sim/race.ts",
+        "lineCount": 691
+      },
+      {
+        "filePath": "src/sim/reviews.ts",
+        "lineCount": 554
+      },
+      {
+        "filePath": "src/sim/types.ts",
+        "lineCount": 1622
+      },
+      {
+        "filePath": "src/sim/vehiclePresets.ts",
+        "lineCount": 729
+      },
+      {
+        "filePath": "src/state/exteriorAssemblyPresets.ts",
+        "lineCount": 865
+      }
+    ],
+    "missingTypeAnnotationCount": 117,
+    "todoCommentCount": 0,
+    "fixmeCommentCount": 0,
+    "testCoverageRatioPct": 10,
+    "recommendations": [
+      "Modularize 48 monolithic files (>500 lines) into focused subsystem domain modules.",
+      "Replace 117 loose 'any' type annotations with strict TypeScript generic/interface types.",
+      "Maintain 100% deterministic transform snap repeatability across all 36 chassis sockets.",
+      "Ensure all 3D assets implement strict level of detail (LOD 1-6) polygon and texture budgets."
+    ]
+  },
+  "qualityGateAuditPassed": true
+}

@@ -4,6 +4,8 @@
 // ===================================================================
 
 import React, { useState, useMemo, useCallback, useRef, useEffect } from "react";
+import { V12WebGLOrbitViewer } from "./iso3d/v12/V12WebGLOrbitViewer";
+import { Engine3DToolbar } from "../../engine3d/ui/Engine3DToolbar";
 import {
   Camera,
   Sparkles,
@@ -14,6 +16,7 @@ import {
   Maximize2,
   SkipForward,
   Layers,
+  Box,
 } from "lucide-react";
 import {
   ComponentId,
@@ -51,6 +54,7 @@ interface StickyEngineDiagramProps {
   onCompleteInstall: () => void;
   onSkipAnimation: () => void;
   onHoverComponent?: (id: ComponentId | null) => void;
+  onSelectComponent?: (id: ComponentId | null) => void;
   onOpenLightbox?: () => void;
   className?: string;
 }
@@ -72,23 +76,24 @@ export function StickyEngineDiagram({
   onCompleteInstall,
   onSkipAnimation,
   onHoverComponent,
+  onSelectComponent,
   onOpenLightbox,
   className = "",
 }: StickyEngineDiagramProps) {
   const [isMuted, setIsMuted] = useState(false);
-  const [viewMode, setViewMode] = useState<"3d_iso" | "2d">("3d_iso");
+  const [viewMode, setViewMode] = useState<"3d_iso" | "2d" | "3d_webgl">("3d_iso");
   const [isTransitioningView, setIsTransitioningView] = useState(false);
   const [transitionKey, setTransitionKey] = useState(0);
   const [isTabVisible, setIsTabVisible] = useState(!document.hidden);
   const hoverRafRef = useRef<number | null>(null);
 
-  const handleToggleViewMode = useCallback(() => {
+  const handleSetViewMode = useCallback((mode: "3d_iso" | "2d" | "3d_webgl") => {
     setIsTransitioningView(true);
-    setViewMode((prev) => (prev === "3d_iso" ? "2d" : "3d_iso"));
+    setViewMode(mode);
     setTransitionKey((prev) => prev + 1);
     setTimeout(() => {
       setIsTransitioningView(false);
-    }, 600);
+    }, 400);
   }, []);
 
   // Monitor visibility to pause animations
@@ -184,18 +189,42 @@ export function StickyEngineDiagram({
 
         {/* Right: Camera / View Mode / Lightbox Controls */}
         <div className="flex items-center gap-1.5 shrink-0">
-          <button
-            type="button"
-            onClick={handleToggleViewMode}
-            className={`flex items-center gap-1 px-2.5 py-1 rounded-xl text-[10px] font-mono font-bold transition-all border cursor-pointer active:scale-95 ${
-              viewMode === "3d_iso"
-                ? "bg-cyan-500/20 text-cyan-200 border-cyan-500/40 shadow-[0_0_10px_rgba(34,211,238,0.3)]"
-                : "bg-base-950/80 text-slate-400 border-slate-800 hover:text-slate-200"
-            }`}
-          >
-            <Camera size={12} className={isTransitioningView ? "animate-spin" : ""} />
-            <span className="hidden sm:inline">{viewMode === "3d_iso" ? "3D Iso" : "2D Ortho"}</span>
-          </button>
+          <div className="flex items-center rounded-xl bg-base-950/90 border border-slate-800 p-0.5">
+            <button
+              type="button"
+              onClick={() => handleSetViewMode("2d")}
+              className={`px-2 py-1 rounded-lg text-[10px] font-mono font-bold transition-all ${
+                viewMode === "2d"
+                  ? "bg-slate-800 text-white shadow-sm"
+                  : "text-slate-400 hover:text-slate-200"
+              }`}
+            >
+              2D
+            </button>
+            <button
+              type="button"
+              onClick={() => handleSetViewMode("3d_iso")}
+              className={`px-2 py-1 rounded-lg text-[10px] font-mono font-bold transition-all ${
+                viewMode === "3d_iso"
+                  ? "bg-cyan-500/25 text-cyan-200 shadow-sm border border-cyan-500/40"
+                  : "text-slate-400 hover:text-slate-200"
+              }`}
+            >
+              3D Iso
+            </button>
+            <button
+              type="button"
+              onClick={() => handleSetViewMode("3d_webgl")}
+              className={`flex items-center gap-1 px-2.5 py-1 rounded-lg text-[10px] font-mono font-extrabold transition-all ${
+                viewMode === "3d_webgl"
+                  ? "bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-[0_0_12px_rgba(168,85,247,0.4)] border border-purple-400/50"
+                  : "text-purple-300 hover:text-white hover:bg-purple-950/40"
+              }`}
+            >
+              <Box size={11} className={viewMode === "3d_webgl" ? "animate-pulse" : ""} />
+              <span>3D GLB</span>
+            </button>
+          </div>
 
           {onOpenLightbox && (
             <button
@@ -221,43 +250,56 @@ export function StickyEngineDiagram({
         </div>
       </div>
 
-      {/* ── CENTRAL SVG STAGE WORKSTATION (TRANSLUCENT) ── */}
+      {/* ── CENTRAL STAGE WORKSTATION: 3D GLB OR 3D/2D SVG STAGE ── */}
       <div className="relative w-full h-[400px] md:h-[460px] rounded-2xl bg-slate-950/20 border border-white/5 backdrop-blur-md overflow-hidden flex items-center justify-center shadow-inner">
-        {/* Ambient Lighting Cones */}
+        {/* Ambient Lighting Cones (Matching UI Theme) */}
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_40%,rgba(34,211,238,0.06),transparent_70%)] pointer-events-none" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_80%,rgba(147,51,234,0.05),transparent_65%)] pointer-events-none" />
 
         {/* 2D / 3D Mode Switch Holographic Scanline Sweep */}
         {isTransitioningView && <div className="engine-view-transition-scanline" />}
 
-        {/* Particle Overlay */}
-        <ParticleEffects
-          activeComponentId={activeComponentId}
-          phase={phase}
-          slotPosition={activeMeta ? activeMeta.slotPosition : { x: 250, y: 225 }}
-        />
-
-        {/* 3D SVG Workstation Canvas with Smooth Camera Animation */}
-        <div
-          key={`engine-stage-canvas-${viewMode}-${transitionKey}`}
-          className={`w-full h-full flex items-center justify-center transition-transform duration-700 ease-out ${
-            viewMode === "3d_iso" ? "engine-canvas-3d-active" : "engine-canvas-2d-active"
-          }`}
-          style={{ transform: cameraTransform }}
-        >
-          <EngineSVG
-            installedComponents={installedComponents}
-            activeComponentId={activeComponentId}
-            phase={phase}
-            hoveredComponentId={hoveredComponentId}
-            isExplodedView={isExplodedView}
-            isAssemblyComplete={isAssemblyComplete}
+        {viewMode === "3d_webgl" ? (
+          <V12WebGLOrbitViewer
+            className="w-full h-full"
+            installedComponents2D={installedComponents}
+            selectedVariants2D={selectedVariants}
+            isExploded2D={isExplodedView}
             engineConfig={engineConfig}
-            selectedVariants={selectedVariants}
-            viewMode={viewMode}
-            onHoverComponent={handleHoverThrottled}
+            onSelectComponent2D={onSelectComponent || onHoverComponent}
           />
-        </div>
+        ) : (
+          <>
+            {/* Particle Overlay */}
+            <ParticleEffects
+              activeComponentId={activeComponentId}
+              phase={phase}
+              slotPosition={activeMeta ? activeMeta.slotPosition : { x: 250, y: 225 }}
+            />
+
+            {/* 3D SVG Workstation Canvas with Smooth Camera Animation */}
+            <div
+              key={`engine-stage-canvas-${viewMode}-${transitionKey}`}
+              className={`w-full h-full flex items-center justify-center transition-transform duration-700 ease-out ${
+                viewMode === "3d_iso" ? "engine-canvas-3d-active" : "engine-canvas-2d-active"
+              }`}
+              style={{ transform: cameraTransform }}
+            >
+              <EngineSVG
+                installedComponents={installedComponents}
+                activeComponentId={activeComponentId}
+                phase={phase}
+                hoveredComponentId={hoveredComponentId}
+                isExplodedView={isExplodedView}
+                isAssemblyComplete={isAssemblyComplete}
+                engineConfig={engineConfig}
+                selectedVariants={selectedVariants}
+                viewMode={viewMode === "2d" ? "2d" : "3d_iso"}
+                onHoverComponent={handleHoverThrottled}
+              />
+            </div>
+          </>
+        )}
 
         {/* Floating Active Installation Badge */}
         {activeComponentId && activeMeta && (
@@ -269,6 +311,9 @@ export function StickyEngineDiagram({
           </div>
         )}
       </div>
+
+      {/* ── DEDICATED 3D GLB CONTROLS BAR (BELOW WORKSTATION) ── */}
+      {viewMode === "3d_webgl" && <Engine3DToolbar isFloating={false} />}
     </div>
   );
 }

@@ -101,6 +101,9 @@ export function EngineBuilderFlow({
         onCompleteInstall={flow.handleInstallComplete}
         onSkipAnimation={flow.assembly.skipCurrentAnimation}
         onHoverComponent={flow.assembly.setHoveredComponentId}
+        onSelectComponent={(id) => {
+          if (id) flow.navigateToStage(id);
+        }}
         onOpenLightbox={onOpenLightbox}
       />
 

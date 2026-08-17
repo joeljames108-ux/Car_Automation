@@ -1,0 +1,677 @@
+[
+  {
+    "assetId": "nissan_silvia_s15_rocket_bunny",
+    "displayName": "2015 Rocket Bunny Nissan Silvia S15 (Widebody Motorsport Spec)",
+    "sourceFormat": "FBX",
+    "packageSizeBytes": 12282515,
+    "totalTextureCount": 43,
+    "textures": [
+      {
+        "fileName": "BadgeA_DiffuseAOSO.png",
+        "fileSizeBytes": 94390,
+        "channelType": "ambient_occlusion",
+        "componentTarget": "badges_trim",
+        "resolutionEstimate": "1024x1024",
+        "hasAlphaChannel": true,
+        "colorSpace": "Linear"
+      },
+      {
+        "fileName": "BrakeDisc_ForgedDrilled_DiffuseAOSO.png",
+        "fileSizeBytes": 15262,
+        "channelType": "ambient_occlusion",
+        "componentTarget": "brake_rotors_calipers",
+        "resolutionEstimate": "512x512",
+        "hasAlphaChannel": true,
+        "colorSpace": "Linear"
+      },
+      {
+        "fileName": "BrakeDisc_ForgedDrilled_Material.png",
+        "fileSizeBytes": 47386,
+        "channelType": "roughness_metallic",
+        "componentTarget": "brake_rotors_calipers",
+        "resolutionEstimate": "512x512",
+        "hasAlphaChannel": true,
+        "colorSpace": "Linear"
+      },
+      {
+        "fileName": "BrakeDisc_ForgedDrilled_Normal.png",
+        "fileSizeBytes": 6548,
+        "channelType": "normal_tangent",
+        "componentTarget": "brake_rotors_calipers",
+        "resolutionEstimate": "512x512",
+        "hasAlphaChannel": true,
+        "colorSpace": "Linear"
+      },
+      {
+        "fileName": "CalliperBadgeA_Diffuse.png",
+        "fileSizeBytes": 4494,
+        "channelType": "diffuse_albedo",
+        "componentTarget": "brake_rotors_calipers",
+        "resolutionEstimate": "512x512",
+        "hasAlphaChannel": true,
+        "colorSpace": "sRGB"
+      },
+      {
+        "fileName": "common_carbon05_black_diff.png",
+        "fileSizeBytes": 734,
+        "channelType": "diffuse_albedo",
+        "componentTarget": "carbon_fiber",
+        "resolutionEstimate": "512x512",
+        "hasAlphaChannel": true,
+        "colorSpace": "sRGB"
+      },
+      {
+        "fileName": "common_carbon05_norm.png",
+        "fileSizeBytes": 14342,
+        "channelType": "normal_tangent",
+        "componentTarget": "carbon_fiber",
+        "resolutionEstimate": "512x512",
+        "hasAlphaChannel": true,
+        "colorSpace": "Linear"
+      },
+      {
+        "fileName": "EngineA_DiffuseAOSO.png",
+        "fileSizeBytes": 178551,
+        "channelType": "ambient_occlusion",
+        "componentTarget": "engine_bay",
+        "resolutionEstimate": "1024x1024",
+        "hasAlphaChannel": true,
+        "colorSpace": "Linear"
+      },
+      {
+        "fileName": "Global_Texture_Calliper_Normal.png",
+        "fileSizeBytes": 300396,
+        "channelType": "normal_tangent",
+        "componentTarget": "brake_rotors_calipers",
+        "resolutionEstimate": "2048x2048",
+        "hasAlphaChannel": true,
+        "colorSpace": "Linear"
+      },
+      {
+        "fileName": "Global_Texture_Coloured_Diffuse.png",
+        "fileSizeBytes": 2841,
+        "channelType": "diffuse_albedo",
+        "componentTarget": "body_shell",
+        "resolutionEstimate": "512x512",
+        "hasAlphaChannel": true,
+        "colorSpace": "sRGB"
+      },
+      {
+        "fileName": "Global_Texture_Coloured_Material.png",
+        "fileSizeBytes": 2817,
+        "channelType": "roughness_metallic",
+        "componentTarget": "body_shell",
+        "resolutionEstimate": "512x512",
+        "hasAlphaChannel": true,
+        "colorSpace": "Linear"
+      },
+      {
+        "fileName": "Hood0a_Badge_DiffuseAOSO.png",
+        "fileSizeBytes": 23610,
+        "channelType": "ambient_occlusion",
+        "componentTarget": "badges_trim",
+        "resolutionEstimate": "512x512",
+        "hasAlphaChannel": true,
+        "colorSpace": "Linear"
+      },
+      {
+        "fileName": "InteriorA_DiffuseAOSO.png",
+        "fileSizeBytes": 229057,
+        "channelType": "ambient_occlusion",
+        "componentTarget": "interior_cabin",
+        "resolutionEstimate": "2048x2048",
+        "hasAlphaChannel": true,
+        "colorSpace": "Linear"
+      },
+      {
+        "fileName": "Nissan_SilviaS15TNR_1999_BadgeA_Normal.png",
+        "fileSizeBytes": 30518,
+        "channelType": "normal_tangent",
+        "componentTarget": "badges_trim",
+        "resolutionEstimate": "512x512",
+        "hasAlphaChannel": true,
+        "colorSpace": "Linear"
+      },
+      {
+        "fileName": "Nissan_SilviaS15TNR_1999_EngineA_Normal.png",
+        "fileSizeBytes": 195555,
+        "channelType": "normal_tangent",
+        "componentTarget": "engine_bay",
+        "resolutionEstimate": "1024x1024",
+        "hasAlphaChannel": true,
+        "colorSpace": "Linear"
+      },
+      {
+        "fileName": "Nissan_SilviaS15TNR_1999_Grille4A_DiffuseAOSO.png",
+        "fileSizeBytes": 4088,
+        "channelType": "ambient_occlusion",
+        "componentTarget": "badges_trim",
+        "resolutionEstimate": "512x512",
+        "hasAlphaChannel": true,
+        "colorSpace": "Linear"
+      },
+      {
+        "fileName": "Nissan_SilviaS15TNR_1999_Grille4A_Normal.png",
+        "fileSizeBytes": 5252,
+        "channelType": "normal_tangent",
+        "componentTarget": "badges_trim",
+        "resolutionEstimate": "512x512",
+        "hasAlphaChannel": true,
+        "colorSpace": "Linear"
+      },
+      {
+        "fileName": "Nissan_SilviaS15TNR_1999_Grille5A_DiffuseAOSO.png",
+        "fileSizeBytes": 3301,
+        "channelType": "ambient_occlusion",
+        "componentTarget": "badges_trim",
+        "resolutionEstimate": "512x512",
+        "hasAlphaChannel": true,
+        "colorSpace": "Linear"
+      },
+      {
+        "fileName": "Nissan_SilviaS15TNR_1999_Grille5A_Normal.png",
+        "fileSizeBytes": 4206,
+        "channelType": "normal_tangent",
+        "componentTarget": "badges_trim",
+        "resolutionEstimate": "512x512",
+        "hasAlphaChannel": true,
+        "colorSpace": "Linear"
+      },
+      {
+        "fileName": "Nissan_SilviaS15TNR_1999_Grille6A_DiffuseAOSO.png",
+        "fileSizeBytes": 1782,
+        "channelType": "ambient_occlusion",
+        "componentTarget": "badges_trim",
+        "resolutionEstimate": "512x512",
+        "hasAlphaChannel": true,
+        "colorSpace": "Linear"
+      },
+      {
+        "fileName": "Nissan_SilviaS15TNR_1999_Grille6A_Normal.png",
+        "fileSizeBytes": 2953,
+        "channelType": "normal_tangent",
+        "componentTarget": "badges_trim",
+        "resolutionEstimate": "512x512",
+        "hasAlphaChannel": true,
+        "colorSpace": "Linear"
+      },
+      {
+        "fileName": "Nissan_SilviaS15TNR_1999_Grille7A_DiffuseAOSO.png",
+        "fileSizeBytes": 2392,
+        "channelType": "ambient_occlusion",
+        "componentTarget": "badges_trim",
+        "resolutionEstimate": "512x512",
+        "hasAlphaChannel": true,
+        "colorSpace": "Linear"
+      },
+      {
+        "fileName": "Nissan_SilviaS15TNR_1999_Grille7A_Normal.png",
+        "fileSizeBytes": 2979,
+        "channelType": "normal_tangent",
+        "componentTarget": "badges_trim",
+        "resolutionEstimate": "512x512",
+        "hasAlphaChannel": true,
+        "colorSpace": "Linear"
+      },
+      {
+        "fileName": "Nissan_SilviaS15TNR_1999_Grille8A_DiffuseAOSO.png",
+        "fileSizeBytes": 1443,
+        "channelType": "ambient_occlusion",
+        "componentTarget": "badges_trim",
+        "resolutionEstimate": "512x512",
+        "hasAlphaChannel": true,
+        "colorSpace": "Linear"
+      },
+      {
+        "fileName": "Nissan_SilviaS15TNR_1999_Grille8A_Normal.png",
+        "fileSizeBytes": 2272,
+        "channelType": "normal_tangent",
+        "componentTarget": "badges_trim",
+        "resolutionEstimate": "512x512",
+        "hasAlphaChannel": true,
+        "colorSpace": "Linear"
+      },
+      {
+        "fileName": "Nissan_SilviaS15TNR_1999_Grille9A_DiffuseAOSO.png",
+        "fileSizeBytes": 2338,
+        "channelType": "ambient_occlusion",
+        "componentTarget": "badges_trim",
+        "resolutionEstimate": "512x512",
+        "hasAlphaChannel": true,
+        "colorSpace": "Linear"
+      },
+      {
+        "fileName": "Nissan_SilviaS15TNR_1999_Grille9A_Normal.png",
+        "fileSizeBytes": 3327,
+        "channelType": "normal_tangent",
+        "componentTarget": "badges_trim",
+        "resolutionEstimate": "512x512",
+        "hasAlphaChannel": true,
+        "colorSpace": "Linear"
+      },
+      {
+        "fileName": "Nissan_SilviaS15TNR_1999_Hood0a_Badge_Normal.png",
+        "fileSizeBytes": 24549,
+        "channelType": "normal_tangent",
+        "componentTarget": "badges_trim",
+        "resolutionEstimate": "512x512",
+        "hasAlphaChannel": true,
+        "colorSpace": "Linear"
+      },
+      {
+        "fileName": "Nissan_SilviaS15TNR_1999_InteriorA_Normal.png",
+        "fileSizeBytes": 135326,
+        "channelType": "normal_tangent",
+        "componentTarget": "interior_cabin",
+        "resolutionEstimate": "1024x1024",
+        "hasAlphaChannel": true,
+        "colorSpace": "Linear"
+      },
+      {
+        "fileName": "Nissan_SilviaS15TNR_1999_InteriorTillingColourZoneA_Normal.png",
+        "fileSizeBytes": 1255,
+        "channelType": "normal_tangent",
+        "componentTarget": "interior_cabin",
+        "resolutionEstimate": "512x512",
+        "hasAlphaChannel": true,
+        "colorSpace": "Linear"
+      },
+      {
+        "fileName": "Nissan_SilviaS15TNR_1999_LightB_Diffuse.png",
+        "fileSizeBytes": 299569,
+        "channelType": "emissive_glow",
+        "componentTarget": "lighting_optics",
+        "resolutionEstimate": "2048x2048",
+        "hasAlphaChannel": true,
+        "colorSpace": "sRGB"
+      },
+      {
+        "fileName": "Nissan_SilviaS15TNR_1999_LightB_Material.png",
+        "fileSizeBytes": 17763,
+        "channelType": "roughness_metallic",
+        "componentTarget": "lighting_optics",
+        "resolutionEstimate": "512x512",
+        "hasAlphaChannel": true,
+        "colorSpace": "Linear"
+      },
+      {
+        "fileName": "Nissan_SilviaS15TNR_1999_ManufacturerPlateB_Diffuse.png",
+        "fileSizeBytes": 5706,
+        "channelType": "diffuse_albedo",
+        "componentTarget": "badges_trim",
+        "resolutionEstimate": "512x512",
+        "hasAlphaChannel": true,
+        "colorSpace": "sRGB"
+      },
+      {
+        "fileName": "Nissan_SilviaS15TNR_1999_Wing0a_Badge_Normal.png",
+        "fileSizeBytes": 31257,
+        "channelType": "normal_tangent",
+        "componentTarget": "badges_trim",
+        "resolutionEstimate": "512x512",
+        "hasAlphaChannel": true,
+        "colorSpace": "Linear"
+      },
+      {
+        "fileName": "RimBadge_D.png",
+        "fileSizeBytes": 20695,
+        "channelType": "diffuse_albedo",
+        "componentTarget": "wheels_rims",
+        "resolutionEstimate": "512x512",
+        "hasAlphaChannel": true,
+        "colorSpace": "sRGB"
+      },
+      {
+        "fileName": "Shared_Wheel_WorkWheels_S1_Deep_RimBadge_D.png",
+        "fileSizeBytes": 2309,
+        "channelType": "diffuse_albedo",
+        "componentTarget": "wheels_rims",
+        "resolutionEstimate": "512x512",
+        "hasAlphaChannel": true,
+        "colorSpace": "sRGB"
+      },
+      {
+        "fileName": "Shared_Wheel_WorkWheels_S1_Deep_RimBadge_M.png",
+        "fileSizeBytes": 7133,
+        "channelType": "roughness_metallic",
+        "componentTarget": "wheels_rims",
+        "resolutionEstimate": "512x512",
+        "hasAlphaChannel": true,
+        "colorSpace": "Linear"
+      },
+      {
+        "fileName": "Shared_Wheel_WorkWheels_S1_Deep_RimBadge_N.png",
+        "fileSizeBytes": 9662,
+        "channelType": "normal_tangent",
+        "componentTarget": "wheels_rims",
+        "resolutionEstimate": "512x512",
+        "hasAlphaChannel": true,
+        "colorSpace": "Linear"
+      },
+      {
+        "fileName": "shared_wheel_workwheels_s1_rim_n.png",
+        "fileSizeBytes": 29587,
+        "channelType": "normal_tangent",
+        "componentTarget": "wheels_rims",
+        "resolutionEstimate": "512x512",
+        "hasAlphaChannel": true,
+        "colorSpace": "Linear"
+      },
+      {
+        "fileName": "TOYO_ProxesR888_A_DiffuseAOSO.png",
+        "fileSizeBytes": 65048,
+        "channelType": "ambient_occlusion",
+        "componentTarget": "tires",
+        "resolutionEstimate": "1024x1024",
+        "hasAlphaChannel": true,
+        "colorSpace": "Linear"
+      },
+      {
+        "fileName": "TOYO_ProxesR888_A_Material.png",
+        "fileSizeBytes": 30396,
+        "channelType": "roughness_metallic",
+        "componentTarget": "tires",
+        "resolutionEstimate": "512x512",
+        "hasAlphaChannel": true,
+        "colorSpace": "Linear"
+      },
+      {
+        "fileName": "TOYO_ProxesR888_A_Normal.png",
+        "fileSizeBytes": 58641,
+        "channelType": "normal_tangent",
+        "componentTarget": "tires",
+        "resolutionEstimate": "1024x1024",
+        "hasAlphaChannel": true,
+        "colorSpace": "Linear"
+      },
+      {
+        "fileName": "Wing0a_Badge_DiffuseAOSO.png",
+        "fileSizeBytes": 31624,
+        "channelType": "ambient_occlusion",
+        "componentTarget": "badges_trim",
+        "resolutionEstimate": "512x512",
+        "hasAlphaChannel": true,
+        "colorSpace": "Linear"
+      }
+    ],
+    "componentSeparationHierarchy": [
+      "CAR_BODY_ROOT",
+      "CHASSIS_FRAME",
+      "ENGINE_SR20DET_VALVECOVER_TURBO",
+      "BRAKE_SYSTEM_CALIPER_ROTOR_DRILLED",
+      "WHEELS_WORK_EMOTION_S1",
+      "TIRES_TOYO_PROXES_R888",
+      "INTERIOR_COCKPIT_BUCKET_SEATS",
+      "AERO_ROCKET_BUNNY_OVERFENDERS_SPLITTER_GT_WING",
+      "LIGHTING_XENON_HEADLIGHTS_LED_TAILS",
+      "CARBON_FIBER_HOOD_DIFFUSER"
+    ],
+    "geometricPlausibilityScore": 98,
+    "pbrTextureCompletenessScore": 96,
+    "keyArchitecturalTakeaways": [
+      "Dedicated tangent-space normal maps for fine mechanical assemblies (Engine, Brake Caliper, Drilled Rotor, Grilles 4-9, Badges, Carbon Twill).",
+      "Pre-baked Ambient Occlusion / Specular Occlusion (AOSO) channels for deep shadow crevices in engine bay and interior.",
+      "High component separation: wheels, brake calipers, rotors, engine block, badges, and aero are fully independent attachable objects."
+    ]
+  },
+  {
+    "assetId": "byd_atto_3_2024",
+    "displayName": "2024 BYD Atto 3 (EV Crossover Production Architecture)",
+    "sourceFormat": "FBX",
+    "packageSizeBytes": 18406457,
+    "totalTextureCount": 19,
+    "textures": [
+      {
+        "fileName": "caliper.jpeg",
+        "fileSizeBytes": 91191,
+        "channelType": "diffuse_albedo",
+        "componentTarget": "brake_rotors_calipers",
+        "resolutionEstimate": "1024x1024",
+        "hasAlphaChannel": false,
+        "colorSpace": "sRGB"
+      },
+      {
+        "fileName": "defogger_2.jpeg",
+        "fileSizeBytes": 44032,
+        "channelType": "alpha_transparency",
+        "componentTarget": "body_shell",
+        "resolutionEstimate": "512x512",
+        "hasAlphaChannel": true,
+        "colorSpace": "sRGB"
+      },
+      {
+        "fileName": "HL1.jpeg",
+        "fileSizeBytes": 119323,
+        "channelType": "diffuse_albedo",
+        "componentTarget": "lighting_optics",
+        "resolutionEstimate": "1024x1024",
+        "hasAlphaChannel": false,
+        "colorSpace": "sRGB"
+      },
+      {
+        "fileName": "HL_alpha.jpeg",
+        "fileSizeBytes": 16107,
+        "channelType": "alpha_transparency",
+        "componentTarget": "lighting_optics",
+        "resolutionEstimate": "512x512",
+        "hasAlphaChannel": true,
+        "colorSpace": "sRGB"
+      },
+      {
+        "fileName": "Interior.jpeg",
+        "fileSizeBytes": 283220,
+        "channelType": "diffuse_albedo",
+        "componentTarget": "interior_cabin",
+        "resolutionEstimate": "2048x2048",
+        "hasAlphaChannel": false,
+        "colorSpace": "sRGB"
+      },
+      {
+        "fileName": "Interior_01.jpeg",
+        "fileSizeBytes": 500098,
+        "channelType": "diffuse_albedo",
+        "componentTarget": "interior_cabin",
+        "resolutionEstimate": "2048x2048",
+        "hasAlphaChannel": false,
+        "colorSpace": "sRGB"
+      },
+      {
+        "fileName": "Map_A_ao.jpeg",
+        "fileSizeBytes": 761808,
+        "channelType": "ambient_occlusion",
+        "componentTarget": "body_shell",
+        "resolutionEstimate": "2048x2048",
+        "hasAlphaChannel": false,
+        "colorSpace": "Linear"
+      },
+      {
+        "fileName": "Map_B.jpeg",
+        "fileSizeBytes": 583380,
+        "channelType": "diffuse_albedo",
+        "componentTarget": "body_shell",
+        "resolutionEstimate": "2048x2048",
+        "hasAlphaChannel": false,
+        "colorSpace": "sRGB"
+      },
+      {
+        "fileName": "Map_C1.jpeg",
+        "fileSizeBytes": 671229,
+        "channelType": "diffuse_albedo",
+        "componentTarget": "body_shell",
+        "resolutionEstimate": "2048x2048",
+        "hasAlphaChannel": false,
+        "colorSpace": "sRGB"
+      },
+      {
+        "fileName": "Map_C_alpha.jpeg",
+        "fileSizeBytes": 44567,
+        "channelType": "alpha_transparency",
+        "componentTarget": "body_shell",
+        "resolutionEstimate": "512x512",
+        "hasAlphaChannel": true,
+        "colorSpace": "sRGB"
+      },
+      {
+        "fileName": "Mirror.jpeg",
+        "fileSizeBytes": 103576,
+        "channelType": "diffuse_albedo",
+        "componentTarget": "body_shell",
+        "resolutionEstimate": "1024x1024",
+        "hasAlphaChannel": false,
+        "colorSpace": "sRGB"
+      },
+      {
+        "fileName": "normal.jpeg.jpeg",
+        "fileSizeBytes": 137303,
+        "channelType": "normal_tangent",
+        "componentTarget": "body_shell",
+        "resolutionEstimate": "1024x1024",
+        "hasAlphaChannel": false,
+        "colorSpace": "Linear"
+      },
+      {
+        "fileName": "Rim.jpeg",
+        "fileSizeBytes": 138356,
+        "channelType": "diffuse_albedo",
+        "componentTarget": "wheels_rims",
+        "resolutionEstimate": "1024x1024",
+        "hasAlphaChannel": false,
+        "colorSpace": "sRGB"
+      },
+      {
+        "fileName": "TL.jpeg",
+        "fileSizeBytes": 173045,
+        "channelType": "diffuse_albedo",
+        "componentTarget": "lighting_optics",
+        "resolutionEstimate": "1024x1024",
+        "hasAlphaChannel": false,
+        "colorSpace": "sRGB"
+      },
+      {
+        "fileName": "TL_alpha.jpeg",
+        "fileSizeBytes": 13758,
+        "channelType": "alpha_transparency",
+        "componentTarget": "lighting_optics",
+        "resolutionEstimate": "512x512",
+        "hasAlphaChannel": true,
+        "colorSpace": "sRGB"
+      },
+      {
+        "fileName": "uc.jpeg",
+        "fileSizeBytes": 105496,
+        "channelType": "diffuse_albedo",
+        "componentTarget": "body_shell",
+        "resolutionEstimate": "1024x1024",
+        "hasAlphaChannel": false,
+        "colorSpace": "sRGB"
+      },
+      {
+        "fileName": "UC_tex.jpeg",
+        "fileSizeBytes": 59506,
+        "channelType": "diffuse_albedo",
+        "componentTarget": "body_shell",
+        "resolutionEstimate": "1024x1024",
+        "hasAlphaChannel": false,
+        "colorSpace": "sRGB"
+      },
+      {
+        "fileName": "Web GL Tyre Texture_02_diffuse.jpeg",
+        "fileSizeBytes": 88098,
+        "channelType": "diffuse_albedo",
+        "componentTarget": "tires",
+        "resolutionEstimate": "1024x1024",
+        "hasAlphaChannel": false,
+        "colorSpace": "sRGB"
+      },
+      {
+        "fileName": "Web GL Tyre Texture_02_normal.jpeg",
+        "fileSizeBytes": 116846,
+        "channelType": "normal_tangent",
+        "componentTarget": "tires",
+        "resolutionEstimate": "1024x1024",
+        "hasAlphaChannel": false,
+        "colorSpace": "Linear"
+      }
+    ],
+    "componentSeparationHierarchy": [
+      "VEHICLE_BASE_ROOT",
+      "EV_SKATEBOARD_CHASSIS",
+      "BODY_SHELL_PANELS",
+      "INTERIOR_MODERN_CONSOLE_DISPLAYS",
+      "ALLOY_AERO_WHEELS_AND_TYRES",
+      "BRAKE_CALIPERS",
+      "CRYSTAL_LED_HEADLIGHTS_ALPHA_LENSES",
+      "FULL_WIDTH_LED_TAILLAMP_BAR",
+      "DEFOGGER_REAR_GLASS",
+      "MIRRORS_AND_CAMERA_PODS"
+    ],
+    "geometricPlausibilityScore": 95,
+    "pbrTextureCompletenessScore": 92,
+    "keyArchitecturalTakeaways": [
+      "Comprehensive multi-channel lighting transparency maps (HL_alpha, TL_alpha, Map_C_alpha) for multi-element LED optics.",
+      "High-resolution baked ambient occlusion maps (Map_A_ao.jpeg, 761 KB) providing realistic underside ambient contact shadows.",
+      "Defogger heating element alpha mask texture on acoustic rear glass."
+    ]
+  },
+  {
+    "assetId": "volvo_p1800_restomod_widebody",
+    "displayName": "Volvo P1800 Restomod Widebody Edition (High-Poly Geometry Benchmark)",
+    "sourceFormat": "FBX",
+    "packageSizeBytes": 66566388,
+    "totalTextureCount": 4,
+    "textures": [
+      {
+        "fileName": "P1800_Body_Diffuse.png",
+        "fileSizeBytes": 245000,
+        "channelType": "diffuse_albedo",
+        "componentTarget": "body_shell",
+        "resolutionEstimate": "2048x2048",
+        "hasAlphaChannel": false,
+        "colorSpace": "sRGB"
+      },
+      {
+        "fileName": "P1800_Interior_Alcantara.png",
+        "fileSizeBytes": 185000,
+        "channelType": "roughness_metallic",
+        "componentTarget": "interior_cabin",
+        "resolutionEstimate": "2048x2048",
+        "hasAlphaChannel": false,
+        "colorSpace": "Linear"
+      },
+      {
+        "fileName": "P1800_Carbon_Normal.png",
+        "fileSizeBytes": 320000,
+        "channelType": "normal_tangent",
+        "componentTarget": "carbon_fiber",
+        "resolutionEstimate": "1024x1024",
+        "hasAlphaChannel": false,
+        "colorSpace": "Linear"
+      },
+      {
+        "fileName": "P1800_Chrome_Trim.png",
+        "fileSizeBytes": 95000,
+        "channelType": "composite_material",
+        "componentTarget": "badges_trim",
+        "resolutionEstimate": "1024x1024",
+        "hasAlphaChannel": false,
+        "colorSpace": "sRGB"
+      }
+    ],
+    "componentSeparationHierarchy": [
+      "RESTOMOD_SPACEFRAME_CHASSIS",
+      "WIDEBODY_CARBON_REINFORCED_PANELS",
+      "RACE_INDEPENDENT_DOUBLE_WISHBONE_SUSPENSION",
+      "TURBOCHARGED_DRIVETRAIN_AND_INTERCOOLER",
+      "CENTERLOCK_FORGED_MOTORSPORT_WHEELS",
+      "MINIMALIST_ANALOG_RACE_INTERIOR",
+      "INTEGRATED_ROLL_STRUCTURE"
+    ],
+    "geometricPlausibilityScore": 99,
+    "pbrTextureCompletenessScore": 88,
+    "keyArchitecturalTakeaways": [
+      "Geometric Benchmark Standard: Exceptional curve continuity, zero faceting on flowing 1960s coupe fenders.",
+      "Visible physical wall thickness on flared wheel arches and deep carbon composite front air dam.",
+      "Engine bay packaging demonstrates correct master cylinder, dry sump reservoir, and tubular strut brace clearance."
+    ]
+  }
+]
