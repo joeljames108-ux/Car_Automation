@@ -6,6 +6,10 @@ import { Phase01AuditTestRunner } from "./__tests__/phase01AuditTests";
 import { Phase02ReferenceAssetTestRunner } from "./__tests__/phase02ReferenceAssetTests";
 import { Phase03HardpointTestRunner } from "./__tests__/phase03HardpointTests";
 import { Phases04to08MasterTestRunner } from "./__tests__/phases04to08MasterTests";
+import { Phases09to13MasterTestRunner } from "./__tests__/phases09to13MasterTests";
+import { Phases14to18MasterTestRunner } from "./__tests__/phases14to18MasterTests";
+import { Phases19to23MasterTestRunner } from "./__tests__/phases19to23MasterTests";
+import { Phases24to28MasterTestRunner } from "./__tests__/phases24to28MasterTests";
 import { runModularVehicleConstructionTests } from "./modularVehicleConstructionTestRunner";
 
 console.log("=================================================");
@@ -20,6 +24,10 @@ const phase01Runner = new Phase01AuditTestRunner();
 const phase02Runner = new Phase02ReferenceAssetTestRunner();
 const phase03Runner = new Phase03HardpointTestRunner();
 const phases04to08Runner = new Phases04to08MasterTestRunner();
+const phases09to13Runner = new Phases09to13MasterTestRunner();
+const phases14to18Runner = new Phases14to18MasterTestRunner();
+const phases19to23Runner = new Phases19to23MasterTestRunner();
+const phases24to28Runner = new Phases24to28MasterTestRunner();
 
 const results = [
   ...runner.executeAllTests(),
@@ -30,6 +38,10 @@ const results = [
   ...phase02Runner.executeAllTests(),
   ...phase03Runner.executeAllTests(),
   ...phases04to08Runner.executeAllTests(),
+  ...phases09to13Runner.executeAllTests(),
+  ...phases14to18Runner.executeAllTests(),
+  ...phases19to23Runner.executeAllTests(),
+  ...phases24to28Runner.executeAllTests(),
 ];
 
 let passedCount = 0;
