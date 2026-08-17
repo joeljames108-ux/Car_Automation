@@ -1,17 +1,17 @@
 {
-  "auditTimestamp": "2026-08-17T11:51:17.623Z",
+  "auditTimestamp": "2026-08-17T11:54:15.723Z",
   "projectName": "Modular glTF Vehicle Construction System & Car Automation Simulator",
   "rootDirectory": "C:\\Users\\joelj\\Downloads\\project-bolt-sb1-a1kjcyhr (3)\\project",
-  "totalSourceFiles": 618,
-  "totalCodeLines": 119247,
-  "totalCommentLines": 8601,
-  "totalBlankLines": 13005,
-  "totalSizeBytes": 5917047,
+  "totalSourceFiles": 624,
+  "totalCodeLines": 119839,
+  "totalCommentLines": 8697,
+  "totalBlankLines": 13094,
+  "totalSizeBytes": 5951446,
   "subsystemBreakdown": {
     "simulation_core": {
-      "fileCount": 71,
-      "codeLines": 16490,
-      "sizeBytes": 968454
+      "fileCount": 74,
+      "codeLines": 16697,
+      "sizeBytes": 981644
     },
     "engine_assembly": {
       "fileCount": 122,
@@ -19,14 +19,14 @@
       "sizeBytes": 1370962
     },
     "modular_vehicle": {
-      "fileCount": 59,
-      "codeLines": 9914,
-      "sizeBytes": 498974
+      "fileCount": 60,
+      "codeLines": 10107,
+      "sizeBytes": 510691
     },
     "exterior_3d": {
-      "fileCount": 148,
-      "codeLines": 18195,
-      "sizeBytes": 825411
+      "fileCount": 149,
+      "codeLines": 18262,
+      "sizeBytes": 829088
     },
     "rendering_engine": {
       "fileCount": 19,
@@ -54,9 +54,9 @@
       "sizeBytes": 0
     },
     "testing_verification": {
-      "fileCount": 20,
-      "codeLines": 2944,
-      "sizeBytes": 137221
+      "fileCount": 21,
+      "codeLines": 3069,
+      "sizeBytes": 143036
     },
     "documentation_audit": {
       "fileCount": 10,
@@ -65,8 +65,8 @@
     }
   },
   "dependencyGraph": {
-    "totalNodes": 618,
-    "totalEdges": 1227,
+    "totalNodes": 624,
+    "totalEdges": 1235,
     "directAcyclicGraphValid": true,
     "cyclicDependencyPaths": [],
     "subsystemCouplingMatrix": {
@@ -97,7 +97,7 @@
         "documentation_audit": 0
       },
       "modular_vehicle": {
-        "simulation_core": 34,
+        "simulation_core": 37,
         "engine_assembly": 5,
         "modular_vehicle": 28,
         "exterior_3d": 32,
@@ -188,16 +188,16 @@
         "documentation_audit": 0
       },
       "testing_verification": {
-        "simulation_core": 25,
+        "simulation_core": 28,
         "engine_assembly": 0,
         "modular_vehicle": 7,
-        "exterior_3d": 49,
+        "exterior_3d": 50,
         "rendering_engine": 0,
         "state_management": 2,
         "ai_agent_framework": 8,
         "ui_components": 0,
         "asset_pipeline": 0,
-        "testing_verification": 19,
+        "testing_verification": 20,
         "documentation_audit": 4
       },
       "documentation_audit": {
@@ -358,7 +358,7 @@
       {
         "modulePath": "src/sim/modularVehicle/runTests.ts",
         "inDegree": 0,
-        "outDegree": 19
+        "outDegree": 20
       },
       {
         "modulePath": "src/state/CompanyContext.tsx",
@@ -959,13 +959,13 @@
         "lineCount": 865
       }
     ],
-    "missingTypeAnnotationCount": 162,
+    "missingTypeAnnotationCount": 166,
     "todoCommentCount": 0,
     "fixmeCommentCount": 0,
     "testCoverageRatioPct": 10,
     "recommendations": [
       "Modularize 48 monolithic files (>500 lines) into focused subsystem domain modules.",
-      "Replace 162 loose 'any' type annotations with strict TypeScript generic/interface types.",
+      "Replace 166 loose 'any' type annotations with strict TypeScript generic/interface types.",
       "Maintain 100% deterministic transform snap repeatability across all 36 chassis sockets.",
       "Ensure all 3D assets implement strict level of detail (LOD 1-6) polygon and texture budgets."
     ]
