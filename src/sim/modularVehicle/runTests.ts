@@ -13,6 +13,7 @@ import { Phases24to28MasterTestRunner } from "./__tests__/phases24to28MasterTest
 import { Phases29to33MasterTestRunner } from "./__tests__/phases29to33MasterTests";
 import { Phases34to38MasterTestRunner } from "./__tests__/phases34to38MasterTests";
 import { Phases39to43MasterTestRunner } from "./__tests__/phases39to43MasterTests";
+import { Phases44to48MasterTestRunner } from "./__tests__/phases44to48MasterTests";
 import { runModularVehicleConstructionTests } from "./modularVehicleConstructionTestRunner";
 
 console.log("=================================================");
@@ -34,6 +35,7 @@ const phases24to28Runner = new Phases24to28MasterTestRunner();
 const phases29to33Runner = new Phases29to33MasterTestRunner();
 const phases34to38Runner = new Phases34to38MasterTestRunner();
 const phases39to43Runner = new Phases39to43MasterTestRunner();
+const phases44to48Runner = new Phases44to48MasterTestRunner();
 
 const results = [
   ...runner.executeAllTests(),
@@ -51,6 +53,7 @@ const results = [
   ...phases29to33Runner.executeAllTests(),
   ...phases34to38Runner.executeAllTests(),
   ...phases39to43Runner.executeAllTests(),
+  ...phases44to48Runner.executeAllTests(),
 ];
 
 let passedCount = 0;
