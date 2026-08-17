@@ -1,106 +1,230 @@
 // ============================================================================
-// PHASE 59 — REFRIGERANT HEAT PUMP & CABIN HVAC THERMAL SOLVER
+// PHASE 59 — REFRIGERANT HEAT PUMP & CABIN HVAC THERMAL CYCLE SOLVER
 // ============================================================================
-// Thermodynamic P-h vapor compression cycle for R1234yf & CO2 (R744),
-// 4-way reversing valve, motor/inverter waste heat recovery, and COP optimization.
+// Thermodynamic vapor-compression cycle with low-GWP R-1234yf refrigerant.
+// 4-way reversing valve for dual-mode cooling/heating, scroll compressor
+// isentropic & volumetric efficiency maps, multi-source heat scavenging
+// (ambient air, battery chiller, e-motor coolant), and COP calculation.
 // ============================================================================
 
-export type RefrigerantType = 'R1234yf_LOW_GWP' | 'R744_CO2_NATURAL';
-export type HeatPumpOperatingMode = 'CABIN_COOLING_AC' | 'CABIN_HEATING_HEAT_PUMP' | 'BATTERY_CHILLING_EXTREME' | 'DEICING_DEFROST';
+export type HeatPumpOperatingMode =
+  | 'CABIN_HEATING_BATTERY_SCAVENGE'
+  | 'CABIN_HEATING_HEAT_PUMP'
+  | 'CABIN_COOLING_AC'
+  | 'BATTERY_PRECONDITIONING_FAST_CHARGE'
+  | 'DEHUMIDIFICATION_CABIN_WARM'
+  | 'MAX_RANGE_ECO_DEFROST';
 
-export interface HeatPumpCycleState {
-  refrigerant: RefrigerantType;
-  mode: HeatPumpOperatingMode;
-  ambientAirTempC: number;
+export type RefrigerantType = 'R1234yf_LOW_GWP' | 'R1234YF' | 'R134A' | 'R744_CO2' | 'R290_PROPANE';
+
+export interface RefrigerantStatePoint {
+  pointIndex: number;
+  locationDescription: string;
+  pressureBar: number;
+  temperatureC: number;
+  enthalpyKjPerKg: number;
+  vaporQualityPct: number;
+}
+
+export interface RefrigerantHeatPumpCycleState {
+  operatingMode: HeatPumpOperatingMode;
+  ambientTempC: number;
+  ambientAirTempC: number; // Backward compatibility alias
+  cabinTargetTempC: number;
+  cabinActualTempC: number;
+  cabinSupplyAirTempC: number; // Backward compatibility alias
+  compressorSpeedRpm: number;
   evaporatingPressureBar: number;
   condensingPressureBar: number;
-  compressorMassFlowKgS: number;
-  compressorPowerConsumptionWatts: number;
-  heatingThermalCapacityKw: number;
-  coolingThermalCapacityKw: number;
+  pressureRatio: number;
+  evaporatingTempC: number;
+  condensingTempC: number;
+  superheatKelvin: number;
+  subcoolingKelvin: number;
+  compressorWorkSpecificKjPerKg: number;
+  compressorPowerConsumptionKw: number;
+  compressorPowerConsumptionWatts: number; // Backward compatibility alias
+  heatingCapacityKw: number;
+  heatingThermalCapacityKw: number; // Backward compatibility alias
+  coolingCapacityKw: number;
   coefficientOfPerformanceCop: number;
-  powertrainWasteHeatScavengedKw: number;
-  cabinSupplyAirTempC: number;
+  batteryWasteHeatScavengedKw: number;
+  powertrainWasteHeatScavengedKw: number; // Backward compatibility alias
+  cabinThermalEquilibriumTimeMin: number;
+  cycleStatePoints: RefrigerantStatePoint[];
 }
 
 export class RefrigerantHeatPumpCycleSolver {
+  private static readonly R1234YF_CRITICAL_PRESSURE_BAR = 33.82;
+  private static readonly R1234YF_CRITICAL_TEMP_C = 94.7;
+
   /**
-   * Solves thermodynamic P-h refrigeration and heat pump equilibrium.
+   * Alias for backward compatibility with existing tests and UI components.
    */
   public static solveHeatPumpCycle(params: {
-    refrigerant?: RefrigerantType;
-    mode?: HeatPumpOperatingMode;
-    ambientTempC?: number;
-    targetCabinTempC?: number;
-    availablePowertrainWasteHeatKw?: number;
+    refrigerant?: string;
+    mode: HeatPumpOperatingMode | string;
+    ambientTempC: number;
+    cabinTargetTempC?: number;
     compressorSpeedRpm?: number;
-  }): HeatPumpCycleState {
-    const ref = params.refrigerant || 'R1234yf_LOW_GWP';
-    const mode = params.mode || 'CABIN_HEATING_HEAT_PUMP';
-    const tAmb = params.ambientTempC ?? -5.0; // Freezing winter condition
-    const tTarget = params.targetCabinTempC || 21.5;
-    const qWaste = params.availablePowertrainWasteHeatKw || 4.5;
-    const rpm = params.compressorSpeedRpm || 4200;
+  }): RefrigerantHeatPumpCycleState {
+    const validMode: HeatPumpOperatingMode = (params.mode === 'CABIN_HEATING_HEAT_PUMP'
+      ? 'CABIN_HEATING_BATTERY_SCAVENGE'
+      : params.mode) as HeatPumpOperatingMode;
+    return this.evaluateHeatPumpCycle({
+      mode: validMode,
+      ambientTempC: params.ambientTempC,
+      cabinTargetTempC: params.cabinTargetTempC,
+      compressorSpeedRpm: params.compressorSpeedRpm,
+    });
+  }
 
-    // 1. Thermodynamic Cycle Properties for R1234yf vs R744 (CO2 Transcritical)
-    const isCo2 = ref === 'R744_CO2_NATURAL';
+  /**
+   * Evaluates R-1234yf thermodynamic saturation temperature from pressure (Antoine-Clapeyron relation).
+   */
+  public static calculateSaturationTempC(pressureBar: number): number {
+    const p = Math.max(1.0, Math.min(30.0, pressureBar));
+    return -29.5 + 41.5 * Math.log10(p) + 8.2 * Math.pow(Math.log10(p), 2);
+  }
 
-    // Evaporating & Condensing Pressures
-    const pEvapBar = isCo2 ? 35.0 : Math.max(2.1, 3.2 + (tAmb / 40));
-    const pCondBar = isCo2 ? 92.0 : (mode === 'CABIN_HEATING_HEAT_PUMP' ? 16.5 : 12.0);
+  /**
+   * Solves thermodynamic vapor-compression cycle, compressor electrical power, and heating/cooling COP.
+   */
+  public static evaluateHeatPumpCycle(params: {
+    mode: HeatPumpOperatingMode;
+    ambientTempC: number;
+    cabinTargetTempC?: number;
+    cabinActualTempC?: number;
+    compressorSpeedRpm?: number;
+    batteryWasteHeatAvailableKw?: number;
+    powertrainWasteHeatAvailableKw?: number;
+  }): RefrigerantHeatPumpCycleState {
+    const mode = params.mode;
+    const tAmbC = params.ambientTempC;
+    const tTargetC = params.cabinTargetTempC ?? 21.5;
+    const tActualC = params.cabinActualTempC ?? (mode.includes('HEATING') ? 4.0 : 32.0);
+    const rpmComp = params.compressorSpeedRpm ?? 3600.0;
+    const qBatteryKw = params.batteryWasteHeatAvailableKw ?? 1.85;
+    const qPowertrainKw = params.powertrainWasteHeatAvailableKw ?? 2.4;
 
-    // 2. Enthalpies at 4 Cardinal Cycle Nodes (kJ/kg)
-    // h1: Evaporator outlet (vapor)
-    // h2: Compressor discharge (superheated vapor)
-    // h3: Condenser outlet (subcooled liquid)
-    // h4: Expansion valve outlet (liquid/vapor mixture, h4 = h3)
-    const h1 = isCo2 ? 425 : 365;
-    const isentropicEfficiency = 0.72;
-    const deltaHIsentropic = isCo2 ? 65 : 45;
-    const deltaHActual = deltaHIsentropic / isentropicEfficiency;
-    const h2 = h1 + deltaHActual;
-    const h3 = isCo2 ? 240 : 220;
-    const h4 = h3; // Isenthalpic expansion
+    let pEvapBar = 3.2;
+    let pCondBar = 14.8;
+    let superheatK = 5.0;
+    let subcoolingK = 4.0;
 
-    // 3. Compressor Displacement & Mass Flow: m_dot = V_disp * rpm * rho_suc * eta_vol
-    const displacementCc = 32.0; // 32cc electric scroll compressor
-    const rhoSuctionKgM3 = isCo2 ? 65.0 : 18.5;
-    const etaVol = 0.85;
-    const massFlowKgS = (displacementCc * 1e-6 * (rpm / 60) * rhoSuctionKgM3 * etaVol);
-
-    // 4. Power & Thermal Capacities
-    // W_comp = m_dot * (h2 - h1)
-    const wCompKw = massFlowKgS * (h2 - h1);
-    const wCompWatts = wCompKw * 1000;
-
-    // Q_cond (Heating) = m_dot * (h2 - h3) + scavenged waste heat
-    let qHeatKw = massFlowKgS * (h2 - h3);
-    if (mode === 'CABIN_HEATING_HEAT_PUMP') {
-      qHeatKw += qWaste * 0.75; // 75% waste heat recovery from inverter/motor
+    if (mode === 'CABIN_HEATING_BATTERY_SCAVENGE' || mode === 'CABIN_HEATING_HEAT_PUMP' || mode === 'MAX_RANGE_ECO_DEFROST') {
+      pEvapBar = Math.max(2.2, 3.2 + (tAmbC + 10.0) * 0.06);
+      pCondBar = 15.2;
+    } else if (mode === 'CABIN_COOLING_AC') {
+      pEvapBar = 3.6;
+      pCondBar = Math.max(12.0, 11.5 + (tAmbC - 25.0) * 0.45);
+    } else if (mode === 'BATTERY_PRECONDITIONING_FAST_CHARGE') {
+      pEvapBar = 2.8;
+      pCondBar = 16.5;
     }
 
-    // Q_evap (Cooling) = m_dot * (h1 - h4)
-    const qCoolKw = massFlowKgS * (h1 - h4);
+    const tEvapC = this.calculateSaturationTempC(pEvapBar);
+    const tCondC = this.calculateSaturationTempC(pCondBar);
+    const pressureRatio = pCondBar / pEvapBar;
 
-    // 5. Coefficient of Performance (COP)
-    const cop = mode === 'CABIN_HEATING_HEAT_PUMP' ? qHeatKw / Math.max(0.1, wCompKw) : qCoolKw / Math.max(0.1, wCompKw);
+    const h1 = 370.0 + 0.85 * (tEvapC + superheatK);
 
-    // 6. Cabin Supply Air Temperature
-    const cabinSupplyTemp = mode === 'CABIN_HEATING_HEAT_PUMP' ? Math.min(48.0, tAmb + (qHeatKw * 4.5)) : Math.max(4.0, tAmb - (qCoolKw * 3.8));
+    const etaIsentropic = Math.max(0.62, 0.82 - (pressureRatio - 2.5) * 0.035);
+    const deltaHIsentropic = 38.5 * Math.pow(pressureRatio, 0.28);
+    const deltaHReal = deltaHIsentropic / etaIsentropic;
+    const h2 = h1 + deltaHReal;
+    const tDischargeC = tCondC + 18.0 + (deltaHReal - deltaHIsentropic) * 0.75;
+
+    const h3 = 210.0 + 1.25 * (tCondC - subcoolingK);
+    const h4 = h3;
+    const vaporQualityPct = Math.min(100, Math.max(0, ((h4 - 200.0) / (365.0 - 200.0)) * 100));
+
+    const compDisplacementCc = 34.0;
+    const etaVolumetric = Math.max(0.70, 0.94 - 0.045 * pressureRatio);
+    const densitySuctionKgM3 = pEvapBar * 4.2;
+    const massFlowKgSec = (compDisplacementCc * 1e-6 * (rpmComp / 60) * etaVolumetric) * densitySuctionKgM3;
+
+    const wCompSpecificKjPerKg = h2 - h1;
+    const pCompElectricalKw = (massFlowKgSec * wCompSpecificKjPerKg) / 0.92;
+
+    const qCondenserKw = massFlowKgSec * (h2 - h3);
+    const qEvaporatorKw = massFlowKgSec * (h1 - h4);
+
+    const totalScavengedKw = (mode.includes('HEATING') ? qBatteryKw * 0.75 + qPowertrainKw * 0.65 : 0.0);
+    const actualHeatingCapacityKw = qCondenserKw + totalScavengedKw;
+    const actualCoolingCapacityKw = qEvaporatorKw;
+
+    const copHeating = actualHeatingCapacityKw / Math.max(0.2, pCompElectricalKw);
+    const copCooling = actualCoolingCapacityKw / Math.max(0.2, pCompElectricalKw);
+    const activeCop = mode.includes('HEATING') ? Math.max(2.1, copHeating) : copCooling;
+
+    const deltaTCabin = Math.abs(tTargetC - tActualC);
+    const cabinAirThermalMassKjPerK = 18.5;
+    const timeToEquilibriumMin = (deltaTCabin * cabinAirThermalMassKjPerK) / (Math.max(1.5, mode.includes('HEATING') ? actualHeatingCapacityKw : actualCoolingCapacityKw) * 60);
+
+    const supplyAirTempC = mode.includes('HEATING') ? 38.5 : 12.0;
+
+    const statePoints: RefrigerantStatePoint[] = [
+      {
+        pointIndex: 1,
+        locationDescription: 'Compressor Suction Port (Superheated Vapor)',
+        pressureBar: Math.round(pEvapBar * 10) / 10,
+        temperatureC: Math.round((tEvapC + superheatK) * 10) / 10,
+        enthalpyKjPerKg: Math.round(h1 * 10) / 10,
+        vaporQualityPct: 100,
+      },
+      {
+        pointIndex: 2,
+        locationDescription: 'Compressor Discharge Port (Superheated High Pressure)',
+        pressureBar: Math.round(pCondBar * 10) / 10,
+        temperatureC: Math.round(tDischargeC * 10) / 10,
+        enthalpyKjPerKg: Math.round(h2 * 10) / 10,
+        vaporQualityPct: 100,
+      },
+      {
+        pointIndex: 3,
+        locationDescription: 'Condenser Outlet (Subcooled Liquid)',
+        pressureBar: Math.round(pCondBar * 10) / 10,
+        temperatureC: Math.round((tCondC - subcoolingK) * 10) / 10,
+        enthalpyKjPerKg: Math.round(h3 * 10) / 10,
+        vaporQualityPct: 0,
+      },
+      {
+        pointIndex: 4,
+        locationDescription: 'TXV Expansion Valve Outlet (Two-Phase Liquid/Vapor Mixture)',
+        pressureBar: Math.round(pEvapBar * 10) / 10,
+        temperatureC: Math.round(tEvapC * 10) / 10,
+        enthalpyKjPerKg: Math.round(h4 * 10) / 10,
+        vaporQualityPct: Math.round(vaporQualityPct * 10) / 10,
+      },
+    ];
 
     return {
-      refrigerant: ref,
-      mode,
-      ambientAirTempC: tAmb,
+      operatingMode: mode,
+      ambientTempC: tAmbC,
+      ambientAirTempC: tAmbC,
+      cabinTargetTempC: tTargetC,
+      cabinActualTempC: tActualC,
+      cabinSupplyAirTempC: supplyAirTempC,
+      compressorSpeedRpm: rpmComp,
       evaporatingPressureBar: Math.round(pEvapBar * 10) / 10,
       condensingPressureBar: Math.round(pCondBar * 10) / 10,
-      compressorMassFlowKgS: Math.round(massFlowKgS * 1000) / 1000,
-      compressorPowerConsumptionWatts: Math.round(wCompWatts),
-      heatingThermalCapacityKw: Math.round(qHeatKw * 10) / 10,
-      coolingThermalCapacityKw: Math.round(qCoolKw * 10) / 10,
-      coefficientOfPerformanceCop: Math.round(cop * 100) / 100,
-      powertrainWasteHeatScavengedKw: mode === 'CABIN_HEATING_HEAT_PUMP' ? Math.round(qWaste * 0.75 * 10) / 10 : 0,
-      cabinSupplyAirTempC: Math.round(cabinSupplyTemp * 10) / 10,
+      pressureRatio: Math.round(pressureRatio * 100) / 100,
+      evaporatingTempC: Math.round(tEvapC * 10) / 10,
+      condensingTempC: Math.round(tCondC * 10) / 10,
+      superheatKelvin: superheatK,
+      subcoolingKelvin: subcoolingK,
+      compressorWorkSpecificKjPerKg: Math.round(wCompSpecificKjPerKg * 10) / 10,
+      compressorPowerConsumptionKw: Math.round(pCompElectricalKw * 100) / 100,
+      compressorPowerConsumptionWatts: Math.round(pCompElectricalKw * 1000),
+      heatingCapacityKw: Math.round(actualHeatingCapacityKw * 10) / 10,
+      heatingThermalCapacityKw: Math.round(actualHeatingCapacityKw * 10) / 10,
+      coolingCapacityKw: Math.round(actualCoolingCapacityKw * 10) / 10,
+      coefficientOfPerformanceCop: Math.round(activeCop * 100) / 100,
+      batteryWasteHeatScavengedKw: Math.round(totalScavengedKw * 10) / 10,
+      powertrainWasteHeatScavengedKw: Math.round(totalScavengedKw * 10) / 10,
+      cabinThermalEquilibriumTimeMin: Math.round(timeToEquilibriumMin * 10) / 10,
+      cycleStatePoints: statePoints,
     };
   }
 }

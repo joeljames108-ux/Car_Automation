@@ -1,89 +1,172 @@
 // ============================================================================
 // PHASE 64 — ACTIVE UNDERBODY VENTURI DIFFUSER & GROUND EFFECT SOLVER
 // ============================================================================
-// Bernoulli ground-effect suction pressure Cp(x), dynamic ride height sensitivity,
-// diffuser ramp stall prevention, and multi-channel vortex sealing strakes.
+// 1D/2D Bernoulli Venturi throat suction, expansion ramp pressure recovery C_p(x),
+// boundary layer momentum thickness growth, adverse pressure gradient stall prediction,
+// vortex generator skirt sealing, and active adjustable flap kinematics.
 // ============================================================================
 
-export interface UnderbodyVenturiState {
-  groundClearanceFrontMm: number;
-  groundClearanceRearMm: number;
+export interface DiffuserStationCp {
+  stationIndex: number;
+  positionXM: number;
+  localChannelHeightMm: number;
+  localAirVelocityMs: number;
+  localPressureCoefficientCp: number;
+  localDownforceN: number;
+  isBoundaryLayerAttached: boolean;
+}
+
+export interface ActiveVenturiDiffuserState {
+  vehicleSpeedKmh: number;
+  frontRideHeightMm: number;
+  rearRideHeightMm: number;
   diffuserRampAngleDeg: number;
-  isDiffuserStalled: boolean;
+  throatGroundClearanceMm: number;
+  expansionRatio: number;
+  throatAirVelocityMs: number;
   throatSuctionCpMin: number;
   totalUnderbodyDownforceN: number;
-  centerOfPressurePctFront: number;
+  underbodyDragForceN: number;
   groundEffectEfficiencyLOverD: number;
-  vortexSealIntensityPct: number;
+  aerodynamicBalanceFrontPct: number;
+  centerOfPressurePctFront: number; // Backward compatibility alias
+  isDiffuserStalled: boolean;
+  boundaryLayerSeparationPointPct: number;
+  vortexSkirtSealingEffectivenessPct: number;
+  vortexSealIntensityPct: number; // Backward compatibility alias
+  pressureDistribution: DiffuserStationCp[];
 }
 
 export class ActiveVenturiDiffuserSolver {
-  private static readonly AIR_DENSITY_KG_M3 = 1.225;
-  private static readonly UNDERBODY_AREA_M2 = 2.45;
-  private static readonly THROAT_CHORD_RATIO = 0.38; // 38% chord location for throat
+  private static readonly TUNNEL_WIDTH_M = 1.42;
+  private static readonly RHO_AIR = 1.225;
 
   /**
-   * Solves non-linear ground effect suction and active diffuser aerodynamics.
+   * Solves non-linear Venturi channel compressible/incompressible flow, C_p(x) recovery, and stall limits.
    */
   public static solveGroundEffectAerodynamics(params: {
     vehicleSpeedKmh: number;
-    frontRideHeightMm?: number;
-    rearRideHeightMm?: number;
-    diffuserRampAngleDeg?: number;
-    activeStrakesDeployed?: boolean;
-  }): UnderbodyVenturiState {
-    const vKmh = params.vehicleSpeedKmh;
-    const vMs = (vKmh * 1000) / 3600;
-    const hF = params.frontRideHeightMm ?? 35; // 35mm racing ride height
-    const hR = params.rearRideHeightMm ?? 55;
-    const rampDeg = params.diffuserRampAngleDeg ?? 11.5;
-    const strakes = params.activeStrakesDeployed ?? true;
+    frontRideHeightMm: number;
+    rearRideHeightMm: number;
+    diffuserRampAngleDeg: number;
+    activeFlapExtensionMm?: number;
+    vortexGeneratorsInstalled?: boolean;
+    yawAngleDeg?: number;
+  }): ActiveVenturiDiffuserState {
+    const vKmh = Math.max(10, params.vehicleSpeedKmh);
+    const vInfMs = (vKmh * 1000) / 3600;
+    const hFront = Math.max(15, params.frontRideHeightMm);
+    const hRear = Math.max(25, params.rearRideHeightMm);
+    const rampAngleDeg = Math.max(4.0, Math.min(22.0, params.diffuserRampAngleDeg));
+    const flapExtMm = params.activeFlapExtensionMm || 0.0;
+    const hasVortexGenerators = params.vortexGeneratorsInstalled ?? true;
+    const yawDeg = Math.abs(params.yawAngleDeg || 0.0);
 
-    // Dynamic Pressure: q = 0.5 * rho * v^2
-    const qInf = 0.5 * this.AIR_DENSITY_KG_M3 * Math.pow(vMs, 2);
+    const hThroatMm = hFront + (hRear - hFront) * 0.15;
+    const hExitMm = hRear + 120.0 * Math.tan((rampAngleDeg * Math.PI) / 180) * 10.0 + flapExtMm;
+    const expansionRatio = Math.max(1.1, hExitMm / Math.max(10, hThroatMm));
 
-    // 1. Throat Ground Proximity Acceleration (Bernoulli 1D Channel Flow)
-    // Suction increases as throat clearance h_throat decreases down to critical height h_crit ~ 18mm
-    const hThroatMm = Math.max(12, hF * 0.92);
-    const groundProximityGain = Math.min(3.8, Math.pow(65 / hThroatMm, 0.72));
+    let groundProximitySuctionFactor = 1.0;
+    if (hThroatMm < 50.0) {
+      groundProximitySuctionFactor = 1.0 + (50.0 - hThroatMm) * 0.022;
+      if (hThroatMm < 18.0) {
+        groundProximitySuctionFactor *= Math.max(0.6, hThroatMm / 18.0);
+      }
+    }
 
-    // 2. Diffuser Ramp Expansion Angle Stall Modeling
-    // Ideal diffuser expansion angle 9-13 deg; stall occurs above 14.5 deg without suction
-    const isStalled = rampDeg > 14.5 && !strakes;
-    const rampExpansionFactor = isStalled
-      ? 0.45 // Severe flow separation and loss of downforce
-      : Math.sin((rampDeg * Math.PI) / 180) * 3.85;
+    const vThroatMs = vInfMs * Math.sqrt(expansionRatio) * 0.92 * groundProximitySuctionFactor;
+    const cpThroat = 1.0 - Math.pow(vThroatMs / vInfMs, 2);
 
-    // 3. Peak Throat Suction Coefficient: Cp_min = 1 - (A_inf / A_throat)^2
-    const cpMin = -1.25 * groundProximityGain * (isStalled ? 0.4 : 1.0);
+    const criticalStallAngleDeg = hasVortexGenerators ? 18.5 : 14.5;
+    const isStalled = rampAngleDeg > criticalStallAngleDeg || (hThroatMm < 16.0 && rampAngleDeg > 15.0);
 
-    // 4. Vortex Sealing Intensity (Active Strakes prevent lateral pressure leakage)
-    const sealIntensity = strakes ? 94.5 : 62.0;
-    const sealFactor = sealIntensity / 100;
+    let separationPct = 100.0;
+    if (isStalled) {
+      separationPct = Math.max(45.0, 100.0 - (rampAngleDeg - criticalStallAngleDeg) * 14.0);
+    }
 
-    // 5. Total Underbody Downforce
-    // Cl_underbody = |Cp_avg| * Area
-    const clUnderbody = Math.abs(cpMin) * 0.68 * rampExpansionFactor * sealFactor;
-    const downforceN = qInf * clUnderbody * this.UNDERBODY_AREA_M2;
+    const nStations = 12;
+    const stations: DiffuserStationCp[] = [];
+    const tunnelLengthM = 2.45;
+    let totalDownforceN = 0.0;
+    let totalInducedDragN = 0.0;
+    let sumFrontMoment = 0.0;
 
-    // Induced Drag from ground effect is extremely low (high L/D ratio)
-    const cdUnderbody = 0.045 + Math.pow(clUnderbody, 2) / (Math.PI * 4.5 * 0.95);
-    const lOverD = clUnderbody / Math.max(0.01, cdUnderbody);
+    for (let i = 0; i < nStations; i++) {
+      const frac = i / (nStations - 1);
+      const xM = frac * tunnelLengthM;
 
-    // 6. Center of Pressure (CP_x) Location (% from front axle)
-    // Pitch sensitivity shifts CP rearward as diffuser angle increases
-    const cpFrontPct = Math.max(38, Math.min(58, 48.5 - (rampDeg - 10) * 0.85 + (hR - hF) * 0.15));
+      let hLocalMm = hFront;
+      if (frac < 0.4) {
+        hLocalMm = hFront - (hFront - hThroatMm) * (frac / 0.4);
+      } else {
+        const rampFrac = (frac - 0.4) / 0.6;
+        hLocalMm = hThroatMm + (hExitMm - hThroatMm) * Math.pow(rampFrac, 1.25);
+      }
+
+      let cpLocal = 0.0;
+      let isAttached = true;
+
+      if (frac < 0.4) {
+        cpLocal = -0.25 - (Math.abs(cpThroat) - 0.25) * Math.pow(frac / 0.4, 2);
+      } else {
+        const rampFrac = (frac - 0.4) / 0.6;
+        if (rampFrac * 100 > separationPct) {
+          cpLocal = -0.15;
+          isAttached = false;
+        } else {
+          const cpExit = 0.05;
+          cpLocal = cpThroat + (cpExit - cpThroat) * (1.0 - Math.exp(-2.8 * rampFrac));
+        }
+      }
+
+      const stationAreaM2 = (tunnelLengthM / nStations) * this.TUNNEL_WIDTH_M;
+      const qDynamic = 0.5 * this.RHO_AIR * Math.pow(vInfMs, 2);
+      const localFzN = -cpLocal * qDynamic * stationAreaM2;
+
+      totalDownforceN += localFzN;
+      totalInducedDragN += localFzN * Math.sin((rampAngleDeg * Math.PI) / 180) * 0.065;
+      sumFrontMoment += localFzN * (tunnelLengthM - xM);
+
+      const localVelMs = vInfMs * Math.sqrt(Math.max(0.01, 1.0 - cpLocal));
+
+      stations.push({
+        stationIndex: i + 1,
+        positionXM: Math.round(xM * 100) / 100,
+        localChannelHeightMm: Math.round(hLocalMm * 10) / 10,
+        localAirVelocityMs: Math.round(localVelMs * 10) / 10,
+        localPressureCoefficientCp: Math.round(cpLocal * 100) / 100,
+        localDownforceN: Math.round(localFzN),
+        isBoundaryLayerAttached: isAttached,
+      });
+    }
+
+    const vortexSealingPct = hasVortexGenerators ? Math.max(50.0, 94.0 - yawDeg * 3.5) : 72.0 - yawDeg * 5.0;
+    const sealingMultiplier = vortexSealingPct / 100;
+    totalDownforceN *= sealingMultiplier;
+
+    const frontAeroBalancePct = totalDownforceN > 0 ? (sumFrontMoment / (totalDownforceN * tunnelLengthM)) * 100 : 45.0;
+    const lOverD = totalInducedDragN > 0 ? totalDownforceN / totalInducedDragN : 5.8;
 
     return {
-      groundClearanceFrontMm: hF,
-      groundClearanceRearMm: hR,
-      diffuserRampAngleDeg: rampDeg,
+      vehicleSpeedKmh: vKmh,
+      frontRideHeightMm: hFront,
+      rearRideHeightMm: hRear,
+      diffuserRampAngleDeg: rampAngleDeg,
+      throatGroundClearanceMm: Math.round(hThroatMm * 10) / 10,
+      expansionRatio: Math.round(expansionRatio * 100) / 100,
+      throatAirVelocityMs: Math.round(vThroatMs * 10) / 10,
+      throatSuctionCpMin: Math.round(cpThroat * 100) / 100,
+      totalUnderbodyDownforceN: Math.round(totalDownforceN),
+      underbodyDragForceN: Math.round(totalInducedDragN),
+      groundEffectEfficiencyLOverD: Math.round(lOverD * 100) / 100,
+      aerodynamicBalanceFrontPct: Math.round(frontAeroBalancePct * 10) / 10,
+      centerOfPressurePctFront: Math.round(frontAeroBalancePct * 10) / 10,
       isDiffuserStalled: isStalled,
-      throatSuctionCpMin: Math.round(cpMin * 100) / 100,
-      totalUnderbodyDownforceN: Math.round(downforceN),
-      centerOfPressurePctFront: Math.round(cpFrontPct * 10) / 10,
-      groundEffectEfficiencyLOverD: Math.round(lOverD * 10) / 10,
-      vortexSealIntensityPct: sealIntensity,
+      boundaryLayerSeparationPointPct: Math.round(separationPct * 10) / 10,
+      vortexSkirtSealingEffectivenessPct: Math.round(vortexSealingPct * 10) / 10,
+      vortexSealIntensityPct: Math.round(vortexSealingPct * 10) / 10,
+      pressureDistribution: stations,
     };
   }
 }

@@ -6,12 +6,14 @@
 // - Phase 96: 1.2 MW Megawatt Flash Charging & Liquid-Cooled Pantograph
 // - Phase 97: Master 100-Phase Digital Twin & Edge Telemetry Orchestrator
 // - Phase 98: Master Grand Pinnacle Proving Ground Telemetry Synchronization
+// - Phase 99: Autonomous Vehicle ODD & SAE Level Classification Solver
 // - Phase 100: 100-Phase Modular glTF Vehicle Construction System Seal of Excellence
 // ============================================================================
 
 import { CarbonCompositeNdtInspectionSolver } from '../../inspection/carbonCompositeNdtInspectionSolver';
 import { MegawattAutomatedPantographSolver } from '../../charging/megawattAutomatedPantographSolver';
 import { MasterDigitalTwinOrchestrator } from '../../digitalTwin/masterDigitalTwinOrchestrator';
+import { OperationalDesignDomainSolver } from '../../adas/operationalDesignDomainSolver';
 
 export interface Phase95to100TestResult {
   suite: string;
@@ -126,8 +128,77 @@ export class Phases95to100MasterTestRunner {
       });
     }
 
-    // ── 4. PHASE 100: Grand Capstone 100-Phase Engineering Certification ──
+    // ── 4. PHASE 99: Autonomous Vehicle ODD & SAE Level Classification Solver ──
     const t3 = performance.now();
+    try {
+      const nominalOdd = OperationalDesignDomainSolver.processAutonomousState({
+        configuredLevel: 'LEVEL_3',
+        vehicleSpeedKmh: 110,
+        weather: 'CLEAR_SUNNY',
+        roadType: 'CONTROLLED_HIGHWAY',
+        surfaceFriction: 'DRY_ASPHALT',
+        forwardVisibilityM: 140,
+        precipitationMmPerHour: 0,
+        crosswindSpeedKmh: 20,
+        laneWidthM: 3.65,
+        hdMapAvailable: true,
+        hdMapLocalizationAccuracyCm: 4.5,
+        dmsGazeYawDeg: 2.0,
+        dmsGazePitchDeg: -1.5,
+        dmsEyeClosureMs: 1200,
+        dmsHandsOnDetected: true,
+        dmsTorqueNm: 0.8,
+        timeSinceRoadGazeSec: 0.2,
+      });
+
+      const degradedOdd = OperationalDesignDomainSolver.processAutonomousState({
+        configuredLevel: 'LEVEL_3',
+        vehicleSpeedKmh: 120,
+        weather: 'DENSE_FOG',
+        roadType: 'CONTROLLED_HIGHWAY',
+        surfaceFriction: 'BLACK_ICE',
+        forwardVisibilityM: 30, // Violates Level 3 (min 80m)
+        precipitationMmPerHour: 35,
+        crosswindSpeedKmh: 65,
+        laneWidthM: 3.1,
+        hdMapAvailable: false,
+        hdMapLocalizationAccuracyCm: 50.0,
+        dmsGazeYawDeg: 45.0,
+        dmsGazePitchDeg: -20.0,
+        dmsEyeClosureMs: 25000,
+        dmsHandsOnDetected: false,
+        dmsTorqueNm: 0.0,
+        timeSinceRoadGazeSec: 18.0, // Exceeds budget -> triggers MRM
+        elapsedMrmDurationSec: 4.0,
+      });
+
+      const passed =
+        nominalOdd.isSafeForAutonomousOperation &&
+        nominalOdd.fallbackState === 'NORMAL_AUTONOMOUS_OPERATING' &&
+        nominalOdd.asilSafetyIntegrityLevel === 'ASIL_D' &&
+        !degradedOdd.isSafeForAutonomousOperation &&
+        degradedOdd.fallbackState === 'MINIMAL_RISK_MANEUVER_IN_PROGRESS' &&
+        degradedOdd.fallbackTargetDecelerationG > 0.2 &&
+        degradedOdd.fallbackSafePullOverLane === 'EMERGENCY_SHOULDER';
+
+      results.push({
+        suite: 'Phase99_OperationalDesignDomain',
+        name: 'Autonomous ODD Solver validates SAE J3016 boundaries, ASIL-D safety integrity, DMS fatigue, and MRM fallback',
+        passed,
+        durationMs: performance.now() - t3,
+      });
+    } catch (err: any) {
+      results.push({
+        suite: 'Phase99_OperationalDesignDomain',
+        name: 'Autonomous ODD Solver validates SAE J3016 boundaries, ASIL-D safety integrity, DMS fatigue, and MRM fallback',
+        passed: false,
+        error: err.message || String(err),
+        durationMs: performance.now() - t3,
+      });
+    }
+
+    // ── 5. PHASE 100: Grand Capstone 100-Phase Engineering Certification ──
+    const t4 = performance.now();
     try {
       const grandTwin = MasterDigitalTwinOrchestrator.sampleDigitalTwin({
         vehicleSpeedKmh: 310,
@@ -146,7 +217,7 @@ export class Phases95to100MasterTestRunner {
         suite: 'Phase100_GrandCapstoneCertification',
         name: '100-Phase Modular glTF Vehicle Construction System achieves full multi-physics mathematical integrity and architectural certification',
         passed: isPhase100Certified,
-        durationMs: performance.now() - t3,
+        durationMs: performance.now() - t4,
       });
     } catch (err: any) {
       results.push({
@@ -154,7 +225,7 @@ export class Phases95to100MasterTestRunner {
         name: '100-Phase Modular glTF Vehicle Construction System achieves full multi-physics mathematical integrity and architectural certification',
         passed: false,
         error: err.message || String(err),
-        durationMs: performance.now() - t3,
+        durationMs: performance.now() - t4,
       });
     }
 

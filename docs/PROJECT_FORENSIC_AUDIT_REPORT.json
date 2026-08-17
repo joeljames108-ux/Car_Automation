@@ -1,17 +1,17 @@
 {
-  "auditTimestamp": "2026-08-17T12:52:25.574Z",
+  "auditTimestamp": "2026-08-17T13:45:01.068Z",
   "projectName": "Modular glTF Vehicle Construction System & Car Automation Simulator",
   "rootDirectory": "C:\\Users\\joelj\\Downloads\\project-bolt-sb1-a1kjcyhr (3)\\project",
-  "totalSourceFiles": 677,
-  "totalCodeLines": 128276,
-  "totalCommentLines": 10229,
-  "totalBlankLines": 14279,
-  "totalSizeBytes": 6497881,
+  "totalSourceFiles": 680,
+  "totalCodeLines": 130774,
+  "totalCommentLines": 10358,
+  "totalBlankLines": 14538,
+  "totalSizeBytes": 6615344,
   "subsystemBreakdown": {
     "simulation_core": {
-      "fileCount": 109,
-      "codeLines": 21602,
-      "sizeBytes": 1330479
+      "fileCount": 110,
+      "codeLines": 23565,
+      "sizeBytes": 1423439
     },
     "engine_assembly": {
       "fileCount": 122,
@@ -54,9 +54,9 @@
       "sizeBytes": 0
     },
     "testing_verification": {
-      "fileCount": 30,
-      "codeLines": 4321,
-      "sizeBytes": 201517
+      "fileCount": 32,
+      "codeLines": 4856,
+      "sizeBytes": 226020
     },
     "documentation_audit": {
       "fileCount": 10,
@@ -65,8 +65,8 @@
     }
   },
   "dependencyGraph": {
-    "totalNodes": 677,
-    "totalEdges": 1322,
+    "totalNodes": 680,
+    "totalEdges": 1351,
     "directAcyclicGraphValid": true,
     "cyclicDependencyPaths": [],
     "subsystemCouplingMatrix": {
@@ -188,7 +188,7 @@
         "documentation_audit": 0
       },
       "testing_verification": {
-        "simulation_core": 63,
+        "simulation_core": 90,
         "engine_assembly": 0,
         "modular_vehicle": 7,
         "exterior_3d": 50,
@@ -197,7 +197,7 @@
         "ai_agent_framework": 8,
         "ui_components": 0,
         "asset_pipeline": 0,
-        "testing_verification": 29,
+        "testing_verification": 31,
         "documentation_audit": 4
       },
       "documentation_audit": {
@@ -311,14 +311,14 @@
         "outDegree": 2
       },
       {
+        "modulePath": "src/sim/modularVehicle/runTests.ts",
+        "inDegree": 0,
+        "outDegree": 31
+      },
+      {
         "modulePath": "src/components/assembly/SectionCard.tsx",
         "inDegree": 29,
         "outDegree": 0
-      },
-      {
-        "modulePath": "src/sim/modularVehicle/runTests.ts",
-        "inDegree": 0,
-        "outDegree": 29
       },
       {
         "modulePath": "src/components/assembly/InstallButton.tsx",
@@ -381,6 +381,11 @@
         "outDegree": 0
       },
       {
+        "modulePath": "src/sim/modularVehicle/__tests__/edgeCaseBoundaryTests.ts",
+        "inDegree": 1,
+        "outDegree": 14
+      },
+      {
         "modulePath": "src/engine3d/generators/masterExporter.ts",
         "inDegree": 0,
         "outDegree": 14
@@ -394,6 +399,11 @@
         "modulePath": "src/components/vehicleAssembly/VehicleSVG.tsx",
         "inDegree": 3,
         "outDegree": 10
+      },
+      {
+        "modulePath": "src/sim/modularVehicle/__tests__/crossSubsystemIntegrationTests.ts",
+        "inDegree": 1,
+        "outDegree": 12
       },
       {
         "modulePath": "src/sim/physics/lapSimulator.ts",
@@ -541,7 +551,47 @@
         "outDegree": 0
       },
       {
+        "modulePath": "src/sim/aerodynamics/activeVenturiDiffuserSolver.ts",
+        "inDegree": 4,
+        "outDegree": 0
+      },
+      {
+        "modulePath": "src/sim/ai/autonomousModelPredictiveController.ts",
+        "inDegree": 4,
+        "outDegree": 0
+      },
+      {
+        "modulePath": "src/sim/battery/solidStateLithiumMultiPhysics.ts",
+        "inDegree": 4,
+        "outDegree": 0
+      },
+      {
+        "modulePath": "src/sim/brakes/brakeByWireBlendingSolver.ts",
+        "inDegree": 4,
+        "outDegree": 0
+      },
+      {
         "modulePath": "src/sim/constants/exteriorConstants.ts",
+        "inDegree": 4,
+        "outDegree": 0
+      },
+      {
+        "modulePath": "src/sim/drivetrain/activeAwdTransferCaseSolver.ts",
+        "inDegree": 4,
+        "outDegree": 0
+      },
+      {
+        "modulePath": "src/sim/powertrain/pmsmFluxWeakeningRotorFea.ts",
+        "inDegree": 4,
+        "outDegree": 0
+      },
+      {
+        "modulePath": "src/sim/powertrain/sicInverterThermalSolver.ts",
+        "inDegree": 4,
+        "outDegree": 0
+      },
+      {
+        "modulePath": "src/sim/suspension/dualChamberAirSuspensionSolver.ts",
         "inDegree": 4,
         "outDegree": 0
       }
@@ -969,13 +1019,13 @@
         "lineCount": 865
       }
     ],
-    "missingTypeAnnotationCount": 202,
+    "missingTypeAnnotationCount": 228,
     "todoCommentCount": 0,
     "fixmeCommentCount": 0,
-    "testCoverageRatioPct": 13,
+    "testCoverageRatioPct": 14,
     "recommendations": [
       "Modularize 49 monolithic files (>500 lines) into focused subsystem domain modules.",
-      "Replace 202 loose 'any' type annotations with strict TypeScript generic/interface types.",
+      "Replace 228 loose 'any' type annotations with strict TypeScript generic/interface types.",
       "Maintain 100% deterministic transform snap repeatability across all 36 chassis sockets.",
       "Ensure all 3D assets implement strict level of detail (LOD 1-6) polygon and texture budgets."
     ]

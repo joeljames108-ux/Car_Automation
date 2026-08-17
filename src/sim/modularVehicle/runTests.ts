@@ -26,6 +26,8 @@ import { Phases90to94MasterTestRunner } from "./__tests__/phases90to94MasterTest
 import { Phases95to100MasterTestRunner } from "./__tests__/phases95to100MasterTests";
 import { Phases101to105MasterTestRunner } from "./__tests__/phases101to105MasterTests";
 import { Phases106to110MasterTestRunner } from "./__tests__/phases106to110MasterTests";
+import { CrossSubsystemIntegrationTestRunner } from "./__tests__/crossSubsystemIntegrationTests";
+import { EdgeCaseBoundaryTestRunner } from "./__tests__/edgeCaseBoundaryTests";
 import { runModularVehicleConstructionTests } from "./modularVehicleConstructionTestRunner";
 
 console.log("=================================================");
@@ -60,6 +62,8 @@ const phases90to94Runner = new Phases90to94MasterTestRunner();
 const phases95to100Runner = new Phases95to100MasterTestRunner();
 const phases101to105Runner = new Phases101to105MasterTestRunner();
 const phases106to110Runner = new Phases106to110MasterTestRunner();
+const crossSubsystemRunner = new CrossSubsystemIntegrationTestRunner();
+const edgeCaseRunner = new EdgeCaseBoundaryTestRunner();
 
 const results = [
   ...runner.executeAllTests(),
@@ -90,6 +94,8 @@ const results = [
   ...phases95to100Runner.executeAllTests(),
   ...phases101to105Runner.executeAllTests(),
   ...phases106to110Runner.executeAllTests(),
+  ...crossSubsystemRunner.executeAllTests(),
+  ...edgeCaseRunner.executeAllTests(),
 ];
 
 let passedCount = 0;
@@ -117,4 +123,3 @@ const constrResults = runModularVehicleConstructionTests();
 if (constrResults.failed > 0 || failedCount > 0) {
   process.exit(1);
 }
-
