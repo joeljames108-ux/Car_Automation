@@ -24,6 +24,7 @@ import {
   AerodynamicForcesResult,
 } from '../../sim/aerodynamics/cfdWindTunnelSimulator';
 import { HighFidelitySedanChassisGenerator } from '../../exterior3d/generators/highFidelitySedanChassisGenerator';
+import { StudioEnvironmentGenerator } from '../../exterior3d/environment/StudioEnvironmentGenerator';
 
 export const AerodynamicWindTunnelViewport: React.FC = () => {
   const mountRef = useRef<HTMLDivElement>(null);
@@ -44,7 +45,7 @@ export const AerodynamicWindTunnelViewport: React.FC = () => {
 
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0x06080e);
-    scene.fog = new THREE.FogExp2(0x06080e, 0.08);
+    scene.fog = new THREE.FogExp2(0x06080e, 0.04);
 
     const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 50);
     camera.position.set(4.5, 2.2, 4.0);
@@ -53,25 +54,27 @@ export const AerodynamicWindTunnelViewport: React.FC = () => {
     renderer.setSize(width, height);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.2;
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     mountRef.current.appendChild(renderer.domElement);
+
+    // Studio Environment Radiance Map
+    if (typeof document !== 'undefined') {
+      scene.environment = StudioEnvironmentGenerator.createStudioRadianceMap(renderer);
+    }
 
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
     controls.target.set(0, 0.5, -0.6);
 
     // 2. Wind Tunnel Lighting
-    const ambientLight = new THREE.AmbientLight(0x1e293b, 1.2);
-    scene.add(ambientLight);
+    StudioEnvironmentGenerator.setupStudioLighting(scene, 'darkWindTunnel');
 
-    const keyLight = new THREE.DirectionalLight(0x38bdf8, 2.5);
-    keyLight.position.set(5, 8, 5);
-    scene.add(keyLight);
+    // 3. Ground Plane with Soft Contact Shadow
+    const shadowPlane = StudioEnvironmentGenerator.createContactShadowPlane(2.6, 5.0, 0.85);
+    scene.add(shadowPlane);
 
-    const rimLight = new THREE.DirectionalLight(0xec4899, 1.8);
-    rimLight.position.set(-5, 3, -6);
-    scene.add(rimLight);
-
-    // 3. Ground Plane with Wind Tunnel Floor Markings
     const grid = new THREE.GridHelper(12, 24, 0x00f0ff, 0x1e293b);
     grid.position.y = 0;
     scene.add(grid);

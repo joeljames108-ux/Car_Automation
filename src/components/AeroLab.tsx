@@ -1,13 +1,14 @@
 import { useMemo, useState } from "react";
 import {
   Wind, CarFront, Layers3, Combine, Zap, Plane, Thermometer, Disc3,
-  Video, BarChart3, Gauge, TrendingUp, CircuitBoard, Bot, Sparkles,
+  Video, BarChart3, Gauge, TrendingUp, CircuitBoard, Bot, Sparkles, Box,
 } from "lucide-react";
 import { useDesign } from "../state/DesignContext";
 import type { SimResult, AeroResearchConfig } from "../sim/types";
 import { Section, Slider, Select, ChoiceGrid, Toggle, StatTile } from "./ui/Controls";
 import { CFDView } from "./ui/CFDView";
 import { LineChart } from "./ui/LineChart";
+import { AerodynamicsStudio } from "./aerodynamics/AerodynamicsStudio";
 import {
   FRONT_BUMPER_SHAPES, SIDEPOD_INLET_POSITIONS, UNDERBODY_FLOOR_TYPES,
   WHEEL_AERO_TYPES, MIRROR_AERO_TYPES, AERO_MODES,
@@ -60,6 +61,7 @@ function MetricBar({ label, value, accent = "accent" }: { label: string; value: 
 export function AeroLab() {
   const { design, sim, updateAeroResearch, uiTheme } = useDesign();
   const ar = design.vehicle.aeroResearch;
+  const [labMode, setLabMode] = useState<"studio" | "dashboard">("studio");
   const [dept, setDept] = useState<Dept>("dashboard");
 
   const update = <K extends keyof AeroResearchConfig>(key: K, patch: Partial<AeroResearchConfig[K]>) =>
@@ -67,55 +69,91 @@ export function AeroLab() {
 
   return (
     <div className="space-y-4">
-      {/* UI 4: Modern Analog Dial & Gradient Sliders Showcase (As seen in Reference Photo) */}
-      {uiTheme === "theme4" && (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-2">
-          <ModernAnalogDial
-            title="AERODYNAMIC PROFILE"
-            value={ar.rearWing.angleOfAttack}
-            min={0}
-            max={40}
-            unit="°"
-            sublabel="L/D Ratio"
-            onChange={(val) => update("rearWing", { angleOfAttack: val })}
-          />
-          <div className="flex flex-col gap-3 justify-center">
-            <GlassSlider
-              label="CFD Visualization Intensity"
-              value={80}
-              min={0}
-              max={100}
-              unit="%"
-            />
-            <GlassSlider
-              label="Ride Height (mm)"
-              value={design.vehicle.aero?.rideHeight ?? 80}
-              min={40}
-              max={120}
-              unit="mm"
-              onChange={(v) => updateAeroResearch({ windTunnel: { ...ar.windTunnel, rideHeight: v } })}
-            />
-          </div>
-          <div className="flex flex-col gap-3 justify-center">
-            <GlassSlider
-              label="Downforce Load Balance"
-              value={52}
-              min={30}
-              max={70}
-              unit="% Front"
-            />
-            <GlassSlider
-              label="Active Aero Sensitivity"
-              value={75}
-              min={0}
-              max={100}
-              unit="%"
-            />
-          </div>
+      {/* Studio / Dashboard Mode Switcher */}
+      <div className="flex items-center justify-between p-2 rounded-xl bg-base-900/90 border border-base-800 shadow-sm">
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => setLabMode("studio")}
+            className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-bold font-mono transition-all border ${
+              labMode === "studio"
+                ? "bg-accent-500/20 border-accent-500/60 text-accent-300 shadow-sm"
+                : "bg-base-850 border-base-800 text-slate-400 hover:text-slate-200"
+            }`}
+          >
+            <Box size={14} className={labMode === "studio" ? "text-accent-400" : ""} />
+            🔬 PARAMETRIC 3D AERO STUDIO (PHASE 111–125)
+          </button>
+          <button
+            onClick={() => setLabMode("dashboard")}
+            className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-bold font-mono transition-all border ${
+              labMode === "dashboard"
+                ? "bg-accent-500/20 border-accent-500/60 text-accent-300 shadow-sm"
+                : "bg-base-850 border-base-800 text-slate-400 hover:text-slate-200"
+            }`}
+          >
+            <BarChart3 size={14} className={labMode === "dashboard" ? "text-accent-400" : ""} />
+            📊 AERO RESEARCH DASHBOARD & ANALYTICS
+          </button>
         </div>
-      )}
+        <div className="hidden sm:flex items-center gap-2 text-[11px] font-mono text-slate-400">
+          <span>Live Physical Coupling:</span>
+          <span className="text-ok-400 font-semibold">Active (3D &harr; CFD &harr; Lap Sim)</span>
+        </div>
+      </div>
 
-      <PresetQuickSelect />
+      {labMode === "studio" ? (
+        <AerodynamicsStudio />
+      ) : (
+        <>
+          {/* UI 4: Modern Analog Dial & Gradient Sliders Showcase (As seen in Reference Photo) */}
+          {uiTheme === "theme4" && (
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-2">
+              <ModernAnalogDial
+                title="AERODYNAMIC PROFILE"
+                value={ar.rearWing.angleOfAttack}
+                min={0}
+                max={40}
+                unit="°"
+                sublabel="L/D Ratio"
+                onChange={(val) => update("rearWing", { angleOfAttack: val })}
+              />
+              <div className="flex flex-col gap-3 justify-center">
+                <GlassSlider
+                  label="CFD Visualization Intensity"
+                  value={80}
+                  min={0}
+                  max={100}
+                  unit="%"
+                />
+                <GlassSlider
+                  label="Ride Height (mm)"
+                  value={design.vehicle.aero?.rideHeight ?? 80}
+                  min={40}
+                  max={120}
+                  unit="mm"
+                  onChange={(v) => updateAeroResearch({ windTunnel: { ...ar.windTunnel, rideHeight: v } })}
+                />
+              </div>
+              <div className="flex flex-col gap-3 justify-center">
+                <GlassSlider
+                  label="Downforce Load Balance"
+                  value={52}
+                  min={30}
+                  max={70}
+                  unit="% Front"
+                />
+                <GlassSlider
+                  label="Active Aero Sensitivity"
+                  value={75}
+                  min={0}
+                  max={100}
+                  unit="%"
+                />
+              </div>
+            </div>
+          )}
+
+          <PresetQuickSelect />
 
       <div className="panel p-3">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-3">
@@ -466,6 +504,8 @@ export function AeroLab() {
           </Section>
         </div>
       </div>
+      )}
+      </>
       )}
     </div>
   );

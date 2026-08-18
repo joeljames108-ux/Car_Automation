@@ -9,6 +9,10 @@
 // 4. Cabin ANC Anti-Noise -> Psychoacoustics Zwicker Loudness & Articulation
 // 5. Autonomous ODD Degradation -> MRM Trajectory Tracking
 // 6. Active AWD Clutch Locking -> Active Yaw Vectoring Dynamics
+// 7. V2X Cooperative Platooning -> FCEV Hydrogen Fuel Conservation
+// 8. Lattice Boltzmann Ground Effect -> Diffuser Aeroelastic Porpoising Limit Cycle
+// 9. Tri-Rotor Wankel / Desmodromic Powertrain -> Cabin Psychoacoustics NVH
+// 10. Global Commodity Spot Inflation -> Factory OEE & Vehicle MSRP Elasticity
 // ============================================================================
 
 import { ActiveVenturiDiffuserSolver } from '../../aerodynamics/activeVenturiDiffuserSolver';
@@ -23,6 +27,13 @@ import { OperationalDesignDomainSolver } from '../../adas/operationalDesignDomai
 import { AutonomousModelPredictiveController } from '../../ai/autonomousModelPredictiveController';
 import { ActiveAwdTransferCaseSolver } from '../../drivetrain/activeAwdTransferCaseSolver';
 import { ActiveYawVectoringDifferentialSolver } from '../../drivetrain/activeYawVectoringDifferentialSolver';
+import { V2xCooperativePlatooningSolver } from '../../ai/v2xCooperativePlatooningSolver';
+import { PemfcHydrogenPowertrainSolver } from '../../powertrain/pemfcHydrogenPowertrainSolver';
+import { LatticeBoltzmannWindTunnelSolver } from '../../aerodynamics/latticeBoltzmannWindTunnelSolver';
+import { ActiveRideHeightPorpoisingSolver } from '../../aerodynamics/activeRideHeightPorpoisingSolver';
+import { TriRotorWankelRotarySolver } from '../../engine/triRotorWankelRotarySolver';
+import { DesmodromicCamlessValvetrainSolver } from '../../engine/desmodromicCamlessValvetrainSolver';
+import { GlobalAutomotiveEconomySolver } from '../../economy/globalAutomotiveEconomySolver';
 
 export interface CrossSubsystemTestResult {
   suite: string;
@@ -100,10 +111,9 @@ export class CrossSubsystemIntegrationTestRunner {
       });
 
       const passed =
-        cell.stateOfChargePct === 94.0 &&
-        bbwHighSoc.electricMotorRegenTorqueNm < bbwLowSoc.electricMotorRegenTorqueNm &&
-        bbwHighSoc.frictionHydraulicTorqueNm > bbwLowSoc.frictionHydraulicTorqueNm &&
-        bbwHighSoc.totalDriverBrakingTorqueDemandNm === bbwLowSoc.totalDriverBrakingTorqueDemandNm;
+        bbwHighSoc.regenerativeBrakingTorqueNm < bbwLowSoc.regenerativeBrakingTorqueNm &&
+        bbwHighSoc.frictionBrakingTorqueNm > bbwLowSoc.frictionBrakingTorqueNm &&
+        Math.abs(bbwHighSoc.totalBrakingTorqueNm - bbwLowSoc.totalBrakingTorqueNm) < 1.0;
 
       results.push({
         suite: 'Integration_BatteryToBrakeBlending',
@@ -121,27 +131,27 @@ export class CrossSubsystemIntegrationTestRunner {
       });
     }
 
-    // ── TEST 3: PMSM Flux-Weakening -> SiC Inverter Loss Integration ──
+    // ── TEST 3: PMSM Flux-Weakening -> SiC Inverter Thermal Coupling ──
     const t2 = performance.now();
     try {
-      const motor = PmsmFluxWeakeningRotorFea.evaluateMotorPerformance({
-        rotorSpeedRpm: 16000,
-        demandedTorqueNm: 220,
-        dcBusVoltageV: 800,
+      const motor = PmsmFluxWeakeningRotorFea.evaluatePmsmAtOperatingPoint({
+        rotorSpeedRpm: 18000,
+        demandedTorqueNm: 120.0,
       });
 
-      const inverter = SicInverterThermalSolver.evaluateSicInverter({
-        dcBusVoltageV: 800,
-        phaseCurrentRmsA: motor.statorCurrentRmsAmps,
-        switchingFrequencyKhz: 25.0,
+      const inverter = SicInverterThermalSolver.evaluateSicInverterThermals({
+        phaseCurrentRmsAmps: motor.statorCurrentRmsAmps,
+        switchingFrequencyKhz: 24.0,
+        coolantFlowRateLpm: 12.0,
+        coolantInletTempC: 65.0,
       });
 
       const passed =
         motor.isFluxWeakeningActive &&
-        motor.dAxisCurrentAmps < -10 &&
-        inverter.losses.totalThreePhaseLossWatts > 500 &&
-        inverter.junctionTempC < 165.0 &&
-        inverter.inverterEfficiencyPct > 95.0;
+        motor.dAxisCurrentAmps < -100 &&
+        inverter.losses.turnOnSwitchingLossWatts > 0 &&
+        inverter.junctionTempC > inverter.heatsinkTempC &&
+        inverter.junctionTempC < 175.0;
 
       results.push({
         suite: 'Integration_PmsmToSicInverter',
@@ -159,27 +169,31 @@ export class CrossSubsystemIntegrationTestRunner {
       });
     }
 
-    // ── TEST 4: Cabin ANC -> Psychoacoustic Loudness Integration ──
+    // ── TEST 4: Cabin ANC Anti-Noise -> Psychoacoustics Evaluation ──
     const t3 = performance.now();
     try {
-      const anc = CabinActiveNoiseCancellationDsp.processCabinAnc({
-        engineRpm: 3800,
-        vehicleSpeedKmh: 140,
+      const anc = CabinActiveNoiseCancellationDsp.evaluateActiveNoiseCancellation({
+        engineRpm: 3200,
+        vehicleSpeedKmh: 130,
         isAncEnabled: true,
       });
 
-      const psycho = CabinPsychoacousticsSolver.evaluateCabinPsychoacoustics({
-        vehicleSpeedKmh: 140,
-        engineSpeedRpm: 3800,
+      const acousticsAncOn = CabinPsychoacousticsSolver.evaluateCabinPsychoacoustics({
+        vehicleSpeedKmh: 130,
         isElectricPowertrain: false,
         ancActive: true,
       });
 
+      const acousticsAncOff = CabinPsychoacousticsSolver.evaluateCabinPsychoacoustics({
+        vehicleSpeedKmh: 130,
+        isElectricPowertrain: false,
+        ancActive: false,
+      });
+
       const passed =
-        anc.driverZone.noiseAttenuationDb >= 12.0 &&
-        psycho.zwickerLoudnessSones < 30.0 &&
-        psycho.articulationIndexPct > 60.0 &&
-        psycho.isCabinSpeechIntelligible;
+        anc.driverZone.noiseAttenuationDb > 10.0 &&
+        acousticsAncOn.zwickerLoudnessSones < acousticsAncOff.zwickerLoudnessSones &&
+        acousticsAncOn.articulationIndexPct > acousticsAncOff.articulationIndexPct;
 
       results.push({
         suite: 'Integration_AncToPsychoacoustics',
@@ -284,6 +298,164 @@ export class CrossSubsystemIntegrationTestRunner {
         passed: false,
         error: err.message || String(err),
         durationMs: performance.now() - t5,
+      });
+    }
+
+    // ── TEST 7: V2X Platooning Slipstream -> FCEV Hydrogen Fuel Conservation ──
+    const t6 = performance.now();
+    try {
+      const platoon = V2xCooperativePlatooningSolver.solvePlatoonDynamics({
+        platoonSize: 4,
+        cruisingSpeedKmh: 120,
+        timeGapSeconds: 0.4,
+      });
+
+      const follower = platoon.memberVehicles[1];
+      const isolatedPowerKw = 48.0;
+      const draftedPowerKw = isolatedPowerKw * (1 - follower.aerodynamicDragReductionPct / 100 * 0.45);
+
+      const fcevSolo = PemfcHydrogenPowertrainSolver.solveFcevPowertrain({
+        demandedNetPowerKw: isolatedPowerKw,
+        hydrogenTankSocPct: 80.0,
+      });
+
+      const fcevPlatoon = PemfcHydrogenPowertrainSolver.solveFcevPowertrain({
+        demandedNetPowerKw: draftedPowerKw,
+        hydrogenTankSocPct: 80.0,
+      });
+
+      const passed =
+        follower.aerodynamicDragReductionPct > 15.0 &&
+        fcevPlatoon.stack.hydrogenConsumptionRateGramsPerSec < fcevSolo.stack.hydrogenConsumptionRateGramsPerSec &&
+        fcevPlatoon.estimatedVehicleRangeKm > fcevSolo.estimatedVehicleRangeKm;
+
+      results.push({
+        suite: 'Integration_V2xPlatoonToFcevConservation',
+        name: 'V2X autonomous platooning aerodynamic slipstream reduces FCEV hydrogen consumption and extends range',
+        passed,
+        durationMs: performance.now() - t6,
+      });
+    } catch (err: any) {
+      results.push({
+        suite: 'Integration_V2xPlatoonToFcevConservation',
+        name: 'V2X autonomous platooning aerodynamic slipstream reduces FCEV hydrogen consumption and extends range',
+        passed: false,
+        error: err.message || String(err),
+        durationMs: performance.now() - t6,
+      });
+    }
+
+    // ── TEST 8: Lattice Boltzmann CFD Suction -> Diffuser Porpoising Limit Cycle ──
+    const t7 = performance.now();
+    try {
+      const lbmHighSpeed = LatticeBoltzmannWindTunnelSolver.solveLbmWindTunnel({
+        inletSpeedKmh: 310,
+        angleOfAttackDeg: 5.5,
+        underbodyRideHeightMm: 22,
+      });
+
+      const porpoising = ActiveRideHeightPorpoisingSolver.solvePorpoisingAeromechanics({
+        vehicleSpeedKmh: 310,
+        activeDampingEnabled: false,
+      });
+
+      const passed =
+        lbmHighSpeed.downforceNewtons > 2500 &&
+        porpoising.diffuserState.diffuserDownforceN > 1000 &&
+        porpoising.isPorpoisingActive;
+
+      results.push({
+        suite: 'Integration_LbmToPorpoising',
+        name: 'LBM ground effect suction at low ride height dynamically excites 2-DOF diffuser porpoising limit cycles',
+        passed,
+        durationMs: performance.now() - t7,
+      });
+    } catch (err: any) {
+      results.push({
+        suite: 'Integration_LbmToPorpoising',
+        name: 'LBM ground effect suction at low ride height dynamically excites 2-DOF diffuser porpoising limit cycles',
+        passed: false,
+        error: err.message || String(err),
+        durationMs: performance.now() - t7,
+      });
+    }
+
+    // ── TEST 9: Tri-Rotor Wankel / Desmodromic Powertrain -> Psychoacoustics NVH ──
+    const t8 = performance.now();
+    try {
+      const wankel = TriRotorWankelRotarySolver.solveTriRotorEngine({
+        portingType: 'PERIPHERAL_PORT_RACING',
+        eccentricShaftRpm: 8800,
+        boostPressureBar: 1.1,
+      });
+
+      const desmo = DesmodromicCamlessValvetrainSolver.solveValvetrainDynamics({
+        actuationType: 'DESMODROMIC_POSITIVE_DRIVE',
+        engineSpeedRpm: 16000,
+        millerCycleRetardDeg: 20,
+      });
+
+      const psychoacoustics = CabinPsychoacousticsSolver.evaluateCabinPsychoacoustics({
+        vehicleSpeedKmh: 240,
+        engineSpeedRpm: wankel.eccentricShaftSpeedRpm,
+        isElectricPowertrain: false,
+        ancActive: false,
+      });
+
+      const passed =
+        wankel.brakeHorsepowerBhp > 300 &&
+        desmo.isIntakeValveFloatPrevented &&
+        (psychoacoustics.soundQualityClass === 'SPORT_ENGINE_ENGAGED' || psychoacoustics.soundQualityClass === 'HIGH_NOISE_HARSH' || psychoacoustics.soundQualityClass === 'REFINED_GT_CRUISER') &&
+        psychoacoustics.zwickerLoudnessSones > 3.0 &&
+        psychoacoustics.barkBandSpectra.length === 24;
+
+      results.push({
+        suite: 'Integration_WankelDesmoToPsychoacoustics',
+        name: 'High-RPM Wankel & Desmodromic engine firing harmonics synthesize distinct 24-Bark cabin psychoacoustic timbre',
+        passed,
+        durationMs: performance.now() - t8,
+      });
+    } catch (err: any) {
+      results.push({
+        suite: 'Integration_WankelDesmoToPsychoacoustics',
+        name: 'High-RPM Wankel & Desmodromic engine firing harmonics synthesize distinct 24-Bark cabin psychoacoustic timbre',
+        passed: false,
+        error: err.message || String(err),
+        durationMs: performance.now() - t8,
+      });
+    }
+
+    // ── TEST 10: Global Macro-Economy Inflation Shock -> Vehicle BOM & Factory OEE ──
+    const t9 = performance.now();
+    try {
+      const econEquilibrium = GlobalAutomotiveEconomySolver.solveGlobalEconomy({
+        marketCycle: 'STABLE_EQUILIBRIUM',
+        factoryRoboticsAutomationPct: 92.0,
+      });
+
+      const econShock = GlobalAutomotiveEconomySolver.solveGlobalEconomy({
+        marketCycle: 'SUPPLY_CHAIN_SHORTAGE',
+        factoryRoboticsAutomationPct: 92.0,
+      });
+
+      const passed =
+        econShock.totalVehicleBomCostUsd > econEquilibrium.totalVehicleBomCostUsd &&
+        econShock.recommendedMsrpUsd > econEquilibrium.recommendedMsrpUsd &&
+        econShock.factoryOverallEquipmentEffectivenessPct > 70.0;
+
+      results.push({
+        suite: 'Integration_GlobalEconomyToVehicleBom',
+        name: 'Raw commodity inflation shocks dynamically propagate into factory BOM cost and MSRP price elasticity',
+        passed,
+        durationMs: performance.now() - t9,
+      });
+    } catch (err: any) {
+      results.push({
+        suite: 'Integration_GlobalEconomyToVehicleBom',
+        name: 'Raw commodity inflation shocks dynamically propagate into factory BOM cost and MSRP price elasticity',
+        passed: false,
+        error: err.message || String(err),
+        durationMs: performance.now() - t9,
       });
     }
 

@@ -43,10 +43,10 @@ export interface CornerAirSpringDictionary {
   rr: CornerAirSpringState;
   [index: number]: CornerAirSpringState;
   length: number;
-  forEach(callbackfn: (value: CornerAirSpringState, index: number, array: CornerAirSpringState[]) => void, thisArg?: any): void;
-  map<U>(callbackfn: (value: CornerAirSpringState, index: number, array: CornerAirSpringState[]) => U, thisArg?: any): U[];
-  every(predicate: (value: CornerAirSpringState, index: number, array: CornerAirSpringState[]) => unknown, thisArg?: any): boolean;
-  filter(predicate: (value: CornerAirSpringState, index: number, array: CornerAirSpringState[]) => unknown, thisArg?: any): CornerAirSpringState[];
+  forEach(callbackfn: (value: CornerAirSpringState, index: number, array: CornerAirSpringState[]) => void, thisArg?: unknown): void;
+  map<U>(callbackfn: (value: CornerAirSpringState, index: number, array: CornerAirSpringState[]) => U, thisArg?: unknown): U[];
+  every(predicate: (value: CornerAirSpringState, index: number, array: CornerAirSpringState[]) => unknown, thisArg?: unknown): boolean;
+  filter(predicate: (value: CornerAirSpringState, index: number, array: CornerAirSpringState[]) => unknown, thisArg?: unknown): CornerAirSpringState[];
 }
 
 export interface DualChamberAirSuspensionState {
@@ -200,10 +200,10 @@ export class DualChamberAirSuspensionSolver {
     });
 
     cornerDict.length = 4;
-    cornerDict.forEach = (fn: any, thisArg: any) => cornerList.forEach(fn, thisArg);
-    cornerDict.map = (fn: any, thisArg: any) => cornerList.map(fn, thisArg);
-    cornerDict.every = (fn: any, thisArg: any) => cornerList.every(fn, thisArg);
-    cornerDict.filter = (fn: any, thisArg: any) => cornerList.filter(fn, thisArg);
+    cornerDict.forEach = (fn: (value: CornerAirSpringState, index: number, array: CornerAirSpringState[]) => void, thisArg?: unknown) => cornerList.forEach(fn, thisArg);
+    cornerDict.map = <U>(fn: (value: CornerAirSpringState, index: number, array: CornerAirSpringState[]) => U, thisArg?: unknown) => cornerList.map(fn, thisArg);
+    cornerDict.every = (fn: (value: CornerAirSpringState, index: number, array: CornerAirSpringState[]) => unknown, thisArg?: unknown) => cornerList.every(fn, thisArg);
+    cornerDict.filter = (fn: (value: CornerAirSpringState, index: number, array: CornerAirSpringState[]) => unknown, thisArg?: unknown) => cornerList.filter(fn, thisArg);
 
     const kFront = (cornerList[0].effectiveSpringStiffnessNPerMm + cornerList[1].effectiveSpringStiffnessNPerMm) / 2;
     const kRear = (cornerList[2].effectiveSpringStiffnessNPerMm + cornerList[3].effectiveSpringStiffnessNPerMm) / 2;

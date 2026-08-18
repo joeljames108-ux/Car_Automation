@@ -60,6 +60,19 @@ export class CarbonCeramicThermalStressFea {
     });
   }
 
+  public static solveBrakeThermalStress(params: {
+    initialVehicleSpeedKmh?: number;
+    brakingPowerKw?: number;
+    rotorSpeedRpm?: number;
+    initialRotorTempC?: number;
+  } = {}): CarbonCeramicThermalFeaState {
+    return this.evaluateThermalStress({
+      brakingPowerKw: params.brakingPowerKw ?? 450,
+      rotorSpeedRpm: params.rotorSpeedRpm ?? ((params.initialVehicleSpeedKmh ?? 160) * 1000 / 3600 / 0.32 * 60 / (2 * Math.PI)),
+      initialRotorTempC: params.initialRotorTempC ?? 150,
+    });
+  }
+
   /**
    * Solves 1D/2D thermal conduction and thermo-elastic stress distribution in brake disc.
    */

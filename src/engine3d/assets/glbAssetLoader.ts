@@ -3,13 +3,15 @@
 // ============================================================================
 // High-performance asynchronous glTF 2.0 / GLB asset loader, deep cloning engine
 // with material independence, reference-counted GPU cache, procedural fallback
-// proxy geometry generator, and level-of-detail asset streaming.
+// proxy geometry generator supporting all 14 engine layouts, and LOD asset streaming.
 // ============================================================================
 
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import type { Engine3DComponentManifest, Engine3DComponentType } from '../types';
+import type { EngineConfig, EngineLayout } from '../../sim/types';
 import { globalMaterialLibrary } from '../materials/pbrMaterialSystem';
+import { buildTransaxleScene } from '../generators/transaxleGenerator';
 
 // ============================================================================
 // 1. CACHE ENTRY & PROGRESS INTERFACES
@@ -36,81 +38,205 @@ export interface AssetLoadProgress {
 export type AssetProgressListener = (progress: AssetLoadProgress) => void;
 
 // ============================================================================
-// 2. PROCEDURAL PROXY GEOMETRY FALLBACK GENERATOR
+// 2. PROCEDURAL PROXY GEOMETRY FALLBACK GENERATOR (MULTI-LAYOUT ARCHITECTURES)
 // ============================================================================
 
 /**
  * Builds realistic programmatic Three.js fallback proxy geometry if a requested
  * .glb asset file is loading or missing, ensuring the engine configurator remains
- * 100% interactive and structurally valid at all times.
+ * 100% interactive and structurally valid at all times across all engine layouts.
  */
-export function buildProceduralFallbackMesh(type: Engine3DComponentType): THREE.Group {
+export function buildProceduralFallbackMesh(
+  type: Engine3DComponentType,
+  config?: Partial<EngineConfig>
+): THREE.Group {
   const group = new THREE.Group();
   group.name = `Fallback_${type}`;
   const matLib = globalMaterialLibrary;
 
+  const layout: EngineLayout = config?.layout || 'v12';
+
+  // Compute Layout Parameters
+  const isInline = layout === 'i3' || layout === 'i4' || layout === 'i6';
+  const isBoxer = layout === 'boxer4' || layout === 'boxer6';
+  const isW = layout === 'w12' || layout === 'w16' || layout === 'w18';
+  const isRotary = layout === 'rotary';
+  const isElectric = layout === 'electric' || layout === 'hybrid';
+
+  const totalCylinders =
+    layout === 'i3' ? 3 :
+    layout === 'i4' || layout === 'boxer4' ? 4 :
+    layout === 'i6' || layout === 'v6' || layout === 'boxer6' ? 6 :
+    layout === 'v8' ? 8 :
+    layout === 'v10' ? 10 :
+    layout === 'w12' ? 12 :
+    layout === 'w16' ? 16 :
+    layout === 'w18' ? 18 :
+    12; // v12 baseline
+
+  const cylsPerBank = isInline ? totalCylinders : isBoxer ? totalCylinders / 2 : isW ? Math.ceil(totalCylinders / 4) : Math.ceil(totalCylinders / 2);
+  const blockLength = isInline
+    ? cylsPerBank === 3 ? 0.38 : cylsPerBank === 4 ? 0.48 : 0.68
+    : isBoxer
+    ? cylsPerBank === 2 ? 0.42 : 0.58
+    : isW
+    ? 0.68
+    : isRotary
+    ? 0.40
+    : isElectric
+    ? 0.36
+    : cylsPerBank === 3 ? 0.46 : cylsPerBank === 4 ? 0.56 : cylsPerBank === 5 ? 0.64 : 0.68;
+
+  const bankTilt = isInline ? 0 : isBoxer ? Math.PI / 2 : layout === 'v12' ? Math.PI / 6 : Math.PI / 4;
+
   switch (type) {
     case 'engine-block': {
-      // Crankcase bedplate
-      const crankcaseGeo = new THREE.BoxGeometry(0.68, 0.32, 0.14);
+      if (isElectric) {
+        // Finned Stator Axial-Flux Motor Casing
+        const motorGeo = new THREE.CylinderGeometry(0.18, 0.18, blockLength, 32);
+        motorGeo.rotateZ(Math.PI / 2);
+        const motorMesh = new THREE.Mesh(motorGeo, matLib.getCastAluminum());
+        group.add(motorMesh);
+
+        for (let r = -2; r <= 2; r++) {
+          const ribGeo = new THREE.TorusGeometry(0.185, 0.008, 8, 32);
+          ribGeo.rotateY(Math.PI / 2);
+          const rib = new THREE.Mesh(ribGeo, matLib.getMachinedBillet());
+          rib.position.set(r * 0.06, 0, 0);
+          group.add(rib);
+        }
+        break;
+      }
+
+      if (isRotary) {
+        // Dual Epitrochoid Rotor Housings & Intermediate Plate
+        for (let r = 0; r < 2; r++) {
+          const rX = -0.09 + r * 0.18;
+          const trochoidGeo = new THREE.CylinderGeometry(0.16, 0.16, 0.08, 24);
+          trochoidGeo.rotateZ(Math.PI / 2);
+          const housing = new THREE.Mesh(trochoidGeo, matLib.getCastAluminum());
+          housing.position.set(rX, 0, 0);
+          group.add(housing);
+        }
+        const plateGeo = new THREE.BoxGeometry(0.035, 0.32, 0.32);
+        const plateMid = new THREE.Mesh(plateGeo, matLib.getMachinedBillet());
+        group.add(plateMid);
+        break;
+      }
+
+      // 1. Crankcase bedplate
+      const crankcaseWidth = isBoxer ? 0.44 : isInline ? 0.22 : 0.32;
+      const crankcaseGeo = new THREE.BoxGeometry(blockLength, crankcaseWidth, 0.14);
       const crankcaseMesh = new THREE.Mesh(crankcaseGeo, matLib.getCastAluminum());
       crankcaseMesh.position.set(0, 0, 0.07);
       group.add(crankcaseMesh);
 
-      // 7 Main bearing saddles
-      for (let i = 0; i < 7; i++) {
-        const mx = -0.30 + i * (0.60 / 6);
-        const saddleGeo = new THREE.CylinderGeometry(0.045, 0.045, 0.30, 24);
+      // 2. Main bearing saddles
+      const mainCount = isInline ? cylsPerBank + 1 : cylsPerBank + 1;
+      for (let i = 0; i < mainCount; i++) {
+        const mx = -blockLength / 2 + 0.05 + i * ((blockLength - 0.10) / (mainCount - 1));
+        const saddleGeo = new THREE.CylinderGeometry(0.045, 0.045, crankcaseWidth * 0.9, 24);
         saddleGeo.rotateZ(Math.PI / 2);
         const saddleMesh = new THREE.Mesh(saddleGeo, matLib.getMachinedBillet());
         saddleMesh.position.set(mx, 0, 0.05);
         group.add(saddleMesh);
       }
 
-      // Bank 1 (Left, +Y tilted -30°)
-      const bank1Geo = new THREE.BoxGeometry(0.64, 0.18, 0.22);
-      const bank1Mesh = new THREE.Mesh(bank1Geo, matLib.getCastAluminum());
-      bank1Mesh.position.set(0, 0.11, 0.22);
-      bank1Mesh.rotation.x = -Math.PI / 6;
-      group.add(bank1Mesh);
+      // 3. Cylinder Banks & Nikasil Bores
+      if (isInline) {
+        const bankGeo = new THREE.BoxGeometry(blockLength * 0.94, 0.18, 0.22);
+        const bankMesh = new THREE.Mesh(bankGeo, matLib.getCastAluminum());
+        bankMesh.position.set(0, 0, 0.22);
+        group.add(bankMesh);
 
-      // Bank 2 (Right, -Y tilted +30°)
-      const bank2Geo = new THREE.BoxGeometry(0.64, 0.18, 0.22);
-      const bank2Mesh = new THREE.Mesh(bank2Geo, matLib.getCastAluminum());
-      bank2Mesh.position.set(0, -0.11, 0.22);
-      bank2Mesh.rotation.x = Math.PI / 6;
-      group.add(bank2Mesh);
+        for (let i = 0; i < cylsPerBank; i++) {
+          const cx = -blockLength / 2 + (i + 0.75) * (blockLength / (cylsPerBank + 0.5));
+          const boreGeo = new THREE.CylinderGeometry(0.044, 0.044, 0.18, 24, 1, true);
+          const boreMesh = new THREE.Mesh(boreGeo, matLib.getMachinedBillet());
+          boreMesh.position.set(cx, 0, 0.22);
+          group.add(boreMesh);
+        }
+      } else if (isBoxer) {
+        // Horizontally Opposed (180° Flat Left & Right)
+        const bankGeo = new THREE.BoxGeometry(blockLength * 0.94, 0.16, 0.14);
+        const bank1 = new THREE.Mesh(bankGeo, matLib.getCastAluminum());
+        bank1.position.set(0, 0.18, 0.07);
 
-      // 12 Nikasil cylinder bores
-      for (let i = 0; i < 6; i++) {
-        const cx = -0.27 + i * 0.108;
-        // Bank 1 bore
-        const b1BoreGeo = new THREE.CylinderGeometry(0.044, 0.044, 0.18, 24, 1, true);
-        const b1BoreMesh = new THREE.Mesh(b1BoreGeo, matLib.getMachinedBillet());
-        b1BoreMesh.position.set(cx, 0.11, 0.22);
-        b1BoreMesh.rotation.x = -Math.PI / 6;
-        group.add(b1BoreMesh);
+        const bank2 = bank1.clone();
+        bank2.position.y = -0.18;
+        group.add(bank1, bank2);
 
-        // Bank 2 bore
-        const b2BoreGeo = new THREE.CylinderGeometry(0.044, 0.044, 0.18, 24, 1, true);
-        const b2BoreMesh = new THREE.Mesh(b2BoreGeo, matLib.getMachinedBillet());
-        b2BoreMesh.position.set(cx + 0.015, -0.11, 0.22);
-        b2BoreMesh.rotation.x = Math.PI / 6;
-        group.add(b2BoreMesh);
+        for (let i = 0; i < cylsPerBank; i++) {
+          const cx = -blockLength / 2 + (i + 0.75) * (blockLength / cylsPerBank);
+          const boreGeo = new THREE.CylinderGeometry(0.044, 0.044, 0.14, 24, 1, true);
+          boreGeo.rotateX(Math.PI / 2);
+
+          const b1 = new THREE.Mesh(boreGeo, matLib.getMachinedBillet());
+          b1.position.set(cx, 0.18, 0.07);
+
+          const b2 = new THREE.Mesh(boreGeo, matLib.getMachinedBillet());
+          b2.position.set(cx + 0.015, -0.18, 0.07);
+          group.add(b1, b2);
+        }
+      } else {
+        // Vee & W configurations
+        const bankGeo = new THREE.BoxGeometry(blockLength * 0.94, 0.18, 0.22);
+        const bank1Mesh = new THREE.Mesh(bankGeo, matLib.getCastAluminum());
+        bank1Mesh.position.set(0, 0.11, 0.22);
+        bank1Mesh.rotation.x = -bankTilt;
+
+        const bank2Mesh = new THREE.Mesh(bankGeo, matLib.getCastAluminum());
+        bank2Mesh.position.set(0, -0.11, 0.22);
+        bank2Mesh.rotation.x = bankTilt;
+        group.add(bank1Mesh, bank2Mesh);
+
+        for (let i = 0; i < cylsPerBank; i++) {
+          const cx = -blockLength / 2 + (i + 0.75) * (blockLength / cylsPerBank);
+
+          const b1BoreGeo = new THREE.CylinderGeometry(0.044, 0.044, 0.18, 24, 1, true);
+          const b1BoreMesh = new THREE.Mesh(b1BoreGeo, matLib.getMachinedBillet());
+          b1BoreMesh.position.set(cx, 0.11, 0.22);
+          b1BoreMesh.rotation.x = -bankTilt;
+
+          const b2BoreGeo = new THREE.CylinderGeometry(0.044, 0.044, 0.18, 24, 1, true);
+          const b2BoreMesh = new THREE.Mesh(b2BoreGeo, matLib.getMachinedBillet());
+          b2BoreMesh.position.set(cx + 0.015, -0.11, 0.22);
+          b2BoreMesh.rotation.x = bankTilt;
+
+          group.add(b1BoreMesh, b2BoreMesh);
+        }
       }
       break;
     }
 
     case 'crankshaft': {
-      // Main shaft
-      const shaftGeo = new THREE.CylinderGeometry(0.034, 0.034, 0.68, 24);
+      if (isRotary) {
+        // Eccentric Shaft with 2 Rotor Lobes
+        const shaftGeo = new THREE.CylinderGeometry(0.028, 0.028, blockLength, 24);
+        shaftGeo.rotateZ(Math.PI / 2);
+        const shaftMesh = new THREE.Mesh(shaftGeo, matLib.getNitridedCrank());
+        group.add(shaftMesh);
+
+        for (let r = 0; r < 2; r++) {
+          const rx = -0.09 + r * 0.18;
+          const lobeGeo = new THREE.CylinderGeometry(0.055, 0.055, 0.065, 24);
+          lobeGeo.rotateZ(Math.PI / 2);
+          const lobe = new THREE.Mesh(lobeGeo, matLib.getMachinedBillet());
+          lobe.position.set(rx, 0, 0.02 * (r === 0 ? 1 : -1));
+          group.add(lobe);
+        }
+        break;
+      }
+
+      // Forged Nitrided Crankshaft
+      const shaftGeo = new THREE.CylinderGeometry(0.034, 0.034, blockLength, 24);
       shaftGeo.rotateZ(Math.PI / 2);
       const shaftMesh = new THREE.Mesh(shaftGeo, matLib.getNitridedCrank());
       group.add(shaftMesh);
 
-      // 6 Counterweights & throws
-      for (let i = 0; i < 6; i++) {
-        const mx = -0.27 + i * 0.108;
+      const throwCount = isInline ? cylsPerBank : cylsPerBank;
+      for (let i = 0; i < throwCount; i++) {
+        const mx = -blockLength / 2 + (i + 0.75) * (blockLength / throwCount);
         const lobeGeo = new THREE.CylinderGeometry(0.065, 0.065, 0.018, 24);
         lobeGeo.rotateZ(Math.PI / 2);
         const lobeMesh = new THREE.Mesh(lobeGeo, matLib.getNitridedCrank());
@@ -121,12 +247,10 @@ export function buildProceduralFallbackMesh(type: Engine3DComponentType): THREE.
     }
 
     case 'piston': {
-      // Piston crown & skirt
       const crownGeo = new THREE.CylinderGeometry(0.043, 0.043, 0.045, 24);
       const crownMesh = new THREE.Mesh(crownGeo, matLib.getMachinedBillet());
       group.add(crownMesh);
 
-      // Wrist pin boss
       const pinGeo = new THREE.CylinderGeometry(0.012, 0.012, 0.040, 16);
       pinGeo.rotateZ(Math.PI / 2);
       const pinMesh = new THREE.Mesh(pinGeo, matLib.getNitridedCrank());
@@ -136,19 +260,16 @@ export function buildProceduralFallbackMesh(type: Engine3DComponentType): THREE.
     }
 
     case 'connecting-rod': {
-      // Rod beam
       const rodGeo = new THREE.CylinderGeometry(0.012, 0.016, 0.14, 16);
       const rodMesh = new THREE.Mesh(rodGeo, matLib.getMachinedBillet());
       group.add(rodMesh);
 
-      // Big end journal
       const bigEndGeo = new THREE.CylinderGeometry(0.026, 0.026, 0.024, 20);
       bigEndGeo.rotateZ(Math.PI / 2);
       const bigEndMesh = new THREE.Mesh(bigEndGeo, matLib.getMachinedBillet());
       bigEndMesh.position.set(0, -0.07, 0);
       group.add(bigEndMesh);
 
-      // Small end pin
       const smallEndGeo = new THREE.CylinderGeometry(0.016, 0.016, 0.022, 16);
       smallEndGeo.rotateZ(Math.PI / 2);
       const smallEndMesh = new THREE.Mesh(smallEndGeo, matLib.getMachinedBillet());
@@ -159,13 +280,13 @@ export function buildProceduralFallbackMesh(type: Engine3DComponentType): THREE.
 
     case 'cylinder-head-left':
     case 'cylinder-head-right': {
-      const headGeo = new THREE.BoxGeometry(0.62, 0.16, 0.10);
+      const headLength = blockLength * 0.94;
+      const headGeo = new THREE.BoxGeometry(headLength, 0.16, 0.10);
       const headMesh = new THREE.Mesh(headGeo, matLib.getMachinedBillet());
       group.add(headMesh);
 
-      // 2 Camshafts
       [-0.04, 0.04].forEach((offset) => {
-        const camGeo = new THREE.CylinderGeometry(0.016, 0.016, 0.60, 20);
+        const camGeo = new THREE.CylinderGeometry(0.016, 0.016, headLength * 0.96, 20);
         camGeo.rotateZ(Math.PI / 2);
         const camMesh = new THREE.Mesh(camGeo, matLib.getMachinedBillet());
         camMesh.position.set(0, offset, 0.06);
@@ -176,7 +297,8 @@ export function buildProceduralFallbackMesh(type: Engine3DComponentType): THREE.
 
     case 'valve-cover-left':
     case 'valve-cover-right': {
-      const coverGeo = new THREE.BoxGeometry(0.60, 0.15, 0.08);
+      const coverLength = blockLength * 0.92;
+      const coverGeo = new THREE.BoxGeometry(coverLength, 0.15, 0.08);
       const coverMesh = new THREE.Mesh(coverGeo, matLib.getGoldAnodized());
       group.add(coverMesh);
       break;
@@ -184,8 +306,8 @@ export function buildProceduralFallbackMesh(type: Engine3DComponentType): THREE.
 
     case 'intake-manifold-left':
     case 'intake-manifold-right': {
-      for (let i = 0; i < 6; i++) {
-        const cx = -0.25 + i * 0.10;
+      for (let i = 0; i < cylsPerBank; i++) {
+        const cx = -blockLength / 2 + (i + 0.75) * (blockLength / cylsPerBank);
         const stackGeo = new THREE.CylinderGeometry(0.034, 0.022, 0.08, 24);
         const stackMesh = new THREE.Mesh(stackGeo, matLib.getCobaltAnodized());
         stackMesh.position.set(cx, 0, 0.04);
@@ -196,8 +318,8 @@ export function buildProceduralFallbackMesh(type: Engine3DComponentType): THREE.
 
     case 'exhaust-header-left':
     case 'exhaust-header-right': {
-      for (let i = 0; i < 6; i++) {
-        const cx = -0.27 + i * 0.108;
+      for (let i = 0; i < cylsPerBank; i++) {
+        const cx = -blockLength / 2 + (i + 0.75) * (blockLength / cylsPerBank);
         const pipeGeo = new THREE.CylinderGeometry(0.020, 0.020, 0.16, 16);
         const pipeMesh = new THREE.Mesh(pipeGeo, matLib.getInconelExhaust());
         pipeMesh.position.set(cx, 0, 0);
@@ -219,7 +341,7 @@ export function buildProceduralFallbackMesh(type: Engine3DComponentType): THREE.
     }
 
     case 'dry-sump': {
-      const panGeo = new THREE.BoxGeometry(0.66, 0.30, 0.06);
+      const panGeo = new THREE.BoxGeometry(blockLength * 0.96, 0.30, 0.06);
       const panMesh = new THREE.Mesh(panGeo, matLib.getCastAluminum());
       group.add(panMesh);
       break;
@@ -233,18 +355,19 @@ export function buildProceduralFallbackMesh(type: Engine3DComponentType): THREE.
     }
 
     case 'transaxle': {
-      const transGeo = new THREE.BoxGeometry(0.38, 0.24, 0.22);
-      const transMesh = new THREE.Mesh(transGeo, matLib.getTransaxleMagnesium());
-      group.add(transMesh);
+      const transScene = buildTransaxleScene();
+      while (transScene.children.length > 0) {
+        group.add(transScene.children[0]);
+      }
       break;
     }
 
     case 'engine-cover': {
-      const coverPlateGeo = new THREE.BoxGeometry(0.62, 0.36, 0.025);
+      const coverPlateGeo = new THREE.BoxGeometry(blockLength * 0.92, 0.36, 0.025);
       const coverPlateMesh = new THREE.Mesh(coverPlateGeo, matLib.getDryCarbonFiber());
       group.add(coverPlateMesh);
 
-      const glassGeo = new THREE.BoxGeometry(0.48, 0.18, 0.008);
+      const glassGeo = new THREE.BoxGeometry(blockLength * 0.72, 0.18, 0.008);
       const glassMesh = new THREE.Mesh(glassGeo, matLib.getQuartzGlass());
       glassMesh.position.set(0, 0, 0.018);
       group.add(glassMesh);
@@ -300,7 +423,8 @@ export class GlbAssetCache {
    */
   public async loadComponentGlb(
     path: string,
-    fallbackType?: Engine3DComponentType
+    fallbackType?: Engine3DComponentType,
+    config?: Partial<EngineConfig>
   ): Promise<THREE.Group> {
     // 1. Return from cache if already loaded
     const cached = this.cache.get(path);
@@ -353,7 +477,7 @@ export class GlbAssetCache {
         undefined,
         (err) => {
           console.warn(`[GlbAssetCache] Failed to load GLB at '${path}', using procedural fallback. Details:`, err);
-          const fallback = buildProceduralFallbackMesh(fallbackType || 'engine-block');
+          const fallback = buildProceduralFallbackMesh(fallbackType || 'engine-block', config);
           this.optimizeLoadedScene(fallback);
 
           this.cache.set(path, {
@@ -379,14 +503,14 @@ export class GlbAssetCache {
   /**
    * Preloads all assets defined in a manifest list in parallel with progress updates.
    */
-  public async preloadManifests(manifests: Engine3DComponentManifest[]): Promise<void> {
+  public async preloadManifests(manifests: Engine3DComponentManifest[], config?: Partial<EngineConfig>): Promise<void> {
     const total = manifests.length;
     let loaded = 0;
     let failed = 0;
 
     const promises = manifests.map(async (m) => {
       try {
-        await this.loadComponentGlb(m.assetPath, m.type);
+        await this.loadComponentGlb(m.assetPath, m.type, config);
         loaded++;
       } catch {
         failed++;

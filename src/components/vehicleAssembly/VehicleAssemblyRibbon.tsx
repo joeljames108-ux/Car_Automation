@@ -32,6 +32,7 @@ interface VehicleAssemblyRibbonProps {
   installedStages: VehicleSubsystemStage[];
   completionPercentage: number;
   onSelectStage: (stage: VehicleSubsystemStage) => void;
+  onInstallAll?: () => void;
 }
 
 const STAGE_ICONS: Record<VehicleSubsystemStage, React.ReactNode> = {
@@ -54,6 +55,7 @@ export const VehicleAssemblyRibbon: React.FC<VehicleAssemblyRibbonProps> = ({
   installedStages,
   completionPercentage,
   onSelectStage,
+  onInstallAll,
 }) => {
   const scrollRef = useRef<HTMLDivElement>(null);
 
@@ -67,7 +69,7 @@ export const VehicleAssemblyRibbon: React.FC<VehicleAssemblyRibbonProps> = ({
   return (
     <div className="bg-white/80 dark:bg-base-900/90 border border-slate-200 dark:border-slate-800 rounded-3xl p-4 backdrop-blur-xl shadow-xl space-y-3 font-mono">
       {/* Ribbon Header: Title + Completion Progress */}
-      <div className="flex items-center justify-between text-xs">
+      <div className="flex flex-wrap items-center justify-between gap-3 text-xs">
         <div className="flex items-center gap-2">
           <span className="p-1.5 rounded-xl bg-cyan-500/10 text-cyan-500 dark:text-cyan-400">
             <Car size={16} />
@@ -81,10 +83,20 @@ export const VehicleAssemblyRibbon: React.FC<VehicleAssemblyRibbonProps> = ({
         </div>
 
         <div className="flex items-center gap-3">
+          {onInstallAll && installedStages.length < SUBSYSTEM_STAGES.length && (
+            <button
+              onClick={onInstallAll}
+              className="px-2.5 py-1 rounded-xl bg-cyan-500/15 hover:bg-cyan-500/25 border border-cyan-500/40 text-cyan-400 text-[11px] font-bold transition-all cursor-pointer flex items-center gap-1.5"
+            >
+              <Zap size={12} />
+              <span>INSTALL ALL 12 STAGES</span>
+            </button>
+          )}
+
           <span className="text-[11px] text-slate-500 dark:text-slate-400 font-bold">
             Assembly Progress
           </span>
-          <div className="w-32 h-2.5 bg-slate-200 dark:bg-base-950 rounded-full overflow-hidden border border-slate-300 dark:border-slate-800">
+          <div className="w-28 h-2.5 bg-slate-200 dark:bg-base-950 rounded-full overflow-hidden border border-slate-300 dark:border-slate-800">
             <div
               className="h-full bg-gradient-to-r from-cyan-500 to-blue-500 transition-all duration-500"
               style={{ width: `${completionPercentage}%` }}

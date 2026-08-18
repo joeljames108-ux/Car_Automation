@@ -17,13 +17,21 @@ import { ModularVehicle3DViewport } from './ModularVehicle3DViewport';
 import { VehicleAssemblyRibbon } from './VehicleAssemblyRibbon';
 import { Vehicle3ColumnDeck } from './Vehicle3ColumnDeck';
 import { ModularInteriorWorkshop } from './ModularInteriorWorkshop';
+import { SUBSYSTEM_STAGES } from '../../exterior3d/manifests/modularComponentManifest';
 
 export const VehicleConstructionStudio: React.FC = () => {
   const store = useVehicleConstructionStore();
   const metrics = store.getComputedMetrics();
 
+  const handleNextStage = () => {
+    const currentIndex = SUBSYSTEM_STAGES.findIndex((s) => s.stage === store.activeStage);
+    if (currentIndex >= 0 && currentIndex < SUBSYSTEM_STAGES.length - 1) {
+      store.setActiveStage(SUBSYSTEM_STAGES[currentIndex + 1].stage);
+    }
+  };
+
   return (
-    <div className="space-y-4 font-mono">
+    <div className="space-y-4 font-mono pb-36">
       {/* ── STEP 1: BODY TYPE CAROUSEL ── */}
       <BodyTypeCarousel
         activeBodyType={store.activeBodyType}
@@ -68,13 +76,18 @@ export const VehicleConstructionStudio: React.FC = () => {
         installedStages={store.installedStages}
         completionPercentage={metrics.completionPercentage}
         onSelectStage={store.setActiveStage}
+        onInstallAll={() => SUBSYSTEM_STAGES.forEach((s) => store.installStage(s.stage))}
       />
 
       {/* ── STEP 5: 3-COLUMN CONFIGURATION DECK ── */}
       <Vehicle3ColumnDeck
         activeStage={store.activeStage}
+        installedStages={store.installedStages}
         materialGrade={store.materialGrades[store.activeStage] || 'forged'}
         onSelectMaterialGrade={(grade) => store.setMaterialGrade(store.activeStage, grade)}
+        onInstallStage={store.installStage}
+        onRemoveStage={store.removeStage}
+        onNextStage={handleNextStage}
         wheelbaseMm={store.wheelbaseMm}
         trackWidthFrontMm={store.trackWidthFrontMm}
         trackWidthRearMm={store.trackWidthRearMm}

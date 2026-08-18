@@ -39,7 +39,7 @@ export const ComponentMesh3D: React.FC<ComponentMesh3DProps> = ({ instance }) =>
     let isMounted = true;
 
     globalAssetCache
-      .loadComponentGlb(instance.manifestRef.assetPath, instance.type)
+      .loadComponentGlb(instance.manifestRef.assetPath, instance.type, engineConfig || undefined)
       .then((loadedGroup) => {
         if (isMounted) {
           // Enable shadow casting and receiving for all child meshes
@@ -57,7 +57,7 @@ export const ComponentMesh3D: React.FC<ComponentMesh3DProps> = ({ instance }) =>
       isMounted = false;
       globalAssetCache.releaseInstance(instance.manifestRef.assetPath);
     };
-  }, [instance.manifestRef.assetPath, instance.type]);
+  }, [instance.manifestRef.assetPath, instance.type, engineConfig?.layout]);
 
   // ── 2. Real-Time Transform, Parametric Sizing & Metallurgy Updates ──
   useFrame(() => {

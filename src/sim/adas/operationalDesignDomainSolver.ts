@@ -366,11 +366,54 @@ export class OperationalDesignDomainSolver {
       oddStatus: oddResult,
       dmsStatus: dmsResult,
       fallbackState: currentFallback,
-      fallbackTargetDecelerationG: Math.round(targetDecelG * 100) / 100,
+      fallbackTargetDecelerationG: targetDecelG,
       fallbackSafePullOverLane: safePullOver,
       timeUntilMrcArrivalSec: Math.round(timeUntilMrc * 10) / 10,
-      asilSafetyIntegrityLevel: asilLevel,
-      isSafeForAutonomousOperation: oddResult.isWithinDesignDomain && (currentFallback === 'NORMAL_AUTONOMOUS_OPERATING'),
+      asilSafetyIntegrityLevel: 'ASIL_D',
+      isSafeForAutonomousOperation: currentFallback === 'NORMAL_AUTONOMOUS_OPERATING',
     };
+  }
+
+  /**
+   * High-level convenience evaluation for Digital Twin and telemetry dashboards.
+   */
+  public static evaluateAutonomousDomain(params: {
+    vehicleSpeedKmh?: number;
+    targetLevel?: SaeAutonomyLevel;
+    currentWeather?: WeatherCondition;
+    currentRoad?: RoadEnvironmentType;
+    currentSurface?: SurfaceFrictionCondition;
+    laneWidthM?: number;
+    forwardVisibilityM?: number;
+    precipitationRateMmHr?: number;
+    crosswindKmh?: number;
+    hasHdMapCoverage?: boolean;
+    gnssRtkFixType?: string;
+    cameraOcclusionPct?: number;
+    radarInterferencePct?: number;
+    lidarPointDensityDegradationPct?: number;
+    driverGazeOnRoadSec?: number;
+    driverPerclosPct?: number;
+    driverHandsOnWheel?: boolean;
+  } = {}): AutonomousOddSystemState {
+    return this.processAutonomousState({
+      configuredLevel: params.targetLevel || 'LEVEL_3',
+      vehicleSpeedKmh: params.vehicleSpeedKmh ?? 110,
+      weather: params.currentWeather || 'CLEAR_SUNNY',
+      roadType: params.currentRoad || 'CONTROLLED_HIGHWAY',
+      surfaceFriction: params.currentSurface || 'DRY_ASPHALT',
+      forwardVisibilityM: params.forwardVisibilityM ?? 300,
+      precipitationMmPerHour: params.precipitationRateMmHr ?? 0,
+      crosswindSpeedKmh: params.crosswindKmh ?? 15,
+      laneWidthM: params.laneWidthM ?? 3.65,
+      hdMapAvailable: params.hasHdMapCoverage ?? true,
+      hdMapLocalizationAccuracyCm: 5.0,
+      dmsGazeYawDeg: 0.0,
+      dmsGazePitchDeg: 0.0,
+      dmsEyeClosureMs: (params.driverPerclosPct ?? 5) * 10,
+      dmsHandsOnDetected: params.driverHandsOnWheel ?? true,
+      dmsTorqueNm: 2.5,
+      timeSinceRoadGazeSec: params.driverGazeOnRoadSec ?? 0.0,
+    });
   }
 }

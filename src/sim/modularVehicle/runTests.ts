@@ -26,8 +26,15 @@ import { Phases90to94MasterTestRunner } from "./__tests__/phases90to94MasterTest
 import { Phases95to100MasterTestRunner } from "./__tests__/phases95to100MasterTests";
 import { Phases101to105MasterTestRunner } from "./__tests__/phases101to105MasterTests";
 import { Phases106to110MasterTestRunner } from "./__tests__/phases106to110MasterTests";
+import { Phases111to125AeroStudioTestRunner } from "./__tests__/phases111to125AeroStudioTests";
+import { ContinuousPipelineIntegrationTestRunner } from "./__tests__/continuousPipelineIntegrationTests";
 import { CrossSubsystemIntegrationTestRunner } from "./__tests__/crossSubsystemIntegrationTests";
 import { EdgeCaseBoundaryTestRunner } from "./__tests__/edgeCaseBoundaryTests";
+import { Phases1to108MasterBenchmarkTestRunner } from "./__tests__/phases1to108MasterBenchmarkTests";
+import { SupplyChainAndMultiPhysicsTestRunner } from "./__tests__/supplyChainAndMultiPhysicsTests";
+import { PlatformSharingTestRunner } from "./__tests__/platformSharingTests";
+import { CustomerLifecycleTestRunner } from "./__tests__/customerLifecycleTests";
+import { MotorsportHomologationTestRunner } from "./__tests__/motorsportHomologationTests";
 import { runModularVehicleConstructionTests } from "./modularVehicleConstructionTestRunner";
 
 console.log("=================================================");
@@ -62,8 +69,15 @@ const phases90to94Runner = new Phases90to94MasterTestRunner();
 const phases95to100Runner = new Phases95to100MasterTestRunner();
 const phases101to105Runner = new Phases101to105MasterTestRunner();
 const phases106to110Runner = new Phases106to110MasterTestRunner();
+const phases111to125Runner = new Phases111to125AeroStudioTestRunner();
+const continuousPipelineRunner = new ContinuousPipelineIntegrationTestRunner();
 const crossSubsystemRunner = new CrossSubsystemIntegrationTestRunner();
 const edgeCaseRunner = new EdgeCaseBoundaryTestRunner();
+const benchmarkRunner = new Phases1to108MasterBenchmarkTestRunner();
+const supplyChainRunner = new SupplyChainAndMultiPhysicsTestRunner();
+const platformSharingRunner = new PlatformSharingTestRunner();
+const customerLifecycleRunner = new CustomerLifecycleTestRunner();
+const motorsportRunner = new MotorsportHomologationTestRunner();
 
 const results = [
   ...runner.executeAllTests(),
@@ -94,8 +108,15 @@ const results = [
   ...phases95to100Runner.executeAllTests(),
   ...phases101to105Runner.executeAllTests(),
   ...phases106to110Runner.executeAllTests(),
+  ...phases111to125Runner.executeAllTests(),
+  ...continuousPipelineRunner.executeAllTests(),
   ...crossSubsystemRunner.executeAllTests(),
   ...edgeCaseRunner.executeAllTests(),
+  ...benchmarkRunner.executeAllTests(),
+  ...supplyChainRunner.executeAllTests(),
+  ...platformSharingRunner.executeAllTests(),
+  ...customerLifecycleRunner.executeAllTests(),
+  ...motorsportRunner.executeAllTests(),
 ];
 
 let passedCount = 0;
@@ -103,15 +124,24 @@ let failedCount = 0;
 
 results.forEach((res, index) => {
   const status = res.passed ? "✅ PASS" : "❌ FAIL";
+  if (!res.passed) {
+    console.error(`\n🚨 >>> FAILED TEST [${index + 1}]: [${res.suite}] ${res.name}\n    Error: ${res.error}\n`);
+  }
   console.log(`[${index + 1}/${results.length}] ${status} [${res.suite}] ${res.name} (${res.durationMs.toFixed(2)}ms)`);
   if (res.passed) {
     passedCount++;
   } else {
     failedCount++;
-    console.error(`    Error: ${res.error}`);
   }
 });
 
+const failedTests = results.filter((r) => !r.passed);
+if (failedTests.length > 0) {
+  console.log("\n❌ FAILED TESTS SUMMARY:");
+  failedTests.forEach((f) => {
+    console.log(`  - [${f.suite}] ${f.name} => Error: ${f.error}`);
+  });
+}
 console.log("-------------------------------------------------");
 console.log(`Results: ${passedCount} passed, ${failedCount} failed of ${results.length} tests.`);
 console.log("=================================================");

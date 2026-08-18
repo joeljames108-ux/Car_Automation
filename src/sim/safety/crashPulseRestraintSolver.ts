@@ -51,6 +51,21 @@ export interface CrashRestraintDeploymentState {
 
 export class CrashPulseRestraintSolver {
   /**
+   * Alias for backward compatibility with integration and benchmark tests.
+   */
+  public static solveCrashRestraintSystem(params: {
+    impactSpeedKmh?: number;
+    scenario?: CrashScenarioType;
+    chassisCrushDistanceMm?: number;
+  } = {}): CrashRestraintDeploymentState {
+    return this.evaluateCrashPulse({
+      impactVelocityKmh: params.impactSpeedKmh,
+      scenario: params.scenario,
+      chassisCrushDistanceMm: params.chassisCrushDistanceMm,
+    });
+  }
+
+  /**
    * Performs high-resolution time-domain integration of vehicle crash pulse and restraint dynamics.
    */
   public static evaluateCrashPulse(params: {

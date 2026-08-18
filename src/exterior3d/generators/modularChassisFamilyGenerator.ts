@@ -4,6 +4,10 @@
 // Procedurally constructs high-detail 3D geometry for any of the 50 chassis
 // platforms based on architecture class, wheelbase, track width, and ride height.
 // Supports Monocoque, Spaceframe, Ladder Frame, Carbon Monocell, and EV Skateboard.
+//
+// Standard Datum:
+//   Front Axle: X = +0.45m
+//   Rear Axle:  X = +0.45m - wbM
 // ============================================================================
 
 import * as THREE from 'three';
@@ -11,9 +15,6 @@ import { Chassis50Definition, ChassisArchitectureClass } from '../types/vehicleC
 import { MaterialGrade } from '../../sim/assemblyTypes';
 
 export class ModularChassisFamilyGenerator {
-  /**
-   * Builds the complete 3D Three.js Group for any selected chassis platform.
-   */
   public static buildChassisMesh(
     chassis: Chassis50Definition,
     materialGrade: MaterialGrade = 'forged',
@@ -27,7 +28,6 @@ export class ModularChassisFamilyGenerator {
     const halfTrM = (chassis.trackWidthRearMm / 2) / 1000;
     const rhM = chassis.rideHeightMm / 1000;
 
-    // Get PBR Material for the chosen metallurgy grade
     const chassisMaterial = this.getMetallurgyMaterial(chassis.architectureClass, materialGrade, isWireframe);
 
     switch (chassis.architectureClass) {
@@ -70,10 +70,14 @@ export class ModularChassisFamilyGenerator {
     rhM: number,
     material: THREE.Material
   ) {
-    // 1.1 Front Crash Box Rails (Left & Right)
-    const railGeo = new THREE.BoxGeometry(0.85, 0.12, 0.08);
+    const frontAxleX = 0.45;
+    const rearAxleX = frontAxleX - wbM;
+    const centerFloorX = (frontAxleX + rearAxleX) / 2;
+
+    // 1.1 Front Crash Box Rails
+    const railGeo = new THREE.BoxGeometry(0.75, 0.12, 0.08);
     const leftRail = new THREE.Mesh(railGeo, material);
-    leftRail.position.set(0.42, rhM + 0.16, -halfTfM * 0.55);
+    leftRail.position.set(frontAxleX + 0.35, rhM + 0.16, -halfTfM * 0.55);
     const rightRail = leftRail.clone();
     rightRail.position.z = halfTfM * 0.55;
     parent.add(leftRail, rightRail);
@@ -81,21 +85,21 @@ export class ModularChassisFamilyGenerator {
     // 1.2 Radiator Crossmember Yoke
     const yokeGeo = new THREE.BoxGeometry(0.08, 0.08, halfTfM * 1.2);
     const yoke = new THREE.Mesh(yokeGeo, material);
-    yoke.position.set(0.82, rhM + 0.16, 0);
+    yoke.position.set(frontAxleX + 0.72, rhM + 0.16, 0);
     parent.add(yoke);
 
-    // 1.3 Front Shock Towers (Cast Aluminum Domes)
-    const towerGeo = new THREE.CylinderGeometry(0.14, 0.18, 0.28, 16);
+    // 1.3 Front Shock Towers (Centered at Front Axle X = +0.45m)
+    const towerGeo = new THREE.CylinderGeometry(0.12, 0.16, 0.26, 16);
     const towerLeft = new THREE.Mesh(towerGeo, material);
-    towerLeft.position.set(0.05, rhM + 0.28, -halfTfM * 0.75);
+    towerLeft.position.set(frontAxleX, rhM + 0.28, -halfTfM * 0.72);
     const towerRight = towerLeft.clone();
-    towerRight.position.z = halfTfM * 0.75;
+    towerRight.position.z = halfTfM * 0.72;
     parent.add(towerLeft, towerRight);
 
-    // 1.4 Cowl Diagonal Braces (Strut to Firewall)
-    const braceGeo = new THREE.CylinderGeometry(0.02, 0.02, 0.55, 12);
+    // 1.4 Cowl Diagonal Braces
+    const braceGeo = new THREE.CylinderGeometry(0.018, 0.018, 0.45, 12);
     const braceLeft = new THREE.Mesh(braceGeo, material);
-    braceLeft.position.set(-0.15, rhM + 0.35, -halfTfM * 0.45);
+    braceLeft.position.set(frontAxleX - 0.18, rhM + 0.35, -halfTfM * 0.45);
     braceLeft.rotation.z = Math.PI / 4;
     braceLeft.rotation.y = Math.PI / 8;
     const braceRight = braceLeft.clone();
@@ -103,49 +107,40 @@ export class ModularChassisFamilyGenerator {
     braceRight.rotation.y = -Math.PI / 8;
     parent.add(braceLeft, braceRight);
 
-    // 1.5 Corrugated Floor Pan Sheet with Swages
-    const floorGeo = new THREE.BoxGeometry(wbM * 0.82, 0.04, halfTfM * 1.55);
+    // 1.5 Corrugated Floor Pan
+    const floorGeo = new THREE.BoxGeometry(wbM * 0.84, 0.04, halfTfM * 1.55);
     const floor = new THREE.Mesh(floorGeo, material);
-    floor.position.set(-wbM * 0.45, rhM + 0.06, 0);
+    floor.position.set(centerFloorX, rhM + 0.06, 0);
     parent.add(floor);
 
     // 1.6 Central Driveline Tunnel Arch
-    const tunnelGeo = new THREE.CylinderGeometry(0.14, 0.16, wbM * 0.85, 16, 1, false, 0, Math.PI);
+    const tunnelGeo = new THREE.CylinderGeometry(0.12, 0.14, wbM * 0.85, 16, 1, false, 0, Math.PI);
+    tunnelGeo.rotateZ(Math.PI / 2);
+    tunnelGeo.rotateX(Math.PI / 2);
     const tunnel = new THREE.Mesh(tunnelGeo, material);
-    tunnel.position.set(-wbM * 0.45, rhM + 0.12, 0);
-    tunnel.rotation.z = Math.PI / 2;
-    tunnel.rotation.x = Math.PI / 2;
+    tunnel.position.set(centerFloorX, rhM + 0.12, 0);
     parent.add(tunnel);
 
-    // 1.7 Outer Rocker Sills (Left & Right)
-    const sillGeo = new THREE.BoxGeometry(wbM * 0.88, 0.14, 0.12);
+    // 1.7 Outer Rocker Sills
+    const sillGeo = new THREE.BoxGeometry(wbM * 0.88, 0.12, 0.1);
     const sillLeft = new THREE.Mesh(sillGeo, material);
-    sillLeft.position.set(-wbM * 0.45, rhM + 0.12, -halfTfM * 0.88);
+    sillLeft.position.set(centerFloorX, rhM + 0.12, -halfTfM * 0.88);
     const sillRight = sillLeft.clone();
     sillRight.position.z = halfTfM * 0.88;
     parent.add(sillLeft, sillRight);
 
     // 1.8 Stepped Firewall Bulkhead
-    const firewallGeo = new THREE.BoxGeometry(0.06, 0.48, halfTfM * 1.6);
+    const firewallGeo = new THREE.BoxGeometry(0.06, 0.45, halfTfM * 1.55);
     const firewall = new THREE.Mesh(firewallGeo, material);
-    firewall.position.set(-0.18, rhM + 0.32, 0);
+    firewall.position.set(frontAxleX - 0.22, rhM + 0.32, 0);
     parent.add(firewall);
 
-    // 1.9 Rear Shock Towers & Subframe Cradle
+    // 1.9 Rear Shock Towers (Centered at Rear Axle X = rearAxleX)
     const rearTowerLeft = towerLeft.clone();
-    rearTowerLeft.position.set(-wbM, rhM + 0.3, -halfTrM * 0.75);
+    rearTowerLeft.position.set(rearAxleX, rhM + 0.28, -halfTrM * 0.72);
     const rearTowerRight = towerRight.clone();
-    rearTowerRight.position.set(-wbM, rhM + 0.3, halfTrM * 0.75);
+    rearTowerRight.position.set(rearAxleX, rhM + 0.28, halfTrM * 0.72);
     parent.add(rearTowerLeft, rearTowerRight);
-
-    // 1.10 Rear Parcel Shelf Diagonal X-Brace
-    const xBraceGeo = new THREE.CylinderGeometry(0.02, 0.02, halfTrM * 1.4, 12);
-    const x1 = new THREE.Mesh(xBraceGeo, material);
-    x1.position.set(-wbM + 0.25, rhM + 0.48, 0);
-    x1.rotation.x = Math.PI / 4;
-    const x2 = x1.clone();
-    x2.rotation.x = -Math.PI / 4;
-    parent.add(x1, x2);
   }
 
   // ── 2. TUBULAR SPACEFRAME GENERATOR ──
@@ -157,46 +152,63 @@ export class ModularChassisFamilyGenerator {
     rhM: number,
     material: THREE.Material
   ) {
-    const tubeRadius = 0.025;
+    const frontAxleX = 0.45;
+    const rearAxleX = frontAxleX - wbM;
+    const centerFloorX = (frontAxleX + rearAxleX) / 2;
+    const tubeRadius = 0.022;
 
-    // Main Lower Longitudinal Tubes
-    const longTubeGeo = new THREE.CylinderGeometry(tubeRadius, tubeRadius, wbM * 1.3, 12);
-    const longLeft = new THREE.Mesh(longTubeGeo, material);
-    longLeft.position.set(-wbM * 0.45, rhM + 0.08, -halfTfM * 0.75);
-    longLeft.rotation.z = Math.PI / 2;
-    const longRight = longLeft.clone();
-    longRight.position.z = halfTfM * 0.75;
-    parent.add(longLeft, longRight);
+    // Longitudinal Rails
+    const bottomRailGeo = new THREE.CylinderGeometry(tubeRadius, tubeRadius, wbM * 0.95, 12);
+    bottomRailGeo.rotateZ(Math.PI / 2);
 
-    // Upper Shoulder Tubes
-    const upperLeft = longLeft.clone();
-    upperLeft.position.set(-wbM * 0.45, rhM + 0.45, -halfTfM * 0.65);
-    const upperRight = longRight.clone();
-    upperRight.position.set(-wbM * 0.45, rhM + 0.45, halfTfM * 0.65);
-    parent.add(upperLeft, upperRight);
+    const leftBottomRail = new THREE.Mesh(bottomRailGeo, material);
+    leftBottomRail.position.set(centerFloorX, rhM + 0.08, -halfTfM * 0.82);
+    const rightBottomRail = leftBottomRail.clone();
+    rightBottomRail.position.z = halfTfM * 0.82;
 
-    // Triangulated Lateral Cross Braces (6 Verticals)
-    for (let i = 0; i < 5; i++) {
-      const xPos = 0.3 - (wbM * 1.2 * (i / 4));
-      const crossGeo = new THREE.CylinderGeometry(tubeRadius * 0.8, tubeRadius * 0.8, halfTfM * 1.3, 12);
-      const cross = new THREE.Mesh(crossGeo, material);
-      cross.position.set(xPos, rhM + 0.08, 0);
-      cross.rotation.x = Math.PI / 2;
-      parent.add(cross);
+    const leftTopRail = leftBottomRail.clone();
+    leftTopRail.position.y = rhM + 0.52;
+    const rightTopRail = rightBottomRail.clone();
+    rightTopRail.position.y = rhM + 0.52;
 
-      // Diagonal Upright Truss
-      const diagGeo = new THREE.CylinderGeometry(tubeRadius * 0.8, tubeRadius * 0.8, 0.48, 12);
-      const diagL = new THREE.Mesh(diagGeo, material);
-      diagL.position.set(xPos, rhM + 0.26, -halfTfM * 0.7);
-      diagL.rotation.x = Math.PI / 12;
-      const diagR = diagL.clone();
-      diagR.position.z = halfTfM * 0.7;
-      diagR.rotation.x = -Math.PI / 12;
-      parent.add(diagL, diagR);
-    }
+    parent.add(leftBottomRail, rightBottomRail, leftTopRail, rightTopRail);
+
+    // 4 Vertical Upright Struts
+    const vertGeo = new THREE.CylinderGeometry(tubeRadius, tubeRadius, 0.44, 12);
+    const v1 = new THREE.Mesh(vertGeo, material);
+    v1.position.set(frontAxleX - 0.15, rhM + 0.3, -halfTfM * 0.82);
+    const v2 = v1.clone();
+    v2.position.z = halfTfM * 0.82;
+    const v3 = new THREE.Mesh(vertGeo, material);
+    v3.position.set(rearAxleX + 0.15, rhM + 0.3, -halfTrM * 0.82);
+    const v4 = v3.clone();
+    v4.position.z = halfTrM * 0.82;
+    parent.add(v1, v2, v3, v4);
+
+    // 4 Transverse Cross-Tubes
+    const crossGeo = new THREE.CylinderGeometry(tubeRadius, tubeRadius, halfTfM * 1.6, 12);
+    crossGeo.rotateX(Math.PI / 2);
+    const c1 = new THREE.Mesh(crossGeo, material);
+    c1.position.set(frontAxleX - 0.15, rhM + 0.08, 0);
+    const c2 = new THREE.Mesh(crossGeo, material);
+    c2.position.set(frontAxleX - 0.15, rhM + 0.52, 0);
+    const c3 = new THREE.Mesh(crossGeo, material);
+    c3.position.set(rearAxleX + 0.15, rhM + 0.08, 0);
+    const c4 = new THREE.Mesh(crossGeo, material);
+    c4.position.set(rearAxleX + 0.15, rhM + 0.52, 0);
+    parent.add(c1, c2, c3, c4);
+
+    // 2 Diagonal X-Brace Tubes
+    const diagGeo = new THREE.CylinderGeometry(tubeRadius * 0.85, tubeRadius * 0.85, wbM * 0.6, 12);
+    diagGeo.rotateZ(Math.PI / 4);
+    const d1 = new THREE.Mesh(diagGeo, material);
+    d1.position.set(centerFloorX, rhM + 0.3, -halfTfM * 0.82);
+    const d2 = d1.clone();
+    d2.position.z = halfTfM * 0.82;
+    parent.add(d1, d2);
   }
 
-  // ── 3. HEAVY-DUTY LADDER FRAME GENERATOR ──
+  // ── 3. HEAVY DUTY LADDER FRAME GENERATOR ──
   private static buildLadderFrame(
     parent: THREE.Group,
     wbM: number,
@@ -205,34 +217,30 @@ export class ModularChassisFamilyGenerator {
     rhM: number,
     material: THREE.Material
   ) {
-    // Massive Boxed Channel Side Rails (Left & Right)
-    const channelGeo = new THREE.BoxGeometry(wbM * 1.5, 0.18, 0.1);
-    const leftChannel = new THREE.Mesh(channelGeo, material);
-    leftChannel.position.set(-wbM * 0.45, rhM + 0.15, -halfTfM * 0.65);
-    const rightChannel = leftChannel.clone();
-    rightChannel.position.z = halfTfM * 0.65;
-    parent.add(leftChannel, rightChannel);
+    const frontAxleX = 0.45;
+    const rearAxleX = frontAxleX - wbM;
+    const centerFloorX = (frontAxleX + rearAxleX) / 2;
+    const totalLength = wbM + 1.2;
 
-    // Heavy Round Crossmember Tubular Crossbars (5 Rungs)
-    for (let i = 0; i < 6; i++) {
-      const xPos = 0.5 - (wbM * 1.4 * (i / 5));
-      const rungGeo = new THREE.CylinderGeometry(0.045, 0.045, halfTfM * 1.3, 16);
-      const rung = new THREE.Mesh(rungGeo, material);
-      rung.position.set(xPos, rhM + 0.15, 0);
-      rung.rotation.x = Math.PI / 2;
-      parent.add(rung);
+    const mainBeamGeo = new THREE.BoxGeometry(totalLength, 0.16, 0.09);
+    const leftBeam = new THREE.Mesh(mainBeamGeo, material);
+    leftBeam.position.set(centerFloorX, rhM + 0.12, -halfTfM * 0.65);
+
+    const rightBeam = leftBeam.clone();
+    rightBeam.position.z = halfTfM * 0.65;
+    parent.add(leftBeam, rightBeam);
+
+    const numCrossmembers = 6;
+    const crossGeo = new THREE.BoxGeometry(0.1, 0.12, halfTfM * 1.3);
+    for (let i = 0; i < numCrossmembers; i++) {
+      const cross = new THREE.Mesh(crossGeo, material);
+      const posX = centerFloorX - totalLength / 2 + (i + 0.5) * (totalLength / numCrossmembers);
+      cross.position.set(posX, rhM + 0.12, 0);
+      parent.add(cross);
     }
-
-    // Rear Solid Axle Leaf Spring Perches
-    const perchGeo = new THREE.BoxGeometry(0.2, 0.08, 0.12);
-    const perchL = new THREE.Mesh(perchGeo, material);
-    perchL.position.set(-wbM, rhM + 0.06, -halfTrM * 0.65);
-    const perchR = perchL.clone();
-    perchR.position.z = halfTrM * 0.65;
-    parent.add(perchL, perchR);
   }
 
-  // ── 4. CARBON MONOCELL TUB GENERATOR ──
+  // ── 4. CARBON MONOCELL GENERATOR ──
   private static buildCarbonMonocell(
     parent: THREE.Group,
     wbM: number,
@@ -241,23 +249,20 @@ export class ModularChassisFamilyGenerator {
     rhM: number,
     material: THREE.Material
   ) {
-    // Seamless One-Piece Carbon Passenger Survival Tub
-    const tubGeo = new THREE.BoxGeometry(wbM * 0.72, 0.52, halfTfM * 1.45);
+    const frontAxleX = 0.45;
+    const rearAxleX = frontAxleX - wbM;
+    const centerFloorX = (frontAxleX + rearAxleX) / 2;
+
+    const tubGeo = new THREE.BoxGeometry(wbM * 0.72, 0.42, halfTfM * 1.35);
     const tub = new THREE.Mesh(tubGeo, material);
-    tub.position.set(-wbM * 0.42, rhM + 0.3, 0);
+    tub.position.set(centerFloorX, rhM + 0.24, 0);
     parent.add(tub);
 
-    // Front Bolt-On Extruded Aluminum Subframe
-    const frontSubGeo = new THREE.BoxGeometry(0.65, 0.22, halfTfM * 1.2);
-    const frontSub = new THREE.Mesh(frontSubGeo, material);
-    frontSub.position.set(0.38, rhM + 0.18, 0);
-    parent.add(frontSub);
-
-    // Rear Powertrain Cradle Subframe
-    const rearSubGeo = new THREE.BoxGeometry(0.75, 0.26, halfTrM * 1.25);
-    const rearSub = new THREE.Mesh(rearSubGeo, material);
-    rearSub.position.set(-wbM - 0.2, rhM + 0.18, 0);
-    parent.add(rearSub);
+    const noseConeGeo = new THREE.ConeGeometry(halfTfM * 0.55, 0.75, 16);
+    noseConeGeo.rotateZ(-Math.PI / 2);
+    const noseCone = new THREE.Mesh(noseConeGeo, material);
+    noseCone.position.set(frontAxleX + 0.45, rhM + 0.22, 0);
+    parent.add(noseCone);
   }
 
   // ── 5. SKATEBOARD EV PLATFORM GENERATOR ──
@@ -269,63 +274,27 @@ export class ModularChassisFamilyGenerator {
     rhM: number,
     material: THREE.Material
   ) {
-    // Structural Underfloor Battery Enclosure Tray
-    const trayGeo = new THREE.BoxGeometry(wbM * 0.78, 0.12, halfTfM * 1.55);
+    const frontAxleX = 0.45;
+    const rearAxleX = frontAxleX - wbM;
+    const centerFloorX = (frontAxleX + rearAxleX) / 2;
+
+    const trayGeo = new THREE.BoxGeometry(wbM * 0.85, 0.14, halfTfM * 1.6);
     const tray = new THREE.Mesh(trayGeo, material);
-    tray.position.set(-wbM * 0.45, rhM + 0.1, 0);
+    tray.position.set(centerFloorX, rhM + 0.12, 0);
     parent.add(tray);
-
-    // Front Electric Drive Unit (EDU) Inverter Housing
-    const frontEduGeo = new THREE.BoxGeometry(0.42, 0.28, 0.48);
-    const frontEdu = new THREE.Mesh(frontEduGeo, material);
-    frontEdu.position.set(0.05, rhM + 0.18, 0);
-    parent.add(frontEdu);
-
-    // Rear Electric Drive Unit (EDU) Dual Inverter Housing
-    const rearEduGeo = new THREE.BoxGeometry(0.52, 0.3, 0.58);
-    const rearEdu = new THREE.Mesh(rearEduGeo, material);
-    rearEdu.position.set(-wbM, rhM + 0.18, 0);
-    parent.add(rearEdu);
   }
 
-  // ── PBR METALLURGY MATERIAL FACTORY ──
   private static getMetallurgyMaterial(
-    architectureClass: ChassisArchitectureClass,
+    archClass: ChassisArchitectureClass,
     grade: MaterialGrade,
     isWireframe: boolean
-  ): THREE.MeshStandardMaterial {
-    let color = '#718096'; // default steel slate
-    let metalness = 0.85;
-    let roughness = 0.35;
-
-    if (grade === 'cast') {
-      color = '#4a5568';
-      roughness = 0.65;
-      metalness = 0.75;
-    } else if (grade === 'forged') {
-      color = '#a0aec0'; // bright aluminum
-      roughness = 0.25;
-      metalness = 0.92;
-    } else if (grade === 'billet') {
-      color = '#cbd5e0'; // CNC machine turned
-      roughness = 0.15;
-      metalness = 0.98;
-    } else if (grade === 'titanium') {
-      if (architectureClass === 'carbon_composite_monocell' || architectureClass === 'f1_prepreg_monocoque') {
-        color = '#1a202c'; // deep carbon weave
-        roughness = 0.3;
-        metalness = 0.4;
-      } else {
-        color = '#d6bcfa'; // iridescent titanium hue
-        roughness = 0.18;
-        metalness = 0.95;
-      }
-    }
+  ): THREE.Material {
+    const isCarbon = archClass === 'carbon_composite_monocell' || archClass === 'f1_prepreg_monocoque';
 
     return new THREE.MeshStandardMaterial({
-      color: new THREE.Color(color),
-      metalness,
-      roughness,
+      color: isCarbon ? 0x090d16 : grade === 'titanium' ? 0x64748b : 0x94a3b8,
+      metalness: isCarbon ? 0.9 : 0.85,
+      roughness: isCarbon ? 0.2 : 0.25,
       wireframe: isWireframe,
     });
   }

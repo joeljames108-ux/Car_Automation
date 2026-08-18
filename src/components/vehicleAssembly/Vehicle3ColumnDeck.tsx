@@ -1,11 +1,3 @@
-// ============================================================================
-// MODULAR glTF VEHICLE CONSTRUCTION SYSTEM — 3-COLUMN CONFIGURATION DECK
-// ============================================================================
-// Column 1: Part Parameters, Drivetrain Layout & Dimensional Geometry
-// Column 2: Metallurgy & Material Grade Selection (4 Tiers with Live Multipliers)
-// Column 3: Specification Impact (Mass, Rigidity, 0-100, G-Force, Cost & Advisory)
-// ============================================================================
-
 import React from 'react';
 import {
   Settings,
@@ -16,6 +8,11 @@ import {
   DollarSign,
   Shield,
   Gauge,
+  Wrench,
+  CheckCircle2,
+  Zap,
+  ArrowRight,
+  RotateCcw,
 } from 'lucide-react';
 import { VehicleSubsystemStage } from '../../exterior3d/types/vehicleConstructionTypes';
 import { MaterialGrade } from '../../sim/assemblyTypes';
@@ -23,8 +20,12 @@ import { Slider, ChoiceGrid } from '../ui/Controls';
 
 interface Vehicle3ColumnDeckProps {
   activeStage: VehicleSubsystemStage;
+  installedStages?: VehicleSubsystemStage[];
   materialGrade: MaterialGrade;
   onSelectMaterialGrade: (grade: MaterialGrade) => void;
+  onInstallStage?: (stage: VehicleSubsystemStage) => void;
+  onRemoveStage?: (stage: VehicleSubsystemStage) => void;
+  onNextStage?: () => void;
   wheelbaseMm: number;
   trackWidthFrontMm: number;
   trackWidthRearMm: number;
@@ -46,8 +47,12 @@ interface Vehicle3ColumnDeckProps {
 
 export const Vehicle3ColumnDeck: React.FC<Vehicle3ColumnDeckProps> = ({
   activeStage,
+  installedStages = [],
   materialGrade,
   onSelectMaterialGrade,
+  onInstallStage,
+  onRemoveStage,
+  onNextStage,
   wheelbaseMm,
   trackWidthFrontMm,
   trackWidthRearMm,
@@ -301,7 +306,7 @@ export const Vehicle3ColumnDeck: React.FC<Vehicle3ColumnDeckProps> = ({
         </div>
 
         {/* Engineering Advisory Card */}
-        <div className="p-3.5 rounded-2xl bg-cyan-500/5 dark:bg-cyan-950/30 border border-cyan-500/20 text-xs space-y-1.5">
+        <div className="p-3 rounded-2xl bg-cyan-500/5 dark:bg-cyan-950/30 border border-cyan-500/20 text-xs space-y-1">
           <div className="flex items-center gap-1.5 text-cyan-600 dark:text-cyan-400 font-bold">
             <Info size={14} />
             <span>ENGINEERING ADVISORY</span>
@@ -315,6 +320,45 @@ export const Vehicle3ColumnDeck: React.FC<Vehicle3ColumnDeckProps> = ({
               ? 'Die-Cast Aluminum delivers optimal 15% mass savings and balanced stiffness for high-performance executive vehicles.'
               : 'Stamped Steel is the robust, ductile baseline for mass manufacturing and economical production.'}
           </p>
+        </div>
+
+        {/* ── 4. DEDICATED ASSEMBLY INSTALLATION ACTION BUTTONS ── */}
+        <div className="pt-2 border-t border-slate-200 dark:border-slate-800 space-y-2">
+          {installedStages.includes(activeStage) ? (
+            <div className="flex items-center gap-2">
+              <div className="flex-1 flex items-center justify-center gap-2 py-2.5 px-3 rounded-2xl bg-emerald-500/15 border border-emerald-500/40 text-emerald-400 font-bold text-xs shadow-sm">
+                <CheckCircle2 size={16} />
+                <span>INSTALLED ON CHASSIS</span>
+              </div>
+              {onRemoveStage && (
+                <button
+                  onClick={() => onRemoveStage(activeStage)}
+                  title="Uninstall stage from chassis"
+                  className="p-2.5 rounded-2xl bg-slate-100 dark:bg-base-950 border border-slate-200 dark:border-slate-800 text-slate-400 hover:text-red-400 hover:border-red-500/40 transition-all cursor-pointer"
+                >
+                  <RotateCcw size={15} />
+                </button>
+              )}
+            </div>
+          ) : (
+            <button
+              onClick={() => onInstallStage && onInstallStage(activeStage)}
+              className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-2xl bg-gradient-to-r from-cyan-500 via-blue-600 to-indigo-600 hover:from-cyan-400 hover:via-blue-500 hover:to-indigo-500 text-slate-950 font-extrabold text-xs tracking-wider uppercase transition-all shadow-lg shadow-cyan-500/25 hover:shadow-cyan-500/40 hover:scale-[1.02] cursor-pointer"
+            >
+              <Zap size={16} className="fill-current" />
+              <span>INSTALL SUBSYSTEM TO VEHICLE</span>
+            </button>
+          )}
+
+          {onNextStage && (
+            <button
+              onClick={onNextStage}
+              className="w-full flex items-center justify-center gap-2 py-2 px-3 rounded-2xl bg-slate-100 dark:bg-base-950 hover:bg-slate-200 dark:hover:bg-base-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:text-cyan-400 text-xs font-bold transition-all cursor-pointer"
+            >
+              <span>PROCEED TO NEXT STAGE</span>
+              <ArrowRight size={14} />
+            </button>
+          )}
         </div>
       </div>
     </div>

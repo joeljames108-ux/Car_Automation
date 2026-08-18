@@ -22,8 +22,11 @@ export interface BrakeByWireBlendingState {
   pedalElastomerHysteresisN: number;
   totalPedalFeelForceN: number;
   totalDriverBrakingTorqueDemandNm: number;
+  totalBrakingTorqueNm: number; // Backward compatibility alias
   electricMotorRegenTorqueNm: number;
+  regenerativeBrakingTorqueNm: number; // Backward compatibility alias
   frictionHydraulicTorqueNm: number;
+  frictionBrakingTorqueNm: number; // Backward compatibility alias
   regenerativeSharePct: number;
   instantaneousRegenPowerKw: number;
   hydraulicCaliperPressureBar: number;
@@ -135,8 +138,11 @@ export class BrakeByWireBlendingSolver {
       pedalElastomerHysteresisN: Math.round(fHysteresisN * 10) / 10,
       totalPedalFeelForceN: Math.round(totalPedalForceN * 10) / 10,
       totalDriverBrakingTorqueDemandNm: Math.round(demandedTorqueNm),
+      totalBrakingTorqueNm: Math.round(demandedTorqueNm),
       electricMotorRegenTorqueNm: Math.round(actualRegenTorqueNm),
+      regenerativeBrakingTorqueNm: Math.round(actualRegenTorqueNm),
       frictionHydraulicTorqueNm: Math.round(frictionTorqueNm),
+      frictionBrakingTorqueNm: Math.round(frictionTorqueNm),
       regenerativeSharePct: Math.round(regenSharePct * 10) / 10,
       instantaneousRegenPowerKw: Math.round(regenPowerKw * 10) / 10,
       hydraulicCaliperPressureBar: Math.round(caliperPressureBar * 10) / 10,

@@ -19,27 +19,31 @@ export class AutomotivePBRMaterialSystem {
   // ==========================================================================
 
   /**
-   * Generates a 2x2 Twill Carbon Fiber Normal Map (128x128).
+   * Generates a High-Fidelity 2x2 Twill Carbon Fiber Normal Map (256x256)
+   * with herringbone tow bundle weaves and micro-filament striations.
    */
   public static getCarbonWeaveNormalTexture(): THREE.CanvasTexture {
-    const key = 'tex_carbon_weave_normal';
+    const key = 'tex_carbon_weave_normal_hd';
     if (this.textureCache.has(key)) {
       return this.textureCache.get(key)!;
     }
 
     if (typeof document === 'undefined') {
-      const data = new Uint8Array(128 * 128 * 4);
-      for (let y = 0; y < 128; y++) {
-        for (let x = 0; x < 128; x++) {
-          const idx = (y * 128 + x) * 4;
-          const pattern = Math.sin((x + y) * 0.4) * Math.cos((x - y) * 0.4);
-          data[idx] = Math.floor(128 + pattern * 60);
-          data[idx + 1] = Math.floor(128 + pattern * 60);
-          data[idx + 2] = 240;
+      const data = new Uint8Array(256 * 256 * 4);
+      for (let y = 0; y < 256; y++) {
+        for (let x = 0; x < 256; x++) {
+          const idx = (y * 256 + x) * 4;
+          const macroWeave = Math.sin((x + y) * 0.35) * Math.cos((x - y) * 0.35);
+          const microStriation = Math.sin((x + y) * 2.8) * 0.15;
+          const pattern = macroWeave + microStriation;
+
+          data[idx] = Math.floor(128 + pattern * 55);
+          data[idx + 1] = Math.floor(128 + pattern * 55);
+          data[idx + 2] = 238;
           data[idx + 3] = 255;
         }
       }
-      const dataTex = new THREE.DataTexture(data, 128, 128, THREE.RGBAFormat);
+      const dataTex = new THREE.DataTexture(data, 256, 256, THREE.RGBAFormat);
       dataTex.needsUpdate = true;
       const castTex = dataTex as unknown as THREE.CanvasTexture;
       this.textureCache.set(key, castTex);
@@ -47,24 +51,26 @@ export class AutomotivePBRMaterialSystem {
     }
 
     const canvas = document.createElement('canvas');
-    canvas.width = 128;
-    canvas.height = 128;
+    canvas.width = 256;
+    canvas.height = 256;
     const ctx = canvas.getContext('2d');
 
     if (ctx) {
-      const imgData = ctx.createImageData(128, 128);
+      const imgData = ctx.createImageData(256, 256);
       const data = imgData.data;
 
-      for (let y = 0; y < 128; y++) {
-        for (let x = 0; x < 128; x++) {
-          const idx = (y * 128 + x) * 4;
-          // 2x2 twill diagonal pattern
-          const pattern = Math.sin((x + y) * 0.4) * Math.cos((x - y) * 0.4);
+      for (let y = 0; y < 256; y++) {
+        for (let x = 0; x < 256; x++) {
+          const idx = (y * 256 + x) * 4;
+          // Dual-frequency 2x2 twill tow bundle wave + filament striation
+          const macroWeave = Math.sin((x + y) * 0.35) * Math.cos((x - y) * 0.35);
+          const microStriation = Math.sin((x + y) * 2.8) * 0.15;
+          const pattern = macroWeave + microStriation;
           
-          // Tangent-space Normal: R = X normal, G = Y normal, B = Z normal (128 = 0.5)
-          const nx = Math.floor(128 + pattern * 60);
-          const ny = Math.floor(128 + pattern * 60);
-          const nz = 240; // facing outward
+          // Tangent-space Normal: R = X normal, G = Y normal, B = Z normal
+          const nx = Math.floor(128 + pattern * 55);
+          const ny = Math.floor(128 + pattern * 55);
+          const nz = 238;
 
           data[idx] = Math.max(0, Math.min(255, nx));
           data[idx + 1] = Math.max(0, Math.min(255, ny));
@@ -137,15 +143,15 @@ export class AutomotivePBRMaterialSystem {
 
           // Concentric circular machining grooves
           const groove = Math.sin(r * 1.8) * 40;
-
-          // Normal direction perpendicular to radius
           const angle = Math.atan2(dy, dx);
+
           const nx = Math.floor(128 + Math.cos(angle) * groove);
           const ny = Math.floor(128 + Math.sin(angle) * groove);
+          const nz = 235;
 
           data[idx] = Math.max(0, Math.min(255, nx));
           data[idx + 1] = Math.max(0, Math.min(255, ny));
-          data[idx + 2] = 235;
+          data[idx + 2] = nz;
           data[idx + 3] = 255;
         }
       }
@@ -153,71 +159,29 @@ export class AutomotivePBRMaterialSystem {
     }
 
     const texture = new THREE.CanvasTexture(canvas);
+    texture.wrapS = THREE.ClampToEdgeWrapping;
+    texture.wrapT = THREE.ClampToEdgeWrapping;
     this.textureCache.set(key, texture);
     return texture;
   }
 
   /**
-   * Generates a Directional Tire Tread Normal Map.
+   * Generates a Perforated Sport Leather Normal Map.
    */
-  public static getTireTreadNormalTexture(): THREE.CanvasTexture {
-    const key = 'tex_tire_tread_normal';
-    if (this.textureCache.has(key)) {
-      return this.textureCache.get(key)!;
-    }
-
-    if (typeof document === 'undefined') {
-      const data = new Uint8Array(128 * 256 * 4);
-      data.fill(128);
-      const dataTex = new THREE.DataTexture(data, 128, 256, THREE.RGBAFormat);
-      dataTex.needsUpdate = true;
-      const castTex = dataTex as unknown as THREE.CanvasTexture;
-      this.textureCache.set(key, castTex);
-      return castTex;
-    }
-
-    const canvas = document.createElement('canvas');
-    canvas.width = 128;
-    canvas.height = 256;
-    const ctx = canvas.getContext('2d');
-
-    if (ctx) {
-      ctx.fillStyle = 'rgb(128, 128, 255)';
-      ctx.fillRect(0, 0, 128, 256);
-
-      // Longitudinal Grooves
-      ctx.fillStyle = 'rgb(100, 100, 240)';
-      ctx.fillRect(30, 0, 8, 256);
-      ctx.fillRect(60, 0, 8, 256);
-      ctx.fillRect(90, 0, 8, 256);
-
-      // Lateral Sipes
-      ctx.fillStyle = 'rgb(128, 90, 220)';
-      for (let y = 0; y < 256; y += 16) {
-        ctx.fillRect(0, y, 128, 3);
-      }
-    }
-
-    const texture = new THREE.CanvasTexture(canvas);
-    texture.wrapS = THREE.RepeatWrapping;
-    texture.wrapT = THREE.RepeatWrapping;
-    texture.repeat.set(4, 12);
-    this.textureCache.set(key, texture);
-    return texture;
-  }
-
-  /**
-   * Generates a Perforated Nappa Leather Normal Map.
-   */
-  public static getLeatherPoresNormalTexture(): THREE.CanvasTexture {
-    const key = 'tex_leather_pores_normal';
+  public static getPerforatedLeatherNormalTexture(): THREE.CanvasTexture {
+    const key = 'tex_perf_leather_normal';
     if (this.textureCache.has(key)) {
       return this.textureCache.get(key)!;
     }
 
     if (typeof document === 'undefined') {
       const data = new Uint8Array(128 * 128 * 4);
-      data.fill(128);
+      for (let i = 0; i < data.length; i += 4) {
+        data[i] = 128;
+        data[i + 1] = 128;
+        data[i + 2] = 255;
+        data[i + 3] = 255;
+      }
       const dataTex = new THREE.DataTexture(data, 128, 128, THREE.RGBAFormat);
       dataTex.needsUpdate = true;
       const castTex = dataTex as unknown as THREE.CanvasTexture;
@@ -231,272 +195,299 @@ export class AutomotivePBRMaterialSystem {
     const ctx = canvas.getContext('2d');
 
     if (ctx) {
-      ctx.fillStyle = 'rgb(128, 128, 255)';
-      ctx.fillRect(0, 0, 128, 128);
+      const imgData = ctx.createImageData(128, 128);
+      const data = imgData.data;
 
-      // Perforation dots
-      ctx.fillStyle = 'rgb(70, 70, 200)';
-      for (let y = 8; y < 128; y += 16) {
-        for (let x = 8; x < 128; x += 16) {
-          ctx.beginPath();
-          ctx.arc(x, y, 2.5, 0, Math.PI * 2);
-          ctx.fill();
+      for (let y = 0; y < 128; y++) {
+        for (let x = 0; x < 128; x++) {
+          const idx = (y * 128 + x) * 4;
+          // Grid holes every 16 pixels
+          const gx = x % 16;
+          const gy = y % 16;
+          const dist = Math.sqrt((gx - 8) * (gx - 8) + (gy - 8) * (gy - 8));
+
+          let nx = 128;
+          let ny = 128;
+          let nz = 240;
+
+          if (dist < 4) {
+            // Indented hole normal
+            nx = Math.floor(128 - (gx - 8) * 20);
+            ny = Math.floor(128 - (gy - 8) * 20);
+            nz = 180;
+          }
+
+          data[idx] = Math.max(0, Math.min(255, nx));
+          data[idx + 1] = Math.max(0, Math.min(255, ny));
+          data[idx + 2] = nz;
+          data[idx + 3] = 255;
         }
       }
+      ctx.putImageData(imgData, 0, 0);
     }
 
     const texture = new THREE.CanvasTexture(canvas);
     texture.wrapS = THREE.RepeatWrapping;
     texture.wrapT = THREE.RepeatWrapping;
-    texture.repeat.set(10, 10);
+    texture.repeat.set(8, 8);
     this.textureCache.set(key, texture);
     return texture;
   }
 
   // ==========================================================================
-  // 2. MASTER PBR MATERIAL LIBRARY
+  // 2. CHASSIS & SUBSTRUCTURE METALLURGY MATERIALS
   // ==========================================================================
 
-  /**
-   * High-Gloss Multi-Layer Automotive Paint with Clearcoat & Metallic Flake.
-   */
-  public static getAutomotivePaint(colorHex: string = '#0ea5e9'): THREE.MeshPhysicalMaterial {
-    const key = `paint_${colorHex}`;
-    if (this.materialCache.has(key)) {
-      return this.materialCache.get(key) as THREE.MeshPhysicalMaterial;
-    }
-
-    const mat = new THREE.MeshPhysicalMaterial({
-      color: new THREE.Color(colorHex),
-      metalness: 0.88,
-      roughness: 0.12,
-      clearcoat: 1.0,
-      clearcoatRoughness: 0.03,
-      ior: 1.52,
-      reflectivity: 0.9,
-      name: `Paint_${colorHex}`,
-    });
-
-    this.materialCache.set(key, mat);
-    return mat;
+  public static getChassisStructuralMaterial(grade: MaterialGrade, isXRay: boolean = false): THREE.Material {
+    return this.getMaterialForGrade(grade, isXRay);
   }
 
-  /**
-   * Carbon Fiber Composite (Dry or Gloss Twill).
-   */
-  public static getCarbonFiber(isGloss: boolean = true): THREE.MeshPhysicalMaterial {
-    const key = `carbon_${isGloss ? 'gloss' : 'dry'}`;
+  public static getMaterialForGrade(grade: MaterialGrade, isXRay: boolean = false): THREE.Material {
+    const key = `grade_${grade}_xray_${isXRay}`;
     if (this.materialCache.has(key)) {
-      return this.materialCache.get(key) as THREE.MeshPhysicalMaterial;
+      return this.materialCache.get(key)!;
     }
 
-    const mat = new THREE.MeshPhysicalMaterial({
-      color: new THREE.Color(0x18181b),
-      metalness: 0.65,
-      roughness: isGloss ? 0.22 : 0.85,
-      clearcoat: isGloss ? 0.95 : 0.0,
-      clearcoatRoughness: 0.04,
-      normalMap: this.getCarbonWeaveNormalTexture(),
-      normalScale: new THREE.Vector2(0.6, 0.6),
-      name: `CarbonFiber_${isGloss ? 'Gloss' : 'Dry'}`,
-    });
-
-    this.materialCache.set(key, mat);
-    return mat;
-  }
-
-  /**
-   * Cast Iron / Carbon-Ceramic Brake Rotor Material.
-   */
-  public static getBrakeRotorMaterial(isCarbonCeramic: boolean = false): THREE.MeshStandardMaterial {
-    const key = `brake_rotor_${isCarbonCeramic ? 'cc' : 'iron'}`;
-    if (this.materialCache.has(key)) {
-      return this.materialCache.get(key) as THREE.MeshStandardMaterial;
-    }
-
-    const mat = new THREE.MeshStandardMaterial({
-      color: isCarbonCeramic ? new THREE.Color(0x334155) : new THREE.Color(0x94a3b8),
-      metalness: isCarbonCeramic ? 0.45 : 0.85,
-      roughness: isCarbonCeramic ? 0.65 : 0.32,
-      normalMap: this.getBrakeRotorNormalTexture(),
-      normalScale: new THREE.Vector2(0.8, 0.8),
-      name: `BrakeRotor_${isCarbonCeramic ? 'CarbonCeramic' : 'CastIron'}`,
-    });
-
-    this.materialCache.set(key, mat);
-    return mat;
-  }
-
-  /**
-   * Anodized Brake Caliper Material.
-   */
-  public static getBrakeCaliperMaterial(colorHex: string = '#f59e0b'): THREE.MeshStandardMaterial {
-    const key = `caliper_${colorHex}`;
-    if (this.materialCache.has(key)) {
-      return this.materialCache.get(key) as THREE.MeshStandardMaterial;
-    }
-
-    const mat = new THREE.MeshStandardMaterial({
-      color: new THREE.Color(colorHex),
-      metalness: 0.92,
-      roughness: 0.18,
-      name: `Caliper_${colorHex}`,
-    });
-
-    this.materialCache.set(key, mat);
-    return mat;
-  }
-
-  /**
-   * High-Performance Tire Rubber Compound.
-   */
-  public static getTireRubberMaterial(): THREE.MeshStandardMaterial {
-    const key = 'tire_rubber';
-    if (this.materialCache.has(key)) {
-      return this.materialCache.get(key) as THREE.MeshStandardMaterial;
-    }
-
-    const mat = new THREE.MeshStandardMaterial({
-      color: new THREE.Color(0x18181b),
-      metalness: 0.02,
-      roughness: 0.84,
-      normalMap: this.getTireTreadNormalTexture(),
-      normalScale: new THREE.Vector2(1.0, 1.0),
-      name: 'TireRubber_SemiSlick',
-    });
-
-    this.materialCache.set(key, mat);
-    return mat;
-  }
-
-  /**
-   * Structural Chassis Box Rail & Subframe Metallurgy.
-   */
-  public static getChassisStructuralMaterial(grade: MaterialGrade = 'forged'): THREE.MeshStandardMaterial {
-    const key = `chassis_meta_${grade}`;
-    if (this.materialCache.has(key)) {
-      return this.materialCache.get(key) as THREE.MeshStandardMaterial;
-    }
-
-    let color = 0x475569;
-    let metalness = 0.85;
-    let roughness = 0.38;
+    let mat: THREE.Material;
 
     switch (grade) {
-      case 'titanium':
-        color = 0x64748b;
-        metalness = 0.95;
-        roughness = 0.25;
-        break;
-      case 'ceramic':
-        color = 0x1e293b;
-        metalness = 0.45;
-        roughness = 0.65;
-        break;
-      case 'billet':
-        color = 0x94a3b8;
-        metalness = 0.92;
-        roughness = 0.18;
-        break;
-      case 'cast':
-        color = 0x334155;
-        metalness = 0.75;
-        roughness = 0.55;
-        break;
       case 'forged':
+        // Forged Billet 7075-T6 Aluminum
+        mat = new THREE.MeshPhysicalMaterial({
+          color: new THREE.Color('#94a3b8'),
+          metalness: 0.94,
+          roughness: 0.18,
+          clearcoat: 0.4,
+          clearcoatRoughness: 0.1,
+          reflectivity: 0.9,
+          transparent: isXRay,
+          opacity: isXRay ? 0.35 : 1.0,
+          wireframe: false,
+        });
+        break;
+
+      case 'titanium':
+        // Grade 5 Titanium Ti-6Al-4V (Slight Golden-Blue Anodized Sheen)
+        mat = new THREE.MeshPhysicalMaterial({
+          color: new THREE.Color('#cbd5e1'),
+          metalness: 0.98,
+          roughness: 0.14,
+          clearcoat: 0.6,
+          clearcoatRoughness: 0.08,
+          reflectivity: 0.95,
+          sheen: 0.5,
+          sheenColor: new THREE.Color('#38bdf8'),
+          transparent: isXRay,
+          opacity: isXRay ? 0.35 : 1.0,
+        });
+        break;
+
+      case 'billet':
+        // CNC Milled 6061-T6 Billet
+        mat = new THREE.MeshPhysicalMaterial({
+          color: new THREE.Color('#cbd5e1'),
+          metalness: 0.92,
+          roughness: 0.15,
+          clearcoat: 0.5,
+          transparent: isXRay,
+          opacity: isXRay ? 0.35 : 1.0,
+        });
+        break;
+
+      case 'ceramic':
+        // Carbon Ceramic / Silicon Carbide Matrix
+        mat = new THREE.MeshStandardMaterial({
+          color: new THREE.Color('#0f172a'),
+          metalness: 0.88,
+          roughness: 0.24,
+          normalMap: this.getCarbonWeaveNormalTexture(),
+          transparent: isXRay,
+          opacity: isXRay ? 0.35 : 1.0,
+        });
+        break;
+
+      case 'cast':
       default:
-        color = 0x475569;
-        metalness = 0.88;
-        roughness = 0.35;
+        // Cast A356-T6 Aluminum (Micro-porous cast grain)
+        mat = new THREE.MeshStandardMaterial({
+          color: new THREE.Color('#64748b'),
+          metalness: 0.85,
+          roughness: 0.45,
+          transparent: isXRay,
+          opacity: isXRay ? 0.35 : 1.0,
+        });
         break;
     }
 
-    const mat = new THREE.MeshStandardMaterial({
-      color: new THREE.Color(color),
+    this.materialCache.set(key, mat);
+    return mat;
+  }
+
+  // ==========================================================================
+  // 3. COMMON AUTOMOTIVE PBR HELPERS
+  // ==========================================================================
+
+  public static getAutomotivePaint(colorHex: string = '#38bdf8', roughness: number = 0.08, metalness: number = 0.9): THREE.MeshPhysicalMaterial {
+    return new THREE.MeshPhysicalMaterial({
+      color: new THREE.Color(colorHex),
       metalness,
       roughness,
-      name: `ChassisMetallurgy_${grade}`,
+      clearcoat: 1.0,
+      clearcoatRoughness: 0.02,
+      reflectivity: 1.0,
     });
-
-    this.materialCache.set(key, mat);
-    return mat;
   }
 
-  /**
-   * Optical Laminated Automotive Glass.
-   */
-  public static getOpticalGlass(tintHex: string = '#e2e8f0', transmission: number = 0.95): THREE.MeshPhysicalMaterial {
-    const key = `glass_${tintHex}_${transmission}`;
-    if (this.materialCache.has(key)) {
-      return this.materialCache.get(key) as THREE.MeshPhysicalMaterial;
+  public static getCarbonFiber(gloss: boolean = true): THREE.MeshPhysicalMaterial | THREE.MeshStandardMaterial {
+    if (gloss) {
+      return new THREE.MeshPhysicalMaterial({
+        color: new THREE.Color('#070b14'),
+        metalness: 0.94,
+        roughness: 0.12,
+        clearcoat: 1.0,
+        clearcoatRoughness: 0.02,
+        normalMap: this.getCarbonWeaveNormalTexture(),
+      });
     }
+    return new THREE.MeshStandardMaterial({
+      color: new THREE.Color('#0f172a'),
+      metalness: 0.9,
+      roughness: 0.38,
+      normalMap: this.getCarbonWeaveNormalTexture(),
+    });
+  }
 
-    const mat = new THREE.MeshPhysicalMaterial({
-      color: new THREE.Color(tintHex),
+  public static getBrakeRotorMaterial(crossDrilled: boolean = false): THREE.MeshStandardMaterial {
+    return new THREE.MeshStandardMaterial({
+      color: new THREE.Color('#334155'),
+      metalness: 0.90,
+      roughness: 0.24,
+      normalMap: this.getBrakeRotorNormalTexture(),
+    });
+  }
+
+  public static getTireRubberMaterial(): THREE.MeshStandardMaterial {
+    return new THREE.MeshStandardMaterial({
+      color: new THREE.Color('#11141a'),
+      roughness: 0.88,
+      metalness: 0.08,
+    });
+  }
+
+  public static getOpticalGlass(): THREE.MeshPhysicalMaterial {
+    return new THREE.MeshPhysicalMaterial({
+      color: new THREE.Color('#38bdf8'),
       metalness: 0.1,
       roughness: 0.02,
-      transmission,
+      transmission: 0.95,
       transparent: true,
-      opacity: 1.0 - transmission * 0.75,
+      opacity: 0.6,
       ior: 1.52,
-      name: `AutomotiveGlass_${tintHex}`,
     });
-
-    this.materialCache.set(key, mat);
-    return mat;
   }
 
-  /**
-   * Interior Nappa Leather & Alcantara Material.
-   */
-  public static getInteriorTrimMaterial(trim: InteriorTrimGrade): THREE.MeshStandardMaterial {
-    const key = `trim_${trim}`;
-    if (this.materialCache.has(key)) {
-      return this.materialCache.get(key) as THREE.MeshStandardMaterial;
-    }
+  // ==========================================================================
+  // 4. INTERIOR LUXURY MATERIALS
+  // ==========================================================================
 
+  public static getInteriorTrimMaterial(trim: InteriorTrimGrade): {
+    primary: THREE.Material;
+    accent: THREE.Material;
+    stitching: THREE.Material;
+    screenGlass: THREE.Material;
+  } {
     switch (trim) {
       case 'forged_carbon':
-        return this.getCarbonFiber(true);
+        return {
+          primary: new THREE.MeshStandardMaterial({
+            color: new THREE.Color('#090d16'),
+            metalness: 0.9,
+            roughness: 0.3,
+            normalMap: this.getCarbonWeaveNormalTexture(),
+          }),
+          accent: new THREE.MeshPhysicalMaterial({
+            color: new THREE.Color('#ef4444'),
+            metalness: 0.95,
+            roughness: 0.12,
+            clearcoat: 0.8,
+          }),
+          stitching: new THREE.MeshBasicMaterial({ color: 0xef4444 }),
+          screenGlass: new THREE.MeshPhysicalMaterial({
+            color: 0x0284c7,
+            transmission: 0.9,
+            roughness: 0.05,
+            ior: 1.5,
+          }),
+        };
+
       case 'alcantara_race':
-        const alc = new THREE.MeshStandardMaterial({
-          color: new THREE.Color(0x27272a),
-          metalness: 0.0,
-          roughness: 0.96,
-          name: 'Interior_AlcantaraRace',
-        });
-        this.materialCache.set(key, alc);
-        return alc;
-      case 'open_pore_wood':
-        const wood = new THREE.MeshStandardMaterial({
-          color: new THREE.Color(0x3e2723),
-          metalness: 0.05,
-          roughness: 0.65,
-          name: 'Interior_OpenPoreWood',
-        });
-        this.materialCache.set(key, wood);
-        return wood;
-      case 'brushed_aluminum':
-        const alum = new THREE.MeshStandardMaterial({
-          color: new THREE.Color(0xd4d4d8),
-          metalness: 0.95,
-          roughness: 0.22,
-          name: 'Interior_BrushedAluminum',
-        });
-        this.materialCache.set(key, alum);
-        return alum;
+        return {
+          primary: new THREE.MeshStandardMaterial({
+            color: new THREE.Color('#1e293b'),
+            roughness: 0.92,
+            metalness: 0.05,
+          }),
+          accent: new THREE.MeshStandardMaterial({
+            color: new THREE.Color('#38bdf8'),
+            metalness: 0.8,
+            roughness: 0.2,
+          }),
+          stitching: new THREE.MeshBasicMaterial({ color: 0x38bdf8 }),
+          screenGlass: new THREE.MeshPhysicalMaterial({
+            color: 0x0284c7,
+            transmission: 0.9,
+            roughness: 0.05,
+            ior: 1.5,
+          }),
+        };
+
       case 'nappa_leather':
       default:
-        const leather = new THREE.MeshStandardMaterial({
-          color: new THREE.Color(0x1e293b),
-          metalness: 0.1,
-          roughness: 0.68,
-          normalMap: this.getLeatherPoresNormalTexture(),
-          normalScale: new THREE.Vector2(0.4, 0.4),
-          name: 'Interior_NappaLeather',
-        });
-        this.materialCache.set(key, leather);
-        return leather;
+        return {
+          primary: new THREE.MeshStandardMaterial({
+            color: new THREE.Color('#0f172a'),
+            roughness: 0.65,
+            metalness: 0.1,
+            normalMap: this.getPerforatedLeatherNormalTexture(),
+          }),
+          accent: new THREE.MeshPhysicalMaterial({
+            color: new THREE.Color('#d4d4d8'),
+            metalness: 0.98,
+            roughness: 0.12,
+            clearcoat: 0.7,
+          }),
+          stitching: new THREE.MeshBasicMaterial({ color: 0xf59e0b }),
+          screenGlass: new THREE.MeshPhysicalMaterial({
+            color: 0x0284c7,
+            transmission: 0.9,
+            roughness: 0.05,
+            ior: 1.5,
+          }),
+        };
     }
+  }
+
+  // ==========================================================================
+  // 5. SUSPENSION SPRINGS & BRAKE ROTORS
+  // ==========================================================================
+
+  public static getSuspensionSpringMaterial(rateNmm: number): THREE.Material {
+    const color = rateNmm > 80 ? new THREE.Color('#ef4444') : new THREE.Color('#3b82f6');
+    return new THREE.MeshPhysicalMaterial({
+      color,
+      metalness: 0.75,
+      roughness: 0.18,
+      clearcoat: 0.9,
+      clearcoatRoughness: 0.05,
+    });
+  }
+
+  public static getBrakeRotorMachinedMaterial(): THREE.Material {
+    return new THREE.MeshStandardMaterial({
+      color: new THREE.Color('#475569'),
+      metalness: 0.92,
+      roughness: 0.22,
+      normalMap: this.getBrakeRotorNormalTexture(),
+    });
   }
 }

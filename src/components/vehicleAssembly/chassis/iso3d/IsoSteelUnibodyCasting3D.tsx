@@ -8,24 +8,25 @@ interface IsoSteelUnibodyCasting3DProps {
  * Photorealistic Side-Profile Body-In-White (BIW) Unibody Car Chassis SVG
  * Precision-drawn with metallic HDR specular shading, shoulder character highlights,
  * stamped swage holes, structural pillar reinforcements, and ground plane occlusion.
+ * Standard Datum: Rear Axle X=240, Front Axle X=760, Wheelbase=520px, Ground Y=340.
  */
 export const IsoSteelUnibodyCasting3D: React.FC<IsoSteelUnibodyCasting3DProps> = ({ isHovered = false }) => {
   return (
     <g id="biw-unibody-car-chassis-casting-exact" className="transition-all duration-700 ease-out">
       {/* ── LAYER 1: GROUND PLANE CONTACT DROP SHADOW ── */}
       <ellipse
-        cx="475"
-        cy="350"
+        cx="500"
+        cy="342"
         rx="430"
-        ry="24"
+        ry="20"
         fill="#020617"
-        opacity="0.75"
+        opacity="0.80"
         filter="url(#ground-contact-blur)"
       />
 
-      {/* ── LAYER 2: RECESSED INNER COCKPIT CAVITY & REAR FLOOR PAN ── */}
+      {/* ── LAYER 2: RECESSED INNER COCKPIT CAVITY & PASSENGER SAFETY CELL ── */}
       <path
-        d="M 240 285 C 220 240 240 190 310 150 C 360 130 520 120 670 170 C 690 220 680 270 650 285 Z"
+        d="M 280 280 C 270 230 300 180 370 145 C 440 120 560 120 660 165 C 685 205 680 250 660 280 Z"
         fill="url(#biw-inner-cavity-dark)"
         stroke="#1e293b"
         strokeWidth="1.5"
@@ -37,61 +38,59 @@ export const IsoSteelUnibodyCasting3D: React.FC<IsoSteelUnibodyCasting3DProps> =
         <line x1="320" y1="272" x2="640" y2="272" stroke="#475569" strokeWidth="2" strokeDasharray="14 5" />
 
         {/* Seat Mounting Rails */}
-        <rect x="525" y="266" width="38" height="14" rx="3" fill="#1e293b" stroke="#64748b" strokeWidth="1.2" />
-        <circle cx="535" cy="273" r="2.2" fill="#cbd5e1" />
-        <circle cx="552" cy="273" r="2.2" fill="#cbd5e1" />
+        <rect x="420" y="266" width="40" height="14" rx="3" fill="#1e293b" stroke="#64748b" strokeWidth="1.2" />
+        <circle cx="430" cy="273" r="2.2" fill="#cbd5e1" />
+        <circle cx="450" cy="273" r="2.2" fill="#cbd5e1" />
+
+        <rect x="540" y="266" width="40" height="14" rx="3" fill="#1e293b" stroke="#64748b" strokeWidth="1.2" />
+        <circle cx="550" cy="273" r="2.2" fill="#cbd5e1" />
+        <circle cx="570" cy="273" r="2.2" fill="#cbd5e1" />
 
         {/* Central Transmission Tunnel Rise */}
-        <path d="M 330 280 C 330 252 350 245 375 245 C 400 245 410 258 410 280 Z" fill="#0f172a" stroke="#475569" strokeWidth="1.5" />
-        <rect x="345" y="258" width="42" height="10" rx="3" fill="#334155" stroke="#94a3b8" strokeWidth="1" />
+        <path d="M 470 280 C 470 252 490 245 515 245 C 540 245 550 258 550 280 Z" fill="#0f172a" stroke="#475569" strokeWidth="1.5" />
 
-        {/* Firewall Bulkhead Structure */}
-        <path d="M 285 285 C 275 235 245 225 210 235 C 190 240 180 265 175 285 Z" fill="#020617" stroke="#475569" strokeWidth="1.5" />
+        {/* Front Firewall Bulkhead Structure */}
+        <path d="M 660 280 C 675 235 695 210 715 215 C 730 220 735 250 740 280 Z" fill="#020617" stroke="#475569" strokeWidth="1.5" />
 
-        {/* ── STRUCTURAL ENGINE MOUNTING CRADLES (Front, Mid, Rear Subframes) ── */}
+        {/* ── STRUCTURAL SUBFRAME MOUNTING CRADLES ── */}
         <g id="engine-chassis-cradles-biw" opacity="0.9">
-          {/* Front Engine Subframe Cradle */}
-          <rect x="200" y="258" width="75" height="12" rx="3" fill="#1e293b" stroke="#38bdf8" strokeWidth="1.5" />
-          <line x1="205" y1="264" x2="270" y2="264" stroke="#94a3b8" strokeWidth="1" />
-          <circle cx="215" cy="264" r="2.5" fill="#f59e0b" />
+          {/* Front Engine Subframe Cradle (X=710 to X=790) */}
+          <rect x="710" y="258" width="80" height="12" rx="3" fill="#1e293b" stroke="#38bdf8" strokeWidth="1.5" />
+          <line x1="715" y1="264" x2="785" y2="264" stroke="#94a3b8" strokeWidth="1" />
+          <circle cx="725" cy="264" r="2.5" fill="#f59e0b" />
+          <circle cx="775" cy="264" r="2.5" fill="#f59e0b" />
+
+          {/* Rear Suspension Subframe Cradle (X=195 to X=275) */}
+          <rect x="195" y="258" width="80" height="12" rx="3" fill="#1e293b" stroke="#38bdf8" strokeWidth="1.5" />
+          <line x1="200" y1="264" x2="270" y2="264" stroke="#94a3b8" strokeWidth="1" />
+          <circle cx="210" cy="264" r="2.5" fill="#f59e0b" />
           <circle cx="260" cy="264" r="2.5" fill="#f59e0b" />
-
-          {/* Mid-Ship Engine Cradle */}
-          <rect x="430" y="258" width="95" height="12" rx="3" fill="#1e293b" stroke="#38bdf8" strokeWidth="1.5" />
-          <line x1="435" y1="264" x2="520" y2="264" stroke="#94a3b8" strokeWidth="1" />
-          <circle cx="445" cy="264" r="2.5" fill="#f59e0b" />
-          <circle cx="510" cy="264" r="2.5" fill="#f59e0b" />
-
-          {/* Rear Engine Subframe Cradle */}
-          <rect x="670" y="258" width="80" height="12" rx="3" fill="#1e293b" stroke="#38bdf8" strokeWidth="1.5" />
-          <line x1="675" y1="264" x2="745" y2="264" stroke="#94a3b8" strokeWidth="1" />
-          <circle cx="685" cy="264" r="2.5" fill="#f59e0b" />
-          <circle cx="735" cy="264" r="2.5" fill="#f59e0b" />
         </g>
       </g>
 
-      {/* ── LAYER 3: MAIN OUTER BODY-IN-WHITE SHELL (Photorealistic Curves) ── */}
+      {/* ── LAYER 3: MAIN OUTER BODY-IN-WHITE SHELL (Proportional GT/Sedan Silhouette) ── */}
       <path
-        d="M 900 250 
-           L 900 245 L 890 235 L 870 230 
-           C 850 215, 800 205, 750 190 
-           C 720 185, 680 180, 650 160 
-           C 600 130, 560 115, 480 110 
-           C 420 108, 360 115, 300 130 
-           C 250 150, 200 180, 160 190 
-           L 85 195 
-           L 80 210 L 95 230 L 80 245 
-           L 80 270 L 105 270 L 105 255 L 170 255 
-           C 170 235, 195 220, 240 220 
-           C 285 220, 310 235, 320 285 
-           L 320 330 
-           L 710 330 
-           L 710 285 
-           C 720 250, 750 225, 800 225 
-           C 850 225, 880 245, 900 250 Z"
+        d="M 885 240
+           L 885 228
+           C 870 215, 830 205, 780 195
+           C 740 188, 700 180, 675 165
+           C 625 130, 580 112, 490 110
+           C 420 110, 360 120, 310 140
+           C 260 165, 200 185, 150 192
+           L 80 195
+           L 75 210 L 85 235 L 75 250
+           L 75 265 L 105 265 L 105 255 L 175 255
+           C 175 220, 205 215, 240 215
+           C 275 215, 305 220, 305 255
+           L 305 295
+           L 695 295
+           L 695 255
+           C 695 220, 725 215, 760 215
+           C 795 215, 825 220, 825 255
+           L 885 255 Z"
         fill="url(#biw-hdr-silver-body)"
         stroke={isHovered ? "#38bdf8" : "#0f172a"}
-        strokeWidth={isHovered ? "3.2" : "2.0"}
+        strokeWidth={isHovered ? "3.0" : "2.0"}
         strokeLinejoin="round"
         strokeLinecap="round"
         filter="url(#panel-ambient-occlusion)"
@@ -99,14 +98,14 @@ export const IsoSteelUnibodyCasting3D: React.FC<IsoSteelUnibodyCasting3DProps> =
 
       {/* ── LAYER 4: SHOULDER CHARACTER LINE SPECULAR REFLECTION (3D Volume Highlight) ── */}
       <path
-        d="M 648 162 Q 545 118 478 113 Q 360 118 298 132"
+        d="M 670 168 Q 550 118 490 112 Q 380 120 310 142"
         fill="none"
         stroke="url(#biw-shoulder-specular-glow)"
         strokeWidth="3.5"
         strokeLinecap="round"
       />
       <path
-        d="M 750 190 C 720 185, 680 180, 650 160"
+        d="M 780 195 C 740 188, 700 180, 675 165"
         fill="none"
         stroke="rgba(255,255,255,0.75)"
         strokeWidth="2.0"
@@ -115,124 +114,102 @@ export const IsoSteelUnibodyCasting3D: React.FC<IsoSteelUnibodyCasting3DProps> =
 
       {/* Rear Fender Character Accent */}
       <path
-        d="M 160 190 Q 240 185 320 220"
+        d="M 150 192 Q 220 185 305 220"
         fill="none"
         stroke="#475569"
         strokeWidth="1.8"
       />
 
       {/* ── LAYER 5: FRONT & REAR DOOR APERTURE CUTOUTS ── */}
+      {/* Front Door Aperture (X=490 to X=665) */}
       <path
-        d="M 640 165 
-           C 585 132, 545 125, 505 125 
-           L 505 285 
-           L 660 285 
-           C 675 220, 665 185, 640 165 Z"
+        d="M 660 168
+           C 615 136, 560 125, 500 125
+           L 500 282
+           L 670 282
+           C 680 220, 675 185, 660 168 Z"
         fill="none"
         stroke="#0f172a"
-        strokeWidth="2.4"
+        strokeWidth="2.2"
         strokeLinejoin="round"
       />
 
+      {/* Rear Door Aperture (X=310 to X=485) */}
       <path
-        d="M 485 125 
-           C 435 125, 375 132, 335 145 
-           C 305 160, 280 190, 260 225 
-           C 255 250, 275 285, 305 285 
-           L 485 285 Z"
+        d="M 480 125
+           C 425 125, 370 135, 325 152
+           C 295 170, 275 200, 260 230
+           C 255 255, 275 282, 305 282
+           L 480 282 Z"
         fill="none"
         stroke="#0f172a"
-        strokeWidth="2.4"
+        strokeWidth="2.2"
         strokeLinejoin="round"
       />
 
-      {/* Door Aperture Inner Seam Flange (3D Thickness) */}
+      {/* ── LAYER 6: B-PILLAR CENTER COLUMN (At X=490) ── */}
       <path
-        d="M 638 168 C 585 136, 545 129, 507 129 L 507 283 L 658 283"
-        fill="none"
-        stroke="#cbd5e1"
-        strokeWidth="1.2"
-        opacity="0.8"
-      />
-
-      {/* ── LAYER 6: B-PILLAR CENTER COLUMN WITH STAMPED LIGHTENING SLOTS ── */}
-      <path
-        d="M 485 125 L 505 125 L 505 285 L 485 285 Z"
+        d="M 485 125 L 500 125 L 500 282 L 485 282 Z"
         fill="url(#biw-hdr-silver-body)"
         stroke="#0f172a"
-        strokeWidth="2.0"
+        strokeWidth="1.8"
       />
-      <rect x="491" y="145" width="8" height="35" rx="4" fill="#0f172a" stroke="#cbd5e1" strokeWidth="1" />
-      <rect x="491" y="195" width="8" height="30" rx="4" fill="#0f172a" stroke="#cbd5e1" strokeWidth="1" />
-      <polygon points="489,260 501,260 495,273" fill="#0f172a" stroke="#64748b" strokeWidth="1" />
+      <rect x="489" y="145" width="7" height="35" rx="3" fill="#0f172a" stroke="#cbd5e1" strokeWidth="1" />
+      <rect x="489" y="195" width="7" height="30" rx="3" fill="#0f172a" stroke="#cbd5e1" strokeWidth="1" />
 
       {/* ── LAYER 7: LOWER ROCKER PANEL SILL & STAMPED SPOT WELDS ── */}
       <rect
-        x="320"
-        y="298"
+        x="305"
+        y="288"
         width="390"
-        height="32"
-        rx="4"
+        height="26"
+        rx="3"
         fill="url(#al-extrusion-grad)"
         stroke="#0f172a"
-        strokeWidth="2.2"
+        strokeWidth="2.0"
       />
-      <line x1="325" y1="312" x2="705" y2="312" stroke="#475569" strokeWidth="1.5" />
+      <line x1="310" y1="300" x2="690" y2="300" stroke="#475569" strokeWidth="1.5" />
       
       {/* Structural Swage Flange Holes along Rocker Panel */}
-      <g transform="translate(340, 305)"><use href="#swage-hole-sm-deep" /></g>
-      <g transform="translate(380, 305)"><use href="#swage-hole-sm-deep" /></g>
-      <g transform="translate(420, 305)"><use href="#swage-hole-sm-deep" /></g>
-      <g transform="translate(460, 305)"><use href="#swage-hole-sm-deep" /></g>
-      <g transform="translate(500, 305)"><use href="#swage-hole-sm-deep" /></g>
-      <g transform="translate(540, 305)"><use href="#swage-hole-sm-deep" /></g>
-      <g transform="translate(580, 305)"><use href="#swage-hole-sm-deep" /></g>
-      <g transform="translate(620, 305)"><use href="#swage-hole-sm-deep" /></g>
-      <g transform="translate(660, 305)"><use href="#swage-hole-sm-deep" /></g>
+      <g transform="translate(330, 292)"><use href="#swage-hole-sm-deep" /></g>
+      <g transform="translate(370, 292)"><use href="#swage-hole-sm-deep" /></g>
+      <g transform="translate(410, 292)"><use href="#swage-hole-sm-deep" /></g>
+      <g transform="translate(450, 292)"><use href="#swage-hole-sm-deep" /></g>
+      <g transform="translate(490, 292)"><use href="#swage-hole-sm-deep" /></g>
+      <g transform="translate(530, 292)"><use href="#swage-hole-sm-deep" /></g>
+      <g transform="translate(570, 292)"><use href="#swage-hole-sm-deep" /></g>
+      <g transform="translate(610, 292)"><use href="#swage-hole-sm-deep" /></g>
+      <g transform="translate(650, 292)"><use href="#swage-hole-sm-deep" /></g>
 
       {/* Spot Welds Along Pinch Flange */}
       {Array.from({ length: 24 }).map((_, i) => (
-        <circle key={i} cx={332 + i * 16} cy={323} r="1.6" fill="#0f172a" stroke="#cbd5e1" strokeWidth="0.5" />
+        <circle key={i} cx={318 + i * 16} cy={308} r="1.5" fill="#0f172a" stroke="#cbd5e1" strokeWidth="0.5" />
       ))}
 
-      {/* ── LAYER 8: FRONT APRON & STRUT TOWER FRAME (Right Side) ── */}
-      <path
-        d="M 720 230 C 740 190, 780 190, 800 230"
-        fill="none"
-        stroke="#0f172a"
-        strokeWidth="2.2"
-      />
+      {/* ── LAYER 8: FRONT STRUT TOWER & CRASH BOX FRAME (Centered at X=760) ── */}
+      <rect x="745" y="202" width="30" height="20" rx="5" fill="#1e293b" stroke="#0f172a" strokeWidth="1.8" />
+      <path d="M 740 190 L 760 185 L 780 190 Z" fill="#cbd5e1" stroke="#0f172a" strokeWidth="1.5" />
 
-      <rect x="735" y="208" width="32" height="22" rx="6" fill="#1e293b" stroke="#0f172a" strokeWidth="2.0" />
-      <path d="M 710 190 L 730 185 L 750 190 Z" fill="#cbd5e1" stroke="#0f172a" strokeWidth="1.5" />
-
-      <g transform="translate(830, 240) rotate(-12)">
-        <rect x="0" y="0" width="15" height="8" rx="4" fill="#0f172a" stroke="#64748b" strokeWidth="1.5" />
-      </g>
-      <g transform="translate(852, 240) rotate(-12)">
-        <rect x="0" y="0" width="15" height="8" rx="4" fill="#0f172a" stroke="#64748b" strokeWidth="1.5" />
-      </g>
-
-      <rect x="888" y="242" width="14" height="24" rx="2" fill="#94a3b8" stroke="#0f172a" strokeWidth="1.8" />
-      <circle cx="895" cy="248" r="2.2" fill="#0f172a" />
-      <circle cx="895" cy="260" r="2.2" fill="#0f172a" />
+      {/* Front Crash Box Honeycomb Horns */}
+      <rect x="850" y="235" width="25" height="18" rx="2" fill="#94a3b8" stroke="#0f172a" strokeWidth="1.5" />
+      <circle cx="862" cy="244" r="2.2" fill="#0f172a" />
 
       {/* ── LAYER 9: REAR QUARTER PANEL & TAIL LIGHT NOTCH (Left Side) ── */}
-      <polygon points="80,195 105,195 105,245 80,245" fill="#0f172a" stroke="#475569" strokeWidth="1.8" />
-      <rect x="75" y="255" width="28" height="15" rx="2" fill="#94a3b8" stroke="#0f172a" strokeWidth="1.8" />
+      <polygon points="75,195 95,195 95,245 75,245" fill="#0f172a" stroke="#475569" strokeWidth="1.8" />
+      <rect x="70" y="250" width="25" height="15" rx="2" fill="#94a3b8" stroke="#0f172a" strokeWidth="1.8" />
 
-      {/* Technical Label */}
+      {/* Technical Blueprint Callout */}
       <text
-        x="475"
-        y="374"
+        x="500"
+        y="370"
         fill="#38bdf8"
-        fontSize="11"
+        fontSize="10"
         fontFamily="monospace"
         textAnchor="middle"
         fontWeight="bold"
         letterSpacing="1"
       >
-        HIGH-STRENGTH STAMPED STEEL UNIBODY CHASSIS (BIW)
+        HIGH-STRENGTH STAMPED STEEL UNIBODY CHASSIS (BIW) // ISO 8855 DATUM
       </text>
     </g>
   );

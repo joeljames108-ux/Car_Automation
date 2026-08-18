@@ -73,7 +73,23 @@ export class SicInverterThermalSolver {
       phaseCurrentRmsA: params.phaseCurrentRmsAmps ?? 350,
       switchingFrequencyKhz: params.switchingFreqKhz ?? 20,
       coolantInletTempC: params.coolantInletTempC ?? 45,
-      coolantFlowRateLpm: params.coolantFlowRateLpm ?? 12,
+      coolantFlowRateLpm: params.coolantFlowRateLpm ?? 15,
+    });
+  }
+
+  public static evaluateSicInverterThermals(params: {
+    switchingFrequencyKhz?: number;
+    dcBusVoltageV?: number;
+    phaseCurrentRmsAmps?: number;
+    coolantInletTempC?: number;
+    coolantFlowRateLpm?: number;
+  } = {}): SicInverterThermalState {
+    return this.evaluateSicInverter({
+      dcBusVoltageV: params.dcBusVoltageV ?? 800,
+      phaseCurrentRmsA: params.phaseCurrentRmsAmps ?? 350,
+      switchingFrequencyKhz: params.switchingFrequencyKhz ?? 20,
+      coolantInletTempC: params.coolantInletTempC ?? 45,
+      coolantFlowRateLpm: params.coolantFlowRateLpm ?? 15,
     });
   }
 

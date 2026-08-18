@@ -72,6 +72,15 @@ export class PmsmFluxWeakeningRotorFea {
     return this.evaluateMotorPerformance(params);
   }
 
+  public static evaluatePmsmAtOperatingPoint(params: {
+    rotorSpeedRpm: number;
+    demandedTorqueNm: number;
+    dcBusVoltageV?: number;
+    magnetTempC?: number;
+  }): PmsmFluxWeakeningRotorState {
+    return this.evaluateMotorPerformance(params);
+  }
+
   /**
    * Evaluates d-q vector current trajectory, flux-weakening, and rotor centrifugal stress.
    */

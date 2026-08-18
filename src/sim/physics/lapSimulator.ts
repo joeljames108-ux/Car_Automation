@@ -18,6 +18,7 @@ import { maxCornerSpeed, simulateCorner, type CornerSimResult } from './cornerSi
 import { suspensionConfigFromVehicle, calculateWeightTransfer, staticWheelLoads, type SuspensionConfig } from './suspensionModel';
 import { calculateBrakeForce, createBrakeState, updateBrakeTemperature, brakingZoneDistance, brakingZoneTime, type BrakePhysicsConfig, type BrakeState } from './brakeModel';
 import { buildDriverProfile, calculateDriverEffect, simulateDriverError, applyLapVariation, type DriverProfile } from './driverModel';
+import { MultiPhysicsCouplingBus } from './multiPhysicsCouplingBus';
 
 // ---------------------------------------------------------------------------
 // Public types
@@ -142,6 +143,17 @@ export function simulateLap(
   aeroConfig.activeAeroEnabled = design.vehicle.aeroResearch.active.enabled;
   aeroConfig.drsReduction = design.vehicle.aeroResearch.active.drs ? 0.18 : 0;
   aeroConfig.rideHeight = design.vehicle.rideHeight;
+
+  // Closed-loop multi-physics aero-thermal cooling drag coupling
+  const couplingBus = MultiPhysicsCouplingBus.getInstance();
+  const aeroThermal = couplingBus.computeAeroThermalCoupling({
+    baseCd: aeroConfig.dragCoeff,
+    radiatorAreaM2: 0.35 + (design.vehicle.aeroResearch?.cooling?.radiatorSize ?? 0.5) * 0.2,
+    coolingDemandKw: sim.peakPower * Math.max(0.1, 1 - (sim.thermalEfficiency || 0.35)),
+    vehicleSpeedKmh: 160,
+    activeGrilleShutterClosedPct: design.vehicle.aeroResearch?.active?.enabled ? 50 : 0,
+  });
+  aeroConfig.dragCoeff = aeroThermal.totalCoupledCd;
 
   // Air density adjusted for track altitude
   const altitude = track.altitudeChange / 2; // rough average altitude

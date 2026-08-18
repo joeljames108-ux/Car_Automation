@@ -10,73 +10,20 @@ import { EngineeringLog } from "./components/EngineeringLog";
 import { DesignProvider, useDesign } from "./state/DesignContext";
 import { RDProvider } from "./state/RDContext";
 import { CompanyProvider, useCompany } from "./state/CompanyContext";
-import { EngineDesigner } from "./components/EngineDesigner";
-import { VehicleDesigner } from "./components/VehicleDesigner";
-import { ExteriorDesigner } from "./components/ExteriorDesigner";
-import { AeroLab } from "./components/AeroLab";
-import { InteriorsDesigner } from "./components/InteriorsDesigner";
-import { ManufacturingDesigner } from "./components/ManufacturingDesigner";
-import { InfotainmentDesigner } from "./components/InfotainmentDesigner";
-import { SimulationDashboard } from "./components/SimulationDashboard";
-import { RaceSimulator } from "./components/RaceSimulator";
-import { DetailedStats } from "./components/DetailedStats";
-import { TestingLab } from "./components/TestingLab";
 import { StatRail } from "./components/StatRail";
 import { SaveLoadDialog } from "./components/SaveLoadDialog";
-import { AIAssistant } from "./components/AIAssistant";
-import { PressReviews } from "./components/PressReviews";
-import { RDCenter } from "./components/RDCenter";
-import { CommandCenter } from "./components/CommandCenter";
-import { Competitors } from "./components/Competitors";
-import { VehicleGarage } from "./components/VehicleGarage";
-import { EngineeringComparison } from "./components/EngineeringComparison";
-import { DynamicEconomy } from "./components/DynamicEconomy";
-import { MotorsportDivision } from "./components/MotorsportDivision";
-import { DigitalTwin } from "./components/DigitalTwin";
-import { SafetyCenter } from "./components/SafetyCenter";
-import { SalesLaunch } from "./components/SalesLaunch";
-import { ApexAIStudio } from "./components/ApexAIStudio";
-
 import { CommandPalette } from "./components/CommandPalette";
 import { ToastProvider } from "./components/ToastSystem";
 import { ThermalAlertMonitor } from "./components/ThermalAlertMonitor";
 import { AgentNotificationCenter } from "./components/agents/AgentNotificationCenter";
 import { AgentOrchestrator } from "./sim/agents/agentFramework";
-import { AeroDynamicsAgent } from "./sim/agents/domainAgents/aeroDynamicsAgent";
-import { ThermalManagementAgent } from "./sim/agents/domainAgents/thermalManagementAgent";
-import { SuspensionDynamicsAgent } from "./sim/agents/domainAgents/suspensionDynamicsAgent";
-import { BrakeDesignAgent } from "./sim/agents/domainAgents/brakeDesignAgent";
-import { ChassisStructuralAgent } from "./sim/agents/domainAgents/chassisStructuralAgent";
-import { EconomyCostAgent } from "./sim/agents/domainAgents/economyCostAgent";
-import { ElectronicsEVAgent } from "./sim/agents/domainAgents/electronicsEVAgent";
-import { ManufacturingAgent } from "./sim/agents/domainAgents/manufacturingAgent";
-import { SafetyCrashAgent } from "./sim/agents/domainAgents/safetyCrashAgent";
-import { NVHComfortAgent } from "./sim/agents/domainAgents/nvhComfortAgent";
-import { TyreStrategyAgent } from "./sim/agents/domainAgents/tyreStrategyAgent";
-import { RivalStrategistAgent } from "./sim/agents/domainAgents/rivalStrategistAgent";
-import { TransmissionDrivetrainAgent } from "./sim/agents/domainAgents/transmissionDrivetrainAgent";
-import { InfotainmentUXAgent } from "./sim/agents/domainAgents/infotainmentUXAgent";
-import { ErgonomicsVisibilityAgent } from "./sim/agents/domainAgents/ergonomicsVisibilityAgent";
-import { HomologationRegulatoryAgent } from "./sim/agents/domainAgents/homologationRegulatoryAgent";
-import { SupplyChainResilienceAgent } from "./sim/agents/domainAgents/supplyChainResilienceAgent";
-import { TelemetryPredictiveMaintenanceAgent } from "./sim/agents/domainAgents/telemetryPredictiveMaintenanceAgent";
-import { PitStopOperationsAgent } from "./sim/agents/domainAgents/pitStopOperationsAgent";
-import { AeroAcousticsWindNoiseAgent } from "./sim/agents/domainAgents/aeroAcousticsWindNoiseAgent";
-import { BatteryDegradationLifeAgent } from "./sim/agents/domainAgents/batteryDegradationLifeAgent";
-import { MotorsportSponsorROIAgent } from "./sim/agents/domainAgents/motorsportSponsorROIAgent";
-import { ChiefPowertrainAgent, RoboticAssemblyQAAgent, RaceStrategyAgent } from "./sim/agents/apexAgentEngine";
-import { Search, Command as CmdIcon, Bot } from "lucide-react";
+import { registerAllDomainAgents } from "./sim/agents/registerDefaultAgents";
+import { StageSwitcher, type Stage } from "./components/StageSwitcher";
+import { Search, Command as CmdIcon, Bot, Wrench } from "lucide-react";
 import { VisionGlassHeader } from "./components/ui/VisionGlassHeader";
 import { VisionGlassDock } from "./components/ui/VisionGlassDock";
 import { VisionGlassToolbar } from "./components/ui/VisionGlassToolbar";
 
-import { Wrench } from "lucide-react";
-
-type Stage =
-  | "command" | "engine" | "vehicle" | "exterior" | "aero" | "interior"
-  | "manufacturing" | "infotainment" | "rd" | "simulation" | "testing"
-  | "race" | "stats" | "press" | "competitors"
-  | "garage" | "compare" | "economy" | "motorsport" | "twin" | "safety" | "sales" | "ai";
 
 export type WorkspaceCategory = "engineering" | "simulation" | "world";
 
@@ -261,31 +208,7 @@ function AppInner() {
   // Initialize Autonomous AI Engineering Division (All 25 Domain Agents)
   useEffect(() => {
     const orchestrator = AgentOrchestrator.getInstance();
-    orchestrator.registerAgent(new ChiefPowertrainAgent());
-    orchestrator.registerAgent(new AeroDynamicsAgent());
-    orchestrator.registerAgent(new ThermalManagementAgent());
-    orchestrator.registerAgent(new SuspensionDynamicsAgent());
-    orchestrator.registerAgent(new BrakeDesignAgent());
-    orchestrator.registerAgent(new ChassisStructuralAgent());
-    orchestrator.registerAgent(new EconomyCostAgent());
-    orchestrator.registerAgent(new ElectronicsEVAgent());
-    orchestrator.registerAgent(new ManufacturingAgent());
-    orchestrator.registerAgent(new SafetyCrashAgent());
-    orchestrator.registerAgent(new NVHComfortAgent());
-    orchestrator.registerAgent(new TyreStrategyAgent());
-    orchestrator.registerAgent(new RaceStrategyAgent());
-    orchestrator.registerAgent(new RoboticAssemblyQAAgent());
-    orchestrator.registerAgent(new RivalStrategistAgent());
-    orchestrator.registerAgent(new TransmissionDrivetrainAgent());
-    orchestrator.registerAgent(new InfotainmentUXAgent());
-    orchestrator.registerAgent(new ErgonomicsVisibilityAgent());
-    orchestrator.registerAgent(new HomologationRegulatoryAgent());
-    orchestrator.registerAgent(new SupplyChainResilienceAgent());
-    orchestrator.registerAgent(new TelemetryPredictiveMaintenanceAgent());
-    orchestrator.registerAgent(new PitStopOperationsAgent());
-    orchestrator.registerAgent(new AeroAcousticsWindNoiseAgent());
-    orchestrator.registerAgent(new BatteryDegradationLifeAgent());
-    orchestrator.registerAgent(new MotorsportSponsorROIAgent());
+    registerAllDomainAgents(orchestrator);
 
     orchestrator.start(
       () => ({ engine: design.engine, vehicle: design.vehicle, carConcept }),
@@ -399,30 +322,7 @@ function AppInner() {
             >
               <div style={{ display: "flex", gap: 16 }}>
                 <div style={{ flex: 1, minWidth: 0 }}>
-                  <div key={stage}>
-                    {stage === "command" && <CommandCenter onSelectStage={(st) => setStage(st as Stage)} />}
-                    {stage === "ai" && <ApexAIStudio />}
-                    {stage === "engine" && <EngineDesigner />}
-                    {stage === "vehicle" && <VehicleDesigner />}
-                    {stage === "exterior" && <ExteriorDesigner />}
-                    {stage === "aero" && <AeroLab />}
-                    {stage === "interior" && <InteriorsDesigner />}
-                    {stage === "manufacturing" && <ManufacturingDesigner />}
-                    {stage === "infotainment" && <InfotainmentDesigner />}
-                    {stage === "safety" && <SafetyCenter />}
-                    {stage === "simulation" && <SimulationDashboard />}
-                    {stage === "testing" && <TestingLab />}
-                    {stage === "race" && <RaceSimulator />}
-                    {stage === "stats" && <DetailedStats />}
-                    {stage === "press" && <PressReviews />}
-                    {stage === "garage" && <VehicleGarage />}
-                    {stage === "compare" && <EngineeringComparison />}
-                    {stage === "economy" && <DynamicEconomy />}
-                    {stage === "motorsport" && <MotorsportDivision />}
-                    {stage === "twin" && <DigitalTwin />}
-                    {stage === "sales" && <SalesLaunch />}
-                    {stage === "competitors" && <Competitors />}
-                  </div>
+                  <StageSwitcher stage={stage} onSelectStage={(st) => setStage(st as Stage)} />
                 </div>
 
                 {/* Right Sidebar — Live Stats (Top) + Engineering Log (Bottom) */}
@@ -586,30 +486,7 @@ function AppInner() {
       {/* Main content */}
       <div className="flex-1 max-w-full w-full px-6 py-4 pb-44 flex gap-4">
         <div className="flex-1 min-w-0">
-          <div key={stage} className="stage-transition-enter">
-            {stage === "command" && <CommandCenter onSelectStage={(st) => setStage(st as Stage)} />}
-            {stage === "ai" && <ApexAIStudio />}
-            {stage === "engine" && <EngineDesigner />}
-            {stage === "vehicle" && <VehicleDesigner />}
-            {stage === "exterior" && <ExteriorDesigner />}
-            {stage === "aero" && <AeroLab />}
-            {stage === "interior" && <InteriorsDesigner />}
-            {stage === "manufacturing" && <ManufacturingDesigner />}
-            {stage === "infotainment" && <InfotainmentDesigner />}
-            {stage === "safety" && <SafetyCenter />}
-            {stage === "simulation" && <SimulationDashboard />}
-            {stage === "testing" && <TestingLab />}
-            {stage === "race" && <RaceSimulator />}
-            {stage === "stats" && <DetailedStats />}
-            {stage === "press" && <PressReviews />}
-            {stage === "garage" && <VehicleGarage />}
-            {stage === "compare" && <EngineeringComparison />}
-            {stage === "economy" && <DynamicEconomy />}
-            {stage === "motorsport" && <MotorsportDivision />}
-            {stage === "twin" && <DigitalTwin />}
-            {stage === "sales" && <SalesLaunch />}
-            {stage === "competitors" && <Competitors />}
-          </div>
+          <StageSwitcher stage={stage} onSelectStage={(st) => setStage(st as Stage)} />
         </div>
         <div className="hidden lg:block w-80 shrink-0">
           <div className="sticky top-20 stat-rail-container">

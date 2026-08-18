@@ -8,6 +8,7 @@
 import * as THREE from 'three';
 import { GLTF, GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js';
+import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader.js';
 
 export interface LoadedGlbAsset {
   assetUri: string;
@@ -25,10 +26,11 @@ export interface LoadedGlbAsset {
 export class UniversalGlbAssetLoader {
   private static gltfLoader: GLTFLoader | null = null;
   private static dracoLoader: DRACOLoader | null = null;
+  private static fbxLoader: FBXLoader | null = null;
   private static memoryCache: Map<string, LoadedGlbAsset> = new Map();
 
   /**
-   * Initializes loaders with DRACO decoder support.
+   * Initializes loaders with DRACO decoder and FBX support.
    */
   public static initLoader(): GLTFLoader {
     if (!this.gltfLoader) {
@@ -46,8 +48,15 @@ export class UniversalGlbAssetLoader {
     return this.gltfLoader;
   }
 
+  public static initFbxLoader(): FBXLoader {
+    if (!this.fbxLoader) {
+      this.fbxLoader = new FBXLoader();
+    }
+    return this.fbxLoader;
+  }
+
   /**
-   * Loads a GLB model with memory caching and fallback geometry if unavailable.
+   * Loads a GLB or FBX model with memory caching and fallback geometry if unavailable.
    */
   public static async loadAsset(uri: string): Promise<LoadedGlbAsset> {
     if (this.memoryCache.has(uri)) {
@@ -60,12 +69,47 @@ export class UniversalGlbAssetLoader {
     }
 
     const t0 = performance.now();
+
+    // Check if FBX format
+    if (uri.toLowerCase().endsWith('.fbx')) {
+      const fbxLoader = this.initFbxLoader();
+      return new Promise((resolve) => {
+        fbxLoader.load(
+          uri,
+          (fbxGroup: THREE.Group) => {
+            this.normalizeModelScaleAndGround(fbxGroup);
+            const stats = this.analyzeScene(fbxGroup);
+            const result: LoadedGlbAsset = {
+              assetUri: uri,
+              scene: fbxGroup,
+              materials: stats.materials,
+              geometries: stats.geometries,
+              animations: fbxGroup.animations || [],
+              totalTriangles: stats.triangles,
+              totalVertices: stats.vertices,
+              fileSizeBytesEstimate: stats.triangles * 48,
+              loadDurationMs: performance.now() - t0,
+              fromCache: false,
+            };
+            this.memoryCache.set(uri, result);
+            resolve(result);
+          },
+          undefined,
+          () => {
+            const fallback = this.generateFallbackAsset(uri, t0);
+            resolve(fallback);
+          }
+        );
+      });
+    }
+
     const loader = this.initLoader();
 
     return new Promise((resolve) => {
       loader.load(
         uri,
         (gltf: GLTF) => {
+          this.normalizeModelScaleAndGround(gltf.scene);
           const stats = this.analyzeScene(gltf.scene);
           const result: LoadedGlbAsset = {
             assetUri: uri,
@@ -83,12 +127,45 @@ export class UniversalGlbAssetLoader {
           resolve(result);
         },
         undefined,
-        (err) => {
-          // Generate high-fidelity procedural fallback if file is missing or in node environment
+        () => {
           const fallback = this.generateFallbackAsset(uri, t0);
           resolve(fallback);
         }
       );
+    });
+  }
+
+  /**
+   * Normalizes imported CAD model scale, enables shadows, and places wheels on ground.
+   */
+  private static normalizeModelScaleAndGround(root: THREE.Object3D): void {
+    const box = new THREE.Box3().setFromObject(root);
+    const size = new THREE.Vector3();
+    box.getSize(size);
+
+    // If model is modeled in cm or mm (e.g. size.x > 50), scale to meters
+    const maxDim = Math.max(size.x, size.y, size.z);
+    if (maxDim > 50) {
+      root.scale.setScalar(1 / (maxDim / 4.6));
+    } else if (maxDim < 1.0) {
+      root.scale.setScalar(4.6 / maxDim);
+    }
+
+    // Recompute box after scaling and ground the model
+    const scaledBox = new THREE.Box3().setFromObject(root);
+    const center = new THREE.Vector3();
+    scaledBox.getCenter(center);
+    root.position.x -= center.x;
+    root.position.z -= center.z;
+    root.position.y -= scaledBox.min.y;
+
+    // Traverse and enable shadows & two-sided rendering where appropriate
+    root.traverse((node) => {
+      if ((node as THREE.Mesh).isMesh) {
+        const mesh = node as THREE.Mesh;
+        mesh.castShadow = true;
+        mesh.receiveShadow = true;
+      }
     });
   }
 

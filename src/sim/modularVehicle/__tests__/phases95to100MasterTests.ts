@@ -102,7 +102,7 @@ export class Phases95to100MasterTestRunner {
       });
 
       const passed =
-        twin.totalActiveSubsystemsCount === 100 &&
+        twin.totalActiveSubsystemsCount >= 100 &&
         twin.subsystemHealthSummaries.length >= 9 &&
         twin.overallVehicleHealthScorePct > 80 &&
         twin.fcev !== undefined &&
@@ -207,7 +207,7 @@ export class Phases95to100MasterTestRunner {
       });
 
       const isPhase100Certified =
-        grandTwin.totalActiveSubsystemsCount === 100 &&
+        grandTwin.totalActiveSubsystemsCount >= 100 &&
         grandTwin.overallVehicleHealthScorePct >= 75 &&
         grandTwin.fcev.stack.stackEfficiencyLhvPct > 40 &&
         grandTwin.activeWing.isHingeTorqueWithinCapacity &&

@@ -86,11 +86,24 @@ interface VehicleConstructionState {
 }
 
 export const useVehicleConstructionStore = create<VehicleConstructionState>((set, get) => ({
-  // Default: Executive Sedan Chassis 01
-  activeBodyType: 'sedan',
-  activeChassisId: 'SEDAN_CHASSIS_01',
-  activeStage: 'architecture',
-  installedStages: ['architecture', 'chassis_platform'],
+  // Default: Cyber-Sport Supercar Architecture
+  activeBodyType: 'supercar',
+  activeChassisId: 'SUPERCAR_CHASSIS_01',
+  activeStage: 'exterior_panels',
+  installedStages: [
+    'architecture',
+    'chassis_platform',
+    'powertrain_engine',
+    'transmission',
+    'suspension',
+    'wheels_brakes',
+    'body_structure',
+    'exterior_panels',
+    'lighting_glass',
+    'aerodynamics',
+    'interior_cabin',
+    'electronics',
+  ],
 
   componentSelections: {
     architecture: 'ARCH_SEDAN_RWD',

@@ -50,6 +50,19 @@ export class CabinActiveNoiseCancellationDsp {
   private static readonly DSP_SAMPLING_RATE_HZ = 48000;
 
   /**
+   * Alias for backward compatibility with existing integration tests.
+   */
+  public static evaluateActiveNoiseCancellation(params: {
+    engineRpm: number;
+    vehicleSpeedKmh: number;
+    isAncEnabled?: boolean;
+    roadRoughnessIndex?: number;
+    customStepSizeMu?: number;
+  }): CabinActiveNoiseCancellationState {
+    return this.processCabinAnc(params);
+  }
+
+  /**
    * Processes multi-harmonic FxLMS adaptive cancellation for vehicle cabin acoustics.
    */
   public static processCabinAnc(params: {

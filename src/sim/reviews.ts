@@ -3,6 +3,7 @@ import {
   TRANSMISSION_TYPES, SUSPENSION_TYPES,
 } from "./constants";
 import type { VehicleDesign, SimResult } from "./types";
+import { MultiPhysicsCouplingBus } from "./physics/multiPhysicsCouplingBus";
 
 export interface CategoryScore {
   key: string;
@@ -139,16 +140,32 @@ export function computeScores(design: VehicleDesign, sim: SimResult): ReviewScor
   const suspensionScore = clamp(5 + susp.gripFactor * 4 + sim.lateralG * 0.6);
   const engineScore = clamp(sim.peakPower / 80 + sim.thermalEfficiency * 4);
 
+  // MULTI-PHYSICS CROSS-COUPLING
+  const bus = MultiPhysicsCouplingBus.getInstance();
+  const psycho = bus.computePsychoacousticRefinement({
+    loudnessSones: Math.max(2, (sim.nvh ?? 0.5) * 22),
+    sharpnessAcum: 1.15,
+    hasActiveNoiseCancellation: int.soundDeadening > 0.6,
+    acousticGlassTier: int.soundDeadening > 0.8 ? 2 : int.soundDeadening > 0.4 ? 1 : 0,
+  });
+
+  const mfgCoupling = bus.computeManufacturingReliabilityCoupling({
+    automationLevelPct: (sim.manufacturing?.qualityScore ?? 75),
+    qcInspectionTiers: 4,
+    componentCount: 3800,
+    baseUnitMSRP: sim.totalCost ?? 35000,
+  });
+
   // COMFORT
   const seatComfort = clamp(seat.comfort * 6 + seatMat.comfortFactor * 4);
   const rideQuality = clamp(8 - (v.springRateF / 300) * 3 - (1 - susp.gripFactor) * 2);
-  const cabinNoise = clamp(8 - sim.nvh * 4 + int.soundDeadening * 4);
+  const cabinNoise = clamp(psycho.cabinQuietnessRating * 0.7 + int.soundDeadening * 3.0);
   const climate = clamp(6 + (int.climateControl ? 2 : 0) + int.ambientLighting * 1.5);
   const rearSeat = clamp(6 - (int.seatCount <= 2 ? 3 : 0) + (v.exterior.bodyType.includes("sedan") || v.exterior.bodyType.includes("suv") ? 2 : 0));
 
   // INTERIOR
   const materialQuality = clamp(dash.luxuryFactor * 6 + seatMat.comfortFactor * 4);
-  const buildQuality = clamp(sim.manufacturing.qualityScore / 10);
+  const buildQuality = clamp((sim.manufacturing.qualityScore / 10) * 0.6 + mfgCoupling.fitAndFinishRating * 0.4);
   const designScore = clamp(6 + dash.luxuryFactor * 3 + int.ambientLighting * 1.5);
   const storage = clamp(5 + (v.exterior.bodyType.includes("wagon") || v.exterior.bodyType.includes("suv") ? 3 : 0));
   const visibility = clamp(7 - (v.aero.wingHeight > 250 ? 1.5 : 0) - (int.rollCage !== "none" ? 1 : 0));
@@ -167,9 +184,9 @@ export function computeScores(design: VehicleDesign, sim: SimResult): ReviewScor
   const childSafety = clamp(4 + (v.exterior.bodyType.includes("sedan") || v.exterior.bodyType.includes("suv") || v.exterior.bodyType.includes("wagon") ? 3 : 0) + sim.testing.crashTest.sideScore / 15);
 
   // OWNERSHIP
-  const reliabilityScore = clamp(sim.reliability * 10);
+  const reliabilityScore = clamp((sim.reliability * 10) * 0.6 + (mfgCoupling.overallReliabilityScorePct / 10) * 0.4);
   const fuelEconomyScore = clamp(10 - sim.fuelEconomy * 0.9);
-  const serviceCost = clamp(10 - (sim.engineCost + sim.manufacturing.warrantyCost) / 12000);
+  const serviceCost = clamp(10 - (sim.engineCost + mfgCoupling.projectedAnnualWarrantyCostPerUnit) / 12000);
   const warranty = clamp(5 + sim.reliability * 4 - (sim.manufacturing.defectRate / 4));
   const resale = clamp(4 + sim.reliability * 4 + (v.chassis === "carbon_tub" ? 1 : 0) - (sim.totalCost > 80000 ? 2 : 0));
 

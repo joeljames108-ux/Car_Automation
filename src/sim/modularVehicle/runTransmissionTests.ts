@@ -29,26 +29,30 @@ function runTest(suite: string, name: string, fn: () => void) {
   try {
     fn();
     results.push({ suite, name, passed: true, durationMs: performance.now() - start });
-  } catch (err: any) {
-    results.push({ suite, name, passed: false, durationMs: performance.now() - start, error: err.message });
+  } catch (err: unknown) {
+    const errorMsg = err instanceof Error ? err.message : String(err);
+    results.push({ suite, name, passed: false, durationMs: performance.now() - start, error: errorMsg });
   }
 }
 
-function expect(actual: any) {
+function expect<T>(actual: T) {
   return {
-    toBe(expected: any) {
-      if (actual !== expected) throw new Error(`Expected ${expected} but got ${actual}`);
+    toBe(expected: T) {
+      if (actual !== expected) throw new Error(`Expected ${String(expected)} but got ${String(actual)}`);
     },
     toBeCloseTo(expected: number, delta: number = 0.05) {
-      if (Math.abs(actual - expected) > delta) {
-        throw new Error(`Expected ${actual} to be close to ${expected} within ${delta}`);
+      const numActual = typeof actual === 'number' ? actual : Number(actual);
+      if (Math.abs(numActual - expected) > delta) {
+        throw new Error(`Expected ${numActual} to be close to ${expected} within ${delta}`);
       }
     },
     toBeGreaterThan(expected: number) {
-      if (actual <= expected) throw new Error(`Expected ${actual} to be > ${expected}`);
+      const numActual = typeof actual === 'number' ? actual : Number(actual);
+      if (numActual <= expected) throw new Error(`Expected ${numActual} to be > ${expected}`);
     },
     toBeLessThan(expected: number) {
-      if (actual >= expected) throw new Error(`Expected ${actual} to be < ${expected}`);
+      const numActual = typeof actual === 'number' ? actual : Number(actual);
+      if (numActual >= expected) throw new Error(`Expected ${numActual} to be < ${expected}`);
     },
   };
 }
