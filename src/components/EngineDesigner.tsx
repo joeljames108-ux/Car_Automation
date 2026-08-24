@@ -24,6 +24,7 @@ import {
   Sparkles,
   Layers,
   Cpu,
+  Sliders,
 } from "lucide-react";
 import { useDesign } from "../state/DesignContext";
 import { Section, Slider, Select, ChoiceGrid, Toggle, StatTile } from "./ui/Controls";
@@ -76,6 +77,7 @@ import { EngineAudioVisualizer } from "./assembly/EngineAudioVisualizer";
 import { ApexAgentConsole } from "./agents/ApexAgentConsole";
 import { EngineBuilderFlow } from "./assembly/EngineBuilderFlow";
 import { ModularEngineStudio } from "./engineStudio/ModularEngineStudio";
+import { Transmission3DStudio } from "./transmissionStudio/Transmission3DStudio";
 
 // Engine layout → icon mapping
 const LAYOUT_ICONS: Record<string, React.ReactNode> = {
@@ -132,7 +134,7 @@ export function EngineDesigner() {
   const [modalRendered, setModalRendered] = useState(false);
   const [modalActive, setModalActive] = useState(false);
   const [showCompletionModal, setShowCompletionModal] = useState(false);
-  const [engineMode, setEngineMode] = useState<"3d_studio" | "assembly_flow">("assembly_flow");
+  const [engineMode, setEngineMode] = useState<"3d_studio" | "assembly_flow" | "transmission_studio">("assembly_flow");
 
   // Robotic Engine Assembly Line System state (Unified)
   const assembly = useAssemblyStore(eng);
@@ -265,7 +267,7 @@ export function EngineDesigner() {
             onClick={() => setEngineMode("assembly_flow")}
             className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
               engineMode === "assembly_flow"
-                ? "bg-cyan-500 text-slate-950 shadow-md shadow-cyan-500/30"
+                ? "bg-cyan-500 text-slate-950 shadow-md shadow-cyan-500/30 font-extrabold"
                 : "text-slate-400 hover:text-slate-200"
             }`}
           >
@@ -276,17 +278,30 @@ export function EngineDesigner() {
             onClick={() => setEngineMode("3d_studio")}
             className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
               engineMode === "3d_studio"
-                ? "bg-cyan-500 text-slate-950 shadow-md shadow-cyan-500/30"
+                ? "bg-cyan-500 text-slate-950 shadow-md shadow-cyan-500/30 font-extrabold"
                 : "text-slate-400 hover:text-slate-200"
             }`}
           >
             <Sparkles size={13} />
             <span>Dyno & Master Workbench</span>
           </button>
+          <button
+            onClick={() => setEngineMode("transmission_studio")}
+            className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+              engineMode === "transmission_studio"
+                ? "bg-cyan-500 text-slate-950 shadow-md shadow-cyan-500/30 font-extrabold"
+                : "text-slate-400 hover:text-slate-200"
+            }`}
+          >
+            <Sliders size={13} />
+            <span>3D Transmission Studio</span>
+          </button>
         </div>
       </div>
 
-      {engineMode === "3d_studio" ? (
+      {engineMode === "transmission_studio" ? (
+        <Transmission3DStudio />
+      ) : engineMode === "3d_studio" ? (
         <ModularEngineStudio />
       ) : (
         /* ========================================================================= */

@@ -25,10 +25,12 @@ import type { EngineLayout, IntakeType, FuelSystemType } from "../../../sim/type
 import { ModularEngine3DViewport } from "../../../engine3d/ModularEngine3DViewport";
 import { EngineBuilderFlow } from "../../assembly/EngineBuilderFlow";
 import { ModularEngineStudio } from "../../engineStudio/ModularEngineStudio";
+import { Transmission3DStudio } from "../../transmissionStudio/Transmission3DStudio";
 
 type EngineStudioTab =
   | "assembly_3d"
   | "engine_workbench"
+  | "transmission_3d"
   | "block"
   | "valvetrain"
   | "forced_induction"
@@ -61,6 +63,7 @@ export function NeonEngineStudio() {
         {[
           { id: "assembly_3d" as const, label: "3D Engine Assembly & Builder", icon: <Box size={14} /> },
           { id: "engine_workbench" as const, label: "Dyno & Master Workbench", icon: <Wrench size={14} /> },
+          { id: "transmission_3d" as const, label: "3D Transmission Studio", icon: <Sliders size={14} /> },
           { id: "block" as const, label: "Block & Geometry", icon: <Cpu size={14} /> },
           { id: "valvetrain" as const, label: "Valvetrain & Cams", icon: <Sliders size={14} /> },
           { id: "forced_induction" as const, label: "Turbo & Boost", icon: <Flame size={14} /> },
@@ -103,6 +106,13 @@ export function NeonEngineStudio() {
       {activeTab === "engine_workbench" && (
         <div className="w-full rounded-3xl overflow-hidden border border-white/10 bg-[#070e1c] shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
           <ModularEngineStudio />
+        </div>
+      )}
+
+      {/* View 2B: Master 3D Transmission Studio */}
+      {activeTab === "transmission_3d" && (
+        <div className="w-full rounded-3xl overflow-hidden border border-white/10 bg-[#070e1c] shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
+          <Transmission3DStudio />
         </div>
       )}
 
