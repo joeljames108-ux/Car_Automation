@@ -115,9 +115,7 @@ const STAGES: StageItem[] = [
   // --- Engineering Studio ---
   { id: "command", label: "Command Center", icon: <Layers size={14} />, category: "engineering" },
   { id: "engine", label: "Engine", icon: <Cog size={14} />, category: "engineering" },
-  { id: "vehicle", label: "Vehicle", icon: <Car size={14} />, category: "engineering" },
-  { id: "exterior", label: "Exterior", icon: <Paintbrush size={14} />, category: "engineering" },
-  { id: "aero", label: "Aero Lab", icon: <Wind size={14} />, category: "engineering" },
+  { id: "vehicle", label: "Vehicle Studio", icon: <Car size={14} />, category: "engineering" },
   { id: "interior", label: "Interior", icon: <Sofa size={14} />, category: "engineering" },
   { id: "manufacturing", label: "Manufacturing", icon: <Factory size={14} />, category: "engineering" },
   { id: "infotainment", label: "Electronics", icon: <Monitor size={14} />, category: "engineering" },
@@ -200,7 +198,7 @@ export function NeonHorizonShell() {
   }, []);
 
   return (
-    <div className="relative min-h-screen text-slate-100 flex flex-col font-sans selection:bg-cyan-500/30 selection:text-cyan-200 overflow-x-hidden">
+    <div className="relative min-h-screen text-slate-100 flex flex-col font-sans selection:bg-sky-400/20 selection:text-sky-200 overflow-x-hidden">
       {/* 1. Multi-Layer Cyberpunk Metropolis Parallax Background */}
       <CyberpunkCityBackground
         scene={sceneMode === "wind_tunnel" || stage === "aero" ? 2 : 1}

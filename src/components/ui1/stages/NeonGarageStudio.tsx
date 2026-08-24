@@ -84,10 +84,10 @@ export function NeonGarageStudio() {
                       setLightingPreset(preset.id);
                     }}
                     className={`p-3 rounded-xl border transition-all cursor-pointer text-xs font-bold ${
-                      isSelected
-                        ? "bg-[#091a38] border-cyan-400 text-cyan-300 shadow-[0_0_12px_rgba(0,229,255,0.3)]"
-                        : "bg-[#060e22] border-white/10 text-slate-300 hover:border-cyan-500/30"
-                    }`}
+ isSelected
+ ? "bg-[#091a38] border-sky-400/40 text-sky-300"
+ : "bg-[#060e22] border-white/10 text-slate-300 hover:border-sky-400/25"
+ }`}
                   >
                     {preset.name}
                   </div>
@@ -95,10 +95,10 @@ export function NeonGarageStudio() {
               })}
             </div>
 
-            <div className="p-4 rounded-xl bg-[#060e22] border border-cyan-500/20 flex flex-col gap-2 mt-2">
+            <div className="p-4 rounded-xl bg-[#060e22] border border-sky-400/15 flex flex-col gap-2 mt-2">
               <div className="flex items-center justify-between">
                 <span className="text-xs text-slate-400">VIN Chassis Serial:</span>
-                <span className="text-xs font-bold nh-font-mono text-cyan-300">APX-2026-00984-GTX</span>
+                <span className="text-xs font-bold nh-font-mono text-sky-300">APX-2026-00984-GTX</span>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-xs text-slate-400">Assembly Location:</span>
@@ -133,10 +133,10 @@ export function NeonGarageStudio() {
                     setSelectedCar(car.id);
                   }}
                   className={`p-3.5 rounded-xl border transition-all cursor-pointer flex flex-col gap-1.5 ${
-                    isSelected
-                      ? "bg-[#0a1b3c] border-cyan-400 shadow-[0_0_15px_rgba(0,229,255,0.3)]"
-                      : "bg-[#060e22] border-white/10 hover:border-cyan-500/30"
-                  }`}
+ isSelected
+ ? "bg-[#0a1b3c] border-sky-400/40"
+ : "bg-[#060e22] border-white/10 hover:border-sky-400/25"
+ }`}
                 >
                   <div className="flex items-center justify-between">
                     <span className="text-xs font-bold text-slate-100">{car.name}</span>

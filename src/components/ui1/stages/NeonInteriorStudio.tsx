@@ -19,6 +19,7 @@ import { NeonHorizonSelect } from "../design/NeonHorizonSelect";
 import { NeonHorizonButton } from "../design/NeonHorizonButton";
 import { NeonHorizonBadge } from "../design/NeonHorizonBadge";
 import { NeonHorizonDataCard } from "../design/NeonHorizonDataCard";
+import { NeonRealisticDashboardPreview } from "../design/NeonRealisticDashboardPreview";
 import { InteriorsDesigner } from "../../InteriorsDesigner";
 import { ModularInteriorWorkshop } from "../../vehicleAssembly/ModularInteriorWorkshop";
 
@@ -30,10 +31,10 @@ export function NeonInteriorStudio() {
   const [activeTab, setActiveTab] = useState<InteriorStudioTab>("cockpit_3d_studio");
   const [clusterTheme, setClusterTheme] = useState<string>("cyberpunk_neon");
   const [seatType, setSeatType] = useState<string>("carbon_bucket");
-  const [ambientColor, setAmbientColor] = useState<string>("#00e5ff");
+  const [ambientColor, setAmbientColor] = useState<string>("#38bdf8");
   const [soundMode, setSoundMode] = useState<string>("v12_symphony");
 
-  const ambientColors = ["#00e5ff", "#e040fb", "#00e676", "#ffd740", "#ff5252"];
+  const ambientColors = ["#38bdf8", "#a78bfa", "#34d399", "#fbbf24", "#ff5252"];
 
   return (
     <div className="w-full flex flex-col gap-6 text-slate-100 animate-nh-materialize">
@@ -73,10 +74,10 @@ export function NeonInteriorStudio() {
                 setActiveTab(tab.id);
               }}
               className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs nh-font-mono font-bold transition-all cursor-pointer whitespace-nowrap ${
-                isActive
-                  ? "bg-cyan-500/30 text-cyan-200 border border-cyan-400/60 shadow-[0_0_12px_rgba(0,229,255,0.4)]"
-                  : "text-slate-400 hover:text-slate-200 hover:bg-white/5"
-              }`}
+ isActive
+ ? "bg-sky-400/20 text-sky-200 border border-sky-400/35"
+ : "text-slate-400 hover:text-slate-200 hover:bg-white/5"
+ }`}
             >
               {tab.icon}
               <span>{tab.label}</span>
@@ -140,8 +141,8 @@ export function NeonInteriorStudio() {
                       onClick={() => setAmbientColor(col)}
                       style={{ backgroundColor: col }}
                       className={`w-8 h-8 rounded-full border-2 transition-transform cursor-pointer ${
-                        ambientColor === col ? "scale-125 border-white shadow-[0_0_15px_rgba(255,255,255,0.6)]" : "border-transparent opacity-70"
-                      }`}
+ ambientColor === col ? "scale-125 border-white" : "border-transparent opacity-70"
+ }`}
                     />
                   ))}
                 </div>
@@ -173,6 +174,24 @@ export function NeonInteriorStudio() {
               />
             </NeonHorizonGlassPanel>
           </div>
+        </div>
+      )}
+
+      {/* Dashboard Preview */}
+      {activeTab === "hmi_quick_tune" && (
+        <div className="w-full">
+          <NeonHorizonGlassPanel
+            variant="window"
+            glow="cyan"
+            corners="reticle"
+            header={{
+              title: "LIVE COCKPIT PREVIEW",
+              icon: <Sparkles size={16} />,
+            }}
+            className="p-6"
+          >
+            <NeonRealisticDashboardPreview interior={design.vehicle.interior} />
+          </NeonHorizonGlassPanel>
         </div>
       )}
     </div>

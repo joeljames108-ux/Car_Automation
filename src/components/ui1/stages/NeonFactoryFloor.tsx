@@ -93,10 +93,10 @@ export function NeonFactoryFloor() {
                 setActiveTab(tab.id);
               }}
               className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs nh-font-mono font-bold transition-all cursor-pointer whitespace-nowrap ${
-                isActive
-                  ? "bg-cyan-500/30 text-cyan-200 border border-cyan-400/60 shadow-[0_0_12px_rgba(0,229,255,0.4)]"
-                  : "text-slate-400 hover:text-slate-200 hover:bg-white/5"
-              }`}
+ isActive
+ ? "bg-sky-400/20 text-sky-200 border border-sky-400/35"
+ : "text-slate-400 hover:text-slate-200 hover:bg-white/5"
+ }`}
             >
               {tab.icon}
               <span>{tab.label}</span>
@@ -136,7 +136,7 @@ export function NeonFactoryFloor() {
             >
               <div className="flex items-center justify-between p-3 rounded-xl bg-black/40 border border-white/10">
                 <span className="text-xs text-slate-400 font-mono">CYCLE TIME</span>
-                <span className="text-sm font-bold font-mono text-cyan-300">{st.cycleTime}</span>
+                <span className="text-sm font-bold font-mono text-sky-300">{st.cycleTime}</span>
               </div>
 
               <div className="flex items-center justify-between p-3 rounded-xl bg-black/40 border border-white/10">

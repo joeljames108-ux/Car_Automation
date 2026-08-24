@@ -49,7 +49,7 @@ export function NeonVortexGeneratorStudio() {
       ctx.clearRect(0, 0, w, h);
 
       // Roof Surface
-      ctx.strokeStyle = "rgba(0, 229, 255, 0.3)";
+      ctx.strokeStyle = "rgba(56,189,248, 0.3)";
       ctx.lineWidth = 2;
       ctx.beginPath();
       ctx.moveTo(30, h * 0.6);
@@ -66,7 +66,7 @@ export function NeonVortexGeneratorStudio() {
       ctx.fill();
 
       // Helical Vortex Swirl Streamlines
-      ctx.strokeStyle = "rgba(0, 229, 255, 0.8)";
+      ctx.strokeStyle = "rgba(56,189,248, 0.8)";
       ctx.lineWidth = 1.5;
 
       for (let i = 0; i < 4; i++) {
@@ -76,7 +76,7 @@ export function NeonVortexGeneratorStudio() {
         const angle = (tick * 0.15 + (offset * 0.08));
         const sy = h * 0.58 - (vgHeightMm / 30) * 15 + Math.sin(angle) * radius;
 
-        ctx.fillStyle = i % 2 === 0 ? "#00e5ff" : "#a855f7";
+        ctx.fillStyle = i % 2 === 0 ? "#38bdf8" : "#a855f7";
         ctx.beginPath();
         ctx.arc(sx, sy, 2.5, 0, Math.PI * 2);
         ctx.fill();
@@ -126,10 +126,10 @@ export function NeonVortexGeneratorStudio() {
             }}
             className="p-6 flex flex-col gap-4"
           >
-            <div className="w-full h-52 bg-[#030712] rounded-xl border border-cyan-500/30 overflow-hidden relative shadow-[inset_0_0_25px_rgba(0,0,0,0.85)]">
+            <div className="w-full h-52 bg-[#030712] rounded-xl border border-sky-400/25 overflow-hidden relative shadow-[inset_0_0_25px_rgba(0,0,0,0.85)]">
               <canvas ref={canvasRef} width={640} height={210} className="w-full h-full" />
               <div className="absolute top-2 left-3 flex items-center gap-2">
-                <span className="text-[10px] nh-font-mono font-bold text-cyan-300">
+                <span className="text-[10px] nh-font-mono font-bold text-sky-300">
                   ACTIVE BOUNDARY LAYER TRIPPING: DOWNSTREAM REAR WING ATTACHED
                 </span>
               </div>
@@ -151,10 +151,10 @@ export function NeonVortexGeneratorStudio() {
                       setVgType(m.id as "delta_wing" | "gothic_arch" | "rectangular_fin" | "micro_strakes");
                     }}
                     className={`p-2.5 rounded-lg border text-center text-xs font-bold cursor-pointer transition-all ${
-                      isSelected
-                        ? "bg-[#091a38] border-cyan-400 text-cyan-300 shadow-[0_0_12px_rgba(0,229,255,0.3)]"
-                        : "bg-[#060e22] border-white/10 text-slate-400 hover:border-cyan-500/30"
-                    }`}
+ isSelected
+ ? "bg-[#091a38] border-sky-400/40 text-sky-300"
+ : "bg-[#060e22] border-white/10 text-slate-400 hover:border-sky-400/25"
+ }`}
                   >
                     {m.name}
                   </div>
@@ -197,14 +197,14 @@ export function NeonVortexGeneratorStudio() {
               onChange={(val) => setVgIncidenceAngle(val)}
             />
 
-            <div className="p-3.5 rounded-xl bg-[#060e22] border border-cyan-500/20 flex flex-col gap-2 font-mono text-xs">
+            <div className="p-3.5 rounded-xl bg-[#060e22] border border-sky-400/15 flex flex-col gap-2 font-mono text-xs">
               <div className="flex items-center justify-between">
                 <span className="text-slate-400">Array Configuration:</span>
                 <span className="text-emerald-300 font-bold">12x Counter-Rotating Pairs</span>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-slate-400">Boundary Layer Thickness:</span>
-                <span className="text-cyan-300 font-bold">22.4 mm (Matched δ)</span>
+                <span className="text-sky-300 font-bold">22.4 mm (Matched δ)</span>
               </div>
             </div>
           </NeonHorizonGlassPanel>

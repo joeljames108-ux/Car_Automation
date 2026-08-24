@@ -16,6 +16,8 @@ import { NeonHorizonGlassPanel } from "../design/NeonHorizonGlassPanel";
 import { NeonHorizonButton } from "../design/NeonHorizonButton";
 import { NeonHorizonBadge } from "../design/NeonHorizonBadge";
 import { NeonHorizonDataCard } from "../design/NeonHorizonDataCard";
+import { NeonComparisonDeltaTile } from "../design/NeonComparisonDeltaTile";
+import { NeonPerformanceKPIGrid } from "../design/NeonPerformanceKPIGrid";
 import { EngineeringComparison } from "../../EngineeringComparison";
 import { VehicleComparisonStudio } from "../../vehicleAssembly/VehicleComparisonStudio";
 
@@ -77,10 +79,10 @@ export function NeonComparisonStudio() {
                 setActiveTab(tab.id);
               }}
               className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs nh-font-mono font-bold transition-all cursor-pointer whitespace-nowrap ${
-                isActive
-                  ? "bg-cyan-500/30 text-cyan-200 border border-cyan-400/60 shadow-[0_0_12px_rgba(0,229,255,0.4)]"
-                  : "text-slate-400 hover:text-slate-200 hover:bg-white/5"
-              }`}
+ isActive
+ ? "bg-sky-400/20 text-sky-200 border border-sky-400/35"
+ : "text-slate-400 hover:text-slate-200 hover:bg-white/5"
+ }`}
             >
               {tab.icon}
               <span>{tab.label}</span>
@@ -113,10 +115,10 @@ export function NeonComparisonStudio() {
                       setRival(id);
                     }}
                     className={`p-3.5 rounded-2xl border transition-all cursor-pointer flex flex-col gap-1 ${
-                      isSelected
-                        ? "bg-[#0a1838] border-cyan-400 shadow-[0_0_15px_rgba(0,229,255,0.3)]"
-                        : "bg-[#060e22] border-white/10 hover:border-cyan-500/30"
-                    }`}
+ isSelected
+ ? "bg-[#0a1838] border-sky-400/40"
+ : "bg-[#060e22] border-white/10 hover:border-sky-400/25"
+ }`}
                   >
                     <span className="text-sm font-bold text-slate-100">{b.name}</span>
                     <div className="flex items-center justify-between text-xs nh-font-mono text-slate-400 pt-1">
@@ -141,25 +143,11 @@ export function NeonComparisonStudio() {
               }}
               className="p-6 flex flex-col gap-4"
             >
-              <div className="flex flex-col gap-3">
-                {[
-                  { label: "PEAK POWER", current: `${sim.peakPower} HP`, rival: `${selectedBenchmark.power} HP`, delta: `${powerDelta > 0 ? "+" : ""}${powerDelta} HP`, win: powerDelta >= 0 },
-                  { label: "TOTAL DRY MASS", current: `${sim.weight} kg`, rival: `${selectedBenchmark.weight} kg`, delta: `${weightDelta > 0 ? "+" : ""}${weightDelta} kg`, win: weightDelta <= 0 },
-                  { label: "TOP SPEED", current: `${sim.topSpeed} km/h`, rival: `${selectedBenchmark.topSpeed} km/h`, delta: `${topSpeedDelta > 0 ? "+" : ""}${topSpeedDelta} km/h`, win: topSpeedDelta >= 0 },
-                  { label: "0-60 MPH ACCELERATION", current: `${sim.accel0_60 || 2.4}s`, rival: `${selectedBenchmark.zeroSixty}s`, delta: `${zeroSixtyDelta > 0 ? "+" : ""}${zeroSixtyDelta}s`, win: zeroSixtyDelta <= 0 },
-                ].map((row, idx) => (
-                  <div key={idx} className="flex items-center justify-between p-3.5 rounded-2xl bg-black/40 border border-white/8">
-                    <span className="text-xs font-bold text-slate-300 w-1/3">{row.label}</span>
-                    <div className="flex items-center justify-between w-2/3 nh-font-mono text-xs">
-                      <span className="font-bold text-cyan-300">{row.current}</span>
-                      <span className="text-slate-500">vs</span>
-                      <span className="text-slate-400">{row.rival}</span>
-                      <span className={`font-bold px-2 py-0.5 rounded-full ${row.win ? "bg-emerald-500/20 text-emerald-300 border border-emerald-500/40" : "bg-rose-500/20 text-rose-300 border border-rose-500/40"}`}>
-                        {row.delta}
-                      </span>
-                    </div>
-                  </div>
-                ))}
+              <div className="grid grid-cols-2 gap-3">
+                <NeonComparisonDeltaTile label="PEAK POWER" value={sim.peakPower} unit="HP" delta={powerDelta} higherIsBetter={true} accentColor="#38bdf8" />
+                <NeonComparisonDeltaTile label="DRY MASS" value={sim.weight} unit="kg" delta={-weightDelta} higherIsBetter={false} accentColor="#f59e0b" />
+                <NeonComparisonDeltaTile label="TOP SPEED" value={sim.topSpeed} unit="km/h" delta={topSpeedDelta} higherIsBetter={true} accentColor="#22c55e" />
+                <NeonComparisonDeltaTile label="0-60 MPH" value={(sim.accel0_60 || 2.4).toFixed(1)} unit="s" delta={-zeroSixtyDelta} higherIsBetter={false} accentColor="#a855f7" />
               </div>
             </NeonHorizonGlassPanel>
           </div>

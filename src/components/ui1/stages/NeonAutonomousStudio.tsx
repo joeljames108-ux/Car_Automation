@@ -47,7 +47,7 @@ export function NeonAutonomousStudio() {
       ctx.fillRect(0, 0, w, h);
 
       // Perspective Road Grid
-      ctx.strokeStyle = "rgba(0, 229, 255, 0.2)";
+      ctx.strokeStyle = "rgba(56,189,248, 0.2)";
       ctx.lineWidth = 1.5;
 
       // Left Lane
@@ -72,7 +72,7 @@ export function NeonAutonomousStudio() {
       ctx.setLineDash([]);
 
       // Autonomous Trajectory Spline (Emerald)
-      ctx.strokeStyle = "#00e676";
+      ctx.strokeStyle = "#34d399";
       ctx.lineWidth = 2.5;
       ctx.beginPath();
       ctx.moveTo(cx, h * 0.85);
@@ -137,7 +137,7 @@ export function NeonAutonomousStudio() {
             }}
             className="p-6 flex flex-col gap-4"
           >
-            <div className="w-full h-52 bg-[#030712] rounded-xl border border-cyan-500/30 overflow-hidden relative shadow-[inset_0_0_25px_rgba(0,0,0,0.85)]">
+            <div className="w-full h-52 bg-[#030712] rounded-xl border border-sky-400/25 overflow-hidden relative shadow-[inset_0_0_25px_rgba(0,0,0,0.85)]">
               <canvas ref={canvasRef} width={640} height={210} className="w-full h-full" />
               <div className="absolute top-2 left-3 flex items-center gap-2">
                 <div className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
@@ -156,10 +156,10 @@ export function NeonAutonomousStudio() {
                       setAutonomyLevel(lvl);
                     }}
                     className={`p-2.5 rounded-lg border text-center text-xs font-bold cursor-pointer transition-all ${
-                      isSelected
-                        ? "bg-[#091a38] border-cyan-400 text-cyan-300 shadow-[0_0_12px_rgba(0,229,255,0.3)]"
-                        : "bg-[#060e22] border-white/10 text-slate-400 hover:border-cyan-500/30"
-                    }`}
+ isSelected
+ ? "bg-[#091a38] border-sky-400/40 text-sky-300"
+ : "bg-[#060e22] border-white/10 text-slate-400 hover:border-sky-400/25"
+ }`}
                   >
                     Level {lvl.replace("L", "")}
                   </div>
@@ -191,10 +191,10 @@ export function NeonAutonomousStudio() {
               onChange={(val) => setTargetSpeed(val)}
             />
 
-            <div className="p-3.5 rounded-xl bg-[#060e22] border border-cyan-500/20 flex flex-col gap-2 font-mono text-xs">
+            <div className="p-3.5 rounded-xl bg-[#060e22] border border-sky-400/15 flex flex-col gap-2 font-mono text-xs">
               <div className="flex items-center justify-between">
                 <span className="text-slate-400">Front LiDAR Range:</span>
-                <span className="text-cyan-300 font-bold">300 meters</span>
+                <span className="text-sky-300 font-bold">300 meters</span>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-slate-400">Triple Camera FOV:</span>

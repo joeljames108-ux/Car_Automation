@@ -67,15 +67,15 @@ export const NeonHorizonModal: React.FC<NeonHorizonModalProps> = ({
           className="p-0 max-h-[90vh] flex flex-col"
         >
           {/* Header */}
-          <div className="px-6 py-4 border-b border-cyan-500/20 bg-black/30 flex items-center justify-between">
+          <div className="px-6 py-4 border-b border-white/8 bg-black/25 flex items-center justify-between">
             <div className="flex items-center gap-3">
               {icon && (
-                <div className="p-2 rounded-xl bg-cyan-500/15 border border-cyan-400/30 text-cyan-300 shadow-[0_0_12px_rgba(0,229,255,0.3)]">
+                <div className="p-2 rounded-xl bg-sky-400/10 border border-sky-400/25 text-sky-300">
                   {icon}
                 </div>
               )}
               <div>
-                <h3 className="text-sm font-bold nh-font-headline tracking-wider text-cyan-200 uppercase">
+                <h3 className="text-sm font-bold nh-font-headline tracking-wider text-slate-100 uppercase">
                   {title}
                 </h3>
                 {subtitle && (
@@ -96,7 +96,7 @@ export const NeonHorizonModal: React.FC<NeonHorizonModalProps> = ({
 
           {/* Footer Actions */}
           {actions && (
-            <div className="px-6 py-3.5 border-t border-cyan-500/20 bg-black/20 flex items-center justify-end gap-3">
+            <div className="px-6 py-3.5 border-t border-white/8 bg-black/20 flex items-center justify-end gap-3">
               {actions}
             </div>
           )}

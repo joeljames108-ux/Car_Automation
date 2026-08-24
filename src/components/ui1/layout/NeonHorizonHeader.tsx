@@ -67,23 +67,23 @@ export const NeonHorizonHeader: React.FC<NeonHorizonHeaderProps> = ({
       <div className="max-w-full px-6 h-16 flex items-center justify-between gap-4">
         {/* Left: Animated Conic Logo & Brand */}
         <div className="flex items-center gap-3 shrink-0">
-          <div className="relative flex items-center justify-center w-10 h-10 rounded-2xl bg-sky-500/10 border border-sky-400/30 shadow-[0_0_20px_rgba(56,189,248,0.25)] overflow-hidden">
+          <div className="relative flex items-center justify-center w-10 h-10 rounded-2xl bg-sky-400/10 border border-sky-400/25 overflow-hidden">
             <div
-              className="absolute inset-0 rounded-2xl opacity-60 pointer-events-none"
+              className="absolute inset-0 rounded-2xl opacity-40 pointer-events-none"
               style={{
-                background: "conic-gradient(from 0deg, rgba(56,189,248,0.4), rgba(168,85,247,0.3), rgba(56,189,248,0.4))",
+                background: "conic-gradient(from 0deg, rgba(127,181,216,0.25), rgba(157,143,196,0.18), rgba(127,181,216,0.25))",
                 animation: "vg-logo-spin 8s linear infinite",
                 filter: "blur(4px)",
               }}
             />
-            <Zap size={20} className="relative z-10 text-sky-400 drop-shadow-[0_0_8px_rgba(56,189,248,0.8)]" />
+            <Zap size={20} className="relative z-10 text-sky-400" />
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <span className="text-sm font-extrabold tracking-wider bg-gradient-to-r from-white via-sky-200 to-sky-400 bg-clip-text text-transparent">
+              <span className="text-sm font-extrabold tracking-wider nh-gradient-text-cyan">
                 APEX ENGINEER
               </span>
-              <span className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-sky-500/15 text-sky-300 text-[10px] font-semibold border border-sky-400/30 shadow-[0_0_10px_rgba(56,189,248,0.2)]">
+              <span className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-sky-500/15 text-sky-300 text-[10px] font-semibold border border-sky-400/30">
                 <span className="w-1.5 h-1.5 rounded-full bg-sky-400 animate-pulse" /> VISION STUDIO
               </span>
             </div>
@@ -107,10 +107,10 @@ export const NeonHorizonHeader: React.FC<NeonHorizonHeaderProps> = ({
                     onSelectCategory(cat.id);
                   }}
                   className={`flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold tracking-wide transition-all duration-200 whitespace-nowrap cursor-pointer ${
-                    isActive
-                      ? "bg-sky-500/20 text-sky-300 border border-sky-400/40 shadow-[0_0_15px_rgba(56,189,248,0.25)] font-bold"
-                      : "text-slate-400 hover:text-slate-200 hover:bg-white/5 border border-transparent"
-                  }`}
+ isActive
+ ? "bg-sky-500/20 text-sky-300 border border-sky-400/40 font-bold"
+ : "text-slate-400 hover:text-slate-200 hover:bg-white/5 border border-transparent"
+ }`}
                 >
                   <span className={isActive ? "text-sky-400" : "text-slate-500"}>{cat.icon}</span>
                   <span>{cat.label}</span>
@@ -131,9 +131,9 @@ export const NeonHorizonHeader: React.FC<NeonHorizonHeaderProps> = ({
           {/* AI Status Badge */}
           <div
             aria-label="Apex AI Studio Agent Online"
-            className="flex items-center gap-1.5 bg-purple-500/15 border border-purple-400/30 rounded-full px-2.5 py-1 text-[10px] font-bold text-purple-300 shadow-[0_0_12px_rgba(168,85,247,0.25)]"
+            className="flex items-center gap-1.5 bg-sky-500/15 border border-sky-400/30 rounded-full px-2.5 py-1 text-[10px] font-bold text-sky-300"
           >
-            <Sparkles size={11} className="text-purple-400 animate-pulse" />
+            <Sparkles size={11} className="text-sky-400 animate-pulse" />
             <span>AI ONLINE</span>
           </div>
         </div>
@@ -193,10 +193,10 @@ export const NeonHorizonHeader: React.FC<NeonHorizonHeaderProps> = ({
                   onSetUnits(u);
                 }}
                 className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase transition-all cursor-pointer ${
-                  units === u
-                    ? "bg-sky-400 text-slate-950 shadow-[0_0_10px_rgba(56,189,248,0.5)]"
-                    : "text-slate-400 hover:text-slate-200"
-                }`}
+ units === u
+ ? "bg-sky-400 text-slate-950"
+ : "text-slate-400 hover:text-slate-200"
+ }`}
               >
                 {u}
               </button>

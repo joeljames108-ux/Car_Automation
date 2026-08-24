@@ -109,16 +109,16 @@ export function NeonLeaderboardStudio() {
                   setSelectedCircuit(c.id);
                 }}
                 className={`p-4 rounded-xl border transition-all cursor-pointer flex items-center justify-between ${
-                  isSelected
-                    ? "bg-[#091a38] border-cyan-400 shadow-[0_0_15px_rgba(0,229,255,0.3)]"
-                    : "bg-[#060e22] border-white/10 hover:border-cyan-500/30"
-                }`}
+ isSelected
+ ? "bg-[#091a38] border-sky-400/40"
+ : "bg-[#060e22] border-white/10 hover:border-sky-400/25"
+ }`}
               >
                 <div className="flex items-center gap-3">
-                  <Flag size={16} className={isSelected ? "text-cyan-400" : "text-slate-400"} />
+                  <Flag size={16} className={isSelected ? "text-sky-400" : "text-slate-400"} />
                   <span className="text-xs font-bold text-slate-100">{c.name}</span>
                 </div>
-                <ChevronRight size={14} className={isSelected ? "text-cyan-400" : "text-slate-500"} />
+                <ChevronRight size={14} className={isSelected ? "text-sky-400" : "text-slate-500"} />
               </div>
             );
           })}
@@ -141,19 +141,19 @@ export function NeonLeaderboardStudio() {
                 <div
                   key={entry.rank}
                   className={`p-3.5 rounded-xl border flex items-center justify-between transition-all ${
-                    isUser
-                      ? "bg-[#081f44] border-cyan-400 shadow-[0_0_15px_rgba(0,229,255,0.35)]"
-                      : "bg-[#060e22] border-white/10"
-                  }`}
+ isUser
+ ? "bg-[#081f44] border-sky-400/40"
+ : "bg-[#060e22] border-white/10"
+ }`}
                 >
                   <div className="flex items-center gap-3">
                     <span className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${
-                      entry.rank === 1 ? "bg-amber-400 text-slate-950" : entry.rank === 2 ? "bg-slate-300 text-slate-950" : entry.rank === 3 ? "bg-amber-700 text-slate-100" : "bg-cyan-500/20 text-cyan-300"
-                    }`}>
+ entry.rank === 1 ? "bg-amber-400 text-slate-950" : entry.rank === 2 ? "bg-slate-300 text-slate-950" : entry.rank === 3 ? "bg-amber-700 text-slate-100" : "bg-sky-400/12 text-sky-300"
+ }`}>
                       #{entry.rank}
                     </span>
                     <div className="flex flex-col">
-                      <span className={`text-xs font-bold ${isUser ? "text-cyan-300" : "text-slate-100"}`}>
+                      <span className={`text-xs font-bold ${isUser ? "text-sky-300" : "text-slate-100"}`}>
                         {entry.car}
                       </span>
                       <span className="text-[10px] text-slate-400 font-mono">
@@ -161,7 +161,7 @@ export function NeonLeaderboardStudio() {
                       </span>
                     </div>
                   </div>
-                  <span className={`text-xs font-bold font-mono ${isUser ? "text-cyan-300" : "text-slate-200"}`}>
+                  <span className={`text-xs font-bold font-mono ${isUser ? "text-sky-300" : "text-slate-200"}`}>
                     {entry.time}
                   </span>
                 </div>

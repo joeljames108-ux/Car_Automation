@@ -51,7 +51,7 @@ export function NeonPlasmaActuatorStudio() {
       ctx.fillStyle = "#060e22";
       ctx.fillRect(40, h * 0.6, w - 80, 20);
 
-      ctx.strokeStyle = "rgba(0, 229, 255, 0.4)";
+      ctx.strokeStyle = "rgba(56,189,248, 0.4)";
       ctx.strokeRect(40, h * 0.6, w - 80, 20);
 
       // Top Exposed Electrode (Gold)
@@ -61,9 +61,9 @@ export function NeonPlasmaActuatorStudio() {
       // Plasma Corona Ionization Glow (Cyan / Purple)
       const glowAlpha = Math.min(1.0, 0.3 + (plasmaVoltageKv / 15) * 0.7);
       const grad = ctx.createLinearGradient(140, h * 0.58, 280, h * 0.58);
-      grad.addColorStop(0, `rgba(0, 229, 255, ${glowAlpha})`);
+      grad.addColorStop(0, `rgba(56,189,248, ${glowAlpha})`);
       grad.addColorStop(0.5, `rgba(168, 85, 247, ${glowAlpha * 0.8})`);
-      grad.addColorStop(1, "rgba(0, 229, 255, 0)");
+      grad.addColorStop(1, "rgba(56,189,248, 0)");
 
       ctx.fillStyle = grad;
       ctx.beginPath();
@@ -74,7 +74,7 @@ export function NeonPlasmaActuatorStudio() {
       ctx.fill();
 
       // Induced Wall Jet Streamlines
-      ctx.strokeStyle = "rgba(0, 229, 255, 0.7)";
+      ctx.strokeStyle = "rgba(56,189,248, 0.7)";
       ctx.lineWidth = 1.5;
       for (let i = 0; i < 4; i++) {
         const offset = (tick * 5 + i * 50) % (w - 180);
@@ -83,7 +83,7 @@ export function NeonPlasmaActuatorStudio() {
 
         ctx.beginPath();
         ctx.arc(sx, sy, 2, 0, Math.PI * 2);
-        ctx.fillStyle = "#00e5ff";
+        ctx.fillStyle = "#38bdf8";
         ctx.fill();
       }
 
@@ -131,10 +131,10 @@ export function NeonPlasmaActuatorStudio() {
             }}
             className="p-6 flex flex-col gap-4"
           >
-            <div className="w-full h-52 bg-[#030712] rounded-xl border border-cyan-500/30 overflow-hidden relative shadow-[inset_0_0_25px_rgba(0,0,0,0.85)]">
+            <div className="w-full h-52 bg-[#030712] rounded-xl border border-sky-400/25 overflow-hidden relative shadow-[inset_0_0_25px_rgba(0,0,0,0.85)]">
               <canvas ref={canvasRef} width={640} height={210} className="w-full h-full" />
               <div className="absolute top-2 left-3 flex items-center gap-2">
-                <span className="text-[10px] nh-font-mono font-bold text-cyan-300">
+                <span className="text-[10px] nh-font-mono font-bold text-sky-300">
                   DBD ACTIVE: ZERO-DRAG ELECTRO-HYDRODYNAMIC PROPULSION
                 </span>
               </div>
@@ -156,10 +156,10 @@ export function NeonPlasmaActuatorStudio() {
                       setActuatorState(m.id as "active_corona" | "burst_pulsed" | "continuous_jet" | "standby");
                     }}
                     className={`p-2.5 rounded-lg border text-center text-xs font-bold cursor-pointer transition-all ${
-                      isSelected
-                        ? "bg-[#091a38] border-cyan-400 text-cyan-300 shadow-[0_0_12px_rgba(0,229,255,0.3)]"
-                        : "bg-[#060e22] border-white/10 text-slate-400 hover:border-cyan-500/30"
-                    }`}
+ isSelected
+ ? "bg-[#091a38] border-sky-400/40 text-sky-300"
+ : "bg-[#060e22] border-white/10 text-slate-400 hover:border-sky-400/25"
+ }`}
                   >
                     {m.name}
                   </div>
@@ -202,10 +202,10 @@ export function NeonPlasmaActuatorStudio() {
               onChange={(val) => setPulseFreqKhz(val)}
             />
 
-            <div className="p-3.5 rounded-xl bg-[#060e22] border border-cyan-500/20 flex flex-col gap-2 font-mono text-xs">
+            <div className="p-3.5 rounded-xl bg-[#060e22] border border-sky-400/15 flex flex-col gap-2 font-mono text-xs">
               <div className="flex items-center justify-between">
                 <span className="text-slate-400">Power Consumption:</span>
-                <span className="text-cyan-300 font-bold">120 W / strip (Ultra Efficient)</span>
+                <span className="text-sky-300 font-bold">120 W / strip (Ultra Efficient)</span>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-slate-400">Electrode Material:</span>

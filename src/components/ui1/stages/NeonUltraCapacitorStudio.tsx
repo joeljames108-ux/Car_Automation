@@ -88,7 +88,7 @@ export function NeonUltraCapacitorStudio() {
             }}
             className="p-6 flex flex-col gap-4"
           >
-            <div className="grid grid-cols-12 gap-1.5 h-36 p-4 rounded-xl bg-[#030712] border border-cyan-500/30 items-end shadow-[inset_0_0_20px_rgba(0,0,0,0.8)]">
+            <div className="grid grid-cols-12 gap-1.5 h-36 p-4 rounded-xl bg-[#030712] border border-sky-400/25 items-end shadow-[inset_0_0_20px_rgba(0,0,0,0.8)]">
               {Array.from({ length: 12 }).map((_, idx) => {
                 const cellSoc = Math.max(0, capSoc - idx * 2.5);
                 const isDischarging = burstActive;
@@ -98,10 +98,10 @@ export function NeonUltraCapacitorStudio() {
                     <div
                       style={{ height: `${cellSoc}%` }}
                       className={`w-full rounded-t transition-all ${
-                        isDischarging
-                          ? "bg-rose-500 shadow-[0_0_12px_rgba(244,63,94,0.7)]"
-                          : "bg-cyan-400 shadow-[0_0_8px_rgba(0,229,255,0.4)]"
-                      }`}
+ isDischarging
+ ? "bg-rose-500"
+ : "bg-sky-300"
+ }`}
                     />
                     <span className="text-[8px] font-mono text-slate-400">#{idx + 1}</span>
                   </div>
@@ -148,10 +148,10 @@ export function NeonUltraCapacitorStudio() {
               onChange={(val) => setRegenBias(val)}
             />
 
-            <div className="p-3.5 rounded-xl bg-[#060e22] border border-cyan-500/20 flex flex-col gap-2 font-mono text-xs">
+            <div className="p-3.5 rounded-xl bg-[#060e22] border border-sky-400/15 flex flex-col gap-2 font-mono text-xs">
               <div className="flex items-center justify-between">
                 <span className="text-slate-400">Full Recharge Time:</span>
-                <span className="text-cyan-300 font-bold">1.8 Seconds (Braking)</span>
+                <span className="text-sky-300 font-bold">1.8 Seconds (Braking)</span>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-slate-400">Total Pack Weight:</span>

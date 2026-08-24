@@ -49,7 +49,7 @@ export function NeonSDuctStudio() {
       ctx.clearRect(0, 0, w, h);
 
       // Nosecone Profile
-      ctx.strokeStyle = "rgba(0, 229, 255, 0.4)";
+      ctx.strokeStyle = "rgba(56,189,248, 0.4)";
       ctx.lineWidth = 2;
       ctx.beginPath();
       ctx.moveTo(30, h * 0.7);
@@ -59,7 +59,7 @@ export function NeonSDuctStudio() {
 
       // S-Duct Internal Flow Streamlines
       if (!isSealed) {
-        ctx.strokeStyle = "rgba(0, 229, 255, 0.7)";
+        ctx.strokeStyle = "rgba(56,189,248, 0.7)";
         ctx.lineWidth = 2;
 
         for (let i = 0; i < 5; i++) {
@@ -74,7 +74,7 @@ export function NeonSDuctStudio() {
 
           ctx.beginPath();
           ctx.arc(sx, sy, 2.5, 0, Math.PI * 2);
-          ctx.fillStyle = "#00e5ff";
+          ctx.fillStyle = "#38bdf8";
           ctx.fill();
         }
       }
@@ -123,10 +123,10 @@ export function NeonSDuctStudio() {
             }}
             className="p-6 flex flex-col gap-4"
           >
-            <div className="w-full h-52 bg-[#030712] rounded-xl border border-cyan-500/30 overflow-hidden relative shadow-[inset_0_0_25px_rgba(0,0,0,0.85)]">
+            <div className="w-full h-52 bg-[#030712] rounded-xl border border-sky-400/25 overflow-hidden relative shadow-[inset_0_0_25px_rgba(0,0,0,0.85)]">
               <canvas ref={canvasRef} width={640} height={210} className="w-full h-full" />
               <div className="absolute top-2 left-3 flex items-center gap-2">
-                <span className="text-[10px] nh-font-mono font-bold text-cyan-300">
+                <span className="text-[10px] nh-font-mono font-bold text-sky-300">
                   {isSealed ? "PASSIVE NOSE: HIGH FRONT-AXLE LIFT DETECTED" : "ACTIVE S-DUCT: FRONT DOWNFORCE STABILIZED"}
                 </span>
               </div>
@@ -148,10 +148,10 @@ export function NeonSDuctStudio() {
                       setDuctMode(m.id as "high_downforce" | "low_drag" | "cooling_boost" | "sealed");
                     }}
                     className={`p-2.5 rounded-lg border text-center text-xs font-bold cursor-pointer transition-all ${
-                      isSelected
-                        ? "bg-[#091a38] border-cyan-400 text-cyan-300 shadow-[0_0_12px_rgba(0,229,255,0.3)]"
-                        : "bg-[#060e22] border-white/10 text-slate-400 hover:border-cyan-500/30"
-                    }`}
+ isSelected
+ ? "bg-[#091a38] border-sky-400/40 text-sky-300"
+ : "bg-[#060e22] border-white/10 text-slate-400 hover:border-sky-400/25"
+ }`}
                   >
                     {m.name}
                   </div>
@@ -194,14 +194,14 @@ export function NeonSDuctStudio() {
               onChange={(val) => setChimneyAngleDeg(val)}
             />
 
-            <div className="p-3.5 rounded-xl bg-[#060e22] border border-cyan-500/20 flex flex-col gap-2 font-mono text-xs">
+            <div className="p-3.5 rounded-xl bg-[#060e22] border border-sky-400/15 flex flex-col gap-2 font-mono text-xs">
               <div className="flex items-center justify-between">
                 <span className="text-slate-400">Boundary Layer Bleed:</span>
                 <span className="text-emerald-300 font-bold">NACA Lower Inlet Active</span>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-slate-400">Hood Vortex Core:</span>
-                <span className="text-cyan-300 font-bold">Helical Flow Coherent</span>
+                <span className="text-sky-300 font-bold">Helical Flow Coherent</span>
               </div>
             </div>
           </NeonHorizonGlassPanel>

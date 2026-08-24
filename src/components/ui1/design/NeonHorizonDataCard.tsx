@@ -35,8 +35,8 @@ export const NeonHorizonDataCard: React.FC<NeonHorizonDataCardProps> = ({
   className = "",
 }) => {
   const accentClasses = {
-    cyan: "text-cyan-300 border-cyan-400/30",
-    magenta: "text-fuchsia-300 border-fuchsia-400/30",
+    cyan: "text-sky-300 border-sky-400/25",
+    magenta: "text-sky-300 border-sky-400/30",
     gold: "text-amber-300 border-amber-400/30",
     emerald: "text-emerald-300 border-emerald-400/30",
     coral: "text-rose-300 border-rose-400/30",
@@ -79,10 +79,10 @@ export const NeonHorizonDataCard: React.FC<NeonHorizonDataCardProps> = ({
         {delta && (
           <div
             className={`flex items-center gap-0.5 text-[10px] nh-font-mono font-bold px-1.5 py-0.5 rounded-md ${
-              delta.positive
-                ? "bg-emerald-500/15 text-emerald-300 border border-emerald-400/30"
-                : "bg-rose-500/15 text-rose-300 border border-rose-400/30"
-            }`}
+ delta.positive
+ ? "bg-emerald-500/15 text-emerald-300 border border-emerald-400/30"
+ : "bg-rose-500/15 text-rose-300 border border-rose-400/30"
+ }`}
           >
             {delta.positive ? <TrendingUp size={11} /> : <TrendingDown size={11} />}
             <span>{delta.text ?? delta.value}</span>
@@ -99,7 +99,7 @@ export const NeonHorizonDataCard: React.FC<NeonHorizonDataCardProps> = ({
             return (
               <div
                 key={idx}
-                className="flex-1 bg-cyan-400/30 rounded-t-sm transition-all duration-300 hover:bg-cyan-300"
+                className="flex-1 bg-sky-300/30 rounded-t-sm transition-all duration-300 hover:bg-cyan-300"
                 style={{ height: `${height}%` }}
               />
             );

@@ -32,8 +32,7 @@ export const NeonHorizonDock: React.FC<NeonHorizonDockProps> = ({
   const dockItems: { id: Stage; label: string; icon: React.ReactNode }[] = [
     { id: "command", label: "Command", icon: <LayoutDashboard size={18} /> },
     { id: "engine", label: "Engine", icon: <Cog size={18} /> },
-    { id: "vehicle", label: "Vehicle", icon: <Car size={18} /> },
-    { id: "aero", label: "Aero Lab", icon: <Wind size={18} /> },
+    { id: "vehicle", label: "Vehicle Studio", icon: <Car size={18} /> },
     { id: "studio", label: "Studio Hub", icon: <Sparkles size={18} /> },
     { id: "simulation", label: "Sim Lab", icon: <Activity size={18} /> },
     { id: "ai", label: "Apex AI", icon: <Bot size={18} /> },
@@ -53,9 +52,9 @@ export const NeonHorizonDock: React.FC<NeonHorizonDockProps> = ({
   const getMagnification = useCallback((idx: number) => {
     if (hoveredIdx === null) return 1;
     const distance = Math.abs(idx - hoveredIdx);
-    if (distance === 0) return 1.25;
-    if (distance === 1) return 1.12;
-    if (distance === 2) return 1.04;
+    if (distance === 0) return 1.18;
+    if (distance === 1) return 1.08;
+    if (distance === 2) return 1.02;
     return 1;
   }, [hoveredIdx]);
 
@@ -70,13 +69,13 @@ export const NeonHorizonDock: React.FC<NeonHorizonDockProps> = ({
       {/* Floating Active Module Label (Vision Glass Dock Feature) */}
       <div
         key={activeStage}
-        className="text-[10px] font-bold text-sky-300/80 tracking-widest uppercase animate-nh-materialize pointer-events-none drop-shadow-[0_0_6px_rgba(56,189,248,0.4)]"
+        className="text-[10px] font-bold text-slate-300/80 tracking-widest uppercase animate-nh-materialize pointer-events-none"
       >
         {activeItemLabel}
       </div>
 
       {/* Floating Scene Mode Switcher */}
-      <div className="flex items-center gap-1.5 p-1 rounded-2xl bg-[#060e20]/90 backdrop-blur-2xl border border-cyan-400/30 shadow-[0_10px_30px_rgba(0,0,0,0.6)]">
+      <div className="flex items-center gap-1.5 p-1 rounded-2xl bg-[#0a1120]/90 backdrop-blur-2xl border border-white/10 shadow-[0_10px_30px_rgba(0,0,0,0.5)]">
         {sceneModes.map((sm) => {
           const isActive = sceneMode === sm.id;
           return (
@@ -88,7 +87,7 @@ export const NeonHorizonDock: React.FC<NeonHorizonDockProps> = ({
               }}
               className={`px-3.5 py-1 rounded-xl text-[11px] font-bold nh-font-body tracking-wider transition-all duration-200 cursor-pointer ${
                 isActive
-                  ? "bg-gradient-to-r from-cyan-500/35 to-sky-500/25 text-white border border-cyan-400/60 shadow-[0_0_15px_rgba(0,229,255,0.4)]"
+                  ? "bg-white/[0.10] text-white border border-white/20"
                   : "text-slate-400 hover:text-slate-200 hover:bg-white/5 border border-transparent"
               }`}
             >
@@ -99,7 +98,7 @@ export const NeonHorizonDock: React.FC<NeonHorizonDockProps> = ({
       </div>
 
       {/* Main Glassmorphic Dock Bar with Vision OS Magnification */}
-      <div className="flex items-end gap-2 px-4 py-2 rounded-2xl bg-[#060c1c]/90 backdrop-blur-3xl border border-cyan-400/40 shadow-[0_20px_60px_rgba(0,0,0,0.8),0_0_30px_rgba(0,229,255,0.25),inset_0_1px_1px_rgba(255,255,255,0.2)] transition-all duration-300">
+      <div className="flex items-end gap-2 px-4 py-2 rounded-2xl bg-[#0a1120]/90 backdrop-blur-3xl border border-white/12 shadow-[0_18px_50px_rgba(0,0,0,0.60),inset_0_1px_0_rgba(255,255,255,0.10)] transition-all duration-300">
         {dockItems.map((item, idx) => {
           const isActive = activeStage === item.id;
           const isHovered = hoveredIdx === idx;
@@ -109,7 +108,7 @@ export const NeonHorizonDock: React.FC<NeonHorizonDockProps> = ({
             <div key={item.id} className="relative flex flex-col items-center">
               {/* Tooltip on hover */}
               {isHovered && (
-                <div className="absolute -top-9 px-2.5 py-1 rounded-lg bg-[#081530]/95 backdrop-blur-md border border-cyan-400/50 text-[10px] nh-font-headline font-bold text-cyan-200 uppercase tracking-wider whitespace-nowrap shadow-[0_4px_15px_rgba(0,0,0,0.7)] animate-nh-materialize z-50">
+                <div className="absolute -top-9 px-2.5 py-1 rounded-lg bg-[#0b1220]/95 backdrop-blur-md border border-white/12 text-[10px] nh-font-headline font-bold text-slate-200 uppercase tracking-wider whitespace-nowrap shadow-[0_4px_15px_rgba(0,0,0,0.6)] animate-nh-materialize z-50">
                   {item.label}
                 </div>
               )}
@@ -128,16 +127,16 @@ export const NeonHorizonDock: React.FC<NeonHorizonDockProps> = ({
                 }}
                 className={`p-2.5 rounded-xl transition-all duration-200 flex items-center justify-center cursor-pointer ${
                   isActive
-                    ? "bg-cyan-500/30 text-cyan-200 border border-cyan-400/70 shadow-[0_0_20px_rgba(0,229,255,0.5)] font-bold"
-                    : "text-slate-400 hover:text-slate-100 hover:bg-white/10 border border-transparent"
+                    ? "bg-sky-400/15 text-sky-200 border border-sky-400/30 font-bold"
+                    : "text-slate-400 hover:text-slate-100 hover:bg-white/[0.07] border border-transparent"
                 }`}
               >
                 {item.icon}
               </button>
 
-              {/* Active neon pip */}
+              {/* Active pip */}
               {isActive && (
-                <div className="w-1.5 h-1.5 rounded-full bg-cyan-400 shadow-[0_0_8px_rgba(0,229,255,1)] mt-1 animate-nh-pulse-dot" />
+                <div className="w-1.5 h-1.5 rounded-full bg-sky-300/90 mt-1 animate-nh-pulse-dot" />
               )}
             </div>
           );
@@ -151,8 +150,8 @@ export const NeonHorizonDock: React.FC<NeonHorizonDockProps> = ({
             key={item.id}
             className={`h-1.5 rounded-full transition-all duration-300 ${
               activeStage === item.id
-                ? "w-4 bg-sky-400 shadow-[0_0_8px_rgba(56,189,248,0.8)]"
-                : "w-1.5 bg-white/20"
+                ? "w-4 bg-sky-300/80"
+                : "w-1.5 bg-white/15"
             }`}
           />
         ))}

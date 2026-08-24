@@ -116,6 +116,7 @@ export function useAssembly3DBridge({
   const prevLayoutRef = useRef<string | undefined>(engineConfig?.layout);
 
   // ── 0. Live Engine Specifications Sync & Layout Change Handler ──
+  const engineConfigKey = JSON.stringify(engineConfig || {});
   useEffect(() => {
     if (engineConfig) {
       setEngineConfig(engineConfig);
@@ -128,7 +129,7 @@ export function useAssembly3DBridge({
       addComponent('engine-block', blockVariant).catch(() => {});
     }
     prevLayoutRef.current = engineConfig?.layout;
-  }, [engineConfig?.layout, setEngineConfig, resetAssembly, addComponent]);
+  }, [engineConfigKey, setEngineConfig, resetAssembly, addComponent]);
 
   // ── 0.1 Initial Base Engine Block Guarantee ──
   useEffect(() => {

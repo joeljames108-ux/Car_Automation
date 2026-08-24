@@ -41,9 +41,9 @@ export const NeonHorizonSidebar: React.FC<NeonHorizonSidebarProps> = ({
     { id: "apps", label: "App Launcher", stage: "command", icon: <LayoutGrid size={18} /> },
     { id: "studio", label: "Grand Studio Hub", stage: "studio", icon: <Sparkles size={18} /> },
     { id: "ai", label: "Apex AI Studio", stage: "ai", icon: <Bot size={18} />, badge: "AI" },
-    { id: "stats", label: "Telemetry & Stats", stage: "aero", icon: <BarChart2 size={18} /> },
+    { id: "stats", label: "Telemetry & Stats", stage: "stats", icon: <BarChart2 size={18} /> },
     { id: "safety", label: "Safety Center", stage: "safety", icon: <ShieldCheck size={18} /> },
-    { id: "controls", label: "Vehicle Controls", stage: "vehicle", icon: <Sliders size={18} /> },
+    { id: "controls", label: "Vehicle Studio", stage: "vehicle", icon: <Sliders size={18} /> },
   ];
 
   return (
@@ -58,12 +58,12 @@ export const NeonHorizonSidebar: React.FC<NeonHorizonSidebarProps> = ({
               {/* Tooltip slide-out label (Vision Glass Toolbar Feature) */}
               {isHovered && (
                 <div
-                  className="absolute left-14 px-3 py-1.5 rounded-xl bg-[#0b172a]/95 backdrop-blur-xl border border-sky-400/40 text-xs font-semibold text-sky-200 whitespace-nowrap shadow-[0_10px_25px_rgba(0,0,0,0.7)] z-50 pointer-events-none flex items-center gap-1.5"
+                  className="absolute left-14 px-3 py-1.5 rounded-xl bg-[#0b1220]/95 backdrop-blur-xl border border-white/12 text-xs font-semibold text-slate-200 whitespace-nowrap shadow-[0_10px_25px_rgba(0,0,0,0.6)] z-50 pointer-events-none flex items-center gap-1.5"
                   style={{ animation: "vg-tooltip-slide-in 0.2s ease-out" }}
                 >
                   <span>{btn.label}</span>
                   {/* Arrow indicator */}
-                  <div className="absolute -left-1 top-1/2 -translate-y-1/2 w-2 h-2 rotate-45 bg-[#0b172a] border-l border-b border-sky-400/40" />
+                  <div className="absolute -left-1 top-1/2 -translate-y-1/2 w-2 h-2 rotate-45 bg-[#0b1220] border-l border-b border-white/12" />
                 </div>
               )}
 
@@ -76,23 +76,23 @@ export const NeonHorizonSidebar: React.FC<NeonHorizonSidebarProps> = ({
                 onMouseLeave={() => setHoveredButton(null)}
                 title={btn.label}
                 className={`relative w-10 h-10 rounded-full flex items-center justify-center transition-all duration-200 cursor-pointer ${
-                  isActive
-                    ? "bg-sky-500/25 text-sky-300 border border-sky-400/50 shadow-[0_0_15px_rgba(56,189,248,0.4)] scale-105"
-                    : "bg-white/[0.04] text-slate-400 hover:text-slate-200 hover:bg-white/10 border border-white/5 hover:scale-105"
-                }`}
+ isActive
+ ? "bg-sky-400/15 text-sky-200 border border-sky-400/30 scale-105"
+ : "bg-white/[0.04] text-slate-400 hover:text-slate-200 hover:bg-white/10 border border-white/5 hover:scale-105"
+ }`}
               >
                 {btn.icon}
 
                 {/* Badge overlay */}
                 {btn.badge && (
-                  <span className="absolute -top-1 -right-1 px-1 min-w-3.5 h-3.5 rounded-full bg-purple-500 text-white text-[8px] font-extrabold flex items-center justify-center shadow-[0_0_6px_rgba(168,85,247,0.8)] border border-purple-300">
+                  <span className="absolute -top-1 -right-1 px-1 min-w-3.5 h-3.5 rounded-full bg-sky-500 text-white text-[8px] font-extrabold flex items-center justify-center border border-sky-300">
                     {btn.badge}
                   </span>
                 )}
 
                 {/* Active side indicator pill */}
                 {isActive && (
-                  <div className="absolute -right-1 top-1/2 -translate-y-1/2 w-1.5 h-3 rounded-full bg-sky-400 shadow-[0_0_8px_rgba(56,189,248,1)]" />
+                  <div className="absolute -right-1 top-1/2 -translate-y-1/2 w-1.5 h-3 rounded-full bg-sky-400" />
                 )}
               </button>
             </div>
@@ -106,11 +106,11 @@ export const NeonHorizonSidebar: React.FC<NeonHorizonSidebarProps> = ({
             <div className="relative flex items-center">
               {hoveredButton === "audio" && (
                 <div
-                  className="absolute left-14 px-3 py-1.5 rounded-xl bg-[#0b172a]/95 backdrop-blur-xl border border-sky-400/40 text-xs font-semibold text-sky-200 whitespace-nowrap shadow-[0_10px_25px_rgba(0,0,0,0.7)] z-50 pointer-events-none"
+                  className="absolute left-14 px-3 py-1.5 rounded-xl bg-[#0b1220]/95 backdrop-blur-xl border border-white/12 text-xs font-semibold text-slate-200 whitespace-nowrap shadow-[0_10px_25px_rgba(0,0,0,0.6)] z-50 pointer-events-none"
                   style={{ animation: "vg-tooltip-slide-in 0.2s ease-out" }}
                 >
                   <span>{soundEnabled ? "Mute Audio" : "Unmute Audio"}</span>
-                  <div className="absolute -left-1 top-1/2 -translate-y-1/2 w-2 h-2 rotate-45 bg-[#0b172a] border-l border-b border-sky-400/40" />
+                  <div className="absolute -left-1 top-1/2 -translate-y-1/2 w-2 h-2 rotate-45 bg-[#0b1220] border-l border-b border-white/12" />
                 </div>
               )}
               <button

@@ -11,6 +11,7 @@ import { GLTF, GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js';
 import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader.js';
 import { GLBMaterialClassifier } from './glbMaterialClassifier';
+import { GLBScenePostProcessor } from './glbScenePostProcessor';
 
 export interface LoadedGlbAsset {
   assetUri: string;
@@ -82,6 +83,7 @@ export class UniversalGlbAssetLoader {
             this.normalizeModelScaleAndGround(fbxGroup);
             this.smoothGeometryNormals(fbxGroup);
             this.enhanceGlbMaterials(fbxGroup);
+            GLBScenePostProcessor.process(fbxGroup);
             const stats = this.analyzeScene(fbxGroup);
             const result: LoadedGlbAsset = {
               assetUri: uri,
@@ -116,6 +118,7 @@ export class UniversalGlbAssetLoader {
           this.normalizeModelScaleAndGround(gltf.scene);
           this.smoothGeometryNormals(gltf.scene);
           this.enhanceGlbMaterials(gltf.scene);
+          GLBScenePostProcessor.process(gltf.scene);
           const stats = this.analyzeScene(gltf.scene);
           const result: LoadedGlbAsset = {
             assetUri: uri,
@@ -228,7 +231,11 @@ export class UniversalGlbAssetLoader {
           // Remove undefined values
           Object.keys(pbrProps).forEach(k => pbrProps[k] === undefined && delete pbrProps[k]);
 
-          const pbr = new THREE.MeshPhysicalMaterial(pbrProps);
+          // Ensure clearcoat properties are set for all physical materials
+        if (pbrProps.clearcoat === undefined) pbrProps.clearcoat = 0.1;
+        if (pbrProps.clearcoatRoughness === undefined) pbrProps.clearcoatRoughness = 0.2;
+        if (pbrProps.envMapIntensity === undefined) pbrProps.envMapIntensity = 1.5;
+        const pbr = new THREE.MeshPhysicalMaterial(pbrProps);
           pbr.needsUpdate = true;
           enhancedMaterials.push(pbr);
         } else {
@@ -258,7 +265,9 @@ export class UniversalGlbAssetLoader {
       roughness: 0.12,
       clearcoat: 1.0,
       clearcoatRoughness: 0.01,
-      envMapIntensity: 1.6,
+      sheen: 0.2,
+      sheenColor: new THREE.Color(0x64748b),
+      envMapIntensity: 1.8,
       specularIntensity: 1.0,
     });
 
@@ -281,12 +290,56 @@ export class UniversalGlbAssetLoader {
     bodyGeo.computeVertexNormals();
 
     const bodyMesh = new THREE.Mesh(bodyGeo, mat);
+
+    // === Enhanced fallback with headlights, taillights, and spoiler ===
+    const headlightGeo = new THREE.SphereGeometry(0.06, 16, 16);
+    const headlightMat = new THREE.MeshPhysicalMaterial({
+      color: 0xffffff, emissive: 0xffeedd, emissiveIntensity: 2.0,
+      metalness: 0.0, roughness: 0.05, clearcoat: 1.0, transparent: true, opacity: 0.9
+    });
+    const hlL = new THREE.Mesh(headlightGeo, headlightMat);
+    hlL.position.set(1.15, 0.38, 0.3);
+    const hlR = new THREE.Mesh(headlightGeo, headlightMat);
+    hlR.position.set(1.15, 0.38, -0.3);
+    group.add(hlL, hlR);
+
+    const taillightGeo = new THREE.SphereGeometry(0.05, 12, 12);
+    const taillightMat = new THREE.MeshPhysicalMaterial({
+      color: 0xff0000, emissive: 0xff1100, emissiveIntensity: 1.5,
+      metalness: 0.0, roughness: 0.1, clearcoat: 0.8, transparent: true, opacity: 0.95
+    });
+    const tlL = new THREE.Mesh(taillightGeo, taillightMat);
+    tlL.position.set(-1.15, 0.35, 0.3);
+    const tlR = new THREE.Mesh(taillightGeo, taillightMat);
+    tlR.position.set(-1.15, 0.35, -0.3);
+    group.add(tlL, tlR);
+
+    // Rear spoiler
+    const spoilerGeo = new THREE.BoxGeometry(0.02, 0.04, 0.7);
+    const spoilerMat = new THREE.MeshPhysicalMaterial({
+      color: 0x1a1a2e, metalness: 0.3, roughness: 0.2, clearcoat: 0.9
+    });
+    const spoiler = new THREE.Mesh(spoilerGeo, spoilerMat);
+    spoiler.position.set(-1.1, 0.52, 0);
+    group.add(spoiler);
+
+    // Side mirrors
+    const mirrorGeo = new THREE.BoxGeometry(0.06, 0.04, 0.03);
+    const mirrorMat = new THREE.MeshPhysicalMaterial({
+      color: 0x2a2a3e, metalness: 0.5, roughness: 0.15, clearcoat: 0.8
+    });
+    const ml = new THREE.Mesh(mirrorGeo, mirrorMat);
+    ml.position.set(0.3, 0.5, 0.45);
+    const mr = new THREE.Mesh(mirrorGeo, mirrorMat);
+    mr.position.set(0.3, 0.5, -0.45);
+    group.add(ml, mr);
+
     bodyMesh.position.y = 0.35;
     bodyMesh.castShadow = true;
     bodyMesh.receiveShadow = true;
     group.add(bodyMesh);
 
-    const wheelMat = new THREE.MeshPhysicalMaterial({ color: 0x111111, metalness: 0.4, roughness: 0.7, clearcoat: 0.1 });
+    const wheelMat = new THREE.MeshPhysicalMaterial({ color: 0x111111, metalness: 0.4, roughness: 0.7, clearcoat: 0.1, sheen: 0.15 });
     const wheelGeo = new THREE.CylinderGeometry(0.18, 0.18, 0.12, 64);
     wheelGeo.computeVertexNormals();
 

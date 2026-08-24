@@ -257,42 +257,42 @@ export const MasterVehicleStudio: React.FC = () => {
   return (
     <div className="flex flex-col xl:flex-row gap-4 w-full h-full min-h-[720px] text-slate-100">
       {/* ── 3D VIEWPORT CANVAS ── */}
-      <div className="flex-1 flex flex-col bg-slate-950/90 rounded-3xl border border-cyan-500/30 overflow-hidden shadow-2xl backdrop-blur-xl relative">
+      <div className="flex-1 flex flex-col bg-base-950/90 rounded-3xl border border-base-800 overflow-hidden shadow-2xl backdrop-blur-xl relative">
         {/* Top Viewport Header */}
-        <div className="flex items-center justify-between px-5 py-3 border-b border-white/10 bg-slate-900/60 backdrop-blur-md z-10">
+        <div className="flex items-center justify-between px-5 py-3 border-b border-base-800/40 bg-base-900/60 backdrop-blur-md z-10">
           <div className="flex items-center gap-3">
-            <div className="p-2 rounded-xl bg-cyan-500/20 text-cyan-400 border border-cyan-500/40 shadow-[0_0_12px_rgba(6,182,212,0.3)]">
+            <div className="p-2 rounded-xl bg-cyan-500/20 text-cyan-600 dark:text-cyan-400 border border-cyan-500/40 shadow-[0_0_12px_rgba(6,182,212,0.3)]">
               <Box size={18} />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h2 className="font-bold text-sm text-white tracking-wide">{state.name}</h2>
-                <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-cyan-500/20 text-cyan-300 border border-cyan-500/40">
+                <h2 className="font-bold text-sm text-slate-900 dark:text-white tracking-wide">{state.name}</h2>
+                <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-cyan-500/20 text-cyan-700 dark:text-cyan-300 border border-cyan-500/40">
                   v{state.version}.0 MODULAR 3D
                 </span>
               </div>
-              <p className="text-[11px] text-slate-400">Master Vehicle Scene Graph & Multi-Physics Digital Twin</p>
+              <p className="text-[11px] text-slate-600 dark:text-slate-400">Master Vehicle Scene Graph & Multi-Physics Digital Twin</p>
             </div>
           </div>
 
           {/* Quick Camera Preset Buttons */}
-          <div className="flex items-center gap-1 bg-slate-950/80 p-1 rounded-xl border border-white/10">
-            <button onClick={() => setCameraPose("iso")} className="px-2.5 py-1 rounded-lg text-xs font-semibold hover:bg-white/10 text-slate-300">
+          <div className="flex items-center gap-1 bg-base-950/80 p-1 rounded-xl border border-base-800">
+            <button onClick={() => setCameraPose("iso")} className="px-2.5 py-1 rounded-lg text-xs font-semibold hover:bg-base-800/50 text-slate-700 dark:text-slate-300">
               3/4 Iso
             </button>
-            <button onClick={() => setCameraPose("front")} className="px-2.5 py-1 rounded-lg text-xs font-semibold hover:bg-white/10 text-slate-300">
+            <button onClick={() => setCameraPose("front")} className="px-2.5 py-1 rounded-lg text-xs font-semibold hover:bg-base-800/50 text-slate-700 dark:text-slate-300">
               Front
             </button>
-            <button onClick={() => setCameraPose("side")} className="px-2.5 py-1 rounded-lg text-xs font-semibold hover:bg-white/10 text-slate-300">
+            <button onClick={() => setCameraPose("side")} className="px-2.5 py-1 rounded-lg text-xs font-semibold hover:bg-base-800/50 text-slate-700 dark:text-slate-300">
               Side
             </button>
-            <button onClick={() => setCameraPose("rear")} className="px-2.5 py-1 rounded-lg text-xs font-semibold hover:bg-white/10 text-slate-300">
+            <button onClick={() => setCameraPose("rear")} className="px-2.5 py-1 rounded-lg text-xs font-semibold hover:bg-base-800/50 text-slate-700 dark:text-slate-300">
               Diffuser
             </button>
-            <button onClick={() => setCameraPose("engine")} className="px-2.5 py-1 rounded-lg text-xs font-semibold hover:bg-white/10 text-slate-300">
+            <button onClick={() => setCameraPose("engine")} className="px-2.5 py-1 rounded-lg text-xs font-semibold hover:bg-base-800/50 text-slate-700 dark:text-slate-300">
               Engine
             </button>
-            <button onClick={() => setCameraPose("top")} className="px-2.5 py-1 rounded-lg text-xs font-semibold hover:bg-white/10 text-slate-300">
+            <button onClick={() => setCameraPose("top")} className="px-2.5 py-1 rounded-lg text-xs font-semibold hover:bg-base-800/50 text-slate-700 dark:text-slate-300">
               Top
             </button>
           </div>
@@ -302,40 +302,40 @@ export const MasterVehicleStudio: React.FC = () => {
         <div ref={containerRef} className="flex-1 w-full h-full min-h-[480px] relative cursor-grab active:cursor-grabbing">
           {/* Real-time Delta Change Floating Badge */}
           {lastDelta && (
-            <div className="absolute top-4 left-4 z-10 p-3 rounded-2xl bg-slate-900/90 border border-cyan-400/50 shadow-2xl backdrop-blur-xl max-w-xs animate-in fade-in slide-in-from-top-2">
+            <div className="absolute top-4 left-4 z-10 p-3 rounded-2xl bg-base-900/90 border border-cyan-400/50 shadow-2xl backdrop-blur-xl max-w-xs animate-in fade-in slide-in-from-top-2">
               <div className="flex items-center justify-between mb-1.5">
-                <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-cyan-400 flex items-center gap-1">
+                <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-cyan-600 dark:text-cyan-400 flex items-center gap-1">
                   <Zap size={11} /> Parameter Delta
                 </span>
-                <span className="text-[10px] text-slate-400 font-mono">{lastDelta.parameterName}</span>
+                <span className="text-[10px] text-slate-500 dark:text-slate-400 font-mono">{lastDelta.parameterName}</span>
               </div>
               <div className="grid grid-cols-2 gap-2 text-xs font-mono">
                 {lastDelta.deltaDownforceN !== 0 && (
-                  <div className="flex items-center justify-between text-cyan-300">
+                  <div className="flex items-center justify-between text-cyan-600 dark:text-cyan-300">
                     <span>Downforce</span>
                     <span className="font-bold">{lastDelta.deltaDownforceN > 0 ? `+${lastDelta.deltaDownforceN} N` : `${lastDelta.deltaDownforceN} N`}</span>
                   </div>
                 )}
                 {lastDelta.deltaDragN !== 0 && (
-                  <div className="flex items-center justify-between text-amber-300">
+                  <div className="flex items-center justify-between text-amber-600 dark:text-amber-300">
                     <span>Drag</span>
                     <span className="font-bold">{lastDelta.deltaDragN > 0 ? `+${lastDelta.deltaDragN} N` : `${lastDelta.deltaDragN} N`}</span>
                   </div>
                 )}
                 {lastDelta.deltaTopSpeedKmh !== 0 && (
-                  <div className="flex items-center justify-between text-emerald-300">
+                  <div className="flex items-center justify-between text-emerald-600 dark:text-emerald-300">
                     <span>Top Speed</span>
                     <span className="font-bold">{lastDelta.deltaTopSpeedKmh > 0 ? `+${lastDelta.deltaTopSpeedKmh} km/h` : `${lastDelta.deltaTopSpeedKmh} km/h`}</span>
                   </div>
                 )}
                 {lastDelta.deltaLapTimeSec !== 0 && (
-                  <div className="flex items-center justify-between text-purple-300">
+                  <div className="flex items-center justify-between text-purple-600 dark:text-purple-300">
                     <span>Ring Lap</span>
                     <span className="font-bold">{lastDelta.deltaLapTimeSec < 0 ? `${lastDelta.deltaLapTimeSec}s` : `+${lastDelta.deltaLapTimeSec}s`}</span>
                   </div>
                 )}
                 {lastDelta.deltaCostUSD !== 0 && (
-                  <div className="flex items-center justify-between text-yellow-300 col-span-2">
+                  <div className="flex items-center justify-between text-yellow-600 dark:text-yellow-300 col-span-2">
                     <span>BOM Cost</span>
                     <span className="font-bold">{lastDelta.deltaCostUSD > 0 ? `+$${lastDelta.deltaCostUSD}` : `-$${Math.abs(lastDelta.deltaCostUSD)}`}</span>
                   </div>
@@ -345,11 +345,11 @@ export const MasterVehicleStudio: React.FC = () => {
           )}
 
           {/* Bottom Viewport Control Overlay (Exploded, X-Ray, Wind Tunnel) */}
-          <div className="absolute bottom-4 left-4 right-4 z-10 flex flex-wrap items-center justify-between gap-3 p-3 rounded-2xl bg-slate-900/80 border border-white/10 backdrop-blur-xl">
+          <div className="absolute bottom-4 left-4 right-4 z-10 flex flex-wrap items-center justify-between gap-3 p-3 rounded-2xl bg-base-900/90 border border-base-800 backdrop-blur-xl">
             {/* Exploded View Slider */}
-            <div className="flex items-center gap-3 bg-slate-950/70 px-3 py-1.5 rounded-xl border border-white/10">
-              <Layers size={15} className="text-cyan-400" />
-              <span className="text-xs font-semibold text-slate-300 whitespace-nowrap">Exploded View:</span>
+            <div className="flex items-center gap-3 bg-base-950/80 px-3 py-1.5 rounded-xl border border-base-800">
+              <Layers size={15} className="text-cyan-500 dark:text-cyan-400" />
+              <span className="text-xs font-semibold text-slate-700 dark:text-slate-300 whitespace-nowrap">Exploded View:</span>
               <input
                 type="range"
                 min="0"
@@ -359,7 +359,7 @@ export const MasterVehicleStudio: React.FC = () => {
                 onChange={(e) => handleExplodedChange(parseFloat(e.target.value))}
                 className="w-28 accent-cyan-400 cursor-pointer"
               />
-              <span className="text-xs font-mono font-bold text-cyan-300 w-8">{Math.round(explodedFactor * 100)}%</span>
+              <span className="text-xs font-mono font-bold text-cyan-600 dark:text-cyan-300 w-8">{Math.round(explodedFactor * 100)}%</span>
             </div>
 
             {/* Viewport Feature Toggles */}
@@ -368,8 +368,8 @@ export const MasterVehicleStudio: React.FC = () => {
                 onClick={handleToggleXRay}
                 className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
                   xRayEnabled
-                    ? "bg-purple-500/30 text-purple-200 border border-purple-400/50 shadow-[0_0_12px_rgba(168,85,247,0.3)]"
-                    : "bg-slate-950/60 text-slate-400 hover:text-white border border-white/10"
+                    ? "bg-purple-500/30 text-purple-700 dark:text-purple-200 border border-purple-400/50 shadow-[0_0_12px_rgba(168,85,247,0.3)]"
+                    : "bg-base-950/80 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white border border-base-800"
                 }`}
               >
                 <Eye size={14} /> X-Ray Shell
@@ -379,8 +379,8 @@ export const MasterVehicleStudio: React.FC = () => {
                 onClick={handleToggleStreamlines}
                 className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
                   streamlinesEnabled
-                    ? "bg-cyan-500/30 text-cyan-200 border border-cyan-400/50 shadow-[0_0_12px_rgba(6,182,212,0.3)]"
-                    : "bg-slate-950/60 text-slate-400 hover:text-white border border-white/10"
+                    ? "bg-cyan-500/30 text-cyan-700 dark:text-cyan-200 border border-cyan-400/50 shadow-[0_0_12px_rgba(6,182,212,0.3)]"
+                    : "bg-base-950/80 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white border border-base-800"
                 }`}
               >
                 <Wind size={14} /> Wind Tunnel Smoke
@@ -390,8 +390,8 @@ export const MasterVehicleStudio: React.FC = () => {
         </div>
 
         {/* Subsystem Isolation Bar */}
-        <div className="flex items-center gap-1.5 px-4 py-2 border-t border-white/10 bg-slate-900/60 overflow-x-auto no-scrollbar">
-          <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider mr-1">Isolate:</span>
+        <div className="flex items-center gap-1.5 px-4 py-2 border-t border-base-800/50 bg-base-900/60 overflow-x-auto no-scrollbar">
+          <span className="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mr-1">Isolate:</span>
           {(["all", "chassis", "powertrain", "suspension", "aero", "body_panels", "interior"] as const).map((cat) => (
             <button
               key={cat}
@@ -399,7 +399,7 @@ export const MasterVehicleStudio: React.FC = () => {
               className={`px-3 py-1 rounded-xl text-xs font-semibold capitalize transition-all ${
                 activeCategory === cat
                   ? "bg-cyan-500 text-slate-950 font-bold shadow-[0_0_10px_rgba(6,182,212,0.5)]"
-                  : "bg-slate-950/50 text-slate-400 hover:text-white border border-white/5"
+                  : "bg-base-950/60 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white border border-base-800/50"
               }`}
             >
               {cat === "all" ? "Entire Vehicle" : cat.replace("_", " ")}
@@ -411,11 +411,11 @@ export const MasterVehicleStudio: React.FC = () => {
       {/* ── RIGHT ENGINEERING WORKBENCH ── */}
       <div className="w-full xl:w-96 flex flex-col gap-3 shrink-0">
         {/* Navigation Tabs */}
-        <div className="grid grid-cols-4 gap-1 p-1 bg-slate-950/80 rounded-2xl border border-white/10 backdrop-blur-xl">
+        <div className="grid grid-cols-4 gap-1 p-1 bg-base-950/80 rounded-2xl border border-base-800 backdrop-blur-xl">
           <button
             onClick={() => setActiveTab("quick_adjust")}
             className={`py-2 rounded-xl text-xs font-bold transition-all ${
-              activeTab === "quick_adjust" ? "bg-cyan-500/20 text-cyan-300 border border-cyan-400/40" : "text-slate-400 hover:text-white"
+              activeTab === "quick_adjust" ? "bg-cyan-500/20 text-cyan-700 dark:text-cyan-300 border border-cyan-400/40" : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
             }`}
           >
             Adjust
@@ -423,7 +423,7 @@ export const MasterVehicleStudio: React.FC = () => {
           <button
             onClick={() => setActiveTab("telemetry")}
             className={`py-2 rounded-xl text-xs font-bold transition-all ${
-              activeTab === "telemetry" ? "bg-cyan-500/20 text-cyan-300 border border-cyan-400/40" : "text-slate-400 hover:text-white"
+              activeTab === "telemetry" ? "bg-cyan-500/20 text-cyan-700 dark:text-cyan-300 border border-cyan-400/40" : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
             }`}
           >
             Dynamics
@@ -431,7 +431,7 @@ export const MasterVehicleStudio: React.FC = () => {
           <button
             onClick={() => setActiveTab("packaging")}
             className={`py-2 rounded-xl text-xs font-bold transition-all relative ${
-              activeTab === "packaging" ? "bg-cyan-500/20 text-cyan-300 border border-cyan-400/40" : "text-slate-400 hover:text-white"
+              activeTab === "packaging" ? "bg-cyan-500/20 text-cyan-700 dark:text-cyan-300 border border-cyan-400/40" : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
             }`}
           >
             Packaging
@@ -442,7 +442,7 @@ export const MasterVehicleStudio: React.FC = () => {
           <button
             onClick={() => setActiveTab("bom")}
             className={`py-2 rounded-xl text-xs font-bold transition-all ${
-              activeTab === "bom" ? "bg-cyan-500/20 text-cyan-300 border border-cyan-400/40" : "text-slate-400 hover:text-white"
+              activeTab === "bom" ? "bg-cyan-500/20 text-cyan-700 dark:text-cyan-300 border border-cyan-400/40" : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
             }`}
           >
             BOM & Cost
@@ -451,16 +451,16 @@ export const MasterVehicleStudio: React.FC = () => {
 
         {/* TAB 1: QUICK PARAMETRIC SLIDERS */}
         {activeTab === "quick_adjust" && (
-          <div className="flex-1 flex flex-col gap-3 p-4 bg-slate-950/90 rounded-3xl border border-cyan-500/30 backdrop-blur-xl overflow-y-auto max-h-[620px] custom-scrollbar">
-            <h3 className="text-xs font-bold uppercase tracking-wider text-cyan-400 flex items-center gap-1.5">
+          <div className="flex-1 flex flex-col gap-3 p-4 bg-base-950/90 rounded-3xl border border-base-800 backdrop-blur-xl overflow-y-auto max-h-[620px] custom-scrollbar">
+            <h3 className="text-xs font-bold uppercase tracking-wider text-cyan-600 dark:text-cyan-400 flex items-center gap-1.5">
               <Sliders size={14} /> Parametric Vehicle Controls
             </h3>
 
             {/* Rear Wing Angle */}
-            <div className="p-3 rounded-2xl bg-slate-900/60 border border-white/10 space-y-1.5">
+            <div className="p-3 rounded-2xl bg-base-900/60 border border-base-800 space-y-1.5">
               <div className="flex justify-between items-center text-xs">
-                <span className="font-semibold text-slate-300">Rear Wing Angle</span>
-                <span className="font-mono font-bold text-cyan-300">{state.aero.rearWingAngleDeg}°</span>
+                <span className="font-semibold text-slate-700 dark:text-slate-300">Rear Wing Angle</span>
+                <span className="font-mono font-bold text-cyan-600 dark:text-cyan-300">{state.aero.rearWingAngleDeg}°</span>
               </div>
               <input
                 type="range"
@@ -471,17 +471,17 @@ export const MasterVehicleStudio: React.FC = () => {
                 onChange={(e) => stateEngine.updateAero({ rearWingAngleDeg: parseInt(e.target.value) })}
                 className="w-full accent-cyan-400 cursor-pointer"
               />
-              <div className="flex justify-between text-[10px] text-slate-400 font-mono">
+              <div className="flex justify-between text-[10px] text-slate-500 dark:text-slate-400 font-mono">
                 <span>0° (Low Drag)</span>
                 <span>28° (Max Downforce)</span>
               </div>
             </div>
 
             {/* Turbo Boost */}
-            <div className="p-3 rounded-2xl bg-slate-900/60 border border-white/10 space-y-1.5">
+            <div className="p-3 rounded-2xl bg-base-900/60 border border-base-800 space-y-1.5">
               <div className="flex justify-between items-center text-xs">
-                <span className="font-semibold text-slate-300">Turbo Boost Pressure</span>
-                <span className="font-mono font-bold text-amber-300">{state.powertrain.boostBar.toFixed(2)} bar</span>
+                <span className="font-semibold text-slate-700 dark:text-slate-300">Turbo Boost Pressure</span>
+                <span className="font-mono font-bold text-amber-600 dark:text-amber-300">{state.powertrain.boostBar.toFixed(2)} bar</span>
               </div>
               <input
                 type="range"
@@ -492,17 +492,17 @@ export const MasterVehicleStudio: React.FC = () => {
                 onChange={(e) => stateEngine.updatePowertrain({ boostBar: parseFloat(e.target.value) })}
                 className="w-full accent-amber-400 cursor-pointer"
               />
-              <div className="flex justify-between text-[10px] text-slate-400 font-mono">
+              <div className="flex justify-between text-[10px] text-slate-500 dark:text-slate-400 font-mono">
                 <span>0.4 bar (Street)</span>
                 <span>2.4 bar (Qualifying)</span>
               </div>
             </div>
 
             {/* Front Splitter Extension */}
-            <div className="p-3 rounded-2xl bg-slate-900/60 border border-white/10 space-y-1.5">
+            <div className="p-3 rounded-2xl bg-base-900/60 border border-base-800 space-y-1.5">
               <div className="flex justify-between items-center text-xs">
-                <span className="font-semibold text-slate-300">Front Splitter Extension</span>
-                <span className="font-mono font-bold text-cyan-300">{state.aero.frontSplitterLengthMm} mm</span>
+                <span className="font-semibold text-slate-700 dark:text-slate-300">Front Splitter Extension</span>
+                <span className="font-mono font-bold text-cyan-600 dark:text-cyan-300">{state.aero.frontSplitterLengthMm} mm</span>
               </div>
               <input
                 type="range"
@@ -516,10 +516,10 @@ export const MasterVehicleStudio: React.FC = () => {
             </div>
 
             {/* Wheelbase Dimension */}
-            <div className="p-3 rounded-2xl bg-slate-900/60 border border-white/10 space-y-1.5">
+            <div className="p-3 rounded-2xl bg-base-900/60 border border-base-800 space-y-1.5">
               <div className="flex justify-between items-center text-xs">
-                <span className="font-semibold text-slate-300">Chassis Wheelbase</span>
-                <span className="font-mono font-bold text-purple-300">{state.chassis.wheelbaseMm} mm</span>
+                <span className="font-semibold text-slate-700 dark:text-slate-300">Chassis Wheelbase</span>
+                <span className="font-mono font-bold text-purple-600 dark:text-purple-300">{state.chassis.wheelbaseMm} mm</span>
               </div>
               <input
                 type="range"
@@ -533,10 +533,10 @@ export const MasterVehicleStudio: React.FC = () => {
             </div>
 
             {/* Front Track Width */}
-            <div className="p-3 rounded-2xl bg-slate-900/60 border border-white/10 space-y-1.5">
+            <div className="p-3 rounded-2xl bg-base-900/60 border border-base-800 space-y-1.5">
               <div className="flex justify-between items-center text-xs">
-                <span className="font-semibold text-slate-300">Front Track Width</span>
-                <span className="font-mono font-bold text-purple-300">{state.chassis.frontTrackMm} mm</span>
+                <span className="font-semibold text-slate-700 dark:text-slate-300">Front Track Width</span>
+                <span className="font-mono font-bold text-purple-600 dark:text-purple-300">{state.chassis.frontTrackMm} mm</span>
               </div>
               <input
                 type="range"
@@ -550,8 +550,8 @@ export const MasterVehicleStudio: React.FC = () => {
             </div>
 
             {/* Paint Finish Selector */}
-            <div className="p-3 rounded-2xl bg-slate-900/60 border border-white/10 space-y-2">
-              <span className="text-xs font-semibold text-slate-300 block">Exterior Paint Finish</span>
+            <div className="p-3 rounded-2xl bg-base-900/60 border border-base-800 space-y-2">
+              <span className="text-xs font-semibold text-slate-700 dark:text-slate-300 block">Exterior Paint Finish</span>
               <div className="flex items-center gap-2">
                 {[
                   { hex: "#ef4444", name: "Rosso Corsa" },
@@ -578,56 +578,56 @@ export const MasterVehicleStudio: React.FC = () => {
 
         {/* TAB 2: MULTI-PHYSICS DYNAMICS TELEMETRY */}
         {activeTab === "telemetry" && (
-          <div className="flex-1 flex flex-col gap-3 p-4 bg-slate-950/90 rounded-3xl border border-cyan-500/30 backdrop-blur-xl overflow-y-auto max-h-[620px] custom-scrollbar">
-            <h3 className="text-xs font-bold uppercase tracking-wider text-cyan-400 flex items-center gap-1.5">
+          <div className="flex-1 flex flex-col gap-3 p-4 bg-base-950/90 rounded-3xl border border-base-800 backdrop-blur-xl overflow-y-auto max-h-[620px] custom-scrollbar">
+            <h3 className="text-xs font-bold uppercase tracking-wider text-cyan-600 dark:text-cyan-400 flex items-center gap-1.5">
               <Activity size={14} /> Multi-Physics Telemetry
             </h3>
 
             {/* Performance Grid */}
             <div className="grid grid-cols-2 gap-2.5">
-              <div className="p-3 rounded-2xl bg-slate-900/60 border border-white/10">
-                <span className="text-[10px] text-slate-400 uppercase font-mono block">0–100 km/h</span>
-                <span className="text-xl font-bold font-mono text-emerald-400">{m.zeroToHundredKmhSec}s</span>
+              <div className="p-3 rounded-2xl bg-base-900/60 border border-base-800">
+                <span className="text-[10px] text-slate-500 dark:text-slate-400 uppercase font-mono block">0–100 km/h</span>
+                <span className="text-xl font-bold font-mono text-emerald-600 dark:text-emerald-400">{m.zeroToHundredKmhSec}s</span>
               </div>
-              <div className="p-3 rounded-2xl bg-slate-900/60 border border-white/10">
-                <span className="text-[10px] text-slate-400 uppercase font-mono block">Top Speed</span>
-                <span className="text-xl font-bold font-mono text-cyan-400">{m.topSpeedKmh} km/h</span>
+              <div className="p-3 rounded-2xl bg-base-900/60 border border-base-800">
+                <span className="text-[10px] text-slate-500 dark:text-slate-400 uppercase font-mono block">Top Speed</span>
+                <span className="text-xl font-bold font-mono text-cyan-600 dark:text-cyan-400">{m.topSpeedKmh} km/h</span>
               </div>
-              <div className="p-3 rounded-2xl bg-slate-900/60 border border-white/10">
-                <span className="text-[10px] text-slate-400 uppercase font-mono block">Peak Power</span>
-                <span className="text-xl font-bold font-mono text-amber-400">{m.peakHorsepowerHp} hp</span>
+              <div className="p-3 rounded-2xl bg-base-900/60 border border-base-800">
+                <span className="text-[10px] text-slate-500 dark:text-slate-400 uppercase font-mono block">Peak Power</span>
+                <span className="text-xl font-bold font-mono text-amber-600 dark:text-amber-400">{m.peakHorsepowerHp} hp</span>
               </div>
-              <div className="p-3 rounded-2xl bg-slate-900/60 border border-white/10">
-                <span className="text-[10px] text-slate-400 uppercase font-mono block">Curb Mass</span>
-                <span className="text-xl font-bold font-mono text-slate-200">{m.totalCurbMassKg} kg</span>
+              <div className="p-3 rounded-2xl bg-base-900/60 border border-base-800">
+                <span className="text-[10px] text-slate-500 dark:text-slate-400 uppercase font-mono block">Curb Mass</span>
+                <span className="text-xl font-bold font-mono text-slate-800 dark:text-slate-200">{m.totalCurbMassKg} kg</span>
               </div>
-              <div className="p-3 rounded-2xl bg-slate-900/60 border border-white/10">
-                <span className="text-[10px] text-slate-400 uppercase font-mono block">Downforce @ 160</span>
-                <span className="text-xl font-bold font-mono text-cyan-300">{m.downforceAt160KmhN} N</span>
+              <div className="p-3 rounded-2xl bg-base-900/60 border border-base-800">
+                <span className="text-[10px] text-slate-500 dark:text-slate-400 uppercase font-mono block">Downforce @ 160</span>
+                <span className="text-xl font-bold font-mono text-cyan-600 dark:text-cyan-300">{m.downforceAt160KmhN} N</span>
               </div>
-              <div className="p-3 rounded-2xl bg-slate-900/60 border border-white/10">
-                <span className="text-[10px] text-slate-400 uppercase font-mono block">Max Lateral G</span>
-                <span className="text-xl font-bold font-mono text-purple-400">{m.maxLateralAccelerationG} g</span>
+              <div className="p-3 rounded-2xl bg-base-900/60 border border-base-800">
+                <span className="text-[10px] text-slate-500 dark:text-slate-400 uppercase font-mono block">Max Lateral G</span>
+                <span className="text-xl font-bold font-mono text-purple-600 dark:text-purple-400">{m.maxLateralAccelerationG} g</span>
               </div>
             </div>
 
             {/* Track Lap Times */}
-            <div className="p-3.5 rounded-2xl bg-slate-900/60 border border-white/10 space-y-2">
-              <span className="text-xs font-bold text-slate-300 flex items-center gap-1.5">
-                <Compass size={14} className="text-cyan-400" /> Virtual Track Lap Sim
+            <div className="p-3.5 rounded-2xl bg-base-900/60 border border-base-800 space-y-2">
+              <span className="text-xs font-bold text-slate-800 dark:text-slate-300 flex items-center gap-1.5">
+                <Compass size={14} className="text-cyan-600 dark:text-cyan-400" /> Virtual Track Lap Sim
               </span>
               <div className="space-y-1.5 text-xs font-mono">
-                <div className="flex justify-between items-center py-1 border-b border-white/5">
-                  <span className="text-slate-400">Nürburgring Nordschleife</span>
-                  <span className="font-bold text-emerald-400">{Math.floor(m.nurburgringNordschleifeLapSec / 60)}:{String(Math.floor(m.nurburgringNordschleifeLapSec % 60)).padStart(2, "0")}.{Math.round((m.nurburgringNordschleifeLapSec % 1) * 10)}</span>
+                <div className="flex justify-between items-center py-1 border-b border-base-800/40">
+                  <span className="text-slate-500 dark:text-slate-400">Nürburgring Nordschleife</span>
+                  <span className="font-bold text-emerald-600 dark:text-emerald-400">{Math.floor(m.nurburgringNordschleifeLapSec / 60)}:{String(Math.floor(m.nurburgringNordschleifeLapSec % 60)).padStart(2, "0")}.{Math.round((m.nurburgringNordschleifeLapSec % 1) * 10)}</span>
                 </div>
-                <div className="flex justify-between items-center py-1 border-b border-white/5">
-                  <span className="text-slate-400">Spa-Francorchamps</span>
-                  <span className="font-bold text-slate-200">{Math.floor(m.spaFrancorchampsLapSec / 60)}:{String(Math.floor(m.spaFrancorchampsLapSec % 60)).padStart(2, "0")}.{Math.round((m.spaFrancorchampsLapSec % 1) * 10)}</span>
+                <div className="flex justify-between items-center py-1 border-b border-base-800/40">
+                  <span className="text-slate-500 dark:text-slate-400">Spa-Francorchamps</span>
+                  <span className="font-bold text-slate-800 dark:text-slate-200">{Math.floor(m.spaFrancorchampsLapSec / 60)}:{String(Math.floor(m.spaFrancorchampsLapSec % 60)).padStart(2, "0")}.{Math.round((m.spaFrancorchampsLapSec % 1) * 10)}</span>
                 </div>
                 <div className="flex justify-between items-center py-1">
-                  <span className="text-slate-400">Silverstone GP</span>
-                  <span className="font-bold text-slate-200">{Math.floor(m.silverstoneGPLapSec / 60)}:{String(Math.floor(m.silverstoneGPLapSec % 60)).padStart(2, "0")}.{Math.round((m.silverstoneGPLapSec % 1) * 10)}</span>
+                  <span className="text-slate-500 dark:text-slate-400">Silverstone GP</span>
+                  <span className="font-bold text-slate-800 dark:text-slate-200">{Math.floor(m.silverstoneGPLapSec / 60)}:{String(Math.floor(m.silverstoneGPLapSec % 60)).padStart(2, "0")}.{Math.round((m.silverstoneGPLapSec % 1) * 10)}</span>
                 </div>
               </div>
             </div>
@@ -636,16 +636,16 @@ export const MasterVehicleStudio: React.FC = () => {
 
         {/* TAB 3: PACKAGING & COMPATIBILITY ENGINE */}
         {activeTab === "packaging" && (
-          <div className="flex-1 flex flex-col gap-3 p-4 bg-slate-950/90 rounded-3xl border border-cyan-500/30 backdrop-blur-xl overflow-y-auto max-h-[620px] custom-scrollbar">
+          <div className="flex-1 flex flex-col gap-3 p-4 bg-base-950/90 rounded-3xl border border-base-800 backdrop-blur-xl overflow-y-auto max-h-[620px] custom-scrollbar">
             <div className="flex items-center justify-between">
-              <h3 className="text-xs font-bold uppercase tracking-wider text-cyan-400 flex items-center gap-1.5">
+              <h3 className="text-xs font-bold uppercase tracking-wider text-cyan-600 dark:text-cyan-400 flex items-center gap-1.5">
                 <AlertTriangle size={14} /> Packaging Rule Engine
               </h3>
               <span
                 className={`px-2 py-0.5 rounded-full text-[10px] font-bold font-mono ${
                   compat.isPhysicallyFeasible
-                    ? "bg-emerald-500/20 text-emerald-300 border border-emerald-500/40"
-                    : "bg-red-500/20 text-red-300 border border-red-500/40"
+                    ? "bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 border border-emerald-500/40"
+                    : "bg-red-500/20 text-red-700 dark:text-red-300 border border-red-500/40"
                 }`}
               >
                 {compat.isPhysicallyFeasible ? "Feasible Build" : `${compat.criticalErrorsCount} Critical Conflicts`}
@@ -654,9 +654,9 @@ export const MasterVehicleStudio: React.FC = () => {
 
             {compat.violations.length === 0 ? (
               <div className="p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-center space-y-2">
-                <CheckCircle2 size={24} className="text-emerald-400 mx-auto" />
-                <p className="text-xs font-bold text-emerald-200">100% Engineering Compatibility</p>
-                <p className="text-[11px] text-slate-400">All mechanical clearances, torque envelopes, and thermal loads are within valid physical tolerances.</p>
+                <CheckCircle2 size={24} className="text-emerald-500 mx-auto" />
+                <p className="text-xs font-bold text-emerald-700 dark:text-emerald-200">100% Engineering Compatibility</p>
+                <p className="text-[11px] text-slate-500 dark:text-slate-400">All mechanical clearances, torque envelopes, and thermal loads are within valid physical tolerances.</p>
               </div>
             ) : (
               <div className="space-y-2.5">
@@ -665,15 +665,15 @@ export const MasterVehicleStudio: React.FC = () => {
                     key={v.id}
                     className={`p-3 rounded-2xl border ${
                       v.severity === "critical_error"
-                        ? "bg-red-500/10 border-red-500/40 text-red-200"
-                        : "bg-amber-500/10 border-amber-500/40 text-amber-200"
+                        ? "bg-red-500/10 border-red-500/40 text-red-700 dark:text-red-200"
+                        : "bg-amber-500/10 border-amber-500/40 text-amber-700 dark:text-amber-200"
                     }`}
                   >
                     <div className="flex items-center gap-1.5 font-bold text-xs mb-1">
                       <AlertTriangle size={13} /> {v.title}
                     </div>
-                    <p className="text-[11px] text-slate-300 mb-2">{v.explanation}</p>
-                    <div className="p-2 rounded-xl bg-slate-950/60 border border-white/10 text-[10px] text-cyan-300">
+                    <p className="text-[11px] text-slate-700 dark:text-slate-300 mb-2">{v.explanation}</p>
+                    <div className="p-2 rounded-xl bg-base-950/60 border border-base-800 text-[10px] text-cyan-700 dark:text-cyan-300">
                       <span className="font-bold">Actionable Remedy:</span> {v.remedySuggestion}
                     </div>
                   </div>
@@ -685,43 +685,43 @@ export const MasterVehicleStudio: React.FC = () => {
 
         {/* TAB 4: BILL OF MATERIALS & COST */}
         {activeTab === "bom" && (
-          <div className="flex-1 flex flex-col gap-3 p-4 bg-slate-950/90 rounded-3xl border border-cyan-500/30 backdrop-blur-xl overflow-y-auto max-h-[620px] custom-scrollbar">
-            <h3 className="text-xs font-bold uppercase tracking-wider text-cyan-400 flex items-center gap-1.5">
+          <div className="flex-1 flex flex-col gap-3 p-4 bg-base-950/90 rounded-3xl border border-base-800 backdrop-blur-xl overflow-y-auto max-h-[620px] custom-scrollbar">
+            <h3 className="text-xs font-bold uppercase tracking-wider text-cyan-600 dark:text-cyan-400 flex items-center gap-1.5">
               <DollarSign size={14} /> Bill of Materials & CapEx
             </h3>
 
-            <div className="p-3.5 rounded-2xl bg-gradient-to-br from-cyan-950/60 to-slate-900 border border-cyan-500/40 space-y-1">
-              <span className="text-[10px] font-mono text-cyan-400 uppercase">Estimated Manufacturing Cost</span>
-              <div className="text-2xl font-bold font-mono text-white">${cost.totalManufacturingCostUSD.toLocaleString()}</div>
-              <span className="text-[10px] text-slate-400 block">Suggested MSRP: ${cost.suggestedMSRPUSD.toLocaleString()}</span>
+            <div className="p-3.5 rounded-2xl bg-base-900/80 border border-base-800 space-y-1">
+              <span className="text-[10px] font-mono text-cyan-600 dark:text-cyan-400 uppercase">Estimated Manufacturing Cost</span>
+              <div className="text-2xl font-bold font-mono text-slate-900 dark:text-white">${cost.totalManufacturingCostUSD.toLocaleString()}</div>
+              <span className="text-[10px] text-slate-500 dark:text-slate-400 block">Suggested MSRP: ${cost.suggestedMSRPUSD.toLocaleString()}</span>
             </div>
 
             <div className="space-y-1 text-xs font-mono">
-              <div className="flex justify-between py-1 border-b border-white/5 text-slate-300">
+              <div className="flex justify-between py-1 border-b border-base-800/40 text-slate-700 dark:text-slate-300">
                 <span>Chassis Structure</span>
                 <span>${cost.chassisCapExUSD.toLocaleString()}</span>
               </div>
-              <div className="flex justify-between py-1 border-b border-white/5 text-slate-300">
+              <div className="flex justify-between py-1 border-b border-base-800/40 text-slate-700 dark:text-slate-300">
                 <span>Powertrain Engine</span>
                 <span>${cost.powertrainCapExUSD.toLocaleString()}</span>
               </div>
-              <div className="flex justify-between py-1 border-b border-white/5 text-slate-300">
+              <div className="flex justify-between py-1 border-b border-base-800/40 text-slate-700 dark:text-slate-300">
                 <span>Transmission</span>
                 <span>${cost.transmissionCapExUSD.toLocaleString()}</span>
               </div>
-              <div className="flex justify-between py-1 border-b border-white/5 text-slate-300">
+              <div className="flex justify-between py-1 border-b border-base-800/40 text-slate-700 dark:text-slate-300">
                 <span>Suspension & Brakes</span>
                 <span>${cost.suspensionWheelsUSD.toLocaleString()}</span>
               </div>
-              <div className="flex justify-between py-1 border-b border-white/5 text-slate-300">
+              <div className="flex justify-between py-1 border-b border-base-800/40 text-slate-700 dark:text-slate-300">
                 <span>Aero Package</span>
                 <span>${cost.aeroPackageUSD.toLocaleString()}</span>
               </div>
-              <div className="flex justify-between py-1 border-b border-white/5 text-slate-300">
+              <div className="flex justify-between py-1 border-b border-base-800/40 text-slate-700 dark:text-slate-300">
                 <span>Interior Cabin</span>
                 <span>${cost.interiorCabinUSD.toLocaleString()}</span>
               </div>
-              <div className="flex justify-between py-1 text-slate-300">
+              <div className="flex justify-between py-1 text-slate-700 dark:text-slate-300">
                 <span>Assembly Labor</span>
                 <span>${cost.assemblyLaborUSD.toLocaleString()}</span>
               </div>

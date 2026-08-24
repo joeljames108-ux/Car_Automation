@@ -42,9 +42,7 @@ const STAGES: StageItem[] = [
   // --- Engineering Studio ---
   { id: "command", label: "Command Center", icon: <LayoutDashboard size={14} />, category: "engineering" },
   { id: "engine", label: "Engine", icon: <Cog size={14} />, category: "engineering" },
-  { id: "vehicle", label: "Vehicle", icon: <Car size={14} />, category: "engineering" },
-  { id: "exterior", label: "Exterior", icon: <Paintbrush size={14} />, category: "engineering" },
-  { id: "aero", label: "Aero Lab", icon: <Wind size={14} />, category: "engineering" },
+  { id: "vehicle", label: "Vehicle Studio", icon: <Car size={14} />, category: "engineering" },
   { id: "interior", label: "Interior", icon: <Sofa size={14} />, category: "engineering" },
   { id: "manufacturing", label: "Manufacturing", icon: <Factory size={14} />, category: "engineering" },
   { id: "infotainment", label: "Electronics", icon: <Monitor size={14} />, category: "engineering" },

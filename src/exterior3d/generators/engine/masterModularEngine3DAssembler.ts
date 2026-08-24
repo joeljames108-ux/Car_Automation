@@ -36,6 +36,10 @@ export class MasterModularEngine3DAssembler {
   private combustionGlows: { mesh: THREE.Mesh; light: THREE.PointLight; cylinderIndex: number }[] = [];
   private camshaftMeshes: THREE.Group[] = [];
 
+  // Live Kinematic Parameter Dimensions
+  private currentStrokeM: number = 0.086;
+  private currentRodLengthM: number = 0.148;
+
   // PBR Materials Cache
   private materials: {
     castAluminum: THREE.MeshStandardMaterial;
@@ -141,9 +145,12 @@ export class MasterModularEngine3DAssembler {
     const block = state.block;
     const cylCount = arch.cylinderCount;
     const cylindersPerBank = arch.family === "inline" ? cylCount : cylCount / 2;
-    const boreSpacing = arch.boreSpacingMm;
+    const boreSpacing = Math.max(arch.boreSpacingMm, block.boreMm + 10);
     const startZ = -((cylindersPerBank - 1) * boreSpacing) / 2;
     const halfBankAngleRad = (arch.bankAngleDeg / 2) * (Math.PI / 180);
+
+    this.currentStrokeM = block.strokeMm / 1000;
+    this.currentRodLengthM = state.connectingRods.rodLengthMm / 1000;
 
     // ------------------------------------------------------------------------
     // 1. ENGINE BLOCK MESH
@@ -151,8 +158,8 @@ export class MasterModularEngine3DAssembler {
     const blockGroup = new THREE.Group();
     blockGroup.name = "EngineBlock_Assembly";
     const blockLengthM = (cylindersPerBank * boreSpacing + 60) / 1000;
-    const blockWidthM = arch.family === "inline" ? 0.32 : 0.46;
-    const blockHeightM = arch.deckHeightMm / 1000;
+    const blockWidthM = arch.family === "inline" ? (0.24 + block.boreMm * 0.001) : (0.34 + block.boreMm * 0.0015);
+    const blockHeightM = Math.max(arch.deckHeightMm / 1000, (block.strokeMm * 0.9 + state.connectingRods.rodLengthMm + 45) / 1000);
 
     const blockCasting = new THREE.Mesh(
       new THREE.BoxGeometry(blockWidthM, blockHeightM, blockLengthM),
@@ -175,7 +182,7 @@ export class MasterModularEngine3DAssembler {
       const angleRad = bank * halfBankAngleRad;
 
       const liner = new THREE.Mesh(
-        new THREE.CylinderGeometry(block.boreMm / 2000, block.boreMm / 2000, block.strokeMm / 1000 * 1.5, 24, 1, true),
+        new THREE.CylinderGeometry(block.boreMm / 2000, block.boreMm / 2000, (block.strokeMm * 1.3) / 1000, 24, 1, true),
         this.materials.nitridedSteel
       );
       liner.rotation.z = angleRad;
@@ -201,10 +208,11 @@ export class MasterModularEngine3DAssembler {
     this.crankshaftMesh.add(crankShaftBar);
 
     // Crank Throws & Knife-edged Counterweights
+    const counterweightRadius = Math.max(0.048, (block.strokeMm / 2000) * 1.35);
     for (let i = 0; i < cylindersPerBank; i++) {
       const zM = (startZ + i * boreSpacing) / 1000;
       const counterweight = new THREE.Mesh(
-        new THREE.CylinderGeometry(0.065, 0.065, 0.016, 16, 1, false, 0, Math.PI),
+        new THREE.CylinderGeometry(counterweightRadius, counterweightRadius, 0.016, 16, 1, false, 0, Math.PI),
         this.materials.forgedSteel
       );
       counterweight.position.set(0, 0, zM);
@@ -228,8 +236,8 @@ export class MasterModularEngine3DAssembler {
     // 3. PISTONS, CONNECTING RODS & COMBUSTION FLAMES
     // ------------------------------------------------------------------------
     const pistonRadiusM = block.boreMm / 2000;
-    const pistonHeightM = 0.042;
-    const rodLengthM = state.connectingRods.rodLengthMm / 1000;
+    const pistonHeightM = Math.max(0.035, 0.042 * (block.boreMm / 88));
+    const rodLengthM = this.currentRodLengthM;
 
     for (let i = 0; i < cylCount; i++) {
       let bank = 0;
@@ -289,7 +297,7 @@ export class MasterModularEngine3DAssembler {
       const conrodGroup = new THREE.Group();
       conrodGroup.name = `ConnectingRod_Cyl_${i + 1}`;
       const rodBeam = new THREE.Mesh(
-        new THREE.BoxGeometry(0.014, rodLengthM, 0.022),
+        new THREE.BoxGeometry(0.014 * (block.boreMm / 88), rodLengthM, 0.022 * (block.strokeMm / 82)),
         state.connectingRods.style.includes("titanium") ? this.materials.titaniumAlloy : this.materials.forgedSteel
       );
       rodBeam.position.y = rodLengthM / 2;
@@ -317,8 +325,8 @@ export class MasterModularEngine3DAssembler {
     // 4. CYLINDER HEADS & VALVETRAIN (DOHC & VALVES)
     // ------------------------------------------------------------------------
     const headLengthM = blockLengthM;
-    const headWidthM = arch.family === "inline" ? 0.28 : 0.24;
-    const headHeightM = 0.12;
+    const headWidthM = arch.family === "inline" ? (blockWidthM * 0.88) : (blockWidthM * 0.55);
+    const headHeightM = 0.11 * Math.sqrt(block.boreMm / 88);
 
     const buildCylinderHeadAssembly = (name: string, isLeft: boolean) => {
       const headGroup = new THREE.Group();
@@ -429,7 +437,7 @@ export class MasterModularEngine3DAssembler {
           new THREE.Vector3(isLeft ? -0.08 : 0.08, -0.04, zM),
           new THREE.Vector3(isLeft ? -0.12 : 0.12, -0.14, 0.04),
         ]);
-        const tubeGeom = new THREE.TubeGeometry(tubeCurve, 16, 0.022, 12, false);
+        const tubeGeom = new THREE.TubeGeometry(tubeCurve, 16, 0.022 * (block.boreMm / 88), 12, false);
         const tube = new THREE.Mesh(tubeGeom, this.materials.inconelExhaust);
         tube.castShadow = true;
         headerGroup.add(tube);
@@ -504,8 +512,9 @@ export class MasterModularEngine3DAssembler {
     // ------------------------------------------------------------------------
     const oilPanGroup = new THREE.Group();
     oilPanGroup.name = "OilPan_Assembly";
+    const panDepthM = Math.max(0.065, (block.strokeMm / 2000) * 1.25);
     const panMesh = new THREE.Mesh(
-      new THREE.BoxGeometry(blockWidthM * 0.85, 0.07, blockLengthM * 0.95),
+      new THREE.BoxGeometry(blockWidthM * 0.85, panDepthM, blockLengthM * 0.95),
       this.materials.billetAluminum
     );
     oilPanGroup.add(panMesh);
@@ -558,8 +567,8 @@ export class MasterModularEngine3DAssembler {
     }
 
     // 2. Reciprocate Pistons & Articulate Conrods
-    const crankRadiusM = 0.043;
-    const rodLengthM = 0.148;
+    const crankRadiusM = this.currentStrokeM / 2;
+    const rodLengthM = this.currentRodLengthM;
 
     this.pistonMeshes.forEach((p) => {
       const solved = this.kinematicsAnimator.solveCylinder(p.cylinderIndex);

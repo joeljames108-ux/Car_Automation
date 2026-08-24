@@ -27,9 +27,9 @@ export function NeonMotorsportStudio() {
 
   const compounds: Record<string, { grip: string; wearRate: string; laps: number; color: string }> = {
     soft: { grip: "1.82 G", wearRate: "3.4% / lap", laps: 16, color: "#ff5252" },
-    medium: { grip: "1.74 G", wearRate: "2.1% / lap", laps: 26, color: "#ffd740" },
+    medium: { grip: "1.74 G", wearRate: "2.1% / lap", laps: 26, color: "#fbbf24" },
     hard: { grip: "1.65 G", wearRate: "1.2% / lap", laps: 40, color: "#ffffff" },
-    wet: { grip: "1.45 G (Water Scavenge: 85 L/s)", wearRate: "1.8% / lap", laps: 30, color: "#00e5ff" },
+    wet: { grip: "1.45 G (Water Scavenge: 85 L/s)", wearRate: "1.8% / lap", laps: 30, color: "#38bdf8" },
   };
 
   const activeCompound = compounds[tireCompound] || compounds.soft;
@@ -95,7 +95,7 @@ export function NeonMotorsportStudio() {
             {/* Tire Degradation SVG Curve */}
             <div className="flex flex-col gap-2 pt-2 border-t border-white/10">
               <span className="nh-label-caps text-slate-400 text-[10px]">TIRE WEAR CURVE & CLIFF PROJECTION</span>
-              <div className="h-32 w-full bg-[#040816] rounded-xl border border-cyan-500/20 p-2">
+              <div className="h-32 w-full bg-[#040816] rounded-xl border border-sky-400/15 p-2">
                 <svg viewBox="0 0 400 100" className="w-full h-full overflow-visible">
                   {[20, 50, 80].map((y) => (
                     <line key={y} x1="20" y1={y} x2="380" y2={y} stroke="rgba(255,255,255,0.06)" strokeWidth="1" />
@@ -106,8 +106,8 @@ export function NeonMotorsportStudio() {
                     stroke={activeCompound.color}
                     strokeWidth="3"
                   />
-                  <circle cx="140" cy="25" r="4" fill="#00e5ff" />
-                  <text x="140" y="15" fill="#00e5ff" fontSize="8" fontFamily="monospace" textAnchor="middle">CURRENT LAP 14</text>
+                  <circle cx="140" cy="25" r="4" fill="#38bdf8" />
+                  <text x="140" y="15" fill="#38bdf8" fontSize="8" fontFamily="monospace" textAnchor="middle">CURRENT LAP 14</text>
                 </svg>
               </div>
             </div>
@@ -125,7 +125,7 @@ export function NeonMotorsportStudio() {
             }}
             className="p-6 flex flex-col gap-4"
           >
-            <div className="p-4 rounded-xl bg-[#060e22] border border-cyan-500/20 flex flex-col gap-2">
+            <div className="p-4 rounded-xl bg-[#060e22] border border-sky-400/15 flex flex-col gap-2">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-bold text-amber-300">RACE ENGINEER:</span>
                 <span className="text-[10px] nh-font-mono text-slate-400">14:22:04</span>
@@ -135,10 +135,10 @@ export function NeonMotorsportStudio() {
               </p>
             </div>
 
-            <div className="p-4 rounded-xl bg-[#060e22] border border-cyan-500/20 flex flex-col gap-2">
+            <div className="p-4 rounded-xl bg-[#060e22] border border-sky-400/15 flex flex-col gap-2">
               <div className="flex items-center justify-between">
                 <span className="text-xs text-slate-400">Average Pit Stop Time:</span>
-                <span className="text-xs font-bold nh-font-mono text-cyan-300">2.18s</span>
+                <span className="text-xs font-bold nh-font-mono text-sky-300">2.18s</span>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-xs text-slate-400">Pit Lane Loss Delta:</span>

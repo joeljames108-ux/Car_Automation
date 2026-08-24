@@ -22,8 +22,9 @@ import { NeonHorizonButton } from "../design/NeonHorizonButton";
 import { NeonHorizonBadge } from "../design/NeonHorizonBadge";
 import { NeonHorizonSelect } from "../design/NeonHorizonSelect";
 import { NeonHorizonDataCard } from "../design/NeonHorizonDataCard";
-import { VehicleStatsPanel } from "../hud/VehicleStatsPanel";
 import type { Stage } from "../../StageSwitcher";
+import { NeonPowerTorqueCurveChart } from "../design/NeonPowerTorqueCurveChart";
+import { NeonPerformanceKPIGrid } from "../design/NeonPerformanceKPIGrid";
 
 export interface NeonCommandCenterProps {
   onSelectStage?: (stage: Stage) => void;
@@ -126,10 +127,10 @@ export const NeonCommandCenter: React.FC<NeonCommandCenterProps> = ({ onSelectSt
                 key={p.id}
                 onClick={() => handleApplyPreset(p)}
                 className={`p-4 rounded-2xl border transition-all duration-300 flex flex-col justify-between gap-3 cursor-pointer select-none ${
-                  isSelected
-                    ? "bg-[#091838]/90 border-cyan-400 shadow-[0_0_25px_rgba(0,229,255,0.4),inset_0_1px_1px_rgba(255,255,255,0.2)] scale-[1.02]"
-                    : "bg-[#050b18]/75 border-white/10 hover:border-cyan-500/40 hover:bg-[#071228]/80"
-                }`}
+ isSelected
+ ? "bg-[#091838]/90 border-sky-400/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)] scale-[1.02]"
+ : "bg-[#050b18]/75 border-white/10 hover:border-sky-400/30 hover:bg-[#071228]/80"
+ }`}
               >
                 <div>
                   <div className="flex items-center justify-between gap-1 mb-2">
@@ -137,7 +138,7 @@ export const NeonCommandCenter: React.FC<NeonCommandCenterProps> = ({ onSelectSt
                       {p.category}
                     </NeonHorizonBadge>
                     {isSelected && (
-                      <span className="w-2 h-2 rounded-full bg-cyan-400 animate-nh-pulse-dot" />
+                      <span className="w-2 h-2 rounded-full bg-sky-300 animate-nh-pulse-dot" />
                     )}
                   </div>
                   <h4 className="text-sm font-bold nh-font-headline text-slate-100 mb-1">
@@ -151,7 +152,7 @@ export const NeonCommandCenter: React.FC<NeonCommandCenterProps> = ({ onSelectSt
                 <div className="grid grid-cols-3 gap-1.5 border-t border-white/10 pt-2.5 nh-font-mono text-center">
                   <div className="bg-black/30 p-1.5 rounded-lg">
                     <div className="text-[8px] text-slate-400">POWER</div>
-                    <div className="text-xs font-bold text-cyan-300">{p.power}</div>
+                    <div className="text-xs font-bold text-sky-300">{p.power}</div>
                   </div>
                   <div className="bg-black/30 p-1.5 rounded-lg">
                     <div className="text-[8px] text-slate-400">WEIGHT</div>
@@ -203,10 +204,10 @@ export const NeonCommandCenter: React.FC<NeonCommandCenterProps> = ({ onSelectSt
                       setPlatformTier(tier.id);
                     }}
                     className={`py-1.5 rounded-lg text-[10px] nh-font-mono font-bold transition-all cursor-pointer ${
-                      platformTier === tier.id
-                        ? "bg-cyan-500/30 text-cyan-200 border border-cyan-400/60 shadow-[0_0_10px_rgba(0,229,255,0.3)]"
-                        : "text-slate-400 hover:text-slate-200 hover:bg-white/5"
-                    }`}
+ platformTier === tier.id
+ ? "bg-sky-400/20 text-sky-200 border border-sky-400/35"
+ : "text-slate-400 hover:text-slate-200 hover:bg-white/5"
+ }`}
                   >
                     {tier.label}
                   </button>
@@ -229,13 +230,13 @@ export const NeonCommandCenter: React.FC<NeonCommandCenterProps> = ({ onSelectSt
 
             {/* Quick Metrics */}
             <div className="grid grid-cols-2 gap-3 pt-1">
-              <div className="p-3 rounded-xl bg-[#081226]/80 border border-cyan-500/20">
+              <div className="p-3 rounded-xl bg-[#081226]/80 border border-sky-400/15">
                 <span className="nh-label-caps text-slate-400 text-[9px]">TORSIONAL RIGIDITY</span>
-                <div className="text-base font-bold nh-font-headline text-cyan-200 mt-0.5">
+                <div className="text-base font-bold nh-font-headline text-sky-200 mt-0.5">
                   74.0 <span className="text-[10px] nh-font-mono text-slate-400">kNm/°</span>
                 </div>
               </div>
-              <div className="p-3 rounded-xl bg-[#081226]/80 border border-cyan-500/20">
+              <div className="p-3 rounded-xl bg-[#081226]/80 border border-sky-400/15">
                 <span className="nh-label-caps text-slate-400 text-[9px]">CHASSIS MASS FACTOR</span>
                 <div className="text-base font-bold nh-font-headline text-emerald-300 mt-0.5">
                   0.15 <span className="text-[10px] nh-font-mono text-slate-400">(Ultralight)</span>
@@ -261,58 +262,31 @@ export const NeonCommandCenter: React.FC<NeonCommandCenterProps> = ({ onSelectSt
             }}
             className="p-5 flex flex-col justify-between"
           >
-            <div className="h-44 w-full relative flex items-center justify-center">
-              <svg viewBox="0 0 400 160" className="w-full h-full overflow-visible">
-                <defs>
-                  <linearGradient id="pwrGrad" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#00e5ff" stopOpacity="0.4" />
-                    <stop offset="100%" stopColor="#00e5ff" stopOpacity="0.0" />
-                  </linearGradient>
-                  <linearGradient id="tqGrad" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#ffd740" stopOpacity="0.3" />
-                    <stop offset="100%" stopColor="#ffd740" stopOpacity="0.0" />
-                  </linearGradient>
-                </defs>
-
-                {/* Grid lines */}
-                {[30, 70, 110, 150].map((y) => (
-                  <line key={y} x1="20" y1={y} x2="380" y2={y} stroke="rgba(255,255,255,0.06)" strokeWidth="1" />
-                ))}
-
-                {/* Power curve */}
-                <path
-                  d="M 30 145 C 80 130, 140 100, 200 65 C 260 35, 310 25, 370 20 L 370 150 L 30 150 Z"
-                  fill="url(#pwrGrad)"
-                />
-                <path
-                  d="M 30 145 C 80 130, 140 100, 200 65 C 260 35, 310 25, 370 20"
-                  fill="none"
-                  stroke="#00e5ff"
-                  strokeWidth="2.5"
-                />
-
-                {/* Torque curve */}
-                <path
-                  d="M 30 120 C 70 60, 130 45, 200 48 C 270 52, 320 80, 370 110 L 370 150 L 30 150 Z"
-                  fill="url(#tqGrad)"
-                />
-                <path
-                  d="M 30 120 C 70 60, 130 45, 200 48 C 270 52, 320 80, 370 110"
-                  fill="none"
-                  stroke="#ffd740"
-                  strokeWidth="2"
-                  strokeDasharray="4 2"
-                />
-              </svg>
-            </div>
+            <NeonPowerTorqueCurveChart
+            powerCurve={[
+              { rpm: 1000, power: sim.peakPower * 0.15, torque: sim.peakTorque * 0.7 },
+              { rpm: 2000, power: sim.peakPower * 0.28, torque: sim.peakTorque * 0.85 },
+              { rpm: 3000, power: sim.peakPower * 0.42, torque: sim.peakTorque * 0.92 },
+              { rpm: 4000, power: sim.peakPower * 0.58, torque: sim.peakTorque * 0.97 },
+              { rpm: 5000, power: sim.peakPower * 0.72, torque: sim.peakTorque },
+              { rpm: 5500, power: sim.peakPower * 0.82, torque: sim.peakTorque * 0.99 },
+              { rpm: 6000, power: sim.peakPower * 0.90, torque: sim.peakTorque * 0.97 },
+              { rpm: 6500, power: sim.peakPower * 0.95, torque: sim.peakTorque * 0.94 },
+              { rpm: sim.peakPowerRpm || 7000, power: sim.peakPower, torque: sim.peakTorque * 0.90 },
+              { rpm: 7500, power: sim.peakPower * 0.98, torque: sim.peakTorque * 0.85 },
+              { rpm: 8000, power: sim.peakPower * 0.95, torque: sim.peakTorque * 0.80 },
+              { rpm: 8500, power: sim.peakPower * 0.90, torque: sim.peakTorque * 0.74 },
+            ]}
+            height={220}
+          />
 
             <div className="flex items-center justify-between border-t border-white/10 pt-3 text-xs nh-font-mono">
               <div className="flex items-center gap-2">
-                <span className="w-2.5 h-2.5 rounded-full bg-[#00e5ff]" />
+                <span className="w-2.5 h-2.5 rounded-full bg-[#38bdf8]" />
                 <span className="text-slate-300">Horsepower (HP)</span>
               </div>
               <div className="flex items-center gap-2">
-                <span className="w-2.5 h-2.5 rounded-full bg-[#ffd740]" />
+                <span className="w-2.5 h-2.5 rounded-full bg-[#fbbf24]" />
                 <span className="text-slate-300">Torque (Nm)</span>
               </div>
               {onSelectStage && (
@@ -333,14 +307,7 @@ export const NeonCommandCenter: React.FC<NeonCommandCenterProps> = ({ onSelectSt
       {/* =========================================================================
           SECTION 3: VEHICLE STATS 6-GRID MATRIX (MATCHING REFERENCE IMAGE 1)
           ========================================================================= */}
-      <VehicleStatsPanel
-        totalWeight={sim.weight}
-        powerToWeight={(sim.peakPower / (sim.weight || 1000)) * 1000}
-        topSpeed={sim.topSpeed}
-        zeroToSixty={sim.accel0_60}
-        quarterMile={sim.quarterMile}
-        braking100To0={sim.brakingDist}
-      />
+      <NeonPerformanceKPIGrid sim={sim} />
     </div>
   );
 };

@@ -59,8 +59,8 @@ export function NeonSplitterSkirtStudio() {
       // Front Splitter Profile
       const splitterY = h * 0.85 - (skirtGapMm / 25.0) * (h * 0.45);
 
-      ctx.fillStyle = isRubbing ? "rgba(255, 0, 85, 0.4)" : "rgba(0, 229, 255, 0.3)";
-      ctx.strokeStyle = isRubbing ? "#ff0055" : "#00e5ff";
+      ctx.fillStyle = isRubbing ? "rgba(255, 0, 85, 0.4)" : "rgba(56,189,248, 0.3)";
+      ctx.strokeStyle = isRubbing ? "#ff0055" : "#38bdf8";
       ctx.lineWidth = 2;
 
       ctx.beginPath();
@@ -74,14 +74,14 @@ export function NeonSplitterSkirtStudio() {
 
       // Ground Effect Suction Field (Gradient)
       const grad = ctx.createLinearGradient(0, splitterY, 0, h * 0.85);
-      grad.addColorStop(0, "rgba(0, 229, 255, 0.6)");
+      grad.addColorStop(0, "rgba(56,189,248, 0.6)");
       grad.addColorStop(1, "rgba(168, 85, 247, 0.1)");
 
       ctx.fillStyle = grad;
       ctx.fillRect(40, splitterY, w - 80, h * 0.85 - splitterY);
 
       // Streamlines
-      ctx.strokeStyle = "rgba(0, 229, 255, 0.9)";
+      ctx.strokeStyle = "rgba(56,189,248, 0.9)";
       ctx.lineWidth = 1.5;
 
       for (let i = 0; i < 5; i++) {
@@ -89,7 +89,7 @@ export function NeonSplitterSkirtStudio() {
         const sx = 40 + offset;
         const sy = splitterY + ((h * 0.85 - splitterY) * ((i + 1) / 6));
 
-        ctx.fillStyle = isRubbing ? "#ff0055" : "#00e5ff";
+        ctx.fillStyle = isRubbing ? "#ff0055" : "#38bdf8";
         ctx.beginPath();
         ctx.arc(sx, sy, 2, 0, Math.PI * 2);
         ctx.fill();
@@ -139,7 +139,7 @@ export function NeonSplitterSkirtStudio() {
             }}
             className="p-6 flex flex-col gap-4"
           >
-            <div className="w-full h-52 bg-[#030712] rounded-xl border border-cyan-500/30 overflow-hidden relative shadow-[inset_0_0_25px_rgba(0,0,0,0.85)]">
+            <div className="w-full h-52 bg-[#030712] rounded-xl border border-sky-400/25 overflow-hidden relative shadow-[inset_0_0_25px_rgba(0,0,0,0.85)]">
               <canvas ref={canvasRef} width={640} height={210} className="w-full h-full" />
               <div className="absolute top-2 left-3 flex items-center gap-2">
                 <span className={`text-[10px] nh-font-mono font-bold ${isRubbing ? "text-rose-400" : "text-emerald-400"}`}>
@@ -164,10 +164,10 @@ export function NeonSplitterSkirtStudio() {
                       setSkirtMaterial(m.id as "kevlar_elastomer" | "brush_seal" | "sliding_skid_titanium" | "rigid_carbon");
                     }}
                     className={`p-2.5 rounded-lg border text-center text-xs font-bold cursor-pointer transition-all ${
-                      isSelected
-                        ? "bg-[#091a38] border-cyan-400 text-cyan-300 shadow-[0_0_12px_rgba(0,229,255,0.3)]"
-                        : "bg-[#060e22] border-white/10 text-slate-400 hover:border-cyan-500/30"
-                    }`}
+ isSelected
+ ? "bg-[#091a38] border-sky-400/40 text-sky-300"
+ : "bg-[#060e22] border-white/10 text-slate-400 hover:border-sky-400/25"
+ }`}
                   >
                     {m.name}
                   </div>
@@ -210,14 +210,14 @@ export function NeonSplitterSkirtStudio() {
               onChange={(val) => setSplitterExtensionMm(val)}
             />
 
-            <div className="p-3.5 rounded-xl bg-[#060e22] border border-cyan-500/20 flex flex-col gap-2 font-mono text-xs">
+            <div className="p-3.5 rounded-xl bg-[#060e22] border border-sky-400/15 flex flex-col gap-2 font-mono text-xs">
               <div className="flex items-center justify-between">
                 <span className="text-slate-400">Side Floor Strakes:</span>
                 <span className="text-emerald-300 font-bold">6x Vortex Retention Curtains</span>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-slate-400">FIA Skid Block Wear:</span>
-                <span className="text-cyan-300 font-bold">0.18 mm / 100 km (Legal)</span>
+                <span className="text-sky-300 font-bold">0.18 mm / 100 km (Legal)</span>
               </div>
             </div>
           </NeonHorizonGlassPanel>

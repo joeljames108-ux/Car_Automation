@@ -38,24 +38,25 @@ export const NeonHorizonButton: React.FC<NeonHorizonButtonProps> = ({
     lg: "px-6 py-3 text-sm rounded-2xl gap-3",
   }[size];
 
+  // Quiet cockpit buttons: flat tints, hairline borders, crisp press states.
   const variantClasses = {
     primary:
-      "bg-gradient-to-r from-cyan-500/25 to-sky-500/20 text-cyan-200 border border-cyan-400/40 hover:bg-cyan-500/35 hover:border-cyan-300 hover:text-white shadow-[0_0_15px_rgba(0,229,255,0.25),inset_0_1px_1px_rgba(255,255,255,0.2)]",
+      "bg-sky-400/15 text-sky-200 border border-sky-400/30 hover:bg-sky-400/25 hover:border-sky-300/50 hover:text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]",
     secondary:
-      "bg-[#0d1c3a]/70 text-slate-200 border border-white/10 hover:bg-[#132852]/80 hover:border-cyan-400/30 hover:text-cyan-200 shadow-[0_4px_12px_rgba(0,0,0,0.3)]",
+      "bg-white/[0.05] text-slate-200 border border-white/10 hover:bg-white/[0.09] hover:border-white/20 shadow-[0_2px_8px_rgba(0,0,0,0.25)]",
     ghost:
-      "bg-transparent text-slate-400 hover:text-cyan-300 hover:bg-cyan-500/10 border border-transparent hover:border-cyan-400/20",
+      "bg-transparent text-slate-400 hover:text-slate-100 hover:bg-white/[0.06] border border-transparent hover:border-white/10",
     danger:
-      "bg-gradient-to-r from-red-500/25 to-rose-500/20 text-rose-200 border border-red-400/40 hover:bg-red-500/35 hover:border-red-300 hover:text-white shadow-[0_0_15px_rgba(255,82,82,0.25)]",
+      "bg-rose-500/12 text-rose-200 border border-rose-400/30 hover:bg-rose-500/22 hover:border-rose-300/50 hover:text-white",
     neon:
-      "bg-gradient-to-r from-cyan-500/30 via-purple-500/25 to-fuchsia-500/30 text-white border border-cyan-300/60 hover:border-cyan-200 shadow-[0_0_25px_rgba(0,229,255,0.45),inset_0_1px_1px_rgba(255,255,255,0.3)] font-bold",
+      "bg-sky-400/20 text-white border border-sky-300/40 hover:bg-sky-400/30 hover:border-sky-300/60 font-bold shadow-[inset_0_1px_0_rgba(255,255,255,0.12)]",
     gold:
-      "bg-gradient-to-r from-amber-500/25 to-yellow-500/20 text-amber-200 border border-amber-400/40 hover:bg-amber-500/35 hover:border-amber-300 hover:text-white shadow-[0_0_15px_rgba(255,215,64,0.25)]",
+      "bg-amber-400/12 text-amber-200 border border-amber-400/30 hover:bg-amber-400/22 hover:border-amber-300/50 hover:text-white",
     emerald:
-      "bg-gradient-to-r from-emerald-500/25 to-teal-500/20 text-emerald-200 border border-emerald-400/40 hover:bg-emerald-500/35 hover:border-emerald-300 hover:text-white shadow-[0_0_15px_rgba(0,230,118,0.25)]",
+      "bg-emerald-400/12 text-emerald-200 border border-emerald-400/30 hover:bg-emerald-400/22 hover:border-emerald-300/50 hover:text-white",
   }[variant];
 
-  const glowClass = glow ? "animate-nh-glow" : "";
+  const glowClass = "";
   const disabledClass = disabled || loading ? "opacity-40 cursor-not-allowed pointer-events-none" : "active:scale-[0.98]";
 
   return (
@@ -66,7 +67,7 @@ export const NeonHorizonButton: React.FC<NeonHorizonButtonProps> = ({
       {...rest}
     >
       {loading ? (
-        <span className="w-3.5 h-3.5 border-2 border-cyan-400 border-t-transparent rounded-full animate-spin" />
+        <span className="w-3.5 h-3.5 border-2 border-sky-300 border-t-transparent rounded-full animate-spin" />
       ) : (
         icon
       )}

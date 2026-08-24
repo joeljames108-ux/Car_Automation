@@ -127,10 +127,10 @@ export function NeonAIArchitectStudio() {
                 setActiveTab(tab.id);
               }}
               className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs nh-font-mono font-bold transition-all cursor-pointer whitespace-nowrap ${
-                isActive
-                  ? "bg-cyan-500/30 text-cyan-200 border border-cyan-400/60 shadow-[0_0_12px_rgba(0,229,255,0.4)]"
-                  : "text-slate-400 hover:text-slate-200 hover:bg-white/5"
-              }`}
+ isActive
+ ? "bg-sky-400/20 text-sky-200 border border-sky-400/35"
+ : "text-slate-400 hover:text-slate-200 hover:bg-white/5"
+ }`}
             >
               {tab.icon}
               <span>{tab.label}</span>
@@ -205,8 +205,8 @@ export function NeonAIArchitectStudio() {
                   <p className="text-sm text-slate-200 leading-relaxed bg-black/40 p-3.5 rounded-xl border border-white/8">
                     "{ag.rec}"
                   </p>
-                  <div className="flex items-center gap-2 text-xs nh-font-mono text-cyan-300 font-bold">
-                    <TrendingUp size={14} className="text-cyan-400" />
+                  <div className="flex items-center gap-2 text-xs nh-font-mono text-sky-300 font-bold">
+                    <TrendingUp size={14} className="text-sky-400" />
                     <span>Impact: {ag.impact}</span>
                   </div>
                 </div>

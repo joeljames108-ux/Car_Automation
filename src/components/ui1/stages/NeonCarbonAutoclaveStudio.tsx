@@ -66,11 +66,11 @@ export function NeonCarbonAutoclaveStudio() {
             }}
             className="p-6 flex flex-col gap-4"
           >
-            <div className="grid grid-cols-8 gap-2 p-4 rounded-xl bg-[#030712] border border-cyan-500/30 shadow-[inset_0_0_20px_rgba(0,0,0,0.8)]">
+            <div className="grid grid-cols-8 gap-2 p-4 rounded-xl bg-[#030712] border border-sky-400/25 shadow-[inset_0_0_20px_rgba(0,0,0,0.8)]">
               {["0°", "+45°", "-45°", "90°", "0°", "+45°", "-45°", "90°", "90°", "-45°", "+45°", "0°", "90°", "-45°", "+45°", "0°"].map((ply, idx) => (
                 <div key={idx} className="p-2.5 rounded-lg bg-[#060e22] border border-white/10 flex flex-col items-center justify-center font-mono text-[10px] text-center">
                   <span className="text-slate-400">P{idx + 1}</span>
-                  <span className="text-cyan-300 font-bold text-xs">{ply}</span>
+                  <span className="text-sky-300 font-bold text-xs">{ply}</span>
                 </div>
               ))}
             </div>
@@ -90,10 +90,10 @@ export function NeonCarbonAutoclaveStudio() {
                       setPrepregResin(r.id as "toughened_epoxy" | "cyanate_ester" | "bismaleimide");
                     }}
                     className={`p-2.5 rounded-lg border text-center text-xs font-bold cursor-pointer transition-all ${
-                      isSelected
-                        ? "bg-[#091a38] border-cyan-400 text-cyan-300 shadow-[0_0_12px_rgba(0,229,255,0.3)]"
-                        : "bg-[#060e22] border-white/10 text-slate-400 hover:border-cyan-500/30"
-                    }`}
+ isSelected
+ ? "bg-[#091a38] border-sky-400/40 text-sky-300"
+ : "bg-[#060e22] border-white/10 text-slate-400 hover:border-sky-400/25"
+ }`}
                   >
                     {r.name}
                   </div>
@@ -136,14 +136,14 @@ export function NeonCarbonAutoclaveStudio() {
               onChange={(val) => setVesselPressure(val)}
             />
 
-            <div className="p-3.5 rounded-xl bg-[#060e22] border border-cyan-500/20 flex flex-col gap-2 font-mono text-xs">
+            <div className="p-3.5 rounded-xl bg-[#060e22] border border-sky-400/15 flex flex-col gap-2 font-mono text-xs">
               <div className="flex items-center justify-between">
                 <span className="text-slate-400">Fiber Volume Fraction (Vf):</span>
                 <span className="text-emerald-300 font-bold">64.5% Optimal</span>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-slate-400">Vacuum Bag Debulk:</span>
-                <span className="text-cyan-300 font-bold">-0.98 Bar Vacuum</span>
+                <span className="text-sky-300 font-bold">-0.98 Bar Vacuum</span>
               </div>
             </div>
           </NeonHorizonGlassPanel>

@@ -49,21 +49,31 @@ export interface RotaryBlockSpec {
   shaftBoreRadiusM: number; // 0.026 m (52 mm eccentric shaft bearing bore)
 }
 
-export function computeRotarySpecs(rotors: number = 2): RotaryBlockSpec {
-  const count = Math.max(2, Math.min(4, rotors));
-  const housingWidthM = 0.080;
+export function computeRotarySpecs(
+  rotorsOrConfig: number | Partial<EngineConfig> = 2,
+  maybeConfig?: Partial<EngineConfig>
+): RotaryBlockSpec {
+  const config = typeof rotorsOrConfig === 'object' ? rotorsOrConfig : maybeConfig;
+  let count = typeof rotorsOrConfig === 'number' ? rotorsOrConfig : 2;
+  count = Math.max(2, Math.min(4, count));
+
+  const boreMm = config?.bore || 86.0;
+  const strokeMm = config?.stroke || 82.0;
+
+  const scaleFactor = (boreMm / 86.0) * 0.5 + (strokeMm / 82.0) * 0.5;
+  const housingWidthM = 0.080 * (strokeMm / 82.0);
   const ironPlateThicknessM = 0.035;
   const plateCount = count + 1; // 2 rotors = 3 plates (Front, Middle, Rear)
   const totalLengthM = count * housingWidthM + plateCount * ironPlateThicknessM;
 
   return {
     rotorCount: count,
-    generatingRadiusR: 0.105,
-    eccentricityE: 0.015,
+    generatingRadiusR: 0.105 * scaleFactor,
+    eccentricityE: 0.015 * scaleFactor,
     housingWidthM,
     ironPlateThicknessM,
     totalLengthM,
-    shaftBoreRadiusM: 0.026,
+    shaftBoreRadiusM: 0.026 * scaleFactor,
   };
 }
 
@@ -331,14 +341,7 @@ export function buildRotaryBlockScene(config?: Partial<EngineConfig> | number): 
   rootGroup.name = 'Rotary_Engine_Block_Master';
   scene.add(rootGroup);
 
-  let rotorCount = 2;
-  if (typeof config === 'number') {
-    rotorCount = config;
-  } else if (config?.layout === 'rotary') {
-    rotorCount = 2; // 2-rotor standard baseline
-  }
-
-  const specs = computeRotarySpecs(rotorCount);
+  const specs = computeRotarySpecs(config);
   const materials = createBlockMaterialPalette(typeof config === 'object' ? config : undefined);
 
   // 1. Epitrochoid Rotor Housings & Chrome Trochoid Tracks

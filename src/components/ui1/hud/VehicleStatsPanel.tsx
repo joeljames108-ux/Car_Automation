@@ -35,10 +35,10 @@ export const VehicleStatsPanel: React.FC<VehicleStatsPanelProps> = ({
     >
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
         {/* Total Weight */}
-        <div className="p-3 rounded-xl bg-[#0a1630]/70 border border-cyan-500/20 flex flex-col justify-between">
+        <div className="p-3 rounded-xl bg-[#0a1630]/70 border border-sky-400/15 flex flex-col justify-between">
           <span className="nh-label-caps text-slate-400 text-[9px] mb-1">TOTAL WEIGHT</span>
           <div className="flex items-baseline gap-1">
-            <span className="text-lg font-bold nh-font-headline text-cyan-200">
+            <span className="text-lg font-bold nh-font-headline text-sky-200">
               <AnimatedCounter value={totalWeight} />
             </span>
             <span className="text-[10px] nh-font-mono text-slate-400">kg</span>
@@ -46,10 +46,10 @@ export const VehicleStatsPanel: React.FC<VehicleStatsPanelProps> = ({
         </div>
 
         {/* Power / Weight */}
-        <div className="p-3 rounded-xl bg-[#0a1630]/70 border border-cyan-500/20 flex flex-col justify-between">
+        <div className="p-3 rounded-xl bg-[#0a1630]/70 border border-sky-400/15 flex flex-col justify-between">
           <span className="nh-label-caps text-slate-400 text-[9px] mb-1">POWER / WEIGHT</span>
           <div className="flex items-baseline gap-1">
-            <span className="text-lg font-bold nh-font-headline text-fuchsia-200">
+            <span className="text-lg font-bold nh-font-headline text-sky-200">
               <AnimatedCounter value={Math.round(powerToWeight)} />
             </span>
             <span className="text-[10px] nh-font-mono text-slate-400">hp/t</span>
@@ -57,10 +57,10 @@ export const VehicleStatsPanel: React.FC<VehicleStatsPanelProps> = ({
         </div>
 
         {/* Top Speed */}
-        <div className="p-3 rounded-xl bg-[#0a1630]/70 border border-cyan-500/20 flex flex-col justify-between">
+        <div className="p-3 rounded-xl bg-[#0a1630]/70 border border-sky-400/15 flex flex-col justify-between">
           <span className="nh-label-caps text-slate-400 text-[9px] mb-1">TOP SPEED</span>
           <div className="flex items-baseline gap-1">
-            <span className="text-lg font-bold nh-font-headline text-cyan-200">
+            <span className="text-lg font-bold nh-font-headline text-sky-200">
               <AnimatedCounter value={topSpeed} />
             </span>
             <span className="text-[10px] nh-font-mono text-slate-400">km/h</span>
@@ -68,7 +68,7 @@ export const VehicleStatsPanel: React.FC<VehicleStatsPanelProps> = ({
         </div>
 
         {/* 0-60 MPH */}
-        <div className="p-3 rounded-xl bg-[#0a1630]/70 border border-cyan-500/20 flex flex-col justify-between">
+        <div className="p-3 rounded-xl bg-[#0a1630]/70 border border-sky-400/15 flex flex-col justify-between">
           <span className="nh-label-caps text-slate-400 text-[9px] mb-1">0-60 MPH</span>
           <div className="flex items-baseline gap-1">
             <span className="text-lg font-bold nh-font-headline text-emerald-300">
@@ -79,7 +79,7 @@ export const VehicleStatsPanel: React.FC<VehicleStatsPanelProps> = ({
         </div>
 
         {/* Quarter Mile */}
-        <div className="p-3 rounded-xl bg-[#0a1630]/70 border border-cyan-500/20 flex flex-col justify-between">
+        <div className="p-3 rounded-xl bg-[#0a1630]/70 border border-sky-400/15 flex flex-col justify-between">
           <span className="nh-label-caps text-slate-400 text-[9px] mb-1">QUARTER MILE</span>
           <div className="flex items-baseline gap-1">
             <span className="text-lg font-bold nh-font-headline text-amber-300">
@@ -90,7 +90,7 @@ export const VehicleStatsPanel: React.FC<VehicleStatsPanelProps> = ({
         </div>
 
         {/* Braking 100-0 */}
-        <div className="p-3 rounded-xl bg-[#0a1630]/70 border border-cyan-500/20 flex flex-col justify-between">
+        <div className="p-3 rounded-xl bg-[#0a1630]/70 border border-sky-400/15 flex flex-col justify-between">
           <span className="nh-label-caps text-slate-400 text-[9px] mb-1">BRAKING 100-0</span>
           <div className="flex items-baseline gap-1">
             <span className="text-lg font-bold nh-font-headline text-rose-300">

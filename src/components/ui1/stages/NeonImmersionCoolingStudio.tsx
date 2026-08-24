@@ -66,7 +66,7 @@ export function NeonImmersionCoolingStudio() {
             }}
             className="p-6 flex flex-col gap-4"
           >
-            <div className="grid grid-cols-8 gap-2 p-4 rounded-xl bg-[#030712] border border-cyan-500/30 shadow-[inset_0_0_20px_rgba(0,0,0,0.8)]">
+            <div className="grid grid-cols-8 gap-2 p-4 rounded-xl bg-[#030712] border border-sky-400/25 shadow-[inset_0_0_20px_rgba(0,0,0,0.8)]">
               {Array.from({ length: 32 }).map((_, idx) => {
                 const cellTemp = Math.round(maxCellTemp - Math.abs(idx - 16) * 0.4);
                 const isHot = cellTemp > 45;
@@ -74,10 +74,10 @@ export function NeonImmersionCoolingStudio() {
                   <div
                     key={idx}
                     className={`h-12 rounded-lg border flex flex-col items-center justify-center font-mono text-[9px] font-bold transition-all ${
-                      isHot
-                        ? "bg-amber-500/20 border-amber-500/50 text-amber-300 shadow-[0_0_8px_rgba(245,158,11,0.3)]"
-                        : "bg-cyan-500/10 border-cyan-500/30 text-cyan-300"
-                    }`}
+ isHot
+ ? "bg-amber-500/20 border-amber-500/50 text-amber-300"
+ : "bg-sky-400/10 border-sky-400/25 text-sky-300"
+ }`}
                   >
                     <span>C{idx + 1}</span>
                     <span>{cellTemp}°C</span>
@@ -103,10 +103,10 @@ export function NeonImmersionCoolingStudio() {
                         setFluidType(item.id as "synthetic_hydrocarbon" | "fluorinated_liquid" | "ester_based");
                       }}
                       className={`p-2.5 rounded-lg border text-center text-xs font-bold cursor-pointer transition-all ${
-                        isSelected
-                          ? "bg-[#091a38] border-cyan-400 text-cyan-300 shadow-[0_0_12px_rgba(0,229,255,0.3)]"
-                          : "bg-[#060e22] border-white/10 text-slate-400 hover:border-cyan-500/30"
-                      }`}
+ isSelected
+ ? "bg-[#091a38] border-sky-400/40 text-sky-300"
+ : "bg-[#060e22] border-white/10 text-slate-400 hover:border-sky-400/25"
+ }`}
                     >
                       {item.name}
                     </div>
@@ -150,10 +150,10 @@ export function NeonImmersionCoolingStudio() {
               onChange={(val) => setChargePower(val)}
             />
 
-            <div className="p-3.5 rounded-xl bg-[#060e22] border border-cyan-500/20 flex flex-col gap-2 font-mono text-xs">
+            <div className="p-3.5 rounded-xl bg-[#060e22] border border-sky-400/15 flex flex-col gap-2 font-mono text-xs">
               <div className="flex items-center justify-between">
                 <span className="text-slate-400">Fluid Boiling Point:</span>
-                <span className="text-cyan-300 font-bold">110°C (Phase Change)</span>
+                <span className="text-sky-300 font-bold">110°C (Phase Change)</span>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-slate-400">Dielectric Breakdown:</span>

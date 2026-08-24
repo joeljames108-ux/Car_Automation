@@ -49,7 +49,7 @@ export function NeonBoundaryLayerSuctionStudio() {
       ctx.clearRect(0, 0, w, h);
 
       // Micro-Perforated Carbon Skin Line
-      ctx.strokeStyle = "rgba(0, 229, 255, 0.5)";
+      ctx.strokeStyle = "rgba(56,189,248, 0.5)";
       ctx.lineWidth = 3;
       ctx.beginPath();
       ctx.moveTo(40, h * 0.7);
@@ -57,7 +57,7 @@ export function NeonBoundaryLayerSuctionStudio() {
       ctx.stroke();
 
       // Micro-Pore Perforations (Cyan Dashes)
-      ctx.strokeStyle = "#00e5ff";
+      ctx.strokeStyle = "#38bdf8";
       ctx.lineWidth = 1.5;
       for (let x = 60; x < w - 60; x += 18) {
         ctx.beginPath();
@@ -80,7 +80,7 @@ export function NeonBoundaryLayerSuctionStudio() {
           sy += (ratio * (suctionFlowrateLps / 100) * 35);
         }
 
-        ctx.fillStyle = "#00e5ff";
+        ctx.fillStyle = "#38bdf8";
         ctx.beginPath();
         ctx.arc(sx, sy, 2, 0, Math.PI * 2);
         ctx.fill();
@@ -130,10 +130,10 @@ export function NeonBoundaryLayerSuctionStudio() {
             }}
             className="p-6 flex flex-col gap-4"
           >
-            <div className="w-full h-52 bg-[#030712] rounded-xl border border-cyan-500/30 overflow-hidden relative shadow-[inset_0_0_25px_rgba(0,0,0,0.85)]">
+            <div className="w-full h-52 bg-[#030712] rounded-xl border border-sky-400/25 overflow-hidden relative shadow-[inset_0_0_25px_rgba(0,0,0,0.85)]">
               <canvas ref={canvasRef} width={640} height={210} className="w-full h-full" />
               <div className="absolute top-2 left-3 flex items-center gap-2">
-                <span className="text-[10px] nh-font-mono font-bold text-cyan-300">
+                <span className="text-[10px] nh-font-mono font-bold text-sky-300">
                   PORE DIAMETER: {poreDiameterMicrons}μm · MICRO-TURBINE SCAVENGE ACTIVE
                 </span>
               </div>
@@ -159,10 +159,10 @@ export function NeonBoundaryLayerSuctionStudio() {
                       else if (m.id === "full_surface_active") setSuctionFlowrateLps(88);
                     }}
                     className={`p-2.5 rounded-lg border text-center text-xs font-bold cursor-pointer transition-all ${
-                      isSelected
-                        ? "bg-[#091a38] border-cyan-400 text-cyan-300 shadow-[0_0_12px_rgba(0,229,255,0.3)]"
-                        : "bg-[#060e22] border-white/10 text-slate-400 hover:border-cyan-500/30"
-                    }`}
+ isSelected
+ ? "bg-[#091a38] border-sky-400/40 text-sky-300"
+ : "bg-[#060e22] border-white/10 text-slate-400 hover:border-sky-400/25"
+ }`}
                   >
                     {m.name}
                   </div>
@@ -205,14 +205,14 @@ export function NeonBoundaryLayerSuctionStudio() {
               onChange={(val) => setPoreDiameterMicrons(val)}
             />
 
-            <div className="p-3.5 rounded-xl bg-[#060e22] border border-cyan-500/20 flex flex-col gap-2 font-mono text-xs">
+            <div className="p-3.5 rounded-xl bg-[#060e22] border border-sky-400/15 flex flex-col gap-2 font-mono text-xs">
               <div className="flex items-center justify-between">
                 <span className="text-slate-400">Drilling Method:</span>
                 <span className="text-emerald-300 font-bold">Femtosecond UV Laser</span>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-slate-400">Suction Source:</span>
-                <span className="text-cyan-300 font-bold">48V Brushless Micro-Impellers</span>
+                <span className="text-sky-300 font-bold">48V Brushless Micro-Impellers</span>
               </div>
             </div>
           </NeonHorizonGlassPanel>

@@ -18,6 +18,7 @@ import { NeonHorizonSelect } from "../design/NeonHorizonSelect";
 import { NeonHorizonButton } from "../design/NeonHorizonButton";
 import { NeonHorizonBadge } from "../design/NeonHorizonBadge";
 import { NeonHorizonDataCard } from "../design/NeonHorizonDataCard";
+import { NeonCircuitDiagram, NeonTelemetryGraph } from "../design/NeonCircuitTelemetry";
 
 export function NeonTrackBattle() {
   const { sim } = useDesign();
@@ -55,14 +56,14 @@ export function NeonTrackBattle() {
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
       // Track Outline Path
-      ctx.strokeStyle = "rgba(0, 229, 255, 0.4)";
+      ctx.strokeStyle = "rgba(56,189,248, 0.4)";
       ctx.lineWidth = 4;
       ctx.beginPath();
       ctx.ellipse(canvas.width / 2, canvas.height / 2, canvas.width * 0.38, canvas.height * 0.32, 0.2, 0, Math.PI * 2);
       ctx.stroke();
 
       // DRS Zone Glowing Stripe
-      ctx.strokeStyle = "rgba(224, 64, 251, 0.8)";
+      ctx.strokeStyle = "rgba(167,139,250, 0.8)";
       ctx.lineWidth = 5;
       ctx.beginPath();
       ctx.ellipse(canvas.width / 2, canvas.height / 2, canvas.width * 0.38, canvas.height * 0.32, 0.2, 0, Math.PI * 0.5);
@@ -73,8 +74,8 @@ export function NeonTrackBattle() {
       const cx = canvas.width / 2 + Math.cos(angle) * canvas.width * 0.38;
       const cy = canvas.height / 2 + Math.sin(angle) * canvas.height * 0.32;
 
-      ctx.fillStyle = "#00e5ff";
-      ctx.shadowColor = "#00e5ff";
+      ctx.fillStyle = "#38bdf8";
+      ctx.shadowColor = "#38bdf8";
       ctx.shadowBlur = 15;
       ctx.beginPath();
       ctx.arc(cx, cy, 7, 0, Math.PI * 2);
@@ -168,23 +169,23 @@ export function NeonTrackBattle() {
             }}
             className="p-6 flex flex-col items-center justify-center relative"
           >
-            <div className="w-full h-72 rounded-2xl overflow-hidden border border-cyan-500/20 shadow-inner">
+            <div className="w-full h-72 rounded-2xl overflow-hidden border border-sky-400/15 shadow-inner">
               <canvas ref={canvasRef} width={500} height={280} className="w-full h-full object-cover" />
             </div>
 
             {/* Sector Times */}
             <div className="w-full grid grid-cols-3 gap-3 border-t border-white/10 pt-4 mt-4 nh-font-mono text-center text-xs">
-              <div className="bg-[#050b18] p-2.5 rounded-xl border border-cyan-500/20">
+              <div className="bg-[#050b18] p-2.5 rounded-xl border border-sky-400/15">
                 <span className="text-slate-400 text-[10px]">SECTOR 1</span>
                 <div className="text-emerald-300 font-bold text-sm mt-0.5">34.21s</div>
               </div>
-              <div className="bg-[#050b18] p-2.5 rounded-xl border border-cyan-500/20">
+              <div className="bg-[#050b18] p-2.5 rounded-xl border border-sky-400/15">
                 <span className="text-slate-400 text-[10px]">SECTOR 2</span>
-                <div className="text-cyan-300 font-bold text-sm mt-0.5">1:02.84s</div>
+                <div className="text-sky-300 font-bold text-sm mt-0.5">1:02.84s</div>
               </div>
-              <div className="bg-[#050b18] p-2.5 rounded-xl border border-cyan-500/20">
+              <div className="bg-[#050b18] p-2.5 rounded-xl border border-sky-400/15">
                 <span className="text-slate-400 text-[10px]">SECTOR 3</span>
-                <div className="text-fuchsia-300 font-bold text-sm mt-0.5">42.15s</div>
+                <div className="text-sky-300 font-bold text-sm mt-0.5">42.15s</div>
               </div>
             </div>
           </NeonHorizonGlassPanel>
@@ -211,9 +212,9 @@ export function NeonTrackBattle() {
               ].map((tire) => (
                 <div
                   key={tire.pos}
-                  className="p-3 rounded-xl bg-[#071126] border border-cyan-500/20 flex flex-col items-center justify-center text-center"
+                  className="p-3 rounded-xl bg-[#071126] border border-sky-400/15 flex flex-col items-center justify-center text-center"
                 >
-                  <span className="text-[10px] nh-font-mono text-cyan-400 font-bold">{tire.pos} TIRE</span>
+                  <span className="text-[10px] nh-font-mono text-sky-400 font-bold">{tire.pos} TIRE</span>
                   <span className="text-lg font-black nh-font-headline text-slate-100 my-0.5">{tire.temp}</span>
                   <span className="text-[10px] nh-font-mono text-slate-400">{tire.psi}</span>
                 </div>
@@ -231,7 +232,7 @@ export function NeonTrackBattle() {
             }}
             className="p-5 flex flex-col items-center justify-center text-center"
           >
-            <div className="w-32 h-32 rounded-full border-2 border-dashed border-cyan-400/40 relative flex items-center justify-center my-2 shadow-[0_0_20px_rgba(0,229,255,0.15)]">
+            <div className="w-32 h-32 rounded-full border-2 border-dashed border-sky-400/30 relative flex items-center justify-center my-2">
               {/* Traction Limit Arc */}
               <div className="w-20 h-20 rounded-full border border-white/15" />
               {/* G-Force Marker */}
@@ -239,11 +240,11 @@ export function NeonTrackBattle() {
                 style={{
                   transform: `translate(${Math.sin(Date.now() / 700) * 35}px, ${Math.cos(Date.now() / 500) * 25}px)`,
                 }}
-                className="w-4 h-4 rounded-full bg-rose-400 shadow-[0_0_12px_rgba(244,63,94,1)] absolute"
+                className="w-4 h-4 rounded-full bg-rose-400 absolute"
               />
             </div>
             <div className="text-xs nh-font-mono text-slate-300">
-              LATERAL: <span className="text-cyan-300 font-bold">{lateralG} G</span> · LONGITUDINAL: <span className="text-amber-300 font-bold">1.45 G</span>
+              LATERAL: <span className="text-sky-300 font-bold">{lateralG} G</span> · LONGITUDINAL: <span className="text-amber-300 font-bold">1.45 G</span>
             </div>
           </NeonHorizonGlassPanel>
         </div>

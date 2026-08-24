@@ -54,7 +54,7 @@ export const NeonHorizonHeroHUD: React.FC<NeonHorizonHeroHUDProps> = ({
   // Update wireframe color when changed
   useEffect(() => {
     if (!wireMatRef.current) return;
-    const hex = holoColor === "cyan" ? 0x00e5ff : holoColor === "magenta" ? 0xe040fb : 0x00e676;
+    const hex = holoColor === "cyan" ? 0x7fb5d8 : holoColor === "magenta" ? 0x9d8fc4 : 0x6fbf9a;
     wireMatRef.current.color.setHex(hex);
   }, [holoColor]);
 
@@ -110,9 +110,9 @@ export const NeonHorizonHeroHUD: React.FC<NeonHorizonHeroHUDProps> = ({
     controls.maxDistance = 8.0;
     controlsRef.current = controls;
 
-    // Glowing Neon Hologram Materials
+    // Muted Hologram Materials
     const cyanWire = new THREE.MeshBasicMaterial({
-      color: 0x00e5ff,
+      color: 0x7fb5d8,
       wireframe: true,
       transparent: true,
       opacity: 0.85,
@@ -123,8 +123,8 @@ export const NeonHorizonHeroHUD: React.FC<NeonHorizonHeroHUDProps> = ({
       color: 0x081c3b,
       metalness: 0.9,
       roughness: 0.2,
-      emissive: 0x003355,
-      emissiveIntensity: 0.4,
+      emissive: 0x10202f,
+      emissiveIntensity: 0.25,
       transparent: true,
       opacity: 0.7,
     });
@@ -161,7 +161,7 @@ export const NeonHorizonHeroHUD: React.FC<NeonHorizonHeroHUDProps> = ({
 
     // 4 Hologram Wheels with Brake Rotors
     const wheelGeom = new THREE.CylinderGeometry(0.28, 0.28, 0.2, 16);
-    const wheelWire = new THREE.MeshBasicMaterial({ color: 0xe040fb, wireframe: true });
+    const wheelWire = new THREE.MeshBasicMaterial({ color: 0x9d8fc4, wireframe: true });
     const wheelPositions = [
       [0.85, -0.05, 0.6],
       [0.85, -0.05, -0.6],
@@ -180,7 +180,7 @@ export const NeonHorizonHeroHUD: React.FC<NeonHorizonHeroHUDProps> = ({
     // Holographic Telemetry Pedestal Ring
     const ringGeom = new THREE.RingGeometry(1.6, 2.0, 32);
     const ringMat = new THREE.MeshBasicMaterial({
-      color: 0x00e5ff,
+      color: 0x7fb5d8,
       side: THREE.DoubleSide,
       transparent: true,
       opacity: 0.35,
@@ -191,9 +191,9 @@ export const NeonHorizonHeroHUD: React.FC<NeonHorizonHeroHUDProps> = ({
     scene.add(ring);
 
     // Neon Lights
-    const ambLight = new THREE.AmbientLight(0x00e5ff, 1.2);
+    const ambLight = new THREE.AmbientLight(0x8fa9c4, 0.9);
     scene.add(ambLight);
-    const pointLight = new THREE.PointLight(0xe040fb, 2.5, 10);
+    const pointLight = new THREE.PointLight(0x9db8d4, 1.6, 10);
     pointLight.position.set(2, 3, 2);
     scene.add(pointLight);
 
@@ -235,8 +235,8 @@ export const NeonHorizonHeroHUD: React.FC<NeonHorizonHeroHUDProps> = ({
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-center">
         {/* Left Subsystem Navigation Pills */}
         <div className="lg:col-span-3 flex flex-col gap-2">
-          <div className="flex items-center justify-between border-b border-cyan-500/20 pb-2 mb-1">
-            <span className="nh-label-caps text-cyan-300 flex items-center gap-1.5">
+          <div className="flex items-center justify-between border-b border-white/8 pb-2 mb-1">
+            <span className="nh-label-caps text-sky-300 flex items-center gap-1.5">
               <Zap size={13} /> SUBSYSTEM HUD
             </span>
             <span className="text-[10px] nh-font-mono text-emerald-400 font-bold flex items-center gap-1">
@@ -261,20 +261,20 @@ export const NeonHorizonHeroHUD: React.FC<NeonHorizonHeroHUDProps> = ({
               onMouseEnter={() => setHoveredNode(sub.id)}
               onMouseLeave={() => setHoveredNode(null)}
               className={`p-2 rounded-xl text-left border transition-all duration-200 flex items-center justify-between gap-2 group cursor-pointer ${
-                hoveredNode === sub.id
-                  ? "bg-cyan-500/20 border-cyan-400/60 shadow-[0_0_15px_rgba(0,229,255,0.3)] text-white"
-                  : "bg-black/30 border-white/10 text-slate-300 hover:border-cyan-500/40"
-              }`}
+ hoveredNode === sub.id
+ ? "bg-sky-400/12 border-sky-400/35 text-white"
+ : "bg-black/30 border-white/10 text-slate-300 hover:border-white/15"
+ }`}
             >
               <div className="flex items-center gap-2">
-                <span className="text-cyan-400 group-hover:scale-110 transition-transform">
+                <span className="text-sky-400 group-hover:scale-110 transition-transform">
                   {sub.icon}
                 </span>
                 <span className="text-[11px] font-bold nh-font-headline tracking-wider">
                   {sub.label}
                 </span>
               </div>
-              <span className="text-[10px] nh-font-mono font-bold text-cyan-300/80">
+              <span className="text-[10px] nh-font-mono font-bold text-sky-300/80">
                 {sub.val}
               </span>
             </button>
@@ -285,12 +285,12 @@ export const NeonHorizonHeroHUD: React.FC<NeonHorizonHeroHUDProps> = ({
         <div className="lg:col-span-5 flex flex-col items-center justify-center relative min-h-[190px]">
           <div
             ref={mountRef}
-            className="w-full h-44 rounded-2xl overflow-hidden border border-cyan-500/30 bg-[#040916]/90 shadow-[inset_0_0_20px_rgba(0,229,255,0.15)] relative"
+            className="w-full h-44 rounded-2xl overflow-hidden border border-white/10 bg-[#040916]/90 shadow-[inset_0_2px_18px_rgba(0,0,0,0.45)] relative"
           />
 
           {/* Top Camera Controls Overlay */}
           <div className="absolute top-2 left-3 right-3 flex items-center justify-between pointer-events-auto">
-            <div className="flex items-center gap-1 bg-black/70 backdrop-blur-md p-0.5 rounded-lg border border-cyan-500/30">
+            <div className="flex items-center gap-1 bg-black/70 backdrop-blur-md p-0.5 rounded-lg border border-white/10">
               {[
                 { id: "perspective" as CameraPreset, label: "3/4 Iso" },
                 { id: "top" as CameraPreset, label: "Top Aero" },
@@ -301,10 +301,10 @@ export const NeonHorizonHeroHUD: React.FC<NeonHorizonHeroHUDProps> = ({
                   key={cp.id}
                   onClick={() => handleSetCameraPreset(cp.id)}
                   className={`px-2 py-0.5 rounded text-[9px] nh-font-mono transition-all cursor-pointer ${
-                    cameraPreset === cp.id
-                      ? "bg-cyan-500/40 text-cyan-200 font-bold border border-cyan-400/50"
-                      : "text-slate-400 hover:text-slate-200"
-                  }`}
+ cameraPreset === cp.id
+ ? "bg-sky-400/25 text-sky-200 font-bold border border-sky-400/30"
+ : "text-slate-400 hover:text-slate-200"
+ }`}
                 >
                   {cp.label}
                 </button>
@@ -315,23 +315,23 @@ export const NeonHorizonHeroHUD: React.FC<NeonHorizonHeroHUDProps> = ({
             <div className="flex items-center gap-1 bg-black/70 backdrop-blur-md p-1 rounded-lg border border-white/10">
               <button
                 onClick={() => setHoloColor("cyan")}
-                className={`w-2.5 h-2.5 rounded-full bg-[#00e5ff] cursor-pointer ${
-                  holoColor === "cyan" ? "ring-2 ring-white scale-125" : "opacity-60"
-                }`}
+                className={`w-2.5 h-2.5 rounded-full bg-[#38bdf8] cursor-pointer ${
+ holoColor === "cyan" ? "ring-2 ring-white scale-125" : "opacity-60"
+ }`}
                 title="Cyan Hologram"
               />
               <button
                 onClick={() => setHoloColor("magenta")}
-                className={`w-2.5 h-2.5 rounded-full bg-[#e040fb] cursor-pointer ${
-                  holoColor === "magenta" ? "ring-2 ring-white scale-125" : "opacity-60"
-                }`}
+                className={`w-2.5 h-2.5 rounded-full bg-[#a78bfa] cursor-pointer ${
+ holoColor === "magenta" ? "ring-2 ring-white scale-125" : "opacity-60"
+ }`}
                 title="Magenta Hologram"
               />
               <button
                 onClick={() => setHoloColor("emerald")}
-                className={`w-2.5 h-2.5 rounded-full bg-[#00e676] cursor-pointer ${
-                  holoColor === "emerald" ? "ring-2 ring-white scale-125" : "opacity-60"
-                }`}
+                className={`w-2.5 h-2.5 rounded-full bg-[#34d399] cursor-pointer ${
+ holoColor === "emerald" ? "ring-2 ring-white scale-125" : "opacity-60"
+ }`}
                 title="Emerald Hologram"
               />
             </div>
@@ -339,7 +339,7 @@ export const NeonHorizonHeroHUD: React.FC<NeonHorizonHeroHUDProps> = ({
         </div>
 
         {/* Right Live Gauges & Telemetry Cluster */}
-        <div className="lg:col-span-4 flex items-center justify-around gap-2 bg-[#040814]/70 p-3 rounded-2xl border border-cyan-500/20">
+        <div className="lg:col-span-4 flex items-center justify-around gap-2 bg-[#040814]/70 p-3 rounded-2xl border border-white/8">
           <NeonRadialDial rpm={rpm} gear={gear} size={125} />
 
           <div className="flex flex-col gap-2">

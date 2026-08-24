@@ -73,46 +73,46 @@ export const CyberpunkCityBackground: React.FC<CyberpunkCityBackgroundProps> = (
 
   return (
     <div className="fixed inset-0 pointer-events-none overflow-hidden z-0 select-none bg-[#03060f]">
-      {/* 1. Cyberpunk City Panorama Image Layer */}
+      {/* 1. City Panorama Image Layer (desaturated, quiet) */}
       <div
         ref={bgRef}
         className={`absolute inset-0 bg-cover bg-center transition-opacity duration-1000 will-change-transform ${
-          bgLoaded ? "opacity-60" : "opacity-0"
-        }`}
+ bgLoaded ? "opacity-45" : "opacity-0"
+ }`}
         style={{
           backgroundImage: `url(${bgImageSrc})`,
-          filter: "brightness(0.75) contrast(1.1) saturate(1.25)",
+          filter: "brightness(0.55) contrast(1.05) saturate(0.45)",
         }}
       />
 
-      {/* 2. Cyberpunk Volumetric Light Leaks & Vignette Overlay */}
+      {/* 2. Cool Ambient Haze & Vignette Overlay */}
       <div
         ref={glowRef}
         className="absolute inset-0 pointer-events-none will-change-transform"
         style={{
           background:
-            "radial-gradient(ellipse 70% 50% at 75% 25%, rgba(0, 229, 255, 0.18), transparent 70%), radial-gradient(ellipse 60% 50% at 20% 75%, rgba(224, 64, 251, 0.15), transparent 65%), radial-gradient(circle at 50% 50%, transparent 40%, rgba(3, 6, 15, 0.85) 100%)",
+            "radial-gradient(ellipse 70% 50% at 75% 25%, rgba(127,181,216, 0.10), transparent 70%), radial-gradient(ellipse 60% 50% at 20% 75%, rgba(157,143,196, 0.07), transparent 65%), radial-gradient(circle at 50% 50%, transparent 40%, rgba(4, 7, 14, 0.90) 100%)",
         }}
       />
 
-      {/* 3. Sci-Fi Cyber Grid Overlay */}
+      {/* 3. Fine Engineering Grid Overlay */}
       {gridEnabled && <NeonGridCanvas />}
 
-      {/* 4. Horizontal Laser Scanline Sweep */}
+      {/* 4. Subtle Horizontal Scanline Texture */}
       <div
-        className="absolute inset-0 pointer-events-none opacity-25"
+        className="absolute inset-0 pointer-events-none opacity-[0.12]"
         style={{
           background:
-            "linear-gradient(180deg, transparent 0%, rgba(0, 229, 255, 0.04) 50%, rgba(224, 64, 251, 0.06) 51%, transparent 100%)",
+            "linear-gradient(180deg, transparent 0%, rgba(255,255,255, 0.05) 50%, transparent 100%)",
           backgroundSize: "100% 8px",
         }}
       />
 
-      {/* 5. Moving Holographic Sweep Beam */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-15">
+      {/* 5. Slow Ambient Sweep */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-[0.07]">
         <div
-          className="w-full h-32 bg-gradient-to-b from-transparent via-cyan-400/30 to-transparent"
-          style={{ animation: "nh-scan-line-sweep 12s linear infinite" }}
+          className="w-full h-32 bg-gradient-to-b from-transparent via-sky-200/25 to-transparent"
+          style={{ animation: "nh-scan-line-sweep 14s linear infinite" }}
         />
       </div>
     </div>

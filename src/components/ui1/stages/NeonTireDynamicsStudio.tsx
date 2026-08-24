@@ -40,7 +40,7 @@ export function NeonTireDynamicsStudio() {
     ctx.clearRect(0, 0, w, h);
 
     // Background Grid
-    ctx.strokeStyle = "rgba(0, 229, 255, 0.1)";
+    ctx.strokeStyle = "rgba(56,189,248, 0.1)";
     ctx.lineWidth = 1;
     for (let x = 0; x < w; x += 40) {
       ctx.beginPath();
@@ -62,7 +62,7 @@ export function NeonTireDynamicsStudio() {
     const B = (10.5 + Math.abs(camber) * 0.8) / (pressure / 24);
     const E = -0.2;
 
-    ctx.strokeStyle = "#00e5ff";
+    ctx.strokeStyle = "#38bdf8";
     ctx.lineWidth = 2.5;
     ctx.beginPath();
 
@@ -134,10 +134,10 @@ export function NeonTireDynamicsStudio() {
             }}
             className="p-6 flex flex-col gap-4"
           >
-            <div className="w-full h-52 bg-[#030712] rounded-xl border border-cyan-500/30 overflow-hidden relative shadow-[inset_0_0_25px_rgba(0,0,0,0.85)]">
+            <div className="w-full h-52 bg-[#030712] rounded-xl border border-sky-400/25 overflow-hidden relative shadow-[inset_0_0_25px_rgba(0,0,0,0.85)]">
               <canvas ref={canvasRef} width={640} height={210} className="w-full h-full" />
               <div className="absolute bottom-2 right-3 flex items-center gap-2">
-                <span className="text-[10px] nh-font-mono text-cyan-400">SLIP ANGLE α (0° → 15°)</span>
+                <span className="text-[10px] nh-font-mono text-sky-400">SLIP ANGLE α (0° → 15°)</span>
               </div>
             </div>
 
@@ -157,10 +157,10 @@ export function NeonTireDynamicsStudio() {
                       setCompound(c.id as "soft" | "medium" | "hard" | "wet");
                     }}
                     className={`p-2.5 rounded-lg border text-center text-xs font-bold cursor-pointer transition-all ${
-                      isSelected
-                        ? "bg-[#091a38] border-cyan-400 text-cyan-300 shadow-[0_0_12px_rgba(0,229,255,0.3)]"
-                        : "bg-[#060e22] border-white/10 text-slate-400 hover:border-cyan-500/30"
-                    }`}
+ isSelected
+ ? "bg-[#091a38] border-sky-400/40 text-sky-300"
+ : "bg-[#060e22] border-white/10 text-slate-400 hover:border-sky-400/25"
+ }`}
                   >
                     {c.name}
                   </div>
@@ -203,10 +203,10 @@ export function NeonTireDynamicsStudio() {
               onChange={(val) => setPressure(val)}
             />
 
-            <div className="p-3.5 rounded-xl bg-[#060e22] border border-cyan-500/20 flex flex-col gap-2 font-mono text-xs">
+            <div className="p-3.5 rounded-xl bg-[#060e22] border border-sky-400/15 flex flex-col gap-2 font-mono text-xs">
               <div className="flex items-center justify-between">
                 <span className="text-slate-400">Pneumatic Trail:</span>
-                <span className="text-cyan-300 font-bold">28.4 mm</span>
+                <span className="text-sky-300 font-bold">28.4 mm</span>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-slate-400">Contact Patch Area:</span>

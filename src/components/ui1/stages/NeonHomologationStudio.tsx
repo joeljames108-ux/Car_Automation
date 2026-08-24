@@ -92,7 +92,7 @@ export function NeonHomologationStudio() {
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
-                  <span className="text-cyan-300 font-bold">{check.actual}</span>
+                  <span className="text-sky-300 font-bold">{check.actual}</span>
                   <NeonHorizonBadge variant={check.pass ? "emerald" : "coral"} size="xs">
                     {check.pass ? "PASS" : "FAIL"}
                   </NeonHorizonBadge>
@@ -114,7 +114,7 @@ export function NeonHomologationStudio() {
             className="p-6 flex flex-col gap-4 text-center items-center justify-center"
           >
             {passportIssued ? (
-              <div className="w-full flex flex-col items-center gap-3 p-4 rounded-xl bg-[#081a38] border border-amber-400/40 shadow-[0_0_25px_rgba(245,158,11,0.25)] animate-nh-materialize">
+              <div className="w-full flex flex-col items-center gap-3 p-4 rounded-xl bg-[#081a38] border border-amber-400/40 animate-nh-materialize">
                 <div className="w-16 h-16 rounded-full bg-amber-400/20 border-2 border-amber-400 flex items-center justify-center text-amber-300">
                   <Award size={32} />
                 </div>

@@ -24,13 +24,13 @@ export const NeonHorizonBadge: React.FC<NeonHorizonBadgeProps> = ({
   }[size];
 
   const variantClasses = {
-    cyan: "bg-cyan-500/15 border-cyan-400/40 text-cyan-200 shadow-[0_0_10px_rgba(0,229,255,0.2)]",
-    magenta: "bg-fuchsia-500/15 border-fuchsia-400/40 text-fuchsia-200 shadow-[0_0_10px_rgba(224,64,251,0.2)]",
-    gold: "bg-amber-500/15 border-amber-400/40 text-amber-200 shadow-[0_0_10px_rgba(255,215,64,0.2)]",
-    emerald: "bg-emerald-500/15 border-emerald-400/40 text-emerald-200 shadow-[0_0_10px_rgba(0,230,118,0.2)]",
-    coral: "bg-rose-500/15 border-rose-400/40 text-rose-200 shadow-[0_0_10px_rgba(255,82,82,0.2)]",
+    cyan: "bg-sky-400/12 border-sky-400/30 text-sky-200",
+    magenta: "bg-sky-500/15 border-sky-400/40 text-sky-200",
+    gold: "bg-amber-500/15 border-amber-400/40 text-amber-200",
+    emerald: "bg-emerald-500/15 border-emerald-400/40 text-emerald-200",
+    coral: "bg-rose-500/15 border-rose-400/40 text-rose-200",
     neutral: "bg-slate-800/60 border-white/10 text-slate-300",
-    live: "bg-cyan-500/20 border-cyan-400/50 text-cyan-100 shadow-[0_0_12px_rgba(0,229,255,0.35)]",
+    live: "bg-sky-400/12 border-sky-400/30 text-sky-100",
   }[variant];
 
   return (
@@ -38,7 +38,7 @@ export const NeonHorizonBadge: React.FC<NeonHorizonBadgeProps> = ({
       className={`inline-flex items-center nh-font-mono font-bold border tracking-wider uppercase select-none ${sizeClasses} ${variantClasses} ${className}`}
     >
       {variant === "live" || pulse ? (
-        <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-nh-pulse-dot mr-0.5" />
+        <span className="w-1.5 h-1.5 rounded-full bg-sky-300 animate-nh-pulse-dot mr-0.5" />
       ) : null}
       {icon}
       {children}

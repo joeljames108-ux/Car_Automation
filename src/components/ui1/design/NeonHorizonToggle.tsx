@@ -26,18 +26,18 @@ export const NeonHorizonToggle: React.FC<NeonHorizonToggleProps> = ({
     onChange(!checked);
   };
 
-  const glowStyles = {
-    cyan: "bg-cyan-500 shadow-[0_0_15px_rgba(0,229,255,0.7)] border-cyan-300",
-    magenta: "bg-fuchsia-500 shadow-[0_0_15px_rgba(224,64,251,0.7)] border-fuchsia-300",
-    emerald: "bg-emerald-500 shadow-[0_0_15px_rgba(0,230,118,0.7)] border-emerald-300",
+  const knobStyles = {
+    cyan: "bg-sky-400 border-sky-300/70",
+    magenta: "bg-sky-400 border-sky-300/70",
+    emerald: "bg-emerald-400 border-emerald-300/70",
   }[color];
 
   return (
     <div
       onClick={handleClick}
-      className={`flex items-center justify-between p-2 rounded-xl cursor-pointer select-none transition-all duration-200 hover:bg-cyan-500/5 ${
-        disabled ? "opacity-40 cursor-not-allowed pointer-events-none" : ""
-      } ${className}`}
+      className={`flex items-center justify-between p-2 rounded-xl cursor-pointer select-none transition-all duration-200 hover:bg-white/[0.04] ${
+ disabled ? "opacity-40 cursor-not-allowed pointer-events-none" : ""
+ } ${className}`}
     >
       <div className="flex flex-col pr-4">
         <span className="text-xs font-semibold nh-font-body tracking-wider text-slate-200">
@@ -50,15 +50,15 @@ export const NeonHorizonToggle: React.FC<NeonHorizonToggleProps> = ({
 
       <div
         className={`relative w-11 h-6 rounded-full transition-all duration-300 p-0.5 border ${
-          checked
-            ? "bg-[#0c1f40] border-cyan-400/50 shadow-[0_0_15px_rgba(0,229,255,0.25)]"
-            : "bg-[#070e1c] border-white/10"
-        }`}
+ checked
+ ? "bg-sky-400/15 border-sky-400/40"
+ : "bg-[#070e1c] border-white/10"
+ }`}
       >
         <div
           className={`w-4.5 h-4.5 rounded-full border transition-all duration-300 transform ${
             checked
-              ? `translate-x-5 ${glowStyles}`
+              ? `translate-x-5 ${knobStyles}`
               : "translate-x-0 bg-slate-500 border-slate-400"
           }`}
         />

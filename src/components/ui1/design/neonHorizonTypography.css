@@ -1,5 +1,6 @@
 /* =========================================================================
-   NEON HORIZON SOPHISTICATED GLASS TYPOGRAPHY STYLES
+   HORIZON TYPOGRAPHY — engineered, quiet, precise.
+   Hierarchy through weight, tracking and tabular figures. No text glow.
    ========================================================================= */
 
 .nh-font-headline {
@@ -16,34 +17,36 @@
   font-family: 'JetBrains Mono', 'SF Mono', Consolas, monospace;
 }
 
+/* Legacy aliases — glows retired; resolve to clean text */
 .nh-text-glow-cyan {
-  text-shadow: 0 0 10px rgba(56, 189, 248, 0.4), 0 0 20px rgba(56, 189, 248, 0.2);
+  text-shadow: none;
 }
 
 .nh-text-glow-magenta {
-  text-shadow: 0 0 10px rgba(192, 132, 252, 0.4), 0 0 20px rgba(192, 132, 252, 0.2);
+  text-shadow: none;
 }
 
 .nh-text-glow-gold {
-  text-shadow: 0 0 10px rgba(251, 191, 36, 0.4), 0 0 20px rgba(251, 191, 36, 0.2);
+  text-shadow: none;
 }
 
+/* Restrained metal gradient — white to ice, no neon */
 .nh-gradient-text-cyan {
-  background: linear-gradient(135deg, #ffffff 0%, #38bdf8 60%, #0ea5e9 100%);
+  background: linear-gradient(135deg, #f4f8fc 0%, #c3d9ea 70%, #9fc4de 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
 .nh-gradient-text-magenta {
-  background: linear-gradient(135deg, #ffffff 0%, #c084fc 60%, #a855f7 100%);
+  background: linear-gradient(135deg, #f4f8fc 0%, #cfc8e4 70%, #b0a6cf 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
 .nh-gradient-text-aurora {
-  background: linear-gradient(90deg, #38bdf8 0%, #34d399 35%, #c084fc 70%, #fbbf24 100%);
+  background: linear-gradient(90deg, #dce7f0 0%, #b9cede 40%, #a9bccf 75%, #c9d4de 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -55,7 +58,7 @@
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  color: #94a3b8;
+  color: #8b96a8;
 }
 
 .nh-data-num {

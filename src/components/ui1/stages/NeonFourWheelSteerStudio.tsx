@@ -50,13 +50,13 @@ export function NeonFourWheelSteerStudio() {
       ctx.clearRect(0, 0, w, h);
 
       // Chassis Outline
-      ctx.strokeStyle = "rgba(0, 229, 255, 0.4)";
+      ctx.strokeStyle = "rgba(56,189,248, 0.4)";
       ctx.lineWidth = 2;
       ctx.strokeRect(cx - 30, cy - 60, 60, 120);
 
       // Front Wheels (Fixed Front Steering)
       const frontAngleRad = (15 * Math.PI) / 180;
-      ctx.fillStyle = "#00e5ff";
+      ctx.fillStyle = "#38bdf8";
 
       // FL
       ctx.save();
@@ -91,7 +91,7 @@ export function NeonFourWheelSteerStudio() {
       ctx.restore();
 
       // Yaw Vector Arc
-      ctx.strokeStyle = isCounterPhase ? "#00e676" : "#00e5ff";
+      ctx.strokeStyle = isCounterPhase ? "#34d399" : "#38bdf8";
       ctx.lineWidth = 1.5;
       ctx.setLineDash([4, 4]);
       ctx.beginPath();
@@ -143,10 +143,10 @@ export function NeonFourWheelSteerStudio() {
             }}
             className="p-6 flex flex-col gap-4"
           >
-            <div className="w-full h-52 bg-[#030712] rounded-xl border border-cyan-500/30 overflow-hidden relative flex items-center justify-center shadow-[inset_0_0_25px_rgba(0,0,0,0.85)]">
+            <div className="w-full h-52 bg-[#030712] rounded-xl border border-sky-400/25 overflow-hidden relative flex items-center justify-center shadow-[inset_0_0_25px_rgba(0,0,0,0.85)]">
               <canvas ref={canvasRef} width={400} height={210} />
               <div className="absolute top-2 left-3 flex items-center gap-2">
-                <span className="text-[10px] nh-font-mono text-cyan-400">FRONT: +15.0° (CYAN)</span>
+                <span className="text-[10px] nh-font-mono text-sky-400">FRONT: +15.0° (CYAN)</span>
                 <span className="text-[10px] nh-font-mono text-rose-400">
                   REAR: {isCounterPhase ? "-" : "+"}{steerAngle.toFixed(1)}° (MAGENTA)
                 </span>
@@ -169,10 +169,10 @@ export function NeonFourWheelSteerStudio() {
                       setSteeringMode(m.id as "track_agile" | "autobahn_stability" | "city_park" | "drift_counter");
                     }}
                     className={`p-2.5 rounded-lg border text-center text-xs font-bold cursor-pointer transition-all ${
-                      isSelected
-                        ? "bg-[#091a38] border-cyan-400 text-cyan-300 shadow-[0_0_12px_rgba(0,229,255,0.3)]"
-                        : "bg-[#060e22] border-white/10 text-slate-400 hover:border-cyan-500/30"
-                    }`}
+ isSelected
+ ? "bg-[#091a38] border-sky-400/40 text-sky-300"
+ : "bg-[#060e22] border-white/10 text-slate-400 hover:border-sky-400/25"
+ }`}
                   >
                     {m.name}
                   </div>
@@ -215,10 +215,10 @@ export function NeonFourWheelSteerStudio() {
               onChange={(val) => setSteerAngle(val)}
             />
 
-            <div className="p-3.5 rounded-xl bg-[#060e22] border border-cyan-500/20 flex flex-col gap-2 font-mono text-xs">
+            <div className="p-3.5 rounded-xl bg-[#060e22] border border-sky-400/15 flex flex-col gap-2 font-mono text-xs">
               <div className="flex items-center justify-between">
                 <span className="text-slate-400">Phase Crossover Speed:</span>
-                <span className="text-cyan-300 font-bold">70 km/h Threshold</span>
+                <span className="text-sky-300 font-bold">70 km/h Threshold</span>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-slate-400">Rear Actuator Latency:</span>

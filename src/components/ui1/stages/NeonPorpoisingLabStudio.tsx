@@ -52,7 +52,7 @@ export function NeonPorpoisingLabStudio() {
       ctx.clearRect(0, 0, w, h);
 
       // Grid
-      ctx.strokeStyle = "rgba(0, 229, 255, 0.1)";
+      ctx.strokeStyle = "rgba(56,189,248, 0.1)";
       ctx.lineWidth = 1;
       for (let x = 0; x < w; x += 40) {
         ctx.beginPath();
@@ -62,7 +62,7 @@ export function NeonPorpoisingLabStudio() {
       }
 
       // Sine Wave Oscillation
-      ctx.strokeStyle = isPorpoisingZone ? "#ff0055" : "#00e676";
+      ctx.strokeStyle = isPorpoisingZone ? "#ff0055" : "#34d399";
       ctx.lineWidth = 2.5;
       ctx.beginPath();
 
@@ -120,7 +120,7 @@ export function NeonPorpoisingLabStudio() {
             }}
             className="p-6 flex flex-col gap-4"
           >
-            <div className="w-full h-52 bg-[#030712] rounded-xl border border-cyan-500/30 overflow-hidden relative shadow-[inset_0_0_25px_rgba(0,0,0,0.85)]">
+            <div className="w-full h-52 bg-[#030712] rounded-xl border border-sky-400/25 overflow-hidden relative shadow-[inset_0_0_25px_rgba(0,0,0,0.85)]">
               <canvas ref={canvasRef} width={640} height={210} className="w-full h-full" />
               <div className="absolute top-2 left-3 flex items-center gap-2">
                 <span className={`text-[10px] nh-font-mono font-bold ${isPorpoisingZone ? "text-rose-400" : "text-emerald-400"}`}>
@@ -131,7 +131,7 @@ export function NeonPorpoisingLabStudio() {
 
             <div className="flex items-center justify-between p-3 rounded-lg bg-[#060e22] border border-white/10 font-mono text-xs">
               <span className="text-slate-400">Venturi Throat Expansion:</span>
-              <span className="text-cyan-300 font-bold">1:4.8 Diffuser Aspect</span>
+              <span className="text-sky-300 font-bold">1:4.8 Diffuser Aspect</span>
               <span className="text-slate-400">Floor Edge Skirt Vortex:</span>
               <span className="text-emerald-300 font-bold">SEALED (98%)</span>
             </div>

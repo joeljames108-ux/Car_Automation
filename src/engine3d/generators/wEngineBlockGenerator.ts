@@ -54,26 +54,42 @@ export interface WBlockSpec {
   journalRadiusM: number; // 0.034 m (68mm heavy-duty main journal)
 }
 
-export function computeWBlockSpecs(totalCyls: number = 16): WBlockSpec {
-  const count = totalCyls === 12 ? 12 : totalCyls === 18 ? 18 : 16;
+export function computeWBlockSpecs(
+  totalCylsOrConfig: number | Partial<EngineConfig> = 16,
+  maybeConfig?: Partial<EngineConfig>
+): WBlockSpec {
+  const config = typeof totalCylsOrConfig === 'object' ? totalCylsOrConfig : maybeConfig;
+  let count = typeof totalCylsOrConfig === 'number' ? totalCylsOrConfig : 16;
+  if (config?.layout) {
+    count = config.layout === 'w12' ? 12 : config.layout === 'w18' ? 18 : 16;
+  }
   const cylsPerRow = count === 12 ? 3 : count === 18 ? 5 : 4;
-  const boreSpacingM = 0.088;
+
+  const boreDiameterMm = config?.bore || 86.0;
+  const strokeMm = config?.stroke || 82.0;
+  const rodLengthMm = config?.rodLength || 140.0;
+
+  const boreSpacingMm = Math.max(88.0, boreDiameterMm + 4.0);
+  const boreSpacingM = boreSpacingMm / 1000;
   const frontMarginM = 0.080;
   const rearMarginM = 0.090;
   const totalLengthM = (cylsPerRow - 1) * boreSpacingM + frontMarginM + rearMarginM;
+  const boreRadiusM = (boreDiameterMm / 2) / 1000;
+  const deckHeightM = (strokeMm * 0.5 + rodLengthMm + 40.0) / 1000;
+  const blockWidthM = Math.max(0.380, (boreDiameterMm * 4.2) / 1000);
 
   return {
     cylinderCount: count,
     cylsPerRow,
     vrAngleDeg: 15.0,
     masterVAngleDeg: 72.0,
-    boreDiameterMm: 86.0,
-    boreRadiusM: 0.043,
-    boreSpacingMm: 88.0,
+    boreDiameterMm,
+    boreRadiusM,
+    boreSpacingMm,
     boreSpacingM,
     rowStaggerM: 0.022,
-    deckHeightM: 0.235,
-    blockWidthM: 0.380,
+    deckHeightM,
+    blockWidthM,
     totalLengthM,
     journalRadiusM: 0.034,
   };
@@ -476,14 +492,7 @@ export function buildWBlockScene(config?: Partial<EngineConfig> | number): THREE
   rootGroup.name = 'W_Engine_Block_Master';
   scene.add(rootGroup);
 
-  let totalCyls = 16;
-  if (typeof config === 'number') {
-    totalCyls = config;
-  } else if (config?.layout) {
-    totalCyls = config.layout === 'w12' ? 12 : config.layout === 'w18' ? 18 : 16;
-  }
-
-  const specs = computeWBlockSpecs(totalCyls);
+  const specs = computeWBlockSpecs(config);
   const materials = createBlockMaterialPalette(typeof config === 'object' ? config : undefined);
 
   // 1. 4 Staggered Cylinder Rows & Nikasil Bores

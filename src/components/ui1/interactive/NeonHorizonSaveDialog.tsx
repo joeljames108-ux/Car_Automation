@@ -58,11 +58,11 @@ export function NeonHorizonSaveDialog({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-nh-materialize">
-      <div className="w-full max-w-xl bg-[#080f24] border border-cyan-400/50 rounded-2xl shadow-[0_0_50px_rgba(0,229,255,0.35)] overflow-hidden flex flex-col">
+      <div className="w-full max-w-xl bg-[#080f24] border border-sky-400/30 rounded-2xl overflow-hidden flex flex-col">
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-cyan-500/20 bg-black/40">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-sky-400/15 bg-black/40">
           <div className="flex items-center gap-2">
-            <Save size={18} className="text-cyan-400" />
+            <Save size={18} className="text-sky-400" />
             <h3 className="text-base font-bold nh-font-headline text-slate-100 uppercase tracking-wide">
               {mode === "save" ? "Save Vehicle Blueprint Snapshot" : "Load Vehicle Blueprint"}
             </h3>
@@ -86,10 +86,10 @@ export function NeonHorizonSaveDialog({
                     setActiveSlot(s.id);
                   }}
                   className={`p-3.5 rounded-xl border transition-all cursor-pointer flex items-center justify-between ${
-                    isSelected
-                      ? "bg-[#0a1838] border-cyan-400 shadow-[0_0_15px_rgba(0,229,255,0.3)]"
-                      : "bg-[#060e22] border-white/10 hover:border-cyan-500/30"
-                  }`}
+ isSelected
+ ? "bg-[#0a1838] border-sky-400/40"
+ : "bg-[#060e22] border-white/10 hover:border-sky-400/25"
+ }`}
                 >
                   <div>
                     <h4 className="text-xs font-bold text-slate-100">{s.name}</h4>

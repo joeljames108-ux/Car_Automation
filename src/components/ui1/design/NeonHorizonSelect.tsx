@@ -43,11 +43,11 @@ export const NeonHorizonSelect: React.FC<NeonHorizonSelectProps> = ({
 
   const variantStyles = {
     primary:
-      "bg-[#081226]/85 border-cyan-400/30 text-cyan-100 focus:border-cyan-300 focus:shadow-[0_0_20px_rgba(0,229,255,0.35)]",
+      "bg-[#0b1424]/85 border-white/12 text-slate-200 focus:border-sky-400/50",
     secondary:
-      "bg-[#0a1630]/70 border-white/15 text-slate-200 focus:border-cyan-400/50",
+      "bg-[#0d1728]/70 border-white/15 text-slate-200 focus:border-sky-400/40",
     minimal:
-      "bg-black/30 border-cyan-500/20 text-slate-200 focus:border-cyan-400/40",
+      "bg-black/30 border-white/10 text-slate-200 focus:border-sky-400/30",
   }[variant];
 
   return (
@@ -55,20 +55,20 @@ export const NeonHorizonSelect: React.FC<NeonHorizonSelectProps> = ({
       {label && (
         <div className="flex items-center justify-between">
           <span className="nh-label-caps text-slate-400">{label}</span>
-          {sublabel && <span className="text-[10px] nh-font-mono text-cyan-400/80">{sublabel}</span>}
+          {sublabel && <span className="text-[10px] nh-font-mono text-sky-400/80">{sublabel}</span>}
         </div>
       )}
       <div className="relative flex items-center">
         {icon && (
-          <div className="absolute left-3 text-cyan-400 pointer-events-none z-10">{icon}</div>
+          <div className="absolute left-3 text-sky-400 pointer-events-none z-10">{icon}</div>
         )}
         <select
           value={value}
           onChange={handleChange}
           disabled={disabled}
           className={`w-full appearance-none rounded-xl py-2 text-xs font-semibold nh-font-body tracking-wider transition-all duration-200 cursor-pointer backdrop-blur-md border outline-none pr-9 ${
-            icon ? "pl-9" : "pl-3.5"
-          } ${variantStyles} ${disabled ? "opacity-40 cursor-not-allowed" : ""}`}
+ icon ? "pl-9" : "pl-3.5"
+ } ${variantStyles} ${disabled ? "opacity-40 cursor-not-allowed" : ""}`}
           {...rest}
         >
           {normalizedOptions.map((opt) => (
@@ -84,7 +84,7 @@ export const NeonHorizonSelect: React.FC<NeonHorizonSelectProps> = ({
         </select>
         <ChevronDown
           size={15}
-          className="absolute right-3 text-cyan-400/70 pointer-events-none transition-transform"
+          className="absolute right-3 text-sky-400/70 pointer-events-none transition-transform"
         />
       </div>
     </div>

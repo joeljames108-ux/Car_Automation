@@ -22,7 +22,7 @@ export const NeonHorizonSkeleton: React.FC<NeonHorizonSkeletonProps> = ({
   return (
     <div
       style={{ width, height }}
-      className={`bg-gradient-to-r from-cyan-950/40 via-cyan-500/15 to-cyan-950/40 bg-[length:200%_100%] border border-cyan-400/10 animate-[nh-neon-shimmer_2s_infinite] ${variantStyles} ${className}`}
+      className={`bg-gradient-to-r from-white/[0.04] via-white/[0.10] to-white/[0.04] bg-[length:200%_100%] border border-white/8 animate-[nh-shimmer_2s_infinite] ${variantStyles} ${className}`}
     />
   );
 };

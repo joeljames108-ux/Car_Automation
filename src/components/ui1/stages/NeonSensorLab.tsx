@@ -38,7 +38,7 @@ export function NeonSensorLab() {
       const cy = canvas.height / 2;
 
       // Range rings
-      ctx.strokeStyle = "rgba(0, 229, 255, 0.15)";
+      ctx.strokeStyle = "rgba(56,189,248, 0.15)";
       ctx.lineWidth = 1;
       [40, 80, 120, 160].forEach((r) => {
         ctx.beginPath();
@@ -48,7 +48,7 @@ export function NeonSensorLab() {
 
       // Rotating sweep line
       angle += 0.04;
-      ctx.strokeStyle = "rgba(0, 229, 255, 0.8)";
+      ctx.strokeStyle = "rgba(56,189,248, 0.8)";
       ctx.lineWidth = 2;
       ctx.beginPath();
       ctx.moveTo(cx, cy);
@@ -56,7 +56,7 @@ export function NeonSensorLab() {
       ctx.stroke();
 
       // Simulated pointcloud particles
-      ctx.fillStyle = "rgba(0, 229, 255, 0.7)";
+      ctx.fillStyle = "rgba(56,189,248, 0.7)";
       for (let i = 0; i < pointCloudDensity / 2; i++) {
         const pAngle = (i / (pointCloudDensity / 2)) * Math.PI * 2 + Math.sin(angle) * 0.1;
         const dist = 50 + ((i * 17) % 100);
@@ -67,7 +67,7 @@ export function NeonSensorLab() {
 
       // Tracked simulated objects (Bounding boxes)
       if (objectTracking) {
-        ctx.strokeStyle = "#e040fb";
+        ctx.strokeStyle = "#a78bfa";
         ctx.lineWidth = 1.5;
         // Object 1: Ahead vehicle
         ctx.strokeRect(cx - 20, cy - 90, 40, 30);
@@ -76,7 +76,7 @@ export function NeonSensorLab() {
       }
 
       // Vehicle center icon dot
-      ctx.fillStyle = "#ffd740";
+      ctx.fillStyle = "#fbbf24";
       ctx.beginPath();
       ctx.arc(cx, cy, 5, 0, Math.PI * 2);
       ctx.fill();
@@ -136,17 +136,17 @@ export function NeonSensorLab() {
                 ref={canvasRef}
                 width={360}
                 height={360}
-                className="max-h-full max-w-full rounded-2xl bg-[#040816] border border-cyan-500/30 shadow-[0_0_30px_rgba(0,229,255,0.2)]"
+                className="max-h-full max-w-full rounded-2xl bg-[#040816] border border-sky-400/25"
               />
             </div>
 
             <div className="flex items-center justify-center gap-6 border-t border-white/10 pt-3 w-full text-xs nh-font-mono">
               <div className="flex items-center gap-2">
-                <span className="w-2.5 h-2.5 rounded-full bg-cyan-400" />
+                <span className="w-2.5 h-2.5 rounded-full bg-sky-300" />
                 <span className="text-slate-300">Pointcloud</span>
               </div>
               <div className="flex items-center gap-2">
-                <span className="w-2.5 h-2.5 rounded-full bg-fuchsia-400" />
+                <span className="w-2.5 h-2.5 rounded-full bg-sky-400" />
                 <span className="text-slate-300">3D Bounding Boxes</span>
               </div>
               <div className="flex items-center gap-2">
@@ -172,7 +172,7 @@ export function NeonSensorLab() {
               {sensorArray.map((sensor, idx) => (
                 <div
                   key={idx}
-                  className="p-3 rounded-xl bg-[#060e22] border border-cyan-500/20 flex flex-col gap-1"
+                  className="p-3 rounded-xl bg-[#060e22] border border-sky-400/15 flex flex-col gap-1"
                 >
                   <div className="flex items-center justify-between">
                     <span className="text-xs font-bold text-slate-100">{sensor.name}</span>
@@ -182,7 +182,7 @@ export function NeonSensorLab() {
                   </div>
                   <div className="flex items-center justify-between text-[10px] nh-font-mono text-slate-400">
                     <span>FOV: {sensor.fov}</span>
-                    <span className="text-cyan-300">Latency: {sensor.latency}</span>
+                    <span className="text-sky-300">Latency: {sensor.latency}</span>
                   </div>
                 </div>
               ))}

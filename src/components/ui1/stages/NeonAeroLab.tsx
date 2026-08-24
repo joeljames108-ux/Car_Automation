@@ -186,10 +186,10 @@ export function NeonAeroLab() {
       <button
         onClick={() => handleAutoBalance("balanced")}
         className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[10px] font-semibold transition-all cursor-pointer ${
-          balanceMode === "balanced"
-            ? "bg-emerald-500/20 text-emerald-300 border border-emerald-400/50 shadow-[0_0_12px_rgba(52,211,153,0.3)]"
-            : "bg-white/[0.04] text-slate-400 hover:text-slate-200 border border-white/8"
-        }`}
+ balanceMode === "balanced"
+ ? "bg-emerald-500/20 text-emerald-300 border border-emerald-400/50"
+ : "bg-white/[0.04] text-slate-400 hover:text-slate-200 border border-white/8"
+ }`}
       >
         <Scale size={12} className="text-emerald-400" />
         <span>Perfect 50/50</span>
@@ -197,10 +197,10 @@ export function NeonAeroLab() {
       <button
         onClick={() => handleAutoBalance("max_downforce")}
         className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[10px] font-semibold transition-all cursor-pointer ${
-          balanceMode === "max_downforce"
-            ? "bg-sky-500/20 text-sky-300 border border-sky-400/50 shadow-[0_0_12px_rgba(56,189,248,0.3)]"
-            : "bg-white/[0.04] text-slate-400 hover:text-slate-200 border border-white/8"
-        }`}
+ balanceMode === "max_downforce"
+ ? "bg-sky-500/20 text-sky-300 border border-sky-400/50"
+ : "bg-white/[0.04] text-slate-400 hover:text-slate-200 border border-white/8"
+ }`}
       >
         <Wind size={12} className="text-sky-400" />
         <span>Max Downforce</span>
@@ -208,12 +208,12 @@ export function NeonAeroLab() {
       <button
         onClick={() => handleAutoBalance("low_drag")}
         className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[10px] font-semibold transition-all cursor-pointer ${
-          balanceMode === "low_drag"
-            ? "bg-purple-500/20 text-purple-300 border border-purple-400/50 shadow-[0_0_12px_rgba(192,132,252,0.3)]"
-            : "bg-white/[0.04] text-slate-400 hover:text-slate-200 border border-white/8"
-        }`}
+ balanceMode === "low_drag"
+ ? "bg-sky-500/20 text-sky-300 border border-sky-400/50"
+ : "bg-white/[0.04] text-slate-400 hover:text-slate-200 border border-white/8"
+ }`}
       >
-        <Rocket size={12} className="text-purple-400" />
+        <Rocket size={12} className="text-sky-400" />
         <span>Low Drag Speed</span>
       </button>
     </div>
@@ -232,10 +232,10 @@ export function NeonAeroLab() {
               setActiveSubTab(tab.id);
             }}
             className={`flex items-center gap-1 px-3 py-1.5 rounded-full text-[10px] font-semibold whitespace-nowrap transition-all cursor-pointer ${
-              isActive
-                ? "bg-sky-500 text-white shadow-[0_0_15px_rgba(56,189,248,0.4)]"
-                : "bg-white/[0.04] text-slate-400 hover:text-slate-200 border border-white/6"
-            }`}
+ isActive
+ ? "bg-sky-500 text-white"
+ : "bg-white/[0.04] text-slate-400 hover:text-slate-200 border border-white/6"
+ }`}
           >
             {tab.icon}
             <span>{tab.label}</span>
@@ -269,13 +269,13 @@ export function NeonAeroLab() {
         <button
           onClick={() => setCameraActive(!cameraActive)}
           className={`w-9 h-5 rounded-full p-0.5 transition-colors cursor-pointer ${
-            cameraActive ? "bg-sky-500" : "bg-slate-700"
-          }`}
+ cameraActive ? "bg-sky-500" : "bg-slate-700"
+ }`}
         >
           <div
             className={`w-4 h-4 rounded-full bg-white transition-transform ${
-              cameraActive ? "translate-x-4" : "translate-x-0"
-            }`}
+ cameraActive ? "translate-x-4" : "translate-x-0"
+ }`}
           />
         </button>
       </div>
@@ -304,20 +304,20 @@ export function NeonAeroLab() {
           <button
             onClick={() => setTimeScale("monthly")}
             className={`px-2 py-0.5 rounded-full text-[9px] font-semibold transition-all ${
-              timeScale === "monthly"
-                ? "bg-white text-slate-900 font-bold"
-                : "text-slate-400"
-            }`}
+ timeScale === "monthly"
+ ? "bg-white text-slate-900 font-bold"
+ : "text-slate-400"
+ }`}
           >
             Monthly
           </button>
           <button
             onClick={() => setTimeScale("weekly")}
             className={`px-2 py-0.5 rounded-full text-[9px] font-semibold transition-all ${
-              timeScale === "weekly"
-                ? "bg-white text-slate-900 font-bold"
-                : "text-slate-400"
-            }`}
+ timeScale === "weekly"
+ ? "bg-white text-slate-900 font-bold"
+ : "text-slate-400"
+ }`}
           >
             Weekly
           </button>
@@ -420,8 +420,8 @@ export function NeonAeroLab() {
                 <ChevronDown
                   size={16}
                   className={`text-slate-400 transition-transform ${
-                    frameDropdownOpen ? "rotate-180" : ""
-                  }`}
+ frameDropdownOpen ? "rotate-180" : ""
+ }`}
                 />
               </button>
               {frameDropdownOpen && (
@@ -440,10 +440,10 @@ export function NeonAeroLab() {
                         setFrameDropdownOpen(false);
                       }}
                       className={`p-2.5 rounded-xl text-left text-xs transition-colors cursor-pointer ${
-                        frameMaterial === mat
-                          ? "bg-sky-500/20 text-sky-300 font-bold"
-                          : "text-slate-300 hover:bg-white/5"
-                      }`}
+ frameMaterial === mat
+ ? "bg-sky-500/20 text-sky-300 font-bold"
+ : "text-slate-300 hover:bg-white/5"
+ }`}
                     >
                       {mat}
                     </button>
@@ -471,8 +471,8 @@ export function NeonAeroLab() {
                 <ChevronDown
                   size={16}
                   className={`text-slate-400 transition-transform ${
-                    bodyDropdownOpen ? "rotate-180" : ""
-                  }`}
+ bodyDropdownOpen ? "rotate-180" : ""
+ }`}
                 />
               </button>
               {bodyDropdownOpen && (
@@ -491,10 +491,10 @@ export function NeonAeroLab() {
                         setBodyDropdownOpen(false);
                       }}
                       className={`p-2.5 rounded-xl text-left text-xs transition-colors cursor-pointer ${
-                        bodyMaterial === mat
-                          ? "bg-sky-500/20 text-sky-300 font-bold"
-                          : "text-slate-300 hover:bg-white/5"
-                      }`}
+ bodyMaterial === mat
+ ? "bg-sky-500/20 text-sky-300 font-bold"
+ : "text-slate-300 hover:bg-white/5"
+ }`}
                     >
                       {mat}
                     </button>
@@ -555,7 +555,7 @@ export function NeonAeroLab() {
                       km/h
                     </span>
                   </span>
-                  <span className="px-2 py-0.5 rounded-full bg-purple-500/15 text-purple-300 text-[10px] font-bold border border-purple-400/30">
+                  <span className="px-2 py-0.5 rounded-full bg-sky-500/15 text-sky-300 text-[10px] font-bold border border-sky-400/30">
                     Sports Pace
                   </span>
                 </div>
@@ -653,7 +653,7 @@ export function NeonAeroLab() {
               284{" "}
               <span className="text-xs font-medium text-slate-400">km/h</span>
             </span>
-            <span className="px-2 py-0.5 rounded-full bg-purple-500/15 text-purple-300 text-[10px] font-bold border border-purple-400/30">
+            <span className="px-2 py-0.5 rounded-full bg-sky-500/15 text-sky-300 text-[10px] font-bold border border-sky-400/30">
               Sports Pace
             </span>
           </div>

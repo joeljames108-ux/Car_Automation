@@ -48,7 +48,7 @@ export function NeonDiffuserStudio() {
       ctx.clearRect(0, 0, w, h);
 
       // Floor & Diffuser Geometry
-      ctx.strokeStyle = "rgba(0, 229, 255, 0.4)";
+      ctx.strokeStyle = "rgba(56,189,248, 0.4)";
       ctx.lineWidth = 2;
       ctx.beginPath();
       ctx.moveTo(30, h * 0.7);
@@ -60,7 +60,7 @@ export function NeonDiffuserStudio() {
       ctx.stroke();
 
       // Streamlines
-      ctx.strokeStyle = isSeparating ? "rgba(255, 0, 85, 0.6)" : "rgba(0, 229, 255, 0.6)";
+      ctx.strokeStyle = isSeparating ? "rgba(255, 0, 85, 0.6)" : "rgba(56,189,248, 0.6)";
       ctx.lineWidth = 1.5;
 
       for (let i = 0; i < 6; i++) {
@@ -73,7 +73,7 @@ export function NeonDiffuserStudio() {
           startY = (h * 0.7 + i * 6) - ratio * ((flapAngle / 22) * (h * 0.45));
         }
 
-        ctx.fillStyle = isSeparating ? "#ff0055" : "#00e5ff";
+        ctx.fillStyle = isSeparating ? "#ff0055" : "#38bdf8";
         ctx.beginPath();
         ctx.arc(startX, startY, 2, 0, Math.PI * 2);
         ctx.fill();
@@ -123,7 +123,7 @@ export function NeonDiffuserStudio() {
             }}
             className="p-6 flex flex-col gap-4"
           >
-            <div className="w-full h-52 bg-[#030712] rounded-xl border border-cyan-500/30 overflow-hidden relative shadow-[inset_0_0_25px_rgba(0,0,0,0.85)]">
+            <div className="w-full h-52 bg-[#030712] rounded-xl border border-sky-400/25 overflow-hidden relative shadow-[inset_0_0_25px_rgba(0,0,0,0.85)]">
               <canvas ref={canvasRef} width={640} height={210} className="w-full h-full" />
               <div className="absolute top-2 left-3 flex items-center gap-2">
                 <span className={`text-[10px] nh-font-mono font-bold ${isSeparating ? "text-rose-400" : "text-emerald-400"}`}>
@@ -148,10 +148,10 @@ export function NeonDiffuserStudio() {
                       setAeroConfig(m.id as "max_expansion" | "drag_reduction_drs" | "stall_prevention" | "wet_wake");
                     }}
                     className={`p-2.5 rounded-lg border text-center text-xs font-bold cursor-pointer transition-all ${
-                      isSelected
-                        ? "bg-[#091a38] border-cyan-400 text-cyan-300 shadow-[0_0_12px_rgba(0,229,255,0.3)]"
-                        : "bg-[#060e22] border-white/10 text-slate-400 hover:border-cyan-500/30"
-                    }`}
+ isSelected
+ ? "bg-[#091a38] border-sky-400/40 text-sky-300"
+ : "bg-[#060e22] border-white/10 text-slate-400 hover:border-sky-400/25"
+ }`}
                   >
                     {m.name}
                   </div>
@@ -194,10 +194,10 @@ export function NeonDiffuserStudio() {
               onChange={(val) => setBlowingFlowRate(val)}
             />
 
-            <div className="p-3.5 rounded-xl bg-[#060e22] border border-cyan-500/20 flex flex-col gap-2 font-mono text-xs">
+            <div className="p-3.5 rounded-xl bg-[#060e22] border border-sky-400/15 flex flex-col gap-2 font-mono text-xs">
               <div className="flex items-center justify-between">
                 <span className="text-slate-400">Actuator Response:</span>
-                <span className="text-cyan-300 font-bold">18 ms Brushless Stepper</span>
+                <span className="text-sky-300 font-bold">18 ms Brushless Stepper</span>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-slate-400">Diffuser Strakes:</span>

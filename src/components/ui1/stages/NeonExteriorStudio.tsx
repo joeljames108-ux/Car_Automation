@@ -26,11 +26,11 @@ export function NeonExteriorStudio() {
   const [activeTab, setActiveTab] = useState<"paint" | "aero_kit" | "lighting">("paint");
 
   const colorPresets = [
-    { name: "Electric Cyan", hex: "#00e5ff" },
-    { name: "Acid Laser", hex: "#00e676" },
-    { name: "Hyper Violet", hex: "#e040fb" },
+    { name: "Electric Cyan", hex: "#38bdf8" },
+    { name: "Acid Laser", hex: "#34d399" },
+    { name: "Hyper Violet", hex: "#a78bfa" },
     { name: "Stealth Carbon", hex: "#0f172a" },
-    { name: "Solar Gold", hex: "#ffd740" },
+    { name: "Solar Gold", hex: "#fbbf24" },
     { name: "Crimson Pulse", hex: "#ff5252" },
   ];
 
@@ -50,10 +50,10 @@ export function NeonExteriorStudio() {
               setActiveTab(tab.id);
             }}
             className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs nh-font-mono font-bold transition-all cursor-pointer whitespace-nowrap ${
-              activeTab === tab.id
-                ? "bg-cyan-500/30 text-cyan-200 border border-cyan-400/60 shadow-[0_0_12px_rgba(0,229,255,0.4)]"
-                : "text-slate-400 hover:text-slate-200 hover:bg-white/5"
-            }`}
+ activeTab === tab.id
+ ? "bg-sky-400/20 text-sky-200 border border-sky-400/35"
+ : "text-slate-400 hover:text-slate-200 hover:bg-white/5"
+ }`}
           >
             {tab.icon}
             <span>{tab.label}</span>
@@ -91,10 +91,10 @@ export function NeonExteriorStudio() {
                         }}
                         style={{ backgroundColor: c.hex }}
                         className={`h-12 rounded-xl border-2 transition-all cursor-pointer flex items-center justify-center ${
-                          isSelected
-                            ? "border-white shadow-[0_0_16px_rgba(255,255,255,0.8)] scale-105"
-                            : "border-white/20 hover:border-white/60"
-                        }`}
+ isSelected
+ ? "border-white scale-105"
+ : "border-white/20 hover:border-white/60"
+ }`}
                       >
                         {isSelected && <Check size={16} className="text-black drop-shadow" />}
                       </button>
@@ -241,16 +241,16 @@ export function NeonExteriorStudio() {
               />
             </div>
 
-            <div className="p-4 rounded-xl bg-[#060e22] border border-cyan-500/20 flex items-center justify-between">
+            <div className="p-4 rounded-xl bg-[#060e22] border border-sky-400/15 flex items-center justify-between">
               <div>
                 <span className="text-[10px] nh-font-mono text-slate-400">ACTIVE COLOR SPEC:</span>
-                <div className="text-sm font-bold nh-font-headline text-cyan-200 mt-0.5">
+                <div className="text-sm font-bold nh-font-headline text-sky-200 mt-0.5">
                   {exterior.paintColor.toUpperCase()} ({exterior.paintFinish.toUpperCase()})
                 </div>
               </div>
               <div
                 style={{ backgroundColor: exterior.paintColor }}
-                className="w-8 h-8 rounded-full border-2 border-white shadow-[0_0_12px_rgba(0,229,255,0.6)]"
+                className="w-8 h-8 rounded-full border-2 border-white"
               />
             </div>
           </NeonHorizonGlassPanel>

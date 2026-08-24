@@ -49,8 +49,8 @@ export function NeonNvhLab() {
         const barHeight = Math.max(8, heightMultiplier * (canvas.height * 0.8));
 
         const grad = ctx.createLinearGradient(0, canvas.height - barHeight, 0, canvas.height);
-        grad.addColorStop(0, "#00e5ff");
-        grad.addColorStop(0.5, "#e040fb");
+        grad.addColorStop(0, "#38bdf8");
+        grad.addColorStop(0.5, "#a78bfa");
         grad.addColorStop(1, "#1e1b4b");
 
         ctx.fillStyle = grad;
@@ -143,7 +143,7 @@ export function NeonNvhLab() {
             }}
             className="p-5 flex flex-col items-center justify-center gap-3"
           >
-            <div className="w-full h-44 rounded-xl overflow-hidden border border-cyan-500/20 shadow-inner">
+            <div className="w-full h-44 rounded-xl overflow-hidden border border-sky-400/15 shadow-inner">
               <canvas ref={canvasRef} width={360} height={176} className="w-full h-full object-cover" />
             </div>
 

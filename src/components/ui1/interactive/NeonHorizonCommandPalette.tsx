@@ -41,11 +41,9 @@ export function NeonHorizonCommandPalette({
 
   const items = [
     { id: "command", label: "Command Center (Overview & Presets)", icon: <Car size={16} />, category: "Studios" },
-    { id: "aero", label: "Aero Lab & CFD Wind Tunnel", icon: <Wind size={16} />, category: "Studios" },
     { id: "engine", label: "Modular Powertrain & Holographic Block", icon: <Zap size={16} />, category: "Studios" },
+    { id: "vehicle", label: "Vehicle Studio (Chassis, Exterior & CFD Aero)", icon: <Layers size={16} />, category: "Studios" },
     { id: "track_battle", label: "Circuit Lap Simulator & Telemetry", icon: <Trophy size={16} />, category: "Studios" },
-    { id: "vehicle", label: "Chassis Structure & Suspension Scales", icon: <Layers size={16} />, category: "Studios" },
-    { id: "exterior", label: "Exterior Styling & Cyberpunk Paint", icon: <Paintbrush size={16} />, category: "Studios" },
     { id: "interior", label: "Holographic Cockpit & HMI Themes", icon: <Sofa size={16} />, category: "Studios" },
     { id: "ai", label: "Apex AI Multi-Agent Swarm", icon: <Bot size={16} />, category: "Studios" },
     { id: "manufacturing", label: "Robotic Assembly Floor & Finances", icon: <Factory size={16} />, category: "Studios" },
@@ -100,10 +98,10 @@ export function NeonHorizonCommandPalette({
 
   return (
     <div className="fixed inset-0 z-50 flex items-start justify-center pt-24 px-4 bg-black/75 backdrop-blur-md animate-nh-materialize">
-      <div className="w-full max-w-2xl bg-[#080f24]/95 border border-cyan-400/50 rounded-2xl shadow-[0_0_50px_rgba(0,229,255,0.35)] overflow-hidden flex flex-col">
+      <div className="w-full max-w-2xl bg-[#080f24]/95 border border-sky-400/30 rounded-2xl overflow-hidden flex flex-col">
         {/* Search Input Bar */}
-        <div className="flex items-center gap-3 px-5 py-4 border-b border-cyan-500/20 bg-black/40">
-          <Search size={18} className="text-cyan-400" />
+        <div className="flex items-center gap-3 px-5 py-4 border-b border-sky-400/15 bg-black/40">
+          <Search size={18} className="text-sky-400" />
           <input
             ref={inputRef}
             type="text"
@@ -145,13 +143,13 @@ export function NeonHorizonCommandPalette({
                   }}
                   onMouseEnter={() => setSelectedIndex(idx)}
                   className={`px-4 py-3 rounded-xl flex items-center justify-between transition-all cursor-pointer ${
-                    isSelected
-                      ? "bg-gradient-to-r from-cyan-500/30 to-purple-500/20 text-white border border-cyan-400/50 shadow-[0_0_15px_rgba(0,229,255,0.25)]"
-                      : "text-slate-300 hover:bg-white/5 border border-transparent"
-                  }`}
+ isSelected
+ ? "bg-gradient-to-r from-sky-500/30 to-sky-500/20 text-white border border-sky-400/30"
+ : "text-slate-300 hover:bg-white/5 border border-transparent"
+ }`}
                 >
                   <div className="flex items-center gap-3">
-                    <span className={isSelected ? "text-cyan-300" : "text-slate-400"}>
+                    <span className={isSelected ? "text-sky-300" : "text-slate-400"}>
                       {item.icon}
                     </span>
                     <span className="text-xs font-bold nh-font-headline">{item.label}</span>
@@ -160,7 +158,7 @@ export function NeonHorizonCommandPalette({
                     <NeonHorizonBadge variant={isSelected ? "cyan" : "neutral"} size="xs">
                       {item.category}
                     </NeonHorizonBadge>
-                    <ArrowRight size={12} className={isSelected ? "text-cyan-400" : "text-transparent"} />
+                    <ArrowRight size={12} className={isSelected ? "text-sky-400" : "text-transparent"} />
                   </div>
                 </div>
               );
@@ -169,13 +167,13 @@ export function NeonHorizonCommandPalette({
         </div>
 
         {/* Footer Hotkey Guide */}
-        <div className="px-5 py-2.5 bg-black/40 border-t border-cyan-500/20 flex items-center justify-between text-[11px] nh-font-mono text-slate-400">
+        <div className="px-5 py-2.5 bg-black/40 border-t border-sky-400/15 flex items-center justify-between text-[11px] nh-font-mono text-slate-400">
           <div className="flex items-center gap-3">
             <span>↑↓ Navigate</span>
             <span>↵ Select</span>
             <span>ESC Close</span>
           </div>
-          <span className="text-cyan-400 font-bold">Apex AI Quick Engine</span>
+          <span className="text-sky-400 font-bold">Apex AI Quick Engine</span>
         </div>
       </div>
     </div>

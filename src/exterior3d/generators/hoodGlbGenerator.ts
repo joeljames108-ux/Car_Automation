@@ -11,6 +11,7 @@ import { GLTFExporter } from 'three/examples/jsm/exporters/GLTFExporter.js';
 import { SculptedBodyPanelsGenerator, BodyClosuresArticulation } from './sculptedBodyPanelsGenerator';
 import type { VehicleBodyType } from '../types/vehicleConstructionTypes';
 import { MaterialGrade } from '../../sim/assemblyTypes';
+import { enhanceGlbBuffer } from '../loaders/glbPbrEnhancer';
 
 // Polyfill Node.js FileReader for Three.js GLTFExporter binary writer in CLI
 if (typeof globalThis !== 'undefined' && typeof (globalThis as any).FileReader === 'undefined') {
@@ -353,20 +354,22 @@ export async function exportAllHoodGlbPresets(
     console.log(`[Hood GLB Export] Generating ${presetName}...`);
 
     // Export closed hood
-    const closedBuffer = await generateSculptedHoodGlbBuffer({
+    const rawClosedBuffer = await generateSculptedHoodGlbBuffer({
       ...preset,
       hoodOpenProgress: 0,
     });
+    const closedBuffer = await enhanceGlbBuffer(Buffer.from(rawClosedBuffer));
     const closedFilename = `${preset.vehicleName.toLowerCase().replace(/\s+/g, '_')}_hood_closed.glb`;
     const closedPath = path.join(outputDir, closedFilename);
     fs.writeFileSync(closedPath, Buffer.from(closedBuffer));
     results.push({ preset: `${presetName}_closed`, filename: closedFilename, bytes: closedBuffer.byteLength });
 
     // Export open hood (45 degrees)
-    const openBuffer = await generateSculptedHoodGlbBuffer({
+    const rawOpenBuffer = await generateSculptedHoodGlbBuffer({
       ...preset,
       hoodOpenProgress: 1,
     });
+    const openBuffer = await enhanceGlbBuffer(Buffer.from(rawOpenBuffer));
     const openFilename = `${preset.vehicleName.toLowerCase().replace(/\s+/g, '_')}_hood_open.glb`;
     const openPath = path.join(outputDir, openFilename);
     fs.writeFileSync(openPath, Buffer.from(openBuffer));

@@ -81,7 +81,7 @@ export function NeonDigitalTwinStudio() {
               {subsystems.map((sub, idx) => (
                 <div
                   key={idx}
-                  className="p-3 rounded-xl bg-[#060e22] border border-cyan-500/20 flex flex-col gap-1.5"
+                  className="p-3 rounded-xl bg-[#060e22] border border-sky-400/15 flex flex-col gap-1.5"
                 >
                   <div className="flex items-center justify-between">
                     <span className="text-xs font-bold text-slate-100 truncate pr-2">{sub.name}</span>
@@ -91,7 +91,7 @@ export function NeonDigitalTwinStudio() {
                   </div>
                   <div className="flex items-center justify-between text-[10px] nh-font-mono text-slate-400">
                     <span>Load: {sub.load} · {sub.temp}</span>
-                    <span className="text-cyan-300 font-bold">Health: {sub.health}</span>
+                    <span className="text-sky-300 font-bold">Health: {sub.health}</span>
                   </div>
                 </div>
               ))}
@@ -110,14 +110,14 @@ export function NeonDigitalTwinStudio() {
             }}
             className="p-6 flex flex-col gap-4"
           >
-            <div className="p-4 rounded-xl bg-[#060e22] border border-cyan-500/20 flex flex-col gap-2">
+            <div className="p-4 rounded-xl bg-[#060e22] border border-sky-400/15 flex flex-col gap-2">
               <div className="flex items-center justify-between">
                 <span className="text-xs text-slate-400">ECU Handshake:</span>
                 <span className="text-xs font-bold nh-font-mono text-emerald-300">ESTABLISHED (0x7E0)</span>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-xs text-slate-400">Security Access Level:</span>
-                <span className="text-xs font-bold nh-font-mono text-cyan-300">OEM LEVEL 3 (UNLOCKED)</span>
+                <span className="text-xs font-bold nh-font-mono text-sky-300">OEM LEVEL 3 (UNLOCKED)</span>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-xs text-slate-400">Flash Memory Checksum:</span>

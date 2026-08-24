@@ -49,7 +49,7 @@ export function NeonThermalPcmStudio() {
       ctx.clearRect(0, 0, w, h);
 
       // Vapor Chamber Planar Enclosure
-      ctx.strokeStyle = "rgba(0, 229, 255, 0.4)";
+      ctx.strokeStyle = "rgba(56,189,248, 0.4)";
       ctx.lineWidth = 3;
       ctx.strokeRect(40, 30, w - 80, h - 60);
 
@@ -59,7 +59,7 @@ export function NeonThermalPcmStudio() {
       // Liquid Melted Phase Region (Amber Molten)
       const grad = ctx.createLinearGradient(40, 0, 40 + liquidW, 0);
       grad.addColorStop(0, "rgba(251, 191, 36, 0.65)");
-      grad.addColorStop(1, "rgba(0, 229, 255, 0.2)");
+      grad.addColorStop(1, "rgba(56,189,248, 0.2)");
 
       ctx.fillStyle = grad;
       ctx.fillRect(40, 30, liquidW, h - 60);
@@ -129,7 +129,7 @@ export function NeonThermalPcmStudio() {
             }}
             className="p-6 flex flex-col gap-4"
           >
-            <div className="w-full h-52 bg-[#030712] rounded-xl border border-cyan-500/30 overflow-hidden relative shadow-[inset_0_0_25px_rgba(0,0,0,0.85)]">
+            <div className="w-full h-52 bg-[#030712] rounded-xl border border-sky-400/25 overflow-hidden relative shadow-[inset_0_0_25px_rgba(0,0,0,0.85)]">
               <canvas ref={canvasRef} width={640} height={210} className="w-full h-full" />
               <div className="absolute top-2 left-3 flex items-center gap-2">
                 <span className="text-[10px] nh-font-mono font-bold text-amber-400">
@@ -154,10 +154,10 @@ export function NeonThermalPcmStudio() {
                       setPcmCompound(m.id as "erythritol_high_temp" | "paraffin_hybrid" | "metallic_gallium_alloy" | "hydrated_salt");
                     }}
                     className={`p-2.5 rounded-lg border text-center text-xs font-bold cursor-pointer transition-all ${
-                      isSelected
-                        ? "bg-[#091a38] border-amber-400 text-amber-300 shadow-[0_0_12px_rgba(251,191,36,0.3)]"
-                        : "bg-[#060e22] border-white/10 text-slate-400 hover:border-cyan-500/30"
-                    }`}
+ isSelected
+ ? "bg-[#091a38] border-amber-400 text-amber-300"
+ : "bg-[#060e22] border-white/10 text-slate-400 hover:border-sky-400/25"
+ }`}
                   >
                     {m.name}
                   </div>
@@ -200,14 +200,14 @@ export function NeonThermalPcmStudio() {
               onChange={(val) => setThermalSpikeHeatKw(val)}
             />
 
-            <div className="p-3.5 rounded-xl bg-[#060e22] border border-cyan-500/20 flex flex-col gap-2 font-mono text-xs">
+            <div className="p-3.5 rounded-xl bg-[#060e22] border border-sky-400/15 flex flex-col gap-2 font-mono text-xs">
               <div className="flex items-center justify-between">
                 <span className="text-slate-400">Vapor Chamber Wick:</span>
                 <span className="text-emerald-300 font-bold">Sintered Copper Powder</span>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-slate-400">Working Fluid:</span>
-                <span className="text-cyan-300 font-bold">Deionized Water (Vacuum)</span>
+                <span className="text-sky-300 font-bold">Deionized Water (Vacuum)</span>
               </div>
             </div>
           </NeonHorizonGlassPanel>

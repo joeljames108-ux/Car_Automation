@@ -60,52 +60,94 @@ export function solveParametricTransformForComponent(
   const exhaustDiaScale = Math.max(0.80, Math.min(1.30, collectorDia / BASELINE_ENGINE_SPECS.exhaustCollectorDiaMm));
 
   switch (type) {
-    // ── 1. PISTONS (Bore diameter scales X & Y, Compression dome scales Z) ──
+    // ── 1. PISTONS (Bore diameter scales X & Z, Compression dome scales Y) ──
     case 'piston':
       return {
-        scale: [boreScale, boreScale, compRatioScale],
+        scale: [boreScale, compRatioScale, boreScale],
+        positionOffset: [0, (strokeScale - 1.0) * 0.05 + (rodScale - 1.0) * 0.035, 0],
       };
 
-    // ── 2. CRANKSHAFT (Stroke length scales journal throw radius Y & Z) ──
+    // ── 2. CRANKSHAFT (Stroke length scales journal throw radius Y & Z, bore pitch scales X) ──
     case 'crankshaft':
       return {
-        scale: [1.0, strokeScale, strokeScale],
+        scale: [1.0 + (boreScale - 1.0) * 0.40, strokeScale, strokeScale],
+        positionOffset: [0, 0, 0],
       };
 
-    // ── 3. CONNECTING RODS (Rod length elongates column along Z) ──
+    // ── 3. CONNECTING RODS (Rod length elongates column along Z, cross-section scales with bore/stroke) ──
     case 'connecting-rod':
       return {
         scale: [
-          1.0 + (strokeScale - 1.0) * 0.15,
-          1.0 + (boreScale - 1.0) * 0.15,
+          1.0 + (boreScale - 1.0) * 0.20,
+          1.0 + (strokeScale - 1.0) * 0.20,
           rodScale,
         ],
+        positionOffset: [0, (strokeScale - 1.0) * 0.025, 0],
       };
 
     // ── 4. ENGINE BLOCK (Cylinder bore sleeves & deck envelope adjust) ──
+    // X = Longitudinal length, Y = Deck Height (Stroke + Rod), Z = Lateral Width across banks (Bore)
     case 'engine-block': {
-      const blockWidthScale = 1.0 + (boreScale - 1.0) * 0.35;
-      const blockHeightScale = 1.0 + (strokeScale - 1.0) * 0.20 + (rodScale - 1.0) * 0.20;
+      const blockLengthScale = 1.0 + (boreScale - 1.0) * 0.40;
+      const blockHeightScale = 1.0 + (strokeScale - 1.0) * 0.45 + (rodScale - 1.0) * 0.25;
+      const blockWidthScale = 1.0 + (boreScale - 1.0) * 0.55;
       return {
-        scale: [1.0, blockWidthScale, blockHeightScale],
+        scale: [blockLengthScale, blockHeightScale, blockWidthScale],
+        positionOffset: [0, (strokeScale - 1.0) * 0.015, 0],
       };
     }
 
-    // ── 5. CYLINDER HEADS (Combustion chambers adjust with bore diameter) ──
-    case 'cylinder-head-left':
-    case 'cylinder-head-right': {
-      const headScale = 1.0 + (boreScale - 1.0) * 0.25;
+    // ── 5. CYLINDER HEADS (Combustion chambers adjust with bore diameter, deck elevates with stroke) ──
+    case 'cylinder-head-left': {
+      const headLengthScale = 1.0 + (boreScale - 1.0) * 0.40;
+      const headWidthScale = 1.0 + (boreScale - 1.0) * 0.55;
+      const headHeightScale = 1.0 + (compRatioScale - 1.0) * 0.15;
       return {
-        scale: [1.0, headScale, headScale],
+        scale: [headLengthScale, headHeightScale, headWidthScale],
+        positionOffset: [
+          0,
+          (strokeScale - 1.0) * 0.055 + (rodScale - 1.0) * 0.035,
+          (boreScale - 1.0) * 0.035,
+        ],
+      };
+    }
+    case 'cylinder-head-right': {
+      const headLengthScale = 1.0 + (boreScale - 1.0) * 0.40;
+      const headWidthScale = 1.0 + (boreScale - 1.0) * 0.55;
+      const headHeightScale = 1.0 + (compRatioScale - 1.0) * 0.15;
+      return {
+        scale: [headLengthScale, headHeightScale, headWidthScale],
+        positionOffset: [
+          0,
+          (strokeScale - 1.0) * 0.055 + (rodScale - 1.0) * 0.035,
+          -(boreScale - 1.0) * 0.035,
+        ],
       };
     }
 
     // ── 6. VALVE COVERS (Follow cylinder head deck envelope) ──
-    case 'valve-cover-left':
-    case 'valve-cover-right': {
-      const coverScale = 1.0 + (boreScale - 1.0) * 0.20;
+    case 'valve-cover-left': {
+      const coverLengthScale = 1.0 + (boreScale - 1.0) * 0.40;
+      const coverWidthScale = 1.0 + (boreScale - 1.0) * 0.55;
       return {
-        scale: [1.0, coverScale, 1.0],
+        scale: [coverLengthScale, 1.0, coverWidthScale],
+        positionOffset: [
+          0,
+          (strokeScale - 1.0) * 0.070 + (rodScale - 1.0) * 0.045,
+          (boreScale - 1.0) * 0.040,
+        ],
+      };
+    }
+    case 'valve-cover-right': {
+      const coverLengthScale = 1.0 + (boreScale - 1.0) * 0.40;
+      const coverWidthScale = 1.0 + (boreScale - 1.0) * 0.55;
+      return {
+        scale: [coverLengthScale, 1.0, coverWidthScale],
+        positionOffset: [
+          0,
+          (strokeScale - 1.0) * 0.070 + (rodScale - 1.0) * 0.045,
+          -(boreScale - 1.0) * 0.040,
+        ],
       };
     }
 
@@ -113,6 +155,11 @@ export function solveParametricTransformForComponent(
     case 'turbocharger':
       return {
         scale: [turboScale, turboScale, turboScale],
+        positionOffset: [
+          0,
+          (strokeScale - 1.0) * 0.035,
+          (boreScale - 1.0) * 0.030,
+        ],
       };
 
     // ── 8. RADIATOR (Core thickness, width & height scale with cooling demand) ──
@@ -123,27 +170,70 @@ export function solveParametricTransformForComponent(
 
     // ── 9. EXHAUST HEADERS (Primary length and merge collector diameter) ──
     case 'exhaust-header-left':
+      return {
+        scale: [
+          1.0 + (boreScale - 1.0) * 0.40,
+          exhaustLenScale * (1.0 + (strokeScale - 1.0) * 0.20),
+          exhaustDiaScale * (1.0 + (boreScale - 1.0) * 0.35),
+        ],
+        positionOffset: [
+          0,
+          (strokeScale - 1.0) * 0.045 + (rodScale - 1.0) * 0.025,
+          (boreScale - 1.0) * 0.040,
+        ],
+      };
     case 'exhaust-header-right':
       return {
-        scale: [exhaustLenScale, exhaustDiaScale, exhaustDiaScale],
+        scale: [
+          1.0 + (boreScale - 1.0) * 0.40,
+          exhaustLenScale * (1.0 + (strokeScale - 1.0) * 0.20),
+          exhaustDiaScale * (1.0 + (boreScale - 1.0) * 0.35),
+        ],
+        positionOffset: [
+          0,
+          (strokeScale - 1.0) * 0.045 + (rodScale - 1.0) * 0.025,
+          -(boreScale - 1.0) * 0.040,
+        ],
       };
 
     // ── 10. INTAKE MANIFOLD (Velocity stack trumpet height and runner cross-section) ──
     case 'intake-manifold-left':
-    case 'intake-manifold-right': {
-      const runnerScale = 1.0 + (boreScale - 1.0) * 0.20;
       return {
-        scale: [1.0, runnerScale, runnerScale],
+        scale: [
+          1.0 + (boreScale - 1.0) * 0.40,
+          1.0 + (strokeScale - 1.0) * 0.15,
+          1.0 + (boreScale - 1.0) * 0.35,
+        ],
+        positionOffset: [
+          0,
+          (strokeScale - 1.0) * 0.050 + (rodScale - 1.0) * 0.030,
+          (boreScale - 1.0) * 0.020,
+        ],
       };
-    }
+    case 'intake-manifold-right':
+      return {
+        scale: [
+          1.0 + (boreScale - 1.0) * 0.40,
+          1.0 + (strokeScale - 1.0) * 0.15,
+          1.0 + (boreScale - 1.0) * 0.35,
+        ],
+        positionOffset: [
+          0,
+          (strokeScale - 1.0) * 0.050 + (rodScale - 1.0) * 0.030,
+          -(boreScale - 1.0) * 0.020,
+        ],
+      };
 
-    // ── 11. DRY SUMP PAN (Sump width matches block crankcase) ──
-    case 'dry-sump': {
-      const sumpWidthScale = 1.0 + (boreScale - 1.0) * 0.25;
+    // ── 11. DRY SUMP PAN (Sump width & depth matches block crankcase) ──
+    case 'dry-sump':
       return {
-        scale: [1.0, sumpWidthScale, 1.0],
+        scale: [
+          1.0 + (boreScale - 1.0) * 0.40,
+          1.0 + (strokeScale - 1.0) * 0.40,
+          1.0 + (boreScale - 1.0) * 0.50,
+        ],
+        positionOffset: [0, -(strokeScale - 1.0) * 0.020, 0],
       };
-    }
 
     // ── 12. TRANSAXLE / GEARBOX ──
     case 'transaxle':
@@ -151,13 +241,20 @@ export function solveParametricTransformForComponent(
         scale: [1.0, 1.0, 1.0],
       };
 
-    // ── 13. TOP ENGINE COVER (Matches block deck width) ──
-    case 'engine-cover': {
-      const coverWidth = 1.0 + (boreScale - 1.0) * 0.25;
+    // ── 13. TOP ENGINE COVER (Matches block deck width and elevates with deck) ──
+    case 'engine-cover':
       return {
-        scale: [1.0, coverWidth, 1.0],
+        scale: [
+          1.0 + (boreScale - 1.0) * 0.40,
+          1.0,
+          1.0 + (boreScale - 1.0) * 0.55,
+        ],
+        positionOffset: [
+          0,
+          (strokeScale - 1.0) * 0.075 + (rodScale - 1.0) * 0.050,
+          0,
+        ],
       };
-    }
 
     default:
       return { scale: [1, 1, 1] };

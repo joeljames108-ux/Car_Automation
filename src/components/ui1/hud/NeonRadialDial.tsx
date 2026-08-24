@@ -26,13 +26,13 @@ export const NeonRadialDial: React.FC<NeonRadialDialProps> = ({
       className={`relative inline-flex items-center justify-center ${className}`}
       style={{ width: size, height: size }}
     >
-      {/* Outer Dial Glow Ring */}
+      {/* Outer Dial Ring */}
       <div
         className={`absolute inset-0 rounded-full border transition-all duration-300 ${
-          isRedline
-            ? "border-red-500/60 shadow-[0_0_25px_rgba(255,82,82,0.6)]"
-            : "border-cyan-400/30 shadow-[0_0_20px_rgba(0,229,255,0.3)]"
-        }`}
+ isRedline
+ ? "border-rose-400/40"
+ : "border-white/12"
+ }`}
       />
 
       <svg width={size} height={size} className="overflow-visible">
@@ -53,7 +53,7 @@ export const NeonRadialDial: React.FC<NeonRadialDialProps> = ({
               y1={y1}
               x2={x2}
               y2={y2}
-              stroke={isHigh ? "#ff5252" : "rgba(0, 229, 255, 0.4)"}
+              stroke={isHigh ? "#d97b70" : "rgba(127,181,216, 0.35)"}
               strokeWidth={i % 3 === 0 ? "2" : "1"}
             />
           );
@@ -65,13 +65,10 @@ export const NeonRadialDial: React.FC<NeonRadialDialProps> = ({
           y1={size / 2}
           x2={size / 2 + (size / 2 - 14) * Math.sin((needleAngle * Math.PI) / 180)}
           y2={size / 2 - (size / 2 - 14) * Math.cos((needleAngle * Math.PI) / 180)}
-          stroke={isRedline ? "#ff5252" : "#00e5ff"}
+          stroke={isRedline ? "#d97b70" : "#a9cde8"}
           strokeWidth="3"
           strokeLinecap="round"
           style={{
-            filter: isRedline
-              ? "drop-shadow(0 0 8px rgba(255, 82, 82, 0.8))"
-              : "drop-shadow(0 0 8px rgba(0, 229, 255, 0.8))",
             transition: "all 0.1s cubic-bezier(0.1, 0.9, 0.2, 1)",
           }}
         />
@@ -80,13 +77,13 @@ export const NeonRadialDial: React.FC<NeonRadialDialProps> = ({
       {/* Center Gear & RPM Hub */}
       <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
         <span className="text-[10px] nh-label-caps text-slate-400 leading-none">GEAR</span>
-        <span className="text-2xl font-black nh-font-headline text-white drop-shadow-[0_0_10px_rgba(255,255,255,0.7)] leading-none my-0.5">
+        <span className="text-2xl font-black nh-font-headline text-white leading-none my-0.5">
           {gear === 0 ? "N" : gear}
         </span>
         <span
           className={`text-[11px] nh-font-mono font-bold ${
-            isRedline ? "text-red-400 animate-pulse" : "text-cyan-300"
-          }`}
+ isRedline ? "text-rose-300 animate-pulse" : "text-sky-300"
+ }`}
         >
           {rpm.toLocaleString()} RPM
         </span>

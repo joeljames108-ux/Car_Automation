@@ -71,7 +71,7 @@ export function NeonBrakeLabStudio() {
             }}
             className="p-6 flex flex-col gap-4"
           >
-            <div className="grid grid-cols-10 gap-1.5 h-36 p-4 rounded-xl bg-[#030712] border border-cyan-500/30 items-end shadow-[inset_0_0_20px_rgba(0,0,0,0.8)]">
+            <div className="grid grid-cols-10 gap-1.5 h-36 p-4 rounded-xl bg-[#030712] border border-sky-400/25 items-end shadow-[inset_0_0_20px_rgba(0,0,0,0.8)]">
               {Array.from({ length: 10 }).map((_, idx) => {
                 const stopTemp = Math.round(180 + (idx + 1) * 68 - (coolingDuctFlow / 100) * 80);
                 const heightPercent = Math.min(100, Math.max(15, (stopTemp / 900) * 100));
@@ -83,12 +83,12 @@ export function NeonBrakeLabStudio() {
                     <div
                       style={{ height: `${heightPercent}%` }}
                       className={`w-full rounded-t transition-all ${
-                        isHot
-                          ? "bg-rose-500 shadow-[0_0_12px_rgba(244,63,94,0.6)]"
-                          : isCurrent
-                          ? "bg-amber-400 shadow-[0_0_10px_rgba(251,191,36,0.5)]"
-                          : "bg-cyan-500/60"
-                      }`}
+ isHot
+ ? "bg-rose-500"
+ : isCurrent
+ ? "bg-amber-400"
+ : "bg-sky-400/40"
+ }`}
                     />
                     <span className="text-[9px] font-mono font-bold text-slate-400">#{idx + 1}</span>
                   </div>
@@ -135,10 +135,10 @@ export function NeonBrakeLabStudio() {
                         setDiscMaterial(item.id as "carbon_ceramic" | "carbon_carbon" | "cast_iron");
                       }}
                       className={`p-2.5 rounded-lg border text-center text-xs font-bold cursor-pointer transition-all ${
-                        isSelected
-                          ? "bg-[#091a38] border-cyan-400 text-cyan-300 shadow-[0_0_12px_rgba(0,229,255,0.3)]"
-                          : "bg-[#060e22] border-white/10 text-slate-400 hover:border-cyan-500/30"
-                      }`}
+ isSelected
+ ? "bg-[#091a38] border-sky-400/40 text-sky-300"
+ : "bg-[#060e22] border-white/10 text-slate-400 hover:border-sky-400/25"
+ }`}
                     >
                       {item.name}
                     </div>
@@ -158,10 +158,10 @@ export function NeonBrakeLabStudio() {
               onChange={(val) => setCoolingDuctFlow(val)}
             />
 
-            <div className="p-3.5 rounded-xl bg-[#060e22] border border-cyan-500/20 flex flex-col gap-2 font-mono text-xs">
+            <div className="p-3.5 rounded-xl bg-[#060e22] border border-sky-400/15 flex flex-col gap-2 font-mono text-xs">
               <div className="flex items-center justify-between">
                 <span className="text-slate-400">Front Caliper:</span>
-                <span className="text-cyan-300 font-bold">10-Piston Monobloc Titanium</span>
+                <span className="text-sky-300 font-bold">10-Piston Monobloc Titanium</span>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-slate-400">Rotor Dimension:</span>

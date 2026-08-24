@@ -140,10 +140,10 @@ export function NeonEvBatteryStudio() {
             }}
             className="p-6 flex flex-col gap-4"
           >
-            <div className="p-4 rounded-xl bg-[#060e22] border border-cyan-500/20 flex flex-col gap-2">
+            <div className="p-4 rounded-xl bg-[#060e22] border border-sky-400/15 flex flex-col gap-2">
               <div className="flex items-center justify-between">
                 <span className="text-xs text-slate-400">Gravimetric Density:</span>
-                <span className="text-xs font-bold nh-font-mono text-cyan-300">{currentChem.density}</span>
+                <span className="text-xs font-bold nh-font-mono text-sky-300">{currentChem.density}</span>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-xs text-slate-400">Max Discharge Rate:</span>
@@ -162,10 +162,10 @@ export function NeonEvBatteryStudio() {
                 {[32.4, 33.1, 33.8, 32.7, 34.2, 34.9, 34.0, 33.5].map((temp, idx) => (
                   <div
                     key={idx}
-                    className="p-2 rounded-lg bg-[#071126] border border-cyan-500/25 flex flex-col items-center justify-center text-center"
+                    className="p-2 rounded-lg bg-[#071126] border border-sky-400/20 flex flex-col items-center justify-center text-center"
                   >
                     <span className="text-[9px] text-slate-400">MOD {idx + 1}</span>
-                    <span className="text-xs font-bold nh-font-mono text-cyan-300">{temp}°C</span>
+                    <span className="text-xs font-bold nh-font-mono text-sky-300">{temp}°C</span>
                   </div>
                 ))}
               </div>

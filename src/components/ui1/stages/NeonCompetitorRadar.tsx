@@ -65,8 +65,8 @@ export function NeonCompetitorRadar() {
               <svg viewBox="0 0 300 300" className="w-full h-full max-w-[280px]">
                 <defs>
                   <linearGradient id="radarGrad" x1="0" y1="0" x2="1" y2="1">
-                    <stop offset="0%" stopColor="#00e5ff" stopOpacity="0.5" />
-                    <stop offset="100%" stopColor="#e040fb" stopOpacity="0.2" />
+                    <stop offset="0%" stopColor="#38bdf8" stopOpacity="0.5" />
+                    <stop offset="100%" stopColor="#a78bfa" stopOpacity="0.2" />
                   </linearGradient>
                 </defs>
 
@@ -87,7 +87,7 @@ export function NeonCompetitorRadar() {
                 <polygon
                   points="150,65 225,110 215,195 150,235 75,190 80,105"
                   fill="url(#radarGrad)"
-                  stroke="#00e5ff"
+                  stroke="#38bdf8"
                   strokeWidth="2"
                 />
 
@@ -95,7 +95,7 @@ export function NeonCompetitorRadar() {
                 <polygon
                   points="150,85 210,120 200,185 150,220 95,180 90,120"
                   fill="none"
-                  stroke="#ffd740"
+                  stroke="#fbbf24"
                   strokeWidth="1.5"
                   strokeDasharray="4 2"
                 />
@@ -104,7 +104,7 @@ export function NeonCompetitorRadar() {
 
             <div className="flex items-center justify-center gap-6 border-t border-white/10 pt-3 text-xs nh-font-mono">
               <div className="flex items-center gap-2">
-                <span className="w-3 h-3 rounded-full bg-cyan-400" />
+                <span className="w-3 h-3 rounded-full bg-sky-300" />
                 <span className="text-slate-200">Your Vehicle</span>
               </div>
               <div className="flex items-center gap-2">
@@ -136,10 +136,10 @@ export function NeonCompetitorRadar() {
                     setSelectedRival(r.id);
                   }}
                   className={`p-3.5 rounded-xl border transition-all cursor-pointer flex flex-col gap-1.5 ${
-                    isSelected
-                      ? "bg-[#091838] border-cyan-400 shadow-[0_0_15px_rgba(0,229,255,0.3)]"
-                      : "bg-[#060e22] border-white/10 hover:border-cyan-500/30"
-                  }`}
+ isSelected
+ ? "bg-[#091838] border-sky-400/40"
+ : "bg-[#060e22] border-white/10 hover:border-sky-400/25"
+ }`}
                 >
                   <div className="flex items-center justify-between">
                     <span className="text-xs font-bold text-slate-100">{r.name}</span>
@@ -147,7 +147,7 @@ export function NeonCompetitorRadar() {
                   </div>
                   <div className="flex items-center justify-between text-[10px] nh-font-mono text-slate-400">
                     <span>{r.power} · {r.weight}</span>
-                    <span className="text-cyan-300">0-60: {r.zeroSixty}</span>
+                    <span className="text-sky-300">0-60: {r.zeroSixty}</span>
                   </div>
                 </div>
               );

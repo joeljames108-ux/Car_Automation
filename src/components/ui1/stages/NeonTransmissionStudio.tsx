@@ -199,12 +199,12 @@ export function NeonTransmissionStudio() {
                 <div key={g.gear} className="flex flex-col gap-1">
                   <div className="flex justify-between text-xs nh-font-mono">
                     <span className="text-slate-300 font-bold">{g.gear} Gear ({g.ratio.toFixed(2)}:1)</span>
-                    <span className="text-cyan-300 font-bold">{g.speed} km/h</span>
+                    <span className="text-sky-300 font-bold">{g.speed} km/h</span>
                   </div>
                   <div className="w-full h-2.5 bg-[#050b18] rounded-full p-0.5 border border-white/10">
                     <div
                       style={{ width: `${Math.min(100, (g.speed / 420) * 100)}%` }}
-                      className="h-full bg-gradient-to-r from-cyan-400 to-fuchsia-500 rounded-full shadow-[0_0_8px_rgba(0,229,255,0.6)]"
+                      className="h-full bg-gradient-to-r from-sky-400 to-sky-500 rounded-full"
                     />
                   </div>
                 </div>

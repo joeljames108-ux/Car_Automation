@@ -22,15 +22,15 @@ export const NeonGridCanvas: React.FC = () => {
 
     // Particle nodes for ambient floating telemetry motes
     const isMobile = window.innerWidth < 768;
-    const count = isMobile ? 14 : 26;
+    const count = isMobile ? 12 : 20;
     const particles = Array.from({ length: count }, () => ({
       x: Math.random() * width,
       y: Math.random() * height,
-      vx: (Math.random() - 0.5) * 0.4,
-      vy: (Math.random() - 0.5) * 0.4,
-      size: Math.random() * 2 + 1,
-      color: Math.random() > 0.4 ? "#00e5ff" : "#e040fb",
-      alpha: Math.random() * 0.6 + 0.2,
+      vx: (Math.random() - 0.5) * 0.3,
+      vy: (Math.random() - 0.5) * 0.3,
+      size: Math.random() * 1.4 + 0.8,
+      color: Math.random() > 0.35 ? "#7f9db8" : "#9d8fc4",
+      alpha: Math.random() * 0.4 + 0.12,
     }));
 
     let mouseX = width / 2;
@@ -56,9 +56,9 @@ export const NeonGridCanvas: React.FC = () => {
       if (!isVisible) return;
       ctx.clearRect(0, 0, width, height);
 
-      // Subtle cyan grid lines
+      // Faint steel grid lines
       const gridSize = 64;
-      ctx.strokeStyle = "rgba(0, 229, 255, 0.028)";
+      ctx.strokeStyle = "rgba(148, 163, 184, 0.05)";
       ctx.lineWidth = 1;
 
       ctx.beginPath();
@@ -87,11 +87,8 @@ export const NeonGridCanvas: React.FC = () => {
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2);
         ctx.fillStyle = p.color;
-        ctx.globalAlpha = p.alpha * 0.7;
-        ctx.shadowColor = p.color;
-        ctx.shadowBlur = 8;
+        ctx.globalAlpha = p.alpha * 0.6;
         ctx.fill();
-        ctx.shadowBlur = 0;
 
         // Draw connections between nearby nodes
         for (let j = i + 1; j < particles.length; j++) {
@@ -102,7 +99,7 @@ export const NeonGridCanvas: React.FC = () => {
             ctx.moveTo(p.x, p.y);
             ctx.lineTo(p2.x, p2.y);
             ctx.strokeStyle = p.color;
-            ctx.globalAlpha = (1 - dist / 120) * 0.15;
+            ctx.globalAlpha = (1 - dist / 120) * 0.08;
             ctx.stroke();
           }
         }

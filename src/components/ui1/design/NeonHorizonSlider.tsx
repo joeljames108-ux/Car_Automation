@@ -35,28 +35,28 @@ export const NeonHorizonSlider: React.FC<NeonHorizonSliderProps> = ({
 
   const colorStyles = {
     cyan: {
-      fill: "from-cyan-500 to-sky-400",
-      glow: "shadow-[0_0_12px_rgba(0,229,255,0.6)]",
-      text: "text-cyan-300",
-      badge: "border-cyan-400/40 bg-cyan-500/15 text-cyan-200",
+      fill: "bg-sky-400/70",
+      glow: "",
+      text: "text-sky-300",
+      badge: "border-sky-400/30 bg-sky-500/12 text-sky-200",
     },
     magenta: {
-      fill: "from-fuchsia-500 to-purple-400",
-      glow: "shadow-[0_0_12px_rgba(224,64,251,0.6)]",
-      text: "text-fuchsia-300",
-      badge: "border-fuchsia-400/40 bg-fuchsia-500/15 text-fuchsia-200",
+      fill: "bg-sky-400/70",
+      glow: "",
+      text: "text-sky-300",
+      badge: "border-sky-400/30 bg-sky-500/12 text-sky-200",
     },
     gold: {
-      fill: "from-amber-500 to-yellow-400",
-      glow: "shadow-[0_0_12px_rgba(255,215,64,0.6)]",
+      fill: "bg-amber-400/70",
+      glow: "",
       text: "text-amber-300",
-      badge: "border-amber-400/40 bg-amber-500/15 text-amber-200",
+      badge: "border-amber-400/30 bg-amber-500/12 text-amber-200",
     },
     emerald: {
-      fill: "from-emerald-500 to-teal-400",
-      glow: "shadow-[0_0_12px_rgba(0,230,118,0.6)]",
+      fill: "bg-emerald-400/70",
+      glow: "",
       text: "text-emerald-300",
-      badge: "border-emerald-400/40 bg-emerald-500/15 text-emerald-200",
+      badge: "border-emerald-400/30 bg-emerald-500/12 text-emerald-200",
     },
   }[color];
 
@@ -69,8 +69,8 @@ export const NeonHorizonSlider: React.FC<NeonHorizonSliderProps> = ({
   return (
     <div
       className={`flex flex-col gap-1.5 p-2 rounded-xl transition-all duration-200 ${
-        isHovered ? "bg-cyan-500/5" : ""
-      } ${className}`}
+ isHovered ? "bg-white/[0.03]" : ""
+ } ${className}`}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
@@ -94,9 +94,9 @@ export const NeonHorizonSlider: React.FC<NeonHorizonSliderProps> = ({
       <div className="relative flex items-center h-5">
         {/* Track background */}
         <div className="w-full h-1.5 bg-[#0a1630] rounded-full overflow-hidden border border-white/10 relative">
-          {/* Active fill with gradient */}
+          {/* Active fill */}
           <div
-            className={`h-full bg-gradient-to-r ${colorStyles.fill} ${colorStyles.glow} rounded-full transition-all duration-75`}
+            className={`h-full ${colorStyles.fill} rounded-full transition-all duration-75`}
             style={{ width: `${percentage}%` }}
           />
         </div>
@@ -112,11 +112,11 @@ export const NeonHorizonSlider: React.FC<NeonHorizonSliderProps> = ({
           className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
         />
 
-        {/* Custom Glowing Thumb Marker */}
+        {/* Precision thumb marker */}
         <div
-          className={`absolute w-3.5 h-3.5 rounded-full bg-white border-2 border-cyan-400 ${colorStyles.glow} pointer-events-none transform -translate-x-1/2 transition-transform duration-75 ${
-            isHovered ? "scale-125" : "scale-100"
-          }`}
+          className={`absolute w-3.5 h-3.5 rounded-full bg-white border-2 border-slate-500/80 shadow-[0_1px_4px_rgba(0,0,0,0.5)] pointer-events-none transform -translate-x-1/2 transition-transform duration-75 ${
+ isHovered ? "scale-110" : "scale-100"
+ }`}
           style={{ left: `${percentage}%` }}
         />
       </div>

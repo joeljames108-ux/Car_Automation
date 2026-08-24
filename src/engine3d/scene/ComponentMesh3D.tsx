@@ -68,8 +68,13 @@ export const ComponentMesh3D: React.FC<ComponentMesh3DProps> = ({ instance }) =>
     // Synchronize 3D transform and live parametric scaling from engine specifications
     const t = instance.transform;
     const parametric = solveParametricTransformForComponent(instance.type, engineConfig || undefined);
+    const offset = parametric.positionOffset || [0, 0, 0];
 
-    groupRef.current.position.set(t.position.x, t.position.y, t.position.z);
+    groupRef.current.position.set(
+      t.position.x + offset[0],
+      t.position.y + offset[1],
+      t.position.z + offset[2]
+    );
     groupRef.current.rotation.set(t.rotation.x, t.rotation.y, t.rotation.z);
     groupRef.current.scale.set(
       t.scale.x * parametric.scale[0],

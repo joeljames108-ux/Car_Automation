@@ -49,7 +49,7 @@ export function NeonWindTunnelPro() {
         vx: 2 + (windSpeed / 50),
         vy: 0,
         life: Math.random(),
-        color: Math.random() > 0.3 ? "#00e5ff" : "#ff0055",
+        color: Math.random() > 0.3 ? "#38bdf8" : "#ff0055",
       });
     }
 
@@ -61,7 +61,7 @@ export function NeonWindTunnelPro() {
       const cx = w * 0.45;
       const cy = h * 0.55;
 
-      ctx.strokeStyle = "rgba(0, 229, 255, 0.4)";
+      ctx.strokeStyle = "rgba(56,189,248, 0.4)";
       ctx.lineWidth = 2;
       ctx.beginPath();
       // Nose
@@ -155,11 +155,11 @@ export function NeonWindTunnelPro() {
             }}
             className="p-6 flex flex-col gap-4"
           >
-            <div className="w-full h-52 bg-[#030712] rounded-xl border border-cyan-500/30 overflow-hidden relative shadow-[inset_0_0_25px_rgba(0,0,0,0.85)]">
+            <div className="w-full h-52 bg-[#030712] rounded-xl border border-sky-400/25 overflow-hidden relative shadow-[inset_0_0_25px_rgba(0,0,0,0.85)]">
               <canvas ref={canvasRef} width={640} height={210} className="w-full h-full" />
               <div className="absolute top-2 left-3 flex items-center gap-2">
-                <div className="w-2 h-2 rounded-full bg-cyan-400 animate-ping" />
-                <span className="text-[10px] nh-font-mono font-bold text-cyan-400">PARTICLE STREAMLINES · {windSpeed} KM/H AIRFLOW</span>
+                <div className="w-2 h-2 rounded-full bg-sky-300 animate-ping" />
+                <span className="text-[10px] nh-font-mono font-bold text-sky-400">PARTICLE STREAMLINES · {windSpeed} KM/H AIRFLOW</span>
               </div>
             </div>
 

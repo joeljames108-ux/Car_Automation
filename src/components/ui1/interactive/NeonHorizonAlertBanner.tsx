@@ -27,10 +27,10 @@ export function NeonHorizonAlertBanner({
 
   const accentClasses =
     type === "danger"
-      ? "bg-rose-950/80 border-rose-500/60 text-rose-200 shadow-[0_0_25px_rgba(244,63,94,0.3)]"
+      ? "bg-rose-950/80 border-rose-500/60 text-rose-200"
       : type === "warning"
-      ? "bg-amber-950/80 border-amber-500/60 text-amber-200 shadow-[0_0_25px_rgba(245,158,11,0.3)]"
-      : "bg-cyan-950/80 border-cyan-500/60 text-cyan-200 shadow-[0_0_25px_rgba(0,229,255,0.3)]";
+      ? "bg-amber-950/80 border-amber-500/60 text-amber-200"
+      : "bg-slate-900/80 border-sky-400/40 text-sky-200";
 
   return (
     <div

@@ -48,7 +48,7 @@ export function NeonEnduranceStudio() {
       ctx.fillRect(0, 0, w, h);
 
       // Radar Concentric Circles
-      ctx.strokeStyle = "rgba(0, 229, 255, 0.15)";
+      ctx.strokeStyle = "rgba(56,189,248, 0.15)";
       ctx.lineWidth = 1;
       for (let r = 30; r <= 90; r += 30) {
         ctx.beginPath();
@@ -57,7 +57,7 @@ export function NeonEnduranceStudio() {
       }
 
       // Radar Sweep Line
-      ctx.strokeStyle = "#00e5ff";
+      ctx.strokeStyle = "#38bdf8";
       ctx.lineWidth = 1.5;
       ctx.beginPath();
       ctx.moveTo(cx, cy);
@@ -66,7 +66,7 @@ export function NeonEnduranceStudio() {
 
       // Rain Cloud Blip
       if (weatherCondition === "rain") {
-        ctx.fillStyle = "rgba(0, 229, 255, 0.4)";
+        ctx.fillStyle = "rgba(56,189,248, 0.4)";
         ctx.beginPath();
         ctx.arc(cx + 40, cy - 30, 25, 0, Math.PI * 2);
         ctx.fill();
@@ -122,11 +122,11 @@ export function NeonEnduranceStudio() {
             }}
             className="p-6 flex flex-col gap-4"
           >
-            <div className="w-full h-48 bg-[#030712] rounded-xl border border-cyan-500/30 overflow-hidden relative flex items-center justify-center shadow-[inset_0_0_25px_rgba(0,0,0,0.85)]">
+            <div className="w-full h-48 bg-[#030712] rounded-xl border border-sky-400/25 overflow-hidden relative flex items-center justify-center shadow-[inset_0_0_25px_rgba(0,0,0,0.85)]">
               <canvas ref={radarCanvasRef} width={360} height={190} className="w-full h-full" />
               <div className="absolute top-2 left-3 flex items-center gap-2">
-                <div className="w-2 h-2 rounded-full bg-cyan-400 animate-ping" />
-                <span className="text-[10px] nh-font-mono font-bold text-cyan-400">CIRCUIT DE LA SARTHE · DOPPLER 500kW</span>
+                <div className="w-2 h-2 rounded-full bg-sky-300 animate-ping" />
+                <span className="text-[10px] nh-font-mono font-bold text-sky-400">CIRCUIT DE LA SARTHE · DOPPLER 500kW</span>
               </div>
             </div>
 
@@ -145,10 +145,10 @@ export function NeonEnduranceStudio() {
                       setWeatherCondition(item.id as "clear" | "overcast" | "rain");
                     }}
                     className={`p-2.5 rounded-lg border text-center text-xs font-bold cursor-pointer transition-all ${
-                      isSelected
-                        ? "bg-[#091a38] border-cyan-400 text-cyan-300 shadow-[0_0_12px_rgba(0,229,255,0.3)]"
-                        : "bg-[#060e22] border-white/10 text-slate-400 hover:border-cyan-500/30"
-                    }`}
+ isSelected
+ ? "bg-[#091a38] border-sky-400/40 text-sky-300"
+ : "bg-[#060e22] border-white/10 text-slate-400 hover:border-sky-400/25"
+ }`}
                   >
                     {item.name}
                   </div>
@@ -190,10 +190,10 @@ export function NeonEnduranceStudio() {
                     setActiveDriver(driver.id);
                   }}
                   className={`p-3.5 rounded-xl border transition-all cursor-pointer flex flex-col gap-1.5 ${
-                    isSelected
-                      ? "bg-[#091a38] border-cyan-400 shadow-[0_0_15px_rgba(0,229,255,0.3)]"
-                      : "bg-[#060e22] border-white/10 hover:border-cyan-500/30"
-                  }`}
+ isSelected
+ ? "bg-[#091a38] border-sky-400/40"
+ : "bg-[#060e22] border-white/10 hover:border-sky-400/25"
+ }`}
                 >
                   <div className="flex items-center justify-between">
                     <span className="text-xs font-bold text-slate-100">{driver.name}</span>

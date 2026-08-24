@@ -52,26 +52,10 @@ export const NeonArcGauge: React.FC<NeonArcGaugeProps> = ({
   const activePath = describeArc(cx, cy, radius, startAngle, Math.max(startAngle + 0.1, currentAngle));
 
   const colors = {
-    cyan: {
-      stroke: "#00e5ff",
-      glow: "drop-shadow(0 0 8px rgba(0, 229, 255, 0.75))",
-      text: "text-cyan-200",
-    },
-    magenta: {
-      stroke: "#e040fb",
-      glow: "drop-shadow(0 0 8px rgba(224, 64, 251, 0.75))",
-      text: "text-fuchsia-200",
-    },
-    gold: {
-      stroke: "#ffd740",
-      glow: "drop-shadow(0 0 8px rgba(255, 215, 64, 0.75))",
-      text: "text-amber-200",
-    },
-    emerald: {
-      stroke: "#00e676",
-      glow: "drop-shadow(0 0 8px rgba(0, 230, 118, 0.75))",
-      text: "text-emerald-200",
-    },
+    cyan: { stroke: "#7fb5d8", text: "text-sky-200" },
+    magenta: { stroke: "#9d8fc4", text: "text-violet-200" },
+    gold: { stroke: "#d9b36c", text: "text-amber-200" },
+    emerald: { stroke: "#6fbf9a", text: "text-emerald-200" },
   }[color];
 
   return (
@@ -95,7 +79,7 @@ export const NeonArcGauge: React.FC<NeonArcGaugeProps> = ({
           stroke={colors.stroke}
           strokeWidth="6"
           strokeLinecap="round"
-          style={{ filter: colors.glow, transition: "d 0.3s ease" }}
+          style={{ transition: "d 0.3s ease" }}
         />
       </svg>
 

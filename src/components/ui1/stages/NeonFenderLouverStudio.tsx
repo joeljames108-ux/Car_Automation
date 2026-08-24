@@ -50,7 +50,7 @@ export function NeonFenderLouverStudio() {
       ctx.clearRect(0, 0, w, h);
 
       // Wheel Arch Curve
-      ctx.strokeStyle = "rgba(0, 229, 255, 0.4)";
+      ctx.strokeStyle = "rgba(56,189,248, 0.4)";
       ctx.lineWidth = 2.5;
       ctx.beginPath();
       ctx.arc(w * 0.4, h * 0.75, 70, Math.PI, 0, false);
@@ -82,7 +82,7 @@ export function NeonFenderLouverStudio() {
         }
 
         // Upward Evacuating Streamlines
-        ctx.strokeStyle = "rgba(0, 229, 255, 0.8)";
+        ctx.strokeStyle = "rgba(56,189,248, 0.8)";
         ctx.lineWidth = 1.5;
 
         for (let i = 0; i < 4; i++) {
@@ -90,7 +90,7 @@ export function NeonFenderLouverStudio() {
           const sx = w * 0.32 + i * 14;
           const sy = h * 0.6 - offset;
 
-          ctx.fillStyle = "#00e5ff";
+          ctx.fillStyle = "#38bdf8";
           ctx.beginPath();
           ctx.arc(sx, sy, 2, 0, Math.PI * 2);
           ctx.fill();
@@ -141,10 +141,10 @@ export function NeonFenderLouverStudio() {
             }}
             className="p-6 flex flex-col gap-4"
           >
-            <div className="w-full h-52 bg-[#030712] rounded-xl border border-cyan-500/30 overflow-hidden relative shadow-[inset_0_0_25px_rgba(0,0,0,0.85)]">
+            <div className="w-full h-52 bg-[#030712] rounded-xl border border-sky-400/25 overflow-hidden relative shadow-[inset_0_0_25px_rgba(0,0,0,0.85)]">
               <canvas ref={canvasRef} width={640} height={210} className="w-full h-full" />
               <div className="absolute top-2 left-3 flex items-center gap-2">
-                <span className="text-[10px] nh-font-mono font-bold text-cyan-300">
+                <span className="text-[10px] nh-font-mono font-bold text-sky-300">
                   {isClosed ? "SEALED FENDER: WHEEL ARCH TRAPPED PRESSURE SPIKE" : "ACTIVE LOUVERS: HIGH-SPEED EVACUATION ATTACHED"}
                 </span>
               </div>
@@ -170,10 +170,10 @@ export function NeonFenderLouverStudio() {
                       else if (m.id === "sealed") setSlatAngleDeg(0);
                     }}
                     className={`p-2.5 rounded-lg border text-center text-xs font-bold cursor-pointer transition-all ${
-                      isSelected
-                        ? "bg-[#091a38] border-cyan-400 text-cyan-300 shadow-[0_0_12px_rgba(0,229,255,0.3)]"
-                        : "bg-[#060e22] border-white/10 text-slate-400 hover:border-cyan-500/30"
-                    }`}
+ isSelected
+ ? "bg-[#091a38] border-sky-400/40 text-sky-300"
+ : "bg-[#060e22] border-white/10 text-slate-400 hover:border-sky-400/25"
+ }`}
                   >
                     {m.name}
                   </div>
@@ -216,10 +216,10 @@ export function NeonFenderLouverStudio() {
               onChange={(val) => setLouverCount(val)}
             />
 
-            <div className="p-3.5 rounded-xl bg-[#060e22] border border-cyan-500/20 flex flex-col gap-2 font-mono text-xs">
+            <div className="p-3.5 rounded-xl bg-[#060e22] border border-sky-400/15 flex flex-col gap-2 font-mono text-xs">
               <div className="flex items-center justify-between">
                 <span className="text-slate-400">Actuator Type:</span>
-                <span className="text-cyan-300 font-bold">12V High-Torque Micro Servo</span>
+                <span className="text-sky-300 font-bold">12V High-Torque Micro Servo</span>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-slate-400">Slat Metallurgy:</span>

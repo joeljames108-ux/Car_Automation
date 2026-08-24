@@ -69,9 +69,9 @@ export const StageSwitcher: React.FC<StageSwitcherProps> = ({ stage, onSelectSta
         {stage === "ai" && <ApexAIStudio />}
         {(stage === "studio" || stage === "grand_studio") && <GrandAutomotiveStudioHub />}
         {stage === "engine" && <EngineDesigner />}
-        {stage === "vehicle" && <VehicleDesigner />}
-        {stage === "exterior" && <ExteriorDesigner />}
-        {stage === "aero" && <AeroLab />}
+        {stage === "vehicle" && <VehicleDesigner initialSubTab="linear_assembly" />}
+        {stage === "exterior" && <VehicleDesigner initialSubTab="exterior" />}
+        {stage === "aero" && <VehicleDesigner initialSubTab="aero" />}
         {stage === "interior" && <InteriorsDesigner />}
         {stage === "manufacturing" && <ManufacturingDesigner />}
         {stage === "infotainment" && <InfotainmentDesigner />}

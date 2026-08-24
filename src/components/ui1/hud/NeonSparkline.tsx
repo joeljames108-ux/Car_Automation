@@ -30,10 +30,10 @@ export const NeonSparkline: React.FC<NeonSparklineProps> = ({
     .join(" ");
 
   const colorMap = {
-    cyan: { stroke: "#00e5ff", glow: "drop-shadow(0 0 4px rgba(0, 229, 255, 0.8))" },
-    magenta: { stroke: "#e040fb", glow: "drop-shadow(0 0 4px rgba(224, 64, 251, 0.8))" },
-    gold: { stroke: "#ffd740", glow: "drop-shadow(0 0 4px rgba(255, 215, 64, 0.8))" },
-    emerald: { stroke: "#00e676", glow: "drop-shadow(0 0 4px rgba(0, 230, 118, 0.8))" },
+    cyan: { stroke: "#8fb9d9" },
+    magenta: { stroke: "#a99cc9" },
+    gold: { stroke: "#d9b36c" },
+    emerald: { stroke: "#7cbfa0" },
   }[color];
 
   return (
@@ -41,11 +41,10 @@ export const NeonSparkline: React.FC<NeonSparklineProps> = ({
       <polyline
         fill="none"
         stroke={colorMap.stroke}
-        strokeWidth="2"
+        strokeWidth="1.5"
         strokeLinecap="round"
         strokeLinejoin="round"
         points={points}
-        style={{ filter: colorMap.glow }}
       />
     </svg>
   );

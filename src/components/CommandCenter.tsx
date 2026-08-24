@@ -290,23 +290,101 @@ export function CommandCenter({ onSelectStage }: CommandCenterProps = {}) {
       {/* Chassis + Suspension */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <Section title="Chassis & Structure" icon={<Layers size={16} />}>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-2 mb-3">
             <StatTile label="Chassis" value={chassis.label} />
-            <StatTile label="Rigidity" value={`${(chassis.rigidityFactor * 100).toFixed(0)}%`} accent={chassis.rigidityFactor > 0.85 ? "ok" : "default"} />
             <StatTile label="CG Height" value={sim.cgHeight} unit="mm" />
-            <StatTile label="Weight Dist." value={`${(sim.weightDistFront * 100).toFixed(0)}/${(100 - sim.weightDistFront * 100).toFixed(0)}`} unit="F/R" accent={Math.abs(sim.weightDistFront - 0.5) < 0.1 ? "ok" : "warn"} />
-            <StatTile label="Safety Factor" value={`${(chassis.safetyFactor * 100).toFixed(0)}%`} accent="ok" />
             <StatTile label="Aero Weight" value={sim.aeroWeight} unit="kg" />
+          </div>
+          <div className="grid grid-cols-2 gap-3">
+            <div className="bg-base-800 border border-base-700/50 rounded-xl p-3 flex flex-col items-center">
+              <div className="text-[10px] uppercase tracking-widest text-slate-500 mb-2">Rigidity</div>
+              <div className="relative w-16 h-16">
+                <svg viewBox="0 0 36 36" className="w-full h-full -rotate-90">
+                  <circle cx="18" cy="18" r="15" fill="none" stroke="#1e293b" strokeWidth="3" />
+                  <circle cx="18" cy="18" r="15" fill="none"
+                    stroke={chassis.rigidityFactor > 0.85 ? "#10b981" : "#f59e0b"}
+                    strokeWidth="3" strokeLinecap="round"
+                    strokeDasharray="94.2" strokeDashoffset={94.2 * (1 - chassis.rigidityFactor)} />
+                </svg>
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <span className="font-mono text-sm font-bold text-slate-100">{(chassis.rigidityFactor * 100).toFixed(0)}%</span>
+                </div>
+              </div>
+            </div>
+            <div className="bg-base-800 border border-base-700/50 rounded-xl p-3">
+              <div className="text-[10px] uppercase tracking-widest text-slate-500 mb-2">Weight Distribution F/R</div>
+              <div className="flex h-6 rounded-lg overflow-hidden border border-base-700/50">
+                <div className="flex items-center justify-center text-[10px] font-mono font-bold text-white transition-all duration-500"
+                  style={{ width: (sim.weightDistFront * 100) + "%", background: "linear-gradient(135deg, #f59e0b, #d97706)", boxShadow: "inset 0 1px 1px rgba(255,255,255,0.2)" }}>
+                  {(sim.weightDistFront * 100).toFixed(0)}%
+                </div>
+                <div className="flex items-center justify-center text-[10px] font-mono font-bold text-white transition-all duration-500"
+                  style={{ width: ((1 - sim.weightDistFront) * 100) + "%", background: "linear-gradient(135deg, #22d3ee, #0891b2)", boxShadow: "inset 0 1px 1px rgba(255,255,255,0.2)" }}>
+                  {(100 - sim.weightDistFront * 100).toFixed(0)}%
+                </div>
+              </div>
+              <div className="flex justify-between mt-1.5 text-[10px] text-slate-500 font-mono"><span>Front</span><span>Rear</span></div>
+            </div>
+          </div>
+          <div className="mt-3 bg-base-800 border border-base-700/50 rounded-xl p-3">
+            <div className="flex items-center justify-between text-xs mb-1.5">
+              <span className="flex items-center gap-1.5 text-slate-300"><ShieldCheck size={12} className="text-emerald-400" />Safety Factor</span>
+              <span className="font-mono text-sm font-bold text-emerald-400">{(chassis.safetyFactor * 100).toFixed(0)}%</span>
+            </div>
+            <div className="h-2.5 bg-base-700 rounded-full overflow-hidden">
+              <div className="h-full rounded-full transition-all duration-700" style={{ width: (chassis.safetyFactor * 100) + "%", background: "linear-gradient(90deg, #059669, #10b981)", boxShadow: "0 0 8px rgba(16,185,129,0.3)" }} />
+            </div>
           </div>
         </Section>
         <Section title="Suspension Geometry" icon={<CircleDot size={16} />}>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
-            <StatTile label="Front Camber" value={design.vehicle.camberF} unit="°" />
-            <StatTile label="Rear Camber" value={design.vehicle.camberR} unit="°" />
-            <StatTile label="Front Toe" value={design.vehicle.toeF} unit="°" />
-            <StatTile label="Rear Toe" value={design.vehicle.toeR} unit="°" />
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-2 mb-3">
             <StatTile label="Ride Height" value={design.vehicle.rideHeight} unit="mm" />
-            <StatTile label="Spring F/R" value={`${design.vehicle.springRateF}/${design.vehicle.springRateR}`} unit="N/mm" />
+            <StatTile label="Spring F/R" value={design.vehicle.springRateF + "/" + design.vehicle.springRateR} unit="N/mm" />
+          </div>
+          <div className="bg-base-800 border border-base-700/50 rounded-xl p-4">
+            <div className="text-[10px] uppercase tracking-widest text-slate-500 mb-3">Wheel Alignment Overview</div>
+            <div className="grid grid-cols-2 gap-4">
+              <div className="text-center">
+                <div className="text-[10px] text-amber-400 font-semibold uppercase mb-2">Front Axle</div>
+                <div className="flex justify-center gap-3">
+                  <div className="flex flex-col items-center">
+                    <svg width="28" height="60" viewBox="0 0 28 60">
+                      <rect x="10" y="2" width="8" height="56" rx="3" fill="#334155" stroke="#475569" strokeWidth="1" />
+                      <line x1="14" y1="0" x2={14 + Math.tan(design.vehicle.camberF * Math.PI / 180) * 56} y2="58" stroke="#f59e0b" strokeWidth="2.5" strokeLinecap="round" opacity="0.8" />
+                    </svg>
+                    <div className="font-mono text-[10px] text-amber-300 mt-1">{design.vehicle.camberF}°</div>
+                  </div>
+                  <div className="flex flex-col items-center">
+                    <svg width="28" height="60" viewBox="0 0 28 60">
+                      <rect x="10" y="2" width="8" height="56" rx="3" fill="#334155" stroke="#475569" strokeWidth="1" />
+                      <line x1="14" y1="0" x2={14 - Math.tan(design.vehicle.camberF * Math.PI / 180) * 56} y2="58" stroke="#f59e0b" strokeWidth="2.5" strokeLinecap="round" opacity="0.8" />
+                    </svg>
+                    <div className="font-mono text-[10px] text-amber-300 mt-1">{design.vehicle.camberF}°</div>
+                  </div>
+                </div>
+                <div className="text-[9px] text-slate-500 mt-1">Toe: {design.vehicle.toeF}°</div>
+              </div>
+              <div className="text-center">
+                <div className="text-[10px] text-cyan-400 font-semibold uppercase mb-2">Rear Axle</div>
+                <div className="flex justify-center gap-3">
+                  <div className="flex flex-col items-center">
+                    <svg width="28" height="60" viewBox="0 0 28 60">
+                      <rect x="10" y="2" width="8" height="56" rx="3" fill="#334155" stroke="#475569" strokeWidth="1" />
+                      <line x1="14" y1="0" x2={14 + Math.tan(design.vehicle.camberR * Math.PI / 180) * 56} y2="58" stroke="#22d3ee" strokeWidth="2.5" strokeLinecap="round" opacity="0.8" />
+                    </svg>
+                    <div className="font-mono text-[10px] text-cyan-300 mt-1">{design.vehicle.camberR}°</div>
+                  </div>
+                  <div className="flex flex-col items-center">
+                    <svg width="28" height="60" viewBox="0 0 28 60">
+                      <rect x="10" y="2" width="8" height="56" rx="3" fill="#334155" stroke="#475569" strokeWidth="1" />
+                      <line x1="14" y1="0" x2={14 - Math.tan(design.vehicle.camberR * Math.PI / 180) * 56} y2="58" stroke="#22d3ee" strokeWidth="2.5" strokeLinecap="round" opacity="0.8" />
+                    </svg>
+                    <div className="font-mono text-[10px] text-cyan-300 mt-1">{design.vehicle.camberR}°</div>
+                  </div>
+                </div>
+                <div className="text-[9px] text-slate-500 mt-1">Toe: {design.vehicle.toeR}°</div>
+              </div>
+            </div>
           </div>
         </Section>
       </div>
@@ -317,16 +395,28 @@ export function CommandCenter({ onSelectStage }: CommandCenterProps = {}) {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mb-3">
             <StatTile label="Fastest" value={fastestLap ? formatLap(fastestLap.time) : "—"} sub={fastestLap?.trackName} accent="ok" />
             <StatTile label="Slowest" value={slowestLap ? formatLap(slowestLap.time) : "—"} sub={slowestLap?.trackName} />
-            <StatTile label="Spread" value={fastestLap && slowestLap ? `${(slowestLap.time - fastestLap.time).toFixed(2)}s` : "—"} />
+            <StatTile label="Spread" value={fastestLap && slowestLap ? (slowestLap.time - fastestLap.time).toFixed(2) + "s" : "—"} />
             <StatTile label="Tracks" value={sortedLaps.length} />
           </div>
-          <div className="space-y-1 max-h-40 overflow-y-auto">
-            {sortedLaps.slice(0, 6).map((lap, i) => (
-              <div key={lap.trackId} className="flex items-center justify-between text-xs py-1 px-2 rounded hover:bg-base-850/50">
-                <span className="text-slate-400 flex items-center gap-1.5"><Flag size={11} className="text-cyan-400 shrink-0" />{i + 1}. {lap.trackName}</span>
-                <span className="font-mono text-accent-300">{formatLap(lap.time)}</span>
-              </div>
-            ))}
+          <div className="space-y-1.5 max-h-52 overflow-y-auto">
+            {sortedLaps.slice(0, 8).map((lap, i) => {
+              const maxT = slowestLap?.time || 1;
+              const minT = fastestLap?.time || 0;
+              const range = maxT - minT || 1;
+              const barPct = 40 + ((lap.time - minT) / range) * 60;
+              const grads = ["linear-gradient(90deg,#f59e0b,#fbbf24)","linear-gradient(90deg,#94a3b8,#cbd5e1)","linear-gradient(90deg,#d97706,#f59e0b)","linear-gradient(90deg,#64748b,#94a3b8)","linear-gradient(90deg,#475569,#64748b)","linear-gradient(90deg,#334155,#475569)","linear-gradient(90deg,#1e293b,#334155)","linear-gradient(90deg,#0f172a,#1e293b)"];
+              return (
+                <div key={lap.trackId} className="group flex items-center gap-2 py-1 px-2 rounded-lg hover:bg-base-800/80 transition-colors">
+                  <span className="font-mono text-xs text-slate-500 w-4 text-right shrink-0">{i + 1}</span>
+                  <Flag size={10} className={i === 0 ? "text-amber-400" : "text-slate-600"} />
+                  <span className="text-xs text-slate-400 flex-1 truncate min-w-0">{lap.trackName}</span>
+                  <div className="w-24 h-2 bg-base-800 rounded-full overflow-hidden shrink-0">
+                    <div className="h-full rounded-full transition-all duration-700" style={{ width: barPct + "%", background: grads[i] || grads[7], boxShadow: i === 0 ? "0 0 8px rgba(245,158,11,0.4)" : "none" }} />
+                  </div>
+                  <span className={"font-mono text-xs font-bold shrink-0 " + (i === 0 ? "text-amber-300" : "text-slate-300")}>{formatLap(lap.time)}</span>
+                </div>
+              );
+            })}
           </div>
         </Section>
         <Section title="Production Cost & Manufacturing" icon={<DollarSign size={16} />}>
@@ -594,32 +684,39 @@ function SystemBar({ label, value, good, icon, invert }: {
 }) {
   const pct = Math.min(value * 100, 100);
   const isGood = invert ? value < good : value >= good;
+  const grad = isGood ? "linear-gradient(90deg, #059669, #10b981, #34d399)" : "linear-gradient(90deg, #d97706, #f59e0b, #fbbf24)";
+  const glow = isGood ? "rgba(16,185,129,0.4)" : "rgba(245,158,11,0.4)";
   return (
-    <div>
-      <div className="flex items-center justify-between text-xs mb-1">
-        <span className="flex items-center gap-1.5 text-slate-400">{icon}{label}</span>
-        <span className={`font-mono ${isGood ? "text-ok-400" : "text-warn-400"}`}>{pct.toFixed(0)}%</span>
+    <div className="group">
+      <div className="flex items-center justify-between text-xs mb-1.5">
+        <span className="flex items-center gap-1.5 text-slate-300 font-medium">{icon}{label}</span>
+        <span className={"font-mono font-bold text-sm " + (isGood ? "text-emerald-400" : "text-amber-400")}>{pct.toFixed(0)}%</span>
       </div>
-      <div className="h-2 bg-base-850 rounded-full overflow-hidden">
-        <div className={`h-full rounded-full transition-all duration-500 ${isGood ? "bg-ok-500" : "bg-warn-500"}`} style={{ width: `${pct}%` }} />
+      <div className="h-3.5 bg-base-800 rounded-full overflow-hidden border border-base-700/50 shadow-inner relative">
+        <div className="h-full rounded-full transition-all duration-700 ease-out relative overflow-hidden group-hover:brightness-110"
+          style={{ width: pct + "%", background: grad, boxShadow: "0 0 12px " + glow + ", inset 0 1px 1px rgba(255,255,255,0.2)" }}>
+          <div className="absolute inset-0 bg-gradient-to-b from-white/20 to-transparent rounded-full" />
+        </div>
       </div>
     </div>
   );
+
+
 }
 
 function CostBar({ label, value, total, color, icon }: { label: string; value: number; total: number; color: string; icon?: React.ReactNode }) {
   const pct = total > 0 ? (value / total) * 100 : 0;
   return (
-    <div>
-      <div className="flex justify-between text-xs mb-1">
-        <span className="flex items-center gap-1.5 text-slate-400">
-          {icon}
-          <span>{label}</span>
-        </span>
-        <span className="font-mono text-slate-200">${(value / 1000).toFixed(1)}k <span className="text-slate-600">({pct.toFixed(0)}%)</span></span>
+    <div className="group">
+      <div className="flex justify-between text-xs mb-1.5">
+        <span className="flex items-center gap-1.5 text-slate-300 font-medium">{icon}<span>{label}</span></span>
+        <span className="font-mono text-slate-200 font-semibold">{"$" + (value/1000).toFixed(1) + "k"} <span className="text-slate-500 text-[10px]">({"(" + pct.toFixed(0) + "%"})</span></span>
       </div>
-      <div className="h-2.5 bg-base-850 rounded-full overflow-hidden">
-        <div className="h-full rounded-full transition-all duration-500" style={{ width: `${pct}%`, background: color }} />
+      <div className="h-3.5 bg-base-800 rounded-full overflow-hidden border border-base-700/50 shadow-inner">
+        <div className="h-full rounded-full transition-all duration-700 ease-out relative overflow-hidden group-hover:brightness-110"
+          style={{ width: pct + "%", background: "linear-gradient(90deg, "+color+", "+color+"dd)", boxShadow: "0 0 10px "+color+"66, inset 0 1px 1px rgba(255,255,255,0.15)" }}>
+          <div className="absolute inset-0 bg-gradient-to-b from-white/20 to-transparent rounded-full" />
+        </div>
       </div>
     </div>
   );

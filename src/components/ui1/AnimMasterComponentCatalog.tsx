@@ -108,7 +108,7 @@ export function AnimMasterComponentCatalog() {
               }}
               className="p-6"
             >
-              <div className="flex justify-center items-center p-8 bg-[#040712]/80 rounded-2xl border border-cyan-500/20 min-h-[300px] perspective-1000">
+              <div className="flex justify-center items-center p-8 bg-[#040712]/80 rounded-2xl border border-sky-400/15 min-h-[300px] perspective-1000">
                 <div
                   onMouseMove={handleMouseMoveCard}
                   onMouseLeave={handleMouseLeaveCard}
@@ -117,7 +117,7 @@ export function AnimMasterComponentCatalog() {
                     transition: cardTilt.rx === 0 ? "transform 0.5s ease-out" : "none",
                     transformStyle: "preserve-3d",
                   }}
-                  className="w-full max-w-md bg-gradient-to-br from-[#0a1226]/90 via-[#101c3d]/90 to-[#0a1226]/90 p-6 rounded-2xl border border-cyan-400/50 shadow-[0_20px_50px_rgba(0,0,0,0.8),0_0_30px_rgba(0,229,255,0.2)] relative overflow-hidden cursor-pointer group"
+                  className="w-full max-w-md bg-gradient-to-br from-[#0a1226]/90 via-[#101c3d]/90 to-[#0a1226]/90 p-6 rounded-2xl border border-sky-400/30 shadow-[0_20px_50px_rgba(0,0,0,0.8)] relative overflow-hidden cursor-pointer group"
                 >
                   {/* Dynamic Glare */}
                   <div
@@ -129,27 +129,27 @@ export function AnimMasterComponentCatalog() {
                   />
 
                   <div className="flex items-center justify-between mb-4">
-                    <span className="text-xs nh-font-mono font-bold text-cyan-400 tracking-wider">APEX AUTOMOTIVE TELEMETRY</span>
+                    <span className="text-xs nh-font-mono font-bold text-sky-400 tracking-wider">APEX AUTOMOTIVE TELEMETRY</span>
                     <NeonHorizonBadge variant="magenta">HYPERCAR V8</NeonHorizonBadge>
                   </div>
 
-                  <h4 className="text-xl font-black text-slate-100 mb-2 group-hover:text-cyan-300 transition-colors">
+                  <h4 className="text-xl font-black text-slate-100 mb-2 group-hover:text-sky-300 transition-colors">
                     Koenigsegg Jesko Attack Telemetry
                   </h4>
                   <p className="text-xs text-slate-300 mb-6 leading-relaxed">
                     Ultra-high downforce active aerodynamics (1000kg @ 275km/h) coupled with a 1600 HP Twin-Turbo Flat-Plane V8.
                   </p>
 
-                  <div className="grid grid-cols-3 gap-3 border-t border-cyan-500/20 pt-4 nh-font-mono">
-                    <div className="bg-[#050917] p-2.5 rounded-xl border border-cyan-500/20 text-center">
+                  <div className="grid grid-cols-3 gap-3 border-t border-sky-400/15 pt-4 nh-font-mono">
+                    <div className="bg-[#050917] p-2.5 rounded-xl border border-sky-400/15 text-center">
                       <div className="text-[9px] text-slate-400">POWER</div>
-                      <div className="text-sm font-bold text-cyan-300">1600 HP</div>
+                      <div className="text-sm font-bold text-sky-300">1600 HP</div>
                     </div>
-                    <div className="bg-[#050917] p-2.5 rounded-xl border border-cyan-500/20 text-center">
+                    <div className="bg-[#050917] p-2.5 rounded-xl border border-sky-400/15 text-center">
                       <div className="text-[9px] text-slate-400">REDLINE</div>
-                      <div className="text-sm font-bold text-fuchsia-300">8500 RPM</div>
+                      <div className="text-sm font-bold text-sky-300">8500 RPM</div>
                     </div>
-                    <div className="bg-[#050917] p-2.5 rounded-xl border border-cyan-500/20 text-center">
+                    <div className="bg-[#050917] p-2.5 rounded-xl border border-sky-400/15 text-center">
                       <div className="text-[9px] text-slate-400">TOP SPEED</div>
                       <div className="text-sm font-bold text-emerald-300">480 km/h</div>
                     </div>
@@ -230,11 +230,11 @@ export function AnimMasterComponentCatalog() {
               ].map((item, i) => (
                 <div
                   key={i}
-                  className="p-3 rounded-xl bg-[#081226]/80 border border-cyan-500/20 flex items-center justify-between"
+                  className="p-3 rounded-xl bg-[#081226]/80 border border-sky-400/15 flex items-center justify-between"
                 >
                   <span className="text-xs font-bold text-slate-100">{item.name}</span>
                   <div className="flex items-center gap-3">
-                    <span className="text-[10px] nh-font-mono text-cyan-300">{item.latency}</span>
+                    <span className="text-[10px] nh-font-mono text-sky-300">{item.latency}</span>
                     <NeonHorizonBadge variant="live">{item.status}</NeonHorizonBadge>
                   </div>
                 </div>
@@ -281,7 +281,7 @@ export function AnimMasterComponentCatalog() {
             }}
             className="p-4"
           >
-            <pre className="p-3 rounded-xl bg-[#03060f] border border-cyan-500/20 text-[11px] nh-font-mono text-cyan-300 overflow-x-auto">
+            <pre className="p-3 rounded-xl bg-[#03060f] border border-sky-400/15 text-[11px] nh-font-mono text-sky-300 overflow-x-auto">
               <code>{`<NeonHorizonGlassPanel
   variant="primary"
   glow="cyan"

@@ -65,9 +65,9 @@ export function NeonTorqueVectoringStudio() {
             }}
             className="p-6 flex flex-col gap-4"
           >
-            <div className="grid grid-cols-2 gap-4 p-4 rounded-xl bg-[#030712] border border-cyan-500/30 shadow-[inset_0_0_20px_rgba(0,0,0,0.8)]">
+            <div className="grid grid-cols-2 gap-4 p-4 rounded-xl bg-[#030712] border border-sky-400/25 shadow-[inset_0_0_20px_rgba(0,0,0,0.8)]">
               {[
-                { pos: "FRONT LEFT (FL)", torque: `${Math.round(frontTorqueNm * 0.45)} Nm`, regen: "DRIVE", color: "text-cyan-300" },
+                { pos: "FRONT LEFT (FL)", torque: `${Math.round(frontTorqueNm * 0.45)} Nm`, regen: "DRIVE", color: "text-sky-300" },
                 { pos: "FRONT RIGHT (FR)", torque: `${Math.round(frontTorqueNm * 0.55)} Nm`, regen: "OVERDRIVE", color: "text-emerald-300" },
                 { pos: "REAR LEFT (RL)", torque: `${Math.round(rearTorqueNm * 0.35)} Nm`, regen: "TUCK-IN", color: "text-amber-300" },
                 { pos: "REAR RIGHT (RR)", torque: `${Math.round(rearTorqueNm * 0.65)} Nm`, regen: "APEX PUSH", color: "text-rose-400" },
@@ -80,7 +80,7 @@ export function NeonTorqueVectoringStudio() {
                   </div>
                   <div className="flex items-center justify-between">
                     <span className="text-slate-400">Vector State:</span>
-                    <span className="text-cyan-300 font-bold">{wheel.regen}</span>
+                    <span className="text-sky-300 font-bold">{wheel.regen}</span>
                   </div>
                 </div>
               ))}
@@ -102,10 +102,10 @@ export function NeonTorqueVectoringStudio() {
                       setVectorMode(m.id as "track_apex" | "pure_rwd_drift" | "torque_overdrive" | "snow_ice_50");
                     }}
                     className={`p-2.5 rounded-lg border text-center text-xs font-bold cursor-pointer transition-all ${
-                      isSelected
-                        ? "bg-[#091a38] border-cyan-400 text-cyan-300 shadow-[0_0_12px_rgba(0,229,255,0.3)]"
-                        : "bg-[#060e22] border-white/10 text-slate-400 hover:border-cyan-500/30"
-                    }`}
+ isSelected
+ ? "bg-[#091a38] border-sky-400/40 text-sky-300"
+ : "bg-[#060e22] border-white/10 text-slate-400 hover:border-sky-400/25"
+ }`}
                   >
                     {m.name}
                   </div>
@@ -148,10 +148,10 @@ export function NeonTorqueVectoringStudio() {
               onChange={(val) => setYawMomentAggressiveness(val)}
             />
 
-            <div className="p-3.5 rounded-xl bg-[#060e22] border border-cyan-500/20 flex flex-col gap-2 font-mono text-xs">
+            <div className="p-3.5 rounded-xl bg-[#060e22] border border-sky-400/15 flex flex-col gap-2 font-mono text-xs">
               <div className="flex items-center justify-between">
                 <span className="text-slate-400">Response Rate:</span>
-                <span className="text-cyan-300 font-bold">1,000 Hz CAN-FD Loop</span>
+                <span className="text-sky-300 font-bold">1,000 Hz CAN-FD Loop</span>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-slate-400">Max Regen Vector:</span>

@@ -10,6 +10,43 @@ import * as THREE from 'three';
 import type { MaterialVariantVisual } from '../types';
 import type { EngineConfig } from '../../sim/types';
 
+/** Generates anisotropic brushed metal normal map with radial grain. */
+function genAnisoBrushed(size: number = 512): HTMLCanvasElement {
+  const cv = document.createElement("canvas"); cv.width = cv.height = size;
+  const ctx = cv.getContext("2d")!;
+  ctx.fillStyle = "#8080ff"; ctx.fillRect(0, 0, size, size);
+  const cx = size / 2, cy = size / 2;
+  for (let y = 0; y < size; y++) {
+    for (let x = 0; x < size; x += 2) {
+      const a = Math.atan2(y - cy, x - cx), d = Math.hypot(x - cx, y - cy);
+      const v = Math.sin(a * 120 + d * 0.3) * 0.12 + (Math.random() - 0.5) * 0.04;
+      ctx.fillStyle = "rgb(" + (128 + v * 60 | 0) + ",128,255)";
+      ctx.fillRect(x, y, 2, 1);
+    }
+  }
+  return cv;
+}
+
+/** Generates embossed foil thermal blanket texture. */
+function genEmbossedFoil(size: number = 256): HTMLCanvasElement {
+  const cv = document.createElement("canvas"); cv.width = cv.height = size;
+  const ctx = cv.getContext("2d")!;
+  ctx.fillStyle = "#808080"; ctx.fillRect(0, 0, size, size);
+  const id = ctx.getImageData(0, 0, size, size);
+  for (let y = 0; y < size; y++) {
+    for (let x = 0; x < size; x++) {
+      const i = (y * size + x) * 4;
+      const dx2 = (x % 32) - 16, dy2 = (y % 32) - 16;
+      const e = Math.max(0, 1 - Math.hypot(dx2, dy2) / 16) * 40;
+      const v = Math.min(255, Math.max(0, 128 + e + (Math.random() - 0.5) * 15));
+      id.data[i] = id.data[i+1] = id.data[i+2] = v;
+    }
+  }
+  ctx.putImageData(id, 0, 0);
+  return cv;
+}
+
+
 // ============================================================================
 // 1. PROCEDURAL TEXTURE GENERATION UTILITIES
 // ============================================================================
@@ -144,6 +181,8 @@ export class EngineMaterialLibrary {
       castTexture.wrapT = THREE.RepeatWrapping;
       castTexture.repeat.set(6, 6);
       this.textureCache.set('cast_iron', castTexture);
+      try { const cv = genAnisoBrushed(512); const t = new THREE.CanvasTexture(cv); t.wrapS = t.wrapT = THREE.RepeatWrapping; t.repeat.set(4,4); this.textureCache.set("anisotropic_brushed", t); } catch {}
+      try { const cv = genEmbossedFoil(256); const t = new THREE.CanvasTexture(cv); t.wrapS = t.wrapT = THREE.RepeatWrapping; t.repeat.set(6,6); this.textureCache.set("embossed_foil", t); } catch {}
     } catch (err) {
       console.warn('[EngineMaterialLibrary] Procedural canvas texture generation skipped:', err);
     }
@@ -151,10 +190,10 @@ export class EngineMaterialLibrary {
 
   // ─── 2.1 BASE MATERIAL PRESET CREATORS ───
 
-  public getCastIron(): THREE.MeshStandardMaterial {
+  public getCastIron(): THREE.MeshPhysicalMaterial {
     const key = 'base_cast_iron';
     if (!this.materialCache.has(key)) {
-      const mat = new THREE.MeshStandardMaterial({
+      const mat = new THREE.MeshPhysicalMaterial({
         name: 'Heavy_Duty_Ductile_Cast_Iron',
         color: new THREE.Color(0x64748b),
         metalness: 0.85,
@@ -163,16 +202,18 @@ export class EngineMaterialLibrary {
         bumpMap: this.textureCache.get('cast_iron') || null,
         bumpScale: 0.015,
         envMapIntensity: 2.0,
+        clearcoat: 0.15,
+        clearcoatRoughness: 0.6,
       });
       this.materialCache.set(key, mat);
     }
-    return this.materialCache.get(key) as THREE.MeshStandardMaterial;
+    return this.materialCache.get(key) as THREE.MeshPhysicalMaterial;
   }
 
-  public getTitaniumAerospace(): THREE.MeshStandardMaterial {
+  public getTitaniumAerospace(): THREE.MeshPhysicalMaterial {
     const key = 'base_titanium_aerospace';
     if (!this.materialCache.has(key)) {
-      const mat = new THREE.MeshStandardMaterial({
+      const mat = new THREE.MeshPhysicalMaterial({
         name: 'Ti_6Al_4V_Aerospace_Titanium',
         color: new THREE.Color(0xc4b5fd),
         metalness: 0.92,
@@ -180,149 +221,181 @@ export class EngineMaterialLibrary {
         normalMap: this.textureCache.get('brushed_metal') || null,
         normalScale: new THREE.Vector2(0.15, 0.15),
         envMapIntensity: 2.4,
+        clearcoat: 0.4,
+        clearcoatRoughness: 0.08,
+        sheen: 0.15,
+        sheenColor: new THREE.Color(0xa5b4fc),
       });
       this.materialCache.set(key, mat);
     }
-    return this.materialCache.get(key) as THREE.MeshStandardMaterial;
+    return this.materialCache.get(key) as THREE.MeshPhysicalMaterial;
   }
 
-  public getForgedSteel(): THREE.MeshStandardMaterial {
+  public getForgedSteel(): THREE.MeshPhysicalMaterial {
     const key = 'base_forged_steel';
     if (!this.materialCache.has(key)) {
-      const mat = new THREE.MeshStandardMaterial({
+      const mat = new THREE.MeshPhysicalMaterial({
         name: 'Forged_4340_Chromoly_Steel',
         color: new THREE.Color(0xcfd8dc),
         metalness: 0.90,
         roughness: 0.18,
         envMapIntensity: 2.2,
+        clearcoat: 0.35,
+        clearcoatRoughness: 0.1,
       });
       this.materialCache.set(key, mat);
     }
-    return this.materialCache.get(key) as THREE.MeshStandardMaterial;
+    return this.materialCache.get(key) as THREE.MeshPhysicalMaterial;
   }
 
-  public getCastAluminum(): THREE.MeshStandardMaterial {
+  public getCastAluminum(): THREE.MeshPhysicalMaterial {
     const key = 'base_cast_aluminum';
     if (!this.materialCache.has(key)) {
-      const mat = new THREE.MeshStandardMaterial({
+      const mat = new THREE.MeshPhysicalMaterial({
         name: 'Cast_Magnesium_Aluminum',
         color: new THREE.Color(0x94a3b8),
         metalness: 0.88,
         roughness: 0.26,
         roughnessMap: this.textureCache.get('cast_iron') || null,
         envMapIntensity: 2.2,
+        clearcoat: 0.2,
+        clearcoatRoughness: 0.3,
       });
       this.materialCache.set(key, mat);
     }
-    return this.materialCache.get(key) as THREE.MeshStandardMaterial;
+    return this.materialCache.get(key) as THREE.MeshPhysicalMaterial;
   }
 
-  public getMachinedBillet(): THREE.MeshStandardMaterial {
+  public getMachinedBillet(): THREE.MeshPhysicalMaterial {
     const key = 'base_machined_billet';
     if (!this.materialCache.has(key)) {
-      const mat = new THREE.MeshStandardMaterial({
+      const mat = new THREE.MeshPhysicalMaterial({
         name: 'Machined_Billet_Surface',
         color: new THREE.Color(0xe2e8f0),
         metalness: 0.94,
         roughness: 0.12,
-        normalMap: this.textureCache.get('brushed_metal') || null,
+        normalMap: this.textureCache.get('anisotropic_brushed') || this.textureCache.get('brushed_metal') || null,
         normalScale: new THREE.Vector2(0.25, 0.25),
         envMapIntensity: 2.5,
+        clearcoat: 0.5,
+        clearcoatRoughness: 0.05,
+        sheen: 0.2,
+        sheenColor: new THREE.Color(0xd1d5db),
       });
       this.materialCache.set(key, mat);
     }
-    return this.materialCache.get(key) as THREE.MeshStandardMaterial;
+    return this.materialCache.get(key) as THREE.MeshPhysicalMaterial;
   }
 
-  public getNitridedCrank(): THREE.MeshStandardMaterial {
+  public getNitridedCrank(): THREE.MeshPhysicalMaterial {
     const key = 'base_nitrided_crank';
     if (!this.materialCache.has(key)) {
-      const mat = new THREE.MeshStandardMaterial({
+      const mat = new THREE.MeshPhysicalMaterial({
         name: 'Forged_Nitrided_Steel',
         color: new THREE.Color(0xdbeafe),
         metalness: 0.95,
         roughness: 0.12,
         envMapIntensity: 2.4,
+        clearcoat: 0.6,
+        clearcoatRoughness: 0.03,
       });
       this.materialCache.set(key, mat);
     }
-    return this.materialCache.get(key) as THREE.MeshStandardMaterial;
+    return this.materialCache.get(key) as THREE.MeshPhysicalMaterial;
   }
 
-  public getGoldAnodized(): THREE.MeshStandardMaterial {
+  public getGoldAnodized(): THREE.MeshPhysicalMaterial {
     const key = 'base_gold_anodized';
     if (!this.materialCache.has(key)) {
-      const mat = new THREE.MeshStandardMaterial({
+      const mat = new THREE.MeshPhysicalMaterial({
         name: 'Billet_Gold_Anodized',
         color: new THREE.Color(0xf59e0b),
         metalness: 0.92,
         roughness: 0.18,
         envMapIntensity: 1.8,
+        clearcoat: 0.7,
+        clearcoatRoughness: 0.04,
+        sheen: 0.1,
       });
       this.materialCache.set(key, mat);
     }
-    return this.materialCache.get(key) as THREE.MeshStandardMaterial;
+    return this.materialCache.get(key) as THREE.MeshPhysicalMaterial;
   }
 
-  public getCobaltAnodized(): THREE.MeshStandardMaterial {
+  public getCobaltAnodized(): THREE.MeshPhysicalMaterial {
     const key = 'base_cobalt_anodized';
     if (!this.materialCache.has(key)) {
-      const mat = new THREE.MeshStandardMaterial({
+      const mat = new THREE.MeshPhysicalMaterial({
         name: 'Apex_Cobalt_Blue_Anodized',
         color: new THREE.Color(0x0284c7),
         metalness: 0.88,
         roughness: 0.18,
         envMapIntensity: 1.8,
+        clearcoat: 0.7,
+        clearcoatRoughness: 0.04,
+        sheen: 0.15,
+        sheenColor: new THREE.Color(0x38bdf8),
       });
       this.materialCache.set(key, mat);
     }
-    return this.materialCache.get(key) as THREE.MeshStandardMaterial;
+    return this.materialCache.get(key) as THREE.MeshPhysicalMaterial;
   }
 
-  public getCeramicIntake(): THREE.MeshStandardMaterial {
+  public getCeramicIntake(): THREE.MeshPhysicalMaterial {
     const key = 'base_ceramic_intake';
     if (!this.materialCache.has(key)) {
-      const mat = new THREE.MeshStandardMaterial({
+      const mat = new THREE.MeshPhysicalMaterial({
         name: 'Thermal_Barrier_Ceramic_White',
         color: new THREE.Color(0xf8fafc),
         metalness: 0.20,
         roughness: 0.35,
         envMapIntensity: 0.9,
+        clearcoat: 0.3,
+        clearcoatRoughness: 0.2,
+        sheen: 0.1,
       });
       this.materialCache.set(key, mat);
     }
-    return this.materialCache.get(key) as THREE.MeshStandardMaterial;
+    return this.materialCache.get(key) as THREE.MeshPhysicalMaterial;
   }
 
-  public getInconelExhaust(): THREE.MeshStandardMaterial {
+  public getInconelExhaust(): THREE.MeshPhysicalMaterial {
     const key = 'base_inconel_exhaust';
     if (!this.materialCache.has(key)) {
-      const mat = new THREE.MeshStandardMaterial({
+      const mat = new THREE.MeshPhysicalMaterial({
         name: 'Inconel_625_Heat_Tinted_Gold',
         color: new THREE.Color(0xd97706),
         metalness: 0.92,
         roughness: 0.24,
         envMapIntensity: 1.6,
+        clearcoat: 0.4,
+        clearcoatRoughness: 0.08,
+        sheen: 0.12,
+        sheenColor: new THREE.Color(0xfbbf24),
       });
       this.materialCache.set(key, mat);
     }
-    return this.materialCache.get(key) as THREE.MeshStandardMaterial;
+    return this.materialCache.get(key) as THREE.MeshPhysicalMaterial;
   }
 
-  public getDryCarbonFiber(): THREE.MeshStandardMaterial {
+  public getDryCarbonFiber(): THREE.MeshPhysicalMaterial {
     const key = 'base_dry_carbon_fiber';
     if (!this.materialCache.has(key)) {
-      const mat = new THREE.MeshStandardMaterial({
+      const mat = new THREE.MeshPhysicalMaterial({
         name: 'Autoclaved_2x2_Twill_Dry_Carbon',
         color: new THREE.Color(0x1e293b),
         metalness: 0.35,
         roughness: 0.32,
         roughnessMap: this.textureCache.get('carbon_fiber') || null,
         envMapIntensity: 1.5,
+        clearcoat: 1.0,
+        clearcoatRoughness: 0.02,
+        sheen: 0.15,
+        sheenColor: new THREE.Color(0x475569),
       });
       this.materialCache.set(key, mat);
     }
-    return this.materialCache.get(key) as THREE.MeshStandardMaterial;
+    return this.materialCache.get(key) as THREE.MeshPhysicalMaterial;
   }
 
   public getQuartzGlass(): THREE.MeshPhysicalMaterial {
@@ -344,71 +417,79 @@ export class EngineMaterialLibrary {
     return this.materialCache.get(key) as THREE.MeshPhysicalMaterial;
   }
 
-  public getBlueSilicone(): THREE.MeshStandardMaterial {
+  public getBlueSilicone(): THREE.MeshPhysicalMaterial {
     const key = 'base_blue_silicone';
     if (!this.materialCache.has(key)) {
-      const mat = new THREE.MeshStandardMaterial({
+      const mat = new THREE.MeshPhysicalMaterial({
         name: 'High_Pressure_Blue_Silicone',
         color: new THREE.Color(0x2563eb),
         metalness: 0.10,
         roughness: 0.60,
         envMapIntensity: 0.8,
+        sheen: 0.3,
+        sheenColor: new THREE.Color(0x60a5fa),
       });
       this.materialCache.set(key, mat);
     }
-    return this.materialCache.get(key) as THREE.MeshStandardMaterial;
+    return this.materialCache.get(key) as THREE.MeshPhysicalMaterial;
   }
 
-  public getTransaxleMagnesium(): THREE.MeshStandardMaterial {
+  public getTransaxleMagnesium(): THREE.MeshPhysicalMaterial {
     const key = 'base_transaxle_magnesium';
     if (!this.materialCache.has(key)) {
-      const mat = new THREE.MeshStandardMaterial({
+      const mat = new THREE.MeshPhysicalMaterial({
         name: 'Transaxle_Magnesium_Casing',
         color: new THREE.Color(0x64748b),
         metalness: 0.80,
         roughness: 0.44,
         roughnessMap: this.textureCache.get('cast_iron') || null,
         envMapIntensity: 1.2,
+        clearcoat: 0.15,
+        clearcoatRoughness: 0.4,
       });
       this.materialCache.set(key, mat);
     }
-    return this.materialCache.get(key) as THREE.MeshStandardMaterial;
+    return this.materialCache.get(key) as THREE.MeshPhysicalMaterial;
   }
 
-  public getBlackPolymer(): THREE.MeshStandardMaterial {
+  public getBlackPolymer(): THREE.MeshPhysicalMaterial {
     const key = 'base_black_polymer';
     if (!this.materialCache.has(key)) {
-      const mat = new THREE.MeshStandardMaterial({
+      const mat = new THREE.MeshPhysicalMaterial({
         name: 'Black_Polymer_Shroud',
         color: new THREE.Color(0x0f172a),
         metalness: 0.20,
         roughness: 0.70,
         envMapIntensity: 0.6,
+        sheen: 0.3,
+        sheenColor: new THREE.Color(0x1e293b),
       });
       this.materialCache.set(key, mat);
     }
-    return this.materialCache.get(key) as THREE.MeshStandardMaterial;
+    return this.materialCache.get(key) as THREE.MeshPhysicalMaterial;
   }
 
-  public getOrangeHighVoltage(): THREE.MeshStandardMaterial {
+  public getOrangeHighVoltage(): THREE.MeshPhysicalMaterial {
     const key = 'base_orange_hv';
     if (!this.materialCache.has(key)) {
-      const mat = new THREE.MeshStandardMaterial({
+      const mat = new THREE.MeshPhysicalMaterial({
         name: 'High_Voltage_800V_Orange',
         color: new THREE.Color(0xea580c),
         metalness: 0.15,
         roughness: 0.50,
         envMapIntensity: 0.9,
+        clearcoat: 0.3,
+        clearcoatRoughness: 0.15,
       });
       this.materialCache.set(key, mat);
     }
-    return this.materialCache.get(key) as THREE.MeshStandardMaterial;
+    return this.materialCache.get(key) as THREE.MeshPhysicalMaterial;
   }
 
-  public getShotPeenedTitanium(): THREE.MeshStandardMaterial {
+  public getShotPeenedTitanium(): THREE.MeshPhysicalMaterial {
     const key = 'base_shot_peened_titanium';
     if (!this.materialCache.has(key)) {
-      const mat = new THREE.MeshStandardMaterial({
+      const mat = new THREE.MeshPhysicalMaterial({
         name: 'Shot_Peened_Aerospace_Titanium',
         color: new THREE.Color(0x818cf8),
         metalness: 0.92,
@@ -417,16 +498,19 @@ export class EngineMaterialLibrary {
         bumpMap: this.textureCache.get('cast_iron') || null,
         bumpScale: 0.015,
         envMapIntensity: 1.6,
+        clearcoat: 0.25,
+        clearcoatRoughness: 0.15,
+        sheen: 0.1,
       });
       this.materialCache.set(key, mat);
     }
-    return this.materialCache.get(key) as THREE.MeshStandardMaterial;
+    return this.materialCache.get(key) as THREE.MeshPhysicalMaterial;
   }
 
-  public getThermalBarrierCeramic(): THREE.MeshStandardMaterial {
+  public getThermalBarrierCeramic(): THREE.MeshPhysicalMaterial {
     const key = 'base_thermal_barrier_ceramic';
     if (!this.materialCache.has(key)) {
-      const mat = new THREE.MeshStandardMaterial({
+      const mat = new THREE.MeshPhysicalMaterial({
         name: 'Plasma_Sprayed_Thermal_Barrier_Ceramic',
         color: new THREE.Color(0xd97706),
         metalness: 0.35,
@@ -434,16 +518,18 @@ export class EngineMaterialLibrary {
         bumpMap: this.textureCache.get('cast_iron') || null,
         bumpScale: 0.02,
         envMapIntensity: 1.1,
+        sheen: 0.15,
+        sheenColor: new THREE.Color(0xfbbf24),
       });
       this.materialCache.set(key, mat);
     }
-    return this.materialCache.get(key) as THREE.MeshStandardMaterial;
+    return this.materialCache.get(key) as THREE.MeshPhysicalMaterial;
   }
 
-  public getHeatShieldBlanket(): THREE.MeshStandardMaterial {
+  public getHeatShieldBlanket(): THREE.MeshPhysicalMaterial {
     const key = 'base_heat_shield_blanket';
     if (!this.materialCache.has(key)) {
-      const mat = new THREE.MeshStandardMaterial({
+      const mat = new THREE.MeshPhysicalMaterial({
         name: 'Embossed_Inconel_Foil_Thermal_Blanket',
         color: new THREE.Color(0xf59e0b),
         metalness: 0.96,
@@ -451,31 +537,35 @@ export class EngineMaterialLibrary {
         normalMap: this.textureCache.get('brushed_metal') || null,
         normalScale: new THREE.Vector2(0.4, 0.4),
         envMapIntensity: 2.0,
+        clearcoat: 0.5,
+        clearcoatRoughness: 0.06,
       });
       this.materialCache.set(key, mat);
     }
-    return this.materialCache.get(key) as THREE.MeshStandardMaterial;
+    return this.materialCache.get(key) as THREE.MeshPhysicalMaterial;
   }
 
-  public getStainlessFlexBellows(): THREE.MeshStandardMaterial {
+  public getStainlessFlexBellows(): THREE.MeshPhysicalMaterial {
     const key = 'base_stainless_flex_bellows';
     if (!this.materialCache.has(key)) {
-      const mat = new THREE.MeshStandardMaterial({
+      const mat = new THREE.MeshPhysicalMaterial({
         name: 'High_Temp_Hydroformed_Stainless_Bellows',
         color: new THREE.Color(0x94a3b8),
         metalness: 0.94,
         roughness: 0.18,
         envMapIntensity: 1.7,
+        clearcoat: 0.4,
+        clearcoatRoughness: 0.05,
       });
       this.materialCache.set(key, mat);
     }
-    return this.materialCache.get(key) as THREE.MeshStandardMaterial;
+    return this.materialCache.get(key) as THREE.MeshPhysicalMaterial;
   }
 
-  public getTranslucentMesh(): THREE.MeshStandardMaterial {
+  public getTranslucentMesh(): THREE.MeshPhysicalMaterial {
     const key = 'base_translucent_mesh';
     if (!this.materialCache.has(key)) {
-      const mat = new THREE.MeshStandardMaterial({
+      const mat = new THREE.MeshPhysicalMaterial({
         name: 'Stainless_Wire_Cloth_Screen',
         color: new THREE.Color(0xcbd5e1),
         metalness: 0.85,
@@ -484,25 +574,29 @@ export class EngineMaterialLibrary {
         opacity: 0.65,
         side: THREE.DoubleSide,
         envMapIntensity: 1.2,
+        clearcoat: 0.2,
+        clearcoatRoughness: 0.1,
       });
       this.materialCache.set(key, mat);
     }
-    return this.materialCache.get(key) as THREE.MeshStandardMaterial;
+    return this.materialCache.get(key) as THREE.MeshPhysicalMaterial;
   }
 
-  public getRubberOring(): THREE.MeshStandardMaterial {
+  public getRubberOring(): THREE.MeshPhysicalMaterial {
     const key = 'base_rubber_oring';
     if (!this.materialCache.has(key)) {
-      const mat = new THREE.MeshStandardMaterial({
+      const mat = new THREE.MeshPhysicalMaterial({
         name: 'Fluorocarbon_Viton_O_Ring',
         color: new THREE.Color(0x0a0a0a),
         metalness: 0.05,
         roughness: 0.85,
         envMapIntensity: 0.4,
+        sheen: 0.15,
+        sheenColor: new THREE.Color(0x1a1a1a),
       });
       this.materialCache.set(key, mat);
     }
-    return this.materialCache.get(key) as THREE.MeshStandardMaterial;
+    return this.materialCache.get(key) as THREE.MeshPhysicalMaterial;
   }
 
   /**
@@ -512,7 +606,7 @@ export class EngineMaterialLibrary {
     materialId?: string,
     fallbackType?: string,
     engineConfig?: Partial<EngineConfig>
-  ): THREE.MeshStandardMaterial | THREE.MeshPhysicalMaterial {
+  ): THREE.MeshPhysicalMaterial {
     const id = (materialId || '').toLowerCase();
 
     if (id.includes('cast_iron') || id === 'iron') {
@@ -593,7 +687,7 @@ export class EngineMaterialLibrary {
 
   // ─── 2.2 DYNAMIC VARIANT MATERIAL GENERATOR ───
 
-  public getVariantMaterial(variant: MaterialVariantVisual): THREE.MeshStandardMaterial {
+  public getVariantMaterial(variant: MaterialVariantVisual): THREE.Material {
     const key = `variant_${variant.id}_${variant.color}_${variant.metalness}_${variant.roughness}`;
     if (!this.materialCache.has(key)) {
       const isTransmissive = (variant.transmission ?? 0) > 0;

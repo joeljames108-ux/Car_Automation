@@ -24,26 +24,10 @@ export const NeonHorizonProgressRing: React.FC<NeonHorizonProgressRingProps> = (
   const offset = circumference - (Math.min(100, Math.max(0, percentage)) / 100) * circumference;
 
   const colorMap = {
-    cyan: {
-      stroke: "#00e5ff",
-      glow: "drop-shadow(0 0 6px rgba(0, 229, 255, 0.7))",
-      text: "text-cyan-300",
-    },
-    magenta: {
-      stroke: "#e040fb",
-      glow: "drop-shadow(0 0 6px rgba(224, 64, 251, 0.7))",
-      text: "text-fuchsia-300",
-    },
-    gold: {
-      stroke: "#ffd740",
-      glow: "drop-shadow(0 0 6px rgba(255, 215, 64, 0.7))",
-      text: "text-amber-300",
-    },
-    emerald: {
-      stroke: "#00e676",
-      glow: "drop-shadow(0 0 6px rgba(0, 230, 118, 0.7))",
-      text: "text-emerald-300",
-    },
+    cyan: { stroke: "#7fb5d8", text: "text-sky-300" },
+    magenta: { stroke: "#9d8fc4", text: "text-violet-300" },
+    gold: { stroke: "#d9b36c", text: "text-amber-300" },
+    emerald: { stroke: "#6fbf9a", text: "text-emerald-300" },
   }[color];
 
   return (
@@ -72,7 +56,7 @@ export const NeonHorizonProgressRing: React.FC<NeonHorizonProgressRingProps> = (
           strokeDashoffset={offset}
           strokeLinecap="round"
           fill="transparent"
-          style={{ filter: colorMap.glow, transition: "stroke-dashoffset 0.6s ease" }}
+          style={{ transition: "stroke-dashoffset 0.6s ease" }}
         />
       </svg>
 

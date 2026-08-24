@@ -32,10 +32,10 @@ export const NeonHorizonSubNav: React.FC<NeonHorizonSubNavProps> = ({
                 onSelectStage(s.id);
               }}
               className={`flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold tracking-wide whitespace-nowrap transition-all duration-200 cursor-pointer ${
-                isCurrent
-                  ? "bg-sky-500/20 text-sky-300 border border-sky-400/40 shadow-[0_0_15px_rgba(56,189,248,0.25)] font-bold"
-                  : "bg-white/[0.04] text-slate-400 hover:text-slate-200 hover:bg-white/[0.08] border border-white/6"
-              }`}
+ isCurrent
+ ? "bg-sky-500/20 text-sky-300 border border-sky-400/40 font-bold"
+ : "bg-white/[0.04] text-slate-400 hover:text-slate-200 hover:bg-white/[0.08] border border-white/6"
+ }`}
             >
               <span className={isCurrent ? "text-sky-400" : "text-slate-500"}>{s.icon}</span>
               <span>{s.label}</span>

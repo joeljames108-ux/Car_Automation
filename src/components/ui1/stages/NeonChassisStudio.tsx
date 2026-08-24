@@ -6,6 +6,8 @@ import {
   Sliders,
   Box,
   Wrench,
+  Paintbrush,
+  Wind,
 } from "lucide-react";
 import { useDesign } from "../../../state/DesignContext";
 import { playHMIClickSound, playHMITabSound } from "../../../utils/hmiSoundSynth";
@@ -14,12 +16,17 @@ import { NeonHorizonSelect } from "../design/NeonHorizonSelect";
 import { NeonHorizonSlider } from "../design/NeonHorizonSlider";
 import { NeonHorizonBadge } from "../design/NeonHorizonBadge";
 import { NeonHorizonDataCard } from "../design/NeonHorizonDataCard";
+import { NeonPerformanceKPIGrid } from "../design/NeonPerformanceKPIGrid";
 import type { DriveType, BrakeType, ChassisType } from "../../../sim/types";
 import { ModularExterior3DViewport } from "../../../exterior3d/ModularExterior3DViewport";
 import { MasterVehicleStudio } from "../../vehicleAssembly/MasterVehicleStudio";
+import { NeonExteriorStudio } from "./NeonExteriorStudio";
+import { NeonAeroLab } from "./NeonAeroLab";
 
 type ChassisStudioTab =
   | "chassis"
+  | "exterior_styling"
+  | "aero_lab"
   | "suspension"
   | "brakes"
   | "exterior_3d"
@@ -37,9 +44,11 @@ export function NeonChassisStudio() {
   return (
     <div className="w-full flex flex-col gap-6 text-slate-100 animate-nh-materialize">
       {/* Sub-Tab Switcher */}
-      <div className="flex items-center gap-2 p-1.5 bg-black/40 rounded-2xl border border-white/10 overflow-x-auto no-scrollbar">
+      <div className="flex items-center gap-2 p-2 bg-base-900/60 dark:bg-base-950/60 rounded-2xl border border-base-800 overflow-x-auto no-scrollbar shadow-sm">
         {[
           { id: "chassis" as const, label: "Chassis & Drivetrain", icon: <Car size={14} /> },
+          { id: "exterior_styling" as const, label: "Exterior & Paint", icon: <Paintbrush size={14} /> },
+          { id: "aero_lab" as const, label: "Aero & Wind Tunnel", icon: <Wind size={14} /> },
           { id: "suspension" as const, label: "Suspension Kinematics", icon: <Sliders size={14} /> },
           { id: "brakes" as const, label: "Brakes & Hydraulics", icon: <Disc size={14} /> },
           { id: "exterior_3d" as const, label: "3D Exterior & Chassis", icon: <Box size={14} /> },
@@ -54,10 +63,10 @@ export function NeonChassisStudio() {
                 setActiveTab(tab.id);
               }}
               className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs nh-font-mono font-bold transition-all cursor-pointer whitespace-nowrap ${
-                isActive
-                  ? "bg-cyan-500/30 text-cyan-200 border border-cyan-400/60 shadow-[0_0_12px_rgba(0,229,255,0.4)]"
-                  : "text-slate-400 hover:text-slate-200 hover:bg-white/5"
-              }`}
+ isActive
+ ? "bg-sky-400/20 text-sky-500 dark:text-sky-200 border border-sky-400/35"
+ : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-base-800/40"
+ }`}
             >
               {tab.icon}
               <span>{tab.label}</span>
@@ -68,7 +77,7 @@ export function NeonChassisStudio() {
 
       {/* View 1: 3D Exterior & Chassis Viewport */}
       {activeTab === "exterior_3d" && (
-        <div className="w-full min-h-[600px] h-[650px] rounded-3xl overflow-hidden border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] relative bg-[#0b1220]">
+        <div className="w-full min-h-[600px] h-[650px] rounded-3xl overflow-hidden border border-base-800 shadow-[0_20px_50px_rgba(0,0,0,0.25)] relative bg-base-950">
           <ModularExterior3DViewport
             className="w-full h-full"
           />
@@ -77,8 +86,22 @@ export function NeonChassisStudio() {
 
       {/* View 2: Master Vehicle Studio */}
       {activeTab === "master_vehicle_studio" && (
-        <div className="w-full rounded-3xl overflow-hidden border border-white/10 bg-[#070e1c] shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
+        <div className="w-full rounded-3xl overflow-hidden border border-base-800 bg-base-950 shadow-[0_20px_50px_rgba(0,0,0,0.25)]">
           <MasterVehicleStudio />
+        </div>
+      )}
+
+      {/* View 2B: Exterior Styling & Paint */}
+      {activeTab === "exterior_styling" && (
+        <div className="w-full">
+          <NeonExteriorStudio />
+        </div>
+      )}
+
+      {/* View 2C: Aero & Wind Tunnel */}
+      {activeTab === "aero_lab" && (
+        <div className="w-full">
+          <NeonAeroLab />
         </div>
       )}
 
@@ -240,43 +263,31 @@ export function NeonChassisStudio() {
               }}
               className="p-6 flex flex-col gap-5"
             >
-              <div className="grid grid-cols-2 gap-3">
-                <NeonHorizonDataCard label="TOTAL MASS" value={vehicleWeight} unit="KG" accentColor="cyan" />
-                <NeonHorizonDataCard label="WEIGHT SPLIT" value={`${Math.round(weightDistribution * 100)}/${Math.round((1 - weightDistribution) * 100)}`} unit="F/R %" accentColor="gold" />
-                <NeonHorizonDataCard label="MAX LATERAL G" value={sim.lateralG.toFixed(2)} unit="G" accentColor="magenta" />
-                <NeonHorizonDataCard label="0-100 KM/H" value={sim.accel0_100.toFixed(2)} unit="SEC" accentColor="emerald" />
-              </div>
-
-              {/* 4-Corner Scale Weight Matrix */}
-              <div className="flex flex-col gap-2 p-3.5 rounded-2xl bg-black/40 border border-white/10">
-                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
-                  4-CORNER CORNER-WEIGHT SCALE MATRIX
-                </span>
-                <div className="grid grid-cols-2 gap-2">
-                  <div className="p-2 rounded-xl bg-white/[0.04] border border-white/6 flex items-center justify-between">
-                    <span className="text-[10px] font-mono text-slate-400">FL CORNER</span>
-                    <span className="text-xs font-mono font-bold text-cyan-300">
-                      {Math.round((vehicleWeight * weightDistribution) / 2)} kg
-                    </span>
-                  </div>
-                  <div className="p-2 rounded-xl bg-white/[0.04] border border-white/6 flex items-center justify-between">
-                    <span className="text-[10px] font-mono text-slate-400">FR CORNER</span>
-                    <span className="text-xs font-mono font-bold text-cyan-300">
-                      {Math.round((vehicleWeight * weightDistribution) / 2)} kg
-                    </span>
-                  </div>
-                  <div className="p-2 rounded-xl bg-white/[0.04] border border-white/6 flex items-center justify-between">
-                    <span className="text-[10px] font-mono text-slate-400">RL CORNER</span>
-                    <span className="text-xs font-mono font-bold text-amber-300">
-                      {Math.round((vehicleWeight * (1 - weightDistribution)) / 2)} kg
-                    </span>
-                  </div>
-                  <div className="p-2 rounded-xl bg-white/[0.04] border border-white/6 flex items-center justify-between">
-                    <span className="text-[10px] font-mono text-slate-400">RR CORNER</span>
-                    <span className="text-xs font-mono font-bold text-amber-300">
-                      {Math.round((vehicleWeight * (1 - weightDistribution)) / 2)} kg
-                    </span>
-                  </div>
+              <NeonPerformanceKPIGrid sim={sim} metrics={["power", "weight", "lateralG", "accel0_100"]} />
+              <div className="grid grid-cols-2 gap-2">
+                <div className="p-2 rounded-xl bg-white/[0.04] border border-white/6 flex items-center justify-between">
+                  <span className="text-[10px] font-mono text-slate-400">FL CORNER</span>
+                  <span className="text-xs font-mono font-bold text-sky-300">
+                    {Math.round((vehicleWeight * weightDistribution) / 2)} kg
+                  </span>
+                </div>
+                <div className="p-2 rounded-xl bg-white/[0.04] border border-white/6 flex items-center justify-between">
+                  <span className="text-[10px] font-mono text-slate-400">FR CORNER</span>
+                  <span className="text-xs font-mono font-bold text-sky-300">
+                    {Math.round((vehicleWeight * weightDistribution) / 2)} kg
+                  </span>
+                </div>
+                <div className="p-2 rounded-xl bg-white/[0.04] border border-white/6 flex items-center justify-between">
+                  <span className="text-[10px] font-mono text-slate-400">RL CORNER</span>
+                  <span className="text-xs font-mono font-bold text-amber-300">
+                    {Math.round((vehicleWeight * (1 - weightDistribution)) / 2)} kg
+                  </span>
+                </div>
+                <div className="p-2 rounded-xl bg-white/[0.04] border border-white/6 flex items-center justify-between">
+                  <span className="text-[10px] font-mono text-slate-400">RR CORNER</span>
+                  <span className="text-xs font-mono font-bold text-amber-300">
+                    {Math.round((vehicleWeight * (1 - weightDistribution)) / 2)} kg
+                  </span>
                 </div>
               </div>
             </NeonHorizonGlassPanel>

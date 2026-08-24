@@ -1,0 +1,101 @@
+/**
+ * ============================================================================
+ * STAGE 3: TRANSMISSION & DRIVETRAIN STAGE
+ * ============================================================================
+ */
+
+import React from "react";
+import { Gauge, CheckCircle2, Zap, ArrowRight, ShieldCheck } from "lucide-react";
+import { InstalledSubsystemsState } from "../scene/ModularAssemblySceneGraph";
+
+interface TransmissionAssemblyStageProps {
+  transmissionType: InstalledSubsystemsState["transmissionType"];
+  onUpdateTransmission: (type: InstalledSubsystemsState["transmissionType"]) => void;
+  isInstalled: boolean;
+  onInstall: () => void;
+}
+
+export const TransmissionAssemblyStage: React.FC<TransmissionAssemblyStageProps> = ({
+  transmissionType,
+  onUpdateTransmission,
+  isInstalled,
+  onInstall,
+}) => {
+  const transmissions: {
+    id: InstalledSubsystemsState["transmissionType"];
+    label: string;
+    gears: string;
+    shiftSpeed: string;
+    efficiency: string;
+    desc: string;
+  }[] = [
+    { id: "dct_7", label: "7-Speed Dual-Clutch (DCT)", gears: "7 Gears", shiftSpeed: "50 ms", efficiency: "97.5%", desc: "Electro-hydraulic dual clutch with instantaneous pre-selected gear shifts." },
+    { id: "seq_8", label: "8-Speed Sequential Dog-Box", gears: "8 Gears", shiftSpeed: "30 ms", efficiency: "98.2%", desc: "Straight-cut motorsport dog rings for clutchless full-throttle upshifts." },
+    { id: "manual_6", label: "6-Speed Manual (H-Pattern)", gears: "6 Gears", shiftSpeed: "220 ms", efficiency: "96.0%", desc: "Mechanical linkage with auto rev-match downshifts and driver engagement." },
+    { id: "ev_direct", label: "Single-Speed EV Reduction Drive", gears: "1 Gear", shiftSpeed: "0 ms", efficiency: "99.0%", desc: "Helical single-ratio planetary gearbox with direct motor-to-axle drive." },
+  ];
+
+  return (
+    <div className="panel p-4 rounded-3xl space-y-4 shadow-xl">
+      <div className="flex items-center justify-between border-b border-base-800/60 pb-3">
+        <div className="flex items-center gap-2.5">
+          <div className="p-2 rounded-xl bg-purple-500/15 text-purple-400 border border-purple-500/30">
+            <Gauge size={18} />
+          </div>
+          <div>
+            <h3 className="text-sm font-bold font-mono text-slate-800 dark:text-slate-100 uppercase tracking-wider">
+              STAGE 3: TRANSMISSION & GEARBOX ASSEMBLY
+            </h3>
+            <p className="text-[11px] font-mono text-slate-500 dark:text-slate-400">
+              Mate the gearbox bellhousing to the engine crankshaft and transmission tunnel.
+            </p>
+          </div>
+        </div>
+        {isInstalled && (
+          <span className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-emerald-500/20 text-emerald-700 dark:text-emerald-300 border border-emerald-500/40 text-xs font-mono font-bold">
+            <CheckCircle2 size={14} /> TRANSMISSION INSTALLED
+          </span>
+        )}
+      </div>
+
+      {/* Transmission Options Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+        {transmissions.map((t) => {
+          const isSelected = transmissionType === t.id;
+          return (
+            <button
+              key={t.id}
+              onClick={() => onUpdateTransmission(t.id)}
+              className={`p-3.5 rounded-2xl text-left transition-all border cursor-pointer ${
+                isSelected
+                  ? "bg-purple-500/20 border-purple-500/60 shadow-md ring-1 ring-purple-500/40"
+                  : "bg-base-900/60 border-base-800 hover:border-base-700 text-slate-400"
+              }`}
+            >
+              <div className="flex items-center justify-between mb-1.5">
+                <span className="font-bold text-xs font-mono text-slate-900 dark:text-slate-100">{t.label}</span>
+                <span className="text-[10px] font-mono text-purple-600 dark:text-purple-300 font-bold">{t.gears}</span>
+              </div>
+              <p className="text-[10px] text-slate-500 dark:text-slate-400 mb-2.5">{t.desc}</p>
+              <div className="flex items-center justify-between text-[10px] font-mono pt-2 border-t border-base-800/60 text-slate-400">
+                <span>Shift Speed: <strong className="text-cyan-600 dark:text-cyan-300">{t.shiftSpeed}</strong></span>
+                <span>Efficiency: <strong className="text-emerald-600 dark:text-emerald-300">{t.efficiency}</strong></span>
+              </div>
+            </button>
+          );
+        })}
+      </div>
+
+      {/* Install Button */}
+      <div className="flex justify-end pt-2">
+        <button
+          onClick={onInstall}
+          className="flex items-center gap-2 px-6 py-3 rounded-2xl bg-gradient-to-r from-purple-500 to-indigo-600 hover:from-purple-400 hover:to-indigo-500 text-white font-mono font-bold text-xs uppercase tracking-wider shadow-lg shadow-purple-500/25 transition-all cursor-pointer hover:scale-105 active:scale-95"
+        >
+          <CheckCircle2 size={16} />
+          {isInstalled ? "RE-MATE TRANSMISSION" : "INSTALL TRANSMISSION & PROCEED TO SUSPENSION"}
+        </button>
+      </div>
+    </div>
+  );
+};

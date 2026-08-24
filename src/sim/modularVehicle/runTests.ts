@@ -159,6 +159,8 @@ console.log("=================================================");
 console.log("\n=================================================");
 console.log("  50-CHASSIS & MODULAR VEHICLE CONSTRUCTION TESTS");
 console.log("=================================================");
+import { runAssemblyPackagingTests } from "./tests/assemblyPackagingTests";
+
 const constrResults = runModularVehicleConstructionTests();
 
 runModularStructureTests();
@@ -171,6 +173,7 @@ const windTunnelResults = runWindTunnelCfdPhysicsTests();
 const powertrainDynoResults = runPowertrainDynoEcuTests();
 const trackBattlesResults = runTrackBattlesTelemetryTests();
 const trackLayoutResults = runTrackLayoutCatalogTests();
+const packagingResults = runAssemblyPackagingTests();
 
 if (
   constrResults.failed > 0 ||
@@ -181,7 +184,8 @@ if (
   windTunnelResults.failed > 0 ||
   powertrainDynoResults.failed > 0 ||
   trackBattlesResults.failed > 0 ||
-  trackLayoutResults.failed > 0
+  trackLayoutResults.failed > 0 ||
+  packagingResults.failed > 0
 ) {
   process.exit(1);
 }

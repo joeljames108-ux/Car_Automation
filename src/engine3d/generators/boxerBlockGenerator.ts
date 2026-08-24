@@ -54,26 +54,45 @@ export interface BoxerBlockSpec {
   journalRadiusM: number; // 0.030 m (60mm main journal)
 }
 
-export function computeBoxerSpecs(totalCyls: number = 6): BoxerBlockSpec {
-  const count = totalCyls === 4 ? 4 : 6;
+export function computeBoxerSpecs(
+  totalCylsOrConfig: number | Partial<EngineConfig> = 6,
+  maybeConfig?: Partial<EngineConfig>
+): BoxerBlockSpec {
+  const config = typeof totalCylsOrConfig === 'object' ? totalCylsOrConfig : maybeConfig;
+  let count = typeof totalCylsOrConfig === 'number' ? totalCylsOrConfig : 6;
+  if (config?.layout) {
+    count = config.layout === 'boxer4' ? 4 : 6;
+  }
+  count = count === 4 ? 4 : 6;
   const cylsPerBank = count / 2;
-  const boreSpacingM = 0.118;
+
+  const boreDiameterMm = config?.bore || 102.0;
+  const strokeMm = config?.stroke || 82.0;
+  const rodLengthMm = config?.rodLength || 140.0;
+
+  const boreSpacingMm = Math.max(110.0, boreDiameterMm + 14.0);
+  const boreSpacingM = boreSpacingMm / 1000;
   const frontMarginM = 0.075;
   const rearMarginM = 0.085;
   const totalLengthM = (cylsPerBank - 1) * boreSpacingM + frontMarginM + rearMarginM;
+  const boreRadiusM = (boreDiameterMm / 2) / 1000;
+  const bankReachM = (strokeMm * 0.5 + rodLengthMm + 35.0) / 1000;
+  const crankcaseWidthM = Math.max(0.200, (boreDiameterMm * 1.8) / 1000);
+  const halfWidthM = crankcaseWidthM / 2;
+  const totalWidthM = crankcaseWidthM + bankReachM * 2;
 
   return {
     cylinderCount: count,
     cylsPerBank,
-    boreDiameterMm: 102.0,
-    boreRadiusM: 0.051,
-    boreSpacingMm: 118.0,
+    boreDiameterMm,
+    boreRadiusM,
+    boreSpacingMm,
     boreSpacingM,
     bankStaggerM: 0.014,
-    crankcaseWidthM: 0.210,
-    halfWidthM: 0.105,
-    bankReachM: 0.210,
-    totalWidthM: 0.630,
+    crankcaseWidthM,
+    halfWidthM,
+    bankReachM,
+    totalWidthM,
     totalLengthM,
     journalRadiusM: 0.030,
   };
@@ -550,14 +569,7 @@ export function buildBoxerBlockScene(config?: Partial<EngineConfig> | number): T
   rootGroup.name = 'Boxer_Engine_Block_Master';
   scene.add(rootGroup);
 
-  let totalCyls = 6;
-  if (typeof config === 'number') {
-    totalCyls = config;
-  } else if (config?.layout) {
-    totalCyls = config.layout === 'boxer4' ? 4 : 6;
-  }
-
-  const specs = computeBoxerSpecs(totalCyls);
+  const specs = computeBoxerSpecs(config);
   const materials = createBlockMaterialPalette(typeof config === 'object' ? config : undefined);
 
   // 1. Split-Case Crankcase Halves & Central Through-Bolts

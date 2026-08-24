@@ -46,7 +46,7 @@ export function NeonMagneRideStudio() {
       ctx.clearRect(0, 0, w, h);
 
       // Grid Lines
-      ctx.strokeStyle = "rgba(0, 229, 255, 0.1)";
+      ctx.strokeStyle = "rgba(56,189,248, 0.1)";
       ctx.lineWidth = 1;
       for (let x = 0; x < w; x += 40) {
         ctx.beginPath();
@@ -65,7 +65,7 @@ export function NeonMagneRideStudio() {
       // Road Bump Excitation (Cyan Wave)
       const decay = Math.max(0.05, 0.4 - (coilCurrentAmps / 5.0) * 0.35);
 
-      ctx.strokeStyle = "rgba(0, 229, 255, 0.8)";
+      ctx.strokeStyle = "rgba(56,189,248, 0.8)";
       ctx.lineWidth = 2;
       ctx.beginPath();
 
@@ -138,10 +138,10 @@ export function NeonMagneRideStudio() {
             }}
             className="p-6 flex flex-col gap-4"
           >
-            <div className="w-full h-52 bg-[#030712] rounded-xl border border-cyan-500/30 overflow-hidden relative shadow-[inset_0_0_25px_rgba(0,0,0,0.85)]">
+            <div className="w-full h-52 bg-[#030712] rounded-xl border border-sky-400/25 overflow-hidden relative shadow-[inset_0_0_25px_rgba(0,0,0,0.85)]">
               <canvas ref={canvasRef} width={640} height={210} className="w-full h-full" />
               <div className="absolute top-2 left-3 flex items-center gap-2">
-                <span className="text-[10px] nh-font-mono font-bold text-cyan-300">
+                <span className="text-[10px] nh-font-mono font-bold text-sky-300">
                   BLUE: WHEEL ROAD EXCITATION · PINK: REBOUND PISTON RESPONSE
                 </span>
               </div>
@@ -166,10 +166,10 @@ export function NeonMagneRideStudio() {
                       else if (m.id === "curb_hop") setCoilCurrentAmps(3.8);
                     }}
                     className={`p-2.5 rounded-lg border text-center text-xs font-bold cursor-pointer transition-all ${
-                      isSelected
-                        ? "bg-[#091a38] border-cyan-400 text-cyan-300 shadow-[0_0_12px_rgba(0,229,255,0.3)]"
-                        : "bg-[#060e22] border-white/10 text-slate-400 hover:border-cyan-500/30"
-                    }`}
+ isSelected
+ ? "bg-[#091a38] border-sky-400/40 text-sky-300"
+ : "bg-[#060e22] border-white/10 text-slate-400 hover:border-sky-400/25"
+ }`}
                   >
                     {m.name}
                   </div>
@@ -201,10 +201,10 @@ export function NeonMagneRideStudio() {
               onChange={(val) => setCoilCurrentAmps(val)}
             />
 
-            <div className="p-3.5 rounded-xl bg-[#060e22] border border-cyan-500/20 flex flex-col gap-2 font-mono text-xs">
+            <div className="p-3.5 rounded-xl bg-[#060e22] border border-sky-400/15 flex flex-col gap-2 font-mono text-xs">
               <div className="flex items-center justify-between">
                 <span className="text-slate-400">Damper Fluid:</span>
-                <span className="text-cyan-300 font-bold">Hydrocarbon + 35% Fe Nanoparticles</span>
+                <span className="text-sky-300 font-bold">Hydrocarbon + 35% Fe Nanoparticles</span>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-slate-400">Coil Thermal State:</span>

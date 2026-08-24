@@ -36,10 +36,10 @@ export const NeonHorizonStatRail: React.FC<NeonHorizonStatRailProps> = ({ sim })
               }}
               title="Toggle Engineering Terminal Log"
               className={`p-1.5 rounded-lg text-xs flex items-center gap-1 transition-all cursor-pointer ${
-                showLog
-                  ? "bg-sky-500/30 text-sky-300 border border-sky-400/50"
-                  : "bg-white/5 text-slate-400 hover:text-slate-200 border border-white/10"
-              }`}
+ showLog
+ ? "bg-sky-500/30 text-sky-300 border border-sky-400/50"
+ : "bg-white/5 text-slate-400 hover:text-slate-200 border border-white/10"
+ }`}
             >
               <Terminal size={13} />
             </button>
@@ -62,17 +62,16 @@ export const NeonHorizonStatRail: React.FC<NeonHorizonStatRailProps> = ({ sim })
                 cy="50"
                 r="44"
                 fill="none"
-                stroke="#38bdf8"
+                stroke="#7fb5d8"
                 strokeWidth="4"
                 strokeDasharray="276"
                 strokeDashoffset="65"
                 strokeLinecap="round"
-                style={{ filter: "drop-shadow(0 0 6px rgba(56, 189, 248, 0.6))" }}
               />
             </svg>
 
             {/* Engineer Avatar Photo */}
-            <div className="absolute inset-2.5 rounded-full overflow-hidden border-2 border-sky-400/60 shadow-[0_0_15px_rgba(56,189,248,0.4)]">
+            <div className="absolute inset-2.5 rounded-full overflow-hidden border-2 border-sky-400/35">
               <img
                 src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=256&auto=format&fit=crop"
                 alt="Lead Aerodynamicist"
@@ -94,10 +93,10 @@ export const NeonHorizonStatRail: React.FC<NeonHorizonStatRailProps> = ({ sim })
                 setActiveMode("race");
               }}
               className={`w-11 h-11 rounded-full flex items-center justify-center transition-all cursor-pointer ${
-                activeMode === "race"
-                  ? "bg-sky-500 text-white shadow-[0_0_18px_rgba(56,189,248,0.5)]"
-                  : "bg-white/[0.06] text-slate-300 hover:bg-white/[0.12] border border-white/8"
-              }`}
+ activeMode === "race"
+ ? "bg-sky-400/25 text-sky-100 border border-sky-300/40"
+ : "bg-white/[0.06] text-slate-300 hover:bg-white/[0.12] border border-white/8"
+ }`}
             >
               <Flag size={18} />
             </button>
@@ -109,10 +108,10 @@ export const NeonHorizonStatRail: React.FC<NeonHorizonStatRailProps> = ({ sim })
                 setActiveMode("aero");
               }}
               className={`w-11 h-11 rounded-full flex items-center justify-center transition-all cursor-pointer ${
-                activeMode === "aero"
-                  ? "bg-sky-500 text-white shadow-[0_0_18px_rgba(56,189,248,0.5)]"
-                  : "bg-white/[0.06] text-slate-300 hover:bg-white/[0.12] border border-white/8"
-              }`}
+ activeMode === "aero"
+ ? "bg-sky-400/25 text-sky-100 border border-sky-300/40"
+ : "bg-white/[0.06] text-slate-300 hover:bg-white/[0.12] border border-white/8"
+ }`}
             >
               <Wind size={18} />
             </button>
@@ -124,10 +123,10 @@ export const NeonHorizonStatRail: React.FC<NeonHorizonStatRailProps> = ({ sim })
                 setActiveMode("chip");
               }}
               className={`w-11 h-11 rounded-full flex items-center justify-center transition-all cursor-pointer ${
-                activeMode === "chip"
-                  ? "bg-sky-500 text-white shadow-[0_0_18px_rgba(56,189,248,0.5)]"
-                  : "bg-white/[0.06] text-slate-300 hover:bg-white/[0.12] border border-white/8"
-              }`}
+ activeMode === "chip"
+ ? "bg-sky-400/25 text-sky-100 border border-sky-300/40"
+ : "bg-white/[0.06] text-slate-300 hover:bg-white/[0.12] border border-white/8"
+ }`}
             >
               <Cpu size={18} />
             </button>

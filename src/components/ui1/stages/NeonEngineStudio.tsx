@@ -78,10 +78,10 @@ export function NeonEngineStudio() {
                 setActiveTab(tab.id);
               }}
               className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs nh-font-mono font-bold transition-all cursor-pointer whitespace-nowrap ${
-                isActive
-                  ? "bg-cyan-500/30 text-cyan-200 border border-cyan-400/60 shadow-[0_0_12px_rgba(0,229,255,0.4)]"
-                  : "text-slate-400 hover:text-slate-200 hover:bg-white/5"
-              }`}
+ isActive
+ ? "bg-sky-400/20 text-sky-200 border border-sky-400/35"
+ : "text-slate-400 hover:text-slate-200 hover:bg-white/5"
+ }`}
             >
               {tab.icon}
               <span>{tab.label}</span>
@@ -366,10 +366,10 @@ export function NeonEngineStudio() {
                       <div
                         key={cylNum}
                         className={`w-7 h-7 rounded-lg flex items-center justify-center text-xs font-bold font-mono transition-all ${
-                          isFiring
-                            ? "bg-cyan-400 text-slate-950 shadow-[0_0_12px_rgba(0,229,255,0.8)] scale-110"
-                            : "bg-white/[0.04] text-slate-400 border border-white/6"
-                        }`}
+ isFiring
+ ? "bg-sky-300 text-slate-950 scale-110"
+ : "bg-white/[0.04] text-slate-400 border border-white/6"
+ }`}
                       >
                         {cylNum}
                       </div>

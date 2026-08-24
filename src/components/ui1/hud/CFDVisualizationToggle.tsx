@@ -35,10 +35,10 @@ export const CFDVisualizationToggle: React.FC<CFDVisualizationToggleProps> = ({
                 setActiveScene(scene.id);
               }}
               className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-all cursor-pointer ${
-                isActive
-                  ? "bg-white text-slate-900 shadow-md font-bold"
-                  : "text-slate-400 hover:text-slate-200"
-              }`}
+ isActive
+ ? "bg-white text-slate-900 shadow-md font-bold"
+ : "text-slate-400 hover:text-slate-200"
+ }`}
             >
               {scene.label}
             </button>
@@ -89,13 +89,13 @@ export const CFDVisualizationToggle: React.FC<CFDVisualizationToggleProps> = ({
               onChange(!enabled);
             }}
             className={`w-10 h-5 rounded-full p-0.5 transition-colors cursor-pointer ${
-              enabled ? "bg-sky-500" : "bg-slate-700"
-            }`}
+ enabled ? "bg-sky-500" : "bg-slate-700"
+ }`}
           >
             <div
               className={`w-4 h-4 rounded-full bg-white transition-transform ${
-                enabled ? "translate-x-5" : "translate-x-0"
-              }`}
+ enabled ? "translate-x-5" : "translate-x-0"
+ }`}
             />
           </button>
         </div>

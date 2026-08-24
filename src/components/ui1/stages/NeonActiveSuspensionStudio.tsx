@@ -63,10 +63,10 @@ export function NeonActiveSuspensionStudio() {
             }}
             className="p-6 flex flex-col gap-4"
           >
-            <div className="grid grid-cols-2 gap-4 p-4 rounded-xl bg-[#030712] border border-cyan-500/30 shadow-[inset_0_0_20px_rgba(0,0,0,0.8)]">
+            <div className="grid grid-cols-2 gap-4 p-4 rounded-xl bg-[#030712] border border-sky-400/25 shadow-[inset_0_0_20px_rgba(0,0,0,0.8)]">
               {[
-                { pos: "FRONT LEFT (FL)", pressure: "185 BAR", height: "+0.0 mm", color: "text-cyan-300" },
-                { pos: "FRONT RIGHT (FR)", pressure: "185 BAR", height: "+0.0 mm", color: "text-cyan-300" },
+                { pos: "FRONT LEFT (FL)", pressure: "185 BAR", height: "+0.0 mm", color: "text-sky-300" },
+                { pos: "FRONT RIGHT (FR)", pressure: "185 BAR", height: "+0.0 mm", color: "text-sky-300" },
                 { pos: "REAR LEFT (RL)", pressure: "160 BAR", height: "-2.0 mm", color: "text-emerald-300" },
                 { pos: "REAR RIGHT (RR)", pressure: "160 BAR", height: "-2.0 mm", color: "text-emerald-300" },
               ].map((strut, idx) => (
@@ -100,10 +100,10 @@ export function NeonActiveSuspensionStudio() {
                       setSuspensionMode(m.id as "aero_seal_gt3" | "magic_carpet" | "track_flat" | "launch_squat");
                     }}
                     className={`p-2.5 rounded-lg border text-center text-xs font-bold cursor-pointer transition-all ${
-                      isSelected
-                        ? "bg-[#091a38] border-cyan-400 text-cyan-300 shadow-[0_0_12px_rgba(0,229,255,0.3)]"
-                        : "bg-[#060e22] border-white/10 text-slate-400 hover:border-cyan-500/30"
-                    }`}
+ isSelected
+ ? "bg-[#091a38] border-sky-400/40 text-sky-300"
+ : "bg-[#060e22] border-white/10 text-slate-400 hover:border-sky-400/25"
+ }`}
                   >
                     {m.name}
                   </div>
@@ -146,10 +146,10 @@ export function NeonActiveSuspensionStudio() {
               onChange={(val) => setCurveTiltAngle(val)}
             />
 
-            <div className="p-3.5 rounded-xl bg-[#060e22] border border-cyan-500/20 flex flex-col gap-2 font-mono text-xs">
+            <div className="p-3.5 rounded-xl bg-[#060e22] border border-sky-400/15 flex flex-col gap-2 font-mono text-xs">
               <div className="flex items-center justify-between">
                 <span className="text-slate-400">48V Pump Power:</span>
-                <span className="text-cyan-300 font-bold">12 kW Peak Electric</span>
+                <span className="text-sky-300 font-bold">12 kW Peak Electric</span>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-slate-400">Road Preview LiDAR:</span>

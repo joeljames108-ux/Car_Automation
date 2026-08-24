@@ -57,23 +57,41 @@ export interface InlineBlockSpec {
   skirtDepthM: number; // 0.065 m
 }
 
-export function computeInlineBlockSpecs(cylCount: number = 4): InlineBlockSpec {
-  const count = Math.max(3, Math.min(6, cylCount));
-  const boreSpacingM = 0.096;
+export function computeInlineBlockSpecs(
+  cylCountOrConfig: number | Partial<EngineConfig> = 4,
+  maybeConfig?: Partial<EngineConfig>
+): InlineBlockSpec {
+  const config = typeof cylCountOrConfig === 'object' ? cylCountOrConfig : maybeConfig;
+  let count = typeof cylCountOrConfig === 'number' ? cylCountOrConfig : 4;
+  if (config?.layout) {
+    count = config.layout === 'i3' ? 3 : config.layout === 'i6' ? 6 : 4;
+  }
+  count = Math.max(3, Math.min(6, count));
+
+  const boreDiameterMm = config?.bore || 86.0;
+  const strokeMm = config?.stroke || 86.0;
+  const rodLengthMm = config?.rodLength || 140.0;
+  const deckHeightMm = (config as any)?.deckHeight || (strokeMm * 0.5 + rodLengthMm + 38.0);
+
+  const boreSpacingMm = Math.max(96.0, boreDiameterMm + 10.0);
+  const boreSpacingM = boreSpacingMm / 1000;
   const frontMarginM = 0.065;
   const rearMarginM = 0.075;
   const totalLengthM = (count - 1) * boreSpacingM + frontMarginM + rearMarginM;
+  const boreRadiusM = (boreDiameterMm / 2) / 1000;
+  const deckHeightM = deckHeightMm / 1000;
+  const blockWidthM = Math.max(0.240, boreRadiusM * 2 + 0.08);
 
   return {
     cylinderCount: count,
-    boreDiameterMm: 86.0,
-    boreRadiusM: 0.043,
-    boreSpacingMm: 96.0,
+    boreDiameterMm,
+    boreRadiusM,
+    boreSpacingMm,
     boreSpacingM,
-    deckHeightMm: 225.0,
-    deckHeightM: 0.225,
+    deckHeightMm,
+    deckHeightM,
     deckThicknessM: 0.018,
-    blockWidthM: 0.240,
+    blockWidthM,
     totalLengthM,
     crankJournalDiameterMm: 55.0,
     crankJournalRadiusM: 0.0275,
@@ -666,14 +684,7 @@ export function buildInlineBlockScene(config?: Partial<EngineConfig> | number): 
   rootGroup.name = 'Inline_Engine_Block_Master';
   scene.add(rootGroup);
 
-  let cylCount = 4;
-  if (typeof config === 'number') {
-    cylCount = config;
-  } else if (config?.layout) {
-    cylCount = config.layout === 'i3' ? 3 : config.layout === 'i6' ? 6 : 4;
-  }
-
-  const specs = computeInlineBlockSpecs(cylCount);
+  const specs = computeInlineBlockSpecs(config);
   const materials = createBlockMaterialPalette(typeof config === 'object' ? config : undefined);
 
   // 1. Cylinder Liners & Nikasil Bores

@@ -56,8 +56,8 @@ export function NeonMorphingAeroStudio() {
       const trailingEdgeY = h * 0.45 + (camberAngleDeg / 18) * (h * 0.35);
 
       // Draw Top & Bottom Skin (Graphene Seamless)
-      ctx.fillStyle = "rgba(0, 229, 255, 0.25)";
-      ctx.strokeStyle = "#00e5ff";
+      ctx.fillStyle = "rgba(56,189,248, 0.25)";
+      ctx.strokeStyle = "#38bdf8";
       ctx.lineWidth = 2.5;
 
       ctx.beginPath();
@@ -83,7 +83,7 @@ export function NeonMorphingAeroStudio() {
       }
 
       // Streamlines
-      ctx.strokeStyle = "rgba(0, 229, 255, 0.8)";
+      ctx.strokeStyle = "rgba(56,189,248, 0.8)";
       ctx.lineWidth = 1.5;
 
       for (let i = 0; i < 5; i++) {
@@ -96,7 +96,7 @@ export function NeonMorphingAeroStudio() {
           sy += (ratio * (camberAngleDeg / 18) * 35);
         }
 
-        ctx.fillStyle = "#00e5ff";
+        ctx.fillStyle = "#38bdf8";
         ctx.beginPath();
         ctx.arc(sx, sy, 2, 0, Math.PI * 2);
         ctx.fill();
@@ -146,10 +146,10 @@ export function NeonMorphingAeroStudio() {
             }}
             className="p-6 flex flex-col gap-4"
           >
-            <div className="w-full h-52 bg-[#030712] rounded-xl border border-cyan-500/30 overflow-hidden relative shadow-[inset_0_0_25px_rgba(0,0,0,0.85)]">
+            <div className="w-full h-52 bg-[#030712] rounded-xl border border-sky-400/25 overflow-hidden relative shadow-[inset_0_0_25px_rgba(0,0,0,0.85)]">
               <canvas ref={canvasRef} width={640} height={210} className="w-full h-full" />
               <div className="absolute top-2 left-3 flex items-center gap-2">
-                <span className="text-[10px] nh-font-mono font-bold text-cyan-300">
+                <span className="text-[10px] nh-font-mono font-bold text-sky-300">
                   PIEZO MFC NODES: 15ms HIGH-SPEED STRAIN DEFORMATION
                 </span>
               </div>
@@ -175,10 +175,10 @@ export function NeonMorphingAeroStudio() {
                       else if (m.id === "airbrake_flare") setCamberAngleDeg(18.0);
                     }}
                     className={`p-2.5 rounded-lg border text-center text-xs font-bold cursor-pointer transition-all ${
-                      isSelected
-                        ? "bg-[#091a38] border-cyan-400 text-cyan-300 shadow-[0_0_12px_rgba(0,229,255,0.3)]"
-                        : "bg-[#060e22] border-white/10 text-slate-400 hover:border-cyan-500/30"
-                    }`}
+ isSelected
+ ? "bg-[#091a38] border-sky-400/40 text-sky-300"
+ : "bg-[#060e22] border-white/10 text-slate-400 hover:border-sky-400/25"
+ }`}
                   >
                     {m.name}
                   </div>
@@ -221,14 +221,14 @@ export function NeonMorphingAeroStudio() {
               onChange={(val) => setPiezoVoltageV(val)}
             />
 
-            <div className="p-3.5 rounded-xl bg-[#060e22] border border-cyan-500/20 flex flex-col gap-2 font-mono text-xs">
+            <div className="p-3.5 rounded-xl bg-[#060e22] border border-sky-400/15 flex flex-col gap-2 font-mono text-xs">
               <div className="flex items-center justify-between">
                 <span className="text-slate-400">Wing Skin Matrix:</span>
                 <span className="text-emerald-300 font-bold">Elastomeric Graphene Prepreg</span>
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-slate-400">Fatigue Life Limit:</span>
-                <span className="text-cyan-300 font-bold">&gt; 10⁷ Cyclic Flexures</span>
+                <span className="text-sky-300 font-bold">&gt; 10⁷ Cyclic Flexures</span>
               </div>
             </div>
           </NeonHorizonGlassPanel>
