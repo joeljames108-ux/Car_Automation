@@ -25,6 +25,32 @@ export type StateChangeListener = (
 ) => void;
 
 export class MasterVehicleStateEngine {
+  /**
+   * Physics calibration constants for the quasi-static performance solver.
+   * Fitted against the 100-car real-world benchmark fleet
+   * (see src/sim/benchmarks/benchmarkCorrelationEngine.ts).
+   */
+  public static PERFORMANCE_CALIBRATION = {
+    muLong: { street_comfort: 0.9, ultra_high_performance: 1.3, track_r_compound: 1.37, racing_slick: 1.46 },
+    muLat: { street_comfort: 0.95, ultra_high_performance: 1.06, track_r_compound: 1.2, racing_slick: 1.38 },
+    /** Engine-engagement / driver-reaction offset added to standing starts (s). */
+    engageOffsetSec: { manual: 0.26, torque_converter: 0.2, dual_clutch: 0.16, sequential: 0.18, ev: 0 },
+    drivetrainEff: { ice: 0.85, hybrid: 0.89, ev: 0.92 },
+    deliveryFactor: { ice: 0.74, hybrid: 0.82, ev: 0.93 },
+    /** Power available at the top-speed operating point (cooling drag, drivetrain rise). */
+    vmaxPowerFactor: 0.89,
+    crr: 0.012,
+    rolloutDiscountSec: 0.22,
+    shiftLossFactor: 0.6,
+    brakeMuFactor: 1.12,
+    // Log-space least-squares regression vs published Nordschleife reference laps
+    lap: {
+      baseSpeed: 181.35, powerExp: 0.1181, gripExp: 0.2716, dfExp: 0.3372,
+      massExp: -0.0568, refMass: 1500, awdBonus: 1.0,
+      spaFactor: 0.325, silverstoneFactor: 0.24, lagunaFactor: 0.185,
+    },
+  };
+
   private static instance: MasterVehicleStateEngine | null = null;
   private state: MasterVehicleState;
   private history: MasterVehicleState[] = [];
@@ -375,7 +401,11 @@ export class MasterVehicleStateEngine {
     if (p.peakPowerHp > effectiveHp) {
       effectiveHp = p.peakPowerHp;
     }
-    const effectiveTorqueNm = (effectiveHp * 7127) / Math.max(3000, p.redlineRpm * 0.75);
+    const isElectricVehicle =
+      p.fuelType === "ev_800v" || p.engineType === "electric_dual_motor";
+    const isHybridVehicle = String(p.engineType).startsWith("hybrid") || p.fuelType === "e85_flex";
+    const computedTorqueNm = (effectiveHp * 7127) / Math.max(3000, p.redlineRpm * 0.75);
+    const effectiveTorqueNm = p.peakTorqueNm > 0 ? Math.max(p.peakTorqueNm, computedTorqueNm) : computedTorqueNm;
 
     // 4. Aerodynamics Physics (Downforce & Drag)
     const airDensity = 1.225; // kg/m³
@@ -400,52 +430,155 @@ export class MasterVehicleStateEngine {
     const dynamicPressure160 = 0.5 * airDensity * Math.pow(speed160Mps, 2);
     const dynamicPressure250 = 0.5 * airDensity * Math.pow(speed250Mps, 2);
 
-    const downforce160N = Math.round(totalCl * dynamicPressure160 * frontalAreaM2);
-    const drag160N = Math.round(totalCd * dynamicPressure160 * frontalAreaM2);
-    const downforce250N = Math.round(totalCl * dynamicPressure250 * frontalAreaM2);
-    const drag250N = Math.round(totalCd * dynamicPressure250 * frontalAreaM2);
+    // Declared aero overrides (benchmark mapper supplies measured Cd·A and downforce)
+    const hasDeclaredAero = (a as { declaredAeroOverride?: boolean }).declaredAeroOverride === true;
+    const declaredCdA = hasDeclaredAero && a.topSpeedDragAreaCdA > 0.05 ? a.topSpeedDragAreaCdA : 0;
+    const effCdA = declaredCdA > 0 ? declaredCdA : totalCd * frontalAreaM2;
+    const declaredDf160N = hasDeclaredAero && a.totalDownforceNAt100Mph > 0 ? a.totalDownforceNAt100Mph : 0;
 
-    // 5. Performance Dynamics
+    const geometricDf160N = totalCl * dynamicPressure160 * frontalAreaM2;
+    const downforce160N = Math.round(declaredDf160N > 0 ? declaredDf160N : geometricDf160N);
+    const drag160N = Math.round(effCdA * dynamicPressure160);
+    const downforce250N = Math.round((declaredDf160N > 0 ? declaredDf160N : geometricDf160N) * Math.pow(speed250Mps / speed160Mps, 2));
+    const drag250N = Math.round(effCdA * dynamicPressure250);
+
+    // 5. Performance Dynamics — quasi-static point-mass solver
+    // (traction-limited launch phase + power-limited phase with drag/rolling
+    //  resistance, calibrated against the 100-car real-world benchmark fleet)
+    const CAL = MasterVehicleStateEngine.PERFORMANCE_CALIBRATION;
+    const G = 9.81; // standard gravity, m/s²
     const powerKw = effectiveHp * 0.7457;
     const powerToWeightHpPerTonne = Math.round((effectiveHp / totalMassKg) * 1000);
 
-    // 0-100 km/h solver
-    let tireGripCoeff = 1.15;
-    if (w.tireCompound === "ultra_high_performance") tireGripCoeff = 1.35;
-    if (w.tireCompound === "track_r_compound") tireGripCoeff = 1.60;
-    if (w.tireCompound === "racing_slick") tireGripCoeff = 1.95;
+    let tireGripCoeff = CAL.muLong.street_comfort;
+    if (w.tireCompound === "ultra_high_performance") tireGripCoeff = CAL.muLong.ultra_high_performance;
+    if (w.tireCompound === "track_r_compound") tireGripCoeff = CAL.muLong.track_r_compound;
+    if (w.tireCompound === "racing_slick") tireGripCoeff = CAL.muLong.racing_slick;
+    let tireMuLat = CAL.muLat.street_comfort;
+    if (w.tireCompound === "ultra_high_performance") tireMuLat = CAL.muLat.ultra_high_performance;
+    if (w.tireCompound === "track_r_compound") tireMuLat = CAL.muLat.track_r_compound;
+    if (w.tireCompound === "racing_slick") tireMuLat = CAL.muLat.racing_slick;
 
-    const launchG = Math.min(1.4, tireGripCoeff * (rearMassKg / totalMassKg) * 1.8);
-    const zeroToHundredSec = Math.max(1.85, Number((100 / (launchG * 9.81 * 3.6) + (t.shiftTimeMs / 1000)).toFixed(2)));
-    const zeroToTwoHundredSec = Number((zeroToHundredSec * 2.65 + (totalMassKg / effectiveHp) * 1.8).toFixed(2));
+    const archAny = c.architecture as string;
+    const isAWD = archAny.includes("awd") || archAny.includes("all_wheel");
+    const isFWD = archAny === "front_engine_fwd";
+    const rearAxleFraction = 1 - frontWeightRatio;
 
-    // Top Speed solver: P = 0.5 * rho * Cd * A * v^3 + Crr * m * g * v
-    const topSpeedMps = Math.pow((powerKw * 1000 * 0.88) / (0.5 * airDensity * totalCd * frontalAreaM2), 1 / 3);
-    const topSpeedKmh = Math.round(Math.min(440, topSpeedMps * 3.6));
+    // Longitudinal weight transfer: ΔW/W = μ · h/L
+    const coGHeight = (c as { coGHeightMm?: number }).coGHeightMm ?? 460;
+    const hOverL = Math.min(0.28, coGHeight / Math.max(2200, c.wheelbaseMm));
+    let drivenAxleFraction: number;
+    if (isElectricVehicle) drivenAxleFraction = 0.95;
+    else if (isAWD) drivenAxleFraction = Math.min(0.96, rearAxleFraction + 0.48);
+    else if (isFWD) drivenAxleFraction = Math.min(0.72, frontWeightRatio + tireGripCoeff * hOverL);
+    else drivenAxleFraction = Math.min(0.95, rearAxleFraction + tireGripCoeff * hOverL);
 
-    // Quarter Mile
-    const quarterMileSec = Number((5.825 * Math.pow(totalMassKg * 2.20462 / effectiveHp, 1 / 3)).toFixed(2));
-    const quarterMileTrapKmh = Math.round(Math.min(topSpeedKmh * 0.85, (234 / Math.pow(totalMassKg * 2.20462 / effectiveHp, 1 / 3)) * 1.60934));
+    const ttKey = String(t.transmissionType);
+    const engageOffsetSec =
+      ttKey.startsWith("manual") ? CAL.engageOffsetSec.manual :
+      ttKey.startsWith("torque_converter") ? CAL.engageOffsetSec.torque_converter :
+      ttKey.startsWith("ev_direct") ? CAL.engageOffsetSec.ev :
+      ttKey.startsWith("dual_clutch") ? CAL.engageOffsetSec.dual_clutch :
+      CAL.engageOffsetSec.sequential;
+    const tractionAccelMs2 = tireGripCoeff * G * drivenAxleFraction;
+
+    // Wheel power after drivetrain losses.
+    // Top-speed operating point sustains near-peak power; standing-run average
+    // power is lower because the engine rarely operates at peak-power rpm.
+    const drivetrainEff = isElectricVehicle ? CAL.drivetrainEff.ev : isHybridVehicle ? CAL.drivetrainEff.hybrid : CAL.drivetrainEff.ice;
+    const deliveryFactor = isElectricVehicle ? CAL.deliveryFactor.ev : isHybridVehicle ? CAL.deliveryFactor.hybrid : CAL.deliveryFactor.ice;
+    const wheelPowerW = effectiveHp * 745.7 * drivetrainEff;
+    const accelPowerW = effectiveHp * 745.7 * drivetrainEff * deliveryFactor;
+
+    const rollingResistN = CAL.crr * totalMassKg * G;
+    const resistForceAt = (v: number) => 0.5 * airDensity * effCdA * v * v + rollingResistN;
+    const accelAt = (v: number) =>
+      Math.max(0.2, Math.min(tractionAccelMs2, accelPowerW / Math.max(4, totalMassKg * v)) - resistForceAt(v) / totalMassKg);
+
+    // Rollout convention: manufacturer / drag-strip timing discounts the first
+    // foot of the run for cars with launch control and non-manual gearboxes.
+    const rolloutDiscount =
+      el.launchControlInstalled && !ttKey.startsWith("manual") && !isElectricVehicle ? CAL.rolloutDiscountSec : 0;
+
+    // Velocity-domain integration helper
+    const integrateToSpeed = (vTargetMps: number): number => {
+      let v = 0.5;
+      let time = 0;
+      const dv = 0.25;
+      while (v < vTargetMps && time < 120) {
+        const a = accelAt(v);
+        time += dv / a;
+        v += dv;
+      }
+      return time;
+    };
+
+    const shiftCountTo = (vEndMps: number) =>
+      isElectricVehicle || t.gearCount <= 1
+        ? 0
+        : Math.max(0, Math.min(t.gearCount - 1, Math.round((vEndMps * 3.6) / 52) - 1));
+
+    const shiftLossSec = (count: number) => count * (t.shiftTimeMs / 1000) * CAL.shiftLossFactor;
+
+    const raw100 = integrateToSpeed(100 / 3.6);
+    const zeroToHundredSec = Number(Math.max(1.6,
+      raw100 + engageOffsetSec + shiftLossSec(Math.max(0, shiftCountTo(27.78) - 1)) - rolloutDiscount).toFixed(2));
+    const raw200 = integrateToSpeed(200 / 3.6);
+    const zeroToTwoHundredSec = Number(Math.max(3.5,
+      raw200 + engageOffsetSec + shiftLossSec(Math.max(0, shiftCountTo(55.56) - 1)) - rolloutDiscount).toFixed(2));
+
+    // Top Speed solver: wheel power balance vs aero drag + rolling resistance
+    const vmaxPowerW = wheelPowerW * CAL.vmaxPowerFactor;
+    let vTop = Math.pow(vmaxPowerW / (0.5 * airDensity * Math.max(0.12, effCdA)), 1 / 3);
+    for (let i = 0; i < 24; i++) {
+      const fDrag = resistForceAt(vTop);
+      const targetV = vmaxPowerW / fDrag;
+      vTop = vTop + (targetV - vTop) * 0.5;
+    }
+    const limiterKmh = el.topSpeedLimiterKmh ?? 0;
+    const topSpeedKmh = Math.round(Math.max(80, Math.min(limiterKmh > 0 ? limiterKmh : 480, vTop * 3.6)));
+
+    // Quarter Mile — distance-domain integration to 402.34 m
+    let qmDist = 0, qmTime = 0, qmTrap = topSpeedKmh * 0.72;
+    {
+      let v = 0.5;
+      const dt = 0.008;
+      while (qmDist < 402.34 && qmTime < 60) {
+        const a = accelAt(v);
+        const vNext = v + a * dt;
+        qmDist += ((v + vNext) / 2) * dt;
+        qmTime += dt;
+        v = vNext;
+      }
+      qmTrap = Math.round(v * 3.6);
+      qmTime += engageOffsetSec + shiftLossSec(Math.max(0, shiftCountTo(qmTrap / 3.6) - 1)) - rolloutDiscount;
+    }
+    const quarterMileSec = Number(Math.max(5, qmTime).toFixed(2));
+    const quarterMileTrapKmh = Math.min(topSpeedKmh, qmTrap);
 
     // Braking & Lateral Grip
-    const brakePadFriction = w.brakeDiscType === "carbon_ceramic_matrix" ? 1.45 : w.brakeDiscType === "carbon_carbon_race" ? 1.65 : 1.15;
-    const brakingDecelG = Math.min(1.85, tireGripCoeff * brakePadFriction * 0.95);
-    const brakingDistM = Number((Math.pow(100 / 3.6, 2) / (2 * brakingDecelG * 9.81)).toFixed(1));
+    const brakePadCapG = w.brakeDiscType === "carbon_ceramic_matrix" ? 1.30 : w.brakeDiscType === "carbon_carbon_race" ? 1.45 : 1.15;
+    const brakingDecelG = Math.min(brakePadCapG, tireMuLat * CAL.brakeMuFactor);
+    const brakingDistM = Number((Math.pow(100 / 3.6, 2) / (2 * brakingDecelG * G)).toFixed(1));
 
     // Lateral G with aero downforce bonus
-    const aeroLoadRatio = downforce160N / (totalMassKg * 9.81);
-    const maxLateralG = Number((tireGripCoeff * (1 + aeroLoadRatio * 0.65)).toFixed(2));
+    const aeroLoadRatio = downforce160N / (totalMassKg * G);
+    const maxLateralG = Number((tireMuLat * (1 + aeroLoadRatio)).toFixed(2));
 
-    // 6. Track Lap Times (Simulated on Nürburgring Nordschleife 20.832 km)
-    const baseRingSec = 540; // 9:00 baseline
-    const powerReduction = (effectiveHp - 300) * 0.18;
-    const massPenalty = (totalMassKg - 1200) * 0.08;
-    const aeroBonus = (downforce250N / 100) * 1.25;
-    const gripBonus = (tireGripCoeff - 1.0) * 45;
-    const nurburgringSec = Number(Math.max(380, baseRingSec - powerReduction + massPenalty - aeroBonus - gripBonus).toFixed(2));
-    const spaSec = Number((nurburgringSec * 0.315).toFixed(2));
-    const silverstoneSec = Number((nurburgringSec * 0.235).toFixed(2));
-    const lagunaSecaSec = Number((nurburgringSec * 0.185).toFixed(2));
+    // 6. Track Lap Times — macro circuit model on Nürburgring Nordschleife 20.832 km.
+    // Average speed scales with power-to-weight, tyre grip, aerodynamic load and mass.
+    const dfTerm = 1 + (downforce250N / Math.max(1, totalMassKg * G));
+    const avgLapSpeedKmh =
+      CAL.lap.baseSpeed *
+      Math.pow(Math.max(0.04, effectiveHp / totalMassKg), CAL.lap.powerExp) *
+      Math.pow(tireMuLat, CAL.lap.gripExp) *
+      Math.pow(dfTerm, CAL.lap.dfExp) *
+      Math.pow(CAL.lap.refMass / Math.max(600, totalMassKg), CAL.lap.massExp) *
+      (isAWD ? CAL.lap.awdBonus : 1);
+    const nurburgringSec = Number(Math.max(240, (20832 / 1000 / Math.max(60, avgLapSpeedKmh)) * 3600).toFixed(2));
+    const spaSec = Number((nurburgringSec * CAL.lap.spaFactor).toFixed(2));
+    const silverstoneSec = Number((nurburgringSec * CAL.lap.silverstoneFactor).toFixed(2));
+    const lagunaSecaSec = Number((nurburgringSec * CAL.lap.lagunaFactor).toFixed(2));
 
     const metrics: UnifiedVehiclePerformanceMetrics = {
       totalCurbMassKg: Math.round(totalMassKg),
@@ -784,13 +917,4 @@ export class MasterVehicleStateEngine {
         fireSuppressionInstalled: true,
         harnessType: "sabelt_6_point_f1",
         fuelCellSafetyBladder: true,
-        crashStructureRating: "motorsport_fia",
-        massKg: 38,
-      },
-      metrics: {} as any,
-      ergonomics: {} as any,
-      costAndBOM: {} as any,
-      compatibility: {} as any,
-    };
-  }
-}
+        crashStructureRating: 

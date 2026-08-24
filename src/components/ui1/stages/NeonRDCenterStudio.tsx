@@ -82,8 +82,8 @@ export function NeonRDCenterStudio() {
                   onClick={() => handleToggleUnlock(tech.id)}
                   className={`p-3.5 rounded-xl border transition-all cursor-pointer flex flex-col gap-2 ${
  isUnlocked
- ? "bg-[#091a38] border-sky-400/40"
- : "bg-[#060e22] border-white/10 opacity-75 hover:opacity-100 hover:border-sky-400/25"
+ ? "bg-sky-400/10 border-sky-400/30 text-sky-200"
+ : "bg-[#0a111e] border-white/10 opacity-75 hover:opacity-100 hover:border-sky-400/25"
  }`}
                 >
                   <div className="flex items-center justify-between">
@@ -132,7 +132,7 @@ export function NeonRDCenterStudio() {
               color="cyan"
             />
 
-            <div className="p-4 rounded-xl bg-[#060e22] border border-sky-400/15 flex flex-col gap-2">
+            <div className="p-4 rounded-xl bg-[#0a111e] border border-sky-400/15 flex flex-col gap-2">
               <div className="flex items-center justify-between">
                 <span className="text-xs text-slate-400">Annual R&D Investment:</span>
                 <span className="text-xs font-bold nh-font-mono text-sky-300">

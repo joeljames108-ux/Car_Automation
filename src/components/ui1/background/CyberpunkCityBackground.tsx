@@ -72,7 +72,7 @@ export const CyberpunkCityBackground: React.FC<CyberpunkCityBackgroundProps> = (
   }, [parallaxIntensity]);
 
   return (
-    <div className="fixed inset-0 pointer-events-none overflow-hidden z-0 select-none bg-[#03060f]">
+    <div className="fixed inset-0 pointer-events-none overflow-hidden z-0 select-none bg-[#05080f]">
       {/* 1. City Panorama Image Layer (desaturated, quiet) */}
       <div
         ref={bgRef}

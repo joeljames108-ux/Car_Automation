@@ -54,7 +54,7 @@ export const NeonHorizonModal: React.FC<NeonHorizonModalProps> = ({
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       {/* Backdrop */}
       <div
-        className="fixed inset-0 bg-[#03050a]/80 backdrop-blur-md transition-opacity duration-300"
+        className="fixed inset-0 bg-[#05080f]/80 backdrop-blur-md transition-opacity duration-300"
         onClick={handleClose}
       />
 

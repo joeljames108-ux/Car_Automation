@@ -1,5 +1,5 @@
 // ============================================================================
-// ULTRA-HIGH-FIDELITY MODULAR GLB GENERATOR — DUAL-PASS COOLING RADIATOR
+// ULTRA-HIGH-FIDELITY MODULAR GLB GENERATOR ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Â DUAL-PASS COOLING RADIATOR
 // ============================================================================
 // Solid-modeling engineering generator for an ultra-high-performance dual-pass
 // brazed aluminum racing radiator. Features a 24-row extruded cooling core with
@@ -126,7 +126,7 @@ export function buildRadiatorScene(customSpec?: Partial<RadiatorSpec>): THREE.Sc
 
   const matRedAnodized = new THREE.MeshStandardMaterial({
     name: 'Billet_Red_Anodized_AN',
-    color: new THREE.Color(0xd97706),
+    color: new THREE.Color(0xdc2626),
     metalness: 0.90,
     roughness: 0.20,
     envMapIntensity: 1.8,
@@ -141,12 +141,13 @@ export function buildRadiatorScene(customSpec?: Partial<RadiatorSpec>): THREE.Sc
 
   const matClearGlass = matLib.getQuartzGlass();
 
-  // ─── 1. 24-ROW DUAL-PASS BRAZED ALUMINUM COOLING CORE ───
+  // ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ 1. 24-ROW DUAL-PASS BRAZED ALUMINUM COOLING CORE ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬
   const coreGroup = new THREE.Group();
   coreGroup.name = 'Brazed_Radiator_Core_Subsystem';
 
   // Main Brazed Fin & Tube Extrusion Matrix (X: Depth, Y: Width, Z: Height)
-  const coreGeo = new THREE.BoxGeometry(spec.coreThicknessM, spec.coreWidthM, spec.coreHeightM);
+  // Recessed inner matrix: tubes & fins protrude past it for a real finned face
+  const coreGeo = new THREE.BoxGeometry(spec.coreThicknessM * 0.55, spec.coreWidthM * 0.995, spec.coreHeightM * 0.995);
   const coreMesh = new THREE.Mesh(coreGeo, matBrazedCore);
   coreMesh.name = 'MicroLouvered_Aluminum_Fin_Core';
   coreMesh.position.set(0, 0, 0);
@@ -228,7 +229,7 @@ export function buildRadiatorScene(customSpec?: Partial<RadiatorSpec>): THREE.Sc
 
   rootGroup.add(coreGroup);
 
-  // ─── 2. TIG-WELDED PARTITIONED END TANKS & FLOW DIVIDERS ───
+  // ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ 2. TIG-WELDED PARTITIONED END TANKS & FLOW DIVIDERS ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬
   const tankGroup = new THREE.Group();
   tankGroup.name = 'Partitioned_EndTanks_Subsystem';
 
@@ -330,7 +331,7 @@ export function buildRadiatorScene(customSpec?: Partial<RadiatorSpec>): THREE.Sc
 
   rootGroup.add(tankGroup);
 
-  // ─── 3. BILLET FILLER NECK, RELIEF CAP & OVERFLOW EXPANSION TANK ───
+  // ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ 3. BILLET FILLER NECK, RELIEF CAP & OVERFLOW EXPANSION TANK ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬
   const fillerGroup = new THREE.Group();
   fillerGroup.name = 'FillerNeck_ExpansionTank_Subsystem';
 
@@ -410,7 +411,7 @@ export function buildRadiatorScene(customSpec?: Partial<RadiatorSpec>): THREE.Sc
 
   rootGroup.add(fillerGroup);
 
-  // ─── 4. CARBON MONOCOQUE SHROUD, BYPASS FLAPS & DUAL BRUSHLESS FANS ───
+  // ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ 4. CARBON MONOCOQUE SHROUD, BYPASS FLAPS & DUAL BRUSHLESS FANS ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬
   const fanGroup = new THREE.Group();
   fanGroup.name = 'Carbon_Shroud_TwinFans_Subsystem';
 
@@ -527,7 +528,7 @@ export function buildRadiatorScene(customSpec?: Partial<RadiatorSpec>): THREE.Sc
 
   rootGroup.add(fanGroup);
 
-  // ─── 5. AUXILIARY 10-ROW STACKED-PLATE OIL COOLER ───
+  // ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ 5. AUXILIARY 10-ROW STACKED-PLATE OIL COOLER ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬
   if (spec.includeAuxiliaryOilCooler) {
     const oilCoolerGroup = new THREE.Group();
     oilCoolerGroup.name = 'Auxiliary_StackedPlate_OilCooler_Subsystem';
@@ -573,13 +574,28 @@ export function buildRadiatorScene(customSpec?: Partial<RadiatorSpec>): THREE.Sc
     rootGroup.add(oilCoolerGroup);
   }
 
-  // ─── 6. TRACK DEBRIS PROTECTIVE MESH GRILLE ───
+  // ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ 6. TRACK DEBRIS PROTECTIVE MESH GRILLE ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬
   if (spec.includeDebrisGrille) {
     const grilleGroup = new THREE.Group();
     grilleGroup.name = 'TrackDebris_StoneGuard_Subsystem';
 
-    const meshGeo = new THREE.BoxGeometry(0.003, spec.coreWidthM - 0.01, spec.coreHeightM - 0.01);
-    const meshItem = new THREE.Mesh(meshGeo, matStainless);
+    // Woven wire mesh grid (merged wire strips) - see-through stone guard
+    const wireGeos: THREE.BufferGeometry[] = [];
+    const meshCols = 26;
+    const meshRows = 44;
+    for (let wc = 0; wc <= meshCols; wc++) {
+      const wy = -spec.coreWidthM / 2 + 0.005 + (wc / meshCols) * (spec.coreWidthM - 0.01);
+      const wGeo = new THREE.BoxGeometry(0.0012, 0.0016, spec.coreHeightM - 0.01);
+      wGeo.translate(0, wy, 0);
+      wireGeos.push(wGeo);
+    }
+    for (let wr = 0; wr <= meshRows; wr++) {
+      const wz = -spec.coreHeightM / 2 + 0.005 + (wr / meshRows) * (spec.coreHeightM - 0.01);
+      const wGeo = new THREE.BoxGeometry(0.0012, spec.coreWidthM - 0.01, 0.0016);
+      wGeo.translate(0, 0, wz);
+      wireGeos.push(wGeo);
+    }
+    const meshItem = new THREE.Mesh(mergeBufferGeometries(wireGeos), matStainless);
     meshItem.name = 'Titanium_Hexagonal_Stone_Guard_Mesh';
     meshItem.position.set(-spec.coreThicknessM / 2 - 0.006, 0, 0);
     grilleGroup.add(meshItem);
@@ -601,7 +617,7 @@ export function buildRadiatorScene(customSpec?: Partial<RadiatorSpec>): THREE.Sc
     rootGroup.add(grilleGroup);
   }
 
-  // ─── 7. 4-PLY KEVLAR SILICONE HOSES & STAINLESS T-BOLT CLAMPS ───
+  // ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ 7. 4-PLY KEVLAR SILICONE HOSES & STAINLESS T-BOLT CLAMPS ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬ÃƒÂ¢Ã¢â‚¬ÂÃ¢â€šÂ¬
   const hoseGroup = new THREE.Group();
   hoseGroup.name = 'Silicone_Hoses_TClamps_Subsystem';
 
@@ -638,6 +654,28 @@ export function buildRadiatorScene(customSpec?: Partial<RadiatorSpec>): THREE.Sc
   const clamp2 = new THREE.Mesh(createHoseClamp(0.045, 0.008), matStainless);
   clamp2.position.set(spec.coreThicknessM / 2 + 0.035, -spec.coreWidthM / 2 - 0.02, -0.12);
   hoseGroup.add(clamp2);
+
+  // Engine-Side Hose End Bead Rings & Clamps
+  const endClamp1 = new THREE.Mesh(createHoseClamp(0.045, 0.008), matStainless);
+  endClamp1.position.set(0.225, -0.155, 0.175);
+  hoseGroup.add(endClamp1);
+
+  const endClamp2 = new THREE.Mesh(createHoseClamp(0.045, 0.008), matStainless);
+  endClamp2.position.set(0.225, -0.06, 0.015);
+  hoseGroup.add(endClamp2);
+
+  const hoseBeadGeo = new THREE.TorusGeometry(0.021, 0.0025, 10, 24);
+  const hoseBead1 = new THREE.Mesh(hoseBeadGeo, matEndTanks);
+  hoseBead1.name = 'Upper_Hose_Mating_Bead_Ring';
+  hoseBead1.position.set(0.243, -0.148, 0.181);
+  hoseBead1.rotation.y = 0.5;
+  hoseGroup.add(hoseBead1);
+
+  const hoseBead2 = new THREE.Mesh(hoseBeadGeo, matEndTanks);
+  hoseBead2.name = 'Lower_Hose_Mating_Bead_Ring';
+  hoseBead2.position.set(0.243, -0.052, 0.024);
+  hoseBead2.rotation.y = 0.5;
+  hoseGroup.add(hoseBead2);
 
   rootGroup.add(hoseGroup);
 

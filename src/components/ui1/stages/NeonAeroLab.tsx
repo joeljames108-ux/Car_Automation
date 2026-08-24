@@ -21,9 +21,9 @@ import { playHMIClickSound } from "../../../utils/hmiSoundSynth";
 
 /* ─── panel glass ─── */
 const glassPanel =
-  "rounded-2xl bg-[#0e1728]/70 border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)]";
+  "rounded-2xl bg-[#0e1626]/70 border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)]";
 const innerCard =
-  "p-3.5 rounded-2xl bg-[#0c1626]/80 border border-white/8";
+  "p-3.5 rounded-2xl bg-[#0e1626]/80 border border-white/8";
 
 export function NeonAeroLab() {
   const { sim, updateAero } = useDesign();
@@ -84,7 +84,7 @@ export function NeonAeroLab() {
       ctx.fillRect(0, h * 0.45, w, h * 0.55);
 
       // Track kerb stripes (Red & White)
-      ctx.strokeStyle = "#ef4444";
+      ctx.strokeStyle = "#c96f6f";
       ctx.lineWidth = 4;
       ctx.beginPath();
       ctx.moveTo(w * 0.15, h);
@@ -115,7 +115,7 @@ export function NeonAeroLab() {
       ctx.fill();
 
       // Red taillight strip
-      ctx.fillStyle = "#ef4444";
+      ctx.fillStyle = "#c96f6f";
       ctx.fillRect(carX - 14, carY + 2, 7, 2);
       ctx.fillRect(carX + 7, carY + 2, 7, 2);
 
@@ -127,7 +127,7 @@ export function NeonAeroLab() {
       ctx.fill();
 
       // Camera Rec Indicator
-      ctx.fillStyle = frame % 60 < 30 ? "#ef4444" : "transparent";
+      ctx.fillStyle = frame % 60 < 30 ? "#c96f6f" : "transparent";
       ctx.beginPath();
       ctx.arc(w - 12, 12, 3, 0, Math.PI * 2);
       ctx.fill();
@@ -198,7 +198,7 @@ export function NeonAeroLab() {
         onClick={() => handleAutoBalance("max_downforce")}
         className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[10px] font-semibold transition-all cursor-pointer ${
  balanceMode === "max_downforce"
- ? "bg-sky-500/20 text-sky-300 border border-sky-400/50"
+ ? "bg-sky-400/15 text-sky-300 border border-sky-400/35"
  : "bg-white/[0.04] text-slate-400 hover:text-slate-200 border border-white/8"
  }`}
       >
@@ -209,7 +209,7 @@ export function NeonAeroLab() {
         onClick={() => handleAutoBalance("low_drag")}
         className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[10px] font-semibold transition-all cursor-pointer ${
  balanceMode === "low_drag"
- ? "bg-sky-500/20 text-sky-300 border border-sky-400/50"
+ ? "bg-sky-400/15 text-sky-300 border border-sky-400/35"
  : "bg-white/[0.04] text-slate-400 hover:text-slate-200 border border-white/8"
  }`}
       >
@@ -233,7 +233,7 @@ export function NeonAeroLab() {
             }}
             className={`flex items-center gap-1 px-3 py-1.5 rounded-full text-[10px] font-semibold whitespace-nowrap transition-all cursor-pointer ${
  isActive
- ? "bg-sky-500 text-white"
+ ? "bg-sky-400/20 text-sky-100 border border-sky-300/40"
  : "bg-white/[0.04] text-slate-400 hover:text-slate-200 border border-white/6"
  }`}
           >
@@ -269,7 +269,7 @@ export function NeonAeroLab() {
         <button
           onClick={() => setCameraActive(!cameraActive)}
           className={`w-9 h-5 rounded-full p-0.5 transition-colors cursor-pointer ${
- cameraActive ? "bg-sky-500" : "bg-slate-700"
+ cameraActive ? "bg-sky-400/80" : "bg-slate-700/80"
  }`}
         >
           <div
@@ -348,7 +348,7 @@ export function NeonAeroLab() {
             <path
               d="M 5 60 Q 50 50 90 40 T 175 18"
               fill="none"
-              stroke="#38bdf8"
+              stroke="#8fb9d9"
               strokeWidth="2"
             />
             <path
@@ -412,7 +412,7 @@ export function NeonAeroLab() {
                   setFrameDropdownOpen(!frameDropdownOpen);
                   setBodyDropdownOpen(false);
                 }}
-                className="w-full p-3 rounded-2xl bg-[#0c1626]/80 hover:bg-[#121f33] border border-white/10 flex items-center justify-between transition-all cursor-pointer"
+                className="w-full p-3 rounded-2xl bg-[#0e1626]/80 hover:bg-[#111a2b] border border-white/10 flex items-center justify-between transition-all cursor-pointer"
               >
                 <span className="text-sm font-medium text-slate-200">
                   {frameMaterial}
@@ -425,7 +425,7 @@ export function NeonAeroLab() {
                 />
               </button>
               {frameDropdownOpen && (
-                <div className="absolute top-full left-0 right-0 mt-1.5 p-1 rounded-2xl bg-[#0c1626] border border-white/15 shadow-2xl z-30 flex flex-col gap-1">
+                <div className="absolute top-full left-0 right-0 mt-1.5 p-1 rounded-2xl bg-[#0e1626] border border-white/15 shadow-2xl z-30 flex flex-col gap-1">
                   {[
                     "Carbon Fiber (Standard)",
                     "Forged Carbon Monocoque",
@@ -441,7 +441,7 @@ export function NeonAeroLab() {
                       }}
                       className={`p-2.5 rounded-xl text-left text-xs transition-colors cursor-pointer ${
  frameMaterial === mat
- ? "bg-sky-500/20 text-sky-300 font-bold"
+ ? "bg-sky-400/15 text-sky-300 font-bold"
  : "text-slate-300 hover:bg-white/5"
  }`}
                     >
@@ -463,7 +463,7 @@ export function NeonAeroLab() {
                   setBodyDropdownOpen(!bodyDropdownOpen);
                   setFrameDropdownOpen(false);
                 }}
-                className="w-full p-3 rounded-2xl bg-[#0c1626]/80 hover:bg-[#121f33] border border-white/10 flex items-center justify-between transition-all cursor-pointer"
+                className="w-full p-3 rounded-2xl bg-[#0e1626]/80 hover:bg-[#111a2b] border border-white/10 flex items-center justify-between transition-all cursor-pointer"
               >
                 <span className="text-sm font-medium text-slate-200">
                   {bodyMaterial}
@@ -476,7 +476,7 @@ export function NeonAeroLab() {
                 />
               </button>
               {bodyDropdownOpen && (
-                <div className="absolute top-full left-0 right-0 mt-1.5 p-1 rounded-2xl bg-[#0c1626] border border-white/15 shadow-2xl z-30 flex flex-col gap-1">
+                <div className="absolute top-full left-0 right-0 mt-1.5 p-1 rounded-2xl bg-[#0e1626] border border-white/15 shadow-2xl z-30 flex flex-col gap-1">
                   {[
                     "Carbon Fiber (Advanced)",
                     "Aramid Graphene Matrix",
@@ -492,7 +492,7 @@ export function NeonAeroLab() {
                       }}
                       className={`p-2.5 rounded-xl text-left text-xs transition-colors cursor-pointer ${
  bodyMaterial === mat
- ? "bg-sky-500/20 text-sky-300 font-bold"
+ ? "bg-sky-400/15 text-sky-300 font-bold"
  : "text-slate-300 hover:bg-white/5"
  }`}
                     >
@@ -555,7 +555,7 @@ export function NeonAeroLab() {
                       km/h
                     </span>
                   </span>
-                  <span className="px-2 py-0.5 rounded-full bg-sky-500/15 text-sky-300 text-[10px] font-bold border border-sky-400/30">
+                  <span className="px-2 py-0.5 rounded-full bg-sky-400/10 text-sky-300 text-[10px] font-bold border border-sky-400/30">
                     Sports Pace
                   </span>
                 </div>
@@ -653,7 +653,7 @@ export function NeonAeroLab() {
               284{" "}
               <span className="text-xs font-medium text-slate-400">km/h</span>
             </span>
-            <span className="px-2 py-0.5 rounded-full bg-sky-500/15 text-sky-300 text-[10px] font-bold border border-sky-400/30">
+            <span className="px-2 py-0.5 rounded-full bg-sky-400/10 text-sky-300 text-[10px] font-bold border border-sky-400/30">
               Sports Pace
             </span>
           </div>

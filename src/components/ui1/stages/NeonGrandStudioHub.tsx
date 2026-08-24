@@ -26,7 +26,7 @@ export function NeonGrandStudioHub() {
       </NeonHorizonGlassPanel>
 
       {/* Embedded Studio Hub Container */}
-      <div className="w-full rounded-3xl overflow-hidden border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] bg-[#070e1c]">
+      <div className="w-full rounded-3xl overflow-hidden border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] bg-[#0a111e]">
         <GrandAutomotiveStudioHub />
       </div>
     </div>

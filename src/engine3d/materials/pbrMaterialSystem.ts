@@ -195,9 +195,9 @@ export class EngineMaterialLibrary {
     if (!this.materialCache.has(key)) {
       const mat = new THREE.MeshPhysicalMaterial({
         name: 'Heavy_Duty_Ductile_Cast_Iron',
-        color: new THREE.Color(0x64748b),
-        metalness: 0.85,
-        roughness: 0.30,
+        color: new THREE.Color(0x51586a),
+        metalness: 0.82,
+        roughness: 0.34,
         roughnessMap: this.textureCache.get('cast_iron') || null,
         bumpMap: this.textureCache.get('cast_iron') || null,
         bumpScale: 0.015,
@@ -253,9 +253,9 @@ export class EngineMaterialLibrary {
     if (!this.materialCache.has(key)) {
       const mat = new THREE.MeshPhysicalMaterial({
         name: 'Cast_Magnesium_Aluminum',
-        color: new THREE.Color(0x94a3b8),
-        metalness: 0.88,
-        roughness: 0.26,
+        color: new THREE.Color(0x9aa4b2),
+        metalness: 0.86,
+        roughness: 0.30,
         roughnessMap: this.textureCache.get('cast_iron') || null,
         envMapIntensity: 2.2,
         clearcoat: 0.2,
@@ -292,9 +292,9 @@ export class EngineMaterialLibrary {
     if (!this.materialCache.has(key)) {
       const mat = new THREE.MeshPhysicalMaterial({
         name: 'Forged_Nitrided_Steel',
-        color: new THREE.Color(0xdbeafe),
+        color: new THREE.Color(0xd4dce8),
         metalness: 0.95,
-        roughness: 0.12,
+        roughness: 0.14,
         envMapIntensity: 2.4,
         clearcoat: 0.6,
         clearcoatRoughness: 0.03,
@@ -309,13 +309,14 @@ export class EngineMaterialLibrary {
     if (!this.materialCache.has(key)) {
       const mat = new THREE.MeshPhysicalMaterial({
         name: 'Billet_Gold_Anodized',
-        color: new THREE.Color(0xf59e0b),
-        metalness: 0.92,
-        roughness: 0.18,
-        envMapIntensity: 1.8,
+        color: new THREE.Color(0xf0a028),
+        metalness: 0.90,
+        roughness: 0.22,
+        envMapIntensity: 2.2,
         clearcoat: 0.7,
-        clearcoatRoughness: 0.04,
-        sheen: 0.1,
+        clearcoatRoughness: 0.05,
+        sheen: 0.12,
+        sheenColor: new THREE.Color(0xfcd34d),
       });
       this.materialCache.set(key, mat);
     }
@@ -439,11 +440,11 @@ export class EngineMaterialLibrary {
     if (!this.materialCache.has(key)) {
       const mat = new THREE.MeshPhysicalMaterial({
         name: 'Transaxle_Magnesium_Casing',
-        color: new THREE.Color(0x64748b),
-        metalness: 0.80,
-        roughness: 0.44,
+        color: new THREE.Color(0x8b95a3),
+        metalness: 0.78,
+        roughness: 0.46,
         roughnessMap: this.textureCache.get('cast_iron') || null,
-        envMapIntensity: 1.2,
+        envMapIntensity: 1.4,
         clearcoat: 0.15,
         clearcoatRoughness: 0.4,
       });

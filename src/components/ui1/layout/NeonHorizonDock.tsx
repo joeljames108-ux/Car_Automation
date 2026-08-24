@@ -75,7 +75,7 @@ export const NeonHorizonDock: React.FC<NeonHorizonDockProps> = ({
       </div>
 
       {/* Floating Scene Mode Switcher */}
-      <div className="flex items-center gap-1.5 p-1 rounded-2xl bg-[#0a1120]/90 backdrop-blur-2xl border border-white/10 shadow-[0_10px_30px_rgba(0,0,0,0.5)]">
+      <div className="flex items-center gap-1.5 p-1 rounded-2xl bg-[#0a111e]/90 backdrop-blur-2xl border border-white/10 shadow-[0_10px_30px_rgba(0,0,0,0.5)]">
         {sceneModes.map((sm) => {
           const isActive = sceneMode === sm.id;
           return (
@@ -98,7 +98,7 @@ export const NeonHorizonDock: React.FC<NeonHorizonDockProps> = ({
       </div>
 
       {/* Main Glassmorphic Dock Bar with Vision OS Magnification */}
-      <div className="flex items-end gap-2 px-4 py-2 rounded-2xl bg-[#0a1120]/90 backdrop-blur-3xl border border-white/12 shadow-[0_18px_50px_rgba(0,0,0,0.60),inset_0_1px_0_rgba(255,255,255,0.10)] transition-all duration-300">
+      <div className="flex items-end gap-2 px-4 py-2 rounded-2xl bg-[#0a111e]/90 backdrop-blur-3xl border border-white/12 shadow-[0_18px_50px_rgba(0,0,0,0.60),inset_0_1px_0_rgba(255,255,255,0.10)] transition-all duration-300">
         {dockItems.map((item, idx) => {
           const isActive = activeStage === item.id;
           const isHovered = hoveredIdx === idx;
@@ -108,7 +108,7 @@ export const NeonHorizonDock: React.FC<NeonHorizonDockProps> = ({
             <div key={item.id} className="relative flex flex-col items-center">
               {/* Tooltip on hover */}
               {isHovered && (
-                <div className="absolute -top-9 px-2.5 py-1 rounded-lg bg-[#0b1220]/95 backdrop-blur-md border border-white/12 text-[10px] nh-font-headline font-bold text-slate-200 uppercase tracking-wider whitespace-nowrap shadow-[0_4px_15px_rgba(0,0,0,0.6)] animate-nh-materialize z-50">
+                <div className="absolute -top-9 px-2.5 py-1 rounded-lg bg-[#0a111e]/95 backdrop-blur-md border border-white/12 text-[10px] nh-font-headline font-bold text-slate-200 uppercase tracking-wider whitespace-nowrap shadow-[0_4px_15px_rgba(0,0,0,0.6)] animate-nh-materialize z-50">
                   {item.label}
                 </div>
               )}
@@ -125,7 +125,7 @@ export const NeonHorizonDock: React.FC<NeonHorizonDockProps> = ({
                   transformOrigin: "bottom center",
                   transition: "transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1)",
                 }}
-                className={`p-2.5 rounded-xl transition-all duration-200 flex items-center justify-center cursor-pointer ${
+                className={`nh-focus p-2.5 rounded-xl transition-all duration-200 flex items-center justify-center cursor-pointer ${
                   isActive
                     ? "bg-sky-400/15 text-sky-200 border border-sky-400/30 font-bold"
                     : "text-slate-400 hover:text-slate-100 hover:bg-white/[0.07] border border-transparent"

@@ -3,7 +3,7 @@ import { NeonEntrance } from "./useNeonEntrance";
 
 export interface NeonPowerTorquePoint { rpm: number; power: number; torque: number }
 
-export function NeonPowerTorqueCurveChart({ powerCurve, height = 220, className = "", powerColor = "#38bdf8", torqueColor = "#f59e0b" }: {
+export function NeonPowerTorqueCurveChart({ powerCurve, height = 220, className = "", powerColor = "#8fb9d9", torqueColor = "#c9974f" }: {
   powerCurve: NeonPowerTorquePoint[]; height?: number; className?: string; powerColor?: string; torqueColor?: string;
 }) {
   const W = 500; const H = height;

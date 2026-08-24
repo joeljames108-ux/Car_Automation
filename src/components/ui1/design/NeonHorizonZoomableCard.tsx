@@ -29,7 +29,7 @@ export function NeonHorizonZoomableCard({
   const [modalActive, setModalActive] = useState(false);
 
   const glowColors = {
-    cyan: { text: "text-sky-300", bg: "bg-sky-500/10" },
+    cyan: { text: "text-sky-300", bg: "bg-sky-400/10" },
     magenta: { text: "text-violet-300", bg: "bg-violet-500/10" },
     gold: { text: "text-amber-300", bg: "bg-amber-500/10" },
     emerald: { text: "text-emerald-300", bg: "bg-emerald-500/10" },
@@ -88,7 +88,7 @@ export function NeonHorizonZoomableCard({
  }`}
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="rounded-3xl bg-[#0c1626]/95 backdrop-blur-3xl border border-white/12 shadow-[0_40px_100px_rgba(0,0,0,0.8)] overflow-hidden p-6">
+            <div className="rounded-3xl bg-[#0e1626]/95 backdrop-blur-3xl border border-white/12 shadow-[0_40px_100px_rgba(0,0,0,0.8)] overflow-hidden p-6">
               <div className="w-full flex items-center justify-between border-b border-white/10 pb-4 mb-4">
                 <button
                   onClick={closeZoomModal}

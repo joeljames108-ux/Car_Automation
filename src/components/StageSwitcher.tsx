@@ -17,7 +17,8 @@ export type Stage =
   | "splitter_skirt" | "morphing_aero"
   | "fender_louvers" | "vgt_turbo"
   | "blown_wing" | "skid_spark"
-  | "boundary_suction" | "thermal_pcm";
+  | "boundary_suction" | "thermal_pcm"
+  | "higgsfield";
 
 // ── Lazy-loaded stage panel components ──
 const Transmission3DStudio = lazy(() => import("./transmissionStudio/Transmission3DStudio").then(m => ({ default: m.Transmission3DStudio })));
@@ -55,6 +56,7 @@ const SupplyChainWorkshop = lazy(() => import("./SupplyChainWorkshop").then(m =>
 const NvhSoundLab = lazy(() => import("./NvhSoundLab").then(m => ({ default: m.NvhSoundLab })));
 const SuspensionMasterStudio = lazy(() => import("./chassis/SuspensionMasterStudio").then(m => ({ default: m.SuspensionMasterStudio })));
 const GrandAutomotiveStudioHub = lazy(() => import("./GrandAutomotiveStudioHub").then(m => ({ default: m.GrandAutomotiveStudioHub })));
+const NeonHiggsfieldStudio = lazy(() => import("./ui1/stages/NeonHiggsfieldStudio").then(m => ({ default: m.NeonHiggsfieldStudio })));
 
 interface StageSwitcherProps {
   stage: Stage;
@@ -108,6 +110,7 @@ export const StageSwitcher: React.FC<StageSwitcherProps> = ({ stage, onSelectSta
             <HypercarConstructorMasterApp />
           </div>
         )}
+        {stage === "higgsfield" && <NeonHiggsfieldStudio />}
       </div>
     </Suspense>
   );

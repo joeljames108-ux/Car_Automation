@@ -63,7 +63,7 @@ export const NeonHorizonButton: React.FC<NeonHorizonButtonProps> = ({
     <button
       onClick={handleClick}
       disabled={disabled || loading}
-      className={`inline-flex items-center justify-center font-semibold tracking-wide transition-all duration-200 select-none backdrop-blur-md ${sizeClasses} ${variantClasses} ${glowClass} ${disabledClass} ${className}`}
+      className={`nh-focus inline-flex items-center justify-center font-semibold tracking-wide transition-all duration-200 select-none backdrop-blur-md ${sizeClasses} ${variantClasses} ${glowClass} ${disabledClass} ${className}`}
       {...rest}
     >
       {loading ? (

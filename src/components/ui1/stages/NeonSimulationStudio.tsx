@@ -81,8 +81,8 @@ export function NeonSimulationStudio() {
                     }}
                     className={`p-3.5 rounded-xl border transition-all cursor-pointer flex flex-col gap-1.5 ${
  isSelected
- ? "bg-[#091a38] border-sky-400/40"
- : "bg-[#060e22] border-white/10 hover:border-sky-400/25"
+ ? "bg-sky-400/10 border-sky-400/30 text-sky-200"
+ : "bg-[#0a111e] border-white/10 hover:border-sky-400/25"
  }`}
                   >
                     <div className="flex items-center justify-between">
@@ -113,19 +113,19 @@ export function NeonSimulationStudio() {
             }}
             className="p-6 flex flex-col gap-3 font-mono text-xs"
           >
-            <div className="p-3.5 rounded-xl bg-[#060e22] border border-sky-400/15 flex items-center justify-between">
+            <div className="p-3.5 rounded-xl bg-[#0a111e] border border-sky-400/15 flex items-center justify-between">
               <span className="text-slate-400">Sector 1 (High Speed Apex):</span>
               <span className="text-sky-300 font-bold">24.810s</span>
             </div>
-            <div className="p-3.5 rounded-xl bg-[#060e22] border border-sky-400/15 flex items-center justify-between">
+            <div className="p-3.5 rounded-xl bg-[#0a111e] border border-sky-400/15 flex items-center justify-between">
               <span className="text-slate-400">Sector 2 (Technical Esses):</span>
               <span className="text-sky-300 font-bold">48.240s</span>
             </div>
-            <div className="p-3.5 rounded-xl bg-[#060e22] border border-sky-400/15 flex items-center justify-between">
+            <div className="p-3.5 rounded-xl bg-[#0a111e] border border-sky-400/15 flex items-center justify-between">
               <span className="text-slate-400">Sector 3 (Main Straight):</span>
               <span className="text-sky-300 font-bold">29.750s</span>
             </div>
-            <div className="p-3.5 rounded-xl bg-[#081734] border border-emerald-400/30 flex items-center justify-between mt-2">
+            <div className="p-3.5 rounded-xl bg-[#0e1626] border border-emerald-400/30 flex items-center justify-between mt-2">
               <span className="text-emerald-200 font-bold">Theoretical Best:</span>
               <span className="text-emerald-400 font-bold">{activeCircuit.baseLap}</span>
             </div>

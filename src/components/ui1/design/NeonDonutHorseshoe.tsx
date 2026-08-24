@@ -52,7 +52,7 @@ export function NeonHorseshoeGauge({ value, max = 10, size = 180 }: { value: num
     const large = Math.abs(a2 - a1) > Math.PI ? 1 : 0;
     return "M" + x1.toFixed(1) + "," + y1.toFixed(1) + " A" + r + "," + r + " 0 " + large + " 1 " + x2.toFixed(1) + "," + y2.toFixed(1);
   };
-  const color = pct >= 0.85 ? "#22c55e" : pct >= 0.7 ? "#38bdf8" : pct >= 0.55 ? "#f59e0b" : "#ef4444";
+  const color = pct >= 0.85 ? "#57a878" : pct >= 0.7 ? "#8fb9d9" : pct >= 0.55 ? "#c9974f" : "#c96f6f";
   const valEnd = startAngle + (pct * sweep);
   return (
     <div className="relative inline-flex items-center justify-center" style={{width:size,height:size}}>

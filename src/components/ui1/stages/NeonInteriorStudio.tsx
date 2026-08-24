@@ -31,10 +31,10 @@ export function NeonInteriorStudio() {
   const [activeTab, setActiveTab] = useState<InteriorStudioTab>("cockpit_3d_studio");
   const [clusterTheme, setClusterTheme] = useState<string>("cyberpunk_neon");
   const [seatType, setSeatType] = useState<string>("carbon_bucket");
-  const [ambientColor, setAmbientColor] = useState<string>("#38bdf8");
+  const [ambientColor, setAmbientColor] = useState<string>("#8fb9d9");
   const [soundMode, setSoundMode] = useState<string>("v12_symphony");
 
-  const ambientColors = ["#38bdf8", "#a78bfa", "#34d399", "#fbbf24", "#ff5252"];
+  const ambientColors = ["#8fb9d9", "#a78bfa", "#34d399", "#d9b36c", "#ff5252"];
 
   return (
     <div className="w-full flex flex-col gap-6 text-slate-100 animate-nh-materialize">
@@ -75,7 +75,7 @@ export function NeonInteriorStudio() {
               }}
               className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs nh-font-mono font-bold transition-all cursor-pointer whitespace-nowrap ${
  isActive
- ? "bg-sky-400/20 text-sky-200 border border-sky-400/35"
+ ? "bg-sky-400/20 text-sky-200 border border-sky-400/30"
  : "text-slate-400 hover:text-slate-200 hover:bg-white/5"
  }`}
             >
@@ -88,14 +88,14 @@ export function NeonInteriorStudio() {
 
       {/* View 1: 3D Cockpit Designer */}
       {activeTab === "cockpit_3d_studio" && (
-        <div className="w-full rounded-3xl overflow-hidden border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] bg-[#070e1c] p-3">
+        <div className="w-full rounded-3xl overflow-hidden border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] bg-[#0a111e] p-3">
           <InteriorsDesigner />
         </div>
       )}
 
       {/* View 2: Modular Interior Workshop */}
       {activeTab === "interior_workshop" && (
-        <div className="w-full rounded-3xl overflow-hidden border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] bg-[#070e1c] p-3">
+        <div className="w-full rounded-3xl overflow-hidden border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] bg-[#0a111e] p-3">
           <ModularInteriorWorkshop
             activeChassisId={design.vehicle.chassis}
             config={{}}

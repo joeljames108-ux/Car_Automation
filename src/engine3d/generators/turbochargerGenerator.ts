@@ -136,6 +136,13 @@ function createSingleTurboUnit(sideOffset: number, scale: number = 1.0, config?:
     compGroup.add(slotMesh);
   }
 
+  // Laser-Etched Manufacturer Badge Plate on the Compressor Volute
+  const compBadgeGeo = new THREE.BoxGeometry(0.0015, 0.026, 0.012);
+  const compBadgeMesh = new THREE.Mesh(compBadgeGeo, matAnFittingGold);
+  compBadgeMesh.name = 'Compressor_Cover_Anodized_Badge_Plate';
+  compBadgeMesh.position.set(-0.045, -0.0765, 0.01);
+  compGroup.add(compBadgeMesh);
+
   // Tangential Boost Discharge Pipe with V-Band Lip
   const compOutletGeo = new THREE.CylinderGeometry(0.028, 0.028, 0.058, 32);
   const compOutletMesh = new THREE.Mesh(compOutletGeo, matCompressorBillet);
@@ -250,6 +257,22 @@ function createSingleTurboUnit(sideOffset: number, scale: number = 1.0, config?:
     waterMesh.name = `Water_Cooling_Banjo_Port_${wIdx === 0 ? 'Inlet' : 'Outlet'}`;
     waterMesh.position.set(wx, 0, 0.032);
     chraGroup.add(waterMesh);
+
+    // Hollow Banjo Bolt with Dual Crush Washers
+    const banjoBoltGeo = createHexBoltHead(0.0085, 0.007);
+    banjoBoltGeo.rotateX(Math.PI / 2);
+    const banjoBoltMesh = new THREE.Mesh(banjoBoltGeo, matStainless);
+    banjoBoltMesh.name = `Water_Banjo_Hollow_Bolt_${wIdx === 0 ? 'In' : 'Out'}`;
+    banjoBoltMesh.position.set(wx, 0, 0.043);
+    chraGroup.add(banjoBoltMesh);
+
+    [-0.0025, 0.0025].forEach((wy) => {
+      const washerGeo = new THREE.TorusGeometry(0.0085, 0.0008, 8, 20);
+      const washerMesh = new THREE.Mesh(washerGeo, matStainless);
+      washerMesh.name = `Banjo_Crush_Washer_${wIdx}_${wy < 0 ? 'A' : 'B'}`;
+      washerMesh.position.set(wx, wy, 0.041);
+      chraGroup.add(washerMesh);
+    });
   });
 
   // Optical Wheel Speed Sensor Boss & Pig-tail Wire Harness
@@ -259,6 +282,26 @@ function createSingleTurboUnit(sideOffset: number, scale: number = 1.0, config?:
   speedSensorMesh.name = 'Turbo_Shaft_Speed_Sensor';
   speedSensorMesh.position.set(-0.015, -0.026, 0.024);
   chraGroup.add(speedSensorMesh);
+
+  // Deutsch-Style Connector Boot on the Speed Sensor
+  const sensorBootGeo = new THREE.CylinderGeometry(0.0065, 0.0045, 0.014, 12);
+  sensorBootGeo.rotateZ(Math.PI / 3);
+  const sensorBootMesh = new THREE.Mesh(sensorBootGeo, matActuatorBlack);
+  sensorBootMesh.name = 'Speed_Sensor_Deutsch_Connector_Boot';
+  speedSensorMesh.position.set(-0.015, -0.026, 0.024);
+  sensorBootMesh.position.set(-0.022, -0.036, 0.030);
+  chraGroup.add(sensorBootMesh);
+
+  // Shielded Sensor Pigtail Wiring Loop
+  const sensorWireCurve = new THREE.CatmullRomCurve3([
+    new THREE.Vector3(-0.026, -0.040, 0.033),
+    new THREE.Vector3(-0.040, -0.050, 0.026),
+    new THREE.Vector3(-0.052, -0.046, 0.014),
+  ]);
+  const sensorWireGeo = new THREE.TubeGeometry(sensorWireCurve, 16, 0.0015, 6, false);
+  const sensorWireMesh = new THREE.Mesh(sensorWireGeo, matActuatorBlack);
+  sensorWireMesh.name = 'Speed_Sensor_Shielded_Pigtail';
+  chraGroup.add(sensorWireMesh);
 
   // Dual Quick-Release V-Band Housing Clamps
   [-0.023, 0.023].forEach((vx, vIdx) => {
@@ -337,6 +380,36 @@ function createSingleTurboUnit(sideOffset: number, scale: number = 1.0, config?:
   turbOutletMesh.castShadow = true;
   turbineGroup.add(turbOutletMesh);
 
+  // V-Band Clamp Ring on the Turbine Discharge Flange
+  const turbVBandGeo = new THREE.TorusGeometry(0.040, 0.005, 12, 40);
+  turbVBandGeo.rotateY(Math.PI / 2);
+  const turbVBandMesh = new THREE.Mesh(turbVBandGeo, matStainless);
+  turbVBandMesh.name = 'Turbine_Discharge_VBand_Clamp_Ring';
+  turbVBandMesh.position.set(0.062, 0, 0);
+  turbineGroup.add(turbVBandMesh);
+
+  // Discharge V-Band T-Bolt Tightener
+  const turbTboltGeo = createThreadedShaft(0.0025, 0.018, 1.0);
+  const turbTboltMesh = new THREE.Mesh(turbTboltGeo, matStainless);
+  turbTboltMesh.name = 'Turbine_VBand_T_Bolt';
+  turbTboltMesh.position.set(0.062, 0.042, 0);
+  turbineGroup.add(turbTboltMesh);
+
+  // Turbine Housing Manifold Mounting Flange Feet
+  [-0.030, 0.030].forEach((mz) => {
+    const footGeo = new THREE.BoxGeometry(0.024, 0.030, 0.008);
+    const footMesh = new THREE.Mesh(footGeo, matTurbineNiResist);
+    footMesh.name = `Turbine_Manifold_Mount_Foot_${mz < 0 ? 'A' : 'B'}`;
+    footMesh.position.set(-0.010, 0, mz);
+    turbineGroup.add(footMesh);
+
+    const footStudGeo = createThreadedShaft(0.0035, 0.016, 1.25);
+    const footStudMesh = new THREE.Mesh(footStudGeo, matStainless);
+    footStudMesh.name = `Manifold_Mount_Stud_${mz < 0 ? 'A' : 'B'}`;
+    footStudMesh.position.set(-0.010, 0, mz * 1.35);
+    turbineGroup.add(footStudMesh);
+  });
+
   unitGroup.add(turbineGroup);
 
   // ─── 4. PNEUMATIC DUAL-PORT WASTEGATE CANISTER & LINKAGE ───
@@ -350,6 +423,23 @@ function createSingleTurboUnit(sideOffset: number, scale: number = 1.0, config?:
   canMesh.position.set(-0.024, -0.068, 0.025);
   canMesh.castShadow = true;
   wastegateGroup.add(canMesh);
+
+  // Diaphragm Crimp Ring Seams (Top & Bottom of Canister)
+  [-0.052, -0.084].forEach((cy) => {
+    const crimpGeo = new THREE.TorusGeometry(0.0225, 0.0016, 8, 32);
+    crimpGeo.rotateX(Math.PI / 2);
+    const crimpMesh = new THREE.Mesh(crimpGeo, matStainless);
+    crimpMesh.name = 'Wastegate_Diaphragm_Crimp_Ring';
+    crimpMesh.position.set(-0.024, cy, 0.025);
+    wastegateGroup.add(crimpMesh);
+  });
+
+  // Wastegate Mounting Bracket Tying Canister to the Turbine Housing
+  const wgBracketGeo = new THREE.BoxGeometry(0.006, 0.028, 0.014);
+  const wgBracketMesh = new THREE.Mesh(wgBracketGeo, matStainless);
+  wgBracketMesh.name = 'Wastegate_Mounting_Bracket';
+  wgBracketMesh.position.set(-0.024, -0.044, 0.025);
+  wastegateGroup.add(wgBracketMesh);
 
   // Dual Boost Pressure Reference Barb Ports
   [-0.010, 0.010].forEach((px, pIdx) => {
@@ -382,6 +472,21 @@ function createSingleTurboUnit(sideOffset: number, scale: number = 1.0, config?:
   armMesh.name = 'Internal_Wastegate_Flapper_Crank';
   armMesh.position.set(0.036, -0.032, -0.012);
   wastegateGroup.add(armMesh);
+
+  // Crank Arm Pivot Pin with Retaining Clip Groove
+  const wgPivotGeo = new THREE.CylinderGeometry(0.0025, 0.0025, 0.016, 12);
+  wgPivotGeo.rotateX(Math.PI / 2);
+  const wgPivotMesh = new THREE.Mesh(wgPivotGeo, matStainless);
+  wgPivotMesh.name = 'Wastegate_Crank_Pivot_Pin';
+  wgPivotMesh.position.set(0.036, -0.032, -0.004);
+  wastegateGroup.add(wgPivotMesh);
+
+  // Rod-End Clevis Joint at the Linkage Termination
+  const clevisGeo = new THREE.SphereGeometry(0.006, 14, 14);
+  const clevisMesh = new THREE.Mesh(clevisGeo, matStainless);
+  clevisMesh.name = 'Wastegate_RodEnd_Clevis_Joint';
+  clevisMesh.position.set(0.028, -0.034, -0.002);
+  wastegateGroup.add(clevisMesh);
 
   unitGroup.add(wastegateGroup);
 

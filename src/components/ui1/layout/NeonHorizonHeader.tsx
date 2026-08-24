@@ -62,7 +62,7 @@ export const NeonHorizonHeader: React.FC<NeonHorizonHeaderProps> = ({
     <header
       role="banner"
       aria-label="Vision Glass Studio Header"
-      className="sticky top-0 z-40 bg-[#0d1728]/85 backdrop-blur-2xl border-b border-white/10 shadow-[0_4px_30px_rgba(0,0,0,0.6)] select-none"
+      className="sticky top-0 z-40 bg-[#0e1626]/88 backdrop-blur-2xl border-b border-white/10 shadow-[0_4px_30px_rgba(0,0,0,0.55)] select-none nh-edge-top"
     >
       <div className="max-w-full px-6 h-16 flex items-center justify-between gap-4">
         {/* Left: Animated Conic Logo & Brand */}
@@ -83,7 +83,7 @@ export const NeonHorizonHeader: React.FC<NeonHorizonHeaderProps> = ({
               <span className="text-sm font-extrabold tracking-wider nh-gradient-text-cyan">
                 APEX ENGINEER
               </span>
-              <span className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-sky-500/15 text-sky-300 text-[10px] font-semibold border border-sky-400/30">
+              <span className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-sky-400/10 text-sky-300 text-[10px] font-semibold border border-sky-400/30">
                 <span className="w-1.5 h-1.5 rounded-full bg-sky-400 animate-pulse" /> VISION STUDIO
               </span>
             </div>
@@ -96,7 +96,7 @@ export const NeonHorizonHeader: React.FC<NeonHorizonHeaderProps> = ({
         {/* Center: Workspace Category Switcher + Live Clock & AI Badge */}
         <div className="hidden lg:flex items-center gap-3">
           {/* Workspace Category Switcher */}
-          <div className="flex items-center gap-1.5 bg-[#0a1322]/90 backdrop-blur-md p-1.5 rounded-full border border-white/10 shadow-inner">
+          <div className="flex items-center gap-1.5 bg-[#0a111e]/90 backdrop-blur-md p-1.5 rounded-full border border-white/10 shadow-inner">
             {categories.map((cat) => {
               const isActive = activeCategory === cat.id;
               return (
@@ -108,7 +108,7 @@ export const NeonHorizonHeader: React.FC<NeonHorizonHeaderProps> = ({
                   }}
                   className={`flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold tracking-wide transition-all duration-200 whitespace-nowrap cursor-pointer ${
  isActive
- ? "bg-sky-500/20 text-sky-300 border border-sky-400/40 font-bold"
+ ? "bg-sky-400/15 text-sky-300 border border-sky-400/30 font-bold"
  : "text-slate-400 hover:text-slate-200 hover:bg-white/5 border border-transparent"
  }`}
                 >
@@ -131,7 +131,7 @@ export const NeonHorizonHeader: React.FC<NeonHorizonHeaderProps> = ({
           {/* AI Status Badge */}
           <div
             aria-label="Apex AI Studio Agent Online"
-            className="flex items-center gap-1.5 bg-sky-500/15 border border-sky-400/30 rounded-full px-2.5 py-1 text-[10px] font-bold text-sky-300"
+            className="flex items-center gap-1.5 bg-sky-400/10 border border-sky-400/30 rounded-full px-2.5 py-1 text-[10px] font-bold text-sky-300"
           >
             <Sparkles size={11} className="text-sky-400 animate-pulse" />
             <span>AI ONLINE</span>
@@ -146,7 +146,7 @@ export const NeonHorizonHeader: React.FC<NeonHorizonHeaderProps> = ({
               playHMIClickSound();
               onOpenSearch();
             }}
-            className="flex items-center gap-2 bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 hover:border-sky-400/40 rounded-full px-3.5 py-1.5 text-xs text-slate-300 transition-all cursor-pointer hidden md:flex"
+            className="flex items-center gap-2 bg-white/[0.04] hover:bg-white/[0.08] border border-white/10 hover:border-sky-400/30 rounded-full px-3.5 py-1.5 text-xs text-slate-300 transition-all cursor-pointer hidden md:flex"
           >
             <Search size={13} className="text-sky-400" />
             <span className="text-[11px]">Search Studio...</span>
@@ -171,7 +171,7 @@ export const NeonHorizonHeader: React.FC<NeonHorizonHeaderProps> = ({
                 onAdvanceMonth();
               }}
               title="Advance 1 Month"
-              className="ml-1 px-1.5 py-0.5 rounded-md bg-sky-500/20 text-sky-300 hover:bg-sky-500/30 text-[10px] font-bold transition-all cursor-pointer border border-sky-400/30"
+              className="ml-1 px-1.5 py-0.5 rounded-md bg-sky-400/15 text-sky-300 hover:bg-sky-400/20 text-[10px] font-bold transition-all cursor-pointer border border-sky-400/30"
             >
               +1 Mo
             </button>
@@ -242,7 +242,7 @@ export const NeonHorizonHeader: React.FC<NeonHorizonHeaderProps> = ({
           {/* User Profile Avatar (Vision Glass Header Feature) */}
           <div
             aria-label="User Profile"
-            className="w-8 h-8 rounded-full bg-gradient-to-tr from-sky-500 to-indigo-500 flex items-center justify-center text-white text-xs font-bold shadow-[0_2px_10px_rgba(56,189,248,0.4)] border border-white/20 cursor-pointer hover:scale-105 transition-transform"
+            className="w-8 h-8 rounded-full bg-gradient-to-tr from-[#41627f] to-[#2e455c] flex items-center justify-center text-white text-xs font-bold shadow-[0_2px_10px_rgba(56,189,248,0.4)] border border-white/20 cursor-pointer hover:scale-105 transition-transform"
           >
             <User size={15} />
           </div>

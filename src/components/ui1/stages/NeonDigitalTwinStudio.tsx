@@ -81,7 +81,7 @@ export function NeonDigitalTwinStudio() {
               {subsystems.map((sub, idx) => (
                 <div
                   key={idx}
-                  className="p-3 rounded-xl bg-[#060e22] border border-sky-400/15 flex flex-col gap-1.5"
+                  className="p-3 rounded-xl bg-[#0a111e] border border-sky-400/15 flex flex-col gap-1.5"
                 >
                   <div className="flex items-center justify-between">
                     <span className="text-xs font-bold text-slate-100 truncate pr-2">{sub.name}</span>
@@ -110,7 +110,7 @@ export function NeonDigitalTwinStudio() {
             }}
             className="p-6 flex flex-col gap-4"
           >
-            <div className="p-4 rounded-xl bg-[#060e22] border border-sky-400/15 flex flex-col gap-2">
+            <div className="p-4 rounded-xl bg-[#0a111e] border border-sky-400/15 flex flex-col gap-2">
               <div className="flex items-center justify-between">
                 <span className="text-xs text-slate-400">ECU Handshake:</span>
                 <span className="text-xs font-bold nh-font-mono text-emerald-300">ESTABLISHED (0x7E0)</span>

@@ -16,6 +16,7 @@ import { globalMaterialLibrary } from '../materials/pbrMaterialSystem';
 import { V12_CRANKSHAFT_ATTACHMENTS } from '../attachmentMaps/v12AttachmentMap';
 import {
   createHexBoltHead,
+  create12PointHead,
   createORingSeal,
   createThreadedShaft,
 } from './geometryDetailUtils';
@@ -303,13 +304,48 @@ export function buildCrankshaftScene(configOrThrows?: Partial<EngineConfig> | nu
   frontSealGrooveMesh.position.set(0.005, 0, 0);
   frontSnoutGroup.add(frontSealGrooveMesh);
 
-  // Harmonic Damper Elastomer Isolator Rubber Ring
-  const damperRingGeo = createORingSeal(spec.snoutDiameterM / 2 + 0.006, 0.003, 16, 36);
+  // Harmonic Damper Steel Hub (Bonded Elastomer Sandwich)
+  const damperHubGeo = new THREE.CylinderGeometry(spec.snoutDiameterM / 2 + 0.004, spec.snoutDiameterM / 2 + 0.004, 0.028, 40);
+  damperHubGeo.rotateZ(Math.PI / 2);
+  const damperHubMesh = new THREE.Mesh(damperHubGeo, matNitrided);
+  damperHubMesh.name = 'Harmonic_Damper_Steel_Hub';
+  damperHubMesh.position.set(-0.012, 0, 0);
+  damperHubMesh.castShadow = true;
+  frontSnoutGroup.add(damperHubMesh);
+
+  // Elastomer Isolator Ring Bonded Between Hub and Inertia Mass
+  const damperRingGeo = createORingSeal(0.04, 0.005, 16, 44);
   damperRingGeo.rotateY(Math.PI / 2);
   const damperRingMesh = new THREE.Mesh(damperRingGeo, matElastomer);
   damperRingMesh.name = 'Harmonic_Damper_Elastomer_Isolator';
   damperRingMesh.position.set(-0.012, 0, 0);
   frontSnoutGroup.add(damperRingMesh);
+
+  // Outer Cast Inertia Mass Ring (Tuned Absorber Donut)
+  const inertiaRingGeo = new THREE.TorusGeometry(0.046, 0.009, 16, 52);
+  inertiaRingGeo.rotateY(Math.PI / 2);
+  const inertiaRingMesh = new THREE.Mesh(inertiaRingGeo, matDarkIron);
+  inertiaRingMesh.name = 'Harmonic_Damper_Inertia_Ring';
+  inertiaRingMesh.position.set(-0.012, 0, 0);
+  inertiaRingMesh.castShadow = true;
+  frontSnoutGroup.add(inertiaRingMesh);
+
+  // 6-Rib Serpentine Belt Grooves Machined Into Inertia Ring Face
+  [-0.006, 0, 0.006].forEach((gx, gIdx) => {
+    const grooveGeo = new THREE.TorusGeometry(0.0545, 0.0026, 10, 48);
+    grooveGeo.rotateY(Math.PI / 2);
+    const grooveMesh = new THREE.Mesh(grooveGeo, matDarkIron);
+    grooveMesh.name = `Serpentine_Belt_V_Groove_${gIdx + 1}`;
+    grooveMesh.position.set(-0.012 + gx, 0, 0);
+    frontSnoutGroup.add(grooveMesh);
+  });
+
+  // TDC Firing Timing Mark Scribe on Inertia Ring Perimeter
+  const tdcMarkGeo = new THREE.BoxGeometry(0.02, 0.005, 0.003);
+  const tdcMarkMesh = new THREE.Mesh(tdcMarkGeo, matGoldReluctor);
+  tdcMarkMesh.name = 'TDC_Timing_Mark_Scribe';
+  tdcMarkMesh.position.set(-0.012, 0.0545, 0);
+  frontSnoutGroup.add(tdcMarkMesh);
 
   // Dual Semi-Circular Woodruff Drive Keys
   [-0.015, 0.015].forEach((kx, kIdx) => {
@@ -385,6 +421,14 @@ export function buildCrankshaftScene(configOrThrows?: Partial<EngineConfig> | nu
     boltHoleMesh.name = `Flywheel_M12_Bolt_Hole_${b + 1}`;
     boltHoleMesh.position.set(0, by, bz);
     rearFlangeGroup.add(boltHoleMesh);
+
+    // 12-Point Retention Bolt Head Seated on the Rear Flange Face
+    const boltHeadGeo = create12PointHead(0.0075, 0.006);
+    boltHeadGeo.rotateZ(Math.PI / 2);
+    const boltHeadMesh = new THREE.Mesh(boltHeadGeo, matNitrided);
+    boltHeadMesh.name = `Flywheel_M12_Retention_Bolt_${b + 1}`;
+    boltHeadMesh.position.set(0.011, by, bz);
+    rearFlangeGroup.add(boltHeadMesh);
   }
 
   // 60-2 Precision Laser-Cut Crankshaft Position Trigger Wheel
@@ -398,8 +442,8 @@ export function buildCrankshaftScene(configOrThrows?: Partial<EngineConfig> | nu
   // 58 Individual Trigger Teeth on Reluctor Perimeter (2 Missing for TDC reference)
   for (let t = 0; t < 58; t++) {
     const tAngle = (t * Math.PI * 2) / 60;
-    const ty = Math.sin(tAngle) * 0.071;
-    const tz = Math.cos(tAngle) * 0.071;
+    const ty = Math.sin(tAngle) * 0.0695;
+    const tz = Math.cos(tAngle) * 0.0695;
 
     const toothGeo = new THREE.BoxGeometry(0.005, 0.004, 0.004);
     toothGeo.rotateX(tAngle);

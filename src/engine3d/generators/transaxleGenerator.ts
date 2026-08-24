@@ -585,17 +585,42 @@ function buildSequentialRacingGearboxScene(
     const gx = 0.02 + g * (0.34 / gears);
     const gearRad = 0.048 + (g % 2 === 0 ? 0.014 : -0.010);
 
-    const gearGeo = new THREE.CylinderGeometry(gearRad, gearRad, 0.022, 32);
-    gearGeo.rotateZ(Math.PI / 2);
-    const gear = new THREE.Mesh(gearGeo, gearMat);
+    const gear = createGearMesh(gearRad, 0.022, 26, 0.014, gearMat, false);
+    gear.name = `Sequential_StraightCut_Gear_${g + 1}`;
     gear.position.set(gx, 0, 0.04);
 
-    const dogGeo = new THREE.CylinderGeometry(0.038, 0.038, 0.010, 20);
+    const dogGeo = new THREE.CylinderGeometry(0.038, 0.038, 0.01, 20);
     dogGeo.rotateZ(Math.PI / 2);
     const dog = new THREE.Mesh(dogGeo, gearMat);
+    dog.name = `Sequential_Dog_Ring_${g + 1}`;
     dog.position.set(gx + 0.014, 0, 0.04);
     group.add(gear, dog);
   }
+
+  // Casing Split-Line Parting Flange with Perimeter Fasteners
+  const partingGeo = new THREE.BoxGeometry(spec.gearboxLengthM + 0.004, spec.gearboxWidthM + 0.004, 0.006);
+  const partingMesh = new THREE.Mesh(partingGeo, billetMat);
+  partingMesh.name = 'Casing_SplitLine_Parting_Flange';
+  partingMesh.position.set(0.18, 0, 0);
+  group.add(partingMesh);
+
+  for (let b = 0; b < 8; b++) {
+    const bx = 0.18 - spec.gearboxLengthM / 2 + 0.03 + b * ((spec.gearboxLengthM - 0.06) / 7);
+    [-1, 1].forEach((s) => {
+      const boltGeo = createHexBoltHead(0.005, 0.006);
+      const bolt = new THREE.Mesh(boltGeo, accentMat);
+      bolt.name = `Casing_SplitLine_Bolt_${b + 1}_${s < 0 ? 'L' : 'R'}`;
+      bolt.position.set(bx, s * (spec.gearboxWidthM / 2 + 0.004), 0);
+      group.add(bolt);
+    });
+  }
+
+  // Manufacturer Badge Plate on the Case End
+  const seqBadgeGeo = new THREE.BoxGeometry(0.0015, 0.05, 0.028);
+  const seqBadge = new THREE.Mesh(seqBadgeGeo, accentMat);
+  seqBadge.name = 'Casing_Manufacturer_Badge_Plate';
+  seqBadge.position.set(0.18 + spec.gearboxLengthM / 2 + 0.001, 0.06, 0.05);
+  group.add(seqBadge);
 
   // 4. Electro-Pneumatic Paddle-Shift Solenoid Block
   const pneuBlockGeo = new THREE.BoxGeometry(0.12, 0.09, 0.06);
@@ -754,6 +779,28 @@ function addDifferentialAndFlanges(
   const diffSphere = new THREE.Mesh(diffSphereGeo, diffMat);
   diffSphere.position.set(diffX, 0, -0.02);
   diffGroup.add(diffSphere);
+
+  // Hypoid Crown Wheel Ring Gear Wrapping the Carrier
+  const crownWheel = createCrownWheelMesh(0.118, 0.06, 0.024, flangeMat);
+  crownWheel.name = 'Diff_Hypoid_Crown_Wheel_Ring_Gear';
+  crownWheel.rotation.z = -Math.PI / 2;
+  crownWheel.position.set(diffX - 0.108, 0, -0.02);
+  diffGroup.add(crownWheel);
+
+  // Magnetic Fill & Drain Plugs
+  const fillPlugGeo = createHexBoltHead(0.01, 0.008);
+  fillPlugGeo.rotateX(Math.PI / 2);
+  const fillPlug = new THREE.Mesh(fillPlugGeo, flangeMat);
+  fillPlug.name = 'Diff_Magnetic_Fill_Plug';
+  fillPlug.position.set(diffX, 0.085, 0.06);
+  diffGroup.add(fillPlug);
+
+  const drainPlugGeo = createHexBoltHead(0.01, 0.008);
+  drainPlugGeo.rotateX(Math.PI / 2);
+  const drainPlug = new THREE.Mesh(drainPlugGeo, flangeMat);
+  drainPlug.name = 'Diff_Magnetic_Drain_Plug';
+  drainPlug.position.set(diffX, -0.085, -0.07);
+  diffGroup.add(drainPlug);
 
   // Dual 108mm Porsche-Style 6-Bolt CV Drive Flange Hubs
   [-1, 1].forEach((dir) => {

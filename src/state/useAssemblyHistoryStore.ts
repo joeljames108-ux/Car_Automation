@@ -34,6 +34,17 @@ export interface AssemblyHistoryManager {
   toggleFreezeCurrent: () => void;
 }
 
+// Deep clone preserving the installedStages Set (JSON.stringify drops Sets)
+function cloneAssemblyState(state: InstalledSubsystemsState): InstalledSubsystemsState {
+  return {
+    ...state,
+    installedStages: new Set<AssemblyStageId>(state.installedStages),
+    chassis: { ...state.chassis },
+    engine: JSON.parse(JSON.stringify(state.engine)),
+    aero: { ...state.aero },
+  };
+}
+
 export function useAssemblyHistory(
   initialState: InstalledSubsystemsState,
   onStateRevert?: (revertedState: InstalledSubsystemsState) => void
@@ -50,7 +61,7 @@ export function useAssemblyHistory(
       totalMassKg: 1185,
       healthScore: 96,
       frozen: true,
-      state: JSON.parse(JSON.stringify(initialState)),
+      state: cloneAssemblyState(initialState),
     },
   ]);
   const [isCurrentFrozen, setIsCurrentFrozen] = useState<boolean>(false);
@@ -106,7 +117,7 @@ export function useAssemblyHistory(
         totalMassKg: massKg,
         healthScore,
         frozen: freeze,
-        state: JSON.parse(JSON.stringify(present)),
+        state: cloneAssemblyState(present),
       };
       setVersions((prev) => [newVersion, ...prev]);
       if (freeze) setIsCurrentFrozen(true);
@@ -119,7 +130,7 @@ export function useAssemblyHistory(
     (versionId: string): InstalledSubsystemsState | null => {
       const found = versions.find((v) => v.id === versionId);
       if (!found) return null;
-      const loadedState = JSON.parse(JSON.stringify(found.state));
+      const loadedState = cloneAssemblyState(found.state);
       pushState(loadedState);
       setIsCurrentFrozen(found.frozen);
       if (onStateRevert) onStateRevert(loadedState);

@@ -1,11 +1,13 @@
 /**
  * ============================================================================
- * STAGE 6: WHEELS & TYRES STAGE
+ * STAGE 6: WHEELS & TIRES — FORGED CONCAVE CENTERLOCK RIMS + RACING SLICKS
  * ============================================================================
+ * Mount forged concave centerlock monoblock rims with racing slicks or
+ * semi-slicks. Includes centerlock torque spec and tire warmer protocol.
  */
 
-import React from "react";
-import { Disc, CheckCircle2, Shield, Sparkles } from "lucide-react";
+import React, { useState } from "react";
+import { Disc, CheckCircle2, Flame, Thermometer } from "lucide-react";
 import { InstalledSubsystemsState } from "../scene/ModularAssemblySceneGraph";
 
 interface WheelsAssemblyStageProps {
@@ -26,11 +28,14 @@ export const WheelsAssemblyStage: React.FC<WheelsAssemblyStageProps> = ({
   isInstalled,
   onInstall,
 }) => {
+  const [warmersOn, setWarmersOn] = useState(true);
+
   const wheelStyles: {
     id: InstalledSubsystemsState["wheelStyle"];
     label: string;
     weight: string;
     strength: string;
+    spec: string;
     desc: string;
   }[] = [
     {
@@ -38,20 +43,23 @@ export const WheelsAssemblyStage: React.FC<WheelsAssemblyStageProps> = ({
       label: "Centerlock Forged GT3 Monoblock",
       weight: "8.4 kg / wheel",
       strength: "Motorsport Spec",
-      desc: "Single central locking nut with lightweight 10-spoke forged aluminum construction.",
+      spec: "Deep-concave 10-spoke · 600 Nm center nut · R/L handed threads",
+      desc: "Single central locking nut with lightweight forged aluminum deep-concave spoke construction.",
     },
     {
       id: "forged_turbofan",
       label: "Aero Turbofan Carbon Disc",
       weight: "8.9 kg / wheel",
       strength: "High Downforce",
-      desc: "Integrated carbon fiber aero blade wheel covers that extract brake heat and reduce air turbulence.",
+      spec: "Carbon turbofan shroud · brake heat extraction",
+      desc: "Integrated carbon fiber aero blade covers that extract brake heat and reduce air turbulence.",
     },
     {
       id: "carbon_spoke",
       label: "Full Carbon Fiber Barrel & Spokes",
       weight: "6.2 kg / wheel",
       strength: "Ultra-Lightweight",
+      spec: "Hollow prepreg spokes · -40% rotational inertia",
       desc: "Hollow prepreg carbon fiber wheel reducing rotational unsprung inertia by 40%.",
     },
     {
@@ -59,6 +67,7 @@ export const WheelsAssemblyStage: React.FC<WheelsAssemblyStageProps> = ({
       label: "Multi-Piece Forged Deep Dish",
       weight: "9.6 kg / wheel",
       strength: "Stance & Track",
+      spec: "3-piece modular · polished step lip · Ti hardware",
       desc: "Forged 3-piece modular alloy rim with polished step lip and titanium assembly hardware.",
     },
   ];
@@ -69,11 +78,14 @@ export const WheelsAssemblyStage: React.FC<WheelsAssemblyStageProps> = ({
     gripCoeff: string;
     longevity: string;
     wetRating: string;
+    opTemp: string;
   }[] = [
-    { id: "racing_slick", label: "Full Racing Slicks (Dry)", gripCoeff: "1.75 G Peak Grip", longevity: "250 km (Race)", wetRating: "Dry Only" },
-    { id: "semi_slick", label: "Trackday Semi-Slick (R-Compound)", gripCoeff: "1.45 G Peak Grip", longevity: "6,000 km", wetRating: "Damp Safe" },
-    { id: "street_sport", label: "Ultra-High Performance Street", gripCoeff: "1.25 G Peak Grip", longevity: "25,000 km", wetRating: "All-Weather" },
+    { id: "racing_slick", label: "Full Racing Slick (Dry)", gripCoeff: "1.75 G Peak Grip", longevity: "250 km (Race)", wetRating: "Dry Only", opTemp: "90–110°C" },
+    { id: "semi_slick", label: "Trackday Semi-Slick (R-Comp)", gripCoeff: "1.45 G Peak Grip", longevity: "6,000 km", wetRating: "Damp Safe", opTemp: "70–95°C" },
+    { id: "street_sport", label: "Ultra-High Performance Street", gripCoeff: "1.25 G Peak Grip", longevity: "25,000 km", wetRating: "All-Weather", opTemp: "40–70°C" },
   ];
+
+  const selectedTire = tireCompounds.find((t) => t.id === tireCompound) || tireCompounds[1];
 
   return (
     <div className="panel p-4 rounded-3xl space-y-4 shadow-xl">
@@ -87,7 +99,7 @@ export const WheelsAssemblyStage: React.FC<WheelsAssemblyStageProps> = ({
               STAGE 6: WHEELS & MOTORSPORT TYRES
             </h3>
             <p className="text-[11px] font-mono text-slate-500 dark:text-slate-400">
-              Mount forged rims and high-grip tire compounds onto the 4-corner wheel hubs.
+              Mount forged concave rims and high-grip compounds onto the 4-corner hubs.
             </p>
           </div>
         </div>
@@ -121,8 +133,9 @@ export const WheelsAssemblyStage: React.FC<WheelsAssemblyStageProps> = ({
                   <span className="text-[10px] font-mono text-cyan-600 dark:text-cyan-300 font-bold">{w.weight}</span>
                 </div>
                 <p className="text-[10px] text-slate-500 dark:text-slate-400 mb-2">{w.desc}</p>
-                <div className="text-[10px] font-mono text-emerald-600 dark:text-emerald-400 font-semibold">
-                  Specs: {w.strength}
+                <div className="space-y-0.5 text-[10px] font-mono pt-2 border-t border-base-800/60">
+                  <div className="text-emerald-600 dark:text-emerald-400 font-semibold">{w.strength}</div>
+                  <div className="text-slate-500 dark:text-slate-400">{w.spec}</div>
                 </div>
               </button>
             );
@@ -132,7 +145,7 @@ export const WheelsAssemblyStage: React.FC<WheelsAssemblyStageProps> = ({
 
       {/* Tire Compound Selection */}
       <div className="space-y-2">
-        <label className="text-xs font-bold font-mono text-slate-700 dark:text-slate-300 block">
+        <label className="text-xs bold font-mono text-slate-700 dark:text-slate-300 block">
           TIRE COMPOUND & TREAD PATTERN
         </label>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-2.5">
@@ -153,11 +166,37 @@ export const WheelsAssemblyStage: React.FC<WheelsAssemblyStageProps> = ({
                   <div>Grip: <strong className="text-emerald-400">{tc.gripCoeff}</strong></div>
                   <div>Life: <strong className="text-slate-300">{tc.longevity}</strong></div>
                   <div>Weather: <strong className="text-cyan-300">{tc.wetRating}</strong></div>
+                  <div>Op. Temp: <strong className="text-orange-400">{tc.opTemp}</strong></div>
                 </div>
               </button>
             );
           })}
         </div>
+      </div>
+
+      {/* Tire Warmer Protocol */}
+      <div className="p-3.5 rounded-2xl bg-base-900/60 border border-base-800 flex items-center justify-between gap-3 flex-wrap">
+        <div className="flex items-center gap-2">
+          <Flame size={14} className="text-orange-400" />
+          <div>
+            <div className="text-xs font-bold font-mono text-slate-700 dark:text-slate-200">TIRE WARMER PROTOCOL</div>
+            <div className="text-[10px] font-mono text-slate-500">
+              {warmersOn ? `Blankets @ ${selectedTire.opTemp.split("–")[0]}°C — instant green-flag grip window` : "Cold tires — 1 formation lap to reach operating window"}
+            </div>
+          </div>
+        </div>
+        <button
+          onClick={() => setWarmersOn(!warmersOn)}
+          className={`px-3 py-1.5 rounded-xl text-xs font-mono font-bold border cursor-pointer transition-all ${
+            warmersOn ? "bg-orange-500/20 border-orange-500/50 text-orange-400" : "bg-base-800 border-base-700 text-slate-500"
+          }`}
+        >
+          {warmersOn ? (
+            <span className="flex items-center gap-1"><Thermometer size={12} /> BLANKETS ON</span>
+          ) : (
+            "BLANKETS OFF"
+          )}
+        </button>
       </div>
 
       {/* Install Button */}

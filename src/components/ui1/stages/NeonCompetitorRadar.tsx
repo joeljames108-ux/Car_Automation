@@ -65,7 +65,7 @@ export function NeonCompetitorRadar() {
               <svg viewBox="0 0 300 300" className="w-full h-full max-w-[280px]">
                 <defs>
                   <linearGradient id="radarGrad" x1="0" y1="0" x2="1" y2="1">
-                    <stop offset="0%" stopColor="#38bdf8" stopOpacity="0.5" />
+                    <stop offset="0%" stopColor="#8fb9d9" stopOpacity="0.5" />
                     <stop offset="100%" stopColor="#a78bfa" stopOpacity="0.2" />
                   </linearGradient>
                 </defs>
@@ -87,7 +87,7 @@ export function NeonCompetitorRadar() {
                 <polygon
                   points="150,65 225,110 215,195 150,235 75,190 80,105"
                   fill="url(#radarGrad)"
-                  stroke="#38bdf8"
+                  stroke="#8fb9d9"
                   strokeWidth="2"
                 />
 
@@ -95,7 +95,7 @@ export function NeonCompetitorRadar() {
                 <polygon
                   points="150,85 210,120 200,185 150,220 95,180 90,120"
                   fill="none"
-                  stroke="#fbbf24"
+                  stroke="#d9b36c"
                   strokeWidth="1.5"
                   strokeDasharray="4 2"
                 />
@@ -137,8 +137,8 @@ export function NeonCompetitorRadar() {
                   }}
                   className={`p-3.5 rounded-xl border transition-all cursor-pointer flex flex-col gap-1.5 ${
  isSelected
- ? "bg-[#091838] border-sky-400/40"
- : "bg-[#060e22] border-white/10 hover:border-sky-400/25"
+ ? "bg-sky-400/10 border-sky-400/30 text-sky-200"
+ : "bg-[#0a111e] border-white/10 hover:border-sky-400/25"
  }`}
                 >
                   <div className="flex items-center justify-between">

@@ -99,7 +99,7 @@ export const NeonHorizonDataCard: React.FC<NeonHorizonDataCardProps> = ({
             return (
               <div
                 key={idx}
-                className="flex-1 bg-sky-300/30 rounded-t-sm transition-all duration-300 hover:bg-cyan-300"
+                className="flex-1 bg-sky-300/30 rounded-t-sm transition-all duration-300 hover:bg-sky-300/60"
                 style={{ height: `${height}%` }}
               />
             );

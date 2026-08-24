@@ -210,22 +210,45 @@ export function buildConnectingRodScene(configOrStroke?: Partial<EngineConfig> |
     bigEndGroup.add(dowelMesh);
   });
 
-  // Tri-Metal Journal Bearing Shell Liners with Anti-Rotation Tangs
-  const shellGeo = new THREE.CylinderGeometry(
-    spec.bigEndBoreRadiusM,
-    spec.bigEndBoreRadiusM,
-    spec.bigEndWidthM - 0.002,
-    48,
-    1,
-    true
-  );
-  shellGeo.rotateZ(Math.PI / 2);
-  const shellMesh = new THREE.Mesh(shellGeo, matBearingShell);
-  shellMesh.name = 'TriMetal_BigEnd_Bearing_Shells';
-  bigEndGroup.add(shellMesh);
+  // Tri-Metal Journal Bearing Shell Liners (Split Pairs with Crush Gaps)
+  [
+    { start: Math.PI / 2 + 0.06, name: 'Cap' },
+    { start: -Math.PI / 2 + 0.06, name: 'Saddle' },
+  ].forEach((half) => {
+    const shellGeo = new THREE.CylinderGeometry(
+      spec.bigEndBoreRadiusM,
+      spec.bigEndBoreRadiusM,
+      spec.bigEndWidthM - 0.002,
+      36,
+      1,
+      true,
+      half.start,
+      Math.PI - 0.12
+    );
+    shellGeo.rotateZ(Math.PI / 2);
+    const shellMesh = new THREE.Mesh(shellGeo, matBearingShell);
+    shellMesh.name = `TriMetal_BigEnd_Bearing_Shell_${half.name}`;
+    bigEndGroup.add(shellMesh);
+  });
+
+  // Anti-Rotation Tangs Locking the Shell Halves to the Housing Bore
+  [-1, 1].forEach((side) => {
+    const tangGeo = new THREE.BoxGeometry(0.005, 0.0018, spec.bigEndWidthM - 0.006);
+    const tangMesh = new THREE.Mesh(tangGeo, matBearingShell);
+    tangMesh.name = `Bearing_Shell_Locking_Tang_${side < 0 ? 'Left' : 'Right'}`;
+    tangMesh.position.set(0, side * (spec.bigEndBoreRadiusM - 0.0006), 0);
+    bigEndGroup.add(tangMesh);
+  });
 
   // Dual ARP Custom Age 625+ 12-Point Cap Screws with Threaded Shanks
   [-0.024, 0.024].forEach((bx, bIdx) => {
+    // Recessed Spud Boss Seat Machined into the Cap Shoulder
+    const spudGeo = new THREE.CylinderGeometry(0.008, 0.0095, 0.010, 24);
+    const spudMesh = new THREE.Mesh(spudGeo, matTitanium);
+    spudMesh.name = `ARP_Bolt_Spud_Boss_Seat_${bIdx + 1}`;
+    spudMesh.position.set(bx, 0, -0.031);
+    bigEndGroup.add(spudMesh);
+
     // Threaded Bolt Shank
     const boltShankGeo = createThreadedShaft(0.0045, 0.048, 1.25);
     const boltShankMesh = new THREE.Mesh(boltShankGeo, matArpBolt);
@@ -283,6 +306,29 @@ export function buildConnectingRodScene(configOrStroke?: Partial<EngineConfig> |
   const bushingMesh = new THREE.Mesh(bushingGeo, matBronzeBushing);
   bushingMesh.name = 'Silicon_Bronze_WristPin_Bushing';
   smallEndGroup.add(bushingMesh);
+
+  // DLC-Coated Hollow Wrist Pin Seated Through the Bushing
+  const wristPinGeo = new THREE.CylinderGeometry(
+    spec.smallEndBoreRadiusM - 0.0004,
+    spec.smallEndBoreRadiusM - 0.0004,
+    spec.smallEndWidthM + 0.014,
+    32
+  );
+  wristPinGeo.rotateZ(Math.PI / 2);
+  const wristPinMesh = new THREE.Mesh(wristPinGeo, matDarkSteel);
+  wristPinMesh.name = 'DLC_Wrist_Pin_Segment';
+  wristPinMesh.castShadow = true;
+  smallEndGroup.add(wristPinMesh);
+
+  // Spiroloc Retaining Clips on the Pin Ends
+  [-1, 1].forEach((side) => {
+    const clipGeo = new THREE.TorusGeometry(spec.smallEndBoreRadiusM - 0.0008, 0.0006, 8, 28, Math.PI * 1.7);
+    clipGeo.rotateY(Math.PI / 2);
+    const clipMesh = new THREE.Mesh(clipGeo, matArpBolt);
+    clipMesh.name = `WristPin_Spiroloc_Clip_${side < 0 ? 'Left' : 'Right'}`;
+    clipMesh.position.set(side * (spec.smallEndWidthM / 2 + 0.0055), 0, 0);
+    smallEndGroup.add(clipMesh);
+  });
 
   // Forced Oil Scoop Orifice at Top of Small End
   const scoopGeo = new THREE.CylinderGeometry(0.0025, 0.004, 0.008, 16);

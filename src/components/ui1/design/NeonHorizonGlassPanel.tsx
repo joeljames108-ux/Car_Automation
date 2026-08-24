@@ -31,7 +31,7 @@ export const NeonHorizonGlassPanel: React.FC<NeonHorizonGlassPanelProps> = ({
   hoverable = false,
   withScanline = false,
 }) => {
-  // Base glass styles by variant (Smoked Frosted Glass, neutral depth only)
+  // Smoked frosted glass — one coherent surface ramp, neutral depth only
   const variantStyles = {
     primary:
       "bg-[#111a2b]/80 backdrop-blur-2xl border border-white/10 shadow-[0_18px_44px_rgba(0,0,0,0.45),inset_0_1px_0_rgba(255,255,255,0.08)]",
@@ -40,17 +40,17 @@ export const NeonHorizonGlassPanel: React.FC<NeonHorizonGlassPanelProps> = ({
     tertiary:
       "bg-[#151f31]/50 backdrop-blur-lg border border-white/6 shadow-[0_8px_20px_rgba(0,0,0,0.30)]",
     floating:
-      "bg-[#101a2c]/90 backdrop-blur-3xl border border-white/12 shadow-[0_24px_60px_rgba(0,0,0,0.55),inset_0_1px_0_rgba(255,255,255,0.10)]",
+      "bg-[#111a2b]/90 backdrop-blur-3xl border border-white/12 shadow-[0_24px_60px_rgba(0,0,0,0.55),inset_0_1px_0_rgba(255,255,255,0.10)]",
     inset:
       "bg-[#0a111e]/85 backdrop-blur-md border border-white/6 shadow-[inset_0_2px_8px_rgba(0,0,0,0.45)]",
     window:
-      "bg-[#101a2c]/85 backdrop-blur-3xl border border-white/12 shadow-[0_28px_70px_rgba(0,0,0,0.60),inset_0_1px_0_rgba(255,255,255,0.10)]",
+      "bg-[#111a2b]/85 backdrop-blur-3xl border border-white/12 shadow-[0_28px_70px_rgba(0,0,0,0.60),inset_0_1px_0_rgba(255,255,255,0.10)]",
   }[variant];
 
-  // Corner style (Smooth rounded corners)
   const cornerStyles = {
+    // reticle draws real instrument corner ticks via .nh-reticle-corners
+    reticle: "rounded-2xl relative nh-reticle-corners",
     rounded: "rounded-2xl",
-    reticle: "rounded-2xl relative",
     sharp: "rounded-lg",
     pill: "rounded-full",
   }[corners];
@@ -97,6 +97,18 @@ export const NeonHorizonGlassPanel: React.FC<NeonHorizonGlassPanelProps> = ({
             {header.actions}
           </div>
         </div>
+      )}
+
+      {/* Optional scanline texture */}
+      {withScanline && (
+        <div
+          className="absolute inset-0 pointer-events-none opacity-[0.05]"
+          style={{
+            background:
+              "linear-gradient(180deg, transparent 0%, rgba(255,255,255,0.5) 50%, transparent 100%)",
+            backgroundSize: "100% 3px",
+          }}
+        />
       )}
 
       {/* Panel body */}

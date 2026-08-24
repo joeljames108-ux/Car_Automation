@@ -65,14 +65,14 @@ export function NeonTorqueVectoringStudio() {
             }}
             className="p-6 flex flex-col gap-4"
           >
-            <div className="grid grid-cols-2 gap-4 p-4 rounded-xl bg-[#030712] border border-sky-400/25 shadow-[inset_0_0_20px_rgba(0,0,0,0.8)]">
+            <div className="grid grid-cols-2 gap-4 p-4 rounded-xl bg-[#05080f] border border-sky-400/25 shadow-[inset_0_0_20px_rgba(0,0,0,0.8)]">
               {[
                 { pos: "FRONT LEFT (FL)", torque: `${Math.round(frontTorqueNm * 0.45)} Nm`, regen: "DRIVE", color: "text-sky-300" },
                 { pos: "FRONT RIGHT (FR)", torque: `${Math.round(frontTorqueNm * 0.55)} Nm`, regen: "OVERDRIVE", color: "text-emerald-300" },
                 { pos: "REAR LEFT (RL)", torque: `${Math.round(rearTorqueNm * 0.35)} Nm`, regen: "TUCK-IN", color: "text-amber-300" },
                 { pos: "REAR RIGHT (RR)", torque: `${Math.round(rearTorqueNm * 0.65)} Nm`, regen: "APEX PUSH", color: "text-rose-400" },
               ].map((wheel, idx) => (
-                <div key={idx} className="p-3 rounded-lg bg-[#060e22] border border-white/10 flex flex-col gap-1 font-mono text-xs">
+                <div key={idx} className="p-3 rounded-lg bg-[#0a111e] border border-white/10 flex flex-col gap-1 font-mono text-xs">
                   <span className="text-[10px] text-slate-400 font-bold">{wheel.pos}</span>
                   <div className="flex items-center justify-between">
                     <span className="text-slate-400">Torque:</span>
@@ -103,8 +103,8 @@ export function NeonTorqueVectoringStudio() {
                     }}
                     className={`p-2.5 rounded-lg border text-center text-xs font-bold cursor-pointer transition-all ${
  isSelected
- ? "bg-[#091a38] border-sky-400/40 text-sky-300"
- : "bg-[#060e22] border-white/10 text-slate-400 hover:border-sky-400/25"
+ ? "bg-sky-400/10 border-sky-400/30 text-sky-200"
+ : "bg-[#0a111e] border-white/10 text-slate-400 hover:border-sky-400/25"
  }`}
                   >
                     {m.name}
@@ -148,7 +148,7 @@ export function NeonTorqueVectoringStudio() {
               onChange={(val) => setYawMomentAggressiveness(val)}
             />
 
-            <div className="p-3.5 rounded-xl bg-[#060e22] border border-sky-400/15 flex flex-col gap-2 font-mono text-xs">
+            <div className="p-3.5 rounded-xl bg-[#0a111e] border border-sky-400/15 flex flex-col gap-2 font-mono text-xs">
               <div className="flex items-center justify-between">
                 <span className="text-slate-400">Response Rate:</span>
                 <span className="text-sky-300 font-bold">1,000 Hz CAN-FD Loop</span>

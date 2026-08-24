@@ -201,10 +201,10 @@ export function NeonTransmissionStudio() {
                     <span className="text-slate-300 font-bold">{g.gear} Gear ({g.ratio.toFixed(2)}:1)</span>
                     <span className="text-sky-300 font-bold">{g.speed} km/h</span>
                   </div>
-                  <div className="w-full h-2.5 bg-[#050b18] rounded-full p-0.5 border border-white/10">
+                  <div className="w-full h-2.5 bg-[#05080f] rounded-full p-0.5 border border-white/10">
                     <div
                       style={{ width: `${Math.min(100, (g.speed / 420) * 100)}%` }}
-                      className="h-full bg-gradient-to-r from-sky-400 to-sky-500 rounded-full"
+                      className="h-full bg-sky-400/60 rounded-full"
                     />
                   </div>
                 </div>

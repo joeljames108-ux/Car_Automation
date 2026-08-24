@@ -14,6 +14,7 @@ import type {
   Exterior3DSceneConfig,
 } from "../types";
 import { EXTERIOR_3D_MANIFEST } from "../manifests/exteriorManifest";
+import { DEFAULT_HOOD_GLB_ID } from "../assets/hoodGlbAssetRegistry";
 import type { MaterialGrade } from "../../sim/assemblyTypes";
 import type {
   ExteriorEngineeringConfig,
@@ -37,12 +38,17 @@ export interface Exterior3DStoreState {
   paintConfig: PaintSystemConfig;
   aeroConfig: AeroSurfaceConfig;
 
+  hoodGlbPresetId: string;
+  hoodGlbOpen: boolean;
+
   // Actions
   addComponent3D: (type: ExteriorComponent3DType, variantGrade?: MaterialGrade) => void;
   removeComponent3D: (type: ExteriorComponent3DType) => void;
   replaceVariant3D: (type: ExteriorComponent3DType, grade: MaterialGrade) => void;
   selectInstance3D: (instanceId: string | null) => void;
   hoverInstance3D: (instanceId: string | null) => void;
+  setHoodGlbPreset: (presetId: string) => void;
+  setHoodGlbOpen: (open: boolean) => void;
 
   setExplodedAmount: (amount: number) => void;
   toggleWireframe: () => void;
@@ -81,6 +87,9 @@ export const useExterior3DStore = create<Exterior3DStoreState>((set, get) => ({
   exteriorConfig: createDefaultExteriorConfig(),
   paintConfig: createDefaultPaintConfig(),
   aeroConfig: createDefaultAeroConfig(),
+
+  hoodGlbPresetId: DEFAULT_HOOD_GLB_ID,
+  hoodGlbOpen: false,
 
   addComponent3D: (type: ExteriorComponent3DType, variantGrade: MaterialGrade = "forged") => {
     const manifest = EXTERIOR_3D_MANIFEST[type];
@@ -151,6 +160,14 @@ export const useExterior3DStore = create<Exterior3DStoreState>((set, get) => ({
 
   hoverInstance3D: (instanceId: string | null) => {
     set({ hoveredInstanceId: instanceId });
+  },
+
+  setHoodGlbPreset: (presetId: string) => {
+    set({ hoodGlbPresetId: presetId });
+  },
+
+  setHoodGlbOpen: (open: boolean) => {
+    set({ hoodGlbOpen: open });
   },
 
   setExplodedAmount: (amount: number) => {

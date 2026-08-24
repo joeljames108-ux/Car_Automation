@@ -122,19 +122,40 @@ export const ModularLinearAssemblyStudio: React.FC = () => {
     },
     engine: design.engine,
     enginePosition: "mid",
+    engineOffsetMm: 0,
     transmissionType: "dct_7",
+    diffCoolingFins: true,
+    cvBoots: true,
     suspensionType: "double_wishbone",
+    activeCoilovers: true,
+    arbFrontNmPerDeg: 120,
+    arbRearNmPerDeg: 100,
     brakeType: "carbon_ceramic",
+    brakeBiasPct: 62,
     caliperColor: "#ef4444",
     wheelStyle: "centerlock_gt3",
     tireCompound: "semi_slick",
     bodyKit: "gt3_aero",
+    fenderLouvers: true,
+    doorStyle: "butterfly",
+    doorOpenAngleDeg: 0,
+    bonnetStyle: "extractor_vents",
+    bonnetOpenAngleDeg: 0,
+    dickyStyle: "vented_decklid",
+    dickyOpenAngleDeg: 0,
     paintColor: "#dc2626",
     paintFinish: "gloss",
     glassType: "race_polycarbonate",
+    lexanEngineCover: true,
     interiorType: "carbon_bucket_gt3",
+    sixPointHarness: true,
+    motecDisplay: true,
     electronicsType: "motorsport_ecu_telemetry",
+    raychemLooms: true,
     exhaustType: "quad_titanium",
+    heatTintIntensity: 70,
+    towHooksFront: true,
+    towHooksRear: true,
     aero: {
       frontSplitterEnabled: true,
       frontSplitterLengthMm: 120,
@@ -154,6 +175,7 @@ export const ModularLinearAssemblyStudio: React.FC = () => {
       sideSkirtExtensionMm: 60,
       vortexFins: true,
       underbodyVenturiTunnels: true,
+      venturiTunnelCount: 4,
       frontCanards: true,
       frontCanardAngleDeg: 14,
     },
@@ -445,6 +467,14 @@ export const ModularLinearAssemblyStudio: React.FC = () => {
                   return updated;
                 });
               }}
+              engineOffsetMm={assemblyState.engineOffsetMm ?? 0}
+              onUpdateOffset={(offset) => {
+                setAssemblyState((prev) => {
+                  const updated = { ...prev, engineOffsetMm: offset };
+                  history.pushState(updated);
+                  return updated;
+                });
+              }}
               isInstalled={assemblyState.installedStages.has("engine")}
               onInstall={() => handleInstallStage("engine")}
             />
@@ -456,6 +486,22 @@ export const ModularLinearAssemblyStudio: React.FC = () => {
               onUpdateTransmission={(t) => {
                 setAssemblyState((prev) => {
                   const updated = { ...prev, transmissionType: t };
+                  history.pushState(updated);
+                  return updated;
+                });
+              }}
+              diffCoolingFins={assemblyState.diffCoolingFins ?? true}
+              onUpdateDiffCoolingFins={(enabled) => {
+                setAssemblyState((prev) => {
+                  const updated = { ...prev, diffCoolingFins: enabled };
+                  history.pushState(updated);
+                  return updated;
+                });
+              }}
+              cvBoots={assemblyState.cvBoots ?? true}
+              onUpdateCvBoots={(enabled) => {
+                setAssemblyState((prev) => {
+                  const updated = { ...prev, cvBoots: enabled };
                   history.pushState(updated);
                   return updated;
                 });
@@ -475,6 +521,23 @@ export const ModularLinearAssemblyStudio: React.FC = () => {
                   return updated;
                 });
               }}
+              activeCoilovers={assemblyState.activeCoilovers ?? false}
+              onUpdateActiveCoilovers={(enabled) => {
+                setAssemblyState((prev) => {
+                  const updated = { ...prev, activeCoilovers: enabled };
+                  history.pushState(updated);
+                  return updated;
+                });
+              }}
+              arbFrontNmPerDeg={assemblyState.arbFrontNmPerDeg ?? 120}
+              arbRearNmPerDeg={assemblyState.arbRearNmPerDeg ?? 100}
+              onUpdateArb={(patch) => {
+                setAssemblyState((prev) => {
+                  const updated = { ...prev, ...patch };
+                  history.pushState(updated);
+                  return updated;
+                });
+              }}
               isInstalled={assemblyState.installedStages.has("suspension")}
               onInstall={() => handleInstallStage("suspension")}
             />
@@ -483,6 +546,14 @@ export const ModularLinearAssemblyStudio: React.FC = () => {
           {activeStage === "brakes" && (
             <BrakesAssemblyStage
               brakeType={assemblyState.brakeType}
+              brakeBiasPct={assemblyState.brakeBiasPct ?? 62}
+              onUpdateBrakeBias={(pct) => {
+                setAssemblyState((prev) => {
+                  const updated = { ...prev, brakeBiasPct: pct };
+                  history.pushState(updated);
+                  return updated;
+                });
+              }}
               caliperColor={assemblyState.caliperColor}
               onUpdateBrakes={(patch) => {
                 setAssemblyState((prev) => {
@@ -515,8 +586,15 @@ export const ModularLinearAssemblyStudio: React.FC = () => {
           {activeStage === "body_structure" && (
             <BodyPanelsAssemblyStage
               bodyKit={assemblyState.bodyKit}
+              doorStyle={assemblyState.doorStyle}
+              doorOpenAngleDeg={assemblyState.doorOpenAngleDeg ?? 0}
+              bonnetStyle={assemblyState.bonnetStyle}
+              bonnetOpenAngleDeg={assemblyState.bonnetOpenAngleDeg ?? 0}
+              dickyStyle={assemblyState.dickyStyle}
+              dickyOpenAngleDeg={assemblyState.dickyOpenAngleDeg ?? 0}
               paintColor={assemblyState.paintColor}
               paintFinish={assemblyState.paintFinish}
+              fenderLouvers={assemblyState.fenderLouvers ?? false}
               onUpdateBody={(patch) => {
                 setAssemblyState((prev) => {
                   const updated = { ...prev, ...patch };
@@ -545,6 +623,14 @@ export const ModularLinearAssemblyStudio: React.FC = () => {
                   return updated;
                 });
               }}
+              lexanEngineCover={assemblyState.lexanEngineCover ?? false}
+              onUpdateLexanEngineCover={(enabled) => {
+                setAssemblyState((prev) => {
+                  const updated = { ...prev, lexanEngineCover: enabled };
+                  history.pushState(updated);
+                  return updated;
+                });
+              }}
               isInstalled={assemblyState.installedStages.has("glass")}
               onInstall={() => handleInstallStage("glass")}
             />
@@ -556,6 +642,22 @@ export const ModularLinearAssemblyStudio: React.FC = () => {
               onUpdateInterior={(i) => {
                 setAssemblyState((prev) => {
                   const updated = { ...prev, interiorType: i };
+                  history.pushState(updated);
+                  return updated;
+                });
+              }}
+              sixPointHarness={assemblyState.sixPointHarness ?? true}
+              onUpdateSixPointHarness={(enabled) => {
+                setAssemblyState((prev) => {
+                  const updated = { ...prev, sixPointHarness: enabled };
+                  history.pushState(updated);
+                  return updated;
+                });
+              }}
+              motecDisplay={assemblyState.motecDisplay ?? true}
+              onUpdateMotecDisplay={(enabled) => {
+                setAssemblyState((prev) => {
+                  const updated = { ...prev, motecDisplay: enabled };
                   history.pushState(updated);
                   return updated;
                 });
@@ -575,6 +677,14 @@ export const ModularLinearAssemblyStudio: React.FC = () => {
                   return updated;
                 });
               }}
+              raychemLooms={assemblyState.raychemLooms ?? false}
+              onUpdateRaychemLooms={(enabled) => {
+                setAssemblyState((prev) => {
+                  const updated = { ...prev, raychemLooms: enabled };
+                  history.pushState(updated);
+                  return updated;
+                });
+              }}
               isInstalled={assemblyState.installedStages.has("electronics")}
               onInstall={() => handleInstallStage("electronics")}
             />
@@ -583,9 +693,26 @@ export const ModularLinearAssemblyStudio: React.FC = () => {
           {activeStage === "final_exterior" && (
             <FinalExteriorAssemblyStage
               exhaustType={assemblyState.exhaustType}
-              onUpdateExteriorDetails={(ex) => {
+              onUpdateExhaustType={(ex) => {
                 setAssemblyState((prev) => {
                   const updated = { ...prev, exhaustType: ex };
+                  history.pushState(updated);
+                  return updated;
+                });
+              }}
+              heatTintIntensity={assemblyState.heatTintIntensity ?? 70}
+              onUpdateHeatTint={(pct) => {
+                setAssemblyState((prev) => {
+                  const updated = { ...prev, heatTintIntensity: pct };
+                  history.pushState(updated);
+                  return updated;
+                });
+              }}
+              towHooksFront={assemblyState.towHooksFront ?? true}
+              towHooksRear={assemblyState.towHooksRear ?? true}
+              onUpdateTowHooks={(patch) => {
+                setAssemblyState((prev) => {
+                  const updated = { ...prev, ...patch };
                   history.pushState(updated);
                   return updated;
                 });
@@ -624,8 +751,16 @@ export const ModularLinearAssemblyStudio: React.FC = () => {
           {activeStage === "complete" && (
             <VehicleCompletionStage
               assemblyState={assemblyState}
+              physicalState={{
+                totalCurbWeightKg: physicalState.totalCurbWeightKg,
+                centerOfMassMm: physicalState.centerOfMassMm,
+                weightDistributionFrontPct: physicalState.weightDistributionFrontPct,
+              }}
               onEnterAeroStudio={() => setActiveStage("aero_studio")}
+              showCoMGizmo={showCoMGizmo}
+              onToggleCoMGizmo={() => setShowCoMGizmo(!showCoMGizmo)}
               onFinishVehicle={() => {
+                assemblyAudio.playPneumaticInstall();
                 alert("Vehicle Assembly & Hardware Sign-Off Complete! Ready for Virtual Track Testing & Simulation.");
               }}
             />

@@ -67,7 +67,7 @@ export function NeonSkidSparkStudio() {
       ctx.stroke();
 
       // Vehicle Underbody Plank
-      ctx.fillStyle = isSparking ? "#fbbf24" : "#38bdf8";
+      ctx.fillStyle = isSparking ? "#d9b36c" : "#8fb9d9";
       ctx.fillRect(80, h * 0.85 - 8, 120, 8);
 
       // Spawn Sparks
@@ -101,7 +101,7 @@ export function NeonSkidSparkStudio() {
         const alpha = 1 - p.life / p.maxLife;
 
         ctx.fillStyle = `rgba(251, 191, 36, ${alpha})`;
-        ctx.shadowColor = "#f59e0b";
+        ctx.shadowColor = "#c9974f";
         ctx.shadowBlur = 8;
         ctx.beginPath();
         ctx.arc(p.x, p.y, 2, 0, Math.PI * 2);
@@ -156,7 +156,7 @@ export function NeonSkidSparkStudio() {
             }}
             className="p-6 flex flex-col gap-4"
           >
-            <div className="w-full h-52 bg-[#030712] rounded-xl border border-sky-400/25 overflow-hidden relative shadow-[inset_0_0_25px_rgba(0,0,0,0.85)]">
+            <div className="w-full h-52 bg-[#05080f] rounded-xl border border-sky-400/25 overflow-hidden relative shadow-[inset_0_0_25px_rgba(0,0,0,0.85)]">
               <canvas ref={canvasRef} width={640} height={210} className="w-full h-full" />
               <div className="absolute top-2 left-3 flex items-center gap-2">
                 <span className={`text-[10px] nh-font-mono font-bold ${isSparking ? "text-amber-400" : "text-sky-300"}`}>
@@ -182,8 +182,8 @@ export function NeonSkidSparkStudio() {
                     }}
                     className={`p-2.5 rounded-lg border text-center text-xs font-bold cursor-pointer transition-all ${
  isSelected
- ? "bg-[#091a38] border-amber-400 text-amber-300"
- : "bg-[#060e22] border-white/10 text-slate-400 hover:border-sky-400/25"
+ ? "bg-[#0e1626] border-amber-400 text-amber-300"
+ : "bg-[#0a111e] border-white/10 text-slate-400 hover:border-sky-400/25"
  }`}
                   >
                     {m.name}
@@ -227,7 +227,7 @@ export function NeonSkidSparkStudio() {
               onChange={(val) => setCompressionLoadKn(val)}
             />
 
-            <div className="p-3.5 rounded-xl bg-[#060e22] border border-sky-400/15 flex flex-col gap-2 font-mono text-xs">
+            <div className="p-3.5 rounded-xl bg-[#0a111e] border border-sky-400/15 flex flex-col gap-2 font-mono text-xs">
               <div className="flex items-center justify-between">
                 <span className="text-slate-400">FIA Scrutineering:</span>
                 <span className="text-emerald-300 font-bold">4-Point Micrometer Laser</span>

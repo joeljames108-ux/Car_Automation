@@ -448,3 +448,12 @@ export function runMasterPhaseExpansionTests() {
 if (typeof process !== "undefined" && process.argv[1]?.includes("masterPhaseExpansionTests")) {
   runMasterPhaseExpansionTests();
 }
+
+// Vitest suite wrapper so `npm test` collects this file correctly
+import { describe, it, expect } from "vitest";
+
+describe("Master Phase Expansion", () => {
+  it("passes all phase expansion engineering assertions", () => {
+    expect(() => runMasterPhaseExpansionTests()).not.toThrow();
+  });
+});

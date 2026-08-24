@@ -1,19 +1,22 @@
 /**
  * ============================================================================
- * STAGE 2: ENGINE INTEGRATION & MOUNTING STAGE
+ * STAGE 2: ENGINE POWERTRAIN — DROP-IN PREVIOUSLY DESIGNED ENGINE
  * ============================================================================
- * Connects directly with the user's previously designed engine in the Engine Tab.
- * Supports Front, Mid, and Rear engine position configuration with live 3D anchor snapping.
+ * Pulls the engine designed in the Engine Studio (live sync) and drops it into
+ * the chassis on the selected mounting anchor. Supports Front / Mid / Rear
+ * position plus lateral drop-in offset for weight-jacking and packaging.
  */
 
 import React from "react";
-import { Cog, CheckCircle2, Zap, Flame, Shield, ArrowRight } from "lucide-react";
+import { Cog, CheckCircle2, MoveHorizontal, Plug } from "lucide-react";
 import { EngineConfig, EnginePosition } from "../../../sim/types";
 
 interface EngineAssemblyStageProps {
   engine: EngineConfig;
   enginePosition: EnginePosition;
   onUpdatePosition: (pos: EnginePosition) => void;
+  engineOffsetMm: number;
+  onUpdateOffset: (offsetMm: number) => void;
   isInstalled: boolean;
   onInstall: () => void;
 }
@@ -34,6 +37,8 @@ export const EngineAssemblyStage: React.FC<EngineAssemblyStageProps> = ({
   engine,
   enginePosition,
   onUpdatePosition,
+  engineOffsetMm,
+  onUpdateOffset,
   isInstalled,
   onInstall,
 }) => {
@@ -41,7 +46,6 @@ export const EngineAssemblyStage: React.FC<EngineAssemblyStageProps> = ({
   const displacementCc = Math.round(
     Math.PI * Math.pow((engine.bore || 88) / 20, 2) * ((engine.stroke || 82) / 10) * cylCount
   );
-  // Estimate engine power output based on displacement, aspiration, and config
   const estHp = Math.round(
     (displacementCc || 4000) *
       0.14 *
@@ -79,19 +83,28 @@ export const EngineAssemblyStage: React.FC<EngineAssemblyStageProps> = ({
     },
   ];
 
+  // Offset side-effect readouts
+  const offsetMm = engineOffsetMm || 0;
+  const crossWeightNote =
+    Math.abs(offsetMm) < 20
+      ? "Neutral — driver-side fuel cell compensates symmetric loading."
+      : offsetMm > 0
+      ? "Shifts mass to left-hand corners — beneficial for clockwise circuits."
+      : "Shifts mass to right-hand corners — beneficial for anti-clockwise circuits.";
+
   return (
     <div className="panel p-4 rounded-3xl space-y-4 shadow-xl">
       <div className="flex items-center justify-between border-b border-base-800/60 pb-3">
         <div className="flex items-center gap-2.5">
           <div className="p-2 rounded-xl bg-amber-500/15 text-amber-500 border border-amber-500/30">
-            <Cog size={18} className="animate-spin-slow" />
+            <Cog size={18} />
           </div>
           <div>
             <h3 className="text-sm font-bold font-mono text-slate-800 dark:text-slate-100 uppercase tracking-wider">
-              STAGE 2: ENGINE MOUNTING & POSITIONING
+              STAGE 2: ENGINE POWERTRAIN DROP-IN & MOUNTING
             </h3>
             <p className="text-[11px] font-mono text-slate-500 dark:text-slate-400">
-              Synchronized with your saved Engine Studio design. Select the chassis mounting anchor.
+              Drop-in your previously designed engine. Select the chassis anchor and fine-trim lateral offset.
             </p>
           </div>
         </div>
@@ -103,22 +116,25 @@ export const EngineAssemblyStage: React.FC<EngineAssemblyStageProps> = ({
       </div>
 
       {/* Live Engine Tab Source Badge */}
-      <div className="p-3.5 rounded-2xl bg-base-900/80 border border-base-800 flex items-center justify-between flex-wrap gap-3">
+      <div className="p-3.5 rounded-2xl bg-base-900/80 border border-amber-500/30 flex items-center justify-between flex-wrap gap-3">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-400 font-mono font-bold text-xs">
             {cylCount}CYL
           </div>
           <div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 flex-wrap">
               <span className="font-bold text-sm font-mono text-slate-900 dark:text-slate-100">
                 {engine.layout?.toUpperCase() || "V8"} · {(displacementCc / 1000).toFixed(1)}L
               </span>
               <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-amber-500/15 text-amber-600 dark:text-amber-300 font-bold uppercase">
                 {engine.intake?.replace("_", " ") || "NA"}
               </span>
+              <span className="text-[9px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-500 font-bold border border-emerald-500/30 flex items-center gap-1">
+                <Plug size={9} /> LIVE DROP-IN SYNC
+              </span>
             </div>
             <span className="text-[11px] font-mono text-slate-500 dark:text-slate-400">
-              Source: Live Engine Tab Configuration
+              Source: Engine Studio design · Bore {(engine.bore || 88)}mm × Stroke {(engine.stroke || 82)}mm
             </span>
           </div>
         </div>
@@ -165,6 +181,35 @@ export const EngineAssemblyStage: React.FC<EngineAssemblyStageProps> = ({
             );
           })}
         </div>
+      </div>
+
+      {/* Lateral Drop-In Offset Trim */}
+      <div className="p-3.5 rounded-2xl bg-base-900/60 border border-base-800 space-y-2.5">
+        <div className="flex items-center justify-between">
+          <label className="text-xs font-bold font-mono text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
+            <MoveHorizontal size={13} className="text-amber-400" /> LATERAL DROP-IN OFFSET TRIM
+          </label>
+          <span className={`text-xs font-mono font-bold ${offsetMm === 0 ? "text-slate-400" : offsetMm > 0 ? "text-emerald-500" : "text-cyan-400"}`}>
+            {offsetMm > 0 ? "+" : ""}{offsetMm} mm {offsetMm > 0 ? "(LEFT)" : offsetMm < 0 ? "(RIGHT)" : "(CENTERED)"}
+          </span>
+        </div>
+        <input
+          type="range"
+          min="-150"
+          max="150"
+          step="5"
+          value={offsetMm}
+          onChange={(e) => onUpdateOffset(parseInt(e.target.value))}
+          className="w-full accent-amber-400 cursor-pointer"
+        />
+        <div className="flex justify-between text-[9px] font-mono text-slate-500">
+          <span>-150 mm (Right Bay)</span>
+          <span>Centered</span>
+          <span>+150 mm (Left Bay)</span>
+        </div>
+        <p className="text-[10px] font-mono text-slate-500 dark:text-slate-400 pt-1 border-t border-base-800/60">
+          {crossWeightNote}
+        </p>
       </div>
 
       {/* Install Button */}

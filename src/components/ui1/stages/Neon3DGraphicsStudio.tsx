@@ -65,7 +65,7 @@ export function Neon3DGraphicsStudio() {
               }}
               className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs nh-font-mono font-bold transition-all cursor-pointer whitespace-nowrap ${
  isActive
- ? "bg-sky-400/20 text-sky-200 border border-sky-400/35"
+ ? "bg-sky-400/20 text-sky-200 border border-sky-400/30"
  : "text-slate-400 hover:text-slate-200 hover:bg-white/5"
  }`}
             >
@@ -78,14 +78,14 @@ export function Neon3DGraphicsStudio() {
 
       {/* Tab 1: All-in-One 3D Studio */}
       {activeTab === "all_in_one" && (
-        <div className="w-full min-h-[700px] h-[780px] rounded-3xl overflow-hidden border border-white/10 shadow-[0_25px_60px_rgba(0,0,0,0.6)] bg-[#070d18] relative">
+        <div className="w-full min-h-[700px] h-[780px] rounded-3xl overflow-hidden border border-white/10 shadow-[0_25px_60px_rgba(0,0,0,0.6)] bg-[#05080f] relative">
           <EngineAndCar3DGraphicsViewport />
         </div>
       )}
 
       {/* Tab 2: Modular Engine 3D Assembly */}
       {activeTab === "engine_assembly" && (
-        <div className="w-full min-h-[700px] h-[780px] rounded-3xl overflow-hidden border border-white/10 shadow-[0_25px_60px_rgba(0,0,0,0.6)] bg-[#070d18] relative">
+        <div className="w-full min-h-[700px] h-[780px] rounded-3xl overflow-hidden border border-white/10 shadow-[0_25px_60px_rgba(0,0,0,0.6)] bg-[#05080f] relative">
           <ModularEngine3DViewport
             className="w-full h-full"
             engineConfig={design.engine}
@@ -96,7 +96,7 @@ export function Neon3DGraphicsStudio() {
 
       {/* Tab 3: Modular Exterior 3D Assembly */}
       {activeTab === "exterior_assembly" && (
-        <div className="w-full min-h-[700px] h-[780px] rounded-3xl overflow-hidden border border-white/10 shadow-[0_25px_60px_rgba(0,0,0,0.6)] bg-[#070d18] relative">
+        <div className="w-full min-h-[700px] h-[780px] rounded-3xl overflow-hidden border border-white/10 shadow-[0_25px_60px_rgba(0,0,0,0.6)] bg-[#05080f] relative">
           <ModularExterior3DViewport
             className="w-full h-full"
           />

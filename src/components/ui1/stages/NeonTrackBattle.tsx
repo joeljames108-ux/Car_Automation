@@ -74,8 +74,8 @@ export function NeonTrackBattle() {
       const cx = canvas.width / 2 + Math.cos(angle) * canvas.width * 0.38;
       const cy = canvas.height / 2 + Math.sin(angle) * canvas.height * 0.32;
 
-      ctx.fillStyle = "#38bdf8";
-      ctx.shadowColor = "#38bdf8";
+      ctx.fillStyle = "#8fb9d9";
+      ctx.shadowColor = "#8fb9d9";
       ctx.shadowBlur = 15;
       ctx.beginPath();
       ctx.arc(cx, cy, 7, 0, Math.PI * 2);
@@ -175,15 +175,15 @@ export function NeonTrackBattle() {
 
             {/* Sector Times */}
             <div className="w-full grid grid-cols-3 gap-3 border-t border-white/10 pt-4 mt-4 nh-font-mono text-center text-xs">
-              <div className="bg-[#050b18] p-2.5 rounded-xl border border-sky-400/15">
+              <div className="bg-[#05080f] p-2.5 rounded-xl border border-sky-400/15">
                 <span className="text-slate-400 text-[10px]">SECTOR 1</span>
                 <div className="text-emerald-300 font-bold text-sm mt-0.5">34.21s</div>
               </div>
-              <div className="bg-[#050b18] p-2.5 rounded-xl border border-sky-400/15">
+              <div className="bg-[#05080f] p-2.5 rounded-xl border border-sky-400/15">
                 <span className="text-slate-400 text-[10px]">SECTOR 2</span>
                 <div className="text-sky-300 font-bold text-sm mt-0.5">1:02.84s</div>
               </div>
-              <div className="bg-[#050b18] p-2.5 rounded-xl border border-sky-400/15">
+              <div className="bg-[#05080f] p-2.5 rounded-xl border border-sky-400/15">
                 <span className="text-slate-400 text-[10px]">SECTOR 3</span>
                 <div className="text-sky-300 font-bold text-sm mt-0.5">42.15s</div>
               </div>
@@ -212,7 +212,7 @@ export function NeonTrackBattle() {
               ].map((tire) => (
                 <div
                   key={tire.pos}
-                  className="p-3 rounded-xl bg-[#071126] border border-sky-400/15 flex flex-col items-center justify-center text-center"
+                  className="p-3 rounded-xl bg-[#0a111e] border border-sky-400/15 flex flex-col items-center justify-center text-center"
                 >
                   <span className="text-[10px] nh-font-mono text-sky-400 font-bold">{tire.pos} TIRE</span>
                   <span className="text-lg font-black nh-font-headline text-slate-100 my-0.5">{tire.temp}</span>

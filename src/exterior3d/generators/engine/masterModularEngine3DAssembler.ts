@@ -19,7 +19,7 @@
 
 import * as THREE from "three";
 import { MasterEngineState } from "../../../sim/engine/masterEngineTypes";
-import { EngineMountingGraph } from "../../sockets/engineMountingGraph";
+import { EngineMountingGraph, solveDynamicEngineGeometry } from "../../sockets/engineMountingGraph";
 import { EngineKinematicsAnimator } from "../../animation/engineKinematicsAnimator";
 
 export class MasterModularEngine3DAssembler {
@@ -145,7 +145,11 @@ export class MasterModularEngine3DAssembler {
     const block = state.block;
     const cylCount = arch.cylinderCount;
     const cylindersPerBank = arch.family === "inline" ? cylCount : cylCount / 2;
-    const boreSpacing = Math.max(arch.boreSpacingMm, block.boreMm + 10);
+
+    // Live parametric geometry — single source of truth shared with the mounting
+    // graph so every subassembly tracks bore pitch, deck height & sump depth.
+    const dyn = solveDynamicEngineGeometry(state);
+    const boreSpacing = dyn.boreSpacingMm;
     const startZ = -((cylindersPerBank - 1) * boreSpacing) / 2;
     const halfBankAngleRad = (arch.bankAngleDeg / 2) * (Math.PI / 180);
 
@@ -159,7 +163,7 @@ export class MasterModularEngine3DAssembler {
     blockGroup.name = "EngineBlock_Assembly";
     const blockLengthM = (cylindersPerBank * boreSpacing + 60) / 1000;
     const blockWidthM = arch.family === "inline" ? (0.24 + block.boreMm * 0.001) : (0.34 + block.boreMm * 0.0015);
-    const blockHeightM = Math.max(arch.deckHeightMm / 1000, (block.strokeMm * 0.9 + state.connectingRods.rodLengthMm + 45) / 1000);
+    const blockHeightM = dyn.deckHeightMm / 1000;
 
     const blockCasting = new THREE.Mesh(
       new THREE.BoxGeometry(blockWidthM, blockHeightM, blockLengthM),
@@ -208,7 +212,7 @@ export class MasterModularEngine3DAssembler {
     this.crankshaftMesh.add(crankShaftBar);
 
     // Crank Throws & Knife-edged Counterweights
-    const counterweightRadius = Math.max(0.048, (block.strokeMm / 2000) * 1.35);
+    const counterweightRadius = dyn.counterweightRadiusMm / 1000;
     for (let i = 0; i < cylindersPerBank; i++) {
       const zM = (startZ + i * boreSpacing) / 1000;
       const counterweight = new THREE.Mesh(
@@ -512,7 +516,7 @@ export class MasterModularEngine3DAssembler {
     // ------------------------------------------------------------------------
     const oilPanGroup = new THREE.Group();
     oilPanGroup.name = "OilPan_Assembly";
-    const panDepthM = Math.max(0.065, (block.strokeMm / 2000) * 1.25);
+    const panDepthM = dyn.oilPanDepthMm / 1000;
     const panMesh = new THREE.Mesh(
       new THREE.BoxGeometry(blockWidthM * 0.85, panDepthM, blockLengthM * 0.95),
       this.materials.billetAluminum
@@ -572,12 +576,14 @@ export class MasterModularEngine3DAssembler {
 
     this.pistonMeshes.forEach((p) => {
       const solved = this.kinematicsAnimator.solveCylinder(p.cylinderIndex);
-      const dispM = (solved.pistonDisplacementMm) / 1000;
+      // Exact slider-crank pin distance from crank centerline:
+      // displacement is measured from BDC where the pin sits at (rodLength - crankRadius)
+      const pinDistanceM = rodLengthM - crankRadiusM + solved.pistonDisplacementMm / 1000;
       const angleRad = p.angleRad;
 
       // Piston position along cylinder bore axis
-      const baseX = Math.sin(angleRad) * (rodLengthM + dispM);
-      const baseY = Math.cos(angleRad) * (rodLengthM + dispM);
+      const baseX = Math.sin(angleRad) * pinDistanceM;
+      const baseY = Math.cos(angleRad) * pinDistanceM;
 
       p.group.position.set(baseX, baseY, p.baseZ);
       p.group.rotation.z = -angleRad;

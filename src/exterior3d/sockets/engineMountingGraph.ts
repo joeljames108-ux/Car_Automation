@@ -21,6 +21,51 @@ export interface EngineMountSocket {
   attachedMesh?: THREE.Object3D;
 }
 
+// ============================================================================
+// DYNAMIC PARAMETRIC GEOMETRY SOLVER (LIVE BORE / STROKE / ROD LENGTH)
+// ============================================================================
+// Derives the real-time block envelope directly from live reciprocating
+// dimensions so every mounting socket tracks the changing deck height,
+// bore pitch, crank throw, and sump depth without gaps or clipping.
+// ============================================================================
+
+export interface DynamicEngineGeometry {
+  /** Live bore pitch: widens spacing as cylinder bore outgrows the preset pitch */
+  boreSpacingMm: number;
+  /** Live deck height: elevates with stroke amplitude, rod length & piston compression height */
+  deckHeightMm: number;
+  /** Crank counterweight swing radius: grows with stroke throw radius */
+  counterweightRadiusMm: number;
+  /** Oil pan depth required for counterweight clearance */
+  oilPanDepthMm: number;
+  /** Seated oil pan centerline Y (mm, negative below crank centerline) */
+  oilPanCenterYMm: number;
+}
+
+export function solveDynamicEngineGeometry(state: MasterEngineState): DynamicEngineGeometry {
+  const arch = state.architecture;
+  const strokeMm = state.block.strokeMm;
+  const rodLengthMm = state.connectingRods.rodLengthMm;
+
+  const boreSpacingMm = Math.max(arch.boreSpacingMm, state.block.boreMm + 10);
+  // Deck must clear: half-stroke + rod + piston compression deck allowance
+  const deckHeightMm = Math.max(
+    arch.deckHeightMm,
+    strokeMm * 0.9 + rodLengthMm + 45
+  );
+  const counterweightRadiusMm = Math.max(48, (strokeMm / 2000) * 1350);
+  const oilPanDepthMm = Math.max(65, (strokeMm / 2000) * 1250);
+  const oilPanCenterYMm = -(counterweightRadiusMm + oilPanDepthMm / 2 + 6);
+
+  return {
+    boreSpacingMm,
+    deckHeightMm,
+    counterweightRadiusMm,
+    oilPanDepthMm,
+    oilPanCenterYMm,
+  };
+}
+
 export class EngineMountingGraph {
   private sockets: Map<string, EngineMountSocket> = new Map();
   private explodedFactor: number = 0.0; // 0.0 (assembled) to 1.0 (fully exploded)
@@ -34,13 +79,16 @@ export class EngineMountingGraph {
   public rebuildSocketsFromState(state: MasterEngineState): void {
     this.sockets.clear();
     const arch = state.architecture;
-    const block = state.block;
     const halfBankAngleRad = (arch.bankAngleDeg / 2) * (Math.PI / 180);
     const halfBankAngleDeg = arch.bankAngleDeg / 2;
 
+    // Live parametric dimensions — sockets track bore pitch, deck height & sump depth
+    const dyn = solveDynamicEngineGeometry(state);
+    const deckHeightMm = dyn.deckHeightMm;
+
     const cylCount = arch.cylinderCount;
     const cylindersPerBank = arch.family === "inline" ? cylCount : cylCount / 2;
-    const boreSpacing = arch.boreSpacingMm;
+    const boreSpacing = dyn.boreSpacingMm;
     const startZ = -((cylindersPerBank - 1) * boreSpacing) / 2;
 
     // 1. Crankshaft Main Journal Socket
@@ -53,11 +101,11 @@ export class EngineMountingGraph {
       isOccupied: true,
     });
 
-    // 2. Oil Pan Socket
+    // 2. Oil Pan Socket (deepens with stroke for counterweight clearance)
     this.sockets.set("ENGINE_OIL_PAN", {
       id: "ENGINE_OIL_PAN",
       category: "lubrication",
-      localPositionMm: { x: 0, y: -90, z: 0 },
+      localPositionMm: { x: 0, y: dyn.oilPanCenterYMm, z: 0 },
       localRotationDeg: { x: 0, y: 0, z: 0 },
       ejectionVector: { x: 0, y: -380, z: 0 },
       isOccupied: true,
@@ -81,7 +129,7 @@ export class EngineMountingGraph {
       const angleRad = bank * halfBankAngleRad;
 
       // Cylinder bore center at deck height
-      const deckRadiusMm = arch.deckHeightMm * 0.75;
+      const deckRadiusMm = deckHeightMm * 0.75;
       const xMm = Math.sin(angleRad) * deckRadiusMm;
       const yMm = Math.cos(angleRad) * deckRadiusMm;
 
@@ -105,7 +153,7 @@ export class EngineMountingGraph {
       this.sockets.set("ENGINE_HEAD_BANK_CENTER", {
         id: "ENGINE_HEAD_BANK_CENTER",
         category: "cylinderHeads",
-        localPositionMm: { x: 0, y: arch.deckHeightMm, z: 0 },
+        localPositionMm: { x: 0, y: deckHeightMm, z: 0 },
         localRotationDeg: { x: 0, y: 0, z: 0 },
         ejectionVector: { x: 0, y: 320, z: 0 },
         isOccupied: true,
@@ -113,7 +161,7 @@ export class EngineMountingGraph {
       this.sockets.set("ENGINE_CAM_INTAKE", {
         id: "ENGINE_CAM_INTAKE",
         category: "camshafts",
-        localPositionMm: { x: -45, y: arch.deckHeightMm + 90, z: 0 },
+        localPositionMm: { x: -45, y: deckHeightMm + 90, z: 0 },
         localRotationDeg: { x: 0, y: 0, z: 0 },
         ejectionVector: { x: -40, y: 440, z: 0 },
         isOccupied: true,
@@ -121,7 +169,7 @@ export class EngineMountingGraph {
       this.sockets.set("ENGINE_CAM_EXHAUST", {
         id: "ENGINE_CAM_EXHAUST",
         category: "camshafts",
-        localPositionMm: { x: 45, y: arch.deckHeightMm + 90, z: 0 },
+        localPositionMm: { x: 45, y: deckHeightMm + 90, z: 0 },
         localRotationDeg: { x: 0, y: 0, z: 0 },
         ejectionVector: { x: 40, y: 440, z: 0 },
         isOccupied: true,
@@ -129,14 +177,14 @@ export class EngineMountingGraph {
       this.sockets.set("ENGINE_VALVE_COVER", {
         id: "ENGINE_VALVE_COVER",
         category: "cylinderHeads",
-        localPositionMm: { x: 0, y: arch.deckHeightMm + 140, z: 0 },
+        localPositionMm: { x: 0, y: deckHeightMm + 140, z: 0 },
         localRotationDeg: { x: 0, y: 0, z: 0 },
         ejectionVector: { x: 0, y: 560, z: 0 },
         isOccupied: true,
       });
     } else {
       // Left Bank Head & Cams
-      const deckL = arch.deckHeightMm;
+      const deckL = deckHeightMm;
       const xL = -Math.sin(halfBankAngleRad) * deckL;
       const yL = Math.cos(halfBankAngleRad) * deckL;
       this.sockets.set("ENGINE_HEAD_BANK_L", {
@@ -173,7 +221,7 @@ export class EngineMountingGraph {
     this.sockets.set("ENGINE_INTAKE_MANIFOLD", {
       id: "ENGINE_INTAKE_MANIFOLD",
       category: "intake",
-      localPositionMm: { x: 0, y: arch.deckHeightMm + 180, z: 0 },
+      localPositionMm: { x: 0, y: deckHeightMm + 180, z: 0 },
       localRotationDeg: { x: 0, y: 0, z: 0 },
       ejectionVector: { x: 0, y: 650, z: 0 },
       isOccupied: true,
@@ -184,7 +232,7 @@ export class EngineMountingGraph {
       this.sockets.set("ENGINE_EXHAUST_HEADER", {
         id: "ENGINE_EXHAUST_HEADER",
         category: "exhaust",
-        localPositionMm: { x: 160, y: arch.deckHeightMm * 0.7, z: 0 },
+        localPositionMm: { x: 160, y: deckHeightMm * 0.7, z: 0 },
         localRotationDeg: { x: 0, y: 0, z: 0 },
         ejectionVector: { x: 420, y: 0, z: 0 },
         isOccupied: true,
@@ -193,7 +241,7 @@ export class EngineMountingGraph {
       this.sockets.set("ENGINE_EXHAUST_HEADER_L", {
         id: "ENGINE_EXHAUST_HEADER_L",
         category: "exhaust",
-        localPositionMm: { x: -240, y: arch.deckHeightMm * 0.6, z: 0 },
+        localPositionMm: { x: -240, y: deckHeightMm * 0.6, z: 0 },
         localRotationDeg: { x: 0, y: 0, z: halfBankAngleDeg },
         ejectionVector: { x: -480, y: -80, z: 0 },
         isOccupied: true,
@@ -201,7 +249,7 @@ export class EngineMountingGraph {
       this.sockets.set("ENGINE_EXHAUST_HEADER_R", {
         id: "ENGINE_EXHAUST_HEADER_R",
         category: "exhaust",
-        localPositionMm: { x: 240, y: arch.deckHeightMm * 0.6, z: 0 },
+        localPositionMm: { x: 240, y: deckHeightMm * 0.6, z: 0 },
         localRotationDeg: { x: 0, y: 0, z: -halfBankAngleDeg },
         ejectionVector: { x: 480, y: -80, z: 0 },
         isOccupied: true,
@@ -214,7 +262,7 @@ export class EngineMountingGraph {
         this.sockets.set("ENGINE_TURBO_HOT_V", {
           id: "ENGINE_TURBO_HOT_V",
           category: "turboSystem",
-          localPositionMm: { x: 0, y: arch.deckHeightMm + 60, z: 0 },
+          localPositionMm: { x: 0, y: deckHeightMm + 60, z: 0 },
           localRotationDeg: { x: 0, y: 0, z: 0 },
           ejectionVector: { x: 0, y: 480, z: 0 },
           isOccupied: true,

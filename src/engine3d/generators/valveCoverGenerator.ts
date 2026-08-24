@@ -18,6 +18,7 @@ import {
   createKnurledBand,
   createORingSeal,
 } from './geometryDetailUtils';
+import { buildStrokeLettering } from './engineCoverGenerator';
 
 // Polyfill Node.js FileReader if executing in CLI
 if (typeof globalThis !== 'undefined' && typeof (globalThis as any).FileReader === 'undefined') {
@@ -134,6 +135,13 @@ export function buildValveCoverScene(bankSide: 'left' | 'right', configOrCyls?: 
     shellGroup.add(finMesh);
   });
 
+  // Laser-Etched "APEX V12" Anodized Badge Lettering on the Front Deck Strip
+  const badgeGeo = buildStrokeLettering('APEX V12', 0.02, 0.62, 0.0025, 0.12);
+  const badgeMesh = new THREE.Mesh(badgeGeo, matCarbonIgnition);
+  badgeMesh.name = 'Valve_Cover_Badge_Apex_V12_Anodized_Lettering';
+  badgeMesh.position.set(0, -0.065, spec.coverHeightM / 2 - 0.0065);
+  shellGroup.add(badgeMesh);
+
   rootGroup.add(shellGroup);
 
   // ─── 2. ISOLATED SPARK PLUG WELLS & COIL-ON-PLUG PACKS ───
@@ -158,6 +166,20 @@ export function buildValveCoverScene(bankSide: 'left' | 'right', configOrCyls?: 
     coilMesh.castShadow = true;
     ignitionGroup.add(coilMesh);
 
+    // Rubber Insulating Boot Extending into the Spark Tube
+    const bootGeo = new THREE.CylinderGeometry(0.008, 0.006, 0.022, 16);
+    const bootMesh = new THREE.Mesh(bootGeo, matVitonGasket);
+    bootMesh.name = `Coil_Rubber_Insulating_Boot_${s + 1}`;
+    bootMesh.position.set(cx, 0, spec.coverHeightM / 2 - 0.002);
+    ignitionGroup.add(bootMesh);
+
+    // Electrical Connection Plug Body on the Coil Flank
+    const plugBodyGeo = new THREE.BoxGeometry(0.014, 0.012, 0.010);
+    const plugBodyMesh = new THREE.Mesh(plugBodyGeo, matCarbonIgnition);
+    plugBodyMesh.name = `Coil_Connector_Plug_${s + 1}`;
+    plugBodyMesh.position.set(cx, -0.026, spec.coverHeightM / 2 + 0.010);
+    ignitionGroup.add(plugBodyMesh);
+
     // Coil Retention M6 Socket Cap Screw
     const coilBoltGeo = createAllenSocketHead(0.003, 0.012);
     const coilBoltMesh = new THREE.Mesh(coilBoltGeo, matStainlessFastener);
@@ -172,6 +194,17 @@ export function buildValveCoverScene(bankSide: 'left' | 'right', configOrCyls?: 
     pclipMesh.position.set(cx, -0.018, spec.coverHeightM / 2 + 0.010);
     ignitionGroup.add(pclipMesh);
   }
+
+  // Ignition Harness Loom Routed Through the Connector Plugs
+  const loomCurve = new THREE.CatmullRomCurve3(
+    Array.from({ length: cylsPerBank }, (_, i) =>
+      new THREE.Vector3(-halfSpanX + i * cylSpacingM, -0.026, spec.coverHeightM / 2 + 0.010)
+    )
+  );
+  const loomGeo = new THREE.TubeGeometry(loomCurve, cylsPerBank * 8, 0.004, 10, false);
+  const loomMesh = new THREE.Mesh(loomGeo, matVitonGasket);
+  loomMesh.name = 'Ignition_Coil_Harness_Loom';
+  ignitionGroup.add(loomMesh);
 
   rootGroup.add(ignitionGroup);
 
@@ -201,6 +234,13 @@ export function buildValveCoverScene(bankSide: 'left' | 'right', configOrCyls?: 
     knurlMesh.name = 'OilCap_Knurled_Grip_Band';
     knurlMesh.position.set(-0.24, 0.045, spec.coverHeightM / 2 + 0.028);
     breatherGroup.add(knurlMesh);
+
+    // Laser-Etched "OIL" Lettering on the Filler Cap Face
+    const oilLetterGeo = buildStrokeLettering('OIL', 0.011, 0.62, 0.0015, 0);
+    const oilLetterMesh = new THREE.Mesh(oilLetterGeo, matCarbonIgnition);
+    oilLetterMesh.name = 'Oil_Filler_Cap_Anodized_Lettering';
+    oilLetterMesh.position.set(-0.24, 0.045, spec.coverHeightM / 2 + 0.0355);
+    breatherGroup.add(oilLetterMesh);
   }
 
   // Dual AN-10 (7/8-14 UNF) Crankcase Breather Fitting Bungs
@@ -220,6 +260,14 @@ export function buildValveCoverScene(bankSide: 'left' | 'right', configOrCyls?: 
     anNutMesh.name = `AN10_Port_Locknut_${bIdx + 1}`;
     anNutMesh.position.set(bx, isLeft ? 0.062 : -0.062, 0.01);
     breatherGroup.add(anNutMesh);
+
+    // Rubber Breather Hose Stub Exiting the Fitting
+    const hoseGeo = new THREE.CylinderGeometry(0.008, 0.008, 0.022, 16);
+    hoseGeo.rotateX(Math.PI / 2);
+    const hoseMesh = new THREE.Mesh(hoseGeo, matVitonGasket);
+    hoseMesh.name = `AN10_Breather_Hose_Stub_${bIdx + 1}`;
+    hoseMesh.position.set(bx, isLeft ? 0.092 : -0.092, 0.01);
+    breatherGroup.add(hoseMesh);
   });
 
   // Internal Labyrinth Oil/Air Separator Baffle Chamber
@@ -247,6 +295,18 @@ export function buildValveCoverScene(bankSide: 'left' | 'right', configOrCyls?: 
       fastenerGroup.add(boltMesh);
     });
   }
+
+  // End Flange Retention Bolts (2 per end)
+  [-(coverLengthM / 2 - 0.015), coverLengthM / 2 - 0.015].forEach((ex, eIdx) => {
+    [-0.04, 0.04].forEach((ey) => {
+      const endBoltGeo = createAllenSocketHead(0.004, 0.012);
+      const endBoltMesh = new THREE.Mesh(endBoltGeo, matStainlessFastener);
+      endBoltMesh.name = `Flange_End_Bolt_${eIdx === 0 ? 'Front' : 'Rear'}_${ey < 0 ? 'A' : 'B'}`;
+      endBoltMesh.position.set(ex, ey, -spec.coverHeightM / 2 + spec.flangeThicknessM + 0.004);
+      endBoltMesh.castShadow = true;
+      fastenerGroup.add(endBoltMesh);
+    });
+  });
 
   rootGroup.add(fastenerGroup);
 

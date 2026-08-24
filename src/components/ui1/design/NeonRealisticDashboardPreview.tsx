@@ -5,7 +5,7 @@ import { Navigation, Music, Thermometer, Sparkles, Volume2 } from "lucide-react"
 export function NeonRealisticDashboardPreview({ interior }: { interior: any }) {
   const i = interior;
   const ic = i.interiorColor || "#141722";
-  const ac = i.accentColor || "#38bdf8";
+  const ac = i.accentColor || "#8fb9d9";
   const sw = Math.min(260, Math.max(140, (i.infotainmentSize || 10) * 16));
   return (
     <NeonEntrance type="glow-burst" className="relative w-full overflow-hidden rounded-2xl" style={{ height: 310, background: "radial-gradient(ellipse 140% 100% at 50% 10%, " + ic + " 0%, #07090e 100%)", border: "1.5px solid rgba(255,255,255,0.15)" }}>

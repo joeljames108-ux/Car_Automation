@@ -53,6 +53,7 @@ export function NeonHorizonCommandPalette({
     { id: "safety", label: "Structural Crash Dynamics & NCAP", icon: <Activity size={16} />, category: "Studios" },
     { id: "dyno_ecu", label: "ECU 3D Calibration & Anti-Lag", icon: <Sliders size={16} />, category: "Studios" },
     { id: "competitors", label: "Hypercar Benchmark Radar", icon: <Trophy size={16} />, category: "Studios" },
+    { id: "higgsfield", label: "Higgsfield AI Creative Suite (Image · Video · Audio)", icon: <Sparkles size={16} />, category: "Studios" },
   ];
 
   const filteredItems = items.filter(
@@ -98,10 +99,10 @@ export function NeonHorizonCommandPalette({
 
   return (
     <div className="fixed inset-0 z-50 flex items-start justify-center pt-24 px-4 bg-black/75 backdrop-blur-md animate-nh-materialize">
-      <div className="w-full max-w-2xl bg-[#080f24]/95 border border-sky-400/30 rounded-2xl overflow-hidden flex flex-col">
+      <div className="w-full max-w-2xl bg-[#0a111e]/95 border border-white/12 rounded-2xl overflow-hidden flex flex-col shadow-[0_30px_80px_rgba(0,0,0,0.65)]">
         {/* Search Input Bar */}
-        <div className="flex items-center gap-3 px-5 py-4 border-b border-sky-400/15 bg-black/40">
-          <Search size={18} className="text-sky-400" />
+        <div className="flex items-center gap-3 px-5 py-4 border-b border-white/8 bg-black/30">
+          <Search size={18} className="text-sky-300/90" />
           <input
             ref={inputRef}
             type="text"
@@ -125,7 +126,7 @@ export function NeonHorizonCommandPalette({
         </div>
 
         {/* Results List */}
-        <div className="max-h-96 overflow-y-auto p-2 flex flex-col gap-1">
+        <div className="max-h-96 overflow-y-auto p-2 flex flex-col gap-1 nh-scroll">
           {filteredItems.length === 0 ? (
             <div className="p-8 text-center text-xs nh-font-mono text-slate-400">
               No matching studio or command found for "{query}".
@@ -144,7 +145,7 @@ export function NeonHorizonCommandPalette({
                   onMouseEnter={() => setSelectedIndex(idx)}
                   className={`px-4 py-3 rounded-xl flex items-center justify-between transition-all cursor-pointer ${
  isSelected
- ? "bg-gradient-to-r from-sky-500/30 to-sky-500/20 text-white border border-sky-400/30"
+ ? "bg-white/[0.08] text-white border border-white/15"
  : "text-slate-300 hover:bg-white/5 border border-transparent"
  }`}
                 >
@@ -167,13 +168,13 @@ export function NeonHorizonCommandPalette({
         </div>
 
         {/* Footer Hotkey Guide */}
-        <div className="px-5 py-2.5 bg-black/40 border-t border-sky-400/15 flex items-center justify-between text-[11px] nh-font-mono text-slate-400">
+        <div className="px-5 py-2.5 bg-black/30 border-t border-white/8 flex items-center justify-between text-[11px] nh-font-mono text-slate-400">
           <div className="flex items-center gap-3">
             <span>↑↓ Navigate</span>
             <span>↵ Select</span>
             <span>ESC Close</span>
           </div>
-          <span className="text-sky-400 font-bold">Apex AI Quick Engine</span>
+          <span className="text-sky-300/90 font-bold">Apex AI Quick Engine</span>
         </div>
       </div>
     </div>

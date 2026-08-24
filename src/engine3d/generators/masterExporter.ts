@@ -21,7 +21,9 @@ import { generateDrySumpGlbBuffer } from './drySumpGenerator';
 import { generateRadiatorGlbBuffer } from './radiatorGenerator';
 import { generateTransaxleGlbBuffer } from './transaxleGenerator';
 import { generateEngineCoverGlbBuffer } from './engineCoverGenerator';
+import { generateTimingChainGlbBuffer } from './timingChainGenerator';
 import { V12_COMPONENT_MANIFESTS } from '../manifests/v12Manifest';
+import { enhanceGlbBuffer } from '../../exterior3d/loaders/glbPbrEnhancer';
 
 // Polyfill Node.js FileReader for Three.js GLTFExporter binary writer in CLI
 if (typeof globalThis !== 'undefined' && typeof (globalThis as any).FileReader === 'undefined') {
@@ -86,6 +88,7 @@ export async function exportAllModularV12GlbFiles(): Promise<MasterExportSummary
     { id: 'radiator', filename: 'radiator.glb', generator: generateRadiatorGlbBuffer },
     { id: 'transaxle', filename: 'transaxle.glb', generator: generateTransaxleGlbBuffer },
     { id: 'engine-cover', filename: 'engine-cover.glb', generator: generateEngineCoverGlbBuffer },
+    { id: 'timing-chain', filename: 'timing-chain.glb', generator: generateTimingChainGlbBuffer },
   ];
 
   const results: ExportedAssetDetail[] = [];
@@ -96,12 +99,13 @@ export async function exportAllModularV12GlbFiles(): Promise<MasterExportSummary
     process.stdout.write(`[${(i + 1).toString().padStart(2, '0')}/${exportJobs.length}] Exporting ${job.filename.padEnd(26, ' ')} ... `);
 
     try {
-      const buffer = await job.generator();
-      const nodeBuffer = Buffer.from(buffer);
+      const rawBuffer = await job.generator();
+      const nodeBuffer = Buffer.from(rawBuffer);
+      const enhancedBuffer = await enhanceGlbBuffer(nodeBuffer);
       const filePath = path.join(outputDir, job.filename);
-      fs.writeFileSync(filePath, nodeBuffer);
+      fs.writeFileSync(filePath, enhancedBuffer);
 
-      const byteSize = nodeBuffer.byteLength;
+      const byteSize = enhancedBuffer.byteLength;
       totalBytes += byteSize;
       const kb = Number((byteSize / 1024).toFixed(1));
 

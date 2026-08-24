@@ -57,7 +57,7 @@ export function NeonVortexGeneratorStudio() {
       ctx.stroke();
 
       // Vortex Generator Fin (Gold Triangle)
-      ctx.fillStyle = "#fbbf24";
+      ctx.fillStyle = "#d9b36c";
       ctx.beginPath();
       ctx.moveTo(80, h * 0.6);
       ctx.lineTo(110, h * 0.6 - (vgHeightMm / 30) * 35);
@@ -76,7 +76,7 @@ export function NeonVortexGeneratorStudio() {
         const angle = (tick * 0.15 + (offset * 0.08));
         const sy = h * 0.58 - (vgHeightMm / 30) * 15 + Math.sin(angle) * radius;
 
-        ctx.fillStyle = i % 2 === 0 ? "#38bdf8" : "#a855f7";
+        ctx.fillStyle = i % 2 === 0 ? "#8fb9d9" : "#9d8fc4";
         ctx.beginPath();
         ctx.arc(sx, sy, 2.5, 0, Math.PI * 2);
         ctx.fill();
@@ -126,7 +126,7 @@ export function NeonVortexGeneratorStudio() {
             }}
             className="p-6 flex flex-col gap-4"
           >
-            <div className="w-full h-52 bg-[#030712] rounded-xl border border-sky-400/25 overflow-hidden relative shadow-[inset_0_0_25px_rgba(0,0,0,0.85)]">
+            <div className="w-full h-52 bg-[#05080f] rounded-xl border border-sky-400/25 overflow-hidden relative shadow-[inset_0_0_25px_rgba(0,0,0,0.85)]">
               <canvas ref={canvasRef} width={640} height={210} className="w-full h-full" />
               <div className="absolute top-2 left-3 flex items-center gap-2">
                 <span className="text-[10px] nh-font-mono font-bold text-sky-300">
@@ -152,8 +152,8 @@ export function NeonVortexGeneratorStudio() {
                     }}
                     className={`p-2.5 rounded-lg border text-center text-xs font-bold cursor-pointer transition-all ${
  isSelected
- ? "bg-[#091a38] border-sky-400/40 text-sky-300"
- : "bg-[#060e22] border-white/10 text-slate-400 hover:border-sky-400/25"
+ ? "bg-sky-400/10 border-sky-400/30 text-sky-200"
+ : "bg-[#0a111e] border-white/10 text-slate-400 hover:border-sky-400/25"
  }`}
                   >
                     {m.name}
@@ -197,7 +197,7 @@ export function NeonVortexGeneratorStudio() {
               onChange={(val) => setVgIncidenceAngle(val)}
             />
 
-            <div className="p-3.5 rounded-xl bg-[#060e22] border border-sky-400/15 flex flex-col gap-2 font-mono text-xs">
+            <div className="p-3.5 rounded-xl bg-[#0a111e] border border-sky-400/15 flex flex-col gap-2 font-mono text-xs">
               <div className="flex items-center justify-between">
                 <span className="text-slate-400">Array Configuration:</span>
                 <span className="text-emerald-300 font-bold">12x Counter-Rotating Pairs</span>

@@ -67,18 +67,18 @@ export function NeonVgtTurboStudio() {
             }}
             className="p-6 flex flex-col gap-4"
           >
-            <div className="grid grid-cols-3 gap-3 p-4 rounded-xl bg-[#030712] border border-sky-400/25 font-mono text-xs">
-              <div className="p-3 rounded-lg bg-[#060e22] border border-white/10 flex flex-col items-center">
+            <div className="grid grid-cols-3 gap-3 p-4 rounded-xl bg-[#05080f] border border-sky-400/25 font-mono text-xs">
+              <div className="p-3 rounded-lg bg-[#0a111e] border border-white/10 flex flex-col items-center">
                 <span className="text-slate-400 text-[10px]">Inlet Temp</span>
                 <span className="text-amber-400 font-bold text-sm">985°C EGT</span>
                 <span className="text-slate-500 text-[10px]">Inconel 718</span>
               </div>
-              <div className="p-3 rounded-lg bg-[#060e22] border border-white/10 flex flex-col items-center">
+              <div className="p-3 rounded-lg bg-[#0a111e] border border-white/10 flex flex-col items-center">
                 <span className="text-slate-400 text-[10px]">Pressure Ratio</span>
                 <span className="text-sky-300 font-bold text-sm">3.85 : 1 P₃/P₁</span>
                 <span className="text-emerald-400 text-[10px]">High Surge Margin</span>
               </div>
-              <div className="p-3 rounded-lg bg-[#060e22] border border-white/10 flex flex-col items-center">
+              <div className="p-3 rounded-lg bg-[#0a111e] border border-white/10 flex flex-col items-center">
                 <span className="text-slate-400 text-[10px]">Shaft Bearings</span>
                 <span className="text-sky-300 font-bold text-sm">Dual Ceramic Ball</span>
                 <span className="text-sky-400 text-[10px]">Water-Cooled CHRA</span>
@@ -102,8 +102,8 @@ export function NeonVgtTurboStudio() {
                     }}
                     className={`p-2.5 rounded-lg border text-center text-xs font-bold cursor-pointer transition-all ${
  isSelected
- ? "bg-[#091a38] border-sky-400/40 text-sky-300"
- : "bg-[#060e22] border-white/10 text-slate-400 hover:border-sky-400/25"
+ ? "bg-sky-400/10 border-sky-400/30 text-sky-200"
+ : "bg-[#0a111e] border-white/10 text-slate-400 hover:border-sky-400/25"
  }`}
                   >
                     {m.name}
@@ -147,7 +147,7 @@ export function NeonVgtTurboStudio() {
               onChange={(val) => setEngineRpm(val)}
             />
 
-            <div className="p-3.5 rounded-xl bg-[#060e22] border border-sky-400/15 flex flex-col gap-2 font-mono text-xs">
+            <div className="p-3.5 rounded-xl bg-[#0a111e] border border-sky-400/15 flex flex-col gap-2 font-mono text-xs">
               <div className="flex items-center justify-between">
                 <span className="text-slate-400">Turbine Wheel:</span>
                 <span className="text-emerald-300 font-bold">Titanium-Aluminide (TiAl)</span>

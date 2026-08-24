@@ -222,9 +222,9 @@ export function initializeBlockShaderSuite(materialId?: string): BlockShaderSuit
 
   const titaniumAlloy = new THREE.MeshStandardMaterial({
     name: 'PBR_Aerospace_Titanium_Ti6Al4V',
-    color: new THREE.Color(0x818cf8),
-    metalness: 0.94,
-    roughness: 0.16,
+    color: new THREE.Color(0xb6bac6),
+    metalness: 0.92,
+    roughness: 0.22,
     envMapIntensity: 2.4,
   });
 
@@ -238,9 +238,9 @@ export function initializeBlockShaderSuite(materialId?: string): BlockShaderSuit
 
   const magnesiumAlloy = new THREE.MeshStandardMaterial({
     name: 'PBR_Lightweight_Magnesium_AZ91D',
-    color: new THREE.Color(0x78716c),
-    metalness: 0.84,
-    roughness: 0.34,
+    color: new THREE.Color(0x9c9c94),
+    metalness: 0.82,
+    roughness: 0.38,
     envMapIntensity: 2.0,
   });
 

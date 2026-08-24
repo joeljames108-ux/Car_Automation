@@ -318,12 +318,12 @@ export class ParametricVehicleAeroCompositeCad {
   public static async loadReferenceVehicleAsset(
     modelId: 'ford_escort' | 'bmw_i8' | 'mini_jcw' | 'v12_engine'
   ): Promise<THREE.Group> {
-    let uri = '/models/extracted/ford-escort-rs-cosworth-cossie/fordEscortRSCosworth.glb';
+    let uri = '/models/extracted/ford-escort-rs-cosworth-cossie/source/Body_lodA/Body_lodA/fordEscortRSCosworth.glb';
 
     if (modelId === 'bmw_i8') {
-      uri = '/models/extracted/bmw-i8-xs-2015/2015-bmw-i8_xs_car.glb';
+      uri = '/models/extracted/bmw-i8-xs-2015/source/2015-bmw-i8_xs_car.glb';
     } else if (modelId === 'mini_jcw') {
-      uri = '/models/extracted/mini-countryman-jcw/source/Unity2Skfb.gltf';
+      uri = '/models/extracted/mini-countryman-jcw/source/Unity2Skfb/Unity2Skfb.gltf';
     } else if (modelId === 'v12_engine') {
       uri = '/models/v12_racing_engine.glb';
     }

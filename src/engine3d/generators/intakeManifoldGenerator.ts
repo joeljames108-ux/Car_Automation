@@ -133,6 +133,21 @@ export function buildIntakeManifoldScene(bankSide: 'left' | 'right', configOrCyl
     baseMesh.position.set(cx, 0, 0.006);
     runnerGroup.add(baseMesh);
 
+    // M8 Flange Mounting Studs with Copper Lock Nuts (2 per runner)
+    [-0.018, 0.018].forEach((sx, sIdx) => {
+      const studGeo = new THREE.CylinderGeometry(0.0025, 0.0025, 0.024, 12);
+      const studMesh = new THREE.Mesh(studGeo, matThrottleShaft);
+      studMesh.name = `Runner_Flange_M8_Stud_${r + 1}_${sIdx === 0 ? 'F' : 'R'}`;
+      studMesh.position.set(cx + sx, 0.016, 0.006);
+      runnerGroup.add(studMesh);
+
+      const nutGeo = new THREE.CylinderGeometry(0.0045, 0.0045, 0.005, 6);
+      const nutMesh = new THREE.Mesh(nutGeo, matGoldFuelRail);
+      nutMesh.name = `Runner_Flange_Copper_Nut_${r + 1}_${sIdx === 0 ? 'F' : 'R'}`;
+      nutMesh.position.set(cx + sx, 0.028, 0.006);
+      runnerGroup.add(nutMesh);
+    });
+
     // Cobalt Anodized Parabolic Bellmouth Velocity Stack
     const stackGeo = new THREE.CylinderGeometry(
       spec.stackBellmouthRadiusM,
@@ -163,6 +178,14 @@ export function buildIntakeManifoldScene(bankSide: 'left' | 'right', configOrCyl
     screenMesh.name = `Velocity_Stack_Wire_Screen_${r + 1}`;
     screenMesh.position.set(cx, stackOffsetY, 0.168 + spec.stackHeightM / 2 - 0.002);
     runnerGroup.add(screenMesh);
+
+    // T-Bolt Clamp Band Joining the Runner Outlet to the Stack Base
+    const clampGeo = new THREE.TorusGeometry(spec.runnerRadiusM + 0.0012, 0.0022, 10, 28);
+    clampGeo.rotateX(Math.PI / 2);
+    const clampMesh = new THREE.Mesh(clampGeo, matThrottleShaft);
+    clampMesh.name = `Stack_TBot_Clamp_Band_${r + 1}`;
+    clampMesh.position.set(cx, stackOffsetY, 0.138);
+    runnerGroup.add(clampMesh);
   }
 
   rootGroup.add(runnerGroup);
@@ -206,6 +229,20 @@ export function buildIntakeManifoldScene(bankSide: 'left' | 'right', configOrCyl
     springMesh.name = `ITB_Torsion_Return_Spring_${t + 1}`;
     springMesh.position.set(cx + 0.025, posY, 0.155);
     itbGroup.add(springMesh);
+
+    // Throttle Actuation Lever Arm Linking Sync Shaft to Butterfly Spindle
+    const leverGeo = new THREE.BoxGeometry(0.007, 0.014, 0.004);
+    const leverMesh = new THREE.Mesh(leverGeo, matThrottleShaft);
+    leverMesh.name = `ITB_Actuation_Lever_Arm_${t + 1}`;
+    leverMesh.position.set(cx - 0.022, isLeft ? -0.021 : 0.021, 0.155);
+    itbGroup.add(leverMesh);
+
+    // Lever Pivot Ball Joint on the Sync Shaft
+    const ballGeo = new THREE.SphereGeometry(0.004, 12, 12);
+    const ballMesh = new THREE.Mesh(ballGeo, matInjectorBillet);
+    ballMesh.name = `ITB_Lever_Pivot_Ball_${t + 1}`;
+    ballMesh.position.set(cx - 0.022, isLeft ? -0.026 : 0.026, 0.155);
+    itbGroup.add(ballMesh);
   }
 
   rootGroup.add(itbGroup);
@@ -243,6 +280,25 @@ export function buildIntakeManifoldScene(bankSide: 'left' | 'right', configOrCyl
     plugMesh.name = `Injector_Electrical_Connector_${i + 1}`;
     plugMesh.position.set(cx, injY - (isLeft ? 0.008 : -0.008), 0.088);
     fuelGroup.add(plugMesh);
+
+    // Injector Top Body Bridging the Cup to the Rail
+    const injTopGeo = new THREE.CylinderGeometry(0.006, 0.0075, 0.022, 16);
+    injTopGeo.rotateX(isLeft ? THREE.MathUtils.degToRad(25) : THREE.MathUtils.degToRad(-25));
+    const injTopMesh = new THREE.Mesh(injTopGeo, matBlackPolymer);
+    injTopMesh.name = `GDI_Injector_TopBody_${i + 1}`;
+    injTopMesh.position.set(cx, injY + (isLeft ? 0.004 : -0.004), 0.088);
+    fuelGroup.add(injTopMesh);
+
+    // Injector Wiring Pigtail Loop
+    const pigtailCurve = new THREE.CatmullRomCurve3([
+      new THREE.Vector3(cx, injY - (isLeft ? 0.010 : -0.010), 0.09),
+      new THREE.Vector3(cx + 0.012, injY - (isLeft ? 0.02 : -0.02), 0.096),
+      new THREE.Vector3(cx + 0.024, injY - (isLeft ? 0.016 : -0.016), 0.094),
+    ]);
+    const pigtailGeo = new THREE.TubeGeometry(pigtailCurve, 14, 0.0012, 6, false);
+    const pigtailMesh = new THREE.Mesh(pigtailGeo, matBlackPolymer);
+    pigtailMesh.name = `Injector_Pigtail_Wire_${i + 1}`;
+    fuelGroup.add(pigtailMesh);
   }
 
   // High-Pressure Fuel Pressure Transducer Sensor (Front of Rail)

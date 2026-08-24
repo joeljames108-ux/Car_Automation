@@ -128,8 +128,8 @@ export const NeonCommandCenter: React.FC<NeonCommandCenterProps> = ({ onSelectSt
                 onClick={() => handleApplyPreset(p)}
                 className={`p-4 rounded-2xl border transition-all duration-300 flex flex-col justify-between gap-3 cursor-pointer select-none ${
  isSelected
- ? "bg-[#091838]/90 border-sky-400/40 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)] scale-[1.02]"
- : "bg-[#050b18]/75 border-white/10 hover:border-sky-400/30 hover:bg-[#071228]/80"
+ ? "bg-sky-400/10 border-sky-400/30 text-sky-200 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)] scale-[1.02]"
+ : "bg-[#05080f]/75 border-white/10 hover:border-sky-400/30 hover:bg-[#05080f]/80"
  }`}
               >
                 <div>
@@ -205,7 +205,7 @@ export const NeonCommandCenter: React.FC<NeonCommandCenterProps> = ({ onSelectSt
                     }}
                     className={`py-1.5 rounded-lg text-[10px] nh-font-mono font-bold transition-all cursor-pointer ${
  platformTier === tier.id
- ? "bg-sky-400/20 text-sky-200 border border-sky-400/35"
+ ? "bg-sky-400/20 text-sky-200 border border-sky-400/30"
  : "text-slate-400 hover:text-slate-200 hover:bg-white/5"
  }`}
                   >
@@ -230,13 +230,13 @@ export const NeonCommandCenter: React.FC<NeonCommandCenterProps> = ({ onSelectSt
 
             {/* Quick Metrics */}
             <div className="grid grid-cols-2 gap-3 pt-1">
-              <div className="p-3 rounded-xl bg-[#081226]/80 border border-sky-400/15">
+              <div className="p-3 rounded-xl bg-[#0a111e]/80 border border-sky-400/15">
                 <span className="nh-label-caps text-slate-400 text-[9px]">TORSIONAL RIGIDITY</span>
                 <div className="text-base font-bold nh-font-headline text-sky-200 mt-0.5">
                   74.0 <span className="text-[10px] nh-font-mono text-slate-400">kNm/°</span>
                 </div>
               </div>
-              <div className="p-3 rounded-xl bg-[#081226]/80 border border-sky-400/15">
+              <div className="p-3 rounded-xl bg-[#0a111e]/80 border border-sky-400/15">
                 <span className="nh-label-caps text-slate-400 text-[9px]">CHASSIS MASS FACTOR</span>
                 <div className="text-base font-bold nh-font-headline text-emerald-300 mt-0.5">
                   0.15 <span className="text-[10px] nh-font-mono text-slate-400">(Ultralight)</span>
@@ -282,11 +282,11 @@ export const NeonCommandCenter: React.FC<NeonCommandCenterProps> = ({ onSelectSt
 
             <div className="flex items-center justify-between border-t border-white/10 pt-3 text-xs nh-font-mono">
               <div className="flex items-center gap-2">
-                <span className="w-2.5 h-2.5 rounded-full bg-[#38bdf8]" />
+                <span className="w-2.5 h-2.5 rounded-full bg-[#8fb9d9]" />
                 <span className="text-slate-300">Horsepower (HP)</span>
               </div>
               <div className="flex items-center gap-2">
-                <span className="w-2.5 h-2.5 rounded-full bg-[#fbbf24]" />
+                <span className="w-2.5 h-2.5 rounded-full bg-[#d9b36c]" />
                 <span className="text-slate-300">Torque (Nm)</span>
               </div>
               {onSelectStage && (

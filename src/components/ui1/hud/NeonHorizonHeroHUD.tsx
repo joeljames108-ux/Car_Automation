@@ -262,7 +262,7 @@ export const NeonHorizonHeroHUD: React.FC<NeonHorizonHeroHUDProps> = ({
               onMouseLeave={() => setHoveredNode(null)}
               className={`p-2 rounded-xl text-left border transition-all duration-200 flex items-center justify-between gap-2 group cursor-pointer ${
  hoveredNode === sub.id
- ? "bg-sky-400/12 border-sky-400/35 text-white"
+ ? "bg-sky-400/12 border-sky-400/30 text-white"
  : "bg-black/30 border-white/10 text-slate-300 hover:border-white/15"
  }`}
             >
@@ -285,7 +285,7 @@ export const NeonHorizonHeroHUD: React.FC<NeonHorizonHeroHUDProps> = ({
         <div className="lg:col-span-5 flex flex-col items-center justify-center relative min-h-[190px]">
           <div
             ref={mountRef}
-            className="w-full h-44 rounded-2xl overflow-hidden border border-white/10 bg-[#040916]/90 shadow-[inset_0_2px_18px_rgba(0,0,0,0.45)] relative"
+            className="w-full h-44 rounded-2xl overflow-hidden border border-white/10 bg-[#05080f]/90 shadow-[inset_0_2px_18px_rgba(0,0,0,0.45)] relative"
           />
 
           {/* Top Camera Controls Overlay */}
@@ -315,7 +315,7 @@ export const NeonHorizonHeroHUD: React.FC<NeonHorizonHeroHUDProps> = ({
             <div className="flex items-center gap-1 bg-black/70 backdrop-blur-md p-1 rounded-lg border border-white/10">
               <button
                 onClick={() => setHoloColor("cyan")}
-                className={`w-2.5 h-2.5 rounded-full bg-[#38bdf8] cursor-pointer ${
+                className={`w-2.5 h-2.5 rounded-full bg-[#8fb9d9] cursor-pointer ${
  holoColor === "cyan" ? "ring-2 ring-white scale-125" : "opacity-60"
  }`}
                 title="Cyan Hologram"
@@ -339,7 +339,7 @@ export const NeonHorizonHeroHUD: React.FC<NeonHorizonHeroHUDProps> = ({
         </div>
 
         {/* Right Live Gauges & Telemetry Cluster */}
-        <div className="lg:col-span-4 flex items-center justify-around gap-2 bg-[#040814]/70 p-3 rounded-2xl border border-white/8">
+        <div className="lg:col-span-4 flex items-center justify-around gap-2 bg-[#05080f]/70 p-3 rounded-2xl border border-white/8">
           <NeonRadialDial rpm={rpm} gear={gear} size={125} />
 
           <div className="flex flex-col gap-2">

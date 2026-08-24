@@ -18,10 +18,10 @@ import { useDesign } from "../../state/DesignContext";
 import { useCompany } from "../../state/CompanyContext";
 import { playHMIClickSound, playHMITabSound } from "../../utils/hmiSoundSynth";
 import { AnimatedCounter } from "../ui/AnimatedCounter";
-import { HORIZONHorizonGlassPanel } from "./design/HORIZONHorizonGlassPanel";
-import { HORIZONHorizonDataCard } from "./design/HORIZONHorizonDataCard";
-import { HORIZONHorizonTabs } from "./design/HORIZONHorizonTabs";
-import { HORIZONHorizonBadge } from "./design/HORIZONHorizonBadge";
+import { NeonHorizonGlassPanel } from "./design/NeonHorizonGlassPanel";
+import { NeonHorizonDataCard } from "./design/NeonHorizonDataCard";
+import { NeonHorizonTabs } from "./design/NeonHorizonTabs";
+import { NeonHorizonBadge } from "./design/NeonHorizonBadge";
 
 export function HorizonTelemetryHUDConsole() {
   const { design, sim, updateEngine, updateAero } = useDesign();
@@ -54,7 +54,7 @@ export function HorizonTelemetryHUDConsole() {
   return (
     <div className="w-full flex flex-col gap-5 text-slate-100 animate-nh-materialize">
       {/* Navigation Tabs */}
-      <HORIZONHorizonTabs
+      <NeonHorizonTabs
         activeTab={activeSubTab}
         onChange={setActiveSubTab}
         tabs={[
@@ -70,7 +70,7 @@ export function HorizonTelemetryHUDConsole() {
       {activeSubTab === "cluster" && (
         <div className="flex flex-col gap-5">
           {/* Shift Light LED Array Header */}
-          <HORIZONHorizonGlassPanel variant="secondary" corners="rounded" className="p-4">
+          <NeonHorizonGlassPanel variant="secondary" corners="rounded" className="p-4">
             <div className="flex items-center justify-between gap-4 flex-wrap">
               <div className="flex items-center gap-3">
                 <span className="nh-label-caps text-sky-400 text-xs">SHIFT LIGHTS:</span>
@@ -94,16 +94,16 @@ export function HorizonTelemetryHUDConsole() {
                 </div>
               </div>
 
-              <HORIZONHorizonBadge variant="live" pulse>
+              <NeonHorizonBadge variant="live" pulse>
                 POWERTRAIN NOMINAL
-              </HORIZONHorizonBadge>
+              </NeonHorizonBadge>
             </div>
-          </HORIZONHorizonGlassPanel>
+          </NeonHorizonGlassPanel>
 
           {/* Main Gauges Grid */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
             {/* Speedometer & Tachometer */}
-            <HORIZONHorizonGlassPanel
+            <NeonHorizonGlassPanel
               variant="primary"
               corners="reticle"
               glow="cyan"
@@ -129,10 +129,10 @@ export function HorizonTelemetryHUDConsole() {
                   <div className="text-emerald-300 font-bold text-base">{sim.accel0_60.toFixed(2)}s</div>
                 </div>
               </div>
-            </HORIZONHorizonGlassPanel>
+            </NeonHorizonGlassPanel>
 
             {/* Turbo Boost & Thermal Gauges */}
-            <HORIZONHorizonGlassPanel
+            <NeonHorizonGlassPanel
               variant="primary"
               corners="reticle"
               header={{
@@ -147,7 +147,7 @@ export function HorizonTelemetryHUDConsole() {
                     <span className="text-slate-400">TURBO BOOST:</span>
                     <span className="text-amber-300 font-bold">{boostBar} BAR</span>
                   </div>
-                  <div className="w-full h-2.5 bg-[#070c1b] rounded-full p-0.5 border border-white/10">
+                  <div className="w-full h-2.5 bg-[#0a111e] rounded-full p-0.5 border border-white/10">
                     <div
                       style={{ width: `${(boostBar / 2.0) * 100}%` }}
                       className="h-full bg-gradient-to-r from-amber-500 to-yellow-400 rounded-full transition-all duration-100"
@@ -160,10 +160,10 @@ export function HorizonTelemetryHUDConsole() {
                     <span className="text-slate-400">ENGINE OIL TEMP:</span>
                     <span className="text-sky-300 font-bold">{oilTemp} °C</span>
                   </div>
-                  <div className="w-full h-2.5 bg-[#070c1b] rounded-full p-0.5 border border-white/10">
+                  <div className="w-full h-2.5 bg-[#0a111e] rounded-full p-0.5 border border-white/10">
                     <div
                       style={{ width: `${(oilTemp / 130) * 100}%` }}
-                      className="h-full bg-gradient-to-r from-sky-500 to-sky-400 rounded-full transition-all duration-100"
+                      className="h-full bg-sky-400/60 rounded-full transition-all duration-100"
                     />
                   </div>
                 </div>
@@ -173,18 +173,18 @@ export function HorizonTelemetryHUDConsole() {
                     <span className="text-slate-400">BRAKE ROTOR TEMP:</span>
                     <span className="text-sky-300 font-bold">{brakeTemp} °C</span>
                   </div>
-                  <div className="w-full h-2.5 bg-[#070c1b] rounded-full p-0.5 border border-white/10">
+                  <div className="w-full h-2.5 bg-[#0a111e] rounded-full p-0.5 border border-white/10">
                     <div
                       style={{ width: `${(brakeTemp / 800) * 100}%` }}
-                      className="h-full bg-gradient-to-r from-sky-500 to-sky-400 rounded-full transition-all duration-100"
+                      className="h-full bg-sky-400/60 rounded-full transition-all duration-100"
                     />
                   </div>
                 </div>
               </div>
-            </HORIZONHorizonGlassPanel>
+            </NeonHorizonGlassPanel>
 
             {/* Aerodynamic Telemetry */}
-            <HORIZONHorizonGlassPanel
+            <NeonHorizonGlassPanel
               variant="primary"
               corners="reticle"
               header={{
@@ -194,29 +194,29 @@ export function HorizonTelemetryHUDConsole() {
               className="p-5"
             >
               <div className="grid grid-cols-2 gap-3">
-                <HORIZONHorizonDataCard
+                <NeonHorizonDataCard
                   label="DRAG CD"
                   value={sim.dragCoeff.toFixed(3)}
                   accentColor="cyan"
                 />
-                <HORIZONHorizonDataCard
+                <NeonHorizonDataCard
                   label="LIFT CL"
                   value={sim.liftCoeff.toFixed(3)}
                   accentColor="emerald"
                 />
-                <HORIZONHorizonDataCard
+                <NeonHorizonDataCard
                   label="DOWNFORCE"
                   value={sim.downforce}
                   unit="N"
                   accentColor="gold"
                 />
-                <HORIZONHorizonDataCard
+                <NeonHorizonDataCard
                   label="AERO BAL"
                   value={`${(sim.aeroBalance * 100).toFixed(0)}%`}
                   accentColor="magenta"
                 />
               </div>
-            </HORIZONHorizonGlassPanel>
+            </NeonHorizonGlassPanel>
           </div>
         </div>
       )}
@@ -225,13 +225,13 @@ export function HorizonTelemetryHUDConsole() {
           SUB-TAB 2: APEX AI ENGINEER DIAGNOSTICS STREAM
           ========================================================================= */}
       {activeSubTab === "ai_feed" && (
-        <HORIZONHorizonGlassPanel
+        <NeonHorizonGlassPanel
           variant="primary"
           corners="reticle"
           header={{
             title: "Apex AI Domain Agent Diagnostic Stream",
             icon: <Bot size={16} />,
-            badge: <HORIZONHorizonBadge variant="live">25 DOMAIN AGENTS ONLINE</HORIZONHorizonBadge>,
+            badge: <NeonHorizonBadge variant="live">25 DOMAIN AGENTS ONLINE</NeonHorizonBadge>,
           }}
           className="p-6 flex flex-col gap-4"
         >
@@ -242,13 +242,13 @@ export function HorizonTelemetryHUDConsole() {
               { agent: "SUSPENSION DYNAMICS AGENT", rec: "Stiffen Front Anti-Roll Bar by 12% to eliminate understeer on turn-in", impact: "+0.04 Lateral G", priority: "medium" },
               { agent: "THERMAL MANAGEMENT AGENT", rec: "Expand Front Brake Cooling Duct aperture by 15mm", impact: "-45°C Rotor Peak Temp", priority: "high" },
             ].map((item, idx) => (
-              <div key={idx} className="p-4 rounded-xl bg-[#070c1b]/80 border border-sky-400/25 flex flex-col justify-between gap-3">
+              <div key={idx} className="p-4 rounded-xl bg-[#0a111e]/80 border border-sky-400/25 flex flex-col justify-between gap-3">
                 <div>
                   <div className="flex items-center justify-between mb-2">
                     <span className="text-[10px] nh-font-mono font-bold text-sky-400 uppercase tracking-widest">{item.agent}</span>
-                    <HORIZONHorizonBadge variant={item.priority === "high" ? "coral" : "gold"}>
+                    <NeonHorizonBadge variant={item.priority === "high" ? "coral" : "gold"}>
                       {item.priority} PRIORITY
-                    </HORIZONHorizonBadge>
+                    </NeonHorizonBadge>
                   </div>
                   <p className="text-xs font-semibold text-slate-100">{item.rec}</p>
                 </div>
@@ -259,14 +259,14 @@ export function HorizonTelemetryHUDConsole() {
               </div>
             ))}
           </div>
-        </HORIZONHorizonGlassPanel>
+        </NeonHorizonGlassPanel>
       )}
 
       {/* =========================================================================
           SUB-TAB 3: SUPPLY CHAIN & MATERIAL YIELD
           ========================================================================= */}
       {activeSubTab === "supply_matrix" && (
-        <HORIZONHorizonGlassPanel
+        <NeonHorizonGlassPanel
           variant="primary"
           corners="reticle"
           header={{
@@ -276,23 +276,23 @@ export function HorizonTelemetryHUDConsole() {
           className="p-6"
         >
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <HORIZONHorizonDataCard
+            <NeonHorizonDataCard
               label="TOTAL REVENUE"
               value={`$${(company.totalRevenue / 1e6).toFixed(2)}M`}
               accentColor="emerald"
             />
-            <HORIZONHorizonDataCard
+            <NeonHorizonDataCard
               label="TOTAL UNIT COST"
               value={`$${(sim.totalCost / 1e3).toFixed(1)}k`}
               accentColor="cyan"
             />
-            <HORIZONHorizonDataCard
+            <NeonHorizonDataCard
               label="ESTIMATED MARGIN"
               value={`${sim.profitMargin.toFixed(1)}%`}
               accentColor="gold"
             />
           </div>
-        </HORIZONHorizonGlassPanel>
+        </NeonHorizonGlassPanel>
       )}
     </div>
   );

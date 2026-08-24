@@ -58,11 +58,11 @@ export function NeonHorizonSaveDialog({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-nh-materialize">
-      <div className="w-full max-w-xl bg-[#080f24] border border-sky-400/30 rounded-2xl overflow-hidden flex flex-col">
+      <div className="w-full max-w-xl bg-[#0a111e] border border-white/12 rounded-2xl shadow-[0_30px_80px_rgba(0,0,0,0.65)] overflow-hidden flex flex-col">
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-sky-400/15 bg-black/40">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-white/8 bg-black/30">
           <div className="flex items-center gap-2">
-            <Save size={18} className="text-sky-400" />
+            <Save size={18} className="text-sky-300/90" />
             <h3 className="text-base font-bold nh-font-headline text-slate-100 uppercase tracking-wide">
               {mode === "save" ? "Save Vehicle Blueprint Snapshot" : "Load Vehicle Blueprint"}
             </h3>
@@ -73,7 +73,7 @@ export function NeonHorizonSaveDialog({
         </div>
 
         {/* Blueprint Slots */}
-        <div className="p-6 flex flex-col gap-3">
+        <div className="p-6 flex flex-col gap-3 nh-scroll">
           <span className="nh-label-caps text-slate-400 text-[10px]">BLUEPRINT STORAGE SLOTS</span>
           <div className="flex flex-col gap-2">
             {slots.map((s) => {
@@ -87,8 +87,8 @@ export function NeonHorizonSaveDialog({
                   }}
                   className={`p-3.5 rounded-xl border transition-all cursor-pointer flex items-center justify-between ${
  isSelected
- ? "bg-[#0a1838] border-sky-400/40"
- : "bg-[#060e22] border-white/10 hover:border-sky-400/25"
+ ? "bg-sky-400/10 border-sky-400/30"
+ : "bg-[#0a111e] border-white/10 hover:border-sky-400/25"
  }`}
                 >
                   <div>

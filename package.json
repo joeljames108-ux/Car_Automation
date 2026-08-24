@@ -10,7 +10,16 @@
     "test": "vitest run",
     "preview": "vite preview",
     "docs:dev": "vitepress dev docs",
-    "docs:build": "vitepress build docs"
+    "docs:build": "vitepress build docs",
+    "assets": "node scripts/asset-pipeline.mjs",
+    "assets:v12-engine": "node scripts/asset-pipeline.mjs v12-engine",
+    "assets:v12-parts": "node scripts/asset-pipeline.mjs v12-parts",
+    "assets:rear-assembly": "node scripts/asset-pipeline.mjs rear-assembly",
+    "assets:hoods": "node scripts/asset-pipeline.mjs hoods",
+    "assets:chassis": "node scripts/asset-pipeline.mjs chassis",
+    "assets:interior": "node scripts/asset-pipeline.mjs interior",
+    "assets:enhance": "node scripts/asset-pipeline.mjs enhance",
+    "assets:all": "node scripts/asset-pipeline.mjs all"
   },
   "dependencies": {
     "@gltf-transform/core": "^4.4.2",

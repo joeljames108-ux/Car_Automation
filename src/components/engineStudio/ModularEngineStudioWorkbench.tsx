@@ -183,7 +183,26 @@ export const ModularEngineStudioWorkbench: React.FC<ModularEngineStudioWorkbench
                   max="105"
                   step="0.5"
                   value={state.block.strokeMm}
-                  onChange={(e) => engine.updateBlock({ strokeMm: parseFloat(e.target.value) })}
+                  onChange={(e) => {
+                    engine.updateBlock({ strokeMm: parseFloat(e.target.value) });
+                    engine.updateCrankshaft({ strokeMm: parseFloat(e.target.value) });
+                  }}
+                  className="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-cyan-400"
+                />
+              </div>
+
+              <div>
+                <div className="flex justify-between text-[11px] mb-1">
+                  <span className="text-slate-400">Connecting Rod Length (Center-to-Center)</span>
+                  <span className="font-mono text-cyan-300">{state.connectingRods.rodLengthMm} mm</span>
+                </div>
+                <input
+                  type="range"
+                  min="130"
+                  max="170"
+                  step="0.5"
+                  value={state.connectingRods.rodLengthMm}
+                  onChange={(e) => engine.updateConnectingRods({ rodLengthMm: parseFloat(e.target.value) })}
                   className="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-cyan-400"
                 />
               </div>

@@ -49,7 +49,7 @@ export function NeonNvhLab() {
         const barHeight = Math.max(8, heightMultiplier * (canvas.height * 0.8));
 
         const grad = ctx.createLinearGradient(0, canvas.height - barHeight, 0, canvas.height);
-        grad.addColorStop(0, "#38bdf8");
+        grad.addColorStop(0, "#8fb9d9");
         grad.addColorStop(0.5, "#a78bfa");
         grad.addColorStop(1, "#1e1b4b");
 

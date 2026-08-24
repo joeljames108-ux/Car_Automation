@@ -38,13 +38,13 @@ export const NeonHorizonSlider: React.FC<NeonHorizonSliderProps> = ({
       fill: "bg-sky-400/70",
       glow: "",
       text: "text-sky-300",
-      badge: "border-sky-400/30 bg-sky-500/12 text-sky-200",
+      badge: "border-sky-400/30 bg-sky-400/10 text-sky-200",
     },
     magenta: {
       fill: "bg-sky-400/70",
       glow: "",
       text: "text-sky-300",
-      badge: "border-sky-400/30 bg-sky-500/12 text-sky-200",
+      badge: "border-sky-400/30 bg-sky-400/10 text-sky-200",
     },
     gold: {
       fill: "bg-amber-400/70",
@@ -93,7 +93,7 @@ export const NeonHorizonSlider: React.FC<NeonHorizonSliderProps> = ({
 
       <div className="relative flex items-center h-5">
         {/* Track background */}
-        <div className="w-full h-1.5 bg-[#0a1630] rounded-full overflow-hidden border border-white/10 relative">
+        <div className="w-full h-1.5 bg-[#0e1626] rounded-full overflow-hidden border border-white/10 relative">
           {/* Active fill */}
           <div
             className={`h-full ${colorStyles.fill} rounded-full transition-all duration-75`}

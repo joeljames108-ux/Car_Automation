@@ -80,7 +80,7 @@ export function NeonComparisonStudio() {
               }}
               className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs nh-font-mono font-bold transition-all cursor-pointer whitespace-nowrap ${
  isActive
- ? "bg-sky-400/20 text-sky-200 border border-sky-400/35"
+ ? "bg-sky-400/20 text-sky-200 border border-sky-400/30"
  : "text-slate-400 hover:text-slate-200 hover:bg-white/5"
  }`}
             >
@@ -116,8 +116,8 @@ export function NeonComparisonStudio() {
                     }}
                     className={`p-3.5 rounded-2xl border transition-all cursor-pointer flex flex-col gap-1 ${
  isSelected
- ? "bg-[#0a1838] border-sky-400/40"
- : "bg-[#060e22] border-white/10 hover:border-sky-400/25"
+ ? "bg-sky-400/10 border-sky-400/30 text-sky-200"
+ : "bg-[#0a111e] border-white/10 hover:border-sky-400/25"
  }`}
                   >
                     <span className="text-sm font-bold text-slate-100">{b.name}</span>
@@ -144,10 +144,10 @@ export function NeonComparisonStudio() {
               className="p-6 flex flex-col gap-4"
             >
               <div className="grid grid-cols-2 gap-3">
-                <NeonComparisonDeltaTile label="PEAK POWER" value={sim.peakPower} unit="HP" delta={powerDelta} higherIsBetter={true} accentColor="#38bdf8" />
-                <NeonComparisonDeltaTile label="DRY MASS" value={sim.weight} unit="kg" delta={-weightDelta} higherIsBetter={false} accentColor="#f59e0b" />
-                <NeonComparisonDeltaTile label="TOP SPEED" value={sim.topSpeed} unit="km/h" delta={topSpeedDelta} higherIsBetter={true} accentColor="#22c55e" />
-                <NeonComparisonDeltaTile label="0-60 MPH" value={(sim.accel0_60 || 2.4).toFixed(1)} unit="s" delta={-zeroSixtyDelta} higherIsBetter={false} accentColor="#a855f7" />
+                <NeonComparisonDeltaTile label="PEAK POWER" value={sim.peakPower} unit="HP" delta={powerDelta} higherIsBetter={true} accentColor="#8fb9d9" />
+                <NeonComparisonDeltaTile label="DRY MASS" value={sim.weight} unit="kg" delta={-weightDelta} higherIsBetter={false} accentColor="#c9974f" />
+                <NeonComparisonDeltaTile label="TOP SPEED" value={sim.topSpeed} unit="km/h" delta={topSpeedDelta} higherIsBetter={true} accentColor="#57a878" />
+                <NeonComparisonDeltaTile label="0-60 MPH" value={(sim.accel0_60 || 2.4).toFixed(1)} unit="s" delta={-zeroSixtyDelta} higherIsBetter={false} accentColor="#9d8fc4" />
               </div>
             </NeonHorizonGlassPanel>
           </div>
@@ -156,14 +156,14 @@ export function NeonComparisonStudio() {
 
       {/* View 2: Garage Fleet Comparison */}
       {activeTab === "garage_compare" && (
-        <div className="w-full rounded-3xl overflow-hidden border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] bg-[#070e1c] p-4">
+        <div className="w-full rounded-3xl overflow-hidden border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] bg-[#0a111e] p-4">
           <EngineeringComparison />
         </div>
       )}
 
       {/* View 3: Vehicle Assembly Matrix */}
       {activeTab === "vehicle_matrix" && (
-        <div className="w-full rounded-3xl overflow-hidden border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] bg-[#070e1c]">
+        <div className="w-full rounded-3xl overflow-hidden border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] bg-[#0a111e]">
           <VehicleComparisonStudio />
         </div>
       )}

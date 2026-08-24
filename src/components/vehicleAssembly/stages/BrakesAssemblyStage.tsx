@@ -1,15 +1,19 @@
 /**
  * ============================================================================
- * STAGE 5: BRAKING HARDWARE & CALIPERS STAGE
+ * STAGE 5: BRAKES — 410mm CARBON-CERAMIC VENTILATED DISCS & 8-PISTON CALIPERS
  * ============================================================================
+ * Mount Brembo-style monobloc calipers and directional ventilated rotors onto
+ * the uprights. Configures pad compound, brake bias and caliper finish.
  */
 
 import React from "react";
-import { Disc, CheckCircle2, Shield, Palette } from "lucide-react";
+import { Disc, CheckCircle2, Palette, SlidersHorizontal } from "lucide-react";
 import { InstalledSubsystemsState } from "../scene/ModularAssemblySceneGraph";
 
 interface BrakesAssemblyStageProps {
   brakeType: InstalledSubsystemsState["brakeType"];
+  brakeBiasPct?: number;
+  onUpdateBrakeBias?: (pct: number) => void;
   caliperColor: string;
   onUpdateBrakes: (patch: { brakeType?: InstalledSubsystemsState["brakeType"]; caliperColor?: string }) => void;
   isInstalled: boolean;
@@ -18,6 +22,8 @@ interface BrakesAssemblyStageProps {
 
 export const BrakesAssemblyStage: React.FC<BrakesAssemblyStageProps> = ({
   brakeType,
+  brakeBiasPct = 54,
+  onUpdateBrakeBias = () => {},
   caliperColor,
   onUpdateBrakes,
   isInstalled,
@@ -27,7 +33,9 @@ export const BrakesAssemblyStage: React.FC<BrakesAssemblyStageProps> = ({
     id: InstalledSubsystemsState["brakeType"];
     label: string;
     rotorSize: string;
+    rotorSpec: string;
     caliper: string;
+    pistons: number;
     fadeLimit: string;
     desc: string;
   }[] = [
@@ -35,27 +43,35 @@ export const BrakesAssemblyStage: React.FC<BrakesAssemblyStageProps> = ({
       id: "carbon_ceramic",
       label: "Carbon-Ceramic Matrix (CCM)",
       rotorSize: "410mm Front / 390mm Rear",
-      caliper: "8-Piston Monobloc",
+      rotorSpec: "Directional ventilated core, 10 curved vanes",
+      caliper: "Brembo-Style Monobloc",
+      pistons: 8,
       fadeLimit: "1,050°C",
-      desc: "Carbon-silicon carbide discs with titanium-backed pads for zero thermal fade.",
+      desc: "Carbon-silicon carbide discs (-17 kg unsprung) with titanium-backed pads for zero thermal fade.",
     },
     {
       id: "slotted_steel",
       label: "Slotted Racing Cast Iron",
       rotorSize: "380mm Front / 355mm Rear",
-      caliper: "6-Piston Motorsport",
+      rotorSpec: "Curved-vane ventilated, gas slots",
+      caliper: "Motorsport Monobloc",
+      pistons: 6,
       fadeLimit: "800°C",
-      desc: "Curved directional vane iron discs with gas evacuation slots and high initial bite.",
+      desc: "High-carbon iron discs with gas evacuation slots and high initial bite for sprint racing.",
     },
     {
       id: "drilled_sport",
       label: "Cross-Drilled Sport Steel",
       rotorSize: "355mm Front / 340mm Rear",
-      caliper: "4-Piston Performance",
+      rotorSpec: "Cross-drilled ventilated",
+      caliper: "Performance 4-Pot",
+      pistons: 4,
       fadeLimit: "680°C",
-      desc: "Cross-drilled lightweight steel rotors for heat dissipation and wet weather water clearing.",
+      desc: "Lightweight steel rotors for heat dissipation and wet weather water clearing.",
     },
   ];
+
+  const selected = brakeOptions.find((b) => b.id === brakeType) || brakeOptions[0];
 
   const caliperColors = [
     { hex: "#ef4444", name: "Brembo Racing Red" },
@@ -67,6 +83,14 @@ export const BrakesAssemblyStage: React.FC<BrakesAssemblyStageProps> = ({
     { hex: "#cbd5e1", name: "Silver Anodized" },
     { hex: "#d946ef", name: "Neon Magenta" },
   ];
+
+  // Bias readout
+  const biasNote =
+    brakeBiasPct >= 66
+      ? "Front-heavy bias — stable trail braking, risk of front lock-up on cold tires."
+      : brakeBiasPct <= 56
+      ? "Rear-biased — rotation under braking, requires driver confidence."
+      : "Neutral window — balanced deceleration platform.";
 
   return (
     <div className="panel p-4 rounded-3xl space-y-4 shadow-xl">
@@ -80,7 +104,7 @@ export const BrakesAssemblyStage: React.FC<BrakesAssemblyStageProps> = ({
               STAGE 5: BRAKING HARDWARE & CALIPER FINISH
             </h3>
             <p className="text-[11px] font-mono text-slate-500 dark:text-slate-400">
-              Mount brake rotors and multi-piston monobloc calipers onto the 4-corner uprights.
+              Mount ventilated rotors and multi-piston monobloc calipers. Set hydraulic bias.
             </p>
           </div>
         </div>
@@ -111,12 +135,42 @@ export const BrakesAssemblyStage: React.FC<BrakesAssemblyStageProps> = ({
               <p className="text-[10px] text-slate-500 dark:text-slate-400 mb-2.5">{b.desc}</p>
               <div className="space-y-1 text-[10px] font-mono text-slate-400 border-t border-base-800/60 pt-2">
                 <div>Rotors: <strong className="text-slate-200">{b.rotorSize}</strong></div>
-                <div>Caliper: <strong className="text-amber-400">{b.caliper}</strong></div>
+                <div>Core: <strong className="text-cyan-400">{b.rotorSpec}</strong></div>
+                <div>Caliper: <strong className="text-amber-400">{b.pistons}-Piston {b.caliper}</strong></div>
                 <div>Fade Temp: <strong className="text-emerald-400">{b.fadeLimit}</strong></div>
               </div>
             </button>
           );
         })}
+      </div>
+
+      {/* Brake Bias Trim */}
+      <div className="p-3.5 rounded-2xl bg-base-900/60 border border-base-800 space-y-2.5">
+        <div className="flex items-center justify-between">
+          <label className="text-xs font-bold font-mono text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
+            <SlidersHorizontal size={13} className="text-red-400" /> HYDRAULIC BRAKE BIAS (COCKPIT ADJUSTER)
+          </label>
+          <span className="text-xs font-mono font-bold text-red-400 tabular-nums">
+            {brakeBiasPct}% F / {100 - brakeBiasPct}% R
+          </span>
+        </div>
+        <input
+          type="range"
+          min="50"
+          max="75"
+          step="1"
+          value={brakeBiasPct}
+          onChange={(e) => onUpdateBrakeBias(parseInt(e.target.value))}
+          className="w-full accent-red-500 cursor-pointer"
+        />
+        <div className="flex justify-between text-[9px] font-mono text-slate-500">
+          <span>50% (Rear-Biased)</span>
+          <span>62% Neutral</span>
+          <span>75% (Front-Stable)</span>
+        </div>
+        <p className="text-[10px] font-mono text-slate-500 dark:text-slate-400 pt-1 border-t border-base-800/60">
+          {biasNote} · Selected: {selected.pistons}-piston front / {Math.max(4, selected.pistons - 2)}-piston rear calipers.
+        </p>
       </div>
 
       {/* Caliper Color Palette */}

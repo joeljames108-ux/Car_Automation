@@ -79,7 +79,7 @@ export function NeonEngineStudio() {
               }}
               className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs nh-font-mono font-bold transition-all cursor-pointer whitespace-nowrap ${
  isActive
- ? "bg-sky-400/20 text-sky-200 border border-sky-400/35"
+ ? "bg-sky-400/20 text-sky-200 border border-sky-400/30"
  : "text-slate-400 hover:text-slate-200 hover:bg-white/5"
  }`}
             >
@@ -104,14 +104,14 @@ export function NeonEngineStudio() {
 
       {/* View 2: Master Engine Workbench & Dyno */}
       {activeTab === "engine_workbench" && (
-        <div className="w-full rounded-3xl overflow-hidden border border-white/10 bg-[#070e1c] shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
+        <div className="w-full rounded-3xl overflow-hidden border border-white/10 bg-[#0a111e] shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
           <ModularEngineStudio />
         </div>
       )}
 
       {/* View 2B: Master 3D Transmission Studio */}
       {activeTab === "transmission_3d" && (
-        <div className="w-full rounded-3xl overflow-hidden border border-white/10 bg-[#070e1c] shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
+        <div className="w-full rounded-3xl overflow-hidden border border-white/10 bg-[#0a111e] shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
           <Transmission3DStudio />
         </div>
       )}

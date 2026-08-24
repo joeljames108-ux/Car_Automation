@@ -108,6 +108,9 @@ export const ModularLinearAssemblyViewport: React.FC<ModularLinearAssemblyViewpo
   const [steeringAngle, setSteeringAngle] = useState<number>(0);
   const [suspensionTravel, setSuspensionTravel] = useState<number>(0);
   const [isDrivetrainSpin, setIsDrivetrainSpin] = useState<boolean>(false);
+  const [closuresDoorAngle, setClosuresDoorAngle] = useState<number>(assemblyState.doorOpenAngleDeg || 0);
+  const [closuresBonnetAngle, setClosuresBonnetAngle] = useState<number>(assemblyState.bonnetOpenAngleDeg || 0);
+  const [closuresDickyAngle, setClosuresDickyAngle] = useState<number>(assemblyState.dickyOpenAngleDeg || 0);
   const [isCinematicInspection, setIsCinematicInspection] = useState<boolean>(false);
   const [showCADToolbar, setShowCADToolbar] = useState<boolean>(false);
 
@@ -279,6 +282,22 @@ export const ModularLinearAssemblyViewport: React.FC<ModularLinearAssemblyViewpo
       sceneGraphRef.current.updateScene(assemblyState, previewStage, explodedProgress, isXRay);
     }
   }, [assemblyState, previewStage, explodedProgress, isXRay]);
+
+  // Sync closures state when assemblyState changes
+  useEffect(() => {
+    setClosuresDoorAngle(assemblyState.doorOpenAngleDeg || 0);
+    setClosuresBonnetAngle(assemblyState.bonnetOpenAngleDeg || 0);
+    setClosuresDickyAngle(assemblyState.dickyOpenAngleDeg || 0);
+  }, [assemblyState.doorOpenAngleDeg, assemblyState.bonnetOpenAngleDeg, assemblyState.dickyOpenAngleDeg]);
+
+  const handleClosuresChange = (doors: number, bonnet: number, dicky: number) => {
+    setClosuresDoorAngle(doors);
+    setClosuresBonnetAngle(bonnet);
+    setClosuresDickyAngle(dicky);
+    if (sceneGraphRef.current) {
+      sceneGraphRef.current.setClosuresArticulation(doors, bonnet, dicky, assemblyState.doorStyle);
+    }
+  };
 
   // Update Center of Mass Gizmo
   useEffect(() => {
@@ -739,6 +758,86 @@ export const ModularLinearAssemblyViewport: React.FC<ModularLinearAssemblyViewpo
               onChange={(e) => handleSuspensionTravelChange(parseInt(e.target.value))}
               className="w-full accent-emerald-400 cursor-pointer"
             />
+          </div>
+
+          {/* Closures Articulation (Doors, Bonnet, Dicky) */}
+          <div className="space-y-2 pt-2 border-t border-base-800">
+            <div className="flex justify-between items-center text-[10px]">
+              <span className="text-slate-400 flex items-center gap-1 font-bold">
+                <Maximize2 size={11} className="text-pink-400" /> CLOSURES ARTICULATION
+              </span>
+              <div className="flex items-center gap-1">
+                <button
+                  onClick={() => {
+                    handleClosuresChange(0, 0, 0);
+                    assemblyAudio.playHydraulicClamp();
+                  }}
+                  className="px-1.5 py-0.5 rounded text-[8px] font-mono bg-base-950 border border-base-800 text-slate-400 hover:text-slate-200 cursor-pointer"
+                >
+                  CLOSE ALL
+                </button>
+                <button
+                  onClick={() => {
+                    handleClosuresChange(70, 45, 40);
+                    assemblyAudio.playHydraulicClamp();
+                  }}
+                  className="px-1.5 py-0.5 rounded text-[8px] font-mono bg-pink-500/20 border border-pink-500 text-pink-300 cursor-pointer"
+                >
+                  OPEN ALL
+                </button>
+              </div>
+            </div>
+
+            {/* Doors slider */}
+            <div className="space-y-0.5">
+              <div className="flex justify-between text-[9px] text-slate-400 font-mono">
+                <span>Doors ({assemblyState.doorStyle || "butterfly"})</span>
+                <span className="text-pink-400 font-bold">{closuresDoorAngle}°</span>
+              </div>
+              <input
+                type="range"
+                min="0"
+                max="70"
+                step="1"
+                value={closuresDoorAngle}
+                onChange={(e) => handleClosuresChange(parseInt(e.target.value), closuresBonnetAngle, closuresDickyAngle)}
+                className="w-full accent-pink-400 cursor-pointer"
+              />
+            </div>
+
+            {/* Bonnet slider */}
+            <div className="space-y-0.5">
+              <div className="flex justify-between text-[9px] text-slate-400 font-mono">
+                <span>Bonnet / Hood</span>
+                <span className="text-pink-400 font-bold">{closuresBonnetAngle}°</span>
+              </div>
+              <input
+                type="range"
+                min="0"
+                max="45"
+                step="1"
+                value={closuresBonnetAngle}
+                onChange={(e) => handleClosuresChange(closuresDoorAngle, parseInt(e.target.value), closuresDickyAngle)}
+                className="w-full accent-pink-400 cursor-pointer"
+              />
+            </div>
+
+            {/* Dicky slider */}
+            <div className="space-y-0.5">
+              <div className="flex justify-between text-[9px] text-slate-400 font-mono">
+                <span>Dicky / Trunk</span>
+                <span className="text-pink-400 font-bold">{closuresDickyAngle}°</span>
+              </div>
+              <input
+                type="range"
+                min="0"
+                max="40"
+                step="1"
+                value={closuresDickyAngle}
+                onChange={(e) => handleClosuresChange(closuresDoorAngle, closuresBonnetAngle, parseInt(e.target.value))}
+                className="w-full accent-pink-400 cursor-pointer"
+              />
+            </div>
           </div>
 
           {/* Drivetrain Spin Animation */}

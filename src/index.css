@@ -3,6 +3,7 @@
 @import "tailwindcss/utilities";
 @import "./components/ui1/design/neonHorizonAnimations.css";
 @import "./components/ui1/design/neonHorizonTypography.css";
+@import "./components/ui1/design/horizonSurfaces.css";
 
 @layer base {
   * {

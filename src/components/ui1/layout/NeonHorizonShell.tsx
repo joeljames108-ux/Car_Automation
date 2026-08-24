@@ -100,6 +100,7 @@ import { NeonSkidSparkStudio } from "../stages/NeonSkidSparkStudio";
 import { NeonBoundaryLayerSuctionStudio } from "../stages/NeonBoundaryLayerSuctionStudio";
 import { NeonThermalPcmStudio } from "../stages/NeonThermalPcmStudio";
 import { NeonGrandStudioHub } from "../stages/NeonGrandStudioHub";
+import { NeonHiggsfieldStudio } from "../stages/NeonHiggsfieldStudio";
 import { NeonHorizonCommandPalette } from "../interactive/NeonHorizonCommandPalette";
 import { NeonHorizonSaveDialog } from "../interactive/NeonHorizonSaveDialog";
 import type { WorkspaceCategory } from "../../ui/UI1Layout";
@@ -127,6 +128,7 @@ const STAGES: StageItem[] = [
   { id: "suspension3d", label: "3D Suspension Studio", icon: <Activity size={14} />, category: "studios" },
   { id: "transmission3d", label: "3D Transmission Studio", icon: <Cog size={14} />, category: "studios" },
   { id: "ai", label: "Apex AI Studio", icon: <Bot size={14} />, category: "studios" },
+  { id: "higgsfield", label: "Higgsfield AI Suite", icon: <SparklesIcon size={14} />, category: "studios" },
   { id: "nvh", label: "NVH Audio Studio", icon: <Volume2 size={14} />, category: "studios" },
 
   // --- Simulation & Testing ---
@@ -281,6 +283,8 @@ export function NeonHorizonShell() {
               <NeonInteriorStudio />
             ) : stage === "ai" ? (
               <NeonAIArchitectStudio />
+            ) : stage === "higgsfield" ? (
+              <NeonHiggsfieldStudio />
             ) : stage === "manufacturing" || stage === "supplyChain" ? (
               <NeonFactoryFloor />
             ) : stage === "transmission3d" ? (

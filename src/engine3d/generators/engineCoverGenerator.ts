@@ -128,7 +128,7 @@ const LETTER_ADVANCE = 5.2;
 const SPACE_ADVANCE = 3.2;
 
 /** Builds merged, centered stroke lettering geometry lying in the XY plane (z = extrusion). */
-function buildStrokeLettering(
+export function buildStrokeLettering(
   text: string,
   letterHeight: number,
   strokeUnits: number,

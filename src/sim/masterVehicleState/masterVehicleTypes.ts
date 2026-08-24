@@ -138,6 +138,14 @@ export interface ChassisSubsystemState {
   materialGrade: "mild_steel" | "chromoly" | "extruded_aluminum" | "carbon_composite" | "titanium_matrix";
   torsionalRigidityKNmPerDeg: number;
   massKg: number;
+  /**
+   * Optional measured front weight distribution override (percent, 0-100).
+   * When present it takes precedence over the architecture-based heuristic so
+   * benchmark vehicles reproduce their real static weight distribution.
+   */
+  weightDistributionFrontPct?: number;
+  /** Optional measured centre-of-gravity height override (mm). */
+  coGHeightMm?: number;
 }
 
 export interface PowertrainSubsystemState {
@@ -233,6 +241,9 @@ export interface AeroSubsystemState {
   aeroBalanceFrontPercent: number; // e.g. 42%
   liftToDragRatio: number;        // e.g. 3.4
   topSpeedDragAreaCdA: number;
+  /** When true, totalDownforceNAt100Mph & topSpeedDragAreaCdA are measured
+   * declarations that take precedence over the parametric wing solver. */
+  declaredAeroOverride?: boolean;
   massKg: number;
 }
 
@@ -270,6 +281,8 @@ export interface ElectronicsAndAdasSubsystemState {
   brakeByWire: boolean;
   steerByWire: boolean;
   massKg: number;
+  /** Optional manufacturer electronic V-max governor (km/h). Undefined = drag-limited. */
+  topSpeedLimiterKmh?: number;
 }
 
 export interface SafetySubsystemState {

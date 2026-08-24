@@ -23,7 +23,7 @@ export const NeonHorizonStatRail: React.FC<NeonHorizonStatRailProps> = ({ sim })
     <div className="hidden xl:flex flex-col gap-4 w-72 shrink-0 select-none">
       <div className="sticky top-28 flex flex-col gap-4">
         {/* SIMULATION PROGRESS Panel */}
-        <div className="p-5 rounded-3xl bg-[#111c2e]/85 backdrop-blur-3xl border border-white/12 shadow-[0_25px_60px_rgba(0,0,0,0.65)] flex flex-col items-center gap-5">
+        <div className="p-5 rounded-3xl bg-[#111a2b]/85 backdrop-blur-3xl border border-white/12 shadow-[0_25px_60px_rgba(0,0,0,0.60),inset_0_1px_0_rgba(255,255,255,0.10)] flex flex-col items-center gap-5 nh-edge-top">
           {/* Header Bar with Engineering Log Toggle Button */}
           <div className="w-full flex items-center justify-between">
             <span className="text-xs font-bold tracking-widest text-slate-300 uppercase">
@@ -37,7 +37,7 @@ export const NeonHorizonStatRail: React.FC<NeonHorizonStatRailProps> = ({ sim })
               title="Toggle Engineering Terminal Log"
               className={`p-1.5 rounded-lg text-xs flex items-center gap-1 transition-all cursor-pointer ${
  showLog
- ? "bg-sky-500/30 text-sky-300 border border-sky-400/50"
+ ? "bg-sky-400/20 text-sky-300 border border-sky-400/35"
  : "bg-white/5 text-slate-400 hover:text-slate-200 border border-white/10"
  }`}
             >
@@ -71,7 +71,7 @@ export const NeonHorizonStatRail: React.FC<NeonHorizonStatRailProps> = ({ sim })
             </svg>
 
             {/* Engineer Avatar Photo */}
-            <div className="absolute inset-2.5 rounded-full overflow-hidden border-2 border-sky-400/35">
+            <div className="absolute inset-2.5 rounded-full overflow-hidden border-2 border-sky-400/30">
               <img
                 src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=256&auto=format&fit=crop"
                 alt="Lead Aerodynamicist"
@@ -135,9 +135,9 @@ export const NeonHorizonStatRail: React.FC<NeonHorizonStatRailProps> = ({ sim })
           {/* Telemetry Rows */}
           <div className="w-full flex flex-col gap-2.5 pt-2 border-t border-white/10">
             {/* POWER */}
-            <div className="flex items-center justify-between p-3 rounded-2xl bg-[#0c1626]/70 border border-white/6 hover:border-sky-400/30 transition-colors">
+            <div className="flex items-center justify-between p-3 rounded-2xl bg-[#0e1626]/70 border border-white/6 hover:border-sky-400/30 transition-colors">
               <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-full bg-sky-500/15 flex items-center justify-center text-sky-400">
+                <div className="w-8 h-8 rounded-full bg-sky-400/10 flex items-center justify-center text-sky-400">
                   <Flag size={15} />
                 </div>
                 <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">
@@ -150,9 +150,9 @@ export const NeonHorizonStatRail: React.FC<NeonHorizonStatRailProps> = ({ sim })
             </div>
 
             {/* TORQUE */}
-            <div className="flex items-center justify-between p-3 rounded-2xl bg-[#0c1626]/70 border border-white/6 hover:border-sky-400/30 transition-colors">
+            <div className="flex items-center justify-between p-3 rounded-2xl bg-[#0e1626]/70 border border-white/6 hover:border-sky-400/30 transition-colors">
               <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-full bg-sky-500/15 flex items-center justify-center text-sky-400">
+                <div className="w-8 h-8 rounded-full bg-sky-400/10 flex items-center justify-center text-sky-400">
                   <Gauge size={15} />
                 </div>
                 <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">
@@ -165,9 +165,9 @@ export const NeonHorizonStatRail: React.FC<NeonHorizonStatRailProps> = ({ sim })
             </div>
 
             {/* WEIGHT */}
-            <div className="flex items-center justify-between p-3 rounded-2xl bg-[#0c1626]/70 border border-white/6 hover:border-sky-400/30 transition-colors">
+            <div className="flex items-center justify-between p-3 rounded-2xl bg-[#0e1626]/70 border border-white/6 hover:border-sky-400/30 transition-colors">
               <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-full bg-sky-500/15 flex items-center justify-center text-sky-400">
+                <div className="w-8 h-8 rounded-full bg-sky-400/10 flex items-center justify-center text-sky-400">
                   <Weight size={15} />
                 </div>
                 <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">
@@ -180,9 +180,9 @@ export const NeonHorizonStatRail: React.FC<NeonHorizonStatRailProps> = ({ sim })
             </div>
 
             {/* 0-60 */}
-            <div className="flex items-center justify-between p-3 rounded-2xl bg-[#0c1626]/70 border border-white/6 hover:border-sky-400/30 transition-colors">
+            <div className="flex items-center justify-between p-3 rounded-2xl bg-[#0e1626]/70 border border-white/6 hover:border-sky-400/30 transition-colors">
               <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-full bg-sky-500/15 flex items-center justify-center text-sky-400">
+                <div className="w-8 h-8 rounded-full bg-sky-400/10 flex items-center justify-center text-sky-400">
                   <Timer size={15} />
                 </div>
                 <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">

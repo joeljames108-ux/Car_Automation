@@ -1,16 +1,20 @@
 /**
  * ============================================================================
- * STAGE 10: ELECTRONICS, HARNESS & SENSORS STAGE
+ * STAGE 10: ELECTRONICS — BOSCH MS6 ECU, RAYCHEM LOOMS, 800V HV LINES
  * ============================================================================
+ * Install the Bosch Motorsport MS6 ECU, Raychem mil-spec wire looms and the
+ * shielded 800V high-voltage traction lines with pyrofuse isolation.
  */
 
 import React from "react";
-import { Cpu, CheckCircle2, Zap, Radio, Shield } from "lucide-react";
+import { Cpu, CheckCircle2, Cable } from "lucide-react";
 import { InstalledSubsystemsState } from "../scene/ModularAssemblySceneGraph";
 
 interface ElectronicsAssemblyStageProps {
   electronicsType: InstalledSubsystemsState["electronicsType"];
   onUpdateElectronics: (type: InstalledSubsystemsState["electronicsType"]) => void;
+  raychemLooms: boolean;
+  onUpdateRaychemLooms: (enabled: boolean) => void;
   isInstalled: boolean;
   onInstall: () => void;
 }
@@ -18,6 +22,8 @@ interface ElectronicsAssemblyStageProps {
 export const ElectronicsAssemblyStage: React.FC<ElectronicsAssemblyStageProps> = ({
   electronicsType,
   onUpdateElectronics,
+  raychemLooms,
+  onUpdateRaychemLooms,
   isInstalled,
   onInstall,
 }) => {
@@ -30,10 +36,10 @@ export const ElectronicsAssemblyStage: React.FC<ElectronicsAssemblyStageProps> =
   }[] = [
     {
       id: "motorsport_ecu_telemetry",
-      label: "Motorsport ECU & 100Hz Telemetry",
+      label: "Bosch MS6 ECU & 100Hz Telemetry",
       bus: "Dual CAN-FD (10 Mbps)",
       voltage: "12V / 48V Mil-Spec",
-      desc: "Bosch Motorsport MS6 engine control unit with wideband lambda, knock control, and high-speed data logger.",
+      desc: "Bosch Motorsport MS6 engine control unit with wideband lambda, knock control, traction map library, and high-speed data logger.",
     },
     {
       id: "800v_hv_harness",
@@ -51,6 +57,8 @@ export const ElectronicsAssemblyStage: React.FC<ElectronicsAssemblyStageProps> =
     },
   ];
 
+  const isHv = electronicsType === "800v_hv_harness";
+
   return (
     <div className="panel p-4 rounded-3xl space-y-4 shadow-xl">
       <div className="flex items-center justify-between border-b border-base-800/60 pb-3">
@@ -60,10 +68,10 @@ export const ElectronicsAssemblyStage: React.FC<ElectronicsAssemblyStageProps> =
           </div>
           <div>
             <h3 className="text-sm font-bold font-mono text-slate-800 dark:text-slate-100 uppercase tracking-wider">
-              STAGE 10: ELECTRONICS, ECU & 800V WIRING
+              STAGE 10: ELECTRONICS & WIRE HARNESS
             </h3>
             <p className="text-[11px] font-mono text-slate-500 dark:text-slate-400">
-              Install the powertrain ECU, vehicle dynamics controller, wire harness, and telemetry sensors.
+              Route the ECU, vehicle dynamics controller, mil-spec looms and HV traction lines.
             </p>
           </div>
         </div>
@@ -92,12 +100,45 @@ export const ElectronicsAssemblyStage: React.FC<ElectronicsAssemblyStageProps> =
               <p className="text-[10px] text-slate-500 dark:text-slate-400 mb-2.5">{e.desc}</p>
               <div className="space-y-0.5 text-[10px] font-mono text-slate-400 border-t border-base-800/60 pt-2">
                 <div>Bus: <strong className="text-cyan-400">{e.bus}</strong></div>
-                <div>Power: <strong className="text-amber-400">{e.voltage}</strong></div>
+                <div>Power: <strong className={isHv && e.id === "800v_hv_harness" ? "text-orange-400" : "text-amber-400"}>{e.voltage}</strong></div>
               </div>
             </button>
           );
         })}
       </div>
+
+      {/* Raychem Mil-Spec Looms Toggle */}
+      <button
+        onClick={() => onUpdateRaychemLooms(!raychemLooms)}
+        className={`w-full p-3.5 rounded-2xl text-left transition-all border cursor-pointer ${
+          raychemLooms
+            ? "bg-amber-500/10 border-amber-500/50 ring-1 ring-amber-500/40"
+            : "bg-base-900/60 border-base-800 hover:border-base-700"
+        }`}
+      >
+        <div className="flex items-center justify-between mb-1">
+          <span className="font-bold text-xs font-mono text-slate-900 dark:text-slate-100 flex items-center gap-1.5">
+            <Cable size={13} className="text-amber-400" /> RAYCHEM MIL-SPEC WIRE LOOMS
+          </span>
+          <span className={`px-2 py-0.5 rounded-lg text-[10px] font-mono font-bold border ${
+            raychemLooms ? "bg-emerald-500/20 border-emerald-500/50 text-emerald-500" : "bg-base-800 border-base-700 text-slate-500"
+          }`}>
+            {raychemLooms ? "✓ LOOMED" : "STANDARD HARNESS"}
+          </span>
+        </div>
+        <p className="text-[10px] text-slate-500 dark:text-slate-400">
+          Tefzel 22AWG core with DR-25 heat-shrink jacketing, bonded into branch bundles at all four corners.
+          55-pin Deutsch ASX connector at the ECU — rated to 200°C and impervious to race fuel vapor.
+          {isHv && raychemLooms ? " HV traction lines run in separate shielded conduit per ISO 6469 clearance rules." : ""}
+        </p>
+      </button>
+
+      {/* HV Warning Strip */}
+      {isHv && (
+        <div className="px-3 py-2 rounded-xl bg-orange-500/10 border border-orange-500/40 text-[10px] font-mono text-orange-300 flex items-center gap-2">
+          ⚡ HIGH-VOLTAGE PROTOCOL: MSD (Maintenance Safety Discharge) loop + service plug required before any Stage 13 hardware validation.
+        </div>
+      )}
 
       {/* Install Button */}
       <div className="flex justify-end pt-2">

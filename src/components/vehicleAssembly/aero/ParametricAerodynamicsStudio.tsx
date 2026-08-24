@@ -6,23 +6,17 @@
  * Provides:
  * 1. Add / Remove / Configure aerodynamic modules
  * 2. Live mechanical 3D pivot rotations (Wing angle, splitter depth, diffuser ramp)
- * 3. Real-time CFD Multi-Physics telemetry (Downforce, Drag Cd, Balance %, Top Speed)
+ * 3. Real-time CFD Multi-Physics telemetry (Downforce, Drag Cd, Balance %,
+ *    Top Speed and live Lift-to-Drag (L/D) efficiency analysis)
  */
 
 import React, { useState } from "react";
 import {
   Wind,
   CheckCircle2,
-  Sliders,
-  Plane,
-  ChevronRight,
-  Sparkles,
-  Zap,
-  Activity,
   AlertTriangle,
-  RotateCcw,
   Gauge,
-  Layers,
+  Activity,
 } from "lucide-react";
 import { AeroParameters3D } from "../scene/ModularAssemblySceneGraph";
 
@@ -39,25 +33,38 @@ export const ParametricAerodynamicsStudio: React.FC<ParametricAerodynamicsStudio
 }) => {
   const [activeAeroDept, setActiveAeroDept] = useState<"rear_wing" | "front_splitter" | "diffuser" | "canards" | "side_skirts">("rear_wing");
 
-  // Calculate live aerodynamic multi-physics
+  // ── REAL-TIME CFD SOLVER (panel-method surrogate, updated every render) ──
   const wingCl = aero.rearWingEnabled ? 0.35 + (Math.max(0, aero.rearWingAngleDeg) * 0.045) * (aero.rearWingWidthMm / 1600) : 0;
   const wingCd = aero.rearWingEnabled ? 0.04 + (Math.max(0, aero.rearWingAngleDeg) * 0.012) : 0;
 
   const splitCl = aero.frontSplitterEnabled ? 0.22 + (aero.frontSplitterLengthMm / 1000) * 0.45 : 0;
   const splitCd = aero.frontSplitterEnabled ? 0.025 + (aero.frontSplitterLengthMm / 1000) * 0.03 : 0;
 
-  const diffCl = aero.diffuserEnabled ? 0.28 + (aero.diffuserAngleDeg * 0.022) : 0;
+  const tunnelCountFactor = Math.min(1.6, (aero.venturiTunnelCount || 4) / 4);
+  const diffCl = aero.diffuserEnabled ? (0.28 + aero.diffuserAngleDeg * 0.022) * (aero.underbodyVenturiTunnels ? tunnelCountFactor : 1) : 0;
   const diffCd = aero.diffuserEnabled ? 0.015 : 0;
 
   const canardCl = aero.frontCanards ? 0.08 + (aero.frontCanardAngleDeg * 0.005) : 0;
   const canardCd = aero.frontCanards ? 0.012 : 0;
 
-  const totalDownforceN = Math.round((wingCl + splitCl + diffCl + canardCl) * 1250);
-  const frontDownforceN = Math.round((splitCl + canardCl + diffCl * 0.2) * 1250);
+  // Reference conditions: 250 km/h, 1.2 kg/m^3, 1.9 m^2 reference area
+  const qRhoS = 0.5 * 1.2 * Math.pow(250 / 3.6, 2) * 1.9;
+  const totalDownforceN = Math.round((wingCl + splitCl + diffCl + canardCl) * qRhoS * 0.055);
+  const frontDownforceN = Math.round((splitCl + canardCl + diffCl * 0.2) * qRhoS * 0.055);
   const rearDownforceN = totalDownforceN - frontDownforceN;
   const frontBalancePct = totalDownforceN > 0 ? Math.round((frontDownforceN / totalDownforceN) * 100) : 50;
   const rearBalancePct = 100 - frontBalancePct;
-  const totalCd = (0.285 + wingCd + splitCd + diffCd + canardCd).toFixed(3);
+  const totalCd = 0.285 + wingCd + splitCd + diffCd + canardCd;
+
+  // Drag force & LIVE L/D RATIO ANALYSIS
+  const dragForceN = Math.round(totalCd * qRhoS);
+  const ldRatio = dragForceN > 0 ? totalDownforceN / dragForceN : 0;
+  const ldRating =
+    ldRatio >= 2.4 ? { label: "ELITE HIGH-DOWNFORCE", cls: "text-emerald-400" }
+    : ldRatio >= 1.7 ? { label: "GT3 RACE WINDOW", cls: "text-cyan-400" }
+    : ldRatio >= 1.1 ? { label: "BALANCED SPRINT", cls: "text-amber-400" }
+    : { label: "LOW DRAG / LOW GRIP", cls: "text-slate-400" };
+
   const isPorpoisingRisk = aero.diffuserAngleDeg > 16 && aero.frontSplitterLengthMm > 150;
 
   return (
@@ -71,35 +78,64 @@ export const ParametricAerodynamicsStudio: React.FC<ParametricAerodynamicsStudio
           <div>
             <div className="flex items-center gap-2">
               <h3 className="text-sm font-bold font-mono text-slate-800 dark:text-slate-100 uppercase tracking-wider">
-                PARAMETRIC AERODYNAMICS STUDIO & LIVE CFD
+                AERODYNAMICS STUDIO & LIVE CFD ANALYSIS
               </h3>
               <span className="text-[9px] font-mono px-2 py-0.5 rounded-full bg-cyan-500/15 text-cyan-600 dark:text-cyan-300 font-bold border border-cyan-500/30">
                 LIVE 3D PIVOT SYNC
               </span>
             </div>
             <p className="text-[11px] font-mono text-slate-500 dark:text-slate-400">
-              Manipulate aerodynamic surfaces in real time. 3D geometry rotates and translates live on your car.
+              High-downforce swan-neck wing, splitter, venturi tunnels & canards — solved at 250 km/h reference condition.
             </p>
           </div>
         </div>
 
-        {/* Live CFD Telemetry Strip */}
+        {/* Live CFD Telemetry Strip incl. L/D */}
         <div className="flex items-center gap-2 flex-wrap font-mono text-xs">
           <div className="px-3 py-1.5 rounded-xl bg-base-900 border border-base-800">
-            <span className="text-slate-500 text-[10px] block">TOTAL DOWNFORCE</span>
-            <span className="font-bold text-cyan-400">{totalDownforceN} N</span>
+            <span className="text-slate-500 text-[10px] block">DOWNFORCE @250</span>
+            <span className="font-bold text-cyan-400">{totalDownforceN.toLocaleString()} N</span>
           </div>
           <div className="px-3 py-1.5 rounded-xl bg-base-900 border border-base-800">
-            <span className="text-slate-500 text-[10px] block">DRAG (CD)</span>
-            <span className="font-bold text-amber-400">{totalCd}</span>
+            <span className="text-slate-500 text-[10px] block">DRAG CD</span>
+            <span className="font-bold text-amber-400">{totalCd.toFixed(3)}</span>
+          </div>
+          <div className="px-3 py-1.5 rounded-xl bg-gradient-to-br from-emerald-500/10 to-base-900 border border-emerald-500/40">
+            <span className="text-slate-500 text-[10px] block">L/D RATIO (CFD)</span>
+            <span className={`font-bold ${ldRating.cls}`}>{ldRatio.toFixed(2)} : 1</span>
           </div>
           <div className="px-3 py-1.5 rounded-xl bg-base-900 border border-base-800">
             <span className="text-slate-500 text-[10px] block">AERO BALANCE</span>
-            <span className="font-bold text-emerald-400">
-              {frontBalancePct}% F / {rearBalancePct}% R
-            </span>
+            <span className="font-bold text-emerald-400">{frontBalancePct}% F</span>
           </div>
         </div>
+      </div>
+
+      {/* L/D Efficiency Analysis Bar */}
+      <div className="p-3.5 rounded-2xl bg-base-900/80 border border-base-800 space-y-2">
+        <div className="flex items-center justify-between text-xs font-mono flex-wrap gap-2">
+          <span className="font-bold text-slate-300 dark:text-slate-200 flex items-center gap-1.5">
+            <Activity size={13} className="text-emerald-400" /> LIFT-TO-DRAG EFFICIENCY MAP
+          </span>
+          <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full bg-base-800 ${ldRating.cls}`}>{ldRating.label}</span>
+        </div>
+        <div className="relative h-2.5 rounded-full overflow-hidden bg-base-850">
+          <div className="absolute inset-y-0 left-0 bg-gradient-to-r from-red-500 via-amber-400 to-emerald-500 opacity-30" style={{ width: "100%" }} />
+          <div
+            className="absolute inset-y-0 left-0 bg-gradient-to-r from-cyan-600 to-emerald-400 transition-all"
+            style={{ width: `${Math.min(100, (ldRatio / 3.2) * 100)}%` }}
+          />
+          <div
+            className="absolute top-1/2 -translate-y-1/2 w-1 h-4 bg-white rounded-full shadow-lg transition-all"
+            style={{ left: `calc(${Math.min(99, (ldRatio / 3.2) * 100)}% - 2px)` }}
+          />
+        </div>
+        <div className="flex items-center justify-between text-[9px] font-mono text-slate-500">
+          <span>Drag car (0.8)</span><span>Sprint (1.7)</span><span>GT3 race (2.4)</span><span>Time attack (3.2)</span>
+        </div>
+        <p className="text-[10px] font-mono text-slate-500 dark:text-slate-400 pt-1">
+          Front axle carries {frontDownforceN.toLocaleString()} N · Rear axle carries {rearDownforceN.toLocaleString()} N · Total drag load {dragForceN.toLocaleString()} N.
+        </p>
       </div>
 
       {/* Porpoising Warning */}
@@ -128,6 +164,7 @@ export const ParametricAerodynamicsStudio: React.FC<ParametricAerodynamicsStudio
               frontSplitterLengthMm: 45,
               diffuserEnabled: true,
               diffuserAngleDeg: 6,
+              venturiTunnelCount: 2,
               frontCanards: false,
               gurneyFlap: false,
             })
@@ -147,6 +184,7 @@ export const ParametricAerodynamicsStudio: React.FC<ParametricAerodynamicsStudio
               frontSplitterLengthMm: 85,
               diffuserEnabled: true,
               diffuserAngleDeg: 10,
+              venturiTunnelCount: 4,
               frontCanards: true,
               gurneyFlap: false,
             })
@@ -168,13 +206,15 @@ export const ParametricAerodynamicsStudio: React.FC<ParametricAerodynamicsStudio
               diffuserEnabled: true,
               diffuserAngleDeg: 14,
               diffuserStrakes: 4,
+              venturiTunnelCount: 4,
+              underbodyVenturiTunnels: true,
               frontCanards: true,
               gurneyFlap: true,
             })
           }
           className="px-2.5 py-1 rounded-xl bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 text-[10px] font-bold border border-cyan-500/50 shrink-0 cursor-pointer"
         >
-          ★ GT3 Competition Pro
+          ★ GT3 Competition Pro (4-Tunnel)
         </button>
         <button
           onClick={() =>
@@ -189,6 +229,7 @@ export const ParametricAerodynamicsStudio: React.FC<ParametricAerodynamicsStudio
               diffuserEnabled: true,
               diffuserAngleDeg: 18,
               diffuserStrakes: 6,
+              venturiTunnelCount: 6,
               frontCanards: true,
               frontCanardAngleDeg: 22,
               gurneyFlap: true,
@@ -210,6 +251,7 @@ export const ParametricAerodynamicsStudio: React.FC<ParametricAerodynamicsStudio
               frontSplitterLengthMm: 50,
               diffuserEnabled: true,
               diffuserAngleDeg: 7,
+              venturiTunnelCount: 4,
               frontCanards: false,
               gurneyFlap: false,
             })
@@ -224,9 +266,9 @@ export const ParametricAerodynamicsStudio: React.FC<ParametricAerodynamicsStudio
       <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar border-b border-base-800/60 pb-2">
         {(
           [
-            { id: "rear_wing", label: "Rear Wing & DRS", active: aero.rearWingEnabled },
+            { id: "rear_wing", label: "Swan-Neck Wing & DRS", active: aero.rearWingEnabled },
             { id: "front_splitter", label: "Front Splitter", active: aero.frontSplitterEnabled },
-            { id: "diffuser", label: "Rear Diffuser", active: aero.diffuserEnabled },
+            { id: "diffuser", label: "Venturi Diffuser", active: aero.diffuserEnabled },
             { id: "canards", label: "Dive Planes / Canards", active: aero.frontCanards },
             { id: "side_skirts", label: "Side Skirts & Floor", active: aero.sideSkirtsEnabled },
           ] as { id: typeof activeAeroDept; label: string; active: boolean }[]
@@ -253,7 +295,7 @@ export const ParametricAerodynamicsStudio: React.FC<ParametricAerodynamicsStudio
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <span className="font-bold text-xs font-mono text-slate-800 dark:text-slate-200">
-                REAR AEROFOIL WING PACKAGE
+                HIGH-DOWNFORCE SWAN-NECK AEROFOIL PACKAGE
               </span>
               <button
                 onClick={() => onUpdateAero({ rearWingEnabled: !aero.rearWingEnabled })}
@@ -269,10 +311,10 @@ export const ParametricAerodynamicsStudio: React.FC<ParametricAerodynamicsStudio
 
             {aero.rearWingEnabled && (
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2 border-t border-base-800/60">
-                {/* Live Wing Angle Slider */}
+                {/* Dynamic AoA Slider */}
                 <div className="p-3 rounded-2xl bg-base-850 border border-base-800 space-y-1.5">
                   <div className="flex justify-between items-center text-xs font-mono">
-                    <span className="text-slate-300 font-bold">Wing Angle of Attack (AoA)</span>
+                    <span className="text-slate-300 font-bold">Dynamic Angle of Attack (AoA)</span>
                     <span className="text-cyan-400 font-bold text-sm">{aero.rearWingAngleDeg}°</span>
                   </div>
                   <input
@@ -339,15 +381,15 @@ export const ParametricAerodynamicsStudio: React.FC<ParametricAerodynamicsStudio
                   </div>
 
                   <div className="flex items-center justify-between pt-1 border-t border-base-800">
-                    <span className="text-xs font-mono text-slate-300">Wing Type</span>
+                    <span className="text-xs font-mono text-slate-300">Mounting Type</span>
                     <select
                       value={aero.rearWingType}
                       onChange={(e) => onUpdateAero({ rearWingType: e.target.value as any })}
                       className="bg-base-900 border border-base-700 rounded-lg text-xs font-mono text-slate-200 px-2 py-1"
                     >
-                      <option value="single_plane">Single Plane</option>
+                      <option value="single_plane">Single Plane (Deck Mount)</option>
                       <option value="dual_plane">Dual Plane Slotted</option>
-                      <option value="swan_neck">Swan Neck Pylons</option>
+                      <option value="swan_neck">Swan Neck Pylons (Clean Suction Side)</option>
                       <option value="active_drs">Active Hydraulic DRS</option>
                     </select>
                   </div>
@@ -414,12 +456,12 @@ export const ParametricAerodynamicsStudio: React.FC<ParametricAerodynamicsStudio
           </div>
         )}
 
-        {/* ── 3. REAR DIFFUSER CONTROLS ── */}
+        {/* ── 3. VENTURI DIFFUSER CONTROLS ── */}
         {activeAeroDept === "diffuser" && (
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <span className="font-bold text-xs font-mono text-slate-800 dark:text-slate-200">
-                UNDERBODY VENTURI REAR DIFFUSER
+                UNDERBODY VENTURI DIFFUSER & TUNNELS
               </span>
               <button
                 onClick={() => onUpdateAero({ diffuserEnabled: !aero.diffuserEnabled })}
@@ -465,6 +507,43 @@ export const ParametricAerodynamicsStudio: React.FC<ParametricAerodynamicsStudio
                     onChange={(e) => onUpdateAero({ diffuserStrakes: parseInt(e.target.value) })}
                     className="w-full accent-cyan-400 cursor-pointer"
                   />
+                </div>
+
+                {/* Venturi Tunnel Count */}
+                <div className="p-3 rounded-2xl bg-base-850 border border-base-800 space-y-1.5 md:col-span-2">
+                  <div className="flex justify-between items-center text-xs font-mono">
+                    <span className="text-slate-300 font-bold flex items-center gap-1.5">
+                      <Gauge size={12} className="text-emerald-400" /> UNDERBODY VENTURI TUNNELS
+                    </span>
+                    <span className="text-emerald-400 font-bold text-sm">
+                      {(aero.venturiTunnelCount || 0)}-Tunnel Configuration
+                      {aero.underbodyVenturiTunnels ? "" : " (DISABLED)"}
+                    </span>
+                  </div>
+                  <input
+                    type="range"
+                    min="2"
+                    max="6"
+                    step="1"
+                    value={aero.venturiTunnelCount || 4}
+                    onChange={(e) => onUpdateAero({ venturiTunnelCount: parseInt(e.target.value) })}
+                    className="w-full accent-emerald-400 cursor-pointer"
+                  />
+                  <div className="flex items-center justify-between">
+                    <div className="flex justify-between w-full text-[9px] font-mono text-slate-500">
+                      <span>2 (Street)</span>
+                      <span>4 (GT3 Spec ★)</span>
+                      <span>6 (Time Attack)</span>
+                    </div>
+                    <button
+                      onClick={() => onUpdateAero({ underbodyVenturiTunnels: !aero.underbodyVenturiTunnels })}
+                      className={`ml-3 px-2.5 py-0.5 rounded-lg text-xs font-mono font-bold border cursor-pointer whitespace-nowrap ${
+                        aero.underbodyVenturiTunnels ? "bg-emerald-500/20 border-emerald-500/50 text-emerald-400" : "bg-base-800 border-base-700 text-slate-500"
+                      }`}
+                    >
+                      {aero.underbodyVenturiTunnels ? "TUNNELS ON" : "TUNNELS OFF"}
+                    </button>
+                  </div>
                 </div>
               </div>
             )}

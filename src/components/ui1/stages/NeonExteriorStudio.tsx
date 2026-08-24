@@ -26,11 +26,11 @@ export function NeonExteriorStudio() {
   const [activeTab, setActiveTab] = useState<"paint" | "aero_kit" | "lighting">("paint");
 
   const colorPresets = [
-    { name: "Electric Cyan", hex: "#38bdf8" },
+    { name: "Electric Cyan", hex: "#8fb9d9" },
     { name: "Acid Laser", hex: "#34d399" },
     { name: "Hyper Violet", hex: "#a78bfa" },
     { name: "Stealth Carbon", hex: "#0f172a" },
-    { name: "Solar Gold", hex: "#fbbf24" },
+    { name: "Solar Gold", hex: "#d9b36c" },
     { name: "Crimson Pulse", hex: "#ff5252" },
   ];
 
@@ -51,7 +51,7 @@ export function NeonExteriorStudio() {
             }}
             className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs nh-font-mono font-bold transition-all cursor-pointer whitespace-nowrap ${
  activeTab === tab.id
- ? "bg-sky-400/20 text-sky-200 border border-sky-400/35"
+ ? "bg-sky-400/20 text-sky-200 border border-sky-400/30"
  : "text-slate-400 hover:text-slate-200 hover:bg-white/5"
  }`}
           >
@@ -241,7 +241,7 @@ export function NeonExteriorStudio() {
               />
             </div>
 
-            <div className="p-4 rounded-xl bg-[#060e22] border border-sky-400/15 flex items-center justify-between">
+            <div className="p-4 rounded-xl bg-[#0a111e] border border-sky-400/15 flex items-center justify-between">
               <div>
                 <span className="text-[10px] nh-font-mono text-slate-400">ACTIVE COLOR SPEC:</span>
                 <div className="text-sm font-bold nh-font-headline text-sky-200 mt-0.5">

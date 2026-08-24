@@ -5,13 +5,15 @@
 // camera/lighting HUD, and seamless bidirectional bridge with primary options.
 // ============================================================================
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Engine3DScene } from './scene/Engine3DScene';
 import { ComponentPicker3D } from './ui/ComponentPicker3D';
 import { ComponentInspector3D } from './ui/ComponentInspector3D';
 import { CascadeRemovalModal } from './ui/CascadeRemovalModal';
 import { useEngine3DStore } from './store/useEngine3DStore';
 import { useAssembly3DBridge } from './store/assemblyBridge';
+import { globalAssetCache } from './assets/glbAssetLoader';
+import { V12_COMPONENT_MANIFESTS } from './manifests/v12Manifest';
 import type { ComponentId, MaterialGrade } from '../sim/assemblyTypes';
 import type { ComponentInstance3D } from './types';
 import type { EngineConfig } from '../sim/types';
@@ -53,6 +55,17 @@ export const ModularEngine3DViewport: React.FC<ModularEngine3DViewportProps> = (
     target: null,
     dependents: [],
   });
+
+  // Preload every V12 GLB asset (with its manifest configuration) so all
+  // engine parts are interactive the instant they appear in the scene
+  useEffect(() => {
+    globalAssetCache
+      .preloadManifests(V12_COMPONENT_MANIFESTS, engineConfig)
+      .catch(() => {
+        // Individual failures fall back to procedural geometry inside the loader
+      });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const removeComponentCascade = useEngine3DStore((s) => s.removeComponentCascade);
 

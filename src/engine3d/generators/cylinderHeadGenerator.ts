@@ -116,11 +116,27 @@ export function buildCylinderHeadScene(bankSide: 'left' | 'right', configOrCyls?
     metalness: 0.95,
     roughness: 0.20,
   });
+  const matCeramicInsulator = matLib.getCeramicIntake();
+  const matCoilBoot = matLib.getRubberOring();
 
   const spec = V12_HEAD_SPECS;
   const cylSpacingM = 0.100;
   const headLengthM = (cylsPerBank - 1) * cylSpacingM + 0.130;
   const halfSpanX = ((cylsPerBank - 1) * cylSpacingM) / 2;
+
+  // Helical coil valve spring (conical, along +Z)
+  const createCoilSpring = (radiusTop: number, radiusBottom: number, height: number, coilCount: number, wireRadius: number): THREE.BufferGeometry => {
+    const points: THREE.Vector3[] = [];
+    const segments = Math.max(16, coilCount * 20);
+    for (let i = 0; i <= segments; i++) {
+      const t = i / segments;
+      const angle = coilCount * Math.PI * 2 * t;
+      const r = radiusBottom + (radiusTop - radiusBottom) * t;
+      points.push(new THREE.Vector3(Math.cos(angle) * r, Math.sin(angle) * r, height * t));
+    }
+    const curve = new THREE.CatmullRomCurve3(points);
+    return new THREE.TubeGeometry(curve, coilCount * 22, wireRadius, 8, false);
+  };
 
   // ─── 1. CNC MILLED BILLET CYLINDER HEAD MONOBLOCK ───
   const headBlockGroup = new THREE.Group();
@@ -194,6 +210,27 @@ export function buildCylinderHeadScene(bankSide: 'left' | 'right', configOrCyls?
     plugWellMesh.position.set(cx, 0, 0.005);
     valvetrainGroup.add(plugWellMesh);
 
+    // Iridium Spark Plug Hex Body Seated in the Well
+    const plugBodyGeo = new THREE.CylinderGeometry(0.0075, 0.0075, 0.012, 16);
+    const plugBodyMesh = new THREE.Mesh(plugBodyGeo, matSteelCam);
+    plugBodyMesh.name = `Iridium_Spark_Plug_Body_${c + 1}`;
+    plugBodyMesh.position.set(cx, 0, 0.024);
+    valvetrainGroup.add(plugBodyMesh);
+
+    // Ceramic Insulator Stack
+    const insulatorGeo = new THREE.CylinderGeometry(0.005, 0.0065, 0.020, 16);
+    const insulatorMesh = new THREE.Mesh(insulatorGeo, matCeramicInsulator);
+    insulatorMesh.name = `Spark_Plug_Ceramic_Insulator_${c + 1}`;
+    insulatorMesh.position.set(cx, 0, 0.040);
+    valvetrainGroup.add(insulatorMesh);
+
+    // Coil-On-Plug Rubber Boot Stub
+    const bootGeo = new THREE.CylinderGeometry(0.008, 0.007, 0.014, 16);
+    const bootMesh = new THREE.Mesh(bootGeo, matCoilBoot);
+    bootMesh.name = `COP_Coil_Rubber_Boot_${c + 1}`;
+    bootMesh.position.set(cx, 0, 0.056);
+    valvetrainGroup.add(bootMesh);
+
     // ── Dual Titanium Intake Valves ──
     const intakeY = isLeft ? 0.038 : -0.038;
     [-0.017, 0.017].forEach((vx, vIdx) => {
@@ -218,12 +255,20 @@ export function buildCylinderHeadScene(bankSide: 'left' | 'right', configOrCyls?
       stemMesh.position.set(cx + vx, intakeY, 0.012);
       valvetrainGroup.add(stemMesh);
 
-      // Conical Valve Spring & Titanium Retainer
-      const springGeo = new THREE.CylinderGeometry(0.013, 0.015, 0.038, 20);
+      // Dual Conical Coil Valve Spring & Titanium Retainer
+      const springGeo = createCoilSpring(0.0115, 0.0145, 0.038, 6, 0.0022);
       const springMesh = new THREE.Mesh(springGeo, matGoldVernier);
       springMesh.name = `Intake_Valve_Conical_Spring_${c + 1}_${vIdx + 1}`;
-      springMesh.position.set(cx + vx, intakeY, 0.028);
+      springMesh.position.set(cx + vx, intakeY, 0.009);
       valvetrainGroup.add(springMesh);
+
+      // Hardened Spring Seat Washer
+      const seatWasherGeo = new THREE.TorusGeometry(0.0145, 0.0012, 8, 24);
+      seatWasherGeo.translate(0, 0, 0.001);
+      const seatWasherMesh = new THREE.Mesh(seatWasherGeo, matSteelCam);
+      seatWasherMesh.name = `Intake_Spring_Seat_Washer_${c + 1}_${vIdx + 1}`;
+      seatWasherMesh.position.set(cx + vx, intakeY, 0.009);
+      valvetrainGroup.add(seatWasherMesh);
 
       // Roller Finger Cam Follower & Pivot HLA Post
       const followerGeo = new THREE.BoxGeometry(0.010, 0.022, 0.008);
@@ -264,12 +309,20 @@ export function buildCylinderHeadScene(bankSide: 'left' | 'right', configOrCyls?
       stemMesh.position.set(cx + vx, exhaustY, 0.012);
       valvetrainGroup.add(stemMesh);
 
-      // Conical Valve Spring
-      const springGeo = new THREE.CylinderGeometry(0.012, 0.014, 0.038, 20);
-      const springMesh = new THREE.Mesh(springGeo, matGoldVernier);
-      springMesh.name = `Exhaust_Valve_Conical_Spring_${c + 1}_${vIdx + 1}`;
-      springMesh.position.set(cx + vx, exhaustY, 0.028);
-      valvetrainGroup.add(springMesh);
+      // Dual Conical Coil Valve Spring
+      const exSpringGeo = createCoilSpring(0.0105, 0.0135, 0.038, 6, 0.0022);
+      const exSpringMesh = new THREE.Mesh(exSpringGeo, matGoldVernier);
+      exSpringMesh.name = `Exhaust_Valve_Conical_Spring_${c + 1}_${vIdx + 1}`;
+      exSpringMesh.position.set(cx + vx, exhaustY, 0.009);
+      valvetrainGroup.add(exSpringMesh);
+
+      // Hardened Spring Seat Washer
+      const exSeatWasherGeo = new THREE.TorusGeometry(0.0135, 0.0012, 8, 24);
+      exSeatWasherGeo.translate(0, 0, 0.001);
+      const exSeatWasherMesh = new THREE.Mesh(exSeatWasherGeo, matSteelCam);
+      exSeatWasherMesh.name = `Exhaust_Spring_Seat_Washer_${c + 1}_${vIdx + 1}`;
+      exSeatWasherMesh.position.set(cx + vx, exhaustY, 0.009);
+      valvetrainGroup.add(exSeatWasherMesh);
 
       // Roller Follower for Exhaust
       const followerGeo = new THREE.BoxGeometry(0.010, 0.022, 0.008);
@@ -361,6 +414,30 @@ export function buildCylinderHeadScene(bankSide: 'left' | 'right', configOrCyls?
     vernierMesh.position.set(-headLengthM / 2 - 0.008, camY, 0.052);
     vernierMesh.castShadow = true;
     camGroup.add(vernierMesh);
+
+    // 25 Roller Timing Chain Engagement Teeth on the Sprocket Rim
+    const sprocketX = -headLengthM / 2 - 0.008;
+    for (let th = 0; th < 25; th++) {
+      const thAngle = (th * Math.PI * 2) / 25;
+      const toothGeo = new THREE.BoxGeometry(0.010, 0.004, 0.005);
+      toothGeo.rotateX(thAngle);
+      const toothMesh = new THREE.Mesh(toothGeo, matGoldVernier);
+      toothMesh.name = `${camName}_Sprocket_Chain_Tooth_${th + 1}`;
+      toothMesh.position.set(
+        sprocketX,
+        camY + Math.sin(thAngle) * (spec.sprocketDiameterM / 2 - 0.001),
+        0.052 + Math.cos(thAngle) * (spec.sprocketDiameterM / 2 - 0.001)
+      );
+      camGroup.add(toothMesh);
+    }
+
+    // Vernier Degree Ring with Laser-Etched Tick Marks
+    const degreeRingGeo = new THREE.TorusGeometry(spec.sprocketDiameterM / 2 + 0.0015, 0.0012, 8, 48);
+    degreeRingGeo.rotateY(Math.PI / 2);
+    const degreeRingMesh = new THREE.Mesh(degreeRingGeo, matArpStud);
+    degreeRingMesh.name = `${camName}_Vernier_Degree_Ring`;
+    degreeRingMesh.position.set(-headLengthM / 2 - 0.008, camY, 0.052);
+    camGroup.add(degreeRingMesh);
 
     // Vernier Lightening Windows (5 Radial Pockets)
     for (let w = 0; w < 5; w++) {

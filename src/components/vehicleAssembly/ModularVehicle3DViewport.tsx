@@ -284,7 +284,7 @@ export const ModularVehicle3DViewport: React.FC<ModularVehicle3DViewportProps> =
       else if (modelSource === 'ford_escort') modelUrl = '/models/exterior/hatchback_ford_escort.glb';
       else if (modelSource === 'bmw_i8') modelUrl = '/models/exterior/sports_car_bmw_i8.glb';
       else if (modelSource === 'mini_countryman') modelUrl = '/models/extracted/mini-countryman-jcw/source/Unity2Skfb/Unity2Skfb.gltf';
-      else if (modelSource === 'v12_engine') modelUrl = '/models/engines/v12/v12_engine_block.glb';
+      else if (modelSource === 'v12_engine') modelUrl = '/models/engines/v12/engine-block.glb';
 
       UniversalGlbAssetLoader.loadAsset(modelUrl)
         .then((res) => {

@@ -57,7 +57,7 @@ export function NeonEnduranceStudio() {
       }
 
       // Radar Sweep Line
-      ctx.strokeStyle = "#38bdf8";
+      ctx.strokeStyle = "#8fb9d9";
       ctx.lineWidth = 1.5;
       ctx.beginPath();
       ctx.moveTo(cx, cy);
@@ -122,7 +122,7 @@ export function NeonEnduranceStudio() {
             }}
             className="p-6 flex flex-col gap-4"
           >
-            <div className="w-full h-48 bg-[#030712] rounded-xl border border-sky-400/25 overflow-hidden relative flex items-center justify-center shadow-[inset_0_0_25px_rgba(0,0,0,0.85)]">
+            <div className="w-full h-48 bg-[#05080f] rounded-xl border border-sky-400/25 overflow-hidden relative flex items-center justify-center shadow-[inset_0_0_25px_rgba(0,0,0,0.85)]">
               <canvas ref={radarCanvasRef} width={360} height={190} className="w-full h-full" />
               <div className="absolute top-2 left-3 flex items-center gap-2">
                 <div className="w-2 h-2 rounded-full bg-sky-300 animate-ping" />
@@ -146,8 +146,8 @@ export function NeonEnduranceStudio() {
                     }}
                     className={`p-2.5 rounded-lg border text-center text-xs font-bold cursor-pointer transition-all ${
  isSelected
- ? "bg-[#091a38] border-sky-400/40 text-sky-300"
- : "bg-[#060e22] border-white/10 text-slate-400 hover:border-sky-400/25"
+ ? "bg-sky-400/10 border-sky-400/30 text-sky-200"
+ : "bg-[#0a111e] border-white/10 text-slate-400 hover:border-sky-400/25"
  }`}
                   >
                     {item.name}
@@ -191,8 +191,8 @@ export function NeonEnduranceStudio() {
                   }}
                   className={`p-3.5 rounded-xl border transition-all cursor-pointer flex flex-col gap-1.5 ${
  isSelected
- ? "bg-[#091a38] border-sky-400/40"
- : "bg-[#060e22] border-white/10 hover:border-sky-400/25"
+ ? "bg-sky-400/10 border-sky-400/30 text-sky-200"
+ : "bg-[#0a111e] border-white/10 hover:border-sky-400/25"
  }`}
                 >
                   <div className="flex items-center justify-between">

@@ -31,7 +31,7 @@ export const NeonHorizonTooltip: React.FC<NeonHorizonTooltipProps> = ({
       {children}
       {visible && (
         <div
-          className={`absolute ${posClasses} z-50 px-3 py-1.5 rounded-xl bg-[#0b1220]/95 backdrop-blur-xl border border-white/12 text-slate-200 text-xs shadow-[0_10px_30px_rgba(0,0,0,0.7)] pointer-events-none whitespace-nowrap animate-nh-materialize`}
+          className={`absolute ${posClasses} z-50 px-3 py-1.5 rounded-xl bg-[#0a111e]/95 backdrop-blur-xl border border-white/12 text-slate-200 text-xs shadow-[0_10px_30px_rgba(0,0,0,0.7)] pointer-events-none whitespace-nowrap animate-nh-materialize`}
         >
           {content}
         </div>
