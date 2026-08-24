@@ -1,17 +1,17 @@
 {
-  "auditTimestamp": "2026-08-24T13:45:49.202Z",
+  "auditTimestamp": "2026-08-24T13:56:44.656Z",
   "projectName": "Modular glTF Vehicle Construction System & Car Automation Simulator",
   "rootDirectory": "C:\\Users\\joelj\\Downloads\\project-bolt-sb1-a1kjcyhr (3)\\project",
-  "totalSourceFiles": 961,
-  "totalCodeLines": 186649,
-  "totalCommentLines": 15015,
-  "totalBlankLines": 22051,
-  "totalSizeBytes": 9397957,
+  "totalSourceFiles": 962,
+  "totalCodeLines": 186677,
+  "totalCommentLines": 15021,
+  "totalBlankLines": 22058,
+  "totalSizeBytes": 9399987,
   "subsystemBreakdown": {
     "simulation_core": {
-      "fileCount": 202,
-      "codeLines": 38977,
-      "sizeBytes": 2132561
+      "fileCount": 203,
+      "codeLines": 39009,
+      "sizeBytes": 2134977
     },
     "engine_assembly": {
       "fileCount": 57,
@@ -45,8 +45,8 @@
     },
     "ui_components": {
       "fileCount": 297,
-      "codeLines": 62880,
-      "sizeBytes": 3133174
+      "codeLines": 62876,
+      "sizeBytes": 3132788
     },
     "asset_pipeline": {
       "fileCount": 0,
@@ -65,8 +65,8 @@
     }
   },
   "dependencyGraph": {
-    "totalNodes": 961,
-    "totalEdges": 2305,
+    "totalNodes": 962,
+    "totalEdges": 2304,
     "directAcyclicGraphValid": true,
     "cyclicDependencyPaths": [],
     "subsystemCouplingMatrix": {
@@ -169,7 +169,7 @@
         "rendering_engine": 10,
         "state_management": 142,
         "ai_agent_framework": 11,
-        "ui_components": 748,
+        "ui_components": 747,
         "asset_pipeline": 0,
         "testing_verification": 0,
         "documentation_audit": 0
@@ -259,6 +259,7 @@
       "src/sim/aerodynamics/aeroStudioTypes.ts",
       "src/sim/agents/assistants/comparisonAssistant.ts",
       "src/sim/agents/assistants/tutorialAssistant.ts",
+      "src/sim/benchmarks/realWorldSportsCar100Dataset.ts",
       "src/sim/competitorTypes.ts",
       "src/sim/constants/chassisConstants.ts",
       "src/sim/constants/engineConstants.ts",
@@ -457,11 +458,6 @@
         "outDegree": 19
       },
       {
-        "modulePath": "src/components/GrandAutomotiveStudioHub.tsx",
-        "inDegree": 2,
-        "outDegree": 17
-      },
-      {
         "modulePath": "src/components/vehicleAssembly/ModularVehicle3DViewport.tsx",
         "inDegree": 1,
         "outDegree": 18
@@ -470,6 +466,11 @@
         "modulePath": "src/App.tsx",
         "inDegree": 1,
         "outDegree": 17
+      },
+      {
+        "modulePath": "src/components/GrandAutomotiveStudioHub.tsx",
+        "inDegree": 2,
+        "outDegree": 16
       },
       {
         "modulePath": "src/engine3d/generators/engineBlockGenerator.ts",
@@ -1617,6 +1618,7 @@
       "src/sim/aerodynamics/aeroStudioTypes.ts",
       "src/sim/agents/assistants/comparisonAssistant.ts",
       "src/sim/agents/assistants/tutorialAssistant.ts",
+      "src/sim/benchmarks/realWorldSportsCar100Dataset.ts",
       "src/sim/competitorTypes.ts",
       "src/sim/constants/chassisConstants.ts",
       "src/sim/constants/engineConstants.ts",
@@ -1711,7 +1713,7 @@
       },
       {
         "filePath": "src/components/GrandAutomotiveStudioHub.tsx",
-        "lineCount": 670
+        "lineCount": 666
       },
       {
         "filePath": "src/components/hypercar/3d/HypercarModularAssemblyViewport.tsx",
