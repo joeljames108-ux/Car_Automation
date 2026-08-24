@@ -1,12 +1,12 @@
 {
-  "auditTimestamp": "2026-08-24T13:56:44.656Z",
+  "auditTimestamp": "2026-08-24T14:02:15.966Z",
   "projectName": "Modular glTF Vehicle Construction System & Car Automation Simulator",
   "rootDirectory": "C:\\Users\\joelj\\Downloads\\project-bolt-sb1-a1kjcyhr (3)\\project",
   "totalSourceFiles": 962,
-  "totalCodeLines": 186677,
+  "totalCodeLines": 186701,
   "totalCommentLines": 15021,
-  "totalBlankLines": 22058,
-  "totalSizeBytes": 9399987,
+  "totalBlankLines": 22059,
+  "totalSizeBytes": 9401262,
   "subsystemBreakdown": {
     "simulation_core": {
       "fileCount": 203,
@@ -45,8 +45,8 @@
     },
     "ui_components": {
       "fileCount": 297,
-      "codeLines": 62876,
-      "sizeBytes": 3132788
+      "codeLines": 62900,
+      "sizeBytes": 3134063
     },
     "asset_pipeline": {
       "fileCount": 0,
@@ -66,7 +66,7 @@
   },
   "dependencyGraph": {
     "totalNodes": 962,
-    "totalEdges": 2304,
+    "totalEdges": 2306,
     "directAcyclicGraphValid": true,
     "cyclicDependencyPaths": [],
     "subsystemCouplingMatrix": {
@@ -169,7 +169,7 @@
         "rendering_engine": 10,
         "state_management": 142,
         "ai_agent_framework": 11,
-        "ui_components": 747,
+        "ui_components": 749,
         "asset_pipeline": 0,
         "testing_verification": 0,
         "documentation_audit": 0
@@ -518,6 +518,16 @@
         "outDegree": 11
       },
       {
+        "modulePath": "src/components/EngineDesigner.tsx",
+        "inDegree": 0,
+        "outDegree": 13
+      },
+      {
+        "modulePath": "src/components/ui1/stages/NeonEngineStudio.tsx",
+        "inDegree": 1,
+        "outDegree": 12
+      },
+      {
         "modulePath": "src/exterior3d/geometry/car3dGeometryGenerator.ts",
         "inDegree": 5,
         "outDegree": 8
@@ -533,11 +543,6 @@
         "outDegree": 11
       },
       {
-        "modulePath": "src/components/EngineDesigner.tsx",
-        "inDegree": 0,
-        "outDegree": 12
-      },
-      {
         "modulePath": "src/components/ui/AnimatedCounter.tsx",
         "inDegree": 12,
         "outDegree": 0
@@ -549,11 +554,6 @@
       },
       {
         "modulePath": "src/components/ui1/stages/NeonAIArchitectStudio.tsx",
-        "inDegree": 1,
-        "outDegree": 11
-      },
-      {
-        "modulePath": "src/components/ui1/stages/NeonEngineStudio.tsx",
         "inDegree": 1,
         "outDegree": 11
       },
@@ -1700,6 +1700,10 @@
         "lineCount": 557
       },
       {
+        "filePath": "src/components/EngineDesigner.tsx",
+        "lineCount": 506
+      },
+      {
         "filePath": "src/components/engineStudio/ModularEngineStudioWorkbench.tsx",
         "lineCount": 759
       },
@@ -1981,7 +1985,7 @@
     "fixmeCommentCount": 0,
     "testCoverageRatioPct": 17,
     "recommendations": [
-      "Modularize 80 monolithic files (>500 lines) into focused subsystem domain modules.",
+      "Modularize 81 monolithic files (>500 lines) into focused subsystem domain modules.",
       "Replace 260 loose 'any' type annotations with strict TypeScript generic/interface types.",
       "Maintain 100% deterministic transform snap repeatability across all 36 chassis sockets.",
       "Ensure all 3D assets implement strict level of detail (LOD 1-6) polygon and texture budgets."
