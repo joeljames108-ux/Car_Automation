@@ -47,7 +47,6 @@ import {
   Flag,
 } from "lucide-react";
 import { MasterVehicleStudio } from "./vehicleAssembly/MasterVehicleStudio";
-import { ModularEngineStudio } from "./engineStudio/ModularEngineStudio";
 import { PowertrainDynoStudio } from "./powertrain/PowertrainDynoStudio";
 import { InteriorsDesigner } from "./InteriorsDesigner";
 import { RoboticFactorySequencer } from "./assembly/RoboticFactorySequencer";
@@ -66,7 +65,6 @@ import { Transmission3DStudio } from "./transmissionStudio/Transmission3DStudio"
 
 export type GrandStudioTab =
   | "vehicle_studio"
-  | "engine_studio"
   | "transmission_studio"
   | "dyno_ecu_studio"
   | "suspension_studio"
@@ -120,17 +118,16 @@ interface PresetConfig {
 
 const STUDIO_TABS: StudioTabConfig[] = [
   { id: "vehicle_studio", label: "Vehicle Assembly", icon: <Car size={14} />, category: "engineering", shortcut: 1, description: "Complete 3D vehicle assembly with exploded views, X-Ray mode, and aero streamlines" },
-  { id: "engine_studio", label: "Engine Studio", icon: <Flame size={14} />, category: "engineering", shortcut: 2, description: "Modular engine building with torque curves, thermal maps, and component health" },
-  { id: "transmission_studio", label: "3D Transmission", icon: <Cog size={14} />, category: "engineering", shortcut: 3, description: "Interactive transmission with gear ratio calculator and shift pattern animator" },
-  { id: "suspension_studio", label: "3D Suspension", icon: <Activity size={14} />, category: "engineering", shortcut: 4, description: "Suspension kinematics with ride height sweep and damper histograms" },
-  { id: "aero_cfd_studio", label: "CFD Wind Tunnel", icon: <Wind size={14} />, category: "aerodynamics", shortcut: 6, description: "Live pressure coefficient display, aero balance maps, and DRS effect preview" },
+  { id: "transmission_studio", label: "3D Transmission", icon: <Cog size={14} />, category: "engineering", shortcut: 2, description: "Interactive transmission with gear ratio calculator and shift pattern animator" },
+  { id: "suspension_studio", label: "3D Suspension", icon: <Activity size={14} />, category: "engineering", shortcut: 3, description: "Suspension kinematics with ride height sweep and damper histograms" },
+  { id: "aero_cfd_studio", label: "CFD Wind Tunnel", icon: <Wind size={14} />, category: "aerodynamics", shortcut: 4, description: "Live pressure coefficient display, aero balance maps, and DRS effect preview" },
   { id: "aero_3d_studio", label: "3D Aero Lab", icon: <Wind size={14} />, category: "aerodynamics", description: "3D parametric aero surfaces, downforce polars, and CFD streamline laboratory" },
-  { id: "track_battle_studio", label: "Track Battles", icon: <Trophy size={14} />, category: "track_racing", shortcut: 7, description: "Telemetry replay with sector deltas and overtake analysis" },
-  { id: "track_layout_studio", label: "Track Layouts", icon: <Navigation size={14} />, category: "track_racing", shortcut: 8, description: "Interactive track geometry with apex markers and elevation profiles" },
-  { id: "interior_studio", label: "Cockpit Studio", icon: <LayersIcon size={14} />, category: "cockpit_factory", shortcut: 9, description: "Cockpit ergonomics, driver fit, and interior systems design" },
+  { id: "track_battle_studio", label: "Track Battles", icon: <Trophy size={14} />, category: "track_racing", shortcut: 5, description: "Telemetry replay with sector deltas and overtake analysis" },
+  { id: "track_layout_studio", label: "Track Layouts", icon: <Navigation size={14} />, category: "track_racing", shortcut: 6, description: "Interactive track geometry with apex markers and elevation profiles" },
+  { id: "interior_studio", label: "Cockpit Studio", icon: <LayersIcon size={14} />, category: "cockpit_factory", shortcut: 7, description: "Cockpit ergonomics, driver fit, and interior systems design" },
   { id: "manufacturing_studio", label: "Manufacturing", icon: <Factory size={14} />, category: "cockpit_factory", description: "Production line design and process optimization" },
   { id: "factory_line", label: "Robotic Factory", icon: <Cpu size={14} />, category: "cockpit_factory", description: "Robotic assembly sequencing and cycle time analysis" },
-  { id: "dyno_ecu_studio", label: "Dyno & ECU", icon: <Gauge size={14} />, category: "analytics", shortcut: 5, description: "Live dyno pulls, ECU map overlays, and power loss breakdown" },
+  { id: "dyno_ecu_studio", label: "Dyno & ECU", icon: <Gauge size={14} />, category: "analytics", shortcut: 8, description: "Live dyno pulls, ECU map overlays, and power loss breakdown" },
   { id: "compare_studio", label: "Comparison", icon: <GitCompare size={14} />, category: "analytics", description: "Side-by-side vehicle specification comparison" },
   { id: "nvh_studio", label: "NVH Audio", icon: <Volume2 size={14} />, category: "analytics", description: "Noise, vibration, and harshness acoustic analysis" },
   { id: "ai_studio", label: "Apex AI Studio", icon: <Bot size={14} />, category: "analytics", description: "AI-powered engineering optimization and recommendations" },
@@ -143,7 +140,7 @@ const STUDIO_CATEGORIES: StudioCategoryConfig[] = [
     label: "Core Engineering",
     icon: <Settings size={14} />,
     color: "cyan",
-    tabs: ["vehicle_studio", "engine_studio", "transmission_studio", "suspension_studio"],
+    tabs: ["vehicle_studio", "transmission_studio", "suspension_studio"],
   },
   {
     id: "aerodynamics",
@@ -195,8 +192,8 @@ const QUICK_PRESETS: PresetConfig[] = [
     id: "design_review",
     label: "Design Review",
     icon: <LayersIcon size={14} />,
-    description: "Vehicle + Engine + Interior for stakeholder review",
-    studios: ["vehicle_studio", "engine_studio", "interior_studio"],
+    description: "Vehicle + Interior for stakeholder review",
+    studios: ["vehicle_studio", "interior_studio"],
     color: "blue",
   },
   {
@@ -219,7 +216,6 @@ const QUICK_PRESETS: PresetConfig[] = [
 
 const STUDIO_COMPONENTS: Record<GrandStudioTab, React.ComponentType> = {
   vehicle_studio: MasterVehicleStudio,
-  engine_studio: ModularEngineStudio,
   transmission_studio: Transmission3DStudio,
   dyno_ecu_studio: PowertrainDynoStudio,
   suspension_studio: SuspensionMasterStudio,
