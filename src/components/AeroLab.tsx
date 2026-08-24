@@ -16,7 +16,6 @@ import {
   ENDPLATE_DESIGNS, OIL_COOLER_PLACEMENTS, TRACKS,
 } from "../sim/constants";
 import { formatLap } from "../sim/utils/formatLap";
-import { PresetQuickSelect } from "./PresetQuickSelect";
 import { ModernAnalogDial } from "./ui/ModernAnalogDial";
 import { GlassSlider } from "./ui/GlassSlider";
 import { SpatialReferenceSuite } from "./ui/SpatialReferenceSuite";
@@ -167,8 +166,6 @@ export function AeroLab() {
               </div>
             </div>
           )}
-
-          <PresetQuickSelect />
 
       <div className="panel p-3">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-3">

@@ -32,7 +32,6 @@ function clamp(v: number, lo: number, hi: number) {
 
 
 import { ChassisHotspotViewer } from "./ChassisHotspotViewer";
-import { PresetQuickSelect } from "./PresetQuickSelect";
 
 interface CommandCenterProps {
   onSelectStage?: (stage: string) => void;
@@ -78,9 +77,6 @@ export function CommandCenter({ onSelectStage }: CommandCenterProps = {}) {
 
   return (
     <div className="space-y-4 stagger">
-      {/* Quick-Start Engineering Presets */}
-      <PresetQuickSelect />
-
       {/* Interactive Telemetry Chassis Blueprint */}
       <ChassisHotspotViewer onSelectStage={onSelectStage} />
 

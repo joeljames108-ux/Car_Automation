@@ -4,7 +4,6 @@ import { useDesign } from "../state/DesignContext";
 import { Section, Slider, Select, ChoiceGrid, Toggle, StatTile } from "./ui/Controls";
 import { PLATFORMS, CHASSIS_TYPES, SUSPENSION_TYPES, BRAKE_TYPES, TIRE_COMPOUNDS, DRIVE_TYPES, ENGINE_POSITIONS } from "../sim/constants";
 import { VEHICLE_PRESET_LIBRARY } from "../sim/vehiclePresets";
-import { PresetQuickSelect } from "./PresetQuickSelect";
 import type { PlatformType, ChassisType, SuspensionType, BrakeType, TireCompound, DriveType, EnginePosition, VehicleConfig } from "../sim/types";
 
 import { useVehicleAssemblyStore } from "../state/useVehicleAssemblyStore";
@@ -156,8 +155,6 @@ export function VehicleDesigner() {
           </button>
         </div>
       </div>
-
-      <PresetQuickSelect />
 
       {/* ── GRAND AUTOMOTIVE ENGINEERING SUITE ── */}
       {workspaceMode === "grand_suite" && (
