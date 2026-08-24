@@ -917,4 +917,13 @@ export class MasterVehicleStateEngine {
         fireSuppressionInstalled: true,
         harnessType: "sabelt_6_point_f1",
         fuelCellSafetyBladder: true,
-        crashStructureRating: 
+        crashStructureRating: "motorsport_fia",
+        massKg: 38,
+      },
+      metrics: {} as any,
+      ergonomics: {} as any,
+      costAndBOM: {} as any,
+      compatibility: {} as any,
+    };
+  }
+}

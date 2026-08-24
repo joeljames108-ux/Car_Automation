@@ -259,4 +259,9 @@ export class BenchmarkCorrelationEngine {
     return {
       metricName: name, solver,
       rSquared: +rSquared.toFixed(4), pearsonR: +pearsonR.toFixed(4),
-      mape: +(sumPctErr / n).toFixed(2), meanAbsol
+      mape: +(sumPctErr / n).toFixed(2), meanAbsoluteError: +(sumAbsErr / n).toFixed(2),
+      slope: +slope.toFixed(4), intercept: +intercept.toFixed(2), samples: n,
+      passRSquared: false, passMAPE: false,
+    };
+  }
+}
