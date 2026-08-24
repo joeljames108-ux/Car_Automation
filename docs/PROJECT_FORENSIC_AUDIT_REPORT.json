@@ -1,17 +1,17 @@
 {
-  "auditTimestamp": "2026-08-24T14:02:15.966Z",
+  "auditTimestamp": "2026-08-24T14:08:28.160Z",
   "projectName": "Modular glTF Vehicle Construction System & Car Automation Simulator",
   "rootDirectory": "C:\\Users\\joelj\\Downloads\\project-bolt-sb1-a1kjcyhr (3)\\project",
   "totalSourceFiles": 962,
-  "totalCodeLines": 186701,
-  "totalCommentLines": 15021,
-  "totalBlankLines": 22059,
-  "totalSizeBytes": 9401262,
+  "totalCodeLines": 186838,
+  "totalCommentLines": 15024,
+  "totalBlankLines": 22071,
+  "totalSizeBytes": 9482448,
   "subsystemBreakdown": {
     "simulation_core": {
       "fileCount": 203,
-      "codeLines": 39009,
-      "sizeBytes": 2134977
+      "codeLines": 39153,
+      "sizeBytes": 2216478
     },
     "engine_assembly": {
       "fileCount": 57,
@@ -45,8 +45,8 @@
     },
     "ui_components": {
       "fileCount": 297,
-      "codeLines": 62900,
-      "sizeBytes": 3134063
+      "codeLines": 62893,
+      "sizeBytes": 3133748
     },
     "asset_pipeline": {
       "fileCount": 0,
@@ -66,7 +66,7 @@
   },
   "dependencyGraph": {
     "totalNodes": 962,
-    "totalEdges": 2306,
+    "totalEdges": 2303,
     "directAcyclicGraphValid": true,
     "cyclicDependencyPaths": [],
     "subsystemCouplingMatrix": {
@@ -169,7 +169,7 @@
         "rendering_engine": 10,
         "state_management": 142,
         "ai_agent_framework": 11,
-        "ui_components": 749,
+        "ui_components": 746,
         "asset_pipeline": 0,
         "testing_verification": 0,
         "documentation_audit": 0
@@ -493,12 +493,12 @@
         "outDegree": 2
       },
       {
-        "modulePath": "src/components/VehicleDesigner.tsx",
+        "modulePath": "src/components/f1/F1ConstructorWorkshop.tsx",
         "inDegree": 0,
-        "outDegree": 16
+        "outDegree": 15
       },
       {
-        "modulePath": "src/components/f1/F1ConstructorWorkshop.tsx",
+        "modulePath": "src/components/VehicleDesigner.tsx",
         "inDegree": 0,
         "outDegree": 15
       },
@@ -538,11 +538,6 @@
         "outDegree": 12
       },
       {
-        "modulePath": "src/components/AeroLab.tsx",
-        "inDegree": 1,
-        "outDegree": 11
-      },
-      {
         "modulePath": "src/components/ui/AnimatedCounter.tsx",
         "inDegree": 12,
         "outDegree": 0
@@ -561,6 +556,11 @@
         "modulePath": "src/sim/modularVehicle/exteriorAssemblyTestRunner.ts",
         "inDegree": 1,
         "outDegree": 11
+      },
+      {
+        "modulePath": "src/components/AeroLab.tsx",
+        "inDegree": 1,
+        "outDegree": 10
       },
       {
         "modulePath": "src/components/InteriorsDesigner.tsx",
@@ -600,11 +600,6 @@
       {
         "modulePath": "src/sim/modularVehicle/modularVehicleConstructionTestRunner.ts",
         "inDegree": 1,
-        "outDegree": 10
-      },
-      {
-        "modulePath": "src/components/CommandCenter.tsx",
-        "inDegree": 0,
         "outDegree": 10
       },
       {
@@ -675,6 +670,11 @@
       {
         "modulePath": "src/sim/modularVehicle/__tests__/phases111to125AeroStudioTests.ts",
         "inDegree": 1,
+        "outDegree": 9
+      },
+      {
+        "modulePath": "src/components/CommandCenter.tsx",
+        "inDegree": 0,
         "outDegree": 9
       },
       {
@@ -1669,7 +1669,7 @@
       },
       {
         "filePath": "src/components/AeroLab.tsx",
-        "lineCount": 771
+        "lineCount": 768
       },
       {
         "filePath": "src/components/AIAssistant.tsx",
@@ -1693,7 +1693,7 @@
       },
       {
         "filePath": "src/components/CommandCenter.tsx",
-        "lineCount": 687
+        "lineCount": 683
       },
       {
         "filePath": "src/components/Competitors.tsx",
