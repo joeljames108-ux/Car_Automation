@@ -9,11 +9,12 @@ import { AIAssistant } from "./AIAssistant";
 import { ApexAgentConsole } from "./agents/ApexAgentConsole";
 import { AgentDashboard } from "./agents/AgentDashboard";
 import { EngineeringLog } from "./EngineeringLog";
+import { AIEngineeringPresets, AI_PRESET_LIBRARY } from "./agents/AIEngineeringPresets";
 
 type Severity = "critical" | "warning" | "info";
 type EngineerId = "chief" | "race" | "production" | "sustainability" | "technology";
 type ModeId = "beginner" | "intermediate" | "expert";
-type StudioSubTab = "all" | "dashboard" | "advisory" | "agents" | "assistant" | "logs";
+type StudioSubTab = "all" | "presets" | "dashboard" | "advisory" | "agents" | "assistant" | "logs";
 
 const ENGINEERS: Record<EngineerId, { label: string; icon: React.ReactNode; focus: string; tone: string; desc: string }> = {
   chief:          { label: "Chief Engineer",        icon: <Wrench size={16} />,    focus: "Technical & Powertrain", tone: "text-cyan-400 border-cyan-500/40 bg-cyan-500/10", desc: "Monitors internal combustion stress, knock thresholds, and structural integrity." },
@@ -207,7 +208,19 @@ export function ApexAIStudio() {
       let reply = "";
       const lower = query.toLowerCase();
 
-      if (lower.includes("aero") || lower.includes("downforce") || lower.includes("drag")) {
+      if (lower.includes("valkyrie") || lower.includes("1000 hp") || lower.includes("1,000 hp") || lower.includes("1000hp")) {
+        reply = `⚡ [AI Blueprint Deployed] Loaded the 1,000 HP V12 Hybrid Valkyrie configuration! 6.4L V12 screaming to 9,200 RPM, paired with 180kW Solid-State P2 PHEV electric assist, 800V SiC Inverter, AWD DCT-7, and 410mm Carbon Ceramic brakes. All telemetry updated!`;
+      } else if (lower.includes("sprint") || lower.includes("sprint race")) {
+        reply = `🏁 [AI Blueprint Deployed] Loaded Sprint Race Attack Spec! V8 Twin-Turbo producing 820 HP, 4.10 final drive gearing for maximum corner exit acceleration, ultra-soft slicks, and 18° rear carbon wing.`;
+      } else if (lower.includes("downforce") || lower.includes("monaco") || lower.includes("high downforce")) {
+        reply = `🌪️ [AI Blueprint Deployed] Loaded Monaco High Downforce Spec! 22° wing AoA, full ground effect Venturi underbody tunnels, and 140mm aggressive front splitter generating 1,850 N of downforce.`;
+      } else if (lower.includes("fuel") || lower.includes("efficient") || lower.includes("ecostream") || lower.includes("eco")) {
+        reply = `🌱 [AI Blueprint Deployed] Loaded EcoStream Hybrid Endurance Spec! 1.8L Atkinson I4 paired with 80kW electric motor and 14 kWh battery, 2.92 cruise final drive, and low-drag 0.24 Cd aerodynamics.`;
+      } else if (lower.includes("balanced") || lower.includes("sport gt")) {
+        reply = `⚖️ [AI Blueprint Deployed] Loaded Balanced Sport GT Spec! 3.0L Twin-Turbo V6 (460 HP), 3.55 final drive, balanced aero, and sports suspension.`;
+      } else if (lower.includes("gt3") || lower.includes("motorsport")) {
+        reply = `🏎️ [AI Blueprint Deployed] Loaded Apex GT3 Spec-R Motorsport Benchmark! FIA GT3 homologated 4.0L flat-plane V8 (620 HP @ 8,500 RPM) in a lightweight dry-carbon tub chassis.`;
+      } else if (lower.includes("aero") || lower.includes("drag")) {
         reply = `Apex AI Aero Analysis: Drag Coeff is ${sim.dragCoeff.toFixed(2)} Cd with ${(sim.aeroBalance * 100).toFixed(0)}% rear bias. Installing aero wheel discs will trim drag by ~0.010 Cd.`;
       } else if (lower.includes("cost") || lower.includes("budget") || lower.includes("price")) {
         reply = `Apex AI Cost Analysis: Current unit cost is $${sim.totalCost.toLocaleString()}. Switching chassis to aluminum spaceframe or reducing wheel diameter saves up to $2,400.`;
@@ -449,18 +462,22 @@ export function ApexAIStudio() {
 
             {/* Quick Prompt Presets */}
             <div className="py-2 flex items-center gap-1.5 overflow-x-auto scrollbar-none border-t border-slate-800 mt-2">
+              <span className="text-[9px] font-mono text-cyan-400 font-bold uppercase shrink-0">AI BLUEPRINTS:</span>
               {[
-                "Optimize aero downforce",
-                "Reduce vehicle cost",
-                "Fix engine knock risk",
-                "Check 800V EV efficiency"
-              ].map((preset, i) => (
+                { label: "⚡ 1000 HP Valkyrie", prompt: "Load the 1000 HP V12 Hybrid Valkyrie blueprint" },
+                { label: "🏁 Sprint Race", prompt: "Deploy the Sprint Race Attack Spec" },
+                { label: "🌪️ High Downforce", prompt: "Apply Monaco High Downforce Spec" },
+                { label: "🌱 EcoStream Hybrid", prompt: "Deploy EcoStream Hybrid Endurance" },
+                { label: "⚖️ Balanced Sport GT", prompt: "Deploy Balanced Sport GT configuration" },
+                { label: "🏎️ GT3 Spec-R", prompt: "Load Apex GT3 Spec-R Motorsport Benchmark" },
+                { label: "🔧 Auto-Fix Knock", prompt: "Fix engine knock risk" },
+              ].map((p, i) => (
                 <button
                   key={i}
-                  onClick={() => handleSendMessage(preset)}
-                  className="px-2.5 py-1 rounded-lg bg-slate-950 border border-slate-800 text-slate-400 hover:text-slate-200 text-[10px] font-mono whitespace-nowrap transition-all cursor-pointer"
+                  onClick={() => handleSendMessage(p.prompt)}
+                  className="px-2 py-1 rounded-lg bg-slate-950/90 border border-cyan-500/30 text-cyan-200 hover:bg-cyan-500/20 text-[10px] font-mono whitespace-nowrap transition-all cursor-pointer shadow-sm"
                 >
-                  {preset}
+                  {p.label}
                 </button>
               ))}
             </div>
@@ -543,6 +560,7 @@ export function ApexAIStudio() {
         <div className="flex items-center gap-2 mt-6 pt-4 border-t border-slate-800/80 overflow-x-auto scrollbar-none">
           {[
             { id: "all" as const, label: "All-in-One Studio Suite", icon: <Layers size={14} /> },
+            { id: "presets" as const, label: "AI Engineering Presets", icon: <Sparkles size={14} /> },
             { id: "dashboard" as const, label: "15-Agent Division Grid", icon: <Bot size={14} /> },
             { id: "advisory" as const, label: "Chief Advisory & Diagnostics", icon: <Wrench size={14} /> },
             { id: "agents" as const, label: "Autonomous Multi-Agent Console", icon: <Zap size={14} /> },
@@ -574,9 +592,19 @@ export function ApexAIStudio() {
       {/* ── DYNAMIC SUB-TAB CONTENT DISPLAY ── */}
       {studioTab === "all" && (
         <div className="flex flex-col gap-8">
+          {/* Section 0: AI Engineering Presets & Architect Templates */}
+          <div className="space-y-3">
+            <AIEngineeringPresets
+              onSelectPresetPrompt={(prompt) => {
+                setStudioTab("advisory");
+                handleSendMessage(prompt);
+              }}
+            />
+          </div>
+
           {/* Section 1: Chief Advisory Studio */}
           <div className="space-y-3">
-            <h2 className="text-sm font-bold text-slate-300 uppercase tracking-widest flex items-center gap-2">
+            <h2 className="text-sm font-bold text-slate-300 uppercase tracking-widest flex items-center gap-2 pt-4 border-t border-slate-800/80">
               <Wrench size={16} className="text-cyan-400" /> Chief Advisory & Live Diagnostics Studio
             </h2>
             {renderAdvisorySection()}
@@ -607,6 +635,17 @@ export function ApexAIStudio() {
               <EngineeringLog />
             </div>
           </div>
+        </div>
+      )}
+
+      {studioTab === "presets" && (
+        <div className="w-full">
+          <AIEngineeringPresets
+            onSelectPresetPrompt={(prompt) => {
+              setStudioTab("advisory");
+              handleSendMessage(prompt);
+            }}
+          />
         </div>
       )}
 

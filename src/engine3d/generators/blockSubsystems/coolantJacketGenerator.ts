@@ -116,14 +116,24 @@ export function buildSingleFreezePlug(
  * Builds the complete physical coolant circulation water jacket system.
  */
 export function buildV12CoolantJacketSystem(
-  materials: V12BlockMaterialPalette
+  materials: V12BlockMaterialPalette,
+  cylindersPerBank: number = 6
 ): THREE.Group {
   const group = new THREE.Group();
-  group.name = '03_V12_Coolant_Jacket_System_Assembly';
+  group.name = '04_V12_Coolant_Jacket_System_Assembly';
   const spec = V12_COOLANT_SPECS;
+  const pitchM = 0.108;
+  const blockHalfLen = (cylindersPerBank * pitchM) / 2;
+  const startXCyl = -((cylindersPerBank - 1) * pitchM) / 2;
 
-  // ── A. 8 Machined Brass Core Expansion Freeze Plugs (4 Left, 4 Right) ──
-  [-0.22, -0.08, 0.08, 0.22].forEach((px, idx) => {
+  // ── A. Deep-Cup Brass Expansion Freeze Plugs ──
+  const plugCountPerSide = Math.max(2, cylindersPerBank - 2);
+  const plugSpan = (cylindersPerBank - 1) * pitchM * 0.85;
+  const plugStart = -plugSpan / 2;
+
+  for (let idx = 0; idx < plugCountPerSide; idx++) {
+    const px = plugCountPerSide === 1 ? 0 : plugStart + idx * (plugSpan / (plugCountPerSide - 1));
+
     // Left flank plugs
     const leftPlug = buildSingleFreezePlug(
       {
@@ -139,7 +149,7 @@ export function buildV12CoolantJacketSystem(
     // Right flank plugs
     const rightPlug = buildSingleFreezePlug(
       {
-        plugNumber: idx + 5,
+        plugNumber: idx + 1 + plugCountPerSide,
         side: 'right',
         positionX: px + 0.015,
         spec,
@@ -147,9 +157,10 @@ export function buildV12CoolantJacketSystem(
       materials
     );
     group.add(rightPlug);
-  });
+  }
 
   // ── B. Front Water Pump Scroll Volute Chamber ──
+  const frontX = -(blockHalfLen + 0.04);
   const voluteHousingGeo = new THREE.CylinderGeometry(
     spec.voluteImpellerRadiusM,
     spec.voluteImpellerRadiusM,
@@ -159,7 +170,7 @@ export function buildV12CoolantJacketSystem(
   voluteHousingGeo.rotateZ(Math.PI / 2);
   const voluteMesh = new THREE.Mesh(voluteHousingGeo, materials.machinedDeckSurface);
   voluteMesh.name = 'Water_Pump_Scroll_Volute_Housing';
-  voluteMesh.position.set(-0.36, 0.08, 0.20);
+  voluteMesh.position.set(frontX, 0.08, 0.20);
   voluteMesh.castShadow = true;
   group.add(voluteMesh);
 
@@ -173,7 +184,7 @@ export function buildV12CoolantJacketSystem(
   inletCavityGeo.rotateZ(Math.PI / 2);
   const inletMesh = new THREE.Mesh(inletCavityGeo, materials.coolantJacketInterior);
   inletMesh.name = 'Water_Pump_Inlet_Cavity';
-  inletMesh.position.set(-0.37, 0.08, 0.20);
+  inletMesh.position.set(frontX - 0.01, 0.08, 0.20);
   group.add(inletMesh);
 
   // Dual Coolant Flow Splitter Discharge Horns (Feeding Bank 1 and Bank 2)
@@ -183,11 +194,11 @@ export function buildV12CoolantJacketSystem(
   [-0.06, 0.06].forEach((hy, hornIdx) => {
     const hornMesh = new THREE.Mesh(hornGeo, materials.castAluminumBlock);
     hornMesh.name = `Coolant_Discharge_Horn_${hornIdx === 0 ? 'Bank1' : 'Bank2'}`;
-    hornMesh.position.set(-0.33, 0.08 + hy, 0.22);
+    hornMesh.position.set(frontX + 0.03, 0.08 + hy, 0.22);
     group.add(hornMesh);
   });
 
-  // ── C. 24 Precision Cylinder Head Deck Water Metering Orifices ──
+  // ── C. Precision Cylinder Head Deck Water Metering Orifices ──
   const orificeGeo = new THREE.CylinderGeometry(
     spec.deckOrificeRadiusM,
     spec.deckOrificeRadiusM,
@@ -196,9 +207,9 @@ export function buildV12CoolantJacketSystem(
   );
   orificeGeo.rotateX(Math.PI / 2);
 
-  // Bank 1 Deck Orifices (12 holes)
-  for (let b1 = 0; b1 < 6; b1++) {
-    const ox = -0.27 + b1 * 0.108;
+  // Bank 1 Deck Orifices
+  for (let b1 = 0; b1 < cylindersPerBank; b1++) {
+    const ox = startXCyl + b1 * pitchM;
     [-0.045, 0.045].forEach((oy, rowIdx) => {
       const orificeMesh = new THREE.Mesh(orificeGeo, materials.coolantJacketInterior);
       orificeMesh.name = `Deck_Coolant_Orifice_Bank1_${b1 + 1}_${rowIdx === 0 ? 'In' : 'Ex'}`;
@@ -207,9 +218,9 @@ export function buildV12CoolantJacketSystem(
     });
   }
 
-  // Bank 2 Deck Orifices (12 holes with 15mm stagger)
-  for (let b2 = 0; b2 < 6; b2++) {
-    const ox = -0.27 + b2 * 0.108 + 0.015;
+  // Bank 2 Deck Orifices (with 15mm stagger)
+  for (let b2 = 0; b2 < cylindersPerBank; b2++) {
+    const ox = startXCyl + b2 * pitchM + 0.015;
     [-0.045, 0.045].forEach((oy, rowIdx) => {
       const orificeMesh = new THREE.Mesh(orificeGeo, materials.coolantJacketInterior);
       orificeMesh.name = `Deck_Coolant_Orifice_Bank2_${b2 + 1}_${rowIdx === 0 ? 'In' : 'Ex'}`;
@@ -226,7 +237,8 @@ export function buildV12CoolantJacketSystem(
     12
   );
 
-  [-0.32, 0.32].forEach((sx, endIdx) => {
+  const steamX = blockHalfLen + 0.02;
+  [-steamX, steamX].forEach((sx, endIdx) => {
     [-0.10, 0.10].forEach((sy, sideIdx) => {
       const steamMesh = new THREE.Mesh(steamGeo, materials.arpHardenedFastener);
       steamMesh.name = `Steam_Bleed_Port_${endIdx === 0 ? 'Front' : 'Rear'}_${sideIdx === 0 ? 'B1' : 'B2'}`;

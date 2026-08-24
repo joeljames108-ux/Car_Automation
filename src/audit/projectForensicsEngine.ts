@@ -253,7 +253,7 @@ export class ProjectForensicsEngine {
     if (lower.includes('modularvehicle/') || lower.includes('vehicleassembly')) {
       return 'modular_vehicle';
     }
-    if (lower.includes('engine3d/') || lower.includes('assembly/iso3d') || lower.includes('cylinder')) {
+    if (lower.includes('engine3d/') || lower.includes('cylinder')) {
       return 'engine_assembly';
     }
     if (lower.includes('render') || lower.includes('scene') || lower.includes('viewport') || lower.includes('shader')) {

@@ -21,7 +21,14 @@ export type ComponentId =
   | "transmission"
   | "engine_cover"
   | "hybrid_motor"
-  | "inverter_ecu";
+  | "inverter_ecu"
+  | "chassis_frame"
+  | "suspension_front"
+  | "suspension_rear"
+  | "brakes"
+  | "wheels_tires"
+  | "aero_package"
+  | "electronics_ecu";
 
 export type AssemblyPhase =
   | "idle"
@@ -339,6 +346,104 @@ export const ENGINE_ASSEMBLY_COMPONENTS: AssemblyComponentMeta[] = [
       boltCount: 8,
     },
   },
+  {
+    id: "chassis_frame",
+    name: "Chassis Frame & Monocoque",
+    category: "Core",
+    description: "The core structural chassis tub supporting engine mounts, suspension pickups, and crash structures.",
+    dependencies: ["transmission"],
+    explodedOffset: { x: 0, y: 100 },
+    slotPosition: { x: 250, y: 250 },
+    estimatedDuration: 1800,
+    soundType: "heavy",
+    variants: DEFAULT_VARIANTS,
+    statDeltas: { hp: 0, torque: 0, weight: 180, reliability: 100, cost: 8500 },
+    tooltipAdvice: "Carbon monocoque tub increases torsional rigidity by 40% while cutting 35% chassis mass.",
+  },
+  {
+    id: "suspension_front",
+    name: "Front Wishbone Suspension",
+    category: "Bottom End",
+    description: "Double-wishbone pushrod front suspension geometry with active dampers and anti-roll bar.",
+    dependencies: ["chassis_frame"],
+    explodedOffset: { x: -80, y: 40 },
+    slotPosition: { x: 150, y: 260 },
+    estimatedDuration: 1400,
+    soundType: "metallic",
+    variants: DEFAULT_VARIANTS,
+    statDeltas: { hp: 0, torque: 0, weight: 35, reliability: 15, cost: 3200 },
+    tooltipAdvice: "Double-wishbone pushrod suspension maintains optimal camber gain through high-G cornering.",
+  },
+  {
+    id: "suspension_rear",
+    name: "Rear Multi-Link Suspension",
+    category: "Bottom End",
+    description: "Multi-link rear suspension with active skyhook dampers, toe links, and sway bar.",
+    dependencies: ["chassis_frame"],
+    explodedOffset: { x: 80, y: 40 },
+    slotPosition: { x: 350, y: 260 },
+    estimatedDuration: 1400,
+    soundType: "metallic",
+    variants: DEFAULT_VARIANTS,
+    statDeltas: { hp: 0, torque: 0, weight: 38, reliability: 15, cost: 3400 },
+    tooltipAdvice: "Multi-link rear suspension prevents snap-oversteer under aggressive power-on exit.",
+  },
+  {
+    id: "brakes",
+    name: "Carbon-Ceramic Brake System",
+    category: "Top End",
+    description: "6-piston monobloc aluminum calipers and carbon-ceramic vented brake discs.",
+    dependencies: ["suspension_front", "suspension_rear"],
+    explodedOffset: { x: -100, y: 80 },
+    slotPosition: { x: 140, y: 280 },
+    estimatedDuration: 1200,
+    soundType: "click",
+    variants: DEFAULT_VARIANTS,
+    statDeltas: { hp: 0, torque: 0, weight: 22, reliability: 20, cost: 4800 },
+    tooltipAdvice: "Carbon-ceramic rotors eliminate thermal fade during repeated high-speed circuit braking.",
+  },
+  {
+    id: "wheels_tires",
+    name: "Forged Magnesium Wheels & Tires",
+    category: "Top End",
+    description: "Centerlock forged magnesium wheels mounted with soft-compound competition slick tires.",
+    dependencies: ["brakes"],
+    explodedOffset: { x: 100, y: 80 },
+    slotPosition: { x: 360, y: 280 },
+    estimatedDuration: 1100,
+    soundType: "heavy",
+    variants: DEFAULT_VARIANTS,
+    statDeltas: { hp: 0, torque: 0, weight: 42, reliability: 10, cost: 3900 },
+    tooltipAdvice: "Forged magnesium wheels reduce un-sprung rotational inertia for rapid acceleration.",
+  },
+  {
+    id: "aero_package",
+    name: "Active Aerodynamic Package",
+    category: "Induction & Exhaust",
+    description: "Active DRS rear wing, carbon front splitter, underbody venturi tunnels, and side skirts.",
+    dependencies: ["wheels_tires"],
+    explodedOffset: { x: 0, y: -120 },
+    slotPosition: { x: 250, y: 120 },
+    estimatedDuration: 1500,
+    soundType: "slide",
+    variants: DEFAULT_VARIANTS,
+    statDeltas: { hp: 15, torque: 0, weight: 28, reliability: 15, cost: 6200 },
+    tooltipAdvice: "Active aerodynamic surfaces generate high-speed downforce while minimizing drag on straights.",
+  },
+  {
+    id: "electronics_ecu",
+    name: "Vehicle ECU & CAN-Bus Harness",
+    category: "Hybrid & Electric",
+    description: "Bosch Motorsport ECU, high-speed CAN-bus wiring harness, telemetry sensors, and TCU.",
+    dependencies: ["aero_package"],
+    explodedOffset: { x: 0, y: -60 },
+    slotPosition: { x: 250, y: 170 },
+    estimatedDuration: 1300,
+    soundType: "click",
+    variants: DEFAULT_VARIANTS,
+    statDeltas: { hp: 20, torque: 15, weight: 6, reliability: 25, cost: 3100 },
+    tooltipAdvice: "High-speed CAN-bus ECU coordinates launch control, ABS, and torque vectoring.",
+  },
 ];
 
 const HYBRID_MOTOR_VARIANTS: ComponentVariant[] = [
@@ -616,6 +721,13 @@ export const ICE_STAGE_SEQUENCE: ComponentId[] = [
   "radiator",
   "transmission",
   "engine_cover",
+  "chassis_frame",
+  "suspension_front",
+  "suspension_rear",
+  "brakes",
+  "wheels_tires",
+  "aero_package",
+  "electronics_ecu",
 ];
 
 export const EV_STAGE_SEQUENCE: ComponentId[] = [
@@ -741,6 +853,48 @@ export const STAGE_METADATA_MAP_ICE: Record<ComponentId, { title: string; short:
     subtitle: "Silicon Carbide (SiC) power inverter and dual-core hybrid energy controller",
     advice: "800V SiC MOSFET power electronics achieve 99% switching efficiency."
   },
+  chassis_frame: {
+    title: "Chassis Frame & Structural Monocoque",
+    short: "Chassis Frame",
+    subtitle: "Select carbon monocoque tub, aluminum spaceframe, or steel unibody",
+    advice: "Carbon monocoque tub increases torsional rigidity by 40% while cutting 35% chassis mass."
+  },
+  suspension_front: {
+    title: "Front Double-Wishbone Pushrod Suspension",
+    short: "Front Suspension",
+    subtitle: "Pushrod damper geometry, anti-roll bar rates, and steering knuckle",
+    advice: "Double-wishbone pushrod suspension maintains optimal camber gain through high-G cornering."
+  },
+  suspension_rear: {
+    title: "Rear Multi-Link / Skyhook Suspension",
+    short: "Rear Suspension",
+    subtitle: "Active skyhook dampers, rear toe control arms, and sway bar link",
+    advice: "Multi-link rear suspension prevents snap-oversteer under aggressive power-on exit."
+  },
+  brakes: {
+    title: "Carbon-Ceramic Brake System & Calipers",
+    short: "Brake System",
+    subtitle: "6-piston monobloc aluminum calipers and carbon-ceramic vented discs",
+    advice: "Carbon-ceramic rotors eliminate thermal fade during repeated high-speed circuit braking."
+  },
+  wheels_tires: {
+    title: "Forged Magnesium Wheels & Racing Slicks",
+    short: "Wheels & Tires",
+    subtitle: "Centerlock forged wheels and soft-compound sticky racing slicks",
+    advice: "Forged magnesium wheels reduce un-sprung rotational inertia for rapid acceleration."
+  },
+  aero_package: {
+    title: "Active Aerodynamic Wing & Splitters",
+    short: "Aero Package",
+    subtitle: "Active DRS rear wing, front splitter, and venturi diffuser ground effect",
+    advice: "Active aerodynamic surfaces generate high-speed downforce while minimizing drag on straights."
+  },
+  electronics_ecu: {
+    title: "Bosch Motorsport ECU & Wiring Harness",
+    short: "Vehicle ECU",
+    subtitle: "High-speed CAN-bus electronics, traction control, and telemetry sensor suite",
+    advice: "High-speed CAN-bus ECU coordinates launch control, ABS, and torque vectoring."
+  },
 };
 
 export const STAGE_METADATA_MAP_EV: Record<ComponentId, { title: string; short: string; subtitle: string; advice: string }> = {
@@ -845,6 +999,48 @@ export const STAGE_METADATA_MAP_EV: Record<ComponentId, { title: string; short: 
     short: "MCU Unit",
     subtitle: "Vehicle central powertrain control module",
     advice: "Coordinates multi-motor torque vectoring algorithms."
+  },
+  chassis_frame: {
+    title: "EV Skateboard Platform Chassis",
+    short: "EV Chassis",
+    subtitle: "Structural battery-integrated skateboard monocoque",
+    advice: "Integrated battery structural pack delivers extreme torsional rigidity."
+  },
+  suspension_front: {
+    title: "Front Double Wishbone Suspension",
+    short: "Front Suspension",
+    subtitle: "Inboard pushrod geometry with active magneto dampers",
+    advice: "Active damping isolates road disturbances while maintaining maximum tire contact patch."
+  },
+  suspension_rear: {
+    title: "Rear Multi-Link Suspension",
+    short: "Rear Suspension",
+    subtitle: "5-link rear suspension with integral link toe control",
+    advice: "Independent 5-link geometry prevents unwanted rear camber change under heavy lateral load."
+  },
+  brakes: {
+    title: "Brembo Carbon-Ceramic Brakes & EV Regen Blending",
+    short: "Carbon Brakes",
+    subtitle: "420mm CSiC rotors with 10-piston calipers & integrated brake-by-wire",
+    advice: "Electro-hydraulic brake-by-wire seamlessly blends mechanical braking with 350kW motor regen."
+  },
+  wheels_tires: {
+    title: "Forged Magnesium Wheels & Bespoke Slicks",
+    short: "Forged Wheels",
+    subtitle: "Ultra-lightweight forged wheels with bespoke high-grip compound tires",
+    advice: "Reduced rotational unsprung inertia improves transient acceleration and braking response."
+  },
+  aero_package: {
+    title: "Active Aerodynamics & Venturi Diffuser",
+    short: "Active Aero",
+    subtitle: "Active front splitters, rear wing DRS, and underbody ground-effect tunnels",
+    advice: "Active aerodynamic surfaces generate high-speed downforce while minimizing drag on straights."
+  },
+  electronics_ecu: {
+    title: "Bosch Motorsport ECU & Wiring Harness",
+    short: "Vehicle ECU",
+    subtitle: "High-speed CAN-bus electronics, traction control, and telemetry sensor suite",
+    advice: "High-speed CAN-bus ECU coordinates launch control, ABS, and torque vectoring."
   },
 };
 

@@ -10,7 +10,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import type { ComponentInstance3D } from '../types';
-import { globalAssetCache } from '../assets/glbAssetLoader';
+import { globalAssetCache, buildProceduralFallbackMesh } from '../assets/glbAssetLoader';
 import { globalMaterialLibrary } from '../materials/pbrMaterialSystem';
 import { useEngine3DStore } from '../store/useEngine3DStore';
 import { useHoverPulse } from '../animations/useSnapAnimation';
@@ -21,13 +21,15 @@ export interface ComponentMesh3DProps {
 }
 
 export const ComponentMesh3D: React.FC<ComponentMesh3DProps> = ({ instance }) => {
+  const engineConfig = useEngine3DStore((s) => s.engineConfig);
   const groupRef = useRef<THREE.Group>(null);
-  const [modelGroup, setModelGroup] = useState<THREE.Group | null>(null);
+  const [modelGroup, setModelGroup] = useState<THREE.Group | null>(() => {
+    return buildProceduralFallbackMesh(instance.type, engineConfig || undefined);
+  });
   const [isHovered, setIsHovered] = useState<boolean>(false);
 
   const selectedId = useEngine3DStore((s) => s.selectedInstanceId);
   const showWireframe = useEngine3DStore((s) => s.showWireframe);
-  const engineConfig = useEngine3DStore((s) => s.engineConfig);
   const selectComponent = useEngine3DStore((s) => s.selectComponent);
   const hoverComponent = useEngine3DStore((s) => s.hoverComponent);
 
@@ -55,9 +57,9 @@ export const ComponentMesh3D: React.FC<ComponentMesh3DProps> = ({ instance }) =>
 
     return () => {
       isMounted = false;
-      globalAssetCache.releaseInstance(instance.manifestRef.assetPath);
+      globalAssetCache.releaseInstance(instance.manifestRef.assetPath, engineConfig?.layout);
     };
-  }, [instance.manifestRef.assetPath, instance.type, engineConfig?.layout]);
+  }, [instance.manifestRef.assetPath, instance.type, engineConfig?.layout, instance.instanceId]);
 
   // ── 2. Real-Time Transform, Parametric Sizing & Metallurgy Updates ──
   useFrame(() => {
@@ -79,7 +81,11 @@ export const ComponentMesh3D: React.FC<ComponentMesh3DProps> = ({ instance }) =>
     // Apply authentic metallurgy PBR material shaders, highlights, and wireframes
     if (modelGroup) {
       const matLib = globalMaterialLibrary;
-      const variantMaterial = matLib.resolveMaterialForVariant(instance.variant?.id, instance.type);
+      const variantMaterial = matLib.resolveMaterialForVariant(
+        instance.variant?.id,
+        instance.type,
+        engineConfig || undefined
+      );
 
       modelGroup.traverse((child) => {
         if ((child as THREE.Mesh).isMesh) {
@@ -102,7 +108,15 @@ export const ComponentMesh3D: React.FC<ComponentMesh3DProps> = ({ instance }) =>
               mesh.name.includes('Hose') ||
               mesh.name.includes('Silicone') ||
               mesh.name.includes('Blade') ||
-              mesh.name.includes('Cap');
+              mesh.name.includes('Cap') ||
+              mesh.name.includes('Isolator') ||
+              mesh.name.includes('Sensor') ||
+              mesh.name.includes('Petcock') ||
+              mesh.name.includes('Flap') ||
+              mesh.name.includes('Harness') ||
+              mesh.name.includes('Grille') ||
+              mesh.name.includes('Anodized') ||
+              mesh.name.includes('Weld');
 
             if (!isProtectedAccent && mesh.material !== variantMaterial) {
               mesh.material = variantMaterial;

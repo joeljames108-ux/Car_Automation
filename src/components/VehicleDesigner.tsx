@@ -13,12 +13,18 @@ import { VehicleWorkshopPanel } from "./vehicleAssembly/VehicleWorkshopPanel";
 import { VehicleCompletionModal } from "./vehicleAssembly/VehicleCompletionModal";
 import { ExteriorDesignerIntegration } from "./vehicleAssembly/exterior/ExteriorDesignerIntegration";
 import { VehicleConstructionStudio } from "./vehicleAssembly/VehicleConstructionStudio";
+import { MasterVehicleStudio } from "./vehicleAssembly/MasterVehicleStudio";
+import { VehicleComparisonStudio } from "./vehicleAssembly/VehicleComparisonStudio";
+import { GrandAutomotiveStudioHub } from "./GrandAutomotiveStudioHub";
+import { RoboticFactorySequencer } from "./assembly/RoboticFactorySequencer";
+import { SuspensionMasterStudio } from "./chassis/SuspensionMasterStudio";
+import { Box, GitCompare, Crown, Activity } from "lucide-react";
 
 export function VehicleDesigner() {
   const { design, sim, setDesign, updateVehicle, updateElectronics } = useDesign();
   const v = design.vehicle;
 
-  const [workspaceMode, setWorkspaceMode] = useState<"chassis_build" | "exterior_build" | "parameters">("chassis_build");
+  const [workspaceMode, setWorkspaceMode] = useState<"grand_suite" | "master_studio" | "suspension_studio" | "chassis_build" | "exterior_build" | "compare_studio" | "factory_line" | "parameters">("grand_suite");
   const [showCompletionModal, setShowCompletionModal] = useState(false);
   const vehAssembly = useVehicleAssemblyStore(v);
 
@@ -32,20 +38,26 @@ export function VehicleDesigner() {
   return (
     <div className="space-y-4">
       {/* Top Navigation & Workspace Mode Switcher */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3.5 rounded-2xl bg-[#0b0f19]/90 border border-cyan-500/30 backdrop-blur-xl shadow-lg">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3.5 rounded-2xl backdrop-blur-xl shadow-lg" style={{backgroundColor: 'rgba(255,248,235,0.85)', border: '1px solid rgba(217,166,78,0.4)'}}>
         <div className="flex items-center gap-3">
-          <div className="p-2 rounded-xl bg-cyan-500/20 text-cyan-300 border border-cyan-500/40">
+          <div className="p-2 rounded-xl" style={{backgroundColor: 'rgba(217,166,78,0.2)', color: '#92400E', border: '1px solid rgba(217,166,78,0.4)'}}>
             <Car size={20} />
           </div>
           <div>
-            <h3 className="text-sm font-extrabold text-slate-100 tracking-tight flex items-center gap-2">
-              <span>MODULAR glTF VEHICLE CONSTRUCTION SYSTEM</span>
-              <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/40">
-                50 CHASSIS CAD
+            <h3 className="text-sm font-extrabold tracking-tight flex items-center gap-2" style={{color: '#451A03'}}>
+              <span>✦ UNIFIED MODULAR 3D VEHICLE STUDIO ✦</span>
+              <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full" style={{backgroundColor: 'rgba(217,166,78,0.2)', color: '#92400E', border: '1px solid rgba(217,166,78,0.4)'}}>
+                ⚙ 12 SUBSYSTEMS
               </span>
             </h3>
-            <p className="text-[11px] text-slate-400 font-mono">
-              {workspaceMode === "chassis_build"
+            <p className="text-[11px] font-mono" style={{color: '#92400E', opacity: 0.8}}>
+              {workspaceMode === "master_studio"
+                ? "Full 3D Vehicle Scene Graph • Exploded Views • Real-Time Multi-Physics Delta Tracking"
+                : workspaceMode === "suspension_studio"
+                ? "Interactive 3D Suspension Kinematics Studio • Wheel Bump Travel & Active MR Damper Telemetry"
+                : workspaceMode === "compare_studio"
+                ? "Vehicle Engineering Comparison Studio • Benchmark Car A vs Car B Lap Times"
+                : workspaceMode === "chassis_build"
                 ? "10 Body Types • 50 Unique Chassis Architectures • 12 Assembly Stages"
                 : workspaceMode === "exterior_build"
                 ? "3D/2D Exterior Body-in-White Assembly Workstation — Panels, Glass & Paint Booth"
@@ -54,47 +66,126 @@ export function VehicleDesigner() {
           </div>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-1.5">
           {/* Workspace Mode Switcher Buttons */}
+          <button
+            onClick={() => setWorkspaceMode("grand_suite")}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-mono font-extrabold transition-all shadow-md ${
+              workspaceMode === "grand_suite"
+                ? "bg-gradient-to-r from-amber-400 to-orange-500 text-white shadow-[0_0_15px_rgba(217,166,78,0.6)]"
+                : "text-amber-700 border border-amber-300/40 hover:border-amber-400"
+            }`}
+          >
+            <Crown size={14} />
+            <span>GRAND SUITE</span>
+            <span className="text-[8px] ml-0.5">👑</span>
+          </button>
+
+          <button
+            onClick={() => setWorkspaceMode("master_studio")}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-mono font-extrabold transition-all shadow-md ${
+              workspaceMode === "master_studio"
+                ? "bg-amber-500 text-white shadow-[0_0_15px_rgba(217,166,78,0.5)]"
+                : "text-amber-700 border border-amber-300/40 hover:border-amber-400"
+            }`}
+          >
+            <Box size={14} />
+            <span>3D VEHICLE STUDIO</span>
+            <span className="text-[8px] ml-0.5">🚗</span>
+          </button>
+
+          <button
+            onClick={() => setWorkspaceMode("suspension_studio")}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-mono font-extrabold transition-all shadow-md ${
+              workspaceMode === "suspension_studio"
+                ? "bg-amber-500 text-white shadow-[0_0_15px_rgba(217,166,78,0.6)]"
+                : "text-amber-700 border border-amber-300/40 hover:border-amber-400"
+            }`}
+          >
+            <Activity size={14} />
+            <span>SUSPENSION 3D</span>
+            <span className="text-[8px] ml-0.5">🔧</span>
+          </button>
+
+          <button
+            onClick={() => setWorkspaceMode("compare_studio")}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-mono font-extrabold transition-all shadow-md ${
+              workspaceMode === "compare_studio"
+                ? "bg-amber-500 text-white shadow-[0_0_15px_rgba(217,166,78,0.5)]"
+                : "text-amber-700 border border-amber-300/40 hover:border-amber-400"
+            }`}
+          >
+            <GitCompare size={14} />
+            <span>COMPARE A/B</span>
+          </button>
+
           <button
             onClick={() => setWorkspaceMode("chassis_build")}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-mono font-extrabold transition-all shadow-md ${
               workspaceMode === "chassis_build"
-                ? "bg-cyan-500 text-slate-950 shadow-[0_0_15px_rgba(6,182,212,0.5)]"
-                : "bg-slate-900 text-cyan-300 border border-cyan-500/40 hover:border-cyan-400"
+                ? "bg-amber-500 text-amber-950 shadow-[0_0_15px_rgba(245,158,11,0.4)]"
+                : "bg-slate-900/60 text-amber-300 border border-amber-600/40 hover:border-amber-500"
             }`}
           >
             <Wrench size={14} />
-            <span>MODULAR CONSTRUCTION</span>
+            <span>50 CHASSIS</span>
           </button>
 
           <button
             onClick={() => setWorkspaceMode("exterior_build")}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-mono font-extrabold transition-all shadow-md ${
               workspaceMode === "exterior_build"
-                ? "bg-cyan-500 text-slate-950 shadow-[0_0_15px_rgba(6,182,212,0.5)]"
-                : "bg-slate-900 text-cyan-300 border border-cyan-500/40 hover:border-cyan-400"
+                ? "bg-emerald-500 text-slate-950 shadow-[0_0_15px_rgba(16,185,129,0.4)]"
+                : "bg-slate-900/60 text-emerald-300 border border-emerald-600/40 hover:border-emerald-500"
             }`}
           >
             <Sparkles size={14} />
-            <span>EXTERIOR BODY-IN-WHITE</span>
+            <span>BODY-IN-WHITE</span>
           </button>
 
           <button
             onClick={() => setWorkspaceMode("parameters")}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-mono font-extrabold transition-all shadow-md ${
               workspaceMode === "parameters"
-                ? "bg-cyan-500 text-slate-950 shadow-[0_0_15px_rgba(6,182,212,0.5)]"
-                : "bg-slate-900 text-cyan-300 border border-cyan-500/40 hover:border-cyan-400"
+                ? "bg-slate-200 text-slate-950"
+                : "bg-slate-900/60 text-slate-400 border border-slate-700 hover:border-slate-500"
             }`}
           >
             <Settings size={14} />
-            <span>PARAMETERS</span>
+            <span>PARAMS</span>
           </button>
         </div>
       </div>
 
       <PresetQuickSelect />
+
+      {/* ── GRAND AUTOMOTIVE ENGINEERING SUITE ── */}
+      {workspaceMode === "grand_suite" && (
+        <div className="animate-stage-transition-enter">
+          <GrandAutomotiveStudioHub />
+        </div>
+      )}
+
+      {/* ── 0. UNIFIED MASTER 3D VEHICLE STUDIO ── */}
+      {workspaceMode === "master_studio" && (
+        <div className="animate-stage-transition-enter">
+          <MasterVehicleStudio />
+        </div>
+      )}
+
+      {/* ── 0B. 3D SUSPENSION & CHASSIS DYNAMICS STUDIO ── */}
+      {workspaceMode === "suspension_studio" && (
+        <div className="animate-stage-transition-enter">
+          <SuspensionMasterStudio />
+        </div>
+      )}
+
+      {/* ── 0C. VEHICLE COMPARISON STUDIO (CAR A vs CAR B) ── */}
+      {workspaceMode === "compare_studio" && (
+        <div className="animate-stage-transition-enter">
+          <VehicleComparisonStudio />
+        </div>
+      )}
 
       {/* ── 1. MODULAR glTF VEHICLE CONSTRUCTION SYSTEM ── */}
       {workspaceMode === "chassis_build" && (
@@ -137,10 +228,10 @@ export function VehicleDesigner() {
             {/* Dedicated Top Section: Drivetrain Layout (FWD / RWD / AWD) & Engine Placement */}
             <Section title="Drivetrain Layout & Engine Placement" icon={<Cpu size={16} className="text-cyan-400" />}>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="bg-cyan-950/20 border border-cyan-500/30 rounded-xl p-3">
-                  <label className="label-mono mb-2 flex items-center justify-between font-bold text-cyan-300">
+                <div                className="border rounded-xl p-3" style={{backgroundColor: 'rgba(217,166,78,0.1)', borderColor: 'rgba(217,166,78,0.3)'}}>
+                  <label className="label-mono mb-2 flex items-center justify-between font-bold" style={{color: '#92400E'}}>
                     <span>Drivetrain (Drive Type)</span>
-                    <span className="px-2 py-0.5 rounded bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 text-[11px] font-mono">
+                    <span className="px-2 py-0.5 rounded text-[11px] font-mono" style={{backgroundColor: 'rgba(217,166,78,0.2)', color: '#92400E', border: '1px solid rgba(217,166,78,0.3)'}}>
                       {DRIVE_TYPES[v.driveType || "rwd"]?.shortLabel || "RWD"}
                     </span>
                   </label>
@@ -267,6 +358,21 @@ export function VehicleDesigner() {
                   unit="N/mm"
                   onChange={(val) => updateVehicle({ springRateR: val })}
                 />
+              </div>
+
+              <div className="mt-4 p-3 rounded-xl bg-blue-950/40 border border-blue-500/30 flex flex-col sm:flex-row sm:items-center justify-between gap-2 shadow-inner">
+                <div className="flex items-center gap-2 text-xs text-blue-300 font-mono">
+                  <Activity size={15} className="text-blue-400 shrink-0" />
+                  <span>Interactive Kinematics, Wheel Travel & Active MR Damper Solver</span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setWorkspaceMode("suspension_studio")}
+                  className="px-3 py-1.5 rounded-lg bg-gradient-to-r from-blue-500 to-cyan-400 hover:from-blue-400 hover:to-cyan-300 text-slate-950 text-xs font-bold font-mono transition-all shadow-md flex items-center justify-center gap-1.5 shrink-0"
+                >
+                  <Sparkles size={12} />
+                  <span>Launch 3D Suspension Studio</span>
+                </button>
               </div>
             </Section>
 

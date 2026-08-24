@@ -23,6 +23,7 @@ import {
   WindTunnelState,
   AerodynamicForcesResult,
 } from '../../sim/aerodynamics/cfdWindTunnelSimulator';
+import { LbmWindTunnelSolver } from '../../sim/advancedPhysics/lbmWindTunnelSolver';
 import { HighFidelitySedanChassisGenerator } from '../../exterior3d/generators/highFidelitySedanChassisGenerator';
 import { StudioEnvironmentGenerator } from '../../exterior3d/environment/StudioEnvironmentGenerator';
 
@@ -256,6 +257,14 @@ export const AerodynamicWindTunnelViewport: React.FC = () => {
               <div className="flex justify-between">
                 <span className="text-gray-400">Aero Balance (Front):</span>
                 <span className="font-mono font-bold text-cyan-400">{aeroResults.aeroBalanceFrontPct}% F / {(100 - aeroResults.aeroBalanceFrontPct).toFixed(1)}% R</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-gray-400">LBM Reynolds No:</span>
+                <span className="font-mono font-bold text-purple-400">{LbmWindTunnelSolver.solveFlowField({ inletVelocityKmH: airspeedKmh, frontalAreaM2: 2.1, rideHeightMm: rideHeightFrontMm, diffuserRampAngleDeg: rearWingAngleDeg }).reynoldsNumber.toLocaleString()}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-gray-400">Ground Effect Suction:</span>
+                <span className="font-mono font-bold text-emerald-400">+{LbmWindTunnelSolver.solveFlowField({ inletVelocityKmH: airspeedKmh, frontalAreaM2: 2.1, rideHeightMm: rideHeightFrontMm, diffuserRampAngleDeg: rearWingAngleDeg }).groundEffectSuctionGainPct}%</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-400">Lift-to-Drag (L/D):</span>

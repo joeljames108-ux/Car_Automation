@@ -4,7 +4,7 @@ import {
   Sofa, Factory, FlaskConical, Ruler, Paintbrush, Wind, Newspaper,
   Monitor, Microscope, LayoutDashboard, Trophy, Warehouse, GitCompare,
   TrendingUp, ShieldCheck, DollarSign, Cpu, GitBranch,
-  LayoutGrid, Bell, SlidersHorizontal,
+  LayoutGrid, Bell, SlidersHorizontal, Box, Truck, Volume2, Gauge, Navigation
 } from "lucide-react";
 import { EngineeringLog } from "./components/EngineeringLog";
 import { DesignProvider, useDesign } from "./state/DesignContext";
@@ -23,9 +23,13 @@ import { Search, Command as CmdIcon, Bot, Wrench } from "lucide-react";
 import { VisionGlassHeader } from "./components/ui/VisionGlassHeader";
 import { VisionGlassDock } from "./components/ui/VisionGlassDock";
 import { VisionGlassToolbar } from "./components/ui/VisionGlassToolbar";
+import { UI1Layout } from "./components/ui/UI1Layout";
 
 
-export type WorkspaceCategory = "engineering" | "simulation" | "world";
+import { Sparkles as SparklesIcon } from "lucide-react";
+
+
+export type WorkspaceCategory = "engineering" | "studios" | "simulation" | "world";
 
 interface StageItem {
   id: Stage;
@@ -46,14 +50,26 @@ const STAGES: StageItem[] = [
   { id: "infotainment", label: "Electronics", icon: <Monitor size={14} />, category: "engineering" },
   { id: "safety", label: "Safety Center", icon: <ShieldCheck size={14} />, category: "engineering" },
 
+  // --- Design Studios Hub ---
+  { id: "studio", label: "Grand Studio Hub", icon: <SparklesIcon size={14} />, category: "studios" },
+  { id: "transmission3d", label: "3D Transmission Studio", icon: <Cog size={14} />, category: "studios" },
+  { id: "track_layout", label: "Track Layouts Studio", icon: <Navigation size={14} />, category: "studios" },
+  { id: "f1_constructor", label: "🏎️ F1 Constructor Studio", icon: <Flag size={14} />, category: "studios" },
+  { id: "hypercar_constructor", label: "🏆 Hypercar WEC Studio", icon: <Trophy size={14} />, category: "studios" },
+  { id: "graphics3d", label: "3D Viewport Studio", icon: <Box size={14} />, category: "studios" },
+  { id: "suspension3d", label: "3D Suspension Studio", icon: <Activity size={14} />, category: "studios" },
+  { id: "ai", label: "Apex AI Studio", icon: <Bot size={14} />, category: "studios" },
+
   // --- Simulation & Testing ---
   { id: "simulation", label: "Simulation", icon: <Activity size={14} />, category: "simulation" },
+  { id: "nvh", label: "NVH Audio Lab", icon: <Volume2 size={14} />, category: "simulation" },
   { id: "testing", label: "Testing Lab", icon: <FlaskConical size={14} />, category: "simulation" },
   { id: "race", label: "Race Track", icon: <Flag size={14} />, category: "simulation" },
   { id: "stats", label: "Telemetry Stats", icon: <BarChart3 size={14} />, category: "simulation" },
 
   // --- World & Racing ---
   { id: "garage", label: "Garage", icon: <Warehouse size={14} />, category: "world" },
+  { id: "supplyChain", label: "Supply Chain", icon: <Truck size={14} />, category: "world" },
   { id: "compare", label: "Compare", icon: <GitCompare size={14} />, category: "world" },
   { id: "economy", label: "Economy", icon: <TrendingUp size={14} />, category: "world" },
   { id: "motorsport", label: "Motorsport", icon: <Trophy size={14} />, category: "world" },
@@ -64,7 +80,8 @@ const STAGES: StageItem[] = [
 ];
 
 const WORKSPACE_CATEGORIES: { id: WorkspaceCategory; label: string; icon: React.ReactNode }[] = [
-  { id: "engineering", label: "Engineering Studio", icon: <Wrench size={14} /> },
+  { id: "engineering", label: "Engineering", icon: <Wrench size={14} /> },
+  { id: "studios", label: "Studios Suite", icon: <SparklesIcon size={14} /> },
   { id: "simulation", label: "Sim & Testing", icon: <Activity size={14} /> },
   { id: "world", label: "World & Racing", icon: <Trophy size={14} /> },
 ];
@@ -205,14 +222,21 @@ function AppInner() {
     return () => window.removeEventListener("keydown", handleGlobalKeydown);
   }, []);
 
+  const designRef = React.useRef(design);
+  designRef.current = design;
+  const simRef = React.useRef(sim);
+  simRef.current = sim;
+  const carConceptRef = React.useRef(carConcept);
+  carConceptRef.current = carConcept;
+
   // Initialize Autonomous AI Engineering Division (All 25 Domain Agents)
   useEffect(() => {
     const orchestrator = AgentOrchestrator.getInstance();
     registerAllDomainAgents(orchestrator);
 
     orchestrator.start(
-      () => ({ engine: design.engine, vehicle: design.vehicle, carConcept }),
-      () => sim
+      () => ({ engine: designRef.current.engine, vehicle: designRef.current.vehicle, carConcept: carConceptRef.current }),
+      () => simRef.current
     );
 
     return () => {
@@ -221,6 +245,16 @@ function AppInner() {
   }, []);
 
   const activeCategoryStages = STAGES.filter(s => s.category === activeCategory);
+
+  // ===== UI 1: Kinetic Horizon — Dedicated Separate UI/UX =====
+  if (uiTheme === "theme1") {
+    return (
+      <VisionGlassErrorBoundary>
+        <UI1Layout />
+      </VisionGlassErrorBoundary>
+    );
+  }
+
   const isVisionGlass = uiTheme === "theme4";
 
   // ===== UI 4: Vision Glass — Completely separate UI/UX =====
@@ -264,6 +298,7 @@ function AppInner() {
           <VisionGlassToolbar
             actions={[
               { id: "command", icon: <LayoutGrid size={17} />, label: "Dashboard", onClick: () => setStage("command"), isActive: stage === "command" },
+              { id: "studio", icon: <SparklesIcon size={17} />, label: "Studio Hub", onClick: () => setStage("studio"), isActive: stage === "studio" },
               { id: "search", icon: <Search size={17} />, label: "Search (Ctrl+K)", onClick: () => setCmdPaletteOpen(true) },
               { id: "simulation", icon: <Activity size={17} />, label: "Analytics", onClick: () => setStage("simulation"), isActive: stage === "simulation" },
               { id: "ai", icon: <Bot size={17} />, label: "Apex AI Studio", onClick: () => setStage("ai"), isActive: stage === "ai" },

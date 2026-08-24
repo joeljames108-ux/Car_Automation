@@ -5,17 +5,23 @@
 // orbit camera controller, and dynamic 3D exterior component meshes.
 // ===================================================================
 
-import React from "react";
+import React, { useMemo } from "react";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls, ContactShadows } from "@react-three/drei";
 import { useExterior3DStore } from "../store/useExterior3DStore";
 import { ExteriorLighting3D } from "./ExteriorLighting3D";
 import { ExteriorComponentMesh3D } from "./ExteriorComponentMesh3D";
+import { Car3DGeometryGenerator } from "../geometry/car3dGeometryGenerator";
 
 export const ExteriorScene3D: React.FC = () => {
   const instances = useExterior3DStore((s) => s.instances);
   const selectInstance3D = useExterior3DStore((s) => s.selectInstance3D);
   const hoverInstance3D = useExterior3DStore((s) => s.hoverInstance3D);
+  const instanceList = Object.values(instances);
+
+  const fallbackCarMesh = useMemo(() => {
+    return Car3DGeometryGenerator.buildCar3DGroup("SUPERCAR_MID_ENGINE");
+  }, []);
 
   return (
     <div className="w-full h-full relative">
@@ -27,17 +33,21 @@ export const ExteriorScene3D: React.FC = () => {
         {/* Studio Lighting */}
         <ExteriorLighting3D />
 
-        {/* Dynamic Exterior Subsystems */}
+        {/* Dynamic Exterior Subsystems or Fallback 3D Vehicle */}
         <group position={[0, -0.2, 0]}>
-          {Object.values(instances).map((inst) => (
-            <ExteriorComponentMesh3D
-              key={inst.instanceId}
-              instance={inst}
-              onClick={() => selectInstance3D(inst.type)}
-              onPointerOver={() => hoverInstance3D(inst.type)}
-              onPointerOut={() => hoverInstance3D(null)}
-            />
-          ))}
+          {instanceList.length > 0 ? (
+            instanceList.map((inst) => (
+              <ExteriorComponentMesh3D
+                key={inst.instanceId}
+                instance={inst}
+                onClick={() => selectInstance3D(inst.type)}
+                onPointerOver={() => hoverInstance3D(inst.type)}
+                onPointerOut={() => hoverInstance3D(null)}
+              />
+            ))
+          ) : (
+            <primitive object={fallbackCarMesh} />
+          )}
         </group>
 
         {/* Soft Ground Contact Shadow Catcher */}

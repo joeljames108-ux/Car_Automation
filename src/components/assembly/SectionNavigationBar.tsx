@@ -192,10 +192,10 @@ export function SectionNavigationBar({
                 <span
                   className={`text-[9px] px-1.5 py-0.2 rounded font-mono ${
                     isCurrent
-                      ? "bg-black/20 text-black font-extrabold"
+                      ? "bg-amber-200/60 text-amber-900 font-extrabold"
                       : isInstalled
-                      ? "bg-emerald-500/20 text-emerald-300"
-                      : "bg-base-900 text-slate-500"
+                      ? "bg-amber-100/60 text-amber-700"
+                      : "bg-amber-100/50 text-amber-600"
                   }`}
                 >
                   #{stage.index + 1}

@@ -8,4 +8,18 @@ export default defineConfig({
       ignored: ["**/dist/**"],
     },
   },
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          "vendor-three": ["three", "@react-three/fiber", "@react-three/drei", "@gltf-transform/core", "@gltf-transform/extensions"],
+          "vendor-icons": ["lucide-react"],
+          "vendor-motion": ["framer-motion"],
+          "vendor-react": ["react", "react-dom"],
+          "vendor-state": ["zustand"],
+        },
+      },
+    },
+    chunkSizeWarningLimit: 1000,
+  },
 });

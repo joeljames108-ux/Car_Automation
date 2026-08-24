@@ -3,15 +3,22 @@
 // ============================================================================
 // Solid-modeling engineering generator for a 6-throw, 12-counterweight forged
 // nitrided 4340 alloy steel crankshaft. Features 7 micro-polished main journals,
-// gun-drilled hollow crankpin lightening bores, knife-edged teardrop counterweights
-// with embedded heavy tungsten balancing slugs, 60-2 timing reluctor wheel teeth,
-// double-keyway front timing snout, and 8-bolt lightweight flywheel interface flange.
+// cross-drilled pressurized oil galleries, gun-drilled hollow crankpin lightening bores,
+// knife-edged teardrop counterweights with embedded heavy tungsten balancing slugs,
+// rear centrifugal oil flinger disc, main seal step grooves, 60-2 timing reluctor wheel,
+// dual Woodruff keys with harmonic damper elastomer isolator, and 8-bolt flywheel flange.
 // ============================================================================
 
 import * as THREE from 'three';
 import { GLTFExporter } from 'three/examples/jsm/exporters/GLTFExporter.js';
+import type { EngineConfig } from '../../sim/types';
 import { globalMaterialLibrary } from '../materials/pbrMaterialSystem';
 import { V12_CRANKSHAFT_ATTACHMENTS } from '../attachmentMaps/v12AttachmentMap';
+import {
+  createHexBoltHead,
+  createORingSeal,
+  createThreadedShaft,
+} from './geometryDetailUtils';
 
 // Polyfill Node.js FileReader if executing in CLI
 if (typeof globalThis !== 'undefined' && typeof (globalThis as any).FileReader === 'undefined') {
@@ -66,16 +73,35 @@ export const V12_CRANK_SPECS: CrankshaftSpec = {
 /**
  * Builds the complete ultra-high-fidelity 3D scene graph for the 60° V12 crankshaft.
  */
-export function buildCrankshaftScene(): THREE.Scene {
+export function buildCrankshaftScene(configOrThrows?: Partial<EngineConfig> | number): THREE.Scene {
   const scene = new THREE.Scene();
-  scene.name = 'V12_Forged_Crankshaft_Scene';
+  scene.name = 'Forged_Crankshaft_Scene';
 
   const rootGroup = new THREE.Group();
-  rootGroup.name = '02_V12_Crankshaft_Assembly_Master';
+  rootGroup.name = 'Crankshaft_Assembly_Master';
   scene.add(rootGroup);
 
+  let throwCount = 6;
+  if (typeof configOrThrows === 'number') {
+    throwCount = configOrThrows;
+  } else if (configOrThrows?.layout) {
+    const l = configOrThrows.layout;
+    throwCount =
+      l === 'i3' || l === 'v6' ? 3 :
+      l === 'i4' || l === 'boxer4' || l === 'v8' || l === 'w16' ? 4 :
+      l === 'v10' ? 5 :
+      6;
+  }
+
   const matLib = globalMaterialLibrary;
-  const matNitrided = matLib.getNitridedCrank();
+  const crankMatType = typeof configOrThrows === 'object' ? (configOrThrows?.crank || 'forged_steel') : 'forged_steel';
+  const matPrimaryCrank =
+    crankMatType === 'cast_iron' ? matLib.getCastIron() :
+    crankMatType === 'billet_steel' ? matLib.getMachinedBillet() :
+    crankMatType === 'titanium' ? matLib.getTitaniumAerospace() :
+    matLib.getNitridedCrank();
+
+  const matNitrided = matPrimaryCrank;
   const matMicroPolished = matLib.getMachinedBillet();
   const matTungsten = new THREE.MeshStandardMaterial({
     name: 'Tungsten_Heavy_Metal_Slug',
@@ -85,11 +111,15 @@ export function buildCrankshaftScene(): THREE.Scene {
   });
   const matGoldReluctor = matLib.getGoldAnodized();
   const matDarkIron = matLib.getCastAluminum();
+  const matElastomer = matLib.getRubberOring();
 
   const spec = V12_CRANK_SPECS;
+  const throwSpacingM = 0.108;
+  const crankLengthM = (throwCount - 1) * throwSpacingM + 0.220;
+  const halfSpanX = ((throwCount - 1) * throwSpacingM) / 2;
 
   // ─── 1. SOLID CORE CRANKSHAFT AXIS LINE ───
-  const coreGeo = new THREE.CylinderGeometry(spec.mainJournalRadiusM - 0.003, spec.mainJournalRadiusM - 0.003, spec.totalLengthM, 36);
+  const coreGeo = new THREE.CylinderGeometry(spec.mainJournalRadiusM - 0.003, spec.mainJournalRadiusM - 0.003, crankLengthM, 48);
   coreGeo.rotateZ(Math.PI / 2);
   const coreMesh = new THREE.Mesh(coreGeo, matNitrided);
   coreMesh.name = 'Crankshaft_Forged_Core_Shaft';
@@ -97,13 +127,14 @@ export function buildCrankshaftScene(): THREE.Scene {
   coreMesh.receiveShadow = true;
   rootGroup.add(coreMesh);
 
-  // ─── 2. 7 MICRO-POLISHED MAIN JOURNALS WITH OIL SUPPLY HOLES ───
-  for (let m = 0; m < 7; m++) {
-    const mx = -0.30 + m * (0.60 / 6);
-    const isThrustJournal = m === 3; // Center Main #4
+  // ─── 2. MAIN JOURNALS WITH OIL SUPPLY HOLES ───
+  const mainJournalCount = throwCount + 1;
+  for (let m = 0; m < mainJournalCount; m++) {
+    const mx = -halfSpanX - throwSpacingM * 0.5 + m * throwSpacingM;
+    const isThrustJournal = m === Math.floor(mainJournalCount / 2);
 
-    // Main Journal Sleeve
-    const journalGeo = new THREE.CylinderGeometry(spec.mainJournalRadiusM, spec.mainJournalRadiusM, spec.mainJournalWidthM, 36);
+    // Main Journal Sleeve (Smooth 48 segments)
+    const journalGeo = new THREE.CylinderGeometry(spec.mainJournalRadiusM, spec.mainJournalRadiusM, spec.mainJournalWidthM, 48);
     journalGeo.rotateZ(Math.PI / 2);
     const journalMesh = new THREE.Mesh(journalGeo, matMicroPolished);
     journalMesh.name = `Main_Bearing_Journal_${m + 1}`;
@@ -112,9 +143,17 @@ export function buildCrankshaftScene(): THREE.Scene {
     journalMesh.receiveShadow = true;
     rootGroup.add(journalMesh);
 
+    // Bearing Cap Alignment Register Lip (Centering shoulder)
+    const registerLipGeo = new THREE.TorusGeometry(spec.mainJournalRadiusM + 0.002, 0.0012, 12, 48);
+    registerLipGeo.rotateY(Math.PI / 2);
+    const registerLipMesh = new THREE.Mesh(registerLipGeo, matNitrided);
+    registerLipMesh.name = `Main_Register_Lip_${m + 1}`;
+    registerLipMesh.position.set(mx, 0, 0);
+    rootGroup.add(registerLipMesh);
+
     // Journal Oil Chamfer Fillet Bands
     [-spec.mainJournalWidthM / 2, spec.mainJournalWidthM / 2].forEach((cx, cIdx) => {
-      const chamferGeo = new THREE.TorusGeometry(spec.mainJournalRadiusM, 0.0018, 12, 32);
+      const chamferGeo = new THREE.TorusGeometry(spec.mainJournalRadiusM, 0.0018, 12, 48);
       chamferGeo.rotateY(Math.PI / 2);
       const chamferMesh = new THREE.Mesh(chamferGeo, matNitrided);
       chamferMesh.name = `Main_Journal_Chamfer_${m + 1}_${cIdx === 0 ? 'F' : 'R'}`;
@@ -129,10 +168,10 @@ export function buildCrankshaftScene(): THREE.Scene {
     oilDrillingMesh.position.set(mx, spec.mainJournalRadiusM - 0.004, 0);
     rootGroup.add(oilDrillingMesh);
 
-    // Thrust Washers on Center Main #4
+    // Integrated Thrust Collars on Center Main
     if (isThrustJournal) {
       [-spec.mainJournalWidthM / 2 - 0.002, spec.mainJournalWidthM / 2 + 0.002].forEach((tx, tIdx) => {
-        const thrustGeo = new THREE.CylinderGeometry(spec.mainJournalRadiusM + 0.014, spec.mainJournalRadiusM + 0.014, 0.003, 36);
+        const thrustGeo = new THREE.CylinderGeometry(spec.mainJournalRadiusM + 0.014, spec.mainJournalRadiusM + 0.014, 0.003, 48);
         thrustGeo.rotateZ(Math.PI / 2);
         const thrustMesh = new THREE.Mesh(thrustGeo, matMicroPolished);
         thrustMesh.name = `Integrated_Thrust_Collar_${tIdx === 0 ? 'Front' : 'Rear'}`;
@@ -143,41 +182,43 @@ export function buildCrankshaftScene(): THREE.Scene {
     }
   }
 
-  // ─── 3. 6 CRANKPINS & 12 AERODYNAMIC KNIFE-EDGED COUNTERWEIGHTS ───
-  // Even-fire 60° V12 crankpin offsets: 0°, 120°, 240°, 240°, 120°, 0°
-  const crankpinAngles = [0, (2 * Math.PI) / 3, (4 * Math.PI) / 3, (4 * Math.PI) / 3, (2 * Math.PI) / 3, 0];
+  // ─── 3. CRANKPINS & AERODYNAMIC KNIFE-EDGED COUNTERWEIGHTS ───
+  for (let p = 0; p < throwCount; p++) {
+    const px = -halfSpanX + p * throwSpacingM;
+    const angle =
+      throwCount === 3 ? (p * (2 * Math.PI)) / 3 :
+      throwCount === 4 ? (p % 2 === 0 ? 0 : Math.PI) :
+      throwCount === 5 ? (p * (2 * Math.PI)) / 5 :
+      (p % 3) * ((2 * Math.PI) / 3);
 
-  for (let p = 0; p < 6; p++) {
-    const px = -0.27 + p * 0.108;
-    const angle = crankpinAngles[p];
     const pinY = Math.sin(angle) * spec.throwRadiusM;
     const pinZ = Math.cos(angle) * spec.throwRadiusM;
 
-    // ── A. Precision Ground Crankpin Journal (48mm Diameter, 40mm Width) ──
-    const pinGeo = new THREE.CylinderGeometry(spec.crankpinRadiusM, spec.crankpinRadiusM, spec.crankpinWidthM, 36);
+    // ── A. Precision Ground Crankpin Journal ──
+    const pinGeo = new THREE.CylinderGeometry(spec.crankpinRadiusM, spec.crankpinRadiusM, spec.crankpinWidthM, 48);
     pinGeo.rotateZ(Math.PI / 2);
     const pinMesh = new THREE.Mesh(pinGeo, matMicroPolished);
     pinMesh.name = `Crankpin_Journal_${p + 1}`;
-    pinMesh.position.set(px + 0.0075, pinY, pinZ);
+    pinMesh.position.set(px, pinY, pinZ);
     pinMesh.castShadow = true;
     pinMesh.receiveShadow = true;
     rootGroup.add(pinMesh);
 
     // Gun-Drilled Crankpin Center Lightening Hollow Bore
-    const hollowGeo = new THREE.CylinderGeometry(spec.crankpinRadiusM - 0.009, spec.crankpinRadiusM - 0.009, spec.crankpinWidthM + 0.002, 24);
+    const hollowGeo = new THREE.CylinderGeometry(spec.crankpinRadiusM - 0.009, spec.crankpinRadiusM - 0.009, spec.crankpinWidthM + 0.002, 28);
     hollowGeo.rotateZ(Math.PI / 2);
     const hollowMesh = new THREE.Mesh(hollowGeo, matDarkIron);
     hollowMesh.name = `Crankpin_GunDrilled_Lightening_Bore_${p + 1}`;
-    hollowMesh.position.set(px + 0.0075, pinY, pinZ);
+    hollowMesh.position.set(px, pinY, pinZ);
     rootGroup.add(hollowMesh);
 
     // Dual Connecting Rod Thrust Shoulders
     [-spec.crankpinWidthM / 2, spec.crankpinWidthM / 2].forEach((sx, sIdx) => {
-      const shoulderGeo = new THREE.TorusGeometry(spec.crankpinRadiusM + 0.004, 0.002, 16, 32);
+      const shoulderGeo = new THREE.TorusGeometry(spec.crankpinRadiusM + 0.004, 0.002, 16, 48);
       shoulderGeo.rotateY(Math.PI / 2);
       const shoulderMesh = new THREE.Mesh(shoulderGeo, matNitrided);
       shoulderMesh.name = `Rod_Side_Thrust_Shoulder_${p + 1}_${sIdx === 0 ? 'Fwd' : 'Aft'}`;
-      shoulderMesh.position.set(px + 0.0075 + sx, pinY, pinZ);
+      shoulderMesh.position.set(px + sx, pinY, pinZ);
       rootGroup.add(shoulderMesh);
     });
 
@@ -192,7 +233,7 @@ export function buildCrankshaftScene(): THREE.Scene {
         0.076,
         0.076,
         spec.webThicknessM,
-        32,
+        48,
         1,
         false,
         angle + Math.PI - 1.05,
@@ -218,7 +259,7 @@ export function buildCrankshaftScene(): THREE.Scene {
         const slugY = Math.sin(slugAngle) * 0.062;
         const slugZ = Math.cos(slugAngle) * 0.062;
 
-        const slugGeo = new THREE.CylinderGeometry(0.011, 0.011, spec.webThicknessM + 0.002, 20);
+        const slugGeo = new THREE.CylinderGeometry(0.011, 0.011, spec.webThicknessM + 0.002, 28);
         slugGeo.rotateZ(Math.PI / 2);
         const slugMesh = new THREE.Mesh(slugGeo, matTungsten);
         slugMesh.name = `Tungsten_Balance_Slug_${p + 1}_${slugIdx + 1}`;
@@ -235,7 +276,7 @@ export function buildCrankshaftScene(): THREE.Scene {
       new THREE.Vector3(mainRefX, 0, 0),
       new THREE.Vector3(px + 0.0075, pinY, pinZ)
     );
-    const oilPassageGeo = new THREE.TubeGeometry(oilPassageCurve, 12, 0.0035, 12, false);
+    const oilPassageGeo = new THREE.TubeGeometry(oilPassageCurve, 16, 0.0035, 16, false);
     const oilPassageMesh = new THREE.Mesh(oilPassageGeo, matDarkIron);
     oilPassageMesh.name = `Internal_Oil_Drilling_Tract_${p + 1}`;
     rootGroup.add(oilPassageMesh);
@@ -247,37 +288,54 @@ export function buildCrankshaftScene(): THREE.Scene {
   frontSnoutGroup.position.set(-0.355, 0, 0);
 
   // Stepped Hardened Snout Shaft
-  const snoutGeo = new THREE.CylinderGeometry(spec.snoutDiameterM / 2, spec.snoutDiameterM / 2, spec.snoutLengthM, 32);
+  const snoutGeo = new THREE.CylinderGeometry(spec.snoutDiameterM / 2, spec.snoutDiameterM / 2, spec.snoutLengthM, 48);
   snoutGeo.rotateZ(Math.PI / 2);
   const snoutMesh = new THREE.Mesh(snoutGeo, matMicroPolished);
   snoutMesh.name = 'Front_Snout_Shaft';
   snoutMesh.castShadow = true;
   frontSnoutGroup.add(snoutMesh);
 
-  // Dual Woodruff Drive Keyways
+  // Front Viton Crank Seal Step Relief Groove
+  const frontSealGrooveGeo = new THREE.CylinderGeometry(spec.snoutDiameterM / 2 - 0.002, spec.snoutDiameterM / 2 - 0.002, 0.008, 48);
+  frontSealGrooveGeo.rotateZ(Math.PI / 2);
+  const frontSealGrooveMesh = new THREE.Mesh(frontSealGrooveGeo, matDarkIron);
+  frontSealGrooveMesh.name = 'Front_Main_Seal_Surface_Groove';
+  frontSealGrooveMesh.position.set(0.005, 0, 0);
+  frontSnoutGroup.add(frontSealGrooveMesh);
+
+  // Harmonic Damper Elastomer Isolator Rubber Ring
+  const damperRingGeo = createORingSeal(spec.snoutDiameterM / 2 + 0.006, 0.003, 16, 36);
+  damperRingGeo.rotateY(Math.PI / 2);
+  const damperRingMesh = new THREE.Mesh(damperRingGeo, matElastomer);
+  damperRingMesh.name = 'Harmonic_Damper_Elastomer_Isolator';
+  damperRingMesh.position.set(-0.012, 0, 0);
+  frontSnoutGroup.add(damperRingMesh);
+
+  // Dual Semi-Circular Woodruff Drive Keys
   [-0.015, 0.015].forEach((kx, kIdx) => {
-    const keyGeo = new THREE.BoxGeometry(0.018, 0.005, 0.006);
+    const keyGeo = new THREE.CylinderGeometry(0.007, 0.007, 0.005, 16, 1, false, 0, Math.PI);
+    keyGeo.rotateZ(Math.PI / 2);
     const keyMesh = new THREE.Mesh(keyGeo, matDarkIron);
-    keyMesh.name = `Woodruff_Drive_Keyway_${kIdx === 0 ? 'OilPump' : 'Damper'}`;
-    keyMesh.position.set(kx, spec.snoutDiameterM / 2, 0);
+    keyMesh.name = `Woodruff_Drive_Key_${kIdx === 0 ? 'OilPump' : 'Damper'}`;
+    keyMesh.position.set(kx, spec.snoutDiameterM / 2 + 0.002, 0);
     frontSnoutGroup.add(keyMesh);
   });
 
   // Front Oil Pump Drive Helical Gear Sprocket
-  const oilPumpDriveGeo = new THREE.CylinderGeometry(0.026, 0.026, 0.016, 24);
+  const oilPumpDriveGeo = new THREE.CylinderGeometry(0.026, 0.026, 0.016, 32);
   oilPumpDriveGeo.rotateZ(Math.PI / 2);
   const oilPumpDriveMesh = new THREE.Mesh(oilPumpDriveGeo, matNitrided);
   oilPumpDriveMesh.name = 'Gerotor_Oil_Pump_Drive_Gear';
   oilPumpDriveMesh.position.set(0.018, 0, 0);
   frontSnoutGroup.add(oilPumpDriveMesh);
 
-  // Harmonic Damper Retention Center Thread Bore
-  const threadGeo = new THREE.CylinderGeometry(0.008, 0.008, 0.035, 16);
-  threadGeo.rotateZ(Math.PI / 2);
-  const threadMesh = new THREE.Mesh(threadGeo, matDarkIron);
-  threadMesh.name = 'Damper_Retention_M16_Thread_Bore';
-  threadMesh.position.set(-0.02, 0, 0);
-  frontSnoutGroup.add(threadMesh);
+  // Harmonic Damper Retention Center Thread Bore & M16 Flanged Bolt
+  const damperBoltGeo = createHexBoltHead(0.012, 0.008);
+  damperBoltGeo.rotateZ(Math.PI / 2);
+  const damperBoltMesh = new THREE.Mesh(damperBoltGeo, matNitrided);
+  damperBoltMesh.name = 'Damper_Retention_M16_Center_Bolt';
+  damperBoltMesh.position.set(-spec.snoutLengthM / 2 - 0.004, 0, 0);
+  frontSnoutGroup.add(damperBoltMesh);
 
   rootGroup.add(frontSnoutGroup);
 
@@ -286,12 +344,20 @@ export function buildCrankshaftScene(): THREE.Scene {
   rearFlangeGroup.name = 'Rear_Flywheel_Flange_Assembly';
   rearFlangeGroup.position.set(0.355, 0, 0);
 
-  // Heavy-Duty Billet Flywheel Mounting Flange Plate
+  // Rear Centrifugal Oil Flinger Disc (Prevents oil flooding the rear main seal)
+  const flingerGeo = new THREE.CylinderGeometry(0.052, 0.052, 0.003, 48);
+  flingerGeo.rotateZ(Math.PI / 2);
+  const flingerMesh = new THREE.Mesh(flingerGeo, matMicroPolished);
+  flingerMesh.name = 'Centrifugal_Rear_Oil_Flinger_Disc';
+  flingerMesh.position.set(-0.024, 0, 0);
+  rearFlangeGroup.add(flingerMesh);
+
+  // Heavy-Duty Billet Flywheel Mounting Flange Plate (48 segments)
   const flangeGeo = new THREE.CylinderGeometry(
     spec.flywheelFlangeDiameterM / 2,
     spec.flywheelFlangeDiameterM / 2,
     spec.flywheelFlangeThicknessM,
-    36
+    48
   );
   flangeGeo.rotateZ(Math.PI / 2);
   const flangeMesh = new THREE.Mesh(flangeGeo, matMicroPolished);
@@ -300,20 +366,20 @@ export function buildCrankshaftScene(): THREE.Scene {
   rearFlangeGroup.add(flangeMesh);
 
   // Transmission Input Shaft Pilot Bearing Bore
-  const pilotBoreGeo = new THREE.CylinderGeometry(0.018, 0.018, 0.025, 24);
+  const pilotBoreGeo = new THREE.CylinderGeometry(0.018, 0.018, 0.025, 32);
   pilotBoreGeo.rotateZ(Math.PI / 2);
   const pilotBoreMesh = new THREE.Mesh(pilotBoreGeo, matDarkIron);
   pilotBoreMesh.name = 'Clutch_Pilot_Bearing_Recess';
   pilotBoreMesh.position.set(0.005, 0, 0);
   rearFlangeGroup.add(pilotBoreMesh);
 
-  // 8 High-Strength M12 Flywheel Retention Bolt Holes
+  // 8 High-Strength M12 Flywheel Retention Bolt Holes & Threaded Fasteners
   for (let b = 0; b < 8; b++) {
     const bAngle = (b * Math.PI) / 4;
     const by = Math.sin(bAngle) * 0.042;
     const bz = Math.cos(bAngle) * 0.042;
 
-    const boltHoleGeo = new THREE.CylinderGeometry(0.006, 0.006, 0.022, 16);
+    const boltHoleGeo = new THREE.CylinderGeometry(0.006, 0.006, 0.022, 20);
     boltHoleGeo.rotateZ(Math.PI / 2);
     const boltHoleMesh = new THREE.Mesh(boltHoleGeo, matDarkIron);
     boltHoleMesh.name = `Flywheel_M12_Bolt_Hole_${b + 1}`;
@@ -386,3 +452,5 @@ export async function generateCrankshaftGlbBuffer(): Promise<ArrayBuffer> {
     );
   });
 }
+
+export default buildCrankshaftScene;

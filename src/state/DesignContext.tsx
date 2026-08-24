@@ -116,12 +116,17 @@ export function DesignProvider({ children }: { children: ReactNode }) {
 
   const resetDesign = useCallback(() => setDesignState(defaultDesign()), []);
 
-  const value: DesignContextValue = {
+  const value: DesignContextValue = useMemo(() => ({
     design, sim, units, setUnits, carConcept, setCarConcept, uiTheme, setUiTheme,
     updateEngine, updateVehicle, updateAero, updateAeroResearch, updateExterior, updateInterior, updateElectronics, updateManufacturing, updateInfotainment,
     updateChassisEng, updateSuspensionGeo, updateSteeringEng, updateBrakesEng, updateTiresEng, updateWheelsEng,
     setDesign, resetDesign,
-  };
+  }), [
+    design, sim, units, carConcept, uiTheme,
+    updateEngine, updateVehicle, updateAero, updateAeroResearch, updateExterior, updateInterior, updateElectronics, updateManufacturing, updateInfotainment,
+    updateChassisEng, updateSuspensionGeo, updateSteeringEng, updateBrakesEng, updateTiresEng, updateWheelsEng,
+    setDesign, resetDesign,
+  ]);
 
   return <DesignContext.Provider value={value}>{children}</DesignContext.Provider>;
 }

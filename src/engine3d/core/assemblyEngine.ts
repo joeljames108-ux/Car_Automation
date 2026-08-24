@@ -14,6 +14,7 @@ import type {
   Engine3DEventListener,
   Transform3D,
 } from '../types';
+import type { EngineConfig } from '../../sim/types';
 import { createComponentInstance, TransformMath, VectorMath } from '../types';
 import {
   getManifestForComponentType,
@@ -34,8 +35,13 @@ export class AssemblyEngine {
   private instances: Map<string, ComponentInstance3D> = new Map();
   private eventListeners: Set<Engine3DEventListener> = new Set();
   private explodedAmount: number = 0; // 0.0 to 1.0
+  private currentConfig: Partial<EngineConfig> | null = null;
 
   constructor() {}
+
+  public setEngineConfig(cfg: Partial<EngineConfig> | null): void {
+    this.currentConfig = cfg;
+  }
 
   // ─── 1. EVENT SUBSCRIPTION SYSTEM ───
 
@@ -152,9 +158,21 @@ export class AssemblyEngine {
       return newInstances;
     }
 
-    // ── CASE B: MULTI-INSTANCE PISTONS (12x INDEPENDENT INSTANCES) ──
+    // ── CASE B: MULTI-INSTANCE PISTONS ──
     if (type === 'piston') {
-      for (let cyl = 1; cyl <= 12; cyl++) {
+      const layout = this.currentConfig?.layout || 'v12';
+      const totalCylinders =
+        layout === 'i3' ? 3 :
+        layout === 'i4' || layout === 'boxer4' ? 4 :
+        layout === 'i6' || layout === 'v6' || layout === 'boxer6' ? 6 :
+        layout === 'v8' ? 8 :
+        layout === 'v10' ? 10 :
+        layout === 'w12' ? 12 :
+        layout === 'w16' ? 16 :
+        layout === 'w18' ? 18 :
+        12;
+
+      for (let cyl = 1; cyl <= totalCylinders; cyl++) {
         const instanceId = `piston-${cyl.toString().padStart(2, '0')}`;
         const socketId = `Piston_${cyl.toString().padStart(2, '0')}_Mount`;
         const socket = findAttachmentPointById(socketId);
@@ -193,9 +211,21 @@ export class AssemblyEngine {
       return newInstances;
     }
 
-    // ── CASE C: MULTI-INSTANCE CONNECTING RODS (12x INDEPENDENT INSTANCES) ──
+    // ── CASE C: MULTI-INSTANCE CONNECTING RODS ──
     if (type === 'connecting-rod') {
-      for (let cyl = 1; cyl <= 12; cyl++) {
+      const layout = this.currentConfig?.layout || 'v12';
+      const totalCylinders =
+        layout === 'i3' ? 3 :
+        layout === 'i4' || layout === 'boxer4' ? 4 :
+        layout === 'i6' || layout === 'v6' || layout === 'boxer6' ? 6 :
+        layout === 'v8' ? 8 :
+        layout === 'v10' ? 10 :
+        layout === 'w12' ? 12 :
+        layout === 'w16' ? 16 :
+        layout === 'w18' ? 18 :
+        12;
+
+      for (let cyl = 1; cyl <= totalCylinders; cyl++) {
         const instanceId = `connecting-rod-${cyl.toString().padStart(2, '0')}`;
         const isLeft = cyl % 2 !== 0;
         const throwIdx = Math.ceil(cyl / 2);
@@ -333,17 +363,27 @@ export class AssemblyEngine {
     const instance = this.instances.get(instanceId);
     if (!instance) return;
 
-    const newVariant = instance.manifestRef.variants.find((v) => v.id === newVariantId);
+    const norm = (id: string) => id.toLowerCase().replace(/[-_]/g, '');
+    const targetNorm = norm(newVariantId);
+
+    const newVariant =
+      instance.manifestRef.variants.find((v) => v.id === newVariantId) ||
+      instance.manifestRef.variants.find((v) => norm(v.id) === targetNorm) ||
+      instance.manifestRef.variants.find((v) => norm(v.id).includes(targetNorm) || targetNorm.includes(norm(v.id))) ||
+      instance.manifestRef.variants[0];
+
     if (!newVariant) return;
 
     const oldVariantId = instance.variant.id;
+    if (oldVariantId === newVariant.id) return; // Prevent unnecessary re-renders and loops
+
     instance.variant = newVariant;
 
     this.emit({
       type: 'component-replaced',
       instanceId,
       oldVariant: oldVariantId,
-      newVariant: newVariantId,
+      newVariant: newVariant.id,
     });
   }
 

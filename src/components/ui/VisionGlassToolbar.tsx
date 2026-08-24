@@ -34,9 +34,13 @@ function ToolbarButton({ action }: { action: ToolbarAction }) {
       style={{ position: "relative" }}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
+      onFocus={handleMouseEnter}
+      onBlur={handleMouseLeave}
     >
       <button
         onClick={action.onClick}
+        aria-label={action.label}
+        className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
         style={{
           position: "relative",
           display: "flex",
@@ -62,11 +66,14 @@ function ToolbarButton({ action }: { action: ToolbarAction }) {
             : "none",
         }}
       >
-        {action.icon}
+        <span aria-hidden="true" style={{ display: "flex", alignItems: "center" }}>
+          {action.icon}
+        </span>
 
         {/* Active indicator dot */}
         {action.isActive && (
           <div
+            aria-hidden="true"
             style={{
               position: "absolute",
               right: -2,
@@ -157,7 +164,9 @@ function ToolbarButton({ action }: { action: ToolbarAction }) {
 
 export function VisionGlassToolbar({ actions }: VisionGlassToolbarProps) {
   return (
-    <div
+    <nav
+      role="toolbar"
+      aria-label="Quick Actions Navigation"
       className="hidden md:flex flex-col items-center"
       style={{
         position: "absolute",
@@ -188,6 +197,7 @@ export function VisionGlassToolbar({ actions }: VisionGlassToolbarProps) {
       {/* Divider */}
       {actions.length > 2 && (
         <div
+          aria-hidden="true"
           style={{
             width: 20,
             height: 1,
@@ -202,6 +212,6 @@ export function VisionGlassToolbar({ actions }: VisionGlassToolbarProps) {
       {actions.slice(-2).map((action) => (
         <ToolbarButton key={action.id} action={action} />
       ))}
-    </div>
+    </nav>
   );
 }

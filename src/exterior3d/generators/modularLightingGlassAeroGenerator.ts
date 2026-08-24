@@ -49,26 +49,36 @@ export class ModularLightingGlassAeroGenerator {
     const taillightOledMat = new THREE.MeshBasicMaterial({ color: 0xef4444 });
     const laserFogMat = new THREE.MeshBasicMaterial({ color: 0xb91c1c });
     const reverseLedMat = new THREE.MeshBasicMaterial({ color: 0xf8fafc });
-    const housingDarkMat = new THREE.MeshStandardMaterial({ color: 0x09090b, metalness: 0.95, roughness: 0.08 });
-    const chromeReflectorMat = new THREE.MeshStandardMaterial({ color: 0xe2e8f0, metalness: 0.98, roughness: 0.04 });
+    const housingDarkMat = new THREE.MeshPhysicalMaterial({ color: 0x09090b, metalness: 0.96, roughness: 0.04, clearcoat: 1.0, clearcoatRoughness: 0.02, envMapIntensity: 1.4 });
+    const chromeReflectorMat = new THREE.MeshPhysicalMaterial({ color: 0xf1f5f9, metalness: 0.99, roughness: 0.01, clearcoat: 1.0, clearcoatRoughness: 0.01, envMapIntensity: 2.0, reflectivity: 1.0 });
 
     const polycarbLensMat = new THREE.MeshPhysicalMaterial({
       color: new THREE.Color('#ffffff'),
-      transmission: 0.96,
+      transmission: 0.97,
       transparent: true,
-      opacity: 0.45,
-      roughness: 0.01,
+      opacity: 0.35,
+      roughness: 0.005,
+      metalness: 0.0,
       ior: 1.58,
+      thickness: 0.003,
+      clearcoat: 1.0,
+      clearcoatRoughness: 0.005,
+      envMapIntensity: 2.0,
       depthWrite: false,
     });
 
     const smokeAcrylicMat = new THREE.MeshPhysicalMaterial({
       color: new THREE.Color('#450a0a'),
-      transmission: 0.85,
+      transmission: 0.88,
       transparent: true,
-      opacity: 0.75,
-      roughness: 0.02,
+      opacity: 0.68,
+      roughness: 0.01,
+      metalness: 0.0,
       ior: 1.5,
+      thickness: 0.005,
+      clearcoat: 1.0,
+      clearcoatRoughness: 0.01,
+      envMapIntensity: 1.5,
     });
 
     // Front Matrix Dotted LED Headlights (Left & Right - embedded flush in sculpted fender sockets)

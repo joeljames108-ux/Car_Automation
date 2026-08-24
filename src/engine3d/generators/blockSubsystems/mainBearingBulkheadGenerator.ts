@@ -250,14 +250,19 @@ export function buildSingleMainBulkhead(
  * cross-bolted main bearing bulkheads, continuous pan rail, and 28 bolt sockets.
  */
 export function buildV12MainBulkheadSystem(
-  materials: V12BlockMaterialPalette
+  materials: V12BlockMaterialPalette,
+  cylindersPerBank: number = 6
 ): THREE.Group {
   const group = new THREE.Group();
   group.name = '01_V12_Main_Bulkheads_Pan_Rail_Assembly';
   const spec = V12_MAIN_BULKHEAD_SPECS;
+  const pitchM = 0.108;
+  const mainCount = cylindersPerBank + 1;
+  const blockLengthM = (cylindersPerBank * pitchM) + 0.08;
+  const startX = -((mainCount - 1) * pitchM) / 2;
 
   // ── 1. Outer Deep-Skirt Tub Casting ──
-  const skirtTubGeo = new THREE.BoxGeometry(0.72, spec.crankcaseWidthM, 0.15);
+  const skirtTubGeo = new THREE.BoxGeometry(blockLengthM, spec.crankcaseWidthM, 0.15);
   const skirtTubMesh = new THREE.Mesh(skirtTubGeo, materials.castAluminumBlock);
   skirtTubMesh.name = 'Deep_Skirt_Crankcase_Housing';
   skirtTubMesh.position.set(0, 0, 0.075);
@@ -266,20 +271,22 @@ export function buildV12MainBulkheadSystem(
   group.add(skirtTubMesh);
 
   // ── 2. Full-Perimeter CNC Machined Oil Pan Rail ──
-  const panRailGeo = new THREE.BoxGeometry(spec.panRailLengthMm / 1000, spec.panRailWidthMm / 1000, 0.018);
+  const panRailLength = blockLengthM + 0.02;
+  const panRailGeo = new THREE.BoxGeometry(panRailLength, spec.panRailWidthMm / 1000, 0.018);
   const panRailMesh = new THREE.Mesh(panRailGeo, materials.machinedDeckSurface);
   panRailMesh.name = 'Continuous_CNC_Pan_Rail';
   panRailMesh.position.set(0, 0, 0.009);
   panRailMesh.castShadow = true;
   group.add(panRailMesh);
 
-  // ── 3. 28 Perimeter Pan Rail Bolt Holes & Gasket Channel ──
+  // ── 3. Perimeter Pan Rail Bolt Holes & Gasket Channel ──
   const boltHoleGeo = new THREE.CylinderGeometry(0.0035, 0.0035, 0.02, 12);
   boltHoleGeo.rotateX(Math.PI / 2);
 
-  // 9 bolts per side rail (18 total)
-  for (let s = 0; s < 9; s++) {
-    const bx = -0.33 + s * (0.66 / 8);
+  const sideBoltCount = Math.max(4, cylindersPerBank + 3);
+  for (let s = 0; s < sideBoltCount; s++) {
+    const halfSpan = (blockLengthM * 0.9) / 2;
+    const bx = -halfSpan + s * ((halfSpan * 2) / (sideBoltCount - 1));
     [-0.172, 0.172].forEach((by, sideIdx) => {
       const hole = new THREE.Mesh(boltHoleGeo, materials.oilGalleryPassage);
       hole.name = `Pan_Bolt_Hole_${sideIdx === 0 ? 'Left' : 'Right'}_${s + 1}`;
@@ -288,8 +295,9 @@ export function buildV12MainBulkheadSystem(
     });
   }
 
-  // 5 bolts front, 5 bolts rear (10 total)
-  [-0.355, 0.355].forEach((bx, endIdx) => {
+  // 5 bolts front, 5 bolts rear
+  const endHalf = blockLengthM / 2 - 0.005;
+  [-endHalf, endHalf].forEach((bx, endIdx) => {
     for (let e = 0; e < 5; e++) {
       const by = -0.14 + e * (0.28 / 4);
       const hole = new THREE.Mesh(boltHoleGeo, materials.oilGalleryPassage);
@@ -299,10 +307,11 @@ export function buildV12MainBulkheadSystem(
     }
   });
 
-  // ── 4. 7 Cross-Bolted Main Bulkhead Modules ──
-  for (let i = 0; i < 7; i++) {
-    const positionX = -0.30 + i * (0.60 / 6);
-    const isThrustBearing = i === 3; // Center #4 main journal handles crank axial thrust
+  // ── 4. Cross-Bolted Main Bulkhead Modules ──
+  const thrustIdx = Math.floor(mainCount / 2);
+  for (let i = 0; i < mainCount; i++) {
+    const positionX = startX + i * pitchM;
+    const isThrustBearing = i === thrustIdx;
 
     const bulkhead = buildSingleMainBulkhead(
       {
@@ -318,7 +327,7 @@ export function buildV12MainBulkheadSystem(
   }
 
   // ── 5. Main Longitudinal High-Pressure Oil Gallery Rifle ──
-  const rifleGeo = new THREE.CylinderGeometry(0.007, 0.007, 0.70, 16);
+  const rifleGeo = new THREE.CylinderGeometry(0.007, 0.007, blockLengthM - 0.02, 16);
   rifleGeo.rotateZ(Math.PI / 2);
   const rifleMesh = new THREE.Mesh(rifleGeo, materials.machinedDeckSurface);
   rifleMesh.name = 'Main_Crankcase_Oil_Rifle';

@@ -56,8 +56,12 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
     [toast]
   );
 
+  const contextValue = React.useMemo(() => ({
+    toast, success, info, warn, rd
+  }), [toast, success, info, warn, rd]);
+
   return (
-    <ToastContext.Provider value={{ toast, success, info, warn, rd }}>
+    <ToastContext.Provider value={contextValue}>
       {children}
       {/* Toast Render Container */}
       <div className="fixed bottom-5 right-5 z-50 flex flex-col gap-2 pointer-events-none max-w-sm w-full px-4">

@@ -1,5 +1,7 @@
-import { useState, useId } from "react";
-import { Plus, Minus, Zap, Scale, Wind, Info, ArrowRight } from "lucide-react";
+import { useState, useId, useEffect, useRef } from "react";
+import * as THREE from "three";
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
+import { Plus, Minus, Zap, Scale, Wind, Info, ArrowRight, Box, Eye } from "lucide-react";
 
 interface ModernAnalogDialProps {
   title?: string;
@@ -30,12 +32,101 @@ export function ModernAnalogDial({
   const [lightningEnabled, setLightningEnabled] = useState(true);
   const [cfdIntensity, setCfdIntensity] = useState(80);
   const [wireframeEnabled, setWireframeEnabled] = useState(false);
+  const [is3DMode, setIs3DMode] = useState(true);
+
+  const mount3DRef = useRef<HTMLDivElement>(null);
+  const needle3DRef = useRef<THREE.Group | null>(null);
 
   const handleUpdate = (next: number) => {
     const clamped = Math.max(min, Math.min(max, next));
     setVal(clamped);
     if (onChange) onChange(clamped);
   };
+
+  // 3D Three.js Dial Gauge Setup
+  useEffect(() => {
+    if (!is3DMode || !mount3DRef.current) return;
+    const container = mount3DRef.current;
+    const s = 170;
+
+    const scene = new THREE.Scene();
+    scene.background = null;
+
+    const camera = new THREE.PerspectiveCamera(40, 1, 0.1, 50);
+    camera.position.set(0, 0, 3.4);
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    renderer.setSize(s, s);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.shadowMap.enabled = true;
+    container.appendChild(renderer.domElement);
+
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.enableZoom = false;
+
+    // Lighting
+    scene.add(new THREE.AmbientLight(0xffffff, 1.4));
+    const dirLight = new THREE.DirectionalLight(0x007aff, 2.5);
+    dirLight.position.set(2, 4, 3);
+    scene.add(dirLight);
+
+    // 1. Outer Bezel Housing Ring
+    const bezelGeom = new THREE.TorusGeometry(1.0, 0.08, 16, 48);
+    const bezelMat = new THREE.MeshStandardMaterial({ color: 0x007aff, metalness: 0.9, roughness: 0.1 });
+    scene.add(new THREE.Mesh(bezelGeom, bezelMat));
+
+    // 2. Dial Plate
+    const dialGeom = new THREE.CylinderGeometry(0.98, 0.98, 0.04, 48);
+    dialGeom.rotateX(Math.PI / 2);
+    const dialMat = new THREE.MeshStandardMaterial({ color: 0xf8fafc, roughness: 0.2 });
+    scene.add(new THREE.Mesh(dialGeom, dialMat));
+
+    // 3. Glowing Active Gauge Arc Ring
+    const arcGeom = new THREE.TorusGeometry(0.82, 0.05, 12, 48, Math.PI * 1.5);
+    arcGeom.rotateZ(-Math.PI * 0.75);
+    const arcMat = new THREE.MeshStandardMaterial({ color: 0x007aff, emissive: 0x007aff, emissiveIntensity: 0.8 });
+    scene.add(new THREE.Mesh(arcGeom, arcMat));
+
+    // 4. Rotating 3D Needle Indicator Group
+    const needleGroup = new THREE.Group();
+    const needleGeom = new THREE.ConeGeometry(0.04, 0.75, 16);
+    needleGeom.translate(0, 0.35, 0);
+    const needleMat = new THREE.MeshStandardMaterial({ color: 0x007aff, emissive: 0x007aff, emissiveIntensity: 0.5 });
+    const needleMesh = new THREE.Mesh(needleGeom, needleMat);
+    needleMesh.rotation.z = Math.PI / 2;
+    needleGroup.add(needleMesh);
+
+    const capGeom = new THREE.SphereGeometry(0.08, 16, 16);
+    const capMat = new THREE.MeshStandardMaterial({ color: 0xffffff, metalness: 0.9 });
+    needleGroup.add(new THREE.Mesh(capGeom, capMat));
+
+    scene.add(needleGroup);
+    needle3DRef.current = needleGroup;
+
+    let animId = 0;
+    const animate = () => {
+      animId = requestAnimationFrame(animate);
+      controls.update();
+      renderer.render(scene, camera);
+    };
+    animate();
+
+    return () => {
+      cancelAnimationFrame(animId);
+      controls.dispose();
+      renderer.dispose();
+      if (container.contains(renderer.domElement)) container.removeChild(renderer.domElement);
+    };
+  }, [is3DMode]);
+
+  // Update 3D Needle Angle when val changes
+  useEffect(() => {
+    if (!needle3DRef.current) return;
+    const pct = Math.max(0, Math.min(1, (val - min) / (max - min)));
+    const targetAngle = -Math.PI * 0.75 + pct * Math.PI * 1.5;
+    needle3DRef.current.rotation.z = -targetAngle;
+  }, [val, min, max]);
 
   // Gauge SVG & Layout Math (170x170 coordinate system)
   const size = 170;
@@ -69,7 +160,6 @@ export function ModernAnalogDial({
   const knobPos = polarToCartesian(center, center, radius, activeAngle);
   const needleEndPos = polarToCartesian(center, center, radius - 14, activeAngle);
 
-  // Default tick list derived evenly from min & max if not explicitly passed
   const rawTicks = ticks || [
     `${min}${unit}`,
     `${Math.round(min + (max - min) * 0.25)}${unit}`,
@@ -108,15 +198,36 @@ export function ModernAnalogDial({
           <div style={{ fontSize: 11, fontWeight: 800, letterSpacing: "0.08em", color: "#1c1c1e", textTransform: "uppercase" }}>
             {title}
           </div>
-          <span style={{ width: 6, height: 6, borderRadius: "50%", backgroundColor: "#007aff", boxShadow: "0 0 8px rgba(0, 122, 255, 0.6)" }} />
+          <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+            <button
+              onClick={() => setIs3DMode(!is3DMode)}
+              style={{
+                fontSize: 9,
+                fontFamily: "monospace",
+                fontWeight: 800,
+                padding: "2px 6px",
+                borderRadius: 6,
+                background: is3DMode ? "#007aff" : "rgba(0,0,0,0.08)",
+                color: is3DMode ? "#fff" : "#1c1c1e",
+                border: "none",
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                gap: 3,
+              }}
+            >
+              {is3DMode ? <Box size={10} /> : <Eye size={10} />}
+              {is3DMode ? "3D" : "2D"}
+            </button>
+            <span style={{ width: 6, height: 6, borderRadius: "50%", backgroundColor: "#007aff", boxShadow: "0 0 8px rgba(0, 122, 255, 0.6)" }} />
+          </div>
         </div>
       )}
 
       {/* Main Analog Gauge Container */}
       <div style={{ position: "relative", width: "100%", display: "flex", flexDirection: "column", alignItems: "center" }}>
         <div style={{ position: "relative", width: size, height: size, display: "flex", alignItems: "center", justifyContent: "center" }}>
-          
-          {/* Central Value Readout (Placed Above Center Pin Hub - matching reference image) */}
+          {/* Central Value Readout */}
           <div
             style={{
               position: "absolute",
@@ -127,7 +238,7 @@ export function ModernAnalogDial({
               justifyContent: "center",
               alignItems: "center",
               pointerEvents: "none",
-              zIndex: 3,
+              zIndex: 5,
             }}
           >
             <span style={{ fontSize: 32, fontWeight: 900, color: "#1c1c1e", lineHeight: 1, letterSpacing: "-0.03em" }}>
@@ -135,7 +246,7 @@ export function ModernAnalogDial({
             </span>
           </div>
 
-          {/* Sublabel Readout (Placed Below Center Pin Hub - matching reference image) */}
+          {/* Sublabel Readout */}
           <div
             style={{
               position: "absolute",
@@ -146,7 +257,7 @@ export function ModernAnalogDial({
               justifyContent: "center",
               alignItems: "center",
               pointerEvents: "none",
-              zIndex: 3,
+              zIndex: 5,
             }}
           >
             <span style={{ fontSize: 10, fontWeight: 800, color: "#3a3a3c", letterSpacing: "0.14em", textTransform: "uppercase" }}>
@@ -154,51 +265,41 @@ export function ModernAnalogDial({
             </span>
           </div>
 
-          {/* SVG Gauge */}
-          <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} style={{ position: "relative", zIndex: 1 }}>
-            {/* Ambient Backlight Glow */}
-            <circle cx={center} cy={center} r={radius} fill="none" stroke="rgba(0, 122, 255, 0.06)" strokeWidth={strokeWidth + 12} />
-            
-            {/* Background Track Arc */}
-            <path d={bgArcPath} fill="none" stroke="rgba(0, 0, 0, 0.08)" strokeWidth={strokeWidth} strokeLinecap="round" />
-            
-            {/* Active Vibrant Color Arc */}
-            <path
-              d={activeArcPath}
-              fill="none"
-              stroke={`url(#${gradientId})`}
-              strokeWidth={strokeWidth}
-              strokeLinecap="round"
-              style={{ filter: "drop-shadow(0 0 8px rgba(0, 122, 255, 0.5))" }}
-            />
-
-            {/* Gradient definition */}
-            <defs>
-              <linearGradient id={gradientId} x1="0%" y1="0%" x2="100%" y2="100%">
-                <stop offset="0%" stopColor="#0066ff" />
-                <stop offset="50%" stopColor="#00c8ff" />
-                <stop offset="100%" stopColor="#34d399" />
-              </linearGradient>
-            </defs>
-
-            {/* Analog Needle Indicator */}
-            <line
-              x1={center}
-              y1={center}
-              x2={needleEndPos.x}
-              y2={needleEndPos.y}
-              stroke="#0066ff"
-              strokeWidth={2.5}
-              strokeLinecap="round"
-              style={{ filter: "drop-shadow(0 0 6px rgba(0, 102, 255, 0.6))", transition: "all 0.15s ease-out" }}
-            />
-
-            {/* Center Cap Pin */}
-            <circle cx={center} cy={center} r={6} fill="#ffffff" stroke="#0066ff" strokeWidth={2.5} style={{ filter: "drop-shadow(0 2px 5px rgba(0,0,0,0.18))" }} />
-
-            {/* Glowing Indicator Knob */}
-            <circle cx={knobPos.x} cy={knobPos.y} r={7.5} fill="#0066ff" stroke="#ffffff" strokeWidth={2.5} style={{ filter: "drop-shadow(0 0 8px rgba(0, 102, 255, 0.85))" }} />
-          </svg>
+          {is3DMode ? (
+            <div ref={mount3DRef} style={{ width: size, height: size, cursor: "grab" }} />
+          ) : (
+            <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} style={{ position: "relative", zIndex: 1 }}>
+              <circle cx={center} cy={center} r={radius} fill="none" stroke="rgba(0, 122, 255, 0.06)" strokeWidth={strokeWidth + 12} />
+              <path d={bgArcPath} fill="none" stroke="rgba(0, 0, 0, 0.08)" strokeWidth={strokeWidth} strokeLinecap="round" />
+              <path
+                d={activeArcPath}
+                fill="none"
+                stroke={`url(#${gradientId})`}
+                strokeWidth={strokeWidth}
+                strokeLinecap="round"
+                style={{ filter: "drop-shadow(0 0 8px rgba(0, 122, 255, 0.5))" }}
+              />
+              <defs>
+                <linearGradient id={gradientId} x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stopColor="#0066ff" />
+                  <stop offset="50%" stopColor="#00c8ff" />
+                  <stop offset="100%" stopColor="#34d399" />
+                </linearGradient>
+              </defs>
+              <line
+                x1={center}
+                y1={center}
+                x2={needleEndPos.x}
+                y2={needleEndPos.y}
+                stroke="#0066ff"
+                strokeWidth={2.5}
+                strokeLinecap="round"
+                style={{ filter: "drop-shadow(0 0 6px rgba(0, 102, 255, 0.6))", transition: "all 0.15s ease-out" }}
+              />
+              <circle cx={center} cy={center} r={6} fill="#ffffff" stroke="#0066ff" strokeWidth={2.5} style={{ filter: "drop-shadow(0 2px 5px rgba(0,0,0,0.18))" }} />
+              <circle cx={knobPos.x} cy={knobPos.y} r={7.5} fill="#0066ff" stroke="#ffffff" strokeWidth={2.5} style={{ filter: "drop-shadow(0 0 8px rgba(0, 102, 255, 0.85))" }} />
+            </svg>
+          )}
 
           {/* Outer Tick Numbers */}
           <div style={{ position: "absolute", inset: 0, pointerEvents: "none", zIndex: 4 }}>
@@ -273,7 +374,7 @@ export function ModernAnalogDial({
         </div>
       </div>
 
-      {/* Actions Row (Downforce+, Balance+, Drag-) */}
+      {/* Actions Row */}
       <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
         <div style={{ fontSize: 10, fontWeight: 700, color: "#636366", textTransform: "uppercase" }}>Actions</div>
         <div style={{ display: "flex", gap: 6, width: "100%" }}>
@@ -313,11 +414,10 @@ export function ModernAnalogDial({
         </div>
       </div>
 
-      {/* Controls Section 1: Lightning & CFD Visualization Intensity */}
+      {/* Controls Section 1 */}
       <div style={{ background: "rgba(255, 255, 255, 0.45)", borderRadius: 14, padding: "10px 12px", border: "1px solid rgba(0, 0, 0, 0.06)", display: "flex", flexDirection: "column", gap: 8 }}>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
           <span style={{ fontSize: 11, fontWeight: 700, color: "#1c1c1e" }}>Lightning</span>
-          {/* Custom Switch Toggle */}
           <button
             onClick={() => setLightningEnabled(!lightningEnabled)}
             style={{
@@ -364,7 +464,7 @@ export function ModernAnalogDial({
         </div>
       </div>
 
-      {/* Controls Section 2: Wireframe & Last Sync timestamp */}
+      {/* Controls Section 2 */}
       <div style={{ background: "rgba(255, 255, 255, 0.45)", borderRadius: 14, padding: "10px 12px", border: "1px solid rgba(0, 0, 0, 0.06)", display: "flex", flexDirection: "column", gap: 10 }}>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
@@ -414,3 +514,4 @@ export function ModernAnalogDial({
     </div>
   );
 }
+

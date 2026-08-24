@@ -3,8 +3,10 @@ import { Flag, Timer, CloudRain, Users, Gauge, TrendingUp, Loader2, Trophy, Aler
 import { useDesign } from "../state/DesignContext";
 import { Section, Slider, Select, ChoiceGrid, StatTile } from "./ui/Controls";
 import { LineChart } from "./ui/LineChart";
+import { formatLap } from "../sim/utils/formatLap";
 import { TRACKS, DRIVER_SKILLS, WEATHER_TYPES, HYBRID_DEPLOY_MODES } from "../sim/constants";
 import { simulateRace, defaultRaceConfig } from "../sim/race";
+import { TrackRacing3DViewport } from "./racing/TrackRacing3DViewport";
 import type { RaceConfig, RaceResult, TrackId, WeatherType, DriverSkill, RaceType, StrategySuggestion } from "../sim/types";
 
 const RACE_TYPES: Record<RaceType, { label: string; laps: number }> = {
@@ -154,6 +156,8 @@ function RaceResultView({ result }: { result: RaceResult }) {
 
   return (
     <div className="space-y-4 stagger">
+      <TrackRacing3DViewport />
+
       <Section title="Race Result" icon={<Trophy size={16} />}>
         {result.dnf ? (
           <div className="bg-danger-500/10 border border-danger-500/30 rounded-lg px-4 py-3 mb-3">
@@ -351,11 +355,4 @@ function formatTime(seconds: number): string {
   return `${seconds.toFixed(3)}s`;
 }
 
-function formatLap(seconds: number): string {
-  if (seconds >= 60) {
-    const m = Math.floor(seconds / 60);
-    const s = seconds % 60;
-    return `${m}:${s.toFixed(3).padStart(6, "0")}`;
-  }
-  return `${seconds.toFixed(3)}s`;
-}
+

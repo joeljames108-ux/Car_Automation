@@ -291,10 +291,26 @@ export class ModularChassisFamilyGenerator {
   ): THREE.Material {
     const isCarbon = archClass === 'carbon_composite_monocell' || archClass === 'f1_prepreg_monocoque';
 
-    return new THREE.MeshStandardMaterial({
-      color: isCarbon ? 0x090d16 : grade === 'titanium' ? 0x64748b : 0x94a3b8,
-      metalness: isCarbon ? 0.9 : 0.85,
-      roughness: isCarbon ? 0.2 : 0.25,
+    if (isCarbon) {
+      return new THREE.MeshPhysicalMaterial({
+        color: 0x0a0e18,
+        metalness: 0.35,
+        roughness: 0.18,
+        clearcoat: 0.95,
+        clearcoatRoughness: 0.03,
+        envMapIntensity: 1.3,
+        wireframe: isWireframe,
+      });
+    }
+
+    const baseColor = grade === 'titanium' ? 0x64748b : 0x94a3b8;
+    return new THREE.MeshPhysicalMaterial({
+      color: baseColor,
+      metalness: 0.92,
+      roughness: 0.15,
+      clearcoat: 0.6,
+      clearcoatRoughness: 0.06,
+      envMapIntensity: 1.4,
       wireframe: isWireframe,
     });
   }

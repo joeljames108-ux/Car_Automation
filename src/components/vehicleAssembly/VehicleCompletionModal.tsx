@@ -11,7 +11,7 @@ import {
   ShieldCheck,
   Zap,
 } from "lucide-react";
-import { VehicleSVG } from "./VehicleSVG";
+import { ModularExterior3DViewport } from "../../exterior3d/ModularExterior3DViewport";
 import { playAssemblySound } from "../assembly/sounds";
 import { VehicleConfig, EnginePosition, DriveType } from "../../sim/types";
 import { StatDeltaBadges } from "../assembly/assemblyUIHelpers";
@@ -101,17 +101,10 @@ export const VehicleCompletionModal: React.FC<VehicleCompletionModalProps> = ({
           </div>
         </div>
 
-        {/* Blueprint Display Viewport */}
+        {/* 3D Blueprint Display Viewport */}
         <div className="h-72 w-full rounded-2xl bg-[#030712] border border-cyan-500/30 overflow-hidden flex items-center justify-center p-2 relative">
-          <VehicleSVG
-            installedComponents={installedAll}
-            activeComponentId={null}
-            phase="idle"
-            hoveredComponentId={null}
-            isExplodedView={false}
-            enginePosition={enginePosition}
-            driveType={driveType}
-            vehicleConfig={vehicleConfig}
+          <ModularExterior3DViewport
+            className="w-full h-full"
           />
         </div>
 

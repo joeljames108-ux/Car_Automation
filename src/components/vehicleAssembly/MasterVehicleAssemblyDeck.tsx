@@ -182,9 +182,9 @@ export const MasterVehicleAssemblyDeck: React.FC = () => {
   const currentSockets = ChassisAttachmentSocketsRegistry.getSocketsForSubsystem(activeStage);
 
   return (
-    <div className="flex flex-col h-full bg-[#0a0c10] text-gray-200 select-none overflow-hidden font-sans">
+    <div className="flex flex-col h-full text-amber-900 select-none overflow-hidden font-sans" style={{backgroundColor: '#FFF8EB'}}>
       {/* Top Stage Navigation Ribbon */}
-      <div className="flex items-center gap-1.5 p-2.5 bg-[#12161f] border-b border-[#1f2636] overflow-x-auto no-scrollbar shadow-lg">
+      <div className="flex items-center gap-1.5 p-2.5 overflow-x-auto no-scrollbar shadow-lg" style={{backgroundColor: 'rgba(255,248,235,0.8)', borderBottom: '1px solid rgba(217,166,78,0.25)'}}>
         {stages.map((stage) => {
           const isActive = activeStage === stage.id;
           return (
@@ -193,12 +193,12 @@ export const MasterVehicleAssemblyDeck: React.FC = () => {
               onClick={() => setActiveStage(stage.id)}
               className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-semibold whitespace-nowrap transition-all ${
                 isActive
-                  ? 'bg-cyan-500/20 text-cyan-400 border border-cyan-500/50 shadow-[0_0_12px_rgba(6,182,212,0.3)]'
-                  : 'bg-[#181e2b] text-gray-400 border border-[#222c3d] hover:bg-[#1f2738] hover:text-gray-200'
+                  ? 'bg-amber-200/60 text-amber-800 border border-amber-400/50 shadow-[0_0_12px_rgba(217,166,78,0.3)]'
+                  : 'bg-amber-100/50 text-amber-700 border border-amber-200/60 hover:bg-amber-200/50 hover:text-amber-900'
               }`}
             >
               <span>{stage.label}</span>
-              <span className={`px-1.5 py-0.2 rounded-full text-[10px] ${isActive ? 'bg-cyan-500 text-black font-bold' : 'bg-gray-800 text-gray-400'}`}>
+              <span className={`px-1.5 py-0.2 rounded-full text-[10px] ${isActive ? 'bg-amber-500 text-white font-bold' : 'bg-amber-200/60 text-amber-600'}`}>
                 {stage.count}
               </span>
             </button>
@@ -209,7 +209,7 @@ export const MasterVehicleAssemblyDeck: React.FC = () => {
       {/* Main 3-Column Studio Deck */}
       <div className="flex flex-1 overflow-hidden">
         {/* Left Subsystem Inspector Column */}
-        <div className="w-80 bg-[#0d1117] border-r border-[#1f2636] flex flex-col overflow-y-auto p-4 space-y-4">
+        <div className="w-80 border-r flex flex-col overflow-y-auto p-4 space-y-4" style={{backgroundColor: 'rgba(255,248,235,0.7)', borderColor: 'rgba(217,166,78,0.25)'}}>
           <div className="flex items-center justify-between">
             <h2 className="text-sm font-bold tracking-wider text-cyan-400 uppercase flex items-center gap-2">
               <Wrench className="w-4 h-4" />
@@ -228,12 +228,12 @@ export const MasterVehicleAssemblyDeck: React.FC = () => {
                   onClick={() => setSelectedSocketId(sock.socketId)}
                   className={`p-3 rounded-lg border cursor-pointer transition-all ${
                     isSelected
-                      ? 'bg-cyan-950/40 border-cyan-500 shadow-[0_0_10px_rgba(6,182,212,0.2)]'
-                      : 'bg-[#131822] border-[#20293a] hover:border-gray-600'
+                      ? 'bg-amber-200/60 border-amber-400 shadow-[0_0_10px_rgba(217,166,78,0.2)]'
+                      : 'bg-amber-50/50 border-amber-200/60 hover:border-amber-300'
                   }`}
                 >
                   <div className="flex items-center justify-between mb-1">
-                    <span className="text-xs font-semibold text-gray-100">{sock.name}</span>
+                    <span className="text-xs font-semibold text-amber-900">{sock.name}</span>
                     {isOccupied ? (
                       <span className="flex items-center gap-1 text-[10px] text-emerald-400 font-medium bg-emerald-950/60 px-1.5 py-0.5 rounded border border-emerald-800">
                         <CheckCircle2 className="w-3 h-3" /> Mated
@@ -244,9 +244,9 @@ export const MasterVehicleAssemblyDeck: React.FC = () => {
                       </span>
                     )}
                   </div>
-                  <div className="text-[11px] text-gray-400 font-mono space-y-0.5">
+                  <div className="text-[11px] font-mono space-y-0.5" style={{color: '#78716C'}}>
                     <div>Fastener: <span className="text-gray-200 font-semibold">{sock.fastenerSpec.id}</span></div>
-                    <div>Torque Spec: <span className="text-cyan-400 font-semibold">{sock.fastenerSpec.nominalTorqueNm} Nm</span></div>
+                    <div>Torque Spec: <span className="font-semibold" style={{color: '#92400E'}}>{sock.fastenerSpec.nominalTorqueNm} Nm</span></div>
                     <div>Max Misalignment: <span className="text-gray-200">{sock.maxAllowableAngularMisalignmentDeg}°</span></div>
                   </div>
                 </div>
@@ -255,9 +255,9 @@ export const MasterVehicleAssemblyDeck: React.FC = () => {
           </div>
 
           {/* Color & Paint Swatches */}
-          <div className="pt-2 border-t border-[#1f2636]">
-            <h3 className="text-xs font-bold text-gray-300 uppercase tracking-wider mb-2.5 flex items-center gap-1.5">
-              <Layers className="w-3.5 h-3.5 text-cyan-400" />
+          <div className="pt-2 border-t" style={{borderColor: 'rgba(217,166,78,0.25)'}}>
+            <h3 className="text-xs font-bold uppercase tracking-wider mb-2.5 flex items-center gap-1.5" style={{color: '#78716C'}}>
+              <Layers className="w-3.5 h-3.5" style={{color: '#92400E'}} />
               Automotive Paint Finish
             </h3>
             <div className="flex items-center gap-2">
@@ -274,7 +274,7 @@ export const MasterVehicleAssemblyDeck: React.FC = () => {
                   title={p.name}
                   style={{ backgroundColor: p.hex }}
                   className={`w-7 h-7 rounded-full border-2 transition-all ${
-                    selectedPaintHex === p.hex ? 'border-cyan-400 scale-110 shadow-[0_0_8px_rgba(6,182,212,0.6)]' : 'border-gray-600 hover:scale-105'
+                    selectedPaintHex === p.hex ? 'scale-110 shadow-[0_0_8px_rgba(217,166,78,0.6)]' : 'hover:scale-105'
                   }`}
                 />
               ))}
@@ -283,26 +283,26 @@ export const MasterVehicleAssemblyDeck: React.FC = () => {
         </div>
 
         {/* Center 3D Viewport Column */}
-        <div className="flex-1 relative flex flex-col bg-[#080a0e]">
+        <div className="flex-1 relative flex flex-col" style={{backgroundColor: 'rgba(255,248,235,0.9)'}}>
           {/* Canvas Viewport Container */}
           <div ref={mountRef} className="w-full h-full cursor-grab active:cursor-grabbing" />
 
           {/* Floating Viewport Controls Overlay */}
-          <div className="absolute top-4 left-4 flex items-center gap-2 bg-[#121620]/90 backdrop-blur-md px-3 py-2 rounded-xl border border-[#232b3d] shadow-2xl">
+          <div className="absolute top-4 left-4 flex items-center gap-2 backdrop-blur-md px-3 py-2 rounded-xl shadow-2xl" style={{backgroundColor: 'rgba(255,248,235,0.9)', border: '1px solid rgba(217,166,78,0.3)'}}>
             <button
               onClick={() => setShowSockets(!showSockets)}
               className={`flex items-center gap-1.5 px-2.5 py-1 rounded text-xs font-medium transition-all ${
-                showSockets ? 'bg-cyan-500/20 text-cyan-400 border border-cyan-500/50' : 'bg-[#1a202c] text-gray-400 hover:text-gray-200'
+                showSockets ? 'bg-amber-200/60 text-amber-800 border border-amber-400/50' : 'bg-amber-100/50 text-amber-600 hover:text-amber-800'
               }`}
             >
               <Eye className="w-3.5 h-3.5" />
               {showSockets ? 'Hide Sockets' : 'Show Sockets'}
             </button>
 
-            <div className="h-4 w-px bg-gray-700 mx-1" />
+            <div className="h-4 w-px mx-1" style={{backgroundColor: 'rgba(217,166,78,0.3)'}} />
 
             <div className="flex items-center gap-2 text-xs text-gray-300 font-medium">
-              <Sliders className="w-3.5 h-3.5 text-cyan-400" />
+              <Sliders className="w-3.5 h-3.5" style={{color: '#92400E'}} />
               <span>Exploded View:</span>
               <input
                 type="range"
@@ -313,28 +313,28 @@ export const MasterVehicleAssemblyDeck: React.FC = () => {
                 onChange={(e) => setExplodedProgress(parseFloat(e.target.value))}
                 className="w-24 accent-cyan-400 cursor-pointer"
               />
-              <span className="font-mono text-cyan-400 w-8">{Math.round(explodedProgress * 100)}%</span>
+              <span className="font-mono w-8" style={{color: '#92400E'}}>{Math.round(explodedProgress * 100)}%</span>
             </div>
           </div>
 
           {/* Viewport Telemetry HUD */}
-          <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between bg-[#0e131d]/90 backdrop-blur-md p-3.5 rounded-xl border border-[#20293b] shadow-2xl">
+          <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between backdrop-blur-md p-3.5 rounded-xl shadow-2xl" style={{backgroundColor: 'rgba(255,248,235,0.92)', border: '1px solid rgba(217,166,78,0.3)'}}>
             <div className="flex items-center gap-6 text-xs font-mono">
               <div>
-                <span className="text-gray-500 block text-[10px] uppercase">Chassis Rigidity</span>
-                <span className="text-cyan-400 font-bold text-sm">38,500 Nm/deg</span>
+                <span className="block text-[10px] uppercase" style={{color: '#A8A29E'}}>Chassis Rigidity</span>
+                <span className="font-bold text-sm" style={{color: '#92400E'}}>38,500 Nm/deg</span>
               </div>
               <div>
-                <span className="text-gray-500 block text-[10px] uppercase">Total Mass</span>
-                <span className="text-gray-200 font-bold text-sm">1,280 kg</span>
+                <span className="block text-[10px] uppercase" style={{color: '#A8A29E'}}>Total Mass</span>
+                <span className="font-bold text-sm text-amber-900">1,280 kg</span>
               </div>
               <div>
-                <span className="text-gray-500 block text-[10px] uppercase">Weight Bias</span>
-                <span className="text-emerald-400 font-bold text-sm">49.2% F / 50.8% R</span>
+                <span className="block text-[10px] uppercase" style={{color: '#A8A29E'}}>Weight Bias</span>
+                <span className="font-bold text-sm text-amber-800">49.2% F / 50.8% R</span>
               </div>
               <div>
-                <span className="text-gray-500 block text-[10px] uppercase">Aero Drag</span>
-                <span className="text-amber-400 font-bold text-sm">Cd 0.31</span>
+                <span className="block text-[10px] uppercase" style={{color: '#A8A29E'}}>Aero Drag</span>
+                <span className="font-bold text-sm text-amber-800">Cd 0.31</span>
               </div>
             </div>
 
@@ -347,54 +347,54 @@ export const MasterVehicleAssemblyDeck: React.FC = () => {
         </div>
 
         {/* Right Assembly Details Column */}
-        <div className="w-84 bg-[#0d1117] border-l border-[#1f2636] flex flex-col p-4 space-y-4 overflow-y-auto">
+        <div className="w-84 border-l flex flex-col p-4 space-y-4 overflow-y-auto" style={{backgroundColor: 'rgba(255,248,235,0.7)', borderColor: 'rgba(217,166,78,0.25)'}}>
           <div className="flex items-center justify-between">
-            <h2 className="text-sm font-bold tracking-wider text-cyan-400 uppercase flex items-center gap-2">
-              <Activity className="w-4 h-4" />
+            <h2 className="text-sm font-bold tracking-wider uppercase flex items-center gap-2" style={{color: '#92400E'}}>
+              <Activity className="w-4 h-4" style={{color: '#92400E'}} />
               Structural Verification
             </h2>
           </div>
 
-          <div className="bg-[#121722] p-3.5 rounded-xl border border-[#1e2738] space-y-3">
-            <h4 className="text-xs font-bold text-gray-200 flex items-center gap-1.5">
-              <Cpu className="w-4 h-4 text-cyan-400" />
+          <div className="p-3.5 rounded-xl border space-y-3" style={{backgroundColor: 'rgba(255,248,235,0.6)', borderColor: 'rgba(217,166,78,0.2)'}}>
+            <h4 className="text-xs font-bold text-amber-900 flex items-center gap-1.5">
+              <Cpu className="w-4 h-4" style={{color: '#92400E'}} />
               Real-Time Joint Preload Analyzer
             </h4>
             <div className="space-y-2 text-xs">
-              <div className="flex justify-between text-gray-300">
+              <div className="flex justify-between text-amber-800">
                 <span>Subframe Preload Tension:</span>
-                <span className="font-mono text-cyan-400 font-semibold">185.0 kN</span>
+                <span className="font-mono font-semibold" style={{color: '#92400E'}}>185.0 kN</span>
               </div>
-              <div className="flex justify-between text-gray-300">
+              <div className="flex justify-between text-amber-800">
                 <span>Engine Hydro-Mount Damper:</span>
                 <span className="font-mono text-emerald-400 font-semibold">95.0 Nm</span>
               </div>
-              <div className="flex justify-between text-gray-300">
+              <div className="flex justify-between text-amber-800">
                 <span>Wheel Centerlock Torque:</span>
                 <span className="font-mono text-amber-400 font-semibold">600.0 Nm</span>
               </div>
             </div>
           </div>
 
-          <div className="bg-[#121722] p-3.5 rounded-xl border border-[#1e2738] space-y-2.5">
-            <h4 className="text-xs font-bold text-gray-200 flex items-center gap-1.5">
-              <Disc className="w-4 h-4 text-cyan-400" />
+          <div className="p-3.5 rounded-xl border space-y-2.5" style={{backgroundColor: 'rgba(255,248,235,0.6)', borderColor: 'rgba(217,166,78,0.2)'}}>
+            <h4 className="text-xs font-bold text-amber-900 flex items-center gap-1.5">
+              <Disc className="w-4 h-4" style={{color: '#92400E'}} />
               Active Subsystem Components
             </h4>
-            <div className="space-y-1.5 text-xs text-gray-300">
-              <div className="p-2 rounded bg-[#171e2c] border border-[#222b3d] flex items-center justify-between">
+            <div className="space-y-1.5 text-xs text-amber-800">
+              <div className="p-2 rounded flex items-center justify-between" style={{backgroundColor: 'rgba(255,248,235,0.5)', border: '1px solid rgba(217,166,78,0.15)'}}>
                 <span>Modular Unibody Shell</span>
                 <span className="text-[10px] text-emerald-400 bg-emerald-950 px-1.5 py-0.5 rounded font-mono">Installed</span>
               </div>
-              <div className="p-2 rounded bg-[#171e2c] border border-[#222b3d] flex items-center justify-between">
+              <div className="p-2 rounded flex items-center justify-between" style={{backgroundColor: 'rgba(255,248,235,0.5)', border: '1px solid rgba(217,166,78,0.15)'}}>
                 <span>V12 Quad-Turbo Block</span>
                 <span className="text-[10px] text-emerald-400 bg-emerald-950 px-1.5 py-0.5 rounded font-mono">Installed</span>
               </div>
-              <div className="p-2 rounded bg-[#171e2c] border border-[#222b3d] flex items-center justify-between">
+              <div className="p-2 rounded flex items-center justify-between" style={{backgroundColor: 'rgba(255,248,235,0.5)', border: '1px solid rgba(217,166,78,0.15)'}}>
                 <span>6-Speed Sequential Gearbox</span>
                 <span className="text-[10px] text-emerald-400 bg-emerald-950 px-1.5 py-0.5 rounded font-mono">Installed</span>
               </div>
-              <div className="p-2 rounded bg-[#171e2c] border border-[#222b3d] flex items-center justify-between">
+              <div className="p-2 rounded flex items-center justify-between" style={{backgroundColor: 'rgba(255,248,235,0.5)', border: '1px solid rgba(217,166,78,0.15)'}}>
                 <span>Carbon Ceramic Rotor Package</span>
                 <span className="text-[10px] text-emerald-400 bg-emerald-950 px-1.5 py-0.5 rounded font-mono">Installed</span>
               </div>

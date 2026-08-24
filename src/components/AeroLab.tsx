@@ -9,11 +9,13 @@ import { Section, Slider, Select, ChoiceGrid, Toggle, StatTile } from "./ui/Cont
 import { CFDView } from "./ui/CFDView";
 import { LineChart } from "./ui/LineChart";
 import { AerodynamicsStudio } from "./aerodynamics/AerodynamicsStudio";
+import { WindTunnelAeroStudio } from "./aerodynamics/WindTunnelAeroStudio";
 import {
   FRONT_BUMPER_SHAPES, SIDEPOD_INLET_POSITIONS, UNDERBODY_FLOOR_TYPES,
   WHEEL_AERO_TYPES, MIRROR_AERO_TYPES, AERO_MODES,
   ENDPLATE_DESIGNS, OIL_COOLER_PLACEMENTS, TRACKS,
 } from "../sim/constants";
+import { formatLap } from "../sim/utils/formatLap";
 import { PresetQuickSelect } from "./PresetQuickSelect";
 import { ModernAnalogDial } from "./ui/ModernAnalogDial";
 import { GlassSlider } from "./ui/GlassSlider";
@@ -61,7 +63,7 @@ function MetricBar({ label, value, accent = "accent" }: { label: string; value: 
 export function AeroLab() {
   const { design, sim, updateAeroResearch, uiTheme } = useDesign();
   const ar = design.vehicle.aeroResearch;
-  const [labMode, setLabMode] = useState<"studio" | "dashboard">("studio");
+  const [labMode, setLabMode] = useState<"studio" | "cfd_windtunnel" | "dashboard">("studio");
   const [dept, setDept] = useState<Dept>("dashboard");
 
   const update = <K extends keyof AeroResearchConfig>(key: K, patch: Partial<AeroResearchConfig[K]>) =>
@@ -70,8 +72,8 @@ export function AeroLab() {
   return (
     <div className="space-y-4">
       {/* Studio / Dashboard Mode Switcher */}
-      <div className="flex items-center justify-between p-2 rounded-xl bg-base-900/90 border border-base-800 shadow-sm">
-        <div className="flex items-center gap-2">
+      <div className="flex items-center justify-between p-2 rounded-xl bg-base-900/90 border border-base-800 shadow-sm flex-wrap gap-2">
+        <div className="flex items-center gap-2 flex-wrap">
           <button
             onClick={() => setLabMode("studio")}
             className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-bold font-mono transition-all border ${
@@ -81,7 +83,18 @@ export function AeroLab() {
             }`}
           >
             <Box size={14} className={labMode === "studio" ? "text-accent-400" : ""} />
-            🔬 PARAMETRIC 3D AERO STUDIO (PHASE 111–125)
+            🔬 PARAMETRIC 3D AERO STUDIO
+          </button>
+          <button
+            onClick={() => setLabMode("cfd_windtunnel")}
+            className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-bold font-mono transition-all border ${
+              labMode === "cfd_windtunnel"
+                ? "bg-cyan-500/20 border-cyan-400/60 text-cyan-200 shadow-sm"
+                : "bg-base-850 border-base-800 text-slate-400 hover:text-slate-200"
+            }`}
+          >
+            <Wind size={14} className={labMode === "cfd_windtunnel" ? "text-cyan-400" : ""} />
+            🌪️ CFD WIND TUNNEL & FLOWFIELD
           </button>
           <button
             onClick={() => setLabMode("dashboard")}
@@ -103,6 +116,8 @@ export function AeroLab() {
 
       {labMode === "studio" ? (
         <AerodynamicsStudio />
+      ) : labMode === "cfd_windtunnel" ? (
+        <WindTunnelAeroStudio />
       ) : (
         <>
           {/* UI 4: Modern Analog Dial & Gradient Sliders Showcase (As seen in Reference Photo) */}
@@ -465,6 +480,15 @@ export function AeroLab() {
               <div className="mt-3">
                 <Toggle label="Rolling Road" value={ar.windTunnel.rollingRoad} onChange={(v) => update("windTunnel", { rollingRoad: v })} />
               </div>
+              <div className="mt-4 pt-3 border-t border-base-800 flex justify-end">
+                <button
+                  onClick={() => setLabMode("cfd_windtunnel")}
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold bg-cyan-500/20 border border-cyan-400/40 text-cyan-300 hover:bg-cyan-500/30 transition-all shadow-sm"
+                >
+                  <Wind size={14} />
+                  Open Full Interactive 3D Wind Tunnel Studio →
+                </button>
+              </div>
             </Section>
           )}
         </div>
@@ -521,11 +545,6 @@ function AeroDashboard({
   const trackPredictions = useMemo(() => {
     return sim.lapTimes.map((lt) => {
       const t = TRACKS[lt.trackId];
-      const formatLap = (secs: number) => {
-        const m = Math.floor(secs / 60);
-        const s = (secs % 60).toFixed(3);
-        return m > 0 ? `${m}:${s.padStart(6, "0")}` : `${s}s`;
-      };
       const fuel = (1 + sim.dragCoeff * 0.4).toFixed(2);
       return {
         id: lt.trackId,

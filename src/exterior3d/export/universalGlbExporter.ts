@@ -22,7 +22,7 @@ export interface ExportedGlbResult {
   filename: string;
   byteLength: number;
   buffer: ArrayBuffer;
-  jsonMetadata?: any;
+  jsonMetadata?: Record<string, unknown>;
 }
 
 export class UniversalGlbExporter {

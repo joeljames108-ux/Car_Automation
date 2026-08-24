@@ -7,6 +7,7 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "typecheck": "tsc --noEmit -p tsconfig.app.json",
+    "test": "vitest run",
     "preview": "vite preview",
     "docs:dev": "vitepress dev docs",
     "docs:build": "vitepress build docs"
@@ -35,7 +36,8 @@
     "tailwindcss": "^3.4.15",
     "typescript": "^5.6.3",
     "vite": "^5.4.11",
-    "vitepress": "^1.0.0"
+    "vitepress": "^1.0.0",
+    "vitest": "^2.1.8"
   },
   "allowScripts": {
     "esbuild@0.21.5": true

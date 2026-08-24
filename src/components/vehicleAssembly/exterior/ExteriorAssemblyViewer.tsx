@@ -109,14 +109,14 @@ export const ExteriorAssemblyViewer: React.FC<ExteriorAssemblyViewerProps> = ({
           {/* 2D / 3D Mode Toggle */}
           <div className="flex items-center gap-1 bg-slate-950 p-1 rounded-xl border border-white/10">
             <button
-              onClick={() => setViewMode("2d_iso")}
+              onClick={() => setViewMode("2d")}
               className={`px-3 py-1 rounded-lg text-xs font-mono font-bold transition-all ${
-                viewMode === "2d_iso"
+                viewMode === "2d"
                   ? "bg-cyan-500 text-slate-950 shadow-[0_0_12px_rgba(6,182,212,0.5)]"
                   : "text-slate-400 hover:text-slate-200"
               }`}
             >
-              2D ISO
+              2D
             </button>
             <button
               onClick={() => setViewMode("3d_webgl")}

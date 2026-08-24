@@ -3,7 +3,7 @@ import {
   Search, Command, LayoutDashboard, Cog, Car, Paintbrush, Wind,
   Sofa, Factory, Monitor, ShieldCheck, Microscope, Activity,
   FlaskConical, Flag, BarChart3, Warehouse, GitCompare, TrendingUp,
-  Trophy, Cpu, Palette, Sparkles, X, ArrowRight
+  Trophy, Cpu, Palette, Sparkles, X, ArrowRight, Navigation
 } from "lucide-react";
 import { useDesign } from "../state/DesignContext";
 import { VEHICLE_PRESET_LIBRARY } from "../sim/vehiclePresets";
@@ -44,6 +44,13 @@ export function CommandPalette({ isOpen, onClose, onSelectStage }: CommandPalett
     const list: CommandItem[] = [
       // Modules
       { id: "mod_command", category: "Modules", title: "Command Center", subtitle: "Overview & Presets", icon: <LayoutDashboard size={16} />, action: () => onSelectStage("command") },
+      { id: "mod_studio", category: "Modules", title: "Grand Studio Hub", subtitle: "All Automotive Studios", icon: <Sparkles size={16} />, action: () => onSelectStage("studio") },
+      { id: "mod_dyno_ecu", category: "Modules", title: "Dyno & ECU Studio", subtitle: "ECU Remapping & Dyno Sweep", icon: <Activity size={16} />, action: () => onSelectStage("dyno_ecu") },
+      { id: "mod_wind_tunnel", category: "Modules", title: "CFD Wind Tunnel", subtitle: "Active Flowfield & Downforce", icon: <Wind size={16} />, action: () => onSelectStage("wind_tunnel") },
+      { id: "mod_track_battle", category: "Modules", title: "Track Battles Studio", subtitle: "Nürburgring & Spa Telemetry", icon: <Trophy size={16} />, action: () => onSelectStage("track_battle") },
+      { id: "mod_track_layout", category: "Modules", title: "Track Layouts Studio", subtitle: "2D Vector Maps & Apex Telemetry", icon: <Navigation size={16} />, action: () => onSelectStage("track_layout") },
+      { id: "mod_f1_constructor", category: "Modules", title: "🏎️ F1 Constructor Studio", subtitle: "Modular 3D Open-Wheel F1 Simulator", icon: <Flag size={16} />, action: () => onSelectStage("f1_constructor") },
+      { id: "mod_hypercar_constructor", category: "Modules", title: "🏆 Hypercar Construction Studio", subtitle: "Modular 3D WEC Le Mans Endurance Simulator", icon: <Trophy size={16} />, action: () => onSelectStage("hypercar_constructor") },
       { id: "mod_engine", category: "Modules", title: "Engine Designer", subtitle: "ICE, Turbo, Hybrid, EV", icon: <Cog size={16} />, action: () => onSelectStage("engine") },
       { id: "mod_vehicle", category: "Modules", title: "Vehicle Architecture", subtitle: "Chassis, Drivetrain & Suspension", icon: <Car size={16} />, action: () => onSelectStage("vehicle") },
       { id: "mod_exterior", category: "Modules", title: "Exterior & Styling", subtitle: "Paint, Lighting & Trim", icon: <Paintbrush size={16} />, action: () => onSelectStage("exterior") },
@@ -64,7 +71,7 @@ export function CommandPalette({ isOpen, onClose, onSelectStage }: CommandPalett
       { id: "mod_twin", category: "Modules", title: "Digital Twin", subtitle: "Real-time Telemetry Feed", icon: <Cpu size={16} />, action: () => onSelectStage("twin") },
 
       // Themes
-      { id: "theme_1", category: "Themes", title: "Theme 1 — Cyan Cyber Glass", subtitle: "Default Liquid Glass", icon: <Palette size={16} />, action: () => { setUiTheme("theme1"); success("Theme Switched", "Activated Theme 1 — Cyan Cyber Glass"); } },
+      { id: "theme_1", category: "Themes", title: "UI 1 — Kinetic Horizon", subtitle: "AnimMaster & HorizonX Design", icon: <Palette size={16} />, action: () => { setUiTheme("theme1"); success("Theme Switched", "Activated UI 1 — Kinetic Horizon"); } },
       { id: "theme_2", category: "Themes", title: "Theme 2 — Cosmic Nebula", subtitle: "Deep Purple Sci-Fi", icon: <Palette size={16} />, action: () => { setUiTheme("theme2"); success("Theme Switched", "Activated Theme 2 — Cosmic Nebula"); } },
       { id: "theme_3", category: "Themes", title: "Theme 3 — Nordic Light Glass", subtitle: "Minimalist Alabaster White", icon: <Palette size={16} />, action: () => { setUiTheme("theme3"); success("Theme Switched", "Activated Theme 3 — Nordic Light Glass"); } },
       { id: "theme_4", category: "Themes", title: "Theme 4 — Vision Glass", subtitle: "Spatial Glass Lounge", icon: <Palette size={16} />, action: () => { setUiTheme("theme4"); success("Theme Switched", "Activated Theme 4 — Vision Glass"); } },

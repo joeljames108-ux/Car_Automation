@@ -308,6 +308,8 @@ export function simulateChassis(
      rearWheelMat.costFactor * wheels.rearDiameter * wheels.rearWidth * 5)
   );
 
+  const feaVonMisesHotspotMpa = Math.round(380 / Math.max(0.5, torsionalRigidity / 15));
+
   return {
     chassisWeight,
     torsionalRigidity,
@@ -338,5 +340,10 @@ export function simulateChassis(
     handlingScore,
     comfortScore,
     chassisCost,
+    feaVonMisesHotspotMpa,
+    rollCenterHeightFrontMm: suspension.rollCenterFront,
+    rollCenterHeightRearMm: suspension.rollCenterRear,
+    antiDivePct: suspension.antiDive,
+    antiSquatPct: suspension.antiSquat,
   };
 }

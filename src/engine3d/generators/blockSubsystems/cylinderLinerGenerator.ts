@@ -225,18 +225,21 @@ export function buildSingleCylinderBoreUnit(
  */
 export function buildV12CylinderLinerSystem(
   bankSide: 'left' | 'right',
-  materials: V12BlockMaterialPalette
+  materials: V12BlockMaterialPalette,
+  cylindersPerBank: number = 6
 ): THREE.Group {
   const group = new THREE.Group();
   const isLeft = bankSide === 'left';
   const bankName = isLeft ? 'Bank_1_Left' : 'Bank_2_Right';
   const spec = V12_LINER_SPECS;
+  const pitchM = spec.borePitchMm / 1000;
+  const startX = -((cylindersPerBank - 1) * pitchM) / 2;
 
   group.name = `${bankName}_Cylinder_Liner_Array`;
 
-  for (let i = 0; i < 6; i++) {
+  for (let i = 0; i < cylindersPerBank; i++) {
     const cylinderNumber = isLeft ? i * 2 + 1 : (i + 1) * 2;
-    const centerX = -0.27 + i * (spec.borePitchMm / 1000);
+    const centerX = startX + i * pitchM;
 
     const boreUnit = buildSingleCylinderBoreUnit(
       {
@@ -257,8 +260,8 @@ export function buildV12CylinderLinerSystem(
   const crossDrillGeo = new THREE.CylinderGeometry(0.005, 0.005, 0.035, 16);
   crossDrillGeo.rotateZ(Math.PI / 2);
 
-  for (let j = 0; j < 5; j++) {
-    const midX = -0.216 + j * 0.108;
+  for (let j = 0; j < cylindersPerBank - 1; j++) {
+    const midX = startX + (j + 0.5) * pitchM;
     const crossDrillMesh = new THREE.Mesh(crossDrillGeo, materials.coolantJacketInterior);
     crossDrillMesh.name = `${bankName}_Inter_Bore_Coolant_Bridge_${j + 1}`;
     crossDrillMesh.position.set(midX, 0, 0.04);

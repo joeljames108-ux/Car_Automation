@@ -1,13 +1,11 @@
 // ===================================================================
-// APEX ENGINE BUILDER — STICKY 3D ENGINE DIAGRAM (PHASE 15)
-// Progressive Assembly Visualizer with Camera Tracking & Stage HUD
+// APEX ENGINE BUILDER — STICKY 3D ENGINE DIAGRAM (PURE 3D WEBGL)
 // ===================================================================
 
-import React, { useState, useMemo, useCallback, useRef, useEffect } from "react";
-import { V12WebGLOrbitViewer } from "./iso3d/v12/V12WebGLOrbitViewer";
+import React, { useState, useMemo, useCallback } from "react";
+import { ModularEngine3DViewport } from "../../engine3d/ModularEngine3DViewport";
 import { Engine3DToolbar } from "../../engine3d/ui/Engine3DToolbar";
 import {
-  Camera,
   Sparkles,
   Zap,
   Flame,
@@ -15,7 +13,6 @@ import {
   VolumeX,
   Maximize2,
   SkipForward,
-  Layers,
   Box,
 } from "lucide-react";
 import {
@@ -25,9 +22,6 @@ import {
   PowertrainMode,
   getAssemblyComponents,
 } from "../../sim/assemblyTypes";
-import { EngineSVG } from "./EngineSVG";
-import { ParticleEffects } from "./ParticleEffects";
-import { useInstallAnimation } from "./useInstallAnimation";
 import { playAssemblySound, toggleAssemblyMute } from "./sounds";
 import { EngineConfig } from "../../sim/types";
 import { StageInfo } from "../../state/useEngineBuilderFlow";
@@ -81,225 +75,75 @@ export function StickyEngineDiagram({
   className = "",
 }: StickyEngineDiagramProps) {
   const [isMuted, setIsMuted] = useState(false);
-  const [viewMode, setViewMode] = useState<"3d_iso" | "2d" | "3d_webgl">("3d_iso");
-  const [isTransitioningView, setIsTransitioningView] = useState(false);
-  const [transitionKey, setTransitionKey] = useState(0);
-  const [isTabVisible, setIsTabVisible] = useState(!document.hidden);
-  const hoverRafRef = useRef<number | null>(null);
 
-  const handleSetViewMode = useCallback((mode: "3d_iso" | "2d" | "3d_webgl") => {
-    setIsTransitioningView(true);
-    setViewMode(mode);
-    setTransitionKey((prev) => prev + 1);
-    setTimeout(() => {
-      setIsTransitioningView(false);
-    }, 400);
+  const activeMeta = useMemo(() => {
+    return activeComponentId
+      ? getAssemblyComponents().find((c) => c.id === activeComponentId)
+      : null;
+  }, [activeComponentId]);
+
+  const handleToggleMute = useCallback(() => {
+    const nextMute = toggleAssemblyMute();
+    setIsMuted(nextMute);
   }, []);
-
-  // Monitor visibility to pause animations
-  useEffect(() => {
-    const handleVisibility = () => {
-      setIsTabVisible(!document.hidden);
-    };
-    document.addEventListener("visibilitychange", handleVisibility);
-    return () => {
-      document.removeEventListener("visibilitychange", handleVisibility);
-      if (hoverRafRef.current) cancelAnimationFrame(hoverRafRef.current);
-    };
-  }, []);
-
-  // Throttled hover handler
-  const handleHoverThrottled = useCallback(
-    (id: ComponentId | null) => {
-      if (!onHoverComponent) return;
-      if (hoverRafRef.current) cancelAnimationFrame(hoverRafRef.current);
-      hoverRafRef.current = requestAnimationFrame(() => {
-        onHoverComponent(id);
-      });
-    },
-    [onHoverComponent]
-  );
-
-  // Install animation controller
-  useInstallAnimation({
-    activeComponentId: isTabVisible ? activeComponentId : null,
-    phase,
-    onAdvancePhase,
-    onCompleteInstall: () => {
-      onCompleteInstall();
-      playAssemblySound("click");
-    },
-    onPlaySound: (type) => playAssemblySound(type),
-    engineConfig,
-  });
-
-  const isEV = powertrainMode === "electric";
-  const componentsList = useMemo(() => getAssemblyComponents(engineConfig), [engineConfig]);
-  const activeMeta = useMemo(
-    () => componentsList.find((c) => c.id === activeComponentId),
-    [componentsList, activeComponentId]
-  );
-
-  // Camera viewport dynamic zoom/pan offset
-  const cameraTransform = useMemo(() => {
-    if (!activeComponentId || phase === "idle") {
-      return "scale(1) translate(0px, 0px)";
-    }
-    if (!activeMeta) return "scale(1) translate(0px, 0px)";
-
-    const slot = activeMeta.slotPosition;
-    const panX = (290 - slot.x) * 0.35;
-    const panY = (245 - slot.y) * 0.35;
-    return `scale(1.08) translate(${panX}px, ${panY}px)`;
-  }, [activeComponentId, phase, activeMeta]);
 
   return (
     <div
-      className={`relative w-full rounded-3xl bg-gradient-to-b from-slate-900/40 via-slate-950/30 to-slate-900/40 border border-white/10 hover:border-cyan-500/30 backdrop-blur-xl shadow-[0_8px_32px_rgba(0,0,0,0.35)] p-3 md:p-4 overflow-hidden select-none transition-all ${className}`}
+      className={`relative w-full rounded-3xl bg-slate-900/90 dark:bg-base-950/90 border border-slate-700/60 dark:border-base-800/80 backdrop-blur-xl p-4 shadow-2xl flex flex-col gap-3.5 transition-all ${className}`}
     >
-      {/* ── TOP HUD HEADER: ACTIVE STAGE TITLE & CAMERA CONTROLS ── */}
-      <div className="flex items-center justify-between gap-2 mb-2 px-1 text-xs font-mono">
-        {/* Left: Active Stage Name & Breadcrumb */}
-        <div className="flex items-center gap-2.5">
-          <div
-            className={`p-1.5 rounded-xl border flex items-center justify-center ${
-              isEV
-                ? "bg-purple-500/20 text-purple-300 border-purple-500/40"
-                : "bg-cyan-500/20 text-cyan-300 border-cyan-500/40"
-            }`}
-          >
-            {isEV ? <Zap size={14} className="animate-pulse" /> : <Flame size={14} className="animate-pulse" />}
+      {/* ── TOP COMPACT HEADER HUD (Stage, Title, 3D WebGL Badge) ── */}
+      <div className="flex items-center justify-between gap-3 border-b border-white/5 pb-3">
+        {/* Left: Current Active Stage Pill */}
+        <div className="flex items-center gap-2.5 min-w-0">
+          <div className="p-2 rounded-xl bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 shrink-0">
+            <Box size={16} />
           </div>
-          <div>
+          <div className="min-w-0">
             <div className="flex items-center gap-2">
-              <span className="font-extrabold text-slate-100 text-xs md:text-sm">
-                {currentStageMeta.title}
+              <span className="text-[11px] font-mono font-black text-cyan-400 uppercase tracking-widest truncate">
+                STAGE {currentStage.toUpperCase()}
               </span>
-              {activeComponentId && (
-                <span className="px-2 py-0.2 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 text-[9.5px] font-extrabold uppercase animate-pulse">
-                  {phase}
-                </span>
-              )}
+              <span className="px-1.5 py-0.5 rounded text-[9px] font-mono font-bold bg-cyan-500/20 text-cyan-300 border border-cyan-500/40">
+                3D GLB
+              </span>
             </div>
-            <p className="text-[10px] text-slate-400 font-mono truncate max-w-md">
-              {currentStageMeta.subtitle}
-            </p>
+            <h3 className="text-xs font-mono font-bold text-slate-200 truncate">
+              {currentStageMeta.title}
+            </h3>
           </div>
         </div>
 
-        {/* Right: Camera / View Mode / Lightbox Controls */}
+        {/* Right: Sound & Action Controls */}
         <div className="flex items-center gap-1.5 shrink-0">
-          <div className="flex items-center rounded-xl bg-base-950/90 border border-slate-800 p-0.5">
-            <button
-              type="button"
-              onClick={() => handleSetViewMode("2d")}
-              className={`px-2 py-1 rounded-lg text-[10px] font-mono font-bold transition-all ${
-                viewMode === "2d"
-                  ? "bg-slate-800 text-white shadow-sm"
-                  : "text-slate-400 hover:text-slate-200"
-              }`}
-            >
-              2D
-            </button>
-            <button
-              type="button"
-              onClick={() => handleSetViewMode("3d_iso")}
-              className={`px-2 py-1 rounded-lg text-[10px] font-mono font-bold transition-all ${
-                viewMode === "3d_iso"
-                  ? "bg-cyan-500/25 text-cyan-200 shadow-sm border border-cyan-500/40"
-                  : "text-slate-400 hover:text-slate-200"
-              }`}
-            >
-              3D Iso
-            </button>
-            <button
-              type="button"
-              onClick={() => handleSetViewMode("3d_webgl")}
-              className={`flex items-center gap-1 px-2.5 py-1 rounded-lg text-[10px] font-mono font-extrabold transition-all ${
-                viewMode === "3d_webgl"
-                  ? "bg-gradient-to-r from-purple-600 to-indigo-600 text-white shadow-[0_0_12px_rgba(168,85,247,0.4)] border border-purple-400/50"
-                  : "text-purple-300 hover:text-white hover:bg-purple-950/40"
-              }`}
-            >
-              <Box size={11} className={viewMode === "3d_webgl" ? "animate-pulse" : ""} />
-              <span>3D GLB</span>
-            </button>
-          </div>
-
-          {onOpenLightbox && (
-            <button
-              type="button"
-              onClick={onOpenLightbox}
-              className="p-1.5 rounded-xl bg-base-950/80 hover:bg-base-900 text-slate-400 hover:text-cyan-300 border border-slate-800 transition-all cursor-pointer"
-              title="Enlarge Schematic Blueprint"
-            >
-              <Maximize2 size={13} />
-            </button>
-          )}
-
           {activeComponentId && (
             <button
-              type="button"
               onClick={onSkipAnimation}
-              className="flex items-center gap-1 px-2.5 py-1 rounded-xl bg-cyan-500/15 hover:bg-cyan-500/25 text-cyan-300 border border-cyan-500/40 text-[10px] font-mono font-extrabold cursor-pointer active:scale-95 transition-all"
+              className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-base-950/80 border border-cyan-500/40 text-cyan-300 hover:bg-cyan-950/40 text-[11px] font-mono font-bold transition-all cursor-pointer"
             >
-              <SkipForward size={11} />
-              <span>Skip</span>
+              <SkipForward size={11} /> Skip
             </button>
           )}
+
+          <button
+            onClick={handleToggleMute}
+            className="p-1.5 rounded-lg bg-base-950/80 border border-white/10 text-slate-400 hover:text-cyan-300 transition-all cursor-pointer"
+            title={isMuted ? "Unmute Audio" : "Mute Audio"}
+          >
+            {isMuted ? <VolumeX size={14} /> : <Volume2 size={14} />}
+          </button>
         </div>
       </div>
 
-      {/* ── CENTRAL STAGE WORKSTATION: 3D GLB OR 3D/2D SVG STAGE ── */}
-      <div className="relative w-full h-[400px] md:h-[460px] rounded-2xl bg-slate-950/20 border border-white/5 backdrop-blur-md overflow-hidden flex items-center justify-center shadow-inner">
-        {/* Ambient Lighting Cones (Matching UI Theme) */}
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_40%,rgba(34,211,238,0.06),transparent_70%)] pointer-events-none" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_80%,rgba(147,51,234,0.05),transparent_65%)] pointer-events-none" />
-
-        {/* 2D / 3D Mode Switch Holographic Scanline Sweep */}
-        {isTransitioningView && <div className="engine-view-transition-scanline" />}
-
-        {viewMode === "3d_webgl" ? (
-          <V12WebGLOrbitViewer
-            className="w-full h-full"
-            installedComponents2D={installedComponents}
-            selectedVariants2D={selectedVariants}
-            isExploded2D={isExplodedView}
-            engineConfig={engineConfig}
-            onSelectComponent2D={onSelectComponent || onHoverComponent}
-          />
-        ) : (
-          <>
-            {/* Particle Overlay */}
-            <ParticleEffects
-              activeComponentId={activeComponentId}
-              phase={phase}
-              slotPosition={activeMeta ? activeMeta.slotPosition : { x: 250, y: 225 }}
-            />
-
-            {/* 3D SVG Workstation Canvas with Smooth Camera Animation */}
-            <div
-              key={`engine-stage-canvas-${viewMode}-${transitionKey}`}
-              className={`w-full h-full flex items-center justify-center transition-transform duration-700 ease-out ${
-                viewMode === "3d_iso" ? "engine-canvas-3d-active" : "engine-canvas-2d-active"
-              }`}
-              style={{ transform: cameraTransform }}
-            >
-              <EngineSVG
-                installedComponents={installedComponents}
-                activeComponentId={activeComponentId}
-                phase={phase}
-                hoveredComponentId={hoveredComponentId}
-                isExplodedView={isExplodedView}
-                isAssemblyComplete={isAssemblyComplete}
-                engineConfig={engineConfig}
-                selectedVariants={selectedVariants}
-                viewMode={viewMode === "2d" ? "2d" : "3d_iso"}
-                onHoverComponent={handleHoverThrottled}
-              />
-            </div>
-          </>
-        )}
+      {/* ── CENTRAL STAGE WORKSTATION: 3D GLB REAL-TIME VIEWPORT ── */}
+      <div className="relative w-full h-[400px] md:h-[460px] rounded-2xl bg-slate-950/40 border border-white/5 backdrop-blur-md overflow-hidden flex items-center justify-center shadow-inner">
+        <ModularEngine3DViewport
+          className="w-full h-full"
+          engineConfig={engineConfig}
+          installedComponents2D={installedComponents}
+          selectedVariants2D={selectedVariants}
+          isExploded2D={isExplodedView}
+          onSelectComponent2D={onSelectComponent}
+        />
 
         {/* Floating Active Installation Badge */}
         {activeComponentId && activeMeta && (
@@ -312,8 +156,18 @@ export function StickyEngineDiagram({
         )}
       </div>
 
-      {/* ── DEDICATED 3D GLB CONTROLS BAR (BELOW WORKSTATION) ── */}
-      {viewMode === "3d_webgl" && <Engine3DToolbar isFloating={false} />}
+      {/* ── 3D VIEWPORT CONTROLS HUD (Camera, Lighting, Wireframe, Exploded View) ── */}
+      <Engine3DToolbar />
+
+      {/* ── BOTTOM STAGE ADVICE FOOTER ── */}
+      <div className="flex items-center justify-between gap-3 pt-1 text-[11px] font-mono text-slate-400 border-t border-white/5">
+        <span className="text-slate-400 truncate">
+          {currentStageMeta.advice || "Assemble precision engineered components to complete this stage."}
+        </span>
+        <span className="text-cyan-400 font-bold shrink-0">
+          {Math.round(flowProgressPercentage)}% Complete
+        </span>
+      </div>
     </div>
   );
 }

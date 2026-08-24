@@ -9,6 +9,8 @@ import { useDesign } from "../state/DesignContext";
 import { useCompany } from "../state/CompanyContext";
 import { Section, StatTile } from "./ui/Controls";
 import { LineChart } from "./ui/LineChart";
+import { PowerTorqueCurveChart } from "./ui/PowerTorqueCurveChart";
+import { formatLap } from "../sim/utils/formatLap";
 import { computeScores, computeSummary } from "../sim/reviews";
 import { ENGINE_LAYOUTS, CHASSIS_TYPES, TIRE_COMPOUNDS } from "../sim/constants";
 import type { SimResult, VehicleDesign } from "../sim/types";
@@ -27,14 +29,7 @@ function clamp(v: number, lo: number, hi: number) {
   return Math.max(lo, Math.min(hi, v));
 }
 
-function formatLap(seconds: number): string {
-  if (seconds >= 60) {
-    const m = Math.floor(seconds / 60);
-    const s = seconds % 60;
-    return `${m}:${s.toFixed(3).padStart(6, "0")}`;
-  }
-  return `${seconds.toFixed(3)}s`;
-}
+
 
 import { ChassisHotspotViewer } from "./ChassisHotspotViewer";
 import { PresetQuickSelect } from "./PresetQuickSelect";
@@ -151,7 +146,7 @@ export function CommandCenter({ onSelectStage }: CommandCenterProps = {}) {
             {/* Theme Option Cards */}
             <div className="grid grid-cols-2 gap-2">
               {[
-                { id: "theme1", label: "Theme 1", desc: "Cyan Cyber Glass", color: "border-cyan-500/40 text-cyan-300 bg-cyan-500/10", activeShadow: "shadow-[0_0_15px_rgba(34,211,238,0.2)] ring-1 ring-cyan-400" },
+                { id: "theme1", label: "UI 1", desc: "Kinetic Horizon — AnimMaster & HorizonX Design", color: "border-cyan-500/40 text-cyan-300 bg-cyan-500/10", activeShadow: "shadow-[0_0_15px_rgba(34,211,238,0.2)] ring-1 ring-cyan-400" },
                 { id: "theme2", label: "Theme 2", desc: "Cosmic Nebula — Deep Purple Sci-Fi", color: "border-purple-500/40 text-purple-300 bg-purple-500/10", activeShadow: "shadow-[0_0_15px_rgba(168,85,247,0.25)] ring-1 ring-purple-400" },
                 { id: "theme3", label: "Theme 3", desc: "Nordic Light Glass — Alabaster White", color: "border-sky-500/40 text-sky-400 bg-sky-500/10", activeShadow: "shadow-[0_0_15px_rgba(14,165,233,0.2)] ring-1 ring-sky-400" },
                 { id: "theme4", label: "Vision Glass", desc: "Spatial Glass Lounge (Default)", color: "border-sky-300/40 text-sky-200 bg-sky-500/10", activeShadow: "shadow-[0_0_15px_rgba(147,197,253,0.15)] ring-1 ring-sky-300" },
@@ -255,11 +250,7 @@ export function CommandCenter({ onSelectStage }: CommandCenterProps = {}) {
       {/* Performance + Curves */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <Section title="Power & Torque Curves" icon={<TrendingUp size={16} />}>
-          <LineChart series={powerSeries} xLabel="RPM" yLabel="hp / Nm" height={220} />
-          <div className="flex justify-between text-[10px] text-slate-500 mt-1">
-            <span className="flex items-center gap-1"><span className="h-2 w-3 bg-accent-400 rounded-sm" />Power</span>
-            <span className="flex items-center gap-1"><span className="h-2 w-3 bg-warn-500 rounded-sm" />Torque</span>
-          </div>
+          <PowerTorqueCurveChart powerCurve={sim.powerCurve} height={220} />
         </Section>
         <Section title="Performance Metrics" icon={<Gauge size={16} />}>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-2">

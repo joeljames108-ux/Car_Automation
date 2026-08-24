@@ -32,6 +32,9 @@ import type {
 } from "./types";
 import { simulateChassis } from "./chassisSim";
 import { simulateLap as physicsSimulateLap } from "./physics/lapSimulator";
+import { SoundEngineeringSynthesizer } from "./nvh/soundEngineeringSynthesizer";
+import { RawMaterialsMarketEngine } from "./supplyChain/rawMaterialsMarket";
+import { LbmWindTunnelSolver } from "./advancedPhysics/lbmWindTunnelSolver";
 
 const RHO_AIR = 1.225;
 const GRAVITY = 9.81;
@@ -1001,13 +1004,24 @@ export function simulateTesting(design: VehicleDesign, _eng: EngineSim, aero: Re
 }
 
 // ===================================================================
-// LAP TIME SIMULATION (Physics-based via lap simulator)
+// LAP TIME SIMULATION (Physics-based via lap simulator with LRU Cache)
 // ===================================================================
+
+const lapTimesCache = new Map<string, { lapTimes: any[]; bestLapTrack: TrackId; bestLapTime: number }>();
+const MAX_LAP_CACHE_ENTRIES = 50;
 
 export function simulateLapTimes(design: VehicleDesign, _aero: ReturnType<typeof simulateAero>, _perf: ReturnType<typeof simulatePerformance>) {
   const aero = _aero;
   const perf = _perf;
   const eng = simulateEngine(design.engine);
+
+  // High-performance cache key of physical dynamic attributes
+  const cacheKey = `${design.engine.layout}_${Math.round(perf.topSpeed)}_${Math.round(perf.weight)}_${Math.round(perf.accel0_60 * 10)}_${Math.round(perf.lateralG * 100)}_${Math.round(aero.dragCoeff * 100)}_${Math.round(aero.downforce)}_${design.vehicle.tireCompound}_${design.vehicle.driveType}_${design.vehicle.transmission}_${design.vehicle.brakeType}`;
+
+  if (lapTimesCache.has(cacheKey)) {
+    return lapTimesCache.get(cacheKey)!;
+  }
+
   const trackIds = Object.keys(TRACKS) as TrackId[];
 
   // Build a minimal SimResult shim for the physics engine
@@ -1064,7 +1078,17 @@ export function simulateLapTimes(design: VehicleDesign, _aero: ReturnType<typeof
     }
   });
 
-  return { lapTimes, bestLapTrack: lapTimes.reduce((a, b) => a.time < b.time ? a : b).trackId, bestLapTime: lapTimes.reduce((a, b) => a.time < b.time ? a : b).time };
+  const bestLapTrack = lapTimes.reduce((a, b) => a.time < b.time ? a : b).trackId;
+  const bestLapTime = lapTimes.reduce((a, b) => a.time < b.time ? a : b).time;
+  const res = { lapTimes, bestLapTrack, bestLapTime };
+
+  if (lapTimesCache.size >= MAX_LAP_CACHE_ENTRIES) {
+    const firstKey = lapTimesCache.keys().next().value;
+    if (firstKey) lapTimesCache.delete(firstKey);
+  }
+  lapTimesCache.set(cacheKey, res);
+
+  return res;
 }
 
 // ===================================================================
@@ -1345,6 +1369,31 @@ export function simulate(design: VehicleDesign): SimResult {
     perf.weight + info.weight,
   );
 
+  // Compute Phase 100+ Multi-Physics Extensions
+  const nvhSoundOutput = SoundEngineeringSynthesizer.synthesizeSound({
+    cylinders: eng.cylinderCount,
+    engineRpm: eng.peakPowerRpm,
+    vehicleSpeedKmH: perf.topSpeed,
+    exhaustValveOpen: true,
+    cabinGlassAcousticLaminate: true,
+    ancActive: true,
+    gearRatio: 1.0,
+    finalDriveRatio: 3.5,
+    tireRadiusM: 0.33,
+  });
+
+  const supplyChainProcurement = RawMaterialsMarketEngine.calculateNetProcurementCost({
+    commodityType: "ALUMINUM_6061_T6",
+    requiredVolumeUnits: Math.round(perf.weight * 0.4),
+  });
+
+  const lbmWindTunnel = LbmWindTunnelSolver.solveFlowField({
+    inletVelocityKmH: perf.topSpeed,
+    frontalAreaM2: aero.frontalArea,
+    rideHeightMm: design.vehicle.rideHeight,
+    diffuserRampAngleDeg: 12,
+  });
+
   return {
     displacement: eng.displacement, cylinderCount: eng.cylinderCount,
     powerCurve: eng.powerCurve, peakPower: eng.combinedPower, peakTorque: eng.combinedTorque,
@@ -1383,5 +1432,8 @@ export function simulate(design: VehicleDesign): SimResult {
     infotainment: info,
     chassisSim,
     lapTimes,
+    nvhSoundOutput,
+    supplyChainProcurement,
+    lbmWindTunnel,
   };
 }

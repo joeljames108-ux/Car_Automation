@@ -294,6 +294,6 @@ export interface ModularVehicleConfiguration {
 // 7. ASSEMBLY VIEW MODES & UI STATE
 // ============================================================================
 
-export type Assembly3DViewMode = '2d_blueprint' | '3d_isometric' | '3d_glb' | 'xray_structural';
+export type Assembly3DViewMode = '2d_blueprint' | '3d_glb' | 'xray_structural';
 
 export type CameraPreset = 'front_3_4' | 'rear_3_4' | 'side_profile' | 'top_chassis' | 'undercarriage' | 'cockpit';

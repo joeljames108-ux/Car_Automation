@@ -28,11 +28,13 @@ export class ParametricFrontWingCad {
     const flapLengthM = (spanM * config.flapLengthPct) / 100;
 
     // Materials
-    const carbonMaterial = new THREE.MeshStandardMaterial({
-      color: visualMode === 'cfdPressure' ? 0x0284c7 : 0x0f172a, // Low pressure suction on underside / realistic
-      metalness: 0.85,
+    const carbonMaterial = new THREE.MeshPhysicalMaterial({
+      color: 0x0a0e17,
+      metalness: 0.35,
       roughness: 0.18,
-      wireframe: visualMode === 'wireframe',
+      clearcoat: 0.95,
+      clearcoatRoughness: 0.03,
+      envMapIntensity: 1.3,
     });
 
     const flapMaterial = new THREE.MeshStandardMaterial({

@@ -26,11 +26,13 @@ export class ParametricCanardArrayCad {
     const sweepRad = (config.sweepDeg * Math.PI) / 180;
     const incidenceRad = (config.incidenceDeg * Math.PI) / 180;
 
-    const carbonMaterial = new THREE.MeshStandardMaterial({
-      color: visualMode === 'cfdPressure' ? 0x0284c7 : 0x090d16,
-      metalness: 0.90,
-      roughness: 0.15,
-      wireframe: visualMode === 'wireframe',
+    const carbonMaterial = new THREE.MeshPhysicalMaterial({
+      color: 0x0a0e17,
+      metalness: 0.35,
+      roughness: 0.18,
+      clearcoat: 0.95,
+      clearcoatRoughness: 0.03,
+      envMapIntensity: 1.3,
     });
 
     const fenceMaterial = new THREE.MeshStandardMaterial({

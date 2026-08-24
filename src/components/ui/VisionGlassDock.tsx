@@ -45,7 +45,9 @@ export function VisionGlassDock({
   }, [hoveredIdx]);
 
   return (
-    <div
+    <nav
+      role="navigation"
+      aria-label="Workspace Module Dock"
       style={{
         position: "absolute",
         bottom: 12,
@@ -56,6 +58,7 @@ export function VisionGlassDock({
         flexDirection: "column",
         alignItems: "center",
         gap: 6,
+        maxWidth: "96vw",
       }}
     >
       {/* ── Active Module Label (floating above dock) ── */}
@@ -67,7 +70,7 @@ export function VisionGlassDock({
           color: "#94a3b8",
           letterSpacing: "0.06em",
           textTransform: "uppercase" as const,
-          opacity: 0.7,
+          opacity: 0.8,
           animation: "vg-dock-label-in 0.3s ease-out",
         }}
       >
@@ -77,10 +80,14 @@ export function VisionGlassDock({
       {/* ── Main Dock Bar ── */}
       <div
         ref={dockRef}
+        role="toolbar"
+        aria-label="Module Stages"
         style={{
           display: "flex",
           alignItems: "flex-end",
           gap: 3,
+          maxWidth: "100%",
+          overflowX: "auto",
           // Apple Vision OS Translucent Light Glass dock
           background: "rgba(255, 255, 255, 0.78)",
           backdropFilter: "blur(50px) saturate(200%)",
@@ -104,6 +111,8 @@ export function VisionGlassDock({
           return (
             <button
               key={cat.id}
+              aria-label={`Switch workspace category to ${cat.label}`}
+              aria-current={active ? "true" : undefined}
               onClick={() => {
                 onSelectCategory(cat.id);
                 // Auto-select first in category if not already there
@@ -115,6 +124,7 @@ export function VisionGlassDock({
               }}
               onMouseEnter={() => setHoveredCat(cat.id)}
               onMouseLeave={() => setHoveredCat(null)}
+              className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
               style={{
                 display: "flex",
                 alignItems: "center",
@@ -143,7 +153,7 @@ export function VisionGlassDock({
                   : "none",
               }}
             >
-              <span style={{ display: "flex", alignItems: "center" }}>{cat.icon}</span>
+              <span style={{ display: "flex", alignItems: "center" }} aria-hidden="true">{cat.icon}</span>
               <span>{cat.label}</span>
             </button>
           );
@@ -172,9 +182,11 @@ export function VisionGlassDock({
               key={s.id}
               onClick={() => onSelectStage(s.id)}
               title={s.label}
+              aria-label={`Open stage: ${s.label}`}
+              aria-current={cur ? "page" : undefined}
               onMouseEnter={() => setHoveredIdx(idx)}
               onMouseLeave={() => setHoveredIdx(null)}
-              className={cur ? "dock-item-active" : ""}
+              className={`focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 ${cur ? "dock-item-active" : ""}`}
               style={{
                 display: "flex",
                 alignItems: "center",
@@ -182,7 +194,7 @@ export function VisionGlassDock({
                 padding: `${Math.round(5 * mag)}px ${Math.round(11 * mag)}px`,
                 borderRadius: Math.round(14 * mag),
                 fontSize: Math.round(11 * mag),
-                fontWeight: cur ? 700 : 400,
+                fontWeight: cur ? 700 : 500,
                 background: cur
                   ? "rgba(0, 122, 255, 0.16)"
                   : isHov
@@ -204,6 +216,7 @@ export function VisionGlassDock({
                   alignItems: "center",
                   transition: "color 0.2s ease",
                 }}
+                aria-hidden="true"
               >
                 {s.icon}
               </span>
@@ -215,6 +228,7 @@ export function VisionGlassDock({
 
       {/* ── Active Indicator Dot ── */}
       <div
+        aria-hidden="true"
         style={{
           display: "flex",
           gap: 4,
@@ -240,6 +254,6 @@ export function VisionGlassDock({
           />
         ))}
       </div>
-    </div>
+    </nav>
   );
 }

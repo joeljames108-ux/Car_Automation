@@ -118,17 +118,23 @@ export function buildSinglePistonCoolingJet(
  * journal feeders, 12 piston squirt jets, drainback chutes, and filter console.
  */
 export function buildV12OilGalleryCircuit(
-  materials: V12BlockMaterialPalette
+  materials: V12BlockMaterialPalette,
+  cylindersPerBank: number = 6
 ): THREE.Group {
   const group = new THREE.Group();
-  group.name = '02_V12_Oil_Gallery_Circuit_Assembly';
+  group.name = '03_V12_Oil_Gallery_Circuit_Assembly';
   const spec = V12_OIL_GALLERY_SPECS;
+  const pitchM = 0.108;
+  const mainCount = cylindersPerBank + 1;
+  const rifleLengthM = (cylindersPerBank * pitchM) + 0.052;
+  const startXMain = -((mainCount - 1) * pitchM) / 2;
+  const startXCyl = -((cylindersPerBank - 1) * pitchM) / 2;
 
   // ── A. Main Longitudinal High-Pressure Oil Rifle ──
   const mainRifleGeo = new THREE.CylinderGeometry(
     spec.mainRifleRadiusM,
     spec.mainRifleRadiusM,
-    spec.mainRifleLengthMm / 1000,
+    rifleLengthM,
     24
   );
   mainRifleGeo.rotateZ(Math.PI / 2);
@@ -147,8 +153,8 @@ export function buildV12OilGalleryCircuit(
   );
   feedPassageGeo.rotateX(Math.PI / 4);
 
-  for (let i = 0; i < 7; i++) {
-    const mx = -0.30 + i * (0.60 / 6);
+  for (let i = 0; i < mainCount; i++) {
+    const mx = startXMain + i * pitchM;
     const feedMesh = new THREE.Mesh(feedPassageGeo, materials.oilGalleryPassage);
     feedMesh.name = `Main_Journal_Oil_Feeder_${i + 1}`;
     feedMesh.position.set(mx, -0.044, 0.09);
@@ -157,9 +163,9 @@ export function buildV12OilGalleryCircuit(
 
   // ── C. 12 Independent Piston Cooling Oil Squirt Jets ──
   // Bank 1 (Left 6 Jets)
-  for (let c = 0; c < 6; c++) {
+  for (let c = 0; c < cylindersPerBank; c++) {
     const cylNum = c * 2 + 1;
-    const px = -0.27 + c * 0.108;
+    const px = startXCyl + c * pitchM;
     const jet = buildSinglePistonCoolingJet(
       {
         cylinderNumber: cylNum,
@@ -173,9 +179,9 @@ export function buildV12OilGalleryCircuit(
   }
 
   // Bank 2 (Right 6 Jets with 15mm stagger)
-  for (let c = 0; c < 6; c++) {
+  for (let c = 0; c < cylindersPerBank; c++) {
     const cylNum = (c + 1) * 2;
-    const px = -0.27 + c * 0.108 + 0.015;
+    const px = startXCyl + c * pitchM + 0.015;
     const jet = buildSinglePistonCoolingJet(
       {
         cylinderNumber: cylNum,
@@ -190,7 +196,7 @@ export function buildV12OilGalleryCircuit(
 
   // ── D. Dual Oversized Outer Drainback Return Chutes ──
   // Left and Right gravity oil drain channels returning oil to the dry sump
-  const chuteGeo = new THREE.BoxGeometry(0.64, spec.drainbackChuteWidthM, 0.16);
+  const chuteGeo = new THREE.BoxGeometry(rifleLengthM * 0.92, spec.drainbackChuteWidthM, 0.16);
 
   [-0.14, 0.14].forEach((cy, chuteIdx) => {
     const chuteMesh = new THREE.Mesh(chuteGeo, materials.oilGalleryPassage);

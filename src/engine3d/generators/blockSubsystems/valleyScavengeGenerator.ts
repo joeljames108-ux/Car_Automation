@@ -53,17 +53,21 @@ export const V12_VALLEY_SPECS: ValleyScavengeSpec = {
  * Builds the complete 60° central V-valley floor, scavenge troughs, and knock sensors.
  */
 export function buildV12ValleyScavengeSystem(
-  materials: V12BlockMaterialPalette
+  materials: V12BlockMaterialPalette,
+  cylindersPerBank: number = 6
 ): THREE.Group {
   const group = new THREE.Group();
   group.name = '07_V12_Central_Valley_Scavenge_Assembly';
   const spec = V12_VALLEY_SPECS;
+  const pitchM = 0.108;
+  const valleyLengthM = Math.max(0.20, (cylindersPerBank * pitchM) - 0.01);
+  const drainCount = Math.max(2, cylindersPerBank - 2);
 
   group.position.set(0, 0, 0.24);
 
   // ── A. Deep 60° V-Valley Floor Casting Bedplate ──
   const valleyFloorGeo = new THREE.BoxGeometry(
-    spec.valleyLengthM,
+    valleyLengthM,
     spec.valleyWidthM,
     0.052
   );
@@ -75,7 +79,7 @@ export function buildV12ValleyScavengeSystem(
   group.add(valleyFloorMesh);
 
   // ── B. Sloped Longitudinal Oil Drainage Trough ──
-  const troughGeo = new THREE.CylinderGeometry(0.045, 0.045, spec.valleyLengthM - 0.04, 24, 1, false, 0, Math.PI);
+  const troughGeo = new THREE.CylinderGeometry(0.045, 0.045, valleyLengthM - 0.04, 24, 1, false, 0, Math.PI);
   troughGeo.rotateZ(Math.PI / 2);
   troughGeo.rotateX(Math.PI);
   const troughMesh = new THREE.Mesh(troughGeo, materials.machinedDeckSurface);
@@ -84,7 +88,7 @@ export function buildV12ValleyScavengeSystem(
   troughMesh.castShadow = true;
   group.add(troughMesh);
 
-  // ── C. 4 Central Oil Drainback Return Galleys ──
+  // ── C. Central Oil Drainback Return Galleys ──
   const drainGeo = new THREE.CylinderGeometry(
     spec.drainPortRadiusM,
     spec.drainPortRadiusM,
@@ -92,8 +96,11 @@ export function buildV12ValleyScavengeSystem(
     16
   );
 
-  for (let i = 0; i < spec.drainPortCount; i++) {
-    const dx = -0.22 + i * 0.15;
+  const drainSpan = (cylindersPerBank - 1) * pitchM * 0.7;
+  const drainStart = -drainSpan / 2;
+
+  for (let i = 0; i < drainCount; i++) {
+    const dx = drainCount === 1 ? 0 : drainStart + i * (drainSpan / (drainCount - 1));
     const drainMesh = new THREE.Mesh(drainGeo, materials.oilGalleryPassage);
     drainMesh.name = `Valley_Drainback_Port_${i + 1}`;
     drainMesh.position.set(dx, 0, -0.015);
@@ -109,8 +116,9 @@ export function buildV12ValleyScavengeSystem(
   );
 
   const knockThreadGeo = new THREE.CylinderGeometry(0.004, 0.004, 0.032, 12);
+  const knockX = valleyLengthM * 0.22;
 
-  [-0.14, 0.14].forEach((kx, kIdx) => {
+  [-knockX, knockX].forEach((kx, kIdx) => {
     const knockGroup = new THREE.Group();
     knockGroup.name = `Knock_Sensor_Assembly_${kIdx + 1}`;
     knockGroup.position.set(kx, 0, 0.028);
@@ -143,7 +151,8 @@ export function buildV12ValleyScavengeSystem(
     20
   );
 
-  [-0.24, 0.24].forEach((bx, bIdx) => {
+  const breatherX = valleyLengthM * 0.38;
+  [-breatherX, breatherX].forEach((bx, bIdx) => {
     const breatherMesh = new THREE.Mesh(breatherGeo, materials.machinedDeckSurface);
     breatherMesh.name = `PCV_Breather_Chimney_${bIdx === 0 ? 'Front' : 'Rear'}`;
     breatherMesh.position.set(bx, 0, 0.032);

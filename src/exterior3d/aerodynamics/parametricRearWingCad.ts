@@ -28,11 +28,13 @@ export class ParametricRearWingCad {
     const endplateHM = config.endplateHeightMm / 1000;
 
     // Materials
-    const carbonMaterial = new THREE.MeshStandardMaterial({
-      color: visualMode === 'cfdPressure' ? 0x0369a1 : 0x090d16,
-      metalness: 0.90,
-      roughness: 0.14,
-      wireframe: visualMode === 'wireframe',
+    const carbonMaterial = new THREE.MeshPhysicalMaterial({
+      color: 0x0a0e17,
+      metalness: 0.35,
+      roughness: 0.18,
+      clearcoat: 0.95,
+      clearcoatRoughness: 0.03,
+      envMapIntensity: 1.3,
     });
 
     const flapMaterial = new THREE.MeshStandardMaterial({

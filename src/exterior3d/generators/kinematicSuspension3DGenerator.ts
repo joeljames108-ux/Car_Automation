@@ -32,36 +32,49 @@ export class KinematicSuspension3DGenerator {
     const rearAxleX = frontAxleX - wbM;
 
     // Materials
-    const titaniumArmMat = new THREE.MeshStandardMaterial({
-      color: 0x94a3b8, // Grade-5 Titanium / Chromoly tubular A-arms
-      metalness: 0.92,
-      roughness: 0.18,
+    const titaniumArmMat = new THREE.MeshPhysicalMaterial({
+      color: 0x94a3b8,
+      metalness: 0.94,
+      roughness: 0.12,
+      clearcoat: 0.7,
+      clearcoatRoughness: 0.04,
+      envMapIntensity: 1.5,
     });
 
     const springCoilMat = new THREE.MeshPhysicalMaterial({
-      color: 0xf59e0b, // High-tensile silicon-chrome spring steel
-      metalness: 0.85,
-      roughness: 0.16,
-      clearcoat: 0.8,
+      color: 0xf59e0b,
+      metalness: 0.88,
+      roughness: 0.10,
+      clearcoat: 0.95,
+      clearcoatRoughness: 0.02,
+      envMapIntensity: 1.4,
     });
 
-    const damperShaftMat = new THREE.MeshStandardMaterial({
-      color: 0xf8fafc, // Micro-polished hard-chrome damper shaft
+    const damperShaftMat = new THREE.MeshPhysicalMaterial({
+      color: 0xf8fafc,
       metalness: 0.98,
-      roughness: 0.04,
+      roughness: 0.02,
+      clearcoat: 1.0,
+      clearcoatRoughness: 0.01,
+      envMapIntensity: 2.0,
     });
 
     const goldReservoirMat = new THREE.MeshPhysicalMaterial({
-      color: 0xd97706, // Anodized gold nitrogen canister
-      metalness: 0.94,
-      roughness: 0.14,
-      clearcoat: 0.9,
+      color: 0xd97706,
+      metalness: 0.96,
+      roughness: 0.08,
+      clearcoat: 1.0,
+      clearcoatRoughness: 0.02,
+      envMapIntensity: 1.6,
     });
 
-    const heimJointMat = new THREE.MeshStandardMaterial({
-      color: 0x38bdf8, // Anodized cyan spherical rod ends
-      metalness: 0.95,
-      roughness: 0.12,
+    const heimJointMat = new THREE.MeshPhysicalMaterial({
+      color: 0x38bdf8,
+      metalness: 0.96,
+      roughness: 0.08,
+      clearcoat: 0.8,
+      clearcoatRoughness: 0.03,
+      envMapIntensity: 1.3,
     });
 
     const rubberBushingMat = new THREE.MeshStandardMaterial({

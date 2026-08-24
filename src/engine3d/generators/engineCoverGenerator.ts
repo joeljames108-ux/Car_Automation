@@ -11,6 +11,9 @@
 import * as THREE from 'three';
 import { GLTFExporter } from 'three/examples/jsm/exporters/GLTFExporter.js';
 import { globalMaterialLibrary } from '../materials/pbrMaterialSystem';
+import {
+  createAllenSocketHead,
+} from './geometryDetailUtils';
 
 // Polyfill Node.js FileReader if executing in CLI
 if (typeof globalThis !== 'undefined' && typeof (globalThis as any).FileReader === 'undefined') {
@@ -62,7 +65,8 @@ export function buildEngineCoverScene(): THREE.Scene {
   const matGoldBezel = matLib.getGoldAnodized();
   const matQuartzGlass = matLib.getQuartzGlass();
   const matDzusFastener = matLib.getNitridedCrank();
-  const matMeshGrille = matLib.getBlackPolymer();
+  const matMeshGrille = matLib.getTranslucentMesh();
+  const matFastenerBillet = matLib.getMachinedBillet();
 
   const spec = V12_COVER_SPECS;
 
@@ -116,6 +120,18 @@ export function buildEngineCoverScene(): THREE.Scene {
   bezelMesh.castShadow = true;
   windowGroup.add(bezelMesh);
 
+  // 12 Bezel Retention Micro-Bolts
+  for (let b = 0; b < 6; b++) {
+    const bx = -spec.glassWindowLengthM / 2 + 0.04 + b * (spec.glassWindowLengthM - 0.08) / 5;
+    [-spec.glassWindowWidthM / 2 - 0.008, spec.glassWindowWidthM / 2 + 0.008].forEach((by, bIdx) => {
+      const boltGeo = createAllenSocketHead(0.002, 0.004);
+      const boltMesh = new THREE.Mesh(boltGeo, matFastenerBillet);
+      boltMesh.name = `Bezel_M4_Bolt_${b + 1}_${bIdx === 0 ? 'L' : 'R'}`;
+      boltMesh.position.set(bx, by, spec.coverHeightM / 2 + 0.009);
+      windowGroup.add(boltMesh);
+    });
+  }
+
   // High-Transparency Quartz Glass Inspection Window
   const glassGeo = new THREE.BoxGeometry(spec.glassWindowLengthM, spec.glassWindowWidthM, 0.006);
   const glassMesh = new THREE.Mesh(glassGeo, matQuartzGlass);
@@ -137,7 +153,7 @@ export function buildEngineCoverScene(): THREE.Scene {
   scoopGroup.name = 'NACA_RamAir_Scoop_Subsystem';
 
   // Aerodynamic Ram-Air Scoop Cowl
-  const scoopGeo = new THREE.ConeGeometry(0.065, 0.16, 20);
+  const scoopGeo = new THREE.ConeGeometry(0.065, 0.16, 28);
   scoopGeo.rotateZ(Math.PI / 2);
   const scoopMesh = new THREE.Mesh(scoopGeo, matCarbonShell);
   scoopMesh.name = 'NACA_RamAir_Induction_Scoop';
@@ -146,7 +162,7 @@ export function buildEngineCoverScene(): THREE.Scene {
   scoopGroup.add(scoopMesh);
 
   // Aluminum Honeycomb Protective Debris Screen
-  const debrisGeo = new THREE.CylinderGeometry(0.045, 0.045, 0.004, 16);
+  const debrisGeo = new THREE.CylinderGeometry(0.045, 0.045, 0.004, 24);
   debrisGeo.rotateZ(Math.PI / 2);
   const debrisMesh = new THREE.Mesh(debrisGeo, matMeshGrille);
   debrisMesh.name = 'Honeycomb_Rock_Debris_Screen';
@@ -161,8 +177,8 @@ export function buildEngineCoverScene(): THREE.Scene {
 
   [-spec.coverLengthM / 2 + 0.04, spec.coverLengthM / 2 - 0.04].forEach((fx) => {
     [-spec.coverWidthM / 2 + 0.03, spec.coverWidthM / 2 - 0.03].forEach((fy) => {
-      // Dzus Flush Slotted Head Fastener
-      const dzusGeo = new THREE.CylinderGeometry(0.008, 0.008, 0.006, 20);
+      // Dzus Flush Slotted Head Fastener with Knurled Collar
+      const dzusGeo = new THREE.CylinderGeometry(0.008, 0.008, 0.006, 24);
       const dzusMesh = new THREE.Mesh(dzusGeo, matDzusFastener);
       dzusMesh.name = 'QuarterTurn_Dzus_Fastener_Head';
       dzusMesh.position.set(fx, fy, spec.coverHeightM / 2 + 0.003);

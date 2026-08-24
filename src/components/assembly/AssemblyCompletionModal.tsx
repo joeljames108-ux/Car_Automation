@@ -18,7 +18,7 @@ import {
   Activity,
   Award,
 } from "lucide-react";
-import { EngineSVG } from "./EngineSVG";
+import { ModularEngine3DViewport } from "../../engine3d/ModularEngine3DViewport";
 import { getAssemblyComponents } from "../../sim/assemblyTypes";
 import { playAssemblySound } from "./sounds";
 import { EngineConfig } from "../../sim/types";
@@ -132,20 +132,10 @@ export function AssemblyCompletionModal({
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
           
           {/* Left Column: Assembled Engine Canvas in Vision Glass Card */}
-          <div className="relative bg-base-950/80 border border-base-800/90 rounded-2xl p-4 flex flex-col items-center justify-center min-h-[320px] overflow-hidden shadow-inner">
-            {/* Grid Pattern Background */}
-            <div className="absolute inset-0 bg-[radial-gradient(rgba(34,211,238,0.06)_1px,transparent_1px)] [background-size:16px_16px] pointer-events-none" />
-
-            <EngineSVG
-              installedComponents={allComponentIds}
-              activeComponentId={null}
-              phase="complete"
-              hoveredComponentId={null}
-              isExplodedView={false}
-              isAssemblyComplete={true}
-              layout={layout}
+          <div className="relative bg-base-950/80 border border-base-800/90 rounded-2xl p-2 flex flex-col items-center justify-center min-h-[320px] h-[320px] w-full overflow-hidden shadow-inner">
+            <ModularEngine3DViewport
+              className="w-full h-full"
               engineConfig={engineConfig}
-              className="max-h-[260px] filter drop-shadow-[0_15px_30px_rgba(0,0,0,0.8)]"
             />
 
             {/* Start Engine & Live Throttle Controls */}
@@ -158,14 +148,14 @@ export function AssemblyCompletionModal({
                     if (nextState) playAssemblySound("starter");
                     else setThrottlePos(0);
                   }}
-                  className={`flex-1 flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl text-xs font-mono font-bold transition-all shadow-lg active:scale-95 cursor-pointer ${
+                  className={`flex-1 py-2 rounded-xl flex items-center justify-center gap-2 font-mono text-xs font-bold transition-all shadow-md active:scale-95 cursor-pointer ${
                     isRunningEngine
-                      ? "bg-gradient-to-r from-rose-500 to-pink-500 text-white shadow-[0_0_24px_rgba(244,63,94,0.5)] border border-rose-400/50 animate-pulse"
-                      : "bg-gradient-to-r from-cyan-400 via-sky-400 to-cyan-500 text-black shadow-[0_0_24px_rgba(34,211,238,0.4)] border border-cyan-300/50 hover:brightness-110"
+                      ? "bg-rose-500/20 border border-rose-500/50 text-rose-300 hover:bg-rose-500/30"
+                      : "bg-emerald-500/20 border border-emerald-500/50 text-emerald-300 hover:bg-emerald-500/30"
                   }`}
                 >
-                  <Flame size={16} />
-                  {isRunningEngine ? "Stop Engine" : "Start Engine"}
+                  <Zap size={14} />
+                  {isRunningEngine ? "CUT IGNITION" : "START ENGINE"}
                 </button>
 
                 {isRunningEngine && (
@@ -175,9 +165,9 @@ export function AssemblyCompletionModal({
                       setThrottlePos(100);
                       setTimeout(() => setThrottlePos(0), 800);
                     }}
-                    className="flex items-center justify-center gap-1.5 py-2.5 px-4 rounded-xl bg-gradient-to-r from-amber-400 to-amber-500 text-black font-mono text-xs font-bold hover:brightness-110 shadow-[0_0_20px_rgba(245,158,11,0.5)] border border-amber-300/50 active:scale-95 cursor-pointer"
+                    className="flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl bg-gradient-to-r from-amber-400 to-amber-500 text-black font-mono text-xs font-bold hover:brightness-110 shadow-[0_0_20px_rgba(245,158,11,0.5)] border border-amber-300/50 active:scale-95 cursor-pointer"
                   >
-                    <Gauge size={16} /> REV MAX
+                    <Gauge size={14} /> REV MAX
                   </button>
                 )}
               </div>

@@ -36,6 +36,8 @@ import { generateTire3DGeometry } from "../generators/tireGenerator";
 import { generateBrakes3DGeometry } from "../generators/brakeCaliperGenerator";
 import { generateFrontSuspension3DGeometry } from "../generators/frontSuspensionGenerator";
 import { generateRearSuspension3DGeometry } from "../generators/rearSuspensionGenerator";
+import { generateRearBumper3DGeometry } from "../generators/rearBumperGenerator";
+import { generateExhaustTips3DGeometry } from "../generators/exhaustTipsGenerator";
 
 interface ExteriorComponentMesh3DProps {
   instance: ExteriorComponentInstance3D;
@@ -109,6 +111,10 @@ export const ExteriorComponentMesh3D: React.FC<ExteriorComponentMesh3DProps> = (
         return generateFrontSuspension3DGeometry();
       case "suspension_rear_assembly":
         return generateRearSuspension3DGeometry();
+      case "rear_bumper_fascia":
+        return generateRearBumper3DGeometry();
+      case "exhaust_tips_surround":
+        return generateExhaustTips3DGeometry();
       default:
         // Generic box placeholder for trim pieces
         const generic = new THREE.Group();

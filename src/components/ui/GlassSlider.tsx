@@ -35,24 +35,25 @@ export function GlassSlider({
     <div
       className="glass-slider-card"
       style={{
-        background: "rgba(255, 252, 245, 0.58)",
+        background: "rgba(255, 255, 255, 0.85)",
         backdropFilter: "blur(40px) saturate(210%)",
         WebkitBackdropFilter: "blur(40px) saturate(210%)",
-        border: "1px solid rgba(255, 255, 255, 0.75)",
+        border: "1px solid rgba(255, 255, 255, 0.95)",
         borderRadius: 20,
         padding: "14px 18px",
         display: "flex",
         flexDirection: "column",
         gap: 8,
-        color: "#1c1c1e",
-        boxShadow: "0 8px 32px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.90)",
+        color: "#0f172a",
+        boxShadow: "0 8px 32px rgba(0, 0, 0, 0.12), inset 0 1px 0 rgba(255, 255, 255, 1.0)",
+        transition: "border-color 0.2s ease, box-shadow 0.2s ease",
       }}
     >
       {/* Label and Value Row */}
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", fontSize: 11, fontWeight: 700 }}>
         <div style={{ display: "flex", alignItems: "center", gap: 6, color: "#1c1c1e" }}>
-          {icon}
-          <span>{label}</span>
+          <span aria-hidden="true" style={{ display: "flex", alignItems: "center" }}>{icon}</span>
+          <label htmlFor={`glass-slider-${label.replace(/\s+/g, '-').toLowerCase()}`}>{label}</label>
         </div>
         <span style={{ fontWeight: 800, color: "#007aff", fontFamily: "monospace" }}>
           {val}{unit}
@@ -63,6 +64,7 @@ export function GlassSlider({
       <div style={{ position: "relative", height: 8, display: "flex", alignItems: "center" }}>
         {/* Background Track with Fill */}
         <div
+          aria-hidden="true"
           style={{
             position: "absolute",
             inset: 0,
@@ -74,12 +76,19 @@ export function GlassSlider({
 
         {/* Real Range Input over top */}
         <input
+          id={`glass-slider-${label.replace(/\s+/g, '-').toLowerCase()}`}
           type="range"
           min={min}
           max={max}
           step={step}
           value={val}
+          aria-label={label}
+          aria-valuemin={min}
+          aria-valuemax={max}
+          aria-valuenow={val}
+          aria-valuetext={`${val}${unit}`}
           onChange={(e) => handleChange(Number(e.target.value))}
+          className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 rounded-full"
           style={{
             position: "absolute",
             inset: 0,
@@ -94,6 +103,7 @@ export function GlassSlider({
 
         {/* Custom Glowing Thumb Knob */}
         <div
+          aria-hidden="true"
           style={{
             position: "absolute",
             left: `calc(${percentage}% - 9px)`,
@@ -105,7 +115,7 @@ export function GlassSlider({
             boxShadow: "0 2px 8px rgba(0, 0, 0, 0.15), 0 0 10px rgba(0, 122, 255, 0.3)",
             pointerEvents: "none",
             zIndex: 5,
-            transition: "left 0.05s ease-out",
+            transition: "left 0.05s ease-out, transform 0.15s ease",
           }}
         />
       </div>

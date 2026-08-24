@@ -52,10 +52,16 @@ export class ForgedWheelAssembly3D {
     const caliperColor = options.caliperColorHex ? parseInt(options.caliperColorHex.replace('#', '0x'), 16) : 0xd97706;
 
     // ── 1. Luxury PBR Materials ──
-    const tireRubberMat = new THREE.MeshStandardMaterial({
-      color: 0x11141a, // Vulcanized high-grip competition rubber
-      roughness: 0.86,
-      metalness: 0.08,
+    const tireRubberMat = new THREE.MeshPhysicalMaterial({
+      color: 0x1a1d24,
+      roughness: 0.78,
+      metalness: 0.02,
+      clearcoat: 0.2,
+      clearcoatRoughness: 0.5,
+      envMapIntensity: 0.18,
+      sheen: 0.15,
+      sheenColor: new THREE.Color(0x2a2a2a),
+      sheenRoughness: 0.8,
     });
 
     const tireLetteringMat = new THREE.MeshBasicMaterial({
@@ -64,9 +70,10 @@ export class ForgedWheelAssembly3D {
     });
 
     const treadGrooveMat = new THREE.MeshStandardMaterial({
-      color: 0x07090e,
-      roughness: 0.95,
-      metalness: 0.05,
+      color: 0x060810,
+      roughness: 0.92,
+      metalness: 0.02,
+      envMapIntensity: 0.08,
     });
 
     // Rim Metal Finish
@@ -95,15 +102,20 @@ export class ForgedWheelAssembly3D {
       color: rimMetalColor,
       metalness: rimMetalness,
       roughness: rimRoughness,
-      clearcoat: 0.8,
-      clearcoatRoughness: 0.04,
-      reflectivity: 0.95,
+      clearcoat: 1.0,
+      clearcoatRoughness: 0.02,
+      reflectivity: 1.0,
+      envMapIntensity: 1.8,
+      specularIntensity: 0.9,
     });
 
-    const finVaneMat = new THREE.MeshStandardMaterial({
+    const finVaneMat = new THREE.MeshPhysicalMaterial({
       color: 0x1e293b,
       metalness: 0.9,
-      roughness: 0.25,
+      roughness: 0.18,
+      clearcoat: 0.5,
+      clearcoatRoughness: 0.05,
+      envMapIntensity: 1.2,
     });
 
     const centerLockRedMat = new THREE.MeshPhysicalMaterial({
@@ -135,19 +147,24 @@ export class ForgedWheelAssembly3D {
     const isGlowing = options.brakesGlowing || false;
     const glowInt = options.brakeGlowIntensity ?? 0.85;
 
-    const carbonCeramicRotorMat = new THREE.MeshStandardMaterial({
+    const carbonCeramicRotorMat = new THREE.MeshPhysicalMaterial({
       color: isGlowing ? 0x22110c : 0x334155,
       metalness: 0.88,
-      roughness: 0.28,
+      roughness: 0.22,
+      clearcoat: 0.4,
+      clearcoatRoughness: 0.15,
       emissive: isGlowing ? new THREE.Color(0xff3b00) : new THREE.Color(0x000000),
       emissiveIntensity: isGlowing ? glowInt * 2.8 : 0,
       normalMap: typeof document !== 'undefined' ? AutomotivePBRMaterialSystem.getBrakeRotorNormalTexture() : null,
     });
 
-    const rotorBellMat = new THREE.MeshStandardMaterial({
+    const rotorBellMat = new THREE.MeshPhysicalMaterial({
       color: 0x475569,
       metalness: 0.94,
-      roughness: 0.15,
+      roughness: 0.12,
+      clearcoat: 0.7,
+      clearcoatRoughness: 0.05,
+      envMapIntensity: 1.3,
     });
 
     const titaniumBobbinMat = new THREE.MeshStandardMaterial({
@@ -158,9 +175,11 @@ export class ForgedWheelAssembly3D {
 
     const brakeCaliperFrontMat = new THREE.MeshPhysicalMaterial({
       color: caliperColor,
-      metalness: 0.88,
-      roughness: 0.15,
-      clearcoat: 0.95,
+      metalness: 0.85,
+      roughness: 0.12,
+      clearcoat: 1.0,
+      clearcoatRoughness: 0.02,
+      envMapIntensity: 1.4,
     });
 
     const brakeCaliperRearMat = new THREE.MeshPhysicalMaterial({

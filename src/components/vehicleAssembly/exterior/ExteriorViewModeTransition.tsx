@@ -18,7 +18,7 @@ export const ExteriorViewModeTransition: React.FC<ExteriorViewModeTransitionProp
 
   return (
     <div className={`relative w-full h-full ${className}`}>
-      {viewMode === "2d_iso" ? (
+      {viewMode === "2d" ? (
         <ExteriorAssemblyViewer />
       ) : (
         <Exterior3DWebGLViewer />

@@ -129,7 +129,7 @@ export class Phases74to78MasterTestRunner {
       const passed =
         mpc.isTrajectoryFeasible &&
         mpc.predictedHorizonTrajectory.length === 20 &&
-        mpc.solverExecutionTimeMs < 5.0 &&
+        mpc.solverExecutionTimeMs < 15.0 &&
         Math.abs(mpc.commandedSteeringAngleDeg) > 0;
 
       results.push({

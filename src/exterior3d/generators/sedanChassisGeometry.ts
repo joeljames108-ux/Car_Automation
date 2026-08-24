@@ -14,6 +14,39 @@ import * as THREE from "three";
 import type { ExteriorEngineeringConfig } from "../../sim/types/exterior";
 import { getSedanChassisMaterials } from "../materials/sedanMetallurgyShaders";
 
+// ── Shared Procedural Geometry Cache ──
+const boxGeoCache = new Map<string, THREE.BoxGeometry>();
+const cylGeoCache = new Map<string, THREE.CylinderGeometry>();
+
+function getBoxGeometry(width: number, height: number, depth: number): THREE.BoxGeometry {
+  const key = `${width.toFixed(4)}_${height.toFixed(4)}_${depth.toFixed(4)}`;
+  let geo = boxGeoCache.get(key);
+  if (!geo) {
+    geo = new THREE.BoxGeometry(width, height, depth);
+    boxGeoCache.set(key, geo);
+  }
+  return geo;
+}
+
+function getCylinderGeometry(
+  radiusTop: number,
+  radiusBottom: number,
+  height: number,
+  radialSegments: number = 16,
+  heightSegments: number = 1,
+  openEnded: boolean = false,
+  thetaStart?: number,
+  thetaLength?: number
+): THREE.CylinderGeometry {
+  const key = `${radiusTop.toFixed(4)}_${radiusBottom.toFixed(4)}_${height.toFixed(4)}_${radialSegments}_${openEnded}_${thetaStart || 0}_${thetaLength || 0}`;
+  let geo = cylGeoCache.get(key);
+  if (!geo) {
+    geo = new THREE.CylinderGeometry(radiusTop, radiusBottom, height, radialSegments, heightSegments, openEnded, thetaStart, thetaLength);
+    cylGeoCache.set(key, geo);
+  }
+  return geo;
+}
+
 export function generateSedanChassis3DGeometry(
   config?: Partial<ExteriorEngineeringConfig>
 ): THREE.Group {
@@ -40,7 +73,7 @@ export function generateSedanChassis3DGeometry(
 
   // 1.1 Left & Right Front Longitudinal Crash Rails (Hydroformed Box Section)
   const frontRailLength = 1.05;
-  const frontRailGeo = new THREE.BoxGeometry(frontRailLength, 0.14, 0.09);
+  const frontRailGeo = getBoxGeometry(frontRailLength, 0.14, 0.09);
   
   const leftFrontRail = new THREE.Mesh(frontRailGeo, materials.highStrengthSteel);
   leftFrontRail.position.set(halfWb * 0.82, floorHeight + 0.12, halfTrackF * 0.52);
@@ -56,7 +89,7 @@ export function generateSedanChassis3DGeometry(
 
   // Front Rail Lightening & Tooling Holes (Decorative Insets)
   for (let i = 0; i < 4; i++) {
-    const holeGeo = new THREE.CylinderGeometry(0.022, 0.022, 0.10, 16);
+    const holeGeo = getCylinderGeometry(0.022, 0.022, 0.10, 16);
     const leftHole = new THREE.Mesh(holeGeo, materials.stampedAlloyDark);
     leftHole.rotation.z = Math.PI / 2;
     leftHole.position.set(halfWb * 0.55 + i * 0.18, floorHeight + 0.12, halfTrackF * 0.52);
@@ -69,7 +102,7 @@ export function generateSedanChassis3DGeometry(
   }
 
   // 1.2 Hexagonal Front Crush Cans & Bumper Mounting Plates
-  const crushCanGeo = new THREE.CylinderGeometry(0.045, 0.05, 0.22, 6);
+  const crushCanGeo = getCylinderGeometry(0.045, 0.05, 0.22, 6);
   const leftCrushCan = new THREE.Mesh(crushCanGeo, materials.stampedAlloyLight);
   leftCrushCan.rotation.z = Math.PI / 2;
   leftCrushCan.position.set(halfWb * 0.82 + frontRailLength / 2 + 0.11, floorHeight + 0.12, halfTrackF * 0.52);

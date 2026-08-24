@@ -19,14 +19,14 @@ export const ExplodedViewSlider: React.FC = () => {
   };
 
   return (
-    <div className="flex items-center gap-2 px-2 py-1 rounded-lg bg-base-900/80 border border-slate-800 text-xs">
+    <div className="flex items-center gap-2 px-2 py-1 rounded-lg text-xs" style={{backgroundColor: 'rgba(255,248,235,0.8)', border: '1px solid rgba(217,166,78,0.3)'}}>
       <button
         type="button"
         onClick={handleToggle}
         className={`px-2 py-0.5 rounded text-[10px] font-mono font-bold transition-all border ${
           explodedAmount > 0.05
-            ? 'bg-cyan-500/25 text-cyan-200 border-cyan-500/40 shadow-sm'
-            : 'bg-base-950 text-slate-400 border-slate-800 hover:text-slate-200'
+            ? 'bg-amber-200/60 text-amber-800 border-amber-400/40 shadow-sm'
+            : 'bg-amber-100/50 text-amber-600 border-amber-200/40 hover:text-amber-800'
         }`}
       >
         {explodedAmount > 0.05 ? 'Exploded' : 'Assemble'}
@@ -39,9 +39,9 @@ export const ExplodedViewSlider: React.FC = () => {
           max="100"
           value={percentage}
           onChange={(e) => setExplodedAmount(Number(e.target.value) / 100)}
-          className="w-24 accent-cyan-400 bg-slate-800 h-1.5 rounded-lg appearance-none cursor-pointer"
+          className="w-24 h-1.5 rounded-lg appearance-none cursor-pointer" style={{accentColor: '#D9A64E', backgroundColor: '#E8D5B7'}}
         />
-        <span className="text-[11px] font-mono font-bold text-cyan-300 w-8 text-right">
+        <span className="text-[11px] font-mono font-bold w-8 text-right" style={{color: '#92400E'}}>
           {percentage}%
         </span>
       </div>

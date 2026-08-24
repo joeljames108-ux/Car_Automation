@@ -9,7 +9,17 @@ import { ComponentId, AssemblyPhase } from "../assemblyTypes";
 import { BaseAgent, AgentFinding, AgentIdentity } from "./agentFramework";
 
 export type AgentMode = "powertrain" | "assembly_qa" | "race_strategy" | "chat";
-export type TuningPreset = "track_attack" | "qualifying_max" | "endurance_reliability" | "eco_lean";
+export type TuningPreset =
+  | "v12_hybrid_valkyrie"
+  | "sprint_race"
+  | "high_downforce"
+  | "fuel_efficient"
+  | "balanced_sport"
+  | "gt3_spec_r"
+  | "track_attack"
+  | "qualifying_max"
+  | "endurance_reliability"
+  | "eco_lean";
 
 export interface TuningRecommendation {
   preset: TuningPreset;
@@ -102,6 +112,158 @@ export class ChiefPowertrainAgent extends BaseAgent {
     const isForced = current.intake && current.intake !== "na";
 
     switch (preset) {
+      case "v12_hybrid_valkyrie":
+        return {
+          preset: "v12_hybrid_valkyrie",
+          title: "🔥 1,000 HP V12 Hybrid Valkyrie",
+          summary: "Atmospheric 6.4L V12 screaming to 9,200 RPM coupled with 180kW Solid-State P2 PHEV electric motor for instantaneous torque fill.",
+          expectedPowerDeltaHp: 350,
+          expectedEfficiencyDelta: 0.5,
+          knockRiskLevel: "safe",
+          changes: {
+            layout: "v12",
+            bore: 92,
+            stroke: 80,
+            redline: 9200,
+            rpmLimiter: 9200,
+            valvetrain: "dohc_vvl",
+            crank: "forged_steel",
+            pistons: "forged",
+            intake: "na",
+            fuelSystem: "direct",
+            hybridArchitecture: "phev",
+            hybridMotorPower: 180,
+            batteryCapacity: 16,
+            batteryChemistry: "solid_state",
+            motorPlacement: "p2",
+            powerElectronicsType: "silicon_carbide_sic",
+            voltageArchitecture: 800,
+            ecuMapMode: "race",
+            afr: 12.5,
+            ignitionTiming: 32,
+            coolingRadiator: 1.0,
+            coolingOilCooler: 1.0,
+          },
+        };
+
+      case "sprint_race":
+        return {
+          preset: "sprint_race",
+          title: "🏁 Sprint Race Attack Spec",
+          summary: "9000 RPM Twin-Turbo V8 pushing 1.6 bar boost with aggressive cam profile and high knock resistance for sprint dominance.",
+          expectedPowerDeltaHp: 220,
+          expectedEfficiencyDelta: -0.8,
+          knockRiskLevel: "moderate",
+          changes: {
+            layout: "v8",
+            bore: 88,
+            stroke: 82,
+            redline: 9000,
+            rpmLimiter: 9000,
+            intake: "twin_turbo",
+            boostPressure: 1.6,
+            ecuMapMode: "race",
+            afr: 12.0,
+            ignitionTiming: 30,
+            camDuration: 305,
+            camLift: 13.8,
+            intercoolerEff: 0.95,
+            coolingRadiator: 1.0,
+          },
+        };
+
+      case "high_downforce":
+        return {
+          preset: "high_downforce",
+          title: "🌪️ Monaco High Downforce Spec",
+          summary: "High-response twin-turbo V6 tuned for instantaneous low-end punch to capitalize on massive aerodynamic ground-effect cornering grip.",
+          expectedPowerDeltaHp: 120,
+          expectedEfficiencyDelta: -0.2,
+          knockRiskLevel: "safe",
+          changes: {
+            layout: "v6",
+            redline: 8500,
+            rpmLimiter: 8500,
+            intake: "twin_turbo",
+            boostPressure: 1.4,
+            ecuMapMode: "sport",
+            afr: 12.3,
+            ignitionTiming: 28,
+            intercoolerEff: 0.92,
+            coolingRadiator: 0.95,
+          },
+        };
+
+      case "fuel_efficient":
+        return {
+          preset: "fuel_efficient",
+          title: "🌱 EcoStream Hybrid Endurance",
+          summary: "Atkinson cycle I4 with 80kW electric motor and 14 kWh battery, running lean AFR 14.7:1 for 43%+ thermal efficiency.",
+          expectedPowerDeltaHp: -60,
+          expectedEfficiencyDelta: 2.4,
+          knockRiskLevel: "safe",
+          changes: {
+            layout: "i4",
+            hybridArchitecture: "phev",
+            hybridMotorPower: 80,
+            batteryCapacity: 14,
+            ecuMapMode: "economy",
+            afr: 14.7,
+            ignitionTiming: 20,
+            hasStartStop: true,
+            boostPressure: 0,
+            coolingRadiator: 0.8,
+          },
+        };
+
+      case "balanced_sport":
+        return {
+          preset: "balanced_sport",
+          title: "⚖️ Balanced Sport GT Spec",
+          summary: "Smooth 3.0L Twin-Turbo V6 (460 HP) delivering wide powerband, compliant NVH, and high thermal margins.",
+          expectedPowerDeltaHp: 60,
+          expectedEfficiencyDelta: 0.2,
+          knockRiskLevel: "safe",
+          changes: {
+            layout: "v6",
+            redline: 7500,
+            rpmLimiter: 7500,
+            intake: "twin_turbo",
+            boostPressure: 1.1,
+            ecuMapMode: "sport",
+            afr: 12.8,
+            ignitionTiming: 26,
+            coolingRadiator: 0.9,
+          },
+        };
+
+      case "gt3_spec_r":
+        return {
+          preset: "gt3_spec_r",
+          title: "🏎️ Apex GT3 Spec-R Motorsport",
+          summary: "FIA GT3 Homologated flat-plane V8 (620 HP @ 8,500 RPM) with direct fuel injection and titanium valvetrain.",
+          expectedPowerDeltaHp: 160,
+          expectedEfficiencyDelta: -0.5,
+          knockRiskLevel: "safe",
+          changes: {
+            layout: "v8",
+            redline: 8500,
+            rpmLimiter: 8500,
+            valvetrain: "dohc_vvl",
+            crank: "forged_steel",
+            pistons: "forged",
+            intake: "na",
+            fuelSystem: "direct",
+            ecuMapMode: "race",
+            afr: 12.4,
+            ignitionTiming: 32,
+            camDuration: 300,
+            camLift: 13.5,
+            coolingRadiator: 1.0,
+            coolingOilCooler: 1.0,
+          },
+        };
+
       case "track_attack":
         return {
           preset: "track_attack",

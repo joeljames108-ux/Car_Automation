@@ -153,9 +153,9 @@ export class ModularInterior3DGenerator {
     cardGroup.name = `DoorCard_${isLeft ? 'L' : 'R'}`;
 
     const mainMat = this.getTrimMaterial(trim);
-    const speakerMat = new THREE.MeshStandardMaterial({ color: 0xd4d4d8, metalness: 0.9, roughness: 0.25 });
-    const switchMat = new THREE.MeshStandardMaterial({ color: 0x18181b, metalness: 0.8, roughness: 0.2 });
-    const handleMat = new THREE.MeshStandardMaterial({ color: 0xe2e8f0, metalness: 0.98, roughness: 0.1 });
+    const speakerMat = new THREE.MeshPhysicalMaterial({ color: 0xd4d4d8, metalness: 0.92, roughness: 0.18, clearcoat: 0.6, clearcoatRoughness: 0.05, envMapIntensity: 1.4 });
+    const switchMat = new THREE.MeshPhysicalMaterial({ color: 0x18181b, metalness: 0.85, roughness: 0.12, clearcoat: 0.8, clearcoatRoughness: 0.03, envMapIntensity: 1.1 });
+    const handleMat = new THREE.MeshPhysicalMaterial({ color: 0xe2e8f0, metalness: 0.98, roughness: 0.06, clearcoat: 1.0, clearcoatRoughness: 0.01, envMapIntensity: 1.8 });
 
     const zSign = isLeft ? 1 : -1;
 
@@ -424,8 +424,8 @@ export class ModularInterior3DGenerator {
     group.name = `Console_${consoleId}`;
 
     const mainMat = this.getTrimMaterial('forged_carbon');
-    const metalMat = new THREE.MeshStandardMaterial({ color: 0xe4e4e7, metalness: 0.95, roughness: 0.15 });
-    const redFlapMat = new THREE.MeshPhysicalMaterial({ color: 0xdc2626, metalness: 0.8, roughness: 0.2, clearcoat: 0.8 });
+    const metalMat = new THREE.MeshPhysicalMaterial({ color: 0xe4e4e7, metalness: 0.96, roughness: 0.10, clearcoat: 0.9, clearcoatRoughness: 0.02, envMapIntensity: 1.6 });
+    const redFlapMat = new THREE.MeshPhysicalMaterial({ color: 0xdc2626, metalness: 0.82, roughness: 0.15, clearcoat: 0.95, clearcoatRoughness: 0.02, envMapIntensity: 1.3 });
 
     // Console Base Spine
     const base = new THREE.Mesh(new THREE.BoxGeometry(wbM * 0.46, 0.16, 0.24), mainMat);
@@ -469,8 +469,8 @@ export class ModularInterior3DGenerator {
 
     const seatMat = this.getTrimMaterial(trim === 'alcantara_race' ? 'alcantara_race' : 'nappa_leather');
     const shellMat = this.getTrimMaterial('forged_carbon');
-    const harnessMat = new THREE.MeshStandardMaterial({ color: 0xdc2626, roughness: 0.8, metalness: 0.1 });
-    const buckleMat = new THREE.MeshStandardMaterial({ color: 0x18181b, roughness: 0.2, metalness: 0.9 });
+    const harnessMat = new THREE.MeshPhysicalMaterial({ color: 0xdc2626, roughness: 0.75, metalness: 0.08, sheen: 0.3, sheenColor: new THREE.Color(0xef4444), envMapIntensity: 0.2 });
+    const buckleMat = new THREE.MeshPhysicalMaterial({ color: 0x18181b, roughness: 0.12, metalness: 0.95, clearcoat: 0.8, clearcoatRoughness: 0.03, envMapIntensity: 1.2 });
 
     // 1. Deep Bucket Seat Bottom Cushion
     const bottom = new THREE.Mesh(new THREE.BoxGeometry(0.46, 0.13, 0.44), seatMat);
@@ -533,19 +533,36 @@ export class ModularInterior3DGenerator {
   }
 
   // ── PBR MATERIAL FACTORY ──
-  private static getTrimMaterial(trim: InteriorTrimGrade): THREE.MeshStandardMaterial {
+  private static getTrimMaterial(trim: InteriorTrimGrade): THREE.Material {
     switch (trim) {
       case 'forged_carbon':
-        return new THREE.MeshStandardMaterial({ color: 0x09090b, roughness: 0.25, metalness: 0.65 });
+        return new THREE.MeshPhysicalMaterial({
+          color: 0x0a0e17, roughness: 0.18, metalness: 0.35,
+          clearcoat: 0.95, clearcoatRoughness: 0.03, envMapIntensity: 1.3,
+        });
       case 'open_pore_wood':
-        return new THREE.MeshStandardMaterial({ color: 0x451a03, roughness: 0.70, metalness: 0.05 });
+        return new THREE.MeshPhysicalMaterial({
+          color: 0x451a03, roughness: 0.65, metalness: 0.02,
+          clearcoat: 0.3, clearcoatRoughness: 0.2, envMapIntensity: 0.6,
+        });
       case 'alcantara_race':
-        return new THREE.MeshStandardMaterial({ color: 0x27272a, roughness: 0.95, metalness: 0.0 });
+        return new THREE.MeshPhysicalMaterial({
+          color: 0x27272a, roughness: 0.92, metalness: 0.0,
+          sheen: 0.4, sheenColor: new THREE.Color(0x3f3f46), sheenRoughness: 0.8,
+          envMapIntensity: 0.15,
+        });
       case 'brushed_aluminum':
-        return new THREE.MeshStandardMaterial({ color: 0xd4d4d8, roughness: 0.25, metalness: 0.95 });
+        return new THREE.MeshPhysicalMaterial({
+          color: 0xd4d4d8, roughness: 0.18, metalness: 0.96,
+          clearcoat: 0.5, clearcoatRoughness: 0.06, envMapIntensity: 1.5,
+        });
       case 'nappa_leather':
       default:
-        return new THREE.MeshStandardMaterial({ color: 0x1e293b, roughness: 0.75, metalness: 0.1 });
+        return new THREE.MeshPhysicalMaterial({
+          color: 0x1e293b, roughness: 0.72, metalness: 0.05,
+          clearcoat: 0.15, clearcoatRoughness: 0.4, envMapIntensity: 0.3,
+          sheen: 0.2, sheenColor: new THREE.Color(0x334155), sheenRoughness: 0.7,
+        });
     }
   }
 }

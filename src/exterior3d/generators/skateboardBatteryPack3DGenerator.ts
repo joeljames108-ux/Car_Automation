@@ -42,11 +42,13 @@ export class SkateboardBatteryPack3DGenerator {
     });
 
     const copperBusbarMat = new THREE.MeshPhysicalMaterial({
-      color: 0xf97316, // Pure electrolytically-refined copper busbar
-      metalness: 0.98,
-      roughness: 0.10,
-      clearcoat: 0.8,
-    });
+        color: 0x0f172a,
+        metalness: 0.85,
+        roughness: 0.2,
+        clearcoat: 0.9,
+        clearcoatRoughness: 0.04,
+        envMapIntensity: 1.2,
+      });
 
     const coolingPlateMat = new THREE.MeshStandardMaterial({
       color: 0x06b6d4, // Anodized cyan liquid cooling channels

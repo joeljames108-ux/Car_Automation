@@ -1,6 +1,9 @@
-import React from "react";
-import { X, Flag, Gauge, Award, Activity, Navigation } from "lucide-react";
+import React, { useState, useEffect, useRef } from "react";
+import * as THREE from "three";
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
+import { X, Flag, Gauge, Award, Activity, Navigation, Box, Eye } from "lucide-react";
 import { TRACKS } from "../sim/constants";
+import { formatLap } from "../sim/utils/formatLap";
 import type { TrackId, SimResult, VehicleDesign } from "../sim/types";
 import { simulateLap } from "../sim/physics/lapSimulator";
 
@@ -44,6 +47,10 @@ export const TrackDiagramModal: React.FC<TrackDiagramModalProps> = ({
   sim,
   onClose,
 }) => {
+  const [mode3D, setMode3D] = useState(true);
+  const mount3DRef = useRef<HTMLDivElement>(null);
+  const anim3DRef = useRef<number>(0);
+
   if (!trackId) return null;
   const track = TRACKS[trackId];
   if (!track) return null;
@@ -64,10 +71,8 @@ export const TrackDiagramModal: React.FC<TrackDiagramModalProps> = ({
     simRes = null;
   }
 
-  // Calculate sector times (divide track segments evenly into S1, S2, S3)
+  // Calculate sector times
   const totalTime = simRes ? simRes.totalTime : (track.length * 1000) / (sim.topSpeed * 0.45 / 3.6);
-  
-  // High fidelity sector times and telemetry
   const s1Time = simRes ? simRes.sectorTimes[0] || (totalTime * 0.31) : (totalTime * 0.31);
   const s2Time = simRes ? simRes.sectorTimes[1] || (totalTime * 0.39) : (totalTime * 0.39);
   const s3Time = simRes ? simRes.sectorTimes[2] || (totalTime * 0.30) : (totalTime * 0.30);
@@ -76,6 +81,137 @@ export const TrackDiagramModal: React.FC<TrackDiagramModalProps> = ({
   const avgSpeed = simRes ? simRes.averageSpeed : Math.round((track.length / (totalTime / 3600)) * 10) / 10;
   const maxG = sim.lateralG;
   const imageSrc = TRACK_DIAGRAM_IMAGES[trackId];
+
+  // Three.js 3D Ribbon Circuit Visualizer
+  useEffect(() => {
+    if (!mode3D || !mount3DRef.current) return;
+    const container = mount3DRef.current;
+    const width = container.clientWidth || 550;
+    const height = container.clientHeight || 260;
+
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x050814);
+    scene.fog = new THREE.FogExp2(0x050814, 0.04);
+
+    const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 100);
+    camera.position.set(0, 8, 12);
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(width, height);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.shadowMap.enabled = true;
+    container.appendChild(renderer.domElement);
+
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.05;
+    controls.target.set(0, 0, 0);
+
+    // Studio Lighting
+    const ambientLight = new THREE.AmbientLight(0xffffff, 1.2);
+    scene.add(ambientLight);
+    const sunLight = new THREE.DirectionalLight(0xffffff, 2.0);
+    sunLight.position.set(5, 12, 8);
+    scene.add(sunLight);
+
+    // Grid Floor
+    const grid = new THREE.GridHelper(20, 20, 0x007aff, 0x1e293b);
+    grid.position.y = -0.5;
+    scene.add(grid);
+
+    // Build 3D Track Spline Points based on Track Archetype
+    const points: THREE.Vector3[] = [];
+    const numPoints = 60;
+
+    for (let i = 0; i < numPoints; i++) {
+      const t = (i / numPoints) * Math.PI * 2;
+      let x = 0, z = 0, y = Math.sin(t * 2) * (track.altitudeChange > 20 ? 0.8 : 0.3);
+
+      if (trackId === "monaco") {
+        x = Math.sin(t) * 4 + Math.sin(t * 3) * 0.8;
+        z = Math.cos(t) * 2.5 + Math.cos(t * 2) * 0.5;
+      } else if (trackId === "monza" || trackId === "redbullring") {
+        x = Math.sin(t) * 5.5 + Math.sin(t * 2) * 0.4;
+        z = Math.cos(t) * 2.0;
+      } else if (trackId === "spa" || trackId === "nordschleife") {
+        x = Math.sin(t) * 5.0 + Math.cos(t * 3) * 1.0;
+        z = Math.cos(t) * 3.2 + Math.sin(t * 2) * 0.6;
+        y = Math.sin(t * 3) * 1.2; // Eau Rouge / Nordschleife elevation bump
+      } else {
+        x = Math.sin(t) * 4.5 + Math.sin(t * 2) * 0.6;
+        z = Math.cos(t) * 2.8 + Math.cos(t * 3) * 0.4;
+      }
+      points.push(new THREE.Vector3(x, y, z));
+    }
+
+    const curve = new THREE.CatmullRomCurve3(points, true);
+
+    // Extrude 3D Ribbon Track Geometry
+    const shape = new THREE.Shape();
+    shape.moveTo(-0.25, -0.04);
+    shape.lineTo(0.25, -0.04);
+    shape.lineTo(0.25, 0.04);
+    shape.lineTo(-0.25, 0.04);
+    shape.closePath();
+
+    const extrudeSettings = { steps: 120, extrudePath: curve, bevelEnabled: false };
+    const trackGeom = new THREE.ExtrudeGeometry(shape, extrudeSettings);
+
+    const trackMat = new THREE.MeshStandardMaterial({
+      color: 0x007aff,
+      metalness: 0.8,
+      roughness: 0.2,
+      emissive: 0x0033aa,
+      emissiveIntensity: 0.2,
+    });
+    const trackMesh = new THREE.Mesh(trackGeom, trackMat);
+    scene.add(trackMesh);
+
+    // 3D Telemetry Racing Car Marker
+    const carGeom = new THREE.BoxGeometry(0.35, 0.15, 0.2);
+    const carMat = new THREE.MeshStandardMaterial({ color: 0x22c55e, emissive: 0x22c55e, emissiveIntensity: 0.6 });
+    const carMesh = new THREE.Mesh(carGeom, carMat);
+    scene.add(carMesh);
+
+    // Dynamic Telemetry Animation
+    let progress = 0;
+    const animate = () => {
+      anim3DRef.current = requestAnimationFrame(animate);
+      controls.update();
+
+      progress += 0.003;
+      if (progress > 1) progress = 0;
+
+      const pos = curve.getPointAt(progress);
+      const tangent = curve.getTangentAt(progress);
+      carMesh.position.copy(pos);
+      carMesh.position.y += 0.12;
+      carMesh.lookAt(pos.clone().add(tangent));
+
+      renderer.render(scene, camera);
+    };
+    animate();
+
+    const handleResize = () => {
+      if (!container) return;
+      const w = container.clientWidth;
+      const h = container.clientHeight;
+      camera.aspect = w / h;
+      camera.updateProjectionMatrix();
+      renderer.setSize(w, h);
+    };
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      cancelAnimationFrame(anim3DRef.current);
+      window.removeEventListener("resize", handleResize);
+      controls.dispose();
+      renderer.dispose();
+      if (container.contains(renderer.domElement)) {
+        container.removeChild(renderer.domElement);
+      }
+    };
+  }, [mode3D, trackId]);
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md p-4 animate-in fade-in duration-200">
@@ -180,75 +316,87 @@ export const TrackDiagramModal: React.FC<TrackDiagramModalProps> = ({
                 <span className="text-xs font-semibold text-slate-300 flex items-center gap-1.5">
                   <Navigation size={14} className="text-accent-400" /> Circuit Track Layout & Sector Map
                 </span>
-                <div className="flex items-center gap-4 text-[10px] text-slate-400">
-                  <span className="flex items-center gap-1"><span className="w-2.5 h-1 rounded-full bg-red-500" /> S1</span>
-                  <span className="flex items-center gap-1"><span className="w-2.5 h-1 rounded-full bg-cyan-400" /> S2</span>
-                  <span className="flex items-center gap-1"><span className="w-2.5 h-1 rounded-full bg-amber-400" /> S3</span>
+                
+                {/* 3D vs 2D Toggle Switch */}
+                <div className="flex items-center gap-1 bg-slate-900 border border-cyan-500/30 rounded-lg p-0.5">
+                  <button
+                    onClick={() => setMode3D(true)}
+                    className={`flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-mono font-bold transition-all ${
+                      mode3D ? "bg-cyan-500 text-slate-950 font-extrabold shadow-sm" : "text-slate-400 hover:text-white"
+                    }`}
+                  >
+                    <Box size={11} /> 3D RIBBON
+                  </button>
+                  <button
+                    onClick={() => setMode3D(false)}
+                    className={`flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-mono font-bold transition-all ${
+                      !mode3D ? "bg-cyan-500 text-slate-950 font-extrabold shadow-sm" : "text-slate-400 hover:text-white"
+                    }`}
+                  >
+                    <Eye size={11} /> 2D PLAN
+                  </button>
                 </div>
               </div>
 
-              <div className="relative w-full flex-1 flex items-center justify-center p-4 min-h-[260px]">
-                {/* Dynamically Generated Track Vector Layout based on Track Geometry & Sectors */}
-                <svg className="w-full h-[260px] max-w-[550px]" viewBox="0 0 600 300">
-                  <defs>
-                    <linearGradient id="s1TrackGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                      <stop offset="0%" stopColor="#ef4444" />
-                      <stop offset="100%" stopColor="#f87171" />
-                    </linearGradient>
-                    <linearGradient id="s2TrackGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                      <stop offset="0%" stopColor="#06b6d4" />
-                      <stop offset="100%" stopColor="#38bdf8" />
-                    </linearGradient>
-                    <linearGradient id="s3TrackGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                      <stop offset="0%" stopColor="#f59e0b" />
-                      <stop offset="100%" stopColor="#fbbf24" />
-                    </linearGradient>
+              <div className="relative w-full flex-1 flex items-center justify-center p-2 min-h-[260px]">
+                {mode3D ? (
+                  <div ref={mount3DRef} className="w-full h-[260px] cursor-grab active:cursor-grabbing relative rounded-lg overflow-hidden border border-cyan-500/20">
+                    <div className="absolute bottom-1 right-2 text-[9px] font-mono text-cyan-400/60 pointer-events-none bg-black/60 px-2 py-0.5 rounded border border-cyan-500/30">
+                      ORBIT: DRAG · ELEVATION Δ: {track.altitudeChange}m
+                    </div>
+                  </div>
+                ) : (
+                  <svg className="w-full h-[260px] max-w-[550px]" viewBox="0 0 600 300">
+                    <defs>
+                      <linearGradient id="s1TrackGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" stopColor="#ef4444" />
+                        <stop offset="100%" stopColor="#f87171" />
+                      </linearGradient>
+                      <linearGradient id="s2TrackGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" stopColor="#06b6d4" />
+                        <stop offset="100%" stopColor="#38bdf8" />
+                      </linearGradient>
+                      <linearGradient id="s3TrackGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                        <stop offset="0%" stopColor="#f59e0b" />
+                        <stop offset="100%" stopColor="#fbbf24" />
+                      </linearGradient>
 
-                    <filter id="neonGlow" x="-20%" y="-20%" width="140%" height="140%">
-                      <feGaussianBlur stdDeviation="4" result="blur" />
-                      <feComposite in="SourceGraphic" in2="blur" operator="over" />
-                    </filter>
-                  </defs>
+                      <filter id="neonGlow" x="-20%" y="-20%" width="140%" height="140%">
+                        <feGaussianBlur stdDeviation="4" result="blur" />
+                        <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                      </filter>
+                    </defs>
 
-                  {/* Dark Track Asphalt Foundation */}
-                  {renderTrackSvgPath(track, "asphalt")}
+                    {/* Dark Track Asphalt Foundation */}
+                    {renderTrackSvgPath(track, "asphalt")}
 
-                  {/* Sector 1 (Red) */}
-                  {renderTrackSvgPath(track, "s1")}
-                  {/* Sector 2 (Cyan) */}
-                  {renderTrackSvgPath(track, "s2")}
-                  {/* Sector 3 (Gold) */}
-                  {renderTrackSvgPath(track, "s3")}
+                    {/* Sector 1 (Red) */}
+                    {renderTrackSvgPath(track, "s1")}
+                    {/* Sector 2 (Cyan) */}
+                    {renderTrackSvgPath(track, "s2")}
+                    {/* Sector 3 (Gold) */}
+                    {renderTrackSvgPath(track, "s3")}
 
-                  {/* Start/Finish Line & Sector Annotations */}
-                  <g>
-                    <circle cx="80" cy="220" r="5" fill="#22c55e" className="animate-ping" />
-                    <circle cx="80" cy="220" r="5" fill="#22c55e" />
-                    <text x="92" y="224" fill="#22c55e" fontSize="10" fontFamily="monospace" fontWeight="bold">DRS Zone</text>
+                    {/* Start/Finish Line & Sector Annotations */}
+                    <g>
+                      <circle cx="80" cy="220" r="5" fill="#22c55e" className="animate-ping" />
+                      <circle cx="80" cy="220" r="5" fill="#22c55e" />
+                      <text x="92" y="224" fill="#22c55e" fontSize="10" fontFamily="monospace" fontWeight="bold">DRS Zone</text>
 
-                    <circle cx="500" cy="140" r="5" fill="#a855f7" />
-                    <text x="512" y="144" fill="#a855f7" fontSize="10" fontFamily="monospace" fontWeight="bold">Speed Trap</text>
+                      <circle cx="500" cy="140" r="5" fill="#a855f7" />
+                      <text x="512" y="144" fill="#a855f7" fontSize="10" fontFamily="monospace" fontWeight="bold">Speed Trap</text>
 
-                    {/* Sector Pills */}
-                    <rect x="65" y="200" width="22" height="13" rx="3" fill="#ef4444" />
-                    <text x="76" y="210" fill="#fff" fontSize="9" fontWeight="bold" textAnchor="middle">S1</text>
+                      {/* Sector Pills */}
+                      <rect x="65" y="200" width="22" height="13" rx="3" fill="#ef4444" />
+                      <text x="76" y="210" fill="#fff" fontSize="9" fontWeight="bold" textAnchor="middle">S1</text>
 
-                    <rect x="260" y="45" width="22" height="13" rx="3" fill="#06b6d4" />
-                    <text x="271" y="55" fill="#fff" fontSize="9" fontWeight="bold" textAnchor="middle">S2</text>
+                      <rect x="260" y="45" width="22" height="13" rx="3" fill="#06b6d4" />
+                      <text x="271" y="55" fill="#fff" fontSize="9" fontWeight="bold" textAnchor="middle">S2</text>
 
-                    <rect x="420" y="125" width="22" height="13" rx="3" fill="#f59e0b" />
-                    <text x="431" y="135" fill="#fff" fontSize="9" fontWeight="bold" textAnchor="middle">S3</text>
-                  </g>
-                </svg>
-
-                {/* Optional Overlay Image if available */}
-                {imageSrc && (
-                  <img
-                    src={imageSrc}
-                    alt={`${track.name} Map`}
-                    className="absolute inset-0 m-auto max-h-[240px] max-w-[450px] object-contain filter invert contrast-125 brightness-110 opacity-30 pointer-events-none"
-                    onError={(e) => { e.currentTarget.style.display = "none"; }}
-                  />
+                      <rect x="420" y="125" width="22" height="13" rx="3" fill="#f59e0b" />
+                      <text x="431" y="135" fill="#fff" fontSize="9" fontWeight="bold" textAnchor="middle">S3</text>
+                    </g>
+                  </svg>
                 )}
               </div>
 
@@ -323,18 +471,8 @@ export const TrackDiagramModal: React.FC<TrackDiagramModalProps> = ({
   );
 };
 
-function formatLap(seconds: number): string {
-  if (seconds >= 60) {
-    const m = Math.floor(seconds / 60);
-    const s = seconds % 60;
-    return `${m}:${s.toFixed(3).padStart(6, "0")}`;
-  }
-  return `${seconds.toFixed(3)}s`;
-}
-
 // Helper to generate dynamic vector path traces for track sectors
 function renderTrackSvgPath(track: import("../sim/types").TrackInfo, mode: "asphalt" | "s1" | "s2" | "s3") {
-  // Customized sector path definitions for distinct circuit archetypes
   let d = "";
   if (track.id === "monaco") {
     d = "M 90 220 L 220 220 C 260 220, 270 190, 250 160 C 230 130, 280 90, 360 80 C 440 70, 520 90, 500 130 C 480 170, 440 180, 410 190 C 370 200, 310 200, 260 210 L 90 220 Z";

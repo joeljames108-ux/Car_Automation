@@ -23,6 +23,7 @@ import {
   BarChart3,
   Waves
 } from 'lucide-react';
+import { GenericProvingDeck } from './GenericProvingDeck';
 import { LatticeBoltzmannWindTunnelSolver, LbmWindTunnelResult } from '../../sim/aerodynamics/latticeBoltzmannWindTunnelSolver';
 import { ActiveYawVectoringDifferentialSolver, ActiveDifferentialState } from '../../sim/drivetrain/activeYawVectoringDifferentialSolver';
 import { CabinPsychoacousticsSolver, CabinPsychoacousticReport } from '../../sim/acoustics/cabinPsychoacousticsSolver';
@@ -60,29 +61,13 @@ export const GrandMultiverseProvingDeck: React.FC = () => {
   });
 
   return (
-    <div className="flex flex-col h-full w-full bg-[#020408] text-gray-100 p-4 gap-4 overflow-y-auto font-sans">
-      {/* Header Deck */}
-      <div className="flex flex-col md:flex-row items-start md:items-center justify-between px-6 py-4 rounded-2xl bg-[#060a12] border border-[#172338] shadow-2xl gap-4">
-        <div className="flex items-center gap-3.5">
-          <div className="p-2.5 rounded-2xl bg-gradient-to-tr from-blue-500/20 via-cyan-500/20 to-emerald-500/20 border border-cyan-500/40 text-cyan-400">
-            <Radio className="w-6 h-6 animate-pulse" />
-          </div>
-          <div>
-            <div className="flex items-center gap-2">
-              <h1 className="text-base font-black tracking-wider text-white">
-                GRAND MULTIVERSE PROVING GROUND SUPER-STUDIO
-              </h1>
-              <span className="px-2.5 py-0.5 rounded-full bg-cyan-500/20 border border-cyan-500/40 text-cyan-400 text-[10px] font-mono font-bold">
-                PHASE 101–105 ACTIVE
-              </span>
-            </div>
-            <p className="text-xs text-gray-400 font-mono">
-              LBM Navier-Stokes CFD ▸ Motorsport e-LSD Vectoring ▸ Cabin Psychoacoustics ▸ V2X Cooperative Swarm
-            </p>
-          </div>
-        </div>
-
-        <div className="flex items-center gap-3 font-mono text-xs">
+    <GenericProvingDeck
+      title="GRAND MULTIVERSE PROVING GROUND SUPER-STUDIO"
+      phaseBadge="PHASE 101–105 ACTIVE"
+      subtitle="LBM Navier-Stokes CFD ▸ Motorsport e-LSD Vectoring ▸ Cabin Psychoacoustics ▸ V2X Cooperative Swarm"
+      icon={<Radio className="w-6 h-6 animate-pulse" />}
+      headerBadges={
+        <>
           <div className="px-3 py-1.5 rounded-xl bg-[#0a1120] border border-[#1c2c47] text-gray-300">
             <span className="text-gray-500 mr-2">CFD Re:</span>
             <span className="text-cyan-400 font-bold">{lbmResult.reynoldsNumber.toLocaleString()}</span>
@@ -91,38 +76,17 @@ export const GrandMultiverseProvingDeck: React.FC = () => {
             <span className="text-gray-500 mr-2">V2X Latency:</span>
             <span className="text-emerald-400 font-bold">&lt; 3.5 ms</span>
           </div>
-        </div>
-      </div>
-
-      {/* Tabs Selector */}
-      <div className="flex items-center gap-2 overflow-x-auto pb-1">
-        {[
-          { id: 'LBM_WIND_TUNNEL', label: 'LBM Navier-Stokes Wind Tunnel', icon: Wind },
-          { id: 'YAW_VECTORING', label: 'Motorsport Active Yaw e-LSD', icon: Compass },
-          { id: 'CABIN_ACOUSTICS', label: 'Cabin Psychoacoustics Sound Lab', icon: Volume2 },
-          { id: 'V2X_PLATOONING', label: 'V2X Cooperative Platooning Swarm', icon: Share2 },
-        ].map((tab) => {
-          const Icon = tab.icon;
-          const isActive = activeTab === tab.id;
-          return (
-            <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id as any)}
-              className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-mono font-bold whitespace-nowrap transition-all border ${
-                isActive
-                  ? 'bg-gradient-to-r from-blue-500/20 to-cyan-500/20 border-cyan-500/50 text-white shadow-lg'
-                  : 'bg-[#060a12] border-[#131d2e] text-gray-400 hover:text-gray-200'
-              }`}
-            >
-              <Icon className={`w-4 h-4 ${isActive ? 'text-cyan-400' : 'text-gray-500'}`} />
-              <span>{tab.label}</span>
-            </button>
-          );
-        })}
-      </div>
-
-      {/* Tab Panels */}
-      <div className="flex-1 flex flex-col gap-4">
+        </>
+      }
+      tabs={[
+        { id: 'LBM_WIND_TUNNEL', label: 'LBM Navier-Stokes Wind Tunnel', icon: <Wind className="w-4 h-4" /> },
+        { id: 'YAW_VECTORING', label: 'Motorsport Active Yaw e-LSD', icon: <Compass className="w-4 h-4" /> },
+        { id: 'CABIN_ACOUSTICS', label: 'Cabin Psychoacoustics Sound Lab', icon: <Volume2 className="w-4 h-4" /> },
+        { id: 'V2X_PLATOONING', label: 'V2X Cooperative Platooning Swarm', icon: <Share2 className="w-4 h-4" /> },
+      ]}
+      activeTab={activeTab}
+      onTabChange={setActiveTab}
+    >
         {/* TAB 1: LBM Wind Tunnel */}
         {activeTab === 'LBM_WIND_TUNNEL' && (
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 flex-1">
@@ -352,7 +316,6 @@ export const GrandMultiverseProvingDeck: React.FC = () => {
             </div>
           </div>
         )}
-      </div>
-    </div>
+    </GenericProvingDeck>
   );
 };

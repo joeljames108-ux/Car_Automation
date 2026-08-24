@@ -12,6 +12,13 @@
 import React, { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
+import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
+import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
+import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass.js';
+import { FXAAShader } from 'three/examples/jsm/shaders/FXAAShader.js';
+import { OutputPass } from 'three/examples/jsm/postprocessing/OutputPass.js';
+import { SAOPass } from 'three/examples/jsm/postprocessing/SAOPass.js';
 import {
   Layers,
   Sparkles,
@@ -45,11 +52,11 @@ import {
 import { ModularInteriorConfiguration } from '../../exterior3d/types/modularInteriorTypes';
 import { CHASSIS_50_MAP } from '../../exterior3d/manifests/chassis50Manifest';
 import { MaterialGrade } from '../../sim/assemblyTypes';
-import { VehicleSVG } from './VehicleSVG';
-import { ChassisFrameSVG } from './exterior/svg/ChassisFrameSVG';
 import { StudioEnvironmentGenerator } from '../../exterior3d/environment/StudioEnvironmentGenerator';
 import { UniversalGlbAssetLoader } from '../../exterior3d/loaders/universalGlbAssetLoader';
 import { PaintFinishType, ModularBodyPanelCustomizer } from '../../exterior3d/materials/modularBodyPanelCustomizer';
+import { ModularStructureEngine } from '../../sim/modularVehicle/modularStructureEngine';
+import { ModularStructureVisualizer } from '../../exterior3d/geometry/modularStructureVisualizer';
 
 interface ModularVehicle3DViewportProps {
   bodyType: VehicleBodyType;
@@ -73,6 +80,10 @@ interface ModularVehicle3DViewportProps {
   onToggleXRay: () => void;
   onToggleWireframe: () => void;
   onToggleRotating: () => void;
+  showCoG?: boolean;
+  showFEAStress?: boolean;
+  showLoadVectors?: boolean;
+  isolatedStage?: string | null;
 }
 
 export const ModularVehicle3DViewport: React.FC<ModularVehicle3DViewportProps> = ({
@@ -97,6 +108,10 @@ export const ModularVehicle3DViewport: React.FC<ModularVehicle3DViewportProps> =
   onToggleXRay,
   onToggleWireframe,
   onToggleRotating,
+  showCoG = false,
+  showFEAStress = false,
+  showLoadVectors = false,
+  isolatedStage = null,
 }) => {
   const [modelSource, setModelSource] = React.useState<
     'parametric' | 'volvo_p1800' | 'byd_atto3' | 'ford_escort' | 'bmw_i8' | 'mini_countryman' | 'v12_engine'
@@ -128,7 +143,8 @@ export const ModularVehicle3DViewport: React.FC<ModularVehicle3DViewportProps> =
 
     // 1. Scene, Camera & WebGL Renderer
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x0a0d14);
+    scene.background = new THREE.Color(0x1a1208);
+    scene.fog = new THREE.FogExp2(0x1a1208, 0.04);
 
     const width = container.clientWidth || 800;
     const height = container.clientHeight || 480;
@@ -144,9 +160,39 @@ export const ModularVehicle3DViewport: React.FC<ModularVehicle3DViewportProps> =
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.2;
+    renderer.toneMappingExposure = 1.45;
+    renderer.outputColorSpace = THREE.SRGBColorSpace;
 
     container.replaceChildren(renderer.domElement);
+
+    // Post-Processing Pipeline
+    const composer = new EffectComposer(renderer);
+    composer.addPass(new RenderPass(scene, camera));
+
+    // Screen-Space Ambient Occlusion for panel gap and crevice shadows
+    const saoPass = new SAOPass(scene, camera, new THREE.Vector2(512, 512));
+    saoPass.params.saoBias = 0.5;
+    saoPass.params.saoIntensity = 0.035;
+    saoPass.params.saoScale = 1.5;
+    saoPass.params.saoKernelRadius = 80;
+    saoPass.params.saoBlur = true;
+    saoPass.params.saoBlurRadius = 6;
+    saoPass.params.saoBlurStdDev = 3;
+    saoPass.params.saoBlurDepthCutoff = 0.01;
+    composer.addPass(saoPass);
+    const bloomPass = new UnrealBloomPass(new THREE.Vector2(width, height), 0.3, 0.5, 0.82);
+    composer.addPass(bloomPass);
+    const fxaaPass = new ShaderPass(FXAAShader);
+    fxaaPass.uniforms["resolution"].value.set(1 / width, 1 / height);
+    composer.addPass(fxaaPass);
+    const vignetteShader = {
+      uniforms: { tDiffuse: { value: null }, offset: { value: 1.0 }, darkness: { value: 1.2 } },
+      vertexShader: "varying vec2 vUv; void main(){ vUv=uv; gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0); }",
+      fragmentShader: "uniform sampler2D tDiffuse; uniform float offset; uniform float darkness; varying vec2 vUv; void main(){ vec4 t=texture2D(tDiffuse,vUv); vec2 u=(vUv-vec2(0.5))*vec2(offset); t.rgb*=1.0-dot(u,u)*darkness; gl_FragColor=t; }"
+    };
+    const vignettePass = new ShaderPass(vignetteShader);
+    composer.addPass(vignettePass);
+    composer.addPass(new OutputPass());
 
     // Studio Environment Radiance Map
     if (typeof document !== 'undefined') {
@@ -166,12 +212,60 @@ export const ModularVehicle3DViewport: React.FC<ModularVehicle3DViewportProps> =
     // 3. Studio Lighting Rig
     StudioEnvironmentGenerator.setupStudioLighting(scene, 'luxuryShowroom');
 
+    // 3b. Atmospheric Dust Particles for volumetric depth
+    const dustCount = 120;
+    const dustGeo = new THREE.BufferGeometry();
+    const dustPositions = new Float32Array(dustCount * 3);
+    const dustSizes = new Float32Array(dustCount);
+    for (let i = 0; i < dustCount; i++) {
+      dustPositions[i * 3] = (Math.random() - 0.5) * 6;
+      dustPositions[i * 3 + 1] = Math.random() * 3;
+      dustPositions[i * 3 + 2] = (Math.random() - 0.5) * 6;
+      dustSizes[i] = 0.02 + Math.random() * 0.04;
+    }
+    dustGeo.setAttribute('position', new THREE.BufferAttribute(dustPositions, 3));
+    dustGeo.setAttribute('size', new THREE.BufferAttribute(dustSizes, 1));
+    const dustMat = new THREE.PointsMaterial({
+      color: 0xffd699,
+      size: 0.035,
+      transparent: true,
+      opacity: 0.25,
+      sizeAttenuation: true,
+      depthWrite: false,
+    });
+    const dustParticles = new THREE.Points(dustGeo, dustMat);
+    dustParticles.name = 'Atmospheric_Dust_Particles';
+    scene.add(dustParticles);
+
+    // 3c. Volumetric light cone from above softbox
+    const lightConeGeo = new THREE.ConeGeometry(2.5, 4, 32, 1, true);
+    const lightConeMat = new THREE.MeshBasicMaterial({
+      color: 0xffd699,
+      transparent: true,
+      opacity: 0.03,
+      side: THREE.DoubleSide,
+      depthWrite: false,
+      blending: THREE.AdditiveBlending,
+    });
+    const lightCone = new THREE.Mesh(lightConeGeo, lightConeMat);
+    lightCone.position.set(-0.9, 3.5, 0);
+    lightCone.name = 'Volumetric_Light_Cone';
+    scene.add(lightCone);
+
     // Ground Plane with Soft Contact Shadow & Cyber Grid
     const cyberFloor = StudioEnvironmentGenerator.createCyberFloorGrid(24);
     scene.add(cyberFloor);
 
     const shadowPlane = StudioEnvironmentGenerator.createContactShadowPlane(2.6, 5.2, 0.88);
     scene.add(shadowPlane);
+
+    // Reflective ground plane for underside bounce
+    const reflectPlane = StudioEnvironmentGenerator.createReflectiveGroundPlane();
+    scene.add(reflectPlane);
+
+    // Ground reflection mirror
+    const mirror = StudioEnvironmentGenerator.createGroundReflectionMirror(renderer, scene, camera);
+    scene.add(mirror.mirrorMesh);
 
     // 3D Floating Holographic Telemetry Badge (Matching Reference Screenshot)
     const holoBadge = StudioEnvironmentGenerator.createFloatingHoloBadge(0.65, 1.35, `BODY: ${bodyType.toUpperCase()} • APEX-CAD 3D`);
@@ -187,14 +281,31 @@ export const ModularVehicle3DViewport: React.FC<ModularVehicle3DViewportProps> =
       let modelUrl = '';
       if (modelSource === 'volvo_p1800') modelUrl = '/models/extracted/volvo-p1800-restomod-widebody-edition/source/car5.fbx';
       else if (modelSource === 'byd_atto3') modelUrl = '/models/extracted/2024-byd-atto-3/source/FINAL_MODEL/FINAL_MODEL.fbx';
-      else if (modelSource === 'ford_escort') modelUrl = '/models/vehicles/ford_escort_rs_cosworth.glb';
-      else if (modelSource === 'bmw_i8') modelUrl = '/models/vehicles/bmw_i8.glb';
-      else if (modelSource === 'mini_countryman') modelUrl = '/models/vehicles/mini_countryman.gltf';
+      else if (modelSource === 'ford_escort') modelUrl = '/models/exterior/hatchback_ford_escort.glb';
+      else if (modelSource === 'bmw_i8') modelUrl = '/models/exterior/sports_car_bmw_i8.glb';
+      else if (modelSource === 'mini_countryman') modelUrl = '/models/extracted/mini-countryman-jcw/source/Unity2Skfb/Unity2Skfb.gltf';
       else if (modelSource === 'v12_engine') modelUrl = '/models/engines/v12/v12_engine_block.glb';
 
       UniversalGlbAssetLoader.loadAsset(modelUrl)
         .then((res) => {
           if (res && res.scene) {
+            // Auto-colorize GLB body panels from paint color picker
+            const paintColor3 = new THREE.Color(paintColor);
+            res.scene.traverse((child) => {
+              if (!(child as THREE.Mesh).isMesh) return;
+              const mesh = child as THREE.Mesh;
+              const mats = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
+              mats.forEach((m) => {
+                if ((m as any).isMeshPhysicalMaterial || (m as any).isMeshStandardMaterial) {
+                  const sm = m as THREE.MeshStandardMaterial;
+                  // Apply paint to metallic body panels (high metalness = painted body)
+                  if (sm.metalness > 0.4 && sm.color.r > 0.15 && sm.color.g > 0.15 && sm.color.b > 0.15) {
+                    sm.color.lerp(paintColor3, 0.55);
+                    sm.needsUpdate = true;
+                  }
+                }
+              });
+            });
             sceneGraph.vehicleRoot.add(res.scene);
           }
         })
@@ -361,12 +472,39 @@ export const ModularVehicle3DViewport: React.FC<ModularVehicle3DViewportProps> =
         const gizmo = VehicleDiagnosticGizmo.createDiagnosticOverlay(wheelbaseMm, trackWidthFrontMm, trackWidthRearMm);
         scene.add(gizmo);
       }
+
+      // 5.10 Modular Structure Telemetry & FEA Stress Overlays (CoG, Load Vectors, FEA Heatmap)
+      if (showCoG || showFEAStress || showLoadVectors) {
+        const chassisDef = CHASSIS_50_MAP[chassisId] || CHASSIS_50_MAP['SEDAN_CHASSIS_01'];
+        const telemetry = ModularStructureEngine.solveStructure(
+          chassisDef,
+          installedStages,
+          materialGrades,
+          wheelbaseMm,
+          trackWidthFrontMm,
+          trackWidthRearMm,
+          rideHeightMm
+        );
+        const telemetryOverlays = ModularStructureVisualizer.createTelemetryOverlayGroup(
+          telemetry,
+          wheelbaseMm,
+          trackWidthFrontMm,
+          trackWidthRearMm,
+          rideHeightMm,
+          { showCoG, showFEAStress, showLoadVectors }
+        );
+        scene.add(telemetryOverlays);
+      }
+
+      // 5.11 Apply Subassembly Solo Isolation
+      ModularStructureVisualizer.applySubassemblyIsolation(sceneGraph.vehicleRoot, isolatedStage);
     }
 
     // Update Exploded View
     sceneGraph.updateExplodedView(explodedViewProgress);
 
     // 6. Animation Render Loop
+    let orbitTime = 0;
     let animationFrameId: number;
     const animate = () => {
       animationFrameId = requestAnimationFrame(animate);
@@ -376,11 +514,21 @@ export const ModularVehicle3DViewport: React.FC<ModularVehicle3DViewportProps> =
       }
 
       controls.update();
-      renderer.render(scene, camera);
+      // Render ground reflection pass
+      mirror.mirrorCamera.position.copy(camera.position);
+      mirror.mirrorCamera.position.y = -camera.position.y;
+      mirror.mirrorCamera.quaternion.copy(camera.quaternion);
+      mirror.mirrorCamera.lookAt(-wheelbaseMm / 2000, 0.4, 0);
+      renderer.setRenderTarget(mirror.mirrorTarget);
+      renderer.render(scene, mirror.mirrorCamera);
+      renderer.setRenderTarget(null);
+
+      // Render master composition pass with SSAO and UnrealBloom
+      composer.render();
     };
     animate();
 
-    // 7. Handle Resize
+    // Window Resize Handler
     const handleResize = () => {
       if (!container) return;
       const w = container.clientWidth;
@@ -388,6 +536,8 @@ export const ModularVehicle3DViewport: React.FC<ModularVehicle3DViewportProps> =
       camera.aspect = w / h;
       camera.updateProjectionMatrix();
       renderer.setSize(w, h);
+      composer.setSize(w, h);
+      fxaaPass.uniforms["resolution"].value.set(1 / w, 1 / h);
     };
     window.addEventListener('resize', handleResize);
 
@@ -395,6 +545,7 @@ export const ModularVehicle3DViewport: React.FC<ModularVehicle3DViewportProps> =
     return () => {
       window.removeEventListener('resize', handleResize);
       cancelAnimationFrame(animationFrameId);
+      mirror.mirrorTarget.dispose();
       renderer.dispose();
       sceneGraph.dispose();
     };
@@ -426,6 +577,10 @@ export const ModularVehicle3DViewport: React.FC<ModularVehicle3DViewportProps> =
     isXRayActive,
     isWireframeActive,
     isRotating,
+    showCoG,
+    showFEAStress,
+    showLoadVectors,
+    isolatedStage,
   ]);
 
   // Update Camera Presets
@@ -451,40 +606,30 @@ export const ModularVehicle3DViewport: React.FC<ModularVehicle3DViewportProps> =
   };
 
   return (
-    <div className="relative w-full bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-3xl overflow-hidden shadow-2xl font-mono flex flex-col">
+    <div className="relative w-full bg-amber-950/80 border border-amber-800/40 rounded-3xl overflow-hidden shadow-2xl font-mono flex flex-col">
       {/* ── TOP HEADER TOOLBAR (OUTSIDE DIAGRAM) ── */}
-      <div className="w-full p-4 flex flex-col gap-3 bg-slate-900/95 border-b border-slate-800/90 backdrop-blur-md">
+      <div className="w-full p-4 flex flex-col gap-3 bg-amber-950/90 border-b border-amber-800/50 backdrop-blur-md">
         {/* Main Row: Modes & Primary Controls */}
         <div className="w-full flex flex-wrap items-center justify-between gap-3">
           {/* Left: View Mode Toggles & 3D Model Selector */}
           <div className="flex flex-wrap items-center gap-2">
-            <div className="flex items-center gap-1.5 p-1 rounded-2xl bg-base-950/80 border border-slate-800">
+            <div className="flex items-center gap-1.5 p-1 rounded-2xl bg-amber-950/60 border border-amber-800/40">
               <button
                 onClick={() => onSetViewMode('2d_blueprint')}
                 className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                   viewMode === '2d_blueprint'
-                    ? 'bg-cyan-500 text-slate-950 shadow-md'
-                    : 'text-slate-400 hover:text-slate-200'
+                    ? 'bg-amber-500 text-amber-950 shadow-md'
+                    : 'text-amber-400/70 hover:text-amber-200'
                 }`}
               >
                 2D Blueprint
               </button>
               <button
-                onClick={() => onSetViewMode('3d_isometric')}
-                className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                  viewMode === '3d_isometric'
-                    ? 'bg-cyan-500 text-slate-950 shadow-md'
-                    : 'text-slate-400 hover:text-slate-200'
-                }`}
-              >
-                3D Iso SVG
-              </button>
-              <button
                 onClick={() => onSetViewMode('3d_glb')}
                 className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                   viewMode === '3d_glb'
-                    ? 'bg-cyan-500 text-slate-950 shadow-md'
-                    : 'text-slate-400 hover:text-slate-200'
+                    ? 'bg-amber-500 text-amber-950 shadow-md'
+                    : 'text-amber-400/70 hover:text-amber-200'
                 }`}
               >
                 3D WebGL GLB
@@ -496,7 +641,7 @@ export const ModularVehicle3DViewport: React.FC<ModularVehicle3DViewportProps> =
               <select
                 value={modelSource}
                 onChange={(e) => setModelSource(e.target.value as any)}
-                className="px-3 py-1.5 rounded-2xl bg-base-950/80 border border-cyan-500/40 text-xs font-bold text-cyan-400 focus:outline-none focus:border-cyan-400 cursor-pointer shadow-md hover:border-cyan-400 transition-all"
+                className="px-3 py-1.5 rounded-2xl bg-amber-950/60 border border-amber-600/50 text-xs font-bold text-amber-400 focus:outline-none focus:border-amber-400 cursor-pointer shadow-md hover:border-cyan-400 transition-all"
               >
                 <option value="parametric">⚡ Parametric Sculpted CAD</option>
                 <option value="volvo_p1800">🇸🇪 Volvo P1800 Restomod (FBX)</option>
@@ -512,8 +657,8 @@ export const ModularVehicle3DViewport: React.FC<ModularVehicle3DViewportProps> =
           {/* Right: Inspection Controls (Exploded View, X-Ray, Wireframe, Rotate, Camera Presets) */}
           <div className="flex flex-wrap items-center gap-2">
             {/* Exploded View Slider */}
-            <div className="flex items-center gap-2 px-3 py-1.5 rounded-2xl bg-base-950/80 border border-slate-800 text-xs text-slate-300">
-              <Sliders size={13} className="text-cyan-400" />
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-2xl bg-amber-950/60 border border-amber-800/40 text-xs text-slate-300">
+              <Sliders size={13} className="text-amber-400" />
               <span className="text-[10px] text-slate-400 font-bold">Exploded:</span>
               <input
                 type="range"
@@ -522,9 +667,9 @@ export const ModularVehicle3DViewport: React.FC<ModularVehicle3DViewportProps> =
                 step="0.05"
                 value={explodedViewProgress}
                 onChange={(e) => onSetExplodedView(parseFloat(e.target.value))}
-                className="w-20 accent-cyan-500 cursor-pointer h-1.5"
+                className="w-20 accent-amber-500 cursor-pointer h-1.5"
               />
-              <span className="text-[10px] text-cyan-400 font-bold w-6">
+              <span className="text-[10px] text-amber-400 font-bold w-6">
                 {Math.round(explodedViewProgress * 100)}%
               </span>
             </div>
@@ -534,8 +679,8 @@ export const ModularVehicle3DViewport: React.FC<ModularVehicle3DViewportProps> =
               onClick={onToggleXRay}
               className={`p-2 rounded-2xl border text-xs font-bold transition-all cursor-pointer ${
                 isXRayActive
-                  ? 'bg-purple-500/20 text-purple-300 border-purple-500/50 shadow-md'
-                  : 'bg-base-950/80 border-slate-800 text-slate-400 hover:text-slate-200'
+                  ? 'bg-amber-600/20 text-amber-300 border-amber-500/50 shadow-md'
+                  : 'bg-base-950/80 border-slate-800 text-amber-400/70 hover:text-amber-200'
               }`}
               title="Toggle X-Ray Structural View"
             >
@@ -547,8 +692,8 @@ export const ModularVehicle3DViewport: React.FC<ModularVehicle3DViewportProps> =
               onClick={onToggleWireframe}
               className={`p-2 rounded-2xl border text-xs font-bold transition-all cursor-pointer ${
                 isWireframeActive
-                  ? 'bg-cyan-500/20 text-cyan-300 border-cyan-500/50 shadow-md'
-                  : 'bg-base-950/80 border-slate-800 text-slate-400 hover:text-slate-200'
+                  ? 'bg-amber-500/20 text-amber-300 border-amber-500/50 shadow-md'
+                  : 'bg-base-950/80 border-slate-800 text-amber-400/70 hover:text-amber-200'
               }`}
               title="Toggle CAD Wireframe Mesh"
             >
@@ -560,8 +705,8 @@ export const ModularVehicle3DViewport: React.FC<ModularVehicle3DViewportProps> =
               onClick={onToggleRotating}
               className={`p-2 rounded-2xl border text-xs font-bold transition-all cursor-pointer ${
                 isRotating
-                  ? 'bg-cyan-500/20 text-cyan-300 border-cyan-500/50 shadow-md'
-                  : 'bg-base-950/80 border-slate-800 text-slate-400 hover:text-slate-200'
+                  ? 'bg-amber-500/20 text-amber-300 border-amber-500/50 shadow-md'
+                  : 'bg-base-950/80 border-slate-800 text-amber-400/70 hover:text-amber-200'
               }`}
               title="Toggle Auto-Rotation"
             >
@@ -569,22 +714,22 @@ export const ModularVehicle3DViewport: React.FC<ModularVehicle3DViewportProps> =
             </button>
 
             {/* Camera Presets */}
-            <div className="flex items-center gap-1 p-1 rounded-2xl bg-base-950/80 border border-slate-800">
+            <div className="flex items-center gap-1 p-1 rounded-2xl bg-amber-950/60 border border-amber-800/40">
               <button
                 onClick={() => applyCameraPreset('front_3_4')}
-                className={`px-2 py-1 rounded-lg text-[10px] font-bold ${cameraPreset === 'front_3_4' ? 'bg-cyan-500 text-slate-950' : 'text-slate-400 hover:text-slate-200'}`}
+                className={`px-2 py-1 rounded-lg text-[10px] font-bold ${cameraPreset === 'front_3_4' ? 'bg-cyan-500 text-slate-950' : 'text-amber-400/70 hover:text-amber-200'}`}
               >
                 3/4 Front
               </button>
               <button
                 onClick={() => applyCameraPreset('side_profile')}
-                className={`px-2 py-1 rounded-lg text-[10px] font-bold ${cameraPreset === 'side_profile' ? 'bg-cyan-500 text-slate-950' : 'text-slate-400 hover:text-slate-200'}`}
+                className={`px-2 py-1 rounded-lg text-[10px] font-bold ${cameraPreset === 'side_profile' ? 'bg-cyan-500 text-slate-950' : 'text-amber-400/70 hover:text-amber-200'}`}
               >
                 Side
               </button>
               <button
                 onClick={() => applyCameraPreset('top_chassis')}
-                className={`px-2 py-1 rounded-lg text-[10px] font-bold ${cameraPreset === 'top_chassis' ? 'bg-cyan-500 text-slate-950' : 'text-slate-400 hover:text-slate-200'}`}
+                className={`px-2 py-1 rounded-lg text-[10px] font-bold ${cameraPreset === 'top_chassis' ? 'text-white' : 'text-amber-700 hover:text-amber-900'}`} style={cameraPreset === 'top_chassis' ? {backgroundColor: '#D9A64E'} : {}}
               >
                 Top Plan
               </button>
@@ -594,14 +739,14 @@ export const ModularVehicle3DViewport: React.FC<ModularVehicle3DViewportProps> =
 
         {/* Sub-Toolbar (Paint Finish, Swatches, Rims, Aero, Brakes, VFX) */}
         {(viewMode === '3d_glb' || viewMode === 'xray_structural') && modelSource === 'parametric' && (
-          <div className="w-full flex flex-wrap items-center justify-between gap-2.5 pt-2.5 border-t border-slate-800 text-xs">
+          <div className="w-full flex flex-wrap items-center justify-between gap-2.5 pt-2.5 border-t border-amber-800/40 text-xs">
             {/* Paint Finish & Color Swatches */}
             <div className="flex flex-wrap items-center gap-2">
-              <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Paint:</span>
+              <span className="text-[10px] text-amber-400/60 font-bold uppercase tracking-wider">Paint:</span>
               <select
                 value={paintFinish}
                 onChange={(e) => setPaintFinish(e.target.value as any)}
-                className="px-2.5 py-1.5 rounded-xl bg-base-950 border border-slate-800 text-[11px] font-bold text-slate-200 focus:outline-none focus:border-cyan-500 cursor-pointer"
+                className="px-2.5 py-1.5 rounded-xl text-[11px] font-bold cursor-pointer focus:outline-none" style={{backgroundColor: 'rgba(255,248,235,0.8)', border: '1px solid rgba(217,166,78,0.3)', color: '#451A03'}}
               >
                 <option value="satin_metallic">✨ Satin Metallic</option>
                 <option value="gloss_clearcoat">💎 Gloss Clearcoat</option>
@@ -626,7 +771,7 @@ export const ModularVehicle3DViewport: React.FC<ModularVehicle3DViewportProps> =
                     key={swatch.color}
                     onClick={() => setPaintColor(swatch.color)}
                     className={`w-4 h-4 rounded-full border transition-all cursor-pointer ${
-                      paintColor === swatch.color ? 'ring-2 ring-cyan-400 scale-125 border-white' : 'border-slate-700 hover:scale-110'
+                      paintColor === swatch.color ? 'scale-125 border-white' : 'hover:scale-110'
                     }`}
                     style={{ backgroundColor: swatch.color }}
                     title={swatch.label}
@@ -637,11 +782,11 @@ export const ModularVehicle3DViewport: React.FC<ModularVehicle3DViewportProps> =
 
             {/* Forged Rim Style & Finish */}
             <div className="flex items-center gap-1.5">
-              <span className="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Rims:</span>
+              <span className="text-[10px] text-amber-400/60 font-bold uppercase tracking-wider">Rims:</span>
               <select
                 value={rimStyle}
                 onChange={(e) => setRimStyle(e.target.value as RimArchitectureStyle)}
-                className="px-2.5 py-1.5 rounded-xl bg-base-950 border border-slate-800 text-[11px] font-bold text-slate-200 focus:outline-none focus:border-cyan-500 cursor-pointer"
+                className="px-2.5 py-1.5 rounded-xl text-[11px] font-bold cursor-pointer focus:outline-none" style={{backgroundColor: 'rgba(255,248,235,0.8)', border: '1px solid rgba(217,166,78,0.3)', color: '#451A03'}}
               >
                 <option value="turbofan">🌀 Turbofan Aero</option>
                 <option value="multi_spoke">⚙️ 10-Spoke Forged</option>
@@ -653,7 +798,7 @@ export const ModularVehicle3DViewport: React.FC<ModularVehicle3DViewportProps> =
               <select
                 value={rimFinish}
                 onChange={(e) => setRimFinish(e.target.value as any)}
-                className="px-2.5 py-1.5 rounded-xl bg-base-950 border border-slate-800 text-[11px] font-bold text-slate-200 focus:outline-none focus:border-cyan-500 cursor-pointer"
+                className="px-2.5 py-1.5 rounded-xl text-[11px] font-bold cursor-pointer focus:outline-none" style={{backgroundColor: 'rgba(255,248,235,0.8)', border: '1px solid rgba(217,166,78,0.3)', color: '#451A03'}}
               >
                 <option value="silver">Silver</option>
                 <option value="gloss_black">Gloss Black</option>
@@ -671,12 +816,12 @@ export const ModularVehicle3DViewport: React.FC<ModularVehicle3DViewportProps> =
                 onClick={() => setHeadlightsOn(!headlightsOn)}
                 className={`px-2.5 py-1.5 rounded-xl border text-[11px] font-bold transition-all cursor-pointer flex items-center gap-1 ${
                   headlightsOn
-                    ? 'bg-cyan-500/20 text-cyan-300 border-cyan-500/60 shadow-md'
-                    : 'bg-base-950 border-slate-800 text-slate-400 hover:text-slate-200'
+                    ? 'bg-amber-200/60 text-amber-800 border-amber-400/60 shadow-md'
+                    : 'border-amber-200/40 text-amber-700 hover:text-amber-900'
                 }`}
                 title="Toggle Matrix LED Headlights & Taillights"
               >
-                <Zap size={12} className={headlightsOn ? 'text-cyan-400' : 'text-slate-500'} />
+                <Zap size={12} className={headlightsOn ? 'text-amber-400' : 'text-slate-500'} />
                 <span>{headlightsOn ? 'Lights: ON' : 'Lights: OFF'}</span>
               </button>
 
@@ -685,12 +830,12 @@ export const ModularVehicle3DViewport: React.FC<ModularVehicle3DViewportProps> =
                 onClick={() => setUnderglowOn(!underglowOn)}
                 className={`px-2.5 py-1.5 rounded-xl border text-[11px] font-bold transition-all cursor-pointer flex items-center gap-1 ${
                   underglowOn
-                    ? 'bg-purple-500/20 text-purple-300 border-purple-500/60 shadow-md'
-                    : 'bg-base-950 border-slate-800 text-slate-400 hover:text-slate-200'
+                    ? 'bg-amber-200/60 text-amber-800 border-amber-400/60 shadow-md'
+                    : 'border-amber-200/40 text-amber-700 hover:text-amber-900'
                 }`}
                 title="Toggle Cyber Underbody Neon Glow"
               >
-                <Sparkles size={12} className={underglowOn ? 'text-purple-400' : 'text-slate-500'} />
+                <Sparkles size={12} className={underglowOn ? 'text-amber-400' : 'text-slate-500'} />
                 <span>{underglowOn ? 'Neon: ON' : 'Neon: OFF'}</span>
               </button>
 
@@ -698,7 +843,7 @@ export const ModularVehicle3DViewport: React.FC<ModularVehicle3DViewportProps> =
               <select
                 value={articulationMode}
                 onChange={(e) => setArticulationMode(e.target.value as any)}
-                className="px-2.5 py-1.5 rounded-xl bg-base-950 border border-slate-800 text-[11px] font-bold text-slate-200 focus:outline-none focus:border-cyan-500 cursor-pointer"
+                className="px-2.5 py-1.5 rounded-xl text-[11px] font-bold cursor-pointer focus:outline-none" style={{backgroundColor: 'rgba(255,248,235,0.8)', border: '1px solid rgba(217,166,78,0.3)', color: '#451A03'}}
               >
                 <option value="closed">🔒 Panels Closed</option>
                 <option value="doors_open">🚪 Doors Open</option>
@@ -711,8 +856,8 @@ export const ModularVehicle3DViewport: React.FC<ModularVehicle3DViewportProps> =
                 onClick={() => setBrakesGlowing(!brakesGlowing)}
                 className={`px-2.5 py-1.5 rounded-xl border text-[11px] font-bold transition-all cursor-pointer flex items-center gap-1 ${
                   brakesGlowing
-                    ? 'bg-amber-500/20 text-amber-300 border-amber-500/60 shadow-md'
-                    : 'bg-base-950 border-slate-800 text-slate-400 hover:text-slate-200'
+                    ? 'bg-amber-200/60 text-amber-800 border-amber-400/60 shadow-md'
+                    : 'border-amber-200/40 text-amber-700 hover:text-amber-900'
                 }`}
                 title="Toggle Thermal Carbon-Ceramic Glowing Brake Rotors"
               >
@@ -724,7 +869,7 @@ export const ModularVehicle3DViewport: React.FC<ModularVehicle3DViewportProps> =
               <select
                 value={drsMode}
                 onChange={(e) => setDrsMode(e.target.value as any)}
-                className="px-2.5 py-1.5 rounded-xl bg-base-950 border border-slate-800 text-[11px] font-bold text-slate-200 focus:outline-none focus:border-cyan-500 cursor-pointer"
+                className="px-2.5 py-1.5 rounded-xl text-[11px] font-bold cursor-pointer focus:outline-none" style={{backgroundColor: 'rgba(255,248,235,0.8)', border: '1px solid rgba(217,166,78,0.3)', color: '#451A03'}}
               >
                 <option value="closed">🛡️ Wing: Normal</option>
                 <option value="drs_open">⚡ DRS: Open</option>
@@ -736,8 +881,8 @@ export const ModularVehicle3DViewport: React.FC<ModularVehicle3DViewportProps> =
                 onClick={() => setShowCFD(!showCFD)}
                 className={`px-2.5 py-1.5 rounded-xl border text-[11px] font-bold transition-all cursor-pointer flex items-center gap-1 ${
                   showCFD
-                    ? 'bg-emerald-500/20 text-emerald-300 border-emerald-500/60 shadow-md'
-                    : 'bg-base-950 border-slate-800 text-slate-400 hover:text-slate-200'
+                    ? 'bg-amber-200/60 text-amber-800 border-amber-400/60 shadow-md'
+                    : 'border-amber-200/40 text-amber-700 hover:text-amber-900'
                 }`}
                 title="Toggle 3D Real-Time CFD Streamlines & Wingtip Vortices"
               >
@@ -750,8 +895,8 @@ export const ModularVehicle3DViewport: React.FC<ModularVehicle3DViewportProps> =
                 onClick={() => setExhaustBackfire(!exhaustBackfire)}
                 className={`px-2.5 py-1.5 rounded-xl border text-[11px] font-bold transition-all cursor-pointer flex items-center gap-1 ${
                   exhaustBackfire
-                    ? 'bg-orange-500/20 text-orange-300 border-orange-500/60 shadow-md'
-                    : 'bg-base-950 border-slate-800 text-slate-400 hover:text-slate-200'
+                    ? 'bg-amber-200/60 text-amber-800 border-amber-400/60 shadow-md'
+                    : 'border-amber-200/40 text-amber-700 hover:text-amber-900'
                 }`}
                 title="Trigger High-RPM Exhaust Backfire Flames & Embers"
               >
@@ -764,8 +909,8 @@ export const ModularVehicle3DViewport: React.FC<ModularVehicle3DViewportProps> =
                 onClick={() => setShowDiagnostics(!showDiagnostics)}
                 className={`p-1.5 rounded-xl border text-xs font-bold transition-all cursor-pointer flex items-center gap-1 ${
                   showDiagnostics
-                    ? 'bg-indigo-500/20 text-indigo-300 border-indigo-500/60 shadow-md'
-                    : 'bg-base-950 border-slate-800 text-slate-400 hover:text-slate-200'
+                    ? 'bg-amber-200/60 text-amber-800 border-amber-400/60 shadow-md'
+                    : 'border-amber-200/40 text-amber-700 hover:text-amber-900'
                 }`}
                 title="Toggle 3D Master Bounding Box & Wheel Center Diagnostic Gizmo"
               >
@@ -776,43 +921,19 @@ export const ModularVehicle3DViewport: React.FC<ModularVehicle3DViewportProps> =
         )}
       </div>
 
-      {/* ── CANVAS RENDER STAGE (CLEAN & UNOBSTRUCTED) ── */}
-      <div className="relative h-[560px] w-full flex items-center justify-center bg-slate-950">
-        {viewMode === '3d_glb' || viewMode === 'xray_structural' ? (
-          <div ref={mountRef} className="w-full h-full cursor-grab active:cursor-grabbing" />
-        ) : viewMode === '3d_isometric' ? (
-          <div className="w-full h-full p-8 flex items-center justify-center bg-base-950">
-            <ChassisFrameSVG />
-          </div>
-        ) : (
-          <div className="w-full h-full p-8 flex items-center justify-center bg-base-950">
-            <VehicleSVG
-              installedComponents={[
-                ...(installedStages.includes('chassis_platform') || installedStages.includes('architecture') ? ['chassis_frame' as const] : []),
-                ...(installedStages.includes('powertrain_engine') ? ['engine_bay' as const] : []),
-                ...(installedStages.includes('transmission') ? ['transmission' as const] : []),
-                ...(installedStages.includes('suspension') ? ['suspension_front' as const, 'suspension_rear' as const] : []),
-                ...(installedStages.includes('wheels_brakes') ? ['brakes' as const, 'wheels_tires' as const] : []),
-                ...(installedStages.includes('aerodynamics') ? ['aero_package' as const] : []),
-                ...(installedStages.includes('electronics') ? ['electronics_ecu' as const] : []),
-              ]}
-              activeComponentId={null}
-              phase="complete"
-              hoveredComponentId={null}
-              isExplodedView={explodedViewProgress > 0.05}
-            />
-          </div>
-        )}
+      {/* ── CANVAS RENDER STAGE (CLEAN & UNOBSTRUCTED 3D) ── */}
+      <div className="relative h-[560px] w-full flex items-center justify-center bg-amber-950/40">
+        <div ref={mountRef} className="w-full h-full cursor-grab active:cursor-grabbing" />
 
         {/* ── BOTTOM HUD CAD DIMENSIONS OVERLAY ── */}
-        <div className="absolute bottom-3 left-4 right-4 z-20 flex items-center justify-between text-[11px] text-slate-400 pointer-events-none">
-          <div className="flex items-center gap-3 px-3 py-1.5 rounded-2xl bg-base-950/80 border border-slate-800 backdrop-blur-md">
-            <span>Wheelbase: <strong className="text-cyan-400">{wheelbaseMm}mm</strong></span>
-            <span>Track F/R: <strong className="text-slate-200">{trackWidthFrontMm}/{trackWidthRearMm}mm</strong></span>
+        <div className="absolute bottom-3 left-4 right-4 z-20 flex items-center justify-between text-[11px] text-amber-400/70 pointer-events-none">
+          <div className="flex items-center gap-3 px-3 py-1.5 rounded-2xl bg-amber-950/60 border border-amber-800/40 backdrop-blur-md">
+            <span>Wheelbase: <strong className="text-amber-400">{wheelbaseMm}mm</strong></span>
+            <span>Track F/R: <strong className="text-amber-900">{trackWidthFrontMm}/{trackWidthRearMm}mm</strong></span>
             <span>Ride Height: <strong className="text-emerald-400">{rideHeightMm}mm</strong></span>
           </div>
 
-          <div className="px-3 py-1.5 rounded-2xl bg-base-950/80 border border-slate-800 backdrop-blur-md text-[10px] text-slate-400">
+          <div className="px-3 py-1.5 rounded-2xl bg-amber-950/60 border border-amber-800/40 backdrop-blur-md text-[10px] text-amber-400/60">
             Left Click: Orbit • Right Click: Pan • Scroll: Zoom
           </div>
         </div>

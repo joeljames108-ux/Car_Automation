@@ -8,6 +8,7 @@
 
 import * as THREE from 'three';
 import type { MaterialVariantVisual } from '../types';
+import type { EngineConfig } from '../../sim/types';
 
 // ============================================================================
 // 1. PROCEDURAL TEXTURE GENERATION UTILITIES
@@ -155,13 +156,13 @@ export class EngineMaterialLibrary {
     if (!this.materialCache.has(key)) {
       const mat = new THREE.MeshStandardMaterial({
         name: 'Heavy_Duty_Ductile_Cast_Iron',
-        color: new THREE.Color(0x2a2c30),
-        metalness: 0.78,
-        roughness: 0.72,
+        color: new THREE.Color(0x64748b),
+        metalness: 0.85,
+        roughness: 0.30,
         roughnessMap: this.textureCache.get('cast_iron') || null,
         bumpMap: this.textureCache.get('cast_iron') || null,
-        bumpScale: 0.04,
-        envMapIntensity: 0.85,
+        bumpScale: 0.015,
+        envMapIntensity: 2.0,
       });
       this.materialCache.set(key, mat);
     }
@@ -173,12 +174,12 @@ export class EngineMaterialLibrary {
     if (!this.materialCache.has(key)) {
       const mat = new THREE.MeshStandardMaterial({
         name: 'Ti_6Al_4V_Aerospace_Titanium',
-        color: new THREE.Color(0x9d8bf0),
-        metalness: 0.96,
-        roughness: 0.12,
+        color: new THREE.Color(0xc4b5fd),
+        metalness: 0.92,
+        roughness: 0.15,
         normalMap: this.textureCache.get('brushed_metal') || null,
         normalScale: new THREE.Vector2(0.15, 0.15),
-        envMapIntensity: 2.2,
+        envMapIntensity: 2.4,
       });
       this.materialCache.set(key, mat);
     }
@@ -190,10 +191,10 @@ export class EngineMaterialLibrary {
     if (!this.materialCache.has(key)) {
       const mat = new THREE.MeshStandardMaterial({
         name: 'Forged_4340_Chromoly_Steel',
-        color: new THREE.Color(0xb0bec5),
+        color: new THREE.Color(0xcfd8dc),
         metalness: 0.90,
-        roughness: 0.22,
-        envMapIntensity: 1.5,
+        roughness: 0.18,
+        envMapIntensity: 2.2,
       });
       this.materialCache.set(key, mat);
     }
@@ -206,10 +207,10 @@ export class EngineMaterialLibrary {
       const mat = new THREE.MeshStandardMaterial({
         name: 'Cast_Magnesium_Aluminum',
         color: new THREE.Color(0x94a3b8),
-        metalness: 0.75,
-        roughness: 0.42,
+        metalness: 0.88,
+        roughness: 0.26,
         roughnessMap: this.textureCache.get('cast_iron') || null,
-        envMapIntensity: 1.2,
+        envMapIntensity: 2.2,
       });
       this.materialCache.set(key, mat);
     }
@@ -223,10 +224,10 @@ export class EngineMaterialLibrary {
         name: 'Machined_Billet_Surface',
         color: new THREE.Color(0xe2e8f0),
         metalness: 0.94,
-        roughness: 0.16,
+        roughness: 0.12,
         normalMap: this.textureCache.get('brushed_metal') || null,
-        normalScale: new THREE.Vector2(0.35, 0.35),
-        envMapIntensity: 1.8,
+        normalScale: new THREE.Vector2(0.25, 0.25),
+        envMapIntensity: 2.5,
       });
       this.materialCache.set(key, mat);
     }
@@ -238,10 +239,10 @@ export class EngineMaterialLibrary {
     if (!this.materialCache.has(key)) {
       const mat = new THREE.MeshStandardMaterial({
         name: 'Forged_Nitrided_Steel',
-        color: new THREE.Color(0xcbd5e1),
-        metalness: 0.92,
-        roughness: 0.15,
-        envMapIntensity: 1.4,
+        color: new THREE.Color(0xdbeafe),
+        metalness: 0.95,
+        roughness: 0.12,
+        envMapIntensity: 2.4,
       });
       this.materialCache.set(key, mat);
     }
@@ -404,22 +405,126 @@ export class EngineMaterialLibrary {
     return this.materialCache.get(key) as THREE.MeshStandardMaterial;
   }
 
+  public getShotPeenedTitanium(): THREE.MeshStandardMaterial {
+    const key = 'base_shot_peened_titanium';
+    if (!this.materialCache.has(key)) {
+      const mat = new THREE.MeshStandardMaterial({
+        name: 'Shot_Peened_Aerospace_Titanium',
+        color: new THREE.Color(0x818cf8),
+        metalness: 0.92,
+        roughness: 0.38,
+        roughnessMap: this.textureCache.get('cast_iron') || null,
+        bumpMap: this.textureCache.get('cast_iron') || null,
+        bumpScale: 0.015,
+        envMapIntensity: 1.6,
+      });
+      this.materialCache.set(key, mat);
+    }
+    return this.materialCache.get(key) as THREE.MeshStandardMaterial;
+  }
+
+  public getThermalBarrierCeramic(): THREE.MeshStandardMaterial {
+    const key = 'base_thermal_barrier_ceramic';
+    if (!this.materialCache.has(key)) {
+      const mat = new THREE.MeshStandardMaterial({
+        name: 'Plasma_Sprayed_Thermal_Barrier_Ceramic',
+        color: new THREE.Color(0xd97706),
+        metalness: 0.35,
+        roughness: 0.65,
+        bumpMap: this.textureCache.get('cast_iron') || null,
+        bumpScale: 0.02,
+        envMapIntensity: 1.1,
+      });
+      this.materialCache.set(key, mat);
+    }
+    return this.materialCache.get(key) as THREE.MeshStandardMaterial;
+  }
+
+  public getHeatShieldBlanket(): THREE.MeshStandardMaterial {
+    const key = 'base_heat_shield_blanket';
+    if (!this.materialCache.has(key)) {
+      const mat = new THREE.MeshStandardMaterial({
+        name: 'Embossed_Inconel_Foil_Thermal_Blanket',
+        color: new THREE.Color(0xf59e0b),
+        metalness: 0.96,
+        roughness: 0.28,
+        normalMap: this.textureCache.get('brushed_metal') || null,
+        normalScale: new THREE.Vector2(0.4, 0.4),
+        envMapIntensity: 2.0,
+      });
+      this.materialCache.set(key, mat);
+    }
+    return this.materialCache.get(key) as THREE.MeshStandardMaterial;
+  }
+
+  public getStainlessFlexBellows(): THREE.MeshStandardMaterial {
+    const key = 'base_stainless_flex_bellows';
+    if (!this.materialCache.has(key)) {
+      const mat = new THREE.MeshStandardMaterial({
+        name: 'High_Temp_Hydroformed_Stainless_Bellows',
+        color: new THREE.Color(0x94a3b8),
+        metalness: 0.94,
+        roughness: 0.18,
+        envMapIntensity: 1.7,
+      });
+      this.materialCache.set(key, mat);
+    }
+    return this.materialCache.get(key) as THREE.MeshStandardMaterial;
+  }
+
+  public getTranslucentMesh(): THREE.MeshStandardMaterial {
+    const key = 'base_translucent_mesh';
+    if (!this.materialCache.has(key)) {
+      const mat = new THREE.MeshStandardMaterial({
+        name: 'Stainless_Wire_Cloth_Screen',
+        color: new THREE.Color(0xcbd5e1),
+        metalness: 0.85,
+        roughness: 0.40,
+        transparent: true,
+        opacity: 0.65,
+        side: THREE.DoubleSide,
+        envMapIntensity: 1.2,
+      });
+      this.materialCache.set(key, mat);
+    }
+    return this.materialCache.get(key) as THREE.MeshStandardMaterial;
+  }
+
+  public getRubberOring(): THREE.MeshStandardMaterial {
+    const key = 'base_rubber_oring';
+    if (!this.materialCache.has(key)) {
+      const mat = new THREE.MeshStandardMaterial({
+        name: 'Fluorocarbon_Viton_O_Ring',
+        color: new THREE.Color(0x0a0a0a),
+        metalness: 0.05,
+        roughness: 0.85,
+        envMapIntensity: 0.4,
+      });
+      this.materialCache.set(key, mat);
+    }
+    return this.materialCache.get(key) as THREE.MeshStandardMaterial;
+  }
+
   /**
-   * Resolves the authentic physical PBR material for any selected material variant string.
+   * Resolves the authentic physical PBR material for any selected material variant string or component type.
    */
-  public resolveMaterialForVariant(materialId?: string, fallbackType?: string): THREE.MeshStandardMaterial | THREE.MeshPhysicalMaterial {
+  public resolveMaterialForVariant(
+    materialId?: string,
+    fallbackType?: string,
+    engineConfig?: Partial<EngineConfig>
+  ): THREE.MeshStandardMaterial | THREE.MeshPhysicalMaterial {
     const id = (materialId || '').toLowerCase();
 
-    if (id.includes('cast_iron') || id === 'cast') {
+    if (id.includes('cast_iron') || id === 'iron') {
       return this.getCastIron();
     }
-    if (id.includes('titanium') || id.includes('ti_6al_4v')) {
+    if (id.includes('titanium') || id.includes('ti_6al_4v') || id.includes('ti-')) {
       return this.getTitaniumAerospace();
     }
-    if (id.includes('billet') || id.includes('cnc') || id.includes('machined')) {
+    if (id.includes('billet') || id.includes('cnc') || id.includes('machined') || id.includes('6061')) {
       return this.getMachinedBillet();
     }
-    if (id.includes('forged') || id.includes('chromoly') || id.includes('steel')) {
+    if (id.includes('forged') || id.includes('chromoly') || id.includes('steel') || id.includes('4340')) {
       return this.getForgedSteel();
     }
     if (id.includes('carbon') || id.includes('composite')) {
@@ -440,15 +545,49 @@ export class EngineMaterialLibrary {
     if (id.includes('magnesium')) {
       return this.getTransaxleMagnesium();
     }
-    if (id.includes('aluminum')) {
+    if (id.includes('aluminum') || id.includes('alloy')) {
       return this.getCastAluminum();
     }
 
-    // Contextual fallback by component type
-    if (fallbackType === 'turbocharger') return this.getInconelExhaust();
+    // Contextual fallback by component type and live engine specifications
+    if (fallbackType === 'engine-block') {
+      const blockMat = (engineConfig as any)?.blockMaterial || (engineConfig as any)?.material;
+      if (blockMat) return this.resolveMaterialForVariant(blockMat);
+      return this.getCastAluminum();
+    }
+
+    if (fallbackType === 'crankshaft') {
+      if (engineConfig?.crank) return this.resolveMaterialForVariant(engineConfig.crank);
+      return this.getNitridedCrank();
+    }
+
+    if (fallbackType === 'piston') {
+      if (engineConfig?.pistons) return this.resolveMaterialForVariant(engineConfig.pistons);
+      return this.getMachinedBillet();
+    }
+
+    if (fallbackType === 'connecting-rod') {
+      return this.getForgedSteel();
+    }
+
+    if (fallbackType === 'turbocharger') {
+      if (engineConfig?.turboHousing) return this.resolveMaterialForVariant(engineConfig.turboHousing);
+      return this.getInconelExhaust();
+    }
+
+    if (fallbackType === 'exhaust-header-left' || fallbackType === 'exhaust-header-right') {
+      return this.getInconelExhaust();
+    }
+
+    if (fallbackType === 'intake-manifold-left' || fallbackType === 'intake-manifold-right') {
+      return this.getMachinedBillet();
+    }
+
     if (fallbackType === 'engine-cover') return this.getDryCarbonFiber();
     if (fallbackType === 'radiator') return this.getCastAluminum();
     if (fallbackType === 'transaxle') return this.getTransaxleMagnesium();
+    if (fallbackType === 'dry-sump') return this.getMachinedBillet();
+
     return this.getCastAluminum();
   }
 

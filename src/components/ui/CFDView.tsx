@@ -411,19 +411,19 @@ function drawScene(ctx: CanvasRenderingContext2D, c: DrawCtx) {
   const W = VIEW_W, H = VIEW_H;
   ctx.clearRect(0, 0, W, H);
 
-  // Deep High-Tech CFD Wind Tunnel Background
+  // High-Visibility High-Tech CFD Wind Tunnel Background
   const bgGrad = ctx.createRadialGradient(W * 0.38, H * 0.5, 50, W / 2, H / 2, W * 0.7);
-  bgGrad.addColorStop(0, "#0a1322");
-  bgGrad.addColorStop(0.5, "#050912");
-  bgGrad.addColorStop(1, "#020408");
+  bgGrad.addColorStop(0, "#15243b");
+  bgGrad.addColorStop(0.5, "#0b1526");
+  bgGrad.addColorStop(1, "#050a14");
   ctx.fillStyle = bgGrad;
   ctx.fillRect(0, 0, W, H);
 
-  // Green Fine Mesh Grid Backdrop (Matching Reference Photo)
+  // Vivid Green Fine Mesh Grid Backdrop
   if (c.showGrid) {
     const gridOffset = (c.frame * c.speed * 0.3) % 24;
-    ctx.strokeStyle = "rgba(34, 197, 94, 0.16)";
-    ctx.lineWidth = 0.8;
+    ctx.strokeStyle = "rgba(34, 197, 94, 0.38)";
+    ctx.lineWidth = 1.2;
     for (let x = -gridOffset; x < W; x += 24) {
       ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke();
     }
@@ -432,10 +432,10 @@ function drawScene(ctx: CanvasRenderingContext2D, c: DrawCtx) {
     }
   }
 
-  // Ground Line & Laser Track
+  // Glowing Laser Ground Line & Track
   const groundY = H * 0.68;
-  ctx.strokeStyle = "rgba(34, 197, 94, 0.35)";
-  ctx.lineWidth = 1.5;
+  ctx.strokeStyle = "#22c55e";
+  ctx.lineWidth = 2.5;
   ctx.beginPath();
   ctx.moveTo(0, groundY);
   ctx.lineTo(W, groundY);
@@ -443,8 +443,8 @@ function drawScene(ctx: CanvasRenderingContext2D, c: DrawCtx) {
 
   // Ground Aerodynamic Mirror Reflection
   const reflGrad = ctx.createLinearGradient(0, groundY, 0, H);
-  reflGrad.addColorStop(0, "rgba(34, 197, 94, 0.12)");
-  reflGrad.addColorStop(0.5, "rgba(0, 122, 255, 0.04)");
+  reflGrad.addColorStop(0, "rgba(34, 197, 94, 0.35)");
+  reflGrad.addColorStop(0.5, "rgba(0, 194, 255, 0.15)");
   reflGrad.addColorStop(1, "rgba(0, 0, 0, 0)");
   ctx.fillStyle = reflGrad;
   ctx.fillRect(0, groundY, W, H - groundY);

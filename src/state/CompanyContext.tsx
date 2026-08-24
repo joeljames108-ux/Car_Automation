@@ -420,7 +420,7 @@ export function CompanyProvider({ children }: { children: ReactNode }) {
     });
   }, []);
 
-  const value: CompanyContextValue = {
+  const value: CompanyContextValue = useMemo(() => ({
     company, saveToGarage, removeFromGarage, duplicateVehicle,
     advanceEconomyMonth, createMotorsportTeam, assignMotorsportDriver,
     simulateMotorsportSeason, transferMotorsportTech, availableDrivers,
@@ -429,7 +429,16 @@ export function CompanyProvider({ children }: { children: ReactNode }) {
     addTwinEvent, safetyConfig, safetySim, updateSafety,
     startWorkflow, advanceWorkflowStep, skipWorkflowStep,
     launchVehicle, setCompanyName, advanceAllSystems,
-  };
+  }), [
+    company, saveToGarage, removeFromGarage, duplicateVehicle,
+    advanceEconomyMonth, createMotorsportTeam, assignMotorsportDriver,
+    simulateMotorsportSeason, transferMotorsportTech, availableDrivers,
+    scoutNewDriver, signScouted, upgradeFacility, updateStrategyFn,
+    releaseMotorsportDriver, renewMotorsportContract, attractMotorsportSponsor, refreshSponsorMarket,
+    addTwinEvent, safetyConfig, safetySim, updateSafety,
+    startWorkflow, advanceWorkflowStep, skipWorkflowStep,
+    launchVehicle, setCompanyName, advanceAllSystems,
+  ]);
 
   return <CompanyContext.Provider value={value}>{children}</CompanyContext.Provider>;
 }

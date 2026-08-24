@@ -1,17 +1,118 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
+import * as THREE from "three";
 import { ModernAnalogDial } from "./ModernAnalogDial";
-import { ModernAnalogClock } from "./ModernAnalogClock";
 import { EngineeringLog } from "../EngineeringLog";
 import { CFDView } from "./CFDView";
 import { useDesign } from "../../state/DesignContext";
-import { SlidersHorizontal, Camera, Activity, HelpCircle, User, Bot } from "lucide-react";
+import { HelpCircle, User, Bot, Box } from "lucide-react";
 
 export function SpatialReferenceSuite() {
-  const { design, sim, updateAeroResearch } = useDesign();
+  const { design, sim } = useDesign();
   const [rideHeight, setRideHeight] = useState(105);
   const [cameraSmart, setCameraSmart] = useState(true);
   const [timePeriod, setTimePeriod] = useState<"monthly" | "weekly">("monthly");
   const [activeTab, setActiveTab] = useState("Suspension");
+
+  const card1MountRef = useRef<HTMLDivElement>(null);
+  const card2MountRef = useRef<HTMLDivElement>(null);
+
+  // 3D Mini Suspension Preview for Card 1
+  useEffect(() => {
+    if (!card1MountRef.current) return;
+    const container = card1MountRef.current;
+    const w = container.clientWidth || 180;
+    const h = container.clientHeight || 80;
+
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0xf1f5f9);
+
+    const camera = new THREE.PerspectiveCamera(45, w / h, 0.1, 10);
+    camera.position.set(1.2, 0.8, 1.2);
+    camera.lookAt(0, 0, 0);
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    renderer.setSize(w, h);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    container.appendChild(renderer.domElement);
+
+    const light = new THREE.DirectionalLight(0x007aff, 2.0);
+    light.position.set(2, 3, 2);
+    scene.add(light);
+    scene.add(new THREE.AmbientLight(0xffffff, 1.0));
+
+    // 3D Suspension Arm Geometry
+    const group = new THREE.Group();
+    const armGeom = new THREE.CylinderGeometry(0.03, 0.03, 0.8);
+    const armMat = new THREE.MeshStandardMaterial({ color: 0x007aff, metalness: 0.8 });
+
+    const arm1 = new THREE.Mesh(armGeom, armMat);
+    arm1.rotation.z = Math.PI / 4;
+    group.add(arm1);
+
+    const arm2 = new THREE.Mesh(armGeom, armMat);
+    arm2.rotation.z = -Math.PI / 4;
+    group.add(arm2);
+
+    const springGeom = new THREE.TorusGeometry(0.12, 0.02, 8, 24);
+    const springMat = new THREE.MeshStandardMaterial({ color: 0x34d399, metalness: 0.5 });
+    const spring = new THREE.Mesh(springGeom, springMat);
+    group.add(spring);
+
+    scene.add(group);
+
+    let animId = 0;
+    const animate = () => {
+      animId = requestAnimationFrame(animate);
+      group.rotation.y += 0.02;
+      renderer.render(scene, camera);
+    };
+    animate();
+
+    return () => {
+      cancelAnimationFrame(animId);
+      renderer.dispose();
+      if (container.contains(renderer.domElement)) container.removeChild(renderer.domElement);
+    };
+  }, []);
+
+  // 3D Mini Wireframe Car Preview for Card 2
+  useEffect(() => {
+    if (!card2MountRef.current) return;
+    const container = card2MountRef.current;
+    const w = container.clientWidth || 180;
+    const h = container.clientHeight || 60;
+
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x0f172a);
+
+    const camera = new THREE.PerspectiveCamera(45, w / h, 0.1, 10);
+    camera.position.set(2.0, 0.8, 2.0);
+    camera.lookAt(0, 0, 0);
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(w, h);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    container.appendChild(renderer.domElement);
+
+    const carGeom = new THREE.BoxGeometry(1.2, 0.35, 0.6);
+    const wireMat = new THREE.MeshBasicMaterial({ color: 0x007aff, wireframe: true });
+    const carMesh = new THREE.Mesh(carGeom, wireMat);
+    scene.add(carMesh);
+
+    let animId = 0;
+    const animate = () => {
+      animId = requestAnimationFrame(animate);
+      carMesh.rotation.y += 0.015;
+      renderer.render(scene, camera);
+    };
+    animate();
+
+    return () => {
+      cancelAnimationFrame(animId);
+      renderer.dispose();
+      if (container.contains(renderer.domElement)) container.removeChild(renderer.domElement);
+    };
+  }, []);
 
   return (
     <div
@@ -31,7 +132,7 @@ export function SpatialReferenceSuite() {
         color: "#1c1c1e",
       }}
     >
-      {/* Top Main Grid Layout (Reference Photo Layout) */}
+      {/* Top Main Grid Layout */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-start">
         {/* Column 1 (Left): AERODYNAMIC PROFILE Dial Card */}
         <div className="lg:col-span-3 flex justify-center">
@@ -74,25 +175,18 @@ export function SpatialReferenceSuite() {
                 boxShadow: "0 4px 16px rgba(0, 0, 0, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.85)",
               }}
             >
-              <div style={{ fontSize: 10, fontWeight: 800, letterSpacing: "0.08em", color: "#1c1c1e", textTransform: "uppercase" }}>
-                VEHICLE CONFIGURATION
+              <div style={{ fontSize: 10, fontWeight: 800, letterSpacing: "0.08em", color: "#1c1c1e", textTransform: "uppercase", display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                <span>VEHICLE CONFIGURATION</span>
+                <Box size={11} style={{ color: "#007aff" }} />
               </div>
 
-              {/* Technical 3D Suspension Diagram */}
-              <div style={{ position: "relative", height: 80, display: "flex", alignItems: "center", justifyContent: "center", background: "rgba(255, 255, 255, 0.65)", borderRadius: 12, border: "1px solid rgba(0,0,0,0.06)" }}>
-                <svg width="120" height="70" viewBox="0 0 120 70">
-                  <path d="M20 50 L40 30 L80 30 L100 50 M40 30 L40 15 L80 15 L80 30" stroke="#007aff" strokeWidth="2" fill="none" />
-                  <circle cx="20" cy="50" r="10" fill="none" stroke="#636366" strokeWidth="2" />
-                  <line x1="20" y1="50" x2="40" y2="30" stroke="#34d399" strokeWidth="2" />
-                  <line x1="80" y1="30" x2="100" y2="50" stroke="#34d399" strokeWidth="2" />
-                </svg>
-              </div>
+              {/* Technical Interactive 3D Suspension Preview Viewport */}
+              <div ref={card1MountRef} style={{ position: "relative", height: 80, borderRadius: 12, overflow: "hidden", border: "1px solid rgba(0,0,0,0.06)" }} />
 
               {/* Ride Height Slider */}
               <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
                   <span style={{ fontSize: 10, fontWeight: 700, color: "#1c1c1e" }}>Ride Height (mm)</span>
-                  {/* Blue Toggle Switch */}
                   <button
                     onClick={() => setRideHeight(rideHeight === 105 ? 85 : 105)}
                     style={{
@@ -170,14 +264,8 @@ export function SpatialReferenceSuite() {
                 </button>
               </div>
 
-              {/* Wireframe Vehicle Thumbnail Box */}
-              <div style={{ height: 60, background: "rgba(255, 255, 255, 0.65)", borderRadius: 12, border: "1px solid rgba(0,0,0,0.06)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                <svg width="100" height="40" viewBox="0 0 100 40">
-                  <path d="M10 28 L30 15 L70 15 L90 28 Z" stroke="#007aff" strokeWidth="1.5" fill="none" strokeDasharray="2 2" />
-                  <circle cx="25" cy="28" r="6" stroke="#007aff" fill="none" />
-                  <circle cx="75" cy="28" r="6" stroke="#007aff" fill="none" />
-                </svg>
-              </div>
+              {/* Wireframe Vehicle 3D Thumbnail Viewport */}
+              <div ref={card2MountRef} style={{ height: 60, borderRadius: 12, overflow: "hidden", border: "1px solid rgba(0,0,0,0.06)" }} />
             </div>
 
             {/* Card 3: AERO FORCES OVER VELOCITY */}
@@ -201,7 +289,7 @@ export function SpatialReferenceSuite() {
                 <HelpCircle size={12} style={{ color: "#636366" }} />
               </div>
 
-              {/* Time Period Filter Pills (Monthly / Weekly) */}
+              {/* Time Period Filter Pills */}
               <div style={{ display: "flex", gap: 4, background: "rgba(255,255,255,0.65)", padding: 2, borderRadius: 10, width: "fit-content", border: "1px solid rgba(0,0,0,0.06)" }}>
                 <button
                   onClick={() => setTimePeriod("monthly")}
@@ -235,10 +323,9 @@ export function SpatialReferenceSuite() {
                 </button>
               </div>
 
-              {/* Visual Bar & Multi-Line Chart (Matching Reference Image) */}
+              {/* Multi-Line Chart */}
               <div style={{ position: "relative", height: 95, width: "100%" }}>
                 <svg width="100%" height="100%" viewBox="0 0 200 95" preserveAspectRatio="none">
-                  {/* Vertical bar series */}
                   {[30, 45, 60, 80, 65].map((h, i) => (
                     <rect
                       key={i}
@@ -250,15 +337,11 @@ export function SpatialReferenceSuite() {
                       fill="rgba(0, 122, 255, 0.14)"
                     />
                   ))}
-                  {/* Blue Line Curve */}
                   <path d="M 10 70 Q 60 50 110 65 T 190 30" fill="none" stroke="#007aff" strokeWidth="2.5" />
-                  {/* Red Line Curve */}
                   <path d="M 10 35 Q 60 55 110 75 T 190 85" fill="none" stroke="#ef4444" strokeWidth="2.5" />
-                  {/* Green Line Curve */}
                   <path d="M 10 80 Q 60 70 110 40 T 190 20" fill="none" stroke="#34d399" strokeWidth="2.5" />
                 </svg>
 
-                {/* X Axis Month Labels */}
                 <div style={{ display: "flex", justifyContent: "space-between", fontSize: 8, color: "#636366", fontFamily: "monospace", marginTop: 2, fontWeight: 700 }}>
                   <span>Jan</span>
                   <span>Feb</span>
@@ -277,7 +360,7 @@ export function SpatialReferenceSuite() {
         </div>
       </div>
 
-      {/* Floating Bottom Navigation Capsule Bar (Matching Reference Image) */}
+      {/* Floating Bottom Navigation Capsule Bar */}
       <div
         style={{
           display: "flex",
@@ -320,13 +403,12 @@ export function SpatialReferenceSuite() {
           })}
         </div>
 
-        {/* Avatar badge */}
         <div style={{ marginLeft: 12, width: 28, height: 28, borderRadius: "50%", background: "#007aff", display: "flex", alignItems: "center", justifyContent: "center", color: "#fff" }}>
           <User size={16} />
         </div>
       </div>
 
-      {/* Floating Bottom-Right Apex AI Button (Matching Reference Image) */}
+      {/* Floating Bottom-Right Apex AI Button */}
       <div
         style={{
           position: "absolute",
@@ -357,3 +439,4 @@ export function SpatialReferenceSuite() {
     </div>
   );
 }
+

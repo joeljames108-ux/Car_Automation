@@ -6,11 +6,12 @@
 // preview ghost holograms oriented with upright Y-axis alignment.
 // ============================================================================
 
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Line } from '@react-three/drei';
 import { useEngine3DStore } from '../store/useEngine3DStore';
 import { ComponentMesh3D } from './ComponentMesh3D';
 import { getAllV12AttachmentPoints } from '../attachmentMaps/v12AttachmentMap';
+import { Engine3DGeometryGenerator } from '../../exterior3d/geometry/engine3dGeometryGenerator';
 
 // ============================================================================
 // 1. ATTACHMENT POINT SOCKET VISUALIZER OVERLAY
@@ -99,18 +100,27 @@ export const ModularEngineAssembly: React.FC = () => {
   const instances = useEngine3DStore((s) => s.instances);
   const showAttachmentPoints = useEngine3DStore((s) => s.showAttachmentPoints);
   const showDependencies = useEngine3DStore((s) => s.showDependencies);
+  const engineRotation = useEngine3DStore((s) => s.engineRotation);
   const instanceList = Object.values(instances);
+
+  const fallbackMesh = useMemo(() => {
+    return Engine3DGeometryGenerator.buildEngine3DGroup("V_BANK_8");
+  }, []);
 
   return (
     <group
       name="Modular_Engine_Assembly_Master"
-      rotation={[-Math.PI / 2, 0, 0]}
+      rotation={engineRotation}
       position={[0, -0.08, 0]}
     >
-      {/* Render all live independent component instances */}
-      {instanceList.map((instance) => (
-        <ComponentMesh3D key={instance.instanceId} instance={instance} />
-      ))}
+      {/* Render live independent component instances, or fallback to high-detail 3D engine model */}
+      {instanceList.length > 0 ? (
+        instanceList.map((instance) => (
+          <ComponentMesh3D key={instance.instanceId} instance={instance} />
+        ))
+      ) : (
+        <primitive object={fallbackMesh} />
+      )}
 
       {/* Optional Diagnostic Overlays */}
       {showAttachmentPoints && <AttachmentPointVisualizer />}

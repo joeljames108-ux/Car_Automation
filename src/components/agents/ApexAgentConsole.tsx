@@ -185,10 +185,14 @@ export function ApexAgentConsole({
           {/* Preset Selector Grid */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5">
             {[
+              { id: "v12_hybrid_valkyrie", label: "🔥 1,000 HP Valkyrie", desc: "6.4L V12 + 180kW PHEV" },
+              { id: "sprint_race", label: "🏁 Sprint Race Attack", desc: "9,000 RPM V8 Twin-Turbo" },
+              { id: "high_downforce", label: "🌪️ High Downforce", desc: "Monaco Ground Effect GT" },
+              { id: "fuel_efficient", label: "🌱 EcoStream Hybrid", desc: "43% BTE Lean Atkinson" },
+              { id: "balanced_sport", label: "⚖️ Balanced Sport GT", desc: "3.0L V6 Golden Ratio" },
+              { id: "gt3_spec_r", label: "🏎️ GT3 Spec-R", desc: "FIA Homologated 620 HP" },
               { id: "track_attack", label: "🏎️ Track Attack", desc: "Balanced Circuit Tune" },
               { id: "qualifying_max", label: "⚡ Quali 100% Boost", desc: "Max Output Flying Lap" },
-              { id: "endurance_reliability", label: "🛡️ 24h Endurance", desc: "Max Thermal Reliability" },
-              { id: "eco_lean", label: "🍃 Eco Lean-Burn", desc: "Minimal BSFC Fuel Burn" },
             ].map((p) => (
               <button
                 key={p.id}

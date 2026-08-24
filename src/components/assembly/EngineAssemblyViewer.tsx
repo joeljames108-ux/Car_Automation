@@ -13,7 +13,7 @@ import {
   AssemblyPhase,
   getAssemblyComponents,
 } from "../../sim/assemblyTypes";
-import { EngineSVG } from "./EngineSVG";
+import { ModularEngine3DViewport } from "../../engine3d/ModularEngine3DViewport";
 import { useInstallAnimation } from "./useInstallAnimation";
 import { playAssemblySound, toggleAssemblyMute } from "./sounds";
 import { AssemblyStatsSync } from "./AssemblyStatsSync";
@@ -60,21 +60,9 @@ export function EngineAssemblyViewer({
 }: EngineAssemblyViewerProps) {
   const [isMuted, setIsMuted] = useState(false);
   const [lastInstalledId, setLastInstalledId] = useState<ComponentId | null>(null);
-  const [viewMode, setViewMode] = useState<"3d_iso" | "2d">("3d_iso");
-  const [isTransitioningView, setIsTransitioningView] = useState(false);
-  const [transitionKey, setTransitionKey] = useState(0);
 
   const [isTabVisible, setIsTabVisible] = useState(!document.hidden);
   const hoverRafRef = useRef<number | null>(null);
-
-  const handleToggleViewMode = useCallback(() => {
-    setIsTransitioningView(true);
-    setViewMode((prev) => (prev === "3d_iso" ? "2d" : "3d_iso"));
-    setTransitionKey((prev) => prev + 1);
-    setTimeout(() => {
-      setIsTransitioningView(false);
-    }, 600);
-  }, []);
 
   // Monitor browser tab visibility to pause animations and audio synthesis when hidden
   useEffect(() => {
@@ -158,30 +146,10 @@ export function EngineAssemblyViewer({
           slotPosition={activeMeta ? activeMeta.slotPosition : { x: 250, y: 225 }}
         />
 
-        {/* 2D / 3D Mode Switch Holographic Scanline Sweep */}
-        {isTransitioningView && <div className="engine-view-transition-scanline" />}
-
-        {/* Camera Viewport Canvas with Smooth Camera Matrix Animation */}
-        <div
-          key={`engine-viewport-canvas-${viewMode}-${transitionKey}`}
-          className={`w-full h-full flex items-center justify-center transition-transform duration-700 ease-out ${
-            viewMode === "3d_iso" ? "engine-canvas-3d-active" : "engine-canvas-2d-active"
-          } ${isCameraShaking ? "animate-camera-shake" : ""} ${
-            !activeComponentId && !isAssemblyComplete ? "animate-ken-burns" : ""
-          }`}
-          style={{ transform: cameraTransform }}
-        >
-          <EngineSVG
-            installedComponents={installedComponents}
-            activeComponentId={activeComponentId}
-            phase={phase}
-            hoveredComponentId={hoveredComponentId}
-            isExplodedView={isExplodedView}
-            isAssemblyComplete={isAssemblyComplete}
+        <div className="w-full h-full flex items-center justify-center">
+          <ModularEngine3DViewport
+            className="w-full h-full"
             engineConfig={engineConfig}
-            selectedVariants={selectedVariants}
-            viewMode={viewMode}
-            onHoverComponent={handleHoverThrottled}
           />
         </div>
 
@@ -197,20 +165,6 @@ export function EngineAssemblyViewer({
 
         {/* Floating Action Controls on Top Right */}
         <div className="absolute top-5 right-5 z-30 flex items-center gap-2">
-          {/* 3D Isometric View Mode Toggle */}
-          <button
-            onClick={handleToggleViewMode}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full border text-xs font-mono font-bold transition-all cursor-pointer active:scale-95 ${
-              viewMode === "3d_iso"
-                ? "bg-cyan-500/20 text-cyan-200 border-cyan-500/50 shadow-[0_0_12px_rgba(34,211,238,0.3)]"
-                : "bg-[#0b0f19]/90 text-slate-400 border-slate-700 hover:text-slate-200"
-            }`}
-            title="Toggle between 3D Isometric View and 2D Orthographic View"
-          >
-            <Camera size={13} className={isTransitioningView ? "animate-spin" : ""} />
-            {viewMode === "3d_iso" ? "3D Isometric View" : "2D View"}
-          </button>
-
           {/* Skip Animation Button */}
           {activeComponentId && (
             <button

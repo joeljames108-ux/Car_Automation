@@ -13,7 +13,8 @@
 
 import * as THREE from 'three';
 import { MaterialGrade } from '../../sim/assemblyTypes';
-import { EngineLayout, EngineConfig } from '../../sim/types';
+import { EngineLayout, EngineConfig, TransmissionType } from '../../sim/types';
+import { buildTransaxleGroup } from '../../engine3d/generators/transaxleGenerator';
 
 export class ModularPowertrainDrivetrain3DGenerator {
   public static buildPowertrainDrivetrain(
@@ -31,55 +32,78 @@ export class ModularPowertrainDrivetrain3DGenerator {
     const rearAxleX = frontAxleX - wbM;
 
     // ── 1. Luxury PBR Metallurgy Materials ──
-    const castAluminumMat = new THREE.MeshStandardMaterial({
-      color: 0x334155, // Sand-cast aluminum block alloy
+    const castAluminumMat = new THREE.MeshPhysicalMaterial({
+      color: 0x334155,
       metalness: 0.88,
-      roughness: 0.28,
-    });
-
-    const billetMachinedMat = new THREE.MeshStandardMaterial({
-      color: 0x94a3b8, // CNC Milled Billet Aluminum
-      metalness: 0.94,
-      roughness: 0.16,
-    });
-
-    const carbonCompositeMat = new THREE.MeshStandardMaterial({
-      color: 0x090d16, // Dry carbon fiber intake plenum
-      metalness: 0.90,
       roughness: 0.22,
+      clearcoat: 0.3,
+      clearcoatRoughness: 0.08,
+      envMapIntensity: 1.2,
+    });
+
+    const billetMachinedMat = new THREE.MeshPhysicalMaterial({
+      color: 0xb0b8c4,
+      metalness: 0.96,
+      roughness: 0.10,
+      clearcoat: 0.6,
+      clearcoatRoughness: 0.04,
+      envMapIntensity: 1.5,
+    });
+
+    const carbonCompositeMat = new THREE.MeshPhysicalMaterial({
+      color: 0x0a0e17,
+      metalness: 0.35,
+      roughness: 0.18,
+      clearcoat: 0.9,
+      clearcoatRoughness: 0.05,
+      envMapIntensity: 1.2,
     });
 
     const goldAnodizedMat = new THREE.MeshPhysicalMaterial({
-      color: 0xd97706, // Gold / Bronze anodized valve covers
-      metalness: 0.92,
-      roughness: 0.18,
-      clearcoat: 0.85,
+      color: 0xd97706,
+      metalness: 0.94,
+      roughness: 0.12,
+      clearcoat: 0.95,
+      clearcoatRoughness: 0.03,
+      envMapIntensity: 1.6,
     });
 
     const crimsonValveCoverMat = new THREE.MeshPhysicalMaterial({
-      color: 0xdc2626, // Racing Red wrinkle-finish valve covers
+      color: 0xdc2626,
       metalness: 0.75,
-      roughness: 0.35,
-      clearcoat: 0.6,
+      roughness: 0.28,
+      clearcoat: 0.8,
+      clearcoatRoughness: 0.05,
+      envMapIntensity: 1.3,
     });
 
     const inconelExhaustMat = new THREE.MeshPhysicalMaterial({
-      color: 0xb45309, // Heat-treated Inconel & Titanium exhaust
+      color: 0xb45309,
       metalness: 0.96,
-      roughness: 0.14,
-      clearcoat: 0.7,
+      roughness: 0.10,
+      clearcoat: 0.85,
+      clearcoatRoughness: 0.04,
+      envMapIntensity: 1.5,
+      emissive: new THREE.Color(0x3a1500),
+      emissiveIntensity: 0.15,
     });
 
-    const transmissionMat = new THREE.MeshStandardMaterial({
-      color: 0x475569, // Magnesium transaxle casing
-      metalness: 0.84,
-      roughness: 0.30,
-    });
-
-    const driveshaftMat = new THREE.MeshStandardMaterial({
-      color: 0x09090b, // Carbon fiber driveshaft tube
+    const transmissionMat = new THREE.MeshPhysicalMaterial({
+      color: 0x475569,
       metalness: 0.88,
-      roughness: 0.20,
+      roughness: 0.22,
+      clearcoat: 0.5,
+      clearcoatRoughness: 0.1,
+      envMapIntensity: 1.2,
+    });
+
+    const driveshaftMat = new THREE.MeshPhysicalMaterial({
+      color: 0x0a0a0e,
+      metalness: 0.3,
+      roughness: 0.15,
+      clearcoat: 0.9,
+      clearcoatRoughness: 0.04,
+      envMapIntensity: 1.0,
     });
 
     const hvOrangeCableMat = new THREE.MeshStandardMaterial({
@@ -164,7 +188,8 @@ export class ModularPowertrainDrivetrain3DGenerator {
 
     // ── 4. High-Performance Dual-Clutch / Sequential / Manual / EV Transmission ──
     const transX = engineX - 0.38;
-    const trans = this.createTransmission(transmissionMat, billetMachinedMat, inconelExhaustMat, goldAnodizedMat, isElectric);
+    const transType = ((engineConfig as Record<string, any>)?.transmission as TransmissionType) || 'dct_7';
+    const trans = this.createTransmission(transmissionMat, billetMachinedMat, inconelExhaustMat, goldAnodizedMat, isElectric, transType);
     trans.position.set(transX, 0.32, 0);
     group.add(trans);
 
@@ -691,79 +716,23 @@ export class ModularPowertrainDrivetrain3DGenerator {
     billetMat: THREE.Material,
     accentMat: THREE.Material,
     goldMat: THREE.Material,
-    isElectric: boolean = false
+    isElectric: boolean = false,
+    transType: TransmissionType = 'dct_7'
   ): THREE.Group {
     const trans = new THREE.Group();
-    trans.name = isElectric ? 'EV_Reduction_Gearbox' : 'DCT_Mechatronic_Transmission';
+    trans.name = isElectric ? 'EV_Reduction_Gearbox' : `${transType}_Transmission`;
 
-    if (isElectric) {
-      // 1. Compact High-Efficiency e-Axle Helical Reduction Gearbox
-      const caseGeo = new THREE.BoxGeometry(0.28, 0.22, 0.22);
-      const caseMesh = new THREE.Mesh(caseGeo, casingMat);
-      caseMesh.position.set(-0.06, 0, 0);
-      trans.add(caseMesh);
-
-      // Helical Reduction Pinion & Park Lock Actuator
-      const parkGeo = new THREE.BoxGeometry(0.08, 0.06, 0.08);
-      const parkLock = new THREE.Mesh(parkGeo, billetMat);
-      parkLock.position.set(-0.06, 0.12, 0.02);
-      trans.add(parkLock);
-
-      // Glycol Cooling Ports
-      const portGeo = new THREE.CylinderGeometry(0.012, 0.012, 0.025, 12);
-      const port1 = new THREE.Mesh(portGeo, goldMat);
-      port1.position.set(-0.12, 0.10, 0.06);
-      const port2 = port1.clone();
-      port2.position.set(-0.12, -0.10, 0.06);
-      trans.add(port1, port2);
+    if (isElectric || transType === 'single_speed') {
+      const transaxle3D = buildTransaxleGroup('single_speed');
+      transaxle3D.position.set(-0.16, 0, 0);
+      trans.add(transaxle3D);
       return trans;
     }
 
-    // 2. High-Performance Dual-Clutch / Sequential Transaxle
-    // Conical Bellhousing with Dual Input Shafts
-    const bellGeo = new THREE.CylinderGeometry(0.13, 0.19, 0.18, 24);
-    bellGeo.rotateZ(Math.PI / 2);
-    const bell = new THREE.Mesh(bellGeo, casingMat);
-    bell.position.set(0.08, 0, 0);
-
-    // Multi-Plate Wet Clutch Drum
-    const clutchDrumGeo = new THREE.CylinderGeometry(0.10, 0.10, 0.05, 20);
-    clutchDrumGeo.rotateZ(Math.PI / 2);
-    const clutchDrum = new THREE.Mesh(clutchDrumGeo, billetMat);
-    clutchDrum.position.set(0.08, 0, 0);
-
-    // Main Ribbed Gearcase
-    const gearGeo = new THREE.BoxGeometry(0.36, 0.22, 0.24);
-    const gearbox = new THREE.Mesh(gearGeo, casingMat);
-    gearbox.position.set(-0.16, -0.02, 0);
-
-    // Top Hydraulic Mechatronics Valve Body Block
-    const mechatronicsGeo = new THREE.BoxGeometry(0.18, 0.12, 0.08);
-    const mechatronics = new THREE.Mesh(mechatronicsGeo, billetMat);
-    mechatronics.position.set(-0.14, 0, 0.14);
-
-    // 4 High-Speed Shift Solenoids
-    for (let s = 0; s < 4; s++) {
-      const sx = -0.18 + (s % 2) * 0.07;
-      const sy = s < 2 ? -0.03 : 0.03;
-      const solGeo = new THREE.CylinderGeometry(0.010, 0.010, 0.025, 12);
-      const sol = new THREE.Mesh(solGeo, goldMat);
-      sol.position.set(sx, sy, 0.18);
-      trans.add(sol);
-    }
-
-    // Side Oil-to-Water Transmission Cooler Canister
-    const coolerGeo = new THREE.CylinderGeometry(0.035, 0.035, 0.12, 16);
-    coolerGeo.rotateZ(Math.PI / 2);
-    const cooler = new THREE.Mesh(coolerGeo, billetMat);
-    cooler.position.set(-0.16, 0.13, -0.02);
-
-    const fittingGeo = new THREE.CylinderGeometry(0.008, 0.008, 0.018, 8);
-    const fitting = new THREE.Mesh(fittingGeo, accentMat);
-    fitting.position.set(-0.16, 0.15, -0.02);
-    trans.add(cooler, fitting);
-
-    trans.add(bell, clutchDrum, gearbox, mechatronics);
+    // 2. High-Performance Dual-Clutch / Sequential / Manual / CVT Transaxle
+    const transaxle3D = buildTransaxleGroup(transType);
+    transaxle3D.position.set(-0.16, 0, 0);
+    trans.add(transaxle3D);
     return trans;
   }
 

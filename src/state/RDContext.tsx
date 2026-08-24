@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect, useCallback, useMemo, type ReactNode } from "react";
-import { supabase } from "../lib/supabase";
+import { supabase, isSupabaseConfigured } from "../lib/supabase";
 import type { RDState, RDBonuses, BuildingId, TechnologyId } from "../sim/rdTypes";
 import { initialRDState } from "../sim/rdData";
 import {
@@ -31,25 +31,39 @@ interface RDContextValue {
 const Ctx = createContext<RDContextValue | null>(null);
 
 export function RDProvider({ children }: { children: ReactNode }) {
-  const [state, setState] = useState<RDState>(() => initialRDState());
-  const [loading, setLoading] = useState(true);
+  const [state, setState] = useState<RDState>(() => {
+    try {
+      const cached = localStorage.getItem("apex_rd_state");
+      if (cached) {
+        return { ...initialRDState(), ...JSON.parse(cached) };
+      }
+    } catch {
+      // ignore
+    }
+    return initialRDState();
+  });
+  const [loading, setLoading] = useState(!isSupabaseConfigured ? false : true);
   const [saving, setSaving] = useState(false);
 
-  // Load from Supabase on mount
+  // Load from Supabase on mount only if configured
   useEffect(() => {
+    if (!isSupabaseConfigured) {
+      setLoading(false);
+      return;
+    }
+
     let mounted = true;
     (async () => {
       try {
         const { data, error } = await supabase.from("rd_state").select("state").eq("id", 1).maybeSingle();
         if (!mounted) return;
-        if (error) { console.warn("rd load error", error.message); setLoading(false); return; }
+        if (error) { setLoading(false); return; }
         if (data?.state) {
-          // Merge with defaults so new fields don't break old saves
           const base = initialRDState();
           setState({ ...base, ...(data.state as RDState) });
         }
       } catch (e) {
-        console.warn("rd load failed", e);
+        // silent fallback
       } finally {
         if (mounted) setLoading(false);
       }
@@ -57,9 +71,17 @@ export function RDProvider({ children }: { children: ReactNode }) {
     return () => { mounted = false; };
   }, []);
 
-  // Persist to Supabase (debounced via the state object identity)
+  // Persist locally and to Supabase if configured (debounced)
   useEffect(() => {
     if (loading) return;
+    try {
+      localStorage.setItem("apex_rd_state", JSON.stringify(state));
+    } catch {
+      // ignore
+    }
+
+    if (!isSupabaseConfigured) return;
+
     setSaving(true);
     const timer = setTimeout(async () => {
       try {
@@ -68,7 +90,7 @@ export function RDProvider({ children }: { children: ReactNode }) {
           { onConflict: "id" }
         );
       } catch (e) {
-        console.warn("rd save failed", e);
+        // ignore
       } finally {
         setSaving(false);
       }
@@ -97,12 +119,17 @@ export function RDProvider({ children }: { children: ReactNode }) {
 
   const bonuses = useMemo(() => computeBonuses(state), [state]);
 
-  const value: RDContextValue = {
+  const value: RDContextValue = useMemo(() => ({
     state, bonuses, loading, saving,
     advanceOneMonth, advanceSixMonths, upgrade,
     startResearch, startSkunkworks, pauseResearch, resumeResearch, cancelResearch,
     hire, fire, patent, updateBudget, reset,
-  };
+  }), [
+    state, bonuses, loading, saving,
+    advanceOneMonth, advanceSixMonths, upgrade,
+    startResearch, startSkunkworks, pauseResearch, resumeResearch, cancelResearch,
+    hire, fire, patent, updateBudget, reset,
+  ]);
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
 }

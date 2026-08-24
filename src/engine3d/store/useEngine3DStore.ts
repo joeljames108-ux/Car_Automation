@@ -43,6 +43,9 @@ export interface Engine3DStoreState {
   showGhostPreview: boolean;
   ghostPreviewType: Engine3DComponentType | null;
 
+  // ── Engine Spatial Orientation & Rotation ──
+  engineRotation: [number, number, number];
+
   // ── Camera & Ambiance Presets ──
   cameraPreset: CameraPreset3D;
   lightingPreset: LightingPreset;
@@ -56,6 +59,9 @@ export interface Engine3DStoreState {
 
   // ── Actions ──
   setEngineConfig: (cfg: Partial<EngineConfig>) => void;
+  setEngineRotation: (rot: [number, number, number]) => void;
+  rotateEngine90: (axis: 'x' | 'y' | 'z', dir?: 1 | -1) => void;
+  resetEngineRotation: () => void;
   addComponent: (type: Engine3DComponentType, variantId?: string) => Promise<string[]>;
   removeComponent: (instanceId: string) => Promise<void>;
   removeComponentCascade: (instanceId: string) => Promise<string[]>;
@@ -97,6 +103,8 @@ export const useEngine3DStore = create<Engine3DStoreState>((set, get) => {
     showDependencies: false,
     showGhostPreview: false,
     ghostPreviewType: null,
+    // Rotated 90 degrees from Z axis to Y axis (Euler: [-Math.PI / 2, 0, 0])
+    engineRotation: [-Math.PI / 2, 0, 0],
     cameraPreset: 'iso-front-left',
     lightingPreset: 'studio',
     postProcessing: createDefaultPostProcessingConfig(),
@@ -105,7 +113,20 @@ export const useEngine3DStore = create<Engine3DStoreState>((set, get) => {
     isAssemblyComplete: false,
     isAutoAssembling: false,
 
+    setEngineRotation: (rot) => set({ engineRotation: rot }),
+
+    rotateEngine90: (axis, dir = 1) => {
+      const step = (Math.PI / 2) * dir;
+      const [rx, ry, rz] = get().engineRotation;
+      if (axis === 'x') set({ engineRotation: [rx + step, ry, rz] });
+      else if (axis === 'y') set({ engineRotation: [rx, ry + step, rz] });
+      else if (axis === 'z') set({ engineRotation: [rx, ry, rz + step] });
+    },
+
+    resetEngineRotation: () => set({ engineRotation: [-Math.PI / 2, 0, 0] }),
+
     setEngineConfig: (cfg) => {
+      globalAssemblyEngine.setEngineConfig(cfg);
       set({ engineConfig: cfg });
     },
 

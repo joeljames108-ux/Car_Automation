@@ -36,6 +36,16 @@ import { PlatformSharingTestRunner } from "./__tests__/platformSharingTests";
 import { CustomerLifecycleTestRunner } from "./__tests__/customerLifecycleTests";
 import { MotorsportHomologationTestRunner } from "./__tests__/motorsportHomologationTests";
 import { runModularVehicleConstructionTests } from "./modularVehicleConstructionTestRunner";
+import { runModularStructureTests } from "./__tests__/modularStructureTests";
+import { runInteriorStudioTests } from "../interior/__tests__/interiorStudioTests";
+import { runMasterVehicleStateTests } from "../masterVehicleState/__tests__/masterVehicleStateTests";
+import { runModularEngineStudioTests } from "../engine/__tests__/modularEngineStudioTests";
+import { runGrandStudioIntegrationTests } from "../masterVehicleState/__tests__/grandStudioIntegrationTests";
+import { runModularInteriorStudioTests } from "../interior/__tests__/modularInteriorStudioTests";
+import { runWindTunnelCfdPhysicsTests } from "../aerodynamics/__tests__/windTunnelCfdPhysicsTests";
+import { runPowertrainDynoEcuTests } from "../powertrain/__tests__/powertrainDynoEcuTests";
+import { runTrackBattlesTelemetryTests } from "../telemetry/__tests__/trackBattlesTelemetryTests";
+import { runTrackLayoutCatalogTests } from "../../components/trackLayouts/__tests__/trackLayoutCatalogTests";
 
 console.log("=================================================");
 console.log("  MODULAR VEHICLE, EXTERIOR & AI AGENT TESTS");
@@ -150,6 +160,28 @@ console.log("\n=================================================");
 console.log("  50-CHASSIS & MODULAR VEHICLE CONSTRUCTION TESTS");
 console.log("=================================================");
 const constrResults = runModularVehicleConstructionTests();
-if (constrResults.failed > 0 || failedCount > 0) {
+
+runModularStructureTests();
+runInteriorStudioTests();
+runMasterVehicleStateTests();
+const engineStudioResults = runModularEngineStudioTests();
+const grandStudioResults = runGrandStudioIntegrationTests();
+const modularInteriorResults = runModularInteriorStudioTests();
+const windTunnelResults = runWindTunnelCfdPhysicsTests();
+const powertrainDynoResults = runPowertrainDynoEcuTests();
+const trackBattlesResults = runTrackBattlesTelemetryTests();
+const trackLayoutResults = runTrackLayoutCatalogTests();
+
+if (
+  constrResults.failed > 0 ||
+  failedCount > 0 ||
+  engineStudioResults.failed > 0 ||
+  grandStudioResults.failed > 0 ||
+  modularInteriorResults.failed > 0 ||
+  windTunnelResults.failed > 0 ||
+  powertrainDynoResults.failed > 0 ||
+  trackBattlesResults.failed > 0 ||
+  trackLayoutResults.failed > 0
+) {
   process.exit(1);
 }

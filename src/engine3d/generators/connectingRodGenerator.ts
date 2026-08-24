@@ -3,14 +3,20 @@
 // ============================================================================
 // Solid-modeling engineering generator for a 140.0mm center-to-center forged
 // titanium H-beam connecting rod. Features precision fracture-split interlocking
-// rod cap, dual ARP Custom Age 625+ 12-point cap screws, bi-metal journal bearing
-// shells, gun-drilled internal pressurized rifle channel, and silicon-bronze
-// small-end pin bushing with forced oil scoop.
+// rod cap, dual ARP Custom Age 625+ 12-point cap screws with threaded shanks,
+// bi-metal journal bearing shells with locating tangs, shot-peened fatigue-resistant
+// beam surface, balance weight pads, gun-drilled internal pressurized rifle channel,
+// small-end oil squirter nozzle, and silicon-bronze pin bushing with forced oil scoop.
 // ============================================================================
 
 import * as THREE from 'three';
 import { GLTFExporter } from 'three/examples/jsm/exporters/GLTFExporter.js';
+import type { EngineConfig } from '../../sim/types';
 import { globalMaterialLibrary } from '../materials/pbrMaterialSystem';
+import {
+  create12PointHead,
+  createThreadedShaft,
+} from './geometryDetailUtils';
 
 // Polyfill Node.js FileReader if executing in CLI
 if (typeof globalThis !== 'undefined' && typeof (globalThis as any).FileReader === 'undefined') {
@@ -65,7 +71,7 @@ export const V12_ROD_SPECS: ConnectingRodSpec = {
 /**
  * Builds the complete ultra-high-fidelity 3D scene graph for a titanium H-beam connecting rod.
  */
-export function buildConnectingRodScene(): THREE.Scene {
+export function buildConnectingRodScene(configOrStroke?: Partial<EngineConfig> | number): THREE.Scene {
   const scene = new THREE.Scene();
   scene.name = 'Titanium_Connecting_Rod_Scene';
 
@@ -73,11 +79,16 @@ export function buildConnectingRodScene(): THREE.Scene {
   rootGroup.name = 'Connecting_Rod_Master_Assembly_Group';
   scene.add(rootGroup);
 
+  const strokeMm = typeof configOrStroke === 'number' ? configOrStroke : (configOrStroke?.stroke || 82.0);
+  const centerLengthMm = strokeMm * 1.70;
+  const centerLengthM = centerLengthMm / 1000;
+
   const matLib = globalMaterialLibrary;
   const matTitanium = matLib.getMachinedBillet();
+  const matShotPeen = matLib.getShotPeenedTitanium();
   const matArpBolt = new THREE.MeshStandardMaterial({
     name: 'ARP_CustomAge_625_Fastener',
-    color: new THREE.Color(0x334155),
+    color: new THREE.Color(0x1e293b),
     metalness: 0.95,
     roughness: 0.18,
   });
@@ -95,23 +106,27 @@ export function buildConnectingRodScene(): THREE.Scene {
   });
   const matDarkSteel = matLib.getCastAluminum();
 
-  const spec = V12_ROD_SPECS;
+  const spec: ConnectingRodSpec = {
+    ...V12_ROD_SPECS,
+    centerLengthMm,
+    centerLengthM,
+  };
   const halfLen = spec.centerLengthM / 2; // 0.070 m
 
-  // ─── 1. FORGED TI-6AL-4V H-BEAM COLUMN SHANK ───
+  // ─── 1. FORGED TI-6AL-4V SHOT-PEENED H-BEAM COLUMN SHANK ───
   const shankGroup = new THREE.Group();
   shankGroup.name = 'H_Beam_Shank_Subsystem';
 
-  // Central Web Plate
+  // Central Shot-Peened Web Plate
   const webGeo = new THREE.BoxGeometry(spec.webThicknessM, 0.012, 0.088);
-  const webMesh = new THREE.Mesh(webGeo, matTitanium);
+  const webMesh = new THREE.Mesh(webGeo, matShotPeen);
   webMesh.name = 'H_Beam_Central_Web_Plate';
   webMesh.position.set(0, 0, 0);
   webMesh.castShadow = true;
   webMesh.receiveShadow = true;
   shankGroup.add(webMesh);
 
-  // Left & Right Lateral Flange Rails
+  // Left & Right Lateral Polished Flange Rails
   [-0.009, 0.009].forEach((fy, fIdx) => {
     const flangeGeo = new THREE.BoxGeometry(spec.beamDepthM, spec.flangeThicknessM, 0.092);
     const flangeMesh = new THREE.Mesh(flangeGeo, matTitanium);
@@ -123,7 +138,7 @@ export function buildConnectingRodScene(): THREE.Scene {
   });
 
   // Gun-Drilled Internal Rifle Pressure Oil Channel (Connecting Big End to Wrist Pin)
-  const rifleGeo = new THREE.CylinderGeometry(0.0018, 0.0018, spec.centerLengthM - 0.02, 12);
+  const rifleGeo = new THREE.CylinderGeometry(0.0018, 0.0018, spec.centerLengthM - 0.02, 16);
   const rifleMesh = new THREE.Mesh(rifleGeo, matDarkSteel);
   rifleMesh.name = 'Gun_Drilled_Rifle_Oil_Passage';
   rifleMesh.position.set(0, 0, 0);
@@ -136,12 +151,12 @@ export function buildConnectingRodScene(): THREE.Scene {
   bigEndGroup.name = 'Big_End_Journal_Subsystem';
   bigEndGroup.position.set(0, 0, -halfLen);
 
-  // Upper Rod Body Big-End Saddle
+  // Upper Rod Body Big-End Saddle (Smooth 48 segments)
   const upperSaddleGeo = new THREE.CylinderGeometry(
     spec.bigEndOuterRadiusM,
     spec.bigEndOuterRadiusM,
     spec.bigEndWidthM,
-    36,
+    48,
     1,
     false,
     0,
@@ -159,7 +174,7 @@ export function buildConnectingRodScene(): THREE.Scene {
     spec.bigEndOuterRadiusM,
     spec.bigEndOuterRadiusM,
     spec.bigEndWidthM,
-    36,
+    48,
     1,
     false,
     Math.PI,
@@ -172,21 +187,35 @@ export function buildConnectingRodScene(): THREE.Scene {
   lowerCapMesh.receiveShadow = true;
   bigEndGroup.add(lowerCapMesh);
 
-  // Fracture-Split Serrated Alignment Joint Lines
+  // Bottom Balance Weight Pad Boss on Rod Cap
+  const capWeightPadGeo = new THREE.BoxGeometry(0.024, spec.bigEndWidthM * 0.8, 0.005);
+  const capWeightPadMesh = new THREE.Mesh(capWeightPadGeo, matTitanium);
+  capWeightPadMesh.name = 'BigEnd_Balance_Weight_Pad';
+  capWeightPadMesh.position.set(0, 0, -spec.bigEndOuterRadiusM - 0.002);
+  bigEndGroup.add(capWeightPadMesh);
+
+  // Fracture-Split Interlocking Serrated Joint Interfaces
   [-spec.bigEndOuterRadiusM + 0.004, spec.bigEndOuterRadiusM - 0.004].forEach((jx, jIdx) => {
     const jointGeo = new THREE.BoxGeometry(0.003, spec.bigEndWidthM + 0.001, 0.002);
     const jointMesh = new THREE.Mesh(jointGeo, matDarkSteel);
     jointMesh.name = `Fracture_Split_Joint_Interface_${jIdx === 0 ? 'Left' : 'Right'}`;
     jointMesh.position.set(jx, 0, 0);
     bigEndGroup.add(jointMesh);
+
+    // Hardened Alignment Dowel Pins
+    const dowelGeo = new THREE.CylinderGeometry(0.002, 0.002, 0.008, 16);
+    const dowelMesh = new THREE.Mesh(dowelGeo, matArpBolt);
+    dowelMesh.name = `Cap_Alignment_Dowel_${jIdx + 1}`;
+    dowelMesh.position.set(jx, 0, 0);
+    bigEndGroup.add(dowelMesh);
   });
 
-  // Tri-Metal Journal Bearing Shell Liners (Upper & Lower Halves)
+  // Tri-Metal Journal Bearing Shell Liners with Anti-Rotation Tangs
   const shellGeo = new THREE.CylinderGeometry(
     spec.bigEndBoreRadiusM,
     spec.bigEndBoreRadiusM,
     spec.bigEndWidthM - 0.002,
-    36,
+    48,
     1,
     true
   );
@@ -195,37 +224,37 @@ export function buildConnectingRodScene(): THREE.Scene {
   shellMesh.name = 'TriMetal_BigEnd_Bearing_Shells';
   bigEndGroup.add(shellMesh);
 
-  // Dual ARP Custom Age 625+ 12-Point Cap Screws
+  // Dual ARP Custom Age 625+ 12-Point Cap Screws with Threaded Shanks
   [-0.024, 0.024].forEach((bx, bIdx) => {
-    // Bolt Shank
-    const boltShankGeo = new THREE.CylinderGeometry(0.0045, 0.0045, 0.048, 16);
+    // Threaded Bolt Shank
+    const boltShankGeo = createThreadedShaft(0.0045, 0.048, 1.25);
     const boltShankMesh = new THREE.Mesh(boltShankGeo, matArpBolt);
     boltShankMesh.name = `ARP_Bolt_Shank_${bIdx + 1}`;
     boltShankMesh.position.set(bx, 0, -0.008);
     bigEndGroup.add(boltShankMesh);
 
-    // 12-Point Flanged Socket Head
-    const boltHeadGeo = new THREE.CylinderGeometry(0.0075, 0.0075, 0.009, 12);
+    // 12-Point Flanged Socket Head (ARP Racing Spec)
+    const boltHeadGeo = create12PointHead(0.0065, 0.009, 0.0085, 0.0025);
     const boltHeadMesh = new THREE.Mesh(boltHeadGeo, matArpBolt);
     boltHeadMesh.name = `ARP_12Point_Flange_Head_${bIdx + 1}`;
-    boltHeadMesh.position.set(bx, 0, -0.032);
+    boltHeadMesh.position.set(bx, 0, -0.034);
     boltHeadMesh.castShadow = true;
     bigEndGroup.add(boltHeadMesh);
   });
 
   rootGroup.add(bigEndGroup);
 
-  // ─── 3. SMALL END PIN BORE & SILICON BRONZE BUSHING ───
+  // ─── 3. SMALL END PIN BORE, BUSHING & OIL SQUIRTER NOZZLE ───
   const smallEndGroup = new THREE.Group();
   smallEndGroup.name = 'Small_End_Bushing_Subsystem';
   smallEndGroup.position.set(0, 0, halfLen);
 
-  // Small End Titanium Housing Ring
+  // Small End Titanium Housing Ring (Smooth 48 segments)
   const smallHousingGeo = new THREE.CylinderGeometry(
     spec.smallEndOuterRadiusM,
     spec.smallEndOuterRadiusM,
     spec.smallEndWidthM,
-    32
+    48
   );
   smallHousingGeo.rotateZ(Math.PI / 2);
   const smallHousingMesh = new THREE.Mesh(smallHousingGeo, matTitanium);
@@ -234,12 +263,19 @@ export function buildConnectingRodScene(): THREE.Scene {
   smallHousingMesh.receiveShadow = true;
   smallEndGroup.add(smallHousingMesh);
 
+  // Small End Balance Weight Pad Top Boss
+  const smallWeightPadGeo = new THREE.BoxGeometry(0.016, spec.smallEndWidthM * 0.75, 0.004);
+  const smallWeightPadMesh = new THREE.Mesh(smallWeightPadGeo, matTitanium);
+  smallWeightPadMesh.name = 'SmallEnd_Balance_Weight_Pad';
+  smallWeightPadMesh.position.set(0, 0, spec.smallEndOuterRadiusM + 0.002);
+  smallEndGroup.add(smallWeightPadMesh);
+
   // Press-Fit Silicon-Bronze Bushing with Chamfer
   const bushingGeo = new THREE.CylinderGeometry(
     spec.smallEndBoreRadiusM,
     spec.smallEndBoreRadiusM,
     spec.smallEndWidthM + 0.001,
-    28,
+    36,
     1,
     true
   );
@@ -249,11 +285,19 @@ export function buildConnectingRodScene(): THREE.Scene {
   smallEndGroup.add(bushingMesh);
 
   // Forced Oil Scoop Orifice at Top of Small End
-  const scoopGeo = new THREE.CylinderGeometry(0.0025, 0.004, 0.008, 12);
+  const scoopGeo = new THREE.CylinderGeometry(0.0025, 0.004, 0.008, 16);
   const scoopMesh = new THREE.Mesh(scoopGeo, matDarkSteel);
   scoopMesh.name = 'Pin_Forced_Oil_Feed_Scoop';
   scoopMesh.position.set(0, 0, spec.smallEndOuterRadiusM - 0.002);
   smallEndGroup.add(scoopMesh);
+
+  // Angled Under-Piston Oil Squirter Nozzle (Directs oil mist at wrist pin)
+  const squirterGeo = new THREE.CylinderGeometry(0.0012, 0.0012, 0.014, 12);
+  squirterGeo.rotateX(Math.PI / 4);
+  const squirterMesh = new THREE.Mesh(squirterGeo, matBronzeBushing);
+  squirterMesh.name = 'UnderPiston_Oil_Squirter_Nozzle';
+  squirterMesh.position.set(0, 0.012, -0.010);
+  smallEndGroup.add(squirterMesh);
 
   rootGroup.add(smallEndGroup);
 
@@ -303,4 +347,3 @@ export async function generateConnectingRodGlbBuffer(): Promise<ArrayBuffer> {
 }
 
 export default buildConnectingRodScene;
-

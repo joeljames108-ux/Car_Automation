@@ -22,9 +22,9 @@ export const ModularExterior3DViewport: React.FC<ModularExterior3DViewportProps>
   useExteriorAssembly3DBridge();
 
   return (
-    <div className={`relative w-full h-full rounded-3xl overflow-hidden bg-slate-950/95 border border-cyan-500/30 backdrop-blur-2xl shadow-2xl ${className}`}>
+    <div className={`relative w-full h-full rounded-3xl overflow-hidden backdrop-blur-2xl shadow-2xl ${className}`} style={{backgroundColor: 'rgba(255,248,235,0.85)', borderColor: 'rgba(217,166,78,0.3)', borderWidth: '1px', borderStyle: 'solid'}}>
       {/* Dynamic Ambient Background Glow */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_35%,rgba(6,182,212,0.15),transparent_70%)] pointer-events-none z-10" />
+      <div className="absolute inset-0 pointer-events-none z-10" style={{background: 'radial-gradient(circle at 50% 35%, rgba(217,166,78,0.12), transparent 70%)'}} />
 
       {/* Main React Three Fiber 3D Canvas */}
       <ExteriorScene3D />

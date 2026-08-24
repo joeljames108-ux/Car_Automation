@@ -67,7 +67,6 @@ import type {
   EnginePosition,
 } from "../sim/types";
 
-import { PresetQuickSelect } from "./PresetQuickSelect";
 import { useAssemblyStore } from "../state/useAssemblyStore";
 import { EngineAssemblyViewer } from "./assembly/EngineAssemblyViewer";
 import { EngineWorkshopPanel } from "./assembly/EngineWorkshopPanel";
@@ -76,6 +75,7 @@ import { HybridTelemetrySuite } from "./HybridTelemetrySuite";
 import { EngineAudioVisualizer } from "./assembly/EngineAudioVisualizer";
 import { ApexAgentConsole } from "./agents/ApexAgentConsole";
 import { EngineBuilderFlow } from "./assembly/EngineBuilderFlow";
+import { ModularEngineStudio } from "./engineStudio/ModularEngineStudio";
 
 // Engine layout → icon mapping
 const LAYOUT_ICONS: Record<string, React.ReactNode> = {
@@ -132,6 +132,7 @@ export function EngineDesigner() {
   const [modalRendered, setModalRendered] = useState(false);
   const [modalActive, setModalActive] = useState(false);
   const [showCompletionModal, setShowCompletionModal] = useState(false);
+  const [engineMode, setEngineMode] = useState<"3d_studio" | "assembly_flow">("assembly_flow");
 
   // Robotic Engine Assembly Line System state (Unified)
   const assembly = useAssemblyStore(eng);
@@ -251,19 +252,55 @@ export function EngineDesigner() {
         </div>
       </div>
 
-      <PresetQuickSelect />
+      {/* Mode Switcher Bar */}
+      <div className="flex items-center justify-between p-2 rounded-2xl bg-slate-900/90 border border-slate-800 backdrop-blur-xl shadow-lg">
+        <div className="flex items-center gap-2 px-2">
+          <Layers size={15} className="text-cyan-400" />
+          <span className="text-xs font-bold uppercase tracking-wider text-slate-200">
+            Engine Workspace:
+          </span>
+        </div>
+        <div className="flex bg-slate-950 p-1 rounded-xl border border-slate-800 gap-1">
+          <button
+            onClick={() => setEngineMode("assembly_flow")}
+            className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+              engineMode === "assembly_flow"
+                ? "bg-cyan-500 text-slate-950 shadow-md shadow-cyan-500/30"
+                : "text-slate-400 hover:text-slate-200"
+            }`}
+          >
+            <Cog size={13} />
+            <span>3D Engine Assembly & Builder</span>
+          </button>
+          <button
+            onClick={() => setEngineMode("3d_studio")}
+            className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+              engineMode === "3d_studio"
+                ? "bg-cyan-500 text-slate-950 shadow-md shadow-cyan-500/30"
+                : "text-slate-400 hover:text-slate-200"
+            }`}
+          >
+            <Sparkles size={13} />
+            <span>Dyno & Master Workbench</span>
+          </button>
+        </div>
+      </div>
 
-      {/* ========================================================================= */}
-      {/* SEQUENTIAL 1-PAGE ENGINE & EV ROBOTIC ASSEMBLY PIPELINE (PHASES 1-25)     */}
-      {/* ========================================================================= */}
-      <EngineBuilderFlow
-        engineConfig={eng}
-        sim={sim}
-        updateEngine={updateEngine}
-        updateVehicle={updateVehicle}
-        onShowCompletionModal={() => setShowCompletionModal(true)}
-        onOpenLightbox={openEnlargedModal}
-      />
+      {engineMode === "3d_studio" ? (
+        <ModularEngineStudio />
+      ) : (
+        /* ========================================================================= */
+        /* SEQUENTIAL 1-PAGE ENGINE & EV ROBOTIC ASSEMBLY PIPELINE (PHASES 1-25)     */
+        /* ========================================================================= */
+        <EngineBuilderFlow
+          engineConfig={eng}
+          sim={sim}
+          updateEngine={updateEngine}
+          updateVehicle={updateVehicle}
+          onShowCompletionModal={() => setShowCompletionModal(true)}
+          onOpenLightbox={openEnlargedModal}
+        />
+      )}
 
       {/* =========================================================================== */}
       {/* LOWER DECK: Dyno Curves, Engine Vitals, AI Engine & Telemetry               */}

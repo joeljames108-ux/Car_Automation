@@ -5,6 +5,7 @@ import {
   ChevronLeft, ChevronRight, Filter,
 } from "lucide-react";
 import { useDesign, fmtPower, fmtWeight, fmtSpeed, fmtCurrency } from "../state/DesignContext";
+import { formatLap } from "../sim/utils/formatLap";
 import { supabase } from "../lib/supabase";
 import type { Competitor, SortKey, SortOption } from "../sim/competitorTypes";
 
@@ -34,12 +35,7 @@ const COMPANY_LOGOS: Record<string, string> = {
   Rimac: "#22d3ee",
 };
 
-function formatLap(seconds: number | null): string {
-  if (seconds === null || seconds === undefined) return "—";
-  const m = Math.floor(seconds / 60);
-  const s = seconds % 60;
-  return `${m}:${s.toFixed(3).padStart(6, "0")}`;
-}
+
 
 export function Competitors() {
   const { design, sim, units } = useDesign();

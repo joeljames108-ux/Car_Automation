@@ -57,7 +57,7 @@ export interface ExteriorAssemblyState {
   selectedComponentId: ExteriorComponentId | null;
   isExplodedView: boolean;
   explodedAmount: number; // 0.0 to 1.0 continuous slider
-  viewMode: "2d_iso" | "3d_webgl";
+  viewMode: "2d" | "3d_webgl";
   isAssemblyComplete: boolean;
 
   // ── 2. Component Material Grade Variants ──
@@ -86,7 +86,7 @@ export interface ExteriorAssemblyState {
   setHoveredComponentId: (componentId: ExteriorComponentId | null) => void;
   setExplodedView: (isExploded: boolean) => void;
   setExplodedAmount: (amount: number) => void;
-  setViewMode: (mode: "2d_iso" | "3d_webgl") => void;
+  setViewMode: (mode: "2d" | "3d_webgl") => void;
 
   replaceVariant: (componentId: ExteriorComponentId, grade: MaterialGrade) => void;
   updateExteriorConfig: (partial: Partial<ExteriorEngineeringConfig>) => void;
@@ -133,7 +133,7 @@ export const useExteriorAssemblyStore = create<ExteriorAssemblyState>((set, get)
   selectedComponentId: "chassis_frame",
   isExplodedView: false,
   explodedAmount: 0.0,
-  viewMode: "2d_iso",
+  viewMode: "2d",
   isAssemblyComplete: false,
 
   selectedVariants: { ...INITIAL_VARIANT_MAP },
@@ -230,7 +230,7 @@ export const useExteriorAssemblyStore = create<ExteriorAssemblyState>((set, get)
     });
   },
 
-  setViewMode: (mode: "2d_iso" | "3d_webgl") => {
+  setViewMode: (mode: "2d" | "3d_webgl") => {
     set({ viewMode: mode });
   },
 

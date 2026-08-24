@@ -7,6 +7,15 @@ export function ThermalAlertMonitor() {
   const toast = useToast();
   const lastAlertsRef = useRef<Record<string, number>>({});
 
+  const knockRisk = sim.knockRisk || 0;
+  const coolingMargin = sim.coolingMargin || 0.5;
+  const brakingDist = sim.brakingDist || 35;
+  const dragCoeff = sim.dragCoeff || 0.3;
+  const lateralG = sim.lateralG || 1.2;
+
+  const toastRef = useRef(toast);
+  toastRef.current = toast;
+
   useEffect(() => {
     const now = Date.now();
 
@@ -21,19 +30,19 @@ export function ThermalAlertMonitor() {
     };
 
     // 1. Engine Knock / Thermal Alert
-    if ((sim.knockRisk || 0) > 0.5) {
+    if (knockRisk > 0.5) {
       if (canNotify("knock")) {
-        toast.warn(
+        toastRef.current.warn(
           "Engine Thermal & Knock Warning",
-          `High knock risk detected (${((sim.knockRisk || 0) * 100).toFixed(0)}%). Reduce compression ratio or retard timing.`
+          `High knock risk detected (${(knockRisk * 100).toFixed(0)}%). Reduce compression ratio or retard timing.`
         );
       }
     }
 
     // 2. Cooling Margin Alert (Oil/Coolant Temp Exceeded)
-    if ((sim.coolingMargin || 0.5) < 0.2) {
+    if (coolingMargin < 0.2) {
       if (canNotify("cooling")) {
-        toast.warn(
+        toastRef.current.warn(
           "Oil Temp Exceeded 110°C",
           "Cooling margin critically low (< 20%). Increase radiator area or radiator air inlets to prevent thermal failure."
         );
@@ -41,36 +50,36 @@ export function ThermalAlertMonitor() {
     }
 
     // 3. Brake Fade / Stopping Distance Alert
-    if ((sim.brakingDist || 35) > 42) {
+    if (brakingDist > 42) {
       if (canNotify("brakes")) {
-        toast.warn(
+        toastRef.current.warn(
           "Brake System Thermal Fade",
-          `100-0 km/h stopping distance increased to ${sim.brakingDist.toFixed(1)}m. Upgrade brake disc diameter or pad compound.`
+          `100-0 km/h stopping distance increased to ${brakingDist.toFixed(1)}m. Upgrade brake disc diameter or pad compound.`
         );
       }
     }
 
     // 4. Aero Loss / High Drag Alert
-    if ((sim.dragCoeff || 0.3) > 0.45) {
+    if (dragCoeff > 0.45) {
       if (canNotify("aero")) {
-        toast.info(
+        toastRef.current.info(
           "Aerodynamic Loss Detected",
-          `Drag coefficient high (Cd ${sim.dragCoeff.toFixed(2)}). Reduce wing AoA or optimize body shape.`
+          `Drag coefficient high (Cd ${dragCoeff.toFixed(2)}). Reduce wing AoA or optimize body shape.`
         );
       }
     }
 
     // 5. Tyre Grip / Degradation Warning
-    if ((sim.lateralG || 1.2) < 0.85) {
+    if (lateralG < 0.85) {
       if (canNotify("tyre")) {
-        toast.warn(
+        toastRef.current.warn(
           "Tire Degradation / Low Grip",
-          `Cornering grip reduced (${sim.lateralG.toFixed(2)}g). Consider switching to softer tire compound or increasing tire width.`
+          `Cornering grip reduced (${lateralG.toFixed(2)}g). Consider switching to softer tire compound or increasing tire width.`
         );
       }
     }
 
-  }, [sim, toast]);
+  }, [knockRisk, coolingMargin, brakingDist, dragCoeff, lateralG]);
 
   return null;
 }

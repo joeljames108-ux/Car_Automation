@@ -115,10 +115,10 @@ export function solveParametricTransformForComponent(
         scale: [turboScale, turboScale, turboScale],
       };
 
-    // ── 8. RADIATOR (Core width & height scale with cooling capacity) ──
+    // ── 8. RADIATOR (Core thickness, width & height scale with cooling demand) ──
     case 'radiator':
       return {
-        scale: [1.0, radScale, radScale],
+        scale: [1.0 + (radScale - 1.0) * 0.35, radScale, radScale],
       };
 
     // ── 9. EXHAUST HEADERS (Primary length and merge collector diameter) ──

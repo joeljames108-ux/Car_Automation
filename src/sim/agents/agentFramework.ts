@@ -242,7 +242,7 @@ export class AgentOrchestrator {
   private agents: Map<string, BaseAgent> = new Map();
   private isRunning = false;
   private intervalId: any = null;
-  private tickRateMs = 2000; // Default 2 seconds
+  private tickRateMs = 6000; // Default 6 seconds (optimized for 60fps UI responsiveness)
   private lastCycleFindings: Map<string, AgentFinding[]> = new Map();
 
   private constructor() {}
@@ -255,6 +255,7 @@ export class AgentOrchestrator {
   }
 
   public registerAgent(agent: BaseAgent): void {
+    if (this.agents.has(agent.identity.id)) return;
     this.agents.set(agent.identity.id, agent);
   }
 
@@ -278,7 +279,17 @@ export class AgentOrchestrator {
     if (this.isRunning) return;
     this.isRunning = true;
 
+    // Run initial tick on next microtask
+    setTimeout(() => {
+      if (this.isRunning) {
+        this.tick(getDesignState(), getSimState());
+      }
+    }, 100);
+
     this.intervalId = setInterval(() => {
+      if (typeof document !== "undefined" && document.hidden) {
+        return; // Skip tick when browser tab is inactive
+      }
       this.tick(getDesignState(), getSimState());
     }, this.tickRateMs);
   }

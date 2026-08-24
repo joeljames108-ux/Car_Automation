@@ -27,8 +27,8 @@ export function createHighResSandCastTexture(): THREE.CanvasTexture {
   const ctx = canvas.getContext('2d');
 
   if (ctx) {
-    // Base mid-tone silver alloy
-    ctx.fillStyle = '#b8c2cc';
+    // Base bright silver alloy
+    ctx.fillStyle = '#e8edf2';
     ctx.fillRect(0, 0, size, size);
 
     const imgData = ctx.getImageData(0, 0, size, size);
@@ -36,26 +36,26 @@ export function createHighResSandCastTexture(): THREE.CanvasTexture {
 
     // Multi-frequency cellular fractal noise for authentic sand-casting grain
     for (let i = 0; i < data.length; i += 4) {
-      const coarseNoise = (Math.random() - 0.5) * 28;
-      const fineNoise = (Math.random() - 0.5) * 16;
-      const microGrain = (Math.random() - 0.5) * 8;
+      const coarseNoise = (Math.random() - 0.5) * 18;
+      const fineNoise = (Math.random() - 0.5) * 10;
+      const microGrain = (Math.random() - 0.5) * 6;
 
-      const baseIntensity = 186 + coarseNoise + fineNoise + microGrain;
+      const baseIntensity = 228 + coarseNoise + fineNoise + microGrain;
 
       data[i] = Math.min(255, Math.max(0, baseIntensity - 2));     // Red
-      data[i + 1] = Math.min(255, Math.max(0, baseIntensity + 2)); // Green
-      data[i + 2] = Math.min(255, Math.max(0, baseIntensity + 6)); // Blue
+      data[i + 1] = Math.min(255, Math.max(0, baseIntensity));     // Green
+      data[i + 2] = Math.min(255, Math.max(0, baseIntensity + 3)); // Blue
       data[i + 3] = 255;                                          // Alpha
     }
 
     ctx.putImageData(imgData, 0, 0);
 
-    // Cast parting line stipple & micro-porosity pockets
-    ctx.fillStyle = 'rgba(70, 80, 95, 0.12)';
-    for (let p = 0; p < 1200; p++) {
+    // Cast parting line stipple & subtle micro-porosity pockets
+    ctx.fillStyle = 'rgba(160, 175, 195, 0.15)';
+    for (let p = 0; p < 800; p++) {
       const px = Math.random() * size;
       const py = Math.random() * size;
-      const rad = Math.random() * 2.0 + 0.4;
+      const rad = Math.random() * 1.8 + 0.4;
       ctx.beginPath();
       ctx.arc(px, py, rad, 0, Math.PI * 2);
       ctx.fill();
@@ -131,13 +131,13 @@ export function createHighResPlateauHoneTexture(): THREE.CanvasTexture {
   const ctx = canvas.getContext('2d');
 
   if (ctx) {
-    ctx.fillStyle = '#e2e8f0';
+    ctx.fillStyle = '#f1f5f9';
     ctx.fillRect(0, 0, size, size);
 
     ctx.lineWidth = 1.4;
 
     // +45 deg plateau honing micro-grooves
-    ctx.strokeStyle = 'rgba(71, 85, 105, 0.25)';
+    ctx.strokeStyle = 'rgba(100, 116, 139, 0.20)';
     for (let x = -size; x < size * 2; x += 8) {
       ctx.beginPath();
       ctx.moveTo(x, 0);
@@ -146,7 +146,7 @@ export function createHighResPlateauHoneTexture(): THREE.CanvasTexture {
     }
 
     // -45 deg intersecting grooves
-    ctx.strokeStyle = 'rgba(71, 85, 105, 0.25)';
+    ctx.strokeStyle = 'rgba(100, 116, 139, 0.20)';
     for (let x = -size; x < size * 2; x += 8) {
       ctx.beginPath();
       ctx.moveTo(x, size);
@@ -167,7 +167,13 @@ export function createHighResPlateauHoneTexture(): THREE.CanvasTexture {
 // ============================================================================
 
 export interface BlockShaderSuite {
+  primaryBlockMaterial: THREE.MeshStandardMaterial;
   sandCastAluminum: THREE.MeshStandardMaterial;
+  castIron: THREE.MeshStandardMaterial;
+  billetAluminum: THREE.MeshStandardMaterial;
+  titaniumAlloy: THREE.MeshStandardMaterial;
+  carbonComposite: THREE.MeshStandardMaterial;
+  magnesiumAlloy: THREE.MeshStandardMaterial;
   cncMilledDeck: THREE.MeshStandardMaterial;
   plateauHonedNikasil: THREE.MeshStandardMaterial;
   hardenedArpFastener: THREE.MeshStandardMaterial;
@@ -177,67 +183,143 @@ export interface BlockShaderSuite {
   fireRingSeal: THREE.MeshStandardMaterial;
 }
 
-export function initializeBlockShaderSuite(): BlockShaderSuite {
+export function initializeBlockShaderSuite(materialId?: string): BlockShaderSuite {
   const isBrowser = typeof document !== 'undefined';
   const sandCastTex = isBrowser ? createHighResSandCastTexture() : null;
   const cncDeckTex = isBrowser ? createHighResCncFlyCutTexture() : null;
   const plateauHoneTex = isBrowser ? createHighResPlateauHoneTexture() : null;
 
+  const sandCastAluminum = new THREE.MeshStandardMaterial({
+    name: 'PBR_SandCast_Aluminum_A356',
+    color: new THREE.Color(0x94a3b8),
+    metalness: 0.88,
+    roughness: 0.28,
+    map: sandCastTex,
+    bumpMap: sandCastTex,
+    bumpScale: 0.0012,
+    envMapIntensity: 2.2,
+  });
+
+  const castIron = new THREE.MeshStandardMaterial({
+    name: 'PBR_Ductile_Cast_Iron',
+    color: new THREE.Color(0x384152),
+    metalness: 0.85,
+    roughness: 0.38,
+    map: sandCastTex,
+    bumpMap: sandCastTex,
+    bumpScale: 0.0035,
+    envMapIntensity: 1.8,
+  });
+
+  const billetAluminum = new THREE.MeshStandardMaterial({
+    name: 'PBR_CNC_Billet_Aluminum_6061',
+    color: new THREE.Color(0xe2e8f0),
+    metalness: 0.95,
+    roughness: 0.12,
+    map: cncDeckTex,
+    envMapIntensity: 2.6,
+  });
+
+  const titaniumAlloy = new THREE.MeshStandardMaterial({
+    name: 'PBR_Aerospace_Titanium_Ti6Al4V',
+    color: new THREE.Color(0x818cf8),
+    metalness: 0.94,
+    roughness: 0.16,
+    envMapIntensity: 2.4,
+  });
+
+  const carbonComposite = new THREE.MeshStandardMaterial({
+    name: 'PBR_Autoclaved_Carbon_Composite',
+    color: new THREE.Color(0x1e293b),
+    metalness: 0.30,
+    roughness: 0.25,
+    envMapIntensity: 1.6,
+  });
+
+  const magnesiumAlloy = new THREE.MeshStandardMaterial({
+    name: 'PBR_Lightweight_Magnesium_AZ91D',
+    color: new THREE.Color(0x78716c),
+    metalness: 0.84,
+    roughness: 0.34,
+    envMapIntensity: 2.0,
+  });
+
+  // Resolve primary block material based on material ID
+  const matKey = (materialId || '').toLowerCase();
+  let primaryBlockMaterial = sandCastAluminum;
+  if (matKey.includes('iron') || matKey === 'cast') {
+    primaryBlockMaterial = castIron;
+  } else if (matKey.includes('billet') || matKey.includes('cnc') || matKey.includes('6061')) {
+    primaryBlockMaterial = billetAluminum;
+  } else if (matKey.includes('titanium') || matKey.includes('ti-')) {
+    primaryBlockMaterial = titaniumAlloy;
+  } else if (matKey.includes('carbon') || matKey.includes('composite')) {
+    primaryBlockMaterial = carbonComposite;
+  } else if (matKey.includes('magnesium')) {
+    primaryBlockMaterial = magnesiumAlloy;
+  } else {
+    primaryBlockMaterial = sandCastAluminum;
+  }
+
   return {
-    sandCastAluminum: new THREE.MeshStandardMaterial({
-      name: 'PBR_SandCast_Aluminum_A356',
-      color: 0xb8c2cc,
-      metalness: 0.84,
-      roughness: 0.40,
-      map: sandCastTex,
-      bumpMap: sandCastTex,
-      bumpScale: 0.0035,
-      roughnessMap: sandCastTex,
-    }),
+    primaryBlockMaterial,
+    sandCastAluminum,
+    castIron,
+    billetAluminum,
+    titaniumAlloy,
+    carbonComposite,
+    magnesiumAlloy,
     cncMilledDeck: new THREE.MeshStandardMaterial({
       name: 'PBR_CNC_Milled_Deck',
       color: 0xe2e8f0,
-      metalness: 0.95,
-      roughness: 0.16,
+      metalness: 0.94,
+      roughness: 0.12,
       map: cncDeckTex,
+      envMapIntensity: 2.5,
     }),
     plateauHonedNikasil: new THREE.MeshStandardMaterial({
       name: 'PBR_Plateau_Honed_Nikasil',
-      color: 0xf8fafc,
-      metalness: 0.98,
-      roughness: 0.10,
+      color: 0xf1f5f9,
+      metalness: 0.96,
+      roughness: 0.08,
       map: plateauHoneTex,
       side: THREE.DoubleSide,
+      envMapIntensity: 2.5,
     }),
     hardenedArpFastener: new THREE.MeshStandardMaterial({
       name: 'PBR_Hardened_ARP_Fastener',
       color: 0x1e293b,
-      metalness: 0.90,
-      roughness: 0.25,
+      metalness: 0.95,
+      roughness: 0.15,
+      envMapIntensity: 2.0,
     }),
     machinedBrassPlug: new THREE.MeshStandardMaterial({
       name: 'PBR_Machined_Brass_Plug',
-      color: 0xd97706,
-      metalness: 0.94,
-      roughness: 0.22,
+      color: 0xf59e0b,
+      metalness: 0.92,
+      roughness: 0.14,
+      envMapIntensity: 2.4,
     }),
     coolantWaterPassage: new THREE.MeshStandardMaterial({
       name: 'PBR_Coolant_Passage',
       color: 0x0284c7,
-      metalness: 0.25,
-      roughness: 0.70,
+      metalness: 0.70,
+      roughness: 0.35,
+      envMapIntensity: 1.8,
     }),
     oilGalleryPassage: new THREE.MeshStandardMaterial({
       name: 'PBR_Oil_Gallery_Passage',
-      color: 0x0f172a,
-      metalness: 0.50,
-      roughness: 0.60,
+      color: 0x1e293b,
+      metalness: 0.85,
+      roughness: 0.25,
+      envMapIntensity: 1.6,
     }),
     fireRingSeal: new THREE.MeshStandardMaterial({
       name: 'PBR_Fire_Ring_Seal',
       color: 0x475569,
-      metalness: 0.75,
-      roughness: 0.35,
+      metalness: 0.90,
+      roughness: 0.20,
+      envMapIntensity: 1.8,
     }),
   };
 }

@@ -10,6 +10,7 @@
 
 import * as THREE from 'three';
 import { GLTFExporter } from 'three/examples/jsm/exporters/GLTFExporter.js';
+import type { EngineConfig } from '../../sim/types';
 import { V12_ENGINE_BLOCK_ATTACHMENTS } from '../attachmentMaps/v12AttachmentMap';
 
 // Subsystem generator imports
@@ -52,11 +53,18 @@ export interface V12BlockMaterialPalette {
 /**
  * Creates the active physical material palette mapped to the shader pipeline.
  */
-export function createBlockMaterialPalette(): V12BlockMaterialPalette {
-  const shaders: BlockShaderSuite = initializeBlockShaderSuite();
+export function createBlockMaterialPalette(configOrMat?: Partial<EngineConfig> | string): V12BlockMaterialPalette {
+  let matString = 'aluminum';
+  if (typeof configOrMat === 'string') {
+    matString = configOrMat;
+  } else if (configOrMat && typeof configOrMat === 'object') {
+    matString = (configOrMat as any).blockMaterial || (configOrMat as any).material || 'aluminum';
+  }
+
+  const shaders: BlockShaderSuite = initializeBlockShaderSuite(matString);
 
   return {
-    castAluminumBlock: shaders.sandCastAluminum,
+    castAluminumBlock: shaders.primaryBlockMaterial,
     machinedDeckSurface: shaders.cncMilledDeck,
     nikasilCylinderBore: shaders.plateauHonedNikasil,
     arpHardenedFastener: shaders.hardenedArpFastener,
@@ -71,55 +79,85 @@ export function createBlockMaterialPalette(): V12BlockMaterialPalette {
  * Builds the complete 3D solid model scene graph for the 60° V12 Engine Block Casting,
  * integrating all 10 engineering subsystems.
  */
-export function buildEngineBlockScene(): THREE.Scene {
+export function buildEngineBlockScene(configOrCyls?: Partial<EngineConfig> | number): THREE.Scene {
   const scene = new THREE.Scene();
-  scene.name = 'V12_Engine_Block_Scene';
+  scene.name = 'V_Engine_Block_Scene';
 
   const rootGroup = new THREE.Group();
-  rootGroup.name = '01_V12_Engine_Block_Master';
+  rootGroup.name = 'V_Engine_Block_Master';
   scene.add(rootGroup);
 
-  // Initialize unified PBR metallurgic material palette
-  const materials = createBlockMaterialPalette();
+  let cylindersPerBank = 6;
+  let bankAngleDeg = 60; // 60° default for V12/V6
 
-  // ── 1. Phase 2: Lower Crankcase & 7 Cross-Bolted Main Bulkheads ──
-  const mainBulkheadGroup = buildV12MainBulkheadSystem(materials);
+  if (typeof configOrCyls === 'number') {
+    cylindersPerBank = configOrCyls;
+    bankAngleDeg = cylindersPerBank === 4 ? 90 : cylindersPerBank === 5 ? 72 : 60;
+  } else if (configOrCyls?.layout) {
+    const l = configOrCyls.layout;
+    if (l === 'v6') {
+      cylindersPerBank = 3;
+      bankAngleDeg = 60;
+    } else if (l === 'v8') {
+      cylindersPerBank = 4;
+      bankAngleDeg = 90;
+    } else if (l === 'v10') {
+      cylindersPerBank = 5;
+      bankAngleDeg = 72;
+    } else if (l === 'v12') {
+      cylindersPerBank = 6;
+      bankAngleDeg = 60;
+    } else {
+      cylindersPerBank = 6;
+      bankAngleDeg = 60;
+    }
+  }
+
+  const halfVAngleRad = (bankAngleDeg / 2) * (Math.PI / 180);
+  const bankOffsetY = 0.22 * Math.cos(halfVAngleRad);
+  const bankOffsetZ = 0.22 * Math.sin(halfVAngleRad);
+
+  // Initialize unified PBR metallurgic material palette matching engine material
+  const materials = createBlockMaterialPalette(typeof configOrCyls === 'object' ? configOrCyls : undefined);
+
+  // ── 1. Phase 2: Lower Crankcase & Main Bulkheads ──
+  const mainBulkheadGroup = buildV12MainBulkheadSystem(materials, cylindersPerBank);
   rootGroup.add(mainBulkheadGroup);
 
-  // ── 2. Phase 1: Bank 1 (Left) 6 Hollow Nikasil Cylinder Bore Sleeves ──
-  const bank1Liners = buildV12CylinderLinerSystem('left', materials);
-  bank1Liners.position.set(0, 0.11, 0.22);
-  bank1Liners.rotation.x = -Math.PI / 6;
+  // ── 2. Phase 1: Bank 1 (Left) Hollow Nikasil Cylinder Bore Sleeves ──
+  const bank1Liners = buildV12CylinderLinerSystem('left', materials, cylindersPerBank);
+  bank1Liners.position.set(0, bankOffsetY * 0.5, bankOffsetZ);
+  bank1Liners.rotation.x = -halfVAngleRad;
   rootGroup.add(bank1Liners);
 
-  // ── 3. Phase 1: Bank 2 (Right, 15mm stagger) 6 Hollow Nikasil Cylinder Bore Sleeves ──
-  const bank2Liners = buildV12CylinderLinerSystem('right', materials);
-  bank2Liners.position.set(0.015, -0.11, 0.22);
-  bank2Liners.rotation.x = Math.PI / 6;
+  // ── 3. Phase 1: Bank 2 (Right, 15mm stagger) Hollow Nikasil Cylinder Bore Sleeves ──
+  const bank2Liners = buildV12CylinderLinerSystem('right', materials, cylindersPerBank);
+  bank2Liners.position.set(0.015, bankOffsetY * 0.5, -bankOffsetZ);
+  bank2Liners.rotation.x = halfVAngleRad;
   rootGroup.add(bank2Liners);
 
   // ── 4. Phase 5: CNC Cylinder Head Decks, Head Stud Pillars & Dowels ──
-  const cylinderDeckSuite = buildV12CylinderDeckSuite(materials);
+  const cylinderDeckSuite = buildV12CylinderDeckSuite(materials, cylindersPerBank);
   rootGroup.add(cylinderDeckSuite);
 
-  // ── 5. Phase 3: High-Pressure Lubrication Galleys & 12 Piston Cooling Jets ──
-  const oilCircuitGroup = buildV12OilGalleryCircuit(materials);
+  // ── 5. Phase 3: High-Pressure Lubrication Galleys & Piston Cooling Jets ──
+  const oilCircuitGroup = buildV12OilGalleryCircuit(materials, cylindersPerBank);
   rootGroup.add(oilCircuitGroup);
 
   // ── 6. Phase 4: Multi-Pass Coolant Water Jackets & Brass Core Freeze Plugs ──
-  const coolantSystemGroup = buildV12CoolantJacketSystem(materials);
+  const coolantSystemGroup = buildV12CoolantJacketSystem(materials, cylindersPerBank);
   rootGroup.add(coolantSystemGroup);
 
   // ── 7. Phase 6: Triangulated Structural Skirt Webbing & Engine Mount Cradles ──
-  const structuralWebbingGroup = buildV12StructuralWebbingSystem(materials);
+  const structuralWebbingGroup = buildV12StructuralWebbingSystem(materials, cylindersPerBank);
   rootGroup.add(structuralWebbingGroup);
 
   // ── 8. Phase 7: Front Timing Gearcase Flange & Rear Transmission Bellhousing ──
-  const endFlangesGroup = buildV12EndFlangesSystem(materials);
+  const endFlangesGroup = buildV12EndFlangesSystem(materials, cylindersPerBank);
   rootGroup.add(endFlangesGroup);
 
-  // ── 9. Phase 8: Central 60° V-Valley Oil Scavenge & Knock Sensor Resonance Bosses ──
-  const valleyScavengeGroup = buildV12ValleyScavengeSystem(materials);
+  // ── 9. Phase 8: Central V-Valley Oil Scavenge & Knock Sensor Resonance Bosses ──
+  const valleyScavengeGroup = buildV12ValleyScavengeSystem(materials, cylindersPerBank);
   rootGroup.add(valleyScavengeGroup);
 
   // ── 10. Embedded Named Attachment Anchor Nodes for Modular Kinematic Snapping ──

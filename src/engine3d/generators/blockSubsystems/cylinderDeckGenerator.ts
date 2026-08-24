@@ -66,13 +66,16 @@ export interface BankDeckConfig {
  */
 export function buildSingleBankDeck(
   config: BankDeckConfig,
-  materials: V12BlockMaterialPalette
+  materials: V12BlockMaterialPalette,
+  cylindersPerBank: number = 6
 ): THREE.Group {
   const { bank, spec } = config;
   const isLeft = bank === 'left';
   const bankName = isLeft ? 'Bank_1_Left' : 'Bank_2_Right';
   const tiltAngle = isLeft ? -Math.PI / 6 : Math.PI / 6;
   const xOffset = isLeft ? 0 : 0.015;
+  const pitchM = 0.108;
+  const deckLengthM = (cylindersPerBank * pitchM) + 0.022;
 
   const group = new THREE.Group();
   group.name = `${bankName}_Machined_Deck_Plate_Assembly`;
@@ -81,7 +84,7 @@ export function buildSingleBankDeck(
 
   // ── A. CNC Fly-Cut Machined Top Deck Plate Surface ──
   const deckGeo = new THREE.BoxGeometry(
-    spec.deckLengthM,
+    deckLengthM,
     spec.deckWidthM,
     spec.deckThicknessM
   );
@@ -92,7 +95,7 @@ export function buildSingleBankDeck(
   deckMesh.receiveShadow = true;
   group.add(deckMesh);
 
-  // ── B. 14 High-Tensile Head Stud Casting Pillars & Threaded Sockets ──
+  // ── B. High-Tensile Head Stud Casting Pillars & Threaded Sockets ──
   const studBossGeo = new THREE.CylinderGeometry(
     spec.headStudBossRadiusM,
     spec.headStudBossRadiusM + 0.002,
@@ -117,11 +120,13 @@ export function buildSingleBankDeck(
   );
   counterboreGeo.rotateX(Math.PI / 2);
 
-  // 7 pairs of intake/exhaust head stud bosses along the bank
-  for (let s = 0; s < 7; s++) {
-    const sx = -0.32 + s * (0.64 / 6);
+  const studPairCount = cylindersPerBank + 1;
+  const startX = -((studPairCount - 1) * pitchM) / 2;
 
-    // Intake row (+Y or -Y) and Exhaust row
+  for (let s = 0; s < studPairCount; s++) {
+    const sx = startX + s * pitchM;
+
+    // Intake row and Exhaust row
     [-0.082, 0.082].forEach((sy, rowIdx) => {
       const isExhaust = rowIdx === 1;
       const studGroup = new THREE.Group();
@@ -158,7 +163,8 @@ export function buildSingleBankDeck(
   );
   dowelGeo.rotateX(Math.PI / 2);
 
-  [-0.315, 0.315].forEach((dx, dowelIdx) => {
+  const dowelX = deckLengthM / 2 - 0.02;
+  [-dowelX, dowelX].forEach((dx, dowelIdx) => {
     const dowelMesh = new THREE.Mesh(dowelGeo, materials.arpHardenedFastener);
     dowelMesh.name = `${bankName}_Locator_Dowel_${dowelIdx === 0 ? 'Front' : 'Rear'}`;
     dowelMesh.position.set(dx, 0, 0.122);
@@ -184,18 +190,19 @@ export function buildSingleBankDeck(
  * Builds the complete dual-bank cylinder deck assembly (Bank 1 & Bank 2).
  */
 export function buildV12CylinderDeckSuite(
-  materials: V12BlockMaterialPalette
+  materials: V12BlockMaterialPalette,
+  cylindersPerBank: number = 6
 ): THREE.Group {
   const group = new THREE.Group();
   group.name = '04_V12_Cylinder_Decks_Suite_Assembly';
   const spec = V12_DECK_SPECS;
 
   // 1. Bank 1 (Left Deck Assembly)
-  const bank1Deck = buildSingleBankDeck({ bank: 'left', spec }, materials);
+  const bank1Deck = buildSingleBankDeck({ bank: 'left', spec }, materials, cylindersPerBank);
   group.add(bank1Deck);
 
   // 2. Bank 2 (Right Deck Assembly with 15mm stagger)
-  const bank2Deck = buildSingleBankDeck({ bank: 'right', spec }, materials);
+  const bank2Deck = buildSingleBankDeck({ bank: 'right', spec }, materials, cylindersPerBank);
   group.add(bank2Deck);
 
   return group;

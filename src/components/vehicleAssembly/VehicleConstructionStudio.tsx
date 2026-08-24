@@ -9,7 +9,7 @@
 // Step 5: 3-Column Configuration Deck (Parameters, Metallurgy Lab, Impact & Advisory)
 // ============================================================================
 
-import React from 'react';
+import React, { useState } from 'react';
 import { useVehicleConstructionStore } from '../../state/useVehicleConstructionStore';
 import { BodyTypeCarousel } from './BodyTypeCarousel';
 import { ChassisArchitectureSelector } from './ChassisArchitectureSelector';
@@ -17,11 +17,20 @@ import { ModularVehicle3DViewport } from './ModularVehicle3DViewport';
 import { VehicleAssemblyRibbon } from './VehicleAssemblyRibbon';
 import { Vehicle3ColumnDeck } from './Vehicle3ColumnDeck';
 import { ModularInteriorWorkshop } from './ModularInteriorWorkshop';
+import { ModularCarStructureWorkbench } from './ModularCarStructureWorkbench';
 import { SUBSYSTEM_STAGES } from '../../exterior3d/manifests/modularComponentManifest';
+import { CHASSIS_50_MAP } from '../../exterior3d/manifests/chassis50Manifest';
 
 export const VehicleConstructionStudio: React.FC = () => {
   const store = useVehicleConstructionStore();
   const metrics = store.getComputedMetrics();
+
+  const [showCoG, setShowCoG] = useState<boolean>(false);
+  const [showFEAStress, setShowFEAStress] = useState<boolean>(false);
+  const [showLoadVectors, setShowLoadVectors] = useState<boolean>(false);
+  const [isolatedStage, setIsolatedStage] = useState<string | null>(null);
+
+  const activeChassisDef = CHASSIS_50_MAP[store.activeChassisId] || CHASSIS_50_MAP['SEDAN_CHASSIS_01'];
 
   const handleNextStage = () => {
     const currentIndex = SUBSYSTEM_STAGES.findIndex((s) => s.stage === store.activeStage);
@@ -68,9 +77,36 @@ export const VehicleConstructionStudio: React.FC = () => {
         onToggleXRay={store.toggleXRay}
         onToggleWireframe={store.toggleWireframe}
         onToggleRotating={store.toggleRotating}
+        showCoG={showCoG}
+        showFEAStress={showFEAStress}
+        showLoadVectors={showLoadVectors}
+        isolatedStage={isolatedStage}
       />
 
-      {/* ── STEP 4: 12-STAGE ASSEMBLY RIBBON ── */}
+      {/* ── STEP 4: MODULAR CAR STRUCTURE ARCHITECTURE WORKBENCH ── */}
+      <ModularCarStructureWorkbench
+        chassis={activeChassisDef}
+        installedStages={store.installedStages}
+        materialGrades={store.materialGrades}
+        wheelbaseMm={store.wheelbaseMm}
+        trackWidthFrontMm={store.trackWidthFrontMm}
+        trackWidthRearMm={store.trackWidthRearMm}
+        rideHeightMm={store.rideHeightMm}
+        onUpdateWheelbase={store.setWheelbase}
+        onUpdateTrackWidthFront={store.setTrackWidthFront}
+        onUpdateTrackWidthRear={store.setTrackWidthRear}
+        onUpdateRideHeight={store.setRideHeight}
+        showCoG={showCoG}
+        onToggleCoG={() => setShowCoG((prev) => !prev)}
+        showFEAStress={showFEAStress}
+        onToggleFEAStress={() => setShowFEAStress((prev) => !prev)}
+        showLoadVectors={showLoadVectors}
+        onToggleLoadVectors={() => setShowLoadVectors((prev) => !prev)}
+        isolatedStage={isolatedStage}
+        onSelectIsolatedStage={setIsolatedStage}
+      />
+
+      {/* ── STEP 5: 12-STAGE ASSEMBLY RIBBON ── */}
       <VehicleAssemblyRibbon
         activeStage={store.activeStage}
         installedStages={store.installedStages}
@@ -79,7 +115,7 @@ export const VehicleConstructionStudio: React.FC = () => {
         onInstallAll={() => SUBSYSTEM_STAGES.forEach((s) => store.installStage(s.stage))}
       />
 
-      {/* ── STEP 5: 3-COLUMN CONFIGURATION DECK ── */}
+      {/* ── STEP 6: 3-COLUMN CONFIGURATION DECK ── */}
       <Vehicle3ColumnDeck
         activeStage={store.activeStage}
         installedStages={store.installedStages}
@@ -99,7 +135,7 @@ export const VehicleConstructionStudio: React.FC = () => {
         metrics={metrics}
       />
 
-      {/* ── STEP 6: DEDICATED MODULAR INTERIOR WORKSHOP (WHEN INTERIOR STAGE ACTIVE) ── */}
+      {/* ── STEP 7: DEDICATED MODULAR INTERIOR WORKSHOP (WHEN INTERIOR STAGE ACTIVE) ── */}
       {store.activeStage === 'interior_cabin' && (
         <ModularInteriorWorkshop
           activeChassisId={store.activeChassisId}

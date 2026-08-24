@@ -961,6 +961,11 @@ export interface SimResult {
     unitCost: number;
   };
 
+  // Phase 100+ Multi-Physics Extensions
+  nvhSoundOutput?: any;
+  supplyChainProcurement?: { totalCostUSD: number; effectiveUnitPriceUSD: number; tariffCostUSD: number };
+  lbmWindTunnel?: { reynoldsNumber: number; computedDownforceN: number; groundEffectSuctionGainPct: number };
+
   // Testing
   testing: {
     windTunnel: {

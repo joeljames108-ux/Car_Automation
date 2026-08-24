@@ -60,7 +60,6 @@ export const MultiViewTechnicalBlueprint: React.FC = () => {
     { id: 'SIDE_PROFILE', label: 'Side Profile View' },
     { id: 'TOP_PLAN', label: 'Top Plan View' },
     { id: 'FRONT_ELEVATION', label: 'Front Elevation' },
-    { id: 'ISOMETRIC_AXONOMETRIC', label: '30° Isometric View' },
   ];
 
   return (

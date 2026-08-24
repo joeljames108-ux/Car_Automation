@@ -31,24 +31,36 @@ export class PhotorealisticInteriorStudio {
     cockpitGroup.name = 'INTERIOR_COCKPIT_3D';
 
     // Materials
-    const leatherMat = new THREE.MeshStandardMaterial({
+    const leatherMat = new THREE.MeshPhysicalMaterial({
       color: new THREE.Color(config.primaryLeatherColorHex),
-      roughness: 0.75,
-      metalness: 0.1,
+      roughness: 0.72,
+      metalness: 0.05,
+      clearcoat: 0.15,
+      clearcoatRoughness: 0.4,
+      sheen: 0.25,
+      sheenColor: new THREE.Color(config.primaryLeatherColorHex).multiplyScalar(1.3),
+      sheenRoughness: 0.7,
+      envMapIntensity: 0.3,
     });
 
-    const carbonMat = new THREE.MeshStandardMaterial({
-      color: 0x111622,
-      roughness: 0.25,
-      metalness: 0.4,
+    const carbonMat = new THREE.MeshPhysicalMaterial({
+      color: 0x0a0e17,
+      roughness: 0.18,
+      metalness: 0.35,
+      clearcoat: config.carbonWeaveGloss,
+      clearcoatRoughness: 0.03,
+      envMapIntensity: 1.3,
     });
 
-    const screenMat = new THREE.MeshStandardMaterial({
+    const screenMat = new THREE.MeshPhysicalMaterial({
       color: 0x050811,
-      roughness: 0.1,
-      metalness: 0.9,
-      emissive: new THREE.Color(0x003366),
-      emissiveIntensity: 0.4,
+      roughness: 0.05,
+      metalness: 0.92,
+      emissive: new THREE.Color(0x004488),
+      emissiveIntensity: 0.6,
+      clearcoat: 1.0,
+      clearcoatRoughness: 0.01,
+      envMapIntensity: 1.5,
     });
 
     const ambientLightMat = new THREE.MeshBasicMaterial({

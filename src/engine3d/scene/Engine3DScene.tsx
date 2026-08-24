@@ -12,6 +12,7 @@ import * as THREE from 'three';
 import { useEngine3DStore } from '../store/useEngine3DStore';
 import { useSnapAnimationTicker } from '../animations/useSnapAnimation';
 import { ModularEngineAssembly } from './ModularEngineAssembly';
+import { PostProcessingStack } from '../postprocessing/PostProcessingStack';
 
 // ============================================================================
 // 1. STUDIO LIGHTING RIG & ENVIRONMENT
@@ -23,18 +24,18 @@ export const StudioLightingRig: React.FC = () => {
   const getPresetValues = () => {
     switch (lightingPreset) {
       case 'workshop':
-        return { keyColor: '#fef08a', keyInt: 2.2, fillInt: 0.6, rimInt: 0.8, envPreset: 'warehouse' as const };
+        return { keyColor: '#fef08a', keyInt: 3.2, fillInt: 1.6, rimInt: 1.5, envPreset: 'warehouse' as const };
       case 'showroom':
-        return { keyColor: '#ffffff', keyInt: 2.8, fillInt: 1.2, rimInt: 1.0, envPreset: 'city' as const };
+        return { keyColor: '#ffffff', keyInt: 3.6, fillInt: 2.0, rimInt: 1.8, envPreset: 'city' as const };
       case 'outdoor':
-        return { keyColor: '#ffedd5', keyInt: 3.2, fillInt: 0.9, rimInt: 0.7, envPreset: 'sunset' as const };
+        return { keyColor: '#ffedd5', keyInt: 3.8, fillInt: 1.8, rimInt: 1.4, envPreset: 'sunset' as const };
       case 'dramatic':
-        return { keyColor: '#38bdf8', keyInt: 3.5, fillInt: 0.2, rimInt: 2.0, envPreset: 'night' as const };
+        return { keyColor: '#38bdf8', keyInt: 3.8, fillInt: 1.0, rimInt: 2.5, envPreset: 'night' as const };
       case 'blueprint':
-        return { keyColor: '#06b6d4', keyInt: 1.5, fillInt: 1.5, rimInt: 0.0, envPreset: 'apartment' as const };
+        return { keyColor: '#06b6d4', keyInt: 2.2, fillInt: 2.0, rimInt: 1.0, envPreset: 'apartment' as const };
       case 'studio':
       default:
-        return { keyColor: '#ffffff', keyInt: 2.6, fillInt: 0.9, rimInt: 1.0, envPreset: 'studio' as const };
+        return { keyColor: '#ffffff', keyInt: 3.4, fillInt: 1.8, rimInt: 1.6, envPreset: 'studio' as const };
     }
   };
 
@@ -42,16 +43,16 @@ export const StudioLightingRig: React.FC = () => {
 
   return (
     <>
-      <ambientLight intensity={0.65} color="#f8fafc" />
+      <ambientLight intensity={1.2} color="#ffffff" />
 
-      {/* Key Light (Casting High-Res Soft Shadows) */}
+      {/* Key Light (Front Right Upper) */}
       <directionalLight
-        position={[2.5, 3.5, 4.0]}
+        position={[3.0, 4.0, 3.5]}
         intensity={values.keyInt}
         color={values.keyColor}
         castShadow
-        shadow-mapSize-width={2048}
-        shadow-mapSize-height={2048}
+        shadow-mapSize-width={1024}
+        shadow-mapSize-height={1024}
         shadow-camera-near={0.5}
         shadow-camera-far={15}
         shadow-camera-left={-1.5}
@@ -61,17 +62,28 @@ export const StudioLightingRig: React.FC = () => {
         shadow-bias={-0.0001}
       />
 
-      {/* Cool Fill Light */}
-      <directionalLight position={[-3.0, 1.5, 2.0]} intensity={values.fillInt} color="#bae6fd" />
+      {/* Cool Fill Light (Front Left) */}
+      <directionalLight position={[-3.5, 2.5, 2.5]} intensity={values.fillInt} color="#e0f2fe" />
 
-      {/* Warm Rim Back-Light */}
-      <directionalLight position={[0, -3.0, 3.5]} intensity={values.rimInt} color="#fde68a" />
+      {/* Warm Rim Back-Light (Rear Upper) */}
+      <directionalLight position={[-1.5, 3.0, -3.5]} intensity={values.rimInt} color="#fef08a" />
+
+      {/* Top Studio Downlight */}
+      <directionalLight position={[0, 4.5, 0]} intensity={1.4} color="#ffffff" />
+
+      {/* Bottom Ground Bounce Light (Illuminates undercuts & oil pan) */}
+      <directionalLight position={[0, -3.5, 0]} intensity={0.9} color="#e2e8f0" />
+
+      {/* Rear Flank Soft Light */}
+      <directionalLight position={[3.5, 1.5, -2.5]} intensity={1.2} color="#f8fafc" />
 
       {/* Hemisphere Ambient */}
-      <hemisphereLight args={['#ffffff', '#1e293b', 0.6]} />
+      <hemisphereLight args={['#ffffff', '#64748b', 1.1]} />
 
-      {/* HDRI Metallic Environment Map */}
-      <Environment preset={values.envPreset} />
+      {/* HDRI Metallic Environment Map (Non-blocking async load) */}
+      <Suspense fallback={null}>
+        <Environment preset={values.envPreset} environmentIntensity={1.4} />
+      </Suspense>
     </>
   );
 };
@@ -91,14 +103,17 @@ export const SceneContent: React.FC = () => {
       {/* Core Modular 3D Engine Assembly */}
       <ModularEngineAssembly />
 
+      {/* Post-Processing Overlays & Studio Highlights */}
+      <PostProcessingStack />
+
       {/* Ground Contact Shadow Plate */}
       <ContactShadows
-        position={[0, 0, -0.16]}
-        opacity={0.45}
+        position={[0, -0.12, 0]}
+        opacity={0.35}
         scale={2.4}
-        blur={2.0}
-        far={1.2}
-        resolution={1024}
+        blur={1.8}
+        far={1.0}
+        resolution={512}
         color="#0f172a"
       />
 
@@ -111,7 +126,7 @@ export const SceneContent: React.FC = () => {
         minDistance={0.4}
         maxDistance={4.5}
         maxPolarAngle={Math.PI / 2 + 0.1}
-        target={[0, 0, 0.18]}
+        target={[0, 0.10, 0]}
       />
 
       {/* 3D Coordinate Orientation Gizmo */}
@@ -140,7 +155,7 @@ export const Engine3DScene: React.FC<Engine3DSceneProps> = ({ className = 'w-ful
           alpha: true,
           powerPreference: 'high-performance',
           toneMapping: THREE.ACESFilmicToneMapping,
-          toneMappingExposure: 1.15,
+          toneMappingExposure: 1.35,
         }}
         shadows
       >

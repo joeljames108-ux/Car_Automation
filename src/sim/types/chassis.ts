@@ -170,4 +170,11 @@ export interface ChassisSimResult {
   handlingScore: number;       // 0-100
   comfortScore: number;        // 0-100
   chassisCost: number;         // $
+
+  // Advanced Structural FEA & Kinematic Extensions
+  feaVonMisesHotspotMpa?: number;
+  rollCenterHeightFrontMm?: number;
+  rollCenterHeightRearMm?: number;
+  antiDivePct?: number;
+  antiSquatPct?: number;
 }

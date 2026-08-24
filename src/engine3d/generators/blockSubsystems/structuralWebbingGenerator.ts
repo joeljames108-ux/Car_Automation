@@ -121,11 +121,17 @@ export function buildSingleEngineMountPad(
  * engine mount cradles, starter motor pocket, and sensor ports.
  */
 export function buildV12StructuralWebbingSystem(
-  materials: V12BlockMaterialPalette
+  materials: V12BlockMaterialPalette,
+  cylindersPerBank: number = 6
 ): THREE.Group {
   const group = new THREE.Group();
   group.name = '05_V12_Structural_Webbing_Mounts_Assembly';
   const spec = V12_WEBBING_SPECS;
+  const pitchM = 0.108;
+  const blockHalfLen = (cylindersPerBank * pitchM) / 2;
+  const ribCount = Math.max(3, cylindersPerBank + 1);
+  const ribSpan = (cylindersPerBank - 1) * pitchM * 0.95;
+  const ribStart = -ribSpan / 2;
 
   // ── A. Triangulated Diagonal Lattice Rib Grids (Left & Right Flanks) ──
   const ribGeo = new THREE.BoxGeometry(spec.ribThicknessM, 0.026, 0.22);
@@ -133,8 +139,8 @@ export function buildV12StructuralWebbingSystem(
   [-0.182, 0.182].forEach((wy, flankIdx) => {
     const flankName = flankIdx === 0 ? 'Left' : 'Right';
 
-    for (let r = 0; r < 7; r++) {
-      const rx = -0.28 + r * 0.095;
+    for (let r = 0; r < ribCount; r++) {
+      const rx = ribStart + r * (ribSpan / (ribCount - 1));
 
       // Positive diagonal truss rib (+26.5°)
       const ribA = new THREE.Mesh(ribGeo, materials.castAluminumBlock);
@@ -154,10 +160,7 @@ export function buildV12StructuralWebbingSystem(
     }
   });
 
-  // ── B. Chassis Engine Mount Cradles (Removed for clean flank styling) ──
-
-  // ── C. Starter Motor Clearance Pocket & Mounting Flange ──
-  // Located on the lower rear right flank clearing the flywheel ring gear
+  // ── B. Starter Motor Clearance Pocket & Mounting Flange ──
   const starterPocketGeo = new THREE.CylinderGeometry(
     spec.starterBoreRadiusM,
     spec.starterBoreRadiusM,
@@ -167,7 +170,7 @@ export function buildV12StructuralWebbingSystem(
   starterPocketGeo.rotateZ(Math.PI / 2);
   const starterPocketMesh = new THREE.Mesh(starterPocketGeo, materials.castAluminumBlock);
   starterPocketMesh.name = 'Starter_Motor_Pocket_Casting';
-  starterPocketMesh.position.set(0.29, -0.18, 0.08);
+  starterPocketMesh.position.set(blockHalfLen - 0.04, -0.18, 0.08);
   starterPocketMesh.castShadow = true;
   group.add(starterPocketMesh);
 
@@ -178,16 +181,16 @@ export function buildV12StructuralWebbingSystem(
   [-0.035, 0.035].forEach((ez, earIdx) => {
     const earMesh = new THREE.Mesh(earGeo, materials.machinedDeckSurface);
     earMesh.name = `Starter_Mount_Ear_${earIdx === 0 ? 'Top' : 'Btm'}`;
-    earMesh.position.set(0.35, -0.18, 0.08 + ez);
+    earMesh.position.set(blockHalfLen + 0.02, -0.18, 0.08 + ez);
     group.add(earMesh);
   });
 
-  // ── D. Crankshaft Position Sensor Machined Boss ──
+  // ── C. Crankshaft Position Sensor Machined Boss ──
   const crankSensorGeo = new THREE.CylinderGeometry(0.016, 0.016, 0.032, 16);
   crankSensorGeo.rotateZ(Math.PI / 2);
   const crankSensorMesh = new THREE.Mesh(crankSensorGeo, materials.machinedDeckSurface);
   crankSensorMesh.name = 'Crank_Position_Sensor_Boss';
-  crankSensorMesh.position.set(0.32, 0.16, 0.06);
+  crankSensorMesh.position.set(blockHalfLen - 0.01, 0.16, 0.06);
   crankSensorMesh.castShadow = true;
   group.add(crankSensorMesh);
 

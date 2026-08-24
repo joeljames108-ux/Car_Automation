@@ -106,7 +106,7 @@ export const ComponentPicker3D: React.FC = () => {
             placeholder="Search parts..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full bg-slate-950/80 border border-slate-800 rounded-lg px-3 py-1.5 text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:border-cyan-500/60 mb-2.5"
+            className="w-full rounded-lg px-3 py-1.5 text-xs mb-2.5 focus:outline-none" style={{backgroundColor: 'rgba(255,248,235,0.8)', border: '1px solid rgba(217,166,78,0.3)', color: '#451A03'}}
           />
 
           {/* Component List */}
@@ -121,17 +121,17 @@ export const ComponentPicker3D: React.FC = () => {
                   key={manifest.type}
                   className={`p-2.5 rounded-lg border transition-all flex items-center justify-between ${
                     isInstalled
-                      ? 'bg-emerald-950/30 border-emerald-800/40 text-emerald-200'
+                      ? 'border-amber-300/60 text-amber-800'
                       : isAvailable
-                      ? 'bg-slate-800/40 border-slate-700/50 text-slate-300 hover:bg-slate-800/80 hover:border-slate-600'
-                      : 'bg-slate-950/40 border-slate-800/50 text-slate-500 opacity-60'
+                      ? 'border-amber-200/50 text-amber-800 hover:bg-amber-100/50 hover:border-amber-300'
+                      : 'border-amber-200/30 text-amber-600 opacity-60'
                   }`}
                 >
                   <div className="truncate mr-2">
-                    <div className="text-xs font-semibold truncate text-slate-200">
+                    <div className="text-xs font-semibold truncate text-amber-900">
                       {manifest.displayName}
                     </div>
-                    <div className="text-[10px] text-slate-400 font-mono">
+                    <div className="text-[10px] font-mono" style={{color: '#92400E'}}>
                       {manifest.massKg} kg | ${manifest.costUsd.toLocaleString()}
                       {manifest.instanceCount > 1 && ` (×${manifest.instanceCount})`}
                     </div>
@@ -145,7 +145,7 @@ export const ComponentPicker3D: React.FC = () => {
                     ) : isAvailable ? (
                       <button
                         onClick={() => addComponent(manifest.type)}
-                        className="text-[11px] font-semibold bg-cyan-600 hover:bg-cyan-500 text-white px-2.5 py-1 rounded shadow transition-colors"
+                        className="text-[11px] font-semibold px-2.5 py-1 rounded shadow transition-colors" style={{backgroundColor: '#D9A64E', color: 'white'}}
                       >
                         + Install
                       </button>
@@ -164,18 +164,18 @@ export const ComponentPicker3D: React.FC = () => {
           </div>
 
           {/* Quick Action Footer */}
-          <div className="mt-3 pt-3 border-t border-slate-800 flex items-center gap-2">
+          <div className="mt-3 pt-3 flex items-center gap-2" style={{borderTop: '1px solid rgba(217,166,78,0.25)'}}>
             <button
               onClick={autoAssembleAll}
               disabled={isAutoAssembling || progress.percentage >= 100}
-              className="flex-1 py-1.5 px-3 rounded-lg text-xs font-semibold bg-gradient-to-r from-cyan-600 to-indigo-600 hover:from-cyan-500 hover:to-indigo-500 text-white disabled:opacity-50 transition-all shadow"
+              className="flex-1 py-1.5 px-3 rounded-lg text-xs font-semibold disabled:opacity-50 transition-all shadow" style={{background: 'linear-gradient(to right, #D9A64E, #C48B2A)', color: 'white'}}
             >
               {isAutoAssembling ? 'Assembling...' : 'Auto-Assemble All'}
             </button>
             <button
               onClick={resetAssembly}
               disabled={progress.installedCount === 0}
-              className="py-1.5 px-3 rounded-lg text-xs font-medium bg-slate-800 hover:bg-slate-700 text-slate-300 disabled:opacity-50 transition-colors"
+              className="py-1.5 px-3 rounded-lg text-xs font-medium disabled:opacity-50 transition-colors" style={{backgroundColor: 'rgba(255,248,235,0.8)', border: '1px solid rgba(217,166,78,0.3)', color: '#92400E'}}
             >
               Reset
             </button>
@@ -185,10 +185,10 @@ export const ComponentPicker3D: React.FC = () => {
         /* Collapsed Trigger Button */
         <button
           onClick={() => setIsOpen(true)}
-          className="bg-slate-900/90 backdrop-blur-xl border border-slate-700/70 p-2.5 rounded-xl shadow-2xl text-cyan-400 hover:text-cyan-300 flex items-center gap-2 text-xs font-bold"
+          className="backdrop-blur-xl p-2.5 rounded-xl shadow-2xl flex items-center gap-2 text-xs font-bold" style={{backgroundColor: 'rgba(255,248,235,0.95)', border: '1px solid rgba(217,166,78,0.4)', color: '#92400E'}}
         >
           <span>▶ Parts Catalog</span>
-          <span className="bg-cyan-950 text-cyan-400 px-1.5 py-0.5 rounded border border-cyan-800/60 font-mono">
+          <span className="px-1.5 py-0.5 rounded font-mono" style={{backgroundColor: 'rgba(217,166,78,0.2)', color: '#92400E', border: '1px solid rgba(217,166,78,0.4)'}}>
             {progress.installedCount}/{progress.totalCount}
           </span>
         </button>

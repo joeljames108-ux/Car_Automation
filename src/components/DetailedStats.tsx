@@ -3,6 +3,8 @@ import { Activity, Gauge, TrendingUp, Disc, Layers, Wind, DollarSign, Cpu, Table
 import { useDesign } from "../state/DesignContext";
 import { Section, StatTile } from "./ui/Controls";
 import { LineChart } from "./ui/LineChart";
+import { PowerTorqueCurveChart } from "./ui/PowerTorqueCurveChart";
+import { formatLap } from "../sim/utils/formatLap";
 import { TRACKS, ENGINE_LAYOUTS, TIRE_COMPOUNDS, CHASSIS_TYPES, SEAT_TYPES, SEAT_MATERIALS, DASHBOARD_MATERIALS, ROLL_CAGES } from "../sim/constants";
 
 export function DetailedStats() {
@@ -42,10 +44,6 @@ export function DetailedStats() {
 
 function OverviewTab() {
   const { sim } = useDesign();
-  const powerSeries = [
-    { data: sim.powerCurve.map((p) => ({ x: p.rpm, y: p.power })), color: "#22d3ee", fill: true },
-    { data: sim.powerCurve.map((p) => ({ x: p.rpm, y: p.torque })), color: "#f59e0b" },
-  ];
   return (
     <div className="space-y-4">
       <Section title="Headline Performance" icon={<Activity size={16} />}>
@@ -66,11 +64,7 @@ function OverviewTab() {
       </Section>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         <Section title="Power & Torque Curve" icon={<TrendingUp size={16} />}>
-          <LineChart series={powerSeries} xLabel="RPM" yLabel="hp / Nm" height={240} />
-          <div className="flex justify-between text-[10px] text-slate-500 mt-1">
-            <span className="flex items-center gap-1"><span className="h-2 w-3 bg-accent-400 rounded-sm" />Power</span>
-            <span className="flex items-center gap-1"><span className="h-2 w-3 bg-warn-500 rounded-sm" />Torque</span>
-          </div>
+          <PowerTorqueCurveChart powerCurve={sim.powerCurve} height={240} />
         </Section>
         <Section title="Ratings Summary" icon={<Gauge size={16} />}>
           <div className="space-y-3">
@@ -394,11 +388,4 @@ function RatingBar({ label, value, good }: { label: string; value: number; good:
   );
 }
 
-function formatLap(seconds: number): string {
-  if (seconds >= 60) {
-    const m = Math.floor(seconds / 60);
-    const s = seconds % 60;
-    return `${m}:${s.toFixed(3).padStart(6, "0")}`;
-  }
-  return `${seconds.toFixed(3)}s`;
-}
+

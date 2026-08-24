@@ -13,10 +13,10 @@ export const ExteriorComponentPicker3D: React.FC = () => {
   const startInstall = useExteriorAssemblyStore((s) => s.startInstall);
 
   return (
-    <div className="absolute top-4 right-4 z-20 w-72 max-h-96 bg-slate-900/90 border border-white/10 rounded-2xl backdrop-blur-xl p-3 shadow-2xl overflow-y-auto space-y-2">
-      <div className="flex items-center gap-2 pb-2 border-b border-white/10">
-        <Box size={14} className="text-cyan-400" />
-        <span className="text-xs font-mono font-bold text-slate-200 uppercase">
+    <div className="absolute top-4 right-4 z-20 w-72 max-h-96 rounded-2xl backdrop-blur-xl p-3 shadow-2xl overflow-y-auto space-y-2" style={{backgroundColor: 'rgba(255,248,235,0.95)', border: '1px solid rgba(217,166,78,0.4)'}}>
+      <div className="flex items-center gap-2 pb-2" style={{borderBottom: '1px solid rgba(217,166,78,0.25)'}}>
+        <Box size={14} style={{color: '#92400E'}} />
+        <span className="text-xs font-mono font-bold uppercase" style={{color: '#451A03'}}>
           3D QUICK INSTALLER
         </span>
       </div>
@@ -31,10 +31,10 @@ export const ExteriorComponentPicker3D: React.FC = () => {
               key={comp.id}
               className={`flex items-center justify-between p-2 rounded-xl border text-xs font-mono transition-all ${
                 isInstalled
-                  ? "bg-emerald-950/20 border-emerald-500/30 text-slate-300"
+                  ? "border-amber-300/40 text-amber-800"
                   : isInstallable
-                  ? "bg-slate-950/80 border-slate-700 hover:border-cyan-400 text-slate-200 cursor-pointer"
-                  : "bg-slate-950/40 border-slate-850 opacity-40 text-slate-500"
+                  ? "border-amber-200/50 hover:border-amber-400 text-amber-800 cursor-pointer"
+                  : "border-amber-200/30 opacity-40 text-amber-600"
               }`}
               onClick={() => {
                 if (!isInstalled && isInstallable) startInstall(comp.id);
@@ -44,7 +44,7 @@ export const ExteriorComponentPicker3D: React.FC = () => {
               {isInstalled ? (
                 <Check size={14} className="text-emerald-400 shrink-0" />
               ) : isInstallable ? (
-                <Plus size={14} className="text-cyan-400 shrink-0" />
+                <Plus size={14} style={{color: '#92400E'}} className="shrink-0" />
               ) : (
                 <span className="text-[10px]">🔒</span>
               )}

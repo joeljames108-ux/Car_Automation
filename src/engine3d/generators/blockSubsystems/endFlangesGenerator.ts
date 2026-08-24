@@ -55,18 +55,23 @@ export const V12_END_FLANGES_SPECS: EndFlangesSpec = {
  * Builds the complete front timing gearcase and rear transaxle bellhousing assembly.
  */
 export function buildV12EndFlangesSystem(
-  materials: V12BlockMaterialPalette
+  materials: V12BlockMaterialPalette,
+  cylindersPerBank: number = 6
 ): THREE.Group {
   const group = new THREE.Group();
   group.name = '06_V12_End_Flanges_Timing_Bellhousing_Assembly';
   const spec = V12_END_FLANGES_SPECS;
+  const pitchM = 0.108;
+  const blockHalfLen = (cylindersPerBank * pitchM) / 2;
+  const frontX = -(blockHalfLen + 0.036);
+  const rearX = blockHalfLen + 0.036;
 
   // ============================================================================
   // ── A. FRONT TIMING CHAIN CASE MATING FLANGE ──
   // ============================================================================
   const frontGroup = new THREE.Group();
   frontGroup.name = 'Front_Timing_Case_System';
-  frontGroup.position.set(-0.36, 0, 0.16);
+  frontGroup.position.set(frontX, 0, 0.16);
 
   // 1. CNC Perimeter Face Flange Plate
   const frontPlateGeo = new THREE.BoxGeometry(0.022, spec.frontFlangeWidthM, spec.frontFlangeHeightM);
@@ -121,7 +126,7 @@ export function buildV12EndFlangesSystem(
   // ============================================================================
   const rearGroup = new THREE.Group();
   rearGroup.name = 'Rear_Bellhousing_System';
-  rearGroup.position.set(0.36, 0, 0.17);
+  rearGroup.position.set(rearX, 0, 0.17);
 
   // 1. Heavy-Duty Rear Bellhousing Structural Flange Plate
   const rearPlateGeo = new THREE.BoxGeometry(0.026, spec.rearBellhousingWidthM, spec.rearBellhousingHeightM);

@@ -54,21 +54,32 @@ export class SculptedBodyPanelsGenerator {
       ? ModularBodyPanelCustomizer.createPaintMaterial(paintConfig, isXRay)
       : new THREE.MeshPhysicalMaterial({
           color: new THREE.Color(paintColorHex),
-          metalness: 0.84,
-          roughness: 0.20,
-          clearcoat: 0.98,
-          clearcoatRoughness: 0.03,
-          reflectivity: 0.96,
+          metalness: 0.88,
+          roughness: 0.12,
+          clearcoat: 1.0,
+          clearcoatRoughness: 0.01,
+          reflectivity: 1.0,
+          specularIntensity: 1.0,
+          specularColor: new THREE.Color(0xffffff),
+          envMapIntensity: 1.6,
+          sheen: 0.3,
+          sheenColor: new THREE.Color(paintColorHex).multiplyScalar(0.7),
+          sheenRoughness: 0.2,
           side: THREE.DoubleSide,
           transparent: isXRay,
           opacity: isXRay ? 0.25 : 1.0,
           depthWrite: !isXRay,
         });
 
-    const carbonAeroMaterial = new THREE.MeshStandardMaterial({
+    const carbonAeroMaterial = new THREE.MeshPhysicalMaterial({
       color: 0x090d16,
       metalness: 0.92,
-      roughness: 0.2,
+      roughness: 0.12,
+      clearcoat: 1.0,
+      clearcoatRoughness: 0.03,
+      envMapIntensity: 1.4,
+      sheen: 0.2,
+      sheenColor: new THREE.Color(0x1a1a2e),
       side: THREE.DoubleSide,
       normalMap: typeof document !== 'undefined' ? AutomotivePBRMaterialSystem.getCarbonWeaveNormalTexture() : null,
       transparent: isXRay,
@@ -82,22 +93,34 @@ export class SculptedBodyPanelsGenerator {
     });
 
     const titaniumHaloMaterial = new THREE.MeshPhysicalMaterial({
-      color: 0xcbd5e1, // Grade 5 Titanium Sheen
+      color: 0xcbd5e1,
       metalness: 0.98,
-      roughness: 0.14,
-      clearcoat: 0.6,
-      clearcoatRoughness: 0.08,
-      sheen: 0.4,
-      sheenColor: new THREE.Color('#38bdf8'),
+      roughness: 0.10,
+      clearcoat: 0.8,
+      clearcoatRoughness: 0.04,
+      envMapIntensity: 1.5,
+      sheen: 0.5,
+      sheenColor: new THREE.Color('#d4a843'),
+      sheenRoughness: 0.15,
     });
 
     const mirrorGlassMat = new THREE.MeshPhysicalMaterial({
-      color: new THREE.Color('#93c5fd'), // Electrochromic Blue Anti-Glare Reflective Tint
-      metalness: 0.98,
-      roughness: 0.02,
+      color: new THREE.Color('#c8ddf0'),
+      metalness: 0.0,
+      roughness: 0.01,
+      transmission: 0.92,
+      transparent: true,
+      opacity: 0.45,
+      ior: 1.52,
+      thickness: 0.004,
       clearcoat: 1.0,
       clearcoatRoughness: 0.01,
-      reflectivity: 0.99,
+      envMapIntensity: 2.2,
+      reflectivity: 0.95,
+      specularColor: new THREE.Color(0xffffff),
+      specularIntensity: 0.8,
+      depthWrite: false,
+      side: THREE.DoubleSide,
     });
 
     const titaniumExhaustMaterial = new THREE.MeshStandardMaterial({
@@ -106,10 +129,14 @@ export class SculptedBodyPanelsGenerator {
       roughness: 0.15,
     });
 
-    const trimGlossBlackMaterial = new THREE.MeshStandardMaterial({
+    const trimGlossBlackMaterial = new THREE.MeshPhysicalMaterial({
       color: 0x05070a,
-      metalness: 0.9,
-      roughness: 0.08,
+      metalness: 0.95,
+      roughness: 0.02,
+      clearcoat: 1.0,
+      clearcoatRoughness: 0.01,
+      envMapIntensity: 1.6,
+      specularIntensity: 1.0,
       side: THREE.DoubleSide,
     });
 
@@ -143,15 +170,21 @@ export class SculptedBodyPanelsGenerator {
     });
 
     const glassMaterial = new THREE.MeshPhysicalMaterial({
-      color: new THREE.Color('#38bdf8'),
-      metalness: 0.1,
-      roughness: 0.015,
+      color: new THREE.Color('#c8ddf0'),
+      metalness: 0.0,
+      roughness: 0.005,
       transmission: 0.96,
       transparent: true,
-      opacity: 0.58,
+      opacity: 0.38,
       ior: 1.52,
+      thickness: 0.006,
       depthWrite: false,
       side: THREE.DoubleSide,
+      clearcoat: 1.0,
+      clearcoatRoughness: 0.005,
+      envMapIntensity: 2.8,
+      specularColor: new THREE.Color(0xffffff),
+      specularIntensity: 0.7,
     });
 
     const velocityTrumpetMat = new THREE.MeshStandardMaterial({
@@ -163,8 +196,10 @@ export class SculptedBodyPanelsGenerator {
     const velocityFilterRedMat = new THREE.MeshPhysicalMaterial({
       color: 0xdc2626,
       metalness: 0.85,
-      roughness: 0.2,
-      clearcoat: 0.8,
+      roughness: 0.12,
+      clearcoat: 0.95,
+      clearcoatRoughness: 0.02,
+      envMapIntensity: 1.3,
     });
 
     // ── 2. Route to Dedicated Body Archetype Generator ──
@@ -465,11 +500,11 @@ export class SculptedBodyPanelsGenerator {
     const halfNW = noseWidth / 2; // 0.62m
 
     // ═══════════════════════════════════════════════════════════════════
-    // 1. CONTINUOUS UPPER NOSE CONE & SHARK-NOSE PROW (32 x 20 Grid)
+    // 1. CONTINUOUS UPPER NOSE CONE & SHARK-NOSE PROW (64 x 48 Grid)
     //    Spans X in [hoodLeadingX, frontNoseX], Z in [-halfNW, +halfNW]
     //    Matches hood leading edge (Y = 0.54m) at X = hoodLeadingX exactly!
     // ═══════════════════════════════════════════════════════════════════
-    const noseGeo = new THREE.PlaneGeometry(bumperLength, noseWidth, 32, 20);
+    const noseGeo = new THREE.PlaneGeometry(bumperLength, noseWidth, 64, 48);
     noseGeo.rotateX(-Math.PI / 2);
     const posN = noseGeo.attributes.position;
 
@@ -508,7 +543,7 @@ export class SculptedBodyPanelsGenerator {
     const createCheekGeo = (isLeft: boolean): THREE.BufferGeometry => {
       const cheekSpanX = frontNoseX - frontAxleX + 0.12; // ~1.00m
       const cheekHeight = 0.38;
-      const geo = new THREE.PlaneGeometry(cheekSpanX, cheekHeight, 28, 16);
+      const geo = new THREE.PlaneGeometry(cheekSpanX, cheekHeight, 64, 40);
       geo.rotateY(Math.PI / 2);
       const posC = geo.attributes.position;
 
@@ -736,7 +771,7 @@ export class SculptedBodyPanelsGenerator {
   // Cowl height at X = 0.37m is Y = 0.68m; front leading edge at X = 1.13m is Y = 0.54m.
   // Power dome rises +45mm in center. Precision boundary matching with fenders/bumper.
   // ==========================================================================
-  private static buildBlock04SculptedHoodAndSDuct(
+  public static buildBlock04SculptedHoodAndSDuct(
     frontAxleX: number,
     frontNoseX: number,
     halfTfM: number,
@@ -766,8 +801,8 @@ export class SculptedBodyPanelsGenerator {
     hoodPivot.position.set(hoodRearX, 0.68, 0);
     hoodPivot.rotation.z = hoodAngle;
 
-    // ── 1a. High-Density Parametric G2 Curvature Stamped Hood Loft (40 x 28 Grid) ──
-    const hoodGeo = new THREE.PlaneGeometry(hoodLength, hoodWidth, 40, 28);
+    // ── 1a. High-Density Parametric G2 Curvature Stamped Hood Loft (80 x 60 Grid) ──
+    const hoodGeo = new THREE.PlaneGeometry(hoodLength, hoodWidth, 80, 60);
     hoodGeo.rotateX(-Math.PI / 2);
     const pos = hoodGeo.attributes.position;
 
@@ -953,7 +988,7 @@ export class SculptedBodyPanelsGenerator {
     //    32x20 high-density parametric grid creating Class-A curvature
     // ═══════════════════════════════════════════════════════════════════
     const createFenderCrownGeo = (isLeft: boolean): THREE.BufferGeometry => {
-      const geo = new THREE.PlaneGeometry(fenderLength, crownWidth, 32, 20);
+      const geo = new THREE.PlaneGeometry(fenderLength, crownWidth, 64, 48);
       geo.rotateX(-Math.PI / 2);
       const pos = geo.attributes.position;
 
@@ -1012,7 +1047,7 @@ export class SculptedBodyPanelsGenerator {
     const createOuterFlankGeo = (isLeft: boolean): THREE.BufferGeometry => {
       const archSpan = fenderLength * 1.02;
       const flankHeight = 0.44;
-      const geo = new THREE.PlaneGeometry(archSpan, flankHeight, 30, 18);
+      const geo = new THREE.PlaneGeometry(archSpan, flankHeight, 60, 40);
       geo.rotateY(Math.PI / 2);
       const pos = geo.attributes.position;
 
@@ -1304,37 +1339,121 @@ export class SculptedBodyPanelsGenerator {
     const halfCockpitZ = cockpitWidthM / 2; // ~0.62m
     const cabinCenterX = (frontAxleX + rearAxleX) / 2;
 
-    // 1. Raked A-Pillars & Roof Cantrail Rails (Left & Right)
-    const aPillarGeo = new THREE.BoxGeometry(0.76, 0.042, 0.042);
-    const aPillarL = new THREE.Mesh(aPillarGeo, paintMat);
-    aPillarL.position.set(frontAxleX - 0.26, 0.90, -halfCockpitZ * 0.96);
-    aPillarL.rotation.z = -0.66;
-    aPillarL.rotation.y = 0.12;
-    aPillarL.castShadow = true;
+    // 1. Sculpted Curved A-Pillars & Roof Cantrail Rails (Left & Right)
+    //    Replaces box geometry with smooth catenary-arc TubeGeometry
+    const aPillarCurveL = new THREE.CatmullRomCurve3([
+      new THREE.Vector3(frontAxleX - 0.12, 0.68, -halfCockpitZ * 0.94),
+      new THREE.Vector3(frontAxleX - 0.22, 0.82, -halfCockpitZ * 0.96),
+      new THREE.Vector3(frontAxleX - 0.34, 0.98, -halfCockpitZ * 0.97),
+      new THREE.Vector3(frontAxleX - 0.46, 1.12, -halfCockpitZ * 0.96),
+    ]);
+    const aPillarGeoL = new THREE.TubeGeometry(aPillarCurveL, 24, 0.022, 12, false);
+    const aPillarLMesh = new THREE.Mesh(aPillarGeoL, paintMat);
+    aPillarLMesh.castShadow = true;
+    group.add(aPillarLMesh);
 
-    const aPillarR = aPillarL.clone();
-    aPillarR.position.z = halfCockpitZ * 0.96;
-    aPillarR.rotation.y = -0.12;
-    group.add(aPillarL, aPillarR);
+    const aPillarCurveR = new THREE.CatmullRomCurve3([
+      new THREE.Vector3(frontAxleX - 0.12, 0.68, halfCockpitZ * 0.94),
+      new THREE.Vector3(frontAxleX - 0.22, 0.82, halfCockpitZ * 0.96),
+      new THREE.Vector3(frontAxleX - 0.34, 0.98, halfCockpitZ * 0.97),
+      new THREE.Vector3(frontAxleX - 0.46, 1.12, halfCockpitZ * 0.96),
+    ]);
+    const aPillarGeoR = new THREE.TubeGeometry(aPillarCurveR, 24, 0.022, 12, false);
+    const aPillarRMesh = new THREE.Mesh(aPillarGeoR, paintMat);
+    aPillarRMesh.castShadow = true;
+    group.add(aPillarRMesh);
 
-    // Windshield Header Crossbar
-    const headerGeo = new THREE.BoxGeometry(0.045, 0.038, cockpitWidthM * 0.88);
+    // Windshield Header Crossbar (curved arc)
+    const headerCurve = new THREE.CatmullRomCurve3([
+      new THREE.Vector3(frontAxleX - 0.46, 1.12, -halfCockpitZ * 0.94),
+      new THREE.Vector3(frontAxleX - 0.48, 1.145, 0),
+      new THREE.Vector3(frontAxleX - 0.46, 1.12, halfCockpitZ * 0.94),
+    ]);
+    const headerGeo = new THREE.TubeGeometry(headerCurve, 20, 0.020, 10, false);
     const header = new THREE.Mesh(headerGeo, paintMat);
-    header.position.set(frontAxleX - 0.48, 1.13, 0);
+    header.castShadow = true;
     group.add(header);
 
-    // 2. Fastback C-Pillars (Left & Right)
-    const cPillarGeo = new THREE.BoxGeometry(0.82, 0.045, 0.045);
-    const cPillarL = new THREE.Mesh(cPillarGeo, paintMat);
-    cPillarL.position.set(rearAxleX + 0.30, 0.90, -halfCockpitZ * 0.98);
-    cPillarL.rotation.z = 0.60;
-    cPillarL.rotation.y = -0.12;
-    cPillarL.castShadow = true;
+    // Rear Header Crossbar (curved arc)
+    const rearHeaderCurve = new THREE.CatmullRomCurve3([
+      new THREE.Vector3(rearAxleX + 0.14, 1.12, -halfCockpitZ * 0.94),
+      new THREE.Vector3(rearAxleX + 0.12, 1.14, 0),
+      new THREE.Vector3(rearAxleX + 0.14, 1.12, halfCockpitZ * 0.94),
+    ]);
+    const rearHeaderGeo = new THREE.TubeGeometry(rearHeaderCurve, 20, 0.018, 10, false);
+    const rearHeader = new THREE.Mesh(rearHeaderGeo, paintMat);
+    rearHeader.castShadow = true;
+    group.add(rearHeader);
 
-    const cPillarR = cPillarL.clone();
-    cPillarR.position.z = halfCockpitZ * 0.98;
-    cPillarR.rotation.y = 0.12;
-    group.add(cPillarL, cPillarR);
+    // 2. Sculpted Curved C-Pillars (Left & Right) — flowing fastback profile
+    const cPillarCurveL = new THREE.CatmullRomCurve3([
+      new THREE.Vector3(rearAxleX + 0.14, 1.12, -halfCockpitZ * 0.95),
+      new THREE.Vector3(rearAxleX + 0.24, 0.98, -halfCockpitZ * 0.97),
+      new THREE.Vector3(rearAxleX + 0.38, 0.84, -halfCockpitZ * 0.99),
+      new THREE.Vector3(rearAxleX + 0.52, 0.70, -halfCockpitZ * 1.0),
+    ]);
+    const cPillarGeoL = new THREE.TubeGeometry(cPillarCurveL, 24, 0.022, 12, false);
+    const cPillarLMesh = new THREE.Mesh(cPillarGeoL, paintMat);
+    cPillarLMesh.castShadow = true;
+    group.add(cPillarLMesh);
+
+    const cPillarCurveR = new THREE.CatmullRomCurve3([
+      new THREE.Vector3(rearAxleX + 0.14, 1.12, halfCockpitZ * 0.95),
+      new THREE.Vector3(rearAxleX + 0.24, 0.98, halfCockpitZ * 0.97),
+      new THREE.Vector3(rearAxleX + 0.38, 0.84, halfCockpitZ * 0.99),
+      new THREE.Vector3(rearAxleX + 0.52, 0.70, halfCockpitZ * 1.0),
+    ]);
+    const cPillarGeoR = new THREE.TubeGeometry(cPillarCurveR, 24, 0.022, 12, false);
+    const cPillarRMesh = new THREE.Mesh(cPillarGeoR, paintMat);
+    cPillarRMesh.castShadow = true;
+    group.add(cPillarRMesh);
+
+    // 2b. Windshield Glass Canopy (continuous tinted glass surface)
+    const windshieldGeo = new THREE.PlaneGeometry(
+      Math.hypot(0.34, 0.44), cockpitWidthM * 0.86, 16, 20
+    );
+    windshieldGeo.rotateY(Math.PI / 2);
+    const windshieldPos = windshieldGeo.attributes.position;
+    const windshieldHalfW = Math.max(cockpitWidthM * 0.43, 0.01);
+    for (let i = 0; i < windshieldPos.count; i++) {
+      const py = windshieldPos.getY(i);
+      const pz = windshieldPos.getZ(i);
+      const h = Math.min(Math.max((py + 0.22) / 0.44, 0), 1);
+      const w = Math.min(Math.max(pz / windshieldHalfW, -1), 1);
+      const curvature = Math.cos(w * Math.PI * 0.5) * 0.04 * Math.sin(h * Math.PI);
+      if (isFinite(curvature)) {
+        windshieldPos.setX(i, windshieldPos.getX(i) + curvature);
+      }
+    }
+    windshieldGeo.computeBoundingSphere();
+    windshieldGeo.computeVertexNormals();
+    const windshield = new THREE.Mesh(windshieldGeo, glassMat);
+    windshield.position.set(frontAxleX - 0.29, 0.90, 0);
+    windshield.rotation.z = 0.52;
+    group.add(windshield);
+
+    // 2c. Rear Glass Canopy
+    const rearGlassGeo = new THREE.PlaneGeometry(
+      Math.hypot(0.38, 0.42), cockpitWidthM * 0.82, 16, 16
+    );
+    rearGlassGeo.rotateY(Math.PI / 2);
+    const rearGlassPos = rearGlassGeo.attributes.position;
+    const rearGlassHalfW = Math.max(cockpitWidthM * 0.41, 0.01);
+    for (let i = 0; i < rearGlassPos.count; i++) {
+      const py = rearGlassPos.getY(i);
+      const pz = rearGlassPos.getZ(i);
+      const w = Math.min(Math.max(pz / rearGlassHalfW, -1), 1);
+      const curvature = Math.cos(w * Math.PI * 0.5) * 0.03;
+      if (isFinite(curvature)) {
+        rearGlassPos.setX(i, rearGlassPos.getX(i) + curvature);
+      }
+    }
+    rearGlassGeo.computeBoundingSphere();
+    rearGlassGeo.computeVertexNormals();
+    const rearGlass = new THREE.Mesh(rearGlassGeo, glassMat);
+    rearGlass.position.set(rearAxleX + 0.33, 0.93, 0);
+    rearGlass.rotation.z = -0.48;
+    group.add(rearGlass);
 
     // 3. Grade-5 Titanium FIA Safety Halo Roll Hoop Structure
     const haloGeo = new THREE.TorusGeometry(0.52, 0.028, 16, 32, Math.PI);
@@ -1344,7 +1463,8 @@ export class SculptedBodyPanelsGenerator {
     group.add(halo);
 
     // 4. Flow-Through Aerodynamic Side Mirrors
-    const mirrorCapGeo = new THREE.BoxGeometry(0.16, 0.08, 0.09);
+    const mirrorCapGeo = new THREE.SphereGeometry(0.065, 16, 12);
+    mirrorCapGeo.scale(1.8, 0.85, 1.0);
     const dualStalkGeo = new THREE.CylinderGeometry(0.010, 0.010, 0.18, 12);
     const indicatorBladeGeo = new THREE.BoxGeometry(0.14, 0.008, 0.008);
     const mirrorGlassGeo = new THREE.BoxGeometry(0.008, 0.072, 0.12);
@@ -2219,24 +2339,44 @@ export class SculptedBodyPanelsGenerator {
     const doorOpenAngle = (articulation.doorOpenProgress || 0) * 0.75;
     const cabinLen = wbM * 0.76;
 
-    // Front Doors (Left & Right)
-    const doorFrontGeo = new THREE.BoxGeometry(cabinLen * 0.50, 0.46, 0.06);
-    const doorFL = new THREE.Mesh(doorFrontGeo, bodyPaintMat);
-    doorFL.position.set(midX + cabinLen * 0.24, 0.46, -bodyWidth / 2 - Math.sin(doorOpenAngle) * 0.18);
-    doorFL.rotation.y = doorOpenAngle;
+    // Sculpted Front Doors with compound curvature (20x12 vertex grid)
+    const createSedanDoorGeo = (isLeft: boolean, doorLen: number, doorH: number): THREE.BufferGeometry => {
+      const geo = new THREE.PlaneGeometry(doorLen, doorH, 20, 12);
+      geo.rotateY(Math.PI / 2);
+      const pos = geo.attributes.position;
+      for (let i = 0; i < pos.count; i++) {
+        const pz = pos.getZ(i); const py = pos.getY(i);
+        const u = (pz + doorLen / 2) / doorLen;
+        const h = (py + doorH / 2) / doorH;
+        const waistTuck = Math.sin(u * Math.PI) * 0.035;
+        const tumblehome = Math.sin(h * Math.PI) * 0.025 - Math.pow(h, 2.5) * 0.015;
+        const shoulderCrease = Math.exp(-Math.pow((h - 0.82) * 8.0, 2)) * 0.012;
+        pos.setX(i, (isLeft ? -1 : 1) * (waistTuck + tumblehome + shoulderCrease));
+      }
+      geo.computeVertexNormals();
+      return geo;
+    };
+    const frontDoorLen = cabinLen * 0.50;
+    const frontDoorH = 0.46;
+    const doorFrontL = new THREE.Mesh(createSedanDoorGeo(true, frontDoorLen, frontDoorH), bodyPaintMat);
+    doorFrontL.position.set(midX + cabinLen * 0.24, 0.46, -bodyWidth / 2 - Math.sin(doorOpenAngle) * 0.18);
+    doorFrontL.rotation.y = doorOpenAngle;
+    doorFrontL.castShadow = true;
+    const doorFrontR = new THREE.Mesh(createSedanDoorGeo(false, frontDoorLen, frontDoorH), bodyPaintMat);
+    doorFrontR.position.set(midX + cabinLen * 0.24, 0.46, bodyWidth / 2 + Math.sin(doorOpenAngle) * 0.18);
+    doorFrontR.rotation.y = -doorOpenAngle;
+    doorFrontR.castShadow = true;
+    group.add(doorFrontL, doorFrontR);
 
-    const doorFR = new THREE.Mesh(doorFrontGeo, bodyPaintMat);
-    doorFR.position.set(midX + cabinLen * 0.24, 0.46, bodyWidth / 2 + Math.sin(doorOpenAngle) * 0.18);
-    doorFR.rotation.y = -doorOpenAngle;
-    group.add(doorFL, doorFR);
-
-    // Rear Doors (Left & Right)
-    const doorRearGeo = new THREE.BoxGeometry(cabinLen * 0.46, 0.46, 0.06);
-    const doorRL = new THREE.Mesh(doorRearGeo, bodyPaintMat);
-    doorRL.position.set(midX - cabinLen * 0.22, 0.46, -bodyWidth / 2);
-    const doorRR = doorRL.clone();
-    doorRR.position.z = bodyWidth / 2;
-    group.add(doorRL, doorRR);
+    // Sculpted Rear Doors with compound curvature
+    const rearDoorLen = cabinLen * 0.46;
+    const doorRearL = new THREE.Mesh(createSedanDoorGeo(true, rearDoorLen, frontDoorH), bodyPaintMat);
+    doorRearL.position.set(midX - cabinLen * 0.22, 0.46, -bodyWidth / 2);
+    doorRearL.castShadow = true;
+    const doorRearR = new THREE.Mesh(createSedanDoorGeo(false, rearDoorLen, frontDoorH), bodyPaintMat);
+    doorRearR.position.set(midX - cabinLen * 0.22, 0.46, bodyWidth / 2);
+    doorRearR.castShadow = true;
+    group.add(doorRearL, doorRearR);
 
     // Chrome Daylight Opening (DLO) Beltline Trim
     const dloGeo = new THREE.BoxGeometry(cabinLen * 0.98, 0.015, 0.02);
@@ -2269,22 +2409,51 @@ export class SculptedBodyPanelsGenerator {
     rearGlass.rotation.z = 0.54;
     group.add(rearGlass);
 
-    // Sedan Solid Roof with Panoramic Sunroof
-    const roofGeo = new THREE.BoxGeometry(cabinLen * 0.64, 0.03, bodyWidth * 0.82);
-    const roof = new THREE.Mesh(roofGeo, bodyPaintMat);
+    // Sculpted Sedan Roof with compound curvature (20x12 grid)
+    const createSedanRoofGeo = (): THREE.BufferGeometry => {
+      const rLen = cabinLen * 0.64, rW = bodyWidth * 0.82;
+      const geo = new THREE.PlaneGeometry(rLen, rW, 20, 12);
+      geo.rotateX(-Math.PI / 2);
+      const pos = geo.attributes.position;
+      for (let i = 0; i < pos.count; i++) {
+        const px = pos.getX(i); const pz = pos.getZ(i);
+        const u = Math.abs(pz) / (rW / 2);
+        const crown = (1.0 - Math.pow(u, 2.0)) * 0.015;
+        pos.setY(i, crown);
+      }
+      geo.computeVertexNormals();
+      return geo;
+    };
+    const roof = new THREE.Mesh(createSedanRoofGeo(), bodyPaintMat);
     roof.position.set(midX, 1.02, 0);
+    roof.castShadow = true;
 
-    const sunRoofGeo = new THREE.BoxGeometry(cabinLen * 0.42, 0.035, bodyWidth * 0.58);
+    const sunRoofGeo = new THREE.PlaneGeometry(cabinLen * 0.42, bodyWidth * 0.58, 1, 1);
     const sunRoof = new THREE.Mesh(sunRoofGeo, glassMat);
+    sunRoof.rotation.x = -Math.PI / 2;
     sunRoof.position.set(0, 0.005, 0);
     roof.add(sunRoof);
     group.add(roof);
 
-    // 6. Distinct Three-Box Trunk Decklid (Rear Box)
+    // 6. Sculpted Three-Box Trunk Decklid with compound curvature
     const trunkLen = frontAxleX - wbM - rearBumperX - 0.10;
-    const trunkGeo = new THREE.BoxGeometry(trunkLen, 0.04, bodyWidth * 0.88);
-    const trunk = new THREE.Mesh(trunkGeo, bodyPaintMat);
+    const createTrunkGeo = (): THREE.BufferGeometry => {
+      const geo = new THREE.PlaneGeometry(trunkLen, bodyWidth * 0.88, 16, 10);
+      geo.rotateX(-Math.PI / 2);
+      const pos = geo.attributes.position;
+      for (let i = 0; i < pos.count; i++) {
+        const px = pos.getX(i); const pz = pos.getZ(i);
+        const u = Math.abs(pz) / (bodyWidth * 0.44);
+        const crown = (1.0 - Math.pow(u, 2.0)) * 0.012;
+        const drop = Math.pow(Math.abs(px) / (trunkLen / 2), 2.0) * 0.008;
+        pos.setY(i, crown - drop);
+      }
+      geo.computeVertexNormals();
+      return geo;
+    };
+    const trunk = new THREE.Mesh(createTrunkGeo(), bodyPaintMat);
     trunk.position.set(rearAxleX - trunkLen * 0.48, 0.70, 0);
+    trunk.castShadow = true;
 
     // Chrome Trunk Finisher Bar
     const trunkTrimGeo = new THREE.BoxGeometry(0.04, 0.02, bodyWidth * 0.72);
@@ -2293,10 +2462,24 @@ export class SculptedBodyPanelsGenerator {
     trunk.add(trunkTrim);
     group.add(trunk);
 
-    // 7. Rear Sedan Bumper with Twin Integrated Chrome Oval Exhausts
-    const rearBumperGeo = new THREE.BoxGeometry(0.36, 0.34, bodyWidth * 0.94);
-    const rearBumper = new THREE.Mesh(rearBumperGeo, bodyPaintMat);
+    // 7. Sculpted Rear Sedan Bumper with compound curvature (16x10 grid)
+    const createRearBumperGeo = (): THREE.BufferGeometry => {
+      const bLen = 0.36, bH = 0.34, bW = bodyWidth * 0.94;
+      const geo = new THREE.PlaneGeometry(bH, bW, 16, 10);
+      const pos = geo.attributes.position;
+      for (let i = 0; i < pos.count; i++) {
+        const py = pos.getY(i); const pz = pos.getZ(i);
+        const v = Math.abs(pz) / (bW / 2);
+        const wrapBack = Math.pow(v, 2.5) * 0.03;
+        pos.setX(i, py + wrapBack);
+      }
+      geo.computeVertexNormals();
+      return geo;
+    };
+    const rearBumper = new THREE.Mesh(createRearBumperGeo(), bodyPaintMat);
     rearBumper.position.set(rearBumperX + 0.18, 0.40, 0);
+    rearBumper.rotation.y = Math.PI / 2;
+    rearBumper.castShadow = true;
 
     const exhaustTipGeo = new THREE.CylinderGeometry(0.038, 0.038, 0.08, 16);
     exhaustTipGeo.rotateZ(Math.PI / 2);
@@ -2446,11 +2629,25 @@ export class SculptedBodyPanelsGenerator {
     windshield.rotation.z = -0.66;
     group.add(windshield);
 
-    // Swept Fastback Roof
-    const roofGeo = new THREE.BoxGeometry(wbM * 0.76, 0.03, bodyWidth * 0.76);
-    const roof = new THREE.Mesh(roofGeo, bodyPaintMat);
+    // Sculpted Swept Fastback Roof with compound curvature
+    const createFastbackRoofGeo = (): THREE.BufferGeometry => {
+      const rLen = wbM * 0.76, rW = bodyWidth * 0.76;
+      const geo = new THREE.PlaneGeometry(rLen, rW, 20, 12);
+      geo.rotateX(-Math.PI / 2);
+      const pos = geo.attributes.position;
+      for (let i = 0; i < pos.count; i++) {
+        const px = pos.getX(i); const pz = pos.getZ(i);
+        const u = Math.abs(pz) / (rW / 2);
+        const crown = (1.0 - Math.pow(u, 2.0)) * 0.018;
+        pos.setY(i, crown);
+      }
+      geo.computeVertexNormals();
+      return geo;
+    };
+    const roof = new THREE.Mesh(createFastbackRoofGeo(), bodyPaintMat);
     roof.position.set(midX - 0.08, 0.94, 0);
     roof.rotation.z = 0.10;
+    roof.castShadow = true;
     group.add(roof);
 
     // Fastback Rear Sloping Glass Backlite
@@ -2461,13 +2658,27 @@ export class SculptedBodyPanelsGenerator {
     fastbackGlass.rotation.z = 0.60;
     group.add(fastbackGlass);
 
-    // 6. Muscular Widebody Rear Haunches & Integrated Ducktail Spoiler
-    const haunchGeo = new THREE.BoxGeometry(0.72, 0.38, 0.16);
-    const haunchL = new THREE.Mesh(haunchGeo, bodyPaintMat);
+    // 6. Sculpted Muscular Widebody Rear Haunches
+    const createHaunchGeo = (isLeft: boolean): THREE.BufferGeometry => {
+      const geo = new THREE.PlaneGeometry(0.72, 0.38, 16, 10);
+      geo.rotateY(Math.PI / 2);
+      const pos = geo.attributes.position;
+      for (let i = 0; i < pos.count; i++) {
+        const pz = pos.getZ(i); const py = pos.getY(i);
+        const u = (pz + 0.36) / 0.72;
+        const bulge = Math.sin(u * Math.PI) * 0.04;
+        const taper = Math.pow(py / 0.19, 2) * -0.01;
+        pos.setX(i, (isLeft ? -1 : 1) * (bulge + taper));
+      }
+      geo.computeVertexNormals();
+      return geo;
+    };
+    const haunchL = new THREE.Mesh(createHaunchGeo(true), bodyPaintMat);
     haunchL.position.set(rearAxleX, 0.54, -halfTrM * 1.05);
-
-    const haunchR = haunchL.clone();
-    haunchR.position.z = halfTrM * 1.05;
+    haunchL.castShadow = true;
+    const haunchR = new THREE.Mesh(createHaunchGeo(false), bodyPaintMat);
+    haunchR.position.set(rearAxleX, 0.54, halfTrM * 1.05);
+    haunchR.castShadow = true;
     group.add(haunchL, haunchR);
 
     // Integrated Carbon Ducktail Spoiler
@@ -2477,10 +2688,22 @@ export class SculptedBodyPanelsGenerator {
     ducktail.rotation.z = -0.32;
     group.add(ducktail);
 
-    // 7. Rear Fascia with Quad Titanium Exhaust Tips & Carbon Diffuser
-    const rearBumperGeo = new THREE.BoxGeometry(0.34, 0.34, bodyWidth * 0.96);
-    const rearBumper = new THREE.Mesh(rearBumperGeo, bodyPaintMat);
+    // 7. Sculpted Rear Fascia with compound curvature
+    const createCoupeRearBumperGeo = (): THREE.BufferGeometry => {
+      const geo = new THREE.PlaneGeometry(0.34, bodyWidth * 0.96, 14, 10);
+      const pos = geo.attributes.position;
+      for (let i = 0; i < pos.count; i++) {
+        const py = pos.getY(i); const pz = pos.getZ(i);
+        const v = Math.abs(pz) / (bodyWidth * 0.48);
+        pos.setX(i, Math.pow(v, 2.5) * 0.03);
+      }
+      geo.computeVertexNormals();
+      return geo;
+    };
+    const rearBumper = new THREE.Mesh(createCoupeRearBumperGeo(), bodyPaintMat);
     rearBumper.position.set(rearBumperX + 0.16, 0.38, 0);
+    rearBumper.rotation.y = Math.PI / 2;
+    rearBumper.castShadow = true;
 
     const quadTipGeo = new THREE.CylinderGeometry(0.032, 0.032, 0.08, 16);
     quadTipGeo.rotateZ(Math.PI / 2);
@@ -2759,18 +2982,37 @@ export class SculptedBodyPanelsGenerator {
     flareRR.position.z = halfTrM * 1.04;
     group.add(flareFL, flareFR, flareRL, flareRR);
 
-    // 5. Tall 5-Door Greenhouse with Roof Rails
+    // 5. Tall 5-Door Greenhouse with Sculpted Doors & Roof Rails
     const cabinLen = wbM * 0.88;
-    const doorGeo = new THREE.BoxGeometry(cabinLen * 0.48, 0.58, 0.06);
-    const doorFL = new THREE.Mesh(doorGeo, bodyPaintMat);
-    doorFL.position.set(midX + cabinLen * 0.22, 0.58, -bodyWidth / 2);
-    const doorFR = doorFL.clone();
-    doorFR.position.z = bodyWidth / 2;
-    const doorRL = new THREE.Mesh(doorGeo, bodyPaintMat);
-    doorRL.position.set(midX - cabinLen * 0.22, 0.58, -bodyWidth / 2);
-    const doorRR = doorRL.clone();
-    doorRR.position.z = bodyWidth / 2;
-    group.add(doorFL, doorFR, doorRL, doorRR);
+    const createSUVDoorGeo = (isLeft: boolean, dLen: number, dH: number): THREE.BufferGeometry => {
+      const geo = new THREE.PlaneGeometry(dLen, dH, 18, 10);
+      geo.rotateY(Math.PI / 2);
+      const pos = geo.attributes.position;
+      for (let i = 0; i < pos.count; i++) {
+        const pz = pos.getZ(i); const py = pos.getY(i);
+        const u = (pz + dLen / 2) / dLen;
+        const h = (py + dH / 2) / dH;
+        const tuck = Math.sin(u * Math.PI) * 0.025;
+        const tumble = Math.sin(h * Math.PI) * 0.018;
+        const shoulder = Math.exp(-Math.pow((h - 0.78) * 6.0, 2)) * 0.010;
+        pos.setX(i, (isLeft ? -1 : 1) * (tuck + tumble + shoulder));
+      }
+      geo.computeVertexNormals();
+      return geo;
+    };
+    const suvDoorFL = new THREE.Mesh(createSUVDoorGeo(true, cabinLen * 0.48, 0.58), bodyPaintMat);
+    suvDoorFL.position.set(midX + cabinLen * 0.22, 0.58, -bodyWidth / 2);
+    suvDoorFL.castShadow = true;
+    const suvDoorFR = new THREE.Mesh(createSUVDoorGeo(false, cabinLen * 0.48, 0.58), bodyPaintMat);
+    suvDoorFR.position.set(midX + cabinLen * 0.22, 0.58, bodyWidth / 2);
+    suvDoorFR.castShadow = true;
+    const suvDoorRL = new THREE.Mesh(createSUVDoorGeo(true, cabinLen * 0.48, 0.58), bodyPaintMat);
+    suvDoorRL.position.set(midX - cabinLen * 0.22, 0.58, -bodyWidth / 2);
+    suvDoorRL.castShadow = true;
+    const suvDoorRR = new THREE.Mesh(createSUVDoorGeo(false, cabinLen * 0.48, 0.58), bodyPaintMat);
+    suvDoorRR.position.set(midX - cabinLen * 0.22, 0.58, bodyWidth / 2);
+    suvDoorRR.castShadow = true;
+    group.add(suvDoorFL, suvDoorFR, suvDoorRL, suvDoorRR);
 
     // Upright Windshield
     const windshieldGeo = new THREE.PlaneGeometry(0.70, bodyWidth * 0.82);
@@ -2793,10 +3035,23 @@ export class SculptedBodyPanelsGenerator {
     roof.add(railL, railR);
     group.add(roof);
 
-    // 6. Vertical Tailgate & Rear Wiper
-    const tailgateGeo = new THREE.BoxGeometry(0.06, 0.74, bodyWidth * 0.88);
-    const tailgate = new THREE.Mesh(tailgateGeo, bodyPaintMat);
+    // 6. Sculpted Vertical Tailgate with compound curvature
+    const createTailgateGeo = (): THREE.BufferGeometry => {
+      const geo = new THREE.PlaneGeometry(0.74, bodyWidth * 0.88, 12, 10);
+      const pos = geo.attributes.position;
+      for (let i = 0; i < pos.count; i++) {
+        const py = pos.getY(i); const pz = pos.getZ(i);
+        const v = Math.abs(pz) / (bodyWidth * 0.44);
+        const curvature = Math.pow(v, 2.0) * 0.02;
+        pos.setX(i, curvature);
+      }
+      geo.computeVertexNormals();
+      return geo;
+    };
+    const tailgate = new THREE.Mesh(createTailgateGeo(), bodyPaintMat);
     tailgate.position.set(rearBumperX + 0.18, 0.76, 0);
+    tailgate.rotation.y = Math.PI / 2;
+    tailgate.castShadow = true;
 
     const rearGlassGeo = new THREE.BoxGeometry(0.03, 0.36, bodyWidth * 0.78);
     const rearGlass = new THREE.Mesh(rearGlassGeo, glassMat);
@@ -2804,10 +3059,22 @@ export class SculptedBodyPanelsGenerator {
     tailgate.add(rearGlass);
     group.add(tailgate);
 
-    // 7. Rear SUV Bumper with Skid Guard & Tow Hitch
-    const rearBumperGeo = new THREE.BoxGeometry(0.38, 0.44, bodyWidth * 0.98);
-    const rearBumper = new THREE.Mesh(rearBumperGeo, bodyPaintMat);
+    // 7. Sculpted Rear SUV Bumper with compound curvature
+    const createSUVRearBumperGeo = (): THREE.BufferGeometry => {
+      const geo = new THREE.PlaneGeometry(0.44, bodyWidth * 0.98, 14, 10);
+      const pos = geo.attributes.position;
+      for (let i = 0; i < pos.count; i++) {
+        const py = pos.getY(i); const pz = pos.getZ(i);
+        const v = Math.abs(pz) / (bodyWidth * 0.49);
+        pos.setX(i, Math.pow(v, 2.5) * 0.03);
+      }
+      geo.computeVertexNormals();
+      return geo;
+    };
+    const rearBumper = new THREE.Mesh(createSUVRearBumperGeo(), bodyPaintMat);
     rearBumper.position.set(rearBumperX + 0.19, 0.46, 0);
+    rearBumper.rotation.y = Math.PI / 2;
+    rearBumper.castShadow = true;
 
     const hitchGeo = new THREE.BoxGeometry(0.12, 0.06, 0.06);
     const hitch = new THREE.Mesh(hitchGeo, trimMat);
@@ -2868,13 +3135,29 @@ export class SculptedBodyPanelsGenerator {
     hood.position.set(frontAxleX + hoodLen * 0.44, 0.86, 0);
     group.add(hood);
 
-    // 3. Truck Cab (Front Section with Vertical Rear Backlite)
+    // 3. Sculpted Truck Cab with compound curvature
     const cabLen = wbM * 0.50;
     const cabCenterX = frontAxleX - cabLen * 0.45;
 
-    const cabGeo = new THREE.BoxGeometry(cabLen, 0.64, bodyWidth * 0.92);
-    const cab = new THREE.Mesh(cabGeo, bodyPaintMat);
+    const createCabGeo = (): THREE.BufferGeometry => {
+      const geo = new THREE.PlaneGeometry(cabLen, bodyWidth * 0.92, 16, 12);
+      geo.rotateY(Math.PI / 2);
+      const pos = geo.attributes.position;
+      for (let i = 0; i < pos.count; i++) {
+        const pz = pos.getZ(i); const py = pos.getY(i);
+        const u = (pz + bodyWidth * 0.46) / (bodyWidth * 0.92);
+        const v = (py + cabLen / 2) / cabLen;
+        const tuck = Math.sin(u * Math.PI) * 0.03;
+        const roofCurve = Math.exp(-Math.pow((v - 0.85) * 5, 2)) * 0.02;
+        pos.setX(i, tuck + roofCurve);
+      }
+      geo.computeVertexNormals();
+      return geo;
+    };
+    const cab = new THREE.Mesh(createCabGeo(), bodyPaintMat);
     cab.position.set(cabCenterX, 0.64, 0);
+    cab.rotation.y = Math.PI / 2;
+    cab.castShadow = true;
     group.add(cab);
 
     // Upright Windshield
@@ -2901,12 +3184,26 @@ export class SculptedBodyPanelsGenerator {
     bedFloor.position.set(bedCenterX, 0.44, 0);
     group.add(bedFloor);
 
-    // Bed Side Walls
-    const bedWallGeo = new THREE.BoxGeometry(bedLen, 0.44, 0.05);
-    const bedWallL = new THREE.Mesh(bedWallGeo, bodyPaintMat);
+    // Sculpted Bed Side Walls with slight outward bulge
+    const createBedWallGeo = (isLeft: boolean): THREE.BufferGeometry => {
+      const geo = new THREE.PlaneGeometry(bedLen, 0.44, 14, 8);
+      geo.rotateY(Math.PI / 2);
+      const pos = geo.attributes.position;
+      for (let i = 0; i < pos.count; i++) {
+        const pz = pos.getZ(i); const py = pos.getY(i);
+        const u = (pz + bedLen / 2) / bedLen;
+        const bulge = Math.sin(u * Math.PI) * 0.012;
+        pos.setX(i, (isLeft ? -1 : 1) * bulge);
+      }
+      geo.computeVertexNormals();
+      return geo;
+    };
+    const bedWallL = new THREE.Mesh(createBedWallGeo(true), bodyPaintMat);
     bedWallL.position.set(bedCenterX, 0.66, -bodyWidth / 2);
-    const bedWallR = bedWallL.clone();
-    bedWallR.position.z = bodyWidth / 2;
+    bedWallL.castShadow = true;
+    const bedWallR = new THREE.Mesh(createBedWallGeo(false), bodyPaintMat);
+    bedWallR.position.set(bedCenterX, 0.66, bodyWidth / 2);
+    bedWallR.castShadow = true;
     group.add(bedWallL, bedWallR);
 
     // Functional Drop-Down Tailgate
@@ -3012,14 +3309,31 @@ export class SculptedBodyPanelsGenerator {
     hatchHood.castShadow = true;
     group.add(hatchHood);
 
-    // 3. 2-Box Cabin Section with Extended Roofline
+    // 3. 2-Box Cabin Section with Sculpted Doors
     const cabinLen = wbM * 0.82;
-    const doorGeo = new THREE.BoxGeometry(cabinLen * 0.48, 0.46, 0.06);
-    const doorFL = new THREE.Mesh(doorGeo, bodyPaintMat);
-    doorFL.position.set(midX + cabinLen * 0.22, 0.46, -bodyWidth / 2);
-    const doorFR = doorFL.clone();
-    doorFR.position.z = bodyWidth / 2;
-    group.add(doorFL, doorFR);
+    const createHatchDoorGeo = (isLeft: boolean): THREE.BufferGeometry => {
+      const dLen = cabinLen * 0.48, dH = 0.46;
+      const geo = new THREE.PlaneGeometry(dLen, dH, 18, 10);
+      geo.rotateY(Math.PI / 2);
+      const pos = geo.attributes.position;
+      for (let i = 0; i < pos.count; i++) {
+        const pz = pos.getZ(i); const py = pos.getY(i);
+        const u = (pz + dLen / 2) / dLen;
+        const h = (py + dH / 2) / dH;
+        const tuck = Math.sin(u * Math.PI) * 0.03;
+        const tumble = Math.sin(h * Math.PI) * 0.02 - Math.pow(h, 2.5) * 0.012;
+        pos.setX(i, (isLeft ? -1 : 1) * (tuck + tumble));
+      }
+      geo.computeVertexNormals();
+      return geo;
+    };
+    const hatchDoorFL = new THREE.Mesh(createHatchDoorGeo(true), bodyPaintMat);
+    hatchDoorFL.position.set(midX + cabinLen * 0.22, 0.46, -bodyWidth / 2);
+    hatchDoorFL.castShadow = true;
+    const hatchDoorFR = new THREE.Mesh(createHatchDoorGeo(false), bodyPaintMat);
+    hatchDoorFR.position.set(midX + cabinLen * 0.22, 0.46, bodyWidth / 2);
+    hatchDoorFR.castShadow = true;
+    group.add(hatchDoorFL, hatchDoorFR);
 
     // Windshield
     const windshieldGeo = new THREE.PlaneGeometry(0.60, bodyWidth * 0.78);
@@ -3029,10 +3343,24 @@ export class SculptedBodyPanelsGenerator {
     windshield.rotation.z = -0.58;
     group.add(windshield);
 
-    // Extended Flat Roofline (terminating at rear hatch)
-    const roofGeo = new THREE.BoxGeometry(cabinLen * 0.86, 0.03, bodyWidth * 0.80);
-    const roof = new THREE.Mesh(roofGeo, bodyPaintMat);
+    // Extended Flat Roofline with sculpted curvature
+    const createHatchRoofGeo = (): THREE.BufferGeometry => {
+      const rLen = cabinLen * 0.86, rW = bodyWidth * 0.80;
+      const geo = new THREE.PlaneGeometry(rLen, rW, 18, 10);
+      geo.rotateX(-Math.PI / 2);
+      const pos = geo.attributes.position;
+      for (let i = 0; i < pos.count; i++) {
+        const px = pos.getX(i); const pz = pos.getZ(i);
+        const u = Math.abs(pz) / (rW / 2);
+        const crown = (1.0 - Math.pow(u, 2.0)) * 0.012;
+        pos.setY(i, crown);
+      }
+      geo.computeVertexNormals();
+      return geo;
+    };
+    const roof = new THREE.Mesh(createHatchRoofGeo(), bodyPaintMat);
     roof.position.set(midX - 0.06, 0.98, 0);
+    roof.castShadow = true;
     group.add(roof);
 
     // Roof Hatch Spoiler
@@ -3056,10 +3384,22 @@ export class SculptedBodyPanelsGenerator {
     hatchDoor.position.set(rearBumperX + 0.16, 0.48, 0);
     group.add(hatchDoor);
 
-    // Rear Bumper with Twin Center Exhausts
-    const rearBumperGeo = new THREE.BoxGeometry(0.32, 0.30, bodyWidth * 0.94);
-    const rearBumper = new THREE.Mesh(rearBumperGeo, bodyPaintMat);
+    // Sculpted Rear Bumper with compound curvature
+    const createHatchBumperGeo = (): THREE.BufferGeometry => {
+      const geo = new THREE.PlaneGeometry(0.30, bodyWidth * 0.94, 14, 10);
+      const pos = geo.attributes.position;
+      for (let i = 0; i < pos.count; i++) {
+        const py = pos.getY(i); const pz = pos.getZ(i);
+        const v = Math.abs(pz) / (bodyWidth * 0.47);
+        pos.setX(i, Math.pow(v, 2.5) * 0.025);
+      }
+      geo.computeVertexNormals();
+      return geo;
+    };
+    const rearBumper = new THREE.Mesh(createHatchBumperGeo(), bodyPaintMat);
     rearBumper.position.set(rearBumperX + 0.16, 0.34, 0);
+    rearBumper.rotation.y = Math.PI / 2;
+    rearBumper.castShadow = true;
 
     const exhaustTipGeo = new THREE.CylinderGeometry(0.034, 0.034, 0.08, 16);
     exhaustTipGeo.rotateZ(Math.PI / 2);

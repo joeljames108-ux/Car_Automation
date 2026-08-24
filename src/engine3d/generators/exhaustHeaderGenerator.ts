@@ -4,14 +4,20 @@
 // Solid-modeling engineering generator for Bank 1 (Left) and Bank 2 (Right)
 // equal-length hydroformed Inconel 625 racing headers. Features 6 stepped-diameter
 // primary tubes, 12mm laser-cut port flange plate with copper locking nuts,
-// 6-into-1 pyramidal merge collector with internal flow director spike, 6 EGT
-// sensor bungs, wideband oxygen sensor boss, and quick-release CNC V-band flange.
+// 6-into-1 pyramidal merge collector with internal flow director spike, flexible
+// corrugated stainless bellows section, spring retention clips, 6 EGT sensor bungs,
+// wideband oxygen sensor boss with wiring harness, and quick-release CNC V-band flange.
 // ============================================================================
 
 import * as THREE from 'three';
 import { GLTFExporter } from 'three/examples/jsm/exporters/GLTFExporter.js';
+import type { EngineConfig } from '../../sim/types';
 import { globalMaterialLibrary } from '../materials/pbrMaterialSystem';
 import { V12_EXHAUST_ATTACHMENTS } from '../attachmentMaps/v12AttachmentMap';
+import {
+  createHexBoltHead,
+  createCorrugatedBellows,
+} from './geometryDetailUtils';
 
 // Polyfill Node.js FileReader if executing in CLI
 if (typeof globalThis !== 'undefined' && typeof (globalThis as any).FileReader === 'undefined') {
@@ -54,14 +60,29 @@ export const V12_EXHAUST_SPECS: ExhaustHeaderSpec = {
 /**
  * Builds the complete ultra-high-fidelity 3D scene graph for an Inconel exhaust header.
  */
-export function buildExhaustHeaderScene(bankSide: 'left' | 'right'): THREE.Scene {
+export function buildExhaustHeaderScene(bankSide: 'left' | 'right', configOrCyls?: Partial<EngineConfig> | number): THREE.Scene {
   const isLeft = bankSide === 'left';
   const scene = new THREE.Scene();
-  scene.name = `V12_Inconel_Exhaust_Header_${isLeft ? 'Bank1_Left' : 'Bank2_Right'}_Scene`;
+  scene.name = `Inconel_Exhaust_Header_${isLeft ? 'Bank1_Left' : 'Bank2_Right'}_Scene`;
 
   const rootGroup = new THREE.Group();
-  rootGroup.name = `07_Exhaust_Header_${isLeft ? 'Left' : 'Right'}_Master_Group`;
+  rootGroup.name = `Exhaust_Header_${isLeft ? 'Left' : 'Right'}_Master_Group`;
   scene.add(rootGroup);
+
+  let cylsPerBank = 6;
+  if (typeof configOrCyls === 'number') {
+    cylsPerBank = configOrCyls;
+  } else if (configOrCyls?.layout) {
+    const l = configOrCyls.layout;
+    cylsPerBank =
+      l === 'i3' || l === 'v6' ? 3 :
+      l === 'i4' || l === 'boxer4' || l === 'v8' ? 4 :
+      l === 'v10' ? 5 :
+      l === 'w12' ? 3 :
+      l === 'w16' ? 4 :
+      l === 'w18' ? 5 :
+      6;
+  }
 
   const matLib = globalMaterialLibrary;
   const matInconel = matLib.getInconelExhaust();
@@ -73,16 +94,21 @@ export function buildExhaustHeaderScene(bankSide: 'left' | 'right'): THREE.Scene
     roughness: 0.28,
   });
   const matSensorBillet = matLib.getNitridedCrank();
+  const matFlexBellows = matLib.getStainlessFlexBellows();
+  const matSensorWire = matLib.getBlackPolymer();
 
   const spec = V12_EXHAUST_SPECS;
-  const collectorPt = new THREE.Vector3(0.38, isLeft ? 0.08 : -0.08, -0.16);
+  const cylSpacingM = 0.100;
+  const halfSpanX = ((cylsPerBank - 1) * cylSpacingM) / 2;
+  const collectorPtX = halfSpanX + 0.12;
+  const collectorPt = new THREE.Vector3(collectorPtX, isLeft ? 0.08 : -0.08, -0.16);
 
   // ─── 1. 12MM LASER-CUT CYLINDER HEAD FLANGE PLATE & COPPER NUTS ───
   const flangeGroup = new THREE.Group();
   flangeGroup.name = 'Exhaust_Flange_Subsystem';
 
-  for (let f = 0; f < 6; f++) {
-    const cx = -0.27 + f * 0.108;
+  for (let f = 0; f < cylsPerBank; f++) {
+    const cx = -halfSpanX + f * cylSpacingM;
     const startY = isLeft ? 0.012 : -0.012;
 
     // Oval CNC Port Flange Plate
@@ -93,9 +119,9 @@ export function buildExhaustHeaderScene(bankSide: 'left' | 'right'): THREE.Scene
     portFlangeMesh.castShadow = true;
     flangeGroup.add(portFlangeMesh);
 
-    // Dual M8 Copper-Coated Locking Nuts on Flange Studs
+    // Dual M8 Copper-Coated Locking Hex Nuts on Flange Studs
     [-0.032, 0.032].forEach((nx, nIdx) => {
-      const nutGeo = new THREE.CylinderGeometry(0.0065, 0.0065, 0.012, 6);
+      const nutGeo = createHexBoltHead(0.0065, 0.012);
       nutGeo.rotateX(Math.PI / 2);
       const nutMesh = new THREE.Mesh(nutGeo, matCopperNut);
       nutMesh.name = `Exhaust_Stud_Copper_Nut_${f + 1}_${nIdx + 1}`;
@@ -106,85 +132,112 @@ export function buildExhaustHeaderScene(bankSide: 'left' | 'right'): THREE.Scene
 
   rootGroup.add(flangeGroup);
 
-  // ─── 2. 6 TRUE EQUAL-LENGTH HYDROFORMED INCONEL 625 PRIMARY TUBES ───
+  // ─── 2. TRUE EQUAL-LENGTH HYDROFORMED INCONEL 625 PRIMARY TUBES ───
   const primaryGroup = new THREE.Group();
   primaryGroup.name = 'Equal_Length_Primaries_Subsystem';
 
-  for (let i = 0; i < 6; i++) {
-    const cx = -0.27 + i * 0.108;
+  for (let i = 0; i < cylsPerBank; i++) {
+    const cx = -halfSpanX + i * cylSpacingM;
     const startY = isLeft ? 0.02 : -0.02;
     const midY = isLeft ? 0.135 : -0.135;
-    const sweepZ = -0.06 - (5 - i) * 0.012;
+    const sweepZ = -0.06 - (cylsPerBank - 1 - i) * 0.012;
 
     // Organic Equal-Length Sweep Curve
     const pipeCurve = new THREE.CatmullRomCurve3([
       new THREE.Vector3(cx, startY, 0),
       new THREE.Vector3(cx + 0.035, midY, sweepZ),
-      new THREE.Vector3(cx + (0.38 - cx) * 0.55, midY * 0.88, -0.13),
+      new THREE.Vector3(cx + (collectorPtX - cx) * 0.55, midY * 0.88, -0.13),
       collectorPt,
     ]);
 
-    const pipeGeo = new THREE.TubeGeometry(pipeCurve, 32, spec.primaryRadiusM, 20, false);
+    const pipeGeo = new THREE.TubeGeometry(pipeCurve, 48, spec.primaryRadiusM, 28, false);
     const pipeMesh = new THREE.Mesh(pipeGeo, matInconel);
     pipeMesh.name = `Inconel_Primary_Pipe_${i + 1}`;
     pipeMesh.castShadow = true;
     pipeMesh.receiveShadow = true;
     primaryGroup.add(pipeMesh);
 
-    // EGT (Exhaust Gas Temperature) Sensor Weld Bung on each primary
-    const egtBungGeo = new THREE.CylinderGeometry(0.006, 0.006, 0.014, 16);
+    // EGT Sensor Weld Bung on each primary
+    const egtBungGeo = new THREE.CylinderGeometry(0.006, 0.006, 0.014, 20);
     egtBungGeo.rotateX(isLeft ? Math.PI / 3 : -Math.PI / 3);
     const egtBungMesh = new THREE.Mesh(egtBungGeo, matSensorBillet);
     egtBungMesh.name = `EGT_Sensor_Bung_${i + 1}`;
     egtBungMesh.position.set(cx + 0.025, midY * 0.65, sweepZ + 0.015);
     primaryGroup.add(egtBungMesh);
+
+    // Stainless Spring Retention Loop on Primary Tube
+    const springLoopGeo = new THREE.TorusGeometry(spec.primaryRadiusM + 0.003, 0.0015, 8, 24);
+    springLoopGeo.rotateY(Math.PI / 2);
+    const springLoopMesh = new THREE.Mesh(springLoopGeo, matSensorBillet);
+    springLoopMesh.name = `Primary_Spring_Retainer_${i + 1}`;
+    springLoopMesh.position.set(cx + 0.035, midY, sweepZ);
+    primaryGroup.add(springLoopMesh);
   }
 
   rootGroup.add(primaryGroup);
 
-  // ─── 3. 6-INTO-1 PYRAMIDAL MERGE COLLECTOR & FLOW SPIKE ───
+  // ─── 3. PYRAMIDAL MERGE COLLECTOR & FLOW SPIKE ───
   const collectorGroup = new THREE.Group();
   collectorGroup.name = 'Merge_Collector_Flow_Spike_Subsystem';
 
   // Pyramidal High-Velocity Merge Collector Cone
-  const coneGeo = new THREE.CylinderGeometry(spec.collectorRadiusM, 0.062, 0.13, 24);
+  const coneGeo = new THREE.CylinderGeometry(spec.collectorRadiusM, 0.062, 0.13, 32);
   coneGeo.rotateZ(Math.PI / 2);
   const coneMesh = new THREE.Mesh(coneGeo, matInconel);
   coneMesh.name = 'High_Velocity_Merge_Collector_Cone';
-  coneMesh.position.set(0.445, isLeft ? 0.08 : -0.08, -0.16);
+  coneMesh.position.set(collectorPtX + 0.065, isLeft ? 0.08 : -0.08, -0.16);
   coneMesh.castShadow = true;
   collectorGroup.add(coneMesh);
 
   // Internal Directional Merge Spike (Flow Splitter)
-  const spikeGeo = new THREE.ConeGeometry(0.018, 0.045, 16);
+  const spikeGeo = new THREE.ConeGeometry(0.018, 0.045, 20);
   spikeGeo.rotateZ(-Math.PI / 2);
   const spikeMesh = new THREE.Mesh(spikeGeo, matInconel);
   spikeMesh.name = 'Internal_Merge_Pyramid_Spike';
-  spikeMesh.position.set(0.395, isLeft ? 0.08 : -0.08, -0.16);
+  spikeMesh.position.set(collectorPtX + 0.015, isLeft ? 0.08 : -0.08, -0.16);
   collectorGroup.add(spikeMesh);
 
-  // Wideband Oxygen (Lambda) Sensor Boss
-  const o2Geo = new THREE.CylinderGeometry(0.008, 0.008, 0.016, 16);
+  // Flexible Corrugated Stainless Bellows Expansion Joint
+  const bellowsGeo = createCorrugatedBellows(spec.collectorRadiusM - 0.002, spec.collectorRadiusM + 0.004, 0.045, 8);
+  bellowsGeo.rotateZ(Math.PI / 2);
+  const bellowsMesh = new THREE.Mesh(bellowsGeo, matFlexBellows);
+  bellowsMesh.name = 'Thermal_Expansion_Flex_Bellows';
+  bellowsMesh.position.set(0.48, isLeft ? 0.08 : -0.08, -0.16);
+  collectorGroup.add(bellowsMesh);
+
+  // Wideband Oxygen (Lambda) Sensor Boss & Wiring Harness
+  const o2Geo = new THREE.CylinderGeometry(0.008, 0.008, 0.016, 20);
   o2Geo.rotateZ(Math.PI / 4);
   const o2Mesh = new THREE.Mesh(o2Geo, matSensorBillet);
   o2Mesh.name = 'Wideband_O2_Sensor_Boss';
   o2Mesh.position.set(0.46, isLeft ? 0.11 : -0.11, -0.14);
   collectorGroup.add(o2Mesh);
 
+  // O2 Sensor Wire Lead Pigtail
+  const wireCurve = new THREE.CatmullRomCurve3([
+    new THREE.Vector3(0.46, isLeft ? 0.11 : -0.11, -0.14),
+    new THREE.Vector3(0.44, isLeft ? 0.14 : -0.14, -0.10),
+    new THREE.Vector3(0.38, isLeft ? 0.16 : -0.16, -0.06),
+  ]);
+  const wireGeo = new THREE.TubeGeometry(wireCurve, 16, 0.0025, 12, false);
+  const wireMesh = new THREE.Mesh(wireGeo, matSensorWire);
+  wireMesh.name = 'O2_Sensor_Shielded_Harness';
+  collectorGroup.add(wireMesh);
+
   // ─── 4. QUICK-RELEASE CNC MACHINED V-BAND COUPLING FLANGE ───
-  const vBandGeo = new THREE.TorusGeometry(spec.vBandRadiusM, 0.0085, 16, 32);
+  const vBandGeo = new THREE.TorusGeometry(spec.vBandRadiusM, 0.0085, 20, 48);
   vBandGeo.rotateY(Math.PI / 2);
   const vBandMesh = new THREE.Mesh(vBandGeo, matMachinedFlange);
   vBandMesh.name = 'QuickRelease_VBand_Exhaust_Flange';
-  vBandMesh.position.set(0.51, isLeft ? 0.08 : -0.08, -0.16);
+  vBandMesh.position.set(0.52, isLeft ? 0.08 : -0.08, -0.16);
   vBandMesh.castShadow = true;
   collectorGroup.add(vBandMesh);
 
   // V-Band Quick-Release Retention Clamp Bolt
-  const clampBoltGeo = new THREE.CylinderGeometry(0.004, 0.004, 0.024, 12);
+  const clampBoltGeo = new THREE.CylinderGeometry(0.004, 0.004, 0.024, 16);
   const clampBoltMesh = new THREE.Mesh(clampBoltGeo, matSensorBillet);
   clampBoltMesh.name = 'VBand_Clamp_Tightening_T_Bolt';
-  clampBoltMesh.position.set(0.51, isLeft ? 0.125 : -0.125, -0.16);
+  clampBoltMesh.position.set(0.52, isLeft ? 0.125 : -0.125, -0.16);
   collectorGroup.add(clampBoltMesh);
 
   rootGroup.add(collectorGroup);
@@ -233,4 +286,3 @@ export async function generateExhaustHeaderGlbBuffer(bankSide: 'left' | 'right')
 }
 
 export default buildExhaustHeaderScene;
-
