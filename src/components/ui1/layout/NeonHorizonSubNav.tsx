@@ -14,6 +14,7 @@ export interface NeonHorizonSubNavProps {
   activeStage: Stage;
   onSelectStage: (stage: Stage) => void;
   onOpenOrbitalNav?: () => void;
+  onReplayBoot?: () => void;
 }
 
 export const NeonHorizonSubNav: React.FC<NeonHorizonSubNavProps> = ({
@@ -21,6 +22,7 @@ export const NeonHorizonSubNav: React.FC<NeonHorizonSubNavProps> = ({
   activeStage,
   onSelectStage,
   onOpenOrbitalNav,
+  onReplayBoot,
 }) => {
   return (
     <nav className="sticky top-16 z-30 bg-[#0e1626]/85 backdrop-blur-xl border-b border-white/8 shadow-lg select-none">
@@ -48,19 +50,35 @@ export const NeonHorizonSubNav: React.FC<NeonHorizonSubNavProps> = ({
           })}
         </div>
 
-        {onOpenOrbitalNav && (
-          <button
-            onClick={() => {
-              playHMIClickSound();
-              onOpenOrbitalNav();
-            }}
-            className="hidden sm:flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold font-mono tracking-wider text-sky-300 bg-sky-400/10 hover:bg-sky-400/20 border border-sky-400/30 hover:border-sky-400/60 shadow-[0_0_15px_rgba(56,189,248,0.25)] transition-all cursor-pointer whitespace-nowrap shrink-0 group"
-          >
-            <Orbit size={13} className="text-sky-400 group-hover:rotate-180 transition-transform duration-500" />
-            <span>3D GLOBE NAV</span>
-          </button>
-        )}
+        <div className="flex items-center gap-2 shrink-0">
+          {onReplayBoot && (
+            <button
+              onClick={() => {
+                playHMIClickSound();
+                onReplayBoot();
+              }}
+              className="hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold font-mono tracking-wider text-fuchsia-300 bg-fuchsia-500/10 hover:bg-fuchsia-500/20 border border-fuchsia-400/30 hover:border-fuchsia-400/60 shadow-[0_0_12px_rgba(217,70,239,0.2)] transition-all cursor-pointer whitespace-nowrap"
+            >
+              <Orbit size={12} className="text-fuchsia-400 animate-spin" />
+              <span>BOOT INTRO</span>
+            </button>
+          )}
+
+          {onOpenOrbitalNav && (
+            <button
+              onClick={() => {
+                playHMIClickSound();
+                onOpenOrbitalNav();
+              }}
+              className="hidden sm:flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold font-mono tracking-wider text-sky-300 bg-sky-400/10 hover:bg-sky-400/20 border border-sky-400/30 hover:border-sky-400/60 shadow-[0_0_15px_rgba(56,189,248,0.25)] transition-all cursor-pointer whitespace-nowrap shrink-0 group"
+            >
+              <Orbit size={13} className="text-sky-400 group-hover:rotate-180 transition-transform duration-500" />
+              <span>3D GLOBE NAV</span>
+            </button>
+          )}
+        </div>
       </div>
     </nav>
   );
 };
+

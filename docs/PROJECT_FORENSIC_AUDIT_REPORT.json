@@ -1,12 +1,12 @@
 {
-  "auditTimestamp": "2026-08-25T06:31:49.459Z",
+  "auditTimestamp": "2026-08-25T06:35:58.726Z",
   "projectName": "Modular glTF Vehicle Construction System & Car Automation Simulator",
   "rootDirectory": "C:\\Users\\joelj\\Downloads\\project-bolt-sb1-a1kjcyhr (3)\\project",
-  "totalSourceFiles": 1018,
-  "totalCodeLines": 204871,
-  "totalCommentLines": 16002,
-  "totalBlankLines": 23919,
-  "totalSizeBytes": 10385650,
+  "totalSourceFiles": 1021,
+  "totalCodeLines": 205592,
+  "totalCommentLines": 16028,
+  "totalBlankLines": 24003,
+  "totalSizeBytes": 10419886,
   "subsystemBreakdown": {
     "simulation_core": {
       "fileCount": 207,
@@ -44,9 +44,9 @@
       "sizeBytes": 183893
     },
     "ui_components": {
-      "fileCount": 315,
-      "codeLines": 67912,
-      "sizeBytes": 3369689
+      "fileCount": 318,
+      "codeLines": 68633,
+      "sizeBytes": 3403925
     },
     "asset_pipeline": {
       "fileCount": 0,
@@ -65,8 +65,8 @@
     }
   },
   "dependencyGraph": {
-    "totalNodes": 1018,
-    "totalEdges": 2421,
+    "totalNodes": 1021,
+    "totalEdges": 2424,
     "directAcyclicGraphValid": true,
     "cyclicDependencyPaths": [],
     "subsystemCouplingMatrix": {
@@ -162,14 +162,14 @@
         "documentation_audit": 0
       },
       "ui_components": {
-        "simulation_core": 236,
+        "simulation_core": 238,
         "engine_assembly": 8,
         "modular_vehicle": 13,
         "exterior_3d": 10,
         "rendering_engine": 10,
         "state_management": 145,
         "ai_agent_framework": 11,
-        "ui_components": 779,
+        "ui_components": 780,
         "asset_pipeline": 0,
         "testing_verification": 0,
         "documentation_audit": 0
@@ -310,7 +310,7 @@
       },
       {
         "modulePath": "src/utils/hmiSoundSynth.ts",
-        "inDegree": 80,
+        "inDegree": 82,
         "outDegree": 0
       },
       {
@@ -380,7 +380,7 @@
       },
       {
         "modulePath": "src/components/ui1/interactive/NeonHorizonSoundEngine.ts",
-        "inDegree": 32,
+        "inDegree": 33,
         "outDegree": 0
       },
       {
@@ -1839,11 +1839,11 @@
       },
       {
         "filePath": "src/components/ui1/layout/NeonHorizonShell.tsx",
-        "lineCount": 569
+        "lineCount": 591
       },
       {
         "filePath": "src/components/ui1/spatial/MasterSpatialNavGlobe.tsx",
-        "lineCount": 908
+        "lineCount": 974
       },
       {
         "filePath": "src/components/ui1/stages/NeonAeroLab.tsx",

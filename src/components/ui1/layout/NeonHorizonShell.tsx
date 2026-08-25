@@ -166,6 +166,9 @@ export function NeonHorizonShell() {
   const [orbitalNavOpen, setOrbitalNavOpen] = useState(false);
   const [spatialNavExpanded, setSpatialNavExpanded] = useState(false);
   const [heroHudVisible, setHeroHudVisible] = useState(true);
+  const [bootIntroOpen, setBootIntroOpen] = useState(false);
+  const [blueprintOpen, setBlueprintOpen] = useState(false);
+  const [isEngineeringMode, setIsEngineeringMode] = useState(false);
 
   const { design, sim, updateEngine, resetDesign, units, setUnits } = useDesign();
   const { company, advanceAllSystems } = useCompany();
@@ -238,6 +241,7 @@ export function NeonHorizonShell() {
         activeStage={stage}
         onSelectStage={handleStageSelect}
         onOpenOrbitalNav={() => setOrbitalNavOpen(true)}
+        onReplayBoot={() => setBootIntroOpen(true)}
       />
 
       {/* 4. Main Futuristic Viewport Body */}
@@ -361,6 +365,15 @@ export function NeonHorizonShell() {
             </div>
           );
         })()}
+
+        {/* Cinematic Engineering Operating System HUD */}
+        <CinematicEngineeringHUD
+          enginePowerHp={sim.peakPower}
+          engineTorqueNm={sim.peakTorque}
+          isEngineeringMode={isEngineeringMode}
+          onToggleEngineeringMode={() => setIsEngineeringMode(!isEngineeringMode)}
+          onOpenBlueprint={() => setBlueprintOpen(true)}
+        />
 
         {/* Hero 3D HUD (Rendered when in command or vehicle view) */}
         {(stage === "command" || stage === "vehicle" || stage === "aero") && (
@@ -536,6 +549,15 @@ export function NeonHorizonShell() {
       <ApexAIFloatingButton onOpenStudio={() => handleStageSelect("ai")} />
 
       {/* 8. Overlays & Dialogs */}
+      {bootIntroOpen && (
+        <CinematicGlobeBootSequence onComplete={() => setBootIntroOpen(false)} />
+      )}
+
+      <CinematicBlueprintXRayOverlay
+        isOpen={blueprintOpen}
+        onClose={() => setBlueprintOpen(false)}
+      />
+
       <NeonHorizonOrbitalStageNavigator
         isOpen={orbitalNavOpen}
         onClose={() => setOrbitalNavOpen(false)}

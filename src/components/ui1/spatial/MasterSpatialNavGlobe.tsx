@@ -17,6 +17,7 @@ import {
   Flame,
   Trophy,
   Bot,
+  Lock,
 } from "lucide-react";
 import { Stage } from "../../StageSwitcher";
 import { playSubsystemEngageSound, playHologramScanSound } from "../interactive/NeonHorizonSoundEngine";
@@ -182,6 +183,8 @@ interface Star {
   r: number;
   spd: number;
   ph: number;
+  vx: number;
+  vy: number;
 }
 
 interface Ripple {
@@ -198,6 +201,14 @@ interface Meteor {
   dx: number;
   dy: number;
   t0: number;
+}
+
+interface WarpLine {
+  angle: number;
+  length: number;
+  speed: number;
+  dist: number;
+  hue: number;
 }
 
 export const MasterSpatialNavGlobe: React.FC<MasterSpatialNavGlobeProps> = ({
@@ -233,7 +244,10 @@ export const MasterSpatialNavGlobe: React.FC<MasterSpatialNavGlobeProps> = ({
   const ripples = useRef<Ripple[]>([]);
   const meteor = useRef<Meteor>({ active: false, x: 0, y: 0, dx: 0, dy: 0, t0: 0 });
   const stars = useRef<Star[]>([]);
+  const warpLines = useRef<WarpLine[]>([]);
   const isTransitioning = useRef(false);
+  const isWarping = useRef(false);
+  const lockRingAngle = useRef({ r1: 0, r2: 0, r3: 0 });
 
   const activeRef = useRef(activeStage);
   activeRef.current = activeStage;
@@ -247,6 +261,20 @@ export const MasterSpatialNavGlobe: React.FC<MasterSpatialNavGlobeProps> = ({
   useEffect(() => {
     const a = angleOf(activeStage);
     const st = orbit.current;
+    const dist = Math.abs(shortestAngleDelta(st.ry, -a.lng)) + Math.abs(st.trx - a.lat);
+
+    if (dist > 75) {
+      isWarping.current = true;
+      // Generate warp streak lines
+      warpLines.current = Array.from({ length: 48 }, () => ({
+        angle: Math.random() * Math.PI * 2,
+        length: 20 + Math.random() * 60,
+        speed: 12 + Math.random() * 18,
+        dist: 40 + Math.random() * 80,
+        hue: (hueCur.current + (Math.random() - 0.5) * 60) % 360,
+      }));
+    }
+
     st.trx = a.lat;
     st.try_ = -a.lng;
     isTransitioning.current = true;
@@ -280,12 +308,14 @@ export const MasterSpatialNavGlobe: React.FC<MasterSpatialNavGlobeProps> = ({
       if (ctx) ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
       if (stars.current.length === 0) {
-        stars.current = Array.from({ length: 160 }, (_, i) => ({
+        stars.current = Array.from({ length: 180 }, (_, i) => ({
           x: Math.random(),
           y: Math.random(),
           r: 0.35 + Math.random() * 1.3,
           spd: 0.0005 + Math.random() * 0.002,
           ph: i * 1.6,
+          vx: 0,
+          vy: 0,
         }));
       }
     });
@@ -368,7 +398,7 @@ export const MasterSpatialNavGlobe: React.FC<MasterSpatialNavGlobeProps> = ({
     };
   }, [onSelectStage]);
 
-  // Main 60 FPS animation loop with physical spring settling & overshoot
+  // Main 60 FPS animation loop with spring settling, gravitational pull & mechanical locking
   useEffect(() => {
     let raf = 0;
     let t = 0;
@@ -384,6 +414,11 @@ export const MasterSpatialNavGlobe: React.FC<MasterSpatialNavGlobeProps> = ({
 
       st.ry += dRy * springK;
       st.rx += dRx * springK;
+
+      // Mechanical Locking Rings rotation
+      lockRingAngle.current.r1 += isTransitioning.current ? 0.04 : 0.005;
+      lockRingAngle.current.r2 -= isTransitioning.current ? 0.06 : 0.007;
+      lockRingAngle.current.r3 += isTransitioning.current ? 0.08 : 0.009;
 
       // Ambient idle continuous rotation when unattended
       const idleMs = performance.now() - lastInteract.current;
@@ -406,6 +441,7 @@ export const MasterSpatialNavGlobe: React.FC<MasterSpatialNavGlobeProps> = ({
       const arrived = remAng < 1.6 && !drag.current.on;
       if (arrived) {
         isTransitioning.current = false;
+        isWarping.current = false;
       }
 
       // Arrival shockwave trigger
@@ -431,21 +467,78 @@ export const MasterSpatialNavGlobe: React.FC<MasterSpatialNavGlobeProps> = ({
         const cy = h / 2;
         const R = Math.min(w, h) / 2 - 28;
 
-        // 1. Starfield background
+        // Gravitational Target Calculation
+        let gravX = cx;
+        let gravY = cy;
+        let hasGrav = false;
+        if (hoveredSectorId) {
+          const hSec = SPATIAL_SECTORS.find((x) => x.id === hoveredSectorId);
+          if (hSec) {
+            const hp3 = project(hSec.lat, hSec.lng, rx, ry);
+            gravX = cx + hp3.x * R;
+            gravY = cy - hp3.y * R;
+            hasGrav = true;
+          }
+        }
+
+        // 1. Starfield background with gravitational bending
         ctx.save();
         ctx.translate(cx, cy);
         ctx.rotate(Math.sin(t * 0.00004) * 0.12);
         for (let i = 0; i < stars.current.length; i++) {
           const s = stars.current[i];
+          let sx = (s.x - 0.5) * w;
+          let sy = (s.y - 0.5) * h;
+
+          // Gravitational attraction vector
+          if (hasGrav) {
+            const gdx = gravX - cx - sx;
+            const gdy = gravY - cy - sy;
+            const distSq = gdx * gdx + gdy * gdy + 1000;
+            const force = 350 / distSq;
+            s.vx = s.vx * 0.9 + gdx * force * 0.15;
+            s.vy = s.vy * 0.9 + gdy * force * 0.15;
+            sx += s.vx;
+            sy += s.vy;
+          } else {
+            s.vx *= 0.95;
+            s.vy *= 0.95;
+          }
+
           const tw = 0.25 + 0.35 * Math.abs(Math.sin(t * s.spd + s.ph));
           ctx.fillStyle = `rgba(191,219,254,${tw.toFixed(3)})`;
           ctx.beginPath();
-          ctx.arc((s.x - 0.5) * w, (s.y - 0.5) * h, s.r, 0, Math.PI * 2);
+          ctx.arc(sx, sy, s.r, 0, Math.PI * 2);
           ctx.fill();
         }
         ctx.restore();
 
-        // 2. Shooting Meteor
+        // 2. Interstellar Space Warp Streak Lines (During fast navigation jumps)
+        if (isWarping.current && warpLines.current.length > 0) {
+          ctx.save();
+          ctx.translate(cx, cy);
+          for (const wl of warpLines.current) {
+            wl.dist += wl.speed;
+            if (wl.dist > R * 2.2) wl.dist = R * 0.3;
+            const wx1 = Math.cos(wl.angle) * wl.dist;
+            const wy1 = Math.sin(wl.angle) * wl.dist;
+            const wx2 = Math.cos(wl.angle) * (wl.dist + wl.length);
+            const wy2 = Math.sin(wl.angle) * (wl.dist + wl.length);
+
+            const wGrad = ctx.createLinearGradient(wx1, wy1, wx2, wy2);
+            wGrad.addColorStop(0, `hsla(${wl.hue}, 100%, 80%, 0)`);
+            wGrad.addColorStop(1, `hsla(${wl.hue}, 100%, 80%, 0.8)`);
+            ctx.strokeStyle = wGrad;
+            ctx.lineWidth = 1.8;
+            ctx.beginPath();
+            ctx.moveTo(wx1, wy1);
+            ctx.lineTo(wx2, wy2);
+            ctx.stroke();
+          }
+          ctx.restore();
+        }
+
+        // 3. Shooting Meteor
         if (!meteor.current.active && Math.random() < 0.004) {
           const fromLeft = Math.random() > 0.5;
           meteor.current = {
@@ -481,7 +574,7 @@ export const MasterSpatialNavGlobe: React.FC<MasterSpatialNavGlobeProps> = ({
           }
         }
 
-        // 3. Planetary Atmospheric Outer Glow
+        // 4. Planetary Atmospheric Outer Glow
         const atmosGrad = ctx.createRadialGradient(cx, cy, R * 0.8, cx, cy, R * 1.26);
         atmosGrad.addColorStop(0, `hsla(${hue}, 95%, 65%, 0.14)`);
         atmosGrad.addColorStop(0.5, `hsla(${hue}, 90%, 55%, 0.06)`);
@@ -491,7 +584,7 @@ export const MasterSpatialNavGlobe: React.FC<MasterSpatialNavGlobeProps> = ({
         ctx.arc(cx, cy, R * 1.26, 0, Math.PI * 2);
         ctx.fill();
 
-        // 4. 3D Wireframe Spherical Grid & Geodesic Arcs
+        // 5. 3D Wireframe Spherical Grid & Geodesic Arcs
         ctx.lineWidth = 1;
         const drawPolyline = (
           pts: { sx: number; sy: number; z: number }[],
@@ -537,78 +630,41 @@ export const MasterSpatialNavGlobe: React.FC<MasterSpatialNavGlobeProps> = ({
           drawPolyline(sample((i) => -86 + (i * 172) / 44, () => lng, 44), lng % 90 === 0 ? 0.18 : 0.08);
         }
 
-        // 5. Great-Circle Geodesic Pathways Between Sectors
-        for (let i = 0; i < SPATIAL_SECTORS.length; i++) {
-          for (let j = i + 1; j < SPATIAL_SECTORS.length; j++) {
-            const tA = SPATIAL_SECTORS[i];
-            const tB = SPATIAL_SECTORS[j];
-            const arcSteps = 16;
-            const arcPts: { sx: number; sy: number; z: number }[] = [];
-            for (let s = 0; s <= arcSteps; s++) {
-              const u = s / arcSteps;
-              const sLat = tA.lat + (tB.lat - tA.lat) * u;
-              const sLng = tA.lng + (tB.lng - tA.lng) * u;
-              const p3 = project(sLat, sLng, rx, ry);
-              arcPts.push({ sx: cx + p3.x * R, sy: cy - p3.y * R, z: p3.z });
-            }
-            ctx.setLineDash([2, 6]);
-            drawPolyline(arcPts, 0.11);
-            ctx.setLineDash([]);
-          }
-        }
-
-        // 6. Horizon Limb Glow Ring
-        ctx.globalAlpha = 0.45;
-        ctx.strokeStyle = `hsl(${hue}, 92%, 70%)`;
-        ctx.lineWidth = 1.6;
-        ctx.beginPath();
-        ctx.arc(cx, cy, R, 0, Math.PI * 2);
-        ctx.stroke();
-
-        ctx.globalAlpha = 0.12;
-        ctx.lineWidth = 10;
-        ctx.beginPath();
-        ctx.arc(cx, cy, R + 4, 0, Math.PI * 2);
-        ctx.stroke();
-        ctx.globalAlpha = 1;
-
-        // 7. Equatorial Satellite Orbit
-        const orbA = t * 0.0009 + 2.1;
-        const orbRx = R * 1.28;
-        const orbRy = R * 0.36;
-        const orbCy = cy - R * 0.12;
-        ctx.strokeStyle = `hsla(${hue}, 60%, 75%, 0.15)`;
-        ctx.setLineDash([2, 5]);
-        ctx.lineWidth = 1;
-        ctx.beginPath();
-        ctx.ellipse(cx, orbCy, orbRx, orbRy, 0, 0, Math.PI * 2);
-        ctx.stroke();
-        ctx.setLineDash([]);
-
-        const satX = cx + Math.cos(orbA) * orbRx;
-        const satY = orbCy + Math.sin(orbA) * orbRy;
-        const sg = ctx.createRadialGradient(satX, satY, 0, satX, satY, 8);
-        sg.addColorStop(0, "rgba(226,232,240,0.95)");
-        sg.addColorStop(1, "rgba(226,232,240,0)");
-        ctx.fillStyle = sg;
-        ctx.beginPath();
-        ctx.arc(satX, satY, 8, 0, Math.PI * 2);
-        ctx.fill();
-
-        // 8. Dynamic Radar Scan Sweep
+        // 6. 3-Ring Concentric Counter-Rotating Mechanical Locking Rings
         ctx.save();
         ctx.translate(cx, cy);
-        ctx.rotate(t * 0.0005);
-        ctx.strokeStyle = `hsla(${(hue + 45) % 360}, 92%, 74%, 0.42)`;
-        ctx.setLineDash([3, 10]);
-        ctx.lineWidth = 1.2;
+
+        // Ring 1 (Outer Segmented Lock Ring)
+        ctx.rotate(lockRingAngle.current.r1);
+        ctx.strokeStyle = `hsla(${hue}, 90%, 75%, 0.35)`;
+        ctx.lineWidth = 1.4;
+        ctx.setLineDash([12, 18, 4, 18]);
         ctx.beginPath();
-        ctx.arc(0, 0, R + 18, 0, Math.PI * 2);
+        ctx.arc(0, 0, R + 14, 0, Math.PI * 2);
         ctx.stroke();
+
+        // Ring 2 (Middle Precision Caliper Ring)
+        ctx.rotate(lockRingAngle.current.r2);
+        ctx.strokeStyle = `hsla(${(hue + 30) % 360}, 95%, 70%, 0.25)`;
+        ctx.lineWidth = 1.2;
+        ctx.setLineDash([8, 12]);
+        ctx.beginPath();
+        ctx.arc(0, 0, R + 22, 0, Math.PI * 2);
+        ctx.stroke();
+
+        // Ring 3 (Inner Magnetic Ring)
+        ctx.rotate(lockRingAngle.current.r3);
+        ctx.strokeStyle = `hsla(${(hue + 60) % 360}, 100%, 80%, ${arrived ? 0.6 : 0.2})`;
+        ctx.lineWidth = arrived ? 2 : 1;
+        ctx.setLineDash([4, 8]);
+        ctx.beginPath();
+        ctx.arc(0, 0, R + 6, 0, Math.PI * 2);
+        ctx.stroke();
+
         ctx.restore();
         ctx.setLineDash([]);
 
-        // 9. Surface Normal Laser Beacons & Sector Pillars
+        // 7. Surface Normal Laser Beacons & Floating Satellite Pods
         for (const sec of SPATIAL_SECTORS) {
           const p3 = project(sec.lat, sec.lng, rx, ry);
           if (p3.z < -0.25) continue;
@@ -620,7 +676,7 @@ export const MasterSpatialNavGlobe: React.FC<MasterSpatialNavGlobeProps> = ({
 
           // Outward light pillar along surface normal
           if (p3.z > 0.08) {
-            const beamLen = (isActive ? 46 : 24) * (0.8 + 0.2 * p3.z);
+            const beamLen = (isActive ? 48 : 24) * (0.8 + 0.2 * p3.z);
             const bx = sx + p3.x * beamLen;
             const by = sy - p3.y * beamLen;
             const beamGrad = ctx.createLinearGradient(sx, sy, bx, by);
@@ -632,6 +688,15 @@ export const MasterSpatialNavGlobe: React.FC<MasterSpatialNavGlobeProps> = ({
             ctx.moveTo(sx, sy);
             ctx.lineTo(bx, by);
             ctx.stroke();
+
+            // Satellite Pod at tip of beam
+            const podGrad = ctx.createRadialGradient(bx, by, 0, bx, by, isActive ? 6 : 3.5);
+            podGrad.addColorStop(0, `hsl(${nHue}, 100%, 90%)`);
+            podGrad.addColorStop(1, `hsl(${nHue}, 90%, 50%)`);
+            ctx.fillStyle = podGrad;
+            ctx.beginPath();
+            ctx.arc(bx, by, isActive ? 4 : 2.5, 0, Math.PI * 2);
+            ctx.fill();
           }
 
           // Proximity Scaling Core
@@ -660,7 +725,7 @@ export const MasterSpatialNavGlobe: React.FC<MasterSpatialNavGlobeProps> = ({
           }
         }
 
-        // 10. Arrival Shockwaves
+        // 8. Arrival Shockwaves
         ripples.current = ripples.current.filter((rp) => t - rp.t0 < 750);
         for (const rp of ripples.current) {
           const age = (t - rp.t0) / 750;
@@ -670,16 +735,6 @@ export const MasterSpatialNavGlobe: React.FC<MasterSpatialNavGlobeProps> = ({
           ctx.arc(rp.sx, rp.sy, 6 + age * 56, 0, Math.PI * 2);
           ctx.stroke();
         }
-
-        // 11. Center Holographic Aim Reticle
-        ctx.strokeStyle = "rgba(148,197,255,0.08)";
-        ctx.lineWidth = 1;
-        ctx.beginPath();
-        ctx.moveTo(cx - R - 20, cy);
-        ctx.lineTo(cx + R + 20, cy);
-        ctx.moveTo(cx, cy - R - 20);
-        ctx.lineTo(cx, cy + R + 20);
-        ctx.stroke();
       }
 
       // DOM Markers on Globe Surface
@@ -704,9 +759,11 @@ export const MasterSpatialNavGlobe: React.FC<MasterSpatialNavGlobeProps> = ({
         readoutRef.current.textContent = `LAT ${(((rx % 360) + 540) % 360 - 180).toFixed(1)}°  LON ${lon.toFixed(1)}°`;
       }
       if (statusRef.current) {
-        statusRef.current.textContent = arrived ? "TARGET LOCKED" : "ORBITING · ROTATING";
+        statusRef.current.textContent = arrived ? "LOCKED & ALIGNED" : isWarping.current ? "WARP SPEED JUMP" : "ORBITING · ROTATING";
         statusRef.current.style.color = arrived
           ? `hsl(${hue}, 95%, 76%)`
+          : isWarping.current
+          ? "#f43f5e"
           : "rgba(148,197,255,0.65)";
       }
 
@@ -803,12 +860,21 @@ export const MasterSpatialNavGlobe: React.FC<MasterSpatialNavGlobeProps> = ({
                 {/* Status Footer Pill */}
                 <div className="mt-2 pt-1.5 border-t border-white/[0.06] flex items-center justify-between z-10">
                   <span
-                    className="text-[9px] font-mono tracking-widest uppercase font-bold"
+                    className="text-[9px] font-mono tracking-widest uppercase font-bold flex items-center gap-1"
                     style={{
                       color: isActive ? `hsl(${nHue} 95% 75%)` : "#64748b",
                     }}
                   >
-                    {isActive ? "● LOCKED · ACTIVE" : isHovered ? "ROTATE GLOBE →" : "STANDBY"}
+                    {isActive ? (
+                      <>
+                        <Lock size={10} className="text-emerald-400" />
+                        <span>LOCKED & ALIGNED</span>
+                      </>
+                    ) : isHovered ? (
+                      "ENGAGE WARP →"
+                    ) : (
+                      "ORBIT STANDBY"
+                    )}
                   </span>
 
                   <ArrowRight
@@ -839,7 +905,7 @@ export const MasterSpatialNavGlobe: React.FC<MasterSpatialNavGlobeProps> = ({
 
         {/* HUD Telemetry Overlays */}
         <span className={`${cornerCls} top-2.5 left-3.5 flex items-center gap-1.5 text-sky-300/60`}>
-          <Navigation size={10} /> 3D SPATIAL NAV · DRAG TO EXPLORE
+          <Navigation size={10} /> 3D SPATIAL NAV · SATELLITE ORBIT
         </span>
         <span ref={readoutRef} className={`${cornerCls} bottom-2.5 left-3.5 text-sky-300/60`} />
         <span
