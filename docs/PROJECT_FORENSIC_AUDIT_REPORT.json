@@ -1,17 +1,17 @@
 {
-  "auditTimestamp": "2026-08-24T19:36:02.858Z",
+  "auditTimestamp": "2026-08-25T06:04:07.202Z",
   "projectName": "Modular glTF Vehicle Construction System & Car Automation Simulator",
   "rootDirectory": "C:\\Users\\joelj\\Downloads\\project-bolt-sb1-a1kjcyhr (3)\\project",
-  "totalSourceFiles": 1016,
-  "totalCodeLines": 202272,
-  "totalCommentLines": 15910,
-  "totalBlankLines": 23709,
-  "totalSizeBytes": 10265892,
+  "totalSourceFiles": 1014,
+  "totalCodeLines": 202559,
+  "totalCommentLines": 15949,
+  "totalBlankLines": 23735,
+  "totalSizeBytes": 10284332,
   "subsystemBreakdown": {
     "simulation_core": {
       "fileCount": 207,
-      "codeLines": 39941,
-      "sizeBytes": 2265045
+      "codeLines": 39944,
+      "sizeBytes": 2266097
     },
     "engine_assembly": {
       "fileCount": 58,
@@ -35,8 +35,8 @@
     },
     "state_management": {
       "fileCount": 27,
-      "codeLines": 6600,
-      "sizeBytes": 279718
+      "codeLines": 6612,
+      "sizeBytes": 280703
     },
     "ai_agent_framework": {
       "fileCount": 36,
@@ -45,8 +45,8 @@
     },
     "ui_components": {
       "fileCount": 311,
-      "codeLines": 65775,
-      "sizeBytes": 3275173
+      "codeLines": 66010,
+      "sizeBytes": 3288230
     },
     "asset_pipeline": {
       "fileCount": 0,
@@ -54,9 +54,9 @@
       "sizeBytes": 0
     },
     "testing_verification": {
-      "fileCount": 59,
-      "codeLines": 8377,
-      "sizeBytes": 428376
+      "fileCount": 57,
+      "codeLines": 8414,
+      "sizeBytes": 431722
     },
     "documentation_audit": {
       "fileCount": 10,
@@ -65,8 +65,8 @@
     }
   },
   "dependencyGraph": {
-    "totalNodes": 1016,
-    "totalEdges": 2407,
+    "totalNodes": 1014,
+    "totalEdges": 2408,
     "directAcyclicGraphValid": true,
     "cyclicDependencyPaths": [],
     "subsystemCouplingMatrix": {
@@ -162,7 +162,7 @@
         "documentation_audit": 0
       },
       "ui_components": {
-        "simulation_core": 231,
+        "simulation_core": 233,
         "engine_assembly": 8,
         "modular_vehicle": 13,
         "exterior_3d": 10,
@@ -188,12 +188,12 @@
         "documentation_audit": 0
       },
       "testing_verification": {
-        "simulation_core": 186,
+        "simulation_core": 184,
         "engine_assembly": 7,
         "modular_vehicle": 10,
         "exterior_3d": 89,
         "rendering_engine": 0,
-        "state_management": 8,
+        "state_management": 9,
         "ai_agent_framework": 8,
         "ui_components": 2,
         "asset_pipeline": 0,
@@ -224,7 +224,6 @@
       "src/components/assembly/telemetry/CombustionDynoHUD.tsx",
       "src/components/assembly/telemetry/EVBatteryThermalAnalytics.tsx",
       "src/components/assembly/telemetry/TransmissionDynoTelemetry.tsx",
-      "src/components/hypercar/benchmark/RealCar100BenchmarkStudio.tsx",
       "src/components/interior/MaterialSwatchWall.tsx",
       "src/components/motorsport/FiaHomologationPanel.tsx",
       "src/components/ui/ComparisonDeltaTile.tsx",
@@ -880,6 +879,11 @@
         "outDegree": 8
       },
       {
+        "modulePath": "src/sim/masterVehicleState/masterVehicleStateEngine.ts",
+        "inDegree": 6,
+        "outDegree": 3
+      },
+      {
         "modulePath": "src/sim/tires/pacejkaTireModel.ts",
         "inDegree": 9,
         "outDegree": 0
@@ -928,11 +932,6 @@
         "modulePath": "src/sim/exteriorAssemblyTypes.ts",
         "inDegree": 8,
         "outDegree": 0
-      },
-      {
-        "modulePath": "src/sim/masterVehicleState/masterVehicleStateEngine.ts",
-        "inDegree": 5,
-        "outDegree": 3
       },
       {
         "modulePath": "src/sim/masterVehicleState/masterVehicleTypes.ts",
@@ -1045,11 +1044,6 @@
         "outDegree": 0
       },
       {
-        "modulePath": "src/sim/benchmarks/realWorldSportsCar100Dataset.ts",
-        "inDegree": 5,
-        "outDegree": 0
-      },
-      {
         "modulePath": "src/sim/drivetrain/activeAwdTransferCaseSolver.ts",
         "inDegree": 5,
         "outDegree": 0
@@ -1121,6 +1115,11 @@
       },
       {
         "modulePath": "src/sim/suspension/dualChamberAirSuspensionSolver.ts",
+        "inDegree": 5,
+        "outDegree": 0
+      },
+      {
+        "modulePath": "src/sim/track/circuitLapTimeSimulator.ts",
         "inDegree": 5,
         "outDegree": 0
       },
@@ -1640,7 +1639,6 @@
       "src/components/assembly/telemetry/CombustionDynoHUD.tsx",
       "src/components/assembly/telemetry/EVBatteryThermalAnalytics.tsx",
       "src/components/assembly/telemetry/TransmissionDynoTelemetry.tsx",
-      "src/components/hypercar/benchmark/RealCar100BenchmarkStudio.tsx",
       "src/components/interior/MaterialSwatchWall.tsx",
       "src/components/motorsport/FiaHomologationPanel.tsx",
       "src/components/ui/ComparisonDeltaTile.tsx",
@@ -2031,7 +2029,7 @@
       },
       {
         "filePath": "src/sim/masterVehicleState/masterVehicleStateEngine.ts",
-        "lineCount": 927
+        "lineCount": 941
       },
       {
         "filePath": "src/sim/modularVehicle/generateRearCarGlb.ts",
@@ -2082,13 +2080,13 @@
         "lineCount": 865
       }
     ],
-    "missingTypeAnnotationCount": 287,
+    "missingTypeAnnotationCount": 285,
     "todoCommentCount": 0,
     "fixmeCommentCount": 0,
-    "testCoverageRatioPct": 18,
+    "testCoverageRatioPct": 17,
     "recommendations": [
       "Modularize 92 monolithic files (>500 lines) into focused subsystem domain modules.",
-      "Replace 287 loose 'any' type annotations with strict TypeScript generic/interface types.",
+      "Replace 285 loose 'any' type annotations with strict TypeScript generic/interface types.",
       "Maintain 100% deterministic transform snap repeatability across all 36 chassis sockets.",
       "Ensure all 3D assets implement strict level of detail (LOD 1-6) polygon and texture budgets."
     ]
