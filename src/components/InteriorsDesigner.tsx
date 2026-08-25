@@ -13,7 +13,6 @@ import { Sofa, Palette, Volume2, Snowflake, Shield, Gauge, Sparkles, Armchair, E
 import { useDesign } from '../state/DesignContext';
 import { Section, Slider, Select, ChoiceGrid, Toggle, StatTile } from './ui/Controls';
 import { SEAT_TYPES, SEAT_MATERIALS, DASHBOARD_MATERIALS, STEERING_WHEEL_TYPES, STEERING_MATERIALS, PEDAL_SETS, SHIFT_KNOBS, ROLL_CAGES } from '../sim/constants';
-import { RealisticDashboardPreview } from './ui/RealisticDashboardPreview';
 import { Interior3DViewport } from './interior/Interior3DViewport';
 import { InteriorStudioWorkbench } from './interior/InteriorStudioWorkbench';
 import { ModularInteriorStudio } from './interior/ModularInteriorStudio';
@@ -269,24 +268,6 @@ export function InteriorsDesigner() {
                 <Toggle label="Navigation" value={i.hasNav} onChange={(v) => updateInterior({ hasNav: v })} />
                 <Toggle label="Premium Audio" value={i.hasPremiumAudio} onChange={(v) => updateInterior({ hasPremiumAudio: v })} />
                 <Toggle label="Climate Control" value={i.climateControl} onChange={(v) => updateInterior({ climateControl: v })} />
-              </div>
-            </Section>
-
-            <Section title="Colors & Dashboard Preview" icon={<Palette size={16} />}>
-              <div className="grid grid-cols-2 gap-3">
-                <div>
-                  <label className="label-mono mb-1.5 block">Interior Color</label>
-                  <input type="color" value={i.interiorColor} onChange={(e) => updateInterior({ interiorColor: e.target.value })} className="w-full h-10 rounded-lg bg-base-850 border border-base-700 cursor-pointer" />
-                </div>
-                <div>
-                  <label className="label-mono mb-1.5 block">Accent Color</label>
-                  <input type="color" value={i.accentColor} onChange={(e) => updateInterior({ accentColor: e.target.value })} className="w-full h-10 rounded-lg bg-base-850 border border-base-700 cursor-pointer" />
-                </div>
-              </div>
-
-              {/* Realistic 2D Dashboard Cross-Section Preview */}
-              <div className="mt-4">
-                <RealisticDashboardPreview interior={i} />
               </div>
             </Section>
           </div>

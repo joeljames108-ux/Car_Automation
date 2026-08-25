@@ -85,7 +85,23 @@ export function buildExhaustHeaderScene(bankSide: 'left' | 'right', configOrCyls
   }
 
   const matLib = globalMaterialLibrary;
-  const matInconel = matLib.getInconelExhaust();
+  const exhaustKey = (configOrCyls as any)?.exhaustFinish || (configOrCyls as any)?.finish;
+  let matPrimaryExhaust = matLib.getTitaniumBlued(); // Default to stunning heat-blued titanium
+  if (exhaustKey === 'inconel_gold' || exhaustKey === 'inconel') {
+    matPrimaryExhaust = matLib.getInconelExhaust();
+  } else if (exhaustKey === 'ceramic_white') {
+    matPrimaryExhaust = matLib.getCeramicIntake();
+  } else if (exhaustKey === 'stealth_black') {
+    matPrimaryExhaust = matLib.getStealthBlackCeramic();
+  } else if (exhaustKey === 'polished_stainless' || exhaustKey === 'chrome') {
+    matPrimaryExhaust = matLib.getPolishedChrome();
+  } else if (exhaustKey === 'dyno_glow') {
+    matPrimaryExhaust = matLib.getDynoGlowExhaust();
+  } else if (exhaustKey === 'titanium_blued') {
+    matPrimaryExhaust = matLib.getTitaniumBlued();
+  }
+
+  const matInconel = matPrimaryExhaust;
   const matMachinedFlange = matLib.getMachinedBillet();
   const matCopperNut = new THREE.MeshStandardMaterial({
     name: 'Copper_Exhaust_Flange_Nut',
@@ -98,15 +114,15 @@ export function buildExhaustHeaderScene(bankSide: 'left' | 'right', configOrCyls
   const matSensorWire = matLib.getBlackPolymer();
   const matHeatTintPurple = new THREE.MeshStandardMaterial({
     name: 'Exhaust_Heat_Tint_Purple_Bronze_Zone',
-    color: new THREE.Color(0x7d5474),
-    metalness: 0.90,
-    roughness: 0.30,
+    color: new THREE.Color(0x7c3aed),
+    metalness: 0.94,
+    roughness: 0.18,
   });
   const matHeatTintStraw = new THREE.MeshStandardMaterial({
     name: 'Exhaust_Heat_Tint_Straw_Bronze_Zone',
-    color: new THREE.Color(0xb0703c),
-    metalness: 0.90,
-    roughness: 0.26,
+    color: new THREE.Color(0xd97706),
+    metalness: 0.92,
+    roughness: 0.20,
   });
 
   const spec = V12_EXHAUST_SPECS;

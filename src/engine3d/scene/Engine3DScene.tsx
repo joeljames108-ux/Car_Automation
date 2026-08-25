@@ -1,8 +1,8 @@
 // ============================================================================
-// MODULAR GLB ENGINE ASSEMBLY — REACT THREE FIBER SCENE CONTAINER
+// MODULAR GLB ENGINE ASSEMBLY — REACT THREE FIBER SCENE CONTAINER (OPTIMIZED)
 // ============================================================================
-// Master 3D viewport canvas featuring transparent alpha blending matching the
-// app's luxury glassmorphic studio theme, studio lighting, and smooth OrbitControls.
+// Master 3D viewport canvas featuring adaptive DPR clamping, high-performance
+// WebGL power preferences, static contact shadow caching, and studio lighting.
 // ============================================================================
 
 import React, { Suspense, useRef } from 'react';
@@ -54,7 +54,7 @@ export const StudioLightingRig: React.FC = () => {
         shadow-mapSize-width={1024}
         shadow-mapSize-height={1024}
         shadow-camera-near={0.5}
-        shadow-camera-far={15}
+        shadow-camera-far={12}
         shadow-camera-left={-1.5}
         shadow-camera-right={1.5}
         shadow-camera-top={1.5}
@@ -106,14 +106,15 @@ export const SceneContent: React.FC = () => {
       {/* Post-Processing Overlays & Studio Highlights */}
       <PostProcessingStack />
 
-      {/* Ground Contact Shadow Plate */}
+      {/* Ground Contact Shadow Plate (Cached 1-Frame Texture Bake) */}
       <ContactShadows
         position={[0, -0.12, 0]}
         opacity={0.35}
         scale={2.4}
         blur={1.8}
         far={1.0}
-        resolution={512}
+        resolution={256}
+        frames={1}
         color="#0f172a"
       />
 
@@ -150,6 +151,8 @@ export const Engine3DScene: React.FC<Engine3DSceneProps> = ({ className = 'w-ful
     <div className={`relative bg-transparent select-none overflow-hidden ${className}`}>
       <Canvas
         camera={{ position: [1.4, 1.2, 0.9], fov: 42, near: 0.05, far: 50 }}
+        dpr={[1, 1.5]}
+        performance={{ min: 0.5 }}
         gl={{
           antialias: true,
           alpha: true,
@@ -167,4 +170,4 @@ export const Engine3DScene: React.FC<Engine3DSceneProps> = ({ className = 'w-ful
   );
 };
 
-export default Engine3DScene;
+export default React.memo(Engine3DScene);

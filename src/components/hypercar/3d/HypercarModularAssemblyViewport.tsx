@@ -6,13 +6,13 @@
 // department isolation, and physical part snapping.
 // ============================================================================
 
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { useHypercarAssemblyStore } from "../../../sim/hypercar/state/hypercarAssemblyStore";
 import { HYPERCAR_SOCKET_ANCHORS, type HypercarSocketId } from "../../../sim/hypercar/modular/hypercarSockets";
 import { HypercarComponentRegistry } from "../../../sim/hypercar/modular/hypercarComponentRegistry";
-import { Layers, Eye, Maximize2, Sparkles, Sliders } from "lucide-react";
+import { Layers, Eye, Maximize2, Sparkles, Sliders, Wind, Camera } from "lucide-react";
 
 export const HypercarModularAssemblyViewport: React.FC = () => {
   const mountRef = useRef<HTMLDivElement>(null);
@@ -22,6 +22,13 @@ export const HypercarModularAssemblyViewport: React.FC = () => {
   const controlsRef = useRef<OrbitControls | null>(null);
   const meshMapRef = useRef<Map<HypercarSocketId, THREE.Group>>(new Map());
   const hotspotsGroupRef = useRef<THREE.Group>(new THREE.Group());
+  const streamlinesRef = useRef<THREE.Points | null>(null);
+
+  const [showAeroStreamlines, setShowAeroStreamlines] = useState(false);
+  const showAeroStreamlinesRef = useRef(false);
+  showAeroStreamlinesRef.current = showAeroStreamlines;
+
+  const [cameraPreset, setCameraPresetState] = useState<"iso" | "mgu" | "cockpit" | "hybrid" | "rear">("iso");
 
   const {
     installedMap,
@@ -68,34 +75,32 @@ export const HypercarModularAssemblyViewport: React.FC = () => {
     controls.enableDamping = true;
     controls.dampingFactor = 0.05;
     controls.maxPolarAngle = Math.PI / 2 + 0.05;
-    controls.minDistance = 1.5;
-    controls.maxDistance = 14.0;
-    controls.target.set(0, 0.45, 1.55); // Center on Hypercar midpoint
+    controls.target.set(0, 0.35, 1.6);
     controlsRef.current = controls;
 
-    // Lighting
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
+    // Workshop Grid Floor
+    const grid = new THREE.GridHelper(24, 48, 0xf59e0b, 0x1f2937);
+    grid.position.y = -0.001;
+    scene.add(grid);
+
+    // Studio Lighting
+    const ambientLight = new THREE.AmbientLight(0xffffff, 1.4);
     scene.add(ambientLight);
 
-    const keyLight = new THREE.DirectionalLight(0xffffff, 2.5);
-    keyLight.position.set(6, 8, 7);
+    const keyLight = new THREE.DirectionalLight(0xffffff, 2.8);
+    keyLight.position.set(6, 9, 6);
     keyLight.castShadow = true;
     keyLight.shadow.mapSize.width = 2048;
     keyLight.shadow.mapSize.height = 2048;
     scene.add(keyLight);
 
-    const rimLight = new THREE.DirectionalLight(0x38bdf8, 2.2); // Cyan rim light
+    const rimLight = new THREE.DirectionalLight(0xf59e0b, 2.2);
     rimLight.position.set(-6, 5, -5);
     scene.add(rimLight);
 
-    const amberFill = new THREE.DirectionalLight(0xf59e0b, 1.2); // Endurance gold
-    amberFill.position.set(0, -2, 0);
-    scene.add(amberFill);
-
-    // Floor Grid & Shadow Plane
-    const grid = new THREE.GridHelper(12, 24, 0x0284c7, 0x1e293b);
-    grid.position.y = 0;
-    scene.add(grid);
+    const cyanUnderglow = new THREE.DirectionalLight(0x06b6d4, 1.2);
+    cyanUnderglow.position.set(0, -3, 0);
+    scene.add(cyanUnderglow);
 
     const shadowPlaneGeo = new THREE.PlaneGeometry(10, 10);
     const shadowPlaneMat = new THREE.ShadowMaterial({ opacity: 0.45 });
@@ -104,6 +109,28 @@ export const HypercarModularAssemblyViewport: React.FC = () => {
     shadowPlane.position.y = 0.001;
     shadowPlane.receiveShadow = true;
     scene.add(shadowPlane);
+
+    // CFD Aerodynamic Streamline Particles
+    const streamlineCount = 150;
+    const streamlineGeo = new THREE.BufferGeometry();
+    const streamlinePos = new Float32Array(streamlineCount * 3);
+    for (let i = 0; i < streamlineCount; i++) {
+      streamlinePos[i * 3 + 0] = (Math.random() - 0.5) * 2.0;
+      streamlinePos[i * 3 + 1] = 0.05 + Math.random() * 0.9;
+      streamlinePos[i * 3 + 2] = -2.8 + Math.random() * 6.5;
+    }
+    streamlineGeo.setAttribute("position", new THREE.BufferAttribute(streamlinePos, 3));
+    const streamlineMat = new THREE.PointsMaterial({
+      color: 0xf59e0b,
+      size: 0.045,
+      transparent: true,
+      opacity: 0.75,
+      blending: THREE.AdditiveBlending,
+    });
+    const streamlines = new THREE.Points(streamlineGeo, streamlineMat);
+    streamlines.visible = false;
+    scene.add(streamlines);
+    streamlinesRef.current = streamlines;
 
     scene.add(hotspotsGroupRef.current);
 
@@ -148,6 +175,23 @@ export const HypercarModularAssemblyViewport: React.FC = () => {
         }
       });
 
+      // Streamline Flow Animation
+      if (streamlinesRef.current && showAeroStreamlinesRef.current) {
+        streamlinesRef.current.visible = true;
+        const posArr = streamlinesRef.current.geometry.attributes.position.array as Float32Array;
+        for (let i = 0; i < streamlineCount; i++) {
+          posArr[i * 3 + 2] += 0.07; // Move rearward
+          if (posArr[i * 3 + 2] > 4.2) {
+            posArr[i * 3 + 2] = -2.8;
+            posArr[i * 3 + 0] = (Math.random() - 0.5) * 2.0;
+            posArr[i * 3 + 1] = 0.05 + Math.random() * 0.9;
+          }
+        }
+        streamlinesRef.current.geometry.attributes.position.needsUpdate = true;
+      } else if (streamlinesRef.current) {
+        streamlinesRef.current.visible = false;
+      }
+
       renderer.render(scene, camera);
     };
     animate();
@@ -160,14 +204,27 @@ export const HypercarModularAssemblyViewport: React.FC = () => {
       camera.updateProjectionMatrix();
       renderer.setSize(w, h);
     };
+
     window.addEventListener("resize", handleResize);
+    const resizeObserver = new ResizeObserver(() => {
+      handleResize();
+    });
+    resizeObserver.observe(container);
+
+    // Initial stabilization timers
+    requestAnimationFrame(handleResize);
+    const initTimer = setTimeout(handleResize, 60);
 
     return () => {
-      cancelAnimationFrame(animId);
+      clearTimeout(initTimer);
+      resizeObserver.disconnect();
       window.removeEventListener("resize", handleResize);
       renderer.domElement.removeEventListener("click", handleClick);
-      container.removeChild(renderer.domElement);
+      cancelAnimationFrame(animId);
       renderer.dispose();
+      if (container.contains(renderer.domElement)) {
+        container.removeChild(renderer.domElement);
+      }
     };
   }, []);
 
@@ -248,13 +305,38 @@ export const HypercarModularAssemblyViewport: React.FC = () => {
     snapAnimationProgress,
   ]);
 
+  const handleCameraPreset = (preset: "iso" | "mgu" | "cockpit" | "hybrid" | "rear") => {
+    setCameraPresetState(preset);
+    if (!cameraRef.current || !controlsRef.current) return;
+    const cam = cameraRef.current;
+    const ctrl = controlsRef.current;
+
+    if (preset === "iso") {
+      cam.position.set(4.5, 2.4, 5.0);
+      ctrl.target.set(0, 0.35, 1.6);
+    } else if (preset === "mgu") {
+      cam.position.set(0, 0.65, -2.4);
+      ctrl.target.set(0, 0.35, -0.8);
+    } else if (preset === "cockpit") {
+      cam.position.set(0, 0.95, 0.6);
+      ctrl.target.set(0, 0.6, -1.0);
+    } else if (preset === "hybrid") {
+      cam.position.set(1.8, 1.4, 2.0);
+      ctrl.target.set(0, 0.4, 1.8);
+    } else if (preset === "rear") {
+      cam.position.set(0, 0.8, 4.8);
+      ctrl.target.set(0, 0.45, 3.2);
+    }
+    ctrl.update();
+  };
+
   return (
     <div className="relative w-full h-full bg-[#08090d] select-none overflow-hidden">
       {/* 3D Canvas Mount */}
       <div ref={mountRef} className="w-full h-full cursor-grab active:cursor-grabbing" />
 
       {/* Top Viewport Controls Bar */}
-      <div className="absolute top-4 left-4 right-4 flex items-center justify-between pointer-events-none">
+      <div className="absolute top-4 left-4 right-4 flex items-center justify-between pointer-events-none z-10">
         <div className="flex items-center gap-2 pointer-events-auto bg-black/70 backdrop-blur-md px-3 py-1.5 rounded-xl border border-white/10 text-xs">
           <span className="font-bold text-amber-400 uppercase tracking-wider flex items-center gap-1.5">
             <Sparkles className="w-3.5 h-3.5" />
@@ -264,13 +346,37 @@ export const HypercarModularAssemblyViewport: React.FC = () => {
           <span className="text-[11px] text-zinc-400">Click mesh or pulsing rings to snap components</span>
         </div>
 
+        {/* Camera Presets Bar */}
+        <div className="flex items-center gap-1 pointer-events-auto bg-black/70 backdrop-blur-md px-2.5 py-1 rounded-xl border border-white/10 text-[10px] font-bold">
+          <Camera className="w-3.5 h-3.5 text-zinc-400 mr-1" />
+          {[
+            { id: "iso", label: "ISO 3D" },
+            { id: "mgu", label: "Front MGU" },
+            { id: "cockpit", label: "Cockpit Tub" },
+            { id: "hybrid", label: "Battery & ICE" },
+            { id: "rear", label: "Rear Wing" },
+          ].map((v) => (
+            <button
+              key={v.id}
+              onClick={() => handleCameraPreset(v.id as any)}
+              className={`px-2 py-0.5 rounded transition-all cursor-pointer ${
+                cameraPreset === v.id
+                  ? "bg-amber-500/30 border border-amber-400/50 text-amber-300"
+                  : "text-zinc-400 hover:text-white"
+              }`}
+            >
+              {v.label}
+            </button>
+          ))}
+        </div>
+
         {/* System Isolation Modes */}
         <div className="flex items-center gap-1 pointer-events-auto bg-black/70 backdrop-blur-md p-1 rounded-xl border border-white/10 text-[11px] font-bold">
           {(["ALL", "BODYWORK", "AERO", "HYBRID_POWERTRAIN", "COOLING", "SUSPENSION", "WHEELS"] as const).map((mode) => (
             <button
               key={mode}
               onClick={() => setSystemIsolationMode(mode)}
-              className={`px-2.5 py-1 rounded-lg transition-all ${
+              className={`px-2.5 py-1 rounded-lg transition-all cursor-pointer ${
                 systemIsolationMode === mode
                   ? "bg-amber-500 text-black shadow-md shadow-amber-500/20"
                   : "text-zinc-400 hover:text-white"
@@ -283,12 +389,12 @@ export const HypercarModularAssemblyViewport: React.FC = () => {
       </div>
 
       {/* Bottom Floating Controls */}
-      <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between pointer-events-none">
+      <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between pointer-events-none z-10">
         {/* Toggles */}
         <div className="flex items-center gap-2 pointer-events-auto bg-black/70 backdrop-blur-md p-1.5 rounded-xl border border-white/10">
           <button
             onClick={toggleXrayMode}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
               xrayMode ? "bg-cyan-500/20 text-cyan-300 border border-cyan-500/40" : "text-zinc-400 hover:text-white"
             }`}
           >
@@ -297,7 +403,7 @@ export const HypercarModularAssemblyViewport: React.FC = () => {
           </button>
           <button
             onClick={toggleAttachmentHotspots}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
               showAttachmentHotspots
                 ? "bg-amber-500/20 text-amber-300 border border-amber-500/40"
                 : "text-zinc-400 hover:text-white"
@@ -305,6 +411,17 @@ export const HypercarModularAssemblyViewport: React.FC = () => {
           >
             <Layers className="w-3.5 h-3.5" />
             Hotspot Rings
+          </button>
+          <button
+            onClick={() => setShowAeroStreamlines(!showAeroStreamlines)}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+              showAeroStreamlines
+                ? "bg-amber-400 text-black shadow-sm"
+                : "text-zinc-400 hover:text-white"
+            }`}
+          >
+            <Wind className="w-3.5 h-3.5" />
+            CFD Flow
           </button>
         </div>
 

@@ -29,6 +29,7 @@ import {
   Check,
   ChevronRight,
   TrendingUp,
+  Scale,
 } from "lucide-react";
 import { useDesign } from "../state/DesignContext";
 import { Section, Slider, Select, ChoiceGrid, Toggle, StatTile } from "./ui/Controls";
@@ -89,11 +90,9 @@ import { playHMIClickSound, playHMITabSound } from "../utils/hmiSoundSynth";
 import { useVehicleAssemblyStore } from "../state/useVehicleAssemblyStore";
 import { VehicleCompletionModal } from "./vehicleAssembly/VehicleCompletionModal";
 import { ExteriorDesignerIntegration } from "./vehicleAssembly/exterior/ExteriorDesignerIntegration";
-import { VehicleConstructionStudio } from "./vehicleAssembly/VehicleConstructionStudio";
 import { MasterVehicleStudio } from "./vehicleAssembly/MasterVehicleStudio";
 import { VehicleComparisonStudio } from "./vehicleAssembly/VehicleComparisonStudio";
 import { GrandAutomotiveStudioHub } from "./GrandAutomotiveStudioHub";
-import { SuspensionMasterStudio } from "./chassis/SuspensionMasterStudio";
 import { AerodynamicsStudio } from "./aerodynamics/AerodynamicsStudio";
 import { WindTunnelAeroStudio } from "./aerodynamics/WindTunnelAeroStudio";
 import { CFDView } from "./ui/CFDView";
@@ -102,7 +101,6 @@ import { ModularLinearAssemblyStudio } from "./vehicleAssembly/ModularLinearAsse
 
 export type VehicleStudioSubTab =
   | "linear_assembly"
-  | "chassis_dynamics"
   | "exterior"
   | "aero"
   | "suite_and_benchmark";
@@ -121,8 +119,8 @@ type AeroDept =
   | "sidepod"
   | "diffuser"
   | "underbody"
-  | "active"
   | "rearwing"
+  | "active"
   | "cooling"
   | "wheel"
   | "mirror"
@@ -165,7 +163,6 @@ export function VehicleDesigner({ initialSubTab = "linear_assembly" }: VehicleDe
   const [activeTab, setActiveTab] = useState<VehicleStudioSubTab>(initialSubTab);
 
   // Sub-view selectors for consolidated studios
-  const [chassisViewMode, setChassisViewMode] = useState<"chassis_arch" | "suspension_3d" | "drivetrain_params">("chassis_arch");
   const [exteriorViewMode, setExteriorViewMode] = useState<"paint_and_styling" | "biw_assembly">("paint_and_styling");
   const [aeroViewMode, setAeroViewMode] = useState<"studio_3d" | "cfd_windtunnel" | "research_depts">("studio_3d");
   const [suiteViewMode, setSuiteViewMode] = useState<"benchmark_ab" | "grand_suite">("benchmark_ab");
@@ -202,15 +199,9 @@ export function VehicleDesigner({ initialSubTab = "linear_assembly" }: VehicleDe
   const tabsConfig = [
     {
       id: "linear_assembly" as const,
-      label: "LINEAR ASSEMBLY & CAD",
+      label: "UNIFIED LINEAR ASSEMBLY & VEHICLE ENGINEERING",
       icon: <Wrench size={14} />,
-      badge: "12 STAGES • CAD",
-    },
-    {
-      id: "chassis_dynamics" as const,
-      label: "CHASSIS, SUSPENSION & DRIVETRAIN",
-      icon: <Car size={14} />,
-      badge: "50 TYPES • KINEMATICS",
+      badge: "12 STAGES • 50 TYPES • KINEMATICS",
     },
     {
       id: "exterior" as const,
@@ -251,12 +242,11 @@ export function VehicleDesigner({ initialSubTab = "linear_assembly" }: VehicleDe
                 </h2>
                 <span className="text-[10px] font-mono font-bold px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 border border-emerald-500/30 flex items-center gap-1.5">
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-                  5 CONSOLIDATED STUDIOS
+                  UNIFIED MASTER CHAIN
                 </span>
               </div>
               <p className="text-[11px] font-mono text-slate-600 dark:text-slate-400 mt-0.5">
-                {activeTab === "linear_assembly" && "Flagship Linear Vehicle Assembly • Engine Tab Sync • CAD Hierarchy • Packaging Diagnostics • Section Cuts"}
-                {activeTab === "chassis_dynamics" && "50 Chassis Types & Rigidity • 3D Suspension Kinematics • Drivetrain (AWD/RWD/FWD) & Braking Hardware"}
+                {activeTab === "linear_assembly" && "Flagship End-to-End Vehicle Engineering • 12-Stage Linear Assembly • 50 Chassis Platforms • 3D Kinematics • Packaging Diagnostics"}
                 {activeTab === "exterior" && "Paint Booth & Finishes • Custom Rims & Calipers • Widebody Kits • 3D Body-in-White Assembly"}
                 {activeTab === "aero" && "3D Parametric Aero Studio • CFD Wind Tunnel Streamlines • 10-Dept Aero Research & Active DRS"}
                 {activeTab === "suite_and_benchmark" && "A/B Car Benchmark & Circuit Lap Time Battles • Grand Automotive Fleet Hub"}
@@ -321,272 +311,11 @@ export function VehicleDesigner({ initialSubTab = "linear_assembly" }: VehicleDe
       </div>
 
       {/* =========================================================================
-          STUDIO 1: MODULAR LINEAR ASSEMBLY & CAD SUITE (FLAGSHIP)
+          FLAGSHIP: UNIFIED LINEAR ASSEMBLY & VEHICLE ENGINEERING SUITE
           ========================================================================= */}
       {activeTab === "linear_assembly" && (
         <div className="animate-stage-transition-enter">
           <ModularLinearAssemblyStudio />
-        </div>
-      )}
-
-      {/* =========================================================================
-          STUDIO 2: UNIFIED CHASSIS, SUSPENSION & DRIVETRAIN
-          ========================================================================= */}
-      {activeTab === "chassis_dynamics" && (
-        <div className="space-y-4 animate-stage-transition-enter">
-          {/* Sub-Studio Mode Switcher */}
-          <div className="panel p-3.5 rounded-2xl flex items-center justify-between flex-wrap gap-2 shadow-md">
-            <div className="flex items-center gap-2 flex-wrap">
-              <button
-                onClick={() => {
-                  playHMIClickSound();
-                  setChassisViewMode("chassis_arch");
-                }}
-                className={`flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-bold font-mono transition-all border ${
-                  chassisViewMode === "chassis_arch"
-                    ? "bg-cyan-500/20 border-cyan-500/60 text-cyan-700 dark:text-cyan-200 shadow-sm"
-                    : "bg-base-850/80 border-base-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100"
-                }`}
-              >
-                <Car size={14} className={chassisViewMode === "chassis_arch" ? "text-cyan-600 dark:text-cyan-400" : ""} />
-                🏗️ 50 CHASSIS ARCHITECTURES & RIGIDITY
-              </button>
-              <button
-                onClick={() => {
-                  playHMIClickSound();
-                  setChassisViewMode("suspension_3d");
-                }}
-                className={`flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-bold font-mono transition-all border ${
-                  chassisViewMode === "suspension_3d"
-                    ? "bg-emerald-500/20 border-emerald-500/60 text-emerald-700 dark:text-emerald-200 shadow-sm"
-                    : "bg-base-850/80 border-base-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100"
-                }`}
-              >
-                <Activity size={14} className={chassisViewMode === "suspension_3d" ? "text-emerald-600 dark:text-emerald-400" : ""} />
-                📐 3D SUSPENSION KINEMATICS
-              </button>
-              <button
-                onClick={() => {
-                  playHMIClickSound();
-                  setChassisViewMode("drivetrain_params");
-                }}
-                className={`flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-bold font-mono transition-all border ${
-                  chassisViewMode === "drivetrain_params"
-                    ? "bg-purple-500/20 border-purple-500/60 text-purple-700 dark:text-purple-200 shadow-sm"
-                    : "bg-base-850/80 border-base-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100"
-                }`}
-              >
-                <Settings size={14} className={chassisViewMode === "drivetrain_params" ? "text-purple-600 dark:text-purple-400" : ""} />
-                ⚙️ DRIVETRAIN, BRAKES & PLATFORM
-              </button>
-            </div>
-            <div className="text-[11px] font-mono text-slate-600 dark:text-slate-400">
-              Chassis: <span className="font-bold text-cyan-400">{CHASSIS_TYPES[v.chassis]?.label || "Carbon Monocoque"}</span>
-            </div>
-          </div>
-
-          {chassisViewMode === "chassis_arch" && <VehicleConstructionStudio />}
-          {chassisViewMode === "suspension_3d" && <SuspensionMasterStudio />}
-          {chassisViewMode === "drivetrain_params" && (
-            <div className="grid grid-cols-1 xl:grid-cols-3 gap-4">
-              <div className="xl:col-span-2 space-y-4 stagger">
-                {/* Presets Selector */}
-                <Section title="Vehicle Class & Budget Presets" icon={<Sparkles size={16} />}>
-                  <div className="p-3 bg-base-850 rounded-xl border border-base-800">
-                    <Select
-                      label="Preset Vehicle Templates"
-                      value=""
-                      options={[
-                        { value: "", label: "-- Load a Vehicle Template / Price Tier --" },
-                        ...VEHICLE_PRESET_LIBRARY.map((item) => ({
-                          value: item.id,
-                          label: `[${item.groupLabel}] ${item.name} (${item.targetMSRP})`,
-                        })),
-                      ]}
-                      onChange={(val) => handleSelectPreset(val)}
-                    />
-                    <p className="text-[11px] text-slate-400 mt-2 font-mono">
-                      Select any vehicle preset to load factory-calibrated chassis, powertrain, suspension, and electronics settings.
-                    </p>
-                  </div>
-                </Section>
-
-                {/* Drivetrain & Engine Placement */}
-                <Section title="Drivetrain Layout & Longitudinal Placement" icon={<Cpu size={16} className="text-cyan-400" />}>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="bg-cyan-950/20 border border-cyan-500/30 rounded-xl p-3.5">
-                      <label className="label-mono mb-2 flex items-center justify-between font-bold text-cyan-300">
-                        <span>Drive Layout (Driven Wheels)</span>
-                        <span className="px-2 py-0.5 rounded bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 text-[11px] font-mono">
-                          {DRIVE_TYPES[v.driveType || "rwd"]?.shortLabel || "RWD"}
-                        </span>
-                      </label>
-                      <ChoiceGrid<DriveType>
-                        value={v.driveType || "rwd"}
-                        options={(Object.keys(DRIVE_TYPES) as DriveType[]).map((dt) => ({
-                          value: dt,
-                          label: DRIVE_TYPES[dt].shortLabel,
-                          description: DRIVE_TYPES[dt].label,
-                        }))}
-                        onChange={(dt) => updateVehicle({ driveType: dt })}
-                      />
-                      <p className="text-[11px] text-slate-400 mt-2 font-mono">
-                        {DRIVE_TYPES[v.driveType || "rwd"]?.description || "Select drive wheels configuration."}
-                      </p>
-                    </div>
-
-                    <div className="bg-purple-950/20 border border-purple-500/30 rounded-xl p-3.5">
-                      <label className="label-mono mb-2 flex items-center justify-between font-bold text-purple-300">
-                        <span>Engine Position</span>
-                        <span className="px-2 py-0.5 rounded bg-purple-500/20 text-purple-300 border border-purple-500/30 text-[11px] font-mono">
-                          {ENGINE_POSITIONS[v.enginePosition || "front"]?.label || "Front Engine"}
-                        </span>
-                      </label>
-                      <ChoiceGrid<EnginePosition>
-                        value={v.enginePosition || "front"}
-                        options={(Object.keys(ENGINE_POSITIONS) as EnginePosition[]).map((ep) => ({
-                          value: ep,
-                          label: ENGINE_POSITIONS[ep].label.split(" ")[0],
-                          description: ENGINE_POSITIONS[ep].label,
-                        }))}
-                        onChange={(ep) => updateVehicle({ enginePosition: ep })}
-                      />
-                      <p className="text-[11px] text-slate-400 mt-2 font-mono">
-                        {ENGINE_POSITIONS[v.enginePosition || "front"]?.description || "Select longitudinal engine placement."}
-                      </p>
-                    </div>
-                  </div>
-                </Section>
-
-                {/* Platform & Frame */}
-                <Section title="Platform Size Class & Chassis Material" icon={<Car size={16} />}>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <Select
-                      label="Platform Size Class"
-                      value={v.platform}
-                      options={Object.keys(PLATFORMS).map((k) => ({
-                        value: k,
-                        label: PLATFORMS[k as PlatformType].label,
-                      }))}
-                      onChange={(val) => updateVehicle({ platform: val as PlatformType })}
-                    />
-                    <Select
-                      label="Chassis Construction Material"
-                      value={v.chassis}
-                      options={Object.keys(CHASSIS_TYPES).map((k) => ({
-                        value: k,
-                        label: CHASSIS_TYPES[k as ChassisType].label,
-                      }))}
-                      onChange={(val) => updateVehicle({ chassis: val as ChassisType })}
-                    />
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-3">
-                    <Slider
-                      label="Ride Height"
-                      value={v.rideHeight}
-                      min={60}
-                      max={250}
-                      step={2}
-                      unit="mm"
-                      onChange={(val) => updateVehicle({ rideHeight: val })}
-                    />
-                    <Slider
-                      label="Wheel Outer Diameter"
-                      value={v.wheelDiameter}
-                      min={16}
-                      max={22}
-                      step={1}
-                      unit="inch"
-                      onChange={(val) => updateVehicle({ wheelDiameter: val })}
-                    />
-                  </div>
-                </Section>
-
-                {/* Suspension Setup & Springs */}
-                <Section title="Suspension Setup & Spring Rates" icon={<Disc size={16} />}>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <Select
-                      label="Front Suspension"
-                      value={v.suspensionFront}
-                      options={Object.keys(SUSPENSION_TYPES).map((k) => ({
-                        value: k,
-                        label: SUSPENSION_TYPES[k as SuspensionType].label,
-                      }))}
-                      onChange={(val) => updateVehicle({ suspensionFront: val as SuspensionType })}
-                    />
-                    <Select
-                      label="Rear Suspension"
-                      value={v.suspensionRear}
-                      options={Object.keys(SUSPENSION_TYPES).map((k) => ({
-                        value: k,
-                        label: SUSPENSION_TYPES[k as SuspensionType].label,
-                      }))}
-                      onChange={(val) => updateVehicle({ suspensionRear: val as SuspensionType })}
-                    />
-                  </div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-3">
-                    <Slider
-                      label="Front Spring Rate"
-                      value={v.springRateF}
-                      min={20}
-                      max={150}
-                      step={2}
-                      unit="N/mm"
-                      onChange={(val) => updateVehicle({ springRateF: val })}
-                    />
-                    <Slider
-                      label="Rear Spring Rate"
-                      value={v.springRateR}
-                      min={20}
-                      max={150}
-                      step={2}
-                      unit="N/mm"
-                      onChange={(val) => updateVehicle({ springRateR: val })}
-                    />
-                  </div>
-                </Section>
-
-                {/* Brakes & Tires */}
-                <Section title="Braking Hardware & Tire Compound" icon={<Shield size={16} />}>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <Select
-                      label="Braking Hardware System"
-                      value={v.brakeType}
-                      options={Object.keys(BRAKE_TYPES).map((k) => ({
-                        value: k,
-                        label: BRAKE_TYPES[k as BrakeType].label,
-                      }))}
-                      onChange={(val) => updateVehicle({ brakeType: val as BrakeType })}
-                    />
-                    <Select
-                      label="Tire Compound & Grip"
-                      value={v.tireCompound}
-                      options={Object.keys(TIRE_COMPOUNDS).map((k) => ({
-                        value: k,
-                        label: TIRE_COMPOUNDS[k as TireCompound].label,
-                      }))}
-                      onChange={(val) => updateVehicle({ tireCompound: val as TireCompound })}
-                    />
-                  </div>
-                </Section>
-              </div>
-
-              {/* Right Column: Live Dynamics */}
-              <div className="space-y-4">
-                <Section title="Vehicle Dynamics Performance" icon={<Car size={16} />}>
-                  <div className="grid grid-cols-2 gap-2">
-                    <StatTile label="Curb Weight" value={Math.round(sim.weight || 1480)} unit="kg" />
-                    <StatTile label="0-100 km/h" value={sim.accel0_100?.toFixed(1) || "3.8"} unit="s" accent="accent" />
-                    <StatTile label="Top Speed" value={Math.round(sim.topSpeed || 280)} unit="km/h" accent="accent" />
-                    <StatTile label="Lateral Grip" value={sim.lateralG.toFixed(2)} unit="G" accent="ok" />
-                    <StatTile label="Braking 100-0" value={sim.brakingDist?.toFixed(1) || "34.5"} unit="m" />
-                    <StatTile label="Weight Dist" value={(sim.weightDistFront * 100).toFixed(0)} unit="% F" />
-                  </div>
-                </Section>
-              </div>
-            </div>
-          )}
         </div>
       )}
 
@@ -1263,7 +992,7 @@ export function VehicleDesigner({ initialSubTab = "linear_assembly" }: VehicleDe
                     </div>
                   </Section>
 
-                  <Section title="Downforce Distribution Balance" icon={<ScaleIcon size={16} />}>
+                  <Section title="Downforce Distribution Balance" icon={<Scale size={16} />}>
                     <div className="space-y-2 text-xs font-mono">
                       <div className="flex justify-between text-slate-400 font-bold">
                         <span>Front Axle Downforce</span>
@@ -1341,26 +1070,5 @@ export function VehicleDesigner({ initialSubTab = "linear_assembly" }: VehicleDe
         vehicleConfig={v}
       />
     </div>
-  );
-}
-
-function ScaleIcon(props: { size?: number }) {
-  return (
-    <svg
-      width={props.size || 16}
-      height={props.size || 16}
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="m16 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z" />
-      <path d="m2 16 3-8 3 8c-.87.65-1.92 1-3 1s-2.13-.35-3-1Z" />
-      <path d="M7 21h10" />
-      <path d="M12 3v18" />
-      <path d="M3 7h2c2 0 5-1 7-2 2 1 5 2 7 2h2" />
-    </svg>
   );
 }

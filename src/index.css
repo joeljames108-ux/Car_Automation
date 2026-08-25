@@ -2929,43 +2929,43 @@ a,
 }
 
 /* ================================================================
-   ENGINE CHOICE BUTTONS — Light glass cards
+   ENGINE CHOICE BUTTONS — High-contrast dark glass cards
    ================================================================ */
 .theme4 .engine-choice-btn {
-  background: rgba(255, 255, 255, 0.40) !important;
+  background: rgba(10, 15, 30, 0.85) !important;
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
-  border: 1px solid rgba(0, 0, 0, 0.06) !important;
-  border-radius: 0.875rem !important;
-  color: #3a3a3c !important;
+  border: 1px solid rgba(56, 189, 248, 0.2) !important;
+  border-radius: 0.75rem !important;
+  color: #94a3b8 !important;
   transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease !important;
 }
 
 .theme4 .engine-choice-btn:hover {
-  background: rgba(255, 255, 255, 0.52) !important;
-  border-color: rgba(0, 0, 0, 0.10) !important;
+  background: rgba(15, 23, 42, 0.95) !important;
+  border-color: rgba(56, 189, 248, 0.5) !important;
   transform: translateY(-1px) !important;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08) !important;
-  color: #1c1c1e !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4), 0 0 12px rgba(56, 189, 248, 0.2) !important;
+  color: #f1f5f9 !important;
 }
 
 .theme4 .engine-choice-btn.active {
-  background: rgba(0, 122, 255, 0.12) !important;
+  background: linear-gradient(180deg, rgba(6, 182, 212, 0.25) 0%, rgba(8, 51, 68, 0.85) 100%) !important;
   backdrop-filter: blur(28px);
   -webkit-backdrop-filter: blur(28px);
-  border: 1px solid rgba(0, 122, 255, 0.30) !important;
-  color: #007aff !important;
-  box-shadow: 0 2px 10px rgba(0, 122, 255, 0.10) !important;
+  border: 1px solid rgba(34, 211, 238, 0.6) !important;
+  color: #22d3ee !important;
+  box-shadow: 0 0 20px rgba(34, 211, 238, 0.35) !important;
 }
 
 .theme4 .engine-choice-icon {
-  background: rgba(0, 0, 0, 0.05) !important;
-  color: #636366 !important;
+  background: rgba(255, 255, 255, 0.05) !important;
+  color: #94a3b8 !important;
 }
 
 .theme4 .engine-choice-btn.active .engine-choice-icon {
-  background: rgba(0, 122, 255, 0.15) !important;
-  color: #007aff !important;
+  background: rgba(34, 211, 238, 0.2) !important;
+  color: #22d3ee !important;
 }
 
 /* ================================================================
@@ -4835,63 +4835,63 @@ a,
 
 /* ── GLASS CAPSULE SLIDER CARDS (Vision Glass UI .theme4) ── */
 .theme4 .slider-card-capsule {
-  background-color: rgba(255, 255, 255, 0.48) !important;
-  backdrop-filter: blur(30px) saturate(220%) !important;
-  -webkit-backdrop-filter: blur(30px) saturate(220%) !important;
-  border: 1.5px solid rgba(255, 255, 255, 0.85) !important;
-  border-radius: 26px !important;
+  background-color: rgba(10, 15, 30, 0.85) !important;
+  backdrop-filter: blur(30px) saturate(200%) !important;
+  -webkit-backdrop-filter: blur(30px) saturate(200%) !important;
+  border: 1px solid rgba(56, 189, 248, 0.25) !important;
+  border-radius: 1rem !important;
   box-shadow:
-    0 8px 24px rgba(0, 0, 0, 0.04),
-    inset 0 1px 0 rgba(255, 255, 255, 0.95) !important;
-  color: #1c1c1e !important;
+    0 8px 24px rgba(0, 0, 0, 0.5),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+  color: #f1f5f9 !important;
 }
 
 .theme4 .slider-card-capsule:hover {
-  background-color: rgba(255, 255, 255, 0.68) !important;
-  border-color: rgba(255, 255, 255, 0.98) !important;
+  background-color: rgba(15, 23, 42, 0.95) !important;
+  border-color: rgba(56, 189, 248, 0.5) !important;
   box-shadow:
-    0 12px 32px rgba(0, 0, 0, 0.07),
-    inset 0 1px 0 rgba(255, 255, 255, 1) !important;
+    0 12px 32px rgba(0, 0, 0, 0.6),
+    0 0 16px rgba(56, 189, 248, 0.2) !important;
 }
 
 .theme4 .slider-icon {
-  color: #1c1c1e !important;
+  color: #22d3ee !important;
 }
 
 .theme4 .slider-card-capsule label {
-  color: #1c1c1e !important;
+  color: #f1f5f9 !important;
   font-weight: 700 !important;
-  font-size: 13px !important;
+  font-size: 12px !important;
 }
 
 .theme4 .slider-value-text {
-  color: #1c1c1e !important;
+  color: #22d3ee !important;
   font-weight: 800 !important;
-  font-size: 14px !important;
+  font-size: 13px !important;
 }
 
 .theme4 .slider-step-btn {
-  background-color: rgba(255, 255, 255, 0.65) !important;
-  border-color: rgba(255, 255, 255, 0.85) !important;
-  color: #1c1c1e !important;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05) !important;
+  background-color: rgba(15, 23, 42, 0.9) !important;
+  border-color: rgba(56, 189, 248, 0.3) !important;
+  color: #e2e8f0 !important;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3) !important;
 }
 
 .theme4 .slider-step-btn:hover:not(:disabled) {
-  background-color: rgba(255, 255, 255, 0.95) !important;
-  border-color: rgba(0, 122, 255, 0.5) !important;
-  color: #007aff !important;
+  background-color: rgba(6, 182, 212, 0.2) !important;
+  border-color: rgba(34, 211, 238, 0.6) !important;
+  color: #22d3ee !important;
 }
 
 .theme4 .slider-track-container {
-  background-color: rgba(0, 0, 0, 0.08) !important;
-  border: 1px solid rgba(255, 255, 255, 0.70) !important;
+  background-color: rgba(0, 0, 0, 0.6) !important;
+  border: 1px solid rgba(56, 189, 248, 0.2) !important;
   height: 10px !important;
 }
 
 .theme4 .slider-track-fill {
-  background: #007aff !important;
-  box-shadow: 0 0 8px rgba(0, 122, 255, 0.4) !important;
+  background: linear-gradient(90deg, #06b6d4 0%, #3b82f6 60%, #8b5cf6 100%) !important;
+  box-shadow: 0 0 10px rgba(6, 182, 212, 0.5) !important;
 }
 
 .theme4 .slider-card-capsule input[type="range"]::-webkit-slider-thumb {
@@ -6719,4 +6719,64 @@ button:active,
   box-shadow: 0 12px 30px rgba(34, 211, 238, 0.25), 0 0 15px rgba(168, 85, 247, 0.2);
   border-color: rgba(34, 211, 238, 0.6);
 }
+
+/* ============================================================================ */
+/* CINEMATIC SCROLL-DRIVEN VIEWPORT & PARALLAX TRANSITIONS                      */
+/* ============================================================================ */
+.cinematic-scene-wrapper {
+  perspective: 1200px;
+  transform-style: preserve-3d;
+}
+
+/* Card-level internal directional parallax */
+.cinematic-card-left {
+  transition: transform 0.12s cubic-bezier(0.16, 1, 0.3, 1);
+  transform: translate3d(calc(var(--scene-delta, 0) * -18px), 0, 0);
+}
+
+.cinematic-card-right {
+  transition: transform 0.12s cubic-bezier(0.16, 1, 0.3, 1);
+  transform: translate3d(calc(var(--scene-delta, 0) * 18px), 0, 0);
+}
+
+.cinematic-card-top {
+  transition: transform 0.12s cubic-bezier(0.16, 1, 0.3, 1);
+  transform: translate3d(0, calc(var(--scene-delta, 0) * -22px), 0);
+}
+
+.cinematic-card-bottom {
+  transition: transform 0.12s cubic-bezier(0.16, 1, 0.3, 1);
+  transform: translate3d(0, calc(var(--scene-delta, 0) * 20px), 0);
+}
+
+/* Card-level progressive emergence & micro-settling */
+.cinematic-stagger-1 {
+  transition: transform 0.18s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.18s ease, filter 0.18s ease;
+  transform: translate3d(0, calc(var(--scene-abs-delta, 0) * 16px), 0) scale(calc(1 - var(--scene-abs-delta, 0) * 0.015));
+  opacity: calc(1 - var(--scene-abs-delta, 0) * 0.7);
+  filter: blur(calc(var(--scene-abs-delta, 0) * 2px));
+}
+
+.cinematic-stagger-2 {
+  transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.22s ease, filter 0.22s ease;
+  transform: translate3d(0, calc(var(--scene-abs-delta, 0) * 28px), 0) scale(calc(1 - var(--scene-abs-delta, 0) * 0.02));
+  opacity: calc(1 - var(--scene-abs-delta, 0) * 0.85);
+  filter: blur(calc(var(--scene-abs-delta, 0) * 2.5px));
+}
+
+.cinematic-stagger-3 {
+  transition: transform 0.26s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.26s ease, filter 0.26s ease;
+  transform: translate3d(0, calc(var(--scene-abs-delta, 0) * 40px), 0) scale(calc(1 - var(--scene-abs-delta, 0) * 0.025));
+  opacity: calc(1 - var(--scene-abs-delta, 0) * 0.95);
+  filter: blur(calc(var(--scene-abs-delta, 0) * 3px));
+}
+
+.cinematic-stagger-4 {
+  transition: transform 0.30s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.30s ease, filter 0.30s ease;
+  transform: translate3d(0, calc(var(--scene-abs-delta, 0) * 52px), 0) scale(calc(1 - var(--scene-abs-delta, 0) * 0.03));
+  opacity: calc(1 - var(--scene-abs-delta, 0) * 1.0);
+  filter: blur(calc(var(--scene-abs-delta, 0) * 3.5px));
+}
+
+
 

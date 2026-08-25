@@ -464,7 +464,488 @@ export function buildHatchbackChassisScene(): THREE.Scene {
 }
 
 /**
- * Exports both chassis frames to their registry asset paths.
+ * Hypercar full autoclave-cured carbon fiber monocoque tub.
+ */
+export function buildSupercarMonocoqueScene(): THREE.Scene {
+  const scene = new THREE.Scene();
+  scene.name = 'Supercar_Carbon_Monocoque_Chassis_Scene';
+
+  const root = new THREE.Group();
+  root.name = 'Supercar_Monocoque_Master_Assembly';
+  scene.add(root);
+
+  const matCarbon = new THREE.MeshStandardMaterial({
+    name: 'Chassis_Carbon_Prepreg_Autoclave_Tub',
+    color: 0x181e24,
+    metalness: 0.55,
+    roughness: 0.22,
+  });
+
+  const matTitanium = new THREE.MeshStandardMaterial({
+    name: 'Subframe_Titanium_Ti6Al4V_Billet',
+    color: 0x88929e,
+    metalness: 0.92,
+    roughness: 0.28,
+  });
+
+  const matBilletAlu = new THREE.MeshStandardMaterial({
+    name: 'Cradle_Billet_Aluminum_7075_CNC',
+    color: 0xc8d4e2,
+    metalness: 0.88,
+    roughness: 0.25,
+  });
+
+  const matGoldAnodized = new THREE.MeshStandardMaterial({
+    name: 'Suspension_Rocker_Bellcrank_Gold',
+    color: 0xf59e0b,
+    metalness: 0.90,
+    roughness: 0.18,
+  });
+
+  // 1. Carbon Monocoque Core Tub & Cockpit
+  const tubGroup = new THREE.Group();
+  tubGroup.name = 'Carbon_Monocoque_Tub_Core';
+
+  // Aerodynamic Monocoque Tub Extrusion
+  const tubProfile = new THREE.Shape();
+  tubProfile.moveTo(-0.96, 0.12);
+  tubProfile.lineTo(-1.08, 0.56);
+  tubProfile.quadraticCurveTo(0.0, 0.66, 0.92, 0.54);
+  tubProfile.lineTo(0.86, 0.12);
+  tubProfile.closePath();
+
+  const tubGeo = new THREE.ExtrudeGeometry(tubProfile, { depth: 0.82, bevelEnabled: false });
+  tubGeo.rotateY(Math.PI / 2);
+  const tubMesh = namedMesh(tubGeo, matCarbon, 'Carbon_Fiber_Monocell_Tub', -0.41, 0, 0);
+  tubGroup.add(tubMesh);
+
+  // Integrated Left & Right Seat Shells
+  for (const sx of [-0.22, 0.22]) {
+    const seatShell = namedMesh(new THREE.BoxGeometry(0.36, 0.45, 0.65), matCarbon, `Integrated_Seat_Bucket_Tub_${sx < 0 ? 'LH' : 'RH'}`, sx, 0.42, -0.05);
+    tubGroup.add(seatShell);
+  }
+
+  // Dihedral Door Hinge Structural Anchors (Billet Titanium)
+  for (const sx of [-1, 1]) {
+    const hinge = namedMesh(new THREE.CylinderGeometry(0.038, 0.038, 0.12, 16), matTitanium, `Dihedral_Door_Hinge_Clevis_${sx < 0 ? 'LH' : 'RH'}`, sx * 0.72, 0.58, -0.68);
+    tubGroup.add(hinge);
+  }
+
+  root.add(tubGroup);
+
+  // 2. Titanium Front Crash Subframe & Pushrod Towers
+  const frontGroup = new THREE.Group();
+  frontGroup.name = 'Front_Titanium_Subframe_And_Suspension';
+
+  for (const sx of [-1, 1]) {
+    const frontRail = new THREE.CatmullRomCurve3([
+      new THREE.Vector3(sx * 0.46, 0.32, -0.92),
+      new THREE.Vector3(sx * 0.38, 0.26, -1.75),
+    ]);
+    frontGroup.add(namedMesh(new THREE.TubeGeometry(frontRail, 10, 0.032, 12), matTitanium, `Front_Subframe_Rail_${sx < 0 ? 'LH' : 'RH'}`));
+
+    // Inboard Pushrod Suspension Bellcrank
+    const bellcrank = namedMesh(new THREE.CylinderGeometry(0.045, 0.045, 0.024, 16), matGoldAnodized, `Inboard_Pushrod_Rocker_${sx < 0 ? 'LH' : 'RH'}`, sx * 0.28, 0.46, -1.25);
+    bellcrank.rotation.x = Math.PI / 2;
+    frontGroup.add(bellcrank);
+
+    // Horizontal Inboard Damper Cylinder
+    const damper = namedMesh(new THREE.CylinderGeometry(0.022, 0.022, 0.24, 12), matTitanium, `Horizontal_Inboard_Coilover_${sx < 0 ? 'LH' : 'RH'}`, sx * 0.15, 0.46, -1.25);
+    damper.rotation.z = Math.PI / 2;
+    frontGroup.add(damper);
+  }
+
+  // Front Carbon Fiber Crash Cone
+  const coneGeo = new THREE.ConeGeometry(0.24, 0.48, 8);
+  coneGeo.rotateX(-Math.PI / 2);
+  const crashCone = namedMesh(coneGeo, matCarbon, 'Carbon_Composite_Impact_Attenuator', 0, 0.26, -1.86);
+  frontGroup.add(crashCone);
+
+  root.add(frontGroup);
+
+  // 3. Rear Billet Aluminum 7075 Powertrain Cradle
+  const rearGroup = new THREE.Group();
+  rearGroup.name = 'Rear_Billet_Powertrain_Cradle';
+
+  for (const sx of [-1, 1]) {
+    const rearSpine = new THREE.CatmullRomCurve3([
+      new THREE.Vector3(sx * 0.48, 0.44, 0.88),
+      new THREE.Vector3(sx * 0.54, 0.38, 1.72),
+    ]);
+    rearGroup.add(namedMesh(new THREE.TubeGeometry(rearSpine, 12, 0.036, 12), matBilletAlu, `Rear_Cradle_Spine_${sx < 0 ? 'LH' : 'RH'}`));
+
+    // Rear Suspension Pushrod Rocker Mounts
+    const rearRocker = namedMesh(new THREE.CylinderGeometry(0.048, 0.048, 0.024, 16), matGoldAnodized, `Rear_Pushrod_Rocker_${sx < 0 ? 'LH' : 'RH'}`, sx * 0.34, 0.52, 1.30);
+    rearRocker.rotation.x = Math.PI / 2;
+    rearGroup.add(rearRocker);
+  }
+
+  // Rear Transaxle Crossmember & Aero Wing Stays
+  const transCross = namedMesh(new THREE.BoxGeometry(0.96, 0.08, 0.10), matBilletAlu, 'Transaxle_Structural_Crossmember', 0, 0.36, 1.64);
+  rearGroup.add(transCross);
+
+  for (const sx of [-0.28, 0.28]) {
+    const wingPylon = namedMesh(new THREE.BoxGeometry(0.04, 0.52, 0.08), matCarbon, `Chassis_Mounted_Wing_Pylon_${sx < 0 ? 'LH' : 'RH'}`, sx, 0.68, 1.62);
+    wingPylon.rotation.x = -0.15;
+    rearGroup.add(wingPylon);
+  }
+
+  root.add(rearGroup);
+
+  // 4. Aerodynamic Underbody Venturi Tunnels
+  const aeroGroup = new THREE.Group();
+  aeroGroup.name = 'Underbody_Venturi_Tunnels';
+
+  const floorGeo = new THREE.BoxGeometry(1.68, 0.022, 3.40);
+  const floorMesh = namedMesh(floorGeo, matCarbon, 'Carbon_Aerodynamic_Flat_Floor', 0, 0.10, 0.0);
+  aeroGroup.add(floorMesh);
+
+  for (const sx of [-0.42, 0.42]) {
+    const strake = namedMesh(new THREE.BoxGeometry(0.018, 0.14, 1.20), matCarbon, `Diffuser_Venturi_Strake_${sx < 0 ? 'LH' : 'RH'}`, sx, 0.18, 1.35);
+    strake.rotation.x = 0.18;
+    aeroGroup.add(strake);
+  }
+
+  root.add(aeroGroup);
+
+  addCommonMounts(root, {
+    engineZ: 1.05,
+    engineHalfTrack: 0.32,
+    suspZf: -1.35,
+    suspZr: 1.38,
+    halfTrackSusp: 0.72,
+    dashZ: -0.74,
+    seatZ: -0.05,
+    aeroFrontZ: -1.95,
+    aeroRearZ: 1.70,
+  });
+
+  return scene;
+}
+
+/**
+ * FIA-homologated GT3 full chromoly tubular rollcage chassis.
+ */
+export function buildGT3RaceChassisScene(): THREE.Scene {
+  const scene = new THREE.Scene();
+  scene.name = 'GT3_Race_Tubular_Chassis_Scene';
+
+  const root = new THREE.Group();
+  root.name = 'GT3_Chassis_Master_Assembly';
+  scene.add(root);
+
+  const matChromoly = new THREE.MeshStandardMaterial({
+    name: 'Chassis_25CrMo4_Chromoly_Tubing',
+    color: 0x475569,
+    metalness: 0.85,
+    roughness: 0.32,
+  });
+
+  const matAirJack = new THREE.MeshStandardMaterial({
+    name: 'Air_Jack_Pneumatic_Cylinder_Alu',
+    color: 0x0ea5e9,
+    metalness: 0.88,
+    roughness: 0.20,
+  });
+
+  const matFuelCell = new THREE.MeshStandardMaterial({
+    name: 'ATL_FIA_FT3_Safety_Fuel_Cell',
+    color: 0xb91c1c,
+    metalness: 0.3,
+    roughness: 0.6,
+  });
+
+  const matGusset = new THREE.MeshStandardMaterial({
+    name: 'Laser_Cut_Chromoly_Gusset_Plate',
+    color: 0x334155,
+    metalness: 0.80,
+    roughness: 0.40,
+  });
+
+  // 1. FIA Roll Cage Lattice
+  const cageGroup = new THREE.Group();
+  cageGroup.name = 'FIA_Rollcage_Lattice';
+  const tubeR = 0.024;
+
+  // Main Hoop & Front A-Pillar Hoops
+  for (const sx of [-1, 1]) {
+    const mainHoopLeg = new THREE.CatmullRomCurve3([
+      new THREE.Vector3(sx * 0.64, 0.20, 0.45),
+      new THREE.Vector3(sx * 0.58, 0.86, 0.45),
+      new THREE.Vector3(0, 0.94, 0.45),
+    ]);
+    cageGroup.add(namedMesh(new THREE.TubeGeometry(mainHoopLeg, 16, tubeR, 12), matChromoly, `Main_Roll_Hoop_${sx < 0 ? 'LH' : 'RH'}`));
+
+    const aPillarLeg = new THREE.CatmullRomCurve3([
+      new THREE.Vector3(sx * 0.64, 0.20, -0.65),
+      new THREE.Vector3(sx * 0.56, 0.82, -0.45),
+      new THREE.Vector3(sx * 0.58, 0.86, 0.45),
+    ]);
+    cageGroup.add(namedMesh(new THREE.TubeGeometry(aPillarLeg, 16, tubeR, 12), matChromoly, `A_Pillar_Roof_Bar_${sx < 0 ? 'LH' : 'RH'}`));
+
+    // Gusseted X-Door Bars (FIA Side Impact Protection)
+    const doorX1 = new THREE.CatmullRomCurve3([
+      new THREE.Vector3(sx * 0.65, 0.24, -0.65),
+      new THREE.Vector3(sx * 0.65, 0.58, 0.45),
+    ]);
+    const doorX2 = new THREE.CatmullRomCurve3([
+      new THREE.Vector3(sx * 0.65, 0.58, -0.65),
+      new THREE.Vector3(sx * 0.65, 0.24, 0.45),
+    ]);
+    cageGroup.add(namedMesh(new THREE.TubeGeometry(doorX1, 10, tubeR * 0.9, 10), matChromoly, `Door_X_Bar_A_${sx < 0 ? 'LH' : 'RH'}`));
+    cageGroup.add(namedMesh(new THREE.TubeGeometry(doorX2, 10, tubeR * 0.9, 10), matChromoly, `Door_X_Bar_B_${sx < 0 ? 'LH' : 'RH'}`));
+
+    // Stamped Taco Gusset Plates
+    const gusset = namedMesh(new THREE.BoxGeometry(0.08, 0.08, 0.008), matGusset, `Taco_Gusset_Plate_${sx < 0 ? 'LH' : 'RH'}`, sx * 0.65, 0.41, -0.10);
+    cageGroup.add(gusset);
+  }
+
+  // Roof Diagonal & Windscreen Upper Header
+  const roofDiag = new THREE.CatmullRomCurve3([
+    new THREE.Vector3(-0.54, 0.85, -0.35),
+    new THREE.Vector3(0.54, 0.88, 0.42),
+  ]);
+  cageGroup.add(namedMesh(new THREE.TubeGeometry(roofDiag, 12, tubeR * 0.8, 10), matChromoly, 'Roof_Diagonal_Brace'));
+
+  root.add(cageGroup);
+
+  // 2. Air Jack Cylinders (4x Built-in Pneumatic Lifts)
+  const airJackGroup = new THREE.Group();
+  airJackGroup.name = 'Air_Jack_Pneumatic_System';
+
+  const ajSpots: Array<[number, number, string]> = [
+    [-0.52, -1.05, 'FL'],
+    [0.52, -1.05, 'FR'],
+    [-0.52, 1.15, 'RL'],
+    [0.52, 1.15, 'RR'],
+  ];
+  for (const [jx, jz, tag] of ajSpots) {
+    const cylinder = namedMesh(new THREE.CylinderGeometry(0.034, 0.034, 0.32, 16), matAirJack, `Air_Jack_Cylinder_${tag}`, jx, 0.32, jz);
+    airJackGroup.add(cylinder);
+
+    const foot = namedMesh(new THREE.CylinderGeometry(0.048, 0.048, 0.016, 16), matAirJack, `Air_Jack_Foot_${tag}`, jx, 0.15, jz);
+    airJackGroup.add(foot);
+  }
+
+  root.add(airJackGroup);
+
+  // 3. ATL FT3 Safety Fuel Cell Enclosure
+  const fuelGroup = new THREE.Group();
+  fuelGroup.name = 'Safety_Fuel_Cell_Enclosure';
+
+  const cellBox = namedMesh(new THREE.BoxGeometry(0.72, 0.42, 0.48), matFuelCell, 'ATL_FT3_120L_Fuel_Cell', 0, 0.42, 0.76);
+  fuelGroup.add(cellBox);
+
+  // Dual Dry-Break Quick Refueling Couplers
+  for (const sx of [-0.18, 0.18]) {
+    const dryBreak = namedMesh(new THREE.CylinderGeometry(0.038, 0.044, 0.12, 16), matAirJack, `Dry_Break_Refuel_Port_${sx < 0 ? 'Vent' : 'Fill'}`, sx, 0.68, 0.76);
+    fuelGroup.add(dryBreak);
+  }
+
+  root.add(fuelGroup);
+
+  addCommonMounts(root, {
+    engineZ: -1.35,
+    engineHalfTrack: 0.34,
+    suspZf: -1.38,
+    suspZr: 1.36,
+    halfTrackSusp: 0.72,
+    dashZ: -0.82,
+    seatZ: 0.05,
+    aeroFrontZ: -1.98,
+    aeroRearZ: 1.68,
+  });
+
+  return scene;
+}
+
+/**
+ * 800V EV Skateboard structural battery chassis.
+ */
+export function buildEVSkateboardChassisScene(): THREE.Scene {
+  const scene = new THREE.Scene();
+  scene.name = 'EV_Skateboard_Battery_Chassis_Scene';
+
+  const root = new THREE.Group();
+  root.name = 'EV_Skateboard_Master_Assembly';
+  scene.add(root);
+
+  const matBatteryBox = new THREE.MeshStandardMaterial({
+    name: 'Battery_Enclosure_Alu_Cast',
+    color: 0x3b4252,
+    metalness: 0.75,
+    roughness: 0.38,
+  });
+
+  const matCoolingPlate = new THREE.MeshStandardMaterial({
+    name: 'Cooling_Manifold_Serpentine_Blue',
+    color: 0x0284c7,
+    metalness: 0.85,
+    roughness: 0.25,
+  });
+
+  const matExtrusion = new THREE.MeshStandardMaterial({
+    name: 'Side_Impact_Multi_Chamber_Alu',
+    color: 0x94a3b8,
+    metalness: 0.90,
+    roughness: 0.28,
+  });
+
+  const matEduMotor = new THREE.MeshStandardMaterial({
+    name: 'Electric_Drive_Unit_Cast_Housing',
+    color: 0x1e293b,
+    metalness: 0.80,
+    roughness: 0.35,
+  });
+
+  // 1. 800V Structural Battery Enclosure Floor
+  const battGroup = new THREE.Group();
+  battGroup.name = 'Structural_Battery_Pack';
+
+  const packBox = namedMesh(new THREE.BoxGeometry(1.42, 0.14, 2.20), matBatteryBox, 'Battery_Enclosure_Tub', 0, 0.20, 0.0);
+  battGroup.add(packBox);
+
+  // Internal Module Cell Blocks & Liquid Cooling Lines
+  for (let m = 0; m < 4; m++) {
+    const mz = -0.80 + m * 0.52;
+    const moduleMesh = namedMesh(new THREE.BoxGeometry(1.32, 0.08, 0.44), matCoolingPlate, `Battery_Module_800V_Stack_${m + 1}`, 0, 0.28, mz);
+    battGroup.add(moduleMesh);
+  }
+
+  // Multi-Chamber Side Impact Sill Channels (Extruded Aluminum)
+  for (const sx of [-1, 1]) {
+    const sill = namedMesh(new THREE.BoxGeometry(0.16, 0.18, 2.35), matExtrusion, `Side_Crash_Extruded_Sill_${sx < 0 ? 'LH' : 'RH'}`, sx * 0.79, 0.20, 0.0);
+    battGroup.add(sill);
+  }
+
+  root.add(battGroup);
+
+  // 2. Front and Rear Electric Drive Units (Dual-Motor Powertrain)
+  const eduGroup = new THREE.Group();
+  eduGroup.name = 'Electric_Drive_Units';
+
+  // Front EDU
+  const eduFront = namedMesh(new THREE.CylinderGeometry(0.18, 0.18, 0.48, 18), matEduMotor, 'Front_Axle_Electric_Drive_Unit_300kW', 0, 0.28, -1.36);
+  eduFront.rotation.z = Math.PI / 2;
+  eduGroup.add(eduFront);
+
+  // Rear EDU
+  const eduRear = namedMesh(new THREE.CylinderGeometry(0.20, 0.20, 0.52, 18), matEduMotor, 'Rear_Axle_Electric_Drive_Unit_450kW', 0, 0.29, 1.36);
+  eduRear.rotation.z = Math.PI / 2;
+  eduGroup.add(eduRear);
+
+  root.add(eduGroup);
+
+  addCommonMounts(root, {
+    engineZ: 0,
+    engineHalfTrack: 0.35,
+    suspZf: -1.36,
+    suspZr: 1.36,
+    halfTrackSusp: 0.74,
+    dashZ: -0.90,
+    seatZ: 0.10,
+    aeroFrontZ: -1.90,
+    aeroRearZ: 1.65,
+  });
+
+  return scene;
+}
+
+/**
+ * Heavy-duty hydroformed steel ladder frame chassis.
+ */
+export function buildOffroadLadderChassisScene(): THREE.Scene {
+  const scene = new THREE.Scene();
+  scene.name = 'Offroad_Ladder_Chassis_Scene';
+
+  const root = new THREE.Group();
+  root.name = 'Offroad_Ladder_Master_Assembly';
+  scene.add(root);
+
+  const matSteelRail = new THREE.MeshStandardMaterial({
+    name: 'Ladder_High_Strength_Steel_Rail',
+    color: 0x1e2229,
+    metalness: 0.70,
+    roughness: 0.50,
+  });
+
+  const matArmorSkid = new THREE.MeshStandardMaterial({
+    name: 'Skid_Plate_Hardox_Armor_Alu',
+    color: 0x64748b,
+    metalness: 0.85,
+    roughness: 0.35,
+  });
+
+  const matWinch = new THREE.MeshStandardMaterial({
+    name: 'Heavy_Duty_Recovery_Winch_Steel',
+    color: 0xd97706,
+    metalness: 0.88,
+    roughness: 0.22,
+  });
+
+  // 1. Hydroformed Box-Section Ladder Side Rails
+  const railGroup = new THREE.Group();
+  railGroup.name = 'Box_Section_Side_Rails';
+
+  for (const sx of [-1, 1]) {
+    const railCurve = new THREE.CatmullRomCurve3([
+      new THREE.Vector3(sx * 0.48, 0.34, -2.10),
+      new THREE.Vector3(sx * 0.54, 0.38, -1.20),
+      new THREE.Vector3(sx * 0.54, 0.36, 1.20),
+      new THREE.Vector3(sx * 0.48, 0.42, 2.10),
+    ]);
+    railGroup.add(namedMesh(new THREE.TubeGeometry(railCurve, 20, 0.055, 12), matSteelRail, `Ladder_Main_Rail_${sx < 0 ? 'LH' : 'RH'}`));
+  }
+
+  // 6 Structural Tubular Crossmembers
+  for (let c = 0; c < 6; c++) {
+    const cz = -1.90 + c * 0.76;
+    const crossGeo = new THREE.CylinderGeometry(0.042, 0.042, 1.08, 14);
+    crossGeo.rotateZ(Math.PI / 2);
+    railGroup.add(namedMesh(crossGeo, matSteelRail, `Ladder_Crossmember_${c + 1}`, 0, 0.36, cz));
+  }
+
+  root.add(railGroup);
+
+  // 2. Front Winch Recovery Cradle & Rear Hitch
+  const recoveryGroup = new THREE.Group();
+  recoveryGroup.name = 'Recovery_And_Hitch_Gear';
+
+  const winchCradle = namedMesh(new THREE.BoxGeometry(0.68, 0.16, 0.22), matWinch, 'Front_Winch_Mounting_Cradle', 0, 0.38, -2.15);
+  recoveryGroup.add(winchCradle);
+
+  const rearHitch = namedMesh(new THREE.BoxGeometry(0.14, 0.14, 0.32), matSteelRail, 'Class_IV_Rear_Receiver_Hitch', 0, 0.38, 2.16);
+  recoveryGroup.add(rearHitch);
+
+  root.add(recoveryGroup);
+
+  // 3. Heavy-Duty Underbody Skid Plate Armor
+  const armorGroup = new THREE.Group();
+  armorGroup.name = 'Underbody_Armor_Plates';
+
+  const skidGeo = new THREE.BoxGeometry(0.86, 0.016, 2.80);
+  const skidPlate = namedMesh(skidGeo, matArmorSkid, 'Hardox_Underbody_Skid_Shield', 0, 0.28, 0.0);
+  armorGroup.add(skidPlate);
+
+  root.add(armorGroup);
+
+  addCommonMounts(root, {
+    engineZ: -1.45,
+    engineHalfTrack: 0.36,
+    suspZf: -1.35,
+    suspZr: 1.45,
+    halfTrackSusp: 0.68,
+    dashZ: -0.95,
+    seatZ: 0.25,
+    aeroFrontZ: -2.15,
+    aeroRearZ: 2.15,
+  });
+
+  return scene;
+}
+
+/**
+ * Exports all 6 chassis frames to their registry asset paths.
  */
 export async function generateChassisFrameGlbs(
   outputDir: string = 'public/models/chassis'
@@ -479,6 +960,10 @@ export async function generateChassisFrameGlbs(
   const jobs: Array<[string, THREE.Scene]> = [
     ['sports_car_chassis_01.glb', buildSportsChassisScene()],
     ['hatchback_chassis_01.glb', buildHatchbackChassisScene()],
+    ['supercar_monocoque_chassis_01.glb', buildSupercarMonocoqueScene()],
+    ['gt3_race_chassis_01.glb', buildGT3RaceChassisScene()],
+    ['ev_skateboard_chassis_01.glb', buildEVSkateboardChassisScene()],
+    ['offroad_ladder_chassis_01.glb', buildOffroadLadderChassisScene()],
   ];
 
   for (const [filename, scene] of jobs) {
@@ -506,3 +991,4 @@ export async function generateChassisFrameGlbs(
 
   return results;
 }
+

@@ -84,13 +84,27 @@ export function buildValveCoverScene(bankSide: 'left' | 'right', configOrCyls?: 
   }
 
   const matLib = globalMaterialLibrary;
-  const matGoldCover = matLib.getGoldAnodized();
+  const coverColorKey = (configOrCyls as any)?.valveCoverColor || (configOrCyls as any)?.coverColor;
+  let matCover = matLib.getRossoCorsaPowdercoat(); // Default to striking Rosso Corsa red
+  if (coverColorKey === 'monaco_blue' || coverColorKey === 'apex_blue') {
+    matCover = matLib.getMonacoBluePowdercoat();
+  } else if (coverColorKey === 'acid_yellow' || coverColorKey === 'giallo_yellow') {
+    matCover = matLib.getGialloModenaPowdercoat();
+  } else if (coverColorKey === 'gold_anodized') {
+    matCover = matLib.getGoldAnodized();
+  } else if (coverColorKey === 'satin_carbon') {
+    matCover = matLib.getDryCarbonFiber();
+  } else if (coverColorKey === 'titanium_gray') {
+    matCover = matLib.getTitaniumAerospace();
+  }
+
   const matBilletCap = matLib.getMachinedBillet();
   const matCarbonIgnition = matLib.getBlackPolymer();
   const matCobaltAn = matLib.getCobaltAnodized();
   const matStainlessFastener = matLib.getNitridedCrank();
   const matInternalBaffle = matLib.getCastAluminum();
   const matVitonGasket = matLib.getRubberOring();
+  const matBadge = matLib.getPolishedChrome();
 
   const spec = V12_COVER_SPECS;
   const cylSpacingM = 0.100;
@@ -103,7 +117,7 @@ export function buildValveCoverScene(bankSide: 'left' | 'right', configOrCyls?: 
 
   // Sculpted Chamfered Main Cover Shell
   const coverGeo = new THREE.BoxGeometry(coverLengthM, spec.coverWidthM, spec.coverHeightM - 0.015);
-  const coverMesh = new THREE.Mesh(coverGeo, matGoldCover);
+  const coverMesh = new THREE.Mesh(coverGeo, matCover);
   coverMesh.name = 'Valve_Cover_Main_Billet_Shell';
   coverMesh.position.set(0, 0, 0);
   coverMesh.castShadow = true;
@@ -112,7 +126,7 @@ export function buildValveCoverScene(bankSide: 'left' | 'right', configOrCyls?: 
 
   // Perimeter Gasket Mating Flange Rail
   const flangeGeo = new THREE.BoxGeometry(coverLengthM + 0.008, spec.coverWidthM + 0.008, spec.flangeThicknessM);
-  const flangeMesh = new THREE.Mesh(flangeGeo, matGoldCover);
+  const flangeMesh = new THREE.Mesh(flangeGeo, matCover);
   flangeMesh.name = 'Perimeter_Gasket_Mating_Flange';
   flangeMesh.position.set(0, 0, -spec.coverHeightM / 2 + spec.flangeThicknessM / 2);
   flangeMesh.castShadow = true;
@@ -125,20 +139,20 @@ export function buildValveCoverScene(bankSide: 'left' | 'right', configOrCyls?: 
   gasketMesh.position.set(0, 0, -spec.coverHeightM / 2 - 0.001);
   shellGroup.add(gasketMesh);
 
-  // Longitudinal Aerodynamic Heat-Sink Cooling Fins
+  // Longitudinal Aerodynamic Heat-Sink Cooling Fins (Polished Billet top edge)
   [-0.05, -0.025, 0, 0.025, 0.05].forEach((finY, finIdx) => {
     const finGeo = new THREE.BoxGeometry(coverLengthM - 0.04, 0.0045, spec.finHeightM);
-    const finMesh = new THREE.Mesh(finGeo, matGoldCover);
+    const finMesh = new THREE.Mesh(finGeo, matBilletCap);
     finMesh.name = `Longitudinal_Cooling_Fin_${finIdx + 1}`;
     finMesh.position.set(0, finY, spec.coverHeightM / 2 - 0.002);
     finMesh.castShadow = true;
     shellGroup.add(finMesh);
   });
 
-  // Laser-Etched "APEX V12" Anodized Badge Lettering on the Front Deck Strip
+  // Laser-Etched "APEX V12" Badge Lettering on the Front Deck Strip
   const badgeGeo = buildStrokeLettering('APEX V12', 0.02, 0.62, 0.0025, 0.12);
-  const badgeMesh = new THREE.Mesh(badgeGeo, matCarbonIgnition);
-  badgeMesh.name = 'Valve_Cover_Badge_Apex_V12_Anodized_Lettering';
+  const badgeMesh = new THREE.Mesh(badgeGeo, matBadge);
+  badgeMesh.name = 'Valve_Cover_Badge_Apex_V12_Lettering';
   badgeMesh.position.set(0, -0.065, spec.coverHeightM / 2 - 0.0065);
   shellGroup.add(badgeMesh);
 
@@ -222,7 +236,7 @@ export function buildValveCoverScene(bankSide: 'left' | 'right', configOrCyls?: 
     breatherGroup.add(fillerNeckMesh);
 
     const fillerCapGeo = new THREE.CylinderGeometry(0.026, 0.026, 0.014, 32);
-    const fillerCapMesh = new THREE.Mesh(fillerCapGeo, matGoldCover);
+    const fillerCapMesh = new THREE.Mesh(fillerCapGeo, matCover);
     fillerCapMesh.name = 'Knurled_Billet_Oil_Filler_Cap';
     fillerCapMesh.position.set(-0.24, 0.045, spec.coverHeightM / 2 + 0.028);
     fillerCapMesh.castShadow = true;

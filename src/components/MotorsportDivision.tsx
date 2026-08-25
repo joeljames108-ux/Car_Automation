@@ -139,7 +139,9 @@ export function MotorsportDivision() {
   const [selectedTeamId, setSelectedTeamId] = useState<string | null>(null);
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [showF1EntryWizard, setShowF1EntryWizard] = useState(false);
+  const [f1InitialMode, setF1InitialMode] = useState<"CONSTRUCTION_CAD" | "RD_LABS" | "GARAGE_SETUP">("CONSTRUCTION_CAD");
   const [showHypercarEntryWizard, setShowHypercarEntryWizard] = useState(false);
+  const [hypercarInitialMode, setHypercarInitialMode] = useState<"assembly" | "rd_labs" | "garage" | "racing">("assembly");
   const [showLiveRaceModal, setShowLiveRaceModal] = useState(false);
   const [liveRaceState, setLiveRaceState] = useState<LiveRaceState | null>(null);
 
@@ -362,14 +364,14 @@ export function MotorsportDivision() {
       {/* F1 CONSTRUCTOR MASTER STUDIO */}
       {activeTab === "f1_workshop" && (
         <Suspense fallback={<div className="panel p-12 text-center text-xs text-cyan-400 animate-pulse">Loading F1 Constructor Studio...</div>}>
-          <F1ConstructorMasterApp onBackToMainMotorsport={() => setActiveTab("teams")} />
+          <F1ConstructorMasterApp initialMode={f1InitialMode} onBackToMainMotorsport={() => setActiveTab("teams")} />
         </Suspense>
       )}
 
       {/* HYPERCAR CONSTRUCTOR MASTER STUDIO */}
       {activeTab === "hypercar_workshop" && (
         <Suspense fallback={<div className="panel p-12 text-center text-xs text-amber-400 animate-pulse">Loading Hypercar Constructor Studio...</div>}>
-          <HypercarConstructorMasterApp onBackToMainMotorsport={() => setActiveTab("teams")} />
+          <HypercarConstructorMasterApp initialMode={hypercarInitialMode} onBackToMainMotorsport={() => setActiveTab("teams")} />
         </Suspense>
       )}
 
@@ -533,10 +535,12 @@ export function MotorsportDivision() {
         isOpen={showF1EntryWizard}
         onClose={() => setShowF1EntryWizard(false)}
         onEnterConstructionStudio={() => {
+          setF1InitialMode("CONSTRUCTION_CAD");
           setShowF1EntryWizard(false);
           setActiveTab("f1_workshop");
         }}
         onEnterGarageAndRace={() => {
+          setF1InitialMode("GARAGE_SETUP");
           setShowF1EntryWizard(false);
           setActiveTab("f1_workshop");
         }}

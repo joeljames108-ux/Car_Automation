@@ -1,6 +1,9 @@
 // ===================================================================
 // THREE.JS VENTURI REAR DIFFUSER 3D GEOMETRY GENERATOR
 // ===================================================================
+// Generates functional multi-channel underbody venturi diffuser with
+// upward expansion ramp, vertical vortex strakes, and central FIA rain light.
+// ===================================================================
 
 import * as THREE from "three";
 import type { AeroSurfaceConfig } from "../../sim/types/exterior";
@@ -11,34 +14,48 @@ export function generateRearDiffuser3DGeometry(
   const group = new THREE.Group();
   group.name = "Rear_Diffuser_Assembly";
 
-  const carbonMat = new THREE.MeshStandardMaterial({
-    color: 0x0f172a,
-    roughness: 0.25,
-    metalness: 0.9,
+  const carbonMat = new THREE.MeshPhysicalMaterial({
+    color: 0x090d16,
+    roughness: 0.15,
+    metalness: 0.90,
+    clearcoat: 1.0,
+    clearcoatRoughness: 0.02,
+    reflectivity: 0.95,
     name: "Carbon_Aero_Material",
   });
 
-  const finCount = config?.diffuserFinCount || 7;
-  const angleDeg = config?.diffuserExpansionAngleDeg || 14;
+  const rainLightMat = new THREE.MeshBasicMaterial({
+    color: 0xef4444,
+  });
 
-  // Main Diffuser Upward-Slanted Tray
-  const trayGeo = new THREE.BoxGeometry(0.55, 0.02, 0.95);
+  const finCount = config?.diffuserFinCount || 6;
+  const angleDeg = config?.diffuserExpansionAngleDeg || 14;
+  const width = 1.25;
+
+  // Main Diffuser Upward Expansion Carbon Tray
+  const trayGeo = new THREE.BoxGeometry(0.68, 0.018, width);
   const trayMesh = new THREE.Mesh(trayGeo, carbonMat);
   trayMesh.rotation.z = (angleDeg * Math.PI) / 180;
   trayMesh.castShadow = true;
   group.add(trayMesh);
 
-  // Vertical Aerodynamic Strakes / Fins
-  const finGeo = new THREE.BoxGeometry(0.45, 0.08, 0.015);
-  const zStep = 0.85 / (finCount - 1);
+  // Vertical Aerodynamic Vortex Strakes
+  const strakeGeo = new THREE.BoxGeometry(0.62, 0.12, 0.012);
+  const zStep = (width * 0.88) / (finCount - 1);
 
   for (let i = 0; i < finCount; i++) {
-    const zPos = -0.425 + i * zStep;
-    const finMesh = new THREE.Mesh(finGeo, carbonMat);
-    finMesh.position.set(0, -0.04, zPos);
-    finMesh.rotation.z = (angleDeg * Math.PI) / 180;
-    group.add(finMesh);
+    const zPos = -(width * 0.44) + i * zStep;
+    const strake = new THREE.Mesh(strakeGeo, carbonMat);
+    strake.position.set(0, -0.05, zPos);
+    strake.rotation.z = (angleDeg * Math.PI) / 180;
+    group.add(strake);
   }
+
+  // Central FIA Motorsport Rain Light
+  const rainLightGeo = new THREE.BoxGeometry(0.06, 0.035, 0.08);
+  const rainLight = new THREE.Mesh(rainLightGeo, rainLightMat);
+  rainLight.position.set(0.32, 0.04, 0);
+  group.add(rainLight);
 
   return group;
 }

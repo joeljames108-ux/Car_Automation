@@ -13,7 +13,7 @@ import { F1_SOCKET_ANCHORS, type F1SocketId } from "../../../sim/f1/modular/f1So
 import { F1ComponentRegistry } from "../../../sim/f1/modular/f1ComponentRegistry";
 import {
   Eye, Box, Layers, RotateCcw, Volume2, Sparkles, ZoomIn, Info, ShieldAlert,
-  Maximize2, EyeOff
+  Maximize2, EyeOff, Wind, Video, Compass, Camera
 } from "lucide-react";
 
 export const F1ModularAssemblyViewport: React.FC = () => {
@@ -24,6 +24,13 @@ export const F1ModularAssemblyViewport: React.FC = () => {
   const controlsRef = useRef<OrbitControls | null>(null);
   const assemblyGroupRef = useRef<THREE.Group | null>(null);
   const hotspotsGroupRef = useRef<THREE.Group | null>(null);
+  const streamlinesRef = useRef<THREE.Points | null>(null);
+
+  const [showAeroStreamlines, setShowAeroStreamlines] = useState(false);
+  const showAeroStreamlinesRef = useRef(false);
+  showAeroStreamlinesRef.current = showAeroStreamlines;
+
+  const [cameraPreset, setCameraPresetState] = useState<"iso" | "wing" | "cockpit" | "engine" | "rear">("iso");
 
   const {
     installedMap,
@@ -161,6 +168,28 @@ export const F1ModularAssemblyViewport: React.FC = () => {
     grid.position.y = -0.001;
     scene.add(grid);
 
+    // CFD Aerodynamic Streamline Particles
+    const streamlineCount = 150;
+    const streamlineGeo = new THREE.BufferGeometry();
+    const streamlinePos = new Float32Array(streamlineCount * 3);
+    for (let i = 0; i < streamlineCount; i++) {
+      streamlinePos[i * 3 + 0] = (Math.random() - 0.5) * 1.9;
+      streamlinePos[i * 3 + 1] = 0.05 + Math.random() * 0.85;
+      streamlinePos[i * 3 + 2] = -2.8 + Math.random() * 6.5;
+    }
+    streamlineGeo.setAttribute("position", new THREE.BufferAttribute(streamlinePos, 3));
+    const streamlineMat = new THREE.PointsMaterial({
+      color: 0x06b6d4,
+      size: 0.045,
+      transparent: true,
+      opacity: 0.75,
+      blending: THREE.AdditiveBlending,
+    });
+    const streamlines = new THREE.Points(streamlineGeo, streamlineMat);
+    streamlines.visible = false;
+    scene.add(streamlines);
+    streamlinesRef.current = streamlines;
+
     // Groups
     const assemblyGroup = new THREE.Group();
     scene.add(assemblyGroup);
@@ -187,6 +216,23 @@ export const F1ModularAssemblyViewport: React.FC = () => {
         });
       }
 
+      // Streamline Flow Animation
+      if (streamlinesRef.current && showAeroStreamlinesRef.current) {
+        streamlinesRef.current.visible = true;
+        const posArr = streamlinesRef.current.geometry.attributes.position.array as Float32Array;
+        for (let i = 0; i < streamlineCount; i++) {
+          posArr[i * 3 + 2] += 0.07; // Move rearward
+          if (posArr[i * 3 + 2] > 4.2) {
+            posArr[i * 3 + 2] = -2.8;
+            posArr[i * 3 + 0] = (Math.random() - 0.5) * 1.9;
+            posArr[i * 3 + 1] = 0.05 + Math.random() * 0.85;
+          }
+        }
+        streamlinesRef.current.geometry.attributes.position.needsUpdate = true;
+      } else if (streamlinesRef.current) {
+        streamlinesRef.current.visible = false;
+      }
+
       renderer.render(scene, camera);
     };
     animate();
@@ -199,9 +245,20 @@ export const F1ModularAssemblyViewport: React.FC = () => {
       camera.updateProjectionMatrix();
       renderer.setSize(w, h);
     };
+
     window.addEventListener("resize", handleResize);
+    const resizeObserver = new ResizeObserver(() => {
+      handleResize();
+    });
+    resizeObserver.observe(container);
+
+    // Trigger initial layout adaptation
+    requestAnimationFrame(handleResize);
+    const initTimer = setTimeout(handleResize, 60);
 
     return () => {
+      clearTimeout(initTimer);
+      resizeObserver.disconnect();
       window.removeEventListener("resize", handleResize);
       cancelAnimationFrame(animationFrameId);
       renderer.dispose();
@@ -475,12 +532,37 @@ export const F1ModularAssemblyViewport: React.FC = () => {
     }
   };
 
+  const handleCameraPreset = (preset: "iso" | "wing" | "cockpit" | "engine" | "rear") => {
+    setCameraPresetState(preset);
+    if (!cameraRef.current || !controlsRef.current) return;
+    const cam = cameraRef.current;
+    const ctrl = controlsRef.current;
+
+    if (preset === "iso") {
+      cam.position.set(3.8, 2.2, 4.8);
+      ctrl.target.set(0, 0.4, 1.8);
+    } else if (preset === "wing") {
+      cam.position.set(0, 0.6, -2.4);
+      ctrl.target.set(0, 0.3, 0);
+    } else if (preset === "cockpit") {
+      cam.position.set(0, 0.88, 0.9);
+      ctrl.target.set(0, 0.55, -1.5);
+    } else if (preset === "engine") {
+      cam.position.set(1.5, 1.2, 2.2);
+      ctrl.target.set(0, 0.4, 2.0);
+    } else if (preset === "rear") {
+      cam.position.set(0, 0.75, 4.6);
+      ctrl.target.set(0, 0.4, 3.0);
+    }
+    ctrl.update();
+  };
+
   return (
     <div className="relative w-full h-full bg-[#0a0c10] select-none overflow-hidden group">
       {/* 3D WebGL Canvas Container */}
       <div ref={mountRef} onPointerDown={handlePointerDown} className="w-full h-full cursor-grab active:cursor-grabbing" />
 
-      {/* Top Floating Viewport Toolbar */}
+      {/* Top Left Floating Viewport Toolbar */}
       <div className="absolute top-4 left-4 flex items-center gap-2 bg-black/70 backdrop-blur-md border border-cyan-500/30 px-3 py-1.5 rounded-xl shadow-2xl z-10">
         <span className="text-[11px] font-black tracking-widest uppercase text-cyan-400 flex items-center gap-1.5">
           <Sparkles className="w-3.5 h-3.5 text-cyan-400 animate-pulse" />
@@ -494,7 +576,7 @@ export const F1ModularAssemblyViewport: React.FC = () => {
           <button
             key={mode}
             onClick={() => setSystemIsolationMode(mode)}
-            className={`px-2 py-0.5 rounded text-[10px] font-bold tracking-wider transition-all ${
+            className={`px-2 py-0.5 rounded text-[10px] font-bold tracking-wider transition-all cursor-pointer ${
               systemIsolationMode === mode
                 ? "bg-cyan-500 text-black shadow-md shadow-cyan-500/30"
                 : "text-zinc-400 hover:text-white hover:bg-white/10"
@@ -509,7 +591,7 @@ export const F1ModularAssemblyViewport: React.FC = () => {
         {/* X-Ray Mode */}
         <button
           onClick={toggleXrayMode}
-          className={`flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold transition-all ${
+          className={`flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold transition-all cursor-pointer ${
             xrayMode ? "bg-amber-500 text-black" : "text-zinc-400 hover:text-white hover:bg-white/10"
           }`}
           title="Toggle Transparent X-Ray Inspection"
@@ -521,7 +603,7 @@ export const F1ModularAssemblyViewport: React.FC = () => {
         {/* Hotspots Toggle */}
         <button
           onClick={toggleAttachmentHotspots}
-          className={`flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold transition-all ${
+          className={`flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold transition-all cursor-pointer ${
             showAttachmentHotspots ? "bg-cyan-500/20 text-cyan-400 border border-cyan-500/40" : "text-zinc-400 hover:text-white hover:bg-white/10"
           }`}
           title="Toggle Empty Attachment Hotspots"
@@ -529,6 +611,43 @@ export const F1ModularAssemblyViewport: React.FC = () => {
           <Box className="w-3 h-3" />
           Hotspots
         </button>
+
+        {/* Aero Streamlines Toggle */}
+        <button
+          onClick={() => setShowAeroStreamlines(!showAeroStreamlines)}
+          className={`flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold transition-all cursor-pointer ${
+            showAeroStreamlines ? "bg-cyan-400 text-black shadow-sm" : "text-zinc-400 hover:text-white hover:bg-white/10"
+          }`}
+          title="Toggle CFD Aerodynamic Streamlines"
+        >
+          <Wind className="w-3 h-3" />
+          CFD Flow
+        </button>
+      </div>
+
+      {/* Top Right Camera Presets Floating Widget */}
+      <div className="absolute top-4 right-4 flex items-center gap-1.5 bg-black/75 backdrop-blur-md border border-white/15 px-3 py-1.5 rounded-xl z-10 text-xs">
+        <Camera className="w-3.5 h-3.5 text-zinc-400" />
+        <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest mr-1">Views:</span>
+        {[
+          { id: "iso", label: "ISO 3D" },
+          { id: "wing", label: "Front Wing" },
+          { id: "cockpit", label: "Halo POV" },
+          { id: "engine", label: "V6 Engine" },
+          { id: "rear", label: "Rear DRS" },
+        ].map((v) => (
+          <button
+            key={v.id}
+            onClick={() => handleCameraPreset(v.id as any)}
+            className={`px-2 py-0.5 rounded text-[10px] font-bold transition-all cursor-pointer ${
+              cameraPreset === v.id
+                ? "bg-cyan-500/25 border border-cyan-400/50 text-cyan-300"
+                : "text-zinc-400 hover:text-white hover:bg-white/10"
+            }`}
+          >
+            {v.label}
+          </button>
+        ))}
       </div>
 
       {/* Exploded View Bottom Slider HUD */}

@@ -3,7 +3,7 @@
  * MODULAR INTERIOR STUDIO — FLAGSHIP STUDIO CONTAINER
  * ============================================================================
  * Master interface integrating:
- * - 3D Interactive WebGL Cabin Viewport with Live Canvas Cluster
+ * - 3D Interactive WebGL Cabin Viewport with Driver Seat First-Person Look-Around
  * - 5-Tab Precision Workbench (Seats, Dash, Console, Materials, Audio/Cage)
  * - Side-by-Side Cabin A vs B Comparison Bench
  * - 5 Curated Production Presets, Undo/Redo & JSON Serialization
@@ -22,6 +22,7 @@ import {
   GitCompare,
   Sliders,
   Check,
+  Eye,
 } from "lucide-react";
 import { MasterInteriorStateEngine, CURATED_INTERIOR_PRESETS } from "../../sim/interior/masterInteriorStateEngine";
 import { MasterModularInteriorState } from "../../sim/interior/masterInteriorTypes";
@@ -66,24 +67,42 @@ export const ModularInteriorStudio: React.FC = () => {
   };
 
   return (
-    <div className="space-y-4 font-sans" style={{color: '#451A03'}}>
+    <div className="space-y-4 font-sans" style={{ color: "#451A03" }}>
       {/* Decorative Top Accent Line */}
-      <div className="w-full h-[2px]" style={{background: 'linear-gradient(to right, transparent, #D9A64E, transparent)'}} />
+      <div
+        className="w-full h-[2px]"
+        style={{ background: "linear-gradient(to right, transparent, #D9A64E, transparent)" }}
+      />
+
       {/* Top Banner & Preset Quick-Select */}
-      <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 p-3.5 rounded-2xl backdrop-blur-xl shadow-lg" style={{backgroundColor: 'rgba(255,248,235,0.85)', border: '1px solid rgba(217,166,78,0.4)'}}>
+      <div
+        className="flex flex-col lg:flex-row lg:items-center justify-between gap-3 p-3.5 rounded-2xl backdrop-blur-xl shadow-lg"
+        style={{ backgroundColor: "rgba(255,248,235,0.85)", border: "1px solid rgba(217,166,78,0.4)" }}
+      >
         <div className="flex items-center gap-3">
-          <div className="p-2.5 rounded-xl" style={{backgroundColor: 'rgba(217,166,78,0.2)', color: '#92400E', border: '1px solid rgba(217,166,78,0.4)'}}>
+          <div
+            className="p-2.5 rounded-xl shadow-md"
+            style={{ backgroundColor: "rgba(217,166,78,0.2)", color: "#92400E", border: "1px solid rgba(217,166,78,0.4)" }}
+          >
             <Armchair size={22} />
           </div>
           <div>
-            <h2 className="text-base font-extrabold flex items-center gap-2" style={{color: '#451A03'}}>
+            <h2 className="text-base font-extrabold flex items-center gap-2" style={{ color: "#451A03" }}>
               <span>✦ MODULAR 3D INTERIOR STUDIO ✦</span>
-              <span className="px-2 py-0.5 text-[10px] font-mono font-bold rounded-full" style={{backgroundColor: 'rgba(217,166,78,0.2)', color: '#92400E', border: '1px solid rgba(217,166,78,0.4)'}}>
+              <span
+                className="px-2 py-0.5 text-[10px] font-mono font-bold rounded-full"
+                style={{ backgroundColor: "rgba(217,166,78,0.2)", color: "#92400E", border: "1px solid rgba(217,166,78,0.4)" }}
+              >
                 ⚙ 10 SUBASSEMBLIES
               </span>
+              <span
+                className="px-2 py-0.5 text-[10px] font-mono font-bold rounded-full bg-emerald-500/20 text-emerald-800 border border-emerald-500/30"
+              >
+                💺 360° DRIVER POV
+              </span>
             </h2>
-            <p className="text-xs font-mono" style={{color: '#92400E', opacity: 0.8}}>
-              Click any 3D part to inspect & customize • Dynamic PBR swatches, ambient glow & NVH physics
+            <p className="text-xs font-mono" style={{ color: "#92400E", opacity: 0.85 }}>
+              Click 3D parts to customize • 360° Driver Seat Look-Around • Real-time cluster tachometer & HMI screens
             </p>
           </div>
         </div>
@@ -91,15 +110,18 @@ export const ModularInteriorStudio: React.FC = () => {
         {/* Preset & Action Bar */}
         <div className="flex flex-wrap items-center gap-2">
           {/* Preset Buttons */}
-          <div className="flex items-center gap-1 p-1 rounded-xl" style={{backgroundColor: 'rgba(255,248,235,0.8)', border: '1px solid rgba(217,166,78,0.3)'}}>
+          <div
+            className="flex items-center gap-1 p-1 rounded-xl"
+            style={{ backgroundColor: "rgba(255,248,235,0.8)", border: "1px solid rgba(217,166,78,0.3)" }}
+          >
             {Object.entries(CURATED_INTERIOR_PRESETS).map(([key, p]) => (
               <button
                 key={key}
                 onClick={() => engine.loadPreset(key as any)}
-                className={`px-2.5 py-1 rounded-lg text-xs font-mono font-bold transition-all ${
+                className={`px-2.5 py-1 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer ${
                   state.id === p.id
-                    ? "bg-cyan-500 text-slate-950 shadow-md"
-                    : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/60"
+                    ? "bg-amber-500 text-white shadow-md shadow-amber-500/30"
+                    : "text-amber-800 hover:text-amber-950 hover:bg-amber-200/50"
                 }`}
               >
                 {p.name.split(" ")[0]}
@@ -111,10 +133,10 @@ export const ModularInteriorStudio: React.FC = () => {
           <div className="flex items-center gap-1">
             <button
               onClick={() => setViewMode("designer")}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all ${
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer ${
                 viewMode === "designer"
-                  ? "bg-cyan-500 text-slate-950 shadow-md"
-                  : "bg-slate-900/60 text-cyan-300 border border-cyan-600/40 hover:border-cyan-400"
+                  ? "bg-amber-600 text-white shadow-md shadow-amber-600/30"
+                  : "bg-amber-100/60 text-amber-800 border border-amber-300 hover:bg-amber-200/50"
               }`}
             >
               <Sliders size={13} />
@@ -123,10 +145,10 @@ export const ModularInteriorStudio: React.FC = () => {
 
             <button
               onClick={() => setViewMode("compare")}
-              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all ${
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer ${
                 viewMode === "compare"
-                  ? "bg-purple-500 text-white shadow-md"
-                  : "bg-slate-900/60 text-purple-300 border border-purple-600/40 hover:border-purple-400"
+                  ? "bg-purple-600 text-white shadow-md shadow-purple-600/30"
+                  : "bg-amber-100/60 text-purple-800 border border-purple-300 hover:bg-purple-100"
               }`}
             >
               <GitCompare size={13} />
@@ -139,27 +161,27 @@ export const ModularInteriorStudio: React.FC = () => {
             <button
               onClick={() => engine.undo()}
               title="Undo"
-              className="p-1.5 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:bg-slate-800"
+              className="p-1.5 rounded-xl bg-amber-100/60 border border-amber-300 text-amber-800 hover:bg-amber-200 cursor-pointer"
             >
               <RotateCcw size={14} />
             </button>
             <button
               onClick={() => engine.redo()}
               title="Redo"
-              className="p-1.5 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:bg-slate-800"
+              className="p-1.5 rounded-xl bg-amber-100/60 border border-amber-300 text-amber-800 hover:bg-amber-200 cursor-pointer"
             >
               <RotateCw size={14} />
             </button>
             <button
               onClick={handleExport}
               title="Export JSON"
-              className="p-1.5 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:bg-slate-800"
+              className="p-1.5 rounded-xl bg-amber-100/60 border border-amber-300 text-amber-800 hover:bg-amber-200 cursor-pointer"
             >
               <Download size={14} />
             </button>
             <label
               title="Import JSON"
-              className="p-1.5 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:bg-slate-800 cursor-pointer"
+              className="p-1.5 rounded-xl bg-amber-100/60 border border-amber-300 text-amber-800 hover:bg-amber-200 cursor-pointer"
             >
               <Upload size={14} />
               <input type="file" accept=".json" onChange={handleImport} className="hidden" />

@@ -38,7 +38,14 @@ import {
   Award,
   ZapOff,
 } from "lucide-react";
-import type { TransmissionType } from "../../sim/types";
+import type { TransmissionType, EngineConfig, SimResult } from "../../sim/types";
+import type {
+  AssemblyComponentMeta,
+  AssemblyPhase,
+  MaterialGrade,
+} from "../../sim/assemblyTypes";
+import { MaterialGradePicker } from "../assembly/MaterialGradePicker";
+import { InstallButton } from "../assembly/InstallButton";
 import {
   buildTransaxleGroup,
   updateTransaxleExplodedView,
@@ -60,6 +67,30 @@ export interface GearRatioConfig {
   finalDrive: number;
 }
 
+export interface Transmission3DStudioProps {
+  engineConfig?: EngineConfig;
+  sim?: SimResult;
+  updateEngine?: (updates: Partial<EngineConfig>) => void;
+  isEmbedded?: boolean;
+  componentMeta?: AssemblyComponentMeta;
+  selectedVariant?: MaterialGrade;
+  onSelectVariant?: (variant: MaterialGrade) => void;
+  isInstalled?: boolean;
+  isInstalling?: boolean;
+  canInstall?: boolean;
+  phase?: AssemblyPhase;
+  currentTotalStats?: {
+    hp: number;
+    torque: number;
+    weight: number;
+    reliability: number;
+    cost: number;
+  };
+  onInstall?: () => void;
+  onSkipAnimation?: () => void;
+  onNext?: () => void;
+}
+
 const DEFAULT_GEAR_RATIOS: Record<TransmissionArchitecture, GearRatioConfig> = {
   dct_7: { gear1: 3.82, gear2: 2.36, gear3: 1.68, gear4: 1.28, gear5: 1.02, gear6: 0.84, gear7: 0.67, gear8: 0.55, finalDrive: 3.44 },
   manual_6: { gear1: 3.50, gear2: 2.06, gear3: 1.41, gear4: 1.10, gear5: 0.91, gear6: 0.75, gear7: 0.65, gear8: 0.55, finalDrive: 3.73 },
@@ -68,13 +99,33 @@ const DEFAULT_GEAR_RATIOS: Record<TransmissionArchitecture, GearRatioConfig> = {
   cvt: { gear1: 2.60, gear2: 2.10, gear3: 1.60, gear4: 1.20, gear5: 0.90, gear6: 0.70, gear7: 0.55, gear8: 0.45, finalDrive: 4.10 },
 };
 
-export const Transmission3DStudio: React.FC = () => {
+export const Transmission3DStudio: React.FC<Transmission3DStudioProps> = ({
+  engineConfig,
+  sim,
+  updateEngine,
+  isEmbedded = false,
+  componentMeta,
+  selectedVariant,
+  onSelectVariant,
+  isInstalled = false,
+  isInstalling = false,
+  canInstall = true,
+  phase = "idle",
+  currentTotalStats,
+  onInstall,
+  onSkipAnimation,
+  onNext,
+}) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
   const [archType, setArchType] = useState<TransmissionArchitecture>("dct_7");
   const [currentGear, setCurrentGear] = useState<number>(1);
-  const [simRpm, setSimRpm] = useState<number>(4500);
-  const [engineTorqueNm, setEngineTorqueNm] = useState<number>(650);
+  const [simRpm, setSimRpm] = useState<number>(
+    engineConfig?.redline ? Math.round(engineConfig.redline * 0.65) : 4500
+  );
+  const [engineTorqueNm, setEngineTorqueNm] = useState<number>(
+    sim?.peakTorque ? Math.round(sim.peakTorque) : 650
+  );
   const [explodedProgress, setExplodedProgress] = useState<number>(0.0);
   const [xRayMode, setXRayMode] = useState<boolean>(false);
   const [isRotating, setIsRotating] = useState<boolean>(true);
@@ -679,6 +730,21 @@ export const Transmission3DStudio: React.FC = () => {
                     ))}
                   </div>
                 </div>
+
+                {/* Component Material Metallurgy Grade Picker if available */}
+                {componentMeta && selectedVariant && onSelectVariant && (
+                  <div className="pt-3 border-t border-slate-800">
+                    <label className="text-slate-300 font-bold mb-2 block flex items-center justify-between">
+                      <span>GEARSET & BELLHOUSING METALLURGY GRADE</span>
+                      <span className="text-[10px] text-cyan-400 font-normal">Stage #14 Specification</span>
+                    </label>
+                    <MaterialGradePicker
+                      variants={componentMeta.variants}
+                      selectedVariant={selectedVariant}
+                      onSelectVariant={onSelectVariant}
+                    />
+                  </div>
+                )}
               </div>
             )}
 
@@ -713,6 +779,23 @@ export const Transmission3DStudio: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {/* Embedded Stage 14 Installation Action Button */}
+      {isEmbedded && onInstall && (
+        <div className="pt-2">
+          <InstallButton
+            componentId="transmission"
+            componentName="Transmission & Bellhousing Assembly"
+            isInstalled={isInstalled}
+            isInstalling={isInstalling}
+            canInstall={canInstall}
+            phase={phase}
+            onInstall={onInstall}
+            onSkipAnimation={onSkipAnimation}
+            onNext={onNext}
+          />
+        </div>
+      )}
     </div>
   );
 };

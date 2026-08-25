@@ -38,6 +38,54 @@ if (typeof globalThis !== 'undefined' && typeof (globalThis as any).FileReader =
   globalThis.FileReader = NodeFileReader;
 }
 
+if (typeof globalThis !== 'undefined' && typeof (globalThis as any).ImageData === 'undefined') {
+  class MockImageData {
+    data: Uint8ClampedArray;
+    width: number;
+    height: number;
+    constructor(width: number, height: number) {
+      this.width = width;
+      this.height = height;
+      this.data = new Uint8ClampedArray(width * height * 4);
+    }
+  }
+  // @ts-ignore
+  globalThis.ImageData = MockImageData;
+}
+
+if (typeof globalThis !== 'undefined' && typeof (globalThis as any).document === 'undefined') {
+  const dummyGradient = { addColorStop: () => {} };
+  (globalThis as any).document = {
+    createElement: (tag: string) => {
+      if (tag === 'canvas') {
+        return {
+          width: 512,
+          height: 256,
+          getContext: () => ({
+            drawImage: () => {},
+            getImageData: () => new (globalThis as any).ImageData(512, 256),
+            putImageData: () => {},
+            createRadialGradient: () => dummyGradient,
+            createLinearGradient: () => dummyGradient,
+            fillRect: () => {},
+            clearRect: () => {},
+            beginPath: () => {},
+            arc: () => {},
+            fill: () => {},
+            stroke: () => {},
+            fillText: () => {},
+          }),
+          toBlob: (cb: (blob: Blob) => void) => {
+            if (cb) cb(new Blob([new Uint8Array(16)], { type: 'image/png' }));
+          },
+          toDataURL: () => 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==',
+        };
+      }
+      return {};
+    },
+  };
+}
+
 const SPORT_THEME: InteriorMaterialTheme = {
   primaryUpholstery: 'alcantara_suede',
   secondaryUpholstery: 'perforated_sport_leather',
@@ -108,20 +156,17 @@ async function main() {
 
   const audioSpec: AudioSystemSpecification = AUDIO_SYSTEM_CATALOG.AUDIO_PREMIUM_16 || Object.values(AUDIO_SYSTEM_CATALOG)[0];
 
-  const jobs: Array<{ name: string; requiresDom?: boolean; build: () => Promise<THREE.Group> }> = [
+  const jobs: Array<{ name: string; build: () => Promise<THREE.Group> }> = [
     {
       name: 'dashboard_executive.glb',
-      requiresDom: true,
       build: async () => Dashboard3DGenerator.buildDashboard('executive_monolith', 1.52, LUXURY_THEME, '#d9b26a'),
     },
     {
       name: 'dashboard_sport.glb',
-      requiresDom: true,
       build: async () => Dashboard3DGenerator.buildDashboard('gt3_track_cockpit', 1.48, SPORT_THEME, '#38bdf8'),
     },
     {
       name: 'dashboard_hyper_glass.glb',
-      requiresDom: true,
       build: async () => Dashboard3DGenerator.buildDashboard('hyper_minimalist_glass', 1.50, SPORT_THEME, '#22d3ee'),
     },
     {
@@ -156,10 +201,6 @@ async function main() {
 
   let okCount = 0;
   for (const job of jobs) {
-    if (job.requiresDom && !hasDom) {
-      console.log(`  ⏭ ${job.name} — skipped (requires browser canvas)`);
-      continue;
-    }
     try {
       const group = await job.build();
       group.name = group.name || job.name.replace(/\.glb$/, '');
@@ -167,11 +208,11 @@ async function main() {
       console.log(`  ✓ ${job.name} — ${(bytes / 1024).toFixed(1)} KB`);
       okCount++;
     } catch (err) {
-      console.error(`  ✗ ${job.name}:`, err instanceof Error ? err.message : err);
+      console.error(`  ✗ ${job.name}:`, err);
     }
   }
 
-  const attempted = jobs.filter((j) => !(j.requiresDom && !hasDom)).length;
+  const attempted = jobs.length;
   console.log('───────────────────────────────────────────────────────────');
   console.log(`Interior export complete: ${okCount}/${attempted} assets written.`);
   if (okCount !== attempted) process.exit(1);

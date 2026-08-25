@@ -2,13 +2,14 @@
 // ULTRA-FIDELITY 3D INTERIOR STUDIO — DEDICATED 3D COCKPIT VIEWPORT
 // ============================================================================
 // Real-time WebGL canvas rendering the procedural automotive interior:
-// - Orbit & First-Person POV Controls
+// - FIRST-PERSON DRIVER SEAT POV & 360° HEAD LOOK-AROUND
+// - Orbit & First-Person Controls with Mouse Drag Head Rotation
 // - 6 Instant Cinematic Camera Presets (Driver POV, Steering Macro, Console Macro, etc.)
 // - Live PBR Shader Reflections and Glowing Canvas Display Screens
 // - Day / Night Ambient Lighting Intensity Controller
 // ============================================================================
 
-import React, { useRef, useEffect, useState } from 'react';
+import React, { useRef, useEffect, useState, useCallback } from 'react';
 import * as THREE from 'three';
 import { OrbitControls } from 'three-stdlib';
 import {
@@ -18,7 +19,7 @@ import {
   MasterInterior3DStudio,
   InteriorCameraViewpoint,
 } from '../../exterior3d/generators/interior/masterInterior3DStudio';
-import { Eye, Gauge, Compass, Sun, Moon, Maximize2, Sparkles, Sliders } from 'lucide-react';
+import { Eye, Gauge, Compass, Sun, Moon, Maximize2, Sparkles, Sliders, Play, Pause, Crosshair } from 'lucide-react';
 
 interface Interior3DViewportProps {
   config: MasterInteriorConfiguration;
@@ -35,10 +36,28 @@ export const Interior3DViewport: React.FC<Interior3DViewportProps> = ({
   const [activeViewpoint, setActiveViewpoint] = useState<InteriorCameraViewpoint>('driver_pov');
   const [isNightMode, setIsNightMode] = useState<boolean>(true);
 
+  // Driver Head Rotation State
+  const [driverYawDeg, setDriverYawDeg] = useState<number>(0);
+  const [driverPitchDeg, setDriverPitchDeg] = useState<number>(0);
+  const [isAutoPan, setIsAutoPan] = useState<boolean>(false);
+  const [currentGaze, setCurrentGaze] = useState<string>("FORWARD ROAD & CLUSTER");
+
   const sceneRef = useRef<THREE.Scene | null>(null);
   const cameraRef = useRef<THREE.PerspectiveCamera | null>(null);
   const controlsRef = useRef<OrbitControls | null>(null);
   const cockpitGroupRef = useRef<THREE.Group | null>(null);
+
+  const isPointerDownRef = useRef<boolean>(false);
+  const lastPointerRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
+  const headYawRef = useRef<number>(0);
+  const headPitchRef = useRef<number>(0);
+  const targetYawRef = useRef<number>(0);
+  const targetPitchRef = useRef<number>(0);
+  const isDriverSeatModeRef = useRef<boolean>(true);
+
+  useEffect(() => {
+    isDriverSeatModeRef.current = activeViewpoint === 'driver_pov';
+  }, [activeViewpoint]);
 
   // Setup Three.js WebGL Scene
   useEffect(() => {
@@ -46,7 +65,7 @@ export const Interior3DViewport: React.FC<Interior3DViewportProps> = ({
     if (!container) return;
 
     const width = container.clientWidth || 800;
-    const height = container.clientHeight || 500;
+    const height = container.clientHeight || 520;
 
     // 1. Scene
     const scene = new THREE.Scene();
@@ -54,7 +73,7 @@ export const Interior3DViewport: React.FC<Interior3DViewportProps> = ({
     sceneRef.current = scene;
 
     // 2. Camera
-    const camera = new THREE.PerspectiveCamera(65, width / height, 0.05, 50);
+    const camera = new THREE.PerspectiveCamera(58, width / height, 0.05, 50);
     cameraRef.current = camera;
 
     const initialPose = MasterInterior3DStudio.getCameraPoseForViewpoint(activeViewpoint);
@@ -85,6 +104,7 @@ export const Interior3DViewport: React.FC<Interior3DViewportProps> = ({
 
     // 5. Lighting Rig
     const ambientLight = new THREE.AmbientLight(0xffffff, isNightMode ? 0.35 : 1.2);
+    ambientLight.name = "ambient";
     scene.add(ambientLight);
 
     const domeLight = new THREE.DirectionalLight(0xffffff, isNightMode ? 0.4 : 1.8);
@@ -100,11 +120,87 @@ export const Interior3DViewport: React.FC<Interior3DViewportProps> = ({
     cockpitGroupRef.current = cockpit;
     scene.add(cockpit);
 
-    // 7. Animation Loop
+    // 7. Pointer drag handlers for Driver POV Look-Around
+    const handlePointerDown = (e: PointerEvent) => {
+      isPointerDownRef.current = true;
+      lastPointerRef.current = { x: e.clientX, y: e.clientY };
+    };
+
+    const handlePointerUp = () => {
+      isPointerDownRef.current = false;
+    };
+
+    const handlePointerMove = (e: PointerEvent) => {
+      if (!isDriverSeatModeRef.current || !isPointerDownRef.current) return;
+      const deltaX = e.clientX - lastPointerRef.current.x;
+      const deltaY = e.clientY - lastPointerRef.current.y;
+      lastPointerRef.current = { x: e.clientX, y: e.clientY };
+
+      const sensitivity = 0.25;
+      const newYaw = Math.max(-140, Math.min(140, headYawRef.current + deltaX * sensitivity));
+      const newPitch = Math.max(-50, Math.min(50, headPitchRef.current - deltaY * sensitivity));
+
+      headYawRef.current = newYaw;
+      headPitchRef.current = newPitch;
+      targetYawRef.current = newYaw;
+      targetPitchRef.current = newPitch;
+
+      setDriverYawDeg(Math.round(newYaw));
+      setDriverPitchDeg(Math.round(newPitch));
+
+      if (newPitch > 25) setCurrentGaze("PANORAMIC ROOF");
+      else if (newPitch < -15 && newYaw > -20 && newYaw < 20) setCurrentGaze("INSTRUMENT CLUSTER & WHEEL");
+      else if (newYaw > 25) setCurrentGaze("CENTER INFOTAINMENT & CONSOLE");
+      else if (newYaw < -25) setCurrentGaze("DRIVER DOOR & MIRROR");
+      else setCurrentGaze("FORWARD WINDSHIELD & ROAD");
+    };
+
+    container.addEventListener('pointerdown', handlePointerDown);
+    window.addEventListener('pointerup', handlePointerUp);
+    container.addEventListener('pointermove', handlePointerMove);
+
+    // 8. Animation Loop
     let animId: number;
+    let curYaw = 0;
+    let curPitch = 0;
+    const clock = new THREE.Clock();
+
     const animate = () => {
       animId = requestAnimationFrame(animate);
-      controls.update();
+      const elapsed = clock.getElapsedTime();
+
+      if (isDriverSeatModeRef.current) {
+        controls.enabled = false;
+
+        if (isAutoPan) {
+          targetYawRef.current = Math.sin(elapsed * 0.5) * 65;
+          targetPitchRef.current = Math.sin(elapsed * 0.7) * 15;
+          setDriverYawDeg(Math.round(targetYawRef.current));
+          setDriverPitchDeg(Math.round(targetPitchRef.current));
+        }
+
+        curYaw += (targetYawRef.current - curYaw) * 0.12;
+        curPitch += (targetPitchRef.current - curPitch) * 0.12;
+
+        const eyeX = -0.68;
+        const eyeY = 0.88;
+        const eyeZ = -0.34;
+
+        camera.position.set(eyeX, eyeY, eyeZ);
+
+        const yawRad = (curYaw * Math.PI) / 180;
+        const pitchRad = (curPitch * Math.PI) / 180;
+
+        const dirX = Math.cos(pitchRad) * Math.cos(yawRad);
+        const dirY = Math.sin(pitchRad);
+        const dirZ = Math.cos(pitchRad) * Math.sin(yawRad);
+
+        camera.lookAt(eyeX + dirX, eyeY + dirY, eyeZ + dirZ);
+      } else {
+        controls.enabled = true;
+        controls.update();
+      }
+
       renderer.render(scene, camera);
     };
     animate();
@@ -122,11 +218,14 @@ export const Interior3DViewport: React.FC<Interior3DViewportProps> = ({
 
     return () => {
       cancelAnimationFrame(animId);
+      container.removeEventListener('pointerdown', handlePointerDown);
+      window.removeEventListener('pointerup', handlePointerUp);
+      container.removeEventListener('pointermove', handlePointerMove);
       window.removeEventListener('resize', handleResize);
       renderer.dispose();
       if (container) container.innerHTML = '';
     };
-  }, []);
+  }, [isAutoPan]);
 
   // Update Cockpit Geometry when Config changes
   useEffect(() => {
@@ -151,46 +250,79 @@ export const Interior3DViewport: React.FC<Interior3DViewportProps> = ({
   // Switch Cinematic Camera Viewpoint
   const setViewpoint = (vp: InteriorCameraViewpoint) => {
     setActiveViewpoint(vp);
+    setIsAutoPan(false);
     if (!cameraRef.current || !controlsRef.current) return;
 
-    const pose = MasterInterior3DStudio.getCameraPoseForViewpoint(vp);
-    const camera = cameraRef.current;
-    const controls = controlsRef.current;
+    if (vp === 'driver_pov') {
+      isDriverSeatModeRef.current = true;
+      targetYawRef.current = 0;
+      targetPitchRef.current = 0;
+      headYawRef.current = 0;
+      headPitchRef.current = 0;
+      setDriverYawDeg(0);
+      setDriverPitchDeg(0);
+      setCurrentGaze("FORWARD ROAD & CLUSTER");
+    } else {
+      isDriverSeatModeRef.current = false;
+      const pose = MasterInterior3DStudio.getCameraPoseForViewpoint(vp);
+      const camera = cameraRef.current;
+      const controls = controlsRef.current;
 
-    camera.position.copy(pose.position);
-    controls.target.copy(pose.target);
-    camera.fov = pose.fov;
-    camera.updateProjectionMatrix();
-    controls.update();
+      camera.position.copy(pose.position);
+      controls.target.copy(pose.target);
+      camera.fov = pose.fov;
+      camera.updateProjectionMatrix();
+      controls.update();
+    }
   };
 
   return (
-    <div className="relative w-full h-[520px] rounded-2xl overflow-hidden shadow-2xl" style={{backgroundColor: '#FFF8EB', border: '1px solid rgba(217,166,78,0.3)'}}>
+    <div className="relative w-full h-[520px] rounded-2xl overflow-hidden shadow-2xl bg-slate-950 border border-amber-500/30">
       {/* 3D WebGL Canvas Mount */}
       <div ref={mountRef} className="w-full h-full cursor-grab active:cursor-grabbing" />
+
+      {/* Driver Crosshair Reticle */}
+      {activeViewpoint === 'driver_pov' && (
+        <div className="absolute inset-0 pointer-events-none flex items-center justify-center">
+          <div className="relative w-6 h-6 flex items-center justify-center opacity-30">
+            <div className="w-1.5 h-1.5 rounded-full border border-amber-300" />
+            <div className="absolute w-4 h-px bg-amber-400" />
+            <div className="absolute h-4 w-px bg-amber-400" />
+          </div>
+        </div>
+      )}
+
+      {/* Driver Gaze HUD */}
+      {activeViewpoint === 'driver_pov' && (
+        <div className="absolute top-14 left-1/2 -translate-x-1/2 flex items-center gap-2 px-3.5 py-1 rounded-full bg-slate-950/85 backdrop-blur-md border border-amber-500/40 text-[11px] font-mono font-bold text-amber-300 shadow-xl pointer-events-none">
+          <Eye size={12} className="text-amber-400 animate-pulse" />
+          <span>👀 LOOKING AT: {currentGaze}</span>
+          <span className="text-slate-400 font-normal">({driverYawDeg}°, {driverPitchDeg}°)</span>
+        </div>
+      )}
 
       {/* ── TOP HEADER OVERLAY: CINEMATIC CAMERA VIEWPOINTS ── */}
       <div className="absolute top-3 left-3 right-3 flex items-center justify-between pointer-events-none">
         {/* Camera Viewpoint Selector */}
-        <div className="flex items-center gap-1.5 p-1.5 rounded-xl backdrop-blur-md shadow-lg pointer-events-auto" style={{backgroundColor: 'rgba(255,248,235,0.92)', border: '1px solid rgba(217,166,78,0.3)'}}>
+        <div className="flex items-center gap-1.5 p-1.5 rounded-xl backdrop-blur-md shadow-lg pointer-events-auto bg-slate-950/85 border border-slate-800">
           <button
             onClick={() => setViewpoint('driver_pov')}
-            className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+            className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
               activeViewpoint === 'driver_pov'
-                ? 'bg-amber-500 text-white shadow-md shadow-amber-500/25'
-                : 'text-amber-700 hover:text-amber-900 hover:bg-amber-100/30'
+                ? 'bg-amber-500 text-slate-950 font-bold shadow-md shadow-amber-500/30'
+                : 'text-amber-300 hover:text-white hover:bg-slate-800'
             }`}
           >
             <Eye size={13} />
-            Driver Eyepoint
+            Driver Seat POV (Look-Around)
           </button>
 
           <button
             onClick={() => setViewpoint('steering_cluster_macro')}
-            className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+            className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
               activeViewpoint === 'steering_cluster_macro'
-                ? 'bg-amber-500 text-white shadow-md shadow-amber-500/25'
-                : 'text-amber-700 hover:text-amber-900 hover:bg-amber-100/30'
+                ? 'bg-amber-500 text-slate-950 font-bold shadow-md shadow-amber-500/30'
+                : 'text-slate-400 hover:text-white hover:bg-slate-800'
             }`}
           >
             <Gauge size={13} />
@@ -199,10 +331,10 @@ export const Interior3DViewport: React.FC<Interior3DViewportProps> = ({
 
           <button
             onClick={() => setViewpoint('center_console_macro')}
-            className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+            className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
               activeViewpoint === 'center_console_macro'
-                ? 'bg-amber-500 text-white shadow-md shadow-amber-500/25'
-                : 'text-amber-700 hover:text-amber-900 hover:bg-amber-100/30'
+                ? 'bg-amber-500 text-slate-950 font-bold shadow-md shadow-amber-500/30'
+                : 'text-slate-400 hover:text-white hover:bg-slate-800'
             }`}
           >
             <Sliders size={13} />
@@ -211,10 +343,10 @@ export const Interior3DViewport: React.FC<Interior3DViewportProps> = ({
 
           <button
             onClick={() => setViewpoint('passenger_pov')}
-            className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+            className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
               activeViewpoint === 'passenger_pov'
-                ? 'bg-amber-500 text-white shadow-md shadow-amber-500/25'
-                : 'text-amber-700 hover:text-amber-900 hover:bg-amber-100/30'
+                ? 'bg-amber-500 text-slate-950 font-bold shadow-md shadow-amber-500/30'
+                : 'text-slate-400 hover:text-white hover:bg-slate-800'
             }`}
           >
             <Compass size={13} />
@@ -223,10 +355,10 @@ export const Interior3DViewport: React.FC<Interior3DViewportProps> = ({
 
           <button
             onClick={() => setViewpoint('rear_vip_lounge')}
-            className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+            className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
               activeViewpoint === 'rear_vip_lounge'
-                ? 'bg-amber-500 text-white shadow-md shadow-amber-500/25'
-                : 'text-amber-700 hover:text-amber-900 hover:bg-amber-100/30'
+                ? 'bg-amber-500 text-slate-950 font-bold shadow-md shadow-amber-500/30'
+                : 'text-slate-400 hover:text-white hover:bg-slate-800'
             }`}
           >
             <Sparkles size={13} />
@@ -235,34 +367,46 @@ export const Interior3DViewport: React.FC<Interior3DViewportProps> = ({
 
           <button
             onClick={() => setViewpoint('overhead_panoramic')}
-            className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+            className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
               activeViewpoint === 'overhead_panoramic'
-                ? 'bg-amber-500 text-white shadow-md shadow-amber-500/25'
-                : 'text-amber-700 hover:text-amber-900 hover:bg-amber-100/30'
+                ? 'bg-amber-500 text-slate-950 font-bold shadow-md shadow-amber-500/30'
+                : 'text-slate-400 hover:text-white hover:bg-slate-800'
             }`}
           >
             <Maximize2 size={13} />
-            Panoramic Cutaway
+            Panoramic ISO
           </button>
         </div>
 
-        {/* Day / Night Ambience Toggle */}
-        <div className="flex items-center gap-2 p-1.5 rounded-xl bg-slate-950/80 backdrop-blur-md border border-white/10 shadow-lg pointer-events-auto">
+        {/* Right Tools: Auto Pan & Day/Night Toggle */}
+        <div className="flex items-center gap-2 p-1.5 rounded-xl bg-slate-950/85 backdrop-blur-md border border-slate-800 shadow-lg pointer-events-auto">
+          {activeViewpoint === 'driver_pov' && (
+            <button
+              onClick={() => setIsAutoPan(!isAutoPan)}
+              className={`flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+                isAutoPan ? 'bg-emerald-500/20 border border-emerald-500 text-emerald-300' : 'bg-slate-900 text-slate-400 hover:text-white'
+              }`}
+            >
+              {isAutoPan ? <Pause size={12} /> : <Play size={12} />}
+              <span>{isAutoPan ? 'Scanning' : 'Auto Pan'}</span>
+            </button>
+          )}
+
           <button
             onClick={() => setIsNightMode(!isNightMode)}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
-              isNightMode ? 'bg-indigo-600 text-white shadow-md' : 'bg-amber-500 text-slate-950 shadow-md'
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+              isNightMode ? 'bg-indigo-600 text-white shadow-md' : 'bg-amber-500 text-slate-950 shadow-md font-bold'
             }`}
           >
             {isNightMode ? <Moon size={13} /> : <Sun size={13} />}
-            {isNightMode ? 'Night Mode (Ambient RGB)' : 'Studio Sunlight'}
+            {isNightMode ? 'Night RGB' : 'Studio Sun'}
           </button>
         </div>
       </div>
 
       {/* ── BOTTOM TELEMETRY PILL HUD ── */}
       <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between pointer-events-none">
-        <div className="flex items-center gap-3 px-3 py-2 rounded-xl bg-slate-950/85 backdrop-blur-md border border-white/10 text-xs text-slate-300 pointer-events-auto">
+        <div className="flex items-center gap-3 px-3 py-2 rounded-xl bg-slate-950/85 backdrop-blur-md border border-slate-800 text-xs text-slate-300 pointer-events-auto">
           <span className="font-mono text-cyan-400 font-bold">DASH: {config.dashboardClass.replace(/_/g, ' ').toUpperCase()}</span>
           <span className="text-slate-600">|</span>
           <span className="font-mono text-amber-400">STEERING: {config.steeringTypology.replace(/_/g, ' ').toUpperCase()}</span>
@@ -270,10 +414,10 @@ export const Interior3DViewport: React.FC<Interior3DViewportProps> = ({
           <span className="font-mono text-emerald-400">SEATS: {config.seatingClass.replace(/_/g, ' ').toUpperCase()} ({config.seatCount}x)</span>
         </div>
 
-        <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-slate-950/85 backdrop-blur-md border border-white/10 text-xs font-mono text-slate-400">
-          <span>ORBIT: L-CLICK + DRAG</span>
+        <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-slate-950/85 backdrop-blur-md border border-slate-800 text-xs font-mono text-slate-400">
+          <span>{activeViewpoint === 'driver_pov' ? 'DRAG: LOOK AROUND CABIN' : 'ORBIT: DRAG'}</span>
           <span>•</span>
-          <span>ZOOM: SCROLL</span>
+          <span>SCROLL: ZOOM</span>
         </div>
       </div>
     </div>

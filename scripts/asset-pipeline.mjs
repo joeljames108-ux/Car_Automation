@@ -24,6 +24,7 @@ const projectRoot = resolve(__dirname, '..');
 const JOBS = {
   'v12-engine': 'src/sim/modularVehicle/generateV12Glb.ts',
   'v12-parts': 'src/engine3d/generators/masterExporter.ts',
+  'forced-induction': 'src/sim/modularVehicle/generateTurbochargerGlb.ts',
   'rear-assembly': 'src/sim/modularVehicle/generateRearCarGlb.ts',
   'hoods': 'scripts/generate-hood-glb.ts',
   'chassis': 'scripts/generate-chassis-glb.ts',
@@ -34,6 +35,7 @@ const JOBS = {
 const ALL_ORDER = [
   'v12-engine',
   'v12-parts',
+  'forced-induction',
   'rear-assembly',
   'hoods',
   'chassis',

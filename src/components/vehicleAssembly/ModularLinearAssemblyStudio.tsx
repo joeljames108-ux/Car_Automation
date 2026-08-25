@@ -70,6 +70,8 @@ import { ElectronicsAssemblyStage } from "./stages/ElectronicsAssemblyStage";
 import { FinalExteriorAssemblyStage } from "./stages/FinalExteriorAssemblyStage";
 import { VehicleCompletionStage } from "./stages/VehicleCompletionStage";
 import { ParametricAerodynamicsStudio } from "./aero/ParametricAerodynamicsStudio";
+import { VehicleConstructionStudio } from "./VehicleConstructionStudio";
+import { SuspensionMasterStudio } from "../chassis/SuspensionMasterStudio";
 
 const STAGES: { id: AssemblyStageId; label: string; icon: any }[] = [
   { id: "chassis", label: "1. Chassis", icon: Wrench },
@@ -95,7 +97,7 @@ export const ModularLinearAssemblyStudio: React.FC = () => {
   // Active linear stage & View Mode
   const [activeStage, setActiveStage] = useState<AssemblyStageId>("chassis");
   const [previewStage, setPreviewStage] = useState<AssemblyStageId | null>(null);
-  const [activeTab, setActiveTab] = useState<"stage_config" | "cad_tree" | "diagnostics" | "versions">("stage_config");
+  const [activeTab, setActiveTab] = useState<"stage_config" | "chassis_50" | "suspension_kinematics" | "cad_tree" | "diagnostics" | "versions">("stage_config");
   const [isInAeroStudio, setIsInAeroStudio] = useState<boolean>(false);
 
   // Viewport Settings
@@ -326,7 +328,7 @@ export const ModularLinearAssemblyStudio: React.FC = () => {
         visibilityModeRequest={visibilityModeRequest}
       />
 
-      {/* View Switcher Tabs (Stage Configurator, CAD Tree, Health Diagnostics, Revisions) */}
+      {/* View Switcher Tabs (Stage Workbench, 50 Chassis Platforms, 3D Kinematics, CAD Tree, Health Diagnostics, Revisions) */}
       <div className="flex items-center justify-between gap-2 border-b border-base-800/80 pb-2 flex-wrap">
         <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar">
           <button
@@ -334,14 +336,44 @@ export const ModularLinearAssemblyStudio: React.FC = () => {
               setIsInAeroStudio(false);
               setActiveTab("stage_config");
             }}
-            className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-mono font-bold transition-all border cursor-pointer ${
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all border cursor-pointer ${
               activeTab === "stage_config" && !isInAeroStudio
                 ? "bg-cyan-500/20 border-cyan-500 text-cyan-300 shadow-sm"
                 : "bg-base-900/60 border-base-800 text-slate-400 hover:text-slate-200"
             }`}
           >
             <Wrench size={13} />
-            <span>STAGE CONFIGURATOR</span>
+            <span>STAGE WORKBENCH</span>
+          </button>
+
+          <button
+            onClick={() => {
+              setIsInAeroStudio(false);
+              setActiveTab("chassis_50");
+            }}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all border cursor-pointer ${
+              activeTab === "chassis_50"
+                ? "bg-cyan-500/20 border-cyan-500 text-cyan-300 shadow-sm"
+                : "bg-base-900/60 border-base-800 text-slate-400 hover:text-slate-200"
+            }`}
+          >
+            <Car size={13} />
+            <span>50 CHASSIS ARCHITECTURES</span>
+          </button>
+
+          <button
+            onClick={() => {
+              setIsInAeroStudio(false);
+              setActiveTab("suspension_kinematics");
+            }}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all border cursor-pointer ${
+              activeTab === "suspension_kinematics"
+                ? "bg-emerald-500/20 border-emerald-500 text-emerald-300 shadow-sm"
+                : "bg-base-900/60 border-base-800 text-slate-400 hover:text-slate-200"
+            }`}
+          >
+            <Activity size={13} />
+            <span>3D KINEMATICS & MR</span>
           </button>
 
           <button
@@ -349,9 +381,9 @@ export const ModularLinearAssemblyStudio: React.FC = () => {
               setIsInAeroStudio(false);
               setActiveTab("cad_tree");
             }}
-            className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-mono font-bold transition-all border cursor-pointer ${
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all border cursor-pointer ${
               activeTab === "cad_tree"
-                ? "bg-cyan-500/20 border-cyan-500 text-cyan-300 shadow-sm"
+                ? "bg-purple-500/20 border-purple-500 text-purple-300 shadow-sm"
                 : "bg-base-900/60 border-base-800 text-slate-400 hover:text-slate-200"
             }`}
           >
@@ -364,7 +396,7 @@ export const ModularLinearAssemblyStudio: React.FC = () => {
               setIsInAeroStudio(false);
               setActiveTab("diagnostics");
             }}
-            className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-mono font-bold transition-all border cursor-pointer ${
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all border cursor-pointer ${
               activeTab === "diagnostics"
                 ? "bg-emerald-500/20 border-emerald-500 text-emerald-300 shadow-sm"
                 : "bg-base-900/60 border-base-800 text-slate-400 hover:text-slate-200"
@@ -379,7 +411,7 @@ export const ModularLinearAssemblyStudio: React.FC = () => {
               setIsInAeroStudio(false);
               setActiveTab("versions");
             }}
-            className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-mono font-bold transition-all border cursor-pointer ${
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all border cursor-pointer ${
               activeTab === "versions"
                 ? "bg-amber-500/20 border-amber-500 text-amber-300 shadow-sm"
                 : "bg-base-900/60 border-base-800 text-slate-400 hover:text-slate-200"
@@ -411,6 +443,14 @@ export const ModularLinearAssemblyStudio: React.FC = () => {
           onUpdateAero={handleUpdateAero}
           onExitToAssembly={() => setIsInAeroStudio(false)}
         />
+      ) : activeTab === "chassis_50" ? (
+        <div className="animate-stage-transition-enter">
+          <VehicleConstructionStudio />
+        </div>
+      ) : activeTab === "suspension_kinematics" ? (
+        <div className="animate-stage-transition-enter">
+          <SuspensionMasterStudio />
+        </div>
       ) : activeTab === "cad_tree" ? (
         <VehicleConfigTree
           installedStages={assemblyState.installedStages}

@@ -54,6 +54,8 @@ export function runModularEngineStudioTests(): { passed: number; failed: number 
   assert(state.exhaust.headerStyle !== undefined, "Exhaust headers defined");
   assert(state.lubrication.systemType === "dry_sump_3_stage", "Dry sump lubrication defined");
   assert(state.tuning.revLimiterRpm >= 7000, "Rev limiter tuning defined");
+  assert(state.drivetrain !== undefined, "15th Subsystem: Drivetrain defined on MasterEngineState");
+  assert(state.drivetrainPerformance !== undefined, "Coupled Drivetrain Performance computed");
 
   // --------------------------------------------------------------------------
   // TEST 2: Multi-Physics Dyno Solver & Continuous Power Curves

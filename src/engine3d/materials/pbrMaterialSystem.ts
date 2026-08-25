@@ -600,6 +600,322 @@ export class EngineMaterialLibrary {
     return this.materialCache.get(key) as THREE.MeshPhysicalMaterial;
   }
 
+  public getTitaniumBlued(): THREE.MeshPhysicalMaterial {
+    const key = 'base_titanium_blued';
+    if (!this.materialCache.has(key)) {
+      const mat = new THREE.MeshPhysicalMaterial({
+        name: 'Titanium_Heat_Blued_PieCut',
+        color: new THREE.Color(0x2563eb),
+        metalness: 0.96,
+        roughness: 0.16,
+        clearcoat: 0.85,
+        clearcoatRoughness: 0.06,
+        sheen: 0.55,
+        sheenColor: new THREE.Color(0x9333ea),
+        specularColor: new THREE.Color(0x38bdf8),
+        envMapIntensity: 2.8,
+      });
+      this.materialCache.set(key, mat);
+    }
+    return this.materialCache.get(key) as THREE.MeshPhysicalMaterial;
+  }
+
+  public getForgedGoldFlakeCarbon(): THREE.MeshPhysicalMaterial {
+    const key = 'base_forged_gold_flake_carbon';
+    if (!this.materialCache.has(key)) {
+      const mat = new THREE.MeshPhysicalMaterial({
+        name: 'Forged_Composite_Carbon_GoldFlake',
+        color: new THREE.Color(0x1c1917),
+        metalness: 0.45,
+        roughness: 0.22,
+        clearcoat: 0.95,
+        clearcoatRoughness: 0.04,
+        sheen: 0.35,
+        sheenColor: new THREE.Color(0xf59e0b),
+        envMapIntensity: 2.2,
+      });
+      this.materialCache.set(key, mat);
+    }
+    return this.materialCache.get(key) as THREE.MeshPhysicalMaterial;
+  }
+
+  public getRossoCorsaPowdercoat(): THREE.MeshPhysicalMaterial {
+    const key = 'base_rosso_corsa';
+    if (!this.materialCache.has(key)) {
+      const mat = new THREE.MeshPhysicalMaterial({
+        name: 'Rosso_Corsa_Textured_Powdercoat',
+        color: new THREE.Color(0xdc2626),
+        metalness: 0.35,
+        roughness: 0.28,
+        clearcoat: 0.8,
+        clearcoatRoughness: 0.15,
+        sheen: 0.2,
+        sheenColor: new THREE.Color(0xef4444),
+        envMapIntensity: 1.8,
+      });
+      this.materialCache.set(key, mat);
+    }
+    return this.materialCache.get(key) as THREE.MeshPhysicalMaterial;
+  }
+
+  public getMonacoBluePowdercoat(): THREE.MeshPhysicalMaterial {
+    const key = 'base_monaco_blue';
+    if (!this.materialCache.has(key)) {
+      const mat = new THREE.MeshPhysicalMaterial({
+        name: 'Monaco_Blue_Metallic_Powdercoat',
+        color: new THREE.Color(0x0284c7),
+        metalness: 0.65,
+        roughness: 0.22,
+        clearcoat: 0.85,
+        clearcoatRoughness: 0.08,
+        sheen: 0.3,
+        sheenColor: new THREE.Color(0x38bdf8),
+        envMapIntensity: 2.0,
+      });
+      this.materialCache.set(key, mat);
+    }
+    return this.materialCache.get(key) as THREE.MeshPhysicalMaterial;
+  }
+
+  public getGialloModenaPowdercoat(): THREE.MeshPhysicalMaterial {
+    const key = 'base_giallo_modena';
+    if (!this.materialCache.has(key)) {
+      const mat = new THREE.MeshPhysicalMaterial({
+        name: 'Giallo_Modena_Racing_Yellow',
+        color: new THREE.Color(0xeab308),
+        metalness: 0.3,
+        roughness: 0.25,
+        clearcoat: 0.85,
+        clearcoatRoughness: 0.1,
+        sheen: 0.25,
+        sheenColor: new THREE.Color(0xfde047),
+        envMapIntensity: 1.8,
+      });
+      this.materialCache.set(key, mat);
+    }
+    return this.materialCache.get(key) as THREE.MeshPhysicalMaterial;
+  }
+
+  public getBritishRacingGreenPowdercoat(): THREE.MeshPhysicalMaterial {
+    const key = 'base_british_racing_green';
+    if (!this.materialCache.has(key)) {
+      const mat = new THREE.MeshPhysicalMaterial({
+        name: 'British_Racing_Green_Metallic',
+        color: new THREE.Color(0x15803d),
+        metalness: 0.55,
+        roughness: 0.24,
+        clearcoat: 0.9,
+        clearcoatRoughness: 0.08,
+        sheen: 0.2,
+        sheenColor: new THREE.Color(0x4ade80),
+        envMapIntensity: 1.9,
+      });
+      this.materialCache.set(key, mat);
+    }
+    return this.materialCache.get(key) as THREE.MeshPhysicalMaterial;
+  }
+
+  public getStealthBlackCeramic(): THREE.MeshPhysicalMaterial {
+    const key = 'base_stealth_black_ceramic';
+    if (!this.materialCache.has(key)) {
+      const mat = new THREE.MeshPhysicalMaterial({
+        name: 'Stealth_Black_Ceramic_Coating',
+        color: new THREE.Color(0x18181b),
+        metalness: 0.30,
+        roughness: 0.55,
+        clearcoat: 0.15,
+        clearcoatRoughness: 0.4,
+        envMapIntensity: 1.2,
+      });
+      this.materialCache.set(key, mat);
+    }
+    return this.materialCache.get(key) as THREE.MeshPhysicalMaterial;
+  }
+
+  public getDynoGlowExhaust(): THREE.MeshPhysicalMaterial {
+    const key = 'base_dyno_glow_exhaust';
+    if (!this.materialCache.has(key)) {
+      const mat = new THREE.MeshPhysicalMaterial({
+        name: 'Dyno_Glow_Exhaust_Headers',
+        color: new THREE.Color(0xff5722),
+        emissive: new THREE.Color(0xff3d00),
+        emissiveIntensity: 1.8,
+        metalness: 0.85,
+        roughness: 0.32,
+        clearcoat: 0.5,
+        clearcoatRoughness: 0.1,
+        envMapIntensity: 1.5,
+      });
+      this.materialCache.set(key, mat);
+    }
+    return this.materialCache.get(key) as THREE.MeshPhysicalMaterial;
+  }
+
+  public getPolishedChrome(): THREE.MeshPhysicalMaterial {
+    const key = 'base_polished_chrome';
+    if (!this.materialCache.has(key)) {
+      const mat = new THREE.MeshPhysicalMaterial({
+        name: 'Mirror_Polished_Chrome',
+        color: new THREE.Color(0xf8fafc),
+        metalness: 0.98,
+        roughness: 0.05,
+        clearcoat: 1.0,
+        clearcoatRoughness: 0.02,
+        envMapIntensity: 3.0,
+      });
+      this.materialCache.set(key, mat);
+    }
+    return this.materialCache.get(key) as THREE.MeshPhysicalMaterial;
+  }
+
+  public getGoldLeaf(): THREE.MeshPhysicalMaterial {
+    const key = 'base_gold_leaf';
+    if (!this.materialCache.has(key)) {
+      const mat = new THREE.MeshPhysicalMaterial({
+        name: '24K_Gold_Leaf_Mirror',
+        color: new THREE.Color(0xfbbf24),
+        metalness: 0.95,
+        roughness: 0.12,
+        clearcoat: 0.9,
+        clearcoatRoughness: 0.04,
+        sheen: 0.4,
+        sheenColor: new THREE.Color(0xfef08a),
+        envMapIntensity: 2.6,
+      });
+      this.materialCache.set(key, mat);
+    }
+    return this.materialCache.get(key) as THREE.MeshPhysicalMaterial;
+  }
+
+  public getAnodizedPurple(): THREE.MeshPhysicalMaterial {
+    const key = 'base_anodized_purple';
+    if (!this.materialCache.has(key)) {
+      const mat = new THREE.MeshPhysicalMaterial({
+        name: 'Anodized_Billet_Purple',
+        color: new THREE.Color(0x9333ea),
+        metalness: 0.88,
+        roughness: 0.18,
+        clearcoat: 0.8,
+        clearcoatRoughness: 0.1,
+        sheen: 0.35,
+        sheenColor: new THREE.Color(0xc084fc),
+        envMapIntensity: 2.2,
+      });
+      this.materialCache.set(key, mat);
+    }
+    return this.materialCache.get(key) as THREE.MeshPhysicalMaterial;
+  }
+
+  public getBilletEmerald(): THREE.MeshPhysicalMaterial {
+    const key = 'base_billet_emerald';
+    if (!this.materialCache.has(key)) {
+      const mat = new THREE.MeshPhysicalMaterial({
+        name: 'Anodized_Billet_Emerald',
+        color: new THREE.Color(0x10b981),
+        metalness: 0.90,
+        roughness: 0.16,
+        clearcoat: 0.85,
+        clearcoatRoughness: 0.08,
+        sheen: 0.3,
+        sheenColor: new THREE.Color(0x6ee7b7),
+        envMapIntensity: 2.4,
+      });
+      this.materialCache.set(key, mat);
+    }
+    return this.materialCache.get(key) as THREE.MeshPhysicalMaterial;
+  }
+
+  public getBilletCobalt(): THREE.MeshPhysicalMaterial {
+    const key = 'base_billet_cobalt';
+    if (!this.materialCache.has(key)) {
+      const mat = new THREE.MeshPhysicalMaterial({
+        name: 'Anodized_Billet_Cobalt',
+        color: new THREE.Color(0x0284c7),
+        metalness: 0.90,
+        roughness: 0.16,
+        clearcoat: 0.85,
+        clearcoatRoughness: 0.08,
+        sheen: 0.3,
+        sheenColor: new THREE.Color(0x38bdf8),
+        envMapIntensity: 2.4,
+      });
+      this.materialCache.set(key, mat);
+    }
+    return this.materialCache.get(key) as THREE.MeshPhysicalMaterial;
+  }
+
+  public getBilletCrimson(): THREE.MeshPhysicalMaterial {
+    const key = 'base_billet_crimson';
+    if (!this.materialCache.has(key)) {
+      const mat = new THREE.MeshPhysicalMaterial({
+        name: 'Anodized_Billet_Crimson',
+        color: new THREE.Color(0xef4444),
+        metalness: 0.90,
+        roughness: 0.16,
+        clearcoat: 0.85,
+        clearcoatRoughness: 0.08,
+        sheen: 0.3,
+        sheenColor: new THREE.Color(0xfca5a5),
+        envMapIntensity: 2.4,
+      });
+      this.materialCache.set(key, mat);
+    }
+    return this.materialCache.get(key) as THREE.MeshPhysicalMaterial;
+  }
+
+  public getCoggedBeltRubber(): THREE.MeshPhysicalMaterial {
+    const key = 'base_cogged_belt';
+    if (!this.materialCache.has(key)) {
+      const mat = new THREE.MeshPhysicalMaterial({
+        name: 'Reinforced_Cogged_Drive_Belt',
+        color: new THREE.Color(0x1f2937),
+        metalness: 0.05,
+        roughness: 0.78,
+        clearcoat: 0.05,
+        clearcoatRoughness: 0.8,
+        envMapIntensity: 0.6,
+      });
+      this.materialCache.set(key, mat);
+    }
+    return this.materialCache.get(key) as THREE.MeshPhysicalMaterial;
+  }
+
+  public getRedSilicone(): THREE.MeshPhysicalMaterial {
+    const key = 'base_red_silicone';
+    if (!this.materialCache.has(key)) {
+      const mat = new THREE.MeshPhysicalMaterial({
+        name: 'Red_4Ply_Silicone_Coupler',
+        color: new THREE.Color(0xdc2626),
+        metalness: 0.05,
+        roughness: 0.45,
+        clearcoat: 0.6,
+        clearcoatRoughness: 0.25,
+        sheen: 0.2,
+        sheenColor: new THREE.Color(0xfca5a5),
+        envMapIntensity: 1.2,
+      });
+      this.materialCache.set(key, mat);
+    }
+    return this.materialCache.get(key) as THREE.MeshPhysicalMaterial;
+  }
+
+  public getBlackViton(): THREE.MeshPhysicalMaterial {
+    const key = 'base_black_viton';
+    if (!this.materialCache.has(key)) {
+      const mat = new THREE.MeshPhysicalMaterial({
+        name: 'Viton_Fluoroelastomer_Black',
+        color: new THREE.Color(0x18181b),
+        metalness: 0.08,
+        roughness: 0.65,
+        clearcoat: 0.2,
+        clearcoatRoughness: 0.5,
+        envMapIntensity: 0.8,
+      });
+      this.materialCache.set(key, mat);
+    }
+    return this.materialCache.get(key) as THREE.MeshPhysicalMaterial;
+  }
+
   /**
    * Resolves the authentic physical PBR material for any selected material variant string or component type.
    */
@@ -610,6 +926,36 @@ export class EngineMaterialLibrary {
   ): THREE.MeshPhysicalMaterial {
     const id = (materialId || '').toLowerCase();
 
+    if (id.includes('titanium_blued') || id.includes('burnt_titanium') || id.includes('heat_blued')) {
+      return this.getTitaniumBlued();
+    }
+    if (id.includes('dyno_glow') || id.includes('glowing') || id.includes('hot_exhaust')) {
+      return this.getDynoGlowExhaust();
+    }
+    if (id.includes('forged_carbon') || id.includes('gold_flake') || id.includes('forged_composite')) {
+      return this.getForgedGoldFlakeCarbon();
+    }
+    if (id.includes('rosso') || id.includes('red_corsa') || id.includes('rosso_red') || id.includes('wrinkle_red')) {
+      return this.getRossoCorsaPowdercoat();
+    }
+    if (id.includes('monaco_blue') || id.includes('electric_blue') || id.includes('apex_blue')) {
+      return this.getMonacoBluePowdercoat();
+    }
+    if (id.includes('giallo') || id.includes('yellow') || id.includes('acid_yellow')) {
+      return this.getGialloModenaPowdercoat();
+    }
+    if (id.includes('green') || id.includes('british_racing')) {
+      return this.getBritishRacingGreenPowdercoat();
+    }
+    if (id.includes('stealth_black') || id.includes('satin_black') || id.includes('black_ceramic')) {
+      return this.getStealthBlackCeramic();
+    }
+    if (id.includes('chrome') || id.includes('polished_stainless') || id.includes('mirror')) {
+      return this.getPolishedChrome();
+    }
+    if (id.includes('gold_leaf') || id.includes('24k')) {
+      return this.getGoldLeaf();
+    }
     if (id.includes('cast_iron') || id === 'iron') {
       return this.getCastIron();
     }

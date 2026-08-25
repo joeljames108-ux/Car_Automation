@@ -157,6 +157,32 @@ export class CabinAcousticSynthesizer {
   }
 
   /**
+   * Play crisp magnetic tactile paddle shifter click
+   */
+  public playPaddleShiftSound(dir: "up" | "down" = "up") {
+    if (this.isMuted) return;
+    this.initContext();
+    if (!this.audioCtx) return;
+
+    const ctx = this.audioCtx;
+    const now = ctx.currentTime;
+
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = dir === "up" ? "triangle" : "sine";
+    osc.frequency.setValueAtTime(dir === "up" ? 1800 : 1200, now);
+    osc.frequency.exponentialRampToValueAtTime(dir === "up" ? 600 : 350, now + 0.03);
+
+    gain.gain.setValueAtTime(0.35, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.035);
+
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.start(now);
+    osc.stop(now + 0.04);
+  }
+
+  /**
    * Spatial Dolby Atmos Audiophile Demo Sweep
    */
   public playDolbyAtmosSweep() {
@@ -196,3 +222,4 @@ export class CabinAcousticSynthesizer {
     });
   }
 }
+

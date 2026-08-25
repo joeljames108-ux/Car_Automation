@@ -29,11 +29,13 @@ import { ModularEngine3DViewport } from "./ModularEngine3DViewport";
 import { ModularEngineStudioWorkbench } from "./ModularEngineStudioWorkbench";
 import { ModularEngineDynoBench } from "./ModularEngineDynoBench";
 import { ModularEngineComparisonStudio } from "./ModularEngineComparisonStudio";
+import { Transmission3DStudio } from "../transmissionStudio/Transmission3DStudio";
+import { CoupledDynoBench } from "../powertrainStudio/CoupledDynoBench";
 
 export const ModularEngineStudio: React.FC = () => {
   const [engineInstance] = useState(() => MasterEngineStateEngine.getInstance());
   const [state, setState] = useState<MasterEngineState>(engineInstance.getState());
-  const [studioMode, setStudioMode] = useState<"viewport" | "dyno" | "compare">("viewport");
+  const [studioMode, setStudioMode] = useState<"viewport" | "dyno" | "transmission" | "coupled_dyno" | "compare">("viewport");
 
   useEffect(() => {
     const unsubscribe = engineInstance.subscribe((newState) => {
@@ -79,16 +81,18 @@ export const ModularEngineStudio: React.FC = () => {
         {/* View Switcher & Action Buttons */}
         <div className="flex flex-wrap items-center gap-2">
           {/* Mode Tabs */}
-          <div className="flex bg-slate-950 p-1 rounded-xl border border-slate-800">
+          <div className="flex bg-slate-950 p-1 rounded-xl border border-slate-800 flex-wrap gap-1">
             {[
-              { id: "viewport", label: "3D Studio", icon: <Layers size={13} /> },
-              { id: "dyno", label: "Dyno Simulator", icon: <Activity size={13} /> },
+              { id: "viewport", label: "3D Engine", icon: <Layers size={13} /> },
+              { id: "dyno", label: "Crank Dyno", icon: <Activity size={13} /> },
+              { id: "transmission", label: "3D Transmission", icon: <Cog size={13} /> },
+              { id: "coupled_dyno", label: "Coupled Dyno", icon: <Zap size={13} /> },
               { id: "compare", label: "Compare A/B", icon: <Scale size={13} /> },
             ].map((tab) => (
               <button
                 key={tab.id}
                 onClick={() => setStudioMode(tab.id as any)}
-                className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg transition-all ${
+                className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg transition-all cursor-pointer ${
                   studioMode === tab.id
                     ? "bg-cyan-500 text-slate-950 font-bold shadow-md shadow-cyan-500/30"
                     : "text-slate-400 hover:text-slate-200"
@@ -146,6 +150,30 @@ export const ModularEngineStudio: React.FC = () => {
         {studioMode === "dyno" && (
           <div className="w-full h-full">
             <ModularEngineDynoBench state={state} />
+          </div>
+        )}
+
+        {studioMode === "transmission" && (
+          <div className="w-full h-full">
+            <Transmission3DStudio
+              engineConfig={{
+                bore: state.block.boreMm,
+                stroke: state.block.strokeMm,
+                compressionRatio: state.performance.staticCompressionRatio,
+                rpmLimiter: state.performance.redlineRpm,
+                layout: `${state.architecture.family === "v_engine" ? "v" : state.architecture.family === "inline" ? "i" : state.architecture.family}${state.architecture.cylinderCount}` as any,
+              } as any}
+              sim={{
+                peakTorque: state.performance.peakTorqueNm,
+                peakPower: state.performance.peakHorsepowerHp,
+              } as any}
+            />
+          </div>
+        )}
+
+        {studioMode === "coupled_dyno" && (
+          <div className="w-full h-full">
+            <CoupledDynoBench state={state} />
           </div>
         )}
 

@@ -21,6 +21,12 @@ import * as THREE from "three";
 import { MasterEngineState } from "../../../sim/engine/masterEngineTypes";
 import { EngineMountingGraph, solveDynamicEngineGeometry } from "../../sockets/engineMountingGraph";
 import { EngineKinematicsAnimator } from "../../animation/engineKinematicsAnimator";
+import { buildEngineCoverScene } from "../../../engine3d/generators/engineCoverGenerator";
+import { createSingleTurboUnit } from "../../../engine3d/generators/turbochargerGenerator";
+import {
+  createTwinScrewSuperchargerAssembly,
+  createCentrifugalSuperchargerAssembly,
+} from "../../../engine3d/generators/superchargerGenerator";
 
 export class MasterModularEngine3DAssembler {
   private rootGroup: THREE.Group;
@@ -48,9 +54,20 @@ export class MasterModularEngine3DAssembler {
     nitridedSteel: THREE.MeshPhysicalMaterial;
     titaniumAlloy: THREE.MeshPhysicalMaterial;
     carbonFiber: THREE.MeshPhysicalMaterial;
+    forgedCarbonGold: THREE.MeshPhysicalMaterial;
     goldAnodized: THREE.MeshPhysicalMaterial;
+    cobaltAnodized: THREE.MeshPhysicalMaterial;
+    crimsonAnodized: THREE.MeshPhysicalMaterial;
     redCorsaPowdercoat: THREE.MeshPhysicalMaterial;
+    monacoBluePowdercoat: THREE.MeshPhysicalMaterial;
+    gialloModenaPowdercoat: THREE.MeshPhysicalMaterial;
+    britishRacingGreenPowdercoat: THREE.MeshPhysicalMaterial;
+    stealthBlackCeramic: THREE.MeshPhysicalMaterial;
+    titaniumBluedExhaust: THREE.MeshPhysicalMaterial;
     inconelExhaust: THREE.MeshPhysicalMaterial;
+    dynoGlowExhaust: THREE.MeshPhysicalMaterial;
+    ceramicWhiteExhaust: THREE.MeshPhysicalMaterial;
+    polishedChrome: THREE.MeshPhysicalMaterial;
     combustionFlameMat: THREE.MeshBasicMaterial;
   };
 
@@ -73,7 +90,7 @@ export class MasterModularEngine3DAssembler {
         color: 0xe2e8f0, // CNC machined 6061-T6 aluminum
         metalness: 0.94,
         roughness: 0.12,
-        clearcoat: 0.5,
+        clearcoat: 0.6,
         clearcoatRoughness: 0.08,
       }),
       forgedSteel: new THREE.MeshStandardMaterial({
@@ -99,22 +116,97 @@ export class MasterModularEngine3DAssembler {
         clearcoat: 0.95,
         clearcoatRoughness: 0.04,
       }),
+      forgedCarbonGold: new THREE.MeshPhysicalMaterial({
+        color: 0x1c1917, // Forged carbon with gold flake
+        metalness: 0.45,
+        roughness: 0.22,
+        clearcoat: 0.95,
+        sheen: 0.4,
+        sheenColor: new THREE.Color(0xf59e0b),
+      }),
       goldAnodized: new THREE.MeshPhysicalMaterial({
         color: 0xf59e0b, // Anodized gold fittings / pulleys
-        metalness: 0.92,
-        roughness: 0.15,
-        clearcoat: 0.4,
+        metalness: 0.94,
+        roughness: 0.14,
+        clearcoat: 0.6,
+      }),
+      cobaltAnodized: new THREE.MeshPhysicalMaterial({
+        color: 0x2563eb, // Cobalt blue anodized
+        metalness: 0.94,
+        roughness: 0.14,
+        clearcoat: 0.6,
+      }),
+      crimsonAnodized: new THREE.MeshPhysicalMaterial({
+        color: 0xdc2626, // Crimson red anodized
+        metalness: 0.94,
+        roughness: 0.14,
+        clearcoat: 0.6,
       }),
       redCorsaPowdercoat: new THREE.MeshPhysicalMaterial({
         color: 0xdc2626, // Scuderia Red textured cam covers
         metalness: 0.45,
         roughness: 0.28,
-        clearcoat: 0.8,
+        clearcoat: 0.85,
+        sheen: 0.25,
+        sheenColor: new THREE.Color(0xef4444),
+      }),
+      monacoBluePowdercoat: new THREE.MeshPhysicalMaterial({
+        color: 0x0284c7, // Monaco Blue metallic
+        metalness: 0.65,
+        roughness: 0.22,
+        clearcoat: 0.85,
+        sheen: 0.3,
+        sheenColor: new THREE.Color(0x38bdf8),
+      }),
+      gialloModenaPowdercoat: new THREE.MeshPhysicalMaterial({
+        color: 0xeab308, // Giallo Modena racing yellow
+        metalness: 0.35,
+        roughness: 0.25,
+        clearcoat: 0.85,
+      }),
+      britishRacingGreenPowdercoat: new THREE.MeshPhysicalMaterial({
+        color: 0x15803d, // British Racing Green metallic
+        metalness: 0.55,
+        roughness: 0.24,
+        clearcoat: 0.9,
+      }),
+      stealthBlackCeramic: new THREE.MeshPhysicalMaterial({
+        color: 0x18181b, // Satin black ceramic
+        metalness: 0.30,
+        roughness: 0.55,
+      }),
+      titaniumBluedExhaust: new THREE.MeshPhysicalMaterial({
+        color: 0x2563eb, // Titanium heat-blued with purple sheen
+        metalness: 0.96,
+        roughness: 0.16,
+        clearcoat: 0.85,
+        clearcoatRoughness: 0.06,
+        sheen: 0.65,
+        sheenColor: new THREE.Color(0x9333ea),
       }),
       inconelExhaust: new THREE.MeshPhysicalMaterial({
-        color: 0xa87954, // Heat-tempered bronze/purple inconel
-        metalness: 0.88,
-        roughness: 0.26,
+        color: 0xd97706, // Heat-tempered bronze/gold inconel
+        metalness: 0.92,
+        roughness: 0.22,
+        clearcoat: 0.5,
+      }),
+      dynoGlowExhaust: new THREE.MeshPhysicalMaterial({
+        color: 0xff5722, // Glowing hot headers
+        emissive: new THREE.Color(0xff3d00),
+        emissiveIntensity: 2.2,
+        metalness: 0.85,
+        roughness: 0.30,
+      }),
+      ceramicWhiteExhaust: new THREE.MeshPhysicalMaterial({
+        color: 0xf8fafc, // F1 Plasma sprayed white thermal barrier
+        metalness: 0.35,
+        roughness: 0.38,
+      }),
+      polishedChrome: new THREE.MeshPhysicalMaterial({
+        color: 0xf8fafc, // Mirror polished chrome
+        metalness: 0.98,
+        roughness: 0.05,
+        clearcoat: 1.0,
       }),
       combustionFlameMat: new THREE.MeshBasicMaterial({
         color: 0xff3d00,
@@ -332,6 +424,29 @@ export class MasterModularEngine3DAssembler {
     const headWidthM = arch.family === "inline" ? (blockWidthM * 0.88) : (blockWidthM * 0.55);
     const headHeightM = 0.11 * Math.sqrt(block.boreMm / 88);
 
+    // Resolve dynamic valve cover material
+    const resolveValveCoverMat = () => {
+      const col = state.cosmetics?.valveCoverColor;
+      if (col === "monaco_blue") return this.materials.monacoBluePowdercoat;
+      if (col === "acid_yellow") return this.materials.gialloModenaPowdercoat;
+      if (col === "gold_anodized") return this.materials.goldAnodized;
+      if (col === "satin_carbon") return this.materials.carbonFiber;
+      if (col === "titanium_gray") return this.materials.titaniumAlloy;
+      return this.materials.redCorsaPowdercoat;
+    };
+    const valveCoverMat = resolveValveCoverMat();
+
+    // Resolve dynamic anodizing hardware
+    const resolveAnodizedMat = () => {
+      const an = state.cosmetics?.anodizingTheme;
+      if (an === "cobalt_blue") return this.materials.cobaltAnodized;
+      if (an === "crimson_red") return this.materials.crimsonAnodized;
+      if (an === "stealth_black") return this.materials.stealthBlackCeramic;
+      if (an === "burnt_titanium") return this.materials.titaniumAlloy;
+      return this.materials.goldAnodized;
+    };
+    const anodizedMat = resolveAnodizedMat();
+
     const buildCylinderHeadAssembly = (name: string, isLeft: boolean) => {
       const headGroup = new THREE.Group();
       headGroup.name = name;
@@ -344,10 +459,10 @@ export class MasterModularEngine3DAssembler {
       headMesh.position.y = headHeightM / 2;
       headGroup.add(headMesh);
 
-      // Red Textured Cam Cover
+      // Colorful Powdercoated Cam Cover
       const camCover = new THREE.Mesh(
         new THREE.BoxGeometry(headWidthM * 0.95, 0.045, headLengthM * 0.98),
-        this.materials.redCorsaPowdercoat
+        valveCoverMat
       );
       camCover.position.y = headHeightM + 0.025;
       headGroup.add(camCover);
@@ -364,12 +479,12 @@ export class MasterModularEngine3DAssembler {
       headGroup.add(exhaustCam);
 
       // Cam Timing Gears
-      const camGear1 = new THREE.Mesh(new THREE.CylinderGeometry(0.042, 0.042, 0.012, 28), this.materials.goldAnodized);
+      const camGear1 = new THREE.Mesh(new THREE.CylinderGeometry(0.042, 0.042, 0.012, 28), anodizedMat);
       camGear1.rotation.x = Math.PI / 2;
       camGear1.position.set(-0.045, headHeightM + 0.01, startZ / 1000 - 0.04);
       headGroup.add(camGear1);
 
-      const camGear2 = new THREE.Mesh(new THREE.CylinderGeometry(0.042, 0.042, 0.012, 28), this.materials.goldAnodized);
+      const camGear2 = new THREE.Mesh(new THREE.CylinderGeometry(0.042, 0.042, 0.012, 28), anodizedMat);
       camGear2.rotation.x = Math.PI / 2;
       camGear2.position.set(0.045, headHeightM + 0.01, startZ / 1000 - 0.04);
       headGroup.add(camGear2);
@@ -414,12 +529,12 @@ export class MasterModularEngine3DAssembler {
     intakeGroup.add(throttleBody);
 
     // Fuel Rails & Injectors
-    const fuelRailL = new THREE.Mesh(new THREE.CylinderGeometry(0.008, 0.008, headLengthM * 0.8, 16), this.materials.goldAnodized);
+    const fuelRailL = new THREE.Mesh(new THREE.CylinderGeometry(0.008, 0.008, headLengthM * 0.8, 16), anodizedMat);
     fuelRailL.rotation.x = Math.PI / 2;
     fuelRailL.position.set(-0.09, -0.04, 0);
     intakeGroup.add(fuelRailL);
 
-    const fuelRailR = new THREE.Mesh(new THREE.CylinderGeometry(0.008, 0.008, headLengthM * 0.8, 16), this.materials.goldAnodized);
+    const fuelRailR = new THREE.Mesh(new THREE.CylinderGeometry(0.008, 0.008, headLengthM * 0.8, 16), anodizedMat);
     fuelRailR.rotation.x = Math.PI / 2;
     fuelRailR.position.set(0.09, -0.04, 0);
     intakeGroup.add(fuelRailR);
@@ -428,8 +543,58 @@ export class MasterModularEngine3DAssembler {
     this.rootGroup.add(intakeGroup);
 
     // ------------------------------------------------------------------------
-    // 6. EXHAUST HEADERS
+    // 5b. MODULAR ENGINE BEAUTY COVER (12 Models for All Engine Architectures)
     // ------------------------------------------------------------------------
+    if (state.cosmetics?.showEngineCover !== false) {
+      const defaultBadge =
+        arch.family === "rotary_wankel"
+          ? "ROTARY 3-ROTOR"
+          : arch.family === "boxer"
+          ? `FLAT-${arch.cylinderCount} TWIN TURBO`
+          : arch.family === "inline"
+          ? `I${arch.cylinderCount} TWIN-CAM 24V`
+          : arch.family === "w_engine"
+          ? `W${arch.cylinderCount} QUAD-TURBO`
+          : arch.cylinderCount === 12
+          ? "APEX V12 CORSA"
+          : `APEX V${arch.cylinderCount} COMPETITION`;
+
+      const coverOpts = {
+        model: state.cosmetics?.coverModel || "hypercar_quartz",
+        coverColor: state.cosmetics?.coverColor || "dry_carbon",
+        bezelColor: state.cosmetics?.coverBezelColor || "billet_gold",
+        badgeText: state.cosmetics?.badgeEmblemText || defaultBadge,
+        cylsPerBank: cylindersPerBank,
+      };
+      const coverScene = buildEngineCoverScene(coverOpts);
+      const coverSubsystem = new THREE.Group();
+      coverSubsystem.name = "ModularEngineCover_Subsystem";
+      coverSubsystem.add(coverScene);
+
+      // Parametrically scale and position cover over intake manifold
+      const scaleX = arch.family === "inline" ? 0.88 : arch.family === "w_engine" ? 1.05 : 0.94;
+      const scaleY = arch.family === "boxer" ? 0.85 : 0.94;
+      const scaleZ = Math.min(1.15, Math.max(0.75, cylindersPerBank / 6));
+      coverSubsystem.scale.set(scaleX, scaleY, scaleZ);
+
+      this.mountingGraph.attachMesh("ENGINE_COVER", coverSubsystem);
+      this.rootGroup.add(coverSubsystem);
+    }
+
+    // ------------------------------------------------------------------------
+    // 6. EXHAUST HEADERS (Titanium Heat-Blued / Inconel / Dyno Glow)
+    // ------------------------------------------------------------------------
+    const resolveExhaustMat = () => {
+      const ex = state.cosmetics?.exhaustFinish;
+      if (ex === "inconel_gold") return this.materials.inconelExhaust;
+      if (ex === "ceramic_white") return this.materials.ceramicWhiteExhaust;
+      if (ex === "stealth_black") return this.materials.stealthBlackCeramic;
+      if (ex === "polished_stainless") return this.materials.polishedChrome;
+      if (ex === "dyno_glow") return this.materials.dynoGlowExhaust;
+      return this.materials.titaniumBluedExhaust;
+    };
+    const exhaustHeaderMat = resolveExhaustMat();
+
     const buildHeaderAssembly = (name: string, isLeft: boolean) => {
       const headerGroup = new THREE.Group();
       headerGroup.name = name;
@@ -442,9 +607,16 @@ export class MasterModularEngine3DAssembler {
           new THREE.Vector3(isLeft ? -0.12 : 0.12, -0.14, 0.04),
         ]);
         const tubeGeom = new THREE.TubeGeometry(tubeCurve, 16, 0.022 * (block.boreMm / 88), 12, false);
-        const tube = new THREE.Mesh(tubeGeom, this.materials.inconelExhaust);
+        const tube = new THREE.Mesh(tubeGeom, exhaustHeaderMat);
         tube.castShadow = true;
         headerGroup.add(tube);
+
+        // Heat Temper Rings / Titanium Pie-cut Welds
+        const ringGeo = new THREE.TorusGeometry(0.0225 * (block.boreMm / 88), 0.003, 8, 16);
+        ringGeo.rotateY(Math.PI / 2);
+        const ringMesh = new THREE.Mesh(ringGeo, this.materials.goldAnodized);
+        ringMesh.position.set(isLeft ? -0.06 : 0.06, -0.03, zM);
+        headerGroup.add(ringMesh);
       }
       return headerGroup;
     };
@@ -464,50 +636,92 @@ export class MasterModularEngine3DAssembler {
     }
 
     // ------------------------------------------------------------------------
-    // 7. TWIN TURBOCHARGERS
+    // 7. FORCED INDUCTION & SUPERCHARGERS (Parametric Sizing & Custom Finishes)
     // ------------------------------------------------------------------------
     if (state.turboSystem.type !== "naturally_aspirated") {
-      const buildTurbocharger = (name: string) => {
-        const turboG = new THREE.Group();
-        turboG.name = name;
-
-        // Exhaust Snail Turbine Housing
-        const turbine = new THREE.Mesh(
-          new THREE.TorusGeometry(0.048, 0.026, 16, 24, Math.PI * 1.6),
-          this.materials.inconelExhaust
-        );
-        turboG.add(turbine);
-
-        // Compressor Housing
-        const compressor = new THREE.Mesh(
-          new THREE.TorusGeometry(0.052, 0.028, 16, 24, Math.PI * 1.6),
-          this.materials.billetAluminum
-        );
-        compressor.position.z = 0.055;
-        turboG.add(compressor);
-
-        // Wastegate Actuator Canister
-        const wastegate = new THREE.Mesh(new THREE.CylinderGeometry(0.020, 0.020, 0.055, 16), this.materials.goldAnodized);
-        wastegate.position.set(0.065, 0.04, 0.03);
-        turboG.add(wastegate);
-
-        return turboG;
+      const turboOpts = {
+        compressorInducerMm: state.turboSystem.compressorInducerMm ?? 68,
+        turbineExducerMm: state.turboSystem.turbineExducerMm ?? 64,
+        aRatio: state.turboSystem.aRatio ?? 0.85,
+        housingFinish: state.turboSystem.turboHousingFinish || state.cosmetics?.exhaustFinish || "inconel",
+        compressorWheelColor: state.turboSystem.compressorWheelColor || "billet_gold",
+        wastegateCapColor: state.turboSystem.wastegateCapColor || "anodized_purple",
+        couplerColor: state.turboSystem.couplerColor || "blue_silicone",
+        scale: 0.95,
       };
 
-      if (state.turboSystem.type === "hot_v_twin_turbo") {
-        const turboHotV = buildTurbocharger("Turbocharger_Hot_V");
+      if (state.turboSystem.type === "roots_twin_screw_supercharger") {
+        // Twin-Screw / Roots Valley-Mounted Supercharger Blower
+        const superchargerMesh = createTwinScrewSuperchargerAssembly({
+          displacementLiters: state.turboSystem.superchargerDisplacementLiters ?? 3.0,
+          pulleyRatio: state.turboSystem.superchargerPulleyRatio ?? 2.4,
+          housingFinish: state.turboSystem.turboHousingFinish || "billet_polished",
+          pulleyFinish: state.turboSystem.compressorWheelColor || "billet_gold",
+          bypassCapColor: state.turboSystem.wastegateCapColor || "anodized_purple",
+        });
+        this.mountingGraph.attachMesh("ENGINE_SUPERCHARGER_VALLEY", superchargerMesh);
+        this.rootGroup.add(superchargerMesh);
+
+      } else if (state.turboSystem.type === "centrifugal_supercharger") {
+        // Centrifugal Supercharger with Front Cogged Belt Drive
+        const centrifugalMesh = createCentrifugalSuperchargerAssembly({
+          housingFinish: state.turboSystem.turboHousingFinish || "billet_polished",
+          pulleyFinish: state.turboSystem.compressorWheelColor || "billet_gold",
+          couplerColor: state.turboSystem.couplerColor || "blue_silicone",
+        });
+        this.mountingGraph.attachMesh("ENGINE_SUPERCHARGER_CENTRIFUGAL", centrifugalMesh);
+        this.rootGroup.add(centrifugalMesh);
+
+      } else if (state.turboSystem.type === "hot_v_twin_turbo") {
+        // Hot-V Valley Mounted Turbochargers
+        const turboHotV = createSingleTurboUnit(0, 0.92, { ...turboOpts, layout: "hot_v" });
+        turboHotV.name = "Turbocharger_Hot_V";
         this.mountingGraph.attachMesh("ENGINE_TURBO_HOT_V", turboHotV);
         this.rootGroup.add(turboHotV);
+
+      } else if (state.turboSystem.type === "quad_turbo_staged" || state.turboSystem.turboCount === 4) {
+        // Quad-Turbo System (FL, RL, FR, RR)
+        const tFL = createSingleTurboUnit(-0.16, 0.86, turboOpts);
+        tFL.name = "Turbocharger_Quad_FL";
+        this.mountingGraph.attachMesh("ENGINE_TURBO_QUAD_FL", tFL);
+        this.rootGroup.add(tFL);
+
+        const tRL = createSingleTurboUnit(-0.16, 0.86, turboOpts);
+        tRL.name = "Turbocharger_Quad_RL";
+        this.mountingGraph.attachMesh("ENGINE_TURBO_QUAD_RL", tRL);
+        this.rootGroup.add(tRL);
+
+        const tFR = createSingleTurboUnit(0.16, 0.86, turboOpts);
+        tFR.name = "Turbocharger_Quad_FR";
+        tFR.rotation.z = Math.PI;
+        this.mountingGraph.attachMesh("ENGINE_TURBO_QUAD_FR", tFR);
+        this.rootGroup.add(tFR);
+
+        const tRR = createSingleTurboUnit(0.16, 0.86, turboOpts);
+        tRR.name = "Turbocharger_Quad_RR";
+        tRR.rotation.z = Math.PI;
+        this.mountingGraph.attachMesh("ENGINE_TURBO_QUAD_RR", tRR);
+        this.rootGroup.add(tRR);
+
+      } else if (state.turboSystem.type === "single_twin_scroll_turbo" || state.turboSystem.turboCount === 1) {
+        // Single High-Flow Turbocharger
+        const turboSingle = createSingleTurboUnit(0, 1.12, { ...turboOpts, layout: "single" });
+        turboSingle.name = "Turbocharger_Single";
+        this.mountingGraph.attachMesh("ENGINE_TURBO_SINGLE", turboSingle);
+        this.rootGroup.add(turboSingle);
+
       } else {
-        const turboL = buildTurbocharger("Turbocharger_L");
+        // Twin-Turbochargers (L & R Outboard)
+        const turboL = createSingleTurboUnit(-0.18, 0.95, { ...turboOpts, sideOffset: -0.18 });
+        turboL.name = "Turbocharger_L";
         this.mountingGraph.attachMesh("ENGINE_TURBO_L", turboL);
         this.rootGroup.add(turboL);
 
-        if (state.turboSystem.turboCount >= 2) {
-          const turboR = buildTurbocharger("Turbocharger_R");
-          this.mountingGraph.attachMesh("ENGINE_TURBO_R", turboR);
-          this.rootGroup.add(turboR);
-        }
+        const turboR = createSingleTurboUnit(0.18, 0.95, { ...turboOpts, sideOffset: 0.18 });
+        turboR.name = "Turbocharger_R";
+        turboR.rotation.z = Math.PI;
+        this.mountingGraph.attachMesh("ENGINE_TURBO_R", turboR);
+        this.rootGroup.add(turboR);
       }
     }
 

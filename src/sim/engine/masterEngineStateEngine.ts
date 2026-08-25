@@ -17,9 +17,11 @@ import {
   MasterEnginePerformanceMetrics,
   MasterEngineCostAndBOM,
   EngineCompatibilityReport,
+  DrivetrainSubsystemState,
 } from "./masterEngineTypes";
 import { EngineDynoSolver } from "./engineDynoSolver";
 import { EngineCompatibilityEngine } from "./engineCompatibilityEngine";
+import { DrivetrainSolver } from "./drivetrainSolver";
 
 export class MasterEngineStateEngine {
   private static instance: MasterEngineStateEngine | null = null;
@@ -166,6 +168,33 @@ export class MasterEngineStateEngine {
     this.notify();
   }
 
+  public updateDrivetrain(patch: Partial<DrivetrainSubsystemState>): void {
+    this.state.drivetrain = { ...this.state.drivetrain, ...patch };
+    this.recomputeAll();
+    this.pushHistory();
+    this.notify();
+  }
+
+  public updateCosmetics(patch: Partial<NonNullable<MasterEngineState["cosmetics"]>>): void {
+    const current = this.state.cosmetics || {
+      coverModel: "hypercar_quartz",
+      coverColor: "dry_carbon",
+      coverBezelColor: "billet_gold",
+      coverStripeStyle: "none",
+      coverStripeColor: "#ffffff",
+      badgeEmblemText: "APEX V12",
+      badgeFinish: "gold",
+      exhaustFinish: "titanium_blued",
+      valveCoverColor: "rosso_red",
+      anodizingTheme: "anodized_gold",
+      showEngineCover: true,
+      wireColor: "orange_hv",
+    };
+    this.state.cosmetics = { ...current, ...patch };
+    this.pushHistory();
+    this.notify();
+  }
+
   public loadPreset(presetId: string): void {
     if (presetId === "v8_twin_turbo") this.state = this.createPresetV8TwinTurbo();
     else if (presetId === "inline_6_turbo") this.state = this.createPresetI6Turbo();
@@ -198,6 +227,15 @@ export class MasterEngineStateEngine {
     this.state.performance = performance;
     this.state.costAndBOM = costAndBOM;
     this.state.compatibility = compatibility;
+
+    // Compute coupled drivetrain performance (wheel torque, shift points, accel)
+    if (this.state.drivetrain && performance.dynoCurve?.length > 0) {
+      this.state.drivetrainPerformance = DrivetrainSolver.solve(
+        performance,
+        this.state.drivetrain,
+      );
+    }
+
     this.state.updatedAt = new Date().toISOString();
   }
 
@@ -404,6 +442,10 @@ export class MasterEngineStateEngine {
         blowOffValveType: "recirculating_diverter",
         intercoolerType: "water_to_air_charge_cooler",
         targetBoostPressureBar: 1.65,
+        turboHousingFinish: "titanium_blued",
+        compressorWheelColor: "billet_gold",
+        wastegateCapColor: "anodized_purple",
+        couplerColor: "blue_silicone",
         massKg: 28,
         costUSD: 6800,
       },
@@ -437,6 +479,36 @@ export class MasterEngineStateEngine {
         launchControlRpm: 4200,
         tractionControlTorqueReductionPercent: 25,
       },
+      cosmetics: {
+        coverModel: "hypercar_quartz",
+        coverColor: "dry_carbon",
+        coverBezelColor: "billet_gold",
+        coverStripeStyle: "none",
+        coverStripeColor: "#ffffff",
+        badgeEmblemText: "APEX V12",
+        badgeFinish: "gold",
+        exhaustFinish: "titanium_blued",
+        valveCoverColor: "rosso_red",
+        anodizingTheme: "anodized_gold",
+        showEngineCover: true,
+        wireColor: "orange_hv",
+      },
+      drivetrain: {
+        architecture: "dct_7",
+        gearRatios: { gear1: 3.82, gear2: 2.36, gear3: 1.68, gear4: 1.28, gear5: 1.02, gear6: 0.84, gear7: 0.67, gear8: 0.55, finalDrive: 3.44 },
+        activeGearCount: 7,
+        lsdType: "e_lsd",
+        clutchType: "carbon_multi_plate",
+        clutchDiameterMm: 240,
+        flywheelMassKg: 5.8,
+        bellhousingMaterial: "cast_aluminum",
+        gearsetMetallurgy: "aerospace_m50_nil",
+        shiftTimingMs: 35,
+        maxInputTorqueNm: 850,
+        mechanicalEfficiencyPercent: 97.2,
+        massKg: 78,
+        costUSD: 9500,
+      },
       performance: {} as any,
       costAndBOM: {} as any,
       compatibility: {} as any,
@@ -463,6 +535,17 @@ export class MasterEngineStateEngine {
     s.turboSystem.compressorInducerMm = 68;
     s.turboSystem.targetBoostPressureBar = 1.45;
     s.tuning.revLimiterRpm = 7600;
+    s.drivetrain = {
+      ...s.drivetrain,
+      architecture: "manual_6",
+      activeGearCount: 6,
+      gearRatios: { gear1: 3.50, gear2: 2.06, gear3: 1.41, gear4: 1.10, gear5: 0.91, gear6: 0.75, gear7: 0.65, gear8: 0.55, finalDrive: 3.73 },
+      clutchType: "sintered_metallic",
+      shiftTimingMs: 120,
+      maxInputTorqueNm: 650,
+      massKg: 65,
+      costUSD: 6200,
+    };
     return s;
   }
 
@@ -488,6 +571,18 @@ export class MasterEngineStateEngine {
     s.turboSystem.targetBoostPressureBar = 0.0;
     s.tuning.revLimiterRpm = 9600;
     s.exhaust.headerStyle = "equal_length_long_tube";
+    s.drivetrain = {
+      ...s.drivetrain,
+      architecture: "seq_7",
+      activeGearCount: 7,
+      gearRatios: { gear1: 3.18, gear2: 2.24, gear3: 1.76, gear4: 1.45, gear5: 1.22, gear6: 1.05, gear7: 0.92, gear8: 0.80, finalDrive: 3.90 },
+      clutchType: "carbon_multi_plate",
+      gearsetMetallurgy: "straight_cut_dog_ring",
+      shiftTimingMs: 15,
+      maxInputTorqueNm: 780,
+      massKg: 72,
+      costUSD: 14500,
+    };
     return s;
   }
 
@@ -510,6 +605,18 @@ export class MasterEngineStateEngine {
     s.turboSystem.turboCount = 0;
     s.turboSystem.targetBoostPressureBar = 0.0;
     s.tuning.revLimiterRpm = 9200;
+    s.drivetrain = {
+      ...s.drivetrain,
+      architecture: "dct_7",
+      activeGearCount: 7,
+      gearRatios: { gear1: 3.91, gear2: 2.29, gear3: 1.58, gear4: 1.19, gear5: 0.97, gear6: 0.79, gear7: 0.63, gear8: 0.52, finalDrive: 3.56 },
+      clutchType: "carbon_multi_plate",
+      gearsetMetallurgy: "straight_cut_dog_ring",
+      shiftTimingMs: 20,
+      maxInputTorqueNm: 520,
+      massKg: 68,
+      costUSD: 12800,
+    };
     return s;
   }
 
@@ -531,6 +638,17 @@ export class MasterEngineStateEngine {
     s.turboSystem.turboCount = 1;
     s.turboSystem.targetBoostPressureBar = 1.85;
     s.tuning.revLimiterRpm = 7400;
+    s.drivetrain = {
+      ...s.drivetrain,
+      architecture: "manual_6",
+      activeGearCount: 6,
+      gearRatios: { gear1: 3.63, gear2: 2.13, gear3: 1.43, gear4: 1.08, gear5: 0.87, gear6: 0.73, gear7: 0.65, gear8: 0.55, finalDrive: 4.10 },
+      clutchType: "sintered_metallic",
+      shiftTimingMs: 110,
+      maxInputTorqueNm: 550,
+      massKg: 58,
+      costUSD: 4800,
+    };
     return s;
   }
 
@@ -552,6 +670,19 @@ export class MasterEngineStateEngine {
     s.turboSystem.turboCount = 4;
     s.turboSystem.targetBoostPressureBar = 2.4;
     s.tuning.revLimiterRpm = 7200;
+    s.drivetrain = {
+      ...s.drivetrain,
+      architecture: "dct_7",
+      activeGearCount: 7,
+      gearRatios: { gear1: 3.56, gear2: 2.18, gear3: 1.55, gear4: 1.17, gear5: 0.92, gear6: 0.76, gear7: 0.61, gear8: 0.50, finalDrive: 3.15 },
+      clutchType: "carbon_multi_plate",
+      gearsetMetallurgy: "aerospace_m50_nil",
+      shiftTimingMs: 25,
+      maxInputTorqueNm: 1600,
+      mechanicalEfficiencyPercent: 96.8,
+      massKg: 95,
+      costUSD: 22000,
+    };
     return s;
   }
 }

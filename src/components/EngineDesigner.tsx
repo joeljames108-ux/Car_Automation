@@ -78,6 +78,7 @@ import { ApexAgentConsole } from "./agents/ApexAgentConsole";
 import { EngineBuilderFlow } from "./assembly/EngineBuilderFlow";
 import { ModularEngineStudio } from "./engineStudio/ModularEngineStudio";
 import { Transmission3DStudio } from "./transmissionStudio/Transmission3DStudio";
+import { UnifiedPowertrainStudio } from "./powertrainStudio/UnifiedPowertrainStudio";
 
 // Engine layout → icon mapping
 const LAYOUT_ICONS: Record<string, React.ReactNode> = {
@@ -134,7 +135,7 @@ export function EngineDesigner() {
   const [modalRendered, setModalRendered] = useState(false);
   const [modalActive, setModalActive] = useState(false);
   const [showCompletionModal, setShowCompletionModal] = useState(false);
-  const [engineMode, setEngineMode] = useState<"3d_studio" | "assembly_flow" | "transmission_studio">("assembly_flow");
+  const [engineMode, setEngineMode] = useState<"3d_studio" | "assembly_flow" | "transmission_studio" | "unified_powertrain">("unified_powertrain");
 
   // Robotic Engine Assembly Line System state (Unified)
   const assembly = useAssemblyStore(eng);
@@ -170,10 +171,10 @@ export function EngineDesigner() {
   }, [isEnlarged]);
 
   // Power & Torque chart — pink/magenta torque + teal power with dual fill
-  const powerSeries = [
+  const powerSeries = useMemo(() => [
     { data: sim.powerCurve.map((p) => ({ x: p.rpm, y: p.power })), color: "#22d3ee", fill: true, label: "Power", unit: " hp" },
     { data: sim.powerCurve.map((p) => ({ x: p.rpm, y: p.torque })), color: "#e879a0", fill: true, label: "Torque", unit: " Nm" },
-  ];
+  ], [sim.powerCurve]);
 
   // Generate live warnings based on sim
   const warnings = useMemo(() => {
@@ -262,7 +263,18 @@ export function EngineDesigner() {
             Engine Workspace:
           </span>
         </div>
-        <div className="flex bg-slate-950 p-1 rounded-xl border border-slate-800 gap-1">
+        <div className="flex bg-slate-950 p-1 rounded-xl border border-slate-800 gap-1 flex-wrap">
+          <button
+            onClick={() => setEngineMode("unified_powertrain")}
+            className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+              engineMode === "unified_powertrain"
+                ? "bg-gradient-to-r from-cyan-400 via-blue-500 to-violet-500 text-slate-950 shadow-lg shadow-cyan-500/30 font-extrabold"
+                : "text-cyan-400 hover:text-cyan-200 hover:bg-slate-900"
+            }`}
+          >
+            <Flame size={13} className={engineMode === "unified_powertrain" ? "text-slate-950" : "text-cyan-400"} />
+            <span>⚡ Unified Powertrain Flow Chain</span>
+          </button>
           <button
             onClick={() => setEngineMode("assembly_flow")}
             className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
@@ -299,7 +311,9 @@ export function EngineDesigner() {
         </div>
       </div>
 
-      {engineMode === "transmission_studio" ? (
+      {engineMode === "unified_powertrain" ? (
+        <UnifiedPowertrainStudio />
+      ) : engineMode === "transmission_studio" ? (
         <Transmission3DStudio />
       ) : engineMode === "3d_studio" ? (
         <ModularEngineStudio />

@@ -1351,7 +1351,11 @@ export const CHASSIS_50_MAP: Record<string, Chassis50Definition> = CHASSIS_50_RE
   {} as Record<string, Chassis50Definition>
 );
 
+/** Master catalog of all 50 chassis architecture manifests */
+export const CHASSIS_50_CATALOG: Chassis50Definition[] = CHASSIS_50_REGISTRY;
+
 /** Helper to retrieve the 5 chassis for a given body type */
 export function getChassisForBodyType(bodyType: VehicleBodyType): Chassis50Definition[] {
   return CHASSIS_50_REGISTRY.filter((c) => c.bodyType === bodyType);
 }
+

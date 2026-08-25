@@ -6,7 +6,7 @@ export type Stage =
   | "manufacturing" | "infotainment" | "rd" | "simulation" | "testing"
   | "race" | "stats" | "press" | "competitors"
   | "garage" | "compare" | "economy" | "motorsport" | "twin" | "safety" | "sales" | "ai"
-  | "graphics3d" | "supplyChain" | "nvh" | "suspension3d" | "studio" | "grand_studio" | "transmission3d"
+  | "graphics3d" | "supplyChain" | "nvh" | "suspension3d" | "studio" | "grand_studio" | "transmission3d" | "powertrain"
   | "f1_constructor" | "hypercar_constructor" | "dyno_ecu" | "track_battle" | "wind_tunnel" | "track_layout"
   | "battery" | "sensors" | "audio" | "acoustics" | "sound" | "leaderboard" | "records" | "homologation" | "endurance"
   | "autonomous" | "immersion" | "tires" | "brakes" | "4ws" | "active_suspension"
@@ -22,6 +22,7 @@ export type Stage =
 
 // ── Lazy-loaded stage panel components ──
 const Transmission3DStudio = lazy(() => import("./transmissionStudio/Transmission3DStudio").then(m => ({ default: m.Transmission3DStudio })));
+const UnifiedPowertrainStudio = lazy(() => import("./powertrainStudio/UnifiedPowertrainStudio").then(m => ({ default: m.UnifiedPowertrainStudio })));
 const TrackLayoutMasterStudio = lazy(() => import("./trackLayouts/TrackLayoutMasterStudio").then(m => ({ default: m.TrackLayoutMasterStudio })));
 const WindTunnelAeroStudio = lazy(() => import("./aerodynamics/WindTunnelAeroStudio").then(m => ({ default: m.WindTunnelAeroStudio })));
 const PowertrainDynoStudio = lazy(() => import("./powertrain/PowertrainDynoStudio").then(m => ({ default: m.PowertrainDynoStudio })));
@@ -96,6 +97,7 @@ export const StageSwitcher: React.FC<StageSwitcherProps> = ({ stage, onSelectSta
         {stage === "nvh" && <NvhSoundLab />}
         {stage === "suspension3d" && <SuspensionMasterStudio />}
         {stage === "transmission3d" && <Transmission3DStudio />}
+        {stage === "powertrain" && <UnifiedPowertrainStudio />}
         {stage === "dyno_ecu" && <PowertrainDynoStudio />}
         {stage === "track_battle" && <TrackBattlesStudio />}
         {stage === "wind_tunnel" && <WindTunnelAeroStudio />}

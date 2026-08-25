@@ -260,16 +260,51 @@ export interface IgnitionSubsystemState {
   costUSD: number;
 }
 
+export type TurboHousingFinish =
+  | "billet_polished"
+  | "titanium_blued"
+  | "inconel_bronze"
+  | "ceramic_white"
+  | "stealth_black"
+  | "gold_anodized"
+  | "rosso_corsa";
+
+export type CompressorWheelColor =
+  | "billet_gold"
+  | "billet_emerald"
+  | "billet_cobalt"
+  | "billet_crimson"
+  | "polished_silver";
+
+export type WastegateCapColor =
+  | "anodized_purple"
+  | "anodized_blue"
+  | "anodized_gold"
+  | "anodized_red"
+  | "stealth_black";
+
+export type SiliconeCouplerColor =
+  | "blue_silicone"
+  | "red_silicone"
+  | "stealth_black_viton";
+
 export interface ForcedInductionSubsystemState {
   type: ForcedInductionType;
   turboCount: 0 | 1 | 2 | 4;
-  compressorInducerMm: number;   // 48 to 88 mm
-  turbineExducerMm: number;      // 52 to 92 mm
-  aRatio: number;                // 0.55 to 1.35
+  compressorInducerMm: number;   // 45 to 110 mm
+  turbineExducerMm: number;      // 48 to 115 mm
+  aRatio: number;                // 0.50 to 1.45
   wastegateType: "internal_pneumatic" | "external_dual_44mm_electronic";
   blowOffValveType: "recirculating_diverter" | "vent_to_atmosphere_50mm";
   intercoolerType: "air_to_air_bar_plate" | "water_to_air_charge_cooler" | "cryogenic_co2_spray";
-  targetBoostPressureBar: number;// 0.0 to 3.8 bar
+  targetBoostPressureBar: number;// 0.0 to 4.0 bar
+  superchargerType?: "twin_screw_roots" | "centrifugal_planetary";
+  superchargerDisplacementLiters?: number; // 1.8 to 4.5 Liters
+  superchargerPulleyRatio?: number;        // 1.8 to 3.4
+  turboHousingFinish?: TurboHousingFinish;
+  compressorWheelColor?: CompressorWheelColor;
+  wastegateCapColor?: WastegateCapColor;
+  couplerColor?: SiliconeCouplerColor;
   massKg: number;
   costUSD: number;
 }
@@ -356,6 +391,8 @@ export interface MasterEngineCostAndBOM {
   assemblyLaborCostUSD: number;
   totalEngineBOMCostUSD: number;
   suggestedMSRPUSD: number;
+  drivetrainCostUSD: number;
+  totalPowertrainBOMCostUSD: number;
 }
 
 export type EngineCompatibilitySeverity = "critical_hazard" | "performance_warning" | "advisory_note";
@@ -391,7 +428,7 @@ export interface MasterEngineState {
   updatedAt: string;
   author: string;
 
-  // 14 Core Subassemblies
+  // 14 Core Subassemblies + Cosmetics
   architecture: ArchitectureSubsystemState;
   block: EngineBlockSubsystemState;
   crankshaft: CrankshaftSubsystemState;
@@ -407,15 +444,180 @@ export interface MasterEngineState {
   exhaust: ExhaustSubsystemState;
   lubrication: LubricationSubsystemState;
   tuning: EngineTuningSubsystemState;
+  cosmetics?: EngineCosmeticsSubsystemState;
+
+  // 15th Subsystem: Drivetrain (Transmission + Differential + Clutch)
+  drivetrain: DrivetrainSubsystemState;
 
   // Computed Multi-Physics Telemetry
   performance: MasterEnginePerformanceMetrics;
   costAndBOM: MasterEngineCostAndBOM;
   compatibility: EngineCompatibilityReport;
+  drivetrainPerformance?: MasterDrivetrainPerformanceMetrics;
 }
 
 // ============================================================================
-// 4. ENGINE COMPARISON A/B DELTA
+// 4. ENGINE COSMETICS & COVER CUSTOMIZATION TAXONOMY
+// ============================================================================
+
+export type EngineCoverModel =
+  | "hypercar_quartz"
+  | "gt3_endurance"
+  | "billet_skeleton"
+  | "heritage_wrinkle"
+  | "stealth_vortex"
+  | "exposed_itb"
+  | "inline_twin_cam_turbo"
+  | "boxer_twin_plenum_flat"
+  | "w16_quad_turbo_hypersport"
+  | "rotary_apex_trochoid"
+  | "supercharged_v8_shaker"
+  | "f1_pneumatic_carbon_plenum";
+
+export type EngineCoverColor =
+  | "dry_carbon"
+  | "forged_carbon_gold"
+  | "rosso_corsa"
+  | "apex_blue"
+  | "giallo_yellow"
+  | "british_racing_green"
+  | "stealth_black"
+  | "billet_silver"
+  | "gold_leaf";
+
+export type EngineCoverBezelColor =
+  | "billet_gold"
+  | "titanium_blue"
+  | "crimson_red"
+  | "cobalt_blue"
+  | "stealth_black"
+  | "polished_chrome";
+
+export type ExhaustFinish =
+  | "titanium_blued"
+  | "inconel_gold"
+  | "ceramic_white"
+  | "stealth_black"
+  | "polished_stainless"
+  | "dyno_glow";
+
+export type ValveCoverColor =
+  | "rosso_red"
+  | "monaco_blue"
+  | "acid_yellow"
+  | "satin_carbon"
+  | "titanium_gray"
+  | "gold_anodized";
+
+export type AnodizingTheme =
+  | "anodized_gold"
+  | "cobalt_blue"
+  | "crimson_red"
+  | "stealth_black"
+  | "burnt_titanium";
+
+export interface EngineCosmeticsSubsystemState {
+  coverModel: EngineCoverModel;
+  coverColor: EngineCoverColor;
+  coverBezelColor: EngineCoverBezelColor;
+  coverStripeStyle: "none" | "dual_racing" | "italian_tricolore" | "ghost_matte" | "gold_pinstripe";
+  coverStripeColor: string;
+  badgeEmblemText: string;
+  badgeFinish: "gold" | "chrome" | "carbon" | "titanium_blue" | "crimson";
+  exhaustFinish: ExhaustFinish;
+  valveCoverColor: ValveCoverColor;
+  anodizingTheme: AnodizingTheme;
+  showEngineCover: boolean;
+  wireColor: "orange_hv" | "neon_blue" | "racing_red" | "stealth_black";
+}
+
+// ============================================================================
+// 5. DRIVETRAIN SUBSYSTEM (TRANSMISSION + DIFFERENTIAL + CLUTCH)
+// ============================================================================
+
+export type TransmissionArchitectureType =
+  | "dct_7"
+  | "manual_6"
+  | "seq_7"
+  | "single_speed"
+  | "cvt";
+
+export type DifferentialType =
+  | "open"
+  | "viscous"
+  | "mechanical_ramp"
+  | "e_lsd";
+
+export type ClutchMaterialType =
+  | "organic"
+  | "sintered_metallic"
+  | "carbon_multi_plate";
+
+export type BellhousingMaterial =
+  | "cast_aluminum"
+  | "magnesium_alloy"
+  | "carbon_fiber_composite";
+
+export type GearsetMetallurgy =
+  | "case_hardened_9310"
+  | "aerospace_m50_nil"
+  | "powder_metal_sintered"
+  | "straight_cut_dog_ring";
+
+export interface GearRatioSet {
+  gear1: number;
+  gear2: number;
+  gear3: number;
+  gear4: number;
+  gear5: number;
+  gear6: number;
+  gear7: number;
+  gear8: number;
+  finalDrive: number;
+}
+
+export interface DrivetrainSubsystemState {
+  architecture: TransmissionArchitectureType;
+  gearRatios: GearRatioSet;
+  activeGearCount: 1 | 4 | 5 | 6 | 7 | 8;
+  lsdType: DifferentialType;
+  clutchType: ClutchMaterialType;
+  clutchDiameterMm: number;              // 180 to 280 mm
+  flywheelMassKg: number;                // 3.5 to 12.0 kg
+  bellhousingMaterial: BellhousingMaterial;
+  gearsetMetallurgy: GearsetMetallurgy;
+  shiftTimingMs: number;                 // 8 to 250 ms
+  maxInputTorqueNm: number;              // 400 to 2200 Nm
+  mechanicalEfficiencyPercent: number;   // 88 to 99 %
+  massKg: number;
+  costUSD: number;
+}
+
+// ============================================================================
+// 6. COMPUTED DRIVETRAIN PERFORMANCE METRICS
+// ============================================================================
+
+export interface WheelTorqueDataPoint {
+  rpm: number;
+  wheelTorqueNm: number;
+  wheelHorsepowerHp: number;
+}
+
+export interface MasterDrivetrainPerformanceMetrics {
+  wheelTorqueCurvesByGear: Record<number, WheelTorqueDataPoint[]>;
+  optimalShiftPointsRpm: number[];         // RPM to upshift for each gear
+  peakWheelTorqueNm: number;
+  peakWheelHorsepowerHp: number;
+  estimatedZeroTo60Sec: number;
+  estimatedZeroTo100Sec: number;
+  estimatedQuarterMileSec: number;
+  estimatedQuarterMileSpeedMph: number;
+  totalPowertrainMassKg: number;
+  powerToWeightHpPerKg: number;
+}
+
+// ============================================================================
+// 7. ENGINE COMPARISON A/B DELTA
 // ============================================================================
 
 export interface EngineComparisonDelta {

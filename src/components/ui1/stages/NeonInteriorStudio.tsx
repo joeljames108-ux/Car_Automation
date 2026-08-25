@@ -19,7 +19,6 @@ import { NeonHorizonSelect } from "../design/NeonHorizonSelect";
 import { NeonHorizonButton } from "../design/NeonHorizonButton";
 import { NeonHorizonBadge } from "../design/NeonHorizonBadge";
 import { NeonHorizonDataCard } from "../design/NeonHorizonDataCard";
-import { NeonRealisticDashboardPreview } from "../design/NeonRealisticDashboardPreview";
 import { InteriorsDesigner } from "../../InteriorsDesigner";
 import { ModularInteriorWorkshop } from "../../vehicleAssembly/ModularInteriorWorkshop";
 
@@ -174,24 +173,6 @@ export function NeonInteriorStudio() {
               />
             </NeonHorizonGlassPanel>
           </div>
-        </div>
-      )}
-
-      {/* Dashboard Preview */}
-      {activeTab === "hmi_quick_tune" && (
-        <div className="w-full">
-          <NeonHorizonGlassPanel
-            variant="window"
-            glow="cyan"
-            corners="reticle"
-            header={{
-              title: "LIVE COCKPIT PREVIEW",
-              icon: <Sparkles size={16} />,
-            }}
-            className="p-6"
-          >
-            <NeonRealisticDashboardPreview interior={design.vehicle.interior} />
-          </NeonHorizonGlassPanel>
         </div>
       )}
     </div>

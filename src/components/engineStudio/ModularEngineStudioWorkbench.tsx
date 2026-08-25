@@ -26,6 +26,10 @@ import {
   Thermometer,
   DollarSign,
   Activity,
+  Sparkles,
+  Palette,
+  Eye,
+  EyeOff,
 } from "lucide-react";
 import {
   MasterEngineState,
@@ -42,8 +46,25 @@ import {
   ForcedInductionType,
   ExhaustHeaderStyle,
   LubricationSystemType,
+  EngineCoverModel,
+  EngineCoverColor,
+  EngineCoverBezelColor,
+  ExhaustFinish,
+  ValveCoverColor,
+  AnodizingTheme,
+  TurboHousingFinish,
+  CompressorWheelColor,
+  WastegateCapColor,
+  SiliconeCouplerColor,
+  TransmissionArchitectureType,
+  DifferentialType,
+  ClutchMaterialType,
+  BellhousingMaterial,
+  GearsetMetallurgy,
+  GearRatioSet,
 } from "../../sim/engine/masterEngineTypes";
 import { MasterEngineStateEngine } from "../../sim/engine/masterEngineStateEngine";
+import { DrivetrainSolver } from "../../sim/engine/drivetrainSolver";
 
 interface ModularEngineStudioWorkbenchProps {
   state: MasterEngineState;
@@ -54,19 +75,22 @@ export const ModularEngineStudioWorkbench: React.FC<ModularEngineStudioWorkbench
   state,
   engine,
 }) => {
-  const [activeTab, setActiveTab] = useState<"block" | "heads" | "turbo" | "tuning" | "safety">("block");
+  const [activeTab, setActiveTab] = useState<"block" | "heads" | "turbo" | "cosmetics" | "tuning" | "drivetrain" | "safety">("block");
 
   const compat = state.compatibility;
+  const dt = state.drivetrain;
 
   return (
     <div className="flex flex-col h-full bg-slate-900/90 backdrop-blur-xl border border-slate-800 rounded-2xl overflow-hidden shadow-2xl">
-      {/* 5-Tab Navigation Bar */}
+      {/* 7-Tab Navigation Bar */}
       <div className="flex border-b border-slate-800 bg-slate-950/60 p-1.5 gap-1 overflow-x-auto">
         {[
           { id: "block", label: "Short Block", icon: <Cog size={13} /> },
           { id: "heads", label: "Heads & Cams", icon: <Layers size={13} /> },
           { id: "turbo", label: "Turbo & Exhaust", icon: <Flame size={13} /> },
+          { id: "cosmetics", label: "Styling & Covers", icon: <Sparkles size={13} className="text-amber-400" /> },
           { id: "tuning", label: "ECU Tuning", icon: <Cpu size={13} /> },
+          { id: "drivetrain", label: "Drivetrain & Gears", icon: <Sliders size={13} className="text-cyan-400" /> },
           {
             id: "safety",
             label: "Safety & Rules",
@@ -85,7 +109,7 @@ export const ModularEngineStudioWorkbench: React.FC<ModularEngineStudioWorkbench
             onClick={() => setActiveTab(tab.id as any)}
             className={`flex items-center gap-1.5 px-3 py-2 text-xs font-semibold rounded-xl transition-all whitespace-nowrap ${
               activeTab === tab.id
-                ? "bg-cyan-500 text-slate-950 shadow-md shadow-cyan-500/20"
+                ? "bg-cyan-500 text-slate-950 shadow-md shadow-cyan-500/20 font-bold"
                 : "text-slate-400 hover:text-slate-200 hover:bg-slate-850"
             }`}
           >
@@ -383,96 +407,370 @@ export const ModularEngineStudioWorkbench: React.FC<ModularEngineStudioWorkbench
         )}
 
         {/* ================================================================= */}
-        {/* TAB 3: FORCED INDUCTION & EXHAUST */}
+        {/* TAB 3: FORCED INDUCTION & SUPERCHARGERS */}
         {/* ================================================================= */}
         {activeTab === "turbo" && (
           <div className="space-y-4">
-            <div className="bg-slate-950/50 p-3 rounded-xl border border-slate-800/80 space-y-2">
+            {/* 1. Aspiration & Forced Induction Archetype */}
+            <div className="bg-slate-950/50 p-3 rounded-xl border border-slate-800/80 space-y-2.5">
               <label className="text-[11px] font-bold uppercase tracking-wider text-cyan-400">
-                Aspiration & Forced Induction
+                1. Aspiration & Forced Induction System
               </label>
-              <select
-                value={state.turboSystem.type}
-                onChange={(e) =>
-                  engine.updateTurboSystem({
-                    type: e.target.value as ForcedInductionType,
-                    turboCount:
-                      e.target.value === "naturally_aspirated"
-                        ? 0
-                        : e.target.value === "single_twin_scroll_turbo"
-                        ? 1
-                        : 2,
-                  })
-                }
-                className="w-full bg-slate-800 border border-slate-700 rounded-lg px-2 py-1.5 text-xs text-slate-100"
-              >
-                <option value="naturally_aspirated">Naturally Aspirated (High RPM)</option>
-                <option value="single_twin_scroll_turbo">Single Twin-Scroll Turbo</option>
-                <option value="twin_turbo_parallel">Twin Turbo Parallel</option>
-                <option value="hot_v_twin_turbo">Hot-V Twin Turbo (Short Spool)</option>
-                <option value="roots_twin_screw_supercharger">Twin-Screw Supercharger</option>
-              </select>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                {[
+                  {
+                    id: "naturally_aspirated",
+                    title: "Naturally Aspirated",
+                    desc: "High-revving purist atmospheric intake with instantaneous throttle response.",
+                    turbos: 0,
+                    badge: "Atmospheric",
+                  },
+                  {
+                    id: "single_twin_scroll_turbo",
+                    title: "Single Twin-Scroll Turbo",
+                    desc: "Big single high-flow turbocharger for massive top-end power delivery.",
+                    turbos: 1,
+                    badge: "Drag / Drift",
+                  },
+                  {
+                    id: "twin_turbo_parallel",
+                    title: "Twin-Turbo Parallel",
+                    desc: "Symmetric left & right outboard turbos for balanced spool and high boost capacity.",
+                    turbos: 2,
+                    badge: "GT3 / Supercar",
+                  },
+                  {
+                    id: "hot_v_twin_turbo",
+                    title: "Hot-V Twin-Turbo",
+                    desc: "Turbos packaged inside the engine V-valley for ultra-short exhaust runner spool.",
+                    turbos: 2,
+                    badge: "Short Spool",
+                  },
+                  {
+                    id: "quad_turbo_staged",
+                    title: "Quad-Turbo Staged",
+                    desc: "4 discrete turbochargers (W16/W18 setup) with dual intercooler bridges.",
+                    turbos: 4,
+                    badge: "Hypercar",
+                  },
+                  {
+                    id: "roots_twin_screw_supercharger",
+                    title: "Twin-Screw Supercharger",
+                    desc: "Valley-mounted positive displacement blower with instant zero-lag low-end torque.",
+                    turbos: 0,
+                    badge: "Instant Boost",
+                  },
+                  {
+                    id: "centrifugal_supercharger",
+                    title: "Centrifugal Supercharger",
+                    desc: "Front-mounted high-RPM compressor with planetary step-up drive gearbox.",
+                    turbos: 0,
+                    badge: "ProCharger",
+                  },
+                ].map((item) => {
+                  const isSelected = state.turboSystem.type === item.id;
+                  return (
+                    <button
+                      key={item.id}
+                      onClick={() =>
+                        engine.updateTurboSystem({
+                          type: item.id as ForcedInductionType,
+                          turboCount: item.turbos as any,
+                        })
+                      }
+                      className={`p-2.5 rounded-xl border text-left transition-all ${
+                        isSelected
+                          ? "bg-cyan-500/15 border-cyan-500/80 shadow-md shadow-cyan-500/10 ring-1 ring-cyan-400"
+                          : "bg-slate-900/60 border-slate-800 hover:border-slate-700 hover:bg-slate-850"
+                      }`}
+                    >
+                      <div className="flex items-center justify-between mb-1">
+                        <span className={`text-xs font-bold ${isSelected ? "text-cyan-300" : "text-slate-200"}`}>
+                          {item.title}
+                        </span>
+                        <span className="text-[9px] font-mono uppercase px-1.5 py-0.5 rounded bg-slate-950 text-slate-400 border border-slate-800">
+                          {item.badge}
+                        </span>
+                      </div>
+                      <p className="text-[10px] text-slate-400 leading-relaxed">{item.desc}</p>
+                    </button>
+                  );
+                })}
+              </div>
             </div>
 
+            {/* Quick Sizing Presets */}
             {state.turboSystem.type !== "naturally_aspirated" && (
-              <div className="bg-slate-950/50 p-3 rounded-xl border border-slate-800/80 space-y-3">
-                <div className="flex justify-between items-center">
-                  <span className="text-[11px] font-bold uppercase tracking-wider text-cyan-400">
-                    Boost Target
-                  </span>
-                  <span className="text-xs font-mono font-bold text-rose-400">
-                    {state.turboSystem.targetBoostPressureBar} bar (
-                    {Math.round(state.turboSystem.targetBoostPressureBar * 14.5)} psi)
-                  </span>
+              <div className="bg-slate-950/50 p-3 rounded-xl border border-slate-800/80 space-y-2">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                  Quick Sizing & Boost Presets:
+                </span>
+                <div className="flex gap-1.5 overflow-x-auto pb-1">
+                  {[
+                    { label: "Street 54mm", inducer: 54, exducer: 58, ar: 0.63, boost: 1.0, disp: 2.3, pulley: 2.0 },
+                    { label: "Track GT3 68mm", inducer: 68, exducer: 64, ar: 0.82, boost: 1.6, disp: 3.0, pulley: 2.4 },
+                    { label: "Hypercar 82mm", inducer: 82, exducer: 78, ar: 1.05, boost: 2.2, disp: 3.5, pulley: 2.8 },
+                    { label: "Pro Drag 98mm", inducer: 98, exducer: 94, ar: 1.25, boost: 3.2, disp: 4.2, pulley: 3.2 },
+                    { label: "Quad 4x 64mm", inducer: 64, exducer: 62, ar: 0.85, boost: 2.8, disp: 3.8, pulley: 3.0 },
+                  ].map((preset) => (
+                    <button
+                      key={preset.label}
+                      onClick={() =>
+                        engine.updateTurboSystem({
+                          compressorInducerMm: preset.inducer,
+                          turbineExducerMm: preset.exducer,
+                          aRatio: preset.ar,
+                          targetBoostPressureBar: preset.boost,
+                          superchargerDisplacementLiters: preset.disp,
+                          superchargerPulleyRatio: preset.pulley,
+                        })
+                      }
+                      className="px-2.5 py-1 text-[10px] font-mono font-semibold rounded-lg bg-slate-800 hover:bg-cyan-950/60 hover:text-cyan-300 text-slate-200 border border-slate-700 whitespace-nowrap transition-all"
+                    >
+                      {preset.label}
+                    </button>
+                  ))}
                 </div>
-                <input
-                  type="range"
-                  min="0.2"
-                  max="3.2"
-                  step="0.05"
-                  value={state.turboSystem.targetBoostPressureBar}
-                  onChange={(e) =>
-                    engine.updateTurboSystem({ targetBoostPressureBar: parseFloat(e.target.value) })
-                  }
-                  className="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-rose-500"
-                />
-
-                <div className="flex justify-between text-[11px]">
-                  <span className="text-slate-400">Compressor Inducer</span>
-                  <span className="font-mono text-cyan-300">
-                    {state.turboSystem.compressorInducerMm} mm
-                  </span>
-                </div>
-                <input
-                  type="range"
-                  min="48"
-                  max="88"
-                  step="1"
-                  value={state.turboSystem.compressorInducerMm}
-                  onChange={(e) =>
-                    engine.updateTurboSystem({ compressorInducerMm: parseInt(e.target.value, 10) })
-                  }
-                  className="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-cyan-400"
-                />
               </div>
             )}
 
-            {/* Exhaust Header Style */}
+            {/* 2. Parametric Sizing & Dynamic Scalers */}
+            {state.turboSystem.type !== "naturally_aspirated" && (
+              <div className="bg-slate-950/50 p-3 rounded-xl border border-slate-800/80 space-y-3.5">
+                <div className="flex justify-between items-center">
+                  <label className="text-[11px] font-bold uppercase tracking-wider text-cyan-400">
+                    2. Physical Geometry Sizing & Boost Parameters
+                  </label>
+                  <span className="text-xs font-mono font-bold text-rose-400">
+                    {state.turboSystem.targetBoostPressureBar} bar ({Math.round(state.turboSystem.targetBoostPressureBar * 14.5)} psi)
+                  </span>
+                </div>
+
+                {/* Target Boost Pressure */}
+                <div>
+                  <div className="flex justify-between text-[11px] mb-1">
+                    <span className="text-slate-400">Target Boost Pressure</span>
+                    <span className="font-mono text-rose-400 font-bold">{state.turboSystem.targetBoostPressureBar} bar</span>
+                  </div>
+                  <input
+                    type="range"
+                    min="0.2"
+                    max="4.0"
+                    step="0.05"
+                    value={state.turboSystem.targetBoostPressureBar}
+                    onChange={(e) => engine.updateTurboSystem({ targetBoostPressureBar: parseFloat(e.target.value) })}
+                    className="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-rose-500"
+                  />
+                </div>
+
+                {/* Turbo Specific Sizing */}
+                {state.turboSystem.type !== "roots_twin_screw_supercharger" && (
+                  <>
+                    <div>
+                      <div className="flex justify-between text-[11px] mb-1">
+                        <span className="text-slate-400">Compressor Inducer Diameter (Physical Size)</span>
+                        <span className="font-mono text-cyan-300 font-bold">{state.turboSystem.compressorInducerMm} mm</span>
+                      </div>
+                      <input
+                        type="range"
+                        min="45"
+                        max="110"
+                        step="1"
+                        value={state.turboSystem.compressorInducerMm}
+                        onChange={(e) => engine.updateTurboSystem({ compressorInducerMm: parseInt(e.target.value, 10) })}
+                        className="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-cyan-400"
+                      />
+                    </div>
+
+                    <div>
+                      <div className="flex justify-between text-[11px] mb-1">
+                        <span className="text-slate-400">Turbine Exducer Diameter</span>
+                        <span className="font-mono text-cyan-300 font-bold">{state.turboSystem.turbineExducerMm} mm</span>
+                      </div>
+                      <input
+                        type="range"
+                        min="48"
+                        max="115"
+                        step="1"
+                        value={state.turboSystem.turbineExducerMm}
+                        onChange={(e) => engine.updateTurboSystem({ turbineExducerMm: parseInt(e.target.value, 10) })}
+                        className="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-cyan-400"
+                      />
+                    </div>
+
+                    <div>
+                      <div className="flex justify-between text-[11px] mb-1">
+                        <span className="text-slate-400">Turbine Housing A/R Ratio</span>
+                        <span className="font-mono text-cyan-300 font-bold">{state.turboSystem.aRatio} A/R</span>
+                      </div>
+                      <input
+                        type="range"
+                        min="0.50"
+                        max="1.45"
+                        step="0.05"
+                        value={state.turboSystem.aRatio}
+                        onChange={(e) => engine.updateTurboSystem({ aRatio: parseFloat(e.target.value) })}
+                        className="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-cyan-400"
+                      />
+                    </div>
+                  </>
+                )}
+
+                {/* Supercharger Specific Sizing */}
+                {state.turboSystem.type === "roots_twin_screw_supercharger" && (
+                  <>
+                    <div>
+                      <div className="flex justify-between text-[11px] mb-1">
+                        <span className="text-slate-400">Supercharger Blower Displacement</span>
+                        <span className="font-mono text-cyan-300 font-bold">{state.turboSystem.superchargerDisplacementLiters ?? 3.0} Liters</span>
+                      </div>
+                      <input
+                        type="range"
+                        min="1.8"
+                        max="4.5"
+                        step="0.1"
+                        value={state.turboSystem.superchargerDisplacementLiters ?? 3.0}
+                        onChange={(e) => engine.updateTurboSystem({ superchargerDisplacementLiters: parseFloat(e.target.value) })}
+                        className="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-cyan-400"
+                      />
+                    </div>
+
+                    <div>
+                      <div className="flex justify-between text-[11px] mb-1">
+                        <span className="text-slate-400">Drive Pulley Ratio</span>
+                        <span className="font-mono text-cyan-300 font-bold">{(state.turboSystem.superchargerPulleyRatio ?? 2.4).toFixed(1)}:1</span>
+                      </div>
+                      <input
+                        type="range"
+                        min="1.8"
+                        max="3.4"
+                        step="0.1"
+                        value={state.turboSystem.superchargerPulleyRatio ?? 2.4}
+                        onChange={(e) => engine.updateTurboSystem({ superchargerPulleyRatio: parseFloat(e.target.value) })}
+                        className="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-cyan-400"
+                      />
+                    </div>
+                  </>
+                )}
+              </div>
+            )}
+
+            {/* 3. Forced Induction Styling, Materials & Finishes */}
+            {state.turboSystem.type !== "naturally_aspirated" && (
+              <div className="bg-slate-950/50 p-3 rounded-xl border border-slate-800/80 space-y-3">
+                <label className="text-[11px] font-bold uppercase tracking-wider text-cyan-400">
+                  3. Forced Induction Materials & Aesthetic Finishes
+                </label>
+
+                {/* Housing Material & Color */}
+                <div>
+                  <span className="text-[10px] text-slate-400 block mb-1.5">Turbine / Blower Housing Finish</span>
+                  <div className="grid grid-cols-3 gap-1.5">
+                    {[
+                      { id: "billet_polished", label: "Polished Billet", color: "#f8fafc" },
+                      { id: "titanium_blued", label: "Titanium Blued", color: "#2563eb" },
+                      { id: "inconel_bronze", label: "Inconel 625", color: "#d97706" },
+                      { id: "ceramic_white", label: "Ceramic White", color: "#e2e8f0" },
+                      { id: "stealth_black", label: "Stealth Black", color: "#18181b" },
+                      { id: "rosso_corsa", label: "Rosso Corsa", color: "#dc2626" },
+                    ].map((item) => {
+                      const isSelected = (state.turboSystem.turboHousingFinish || "titanium_blued") === item.id;
+                      return (
+                        <button
+                          key={item.id}
+                          onClick={() => engine.updateTurboSystem({ turboHousingFinish: item.id as TurboHousingFinish })}
+                          className={`flex items-center gap-1.5 p-1.5 rounded-lg border text-left transition-all ${
+                            isSelected
+                              ? "bg-slate-800 border-cyan-400 ring-1 ring-cyan-400 text-slate-100"
+                              : "bg-slate-900/80 border-slate-800 hover:border-slate-700 text-slate-300"
+                          }`}
+                        >
+                          <span className="w-3 h-3 rounded-full border border-white/20 shrink-0" style={{ backgroundColor: item.color }} />
+                          <span className="text-[9.5px] font-medium truncate">{item.label}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* Compressor Wheel / Pulley Anodizing */}
+                <div>
+                  <span className="text-[10px] text-slate-400 block mb-1.5">Compressor Impeller / Pulley Finish</span>
+                  <div className="grid grid-cols-3 gap-1.5">
+                    {[
+                      { id: "billet_gold", label: "Billet Gold", color: "#f59e0b" },
+                      { id: "billet_emerald", label: "Emerald Green", color: "#10b981" },
+                      { id: "billet_cobalt", label: "Cobalt Blue", color: "#0284c7" },
+                      { id: "billet_crimson", label: "Crimson Red", color: "#ef4444" },
+                      { id: "polished_silver", label: "Billet Silver", color: "#e2e8f0" },
+                    ].map((item) => {
+                      const isSelected = (state.turboSystem.compressorWheelColor || "billet_gold") === item.id;
+                      return (
+                        <button
+                          key={item.id}
+                          onClick={() => engine.updateTurboSystem({ compressorWheelColor: item.id as CompressorWheelColor })}
+                          className={`flex items-center gap-1.5 p-1.5 rounded-lg border text-left transition-all ${
+                            isSelected
+                              ? "bg-slate-800 border-cyan-400 ring-1 ring-cyan-400 text-slate-100"
+                              : "bg-slate-900/80 border-slate-800 hover:border-slate-700 text-slate-300"
+                          }`}
+                        >
+                          <span className="w-3 h-3 rounded-full border border-white/20 shrink-0" style={{ backgroundColor: item.color }} />
+                          <span className="text-[9.5px] font-medium truncate">{item.label}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* Wastegate & Silicone Coupler Options */}
+                <div className="grid grid-cols-2 gap-2">
+                  <div>
+                    <span className="text-[10px] text-slate-400">Wastegate / BOV Cap</span>
+                    <select
+                      value={state.turboSystem.wastegateCapColor || "anodized_purple"}
+                      onChange={(e) => engine.updateTurboSystem({ wastegateCapColor: e.target.value as WastegateCapColor })}
+                      className="w-full mt-1 bg-slate-800 border border-slate-700 rounded-lg px-2 py-1.5 text-xs text-slate-100 font-medium"
+                    >
+                      <option value="anodized_purple">Anodized Purple</option>
+                      <option value="anodized_blue">Cobalt Blue</option>
+                      <option value="anodized_gold">Billet Gold</option>
+                      <option value="anodized_red">Crimson Red</option>
+                      <option value="stealth_black">Stealth Black</option>
+                    </select>
+                  </div>
+
+                  <div>
+                    <span className="text-[10px] text-slate-400">Silicone Coupler Boot</span>
+                    <select
+                      value={state.turboSystem.couplerColor || "blue_silicone"}
+                      onChange={(e) => engine.updateTurboSystem({ couplerColor: e.target.value as SiliconeCouplerColor })}
+                      className="w-full mt-1 bg-slate-800 border border-slate-700 rounded-lg px-2 py-1.5 text-xs text-slate-100 font-medium"
+                    >
+                      <option value="blue_silicone">4-Ply Silicone Blue</option>
+                      <option value="red_silicone">4-Ply Silicone Red</option>
+                      <option value="stealth_black_viton">Stealth Black Viton</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* 4. Exhaust Headers Style */}
             <div className="bg-slate-950/50 p-3 rounded-xl border border-slate-800/80 space-y-2">
               <label className="text-[11px] font-bold uppercase tracking-wider text-cyan-400">
-                Exhaust Headers
+                4. Exhaust Header Configuration
               </label>
               <select
                 value={state.exhaust.headerStyle}
-                onChange={(e) =>
-                  engine.updateExhaust({ headerStyle: e.target.value as ExhaustHeaderStyle })
-                }
-                className="w-full bg-slate-800 border border-slate-700 rounded-lg px-2 py-1.5 text-xs text-slate-100"
+                onChange={(e) => engine.updateExhaust({ headerStyle: e.target.value as ExhaustHeaderStyle })}
+                className="w-full bg-slate-800 border border-slate-700 rounded-lg px-2 py-1.5 text-xs text-slate-100 font-medium"
               >
                 <option value="cast_iron_log">Cast Iron Log</option>
                 <option value="shorty_tuned_tubular">Shorty Tuned Tubular</option>
                 <option value="equal_length_long_tube">Equal-Length Long Tube</option>
                 <option value="inconel_pie_cut_hot_v">Inconel Pie-Cut Race</option>
+                <option value="titanium_f1_bundle">Titanium F1 Bundle</option>
               </select>
             </div>
           </div>
@@ -623,6 +921,546 @@ export const ModularEngineStudioWorkbench: React.FC<ModularEngineStudioWorkbench
                 </div>
               ))
             )}
+          </div>
+        )}
+
+        {/* ================================================================= */}
+        {/* TAB 6: COSMETICS, ENGINE COVERS & EXHAUST FINISHES */}
+        {/* ================================================================= */}
+        {activeTab === "cosmetics" && (
+          <div className="space-y-4">
+            {/* Header & Beauty Cover Visibility Toggle */}
+            <div className="bg-slate-950/60 p-3 rounded-xl border border-slate-800 flex items-center justify-between">
+              <div>
+                <span className="text-[11px] font-bold uppercase tracking-wider text-amber-400 flex items-center gap-1.5">
+                  <Sparkles size={14} className="text-amber-400" />
+                  Engine Aesthetics & Covers
+                </span>
+                <p className="text-[10px] text-slate-400 mt-0.5">
+                  Customize 3D engine beauty cover models, titanium temper bluing, and powdercoats.
+                </p>
+              </div>
+              <button
+                onClick={() =>
+                  engine.updateCosmetics({
+                    showEngineCover: !(state.cosmetics?.showEngineCover ?? true),
+                  })
+                }
+                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold border transition-all ${
+                  (state.cosmetics?.showEngineCover ?? true)
+                    ? "bg-amber-500/20 text-amber-300 border-amber-500/40 hover:bg-amber-500/30"
+                    : "bg-slate-800 text-slate-400 border-slate-700 hover:bg-slate-700"
+                }`}
+              >
+                {(state.cosmetics?.showEngineCover ?? true) ? (
+                  <>
+                    <Eye size={13} />
+                    <span>Cover Visible</span>
+                  </>
+                ) : (
+                  <>
+                    <EyeOff size={13} />
+                    <span>Cover Hidden</span>
+                  </>
+                )}
+              </button>
+            </div>
+
+            {/* 1. Engine Cover 3D Model Picker */}
+            <div className="bg-slate-950/50 p-3 rounded-xl border border-slate-800/80 space-y-2.5">
+              <label className="text-[11px] font-bold uppercase tracking-wider text-cyan-400">
+                1. 3D Engine Cover Geometry Model
+              </label>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                {[
+                  {
+                    id: "hypercar_quartz",
+                    title: "Apex Hypercar Monocoque",
+                    desc: "Carbon fiber monocoque beauty cover with quartz window, gold bezel, and ram scoop.",
+                    badge: "Flagship V12",
+                  },
+                  {
+                    id: "gt3_endurance",
+                    title: "Sarthe GT3 Endurance",
+                    desc: "Dual high-flow carbon airbox plenums with exposed trumpets & Dzus latches.",
+                    badge: "Race Spec",
+                  },
+                  {
+                    id: "billet_skeleton",
+                    title: "Modena Billet Skeleton",
+                    desc: "CNC 6061-T6 skeletal lattice truss frame exposing cams, sprockets & rails.",
+                    badge: "Lightweight",
+                  },
+                  {
+                    id: "heritage_wrinkle",
+                    title: "Prancing Heritage Plenums",
+                    desc: "Dual sand-cast aluminum intake plenums with longitudinal heat fins.",
+                    badge: "Classic",
+                  },
+                  {
+                    id: "stealth_vortex",
+                    title: "Stealth Track Vortex",
+                    desc: "Low-profile forged carbon cover with active vortex aero generator fins.",
+                    badge: "Aero Track",
+                  },
+                  {
+                    id: "exposed_itb",
+                    title: "Purist Exposed Velocity Stacks",
+                    desc: "Raw open-trumpet ITBs, billet fuel rails, and mechanical throttle linkage.",
+                    badge: "Pure ITB",
+                  },
+                  {
+                    id: "inline_twin_cam_turbo",
+                    title: "Inline Twin-Cam Turbo Spec",
+                    desc: "Asymmetric dry-carbon cam valley cover, titanium turbo heat shield & COP coils.",
+                    badge: "Inline I3-I6",
+                  },
+                  {
+                    id: "boxer_twin_plenum_flat",
+                    title: "Boxer Twin-Plenum Flat Spec",
+                    desc: "Low-profile dual runner airbox with top-mount intercooler fins & strut bar.",
+                    badge: "Boxer/Flat",
+                  },
+                  {
+                    id: "w16_quad_turbo_hypersport",
+                    title: "W16 Quad-Turbo Hypersport",
+                    desc: "Massive 4-bank carbon cover with inconel heat shield & 16-coil heat sinks.",
+                    badge: "W12 / W16",
+                  },
+                  {
+                    id: "rotary_apex_trochoid",
+                    title: "Rotary Apex Trochoid Spec",
+                    desc: "Epitrochoid rotor profile housing with side-draft velocity trumpets & apex badge.",
+                    badge: "Wankel Rotary",
+                  },
+                  {
+                    id: "supercharged_v8_shaker",
+                    title: "Supercharged V8 Shaker Scoop",
+                    desc: "Billet supercharger case cover with protruding hood scoop & twin butterfly valves.",
+                    badge: "Supercharged",
+                  },
+                  {
+                    id: "f1_pneumatic_carbon_plenum",
+                    title: "F1 Pneumatic Carbon Plenum",
+                    desc: "Teardrop pre-preg carbon airbox with 24K gold thermal foil & pneumatic fill ports.",
+                    badge: "F1 Spec",
+                  },
+                ].map((model) => {
+                  const isSelected = (state.cosmetics?.coverModel || "hypercar_quartz") === model.id;
+                  return (
+                    <button
+                      key={model.id}
+                      onClick={() =>
+                        engine.updateCosmetics({
+                          coverModel: model.id as EngineCoverModel,
+                          showEngineCover: true,
+                        })
+                      }
+                      className={`p-2.5 rounded-xl border text-left transition-all ${
+                        isSelected
+                          ? "bg-cyan-500/15 border-cyan-500/80 shadow-md shadow-cyan-500/10 ring-1 ring-cyan-400"
+                          : "bg-slate-900/60 border-slate-800 hover:border-slate-700 hover:bg-slate-850"
+                      }`}
+                    >
+                      <div className="flex items-center justify-between mb-1">
+                        <span className={`text-xs font-bold ${isSelected ? "text-cyan-300" : "text-slate-200"}`}>
+                          {model.title}
+                        </span>
+                        <span className="text-[9px] font-mono uppercase px-1.5 py-0.5 rounded bg-slate-950 text-slate-400 border border-slate-800">
+                          {model.badge}
+                        </span>
+                      </div>
+                      <p className="text-[10px] text-slate-400 leading-relaxed">{model.desc}</p>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* 2. Cover Material & Finish */}
+            <div className="bg-slate-950/50 p-3 rounded-xl border border-slate-800/80 space-y-2">
+              <label className="text-[11px] font-bold uppercase tracking-wider text-cyan-400">
+                2. Engine Cover Composite & Color
+              </label>
+              <div className="grid grid-cols-3 gap-1.5">
+                {[
+                  { id: "dry_carbon", label: "Dry Carbon 3K", color: "#1e293b" },
+                  { id: "forged_carbon_gold", label: "Forged Gold Flake", color: "#27272a" },
+                  { id: "rosso_corsa", label: "Rosso Corsa", color: "#dc2626" },
+                  { id: "apex_blue", label: "Monaco Blue", color: "#0284c7" },
+                  { id: "giallo_yellow", label: "Giallo Modena", color: "#eab308" },
+                  { id: "british_racing_green", label: "British Racing Green", color: "#15803d" },
+                  { id: "stealth_black", label: "Stealth Black", color: "#18181b" },
+                  { id: "billet_silver", label: "Billet 6061", color: "#94a3b8" },
+                  { id: "gold_leaf", label: "24K Gold Leaf", color: "#f59e0b" },
+                ].map((item) => {
+                  const isSelected = (state.cosmetics?.coverColor || "dry_carbon") === item.id;
+                  return (
+                    <button
+                      key={item.id}
+                      onClick={() => engine.updateCosmetics({ coverColor: item.id as EngineCoverColor })}
+                      className={`flex items-center gap-2 p-2 rounded-lg border text-left transition-all ${
+                        isSelected
+                          ? "bg-slate-800 border-cyan-400 ring-1 ring-cyan-400 text-slate-100"
+                          : "bg-slate-900/80 border-slate-800 hover:border-slate-700 text-slate-300"
+                      }`}
+                    >
+                      <span
+                        className="w-3.5 h-3.5 rounded-full border border-white/20 shadow-sm shrink-0"
+                        style={{ backgroundColor: item.color }}
+                      />
+                      <span className="text-[10px] font-medium truncate">{item.label}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* 3. Cover Bezel & Accent Trim */}
+            <div className="bg-slate-950/50 p-3 rounded-xl border border-slate-800/80 space-y-2">
+              <label className="text-[11px] font-bold uppercase tracking-wider text-cyan-400">
+                3. Window Bezel & Fastener Accent
+              </label>
+              <div className="grid grid-cols-3 gap-1.5">
+                {[
+                  { id: "billet_gold", label: "Billet Gold", color: "#f59e0b" },
+                  { id: "titanium_blue", label: "Heat-Blued Ti", color: "#2563eb" },
+                  { id: "crimson_red", label: "Crimson Red", color: "#dc2626" },
+                  { id: "cobalt_blue", label: "Cobalt Blue", color: "#0284c7" },
+                  { id: "stealth_black", label: "Stealth Black", color: "#18181b" },
+                  { id: "polished_chrome", label: "Mirror Chrome", color: "#f8fafc" },
+                ].map((item) => {
+                  const isSelected = (state.cosmetics?.coverBezelColor || "billet_gold") === item.id;
+                  return (
+                    <button
+                      key={item.id}
+                      onClick={() => engine.updateCosmetics({ coverBezelColor: item.id as EngineCoverBezelColor })}
+                      className={`flex items-center gap-2 p-2 rounded-lg border text-left transition-all ${
+                        isSelected
+                          ? "bg-slate-800 border-cyan-400 ring-1 ring-cyan-400 text-slate-100"
+                          : "bg-slate-900/80 border-slate-800 hover:border-slate-700 text-slate-300"
+                      }`}
+                    >
+                      <span
+                        className="w-3.5 h-3.5 rounded-full border border-white/20 shadow-sm shrink-0"
+                        style={{ backgroundColor: item.color }}
+                      />
+                      <span className="text-[10px] font-medium truncate">{item.label}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* 4. Exhaust Headers Finish */}
+            <div className="bg-slate-950/50 p-3 rounded-xl border border-slate-800/80 space-y-2">
+              <label className="text-[11px] font-bold uppercase tracking-wider text-cyan-400">
+                4. Exhaust Header Material & Finish
+              </label>
+              <div className="grid grid-cols-2 gap-2">
+                {[
+                  {
+                    id: "titanium_blued",
+                    label: "Titanium Heat-Blued",
+                    desc: "Pie-cut welded Grade 5 titanium with vibrant electric blue & purple temper gradient.",
+                    color: "#2563eb",
+                  },
+                  {
+                    id: "dyno_glow",
+                    label: "Dyno Glowing Red-Hot",
+                    desc: "Full dyno WOT thermal simulation with emissive red-orange heat radiance.",
+                    color: "#ff4500",
+                  },
+                  {
+                    id: "inconel_gold",
+                    label: "Inconel 625 Gold",
+                    desc: "F1 endurance heat-treated gold/bronze nickel-chromium superalloy.",
+                    color: "#d97706",
+                  },
+                  {
+                    id: "ceramic_white",
+                    label: "Plasma Ceramic White",
+                    desc: "Thermal barrier plasma-sprayed ceramic coating for sub-hood heat reduction.",
+                    color: "#f8fafc",
+                  },
+                  {
+                    id: "stealth_black",
+                    label: "Satin Black Ceramic",
+                    desc: "Military-spec heat insulation coating with stealth matte finish.",
+                    color: "#18181b",
+                  },
+                  {
+                    id: "polished_stainless",
+                    label: "Mirror Polished 321",
+                    desc: "Hand-polished surgical 321 stainless steel runners with mirror reflections.",
+                    color: "#e2e8f0",
+                  },
+                ].map((ex) => {
+                  const isSelected = (state.cosmetics?.exhaustFinish || "titanium_blued") === ex.id;
+                  return (
+                    <button
+                      key={ex.id}
+                      onClick={() => engine.updateCosmetics({ exhaustFinish: ex.id as ExhaustFinish })}
+                      className={`p-2 rounded-xl border text-left transition-all ${
+                        isSelected
+                          ? "bg-slate-800 border-cyan-400 ring-1 ring-cyan-400 text-slate-100"
+                          : "bg-slate-900/80 border-slate-800 hover:border-slate-700 text-slate-300"
+                      }`}
+                    >
+                      <div className="flex items-center gap-2 mb-1">
+                        <span
+                          className="w-3.5 h-3.5 rounded-full border border-white/20 shadow-sm shrink-0"
+                          style={{ backgroundColor: ex.color }}
+                        />
+                        <span className="text-[11px] font-bold text-slate-200">{ex.label}</span>
+                      </div>
+                      <p className="text-[9.5px] text-slate-400 leading-snug">{ex.desc}</p>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* 5. Valve Cover Powdercoat */}
+            <div className="bg-slate-950/50 p-3 rounded-xl border border-slate-800/80 space-y-2">
+              <label className="text-[11px] font-bold uppercase tracking-wider text-cyan-400">
+                5. Valve Cover Powdercoat Color
+              </label>
+              <div className="grid grid-cols-3 gap-1.5">
+                {[
+                  { id: "rosso_red", label: "Rosso Red", color: "#dc2626" },
+                  { id: "monaco_blue", label: "Monaco Blue", color: "#0284c7" },
+                  { id: "acid_yellow", label: "Acid Yellow", color: "#eab308" },
+                  { id: "gold_anodized", label: "Gold Anodized", color: "#f59e0b" },
+                  { id: "satin_carbon", label: "Satin Carbon", color: "#27272a" },
+                  { id: "titanium_gray", label: "Titanium Gray", color: "#64748b" },
+                ].map((item) => {
+                  const isSelected = (state.cosmetics?.valveCoverColor || "rosso_red") === item.id;
+                  return (
+                    <button
+                      key={item.id}
+                      onClick={() => engine.updateCosmetics({ valveCoverColor: item.id as ValveCoverColor })}
+                      className={`flex items-center gap-2 p-2 rounded-lg border text-left transition-all ${
+                        isSelected
+                          ? "bg-slate-800 border-cyan-400 ring-1 ring-cyan-400 text-slate-100"
+                          : "bg-slate-900/80 border-slate-800 hover:border-slate-700 text-slate-300"
+                      }`}
+                    >
+                      <span
+                        className="w-3.5 h-3.5 rounded-full border border-white/20 shadow-sm shrink-0"
+                        style={{ backgroundColor: item.color }}
+                      />
+                      <span className="text-[10px] font-medium truncate">{item.label}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* 6. Custom 3D Badge Lettering & Anodizing Theme */}
+            <div className="bg-slate-950/50 p-3 rounded-xl border border-slate-800/80 space-y-3">
+              <label className="text-[11px] font-bold uppercase tracking-wider text-cyan-400">
+                6. Custom 3D Laser-Etched Badge & Anodizing
+              </label>
+              <div className="grid grid-cols-2 gap-2">
+                <div>
+                  <span className="text-[10px] text-slate-400">3D Badge Text</span>
+                  <input
+                    type="text"
+                    value={state.cosmetics?.badgeEmblemText ?? "APEX V12"}
+                    onChange={(e) => engine.updateCosmetics({ badgeEmblemText: e.target.value.toUpperCase() })}
+                    placeholder="e.g. APEX V12"
+                    maxLength={14}
+                    className="w-full mt-1 bg-slate-800 border border-slate-700 rounded-lg px-2 py-1.5 text-xs text-slate-100 font-mono tracking-wider font-bold uppercase focus:border-cyan-400 focus:outline-none"
+                  />
+                </div>
+                <div>
+                  <span className="text-[10px] text-slate-400">Hardware Anodizing Theme</span>
+                  <select
+                    value={state.cosmetics?.anodizingTheme || "anodized_gold"}
+                    onChange={(e) => engine.updateCosmetics({ anodizingTheme: e.target.value as AnodizingTheme })}
+                    className="w-full mt-1 bg-slate-800 border border-slate-700 rounded-lg px-2 py-1.5 text-xs text-slate-100 font-medium"
+                  >
+                    <option value="anodized_gold">Billet Gold Anodized</option>
+                    <option value="anodized_blue">Cobalt Blue Anodized</option>
+                    <option value="anodized_red">Crimson Red Anodized</option>
+                    <option value="anodized_black">Stealth Black Ceramic</option>
+                    <option value="anodized_titanium">Titanium Natural</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* ================================================================= */}
+        {/* TAB 7: DRIVETRAIN & TRANSMISSION SUBSYSTEM                        */}
+        {/* ================================================================= */}
+        {activeTab === "drivetrain" && dt && (
+          <div className="space-y-4">
+            {/* Transmission Architecture Selection */}
+            <div className="p-3.5 bg-slate-950/60 rounded-xl border border-slate-800 space-y-3">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-bold uppercase text-slate-200">Transmission Architecture</span>
+                <span className="text-[10px] font-mono text-cyan-400 font-bold">{dt.architecture.toUpperCase()}</span>
+              </div>
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                {[
+                  { id: "dct_7" as TransmissionArchitectureType, label: "7-Speed DCT", desc: "Lightning 35ms shifts, wet dual-clutch", gears: 7 as const },
+                  { id: "manual_6" as TransmissionArchitectureType, label: "6-Speed Manual", desc: "H-pattern, mechanical driver feel", gears: 6 as const },
+                  { id: "seq_7" as TransmissionArchitectureType, label: "7-Speed Sequential", desc: "Straight-cut dog-box, race spec", gears: 7 as const },
+                  { id: "single_speed" as TransmissionArchitectureType, label: "Single-Speed Direct", desc: "EV reduction box / e-Axle", gears: 1 as const },
+                  { id: "cvt" as TransmissionArchitectureType, label: "Sport CVT", desc: "Torque-tracking variable cones", gears: 7 as const },
+                ].map((arch) => (
+                  <button
+                    key={arch.id}
+                    onClick={() => {
+                      engine.updateDrivetrain({
+                        architecture: arch.id,
+                        activeGearCount: arch.gears,
+                        shiftTimingMs: arch.id === "seq_7" ? 15 : arch.id === "dct_7" ? 35 : arch.id === "single_speed" ? 0 : 120,
+                      });
+                    }}
+                    className={`p-2.5 rounded-xl border text-left transition-all cursor-pointer ${
+                      dt.architecture === arch.id
+                        ? "bg-cyan-500/10 border-cyan-500/50 text-cyan-200 ring-1 ring-cyan-500/30"
+                        : "bg-slate-900/50 border-slate-800 text-slate-400 hover:border-slate-700 hover:text-slate-200"
+                    }`}
+                  >
+                    <div className="font-bold text-xs">{arch.label}</div>
+                    <div className="text-[10px] text-slate-500 mt-0.5 leading-tight">{arch.desc}</div>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Ratio Auto-Optimizer */}
+            <div className="flex items-center justify-between p-3 bg-gradient-to-r from-cyan-950/40 via-blue-950/20 to-slate-950/60 rounded-xl border border-cyan-500/30">
+              <div>
+                <div className="text-xs font-bold text-slate-200">Gear Ratio Optimization Engine</div>
+                <p className="text-[10px] text-slate-400">Synthesize close-ratio motorsport or wide-ratio highway steps</p>
+              </div>
+              <div className="flex gap-2">
+                <button
+                  onClick={() => {
+                    const ratios = DrivetrainSolver.suggestGearRatios(
+                      state.performance.peakTorqueRpm,
+                      state.performance.redlineRpm,
+                      dt.activeGearCount,
+                      state.turboSystem.type === "naturally_aspirated"
+                    );
+                    engine.updateDrivetrain({ gearRatios: ratios });
+                  }}
+                  className="px-3 py-1.5 rounded-lg bg-cyan-500 text-slate-950 font-bold text-xs shadow-md shadow-cyan-500/30 cursor-pointer hover:bg-cyan-400"
+                >
+                  Auto-Optimize Ratios
+                </button>
+              </div>
+            </div>
+
+            {/* Final Drive & Gear Ratios Deck */}
+            <div className="p-3.5 bg-slate-950/60 rounded-xl border border-slate-800 space-y-3">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-bold uppercase text-slate-200">Final Drive Differential Ratio</span>
+                <span className="text-xs font-mono font-bold text-cyan-300">{dt.gearRatios.finalDrive.toFixed(2)} : 1</span>
+              </div>
+              <input
+                type="range"
+                min={2.20}
+                max={5.20}
+                step={0.01}
+                value={dt.gearRatios.finalDrive}
+                onChange={(e) => {
+                  const val = parseFloat(e.target.value);
+                  engine.updateDrivetrain({
+                    gearRatios: { ...dt.gearRatios, finalDrive: val },
+                  });
+                }}
+                className="w-full accent-cyan-400"
+              />
+
+              {/* Individual Gear Ratios */}
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-2 border-t border-slate-800">
+                {(["gear1", "gear2", "gear3", "gear4", "gear5", "gear6", "gear7", "gear8"] as (keyof GearRatioSet)[]).slice(0, dt.activeGearCount).map((gearKey, idx) => (
+                  <div key={gearKey} className="p-2 bg-slate-900/80 rounded-lg border border-slate-800 space-y-1">
+                    <div className="flex justify-between text-[10px] font-bold text-slate-400 uppercase">
+                      <span>Gear {idx + 1}</span>
+                      <span className="text-cyan-300 font-mono">{dt.gearRatios[gearKey]?.toFixed(2)}</span>
+                    </div>
+                    <input
+                      type="range"
+                      min={0.40}
+                      max={5.00}
+                      step={0.01}
+                      value={dt.gearRatios[gearKey] || 1.0}
+                      onChange={(e) => {
+                        const val = parseFloat(e.target.value);
+                        engine.updateDrivetrain({
+                          gearRatios: { ...dt.gearRatios, [gearKey]: val },
+                        });
+                      }}
+                      className="w-full accent-cyan-400"
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Differential & Clutch Metallurgy */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {/* LSD */}
+              <div className="p-3.5 bg-slate-950/60 rounded-xl border border-slate-800 space-y-2">
+                <span className="text-xs font-bold uppercase text-slate-200">Limited-Slip Differential</span>
+                <div className="grid grid-cols-2 gap-1.5">
+                  {[
+                    { id: "e_lsd" as DifferentialType, label: "Electronic e-LSD" },
+                    { id: "mechanical_ramp" as DifferentialType, label: "Multi-Plate Ramp" },
+                    { id: "viscous" as DifferentialType, label: "Viscous Coupling" },
+                    { id: "open" as DifferentialType, label: "Open Diff" },
+                  ].map((lsd) => (
+                    <button
+                      key={lsd.id}
+                      onClick={() => engine.updateDrivetrain({ lsdType: lsd.id })}
+                      className={`p-2 rounded-lg border text-xs font-bold text-left transition-all cursor-pointer ${
+                        dt.lsdType === lsd.id
+                          ? "bg-cyan-500/20 border-cyan-500/50 text-cyan-200"
+                          : "bg-slate-900 border-slate-800 text-slate-400 hover:text-slate-200"
+                      }`}
+                    >
+                      {lsd.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Clutch Package */}
+              <div className="p-3.5 bg-slate-950/60 rounded-xl border border-slate-800 space-y-2">
+                <span className="text-xs font-bold uppercase text-slate-200">Clutch Friction Package</span>
+                <div className="grid grid-cols-3 gap-1.5">
+                  {[
+                    { id: "carbon_multi_plate" as ClutchMaterialType, label: "Carbon Multi" },
+                    { id: "sintered_metallic" as ClutchMaterialType, label: "Sintered Puck" },
+                    { id: "organic" as ClutchMaterialType, label: "Organic Road" },
+                  ].map((clutch) => (
+                    <button
+                      key={clutch.id}
+                      onClick={() => engine.updateDrivetrain({ clutchType: clutch.id })}
+                      className={`p-2 rounded-lg border text-xs font-bold text-center transition-all cursor-pointer ${
+                        dt.clutchType === clutch.id
+                          ? "bg-cyan-500/20 border-cyan-500/50 text-cyan-200"
+                          : "bg-slate-900 border-slate-800 text-slate-400 hover:text-slate-200"
+                      }`}
+                    >
+                      {clutch.label}
+                    </button>
+                  ))}
+                </div>
+                <div className="pt-2 flex justify-between items-center text-[10px] text-slate-400">
+                  <span>Flywheel Mass: <strong className="text-slate-200">{dt.flywheelMassKg} kg</strong></span>
+                  <span>Max Input TQ: <strong className="text-amber-300">{dt.maxInputTorqueNm} Nm</strong></span>
+                </div>
+              </div>
+            </div>
           </div>
         )}
       </div>

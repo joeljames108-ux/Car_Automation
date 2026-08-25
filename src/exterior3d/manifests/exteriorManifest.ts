@@ -10,7 +10,7 @@ import type { ExteriorComponent3DType, ExteriorManifestRef } from "../types";
 export const EXTERIOR_3D_MANIFEST: Record<ExteriorComponent3DType, ExteriorManifestRef> = {
   chassis_frame: {
     componentType: "chassis_frame",
-    assetPath: "/models/exterior/chassis_frame.glb",
+    assetPath: "/models/chassis/sports_car_chassis_01.glb",
     defaultTransform: {
       position: { x: 0, y: 0, z: 0 },
       rotation: { x: 0, y: 0, z: 0 },

@@ -37,9 +37,12 @@ import {
   Scissors,
   Crosshair,
   Activity,
+  Shield,
   Play,
   Pause,
   Video,
+  Palette,
+  Building,
 } from "lucide-react";
 import {
   ModularAssemblySceneGraph,
@@ -49,6 +52,11 @@ import {
 import { AeroStreamlineParticleSystem } from "../../exterior3d/aerodynamics/AeroStreamlineParticleSystem";
 import { ComputedVehiclePhysicalState } from "../../sim/modularVehicle/AssemblyRegistryEngine";
 import { assemblyAudio } from "./utils/assemblyAudioEngine";
+import {
+  STUDIO_ENVIRONMENT_PRESETS,
+  StudioEnvironmentPreset,
+  AutomotiveStudioEnvironmentManager,
+} from "../../exterior3d/environment/AutomotiveStudioEnvironment";
 
 export type CameraPresetType = "front34" | "side" | "rear34" | "top" | "engine_zoom" | "cockpit" | "undercarriage";
 
@@ -97,7 +105,17 @@ export const ModularLinearAssemblyViewport: React.FC<ModularLinearAssemblyViewpo
   const sceneGraphRef = useRef<ModularAssemblySceneGraph | null>(null);
   const particleSystemRef = useRef<AeroStreamlineParticleSystem | null>(null);
 
-  const [lightingMode, setLightingMode] = useState<"studio" | "cyberpunk" | "sunset">("studio");
+  const [environmentPreset, setEnvironmentPreset] = useState<StudioEnvironmentPreset>("warm_sunset");
+  const [customTopColor, setCustomTopColor] = useState<string>("#2e1814");
+  const [customHorizonColor, setCustomHorizonColor] = useState<string>("#451a14");
+  const [customFloorColor, setCustomFloorColor] = useState<string>("#1f0f0c");
+  const [floorReflectivity, setFloorReflectivity] = useState<number>(0.2);
+  const [gridOpacity, setGridOpacity] = useState<number>(0.45);
+  const [exposureVal, setExposureVal] = useState<number>(1.3);
+  const [isFloorDiscActive, setIsFloorDiscActive] = useState<boolean>(true);
+  const [isContactShadowActive, setIsContactShadowActive] = useState<boolean>(true);
+  const currentEnvTextureRef = useRef<THREE.CanvasTexture | null>(null);
+
   const [activeCamPreset, setActiveCamPreset] = useState<CameraPresetType>("front34");
 
   // CAD Tools State
@@ -113,6 +131,14 @@ export const ModularLinearAssemblyViewport: React.FC<ModularLinearAssemblyViewpo
   const [closuresDickyAngle, setClosuresDickyAngle] = useState<number>(assemblyState.dickyOpenAngleDeg || 0);
   const [isCinematicInspection, setIsCinematicInspection] = useState<boolean>(false);
   const [showCADToolbar, setShowCADToolbar] = useState<boolean>(false);
+  const [isFeaStressActive, setIsFeaStressActive] = useState<boolean>(false);
+  const [feaLoadCase, setFeaLoadCase] = useState<"torsional" | "cornering" | "braking" | "crash">("torsional");
+  const [chassisMetallurgy, setChassisMetallurgy] = useState<"default" | "titanium" | "aluminum_6061" | "chromoly_4130" | "carbon_autoclave" | "hardox_steel">("default");
+  const [frameIsolation, setFrameIsolation] = useState<"all" | "chassis" | "body">("all");
+  const [activeCustomPaintFinish, setActiveCustomPaintFinish] = useState<string>("candy");
+  const [headlightsActive, setHeadlightsActive] = useState<boolean>(true);
+  const [drlActive, setDrlActive] = useState<boolean>(true);
+  const [underglowActive, setUnderglowActive] = useState<boolean>(true);
 
   // Initialize Three.js Scene
   useEffect(() => {
@@ -123,7 +149,6 @@ export const ModularLinearAssemblyViewport: React.FC<ModularLinearAssemblyViewpo
     const height = container.clientHeight || 560;
 
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x0a0c14);
     sceneRef.current = scene;
 
     const camera = new THREE.PerspectiveCamera(40, width / height, 0.1, 100);
@@ -139,7 +164,7 @@ export const ModularLinearAssemblyViewport: React.FC<ModularLinearAssemblyViewpo
     renderer.setSize(width, height);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.35;
+    renderer.toneMappingExposure = 1.3;
     renderer.shadowMap.enabled = true;
     rendererRef.current = renderer;
     container.appendChild(renderer.domElement);
@@ -153,30 +178,55 @@ export const ModularLinearAssemblyViewport: React.FC<ModularLinearAssemblyViewpo
     controls.target.set(0, 0.35, 0);
     controlsRef.current = controls;
 
-    // Lighting Setup
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.75);
+    // 1. Initial Lighting Rig
+    const ambientLight = new THREE.AmbientLight(0xffecd1, 1.3);
     ambientLight.name = "ambient";
     scene.add(ambientLight);
 
-    const keyLight = new THREE.DirectionalLight(0xfff8ee, 2.8);
+    const hemiLight = new THREE.HemisphereLight(0xffedd5, 0x2e1814, 0.7);
+    hemiLight.name = "hemi";
+    scene.add(hemiLight);
+
+    const keyLight = new THREE.DirectionalLight(0xffaa44, 3.4);
     keyLight.name = "key";
-    keyLight.position.set(6, 9, -6);
+    keyLight.position.set(7, 8, -5);
     scene.add(keyLight);
 
-    const fillLight = new THREE.DirectionalLight(0x38bdf8, 1.4);
+    const fillLight = new THREE.DirectionalLight(0xc084fc, 1.8);
     fillLight.name = "fill";
     fillLight.position.set(-6, 4, 6);
     scene.add(fillLight);
 
-    const rimLight = new THREE.DirectionalLight(0xec4899, 1.2);
+    const rimLight = new THREE.DirectionalLight(0xfbbf24, 2.2);
     rimLight.name = "rim";
     rimLight.position.set(0, 7, 7);
     scene.add(rimLight);
 
-    // Studio Ground Grid
-    const grid = new THREE.GridHelper(24, 48, 0x06b6d4, 0x1e293b);
+    // 2. Studio Ground Grid
+    const grid = new THREE.GridHelper(24, 48, 0xf59e0b, 0x78350f);
+    grid.name = "grid";
     grid.position.y = -0.01;
+    (grid.material as THREE.Material).transparent = true;
+    (grid.material as THREE.Material).opacity = 0.45;
     scene.add(grid);
+
+    // 3. Studio Floor Disc & Ground Contact Shadow Plane
+    const floorDisc = AutomotiveStudioEnvironmentManager.createStudioFloorDisc(18, 0x1f0f0c, 0.2);
+    scene.add(floorDisc);
+
+    const contactShadow = AutomotiveStudioEnvironmentManager.createContactShadowPlane(3.2, 6.0, 0.65);
+    scene.add(contactShadow);
+
+    // 4. Initial Gradient Canvas Background Texture (Golden Hour Sunset Studio)
+    const initBg = AutomotiveStudioEnvironmentManager.createGradientBackgroundTexture(
+      "#2e1814",
+      "#451a14",
+      "#1f0f0c",
+      true
+    );
+    currentEnvTextureRef.current = initBg;
+    scene.background = initBg;
+    scene.environment = initBg;
 
     // Assembly Scene Graph
     const sceneGraph = new ModularAssemblySceneGraph();
@@ -412,63 +462,109 @@ export const ModularLinearAssemblyViewport: React.FC<ModularLinearAssemblyViewpo
     }
   };
 
-  // Handle Lighting Preset Switch
-  const applyLightingMode = (mode: "studio" | "cyberpunk" | "sunset") => {
-    setLightingMode(mode);
-    const scene = sceneRef.current;
-    if (!scene) return;
+  // Handle Dynamic Studio Environment Preset Switch
+  const applyEnvironmentPreset = (presetId: StudioEnvironmentPreset) => {
+    setEnvironmentPreset(presetId);
+    const config = STUDIO_ENVIRONMENT_PRESETS[presetId];
+    if (!config) return;
 
+    setCustomTopColor(config.topColor);
+    setCustomHorizonColor(config.horizonColor);
+    setCustomFloorColor(config.floorColor);
+    setGridOpacity(config.gridOpacity);
+    setFloorReflectivity(config.floorReflectivity);
+    setExposureVal(config.toneMappingExposure);
+
+    const scene = sceneRef.current;
+    const renderer = rendererRef.current;
+    if (!scene || !renderer) return;
+
+    // 1. Dynamic Gradient Canvas Background Texture
+    if (currentEnvTextureRef.current) {
+      currentEnvTextureRef.current.dispose();
+    }
+    const bgTexture = AutomotiveStudioEnvironmentManager.createGradientBackgroundTexture(
+      config.topColor,
+      config.horizonColor,
+      config.floorColor,
+      true
+    );
+    currentEnvTextureRef.current = bgTexture;
+    scene.background = bgTexture;
+    scene.environment = bgTexture;
+
+    // 2. 5-Point Dynamic Automotive Studio Lighting
     const ambient = scene.getObjectByName("ambient") as THREE.AmbientLight;
+    const hemi = scene.getObjectByName("hemi") as THREE.HemisphereLight;
     const key = scene.getObjectByName("key") as THREE.DirectionalLight;
     const fill = scene.getObjectByName("fill") as THREE.DirectionalLight;
     const rim = scene.getObjectByName("rim") as THREE.DirectionalLight;
 
-    if (mode === "studio") {
-      scene.background = new THREE.Color(0x0a0c14);
-      if (ambient) ambient.color.setHex(0xffffff);
-      if (key) {
-        key.color.setHex(0xfff8ee);
-        key.intensity = 2.8;
-      }
-      if (fill) {
-        fill.color.setHex(0x38bdf8);
-        fill.intensity = 1.4;
-      }
-      if (rim) {
-        rim.color.setHex(0xec4899);
-        rim.intensity = 1.2;
-      }
-    } else if (mode === "cyberpunk") {
-      scene.background = new THREE.Color(0x04060d);
-      if (ambient) ambient.color.setHex(0x1e1035);
-      if (key) {
-        key.color.setHex(0x00f0ff);
-        key.intensity = 3.5;
-      }
-      if (fill) {
-        fill.color.setHex(0xff007f);
-        fill.intensity = 2.5;
-      }
-      if (rim) {
-        rim.color.setHex(0xa855f7);
-        rim.intensity = 2.2;
-      }
-    } else if (mode === "sunset") {
-      scene.background = new THREE.Color(0x140a0c);
-      if (ambient) ambient.color.setHex(0xffaa77);
-      if (key) {
-        key.color.setHex(0xff6622);
-        key.intensity = 3.0;
-      }
-      if (fill) {
-        fill.color.setHex(0x8844ff);
-        fill.intensity = 1.8;
-      }
-      if (rim) {
-        rim.color.setHex(0xffcc00);
-        rim.intensity = 1.8;
-      }
+    if (ambient) {
+      ambient.color.setHex(config.ambientLightColor);
+      ambient.intensity = config.ambientLightIntensity;
     }
+    if (hemi) {
+      hemi.color.setHex(config.hemiSkyColor);
+      hemi.groundColor.setHex(config.hemiGroundColor);
+      hemi.intensity = config.hemiIntensity;
+    }
+    if (key) {
+      key.color.setHex(config.keyLightColor);
+      key.intensity = config.keyLightIntensity;
+      key.position.set(...config.keyLightPos);
+    }
+    if (fill) {
+      fill.color.setHex(config.fillLightColor);
+      fill.intensity = config.fillLightIntensity;
+    }
+    if (rim) {
+      rim.color.setHex(config.rimLightColor);
+      rim.intensity = config.rimLightIntensity;
+    }
+
+    // 3. Grid Reconfiguration
+    const existingGrid = scene.getObjectByName("grid");
+    if (existingGrid) scene.remove(existingGrid);
+    const newGrid = new THREE.GridHelper(24, 48, config.gridPrimaryColor, config.gridSecondaryColor);
+    newGrid.name = "grid";
+    newGrid.position.y = -0.01;
+    (newGrid.material as THREE.Material).transparent = true;
+    (newGrid.material as THREE.Material).opacity = config.gridOpacity;
+    scene.add(newGrid);
+
+    // 4. Studio Floor Disc Reconfiguration
+    const existingDisc = scene.getObjectByName("Studio_Floor_Disc");
+    if (existingDisc) scene.remove(existingDisc);
+    if (isFloorDiscActive) {
+      const newDisc = AutomotiveStudioEnvironmentManager.createStudioFloorDisc(
+        18,
+        new THREE.Color(config.floorColor).getHex(),
+        config.floorReflectivity
+      );
+      scene.add(newDisc);
+    }
+
+    // 5. Tone Mapping Exposure Calibration
+    renderer.toneMappingExposure = config.toneMappingExposure;
+  };
+
+  // Handle Custom Gradient Color Customization
+  const applyCustomGradient = (top: string, horizon: string, floor: string) => {
+    setCustomTopColor(top);
+    setCustomHorizonColor(horizon);
+    setCustomFloorColor(floor);
+
+    const scene = sceneRef.current;
+    if (!scene) return;
+
+    if (currentEnvTextureRef.current) {
+      currentEnvTextureRef.current.dispose();
+    }
+    const bgTexture = AutomotiveStudioEnvironmentManager.createGradientBackgroundTexture(top, horizon, floor, true);
+    currentEnvTextureRef.current = bgTexture;
+    scene.background = bgTexture;
+    scene.environment = bgTexture;
   };
 
   // Handle Camera Presets
@@ -597,35 +693,36 @@ export const ModularLinearAssemblyViewport: React.FC<ModularLinearAssemblyViewpo
           <span>CAD TOOLS</span>
         </button>
 
-        {/* Lighting Mode Switcher */}
+        {/* Dynamic Studio Environment Switcher */}
         <div className="flex items-center bg-base-900/80 backdrop-blur-xl p-1 rounded-2xl border border-base-800 shadow-lg">
-          <button
-            onClick={() => applyLightingMode("studio")}
-            className={`p-1.5 rounded-xl transition-all cursor-pointer ${
-              lightingMode === "studio" ? "bg-cyan-500/20 text-cyan-400" : "text-slate-400 hover:text-slate-200"
-            }`}
-            title="Studio Neutral"
-          >
-            <Sun size={13} />
-          </button>
-          <button
-            onClick={() => applyLightingMode("cyberpunk")}
-            className={`p-1.5 rounded-xl transition-all cursor-pointer ${
-              lightingMode === "cyberpunk" ? "bg-purple-500/20 text-purple-400" : "text-slate-400 hover:text-slate-200"
-            }`}
-            title="Cyberpunk Neon"
-          >
-            <Moon size={13} />
-          </button>
-          <button
-            onClick={() => applyLightingMode("sunset")}
-            className={`p-1.5 rounded-xl transition-all cursor-pointer ${
-              lightingMode === "sunset" ? "bg-amber-500/20 text-amber-400" : "text-slate-400 hover:text-slate-200"
-            }`}
-            title="Sunset Golden Hour"
-          >
-            <Flame size={13} />
-          </button>
+          {(
+            [
+              { id: "warm_sunset", label: "Sunset", icon: Flame, color: "text-amber-400" },
+              { id: "luxury_showroom", label: "Showroom", icon: Sun, color: "text-slate-100" },
+              { id: "titanium_slate", label: "Titanium", icon: Compass, color: "text-cyan-400" },
+              { id: "blueprint_navy", label: "Blueprint", icon: Layers, color: "text-blue-400" },
+              { id: "cyberpunk_neon", label: "Cyberpunk", icon: Zap, color: "text-purple-400" },
+              { id: "obsidian_stealth", label: "Obsidian", icon: Moon, color: "text-zinc-400" },
+            ] as const
+          ).map((env) => {
+            const Icon = env.icon;
+            const isActive = environmentPreset === env.id;
+            return (
+              <button
+                key={env.id}
+                onClick={() => applyEnvironmentPreset(env.id)}
+                className={`p-1.5 rounded-xl transition-all cursor-pointer flex items-center gap-1 ${
+                  isActive
+                    ? "bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 shadow-sm"
+                    : "text-slate-400 hover:text-slate-200"
+                }`}
+                title={STUDIO_ENVIRONMENT_PRESETS[env.id].name + " — " + STUDIO_ENVIRONMENT_PRESETS[env.id].tagline}
+              >
+                <Icon size={13} className={isActive ? env.color : ""} />
+                {isActive && <span className="text-[9px] font-mono font-bold uppercase">{env.label}</span>}
+              </button>
+            );
+          })}
         </div>
       </div>
 
@@ -840,6 +937,331 @@ export const ModularLinearAssemblyViewport: React.FC<ModularLinearAssemblyViewpo
             </div>
           </div>
 
+          {/* FEA Load Case Simulation */}
+          <div className="space-y-1.5 pt-2 border-t border-base-800">
+            <div className="flex justify-between items-center text-[10px]">
+              <span className="text-slate-400 flex items-center gap-1">
+                <Activity size={11} className="text-rose-400" /> FEA LOAD CASE
+              </span>
+              <span className="text-rose-400 font-bold uppercase text-[9px]">{feaLoadCase}</span>
+            </div>
+            <div className="grid grid-cols-2 gap-1">
+              {(
+                [
+                  { id: "torsional", label: "Torsional 45kNm" },
+                  { id: "cornering", label: "Corner 1.8G" },
+                  { id: "braking", label: "Braking 1.5G" },
+                  { id: "crash", label: "Crash 50km/h" },
+                ] as const
+              ).map((lc) => (
+                <button
+                  key={lc.id}
+                  onClick={() => {
+                    setFeaLoadCase(lc.id);
+                    if (sceneGraphRef.current) {
+                      sceneGraphRef.current.setFeaLoadCase(lc.id);
+                      sceneGraphRef.current.updateScene(assemblyState, previewStage, explodedProgress, isXRay);
+                    }
+                  }}
+                  className={`py-1 px-1.5 rounded-lg text-[9px] font-bold border transition-all cursor-pointer truncate ${
+                    feaLoadCase === lc.id
+                      ? "bg-rose-500/20 border-rose-500 text-rose-300 shadow-sm"
+                      : "bg-base-950 border-base-800 text-slate-500 hover:text-slate-300"
+                  }`}
+                >
+                  {lc.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Chassis Metallurgy Mode */}
+          <div className="space-y-1.5 pt-2 border-t border-base-800">
+            <div className="flex justify-between items-center text-[10px]">
+              <span className="text-slate-400 flex items-center gap-1">
+                <Shield size={11} className="text-blue-400" /> CHASSIS METALLURGY
+              </span>
+              <span className="text-blue-400 font-bold uppercase text-[9px]">{chassisMetallurgy}</span>
+            </div>
+            <div className="grid grid-cols-3 gap-1">
+              {(
+                [
+                  { id: "default", label: "Default" },
+                  { id: "titanium", label: "Titanium" },
+                  { id: "aluminum_6061", label: "Alu 6061" },
+                  { id: "chromoly_4130", label: "Chromoly" },
+                  { id: "carbon_autoclave", label: "Carbon Tub" },
+                  { id: "hardox_steel", label: "Hardox" },
+                ] as const
+              ).map((met) => (
+                <button
+                  key={met.id}
+                  onClick={() => {
+                    setChassisMetallurgy(met.id);
+                    if (sceneGraphRef.current) {
+                      sceneGraphRef.current.setChassisMetallurgy(met.id);
+                      sceneGraphRef.current.updateScene(assemblyState, previewStage, explodedProgress, isXRay);
+                    }
+                  }}
+                  className={`py-1 px-1 rounded-lg text-[8px] font-bold border transition-all cursor-pointer truncate ${
+                    chassisMetallurgy === met.id
+                      ? "bg-blue-500/20 border-blue-500 text-blue-300 shadow-sm"
+                      : "bg-base-950 border-base-800 text-slate-500 hover:text-slate-300"
+                  }`}
+                >
+                  {met.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Structural Rigidity Telemetry Card */}
+          <div className="p-2 rounded-xl bg-base-950/80 border border-base-800/80 space-y-1 text-[9px] font-mono">
+            <div className="flex justify-between text-slate-400">
+              <span>TORSIONAL RIGIDITY:</span>
+              <span className="text-cyan-300 font-bold">48,200 Nm/deg</span>
+            </div>
+            <div className="flex justify-between text-slate-400">
+              <span>PEAK VON MISES:</span>
+              <span className="text-rose-400 font-bold">418 MPa</span>
+            </div>
+            <div className="flex justify-between text-slate-400">
+              <span>YIELD STRENGTH:</span>
+              <span className="text-emerald-400 font-bold">880 MPa</span>
+            </div>
+            <div className="flex justify-between text-slate-400">
+              <span>SAFETY FACTOR (Sf):</span>
+              <span className="text-amber-300 font-bold">2.10 (OPTIMAL)</span>
+            </div>
+          </div>
+
+          {/* Paint Finish Studio */}
+          <div className="space-y-1.5 pt-2 border-t border-base-800">
+            <div className="flex justify-between items-center text-[10px]">
+              <span className="text-slate-400 flex items-center gap-1">
+                <Sparkles size={11} className="text-amber-400" /> PAINT FINISH STUDIO
+              </span>
+              <span className="text-amber-400 font-bold uppercase text-[9px]">{activeCustomPaintFinish}</span>
+            </div>
+            <div className="grid grid-cols-3 gap-1">
+              {(
+                [
+                  { id: "candy", label: "Candy Red" },
+                  { id: "chameleon", label: "Chameleon" },
+                  { id: "carbon", label: "Forged Carbon" },
+                  { id: "metallic", label: "Metallic Flake" },
+                  { id: "pearl", label: "Pearl Shift" },
+                  { id: "matte", label: "Matte Satin" },
+                ] as const
+              ).map((p) => (
+                <button
+                  key={p.id}
+                  onClick={() => {
+                    setActiveCustomPaintFinish(p.id);
+                    if (sceneGraphRef.current) {
+                      const updatedState = { ...assemblyState, paintFinish: p.id as any };
+                      sceneGraphRef.current.updateScene(updatedState, previewStage, explodedProgress, isXRay);
+                    }
+                  }}
+                  className={`py-1 px-1 rounded-lg text-[8px] font-bold border transition-all cursor-pointer truncate ${
+                    activeCustomPaintFinish === p.id
+                      ? "bg-amber-500/20 border-amber-500 text-amber-300 shadow-sm"
+                      : "bg-base-950 border-base-800 text-slate-500 hover:text-slate-300"
+                  }`}
+                >
+                  {p.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Exterior Lighting Studio */}
+          <div className="space-y-1.5 pt-2 border-t border-base-800">
+            <div className="flex justify-between items-center text-[10px]">
+              <span className="text-slate-400 flex items-center gap-1">
+                <Sun size={11} className="text-cyan-400" /> EXTERIOR OPTICS
+              </span>
+              <span className="text-cyan-400 font-bold uppercase text-[9px]">
+                {headlightsActive ? "ACTIVE" : "STANDBY"}
+              </span>
+            </div>
+            <div className="grid grid-cols-3 gap-1">
+              <button
+                onClick={() => setHeadlightsActive(!headlightsActive)}
+                className={`py-1 px-1 rounded-lg text-[8px] font-bold border transition-all cursor-pointer truncate ${
+                  headlightsActive
+                    ? "bg-cyan-500/20 border-cyan-500 text-cyan-300 shadow-sm"
+                    : "bg-base-950 border-base-800 text-slate-500 hover:text-slate-300"
+                }`}
+              >
+                Headlights
+              </button>
+              <button
+                onClick={() => setDrlActive(!drlActive)}
+                className={`py-1 px-1 rounded-lg text-[8px] font-bold border transition-all cursor-pointer truncate ${
+                  drlActive
+                    ? "bg-sky-500/20 border-sky-500 text-sky-300 shadow-sm"
+                    : "bg-base-950 border-base-800 text-slate-500 hover:text-slate-300"
+                }`}
+              >
+                DRL Halos
+              </button>
+              <button
+                onClick={() => setUnderglowActive(!underglowActive)}
+                className={`py-1 px-1 rounded-lg text-[8px] font-bold border transition-all cursor-pointer truncate ${
+                  underglowActive
+                    ? "bg-purple-500/20 border-purple-500 text-purple-300 shadow-sm"
+                    : "bg-base-950 border-base-800 text-slate-500 hover:text-slate-300"
+                }`}
+              >
+                Underglow
+              </button>
+            </div>
+          </div>
+
+          {/* Studio Environment & Lighting Lab */}
+          <div className="space-y-2 pt-2 border-t border-base-800">
+            <div className="flex justify-between items-center text-[10px]">
+              <span className="text-slate-400 flex items-center gap-1">
+                <Palette size={11} className="text-amber-400" /> STUDIO ENVIRONMENT
+              </span>
+              <span className="text-amber-400 font-bold uppercase text-[9px]">
+                {STUDIO_ENVIRONMENT_PRESETS[environmentPreset]?.name || "CUSTOM"}
+              </span>
+            </div>
+
+            {/* Presets Grid */}
+            <div className="grid grid-cols-3 gap-1">
+              {(
+                [
+                  { id: "warm_sunset", label: "Sunset", accent: "border-amber-500 text-amber-300" },
+                  { id: "luxury_showroom", label: "Showroom", accent: "border-slate-300 text-slate-200" },
+                  { id: "titanium_slate", label: "Slate CAD", accent: "border-cyan-500 text-cyan-300" },
+                  { id: "blueprint_navy", label: "Blueprint", accent: "border-blue-500 text-blue-300" },
+                  { id: "cyberpunk_neon", label: "Cyberpunk", accent: "border-purple-500 text-purple-300" },
+                  { id: "obsidian_stealth", label: "Obsidian", accent: "border-zinc-500 text-zinc-400" },
+                ] as const
+              ).map((preset) => (
+                <button
+                  key={preset.id}
+                  onClick={() => applyEnvironmentPreset(preset.id)}
+                  className={`py-1 px-1 rounded-lg text-[8px] font-bold border transition-all cursor-pointer truncate ${
+                    environmentPreset === preset.id
+                      ? `bg-amber-500/20 ${preset.accent} shadow-sm`
+                      : "bg-base-950 border-base-800 text-slate-500 hover:text-slate-300"
+                  }`}
+                >
+                  {preset.label}
+                </button>
+              ))}
+            </div>
+
+            {/* Custom Gradient Palette */}
+            <div className="p-2 rounded-xl bg-base-950/80 border border-base-800/80 space-y-1.5 text-[9px]">
+              <div className="flex justify-between items-center text-slate-400">
+                <span>GRADIENT PALETTE:</span>
+                <div className="flex items-center gap-1">
+                  <input
+                    type="color"
+                    value={customTopColor}
+                    onChange={(e) => applyCustomGradient(e.target.value, customHorizonColor, customFloorColor)}
+                    className="w-4 h-4 rounded cursor-pointer border-0 bg-transparent"
+                    title="Sky / Top Color"
+                  />
+                  <input
+                    type="color"
+                    value={customHorizonColor}
+                    onChange={(e) => applyCustomGradient(customTopColor, e.target.value, customFloorColor)}
+                    className="w-4 h-4 rounded cursor-pointer border-0 bg-transparent"
+                    title="Horizon Glow Color"
+                  />
+                  <input
+                    type="color"
+                    value={customFloorColor}
+                    onChange={(e) => applyCustomGradient(customTopColor, customHorizonColor, e.target.value)}
+                    className="w-4 h-4 rounded cursor-pointer border-0 bg-transparent"
+                    title="Floor Base Color"
+                  />
+                </div>
+              </div>
+
+              {/* Exposure Slider */}
+              <div className="flex justify-between items-center text-slate-400">
+                <span>EXPOSURE:</span>
+                <div className="flex items-center gap-1">
+                  <input
+                    type="range"
+                    min="0.8"
+                    max="2.2"
+                    step="0.05"
+                    value={exposureVal}
+                    onChange={(e) => {
+                      const val = parseFloat(e.target.value);
+                      setExposureVal(val);
+                      if (rendererRef.current) rendererRef.current.toneMappingExposure = val;
+                    }}
+                    className="w-16 accent-amber-400 cursor-pointer"
+                  />
+                  <span className="text-amber-300 font-mono w-7 text-right">{exposureVal.toFixed(1)}x</span>
+                </div>
+              </div>
+
+              {/* Floor Reflectivity */}
+              <div className="flex justify-between items-center text-slate-400">
+                <span>FLOOR REFLECTIVITY:</span>
+                <div className="flex items-center gap-1">
+                  <input
+                    type="range"
+                    min="0"
+                    max="0.8"
+                    step="0.05"
+                    value={floorReflectivity}
+                    onChange={(e) => {
+                      const val = parseFloat(e.target.value);
+                      setFloorReflectivity(val);
+                      const scene = sceneRef.current;
+                      if (scene) {
+                        const disc = scene.getObjectByName("Studio_Floor_Disc") as THREE.Mesh;
+                        if (disc && disc.material) {
+                          (disc.material as THREE.MeshStandardMaterial).roughness = 0.9 - val * 0.7;
+                        }
+                      }
+                    }}
+                    className="w-16 accent-cyan-400 cursor-pointer"
+                  />
+                  <span className="text-cyan-300 font-mono w-7 text-right">{Math.round(floorReflectivity * 100)}%</span>
+                </div>
+              </div>
+
+              {/* Floor Grid Opacity */}
+              <div className="flex justify-between items-center text-slate-400">
+                <span>CAD GRID OPACITY:</span>
+                <div className="flex items-center gap-1">
+                  <input
+                    type="range"
+                    min="0"
+                    max="1"
+                    step="0.05"
+                    value={gridOpacity}
+                    onChange={(e) => {
+                      const val = parseFloat(e.target.value);
+                      setGridOpacity(val);
+                      const scene = sceneRef.current;
+                      if (scene) {
+                        const gridObj = scene.getObjectByName("grid") as THREE.GridHelper;
+                        if (gridObj && gridObj.material) {
+                          (gridObj.material as THREE.Material).opacity = val;
+                        }
+                      }
+                    }}
+                    className="w-16 accent-emerald-400 cursor-pointer"
+                  />
+                  <span className="text-emerald-300 font-mono w-7 text-right">{Math.round(gridOpacity * 100)}%</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
           {/* Drivetrain Spin Animation */}
           <div className="flex items-center justify-between pt-2 border-t border-base-800 text-[10px]">
             <span className="text-slate-400">Drivetrain Spin (3,600 RPM)</span>
@@ -933,6 +1355,47 @@ export const ModularLinearAssemblyViewport: React.FC<ModularLinearAssemblyViewpo
         >
           <Wind size={12} className={showStreamlines ? "animate-pulse text-emerald-400" : ""} />
           <span>CFD STREAMLINES</span>
+        </button>
+
+        {/* FEA Stress Heatmap */}
+        <button
+          onClick={() => {
+            const nextState = !isFeaStressActive;
+            setIsFeaStressActive(nextState);
+            if (sceneGraphRef.current) {
+              sceneGraphRef.current.setFeaStressMode(nextState);
+              sceneGraphRef.current.updateScene(assemblyState, previewStage, explodedProgress, isXRay);
+            }
+          }}
+          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-[10px] font-mono font-bold transition-all border cursor-pointer ${
+            isFeaStressActive
+              ? "bg-rose-500/20 border-rose-500/50 text-rose-300 shadow-sm"
+              : "bg-base-850/80 border-base-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100"
+          }`}
+          title="FEA Von Mises Stress Heatmap"
+        >
+          <Activity size={12} className={isFeaStressActive ? "animate-pulse text-rose-400" : ""} />
+          <span>FEA STRESS</span>
+        </button>
+
+        {/* Chassis Frame Isolation */}
+        <button
+          onClick={() => {
+            const nextIso = frameIsolation === "all" ? "chassis" : frameIsolation === "chassis" ? "body" : "all";
+            setFrameIsolation(nextIso);
+            if (sceneGraphRef.current) {
+              sceneGraphRef.current.setIsolatedStage(nextIso === "all" ? null : nextIso === "chassis" ? "chassis" : "body_structure");
+            }
+          }}
+          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-[10px] font-mono font-bold transition-all border cursor-pointer ${
+            frameIsolation !== "all"
+              ? "bg-cyan-500/20 border-cyan-500/50 text-cyan-300 shadow-sm"
+              : "bg-base-850/80 border-base-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100"
+          }`}
+          title="Isolate Chassis Frame or Bodywork"
+        >
+          <Layers size={12} />
+          <span>{frameIsolation === "all" ? "ALL LAYERS" : frameIsolation === "chassis" ? "FRAME ONLY" : "BODY ONLY"}</span>
         </button>
       </div>
     </div>

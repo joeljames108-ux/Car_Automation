@@ -338,6 +338,318 @@ export class AutomotivePBRMaterialSystem {
     });
   }
 
+  public static getMetallicFlakePaint(
+    colorHex: string = '#22d3ee',
+    roughness: number = 0.12,
+    flakeIntensity: number = 0.8
+  ): THREE.MeshPhysicalMaterial {
+    const key = `paint_metallic_${colorHex}_${roughness}_${flakeIntensity}`;
+    if (this.materialCache.has(key)) {
+      return this.materialCache.get(key)! as THREE.MeshPhysicalMaterial;
+    }
+
+    const mat = new THREE.MeshPhysicalMaterial({
+      color: new THREE.Color(colorHex),
+      metalness: 0.92,
+      roughness: roughness,
+      clearcoat: 1.0,
+      clearcoatRoughness: 0.03,
+      reflectivity: 1.0,
+      sheen: flakeIntensity,
+      sheenColor: new THREE.Color('#ffffff'),
+      sheenRoughness: 0.25,
+    });
+
+    this.materialCache.set(key, mat);
+    return mat;
+  }
+
+  public static getPearlescentPaint(
+    baseHex: string = '#0ea5e9',
+    shimmerHex: string = '#c084fc'
+  ): THREE.MeshPhysicalMaterial {
+    const key = `paint_pearl_${baseHex}_${shimmerHex}`;
+    if (this.materialCache.has(key)) {
+      return this.materialCache.get(key)! as THREE.MeshPhysicalMaterial;
+    }
+
+    const mat = new THREE.MeshPhysicalMaterial({
+      color: new THREE.Color(baseHex),
+      metalness: 0.85,
+      roughness: 0.10,
+      clearcoat: 1.0,
+      clearcoatRoughness: 0.02,
+      sheen: 1.0,
+      sheenColor: new THREE.Color(shimmerHex),
+      sheenRoughness: 0.15,
+      reflectivity: 0.95,
+    });
+
+    this.materialCache.set(key, mat);
+    return mat;
+  }
+
+  public static getMatteSatinPaint(colorHex: string = '#334155'): THREE.MeshPhysicalMaterial {
+    const key = `paint_matte_${colorHex}`;
+    if (this.materialCache.has(key)) {
+      return this.materialCache.get(key)! as THREE.MeshPhysicalMaterial;
+    }
+
+    const mat = new THREE.MeshPhysicalMaterial({
+      color: new THREE.Color(colorHex),
+      metalness: 0.4,
+      roughness: 0.65,
+      clearcoat: 0.15,
+      clearcoatRoughness: 0.5,
+      reflectivity: 0.3,
+    });
+
+    this.materialCache.set(key, mat);
+    return mat;
+  }
+
+  /**
+   * Generates Multi-Layer Candy Apple Deep Tint Automotive Paint
+   */
+  public static getCandyApplePaint(colorHex: string = '#b91c1c'): THREE.MeshPhysicalMaterial {
+    const key = `paint_candy_${colorHex}`;
+    if (this.materialCache.has(key)) {
+      return this.materialCache.get(key)! as THREE.MeshPhysicalMaterial;
+    }
+
+    const mat = new THREE.MeshPhysicalMaterial({
+      color: new THREE.Color(colorHex),
+      metalness: 0.95,
+      roughness: 0.04,
+      clearcoat: 1.0,
+      clearcoatRoughness: 0.01,
+      reflectivity: 1.0,
+      specularIntensity: 1.0,
+      specularColor: new THREE.Color('#ffffff'),
+      transmission: 0.15,
+      sheen: 0.8,
+      sheenColor: new THREE.Color(colorHex),
+      sheenRoughness: 0.1,
+    });
+
+    this.materialCache.set(key, mat);
+    return mat;
+  }
+
+  /**
+   * Generates Chroma Shift / Chameleon Color Shifting Paint
+   */
+  public static getChameleonPaint(
+    primaryHex: string = '#8b5cf6',
+    secondaryHex: string = '#06b6d4'
+  ): THREE.MeshPhysicalMaterial {
+    const key = `paint_chameleon_${primaryHex}_${secondaryHex}`;
+    if (this.materialCache.has(key)) {
+      return this.materialCache.get(key)! as THREE.MeshPhysicalMaterial;
+    }
+
+    const mat = new THREE.MeshPhysicalMaterial({
+      color: new THREE.Color(primaryHex),
+      metalness: 0.90,
+      roughness: 0.06,
+      clearcoat: 1.0,
+      clearcoatRoughness: 0.02,
+      sheen: 1.0,
+      sheenColor: new THREE.Color(secondaryHex),
+      sheenRoughness: 0.12,
+      reflectivity: 0.98,
+    });
+
+    this.materialCache.set(key, mat);
+    return mat;
+  }
+
+  /**
+   * Generates Marbled Forged Carbon Fiber Material
+   */
+  public static getForgedCarbon(gloss: boolean = true): THREE.MeshPhysicalMaterial {
+    const key = `forged_carbon_${gloss}`;
+    if (this.materialCache.has(key)) {
+      return this.materialCache.get(key)! as THREE.MeshPhysicalMaterial;
+    }
+
+    const mat = new THREE.MeshPhysicalMaterial({
+      color: new THREE.Color('#18181b'),
+      metalness: 0.60,
+      roughness: gloss ? 0.14 : 0.45,
+      clearcoat: gloss ? 1.0 : 0.2,
+      clearcoatRoughness: gloss ? 0.03 : 0.4,
+      normalMap: this.getCarbonWeaveNormalTexture(),
+    });
+
+    this.materialCache.set(key, mat);
+    return mat;
+  }
+
+  /**
+   * Generates Optical-Grade Dielectric Tinted Glass Material
+   */
+  public static getDielectricGlass(
+    tintHex: string = '#0f172a',
+    opacity: number = 0.65,
+    ior: number = 1.52
+  ): THREE.MeshPhysicalMaterial {
+    const key = `glass_dielectric_${tintHex}_${opacity}_${ior}`;
+    if (this.materialCache.has(key)) {
+      return this.materialCache.get(key)! as THREE.MeshPhysicalMaterial;
+    }
+
+    const mat = new THREE.MeshPhysicalMaterial({
+      color: new THREE.Color(tintHex),
+      transmission: 0.92,
+      transparent: true,
+      opacity,
+      ior,
+      metalness: 0.05,
+      roughness: 0.02,
+      clearcoat: 1.0,
+      clearcoatRoughness: 0.01,
+      depthWrite: false,
+    });
+
+    this.materialCache.set(key, mat);
+    return mat;
+  }
+
+  /**
+   * Generates FEA Von Mises Stress Heatmap Material for Chassis Frame & Suspension
+   * Load Path Inspection (Low Stress: Cyan/Blue -> Nominal: Green -> Peak Yield: Amber/Crimson)
+   */
+  public static getFeaStressMaterial(stressRatio: number = 0.5, isXRay: boolean = false): THREE.MeshPhysicalMaterial {
+    const clamped = Math.max(0, Math.min(1, stressRatio));
+    const key = `fea_stress_${clamped.toFixed(2)}_xray_${isXRay}`;
+    if (this.materialCache.has(key)) {
+      return this.materialCache.get(key)! as THREE.MeshPhysicalMaterial;
+    }
+
+    // Von Mises Color Map Interpolation:
+    // 0.0 -> Blue (#0284c7)
+    // 0.25 -> Cyan (#06b6d4)
+    // 0.50 -> Emerald (#10b981)
+    // 0.75 -> Amber (#f59e0b)
+    // 1.0 -> Crimson (#ef4444)
+    let color: THREE.Color;
+    if (clamped < 0.25) {
+      color = new THREE.Color('#0284c7').lerp(new THREE.Color('#06b6d4'), clamped / 0.25);
+    } else if (clamped < 0.5) {
+      color = new THREE.Color('#06b6d4').lerp(new THREE.Color('#10b981'), (clamped - 0.25) / 0.25);
+    } else if (clamped < 0.75) {
+      color = new THREE.Color('#10b981').lerp(new THREE.Color('#f59e0b'), (clamped - 0.5) / 0.25);
+    } else {
+      color = new THREE.Color('#f59e0b').lerp(new THREE.Color('#ef4444'), (clamped - 0.75) / 0.25);
+    }
+
+    const mat = new THREE.MeshPhysicalMaterial({
+      color,
+      emissive: color.clone().multiplyScalar(0.35),
+      metalness: 0.85,
+      roughness: 0.25,
+      clearcoat: 0.5,
+      transparent: isXRay,
+      opacity: isXRay ? 0.45 : 0.95,
+      wireframe: false,
+    });
+
+    this.materialCache.set(key, mat);
+    return mat;
+  }
+
+  /**
+   * Generates FEA Load-Case Specific Stress Distribution Material
+   * (Torsional Twist 45 kNm/deg, Lateral Cornering 1.8G, Braking 1.5G, Frontal Crash)
+   */
+  public static getFeaLoadCaseStressMaterial(
+    loadCase: 'torsional' | 'cornering' | 'braking' | 'crash',
+    stressRatio: number = 0.5,
+    isXRay: boolean = false
+  ): THREE.MeshPhysicalMaterial {
+    // Dynamic bias based on load case engineering profile
+    let effectiveRatio = stressRatio;
+    switch (loadCase) {
+      case 'torsional':
+        effectiveRatio = Math.min(1.0, stressRatio * 1.15); // Diagonal shear concentration
+        break;
+      case 'cornering':
+        effectiveRatio = Math.min(1.0, stressRatio * 1.25); // Lateral wishbone/sill load
+        break;
+      case 'braking':
+        effectiveRatio = Math.min(1.0, stressRatio * 1.10); // Forward rail compression
+        break;
+      case 'crash':
+        effectiveRatio = 0.92; // Near-yield deformation zone
+        break;
+    }
+    return this.getFeaStressMaterial(effectiveRatio, isXRay);
+  }
+
+  /**
+   * Generates Dedicated Chassis Metallurgy Material (Titanium, 6061-T6 Aluminum, 4130 Chromoly, Carbon Tub, Hardox Steel)
+   */
+  public static getChassisMetallurgyMaterial(
+    metalType: 'titanium' | 'aluminum_6061' | 'chromoly_4130' | 'carbon_autoclave' | 'hardox_steel',
+    weldBluing: boolean = false
+  ): THREE.Material {
+    const key = `chassis_metal_${metalType}_weld_${weldBluing}`;
+    if (this.materialCache.has(key)) {
+      return this.materialCache.get(key)!;
+    }
+
+    let mat: THREE.Material;
+    switch (metalType) {
+      case 'titanium':
+        mat = new THREE.MeshPhysicalMaterial({
+          color: new THREE.Color(weldBluing ? '#7c8ba1' : '#94a3b8'),
+          metalness: 0.94,
+          roughness: 0.22,
+          clearcoat: 0.6,
+          reflectivity: 0.95,
+          sheen: weldBluing ? 0.8 : 0,
+          sheenColor: new THREE.Color('#38bdf8'),
+        });
+        break;
+      case 'aluminum_6061':
+        mat = new THREE.MeshStandardMaterial({
+          color: new THREE.Color('#cbd5e1'),
+          metalness: 0.88,
+          roughness: 0.32,
+        });
+        break;
+      case 'chromoly_4130':
+        mat = new THREE.MeshStandardMaterial({
+          color: new THREE.Color('#475569'),
+          metalness: 0.82,
+          roughness: 0.38,
+        });
+        break;
+      case 'carbon_autoclave':
+        mat = new THREE.MeshPhysicalMaterial({
+          color: new THREE.Color('#111827'),
+          metalness: 0.65,
+          roughness: 0.18,
+          clearcoat: 0.9,
+          clearcoatRoughness: 0.05,
+          normalMap: this.getCarbonWeaveNormalTexture(),
+        });
+        break;
+      case 'hardox_steel':
+      default:
+        mat = new THREE.MeshStandardMaterial({
+          color: new THREE.Color('#334155'),
+          metalness: 0.75,
+          roughness: 0.48,
+        });
+        break;
+    }
+
+    this.materialCache.set(key, mat);
+    return mat;
+  }
+
   public static getCarbonFiber(gloss: boolean = true): THREE.MeshPhysicalMaterial | THREE.MeshStandardMaterial {
     if (gloss) {
       return new THREE.MeshPhysicalMaterial({

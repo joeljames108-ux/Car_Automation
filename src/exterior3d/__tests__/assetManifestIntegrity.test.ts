@@ -37,8 +37,22 @@ const REQUIRED_GENERATED_FAMILIES: Record<string, string[]> = {
   'chassis frames': [
     'models/chassis/sports_car_chassis_01.glb',
     'models/chassis/hatchback_chassis_01.glb',
+    'models/chassis/supercar_monocoque_chassis_01.glb',
+    'models/chassis/gt3_race_chassis_01.glb',
+    'models/chassis/ev_skateboard_chassis_01.glb',
+    'models/chassis/offroad_ladder_chassis_01.glb',
+  ],
+  'car bodies and aero': [
+    'models/exterior/hypercar_apex_gt3.glb',
+    'models/exterior/sports_coupe_gt.glb',
+    'models/exterior/doors_butterfly_pair.glb',
+    'models/exterior/aerodynamic_widebody_kit.glb',
+    'models/exterior/full_modular_car_assembly.glb',
   ],
   'interior studio': [
+    'models/interior/dashboard_executive.glb',
+    'models/interior/dashboard_sport.glb',
+    'models/interior/dashboard_hyper_glass.glb',
     'models/interior/steering_wheel_gt3_yoke.glb',
     'models/interior/steering_wheel_sport.glb',
     'models/interior/seat_carbon_race.glb',

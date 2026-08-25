@@ -58,30 +58,87 @@ export const V12_TURBO_SPECS: TurbochargerSpec = {
   vBandDischargeDiameterMm: 76.0,
 };
 
-function createSingleTurboUnit(sideOffset: number, scale: number = 1.0, config?: Partial<EngineConfig>): THREE.Group {
+export interface TurbochargerBuildOptions {
+  turboCount?: 1 | 2 | 4;
+  layout?: 'single' | 'twin' | 'quad' | 'hot_v';
+  scale?: number;
+  compressorInducerMm?: number; // 45 to 110 mm
+  turbineExducerMm?: number;    // 48 to 115 mm
+  aRatio?: number;              // 0.50 to 1.45
+  housingFinish?: string;
+  compressorWheelColor?: string;
+  wastegateCapColor?: string;
+  couplerColor?: string;
+  sideOffset?: number;
+}
+
+export function createSingleTurboUnit(
+  sideOffset: number,
+  scale: number = 1.0,
+  configOrOpts?: Partial<EngineConfig> | TurbochargerBuildOptions
+): THREE.Group {
+  const opts = (configOrOpts && ('compressorInducerMm' in configOrOpts || 'housingFinish' in configOrOpts || 'layout' in configOrOpts))
+    ? (configOrOpts as TurbochargerBuildOptions)
+    : undefined;
+  const legacyCfg = (!opts && configOrOpts) ? (configOrOpts as Partial<EngineConfig>) : undefined;
+
+  // Compute parametric sizing scale
+  const parametricScale = (opts?.compressorInducerMm ? opts.compressorInducerMm / 68.0 : 1.0) * scale;
+
   const unitGroup = new THREE.Group();
   unitGroup.name = `Turbocharger_Unit_${sideOffset >= 0 ? 'Right' : 'Left'}`;
   unitGroup.position.set(0, sideOffset, 0);
-  unitGroup.scale.set(scale, scale, scale);
+  unitGroup.scale.set(parametricScale, parametricScale, parametricScale);
 
   const matLib = globalMaterialLibrary;
-  const turboHousingMat = config?.turboHousing || 'inconel';
+
+  // Resolve turbine housing finish
+  const housingKey = (opts?.housingFinish || legacyCfg?.turboHousing || 'inconel').toLowerCase();
   const matTurbineHousing =
-    turboHousingMat === 'cast_iron' ? matLib.getCastIron() :
-    turboHousingMat === 'titanium' ? matLib.getTitaniumAerospace() :
-    turboHousingMat === 'ceramic_coated' ? matLib.getCeramicIntake() :
+    housingKey.includes('titanium_blued') || housingKey.includes('burnt_titanium') ? matLib.getTitaniumBlued() :
+    housingKey.includes('cast_iron') ? matLib.getCastIron() :
+    housingKey.includes('titanium') ? matLib.getTitaniumAerospace() :
+    housingKey.includes('ceramic_white') || housingKey.includes('ceramic') ? matLib.getCeramicIntake() :
+    housingKey.includes('stealth_black') ? matLib.getStealthBlackCeramic() :
+    housingKey.includes('gold') ? matLib.getGoldAnodized() :
+    housingKey.includes('rosso') ? matLib.getRossoCorsaPowdercoat() :
+    housingKey.includes('billet') || housingKey.includes('chrome') ? matLib.getPolishedChrome() :
     matLib.getInconelExhaust();
 
+  // Resolve compressor wheel finish
+  const wheelKey = (opts?.compressorWheelColor || 'billet_gold').toLowerCase();
+  const matWheelBillet =
+    wheelKey.includes('emerald') || wheelKey.includes('green') ? matLib.getBilletEmerald() :
+    wheelKey.includes('cobalt') || wheelKey.includes('blue') ? matLib.getBilletCobalt() :
+    wheelKey.includes('crimson') || wheelKey.includes('red') ? matLib.getBilletCrimson() :
+    wheelKey.includes('silver') || wheelKey.includes('polished') ? matLib.getMachinedBillet() :
+    matLib.getGoldAnodized();
+
+  // Resolve wastegate actuator cap finish
+  const wgKey = (opts?.wastegateCapColor || 'anodized_purple').toLowerCase();
+  const matActuatorCap =
+    wgKey.includes('purple') ? matLib.getAnodizedPurple() :
+    wgKey.includes('blue') || wgKey.includes('cobalt') ? matLib.getBilletCobalt() :
+    wgKey.includes('gold') ? matLib.getGoldAnodized() :
+    wgKey.includes('red') || wgKey.includes('crimson') ? matLib.getBilletCrimson() :
+    wgKey.includes('black') ? matLib.getStealthBlackCeramic() :
+    matLib.getAnodizedPurple();
+
+  // Resolve silicone coupler color
+  const couplerKey = (opts?.couplerColor || 'blue_silicone').toLowerCase();
+  const matSiliconeCoupler =
+    couplerKey.includes('red') ? matLib.getRedSilicone() :
+    couplerKey.includes('black') || couplerKey.includes('viton') ? matLib.getBlackViton() :
+    matLib.getBlueSilicone();
+
   const matCompressorBillet = matLib.getMachinedBillet();
-  const matWheelBillet = matLib.getGoldAnodized();
   const matChraCasting = matLib.getCastAluminum();
   const matTurbineNiResist = matTurbineHousing;
   const matAnFittingGold = matLib.getGoldAnodized();
   const matAnFittingBlue = matLib.getCobaltAnodized();
-  const matActuatorBlack = matLib.getBlackPolymer();
+  const matActuatorBlack = matActuatorCap;
   const matStainless = matLib.getNitridedCrank();
   const matHeatShield = matLib.getHeatShieldBlanket();
-  const matSiliconeCoupler = matLib.getBlueSilicone();
   const matVitonOring = matLib.getRubberOring();
 
   // ─── 1. BILLET ANTI-SURGE COMPRESSOR HOUSING & DUAL-TIER IMPELLER ───
@@ -497,7 +554,13 @@ function createSingleTurboUnit(sideOffset: number, scale: number = 1.0, config?:
  * Builds the complete ultra-high-fidelity 3D scene graph for a racing turbocharger setup.
  * Supports Single Turbo, Twin Turbo (V6/V8/V12/Boxer), and Quad Turbo (W16/W18).
  */
-export function buildTurbochargerScene(configOrCount?: Partial<EngineConfig> | number | string): THREE.Scene {
+/**
+ * Builds the complete ultra-high-fidelity 3D scene graph for a racing turbocharger setup.
+ * Supports Single Turbo, Twin Turbo (V6/V8/V12/Boxer), Quad Turbo (W16/W18), and Hot-V.
+ */
+export function buildTurbochargerScene(
+  configOrCountOrOpts?: Partial<EngineConfig> | TurbochargerBuildOptions | number | string
+): THREE.Scene {
   const scene = new THREE.Scene();
   scene.name = 'Turbocharger_System_Scene';
 
@@ -505,58 +568,205 @@ export function buildTurbochargerScene(configOrCount?: Partial<EngineConfig> | n
   rootGroup.name = 'Turbocharger_Master_Assembly_Group';
   scene.add(rootGroup);
 
-  let turboCount = 1;
-  if (typeof configOrCount === 'number') {
-    turboCount = configOrCount;
-  } else if (typeof configOrCount === 'string') {
-    turboCount = configOrCount === 'quad-turbo' ? 4 : configOrCount === 'twin-turbo' ? 2 : 1;
-  } else if (configOrCount?.layout) {
-    const l = configOrCount.layout;
-    if (l === 'w16' || l === 'w18') {
-      turboCount = 4;
-    } else if (l === 'v6' || l === 'v8' || l === 'v10' || l === 'v12' || l === 'boxer6') {
-      turboCount = 2;
+  const matLib = globalMaterialLibrary;
+  const matStainless = matLib.getNitridedCrank();
+  const matBillet = matLib.getMachinedBillet();
+
+  let opts: TurbochargerBuildOptions = {};
+  if (typeof configOrCountOrOpts === 'number') {
+    opts = { turboCount: configOrCountOrOpts as any };
+  } else if (typeof configOrCountOrOpts === 'string') {
+    const s = configOrCountOrOpts.toLowerCase();
+    opts = {
+      turboCount: s.includes('quad') ? 4 : s.includes('twin') || s.includes('hot_v') ? 2 : 1,
+      layout: s.includes('quad') ? 'quad' : s.includes('hot_v') ? 'hot_v' : s.includes('twin') ? 'twin' : 'single',
+    };
+  } else if (configOrCountOrOpts && typeof configOrCountOrOpts === 'object') {
+    if ('compressorInducerMm' in configOrCountOrOpts || 'housingFinish' in configOrCountOrOpts || 'turboCount' in configOrCountOrOpts) {
+      opts = configOrCountOrOpts as TurbochargerBuildOptions;
     } else {
-      turboCount = 1;
+      const cfg = configOrCountOrOpts as Partial<EngineConfig>;
+      const l = cfg.layout;
+      opts = {
+        turboCount: (l === 'w16' || l === 'w18') ? 4 : (l === 'v6' || l === 'v8' || l === 'v10' || l === 'v12' || l === 'boxer6') ? 2 : 1,
+        housingFinish: cfg.turboHousing,
+      };
     }
   }
 
-  const cfgObj = typeof configOrCount === 'object' ? configOrCount : undefined;
+  const turboCount = opts.turboCount ?? (opts.layout === 'quad' ? 4 : opts.layout === 'twin' || opts.layout === 'hot_v' ? 2 : 1);
+  const layout = opts.layout ?? (turboCount === 4 ? 'quad' : turboCount === 2 ? 'twin' : 'single');
 
-  if (turboCount === 4) {
-    // Quad-Turbo Layout (W16/W18)
-    const t1 = createSingleTurboUnit(-0.16, 0.85, cfgObj);
-    t1.position.set(-0.10, -0.16, 0.05);
-    rootGroup.add(t1);
+  // Coupler Material for Intercooler Pipes
+  const couplerKey = (opts.couplerColor || 'blue_silicone').toLowerCase();
+  const matSiliconeCoupler =
+    couplerKey.includes('red') ? matLib.getRedSilicone() :
+    couplerKey.includes('black') || couplerKey.includes('viton') ? matLib.getBlackViton() :
+    matLib.getBlueSilicone();
 
-    const t2 = createSingleTurboUnit(-0.16, 0.85, cfgObj);
-    t2.position.set(0.10, -0.16, 0.05);
-    rootGroup.add(t2);
+  // Blow-Off Valve Material
+  const bovKey = (opts.wastegateCapColor || 'anodized_purple').toLowerCase();
+  const matBovCap =
+    bovKey.includes('purple') ? matLib.getAnodizedPurple() :
+    bovKey.includes('blue') ? matLib.getBilletCobalt() :
+    bovKey.includes('gold') ? matLib.getGoldAnodized() :
+    bovKey.includes('red') ? matLib.getBilletCrimson() :
+    matLib.getStealthBlackCeramic();
 
-    const t3 = createSingleTurboUnit(0.16, 0.85, cfgObj);
-    t3.position.set(-0.10, 0.16, 0.05);
-    t3.rotation.z = Math.PI;
-    rootGroup.add(t3);
+  if (layout === 'quad' || turboCount === 4) {
+    // ═════════════════════════════════════════════════════════════════════════
+    // QUAD-TURBOCHARGER SYSTEM (W16/W18 & Megawatt Hypercar Setup)
+    // ═════════════════════════════════════════════════════════════════════════
+    const qScale = 0.88 * (opts.scale || 1.0);
 
-    const t4 = createSingleTurboUnit(0.16, 0.85, cfgObj);
-    t4.position.set(0.10, 0.16, 0.05);
-    t4.rotation.z = Math.PI;
-    rootGroup.add(t4);
-  } else if (turboCount === 2) {
-    // Twin-Turbo Layout (V-Engines & Boxers)
-    const tLeft = createSingleTurboUnit(-0.18, 0.95, cfgObj);
-    tLeft.position.set(0.05, -0.18, 0.02);
+    // Front-Left Turbo
+    const tFL = createSingleTurboUnit(-0.16, qScale, opts);
+    tFL.name = 'Turbocharger_Quad_Front_Left';
+    tFL.position.set(-0.14, -0.18, 0.04);
+    rootGroup.add(tFL);
+
+    // Rear-Left Turbo
+    const tRL = createSingleTurboUnit(-0.16, qScale, opts);
+    tRL.name = 'Turbocharger_Quad_Rear_Left';
+    tRL.position.set(0.14, -0.18, 0.04);
+    rootGroup.add(tRL);
+
+    // Front-Right Turbo
+    const tFR = createSingleTurboUnit(0.16, qScale, opts);
+    tFR.name = 'Turbocharger_Quad_Front_Right';
+    tFR.position.set(-0.14, 0.18, 0.04);
+    tFR.rotation.z = Math.PI;
+    rootGroup.add(tFR);
+
+    // Rear-Right Turbo
+    const tRR = createSingleTurboUnit(0.16, qScale, opts);
+    tRR.name = 'Turbocharger_Quad_Rear_Right';
+    tRR.position.set(0.14, 0.18, 0.04);
+    tRR.rotation.z = Math.PI;
+    rootGroup.add(tRR);
+
+    // Intercooler Charge Merge Pipes (Left & Right Banks)
+    [-0.18, 0.18].forEach((py, idx) => {
+      const bridgeCurve = new THREE.CatmullRomCurve3([
+        new THREE.Vector3(-0.14, py, 0.08),
+        new THREE.Vector3(0, py * 0.9, 0.12),
+        new THREE.Vector3(0.14, py, 0.08),
+      ]);
+      const bridgeGeo = new THREE.TubeGeometry(bridgeCurve, 20, 0.018, 16, false);
+      const bridgeMesh = new THREE.Mesh(bridgeGeo, matStainless);
+      bridgeMesh.name = `Quad_Charge_Merge_Bridge_${idx === 0 ? 'Left' : 'Right'}`;
+      bridgeMesh.castShadow = true;
+      rootGroup.add(bridgeMesh);
+
+      // Silicone Joiner Sleeves
+      [-0.12, 0.12].forEach((sx) => {
+        const sleeveGeo = new THREE.CylinderGeometry(0.021, 0.021, 0.022, 24);
+        sleeveGeo.rotateZ(Math.PI / 2);
+        const sleeveMesh = new THREE.Mesh(sleeveGeo, matSiliconeCoupler);
+        sleeveMesh.position.set(sx, py, 0.085);
+        rootGroup.add(sleeveMesh);
+      });
+    });
+
+    // Dual 50mm Atmospheric Blow-Off Valves
+    [-0.10, 0.10].forEach((by) => {
+      const bovGroup = new THREE.Group();
+      bovGroup.name = `Atmospheric_BOV_50mm_${by < 0 ? 'L' : 'R'}`;
+      bovGroup.position.set(0, by, 0.13);
+
+      const bovBody = new THREE.Mesh(new THREE.CylinderGeometry(0.016, 0.018, 0.032, 24), matBillet);
+      bovGroup.add(bovBody);
+
+      const bovCap = new THREE.Mesh(new THREE.CylinderGeometry(0.017, 0.017, 0.012, 24), matBovCap);
+      bovCap.position.y = 0.018;
+      bovGroup.add(bovCap);
+
+      const bovHorn = new THREE.Mesh(new THREE.CylinderGeometry(0.014, 0.008, 0.018, 20), matBillet);
+      bovHorn.rotation.z = Math.PI / 2;
+      bovHorn.position.set(0.014, 0, 0);
+      bovGroup.add(bovHorn);
+
+      rootGroup.add(bovGroup);
+    });
+
+  } else if (layout === 'hot_v') {
+    // ═════════════════════════════════════════════════════════════════════════
+    // HOT-V TWIN-TURBO SYSTEM (Valley-Mounted Compact Packaging)
+    // ═════════════════════════════════════════════════════════════════════════
+    const hvScale = 0.92 * (opts.scale || 1.0);
+    const tL = createSingleTurboUnit(-0.06, hvScale, opts);
+    tL.position.set(-0.04, -0.06, 0.06);
+    rootGroup.add(tL);
+
+    const tR = createSingleTurboUnit(0.06, hvScale, opts);
+    tR.position.set(-0.04, 0.06, 0.06);
+    tR.rotation.z = Math.PI;
+    rootGroup.add(tR);
+
+    // Valley Heat Shield Blanket
+    const shieldGeo = new THREE.BoxGeometry(0.22, 0.18, 0.006);
+    const shieldMesh = new THREE.Mesh(shieldGeo, matLib.getHeatShieldBlanket());
+    shieldMesh.name = 'Hot_V_Thermal_Inconel_Heat_Shield';
+    shieldMesh.position.set(-0.04, 0, 0.02);
+    rootGroup.add(shieldMesh);
+
+  } else if (layout === 'twin' || turboCount === 2) {
+    // ═════════════════════════════════════════════════════════════════════════
+    // PARALLEL TWIN-TURBO SYSTEM (Left & Right Outboard Turbochargers)
+    // ═════════════════════════════════════════════════════════════════════════
+    const tScale = 0.96 * (opts.scale || 1.0);
+    const tLeft = createSingleTurboUnit(-0.18, tScale, opts);
+    tLeft.position.set(0.04, -0.18, 0.02);
     rootGroup.add(tLeft);
 
-    const tRight = createSingleTurboUnit(0.18, 0.95, cfgObj);
-    tRight.position.set(0.05, 0.18, 0.02);
+    const tRight = createSingleTurboUnit(0.18, tScale, opts);
+    tRight.position.set(0.04, 0.18, 0.02);
     tRight.rotation.z = Math.PI;
     rootGroup.add(tRight);
+
+    // Cross-Bank Charge Pipe with Central Blow-Off Valve
+    const chargeCurve = new THREE.CatmullRomCurve3([
+      new THREE.Vector3(0.04, -0.15, 0.06),
+      new THREE.Vector3(0.12, 0, 0.10),
+      new THREE.Vector3(0.04, 0.15, 0.06),
+    ]);
+    const chargeGeo = new THREE.TubeGeometry(chargeCurve, 24, 0.022, 16, false);
+    const chargeMesh = new THREE.Mesh(chargeGeo, matStainless);
+    chargeMesh.name = 'Twin_Turbo_Equalized_Charge_Y_Pipe';
+    chargeMesh.castShadow = true;
+    rootGroup.add(chargeMesh);
+
+    // Central Atmospheric Blow-Off Valve
+    const bovGroup = new THREE.Group();
+    bovGroup.name = 'Twin_Turbo_Central_BOV';
+    bovGroup.position.set(0.12, 0, 0.12);
+
+    const bovBody = new THREE.Mesh(new THREE.CylinderGeometry(0.018, 0.020, 0.036, 24), matBillet);
+    bovGroup.add(bovBody);
+
+    const bovCap = new THREE.Mesh(new THREE.CylinderGeometry(0.019, 0.019, 0.014, 24), matBovCap);
+    bovCap.position.y = 0.022;
+    bovGroup.add(bovCap);
+
+    rootGroup.add(bovGroup);
+
   } else {
-    // Single High-Flow Twin-Scroll Turbo
-    const tSingle = createSingleTurboUnit(0, 1.05, cfgObj);
+    // ═════════════════════════════════════════════════════════════════════════
+    // SINGLE HIGH-FLOW TWIN-SCROLL DRAG/RACE TURBOCHARGER
+    // ═════════════════════════════════════════════════════════════════════════
+    const sScale = 1.15 * (opts.scale || 1.0);
+    const tSingle = createSingleTurboUnit(0, sScale, opts);
+    tSingle.name = 'Turbocharger_Single_HighFlow_Unit';
     tSingle.position.set(0.08, 0, 0.04);
     rootGroup.add(tSingle);
+
+    // High-Flow Billet Velocity Bellmouth Horn on Inlet Snout
+    const bellGeo = new THREE.CylinderGeometry(0.052, 0.040, 0.032, 36);
+    bellGeo.rotateZ(Math.PI / 2);
+    const bellMesh = new THREE.Mesh(bellGeo, matBillet);
+    bellMesh.name = 'CNC_Velocity_Stack_Inlet_Horn';
+    bellMesh.position.set(0.08 - 0.11 * sScale, 0, 0.04);
+    rootGroup.add(bellMesh);
   }
 
   return scene;
@@ -565,8 +775,10 @@ export function buildTurbochargerScene(configOrCount?: Partial<EngineConfig> | n
 /**
  * Exports the turbocharger scene to a binary GLB ArrayBuffer.
  */
-export async function generateTurbochargerGlbBuffer(): Promise<ArrayBuffer> {
-  const scene = buildTurbochargerScene();
+export async function generateTurbochargerGlbBuffer(
+  opts?: TurbochargerBuildOptions
+): Promise<ArrayBuffer> {
+  const scene = buildTurbochargerScene(opts);
   const exporter = new GLTFExporter();
 
   return new Promise<ArrayBuffer>((resolve, reject) => {
@@ -585,4 +797,17 @@ export async function generateTurbochargerGlbBuffer(): Promise<ArrayBuffer> {
   });
 }
 
+export async function generateTwinTurboGlbBuffer(opts?: TurbochargerBuildOptions): Promise<ArrayBuffer> {
+  return generateTurbochargerGlbBuffer({ ...opts, layout: 'twin', turboCount: 2 });
+}
+
+export async function generateQuadTurboGlbBuffer(opts?: TurbochargerBuildOptions): Promise<ArrayBuffer> {
+  return generateTurbochargerGlbBuffer({ ...opts, layout: 'quad', turboCount: 4 });
+}
+
+export async function generateSingleTurboGlbBuffer(opts?: TurbochargerBuildOptions): Promise<ArrayBuffer> {
+  return generateTurbochargerGlbBuffer({ ...opts, layout: 'single', turboCount: 1 });
+}
+
 export default buildTurbochargerScene;
+

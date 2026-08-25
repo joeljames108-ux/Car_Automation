@@ -8,6 +8,7 @@ import {
   createHexBoltHead,
   createKnurledBand,
 } from "../../engine3d/generators/geometryDetailUtils";
+import { buildStrokeLettering } from "../../engine3d/generators/engineCoverGenerator";
 
 // Polyfill Node.js FileReader for Three.js GLTFExporter binary writer
 class NodeFileReader {
@@ -114,11 +115,32 @@ export function buildV12EngineScene(explodedAmount: number = 0): THREE.Scene {
     roughness: 0.26,
   });
 
+  const matTitaniumBlued = new THREE.MeshStandardMaterial({
+    name: "Titanium_Heat_Blued_Primary",
+    color: 0x2563eb,
+    metalness: 0.96,
+    roughness: 0.16,
+  });
+
+  const matRossoCorsa = new THREE.MeshStandardMaterial({
+    name: "Rosso_Corsa_Textured_Powdercoat",
+    color: 0xdc2626,
+    metalness: 0.45,
+    roughness: 0.28,
+  });
+
   const matCarbonFiber = new THREE.MeshStandardMaterial({
     name: "Autoclaved_2x2_Twill_Dry_Carbon",
     color: 0x1e293b,
     metalness: 0.35,
     roughness: 0.38,
+  });
+
+  const matForgedCarbonGold = new THREE.MeshStandardMaterial({
+    name: "Forged_Carbon_Gold_Flake",
+    color: 0x18181b,
+    metalness: 0.45,
+    roughness: 0.25,
   });
 
   const matQuartzGlass = new THREE.MeshPhysicalMaterial({
@@ -490,20 +512,25 @@ export function buildV12EngineScene(explodedAmount: number = 0): THREE.Scene {
     const bankRot = bankSide === 1 ? THREE.MathUtils.degToRad(-30) : THREE.MathUtils.degToRad(30);
     const posY = bankSide * 0.22;
 
-    const coverMesh = namedMesh(new THREE.BoxGeometry(0.60, 0.15, 0.08), matGoldAnodized, `Valve_Cover_${bankLabel}`, 0, posY, 0.39);
+    const coverMesh = namedMesh(new THREE.BoxGeometry(0.60, 0.15, 0.08), matRossoCorsa, `Valve_Cover_${bankLabel}`, 0, posY, 0.39);
     coverMesh.rotation.x = bankRot;
     valveCoversGroup.add(coverMesh);
 
-    for (let rx = 0; rx < 3; rx++) {
-      const ox = (rx - 1) * 0.20;
-      const rib = namedMesh(new THREE.BoxGeometry(0.02, 0.02, 0.06), matGoldAnodized, `Cover_Rib_${bankLabel}_${rx + 1}`, ox, posY + Math.cos(bankRot) * 0.082, 0.39 + Math.sin(bankRot) * 0.082);
+    for (let rx = 0; rx < 5; rx++) {
+      const ox = (rx - 2) * 0.12;
+      const rib = namedMesh(new THREE.BoxGeometry(0.012, 0.016, 0.06), matMachinedDeck, `Cover_Rib_${bankLabel}_${rx + 1}`, ox, posY + Math.cos(bankRot) * 0.082, 0.39 + Math.sin(bankRot) * 0.082);
       rib.rotation.x = bankRot;
       valveCoversGroup.add(rib);
     }
 
-    const badge = namedMesh(new THREE.BoxGeometry(0.09, 0.006, 0.045), matBlackPolymer, `V12_Badge_Plate_${bankLabel}`, 0.18, posY + Math.cos(bankRot) * 0.088, 0.39 + Math.sin(bankRot) * 0.088);
-    badge.rotation.x = bankRot;
-    valveCoversGroup.add(badge);
+    const badgePlate = namedMesh(new THREE.BoxGeometry(0.14, 0.006, 0.036), matBlackPolymer, `V12_Badge_Plate_${bankLabel}`, 0.0, posY + Math.cos(bankRot) * 0.088, 0.39 + Math.sin(bankRot) * 0.088);
+    badgePlate.rotation.x = bankRot;
+    valveCoversGroup.add(badgePlate);
+
+    const badgeGeo = buildStrokeLettering("APEX V12", 0.016, 0.6, 0.0025, 0.12);
+    const badgeTextMesh = namedMesh(badgeGeo, matMachinedDeck, `Badge_Lettering_${bankLabel}`, 0.0, posY + Math.cos(bankRot) * 0.092, 0.39 + Math.sin(bankRot) * 0.092);
+    badgeTextMesh.rotation.x = bankRot;
+    valveCoversGroup.add(badgeTextMesh);
 
     for (let b = 0; b < 8; b++) {
       const bx = -0.27 + b * (0.54 / 7);
@@ -617,10 +644,10 @@ export function buildV12EngineScene(explodedAmount: number = 0): THREE.Scene {
   engineRoot.add(intakeGroup);
 
   // ══════════════════════════════════════════════════════════
-  // ─── 07. 6-INTO-1 HYDROFORMED INCONEL EXHAUST HEADERS ───
+  // ─── 07. 6-INTO-1 HYDROFORMED TITANIUM HEAT-BLUED EXHAUST HEADERS ───
   // ══════════════════════════════════════════════════════════
   const exhaustGroup = new THREE.Group();
-  exhaustGroup.name = "07_Inconel_Exhaust_Headers";
+  exhaustGroup.name = "07_Titanium_Blued_Exhaust_Headers";
   exhaustGroup.position.set(0, -expY, 0);
 
   const collectorPt = new THREE.Vector3(0.38, -0.32, 0.12);
@@ -634,30 +661,30 @@ export function buildV12EngineScene(explodedAmount: number = 0): THREE.Scene {
       new THREE.Vector3(cx + (0.38 - cx) * 0.5, -0.35, 0.16),
       collectorPt,
     ]);
-    exhaustGroup.add(namedMesh(new THREE.TubeGeometry(pipeCurve, 28, 0.022, 18), matInconelExhaust, `Header_Primary_Pipe_${i + 1}`));
+    exhaustGroup.add(namedMesh(new THREE.TubeGeometry(pipeCurve, 28, 0.022, 18), matTitaniumBlued, `Header_Primary_Pipe_${i + 1}`));
 
     for (let w = 0; w < 3; w++) {
       const wp = pipeCurve.getPointAt(0.08 + w * 0.05);
-      const wrap = namedMesh(springWrapGeo, matMachinedDeck, `Exhaust_SpringWrap_${i + 1}_${w + 1}`, wp.x, wp.y, wp.z);
+      const wrap = namedMesh(springWrapGeo, matGoldAnodized, `Exhaust_PieCut_Weld_${i + 1}_${w + 1}`, wp.x, wp.y, wp.z);
       wrap.rotation.y = Math.PI / 2;
       wrap.rotation.z = 0.4;
       exhaustGroup.add(wrap);
     }
 
-    const flange = namedMesh(hexGeo, matInconelExhaust, `Header_Exit_FlangeBolt_${i + 1}`, cx, -0.225, 0.285);
+    const flange = namedMesh(hexGeo, matGoldAnodized, `Header_Exit_FlangeBolt_${i + 1}`, cx, -0.225, 0.285);
     flange.rotation.x = Math.PI / 2;
     exhaustGroup.add(flange);
   }
 
   const collectorConeGeo = new THREE.CylinderGeometry(0.055, 0.038, 0.12, 28);
   collectorConeGeo.rotateZ(Math.PI / 2);
-  exhaustGroup.add(namedMesh(collectorConeGeo, matInconelExhaust, "Pyramidal_Merge_Collector_Cone", 0.44, -0.32, 0.12));
+  exhaustGroup.add(namedMesh(collectorConeGeo, matTitaniumBlued, "Pyramidal_Merge_Collector_Cone", 0.44, -0.32, 0.12));
 
   const vBandGeo = new THREE.TorusGeometry(0.048, 0.010, 16, 28);
   vBandGeo.rotateY(Math.PI / 2);
   exhaustGroup.add(namedMesh(vBandGeo, matMachinedDeck, "Collector_VBand_Flange_Clamp", 0.50, -0.32, 0.12));
 
-  const lambdaBung = namedMesh(hexGeo, matSensorGray, "Lambda_Sensor_Bung", 0.42, -0.27, 0.12);
+  const lambdaBung = namedMesh(hexGeo, matGoldAnodized, "Lambda_Sensor_Bung", 0.42, -0.27, 0.12);
   lambdaBung.rotation.z = Math.PI / 2;
   exhaustGroup.add(lambdaBung);
 
@@ -845,6 +872,11 @@ export function buildV12EngineScene(explodedAmount: number = 0): THREE.Scene {
 
   coverGroup.add(namedMesh(new THREE.BoxGeometry(0.52, 0.22, 0.015), matGoldAnodized, "Billet_Perimeter_Raised_Bezel_Frame", 0, 0, 0.018));
   coverGroup.add(namedMesh(new THREE.BoxGeometry(0.48, 0.18, 0.008), matQuartzGlass, "Quartz_ITB_Inspection_Window", 0, 0, 0.024));
+
+  // Gold 3D Stroke Lettering Badge "APEX V12" on Engine Cover
+  const coverBadgeGeo = buildStrokeLettering("APEX V12", 0.022, 0.62, 0.003, 0.14);
+  const coverBadgeMesh = namedMesh(coverBadgeGeo, matGoldAnodized, "Cover_Gold_Apex_V12_Badge", 0, -0.12, 0.026);
+  coverGroup.add(coverBadgeMesh);
 
   const dzusSpots: Array<[number, number]> = [
     [-0.235, -0.08],

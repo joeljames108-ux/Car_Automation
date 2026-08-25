@@ -214,6 +214,8 @@ export class EngineDynoSolver {
       assemblyLaborCostUSD: assemblyLaborCost,
       totalEngineBOMCostUSD: totalBOM,
       suggestedMSRPUSD: Math.round(totalBOM * 1.55),
+      drivetrainCostUSD: state.drivetrain?.costUSD ?? 0,
+      totalPowertrainBOMCostUSD: totalBOM + (state.drivetrain?.costUSD ?? 0),
     };
 
     const meanPistonSpeedRedline = Number(((2 * block.strokeMm * redline) / 60000).toFixed(1));

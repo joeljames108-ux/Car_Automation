@@ -27,6 +27,10 @@ export interface ClusterTelemetryFrame {
 }
 
 export class InteriorCanvasTextureFactory {
+  private static isBrowserCanvasAvailable(): boolean {
+    return typeof window !== 'undefined' && typeof document !== 'undefined' && typeof document.createElement === 'function';
+  }
+
   private static createFallbackTexture(): THREE.Texture {
     const data = new Uint8Array([10, 15, 24, 255]);
     const texture = new THREE.DataTexture(data, 1, 1, THREE.RGBAFormat);
@@ -38,7 +42,7 @@ export class InteriorCanvasTextureFactory {
    * Generates a high-definition (2048x1024) Virtual Instrument Cluster CanvasTexture.
    */
   public static createClusterTexture(telemetry?: Partial<ClusterTelemetryFrame>): THREE.Texture {
-    if (typeof document === 'undefined') {
+    if (!this.isBrowserCanvasAvailable()) {
       return this.createFallbackTexture();
     }
 
@@ -83,7 +87,7 @@ export class InteriorCanvasTextureFactory {
    * Generates a high-definition (2048x1536) Center Infotainment Navigation & Media CanvasTexture.
    */
   public static createInfotainmentTexture(theme: HmiUiTheme = 'cyberpunk_neon_cyan'): THREE.Texture {
-    if (typeof document === 'undefined') {
+    if (!this.isBrowserCanvasAvailable()) {
       return this.createFallbackTexture();
     }
 
@@ -112,7 +116,7 @@ export class InteriorCanvasTextureFactory {
    * Generates a 1024x512 Passenger Performance Display CanvasTexture.
    */
   public static createPassengerScreenTexture(theme: HmiUiTheme = 'cyberpunk_neon_cyan'): THREE.Texture {
-    if (typeof document === 'undefined') {
+    if (!this.isBrowserCanvasAvailable()) {
       return this.createFallbackTexture();
     }
 
@@ -141,7 +145,7 @@ export class InteriorCanvasTextureFactory {
    * Generates a 1024x512 Holographic Windshield Heads-Up Display CanvasTexture.
    */
   public static createHudTexture(speedKmh: number = 148, gear: string = 'M4', rpmRatio: number = 0.74): THREE.Texture {
-    if (typeof document === 'undefined') {
+    if (!this.isBrowserCanvasAvailable()) {
       return this.createFallbackTexture();
     }
 

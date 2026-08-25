@@ -114,22 +114,22 @@ export function Slider({ label, value, min, max, step = 1, onChange, format, uni
   const diff = Math.round((localVal - initialRef.current) * 100) / 100;
 
   return (
-    <div className="slider-card-capsule group/slider relative my-2 p-3.5 sm:p-4 rounded-3xl bg-base-850/80 border border-base-750 backdrop-blur-xl shadow-md transition-all duration-200 hover:border-cyan-500/40 select-none">
+    <div className="slider-card-capsule group/slider relative my-1.5 p-3 rounded-xl bg-slate-950/90 border border-slate-800/90 backdrop-blur-xl shadow-md transition-all duration-200 hover:border-cyan-500/50 hover:shadow-[0_4px_20px_rgba(0,0,0,0.5)] select-none">
       {/* Header Row: Icon + Label (Left), Delta + Value (Right) */}
-      <div className="flex justify-between items-center mb-2.5">
-        <div className="flex items-center gap-2 min-w-0">
-          <Zap size={14} className="slider-icon text-cyan-400 shrink-0" />
-          <label className="text-xs font-bold tracking-wide text-slate-100 flex items-center gap-1 truncate">
+      <div className="flex justify-between items-center mb-2">
+        <div className="flex items-center gap-1.5 min-w-0">
+          <Zap size={13} className="slider-icon text-cyan-400 shrink-0" />
+          <label className="text-xs font-mono font-bold tracking-wide text-slate-100 flex items-center gap-1 truncate">
             {label}
           </label>
           <ApexTooltip label={label} />
         </div>
 
-        <div className="flex items-center gap-2 shrink-0">
+        <div className="flex items-center gap-1.5 shrink-0">
           {/* Live Differential Delta Badge (+X / -X) */}
           {diff !== 0 && (
             <span
-              className={`font-mono text-[10px] font-bold px-2 py-0.5 rounded-full animate-in fade-in zoom-in-90 duration-150 ${
+              className={`font-mono text-[9px] font-bold px-1.5 py-0.2 rounded-md animate-in fade-in zoom-in-90 duration-150 ${
                 diff > 0
                   ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/30"
                   : "bg-rose-500/20 text-rose-400 border border-rose-500/30"
@@ -141,30 +141,30 @@ export function Slider({ label, value, min, max, step = 1, onChange, format, uni
           )}
 
           {/* Current Slider Value */}
-          <span className="slider-value-text font-mono text-sm font-extrabold text-cyan-400 tracking-tight">
-            {format ? format(localVal) : localVal}{unit && <span className="text-slate-400 text-xs font-normal ml-1">{unit}</span>}
+          <span className="slider-value-text font-mono text-xs font-extrabold text-cyan-300 tracking-tight bg-cyan-950/60 border border-cyan-500/30 px-2 py-0.5 rounded-md shadow-[0_0_8px_rgba(34,211,238,0.2)]">
+            {format ? format(localVal) : localVal}{unit && <span className="text-slate-400 text-[10px] font-normal ml-0.5">{unit}</span>}
           </span>
         </div>
       </div>
       
       {/* Slider Track with Stepper Controls */}
-      <div className="flex items-center gap-2.5">
+      <div className="flex items-center gap-2">
         {/* Decrement (-) Fine-Tune Button */}
         <button
           type="button"
           onClick={() => handleStepAdjust(-1)}
           disabled={localVal <= min}
-          className="slider-step-btn w-6 h-6 rounded-lg bg-base-800 border border-slate-700/60 flex items-center justify-center text-slate-200 hover:text-cyan-400 hover:border-cyan-400/50 disabled:opacity-20 disabled:pointer-events-none transition-all active:scale-90 shrink-0 font-bold text-xs shadow-sm cursor-pointer"
+          className="slider-step-btn w-6 h-6 rounded-lg bg-slate-900 border border-slate-700/80 flex items-center justify-center text-slate-300 hover:text-cyan-300 hover:border-cyan-400/60 hover:bg-slate-800 disabled:opacity-20 disabled:pointer-events-none transition-all active:scale-90 shrink-0 font-bold text-xs shadow-sm cursor-pointer"
           title={`Decrease by ${step}${unit || ""}`}
         >
           -
         </button>
 
         <div className="relative flex-1 flex items-center h-5">
-          {/* Custom Solid Blue Progress Track */}
-          <div className="slider-track-container absolute left-0 top-1/2 -translate-y-1/2 h-3 w-full bg-slate-900/90 rounded-full overflow-hidden pointer-events-none border border-slate-700/60 shadow-inner">
+          {/* Custom Solid Progress Track */}
+          <div className="slider-track-container absolute left-0 top-1/2 -translate-y-1/2 h-2.5 w-full bg-slate-900 rounded-full overflow-hidden pointer-events-none border border-slate-800 shadow-inner">
             <div
-              className="slider-track-fill h-full bg-cyan-500 rounded-full shadow-[0_0_10px_rgba(34,211,238,0.5)] transition-[width] duration-75"
+              className="slider-track-fill h-full bg-gradient-to-r from-cyan-500 to-blue-500 rounded-full shadow-[0_0_10px_rgba(34,211,238,0.5)] transition-[width] duration-75"
               style={{ width: `${percentage}%` }}
             />
           </div>
@@ -190,14 +190,14 @@ export function Slider({ label, value, min, max, step = 1, onChange, format, uni
           type="button"
           onClick={() => handleStepAdjust(1)}
           disabled={localVal >= max}
-          className="slider-step-btn w-6 h-6 rounded-lg bg-base-800 border border-slate-700/60 flex items-center justify-center text-slate-200 hover:text-cyan-400 hover:border-cyan-400/50 disabled:opacity-20 disabled:pointer-events-none transition-all active:scale-90 shrink-0 font-bold text-xs shadow-sm cursor-pointer"
+          className="slider-step-btn w-6 h-6 rounded-lg bg-slate-900 border border-slate-700/80 flex items-center justify-center text-slate-300 hover:text-cyan-300 hover:border-cyan-400/60 hover:bg-slate-800 disabled:opacity-20 disabled:pointer-events-none transition-all active:scale-90 shrink-0 font-bold text-xs shadow-sm cursor-pointer"
           title={`Increase by ${step}${unit || ""}`}
         >
           +
         </button>
       </div>
 
-      {hint && <p className="text-[10px] text-slate-400/80 mt-1.5 px-0.5">{hint}</p>}
+      {hint && <p className="text-[10px] text-slate-400/80 mt-1 px-0.5 font-mono">{hint}</p>}
     </div>
   );
 }

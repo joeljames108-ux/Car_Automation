@@ -116,20 +116,24 @@ export function useAssembly3DBridge({
   const prevLayoutRef = useRef<string | undefined>(engineConfig?.layout);
 
   // ── 0. Live Engine Specifications Sync & Layout Change Handler ──
-  const engineConfigKey = JSON.stringify(engineConfig || {});
+  const prevConfigStrRef = useRef<string>('');
   useEffect(() => {
-    if (engineConfig) {
+    if (!engineConfig) return;
+    const configStr = `${engineConfig.layout}_${engineConfig.bore}_${engineConfig.stroke}_${engineConfig.rodLength}_${engineConfig.intake}_${engineConfig.boostPressure}_${engineConfig.valvetrain}_${engineConfig.crank}_${engineConfig.pistons}`;
+    if (configStr !== prevConfigStrRef.current) {
+      prevConfigStrRef.current = configStr;
       setEngineConfig(engineConfig);
+
+      if (engineConfig?.layout && prevLayoutRef.current && prevLayoutRef.current !== engineConfig.layout) {
+        prevInstalled2DRef.current = new Set();
+        prevVariantsRef.current = {};
+        resetAssembly();
+        const blockVariant = normalizeGrade(selectedVariants2D.block || 'cast_iron');
+        addComponent('engine-block', blockVariant).catch(() => {});
+      }
+      prevLayoutRef.current = engineConfig?.layout;
     }
-    if (engineConfig?.layout && prevLayoutRef.current && prevLayoutRef.current !== engineConfig.layout) {
-      prevInstalled2DRef.current = new Set();
-      prevVariantsRef.current = {};
-      resetAssembly();
-      const blockVariant = normalizeGrade(selectedVariants2D.block || 'cast_iron');
-      addComponent('engine-block', blockVariant).catch(() => {});
-    }
-    prevLayoutRef.current = engineConfig?.layout;
-  }, [engineConfigKey, setEngineConfig, resetAssembly, addComponent]);
+  }, [engineConfig, setEngineConfig, resetAssembly, addComponent, selectedVariants2D.block]);
 
   // ── 0.1 Initial Base Engine Block Guarantee ──
   useEffect(() => {

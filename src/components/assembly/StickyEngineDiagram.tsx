@@ -53,7 +53,7 @@ interface StickyEngineDiagramProps {
   className?: string;
 }
 
-export function StickyEngineDiagram({
+function StickyEngineDiagramComponent({
   powertrainMode,
   currentStage,
   currentStageMeta,
@@ -171,3 +171,6 @@ export function StickyEngineDiagram({
     </div>
   );
 }
+
+export const StickyEngineDiagram = React.memo(StickyEngineDiagramComponent);
+
