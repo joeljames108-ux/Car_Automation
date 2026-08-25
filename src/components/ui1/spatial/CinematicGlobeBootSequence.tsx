@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Zap, Sparkles, Orbit, Compass, ArrowRight, Shield, Cpu, Activity } from "lucide-react";
 import { playSubsystemEngageSound, playHologramScanSound } from "../interactive/NeonHorizonSoundEngine";
+import { playHMIClickSound } from "../../../utils/hmiSoundSynth";
 
 interface CinematicGlobeBootSequenceProps {
   onComplete: () => void;

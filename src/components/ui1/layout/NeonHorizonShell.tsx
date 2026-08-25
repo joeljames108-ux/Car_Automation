@@ -107,6 +107,9 @@ import { NeonHorizonOrbitalStageNavigator } from "./NeonHorizonOrbitalStageNavig
 import { MasterSpatialNavGlobe, SPATIAL_SECTORS } from "../spatial/MasterSpatialNavGlobe";
 import { SpatialConstellationMap } from "../spatial/SpatialConstellationMap";
 import { SectorEntryAnimationLayer } from "../spatial/SectorEntryAnimationLayer";
+import { CinematicGlobeBootSequence } from "../spatial/CinematicGlobeBootSequence";
+import { CinematicBlueprintXRayOverlay } from "../spatial/CinematicBlueprintXRayOverlay";
+import { CinematicEngineeringHUD } from "../spatial/CinematicEngineeringHUD";
 import { Globe, Orbit, Compass, LayoutGrid } from "lucide-react";
 import type { WorkspaceCategory } from "../../ui/UI1Layout";
 

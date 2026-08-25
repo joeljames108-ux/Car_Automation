@@ -1,12 +1,12 @@
 {
-  "auditTimestamp": "2026-08-25T06:35:58.726Z",
+  "auditTimestamp": "2026-08-25T06:37:38.385Z",
   "projectName": "Modular glTF Vehicle Construction System & Car Automation Simulator",
   "rootDirectory": "C:\\Users\\joelj\\Downloads\\project-bolt-sb1-a1kjcyhr (3)\\project",
   "totalSourceFiles": 1021,
-  "totalCodeLines": 205592,
+  "totalCodeLines": 205596,
   "totalCommentLines": 16028,
   "totalBlankLines": 24003,
-  "totalSizeBytes": 10419886,
+  "totalSizeBytes": 10420204,
   "subsystemBreakdown": {
     "simulation_core": {
       "fileCount": 207,
@@ -45,8 +45,8 @@
     },
     "ui_components": {
       "fileCount": 318,
-      "codeLines": 68633,
-      "sizeBytes": 3403925
+      "codeLines": 68637,
+      "sizeBytes": 3404243
     },
     "asset_pipeline": {
       "fileCount": 0,
@@ -66,7 +66,7 @@
   },
   "dependencyGraph": {
     "totalNodes": 1021,
-    "totalEdges": 2424,
+    "totalEdges": 2428,
     "directAcyclicGraphValid": true,
     "cyclicDependencyPaths": [],
     "subsystemCouplingMatrix": {
@@ -162,14 +162,14 @@
         "documentation_audit": 0
       },
       "ui_components": {
-        "simulation_core": 238,
+        "simulation_core": 239,
         "engine_assembly": 8,
         "modular_vehicle": 13,
         "exterior_3d": 10,
         "rendering_engine": 10,
         "state_management": 145,
         "ai_agent_framework": 11,
-        "ui_components": 780,
+        "ui_components": 783,
         "asset_pipeline": 0,
         "testing_verification": 0,
         "documentation_audit": 0
@@ -306,11 +306,11 @@
       {
         "modulePath": "src/components/ui1/layout/NeonHorizonShell.tsx",
         "inDegree": 1,
-        "outDegree": 87
+        "outDegree": 90
       },
       {
         "modulePath": "src/utils/hmiSoundSynth.ts",
-        "inDegree": 82,
+        "inDegree": 83,
         "outDegree": 0
       },
       {
@@ -1839,7 +1839,7 @@
       },
       {
         "filePath": "src/components/ui1/layout/NeonHorizonShell.tsx",
-        "lineCount": 591
+        "lineCount": 594
       },
       {
         "filePath": "src/components/ui1/spatial/MasterSpatialNavGlobe.tsx",
