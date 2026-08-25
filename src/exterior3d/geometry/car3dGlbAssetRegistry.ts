@@ -1,9 +1,22 @@
 // ============================================================================
 // MODULAR glTF VEHICLE CONSTRUCTION SYSTEM — CAR 3D GLB ASSET REGISTRY
 // ============================================================================
-// Master registry mapping vehicle body styles, chassis platforms, and engines
-// to real production .glb / .gltf / .fbx 3D asset files.
+// Master registry mapping vehicle body styles, chassis platforms, closures,
+// aerodynamics, interior cockpit modules, and engines to real production
+// .glb / .gltf / .fbx 3D asset files.
 // ============================================================================
+
+export type GlbAssetCategory =
+  | "SUPERCAR"
+  | "HATCHBACK"
+  | "SEDAN"
+  | "RALLY"
+  | "CHASSIS"
+  | "ENGINE"
+  | "RESTOMOD"
+  | "AERO"
+  | "CLOSURES"
+  | "INTERIOR";
 
 export interface CarGlbAssetDefinition {
   id: string;
@@ -12,7 +25,7 @@ export interface CarGlbAssetDefinition {
   description: string;
   assetPath: string;
   fallbackPath?: string;
-  category: "SUPERCAR" | "HATCHBACK" | "SEDAN" | "RALLY" | "CHASSIS" | "ENGINE" | "RESTOMOD";
+  category: GlbAssetCategory;
   wheelbaseMm: number;
   lengthMm: number;
   widthMm: number;
@@ -25,6 +38,7 @@ export interface CarGlbAssetDefinition {
 
 export class Car3DGlbAssetRegistry {
   public static readonly ASSETS: Record<string, CarGlbAssetDefinition> = {
+    // ─── 1. COMPLETE VEHICLE ASSEMBLIES ───
     SUPERCAR_MID_ENGINE: {
       id: "SUPERCAR_MID_ENGINE",
       name: "BMW i8 Hybrid Supercar GLB",
@@ -89,6 +103,8 @@ export class Car3DGlbAssetRegistry {
       caliperColorDefault: "#eab308",
       suggestedCameraRadius: 4.1,
     },
+
+    // ─── 2. CHASSIS & STRUCTURAL PLATFORMS ───
     SPORTS_CHASSIS_01: {
       id: "SPORTS_CHASSIS_01",
       name: "Sports Car Aluminum Monocoque Chassis GLB",
@@ -119,6 +135,8 @@ export class Car3DGlbAssetRegistry {
       caliperColorDefault: "#dc2626",
       suggestedCameraRadius: 3.7,
     },
+
+    // ─── 3. POWERTRAIN MASTER ASSEMBLY ───
     V12_MASTER_ENGINE: {
       id: "V12_MASTER_ENGINE",
       name: "60° V12 Racing Engine & Transaxle GLB",
@@ -134,13 +152,15 @@ export class Car3DGlbAssetRegistry {
       caliperColorDefault: "#f59e0b",
       suggestedCameraRadius: 2.5,
     },
+
+    // ─── 4. REAR AERODYNAMICS & COMPONENT MODULES ───
     HYPERCAR_REAR_ASSEMBLY: {
       id: "HYPERCAR_REAR_ASSEMBLY",
       name: "Hypercar Rear Assembly & Active Aero GLB",
       subtitle: "Rear Bodywork, Active Swan-Neck Wing, Venturi Diffuser & Quad Titanium Exhaust",
       description: "High-fidelity 3D GLB model of hypercar rear assembly with active swan-neck wing, Venturi diffuser strakes, OLED lightbar, quad titanium exhausts, and rear suspension.",
       assetPath: "/models/exterior/rear_car_assembly.glb",
-      category: "SUPERCAR",
+      category: "AERO",
       wheelbaseMm: 2750,
       lengthMm: 2200,
       widthMm: 1980,
@@ -150,6 +170,277 @@ export class Car3DGlbAssetRegistry {
       caliperColorDefault: "#b91c1c",
       suggestedCameraRadius: 3.5,
     },
+    REAR_WING_SWAN_NECK: {
+      id: "REAR_WING_SWAN_NECK",
+      name: "Active Swan-Neck Carbon Rear Wing GLB",
+      subtitle: "High-Downforce DRS-Equipped Carbon Aerofoil",
+      description: "Dual-element swan-neck carbon aerofoil with endplates, DRS actuator linkage, and CNC billet mounting pylons.",
+      assetPath: "/models/exterior/rear_wing.glb",
+      category: "AERO",
+      wheelbaseMm: 0,
+      lengthMm: 450,
+      widthMm: 1650,
+      heightMm: 380,
+      bodyPaintMaterialNames: ["wing", "aerofoil", "paint", "carbon"],
+      suggestedCameraRadius: 2.2,
+    },
+    REAR_DIFFUSER_VENTURI: {
+      id: "REAR_DIFFUSER_VENTURI",
+      name: "Venturi Tunnel Rear Diffuser GLB",
+      subtitle: "Ground Effect Carbon Diffuser with Strakes",
+      description: "Underbody aerodynamic ground-effect diffuser with high-expansion Venturi tunnels and carbon vertical strakes.",
+      assetPath: "/models/exterior/rear_diffuser.glb",
+      category: "AERO",
+      wheelbaseMm: 0,
+      lengthMm: 950,
+      widthMm: 1720,
+      heightMm: 280,
+      bodyPaintMaterialNames: ["diffuser", "carbon", "strake"],
+      suggestedCameraRadius: 2.4,
+    },
+    REAR_BUMPER_FASCIA: {
+      id: "REAR_BUMPER_FASCIA",
+      name: "Aero Rear Bumper & Heat Extractors GLB",
+      subtitle: "Widebody Rear Fascia with Thermal Flow Vents",
+      description: "Sculpted rear bumper assembly with cooling exhaust cutouts, thermal mesh vents, and integrated aerodynamic ducting.",
+      assetPath: "/models/exterior/rear_bumper.glb",
+      category: "AERO",
+      wheelbaseMm: 0,
+      lengthMm: 850,
+      widthMm: 1980,
+      heightMm: 620,
+      bodyPaintMaterialNames: ["bumper", "paint", "body", "fascia"],
+      suggestedCameraRadius: 2.6,
+    },
+    OLED_TAILLIGHTS_MODULE: {
+      id: "OLED_TAILLIGHTS_MODULE",
+      name: "Continuous OLED Lightbar Taillights GLB",
+      subtitle: "Dynamic Signature OLED Surface Light Guide",
+      description: "Edge-to-edge curved OLED lightbar assembly with micro-prism internal optics and smoked polycarbonate outer lenses.",
+      assetPath: "/models/exterior/taillights.glb",
+      category: "AERO",
+      wheelbaseMm: 0,
+      lengthMm: 220,
+      widthMm: 1680,
+      heightMm: 120,
+      bodyPaintMaterialNames: ["taillight", "light", "lens", "led"],
+      glassMaterialNames: ["lens", "glass"],
+      suggestedCameraRadius: 2.0,
+    },
+
+    // ─── 5. CLOSURES & HOOD PANELS ───
+    BMW_I8_HOOD_OPEN: {
+      id: "BMW_I8_HOOD_OPEN",
+      name: "BMW i8 Supercar Front Hood (Open) GLB",
+      subtitle: "Forward-Hinged Carbon Hood with Cooling Ducts (Service Position)",
+      description: "Open articulated carbon fiber hood panel revealing electric motor cooling radiators and front suspension geometry.",
+      assetPath: "/models/exterior/bmw_i8_supercar_hood_open.glb",
+      category: "CLOSURES",
+      wheelbaseMm: 0,
+      lengthMm: 1450,
+      widthMm: 1680,
+      heightMm: 650,
+      bodyPaintMaterialNames: ["hood", "paint", "carbon", "body"],
+      suggestedCameraRadius: 2.5,
+    },
+    BMW_I8_HOOD_CLOSED: {
+      id: "BMW_I8_HOOD_CLOSED",
+      name: "BMW i8 Supercar Front Hood (Closed) GLB",
+      subtitle: "Aerodynamic Carbon Hood with V-Extractor Ducts",
+      description: "Closed aerodynamic carbon composite hood panel flush-mounted to front fenders and headlights.",
+      assetPath: "/models/exterior/bmw_i8_supercar_hood_closed.glb",
+      category: "CLOSURES",
+      wheelbaseMm: 0,
+      lengthMm: 1450,
+      widthMm: 1680,
+      heightMm: 280,
+      bodyPaintMaterialNames: ["hood", "paint", "carbon", "body"],
+      suggestedCameraRadius: 2.4,
+    },
+    COSWORTH_HOOD_OPEN: {
+      id: "COSWORTH_HOOD_OPEN",
+      name: "Ford Cosworth WRC Hood (Open) GLB",
+      subtitle: "Rally Hood with Louvered Heat Extractors (Engine Bay Service)",
+      description: "Articulated rally hood raised on gas struts displaying twin-louvers and radiator extraction scoops.",
+      assetPath: "/models/exterior/ford_escort_rs_cosworth_hood_open.glb",
+      category: "CLOSURES",
+      wheelbaseMm: 0,
+      lengthMm: 1380,
+      widthMm: 1520,
+      heightMm: 620,
+      bodyPaintMaterialNames: ["hood", "paint", "body"],
+      suggestedCameraRadius: 2.4,
+    },
+    COSWORTH_HOOD_CLOSED: {
+      id: "COSWORTH_HOOD_CLOSED",
+      name: "Ford Cosworth WRC Hood (Closed) GLB",
+      subtitle: "Rally Specification Louvered Aluminum Hood Panel",
+      description: "Closed hood featuring Cosworth signature heat louvers and rally quick-release pin mounts.",
+      assetPath: "/models/exterior/ford_escort_rs_cosworth_hood_closed.glb",
+      category: "CLOSURES",
+      wheelbaseMm: 0,
+      lengthMm: 1380,
+      widthMm: 1520,
+      heightMm: 220,
+      bodyPaintMaterialNames: ["hood", "paint", "body"],
+      suggestedCameraRadius: 2.3,
+    },
+    COSWORTH_GT3_HOOD_OPEN: {
+      id: "COSWORTH_GT3_HOOD_OPEN",
+      name: "Cosworth GT3 Aero Hood (Open) GLB",
+      subtitle: "Circuit GT3 Spec Carbon Extraction Hood (Paddock Open)",
+      description: "Ultralight pre-preg carbon fiber GT3 hood in open position showing inner structural skeleton.",
+      assetPath: "/models/exterior/ford_escort_rs_cosworth_gt3_hood_open.glb",
+      category: "CLOSURES",
+      wheelbaseMm: 0,
+      lengthMm: 1380,
+      widthMm: 1540,
+      heightMm: 640,
+      bodyPaintMaterialNames: ["hood", "carbon", "paint", "body"],
+      suggestedCameraRadius: 2.4,
+    },
+    COSWORTH_GT3_HOOD_CLOSED: {
+      id: "COSWORTH_GT3_HOOD_CLOSED",
+      name: "Cosworth GT3 Aero Hood (Closed) GLB",
+      subtitle: "Pre-Preg Carbon Fiber Aerodynamic Downforce Hood",
+      description: "Low-drag GT3 racing hood with deep radiator chimney relief and NACA air intakes.",
+      assetPath: "/models/exterior/ford_escort_rs_cosworth_gt3_hood_closed.glb",
+      category: "CLOSURES",
+      wheelbaseMm: 0,
+      lengthMm: 1380,
+      widthMm: 1540,
+      heightMm: 220,
+      bodyPaintMaterialNames: ["hood", "carbon", "paint", "body"],
+      suggestedCameraRadius: 2.3,
+    },
+    HOOD_VENTED_CARBON: {
+      id: "HOOD_VENTED_CARBON",
+      name: "Universal Carbon Vented Hood GLB",
+      subtitle: "Center-Vented Aerodynamic Carbon Hood",
+      description: "Universal performance carbon fiber hood featuring inverted center air extractor duct.",
+      assetPath: "/models/exterior/hood.glb",
+      category: "CLOSURES",
+      wheelbaseMm: 0,
+      lengthMm: 1400,
+      widthMm: 1560,
+      heightMm: 240,
+      bodyPaintMaterialNames: ["hood", "carbon", "paint", "body"],
+      suggestedCameraRadius: 2.3,
+    },
+    HOOD_AERO_PANEL: {
+      id: "HOOD_AERO_PANEL",
+      name: "Aero Powerdome Hood Panel GLB",
+      subtitle: "Dual-Vent Aggressive Powerdome Hood Assembly",
+      description: "Aggressive powerdome hood assembly with twin side extractors for high-boost engine configurations.",
+      assetPath: "/models/exterior/hood_panel.glb",
+      category: "CLOSURES",
+      wheelbaseMm: 0,
+      lengthMm: 1420,
+      widthMm: 1580,
+      heightMm: 250,
+      bodyPaintMaterialNames: ["hood", "paint", "body", "panel"],
+      suggestedCameraRadius: 2.3,
+    },
+
+    // ─── 6. INTERIOR COCKPIT MODULES ───
+    INTERIOR_GT3_YOKE: {
+      id: "INTERIOR_GT3_YOKE",
+      name: "FIA GT3 Carbon Racing Yoke GLB",
+      subtitle: "Billet Carbon Steering Yoke with Integrated OLED Display & Rotary Encoders",
+      description: "Full racing yoke steering wheel with Alcantara handgrips, titanium quick-release hub, and paddle shifters.",
+      assetPath: "/models/interior/steering_wheel_gt3_yoke.glb",
+      category: "INTERIOR",
+      wheelbaseMm: 0,
+      lengthMm: 180,
+      widthMm: 310,
+      heightMm: 220,
+      bodyPaintMaterialNames: ["yoke", "carbon", "grip", "leather", "alcantara"],
+      suggestedCameraRadius: 1.2,
+    },
+    INTERIOR_SPORT_WHEEL: {
+      id: "INTERIOR_SPORT_WHEEL",
+      name: "Sport GT Round Steering Wheel GLB",
+      subtitle: "Perforated Leather Steering Wheel with Aluminum Spokes",
+      description: "Sport GT round steering wheel with perforated Napa leather, contrasting 12 o'clock center stripe, and CNC billet buttons.",
+      assetPath: "/models/interior/steering_wheel_sport.glb",
+      category: "INTERIOR",
+      wheelbaseMm: 0,
+      lengthMm: 160,
+      widthMm: 360,
+      heightMm: 360,
+      bodyPaintMaterialNames: ["wheel", "leather", "aluminum", "spoke"],
+      suggestedCameraRadius: 1.3,
+    },
+    INTERIOR_SEAT_CARBON_RACE: {
+      id: "INTERIOR_SEAT_CARBON_RACE",
+      name: "Carbon Fiber FIA Monocoque Race Seat GLB",
+      subtitle: "FIA 8855-2021 Ultralight Carbon Bucket Seat with 6-Point Harness Passages",
+      description: "High-rigidity autoclaved carbon monocoque seat with high-density foam padding and Alcantara inserts.",
+      assetPath: "/models/interior/seat_carbon_race.glb",
+      category: "INTERIOR",
+      wheelbaseMm: 0,
+      lengthMm: 580,
+      widthMm: 520,
+      heightMm: 890,
+      bodyPaintMaterialNames: ["seat", "carbon", "leather", "alcantara", "cushion"],
+      suggestedCameraRadius: 1.8,
+    },
+    INTERIOR_SEAT_SPORT_BUCKET: {
+      id: "INTERIOR_SEAT_SPORT_BUCKET",
+      name: "Adaptive Ergonomic Sport Bucket Seat GLB",
+      subtitle: "18-Way Adjustable Sport Touring Bucket Seat with Memory Foam",
+      description: "Premium leather touring seat with pneumatic lumbar bolsters and heating/ventilation cooling channels.",
+      assetPath: "/models/interior/seat_sport_bucket.glb",
+      category: "INTERIOR",
+      wheelbaseMm: 0,
+      lengthMm: 620,
+      widthMm: 560,
+      heightMm: 920,
+      bodyPaintMaterialNames: ["seat", "leather", "bolster", "stitch"],
+      suggestedCameraRadius: 1.9,
+    },
+    INTERIOR_CONSOLE_GT3: {
+      id: "INTERIOR_CONSOLE_GT3",
+      name: "GT3 Competition Center Console GLB",
+      subtitle: "Motorsport Switchgear Panel with Ignition Safety Guard & Brake Bias",
+      description: "Race-ready center tunnel console featuring anodized toggle switches, fire extinguisher toggle, and carbon transmission tunnel.",
+      assetPath: "/models/interior/center_console_gt3.glb",
+      category: "INTERIOR",
+      wheelbaseMm: 0,
+      lengthMm: 850,
+      widthMm: 280,
+      heightMm: 340,
+      bodyPaintMaterialNames: ["console", "carbon", "switch", "tunnel"],
+      suggestedCameraRadius: 1.5,
+    },
+    INTERIOR_CONSOLE_EXECUTIVE: {
+      id: "INTERIOR_CONSOLE_EXECUTIVE",
+      name: "Executive Luxury Center Console GLB",
+      subtitle: "Leather-Wrapped Tunnel Console with Touch Controller & Haptic Dials",
+      description: "Executive grand touring console with dual wireless chargers, knurled aluminum rotary drive mode selectors, and cooled cup holders.",
+      assetPath: "/models/interior/center_console_executive.glb",
+      category: "INTERIOR",
+      wheelbaseMm: 0,
+      lengthMm: 920,
+      widthMm: 320,
+      heightMm: 360,
+      bodyPaintMaterialNames: ["console", "leather", "aluminum", "trim"],
+      suggestedCameraRadius: 1.6,
+    },
+    INTERIOR_DOOR_CARDS: {
+      id: "INTERIOR_DOOR_CARDS",
+      name: "Lightweight Sport Door Cards GLB",
+      subtitle: "Carbon Inner Door Cards with Fabric Pull Straps & Armrest",
+      description: "Motorsport interior door panels with carbon fiber card inserts, integrated speaker grilles, and woven pull straps.",
+      assetPath: "/models/interior/door_cards_sport.glb",
+      category: "INTERIOR",
+      wheelbaseMm: 0,
+      lengthMm: 1100,
+      widthMm: 180,
+      heightMm: 580,
+      bodyPaintMaterialNames: ["door", "leather", "carbon", "armrest"],
+      suggestedCameraRadius: 1.7,
+    },
   };
 
   public static getAsset(id: string): CarGlbAssetDefinition {
@@ -158,5 +449,9 @@ export class Car3DGlbAssetRegistry {
 
   public static getAllAssets(): CarGlbAssetDefinition[] {
     return Object.values(this.ASSETS);
+  }
+
+  public static getAssetsByCategory(category: GlbAssetCategory): CarGlbAssetDefinition[] {
+    return Object.values(this.ASSETS).filter((a) => a.category === category);
   }
 }

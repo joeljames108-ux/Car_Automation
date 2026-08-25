@@ -392,6 +392,21 @@ export const EngineAndCar3DGraphicsViewport: React.FC = () => {
         currentModelGroup.current = modelGroup;
       }
 
+      // Automatically frame camera around loaded model geometry
+      if (cameraRef.current && controlsRef.current) {
+        const bbox = new THREE.Box3().setFromObject(modelGroup);
+        const center = new THREE.Vector3();
+        const size = new THREE.Vector3();
+        bbox.getCenter(center);
+        bbox.getSize(size);
+        const maxDim = Math.max(size.x, size.y, size.z, 0.4);
+        const radius = maxDim * 1.5;
+        controlsRef.current.target.set(center.x, center.y, center.z);
+        cameraRef.current.position.set(center.x + radius * 0.75, center.y + radius * 0.45, center.z + radius * 0.85);
+        cameraRef.current.lookAt(center);
+        controlsRef.current.update();
+      }
+
       setPolyCount(Math.round(tri));
       setVertCount(Math.round(vert));
       setLoadedAssetName(assetLabel);
@@ -453,15 +468,54 @@ export const EngineAndCar3DGraphicsViewport: React.FC = () => {
             <select
               value={selectedCarStyle}
               onChange={(e) => setSelectedCarStyle(e.target.value as VehicleBodyStyle3D)}
-              className="bg-slate-950 text-blue-300 text-xs rounded-lg px-2.5 py-1.5 border border-slate-700 font-mono outline-none focus:border-blue-500"
+              className="bg-slate-950 text-blue-300 text-xs rounded-lg px-2.5 py-1.5 border border-slate-700 font-mono outline-none focus:border-blue-500 max-w-[280px]"
             >
-              {Car3DGlbAssetRegistry.getAllAssets().map((asset) => (
-                <option key={asset.id} value={asset.id}>
-                  {asset.name}
-                </option>
-              ))}
-              <option value="EXECUTIVE_SEDAN">Executive Sport Sedan (Studio CAD)</option>
-              <option value="HYPERCAR_MONOCOQUE">Carbon Monocoque Hypercar (Studio CAD)</option>
+              <optgroup label="── Complete Vehicles ──">
+                {Car3DGlbAssetRegistry.getAssetsByCategory("SUPERCAR").map((a) => (
+                  <option key={a.id} value={a.id}>{a.name}</option>
+                ))}
+                {Car3DGlbAssetRegistry.getAssetsByCategory("RALLY").map((a) => (
+                  <option key={a.id} value={a.id}>{a.name}</option>
+                ))}
+                {Car3DGlbAssetRegistry.getAssetsByCategory("RESTOMOD").map((a) => (
+                  <option key={a.id} value={a.id}>{a.name}</option>
+                ))}
+              </optgroup>
+
+              <optgroup label="── Chassis & Platforms ──">
+                {Car3DGlbAssetRegistry.getAssetsByCategory("CHASSIS").map((a) => (
+                  <option key={a.id} value={a.id}>{a.name}</option>
+                ))}
+              </optgroup>
+
+              <optgroup label="── Active Aero & Rear Assembly ──">
+                {Car3DGlbAssetRegistry.getAssetsByCategory("AERO").map((a) => (
+                  <option key={a.id} value={a.id}>{a.name}</option>
+                ))}
+              </optgroup>
+
+              <optgroup label="── Closures & Hood Panels ──">
+                {Car3DGlbAssetRegistry.getAssetsByCategory("CLOSURES").map((a) => (
+                  <option key={a.id} value={a.id}>{a.name}</option>
+                ))}
+              </optgroup>
+
+              <optgroup label="── Cockpit Interior Studio ──">
+                {Car3DGlbAssetRegistry.getAssetsByCategory("INTERIOR").map((a) => (
+                  <option key={a.id} value={a.id}>{a.name}</option>
+                ))}
+              </optgroup>
+
+              <optgroup label="── Powertrain Engines ──">
+                {Car3DGlbAssetRegistry.getAssetsByCategory("ENGINE").map((a) => (
+                  <option key={a.id} value={a.id}>{a.name}</option>
+                ))}
+              </optgroup>
+
+              <optgroup label="── Procedural Studio CAD ──">
+                <option value="EXECUTIVE_SEDAN">Executive Sport Sedan (Studio CAD)</option>
+                <option value="HYPERCAR_MONOCOQUE">Carbon Monocoque Hypercar (Studio CAD)</option>
+              </optgroup>
             </select>
           ) : (
             <select

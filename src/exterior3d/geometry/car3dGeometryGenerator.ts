@@ -213,6 +213,43 @@ export class Car3DGeometryGenerator {
       envMapIntensity: 1.6,
     });
 
+    // Carbon Fiber Material
+    const carbonMaterial = new THREE.MeshPhysicalMaterial({
+      color: 0x111622,
+      metalness: 0.40,
+      roughness: 0.18,
+      clearcoat: 1.0,
+      clearcoatRoughness: 0.04,
+      reflectivity: 0.9,
+      envMapIntensity: 1.6,
+      side: THREE.DoubleSide,
+      transparent: isXRay,
+      opacity: isXRay ? 0.3 : 1.0,
+    });
+
+    // Leather / Alcantara Material for Interior Modules
+    const leatherMaterial = new THREE.MeshPhysicalMaterial({
+      color: 0x1e222d,
+      roughness: 0.75,
+      metalness: 0.05,
+      clearcoat: 0.15,
+      clearcoatRoughness: 0.3,
+      sheen: 0.4,
+      sheenColor: new THREE.Color(paintColorHex).multiplyScalar(0.8),
+      envMapIntensity: 0.4,
+      transparent: isXRay,
+      opacity: isXRay ? 0.3 : 1.0,
+    });
+
+    // OLED Emissive Red Taillight / Indicator
+    const oledRedEmissive = new THREE.MeshStandardMaterial({
+      color: 0xff1122,
+      emissive: 0xff0022,
+      emissiveIntensity: 2.8,
+      roughness: 0.1,
+      metalness: 0.1,
+    });
+
     root.traverse((node) => {
       if (!(node as THREE.Mesh).isMesh) return;
       const mesh = node as THREE.Mesh;
@@ -221,6 +258,24 @@ export class Car3DGeometryGenerator {
       // Check if mesh is brake caliper
       if (nameLower.includes("caliper") || nameLower.includes("calliper") || nameLower.includes("brake_pad")) {
         mesh.material = caliperMat;
+        return;
+      }
+
+      // Check if mesh is interior upholstery / leather / seats
+      if (nameLower.includes("leather") || nameLower.includes("seat") || nameLower.includes("cushion") || nameLower.includes("bolster") || nameLower.includes("armrest") || nameLower.includes("grip")) {
+        mesh.material = leatherMaterial;
+        return;
+      }
+
+      // Check if mesh is carbon fiber
+      if (nameLower.includes("carbon") || nameLower.includes("monocoque") || nameLower.includes("weave") || nameLower.includes("tub") || nameLower.includes("strake")) {
+        mesh.material = carbonMaterial;
+        return;
+      }
+
+      // Check if mesh is OLED taillight or LED light guide
+      if (nameLower.includes("taillight") || nameLower.includes("lightbar") || (nameLower.includes("light") && !nameLower.includes("glass"))) {
+        mesh.material = oledRedEmissive;
         return;
       }
 
@@ -236,7 +291,8 @@ export class Car3DGeometryGenerator {
         nameLower.includes("bumper") ||
         nameLower.includes("quarter") ||
         nameLower.includes("spoiler") ||
-        nameLower.includes("wing");
+        nameLower.includes("wing") ||
+        nameLower.includes("fascia");
 
       if (
         isPaintMesh &&
@@ -251,7 +307,7 @@ export class Car3DGeometryGenerator {
           paintMaterial.map = mesh.material.map;
         }
         mesh.material = paintMaterial;
-      } else if (nameLower.includes("glass") || nameLower.includes("window") || nameLower.includes("windshield") || nameLower.includes("windscreen")) {
+      } else if (nameLower.includes("glass") || nameLower.includes("window") || nameLower.includes("windshield") || nameLower.includes("windscreen") || nameLower.includes("backlite")) {
         mesh.material = glassMaterial;
       } else if (isXRay) {
         // Semi-transparent for non-body parts in X-Ray
@@ -276,7 +332,8 @@ export class Car3DGeometryGenerator {
     caliperColorHex: string,
     isXRay: boolean
   ): void {
-    if (assetDef.category === "ENGINE") return; // Engines have their own micro-details
+    const fullVehicleCategories = ["SUPERCAR", "HATCHBACK", "SEDAN", "RALLY", "RESTOMOD"];
+    if (!fullVehicleCategories.includes(assetDef.category)) return; // Only full vehicle assemblies get wheel/exhaust micro-details
 
     const detailsGroup = new THREE.Group();
     detailsGroup.name = "GLB_MICRO_DETAILS_AUGMENTATION";
