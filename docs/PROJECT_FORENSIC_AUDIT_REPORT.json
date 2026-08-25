@@ -1,17 +1,17 @@
 {
-  "auditTimestamp": "2026-08-25T06:37:38.385Z",
+  "auditTimestamp": "2026-08-25T07:46:46.144Z",
   "projectName": "Modular glTF Vehicle Construction System & Car Automation Simulator",
   "rootDirectory": "C:\\Users\\joelj\\Downloads\\project-bolt-sb1-a1kjcyhr (3)\\project",
   "totalSourceFiles": 1021,
-  "totalCodeLines": 205596,
+  "totalCodeLines": 205642,
   "totalCommentLines": 16028,
-  "totalBlankLines": 24003,
-  "totalSizeBytes": 10420204,
+  "totalBlankLines": 24005,
+  "totalSizeBytes": 10422390,
   "subsystemBreakdown": {
     "simulation_core": {
       "fileCount": 207,
-      "codeLines": 39944,
-      "sizeBytes": 2266097
+      "codeLines": 39945,
+      "sizeBytes": 2266150
     },
     "engine_assembly": {
       "fileCount": 58,
@@ -45,8 +45,8 @@
     },
     "ui_components": {
       "fileCount": 318,
-      "codeLines": 68637,
-      "sizeBytes": 3404243
+      "codeLines": 68682,
+      "sizeBytes": 3406376
     },
     "asset_pipeline": {
       "fileCount": 0,
@@ -1723,7 +1723,7 @@
     "largeFilesExceeding500Lines": [
       {
         "filePath": "src/App.tsx",
-        "lineCount": 574
+        "lineCount": 575
       },
       {
         "filePath": "src/components/aerodynamics/AerodynamicsStudio.tsx",
@@ -1839,7 +1839,7 @@
       },
       {
         "filePath": "src/components/ui1/layout/NeonHorizonShell.tsx",
-        "lineCount": 594
+        "lineCount": 596
       },
       {
         "filePath": "src/components/ui1/spatial/MasterSpatialNavGlobe.tsx",

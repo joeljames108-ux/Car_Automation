@@ -173,7 +173,7 @@ export function NeonHorizonShell() {
   const [blueprintOpen, setBlueprintOpen] = useState(false);
   const [isEngineeringMode, setIsEngineeringMode] = useState(false);
 
-  const { design, sim, updateEngine, resetDesign, units, setUnits } = useDesign();
+  const { design, sim, updateEngine, resetDesign, units, setUnits, uiTheme, setUiTheme } = useDesign();
   const { company, advanceAllSystems } = useCompany();
 
   const activeCategoryStages = STAGES.filter((s) => s.category === activeCategory);
@@ -236,6 +236,8 @@ export function NeonHorizonShell() {
         onSave={() => setDialog({ open: true, mode: "save" })}
         onLoad={() => setDialog({ open: true, mode: "load" })}
         onReset={resetDesign}
+        uiTheme={uiTheme}
+        onSetUiTheme={setUiTheme}
       />
 
       {/* 3. Sub-Header Stage Tab Ribbon */}

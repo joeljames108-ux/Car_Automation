@@ -131,7 +131,7 @@ function AppInner() {
   const [activeCategory, setActiveCategory] = useState<WorkspaceCategory>("engineering");
   const [dialog, setDialog] = useState<{ open: boolean; mode: "save" | "load" }>({ open: false, mode: "save" });
   const [cmdPaletteOpen, setCmdPaletteOpen] = useState(false);
-  const { design, sim, carConcept, updateEngine, resetDesign, units, setUnits, uiTheme } = useDesign();
+  const { design, sim, carConcept, updateEngine, resetDesign, units, setUnits, uiTheme, setUiTheme } = useDesign();
   const { company, advanceAllSystems } = useCompany();
   const [booted, setBooted] = useState(false);
 
@@ -333,6 +333,7 @@ function AppInner() {
               onReset={resetDesign}
               onSearch={() => setCmdPaletteOpen(true)}
               onAdvanceMonth={advanceAllSystems}
+              onSetUiTheme={setUiTheme}
             />
 
             {/* ── SPATIAL GLASS SCROLL PROGRESS INDICATOR BAR (Phase 1) ── */}

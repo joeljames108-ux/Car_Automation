@@ -28,6 +28,8 @@ export interface NeonHorizonHeaderProps {
   onSave: () => void;
   onLoad: () => void;
   onReset: () => void;
+  uiTheme?: "theme1" | "theme2" | "theme3" | "theme4";
+  onSetUiTheme?: (theme: "theme1" | "theme2" | "theme3" | "theme4") => void;
 }
 
 export const NeonHorizonHeader: React.FC<NeonHorizonHeaderProps> = ({
@@ -43,6 +45,8 @@ export const NeonHorizonHeader: React.FC<NeonHorizonHeaderProps> = ({
   onSave,
   onLoad,
   onReset,
+  uiTheme = "theme1",
+  onSetUiTheme,
 }) => {
   const [time, setTime] = useState(new Date());
 
@@ -238,6 +242,21 @@ export const NeonHorizonHeader: React.FC<NeonHorizonHeaderProps> = ({
               <RotateCcw size={14} />
             </button>
           </div>
+
+          {/* Quick UI Mode Switcher (UI 1 <-> Glass UI) */}
+          {onSetUiTheme && (
+            <button
+              onClick={() => {
+                playHMIClickSound();
+                onSetUiTheme("theme4");
+              }}
+              title="Switch to Vision Glass UI"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-mono font-bold tracking-wider bg-gradient-to-r from-amber-500/20 to-sky-500/20 hover:from-amber-500/30 hover:to-sky-500/30 border border-amber-400/40 text-amber-200 shadow-[0_0_15px_rgba(245,158,11,0.2)] transition-all cursor-pointer whitespace-nowrap"
+            >
+              <Sparkles size={12} className="text-amber-400 animate-pulse" />
+              <span>GLASS UI</span>
+            </button>
+          )}
 
           {/* User Profile Avatar (Vision Glass Header Feature) */}
           <div
