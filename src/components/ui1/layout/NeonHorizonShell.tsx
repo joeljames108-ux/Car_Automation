@@ -103,6 +103,7 @@ import { NeonGrandStudioHub } from "../stages/NeonGrandStudioHub";
 import { NeonHiggsfieldStudio } from "../stages/NeonHiggsfieldStudio";
 import { NeonHorizonCommandPalette } from "../interactive/NeonHorizonCommandPalette";
 import { NeonHorizonSaveDialog } from "../interactive/NeonHorizonSaveDialog";
+import { NeonHorizonOrbitalStageNavigator } from "./NeonHorizonOrbitalStageNavigator";
 import type { WorkspaceCategory } from "../../ui/UI1Layout";
 
 interface StageItem {
@@ -158,6 +159,7 @@ export function NeonHorizonShell() {
   const [particlesEnabled, setParticlesEnabled] = useState(true);
   const [dialog, setDialog] = useState<{ open: boolean; mode: "save" | "load" }>({ open: false, mode: "save" });
   const [cmdPaletteOpen, setCmdPaletteOpen] = useState(false);
+  const [orbitalNavOpen, setOrbitalNavOpen] = useState(false);
   const [heroHudVisible, setHeroHudVisible] = useState(true);
 
   const { design, sim, updateEngine, resetDesign, units, setUnits } = useDesign();
@@ -230,6 +232,7 @@ export function NeonHorizonShell() {
         stages={activeCategoryStages}
         activeStage={stage}
         onSelectStage={handleStageSelect}
+        onOpenOrbitalNav={() => setOrbitalNavOpen(true)}
       />
 
       {/* 4. Main Futuristic Viewport Body */}
@@ -408,6 +411,18 @@ export function NeonHorizonShell() {
       <ApexAIFloatingButton onOpenStudio={() => handleStageSelect("ai")} />
 
       {/* 8. Overlays & Dialogs */}
+      <NeonHorizonOrbitalStageNavigator
+        isOpen={orbitalNavOpen}
+        onClose={() => setOrbitalNavOpen(false)}
+        stages={STAGES}
+        activeStage={stage}
+        activeCategory={activeCategory}
+        onSelectStage={(st) => {
+          handleStageSelect(st);
+          setOrbitalNavOpen(false);
+        }}
+        onSelectCategory={handleCategorySelect}
+      />
       <NeonHorizonSaveDialog
         open={dialog.open}
         mode={dialog.mode}

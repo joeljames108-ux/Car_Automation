@@ -1,12 +1,12 @@
 {
-  "auditTimestamp": "2026-08-25T06:13:48.585Z",
+  "auditTimestamp": "2026-08-25T06:27:06.621Z",
   "projectName": "Modular glTF Vehicle Construction System & Car Automation Simulator",
   "rootDirectory": "C:\\Users\\joelj\\Downloads\\project-bolt-sb1-a1kjcyhr (3)\\project",
-  "totalSourceFiles": 1014,
-  "totalCodeLines": 202597,
-  "totalCommentLines": 15952,
-  "totalBlankLines": 23743,
-  "totalSizeBytes": 10287375,
+  "totalSourceFiles": 1015,
+  "totalCodeLines": 203455,
+  "totalCommentLines": 15975,
+  "totalBlankLines": 23799,
+  "totalSizeBytes": 10325284,
   "subsystemBreakdown": {
     "simulation_core": {
       "fileCount": 207,
@@ -20,13 +20,13 @@
     },
     "modular_vehicle": {
       "fileCount": 90,
-      "codeLines": 23260,
-      "sizeBytes": 1202917
+      "codeLines": 23306,
+      "sizeBytes": 1205477
     },
     "exterior_3d": {
       "fileCount": 207,
-      "codeLines": 34691,
-      "sizeBytes": 1675011
+      "codeLines": 35017,
+      "sizeBytes": 1689267
     },
     "rendering_engine": {
       "fileCount": 11,
@@ -44,9 +44,9 @@
       "sizeBytes": 183893
     },
     "ui_components": {
-      "fileCount": 311,
-      "codeLines": 66010,
-      "sizeBytes": 3288230
+      "fileCount": 312,
+      "codeLines": 66496,
+      "sizeBytes": 3309323
     },
     "asset_pipeline": {
       "fileCount": 0,
@@ -65,8 +65,8 @@
     }
   },
   "dependencyGraph": {
-    "totalNodes": 1014,
-    "totalEdges": 2409,
+    "totalNodes": 1015,
+    "totalEdges": 2412,
     "directAcyclicGraphValid": true,
     "cyclicDependencyPaths": [],
     "subsystemCouplingMatrix": {
@@ -162,14 +162,14 @@
         "documentation_audit": 0
       },
       "ui_components": {
-        "simulation_core": 233,
+        "simulation_core": 234,
         "engine_assembly": 8,
         "modular_vehicle": 13,
         "exterior_3d": 10,
         "rendering_engine": 10,
         "state_management": 145,
         "ai_agent_framework": 11,
-        "ui_components": 770,
+        "ui_components": 772,
         "asset_pipeline": 0,
         "testing_verification": 0,
         "documentation_audit": 0
@@ -306,11 +306,11 @@
       {
         "modulePath": "src/components/ui1/layout/NeonHorizonShell.tsx",
         "inDegree": 1,
-        "outDegree": 83
+        "outDegree": 84
       },
       {
         "modulePath": "src/utils/hmiSoundSynth.ts",
-        "inDegree": 77,
+        "inDegree": 78,
         "outDegree": 0
       },
       {
@@ -1838,11 +1838,11 @@
       },
       {
         "filePath": "src/components/ui1/stages/NeonHiggsfieldGlobe.tsx",
-        "lineCount": 601
+        "lineCount": 771
       },
       {
         "filePath": "src/components/ui1/stages/NeonHiggsfieldStudio.tsx",
-        "lineCount": 807
+        "lineCount": 935
       },
       {
         "filePath": "src/components/vehicleAssembly/aero/ParametricAerodynamicsStudio.tsx",
@@ -1850,7 +1850,7 @@
       },
       {
         "filePath": "src/components/vehicleAssembly/EngineAndCar3DGraphicsViewport.tsx",
-        "lineCount": 736
+        "lineCount": 790
       },
       {
         "filePath": "src/components/vehicleAssembly/exterior/ExteriorSVGCanvas.tsx",
@@ -1974,7 +1974,7 @@
       },
       {
         "filePath": "src/exterior3d/geometry/car3dGeometryGenerator.ts",
-        "lineCount": 570
+        "lineCount": 627
       },
       {
         "filePath": "src/exterior3d/manifests/chassis50Manifest.ts",

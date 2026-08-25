@@ -41,12 +41,72 @@ import {
 type StudioTab = "image" | "cinema" | "audio" | "marketing" | "batch" | "connect";
 
 const TABS: (GlobeTabDef & { id: StudioTab })[] = [
-  { id: "image", label: "Image Lab", icon: <ImageIcon size={13} />, lat: 22, lng: 0, hue: 199 },
-  { id: "cinema", label: "Cinema", icon: <Clapperboard size={13} />, lat: -18, lng: 62, hue: 262 },
-  { id: "audio", label: "Audio", icon: <Music4 size={13} />, lat: 38, lng: 128, hue: 158 },
-  { id: "marketing", label: "Marketing", icon: <Megaphone size={13} />, lat: -42, lng: 178, hue: 45 },
-  { id: "batch", label: "Supercomputer", icon: <Cpu size={13} />, lat: 8, lng: -115, hue: 350 },
-  { id: "connect", label: "Connect", icon: <Plug size={13} />, lat: -52, lng: -62, hue: 189 },
+  {
+    id: "image",
+    label: "Image Lab",
+    icon: <ImageIcon size={13} />,
+    lat: 0,
+    lng: 0,
+    hue: 199,
+    description: "Neural Diffusion & AI Studio Renders",
+    cardinal: "0°N, 0°E · PRIME FRONT",
+    side: "top-left",
+  },
+  {
+    id: "cinema",
+    label: "Cinema 4K",
+    icon: <Clapperboard size={13} />,
+    lat: 0,
+    lng: 90,
+    hue: 265,
+    description: "Cinematic Video & Camera Motion",
+    cardinal: "0°N, +90°E · EAST FLANK",
+    side: "right",
+  },
+  {
+    id: "audio",
+    label: "Audio Synth",
+    icon: <Music4 size={13} />,
+    lat: 0,
+    lng: 180,
+    hue: 155,
+    description: "Dynamic Soundtracks & Exhaust Audio",
+    cardinal: "0°N, 180°W · BACK ANTIPODE",
+    side: "top-right",
+  },
+  {
+    id: "marketing",
+    label: "Marketing",
+    icon: <Megaphone size={13} />,
+    lat: 0,
+    lng: -90,
+    hue: 45,
+    description: "Viral Campaigns & Launch Press",
+    cardinal: "0°N, -90°W · WEST FLANK",
+    side: "left",
+  },
+  {
+    id: "batch",
+    label: "Supercomputer",
+    icon: <Cpu size={13} />,
+    lat: 60,
+    lng: 0,
+    hue: 350,
+    description: "Multi-GPU Distributed Neural Batch",
+    cardinal: "+60°N, 0°E · NORTH POLE",
+    side: "top",
+  },
+  {
+    id: "connect",
+    label: "Neural Connect",
+    icon: <Plug size={13} />,
+    lat: -60,
+    lng: 0,
+    hue: 185,
+    description: "Live Webhooks & Engine Bridge",
+    cardinal: "-60°S, 0°E · SOUTH POLE",
+    side: "bottom",
+  },
 ];
 
 const IMAGE_STYLES = [
@@ -780,7 +840,7 @@ export function NeonHiggsfieldStudio() {
 
         <div
           key={tab}
-          className="nh-globe-content relative min-w-0"
+          className="nh-globe-content relative min-w-0 flex flex-col gap-3.5"
           style={{ ["--nh-transit" as any]: `${Math.round(transitMs * 0.62)}ms` }}
         >
           <div
@@ -793,6 +853,74 @@ export function NeonHiggsfieldStudio() {
               } 95% 70% / 0.95))`,
             }}
           />
+
+          {/* Active Station Orbital HUD Waypoint Bar */}
+          {(() => {
+            const curTab = TABS.find((t) => t.id === tab)!;
+            const curIdx = TABS.findIndex((t) => t.id === tab);
+            const prevTab = TABS[(curIdx - 1 + TABS.length) % TABS.length];
+            const nextTab = TABS[(curIdx + 1) % TABS.length];
+            const nHue = curTab.hue ?? 200;
+
+            return (
+              <div
+                className="flex items-center justify-between p-3.5 rounded-xl border backdrop-blur-md transition-all duration-300"
+                style={{
+                  background: `linear-gradient(135deg, rgba(15, 23, 42, 0.9), hsl(${nHue} 90% 40% / 0.1))`,
+                  borderColor: `hsl(${nHue} 90% 70% / 0.4)`,
+                  boxShadow: `0 4px 20px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.1)`,
+                }}
+              >
+                <div className="flex items-center gap-3">
+                  <div
+                    className="w-9 h-9 rounded-xl flex items-center justify-center shadow-lg"
+                    style={{
+                      background: `hsl(${nHue} 95% 60% / 0.25)`,
+                      color: `hsl(${nHue} 95% 80%)`,
+                      border: `1px solid hsl(${nHue} 90% 70% / 0.5)`,
+                    }}
+                  >
+                    {curTab.icon}
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm font-extrabold text-white tracking-wide">{curTab.label}</span>
+                      <span
+                        className="text-[9px] font-mono font-bold px-2 py-0.5 rounded-full uppercase"
+                        style={{
+                          background: `hsl(${nHue} 90% 60% / 0.18)`,
+                          color: `hsl(${nHue} 95% 80%)`,
+                          border: `1px solid hsl(${nHue} 90% 70% / 0.35)`,
+                        }}
+                      >
+                        {curTab.cardinal}
+                      </span>
+                    </div>
+                    <p className="text-[11px] text-slate-300 font-sans mt-0.5">{curTab.description}</p>
+                  </div>
+                </div>
+
+                {/* Fast Cycle Buttons */}
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => go(prevTab.id)}
+                    className="px-2.5 py-1 rounded-lg text-[10px] font-mono text-slate-300 hover:text-white bg-slate-950/80 hover:bg-slate-800 border border-white/10 transition-all flex items-center gap-1"
+                    title={`Rotate globe to ${prevTab.label}`}
+                  >
+                    ← {prevTab.label}
+                  </button>
+                  <button
+                    onClick={() => go(nextTab.id)}
+                    className="px-2.5 py-1 rounded-lg text-[10px] font-mono text-slate-300 hover:text-white bg-slate-950/80 hover:bg-slate-800 border border-white/10 transition-all flex items-center gap-1"
+                    title={`Rotate globe to ${nextTab.label}`}
+                  >
+                    {nextTab.label} →
+                  </button>
+                </div>
+              </div>
+            );
+          })()}
+
           {tab === "image" && <ImageLabTab />}
           {tab === "cinema" && <CinemaTab />}
           {tab === "audio" && <AudioTab />}
