@@ -250,3 +250,39 @@
 .animate-nh-float {
   animation: nh-float-slow 5s ease-in-out infinite;
 }
+
+@keyframes nh-spatial-reveal {
+  0% {
+    opacity: 0;
+    transform: scale(0.96) translateY(12px);
+    filter: blur(8px);
+  }
+  60% {
+    opacity: 1;
+    transform: scale(1.01) translateY(-2px);
+    filter: blur(0);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+    filter: blur(0);
+  }
+}
+
+.animate-nh-spatial-reveal {
+  animation: nh-spatial-reveal 0.55s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes nh-streamline-flow {
+  0% {
+    stroke-dashoffset: 200;
+  }
+  100% {
+    stroke-dashoffset: 0;
+  }
+}
+
+.animate-nh-streamline {
+  animation: nh-streamline-flow 1.5s linear infinite;
+}
+

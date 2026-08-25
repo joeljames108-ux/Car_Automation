@@ -104,6 +104,10 @@ import { NeonHiggsfieldStudio } from "../stages/NeonHiggsfieldStudio";
 import { NeonHorizonCommandPalette } from "../interactive/NeonHorizonCommandPalette";
 import { NeonHorizonSaveDialog } from "../interactive/NeonHorizonSaveDialog";
 import { NeonHorizonOrbitalStageNavigator } from "./NeonHorizonOrbitalStageNavigator";
+import { MasterSpatialNavGlobe, SPATIAL_SECTORS } from "../spatial/MasterSpatialNavGlobe";
+import { SpatialConstellationMap } from "../spatial/SpatialConstellationMap";
+import { SectorEntryAnimationLayer } from "../spatial/SectorEntryAnimationLayer";
+import { Globe, Orbit, Compass, LayoutGrid } from "lucide-react";
 import type { WorkspaceCategory } from "../../ui/UI1Layout";
 
 interface StageItem {
@@ -160,6 +164,7 @@ export function NeonHorizonShell() {
   const [dialog, setDialog] = useState<{ open: boolean; mode: "save" | "load" }>({ open: false, mode: "save" });
   const [cmdPaletteOpen, setCmdPaletteOpen] = useState(false);
   const [orbitalNavOpen, setOrbitalNavOpen] = useState(false);
+  const [spatialNavExpanded, setSpatialNavExpanded] = useState(false);
   const [heroHudVisible, setHeroHudVisible] = useState(true);
 
   const { design, sim, updateEngine, resetDesign, units, setUnits } = useDesign();
@@ -237,6 +242,126 @@ export function NeonHorizonShell() {
 
       {/* 4. Main Futuristic Viewport Body */}
       <main className="flex-1 max-w-full px-6 py-4 pb-36 flex flex-col gap-5 relative z-10">
+        {/* Dynamic Sector Entry Animation Layer */}
+        {(() => {
+          const activeSectorDef = SPATIAL_SECTORS.find((s) => s.id === stage) ?? SPATIAL_SECTORS[0];
+          return <SectorEntryAnimationLayer stage={stage} accentHue={activeSectorDef.hue} />;
+        })()}
+
+        {/* Master 3D Spatial Planetary Navigation Console */}
+        {(() => {
+          const activeSectorDef = SPATIAL_SECTORS.find((s) => s.id === stage) ?? SPATIAL_SECTORS[0];
+          const activeSectorHue = activeSectorDef.hue;
+
+          return (
+            <div className="relative rounded-3xl bg-slate-950/80 border border-white/12 shadow-[0_20px_50px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,255,255,0.1)] p-4 backdrop-blur-2xl transition-all duration-500 overflow-hidden">
+              {/* Header Bar with Mode Toggle */}
+              <div className="flex items-center justify-between flex-wrap gap-3 pb-3 border-b border-white/10 select-none">
+                <div className="flex items-center gap-3">
+                  <div
+                    className="w-8 h-8 rounded-xl flex items-center justify-center shadow-lg transition-transform duration-300"
+                    style={{
+                      background: `hsl(${activeSectorHue} 95% 60% / 0.25)`,
+                      color: `hsl(${activeSectorHue} 95% 80%)`,
+                      border: `1px solid hsl(${activeSectorHue} 90% 70% / 0.5)`,
+                    }}
+                  >
+                    {activeSectorDef.icon}
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm font-extrabold text-white tracking-wide">3D SPATIAL NAVIGATION HUB</span>
+                      <span
+                        className="text-[9px] font-mono font-bold px-2 py-0.5 rounded-full uppercase"
+                        style={{
+                          background: `hsl(${activeSectorHue} 90% 60% / 0.18)`,
+                          color: `hsl(${activeSectorHue} 95% 80%)`,
+                          border: `1px solid hsl(${activeSectorHue} 90% 70% / 0.35)`,
+                        }}
+                      >
+                        {activeSectorDef.cardinal}
+                      </span>
+                    </div>
+                    <p className="text-[11px] text-slate-400 font-sans">{activeSectorDef.description}</p>
+                  </div>
+                </div>
+
+                {/* View Mode Controls */}
+                <div className="flex items-center gap-2">
+                  <button
+                    onClick={() => setSpatialNavExpanded(!spatialNavExpanded)}
+                    className={`px-3 py-1.5 rounded-xl text-xs font-mono font-bold tracking-wider transition-all flex items-center gap-1.5 cursor-pointer border ${
+                      spatialNavExpanded
+                        ? "bg-sky-500/20 text-sky-300 border-sky-400/50 shadow-[0_0_15px_rgba(56,189,248,0.3)]"
+                        : "bg-white/5 text-slate-300 hover:text-white border-white/10 hover:bg-white/10"
+                    }`}
+                  >
+                    <Orbit size={13} className={spatialNavExpanded ? "animate-spin text-sky-400" : "text-slate-400"} />
+                    <span>{spatialNavExpanded ? "COLLAPSE SPHERE" : "EXPLORE 3D PLANETARY SPHERE"}</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* Expanded View: Full 3D Sphere & Constellation Radar */}
+              {spatialNavExpanded ? (
+                <div className="grid lg:grid-cols-[1fr_320px] gap-4 mt-4 animate-nh-materialize items-center">
+                  <MasterSpatialNavGlobe
+                    activeStage={stage}
+                    onSelectStage={handleStageSelect}
+                    isCompact={false}
+                  />
+                  <div className="flex flex-col gap-3">
+                    <SpatialConstellationMap
+                      activeStage={stage}
+                      onSelectStage={handleStageSelect}
+                      compact={false}
+                    />
+                  </div>
+                </div>
+              ) : (
+                /* Compact Spatial Ribbon: Quick Constellation Navigation */
+                <div className="flex items-center justify-between gap-3 mt-3 overflow-x-auto scrollbar-none py-1">
+                  <div className="flex items-center gap-2">
+                    {SPATIAL_SECTORS.map((sec) => {
+                      const isCurrent = stage === sec.id;
+                      const nHue = sec.hue;
+                      return (
+                        <button
+                          key={`quick-sec-${sec.id}`}
+                          onClick={() => handleStageSelect(sec.id)}
+                          className={`flex items-center gap-2 px-3 py-1.5 rounded-xl border text-xs font-mono font-bold tracking-wide transition-all cursor-pointer whitespace-nowrap ${
+                            isCurrent
+                              ? "text-white shadow-lg scale-105"
+                              : "text-slate-400 hover:text-slate-200 border-white/8 hover:bg-white/5"
+                          }`}
+                          style={
+                            isCurrent
+                              ? {
+                                  borderColor: `hsl(${nHue} 90% 70% / 0.7)`,
+                                  background: `hsl(${nHue} 90% 60% / 0.18)`,
+                                  boxShadow: `0 0 16px hsl(${nHue} 90% 60% / 0.25)`,
+                                }
+                              : undefined
+                          }
+                        >
+                          <span style={{ color: isCurrent ? `hsl(${nHue} 95% 80%)` : undefined }}>{sec.icon}</span>
+                          <span>{sec.label}</span>
+                          {isCurrent && <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />}
+                        </button>
+                      );
+                    })}
+                  </div>
+
+                  <div className="hidden xl:flex items-center gap-1.5 text-sky-400/70 font-mono text-[10px] uppercase font-bold shrink-0">
+                    <Compass size={11} className="animate-spin" />
+                    <span>SPATIAL MAPPING ACTIVE</span>
+                  </div>
+                </div>
+              )}
+            </div>
+          );
+        })()}
+
         {/* Hero 3D HUD (Rendered when in command or vehicle view) */}
         {(stage === "command" || stage === "vehicle" || stage === "aero") && (
           <div className="animate-nh-materialize">
