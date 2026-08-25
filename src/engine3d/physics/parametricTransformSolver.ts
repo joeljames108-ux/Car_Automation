@@ -49,22 +49,22 @@ export function solveParametricTransformForComponent(
   const primaryLen = engineConfig.exhaustPrimaryLength ?? BASELINE_ENGINE_SPECS.exhaustPrimaryLengthMm;
   const collectorDia = engineConfig.exhaustCollectorDia ?? BASELINE_ENGINE_SPECS.exhaustCollectorDiaMm;
 
-  // Normalized scaling factors (1.0 = baseline)
-  const boreScale = Math.max(0.75, Math.min(1.35, bore / BASELINE_ENGINE_SPECS.boreMm));
-  const strokeScale = Math.max(0.70, Math.min(1.40, stroke / BASELINE_ENGINE_SPECS.strokeMm));
-  const rodScale = Math.max(0.80, Math.min(1.25, rodLength / BASELINE_ENGINE_SPECS.rodLengthMm));
-  const compRatioScale = Math.max(0.85, Math.min(1.20, 1.0 + (cr - BASELINE_ENGINE_SPECS.compressionRatio) * 0.04));
-  const turboScale = Math.max(0.70, Math.min(1.50, 0.70 + turboSize * 0.40 + (boost / 3.0) * 0.30));
-  const radScale = Math.max(0.75, Math.min(1.30, 0.70 + rad * 0.375));
-  const exhaustLenScale = Math.max(0.80, Math.min(1.30, primaryLen / BASELINE_ENGINE_SPECS.exhaustPrimaryLengthMm));
-  const exhaustDiaScale = Math.max(0.80, Math.min(1.30, collectorDia / BASELINE_ENGINE_SPECS.exhaustCollectorDiaMm));
+  // Normalized scaling factors (1.0 = baseline: 88mm bore, 82mm stroke, 140mm rod)
+  const boreScale = Math.max(0.60, Math.min(1.50, bore / BASELINE_ENGINE_SPECS.boreMm));
+  const strokeScale = Math.max(0.60, Math.min(1.50, stroke / BASELINE_ENGINE_SPECS.strokeMm));
+  const rodScale = Math.max(0.70, Math.min(1.40, rodLength / BASELINE_ENGINE_SPECS.rodLengthMm));
+  const compRatioScale = Math.max(0.80, Math.min(1.30, 1.0 + (cr - BASELINE_ENGINE_SPECS.compressionRatio) * 0.04));
+  const turboScale = Math.max(0.60, Math.min(1.60, 0.70 + turboSize * 0.40 + (boost / 3.0) * 0.30));
+  const radScale = Math.max(0.70, Math.min(1.40, 0.70 + rad * 0.375));
+  const exhaustLenScale = Math.max(0.75, Math.min(1.40, primaryLen / BASELINE_ENGINE_SPECS.exhaustPrimaryLengthMm));
+  const exhaustDiaScale = Math.max(0.75, Math.min(1.40, collectorDia / BASELINE_ENGINE_SPECS.exhaustCollectorDiaMm));
 
   switch (type) {
     // ── 1. PISTONS (Bore diameter scales X & Z, Compression dome scales Y) ──
     case 'piston':
       return {
         scale: [boreScale, compRatioScale, boreScale],
-        positionOffset: [0, (strokeScale - 1.0) * 0.05 + (rodScale - 1.0) * 0.035, 0],
+        positionOffset: [0, (strokeScale - 1.0) * 0.055 + (rodScale - 1.0) * 0.035, 0],
       };
 
     // ── 2. CRANKSHAFT (Stroke length scales journal throw radius Y & Z, bore pitch scales X) ──

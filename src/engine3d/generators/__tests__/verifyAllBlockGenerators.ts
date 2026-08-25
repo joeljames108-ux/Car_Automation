@@ -15,6 +15,7 @@ import { buildWBlockScene } from '../wEngineBlockGenerator';
 import { buildRotaryBlockScene } from '../rotaryBlockGenerator';
 import { buildElectricDriveScene } from '../electricDriveGenerator';
 import { buildProceduralFallbackMesh } from '../../assets/glbAssetLoader';
+import { solveParametricTransformForComponent } from '../../physics/parametricTransformSolver';
 
 interface SceneAnalysis {
   name: string;
@@ -171,6 +172,49 @@ export function runAllBlockGeneratorTests(): boolean {
         allPassed = false;
       }
     }
+  }
+
+  console.log('\n================================================================');
+  console.log('TESTING DYNAMIC PARAMETRIC SIZING (BORE, STROKE & ROD LENGTH)');
+  console.log('================================================================\n');
+
+  // 1. Bore Scaling Verification (60mm -> 88mm baseline -> 110mm)
+  const smallBore = solveParametricTransformForComponent('engine-block', { bore: 65, stroke: 82, rodLength: 140 });
+  const baselineBore = solveParametricTransformForComponent('engine-block', { bore: 88, stroke: 82, rodLength: 140 });
+  const largeBore = solveParametricTransformForComponent('engine-block', { bore: 108, stroke: 82, rodLength: 140 });
+
+  if (smallBore.scale[2] < baselineBore.scale[2] && baselineBore.scale[2] < largeBore.scale[2]) {
+    console.log(`[PASS] Engine Block lateral width scales with bore diameter: [${smallBore.scale[2].toFixed(3)} -> ${baselineBore.scale[2].toFixed(3)} -> ${largeBore.scale[2].toFixed(3)}]`);
+  } else {
+    console.error(`[FAIL] Engine block bore lateral scaling failed!`);
+    allPassed = false;
+  }
+
+  // 2. Stroke Scaling Verification (Piston Travel & Deck Elevation)
+  const shortStroke = solveParametricTransformForComponent('cylinder-head-left', { bore: 88, stroke: 65, rodLength: 140 });
+  const baselineStroke = solveParametricTransformForComponent('cylinder-head-left', { bore: 88, stroke: 82, rodLength: 140 });
+  const longStroke = solveParametricTransformForComponent('cylinder-head-left', { bore: 88, stroke: 108, rodLength: 140 });
+
+  const shortY = shortStroke.positionOffset ? shortStroke.positionOffset[1] : 0;
+  const baseY = baselineStroke.positionOffset ? baselineStroke.positionOffset[1] : 0;
+  const longY = longStroke.positionOffset ? longStroke.positionOffset[1] : 0;
+
+  if (shortY < baseY && baseY < longY) {
+    console.log(`[PASS] Cylinder Head elevates dynamically with stroke length: [${shortY.toFixed(4)}m -> ${baseY.toFixed(4)}m -> ${longY.toFixed(4)}m]`);
+  } else {
+    console.error(`[FAIL] Cylinder head stroke elevation failed!`);
+    allPassed = false;
+  }
+
+  // 3. Piston Diameter & Crown Scaling
+  const smallPiston = solveParametricTransformForComponent('piston', { bore: 65, compressionRatio: 9.0 });
+  const largePiston = solveParametricTransformForComponent('piston', { bore: 105, compressionRatio: 13.5 });
+
+  if (smallPiston.scale[0] < largePiston.scale[0] && smallPiston.scale[1] < largePiston.scale[1]) {
+    console.log(`[PASS] Piston crown diameter and compression dome scale correctly with bore & CR: [BoreScale: ${smallPiston.scale[0].toFixed(2)}x -> ${largePiston.scale[0].toFixed(2)}x | Dome: ${smallPiston.scale[1].toFixed(2)}x -> ${largePiston.scale[1].toFixed(2)}x]`);
+  } else {
+    console.error(`[FAIL] Piston scaling failed!`);
+    allPassed = false;
   }
 
   console.log('\n================================================================');

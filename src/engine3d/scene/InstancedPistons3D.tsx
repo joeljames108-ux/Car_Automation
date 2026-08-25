@@ -28,10 +28,15 @@ export const InstancedPistons3D: React.FC = () => {
     if (!meshRef.current) return;
 
     const parametric = solveParametricTransformForComponent('piston', engineConfig || undefined);
+    const offset = parametric.positionOffset || [0, 0, 0];
 
     pistonInstances.forEach((piston, idx) => {
       const t = piston.transform;
-      dummy.position.set(t.position.x, t.position.y, t.position.z);
+      dummy.position.set(
+        t.position.x + offset[0],
+        t.position.y + offset[1],
+        t.position.z + offset[2]
+      );
       dummy.rotation.set(t.rotation.x, t.rotation.y, t.rotation.z);
       dummy.scale.set(
         t.scale.x * parametric.scale[0],

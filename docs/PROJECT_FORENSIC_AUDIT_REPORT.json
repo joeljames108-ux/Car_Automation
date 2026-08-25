@@ -1,12 +1,12 @@
 {
-  "auditTimestamp": "2026-08-25T06:04:07.202Z",
+  "auditTimestamp": "2026-08-25T06:13:48.585Z",
   "projectName": "Modular glTF Vehicle Construction System & Car Automation Simulator",
   "rootDirectory": "C:\\Users\\joelj\\Downloads\\project-bolt-sb1-a1kjcyhr (3)\\project",
   "totalSourceFiles": 1014,
-  "totalCodeLines": 202559,
-  "totalCommentLines": 15949,
-  "totalBlankLines": 23735,
-  "totalSizeBytes": 10284332,
+  "totalCodeLines": 202597,
+  "totalCommentLines": 15952,
+  "totalBlankLines": 23743,
+  "totalSizeBytes": 10287375,
   "subsystemBreakdown": {
     "simulation_core": {
       "fileCount": 207,
@@ -15,8 +15,8 @@
     },
     "engine_assembly": {
       "fileCount": 58,
-      "codeLines": 15121,
-      "sizeBytes": 736595
+      "codeLines": 15126,
+      "sizeBytes": 736758
     },
     "modular_vehicle": {
       "fileCount": 90,
@@ -55,8 +55,8 @@
     },
     "testing_verification": {
       "fileCount": 57,
-      "codeLines": 8414,
-      "sizeBytes": 431722
+      "codeLines": 8447,
+      "sizeBytes": 434602
     },
     "documentation_audit": {
       "fileCount": 10,
@@ -66,7 +66,7 @@
   },
   "dependencyGraph": {
     "totalNodes": 1014,
-    "totalEdges": 2408,
+    "totalEdges": 2409,
     "directAcyclicGraphValid": true,
     "cyclicDependencyPaths": [],
     "subsystemCouplingMatrix": {
@@ -189,7 +189,7 @@
       },
       "testing_verification": {
         "simulation_core": 184,
-        "engine_assembly": 7,
+        "engine_assembly": 8,
         "modular_vehicle": 10,
         "exterior_3d": 89,
         "rendering_engine": 0,
@@ -902,6 +902,11 @@
         "modulePath": "src/components/assembly/sounds.ts",
         "inDegree": 7,
         "outDegree": 1
+      },
+      {
+        "modulePath": "src/engine3d/generators/__tests__/verifyAllBlockGenerators.ts",
+        "inDegree": 0,
+        "outDegree": 8
       },
       {
         "modulePath": "src/exterior3d/generators/sculptedBodyPanelsGenerator.ts",
