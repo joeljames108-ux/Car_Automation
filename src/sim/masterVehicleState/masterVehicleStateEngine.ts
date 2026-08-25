@@ -31,18 +31,24 @@ export class MasterVehicleStateEngine {
    * (see src/sim/benchmarks/benchmarkCorrelationEngine.ts).
    */
   public static PERFORMANCE_CALIBRATION = {
-    muLong: { street_comfort: 0.9, ultra_high_performance: 1.3, track_r_compound: 1.37, racing_slick: 1.46 },
+    muLong: { street_comfort: 0.96, ultra_high_performance: 1.34, track_r_compound: 1.4, racing_slick: 1.46 },
     muLat: { street_comfort: 0.95, ultra_high_performance: 1.06, track_r_compound: 1.2, racing_slick: 1.38 },
     /** Engine-engagement / driver-reaction offset added to standing starts (s). */
-    engageOffsetSec: { manual: 0.26, torque_converter: 0.2, dual_clutch: 0.16, sequential: 0.18, ev: 0 },
+    engageOffsetSec: { manual: 0.26, torque_converter: 0.2, dual_clutch: 0.34, sequential: 0.26, ev: 0 },
     drivetrainEff: { ice: 0.85, hybrid: 0.89, ev: 0.92 },
-    deliveryFactor: { ice: 0.74, hybrid: 0.82, ev: 0.93 },
+    deliveryFactor: {
+      /** ICE delivery = clamp(iceBase + (Nm/HP)*iceTorqueSlope, iceMin, iceMax) */
+      iceBase: 0.58, iceTorqueSlope: 0.15, iceMin: 0.66, iceMax: 0.84,
+      hybrid: 0.76, ev: 0.9,
+    },
     /** Power available at the top-speed operating point (cooling drag, drivetrain rise). */
     vmaxPowerFactor: 0.89,
     crr: 0.012,
-    rolloutDiscountSec: 0.22,
+    rolloutDiscountSec: 0.16,
     shiftLossFactor: 0.6,
     brakeMuFactor: 1.12,
+    /** Drag-strip timing gear reads trap slightly below true exit speed. */
+    trapMeasurementFactor: 0.96,
     // Log-space least-squares regression vs published Nordschleife reference laps
     lap: {
       baseSpeed: 181.35, powerExp: 0.1181, gripExp: 0.2716, dfExp: 0.3372,
@@ -403,7 +409,7 @@ export class MasterVehicleStateEngine {
     }
     const isElectricVehicle =
       p.fuelType === "ev_800v" || p.engineType === "electric_dual_motor";
-    const isHybridVehicle = String(p.engineType).startsWith("hybrid") || p.fuelType === "e85_flex";
+    const isHybridVehicle = (p as { isHybrid?: boolean }).isHybrid === true || String(p.engineType).startsWith("hybrid");
     const computedTorqueNm = (effectiveHp * 7127) / Math.max(3000, p.redlineRpm * 0.75);
     const effectiveTorqueNm = p.peakTorqueNm > 0 ? Math.max(p.peakTorqueNm, computedTorqueNm) : computedTorqueNm;
 
@@ -468,8 +474,8 @@ export class MasterVehicleStateEngine {
     const coGHeight = (c as { coGHeightMm?: number }).coGHeightMm ?? 460;
     const hOverL = Math.min(0.28, coGHeight / Math.max(2200, c.wheelbaseMm));
     let drivenAxleFraction: number;
-    if (isElectricVehicle) drivenAxleFraction = 0.95;
-    else if (isAWD) drivenAxleFraction = Math.min(0.96, rearAxleFraction + 0.48);
+    if (isElectricVehicle) drivenAxleFraction = 0.88;
+    else if (isAWD) drivenAxleFraction = isHybridVehicle ? Math.min(0.88, rearAxleFraction + 0.32) : Math.min(0.96, rearAxleFraction + 0.5);
     else if (isFWD) drivenAxleFraction = Math.min(0.72, frontWeightRatio + tireGripCoeff * hOverL);
     else drivenAxleFraction = Math.min(0.95, rearAxleFraction + tireGripCoeff * hOverL);
 
@@ -484,9 +490,15 @@ export class MasterVehicleStateEngine {
 
     // Wheel power after drivetrain losses.
     // Top-speed operating point sustains near-peak power; standing-run average
-    // power is lower because the engine rarely operates at peak-power rpm.
+    // power scales with the engine's torque richness (Nm/HP) because flat,
+    // torquey curves spend more time near peak-power rpm during a run.
     const drivetrainEff = isElectricVehicle ? CAL.drivetrainEff.ev : isHybridVehicle ? CAL.drivetrainEff.hybrid : CAL.drivetrainEff.ice;
-    const deliveryFactor = isElectricVehicle ? CAL.deliveryFactor.ev : isHybridVehicle ? CAL.deliveryFactor.hybrid : CAL.deliveryFactor.ice;
+    const torqueRichness = p.peakTorqueNm > 0 ? p.peakTorqueNm / Math.max(1, effectiveHp) : 1.1;
+    const deliveryFactor = isElectricVehicle
+      ? CAL.deliveryFactor.ev
+      : isHybridVehicle
+        ? CAL.deliveryFactor.hybrid
+        : Math.min(CAL.deliveryFactor.iceMax, Math.max(CAL.deliveryFactor.iceMin, CAL.deliveryFactor.iceBase + torqueRichness * CAL.deliveryFactor.iceTorqueSlope));
     const wheelPowerW = effectiveHp * 745.7 * drivetrainEff;
     const accelPowerW = effectiveHp * 745.7 * drivetrainEff * deliveryFactor;
 
@@ -526,7 +538,6 @@ export class MasterVehicleStateEngine {
     const raw200 = integrateToSpeed(200 / 3.6);
     const zeroToTwoHundredSec = Number(Math.max(3.5,
       raw200 + engageOffsetSec + shiftLossSec(Math.max(0, shiftCountTo(55.56) - 1)) - rolloutDiscount).toFixed(2));
-
     // Top Speed solver: wheel power balance vs aero drag + rolling resistance
     const vmaxPowerW = wheelPowerW * CAL.vmaxPowerFactor;
     let vTop = Math.pow(vmaxPowerW / (0.5 * airDensity * Math.max(0.12, effCdA)), 1 / 3);
@@ -554,7 +565,7 @@ export class MasterVehicleStateEngine {
       qmTime += engageOffsetSec + shiftLossSec(Math.max(0, shiftCountTo(qmTrap / 3.6) - 1)) - rolloutDiscount;
     }
     const quarterMileSec = Number(Math.max(5, qmTime).toFixed(2));
-    const quarterMileTrapKmh = Math.min(topSpeedKmh, qmTrap);
+    const quarterMileTrapKmh = Math.min(topSpeedKmh, Math.round(qmTrap * CAL.trapMeasurementFactor));
 
     // Braking & Lateral Grip
     const brakePadCapG = w.brakeDiscType === "carbon_ceramic_matrix" ? 1.30 : w.brakeDiscType === "carbon_carbon_race" ? 1.45 : 1.15;

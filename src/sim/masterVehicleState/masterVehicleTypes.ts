@@ -167,6 +167,8 @@ export interface PowertrainSubsystemState {
   mountedCylinderHeads: boolean;
   mountedTurbos: boolean;
   mountedIntake: boolean;
+  /** Hybrid-electric assistance flag (affects power-delivery solver). */
+  isHybrid?: boolean;
 }
 
 export interface TransmissionSubsystemState {

@@ -84,7 +84,7 @@ function shiftTimeMsFor(car: RealCarSpec): number {
 function buildGearRatios(car: RealCarSpec): number[] {
   const n = Math.max(1, car.gearCount);
   const first = n <= 4 ? 3.2 : n <= 6 ? 3.7 : 4.0;
-  const top = n <= 4 ? 0.9 : n <= 6 ? 0.72 : 0.62;
+  const top = n <= 4 ? 0.95 : n <= 6 ? 0.78 : 0.66;
   const ratios: number[] = [];
   for (let i = 0; i < n; i++) {
     ratios.push(+(first * Math.pow(top / first, i / (n - 1 || 1))).toFixed(3));
@@ -119,7 +119,8 @@ export function mapRealCarToSimulatorState(car: RealCarSpec): MasterVehicleState
   const matGrade = car.tier >= 7 && !isEV ? "carbon_composite"
     : car.tier >= 4 ? "carbon_composite"
     : car.tier >= 2 ? "extruded_aluminum" : "chromoly";
-  const bodyPanelMass = matGrade === "carbon_composite" ? 75 : matGrade === "extruded_aluminum" ? 65 : 140;
+  // Must match the engines body-panel mass lookup (material -> kg)
+  const bodyPanelMass = matGrade === "carbon_composite" ? 75 : matGrade === "extruded_aluminum" ? 140 : 210;
   const isTrackPrep = car.tireCompound === "racing_slick" || car.tier >= 10;
   const electronicsMass = 5;
   const safetyMass = car.tier >= 7 ? 35 : car.tier >= 3 ? 20 : 8;
@@ -194,6 +195,7 @@ export function mapRealCarToSimulatorState(car: RealCarSpec): MasterVehicleState
       mountedCylinderHeads: true,
       mountedTurbos: !isEV && car.aspiration !== "NA",
       mountedIntake: true,
+      isHybrid: isHybrid,
     },
     transmission: {
       transmissionType: tt as MasterVehicleState['transmission']['transmissionType'],
