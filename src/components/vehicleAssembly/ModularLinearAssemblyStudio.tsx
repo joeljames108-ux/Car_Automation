@@ -66,7 +66,6 @@ import { WheelsAssemblyStage } from "./stages/WheelsAssemblyStage";
 import { BodyPanelsAssemblyStage } from "./stages/BodyPanelsAssemblyStage";
 import { GlassAssemblyStage } from "./stages/GlassAssemblyStage";
 import { InteriorAssemblyStage } from "./stages/InteriorAssemblyStage";
-import { ElectronicsAssemblyStage } from "./stages/ElectronicsAssemblyStage";
 import { FinalExteriorAssemblyStage } from "./stages/FinalExteriorAssemblyStage";
 import { VehicleCompletionStage } from "./stages/VehicleCompletionStage";
 import { ParametricAerodynamicsStudio } from "./aero/ParametricAerodynamicsStudio";
@@ -81,11 +80,10 @@ const STAGES: { id: AssemblyStageId; label: string; icon: any }[] = [
   { id: "wheels", label: "6. Wheels", icon: Disc },
   { id: "body_structure", label: "7. Body & Paint", icon: Car },
   { id: "glass", label: "8. Glass", icon: Sparkles },
-  { id: "interior", label: "9. Interior", icon: Sofa },
-  { id: "electronics", label: "10. Electronics", icon: Cpu },
-  { id: "final_exterior", label: "11. Details", icon: Flame },
-  { id: "aero_studio", label: "12. Aero Studio", icon: Wind },
-  { id: "complete", label: "13. Complete", icon: Trophy },
+  { id: "interior", label: "9. Interior & Electronics", icon: Sofa },
+  { id: "final_exterior", label: "10. Details", icon: Flame },
+  { id: "aero_studio", label: "11. Aero Studio", icon: Wind },
+  { id: "complete", label: "12. Complete", icon: Trophy },
 ];
 
 import { assemblyAudio } from "./utils/assemblyAudioEngine";
@@ -239,6 +237,9 @@ export const ModularLinearAssemblyStudio: React.FC = () => {
     setAssemblyState((prev) => {
       const nextStages = new Set(prev.installedStages);
       nextStages.add(stageId);
+      if (stageId === "interior") {
+        nextStages.add("electronics");
+      }
       const updated = { ...prev, installedStages: nextStages };
       history.pushState(updated);
       return updated;
@@ -682,13 +683,6 @@ export const ModularLinearAssemblyStudio: React.FC = () => {
                   return updated;
                 });
               }}
-              isInstalled={assemblyState.installedStages.has("interior")}
-              onInstall={() => handleInstallStage("interior")}
-            />
-          )}
-
-          {activeStage === "electronics" && (
-            <ElectronicsAssemblyStage
               electronicsType={assemblyState.electronicsType}
               onUpdateElectronics={(e) => {
                 setAssemblyState((prev) => {
@@ -705,8 +699,8 @@ export const ModularLinearAssemblyStudio: React.FC = () => {
                   return updated;
                 });
               }}
-              isInstalled={assemblyState.installedStages.has("electronics")}
-              onInstall={() => handleInstallStage("electronics")}
+              isInstalled={assemblyState.installedStages.has("interior")}
+              onInstall={() => handleInstallStage("interior")}
             />
           )}
 

@@ -175,19 +175,16 @@ export const VehicleConfigTree: React.FC<VehicleConfigTreeProps> = ({
     },
     {
       id: "interior",
-      name: "Cockpit, Yoke & Carbon Buckets",
-      category: "Cockpit",
+      name: "Cockpit Interior & Electronics Suite",
+      category: "Cockpit & Electrical",
       icon: Sofa,
-      massKg: 28,
+      massKg: 46,
       status: installedStages.has("interior") ? "INSTALLED" : "UNINSTALLED",
-    },
-    {
-      id: "electronics",
-      name: "Motorsport ECU & 800V Harness",
-      category: "Electrical",
-      icon: Cpu,
-      massKg: 18,
-      status: installedStages.has("electronics") ? "INSTALLED" : "UNINSTALLED",
+      children: [
+        { id: "int_seating", name: "FIA Carbon Buckets & Steering Yoke", info: "6-Point Racing Harnesses" },
+        { id: "int_ecu", name: "Bosch MS6 ECU & Raychem Looms", info: "CAN-FD / 800V SiC Power Architecture" },
+        { id: "int_cluster", name: "Digital MoTeC Telemetry Display", info: "OLED Real-Time CAN Bus Stream" },
+      ],
     },
     {
       id: "final_exterior",
