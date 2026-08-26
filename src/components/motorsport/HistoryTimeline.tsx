@@ -1,12 +1,12 @@
 // ===================================================================
 // HISTORY TIMELINE — Vertical timeline layout for season history
 // ===================================================================
-import { useState } from "react";
+import { useState, memo } from "react";
 import { Clock, Trophy, ChevronDown, ChevronUp } from "lucide-react";
 import { CATEGORY_LABELS, CATEGORY_COLORS } from "./TeamCard";
 import type { MotorsportTeam } from "../../sim/types";
 
-export function HistoryTimeline({ selectedTeam }: { selectedTeam: MotorsportTeam | null }) {
+export const HistoryTimeline = memo(function HistoryTimeline({ selectedTeam }: { selectedTeam: MotorsportTeam | null }) {
   const [expandedSeason, setExpandedSeason] = useState<number | null>(null);
 
   if (!selectedTeam || selectedTeam.seasonResults.length === 0) {
@@ -142,4 +142,5 @@ export function HistoryTimeline({ selectedTeam }: { selectedTeam: MotorsportTeam
       </div>
     </div>
   );
-}
+});
+

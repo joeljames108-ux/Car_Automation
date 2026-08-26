@@ -1,7 +1,7 @@
 // ===================================================================
 // ANALYTICS PANEL — Charts, driver comparison, team overview
 // ===================================================================
-import { useMemo } from "react";
+import { useMemo, memo } from "react";
 import { TrendingUp, Users, BarChart3 } from "lucide-react";
 import { useCompany } from "../../state/CompanyContext";
 import { LineChart } from "../ui/LineChart";
@@ -9,7 +9,7 @@ import { DonutChart } from "../ui/Charts";
 import { FACILITY_COLORS } from "./TeamCard";
 import type { MotorsportTeam } from "../../sim/types";
 
-function RadarChart({ stats, size = 120 }: { stats: { label: string; value: number; color: string }[]; size?: number }) {
+const RadarChart = memo(function RadarChart({ stats, size = 120 }: { stats: { label: string; value: number; color: string }[]; size?: number }) {
   const cx = size / 2, cy = size / 2, r = size / 2 - 20;
   const n = stats.length;
   const points = stats.map((s, i) => {
@@ -23,18 +23,24 @@ function RadarChart({ stats, size = 120 }: { stats: { label: string; value: numb
   });
   const labelPoints = stats.map((_, i) => {
     const angle = (Math.PI * 2 * i) / n - Math.PI / 2;
-    return { x: cx + (r + 14) * Math.cos(angle), y: cy + (r + 14) * Math.sin(angle) };
+    const labelDist = r + 12;
+    return { x: cx + labelDist * Math.cos(angle), y: cy + labelDist * Math.sin(angle) };
   });
 
   return (
-    <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
-      {/* Grid rings */}
-      {[0.25, 0.5, 0.75, 1].map(scale => (
+    <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} className="shrink-0">
+      {/* Background web */}
+      <polygon points={bgPoints.map(p => `${p.x},${p.y}`).join(" ")}
+        fill="none" stroke="#1e293b" strokeWidth="0.5" />
+      {[0.25, 0.5, 0.75].map(scale => (
         <polygon key={scale}
-          points={bgPoints.map(p => `${cx + (p.x - cx) * scale},${cy + (p.y - cy) * scale}`).join(" ")}
-          fill="none" stroke="#1e293b" strokeWidth="0.5" />
+          points={stats.map((_, i) => {
+            const a = (Math.PI * 2 * i) / n - Math.PI / 2;
+            return `${cx + r * scale * Math.cos(a)},${cy + r * scale * Math.sin(a)}`;
+          }).join(" ")}
+          fill="none" stroke="#0f172a" strokeWidth="0.5" />
       ))}
-      {/* Axes */}
+      {/* Axis lines */}
       {bgPoints.map((p, i) => (
         <line key={i} x1={cx} y1={cy} x2={p.x} y2={p.y} stroke="#1e293b" strokeWidth="0.5" />
       ))}
@@ -54,9 +60,9 @@ function RadarChart({ stats, size = 120 }: { stats: { label: string; value: numb
       ))}
     </svg>
   );
-}
+});
 
-export function AnalyticsPanel({ selectedTeam }: { selectedTeam: MotorsportTeam | null }) {
+export const AnalyticsPanel = memo(function AnalyticsPanel({ selectedTeam }: { selectedTeam: MotorsportTeam | null }) {
   const { company } = useCompany();
 
   const pointsSeries = useMemo(() => {
@@ -206,4 +212,5 @@ export function AnalyticsPanel({ selectedTeam }: { selectedTeam: MotorsportTeam 
       </div>
     </div>
   );
-}
+});
+

@@ -50,7 +50,14 @@ export function CFDView({ aero, dragCoeff, liftCoeff, downforce, className = "" 
   const animRef = useRef<number>(0);
   const particlesRef = useRef<Particle[]>([]);
   const frameRef = useRef(0);
+  const cameraAngleRef = useRef(0);
+  const simProgressRef = useRef(0);
+  const lastStateUpdateRef = useRef(0);
   const dragRef = useRef({ x: 0, y: 0, dragging: false, lastX: 0, lastY: 0 });
+
+  // Sync refs with state
+  useEffect(() => { cameraAngleRef.current = cameraAngle; }, [cameraAngle]);
+  useEffect(() => { simProgressRef.current = simProgress; }, [simProgress]);
 
   // Car profile points (side silhouette of a sports car)
   const carProfile = useMemo(() => buildCarProfile(aero), [aero]);
@@ -64,7 +71,7 @@ export function CFDView({ aero, dragCoeff, liftCoeff, downforce, className = "" 
     particlesRef.current = ps;
   }, []);
 
-  // Run simulation animation
+  // Run simulation animation (Optimized 60 FPS Canvas Render Loop)
   useEffect(() => {
     if (!playing) return;
     const canvas = canvasRef.current;
@@ -74,27 +81,34 @@ export function CFDView({ aero, dragCoeff, liftCoeff, downforce, className = "" 
 
     const render = () => {
       frameRef.current++;
+      const now = performance.now();
+
+      if (autoRotate) {
+        cameraAngleRef.current += 0.4;
+      }
+
+      const activeAngle = cameraAngleRef.current;
+
       drawScene(ctx, {
         mode, aero, carProfile, particles: particlesRef.current,
         frame: frameRef.current, speed, showVectors, showGrid, showCar,
-        cutaway, cameraAngle, zoom, airSpeed,
+        cutaway, cameraAngle: activeAngle, zoom, airSpeed,
         dragCoeff, liftCoeff, downforce, sim,
       });
-      if (simRunning && simProgress < 100) {
-        setSimProgress((p) => Math.min(100, p + speed * 0.8));
+
+      if (simRunning && simProgressRef.current < 100) {
+        simProgressRef.current = Math.min(100, simProgressRef.current + speed * 0.8);
+        if (now - lastStateUpdateRef.current > 200 || simProgressRef.current >= 100) {
+          lastStateUpdateRef.current = now;
+          setSimProgress(Math.round(simProgressRef.current));
+        }
       }
+
       animRef.current = requestAnimationFrame(render);
     };
     animRef.current = requestAnimationFrame(render);
     return () => cancelAnimationFrame(animRef.current);
-  }, [playing, mode, aero, carProfile, speed, showVectors, showGrid, showCar, cutaway, cameraAngle, zoom, airSpeed, dragCoeff, liftCoeff, downforce, sim, simRunning, simProgress]);
-
-  // Auto-rotate
-  useEffect(() => {
-    if (!autoRotate) return;
-    const t = setInterval(() => setCameraAngle((a) => a + 0.5), 50);
-    return () => clearInterval(t);
-  }, [autoRotate]);
+  }, [playing, mode, aero, carProfile, speed, showVectors, showGrid, showCar, cutaway, autoRotate, zoom, airSpeed, dragCoeff, liftCoeff, downforce, sim, simRunning]);
 
   // Mouse drag for camera
   const onMouseDown = useCallback((e: React.MouseEvent) => {

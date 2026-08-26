@@ -1,13 +1,13 @@
 // ===================================================================
 // SEASON SIMULATOR — Simulate championship with animated results
 // ===================================================================
-import { useState } from "react";
+import { useState, memo } from "react";
 import { Play, Zap, Gauge, TrendingUp, Shield, AlertTriangle, Trophy, Medal } from "lucide-react";
 import { useCompany } from "../../state/CompanyContext";
 import { useDesign } from "../../state/DesignContext";
 import { CATEGORY_LABELS, CATEGORY_COLORS } from "./TeamCard";
 
-export function SeasonSimulator() {
+function SeasonSimulatorComponent() {
   const { company, simulateMotorsportSeason } = useCompany();
   const { sim } = useDesign();
   const [showResultsModal, setShowResultsModal] = useState(false);
@@ -270,3 +270,6 @@ export function SeasonSimulator() {
     </div>
   );
 }
+
+export const SeasonSimulator = memo(SeasonSimulatorComponent);
+

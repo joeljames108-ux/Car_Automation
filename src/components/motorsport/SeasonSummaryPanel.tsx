@@ -1,11 +1,12 @@
 // ===================================================================
 // SEASON SUMMARY PANEL — Official Championship Results Showcase
 // ===================================================================
+import { memo } from "react";
 import { Trophy, Award, Medal, Flag, Zap, TrendingUp } from "lucide-react";
 import { useCompany } from "../../state/CompanyContext";
 import { CATEGORY_LABELS, CATEGORY_COLORS } from "./TeamCard";
 
-export function SeasonSummaryPanel() {
+export const SeasonSummaryPanel = memo(function SeasonSummaryPanel() {
   const { company } = useCompany();
 
   return (
@@ -106,4 +107,5 @@ export function SeasonSummaryPanel() {
       </div>
     </div>
   );
-}
+});
+

@@ -6,7 +6,7 @@
 // in a responsive multi-column layout with warm amber theme.
 // ============================================================================
 
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, memo } from 'react';
 import { LiveTelemetrySimulator, TelemetryFrame } from '../../sim/telemetry/liveTelemetrySimulator';
 import { PacejkaTireModel, TIRE_COMPOUNDS } from '../../sim/tires/pacejkaTireModel';
 import { RaceWeatherSystem, WeatherState } from '../../sim/weather/raceWeatherSystem';
@@ -25,7 +25,7 @@ interface RaceEngineeringDashboardProps {
 
 type DashboardTab = 'overview' | 'telemetry' | 'strategy' | 'tires' | 'weather' | 'engineer';
 
-export const RaceEngineeringDashboard: React.FC<RaceEngineeringDashboardProps> = ({
+export const RaceEngineeringDashboard: React.FC<RaceEngineeringDashboardProps> = memo(({
   className = 'w-full min-h-screen',
 }) => {
   const [activeTab, setActiveTab] = useState<DashboardTab>('overview');
@@ -75,6 +75,7 @@ export const RaceEngineeringDashboard: React.FC<RaceEngineeringDashboardProps> =
   useEffect(() => {
     if (!isRunning) return;
     const interval = setInterval(() => {
+      if (document.hidden) return;
       setRaceTime(t => t + 1);
       const lapProgress = (raceTime % 90) / 90;
 
@@ -541,4 +542,5 @@ export const RaceEngineeringDashboard: React.FC<RaceEngineeringDashboardProps> =
       </div>
     </div>
   );
-};
+});
+

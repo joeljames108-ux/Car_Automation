@@ -1,4 +1,4 @@
-import { useState, useId, useEffect, useRef } from "react";
+import { useState, useId, useEffect, useRef, memo } from "react";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { Plus, Minus, Zap, Scale, Wind, Info, ArrowRight, Box, Eye } from "lucide-react";
@@ -15,7 +15,7 @@ interface ModernAnalogDialProps {
   ticks?: (string | number)[];
 }
 
-export function ModernAnalogDial({
+function ModernAnalogDialComponent({
   title = "AERODYNAMIC PROFILE",
   value = 19,
   min = 0,
@@ -514,4 +514,6 @@ export function ModernAnalogDial({
     </div>
   );
 }
+
+export const ModernAnalogDial = memo(ModernAnalogDialComponent);
 

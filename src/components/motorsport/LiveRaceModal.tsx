@@ -1,6 +1,7 @@
 // ===================================================================
 // LIVE RACE MODAL — Telemetry Loop, Leaderboard, Diagrams & Radio Feed
 // ===================================================================
+import { memo } from "react";
 import { Radio, Trophy, Play, SkipForward, CheckCircle } from "lucide-react";
 import { CircuitDiagram, TelemetryGraph, SectorTimesBarChart, CarSilhouetteDiagram } from "../ui/Charts";
 import type { SimResult } from "../../sim/types";
@@ -25,7 +26,7 @@ interface LiveRaceModalProps {
   onClose: () => void;
 }
 
-export function LiveRaceModal({ isOpen, state, sim, onStepLap, onFinishRace, onClose }: LiveRaceModalProps) {
+export const LiveRaceModal = memo(function LiveRaceModal({ isOpen, state, sim, onStepLap, onFinishRace, onClose }: LiveRaceModalProps) {
   if (!isOpen || !state) return null;
 
   return (
@@ -171,4 +172,5 @@ export function LiveRaceModal({ isOpen, state, sim, onStepLap, onFinishRace, onC
       </div>
     </div>
   );
-}
+});
+

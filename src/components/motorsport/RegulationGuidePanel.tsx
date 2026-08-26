@@ -1,7 +1,7 @@
 // ===================================================================
 // REGULATION GUIDE PANEL — Guides, Series Rules, Technical Compliance
 // ===================================================================
-import { useState, useMemo } from "react";
+import { useState, useMemo, memo } from "react";
 import { BookOpen, Star, Target, Shield, CheckCircle, XCircle, Info, ChevronRight, Award, AlertTriangle, Settings } from "lucide-react";
 import { CATEGORY_REGULATIONS, CATEGORY_GUIDES, evaluateCompliance } from "../../sim/motorsportEngine";
 import { CATEGORY_LABELS, CATEGORY_COLORS } from "./TeamCard";
@@ -10,7 +10,7 @@ import type { MotorsportCategory } from "../../sim/types";
 
 const DIFFICULTY_LABELS = ["", "Beginner", "Easy", "Moderate", "Hard", "Expert"];
 
-function DifficultyStars({ value }: { value: number }) {
+const DifficultyStars = memo(function DifficultyStars({ value }: { value: number }) {
   return (
     <div className="flex gap-0.5">
       {[1, 2, 3, 4, 5].map(i => (
@@ -18,9 +18,9 @@ function DifficultyStars({ value }: { value: number }) {
       ))}
     </div>
   );
-}
+});
 
-export function RegulationGuidePanel() {
+export const RegulationGuidePanel = memo(function RegulationGuidePanel() {
   const { sim, design } = useDesign();
   const [guideCategory, setGuideCategory] = useState<MotorsportCategory>("gt");
 
@@ -192,4 +192,5 @@ export function RegulationGuidePanel() {
       </div>
     </div>
   );
-}
+});
+

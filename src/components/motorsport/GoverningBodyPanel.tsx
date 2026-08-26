@@ -1,13 +1,13 @@
 // ===================================================================
 // GOVERNING BODY PANEL — Technical Directives, BoP & Regulatory Rules
 // ===================================================================
-import { useState } from "react";
+import { useState, memo } from "react";
 import { Building2, Gavel, Shield, Zap, Gauge, Scale, AlertCircle } from "lucide-react";
 import { CATEGORY_REGULATIONS } from "../../sim/motorsportEngine";
 import { CATEGORY_LABELS, CATEGORY_COLORS } from "./TeamCard";
 import type { MotorsportCategory } from "../../sim/types";
 
-export function GoverningBodyPanel() {
+export const GoverningBodyPanel = memo(function GoverningBodyPanel() {
   const [selectedCategory, setSelectedCategory] = useState<MotorsportCategory>("gt");
   const reg = CATEGORY_REGULATIONS[selectedCategory];
 
@@ -111,4 +111,5 @@ export function GoverningBodyPanel() {
       </div>
     </div>
   );
-}
+});
+

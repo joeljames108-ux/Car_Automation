@@ -1,6 +1,7 @@
 // ===================================================================
 // TEAM CARD — Individual team display with glassmorphism + animations
 // ===================================================================
+import React, { memo } from "react";
 import { Trophy } from "lucide-react";
 import type { MotorsportTeam, MotorsportCategory, FacilityLevel } from "../../sim/types";
 
@@ -37,7 +38,7 @@ const FACILITY_COLORS: Record<FacilityLevel, string> = {
   advanced: "text-purple-400", elite: "text-yellow-400",
 };
 
-function MoraleBar({ value }: { value: number }) {
+const MoraleBar = memo(function MoraleBar({ value }: { value: number }) {
   const color = value > 75 ? "bg-ok-400" : value > 45 ? "bg-warn-400" : "bg-danger-400";
   return (
     <div className="flex items-center gap-2">
@@ -47,9 +48,9 @@ function MoraleBar({ value }: { value: number }) {
       <span className="text-[10px] font-mono text-slate-400 w-8 text-right">{value}%</span>
     </div>
   );
-}
+});
 
-function SkillRadar({ driver }: { driver: { skill: number; consistency: number; wetSkill: number; aggression: number; experience: number } }) {
+const SkillRadar = memo(function SkillRadar({ driver }: { driver: { skill: number; consistency: number; wetSkill: number; aggression: number; experience: number } }) {
   const stats = [driver.skill, driver.consistency, driver.wetSkill, driver.aggression, driver.experience];
   const cx = 24, cy = 24, r = 18;
   const points = stats.map((v, i) => {
@@ -68,11 +69,11 @@ function SkillRadar({ driver }: { driver: { skill: number; consistency: number; 
       <polygon points={points} fill="rgba(34,211,238,0.15)" stroke="#22d3ee" strokeWidth="1" />
     </svg>
   );
-}
+});
 
 export { CATEGORY_LABELS, CATEGORY_COLORS, CATEGORY_GRADIENTS, STATUS_COLORS, FACILITY_COLORS };
 
-export function TeamCard({ team, onSelect, isSelected }: {
+function TeamCardComponent({ team, onSelect, isSelected }: {
   team: MotorsportTeam; onSelect: () => void; isSelected: boolean;
 }) {
   const lastSeason = team.seasonResults[team.seasonResults.length - 1];
@@ -184,3 +185,6 @@ export function TeamCard({ team, onSelect, isSelected }: {
     </div>
   );
 }
+
+export const TeamCard = memo(TeamCardComponent);
+

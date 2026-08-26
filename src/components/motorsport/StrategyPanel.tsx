@@ -1,6 +1,7 @@
 // ===================================================================
 // STRATEGY PANEL — Race strategy configurator
 // ===================================================================
+import { memo } from "react";
 import { Settings, Fuel, Droplets } from "lucide-react";
 import { useCompany } from "../../state/CompanyContext";
 import { CATEGORY_COLORS, CATEGORY_LABELS } from "./TeamCard";
@@ -14,7 +15,7 @@ const TIRE_LABELS: Record<TireChoice, string> = {
   soft: "S", medium: "M", hard: "H", intermediate: "I", wet: "W",
 };
 
-function TireBadge({ tire, active, onClick }: { tire: TireChoice; active: boolean; onClick: () => void }) {
+const TireBadge = memo(function TireBadge({ tire, active, onClick }: { tire: TireChoice; active: boolean; onClick: () => void }) {
   return (
     <button onClick={onClick}
       className={`w-8 h-8 rounded-full flex items-center justify-center text-[10px] font-bold transition-all border-2 ${
@@ -24,9 +25,9 @@ function TireBadge({ tire, active, onClick }: { tire: TireChoice; active: boolea
       {TIRE_LABELS[tire]}
     </button>
   );
-}
+});
 
-export function StrategyPanel({ selectedTeam }: { selectedTeam: MotorsportTeam | null }) {
+export const StrategyPanel = memo(function StrategyPanel({ selectedTeam }: { selectedTeam: MotorsportTeam | null }) {
   const { company, updateStrategy } = useCompany();
 
   if (company.motorsport.teams.length === 0) {
@@ -276,4 +277,5 @@ export function StrategyPanel({ selectedTeam }: { selectedTeam: MotorsportTeam |
       </div>
     </div>
   );
-}
+});
+

@@ -1,7 +1,7 @@
 // ===================================================================
 // POLITICAL VOTING PANEL — World Motorsport Council Votes
 // ===================================================================
-import { useState } from "react";
+import { useState, memo } from "react";
 import { Gavel, Check, X, ThumbsUp, ThumbsDown, Vote } from "lucide-react";
 
 interface PoliticalMotion {
@@ -21,7 +21,7 @@ const DEFAULT_MOTIONS: PoliticalMotion[] = [
   { id: "v4", title: "Compulsory Sustainable E-Fuel 100%", desc: "Mandate 100% synthetic advanced biofuels, requiring complete combustion chamber redesigns.", effect: "Reduces engine emissions footprint to zero, thermal efficiency delta +5%.", votesFor: 7, votesAgainst: 3, userVote: null },
 ];
 
-export function PoliticalVotingPanel() {
+export const PoliticalVotingPanel = memo(function PoliticalVotingPanel() {
   const [motions, setMotions] = useState<PoliticalMotion[]>(DEFAULT_MOTIONS);
 
   const handleVote = (id: string, choice: "for" | "against") => {
@@ -119,4 +119,5 @@ export function PoliticalVotingPanel() {
       </div>
     </div>
   );
-}
+});
+

@@ -1,13 +1,13 @@
 // ===================================================================
 // CREATE TEAM FORM — Multi-step team creation wizard
 // ===================================================================
-import { useState } from "react";
+import { useState, memo } from "react";
 import { Plus, ChevronRight } from "lucide-react";
 import { useCompany } from "../../state/CompanyContext";
 import { CATEGORY_LABELS, CATEGORY_COLORS } from "./TeamCard";
 import type { MotorsportCategory } from "../../sim/types";
 
-export function CreateTeamForm({ onClose }: { onClose: () => void }) {
+export const CreateTeamForm = memo(function CreateTeamForm({ onClose }: { onClose: () => void }) {
   const { createMotorsportTeam, company } = useCompany();
   const [step, setStep] = useState(0);
   const [form, setForm] = useState({
@@ -139,4 +139,5 @@ export function CreateTeamForm({ onClose }: { onClose: () => void }) {
       </div>
     </div>
   );
-}
+});
+

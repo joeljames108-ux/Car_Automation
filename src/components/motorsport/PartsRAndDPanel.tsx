@@ -1,7 +1,7 @@
 // ===================================================================
 // PARTS R&D PANEL — Component Engineering & High-Risk Breakthroughs
 // ===================================================================
-import { useState } from "react";
+import { useState, memo } from "react";
 import { Wrench, Zap, Shield, AlertTriangle, CheckCircle, Clock, Flame } from "lucide-react";
 import { useCompany } from "../../state/CompanyContext";
 import type { MotorsportTeam } from "../../sim/types";
@@ -27,7 +27,7 @@ const DEFAULT_PARTS: MotorsportPart[] = [
   { id: "p6", name: "Titanium Matrix Exhaust Blown Diffuser", category: "Aerodynamics", paceGain: 28, reliabilityDelta: -12, cost: 7_800_000, riskPenalty: "HIGH RISK (45% FIA Ban Warning)", isIllegal: true, status: "Available" },
 ];
 
-export function PartsRAndDPanel({ selectedTeam }: { selectedTeam: MotorsportTeam | null }) {
+export const PartsRAndDPanel = memo(function PartsRAndDPanel({ selectedTeam }: { selectedTeam: MotorsportTeam | null }) {
   const { company } = useCompany();
   const [parts, setParts] = useState<MotorsportPart[]>(DEFAULT_PARTS);
 
@@ -129,4 +129,5 @@ export function PartsRAndDPanel({ selectedTeam }: { selectedTeam: MotorsportTeam
       </div>
     </div>
   );
-}
+});
+

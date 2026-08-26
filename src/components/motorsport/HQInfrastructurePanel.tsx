@@ -1,7 +1,7 @@
 // ===================================================================
 // HQ INFRASTRUCTURE PANEL — R&D Facilities & Headquarters Upgrades
 // ===================================================================
-import { useState } from "react";
+import { useState, memo } from "react";
 import { Building2, Zap, Wind, Cpu, Gauge, Users, Wrench, Shield, CheckCircle } from "lucide-react";
 import { useCompany } from "../../state/CompanyContext";
 import type { MotorsportTeam } from "../../sim/types";
@@ -17,7 +17,7 @@ const DEFAULT_BUILDINGS = [
   { id: "staff_lounge", name: "Staff Facilities & Lounge", level: 2, maxLevel: 5, desc: "+10 Team morale & lower salary demands", effect: "Pit crew retention +20%", cost: 4_000_000, icon: <Shield size={16} className="text-teal-400" /> },
 ];
 
-export function HQInfrastructurePanel({ selectedTeam }: { selectedTeam: MotorsportTeam | null }) {
+export const HQInfrastructurePanel = memo(function HQInfrastructurePanel({ selectedTeam }: { selectedTeam: MotorsportTeam | null }) {
   const { company } = useCompany();
   const [buildings, setBuildings] = useState(DEFAULT_BUILDINGS);
   const [upgradedId, setUpgradedId] = useState<string | null>(null);
@@ -117,4 +117,5 @@ export function HQInfrastructurePanel({ selectedTeam }: { selectedTeam: Motorspo
       </div>
     </div>
   );
-}
+});
+

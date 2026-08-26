@@ -1,14 +1,14 @@
 // ===================================================================
 // CALENDAR VIEW PANEL — Official Championship Calendar & Circuits
 // ===================================================================
-import { useState } from "react";
+import { useState, memo } from "react";
 import { Calendar, Flag, CheckCircle, Navigation, MapPin } from "lucide-react";
 import { getSeasonCalendar } from "../../sim/motorsportEngine";
 import { CATEGORY_LABELS, CATEGORY_COLORS } from "./TeamCard";
 import { TRACKS } from "../../sim/constants";
 import type { MotorsportCategory } from "../../sim/types";
 
-export function CalendarViewPanel() {
+export const CalendarViewPanel = memo(function CalendarViewPanel() {
   const [selectedCategory, setSelectedCategory] = useState<MotorsportCategory>("gt");
   const calendar = getSeasonCalendar(selectedCategory);
 
@@ -107,4 +107,5 @@ export function CalendarViewPanel() {
       </div>
     </div>
   );
-}
+});
+

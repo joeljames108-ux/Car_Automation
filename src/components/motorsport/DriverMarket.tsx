@@ -1,12 +1,12 @@
 // ===================================================================
 // DRIVER MARKET — Browse, scout, hire, manage contracts
 // ===================================================================
-import { useState } from "react";
+import { useState, memo } from "react";
 import { Users, Search, UserPlus, UserMinus, RefreshCw } from "lucide-react";
 import { useCompany } from "../../state/CompanyContext";
 import type { MotorsportTeam, RaceDriver } from "../../sim/types";
 
-function SkillBar({ label, value, color }: { label: string; value: number; color: string }) {
+const SkillBar = memo(function SkillBar({ label, value, color }: { label: string; value: number; color: string }) {
   return (
     <div>
       <div className="flex justify-between text-[10px] mb-0.5">
@@ -18,9 +18,9 @@ function SkillBar({ label, value, color }: { label: string; value: number; color
       </div>
     </div>
   );
-}
+});
 
-function DriverCard({ driver, actions }: { driver: RaceDriver; actions: React.ReactNode }) {
+const DriverCard = memo(function DriverCard({ driver, actions }: { driver: RaceDriver; actions: React.ReactNode }) {
   return (
     <div className="glass-panel p-3 card-hover">
       <div className="flex items-start gap-3">
@@ -50,9 +50,9 @@ function DriverCard({ driver, actions }: { driver: RaceDriver; actions: React.Re
       </div>
     </div>
   );
-}
+});
 
-export function DriverMarket({ selectedTeam }: { selectedTeam: MotorsportTeam | null }) {
+export const DriverMarket = memo(function DriverMarket({ selectedTeam }: { selectedTeam: MotorsportTeam | null }) {
   const {
     company, assignMotorsportDriver, availableDrivers,
     scoutNewDriver, signScouted, releaseMotorsportDriver, renewMotorsportContract,
@@ -176,4 +176,5 @@ export function DriverMarket({ selectedTeam }: { selectedTeam: MotorsportTeam | 
       )}
     </div>
   );
-}
+});
+

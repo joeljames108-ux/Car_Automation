@@ -1,12 +1,12 @@
 // ===================================================================
 // TECH TRANSFER PANEL — Transfer tech between race and production
 // ===================================================================
-import { useState } from "react";
+import { useState, memo } from "react";
 import { ArrowRightLeft, ArrowRight, ArrowLeft, Clock, Zap } from "lucide-react";
 import { useCompany } from "../../state/CompanyContext";
 import type { MotorsportTeam } from "../../sim/types";
 
-export function TechTransferPanel({ selectedTeam }: { selectedTeam: MotorsportTeam | null }) {
+export const TechTransferPanel = memo(function TechTransferPanel({ selectedTeam }: { selectedTeam: MotorsportTeam | null }) {
   const { company, transferMotorsportTech } = useCompany();
   const [direction, setDirection] = useState<"race_to_production" | "production_to_race">("race_to_production");
   const [points, setPoints] = useState(10);
@@ -114,4 +114,5 @@ export function TechTransferPanel({ selectedTeam }: { selectedTeam: MotorsportTe
       )}
     </div>
   );
-}
+});
+

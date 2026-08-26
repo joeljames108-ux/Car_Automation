@@ -1,7 +1,7 @@
 // ===================================================================
 // MOTORSPORT DIVISION — Master Motorsport Hub & Multi-Category Racing
 // ===================================================================
-import { useState, useMemo, lazy, Suspense } from "react";
+import { useState, useMemo, lazy, Suspense, memo } from "react";
 import {
   Trophy, Plus, Users, ArrowRightLeft,
   Medal, AlertTriangle, Zap, Gauge, Shield,
@@ -127,7 +127,7 @@ const HUB_CATEGORIES: HubCategory[] = [
   },
 ];
 
-export function MotorsportDivision() {
+function MotorsportDivisionComponent() {
   const {
     company, assignMotorsportDriver, simulateMotorsportSeason,
     scoutNewDriver, signScouted, releaseMotorsportDriver, renewMotorsportContract,
@@ -202,9 +202,16 @@ export function MotorsportDivision() {
     simulateMotorsportSeason(sim.peakPower, sim.weight, sim.downforce / 100, sim.reliability);
   };
 
-  const totalWins = useMemo(() => company.motorsport.teams.reduce((s, t) => s + t.wins, 0), [company.motorsport.teams]);
-  const totalTitles = useMemo(() => company.motorsport.teams.reduce((s, t) => s + t.championships, 0), [company.motorsport.teams]);
-  const totalFastestLaps = useMemo(() => company.motorsport.teams.reduce((s, t) => s + t.fastestLaps, 0), [company.motorsport.teams]);
+  const { totalWins, totalTitles, totalFastestLaps } = useMemo(() => {
+    let wins = 0, titles = 0, fl = 0;
+    for (const t of company.motorsport.teams) {
+      wins += t.wins;
+      titles += t.championships;
+      fl += t.fastestLaps;
+    }
+    return { totalWins: wins, totalTitles: titles, totalFastestLaps: fl };
+  }, [company.motorsport.teams]);
+
 
   return (
     <div className="space-y-4 animate-fade-in">
@@ -572,4 +579,7 @@ export function MotorsportDivision() {
     </div>
   );
 }
+
+export const MotorsportDivision = memo(MotorsportDivisionComponent);
 export default MotorsportDivision;
+

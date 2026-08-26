@@ -1,15 +1,24 @@
 // ===================================================================
 // MOTORSPORT HEADER — Animated header with key stats
 // ===================================================================
+import { useMemo, memo } from "react";
 import { Trophy, Flag, Zap, Timer } from "lucide-react";
 import { useCompany } from "../../state/CompanyContext";
 
-export function MotorsportHeader() {
+export const MotorsportHeader = memo(function MotorsportHeader() {
   const { company } = useCompany();
   const teams = company.motorsport.teams;
-  const totalWins = teams.reduce((s, t) => s + t.wins, 0);
-  const totalTitles = teams.reduce((s, t) => s + t.championships, 0);
-  const totalPodiums = teams.reduce((s, t) => s + t.podiums, 0);
+
+  const { totalWins, totalTitles, totalPodiums } = useMemo(() => {
+    let wins = 0, titles = 0, podiums = 0;
+    for (const t of teams) {
+      wins += t.wins;
+      titles += t.championships;
+      podiums += t.podiums;
+    }
+    return { totalWins: wins, totalTitles: titles, totalPodiums: podiums };
+  }, [teams]);
+
 
   return (
     <div className="glass-panel p-6 relative overflow-hidden checkered-bg">
@@ -53,4 +62,5 @@ export function MotorsportHeader() {
       </div>
     </div>
   );
-}
+});
+

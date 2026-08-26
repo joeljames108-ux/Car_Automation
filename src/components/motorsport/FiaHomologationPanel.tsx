@@ -5,7 +5,7 @@
 // air restrictor BoP calculations, success ballast, and digital certification.
 // ===================================================================
 
-import React, { useState } from "react";
+import React, { useState, useMemo, memo } from "react";
 import {
   HomologationAndBopEngine,
   FiaRacingSeries,
@@ -13,7 +13,7 @@ import {
 } from "../../sim/motorsport/homologationAndBopEngine";
 import { Gavel, CheckCircle2, XCircle, ShieldAlert, Award, Sliders, Download, FileCheck } from "lucide-react";
 
-export const FiaHomologationPanel: React.FC = () => {
+const FiaHomologationPanelComponent: React.FC = () => {
   const [selectedSeries, setSelectedSeries] = useState<FiaRacingSeries>("FIA_GT3");
   const [vehicleName, setVehicleName] = useState<string>("Apex GT3 Concept");
   const [curbWeightKg, setCurbWeightKg] = useState<number>(1280);
@@ -27,28 +27,33 @@ export const FiaHomologationPanel: React.FC = () => {
   const [championshipStanding, setChampionshipStanding] = useState<number>(1); // 1st = Success Ballast
 
   // 1. Run Homologation Check
-  const homologationResult = HomologationAndBopEngine.checkHomologation({
-    series: selectedSeries,
-    curbWeightKg,
-    peakPowerHp,
-    displacementLiters,
-    annualProductionUnits,
-    hasTurbo,
-    isAwd,
-    hasAbs,
-    hasTractionControl,
-    rideHeightMm: 60,
-  });
+  const homologationResult = useMemo(() => {
+    return HomologationAndBopEngine.checkHomologation({
+      series: selectedSeries,
+      curbWeightKg,
+      peakPowerHp,
+      displacementLiters,
+      annualProductionUnits,
+      hasTurbo,
+      isAwd,
+      hasAbs,
+      hasTractionControl,
+      rideHeightMm: 60,
+    });
+  }, [selectedSeries, curbWeightKg, peakPowerHp, displacementLiters, annualProductionUnits, hasTurbo, isAwd, hasAbs, hasTractionControl]);
 
   // 2. Run BoP Calculation
-  const bopAdjustment = HomologationAndBopEngine.calculateBoPAdjustment({
-    series: selectedSeries,
-    vehicleName,
-    curbWeightKg,
-    peakPowerHp,
-    hasTurbo,
-    championshipStandingPosition: championshipStanding,
-  });
+  const bopAdjustment = useMemo(() => {
+    return HomologationAndBopEngine.calculateBoPAdjustment({
+      series: selectedSeries,
+      vehicleName,
+      curbWeightKg,
+      peakPowerHp,
+      hasTurbo,
+      championshipStandingPosition: championshipStanding,
+    });
+  }, [selectedSeries, vehicleName, curbWeightKg, peakPowerHp, hasTurbo, championshipStanding]);
+
 
   const seriesSpec = FIA_REGULATIONS[selectedSeries];
 
@@ -217,3 +222,6 @@ export const FiaHomologationPanel: React.FC = () => {
     </div>
   );
 };
+
+export const FiaHomologationPanel = memo(FiaHomologationPanelComponent);
+

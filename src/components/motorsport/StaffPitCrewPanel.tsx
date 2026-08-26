@@ -1,7 +1,7 @@
 // ===================================================================
 // STAFF & PIT CREW PANEL — Key Personnel & Crew Chiefs
 // ===================================================================
-import { useState } from "react";
+import { useState, memo } from "react";
 import { Users, Award, Shield, DollarSign, UserCheck, Flame } from "lucide-react";
 import { useCompany } from "../../state/CompanyContext";
 import type { MotorsportTeam } from "../../sim/types";
@@ -26,7 +26,7 @@ const DEFAULT_STAFF: StaffMember[] = [
   { id: "s6", name: "Kenji Sato", role: "Vehicle Dynamics Chief", skill: 91, morale: 92, salary: 2_600_000, spec: "Suspension Geometry & Tire Life", bonus: "+10% Tire longevity" },
 ];
 
-export function StaffPitCrewPanel({ selectedTeam }: { selectedTeam: MotorsportTeam | null }) {
+export const StaffPitCrewPanel = memo(function StaffPitCrewPanel({ selectedTeam }: { selectedTeam: MotorsportTeam | null }) {
   const { company } = useCompany();
   const [staff, setStaff] = useState<StaffMember[]>(DEFAULT_STAFF);
   const [bonusActiveId, setBonusActiveId] = useState<string | null>(null);
@@ -128,4 +128,5 @@ export function StaffPitCrewPanel({ selectedTeam }: { selectedTeam: MotorsportTe
       </div>
     </div>
   );
-}
+});
+

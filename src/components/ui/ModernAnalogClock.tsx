@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, memo } from "react";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 
@@ -10,7 +10,7 @@ interface ModernAnalogClockProps {
   enable3DMode?: boolean;
 }
 
-export function ModernAnalogClock({
+function ModernAnalogClockComponent({
   size = 110,
   variant = "wall-light",
   showLiveBadge = true,
@@ -391,4 +391,6 @@ export function ModernAnalogClock({
     </div>
   );
 }
+
+export const ModernAnalogClock = memo(ModernAnalogClockComponent);
 

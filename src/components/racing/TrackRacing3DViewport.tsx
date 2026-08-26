@@ -20,7 +20,7 @@ import {
 import { Car3DGeometryGenerator } from "../../exterior3d/geometry/car3dGeometryGenerator";
 import { Flag, Play, Pause, RotateCcw, Flame, ShieldAlert, Zap, Trophy, Sliders } from "lucide-react";
 
-export const TrackRacing3DViewport: React.FC = () => {
+const TrackRacing3DViewportComponent: React.FC = () => {
   const mountRef = useRef<HTMLDivElement>(null);
   const [selectedTrack, setSelectedTrack] = useState<TrackCircuitConfig>(MASTER_RACE_TRACKS[0]);
   const [driverAggression, setDriverAggression] = useState<AiDriverAggression>("AGGRESSIVE_LATE_BRAKER");
@@ -45,11 +45,13 @@ export const TrackRacing3DViewport: React.FC = () => {
   const controlsRef = useRef<OrbitControls | null>(null);
   const carMeshRef = useRef<THREE.Group | null>(null);
 
-  // 1. Simulation Step Loop (Every 2 seconds = 1 race lap)
+  // 1. Simulation Step Loop (Every 2.5 seconds = 1 race lap)
   useEffect(() => {
     if (!isRacingActive) return;
 
     const timer = setInterval(() => {
+      if (document.hidden) return;
+
       setTelemetry((prev) =>
         TrackRacingSimulator.simulateRaceLap({
           track: selectedTrack,
@@ -64,6 +66,7 @@ export const TrackRacing3DViewport: React.FC = () => {
 
     return () => clearInterval(timer);
   }, [isRacingActive, selectedTrack, driverAggression]);
+
 
   // 2. Three.js 3D Track Viewport
   useEffect(() => {
@@ -123,11 +126,22 @@ export const TrackRacing3DViewport: React.FC = () => {
     scene.add(car3D);
     carMeshRef.current = car3D;
 
-    // Animation Loop
+    // Adaptive Animation Loop Controller
+    let isDirty = true;
+    let lastActiveTime = performance.now();
+    const markDirty = () => {
+      isDirty = true;
+      lastActiveTime = performance.now();
+    };
+
+    controls.addEventListener("change", markDirty);
+
     let animId: number;
     let progress = 0;
     const animate = () => {
       animId = requestAnimationFrame(animate);
+
+      if (document.hidden) return;
 
       if (isRacingActive) {
         progress += 0.002;
@@ -137,10 +151,16 @@ export const TrackRacing3DViewport: React.FC = () => {
 
         car3D.position.set(pt.x, 0.05, pt.z);
         car3D.lookAt(pt.x + tangent.x, 0.05, pt.z + tangent.z);
+        markDirty();
       }
 
-      controls.update();
-      renderer.render(scene, camera);
+      if (isDirty || isRacingActive) {
+        controls.update();
+        renderer.render(scene, camera);
+        if (performance.now() - lastActiveTime > 2000 && !isRacingActive) {
+          isDirty = false;
+        }
+      }
     };
     animate();
 
@@ -151,16 +171,25 @@ export const TrackRacing3DViewport: React.FC = () => {
       camera.aspect = w / h;
       camera.updateProjectionMatrix();
       renderer.setSize(w, h);
+      markDirty();
     };
+
+    const handleVisibilityChange = () => {
+      if (!document.hidden) markDirty();
+    };
+
     window.addEventListener("resize", handleResize);
+    document.addEventListener("visibilitychange", handleVisibilityChange);
 
     return () => {
       cancelAnimationFrame(animId);
       window.removeEventListener("resize", handleResize);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
       renderer.dispose();
       if (mountRef.current) mountRef.current.innerHTML = "";
     };
   }, [isRacingActive]);
+
 
   const formatTime = (ms: number) => {
     const min = Math.floor(ms / 60000);
@@ -286,3 +315,6 @@ export const TrackRacing3DViewport: React.FC = () => {
     </div>
   );
 };
+
+export const TrackRacing3DViewport = React.memo(TrackRacing3DViewportComponent);
+

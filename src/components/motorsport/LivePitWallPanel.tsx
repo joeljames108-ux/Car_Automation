@@ -5,11 +5,11 @@
 // tire pyrometry, pit stop strategy execution, and 3D track viewport.
 // ===================================================================
 
-import React, { useState } from "react";
+import React, { useState, memo } from "react";
 import { TrackRacing3DViewport } from "../racing/TrackRacing3DViewport";
 import { Radio, Flame, ShieldAlert, Zap, Trophy, Play, Pause, RefreshCw } from "lucide-react";
 
-export const LivePitWallPanel: React.FC = () => {
+const LivePitWallPanelComponent: React.FC = () => {
   const [activeStrategy, setActiveStrategy] = useState<"UNDERCUT_PUSH" | "OVERCUT_EXTEND" | "CONSERVE_TIRES">("UNDERCUT_PUSH");
   const [selectedTireCompound, setSelectedTireCompound] = useState<"SOFT_SLICK" | "MEDIUM_SLICK" | "HARD_SLICK" | "WET_INTERMEDIATE">("SOFT_SLICK");
   const [pitWindowLap, setPitWindowLap] = useState<number>(12);
@@ -108,3 +108,6 @@ export const LivePitWallPanel: React.FC = () => {
     </div>
   );
 };
+
+export const LivePitWallPanel = memo(LivePitWallPanelComponent);
+

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, memo } from "react";
 import { Zap } from "lucide-react";
 
 interface GlassSliderProps {
@@ -12,7 +12,7 @@ interface GlassSliderProps {
   step?: number;
 }
 
-export function GlassSlider({
+function GlassSliderComponent({
   label = "CFD Visualization Intensity",
   value = 80,
   min = 0,
@@ -122,3 +122,5 @@ export function GlassSlider({
     </div>
   );
 }
+
+export const GlassSlider = memo(GlassSliderComponent);
