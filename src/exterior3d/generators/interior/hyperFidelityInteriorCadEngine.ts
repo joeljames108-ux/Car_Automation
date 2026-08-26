@@ -23,7 +23,7 @@ import {
   SteeringWheelTypology,
   FrontSeatTypology,
 } from "../../../sim/interior/masterInteriorTypes";
-import { MasterPbrTextureSynthesizer } from "../../materials/masterPbrTextureSynthesizer";
+import { InteriorMaterialPbrSynthesizer } from "../../materials/interiorMaterialPbrSynthesizer";
 
 export interface InteriorCadComponentMetadata {
   id: string;
@@ -37,7 +37,7 @@ export interface InteriorCadComponentMetadata {
 }
 
 export class HyperFidelityInteriorCadEngine {
-  private static texSynthesizer = MasterPbrTextureSynthesizer.getInstance();
+  private static texSynthesizer = InteriorMaterialPbrSynthesizer.getInstance();
 
   /**
    * Generates a complete photorealistic 3D interior cabin CAD group.
@@ -289,7 +289,7 @@ export class HyperFidelityInteriorCadEngine {
     wheelGroup.rotation.x = -0.42; // Match tilt
     wheelGroup.rotation.z = steeringAngleRad; // Dynamic steering turn
 
-    if (state.steering.typology === "gt3_race_yoke") {
+    if (state.steering.typology === "formula_gt3_carbon_yoke" || (state.steering.typology as any) === "gt3_race_yoke") {
       // GT3 Carbon Yoke Geometry
       const yokeRimGeo = new THREE.BoxGeometry(0.32, 0.032, 0.024);
       const yokeRim = new THREE.Mesh(yokeRimGeo, carbonMat);
@@ -407,8 +407,8 @@ export class HyperFidelityInteriorCadEngine {
 
     const dx = isDriver ? -exploded * 0.25 : exploded * 0.25;
     const dz = -exploded * 0.20;
-
-    const primaryLeather = this.createLeatherMaterial(state.materials.seatPrimaryMaterial, state.materials.primaryColorHex || "#1e293b");
+    const seatColor = (state.materials as any).primaryColorHex || "#1e293b";
+    const primaryLeather = this.createLeatherMaterial(state.materials.seatPrimaryMaterial, seatColor);
     const carbonMat = this.createCarbonMaterial();
     const metalMat = this.createAluminumMaterial();
 
@@ -757,7 +757,7 @@ export class HyperFidelityInteriorCadEngine {
     // Panoramic Starlight Glass Roof Headliner
     const roofWidth = cageWidth + 0.12;
     const roofGeo = new THREE.BoxGeometry(roofWidth, 0.025, 1.65);
-    const fabricMat = this.createFabricMaterial(state.materials.headlinerColorHex || "#0f172a");
+    const fabricMat = this.createFabricMaterial((state.materials as any).headlinerColorHex || "#0f172a");
     const roofMesh = new THREE.Mesh(roofGeo, fabricMat);
     roofMesh.position.set(0, 1.28 + dy, -0.40);
     roofMesh.receiveShadow = true;
@@ -793,7 +793,7 @@ export class HyperFidelityInteriorCadEngine {
       clearcoatRoughness: 0.04,
       envMapIntensity: 1.5,
     });
-    const carbonNorm = this.texSynthesizer.getCarbonFiberNormalMap();
+    const carbonNorm = this.texSynthesizer.getProceduralNormalMap("carbon_twill");
     if (carbonNorm) mat.normalMap = carbonNorm;
     return mat;
   }
@@ -809,7 +809,7 @@ export class HyperFidelityInteriorCadEngine {
       sheenColor: new THREE.Color(hexColor).multiplyScalar(1.2),
       envMapIntensity: 0.4,
     });
-    const leatherNorm = this.texSynthesizer.getLeatherNormalMap();
+    const leatherNorm = this.texSynthesizer.getProceduralNormalMap("leather_grain");
     if (leatherNorm) mat.normalMap = leatherNorm;
     return mat;
   }

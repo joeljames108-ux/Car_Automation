@@ -101,6 +101,12 @@ export class EngineKinematicsAnimator {
     return THREE.MathUtils.radToDeg(this.currentCrankAngleRad) % 720;
   }
 
+  private static COLOR_INTAKE = new THREE.Color(0x00e5ff);
+  private static COLOR_COMPRESSION = new THREE.Color(0xfbbf24);
+  private static COLOR_POWER = new THREE.Color(0xff3d00);
+  private static COLOR_EXHAUST = new THREE.Color(0xd97706);
+  private static COLOR_OFF = new THREE.Color(0x000000);
+
   /**
    * Calculates the exact kinematic and combustion state for a given cylinder.
    */
@@ -126,40 +132,33 @@ export class EngineKinematicsAnimator {
     const conrodAngleRad = Math.asin(Math.max(-1, Math.min(1, (r * Math.sin(thetaRad)) / l)));
     const conrodAngleDeg = THREE.MathUtils.radToDeg(conrodAngleRad);
 
-    // 4-Stroke Phase Classification (0 to 720 degrees):
-    // 0° -> 180°: Intake (Piston moves down from TDC to BDC, Intake valve open)
-    // 180° -> 360°: Compression (Piston moves up to TDC, all valves closed)
-    // 360° -> 540°: Power / Combustion (Spark fires near 360°, piston pushed down)
-    // 540° -> 720°: Exhaust (Piston moves up to TDC, Exhaust valve open)
     let cyclePhase: FourStrokePhase = "intake";
     let intakeLift = 0;
     let exhaustLift = 0;
-    const glowColor = new THREE.Color(0x000000);
+    let glowColor = EngineKinematicsAnimator.COLOR_OFF;
     let intensity = 0.0;
 
     if (totalAngleDeg >= 0 && totalAngleDeg < 180) {
       cyclePhase = "intake";
-      // Intake valve lift bell curve
       const phaseNorm = totalAngleDeg / 180;
       intakeLift = Math.sin(phaseNorm * Math.PI) * 12.5; // mm
-      glowColor.setHex(0x00e5ff); // Cyan incoming air/fuel charge
+      glowColor = EngineKinematicsAnimator.COLOR_INTAKE; // Cyan incoming air/fuel charge
       intensity = Math.sin(phaseNorm * Math.PI) * 0.65;
     } else if (totalAngleDeg >= 180 && totalAngleDeg < 360) {
       cyclePhase = "compression";
       const phaseNorm = (totalAngleDeg - 180) / 180;
-      glowColor.setHex(0xfbbf24); // Warm yellow compression
+      glowColor = EngineKinematicsAnimator.COLOR_COMPRESSION; // Warm yellow compression
       intensity = Math.pow(phaseNorm, 2) * 0.8;
     } else if (totalAngleDeg >= 360 && totalAngleDeg < 540) {
       cyclePhase = "power";
       const phaseNorm = (totalAngleDeg - 360) / 180;
-      // Exponential flame expansion decaying over power stroke
       intensity = Math.exp(-phaseNorm * 3.2);
-      glowColor.setHex(0xff3d00); // Fierce flame red-orange
+      glowColor = EngineKinematicsAnimator.COLOR_POWER; // Fierce flame red-orange
     } else {
       cyclePhase = "exhaust";
       const phaseNorm = (totalAngleDeg - 540) / 180;
       exhaustLift = Math.sin(phaseNorm * Math.PI) * 12.0; // mm
-      glowColor.setHex(0xd97706); // Amber burning exhaust gases
+      glowColor = EngineKinematicsAnimator.COLOR_EXHAUST; // Amber burning exhaust gases
       intensity = Math.sin(phaseNorm * Math.PI) * 0.55;
     }
 

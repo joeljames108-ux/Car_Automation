@@ -6,13 +6,15 @@
 // ============================================================================
 
 import React, { Suspense, useRef } from 'react';
-import { Canvas } from '@react-three/fiber';
+import { Canvas, useFrame } from '@react-three/fiber';
 import { OrbitControls, ContactShadows, Environment, GizmoHelper, GizmoViewport } from '@react-three/drei';
 import * as THREE from 'three';
 import { useEngine3DStore } from '../store/useEngine3DStore';
 import { useSnapAnimationTicker } from '../animations/useSnapAnimation';
 import { ModularEngineAssembly } from './ModularEngineAssembly';
 import { PostProcessingStack } from '../postprocessing/PostProcessingStack';
+
+import { globalPerformanceManager } from '../core/PerformanceManager';
 
 // ============================================================================
 // 1. STUDIO LIGHTING RIG & ENVIRONMENT
@@ -95,6 +97,10 @@ export const StudioLightingRig: React.FC = () => {
 export const SceneContent: React.FC = () => {
   useSnapAnimationTicker();
   const orbitRef = useRef<any>(null);
+
+  useFrame(({ gl }: { gl: THREE.WebGLRenderer }) => {
+    globalPerformanceManager.updateFrameStats(gl, 0, false);
+  });
 
   return (
     <>

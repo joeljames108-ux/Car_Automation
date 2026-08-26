@@ -71,7 +71,7 @@ interface ModularEngineStudioWorkbenchProps {
   engine: MasterEngineStateEngine;
 }
 
-export const ModularEngineStudioWorkbench: React.FC<ModularEngineStudioWorkbenchProps> = ({
+const ModularEngineStudioWorkbenchComponent: React.FC<ModularEngineStudioWorkbenchProps> = ({
   state,
   engine,
 }) => {
@@ -1613,3 +1613,5 @@ export const ModularEngineStudioWorkbench: React.FC<ModularEngineStudioWorkbench
     </div>
   );
 };
+
+export const ModularEngineStudioWorkbench = React.memo(ModularEngineStudioWorkbenchComponent);

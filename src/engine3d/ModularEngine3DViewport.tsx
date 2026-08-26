@@ -18,6 +18,9 @@ import type { ComponentId, MaterialGrade } from '../sim/assemblyTypes';
 import type { ComponentInstance3D } from './types';
 import type { EngineConfig } from '../sim/types';
 
+import { EngineInitializationHUD } from './ui/EngineInitializationHUD';
+import { PerformanceMonitorHUD } from './ui/PerformanceMonitorHUD';
+
 export interface ModularEngine3DViewportProps {
   className?: string;
   installedComponents2D?: ComponentId[];
@@ -80,6 +83,12 @@ export const ModularEngine3DViewport: React.FC<ModularEngine3DViewportProps> = (
     <div className={`relative w-full h-full overflow-hidden select-none ${className}`}>
       {/* 3D WebGL Canvas Layer */}
       <Engine3DScene className="w-full h-full absolute inset-0" />
+
+      {/* Staged Asset Initialization HUD */}
+      <EngineInitializationHUD />
+
+      {/* Development Performance Telemetry Monitor HUD */}
+      {process.env.NODE_ENV === 'development' && <PerformanceMonitorHUD />}
 
       {/* Optional Standalone Floating Panels (only if explicitly enabled) */}
       {showFloatingPanels && (

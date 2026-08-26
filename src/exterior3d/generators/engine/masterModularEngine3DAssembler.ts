@@ -27,11 +27,14 @@ import {
   createTwinScrewSuperchargerAssembly,
   createCentrifugalSuperchargerAssembly,
 } from "../../../engine3d/generators/superchargerGenerator";
+import { EngineMaterialManager } from "../../../engine3d/managers/EngineSceneManager";
+import { EngineStagedLoader } from "../../../engine3d/managers/EngineStagedLoader";
 
 export class MasterModularEngine3DAssembler {
   private rootGroup: THREE.Group;
   private mountingGraph: EngineMountingGraph;
   private kinematicsAnimator: EngineKinematicsAnimator;
+  private lastStateSummary: string = "";
 
   // Component Mesh References for Kinematic Animation
   private crankshaftMesh: THREE.Group | null = null;
@@ -46,29 +49,37 @@ export class MasterModularEngine3DAssembler {
   private currentStrokeM: number = 0.086;
   private currentRodLengthM: number = 0.148;
 
-  // PBR Materials Cache
+  // Last Assembly Structural Signature for In-Place Parameter Updates
+  private lastArchFamily: string = "";
+  private lastCylCount: number = 0;
+  private lastTurboType: string = "";
+  private lastCoverModel: string = "";
+  private lastShowCover: boolean = true;
+
+  // PBR Materials Cache (Singleton managed)
+  private matManager = EngineMaterialManager.getInstance();
   private materials: {
-    castAluminum: THREE.MeshStandardMaterial;
-    billetAluminum: THREE.MeshPhysicalMaterial;
-    forgedSteel: THREE.MeshStandardMaterial;
-    nitridedSteel: THREE.MeshPhysicalMaterial;
-    titaniumAlloy: THREE.MeshPhysicalMaterial;
-    carbonFiber: THREE.MeshPhysicalMaterial;
-    forgedCarbonGold: THREE.MeshPhysicalMaterial;
-    goldAnodized: THREE.MeshPhysicalMaterial;
-    cobaltAnodized: THREE.MeshPhysicalMaterial;
-    crimsonAnodized: THREE.MeshPhysicalMaterial;
-    redCorsaPowdercoat: THREE.MeshPhysicalMaterial;
-    monacoBluePowdercoat: THREE.MeshPhysicalMaterial;
-    gialloModenaPowdercoat: THREE.MeshPhysicalMaterial;
-    britishRacingGreenPowdercoat: THREE.MeshPhysicalMaterial;
-    stealthBlackCeramic: THREE.MeshPhysicalMaterial;
-    titaniumBluedExhaust: THREE.MeshPhysicalMaterial;
-    inconelExhaust: THREE.MeshPhysicalMaterial;
-    dynoGlowExhaust: THREE.MeshPhysicalMaterial;
-    ceramicWhiteExhaust: THREE.MeshPhysicalMaterial;
-    polishedChrome: THREE.MeshPhysicalMaterial;
-    combustionFlameMat: THREE.MeshBasicMaterial;
+    castAluminum: THREE.Material;
+    billetAluminum: THREE.Material;
+    forgedSteel: THREE.Material;
+    nitridedSteel: THREE.Material;
+    titaniumAlloy: THREE.Material;
+    carbonFiber: THREE.Material;
+    forgedCarbonGold: THREE.Material;
+    goldAnodized: THREE.Material;
+    cobaltAnodized: THREE.Material;
+    crimsonAnodized: THREE.Material;
+    redCorsaPowdercoat: THREE.Material;
+    monacoBluePowdercoat: THREE.Material;
+    gialloModenaPowdercoat: THREE.Material;
+    britishRacingGreenPowdercoat: THREE.Material;
+    stealthBlackCeramic: THREE.Material;
+    titaniumBluedExhaust: THREE.Material;
+    inconelExhaust: THREE.Material;
+    dynoGlowExhaust: THREE.Material;
+    ceramicWhiteExhaust: THREE.Material;
+    polishedChrome: THREE.Material;
+    combustionFlameMat: THREE.Material;
   };
 
   constructor() {
@@ -76,7 +87,33 @@ export class MasterModularEngine3DAssembler {
     this.rootGroup.name = "MasterModularEngine3D";
     this.mountingGraph = new EngineMountingGraph();
     this.kinematicsAnimator = new EngineKinematicsAnimator();
-    this.materials = this.createPBRMaterials();
+    this.materials = this.resolveMaterialsFromManager();
+  }
+
+  private resolveMaterialsFromManager() {
+    return {
+      castAluminum: this.matManager.getMaterial('cast_aluminum'),
+      billetAluminum: this.matManager.getMaterial('billet_aluminum'),
+      forgedSteel: this.matManager.getMaterial('forged_steel'),
+      nitridedSteel: this.matManager.getMaterial('nitrided_steel'),
+      titaniumAlloy: this.matManager.getMaterial('titanium'),
+      carbonFiber: this.matManager.getMaterial('carbon_fiber'),
+      forgedCarbonGold: this.matManager.getMaterial('forged_carbon_gold'),
+      goldAnodized: this.matManager.getMaterial('gold_anodized'),
+      cobaltAnodized: this.matManager.getMaterial('cobalt_anodized'),
+      crimsonAnodized: this.matManager.getMaterial('crimson_anodized'),
+      redCorsaPowdercoat: this.matManager.getMaterial('rosso_corsa'),
+      monacoBluePowdercoat: this.matManager.getMaterial('monaco_blue'),
+      gialloModenaPowdercoat: this.matManager.getMaterial('gold_anodized'),
+      britishRacingGreenPowdercoat: this.matManager.getMaterial('cast_aluminum'),
+      stealthBlackCeramic: this.matManager.getMaterial('stealth_black'),
+      titaniumBluedExhaust: this.matManager.getMaterial('titanium_blued'),
+      inconelExhaust: this.matManager.getMaterial('inconel_exhaust'),
+      dynoGlowExhaust: this.matManager.getMaterial('combustion_flame'),
+      ceramicWhiteExhaust: this.matManager.getMaterial('billet_aluminum'),
+      polishedChrome: this.matManager.getMaterial('polished_chrome'),
+      combustionFlameMat: this.matManager.getMaterial('combustion_flame'),
+    };
   }
 
   private createPBRMaterials() {
@@ -217,7 +254,52 @@ export class MasterModularEngine3DAssembler {
     };
   }
 
+  public updateOrAssemble(state: MasterEngineState): boolean {
+    const family = state.architecture.family;
+    const cyls = state.architecture.cylinderCount;
+    const turbo = state.turboSystem.type;
+    const coverModel = state.cosmetics?.coverModel || "";
+    const showCover = state.cosmetics?.showEngineCover !== false;
+
+    // Check if structural architecture is unchanged
+    if (
+      this.lastArchFamily === family &&
+      this.lastCylCount === cyls &&
+      this.lastTurboType === turbo &&
+      this.lastCoverModel === coverModel &&
+      this.lastShowCover === showCover &&
+      this.rootGroup.children.length > 0
+    ) {
+      // In-place parameter updates without scene graph destruction
+      this.kinematicsAnimator.updateParameters(state);
+      this.currentStrokeM = state.block.strokeMm / 1000;
+      this.currentRodLengthM = state.connectingRods.rodLengthMm / 1000;
+      this.mountingGraph.rebuildSocketsFromState(state);
+      this.mountingGraph.applyTransformsToAttachedMeshes();
+      return false; // Rebuild skipped
+    }
+
+    // Full structural rebuild required
+    this.assemble(state);
+    return true; // Rebuilt
+  }
+
   public assemble(state: MasterEngineState): THREE.Group {
+    // Record current structural parameters
+    this.lastArchFamily = state.architecture.family;
+    this.lastCylCount = state.architecture.cylinderCount;
+    this.lastTurboType = state.turboSystem.type;
+    this.lastCoverModel = state.cosmetics?.coverModel || "";
+    this.lastShowCover = state.cosmetics?.showEngineCover !== false;
+
+    // Dispose old geometries to prevent VRAM memory leaks
+    this.rootGroup.traverse((child) => {
+      if ((child as THREE.Mesh).isMesh) {
+        const mesh = child as THREE.Mesh;
+        if (mesh.geometry) mesh.geometry.dispose();
+      }
+    });
+
     // Clear existing children
     while (this.rootGroup.children.length > 0) {
       this.rootGroup.remove(this.rootGroup.children[0]);
@@ -266,7 +348,12 @@ export class MasterModularEngine3DAssembler {
     blockCasting.receiveShadow = true;
     blockGroup.add(blockCasting);
 
-    // Cylinder Bore Liners (Hollow Cutouts)
+    // Cylinder Bore Liners (GPU Instanced Single Draw Call)
+    const linerGeo = new THREE.CylinderGeometry(block.boreMm / 2000, block.boreMm / 2000, (block.strokeMm * 1.3) / 1000, 24, 1, true);
+    const instancedLiners = new THREE.InstancedMesh(linerGeo, this.materials.nitridedSteel, cylCount);
+    instancedLiners.name = "Instanced_Bore_Liners";
+    const dummyObj = new THREE.Object3D();
+
     for (let i = 0; i < cylCount; i++) {
       let bank = 0;
       let bankIndex = i;
@@ -277,18 +364,21 @@ export class MasterModularEngine3DAssembler {
       const zM = (startZ + bankIndex * boreSpacing) / 1000;
       const angleRad = bank * halfBankAngleRad;
 
-      const liner = new THREE.Mesh(
-        new THREE.CylinderGeometry(block.boreMm / 2000, block.boreMm / 2000, (block.strokeMm * 1.3) / 1000, 24, 1, true),
-        this.materials.nitridedSteel
-      );
-      liner.rotation.z = angleRad;
-      liner.position.set(
+      dummyObj.position.set(
         Math.sin(angleRad) * (blockHeightM * 0.5),
         Math.cos(angleRad) * (blockHeightM * 0.5),
         zM
       );
-      blockGroup.add(liner);
+      dummyObj.rotation.set(0, 0, angleRad);
+      dummyObj.scale.set(1, 1, 1);
+      dummyObj.updateMatrix();
+
+      instancedLiners.setMatrixAt(i, dummyObj.matrix);
     }
+    instancedLiners.instanceMatrix.needsUpdate = true;
+    instancedLiners.castShadow = true;
+    instancedLiners.receiveShadow = true;
+    blockGroup.add(instancedLiners);
     this.rootGroup.add(blockGroup);
 
     // ------------------------------------------------------------------------
@@ -303,18 +393,25 @@ export class MasterModularEngine3DAssembler {
     crankShaftBar.rotation.x = Math.PI / 2;
     this.crankshaftMesh.add(crankShaftBar);
 
-    // Crank Throws & Knife-edged Counterweights
+    // Crank Throws & Knife-edged Counterweights (GPU Instanced)
     const counterweightRadius = dyn.counterweightRadiusMm / 1000;
+    const cwGeo = new THREE.CylinderGeometry(counterweightRadius, counterweightRadius, 0.016, 16, 1, false, 0, Math.PI);
+    const instancedCounterweights = new THREE.InstancedMesh(cwGeo, this.materials.forgedSteel, cylindersPerBank);
+    instancedCounterweights.name = "Instanced_Crank_Counterweights";
+
     for (let i = 0; i < cylindersPerBank; i++) {
       const zM = (startZ + i * boreSpacing) / 1000;
-      const counterweight = new THREE.Mesh(
-        new THREE.CylinderGeometry(counterweightRadius, counterweightRadius, 0.016, 16, 1, false, 0, Math.PI),
-        this.materials.forgedSteel
-      );
-      counterweight.position.set(0, 0, zM);
-      counterweight.rotation.z = (i * Math.PI) / 2;
-      this.crankshaftMesh.add(counterweight);
+      dummyObj.position.set(0, 0, zM);
+      dummyObj.rotation.set(0, 0, (i * Math.PI) / 2);
+      dummyObj.scale.set(1, 1, 1);
+      dummyObj.updateMatrix();
+
+      instancedCounterweights.setMatrixAt(i, dummyObj.matrix);
     }
+    instancedCounterweights.instanceMatrix.needsUpdate = true;
+    instancedCounterweights.castShadow = true;
+    instancedCounterweights.receiveShadow = true;
+    this.crankshaftMesh.add(instancedCounterweights);
 
     // Front Crank Pulley Damper
     const harmonicDamper = new THREE.Mesh(
@@ -849,6 +946,70 @@ export class MasterModularEngine3DAssembler {
 
   public setCombustionGlowEnabled(enabled: boolean): void {
     this.kinematicsAnimator.setCombustionGlowEnabled(enabled);
+  }
+
+  public updateLiveParameters(state: MasterEngineState): boolean {
+    const arch = state.architecture;
+    const summaryKey = `${arch.family}_${arch.cylinderCount}_${arch.bankAngleDeg}_${state.turboSystem.type}_${state.cosmetics?.coverModel}_${state.cosmetics?.showEngineCover}`;
+
+    if (this.lastStateSummary && this.lastStateSummary !== summaryKey) {
+      return false; // Structural layout changed, requires full assembly
+    }
+
+    this.currentStrokeM = state.block.strokeMm / 1000;
+    this.currentRodLengthM = state.connectingRods.rodLengthMm / 1000;
+    this.kinematicsAnimator.updateParameters(state);
+
+    // Update material properties dynamically if cosmetics changed
+    const valveCoverMat = this.resolveValveCoverMaterial(state);
+    this.rootGroup.traverse((child) => {
+      if ((child as THREE.Mesh).isMesh) {
+        const mesh = child as THREE.Mesh;
+        if (mesh.parent?.name.includes('CylinderHead') && mesh.geometry.type === 'BoxGeometry') {
+          // If it's the cam cover box
+          if (mesh.position.y > 0.08) {
+            mesh.material = valveCoverMat;
+          }
+        }
+      }
+    });
+
+    return true;
+  }
+
+  private resolveValveCoverMaterial(state: MasterEngineState): THREE.Material {
+    const col = state.cosmetics?.valveCoverColor;
+    if (col === "monaco_blue") return this.materials.monacoBluePowdercoat;
+    if (col === "acid_yellow") return this.materials.gialloModenaPowdercoat;
+    if (col === "gold_anodized") return this.materials.goldAnodized;
+    if (col === "satin_carbon") return this.materials.carbonFiber;
+    if (col === "titanium_gray") return this.materials.titaniumAlloy;
+    return this.materials.redCorsaPowdercoat;
+  }
+
+  public dispose(): void {
+    this.rootGroup.traverse((child) => {
+      if ((child as THREE.Mesh).isMesh) {
+        const mesh = child as THREE.Mesh;
+        if (mesh.geometry) {
+          mesh.geometry.dispose();
+        }
+      }
+      if ((child as THREE.Light).isLight) {
+        (child as THREE.Light).dispose?.();
+      }
+    });
+
+    while (this.rootGroup.children.length > 0) {
+      this.rootGroup.remove(this.rootGroup.children[0]);
+    }
+
+    this.pistonMeshes = [];
+    this.conrodMeshes = [];
+    this.intakeValves = [];
+    this.exhaustValves = [];
+    this.combustionGlows = [];
+    this.camshaftMeshes = [];
   }
 
   public getRootGroup(): THREE.Group {

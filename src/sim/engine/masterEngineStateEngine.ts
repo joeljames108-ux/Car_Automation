@@ -268,10 +268,32 @@ export class MasterEngineStateEngine {
   }
 
   // ==========================================================================
-  // HISTORY / UNDO / REDO
+  // HISTORY / UNDO / REDO (OPTIMIZED WITH DEBOUNCED SNAPSHOTS)
   // ==========================================================================
 
-  private pushHistory(): void {
+  private historyDebounceTimer: any = null;
+
+  private pushHistory(immediate: boolean = false): void {
+    if (immediate) {
+      if (this.historyDebounceTimer) {
+        clearTimeout(this.historyDebounceTimer);
+        this.historyDebounceTimer = null;
+      }
+      this.executePushHistory();
+      return;
+    }
+
+    if (this.historyDebounceTimer) {
+      clearTimeout(this.historyDebounceTimer);
+    }
+
+    this.historyDebounceTimer = setTimeout(() => {
+      this.executePushHistory();
+      this.historyDebounceTimer = null;
+    }, 350);
+  }
+
+  private executePushHistory(): void {
     if (this.historyIndex < this.history.length - 1) {
       this.history = this.history.slice(0, this.historyIndex + 1);
     }

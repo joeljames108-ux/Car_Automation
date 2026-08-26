@@ -422,37 +422,58 @@ export class GlbAssetCache {
   }
 
   /**
-   * Preloads all assets defined in a manifest list in parallel with progress updates.
+   * Preloads all assets defined in a manifest list in prioritized stages so
+   * primary hero geometry (engine block shell) displays immediately without blocking.
    */
   public async preloadManifests(manifests: Engine3DComponentManifest[], config?: Partial<EngineConfig>): Promise<void> {
     const total = manifests.length;
     let loaded = 0;
     let failed = 0;
 
-    const promises = manifests.map(async (m) => {
-      try {
-        await this.loadComponentGlb(m.assetPath, m.type, config);
-        loaded++;
-      } catch {
-        failed++;
-      } finally {
-        this.notifyProgress({
-          totalAssets: total,
-          loadedAssets: loaded,
-          failedAssets: failed,
-          percentage: Math.round(((loaded + failed) / total) * 100),
-          currentAssetPath: m.assetPath,
-        });
-      }
-    });
+    const updateProgress = (path: string) => {
+      this.notifyProgress({
+        totalAssets: total,
+        loadedAssets: loaded,
+        failedAssets: failed,
+        percentage: Math.round(((loaded + failed) / total) * 100),
+        currentAssetPath: path,
+      });
+    };
 
-    await Promise.all(promises);
+    // Classify manifests into 4 priority stages
+    const stage1 = manifests.filter((m) => m.type === 'engine-block');
+    const stage2 = manifests.filter((m) =>
+      ['cylinder-head-left', 'cylinder-head-right', 'valve-cover-left', 'valve-cover-right', 'crankshaft'].includes(m.type)
+    );
+    const stage3 = manifests.filter((m) =>
+      ['intake-manifold-left', 'intake-manifold-right', 'exhaust-header-left', 'exhaust-header-right', 'dry-sump'].includes(m.type)
+    );
+    const stage4 = manifests.filter((m) => !stage1.includes(m) && !stage2.includes(m) && !stage3.includes(m));
+
+    const stages = [stage1, stage2, stage3, stage4];
+
+    for (const stage of stages) {
+      if (stage.length === 0) continue;
+      await Promise.all(
+        stage.map(async (m) => {
+          try {
+            await this.loadComponentGlb(m.assetPath, m.type, config);
+            loaded++;
+          } catch {
+            failed++;
+          } finally {
+            updateProgress(m.assetPath);
+          }
+        })
+      );
+      // Give browser main thread a frame breathing room between stages
+      await new Promise((resolve) => setTimeout(resolve, 16));
+    }
   }
 
   /**
-   * Deep clones a scene graph, duplicating meshes and creating independent
-   * material references so modifications (selection highlights, variant swaps)
-   * on one instance do not cross-contaminate other instances.
+   * Clones a scene graph efficiently while reusing shared materials and geometries
+   * to maximize WebGL batching and eliminate material instantiation overhead.
    */
   public deepCloneScene(source: THREE.Group): THREE.Group {
     const clone = source.clone(true);
@@ -462,12 +483,7 @@ export class GlbAssetCache {
         const mesh = child as THREE.Mesh;
         mesh.castShadow = true;
         mesh.receiveShadow = true;
-
-        if (Array.isArray(mesh.material)) {
-          mesh.material = mesh.material.map((m) => m.clone());
-        } else if (mesh.material) {
-          mesh.material = mesh.material.clone();
-        }
+        // Keep shared material instances to enable WebGL state reuse and reduce memory
       }
     });
 

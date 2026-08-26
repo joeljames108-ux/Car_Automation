@@ -33,6 +33,33 @@ export class UniversalGlbExporter {
     rootGroup: THREE.Object3D,
     options?: Partial<GlbExportOptions>
   ): Promise<ExportedGlbResult> {
+    if (typeof (globalThis as any).FileReader === 'undefined') {
+      (globalThis as any).FileReader = class {
+        onload: ((e: any) => void) | null = null;
+        onerror: ((e: any) => void) | null = null;
+        result: any = null;
+        async readAsArrayBuffer(blob: any) {
+          try {
+            const buf = typeof blob.arrayBuffer === 'function' ? await blob.arrayBuffer() : new ArrayBuffer(0);
+            this.result = buf;
+            if (this.onload) this.onload({ target: this });
+          } catch (err) {
+            if (this.onerror) this.onerror(err);
+          }
+        }
+        async readAsDataURL(blob: any) {
+          try {
+            const buf = typeof blob.arrayBuffer === 'function' ? await blob.arrayBuffer() : new ArrayBuffer(0);
+            const base64 = typeof Buffer !== 'undefined' ? Buffer.from(buf).toString('base64') : '';
+            this.result = `data:${blob.type || 'application/octet-stream'};base64,${base64}`;
+            if (this.onload) this.onload({ target: this });
+          } catch (err) {
+            if (this.onerror) this.onerror(err);
+          }
+        }
+      };
+    }
+
     const opts: GlbExportOptions = {
       binary: true,
       includeCustomMetadata: true,
