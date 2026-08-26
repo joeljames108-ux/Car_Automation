@@ -11,7 +11,7 @@
  * ============================================================================
  */
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, memo } from "react";
 import {
   Sliders,
   Palette,
@@ -41,7 +41,10 @@ import {
 import { MasterInteriorStateEngine } from "../../sim/interior/masterInteriorStateEngine";
 import { ModularInterior3DStudioViewport } from "./ModularInterior3DStudioViewport";
 import { InteriorAcousticThermalSimulator } from "../../sim/interior/interiorAcousticThermalSimulator";
-import { InteriorErgonomicsBiometricsEngine, DriverPercentile } from "../../sim/interior/interiorErgonomicsBiometricsEngine";
+import {
+  InteriorErgonomicsBiometricsEngine,
+  DriverPercentile,
+} from "../../sim/interior/interiorErgonomicsBiometricsEngine";
 
 export const DEFAULT_BESPOKE_STATE: MasterModularInteriorState = MasterInteriorStateEngine.getInstance().getState();
 
@@ -79,7 +82,7 @@ const CONSOLE_OPTIONS: { id: CenterConsoleTypology; name: string }[] = [
   { id: "track_competition_fire_suppression", name: "Track Competition Fire Suppression Tower" },
 ];
 
-export const BespokeLuxuryInteriorStudioHub: React.FC = () => {
+export const BespokeLuxuryInteriorStudioHubComponent: React.FC = () => {
   const [interiorState, setInteriorState] = useState<MasterModularInteriorState>(DEFAULT_BESPOKE_STATE);
   const [activeTab, setActiveTab] = useState<"visualizer" | "materials" | "acoustics" | "ergonomics" | "cad">("visualizer");
   const [simRpm, setSimRpm] = useState<number>(4200);
@@ -509,3 +512,6 @@ export const BespokeLuxuryInteriorStudioHub: React.FC = () => {
     </div>
   );
 };
+
+export const BespokeLuxuryInteriorStudioHub = memo(BespokeLuxuryInteriorStudioHubComponent);
+

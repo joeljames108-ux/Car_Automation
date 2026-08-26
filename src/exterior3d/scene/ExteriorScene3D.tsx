@@ -27,6 +27,13 @@ export const ExteriorScene3D: React.FC = () => {
     <div className="w-full h-full relative">
       <Canvas
         camera={{ position: [3.8, 2.2, 3.8], fov: 42 }}
+        dpr={[1, 1.5]}
+        performance={{ min: 0.5 }}
+        gl={{
+          antialias: true,
+          alpha: true,
+          powerPreference: "high-performance",
+        }}
         shadows
         className="w-full h-full"
       >

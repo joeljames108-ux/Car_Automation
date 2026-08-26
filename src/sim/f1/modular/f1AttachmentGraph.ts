@@ -30,11 +30,34 @@ export interface F1AggregatedVehicleMetrics {
   isCompleteAndLegal: boolean;
 }
 
+const ALL_SOCKET_IDS: F1SocketId[] = Object.keys(F1_SOCKET_ANCHORS) as F1SocketId[];
+const MANDATORY_SOCKET_IDS: F1SocketId[] = ALL_SOCKET_IDS.filter((s) => F1_SOCKET_ANCHORS[s].mandatoryForHomologation);
+
 export class F1AttachmentGraph {
+  private static evalCache = new Map<string, F1AggregatedVehicleMetrics>();
+  private static readonly MAX_CACHE_SIZE = 50;
+
+  /**
+   * Generates a fast deterministic signature key for installed component map.
+   */
+  private static getMapSignature(installedMap: F1AssemblyInstalledMap): string {
+    let sig = "";
+    for (let i = 0; i < ALL_SOCKET_IDS.length; i++) {
+      const sId = ALL_SOCKET_IDS[i];
+      const val = installedMap[sId];
+      if (val) sig += `${sId}:${val};`;
+    }
+    return sig;
+  }
+
   /**
    * Evaluates the active installed assembly state and computes all physical properties.
    */
   public static evaluateAssembly(installedMap: F1AssemblyInstalledMap): F1AggregatedVehicleMetrics {
+    const signature = this.getMapSignature(installedMap);
+    const cached = this.evalCache.get(signature);
+    if (cached) return cached;
+
     let totalMass = 0;
     let weightedX = 0;
     let weightedY = 0;
@@ -51,10 +74,8 @@ export class F1AttachmentGraph {
     let installedCount = 0;
     const missingMandatorySockets: F1SocketId[] = [];
 
-    const allSockets = Object.keys(F1_SOCKET_ANCHORS) as F1SocketId[];
-    const mandatorySockets = allSockets.filter((s) => F1_SOCKET_ANCHORS[s].mandatoryForHomologation);
-
-    for (const socketId of allSockets) {
+    for (let i = 0; i < ALL_SOCKET_IDS.length; i++) {
+      const socketId = ALL_SOCKET_IDS[i];
       const componentId = installedMap[socketId];
       const socketAnchor = F1_SOCKET_ANCHORS[socketId];
 
@@ -112,10 +133,10 @@ export class F1AttachmentGraph {
     const frontWeightDist = Number((((3600 - cgZ) / 3600) * 100).toFixed(1));
     const frontAeroBalance = totalDownforce > 0 ? Number(((frontDownforce / totalDownforce) * 100).toFixed(1)) : 45.0;
 
-    const completionPercentage = Math.round(((mandatorySockets.length - missingMandatorySockets.length) / mandatorySockets.length) * 100);
+    const completionPercentage = Math.round(((MANDATORY_SOCKET_IDS.length - missingMandatorySockets.length) / MANDATORY_SOCKET_IDS.length) * 100);
     const isCompleteAndLegal = missingMandatorySockets.length === 0 && finalMass >= 798 && (totalIceHp + totalErsHp) >= 900 && totalCost <= 140_000_000;
 
-    return {
+    const metrics: F1AggregatedVehicleMetrics = {
       totalMassKg: finalMass,
       centerOfGravityMm: [cgX, cgY, cgZ],
       frontWeightDistributionPercent: Math.max(40, Math.min(55, frontWeightDist)),
@@ -127,11 +148,19 @@ export class F1AttachmentGraph {
       frontAeroBalancePercent: frontAeroBalance,
       totalCostUsd: totalCost,
       installedCount,
-      totalMandatoryCount: mandatorySockets.length,
+      totalMandatoryCount: MANDATORY_SOCKET_IDS.length,
       completionPercentage,
       missingMandatorySockets,
       isCompleteAndLegal,
     };
+
+    if (this.evalCache.size >= this.MAX_CACHE_SIZE) {
+      const firstKey = this.evalCache.keys().next().value;
+      if (firstKey) this.evalCache.delete(firstKey);
+    }
+    this.evalCache.set(signature, metrics);
+
+    return metrics;
   }
 
   /**

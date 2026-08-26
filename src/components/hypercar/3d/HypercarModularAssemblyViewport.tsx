@@ -6,7 +6,7 @@
 // department isolation, and physical part snapping.
 // ============================================================================
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, memo } from "react";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { useHypercarAssemblyStore } from "../../../sim/hypercar/state/hypercarAssemblyStore";
@@ -14,7 +14,7 @@ import { HYPERCAR_SOCKET_ANCHORS, type HypercarSocketId } from "../../../sim/hyp
 import { HypercarComponentRegistry } from "../../../sim/hypercar/modular/hypercarComponentRegistry";
 import { Layers, Eye, Maximize2, Sparkles, Sliders, Wind, Camera } from "lucide-react";
 
-export const HypercarModularAssemblyViewport: React.FC = () => {
+const HypercarModularAssemblyViewportComponent: React.FC = () => {
   const mountRef = useRef<HTMLDivElement>(null);
   const sceneRef = useRef<THREE.Scene | null>(null);
   const cameraRef = useRef<THREE.PerspectiveCamera | null>(null);
@@ -159,10 +159,12 @@ export const HypercarModularAssemblyViewport: React.FC = () => {
 
     renderer.domElement.addEventListener("click", handleClick);
 
-    // Animation Loop
+    // Animation Loop with Tab Visibility Suspension
     let animId: number;
     const animate = () => {
       animId = requestAnimationFrame(animate);
+      if (document.hidden) return;
+
       controls.update();
 
       // Pulsing hotspot rings
@@ -196,6 +198,13 @@ export const HypercarModularAssemblyViewport: React.FC = () => {
     };
     animate();
 
+    const handleVisibilityChange = () => {
+      if (!document.hidden && renderer && scene && camera) {
+        renderer.render(scene, camera);
+      }
+    };
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
     const handleResize = () => {
       if (!mountRef.current || !renderer || !camera) return;
       const w = mountRef.current.clientWidth || 800;
@@ -217,6 +226,7 @@ export const HypercarModularAssemblyViewport: React.FC = () => {
 
     return () => {
       clearTimeout(initTimer);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
       resizeObserver.disconnect();
       window.removeEventListener("resize", handleResize);
       renderer.domElement.removeEventListener("click", handleClick);
@@ -444,6 +454,9 @@ export const HypercarModularAssemblyViewport: React.FC = () => {
     </div>
   );
 };
+
+export const HypercarModularAssemblyViewport = memo(HypercarModularAssemblyViewportComponent);
+
 
 // ── Procedural Hypercar Mesh Generator ──
 function createHypercarModularMesh(

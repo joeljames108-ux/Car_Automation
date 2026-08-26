@@ -25,15 +25,11 @@ export class F1PhysicsEngine {
     const b = design.brakes;
     const c = design.cockpit;
 
-    return [
-      m.carbonFiberGrade, m.coreMaterial, m.totalMonocoqueMassKg, m.ballastTungstenKg, m.ballastPositionXPercent, m.cockpitOpeningWidthMm, m.haloMaterial,
-      pu.iceBoreMm, pu.iceStrokeMm, pu.compressionRatio, pu.prechamberTechnology, pu.fuelRailPressureBar, pu.mguKPowerKw, pu.mguHControl, pu.energyStoreCapacityMj, pu.totalPowerUnitMassKg,
-      a.frontWingFlapAngleDeg, a.frontWingSpanMm, a.rearWingMainPlaneAngleDeg, a.rearWingDrsFlapGapOpenMm, a.floorVenturiThroatHeightMm, a.frontAeroBalancePercent, a.sidepodUndercutDepthMm, a.rearWingBeamWingProfile,
-      s.frontLayout, s.rearLayout, s.frontHeaveSpringRateNmm, s.rearHeaveSpringRateNmm,
-      g.gearboxWeightKg, g.casingType,
-      b.frontDiscDiameterMm, b.caliperFrontPistons,
-      c?.steeringWheelDisplayType
-    ].join("|");
+    return `${m.carbonFiberGrade}_${m.coreMaterial}_${m.totalMonocoqueMassKg}_${m.ballastTungstenKg}_${m.ballastPositionXPercent}_${m.cockpitOpeningWidthMm}_${m.haloMaterial}_` +
+      `${pu.iceBoreMm}_${pu.iceStrokeMm}_${pu.compressionRatio}_${pu.prechamberTechnology}_${pu.fuelRailPressureBar}_${pu.mguKPowerKw}_${pu.mguHControl}_${pu.energyStoreCapacityMj}_${pu.totalPowerUnitMassKg}_` +
+      `${a.frontWingFlapAngleDeg}_${a.frontWingSpanMm}_${a.rearWingMainPlaneAngleDeg}_${a.rearWingDrsFlapGapOpenMm}_${a.floorVenturiThroatHeightMm}_${a.frontAeroBalancePercent}_${a.sidepodUndercutDepthMm}_${a.rearWingBeamWingProfile}_` +
+      `${s.frontLayout}_${s.rearLayout}_${s.frontHeaveSpringRateNmm}_${s.rearHeaveSpringRateNmm}_` +
+      `${g.gearboxWeightKg}_${g.casingType}_${b.frontDiscDiameterMm}_${b.caliperFrontPistons}_${c?.steeringWheelDisplayType || ""}`;
   }
 
 
@@ -270,9 +266,17 @@ export class F1PhysicsEngine {
         : "Cost cap breach! Re-spec high-cost titanium or M55J components to lower overall expenditure.",
     });
 
-    const passedCount = checks.filter(c => c.status === "PASS").length;
-    const failedCount = checks.filter(c => c.status === "FAIL").length;
-    const warningCount = checks.filter(c => c.status === "WARNING").length;
+    let passedCount = 0;
+    let failedCount = 0;
+    let warningCount = 0;
+
+    for (let i = 0; i < checks.length; i++) {
+      const status = checks[i].status;
+      if (status === "PASS") passedCount++;
+      else if (status === "FAIL") failedCount++;
+      else if (status === "WARNING") warningCount++;
+    }
+
     const overallScore = Math.round((passedCount / checks.length) * 100);
 
     const report: F1ScrutineeringReport = {

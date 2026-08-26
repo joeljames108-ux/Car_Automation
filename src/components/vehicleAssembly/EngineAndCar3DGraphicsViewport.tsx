@@ -10,7 +10,7 @@
 // - Part Hierarchy Inspector: Explores GLB mesh tree nodes with visibility & polycounts
 // ===================================================================
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, memo } from "react";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
@@ -66,7 +66,7 @@ export const CALIPER_PALETTE = [
 export type StudioLightingMode = "SOFTBOX_MAIN" | "CYBER_NEON" | "PROVING_GROUND_SUN";
 export type CameraPresetView = "HERO_THREE_QUARTER" | "SIDE_PROFILE" | "COCKPIT_DRIVER" | "ENGINE_BAY" | "REAR_DIFFUSER";
 
-export const EngineAndCar3DGraphicsViewport: React.FC = () => {
+const EngineAndCar3DGraphicsViewportComponent: React.FC = () => {
   const mountRef = useRef<HTMLDivElement>(null);
   const [viewMode, setViewMode] = useState<"VEHICLE" | "ENGINE">("VEHICLE");
   const [selectedEngineLayout, setSelectedEngineLayout] = useState<EngineLayout3D>("V_BANK_8");
@@ -166,8 +166,8 @@ export const EngineAndCar3DGraphicsViewport: React.FC = () => {
     const keyLight = new THREE.DirectionalLight(0xfff5e6, 3.2);
     keyLight.position.set(5, 8, 5);
     keyLight.castShadow = true;
-    keyLight.shadow.mapSize.width = 2048;
-    keyLight.shadow.mapSize.height = 2048;
+    keyLight.shadow.mapSize.width = 1024;
+    keyLight.shadow.mapSize.height = 1024;
     keyLight.shadow.bias = -0.0001;
     scene.add(keyLight);
     keyLightRef.current = keyLight;
@@ -204,11 +204,13 @@ export const EngineAndCar3DGraphicsViewport: React.FC = () => {
     const shadowPlane = StudioEnvironmentGenerator.createContactShadowPlane(2.6, 5.2, 0.75);
     scene.add(shadowPlane);
 
-    // 6. ANIMATION LOOP
+    // 6. ANIMATION LOOP WITH TAB VISIBILITY SUSPENSION
     let animationFrameId: number;
     let orbitTime = 0;
     const animate = () => {
       animationFrameId = requestAnimationFrame(animate);
+      if (document.hidden) return;
+
       if (autoRotate) {
         orbitTime += 0.004;
         const radius = 4.2;
@@ -222,6 +224,13 @@ export const EngineAndCar3DGraphicsViewport: React.FC = () => {
       composer.render();
     };
     animate();
+
+    const handleVisibilityChange = () => {
+      if (!document.hidden && composer) {
+        composer.render();
+      }
+    };
+    document.addEventListener("visibilitychange", handleVisibilityChange);
 
     // Resize Handler
     const handleResize = () => {
@@ -238,6 +247,7 @@ export const EngineAndCar3DGraphicsViewport: React.FC = () => {
 
     return () => {
       cancelAnimationFrame(animationFrameId);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
       window.removeEventListener("resize", handleResize);
       if (mountRef.current && renderer.domElement) {
         mountRef.current.removeChild(renderer.domElement);
@@ -787,3 +797,6 @@ export const EngineAndCar3DGraphicsViewport: React.FC = () => {
     </div>
   );
 };
+
+export const EngineAndCar3DGraphicsViewport = memo(EngineAndCar3DGraphicsViewportComponent);
+

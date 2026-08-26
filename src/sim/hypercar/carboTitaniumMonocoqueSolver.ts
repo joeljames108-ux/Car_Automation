@@ -66,11 +66,13 @@ export class CarboTitaniumMonocoqueSolver {
 
     const m2 = m * m;
     const n2 = n * n;
+    const m4 = m2 * m2;
+    const n4 = n2 * n2;
 
-    const qBar11 = q11 * Math.pow(m, 4) + 2 * (q12 + 2 * q66) * m2 * n2 + q22 * Math.pow(n, 4);
-    const qBar22 = q11 * Math.pow(n, 4) + 2 * (q12 + 2 * q66) * m2 * n2 + q22 * Math.pow(m, 4);
-    const qBar12 = (q11 + q22 - 4 * q66) * m2 * n2 + q12 * (Math.pow(m, 4) + Math.pow(n, 4));
-    const qBar66 = (q11 + q22 - 2 * q12 - 2 * q66) * m2 * n2 + q66 * (Math.pow(m, 4) + Math.pow(n, 4));
+    const qBar11 = q11 * m4 + 2 * (q12 + 2 * q66) * m2 * n2 + q22 * n4;
+    const qBar22 = q11 * n4 + 2 * (q12 + 2 * q66) * m2 * n2 + q22 * m4;
+    const qBar12 = (q11 + q22 - 4 * q66) * m2 * n2 + q12 * (m4 + n4);
+    const qBar66 = (q11 + q22 - 2 * q12 - 2 * q66) * m2 * n2 + q66 * (m4 + n4);
 
     return [
       [qBar11, qBar12, 0],

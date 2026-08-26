@@ -6,6 +6,12 @@ import React, { useState, useMemo } from "react";
 import { useHypercarAssemblyStore } from "../../../sim/hypercar/state/hypercarAssemblyStore";
 import { WEC_CIRCUITS, type WECCircuitProfile } from "../../../sim/hypercar/season/wecCalendar";
 import {
+  MotorsportSetupOptimizer,
+  type OptimizationGoal,
+  type MotorsportOptimizationResult,
+  type CircuitOptimizerProfile,
+} from "../../../sim/motorsport/motorsportSetupOptimizer";
+import {
   SlidersHorizontal,
   Play,
   RotateCcw,
@@ -25,6 +31,11 @@ import {
   GitCompare,
   TrendingUp,
   Activity,
+  Cpu,
+  Sparkles,
+  CheckCircle2,
+  Target,
+  BarChart3,
 } from "lucide-react";
 
 export interface HypercarGarageSetup {
@@ -83,6 +94,8 @@ export const HypercarGarageSetupStudio: React.FC<HypercarGarageSetupStudioProps>
   const activeCircuit = WEC_CIRCUITS[selectedCircuitIndex];
   const [weather, setWeather] = useState<WeatherCondition>("DRY_OPTIMAL");
   const [showPresetCompare, setShowPresetCompare] = useState(false);
+  const [showOptimizerModal, setShowOptimizerModal] = useState(false);
+  const [optimizationGoal, setOptimizationGoal] = useState<OptimizationGoal>("QUALIFYING_MAX_PACE");
 
   const [setup, setSetup] = useState<HypercarGarageSetup>({
     rearWingAngleDeg: 6.5,
@@ -93,6 +106,56 @@ export const HypercarGarageSetupStudio: React.FC<HypercarGarageSetupStudioProps>
     tireCompound: "MEDIUM_DOUBLE_STINT",
     ersDeployMode: "ENDURANCE_BALANCED",
   });
+
+  // Calculate AI Motorsport Optimization Result
+  const optimizerResult = useMemo<MotorsportOptimizationResult>(() => {
+    const circuitProfile: CircuitOptimizerProfile = {
+      name: activeCircuit.name,
+      totalLengthM: activeCircuit.lapLengthMeters,
+      longestStraightM: activeCircuit.downforceRequirement === "LOW" ? 850 : activeCircuit.downforceRequirement === "HIGH" ? 450 : 650,
+      cornerCount: 16,
+      avgCornerRadiusM: 80,
+      downforceRequirement: activeCircuit.downforceRequirement as any,
+      trackTempC: weather === "DRY_OPTIMAL" ? 32 : weather === "DAMP_TRACK" ? 22 : 18,
+      isWetTrack: weather === "WET_RAIN" || weather === "TORRENTIAL_MONSOON",
+    };
+
+    return MotorsportSetupOptimizer.optimizeSetup(optimizationGoal, circuitProfile, {
+      vehicleMassKg: metrics.totalMassKg || 1040,
+      enginePowerHp: metrics.totalPeakHorsepower || 880,
+      hybridPowerKw: 200,
+      frontalAreaM2: 1.95,
+      baseDragCoeffCd: 0.62,
+      baseLiftCoeffCl: 2.8,
+      maxBrakingForceN: 28000,
+      fuelTankCapacityKg: 90,
+      driveType: "AWD_HYBRID",
+    });
+  }, [activeCircuit, weather, optimizationGoal, metrics]);
+
+  const handleApplyOptimizerSetup = () => {
+    const opt = optimizerResult.optimalSetup;
+    let recTire: HypercarGarageSetup["tireCompound"] = "MEDIUM_DOUBLE_STINT";
+    if (weather === "WET_RAIN") recTire = "WET_INTERMEDIATE";
+    else if (weather === "TORRENTIAL_MONSOON") recTire = "FULL_WET_MONSOON";
+    else if (optimizationGoal === "QUALIFYING_MAX_PACE") recTire = "SOFT_SPRINT";
+    else if (optimizationGoal === "ENDURANCE_STINT_PACING") recTire = "HARD_TRIPLE_STINT";
+
+    let ersMode: HypercarGarageSetup["ersDeployMode"] = "ENDURANCE_BALANCED";
+    if (optimizationGoal === "QUALIFYING_MAX_PACE") ersMode = "QUALIFYING_MAX";
+    else if (optimizationGoal === "FUEL_HYBRID_EFFICIENCY") ersMode = "LIFT_AND_COAST";
+
+    setSetup({
+      rearWingAngleDeg: opt.rearWingAngleDeg,
+      frontRideHeightMm: opt.frontRideHeightMm,
+      rearRideHeightMm: opt.rearRideHeightMm,
+      frontMguDeploySpeedKmh: opt.frontMguDeploySpeedKmh,
+      brakeDuctTapePercent: opt.brakeDuctTapePct,
+      tireCompound: recTire,
+      ersDeployMode: ersMode,
+    });
+    setShowOptimizerModal(false);
+  };
 
   const aeroEfficiencyIndex =
     metrics.totalDragAt250KmhKg > 0
@@ -156,6 +219,14 @@ export const HypercarGarageSetupStudio: React.FC<HypercarGarageSetupStudioProps>
 
         {/* Live Setup Impact Delta & Enter Session Action */}
         <div className="flex items-center gap-4">
+          <button
+            onClick={() => setShowOptimizerModal(true)}
+            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-purple-600/30 to-indigo-600/30 border border-purple-500/50 text-purple-300 font-bold text-xs hover:bg-purple-600/40 transition-all cursor-pointer shadow-lg shadow-purple-500/10"
+          >
+            <Sparkles className="w-4 h-4 text-purple-400" />
+            AI Motorsport Setup Optimizer
+          </button>
+
           <div className="text-right">
             <div className="text-[10px] text-zinc-400 uppercase font-mono">Est. Lap Time Delta</div>
             <div className={`text-sm font-black font-mono ${Number(lapTimeDeltaSec) <= 0.2 ? "text-emerald-400" : "text-amber-400"}`}>
@@ -488,6 +559,171 @@ export const HypercarGarageSetupStudio: React.FC<HypercarGarageSetupStudioProps>
           </div>
         </div>
       </div>
+
+      {/* AI Motorsport Setup Optimizer Modal */}
+      {showOptimizerModal && (
+        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-6">
+          <div className="bg-[#0b0f19] border border-purple-500/30 rounded-3xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col shadow-2xl">
+            {/* Modal Header */}
+            <div className="p-6 border-b border-white/10 flex items-center justify-between bg-purple-950/20">
+              <div className="flex items-center gap-3">
+                <div className="p-2.5 rounded-2xl bg-purple-500/20 border border-purple-500/30 text-purple-400">
+                  <Sparkles className="w-6 h-6" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-black text-white uppercase tracking-wider flex items-center gap-2">
+                    AI Motorsport Setup & Telemetry Optimizer
+                  </h3>
+                  <p className="text-xs text-zinc-400">
+                    Direct Collocation & Non-Linear Pareto Optimization Engine for {activeCircuit.name}
+                  </p>
+                </div>
+              </div>
+              <button
+                onClick={() => setShowOptimizerModal(false)}
+                className="px-3 py-1.5 rounded-xl bg-zinc-900 border border-white/10 text-xs font-bold text-zinc-400 hover:text-white transition-all cursor-pointer"
+              >
+                ✕ Close
+              </button>
+            </div>
+
+            {/* Modal Body */}
+            <div className="p-6 overflow-y-auto space-y-6 flex-1 text-xs">
+              {/* Goal Selector */}
+              <div className="space-y-2">
+                <span className="font-mono text-zinc-400 text-[10px] uppercase font-bold block">
+                  Select Performance Optimization Goal
+                </span>
+                <div className="grid grid-cols-4 gap-3">
+                  {[
+                    { id: "QUALIFYING_MAX_PACE", label: "Qualifying Push Pace", desc: "Max single lap speed & downforce" },
+                    { id: "ENDURANCE_STINT_PACING", label: "Stint Longevity", desc: "Minimal tire wear & thermal degradation" },
+                    { id: "RAIN_STABILITY", label: "Wet Track Stability", desc: "Max mechanical grip & lock-up prevention" },
+                    { id: "FUEL_HYBRID_EFFICIENCY", label: "Hybrid Efficiency", desc: "Energy harvesting & lift-and-coast" },
+                  ].map((g) => (
+                    <button
+                      key={g.id}
+                      onClick={() => setOptimizationGoal(g.id as OptimizationGoal)}
+                      className={`p-3 rounded-2xl border text-left transition-all cursor-pointer ${
+                        optimizationGoal === g.id
+                          ? "bg-purple-500/20 border-purple-500 text-purple-200 ring-1 ring-purple-500/50"
+                          : "bg-zinc-900/60 border-white/10 text-zinc-400 hover:text-white"
+                      }`}
+                    >
+                      <div className="font-black text-xs">{g.label}</div>
+                      <div className="text-[10px] text-zinc-500 mt-1">{g.desc}</div>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Optimization KPI Cards */}
+              <div className="grid grid-cols-4 gap-3 font-mono">
+                <div className="p-3.5 rounded-2xl bg-black/40 border border-purple-500/20">
+                  <span className="text-[9px] text-purple-400 block font-bold">EST. LAP TIME</span>
+                  <span className="text-xl font-black text-white">{optimizerResult.predictedLapTimeString}</span>
+                  <span className="text-[9px] text-emerald-400 block mt-1">
+                    -{optimizerResult.lapTimeSavedVsBaselineSec}s vs Baseline
+                  </span>
+                </div>
+                <div className="p-3.5 rounded-2xl bg-black/40 border border-purple-500/20">
+                  <span className="text-[9px] text-cyan-400 block font-bold">TOP SPEED</span>
+                  <span className="text-xl font-black text-white">{optimizerResult.topSpeedKmh} km/h</span>
+                  <span className="text-[9px] text-zinc-400 block mt-1">
+                    Min Apex: {optimizerResult.minCorneringSpeedKmh} km/h
+                  </span>
+                </div>
+                <div className="p-3.5 rounded-2xl bg-black/40 border border-purple-500/20">
+                  <span className="text-[9px] text-amber-400 block font-bold">AERO EFFICIENCY</span>
+                  <span className="text-xl font-black text-white">{optimizerResult.aerodynamicEfficiencyLoverD} L/D</span>
+                  <span className="text-[9px] text-zinc-400 block mt-1">Wing Angle: {optimizerResult.optimalSetup.rearWingAngleDeg}°</span>
+                </div>
+                <div className="p-3.5 rounded-2xl bg-black/40 border border-purple-500/20">
+                  <span className="text-[9px] text-rose-400 block font-bold">STINT LONGEVITY</span>
+                  <span className="text-xl font-black text-white">{optimizerResult.stintMaxLaps} Laps</span>
+                  <span className="text-[9px] text-zinc-400 block mt-1">{optimizerResult.tireWearPctPerLap}% Wear / lap</span>
+                </div>
+              </div>
+
+              {/* Sector Deltas Breakdown */}
+              <div className="p-4 rounded-2xl bg-zinc-900/60 border border-white/10 space-y-2">
+                <span className="font-mono text-zinc-400 text-[10px] uppercase font-bold block">
+                  Sector Time Decomposition
+                </span>
+                <div className="grid grid-cols-3 gap-3 font-mono text-center">
+                  <div className="p-2.5 rounded-xl bg-black/40 border border-white/5">
+                    <span className="text-[9px] text-zinc-500 block">SECTOR 1 (SPEED)</span>
+                    <span className="font-bold text-amber-300 text-sm">{optimizerResult.sectorTimes.s1}s</span>
+                  </div>
+                  <div className="p-2.5 rounded-xl bg-black/40 border border-white/5">
+                    <span className="text-[9px] text-zinc-500 block">SECTOR 2 (TECHNICAL)</span>
+                    <span className="font-bold text-amber-300 text-sm">{optimizerResult.sectorTimes.s2}s</span>
+                  </div>
+                  <div className="p-2.5 rounded-xl bg-black/40 border border-white/5">
+                    <span className="text-[9px] text-zinc-500 block">SECTOR 3 (TRACTION)</span>
+                    <span className="font-bold text-amber-300 text-sm">{optimizerResult.sectorTimes.s3}s</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Pareto Frontier Comparison */}
+              <div className="p-4 rounded-2xl bg-zinc-900/60 border border-white/10 space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="font-mono text-purple-300 text-[10px] uppercase font-bold flex items-center gap-1.5">
+                    <BarChart3 className="w-4 h-4 text-purple-400" />
+                    Pareto Trade-Off Frontier (Downforce vs Top Speed vs Lap Time)
+                  </span>
+                </div>
+                <div className="space-y-2 font-mono">
+                  {optimizerResult.paretoFrontier.map((pt, i) => (
+                    <div
+                      key={i}
+                      className="p-2.5 rounded-xl bg-black/40 border border-white/5 flex items-center justify-between text-[11px]"
+                    >
+                      <div className="font-bold text-white w-48">{pt.setupName}</div>
+                      <div className="text-zinc-400">DF: {pt.downforceNAt250} N</div>
+                      <div className="text-cyan-300">Drag: {pt.dragNAt250} N</div>
+                      <div className="text-amber-400">VMax: {pt.topSpeedKmh} km/h</div>
+                      <div className="text-emerald-400 font-bold">Lap: {pt.predictedLapTimeSec}s</div>
+                      <div className="text-rose-300">Life: {pt.tireLifeLaps} Laps</div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Engineering Recommendations */}
+              <div className="p-4 rounded-2xl bg-purple-950/20 border border-purple-500/30 space-y-2">
+                <span className="font-mono text-purple-300 text-[10px] uppercase font-bold flex items-center gap-1.5">
+                  <Cpu className="w-4 h-4 text-purple-400" />
+                  Race Engineer Advisory Notes
+                </span>
+                <ul className="space-y-1 text-zinc-300 text-[11px]">
+                  {optimizerResult.engineeringRecommendations.map((rec, i) => (
+                    <li key={i} className="flex items-start gap-2">
+                      <span className="text-purple-400 font-bold">•</span>
+                      <span>{rec}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+
+            {/* Modal Footer */}
+            <div className="p-6 border-t border-white/10 bg-black/40 flex items-center justify-between">
+              <div className="text-zinc-400 text-xs font-mono">
+                Optimized for {activeCircuit.name} ({activeCircuit.downforceRequirement} Downforce Demand)
+              </div>
+              <button
+                onClick={handleApplyOptimizerSetup}
+                className="flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-black text-xs uppercase tracking-wider shadow-lg shadow-purple-500/20 hover:brightness-110 transition-all cursor-pointer"
+              >
+                <CheckCircle2 className="w-4 h-4" />
+                Apply AI Optimal Setup to Pit Garage
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

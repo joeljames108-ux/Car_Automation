@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, memo } from "react";
 import {
   LayoutDashboard, Wind, Battery, Zap, Thermometer, Layers,
   CircleDot, Flag, DollarSign, ShieldCheck, Star,
@@ -34,7 +34,7 @@ interface CommandCenterProps {
   onSelectStage?: (stage: string) => void;
 }
 
-export function CommandCenter({ onSelectStage }: CommandCenterProps = {}) {
+function CommandCenterComponent({ onSelectStage }: CommandCenterProps = {}) {
   const { design, sim, carConcept, setCarConcept, uiTheme, setUiTheme } = useDesign();
   const { company } = useCompany();
   const scores = useMemo(() => computeScores(design, sim), [design, sim]);
@@ -45,12 +45,12 @@ export function CommandCenter({ onSelectStage }: CommandCenterProps = {}) {
     [design, sim],
   );
 
-  const dragSeries = [
+  const dragSeries = useMemo(() => [
     { data: sim.dragVsSpeed.map((d) => ({ x: d.speed, y: d.drag })), color: "#22d3ee", fill: true },
     { data: sim.dragVsSpeed.map((d) => ({ x: d.speed, y: d.downforce })), color: "#22c55e" },
-  ];
+  ], [sim.dragVsSpeed]);
 
-  const sortedLaps = [...sim.lapTimes].sort((a, b) => a.time - b.time);
+  const sortedLaps = useMemo(() => [...sim.lapTimes].sort((a, b) => a.time - b.time), [sim.lapTimes]);
   const fastestLap = sortedLaps[0];
   const slowestLap = sortedLaps[sortedLaps.length - 1];
 
@@ -778,4 +778,5 @@ function RecommendationRow({ rec }: { rec: Recommendation }) {
   );
 }
 
+export const CommandCenter = memo(CommandCenterComponent);
 export default CommandCenter;

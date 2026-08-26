@@ -13,7 +13,7 @@
  * ============================================================================
  */
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, memo } from "react";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import {
@@ -99,7 +99,7 @@ const DEFAULT_GEAR_RATIOS: Record<TransmissionArchitecture, GearRatioConfig> = {
   cvt: { gear1: 2.60, gear2: 2.10, gear3: 1.60, gear4: 1.20, gear5: 0.90, gear6: 0.70, gear7: 0.55, gear8: 0.45, finalDrive: 4.10 },
 };
 
-export const Transmission3DStudio: React.FC<Transmission3DStudioProps> = ({
+const Transmission3DStudioComponent: React.FC<Transmission3DStudioProps> = ({
   engineConfig,
   sim,
   updateEngine,
@@ -222,11 +222,13 @@ export const Transmission3DStudio: React.FC<Transmission3DStudioProps> = ({
     grid.position.y = -0.24;
     scene.add(grid);
 
-    // Animation Loop
+    // Animation Loop with Tab Visibility Suspension
     let animId: number;
     let prevTime = performance.now();
     const animate = (now: number) => {
       animId = requestAnimationFrame(animate);
+      if (document.hidden) return;
+
       const dt = Math.min((now - prevTime) / 1000, 0.05);
       prevTime = now;
 
@@ -246,6 +248,13 @@ export const Transmission3DStudio: React.FC<Transmission3DStudioProps> = ({
     };
     animate(performance.now());
 
+    const handleVisibilityChange = () => {
+      if (!document.hidden && renderer && scene && camera) {
+        renderer.render(scene, camera);
+      }
+    };
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
     const handleResize = () => {
       if (!containerRef.current || !renderer || !camera) return;
       const w = containerRef.current.clientWidth;
@@ -258,6 +267,7 @@ export const Transmission3DStudio: React.FC<Transmission3DStudioProps> = ({
 
     return () => {
       cancelAnimationFrame(animId);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
       window.removeEventListener("resize", handleResize);
       renderer.dispose();
     };
@@ -799,3 +809,6 @@ export const Transmission3DStudio: React.FC<Transmission3DStudioProps> = ({
     </div>
   );
 };
+
+export const Transmission3DStudio = memo(Transmission3DStudioComponent);
+

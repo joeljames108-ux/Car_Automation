@@ -9,7 +9,7 @@
 // - Live Kinematic Readouts: Camber Gain (°/m), Roll Center Height, Anti-Dive/Squat %
 // ===================================================================
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useMemo, memo } from "react";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { PbrMaterialStudio } from "../../exterior3d/materials/pbrMaterialStudio";
@@ -40,7 +40,7 @@ export type SuspensionType3D =
   | "PULLROD_FORMULA"
   | "MULTI_LINK_5ARM";
 
-export const Suspension3DStudioViewport: React.FC = () => {
+const Suspension3DStudioViewportComponent: React.FC = () => {
   const { uiTheme } = useDesign();
   const mountRef = useRef<HTMLDivElement>(null);
 
@@ -74,13 +74,13 @@ export const Suspension3DStudioViewport: React.FC = () => {
   const damperGroupRef = useRef<THREE.Group | null>(null);
   const springCoilRef = useRef<THREE.Group | null>(null);
 
-  // Kinematic calculations
+  // Kinematic calculations with useMemo
   const bumpMers = wheelBumpMm / 1000;
-  const dynamicCamberDeg = Number((-0.8 - (bumpMers * 1000 / 25) * 0.45).toFixed(2));
-  const rollCenterHeightMm = Number((42 + bumpMers * 18).toFixed(1));
-  const antiDivePct = Number((32.5 + (springRateNmm / 120) * 8.0).toFixed(1));
-  const antiSquatPct = Number((48.0 + (springRateNmm / 120) * 12.0).toFixed(1));
-  const ackermannDeg = Number((steeringAngleDeg * 1.15).toFixed(1));
+  const dynamicCamberDeg = useMemo(() => Number((-0.8 - (bumpMers * 1000 / 25) * 0.45).toFixed(2)), [bumpMers]);
+  const rollCenterHeightMm = useMemo(() => Number((42 + bumpMers * 18).toFixed(1)), [bumpMers]);
+  const antiDivePct = useMemo(() => Number((32.5 + (springRateNmm / 120) * 8.0).toFixed(1)), [springRateNmm]);
+  const antiSquatPct = useMemo(() => Number((48.0 + (springRateNmm / 120) * 12.0).toFixed(1)), [springRateNmm]);
+  const ackermannDeg = useMemo(() => Number((steeringAngleDeg * 1.15).toFixed(1)), [steeringAngleDeg]);
 
   // Sync default environment if global UI theme changes
   useEffect(() => {
@@ -469,17 +469,26 @@ export const Suspension3DStudioViewport: React.FC = () => {
 
     scene.add(suspAssembly);
 
-    // Animation Loop
+    // Animation Loop with Tab Visibility Suspension
     let animId: number;
     const animate = () => {
       animId = requestAnimationFrame(animate);
+      if (document.hidden) return;
+
       controls.update();
       renderer.render(scene, camera);
     };
     animate();
 
+    const handleVisibilityChange = () => {
+      if (!document.hidden && renderer && scene && camera) {
+        renderer.render(scene, camera);
+      }
+    };
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
     const handleResize = () => {
-      if (!mountRef.current) return;
+      if (!mountRef.current || !renderer || !camera) return;
       const w = mountRef.current.clientWidth;
       const h = mountRef.current.clientHeight;
       camera.aspect = w / h;
@@ -490,12 +499,15 @@ export const Suspension3DStudioViewport: React.FC = () => {
 
     return () => {
       cancelAnimationFrame(animId);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
       window.removeEventListener("resize", handleResize);
       if (currentEnvTextureRef.current) {
         currentEnvTextureRef.current.dispose();
       }
       renderer.dispose();
-      if (mountRef.current) mountRef.current.innerHTML = "";
+      if (mountRef.current && renderer.domElement) {
+        mountRef.current.removeChild(renderer.domElement);
+      }
     };
   }, [suspensionType, envPreset]);
 
@@ -759,3 +771,6 @@ export const Suspension3DStudioViewport: React.FC = () => {
     </div>
   );
 };
+
+export const Suspension3DStudioViewport = memo(Suspension3DStudioViewportComponent);
+

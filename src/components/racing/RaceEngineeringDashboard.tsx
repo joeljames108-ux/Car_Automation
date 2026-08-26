@@ -130,7 +130,7 @@ export const RaceEngineeringDashboard: React.FC<RaceEngineeringDashboardProps> =
         positionChanges: [],
       });
       if (aiMessages.length > 0) {
-        setEngineerMessages(prev => [...prev, ...aiMessages]);
+        setEngineerMessages(prev => [...prev.slice(-50), ...aiMessages]);
       }
     }, 100);
 

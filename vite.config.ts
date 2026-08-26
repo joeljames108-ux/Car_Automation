@@ -9,10 +9,14 @@ export default defineConfig({
     },
   },
   build: {
+    target: "es2022",
+    cssCodeSplit: true,
     rollupOptions: {
       output: {
         manualChunks: {
-          "vendor-three": ["three", "@react-three/fiber", "@react-three/drei", "@gltf-transform/core", "@gltf-transform/extensions"],
+          "vendor-three-core": ["three"],
+          "vendor-three-fiber": ["@react-three/fiber", "@react-three/drei"],
+          "vendor-gltf": ["@gltf-transform/core", "@gltf-transform/extensions"],
           "vendor-icons": ["lucide-react"],
           "vendor-motion": ["framer-motion"],
           "vendor-react": ["react", "react-dom"],
@@ -20,6 +24,6 @@ export default defineConfig({
         },
       },
     },
-    chunkSizeWarningLimit: 1000,
+    chunkSizeWarningLimit: 1200,
   },
 });

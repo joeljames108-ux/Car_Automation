@@ -8,7 +8,7 @@
 // - 420mm Carbon-Ceramic Matrix Brake 1,400°C Thermal Pyrometry
 // ===================================================================
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useMemo, memo } from "react";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { CarboTitaniumMonocoqueSolver } from "../../sim/hypercar/carboTitaniumMonocoqueSolver";
@@ -18,7 +18,7 @@ import { CarbonCeramicMatrixBrakeThermalFea } from "../../sim/hypercar/carbonCer
 import { Car3DGeometryGenerator } from "../../exterior3d/geometry/car3dGeometryGenerator";
 import { Zap, Sliders, Wind, Flame, ShieldAlert, Activity, Trophy, Play } from "lucide-react";
 
-export const MegawattHypercarStudioViewport: React.FC = () => {
+const MegawattHypercarStudioViewportComponent: React.FC = () => {
   const mountRef = useRef<HTMLDivElement>(null);
   const [drsMode, setDrsMode] = useState<ActiveDrsMode>("HIGH_DOWNFORCE_CORNERING");
   const [airspeedKmH, setAirspeedKmH] = useState<number>(320);
@@ -28,56 +28,64 @@ export const MegawattHypercarStudioViewport: React.FC = () => {
   const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
   const controlsRef = useRef<OrbitControls | null>(null);
 
-  // 1. Run Simulations
-  const monocoqueFea = CarboTitaniumMonocoqueSolver.solveMonocoque({
-    plyCount: 32,
-    titaniumMeshVolRatioPct: 18,
-    monocoqueLengthMm: 2750,
-    monocoqueWidthMm: 1450,
-    monocoqueHeightMm: 1100,
-    appliedTorsionalMomentNm: 15000,
-  });
+  // 1. Run Simulations with useMemo
+  const monocoqueFea = useMemo(() => {
+    return CarboTitaniumMonocoqueSolver.solveMonocoque({
+      plyCount: 32,
+      titaniumMeshVolRatioPct: 18,
+      monocoqueLengthMm: 2750,
+      monocoqueWidthMm: 1450,
+      monocoqueHeightMm: 1100,
+      appliedTorsionalMomentNm: 15000,
+    });
+  }, []);
 
-  const powertrain = MegawattTriMotorPowertrainEngine.solvePowertrainKinetics({
-    vehicleMassKg: 1480,
-    icePowerHp,
-    frontLeftMotorKw: 350,
-    frontRightMotorKw: 350,
-    batteryCapacityKwh: 85,
-    dragCoefficientCd: 0.31,
-    frontalAreaM2: 2.05,
-  });
+  const powertrain = useMemo(() => {
+    return MegawattTriMotorPowertrainEngine.solvePowertrainKinetics({
+      vehicleMassKg: 1480,
+      icePowerHp,
+      frontLeftMotorKw: 350,
+      frontRightMotorKw: 350,
+      batteryCapacityKwh: 85,
+      dragCoefficientCd: 0.31,
+      frontalAreaM2: 2.05,
+    });
+  }, [icePowerHp]);
 
-  const aero = ActiveGroundEffectVenturiAeromechanics.solveAeromechanics({
-    airspeedKmH,
-    rideHeightMm,
-    drsMode,
-    wingAngleDeg: 12.0,
-  });
+  const aero = useMemo(() => {
+    return ActiveGroundEffectVenturiAeromechanics.solveAeromechanics({
+      airspeedKmH,
+      rideHeightMm,
+      drsMode,
+      wingAngleDeg: 12.0,
+    });
+  }, [airspeedKmH, rideHeightMm, drsMode]);
 
-  const brakeFea = CarbonCeramicMatrixBrakeThermalFea.solveBrakeThermalFea({
-    entrySpeedKmH: airspeedKmH,
-    vehicleMassKg: 1480,
-    rotorSpec: {
-      outerDiameterMm: 420,
-      innerDiameterMm: 240,
-      thicknessMm: 40,
-      rotorMassKg: 6.8,
-      materialType: "CARBON_SILICON_CARBIDE_CSIC_R",
-      maxOperatingTempC: 1450,
-      specificHeatJPerKgK: 1200,
-      thermalConductivityWPerMK: 45,
-    },
-    caliperSpec: {
-      pistonCount: 10,
-      pistonMaterial: "TITANIUM_NITRIDE_COATED",
-      caliperBodyMaterial: "ALUMINUM_LITHIUM_MONOBLOC",
-      maxHydraulicLinePressureBar: 120,
-      totalPistonAreaCm2: 85,
-    },
-    hydraulicLinePressureBar: 95,
-    ambientTempC: 30,
-  });
+  const brakeFea = useMemo(() => {
+    return CarbonCeramicMatrixBrakeThermalFea.solveBrakeThermalFea({
+      entrySpeedKmH: airspeedKmH,
+      vehicleMassKg: 1480,
+      rotorSpec: {
+        outerDiameterMm: 420,
+        innerDiameterMm: 240,
+        thicknessMm: 40,
+        rotorMassKg: 6.8,
+        materialType: "CARBON_SILICON_CARBIDE_CSIC_R",
+        maxOperatingTempC: 1450,
+        specificHeatJPerKgK: 1200,
+        thermalConductivityWPerMK: 45,
+      },
+      caliperSpec: {
+        pistonCount: 10,
+        pistonMaterial: "TITANIUM_NITRIDE_COATED",
+        caliperBodyMaterial: "ALUMINUM_LITHIUM_MONOBLOC",
+        maxHydraulicLinePressureBar: 120,
+        totalPistonAreaCm2: 85,
+      },
+      hydraulicLinePressureBar: 95,
+      ambientTempC: 30,
+    });
+  }, [airspeedKmH]);
 
   // 2. Three.js 3D Viewport Setup
   useEffect(() => {
@@ -114,6 +122,8 @@ export const MegawattHypercarStudioViewport: React.FC = () => {
     const keyLight = new THREE.DirectionalLight(0xfff5e6, 3.0);
     keyLight.position.set(6, 8, 6);
     keyLight.castShadow = true;
+    keyLight.shadow.mapSize.width = 1024;
+    keyLight.shadow.mapSize.height = 1024;
     scene.add(keyLight);
 
     const rimLight = new THREE.DirectionalLight(0x38bdf8, 1.8);
@@ -128,17 +138,26 @@ export const MegawattHypercarStudioViewport: React.FC = () => {
     const hypercar3D = Car3DGeometryGenerator.buildCar3DGroup("HYPERCAR_MONOCOQUE", 0x111317);
     scene.add(hypercar3D);
 
-    // Animation Loop
+    // Animation Loop with Tab Visibility Suspension
     let animId: number;
     const animate = () => {
       animId = requestAnimationFrame(animate);
+      if (document.hidden) return;
+
       controls.update();
       renderer.render(scene, camera);
     };
     animate();
 
+    const handleVisibilityChange = () => {
+      if (!document.hidden && renderer && scene && camera) {
+        renderer.render(scene, camera);
+      }
+    };
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
     const handleResize = () => {
-      if (!mountRef.current) return;
+      if (!mountRef.current || !renderer || !camera) return;
       const w = mountRef.current.clientWidth;
       const h = mountRef.current.clientHeight;
       camera.aspect = w / h;
@@ -149,9 +168,12 @@ export const MegawattHypercarStudioViewport: React.FC = () => {
 
     return () => {
       cancelAnimationFrame(animId);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
       window.removeEventListener("resize", handleResize);
       renderer.dispose();
-      if (mountRef.current) mountRef.current.innerHTML = "";
+      if (mountRef.current && renderer.domElement) {
+        mountRef.current.removeChild(renderer.domElement);
+      }
     };
   }, []);
 
@@ -288,3 +310,6 @@ export const MegawattHypercarStudioViewport: React.FC = () => {
     </div>
   );
 };
+
+export const MegawattHypercarStudioViewport = memo(MegawattHypercarStudioViewportComponent);
+

@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useMemo, memo } from "react";
 import { createPortal } from "react-dom";
 import { Gauge, Zap, Weight, Timer, TrendingUp, DollarSign, Battery, HelpCircle, Info, Activity, Disc, Wind, Flag, Fuel, ShieldCheck, Maximize2, ArrowLeft, X } from "lucide-react";
 import { useDesign } from "../state/DesignContext";
@@ -17,7 +17,7 @@ interface StatItem {
   subMetric?: string;
 }
 
-export function StatRail() {
+export function StatRailComponent() {
   const { sim } = useDesign();
   const [hoveredLabel, setHoveredLabel] = useState<string | null>(null);
   const [selectedStat, setSelectedStat] = useState<StatItem | null>(null);
@@ -57,22 +57,23 @@ export function StatRail() {
   const initialSimRef = useRef(sim);
   const initialSim = initialSimRef.current;
 
-  const pwrToWeight = (sim.peakPower / (sim.weight / 1000)).toFixed(1);
+  const stats = useMemo<StatItem[]>(() => {
+    const pwrToWeight = (sim.peakPower / (sim.weight / 1000)).toFixed(1);
 
-  // Compute numeric deltas
-  const pwrDiff = sim.peakPower - initialSim.peakPower;
-  const trqDiff = sim.peakTorque - initialSim.peakTorque;
-  const wgtDiff = sim.weight - initialSim.weight;
-  const accDiff = Number((sim.accel0_60 - initialSim.accel0_60).toFixed(2));
-  const qtrDiff = Number(((sim.quarterMile || 11.5) - (initialSim.quarterMile || 11.5)).toFixed(2));
-  const latDiff = Number(((sim.lateralG || 1.1) - (initialSim.lateralG || 1.1)).toFixed(2));
-  const brkDiff = Number(((sim.brakingDist || 32) - (initialSim.brakingDist || 32)).toFixed(1));
-  const dwnDiff = (sim.downforce || 0) - (initialSim.downforce || 0);
-  const spdDiff = sim.topSpeed - initialSim.topSpeed;
-  const fueDiff = Number(((sim.fuelEconomy || 8.5) - (initialSim.fuelEconomy || 8.5)).toFixed(1));
-  const cstDiff = Math.round((sim.totalCost - initialSim.totalCost) / 1000);
+    // Compute numeric deltas
+    const pwrDiff = sim.peakPower - initialSim.peakPower;
+    const trqDiff = sim.peakTorque - initialSim.peakTorque;
+    const wgtDiff = sim.weight - initialSim.weight;
+    const accDiff = Number((sim.accel0_60 - initialSim.accel0_60).toFixed(2));
+    const qtrDiff = Number(((sim.quarterMile || 11.5) - (initialSim.quarterMile || 11.5)).toFixed(2));
+    const latDiff = Number(((sim.lateralG || 1.1) - (initialSim.lateralG || 1.1)).toFixed(2));
+    const brkDiff = Number(((sim.brakingDist || 32) - (initialSim.brakingDist || 32)).toFixed(1));
+    const dwnDiff = (sim.downforce || 0) - (initialSim.downforce || 0);
+    const spdDiff = sim.topSpeed - initialSim.topSpeed;
+    const fueDiff = Number(((sim.fuelEconomy || 8.5) - (initialSim.fuelEconomy || 8.5)).toFixed(1));
+    const cstDiff = Math.round((sim.totalCost - initialSim.totalCost) / 1000);
 
-  const stats: StatItem[] = [
+    const items: StatItem[] = [
     {
       icon: <Zap size={14} />,
       label: "Power",
@@ -207,21 +208,24 @@ export function StatRail() {
     },
   ];
 
-  if (sim.isHybrid || sim.isElectric) {
-    const batDiff = (sim.batteryEnergy || 0) - (initialSim.batteryEnergy || 0);
-    stats.splice(6, 0, {
-      icon: <Battery size={14} />,
-      label: "Battery",
-      initialValue: initialSim.batteryEnergy || 0,
-      value: sim.batteryEnergy || 0,
-      unit: "kWh",
-      deltaText: batDiff > 0 ? `+${batDiff} kWh` : batDiff < 0 ? `${batDiff} kWh` : "Base",
-      deltaColor: batDiff > 0 ? "bg-emerald-500/15 text-emerald-400 border-emerald-500/30" : "bg-slate-500/10 text-slate-400 border-slate-500/20",
-      tooltipTitle: "EV Battery Capacity",
-      tooltipDesc: "Usable lithium-ion / solid-state energy storage feeding electric drive motors.",
-      subMetric: `Range: ${sim.electricRange || 450} km`
-    });
-  }
+    if (sim.isHybrid || sim.isElectric) {
+      const batDiff = (sim.batteryEnergy || 0) - (initialSim.batteryEnergy || 0);
+      items.splice(6, 0, {
+        icon: <Battery size={14} />,
+        label: "Battery",
+        initialValue: initialSim.batteryEnergy || 0,
+        value: sim.batteryEnergy || 0,
+        unit: "kWh",
+        deltaText: batDiff > 0 ? `+${batDiff} kWh` : batDiff < 0 ? `${batDiff} kWh` : "Base",
+        deltaColor: batDiff > 0 ? "bg-emerald-500/15 text-emerald-400 border-emerald-500/30" : "bg-slate-500/10 text-slate-400 border-slate-500/20",
+        tooltipTitle: "EV Battery Capacity",
+        tooltipDesc: "Usable lithium-ion / solid-state energy storage feeding electric drive motors.",
+        subMetric: `Range: ${sim.electricRange || 450} km`
+      });
+    }
+
+    return items;
+  }, [sim, initialSim]);
 
   return (
     <div className="flex flex-col gap-2.5 stagger-enter relative select-none w-full">
@@ -380,3 +384,6 @@ export function StatRail() {
     </div>
   );
 }
+
+export const StatRail = memo(StatRailComponent);
+

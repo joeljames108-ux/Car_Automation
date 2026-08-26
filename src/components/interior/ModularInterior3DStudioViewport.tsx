@@ -21,7 +21,7 @@
  * ============================================================================
  */
 
-import React, { useEffect, useRef, useState, useCallback } from "react";
+import React, { useEffect, useRef, useState, useCallback, memo } from "react";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import {
@@ -179,7 +179,7 @@ interface ModularInterior3DStudioViewportProps {
   onSelectPart?: (partId: "seats" | "dash" | "console" | "materials" | "audio_safety" | "bespoke") => void;
 }
 
-export const ModularInterior3DStudioViewport: React.FC<ModularInterior3DStudioViewportProps> = ({
+const ModularInterior3DStudioViewportComponent: React.FC<ModularInterior3DStudioViewportProps> = ({
   state,
   selectedPartId,
   onSelectPart,
@@ -481,43 +481,52 @@ export const ModularInterior3DStudioViewport: React.FC<ModularInterior3DStudioVi
     container.addEventListener("pointermove", handlePointerMove);
     container.addEventListener("click", handleClick);
 
-    // Animation Loop
+    // Animation Loop with Throttled 2D Canvas Updates & Tab Visibility Suspension
     let animId: number;
     const clock = new THREE.Clock();
-    let currentYaw = 0;
-    let currentPitch = 2;
+    let lastCanvasUpdate = 0;
+    let lastRenderedRpm = -1;
 
     const animate = () => {
       animId = requestAnimationFrame(animate);
+      if (document.hidden) return;
+
       const delta = clock.getDelta();
       const elapsed = clock.getElapsedTime();
+      const now = performance.now();
 
-      // 1. Update functional instrument cluster canvas
-      const clusterRenderer = MasterModularInterior3DAssembler.getClusterRenderer();
-      clusterRenderer.render({
-        rpm: simRpm,
-        maxRpm: 9000,
-        speedKmh: (simRpm / 9000) * 285,
-        gear: simRpm > 7500 ? "4" : "3",
-        boostBar: Math.min(2.2, (simRpm / 9000) * 2.2),
-        oilTempC: 98,
-        coolantTempC: 90,
-        lateralG: Math.sin(elapsed * 0.8) * 1.35,
-        longitudinalG: Math.cos(elapsed * 1.2) * 0.95,
-        lapTimeSeconds: elapsed,
-      });
+      // 1 & 2. Throttle 2D Canvas redraws to 20Hz (every 50ms) or on RPM changes (eliminates 60fps canvas CPU draws & texture uploads)
+      if (now - lastCanvasUpdate > 50 || lastRenderedRpm !== simRpm) {
+        lastCanvasUpdate = now;
+        lastRenderedRpm = simRpm;
 
-      // 2. Update functional central infotainment touchscreen canvas
-      const infoRenderer = MasterModularInterior3DAssembler.getInfotainmentRenderer();
-      infoRenderer.render({
-        speedKmh: (simRpm / 9000) * 285,
-        gear: simRpm > 7500 ? "4" : "3",
-        rpm: simRpm,
-        lateralG: Math.sin(elapsed * 0.8) * 1.35,
-        longitudinalG: Math.cos(elapsed * 1.2) * 0.95,
-        lapTimeSeconds: elapsed,
-        lapDeltaSeconds: Math.sin(elapsed * 0.5) * 0.45,
-      });
+        // Functional instrument cluster canvas
+        const clusterRenderer = MasterModularInterior3DAssembler.getClusterRenderer();
+        clusterRenderer.render({
+          rpm: simRpm,
+          maxRpm: 9000,
+          speedKmh: (simRpm / 9000) * 285,
+          gear: simRpm > 7500 ? "4" : "3",
+          boostBar: Math.min(2.2, (simRpm / 9000) * 2.2),
+          oilTempC: 98,
+          coolantTempC: 90,
+          lateralG: Math.sin(elapsed * 0.8) * 1.35,
+          longitudinalG: Math.cos(elapsed * 1.2) * 0.95,
+          lapTimeSeconds: elapsed,
+        });
+
+        // Functional central infotainment touchscreen canvas
+        const infoRenderer = MasterModularInterior3DAssembler.getInfotainmentRenderer();
+        infoRenderer.render({
+          speedKmh: (simRpm / 9000) * 285,
+          gear: simRpm > 7500 ? "4" : "3",
+          rpm: simRpm,
+          lateralG: Math.sin(elapsed * 0.8) * 1.35,
+          longitudinalG: Math.cos(elapsed * 1.2) * 0.95,
+          lapTimeSeconds: elapsed,
+          lapDeltaSeconds: Math.sin(elapsed * 0.5) * 0.45,
+        });
+      }
 
       // 3. Driver Seat First-Person Look-Around or Orbit Camera
       if (isDriverSeatModeRef.current && cameraRigRef.current) {
@@ -532,6 +541,13 @@ export const ModularInterior3DStudioViewport: React.FC<ModularInterior3DStudioVi
     };
     animate();
 
+    const handleVisibilityChange = () => {
+      if (!document.hidden) {
+        clock.getDelta(); // reset delta to prevent huge frame jump
+      }
+    };
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
     const handleResize = () => {
       if (!containerRef.current || !renderer || !camera) return;
       const w = containerRef.current.clientWidth;
@@ -544,6 +560,7 @@ export const ModularInterior3DStudioViewport: React.FC<ModularInterior3DStudioVi
 
     return () => {
       cancelAnimationFrame(animId);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
       container.removeEventListener("pointerdown", handlePointerDown);
       window.removeEventListener("pointerup", handlePointerUp);
       container.removeEventListener("pointermove", handlePointerMove);
@@ -1228,3 +1245,6 @@ export const ModularInterior3DStudioViewport: React.FC<ModularInterior3DStudioVi
     </div>
   );
 };
+
+export const ModularInterior3DStudioViewport = memo(ModularInterior3DStudioViewportComponent);
+

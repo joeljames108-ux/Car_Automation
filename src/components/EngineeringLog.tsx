@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo, memo } from "react";
 import { Globe, RefreshCw, CheckCircle2, AlertCircle, Info, ChevronRight, Sliders, Cpu, ShieldCheck } from "lucide-react";
 import { useDesign } from "../state/DesignContext";
 
@@ -11,11 +11,11 @@ interface LogEntry {
   timestamp: string;
 }
 
-export function EngineeringLog() {
+export function EngineeringLogComponent() {
   const { sim, design } = useDesign();
   const [filter, setFilter] = useState<"all" | "approved" | "suggestions">("all");
 
-  const logs: LogEntry[] = [
+  const logs: LogEntry[] = useMemo(() => [
     {
       id: "1",
       category: "aero",
@@ -79,13 +79,15 @@ export function EngineeringLog() {
       status: "approved",
       timestamp: "18m ago",
     },
-  ];
+  ], [design.vehicle.aero?.drs, design.vehicle.aero?.wingAngle, design.vehicle.aero?.rideHeight, design.vehicle.chassisEng?.chassisType, sim.peakPower, sim.dragCoeff]);
 
-  const filteredLogs = logs.filter((log) => {
-    if (filter === "approved") return log.status === "approved";
-    if (filter === "suggestions") return log.status === "suggestion";
-    return true;
-  });
+  const filteredLogs = useMemo(() => {
+    return logs.filter((log) => {
+      if (filter === "approved") return log.status === "approved";
+      if (filter === "suggestions") return log.status === "suggestion";
+      return true;
+    });
+  }, [logs, filter]);
 
   return (
     <div
@@ -212,3 +214,6 @@ export function EngineeringLog() {
     </div>
   );
 }
+
+export const EngineeringLog = memo(EngineeringLogComponent);
+

@@ -65,6 +65,24 @@ interface StageSwitcherProps {
 }
 
 const StageSwitcherComponent: React.FC<StageSwitcherProps> = ({ stage, onSelectStage }) => {
+  // Idle Pre-fetching Warming for smooth zero-lag tab transitions
+  React.useEffect(() => {
+    const prefetch = () => {
+      import("./EngineDesigner");
+      import("./VehicleDesigner");
+      import("./InteriorsDesigner");
+      import("./SimulationDashboard");
+      import("./GrandAutomotiveStudioHub");
+    };
+
+    if (typeof window !== "undefined" && "requestIdleCallback" in window) {
+      (window as any).requestIdleCallback(prefetch, { timeout: 2000 });
+    } else {
+      const timer = setTimeout(prefetch, 1500);
+      return () => clearTimeout(timer);
+    }
+  }, []);
+
   return (
     <Suspense fallback={<StageLoadingSkeleton stageName={stage} />}>
       <div key={stage} className="stage-transition-enter">

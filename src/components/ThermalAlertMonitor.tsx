@@ -1,8 +1,8 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, memo } from "react";
 import { useDesign } from "../state/DesignContext";
 import { useToast } from "./ToastSystem";
 
-export function ThermalAlertMonitor() {
+function ThermalAlertMonitorComponent() {
   const { sim } = useDesign();
   const toast = useToast();
   const lastAlertsRef = useRef<Record<string, number>>({});
@@ -83,3 +83,6 @@ export function ThermalAlertMonitor() {
 
   return null;
 }
+
+export const ThermalAlertMonitor = memo(ThermalAlertMonitorComponent);
+

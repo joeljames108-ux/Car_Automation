@@ -11,8 +11,6 @@ import { DesignProvider, useDesign } from "./state/DesignContext";
 import { RDProvider } from "./state/RDContext";
 import { CompanyProvider, useCompany } from "./state/CompanyContext";
 import { StatRail } from "./components/StatRail";
-import { SaveLoadDialog } from "./components/SaveLoadDialog";
-import { CommandPalette } from "./components/CommandPalette";
 import { ToastProvider } from "./components/ToastSystem";
 import { ThermalAlertMonitor } from "./components/ThermalAlertMonitor";
 import { AgentNotificationCenter } from "./components/agents/AgentNotificationCenter";
@@ -24,6 +22,9 @@ import { VisionGlassHeader } from "./components/ui/VisionGlassHeader";
 import { VisionGlassDock } from "./components/ui/VisionGlassDock";
 import { VisionGlassToolbar } from "./components/ui/VisionGlassToolbar";
 import { UI1Layout } from "./components/ui/UI1Layout";
+
+const SaveLoadDialog = React.lazy(() => import("./components/SaveLoadDialog").then(m => ({ default: m.SaveLoadDialog })));
+const CommandPalette = React.lazy(() => import("./components/CommandPalette").then(m => ({ default: m.CommandPalette })));
 
 
 import { Sparkles as SparklesIcon } from "lucide-react";
@@ -394,8 +395,10 @@ function AppInner() {
           </div>
 
           {/* Overlays */}
-          <SaveLoadDialog open={dialog.open} mode={dialog.mode} onClose={handleCloseDialog} />
-          <CommandPalette isOpen={cmdPaletteOpen} onClose={handleCloseCmdPalette} onSelectStage={handleSelectStage} />
+          <React.Suspense fallback={null}>
+            <SaveLoadDialog open={dialog.open} mode={dialog.mode} onClose={handleCloseDialog} />
+            <CommandPalette isOpen={cmdPaletteOpen} onClose={handleCloseCmdPalette} onSelectStage={handleSelectStage} />
+          </React.Suspense>
           <ThermalAlertMonitor />
         </div>
       </VisionGlassErrorBoundary>
@@ -538,17 +541,19 @@ function AppInner() {
         </div>
       </div>
 
-      <SaveLoadDialog
-        open={dialog.open}
-        mode={dialog.mode}
-        onClose={() => setDialog({ open: false, mode: dialog.mode })}
-      />
+      <React.Suspense fallback={null}>
+        <SaveLoadDialog
+          open={dialog.open}
+          mode={dialog.mode}
+          onClose={() => setDialog({ open: false, mode: dialog.mode })}
+        />
 
-      <CommandPalette
-        isOpen={cmdPaletteOpen}
-        onClose={() => setCmdPaletteOpen(false)}
-        onSelectStage={(s) => setStage(s as Stage)}
-      />
+        <CommandPalette
+          isOpen={cmdPaletteOpen}
+          onClose={() => setCmdPaletteOpen(false)}
+          onSelectStage={(s) => setStage(s as Stage)}
+        />
+      </React.Suspense>
 
       <ThermalAlertMonitor />
       <AgentNotificationCenter

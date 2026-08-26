@@ -35,6 +35,7 @@ import { simulateLap as physicsSimulateLap } from "./physics/lapSimulator";
 import { SoundEngineeringSynthesizer } from "./nvh/soundEngineeringSynthesizer";
 import { RawMaterialsMarketEngine } from "./supplyChain/rawMaterialsMarket";
 import { LbmWindTunnelSolver } from "./advancedPhysics/lbmWindTunnelSolver";
+import { GlobalPerformanceOptimizer } from "./performance/GlobalPerformanceOptimizer";
 
 const RHO_AIR = 1.225;
 const GRAVITY = 9.81;
@@ -1343,97 +1344,101 @@ function simulateInfotainment(info: InfotainmentConfig): InfotainmentSim {
 // ===================================================================
 
 export function simulate(design: VehicleDesign): SimResult {
-  const eng = simulateEngine(design.engine);
-  const aero = simulateAero(design.vehicle);
-  const interior = simulateInterior(design.vehicle);
-  const info = simulateInfotainment(design.infotainment || defaultInfotainment());
-  const perf = simulatePerformance(design, eng, aero, interior);
-  const mfg = simulateManufacturing(design, perf);
-  const testing = simulateTesting(design, eng, aero, perf);
-  const { lapTimes } = simulateLapTimes(design, aero, perf);
+  const cacheKey = `veh_sim_${design.name || 'curr'}_${design.updatedAt || '0'}_${design.engine.layout}_${design.engine.bore}_${design.engine.stroke}_${design.engine.redline}_${design.engine.boostPressure || 0}_${design.vehicle.platform}_${design.vehicle.chassis}_${design.vehicle.tireCompound}_${design.vehicle.aero?.wingAngle ?? 0}_${design.vehicle.aero?.rideHeight ?? 0}`;
 
-  // Integrate infotainment into vehicle totals
-  const totalCost = perf.totalCost + info.totalCost;
-  const targetPrice = Math.round(totalCost * (1.2 + (perf.targetPrice / Math.max(perf.totalCost, 1) - 1.2)));
-  const profitMargin = (targetPrice - totalCost) / Math.max(targetPrice, 1);
-  const luxuryRating = clamp(interior.luxuryRating + info.luxuryScore * 2, 0, 10);
+  return GlobalPerformanceOptimizer.getInstance().memoize(cacheKey, () => {
+    const eng = simulateEngine(design.engine);
+    const aero = simulateAero(design.vehicle);
+    const interior = simulateInterior(design.vehicle);
+    const info = simulateInfotainment(design.infotainment || defaultInfotainment());
+    const perf = simulatePerformance(design, eng, aero, interior);
+    const mfg = simulateManufacturing(design, perf);
+    const testing = simulateTesting(design, eng, aero, perf);
+    const { lapTimes } = simulateLapTimes(design, aero, perf);
 
-  // ---- Phase 1: Chassis engineering simulation ----
-  const chassisSim = simulateChassis(
-    design.vehicle.chassisEng,
-    design.vehicle.suspensionGeo,
-    design.vehicle.steeringEng,
-    design.vehicle.brakesEng,
-    design.vehicle.tiresEng,
-    design.vehicle.wheelsEng,
-    perf.weight + info.weight,
-  );
+    // Integrate infotainment into vehicle totals
+    const totalCost = perf.totalCost + info.totalCost;
+    const targetPrice = Math.round(totalCost * (1.2 + (perf.targetPrice / Math.max(perf.totalCost, 1) - 1.2)));
+    const profitMargin = (targetPrice - totalCost) / Math.max(targetPrice, 1);
+    const luxuryRating = clamp(interior.luxuryRating + info.luxuryScore * 2, 0, 10);
 
-  // Compute Phase 100+ Multi-Physics Extensions
-  const nvhSoundOutput = SoundEngineeringSynthesizer.synthesizeSound({
-    cylinders: eng.cylinderCount,
-    engineRpm: eng.peakPowerRpm,
-    vehicleSpeedKmH: perf.topSpeed,
-    exhaustValveOpen: true,
-    cabinGlassAcousticLaminate: true,
-    ancActive: true,
-    gearRatio: 1.0,
-    finalDriveRatio: 3.5,
-    tireRadiusM: 0.33,
+    // ---- Phase 1: Chassis engineering simulation ----
+    const chassisSim = simulateChassis(
+      design.vehicle.chassisEng,
+      design.vehicle.suspensionGeo,
+      design.vehicle.steeringEng,
+      design.vehicle.brakesEng,
+      design.vehicle.tiresEng,
+      design.vehicle.wheelsEng,
+      perf.weight + info.weight,
+    );
+
+    // Compute Phase 100+ Multi-Physics Extensions
+    const nvhSoundOutput = SoundEngineeringSynthesizer.synthesizeSound({
+      cylinders: eng.cylinderCount,
+      engineRpm: eng.peakPowerRpm,
+      vehicleSpeedKmH: perf.topSpeed,
+      exhaustValveOpen: true,
+      cabinGlassAcousticLaminate: true,
+      ancActive: true,
+      gearRatio: 1.0,
+      finalDriveRatio: 3.5,
+      tireRadiusM: 0.33,
+    });
+
+    const supplyChainProcurement = RawMaterialsMarketEngine.calculateNetProcurementCost({
+      commodityType: "ALUMINUM_6061_T6",
+      requiredVolumeUnits: Math.round(perf.weight * 0.4),
+    });
+
+    const lbmWindTunnel = LbmWindTunnelSolver.solveFlowField({
+      inletVelocityKmH: perf.topSpeed,
+      frontalAreaM2: aero.frontalArea,
+      rideHeightMm: design.vehicle.rideHeight,
+      diffuserRampAngleDeg: 12,
+    });
+
+    return {
+      displacement: eng.displacement, cylinderCount: eng.cylinderCount,
+      powerCurve: eng.powerCurve, peakPower: eng.combinedPower, peakTorque: eng.combinedTorque,
+      peakPowerRpm: eng.peakPowerRpm, peakTorqueRpm: eng.peakTorqueRpm, redline: eng.redline,
+      maxPistonSpeed: eng.maxPistonSpeed, thermalEfficiency: eng.thermalEfficiency,
+      knockRisk: eng.knockRisk, octaneRequired: eng.octaneRequired, bsfc: eng.bsfc,
+      turboLag: eng.turboLag, boostPressure: eng.boostPressure,
+      engineWeight: eng.engineWeight, engineCost: eng.engineCost,
+      reliability: eng.reliability, nvh: eng.nvhEngine, noise: perf.noise,
+      emissions: perf.emissions, fuelEconomy: perf.fuelEconomy, coolingMargin: perf.coolingMargin,
+      mguHPower: eng.mguHPower, mguKPower: eng.mguKPower, combinedPower: eng.combinedPower,
+      combinedTorque: eng.combinedTorque, batteryWeight: eng.batteryWeight,
+      batteryCost: eng.batteryCost, batteryEnergy: eng.batteryEnergy,
+      electricRange: eng.electricRange, regenEfficiency: eng.regenEfficiency,
+      isElectric: eng.isElectric, isHybrid: eng.isHybrid,
+      dragCoeff: aero.dragCoeff, frontalArea: aero.frontalArea, downforce: aero.downforce,
+      liftCoeff: aero.liftCoeff, centerOfPressure: aero.centerOfPressure, aeroBalance: aero.aeroBalance,
+      dragVsSpeed: aero.dragVsSpeed, aeroCost: aero.aeroCost, aeroWeight: aero.aeroWeight,
+      coolingEfficiency: aero.coolingEfficiency,
+      frontDownforce: aero.frontDownforce, rearDownforce: aero.rearDownforce,
+      groundEffect: aero.groundEffect, separationRisk: aero.separationRisk,
+      brakeCooling: aero.brakeCooling, aeroNoise: aero.aeroNoise,
+      weight: perf.weight + info.weight, weightDistFront: perf.weightDistFront, cgHeight: perf.cgHeight,
+      topSpeed: perf.topSpeed, accel0_60: perf.accel0_60, accel0_100: perf.accel0_100,
+      accel100_200: perf.accel100_200, quarterMile: perf.quarterMile, quarterMileSpeed: perf.quarterMileSpeed,
+      halfMile: perf.halfMile, halfMileSpeed: perf.halfMileSpeed,
+      brakingDist: perf.brakingDist, lateralG: perf.lateralG, skidpad: perf.skidpad, slalomSpeed: perf.slalomSpeed,
+      vehicleCost: perf.vehicleCost + info.totalCost, totalCost, targetPrice,
+      profitMargin, safetyRating: clamp(perf.safetyRating + info.safetyBonus * 2, 0, 10), marketRating: perf.marketRating,
+      drivability: perf.drivability,
+      costBreakdown: perf.costBreakdown,
+      manufacturing: mfg,
+      testing,
+      interiorWeight: interior.interiorWeight + info.weight, interiorCost: interior.interiorCost + info.totalCost,
+      comfortRating: interior.comfortRating, luxuryRating,
+      infotainment: info,
+      chassisSim,
+      lapTimes,
+      nvhSoundOutput,
+      supplyChainProcurement,
+      lbmWindTunnel,
+    };
   });
-
-  const supplyChainProcurement = RawMaterialsMarketEngine.calculateNetProcurementCost({
-    commodityType: "ALUMINUM_6061_T6",
-    requiredVolumeUnits: Math.round(perf.weight * 0.4),
-  });
-
-  const lbmWindTunnel = LbmWindTunnelSolver.solveFlowField({
-    inletVelocityKmH: perf.topSpeed,
-    frontalAreaM2: aero.frontalArea,
-    rideHeightMm: design.vehicle.rideHeight,
-    diffuserRampAngleDeg: 12,
-  });
-
-  return {
-    displacement: eng.displacement, cylinderCount: eng.cylinderCount,
-    powerCurve: eng.powerCurve, peakPower: eng.combinedPower, peakTorque: eng.combinedTorque,
-    peakPowerRpm: eng.peakPowerRpm, peakTorqueRpm: eng.peakTorqueRpm, redline: eng.redline,
-    maxPistonSpeed: eng.maxPistonSpeed, thermalEfficiency: eng.thermalEfficiency,
-    knockRisk: eng.knockRisk, octaneRequired: eng.octaneRequired, bsfc: eng.bsfc,
-    turboLag: eng.turboLag, boostPressure: eng.boostPressure,
-    engineWeight: eng.engineWeight, engineCost: eng.engineCost,
-    reliability: eng.reliability, nvh: eng.nvhEngine, noise: perf.noise,
-    emissions: perf.emissions, fuelEconomy: perf.fuelEconomy, coolingMargin: perf.coolingMargin,
-    mguHPower: eng.mguHPower, mguKPower: eng.mguKPower, combinedPower: eng.combinedPower,
-    combinedTorque: eng.combinedTorque, batteryWeight: eng.batteryWeight,
-    batteryCost: eng.batteryCost, batteryEnergy: eng.batteryEnergy,
-    electricRange: eng.electricRange, regenEfficiency: eng.regenEfficiency,
-    isElectric: eng.isElectric, isHybrid: eng.isHybrid,
-    dragCoeff: aero.dragCoeff, frontalArea: aero.frontalArea, downforce: aero.downforce,
-    liftCoeff: aero.liftCoeff, centerOfPressure: aero.centerOfPressure, aeroBalance: aero.aeroBalance,
-    dragVsSpeed: aero.dragVsSpeed, aeroCost: aero.aeroCost, aeroWeight: aero.aeroWeight,
-    coolingEfficiency: aero.coolingEfficiency,
-    frontDownforce: aero.frontDownforce, rearDownforce: aero.rearDownforce,
-    groundEffect: aero.groundEffect, separationRisk: aero.separationRisk,
-    brakeCooling: aero.brakeCooling, aeroNoise: aero.aeroNoise,
-    weight: perf.weight + info.weight, weightDistFront: perf.weightDistFront, cgHeight: perf.cgHeight,
-    topSpeed: perf.topSpeed, accel0_60: perf.accel0_60, accel0_100: perf.accel0_100,
-    accel100_200: perf.accel100_200, quarterMile: perf.quarterMile, quarterMileSpeed: perf.quarterMileSpeed,
-    halfMile: perf.halfMile, halfMileSpeed: perf.halfMileSpeed,
-    brakingDist: perf.brakingDist, lateralG: perf.lateralG, skidpad: perf.skidpad, slalomSpeed: perf.slalomSpeed,
-    vehicleCost: perf.vehicleCost + info.totalCost, totalCost, targetPrice,
-    profitMargin, safetyRating: clamp(perf.safetyRating + info.safetyBonus * 2, 0, 10), marketRating: perf.marketRating,
-    drivability: perf.drivability,
-    costBreakdown: perf.costBreakdown,
-    manufacturing: mfg,
-    testing,
-    interiorWeight: interior.interiorWeight + info.weight, interiorCost: interior.interiorCost + info.totalCost,
-    comfortRating: interior.comfortRating, luxuryRating,
-    infotainment: info,
-    chassisSim,
-    lapTimes,
-    nvhSoundOutput,
-    supplyChainProcurement,
-    lbmWindTunnel,
-  };
 }

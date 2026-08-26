@@ -207,4 +207,77 @@ export class F1ChampionshipEngine {
       playerPaceDeltaSec: Number(totalPlayerOffset.toFixed(3)),
     };
   }
+
+  /**
+   * Simulates an entire World Championship season across all calendar circuits.
+   */
+  public static simulateChampionshipSeason(playerCar: F1CarDesign, playerDriverSkill = 95): {
+    weekendResults: F1WeekendSimulationResult[];
+    driverStandings: F1DriverStanding[];
+    constructorStandings: F1ConstructorStanding[];
+  } {
+    const driverMap = new Map<string, F1DriverStanding>();
+    const teamMap = new Map<string, F1ConstructorStanding>();
+
+    const weekendResults: F1WeekendSimulationResult[] = [];
+
+    for (const circuit of F1_OFFICIAL_CALENDAR) {
+      const weekend = this.simulateRaceWeekend(circuit, playerCar, playerDriverSkill);
+      weekendResults.push(weekend);
+
+      for (const res of weekend.results) {
+        // Driver update
+        let d = driverMap.get(res.driverName);
+        if (!d) {
+          d = {
+            driverName: res.driverName,
+            teamName: res.teamName,
+            points: 0,
+            wins: 0,
+            podiums: 0,
+            poles: 0,
+            fastestLaps: 0,
+            isPlayer: res.isPlayer,
+          };
+          driverMap.set(res.driverName, d);
+        }
+
+        d.points += res.pointsEarned;
+        if (res.fastestLap) d.points += 1;
+        if (res.position === 1) d.wins++;
+        if (res.position <= 3) d.podiums++;
+        if (res.position === 1 && weekend.polePositionDriver === res.driverName) d.poles++;
+        if (res.fastestLap) d.fastestLaps++;
+
+        // Constructor update
+        let c = teamMap.get(res.teamName);
+        if (!c) {
+          const rival = F1_RIVAL_TEAMS.find((t) => t.teamName === res.teamName);
+          c = {
+            teamName: res.teamName,
+            points: 0,
+            wins: 0,
+            podiums: 0,
+            colorHex: rival ? rival.colorHex : playerCar.livery.primaryColorHex,
+            isPlayer: res.isPlayer,
+          };
+          teamMap.set(res.teamName, c);
+        }
+
+        c.points += res.pointsEarned;
+        if (res.fastestLap) c.points += 1;
+        if (res.position === 1) c.wins++;
+        if (res.position <= 3) c.podiums++;
+      }
+    }
+
+    const driverStandings = Array.from(driverMap.values()).sort((a, b) => b.points - a.points);
+    const constructorStandings = Array.from(teamMap.values()).sort((a, b) => b.points - a.points);
+
+    return {
+      weekendResults,
+      driverStandings,
+      constructorStandings,
+    };
+  }
 }
