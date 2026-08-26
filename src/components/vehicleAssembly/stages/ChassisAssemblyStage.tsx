@@ -13,8 +13,6 @@
 import React, { useState } from "react";
 import { Wrench, CheckCircle2, Crosshair, Ruler, Shield, Activity, Sparkles, Layers, Cpu } from "lucide-react";
 import { ChassisConfig3D } from "../scene/ModularAssemblySceneGraph";
-import { CHASSIS_50_CATALOG, CHASSIS_50_MAP } from "../../../exterior3d/manifests/chassis50Manifest";
-import { Chassis50Definition } from "../../../exterior3d/types/vehicleConstructionTypes";
 
 interface ChassisAssemblyStageProps {
   chassis: ChassisConfig3D;
@@ -41,42 +39,42 @@ const ARCHITECTURES: {
   },
   {
     id: "spaceframe",
-    label: "Aluminum Spaceframe",
-    desc: "Bonded & riveted 6061-T6 extrusion spaceframe with cast node joints — GT3-proven torsional architecture.",
-    rigidity: "68 kNm/°",
-    massKg: 94,
-    material: "6061-T6 Extrusions + Cast Nodes",
-  },
-  {
-    id: "tubular_cradle",
-    label: "Tubular Cradle Frame",
-    desc: "4130 chromoly tubular cradle with removable front/rear subframes for drivetrain drop-out serviceability.",
-    rigidity: "48 kNm/°",
+    label: "4130 Chromoly Spaceframe",
+    desc: "TIG-welded multi-tubular 4130 chromoly spaceframe chassis with integrated FIA-spec roll structure.",
+    rigidity: "42 kNm/°",
     massKg: 112,
-    material: "4130 Chromoly Tube (CDS)",
-  },
-  {
-    id: "ev_skateboard",
-    label: "800V EV Skateboard",
-    desc: "Structural battery floorpack with liquid-cooling channels and integrated front/rear electric drive cradles.",
-    rigidity: "74 kNm/°",
-    massKg: 145,
-    material: "Extruded 6000-Series Alu + Steel Bottom Plate",
+    material: "4130 Chromoly Steel Alloy",
   },
   {
     id: "ladder",
-    label: "Hydroformed Ladder Frame",
-    desc: "Closed-box hydroformed high-strength steel rails with 6 tubular crossmembers and armor skid plate mountings.",
-    rigidity: "32 kNm/°",
-    massKg: 185,
-    material: "High-Strength Low-Alloy (HSLA) Steel",
+    label: "Hydroformed Steel Ladder",
+    desc: "Box-section heavy duty ladder chassis frame for extreme torsional shock absorption and utilitarian load carrying.",
+    rigidity: "28 kNm/°",
+    massKg: 195,
+    material: "High-Strength Low-Alloy Steel (HSLA)",
+  },
+  {
+    id: "ev_skateboard",
+    label: "Structural Battery Skateboard",
+    desc: "Die-cast gigacasting subframes with structural battery pack casing serving as the primary torsional member.",
+    rigidity: "58 kNm/°",
+    massKg: 145,
+    material: "A380 Die-Cast Aluminum Alloy",
+  },
+  {
+    id: "monocoque",
+    label: "Stamping Unibody Monocoque",
+    desc: "High-volume stamped galvanized steel and aluminum hybrid unibody architecture with laser-welded seams.",
+    rigidity: "36 kNm/°",
+    massKg: 138,
+    material: "Galvanized High-Strength Steel",
   },
 ];
 
 const METALLURGY_TYPES = [
-  { id: "titanium", label: "Ti-6Al-4V Grade 5 Titanium", desc: "Ultra-high strength-to-weight with rainbow weld bluing.", density: "4.43 g/cm³", yield: "880 MPa" },
-  { id: "aluminum_6061", label: "6061-T6 Tempered Aluminum", desc: "Extruded structural spaceframe alloy with directional grain.", density: "2.70 g/cm³", yield: "276 MPa" },
-  { id: "chromoly_4130", label: "4130 Seamless Chromoly", desc: "Cold-drawn tubular alloy with anti-corrosion phosphate bath.", density: "7.85 g/cm³", yield: "460 MPa" },
+  { id: "titanium_gr5", label: "Ti-6Al-4V Grade 5 Titanium", desc: "Aerospace alloy with unmatched specific strength and corrosion resistance.", density: "4.43 g/cm³", yield: "880 MPa" },
+  { id: "alu_6061", label: "6061-T6 Billet Aluminum", desc: "Precipitation-hardened structural aluminum alloy with excellent machinability.", density: "2.70 g/cm³", yield: "276 MPa" },
+  { id: "chromoly_4130", label: "4130 Chromoly Steel Alloy", desc: "Motorsport standard alloy steel with chromium and molybdenum strengthening.", density: "7.85 g/cm³", yield: "460 MPa" },
   { id: "carbon_autoclave", label: "Autoclave Prepreg Carbon", desc: "2x2 twill weave carbon fiber with high-modulus resin matrix.", density: "1.55 g/cm³", yield: "1,200 MPa" },
   { id: "hardox_steel", label: "Hardox 450 Structural Armor", desc: "Abrasion-resistant plate steel for offroad chassis reinforcements.", density: "7.85 g/cm³", yield: "1,250 MPa" },
 ];
@@ -87,7 +85,7 @@ export const ChassisAssemblyStage: React.FC<ChassisAssemblyStageProps> = ({
   isInstalled,
   onInstall,
 }) => {
-  const [activeSubTab, setActiveSubTab] = useState<"quick_arch" | "50_catalog" | "metallurgy" | "fea_hotspots">("quick_arch");
+  const [activeSubTab, setActiveSubTab] = useState<"quick_arch" | "metallurgy" | "fea_hotspots">("quick_arch");
   const [metallurgy, setMetallurgy] = useState<string>("carbon_autoclave");
 
   // Hardpoint map computed from the live parametric envelope (mm datum, front axle @ z=0)
@@ -117,7 +115,7 @@ export const ChassisAssemblyStage: React.FC<ChassisAssemblyStageProps> = ({
                 STAGE 1: CHASSIS ARCHITECTURE & HARDPOINTS
               </h3>
               <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">
-                50 ARCHITECTURES • FEA
+                MODULAR PLATFORM • FEA
               </span>
             </div>
             <p className="text-[11px] font-mono text-slate-500 dark:text-slate-400">
@@ -135,14 +133,6 @@ export const ChassisAssemblyStage: React.FC<ChassisAssemblyStageProps> = ({
             }`}
           >
             ARCHITECTURE
-          </button>
-          <button
-            onClick={() => setActiveSubTab("50_catalog")}
-            className={`px-2.5 py-1 rounded-lg text-[10px] font-mono font-bold transition-all cursor-pointer ${
-              activeSubTab === "50_catalog" ? "bg-cyan-500 text-slate-950 shadow-sm" : "text-slate-400 hover:text-slate-200"
-            }`}
-          >
-            50 PLATFORMS
           </button>
           <button
             onClick={() => setActiveSubTab("metallurgy")}
@@ -256,50 +246,7 @@ export const ChassisAssemblyStage: React.FC<ChassisAssemblyStageProps> = ({
         </div>
       )}
 
-      {/* ── VIEW 2: 50 CHASSIS PLATFORMS CATALOG ── */}
-      {activeSubTab === "50_catalog" && (
-        <div className="space-y-3 animate-stage-transition-enter">
-          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-2.5 max-h-80 overflow-y-auto pr-1">
-            {CHASSIS_50_CATALOG.slice(0, 18).map((c: Chassis50Definition) => {
-              const isMatch = chassis.type === (c.bodyType as any);
-              return (
-                <div
-                  key={c.id}
-                  onClick={() => {
-                    onUpdateChassis({
-                      type: c.bodyType as any,
-                      wheelbaseMm: c.wheelbaseMm,
-                      frontTrackMm: c.trackWidthFrontMm,
-                      rearTrackMm: c.trackWidthRearMm,
-                    });
-                  }}
-                  className={`p-3 rounded-2xl border cursor-pointer transition-all flex flex-col justify-between ${
-                    isMatch
-                      ? "bg-cyan-500/20 border-cyan-500 ring-1 ring-cyan-500/50 shadow-md"
-                      : "bg-base-900/60 border-base-800 hover:border-base-700 text-slate-400"
-                  }`}
-                >
-                  <div>
-                    <div className="flex justify-between items-center mb-1">
-                      <span className="font-bold text-xs font-mono text-slate-200">{c.name}</span>
-                      <span className="text-[9px] font-mono font-bold text-cyan-400 bg-cyan-950/60 px-1.5 py-0.5 rounded">
-                        {c.torsionalRigidityKNmPerDeg} kNm/°
-                      </span>
-                    </div>
-                    <p className="text-[10px] text-slate-400 line-clamp-2 leading-relaxed">{c.tagline}</p>
-                  </div>
-                  <div className="flex justify-between items-center text-[9px] font-mono pt-2 border-t border-base-800/60 mt-2">
-                    <span>Tare: <strong className="text-emerald-400">{c.baseMassKg} kg</strong></span>
-                    <span>Cost: <strong className="text-amber-400">${c.manufacturingCostBOM.toLocaleString()}</strong></span>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      )}
-
-      {/* ── VIEW 3: AUTOMOTIVE METALLURGY LAB ── */}
+      {/* ── VIEW 2: AUTOMOTIVE METALLURGY LAB ── */}
       {activeSubTab === "metallurgy" && (
         <div className="space-y-3 animate-stage-transition-enter">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-2.5">

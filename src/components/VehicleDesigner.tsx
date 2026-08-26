@@ -246,7 +246,7 @@ export function VehicleDesigner({ initialSubTab = "linear_assembly" }: VehicleDe
                 </span>
               </div>
               <p className="text-[11px] font-mono text-slate-600 dark:text-slate-400 mt-0.5">
-                {activeTab === "linear_assembly" && "Flagship End-to-End Vehicle Engineering • 12-Stage Linear Assembly • 50 Chassis Platforms • 3D Kinematics • Packaging Diagnostics"}
+                {activeTab === "linear_assembly" && "Flagship End-to-End Vehicle Engineering • 12-Stage Linear Assembly • 3D Kinematics • Packaging Diagnostics"}
                 {activeTab === "exterior" && "Paint Booth & Finishes • Custom Rims & Calipers • Widebody Kits • 3D Body-in-White Assembly"}
                 {activeTab === "aero" && "3D Parametric Aero Studio • CFD Wind Tunnel Streamlines • 10-Dept Aero Research & Active DRS"}
                 {activeTab === "suite_and_benchmark" && "A/B Car Benchmark & Circuit Lap Time Battles • Grand Automotive Fleet Hub"}

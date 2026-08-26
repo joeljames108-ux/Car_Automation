@@ -70,7 +70,6 @@ import { ElectronicsAssemblyStage } from "./stages/ElectronicsAssemblyStage";
 import { FinalExteriorAssemblyStage } from "./stages/FinalExteriorAssemblyStage";
 import { VehicleCompletionStage } from "./stages/VehicleCompletionStage";
 import { ParametricAerodynamicsStudio } from "./aero/ParametricAerodynamicsStudio";
-import { VehicleConstructionStudio } from "./VehicleConstructionStudio";
 import { SuspensionMasterStudio } from "../chassis/SuspensionMasterStudio";
 
 const STAGES: { id: AssemblyStageId; label: string; icon: any }[] = [
@@ -97,7 +96,7 @@ export const ModularLinearAssemblyStudio: React.FC = () => {
   // Active linear stage & View Mode
   const [activeStage, setActiveStage] = useState<AssemblyStageId>("chassis");
   const [previewStage, setPreviewStage] = useState<AssemblyStageId | null>(null);
-  const [activeTab, setActiveTab] = useState<"stage_config" | "chassis_50" | "suspension_kinematics" | "cad_tree" | "diagnostics" | "versions">("stage_config");
+  const [activeTab, setActiveTab] = useState<"stage_config" | "suspension_kinematics" | "cad_tree" | "diagnostics" | "versions">("stage_config");
   const [isInAeroStudio, setIsInAeroStudio] = useState<boolean>(false);
 
   // Viewport Settings
@@ -349,21 +348,6 @@ export const ModularLinearAssemblyStudio: React.FC = () => {
           <button
             onClick={() => {
               setIsInAeroStudio(false);
-              setActiveTab("chassis_50");
-            }}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all border cursor-pointer ${
-              activeTab === "chassis_50"
-                ? "bg-cyan-500/20 border-cyan-500 text-cyan-300 shadow-sm"
-                : "bg-base-900/60 border-base-800 text-slate-400 hover:text-slate-200"
-            }`}
-          >
-            <Car size={13} />
-            <span>50 CHASSIS ARCHITECTURES</span>
-          </button>
-
-          <button
-            onClick={() => {
-              setIsInAeroStudio(false);
               setActiveTab("suspension_kinematics");
             }}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all border cursor-pointer ${
@@ -443,10 +427,6 @@ export const ModularLinearAssemblyStudio: React.FC = () => {
           onUpdateAero={handleUpdateAero}
           onExitToAssembly={() => setIsInAeroStudio(false)}
         />
-      ) : activeTab === "chassis_50" ? (
-        <div className="animate-stage-transition-enter">
-          <VehicleConstructionStudio />
-        </div>
       ) : activeTab === "suspension_kinematics" ? (
         <div className="animate-stage-transition-enter">
           <SuspensionMasterStudio />
