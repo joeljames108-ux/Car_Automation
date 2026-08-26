@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useCallback } from "react";
+import { useState, useRef, useEffect, useCallback, memo } from "react";
 import type { ReactNode } from "react";
 
 interface StageItem {
@@ -23,7 +23,7 @@ interface VisionGlassDockProps {
   onSelectStage: (id: string) => void;
 }
 
-export function VisionGlassDock({
+function VisionGlassDockComponent({
   stages, categories, activeCategory, activeStage,
   onSelectCategory, onSelectStage,
 }: VisionGlassDockProps) {
@@ -257,3 +257,5 @@ export function VisionGlassDock({
     </nav>
   );
 }
+
+export const VisionGlassDock = memo(VisionGlassDockComponent);

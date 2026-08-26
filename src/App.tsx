@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import {
   Cog, Car, Activity, Flag, BarChart3, Save, FolderOpen, RotateCcw,
   Sofa, Factory, FlaskConical, Ruler, Paintbrush, Wind, Newspaper,
@@ -134,6 +134,25 @@ function AppInner() {
   const { design, sim, carConcept, updateEngine, resetDesign, units, setUnits, uiTheme, setUiTheme } = useDesign();
   const { company, advanceAllSystems } = useCompany();
   const [booted, setBooted] = useState(false);
+
+  // Stable Memoized Handlers for UI Performance
+  const handleSave = useCallback(() => setDialog({ open: true, mode: "save" }), []);
+  const handleLoad = useCallback(() => setDialog({ open: true, mode: "load" }), []);
+  const handleCloseDialog = useCallback(() => setDialog((prev) => ({ open: false, mode: prev.mode })), []);
+  const handleSearch = useCallback(() => setCmdPaletteOpen(true), []);
+  const handleCloseCmdPalette = useCallback(() => setCmdPaletteOpen(false), []);
+  const handleSelectStage = useCallback((st: string) => setStage(st as Stage), []);
+  const handleSelectCategory = useCallback((cat: string) => setActiveCategory(cat as WorkspaceCategory), []);
+
+  const toolbarActions = useMemo(() => [
+    { id: "command", icon: <LayoutGrid size={17} />, label: "Dashboard", onClick: () => setStage("command"), isActive: stage === "command" },
+    { id: "studio", icon: <SparklesIcon size={17} />, label: "Studio Hub", onClick: () => setStage("studio"), isActive: stage === "studio" },
+    { id: "search", icon: <Search size={17} />, label: "Search (Ctrl+K)", onClick: handleSearch },
+    { id: "simulation", icon: <Activity size={17} />, label: "Analytics", onClick: () => setStage("simulation"), isActive: stage === "simulation" },
+    { id: "ai", icon: <Bot size={17} />, label: "Apex AI Studio", onClick: () => setStage("ai"), isActive: stage === "ai" },
+    { id: "safety", icon: <Bell size={17} />, label: "Safety & Alerts", onClick: () => setStage("safety"), isActive: stage === "safety" },
+    { id: "vehicle", icon: <SlidersHorizontal size={17} />, label: "Vehicle Controls", onClick: () => setStage("vehicle"), isActive: stage === "vehicle" },
+  ], [stage, handleSearch]);
 
   // Phase 1 Scroll Animation Physics (120Hz / 60fps rAF lerp engine)
   const scrollRef = React.useRef<HTMLDivElement>(null);
@@ -293,17 +312,7 @@ function AppInner() {
             }}
           />
           {/* ===== Left Vertical Toolbar (Phase 7 Component) ===== */}
-          <VisionGlassToolbar
-            actions={[
-              { id: "command", icon: <LayoutGrid size={17} />, label: "Dashboard", onClick: () => setStage("command"), isActive: stage === "command" },
-              { id: "studio", icon: <SparklesIcon size={17} />, label: "Studio Hub", onClick: () => setStage("studio"), isActive: stage === "studio" },
-              { id: "search", icon: <Search size={17} />, label: "Search (Ctrl+K)", onClick: () => setCmdPaletteOpen(true) },
-              { id: "simulation", icon: <Activity size={17} />, label: "Analytics", onClick: () => setStage("simulation"), isActive: stage === "simulation" },
-              { id: "ai", icon: <Bot size={17} />, label: "Apex AI Studio", onClick: () => setStage("ai"), isActive: stage === "ai" },
-              { id: "safety", icon: <Bell size={17} />, label: "Safety & Alerts", onClick: () => setStage("safety"), isActive: stage === "safety" },
-              { id: "vehicle", icon: <SlidersHorizontal size={17} />, label: "Vehicle Controls", onClick: () => setStage("vehicle"), isActive: stage === "vehicle" },
-            ]}
-          />
+          <VisionGlassToolbar actions={toolbarActions} />
 
           {/* ===== Floating Liquid Glass Window ===== */}
           <div style={{
@@ -328,10 +337,10 @@ function AppInner() {
               totalRevenue={company.totalRevenue}
               units={units}
               onSetUnits={setUnits}
-              onSave={() => setDialog({ open: true, mode: "save" })}
-              onLoad={() => setDialog({ open: true, mode: "load" })}
+              onSave={handleSave}
+              onLoad={handleLoad}
               onReset={resetDesign}
-              onSearch={() => setCmdPaletteOpen(true)}
+              onSearch={handleSearch}
               onAdvanceMonth={advanceAllSystems}
               onSetUiTheme={setUiTheme}
             />

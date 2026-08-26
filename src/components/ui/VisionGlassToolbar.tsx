@@ -1,4 +1,4 @@
-import { useState, useRef, useCallback, type ReactNode } from "react";
+import { useState, useRef, useCallback, memo, type ReactNode } from "react";
 
 interface ToolbarAction {
   id: string;
@@ -162,7 +162,7 @@ function ToolbarButton({ action }: { action: ToolbarAction }) {
   );
 }
 
-export function VisionGlassToolbar({ actions }: VisionGlassToolbarProps) {
+function VisionGlassToolbarComponent({ actions }: VisionGlassToolbarProps) {
   return (
     <nav
       role="toolbar"
@@ -215,3 +215,5 @@ export function VisionGlassToolbar({ actions }: VisionGlassToolbarProps) {
     </nav>
   );
 }
+
+export const VisionGlassToolbar = memo(VisionGlassToolbarComponent);

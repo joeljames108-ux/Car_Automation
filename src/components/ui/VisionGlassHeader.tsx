@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, memo } from "react";
 import {
   Save, FolderOpen, RotateCcw, Search, User, Settings2,
   Clock, ChevronDown, Sparkles, Wifi, Battery,
@@ -17,7 +17,7 @@ interface VisionGlassHeaderProps {
   onSetUiTheme?: (theme: "theme1" | "theme2" | "theme3" | "theme4") => void;
 }
 
-export function VisionGlassHeader({
+function VisionGlassHeaderComponent({
   month, totalRevenue, units,
   onSetUnits, onSave, onLoad, onReset, onSearch, onAdvanceMonth,
   onSetUiTheme,
@@ -314,3 +314,5 @@ export function VisionGlassHeader({
     </header>
   );
 }
+
+export const VisionGlassHeader = memo(VisionGlassHeaderComponent);
