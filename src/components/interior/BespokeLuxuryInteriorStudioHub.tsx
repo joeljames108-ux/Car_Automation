@@ -155,9 +155,7 @@ export const BespokeLuxuryInteriorStudioHub: React.FC = () => {
       {/* Main Studio Work Area */}
       {activeTab === "visualizer" && (
         <div className="space-y-4">
-          <div className="relative w-full h-[620px] rounded-3xl overflow-hidden border border-slate-800 shadow-2xl bg-slate-950">
-            <ModularInterior3DStudioViewport state={interiorState} />
-          </div>
+          <ModularInterior3DStudioViewport state={interiorState} />
 
           {/* Quick Component Preset Switcher Bar */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">

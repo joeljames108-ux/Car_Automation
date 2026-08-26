@@ -49,6 +49,9 @@ import {
   Download,
   Box,
   CheckCircle,
+  Armchair,
+  Sofa,
+  Gauge,
 } from "lucide-react";
 import { MasterModularInteriorState } from "../../sim/interior/masterInteriorTypes";
 import { MasterModularInterior3DAssembler } from "../../exterior3d/generators/interior/masterModularInterior3DAssembler";
@@ -725,56 +728,66 @@ export const ModularInterior3DStudioViewport: React.FC<ModularInterior3DStudioVi
   };
 
   return (
-    <div className="relative w-full h-[680px] rounded-3xl overflow-hidden shadow-2xl flex flex-col select-none border border-amber-900/40 bg-gradient-to-b from-slate-900/90 to-base-950 font-mono">
-      {/* 3D WebGL Canvas Container */}
-      <div ref={containerRef} className="w-full flex-1" />
-
-      {/* Driver Crosshair Reticle (in Driver Look-Around mode) */}
-      {activeCameraPose === "driver_seat_eye" && showCrosshair && (
-        <div className="absolute inset-0 pointer-events-none flex items-center justify-center">
-          <div className="relative w-8 h-8 flex items-center justify-center opacity-40">
-            <div className="w-2 h-2 rounded-full border border-amber-300" />
-            <div className="absolute w-6 h-px bg-amber-400/50" />
-            <div className="absolute h-6 w-px bg-amber-400/50" />
+    <div className="w-full flex flex-col space-y-3 select-none font-mono">
+      {/* ── TOP EXTERNAL STUDIO TOOLBAR (OUTSIDE CANVAS) ── */}
+      <div className="flex flex-wrap items-center justify-between gap-2.5 p-3 rounded-2xl backdrop-blur-xl bg-slate-900/90 border border-slate-800 shadow-xl">
+        {/* Left: Cabin badge & Specs */}
+        <div className="flex items-center gap-2.5">
+          <div className="p-2 rounded-xl bg-gradient-to-tr from-amber-500/20 to-orange-500/20 text-amber-300 border border-amber-500/30">
+            <Layers size={16} />
+          </div>
+          <div>
+            <div className="text-xs font-bold text-slate-100 flex items-center gap-1.5">
+              <span>{state.name.toUpperCase()}</span>
+              {activeCameraPose === "driver_seat_eye" && (
+                <span className="px-1.5 py-0.5 rounded text-[8px] font-mono bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 animate-pulse">
+                  DRIVER EYE ACTIVE
+                </span>
+              )}
+            </div>
+            <div className="text-[10px] text-slate-400">
+              {state.metrics.totalInteriorMassKg} kg • ${state.metrics.totalInteriorCostUSD.toLocaleString()} • Comfort: <strong className="text-amber-400">{state.metrics.comfortIndexPercent}%</strong>
+            </div>
           </div>
         </div>
-      )}
 
-      {/* Real-Time Gaze Target HUD (When sitting in Driver Seat) */}
-      {activeCameraPose === "driver_seat_eye" && (
-        <div className="absolute top-16 left-1/2 -translate-x-1/2 flex items-center gap-2 px-4 py-1.5 rounded-full bg-slate-950/85 backdrop-blur-xl border border-amber-500/40 shadow-xl pointer-events-none text-xs font-bold animate-pulse">
-          <Eye size={14} className="text-amber-400" />
-          <span className="text-amber-200 tracking-wider">👀 GAZE: {currentGazeTarget}</span>
-          <span className="text-[10px] text-slate-400 font-normal">
-            ({driverYawDeg > 0 ? `+${driverYawDeg}° R` : `${driverYawDeg}° L`}, {driverPitchDeg}° TILT)
+        {/* Center: Camera Pose View Selector */}
+        <div className="flex items-center gap-1 bg-slate-950 p-1 rounded-xl border border-slate-800 flex-wrap">
+          <span className="text-[9px] font-bold text-amber-400 px-2 py-0.5 uppercase tracking-wider flex items-center gap-1">
+            <Compass size={11} /> VIEW:
           </span>
+          {[
+            { id: "driver_seat_eye" as const, label: "Driver POV", icon: Crosshair },
+            { id: "steering_close" as const, label: "Wheel", icon: Sliders },
+            { id: "dashboard_macro" as const, label: "Cluster", icon: Gauge },
+            { id: "console_macro" as const, label: "Console", icon: Box },
+            { id: "passenger_pov" as const, label: "Passenger", icon: Armchair },
+            { id: "seats_detail" as const, label: "Seats", icon: Sofa },
+            { id: "starlight_roof" as const, label: "Roof", icon: Sparkles },
+            { id: "exploded_wide" as const, label: "Studio ISO", icon: Eye },
+          ].map((c) => {
+            const Icon = c.icon;
+            const isSelected = activeCameraPose === c.id;
+            return (
+              <button
+                key={c.id}
+                onClick={() => setCameraView(c.id)}
+                className={`flex items-center gap-1 px-2 py-1 rounded-lg text-[10px] font-bold transition-all cursor-pointer ${
+                  isSelected
+                    ? "bg-amber-500 text-slate-950 shadow-md shadow-amber-500/25"
+                    : "text-slate-400 hover:text-slate-200 hover:bg-slate-850"
+                }`}
+              >
+                <Icon size={11} />
+                <span>{c.label}</span>
+              </button>
+            );
+          })}
         </div>
-      )}
 
-      {/* Top HUD Controls Overlay */}
-      <div className="absolute top-3 left-3 right-3 flex flex-wrap items-center justify-between gap-2 pointer-events-none z-20">
-        {/* Left: Active Cabin Badge & Multi-Seat Selector */}
-        <div className="flex items-center gap-2 pointer-events-auto">
-          <div className="flex items-center gap-2.5 p-2 px-3 rounded-2xl backdrop-blur-xl shadow-xl bg-slate-950/85 border border-amber-500/30">
-            <div className="p-1.5 rounded-xl bg-amber-500/20 text-amber-300">
-              <Layers size={16} />
-            </div>
-            <div>
-              <div className="text-xs font-bold text-slate-100 flex items-center gap-1.5">
-                <span>{state.name.toUpperCase()}</span>
-                {activeCameraPose === "driver_seat_eye" && (
-                  <span className="px-1.5 py-0.5 rounded text-[8px] bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 animate-pulse">
-                    DRIVER EYE ACTIVE
-                  </span>
-                )}
-              </div>
-              <div className="text-[10px] text-amber-300/80">
-                {state.metrics.totalInteriorMassKg} kg • ${state.metrics.totalInteriorCostUSD.toLocaleString()} • Comfort: {state.metrics.comfortIndexPercent}%
-              </div>
-            </div>
-          </div>
-
-          {/* Seat Position Selector [ DRIVER ] [ FRONT PASSENGER ] [ REAR LEFT ] [ REAR RIGHT ] */}
+        {/* Right: Quick Action Controls */}
+        <div className="flex items-center gap-1.5 flex-wrap">
+          {/* Seat Position Selector */}
           <SeatPositionSelector
             activeAnchor={activeSeatAnchor}
             seatCount={state.seating.rearSeatType.includes("delete") ? 2 : 5}
@@ -796,111 +809,61 @@ export const ModularInterior3DStudioViewport: React.FC<ModularInterior3DStudioVi
               }
             }}
           />
-        </div>
 
-        {/* Center: Central Screen HMI Mode Switcher */}
-        <div className="flex items-center gap-1 p-1 rounded-2xl backdrop-blur-xl pointer-events-auto bg-slate-950/85 border border-slate-800 shadow-xl">
-          <div className="px-2 py-0.5 text-[10px] font-bold text-amber-400 flex items-center gap-1">
-            <Tv size={12} />
-            <span>HMI:</span>
-          </div>
-          {[
-            { id: "telemetry", label: "Track Telemetry" },
-            { id: "media", label: "Dolby Atmos" },
-            { id: "dynamics", label: "G-Dynamics" },
-            { id: "climate", label: "4-Zone HVAC" },
-          ].map((m) => (
-            <button
-              key={m.id}
-              onClick={() => {
-                setInfotainmentMode(m.id as InfotainmentScreenMode);
-                audioSynth.playRotaryDialClick();
-              }}
-              className={`px-2.5 py-1 rounded-xl text-[10px] font-bold transition-all cursor-pointer ${
-                infotainmentMode === m.id
-                  ? "bg-amber-500 text-white shadow-md shadow-amber-500/30"
-                  : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/60"
-              }`}
-            >
-              {m.label}
-            </button>
-          ))}
-        </div>
-
-        {/* Right: Studio Environment & Interactive Actions */}
-        <div className="flex items-center gap-1.5 pointer-events-auto">
-          {/* Audio Mute Toggle */}
+          {/* Audio Mute */}
           <button
             onClick={() => setIsAudioMuted(!isAudioMuted)}
-            className={`p-2 rounded-xl text-xs border transition-all cursor-pointer ${
+            className={`p-1.5 rounded-xl border text-xs transition-all cursor-pointer ${
               isAudioMuted
                 ? "bg-rose-500/20 border-rose-500/40 text-rose-300"
-                : "bg-slate-950/85 border-slate-800 text-slate-300 hover:text-white"
+                : "bg-slate-950 border-slate-800 text-slate-300 hover:text-white"
             }`}
             title={isAudioMuted ? "Unmute Engine Audio" : "Mute Engine Audio"}
           >
             {isAudioMuted ? <VolumeX size={13} /> : <Volume2 size={13} />}
           </button>
 
-          {/* SAE J1100 Ergonomics Sightline Toggle */}
+          {/* Door Toggle */}
+          <button
+            onClick={toggleDoor}
+            className={`flex items-center gap-1 px-2.5 py-1.5 rounded-xl text-[10px] font-bold border transition-all cursor-pointer ${
+              doorOpenAngleDeg > 0
+                ? "bg-cyan-500/20 border-cyan-500/50 text-cyan-300 shadow-sm"
+                : "bg-slate-950 border-slate-800 text-slate-400 hover:text-slate-200"
+            }`}
+          >
+            <DoorOpen size={12} />
+            <span>{doorOpenAngleDeg > 0 ? "DOOR OPEN" : "DOOR CLOSED"}</span>
+          </button>
+
+          {/* SAE Ergonomics */}
           <button
             onClick={() => {
               setShowErgonomics(!showErgonomics);
               audioSynth.playRotaryDialClick();
             }}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-[10px] font-bold border transition-all cursor-pointer ${
+            className={`flex items-center gap-1 px-2.5 py-1.5 rounded-xl text-[10px] font-bold border transition-all cursor-pointer ${
               showErgonomics
-                ? "bg-amber-500/20 border-amber-500 text-amber-300 shadow-md"
-                : "bg-slate-950/85 border-slate-800 text-slate-400 hover:text-slate-200"
+                ? "bg-amber-500/20 border-amber-500/50 text-amber-300 shadow-sm"
+                : "bg-slate-950 border-slate-800 text-slate-400 hover:text-slate-200"
             }`}
           >
             <Eye size={12} />
-            <span>SAE J1100 {showErgonomics ? "ON" : "OFF"}</span>
+            <span>SAE J1100</span>
           </button>
 
-          {/* Door Toggle Button with Thunk Sound */}
-          <button
-            onClick={toggleDoor}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-[10px] font-bold border transition-all cursor-pointer ${
-              doorOpenAngleDeg > 0
-                ? "bg-cyan-500/20 border-cyan-500 text-cyan-300 shadow-md"
-                : "bg-slate-950/85 border-slate-800 text-slate-400 hover:text-slate-200"
-            }`}
-          >
-            <DoorOpen size={12} />
-            <span>{doorOpenAngleDeg > 0 ? "CLOSE DOOR" : "OPEN DOOR"}</span>
-          </button>
-
-          {/* GLB Asset Engine Mode Toggle */}
-          <button
-            onClick={() => {
-              setUseGlbAssets(!useGlbAssets);
-              audioSynth.playRotaryDialClick();
-            }}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-[10px] font-bold border transition-all cursor-pointer ${
-              useGlbAssets
-                ? "bg-purple-500/20 border-purple-500 text-purple-300 shadow-md"
-                : "bg-slate-950/85 border-slate-800 text-slate-400 hover:text-slate-200"
-            }`}
-            title="Toggle between GLB asset loading and 3D procedural mesh generation"
-          >
-            <Box size={12} />
-            <span>GLB MODE: {useGlbAssets ? "ACTIVE" : "PROCEDURAL"}</span>
-          </button>
-
-          {/* Export Studio GLB Button */}
+          {/* GLB Export */}
           <button
             onClick={handleExportGlb}
             disabled={isExportingGlb}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-[10px] font-bold border transition-all cursor-pointer bg-gradient-to-r from-cyan-600 to-blue-600 border-cyan-400 text-white shadow-lg hover:brightness-110 disabled:opacity-50"
-            title="Export full 3D interior studio scene to binary GLB file"
+            className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl text-[10px] font-bold border border-cyan-500/40 bg-gradient-to-r from-cyan-600 to-blue-600 text-white shadow-md hover:brightness-110 disabled:opacity-50 cursor-pointer"
           >
             <Download size={12} className={isExportingGlb ? "animate-bounce" : ""} />
-            <span>{isExportingGlb ? "EXPORTING GLB..." : "EXPORT GLB"}</span>
+            <span>{isExportingGlb ? "EXPORTING..." : "GLB"}</span>
           </button>
 
-          {/* Studio Environment Preset Selector */}
-          <div className="flex items-center bg-slate-950/85 backdrop-blur-xl p-1 rounded-2xl border border-slate-800 shadow-xl">
+          {/* Environment Presets */}
+          <div className="flex items-center bg-slate-950 p-0.5 rounded-xl border border-slate-800">
             {(
               [
                 { id: "warm_sunset", icon: Sunset, color: "text-amber-400", title: "Warm Sunset" },
@@ -916,14 +879,14 @@ export const ModularInterior3DStudioViewport: React.FC<ModularInterior3DStudioVi
                 <button
                   key={env.id}
                   onClick={() => applyEnvironmentPreset(env.id)}
-                  className={`p-1.5 rounded-xl transition-all cursor-pointer ${
+                  className={`p-1 rounded-lg transition-all cursor-pointer ${
                     isSelected
-                      ? "bg-amber-500/20 text-amber-300 border border-amber-500/40 shadow-sm"
-                      : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/60"
+                      ? "bg-amber-500/20 text-amber-300 border border-amber-500/40"
+                      : "text-slate-400 hover:text-slate-200"
                   }`}
                   title={env.title}
                 >
-                  <Icon size={13} className={isSelected ? env.color : ""} />
+                  <Icon size={12} className={isSelected ? env.color : ""} />
                 </button>
               );
             })}
@@ -931,80 +894,89 @@ export const ModularInterior3DStudioViewport: React.FC<ModularInterior3DStudioVi
         </div>
       </div>
 
-      {/* Export GLB Success Toast */}
-      {exportSuccessMsg && (
-        <div className="absolute top-16 left-1/2 -translate-x-1/2 px-4 py-2 rounded-xl backdrop-blur-xl bg-emerald-950/90 border border-emerald-500/40 text-emerald-300 text-xs font-bold shadow-2xl flex items-center gap-2 z-30 animate-in fade-in slide-in-from-top-2">
-          <CheckCircle size={14} className="text-emerald-400" />
-          <span>{exportSuccessMsg}</span>
-        </div>
-      )}
+      {/* ── CLEAN 3D HERO CANVAS (UNOBSTRUCTED) ── */}
+      <div className="relative w-full h-[500px] md:h-[560px] rounded-3xl overflow-hidden bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 border border-slate-800 shadow-2xl flex flex-col">
+        <div ref={containerRef} className="w-full flex-1" />
 
-      {/* Camera Viewpoints Quick Ribbon (Right Side) */}
-      <div className="absolute top-20 right-3 flex flex-col gap-1 p-1.5 rounded-2xl backdrop-blur-xl bg-slate-950/90 border border-slate-800 shadow-2xl z-10">
-        <div className="px-2 py-1 text-[9px] font-bold text-amber-400 border-b border-slate-800 uppercase tracking-wider flex items-center gap-1">
-          <Compass size={11} /> CAMERA POSE
-        </div>
-        {[
-          { id: "driver_seat_eye" as const, label: "Driver Seat POV (Look-Around)", highlight: true },
-          { id: "steering_close" as const, label: "Wheel & Paddle Shifter" },
-          { id: "dashboard_macro" as const, label: "Digital Cluster & HMI" },
-          { id: "console_macro" as const, label: "Central Crystal Console" },
-          { id: "passenger_pov" as const, label: "Passenger Viewpoint" },
-          { id: "seats_detail" as const, label: "Recaro Sport Seating" },
-          { id: "starlight_roof" as const, label: "Starlight Roof View" },
-          { id: "exploded_wide" as const, label: "Studio Isometric ISO" },
-        ].map((c) => (
-          <button
-            key={c.id}
-            onClick={() => setCameraView(c.id)}
-            className={`px-3 py-1.5 rounded-xl text-[10px] font-bold text-left transition-all cursor-pointer flex items-center justify-between gap-2 ${
-              activeCameraPose === c.id
-                ? "bg-gradient-to-r from-amber-500 to-orange-600 text-white shadow-md shadow-amber-500/30"
-                : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/60"
-            }`}
-          >
-            <span>{c.label}</span>
-            {c.id === "driver_seat_eye" && <Crosshair size={11} className="text-amber-200" />}
-          </button>
-        ))}
+        {/* Subtle Reticle (Only in Driver POV) */}
+        {activeCameraPose === "driver_seat_eye" && showCrosshair && (
+          <div className="absolute inset-0 pointer-events-none flex items-center justify-center">
+            <div className="relative w-6 h-6 flex items-center justify-center opacity-30">
+              <div className="w-1.5 h-1.5 rounded-full border border-amber-300" />
+              <div className="absolute w-5 h-px bg-amber-400/40" />
+              <div className="absolute h-5 w-px bg-amber-400/40" />
+            </div>
+          </div>
+        )}
+
+        {/* Floating subtle Gaze HUD */}
+        {activeCameraPose === "driver_seat_eye" && (
+          <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex items-center gap-2 px-3.5 py-1 rounded-full bg-slate-950/80 backdrop-blur-md border border-amber-500/30 text-[10px] pointer-events-none text-amber-200 shadow-lg">
+            <Eye size={12} className="text-amber-400" />
+            <span className="font-bold uppercase tracking-wider">{currentGazeTarget}</span>
+            <span className="text-slate-400">
+              ({driverYawDeg > 0 ? `+${driverYawDeg}° R` : `${driverYawDeg}° L`}, {driverPitchDeg}°)
+            </span>
+          </div>
+        )}
+
+        {/* Hovered Part Name */}
+        {hoveredPartName && (
+          <div className="absolute top-3 left-3 px-3 py-1 rounded-xl bg-slate-950/80 backdrop-blur-md border border-cyan-500/30 text-[10px] text-cyan-300 font-bold pointer-events-none">
+            TARGET: {hoveredPartName}
+          </div>
+        )}
+
+        {/* Export Toast */}
+        {exportSuccessMsg && (
+          <div className="absolute top-3 right-3 px-3 py-1.5 rounded-xl bg-emerald-950/90 border border-emerald-500/40 text-emerald-300 text-[10px] font-bold shadow-xl flex items-center gap-1.5 animate-in fade-in">
+            <CheckCircle size={12} className="text-emerald-400" />
+            <span>{exportSuccessMsg}</span>
+          </div>
+        )}
       </div>
 
-      {/* FIRST-PERSON DRIVER SEAT HEAD LOOK-AROUND CONTROL BAR (Left Side Drawer) */}
-      {activeCameraPose === "driver_seat_eye" && (
-        <div className="absolute top-20 left-3 p-3 rounded-2xl backdrop-blur-xl bg-slate-950/92 border border-amber-500/30 shadow-2xl w-64 space-y-2.5 z-10">
+      {/* ── EXTERNAL COCKPIT ERGONOMICS & LIVE DYNAMICS WORKBENCH (OUTSIDE CANVAS) ── */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-3.5">
+        {/* Panel 1: Driver Cockpit & Ergonomics Controls (7 Cols) */}
+        <div className="lg:col-span-7 p-3.5 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-3 shadow-xl">
           <div className="flex items-center justify-between border-b border-slate-800 pb-2">
-            <span className="text-[10px] font-bold text-amber-300 uppercase tracking-wider flex items-center gap-1.5">
-              <Crosshair size={13} className="text-amber-400" /> DRIVER HEAD LOOK-AROUND
-            </span>
+            <div className="flex items-center gap-2">
+              <div className="p-1.5 rounded-lg bg-amber-500/20 text-amber-300">
+                <Crosshair size={14} />
+              </div>
+              <span className="text-xs font-bold text-slate-100 uppercase tracking-wider">
+                DRIVER SEAT ERGONOMICS & HEAD LOOK-AROUND
+              </span>
+            </div>
             <button
               onClick={() => setIsAutoHeadPan(!isAutoHeadPan)}
-              className={`px-2 py-0.5 rounded-lg text-[9px] font-bold border transition-all cursor-pointer flex items-center gap-1 ${
+              className={`px-2.5 py-1 rounded-xl text-[10px] font-bold border transition-all cursor-pointer flex items-center gap-1.5 ${
                 isAutoHeadPan
                   ? "bg-emerald-500/20 border-emerald-500 text-emerald-300 animate-pulse"
-                  : "bg-slate-900 border-slate-700 text-slate-400 hover:text-slate-200"
+                  : "bg-slate-950 border-slate-800 text-slate-400 hover:text-slate-200"
               }`}
-              title="Toggle automatic 360° cabin head turn pan"
             >
-              {isAutoHeadPan ? <Pause size={10} /> : <Play size={10} />}
-              <span>{isAutoHeadPan ? "SCANNING" : "AUTO PAN"}</span>
+              {isAutoHeadPan ? <Pause size={11} /> : <Play size={11} />}
+              <span>{isAutoHeadPan ? "AUTO-PANNING" : "AUTO PAN (360°)"}</span>
             </button>
           </div>
 
-          {/* Quick Gaze Hotspots Grid */}
-          <div className="space-y-1">
-            <div className="text-[9px] text-slate-400 flex justify-between">
+          {/* Quick Gaze Target Buttons */}
+          <div className="space-y-1.5">
+            <div className="text-[10px] text-slate-400 flex justify-between">
               <span>QUICK GAZE HOTSPOTS:</span>
-              <span className="text-amber-300">8 POSES</span>
+              <span className="text-amber-400 font-bold">8 POSE TARGETS</span>
             </div>
-            <div className="grid grid-cols-2 gap-1">
+            <div className="grid grid-cols-4 gap-1.5">
               {GAZE_HOTSPOTS.map((hotspot) => (
                 <button
                   key={hotspot.id}
                   onClick={() => snapToHotspot(hotspot)}
-                  className={`px-2 py-1 rounded-lg text-[9px] font-bold border transition-all text-left truncate cursor-pointer flex items-center gap-1 ${
+                  className={`px-2 py-1.5 rounded-xl text-[10px] font-bold border transition-all truncate cursor-pointer flex items-center gap-1 ${
                     currentGazeTarget === hotspot.targetDescription
                       ? "bg-amber-500/20 border-amber-500 text-amber-300 shadow-sm"
-                      : "bg-slate-900/80 border-slate-800 text-slate-400 hover:text-slate-200 hover:bg-slate-800"
+                      : "bg-slate-950/80 border-slate-800 text-slate-400 hover:text-slate-200 hover:bg-slate-850"
                   }`}
                   title={hotspot.label}
                 >
@@ -1015,175 +987,242 @@ export const ModularInterior3DStudioViewport: React.FC<ModularInterior3DStudioVi
             </div>
           </div>
 
-          {/* Manual Head Rotation Sliders */}
-          <div className="space-y-1.5 pt-1 border-t border-slate-800/80 text-[9px]">
-            <div className="flex justify-between items-center text-slate-400">
-              <span>HEAD PAN (YAW):</span>
-              <span className="text-amber-300 font-bold">{driverYawDeg}°</span>
+          {/* Sliders Grid: Yaw, Pitch, FOV, Fore/Aft, Height */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5 pt-2 border-t border-slate-800/80 text-[10px]">
+            {/* Head Pan */}
+            <div className="p-2 rounded-xl bg-slate-950/70 border border-slate-800 space-y-1">
+              <div className="flex justify-between text-slate-400">
+                <span>HEAD PAN (YAW):</span>
+                <span className="text-amber-400 font-bold">{driverYawDeg}°</span>
+              </div>
+              <input
+                type="range"
+                min="-140"
+                max="140"
+                step="1"
+                value={driverYawDeg}
+                onChange={(e) => {
+                  const val = parseFloat(e.target.value);
+                  setIsAutoHeadPan(false);
+                  setDriverYawDeg(val);
+                  targetYawRef.current = val;
+                  headYawRef.current = val;
+                  updateGazeDetection(val, driverPitchDeg);
+                }}
+                className="w-full h-1.5 rounded-lg accent-amber-400 cursor-pointer"
+              />
             </div>
-            <input
-              type="range"
-              min="-140"
-              max="140"
-              step="1"
-              value={driverYawDeg}
-              onChange={(e) => {
-                const val = parseFloat(e.target.value);
-                setIsAutoHeadPan(false);
-                setDriverYawDeg(val);
-                targetYawRef.current = val;
-                headYawRef.current = val;
-                updateGazeDetection(val, driverPitchDeg);
-              }}
-              className="w-full h-1.5 rounded-lg accent-amber-400 cursor-pointer"
-            />
 
-            <div className="flex justify-between items-center text-slate-400">
-              <span>HEAD TILT (PITCH):</span>
-              <span className="text-amber-300 font-bold">{driverPitchDeg}°</span>
+            {/* Head Tilt */}
+            <div className="p-2 rounded-xl bg-slate-950/70 border border-slate-800 space-y-1">
+              <div className="flex justify-between text-slate-400">
+                <span>HEAD TILT (PITCH):</span>
+                <span className="text-amber-400 font-bold">{driverPitchDeg}°</span>
+              </div>
+              <input
+                type="range"
+                min="-50"
+                max="50"
+                step="1"
+                value={driverPitchDeg}
+                onChange={(e) => {
+                  const val = parseFloat(e.target.value);
+                  setIsAutoHeadPan(false);
+                  setDriverPitchDeg(val);
+                  targetPitchRef.current = val;
+                  headPitchRef.current = val;
+                  updateGazeDetection(driverYawDeg, val);
+                }}
+                className="w-full h-1.5 rounded-lg accent-amber-400 cursor-pointer"
+              />
             </div>
-            <input
-              type="range"
-              min="-50"
-              max="50"
-              step="1"
-              value={driverPitchDeg}
-              onChange={(e) => {
-                const val = parseFloat(e.target.value);
-                setIsAutoHeadPan(false);
-                setDriverPitchDeg(val);
-                targetPitchRef.current = val;
-                headPitchRef.current = val;
-                updateGazeDetection(driverYawDeg, val);
-              }}
-              className="w-full h-1.5 rounded-lg accent-amber-400 cursor-pointer"
-            />
-          </div>
 
-          {/* Seating Ergonomics & Lens Zoom */}
-          <div className="space-y-1.5 pt-1 border-t border-slate-800/80 text-[9px]">
-            <div className="flex justify-between items-center text-slate-400">
-              <span>LENS FOV (ZOOM):</span>
-              <span className="text-cyan-300 font-bold">{driverFov}°</span>
+            {/* Lens FOV */}
+            <div className="p-2 rounded-xl bg-slate-950/70 border border-slate-800 space-y-1">
+              <div className="flex justify-between text-slate-400">
+                <span>LENS FOV (ZOOM):</span>
+                <span className="text-cyan-400 font-bold">{driverFov}°</span>
+              </div>
+              <input
+                type="range"
+                min="38"
+                max="72"
+                step="1"
+                value={driverFov}
+                onChange={(e) => handleFovChange(parseInt(e.target.value))}
+                className="w-full h-1.5 rounded-lg accent-cyan-400 cursor-pointer"
+              />
             </div>
-            <input
-              type="range"
-              min="38"
-              max="72"
-              step="1"
-              value={driverFov}
-              onChange={(e) => handleFovChange(parseInt(e.target.value))}
-              className="w-full h-1.5 rounded-lg accent-cyan-400 cursor-pointer"
-            />
 
-            <div className="flex justify-between items-center text-slate-400">
-              <span>SEAT FORE / AFT:</span>
-              <span className="text-emerald-300 font-bold">{seatForeAftMm} mm</span>
+            {/* Seat Fore / Aft */}
+            <div className="p-2 rounded-xl bg-slate-950/70 border border-slate-800 space-y-1">
+              <div className="flex justify-between text-slate-400">
+                <span>SEAT FORE / AFT:</span>
+                <span className="text-emerald-400 font-bold">{seatForeAftMm} mm</span>
+              </div>
+              <input
+                type="range"
+                min="-80"
+                max="80"
+                step="5"
+                value={seatForeAftMm}
+                onChange={(e) => setSeatForeAftMm(parseInt(e.target.value))}
+                className="w-full h-1.5 rounded-lg accent-emerald-400 cursor-pointer"
+              />
             </div>
-            <input
-              type="range"
-              min="-80"
-              max="80"
-              step="5"
-              value={seatForeAftMm}
-              onChange={(e) => setSeatForeAftMm(parseInt(e.target.value))}
-              className="w-full h-1.5 rounded-lg accent-emerald-400 cursor-pointer"
-            />
 
-            <div className="flex justify-between items-center text-slate-400">
-              <span>EYE HEIGHT:</span>
-              <span className="text-emerald-300 font-bold">{seatHeightMm} mm</span>
+            {/* Eye Height */}
+            <div className="p-2 rounded-xl bg-slate-950/70 border border-slate-800 space-y-1">
+              <div className="flex justify-between text-slate-400">
+                <span>EYE HEIGHT:</span>
+                <span className="text-emerald-400 font-bold">{seatHeightMm} mm</span>
+              </div>
+              <input
+                type="range"
+                min="-40"
+                max="40"
+                step="5"
+                value={seatHeightMm}
+                onChange={(e) => setSeatHeightMm(parseInt(e.target.value))}
+                className="w-full h-1.5 rounded-lg accent-emerald-400 cursor-pointer"
+              />
             </div>
-            <input
-              type="range"
-              min="-40"
-              max="40"
-              step="5"
-              value={seatHeightMm}
-              onChange={(e) => setSeatHeightMm(parseInt(e.target.value))}
-              className="w-full h-1.5 rounded-lg accent-emerald-400 cursor-pointer"
-            />
-          </div>
 
-          {/* Mouse Drag Tip */}
-          <div className="p-1.5 rounded-xl bg-slate-900 border border-slate-800 text-[8px] text-slate-400 text-center">
-            💡 Drag cursor anywhere on canvas to look around cockpit
+            {/* Reticle Toggle */}
+            <div className="p-2 rounded-xl bg-slate-950/70 border border-slate-800 flex items-center justify-between">
+              <span className="text-slate-400">CROSSHAIR:</span>
+              <button
+                onClick={() => setShowCrosshair(!showCrosshair)}
+                className={`px-2 py-0.5 rounded-lg font-bold border transition-all cursor-pointer ${
+                  showCrosshair
+                    ? "bg-amber-500/20 border-amber-500/50 text-amber-300"
+                    : "bg-slate-900 border-slate-800 text-slate-500"
+                }`}
+              >
+                {showCrosshair ? "ON" : "OFF"}
+              </button>
+            </div>
           </div>
         </div>
-      )}
 
-      {/* Bottom Interactive Sliders & Cockpit Simulator Bar */}
-      <div className="absolute bottom-3 left-3 right-3 p-3 rounded-2xl backdrop-blur-xl bg-slate-950/90 border border-slate-800 shadow-2xl flex flex-wrap items-center justify-between gap-4">
-        {/* Continuous Exploded View Slider */}
-        <div className="flex items-center gap-3 min-w-[200px] flex-1">
-          <div className="flex items-center gap-1.5 text-xs font-bold text-amber-400 whitespace-nowrap">
-            <Maximize2 size={14} />
-            <span>EXPLODED</span>
+        {/* Panel 2: Live HMI & Dynamics Telemetry (5 Cols) */}
+        <div className="lg:col-span-5 p-3.5 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-3 shadow-xl">
+          <div className="flex items-center justify-between border-b border-slate-800 pb-2">
+            <div className="flex items-center gap-2">
+              <div className="p-1.5 rounded-lg bg-cyan-500/20 text-cyan-300">
+                <Tv size={14} />
+              </div>
+              <span className="text-xs font-bold text-slate-100 uppercase tracking-wider">
+                CENTRAL HMI & DYNAMICS SIMULATOR
+              </span>
+            </div>
+            <div className="text-[10px] text-rose-400 font-bold">
+              {simRpm} RPM
+            </div>
           </div>
-          <input
-            type="range"
-            min="0"
-            max="1"
-            step="0.01"
-            value={explodedFactor}
-            onChange={(e) => setExplodedFactor(parseFloat(e.target.value))}
-            className="w-full h-1.5 rounded-lg accent-amber-400 cursor-pointer"
-          />
-          <span className="text-xs font-bold text-amber-300 min-w-[36px]">
-            {Math.round(explodedFactor * 100)}%
-          </span>
-        </div>
 
-        {/* Dynamic Engine RPM Simulator for Cluster Needle & Audio */}
-        <div className="flex items-center gap-3 min-w-[200px] flex-1">
-          <div className="flex items-center gap-1.5 text-xs font-bold text-rose-400 whitespace-nowrap">
-            <Activity size={14} />
-            <span>SIM RPM</span>
+          {/* HMI Screen Mode Switcher */}
+          <div className="space-y-1.5">
+            <div className="text-[10px] text-slate-400">INFOTAINMENT DASHBOARD STREAM:</div>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5">
+              {[
+                { id: "telemetry", label: "Telemetry" },
+                { id: "media", label: "Dolby Atmos" },
+                { id: "dynamics", label: "G-Force" },
+                { id: "climate", label: "4-Zone HVAC" },
+              ].map((m) => (
+                <button
+                  key={m.id}
+                  onClick={() => {
+                    setInfotainmentMode(m.id as InfotainmentScreenMode);
+                    audioSynth.playRotaryDialClick();
+                  }}
+                  className={`px-2 py-1.5 rounded-xl text-[10px] font-bold transition-all cursor-pointer ${
+                    infotainmentMode === m.id
+                      ? "bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-md shadow-cyan-500/25"
+                      : "bg-slate-950/80 border border-slate-800 text-slate-400 hover:text-slate-200"
+                  }`}
+                >
+                  {m.label}
+                </button>
+              ))}
+            </div>
           </div>
-          <input
-            type="range"
-            min="800"
-            max="9000"
-            step="100"
-            value={simRpm}
-            onChange={(e) => handleRpmChange(parseInt(e.target.value))}
-            className="w-full h-1.5 rounded-lg accent-rose-400 cursor-pointer"
-          />
-          <span className="text-xs text-rose-300 font-bold min-w-[54px]">
-            {simRpm} RPM
-          </span>
-        </div>
 
-        {/* Dynamic Steering Angle */}
-        <div className="flex items-center gap-2 min-w-[140px]">
-          <div className="text-xs font-bold text-cyan-400 whitespace-nowrap">
-            STEER: {steeringAngleDeg}°
-          </div>
-          <input
-            type="range"
-            min="-90"
-            max="90"
-            step="5"
-            value={steeringAngleDeg}
-            onChange={(e) => setSteeringAngleDeg(parseInt(e.target.value))}
-            className="w-16 h-1.5 rounded-lg accent-cyan-400 cursor-pointer"
-          />
-        </div>
+          {/* Dynamics Sliders: Exploded, RPM, Steering, Door */}
+          <div className="grid grid-cols-2 gap-2.5 pt-2 border-t border-slate-800/80 text-[10px]">
+            {/* Exploded View */}
+            <div className="p-2 rounded-xl bg-slate-950/70 border border-slate-800 space-y-1">
+              <div className="flex justify-between text-slate-400">
+                <span className="flex items-center gap-1">
+                  <Maximize2 size={11} className="text-amber-400" /> EXPLODED:
+                </span>
+                <span className="text-amber-400 font-bold">{Math.round(explodedFactor * 100)}%</span>
+              </div>
+              <input
+                type="range"
+                min="0"
+                max="1"
+                step="0.01"
+                value={explodedFactor}
+                onChange={(e) => setExplodedFactor(parseFloat(e.target.value))}
+                className="w-full h-1.5 rounded-lg accent-amber-400 cursor-pointer"
+              />
+            </div>
 
-        {/* Driver Door Angle */}
-        <div className="flex items-center gap-2 min-w-[140px]">
-          <div className="text-xs font-bold text-emerald-400 whitespace-nowrap">
-            DOOR: {doorOpenAngleDeg}°
+            {/* Engine RPM */}
+            <div className="p-2 rounded-xl bg-slate-950/70 border border-slate-800 space-y-1">
+              <div className="flex justify-between text-slate-400">
+                <span className="flex items-center gap-1">
+                  <Activity size={11} className="text-rose-400" /> RPM SOUND:
+                </span>
+                <span className="text-rose-400 font-bold">{simRpm}</span>
+              </div>
+              <input
+                type="range"
+                min="800"
+                max="9000"
+                step="100"
+                value={simRpm}
+                onChange={(e) => handleRpmChange(parseInt(e.target.value))}
+                className="w-full h-1.5 rounded-lg accent-rose-400 cursor-pointer"
+              />
+            </div>
+
+            {/* Steering Angle */}
+            <div className="p-2 rounded-xl bg-slate-950/70 border border-slate-800 space-y-1">
+              <div className="flex justify-between text-slate-400">
+                <span>STEERING:</span>
+                <span className="text-cyan-400 font-bold">{steeringAngleDeg}°</span>
+              </div>
+              <input
+                type="range"
+                min="-90"
+                max="90"
+                step="5"
+                value={steeringAngleDeg}
+                onChange={(e) => setSteeringAngleDeg(parseInt(e.target.value))}
+                className="w-full h-1.5 rounded-lg accent-cyan-400 cursor-pointer"
+              />
+            </div>
+
+            {/* Driver Door Angle */}
+            <div className="p-2 rounded-xl bg-slate-950/70 border border-slate-800 space-y-1">
+              <div className="flex justify-between text-slate-400">
+                <span>DOOR SWING:</span>
+                <span className="text-emerald-400 font-bold">{doorOpenAngleDeg}°</span>
+              </div>
+              <input
+                type="range"
+                min="0"
+                max="65"
+                step="1"
+                value={doorOpenAngleDeg}
+                onChange={(e) => setDoorOpenAngleDeg(parseInt(e.target.value))}
+                className="w-full h-1.5 rounded-lg accent-emerald-400 cursor-pointer"
+              />
+            </div>
           </div>
-          <input
-            type="range"
-            min="0"
-            max="65"
-            step="1"
-            value={doorOpenAngleDeg}
-            onChange={(e) => setDoorOpenAngleDeg(parseInt(e.target.value))}
-            className="w-16 h-1.5 rounded-lg accent-emerald-400 cursor-pointer"
-          />
         </div>
       </div>
     </div>
