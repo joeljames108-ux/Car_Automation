@@ -38,11 +38,12 @@ export class MasterModularEngine3DAssembler {
 
   // Component Mesh References for Kinematic Animation
   private crankshaftMesh: THREE.Group | null = null;
-  private pistonMeshes: { group: THREE.Group; cylinderIndex: number; baseZ: number; angleRad: number }[] = [];
+  private pistonMeshes: { group: THREE.Group; cylinderIndex: number; baseZ: number; angleRad: number; glowMesh?: THREE.Mesh }[] = [];
   private conrodMeshes: { group: THREE.Group; cylinderIndex: number }[] = [];
   private intakeValves: { mesh: THREE.Mesh; cylinderIndex: number }[] = [];
   private exhaustValves: { mesh: THREE.Mesh; cylinderIndex: number }[] = [];
-  private combustionGlows: { mesh: THREE.Mesh; light: THREE.PointLight; cylinderIndex: number }[] = [];
+  private combustionGlows: { mesh: THREE.Mesh; cylinderIndex: number }[] = [];
+  private activeFlameLight: THREE.PointLight | null = null;
   private camshaftMeshes: THREE.Group[] = [];
 
   // Live Kinematic Parameter Dimensions
@@ -427,11 +428,29 @@ export class MasterModularEngine3DAssembler {
     this.rootGroup.add(this.crankshaftMesh);
 
     // ------------------------------------------------------------------------
-    // 3. PISTONS, CONNECTING RODS & COMBUSTION FLAMES
+    // 3. PISTONS, CONNECTING RODS & COMBUSTION FLAMES (OPTIMIZED SHARED BUFFERS)
     // ------------------------------------------------------------------------
     const pistonRadiusM = block.boreMm / 2000;
     const pistonHeightM = Math.max(0.035, 0.042 * (block.boreMm / 88));
     const rodLengthM = this.currentRodLengthM;
+
+    // Shared prototype geometries (Instantiated once, reused across all cylinders)
+    const pistonCrownGeo = new THREE.CylinderGeometry(pistonRadiusM * 0.98, pistonRadiusM * 0.98, pistonHeightM, 24);
+    const ringGeo = new THREE.TorusGeometry(pistonRadiusM * 0.985, 0.001, 6, 20);
+    ringGeo.rotateX(Math.PI / 2);
+    const glowSphereGeo = new THREE.SphereGeometry(pistonRadiusM * 0.85, 12, 12);
+    const rodBeamGeo = new THREE.BoxGeometry(0.014 * (block.boreMm / 88), rodLengthM, 0.022 * (block.strokeMm / 82));
+    const bigEndGeo = new THREE.CylinderGeometry(0.034, 0.034, 0.024, 16);
+    bigEndGeo.rotateX(Math.PI / 2);
+    const smallEndGeo = new THREE.CylinderGeometry(0.016, 0.016, 0.020, 14);
+    smallEndGeo.rotateX(Math.PI / 2);
+
+    // Single dynamic ignition point light (Follows active firing cylinder at runtime)
+    this.activeFlameLight = new THREE.PointLight(0xff4500, 0, 0.6);
+    this.activeFlameLight.name = "DynamicIgnitionLight";
+    this.rootGroup.add(this.activeFlameLight);
+
+    const rodMaterial = state.connectingRods.style.includes("titanium") ? this.materials.titaniumAlloy : this.materials.forgedSteel;
 
     for (let i = 0; i < cylCount; i++) {
       let bank = 0;
@@ -446,35 +465,28 @@ export class MasterModularEngine3DAssembler {
       // Piston Crown Mesh
       const pistonGroup = new THREE.Group();
       pistonGroup.name = `Piston_Cyl_${i + 1}`;
-      const pistonCrown = new THREE.Mesh(
-        new THREE.CylinderGeometry(pistonRadiusM * 0.98, pistonRadiusM * 0.98, pistonHeightM, 32),
-        this.materials.billetAluminum
-      );
+      const pistonCrown = new THREE.Mesh(pistonCrownGeo, this.materials.billetAluminum);
       pistonCrown.castShadow = true;
       pistonGroup.add(pistonCrown);
 
       // Piston Rings
-      const ring1 = new THREE.Mesh(new THREE.TorusGeometry(pistonRadiusM * 0.985, 0.001, 8, 32), this.materials.nitridedSteel);
-      ring1.rotation.x = Math.PI / 2;
+      const ring1 = new THREE.Mesh(ringGeo, this.materials.nitridedSteel);
       ring1.position.y = 0.012;
       pistonGroup.add(ring1);
 
-      // 4-Stroke Combustion Glow Sphere
-      const glowSphere = new THREE.Mesh(
-        new THREE.SphereGeometry(pistonRadiusM * 0.85, 16, 16),
-        this.materials.combustionFlameMat.clone()
-      );
+      // 4-Stroke Combustion Glow Sphere (Per-cylinder lightweight mesh material)
+      const glowMat = new THREE.MeshBasicMaterial({
+        color: 0xff6b00,
+        transparent: true,
+        opacity: 0,
+        blending: THREE.AdditiveBlending,
+      });
+      const glowSphere = new THREE.Mesh(glowSphereGeo, glowMat);
       glowSphere.position.y = 0.035;
-      glowSphere.visible = true;
       pistonGroup.add(glowSphere);
-
-      const flameLight = new THREE.PointLight(0xff4500, 0, 0.4);
-      flameLight.position.y = 0.05;
-      pistonGroup.add(flameLight);
 
       this.combustionGlows.push({
         mesh: glowSphere,
-        light: flameLight,
         cylinderIndex: i,
       });
 
@@ -483,6 +495,7 @@ export class MasterModularEngine3DAssembler {
         cylinderIndex: i,
         baseZ: zM,
         angleRad,
+        glowMesh: glowSphere,
       });
 
       this.rootGroup.add(pistonGroup);
@@ -490,21 +503,16 @@ export class MasterModularEngine3DAssembler {
       // Connecting Rod
       const conrodGroup = new THREE.Group();
       conrodGroup.name = `ConnectingRod_Cyl_${i + 1}`;
-      const rodBeam = new THREE.Mesh(
-        new THREE.BoxGeometry(0.014 * (block.boreMm / 88), rodLengthM, 0.022 * (block.strokeMm / 82)),
-        state.connectingRods.style.includes("titanium") ? this.materials.titaniumAlloy : this.materials.forgedSteel
-      );
+      const rodBeam = new THREE.Mesh(rodBeamGeo, rodMaterial);
       rodBeam.position.y = rodLengthM / 2;
       rodBeam.castShadow = true;
       conrodGroup.add(rodBeam);
 
       // Big End Rod Cap & Bronze Small End Bushing
-      const bigEnd = new THREE.Mesh(new THREE.CylinderGeometry(0.034, 0.034, 0.024, 20), this.materials.forgedSteel);
-      bigEnd.rotation.x = Math.PI / 2;
+      const bigEnd = new THREE.Mesh(bigEndGeo, this.materials.forgedSteel);
       conrodGroup.add(bigEnd);
 
-      const smallEnd = new THREE.Mesh(new THREE.CylinderGeometry(0.016, 0.016, 0.020, 16), this.materials.goldAnodized);
-      smallEnd.rotation.x = Math.PI / 2;
+      const smallEnd = new THREE.Mesh(smallEndGeo, this.materials.goldAnodized);
       smallEnd.position.y = rodLengthM;
       conrodGroup.add(smallEnd);
 
@@ -886,7 +894,15 @@ export class MasterModularEngine3DAssembler {
     const crankRadiusM = this.currentStrokeM / 2;
     const rodLengthM = this.currentRodLengthM;
 
-    this.pistonMeshes.forEach((p) => {
+    let maxIntensity = 0;
+    let firingX = 0;
+    let firingY = 0;
+    let firingZ = 0;
+    let firingColor = new THREE.Color(0xff4500);
+    let hasFiringCyl = false;
+
+    for (let i = 0; i < this.pistonMeshes.length; i++) {
+      const p = this.pistonMeshes[i];
       const solved = this.kinematicsAnimator.solveCylinder(p.cylinderIndex);
       // Exact slider-crank pin distance from crank centerline:
       // displacement is measured from BDC where the pin sits at (rodLength - crankRadius)
@@ -900,15 +916,33 @@ export class MasterModularEngine3DAssembler {
       p.group.position.set(baseX, baseY, p.baseZ);
       p.group.rotation.z = -angleRad;
 
-      // Update 4-Stroke Combustion Glow
-      const glow = this.combustionGlows.find((g) => g.cylinderIndex === p.cylinderIndex);
-      if (glow) {
-        (glow.mesh.material as THREE.MeshBasicMaterial).color.copy(solved.combustionGlowColor);
-        (glow.mesh.material as THREE.MeshBasicMaterial).opacity = solved.combustionIntensity;
-        glow.light.color.copy(solved.combustionGlowColor);
-        glow.light.intensity = solved.combustionIntensity * 2.8;
+      // Update 4-Stroke Combustion Glow (O(1) direct reference)
+      if (p.glowMesh) {
+        const mat = p.glowMesh.material as THREE.MeshBasicMaterial;
+        mat.color.copy(solved.combustionGlowColor);
+        mat.opacity = solved.combustionIntensity;
       }
-    });
+
+      if (solved.combustionIntensity > maxIntensity) {
+        maxIntensity = solved.combustionIntensity;
+        firingX = baseX + Math.sin(angleRad) * 0.04;
+        firingY = baseY + Math.cos(angleRad) * 0.04;
+        firingZ = p.baseZ;
+        firingColor = solved.combustionGlowColor;
+        hasFiringCyl = true;
+      }
+    }
+
+    // Direct dynamic ignition point light to firing cylinder
+    if (this.activeFlameLight) {
+      if (maxIntensity > 0.05 && hasFiringCyl) {
+        this.activeFlameLight.position.set(firingX, firingY, firingZ);
+        this.activeFlameLight.color.copy(firingColor);
+        this.activeFlameLight.intensity = maxIntensity * 3.2;
+      } else {
+        this.activeFlameLight.intensity = 0;
+      }
+    }
 
     // 3. Conrods Articulation
     this.conrodMeshes.forEach((c) => {

@@ -156,7 +156,16 @@ export const ModularEngine3DViewportComponent: React.FC<ModularEngine3DViewportP
       renderer.setSize(w, h);
       renderControllerRef.current.markDirty();
     };
+    const handleVisibilityChange = () => {
+      if (document.hidden) {
+        renderControllerRef.current.setAnimating(false);
+      } else {
+        renderControllerRef.current.setAnimating(isRunning);
+        renderControllerRef.current.markDirty();
+      }
+    };
     window.addEventListener("resize", handleResize);
+    document.addEventListener("visibilitychange", handleVisibilityChange);
 
     // Adaptive Animation Loop
     let lastTime = performance.now();
@@ -166,10 +175,10 @@ export const ModularEngine3DViewportComponent: React.FC<ModularEngine3DViewportP
       lastTime = time;
 
       const ctrl = renderControllerRef.current;
-      ctrl.setAnimating(isRunning);
+      ctrl.setAnimating(isRunning && !document.hidden);
 
       if (ctrl.shouldRender()) {
-        if (isRunning) {
+        if (isRunning && !document.hidden) {
           assembler.updateKinematics(deltaSec);
         }
         controls.update();
@@ -185,6 +194,7 @@ export const ModularEngine3DViewportComponent: React.FC<ModularEngine3DViewportP
 
     return () => {
       window.removeEventListener("resize", handleResize);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
       if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
       if (assemblerRef.current) assemblerRef.current.dispose();
       renderer.dispose();
@@ -199,20 +209,14 @@ export const ModularEngine3DViewportComponent: React.FC<ModularEngine3DViewportP
     if (!assemblerRef.current || !sceneRef.current) return;
     renderControllerRef.current.markDirty();
 
-    // Try selective in-place parameter update without rebuilding scene graph
-    const success = assemblerRef.current.updateLiveParameters(state);
-    if (!success) {
-      // Structural architecture changed (e.g. Inline-4 to V12), perform clean dispose & re-assembly
-      const oldGroup = assemblerRef.current.getRootGroup();
-      sceneRef.current.remove(oldGroup);
-      assemblerRef.current.dispose();
-
-      const newGroup = assemblerRef.current.assemble(state);
+    const rebuilt = assemblerRef.current.updateOrAssemble(state);
+    if (rebuilt) {
       assemblerRef.current.setExplodedFactor(explodedFactor);
       assemblerRef.current.setRpm(rpm);
       assemblerRef.current.setRunning(isRunning);
       assemblerRef.current.setCombustionGlowEnabled(combustionGlow);
-      sceneRef.current.add(newGroup);
+    } else {
+      assemblerRef.current.updateLiveParameters(state);
     }
   }, [state]);
 

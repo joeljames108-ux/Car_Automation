@@ -15,11 +15,70 @@ import {
   DynoDataPoint,
 } from "./masterEngineTypes";
 
+interface DynoSolverCacheEntry {
+  performance: MasterEnginePerformanceMetrics;
+  costAndBOM: MasterEngineCostAndBOM;
+}
+
 export class EngineDynoSolver {
+  private static cache: Map<string, DynoSolverCacheEntry> = new Map();
+  private static readonly MAX_CACHE_SIZE = 120;
+
+  /**
+   * Generates a deterministic signature based solely on mechanical & thermodynamic parameters
+   * (Cosmetics, color themes, badges, and visual options are deliberately excluded).
+   */
+  private static getMechanicalSignature(state: MasterEngineState): string {
+    const arch = state.architecture;
+    const block = state.block;
+    const crank = state.crankshaft;
+    const rods = state.connectingRods;
+    const pistons = state.pistons;
+    const heads = state.cylinderHeads;
+    const cams = state.camshafts;
+    const valves = state.valvesAndSprings;
+    const intake = state.intake;
+    const fuel = state.fuelSystem;
+    const ignition = state.ignition;
+    const turbo = state.turboSystem;
+    const exhaust = state.exhaust;
+    const lube = state.lubrication;
+    const tuning = state.tuning;
+    const dt = state.drivetrain;
+
+    return [
+      arch.family, arch.cylinderCount, arch.bankAngleDeg,
+      block.boreMm, block.strokeMm, block.material, block.costUSD,
+      crank.material, crank.planeType, crank.knifeEdgedCounterweights, crank.costUSD,
+      rods.style, rods.rodLengthMm, rods.costUSD,
+      pistons.materialClass, pistons.domeVolumeCc, pistons.ringPackage, pistons.costUSD,
+      heads.valvetrain, heads.combustionChamberVolumeCc, heads.portFinish, heads.intakeValvesPerCylinder, heads.intakeValveDiameterMm, heads.exhaustValveDiameterMm, heads.costUSD,
+      cams.intakeDurationAdvDeg, cams.exhaustDurationAdvDeg, cams.variableValveTimingIntake, cams.costUSD,
+      valves.springType, valves.intakeValveMaterial, valves.exhaustValveMaterial, valves.costUSD,
+      intake.style, intake.runnerLengthMm, intake.plenumVolumeLiters, intake.costUSD,
+      fuel.injectionType, fuel.injectorFlowCcPerMin, fuel.fuelTypeOctane, fuel.costUSD,
+      ignition.type, ignition.sparkPlugHeatRange, ignition.coilEnergyMillijoules, ignition.costUSD,
+      turbo.type, turbo.compressorInducerMm, turbo.turbineExducerMm, turbo.aRatio, turbo.targetBoostPressureBar, turbo.costUSD,
+      exhaust.headerStyle, exhaust.primaryTubeDiameterMm, exhaust.catalyticConverter, exhaust.costUSD,
+      lube.systemType, lube.oilViscosityGrade, lube.costUSD,
+      tuning.revLimiterRpm, tuning.airFuelRatioTargetWOT, tuning.vvtIntakeAdvanceMapDeg,
+      dt?.architecture, dt?.activeGearCount, dt?.costUSD
+    ].join("|");
+  }
+
   public static solve(state: MasterEngineState): {
     performance: MasterEnginePerformanceMetrics;
     costAndBOM: MasterEngineCostAndBOM;
   } {
+    const signature = this.getMechanicalSignature(state);
+    const cached = this.cache.get(signature);
+    if (cached) {
+      return {
+        performance: { ...cached.performance, dynoCurve: [...cached.performance.dynoCurve] },
+        costAndBOM: { ...cached.costAndBOM },
+      };
+    }
+
     const arch = state.architecture;
     const block = state.block;
     const crank = state.crankshaft;
@@ -241,6 +300,13 @@ export class EngineDynoSolver {
       dynoCurve,
     };
 
+    if (this.cache.size >= this.MAX_CACHE_SIZE) {
+      const firstKey = this.cache.keys().next().value;
+      if (firstKey) this.cache.delete(firstKey);
+    }
+    this.cache.set(signature, { performance, costAndBOM });
+
     return { performance, costAndBOM };
   }
 }
+

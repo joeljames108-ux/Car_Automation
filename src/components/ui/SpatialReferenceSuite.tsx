@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, memo } from "react";
 import * as THREE from "three";
 import { ModernAnalogDial } from "./ModernAnalogDial";
 import { EngineeringLog } from "../EngineeringLog";
@@ -6,7 +6,7 @@ import { CFDView } from "./CFDView";
 import { useDesign } from "../../state/DesignContext";
 import { HelpCircle, User, Bot, Box } from "lucide-react";
 
-export function SpatialReferenceSuite() {
+function SpatialReferenceSuiteComponent() {
   const { design, sim } = useDesign();
   const [rideHeight, setRideHeight] = useState(105);
   const [cameraSmart, setCameraSmart] = useState(true);
@@ -439,4 +439,6 @@ export function SpatialReferenceSuite() {
     </div>
   );
 }
+
+export const SpatialReferenceSuite = memo(SpatialReferenceSuiteComponent);
 
