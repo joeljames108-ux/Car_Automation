@@ -34,7 +34,7 @@ interface F1ConstructorMasterAppProps {
   initialMode?: F1WorkshopMode;
 }
 
-export const F1ConstructorMasterApp: React.FC<F1ConstructorMasterAppProps> = ({
+const F1ConstructorMasterAppComponent: React.FC<F1ConstructorMasterAppProps> = ({
   onBackToMainMotorsport,
   initialMode = "CONSTRUCTION_CAD",
 }) => {
@@ -198,4 +198,6 @@ export const F1ConstructorMasterApp: React.FC<F1ConstructorMasterAppProps> = ({
   );
 };
 
+export const F1ConstructorMasterApp = React.memo(F1ConstructorMasterAppComponent);
 export default F1ConstructorMasterApp;
+

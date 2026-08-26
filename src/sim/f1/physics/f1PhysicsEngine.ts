@@ -9,11 +9,52 @@ import type { F1CarDesign } from "../types/f1Types";
 import type { F1ScrutineeringReport, F1ScrutineeringCheckItem } from "../types/f1Interfaces";
 
 export class F1PhysicsEngine {
+  private static evaluationCache: Map<string, F1CarDesign> = new Map();
+  private static scrutineeringCache: Map<string, F1ScrutineeringReport> = new Map();
+  private static readonly MAX_CACHE_SIZE = 100;
+
+  /**
+   * Generates a deterministic signature based on mechanical, aerodynamic, and chassis parameters.
+   */
+  private static getCarPhysicsSignature(design: F1CarDesign): string {
+    const m = design.monocoque;
+    const pu = design.powerUnit;
+    const a = design.aero;
+    const s = design.suspension;
+    const g = design.gearbox;
+    const b = design.brakes;
+    const c = design.cockpit;
+
+    return [
+      m.carbonFiberGrade, m.coreMaterial, m.totalMonocoqueMassKg, m.ballastTungstenKg, m.ballastPositionXPercent, m.cockpitOpeningWidthMm, m.haloMaterial,
+      pu.iceBoreMm, pu.iceStrokeMm, pu.compressionRatio, pu.prechamberTechnology, pu.fuelRailPressureBar, pu.mguKPowerKw, pu.mguHControl, pu.energyStoreCapacityMj, pu.totalPowerUnitMassKg,
+      a.frontWingFlapAngleDeg, a.frontWingSpanMm, a.rearWingMainPlaneAngleDeg, a.rearWingDrsFlapGapOpenMm, a.floorVenturiThroatHeightMm, a.frontAeroBalancePercent, a.sidepodUndercutDepthMm, a.rearWingBeamWingProfile,
+      s.frontLayout, s.rearLayout, s.frontHeaveSpringRateNmm, s.rearHeaveSpringRateNmm,
+      g.gearboxWeightKg, g.casingType,
+      b.frontDiscDiameterMm, b.caliperFrontPistons,
+      c?.steeringWheelDisplayType
+    ].join("|");
+  }
+
+
   /**
    * Recalculates all performance metrics and verifies technical compliance.
    */
   public static evaluateCar(design: F1CarDesign): F1CarDesign {
+    const signature = this.getCarPhysicsSignature(design);
+    const cached = this.evaluationCache.get(signature);
+    if (cached) {
+      // Return fresh copy with livery/cosmetics merged from current design
+      return {
+        ...cached,
+        id: design.id,
+        name: design.name,
+        livery: { ...design.livery },
+      };
+    }
+
     const d = { ...design };
+
 
     // 1. Mass Buildup
     const monocoqueMass = d.monocoque.totalMonocoqueMassKg + d.monocoque.ballastTungstenKg;
@@ -86,6 +127,12 @@ export class F1PhysicsEngine {
     const report = this.runScrutineering(d);
     d.computedFiaHomologationScore = report.overallScore;
 
+    if (this.evaluationCache.size >= this.MAX_CACHE_SIZE) {
+      const firstKey = this.evaluationCache.keys().next().value;
+      if (firstKey) this.evaluationCache.delete(firstKey);
+    }
+    this.evaluationCache.set(signature, { ...d });
+
     return d;
   }
 
@@ -93,7 +140,14 @@ export class F1PhysicsEngine {
    * Complete FIA Technical Scrutineering Audit Check.
    */
   public static runScrutineering(car: F1CarDesign): F1ScrutineeringReport {
+    const signature = `${car.computedTotalMassKg}_${car.powerUnit.iceBoreMm}_${car.powerUnit.iceStrokeMm}_${car.powerUnit.mguKPowerKw}_${car.powerUnit.energyStoreCapacityMj}_${car.aero.rearWingDrsFlapGapOpenMm}_${car.aero.frontWingSpanMm}_${car.monocoque.haloMaterial}_${car.monocoque.cockpitOpeningWidthMm}_${car.computedEstCostMillionUsd}`;
+    const cached = this.scrutineeringCache.get(signature);
+    if (cached) {
+      return { ...cached, items: [...cached.items] };
+    }
+
     const checks: F1ScrutineeringCheckItem[] = [];
+
 
     // Art 4.1: Minimum Mass (798 kg)
     const massPass = car.computedTotalMassKg >= 798;
@@ -221,7 +275,7 @@ export class F1PhysicsEngine {
     const warningCount = checks.filter(c => c.status === "WARNING").length;
     const overallScore = Math.round((passedCount / checks.length) * 100);
 
-    return {
+    const report: F1ScrutineeringReport = {
       passedHomologation: failedCount === 0,
       overallScore,
       totalChecks: checks.length,
@@ -231,5 +285,14 @@ export class F1PhysicsEngine {
       items: checks,
       generatedTimestamp: Date.now(),
     };
+
+    if (this.scrutineeringCache.size >= this.MAX_CACHE_SIZE) {
+      const firstKey = this.scrutineeringCache.keys().next().value;
+      if (firstKey) this.scrutineeringCache.delete(firstKey);
+    }
+    this.scrutineeringCache.set(signature, report);
+
+    return report;
   }
 }
+

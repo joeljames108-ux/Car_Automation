@@ -12,7 +12,7 @@ import {
 import { useF1ConstructorStore } from "../../../sim/f1/state/f1ConstructorStore";
 import { F1FullCarProceduralGenerator } from "../../../exterior3d/generators/f1/f1FullCarProceduralGenerator";
 
-export const F1Car3DViewport: React.FC = () => {
+const F1Car3DViewportComponent: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const {
     car,
@@ -123,16 +123,39 @@ export const F1Car3DViewport: React.FC = () => {
     floorPlane.receiveShadow = true;
     scene.add(floorPlane);
 
-    // Animation Loop
+    // Adaptive Render Loop Controller
+    let isDirty = true;
+    let lastActiveTime = performance.now();
+    const markDirty = () => {
+      isDirty = true;
+      lastActiveTime = performance.now();
+    };
+
+    controls.addEventListener("change", markDirty);
+
     let animationFrameId: number;
     const animate = () => {
       animationFrameId = requestAnimationFrame(animate);
-      if (controlsRef.current) {
-        controlsRef.current.autoRotate = autoRotate;
+
+      if (document.hidden) return;
+
+      const isActivelyRotating = autoRotate;
+      const isActivelyRevving = isEngineRevving;
+
+      if (isActivelyRotating && controlsRef.current) {
+        controlsRef.current.autoRotate = true;
         controlsRef.current.autoRotateSpeed = 1.2;
         controlsRef.current.update();
+        markDirty();
       }
-      renderer.render(scene, camera);
+
+      if (isDirty || isActivelyRotating || isActivelyRevving) {
+        controls.update();
+        renderer.render(scene, camera);
+        if (performance.now() - lastActiveTime > 2000 && !isActivelyRotating && !isActivelyRevving) {
+          isDirty = false;
+        }
+      }
     };
     animate();
 
@@ -144,15 +167,25 @@ export const F1Car3DViewport: React.FC = () => {
       cameraRef.current.aspect = w / h;
       cameraRef.current.updateProjectionMatrix();
       rendererRef.current.setSize(w, h);
+      markDirty();
     };
+
+    const handleVisibilityChange = () => {
+      if (!document.hidden) {
+        markDirty();
+      }
+    };
+
     window.addEventListener("resize", handleResize);
+    document.addEventListener("visibilitychange", handleVisibilityChange);
 
     return () => {
       window.removeEventListener("resize", handleResize);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
       cancelAnimationFrame(animationFrameId);
       renderer.dispose();
     };
-  }, []);
+  }, [autoRotate, isEngineRevving]);
 
   // Update 3D Car Geometry when design or options change
   useEffect(() => {
@@ -380,3 +413,6 @@ export const F1Car3DViewport: React.FC = () => {
     </div>
   );
 };
+
+export const F1Car3DViewport = React.memo(F1Car3DViewportComponent);
+

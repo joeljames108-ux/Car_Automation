@@ -43,7 +43,7 @@ interface RadioMessage {
   type: "INFO" | "WARNING" | "CRITICAL" | "SUCCESS";
 }
 
-export const F1LiveRaceSimulator: React.FC<F1LiveRaceSimulatorProps> = ({
+const F1LiveRaceSimulatorComponent: React.FC<F1LiveRaceSimulatorProps> = ({
   circuit,
   setup,
   onExitSession,
@@ -670,4 +670,7 @@ export const F1LiveRaceSimulator: React.FC<F1LiveRaceSimulatorProps> = ({
     </div>
   );
 };
+
+export const F1LiveRaceSimulator = React.memo(F1LiveRaceSimulatorComponent);
+
 

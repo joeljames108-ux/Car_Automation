@@ -16,7 +16,7 @@ import {
   Maximize2, EyeOff, Wind, Video, Compass, Camera
 } from "lucide-react";
 
-export const F1ModularAssemblyViewport: React.FC = () => {
+const F1ModularAssemblyViewportComponent: React.FC = () => {
   const mountRef = useRef<HTMLDivElement>(null);
   const sceneRef = useRef<THREE.Scene | null>(null);
   const cameraRef = useRef<THREE.PerspectiveCamera | null>(null);
@@ -151,8 +151,8 @@ export const F1ModularAssemblyViewport: React.FC = () => {
     const keyLight = new THREE.DirectionalLight(0xffffff, 2.5);
     keyLight.position.set(5, 8, 5);
     keyLight.castShadow = true;
-    keyLight.shadow.mapSize.width = 2048;
-    keyLight.shadow.mapSize.height = 2048;
+    keyLight.shadow.mapSize.width = 1024;
+    keyLight.shadow.mapSize.height = 1024;
     scene.add(keyLight);
 
     const rimLight = new THREE.DirectionalLight(0x06b6d4, 2.0);
@@ -199,14 +199,26 @@ export const F1ModularAssemblyViewport: React.FC = () => {
     scene.add(hotspotsGroup);
     hotspotsGroupRef.current = hotspotsGroup;
 
-    // Animation Loop
+    // Adaptive Render Loop Controller
+    let isDirty = true;
+    let lastActiveTime = performance.now();
+    const markDirty = () => {
+      isDirty = true;
+      lastActiveTime = performance.now();
+    };
+
+    controls.addEventListener("change", markDirty);
+
     let animationFrameId: number;
     const animate = () => {
       animationFrameId = requestAnimationFrame(animate);
-      controls.update();
+
+      if (document.hidden) return;
+
+      const isStreamlinesActive = showAeroStreamlinesRef.current;
 
       // Pulse Hotspots
-      if (hotspotsGroupRef.current) {
+      if (hotspotsGroupRef.current && hotspotsGroupRef.current.children.length > 0) {
         const time = Date.now() * 0.003;
         hotspotsGroupRef.current.children.forEach((child) => {
           if (child instanceof THREE.Mesh) {
@@ -214,10 +226,11 @@ export const F1ModularAssemblyViewport: React.FC = () => {
             child.scale.set(scale, scale, scale);
           }
         });
+        markDirty();
       }
 
       // Streamline Flow Animation
-      if (streamlinesRef.current && showAeroStreamlinesRef.current) {
+      if (streamlinesRef.current && isStreamlinesActive) {
         streamlinesRef.current.visible = true;
         const posArr = streamlinesRef.current.geometry.attributes.position.array as Float32Array;
         for (let i = 0; i < streamlineCount; i++) {
@@ -229,11 +242,18 @@ export const F1ModularAssemblyViewport: React.FC = () => {
           }
         }
         streamlinesRef.current.geometry.attributes.position.needsUpdate = true;
+        markDirty();
       } else if (streamlinesRef.current) {
         streamlinesRef.current.visible = false;
       }
 
-      renderer.render(scene, camera);
+      if (isDirty || isStreamlinesActive) {
+        controls.update();
+        renderer.render(scene, camera);
+        if (performance.now() - lastActiveTime > 2000 && !isStreamlinesActive) {
+          isDirty = false;
+        }
+      }
     };
     animate();
 
@@ -244,9 +264,15 @@ export const F1ModularAssemblyViewport: React.FC = () => {
       camera.aspect = w / h;
       camera.updateProjectionMatrix();
       renderer.setSize(w, h);
+      markDirty();
+    };
+
+    const handleVisibilityChange = () => {
+      if (!document.hidden) markDirty();
     };
 
     window.addEventListener("resize", handleResize);
+    document.addEventListener("visibilitychange", handleVisibilityChange);
     const resizeObserver = new ResizeObserver(() => {
       handleResize();
     });
@@ -678,3 +704,6 @@ export const F1ModularAssemblyViewport: React.FC = () => {
     </div>
   );
 };
+
+export const F1ModularAssemblyViewport = React.memo(F1ModularAssemblyViewportComponent);
+
