@@ -365,7 +365,7 @@ function AppInner() {
             >
               <div style={{ display: "flex", gap: 16 }}>
                 <div style={{ flex: 1, minWidth: 0 }}>
-                  <StageSwitcher stage={stage} onSelectStage={(st) => setStage(st as Stage)} />
+                  <StageSwitcher stage={stage} onSelectStage={handleSelectStage} />
                 </div>
 
                 {/* Right Sidebar — Live Stats (Top) + Engineering Log (Bottom) */}
@@ -388,14 +388,14 @@ function AppInner() {
               categories={WORKSPACE_CATEGORIES}
               activeCategory={activeCategory}
               activeStage={stage}
-              onSelectCategory={(id) => setActiveCategory(id as WorkspaceCategory)}
-              onSelectStage={(id) => setStage(id as Stage)}
+              onSelectCategory={handleSelectCategory}
+              onSelectStage={handleSelectStage}
             />
           </div>
 
           {/* Overlays */}
-          <SaveLoadDialog open={dialog.open} mode={dialog.mode} onClose={() => setDialog({ open: false, mode: dialog.mode })} />
-          <CommandPalette isOpen={cmdPaletteOpen} onClose={() => setCmdPaletteOpen(false)} onSelectStage={(s) => setStage(s as Stage)} />
+          <SaveLoadDialog open={dialog.open} mode={dialog.mode} onClose={handleCloseDialog} />
+          <CommandPalette isOpen={cmdPaletteOpen} onClose={handleCloseCmdPalette} onSelectStage={handleSelectStage} />
           <ThermalAlertMonitor />
         </div>
       </VisionGlassErrorBoundary>

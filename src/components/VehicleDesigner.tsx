@@ -90,9 +90,7 @@ import { playHMIClickSound, playHMITabSound } from "../utils/hmiSoundSynth";
 import { useVehicleAssemblyStore } from "../state/useVehicleAssemblyStore";
 import { VehicleCompletionModal } from "./vehicleAssembly/VehicleCompletionModal";
 import { ExteriorDesignerIntegration } from "./vehicleAssembly/exterior/ExteriorDesignerIntegration";
-import { MasterVehicleStudio } from "./vehicleAssembly/MasterVehicleStudio";
 import { VehicleComparisonStudio } from "./vehicleAssembly/VehicleComparisonStudio";
-import { GrandAutomotiveStudioHub } from "./GrandAutomotiveStudioHub";
 import { AerodynamicsStudio } from "./aerodynamics/AerodynamicsStudio";
 import { WindTunnelAeroStudio } from "./aerodynamics/WindTunnelAeroStudio";
 import { CFDView } from "./ui/CFDView";
@@ -103,7 +101,7 @@ export type VehicleStudioSubTab =
   | "linear_assembly"
   | "exterior"
   | "aero"
-  | "suite_and_benchmark";
+  | "benchmark";
 
 const PAINT_SWATCHES = [
   "#e11d48", "#dc2626", "#ea580c", "#f59e0b", "#facc15", "#84cc16",
@@ -165,7 +163,6 @@ export function VehicleDesigner({ initialSubTab = "linear_assembly" }: VehicleDe
   // Sub-view selectors for consolidated studios
   const [exteriorViewMode, setExteriorViewMode] = useState<"paint_and_styling" | "biw_assembly">("paint_and_styling");
   const [aeroViewMode, setAeroViewMode] = useState<"studio_3d" | "cfd_windtunnel" | "research_depts">("studio_3d");
-  const [suiteViewMode, setSuiteViewMode] = useState<"benchmark_ab" | "grand_suite">("benchmark_ab");
   const [aeroDept, setAeroDept] = useState<AeroDept>("dashboard");
   const [showCompletionModal, setShowCompletionModal] = useState(false);
 
@@ -201,7 +198,7 @@ export function VehicleDesigner({ initialSubTab = "linear_assembly" }: VehicleDe
       id: "linear_assembly" as const,
       label: "UNIFIED LINEAR ASSEMBLY & VEHICLE ENGINEERING",
       icon: <Wrench size={14} />,
-      badge: "12 STAGES • 50 TYPES • KINEMATICS",
+      badge: "12 STAGES • KINEMATICS",
     },
     {
       id: "exterior" as const,
@@ -216,10 +213,10 @@ export function VehicleDesigner({ initialSubTab = "linear_assembly" }: VehicleDe
       badge: "CFD • ACTIVE DRS",
     },
     {
-      id: "suite_and_benchmark" as const,
-      label: "BENCHMARK & GRAND SUITE",
-      icon: <Crown size={14} />,
-      badge: "A/B • FLEET",
+      id: "benchmark" as const,
+      label: "A/B BENCHMARK LAB",
+      icon: <GitCompare size={14} />,
+      badge: "A/B BATTLE",
     },
   ];
 
@@ -249,7 +246,7 @@ export function VehicleDesigner({ initialSubTab = "linear_assembly" }: VehicleDe
                 {activeTab === "linear_assembly" && "Flagship End-to-End Vehicle Engineering • 12-Stage Linear Assembly • 3D Kinematics • Packaging Diagnostics"}
                 {activeTab === "exterior" && "Paint Booth & Finishes • Custom Rims & Calipers • Widebody Kits • 3D Body-in-White Assembly"}
                 {activeTab === "aero" && "3D Parametric Aero Studio • CFD Wind Tunnel Streamlines • 10-Dept Aero Research & Active DRS"}
-                {activeTab === "suite_and_benchmark" && "A/B Car Benchmark & Circuit Lap Time Battles • Grand Automotive Fleet Hub"}
+                {activeTab === "benchmark" && "A/B Car Benchmark & Circuit Lap Time Battles • Multi-Car Head-to-Head Comparison"}
               </p>
             </div>
           </div>
@@ -1016,48 +1013,11 @@ export function VehicleDesigner({ initialSubTab = "linear_assembly" }: VehicleDe
       )}
 
       {/* =========================================================================
-          STUDIO 5: UNIFIED BENCHMARK & GRAND SUITE
+          STUDIO 4: A/B VEHICLE BENCHMARK & TRACK BATTLE
           ========================================================================= */}
-      {activeTab === "suite_and_benchmark" && (
+      {activeTab === "benchmark" && (
         <div className="space-y-4 animate-stage-transition-enter">
-          {/* Sub-Studio Mode Switcher */}
-          <div className="panel p-3.5 rounded-2xl flex items-center justify-between flex-wrap gap-2 shadow-md">
-            <div className="flex items-center gap-2 flex-wrap">
-              <button
-                onClick={() => {
-                  playHMIClickSound();
-                  setSuiteViewMode("benchmark_ab");
-                }}
-                className={`flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-bold font-mono transition-all border ${
-                  suiteViewMode === "benchmark_ab"
-                    ? "bg-cyan-500/20 border-cyan-500/60 text-cyan-700 dark:text-cyan-200 shadow-sm"
-                    : "bg-base-850/80 border-base-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100"
-                }`}
-              >
-                <GitCompare size={14} className={suiteViewMode === "benchmark_ab" ? "text-cyan-600 dark:text-cyan-400" : ""} />
-                🏎️ A/B VEHICLE BENCHMARK & TRACK BATTLE
-              </button>
-              <button
-                onClick={() => {
-                  playHMIClickSound();
-                  setSuiteViewMode("grand_suite");
-                }}
-                className={`flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-bold font-mono transition-all border ${
-                  suiteViewMode === "grand_suite"
-                    ? "bg-amber-500/20 border-amber-500/60 text-amber-700 dark:text-amber-200 shadow-sm"
-                    : "bg-base-850/80 border-base-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100"
-                }`}
-              >
-                <Crown size={14} className={suiteViewMode === "grand_suite" ? "text-amber-600 dark:text-amber-400" : ""} />
-                👑 GRAND AUTOMOTIVE ENGINEERING SUITE
-              </button>
-            </div>
-            <div className="text-[11px] font-mono text-slate-400">
-              Fleet Status: <span className="font-bold text-amber-400">Master Vehicle Hub Active</span>
-            </div>
-          </div>
-
-          {suiteViewMode === "benchmark_ab" ? <VehicleComparisonStudio /> : <GrandAutomotiveStudioHub />}
+          <VehicleComparisonStudio />
         </div>
       )}
 

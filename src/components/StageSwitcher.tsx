@@ -1,4 +1,4 @@
-import React, { Suspense, lazy } from "react";
+import React, { Suspense, lazy, memo } from "react";
 import { StageLoadingSkeleton } from "./ui/StageLoadingSkeleton";
 
 export type Stage =
@@ -64,7 +64,7 @@ interface StageSwitcherProps {
   onSelectStage: (stage: Stage) => void;
 }
 
-export const StageSwitcher: React.FC<StageSwitcherProps> = ({ stage, onSelectStage }) => {
+const StageSwitcherComponent: React.FC<StageSwitcherProps> = ({ stage, onSelectStage }) => {
   return (
     <Suspense fallback={<StageLoadingSkeleton stageName={stage} />}>
       <div key={stage} className="stage-transition-enter">
@@ -117,3 +117,5 @@ export const StageSwitcher: React.FC<StageSwitcherProps> = ({ stage, onSelectSta
     </Suspense>
   );
 };
+
+export const StageSwitcher = memo(StageSwitcherComponent);
