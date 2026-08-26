@@ -1,12 +1,12 @@
 {
-  "auditTimestamp": "2026-08-25T22:16:24.779Z",
+  "auditTimestamp": "2026-08-26T04:01:24.091Z",
   "projectName": "Modular glTF Vehicle Construction System & Car Automation Simulator",
   "rootDirectory": "C:\\Users\\joelj\\Downloads\\project-bolt-sb1-a1kjcyhr (3)\\project",
   "totalSourceFiles": 1050,
-  "totalCodeLines": 218469,
-  "totalCommentLines": 17206,
-  "totalBlankLines": 25621,
-  "totalSizeBytes": 11051811,
+  "totalCodeLines": 218503,
+  "totalCommentLines": 17213,
+  "totalBlankLines": 25628,
+  "totalSizeBytes": 11054876,
   "subsystemBreakdown": {
     "simulation_core": {
       "fileCount": 210,
@@ -15,8 +15,8 @@
     },
     "engine_assembly": {
       "fileCount": 66,
-      "codeLines": 17510,
-      "sizeBytes": 853157
+      "codeLines": 17514,
+      "sizeBytes": 853361
     },
     "modular_vehicle": {
       "fileCount": 92,
@@ -30,8 +30,8 @@
     },
     "rendering_engine": {
       "fileCount": 13,
-      "codeLines": 4769,
-      "sizeBytes": 226228
+      "codeLines": 4792,
+      "sizeBytes": 227905
     },
     "state_management": {
       "fileCount": 27,
@@ -45,8 +45,8 @@
     },
     "ui_components": {
       "fileCount": 324,
-      "codeLines": 71307,
-      "sizeBytes": 3531704
+      "codeLines": 71314,
+      "sizeBytes": 3532888
     },
     "asset_pipeline": {
       "fileCount": 0,
@@ -66,7 +66,7 @@
   },
   "dependencyGraph": {
     "totalNodes": 1050,
-    "totalEdges": 2541,
+    "totalEdges": 2542,
     "directAcyclicGraphValid": true,
     "cyclicDependencyPaths": [],
     "subsystemCouplingMatrix": {
@@ -85,7 +85,7 @@
       },
       "engine_assembly": {
         "simulation_core": 2,
-        "engine_assembly": 107,
+        "engine_assembly": 108,
         "modular_vehicle": 0,
         "exterior_3d": 2,
         "rendering_engine": 0,

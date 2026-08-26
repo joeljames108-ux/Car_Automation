@@ -6724,58 +6724,67 @@ button:active,
 /* CINEMATIC SCROLL-DRIVEN VIEWPORT & PARALLAX TRANSITIONS                      */
 /* ============================================================================ */
 .cinematic-scene-wrapper {
-  perspective: 1200px;
+  perspective: 1400px;
   transform-style: preserve-3d;
+  will-change: transform, opacity;
 }
 
-/* Card-level internal directional parallax */
+/* Card-level internal directional parallax (Screen 1 recedes with multi-axial separation) */
 .cinematic-card-left {
-  transition: transform 0.12s cubic-bezier(0.16, 1, 0.3, 1);
-  transform: translate3d(calc(var(--scene-delta, 0) * -18px), 0, 0);
+  transition: transform 0.16s cubic-bezier(0.16, 1, 0.3, 1);
+  transform: translate3d(calc(var(--scene-delta, 0) * -20px), 0, 0);
+  will-change: transform;
 }
 
 .cinematic-card-right {
-  transition: transform 0.12s cubic-bezier(0.16, 1, 0.3, 1);
-  transform: translate3d(calc(var(--scene-delta, 0) * 18px), 0, 0);
+  transition: transform 0.16s cubic-bezier(0.16, 1, 0.3, 1);
+  transform: translate3d(calc(var(--scene-delta, 0) * 20px), 0, 0);
+  will-change: transform;
 }
 
 .cinematic-card-top {
-  transition: transform 0.12s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform 0.16s cubic-bezier(0.16, 1, 0.3, 1);
   transform: translate3d(0, calc(var(--scene-delta, 0) * -22px), 0);
+  will-change: transform;
 }
 
 .cinematic-card-bottom {
-  transition: transform 0.12s cubic-bezier(0.16, 1, 0.3, 1);
-  transform: translate3d(0, calc(var(--scene-delta, 0) * 20px), 0);
+  transition: transform 0.16s cubic-bezier(0.16, 1, 0.3, 1);
+  transform: translate3d(0, calc(var(--scene-delta, 0) * 22px), 0);
+  will-change: transform;
 }
 
-/* Card-level progressive emergence & micro-settling */
+/* Card-level progressive emergence & micro-settling (Screen 2 enters with staggered depth) */
 .cinematic-stagger-1 {
   transition: transform 0.18s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.18s ease, filter 0.18s ease;
   transform: translate3d(0, calc(var(--scene-abs-delta, 0) * 16px), 0) scale(calc(1 - var(--scene-abs-delta, 0) * 0.015));
   opacity: calc(1 - var(--scene-abs-delta, 0) * 0.7);
-  filter: blur(calc(var(--scene-abs-delta, 0) * 2px));
+  filter: blur(calc(var(--scene-abs-delta, 0) * 1.8px));
+  will-change: transform, opacity, filter;
 }
 
 .cinematic-stagger-2 {
   transition: transform 0.22s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.22s ease, filter 0.22s ease;
-  transform: translate3d(0, calc(var(--scene-abs-delta, 0) * 28px), 0) scale(calc(1 - var(--scene-abs-delta, 0) * 0.02));
+  transform: translate3d(0, calc(var(--scene-abs-delta, 0) * 26px), 0) scale(calc(1 - var(--scene-abs-delta, 0) * 0.018));
   opacity: calc(1 - var(--scene-abs-delta, 0) * 0.85);
-  filter: blur(calc(var(--scene-abs-delta, 0) * 2.5px));
+  filter: blur(calc(var(--scene-abs-delta, 0) * 2.2px));
+  will-change: transform, opacity, filter;
 }
 
 .cinematic-stagger-3 {
   transition: transform 0.26s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.26s ease, filter 0.26s ease;
-  transform: translate3d(0, calc(var(--scene-abs-delta, 0) * 40px), 0) scale(calc(1 - var(--scene-abs-delta, 0) * 0.025));
+  transform: translate3d(0, calc(var(--scene-abs-delta, 0) * 36px), 0) scale(calc(1 - var(--scene-abs-delta, 0) * 0.022));
   opacity: calc(1 - var(--scene-abs-delta, 0) * 0.95);
-  filter: blur(calc(var(--scene-abs-delta, 0) * 3px));
+  filter: blur(calc(var(--scene-abs-delta, 0) * 2.6px));
+  will-change: transform, opacity, filter;
 }
 
 .cinematic-stagger-4 {
   transition: transform 0.30s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.30s ease, filter 0.30s ease;
-  transform: translate3d(0, calc(var(--scene-abs-delta, 0) * 52px), 0) scale(calc(1 - var(--scene-abs-delta, 0) * 0.03));
+  transform: translate3d(0, calc(var(--scene-abs-delta, 0) * 46px), 0) scale(calc(1 - var(--scene-abs-delta, 0) * 0.026));
   opacity: calc(1 - var(--scene-abs-delta, 0) * 1.0);
-  filter: blur(calc(var(--scene-abs-delta, 0) * 3.5px));
+  filter: blur(calc(var(--scene-abs-delta, 0) * 3.0px));
+  will-change: transform, opacity, filter;
 }
 
 

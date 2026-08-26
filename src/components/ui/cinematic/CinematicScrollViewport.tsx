@@ -1,10 +1,10 @@
 // ============================================================================
-// CINEMATIC SCROLL-DRIVEN CONTENT VIEWPORT ENGINE (ENHANCED)
+// CINEMATIC SCROLL-DRIVEN CONTENT VIEWPORT ENGINE
 // ============================================================================
 // Full-screen automotive engineering console viewport orchestrating
 // continuous, bidirectional 3D layered transitions between consecutive
-// content states (Screen 1 → Screen 2) driven directly by mouse wheel,
-// trackpad gestures, keyboard navigation, and touch swipe.
+// content states (Screen 1 → Screen 2 → Screen N) driven directly by
+// mouse wheel, trackpad gestures, keyboard navigation, and touch scrub.
 // ============================================================================
 
 import React, { useState, useEffect, useRef, useCallback } from "react";
@@ -13,6 +13,8 @@ import {
   ChevronUp,
   Layers,
   Sparkles,
+  Compass,
+  Activity,
 } from "lucide-react";
 
 export interface CinematicSceneConfig {
@@ -30,6 +32,7 @@ export interface CinematicScrollViewportProps {
   onSceneChange?: (index: number) => void;
   persistentHeader?: React.ReactNode;
   persistentFooter?: React.ReactNode;
+  persistentSidebar?: React.ReactNode;
   className?: string;
   scrollSensitivity?: number;
   enableMagneticSnap?: boolean;
@@ -41,8 +44,9 @@ export function CinematicScrollViewport({
   onSceneChange,
   persistentHeader,
   persistentFooter,
+  persistentSidebar,
   className = "",
-  scrollSensitivity = 0.0018,
+  scrollSensitivity = 0.0016,
   enableMagneticSnap = true,
 }: CinematicScrollViewportProps) {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -61,7 +65,7 @@ export function CinematicScrollViewport({
   const totalScenes = scenes.length;
   const maxProgress = Math.max(0, totalScenes - 1);
 
-  // Sync controlled index if provided
+  // Sync controlled index if provided externally
   useEffect(() => {
     if (controlledIndex !== undefined && controlledIndex !== Math.round(targetProgressRef.current)) {
       targetProgressRef.current = controlledIndex;
@@ -69,15 +73,15 @@ export function CinematicScrollViewport({
     }
   }, [controlledIndex]);
 
-  // ── 1. Physics Animation Loop (Spring Interpolation & Damping) ──
+  // ── 1. Physics Animation Loop (120Hz Spring Interpolation & Damping) ──
   const updatePhysics = useCallback(() => {
     const target = targetProgressRef.current;
     const current = currentProgressRef.current;
     const diff = target - current;
 
-    // Damped spring interpolation (smooth approach)
-    if (Math.abs(diff) > 0.0005) {
-      const step = diff * 0.14;
+    // High-precision damped spring interpolation (seamless continuous approach)
+    if (Math.abs(diff) > 0.0004) {
+      const step = diff * 0.12;
       const nextProgress = current + step;
       currentProgressRef.current = nextProgress;
       setProgress(nextProgress);
@@ -101,7 +105,7 @@ export function CinematicScrollViewport({
     }
   }, [updatePhysics]);
 
-  // ── 2. Magnetic Snap Settling ──
+  // ── 2. Magnetic Snap Settling (Controlled Mechanical Lock) ──
   const snapToNearest = useCallback(() => {
     if (!enableMagneticSnap) return;
     const nearest = Math.round(targetProgressRef.current);
@@ -114,12 +118,12 @@ export function CinematicScrollViewport({
     const container = containerRef.current;
     if (!container) return;
 
-    // Find parent scroll container (e.g. .vision-glass-content)
+    // Find parent scroll container (e.g. .vision-glass-content or parentElement)
     const scrollParent = container.closest(".vision-glass-content") || container.parentElement || container;
 
     const onNativeWheel = (e: Event) => {
       const wheelEvent = e as WheelEvent;
-      // Intercept wheel to drive normalized timeline without page scrolling
+      // Intercept wheel to drive normalized timeline without jumpy page scrolling
       wheelEvent.preventDefault();
       wheelEvent.stopPropagation();
 
@@ -134,7 +138,7 @@ export function CinematicScrollViewport({
       interactionTimeoutRef.current = setTimeout(() => {
         isInteractingRef.current = false;
         snapToNearest();
-      }, 200);
+      }, 180);
     };
 
     container.addEventListener("wheel", onNativeWheel, { passive: false });
@@ -158,7 +162,7 @@ export function CinematicScrollViewport({
     const deltaY = lastTouchYRef.current - touchY;
     lastTouchYRef.current = touchY;
 
-    const delta = deltaY * scrollSensitivity * 1.6;
+    const delta = deltaY * scrollSensitivity * 1.5;
     const nextTarget = Math.max(0, Math.min(maxProgress, targetProgressRef.current + delta));
     targetProgressRef.current = nextTarget;
     triggerPhysics();
@@ -172,6 +176,11 @@ export function CinematicScrollViewport({
   // ── 5. Keyboard Navigation (Arrows / PageUp / PageDown) ──
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
+      // Don't intercept if user is typing in an input
+      if (["INPUT", "TEXTAREA", "SELECT"].includes((e.target as HTMLElement)?.tagName)) {
+        return;
+      }
+
       if (e.key === "ArrowDown" || e.key === "PageDown") {
         e.preventDefault();
         targetProgressRef.current = Math.min(maxProgress, Math.floor(targetProgressRef.current) + 1);
@@ -210,45 +219,51 @@ export function CinematicScrollViewport({
       {persistentHeader && <div className="w-full shrink-0 z-30 mb-3">{persistentHeader}</div>}
 
       {/* ── CINEMATIC TIMELINE HUD CONTROL BAR ── */}
-      <div className="w-full flex items-center justify-between gap-3 px-4 py-2 mb-3 rounded-2xl bg-base-950/80 border border-cyan-500/30 backdrop-blur-xl shadow-[0_0_20px_rgba(0,0,0,0.5)] z-20">
-        <div className="flex items-center gap-2.5">
-          <div className="flex items-center justify-center w-7 h-7 rounded-lg bg-cyan-500/20 border border-cyan-400/40 text-cyan-300 shadow-[0_0_10px_rgba(34,211,238,0.3)]">
-            <Layers size={14} className="animate-pulse" />
+      <div className="w-full flex flex-wrap items-center justify-between gap-3 px-4 py-2.5 mb-3 rounded-2xl bg-base-950/85 border border-cyan-500/30 backdrop-blur-xl shadow-[0_0_25px_rgba(0,0,0,0.5)] z-20">
+        <div className="flex items-center gap-3">
+          <div className="flex items-center justify-center w-8 h-8 rounded-xl bg-gradient-to-br from-cyan-500/25 to-blue-600/25 border border-cyan-400/40 text-cyan-300 shadow-[0_0_12px_rgba(34,211,238,0.3)]">
+            <Layers size={16} className="animate-pulse" />
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <span className="text-[10px] font-mono font-extrabold text-cyan-400 uppercase tracking-widest">
-                CINEMATIC VIEWPORT TIMELINE
+              <span className="text-[10px] font-mono font-extrabold text-cyan-400 uppercase tracking-widest flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-ping" />
+                AUTOMOTIVE OS CONSOLE TIMELINE
               </span>
-              <span className="px-1.5 py-0.2 rounded-full bg-cyan-500/20 text-cyan-300 text-[9px] font-mono font-bold border border-cyan-500/30">
+              <span className="px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 text-[9px] font-mono font-extrabold border border-cyan-500/30">
                 STATE 0{activeSceneIndex + 1} / 0{totalScenes}
               </span>
             </div>
-            <span className="text-xs font-bold text-slate-100 flex items-center gap-1.5">
+            <div className="text-xs font-bold text-slate-100 flex items-center gap-1.5 mt-0.5">
               {activeScene?.icon}
-              {activeScene?.title}
-            </span>
+              <span>{activeScene?.title}</span>
+              {activeScene?.subtitle && (
+                <span className="hidden md:inline text-[11px] font-normal text-slate-400 ml-1.5 pl-2 border-l border-white/10">
+                  {activeScene.subtitle}
+                </span>
+              )}
+            </div>
           </div>
         </div>
 
         {/* Scene Switcher Beads & Timeline Progress Scrub */}
         <div className="flex items-center gap-3">
           {/* Quick Scene Jump Buttons */}
-          <div className="flex items-center gap-1.5 p-1 rounded-xl bg-black/40 border border-white/10">
+          <div className="flex items-center gap-1.5 p-1 rounded-xl bg-black/50 border border-white/10">
             {scenes.map((s, idx) => {
               const isActive = Math.abs(progress - idx) < 0.45;
               return (
                 <button
                   key={s.id}
                   onClick={() => goToScene(idx)}
-                  className={`flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer ${
+                  className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer ${
                     isActive
-                      ? "bg-cyan-500 text-slate-950 shadow-[0_0_12px_rgba(34,211,238,0.6)] font-extrabold scale-105"
+                      ? "bg-gradient-to-r from-cyan-500 to-sky-400 text-slate-950 shadow-[0_0_15px_rgba(34,211,238,0.6)] font-black scale-105"
                       : "text-slate-400 hover:text-slate-200 hover:bg-white/5"
                   }`}
                 >
                   <span className="text-[10px]">0{idx + 1}</span>
-                  <span className="hidden sm:inline">{s.title}</span>
+                  <span className="hidden sm:inline">{s.title.split("/")[0].trim()}</span>
                 </button>
               );
             })}
@@ -259,90 +274,108 @@ export function CinematicScrollViewport({
             <button
               onClick={() => goToScene(Math.max(0, activeSceneIndex - 1))}
               disabled={activeSceneIndex === 0}
-              className={`p-1.5 rounded-lg border text-xs transition-all cursor-pointer ${
+              className={`p-2 rounded-xl border text-xs transition-all cursor-pointer ${
                 activeSceneIndex > 0
-                  ? "bg-base-900 border-cyan-500/30 text-cyan-300 hover:bg-cyan-500/20"
+                  ? "bg-base-900 border-cyan-500/30 text-cyan-300 hover:bg-cyan-500/20 hover:scale-105 shadow-sm"
                   : "bg-base-950/40 border-white/5 text-slate-600 cursor-not-allowed"
               }`}
               title="Previous Content State (Scroll Up / PageUp)"
             >
-              <ChevronUp size={14} />
+              <ChevronUp size={15} />
             </button>
             <button
               onClick={() => goToScene(Math.min(maxProgress, activeSceneIndex + 1))}
               disabled={activeSceneIndex >= maxProgress}
-              className={`p-1.5 rounded-lg border text-xs transition-all cursor-pointer ${
+              className={`p-2 rounded-xl border text-xs transition-all cursor-pointer ${
                 activeSceneIndex < maxProgress
-                  ? "bg-base-900 border-cyan-500/30 text-cyan-300 hover:bg-cyan-500/20"
+                  ? "bg-base-900 border-cyan-500/30 text-cyan-300 hover:bg-cyan-500/20 hover:scale-105 shadow-sm"
                   : "bg-base-950/40 border-white/5 text-slate-600 cursor-not-allowed"
               }`}
               title="Next Content State (Scroll Down / PageDown)"
             >
-              <ChevronDown size={14} />
+              <ChevronDown size={15} />
             </button>
           </div>
         </div>
       </div>
 
-      {/* ── MAIN 3D MULTI-LAYER VIEWPORT CANVAS ── */}
-      <div
-        ref={viewportRef}
-        className="relative w-full flex-1 perspective-[1200px]"
-        style={{
-          perspective: "1200px",
-          minHeight: "680px",
-        }}
-      >
-        {scenes.map((scene, index) => {
-          const delta = progress - index;
-          const absDelta = Math.abs(delta);
+      {/* ── MAIN CONTENT WORKSPACE (OPTIONAL PERSISTENT SIDEBAR + 3D VIEWPORT) ── */}
+      <div className="w-full flex-1 flex gap-4 min-h-[640px]">
+        {/* Main 3D Multi-Layer Viewport Canvas */}
+        <div
+          ref={viewportRef}
+          className="relative flex-1 min-w-0"
+          style={{
+            perspective: "1400px",
+            minHeight: "640px",
+          }}
+        >
+          {scenes.map((scene, index) => {
+            const delta = progress - index;
+            const absDelta = Math.abs(delta);
 
-          const isVisible = absDelta < 1.4;
-          if (!isVisible) return null;
+            const isVisible = absDelta < 1.4;
+            if (!isVisible) return null;
 
-          // ── Layered Cinematic Mathematical Transforms ──
-          const scale = 1.0 - Math.min(0.04, absDelta * 0.04);
-          const opacity = Math.max(0, Math.min(1, 1 - Math.pow(absDelta, 1.2)));
-          const translateY = delta * -40; // Pixels
-          const translateZ = -absDelta * 120; // Depth Pixels
-          const rotateX = delta * 1.8; // Perspective tilt in degrees
-          const blur = absDelta > 0.05 ? Math.min(3, absDelta * 3) : 0; // Micro transient blur
+            // ── Layered Cinematic Mathematical Transforms ──
+            // Scale: 1.00 -> 0.96
+            const scale = 1.0 - Math.min(0.04, absDelta * 0.04);
+            // Opacity: 1.00 -> 0.00 with smooth cubic power curve
+            const opacity = Math.max(0, Math.min(1, 1 - Math.pow(absDelta, 1.25)));
+            // TranslateY: 0 -> -40px (leaving) or +40px -> 0 (entering)
+            const translateY = delta * -40;
+            // TranslateZ: 0 -> -120px depth
+            const translateZ = -absDelta * 120;
+            // Subtle 3D perspective tilt
+            const rotateX = delta * 1.5;
+            // Micro transient blur only during motion
+            const blur = absDelta > 0.04 ? Math.min(2.5, absDelta * 2.8) : 0;
 
-          const pointerEvents = absDelta < 0.25 ? "auto" : "none";
-          const zIndex = Math.round(100 - absDelta * 50);
+            const pointerEvents = absDelta < 0.25 ? "auto" : "none";
+            const zIndex = Math.round(100 - absDelta * 50);
 
-          return (
-            <div
-              key={scene.id}
-              className="absolute inset-0 w-full h-full will-change-transform transition-none"
-              style={{
-                transform: `translate3d(0, ${translateY}px, ${translateZ}px) scale(${scale}) rotateX(${rotateX}deg)`,
-                opacity,
-                filter: blur > 0.1 ? `blur(${blur}px)` : "none",
-                pointerEvents: pointerEvents as any,
-                zIndex,
-                transformStyle: "preserve-3d",
-              }}
-            >
-              {/* Internal Parallax Container passing delta via CSS variable */}
+            return (
               <div
-                className="w-full h-full cinematic-scene-wrapper"
-                style={
-                  {
-                    "--scene-delta": delta,
-                    "--scene-abs-delta": absDelta,
-                  } as React.CSSProperties
-                }
+                key={scene.id}
+                className="absolute inset-0 w-full h-full will-change-transform transition-none"
+                style={{
+                  transform: `translate3d(0, ${translateY}px, ${translateZ}px) scale(${scale}) rotateX(${rotateX}deg)`,
+                  opacity,
+                  filter: blur > 0.1 ? `blur(${blur}px)` : "none",
+                  pointerEvents: pointerEvents as any,
+                  zIndex,
+                  transformStyle: "preserve-3d",
+                }}
               >
-                {scene.component}
+                {/* Internal Parallax Container passing delta via CSS variable */}
+                <div
+                  className="w-full h-full cinematic-scene-wrapper"
+                  style={
+                    {
+                      "--scene-delta": delta,
+                      "--scene-abs-delta": absDelta,
+                    } as React.CSSProperties
+                  }
+                >
+                  {scene.component}
+                </div>
               </div>
-            </div>
-          );
-        })}
+            );
+          })}
+        </div>
+
+        {/* Persistent Right-Side Contextual Telemetry Sidebar (if provided) */}
+        {persistentSidebar && (
+          <div className="hidden xl:block w-80 shrink-0 z-10">
+            <div className="sticky top-20">{persistentSidebar}</div>
+          </div>
+        )}
       </div>
 
-      {/* ── PERSISTENT APPLICATION FOOTER / COMMAND CENTER ── */}
+      {/* ── PERSISTENT APPLICATION FOOTER / COMMAND BAR ── */}
       {persistentFooter && <div className="w-full shrink-0 z-30 mt-4">{persistentFooter}</div>}
     </div>
   );
 }
+
+export default CinematicScrollViewport;
