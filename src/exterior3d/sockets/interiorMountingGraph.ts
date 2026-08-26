@@ -14,6 +14,11 @@
 
 import * as THREE from "three";
 
+export interface SocketTransform {
+  position: THREE.Vector3;
+  rotation: THREE.Euler;
+}
+
 export type InteriorSocketId =
   | "INTERIOR_ROOT"
   | "DRIVER_SEAT_MOUNT"

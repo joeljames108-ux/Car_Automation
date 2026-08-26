@@ -3,7 +3,7 @@
 // Interactive Multi-Agent Control Suite with One-Click Auto-Tune, QA Diagnostics & Chat
 // ===================================================================
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import {
   Bot,
   Zap,
@@ -64,10 +64,22 @@ export function ApexAgentConsole({
   ]);
   const [chatInput, setChatInput] = useState("");
 
-  const recommendation = ChiefPowertrainAgent.getTuningPreset(selectedPreset, engineConfig);
-  const diagnostics = ChiefPowertrainAgent.diagnose(engineConfig);
-  const qaReport = RoboticAssemblyQAAgent.inspectAssembly(installedComponents, activeComponentId, phase);
-  const circuitPredictions = RaceStrategyAgent.predictCircuits(powerHp, weightKg);
+  const recommendation = useMemo(
+    () => ChiefPowertrainAgent.getTuningPreset(selectedPreset, engineConfig),
+    [selectedPreset, engineConfig]
+  );
+  const diagnostics = useMemo(
+    () => ChiefPowertrainAgent.diagnose(engineConfig),
+    [engineConfig]
+  );
+  const qaReport = useMemo(
+    () => RoboticAssemblyQAAgent.inspectAssembly(installedComponents, activeComponentId, phase),
+    [installedComponents, activeComponentId, phase]
+  );
+  const circuitPredictions = useMemo(
+    () => RaceStrategyAgent.predictCircuits(powerHp, weightKg),
+    [powerHp, weightKg]
+  );
 
   const handleApplyPreset = () => {
     if (onApplyTuning) {

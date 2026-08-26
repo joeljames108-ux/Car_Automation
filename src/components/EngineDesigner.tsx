@@ -25,6 +25,7 @@ import {
   Layers,
   Cpu,
   Sliders,
+  Radio,
 } from "lucide-react";
 import { useDesign } from "../state/DesignContext";
 import { Section, Slider, Select, ChoiceGrid, Toggle, StatTile } from "./ui/Controls";
@@ -79,6 +80,7 @@ import { EngineBuilderFlow } from "./assembly/EngineBuilderFlow";
 import { ModularEngineStudio } from "./engineStudio/ModularEngineStudio";
 import { Transmission3DStudio } from "./transmissionStudio/Transmission3DStudio";
 import { UnifiedPowertrainStudio } from "./powertrainStudio/UnifiedPowertrainStudio";
+import { AdvancedEngineTelemetryStudio } from "./engineStudio/AdvancedEngineTelemetryStudio";
 
 // Engine layout → icon mapping
 const LAYOUT_ICONS: Record<string, React.ReactNode> = {
@@ -135,7 +137,16 @@ export function EngineDesigner() {
   const [modalRendered, setModalRendered] = useState(false);
   const [modalActive, setModalActive] = useState(false);
   const [showCompletionModal, setShowCompletionModal] = useState(false);
-  const [engineMode, setEngineMode] = useState<"3d_studio" | "assembly_flow" | "transmission_studio" | "unified_powertrain">("unified_powertrain");
+  const [engineMode, setEngineMode] = useState<"3d_studio" | "assembly_flow" | "transmission_studio" | "unified_powertrain" | "advanced_telemetry">("unified_powertrain");
+  const [showSecondaryPanels, setShowSecondaryPanels] = useState(false);
+
+  // Defer heavy lower deck analytics and agent suite to next frame for instant tab switching
+  useEffect(() => {
+    const timer = requestAnimationFrame(() => {
+      setShowSecondaryPanels(true);
+    });
+    return () => cancelAnimationFrame(timer);
+  }, []);
 
   // Robotic Engine Assembly Line System state (Unified)
   const assembly = useAssemblyStore(eng);
@@ -308,11 +319,24 @@ export function EngineDesigner() {
             <Sliders size={13} />
             <span>3D Transmission Studio</span>
           </button>
+          <button
+            onClick={() => setEngineMode("advanced_telemetry")}
+            className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+              engineMode === "advanced_telemetry"
+                ? "bg-violet-500 text-white shadow-md shadow-violet-500/30 font-extrabold"
+                : "text-slate-400 hover:text-slate-200"
+            }`}
+          >
+            <Radio size={13} />
+            <span>Telemetry & ECU 3D</span>
+          </button>
         </div>
       </div>
 
       {engineMode === "unified_powertrain" ? (
         <UnifiedPowertrainStudio />
+      ) : engineMode === "advanced_telemetry" ? (
+        <AdvancedEngineTelemetryStudio />
       ) : engineMode === "transmission_studio" ? (
         <Transmission3DStudio />
       ) : engineMode === "3d_studio" ? (
@@ -335,115 +359,119 @@ export function EngineDesigner() {
       {/* LOWER DECK: Dyno Curves, Engine Vitals, AI Engine & Telemetry               */}
       {/* =========================================================================== */}
 
-      {/* Live Warnings Banner (If Active) */}
-      {warnings.length > 0 && (
-        <div className="p-3 rounded-2xl bg-amber-950/30 border border-amber-500/30 backdrop-blur-xl">
-          <div className="flex items-center gap-2 mb-2">
-            <AlertTriangle size={14} className="text-amber-400" />
-            <span className="label-mono text-amber-300">Live Engineering Warnings</span>
-            <span className="text-[10px] text-amber-400/70 font-mono">({warnings.length} active)</span>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-            {warnings.map((w) => (
-              <div key={w.id} className="engine-warning-bar bg-base-950/80 border border-amber-500/20 p-2 rounded-xl">
-                <span className="warning-dot" />
-                <span className="font-mono text-[10px] text-amber-400/80 uppercase tracking-wider">{w.category}</span>
-                <span className="flex-1 text-[11px] text-slate-200">{w.text}</span>
-                <button onClick={() => setDismissedWarnings((prev) => [...prev, w.id])} className="text-red-400/50 hover:text-red-300 transition-colors">
-                  <X size={12} />
-                </button>
+      {showSecondaryPanels && (
+        <>
+          {/* Live Warnings Banner (If Active) */}
+          {warnings.length > 0 && (
+            <div className="p-3 rounded-2xl bg-amber-950/30 border border-amber-500/30 backdrop-blur-xl">
+              <div className="flex items-center gap-2 mb-2">
+                <AlertTriangle size={14} className="text-amber-400" />
+                <span className="label-mono text-amber-300">Live Engineering Warnings</span>
+                <span className="text-[10px] text-amber-400/70 font-mono">({warnings.length} active)</span>
               </div>
-            ))}
-          </div>
-        </div>
-      )}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                {warnings.map((w) => (
+                  <div key={w.id} className="engine-warning-bar bg-base-950/80 border border-amber-500/20 p-2 rounded-xl">
+                    <span className="warning-dot" />
+                    <span className="font-mono text-[10px] text-amber-400/80 uppercase tracking-wider">{w.category}</span>
+                    <span className="flex-1 text-[11px] text-slate-200">{w.text}</span>
+                    <button onClick={() => setDismissedWarnings((prev) => [...prev, w.id])} className="text-red-400/50 hover:text-red-300 transition-colors">
+                      <X size={12} />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
 
-      {/* 4-Column Lower Analytics Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 items-start">
-        
-        {/* Power & Torque Dyno Chart */}
-        <Section title="Dyno Power & Torque" icon={<Zap size={16} />}>
-          <LineChart series={powerSeries} xLabel="RPM" yLabel="hp / Nm" height={190} />
-          <div className="flex justify-between text-[10px] text-slate-400 mt-1 font-mono">
-            <span className="flex items-center gap-1">
-              <span className="h-2 w-3 bg-cyan-400 rounded-sm shadow-[0_0_6px_rgba(34,211,238,0.6)]" /> Power ({sim.peakPower} hp)
-            </span>
-            <span className="flex items-center gap-1">
-              <span className="h-2 w-3 rounded-sm shadow-[0_0_6px_rgba(232,121,160,0.6)]" style={{ background: "#e879a0" }} /> Torque ({sim.peakTorque} Nm)
-            </span>
-          </div>
-        </Section>
-
-        {/* Engine Vitals Grid */}
-        <Section title="Engine Vitals" icon={<Gauge size={16} />}>
-          <div className="grid grid-cols-2 gap-2">
-            <StatTile label="Displacement" value={sim.displacement} unit="cc" accent="accent" />
-            <StatTile label="Cylinders" value={sim.cylinderCount} />
-            <StatTile label="Peak Power" value={sim.peakPower} unit="hp" accent="accent" sub={`@ ${sim.peakPowerRpm} rpm`} />
-            <StatTile label="Peak Torque" value={sim.peakTorque} unit="Nm" accent="accent" sub={`@ ${sim.peakTorqueRpm} rpm`} />
-            {!isElectric && <StatTile label="Thermal Eff." value={`${(sim.thermalEfficiency * 100).toFixed(1)}%`} accent="ok" />}
-            <StatTile label="Redline" value={sim.redline} unit="rpm" />
-            {!isElectric && <StatTile label="Knock Risk" value={`${(sim.knockRisk * 100).toFixed(0)}%`} accent={sim.knockRisk > 0.5 ? "danger" : sim.knockRisk > 0.3 ? "warn" : "ok"} />}
-            {!isElectric && <StatTile label="BSFC" value={sim.bsfc} unit="g/kWh" />}
-            <StatTile label="Engine Weight" value={sim.engineWeight} unit="kg" />
-            <StatTile label="Reliability" value={`${(sim.reliability * 100).toFixed(0)}%`} accent={sim.reliability > 0.85 ? "ok" : "warn"} />
-          </div>
-        </Section>
-
-        {/* AI Suggestion Card */}
-        <Section title="Apex AI Copilot" icon={<Lightbulb size={16} />}>
-          <div className="ai-suggestion-card bg-purple-950/20 border border-purple-500/30 p-3 rounded-xl space-y-2">
-            <div className="text-xs font-semibold text-purple-200">{suggestion.title}</div>
-            <div className="text-[10.5px] text-purple-300/80 leading-relaxed">{suggestion.detail}</div>
-            <div className="suggestion-impacts flex flex-wrap gap-1.5 pt-1">
-              {suggestion.impacts.map((impact, i) => (
-                <span key={i} className={`impact-badge ${impact.tone === "good" ? "good" : "caution"}`}>
-                  → {impact.label} : {impact.delta}
+          {/* 4-Column Lower Analytics Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 items-start">
+            
+            {/* Power & Torque Dyno Chart */}
+            <Section title="Dyno Power & Torque" icon={<Zap size={16} />}>
+              <LineChart series={powerSeries} xLabel="RPM" yLabel="hp / Nm" height={190} />
+              <div className="flex justify-between text-[10px] text-slate-400 mt-1 font-mono">
+                <span className="flex items-center gap-1">
+                  <span className="h-2 w-3 bg-cyan-400 rounded-sm shadow-[0_0_6px_rgba(34,211,238,0.6)]" /> Power ({sim.peakPower} hp)
                 </span>
-              ))}
-            </div>
-            <div className="ai-suggestion-actions flex items-center gap-2 pt-2 border-t border-purple-500/20">
-              <button className="btn-apply flex items-center gap-1 px-3 py-1 rounded-lg bg-purple-500 text-black text-xs font-mono font-bold hover:bg-purple-400 transition-all cursor-pointer">
-                <Check size={11} /> Apply
-              </button>
-              <button className="btn-explain flex items-center gap-1 px-3 py-1 rounded-lg bg-base-800 text-purple-300 border border-purple-500/30 text-xs font-mono hover:bg-base-750 transition-all cursor-pointer">
-                <Info size={11} /> Explain
-              </button>
-            </div>
+                <span className="flex items-center gap-1">
+                  <span className="h-2 w-3 rounded-sm shadow-[0_0_6px_rgba(232,121,160,0.6)]" style={{ background: "#e879a0" }} /> Torque ({sim.peakTorque} Nm)
+                </span>
+              </div>
+            </Section>
+
+            {/* Engine Vitals Grid */}
+            <Section title="Engine Vitals" icon={<Gauge size={16} />}>
+              <div className="grid grid-cols-2 gap-2">
+                <StatTile label="Displacement" value={sim.displacement} unit="cc" accent="accent" />
+                <StatTile label="Cylinders" value={sim.cylinderCount} />
+                <StatTile label="Peak Power" value={sim.peakPower} unit="hp" accent="accent" sub={`@ ${sim.peakPowerRpm} rpm`} />
+                <StatTile label="Peak Torque" value={sim.peakTorque} unit="Nm" accent="accent" sub={`@ ${sim.peakTorqueRpm} rpm`} />
+                {!isElectric && <StatTile label="Thermal Eff." value={`${(sim.thermalEfficiency * 100).toFixed(1)}%`} accent="ok" />}
+                <StatTile label="Redline" value={sim.redline} unit="rpm" />
+                {!isElectric && <StatTile label="Knock Risk" value={`${(sim.knockRisk * 100).toFixed(0)}%`} accent={sim.knockRisk > 0.5 ? "danger" : sim.knockRisk > 0.3 ? "warn" : "ok"} />}
+                {!isElectric && <StatTile label="BSFC" value={sim.bsfc} unit="g/kWh" />}
+                <StatTile label="Engine Weight" value={sim.engineWeight} unit="kg" />
+                <StatTile label="Reliability" value={`${(sim.reliability * 100).toFixed(0)}%`} accent={sim.reliability > 0.85 ? "ok" : "warn"} />
+              </div>
+            </Section>
+
+            {/* AI Suggestion Card */}
+            <Section title="Apex AI Copilot" icon={<Lightbulb size={16} />}>
+              <div className="ai-suggestion-card bg-purple-950/20 border border-purple-500/30 p-3 rounded-xl space-y-2">
+                <div className="text-xs font-semibold text-purple-200">{suggestion.title}</div>
+                <div className="text-[10.5px] text-purple-300/80 leading-relaxed">{suggestion.detail}</div>
+                <div className="suggestion-impacts flex flex-wrap gap-1.5 pt-1">
+                  {suggestion.impacts.map((impact, i) => (
+                    <span key={i} className={`impact-badge ${impact.tone === "good" ? "good" : "caution"}`}>
+                      → {impact.label} : {impact.delta}
+                    </span>
+                  ))}
+                </div>
+                <div className="ai-suggestion-actions flex items-center gap-2 pt-2 border-t border-purple-500/20">
+                  <button className="btn-apply flex items-center gap-1 px-3 py-1 rounded-lg bg-purple-500 text-black text-xs font-mono font-bold hover:bg-purple-400 transition-all cursor-pointer">
+                    <Check size={11} /> Apply
+                  </button>
+                  <button className="btn-explain flex items-center gap-1 px-3 py-1 rounded-lg bg-base-800 text-purple-300 border border-purple-500/30 text-xs font-mono hover:bg-base-750 transition-all cursor-pointer">
+                    <Info size={11} /> Explain
+                  </button>
+                </div>
+              </div>
+            </Section>
+
+            {/* Cost, Emissions & Environment */}
+            <Section title="Cost & Economics" icon={<DollarSign size={16} />}>
+              <div className="grid grid-cols-2 gap-2">
+                <StatTile label="Engine Cost" value={`$${(sim.engineCost / 1000).toFixed(1)}k`} accent="accent" />
+                {!isElectric && <StatTile label="Fuel Economy" value={sim.fuelEconomy} unit="L/100km" />}
+                <StatTile label="Emissions" value={sim.emissions} unit="g/km" accent={sim.emissions > 250 ? "warn" : "default"} />
+                <StatTile label="Noise" value={sim.noise} unit="dB" />
+                {isHybrid && <StatTile label="Regen Eff." value={`${(sim.regenEfficiency * 100).toFixed(0)}%`} accent="ok" />}
+                {isElectric && <StatTile label="EV Range" value={sim.electricRange} unit="km" accent="ok" />}
+              </div>
+            </Section>
           </div>
-        </Section>
 
-        {/* Cost, Emissions & Environment */}
-        <Section title="Cost & Economics" icon={<DollarSign size={16} />}>
-          <div className="grid grid-cols-2 gap-2">
-            <StatTile label="Engine Cost" value={`$${(sim.engineCost / 1000).toFixed(1)}k`} accent="accent" />
-            {!isElectric && <StatTile label="Fuel Economy" value={sim.fuelEconomy} unit="L/100km" />}
-            <StatTile label="Emissions" value={sim.emissions} unit="g/km" accent={sim.emissions > 250 ? "warn" : "default"} />
-            <StatTile label="Noise" value={sim.noise} unit="dB" />
-            {isHybrid && <StatTile label="Regen Eff." value={`${(sim.regenEfficiency * 100).toFixed(0)}%`} accent="ok" />}
-            {isElectric && <StatTile label="EV Range" value={sim.electricRange} unit="km" accent="ok" />}
+          {/* Autonomous AI Agent Suite Console */}
+          <div className="w-full mt-4">
+            <ApexAgentConsole
+              engineConfig={eng}
+              installedComponents={assembly.installedComponents}
+              activeComponentId={assembly.activeComponentId}
+              phase={assembly.phase}
+              powerHp={sim.peakPower}
+              weightKg={sim.engineWeight + 1200}
+              onApplyTuning={(changes) => updateEngine(changes)}
+            />
           </div>
-        </Section>
-      </div>
 
-      {/* Autonomous AI Agent Suite Console */}
-      <div className="w-full mt-4">
-        <ApexAgentConsole
-          engineConfig={eng}
-          installedComponents={assembly.installedComponents}
-          activeComponentId={assembly.activeComponentId}
-          phase={assembly.phase}
-          powerHp={sim.peakPower}
-          weightKg={sim.engineWeight + 1200}
-          onApplyTuning={(changes) => updateEngine(changes)}
-        />
-      </div>
-
-      {/* 21 Subsystem Hybrid & EV Telemetry Suite (If Hybrid or EV) */}
-      {(isHybrid || isElectric) && (
-        <div className="w-full mt-4 mb-16 pb-6">
-          <HybridTelemetrySuite />
-        </div>
+          {/* 21 Subsystem Hybrid & EV Telemetry Suite (If Hybrid or EV) */}
+          {(isHybrid || isElectric) && (
+            <div className="w-full mt-4 mb-16 pb-6">
+              <HybridTelemetrySuite />
+            </div>
+          )}
+        </>
       )}
 
       {/* Assembly Completion Celebration Modal */}

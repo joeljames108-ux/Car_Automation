@@ -112,35 +112,40 @@ export class UniversalGlbAssetLoader {
     const loader = this.initLoader();
 
     return new Promise((resolve) => {
-      loader.load(
-        uri,
-        (gltf: GLTF) => {
-          this.normalizeModelScaleAndGround(gltf.scene);
-          this.smoothGeometryNormals(gltf.scene);
-          this.enhanceGlbMaterials(gltf.scene);
-          GLBScenePostProcessor.process(gltf.scene);
-          const stats = this.analyzeScene(gltf.scene);
-          const result: LoadedGlbAsset = {
-            assetUri: uri,
-            scene: gltf.scene,
-            materials: stats.materials,
-            geometries: stats.geometries,
-            animations: gltf.animations || [],
-            totalTriangles: stats.triangles,
-            totalVertices: stats.vertices,
-            fileSizeBytesEstimate: stats.triangles * 48,
-            loadDurationMs: performance.now() - t0,
-            fromCache: false,
-          };
-          this.memoryCache.set(uri, result);
-          resolve(result);
-        },
-        undefined,
-        () => {
-          const fallback = this.generateFallbackAsset(uri, t0);
-          resolve(fallback);
-        }
-      );
+      try {
+        loader.load(
+          uri,
+          (gltf: GLTF) => {
+            this.normalizeModelScaleAndGround(gltf.scene);
+            this.smoothGeometryNormals(gltf.scene);
+            this.enhanceGlbMaterials(gltf.scene);
+            GLBScenePostProcessor.process(gltf.scene);
+            const stats = this.analyzeScene(gltf.scene);
+            const result: LoadedGlbAsset = {
+              assetUri: uri,
+              scene: gltf.scene,
+              materials: stats.materials,
+              geometries: stats.geometries,
+              animations: gltf.animations || [],
+              totalTriangles: stats.triangles,
+              totalVertices: stats.vertices,
+              fileSizeBytesEstimate: stats.triangles * 48,
+              loadDurationMs: performance.now() - t0,
+              fromCache: false,
+            };
+            this.memoryCache.set(uri, result);
+            resolve(result);
+          },
+          undefined,
+          () => {
+            const fallback = this.generateFallbackAsset(uri, t0);
+            resolve(fallback);
+          }
+        );
+      } catch {
+        const fallback = this.generateFallbackAsset(uri, t0);
+        resolve(fallback);
+      }
     });
   }
 

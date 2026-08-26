@@ -9,11 +9,15 @@
  * ============================================================================
  */
 
-import React, { useState } from "react";
-import { GitCompare, Scale, DollarSign, Volume2, ShieldCheck, Zap, Sparkles } from "lucide-react";
+import React, { useState, useMemo } from "react";
+import { GitCompare, Scale, DollarSign, Volume2, ShieldCheck, Zap, Sparkles, Download, Eye } from "lucide-react";
 import { MasterModularInteriorState } from "../../sim/interior/masterInteriorTypes";
 import { CURATED_INTERIOR_PRESETS } from "../../sim/interior/masterInteriorStateEngine";
 import { MasterInteriorSolver } from "../../sim/interior/masterInteriorSolver";
+import { InteriorAcousticThermalSimulator } from "../../sim/interior/interiorAcousticThermalSimulator";
+import { InteriorErgonomicsBiometricsEngine } from "../../sim/interior/interiorErgonomicsBiometricsEngine";
+import { UniversalGlbExporter } from "../../exterior3d/export/universalGlbExporter";
+import { HyperFidelityInteriorCadEngine } from "../../exterior3d/generators/interior/hyperFidelityInteriorCadEngine";
 
 interface ModularInteriorComparisonStudioProps {
   currentCabin: MasterModularInteriorState;
@@ -21,6 +25,8 @@ interface ModularInteriorComparisonStudioProps {
 
 export const ModularInteriorComparisonStudio: React.FC<ModularInteriorComparisonStudioProps> = ({ currentCabin }) => {
   const [benchmarkKey, setBenchmarkKey] = useState<string>("GT3_COMPETITION_RACE");
+  const [isExportingA, setIsExportingA] = useState<boolean>(false);
+  const [isExportingB, setIsExportingB] = useState<boolean>(false);
 
   const benchmarkRaw = CURATED_INTERIOR_PRESETS[benchmarkKey] || CURATED_INTERIOR_PRESETS.GT3_COMPETITION_RACE;
   const benchmarkCabin: MasterModularInteriorState = {
@@ -29,6 +35,40 @@ export const ModularInteriorComparisonStudio: React.FC<ModularInteriorComparison
   };
 
   const delta = MasterInteriorSolver.compareInteriors(currentCabin, benchmarkCabin);
+
+  // Acoustic & NVH physics comparison
+  const acousticA = useMemo(() => InteriorAcousticThermalSimulator.simulateCabinAcoustics(currentCabin, 4200, 120, true), [currentCabin]);
+  const acousticB = useMemo(() => InteriorAcousticThermalSimulator.simulateCabinAcoustics(benchmarkCabin, 4200, 120, true), [benchmarkCabin]);
+
+  // SAE Ergonomics biometrics comparison
+  const ergoA = useMemo(() => InteriorErgonomicsBiometricsEngine.solveDriverErgonomics(currentCabin, "50th_male", 0, 0), [currentCabin]);
+  const ergoB = useMemo(() => InteriorErgonomicsBiometricsEngine.solveDriverErgonomics(benchmarkCabin, "50th_male", 0, 0), [benchmarkCabin]);
+
+  const handleExportGlbA = async () => {
+    setIsExportingA(true);
+    try {
+      const group = HyperFidelityInteriorCadEngine.buildFullInteriorCad(currentCabin);
+      const res = await UniversalGlbExporter.exportVehicleToGlb(group, { vehicleName: `Cabin_A_${currentCabin.name}` });
+      UniversalGlbExporter.triggerBrowserDownload(res);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setIsExportingA(false);
+    }
+  };
+
+  const handleExportGlbB = async () => {
+    setIsExportingB(true);
+    try {
+      const group = HyperFidelityInteriorCadEngine.buildFullInteriorCad(benchmarkCabin);
+      const res = await UniversalGlbExporter.exportVehicleToGlb(group, { vehicleName: `Cabin_B_${benchmarkCabin.name}` });
+      UniversalGlbExporter.triggerBrowserDownload(res);
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setIsExportingB(false);
+    }
+  };
 
   return (
     <div className="space-y-4 p-4 rounded-2xl bg-slate-950/80 border border-purple-500/30 backdrop-blur-xl shadow-2xl text-xs font-mono">
@@ -79,14 +119,22 @@ export const ModularInteriorComparisonStudio: React.FC<ModularInteriorComparison
               <span className="font-extrabold" style={{color: '#451A03'}}>${currentCabin.metrics.totalInteriorCostUSD.toLocaleString()}</span>
             </div>
             <div className="p-2 rounded-lg" style={{backgroundColor: 'rgba(255,248,235,0.5)', border: '1px solid rgba(217,166,78,0.15)'}}>
-              <span className="block" style={{color: '#78716C'}}>Comfort Index:</span>
-              <span className="font-extrabold" style={{color: '#92400E'}}>{currentCabin.metrics.comfortIndexPercent}%</span>
+              <span className="block" style={{color: '#78716C'}}>Ear Noise Level:</span>
+              <span className="font-extrabold text-cyan-600">{acousticA.driverEarSplDba} dBA</span>
             </div>
             <div className="p-2 rounded-lg" style={{backgroundColor: 'rgba(255,248,235,0.5)', border: '1px solid rgba(217,166,78,0.15)'}}>
-              <span className="block" style={{color: '#78716C'}}>Sportiness Index:</span>
-              <span className="font-extrabold" style={{color: '#92400E'}}>{currentCabin.metrics.sportinessIndexPercent}%</span>
+              <span className="block" style={{color: '#78716C'}}>SAE Ergo Score:</span>
+              <span className="font-extrabold text-emerald-600">{ergoA.overallSaeErgonomicsScore}/100</span>
             </div>
           </div>
+          <button
+            onClick={handleExportGlbA}
+            disabled={isExportingA}
+            className="w-full mt-2 py-1.5 px-3 rounded-lg bg-amber-600 text-white font-bold flex items-center justify-center gap-1.5 text-[10px] cursor-pointer hover:bg-amber-700 disabled:opacity-50"
+          >
+            <Download size={12} />
+            <span>{isExportingA ? "EXPORTING..." : "EXPORT CABIN A GLB"}</span>
+          </button>
         </div>
 
         {/* Cabin B Card */}
@@ -96,23 +144,31 @@ export const ModularInteriorComparisonStudio: React.FC<ModularInteriorComparison
             <span className="px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-300 text-[10px]">{benchmarkCabin.name}</span>
           </div>
           <div className="grid grid-cols-2 gap-2 text-[11px]">
-            <div className="p-2 rounded-lg" style={{backgroundColor: 'rgba(255,248,235,0.5)', border: '1px solid rgba(217,166,78,0.15)'}}>
-              <span className="block" style={{color: '#78716C'}}>Total Mass:</span>
-              <span className="font-extrabold" style={{color: '#451A03'}}>{benchmarkCabin.metrics.totalInteriorMassKg} kg</span>
+            <div className="p-2 rounded-lg bg-slate-950/80 border border-slate-800">
+              <span className="block text-slate-400">Total Mass:</span>
+              <span className="font-extrabold text-slate-100">{benchmarkCabin.metrics.totalInteriorMassKg} kg</span>
             </div>
-            <div className="p-2 rounded-lg" style={{backgroundColor: 'rgba(255,248,235,0.5)', border: '1px solid rgba(217,166,78,0.15)'}}>
-              <span className="block" style={{color: '#78716C'}}>BOM Cost:</span>
-              <span className="font-extrabold" style={{color: '#451A03'}}>${benchmarkCabin.metrics.totalInteriorCostUSD.toLocaleString()}</span>
+            <div className="p-2 rounded-lg bg-slate-950/80 border border-slate-800">
+              <span className="block text-slate-400">BOM Cost:</span>
+              <span className="font-extrabold text-slate-100">${benchmarkCabin.metrics.totalInteriorCostUSD.toLocaleString()}</span>
             </div>
-            <div className="p-2 rounded-lg" style={{backgroundColor: 'rgba(255,248,235,0.5)', border: '1px solid rgba(217,166,78,0.15)'}}>
-              <span className="block" style={{color: '#78716C'}}>Comfort Index:</span>
-              <span className="font-extrabold" style={{color: '#92400E'}}>{benchmarkCabin.metrics.comfortIndexPercent}%</span>
+            <div className="p-2 rounded-lg bg-slate-950/80 border border-slate-800">
+              <span className="block text-slate-400">Ear Noise Level:</span>
+              <span className="font-extrabold text-cyan-400">{acousticB.driverEarSplDba} dBA</span>
             </div>
-            <div className="p-2 rounded-lg" style={{backgroundColor: 'rgba(255,248,235,0.5)', border: '1px solid rgba(217,166,78,0.15)'}}>
-              <span className="block" style={{color: '#78716C'}}>Sportiness Index:</span>
-              <span className="font-extrabold" style={{color: '#92400E'}}>{benchmarkCabin.metrics.sportinessIndexPercent}%</span>
+            <div className="p-2 rounded-lg bg-slate-950/80 border border-slate-800">
+              <span className="block text-slate-400">SAE Ergo Score:</span>
+              <span className="font-extrabold text-emerald-400">{ergoB.overallSaeErgonomicsScore}/100</span>
             </div>
           </div>
+          <button
+            onClick={handleExportGlbB}
+            disabled={isExportingB}
+            className="w-full mt-2 py-1.5 px-3 rounded-lg bg-purple-600 text-white font-bold flex items-center justify-center gap-1.5 text-[10px] cursor-pointer hover:bg-purple-700 disabled:opacity-50"
+          >
+            <Download size={12} />
+            <span>{isExportingB ? "EXPORTING..." : "EXPORT CABIN B GLB"}</span>
+          </button>
         </div>
       </div>
 

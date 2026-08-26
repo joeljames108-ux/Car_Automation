@@ -29,6 +29,7 @@ import {
   Gauge,
   CheckCircle2,
   ChevronRight,
+  Radio,
 } from "lucide-react";
 import { MasterEngineStateEngine } from "../../sim/engine/masterEngineStateEngine";
 import type { MasterEngineState } from "../../sim/engine/masterEngineTypes";
@@ -39,13 +40,15 @@ import { ModularEngineComparisonStudio } from "../engineStudio/ModularEngineComp
 import { Transmission3DStudio } from "../transmissionStudio/Transmission3DStudio";
 import { CoupledDynoBench } from "./CoupledDynoBench";
 import { PowertrainSummaryPanel } from "./PowertrainSummaryPanel";
+import { AdvancedEngineTelemetryStudio } from "../engineStudio/AdvancedEngineTelemetryStudio";
 
 type PowertrainStudioMode =
   | "engine_3d"
   | "transmission_3d"
   | "coupled_dyno"
   | "compare"
-  | "summary";
+  | "summary"
+  | "advanced_telemetry";
 
 // Flow chain steps for the progress bar
 const FLOW_CHAIN_STEPS = [
@@ -133,6 +136,7 @@ export const UnifiedPowertrainStudio: React.FC = () => {
               { id: "engine_3d" as const, label: "Engine 3D", icon: <Flame size={13} /> },
               { id: "transmission_3d" as const, label: "Transmission", icon: <Cog size={13} /> },
               { id: "coupled_dyno" as const, label: "Coupled Dyno", icon: <Activity size={13} /> },
+              { id: "advanced_telemetry" as const, label: "Telemetry & ECU 3D", icon: <Radio size={13} /> },
               { id: "compare" as const, label: "Compare", icon: <Scale size={13} /> },
               { id: "summary" as const, label: "Summary", icon: <Layers size={13} /> },
             ].map((tab) => (
@@ -287,6 +291,13 @@ export const UnifiedPowertrainStudio: React.FC = () => {
         {studioMode === "compare" && (
           <div className="w-full h-full">
             <ModularEngineComparisonStudio currentEngine={state} stateEngine={engineInstance} />
+          </div>
+        )}
+
+        {/* ADVANCED TELEMETRY & ECU 3D MAP STUDIO */}
+        {studioMode === "advanced_telemetry" && (
+          <div className="w-full h-full">
+            <AdvancedEngineTelemetryStudio state={state} engine={engineInstance} />
           </div>
         )}
 

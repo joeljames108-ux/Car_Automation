@@ -123,6 +123,24 @@ export class UniversalGlbExporter {
   }
 
   /**
+   * Helper utility to serialize a complete interior cabin state configuration to a GLB file.
+   */
+  public static async exportInteriorCabinToGlb(
+    rootGroup: THREE.Object3D,
+    interiorName: string = "Bespoke_Interior_Cabin",
+    authorName: string = "Antigravity Automotive CAD Engine"
+  ): Promise<ExportedGlbResult> {
+    return this.exportVehicleToGlb(rootGroup, {
+      vehicleName: interiorName.toLowerCase().replace(/\s+/g, "_"),
+      author: authorName,
+      binary: true,
+      includeCustomMetadata: true,
+      embedTextures: true,
+      maxTextureSize: 2048,
+    });
+  }
+
+  /**
    * Helper utility to trigger in-browser file download of the exported GLB buffer.
    */
   public static triggerBrowserDownload(exportResult: ExportedGlbResult): void {

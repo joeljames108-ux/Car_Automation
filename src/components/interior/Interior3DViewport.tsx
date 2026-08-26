@@ -20,6 +20,8 @@ import {
   InteriorCameraViewpoint,
 } from '../../exterior3d/generators/interior/masterInterior3DStudio';
 import { Eye, Gauge, Compass, Sun, Moon, Maximize2, Sparkles, Sliders, Play, Pause, Crosshair } from 'lucide-react';
+import { DriverSeatCameraRig, SeatCameraAnchorId } from '../../exterior3d/generators/interior/driverSeatCameraRig';
+import { SeatPositionSelector } from './SeatPositionSelector';
 
 interface Interior3DViewportProps {
   config: MasterInteriorConfiguration;
@@ -53,7 +55,9 @@ export const Interior3DViewport: React.FC<Interior3DViewportProps> = ({
   const headPitchRef = useRef<number>(0);
   const targetYawRef = useRef<number>(0);
   const targetPitchRef = useRef<number>(0);
+  const cameraRigRef = useRef<DriverSeatCameraRig | null>(null);
   const isDriverSeatModeRef = useRef<boolean>(true);
+  const [activeSeatAnchor, setActiveSeatAnchor] = useState<SeatCameraAnchorId>('DRIVER');
 
   useEffect(() => {
     isDriverSeatModeRef.current = activeViewpoint === 'driver_pov';
@@ -301,10 +305,23 @@ export const Interior3DViewport: React.FC<Interior3DViewportProps> = ({
         </div>
       )}
 
-      {/* ── TOP HEADER OVERLAY: CINEMATIC CAMERA VIEWPOINTS ── */}
-      <div className="absolute top-3 left-3 right-3 flex items-center justify-between pointer-events-none">
-        {/* Camera Viewpoint Selector */}
-        <div className="flex items-center gap-1.5 p-1.5 rounded-xl backdrop-blur-md shadow-lg pointer-events-auto bg-slate-950/85 border border-slate-800">
+      {/* ── TOP HEADER OVERLAY: CINEMATIC CAMERA VIEWPOINTS & MULTI-SEAT SELECTOR ── */}
+      <div className="absolute top-3 left-3 right-3 flex items-center justify-between pointer-events-none z-20">
+        <div className="flex items-center gap-2 pointer-events-auto">
+          {/* Seat Position Selector [ DRIVER ] [ PASSENGER ] [ REAR L ] [ REAR R ] */}
+          <SeatPositionSelector
+            activeAnchor={activeSeatAnchor}
+            seatCount={config.seatCount || 2}
+            onSelectAnchor={(anchorId) => {
+              setActiveSeatAnchor(anchorId);
+              setViewpoint('driver_pov');
+            }}
+            isAutoPan={isAutoPan}
+            onToggleAutoPan={() => setIsAutoPan(!isAutoPan)}
+          />
+
+          {/* Camera Viewpoint Selector */}
+          <div className="flex items-center gap-1.5 p-1.5 rounded-xl backdrop-blur-md shadow-lg pointer-events-auto bg-slate-950/85 border border-slate-800">
           <button
             onClick={() => setViewpoint('driver_pov')}
             className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
@@ -365,17 +382,18 @@ export const Interior3DViewport: React.FC<Interior3DViewportProps> = ({
             VIP Lounge
           </button>
 
-          <button
-            onClick={() => setViewpoint('overhead_panoramic')}
-            className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
-              activeViewpoint === 'overhead_panoramic'
-                ? 'bg-amber-500 text-slate-950 font-bold shadow-md shadow-amber-500/30'
-                : 'text-slate-400 hover:text-white hover:bg-slate-800'
-            }`}
-          >
-            <Maximize2 size={13} />
-            Panoramic ISO
-          </button>
+            <button
+              onClick={() => setViewpoint('overhead_panoramic')}
+              className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
+                activeViewpoint === 'overhead_panoramic'
+                  ? 'bg-amber-500 text-slate-950 font-bold shadow-md shadow-amber-500/30'
+                  : 'text-slate-400 hover:text-white hover:bg-slate-800'
+              }`}
+            >
+              <Maximize2 size={13} />
+              Panoramic ISO
+            </button>
+          </div>
         </div>
 
         {/* Right Tools: Auto Pan & Day/Night Toggle */}

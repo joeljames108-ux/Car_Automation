@@ -19,6 +19,8 @@ import { SteeringWheel3DGenerator } from '../src/exterior3d/generators/interior/
 import { Seating3DGenerator } from '../src/exterior3d/generators/interior/seating3DGenerator';
 import { CenterConsole3DGenerator } from '../src/exterior3d/generators/interior/centerConsole3DGenerator';
 import { DoorCard3DGenerator } from '../src/exterior3d/generators/interior/doorCard3DGenerator';
+import { HyperFidelityInteriorCadEngine } from '../src/exterior3d/generators/interior/hyperFidelityInteriorCadEngine';
+import { DEFAULT_BESPOKE_STATE } from '../src/components/interior/BespokeLuxuryInteriorStudioHub';
 import { AUDIO_SYSTEM_CATALOG } from '../src/exterior3d/manifests/interiorStudioCatalog';
 import type {
   InteriorMaterialTheme,
@@ -170,11 +172,31 @@ async function main() {
       build: async () => Dashboard3DGenerator.buildDashboard('hyper_minimalist_glass', 1.50, SPORT_THEME, '#22d3ee'),
     },
     {
+      name: 'dashboard_luxury_gt.glb',
+      build: async () => Dashboard3DGenerator.buildDashboard('luxury_grand_tourer', 1.52, LUXURY_THEME, '#d9b26a'),
+    },
+    {
+      name: 'dashboard_classic.glb',
+      build: async () => Dashboard3DGenerator.buildDashboard('classic_heritage_sport', 1.46, LUXURY_THEME, '#f59e0b'),
+    },
+    {
       name: 'steering_wheel_gt3_yoke.glb',
       build: async () => SteeringWheel3DGenerator.buildSteeringWheel('gt3_race_yoke', SPORT_THEME, 0),
     },
     {
       name: 'steering_wheel_sport.glb',
+      build: async () => SteeringWheel3DGenerator.buildSteeringWheel('flat_bottom_sport', SPORT_THEME, 0),
+    },
+    {
+      name: 'steering_formula.glb',
+      build: async () => SteeringWheel3DGenerator.buildSteeringWheel('gt3_race_yoke', SPORT_THEME, 0),
+    },
+    {
+      name: 'steering_luxury_3spoke.glb',
+      build: async () => SteeringWheel3DGenerator.buildSteeringWheel('classic_3spoke_wood', LUXURY_THEME, 0),
+    },
+    {
+      name: 'steering_suede_carbon.glb',
       build: async () => SteeringWheel3DGenerator.buildSteeringWheel('flat_bottom_sport', SPORT_THEME, 0),
     },
     {
@@ -184,6 +206,14 @@ async function main() {
     {
       name: 'seat_sport_bucket.glb',
       build: async () => Seating3DGenerator.buildSeatingAssembly('sport_bolstered_recaro', 2, 'standard_3_point', LUXURY_THEME, 2.80, 1.64),
+    },
+    {
+      name: 'seat_executive_lounge.glb',
+      build: async () => Seating3DGenerator.buildSeatingAssembly('executive_22way_massage_ottoman', 2, 'standard_3_point', LUXURY_THEME, 2.90, 1.64),
+    },
+    {
+      name: 'seat_luxury_massage.glb',
+      build: async () => Seating3DGenerator.buildSeatingAssembly('executive_22way_massage_ottoman', 2, 'standard_3_point', LUXURY_THEME, 2.90, 1.64),
     },
     {
       name: 'center_console_gt3.glb',
@@ -196,6 +226,18 @@ async function main() {
     {
       name: 'door_cards_sport.glb',
       build: async () => DoorCard3DGenerator.buildDoorCardAssemblies(SPORT_THEME, audioSpec, 2.68, 1.62, '#38bdf8'),
+    },
+    {
+      name: 'door_cards_executive.glb',
+      build: async () => DoorCard3DGenerator.buildDoorCardAssemblies(LUXURY_THEME, audioSpec, 2.90, 1.64, '#d9b26a'),
+    },
+    {
+      name: 'roof_starlight.glb',
+      build: async () => HyperFidelityInteriorCadEngine.buildSafetyAndRoofAssembly(DEFAULT_BESPOKE_STATE, 0.81, 0),
+    },
+    {
+      name: 'pedals_race.glb',
+      build: async () => HyperFidelityInteriorCadEngine.buildPedalBoxAssembly(DEFAULT_BESPOKE_STATE, 0),
     },
   ];
 

@@ -61,6 +61,9 @@ import {
   StudioEnvironmentPreset,
   AutomotiveStudioEnvironmentManager,
 } from "../../exterior3d/environment/AutomotiveStudioEnvironment";
+import { DriverSeatCameraRig, SeatCameraAnchorId } from "../../exterior3d/generators/interior/driverSeatCameraRig";
+import { SeatPositionSelector } from "./SeatPositionSelector";
+import { InteriorRaycastPicker, InteriorWorkbenchTabKey } from "../../exterior3d/generators/interior/interiorRaycastPicker";
 
 export type CockpitCameraPose =
   | "driver_seat_eye"
@@ -248,6 +251,11 @@ export const ModularInterior3DStudioViewport: React.FC<ModularInterior3DStudioVi
 
   const audioSynth = CabinAcousticSynthesizer.getInstance();
 
+  // DriverSeatCameraRig & RaycastPicker State
+  const cameraRigRef = useRef<DriverSeatCameraRig | null>(null);
+  const raycastPickerRef = useRef<InteriorRaycastPicker | null>(null);
+  const [activeSeatAnchor, setActiveSeatAnchor] = useState<SeatCameraAnchorId>("DRIVER");
+
   // Sync ref with state
   useEffect(() => {
     isDriverSeatModeRef.current = activeCameraPose === "driver_seat_eye";
@@ -354,16 +362,20 @@ export const ModularInterior3DStudioViewport: React.FC<ModularInterior3DStudioVi
     const contactShadow = AutomotiveStudioEnvironmentManager.createContactShadowPlane(2.8, 4.8, 0.6);
     scene.add(contactShadow);
 
-    // 4. Initial Background Texture
-    const initBg = AutomotiveStudioEnvironmentManager.createGradientBackgroundTexture(
-      "#2e1814",
-      "#451a14",
-      "#1f0f0c",
-      true
-    );
-    currentEnvTextureRef.current = initBg;
-    scene.background = initBg;
-    scene.environment = initBg;
+    // 5. Initialize Camera Rig Engine
+    const cameraRig = new DriverSeatCameraRig({
+      camera,
+      domElement: container,
+      initialAnchor: "DRIVER",
+      sensitivity: 0.25,
+      dampingFactor: 0.12,
+    });
+    cameraRigRef.current = cameraRig;
+    cameraRig.subscribeGazeChange((yaw, pitch, targetStr) => {
+      setDriverYawDeg(yaw);
+      setDriverPitchDeg(pitch);
+      setCurrentGazeTarget(targetStr);
+    });
 
     // Raycaster for Direct Click-to-Edit & Hover
     const raycaster = new THREE.Raycaster();
@@ -505,41 +517,9 @@ export const ModularInterior3DStudioViewport: React.FC<ModularInterior3DStudioVi
       });
 
       // 3. Driver Seat First-Person Look-Around or Orbit Camera
-      if (isDriverSeatModeRef.current) {
+      if (isDriverSeatModeRef.current && cameraRigRef.current) {
         controls.enabled = false;
-
-        // Auto Head Pan Mode
-        if (isAutoHeadPan) {
-          const panSpeed = elapsed * 0.45;
-          targetYawRef.current = Math.sin(panSpeed) * 72;
-          targetPitchRef.current = Math.sin(panSpeed * 0.6) * 16 - 2;
-          headYawRef.current = targetYawRef.current;
-          headPitchRef.current = targetPitchRef.current;
-          setDriverYawDeg(Math.round(targetYawRef.current));
-          setDriverPitchDeg(Math.round(targetPitchRef.current));
-          updateGazeDetection(targetYawRef.current, targetPitchRef.current);
-        }
-
-        // Smooth Interpolation towards target angle
-        currentYaw += (targetYawRef.current - currentYaw) * 0.12;
-        currentPitch += (targetPitchRef.current - currentPitch) * 0.12;
-
-        const eyeX = -0.68 + seatForeAftMm / 1000;
-        const eyeY = 0.88 + seatHeightMm / 1000;
-        const eyeZ = -0.34;
-
-        camera.position.set(eyeX, eyeY, eyeZ);
-
-        const yawRad = (currentYaw * Math.PI) / 180;
-        const pitchRad = (currentPitch * Math.PI) / 180;
-
-        // Forward vector (+X forward, +Y up, +Z right)
-        const dirX = Math.cos(pitchRad) * Math.cos(yawRad);
-        const dirY = Math.sin(pitchRad);
-        const dirZ = Math.cos(pitchRad) * Math.sin(yawRad);
-
-        const lookTarget = new THREE.Vector3(eyeX + dirX, eyeY + dirY, eyeZ + dirZ);
-        camera.lookAt(lookTarget);
+        cameraRigRef.current.update(delta);
       } else {
         controls.enabled = true;
         controls.update();
@@ -772,25 +752,50 @@ export const ModularInterior3DStudioViewport: React.FC<ModularInterior3DStudioVi
       )}
 
       {/* Top HUD Controls Overlay */}
-      <div className="absolute top-3 left-3 right-3 flex flex-wrap items-center justify-between gap-2 pointer-events-none">
-        {/* Left: Active Cabin Badge */}
-        <div className="flex items-center gap-2.5 p-2 px-3 rounded-2xl backdrop-blur-xl pointer-events-auto shadow-xl bg-slate-950/85 border border-amber-500/30">
-          <div className="p-1.5 rounded-xl bg-amber-500/20 text-amber-300">
-            <Layers size={16} />
-          </div>
-          <div>
-            <div className="text-xs font-bold text-slate-100 flex items-center gap-1.5">
-              <span>{state.name.toUpperCase()}</span>
-              {activeCameraPose === "driver_seat_eye" && (
-                <span className="px-1.5 py-0.5 rounded text-[8px] bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 animate-pulse">
-                  DRIVER EYE ACTIVE
-                </span>
-              )}
+      <div className="absolute top-3 left-3 right-3 flex flex-wrap items-center justify-between gap-2 pointer-events-none z-20">
+        {/* Left: Active Cabin Badge & Multi-Seat Selector */}
+        <div className="flex items-center gap-2 pointer-events-auto">
+          <div className="flex items-center gap-2.5 p-2 px-3 rounded-2xl backdrop-blur-xl shadow-xl bg-slate-950/85 border border-amber-500/30">
+            <div className="p-1.5 rounded-xl bg-amber-500/20 text-amber-300">
+              <Layers size={16} />
             </div>
-            <div className="text-[10px] text-amber-300/80">
-              {state.metrics.totalInteriorMassKg} kg • ${state.metrics.totalInteriorCostUSD.toLocaleString()} • Comfort: {state.metrics.comfortIndexPercent}%
+            <div>
+              <div className="text-xs font-bold text-slate-100 flex items-center gap-1.5">
+                <span>{state.name.toUpperCase()}</span>
+                {activeCameraPose === "driver_seat_eye" && (
+                  <span className="px-1.5 py-0.5 rounded text-[8px] bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 animate-pulse">
+                    DRIVER EYE ACTIVE
+                  </span>
+                )}
+              </div>
+              <div className="text-[10px] text-amber-300/80">
+                {state.metrics.totalInteriorMassKg} kg • ${state.metrics.totalInteriorCostUSD.toLocaleString()} • Comfort: {state.metrics.comfortIndexPercent}%
+              </div>
             </div>
           </div>
+
+          {/* Seat Position Selector [ DRIVER ] [ FRONT PASSENGER ] [ REAR LEFT ] [ REAR RIGHT ] */}
+          <SeatPositionSelector
+            activeAnchor={activeSeatAnchor}
+            seatCount={state.seating.rearSeatType.includes("delete") ? 2 : 5}
+            onSelectAnchor={(anchorId) => {
+              setActiveSeatAnchor(anchorId);
+              setActiveCameraPose("driver_seat_eye");
+              isDriverSeatModeRef.current = true;
+              if (cameraRigRef.current) {
+                cameraRigRef.current.setActiveAnchor(anchorId, true);
+              }
+              audioSynth.playRotaryDialClick();
+            }}
+            isAutoPan={isAutoHeadPan}
+            onToggleAutoPan={() => {
+              const next = !isAutoHeadPan;
+              setIsAutoHeadPan(next);
+              if (cameraRigRef.current) {
+                cameraRigRef.current.setAutoPan(next);
+              }
+            }}
+          />
         </div>
 
         {/* Center: Central Screen HMI Mode Switcher */}

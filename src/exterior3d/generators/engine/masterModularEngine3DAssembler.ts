@@ -286,11 +286,13 @@ export class MasterModularEngine3DAssembler {
 
   public assemble(state: MasterEngineState): THREE.Group {
     // Record current structural parameters
-    this.lastArchFamily = state.architecture.family;
-    this.lastCylCount = state.architecture.cylinderCount;
+    const arch = state.architecture;
+    this.lastArchFamily = arch.family;
+    this.lastCylCount = arch.cylinderCount;
     this.lastTurboType = state.turboSystem.type;
     this.lastCoverModel = state.cosmetics?.coverModel || "";
     this.lastShowCover = state.cosmetics?.showEngineCover !== false;
+    this.lastStateSummary = `${arch.family}_${arch.cylinderCount}_${arch.bankAngleDeg}_${state.turboSystem.type}_${state.cosmetics?.coverModel}_${state.cosmetics?.showEngineCover}`;
 
     // Dispose old geometries to prevent VRAM memory leaks
     this.rootGroup.traverse((child) => {
@@ -315,7 +317,6 @@ export class MasterModularEngine3DAssembler {
     this.mountingGraph.rebuildSocketsFromState(state);
     this.kinematicsAnimator.updateParameters(state);
 
-    const arch = state.architecture;
     const block = state.block;
     const cylCount = arch.cylinderCount;
     const cylindersPerBank = arch.family === "inline" ? cylCount : cylCount / 2;
@@ -955,6 +956,7 @@ export class MasterModularEngine3DAssembler {
     if (this.lastStateSummary && this.lastStateSummary !== summaryKey) {
       return false; // Structural layout changed, requires full assembly
     }
+    this.lastStateSummary = summaryKey;
 
     this.currentStrokeM = state.block.strokeMm / 1000;
     this.currentRodLengthM = state.connectingRods.rodLengthMm / 1000;

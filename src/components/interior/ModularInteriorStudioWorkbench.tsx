@@ -39,8 +39,9 @@ import {
 } from "../../sim/interior/masterInteriorTypes";
 import { MasterInteriorStateEngine } from "../../sim/interior/masterInteriorStateEngine";
 import { LuxuryMaterialSwatchWall } from "./LuxuryMaterialSwatchWall";
-
 import { BespokeInteriorCustomizer } from "./BespokeInteriorCustomizer";
+import { AmbientLightingStudioPanel } from "./AmbientLightingStudioPanel";
+import { CockpitHmiConfiguratorPanel } from "./CockpitHmiConfiguratorPanel";
 
 export type InteriorWorkbenchTab = "seats" | "dash" | "console" | "materials" | "audio_safety" | "bespoke";
 
@@ -178,6 +179,8 @@ export const ModularInteriorStudioWorkbench: React.FC<ModularInteriorStudioWorkb
         {/* ── TAB 2: DASHBOARD & STEERING ── */}
         {activeTab === "dash" && (
           <div className="space-y-4">
+            <CockpitHmiConfiguratorPanel state={state} />
+
             <div>
               <label className="text-amber-800 font-bold mb-2 flex items-center gap-2"><span style={{color: '#D9A64E', fontSize: '10px'}}>◆</span> <span>▌</span> DASHBOARD ARCHITECTURE <span style={{color: '#D9A64E', fontSize: '10px'}}>◆</span></label>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
@@ -350,6 +353,8 @@ export const ModularInteriorStudioWorkbench: React.FC<ModularInteriorStudioWorkb
         {/* ── TAB 5: AUDIO, LIGHTING & ROLL CAGE ── */}
         {activeTab === "audio_safety" && (
           <div className="space-y-4">
+            <AmbientLightingStudioPanel state={state} />
+
             <div>
               <label              className="text-amber-800 font-bold mb-2 block">ACOUSTIC AUDIO SYSTEM</label>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
