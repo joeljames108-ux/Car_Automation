@@ -5,7 +5,7 @@
 // DRS zones, incident markers, and safety car visualization.
 // ============================================================================
 
-import React, { useMemo } from 'react';
+import React, { useMemo, memo } from 'react';
 import { CIRCUIT_DATABASE, TrackLayout } from '../../sim/track/circuitDatabase';
 
 interface TrackMapLiveProps {
@@ -34,7 +34,7 @@ function generateTrackPath(track: TrackLayout): string {
   for (let i = 0; i < track.corners.length; i++) {
     const corner = track.corners[i];
     const dist = (track.length / track.corners.length) * scale;
-    angle += angleStep * (0.8 + Math.random() * 0.4);
+    angle += angleStep * (0.8 + ((i * 17 + 7) % 10) * 0.04);
     const turnFactor = corner.type === 'hairpin' ? 0.5 : corner.type === 'chicane' ? 0.7 : 1.0;
     x += Math.cos(angle) * dist * turnFactor;
     y += Math.sin(angle) * dist * turnFactor;
@@ -61,9 +61,9 @@ function generateTrackPath(track: TrackLayout): string {
   return d;
 }
 
-export const TrackMapLive: React.FC<TrackMapLiveProps> = ({
+export const TrackMapLive: React.FC<TrackMapLiveProps> = memo(function TrackMapLive({
   trackId, carPositions, currentLap, safetyCarActive = false, incidents = [],
-}) => {
+}) {
   const track = CIRCUIT_DATABASE[trackId];
   if (!track) return <div className="text-amber-500 text-sm">Track not found</div>;
 
@@ -163,4 +163,4 @@ export const TrackMapLive: React.FC<TrackMapLiveProps> = ({
       </div>
     </div>
   );
-};
+});

@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState, useEffect, useCallback } from "react";
+import React, { useMemo, useRef, useState, useEffect, useCallback } from "react";
 import {
   Wind, Play, Pause, RotateCcw, Camera, Gauge,
   Activity, Waves, Layers, Eye, EyeOff, ChevronDown,

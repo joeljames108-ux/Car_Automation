@@ -2,7 +2,7 @@
 // F1 CONSTRUCTOR EXPERIENCE — MASTER WORKSHOP CONTAINER
 // ============================================================================
 
-import React from "react";
+import React, { memo } from "react";
 import { useF1ConstructorStore } from "../../sim/f1/state/f1ConstructorStore";
 import { F1BudgetBar } from "./F1BudgetBar";
 import { F1WorkshopNav } from "./F1WorkshopNav";
@@ -18,12 +18,13 @@ import { LiveryStudio } from "./studios/LiveryStudio";
 import { F1RegulationViewer } from "./F1RegulationViewer";
 import { WindTunnelStudio } from "./studios/WindTunnelStudio";
 import { DynoBenchStudio } from "./studios/DynoBenchStudio";
+import { playHMIClickSound } from "../../utils/hmiSoundSynth";
 
 interface F1ConstructorWorkshopProps {
   onBackToMotorsport?: () => void;
 }
 
-export const F1ConstructorWorkshop: React.FC<F1ConstructorWorkshopProps> = ({ onBackToMotorsport }) => {
+export const F1ConstructorWorkshop: React.FC<F1ConstructorWorkshopProps> = memo(function F1ConstructorWorkshop({ onBackToMotorsport }) {
   const { activeStep } = useF1ConstructorStore();
 
   return (
@@ -38,8 +39,11 @@ export const F1ConstructorWorkshop: React.FC<F1ConstructorWorkshopProps> = ({ on
           <F1WorkshopNav />
           {onBackToMotorsport && (
             <button
-              onClick={onBackToMotorsport}
-              className="w-full py-2.5 px-4 rounded-xl bg-slate-900/80 hover:bg-slate-800 border border-slate-800 text-xs font-semibold text-slate-400 hover:text-slate-200 transition-all text-center"
+              onClick={() => {
+                playHMIClickSound();
+                onBackToMotorsport();
+              }}
+              className="w-full py-2.5 px-4 rounded-xl bg-slate-900/80 hover:bg-slate-800 border border-slate-800 text-xs font-semibold text-slate-400 hover:text-slate-200 transition-all text-center cursor-pointer"
             >
               ← Return to Motorsport Hub
             </button>
@@ -64,4 +68,4 @@ export const F1ConstructorWorkshop: React.FC<F1ConstructorWorkshopProps> = ({ on
       </div>
     </div>
   );
-};
+});

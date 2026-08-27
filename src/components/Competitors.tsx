@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   Gauge, Trophy, Zap, Weight, TrendingUp, Flag, DollarSign,
   Building2, Search, X, Crown, Target, ArrowUpDown, Info, Loader2,

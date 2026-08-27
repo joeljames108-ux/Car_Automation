@@ -11,19 +11,38 @@ export default defineConfig({
   build: {
     target: "es2022",
     cssCodeSplit: true,
+    minify: "esbuild",
+    assetsInlineLimit: 4096,
     rollupOptions: {
       output: {
-        manualChunks: {
-          "vendor-three-core": ["three"],
-          "vendor-three-fiber": ["@react-three/fiber", "@react-three/drei"],
-          "vendor-gltf": ["@gltf-transform/core", "@gltf-transform/extensions"],
-          "vendor-icons": ["lucide-react"],
-          "vendor-motion": ["framer-motion"],
-          "vendor-react": ["react", "react-dom"],
-          "vendor-state": ["zustand"],
+        manualChunks(id) {
+          if (id.includes("node_modules")) {
+            if (id.includes("three")) {
+              return "vendor-three-core";
+            }
+            if (id.includes("@react-three")) {
+              return "vendor-three-fiber";
+            }
+            if (id.includes("@gltf-transform")) {
+              return "vendor-gltf";
+            }
+            if (id.includes("lucide-react")) {
+              return "vendor-icons";
+            }
+            if (id.includes("framer-motion")) {
+              return "vendor-motion";
+            }
+            if (id.includes("react") || id.includes("react-dom") || id.includes("zustand")) {
+              return "vendor-react-core";
+            }
+            if (id.includes("@supabase")) {
+              return "vendor-supabase";
+            }
+          }
         },
       },
     },
     chunkSizeWarningLimit: 1200,
   },
 });
+

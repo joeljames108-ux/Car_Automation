@@ -5,11 +5,12 @@
 // brake rotor temperatures, and hybrid battery energy deployment.
 // ===================================================================
 
-import React, { useState } from "react";
+import React, { useState, memo } from "react";
 import { LineChart, ChartSeries } from "../ui/LineChart";
 import { Flag, Timer, Thermometer, Zap, ShieldAlert } from "lucide-react";
+import { playHMITabSound } from "../../utils/hmiSoundSynth";
 
-export const RaceTelemetryComparisonTool: React.FC = () => {
+export const RaceTelemetryComparisonTool: React.FC = memo(function RaceTelemetryComparisonTool() {
   const [activeTab, setActiveTab] = useState<"LAP_TIME" | "TIRE_TEMP" | "BRAKE_TEMP" | "HYBRID">("LAP_TIME");
 
   // Sample comparison dataset (Pro Driver vs Conservative Driver)
@@ -72,16 +73,22 @@ export const RaceTelemetryComparisonTool: React.FC = () => {
 
         <div className="flex items-center space-x-2 bg-slate-950 p-1 rounded-xl border border-slate-800">
           <button
-            onClick={() => setActiveTab("LAP_TIME")}
-            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
+            onClick={() => {
+              playHMITabSound();
+              setActiveTab("LAP_TIME");
+            }}
+            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
               activeTab === "LAP_TIME" ? "bg-blue-600 text-white shadow-md" : "text-slate-400 hover:text-white"
             }`}
           >
             LAP TIMES
           </button>
           <button
-            onClick={() => setActiveTab("TIRE_TEMP")}
-            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
+            onClick={() => {
+              playHMITabSound();
+              setActiveTab("TIRE_TEMP");
+            }}
+            className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
               activeTab === "TIRE_TEMP" ? "bg-blue-600 text-white shadow-md" : "text-slate-400 hover:text-white"
             }`}
           >
@@ -100,4 +107,4 @@ export const RaceTelemetryComparisonTool: React.FC = () => {
       </div>
     </div>
   );
-};
+});

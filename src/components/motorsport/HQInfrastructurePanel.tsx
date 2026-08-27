@@ -4,6 +4,7 @@
 import { useState, memo } from "react";
 import { Building2, Zap, Wind, Cpu, Gauge, Users, Wrench, Shield, CheckCircle } from "lucide-react";
 import { useCompany } from "../../state/CompanyContext";
+import { playHMIClickSound } from "../../utils/hmiSoundSynth";
 import type { MotorsportTeam } from "../../sim/types";
 
 const DEFAULT_BUILDINGS = [
@@ -26,6 +27,7 @@ export const HQInfrastructurePanel = memo(function HQInfrastructurePanel({ selec
 
   const handleUpgrade = (id: string, cost: number) => {
     if (availableFunds < cost) return;
+    playHMIClickSound();
     setBuildings(prev => prev.map(b => b.id === id ? { ...b, level: Math.min(b.maxLevel, b.level + 1) } : b));
     setUpgradedId(id);
     setTimeout(() => setUpgradedId(null), 2000);

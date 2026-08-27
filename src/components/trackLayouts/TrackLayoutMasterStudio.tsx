@@ -11,7 +11,7 @@
  * ============================================================================
  */
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, memo } from "react";
 import {
   Navigation,
   Flag,
@@ -34,8 +34,9 @@ import {
   CornerTelemetry,
   TrackGeometryData,
 } from "./trackLayoutSvgCatalog";
+import { playHMIClickSound, playHMITabSound } from "../../utils/hmiSoundSynth";
 
-export const TrackLayoutMasterStudio: React.FC = () => {
+export const TrackLayoutMasterStudio: React.FC = memo(function TrackLayoutMasterStudio() {
   const [selectedTrackId, setSelectedTrackId] = useState<TrackId>("spa");
   const [compareTrackId, setCompareTrackId] = useState<TrackId>("monza");
   const [selectedCorner, setSelectedCorner] = useState<CornerTelemetry | null>(null);
@@ -50,6 +51,7 @@ export const TrackLayoutMasterStudio: React.FC = () => {
   useEffect(() => {
     if (!isPlaying) return;
     const interval = setInterval(() => {
+      if (document.hidden) return;
       setGhostProgressPct((prev) => (prev + 1.2) % 100);
     }, 50);
     return () => clearInterval(interval);
@@ -86,6 +88,7 @@ export const TrackLayoutMasterStudio: React.FC = () => {
               <button
                 key={tId}
                 onClick={() => {
+                  playHMIClickSound();
                   setSelectedTrackId(tId);
                   setSelectedCorner(null);
                 }}
@@ -176,30 +179,39 @@ export const TrackLayoutMasterStudio: React.FC = () => {
           <div className="flex items-center justify-between bg-slate-900 p-1.5 rounded-xl border border-slate-800">
             <div className="flex items-center gap-1">
               <button
-                onClick={() => setActiveTab("inspector")}
-                className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-lg transition-all ${
+                onClick={() => {
+                  playHMITabSound();
+                  setActiveTab("inspector");
+                }}
+                className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-lg transition-all cursor-pointer ${
                   activeTab === "inspector"
                     ? "bg-cyan-500 text-slate-950 shadow-md shadow-cyan-500/30"
                     : "text-slate-400 hover:text-slate-200"
                 }`}
               >
-                <Navigation size={13} />
-                <span>Interactive Layout</span>
+                <Activity size={13} />
+                <span>Sector & Apex View</span>
               </button>
               <button
-                onClick={() => setActiveTab("heatmap")}
-                className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-lg transition-all ${
+                onClick={() => {
+                  playHMITabSound();
+                  setActiveTab("heatmap");
+                }}
+                className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-lg transition-all cursor-pointer ${
                   activeTab === "heatmap"
                     ? "bg-cyan-500 text-slate-950 shadow-md shadow-cyan-500/30"
                     : "text-slate-400 hover:text-slate-200"
                 }`}
               >
-                <Activity size={13} />
+                <Gauge size={13} />
                 <span>Speed Heatmap</span>
               </button>
               <button
-                onClick={() => setActiveTab("compare")}
-                className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-lg transition-all ${
+                onClick={() => {
+                  playHMITabSound();
+                  setActiveTab("compare");
+                }}
+                className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-lg transition-all cursor-pointer ${
                   activeTab === "compare"
                     ? "bg-cyan-500 text-slate-950 shadow-md shadow-cyan-500/30"
                     : "text-slate-400 hover:text-slate-200"
@@ -213,8 +225,11 @@ export const TrackLayoutMasterStudio: React.FC = () => {
             {/* Playback & Reset Controls */}
             <div className="flex items-center gap-2">
               <button
-                onClick={() => setIsPlaying(!isPlaying)}
-                className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold transition-all"
+                onClick={() => {
+                  playHMIClickSound();
+                  setIsPlaying(!isPlaying);
+                }}
+                className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold transition-all cursor-pointer"
               >
                 {isPlaying ? <Pause size={12} /> : <Play size={12} />}
                 <span>{isPlaying ? "Pause Ghost" : "Play Ghost"}</span>
@@ -455,4 +470,6 @@ export const TrackLayoutMasterStudio: React.FC = () => {
       </div>
     </div>
   );
-};
+});
+
+export default TrackLayoutMasterStudio;

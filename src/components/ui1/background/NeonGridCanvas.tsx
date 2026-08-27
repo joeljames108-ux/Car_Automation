@@ -13,34 +13,53 @@ export const NeonGridCanvas: React.FC = () => {
     let width = (canvas.width = window.innerWidth);
     let height = (canvas.height = window.innerHeight);
 
+    let offscreenCanvas: HTMLCanvasElement | null = null;
+    let offscreenCtx: CanvasRenderingContext2D | null = null;
+
+    const createGridPattern = (w: number, h: number) => {
+      offscreenCanvas = document.createElement("canvas");
+      offscreenCanvas.width = w;
+      offscreenCanvas.height = h;
+      offscreenCtx = offscreenCanvas.getContext("2d");
+      if (!offscreenCtx) return;
+
+      const gridSize = 64;
+      offscreenCtx.strokeStyle = "rgba(148, 163, 184, 0.05)";
+      offscreenCtx.lineWidth = 1;
+      offscreenCtx.beginPath();
+      for (let x = 0; x < w; x += gridSize) {
+        offscreenCtx.moveTo(x, 0);
+        offscreenCtx.lineTo(x, h);
+      }
+      for (let y = 0; y < h; y += gridSize) {
+        offscreenCtx.moveTo(0, y);
+        offscreenCtx.lineTo(w, y);
+      }
+      offscreenCtx.stroke();
+    };
+
+    createGridPattern(width, height);
+
     const onResize = () => {
       if (!canvas) return;
       width = canvas.width = window.innerWidth;
       height = canvas.height = window.innerHeight;
+      createGridPattern(width, height);
     };
     window.addEventListener("resize", onResize);
 
     // Particle nodes for ambient floating telemetry motes
     const isMobile = window.innerWidth < 768;
-    const count = isMobile ? 12 : 20;
+    const count = isMobile ? 10 : 16;
     const particles = Array.from({ length: count }, () => ({
       x: Math.random() * width,
       y: Math.random() * height,
-      vx: (Math.random() - 0.5) * 0.3,
-      vy: (Math.random() - 0.5) * 0.3,
+      vx: (Math.random() - 0.5) * 0.25,
+      vy: (Math.random() - 0.5) * 0.25,
       size: Math.random() * 1.4 + 0.8,
       color: Math.random() > 0.35 ? "#7f9db8" : "#9d8fc4",
       alpha: Math.random() * 0.4 + 0.12,
     }));
-
-    let mouseX = width / 2;
-    let mouseY = height / 2;
-
-    const onMouseMove = (e: MouseEvent) => {
-      mouseX = e.clientX;
-      mouseY = e.clientY;
-    };
-    window.addEventListener("mousemove", onMouseMove, { passive: true });
 
     let isVisible = !document.hidden;
     const onVisibilityChange = () => {
@@ -56,21 +75,10 @@ export const NeonGridCanvas: React.FC = () => {
       if (!isVisible) return;
       ctx.clearRect(0, 0, width, height);
 
-      // Faint steel grid lines
-      const gridSize = 64;
-      ctx.strokeStyle = "rgba(148, 163, 184, 0.05)";
-      ctx.lineWidth = 1;
-
-      ctx.beginPath();
-      for (let x = 0; x < width; x += gridSize) {
-        ctx.moveTo(x, 0);
-        ctx.lineTo(x, height);
+      // Draw pre-cached grid instantly
+      if (offscreenCanvas) {
+        ctx.drawImage(offscreenCanvas, 0, 0);
       }
-      for (let y = 0; y < height; y += gridSize) {
-        ctx.moveTo(0, y);
-        ctx.lineTo(width, y);
-      }
-      ctx.stroke();
 
       // Render floating sci-fi particle nodes
       for (let i = 0; i < particles.length; i++) {
@@ -94,12 +102,12 @@ export const NeonGridCanvas: React.FC = () => {
         for (let j = i + 1; j < particles.length; j++) {
           const p2 = particles[j];
           const dist = Math.hypot(p.x - p2.x, p.y - p2.y);
-          if (dist < 120) {
+          if (dist < 110) {
             ctx.beginPath();
             ctx.moveTo(p.x, p.y);
             ctx.lineTo(p2.x, p2.y);
             ctx.strokeStyle = p.color;
-            ctx.globalAlpha = (1 - dist / 120) * 0.08;
+            ctx.globalAlpha = (1 - dist / 110) * 0.08;
             ctx.stroke();
           }
         }
@@ -113,7 +121,6 @@ export const NeonGridCanvas: React.FC = () => {
 
     return () => {
       window.removeEventListener("resize", onResize);
-      window.removeEventListener("mousemove", onMouseMove);
       document.removeEventListener("visibilitychange", onVisibilityChange);
       cancelAnimationFrame(animId);
     };

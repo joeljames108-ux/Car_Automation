@@ -2,12 +2,13 @@
 // F1 CONSTRUCTOR EXPERIENCE — AERODYNAMICS & GROUND EFFECT STUDIO (UPGRADED)
 // ============================================================================
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, memo } from "react";
 import { Wind, Sliders, Layers, CheckCircle2, AlertTriangle, Compass, HelpCircle, Save, GitCompare } from "lucide-react";
 import { useF1ConstructorStore } from "../../../sim/f1/state/f1ConstructorStore";
 import type { AeroPackageLevel, FrontWingConcept, SidepodPhilosophy, DiffuserStrakeLayout } from "../../../sim/f1/types/f1Enums";
+import { playHMIClickSound } from "../../../utils/hmiSoundSynth";
 
-export const AerodynamicsStudio: React.FC = () => {
+export const AerodynamicsStudio: React.FC = memo(function AerodynamicsStudio() {
   const { car, updateAero } = useF1ConstructorStore();
   const aero = car.aero;
 
@@ -77,7 +78,10 @@ export const AerodynamicsStudio: React.FC = () => {
 
           {/* Compare Baseline Toggle */}
           <button
-            onClick={() => setShowCompareBaseline(!showCompareBaseline)}
+            onClick={() => {
+              playHMIClickSound();
+              setShowCompareBaseline(!showCompareBaseline);
+            }}
             className={`px-3 py-1.5 rounded-xl border flex items-center gap-1.5 text-xs font-bold transition-all cursor-pointer ${
               showCompareBaseline
                 ? "bg-cyan-500/20 text-cyan-300 border-cyan-500/40"
@@ -282,4 +286,4 @@ export const AerodynamicsStudio: React.FC = () => {
       </div>
     </div>
   );
-};
+});

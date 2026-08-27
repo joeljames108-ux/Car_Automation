@@ -2,14 +2,15 @@
 // F1 CONSTRUCTOR EXPERIENCE — BRAKES & HYDRAULICS STUDIO WITH 3D MODEL
 // ============================================================================
 
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, memo } from "react";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { Disc, Flame, Sliders, Shield, Box, Activity } from "lucide-react";
 import { useF1ConstructorStore } from "../../../sim/f1/state/f1ConstructorStore";
 import type { BrakeDiscHolePattern } from "../../../sim/f1/types/f1Enums";
+import { playHMIClickSound } from "../../../utils/hmiSoundSynth";
 
-export const BrakesStudio: React.FC = () => {
+export const BrakesStudio: React.FC = memo(function BrakesStudio() {
   const { car, updateBrakes } = useF1ConstructorStore();
   const b = car.brakes;
 
@@ -203,8 +204,14 @@ export const BrakesStudio: React.FC = () => {
           </label>
           <select
             value={b.frontDiscHoleCount}
-            onChange={(e) => updateBrakes({ frontDiscHoleCount: e.target.value as BrakeDiscHolePattern, rearDiscHoleCount: e.target.value as BrakeDiscHolePattern })}
-            className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-red-500"
+            onChange={(e) => {
+              playHMIClickSound();
+              updateBrakes({
+                frontDiscHoleCount: e.target.value as BrakeDiscHolePattern,
+                rearDiscHoleCount: e.target.value as BrakeDiscHolePattern,
+              });
+            }}
+            className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-red-500 cursor-pointer"
           >
             <option value="600_HOLE_MEDIUM_COOLING">600 Holes (Low Drag / Silverstone)</option>
             <option value="1050_HOLE_HIGH_VENT">1050 Holes (Standard F1 GP)</option>
@@ -289,8 +296,11 @@ export const BrakesStudio: React.FC = () => {
           </label>
           <select
             value={b.brakePadCompound}
-            onChange={(e) => updateBrakes({ brakePadCompound: e.target.value as any })}
-            className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-red-500"
+            onChange={(e) => {
+              playHMIClickSound();
+              updateBrakes({ brakePadCompound: e.target.value as any });
+            }}
+            className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-red-500 cursor-pointer"
           >
             <option value="CARBONE_INDUSTRIE_CCR">Carbone Industrie CCR (Linear Modulation)</option>
             <option value="BREMBO_HIGH_FRICTION_CERAMIC">Brembo High-Initial-Bite Ceramic Matrix</option>
@@ -308,8 +318,11 @@ export const BrakesStudio: React.FC = () => {
           </label>
           <select
             value={b.brakeFluidType}
-            onChange={(e) => updateBrakes({ brakeFluidType: e.target.value as any })}
-            className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-red-500"
+            onChange={(e) => {
+              playHMIClickSound();
+              updateBrakes({ brakeFluidType: e.target.value as any });
+            }}
+            className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-red-500 cursor-pointer"
           >
             <option value="SILICONE_ESTER_350C">Silicone Ester Racing Fluid (350°C Dry Boiling)</option>
             <option value="DOT_5_1_RACING">Castrol SRF DOT 5.1 Synthetic</option>
@@ -321,5 +334,5 @@ export const BrakesStudio: React.FC = () => {
       </div>
     </div>
   );
-};
+});
 

@@ -2,11 +2,12 @@
 // F1 CONSTRUCTOR EXPERIENCE — VIRTUAL WIND TUNNEL & CFD LAB STUDIO
 // ============================================================================
 
-import React, { useState } from "react";
+import React, { useState, useMemo, memo } from "react";
 import { Gauge, Wind, Activity, Zap, Play, RotateCw } from "lucide-react";
 import { useF1ConstructorStore } from "../../../sim/f1/state/f1ConstructorStore";
+import { playHMIClickSound } from "../../../utils/hmiSoundSynth";
 
-export const WindTunnelStudio: React.FC = () => {
+export const WindTunnelStudio: React.FC = memo(function WindTunnelStudio() {
   const { car } = useF1ConstructorStore();
   const aero = car.aero;
 
@@ -14,9 +15,14 @@ export const WindTunnelStudio: React.FC = () => {
   const [tunnelRunning, setTunnelRunning] = useState(false);
   const [smokeStreams, setSmokeStreams] = useState(true);
 
-  const liftToDragRatio = Number((aero.totalDownforceAt250KmhKg / aero.totalDragAt250KmhKg).toFixed(2));
-  const dynamicDownforce = Math.round(aero.totalDownforceAt250KmhKg * Math.pow(windSpeedKmh / 250, 2));
-  const dynamicDrag = Math.round(aero.totalDragAt250KmhKg * Math.pow(windSpeedKmh / 250, 2));
+  const { liftToDragRatio, dynamicDownforce, dynamicDrag } = useMemo(() => {
+    const speedRatioSq = Math.pow(windSpeedKmh / 250, 2);
+    return {
+      liftToDragRatio: Number((aero.totalDownforceAt250KmhKg / aero.totalDragAt250KmhKg).toFixed(2)),
+      dynamicDownforce: Math.round(aero.totalDownforceAt250KmhKg * speedRatioSq),
+      dynamicDrag: Math.round(aero.totalDragAt250KmhKg * speedRatioSq),
+    };
+  }, [aero, windSpeedKmh]);
 
   return (
     <div className="space-y-6 animate-fade-in-up">
@@ -93,8 +99,11 @@ export const WindTunnelStudio: React.FC = () => {
 
         <div className="flex flex-wrap gap-2 pt-2 border-t border-slate-800/80">
           <button
-            onClick={() => setTunnelRunning(!tunnelRunning)}
-            className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all ${
+            onClick={() => {
+              playHMIClickSound();
+              setTunnelRunning(!tunnelRunning);
+            }}
+            className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
               tunnelRunning
                 ? "bg-cyan-500 text-slate-950 shadow-lg shadow-cyan-500/30"
                 : "bg-slate-800 hover:bg-slate-700 text-slate-200"
@@ -105,8 +114,11 @@ export const WindTunnelStudio: React.FC = () => {
           </button>
 
           <button
-            onClick={() => setSmokeStreams(!smokeStreams)}
-            className={`px-3 py-2 rounded-xl text-xs font-semibold border transition-all ${
+            onClick={() => {
+              playHMIClickSound();
+              setSmokeStreams(!smokeStreams);
+            }}
+            className={`px-3 py-2 rounded-xl text-xs font-semibold border transition-all cursor-pointer ${
               smokeStreams
                 ? "bg-cyan-500/15 border-cyan-500/40 text-cyan-300"
                 : "bg-slate-800 border-slate-700 text-slate-400 hover:text-slate-200"
@@ -118,4 +130,4 @@ export const WindTunnelStudio: React.FC = () => {
       </div>
     </div>
   );
-};
+});

@@ -87,6 +87,8 @@ export interface ModularStructureTelemetry {
   nodes: ModularSubsystemNode[];
 }
 
+export type ModularStructureResult = ModularStructureTelemetry;
+
 // Material density & strength multipliers relative to standard cast steel
 const MATERIAL_GRADE_FACTORS: Record<MaterialGrade, { massMult: number; stiffnessMult: number; yieldMpa: number }> = {
   cast: { massMult: 1.05, stiffnessMult: 0.90, yieldMpa: 310 },
@@ -110,6 +112,9 @@ const ARCHITECTURE_BASE_RIGIDITY: Record<ChassisArchitectureClass, { baseTorsion
   heavy_duty_ladder_frame: { baseTorsionKNmDeg: 19.5, baseBendingKNm: 28.0 },
 };
 
+const structureCache = new Map<string, ModularStructureTelemetry>();
+const MAX_STRUCTURE_CACHE = 60;
+
 export class ModularStructureEngine {
   /**
    * Solves all mass, center of gravity, corner load, kinematics, and FEA stress metrics
@@ -124,6 +129,17 @@ export class ModularStructureEngine {
     trackWidthRearMm: number,
     rideHeightMm: number
   ): ModularStructureTelemetry {
+    const gradesKey = Object.entries(materialGrades || {})
+      .sort(([a], [b]) => a.localeCompare(b))
+      .map(([k, v]) => `${k}:${v}`)
+      .join(";");
+    const stagesKey = (installedStages || []).slice().sort().join(",");
+    const cacheKey = `${chassis?.id || "chassis"}_${stagesKey}_${gradesKey}_${wheelbaseMm}_${trackWidthFrontMm}_${trackWidthRearMm}_${rideHeightMm}`;
+
+    if (structureCache.has(cacheKey)) {
+      return structureCache.get(cacheKey)!;
+    }
+
     const wbM = wheelbaseMm / 1000;
     const tfM = trackWidthFrontMm / 1000;
     const trM = trackWidthRearMm / 1000;
@@ -282,7 +298,7 @@ export class ModularStructureEngine {
       torsionalStiffnessKNmDeg
     );
 
-    return {
+    const result: ModularStructureTelemetry = {
       totalMassKg: Math.round(totalMassKg * 10) / 10,
       sprungMassKg: Math.round(sprungMassKg * 10) / 10,
       unsprungMassKg: Math.round(unsprungMassKg * 10) / 10,
@@ -327,6 +343,14 @@ export class ModularStructureEngine {
       feaHotspots,
       nodes,
     };
+
+    if (structureCache.size >= MAX_STRUCTURE_CACHE) {
+      const firstKey = structureCache.keys().next().value;
+      if (typeof firstKey === "string") structureCache.delete(firstKey);
+    }
+    structureCache.set(cacheKey, result);
+
+    return result;
   }
 
   /**

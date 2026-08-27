@@ -321,4 +321,24 @@ export class ModularStructureVisualizer {
       }
     });
   }
+
+  /**
+   * Disposes all geometry and materials in a telemetry overlay group.
+   */
+  public static disposeTelemetryGroup(group: THREE.Group | null): void {
+    if (!group) return;
+    group.traverse((child) => {
+      if ((child as THREE.Mesh).isMesh) {
+        const mesh = child as THREE.Mesh;
+        if (mesh.geometry) mesh.geometry.dispose();
+        if (mesh.material) {
+          const mats = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
+          mats.forEach((m) => m.dispose());
+        }
+      }
+    });
+    while (group.children.length > 0) {
+      group.remove(group.children[0]);
+    }
+  }
 }

@@ -5,7 +5,7 @@
 // compounds, pit stops, and lap times with color-coded sector information.
 // ============================================================================
 
-import React, { useState } from 'react';
+import React, { useState, memo } from 'react';
 import { TIRE_COMPOUNDS } from '../../sim/tires/pacejkaTireModel';
 
 interface TimingEntry {
@@ -43,9 +43,9 @@ const SECTOR_COLORS = {
   yellow: 'text-yellow-400 bg-yellow-500/10',
 };
 
-export const GapTower: React.FC<GapTowerProps> = ({
+export const GapTower: React.FC<GapTowerProps> = memo(function GapTower({
   entries, highlightDriver, showSectors = true,
-}) => {
+}) {
   const [sortMode, setSortMode] = useState<'position' | 'gap' | 'lastLap'>('position');
 
   const sorted = [...entries].sort((a, b) => {
@@ -173,4 +173,4 @@ export const GapTower: React.FC<GapTowerProps> = ({
       </div>
     </div>
   );
-};
+});

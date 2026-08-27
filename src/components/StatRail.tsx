@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect, useMemo, memo } from "react";
+import React, { useState, useRef, useEffect, useMemo, memo } from "react";
 import { createPortal } from "react-dom";
 import { Gauge, Zap, Weight, Timer, TrendingUp, DollarSign, Battery, HelpCircle, Info, Activity, Disc, Wind, Flag, Fuel, ShieldCheck, Maximize2, ArrowLeft, X } from "lucide-react";
 import { useDesign } from "../state/DesignContext";

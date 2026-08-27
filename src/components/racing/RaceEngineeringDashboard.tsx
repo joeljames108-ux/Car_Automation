@@ -6,7 +6,7 @@
 // in a responsive multi-column layout with warm amber theme.
 // ============================================================================
 
-import React, { useState, useEffect, useCallback, memo } from 'react';
+import React, { useState, useEffect, useRef, useCallback, memo } from 'react';
 import { LiveTelemetrySimulator, TelemetryFrame } from '../../sim/telemetry/liveTelemetrySimulator';
 import { PacejkaTireModel, TIRE_COMPOUNDS } from '../../sim/tires/pacejkaTireModel';
 import { RaceWeatherSystem, WeatherState } from '../../sim/weather/raceWeatherSystem';
@@ -18,6 +18,7 @@ import { RaceEngineerAI, EngineerMessage } from '../../sim/ai/raceEngineerAI';
 import { CIRCUIT_DATABASE } from '../../sim/track/circuitDatabase';
 import { DynamicAeroModel } from '../../sim/aerodynamics/dynamicAeroModel';
 import { BrakeThermalSimulator } from '../../sim/thermal/brakeThermalSimulator';
+import { playHMIClickSound, playHMITabSound } from '../../utils/hmiSoundSynth';
 
 interface RaceEngineeringDashboardProps {
   className?: string;
@@ -60,6 +61,11 @@ export const RaceEngineeringDashboard: React.FC<RaceEngineeringDashboardProps> =
   const [strategies, setStrategies] = useState<RaceStrategy[]>([]);
   const [telemetryHistory, setTelemetryHistory] = useState<TelemetryFrame[]>([]);
   const [raceTime, setRaceTime] = useState(0);
+  const raceTimeRef = useRef(0);
+  const currentLapRef = useRef(currentLap);
+  useEffect(() => {
+    currentLapRef.current = currentLap;
+  }, [currentLap]);
   const [flagColor, setFlagColor] = useState<FlagColor>('green');
 
   const track = CIRCUIT_DATABASE.silverstone;
@@ -76,8 +82,9 @@ export const RaceEngineeringDashboard: React.FC<RaceEngineeringDashboardProps> =
     if (!isRunning) return;
     const interval = setInterval(() => {
       if (document.hidden) return;
-      setRaceTime(t => t + 1);
-      const lapProgress = (raceTime % 90) / 90;
+      raceTimeRef.current += 1;
+      setRaceTime(raceTimeRef.current);
+      const lapProgress = (raceTimeRef.current % 90) / 90;
 
       // Generate telemetry
       const frame = telemetry.generateFrame(lapProgress, track.length);
@@ -103,8 +110,9 @@ export const RaceEngineeringDashboard: React.FC<RaceEngineeringDashboardProps> =
       fuel.consumeLap(frame.throttle, frame.rpm, track.altitude);
 
       // Race control
-      if (lapProgress > 0.95 && currentLap < totalLaps) {
-        const newLap = currentLap + 1;
+      if (lapProgress > 0.95 && currentLapRef.current < totalLaps) {
+        const newLap = currentLapRef.current + 1;
+        currentLapRef.current = newLap;
         setCurrentLap(newLap);
         tireFL.newLap(); tireFR.newLap(); tireRL.newLap(); tireRR.newLap();
         raceControl.updateLap(newLap, new Map());
@@ -115,7 +123,7 @@ export const RaceEngineeringDashboard: React.FC<RaceEngineeringDashboardProps> =
 
       // AI Engineer
       const aiMessages = engineer.analyze({
-        currentLap, totalLaps, position, totalCars: 20,
+        currentLap: currentLapRef.current, totalLaps, position, totalCars: 20,
         tireCompound: 'medium', tireWear: tireFL.getState().wear,
         tireTemp: tireFL.getState().temperature,
         fuelRemaining: fuel.getFuelLoad(),
@@ -135,11 +143,12 @@ export const RaceEngineeringDashboard: React.FC<RaceEngineeringDashboardProps> =
     }, 100);
 
     return () => clearInterval(interval);
-  }, [isRunning, raceTime, currentLap]);
+  }, [isRunning]);
 
   const [fuelState, setFuelState] = useState(fuel.getState());
 
   const toggleSimulation = useCallback(() => {
+    playHMIClickSound();
     setIsRunning(prev => !prev);
   }, []);
 
@@ -183,7 +192,10 @@ export const RaceEngineeringDashboard: React.FC<RaceEngineeringDashboardProps> =
         {/* Tab Bar */}
         <div className="flex items-center gap-1">
           {tabs.map(tab => (
-            <button key={tab.id} onClick={() => setActiveTab(tab.id)}
+            <button key={tab.id} onClick={() => {
+              playHMITabSound();
+              setActiveTab(tab.id);
+            }}
               className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                 activeTab === tab.id
                   ? 'bg-amber-500 text-amber-950 shadow-md'

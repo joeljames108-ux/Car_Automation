@@ -2,31 +2,33 @@
 // F1 CONSTRUCTOR EXPERIENCE — POWER UNIT DYNO BENCH STUDIO
 // ============================================================================
 
-import React, { useState } from "react";
+import React, { useState, useMemo, memo } from "react";
 import { Zap, Activity, Cpu, Flame, Volume2, Play } from "lucide-react";
 import { useF1ConstructorStore } from "../../../sim/f1/state/f1ConstructorStore";
 import { PowerTorqueCurveChart } from "../../ui/PowerTorqueCurveChart";
 
-export const DynoBenchStudio: React.FC = () => {
+export const DynoBenchStudio: React.FC = memo(function DynoBenchStudio() {
   const { car, engineRpm, setEngineRpm, isEngineRevving, setIsEngineRevving } = useF1ConstructorStore();
   const pu = car.powerUnit;
 
-  // Generate Dyno Points for F1 V6 Turbo Hybrid
-  const dynoPoints = Array.from({ length: 25 }, (_, i) => {
-    const rpm = 3500 + i * 500;
-    // Power Curve calculation (Peak power at 12,500 - 14,000 RPM)
-    const normalizedRpm = (rpm - 3500) / (15000 - 3500);
-    const icePower = car.computedIcePeakHp * Math.sin(normalizedRpm * Math.PI * 0.78);
-    const ersPower = car.computedErsPeakHp; // Flat 160 HP
-    const totalHp = Math.round(icePower + (rpm > 5500 ? ersPower : ersPower * 0.6));
-    const torqueNm = Math.round((totalHp * 7127) / rpm);
+  // Generate Dyno Points for F1 V6 Turbo Hybrid (memoized against computed power)
+  const dynoPoints = useMemo(() => {
+    return Array.from({ length: 25 }, (_, i) => {
+      const rpm = 3500 + i * 500;
+      // Power Curve calculation (Peak power at 12,500 - 14,000 RPM)
+      const normalizedRpm = (rpm - 3500) / (15000 - 3500);
+      const icePower = car.computedIcePeakHp * Math.sin(normalizedRpm * Math.PI * 0.78);
+      const ersPower = car.computedErsPeakHp; // Flat 160 HP
+      const totalHp = Math.round(icePower + (rpm > 5500 ? ersPower : ersPower * 0.6));
+      const torqueNm = Math.round((totalHp * 7127) / rpm);
 
-    return {
-      rpm,
-      power: Math.max(220, totalHp),
-      torque: Math.max(180, Math.min(850, torqueNm)),
-    };
-  });
+      return {
+        rpm,
+        power: Math.max(220, totalHp),
+        torque: Math.max(180, Math.min(850, torqueNm)),
+      };
+    });
+  }, [car.computedIcePeakHp, car.computedErsPeakHp]);
 
   return (
     <div className="space-y-6 animate-fade-in-up">
@@ -93,4 +95,4 @@ export const DynoBenchStudio: React.FC = () => {
       </div>
     </div>
   );
-};
+});

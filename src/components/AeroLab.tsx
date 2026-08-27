@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import {
   Wind, CarFront, Layers3, Combine, Zap, Plane, Thermometer, Disc3,
   Video, BarChart3, Gauge, TrendingUp, CircuitBoard, Bot, Sparkles, Box,

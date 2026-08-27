@@ -2,12 +2,13 @@
 // F1 CONSTRUCTOR EXPERIENCE — MONOCOQUE & SURVIVAL CELL STUDIO
 // ============================================================================
 
-import React from "react";
+import React, { memo } from "react";
 import { Shield, Scale, Layers, CheckCircle2, AlertTriangle } from "lucide-react";
 import { useF1ConstructorStore } from "../../../sim/f1/state/f1ConstructorStore";
 import type { CarbonFiberGrade, ResinMatrixType, CoreMaterialType } from "../../../sim/f1/types/f1Enums";
+import { playHMIClickSound } from "../../../utils/hmiSoundSynth";
 
-export const MonocoqueStudio: React.FC = () => {
+export const MonocoqueStudio: React.FC = memo(function MonocoqueStudio() {
   const { car, updateMonocoque } = useF1ConstructorStore();
   const m = car.monocoque;
 
@@ -47,8 +48,11 @@ export const MonocoqueStudio: React.FC = () => {
           </label>
           <select
             value={m.carbonFiberGrade}
-            onChange={(e) => updateMonocoque({ carbonFiberGrade: e.target.value as CarbonFiberGrade })}
-            className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-cyan-500"
+            onChange={(e) => {
+              playHMIClickSound();
+              updateMonocoque({ carbonFiberGrade: e.target.value as CarbonFiberGrade });
+            }}
+            className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-cyan-500 cursor-pointer"
           >
             <option value="T300_STANDARD">T300 Standard (230 GPa / 3.5 GPa)</option>
             <option value="T700_INTERMEDIATE">T700 Intermediate (230 GPa / 4.9 GPa)</option>
@@ -70,8 +74,11 @@ export const MonocoqueStudio: React.FC = () => {
           </label>
           <select
             value={m.coreMaterial}
-            onChange={(e) => updateMonocoque({ coreMaterial: e.target.value as CoreMaterialType })}
-            className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-cyan-500"
+            onChange={(e) => {
+              playHMIClickSound();
+              updateMonocoque({ coreMaterial: e.target.value as CoreMaterialType });
+            }}
+            className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-cyan-500 cursor-pointer"
           >
             <option value="NOMEX_HONEYCOMB_HRH10">Nomex Honeycomb HRH-10 (48 kg/m³)</option>
             <option value="ALUMINUM_5056_HONEYCOMB">Aluminum 5056 Honeycomb (Crush Resistant)</option>
@@ -91,8 +98,11 @@ export const MonocoqueStudio: React.FC = () => {
           </label>
           <select
             value={m.haloMaterial}
-            onChange={(e) => updateMonocoque({ haloMaterial: e.target.value as any })}
-            className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-cyan-500"
+            onChange={(e) => {
+              playHMIClickSound();
+              updateMonocoque({ haloMaterial: e.target.value as any });
+            }}
+            className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-cyan-500 cursor-pointer"
           >
             <option value="TITANIUM_GRADE_5_DMLS">Grade 5 Titanium (3D DMLS Laser Sintered)</option>
             <option value="TITANIUM_FORGED_EXTRUDED">Forged & Extruded Tubular Titanium</option>
@@ -102,8 +112,11 @@ export const MonocoqueStudio: React.FC = () => {
               type="checkbox"
               id="haloAero"
               checked={m.haloFairingAeroRamp}
-              onChange={(e) => updateMonocoque({ haloFairingAeroRamp: e.target.checked })}
-              className="accent-cyan-400"
+              onChange={(e) => {
+                playHMIClickSound();
+                updateMonocoque({ haloFairingAeroRamp: e.target.checked });
+              }}
+              className="accent-cyan-400 cursor-pointer"
             />
             <label htmlFor="haloAero" className="text-xs text-slate-300 cursor-pointer">
               Add Halo Micro-Aero Fairing (Reduces helmet buffet)
@@ -181,4 +194,4 @@ export const MonocoqueStudio: React.FC = () => {
       </div>
     </div>
   );
-};
+});

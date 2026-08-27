@@ -3,7 +3,7 @@
 // Interactive Multi-Agent Control Suite with One-Click Auto-Tune, QA Diagnostics & Chat
 // ===================================================================
 
-import { useState, useMemo } from "react";
+import React, { useState, useMemo } from "react";
 import {
   Bot,
   Zap,

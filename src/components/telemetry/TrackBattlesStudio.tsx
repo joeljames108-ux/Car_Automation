@@ -10,7 +10,7 @@
  * ============================================================================
  */
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, memo } from "react";
 import {
   Trophy,
   Flag,
@@ -32,6 +32,7 @@ import {
   CircuitId,
   VehicleTelemetrySpecs,
 } from "../../sim/telemetry/trackBattlesTelemetryEngine";
+import { playHMIClickSound } from "../../utils/hmiSoundSynth";
 
 const CAR_A_DEFAULT: VehicleTelemetrySpecs = {
   name: "Apex Spec-R Hypercar (Current Build)",
@@ -51,7 +52,7 @@ const CAR_B_DEFAULT: VehicleTelemetrySpecs = {
   tireGripCoeff: 1.42,
 };
 
-export const TrackBattlesStudio: React.FC = () => {
+export const TrackBattlesStudio: React.FC = memo(function TrackBattlesStudio() {
   const [circuitId, setCircuitId] = useState<CircuitId>("nurburgring");
   const [carA, setCarA] = useState<VehicleTelemetrySpecs>(CAR_A_DEFAULT);
   const [carB, setCarB] = useState<VehicleTelemetrySpecs>(CAR_B_DEFAULT);
@@ -62,6 +63,20 @@ export const TrackBattlesStudio: React.FC = () => {
     () => TrackBattlesTelemetryEngine.solveBattle(circuitId, carA, carB),
     [circuitId, carA, carB]
   );
+
+  React.useEffect(() => {
+    if (!isPlaying) return;
+    const interval = setInterval(() => {
+      setPlaybackFrameIdx((prev) => {
+        if (prev >= results.telemetryFrames.length - 1) {
+          setIsPlaying(false);
+          return 0;
+        }
+        return prev + 1;
+      });
+    }, 50);
+    return () => clearInterval(interval);
+  }, [isPlaying, results.telemetryFrames.length]);
 
   const activeFrame = results.telemetryFrames[playbackFrameIdx] || results.telemetryFrames[0];
 
@@ -97,6 +112,7 @@ export const TrackBattlesStudio: React.FC = () => {
               <button
                 key={cId}
                 onClick={() => {
+                  playHMIClickSound();
                   setCircuitId(cId);
                   setPlaybackFrameIdx(0);
                 }}
@@ -301,8 +317,36 @@ export const TrackBattlesStudio: React.FC = () => {
                 </div>
               </div>
 
-              {/* Playback Scrubber Control */}
-              <div className="pt-2">
+              {/* Playback Controls & Scrubber */}
+              <div className="pt-2 flex flex-col gap-2">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={() => {
+                        playHMIClickSound();
+                        setIsPlaying(!isPlaying);
+                      }}
+                      className="flex items-center gap-1 px-3 py-1 bg-emerald-500 hover:bg-emerald-400 text-slate-950 rounded-lg text-xs font-bold transition-all shadow-md shadow-emerald-500/20 cursor-pointer"
+                    >
+                      {isPlaying ? <Pause size={12} /> : <Play size={12} />}
+                      <span>{isPlaying ? "PAUSE" : "PLAY"}</span>
+                    </button>
+                    <button
+                      onClick={() => {
+                        playHMIClickSound();
+                        setIsPlaying(false);
+                        setPlaybackFrameIdx(0);
+                      }}
+                      className="p-1 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg transition-all cursor-pointer"
+                      title="Reset to Lap Start"
+                    >
+                      <RotateCcw size={13} />
+                    </button>
+                  </div>
+                  <span className="text-[11px] font-mono text-slate-400">
+                    Frame: <strong className="text-white">{playbackFrameIdx + 1}</strong> / {results.telemetryFrames.length}
+                  </span>
+                </div>
                 <input
                   type="range"
                   min="0"
@@ -318,4 +362,6 @@ export const TrackBattlesStudio: React.FC = () => {
       </div>
     </div>
   );
-};
+});
+
+export default TrackBattlesStudio;

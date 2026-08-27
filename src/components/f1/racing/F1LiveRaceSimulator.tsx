@@ -11,6 +11,7 @@ import { useF1AssemblyStore } from "../../../sim/f1/state/f1AssemblyStore";
 import { type F1Circuit } from "../../../sim/f1/season/f1Calendar";
 import { type F1RaceWeekendSetup } from "../garage/F1GarageSetupStudio";
 import { F1_RIVAL_TEAMS } from "../../../sim/f1/season/f1RivalTeams";
+import { playHMIClickSound } from "../../../utils/hmiSoundSynth";
 import {
   Flag, Trophy, Activity, Zap, Flame, RotateCcw,
   Award, ArrowRight, Gauge, Play, Pause, FastForward, CheckCircle2,
@@ -314,6 +315,7 @@ const F1LiveRaceSimulatorComponent: React.FC<F1LiveRaceSimulatorProps> = ({
   const playerPosition = leaderboard.find((e) => e.isPlayer)?.position || 1;
 
   const handleBoxToggle = () => {
+    playHMIClickSound();
     const nextState = !boxThisLap;
     setBoxThisLap(nextState);
     if (nextState) {
@@ -353,17 +355,23 @@ const F1LiveRaceSimulatorComponent: React.FC<F1LiveRaceSimulatorProps> = ({
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-1 bg-zinc-900 border border-white/10 rounded-xl p-1">
             <button
-              onClick={() => setIsPlaying(!isPlaying)}
+              onClick={() => {
+                playHMIClickSound();
+                setIsPlaying(!isPlaying);
+              }}
               disabled={isRaceFinished}
-              className="p-1.5 rounded-lg bg-cyan-500/20 text-cyan-300 hover:bg-cyan-500/30 text-xs font-bold transition-all"
+              className="p-1.5 rounded-lg bg-cyan-500/20 text-cyan-300 hover:bg-cyan-500/30 text-xs font-bold transition-all cursor-pointer"
             >
               {isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
             </button>
             {([1, 2, 4] as const).map((speed) => (
               <button
                 key={speed}
-                onClick={() => setPlaybackSpeed(speed)}
-                className={`px-2.5 py-1 rounded-lg text-xs font-bold font-mono transition-all ${
+                onClick={() => {
+                  playHMIClickSound();
+                  setPlaybackSpeed(speed);
+                }}
+                className={`px-2.5 py-1 rounded-lg text-xs font-bold font-mono transition-all cursor-pointer ${
                   playbackSpeed === speed ? "bg-cyan-500 text-black font-black" : "text-zinc-400 hover:text-white"
                 }`}
               >
@@ -373,7 +381,10 @@ const F1LiveRaceSimulatorComponent: React.FC<F1LiveRaceSimulatorProps> = ({
           </div>
 
           <button
-            onClick={onExitSession}
+            onClick={() => {
+              playHMIClickSound();
+              onExitSession?.();
+            }}
             className="px-4 py-2 rounded-xl bg-zinc-900 border border-white/20 text-xs font-bold text-zinc-300 hover:text-white transition-all cursor-pointer"
           >
             Exit Session
@@ -473,7 +484,10 @@ const F1LiveRaceSimulatorComponent: React.FC<F1LiveRaceSimulatorProps> = ({
                 </label>
                 <select
                   value={nextPitCompound}
-                  onChange={(e) => setNextPitCompound(e.target.value as any)}
+                  onChange={(e) => {
+                    playHMIClickSound();
+                    setNextPitCompound(e.target.value as any);
+                  }}
                   className="w-full bg-zinc-900 text-xs font-bold text-white border border-white/20 rounded-lg p-1.5 outline-none cursor-pointer"
                 >
                   <option value="SOFT">SOFT (Fastest, High Deg)</option>
@@ -491,6 +505,7 @@ const F1LiveRaceSimulatorComponent: React.FC<F1LiveRaceSimulatorProps> = ({
                 <select
                   value={ersMode}
                   onChange={(e) => {
+                    playHMIClickSound();
                     const newMode = e.target.value as any;
                     setErsMode(newMode);
                     addRadioMessage("ENGINEER", `ERS Deployment mode changed to ${newMode.replace("_", " ")}`, "INFO");
@@ -512,6 +527,7 @@ const F1LiveRaceSimulatorComponent: React.FC<F1LiveRaceSimulatorProps> = ({
                 <select
                   value={engineStratMode}
                   onChange={(e) => {
+                    playHMIClickSound();
                     const newStrat = e.target.value as any;
                     setEngineStratMode(newStrat);
                     addRadioMessage("ENGINEER", `Engine map set to ${newStrat.replace("_", " ")}`, "INFO");

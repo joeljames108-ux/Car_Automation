@@ -1,8 +1,4 @@
-// ============================================================================
-// F1 CONSTRUCTOR — DEEP R&D & ENGINEERING LABORATORIES MASTER SUITE
-// ============================================================================
-
-import React, { useState } from "react";
+import React, { useState, memo } from "react";
 import {
   Wind, Zap, Shield, Disc, Activity, Sparkles, Layers,
   Sliders, Award, Compass, Palette, Flame, Gauge, CheckCircle2
@@ -19,6 +15,7 @@ import { CockpitStudio } from "./CockpitStudio";
 import { LiveryStudio } from "./LiveryStudio";
 import { F1RegulationViewer } from "../F1RegulationViewer";
 import { F1BudgetBar } from "../F1BudgetBar";
+import { playHMITabSound } from "../../../utils/hmiSoundSynth";
 
 export type F1RDSubTab =
   | "windtunnel"
@@ -54,7 +51,7 @@ const RD_TABS: F1RDTabDefinition[] = [
   { id: "scrutineering", label: "FIA Scrutineering", icon: <Award size={14} className="text-yellow-400" />, badge: "FIA" },
 ];
 
-export const F1DeepRDLab: React.FC = () => {
+export const F1DeepRDLab: React.FC = memo(function F1DeepRDLab() {
   const [activeSubTab, setActiveSubTab] = useState<F1RDSubTab>("windtunnel");
 
   return (
@@ -71,7 +68,10 @@ export const F1DeepRDLab: React.FC = () => {
           return (
             <button
               key={tab.id}
-              onClick={() => setActiveSubTab(tab.id)}
+              onClick={() => {
+                playHMITabSound();
+                setActiveSubTab(tab.id);
+              }}
               className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 whitespace-nowrap border cursor-pointer ${
                 isActive
                   ? "bg-cyan-500/20 border-cyan-400/50 text-cyan-200 shadow-sm shadow-cyan-500/20"
@@ -108,6 +108,6 @@ export const F1DeepRDLab: React.FC = () => {
       </div>
     </div>
   );
-};
+});
 
 export default F1DeepRDLab;

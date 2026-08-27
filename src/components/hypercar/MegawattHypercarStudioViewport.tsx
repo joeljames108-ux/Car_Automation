@@ -17,6 +17,7 @@ import { ActiveGroundEffectVenturiAeromechanics, ActiveDrsMode } from "../../sim
 import { CarbonCeramicMatrixBrakeThermalFea } from "../../sim/hypercar/carbonCeramicMatrixBrakeThermalFea";
 import { Car3DGeometryGenerator } from "../../exterior3d/geometry/car3dGeometryGenerator";
 import { Zap, Sliders, Wind, Flame, ShieldAlert, Activity, Trophy, Play } from "lucide-react";
+import { playHMIClickSound } from "../../utils/hmiSoundSynth";
 
 const MegawattHypercarStudioViewportComponent: React.FC = () => {
   const mountRef = useRef<HTMLDivElement>(null);
@@ -207,8 +208,11 @@ const MegawattHypercarStudioViewportComponent: React.FC = () => {
           <label className="font-bold text-slate-400">ACTIVE DRS WING:</label>
           <select
             value={drsMode}
-            onChange={(e) => setDrsMode(e.target.value as ActiveDrsMode)}
-            className="bg-slate-950 text-slate-200 text-xs rounded-lg px-2.5 py-1.5 border border-slate-700 font-mono outline-none"
+            onChange={(e) => {
+              playHMIClickSound();
+              setDrsMode(e.target.value as ActiveDrsMode);
+            }}
+            className="bg-slate-950 text-slate-200 text-xs rounded-lg px-2.5 py-1.5 border border-slate-700 font-mono outline-none cursor-pointer"
           >
             <option value="HIGH_DOWNFORCE_CORNERING">High Downforce Cornering Mode</option>
             <option value="LOW_DRAG_STRAIGHT_SPRINT">Low Drag Straight Sprint (DRS Open)</option>

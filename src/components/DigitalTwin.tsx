@@ -1,7 +1,7 @@
 // ===================================================================
 // DIGITAL TWIN — Complete per-vehicle lifecycle history
 // ===================================================================
-import { useState, useMemo } from "react";
+import React, { useState, useMemo } from "react";
 import { Cpu, Clock, CheckCircle2, AlertTriangle, Info, Star, Plus, BarChart3 } from "lucide-react";
 import { useCompany } from "../state/CompanyContext";
 import type { TwinEventType, TwinEvent } from "../sim/types";

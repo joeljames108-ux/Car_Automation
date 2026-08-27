@@ -1339,12 +1339,16 @@ function simulateInfotainment(info: InfotainmentConfig): InfotainmentSim {
   };
 }
 
-// ===================================================================
-// MAIN SIMULATE FUNCTION
-// ===================================================================
+export function getPhysicsSignature(design: VehicleDesign): string {
+  const e = design.engine;
+  const v = design.vehicle;
+
+  return `e_${e.layout}_${e.bore}_${e.stroke}_${e.compressionRatio}_${e.boostPressure || 0}_${e.fuelSystem}_${e.rpmLimiter}_${e.valvetrain}` +
+    `_v_${v.platform}_${v.chassis}_${v.driveType}_${v.enginePosition}_${v.tireCompound}_${v.wheelDiameter}_${v.rideHeight}_${v.transmission}`;
+}
 
 export function simulate(design: VehicleDesign): SimResult {
-  const cacheKey = `veh_sim_${design.name || 'curr'}_${design.updatedAt || '0'}_${design.engine.layout}_${design.engine.bore}_${design.engine.stroke}_${design.engine.redline}_${design.engine.boostPressure || 0}_${design.vehicle.platform}_${design.vehicle.chassis}_${design.vehicle.tireCompound}_${design.vehicle.aero?.wingAngle ?? 0}_${design.vehicle.aero?.rideHeight ?? 0}`;
+  const cacheKey = `veh_sim_${getPhysicsSignature(design)}`;
 
   return GlobalPerformanceOptimizer.getInstance().memoize(cacheKey, () => {
     const eng = simulateEngine(design.engine);

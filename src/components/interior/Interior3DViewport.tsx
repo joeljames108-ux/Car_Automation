@@ -38,11 +38,10 @@ export const Interior3DViewport: React.FC<Interior3DViewportProps> = ({
   const [activeViewpoint, setActiveViewpoint] = useState<InteriorCameraViewpoint>('driver_pov');
   const [isNightMode, setIsNightMode] = useState<boolean>(true);
 
-  // Driver Head Rotation State
-  const [driverYawDeg, setDriverYawDeg] = useState<number>(0);
-  const [driverPitchDeg, setDriverPitchDeg] = useState<number>(0);
+  // Driver Head Rotation HUD DOM Refs (Zero-re-render high performance 120Hz tracking)
+  const gazeSpanRef = useRef<HTMLSpanElement>(null);
+  const coordsSpanRef = useRef<HTMLSpanElement>(null);
   const [isAutoPan, setIsAutoPan] = useState<boolean>(false);
-  const [currentGaze, setCurrentGaze] = useState<string>("FORWARD ROAD & CLUSTER");
 
   const sceneRef = useRef<THREE.Scene | null>(null);
   const cameraRef = useRef<THREE.PerspectiveCamera | null>(null);
@@ -58,65 +57,66 @@ export const Interior3DViewport: React.FC<Interior3DViewportProps> = ({
   const cameraRigRef = useRef<DriverSeatCameraRig | null>(null);
   const isDriverSeatModeRef = useRef<boolean>(true);
   const [activeSeatAnchor, setActiveSeatAnchor] = useState<SeatCameraAnchorId>('DRIVER');
+  const isAutoPanRef = useRef<boolean>(isAutoPan);
+
+  useEffect(() => {
+    isAutoPanRef.current = isAutoPan;
+  }, [isAutoPan]);
 
   useEffect(() => {
     isDriverSeatModeRef.current = activeViewpoint === 'driver_pov';
   }, [activeViewpoint]);
 
-  // Setup Three.js WebGL Scene
+  // Setup Three.js WebGL Scene (Mounted ONCE)
   useEffect(() => {
     const container = mountRef.current;
     if (!container) return;
 
-    const width = container.clientWidth || 800;
-    const height = container.clientHeight || 520;
-
     // 1. Scene
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color(isNightMode ? 0x05070d : 0x1e2430);
     sceneRef.current = scene;
+    scene.background = new THREE.Color(isNightMode ? 0x05070d : 0x1e2430);
 
     // 2. Camera
-    const camera = new THREE.PerspectiveCamera(58, width / height, 0.05, 50);
+    const width = container.clientWidth;
+    const height = container.clientHeight || 500;
+    const camera = new THREE.PerspectiveCamera(65, width / height, 0.05, 50);
     cameraRef.current = camera;
 
-    const initialPose = MasterInterior3DStudio.getCameraPoseForViewpoint(activeViewpoint);
-    camera.position.copy(initialPose.position);
-    camera.fov = initialPose.fov;
-    camera.updateProjectionMatrix();
-
     // 3. Renderer
-    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: 'high-performance' });
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
     renderer.setSize(width, height);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.25;
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.2;
     container.innerHTML = '';
     container.appendChild(renderer.domElement);
 
-    // 4. Orbit Controls
+    // 4. Orbit Controls (Secondary mode when not in driver seat)
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
-    controls.dampingFactor = 0.06;
-    controls.target.copy(initialPose.target);
+    controls.dampingFactor = 0.05;
+    controls.minDistance = 0.1;
     controls.maxDistance = 6.0;
-    controls.minDistance = 0.15;
+    controls.maxPolarAngle = Math.PI / 2 + 0.1;
     controlsRef.current = controls;
 
     // 5. Lighting Rig
-    const ambientLight = new THREE.AmbientLight(0xffffff, isNightMode ? 0.35 : 1.2);
-    ambientLight.name = "ambient";
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
     scene.add(ambientLight);
 
-    const domeLight = new THREE.DirectionalLight(0xffffff, isNightMode ? 0.4 : 1.8);
-    domeLight.position.set(2, 4, 2);
-    scene.add(domeLight);
+    const roofDomeLight = new THREE.PointLight(0xffeedd, 2.2, 3.5);
+    roofDomeLight.position.set(-0.75, 1.2, 0);
+    scene.add(roofDomeLight);
 
-    const cabinFillLight = new THREE.PointLight(0x38bdf8, isNightMode ? 0.6 : 0.2, 3);
-    cabinFillLight.position.set(-0.6, 0.9, 0);
+    const windshieldKeyLight = new THREE.DirectionalLight(0xa5c8ff, 1.8);
+    windshieldKeyLight.position.set(2.0, 2.5, 0);
+    scene.add(windshieldKeyLight);
+
+    const cabinFillLight = new THREE.DirectionalLight(0x445577, 0.8);
+    cabinFillLight.position.set(-2.0, 1.0, 1.5);
     scene.add(cabinFillLight);
 
     // 6. Build Initial Cockpit Group
@@ -149,21 +149,21 @@ export const Interior3DViewport: React.FC<Interior3DViewportProps> = ({
       targetYawRef.current = newYaw;
       targetPitchRef.current = newPitch;
 
-      setDriverYawDeg(Math.round(newYaw));
-      setDriverPitchDeg(Math.round(newPitch));
+      let gazeText = "FORWARD WINDSHIELD & ROAD";
+      if (newPitch > 25) gazeText = "PANORAMIC ROOF";
+      else if (newPitch < -15 && newYaw > -20 && newYaw < 20) gazeText = "INSTRUMENT CLUSTER & WHEEL";
+      else if (newYaw > 25) gazeText = "CENTER INFOTAINMENT & CONSOLE";
+      else if (newYaw < -25) gazeText = "DRIVER DOOR & MIRROR";
 
-      if (newPitch > 25) setCurrentGaze("PANORAMIC ROOF");
-      else if (newPitch < -15 && newYaw > -20 && newYaw < 20) setCurrentGaze("INSTRUMENT CLUSTER & WHEEL");
-      else if (newYaw > 25) setCurrentGaze("CENTER INFOTAINMENT & CONSOLE");
-      else if (newYaw < -25) setCurrentGaze("DRIVER DOOR & MIRROR");
-      else setCurrentGaze("FORWARD WINDSHIELD & ROAD");
+      if (gazeSpanRef.current) gazeSpanRef.current.textContent = `👀 LOOKING AT: ${gazeText}`;
+      if (coordsSpanRef.current) coordsSpanRef.current.textContent = `(${Math.round(newYaw)}°, ${Math.round(newPitch)}°)`;
     };
 
     container.addEventListener('pointerdown', handlePointerDown);
     window.addEventListener('pointerup', handlePointerUp);
     container.addEventListener('pointermove', handlePointerMove);
 
-    // 8. Animation Loop
+    // 8. Animation Loop with Tab Visibility Suspension
     let animId: number;
     let curYaw = 0;
     let curPitch = 0;
@@ -171,16 +171,17 @@ export const Interior3DViewport: React.FC<Interior3DViewportProps> = ({
 
     const animate = () => {
       animId = requestAnimationFrame(animate);
+      if (document.hidden) return;
+
       const elapsed = clock.getElapsedTime();
 
       if (isDriverSeatModeRef.current) {
         controls.enabled = false;
 
-        if (isAutoPan) {
+        if (isAutoPanRef.current) {
           targetYawRef.current = Math.sin(elapsed * 0.5) * 65;
           targetPitchRef.current = Math.sin(elapsed * 0.7) * 15;
-          setDriverYawDeg(Math.round(targetYawRef.current));
-          setDriverPitchDeg(Math.round(targetPitchRef.current));
+          if (coordsSpanRef.current) coordsSpanRef.current.textContent = `(${Math.round(targetYawRef.current)}°, ${Math.round(targetPitchRef.current)}°)`;
         }
 
         curYaw += (targetYawRef.current - curYaw) * 0.12;
@@ -209,6 +210,13 @@ export const Interior3DViewport: React.FC<Interior3DViewportProps> = ({
     };
     animate();
 
+    const handleVisibilityChange = () => {
+      if (!document.hidden && renderer && scene && camera) {
+        renderer.render(scene, camera);
+      }
+    };
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+
     // Resize Handler
     const handleResize = () => {
       if (!container) return;
@@ -222,14 +230,19 @@ export const Interior3DViewport: React.FC<Interior3DViewportProps> = ({
 
     return () => {
       cancelAnimationFrame(animId);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
       container.removeEventListener('pointerdown', handlePointerDown);
       window.removeEventListener('pointerup', handlePointerUp);
       container.removeEventListener('pointermove', handlePointerMove);
       window.removeEventListener('resize', handleResize);
+      controls.dispose();
+      MasterInterior3DStudio.disposeCockpitScene(cockpitGroupRef.current);
       renderer.dispose();
-      if (container) container.innerHTML = '';
+      if (container.contains(renderer.domElement)) {
+        container.removeChild(renderer.domElement);
+      }
     };
-  }, [isAutoPan]);
+  }, []);
 
   // Update Cockpit Geometry when Config changes
   useEffect(() => {
@@ -238,6 +251,8 @@ export const Interior3DViewport: React.FC<Interior3DViewportProps> = ({
 
     if (cockpitGroupRef.current) {
       scene.remove(cockpitGroupRef.current);
+      MasterInterior3DStudio.disposeCockpitScene(cockpitGroupRef.current);
+      cockpitGroupRef.current = null;
     }
 
     const newCockpit = MasterInterior3DStudio.buildCockpitScene(config, wheelbaseMm, trackWidthMm);
@@ -263,9 +278,8 @@ export const Interior3DViewport: React.FC<Interior3DViewportProps> = ({
       targetPitchRef.current = 0;
       headYawRef.current = 0;
       headPitchRef.current = 0;
-      setDriverYawDeg(0);
-      setDriverPitchDeg(0);
-      setCurrentGaze("FORWARD ROAD & CLUSTER");
+      if (gazeSpanRef.current) gazeSpanRef.current.textContent = "👀 LOOKING AT: FORWARD WINDSHIELD & ROAD";
+      if (coordsSpanRef.current) coordsSpanRef.current.textContent = "(0°, 0°)";
     } else {
       isDriverSeatModeRef.current = false;
       const pose = MasterInterior3DStudio.getCameraPoseForViewpoint(vp);
@@ -300,8 +314,8 @@ export const Interior3DViewport: React.FC<Interior3DViewportProps> = ({
       {activeViewpoint === 'driver_pov' && (
         <div className="absolute top-14 left-1/2 -translate-x-1/2 flex items-center gap-2 px-3.5 py-1 rounded-full bg-slate-950/85 backdrop-blur-md border border-amber-500/40 text-[11px] font-mono font-bold text-amber-300 shadow-xl pointer-events-none">
           <Eye size={12} className="text-amber-400 animate-pulse" />
-          <span>👀 LOOKING AT: {currentGaze}</span>
-          <span className="text-slate-400 font-normal">({driverYawDeg}°, {driverPitchDeg}°)</span>
+          <span ref={gazeSpanRef}>👀 LOOKING AT: FORWARD WINDSHIELD & ROAD</span>
+          <span ref={coordsSpanRef} className="text-slate-400 font-normal">(0°, 0°)</span>
         </div>
       )}
 

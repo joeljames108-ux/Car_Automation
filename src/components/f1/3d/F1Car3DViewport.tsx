@@ -33,19 +33,31 @@ const F1Car3DViewportComponent: React.FC = () => {
   const [drsOpen, setDrsOpen] = useState(false);
   const [autoRotate, setAutoRotate] = useState(false);
   const [audioEnabled, setAudioEnabled] = useState(false);
-
   const sceneRef = useRef<THREE.Scene | null>(null);
   const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
   const cameraRef = useRef<THREE.PerspectiveCamera | null>(null);
   const controlsRef = useRef<OrbitControls | null>(null);
   const carGroupRef = useRef<THREE.Group | null>(null);
+  const markDirtyRef = useRef<() => void>(() => {});
+  const autoRotateRef = useRef<boolean>(autoRotate);
+  const isEngineRevvingRef = useRef<boolean>(isEngineRevving);
+
+  useEffect(() => {
+    autoRotateRef.current = autoRotate;
+    markDirtyRef.current();
+  }, [autoRotate]);
+
+  useEffect(() => {
+    isEngineRevvingRef.current = isEngineRevving;
+    markDirtyRef.current();
+  }, [isEngineRevving]);
 
   // Audio Synth Ref (Web Audio API)
   const audioCtxRef = useRef<AudioContext | null>(null);
   const oscRef = useRef<OscillatorNode | null>(null);
   const gainRef = useRef<GainNode | null>(null);
 
-  // Initialize Three.js Scene
+  // Initialize Three.js Scene (Mounted ONCE)
   useEffect(() => {
     if (!containerRef.current) return;
 
@@ -71,7 +83,7 @@ const F1Car3DViewportComponent: React.FC = () => {
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.15;
+    renderer.toneMappingExposure = 1.25;
     rendererRef.current = renderer;
 
     containerRef.current.innerHTML = "";
@@ -81,41 +93,44 @@ const F1Car3DViewportComponent: React.FC = () => {
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
     controls.dampingFactor = 0.05;
-    controls.maxPolarAngle = Math.PI / 2 - 0.02; // Don't clip under floor
-    controls.minDistance = 1.8;
-    controls.maxDistance = 18;
+    controls.maxPolarAngle = Math.PI / 2 - 0.05;
+    controls.minDistance = 2.0;
+    controls.maxDistance = 15.0;
     controls.target.set(0, 0.4, 0);
     controlsRef.current = controls;
 
-    // Studio Lighting
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+    // Lighting
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.9);
     scene.add(ambientLight);
 
-    const keyLight = new THREE.DirectionalLight(0x06b6d4, 2.2);
-    keyLight.position.set(5, 8, 4);
-    keyLight.castShadow = true;
-    keyLight.shadow.mapSize.width = 1024;
-    keyLight.shadow.mapSize.height = 1024;
-    scene.add(keyLight);
+    const dirLight = new THREE.DirectionalLight(0xffffff, 2.5);
+    dirLight.position.set(5, 8, 5);
+    dirLight.castShadow = true;
+    dirLight.shadow.mapSize.width = 2048;
+    dirLight.shadow.mapSize.height = 2048;
+    dirLight.shadow.camera.near = 0.5;
+    dirLight.shadow.camera.far = 25;
+    dirLight.shadow.bias = -0.0005;
+    scene.add(dirLight);
 
-    const fillLight = new THREE.DirectionalLight(0x3b82f6, 1.4);
-    fillLight.position.set(-5, 6, -3);
-    scene.add(fillLight);
+    // Studio Rim Lights
+    const rimLight1 = new THREE.DirectionalLight(0x00f0ff, 1.8);
+    rimLight1.position.set(-5, 3, -5);
+    scene.add(rimLight1);
 
-    const rimLight = new THREE.DirectionalLight(0xf59e0b, 1.8);
-    rimLight.position.set(0, 4, -6);
-    scene.add(rimLight);
+    const rimLight2 = new THREE.DirectionalLight(0xff0055, 1.2);
+    rimLight2.position.set(5, 2, -5);
+    scene.add(rimLight2);
 
-    // High Tech Floor Grid
-    const gridHelper = new THREE.GridHelper(16, 32, 0x06b6d4, 0x1e293b);
+    // Reflective Studio Floor
+    const gridHelper = new THREE.GridHelper(30, 60, 0x00f0ff, 0x1e293b);
     gridHelper.position.y = 0;
     scene.add(gridHelper);
 
-    // Floor Mirror / Dark Plane
-    const floorGeo = new THREE.PlaneGeometry(24, 24);
+    const floorGeo = new THREE.PlaneGeometry(30, 30);
     const floorMat = new THREE.MeshStandardMaterial({
-      color: 0x070b15,
-      roughness: 0.1,
+      color: 0x050814,
+      roughness: 0.2,
       metalness: 0.8,
     });
     const floorPlane = new THREE.Mesh(floorGeo, floorMat);
@@ -130,6 +145,7 @@ const F1Car3DViewportComponent: React.FC = () => {
       isDirty = true;
       lastActiveTime = performance.now();
     };
+    markDirtyRef.current = markDirty;
 
     controls.addEventListener("change", markDirty);
 
@@ -139,8 +155,8 @@ const F1Car3DViewportComponent: React.FC = () => {
 
       if (document.hidden) return;
 
-      const isActivelyRotating = autoRotate;
-      const isActivelyRevving = isEngineRevving;
+      const isActivelyRotating = autoRotateRef.current;
+      const isActivelyRevving = isEngineRevvingRef.current;
 
       if (isActivelyRotating && controlsRef.current) {
         controlsRef.current.autoRotate = true;
@@ -183,9 +199,10 @@ const F1Car3DViewportComponent: React.FC = () => {
       window.removeEventListener("resize", handleResize);
       document.removeEventListener("visibilitychange", handleVisibilityChange);
       cancelAnimationFrame(animationFrameId);
+      controls.dispose();
       renderer.dispose();
     };
-  }, [autoRotate, isEngineRevving]);
+  }, []);
 
   // Update 3D Car Geometry when design or options change
   useEffect(() => {
@@ -214,6 +231,7 @@ const F1Car3DViewportComponent: React.FC = () => {
 
     carGroupRef.current = newCarGroup;
     sceneRef.current.add(newCarGroup);
+    markDirtyRef.current();
   }, [car, explodedViewAmount, wireframeMode, drsOpen, isEngineRevving]);
 
   // Camera Presets

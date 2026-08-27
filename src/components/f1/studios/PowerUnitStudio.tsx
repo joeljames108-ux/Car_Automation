@@ -2,12 +2,13 @@
 // F1 CONSTRUCTOR EXPERIENCE — POWER UNIT & HYBRID ERS STUDIO
 // ============================================================================
 
-import React from "react";
+import React, { memo } from "react";
 import { Zap, BatteryCharging, Flame, Cpu, Gauge } from "lucide-react";
 import { useF1ConstructorStore } from "../../../sim/f1/state/f1ConstructorStore";
 import type { CombustionPrechamberTech, MguKDeploymentStrategy, MguHControlMode } from "../../../sim/f1/types/f1Enums";
+import { playHMIClickSound } from "../../../utils/hmiSoundSynth";
 
-export const PowerUnitStudio: React.FC = () => {
+export const PowerUnitStudio: React.FC = memo(function PowerUnitStudio() {
   const { car, updatePowerUnit } = useF1ConstructorStore();
   const pu = car.powerUnit;
 
@@ -49,8 +50,11 @@ export const PowerUnitStudio: React.FC = () => {
           </label>
           <select
             value={pu.prechamberTechnology}
-            onChange={(e) => updatePowerUnit({ prechamberTechnology: e.target.value as CombustionPrechamberTech })}
-            className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-amber-500"
+            onChange={(e) => {
+              playHMIClickSound();
+              updatePowerUnit({ prechamberTechnology: e.target.value as CombustionPrechamberTech });
+            }}
+            className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-amber-500 cursor-pointer"
           >
             <option value="ACTIVE_DUAL_STAGE_MAHLE">Mahle Jet Ignition (Active Dual Injector)</option>
             <option value="PASSIVE_PRECHAMBER_TBI">Passive Scavenged Prechamber</option>
@@ -140,8 +144,11 @@ export const PowerUnitStudio: React.FC = () => {
           </label>
           <select
             value={pu.mguKDeployment}
-            onChange={(e) => updatePowerUnit({ mguKDeployment: e.target.value as MguKDeploymentStrategy })}
-            className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-amber-500"
+            onChange={(e) => {
+              playHMIClickSound();
+              updatePowerUnit({ mguKDeployment: e.target.value as MguKDeploymentStrategy });
+            }}
+            className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-amber-500 cursor-pointer"
           >
             <option value="CORNER_EXIT_TORQUE_FILL">Corner Exit Torque-Fill (Eliminates Lag)</option>
             <option value="TOP_END_SPEED_EXTENDER">Top-End Speed Extender (Straightline Boost)</option>
@@ -161,8 +168,11 @@ export const PowerUnitStudio: React.FC = () => {
           </label>
           <select
             value={pu.mguHControl}
-            onChange={(e) => updatePowerUnit({ mguHControl: e.target.value as MguHControlMode })}
-            className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-amber-500"
+            onChange={(e) => {
+              playHMIClickSound();
+              updatePowerUnit({ mguHControl: e.target.value as MguHControlMode });
+            }}
+            className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-amber-500 cursor-pointer"
           >
             <option value="DIRECT_MGU_K_ENERGY_FEED">Direct MGU-K Feed (Bypasses 4MJ Battery Limit)</option>
             <option value="ENERGY_STORE_CHARGING">Direct Energy Store Charging</option>
@@ -176,4 +186,4 @@ export const PowerUnitStudio: React.FC = () => {
       </div>
     </div>
   );
-};
+});

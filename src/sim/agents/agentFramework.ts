@@ -275,16 +275,24 @@ export class AgentOrchestrator {
     return Array.from(this.agents.values()).sort((a, b) => b.identity.priority - a.identity.priority);
   }
 
+  private lastStateHash = "";
+
   public start(getDesignState: () => any, getSimState: () => any): void {
     if (this.isRunning) return;
     this.isRunning = true;
 
-    // Run initial tick on next microtask
-    setTimeout(() => {
+    // Run initial tick when idle after initial UI render completes smoothly
+    const startInitialTick = () => {
       if (this.isRunning) {
         this.tick(getDesignState(), getSimState());
       }
-    }, 100);
+    };
+
+    if (typeof window !== "undefined" && "requestIdleCallback" in window) {
+      (window as any).requestIdleCallback(startInitialTick, { timeout: 1500 });
+    } else {
+      setTimeout(startInitialTick, 1200);
+    }
 
     this.intervalId = setInterval(() => {
       if (typeof document !== "undefined" && document.hidden) {
@@ -304,9 +312,21 @@ export class AgentOrchestrator {
   }
 
   /**
-   * Execute single synchronous analysis cycle across all registered agents
+   * Execute single synchronous analysis cycle across all registered agents with state fingerprint memoization
    */
   public tick(designState: any, simState: any): Map<string, AgentFinding[]> {
+    if (!designState || !simState) return this.lastCycleFindings;
+
+    const eng = designState.engine;
+    const veh = designState.vehicle;
+    const stateHash = `${eng?.layout}_${eng?.bore}_${eng?.stroke}_${eng?.boostPressure}_${veh?.chassis}_${veh?.driveType}_${simState?.peakPower}_${simState?.weight}_${simState?.topSpeed}_${simState?.dragCoeff}`;
+
+    // Skip redundant agent iterations if vehicle state has not changed
+    if (stateHash === this.lastStateHash && this.lastCycleFindings.size > 0) {
+      return this.lastCycleFindings;
+    }
+    this.lastStateHash = stateHash;
+
     const allFindings = new Map<string, AgentFinding[]>();
 
     // Execute agents in priority order

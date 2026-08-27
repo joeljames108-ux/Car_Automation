@@ -2,7 +2,7 @@
 // COMPANY CONTEXT — Manages all new game mechanics state
 // ===================================================================
 
-import { createContext, useContext, useState, useCallback, useMemo, type ReactNode } from "react";
+import React, { createContext, useContext, useState, useCallback, useMemo, type ReactNode } from "react";
 import { initialEconomyState, advanceEconomy } from "../sim/economyEngine";
 import { initialAICompetitors, advanceCompetitors } from "../sim/aiCompetitors";
 import { initialMotorsportState, createTeam, assignDriver, simulateSeason, transferTech, getAvailableDrivers, scoutDriver, signScoutedDriver, upgradeTeamFacility, updateTeamStrategy, releaseDriver, renewDriverContract, attractSponsor as attractSponsorFn, generateSponsorMarket } from "../sim/motorsportEngine";

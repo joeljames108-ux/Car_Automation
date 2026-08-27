@@ -1,4 +1,4 @@
-import { useMemo, useState, useEffect } from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import {
   Bot, AlertTriangle, Lightbulb, TrendingUp, X, Check, Info,
   Wrench, Trophy, DollarSign, Leaf, Cpu, Zap, RotateCcw, Target, Sparkles, ChevronDown, ChevronUp

@@ -1,3 +1,4 @@
+import React from "react";
 import { useDesign, fmtCurrency } from "../state/DesignContext";
 import { Section, Select, Slider, StatTile } from "./ui/Controls";
 import {
@@ -10,17 +11,17 @@ import type {
 } from "../sim/types";
 import { Factory, Wrench, ShieldCheck, Boxes, Gauge, DollarSign, TrendingUp, Cpu, Clock } from "lucide-react";
 
+const FRAME_OPTIONS = Object.entries(FRAME_MATERIALS).map(([k, v]) => ({ value: k as FrameMaterial, label: v.label }));
+const PROCESS_OPTIONS = Object.entries(MANUFACTURING_PROCESSES).map(([k, v]) => ({ value: k as ManufacturingProcess, label: v.label }));
+const FACTORY_OPTIONS = Object.entries(FACTORY_TIERS).map(([k, v]) => ({ value: k as FactoryTier, label: v.label }));
+const AUTOMATION_OPTIONS = Object.entries(AUTOMATION_LEVELS).map(([k, v]) => ({ value: k as AutomationLevel, label: v.label }));
+const QC_OPTIONS = Object.entries(QC_LEVELS).map(([k, v]) => ({ value: k as QcLevel, label: v.label }));
+const ASSEMBLY_OPTIONS = Object.entries(ASSEMBLY_LINES).map(([k, v]) => ({ value: k, label: v.label }));
+
 export function ManufacturingDesigner() {
   const { design, sim, updateManufacturing } = useDesign();
   const m = design.manufacturing;
   const mfg = sim.manufacturing;
-
-  const frameOptions = Object.entries(FRAME_MATERIALS).map(([k, v]) => ({ value: k as FrameMaterial, label: v.label }));
-  const processOptions = Object.entries(MANUFACTURING_PROCESSES).map(([k, v]) => ({ value: k as ManufacturingProcess, label: v.label }));
-  const factoryOptions = Object.entries(FACTORY_TIERS).map(([k, v]) => ({ value: k as FactoryTier, label: v.label }));
-  const automationOptions = Object.entries(AUTOMATION_LEVELS).map(([k, v]) => ({ value: k as AutomationLevel, label: v.label }));
-  const qcOptions = Object.entries(QC_LEVELS).map(([k, v]) => ({ value: k as QcLevel, label: v.label }));
-  const assemblyOptions = Object.entries(ASSEMBLY_LINES).map(([k, v]) => ({ value: k, label: v.label }));
 
   const cb = sim.costBreakdown;
   const totalCB = cb.materials + cb.labor + cb.tooling + cb.assembly + cb.warranty + cb.overhead;
@@ -35,8 +36,8 @@ export function ManufacturingDesigner() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {/* Materials */}
         <Section title="Frame & Body Materials" icon={<Boxes size={14} />}>
-          <Select label="Frame Material" value={m.frameMaterial} options={frameOptions} onChange={(v) => updateManufacturing({ frameMaterial: v })} />
-          <Select label="Body Material" value={m.bodyMaterial} options={frameOptions} onChange={(v) => updateManufacturing({ bodyMaterial: v })} />
+          <Select label="Frame Material" value={m.frameMaterial} options={FRAME_OPTIONS} onChange={(v) => updateManufacturing({ frameMaterial: v })} />
+          <Select label="Body Material" value={m.bodyMaterial} options={FRAME_OPTIONS} onChange={(v) => updateManufacturing({ bodyMaterial: v })} />
           <div className="grid grid-cols-2 gap-2 mt-3">
             <StatTile label="Frame Wt Factor" value={FRAME_MATERIALS[m.frameMaterial].weightFactor.toFixed(2)} accent="default" />
             <StatTile label="Frame Strength" value={FRAME_MATERIALS[m.frameMaterial].strengthFactor.toFixed(2)} accent="ok" />
@@ -47,7 +48,7 @@ export function ManufacturingDesigner() {
 
         {/* Process */}
         <Section title="Manufacturing Process" icon={<Wrench size={14} />}>
-          <Select label="Process" value={m.process} options={processOptions} onChange={(v) => updateManufacturing({ process: v })} />
+          <Select label="Process" value={m.process} options={PROCESS_OPTIONS} onChange={(v) => updateManufacturing({ process: v })} />
           <p className="text-xs text-slate-500 mt-2">{MANUFACTURING_PROCESSES[m.process].description}</p>
           <div className="grid grid-cols-2 gap-2 mt-3">
             <StatTile label="Labor Hours" value={MANUFACTURING_PROCESSES[m.process].laborHours} unit="h" accent="default" />
@@ -59,7 +60,7 @@ export function ManufacturingDesigner() {
 
         {/* Factory */}
         <Section title="Factory Tier" icon={<Factory size={14} />}>
-          <Select label="Factory" value={m.factoryTier} options={factoryOptions} onChange={(v) => updateManufacturing({ factoryTier: v })} />
+          <Select label="Factory" value={m.factoryTier} options={FACTORY_OPTIONS} onChange={(v) => updateManufacturing({ factoryTier: v })} />
           <p className="text-xs text-slate-500 mt-2">{FACTORY_TIERS[m.factoryTier].description}</p>
           <div className="grid grid-cols-2 gap-2 mt-3">
             <StatTile label="Capacity" value={FACTORY_TIERS[m.factoryTier].capacity.toLocaleString()} unit="/yr" accent="default" />
@@ -71,11 +72,11 @@ export function ManufacturingDesigner() {
 
         {/* Automation */}
         <Section title="Automation & Assembly" icon={<Cpu size={14} />}>
-          <Select label="Automation Level" value={m.automation} options={automationOptions} onChange={(v) => updateManufacturing({ automation: v })} />
+          <Select label="Automation Level" value={m.automation} options={AUTOMATION_OPTIONS} onChange={(v) => updateManufacturing({ automation: v })} />
           <div className="mt-3">
             <label className="label-mono mb-1.5 block">Assembly Line</label>
             <div className="grid grid-cols-2 gap-1.5">
-              {assemblyOptions.map((o) => (
+              {ASSEMBLY_OPTIONS.map((o) => (
                 <button
                   key={o.value}
                   onClick={() => updateManufacturing({ assemblyLine: o.value as ManufacturingConfig["assemblyLine"] })}
@@ -100,7 +101,7 @@ export function ManufacturingDesigner() {
 
         {/* Quality Control */}
         <Section title="Quality Control" icon={<ShieldCheck size={14} />}>
-          <Select label="QC Level" value={m.qcLevel} options={qcOptions} onChange={(v) => updateManufacturing({ qcLevel: v })} />
+          <Select label="QC Level" value={m.qcLevel} options={QC_OPTIONS} onChange={(v) => updateManufacturing({ qcLevel: v })} />
           <p className="text-xs text-slate-500 mt-2">{QC_LEVELS[m.qcLevel].description}</p>
           <div className="grid grid-cols-2 gap-2 mt-3">
             <StatTile label="Inspection Time" value={QC_LEVELS[m.qcLevel].inspectionTime} unit="h" accent="default" />

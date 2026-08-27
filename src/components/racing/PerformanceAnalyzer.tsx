@@ -5,8 +5,9 @@
 // tire degradation curves, and improvement opportunity identification.
 // ============================================================================
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, memo } from 'react';
 import { PacejkaTireModel, TIRE_COMPOUNDS } from '../../sim/tires/pacejkaTireModel';
+import { playHMIClickSound } from '../../utils/hmiSoundSynth';
 
 interface LapData {
   lap: number;
@@ -25,9 +26,9 @@ interface PerformanceAnalyzerProps {
   bestLapIndex?: number;
 }
 
-export const PerformanceAnalyzer: React.FC<PerformanceAnalyzerProps> = ({
+export const PerformanceAnalyzer: React.FC<PerformanceAnalyzerProps> = memo(function PerformanceAnalyzer({
   laps, bestLapIndex,
-}) => {
+}) {
   const [selectedLap, setSelectedLap] = useState<number>(0);
   const [compareLap, setCompareLap] = useState<number>(-1);
 
@@ -109,7 +110,14 @@ export const PerformanceAnalyzer: React.FC<PerformanceAnalyzerProps> = ({
               const isSelected = i === selectedLap;
               const isBest = i === bestLap;
               return (
-                <g key={i} onClick={() => setSelectedLap(i)} style={{ cursor: 'pointer' }}>
+                <g
+                  key={i}
+                  onClick={() => {
+                    playHMIClickSound();
+                    setSelectedLap(i);
+                  }}
+                  style={{ cursor: 'pointer' }}
+                >
                   <rect x={i * 30 + 2} y={115 - barHeight} width="26" height={barHeight} rx="2"
                     fill={isBest ? '#22c55e' : isSelected ? '#d4a843' : '#6b5a3e'}
                     opacity={isSelected || isBest ? 1 : 0.6} />
@@ -177,4 +185,4 @@ export const PerformanceAnalyzer: React.FC<PerformanceAnalyzerProps> = ({
       </div>
     </div>
   );
-};
+});

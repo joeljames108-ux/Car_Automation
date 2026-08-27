@@ -5,6 +5,7 @@ import { useState, memo } from "react";
 import { Clock, Trophy, ChevronDown, ChevronUp } from "lucide-react";
 import { CATEGORY_LABELS, CATEGORY_COLORS } from "./TeamCard";
 import type { MotorsportTeam } from "../../sim/types";
+import { playHMIClickSound } from "../../utils/hmiSoundSynth";
 
 export const HistoryTimeline = memo(function HistoryTimeline({ selectedTeam }: { selectedTeam: MotorsportTeam | null }) {
   const [expandedSeason, setExpandedSeason] = useState<number | null>(null);
@@ -41,8 +42,13 @@ export const HistoryTimeline = memo(function HistoryTimeline({ selectedTeam }: {
                 "bg-base-800 border-base-700"
               }`} />
 
-              <div className={`glass-panel p-4 cursor-pointer card-hover ${isChamp ? "border-yellow-500/30 shadow-[0_0_20px_-6px_rgba(234,179,8,0.15)]" : ""}`}
-                onClick={() => setExpandedSeason(isExpanded ? null : season.season)}>
+              <div
+                className={`glass-panel p-4 cursor-pointer card-hover ${isChamp ? "border-yellow-500/30 shadow-[0_0_20px_-6px_rgba(234,179,8,0.15)]" : ""}`}
+                onClick={() => {
+                  playHMIClickSound();
+                  setExpandedSeason(isExpanded ? null : season.season);
+                }}
+              >
 
                 {/* Header */}
                 <div className="flex items-center justify-between">

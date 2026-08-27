@@ -1,7 +1,7 @@
 // ===================================================================
 // MOTORSPORT DIVISION — Master Motorsport Hub & Multi-Category Racing
 // ===================================================================
-import { useState, useMemo, lazy, Suspense, memo } from "react";
+import React, { useState, useMemo, lazy, Suspense, memo } from "react";
 import {
   Trophy, Plus, Users, ArrowRightLeft,
   Medal, AlertTriangle, Zap, Gauge, Shield,
@@ -15,6 +15,7 @@ import { useDesign } from "../state/DesignContext";
 import { getSeasonCalendar } from "../sim/motorsportEngine";
 import { TRACKS } from "../sim/constants";
 import type { MotorsportCategory, MotorsportTeam } from "../sim/types";
+import { playHMIClickSound, playHMITabSound } from "../utils/hmiSoundSynth";
 
 // Modular sub-components from motorsport package
 import { TeamCard, CATEGORY_LABELS, CATEGORY_COLORS } from "./motorsport/TeamCard";
@@ -281,7 +282,10 @@ function MotorsportDivisionComponent() {
             </div>
 
             <button
-              onClick={() => setShowF1EntryWizard(true)}
+              onClick={() => {
+                playHMIClickSound();
+                setShowF1EntryWizard(true);
+              }}
               className="px-4 py-2 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-xs tracking-wide shadow-md shadow-cyan-500/25 transition-all whitespace-nowrap flex items-center gap-1.5 cursor-pointer"
             >
               <span>Enter F1</span>
@@ -307,7 +311,10 @@ function MotorsportDivisionComponent() {
             </div>
 
             <button
-              onClick={() => setShowHypercarEntryWizard(true)}
+              onClick={() => {
+                playHMIClickSound();
+                setShowHypercarEntryWizard(true);
+              }}
               className="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs tracking-wide shadow-md shadow-amber-500/25 transition-all whitespace-nowrap flex items-center gap-1.5 cursor-pointer"
             >
               <span>Enter Hypercar</span>
@@ -326,8 +333,11 @@ function MotorsportDivisionComponent() {
             return (
               <button
                 key={cat.id}
-                onClick={() => setActiveTab(cat.tabs[0].id)}
-                className={`p-2.5 rounded-xl text-xs font-bold transition-all flex items-center gap-2 border ${
+                onClick={() => {
+                  playHMITabSound();
+                  setActiveTab(cat.tabs[0].id);
+                }}
+                className={`p-2.5 rounded-xl text-xs font-bold transition-all flex items-center gap-2 border cursor-pointer ${
                   isSelected
                     ? "bg-cyan-500/15 border-cyan-400/40 text-cyan-200 shadow-[0_0_15px_rgba(34,211,238,0.15)]"
                     : "bg-base-900/60 border-white/5 text-slate-400 hover:text-slate-200 hover:border-white/10"
@@ -347,8 +357,11 @@ function MotorsportDivisionComponent() {
             return (
               <button
                 key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
-                className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all whitespace-nowrap flex items-center gap-1.5 border ${
+                onClick={() => {
+                  playHMIClickSound();
+                  setActiveTab(tab.id);
+                }}
+                className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all whitespace-nowrap flex items-center gap-1.5 border cursor-pointer ${
                   isTabActive
                     ? "bg-gradient-to-r from-cyan-500/20 to-blue-500/20 border-cyan-400/50 text-cyan-200 shadow-sm"
                     : "bg-base-900/40 border-transparent text-slate-400 hover:text-slate-200 hover:border-white/5"

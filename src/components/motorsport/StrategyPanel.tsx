@@ -4,6 +4,7 @@
 import { memo } from "react";
 import { Settings, Fuel, Droplets } from "lucide-react";
 import { useCompany } from "../../state/CompanyContext";
+import { playHMIClickSound } from "../../utils/hmiSoundSynth";
 import { CATEGORY_COLORS, CATEGORY_LABELS } from "./TeamCard";
 import type { MotorsportTeam, TireChoice } from "../../sim/types";
 
@@ -17,8 +18,12 @@ const TIRE_LABELS: Record<TireChoice, string> = {
 
 const TireBadge = memo(function TireBadge({ tire, active, onClick }: { tire: TireChoice; active: boolean; onClick: () => void }) {
   return (
-    <button onClick={onClick}
-      className={`w-8 h-8 rounded-full flex items-center justify-center text-[10px] font-bold transition-all border-2 ${
+    <button
+      onClick={() => {
+        playHMIClickSound();
+        onClick();
+      }}
+      className={`w-8 h-8 rounded-full flex items-center justify-center text-[10px] font-bold transition-all border-2 cursor-pointer ${
         active ? `${TIRE_COLORS[tire]} border-white/40 text-slate-900 shadow-lg scale-110` :
         "bg-base-800 border-base-700 text-slate-500 hover:border-base-600"
       }`}>

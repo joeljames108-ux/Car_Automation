@@ -171,6 +171,7 @@ export const RoboticFactorySequencer: React.FC = () => {
   useEffect(() => {
     if (!isPlaying) return;
     const interval = setInterval(() => {
+      if (document.hidden) return;
       setCurrentStageIndex((prev) => {
         if (prev >= ASSEMBLY_STAGES.length - 1) {
           setIsPlaying(false);
@@ -180,7 +181,7 @@ export const RoboticFactorySequencer: React.FC = () => {
         setCompletedStages((c) => (c.includes(next) ? c : [...c, next]));
         return next;
       });
-    }, 2800);
+    }, 1800);
 
     return () => clearInterval(interval);
   }, [isPlaying]);

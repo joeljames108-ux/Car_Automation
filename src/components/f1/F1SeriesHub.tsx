@@ -2,24 +2,26 @@
 // F1 CONSTRUCTOR EXPERIENCE — SERIES SELECTION & ENTRY WIZARD HUB
 // ============================================================================
 
-import React, { useState } from "react";
+import React, { useState, memo } from "react";
 import { Trophy, Zap, Shield, ChevronRight, Calendar, Users, Sliders, Play, Sparkles, DollarSign } from "lucide-react";
 import { F1_OFFICIAL_CALENDAR } from "../../sim/f1/season/f1Calendar";
 import { F1_RIVAL_TEAMS } from "../../sim/f1/season/f1RivalTeams";
 import { useF1ConstructorStore } from "../../sim/f1/state/f1ConstructorStore";
+import { playHMIClickSound } from "../../utils/hmiSoundSynth";
 
 interface F1SeriesHubProps {
   onEnterWorkshop: () => void;
   onCancel?: () => void;
 }
 
-export const F1SeriesHub: React.FC<F1SeriesHubProps> = ({ onEnterWorkshop, onCancel }) => {
+export const F1SeriesHub: React.FC<F1SeriesHubProps> = memo(function F1SeriesHub({ onEnterWorkshop, onCancel }) {
   const { car, updateLivery } = useF1ConstructorStore();
   const [teamName, setTeamName] = useState(car.name);
   const [budgetTier, setBudgetTier] = useState<number>(140);
   const [selectedDriverName, setSelectedDriverName] = useState("Player Lead Driver");
 
   const handleStartSeason = () => {
+    playHMIClickSound();
     updateLivery({ titleSponsorName: "APEX HORIZON DYNAMICS" });
     onEnterWorkshop();
   };
@@ -44,7 +46,7 @@ export const F1SeriesHub: React.FC<F1SeriesHubProps> = ({ onEnterWorkshop, onCan
           <div className="flex flex-wrap items-center gap-4 pt-4">
             <button
               onClick={handleStartSeason}
-              className="px-6 py-3.5 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-black text-sm tracking-wide shadow-lg shadow-cyan-500/25 flex items-center gap-2 transition-all group"
+              className="px-6 py-3.5 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-black text-sm tracking-wide shadow-lg shadow-cyan-500/25 flex items-center gap-2 transition-all group cursor-pointer"
             >
               <span>ENTER F1 DESIGN WORKSHOP</span>
               <ChevronRight size={18} className="group-hover:translate-x-1 transition-transform" />
@@ -52,8 +54,11 @@ export const F1SeriesHub: React.FC<F1SeriesHubProps> = ({ onEnterWorkshop, onCan
 
             {onCancel && (
               <button
-                onClick={onCancel}
-                className="px-5 py-3 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-xs font-semibold text-slate-300 transition-all border border-slate-700"
+                onClick={() => {
+                  playHMIClickSound();
+                  onCancel();
+                }}
+                className="px-5 py-3 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-xs font-semibold text-slate-300 transition-all border border-slate-700 cursor-pointer"
               >
                 Back to Motorsport Menu
               </button>
@@ -143,4 +148,4 @@ export const F1SeriesHub: React.FC<F1SeriesHubProps> = ({ onEnterWorkshop, onCan
       </div>
     </div>
   );
-};
+});

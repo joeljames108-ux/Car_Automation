@@ -2,8 +2,9 @@
 // F1 MODULAR VEHICLE ASSEMBLY — LIVE ENGINEERING & HOMOLOGATION HUD
 // ============================================================================
 
-import React from "react";
+import React, { memo } from "react";
 import { useF1AssemblyStore } from "../../../sim/f1/state/f1AssemblyStore";
+import { playHMIClickSound } from "../../../utils/hmiSoundSynth";
 import {
   ShieldCheck, AlertTriangle, Scale, Zap, Wind, DollarSign,
   Flag, Award, ArrowRight, CheckCircle2, ChevronRight
@@ -13,10 +14,11 @@ interface F1LivePhysicsHUDProps {
   onProceedToSetup?: () => void;
 }
 
-export const F1LivePhysicsHUD: React.FC<F1LivePhysicsHUDProps> = ({ onProceedToSetup }) => {
+export const F1LivePhysicsHUD: React.FC<F1LivePhysicsHUDProps> = memo(function F1LivePhysicsHUD({ onProceedToSetup }) {
   const { metrics, isHomologated, homologateVehicle, homologationPassportId } = useF1AssemblyStore();
 
   const handleHomologateClick = () => {
+    playHMIClickSound();
     const passportId = `FIA-PASSPORT-${Date.now().toString().slice(-6)}`;
     homologateVehicle(passportId);
   };
@@ -67,10 +69,13 @@ export const F1LivePhysicsHUD: React.FC<F1LivePhysicsHUDProps> = ({ onProceedToS
           <Scale className="w-4 h-4 text-amber-400" />
           <div>
             <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-wider block">
-              MASS (MIN 798 KG)
+              TOTAL VEHICLE MASS
             </span>
-            <span className={`text-xs font-mono font-black ${metrics.totalMassKg >= 798 ? "text-white" : "text-rose-400"}`}>
-              {metrics.totalMassKg} kg ({metrics.frontWeightDistributionPercent}% Front)
+            <span className="text-xs font-mono font-black text-white">
+              {metrics.totalMassKg} kg{" "}
+              <span className="text-[10px] text-zinc-400">
+                (Min: 798 kg {metrics.totalMassKg >= 798 ? "✓ Legal" : "✗ Underweight"})
+              </span>
             </span>
           </div>
         </div>
@@ -82,10 +87,10 @@ export const F1LivePhysicsHUD: React.FC<F1LivePhysicsHUDProps> = ({ onProceedToS
           <Zap className="w-4 h-4 text-cyan-400" />
           <div>
             <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-wider block">
-              TOTAL OUTPUT
+              POWER OUTPUT
             </span>
             <span className="text-xs font-mono font-black text-cyan-300">
-              {metrics.totalPeakHorsepower} HP ({metrics.iceHorsepower} ICE + {metrics.ersHorsepower} ERS)
+              {metrics.totalPeakHorsepower} HP (ICE: {metrics.totalPeakHorsepower - metrics.ersHorsepower} + ERS: {metrics.ersHorsepower})
             </span>
           </div>
         </div>
@@ -117,7 +122,7 @@ export const F1LivePhysicsHUD: React.FC<F1LivePhysicsHUDProps> = ({ onProceedToS
           ) : (
             <button
               onClick={handleHomologateClick}
-              className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-black font-black text-xs uppercase tracking-wider shadow-lg shadow-amber-500/20 transition-all"
+              className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-black font-black text-xs uppercase tracking-wider shadow-lg shadow-amber-500/20 transition-all cursor-pointer"
             >
               <Award className="w-4 h-4" />
               Homologate Car
@@ -133,7 +138,10 @@ export const F1LivePhysicsHUD: React.FC<F1LivePhysicsHUDProps> = ({ onProceedToS
         )}
 
         <button
-          onClick={onProceedToSetup}
+          onClick={() => {
+            playHMIClickSound();
+            onProceedToSetup?.();
+          }}
           disabled={!metrics.isCompleteAndLegal}
           className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-black uppercase tracking-wider transition-all shadow-xl ${
             metrics.isCompleteAndLegal
@@ -147,4 +155,4 @@ export const F1LivePhysicsHUD: React.FC<F1LivePhysicsHUDProps> = ({ onProceedToS
       </div>
     </div>
   );
-};
+});

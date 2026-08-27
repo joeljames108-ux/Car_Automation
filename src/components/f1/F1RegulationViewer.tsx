@@ -1,24 +1,21 @@
-// ============================================================================
-// F1 CONSTRUCTOR EXPERIENCE — FIA TECHNICAL REGULATION VIEWER
-// ============================================================================
-
-import React, { useState } from "react";
+import React, { useState, useMemo, memo } from "react";
 import { BookOpen, CheckCircle2, AlertTriangle, Shield, Zap, Wind, Scale, Search, Sliders } from "lucide-react";
 import { useF1ConstructorStore } from "../../sim/f1/state/f1ConstructorStore";
 import { F1PhysicsEngine } from "../../sim/f1/physics/f1PhysicsEngine";
+import { playHMIClickSound } from "../../utils/hmiSoundSynth";
 
-export const F1RegulationViewer: React.FC = () => {
+export const F1RegulationViewer: React.FC = memo(function F1RegulationViewer() {
   const { car } = useF1ConstructorStore();
-  const report = F1PhysicsEngine.runScrutineering(car);
+  const report = useMemo(() => F1PhysicsEngine.runScrutineering(car), [car]);
   const [searchFilter, setSearchFilter] = useState("");
   const [categoryFilter, setCategoryFilter] = useState<string>("ALL");
 
-  const filteredItems = report.items.filter((item) => {
+  const filteredItems = useMemo(() => report.items.filter((item) => {
     const matchesSearch = item.title.toLowerCase().includes(searchFilter.toLowerCase()) ||
       item.articleCode.toLowerCase().includes(searchFilter.toLowerCase());
     const matchesCategory = categoryFilter === "ALL" || item.category === categoryFilter;
     return matchesSearch && matchesCategory;
-  });
+  }), [report, searchFilter, categoryFilter]);
 
   return (
     <div className="space-y-6 animate-fade-in-up">
@@ -64,8 +61,11 @@ export const F1RegulationViewer: React.FC = () => {
           {["ALL", "WEIGHT", "POWER_UNIT", "AERO", "CHASSIS", "SAFETY"].map((cat) => (
             <button
               key={cat}
-              onClick={() => setCategoryFilter(cat)}
-              className={`px-3 py-1 text-xs font-semibold rounded-lg transition-all ${
+              onClick={() => {
+                playHMIClickSound();
+                setCategoryFilter(cat);
+              }}
+              className={`px-3 py-1 text-xs font-semibold rounded-lg transition-all cursor-pointer ${
                 categoryFilter === cat
                   ? "bg-ok-500/20 text-ok-300 border border-ok-500/40 shadow-sm"
                   : "bg-slate-800/60 text-slate-400 hover:text-slate-200 border border-transparent"
@@ -128,4 +128,4 @@ export const F1RegulationViewer: React.FC = () => {
       </div>
     </div>
   );
-};
+});

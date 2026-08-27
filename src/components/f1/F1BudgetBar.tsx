@@ -1,12 +1,9 @@
-// ============================================================================
-// F1 CONSTRUCTOR EXPERIENCE — TOP HUD STATUS & BUDGET BAR
-// ============================================================================
-
-import React from "react";
+import React, { memo } from "react";
 import { Zap, Gauge, Wind, Shield, DollarSign, RotateCcw, Undo2, Redo2, CheckCircle2, AlertTriangle } from "lucide-react";
 import { useF1ConstructorStore } from "../../sim/f1/state/f1ConstructorStore";
+import { playHMIClickSound } from "../../utils/hmiSoundSynth";
 
-export const F1BudgetBar: React.FC = () => {
+export const F1BudgetBar: React.FC = memo(function F1BudgetBar() {
   const {
     car,
     budgetCapMaxUsd,
@@ -105,25 +102,34 @@ export const F1BudgetBar: React.FC = () => {
         {/* History / Reset Controls */}
         <div className="flex items-center gap-1.5">
           <button
-            onClick={undo}
+            onClick={() => {
+              playHMIClickSound();
+              undo();
+            }}
             disabled={undoStack.length === 0}
             title="Undo"
-            className="p-2 rounded-lg bg-slate-800/80 hover:bg-slate-700 text-slate-300 disabled:opacity-30 disabled:cursor-not-allowed transition-all border border-slate-700"
+            className="p-2 rounded-lg bg-slate-800/80 hover:bg-slate-700 text-slate-300 disabled:opacity-30 disabled:cursor-not-allowed transition-all border border-slate-700 cursor-pointer"
           >
             <Undo2 size={14} />
           </button>
           <button
-            onClick={redo}
+            onClick={() => {
+              playHMIClickSound();
+              redo();
+            }}
             disabled={redoStack.length === 0}
             title="Redo"
-            className="p-2 rounded-lg bg-slate-800/80 hover:bg-slate-700 text-slate-300 disabled:opacity-30 disabled:cursor-not-allowed transition-all border border-slate-700"
+            className="p-2 rounded-lg bg-slate-800/80 hover:bg-slate-700 text-slate-300 disabled:opacity-30 disabled:cursor-not-allowed transition-all border border-slate-700 cursor-pointer"
           >
             <Redo2 size={14} />
           </button>
           <button
-            onClick={resetToFactoryBaseline}
+            onClick={() => {
+              playHMIClickSound();
+              resetToFactoryBaseline();
+            }}
             title="Reset to Factory Spec"
-            className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-slate-800/80 hover:bg-slate-700 text-xs text-slate-300 transition-all border border-slate-700"
+            className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-slate-800/80 hover:bg-slate-700 text-xs text-slate-300 transition-all border border-slate-700 cursor-pointer"
           >
             <RotateCcw size={12} />
             <span className="hidden sm:inline">Reset</span>
@@ -132,4 +138,4 @@ export const F1BudgetBar: React.FC = () => {
       </div>
     </div>
   );
-};
+});

@@ -2,11 +2,12 @@
 // F1 CONSTRUCTOR EXPERIENCE — LIVERY & TITLE SPONSOR STUDIO
 // ============================================================================
 
-import React from "react";
+import React, { memo } from "react";
 import { Palette, Sparkles, DollarSign, Award, Sliders } from "lucide-react";
 import { useF1ConstructorStore } from "../../../sim/f1/state/f1ConstructorStore";
+import { playHMIClickSound } from "../../../utils/hmiSoundSynth";
 
-export const LiveryStudio: React.FC = () => {
+export const LiveryStudio: React.FC = memo(function LiveryStudio() {
   const { car, updateLivery } = useF1ConstructorStore();
   const l = car.livery;
 
@@ -55,14 +56,15 @@ export const LiveryStudio: React.FC = () => {
           {PRESET_PALETTES.map((palette) => (
             <button
               key={palette.name}
-              onClick={() =>
+              onClick={() => {
+                playHMIClickSound();
                 updateLivery({
                   primaryColorHex: palette.primary,
                   secondaryColorHex: palette.secondary,
                   tertiaryColorHex: palette.tertiary,
-                })
-              }
-              className="p-2 rounded-xl bg-slate-800/80 border border-slate-700 hover:border-pink-500/50 transition-all text-left group"
+                });
+              }}
+              className="p-2 rounded-xl bg-slate-800/80 border border-slate-700 hover:border-pink-500/50 transition-all text-left group cursor-pointer"
             >
               <div className="flex h-4 rounded-md overflow-hidden mb-1.5 border border-slate-700">
                 <div className="w-1/2 h-full" style={{ backgroundColor: palette.primary }} />
@@ -177,4 +179,4 @@ export const LiveryStudio: React.FC = () => {
       </div>
     </div>
   );
-};
+});

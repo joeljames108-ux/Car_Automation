@@ -2,11 +2,12 @@
 // F1 CONSTRUCTOR EXPERIENCE — COCKPIT, STEERING WHEEL & ELECTRONICS STUDIO
 // ============================================================================
 
-import React from "react";
+import React, { memo } from "react";
 import { Sliders, Cpu, Shield, Radio, CheckCircle2 } from "lucide-react";
 import { useF1ConstructorStore } from "../../../sim/f1/state/f1ConstructorStore";
+import { playHMIClickSound } from "../../../utils/hmiSoundSynth";
 
-export const CockpitStudio: React.FC = () => {
+export const CockpitStudio: React.FC = memo(function CockpitStudio() {
   const { car, updateCockpit } = useF1ConstructorStore();
   const c = car.cockpit;
 
@@ -48,8 +49,11 @@ export const CockpitStudio: React.FC = () => {
           </label>
           <select
             value={c.steeringWheelDisplayType}
-            onChange={(e) => updateCockpit({ steeringWheelDisplayType: e.target.value as any })}
-            className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-indigo-500"
+            onChange={(e) => {
+              playHMIClickSound();
+              updateCockpit({ steeringWheelDisplayType: e.target.value as any });
+            }}
+            className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-indigo-500 cursor-pointer"
           >
             <option value="5_0_INCH_HIGH_NIT_TFT">5.0" High-Nit Daylight Visible TFT (1200 Nits)</option>
             <option value="4_3_INCH_OLED_PDU">4.3" Lightweight OLED Programmable Display</option>
@@ -135,7 +139,10 @@ export const CockpitStudio: React.FC = () => {
               type="checkbox"
               id="customSeat"
               checked={c.driverSeatCustomFoamScan}
-              onChange={(e) => updateCockpit({ driverSeatCustomFoamScan: e.target.checked })}
+              onChange={(e) => {
+                playHMIClickSound();
+                updateCockpit({ driverSeatCustomFoamScan: e.target.checked });
+              }}
               className="accent-indigo-400 w-4 h-4"
             />
             <label htmlFor="customSeat" className="text-xs text-slate-200 cursor-pointer">
@@ -155,8 +162,11 @@ export const CockpitStudio: React.FC = () => {
           </label>
           <select
             value={c.fireExtinguisherGas}
-            onChange={(e) => updateCockpit({ fireExtinguisherGas: e.target.value as any })}
-            className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-indigo-500"
+            onChange={(e) => {
+              playHMIClickSound();
+              updateCockpit({ fireExtinguisherGas: e.target.value as any });
+            }}
+            className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-indigo-500 cursor-pointer"
           >
             <option value="NOVEC_1230">3M Novec 1230 Clean Agent (Zero Residue)</option>
             <option value="FE_36_ECO_CLEAN">FE-36 DuPont Fire Suppression Gas</option>
@@ -168,4 +178,4 @@ export const CockpitStudio: React.FC = () => {
       </div>
     </div>
   );
-};
+});

@@ -115,9 +115,22 @@ export class MasterAttachmentGraph {
   /**
    * Detaches a component and removes its 3D mesh from the scene.
    */
-  public detachComponent(nodeId: string): boolean {
+  public detachComponent(nodeId: string, disposeGeometries: boolean = true): boolean {
     const node = this.attachedNodes.get(nodeId);
     if (!node) return false;
+
+    if (disposeGeometries && node.meshGroup) {
+      node.meshGroup.traverse((child) => {
+        if ((child as THREE.Mesh).isMesh) {
+          const mesh = child as THREE.Mesh;
+          if (mesh.geometry) mesh.geometry.dispose();
+          if (mesh.material) {
+            const mats = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
+            mats.forEach((m) => m.dispose());
+          }
+        }
+      });
+    }
 
     this.rootGroup.remove(node.meshGroup);
     const socket = this.sockets.get(node.parentSocketId);
@@ -128,6 +141,14 @@ export class MasterAttachmentGraph {
 
     this.attachedNodes.delete(nodeId);
     return true;
+  }
+
+  /**
+   * Cleans up all attached node meshes and frees GPU buffers.
+   */
+  public dispose(): void {
+    const nodeIds = Array.from(this.attachedNodes.keys());
+    nodeIds.forEach((id) => this.detachComponent(id, true));
   }
 
   /**

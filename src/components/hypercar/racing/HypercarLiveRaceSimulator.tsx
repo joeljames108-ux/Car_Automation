@@ -1,12 +1,9 @@
-// ============================================================================
-// HYPERCAR LIVE ENDURANCE RACE SIMULATOR & MULTI-CLASS TELEMETRY TOWER
-// ============================================================================
-
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, memo } from "react";
 import { useHypercarAssemblyStore } from "../../../sim/hypercar/state/hypercarAssemblyStore";
 import type { WECCircuitProfile } from "../../../sim/hypercar/season/wecCalendar";
 import type { HypercarGarageSetup } from "../garage/HypercarGarageSetupStudio";
 import { WEC_RIVAL_HYPERCAR_TEAMS } from "../../../sim/hypercar/season/wecRivalTeams";
+import { playHMIClickSound } from "../../../utils/hmiSoundSynth";
 import {
   Trophy,
   Flag,
@@ -31,11 +28,11 @@ interface HypercarLiveRaceSimulatorProps {
   onExitSession: () => void;
 }
 
-export const HypercarLiveRaceSimulator: React.FC<HypercarLiveRaceSimulatorProps> = ({
+export const HypercarLiveRaceSimulator: React.FC<HypercarLiveRaceSimulatorProps> = memo(function HypercarLiveRaceSimulator({
   circuit,
   setup,
   onExitSession,
-}) => {
+}) {
   const { metrics, homologationPassportId } = useHypercarAssemblyStore();
 
   const [currentHour, setCurrentHour] = useState(1);
@@ -63,6 +60,7 @@ export const HypercarLiveRaceSimulator: React.FC<HypercarLiveRaceSimulatorProps>
   const isNightTime = circuit.nightRacingHours > 0 && currentLap > totalSimLaps / 2;
 
   const handleExecutePitStop = () => {
+    playHMIClickSound();
     setIsPitStopActive(true);
     setPitStopMessage("BOX THIS LAP! Changing Michelin tires & refueling to 90 kg...");
     setTimeout(() => {
@@ -88,11 +86,21 @@ export const HypercarLiveRaceSimulator: React.FC<HypercarLiveRaceSimulatorProps>
     { pos: 8, team: "Peugeot TotalEnergies", car: "Peugeot 9X8", gap: "+21.340s", bestLap: "3:27.450" },
   ]);
 
+  // Deterministic seeded pseudo-random for simulation stability
+  const seededRand = (seed: number, offset: number): number => {
+    const x = Math.sin(seed * 9301 + offset * 49297) * 49999;
+    return x - Math.floor(x);
+  };
+
   // Simulation Tick Loop
   useEffect(() => {
     if (!isPlaying || raceFinished) return;
+    let tickCount = currentLap;
 
     const interval = setInterval(() => {
+      tickCount++;
+      const s = tickCount;
+
       setCurrentLap((prev) => {
         const next = prev + 1;
         if (next > totalSimLaps) {
@@ -106,21 +114,21 @@ export const HypercarLiveRaceSimulator: React.FC<HypercarLiveRaceSimulatorProps>
       setCurrentHour((prev) => Math.min(totalHours, prev + 1));
 
       // Telemetry dynamics
-      const simulatedSpeed = Math.floor(270 + Math.random() * 55);
+      const simulatedSpeed = Math.floor(270 + seededRand(s, 1) * 55);
       setCurrentSpeedKmh(simulatedSpeed);
       setFrontMguActive(simulatedSpeed >= setup.frontMguDeploySpeedKmh);
 
       // Battery & Fuel
-      setBatterySocPercent((prev) => Math.max(30, Math.min(98, prev + (Math.random() > 0.4 ? -4 : 8))));
+      setBatterySocPercent((prev) => Math.max(30, Math.min(98, prev + (seededRand(s, 2) > 0.4 ? -4 : 8))));
       setFuelKg((prev) => Math.max(8.0, prev - 3.2));
 
       // Tires & Brakes
-      setTireWearPercent((prev) => Math.min(85, prev + Math.floor(Math.random() * 6)));
-      setBrakeTempC(Math.floor(520 + setup.brakeDuctTapePercent * 2 + Math.random() * 60));
+      setTireWearPercent((prev) => Math.min(85, prev + Math.floor(seededRand(s, 3) * 6)));
+      setBrakeTempC(Math.floor(520 + setup.brakeDuctTapePercent * 2 + seededRand(s, 4) * 60));
 
       // Position Battles
-      if (Math.random() > 0.65) {
-        setPlayerPosition((prev) => Math.max(1, Math.min(3, prev + (Math.random() > 0.5 ? -1 : 1))));
+      if (seededRand(s, 5) > 0.65) {
+        setPlayerPosition((prev) => Math.max(1, Math.min(3, prev + (seededRand(s, 6) > 0.5 ? -1 : 1))));
       }
     }, 1800 / playbackSpeed);
 
@@ -133,8 +141,11 @@ export const HypercarLiveRaceSimulator: React.FC<HypercarLiveRaceSimulatorProps>
       <div className="p-4 bg-black/70 border-b border-white/10 flex items-center justify-between backdrop-blur-xl">
         <div className="flex items-center gap-3">
           <button
-            onClick={onExitSession}
-            className="px-3 py-1.5 rounded-lg bg-zinc-900 border border-white/10 text-xs font-bold text-zinc-300 hover:text-white transition-all"
+            onClick={() => {
+              playHMIClickSound();
+              onExitSession();
+            }}
+            className="px-3 py-1.5 rounded-lg bg-zinc-900 border border-white/10 text-xs font-bold text-zinc-300 hover:text-white transition-all cursor-pointer"
           >
             ← Exit Session
           </button>
@@ -168,16 +179,22 @@ export const HypercarLiveRaceSimulator: React.FC<HypercarLiveRaceSimulatorProps>
 
           <div className="flex items-center gap-1 bg-zinc-900 border border-white/10 rounded-xl p-1">
             <button
-              onClick={() => setIsPlaying(!isPlaying)}
-              className="p-1.5 rounded-lg bg-black/40 hover:bg-black text-white transition-all"
+              onClick={() => {
+                playHMIClickSound();
+                setIsPlaying(!isPlaying);
+              }}
+              className="p-1.5 rounded-lg bg-black/40 hover:bg-black text-white transition-all cursor-pointer"
             >
               {isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4 fill-white" />}
             </button>
             {([1, 2, 4] as const).map((spd) => (
               <button
                 key={spd}
-                onClick={() => setPlaybackSpeed(spd)}
-                className={`px-2 py-1 rounded-lg text-xs font-mono font-bold transition-all ${
+                onClick={() => {
+                  playHMIClickSound();
+                  setPlaybackSpeed(spd);
+                }}
+                className={`px-2 py-1 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer ${
                   playbackSpeed === spd ? "bg-amber-500 text-black" : "text-zinc-400 hover:text-white"
                 }`}
               >
@@ -407,7 +424,10 @@ export const HypercarLiveRaceSimulator: React.FC<HypercarLiveRaceSimulatorProps>
             </div>
 
             <button
-              onClick={onExitSession}
+              onClick={() => {
+                playHMIClickSound();
+                onExitSession();
+              }}
               className="w-full py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 text-black font-black text-xs uppercase tracking-wider shadow-lg hover:brightness-110 transition-all cursor-pointer"
             >
               Return to Hypercar Studio
@@ -417,4 +437,4 @@ export const HypercarLiveRaceSimulator: React.FC<HypercarLiveRaceSimulatorProps>
       )}
     </div>
   );
-};
+});

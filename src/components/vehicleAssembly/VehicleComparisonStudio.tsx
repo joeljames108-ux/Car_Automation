@@ -6,7 +6,7 @@
  * aerodynamic load curves, multi-sector lap times, and manufacturing economics.
  */
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import {
   GitCompare,
   ArrowRight,
@@ -27,13 +27,21 @@ import { MasterVehicleState, VehicleComparisonDelta } from "../../sim/masterVehi
 
 export const VehicleComparisonStudio: React.FC = () => {
   const stateEngine = useMemo(() => MasterVehicleStateEngine.getInstance(), []);
-  const carA = stateEngine.getState();
+  const [carA, setCarA] = useState<MasterVehicleState>(() => stateEngine.getState());
+
+  useEffect(() => {
+    const unsub = stateEngine.subscribe((newState) => {
+      setCarA(newState);
+    });
+    return unsub;
+  }, [stateEngine]);
 
   // Create a default Variant B for comparison (e.g. Clubsport Lightweight Spec)
   const [carB, setCarB] = useState<MasterVehicleState>(() => {
-    const clone: MasterVehicleState = JSON.parse(JSON.stringify(carA));
+    const initialA = stateEngine.getState();
+    const clone: MasterVehicleState = JSON.parse(JSON.stringify(initialA));
     clone.id = "VARIANT_B_CLUBSPORT";
-    clone.name = `${carA.name} [Lightweight Clubsport Spec]`;
+    clone.name = `${initialA.name} [Lightweight Clubsport Spec]`;
     clone.powertrain.boostBar = 1.85;
     clone.aero.rearWingAngleDeg = 22;
     clone.chassis.materialGrade = "carbon_composite";

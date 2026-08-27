@@ -1,4 +1,4 @@
-import { useMemo, memo } from "react";
+import React, { useMemo, memo } from "react";
 import {
   LayoutDashboard, Wind, Battery, Zap, Thermometer, Layers,
   CircleDot, Flag, DollarSign, ShieldCheck, Star,

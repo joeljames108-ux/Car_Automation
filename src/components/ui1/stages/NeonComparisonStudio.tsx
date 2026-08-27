@@ -18,8 +18,9 @@ import { NeonHorizonBadge } from "../design/NeonHorizonBadge";
 import { NeonHorizonDataCard } from "../design/NeonHorizonDataCard";
 import { NeonComparisonDeltaTile } from "../design/NeonComparisonDeltaTile";
 import { NeonPerformanceKPIGrid } from "../design/NeonPerformanceKPIGrid";
-import { EngineeringComparison } from "../../EngineeringComparison";
-import { VehicleComparisonStudio } from "../../vehicleAssembly/VehicleComparisonStudio";
+
+const EngineeringComparison = React.lazy(() => import("../../EngineeringComparison").then(m => ({ default: m.EngineeringComparison })));
+const VehicleComparisonStudio = React.lazy(() => import("../../vehicleAssembly/VehicleComparisonStudio").then(m => ({ default: m.VehicleComparisonStudio })));
 
 export function NeonComparisonStudio() {
   const { sim, design } = useDesign();
@@ -157,14 +158,18 @@ export function NeonComparisonStudio() {
       {/* View 2: Garage Fleet Comparison */}
       {activeTab === "garage_compare" && (
         <div className="w-full rounded-3xl overflow-hidden border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] bg-[#0a111e] p-4">
-          <EngineeringComparison />
+          <React.Suspense fallback={<div className="p-8 text-center text-slate-500 font-mono text-xs">Loading comparison matrix...</div>}>
+            <EngineeringComparison />
+          </React.Suspense>
         </div>
       )}
 
       {/* View 3: Vehicle Assembly Matrix */}
       {activeTab === "vehicle_matrix" && (
         <div className="w-full rounded-3xl overflow-hidden border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] bg-[#0a111e]">
-          <VehicleComparisonStudio />
+          <React.Suspense fallback={<div className="p-8 text-center text-slate-500 font-mono text-xs">Loading assembly matrix...</div>}>
+            <VehicleComparisonStudio />
+          </React.Suspense>
         </div>
       )}
     </div>

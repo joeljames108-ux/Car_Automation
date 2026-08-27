@@ -39,6 +39,23 @@ interface ModularInteriorWorkshopProps {
   onUpdateInterior: (partial: Partial<ModularInteriorConfiguration>) => void;
 }
 
+const TRIM_GRADES: { id: InteriorTrimGrade; name: string; badge: string }[] = [
+  { id: 'nappa_leather', name: 'Semi-Aniline Nappa Leather', badge: 'LUXURY' },
+  { id: 'alcantara_race', name: 'Alcantara Suede Race Weave', badge: 'RACE SPEC' },
+  { id: 'open_pore_wood', name: 'Natural Open-Pore Walnut Wood', badge: 'HERITAGE' },
+  { id: 'forged_carbon', name: 'Pre-Preg Forged Carbon Inlays', badge: 'MOTORSPORT' },
+  { id: 'brushed_aluminum', name: 'Billet Brushed Aluminum Trim', badge: 'ENGINEERING' },
+];
+
+const AMBIENT_COLORS = [
+  { name: 'Cyan Neon', hex: '#06b6d4' },
+  { name: 'Hyper Purple', hex: '#a855f7' },
+  { name: 'Emerald Green', hex: '#10b981' },
+  { name: 'Amber Gold', hex: '#f59e0b' },
+  { name: 'Crimson Red', hex: '#ef4444' },
+  { name: 'Pure White', hex: '#ffffff' },
+];
+
 export const ModularInteriorWorkshop: React.FC<ModularInteriorWorkshopProps> = ({
   activeChassisId,
   config,
@@ -53,23 +70,6 @@ export const ModularInteriorWorkshop: React.FC<ModularInteriorWorkshopProps> = (
   const currentConsoleId = config.centerConsoleId || 'CONSOLE_SPORT_GATED';
   const currentTrim = config.primaryTrimGrade || 'nappa_leather';
   const ambientColor = config.ambientLightingColorHex || '#06b6d4';
-
-  const trimGrades: { id: InteriorTrimGrade; name: string; badge: string }[] = [
-    { id: 'nappa_leather', name: 'Semi-Aniline Nappa Leather', badge: 'LUXURY' },
-    { id: 'alcantara_race', name: 'Alcantara Suede Race Weave', badge: 'RACE SPEC' },
-    { id: 'open_pore_wood', name: 'Natural Open-Pore Walnut Wood', badge: 'HERITAGE' },
-    { id: 'forged_carbon', name: 'Pre-Preg Forged Carbon Inlays', badge: 'MOTORSPORT' },
-    { id: 'brushed_aluminum', name: 'Billet Brushed Aluminum Trim', badge: 'ENGINEERING' },
-  ];
-
-  const ambientColors = [
-    { name: 'Cyan Neon', hex: '#06b6d4' },
-    { name: 'Hyper Purple', hex: '#a855f7' },
-    { name: 'Emerald Green', hex: '#10b981' },
-    { name: 'Amber Gold', hex: '#f59e0b' },
-    { name: 'Crimson Red', hex: '#ef4444' },
-    { name: 'Ice White', hex: '#f8fafc' },
-  ];
 
   return (
     <div className="bg-white/80 dark:bg-base-900/90 border border-slate-200 dark:border-slate-800 rounded-3xl p-5 backdrop-blur-xl shadow-xl space-y-4 font-mono">
@@ -299,7 +299,7 @@ export const ModularInteriorWorkshop: React.FC<ModularInteriorWorkshopProps> = (
           <div className="space-y-2">
             <label className="text-xs font-bold text-slate-300 block">Primary Interior Trim</label>
             <div className="space-y-2">
-              {trimGrades.map((tg) => {
+              {TRIM_GRADES.map((tg) => {
                 const isSelected = currentTrim === tg.id;
                 return (
                   <div
@@ -325,7 +325,7 @@ export const ModularInteriorWorkshop: React.FC<ModularInteriorWorkshopProps> = (
           <div className="space-y-2">
             <label className="text-xs font-bold text-slate-300 block">Ambient LED Lightstrip Hue</label>
             <div className="grid grid-cols-3 gap-2">
-              {ambientColors.map((col) => {
+              {AMBIENT_COLORS.map((col) => {
                 const isSelected = ambientColor === col.hex;
                 return (
                   <button

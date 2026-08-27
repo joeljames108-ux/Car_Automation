@@ -5,9 +5,10 @@
 // load optimization, pit window visualization, and undercut/overcut analysis.
 // ============================================================================
 
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, memo } from 'react';
 import { TIRE_COMPOUNDS } from '../../sim/tires/pacejkaTireModel';
 import { PitStopStrategyEngine, RaceStrategy, PitWindow } from '../../sim/racing/pitStopStrategy';
+import { playHMIClickSound } from '../../utils/hmiSoundSynth';
 
 interface PitStopOptimizerProps {
   totalLaps: number;
@@ -19,9 +20,9 @@ interface PitStopOptimizerProps {
   onStrategySelect?: (strategy: RaceStrategy) => void;
 }
 
-export const PitStopOptimizer: React.FC<PitStopOptimizerProps> = ({
+export const PitStopOptimizer: React.FC<PitStopOptimizerProps> = memo(function PitStopOptimizer({
   totalLaps, trackLength, currentLap, currentCompound, currentTireWear, strategies, onStrategySelect,
-}) => {
+}) {
   const [selectedStrategy, setSelectedStrategy] = useState<string>(strategies[0]?.id || '');
   const [customPitLap, setCustomPitLap] = useState(Math.floor(totalLaps / 2));
   const [customCompound, setCustomCompound] = useState('hard');
@@ -30,6 +31,7 @@ export const PitStopOptimizer: React.FC<PitStopOptimizerProps> = ({
   const pitWindow = useMemo(() => engine.calculatePitWindow(currentCompound, currentLap, currentTireWear), [engine, currentCompound, currentLap, currentTireWear]);
 
   const handleSelect = (strategy: RaceStrategy) => {
+    playHMIClickSound();
     setSelectedStrategy(strategy.id);
     onStrategySelect?.(strategy);
   };
@@ -139,10 +141,17 @@ export const PitStopOptimizer: React.FC<PitStopOptimizerProps> = ({
             <label className="text-amber-500 text-xs block mb-1">Tire Compound</label>
             <div className="flex gap-2">
               {Object.entries(TIRE_COMPOUNDS).filter(([k]) => !['intermediate', 'wet'].includes(k)).map(([key, compound]) => (
-                <button key={key} onClick={() => setCustomCompound(key)}
+                <button
+                  key={key}
+                  onClick={() => {
+                    playHMIClickSound();
+                    setCustomCompound(key);
+                  }}
                   className={`flex-1 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                     customCompound === key ? 'ring-2 ring-amber-400' : ''
-                  }`} style={{ backgroundColor: compound.color + '33', color: compound.color }}>
+                  }`}
+                  style={{ backgroundColor: compound.color + '33', color: compound.color }}
+                >
                   {compound.emoji}
                 </button>
               ))}
@@ -152,4 +161,4 @@ export const PitStopOptimizer: React.FC<PitStopOptimizerProps> = ({
       </div>
     </div>
   );
-};
+});

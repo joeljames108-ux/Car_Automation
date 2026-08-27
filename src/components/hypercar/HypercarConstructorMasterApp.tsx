@@ -2,7 +2,7 @@
 // HYPERCAR CONSTRUCTOR MASTER APPLICATION WRAPPER — UNIFIED WEC 24H SUITE
 // ============================================================================
 
-import React, { useState } from "react";
+import React, { useState, memo } from "react";
 import { HypercarModularAssemblyViewport } from "./3d/HypercarModularAssemblyViewport";
 import { HypercarComponentBrowser } from "./modular/HypercarComponentBrowser";
 import { HypercarLivePhysicsHUD } from "./modular/HypercarLivePhysicsHUD";
@@ -11,6 +11,7 @@ import { HypercarGarageSetupStudio, type HypercarGarageSetup } from "./garage/Hy
 import { HypercarLiveRaceSimulator } from "./racing/HypercarLiveRaceSimulator";
 import { RealCar100BenchmarkStudio } from "./benchmark/RealCar100BenchmarkStudio";
 import { WEC_CIRCUITS, type WECCircuitProfile } from "../../sim/hypercar/season/wecCalendar";
+import { playHMIClickSound, playHMITabSound } from "../../utils/hmiSoundSynth";
 import { Wrench, SlidersHorizontal, Flag, Sparkles, Trophy, ShieldAlert, FlaskConical } from "lucide-react";
 
 export type HypercarAppScreen = "assembly" | "rd_labs" | "garage" | "racing" | "benchmark";
@@ -20,7 +21,7 @@ interface HypercarConstructorMasterAppProps {
   initialMode?: HypercarAppScreen;
 }
 
-export const HypercarConstructorMasterApp: React.FC<HypercarConstructorMasterAppProps> = ({
+const HypercarConstructorMasterAppComponent: React.FC<HypercarConstructorMasterAppProps> = ({
   onBackToMainMotorsport,
   initialMode = "assembly",
 }) => {
@@ -37,6 +38,7 @@ export const HypercarConstructorMasterApp: React.FC<HypercarConstructorMasterApp
   });
 
   const handleStartRace = (circuit: WECCircuitProfile, setup: HypercarGarageSetup) => {
+    playHMIClickSound();
     setActiveCircuit(circuit);
     setActiveSetup(setup);
     setScreen("racing");
@@ -49,7 +51,10 @@ export const HypercarConstructorMasterApp: React.FC<HypercarConstructorMasterApp
         <div className="flex items-center gap-3">
           {onBackToMainMotorsport && (
             <button
-              onClick={onBackToMainMotorsport}
+              onClick={() => {
+                playHMIClickSound();
+                onBackToMainMotorsport();
+              }}
               className="px-3 py-1.5 rounded-lg bg-zinc-900 border border-white/10 text-xs font-bold text-zinc-300 hover:text-white transition-all cursor-pointer"
             >
               ← Exit to Motorsport Hub
@@ -65,7 +70,10 @@ export const HypercarConstructorMasterApp: React.FC<HypercarConstructorMasterApp
         {/* Navigation Tabs */}
         <div className="flex items-center gap-1.5">
           <button
-            onClick={() => setScreen("assembly")}
+            onClick={() => {
+              playHMITabSound();
+              setScreen("assembly");
+            }}
             className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
               screen === "assembly"
                 ? "bg-amber-500/20 border border-amber-400/50 text-amber-300 shadow-sm"
@@ -77,7 +85,10 @@ export const HypercarConstructorMasterApp: React.FC<HypercarConstructorMasterApp
           </button>
 
           <button
-            onClick={() => setScreen("rd_labs")}
+            onClick={() => {
+              playHMITabSound();
+              setScreen("rd_labs");
+            }}
             className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
               screen === "rd_labs"
                 ? "bg-amber-500/20 border border-amber-400/50 text-amber-300 shadow-sm"
@@ -89,7 +100,10 @@ export const HypercarConstructorMasterApp: React.FC<HypercarConstructorMasterApp
           </button>
 
           <button
-            onClick={() => setScreen("garage")}
+            onClick={() => {
+              playHMITabSound();
+              setScreen("garage");
+            }}
             className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
               screen === "garage"
                 ? "bg-amber-500/20 border border-amber-400/50 text-amber-300 shadow-sm"
@@ -101,7 +115,10 @@ export const HypercarConstructorMasterApp: React.FC<HypercarConstructorMasterApp
           </button>
 
           <button
-            onClick={() => setScreen("racing")}
+            onClick={() => {
+              playHMITabSound();
+              setScreen("racing");
+            }}
             className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
               screen === "racing"
                 ? "bg-emerald-500/20 border border-emerald-400/50 text-emerald-300 shadow-sm"
@@ -113,7 +130,10 @@ export const HypercarConstructorMasterApp: React.FC<HypercarConstructorMasterApp
           </button>
 
           <button
-            onClick={() => setScreen("benchmark")}
+            onClick={() => {
+              playHMITabSound();
+              setScreen("benchmark");
+            }}
             className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
               screen === "benchmark"
                 ? "bg-cyan-500/20 border border-cyan-400/50 text-cyan-300 shadow-sm"
@@ -138,7 +158,12 @@ export const HypercarConstructorMasterApp: React.FC<HypercarConstructorMasterApp
           </div>
 
           {/* Bottom Live Physics & Scrutineering HUD */}
-          <HypercarLivePhysicsHUD onProceedToGarage={() => setScreen("garage")} />
+          <HypercarLivePhysicsHUD
+            onProceedToGarage={() => {
+              playHMIClickSound();
+              setScreen("garage");
+            }}
+          />
         </div>
       )}
 
@@ -151,7 +176,10 @@ export const HypercarConstructorMasterApp: React.FC<HypercarConstructorMasterApp
       {screen === "garage" && (
         <div className="flex-1 min-h-0 overflow-hidden">
           <HypercarGarageSetupStudio
-            onBackToAssembly={() => setScreen("assembly")}
+            onBackToAssembly={() => {
+              playHMIClickSound();
+              setScreen("assembly");
+            }}
             onStartRace={handleStartRace}
           />
         </div>
@@ -174,7 +202,10 @@ export const HypercarConstructorMasterApp: React.FC<HypercarConstructorMasterApp
               100 Real-World Sports Car Benchmark & Simulation Validation Suite
             </h2>
             <button
-              onClick={() => setScreen("assembly")}
+              onClick={() => {
+                playHMIClickSound();
+                setScreen("assembly");
+              }}
               className="px-3 py-1.5 rounded-lg bg-zinc-900 border border-white/10 text-xs font-bold text-zinc-300 hover:text-white transition-all cursor-pointer"
             >
               ← Back to Assembly CAD
@@ -189,4 +220,5 @@ export const HypercarConstructorMasterApp: React.FC<HypercarConstructorMasterApp
   );
 };
 
+export const HypercarConstructorMasterApp = React.memo(HypercarConstructorMasterAppComponent);
 export default HypercarConstructorMasterApp;

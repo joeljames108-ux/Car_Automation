@@ -5,7 +5,7 @@
 // and timing tower with real-time position tracking.
 // ============================================================================
 
-import React from 'react';
+import React, { memo } from 'react';
 import { RaceControlSystem, FlagColor, RaceIncident } from '../../sim/racing/raceControlSystem';
 
 interface RaceControlPanelProps {
@@ -15,20 +15,20 @@ interface RaceControlPanelProps {
 }
 
 const FLAG_COLORS: Record<FlagColor, { bg: string; text: string; label: string; icon: string }> = {
-  green: { bg: 'bg-green-500', text: 'text-green-100', label: 'GREEN FLAG', icon: '\🟢' },
-  yellow: { bg: 'bg-yellow-400', text: 'text-yellow-900', label: 'YELLOW FLAG', icon: '\🟡' },
-  double_yellow: { bg: 'bg-yellow-400', text: 'text-yellow-900', label: 'DOUBLE YELLOW', icon: '\🟡\🟡' },
-  red: { bg: 'bg-red-600', text: 'text-red-100', label: 'RED FLAG', icon: '\🔴' },
-  chequered: { bg: 'bg-black', text: 'text-white', label: 'CHEQUERED FLAG', icon: '\🏁' },
-  blue: { bg: 'bg-blue-500', text: 'text-blue-100', label: 'BLUE FLAG', icon: '\🔵' },
+  green: { bg: 'bg-green-500', text: 'text-green-100', label: 'GREEN FLAG', icon: '🟢' },
+  yellow: { bg: 'bg-yellow-400', text: 'text-yellow-900', label: 'YELLOW FLAG', icon: '🟡' },
+  double_yellow: { bg: 'bg-yellow-400', text: 'text-yellow-900', label: 'DOUBLE YELLOW', icon: '🟡🟡' },
+  red: { bg: 'bg-red-600', text: 'text-red-100', label: 'RED FLAG', icon: '🔴' },
+  chequered: { bg: 'bg-black', text: 'text-white', label: 'CHEQUERED FLAG', icon: '🏁' },
+  blue: { bg: 'bg-blue-500', text: 'text-blue-100', label: 'BLUE FLAG', icon: '🔵' },
   white: { bg: 'bg-white', text: 'text-black', label: 'WHITE FLAG', icon: '\u26AA' },
   black: { bg: 'bg-gray-900', text: 'text-white', label: 'BLACK FLAG', icon: '\u26AB' },
-  black_orange: { bg: 'bg-orange-600', text: 'text-orange-100', label: 'BLACK-ORANGE', icon: '\🟠' },
+  black_orange: { bg: 'bg-orange-600', text: 'text-orange-100', label: 'BLACK-ORANGE', icon: '🟠' },
 };
 
-export const RaceControlPanel: React.FC<RaceControlPanelProps> = ({
+export const RaceControlPanel: React.FC<RaceControlPanelProps> = memo(function RaceControlPanel({
   raceControl, currentLap, totalLaps,
-}) => {
+}) {
   const state = raceControl.getState();
   const flag = raceControl.getFlagForZone(0);
   const flagInfo = FLAG_COLORS[flag];
@@ -145,4 +145,4 @@ export const RaceControlPanel: React.FC<RaceControlPanelProps> = ({
       </div>
     </div>
   );
-};
+});

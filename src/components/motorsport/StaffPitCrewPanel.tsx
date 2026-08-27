@@ -4,6 +4,7 @@
 import { useState, memo } from "react";
 import { Users, Award, Shield, DollarSign, UserCheck, Flame } from "lucide-react";
 import { useCompany } from "../../state/CompanyContext";
+import { playHMIClickSound } from "../../utils/hmiSoundSynth";
 import type { MotorsportTeam } from "../../sim/types";
 
 interface StaffMember {
@@ -32,6 +33,7 @@ export const StaffPitCrewPanel = memo(function StaffPitCrewPanel({ selectedTeam 
   const [bonusActiveId, setBonusActiveId] = useState<string | null>(null);
 
   const handleTrain = (id: string) => {
+    playHMIClickSound();
     setStaff(prev => prev.map(s => s.id === id ? { ...s, skill: Math.min(99, s.skill + 1), morale: Math.min(100, s.morale + 3) } : s));
     setBonusActiveId(id);
     setTimeout(() => setBonusActiveId(null), 2000);

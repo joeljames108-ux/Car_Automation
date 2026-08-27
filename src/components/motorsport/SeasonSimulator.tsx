@@ -5,6 +5,7 @@ import { useState, memo } from "react";
 import { Play, Zap, Gauge, TrendingUp, Shield, AlertTriangle, Trophy, Medal } from "lucide-react";
 import { useCompany } from "../../state/CompanyContext";
 import { useDesign } from "../../state/DesignContext";
+import { playHMIClickSound } from "../../utils/hmiSoundSynth";
 import { CATEGORY_LABELS, CATEGORY_COLORS } from "./TeamCard";
 
 function SeasonSimulatorComponent() {
@@ -13,6 +14,7 @@ function SeasonSimulatorComponent() {
   const [showResultsModal, setShowResultsModal] = useState(false);
 
   function handleSimulate() {
+    playHMIClickSound();
     simulateMotorsportSeason(sim.peakPower, sim.weight, sim.downforce / 100, sim.reliability);
     setShowResultsModal(true);
   }
@@ -259,8 +261,11 @@ function SeasonSimulatorComponent() {
             </div>
 
             <button
-              onClick={() => setShowResultsModal(false)}
-              className="w-full py-3.5 rounded-xl font-bold text-sm bg-gradient-to-r from-yellow-500/30 via-amber-500/20 to-yellow-500/30 border border-yellow-500/50 text-yellow-300 hover:from-yellow-500/40 hover:to-yellow-500/40 transition-all shadow-[0_0_20px_rgba(234,179,8,0.2)]"
+              onClick={() => {
+                playHMIClickSound();
+                setShowResultsModal(false);
+              }}
+              className="w-full py-3.5 rounded-xl font-bold text-sm bg-gradient-to-r from-yellow-500/30 via-amber-500/20 to-yellow-500/30 border border-yellow-500/50 text-yellow-300 hover:from-yellow-500/40 hover:to-yellow-500/40 transition-all shadow-[0_0_20px_rgba(234,179,8,0.2)] cursor-pointer"
             >
               Continue to Season {company.motorsport.currentSeason} ➔
             </button>

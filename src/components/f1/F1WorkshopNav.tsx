@@ -2,13 +2,14 @@
 // F1 CONSTRUCTOR EXPERIENCE — WORKSHOP NAVIGATION SIDEBAR
 // ============================================================================
 
-import React from "react";
+import React, { memo } from "react";
 import {
   LayoutDashboard, Shield, Zap, Wind, Activity, Layers, Disc,
   Sliders, Palette, Gavel, Gauge, Cpu, CheckCircle2, AlertTriangle,
 } from "lucide-react";
 import { useF1ConstructorStore } from "../../sim/f1/state/f1ConstructorStore";
 import { F1_WORKSHOP_STEPS, type F1WorkshopStepId } from "../../sim/f1/state/f1BuildStateMachine";
+import { playHMITabSound } from "../../utils/hmiSoundSynth";
 
 const ICON_MAP: Record<string, React.ReactNode> = {
   LayoutDashboard: <LayoutDashboard size={16} />,
@@ -29,10 +30,11 @@ interface F1WorkshopNavProps {
   onSelectStep?: (step: F1WorkshopStepId) => void;
 }
 
-export const F1WorkshopNav: React.FC<F1WorkshopNavProps> = ({ onSelectStep }) => {
+export const F1WorkshopNav: React.FC<F1WorkshopNavProps> = memo(function F1WorkshopNav({ onSelectStep }) {
   const { activeStep, setActiveStep, completionMap } = useF1ConstructorStore();
 
   const handleStepClick = (stepId: F1WorkshopStepId) => {
+    playHMITabSound();
     setActiveStep(stepId);
     if (onSelectStep) onSelectStep(stepId);
   };
@@ -90,4 +92,4 @@ export const F1WorkshopNav: React.FC<F1WorkshopNavProps> = ({ onSelectStep }) =>
       </div>
     </div>
   );
-};
+});

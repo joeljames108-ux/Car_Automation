@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, useCallback } from "react";
+import React, { useEffect, useRef, useState, useCallback } from "react";
 
 /* ═══════════════════════════════════════════════════════════════════
    NeonEntrance Hook — IntersectionObserver-based staggered reveal

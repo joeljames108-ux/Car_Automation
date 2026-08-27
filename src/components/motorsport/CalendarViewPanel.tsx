@@ -4,6 +4,7 @@
 import { useState, memo } from "react";
 import { Calendar, Flag, CheckCircle, Navigation, MapPin } from "lucide-react";
 import { getSeasonCalendar } from "../../sim/motorsportEngine";
+import { playHMIClickSound } from "../../utils/hmiSoundSynth";
 import { CATEGORY_LABELS, CATEGORY_COLORS } from "./TeamCard";
 import { TRACKS } from "../../sim/constants";
 import type { MotorsportCategory } from "../../sim/types";
@@ -37,8 +38,11 @@ export const CalendarViewPanel = memo(function CalendarViewPanel() {
               {(Object.keys(CATEGORY_LABELS) as MotorsportCategory[]).map(cat => (
                 <button
                   key={cat}
-                  onClick={() => setSelectedCategory(cat)}
-                  className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition-all border ${
+                  onClick={() => {
+                    playHMIClickSound();
+                    setSelectedCategory(cat);
+                  }}
+                  className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition-all border cursor-pointer ${
                     selectedCategory === cat ? CATEGORY_COLORS[cat] : "bg-base-850 border-base-800 text-slate-400 hover:border-base-700"
                   }`}
                 >

@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import { createPortal } from "react-dom";
 import {
   Cog,
@@ -70,17 +70,18 @@ import type {
 } from "../sim/types";
 
 import { useAssemblyStore } from "../state/useAssemblyStore";
-import { EngineAssemblyViewer } from "./assembly/EngineAssemblyViewer";
-import { EngineWorkshopPanel } from "./assembly/EngineWorkshopPanel";
-import { AssemblyCompletionModal } from "./assembly/AssemblyCompletionModal";
-import { HybridTelemetrySuite } from "./HybridTelemetrySuite";
-import { EngineAudioVisualizer } from "./assembly/EngineAudioVisualizer";
-import { ApexAgentConsole } from "./agents/ApexAgentConsole";
-import { EngineBuilderFlow } from "./assembly/EngineBuilderFlow";
-import { ModularEngineStudio } from "./engineStudio/ModularEngineStudio";
-import { Transmission3DStudio } from "./transmissionStudio/Transmission3DStudio";
-import { UnifiedPowertrainStudio } from "./powertrainStudio/UnifiedPowertrainStudio";
-import { AdvancedEngineTelemetryStudio } from "./engineStudio/AdvancedEngineTelemetryStudio";
+
+const EngineAssemblyViewer = React.lazy(() => import("./assembly/EngineAssemblyViewer").then(m => ({ default: m.EngineAssemblyViewer })));
+const EngineWorkshopPanel = React.lazy(() => import("./assembly/EngineWorkshopPanel").then(m => ({ default: m.EngineWorkshopPanel })));
+const AssemblyCompletionModal = React.lazy(() => import("./assembly/AssemblyCompletionModal").then(m => ({ default: m.AssemblyCompletionModal })));
+const HybridTelemetrySuite = React.lazy(() => import("./HybridTelemetrySuite").then(m => ({ default: m.HybridTelemetrySuite })));
+const EngineAudioVisualizer = React.lazy(() => import("./assembly/EngineAudioVisualizer").then(m => ({ default: m.EngineAudioVisualizer })));
+const ApexAgentConsole = React.lazy(() => import("./agents/ApexAgentConsole").then(m => ({ default: m.ApexAgentConsole })));
+const EngineBuilderFlow = React.lazy(() => import("./assembly/EngineBuilderFlow").then(m => ({ default: m.EngineBuilderFlow })));
+const ModularEngineStudio = React.lazy(() => import("./engineStudio/ModularEngineStudio").then(m => ({ default: m.ModularEngineStudio })));
+const Transmission3DStudio = React.lazy(() => import("./transmissionStudio/Transmission3DStudio").then(m => ({ default: m.Transmission3DStudio })));
+const UnifiedPowertrainStudio = React.lazy(() => import("./powertrainStudio/UnifiedPowertrainStudio").then(m => ({ default: m.UnifiedPowertrainStudio })));
+const AdvancedEngineTelemetryStudio = React.lazy(() => import("./engineStudio/AdvancedEngineTelemetryStudio").then(m => ({ default: m.AdvancedEngineTelemetryStudio })));
 
 // Engine layout → icon mapping
 const LAYOUT_ICONS: Record<string, React.ReactNode> = {

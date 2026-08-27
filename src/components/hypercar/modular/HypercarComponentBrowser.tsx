@@ -2,10 +2,11 @@
 // HYPERCAR MODULAR COMPONENT BROWSER & ENGINEERING INSPECTOR
 // ============================================================================
 
-import React, { useState } from "react";
+import React, { useState, memo } from "react";
 import { useHypercarAssemblyStore } from "../../../sim/hypercar/state/hypercarAssemblyStore";
 import { HYPERCAR_SOCKET_ANCHORS, type HypercarSocketId } from "../../../sim/hypercar/modular/hypercarSockets";
 import { HypercarComponentRegistry, type HypercarComponentDefinition } from "../../../sim/hypercar/modular/hypercarComponentRegistry";
+import { playHMIClickSound } from "../../../utils/hmiSoundSynth";
 import {
   Layers,
   Wrench,
@@ -23,7 +24,7 @@ import {
   XCircle,
 } from "lucide-react";
 
-export const HypercarComponentBrowser: React.FC = () => {
+export const HypercarComponentBrowser: React.FC = memo(function HypercarComponentBrowser() {
   const {
     installedMap,
     selectedSocketId,
@@ -63,17 +64,23 @@ export const HypercarComponentBrowser: React.FC = () => {
         </div>
         <div className="flex items-center gap-1">
           <button
-            onClick={undo}
+            onClick={() => {
+              playHMIClickSound();
+              undo();
+            }}
             disabled={undoStack.length === 0}
-            className="p-1.5 rounded-lg bg-zinc-900 border border-white/10 text-zinc-400 hover:text-white disabled:opacity-30 transition-all"
+            className="p-1.5 rounded-lg bg-zinc-900 border border-white/10 text-zinc-400 hover:text-white disabled:opacity-30 transition-all cursor-pointer"
             title="Undo"
           >
             <RotateCcw className="w-3.5 h-3.5" />
           </button>
           <button
-            onClick={redo}
+            onClick={() => {
+              playHMIClickSound();
+              redo();
+            }}
             disabled={redoStack.length === 0}
-            className="p-1.5 rounded-lg bg-zinc-900 border border-white/10 text-zinc-400 hover:text-white disabled:opacity-30 transition-all"
+            className="p-1.5 rounded-lg bg-zinc-900 border border-white/10 text-zinc-400 hover:text-white disabled:opacity-30 transition-all cursor-pointer"
             title="Redo"
           >
             <RotateCw className="w-3.5 h-3.5" />
@@ -84,15 +91,21 @@ export const HypercarComponentBrowser: React.FC = () => {
       {/* Assembly Presets: Bare Monocoque vs Factory Baseline */}
       <div className="grid grid-cols-2 gap-2 p-3 bg-black/40 border-b border-white/10">
         <button
-          onClick={resetToBareChassis}
-          className="flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-300 hover:bg-rose-500/20 text-xs font-bold transition-all"
+          onClick={() => {
+            playHMIClickSound();
+            resetToBareChassis();
+          }}
+          className="flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl bg-rose-500/10 border border-rose-500/30 text-rose-300 hover:bg-rose-500/20 text-xs font-bold transition-all cursor-pointer"
         >
           <Trash2 className="w-3 h-3" />
           Bare Monocoque
         </button>
         <button
-          onClick={autoAssembleFactoryBaseline}
-          className="flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-300 hover:bg-amber-500/20 text-xs font-bold transition-all"
+          onClick={() => {
+            playHMIClickSound();
+            autoAssembleFactoryBaseline();
+          }}
+          className="flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-300 hover:bg-amber-500/20 text-xs font-bold transition-all cursor-pointer"
         >
           <CheckCircle2 className="w-3 h-3" />
           Factory Baseline
@@ -105,8 +118,11 @@ export const HypercarComponentBrowser: React.FC = () => {
           (cat) => (
             <button
               key={cat}
-              onClick={() => setCategoryFilter(cat)}
-              className={`px-2.5 py-1 rounded-lg shrink-0 transition-all ${
+              onClick={() => {
+                playHMIClickSound();
+                setCategoryFilter(cat);
+              }}
+              className={`px-2.5 py-1 rounded-lg shrink-0 transition-all cursor-pointer ${
                 categoryFilter === cat
                   ? "bg-amber-500 text-black shadow-md shadow-amber-500/20"
                   : "text-zinc-400 hover:text-zinc-200 bg-zinc-900/60"
@@ -132,7 +148,10 @@ export const HypercarComponentBrowser: React.FC = () => {
           return (
             <div
               key={socketId}
-              onClick={() => selectSocket(socketId)}
+              onClick={() => {
+                playHMIClickSound();
+                selectSocket(socketId);
+              }}
               className={`p-2.5 rounded-xl border transition-all cursor-pointer ${
                 isSelected
                   ? "bg-amber-500/10 border-amber-500/60 shadow-lg shadow-amber-500/10"
@@ -166,8 +185,11 @@ export const HypercarComponentBrowser: React.FC = () => {
             <h3 className="text-xs font-black text-white uppercase">{activeSocket.name}</h3>
             {installedCompDef && (
               <button
-                onClick={() => uninstallComponent(activeSocket.id)}
-                className="text-[10px] text-rose-400 hover:text-rose-300 font-bold flex items-center gap-1"
+                onClick={() => {
+                  playHMIClickSound();
+                  uninstallComponent(activeSocket.id);
+                }}
+                className="text-[10px] text-rose-400 hover:text-rose-300 font-bold flex items-center gap-1 cursor-pointer"
               >
                 <XCircle className="w-3 h-3" />
                 Detach
@@ -227,7 +249,10 @@ export const HypercarComponentBrowser: React.FC = () => {
                   {/* Install Action */}
                   {!isCurrent ? (
                     <button
-                      onClick={() => installComponent(comp.id)}
+                      onClick={() => {
+                        playHMIClickSound();
+                        installComponent(comp.id);
+                      }}
                       className="w-full py-1.5 rounded-lg bg-gradient-to-r from-amber-500 to-amber-600 text-black font-black text-[11px] uppercase tracking-wider shadow-md hover:brightness-110 transition-all flex items-center justify-center gap-1 cursor-pointer"
                     >
                       <PlusCircle className="w-3 h-3" />
@@ -246,4 +271,4 @@ export const HypercarComponentBrowser: React.FC = () => {
       )}
     </div>
   );
-};
+});

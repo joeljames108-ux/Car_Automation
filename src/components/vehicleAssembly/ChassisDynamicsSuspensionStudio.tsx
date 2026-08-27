@@ -5,7 +5,7 @@
 // damping, Crashworthiness FEA folding, and P2/P4 hybrid energy management.
 // ============================================================================
 
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Activity, ShieldCheck, Zap, Gauge, Sparkles, Layers, Sliders, BatteryCharging } from 'lucide-react';
 import { MagnetorheologicalDamperController, SuspensionDriveMode } from '../../sim/suspension/magnetorheologicalDamperController';
 import { CrashEnergyAbsorberFea, CrashRailCrossSection } from '../../exterior3d/chassis/crashEnergyAbsorberFea';
@@ -18,31 +18,37 @@ export const ChassisDynamicsSuspensionStudio: React.FC = () => {
   const [batterySoc, setBatterySoc] = useState<number>(65);
 
   // 1. Solve MR Damper Suspension State
-  const mrState = MagnetorheologicalDamperController.evaluateActiveSuspensionTick({
-    mode: driveMode,
-    bodyHeaveVelocityMs: 0.12,
-    bodyPitchRateRadSec: 0.045,
-    bodyRollRateRadSec: 0.065,
-    wheelVelocitiesMs: { fl: -0.15, fr: 0.18, rl: -0.12, rr: 0.14 },
-    deflectionsMm: { fl: 18.5, fr: -14.2, rl: 12.0, rr: -10.5 },
-  });
+  const mrState = useMemo(() => {
+    return MagnetorheologicalDamperController.evaluateActiveSuspensionTick({
+      mode: driveMode,
+      bodyHeaveVelocityMs: 0.12,
+      bodyPitchRateRadSec: 0.045,
+      bodyRollRateRadSec: 0.065,
+      wheelVelocitiesMs: { fl: -0.15, fr: 0.18, rl: -0.12, rr: 0.14 },
+      deflectionsMm: { fl: 18.5, fr: -14.2, rl: 12.0, rr: -10.5 },
+    });
+  }, [driveMode]);
 
   // 2. Solve Crashworthiness Energy Absorption
-  const crashResult = CrashEnergyAbsorberFea.evaluateFrontalImpact({
-    material: crashMaterial,
-    impactVelocityKmh: 64.0,
-    vehicleMassKg: 1480,
-  });
+  const crashResult = useMemo(() => {
+    return CrashEnergyAbsorberFea.evaluateFrontalImpact({
+      material: crashMaterial,
+      impactVelocityKmh: 64.0,
+      vehicleMassKg: 1480,
+    });
+  }, [crashMaterial]);
 
   // 3. Solve P2/P4 Hybrid Energy Management
-  const hybridState = HybridEnergyManagementStrategy.evaluateHybridPowerSplit({
-    driverThrottlePct: throttlePct,
-    driverBrakePressureBar: 0,
-    vehicleSpeedKmh: 145,
-    batterySocPct: batterySoc,
-    currentRpm: 5200,
-    turboSpoolPct: 0.75, // Moderate spool -> invokes electric torque fill
-  });
+  const hybridState = useMemo(() => {
+    return HybridEnergyManagementStrategy.evaluateHybridPowerSplit({
+      driverThrottlePct: throttlePct,
+      driverBrakePressureBar: 0,
+      vehicleSpeedKmh: 145,
+      batterySocPct: batterySoc,
+      currentRpm: 5200,
+      turboSpoolPct: 0.75, // Moderate spool -> invokes electric torque fill
+    });
+  }, [throttlePct, batterySoc]);
 
   return (
     <div className="flex flex-col h-full w-full bg-[#05070c] text-gray-100 p-4 gap-4 overflow-y-auto font-sans">

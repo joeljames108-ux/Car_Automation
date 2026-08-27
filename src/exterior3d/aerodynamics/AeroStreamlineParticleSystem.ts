@@ -156,4 +156,23 @@ export class AeroStreamlineParticleSystem {
     posAttr.needsUpdate = true;
     colAttr.needsUpdate = true;
   }
+
+  /**
+   * Frees WebGL particle geometry buffers and points material.
+   */
+  public dispose(): void {
+    if (this.pointsMesh) {
+      if (this.pointsMesh.geometry) {
+        this.pointsMesh.geometry.dispose();
+      }
+      if (this.pointsMesh.material) {
+        if (Array.isArray(this.pointsMesh.material)) {
+          this.pointsMesh.material.forEach((m) => m.dispose());
+        } else {
+          this.pointsMesh.material.dispose();
+        }
+      }
+      this.particleGroup.remove(this.pointsMesh);
+    }
+  }
 }

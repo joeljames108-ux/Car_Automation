@@ -5,7 +5,7 @@
 // wind direction compass, forecast timeline, and tire recommendation engine.
 // ============================================================================
 
-import React, { useMemo } from 'react';
+import React, { useMemo, memo } from 'react';
 import { RaceWeatherSystem, WeatherState, WeatherForecast } from '../../sim/weather/raceWeatherSystem';
 import { TIRE_COMPOUNDS } from '../../sim/tires/pacejkaTireModel';
 
@@ -14,7 +14,7 @@ interface WeatherPanelProps {
   currentLap: number;
 }
 
-export const WeatherPanel: React.FC<WeatherPanelProps> = ({ weather, currentLap }) => {
+export const WeatherPanel: React.FC<WeatherPanelProps> = memo(function WeatherPanel({ weather, currentLap }) {
   const state = weather.getState();
   const forecast = useMemo(() => weather.getForecast().slice(0, 30), [weather]);
   const recommendedTire = weather.getRecommendedTire();
@@ -172,4 +172,4 @@ export const WeatherPanel: React.FC<WeatherPanelProps> = ({ weather, currentLap 
       </div>
     </div>
   );
-};
+});

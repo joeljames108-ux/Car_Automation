@@ -4,10 +4,13 @@
 // Frosted Translucent Liquid Glassmorphic Studio Workstation Component
 // ===================================================================
 
-import { useState, useMemo } from "react";
+import React, { useState, useMemo } from "react";
 import { Zap, Battery, Thermometer, ShieldAlert, Cpu, Activity, Gauge, RefreshCw, BarChart2, Flame, Wind, Maximize2, Sparkles, Sliders, ChevronRight } from "lucide-react";
 import { useDesign } from "../state/DesignContext";
 import { evaluateFullHybridPhysicsSuite } from "../sim/physics/advancedHybridPhysicsEngine";
+
+const HYBRID_TELEMETRY_TABS = ["overview", "motors", "battery", "inverter", "regen", "sports"] as const;
+type HybridTelemetryTab = typeof HYBRID_TELEMETRY_TABS[number];
 
 export function HybridTelemetrySuite() {
   const { design, sim } = useDesign();
@@ -15,7 +18,7 @@ export function HybridTelemetrySuite() {
 
   const [testSpeedKmh, setTestSpeedKmh] = useState(120);
   const [testSocPercent, setTestSocPercent] = useState(80);
-  const [activeTab, setActiveTab] = useState<"overview" | "motors" | "battery" | "inverter" | "regen" | "sports">("overview");
+  const [activeTab, setActiveTab] = useState<HybridTelemetryTab>("overview");
 
   // Run Master 21-Category Physics Evaluation
   const physicsData = useMemo(() => {
@@ -49,7 +52,7 @@ export function HybridTelemetrySuite() {
 
         {/* Scrollable Translucent Navigation Tabs */}
         <div className="flex items-center gap-1 overflow-x-auto no-scrollbar p-1 rounded-xl bg-white/40 dark:bg-base-950/60 border border-white/60 dark:border-base-800 backdrop-blur-md">
-          {(["overview", "motors", "battery", "inverter", "regen", "sports"] as const).map((tab) => (
+          {HYBRID_TELEMETRY_TABS.map((tab) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}

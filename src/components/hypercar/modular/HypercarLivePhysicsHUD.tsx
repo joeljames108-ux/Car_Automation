@@ -1,9 +1,6 @@
-// ============================================================================
-// HYPERCAR LIVE PHYSICS & FIA WEC SCRUTINEERING HUD
-// ============================================================================
-
-import React, { useState } from "react";
+import React, { useState, memo } from "react";
 import { useHypercarAssemblyStore } from "../../../sim/hypercar/state/hypercarAssemblyStore";
+import { playHMIClickSound } from "../../../utils/hmiSoundSynth";
 import {
   ShieldCheck,
   AlertCircle,
@@ -22,11 +19,12 @@ interface HypercarLivePhysicsHUDProps {
   onProceedToGarage?: () => void;
 }
 
-export const HypercarLivePhysicsHUD: React.FC<HypercarLivePhysicsHUDProps> = ({ onProceedToGarage }) => {
+export const HypercarLivePhysicsHUD: React.FC<HypercarLivePhysicsHUDProps> = memo(function HypercarLivePhysicsHUD({ onProceedToGarage }) {
   const { metrics, isHomologated, homologationPassportId, homologateVehicle } = useHypercarAssemblyStore();
   const [showPassportModal, setShowPassportModal] = useState(false);
 
   const handleHomologate = () => {
+    playHMIClickSound();
     const passportCode = `FIA-WEC-APX-LMH-${Math.floor(1000 + Math.random() * 9000)}`;
     homologateVehicle(passportCode);
     setShowPassportModal(true);
@@ -134,7 +132,7 @@ export const HypercarLivePhysicsHUD: React.FC<HypercarLivePhysicsHUDProps> = ({ 
           </div>
         </div>
 
-        {/* Right: Homologation & Garage CTA */}
+          {/* Right: Homologation & Garage CTA */}
         <div className="flex items-center gap-3">
           {metrics.isCompleteAndLegal && !isHomologated ? (
             <button
@@ -146,7 +144,10 @@ export const HypercarLivePhysicsHUD: React.FC<HypercarLivePhysicsHUDProps> = ({ 
             </button>
           ) : isHomologated ? (
             <button
-              onClick={() => setShowPassportModal(true)}
+              onClick={() => {
+                playHMIClickSound();
+                setShowPassportModal(true);
+              }}
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 font-mono text-xs font-bold transition-all hover:bg-emerald-500/30 cursor-pointer"
             >
               <ShieldCheck className="w-4 h-4" />
@@ -164,7 +165,10 @@ export const HypercarLivePhysicsHUD: React.FC<HypercarLivePhysicsHUDProps> = ({ 
 
           {/* Proceed to Garage */}
           <button
-            onClick={onProceedToGarage}
+            onClick={() => {
+              playHMIClickSound();
+              onProceedToGarage?.();
+            }}
             disabled={!metrics.isCompleteAndLegal}
             className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-black text-xs uppercase tracking-wider shadow-lg transition-all ${
               metrics.isCompleteAndLegal
@@ -223,7 +227,10 @@ export const HypercarLivePhysicsHUD: React.FC<HypercarLivePhysicsHUDProps> = ({ 
             </div>
 
             <button
-              onClick={() => setShowPassportModal(false)}
+              onClick={() => {
+                playHMIClickSound();
+                setShowPassportModal(false);
+              }}
               className="w-full py-2.5 rounded-xl bg-amber-500 text-black font-black text-xs uppercase tracking-wider hover:bg-amber-400 transition-all cursor-pointer"
             >
               Close Passport
@@ -233,4 +240,4 @@ export const HypercarLivePhysicsHUD: React.FC<HypercarLivePhysicsHUDProps> = ({ 
       )}
     </>
   );
-};
+});

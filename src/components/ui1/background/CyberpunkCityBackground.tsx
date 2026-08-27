@@ -27,26 +27,21 @@ export const CyberpunkCityBackground: React.FC<CyberpunkCityBackgroundProps> = (
     img.onload = () => setBgLoaded(true);
   }, [bgImageSrc]);
 
-  // Smooth mouse-tracked 60FPS Lerp Parallax Effect
+  // Smooth mouse-tracked 60/120FPS Lerp Parallax Effect with Idle Sleeping
   useEffect(() => {
-    let animId: number;
+    let animId: number | null = null;
     let targetX = 0;
     let targetY = 0;
     let currentX = 0;
     let currentY = 0;
-
-    const onMouseMove = (e: MouseEvent) => {
-      const centerX = window.innerWidth / 2;
-      const centerY = window.innerHeight / 2;
-      targetX = ((e.clientX - centerX) / centerX) * 16 * parallaxIntensity;
-      targetY = ((e.clientY - centerY) / centerY) * 12 * parallaxIntensity;
-    };
-
-    window.addEventListener("mousemove", onMouseMove, { passive: true });
+    let isAnimating = false;
 
     const render = () => {
       currentX += (targetX - currentX) * 0.08;
       currentY += (targetY - currentY) * 0.08;
+
+      const diffX = Math.abs(targetX - currentX);
+      const diffY = Math.abs(targetY - currentY);
 
       if (bgRef.current) {
         bgRef.current.style.transform = `translate3d(${currentX.toFixed(2)}px, ${currentY.toFixed(
@@ -60,14 +55,31 @@ export const CyberpunkCityBackground: React.FC<CyberpunkCityBackgroundProps> = (
         )}px, ${(currentY * 1.6).toFixed(2)}px, 0)`;
       }
 
-      animId = requestAnimationFrame(render);
+      if (diffX > 0.02 || diffY > 0.02) {
+        animId = requestAnimationFrame(render);
+      } else {
+        isAnimating = false;
+        animId = null;
+      }
     };
 
-    animId = requestAnimationFrame(render);
+    const onMouseMove = (e: MouseEvent) => {
+      const centerX = window.innerWidth / 2;
+      const centerY = window.innerHeight / 2;
+      targetX = ((e.clientX - centerX) / centerX) * 16 * parallaxIntensity;
+      targetY = ((e.clientY - centerY) / centerY) * 12 * parallaxIntensity;
+
+      if (!isAnimating) {
+        isAnimating = true;
+        animId = requestAnimationFrame(render);
+      }
+    };
+
+    window.addEventListener("mousemove", onMouseMove, { passive: true });
 
     return () => {
       window.removeEventListener("mousemove", onMouseMove);
-      cancelAnimationFrame(animId);
+      if (animId) cancelAnimationFrame(animId);
     };
   }, [parallaxIntensity]);
 

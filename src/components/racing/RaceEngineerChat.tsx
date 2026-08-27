@@ -6,8 +6,9 @@
 // advice during race simulation with priority-based message styling.
 // ============================================================================
 
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, memo } from 'react';
 import { RaceEngineerAI, EngineerMessage } from '../../sim/ai/raceEngineerAI';
+import { playHMIClickSound } from '../../utils/hmiSoundSynth';
 
 interface RaceEngineerChatProps {
   engineer: RaceEngineerAI;
@@ -25,9 +26,9 @@ interface ChatMessage {
   priority?: EngineerMessage['priority'];
 }
 
-export const RaceEngineerChat: React.FC<RaceEngineerChatProps> = ({
+export const RaceEngineerChat: React.FC<RaceEngineerChatProps> = memo(function RaceEngineerChat({
   engineer, messages, currentLap, totalLaps,
-}) => {
+}) {
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
   const [input, setInput] = useState('');
   const [isTyping, setIsTyping] = useState(false);
@@ -67,6 +68,7 @@ export const RaceEngineerChat: React.FC<RaceEngineerChatProps> = ({
 
   const handleSend = () => {
     if (!input.trim()) return;
+    playHMIClickSound();
 
     const driverMsg: ChatMessage = {
       id: `driver_${Date.now()}`,
@@ -95,6 +97,7 @@ export const RaceEngineerChat: React.FC<RaceEngineerChatProps> = ({
   };
 
   const handleQuickCommand = (query: string) => {
+    playHMIClickSound();
     setInput(query);
     setTimeout(() => {
       const driverMsg: ChatMessage = {
@@ -221,7 +224,7 @@ export const RaceEngineerChat: React.FC<RaceEngineerChatProps> = ({
       </div>
     </div>
   );
-};
+});
 
 function generateEngineerResponse(query: string, currentLap: number, totalLaps: number): string {
   const q = query.toLowerCase();

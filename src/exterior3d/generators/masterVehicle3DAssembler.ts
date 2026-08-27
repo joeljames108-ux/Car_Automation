@@ -484,4 +484,21 @@ export class MasterVehicle3DAssembler {
 
     return group;
   }
+
+  /**
+   * Frees all GPU buffer geometries and materials in the vehicle hierarchy.
+   */
+  public dispose(): void {
+    this.attachmentGraph.dispose();
+    this.rootGroup.traverse((child) => {
+      if ((child as THREE.Mesh).isMesh) {
+        const mesh = child as THREE.Mesh;
+        if (mesh.geometry) mesh.geometry.dispose();
+        if (mesh.material) {
+          const mats = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
+          mats.forEach((m) => m.dispose());
+        }
+      }
+    });
+  }
 }

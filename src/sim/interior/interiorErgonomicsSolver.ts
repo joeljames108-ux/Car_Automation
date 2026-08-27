@@ -22,6 +22,9 @@ import {
   AUDIO_SYSTEM_CATALOG,
 } from '../../exterior3d/manifests/interiorStudioCatalog';
 
+const ergonomicsCache = new Map<string, InteriorErgonomicsTelemetry>();
+const MAX_ERGONOMICS_CACHE = 60;
+
 export class InteriorErgonomicsSolver {
   /**
    * Solves complete interior ergonomics, acoustic isolation, mass, and luxury ratings.
@@ -32,6 +35,12 @@ export class InteriorErgonomicsSolver {
     trackWidthMm: number = 1620,
     roofHeightMm: number = 1380
   ): InteriorErgonomicsTelemetry {
+    const cacheKey = `${config.dashboardId}_${config.steeringWheelId}_${config.frontSeatsId}_${config.centerConsoleId}_${config.audioSystemId}_${config.seatCount || 2}_${wheelbaseMm}_${trackWidthMm}_${roofHeightMm}_${config.soundDeadeningLevel ?? 0.7}_${config.ambientLighting?.enabled ?? false}_${config.digitalCockpit?.hasHolographicHUD ?? false}`;
+
+    if (ergonomicsCache.has(cacheKey)) {
+      return ergonomicsCache.get(cacheKey)!;
+    }
+
     const dash = DASHBOARD_CATALOG[config.dashboardId] || Object.values(DASHBOARD_CATALOG)[0];
     const wheel = STEERING_WHEEL_CATALOG[config.steeringWheelId] || Object.values(STEERING_WHEEL_CATALOG)[0];
     const seat = SEATING_CATALOG[config.frontSeatsId] || Object.values(SEATING_CATALOG)[0];
@@ -120,7 +129,7 @@ export class InteriorErgonomicsSolver {
     const totalMass = Math.round((dash.massKg + wheel.massKg + seatTotalMass + console.massKg + audio.massKg + soundDeadeningMass + cageMass + 14) * 10) / 10;
     const totalCost = dash.costUSD + wheel.costUSD + seatTotalCost + console.costUSD + audio.costUSD + (config.ambientLighting?.enabled ? 850 : 0) + (config.digitalCockpit?.hasHolographicHUD ? 1200 : 0);
 
-    return {
+    const result: InteriorErgonomicsTelemetry = {
       driverHPointMm: { x: hPointX, y: hPointY, z: hPointZ },
       headroomClearanceMm: Math.round(headroom),
       legroomClearanceMm: Math.round(legroom),
@@ -135,5 +144,13 @@ export class InteriorErgonomicsSolver {
       totalInteriorMassKg: totalMass,
       totalInteriorCostUSD: totalCost,
     };
+
+    if (ergonomicsCache.size >= MAX_ERGONOMICS_CACHE) {
+      const firstKey = ergonomicsCache.keys().next().value;
+      if (firstKey) ergonomicsCache.delete(firstKey);
+    }
+    ergonomicsCache.set(cacheKey, result);
+
+    return result;
   }
 }

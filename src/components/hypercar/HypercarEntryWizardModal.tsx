@@ -1,9 +1,6 @@
-// ============================================================================
-// HYPERCAR CHAMPIONSHIP ENTRY REQUIREMENTS & SCRUTINEERING GATE MODAL
-// ============================================================================
-
-import React from "react";
+import React, { memo } from "react";
 import { useHypercarAssemblyStore } from "../../sim/hypercar/state/hypercarAssemblyStore";
+import { playHMIClickSound } from "../../utils/hmiSoundSynth";
 import {
   ShieldAlert,
   ShieldCheck,
@@ -24,12 +21,12 @@ interface HypercarEntryWizardModalProps {
   onProceedToRace: () => void;
 }
 
-export const HypercarEntryWizardModal: React.FC<HypercarEntryWizardModalProps> = ({
+export const HypercarEntryWizardModal: React.FC<HypercarEntryWizardModalProps> = memo(function HypercarEntryWizardModal({
   isOpen,
   onClose,
   onEnterStudio,
   onProceedToRace,
-}) => {
+}) {
   if (!isOpen) return null;
 
   const { metrics, isHomologated, homologationPassportId } = useHypercarAssemblyStore();
@@ -40,8 +37,11 @@ export const HypercarEntryWizardModal: React.FC<HypercarEntryWizardModalProps> =
       <div className="max-w-xl w-full bg-zinc-950 border border-amber-500/40 rounded-3xl p-6 shadow-2xl shadow-amber-500/10 space-y-5 text-white relative">
         {/* Close Button */}
         <button
-          onClick={onClose}
-          className="absolute top-5 right-5 p-2 rounded-full bg-zinc-900 border border-white/10 text-zinc-400 hover:text-white transition-all"
+          onClick={() => {
+            playHMIClickSound();
+            onClose();
+          }}
+          className="absolute top-5 right-5 p-2 rounded-full bg-zinc-900 border border-white/10 text-zinc-400 hover:text-white transition-all cursor-pointer"
         >
           <X className="w-4 h-4" />
         </button>
@@ -95,10 +95,11 @@ export const HypercarEntryWizardModal: React.FC<HypercarEntryWizardModalProps> =
         <div className="flex items-center gap-3 pt-2">
           <button
             onClick={() => {
+              playHMIClickSound();
               onClose();
               onEnterStudio();
             }}
-            className="flex-1 py-3 px-4 rounded-xl bg-zinc-900 border border-white/20 text-white font-bold text-xs uppercase tracking-wider hover:bg-zinc-800 transition-all flex items-center justify-center gap-2"
+            className="flex-1 py-3 px-4 rounded-xl bg-zinc-900 border border-white/20 text-white font-bold text-xs uppercase tracking-wider hover:bg-zinc-800 transition-all flex items-center justify-center gap-2 cursor-pointer"
           >
             <Wrench className="w-4 h-4 text-amber-400" />
             {hasEligibleCar ? "Open Hypercar CAD Studio" : "Build Hypercar from Scratch"}
@@ -107,6 +108,7 @@ export const HypercarEntryWizardModal: React.FC<HypercarEntryWizardModalProps> =
           {hasEligibleCar && (
             <button
               onClick={() => {
+                playHMIClickSound();
                 onClose();
                 onProceedToRace();
               }}
@@ -120,4 +122,4 @@ export const HypercarEntryWizardModal: React.FC<HypercarEntryWizardModalProps> =
       </div>
     </div>
   );
-};
+});

@@ -2,12 +2,13 @@
 // F1 CONSTRUCTOR EXPERIENCE — SUSPENSION & KINEMATICS STUDIO (UPGRADED)
 // ============================================================================
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, memo } from "react";
 import { Activity, Sliders, Layers, CheckCircle2, AlertTriangle, HelpCircle, Save, GitCompare } from "lucide-react";
 import { useF1ConstructorStore } from "../../../sim/f1/state/f1ConstructorStore";
 import type { F1SuspensionLayout, AntiRollBarType } from "../../../sim/f1/types/f1Enums";
+import { playHMIClickSound } from "../../../utils/hmiSoundSynth";
 
-export const SuspensionStudio: React.FC = () => {
+export const SuspensionStudio: React.FC = memo(function SuspensionStudio() {
   const { car, updateSuspension } = useF1ConstructorStore();
   const s = car.suspension;
 
@@ -72,7 +73,10 @@ export const SuspensionStudio: React.FC = () => {
           </div>
 
           <button
-            onClick={() => setShowCompareBaseline(!showCompareBaseline)}
+            onClick={() => {
+              playHMIClickSound();
+              setShowCompareBaseline(!showCompareBaseline);
+            }}
             className={`px-3 py-1.5 rounded-xl border flex items-center gap-1.5 text-xs font-bold transition-all cursor-pointer ${
               showCompareBaseline
                 ? "bg-purple-500/20 text-purple-300 border-purple-500/40"
@@ -184,4 +188,4 @@ export const SuspensionStudio: React.FC = () => {
       </div>
     </div>
   );
-};
+});

@@ -4,6 +4,7 @@
 import { useState, memo } from "react";
 import { Wrench, Zap, Shield, AlertTriangle, CheckCircle, Clock, Flame } from "lucide-react";
 import { useCompany } from "../../state/CompanyContext";
+import { playHMIClickSound } from "../../utils/hmiSoundSynth";
 import type { MotorsportTeam } from "../../sim/types";
 
 interface MotorsportPart {
@@ -34,6 +35,7 @@ export const PartsRAndDPanel = memo(function PartsRAndDPanel({ selectedTeam }: {
   const availableFunds = selectedTeam ? selectedTeam.budget : (company.totalRevenue || 50_000_000);
 
   const handleDevelop = (id: string) => {
+    playHMIClickSound();
     setParts(prev => prev.map(p => p.id === id ? { ...p, status: "In Development" } : p));
     setTimeout(() => {
       setParts(prev => prev.map(p => p.id === id ? { ...p, status: "Installed" } : p));

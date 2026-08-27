@@ -4,6 +4,7 @@
 import { useState, memo } from "react";
 import { Plus, ChevronRight } from "lucide-react";
 import { useCompany } from "../../state/CompanyContext";
+import { playHMIClickSound, playHMITabSound } from "../../utils/hmiSoundSynth";
 import { CATEGORY_LABELS, CATEGORY_COLORS } from "./TeamCard";
 import type { MotorsportCategory } from "../../sim/types";
 
@@ -17,6 +18,7 @@ export const CreateTeamForm = memo(function CreateTeamForm({ onClose }: { onClos
 
   function handleCreate() {
     if (!form.name.trim()) return;
+    playHMIClickSound();
     createMotorsportTeam(form.name, form.category, form.budget, form.baseVehicleId);
     onClose();
   }
@@ -64,9 +66,14 @@ export const CreateTeamForm = memo(function CreateTeamForm({ onClose }: { onClos
                 className="w-full bg-base-850 border border-base-700 rounded-lg px-3 py-2.5 text-sm text-slate-200 focus:border-accent-500 focus:outline-none focus:ring-1 focus:ring-accent-500/30 transition-all" />
             </div>
             <div className="flex gap-2 justify-end">
-              <button onClick={onClose} className="px-4 py-2 rounded-lg text-xs text-slate-500 hover:text-slate-300 hover:bg-base-800 transition-all">Cancel</button>
-              <button onClick={() => form.name.trim() && setStep(1)} disabled={!form.name.trim()}
-                className="flex items-center gap-1 px-4 py-2 rounded-lg text-xs font-semibold bg-accent-500/20 border border-accent-500/40 text-accent-300 hover:bg-accent-500/30 disabled:opacity-40 disabled:cursor-not-allowed transition-all">
+              <button onClick={onClose} className="px-4 py-2 rounded-lg text-xs text-slate-500 hover:text-slate-300 hover:bg-base-800 transition-all cursor-pointer">Cancel</button>
+              <button onClick={() => {
+                if (form.name.trim()) {
+                  playHMIClickSound();
+                  setStep(1);
+                }
+              }} disabled={!form.name.trim()}
+                className="flex items-center gap-1 px-4 py-2 rounded-lg text-xs font-semibold bg-accent-500/20 border border-accent-500/40 text-accent-300 hover:bg-accent-500/30 disabled:opacity-40 disabled:cursor-not-allowed transition-all cursor-pointer">
                 Next <ChevronRight size={12} />
               </button>
             </div>
@@ -78,8 +85,11 @@ export const CreateTeamForm = memo(function CreateTeamForm({ onClose }: { onClos
           <div className="space-y-3 animate-fade-in-up">
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
               {(Object.keys(CATEGORY_LABELS) as MotorsportCategory[]).map(cat => (
-                <button key={cat} onClick={() => setForm(f => ({ ...f, category: cat }))}
-                  className={`px-3 py-3 rounded-xl text-xs font-medium transition-all border card-hover ${
+                <button key={cat} onClick={() => {
+                  playHMIClickSound();
+                  setForm(f => ({ ...f, category: cat }));
+                }}
+                  className={`px-3 py-3 rounded-xl text-xs font-medium transition-all border card-hover cursor-pointer ${
                     form.category === cat ? `${CATEGORY_COLORS[cat]} shadow-lg` : "bg-base-850 border-base-800 text-slate-400 hover:border-base-700"
                   }`}>
                   <div className="text-sm font-semibold mb-0.5">{CATEGORY_LABELS[cat]}</div>
@@ -95,9 +105,15 @@ export const CreateTeamForm = memo(function CreateTeamForm({ onClose }: { onClos
               ))}
             </div>
             <div className="flex gap-2 justify-end">
-              <button onClick={() => setStep(0)} className="px-4 py-2 rounded-lg text-xs text-slate-500 hover:text-slate-300 hover:bg-base-800 transition-all">Back</button>
-              <button onClick={() => setStep(2)}
-                className="flex items-center gap-1 px-4 py-2 rounded-lg text-xs font-semibold bg-accent-500/20 border border-accent-500/40 text-accent-300 hover:bg-accent-500/30 transition-all">
+              <button onClick={() => {
+                playHMIClickSound();
+                setStep(0);
+              }} className="px-4 py-2 rounded-lg text-xs text-slate-500 hover:text-slate-300 hover:bg-base-800 transition-all cursor-pointer">Back</button>
+              <button onClick={() => {
+                playHMIClickSound();
+                setStep(2);
+              }}
+                className="flex items-center gap-1 px-4 py-2 rounded-lg text-xs font-semibold bg-accent-500/20 border border-accent-500/40 text-accent-300 hover:bg-accent-500/30 transition-all cursor-pointer">
                 Next <ChevronRight size={12} />
               </button>
             </div>

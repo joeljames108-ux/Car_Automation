@@ -46,22 +46,24 @@ import {
   HelpCircle,
   Flag,
 } from "lucide-react";
-import { MasterVehicleStudio } from "./vehicleAssembly/MasterVehicleStudio";
-import { PowertrainDynoStudio } from "./powertrain/PowertrainDynoStudio";
-import { InteriorsDesigner } from "./InteriorsDesigner";
-import { RoboticFactorySequencer } from "./assembly/RoboticFactorySequencer";
-import { SuspensionMasterStudio } from "./chassis/SuspensionMasterStudio";
-import { AeroLab } from "./AeroLab";
-import { WindTunnelAeroStudio } from "./aerodynamics/WindTunnelAeroStudio";
-import { TrackBattlesStudio } from "./telemetry/TrackBattlesStudio";
-import { TrackLayoutMasterStudio } from "./trackLayouts/TrackLayoutMasterStudio";
-import { ManufacturingDesigner } from "./ManufacturingDesigner";
-import { EngineAndCar3DGraphicsViewport } from "./vehicleAssembly/EngineAndCar3DGraphicsViewport";
-import { VehicleComparisonStudio } from "./vehicleAssembly/VehicleComparisonStudio";
-import { NvhSoundLab } from "./NvhSoundLab";
-import { ApexAIStudio } from "./ApexAIStudio";
 import { MasterEngineAudioSynthesizer } from "../sim/audio/masterEngineAudioSynthesizer";
-import { Transmission3DStudio } from "./transmissionStudio/Transmission3DStudio";
+
+// Lazy-loaded studio modules for optimal bundle splitting
+const MasterVehicleStudio = React.lazy(() => import("./vehicleAssembly/MasterVehicleStudio").then(m => ({ default: m.MasterVehicleStudio })));
+const PowertrainDynoStudio = React.lazy(() => import("./powertrain/PowertrainDynoStudio").then(m => ({ default: m.PowertrainDynoStudio })));
+const InteriorsDesigner = React.lazy(() => import("./InteriorsDesigner").then(m => ({ default: m.InteriorsDesigner })));
+const RoboticFactorySequencer = React.lazy(() => import("./assembly/RoboticFactorySequencer").then(m => ({ default: m.RoboticFactorySequencer })));
+const SuspensionMasterStudio = React.lazy(() => import("./chassis/SuspensionMasterStudio").then(m => ({ default: m.SuspensionMasterStudio })));
+const AeroLab = React.lazy(() => import("./AeroLab").then(m => ({ default: m.AeroLab })));
+const WindTunnelAeroStudio = React.lazy(() => import("./aerodynamics/WindTunnelAeroStudio").then(m => ({ default: m.WindTunnelAeroStudio })));
+const TrackBattlesStudio = React.lazy(() => import("./telemetry/TrackBattlesStudio").then(m => ({ default: m.TrackBattlesStudio })));
+const TrackLayoutMasterStudio = React.lazy(() => import("./trackLayouts/TrackLayoutMasterStudio").then(m => ({ default: m.TrackLayoutMasterStudio })));
+const ManufacturingDesigner = React.lazy(() => import("./ManufacturingDesigner").then(m => ({ default: m.ManufacturingDesigner })));
+const EngineAndCar3DGraphicsViewport = React.lazy(() => import("./vehicleAssembly/EngineAndCar3DGraphicsViewport").then(m => ({ default: m.EngineAndCar3DGraphicsViewport })));
+const VehicleComparisonStudio = React.lazy(() => import("./vehicleAssembly/VehicleComparisonStudio").then(m => ({ default: m.VehicleComparisonStudio })));
+const NvhSoundLab = React.lazy(() => import("./NvhSoundLab").then(m => ({ default: m.NvhSoundLab })));
+const ApexAIStudio = React.lazy(() => import("./ApexAIStudio").then(m => ({ default: m.ApexAIStudio })));
+const Transmission3DStudio = React.lazy(() => import("./transmissionStudio/Transmission3DStudio").then(m => ({ default: m.Transmission3DStudio })));
 
 export type GrandStudioTab =
   | "vehicle_studio"

@@ -1,4 +1,4 @@
-import { useState, memo } from "react";
+import React, { useState, memo } from "react";
 import { Zap } from "lucide-react";
 
 interface GlassSliderProps {

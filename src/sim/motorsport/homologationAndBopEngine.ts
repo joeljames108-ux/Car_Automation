@@ -129,6 +129,10 @@ export interface BalanceOfPerformanceAdjustment {
   estimatedLapTimeDeltaSec: number; // delta to baseline grid pace
 }
 
+const homologationCache = new Map<string, HomologationResult>();
+const bopCache = new Map<string, BalanceOfPerformanceAdjustment>();
+const MAX_BOP_CACHE = 64;
+
 export class HomologationAndBopEngine {
   /**
    * Evaluates if a vehicle meets the strict homologation technical regulations for a given FIA series.
@@ -145,6 +149,12 @@ export class HomologationAndBopEngine {
     hasTractionControl: boolean;
     rideHeightMm: number;
   }): HomologationResult {
+    const cacheKey = `${params.series}_${params.curbWeightKg}_${params.peakPowerHp}_${params.displacementLiters}_${params.annualProductionUnits}_${params.hasTurbo}_${params.isAwd}_${params.hasAbs}_${params.hasTractionControl}_${params.rideHeightMm}`;
+
+    if (homologationCache.has(cacheKey)) {
+      return homologationCache.get(cacheKey)!;
+    }
+
     const reg = FIA_REGULATIONS[params.series];
     const checks: HomologationCheckItem[] = [];
     let remedyCost = 0;
@@ -212,13 +222,21 @@ export class HomologationAndBopEngine {
       ? "REJECTED_WITH_REMEDIES"
       : "NON_COMPLIANT";
 
-    return {
+    const result: HomologationResult = {
       series: params.series,
       isCompliant: allPassed,
       overallStatus,
       checks,
       remedyCostEstimateUsd: remedyCost,
     };
+
+    if (homologationCache.size >= MAX_BOP_CACHE) {
+      const firstKey = homologationCache.keys().next().value;
+      if (firstKey) homologationCache.delete(firstKey);
+    }
+    homologationCache.set(cacheKey, result);
+
+    return result;
   }
 
   /**
@@ -232,6 +250,12 @@ export class HomologationAndBopEngine {
     hasTurbo: boolean;
     championshipStandingPosition?: number; // 1st gets success ballast penalty
   }): BalanceOfPerformanceAdjustment {
+    const cacheKey = `${params.series}_${params.vehicleName}_${params.curbWeightKg}_${params.peakPowerHp}_${params.hasTurbo}_${params.championshipStandingPosition ?? 0}`;
+
+    if (bopCache.has(cacheKey)) {
+      return bopCache.get(cacheKey)!;
+    }
+
     const reg = FIA_REGULATIONS[params.series];
     const targetPtoW = reg.maxPowerHp / reg.minWeightKg; // Target HP/kg ratio for class
     const rawPtoW = params.peakPowerHp / params.curbWeightKg;
@@ -261,7 +285,7 @@ export class HomologationAndBopEngine {
     const calibratedPtoW = calibratedPower / calibratedWeight;
     const estimatedLapTimeDeltaSec = Number(((targetPtoW - calibratedPtoW) * 4.5).toFixed(2));
 
-    return {
+    const bopResult: BalanceOfPerformanceAdjustment = {
       series: params.series,
       vehicleName: params.vehicleName,
       rawPtoWRatioHpPerKg: Number(rawPtoW.toFixed(3)),
@@ -273,5 +297,13 @@ export class HomologationAndBopEngine {
       calibratedWeightKg: Number(calibratedWeight.toFixed(0)),
       estimatedLapTimeDeltaSec,
     };
+
+    if (bopCache.size >= MAX_BOP_CACHE) {
+      const firstKey = bopCache.keys().next().value;
+      if (firstKey) bopCache.delete(firstKey);
+    }
+    bopCache.set(cacheKey, bopResult);
+
+    return bopResult;
   }
 }

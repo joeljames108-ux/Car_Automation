@@ -1,8 +1,4 @@
-// ============================================================================
-// HYPERCAR GARAGE & ENDURANCE STINT SETUP WORKSTATION (UPGRADED)
-// ============================================================================
-
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, memo } from "react";
 import { useHypercarAssemblyStore } from "../../../sim/hypercar/state/hypercarAssemblyStore";
 import { WEC_CIRCUITS, type WECCircuitProfile } from "../../../sim/hypercar/season/wecCalendar";
 import {
@@ -37,6 +33,7 @@ import {
   Target,
   BarChart3,
 } from "lucide-react";
+import { playHMIClickSound } from "../../../utils/hmiSoundSynth";
 
 export interface HypercarGarageSetup {
   rearWingAngleDeg: number; // 2° to 14°
@@ -85,17 +82,19 @@ const SETUP_PRESETS: Record<string, Partial<HypercarGarageSetup>> = {
   },
 };
 
-export const HypercarGarageSetupStudio: React.FC<HypercarGarageSetupStudioProps> = ({
+export const HypercarGarageSetupStudio: React.FC<HypercarGarageSetupStudioProps> = memo(function HypercarGarageSetupStudio({
   onBackToAssembly,
   onStartRace,
-}) => {
+}) {
   const { metrics, homologationPassportId } = useHypercarAssemblyStore();
   const [selectedCircuitIndex, setSelectedCircuitIndex] = useState(0);
   const activeCircuit = WEC_CIRCUITS[selectedCircuitIndex];
+
   const [weather, setWeather] = useState<WeatherCondition>("DRY_OPTIMAL");
-  const [showPresetCompare, setShowPresetCompare] = useState(false);
-  const [showOptimizerModal, setShowOptimizerModal] = useState(false);
   const [optimizationGoal, setOptimizationGoal] = useState<OptimizationGoal>("QUALIFYING_MAX_PACE");
+  const [showOptimizerModal, setShowOptimizerModal] = useState(false);
+  const [showCircuitCompare, setShowCircuitCompare] = useState(false);
+  const [activeTelemetryTab, setActiveTelemetryTab] = useState<"stint" | "thermal" | "aero">("stint");
 
   const [setup, setSetup] = useState<HypercarGarageSetup>({
     rearWingAngleDeg: 6.5,
@@ -107,15 +106,18 @@ export const HypercarGarageSetupStudio: React.FC<HypercarGarageSetupStudioProps>
     ersDeployMode: "ENDURANCE_BALANCED",
   });
 
-  // Calculate AI Motorsport Optimization Result
-  const optimizerResult = useMemo<MotorsportOptimizationResult>(() => {
+  const optimizerResult: MotorsportOptimizationResult = useMemo(() => {
+    const downforceReq: CircuitOptimizerProfile["downforceRequirement"] =
+      activeCircuit.downforceRequirement === "LOW" ? "LOW" :
+      activeCircuit.downforceRequirement === "HIGH" ? "HIGH" : "BALANCED";
+
     const circuitProfile: CircuitOptimizerProfile = {
       name: activeCircuit.name,
       totalLengthM: activeCircuit.lapLengthMeters,
       longestStraightM: activeCircuit.downforceRequirement === "LOW" ? 850 : activeCircuit.downforceRequirement === "HIGH" ? 450 : 650,
       cornerCount: 16,
       avgCornerRadiusM: 80,
-      downforceRequirement: activeCircuit.downforceRequirement as any,
+      downforceRequirement: downforceReq,
       trackTempC: weather === "DRY_OPTIMAL" ? 32 : weather === "DAMP_TRACK" ? 22 : 18,
       isWetTrack: weather === "WET_RAIN" || weather === "TORRENTIAL_MONSOON",
     };
@@ -134,6 +136,7 @@ export const HypercarGarageSetupStudio: React.FC<HypercarGarageSetupStudioProps>
   }, [activeCircuit, weather, optimizationGoal, metrics]);
 
   const handleApplyOptimizerSetup = () => {
+    playHMIClickSound();
     const opt = optimizerResult.optimalSetup;
     let recTire: HypercarGarageSetup["tireCompound"] = "MEDIUM_DOUBLE_STINT";
     if (weather === "WET_RAIN") recTire = "WET_INTERMEDIATE";
@@ -162,22 +165,16 @@ export const HypercarGarageSetupStudio: React.FC<HypercarGarageSetupStudioProps>
       ? (metrics.totalDownforceAt250KmhKg / metrics.totalDragAt250KmhKg).toFixed(2)
       : "0.0";
 
-  // Compute predicted lap time delta based on setup vs circuit optimal
   const lapTimeDeltaSec = useMemo(() => {
     let delta = 0;
-    // Wing angle penalty/benefit vs downforce requirement
     const targetWing = (activeCircuit.downforceRequirement as string) === "LOW" ? 3.0 : activeCircuit.downforceRequirement === "HIGH" ? 11.0 : 7.0;
     delta += Math.abs(setup.rearWingAngleDeg - targetWing) * 0.18;
-
-    // Weather mismatch penalty
     if ((weather === "WET_RAIN" || weather === "TORRENTIAL_MONSOON") && setup.tireCompound !== "WET_INTERMEDIATE" && setup.tireCompound !== "FULL_WET_MONSOON") {
       delta += 4.5;
     }
-
     return delta.toFixed(3);
   }, [setup, activeCircuit, weather]);
 
-  // Weather-specific tire recommendations
   const recommendedTires = useMemo(() => {
     switch (weather) {
       case "DRY_OPTIMAL": return ["SOFT_SPRINT", "MEDIUM_DOUBLE_STINT", "HARD_TRIPLE_STINT"];
@@ -188,6 +185,7 @@ export const HypercarGarageSetupStudio: React.FC<HypercarGarageSetupStudioProps>
   }, [weather]);
 
   const applyPreset = (presetKey: string) => {
+    playHMIClickSound();
     const preset = SETUP_PRESETS[presetKey];
     if (preset) {
       setSetup((prev) => ({ ...prev, ...preset }));
@@ -200,7 +198,10 @@ export const HypercarGarageSetupStudio: React.FC<HypercarGarageSetupStudioProps>
       <div className="p-4 bg-black/60 border-b border-white/10 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <button
-            onClick={onBackToAssembly}
+            onClick={() => {
+              playHMIClickSound();
+              onBackToAssembly();
+            }}
             className="px-3 py-1.5 rounded-lg bg-zinc-900 border border-white/10 text-xs font-bold text-zinc-300 hover:text-white transition-all cursor-pointer"
           >
             ← Back to Assembly CAD
@@ -220,7 +221,10 @@ export const HypercarGarageSetupStudio: React.FC<HypercarGarageSetupStudioProps>
         {/* Live Setup Impact Delta & Enter Session Action */}
         <div className="flex items-center gap-4">
           <button
-            onClick={() => setShowOptimizerModal(true)}
+            onClick={() => {
+              playHMIClickSound();
+              setShowOptimizerModal(true);
+            }}
             className="flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-purple-600/30 to-indigo-600/30 border border-purple-500/50 text-purple-300 font-bold text-xs hover:bg-purple-600/40 transition-all cursor-pointer shadow-lg shadow-purple-500/10"
           >
             <Sparkles className="w-4 h-4 text-purple-400" />
@@ -235,7 +239,10 @@ export const HypercarGarageSetupStudio: React.FC<HypercarGarageSetupStudioProps>
           </div>
 
           <button
-            onClick={() => onStartRace && onStartRace(activeCircuit, setup)}
+            onClick={() => {
+              playHMIClickSound();
+              if (onStartRace) onStartRace(activeCircuit, setup);
+            }}
             className="flex items-center gap-2 px-6 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 text-black font-black text-xs uppercase tracking-wider shadow-lg shadow-amber-500/20 hover:brightness-110 transition-all cursor-pointer"
           >
             <Play className="w-4 h-4 fill-black" />
@@ -726,4 +733,4 @@ export const HypercarGarageSetupStudio: React.FC<HypercarGarageSetupStudioProps>
       )}
     </div>
   );
-};
+});

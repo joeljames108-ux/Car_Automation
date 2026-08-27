@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo, memo } from "react";
 import { createPortal } from "react-dom";
 import { Gauge, Wind, Disc, Activity, Cpu, Sparkles, Navigation, ArrowRight, Maximize2, ArrowLeft, X } from "lucide-react";
 import { useDesign } from "../state/DesignContext";
@@ -7,7 +7,7 @@ interface ChassisHotspotViewerProps {
   onSelectStage?: (stage: string) => void;
 }
 
-export function ChassisHotspotViewer({ onSelectStage }: ChassisHotspotViewerProps) {
+function ChassisHotspotViewerComponent({ onSelectStage }: ChassisHotspotViewerProps) {
   const { design, sim } = useDesign();
   const [activeHotspot, setActiveHotspot] = useState<string | null>(null);
   const [isZoomed, setIsZoomed] = useState(false);
@@ -43,108 +43,124 @@ export function ChassisHotspotViewer({ onSelectStage }: ChassisHotspotViewerProp
     };
   }, [isZoomed]);
 
-  const dispLiters = (sim.displacement / 1000).toFixed(1);
+  const hotspots = useMemo(() => {
+    const dispL = (sim.displacement / 1000).toFixed(1);
+    const engStat = (sim.knockRisk || 0) > 0.45 ? "red" : (sim.coolingMargin || 0.5) < 0.25 ? "yellow" : "green";
+    const fAeroStat = (sim.dragCoeff || 0.3) > 0.45 ? "yellow" : "green";
+    const rAeroStat = (sim.aeroBalance || 50) < 35 || (sim.aeroBalance || 50) > 65 ? "yellow" : "green";
+    const whlStat = (sim.lateralG || 1.2) < 0.9 ? "yellow" : "green";
+    const brkStat = (sim.brakingDist || 35) > 42 ? "red" : (sim.brakingDist || 35) > 36 ? "yellow" : "green";
+    const ecStat = (sim.reliability || 0.8) < 0.65 ? "red" : (sim.reliability || 0.8) < 0.8 ? "yellow" : "green";
 
-  // Calculate component status rings (Green / Yellow / Red) based on live simulation stats
-  const engineStatus = (sim.knockRisk || 0) > 0.45 ? "red" : (sim.coolingMargin || 0.5) < 0.25 ? "yellow" : "green";
-  const frontAeroStatus = (sim.dragCoeff || 0.3) > 0.45 ? "yellow" : "green";
-  const rearAeroStatus = (sim.aeroBalance || 50) < 35 || (sim.aeroBalance || 50) > 65 ? "yellow" : "green";
-  const wheelStatus = (sim.lateralG || 1.2) < 0.9 ? "yellow" : "green";
-  const brakeStatus = (sim.brakingDist || 35) > 42 ? "red" : (sim.brakingDist || 35) > 36 ? "yellow" : "green";
-  const ecuStatus = (sim.reliability || 0.8) < 0.65 ? "red" : (sim.reliability || 0.8) < 0.8 ? "yellow" : "green";
+    const dispLiters = (sim.displacement / 1000).toFixed(1);
+    const engineStatus = (sim.knockRisk || 0) > 0.45 ? "red" : (sim.coolingMargin || 0.5) < 0.25 ? "yellow" : "green";
+    const frontAeroStatus = (sim.dragCoeff || 0.3) > 0.45 ? "yellow" : "green";
+    const rearAeroStatus = (sim.aeroBalance || 50) < 35 || (sim.aeroBalance || 50) > 65 ? "yellow" : "green";
+    const wheelStatus = (sim.lateralG || 1.2) < 0.9 ? "yellow" : "green";
+    const brakeStatus = (sim.brakingDist || 35) > 42 ? "red" : (sim.brakingDist || 35) > 36 ? "yellow" : "green";
+    const ecuStatus = (sim.reliability || 0.8) < 0.65 ? "red" : (sim.reliability || 0.8) < 0.8 ? "yellow" : "green";
 
-  const getRingColor = (status: "green" | "yellow" | "red") => {
-    if (status === "red") return { stroke: "#ef4444", fill: "rgba(239, 68, 68, 0.2)", glow: "rgba(239, 68, 68, 0.7)", border: "border-red-500/80 text-red-300 bg-red-500/10" };
-    if (status === "yellow") return { stroke: "#eab308", fill: "rgba(234, 179, 8, 0.2)", glow: "rgba(234, 179, 8, 0.7)", border: "border-yellow-500/80 text-yellow-300 bg-yellow-500/10" };
-    return { stroke: "#22c55e", fill: "rgba(34, 197, 94, 0.15)", glow: "rgba(34, 197, 94, 0.6)", border: "border-emerald-500/80 text-emerald-300 bg-emerald-500/10" };
-  };
+    const getRingColor = (status: "green" | "yellow" | "red") => {
+      if (status === "red") return { stroke: "#ef4444", fill: "rgba(239, 68, 68, 0.2)", glow: "rgba(239, 68, 68, 0.7)", border: "border-red-500/80 text-red-300 bg-red-500/10" };
+      if (status === "yellow") return { stroke: "#eab308", fill: "rgba(234, 179, 8, 0.2)", glow: "rgba(234, 179, 8, 0.7)", border: "border-yellow-500/80 text-yellow-300 bg-yellow-500/10" };
+      return { stroke: "#22c55e", fill: "rgba(34, 197, 94, 0.15)", glow: "rgba(34, 197, 94, 0.6)", border: "border-emerald-500/80 text-emerald-300 bg-emerald-500/10" };
+    };
 
-  const hotspots = [
-    {
-      id: "engine",
-      stage: "engine",
-      label: "Engine Bay & Powertrain",
-      icon: <Gauge size={16} className="text-cyan-400" />,
-      cx: 240,
-      cy: 160,
-      stat: `${sim.peakPower} HP | ${sim.peakTorque} Nm`,
-      detail: `${design.engine.layout.toUpperCase()} ${sim.cylinderCount} Cyl (${dispLiters}L)`,
-      color: "from-cyan-500/20 to-blue-500/10 border-cyan-400/60 text-cyan-300",
-      glowColor: "rgba(34, 211, 238, 0.6)",
-      status: engineStatus,
-      ring: getRingColor(engineStatus),
-    },
-    {
-      id: "front-aero",
-      stage: "aero",
-      label: "Front Splitter & Aero",
-      icon: <Wind size={16} className="text-emerald-400" />,
-      cx: 110,
-      cy: 160,
-      stat: `Cd ${sim.dragCoeff.toFixed(2)} | Front Bias ${(sim.aeroBalance || 50).toFixed(0)}%`,
-      detail: `Splitter ${design.vehicle.aero?.splitterLength || 100}mm | Floor: ${(design.vehicle.aero?.underbody || "flat").replace("_", " ")}`,
-      color: "from-emerald-500/20 to-teal-500/10 border-emerald-400/60 text-emerald-300",
-      glowColor: "rgba(52, 211, 153, 0.6)",
-      status: frontAeroStatus,
-      ring: getRingColor(frontAeroStatus),
-    },
-    {
-      id: "rear-aero",
-      stage: "aero",
-      label: "Rear Wing & Diffuser",
-      icon: <Wind size={16} className="text-purple-400" />,
-      cx: 690,
-      cy: 160,
-      stat: `${sim.downforce || 0} kg Downforce @ 200km/h`,
-      detail: `Rear Wing Angle ${design.vehicle.aero?.wingAngle || 0}° | Diffuser ${design.vehicle.aero?.diffuserAngle || 0}°`,
-      color: "from-purple-500/20 to-fuchsia-500/10 border-purple-400/60 text-purple-300",
-      glowColor: "rgba(192, 132, 252, 0.6)",
-      status: rearAeroStatus,
-      ring: getRingColor(rearAeroStatus),
-    },
-    {
-      id: "wheels",
-      stage: "vehicle",
-      label: "Suspension & Tyres",
-      icon: <Activity size={16} className="text-amber-400" />,
-      cx: 210,
-      cy: 225,
-      stat: `Cornering ${(sim.lateralG || 1.2).toFixed(2)}g | ${(design.vehicle.tireCompound || "street").toUpperCase()}`,
-      detail: `Wheel Width ${design.vehicle.wheelWidth || 9}" | Diameter ${design.vehicle.wheelDiameter || 19}"`,
-      color: "from-amber-500/20 to-yellow-500/10 border-amber-400/60 text-amber-300",
-      glowColor: "rgba(251, 191, 36, 0.6)",
-      status: wheelStatus,
-      ring: getRingColor(wheelStatus),
-    },
-    {
-      id: "brakes",
-      stage: "vehicle",
-      label: "Brake System",
-      icon: <Disc size={16} className="text-rose-400" />,
-      cx: 580,
-      cy: 225,
-      stat: `Brake Type: ${(design.vehicle.brakeType || "steel").toUpperCase()}`,
-      detail: `Disc Size ${design.vehicle.brakeDiscSize || 380}mm | Bias ${((design.vehicle.brakeBias || 0.6) * 100).toFixed(0)}% F`,
-      color: "from-rose-500/20 to-red-500/10 border-rose-400/60 text-rose-300",
-      glowColor: "rgba(251, 113, 133, 0.6)",
-      status: brakeStatus,
-      ring: getRingColor(brakeStatus),
-    },
-    {
-      id: "electronics",
-      stage: "infotainment",
-      label: "Cockpit & Telemetry ECU",
-      icon: <Cpu size={16} className="text-indigo-400" />,
-      cx: 430,
-      cy: 160,
-      stat: `Infotainment OS: ${(design.infotainment?.osTier || "standard").toUpperCase()}`,
-      detail: `ADAS Assist Level ${design.infotainment?.adasLevel || 0} | Drive ECU Active`,
-      color: "from-indigo-500/20 to-violet-500/10 border-indigo-400/60 text-indigo-300",
-      glowColor: "rgba(129, 140, 248, 0.6)",
-      status: ecuStatus,
-      ring: getRingColor(ecuStatus),
-    },
-  ];
+    return [
+      {
+        id: "engine",
+        stage: "engine",
+        label: "Engine Bay & Powertrain",
+        icon: <Gauge size={16} className="text-cyan-400" />,
+        cx: 240,
+        cy: 160,
+        stat: `${sim.peakPower} HP | ${sim.peakTorque} Nm`,
+        detail: `${design.engine.layout.toUpperCase()} ${sim.cylinderCount} Cyl (${dispLiters}L)`,
+        color: "from-cyan-500/20 to-blue-500/10 border-cyan-400/60 text-cyan-300",
+        glowColor: "rgba(34, 211, 238, 0.6)",
+        status: engineStatus,
+        ring: getRingColor(engineStatus),
+      },
+      {
+        id: "front-aero",
+        stage: "aero",
+        label: "Front Splitter & Aero",
+        icon: <Wind size={16} className="text-emerald-400" />,
+        cx: 110,
+        cy: 160,
+        stat: `Cd ${sim.dragCoeff.toFixed(2)} | Front Bias ${(sim.aeroBalance || 50).toFixed(0)}%`,
+        detail: `Splitter ${design.vehicle.aero?.splitterLength || 100}mm | Floor: ${(design.vehicle.aero?.underbody || "flat").replace("_", " ")}`,
+        color: "from-emerald-500/20 to-teal-500/10 border-emerald-400/60 text-emerald-300",
+        glowColor: "rgba(52, 211, 153, 0.6)",
+        status: frontAeroStatus,
+        ring: getRingColor(frontAeroStatus),
+      },
+      {
+        id: "rear-aero",
+        stage: "aero",
+        label: "Rear Wing & Diffuser",
+        icon: <Wind size={16} className="text-purple-400" />,
+        cx: 690,
+        cy: 160,
+        stat: `${sim.downforce || 0} kg Downforce @ 200km/h`,
+        detail: `Rear Wing Angle ${design.vehicle.aero?.wingAngle || 0}° | Diffuser ${design.vehicle.aero?.diffuserAngle || 0}°`,
+        color: "from-purple-500/20 to-fuchsia-500/10 border-purple-400/60 text-purple-300",
+        glowColor: "rgba(192, 132, 252, 0.6)",
+        status: rearAeroStatus,
+        ring: getRingColor(rearAeroStatus),
+      },
+      {
+        id: "wheels",
+        stage: "vehicle",
+        label: "Suspension & Tyres",
+        icon: <Activity size={16} className="text-amber-400" />,
+        cx: 210,
+        cy: 225,
+        stat: `Cornering ${(sim.lateralG || 1.2).toFixed(2)}g | ${(design.vehicle.tireCompound || "street").toUpperCase()}`,
+        detail: `Wheel Width ${design.vehicle.wheelWidth || 9}" | Diameter ${design.vehicle.wheelDiameter || 19}"`,
+        color: "from-amber-500/20 to-yellow-500/10 border-amber-400/60 text-amber-300",
+        glowColor: "rgba(251, 191, 36, 0.6)",
+        status: wheelStatus,
+        ring: getRingColor(wheelStatus),
+      },
+      {
+        id: "brakes",
+        stage: "vehicle",
+        label: "Brake System",
+        icon: <Disc size={16} className="text-rose-400" />,
+        cx: 580,
+        cy: 225,
+        stat: `Brake Type: ${(design.vehicle.brakeType || "steel").toUpperCase()}`,
+        detail: `Disc Size ${design.vehicle.brakeDiscSize || 380}mm | Bias ${((design.vehicle.brakeBias || 0.6) * 100).toFixed(0)}% F`,
+        color: "from-rose-500/20 to-red-500/10 border-rose-400/60 text-rose-300",
+        glowColor: "rgba(251, 113, 133, 0.6)",
+        status: brakeStatus,
+        ring: getRingColor(brakeStatus),
+      },
+      {
+        id: "electronics",
+        stage: "infotainment",
+        label: "Cockpit & Telemetry ECU",
+        icon: <Cpu size={16} className="text-indigo-400" />,
+        cx: 430,
+        cy: 160,
+        stat: `Infotainment OS: ${(design.infotainment?.osTier || "standard").toUpperCase()}`,
+        detail: `ADAS Assist Level ${design.infotainment?.adasLevel || 0} | Drive ECU Active`,
+        color: "from-indigo-500/20 to-violet-500/10 border-indigo-400/60 text-indigo-300",
+        glowColor: "rgba(129, 140, 248, 0.6)",
+        status: ecuStatus,
+        ring: getRingColor(ecuStatus),
+      },
+    ];
+  }, [
+    sim.peakPower, sim.peakTorque, sim.displacement, sim.cylinderCount, design.engine.layout,
+    sim.dragCoeff, sim.aeroBalance, design.vehicle.aero?.splitterLength, design.vehicle.aero?.underbody,
+    sim.downforce, design.vehicle.aero?.wingAngle, design.vehicle.aero?.diffuserAngle,
+    sim.lateralG, design.vehicle.tireCompound, design.vehicle.wheelWidth, design.vehicle.wheelDiameter,
+    design.vehicle.brakeType, design.vehicle.brakeDiscSize, design.vehicle.brakeBias,
+    design.infotainment?.osTier, design.infotainment?.adasLevel,
+    sim.knockRisk, sim.coolingMargin, sim.brakingDist, sim.reliability
+  ]);
 
   const currentHotspotObj = hotspots.find((h) => h.id === activeHotspot);
 
@@ -345,3 +361,5 @@ export function ChassisHotspotViewer({ onSelectStage }: ChassisHotspotViewerProp
     </div>
   );
 }
+
+export const ChassisHotspotViewer = memo(ChassisHotspotViewerComponent);

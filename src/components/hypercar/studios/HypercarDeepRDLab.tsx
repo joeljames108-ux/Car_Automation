@@ -1,8 +1,4 @@
-// ============================================================================
-// HYPERCAR CONSTRUCTOR — DEEP R&D & MEGAVOLT FEA LABORATORIES
-// ============================================================================
-
-import React, { useState } from "react";
+import React, { useState, useMemo, memo } from "react";
 import {
   Shield, Zap, Wind, Flame, Activity, Sparkles, Layers,
   Sliders, Award, Gauge, Disc, ArrowRight, CheckCircle2, AlertTriangle
@@ -13,6 +9,7 @@ import { MegawattTriMotorPowertrainEngine } from "../../../sim/hypercar/megawatt
 import { ActiveGroundEffectVenturiAeromechanics, type ActiveDrsMode } from "../../../sim/hypercar/activeGroundEffectVenturiAeromechanics";
 import { CarbonCeramicMatrixBrakeThermalFea } from "../../../sim/hypercar/carbonCeramicMatrixBrakeThermalFea";
 import { useHypercarAssemblyStore } from "../../../sim/hypercar/state/hypercarAssemblyStore";
+import { playHMITabSound, playHMIClickSound } from "../../../utils/hmiSoundSynth";
 
 export type HypercarRDSubTab = "carbotanium_fea" | "trimotor_powertrain" | "venturi_aeromechanics" | "csic_brakes" | "bop_scrutineering" | "full_3d_lab";
 
@@ -32,7 +29,7 @@ const HYPERCAR_RD_TABS: HypercarRDTabDef[] = [
   { id: "bop_scrutineering", label: "WEC 24H BoP Scrutineering", icon: <Award size={14} className="text-yellow-400" />, badge: "ACO/FIA" },
 ];
 
-export const HypercarDeepRDLab: React.FC = () => {
+export const HypercarDeepRDLab: React.FC = memo(function HypercarDeepRDLab() {
   const [activeSubTab, setActiveSubTab] = useState<HypercarRDSubTab>("full_3d_lab");
   const { metrics, homologationPassportId } = useHypercarAssemblyStore();
 
@@ -49,56 +46,64 @@ export const HypercarDeepRDLab: React.FC = () => {
   const [rideHeightMm, setRideHeightMm] = useState<number>(35);
   const [drsMode, setDrsMode] = useState<ActiveDrsMode>("HIGH_DOWNFORCE_CORNERING");
 
-  // Solvers
-  const monocoqueFea = CarboTitaniumMonocoqueSolver.solveMonocoque({
-    plyCount,
-    titaniumMeshVolRatioPct: tiMeshVolPct,
-    monocoqueLengthMm: 2750,
-    monocoqueWidthMm: 1450,
-    monocoqueHeightMm: 1100,
-    appliedTorsionalMomentNm: appliedMomentNm,
-  });
+  // Solvers (memoized to avoid expensive re-calculations on unrelated renders)
+  const monocoqueFea = useMemo(() => {
+    return CarboTitaniumMonocoqueSolver.solveMonocoque({
+      plyCount,
+      titaniumMeshVolRatioPct: tiMeshVolPct,
+      monocoqueLengthMm: 2750,
+      monocoqueWidthMm: 1450,
+      monocoqueHeightMm: 1100,
+      appliedTorsionalMomentNm: appliedMomentNm,
+    });
+  }, [plyCount, tiMeshVolPct, appliedMomentNm]);
 
-  const powertrain = MegawattTriMotorPowertrainEngine.solvePowertrainKinetics({
-    vehicleMassKg: metrics.totalMassKg || 1480,
-    icePowerHp,
-    frontLeftMotorKw: frontMotorKw,
-    frontRightMotorKw: frontMotorKw,
-    batteryCapacityKwh: batteryKwh,
-    dragCoefficientCd: 0.31,
-    frontalAreaM2: 2.05,
-  });
+  const powertrain = useMemo(() => {
+    return MegawattTriMotorPowertrainEngine.solvePowertrainKinetics({
+      vehicleMassKg: metrics.totalMassKg || 1480,
+      icePowerHp,
+      frontLeftMotorKw: frontMotorKw,
+      frontRightMotorKw: frontMotorKw,
+      batteryCapacityKwh: batteryKwh,
+      dragCoefficientCd: 0.31,
+      frontalAreaM2: 2.05,
+    });
+  }, [metrics.totalMassKg, icePowerHp, frontMotorKw, batteryKwh]);
 
-  const aero = ActiveGroundEffectVenturiAeromechanics.solveAeromechanics({
-    airspeedKmH,
-    rideHeightMm,
-    drsMode,
-    wingAngleDeg: 12.0,
-  });
+  const aero = useMemo(() => {
+    return ActiveGroundEffectVenturiAeromechanics.solveAeromechanics({
+      airspeedKmH,
+      rideHeightMm,
+      drsMode,
+      wingAngleDeg: 12.0,
+    });
+  }, [airspeedKmH, rideHeightMm, drsMode]);
 
-  const brakeFea = CarbonCeramicMatrixBrakeThermalFea.solveBrakeThermalFea({
-    entrySpeedKmH: airspeedKmH,
-    vehicleMassKg: metrics.totalMassKg || 1480,
-    rotorSpec: {
-      outerDiameterMm: 420,
-      innerDiameterMm: 240,
-      thicknessMm: 40,
-      rotorMassKg: 6.8,
-      materialType: "CARBON_SILICON_CARBIDE_CSIC_R",
-      maxOperatingTempC: 1450,
-      specificHeatJPerKgK: 1200,
-      thermalConductivityWPerMK: 45,
-    },
-    caliperSpec: {
-      pistonCount: 10,
-      pistonMaterial: "TITANIUM_NITRIDE_COATED",
-      caliperBodyMaterial: "ALUMINUM_LITHIUM_MONOBLOC",
-      maxHydraulicLinePressureBar: 120,
-      totalPistonAreaCm2: 85,
-    },
-    hydraulicLinePressureBar: 95,
-    ambientTempC: 30,
-  });
+  const brakeFea = useMemo(() => {
+    return CarbonCeramicMatrixBrakeThermalFea.solveBrakeThermalFea({
+      entrySpeedKmH: airspeedKmH,
+      vehicleMassKg: metrics.totalMassKg || 1480,
+      rotorSpec: {
+        outerDiameterMm: 420,
+        innerDiameterMm: 240,
+        thicknessMm: 40,
+        rotorMassKg: 6.8,
+        materialType: "CARBON_SILICON_CARBIDE_CSIC_R",
+        maxOperatingTempC: 1450,
+        specificHeatJPerKgK: 1200,
+        thermalConductivityWPerMK: 45,
+      },
+      caliperSpec: {
+        pistonCount: 10,
+        pistonMaterial: "TITANIUM_NITRIDE_COATED",
+        caliperBodyMaterial: "ALUMINUM_LITHIUM_MONOBLOC",
+        maxHydraulicLinePressureBar: 120,
+        totalPistonAreaCm2: 85,
+      },
+      hydraulicLinePressureBar: 95,
+      ambientTempC: 30,
+    });
+  }, [airspeedKmH, metrics.totalMassKg]);
 
   return (
     <div className="w-full h-full flex flex-col bg-[#05070a] text-white overflow-hidden select-none">
@@ -109,7 +114,10 @@ export const HypercarDeepRDLab: React.FC = () => {
           return (
             <button
               key={tab.id}
-              onClick={() => setActiveSubTab(tab.id)}
+              onClick={() => {
+                playHMITabSound();
+                setActiveSubTab(tab.id);
+              }}
               className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all flex items-center gap-1.5 whitespace-nowrap border cursor-pointer ${
                 isActive
                   ? "bg-amber-500/20 border-amber-400/50 text-amber-200 shadow-sm shadow-amber-500/20"
@@ -185,7 +193,10 @@ export const HypercarDeepRDLab: React.FC = () => {
                 <label className="text-xs font-bold text-slate-300 block mb-1">Composite Ply Schedule</label>
                 <select
                   value={plyCount}
-                  onChange={(e) => setPlyCount(parseInt(e.target.value) as 24 | 32 | 48)}
+                  onChange={(e) => {
+                    playHMIClickSound();
+                    setPlyCount(parseInt(e.target.value) as 24 | 32 | 48);
+                  }}
                   className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-1.5 text-xs text-white outline-none cursor-pointer"
                 >
                   <option value={24}>24-Ply Lightweight Sprint Layup</option>
@@ -513,6 +524,6 @@ export const HypercarDeepRDLab: React.FC = () => {
       </div>
     </div>
   );
-};
+});
 
 export default HypercarDeepRDLab;

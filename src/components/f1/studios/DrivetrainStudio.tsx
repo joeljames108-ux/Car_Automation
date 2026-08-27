@@ -2,12 +2,13 @@
 // F1 CONSTRUCTOR EXPERIENCE — GEARBOX & DRIVETRAIN STUDIO
 // ============================================================================
 
-import React from "react";
+import React, { memo } from "react";
 import { Layers, Zap, Sliders, Shield } from "lucide-react";
 import { useF1ConstructorStore } from "../../../sim/f1/state/f1ConstructorStore";
 import type { F1GearboxCasingType } from "../../../sim/f1/types/f1Enums";
+import { playHMIClickSound } from "../../../utils/hmiSoundSynth";
 
-export const DrivetrainStudio: React.FC = () => {
+export const DrivetrainStudio: React.FC = memo(function DrivetrainStudio() {
   const { car, updateGearbox } = useF1ConstructorStore();
   const gb = car.gearbox;
 
@@ -47,8 +48,11 @@ export const DrivetrainStudio: React.FC = () => {
           </label>
           <select
             value={gb.casingType}
-            onChange={(e) => updateGearbox({ casingType: e.target.value as F1GearboxCasingType })}
-            className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-blue-500"
+            onChange={(e) => {
+              playHMIClickSound();
+              updateGearbox({ casingType: e.target.value as F1GearboxCasingType });
+            }}
+            className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-blue-500 cursor-pointer"
           >
             <option value="FULL_CARBON_MONOCOQUE">Full Carbon Fiber Monocoque (42 kg)</option>
             <option value="CARBON_TITANIUM_HYBRID">Carbon-Titanium Hybrid Casing (46 kg)</option>
@@ -155,8 +159,11 @@ export const DrivetrainStudio: React.FC = () => {
           </label>
           <select
             value={gb.driveshaftMaterial}
-            onChange={(e) => updateGearbox({ driveshaftMaterial: e.target.value as any })}
-            className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-blue-500"
+            onChange={(e) => {
+              playHMIClickSound();
+              updateGearbox({ driveshaftMaterial: e.target.value as any });
+            }}
+            className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-blue-500 cursor-pointer"
           >
             <option value="CARBON_FIBER_OVERWRAPPED_TI">Carbon Overwrapped Titanium (Ultra Light)</option>
             <option value="HOLLOW_AERMET_STEEL">Hollow AerMet 100 Structural Steel</option>
@@ -168,4 +175,4 @@ export const DrivetrainStudio: React.FC = () => {
       </div>
     </div>
   );
-};
+});

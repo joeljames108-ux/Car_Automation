@@ -2,7 +2,7 @@
 // F1 CONSTRUCTOR MASTER APPLICATION — UNIFIED WORKSHOP & RACE EXPERIENCE
 // ============================================================================
 
-import React, { useState } from "react";
+import React, { useState, memo } from "react";
 import { F1ModularComponentBrowser } from "./modular/F1ModularComponentBrowser";
 import { F1ModularAssemblyViewport } from "./3d/F1ModularAssemblyViewport";
 import { F1LivePhysicsHUD } from "./modular/F1LivePhysicsHUD";
@@ -11,6 +11,7 @@ import { F1GarageSetupStudio, type F1RaceWeekendSetup } from "./garage/F1GarageS
 import { F1LiveRaceSimulator } from "./racing/F1LiveRaceSimulator";
 import { RealCar100BenchmarkStudio } from "../hypercar/benchmark/RealCar100BenchmarkStudio";
 import { F1_CIRCUITS, type F1Circuit } from "../../sim/f1/season/f1Calendar";
+import { playHMIClickSound, playHMITabSound } from "../../utils/hmiSoundSynth";
 import { Wrench, SlidersHorizontal, Flag, Sparkles, Trophy, FlaskConical } from "lucide-react";
 
 export type F1WorkshopMode = "CONSTRUCTION_CAD" | "RD_LABS" | "GARAGE_SETUP" | "LIVE_RACE" | "BENCHMARKS";
@@ -43,6 +44,7 @@ const F1ConstructorMasterAppComponent: React.FC<F1ConstructorMasterAppProps> = (
   const [activeSetup, setActiveSetup] = useState<F1RaceWeekendSetup>(DEFAULT_F1_SETUP);
 
   const handleStartRace = (circuit: F1Circuit, setup: F1RaceWeekendSetup) => {
+    playHMIClickSound();
     setSelectedCircuit(circuit);
     setActiveSetup(setup);
     setCurrentMode("LIVE_RACE");
@@ -55,7 +57,10 @@ const F1ConstructorMasterAppComponent: React.FC<F1ConstructorMasterAppProps> = (
         <div className="flex items-center gap-3">
           {onBackToMainMotorsport && (
             <button
-              onClick={onBackToMainMotorsport}
+              onClick={() => {
+                playHMIClickSound();
+                onBackToMainMotorsport();
+              }}
               className="px-3 py-1.5 rounded-lg bg-zinc-900 border border-white/10 text-xs font-bold text-zinc-300 hover:text-white transition-all cursor-pointer"
             >
               ← Exit to Motorsport Hub
@@ -71,7 +76,10 @@ const F1ConstructorMasterAppComponent: React.FC<F1ConstructorMasterAppProps> = (
         {/* Studio Sub-Navigation Tabs */}
         <div className="flex items-center gap-1.5">
           <button
-            onClick={() => setCurrentMode("CONSTRUCTION_CAD")}
+            onClick={() => {
+              playHMITabSound();
+              setCurrentMode("CONSTRUCTION_CAD");
+            }}
             className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
               currentMode === "CONSTRUCTION_CAD"
                 ? "bg-cyan-500/20 border border-cyan-400/50 text-cyan-300 shadow-sm"
@@ -83,7 +91,10 @@ const F1ConstructorMasterAppComponent: React.FC<F1ConstructorMasterAppProps> = (
           </button>
 
           <button
-            onClick={() => setCurrentMode("RD_LABS")}
+            onClick={() => {
+              playHMITabSound();
+              setCurrentMode("RD_LABS");
+            }}
             className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
               currentMode === "RD_LABS"
                 ? "bg-cyan-500/20 border border-cyan-400/50 text-cyan-300 shadow-sm"
@@ -95,7 +106,10 @@ const F1ConstructorMasterAppComponent: React.FC<F1ConstructorMasterAppProps> = (
           </button>
 
           <button
-            onClick={() => setCurrentMode("GARAGE_SETUP")}
+            onClick={() => {
+              playHMITabSound();
+              setCurrentMode("GARAGE_SETUP");
+            }}
             className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
               currentMode === "GARAGE_SETUP"
                 ? "bg-cyan-500/20 border border-cyan-400/50 text-cyan-300 shadow-sm"
@@ -107,7 +121,10 @@ const F1ConstructorMasterAppComponent: React.FC<F1ConstructorMasterAppProps> = (
           </button>
 
           <button
-            onClick={() => setCurrentMode("LIVE_RACE")}
+            onClick={() => {
+              playHMITabSound();
+              setCurrentMode("LIVE_RACE");
+            }}
             className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
               currentMode === "LIVE_RACE"
                 ? "bg-emerald-500/20 border border-emerald-400/50 text-emerald-300 shadow-sm"
@@ -119,7 +136,10 @@ const F1ConstructorMasterAppComponent: React.FC<F1ConstructorMasterAppProps> = (
           </button>
 
           <button
-            onClick={() => setCurrentMode("BENCHMARKS")}
+            onClick={() => {
+              playHMITabSound();
+              setCurrentMode("BENCHMARKS");
+            }}
             className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
               currentMode === "BENCHMARKS"
                 ? "bg-amber-500/20 border border-amber-400/50 text-amber-300 shadow-sm"

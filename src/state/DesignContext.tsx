@@ -1,5 +1,5 @@
-import { createContext, useContext, useState, useMemo, useCallback, type ReactNode } from "react";
-import { simulate } from "../sim/engine";
+import React, { createContext, useContext, useState, useMemo, useCallback, ReactNode } from "react";
+import { simulate, getPhysicsSignature } from "../sim/engine";
 import { defaultDesign } from "../sim/constants";
 import { GlobalPerformanceOptimizer } from "../sim/performance/GlobalPerformanceOptimizer";
 import type { VehicleDesign, SimResult, EngineConfig, VehicleConfig, AeroConfig, InteriorConfig, ElectronicsConfig, ManufacturingConfig, ExteriorConfig, AeroResearchConfig, InfotainmentConfig } from "../sim/types";
@@ -48,8 +48,9 @@ export function DesignProvider({ children }: { children: ReactNode }) {
   const [units, setUnits] = useState<UnitSystem>("metric");
   const [carConcept, setCarConcept] = useState<CarConceptFocus>("balanced");
   const [uiTheme, setUiTheme] = useState<UITheme>("theme4");
+
   const sim = useMemo(() => {
-    const key = `sim_${design.updatedAt || 'default'}_${design.engine.layout}_${design.engine.bore}_${design.engine.stroke}_${design.engine.boostPressure || 0}`;
+    const key = `sim_${getPhysicsSignature(design)}`;
     return GlobalPerformanceOptimizer.getInstance().memoize(key, () => simulate(design));
   }, [design]);
 

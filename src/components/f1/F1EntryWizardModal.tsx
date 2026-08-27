@@ -1,9 +1,6 @@
-// ============================================================================
-// F1 CHAMPIONSHIP ENTRY WIZARD & SCRUTINEERING GATE
-// ============================================================================
-
-import React from "react";
+import React, { memo } from "react";
 import { useF1AssemblyStore } from "../../sim/f1/state/f1AssemblyStore";
+import { playHMIClickSound } from "../../utils/hmiSoundSynth";
 import {
   ShieldAlert, Wrench, Flag, CheckCircle2, ArrowRight, X, AlertTriangle, Sparkles
 } from "lucide-react";
@@ -15,12 +12,12 @@ interface F1EntryWizardModalProps {
   onEnterGarageAndRace: () => void;
 }
 
-export const F1EntryWizardModal: React.FC<F1EntryWizardModalProps> = ({
+export const F1EntryWizardModal: React.FC<F1EntryWizardModalProps> = memo(function F1EntryWizardModal({
   isOpen,
   onClose,
   onEnterConstructionStudio,
   onEnterGarageAndRace,
-}) => {
+}) {
   const { metrics, isHomologated, homologationPassportId } = useF1AssemblyStore();
 
   if (!isOpen) return null;
@@ -35,8 +32,11 @@ export const F1EntryWizardModal: React.FC<F1EntryWizardModalProps> = ({
 
         {/* Close Button */}
         <button
-          onClick={onClose}
-          className="absolute top-4 right-4 p-2 rounded-xl bg-white/5 hover:bg-white/10 text-zinc-400 hover:text-white transition-all"
+          onClick={() => {
+            playHMIClickSound();
+            onClose();
+          }}
+          className="absolute top-4 right-4 p-2 rounded-xl bg-white/5 hover:bg-white/10 text-zinc-400 hover:text-white transition-all cursor-pointer"
         >
           <X className="w-4 h-4" />
         </button>
@@ -105,7 +105,10 @@ export const F1EntryWizardModal: React.FC<F1EntryWizardModalProps> = ({
         {/* Action Buttons */}
         <div className="flex items-center justify-end gap-3">
           <button
-            onClick={onEnterConstructionStudio}
+            onClick={() => {
+              playHMIClickSound();
+              onEnterConstructionStudio();
+            }}
             className="flex items-center gap-2 px-5 py-3 rounded-2xl bg-cyan-500 hover:bg-cyan-400 text-black font-black text-xs uppercase tracking-wider shadow-lg shadow-cyan-500/30 transition-all cursor-pointer"
           >
             <Wrench className="w-4 h-4" />
@@ -114,7 +117,10 @@ export const F1EntryWizardModal: React.FC<F1EntryWizardModalProps> = ({
 
           {hasEligibleCar && (
             <button
-              onClick={onEnterGarageAndRace}
+              onClick={() => {
+                playHMIClickSound();
+                onEnterGarageAndRace();
+              }}
               className="flex items-center gap-2 px-6 py-3 rounded-2xl bg-gradient-to-r from-emerald-500 to-teal-400 text-black font-black text-xs uppercase tracking-wider shadow-lg shadow-emerald-500/30 hover:brightness-110 transition-all cursor-pointer"
             >
               <span>Enter Race Setup & Qualifying</span>
@@ -125,4 +131,4 @@ export const F1EntryWizardModal: React.FC<F1EntryWizardModalProps> = ({
       </div>
     </div>
   );
-};
+});

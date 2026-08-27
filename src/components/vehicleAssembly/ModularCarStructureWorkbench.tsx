@@ -9,7 +9,7 @@
 // - 3D Viewport Telemetry Controls (CoG Sphere, FEA Heatmap, Load Vectors, Solo Isolation)
 // ============================================================================
 
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import {
   Layers,
   Activity,
@@ -93,16 +93,26 @@ export const ModularCarStructureWorkbench: React.FC<ModularCarStructureWorkbench
     aero: true,
   });
 
-  // Calculate live structure telemetry
-  const telemetry: ModularStructureTelemetry = ModularStructureEngine.solveStructure(
+  // Calculate live structure telemetry (Memoized for high-performance zero-lag UI updates)
+  const telemetry: ModularStructureTelemetry = useMemo(() => {
+    return ModularStructureEngine.solveStructure(
+      chassis,
+      installedStages,
+      materialGrades,
+      wheelbaseMm,
+      trackWidthFrontMm,
+      trackWidthRearMm,
+      rideHeightMm
+    );
+  }, [
     chassis,
     installedStages,
     materialGrades,
     wheelbaseMm,
     trackWidthFrontMm,
     trackWidthRearMm,
-    rideHeightMm
-  );
+    rideHeightMm,
+  ]);
 
   const toggleCategory = (cat: string) => {
     setExpandedCategories((prev) => ({ ...prev, [cat]: !prev[cat] }));

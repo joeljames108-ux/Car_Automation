@@ -70,6 +70,68 @@ interface VehicleWorkshopPanelProps {
   className?: string;
 }
 
+const RIBBON_ITEMS = [
+  { id: "architecture", number: "#0", name: "Architecture", category: "Core" },
+  { id: "chassis_frame", number: "#1", name: "Chassis Monocoque", category: "Structure" },
+  { id: "subframe_front", number: "#2", name: "Front Subframe", category: "Structure" },
+  { id: "subframe_rear", number: "#3", name: "Rear Subframe", category: "Structure" },
+  { id: "suspension_front", number: "#4", name: "Front Suspension", category: "Suspension & Handling" },
+  { id: "suspension_rear", number: "#5", name: "Rear Suspension", category: "Suspension & Handling" },
+  { id: "brakes", number: "#6", name: "Brakes & Calipers", category: "Suspension & Handling" },
+  { id: "steering", number: "#7", name: "Steering System", category: "Suspension & Handling" },
+  { id: "transmission", number: "#8", name: "Transmission & Driveline", category: "Powertrain" },
+  { id: "floor_pan", number: "#9", name: "Floor Pan & Tunnel", category: "Structure" },
+  { id: "firewall", number: "#10", name: "Firewall & Cowl", category: "Structure" },
+  { id: "pillars", number: "#11", name: "A/B/C Pillars", category: "Structure" },
+  { id: "roof_structure", number: "#12", name: "Roof Framework", category: "Structure" },
+  { id: "rear_wheelhouses", number: "#13", name: "Rear Wheelhouses", category: "Structure" },
+  { id: "closures", number: "#14", name: "Closures & Body Panels", category: "Exterior & Aero" },
+  { id: "wheels_tires", number: "#15", name: "Wheels & Tires", category: "Suspension & Handling" },
+];
+
+const MATERIAL_TIERS = [
+  {
+    id: "cast" as MaterialGrade,
+    name: "Stamped Steel (OEM Base)",
+    badge: "OEM BASE",
+    powerLabel: "100%",
+    weightLabel: "100%",
+    rigidityLabel: "+0 kNm/deg",
+    costMult: "1.0x",
+    description: "High-volume stamped deep-draw steel. Maximum impact ductility and lowest production cost.",
+  },
+  {
+    id: "forged" as MaterialGrade,
+    name: "Die-Cast Aluminum Alloy (Lightweight)",
+    badge: "RACE SPEC",
+    powerLabel: "120%",
+    weightLabel: "55%",
+    rigidityLabel: "+8 kNm/deg",
+    costMult: "1.4x",
+    description: "Automotive aerospace 6000/7000 series aluminum. 45% weight saving with enhanced torsional response.",
+  },
+  {
+    id: "billet" as MaterialGrade,
+    name: "Compacted Graphite / Billet CNC Alloy",
+    badge: "CNC BILLET",
+    powerLabel: "140%",
+    weightLabel: "80%",
+    rigidityLabel: "+18 kNm/deg",
+    costMult: "1.9x",
+    description: "5-axis CNC machined billet structure. Double fatigue strength under high-frequency track loads.",
+  },
+  {
+    id: "titanium" as MaterialGrade,
+    name: "Titanium / Carbon Monocoque (Motorsport)",
+    badge: "TITANIUM / CARBON",
+    powerLabel: "165%",
+    weightLabel: "50%",
+    rigidityLabel: "+32 kNm/deg",
+    costMult: "4.5x",
+    description: "Autoclave cured carbon fiber & Ti-6Al-4V titanium hardpoints. Uncompromising F1-grade stiffness.",
+  },
+];
+
 export const VehicleWorkshopPanel: React.FC<VehicleWorkshopPanelProps> = ({
   installedComponents,
   activeComponentId,
@@ -115,26 +177,6 @@ export const VehicleWorkshopPanel: React.FC<VehicleWorkshopPanelProps> = ({
 
   const components = useMemo(() => getVehicleAssemblyComponents(vehicleConfig), [vehicleConfig]);
 
-  // Full 16-step Assembly Ribbon Items
-  const ribbonItems = useMemo(() => [
-    { id: "architecture", number: "#0", name: "Architecture", category: "Core" },
-    { id: "chassis_frame", number: "#1", name: "Chassis Monocoque", category: "Structure" },
-    { id: "subframe_front", number: "#2", name: "Front Subframe", category: "Structure" },
-    { id: "subframe_rear", number: "#3", name: "Rear Subframe", category: "Structure" },
-    { id: "suspension_front", number: "#4", name: "Front Suspension", category: "Suspension & Handling" },
-    { id: "suspension_rear", number: "#5", name: "Rear Suspension", category: "Suspension & Handling" },
-    { id: "brakes", number: "#6", name: "Brakes & Calipers", category: "Suspension & Handling" },
-    { id: "steering", number: "#7", name: "Steering System", category: "Suspension & Handling" },
-    { id: "transmission", number: "#8", name: "Transmission & Driveline", category: "Powertrain" },
-    { id: "floor_pan", number: "#9", name: "Floor Pan & Tunnel", category: "Structure" },
-    { id: "firewall", number: "#10", name: "Firewall & Cowl", category: "Structure" },
-    { id: "pillars", number: "#11", name: "A/B/C Pillars", category: "Structure" },
-    { id: "roof_structure", number: "#12", name: "Roof Framework", category: "Structure" },
-    { id: "rear_wheelhouses", number: "#13", name: "Rear Wheelhouses", category: "Structure" },
-    { id: "closures", number: "#14", name: "Closures & Body Panels", category: "Exterior & Aero" },
-    { id: "wheels_tires", number: "#15", name: "Wheels & Tires", category: "Suspension & Handling" },
-  ], []);
-
   const activeRibbonId = activeComponentId || selectedNavId;
 
   const scrollRibbon = (direction: "left" | "right") => {
@@ -146,49 +188,6 @@ export const VehicleWorkshopPanel: React.FC<VehicleWorkshopPanelProps> = ({
 
   // Material Grade Metadata Tiers for Column 2
   const currentGrade = (selectedVariants[activeRibbonId as VehicleComponentId] || "forged") as MaterialGrade;
-
-  const materialTiers = [
-    {
-      id: "cast" as MaterialGrade,
-      name: "Stamped Steel (OEM Base)",
-      badge: "OEM BASE",
-      powerLabel: "100%",
-      weightLabel: "100%",
-      rigidityLabel: "+0 kNm/deg",
-      costMult: "1.0x",
-      description: "High-volume stamped deep-draw steel. Maximum impact ductility and lowest production cost.",
-    },
-    {
-      id: "forged" as MaterialGrade,
-      name: "Die-Cast Aluminum Alloy (Lightweight)",
-      badge: "RACE SPEC",
-      powerLabel: "120%",
-      weightLabel: "55%",
-      rigidityLabel: "+8 kNm/deg",
-      costMult: "1.4x",
-      description: "Automotive aerospace 6000/7000 series aluminum. 45% weight saving with enhanced torsional response.",
-    },
-    {
-      id: "billet" as MaterialGrade,
-      name: "Compacted Graphite / Billet CNC Alloy",
-      badge: "CNC BILLET",
-      powerLabel: "140%",
-      weightLabel: "80%",
-      rigidityLabel: "+18 kNm/deg",
-      costMult: "1.9x",
-      description: "5-axis CNC machined billet structure. Double fatigue strength under high-frequency track loads.",
-    },
-    {
-      id: "titanium" as MaterialGrade,
-      name: "Titanium / Carbon Monocoque (Motorsport)",
-      badge: "TITANIUM / CARBON",
-      powerLabel: "165%",
-      weightLabel: "50%",
-      rigidityLabel: "+32 kNm/deg",
-      costMult: "4.5x",
-      description: "Autoclave cured carbon fiber & Ti-6Al-4V titanium hardpoints. Uncompromising F1-grade stiffness.",
-    },
-  ];
 
   return (
     <div className={`space-y-4 font-mono ${className}`}>
@@ -242,7 +241,7 @@ export const VehicleWorkshopPanel: React.FC<VehicleWorkshopPanelProps> = ({
             className="flex items-center gap-2 overflow-x-auto no-scrollbar py-1 scroll-smooth"
             style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
           >
-            {ribbonItems.map((item) => {
+            {RIBBON_ITEMS.map((item) => {
               const isSelected = activeRibbonId === item.id;
               const isInstalled = installedComponents.includes(item.id as VehicleComponentId);
               const installable = item.id === "architecture" || canInstall(item.id as VehicleComponentId);
@@ -600,7 +599,7 @@ export const VehicleWorkshopPanel: React.FC<VehicleWorkshopPanelProps> = ({
 
           {/* 4 Interactive Material Cards */}
           <div className="space-y-2.5">
-            {materialTiers.map((tier) => {
+            {MATERIAL_TIERS.map((tier) => {
               const isSelected = currentGrade === tier.id;
 
               return (

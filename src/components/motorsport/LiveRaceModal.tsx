@@ -4,6 +4,7 @@
 import { memo } from "react";
 import { Radio, Trophy, Play, SkipForward, CheckCircle } from "lucide-react";
 import { CircuitDiagram, TelemetryGraph, SectorTimesBarChart, CarSilhouetteDiagram } from "../ui/Charts";
+import { playHMIClickSound } from "../../utils/hmiSoundSynth";
 import type { SimResult } from "../../sim/types";
 
 export interface LiveRaceState {
@@ -47,8 +48,11 @@ export const LiveRaceModal = memo(function LiveRaceModal({ isOpen, state, sim, o
             </div>
           </div>
           <button
-            onClick={onFinishRace}
-            className="px-4 py-2 rounded-xl text-xs font-bold bg-cyan-500/20 border border-cyan-400/40 text-cyan-300 hover:bg-cyan-500/30 transition-all shadow-[0_0_12px_rgba(34,211,238,0.2)]"
+            onClick={() => {
+              playHMIClickSound();
+              onFinishRace();
+            }}
+            className="px-4 py-2 rounded-xl text-xs font-bold bg-cyan-500/20 border border-cyan-400/40 text-cyan-300 hover:bg-cyan-500/30 transition-all shadow-[0_0_12px_rgba(34,211,238,0.2)] cursor-pointer"
           >
             Skip to Final Results ➔
           </button>
@@ -70,14 +74,20 @@ export const LiveRaceModal = memo(function LiveRaceModal({ isOpen, state, sim, o
 
           <div className="flex items-center gap-2">
             <button
-              onClick={onStepLap}
-              className="px-3.5 py-2 rounded-xl text-xs font-bold bg-base-850 border border-base-700 text-slate-300 hover:bg-base-800 transition-all flex items-center gap-1.5"
+              onClick={() => {
+                playHMIClickSound();
+                onStepLap();
+              }}
+              className="px-3.5 py-2 rounded-xl text-xs font-bold bg-base-850 border border-base-700 text-slate-300 hover:bg-base-800 transition-all flex items-center gap-1.5 cursor-pointer"
             >
               <SkipForward size={14} /> Next Lap
             </button>
             <button
-              onClick={onFinishRace}
-              className="px-4 py-2 rounded-xl text-xs font-bold bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 hover:bg-emerald-500/30 transition-all flex items-center gap-1.5"
+              onClick={() => {
+                playHMIClickSound();
+                onFinishRace();
+              }}
+              className="px-4 py-2 rounded-xl text-xs font-bold bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 hover:bg-emerald-500/30 transition-all flex items-center gap-1.5 cursor-pointer"
             >
               <CheckCircle size={14} /> Complete Simulation
             </button>

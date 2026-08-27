@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import {
   Newspaper, Trophy, Star, Users, Clock, Video, GitCompare, Award,
   Shield, TrendingUp, ThumbsUp, ThumbsDown, Flame, Sparkles,

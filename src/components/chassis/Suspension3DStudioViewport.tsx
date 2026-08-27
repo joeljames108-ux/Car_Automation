@@ -18,6 +18,7 @@ import {
   STUDIO_ENVIRONMENT_PRESETS,
   AutomotiveStudioEnvironmentManager,
 } from "../../exterior3d/environment/AutomotiveStudioEnvironment";
+import { disposeThreeScene } from "../../exterior3d/utils/threeDisposal";
 import { useDesign } from "../../state/DesignContext";
 import {
   Sliders,
@@ -501,13 +502,11 @@ const Suspension3DStudioViewportComponent: React.FC = () => {
       cancelAnimationFrame(animId);
       document.removeEventListener("visibilitychange", handleVisibilityChange);
       window.removeEventListener("resize", handleResize);
+      controls.dispose();
       if (currentEnvTextureRef.current) {
         currentEnvTextureRef.current.dispose();
       }
-      renderer.dispose();
-      if (mountRef.current && renderer.domElement) {
-        mountRef.current.removeChild(renderer.domElement);
-      }
+      disposeThreeScene(scene, renderer);
     };
   }, [suspensionType, envPreset]);
 

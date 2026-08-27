@@ -2,23 +2,24 @@
 // F1 CONSTRUCTOR EXPERIENCE — OVERVIEW COMMAND STUDIO
 // ============================================================================
 
-import React from "react";
+import React, { useMemo, memo } from "react";
 import { Zap, Gauge, Wind, Activity, Layers, Shield, Trophy, CheckCircle2, ChevronRight, Sliders } from "lucide-react";
 import { useF1ConstructorStore } from "../../../sim/f1/state/f1ConstructorStore";
 import { F1Car3DViewport } from "../3d/F1Car3DViewport";
 import { F1_RIVAL_TEAMS } from "../../../sim/f1/season/f1RivalTeams";
+import { playHMIClickSound } from "../../../utils/hmiSoundSynth";
 
-export const F1OverviewStudio: React.FC = () => {
+export const F1OverviewStudio: React.FC = memo(function F1OverviewStudio() {
   const { car, setActiveStep } = useF1ConstructorStore();
 
-  const kpis = [
+  const kpis = useMemo(() => [
     { label: "Total Peak Power", value: `${car.computedTotalPeakHp} HP`, subtext: `${car.computedIcePeakHp} ICE + ${car.computedErsPeakHp} ERS` },
     { label: "Vehicle Mass", value: `${car.computedTotalMassKg} kg`, subtext: `${car.computedFrontWeightDistPercent}% Front Bias (FIA 798kg min)` },
     { label: "Downforce @ 250 km/h", value: `${car.aero.totalDownforceAt250KmhKg} kg`, subtext: `${car.aero.frontAeroBalancePercent}% Front Aero Bias` },
     { label: "Top Speed (Drag Limited)", value: `${car.computedTopSpeedKmh} km/h`, subtext: `0-100: ${car.computedZeroToHundredSec}s | 0-200: ${car.computedZeroToTwoHundredSec}s` },
     { label: "Max Cornering G-Force", value: `${car.computedMaxCorneringGLat} G`, subtext: `Braking: ${car.computedMaxBrakingGLong} G` },
     { label: "FIA Homologation Score", value: `${car.computedFiaHomologationScore}%`, subtext: car.computedFiaHomologationScore === 100 ? "100% Legal" : "Scrutineering Failures" },
-  ];
+  ], [car]);
 
   return (
     <div className="space-y-6 animate-fade-in-up">
@@ -58,8 +59,11 @@ export const F1OverviewStudio: React.FC = () => {
             ].map((dept) => (
               <button
                 key={dept.id}
-                onClick={() => setActiveStep(dept.id as any)}
-                className="flex items-center justify-between p-3.5 rounded-xl bg-slate-800/60 hover:bg-slate-800 border border-slate-700/60 hover:border-cyan-500/40 transition-all text-left group"
+                onClick={() => {
+                  playHMIClickSound();
+                  setActiveStep(dept.id as any);
+                }}
+                className="flex items-center justify-between p-3.5 rounded-xl bg-slate-800/60 hover:bg-slate-800 border border-slate-700/60 hover:border-cyan-500/40 transition-all text-left group cursor-pointer"
               >
                 <div className="flex items-center gap-3">
                   <div className="p-2 rounded-lg bg-slate-900 border border-slate-700">{dept.icon}</div>
@@ -110,4 +114,6 @@ export const F1OverviewStudio: React.FC = () => {
       </div>
     </div>
   );
-};
+});
+
+export default F1OverviewStudio;

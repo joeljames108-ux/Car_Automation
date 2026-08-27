@@ -501,6 +501,18 @@ input[type="range"]::-moz-range-thumb:active {
   --ease-smooth: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* Performance Optimizations: Content Visibility & Hardware Acceleration */
+.cv-auto {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 500px;
+}
+
+.gpu-accelerated {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
 /* Glass panel interactive dynamics */
 .panel,
 .panel-glow,
@@ -6786,6 +6798,38 @@ button:active,
   filter: blur(calc(var(--scene-abs-delta, 0) * 3.0px));
   will-change: transform, opacity, filter;
 }
+
+/* ===== High-Performance Hardware Acceleration & Stage Transitions ===== */
+.stage-transition-enter {
+  animation: stageFadeIn 0.22s cubic-bezier(0.16, 1, 0.3, 1) both;
+  transform: translate3d(0, 0, 0);
+  backface-visibility: hidden;
+  contain: layout style;
+}
+
+@keyframes stageFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.vision-scroll-momentum {
+  -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+  transform: translateZ(0);
+}
+
+.vision-parallax-layer {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
 
 
 

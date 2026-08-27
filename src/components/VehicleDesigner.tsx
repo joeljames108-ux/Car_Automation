@@ -354,7 +354,7 @@ export function VehicleDesigner({ initialSubTab = "linear_assembly" }: VehicleDe
               </button>
             </div>
             <div className="text-[11px] font-mono text-slate-600 dark:text-slate-400">
-              Active Color: <span className="font-bold text-slate-900 dark:text-slate-200">{ext.paintColor}</span> ({PAINT_FINISHES[ext.paintFinish]?.label || "Gloss"})
+              Active Color: <span className="font-bold text-slate-900 dark:text-slate-200">{ext.paintColor}</span> ({(PAINT_FINISHES as Record<string, any>)[ext.paintFinish]?.label || "Gloss"})
             </div>
           </div>
 
@@ -370,7 +370,7 @@ export function VehicleDesigner({ initialSubTab = "linear_assembly" }: VehicleDe
                       value={ext.bodyType}
                       options={(Object.keys(BODY_TYPES) as BodyType[]).map((b) => ({
                         value: b,
-                        label: BODY_TYPES[b].label,
+                        label: (BODY_TYPES as Record<string, any>)[b]?.label || b,
                       }))}
                       onChange={(val) => updateExterior({ bodyType: val })}
                       columns={6}
@@ -379,26 +379,26 @@ export function VehicleDesigner({ initialSubTab = "linear_assembly" }: VehicleDe
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
                     <div className="bg-base-850 rounded-lg p-2.5 border border-base-800">
                       <div className="label-mono text-slate-500">Design Origin</div>
-                      <div className="text-slate-300 font-semibold">{BODY_TYPES[ext.bodyType].origin}</div>
+                      <div className="text-slate-300 font-semibold">{(BODY_TYPES as Record<string, any>)[ext.bodyType]?.origin || "Automotive Engineering"}</div>
                     </div>
                     <div className="bg-base-850 rounded-lg p-2.5 border border-base-800">
                       <div className="label-mono text-slate-500">Aerodynamic Impact</div>
                       <div className="text-cyan-300 font-mono">
-                        Cd {BODY_TYPES[ext.bodyType].dragDelta >= 0 ? "+" : ""}
-                        {BODY_TYPES[ext.bodyType].dragDelta.toFixed(3)} · Cl{" "}
-                        {BODY_TYPES[ext.bodyType].liftDelta >= 0 ? "+" : ""}
-                        {BODY_TYPES[ext.bodyType].liftDelta.toFixed(3)}
+                        Cd {((BODY_TYPES as Record<string, any>)[ext.bodyType]?.dragDelta ?? 0) >= 0 ? "+" : ""}
+                        {((BODY_TYPES as Record<string, any>)[ext.bodyType]?.dragDelta ?? 0).toFixed(3)} · Cl{" "}
+                        {((BODY_TYPES as Record<string, any>)[ext.bodyType]?.liftDelta ?? 0) >= 0 ? "+" : ""}
+                        {((BODY_TYPES as Record<string, any>)[ext.bodyType]?.liftDelta ?? 0).toFixed(3)}
                       </div>
                     </div>
                     <div className="bg-base-850 rounded-lg p-2.5 border border-base-800">
                       <div className="label-mono text-slate-500">Weight Δ</div>
                       <div className="text-amber-300 font-mono">
-                        {BODY_TYPES[ext.bodyType].weightDelta > 0 ? "+" : ""}
-                        {BODY_TYPES[ext.bodyType].weightDelta} kg
+                        {((BODY_TYPES as Record<string, any>)[ext.bodyType]?.weightDelta ?? 0) > 0 ? "+" : ""}
+                        {(BODY_TYPES as Record<string, any>)[ext.bodyType]?.weightDelta ?? 0} kg
                       </div>
                     </div>
                   </div>
-                  <p className="text-[11px] text-slate-400 mt-2 font-mono">{BODY_TYPES[ext.bodyType].description}</p>
+                  <p className="text-[11px] text-slate-400 mt-2 font-mono">{(BODY_TYPES as Record<string, any>)[ext.bodyType]?.description || ""}</p>
                 </Section>
 
                 {/* Paint & Finish */}
@@ -938,8 +938,8 @@ export function VehicleDesigner({ initialSubTab = "linear_assembly" }: VehicleDe
                         <div className="h-[220px]">
                           <LineChart
                             series={[
-                              { data: sim.dragVsSpeed.map((d) => ({ x: d.speed, y: d.downforce })), color: "#10b981", label: "Downforce (N)" },
-                              { data: sim.dragVsSpeed.map((d) => ({ x: d.speed, y: d.drag })), color: "#06b6d4", label: "Drag Force (N)" },
+                              { data: sim.dragVsSpeed.map((d: { speed: number; downforce: number }) => ({ x: d.speed, y: d.downforce })), color: "#10b981", label: "Downforce (N)" },
+                              { data: sim.dragVsSpeed.map((d: { speed: number; drag: number }) => ({ x: d.speed, y: d.drag })), color: "#06b6d4", label: "Drag Force (N)" },
                             ]}
                             xLabel="Speed (km/h)"
                             yLabel="Force (N)"

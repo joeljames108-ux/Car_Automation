@@ -286,8 +286,20 @@ const F1ModularAssemblyViewportComponent: React.FC = () => {
       clearTimeout(initTimer);
       resizeObserver.disconnect();
       window.removeEventListener("resize", handleResize);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
       cancelAnimationFrame(animationFrameId);
+      controls.dispose();
       renderer.dispose();
+      carbonMaterial.current.dispose();
+      liveryMaterial.current.dispose();
+      titaniumMaterial.current.dispose();
+      engineGoldMaterial.current.dispose();
+      rubberMaterial.current.dispose();
+      brakeGlowingMaterial.current.dispose();
+      xrayBodyMaterial.current.dispose();
+      if (streamlinesRef.current?.geometry) {
+        streamlinesRef.current.geometry.dispose();
+      }
       if (container.contains(renderer.domElement)) {
         container.removeChild(renderer.domElement);
       }
@@ -300,13 +312,20 @@ const F1ModularAssemblyViewportComponent: React.FC = () => {
     const assemblyGroup = assemblyGroupRef.current;
     const hotspotsGroup = hotspotsGroupRef.current;
 
-    // Clear previous children
-    while (assemblyGroup.children.length > 0) {
-      assemblyGroup.remove(assemblyGroup.children[0]);
-    }
-    while (hotspotsGroup.children.length > 0) {
-      hotspotsGroup.remove(hotspotsGroup.children[0]);
-    }
+    // Dispose old geometries before clearing children
+    const disposeGeometries = (grp: THREE.Group) => {
+      grp.traverse((obj) => {
+        if (obj instanceof THREE.Mesh && obj.geometry) {
+          obj.geometry.dispose();
+        }
+      });
+      while (grp.children.length > 0) {
+        grp.remove(grp.children[0]);
+      }
+    };
+
+    disposeGeometries(assemblyGroup);
+    disposeGeometries(hotspotsGroup);
 
     const allSockets = Object.keys(F1_SOCKET_ANCHORS) as F1SocketId[];
 

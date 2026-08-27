@@ -3,6 +3,7 @@
 // ===================================================================
 import { useState, memo } from "react";
 import { Gavel, Check, X, ThumbsUp, ThumbsDown, Vote } from "lucide-react";
+import { playHMIClickSound } from "../../utils/hmiSoundSynth";
 
 interface PoliticalMotion {
   id: string;
@@ -25,6 +26,7 @@ export const PoliticalVotingPanel = memo(function PoliticalVotingPanel() {
   const [motions, setMotions] = useState<PoliticalMotion[]>(DEFAULT_MOTIONS);
 
   const handleVote = (id: string, choice: "for" | "against") => {
+    playHMIClickSound();
     setMotions(prev => prev.map(m => {
       if (m.id !== id) return m;
       const prevVote = m.userVote;

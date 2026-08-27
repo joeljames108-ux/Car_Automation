@@ -5,7 +5,7 @@
 // Zwicker psychoacoustics (Loudness, Sharpness, Roughness), and FxLMS ANC.
 // ===================================================================
 
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import { SoundEngineeringSynthesizer } from "../sim/nvh/soundEngineeringSynthesizer";
 import { Volume2, VolumeX, Radio, Gauge, Sliders } from "lucide-react";
 
@@ -16,17 +16,19 @@ export const NvhSoundLab: React.FC = () => {
   const [exhaustValveOpen, setExhaustValveOpen] = useState<boolean>(true);
   const [ancActive, setAncActive] = useState<boolean>(true);
 
-  const acousticOutput = SoundEngineeringSynthesizer.synthesizeSound({
-    cylinders,
-    engineRpm,
-    vehicleSpeedKmH,
-    exhaustValveOpen,
-    cabinGlassAcousticLaminate: true,
-    ancActive,
-    gearRatio: 1.0,
-    finalDriveRatio: 3.5,
-    tireRadiusM: 0.33,
-  });
+  const acousticOutput = useMemo(() => {
+    return SoundEngineeringSynthesizer.synthesizeSound({
+      cylinders,
+      engineRpm,
+      vehicleSpeedKmH,
+      exhaustValveOpen,
+      cabinGlassAcousticLaminate: true,
+      ancActive,
+      gearRatio: 1.0,
+      finalDriveRatio: 3.5,
+      tireRadiusM: 0.33,
+    });
+  }, [cylinders, engineRpm, vehicleSpeedKmH, exhaustValveOpen, ancActive]);
 
   return (
     <div className="space-y-6 text-slate-100">

@@ -62,7 +62,7 @@ export class ElasticBandCollisionAvoidanceSolver {
   private static readonly DEFAULT_NUM_NODES = 30;
   private static readonly K_TENSION = 180.0; // N/m internal elastic tension
   private static readonly ETA_REPULSION = 2500.0; // External potential strength
-  private static readonly MAX_LATERAL_G_LIMIT = 1.65; // High-performance tire grip limit
+  private static readonly MAX_LATERAL_G_LIMIT = 3.5; // High-performance racing downforce & tire grip limit
 
   /**
    * Solves real-time Elastic Band trajectory deformation to smoothly evade

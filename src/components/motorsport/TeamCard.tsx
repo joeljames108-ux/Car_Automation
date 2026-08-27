@@ -3,6 +3,7 @@
 // ===================================================================
 import React, { memo } from "react";
 import { Trophy } from "lucide-react";
+import { playHMIClickSound } from "../../utils/hmiSoundSynth";
 import type { MotorsportTeam, MotorsportCategory, FacilityLevel } from "../../sim/types";
 
 const CATEGORY_LABELS: Record<MotorsportCategory, string> = {
@@ -81,7 +82,10 @@ function TeamCardComponent({ team, onSelect, isSelected }: {
 
   return (
     <div
-      onClick={onSelect}
+      onClick={() => {
+        playHMIClickSound();
+        onSelect();
+      }}
       className={`glass-panel p-4 cursor-pointer card-hover relative overflow-hidden ${isSelected ? "border-accent-500/50 shadow-[0_0_20px_-4px_rgba(34,211,238,0.15)]" : ""}`}
     >
       {/* Category gradient accent */}

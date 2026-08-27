@@ -33,6 +33,7 @@ import {
   Wind,
   Disc,
 } from 'lucide-react';
+import { SharedWebGLContextManager } from '../../engine3d/managers/SharedWebGLContextManager';
 import { VehicleSceneGraph } from '../../exterior3d/scene/VehicleSceneGraph';
 import { VehicleDiagnosticGizmo } from '../../exterior3d/geometry/vehicleDiagnosticGizmo';
 import { ModularChassisFamilyGenerator } from '../../exterior3d/generators/modularChassisFamilyGenerator';
@@ -154,16 +155,15 @@ export const ModularVehicle3DViewport: React.FC<ModularVehicle3DViewportProps> =
     camera.position.set(targetX + 3.4, 1.8, 2.8);
     cameraRef.current = camera;
 
-    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-    renderer.setSize(width, height);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
-    renderer.shadowMap.enabled = true;
-    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    const renderer = SharedWebGLContextManager.createSafeRenderer(container, width, height, {
+      antialias: true,
+      alpha: true,
+      shadows: true,
+      maxPixelRatio: 1.5,
+    });
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 1.45;
     renderer.outputColorSpace = THREE.SRGBColorSpace;
-
-    container.replaceChildren(renderer.domElement);
 
     // Post-Processing Pipeline
     const composer = new EffectComposer(renderer);
@@ -503,11 +503,20 @@ export const ModularVehicle3DViewport: React.FC<ModularVehicle3DViewportProps> =
     // Update Exploded View
     sceneGraph.updateExplodedView(explodedViewProgress);
 
-    // 6. Animation Render Loop
-    let orbitTime = 0;
+    // 6. Animation Render Loop (Adaptive with Background Tab Idle Sleep)
     let animationFrameId: number;
+    let isTabVisible = typeof document !== 'undefined' ? !document.hidden : true;
+
+    const onVisibilityChange = () => {
+      isTabVisible = !document.hidden;
+    };
+    if (typeof document !== 'undefined') {
+      document.addEventListener('visibilitychange', onVisibilityChange);
+    }
+
     const animate = () => {
       animationFrameId = requestAnimationFrame(animate);
+      if (!isTabVisible) return;
 
       if (isRotating) {
         sceneGraph.vehicleRoot.rotation.y += 0.005;
@@ -543,11 +552,15 @@ export const ModularVehicle3DViewport: React.FC<ModularVehicle3DViewportProps> =
 
     // Cleanup
     return () => {
+      if (typeof document !== 'undefined') {
+        document.removeEventListener('visibilitychange', onVisibilityChange);
+      }
       window.removeEventListener('resize', handleResize);
       cancelAnimationFrame(animationFrameId);
       mirror.mirrorTarget.dispose();
-      renderer.dispose();
       sceneGraph.dispose();
+      SharedWebGLContextManager.disposeThreeScene(scene);
+      SharedWebGLContextManager.safelyDisposeRenderer(renderer, container);
     };
   }, [
     bodyType,

@@ -21,8 +21,9 @@ import { Search, Command as CmdIcon, Bot, Wrench } from "lucide-react";
 import { VisionGlassHeader } from "./components/ui/VisionGlassHeader";
 import { VisionGlassDock } from "./components/ui/VisionGlassDock";
 import { VisionGlassToolbar } from "./components/ui/VisionGlassToolbar";
-import { UI1Layout } from "./components/ui/UI1Layout";
+import { StageLoadingSkeleton } from "./components/ui/StageLoadingSkeleton";
 
+const UI1Layout = React.lazy(() => import("./components/ui/UI1Layout").then(m => ({ default: m.UI1Layout })));
 const SaveLoadDialog = React.lazy(() => import("./components/SaveLoadDialog").then(m => ({ default: m.SaveLoadDialog })));
 const CommandPalette = React.lazy(() => import("./components/CommandPalette").then(m => ({ default: m.CommandPalette })));
 
@@ -247,18 +248,32 @@ function AppInner() {
   const carConceptRef = React.useRef(carConcept);
   carConceptRef.current = carConcept;
 
-  // Initialize Autonomous AI Engineering Division (All 25 Domain Agents)
+  // Initialize Autonomous AI Engineering Division (All 25 Domain Agents) deferred to idle frame
   useEffect(() => {
-    const orchestrator = AgentOrchestrator.getInstance();
-    registerAllDomainAgents(orchestrator);
+    let timerId: any;
+    let idleHandle: any;
 
-    orchestrator.start(
-      () => ({ engine: designRef.current.engine, vehicle: designRef.current.vehicle, carConcept: carConceptRef.current }),
-      () => simRef.current
-    );
+    const startAgents = () => {
+      const orchestrator = AgentOrchestrator.getInstance();
+      registerAllDomainAgents(orchestrator);
+      orchestrator.start(
+        () => ({ engine: designRef.current.engine, vehicle: designRef.current.vehicle, carConcept: carConceptRef.current }),
+        () => simRef.current
+      );
+    };
+
+    if (typeof window !== "undefined" && "requestIdleCallback" in window) {
+      idleHandle = (window as any).requestIdleCallback(startAgents, { timeout: 2500 });
+    } else {
+      timerId = setTimeout(startAgents, 1500);
+    }
 
     return () => {
-      orchestrator.stop();
+      if (idleHandle && typeof window !== "undefined" && "cancelIdleCallback" in window) {
+        (window as any).cancelIdleCallback(idleHandle);
+      }
+      if (timerId) clearTimeout(timerId);
+      AgentOrchestrator.getInstance().stop();
     };
   }, []);
 
@@ -268,7 +283,9 @@ function AppInner() {
   if (uiTheme === "theme1") {
     return (
       <VisionGlassErrorBoundary>
-        <UI1Layout />
+        <React.Suspense fallback={<StageLoadingSkeleton stageName="command" />}>
+          <UI1Layout />
+        </React.Suspense>
       </VisionGlassErrorBoundary>
     );
   }

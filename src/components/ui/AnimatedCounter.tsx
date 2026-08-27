@@ -30,6 +30,7 @@ export function AnimatedCounter({
   const animationFrameRef = useRef<number | null>(null);
 
   useEffect(() => {
+    if (displayValue === value) return;
     startValueRef.current = displayValue;
     targetValueRef.current = value;
     startTimeRef.current = null;

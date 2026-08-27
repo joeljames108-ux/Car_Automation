@@ -1,9 +1,10 @@
 // ===================================================================
 // ENGINEERING COMPARISON — Side-by-side vehicle analysis
 // ===================================================================
-import { useState, useMemo } from "react";
+import { useState, useMemo, memo } from "react";
 import { GitCompare, ArrowUp, ArrowDown, Minus } from "lucide-react";
 import { useCompany } from "../state/CompanyContext";
+import { playHMIClickSound, playHMITabSound } from "../utils/hmiSoundSynth";
 import type { GarageVehicle } from "../sim/types";
 
 interface MetricRow {
@@ -67,7 +68,7 @@ function Delta({ a, b, metric }: { a: number; b: number; metric: MetricRow }) {
   );
 }
 
-function VehicleSelect({ label, value, vehicles, onChange }: {
+const VehicleSelect = memo(function VehicleSelect({ label, value, vehicles, onChange }: {
   label: string; value: string | null; vehicles: GarageVehicle[];
   onChange: (id: string | null) => void;
 }) {
@@ -76,8 +77,11 @@ function VehicleSelect({ label, value, vehicles, onChange }: {
       <div className="text-[10px] uppercase tracking-wider text-slate-500 font-mono mb-1">{label}</div>
       <select
         value={value || ""}
-        onChange={e => onChange(e.target.value || null)}
-        className="w-full bg-base-850 border border-base-700 rounded-lg px-3 py-2 text-sm text-slate-200 focus:border-accent-500 focus:outline-none"
+        onChange={e => {
+          playHMIClickSound();
+          onChange(e.target.value || null);
+        }}
+        className="w-full bg-base-850 border border-base-700 rounded-lg px-3 py-2 text-sm text-slate-200 focus:border-accent-500 focus:outline-none cursor-pointer"
       >
         <option value="">— Select Vehicle —</option>
         {vehicles.map(v => (
@@ -86,9 +90,9 @@ function VehicleSelect({ label, value, vehicles, onChange }: {
       </select>
     </div>
   );
-}
+});
 
-function RadarChart({ a, b }: { a: GarageVehicle; b: GarageVehicle }) {
+const RadarChart = memo(function RadarChart({ a, b }: { a: GarageVehicle; b: GarageVehicle }) {
   const axes = [
     { label: "Power",    va: Math.min(a.sim.peakPower / 1000, 1),    vb: Math.min(b.sim.peakPower / 1000, 1) },
     { label: "Speed",    va: Math.min(a.sim.topSpeed / 400, 1),      vb: Math.min(b.sim.topSpeed / 400, 1) },
@@ -135,9 +139,9 @@ function RadarChart({ a, b }: { a: GarageVehicle; b: GarageVehicle }) {
       })}
     </svg>
   );
-}
+});
 
-export function EngineeringComparison() {
+function EngineeringComparisonComponent() {
   const { company } = useCompany();
   const [idA, setIdA] = useState<string | null>(null);
   const [idB, setIdB] = useState<string | null>(null);
@@ -224,9 +228,30 @@ export function EngineeringComparison() {
 
           {/* Section filter */}
           <div className="flex items-center gap-1 flex-wrap">
-            <button onClick={() => setSection(null)} className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all border ${section === null ? "bg-accent-500/20 border-accent-500/40 text-accent-300" : "bg-base-850 border-base-800 text-slate-400 hover:border-base-700"}`}>All</button>
+            <button
+              onClick={() => {
+                playHMITabSound();
+                setSection(null);
+              }}
+              className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all border cursor-pointer ${
+                section === null ? "bg-accent-500/20 border-accent-500/40 text-accent-300" : "bg-base-850 border-base-800 text-slate-400 hover:border-base-700"
+              }`}
+            >
+              All
+            </button>
             {SECTIONS.map(s => (
-              <button key={s} onClick={() => setSection(s)} className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all border ${section === s ? "bg-accent-500/20 border-accent-500/40 text-accent-300" : "bg-base-850 border-base-800 text-slate-400 hover:border-base-700"}`}>{s}</button>
+              <button
+                key={s}
+                onClick={() => {
+                  playHMITabSound();
+                  setSection(s);
+                }}
+                className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all border cursor-pointer ${
+                  section === s ? "bg-accent-500/20 border-accent-500/40 text-accent-300" : "bg-base-850 border-base-800 text-slate-400 hover:border-base-700"
+                }`}
+              >
+                {s}
+              </button>
             ))}
           </div>
 
@@ -269,3 +294,5 @@ export function EngineeringComparison() {
     </div>
   );
 }
+
+export const EngineeringComparison = memo(EngineeringComparisonComponent);

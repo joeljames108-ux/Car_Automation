@@ -1,7 +1,7 @@
 // ===================================================================
 // DYNAMIC ECONOMY — Live market & world simulation dashboard
 // ===================================================================
-import { useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
 import {
   TrendingUp, TrendingDown, Fuel, AlertTriangle, Calendar,
   Globe, ShoppingCart, Zap, ChevronRight, Play, FastForward,
@@ -128,15 +128,15 @@ export function DynamicEconomy() {
     fill: true,
   }], [economy.fuelPriceHistory]);
 
-  const matEntries = Object.entries(economy.materialCosts);
-  const competitorActions = company.competitorActions.slice(-15).reverse();
+  const matEntries = useMemo(() => Object.entries(economy.materialCosts), [economy.materialCosts]);
+  const competitorActions = useMemo(() => company.competitorActions.slice(-15).reverse(), [company.competitorActions]);
 
-  const tabs = [
+  const tabs = useMemo(() => [
     { id: "overview" as const, label: "Overview" },
     { id: "regulations" as const, label: `Regulations (${economy.upcomingRegulations.length})` },
     { id: "events" as const, label: `Active Events (${economy.activeEvents.length})` },
     { id: "news" as const, label: `World News (${competitorActions.length})` },
-  ];
+  ], [economy.upcomingRegulations.length, economy.activeEvents.length, competitorActions.length]);
 
   return (
     <div className="space-y-4 stagger">

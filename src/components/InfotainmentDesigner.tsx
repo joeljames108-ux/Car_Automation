@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import React, { useMemo } from "react";
 import {
   Monitor, Cpu, Mic, Brain, Smartphone, ShieldAlert, Gauge,
   Wifi, Lightbulb, Sparkles, Users, Car, Bot, Activity, Zap, Thermometer,

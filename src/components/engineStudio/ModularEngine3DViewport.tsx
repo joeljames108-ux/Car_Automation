@@ -40,6 +40,7 @@ import {
 import { EnginePerformanceHUD } from "../../engine3d/components/EnginePerformanceHUD";
 import { EngineStagedLoadingHUD } from "../../engine3d/components/EngineStagedLoadingHUD";
 import { EngineStagedLoader } from "../../engine3d/managers/EngineStagedLoader";
+import { SharedWebGLContextManager } from "../../engine3d/managers/SharedWebGLContextManager";
 
 interface ModularEngine3DViewportProps {
   state: MasterEngineState;
@@ -110,14 +111,14 @@ export const ModularEngine3DViewportComponent: React.FC<ModularEngine3DViewportP
     camera.position.set(0.9, 0.6, 1.2);
     cameraRef.current = camera;
 
-    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: 'high-performance' });
-    renderer.setSize(width, height);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    renderer.shadowMap.enabled = true;
-    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    const renderer = SharedWebGLContextManager.createSafeRenderer(containerRef.current, width, height, {
+      antialias: true,
+      alpha: true,
+      powerPreference: 'high-performance',
+      shadows: true,
+      maxPixelRatio: 1.5,
+    });
     rendererRef.current = renderer;
-
-    containerRef.current.appendChild(renderer.domElement);
 
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
@@ -197,10 +198,8 @@ export const ModularEngine3DViewportComponent: React.FC<ModularEngine3DViewportP
       document.removeEventListener("visibilitychange", handleVisibilityChange);
       if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
       if (assemblerRef.current) assemblerRef.current.dispose();
-      renderer.dispose();
-      if (containerRef.current && renderer.domElement) {
-        containerRef.current.removeChild(renderer.domElement);
-      }
+      SharedWebGLContextManager.disposeThreeScene(scene);
+      SharedWebGLContextManager.safelyDisposeRenderer(renderer, containerRef.current);
     };
   }, []);
 

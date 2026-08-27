@@ -87,6 +87,9 @@ export interface MotorsportOptimizationResult {
   engineeringRecommendations: string[];
 }
 
+const optimizerCache = new Map<string, MotorsportOptimizationResult>();
+const MAX_OPTIMIZER_CACHE = 64;
+
 export class MotorsportSetupOptimizer {
   private static readonly AIR_DENSITY_KG_M3 = 1.225;
   private static readonly GRAVITY = 9.81;
@@ -125,6 +128,12 @@ export class MotorsportSetupOptimizer {
     circuit: CircuitOptimizerProfile = this.DEFAULT_CIRCUIT,
     vehicle: MotorsportVehicleInputSpecs = this.DEFAULT_HYPERCAR_SPECS
   ): MotorsportOptimizationResult {
+    const cacheKey = `${goal}_${circuit.name}_${circuit.totalLengthM}_${circuit.trackTempC}_${circuit.isWetTrack}_${vehicle.vehicleMassKg}_${vehicle.enginePowerHp}_${vehicle.hybridPowerKw}_${vehicle.baseDragCoeffCd}_${vehicle.baseLiftCoeffCl}_${vehicle.driveType}`;
+
+    if (optimizerCache.has(cacheKey)) {
+      return optimizerCache.get(cacheKey)!;
+    }
+
     // 1. Calculate Target Aerodynamic Wing Angle based on Circuit & Goal
     const targetAero = this.calculateOptimalAero(circuit, goal);
     
@@ -227,7 +236,7 @@ export class MotorsportSetupOptimizer {
       lOverD
     );
 
-    return {
+    const result: MotorsportOptimizationResult = {
       goal,
       circuitName: circuit.name,
       optimalSetup,
@@ -247,6 +256,14 @@ export class MotorsportSetupOptimizer {
       paretoFrontier,
       engineeringRecommendations,
     };
+
+    if (optimizerCache.size >= MAX_OPTIMIZER_CACHE) {
+      const firstKey = optimizerCache.keys().next().value;
+      if (firstKey) optimizerCache.delete(firstKey);
+    }
+    optimizerCache.set(cacheKey, result);
+
+    return result;
   }
 
   /**

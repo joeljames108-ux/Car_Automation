@@ -12,6 +12,7 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { useHypercarAssemblyStore } from "../../../sim/hypercar/state/hypercarAssemblyStore";
 import { HYPERCAR_SOCKET_ANCHORS, type HypercarSocketId } from "../../../sim/hypercar/modular/hypercarSockets";
 import { HypercarComponentRegistry } from "../../../sim/hypercar/modular/hypercarComponentRegistry";
+import { disposeThreeScene } from "../../../exterior3d/utils/threeDisposal";
 import { Layers, Eye, Maximize2, Sparkles, Sliders, Wind, Camera } from "lucide-react";
 
 const HypercarModularAssemblyViewportComponent: React.FC = () => {
@@ -231,10 +232,7 @@ const HypercarModularAssemblyViewportComponent: React.FC = () => {
       window.removeEventListener("resize", handleResize);
       renderer.domElement.removeEventListener("click", handleClick);
       cancelAnimationFrame(animId);
-      renderer.dispose();
-      if (container.contains(renderer.domElement)) {
-        container.removeChild(renderer.domElement);
-      }
+      disposeThreeScene(scene, renderer);
     };
   }, []);
 

@@ -1,8 +1,10 @@
-import React from "react";
+import React, { Suspense, lazy } from "react";
 import { Sparkles } from "lucide-react";
-import { GrandAutomotiveStudioHub } from "../../GrandAutomotiveStudioHub";
 import { NeonHorizonGlassPanel } from "../design/NeonHorizonGlassPanel";
 import { NeonHorizonBadge } from "../design/NeonHorizonBadge";
+import { StageLoadingSkeleton } from "../../ui/StageLoadingSkeleton";
+
+const GrandAutomotiveStudioHub = lazy(() => import("../../GrandAutomotiveStudioHub").then(m => ({ default: m.GrandAutomotiveStudioHub })));
 
 export function NeonGrandStudioHub() {
   return (
@@ -27,7 +29,9 @@ export function NeonGrandStudioHub() {
 
       {/* Embedded Studio Hub Container */}
       <div className="w-full rounded-3xl overflow-hidden border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] bg-[#0a111e]">
-        <GrandAutomotiveStudioHub />
+        <Suspense fallback={<StageLoadingSkeleton stageName="studio" />}>
+          <GrandAutomotiveStudioHub />
+        </Suspense>
       </div>
     </div>
   );

@@ -1,4 +1,4 @@
-import { useId } from "react";
+import React, { useId } from "react";
 import { useDesign, fmtSpeed, fmtDistance } from "../state/DesignContext";
 import { Section, StatTile } from "./ui/Controls";
 import { Wind, ShieldAlert, Disc, CircleDot, Spline, Star, Activity, Thermometer, AlertTriangle } from "lucide-react";

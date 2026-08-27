@@ -5,17 +5,18 @@
 // view delta performance comparisons, and execute physical snap installations.
 // ============================================================================
 
-import React from "react";
+import React, { memo } from "react";
 import { useF1AssemblyStore } from "../../../sim/f1/state/f1AssemblyStore";
 import { F1_SOCKET_ANCHORS, type F1SocketId } from "../../../sim/f1/modular/f1Sockets";
 import { F1ComponentRegistry, type F1ComponentDefinition } from "../../../sim/f1/modular/f1ComponentRegistry";
 import { F1AttachmentGraph } from "../../../sim/f1/modular/f1AttachmentGraph";
+import { playHMIClickSound } from "../../../utils/hmiSoundSynth";
 import {
   Wrench, CheckCircle2, AlertTriangle, ArrowRight, RotateCcw,
   Sparkles, Layers, ShieldCheck, Box, Trash2, Undo2, Redo2, Plus
 } from "lucide-react";
 
-export const F1ModularComponentBrowser: React.FC = () => {
+export const F1ModularComponentBrowser: React.FC = memo(function F1ModularComponentBrowser() {
   const {
     installedMap,
     selectedSocketId,
@@ -52,17 +53,23 @@ export const F1ModularComponentBrowser: React.FC = () => {
 
         <div className="flex items-center gap-1">
           <button
-            onClick={undo}
+            onClick={() => {
+              playHMIClickSound();
+              undo();
+            }}
             disabled={undoStack.length === 0}
-            className="p-1.5 rounded-lg bg-white/5 border border-white/10 text-zinc-400 hover:text-white disabled:opacity-30 transition-all"
+            className="p-1.5 rounded-lg bg-white/5 border border-white/10 text-zinc-400 hover:text-white disabled:opacity-30 transition-all cursor-pointer"
             title="Undo"
           >
             <Undo2 className="w-3.5 h-3.5" />
           </button>
           <button
-            onClick={redo}
+            onClick={() => {
+              playHMIClickSound();
+              redo();
+            }}
             disabled={redoStack.length === 0}
-            className="p-1.5 rounded-lg bg-white/5 border border-white/10 text-zinc-400 hover:text-white disabled:opacity-30 transition-all"
+            className="p-1.5 rounded-lg bg-white/5 border border-white/10 text-zinc-400 hover:text-white disabled:opacity-30 transition-all cursor-pointer"
             title="Redo"
           >
             <Redo2 className="w-3.5 h-3.5" />
@@ -73,15 +80,21 @@ export const F1ModularComponentBrowser: React.FC = () => {
       {/* Quick Action Preset Buttons */}
       <div className="grid grid-cols-2 gap-2 p-2 border-b border-white/10 bg-black/20 text-[11px]">
         <button
-          onClick={resetToBareChassis}
-          className="flex items-center justify-center gap-1 py-1.5 px-2 rounded-lg bg-rose-500/10 border border-rose-500/30 text-rose-300 hover:bg-rose-500/20 font-bold transition-all"
+          onClick={() => {
+            playHMIClickSound();
+            resetToBareChassis();
+          }}
+          className="flex items-center justify-center gap-1 py-1.5 px-2 rounded-lg bg-rose-500/10 border border-rose-500/30 text-rose-300 hover:bg-rose-500/20 font-bold transition-all cursor-pointer"
         >
           <Trash2 className="w-3 h-3" />
           Bare Chassis
         </button>
         <button
-          onClick={autoAssembleFactoryBaseline}
-          className="flex items-center justify-center gap-1 py-1.5 px-2 rounded-lg bg-cyan-500/10 border border-cyan-500/30 text-cyan-300 hover:bg-cyan-500/20 font-bold transition-all"
+          onClick={() => {
+            playHMIClickSound();
+            autoAssembleFactoryBaseline();
+          }}
+          className="flex items-center justify-center gap-1 py-1.5 px-2 rounded-lg bg-cyan-500/10 border border-cyan-500/30 text-cyan-300 hover:bg-cyan-500/20 font-bold transition-all cursor-pointer"
         >
           <Sparkles className="w-3 h-3" />
           Factory Works
@@ -98,8 +111,11 @@ export const F1ModularComponentBrowser: React.FC = () => {
           return (
             <button
               key={sId}
-              onClick={() => selectSocket(sId)}
-              className={`flex-shrink-0 px-2.5 py-1.5 rounded-lg text-[10px] font-bold tracking-wider transition-all border flex items-center gap-1.5 ${
+              onClick={() => {
+                playHMIClickSound();
+                selectSocket(sId);
+              }}
+              className={`flex-shrink-0 px-2.5 py-1.5 rounded-lg text-[10px] font-bold tracking-wider transition-all border flex items-center gap-1.5 cursor-pointer ${
                 isSelected
                   ? "bg-cyan-500 text-black border-cyan-400 shadow-md shadow-cyan-500/30 font-black"
                   : isInstalled
@@ -140,8 +156,11 @@ export const F1ModularComponentBrowser: React.FC = () => {
                     <span className="text-xs font-bold text-white">{currentlyInstalledComp.name}</span>
                   </div>
                   <button
-                    onClick={() => uninstallComponent(activeSocket.id)}
-                    className="p-1.5 rounded bg-rose-500/20 text-rose-300 hover:bg-rose-500/40 text-[10px] font-bold transition-all"
+                    onClick={() => {
+                      playHMIClickSound();
+                      uninstallComponent(activeSocket.id);
+                    }}
+                    className="p-1.5 rounded bg-rose-500/20 text-rose-300 hover:bg-rose-500/40 text-[10px] font-bold transition-all cursor-pointer"
                     title="Detach Component"
                   >
                     Detach
@@ -219,9 +238,12 @@ export const F1ModularComponentBrowser: React.FC = () => {
                       </div>
                     ) : (
                       <button
-                        onClick={() => installComponent(comp.id)}
+                        onClick={() => {
+                          playHMIClickSound();
+                          installComponent(comp.id);
+                        }}
                         disabled={!canInstallCheck.canInstall}
-                        className={`w-full py-1.5 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-1.5 ${
+                        className={`w-full py-1.5 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
                           canInstallCheck.canInstall
                             ? "bg-cyan-500 hover:bg-cyan-400 text-black shadow-lg shadow-cyan-500/20 font-black"
                             : "bg-zinc-800 text-zinc-500 cursor-not-allowed"
@@ -250,4 +272,4 @@ export const F1ModularComponentBrowser: React.FC = () => {
       </div>
     </div>
   );
-};
+});

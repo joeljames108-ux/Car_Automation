@@ -19,6 +19,19 @@ import { ModularInteriorStudio } from './interior/ModularInteriorStudio';
 import { MasterInteriorConfiguration } from '../exterior3d/types/interiorStudioTypes';
 import { COCKPIT_THEME_PRESETS } from '../exterior3d/manifests/interiorStudioCatalog';
 
+const SEAT_MATERIAL_OPTIONS = Object.entries(SEAT_MATERIALS).map(([k, v]) => ({ value: k, label: v.label }));
+const DASHBOARD_MATERIAL_OPTIONS = Object.entries(DASHBOARD_MATERIALS).map(([k, v]) => ({ value: k, label: v.label }));
+const STEERING_WHEEL_OPTIONS = Object.entries(STEERING_WHEEL_TYPES).map(([k, v]) => ({ value: k, label: v.label }));
+const STEERING_MATERIAL_OPTIONS = Object.entries(STEERING_MATERIALS).map(([k, v]) => ({ value: k, label: v.label }));
+const PEDAL_SET_OPTIONS = Object.entries(PEDAL_SETS).map(([k, v]) => ({ value: k, label: v.label }));
+const SHIFT_KNOB_OPTIONS = Object.entries(SHIFT_KNOBS).map(([k, v]) => ({ value: k, label: v.label }));
+const TRIM_FINISH_OPTIONS = [
+  { value: "matte", label: "Matte" },
+  { value: "gloss", label: "Gloss" },
+  { value: "satin", label: "Satin" },
+  { value: "brushed", label: "Brushed" },
+];
+
 export function InteriorsDesigner() {
   const { design, sim, updateInterior } = useDesign();
   const i = design.vehicle.interior;
@@ -118,85 +131,86 @@ export function InteriorsDesigner() {
         <div className="flex items-center gap-2 pl-2">
           <Sparkles style={{color: '#92400E'}} size={18} />
           <span className="text-xs font-black tracking-wider uppercase" style={{color: '#92400E'}}>
-            Automotive Cockpit & Interior Engineering
+            INTERIOR COCKPIT WORKBENCH
           </span>
         </div>
-        {/* Studio Mode Switcher */}
-        <div className="flex items-center gap-1 p-1 rounded-xl" style={{backgroundColor: 'rgba(255,248,235,0.8)', border: '1px solid rgba(217,166,78,0.3)'}}>
+
+        {/* Studio View Selector */}
+        <div className="flex items-center gap-1.5 p-1 rounded-xl" style={{backgroundColor: 'rgba(0,0,0,0.06)'}}>
           <button
             onClick={() => setViewMode('modular_studio')}
-            className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
               viewMode === 'modular_studio'
-                ? 'bg-gradient-to-r from-amber-400 to-orange-500 text-white shadow-md shadow-amber-500/25'
-                : 'text-amber-700 hover:text-amber-900'
+                ? 'shadow-md scale-[1.02]'
+                : 'hover:opacity-80'
             }`}
+            style={{
+              backgroundColor: viewMode === 'modular_studio' ? '#B45309' : 'transparent',
+              color: viewMode === 'modular_studio' ? '#ffffff' : '#78350F'
+            }}
           >
-            <Sparkles size={14} />
-            Modular 3D Studio
+            <Sliders size={13} />
+            <span>MODULAR STUDIO</span>
           </button>
 
           <button
             onClick={() => setViewMode('3d_studio')}
-            className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
               viewMode === '3d_studio'
-                ? 'bg-amber-500 text-white shadow-md shadow-amber-500/25'
-                : 'text-amber-600 hover:text-amber-900'
+                ? 'shadow-md scale-[1.02]'
+                : 'hover:opacity-80'
             }`}
+            style={{
+              backgroundColor: viewMode === '3d_studio' ? '#B45309' : 'transparent',
+              color: viewMode === '3d_studio' ? '#ffffff' : '#78350F'
+            }}
           >
-            <Box size={14} />
-            3D Cockpit
+            <Eye size={13} />
+            <span>3D VIEWPORT ONLY</span>
           </button>
 
           <button
             onClick={() => setViewMode('2d_classic')}
-            className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
               viewMode === '2d_classic'
-                ? 'bg-amber-500 text-white shadow-md shadow-amber-500/25'
-                : 'text-amber-600 hover:text-amber-900'
+                ? 'shadow-md scale-[1.02]'
+                : 'hover:opacity-80'
             }`}
+            style={{
+              backgroundColor: viewMode === '2d_classic' ? '#B45309' : 'transparent',
+              color: viewMode === '2d_classic' ? '#ffffff' : '#78350F'
+            }}
           >
-            <Sliders size={14} />
-            2D Classic Schematic
+            <Box size={13} />
+            <span>2D CONTROLS</span>
           </button>
         </div>
       </div>
 
-      {/* ── MODULAR 3D INTERIOR STUDIO MODE ── */}
-      {viewMode === 'modular_studio' && (
-        <div className="animate-stage-transition-enter">
-          <ModularInteriorStudio />
-        </div>
-      )}
-
-      {/* ── 3D PHOTOREALISTIC COCKPIT STUDIO MODE ── */}
-      {viewMode === '3d_studio' ? (
-        <div className="space-y-4">
-          {/* 3D WebGL Viewport with 6 Camera Presets */}
+      {/* ── CONDITIONAL VIEW MODE RENDERING ── */}
+      {viewMode === 'modular_studio' ? (
+        /* MODE A: Integrated Modular Studio (3D Viewport + 5-Tab Material/Component Studio) */
+        <ModularInteriorStudio />
+      ) : viewMode === '3d_studio' ? (
+        /* MODE B: Pure Full-Size 3D Interactive Cockpit Viewport */
+        <div className="rounded-2xl overflow-hidden shadow-2xl border border-slate-800" style={{ height: '620px' }}>
           <Interior3DViewport
             config={studioConfig}
             wheelbaseMm={wbMm}
             trackWidthMm={trMm}
           />
-
-          {/* 5-Tab Glassmorphism Workbench */}
-          <InteriorStudioWorkbench
-            config={studioConfig}
-            onChange={handleStudioConfigChange}
-            wheelbaseMm={wbMm}
-            trackWidthMm={trMm}
-          />
         </div>
       ) : (
-        /* ── 2D CLASSIC SCHEMATIC MODE ── */
-        <div className="grid grid-cols-1 xl:grid-cols-3 gap-4">
-          <div className="xl:col-span-2 space-y-4">
-            <Section title="Seating" icon={<Armchair size={16} />}>
+        /* MODE C: Classic 2D Controls & Section Layouts */
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+          <div className="lg:col-span-2 space-y-4">
+            <Section title="Seating & Upholstery" icon={<Armchair size={16} />}>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                <div>
+                <div className="md:col-span-2">
                   <label className="label-mono mb-1.5 block">Seat Type</label>
                   <ChoiceGrid
                     value={i.seatType}
-                    options={(Object.keys(SEAT_TYPES) as string[]).map((s) => ({ value: s, label: SEAT_TYPES[s].label }))}
+                    options={Object.entries(SEAT_TYPES).map(([k, v]) => ({ value: k, label: v.label, desc: `${v.weight}kg | Comfort: ${(v.comfort * 10).toFixed(0)}/10` }))}
                     onChange={(v) => updateInterior({ seatType: v as typeof i.seatType })}
                     columns={3}
                   />
@@ -204,7 +218,7 @@ export function InteriorsDesigner() {
                 <Select
                   label="Seat Material"
                   value={i.seatMaterial}
-                  options={(Object.keys(SEAT_MATERIALS) as string[]).map((m) => ({ value: m, label: SEAT_MATERIALS[m].label }))}
+                  options={SEAT_MATERIAL_OPTIONS}
                   onChange={(v) => updateInterior({ seatMaterial: v as typeof i.seatMaterial })}
                 />
                 <Slider label="Seat Count" value={i.seatCount} min={1} max={5} onChange={(v) => updateInterior({ seatCount: v })} />
@@ -221,37 +235,37 @@ export function InteriorsDesigner() {
                 <Select
                   label="Dashboard Material"
                   value={i.dashboardMaterial}
-                  options={(Object.keys(DASHBOARD_MATERIALS) as string[]).map((d) => ({ value: d, label: DASHBOARD_MATERIALS[d].label }))}
+                  options={DASHBOARD_MATERIAL_OPTIONS}
                   onChange={(v) => updateInterior({ dashboardMaterial: v as typeof i.dashboardMaterial })}
                 />
                 <Select
                   label="Steering Wheel"
                   value={i.steeringWheel}
-                  options={(Object.keys(STEERING_WHEEL_TYPES) as string[]).map((w) => ({ value: w, label: STEERING_WHEEL_TYPES[w].label }))}
+                  options={STEERING_WHEEL_OPTIONS}
                   onChange={(v) => updateInterior({ steeringWheel: v as typeof i.steeringWheel })}
                 />
                 <Select
                   label="Steering Material"
                   value={i.steeringMaterial}
-                  options={(Object.keys(STEERING_MATERIALS) as string[]).map((m) => ({ value: m, label: STEERING_MATERIALS[m].label }))}
+                  options={STEERING_MATERIAL_OPTIONS}
                   onChange={(v) => updateInterior({ steeringMaterial: v as typeof i.steeringMaterial })}
                 />
                 <Select
                   label="Pedal Set"
                   value={i.pedalSet}
-                  options={(Object.keys(PEDAL_SETS) as string[]).map((p) => ({ value: p, label: PEDAL_SETS[p].label }))}
+                  options={PEDAL_SET_OPTIONS}
                   onChange={(v) => updateInterior({ pedalSet: v as typeof i.pedalSet })}
                 />
                 <Select
                   label="Shift Knob"
                   value={i.shiftKnob}
-                  options={(Object.keys(SHIFT_KNOBS) as string[]).map((k) => ({ value: k, label: SHIFT_KNOBS[k].label }))}
+                  options={SHIFT_KNOB_OPTIONS}
                   onChange={(v) => updateInterior({ shiftKnob: v as typeof i.shiftKnob })}
                 />
                 <Select
                   label="Trim Finish"
                   value={i.trimFinish}
-                  options={[{ value: "matte", label: "Matte" }, { value: "gloss", label: "Gloss" }, { value: "satin", label: "Satin" }, { value: "brushed", label: "Brushed" }]}
+                  options={TRIM_FINISH_OPTIONS}
                   onChange={(v) => updateInterior({ trimFinish: v as typeof i.trimFinish })}
                 />
               </div>

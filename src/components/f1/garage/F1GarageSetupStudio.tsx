@@ -1,16 +1,11 @@
-// ============================================================================
-// F1 GARAGE & CIRCUIT SETUP WORKSTATION
-// ============================================================================
-// Fine-tune race setup parameters on the constructed car for the target circuit.
-// ============================================================================
-
-import React, { useState } from "react";
+import React, { useState, memo } from "react";
 import { useF1AssemblyStore } from "../../../sim/f1/state/f1AssemblyStore";
 import { F1_CIRCUITS, type F1Circuit } from "../../../sim/f1/season/f1Calendar";
 import {
   SlidersHorizontal, Flag, Gauge, Wind, Disc, Activity,
   Play, RotateCcw, Sparkles, CheckCircle2, ChevronRight, Award, ShieldAlert
 } from "lucide-react";
+import { playHMIClickSound } from "../../../utils/hmiSoundSynth";
 
 interface F1GarageSetupStudioProps {
   onStartRace?: (circuit: F1Circuit, setup: F1RaceWeekendSetup) => void;
@@ -31,10 +26,10 @@ export interface F1RaceWeekendSetup {
   ersDeploymentStrategy: "QUALIFYING_HOTLAP" | "BALANCED_RACE" | "ATTACK_OVERTAKE" | "ENERGY_SAVE";
 }
 
-export const F1GarageSetupStudio: React.FC<F1GarageSetupStudioProps> = ({
+export const F1GarageSetupStudio: React.FC<F1GarageSetupStudioProps> = memo(function F1GarageSetupStudio({
   onStartRace,
   onBackToAssembly,
-}) => {
+}) {
   const { metrics, homologationPassportId } = useF1AssemblyStore();
   const [selectedCircuitIndex, setSelectedCircuitIndex] = useState(0);
   const activeCircuit = F1_CIRCUITS[selectedCircuitIndex];
@@ -63,8 +58,11 @@ export const F1GarageSetupStudio: React.FC<F1GarageSetupStudioProps> = ({
       <div className="p-4 bg-black/60 border-b border-white/10 flex items-center justify-between">
         <div className="flex items-center gap-3">
           <button
-            onClick={onBackToAssembly}
-            className="px-3 py-1.5 rounded-lg bg-zinc-900 border border-white/10 text-xs font-bold text-zinc-300 hover:text-white transition-all"
+            onClick={() => {
+              playHMIClickSound();
+              onBackToAssembly?.();
+            }}
+            className="px-3 py-1.5 rounded-lg bg-zinc-900 border border-white/10 text-xs font-bold text-zinc-300 hover:text-white transition-all cursor-pointer"
           >
             ← Back to Assembly CAD
           </button>
@@ -80,7 +78,10 @@ export const F1GarageSetupStudio: React.FC<F1GarageSetupStudioProps> = ({
 
         {/* Enter Session CTA */}
         <button
-          onClick={() => onStartRace && onStartRace(activeCircuit, setup)}
+          onClick={() => {
+            playHMIClickSound();
+            if (onStartRace) onStartRace(activeCircuit, setup);
+          }}
           className="flex items-center gap-2 px-6 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-teal-400 text-black font-black text-xs uppercase tracking-wider shadow-lg shadow-emerald-500/20 hover:brightness-110 transition-all cursor-pointer"
         >
           <Play className="w-4 h-4 fill-black" />
@@ -280,8 +281,11 @@ export const F1GarageSetupStudio: React.FC<F1GarageSetupStudioProps> = ({
                   {(["SOFT", "MEDIUM", "HARD"] as const).map((compound) => (
                     <button
                       key={compound}
-                      onClick={() => setSetup({ ...setup, selectedTireCompound: compound })}
-                      className={`py-2 rounded-xl text-xs font-black tracking-wider transition-all border ${
+                      onClick={() => {
+                        playHMIClickSound();
+                        setSetup({ ...setup, selectedTireCompound: compound });
+                      }}
+                      className={`py-2 rounded-xl text-xs font-black tracking-wider transition-all border cursor-pointer ${
                         setup.selectedTireCompound === compound
                           ? compound === "SOFT"
                             ? "bg-rose-500 text-black border-rose-400 shadow-md shadow-rose-500/30"
@@ -306,8 +310,11 @@ export const F1GarageSetupStudio: React.FC<F1GarageSetupStudioProps> = ({
                   {(["QUALIFYING_HOTLAP", "BALANCED_RACE", "ATTACK_OVERTAKE", "ENERGY_SAVE"] as const).map((mode) => (
                     <button
                       key={mode}
-                      onClick={() => setSetup({ ...setup, ersDeploymentStrategy: mode })}
-                      className={`py-1.5 px-2 rounded-xl font-bold tracking-wider transition-all border ${
+                      onClick={() => {
+                        playHMIClickSound();
+                        setSetup({ ...setup, ersDeploymentStrategy: mode });
+                      }}
+                      className={`py-1.5 px-2 rounded-xl font-bold tracking-wider transition-all border cursor-pointer ${
                         setup.ersDeploymentStrategy === mode
                           ? "bg-cyan-500 text-black border-cyan-400 font-black shadow-md shadow-cyan-500/30"
                           : "bg-black/40 text-zinc-400 border-white/10 hover:border-white/30"
@@ -324,4 +331,4 @@ export const F1GarageSetupStudio: React.FC<F1GarageSetupStudioProps> = ({
       </div>
     </div>
   );
-};
+});

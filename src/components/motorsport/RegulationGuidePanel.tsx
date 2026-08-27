@@ -4,6 +4,7 @@
 import { useState, useMemo, memo } from "react";
 import { BookOpen, Star, Target, Shield, CheckCircle, XCircle, Info, ChevronRight, Award, AlertTriangle, Settings } from "lucide-react";
 import { CATEGORY_REGULATIONS, CATEGORY_GUIDES, evaluateCompliance } from "../../sim/motorsportEngine";
+import { playHMIClickSound } from "../../utils/hmiSoundSynth";
 import { CATEGORY_LABELS, CATEGORY_COLORS } from "./TeamCard";
 import { useDesign } from "../../state/DesignContext";
 import type { MotorsportCategory } from "../../sim/types";
@@ -40,8 +41,11 @@ export const RegulationGuidePanel = memo(function RegulationGuidePanel() {
         {(Object.keys(CATEGORY_LABELS) as MotorsportCategory[]).map(cat => (
           <button
             key={cat}
-            onClick={() => setGuideCategory(cat)}
-            className={`px-2 py-2 rounded-xl text-xs font-semibold transition-all border ${
+            onClick={() => {
+              playHMIClickSound();
+              setGuideCategory(cat);
+            }}
+            className={`px-2 py-2 rounded-xl text-xs font-semibold transition-all border cursor-pointer ${
               guideCategory === cat ? CATEGORY_COLORS[cat] : "bg-base-850 border-base-800 text-slate-400 hover:border-base-700"
             }`}
           >

@@ -24,6 +24,7 @@ import { StudioEnvironmentGenerator } from "../../exterior3d/environment/StudioE
 import { Engine3DGeometryGenerator, EngineLayout3D } from "../../exterior3d/geometry/engine3dGeometryGenerator";
 import { Car3DGeometryGenerator, VehicleBodyStyle3D, CarGlbOptions } from "../../exterior3d/geometry/car3dGeometryGenerator";
 import { Car3DGlbAssetRegistry } from "../../exterior3d/geometry/car3dGlbAssetRegistry";
+import { disposeThreeScene } from "../../exterior3d/utils/threeDisposal";
 import {
   Box,
   Layers,
@@ -77,6 +78,11 @@ const EngineAndCar3DGraphicsViewportComponent: React.FC = () => {
   const [isXRay, setIsXRay] = useState(false);
   const [isSmoothNormals, setIsSmoothNormals] = useState(true);
   const [autoRotate, setAutoRotate] = useState(true);
+  const autoRotateRef = useRef(autoRotate);
+  useEffect(() => {
+    autoRotateRef.current = autoRotate;
+  }, [autoRotate]);
+
   const [explodedAmount, setExplodedAmount] = useState<number>(0);
   const [lightingMode, setLightingMode] = useState<StudioLightingMode>("SOFTBOX_MAIN");
   const [activeCameraPreset, setActiveCameraPreset] = useState<CameraPresetView>("HERO_THREE_QUARTER");
@@ -211,7 +217,7 @@ const EngineAndCar3DGraphicsViewportComponent: React.FC = () => {
       animationFrameId = requestAnimationFrame(animate);
       if (document.hidden) return;
 
-      if (autoRotate) {
+      if (autoRotateRef.current) {
         orbitTime += 0.004;
         const radius = 4.2;
         camera.position.x = Math.sin(orbitTime) * radius;
@@ -249,10 +255,7 @@ const EngineAndCar3DGraphicsViewportComponent: React.FC = () => {
       cancelAnimationFrame(animationFrameId);
       document.removeEventListener("visibilitychange", handleVisibilityChange);
       window.removeEventListener("resize", handleResize);
-      if (mountRef.current && renderer.domElement) {
-        mountRef.current.removeChild(renderer.domElement);
-      }
-      renderer.dispose();
+      disposeThreeScene(scene, renderer, composer);
     };
   }, []);
 
@@ -328,6 +331,8 @@ const EngineAndCar3DGraphicsViewportComponent: React.FC = () => {
 
     if (currentModelGroup.current) {
       sceneRef.current.remove(currentModelGroup.current);
+      disposeThreeScene(currentModelGroup.current);
+      currentModelGroup.current = null;
     }
 
     setIsLoading(true);

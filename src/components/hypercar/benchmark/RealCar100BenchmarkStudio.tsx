@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, memo } from 'react';
 import {
   ALL_REAL_SPORTS_CARS_100, TIER_NAMES,
   getCarsByTier,
@@ -9,6 +9,7 @@ import {
 } from '../../../sim/benchmarks/benchmarkCorrelationEngine';
 import { CircuitLapTimeSimulator, LapSimulationResult } from '../../../sim/track/circuitLapTimeSimulator';
 import { mapRealCarToSolverParams } from '../../../sim/benchmarks/realCarSimulatorMapper';
+import { playHMIClickSound, playHMITabSound } from '../../../utils/hmiSoundSynth';
 
 const TIER_COLORS = [
   '#10b981', '#3b82f6', '#f59e0b', '#ef4444', '#8b5cf6',
@@ -48,7 +49,7 @@ function pairsForMetric(
   }
 }
 
-export function RealCar100BenchmarkStudio() {
+export const RealCar100BenchmarkStudio = memo(function RealCar100BenchmarkStudio() {
   const [report, setReport] = useState<BenchmarkReport | null>(null);
   const [selectedTier, setSelectedTier] = useState<number>(0);
   const [searchQuery, setSearchQuery] = useState('');
@@ -62,6 +63,7 @@ export function RealCar100BenchmarkStudio() {
   const [telemetry, setTelemetry] = useState<LapSimulationResult | null>(null);
 
   const runBenchmark = () => {
+    playHMIClickSound();
     setRunning(true);
     setTimeout(() => {
       const r = BenchmarkCorrelationEngine.runFullBenchmark();
@@ -167,8 +169,14 @@ export function RealCar100BenchmarkStudio() {
         <input type="text" placeholder="🔍 Search cars..." value={searchQuery} onChange={e => setSearchQuery(e.target.value)}
           className="px-3 py-2 rounded-lg text-sm border border-amber-300 bg-white/80 text-amber-900 w-48" />
         {(['table', 'scatter', 'correlations', 'telemetry'] as ViewMode[]).map(m => (
-          <button key={m} onClick={() => setViewMode(m)}
-            className={`px-3 py-2 rounded-lg text-xs font-bold uppercase tracking-wider ${viewMode === m ? 'bg-amber-600 text-white' : 'bg-white/60 text-amber-700 border border-amber-300'}`}>
+          <button
+            key={m}
+            onClick={() => {
+              playHMITabSound();
+              setViewMode(m);
+            }}
+            className={`px-3 py-2 rounded-lg text-xs font-bold uppercase tracking-wider cursor-pointer ${viewMode === m ? 'bg-amber-600 text-white' : 'bg-white/60 text-amber-700 border border-amber-300'}`}
+          >
             {m}
           </button>
         ))}
@@ -359,7 +367,7 @@ export function RealCar100BenchmarkStudio() {
       )}
     </div>
   );
-}
+});
 
 
 function fmtLap(sec: number): string {

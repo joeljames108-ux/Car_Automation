@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, memo } from "react";
 import {
   Flag,
   Trophy,
@@ -18,7 +18,7 @@ import { NeonHorizonSlider } from "../design/NeonHorizonSlider";
 import { NeonHorizonBadge } from "../design/NeonHorizonBadge";
 import { NeonHorizonDataCard } from "../design/NeonHorizonDataCard";
 
-export function NeonMotorsportStudio() {
+export const NeonMotorsportStudio = memo(function NeonMotorsportStudio() {
   const { sim, design } = useDesign();
 
   const [tireCompound, setTireCompound] = useState<string>("soft");
@@ -73,7 +73,10 @@ export function NeonMotorsportStudio() {
             <NeonHorizonSelect
               label="ACTIVE TIRE COMPOUND"
               value={tireCompound}
-              onChange={setTireCompound}
+              onChange={(val) => {
+                playHMIClickSound();
+                setTireCompound(val);
+              }}
               options={[
                 { value: "soft", label: "C5 Soft Compound (Red)", sublabel: "Maximum mechanical grip · 16 Lap lifespan" },
                 { value: "medium", label: "C3 Medium Compound (Yellow)", sublabel: "Optimum race stint balance · 26 Lap lifespan" },
@@ -154,4 +157,6 @@ export function NeonMotorsportStudio() {
       </div>
     </div>
   );
-}
+});
+
+export default NeonMotorsportStudio;

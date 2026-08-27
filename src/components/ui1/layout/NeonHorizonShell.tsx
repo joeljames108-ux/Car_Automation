@@ -23,8 +23,6 @@ import {
 import { useDesign } from "../../../state/DesignContext";
 import { useCompany } from "../../../state/CompanyContext";
 import { StageSwitcher, type Stage } from "../../StageSwitcher";
-import { SaveLoadDialog } from "../../SaveLoadDialog";
-import { CommandPalette } from "../../CommandPalette";
 import { ThermalAlertMonitor } from "../../ThermalAlertMonitor";
 import { AgentNotificationCenter } from "../../agents/AgentNotificationCenter";
 import { AgentOrchestrator } from "../../../sim/agents/agentFramework";
@@ -39,79 +37,84 @@ import { NeonHorizonDock } from "./NeonHorizonDock";
 import { NeonHorizonHeroHUD } from "../hud/NeonHorizonHeroHUD";
 import { ApexAIFloatingButton } from "../hud/ApexAIFloatingButton";
 import { CFDVisualizationToggle } from "../hud/CFDVisualizationToggle";
-import { AnimMasterComponentCatalog } from "../AnimMasterComponentCatalog";
-import { HorizonTelemetryHUDConsole } from "../HorizonTelemetryHUDConsole";
-import { KineticStudioMultiverseSuite } from "../KineticStudioMultiverseSuite";
-import { NeonCommandCenter } from "../stages/NeonCommandCenter";
-import { NeonAeroLab } from "../stages/NeonAeroLab";
-import { NeonEngineStudio } from "../stages/NeonEngineStudio";
-import { NeonTrackBattle } from "../stages/NeonTrackBattle";
-import { NeonChassisStudio } from "../stages/NeonChassisStudio";
-import { NeonExteriorStudio } from "../stages/NeonExteriorStudio";
-import { NeonInteriorStudio } from "../stages/NeonInteriorStudio";
-import { NeonAIArchitectStudio } from "../stages/NeonAIArchitectStudio";
-import { NeonFactoryFloor } from "../stages/NeonFactoryFloor";
-import { NeonTransmissionStudio } from "../stages/NeonTransmissionStudio";
-import { NeonConstructorStudio } from "../stages/NeonConstructorStudio";
-import { NeonNvhLab } from "../stages/NeonNvhLab";
-import { NeonSafetyLab } from "../stages/NeonSafetyLab";
-import { NeonDynoEcuStudio } from "../stages/NeonDynoEcuStudio";
-import { NeonCompetitorRadar } from "../stages/NeonCompetitorRadar";
-import { NeonEvBatteryStudio } from "../stages/NeonEvBatteryStudio";
-import { NeonSensorLab } from "../stages/NeonSensorLab";
-import { NeonDigitalTwinStudio } from "../stages/NeonDigitalTwinStudio";
-import { NeonPressReviewsStudio } from "../stages/NeonPressReviewsStudio";
-import { NeonEconomyStudio } from "../stages/NeonEconomyStudio";
-import { Neon3DGraphicsStudio } from "../stages/Neon3DGraphicsStudio";
-import { NeonMotorsportStudio } from "../stages/NeonMotorsportStudio";
-import { NeonRDCenterStudio } from "../stages/NeonRDCenterStudio";
-import { NeonGarageStudio } from "../stages/NeonGarageStudio";
-import { NeonComparisonStudio } from "../stages/NeonComparisonStudio";
-import { NeonSimulationStudio } from "../stages/NeonSimulationStudio";
-import { NeonAudioStudio } from "../stages/NeonAudioStudio";
-import { NeonLeaderboardStudio } from "../stages/NeonLeaderboardStudio";
-import { NeonWindTunnelPro } from "../stages/NeonWindTunnelPro";
-import { NeonHomologationStudio } from "../stages/NeonHomologationStudio";
-import { NeonEnduranceStudio } from "../stages/NeonEnduranceStudio";
-import { NeonAutonomousStudio } from "../stages/NeonAutonomousStudio";
-import { NeonImmersionCoolingStudio } from "../stages/NeonImmersionCoolingStudio";
-import { NeonTireDynamicsStudio } from "../stages/NeonTireDynamicsStudio";
-import { NeonBrakeLabStudio } from "../stages/NeonBrakeLabStudio";
-import { NeonFourWheelSteerStudio } from "../stages/NeonFourWheelSteerStudio";
-import { NeonActiveSuspensionStudio } from "../stages/NeonActiveSuspensionStudio";
-import { NeonTorqueVectoringStudio } from "../stages/NeonTorqueVectoringStudio";
-import { NeonVariableCompressionStudio } from "../stages/NeonVariableCompressionStudio";
-import { NeonPorpoisingLabStudio } from "../stages/NeonPorpoisingLabStudio";
-import { NeonUltraCapacitorStudio } from "../stages/NeonUltraCapacitorStudio";
-import { NeonDiffuserStudio } from "../stages/NeonDiffuserStudio";
-import { NeonCarbonAutoclaveStudio } from "../stages/NeonCarbonAutoclaveStudio";
-import { NeonPlasmaActuatorStudio } from "../stages/NeonPlasmaActuatorStudio";
-import { NeonSicInverterStudio } from "../stages/NeonSicInverterStudio";
-import { NeonMagneRideStudio } from "../stages/NeonMagneRideStudio";
-import { NeonSDuctStudio } from "../stages/NeonSDuctStudio";
-import { NeonVortexGeneratorStudio } from "../stages/NeonVortexGeneratorStudio";
-import { NeonFlywheelKersStudio } from "../stages/NeonFlywheelKersStudio";
-import { NeonSplitterSkirtStudio } from "../stages/NeonSplitterSkirtStudio";
-import { NeonMorphingAeroStudio } from "../stages/NeonMorphingAeroStudio";
-import { NeonFenderLouverStudio } from "../stages/NeonFenderLouverStudio";
-import { NeonVgtTurboStudio } from "../stages/NeonVgtTurboStudio";
-import { NeonBlownWingStudio } from "../stages/NeonBlownWingStudio";
-import { NeonSkidSparkStudio } from "../stages/NeonSkidSparkStudio";
-import { NeonBoundaryLayerSuctionStudio } from "../stages/NeonBoundaryLayerSuctionStudio";
-import { NeonThermalPcmStudio } from "../stages/NeonThermalPcmStudio";
-import { NeonGrandStudioHub } from "../stages/NeonGrandStudioHub";
-import { NeonHiggsfieldStudio } from "../stages/NeonHiggsfieldStudio";
-import { NeonHorizonCommandPalette } from "../interactive/NeonHorizonCommandPalette";
-import { NeonHorizonSaveDialog } from "../interactive/NeonHorizonSaveDialog";
-import { NeonHorizonOrbitalStageNavigator } from "./NeonHorizonOrbitalStageNavigator";
-import { MasterSpatialNavGlobe, SPATIAL_SECTORS } from "../spatial/MasterSpatialNavGlobe";
-import { SpatialConstellationMap } from "../spatial/SpatialConstellationMap";
-import { SectorEntryAnimationLayer } from "../spatial/SectorEntryAnimationLayer";
-import { CinematicGlobeBootSequence } from "../spatial/CinematicGlobeBootSequence";
-import { CinematicBlueprintXRayOverlay } from "../spatial/CinematicBlueprintXRayOverlay";
-import { CinematicEngineeringHUD } from "../spatial/CinematicEngineeringHUD";
+import { StageLoadingSkeleton } from "../../ui/StageLoadingSkeleton";
+import { SPATIAL_SECTORS } from "../spatial/MasterSpatialNavGlobe";
 import { Globe, Orbit, Compass, LayoutGrid } from "lucide-react";
 import type { WorkspaceCategory } from "../../ui/UI1Layout";
+
+// ── Lazy-loaded Stage Components for Peak Load Performance & Fast Chunking ──
+const NeonCommandCenter = React.lazy(() => import("../stages/NeonCommandCenter").then(m => ({ default: m.NeonCommandCenter })));
+const NeonAeroLab = React.lazy(() => import("../stages/NeonAeroLab").then(m => ({ default: m.NeonAeroLab })));
+const NeonEngineStudio = React.lazy(() => import("../stages/NeonEngineStudio").then(m => ({ default: m.NeonEngineStudio })));
+const NeonTrackBattle = React.lazy(() => import("../stages/NeonTrackBattle").then(m => ({ default: m.NeonTrackBattle })));
+const NeonChassisStudio = React.lazy(() => import("../stages/NeonChassisStudio").then(m => ({ default: m.NeonChassisStudio })));
+const NeonExteriorStudio = React.lazy(() => import("../stages/NeonExteriorStudio").then(m => ({ default: m.NeonExteriorStudio })));
+const NeonInteriorStudio = React.lazy(() => import("../stages/NeonInteriorStudio").then(m => ({ default: m.NeonInteriorStudio })));
+const NeonAIArchitectStudio = React.lazy(() => import("../stages/NeonAIArchitectStudio").then(m => ({ default: m.NeonAIArchitectStudio })));
+const NeonFactoryFloor = React.lazy(() => import("../stages/NeonFactoryFloor").then(m => ({ default: m.NeonFactoryFloor })));
+const NeonTransmissionStudio = React.lazy(() => import("../stages/NeonTransmissionStudio").then(m => ({ default: m.NeonTransmissionStudio })));
+const NeonConstructorStudio = React.lazy(() => import("../stages/NeonConstructorStudio").then(m => ({ default: m.NeonConstructorStudio })));
+const NeonNvhLab = React.lazy(() => import("../stages/NeonNvhLab").then(m => ({ default: m.NeonNvhLab })));
+const NeonSafetyLab = React.lazy(() => import("../stages/NeonSafetyLab").then(m => ({ default: m.NeonSafetyLab })));
+const NeonDynoEcuStudio = React.lazy(() => import("../stages/NeonDynoEcuStudio").then(m => ({ default: m.NeonDynoEcuStudio })));
+const NeonCompetitorRadar = React.lazy(() => import("../stages/NeonCompetitorRadar").then(m => ({ default: m.NeonCompetitorRadar })));
+const NeonEvBatteryStudio = React.lazy(() => import("../stages/NeonEvBatteryStudio").then(m => ({ default: m.NeonEvBatteryStudio })));
+const NeonSensorLab = React.lazy(() => import("../stages/NeonSensorLab").then(m => ({ default: m.NeonSensorLab })));
+const NeonDigitalTwinStudio = React.lazy(() => import("../stages/NeonDigitalTwinStudio").then(m => ({ default: m.NeonDigitalTwinStudio })));
+const NeonPressReviewsStudio = React.lazy(() => import("../stages/NeonPressReviewsStudio").then(m => ({ default: m.NeonPressReviewsStudio })));
+const NeonEconomyStudio = React.lazy(() => import("../stages/NeonEconomyStudio").then(m => ({ default: m.NeonEconomyStudio })));
+const Neon3DGraphicsStudio = React.lazy(() => import("../stages/Neon3DGraphicsStudio").then(m => ({ default: m.Neon3DGraphicsStudio })));
+const NeonMotorsportStudio = React.lazy(() => import("../stages/NeonMotorsportStudio").then(m => ({ default: m.NeonMotorsportStudio })));
+const NeonRDCenterStudio = React.lazy(() => import("../stages/NeonRDCenterStudio").then(m => ({ default: m.NeonRDCenterStudio })));
+const NeonGarageStudio = React.lazy(() => import("../stages/NeonGarageStudio").then(m => ({ default: m.NeonGarageStudio })));
+const NeonComparisonStudio = React.lazy(() => import("../stages/NeonComparisonStudio").then(m => ({ default: m.NeonComparisonStudio })));
+const NeonSimulationStudio = React.lazy(() => import("../stages/NeonSimulationStudio").then(m => ({ default: m.NeonSimulationStudio })));
+const NeonAudioStudio = React.lazy(() => import("../stages/NeonAudioStudio").then(m => ({ default: m.NeonAudioStudio })));
+const NeonLeaderboardStudio = React.lazy(() => import("../stages/NeonLeaderboardStudio").then(m => ({ default: m.NeonLeaderboardStudio })));
+const NeonWindTunnelPro = React.lazy(() => import("../stages/NeonWindTunnelPro").then(m => ({ default: m.NeonWindTunnelPro })));
+const NeonHomologationStudio = React.lazy(() => import("../stages/NeonHomologationStudio").then(m => ({ default: m.NeonHomologationStudio })));
+const NeonEnduranceStudio = React.lazy(() => import("../stages/NeonEnduranceStudio").then(m => ({ default: m.NeonEnduranceStudio })));
+const NeonAutonomousStudio = React.lazy(() => import("../stages/NeonAutonomousStudio").then(m => ({ default: m.NeonAutonomousStudio })));
+const NeonImmersionCoolingStudio = React.lazy(() => import("../stages/NeonImmersionCoolingStudio").then(m => ({ default: m.NeonImmersionCoolingStudio })));
+const NeonTireDynamicsStudio = React.lazy(() => import("../stages/NeonTireDynamicsStudio").then(m => ({ default: m.NeonTireDynamicsStudio })));
+const NeonBrakeLabStudio = React.lazy(() => import("../stages/NeonBrakeLabStudio").then(m => ({ default: m.NeonBrakeLabStudio })));
+const NeonFourWheelSteerStudio = React.lazy(() => import("../stages/NeonFourWheelSteerStudio").then(m => ({ default: m.NeonFourWheelSteerStudio })));
+const NeonActiveSuspensionStudio = React.lazy(() => import("../stages/NeonActiveSuspensionStudio").then(m => ({ default: m.NeonActiveSuspensionStudio })));
+const NeonTorqueVectoringStudio = React.lazy(() => import("../stages/NeonTorqueVectoringStudio").then(m => ({ default: m.NeonTorqueVectoringStudio })));
+const NeonVariableCompressionStudio = React.lazy(() => import("../stages/NeonVariableCompressionStudio").then(m => ({ default: m.NeonVariableCompressionStudio })));
+const NeonPorpoisingLabStudio = React.lazy(() => import("../stages/NeonPorpoisingLabStudio").then(m => ({ default: m.NeonPorpoisingLabStudio })));
+const NeonUltraCapacitorStudio = React.lazy(() => import("../stages/NeonUltraCapacitorStudio").then(m => ({ default: m.NeonUltraCapacitorStudio })));
+const NeonDiffuserStudio = React.lazy(() => import("../stages/NeonDiffuserStudio").then(m => ({ default: m.NeonDiffuserStudio })));
+const NeonCarbonAutoclaveStudio = React.lazy(() => import("../stages/NeonCarbonAutoclaveStudio").then(m => ({ default: m.NeonCarbonAutoclaveStudio })));
+const NeonPlasmaActuatorStudio = React.lazy(() => import("../stages/NeonPlasmaActuatorStudio").then(m => ({ default: m.NeonPlasmaActuatorStudio })));
+const NeonSicInverterStudio = React.lazy(() => import("../stages/NeonSicInverterStudio").then(m => ({ default: m.NeonSicInverterStudio })));
+const NeonMagneRideStudio = React.lazy(() => import("../stages/NeonMagneRideStudio").then(m => ({ default: m.NeonMagneRideStudio })));
+const NeonSDuctStudio = React.lazy(() => import("../stages/NeonSDuctStudio").then(m => ({ default: m.NeonSDuctStudio })));
+const NeonVortexGeneratorStudio = React.lazy(() => import("../stages/NeonVortexGeneratorStudio").then(m => ({ default: m.NeonVortexGeneratorStudio })));
+const NeonFlywheelKersStudio = React.lazy(() => import("../stages/NeonFlywheelKersStudio").then(m => ({ default: m.NeonFlywheelKersStudio })));
+const NeonSplitterSkirtStudio = React.lazy(() => import("../stages/NeonSplitterSkirtStudio").then(m => ({ default: m.NeonSplitterSkirtStudio })));
+const NeonMorphingAeroStudio = React.lazy(() => import("../stages/NeonMorphingAeroStudio").then(m => ({ default: m.NeonMorphingAeroStudio })));
+const NeonFenderLouverStudio = React.lazy(() => import("../stages/NeonFenderLouverStudio").then(m => ({ default: m.NeonFenderLouverStudio })));
+const NeonVgtTurboStudio = React.lazy(() => import("../stages/NeonVgtTurboStudio").then(m => ({ default: m.NeonVgtTurboStudio })));
+const NeonBlownWingStudio = React.lazy(() => import("../stages/NeonBlownWingStudio").then(m => ({ default: m.NeonBlownWingStudio })));
+const NeonSkidSparkStudio = React.lazy(() => import("../stages/NeonSkidSparkStudio").then(m => ({ default: m.NeonSkidSparkStudio })));
+const NeonBoundaryLayerSuctionStudio = React.lazy(() => import("../stages/NeonBoundaryLayerSuctionStudio").then(m => ({ default: m.NeonBoundaryLayerSuctionStudio })));
+const NeonThermalPcmStudio = React.lazy(() => import("../stages/NeonThermalPcmStudio").then(m => ({ default: m.NeonThermalPcmStudio })));
+const NeonGrandStudioHub = React.lazy(() => import("../stages/NeonGrandStudioHub").then(m => ({ default: m.NeonGrandStudioHub })));
+const NeonHiggsfieldStudio = React.lazy(() => import("../stages/NeonHiggsfieldStudio").then(m => ({ default: m.NeonHiggsfieldStudio })));
+
+// ── Lazy-loaded Spatial Nav & Overlay Components ──
+const MasterSpatialNavGlobe = React.lazy(() => import("../spatial/MasterSpatialNavGlobe").then(m => ({ default: m.MasterSpatialNavGlobe })));
+const SpatialConstellationMap = React.lazy(() => import("../spatial/SpatialConstellationMap").then(m => ({ default: m.SpatialConstellationMap })));
+const SectorEntryAnimationLayer = React.lazy(() => import("../spatial/SectorEntryAnimationLayer").then(m => ({ default: m.SectorEntryAnimationLayer })));
+const CinematicGlobeBootSequence = React.lazy(() => import("../spatial/CinematicGlobeBootSequence").then(m => ({ default: m.CinematicGlobeBootSequence })));
+const CinematicBlueprintXRayOverlay = React.lazy(() => import("../spatial/CinematicBlueprintXRayOverlay").then(m => ({ default: m.CinematicBlueprintXRayOverlay })));
+const CinematicEngineeringHUD = React.lazy(() => import("../spatial/CinematicEngineeringHUD").then(m => ({ default: m.CinematicEngineeringHUD })));
+const NeonHorizonCommandPalette = React.lazy(() => import("../interactive/NeonHorizonCommandPalette").then(m => ({ default: m.NeonHorizonCommandPalette })));
+const NeonHorizonSaveDialog = React.lazy(() => import("../interactive/NeonHorizonSaveDialog").then(m => ({ default: m.NeonHorizonSaveDialog })));
+const NeonHorizonOrbitalStageNavigator = React.lazy(() => import("./NeonHorizonOrbitalStageNavigator").then(m => ({ default: m.NeonHorizonOrbitalStageNavigator })));
+const SaveLoadDialog = React.lazy(() => import("../../SaveLoadDialog").then(m => ({ default: m.SaveLoadDialog })));
+const CommandPalette = React.lazy(() => import("../../CommandPalette").then(m => ({ default: m.CommandPalette })));
 
 interface StageItem {
   id: Stage;
@@ -199,6 +202,24 @@ export function NeonHorizonShell() {
       setActiveCategory(item.category);
     }
   }, [stage]);
+
+  // Idle Stage Warming for smooth zero-lag tab transitions
+  useEffect(() => {
+    const prefetch = () => {
+      import("../stages/NeonCommandCenter");
+      import("../stages/NeonAeroLab");
+      import("../stages/NeonEngineStudio");
+      import("../stages/NeonChassisStudio");
+      import("../spatial/MasterSpatialNavGlobe");
+    };
+
+    if (typeof window !== "undefined" && "requestIdleCallback" in window) {
+      (window as any).requestIdleCallback(prefetch, { timeout: 2500 });
+    } else {
+      const timer = setTimeout(prefetch, 2000);
+      return () => clearTimeout(timer);
+    }
+  }, []);
 
   // Global Keyboard Shortcuts
   useEffect(() => {
@@ -409,125 +430,127 @@ export function NeonHorizonShell() {
 
           {/* Center Stage Viewport */}
           <NeonHorizonContentViewport activeStage={stage} onSelectStage={handleStageSelect}>
-            {stage === "command" ? (
-              <NeonCommandCenter onSelectStage={(st) => handleStageSelect(st as Stage)} />
-            ) : stage === "aero" ? (
-              <NeonAeroLab />
-            ) : stage === "wind_tunnel" ? (
-              <NeonWindTunnelPro />
-            ) : stage === "engine" ? (
-              <NeonEngineStudio />
-            ) : stage === "dyno_ecu" ? (
-              <NeonDynoEcuStudio />
-            ) : stage === "track_battle" || stage === "race" || stage === "track_layout" ? (
-              <NeonTrackBattle />
-            ) : stage === "vehicle" || stage === "suspension3d" ? (
-              <NeonChassisStudio />
-            ) : stage === "exterior" ? (
-              <NeonExteriorStudio />
-            ) : stage === "interior" || stage === "infotainment" ? (
-              <NeonInteriorStudio />
-            ) : stage === "ai" ? (
-              <NeonAIArchitectStudio />
-            ) : stage === "higgsfield" ? (
-              <NeonHiggsfieldStudio />
-            ) : stage === "manufacturing" || stage === "supplyChain" ? (
-              <NeonFactoryFloor />
-            ) : stage === "transmission3d" ? (
-              <NeonTransmissionStudio />
-            ) : stage === "f1_constructor" || stage === "hypercar_constructor" ? (
-              <NeonConstructorStudio />
-            ) : stage === "nvh" || stage === "audio" || stage === "acoustics" || stage === "sound" ? (
-              <NeonAudioStudio />
-            ) : stage === "safety" ? (
-              <NeonSafetyLab />
-            ) : stage === "competitors" || stage === "sales" ? (
-              <NeonCompetitorRadar />
-            ) : stage === "compare" ? (
-              <NeonComparisonStudio />
-            ) : stage === "garage" ? (
-              <NeonGarageStudio />
-            ) : stage === "homologation" ? (
-              <NeonHomologationStudio />
-            ) : stage === "endurance" ? (
-              <NeonEnduranceStudio />
-            ) : stage === "autonomous" ? (
-              <NeonAutonomousStudio />
-            ) : stage === "immersion" ? (
-              <NeonImmersionCoolingStudio />
-            ) : stage === "tires" ? (
-              <NeonTireDynamicsStudio />
-            ) : stage === "brakes" ? (
-              <NeonBrakeLabStudio />
-            ) : stage === "4ws" ? (
-              <NeonFourWheelSteerStudio />
-            ) : stage === "active_suspension" ? (
-              <NeonActiveSuspensionStudio />
-            ) : stage === "torque_vectoring" ? (
-              <NeonTorqueVectoringStudio />
-            ) : stage === "variable_compression" ? (
-              <NeonVariableCompressionStudio />
-            ) : stage === "porpoising" ? (
-              <NeonPorpoisingLabStudio />
-            ) : stage === "ultracapacitor" ? (
-              <NeonUltraCapacitorStudio />
-            ) : stage === "diffuser" ? (
-              <NeonDiffuserStudio />
-            ) : stage === "autoclave" ? (
-              <NeonCarbonAutoclaveStudio />
-            ) : stage === "plasma" ? (
-              <NeonPlasmaActuatorStudio />
-            ) : stage === "sic_inverter" ? (
-              <NeonSicInverterStudio />
-            ) : stage === "magneride" ? (
-              <NeonMagneRideStudio />
-            ) : stage === "sduct" ? (
-              <NeonSDuctStudio />
-            ) : stage === "vortex" ? (
-              <NeonVortexGeneratorStudio />
-            ) : stage === "flywheel" ? (
-              <NeonFlywheelKersStudio />
-            ) : stage === "splitter_skirt" ? (
-              <NeonSplitterSkirtStudio />
-            ) : stage === "morphing_aero" ? (
-              <NeonMorphingAeroStudio />
-            ) : stage === "fender_louvers" ? (
-              <NeonFenderLouverStudio />
-            ) : stage === "vgt_turbo" ? (
-              <NeonVgtTurboStudio />
-            ) : stage === "blown_wing" ? (
-              <NeonBlownWingStudio />
-            ) : stage === "skid_spark" ? (
-              <NeonSkidSparkStudio />
-            ) : stage === "boundary_suction" ? (
-              <NeonBoundaryLayerSuctionStudio />
-            ) : stage === "thermal_pcm" ? (
-              <NeonThermalPcmStudio />
-            ) : stage === "leaderboard" || stage === "records" ? (
-              <NeonLeaderboardStudio />
-            ) : stage === "simulation" || stage === "testing" || stage === "stats" ? (
-              <NeonSimulationStudio />
-            ) : stage === "battery" ? (
-              <NeonEvBatteryStudio />
-            ) : stage === "sensors" ? (
-              <NeonSensorLab />
-            ) : stage === "twin" ? (
-              <NeonDigitalTwinStudio />
-            ) : stage === "press" ? (
-              <NeonPressReviewsStudio />
-            ) : stage === "economy" ? (
-              <NeonEconomyStudio />
-            ) : stage === "studio" || stage === "grand_studio" ? (
-              <NeonGrandStudioHub />
-            ) : stage === "graphics3d" ? (
-              <Neon3DGraphicsStudio />
-            ) : stage === "motorsport" ? (
-              <NeonMotorsportStudio />
-            ) : stage === "rd" ? (
-              <NeonRDCenterStudio />
-            ) : (
-              <StageSwitcher stage={stage} onSelectStage={(st) => handleStageSelect(st as Stage)} />
-            )}
+            <React.Suspense fallback={<StageLoadingSkeleton stageName={stage} />}>
+              {stage === "command" ? (
+                <NeonCommandCenter onSelectStage={(st) => handleStageSelect(st as Stage)} />
+              ) : stage === "aero" ? (
+                <NeonAeroLab />
+              ) : stage === "wind_tunnel" ? (
+                <NeonWindTunnelPro />
+              ) : stage === "engine" ? (
+                <NeonEngineStudio />
+              ) : stage === "dyno_ecu" ? (
+                <NeonDynoEcuStudio />
+              ) : stage === "track_battle" || stage === "race" || stage === "track_layout" ? (
+                <NeonTrackBattle />
+              ) : stage === "vehicle" || stage === "suspension3d" ? (
+                <NeonChassisStudio />
+              ) : stage === "exterior" ? (
+                <NeonExteriorStudio />
+              ) : stage === "interior" || stage === "infotainment" ? (
+                <NeonInteriorStudio />
+              ) : stage === "ai" ? (
+                <NeonAIArchitectStudio />
+              ) : stage === "higgsfield" ? (
+                <NeonHiggsfieldStudio />
+              ) : stage === "manufacturing" || stage === "supplyChain" ? (
+                <NeonFactoryFloor />
+              ) : stage === "transmission3d" ? (
+                <NeonTransmissionStudio />
+              ) : stage === "f1_constructor" || stage === "hypercar_constructor" ? (
+                <NeonConstructorStudio />
+              ) : stage === "nvh" || stage === "audio" || stage === "acoustics" || stage === "sound" ? (
+                <NeonAudioStudio />
+              ) : stage === "safety" ? (
+                <NeonSafetyLab />
+              ) : stage === "competitors" || stage === "sales" ? (
+                <NeonCompetitorRadar />
+              ) : stage === "compare" ? (
+                <NeonComparisonStudio />
+              ) : stage === "garage" ? (
+                <NeonGarageStudio />
+              ) : stage === "homologation" ? (
+                <NeonHomologationStudio />
+              ) : stage === "endurance" ? (
+                <NeonEnduranceStudio />
+              ) : stage === "autonomous" ? (
+                <NeonAutonomousStudio />
+              ) : stage === "immersion" ? (
+                <NeonImmersionCoolingStudio />
+              ) : stage === "tires" ? (
+                <NeonTireDynamicsStudio />
+              ) : stage === "brakes" ? (
+                <NeonBrakeLabStudio />
+              ) : stage === "4ws" ? (
+                <NeonFourWheelSteerStudio />
+              ) : stage === "active_suspension" ? (
+                <NeonActiveSuspensionStudio />
+              ) : stage === "torque_vectoring" ? (
+                <NeonTorqueVectoringStudio />
+              ) : stage === "variable_compression" ? (
+                <NeonVariableCompressionStudio />
+              ) : stage === "porpoising" ? (
+                <NeonPorpoisingLabStudio />
+              ) : stage === "ultracapacitor" ? (
+                <NeonUltraCapacitorStudio />
+              ) : stage === "diffuser" ? (
+                <NeonDiffuserStudio />
+              ) : stage === "autoclave" ? (
+                <NeonCarbonAutoclaveStudio />
+              ) : stage === "plasma" ? (
+                <NeonPlasmaActuatorStudio />
+              ) : stage === "sic_inverter" ? (
+                <NeonSicInverterStudio />
+              ) : stage === "magneride" ? (
+                <NeonMagneRideStudio />
+              ) : stage === "sduct" ? (
+                <NeonSDuctStudio />
+              ) : stage === "vortex" ? (
+                <NeonVortexGeneratorStudio />
+              ) : stage === "flywheel" ? (
+                <NeonFlywheelKersStudio />
+              ) : stage === "splitter_skirt" ? (
+                <NeonSplitterSkirtStudio />
+              ) : stage === "morphing_aero" ? (
+                <NeonMorphingAeroStudio />
+              ) : stage === "fender_louvers" ? (
+                <NeonFenderLouverStudio />
+              ) : stage === "vgt_turbo" ? (
+                <NeonVgtTurboStudio />
+              ) : stage === "blown_wing" ? (
+                <NeonBlownWingStudio />
+              ) : stage === "skid_spark" ? (
+                <NeonSkidSparkStudio />
+              ) : stage === "boundary_suction" ? (
+                <NeonBoundaryLayerSuctionStudio />
+              ) : stage === "thermal_pcm" ? (
+                <NeonThermalPcmStudio />
+              ) : stage === "leaderboard" || stage === "records" ? (
+                <NeonLeaderboardStudio />
+              ) : stage === "simulation" || stage === "testing" || stage === "stats" ? (
+                <NeonSimulationStudio />
+              ) : stage === "battery" ? (
+                <NeonEvBatteryStudio />
+              ) : stage === "sensors" ? (
+                <NeonSensorLab />
+              ) : stage === "twin" ? (
+                <NeonDigitalTwinStudio />
+              ) : stage === "press" ? (
+                <NeonPressReviewsStudio />
+              ) : stage === "economy" ? (
+                <NeonEconomyStudio />
+              ) : stage === "studio" || stage === "grand_studio" ? (
+                <NeonGrandStudioHub />
+              ) : stage === "graphics3d" ? (
+                <Neon3DGraphicsStudio />
+              ) : stage === "motorsport" ? (
+                <NeonMotorsportStudio />
+              ) : stage === "rd" ? (
+                <NeonRDCenterStudio />
+              ) : (
+                <StageSwitcher stage={stage} onSelectStage={(st) => handleStageSelect(st as Stage)} />
+              )}
+            </React.Suspense>
           </NeonHorizonContentViewport>
 
           {/* Right Dual-Column Stat Rail */}
@@ -554,37 +577,39 @@ export function NeonHorizonShell() {
       <ApexAIFloatingButton onOpenStudio={() => handleStageSelect("ai")} />
 
       {/* 8. Overlays & Dialogs */}
-      {bootIntroOpen && (
-        <CinematicGlobeBootSequence onComplete={() => setBootIntroOpen(false)} />
-      )}
+      <React.Suspense fallback={null}>
+        {bootIntroOpen && (
+          <CinematicGlobeBootSequence onComplete={() => setBootIntroOpen(false)} />
+        )}
 
-      <CinematicBlueprintXRayOverlay
-        isOpen={blueprintOpen}
-        onClose={() => setBlueprintOpen(false)}
-      />
+        <CinematicBlueprintXRayOverlay
+          isOpen={blueprintOpen}
+          onClose={() => setBlueprintOpen(false)}
+        />
 
-      <NeonHorizonOrbitalStageNavigator
-        isOpen={orbitalNavOpen}
-        onClose={() => setOrbitalNavOpen(false)}
-        stages={STAGES}
-        activeStage={stage}
-        activeCategory={activeCategory}
-        onSelectStage={(st) => {
-          handleStageSelect(st);
-          setOrbitalNavOpen(false);
-        }}
-        onSelectCategory={handleCategorySelect}
-      />
-      <NeonHorizonSaveDialog
-        open={dialog.open}
-        mode={dialog.mode}
-        onClose={() => setDialog({ open: false, mode: dialog.mode })}
-      />
-      <NeonHorizonCommandPalette
-        isOpen={cmdPaletteOpen}
-        onClose={() => setCmdPaletteOpen(false)}
-        onSelectStage={(s) => handleStageSelect(s as Stage)}
-      />
+        <NeonHorizonOrbitalStageNavigator
+          isOpen={orbitalNavOpen}
+          onClose={() => setOrbitalNavOpen(false)}
+          stages={STAGES}
+          activeStage={stage}
+          activeCategory={activeCategory}
+          onSelectStage={(st) => {
+            handleStageSelect(st);
+            setOrbitalNavOpen(false);
+          }}
+          onSelectCategory={handleCategorySelect}
+        />
+        <NeonHorizonSaveDialog
+          open={dialog.open}
+          mode={dialog.mode}
+          onClose={() => setDialog({ open: false, mode: dialog.mode })}
+        />
+        <NeonHorizonCommandPalette
+          isOpen={cmdPaletteOpen}
+          onClose={() => setCmdPaletteOpen(false)}
+          onSelectStage={(s) => handleStageSelect(s as Stage)}
+        />
+      </React.Suspense>
       <ThermalAlertMonitor />
       <AgentNotificationCenter
         findings={AgentOrchestrator.getInstance().getAggregateFindings()}

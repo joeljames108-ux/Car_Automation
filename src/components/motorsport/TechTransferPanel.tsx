@@ -4,6 +4,7 @@
 import { useState, memo } from "react";
 import { ArrowRightLeft, ArrowRight, ArrowLeft, Clock, Zap } from "lucide-react";
 import { useCompany } from "../../state/CompanyContext";
+import { playHMIClickSound } from "../../utils/hmiSoundSynth";
 import type { MotorsportTeam } from "../../sim/types";
 
 export const TechTransferPanel = memo(function TechTransferPanel({ selectedTeam }: { selectedTeam: MotorsportTeam | null }) {
@@ -46,8 +47,11 @@ export const TechTransferPanel = memo(function TechTransferPanel({ selectedTeam 
               { dir: "race_to_production" as const, label: "Race → Production", icon: <ArrowRight size={14} />, desc: "Apply race tech to road cars" },
               { dir: "production_to_race" as const, label: "Production → Race", icon: <ArrowLeft size={14} />, desc: "Apply road car R&D to racing" },
             ]).map(d => (
-              <button key={d.dir} onClick={() => setDirection(d.dir)}
-                className={`px-4 py-3 rounded-xl text-xs font-medium transition-all border ${
+              <button key={d.dir} onClick={() => {
+                playHMIClickSound();
+                setDirection(d.dir);
+              }}
+                className={`px-4 py-3 rounded-xl text-xs font-medium transition-all border cursor-pointer ${
                   direction === d.dir
                     ? "bg-purple-500/15 border-purple-500/40 text-purple-300"
                     : "bg-base-850 border-base-800 text-slate-400 hover:border-base-700"
@@ -68,9 +72,12 @@ export const TechTransferPanel = memo(function TechTransferPanel({ selectedTeam 
             </div>
           </div>
 
-          <button onClick={() => transferMotorsportTech(selectedTeam.id, direction, Math.min(points, pool))}
+          <button onClick={() => {
+            playHMIClickSound();
+            transferMotorsportTech(selectedTeam.id, direction, Math.min(points, pool));
+          }}
             disabled={pool < 5}
-            className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-purple-500/15 border border-purple-500/40 text-purple-300 hover:bg-purple-500/25 disabled:opacity-40 disabled:cursor-not-allowed transition-all text-sm font-semibold">
+            className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-purple-500/15 border border-purple-500/40 text-purple-300 hover:bg-purple-500/25 disabled:opacity-40 disabled:cursor-not-allowed transition-all text-sm font-semibold cursor-pointer">
             <ArrowRightLeft size={14} /> Transfer Technology
           </button>
         </div>

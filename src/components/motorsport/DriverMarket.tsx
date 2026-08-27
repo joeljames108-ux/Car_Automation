@@ -1,9 +1,10 @@
 // ===================================================================
 // DRIVER MARKET — Browse, scout, hire, manage contracts
 // ===================================================================
-import { useState, memo } from "react";
+import React, { useState, memo } from "react";
 import { Users, Search, UserPlus, UserMinus, RefreshCw } from "lucide-react";
 import { useCompany } from "../../state/CompanyContext";
+import { playHMIClickSound, playHMITabSound } from "../../utils/hmiSoundSynth";
 import type { MotorsportTeam, RaceDriver } from "../../sim/types";
 
 const SkillBar = memo(function SkillBar({ label, value, color }: { label: string; value: number; color: string }) {
@@ -68,8 +69,11 @@ export const DriverMarket = memo(function DriverMarket({ selectedTeam }: { selec
           { id: "available" as const, label: "Free Agents", icon: <UserPlus size={12} /> },
           { id: "scouting" as const, label: "Scouting", icon: <Search size={12} /> },
         ].map(t => (
-          <button key={t.id} onClick={() => setTab(t.id)}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-all ${
+          <button key={t.id} onClick={() => {
+            playHMITabSound();
+            setTab(t.id);
+          }}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-all cursor-pointer ${
               tab === t.id ? "bg-accent-500/20 text-accent-300 tab-active-indicator" : "text-slate-400 hover:text-slate-200"
             }`}>
             {t.icon} {t.label}
@@ -94,13 +98,19 @@ export const DriverMarket = memo(function DriverMarket({ selectedTeam }: { selec
             selectedTeam.drivers.map(d => (
               <DriverCard key={d.id} driver={d} actions={
                 <>
-                  <button onClick={() => renewMotorsportContract(selectedTeam.id, d.id, 2)}
-                    className="px-2 py-1 rounded text-[10px] font-medium bg-ok-500/15 border border-ok-500/30 text-ok-400 hover:bg-ok-500/25 transition-all"
+                  <button onClick={() => {
+                    playHMIClickSound();
+                    renewMotorsportContract(selectedTeam.id, d.id, 2);
+                  }}
+                    className="px-2 py-1 rounded text-[10px] font-medium bg-ok-500/15 border border-ok-500/30 text-ok-400 hover:bg-ok-500/25 transition-all cursor-pointer"
                     title="Renew contract for 2 seasons">
                     <RefreshCw size={10} className="inline mr-0.5" /> Renew
                   </button>
-                  <button onClick={() => releaseMotorsportDriver(selectedTeam.id, d.id)}
-                    className="px-2 py-1 rounded text-[10px] font-medium bg-danger-500/15 border border-danger-500/30 text-danger-400 hover:bg-danger-500/25 transition-all"
+                  <button onClick={() => {
+                    playHMIClickSound();
+                    releaseMotorsportDriver(selectedTeam.id, d.id);
+                  }}
+                    className="px-2 py-1 rounded text-[10px] font-medium bg-danger-500/15 border border-danger-500/30 text-danger-400 hover:bg-danger-500/25 transition-all cursor-pointer"
                     title="Release driver">
                     <UserMinus size={10} className="inline mr-0.5" /> Release
                   </button>
@@ -122,8 +132,11 @@ export const DriverMarket = memo(function DriverMarket({ selectedTeam }: { selec
             availableDrivers.map((d, idx) => (
               <DriverCard key={d.id} driver={d} actions={
                 selectedTeam && selectedTeam.drivers.length < 2 ? (
-                  <button onClick={() => assignMotorsportDriver(selectedTeam.id, idx)}
-                    className="px-3 py-1.5 rounded-lg text-xs font-medium bg-accent-500/15 border border-accent-500/30 text-accent-300 hover:bg-accent-500/25 transition-all">
+                  <button onClick={() => {
+                    playHMIClickSound();
+                    assignMotorsportDriver(selectedTeam.id, idx);
+                  }}
+                    className="px-3 py-1.5 rounded-lg text-xs font-medium bg-accent-500/15 border border-accent-500/30 text-accent-300 hover:bg-accent-500/25 transition-all cursor-pointer">
                     Hire
                   </button>
                 ) : (
@@ -141,9 +154,12 @@ export const DriverMarket = memo(function DriverMarket({ selectedTeam }: { selec
       {tab === "scouting" && (
         <div className="space-y-3">
           <div className="flex items-center gap-3">
-            <button onClick={scoutNewDriver}
+            <button onClick={() => {
+              playHMIClickSound();
+              scoutNewDriver();
+            }}
               disabled={company.motorsport.scoutedDrivers.length >= 4}
-              className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-xs font-semibold bg-purple-500/15 border border-purple-500/30 text-purple-300 hover:bg-purple-500/25 disabled:opacity-40 disabled:cursor-not-allowed transition-all">
+              className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-xs font-semibold bg-purple-500/15 border border-purple-500/30 text-purple-300 hover:bg-purple-500/25 disabled:opacity-40 disabled:cursor-not-allowed transition-all cursor-pointer">
               <Search size={14} /> Scout New Talent
             </button>
             <span className="text-[10px] text-slate-500">
@@ -160,8 +176,11 @@ export const DriverMarket = memo(function DriverMarket({ selectedTeam }: { selec
             company.motorsport.scoutedDrivers.map(d => (
               <DriverCard key={d.id} driver={d} actions={
                 selectedTeam && selectedTeam.drivers.length < 2 ? (
-                  <button onClick={() => signScouted(d.id, selectedTeam.id)}
-                    className="px-3 py-1.5 rounded-lg text-xs font-medium bg-ok-500/15 border border-ok-500/30 text-ok-400 hover:bg-ok-500/25 transition-all">
+                  <button onClick={() => {
+                    playHMIClickSound();
+                    signScouted(d.id, selectedTeam.id);
+                  }}
+                    className="px-3 py-1.5 rounded-lg text-xs font-medium bg-ok-500/15 border border-ok-500/30 text-ok-400 hover:bg-ok-500/25 transition-all cursor-pointer">
                     Sign
                   </button>
                 ) : (

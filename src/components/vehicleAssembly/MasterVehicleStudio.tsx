@@ -40,6 +40,7 @@ import {
 } from "../../sim/masterVehicleState/masterVehicleTypes";
 import { MasterVehicle3DAssembler } from "../../exterior3d/generators/masterVehicle3DAssembler";
 import { AeroStreamlineParticleSystem } from "../../exterior3d/aerodynamics/AeroStreamlineParticleSystem";
+import { SharedWebGLContextManager } from "../../engine3d/managers/SharedWebGLContextManager";
 
 export const MasterVehicleStudio: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -135,9 +136,17 @@ export const MasterVehicleStudio: React.FC = () => {
 
     let animationFrameId: number;
     const clock = new THREE.Clock();
+    let isTabVisible = !document.hidden;
+
+    const onVisibilityChange = () => {
+      isTabVisible = !document.hidden;
+    };
+    document.addEventListener("visibilitychange", onVisibilityChange);
 
     const animate = () => {
       animationFrameId = requestAnimationFrame(animate);
+      if (!isTabVisible) return;
+
       const deltaSec = clock.getDelta();
       controls.update();
 
@@ -162,19 +171,21 @@ export const MasterVehicleStudio: React.FC = () => {
     window.addEventListener("resize", handleResize);
 
     return () => {
+      document.removeEventListener("visibilitychange", onVisibilityChange);
       window.removeEventListener("resize", handleResize);
       cancelAnimationFrame(animationFrameId);
       controls.dispose();
-      renderer.dispose();
-      if (container.contains(renderer.domElement)) {
-        container.removeChild(renderer.domElement);
-      }
+      particleSystemRef.current?.dispose();
+      assemblerRef.current?.dispose();
+      SharedWebGLContextManager.safelyDisposeRenderer(renderer, container);
+      SharedWebGLContextManager.disposeThreeScene(scene);
     };
   }, []);
 
   // Update vehicle 3D mesh on state change
   useEffect(() => {
     if (assemblerRef.current) {
+      assemblerRef.current.dispose();
       assemblerRef.current.assembleVehicle(state);
       assemblerRef.current.getAttachmentGraph().setExplodedFactor(explodedFactor);
       assemblerRef.current.getAttachmentGraph().isolateCategory(activeCategory);

@@ -18,7 +18,9 @@ import {
   DriverStintTelemetry,
 } from "../../sim/racing/trackRacingSimulator";
 import { Car3DGeometryGenerator } from "../../exterior3d/geometry/car3dGeometryGenerator";
+import { disposeThreeScene } from "../../exterior3d/utils/threeDisposal";
 import { Flag, Play, Pause, RotateCcw, Flame, ShieldAlert, Zap, Trophy, Sliders } from "lucide-react";
+import { playHMIClickSound } from "../../utils/hmiSoundSynth";
 
 const TrackRacing3DViewportComponent: React.FC = () => {
   const mountRef = useRef<HTMLDivElement>(null);
@@ -185,8 +187,7 @@ const TrackRacing3DViewportComponent: React.FC = () => {
       cancelAnimationFrame(animId);
       window.removeEventListener("resize", handleResize);
       document.removeEventListener("visibilitychange", handleVisibilityChange);
-      renderer.dispose();
-      if (mountRef.current) mountRef.current.innerHTML = "";
+      disposeThreeScene(scene, renderer);
     };
   }, [isRacingActive]);
 
@@ -224,8 +225,11 @@ const TrackRacing3DViewportComponent: React.FC = () => {
         <div className="flex items-center space-x-3 pointer-events-auto bg-slate-900/80 backdrop-blur-md p-2 rounded-xl border border-slate-700/50 shadow-lg">
           <select
             value={driverAggression}
-            onChange={(e) => setDriverAggression(e.target.value as AiDriverAggression)}
-            className="bg-slate-950 text-slate-200 text-xs rounded-lg px-2.5 py-1.5 border border-slate-700 font-mono outline-none"
+            onChange={(e) => {
+              playHMIClickSound();
+              setDriverAggression(e.target.value as AiDriverAggression);
+            }}
+            className="bg-slate-950 text-slate-200 text-xs rounded-lg px-2.5 py-1.5 border border-slate-700 font-mono outline-none cursor-pointer"
           >
             <option value="CONSERVATIVE_TIRE_SAVER">Conservative (Tire Saver)</option>
             <option value="BALANCED_CALCULATED">Balanced (Calculated Apex)</option>
@@ -234,8 +238,11 @@ const TrackRacing3DViewportComponent: React.FC = () => {
           </select>
 
           <button
-            onClick={() => setIsRacingActive(!isRacingActive)}
-            className="px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold flex items-center space-x-1.5 transition-all shadow-md shadow-blue-500/30"
+            onClick={() => {
+              playHMIClickSound();
+              setIsRacingActive(!isRacingActive);
+            }}
+            className="px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold flex items-center space-x-1.5 transition-all shadow-md shadow-blue-500/30 cursor-pointer"
           >
             {isRacingActive ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4 fill-white" />}
             <span>{isRacingActive ? "PAUSE RACE" : "RESUME RACE"}</span>

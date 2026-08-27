@@ -5,7 +5,7 @@
 // the race with compound colors, stint lengths, and pit stop markers.
 // ============================================================================
 
-import React, { useMemo } from 'react';
+import React, { useMemo, memo } from 'react';
 import { TIRE_COMPOUNDS, PacejkaTireModel } from '../../sim/tires/pacejkaTireModel';
 
 interface TireStint {
@@ -22,9 +22,9 @@ interface TireStrategyViewProps {
   tireStates?: { compound: string; wear: number; temp: number }[];
 }
 
-export const TireStrategyView: React.FC<TireStrategyViewProps> = ({
+export const TireStrategyView: React.FC<TireStrategyViewProps> = memo(function TireStrategyView({
   totalLaps, stints, currentLap, tireStates = [],
-}) => {
+}) {
   const pitStops = useMemo(() =>
     stints.filter((s, i) => i > 0).map(s => s.startLap),
     [stints]
@@ -113,4 +113,4 @@ export const TireStrategyView: React.FC<TireStrategyViewProps> = ({
       )}
     </div>
   );
-};
+});
