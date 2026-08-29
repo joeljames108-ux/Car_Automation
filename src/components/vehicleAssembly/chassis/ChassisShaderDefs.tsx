@@ -25,7 +25,7 @@ export const ChassisShaderDefs: React.FC = () => (
     <pattern id="carbon-twill-2x2" width="12" height="12" patternUnits="userSpaceOnUse">
       <rect width="12" height="12" fill="#0b0f19" />
       <path d="M 0 0 L 6 6 L 12 0 L 6 -6 Z" fill="#1e293b" />
-      <path d="M 6 6 L 12 12 L 18 6 L 12 0 Z" fill="#38bdf8" opacity="0.25" />
+      <path d="M 6 6 L 12 12 L 18 6 L 12 0 Z" fill="#fbbf24" opacity="0.25" />
       <path d="M 0 12 L 6 18 L 12 12 L 6 6 Z" fill="#1e293b" />
       <path d="M -6 6 L 0 12 L 6 6 L 0 0 Z" fill="#0f172a" />
     </pattern>
@@ -41,9 +41,9 @@ export const ChassisShaderDefs: React.FC = () => (
 
     {/* 5. Titanium Weld Heat-Tint Iridescent Gradient */}
     <linearGradient id="titanium-weld-tint" x1="0%" y1="0%" x2="100%" y2="0%">
-      <stop offset="0%" stopColor="#3b82f6" />
-      <stop offset="25%" stopColor="#a855f7" />
-      <stop offset="50%" stopColor="#ec4899" />
+      <stop offset="0%" stopColor="#d97706" />
+      <stop offset="25%" stopColor="#f59e0b" />
+      <stop offset="50%" stopColor="#d97706" />
       <stop offset="75%" stopColor="#f59e0b" />
       <stop offset="100%" stopColor="#10b981" />
     </linearGradient>
@@ -141,7 +141,7 @@ export const ChassisShaderDefs: React.FC = () => (
 
     {/* 18. FEA Triangular Mesh Overlay Pattern */}
     <pattern id="fea-tri-mesh" width="30" height="30" patternUnits="userSpaceOnUse">
-      <path d="M 0 0 L 30 0 L 15 30 Z M 30 0 L 30 30 L 15 30 Z" fill="none" stroke="#38bdf8" strokeWidth="0.6" opacity="0.35" />
+      <path d="M 0 0 L 30 0 L 15 30 Z M 30 0 L 30 30 L 15 30 Z" fill="none" stroke="#fbbf24" strokeWidth="0.6" opacity="0.35" />
     </pattern>
   </defs>
 );

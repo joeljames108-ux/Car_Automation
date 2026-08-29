@@ -101,7 +101,7 @@ export const LIGHTING_PRESET_CONFIGS: Record<LightingPreset, LightingPresetConfi
       {
         id: 'accent_spot',
         type: 'spot',
-        color: 0x38bdf8,
+        color: 0xfbbf24,
         intensity: 1.8,
         position: { x: -2.0, y: -2.0, z: 3.0 },
       },
@@ -130,7 +130,7 @@ export const LIGHTING_PRESET_CONFIGS: Record<LightingPreset, LightingPresetConfi
       {
         id: 'sky_bounce',
         type: 'hemisphere',
-        color: 0x38bdf8,
+        color: 0xfbbf24,
         intensity: 0.8,
       },
     ],
@@ -179,7 +179,7 @@ export const LIGHTING_PRESET_CONFIGS: Record<LightingPreset, LightingPresetConfi
       {
         id: 'cad_ambient',
         type: 'ambient',
-        color: 0x38bdf8,
+        color: 0xfbbf24,
         intensity: 2.0,
       },
     ],

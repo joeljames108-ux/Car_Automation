@@ -22,7 +22,6 @@ export type Stage =
 
 // ── Lazy-loaded stage panel components ──
 const Transmission3DStudio = lazy(() => import("./transmissionStudio/Transmission3DStudio").then(m => ({ default: m.Transmission3DStudio })));
-const UnifiedPowertrainStudio = lazy(() => import("./powertrainStudio/UnifiedPowertrainStudio").then(m => ({ default: m.UnifiedPowertrainStudio })));
 const TrackLayoutMasterStudio = lazy(() => import("./trackLayouts/TrackLayoutMasterStudio").then(m => ({ default: m.TrackLayoutMasterStudio })));
 const WindTunnelAeroStudio = lazy(() => import("./aerodynamics/WindTunnelAeroStudio").then(m => ({ default: m.WindTunnelAeroStudio })));
 const PowertrainDynoStudio = lazy(() => import("./powertrain/PowertrainDynoStudio").then(m => ({ default: m.PowertrainDynoStudio })));
@@ -93,9 +92,9 @@ const StageSwitcherComponent: React.FC<StageSwitcherProps> = ({ stage, onSelectS
         {stage === "vehicle" && <VehicleDesigner initialSubTab="linear_assembly" />}
         {stage === "exterior" && <VehicleDesigner initialSubTab="exterior" />}
         {stage === "aero" && <VehicleDesigner initialSubTab="aero" />}
-        {stage === "interior" && <InteriorsDesigner />}
+        {stage === "interior" && <InteriorsDesigner initialSubTab="modular_studio" />}
         {stage === "manufacturing" && <ManufacturingDesigner />}
-        {stage === "infotainment" && <InfotainmentDesigner />}
+        {stage === "infotainment" && <InteriorsDesigner initialSubTab="electronics" />}
         {stage === "safety" && <SafetyCenter />}
         {stage === "simulation" && <SimulationDashboard />}
         {stage === "testing" && <TestingLab />}
@@ -115,7 +114,6 @@ const StageSwitcherComponent: React.FC<StageSwitcherProps> = ({ stage, onSelectS
         {stage === "nvh" && <NvhSoundLab />}
         {stage === "suspension3d" && <SuspensionMasterStudio />}
         {stage === "transmission3d" && <Transmission3DStudio />}
-        {stage === "powertrain" && <UnifiedPowertrainStudio />}
         {stage === "dyno_ecu" && <PowertrainDynoStudio />}
         {stage === "track_battle" && <TrackBattlesStudio />}
         {stage === "wind_tunnel" && <WindTunnelAeroStudio />}

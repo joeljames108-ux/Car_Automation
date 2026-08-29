@@ -39,7 +39,7 @@ export const FrontSplitterSVG: React.FC<FrontSplitterSVGProps> = ({
   const extPx = Math.round((ext / 110) * 15);
 
   const strokeColor = isSelected
-    ? "#38bdf8"
+    ? "#fbbf24"
     : isHovered
     ? "#0284c7"
     : "#020617";
@@ -69,7 +69,7 @@ export const FrontSplitterSVG: React.FC<FrontSplitterSVGProps> = ({
       <polygon
         points={`${160 - extPx},355 ${165 - extPx},340 ${175 - extPx},345 ${170 - extPx},360`}
         fill="url(#exposedCarbonWeave)"
-        stroke="#38bdf8"
+        stroke="#fbbf24"
         strokeWidth="1.0"
       />
 

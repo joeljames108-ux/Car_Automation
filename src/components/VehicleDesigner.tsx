@@ -105,12 +105,12 @@ export type VehicleStudioSubTab =
 
 const PAINT_SWATCHES = [
   "#e11d48", "#dc2626", "#ea580c", "#f59e0b", "#facc15", "#84cc16",
-  "#22c55e", "#10b981", "#14b8a6", "#06b6d4", "#3b82f6", "#2563eb",
-  "#1e40af", "#7c3aed", "#a855f7", "#ec4899", "#f43f5e", "#0f172a",
+  "#22c55e", "#10b981", "#14b8a6", "#f59e0b", "#d97706", "#b45309",
+  "#1e40af", "#d97706", "#f59e0b", "#d97706", "#f43f5e", "#0f172a",
   "#1e293b", "#475569", "#94a3b8", "#e2e8f0", "#f8fafc", "#92400e",
 ];
 
-const BADGE_SWATCHES = ["#e11d48", "#facc15", "#22d3ee", "#e2e8f0", "#0f172a", "#84cc16"];
+const BADGE_SWATCHES = ["#e11d48", "#facc15", "#fbbf24", "#e2e8f0", "#0f172a", "#84cc16"];
 
 type AeroDept =
   | "front"
@@ -141,7 +141,7 @@ function BodyPreview({ bodyType, finish }: { bodyType: BodyType; finish: PaintFi
   return (
     <div className="relative bg-gradient-to-b from-base-900 to-base-950 rounded-xl overflow-hidden border border-base-800 shadow-inner">
       <img src="/agera.png" alt="Car Preview" loading="lazy" decoding="async" className="w-full h-auto block object-cover" />
-      <div className="absolute top-2 left-2 text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-black/60 backdrop-blur-md text-cyan-400 border border-cyan-500/30 uppercase tracking-wider">
+      <div className="absolute top-2 left-2 text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-black/60 backdrop-blur-md text-amber-400 border border-amber-500/30 uppercase tracking-wider">
         {BODY_TYPES[bodyType]?.label || "Coupe"} · {PAINT_FINISHES[finish]?.label || "Gloss"}
       </div>
     </div>
@@ -229,8 +229,8 @@ export function VehicleDesigner({ initialSubTab = "linear_assembly" }: VehicleDe
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-3">
           {/* Header Title & Subsystem Status */}
           <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-2xl bg-cyan-500/15 text-cyan-600 dark:text-cyan-300 border border-cyan-500/30 flex items-center justify-center">
-              <Car size={22} className="text-cyan-500 animate-pulse" />
+            <div className="p-2.5 rounded-2xl bg-amber-500/15 text-amber-600 dark:text-amber-300 border border-amber-500/30 flex items-center justify-center">
+              <Car size={22} className="text-amber-500 animate-pulse" />
             </div>
             <div>
               <div className="flex items-center gap-2 flex-wrap">
@@ -259,7 +259,7 @@ export function VehicleDesigner({ initialSubTab = "linear_assembly" }: VehicleDe
             </div>
             <div className="px-2.5 py-1 rounded-xl bg-base-850 border border-base-800 flex items-center">
               <span className="text-slate-500 dark:text-slate-400 mr-1.5">DRAG</span>
-              <span className="font-bold text-cyan-600 dark:text-cyan-300">Cd {sim.dragCoeff.toFixed(3)}</span>
+              <span className="font-bold text-amber-600 dark:text-amber-300">Cd {sim.dragCoeff.toFixed(3)}</span>
             </div>
             <div className="px-2.5 py-1 rounded-xl bg-base-850 border border-base-800 flex items-center">
               <span className="text-slate-500 dark:text-slate-400 mr-1.5">DOWNFORCE</span>
@@ -282,11 +282,11 @@ export function VehicleDesigner({ initialSubTab = "linear_assembly" }: VehicleDe
                 onClick={() => handleTabChange(tab.id)}
                 className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-mono font-bold transition-all whitespace-nowrap cursor-pointer ${
                   isActive
-                    ? "bg-cyan-500/20 text-cyan-700 dark:text-cyan-200 border border-cyan-500/50 shadow-sm"
+                    ? "bg-amber-500/20 text-amber-700 dark:text-amber-200 border border-amber-500/50 shadow-sm"
                     : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-base-800/40 border border-transparent"
                 }`}
               >
-                <span className={isActive ? "text-cyan-600 dark:text-cyan-300" : "text-slate-500 dark:text-slate-400"}>
+                <span className={isActive ? "text-amber-600 dark:text-amber-300" : "text-slate-500 dark:text-slate-400"}>
                   {tab.icon}
                 </span>
                 <span>{tab.label}</span>
@@ -294,7 +294,7 @@ export function VehicleDesigner({ initialSubTab = "linear_assembly" }: VehicleDe
                   <span
                     className={`text-[9px] px-1.5 py-0.5 rounded font-extrabold ${
                       isActive
-                        ? "bg-cyan-500/20 text-cyan-700 dark:text-cyan-300 border border-cyan-500/40"
+                        ? "bg-amber-500/20 text-amber-700 dark:text-amber-300 border border-amber-500/40"
                         : "bg-base-800/80 text-slate-500 dark:text-slate-400 border border-base-700/40"
                     }`}
                   >
@@ -331,11 +331,11 @@ export function VehicleDesigner({ initialSubTab = "linear_assembly" }: VehicleDe
                 }}
                 className={`flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-bold font-mono transition-all border ${
                   exteriorViewMode === "paint_and_styling"
-                    ? "bg-cyan-500/20 border-cyan-500/60 text-cyan-700 dark:text-cyan-200 shadow-sm"
+                    ? "bg-amber-500/20 border-amber-500/60 text-amber-700 dark:text-amber-200 shadow-sm"
                     : "bg-base-850/80 border-base-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100"
                 }`}
               >
-                <Palette size={14} className={exteriorViewMode === "paint_and_styling" ? "text-cyan-600 dark:text-cyan-400" : ""} />
+                <Palette size={14} className={exteriorViewMode === "paint_and_styling" ? "text-amber-600 dark:text-amber-400" : ""} />
                 🎨 PAINT BOOTH, RIMS & STYLING
               </button>
               <button
@@ -383,7 +383,7 @@ export function VehicleDesigner({ initialSubTab = "linear_assembly" }: VehicleDe
                     </div>
                     <div className="bg-base-850 rounded-lg p-2.5 border border-base-800">
                       <div className="label-mono text-slate-500">Aerodynamic Impact</div>
-                      <div className="text-cyan-300 font-mono">
+                      <div className="text-amber-300 font-mono">
                         Cd {((BODY_TYPES as Record<string, any>)[ext.bodyType]?.dragDelta ?? 0) >= 0 ? "+" : ""}
                         {((BODY_TYPES as Record<string, any>)[ext.bodyType]?.dragDelta ?? 0).toFixed(3)} · Cl{" "}
                         {((BODY_TYPES as Record<string, any>)[ext.bodyType]?.liftDelta ?? 0) >= 0 ? "+" : ""}
@@ -415,7 +415,7 @@ export function VehicleDesigner({ initialSubTab = "linear_assembly" }: VehicleDe
                             onClick={() => updateExterior({ paintColor: c })}
                             className={`h-7 rounded-md border-2 transition-all cursor-pointer ${
                               ext.paintColor === c
-                                ? "border-cyan-400 scale-110 shadow-[0_0_10px_rgba(34,211,238,0.5)]"
+                                ? "border-amber-400 scale-110 shadow-[0_0_10px_rgba(34,211,238,0.5)]"
                                 : "border-base-800 hover:border-base-600 hover:scale-105"
                             }`}
                             style={{ backgroundColor: c }}
@@ -430,7 +430,7 @@ export function VehicleDesigner({ initialSubTab = "linear_assembly" }: VehicleDe
                           onChange={(e) => updateExterior({ paintColor: e.target.value })}
                           className="h-8 w-12 bg-transparent border border-base-800 rounded cursor-pointer"
                         />
-                        <span className="font-mono text-xs text-cyan-300 font-bold">{ext.paintColor}</span>
+                        <span className="font-mono text-xs text-amber-300 font-bold">{ext.paintColor}</span>
                         <span className="text-[10px] text-slate-500 font-mono">(Custom Hex Code)</span>
                       </div>
                     </div>
@@ -456,7 +456,7 @@ export function VehicleDesigner({ initialSubTab = "linear_assembly" }: VehicleDe
                               onClick={() => updateExterior({ badgeColor: c })}
                               className={`h-8 w-8 rounded-full border-2 transition-all cursor-pointer ${
                                 ext.badgeColor === c
-                                  ? "border-cyan-400 scale-110 shadow-[0_0_10px_rgba(34,211,238,0.5)]"
+                                  ? "border-amber-400 scale-110 shadow-[0_0_10px_rgba(34,211,238,0.5)]"
                                   : "border-base-800 hover:border-base-600"
                               }`}
                               style={{ backgroundColor: c }}
@@ -648,11 +648,11 @@ export function VehicleDesigner({ initialSubTab = "linear_assembly" }: VehicleDe
                 }}
                 className={`flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-bold font-mono transition-all border ${
                   aeroViewMode === "cfd_windtunnel"
-                    ? "bg-cyan-500/20 border-cyan-400/60 text-cyan-700 dark:text-cyan-200 shadow-sm"
+                    ? "bg-amber-500/20 border-amber-400/60 text-amber-700 dark:text-amber-200 shadow-sm"
                     : "bg-base-850/80 border-base-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100"
                 }`}
               >
-                <Wind size={14} className={aeroViewMode === "cfd_windtunnel" ? "text-cyan-600 dark:text-cyan-400" : ""} />
+                <Wind size={14} className={aeroViewMode === "cfd_windtunnel" ? "text-amber-600 dark:text-amber-400" : ""} />
                 🌪️ CFD WIND TUNNEL & FLOWFIELD
               </button>
               <button
@@ -662,11 +662,11 @@ export function VehicleDesigner({ initialSubTab = "linear_assembly" }: VehicleDe
                 }}
                 className={`flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-bold font-mono transition-all border ${
                   aeroViewMode === "research_depts"
-                    ? "bg-purple-500/20 border-purple-400/60 text-purple-700 dark:text-purple-200 shadow-sm"
+                    ? "bg-amber-500/20 border-amber-400/60 text-amber-700 dark:text-amber-200 shadow-sm"
                     : "bg-base-850/80 border-base-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100"
                 }`}
               >
-                <BarChart3 size={14} className={aeroViewMode === "research_depts" ? "text-purple-600 dark:text-purple-400" : ""} />
+                <BarChart3 size={14} className={aeroViewMode === "research_depts" ? "text-amber-600 dark:text-amber-400" : ""} />
                 📊 10-DEPT AERO RESEARCH & DRS
               </button>
             </div>
@@ -685,7 +685,7 @@ export function VehicleDesigner({ initialSubTab = "linear_assembly" }: VehicleDe
               {/* Quick Auto-Balance Presets */}
               <div className="panel p-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                 <div className="flex items-center gap-2">
-                  <Wind size={20} className="text-cyan-400" />
+                  <Wind size={20} className="text-amber-400" />
                   <div>
                     <h3 className="text-sm font-bold text-slate-100">Aerodynamics Research Center</h3>
                     <p className="text-[11px] text-slate-500">Fine-tune downforce distribution, ground effects & active aero</p>
@@ -711,7 +711,7 @@ export function VehicleDesigner({ initialSubTab = "linear_assembly" }: VehicleDe
                       updateAeroDept("front", { splitterExtension: 220, splitterAngle: 8, divePlanes: 2 });
                       updateAeroDept("diffuser", { angle: 18, gurneyFlap: true });
                     }}
-                    className="px-3 py-1 rounded-lg text-xs font-semibold bg-cyan-500/15 border border-cyan-500/30 text-cyan-300 hover:bg-cyan-500/25 transition-all shadow-sm"
+                    className="px-3 py-1 rounded-lg text-xs font-semibold bg-amber-500/15 border border-amber-500/30 text-amber-300 hover:bg-amber-500/25 transition-all shadow-sm"
                   >
                     🏎️ High Downforce
                   </button>
@@ -722,7 +722,7 @@ export function VehicleDesigner({ initialSubTab = "linear_assembly" }: VehicleDe
                       updateAeroDept("front", { splitterExtension: 40, splitterAngle: 1, divePlanes: 0 });
                       updateAeroDept("diffuser", { angle: 6, gurneyFlap: false });
                     }}
-                    className="px-3 py-1 rounded-lg text-xs font-semibold bg-purple-500/15 border border-purple-500/30 text-purple-300 hover:bg-purple-500/25 transition-all shadow-sm"
+                    className="px-3 py-1 rounded-lg text-xs font-semibold bg-amber-500/15 border border-amber-500/30 text-amber-300 hover:bg-amber-500/25 transition-all shadow-sm"
                   >
                     🚀 Low Drag
                   </button>
@@ -740,7 +740,7 @@ export function VehicleDesigner({ initialSubTab = "linear_assembly" }: VehicleDe
                     }}
                     className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-mono font-bold transition-all whitespace-nowrap ${
                       aeroDept === d.id
-                        ? "bg-cyan-500/20 text-cyan-300 border border-cyan-500/40"
+                        ? "bg-amber-500/20 text-amber-300 border border-amber-500/40"
                         : "text-slate-400 hover:text-slate-200 hover:bg-white/5 border border-transparent"
                     }`}
                   >
@@ -939,7 +939,7 @@ export function VehicleDesigner({ initialSubTab = "linear_assembly" }: VehicleDe
                           <LineChart
                             series={[
                               { data: sim.dragVsSpeed.map((d: { speed: number; downforce: number }) => ({ x: d.speed, y: d.downforce })), color: "#10b981", label: "Downforce (N)" },
-                              { data: sim.dragVsSpeed.map((d: { speed: number; drag: number }) => ({ x: d.speed, y: d.drag })), color: "#06b6d4", label: "Drag Force (N)" },
+                              { data: sim.dragVsSpeed.map((d: { speed: number; drag: number }) => ({ x: d.speed, y: d.drag })), color: "#f59e0b", label: "Drag Force (N)" },
                             ]}
                             xLabel="Speed (km/h)"
                             yLabel="Force (N)"
@@ -993,15 +993,15 @@ export function VehicleDesigner({ initialSubTab = "linear_assembly" }: VehicleDe
                     <div className="space-y-2 text-xs font-mono">
                       <div className="flex justify-between text-slate-400 font-bold">
                         <span>Front Axle Downforce</span>
-                        <span className="text-cyan-400">{Math.round(sim.downforce * (1 - sim.aeroBalance))} N</span>
+                        <span className="text-amber-400">{Math.round(sim.downforce * (1 - sim.aeroBalance))} N</span>
                       </div>
                       <div className="w-full h-2 rounded-full bg-base-800 overflow-hidden flex">
-                        <div style={{ width: `${(1 - sim.aeroBalance) * 100}%` }} className="bg-cyan-500 h-full transition-all" />
-                        <div style={{ width: `${sim.aeroBalance * 100}%` }} className="bg-purple-500 h-full transition-all" />
+                        <div style={{ width: `${(1 - sim.aeroBalance) * 100}%` }} className="bg-amber-500 h-full transition-all" />
+                        <div style={{ width: `${sim.aeroBalance * 100}%` }} className="bg-amber-500 h-full transition-all" />
                       </div>
                       <div className="flex justify-between text-slate-400 font-bold pt-1">
                         <span>Rear Axle Downforce</span>
-                        <span className="text-purple-400">{Math.round(sim.downforce * sim.aeroBalance)} N</span>
+                        <span className="text-amber-400">{Math.round(sim.downforce * sim.aeroBalance)} N</span>
                       </div>
                     </div>
                   </Section>

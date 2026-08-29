@@ -1,3 +1,4 @@
+import { CornerAnalysisEngine, CarSetupParameters } from "../racing/cornerAnalysisEngine";
 // ============================================================================
 // RACE ENGINEERING SUITE — AI RACE ENGINEER ASSISTANT
 // ============================================================================
@@ -141,6 +142,9 @@ export class RaceEngineerAI {
     };
   }
 
+  private carParams: CarSetupParameters | null = null;
+  public setCarParameters(p: CarSetupParameters): void { this.carParams = p; }
+  public answerQuestion(q: string): string { const c=this.carParams;if(!c)return "Configure your car first.";const ql=q.toLowerCase();if(ql.includes("understeer")){const fg=c.tireWidthFront*(1+c.frontWingAngle*0.03);const rg=c.tireWidthRear*(1+c.rearWingAngle*0.03);const b=fg/rg;return b<0.85?"Understeer detected. Grip ratio: "+b.toFixed(2)+". Fix: increase front wing to "+(c.frontWingAngle+2)+"°, widen front tires to "+(c.tireWidthFront+20)+"mm.":"Balance is OK ("+b.toFixed(2)+" grip ratio).";}if(ql.includes("oversteer")){const fg=c.tireWidthFront*(1+c.frontWingAngle*0.03);const rg=c.tireWidthRear*(1+c.rearWingAngle*0.03);const b=fg/rg;return b>1.2?"Oversteer detected. Grip ratio: "+b.toFixed(2)+". Fix: increase rear wing to "+(c.rearWingAngle+2)+"°, increase diff lock to "+Math.min(90,c.differentialLock+20)+"%.":"Balance is OK ("+b.toFixed(2)+" grip ratio).";}if(ql.includes("top speed")||ql.includes("drag")){return "Top speed limited by Cd="+c.dragCoefficient+", power/weight="+(c.power/c.weight).toFixed(2)+" hp/kg. Reduce rear wing for +10 km/h or keep for cornering grip.";}if(ql.includes("weight")||ql.includes("heavy")){return "Car weighs "+c.weight+"kg ("+c.weightDistribution+"% front). "+(c.weight>800?"Too heavy. Switch to carbon chassis and lightweight panels.":"Good weight.")+"";}if(ql.includes("monaco")){return "Monaco: max downforce, soft tires, high diff lock ("+c.differentialLock+"%), stiff suspension.";}if(ql.includes("optimize")||ql.includes("improve")){var r=CornerAnalysisEngine.analyzeTrack("monaco",c);var s=r.corners.filter(function(x){return x.issueSeverity==="severe";});return s.length>0?"Critical: "+s.map(function(x){return x.issueDescription;}).join("; ")+". Fix these first.":"Car is balanced. Focus on tire management.";}return "Ask about: understeer, oversteer, top speed, weight, Monaco setup, or optimization.";}
   public getMessages(): EngineerMessage[] { return [...this.messages]; }
   public getRecentMessages(count: number): EngineerMessage[] { return this.messages.slice(-count); }
   public clearMessages(): void { this.messages = []; }

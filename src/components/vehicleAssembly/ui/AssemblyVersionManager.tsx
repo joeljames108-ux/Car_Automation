@@ -56,7 +56,7 @@ export const AssemblyVersionManager: React.FC<AssemblyVersionManagerProps> = ({
       {/* Header */}
       <div className="flex items-center justify-between border-b border-base-800/60 pb-2">
         <div className="flex items-center gap-2">
-          <GitBranch size={15} className="text-cyan-400" />
+          <GitBranch size={15} className="text-amber-400" />
           <span className="font-bold text-slate-800 dark:text-slate-100 uppercase tracking-wider text-[11px]">
             ENGINEERING REVISIONS & DESIGN FREEZE
           </span>
@@ -77,7 +77,7 @@ export const AssemblyVersionManager: React.FC<AssemblyVersionManagerProps> = ({
 
           <button
             onClick={() => setIsAdding(true)}
-            className="flex items-center gap-1 px-2.5 py-1 rounded-xl bg-cyan-500/20 border border-cyan-500/50 text-cyan-300 hover:bg-cyan-500/30 text-[10px] font-bold transition-all cursor-pointer"
+            className="flex items-center gap-1 px-2.5 py-1 rounded-xl bg-amber-500/20 border border-amber-500/50 text-amber-300 hover:bg-amber-500/30 text-[10px] font-bold transition-all cursor-pointer"
           >
             <Plus size={12} />
             <span>SAVE REVISION</span>
@@ -87,18 +87,18 @@ export const AssemblyVersionManager: React.FC<AssemblyVersionManagerProps> = ({
 
       {/* Revision Name Input Form */}
       {isAdding && (
-        <div className="p-2.5 rounded-xl bg-base-900/80 border border-cyan-500/40 flex items-center gap-2">
+        <div className="p-2.5 rounded-xl bg-base-900/80 border border-amber-500/40 flex items-center gap-2">
           <input
             type="text"
             placeholder="Revision Name (e.g. GT3 V1.1 Track Spec)..."
             value={newVersionName}
             onChange={(e) => setNewVersionName(e.target.value)}
-            className="flex-1 bg-base-950 border border-base-700 rounded-lg px-2.5 py-1 text-xs text-slate-100 font-mono focus:outline-none focus:border-cyan-400"
+            className="flex-1 bg-base-950 border border-base-700 rounded-lg px-2.5 py-1 text-xs text-slate-100 font-mono focus:outline-none focus:border-amber-400"
             autoFocus
           />
           <button
             onClick={handleCreate}
-            className="px-3 py-1 rounded-lg bg-cyan-500 hover:bg-cyan-400 text-black font-bold text-[10px] cursor-pointer"
+            className="px-3 py-1 rounded-lg bg-amber-500 hover:bg-amber-400 text-black font-bold text-[10px] cursor-pointer"
           >
             SAVE
           </button>
@@ -138,7 +138,7 @@ export const AssemblyVersionManager: React.FC<AssemblyVersionManagerProps> = ({
                 title="A/B Compare against current"
                 className={`p-1.5 rounded-lg border text-[9px] font-bold cursor-pointer transition-all ${
                   compareVersionId === ver.id
-                    ? "bg-cyan-500/20 border-cyan-500 text-cyan-300"
+                    ? "bg-amber-500/20 border-amber-500 text-amber-300"
                     : "bg-base-850 border-base-700 text-slate-400 hover:text-slate-200"
                 }`}
               >
@@ -157,9 +157,9 @@ export const AssemblyVersionManager: React.FC<AssemblyVersionManagerProps> = ({
 
       {/* Comparison Drawer */}
       {comparedVersion && (
-        <div className="p-3 rounded-xl bg-base-900/90 border border-cyan-500/40 space-y-2">
+        <div className="p-3 rounded-xl bg-base-900/90 border border-amber-500/40 space-y-2">
           <div className="flex items-center justify-between">
-            <span className="font-bold text-[10px] text-cyan-400 uppercase">
+            <span className="font-bold text-[10px] text-amber-400 uppercase">
               A/B COMPARISON: CURRENT BUILD vs {comparedVersion.name.toUpperCase()}
             </span>
             <button

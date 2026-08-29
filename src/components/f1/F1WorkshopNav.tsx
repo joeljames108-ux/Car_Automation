@@ -45,7 +45,7 @@ export const F1WorkshopNav: React.FC<F1WorkshopNavProps> = memo(function F1Works
         <div className="text-[11px] font-bold uppercase tracking-wider text-slate-400">
           Design Departments
         </div>
-        <span className="text-[10px] font-mono text-cyan-400 bg-cyan-950/40 border border-cyan-800/40 px-2 py-0.5 rounded-full">
+        <span className="text-[10px] font-mono text-amber-400 bg-amber-950/40 border border-amber-800/40 px-2 py-0.5 rounded-full">
           12 Studios
         </span>
       </div>
@@ -61,14 +61,14 @@ export const F1WorkshopNav: React.FC<F1WorkshopNavProps> = memo(function F1Works
               onClick={() => handleStepClick(step.id)}
               className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-left transition-all group ${
                 isActive
-                  ? "bg-cyan-500/15 border border-cyan-500/40 text-cyan-300 shadow-md shadow-cyan-950/30"
+                  ? "bg-amber-500/15 border border-amber-500/40 text-amber-300 shadow-md shadow-cyan-950/30"
                   : "bg-slate-950/30 border border-transparent hover:bg-slate-800/60 hover:border-slate-700/60 text-slate-300"
               }`}
             >
               <div className="flex items-center gap-2.5 min-w-0">
                 <div
                   className={`p-1.5 rounded-lg transition-colors ${
-                    isActive ? "bg-cyan-500/20 text-cyan-400" : "bg-slate-800/80 text-slate-400 group-hover:text-slate-200"
+                    isActive ? "bg-amber-500/20 text-amber-400" : "bg-slate-800/80 text-slate-400 group-hover:text-slate-200"
                   }`}
                 >
                   {ICON_MAP[step.iconName] || <LayoutDashboard size={16} />}

@@ -46,7 +46,7 @@ const RadarChart = memo(function RadarChart({ stats, size = 120 }: { stats: { la
       ))}
       {/* Data polygon */}
       <polygon points={points.map(p => `${p.x},${p.y}`).join(" ")}
-        fill="rgba(34,211,238,0.12)" stroke="#22d3ee" strokeWidth="1.5" />
+        fill="rgba(34,211,238,0.12)" stroke="#fbbf24" strokeWidth="1.5" />
       {/* Data dots */}
       {points.map((p, i) => (
         <circle key={i} cx={p.x} cy={p.y} r="3" fill={stats[i].color} />
@@ -69,7 +69,7 @@ export const AnalyticsPanel = memo(function AnalyticsPanel({ selectedTeam }: { s
     if (!selectedTeam || selectedTeam.seasonResults.length === 0) return [];
     return [{
       data: selectedTeam.seasonResults.map(r => ({ x: r.season, y: r.points })),
-      color: "#22d3ee",
+      color: "#fbbf24",
       fill: true,
     }];
   }, [selectedTeam]);
@@ -78,7 +78,7 @@ export const AnalyticsPanel = memo(function AnalyticsPanel({ selectedTeam }: { s
     if (!selectedTeam || selectedTeam.seasonResults.length === 0) return [];
     return [{
       data: selectedTeam.seasonResults.map(r => ({ x: r.season, y: r.position })),
-      color: "#a855f7",
+      color: "#f59e0b",
       fill: false,
     }];
   }, [selectedTeam]);
@@ -117,7 +117,7 @@ export const AnalyticsPanel = memo(function AnalyticsPanel({ selectedTeam }: { s
       {posSeries.length > 0 && selectedTeam.seasonResults.length > 1 && (
         <div className="glass-panel p-4">
           <h3 className="text-xs font-semibold text-slate-300 uppercase tracking-wider mb-3 flex items-center gap-1.5">
-            <BarChart3 size={12} className="text-purple-400" /> Championship Position
+            <BarChart3 size={12} className="text-amber-400" /> Championship Position
           </h3>
           <LineChart series={posSeries} height={120} xLabel="Season" yLabel="Position" yMin={1} />
         </div>
@@ -134,11 +134,11 @@ export const AnalyticsPanel = memo(function AnalyticsPanel({ selectedTeam }: { s
               const devLogs = selectedTeam.driverDevLogs.filter(l => l.driverId === d.id);
               const latestDev = devLogs[devLogs.length - 1];
               const radarStats = [
-                { label: "SKL", value: d.skill, color: "#22d3ee" },
+                { label: "SKL", value: d.skill, color: "#fbbf24" },
                 { label: "CON", value: d.consistency, color: "#22c55e" },
-                { label: "WET", value: d.wetSkill, color: "#3b82f6" },
+                { label: "WET", value: d.wetSkill, color: "#d97706" },
                 { label: "AGG", value: d.aggression, color: "#eab308" },
-                { label: "EXP", value: d.experience, color: "#a855f7" },
+                { label: "EXP", value: d.experience, color: "#f59e0b" },
               ];
               return (
                 <div key={d.id} className="bg-base-850/50 rounded-xl p-4 border border-base-800/50">
@@ -176,14 +176,14 @@ export const AnalyticsPanel = memo(function AnalyticsPanel({ selectedTeam }: { s
       {/* Team Overview & Budget Breakdown */}
       <div className="glass-panel p-4 space-y-4">
         <h3 className="text-xs font-semibold text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
-          <BarChart3 size={12} className="text-blue-400" /> Team Financial & Operational Overview
+          <BarChart3 size={12} className="text-amber-400" /> Team Financial & Operational Overview
         </h3>
         
         <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
           {[
             { label: "Budget", value: `$${(selectedTeam.budget / 1e6).toFixed(0)}M`, color: "text-accent-300" },
             { label: "Facility", value: selectedTeam.facilityLevel, color: FACILITY_COLORS[selectedTeam.facilityLevel], capitalize: true },
-            { label: "Tech Pool", value: String(selectedTeam.techTransferPool), color: "text-purple-400" },
+            { label: "Tech Pool", value: String(selectedTeam.techTransferPool), color: "text-amber-400" },
             { label: "Penalty Pts", value: String(selectedTeam.penaltyPoints), color: selectedTeam.penaltyPoints > 5 ? "text-danger-400" : "text-slate-300" },
             { label: "Sponsors", value: String(selectedTeam.sponsors.length), color: "text-ok-400" },
           ].map(s => (
@@ -199,11 +199,11 @@ export const AnalyticsPanel = memo(function AnalyticsPanel({ selectedTeam }: { s
           <div className="text-xs font-bold text-slate-200 mb-3">Sponsor Revenue & Financial Allocation Breakdown</div>
           <DonutChart
             segments={[
-              { label: "Base Budget", value: Math.round(selectedTeam.budget / 1e6), color: "#22d3ee" },
+              { label: "Base Budget", value: Math.round(selectedTeam.budget / 1e6), color: "#fbbf24" },
               ...selectedTeam.sponsors.map((sp, idx) => ({
                 label: `${sp.name} (${sp.tier})`,
                 value: Math.round(sp.revenue / 1e6),
-                color: idx === 0 ? "#fbbf24" : idx === 1 ? "#a855f7" : "#22c55e"
+                color: idx === 0 ? "#fbbf24" : idx === 1 ? "#f59e0b" : "#22c55e"
               }))
             ]}
             totalLabel="FINANCES ($M)"

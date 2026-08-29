@@ -82,11 +82,11 @@ export const ModularEngineComparisonStudio: React.FC<ModularEngineComparisonStud
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between pb-3 border-b border-slate-800 gap-2">
         <div>
           <h3 className="text-sm font-bold text-slate-100 flex items-center gap-2">
-            <Scale size={16} className="text-cyan-400" />
+            <Scale size={16} className="text-amber-400" />
             Side-by-Side Engine Benchmark (A vs B)
           </h3>
           <p className="text-[11px] text-slate-400">
-            Comparing <span className="text-cyan-300 font-bold">{currentEngine.name}</span> against Engine B
+            Comparing <span className="text-amber-300 font-bold">{currentEngine.name}</span> against Engine B
           </p>
         </div>
 
@@ -162,8 +162,8 @@ export const ModularEngineComparisonStudio: React.FC<ModularEngineComparisonStud
         {/* Legend */}
         <div className="absolute top-3 right-5 flex items-center gap-4 text-[10px] font-mono">
           <div className="flex items-center gap-1.5">
-            <span className="w-3 h-1 rounded-full bg-cyan-400" />
-            <span className="text-cyan-300 font-bold">Engine A ({perfA?.peakHorsepowerHp} HP)</span>
+            <span className="w-3 h-1 rounded-full bg-amber-400" />
+            <span className="text-amber-300 font-bold">Engine A ({perfA?.peakHorsepowerHp} HP)</span>
           </div>
           <div className="flex items-center gap-1.5">
             <span className="w-3 h-1 rounded-full bg-rose-500" />
@@ -228,7 +228,7 @@ export const ModularEngineComparisonStudio: React.FC<ModularEngineComparisonStud
             <span className="text-base font-mono font-bold text-slate-100">
               {perfA?.specificOutputHpPerLiter} vs {perfB?.specificOutputHpPerLiter} HP/L
             </span>
-            <span className="text-xs font-mono font-bold text-cyan-300">
+            <span className="text-xs font-mono font-bold text-amber-300">
               {delta.specificOutputDiffHpPerL >= 0 ? `+${delta.specificOutputDiffHpPerL}` : delta.specificOutputDiffHpPerL} HP/L
             </span>
           </div>

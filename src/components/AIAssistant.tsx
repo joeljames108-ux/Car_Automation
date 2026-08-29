@@ -640,8 +640,8 @@ export function AIAssistant({ embedded = false }: { embedded?: boolean }) {
             <div className="flex-1" />
 
             {/* Car Concept Philosophy Selector */}
-            <div className="hidden lg:flex items-center gap-1 bg-base-950 px-2 py-1 rounded-xl border border-cyan-500/30">
-              <span className="text-[10px] font-mono text-cyan-400 flex items-center gap-1 font-bold">
+            <div className="hidden lg:flex items-center gap-1 bg-base-950 px-2 py-1 rounded-xl border border-amber-500/30">
+              <span className="text-[10px] font-mono text-amber-400 flex items-center gap-1 font-bold">
                 <Target size={11} /> PHILOSOPHY:
               </span>
               {(["budget", "track", "luxury", "balanced"] as const).map((c) => (
@@ -655,8 +655,8 @@ export function AIAssistant({ embedded = false }: { embedded?: boolean }) {
                         : c === "track"
                         ? "bg-amber-500/20 border-amber-500/40 text-amber-300"
                         : c === "luxury"
-                        ? "bg-purple-500/20 border-purple-500/40 text-purple-300"
-                        : "bg-cyan-500/20 border-cyan-500/40 text-cyan-300"
+                        ? "bg-amber-500/20 border-amber-500/40 text-amber-300"
+                        : "bg-amber-500/20 border-amber-500/40 text-amber-300"
                       : "bg-base-900 border-transparent text-slate-500 hover:text-slate-300"
                   }`}
                 >
@@ -820,7 +820,7 @@ export function AIAssistant({ embedded = false }: { embedded?: boolean }) {
           {showPresetDrawer && (
             <div className="p-3 border-t border-base-800 bg-base-950/90 max-h-72 overflow-y-auto space-y-2 animate-fade-in">
               <div className="flex items-center justify-between mb-2">
-                <span className="text-[10px] font-mono text-cyan-400 font-bold uppercase tracking-wider flex items-center gap-1">
+                <span className="text-[10px] font-mono text-amber-400 font-bold uppercase tracking-wider flex items-center gap-1">
                   <Sparkles size={12} /> AI Engineering Blueprint Templates
                 </span>
                 <span className="text-[9px] text-slate-500 font-mono">1-Click Neural Setup</span>
@@ -829,7 +829,7 @@ export function AIAssistant({ embedded = false }: { embedded?: boolean }) {
                 {AI_PRESET_LIBRARY.map((preset) => (
                   <div
                     key={preset.id}
-                    className="p-2.5 rounded-xl bg-base-900 border border-base-800 hover:border-cyan-500/40 transition-all flex flex-col justify-between gap-2"
+                    className="p-2.5 rounded-xl bg-base-900 border border-base-800 hover:border-amber-500/40 transition-all flex flex-col justify-between gap-2"
                   >
                     <div>
                       <div className="flex items-center justify-between gap-1 mb-1">
@@ -839,7 +839,7 @@ export function AIAssistant({ embedded = false }: { embedded?: boolean }) {
                         </span>
                       </div>
                       <p className="text-[10px] text-slate-400 line-clamp-2">{preset.description}</p>
-                      <div className="mt-1.5 text-[9px] font-mono text-cyan-300">
+                      <div className="mt-1.5 text-[9px] font-mono text-amber-300">
                         {preset.metrics.powerHp} HP • {preset.metrics.weightKg} kg • {preset.metrics.zeroToSixtySec}s 0-60
                       </div>
                     </div>
@@ -849,7 +849,7 @@ export function AIAssistant({ embedded = false }: { embedded?: boolean }) {
                         setDesign(newDesign);
                         toast.success(`AI Applied: ${preset.title}`, `Configured ${preset.metrics.powerHp} HP.`);
                       }}
-                      className="w-full py-1 px-2 rounded-lg bg-cyan-500/20 border border-cyan-500/40 text-cyan-300 hover:bg-cyan-500/30 text-[10px] font-mono font-bold flex items-center justify-center gap-1 transition-all cursor-pointer"
+                      className="w-full py-1 px-2 rounded-lg bg-amber-500/20 border border-amber-500/40 text-amber-300 hover:bg-amber-500/30 text-[10px] font-mono font-bold flex items-center justify-center gap-1 transition-all cursor-pointer"
                     >
                       <Zap size={10} /> Apply Template
                     </button>
@@ -865,8 +865,8 @@ export function AIAssistant({ embedded = false }: { embedded?: boolean }) {
               onClick={() => setShowPresetDrawer(!showPresetDrawer)}
               className={`flex items-center gap-1 px-2.5 py-1 rounded-lg border text-[10px] font-mono font-bold transition-all whitespace-nowrap cursor-pointer mr-1 ${
                 showPresetDrawer
-                  ? "bg-cyan-500 text-black border-cyan-400 shadow-[0_0_10px_rgba(34,211,238,0.3)]"
-                  : "bg-cyan-500/20 border-cyan-500/40 text-cyan-300 hover:bg-cyan-500/30"
+                  ? "bg-amber-500 text-black border-amber-400 shadow-[0_0_10px_rgba(34,211,238,0.3)]"
+                  : "bg-amber-500/20 border-amber-500/40 text-amber-300 hover:bg-amber-500/30"
               }`}
             >
               <Sparkles size={11} />

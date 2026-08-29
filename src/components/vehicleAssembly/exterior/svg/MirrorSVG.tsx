@@ -23,7 +23,7 @@ export const MirrorSVG: React.FC<MirrorSVGProps> = ({
   onMouseEnter,
   onMouseLeave,
 }) => {
-  const strokeColor = isSelected ? "#38bdf8" : isHovered ? "#0284c7" : "#020617";
+  const strokeColor = isSelected ? "#fbbf24" : isHovered ? "#0284c7" : "#020617";
 
   return (
     <g
@@ -42,7 +42,7 @@ export const MirrorSVG: React.FC<MirrorSVGProps> = ({
       {/* Integrated Amber LED Turn Signal Blade */}
       <path d="M375,242 L395,242" stroke="#f59e0b" strokeWidth="1.2" strokeLinecap="round" />
       {/* Mirror Glass Face Reflection */}
-      <ellipse cx="385" cy="242" rx="10" ry="5.5" fill="#38bdf8" fillOpacity="0.3" />
+      <ellipse cx="385" cy="242" rx="10" ry="5.5" fill="#fbbf24" fillOpacity="0.3" />
     </g>
   );
 };

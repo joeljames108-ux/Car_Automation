@@ -46,7 +46,9 @@ function VisionGlassHeaderComponent({
         padding: "0 20px",
         height: 48,
         borderBottom: "1px solid rgba(255,255,255,0.08)",
-        background: "rgba(255,255,255,0.03)",
+        background: "rgba(255,255,255,0.06)",
+        backdropFilter: "blur(40px) saturate(180%)",
+        WebkitBackdropFilter: "blur(40px) saturate(180%)",
         flexShrink: 0,
         position: "relative",
         zIndex: 20,
@@ -89,7 +91,7 @@ function VisionGlassHeaderComponent({
           <div style={{
             fontSize: 13, fontWeight: 800, letterSpacing: "0.06em",
             color: "#f8fafc", lineHeight: 1,
-            background: "linear-gradient(135deg, #f8fafc 30%, #38bdf8 100%)",
+            background: "linear-gradient(135deg, #f8fafc 30%, #fbbf24 100%)",
             WebkitBackgroundClip: "text",
             WebkitTextFillColor: "transparent",
           }}>
@@ -139,7 +141,7 @@ function VisionGlassHeaderComponent({
           }}
         >
           <span style={{ color: "#94a3b8", fontFamily: "monospace", fontSize: 9, fontWeight: 700 }}>MO</span>
-          <span style={{ color: "#38bdf8", fontWeight: 800, fontFamily: "monospace", fontSize: 11 }}>{month}</span>
+          <span style={{ color: "#fbbf24", fontWeight: 800, fontFamily: "monospace", fontSize: 11 }}>{month}</span>
           <div style={{ width: 1, height: 12, background: "rgba(255,255,255,0.12)" }} />
           <span style={{ color: "#34d399", fontWeight: 800, fontFamily: "monospace", fontSize: 11 }}>{fmtRev}</span>
           <button
@@ -150,7 +152,7 @@ function VisionGlassHeaderComponent({
             className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400"
             style={{
               background: hovered === "advance" ? "rgba(0,136,255,0.30)" : "rgba(0,136,255,0.18)",
-              color: "#38bdf8",
+              color: "#fbbf24",
               border: "1px solid rgba(0,136,255,0.30)",
               borderRadius: 7,
               padding: "2px 7px",
@@ -173,7 +175,7 @@ function VisionGlassHeaderComponent({
             background: "rgba(168,85,247,0.12)",
             border: "1px solid rgba(168,85,247,0.25)",
             borderRadius: 10, padding: "4px 8px",
-            fontSize: 9, fontWeight: 700, color: "#c084fc",
+            fontSize: 9, fontWeight: 700, color: "#fbbf24",
           }}
         >
           <Sparkles size={10} style={{ animation: "vg-sparkle-pulse 2s ease-in-out infinite" }} aria-hidden="true" />
@@ -200,7 +202,7 @@ function VisionGlassHeaderComponent({
           }}
         >
           <div className="flex items-center gap-1.5">
-            <Search size={12} style={{ color: "#38bdf8" }} aria-hidden="true" />
+            <Search size={12} style={{ color: "#fbbf24" }} aria-hidden="true" />
             <span className="font-medium text-slate-200">Search Studio...</span>
           </div>
           <span style={{
@@ -284,14 +286,14 @@ function VisionGlassHeaderComponent({
               fontFamily: "monospace",
               background: "linear-gradient(135deg, rgba(6,182,212,0.15), rgba(56,189,248,0.25))",
               border: "1px solid rgba(56,189,248,0.4)",
-              color: "#38bdf8",
+              color: "#fbbf24",
               cursor: "pointer",
               display: "flex", alignItems: "center", gap: 5,
               boxShadow: "0 0 12px rgba(56,189,248,0.2)",
               transition: "all 0.2s ease",
             }}
           >
-            <Sparkles size={11} style={{ color: "#38bdf8" }} />
+            <Sparkles size={11} style={{ color: "#fbbf24" }} />
             <span>UI 1 (3D GLOBE)</span>
           </button>
         )}
@@ -301,7 +303,7 @@ function VisionGlassHeaderComponent({
           aria-label="User Profile"
           style={{
             width: 26, height: 26, borderRadius: "50%",
-            background: "linear-gradient(135deg, #0088ff 0%, #38bdf8 100%)",
+            background: "linear-gradient(135deg, #0088ff 0%, #fbbf24 100%)",
             display: "flex", alignItems: "center", justifyContent: "center",
             color: "#fff", fontSize: 10, fontWeight: 800,
             boxShadow: "0 2px 8px rgba(0,136,255,0.3)",

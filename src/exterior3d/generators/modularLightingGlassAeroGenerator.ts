@@ -43,7 +43,7 @@ export class ModularLightingGlassAeroGenerator {
       color: headlightsOn ? 0xffffff : 0x334155
     });
     const drlGlowMat = new THREE.MeshBasicMaterial({
-      color: drlOn ? 0x38bdf8 : 0x1e293b
+      color: drlOn ? 0xfbbf24 : 0x1e293b
     });
     const amberIndicatorMat = new THREE.MeshBasicMaterial({ color: 0xf59e0b });
     const taillightOledMat = new THREE.MeshBasicMaterial({ color: 0xef4444 });
@@ -332,7 +332,7 @@ export class ModularLightingGlassAeroGenerator {
     const cabinLength = wbM * 0.62;
 
     const glassMaterial = new THREE.MeshPhysicalMaterial({
-      color: new THREE.Color('#38bdf8'),
+      color: new THREE.Color('#fbbf24'),
       metalness: 0.1,
       roughness: 0.04,
       transmission: 0.94,
@@ -369,7 +369,7 @@ export class ModularLightingGlassAeroGenerator {
 
     // 2. Cockpit Telemetry HUD Glass Strip
     const hudGeo = new THREE.BoxGeometry(0.015, 0.09, 0.28);
-    const hudMat = new THREE.MeshBasicMaterial({ color: 0x38bdf8 });
+    const hudMat = new THREE.MeshBasicMaterial({ color: 0xfbbf24 });
     const hudScreen = new THREE.Mesh(hudGeo, hudMat);
     hudScreen.position.set(cabinCenterX + cabinLength * 0.24, 0.76, 0);
     group.add(hudScreen);
@@ -482,15 +482,15 @@ export class ModularLightingGlassAeroGenerator {
     // Multi-Tier Streamline Ribbons
     const streamLinesData = [
       // Centerline High-Speed Roof Flow
-      { start: [frontX, 0.45, 0], end: [rearX, 1.25, 0], color: 0xec4899, radius: 0.008 },
+      { start: [frontX, 0.45, 0], end: [rearX, 1.25, 0], color: 0xd97706, radius: 0.008 },
       { start: [frontX - 0.1, 0.52, -0.15], end: [rearX, 1.22, -0.20], color: 0x06b6d4, radius: 0.007 },
       { start: [frontX - 0.1, 0.52, 0.15], end: [rearX, 1.22, 0.20], color: 0x06b6d4, radius: 0.007 },
       // Side Flank & Mirror Vortex Streams
       { start: [frontX - 0.4, 0.48, -halfTrM * 0.9], end: [rearX, 0.65, -halfTrM * 1.05], color: 0x10b981, radius: 0.006 },
       { start: [frontX - 0.4, 0.48, halfTrM * 0.9], end: [rearX, 0.65, halfTrM * 1.05], color: 0x10b981, radius: 0.006 },
       // Underbody Venturi Suction Streamlines
-      { start: [frontX - 0.2, 0.10, -0.3], end: [rearX, 0.35, -0.45], color: 0x3b82f6, radius: 0.008 },
-      { start: [frontX - 0.2, 0.10, 0.3], end: [rearX, 0.35, 0.45], color: 0x3b82f6, radius: 0.008 },
+      { start: [frontX - 0.2, 0.10, -0.3], end: [rearX, 0.35, -0.45], color: 0xd97706, radius: 0.008 },
+      { start: [frontX - 0.2, 0.10, 0.3], end: [rearX, 0.35, 0.45], color: 0xd97706, radius: 0.008 },
       // Wingtip Trailing Vortex Coils
       { start: [rearX + 0.3, 1.16, -halfTrM * 0.95], end: [rearX - 0.4, 1.30, -halfTrM * 1.15], color: 0xf59e0b, radius: 0.009 },
       { start: [rearX + 0.3, 1.16, halfTrM * 0.95], end: [rearX - 0.4, 1.30, halfTrM * 1.15], color: 0xf59e0b, radius: 0.009 },
@@ -528,7 +528,7 @@ export class ModularLightingGlassAeroGenerator {
     });
 
     const innerCoreMat = new THREE.MeshBasicMaterial({
-      color: 0x38bdf8,
+      color: 0xfbbf24,
       transparent: true,
       opacity: 0.95,
     });
@@ -551,7 +551,7 @@ export class ModularLightingGlassAeroGenerator {
     });
 
     // Dynamic Flash Point Light
-    const flameLight = new THREE.PointLight(0x38bdf8, 3.5, 4.0);
+    const flameLight = new THREE.PointLight(0xfbbf24, 3.5, 4.0);
     flameLight.position.set(rearBumperX - 0.20, 0.38, 0);
     flameGroup.add(flameLight);
 

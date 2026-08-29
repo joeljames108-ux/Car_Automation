@@ -26,7 +26,7 @@ export function resolveExteriorMaterialForZone(
     case "GLASS_TRANSMISSIVE":
       return ExteriorMaterialLibrary.getGlassMaterial(0.92);
     case "LIGHTING_EMISSIVE":
-      return ExteriorMaterialLibrary.getLightingEmissiveMaterial(0x38bdf8, 2.5);
+      return ExteriorMaterialLibrary.getLightingEmissiveMaterial(0xfbbf24, 2.5);
     case "RUBBER_MATTE":
       return ExteriorMaterialLibrary.getTireRubberMaterial();
     case "CHROME_POLISHED":

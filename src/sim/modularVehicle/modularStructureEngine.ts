@@ -90,12 +90,27 @@ export interface ModularStructureTelemetry {
 export type ModularStructureResult = ModularStructureTelemetry;
 
 // Material density & strength multipliers relative to standard cast steel
+// Extended with real metallurgical data from the metallurgy database
 const MATERIAL_GRADE_FACTORS: Record<MaterialGrade, { massMult: number; stiffnessMult: number; yieldMpa: number }> = {
+  // Legacy grades
   cast: { massMult: 1.05, stiffnessMult: 0.90, yieldMpa: 310 },
   forged: { massMult: 0.88, stiffnessMult: 1.35, yieldMpa: 650 },
   billet: { massMult: 0.82, stiffnessMult: 1.50, yieldMpa: 720 },
   titanium: { massMult: 0.58, stiffnessMult: 1.80, yieldMpa: 980 },
   ceramic: { massMult: 0.42, stiffnessMult: 2.20, yieldMpa: 1250 },
+  // Extended metallurgy grades (real-world properties)
+  cast_iron: { massMult: 1.05, stiffnessMult: 0.90, yieldMpa: 250 },
+  nodular_iron: { massMult: 1.02, stiffnessMult: 1.35, yieldMpa: 370 },
+  cast_aluminum: { massMult: 0.55, stiffnessMult: 0.58, yieldMpa: 240 },
+  billet_7075: { massMult: 0.58, stiffnessMult: 0.58, yieldMpa: 503 },
+  maraging_steel: { massMult: 1.10, stiffnessMult: 1.52, yieldMpa: 1860 },
+  titanium_alloy: { massMult: 0.58, stiffnessMult: 0.93, yieldMpa: 880 },
+  inconel_718: { massMult: 1.12, stiffnessMult: 1.67, yieldMpa: 1035 },
+  haynes_230: { massMult: 1.22, stiffnessMult: 1.72, yieldMpa: 390 },
+  cmc: { massMult: 0.35, stiffnessMult: 2.28, yieldMpa: 350 },
+  mim_titanium: { massMult: 0.59, stiffnessMult: 0.90, yieldMpa: 830 },
+  chromoly: { massMult: 0.92, stiffnessMult: 1.67, yieldMpa: 460 },
+  hypereutectic_aluminum: { massMult: 0.54, stiffnessMult: 0.66, yieldMpa: 270 },
 };
 
 // Base torsional rigidity by chassis architecture class

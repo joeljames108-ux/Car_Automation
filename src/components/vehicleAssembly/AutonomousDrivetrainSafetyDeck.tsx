@@ -80,7 +80,7 @@ export const AutonomousDrivetrainSafetyDeck: React.FC = () => {
           <select
             value={suspAxle}
             onChange={(e) => setSuspAxle(e.target.value as 'FRONT' | 'REAR')}
-            className="bg-[#0e1424] text-cyan-400 text-xs font-bold font-mono px-3 py-1.5 rounded-xl border border-cyan-500/40 cursor-pointer"
+            className="bg-[#0e1424] text-amber-400 text-xs font-bold font-mono px-3 py-1.5 rounded-xl border border-amber-500/40 cursor-pointer"
           >
             <option value="FRONT">Front Axle K&C</option>
             <option value="REAR">Rear Axle K&C</option>
@@ -129,7 +129,7 @@ export const AutonomousDrivetrainSafetyDeck: React.FC = () => {
             </div>
             <div className="p-2 rounded-lg bg-[#0c1220] border border-[#1c263d]">
               <div className="text-gray-400 text-[10px]">VGT VANE</div>
-              <div className="text-cyan-400 font-bold">{egrVgt.turbine.vgtVaneAngleDeg}°</div>
+              <div className="text-amber-400 font-bold">{egrVgt.turbine.vgtVaneAngleDeg}°</div>
             </div>
             <div className="p-2 rounded-lg bg-[#0c1220] border border-[#1c263d]">
               <div className="text-gray-400 text-[10px]">TURBO SPEED</div>
@@ -141,7 +141,7 @@ export const AutonomousDrivetrainSafetyDeck: React.FC = () => {
             </div>
             <div className="p-2 rounded-lg bg-[#0c1220] border border-[#1c263d]">
               <div className="text-gray-400 text-[10px]">LP-EGR</div>
-              <div className="text-violet-400 font-bold">{egrVgt.lpEgr.egrRatePct}%</div>
+              <div className="text-amber-400 font-bold">{egrVgt.lpEgr.egrRatePct}%</div>
             </div>
             <div className="p-2 rounded-lg bg-[#0c1220] border border-[#1c263d]">
               <div className="text-gray-400 text-[10px]">NOx REDUC</div>
@@ -170,7 +170,7 @@ export const AutonomousDrivetrainSafetyDeck: React.FC = () => {
             </div>
             <div className="p-2 rounded-lg bg-[#0c1220] border border-[#1c263d]">
               <div className="text-gray-400 text-[10px]">ISOLATION</div>
-              <div className="text-cyan-400 font-bold">{emcHvil.isolationMonitoring.minimumIsolationResistanceMohm} MΩ</div>
+              <div className="text-amber-400 font-bold">{emcHvil.isolationMonitoring.minimumIsolationResistanceMohm} MΩ</div>
             </div>
             <div className="p-2 rounded-lg bg-[#0c1220] border border-[#1c263d]">
               <div className="text-gray-400 text-[10px]">DISCHARGE 5s</div>
@@ -187,18 +187,18 @@ export const AutonomousDrivetrainSafetyDeck: React.FC = () => {
         {/* Card 3: Active Torque Fill & DMF */}
         <div className="flex flex-col p-4 rounded-2xl bg-[#090d16] border border-[#182133] gap-3">
           <div className="flex items-center justify-between pb-2 border-b border-[#182133]">
-            <div className="flex items-center gap-2 text-cyan-400 font-bold text-xs">
+            <div className="flex items-center gap-2 text-amber-400 font-bold text-xs">
               <Zap className="w-4 h-4" />
               <span>ACTIVE TORQUE FILL & DMF DYNAMICS</span>
             </div>
-            <span className="text-[10px] font-mono font-bold text-cyan-400">
+            <span className="text-[10px] font-mono font-bold text-amber-400">
               Score: {torqueFill.overallDriveabilityScore}/100
             </span>
           </div>
           <div className="grid grid-cols-3 gap-2 text-xs font-mono">
             <div className="p-2 rounded-lg bg-[#0c1220] border border-[#1c263d]">
               <div className="text-gray-400 text-[10px]">E-MOTOR FILL</div>
-              <div className="text-cyan-400 font-bold">{torqueFill.torqueFill.eMotorFillTorqueNm} Nm</div>
+              <div className="text-amber-400 font-bold">{torqueFill.torqueFill.eMotorFillTorqueNm} Nm</div>
             </div>
             <div className="p-2 rounded-lg bg-[#0c1220] border border-[#1c263d]">
               <div className="text-gray-400 text-[10px]">SHUFFLE FREQ</div>
@@ -216,7 +216,7 @@ export const AutonomousDrivetrainSafetyDeck: React.FC = () => {
             </div>
             <div className="p-2 rounded-lg bg-[#0c1220] border border-[#1c263d]">
               <div className="text-gray-400 text-[10px]">CPA ABSORB</div>
-              <div className="text-violet-400 font-bold">{torqueFill.cpa.absorptionEfficiencyPct}%</div>
+              <div className="text-amber-400 font-bold">{torqueFill.cpa.absorptionEfficiencyPct}%</div>
             </div>
             <div className="p-2 rounded-lg bg-[#0c1220] border border-[#1c263d]">
               <div className="text-gray-400 text-[10px]">SETTLE TIME</div>
@@ -228,22 +228,22 @@ export const AutonomousDrivetrainSafetyDeck: React.FC = () => {
         {/* Card 4: Suspension K&C */}
         <div className="flex flex-col p-4 rounded-2xl bg-[#090d16] border border-[#182133] gap-3">
           <div className="flex items-center justify-between pb-2 border-b border-[#182133]">
-            <div className="flex items-center gap-2 text-violet-400 font-bold text-xs">
+            <div className="flex items-center gap-2 text-amber-400 font-bold text-xs">
               <Settings2 className="w-4 h-4" />
               <span>{suspAxle} SUSPENSION K&C ({suspKc.topology})</span>
             </div>
-            <span className="text-[10px] font-mono font-bold text-violet-400">
+            <span className="text-[10px] font-mono font-bold text-amber-400">
               Quality: {suspKc.overallKcQualityScore}/100
             </span>
           </div>
           <div className="grid grid-cols-3 gap-2 text-xs font-mono">
             <div className="p-2 rounded-lg bg-[#0c1220] border border-[#1c263d]">
               <div className="text-gray-400 text-[10px]">ROLL CENTER</div>
-              <div className="text-violet-400 font-bold">{suspKc.rollCenter.rollCenterHeightMm} mm</div>
+              <div className="text-amber-400 font-bold">{suspKc.rollCenter.rollCenterHeightMm} mm</div>
             </div>
             <div className="p-2 rounded-lg bg-[#0c1220] border border-[#1c263d]">
               <div className="text-gray-400 text-[10px]">CAMBER GAIN</div>
-              <div className="text-cyan-400 font-bold">{suspKc.camberGain.camberGainDegPerMm}°/mm</div>
+              <div className="text-amber-400 font-bold">{suspKc.camberGain.camberGainDegPerMm}°/mm</div>
             </div>
             <div className="p-2 rounded-lg bg-[#0c1220] border border-[#1c263d]">
               <div className="text-gray-400 text-[10px]">RIDE FREQ</div>

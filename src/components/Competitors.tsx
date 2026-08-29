@@ -27,12 +27,12 @@ const SORT_OPTIONS: SortOption[] = [
 
 const COMPANY_LOGOS: Record<string, string> = {
   Koenigsegg: "#e11d48",
-  Bugatti: "#0ea5e9",
+  Bugatti: "#f59e0b",
   Ferrari: "#dc2626",
   McLaren: "#f97316",
   Lamborghini: "#facc15",
   Porsche: "#e2e8f0",
-  Rimac: "#22d3ee",
+  Rimac: "#fbbf24",
 };
 
 

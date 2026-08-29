@@ -13,7 +13,7 @@ export const LightingShaderDefs: React.FC = () => {
       {/* ── 1. Matrix LED Projector Lens Glow ── */}
       <radialGradient id="matrixProjectorGlow" cx="50%" cy="50%" r="50%">
         <stop offset="0%" stopColor="#ffffff" stopOpacity="1.0" />
-        <stop offset="30%" stopColor="#38bdf8" stopOpacity="0.8" />
+        <stop offset="30%" stopColor="#fbbf24" stopOpacity="0.8" />
         <stop offset="70%" stopColor="#0284c7" stopOpacity="0.3" />
         <stop offset="100%" stopColor="#0284c7" stopOpacity="0.0" />
       </radialGradient>
@@ -21,7 +21,7 @@ export const LightingShaderDefs: React.FC = () => {
       {/* ── 2. Laser High Beam Phosphor Core ── */}
       <radialGradient id="laserPhosphorCore" cx="50%" cy="50%" r="50%">
         <stop offset="0%" stopColor="#fef08a" stopOpacity="1.0" />
-        <stop offset="40%" stopColor="#38bdf8" stopOpacity="0.9" />
+        <stop offset="40%" stopColor="#fbbf24" stopOpacity="0.9" />
         <stop offset="100%" stopColor="#0f172a" stopOpacity="0.0" />
       </radialGradient>
 
@@ -42,7 +42,7 @@ export const LightingShaderDefs: React.FC = () => {
       {/* ── 5. Headlight Lens Crystal Clear Refraction ── */}
       <linearGradient id="headlightLensRefraction" x1="0%" y1="0%" x2="100%" y2="100%">
         <stop offset="0%" stopColor="#ffffff" stopOpacity="0.4" />
-        <stop offset="25%" stopColor="#38bdf8" stopOpacity="0.15" />
+        <stop offset="25%" stopColor="#fbbf24" stopOpacity="0.15" />
         <stop offset="70%" stopColor="#0284c7" stopOpacity="0.05" />
         <stop offset="100%" stopColor="#ffffff" stopOpacity="0.3" />
       </linearGradient>

@@ -107,11 +107,11 @@ export function HybridOptionalSection({
   return (
     <div className={`space-y-6 ${className}`}>
       {/* ── SKIP BANNER ── */}
-      <div className="p-3.5 rounded-2xl bg-purple-950/30 border border-purple-500/30 flex items-center justify-between">
-        <div className="flex items-center gap-2 text-xs font-mono text-purple-200">
-          <Zap size={14} className="text-purple-400 animate-pulse" />
+      <div className="p-3.5 rounded-2xl bg-amber-950/30 border border-amber-500/30 flex items-center justify-between">
+        <div className="flex items-center gap-2 text-xs font-mono text-amber-200">
+          <Zap size={14} className="text-amber-400 animate-pulse" />
           <span className="font-extrabold">Optional Electrification Subsystem:</span>
-          <span className="text-purple-300/80">
+          <span className="text-amber-300/80">
             {isMotorInstalled
               ? "Motor installed — now mounting Inverter & Power Electronics"
               : "Install e-motor assist or skip directly to summary."}
@@ -121,7 +121,7 @@ export function HybridOptionalSection({
         <button
           type="button"
           onClick={onSkipHybrid}
-          className="flex items-center gap-1.5 px-3 py-1 rounded-xl bg-base-900 hover:bg-base-800 text-purple-300 border border-purple-500/30 text-xs font-mono font-bold transition-all cursor-pointer"
+          className="flex items-center gap-1.5 px-3 py-1 rounded-xl bg-base-900 hover:bg-base-800 text-amber-300 border border-amber-500/30 text-xs font-mono font-bold transition-all cursor-pointer"
         >
           <SkipForward size={13} />
           <span>Skip Hybrid</span>

@@ -15,10 +15,10 @@ export const MonocoqueStudio: React.FC = memo(function MonocoqueStudio() {
   return (
     <div className="space-y-6 animate-fade-in-up">
       {/* Studio Header */}
-      <div className="glass-panel p-6 border-cyan-500/20 bg-gradient-to-r from-slate-900 via-slate-900/90 to-cyan-950/30 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+      <div className="glass-panel p-6 border-amber-500/20 bg-gradient-to-r from-slate-900 via-slate-900/90 to-amber-950/30 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2 mb-2">
-            <Shield className="text-cyan-400" size={24} />
+            <Shield className="text-amber-400" size={24} />
             <h2 className="text-xl font-bold text-slate-100 tracking-wide">
               Carbon Fiber Monocoque & Safety Survival Cell
             </h2>
@@ -30,7 +30,7 @@ export const MonocoqueStudio: React.FC = memo(function MonocoqueStudio() {
 
         <div className="flex items-center gap-3">
           <div className="text-right">
-            <div className="text-2xl font-black font-mono text-cyan-400">
+            <div className="text-2xl font-black font-mono text-amber-400">
               {m.monocoqueTorsionalRigidityKNmDeg} <span className="text-xs text-slate-400 font-normal">kNm/deg</span>
             </div>
             <div className="text-[10px] text-slate-400 uppercase tracking-wider">Torsional Rigidity</div>
@@ -44,7 +44,7 @@ export const MonocoqueStudio: React.FC = memo(function MonocoqueStudio() {
         <div className="bg-slate-900/60 p-4 rounded-xl border border-slate-800 space-y-3">
           <label className="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center justify-between">
             <span>Carbon Fiber Grade</span>
-            <span className="text-[10px] text-cyan-400 font-mono">Structural Layup</span>
+            <span className="text-[10px] text-amber-400 font-mono">Structural Layup</span>
           </label>
           <select
             value={m.carbonFiberGrade}
@@ -52,7 +52,7 @@ export const MonocoqueStudio: React.FC = memo(function MonocoqueStudio() {
               playHMIClickSound();
               updateMonocoque({ carbonFiberGrade: e.target.value as CarbonFiberGrade });
             }}
-            className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-cyan-500 cursor-pointer"
+            className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-amber-500 cursor-pointer"
           >
             <option value="T300_STANDARD">T300 Standard (230 GPa / 3.5 GPa)</option>
             <option value="T700_INTERMEDIATE">T700 Intermediate (230 GPa / 4.9 GPa)</option>
@@ -70,7 +70,7 @@ export const MonocoqueStudio: React.FC = memo(function MonocoqueStudio() {
         <div className="bg-slate-900/60 p-4 rounded-xl border border-slate-800 space-y-3">
           <label className="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center justify-between">
             <span>Sandwich Core Material</span>
-            <span className="text-[10px] text-cyan-400 font-mono">Energy Attenuation</span>
+            <span className="text-[10px] text-amber-400 font-mono">Energy Attenuation</span>
           </label>
           <select
             value={m.coreMaterial}
@@ -78,7 +78,7 @@ export const MonocoqueStudio: React.FC = memo(function MonocoqueStudio() {
               playHMIClickSound();
               updateMonocoque({ coreMaterial: e.target.value as CoreMaterialType });
             }}
-            className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-cyan-500 cursor-pointer"
+            className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-amber-500 cursor-pointer"
           >
             <option value="NOMEX_HONEYCOMB_HRH10">Nomex Honeycomb HRH-10 (48 kg/m³)</option>
             <option value="ALUMINUM_5056_HONEYCOMB">Aluminum 5056 Honeycomb (Crush Resistant)</option>
@@ -102,7 +102,7 @@ export const MonocoqueStudio: React.FC = memo(function MonocoqueStudio() {
               playHMIClickSound();
               updateMonocoque({ haloMaterial: e.target.value as any });
             }}
-            className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-cyan-500 cursor-pointer"
+            className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-amber-500 cursor-pointer"
           >
             <option value="TITANIUM_GRADE_5_DMLS">Grade 5 Titanium (3D DMLS Laser Sintered)</option>
             <option value="TITANIUM_FORGED_EXTRUDED">Forged & Extruded Tubular Titanium</option>
@@ -116,7 +116,7 @@ export const MonocoqueStudio: React.FC = memo(function MonocoqueStudio() {
                 playHMIClickSound();
                 updateMonocoque({ haloFairingAeroRamp: e.target.checked });
               }}
-              className="accent-cyan-400 cursor-pointer"
+              className="accent-amber-400 cursor-pointer"
             />
             <label htmlFor="haloAero" className="text-xs text-slate-300 cursor-pointer">
               Add Halo Micro-Aero Fairing (Reduces helmet buffet)
@@ -139,7 +139,7 @@ export const MonocoqueStudio: React.FC = memo(function MonocoqueStudio() {
             step="5"
             value={m.cockpitOpeningWidthMm}
             onChange={(e) => updateMonocoque({ cockpitOpeningWidthMm: parseInt(e.target.value) })}
-            className="w-full accent-cyan-400 cursor-pointer"
+            className="w-full accent-amber-400 cursor-pointer"
           />
           <div className="flex justify-between text-[10px] text-slate-500">
             <span>500mm (Illegal)</span>
@@ -152,7 +152,7 @@ export const MonocoqueStudio: React.FC = memo(function MonocoqueStudio() {
         <div className="bg-slate-900/60 p-4 rounded-xl border border-slate-800 space-y-2">
           <div className="flex justify-between items-center text-xs">
             <span className="font-bold text-slate-300 uppercase tracking-wider">Torsional Rigidity Target</span>
-            <span className="font-mono text-cyan-400 font-bold">{m.monocoqueTorsionalRigidityKNmDeg} kNm/deg</span>
+            <span className="font-mono text-amber-400 font-bold">{m.monocoqueTorsionalRigidityKNmDeg} kNm/deg</span>
           </div>
           <input
             type="range"
@@ -161,7 +161,7 @@ export const MonocoqueStudio: React.FC = memo(function MonocoqueStudio() {
             step="1"
             value={m.monocoqueTorsionalRigidityKNmDeg}
             onChange={(e) => updateMonocoque({ monocoqueTorsionalRigidityKNmDeg: parseInt(e.target.value) })}
-            className="w-full accent-cyan-400 cursor-pointer"
+            className="w-full accent-amber-400 cursor-pointer"
           />
           <div className="flex justify-between text-[10px] text-slate-500">
             <span>40 kNm/deg</span>

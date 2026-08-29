@@ -26,10 +26,8 @@ import { ModularEngine3DViewport } from "../../../engine3d/ModularEngine3DViewpo
 import { EngineBuilderFlow } from "../../assembly/EngineBuilderFlow";
 import { ModularEngineStudio } from "../../engineStudio/ModularEngineStudio";
 import { Transmission3DStudio } from "../../transmissionStudio/Transmission3DStudio";
-import { UnifiedPowertrainStudio } from "../../powertrainStudio/UnifiedPowertrainStudio";
 
 type EngineStudioTab =
-  | "unified_powertrain"
   | "assembly_3d"
   | "engine_workbench"
   | "transmission_3d"
@@ -66,7 +64,6 @@ export function NeonEngineStudio() {
       {/* Engine Studio Sub-Tabs */}
       <div className="flex items-center gap-2 p-1.5 bg-black/40 rounded-2xl border border-white/10 overflow-x-auto no-scrollbar">
         {[
-          { id: "unified_powertrain" as const, label: "⚡ Unified Powertrain Studio", icon: <Flame size={14} className="text-cyan-400" /> },
           { id: "assembly_3d" as const, label: "3D Engine Assembly & Builder", icon: <Box size={14} /> },
           { id: "engine_workbench" as const, label: "Dyno & Master Workbench", icon: <Wrench size={14} /> },
           { id: "transmission_3d" as const, label: "3D Transmission Studio", icon: <Sliders size={14} /> },
@@ -96,14 +93,7 @@ export function NeonEngineStudio() {
         })}
       </div>
 
-      {/* View 0: Unified Powertrain Studio */}
-      {activeTab === "unified_powertrain" && (
-        <div className="w-full rounded-3xl overflow-hidden border border-white/10 bg-[#0a111e] shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
-          <UnifiedPowertrainStudio />
-        </div>
-      )}
-
-      {/* View 1: Unified 3D Engine Assembly & Builder Flow */}
+      {/* View 0: Unified 3D Engine Assembly & Builder Flow */}
       {activeTab === "assembly_3d" && (
         <div className="w-full">
           <EngineBuilderFlow

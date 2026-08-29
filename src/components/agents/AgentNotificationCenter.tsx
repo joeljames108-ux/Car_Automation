@@ -35,16 +35,16 @@ export const AgentNotificationCenter: React.FC<AgentNotificationCenterProps> = (
       {/* Floating Badge Trigger */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2.5 px-4 py-3 bg-slate-900/90 backdrop-blur-md border border-cyan-500/40 rounded-full shadow-2xl hover:border-cyan-400 transition-all text-white font-medium text-xs group"
+        className="flex items-center gap-2.5 px-4 py-3 bg-slate-900/90 backdrop-blur-md border border-amber-500/40 rounded-full shadow-2xl hover:border-amber-400 transition-all text-white font-medium text-xs group"
       >
         <div className="relative">
-          <Bell size={16} className="text-cyan-400 group-hover:rotate-12 transition-transform" />
+          <Bell size={16} className="text-amber-400 group-hover:rotate-12 transition-transform" />
           {criticalCount > 0 && (
             <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-rose-500 rounded-full animate-ping" />
           )}
         </div>
         <span>AI Division Diagnostics</span>
-        <span className="px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 font-semibold text-[10px] border border-cyan-500/30">
+        <span className="px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 font-semibold text-[10px] border border-amber-500/30">
           {activeFindings.length}
         </span>
       </button>
@@ -54,7 +54,7 @@ export const AgentNotificationCenter: React.FC<AgentNotificationCenterProps> = (
         <div className="mt-3 w-96 max-h-[500px] overflow-y-auto bg-slate-950/95 backdrop-blur-xl border border-slate-800 rounded-2xl p-4 shadow-2xl text-slate-200 flex flex-col gap-3">
           <div className="flex items-center justify-between border-b border-slate-800 pb-3">
             <div className="flex items-center gap-2">
-              <Zap size={16} className="text-cyan-400" />
+              <Zap size={16} className="text-amber-400" />
               <h4 className="font-semibold text-sm text-white">Live AI Diagnostics</h4>
             </div>
             <button
@@ -74,7 +74,7 @@ export const AgentNotificationCenter: React.FC<AgentNotificationCenterProps> = (
                     ? "bg-rose-950/30 border-rose-500/40 text-rose-200"
                     : f.severity === "warning"
                     ? "bg-amber-950/30 border-amber-500/40 text-amber-200"
-                    : "bg-cyan-950/30 border-cyan-500/40 text-cyan-200"
+                    : "bg-amber-950/30 border-amber-500/40 text-amber-200"
                 }`}
               >
                 <div className="flex items-start justify-between gap-2">
@@ -102,7 +102,7 @@ export const AgentNotificationCenter: React.FC<AgentNotificationCenterProps> = (
                       onApplyRecommendation(f.recommendation!);
                       handleDismiss(f.id);
                     }}
-                    className="mt-1 flex items-center justify-between px-3 py-1.5 bg-cyan-500/20 hover:bg-cyan-500/30 border border-cyan-500/40 rounded-lg text-cyan-300 font-medium text-[11px] transition-colors"
+                    className="mt-1 flex items-center justify-between px-3 py-1.5 bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/40 rounded-lg text-amber-300 font-medium text-[11px] transition-colors"
                   >
                     <span>Apply: {f.recommendation.title}</span>
                     <ChevronRight size={12} />

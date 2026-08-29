@@ -38,7 +38,7 @@ export const RearWingSVG: React.FC<RearWingSVGProps> = ({
   const aoaOffset = Math.round((aoa / 32) * 8);
 
   const strokeColor = isSelected
-    ? "#38bdf8"
+    ? "#fbbf24"
     : isHovered
     ? "#0284c7"
     : "#020617";
@@ -97,19 +97,19 @@ export const RearWingSVG: React.FC<RearWingSVGProps> = ({
       <polygon
         points="650,150 675,153 695,205 670,202"
         fill="url(#exposedCarbonWeave)"
-        stroke="#38bdf8"
+        stroke="#fbbf24"
         strokeWidth="1.2"
       />
       {/* Right Endplate */}
       <polygon
         points="785,165 810,168 830,220 805,217"
         fill="url(#exposedCarbonWeave)"
-        stroke="#38bdf8"
+        stroke="#fbbf24"
         strokeWidth="1.2"
       />
 
       {/* ── 5. DRS Actuator Mechanism Pod ── */}
-      <ellipse cx="735" cy="180" rx="6" ry="3.5" fill="#38bdf8" stroke="#0284c7" strokeWidth="0.8" />
+      <ellipse cx="735" cy="180" rx="6" ry="3.5" fill="#fbbf24" stroke="#0284c7" strokeWidth="0.8" />
     </g>
   );
 };

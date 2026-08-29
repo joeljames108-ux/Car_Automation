@@ -92,10 +92,10 @@ export const VehicleCompletionStage: React.FC<VehicleCompletionStageProps> = ({
   const massKg = physicalState?.totalCurbWeightKg || 1185;
 
   return (
-    <div className="panel p-6 rounded-3xl space-y-6 shadow-2xl border-cyan-500/40 animate-stage-transition-enter">
+    <div className="panel p-6 rounded-3xl space-y-6 shadow-2xl border-amber-500/40 animate-stage-transition-enter">
       {/* Header Banner */}
       <div className="text-center space-y-2">
-        <div className="inline-flex p-3.5 rounded-3xl bg-gradient-to-tr from-emerald-500/20 to-cyan-500/20 border border-emerald-500/40 text-emerald-400 mb-1 shadow-lg shadow-emerald-500/10">
+        <div className="inline-flex p-3.5 rounded-3xl bg-gradient-to-tr from-emerald-500/20 to-amber-500/20 border border-emerald-500/40 text-emerald-400 mb-1 shadow-lg shadow-emerald-500/10">
           <Trophy size={36} className={allPassed ? "text-emerald-400 animate-bounce" : "text-slate-400"} />
         </div>
         <h2 className="text-2xl font-extrabold font-mono text-slate-900 dark:text-white tracking-wide">
@@ -117,8 +117,8 @@ export const VehicleCompletionStage: React.FC<VehicleCompletionStageProps> = ({
           <span className="text-xl font-bold font-mono text-amber-600 dark:text-amber-300">{estHp} HP</span>
         </div>
         <div className="p-3.5 rounded-2xl bg-base-900/80 border border-base-800 text-center">
-          <span className="text-[10px] font-mono text-cyan-500 uppercase block mb-1">0–100 KM/H</span>
-          <span className="text-xl font-bold font-mono text-cyan-600 dark:text-cyan-300">{accel0_100}s</span>
+          <span className="text-[10px] font-mono text-amber-500 uppercase block mb-1">0–100 KM/H</span>
+          <span className="text-xl font-bold font-mono text-amber-600 dark:text-amber-300">{accel0_100}s</span>
         </div>
         <div className="p-3.5 rounded-2xl bg-base-900/80 border border-base-800 text-center">
           <span className="text-[10px] font-mono text-emerald-500 uppercase block mb-1">TOP SPEED</span>
@@ -127,10 +127,10 @@ export const VehicleCompletionStage: React.FC<VehicleCompletionStageProps> = ({
       </div>
 
       {/* 3D CENTER OF MASS DATUM */}
-      <div className="p-5 rounded-2xl bg-gradient-to-r from-indigo-950/40 to-purple-950/30 border border-indigo-500/40 space-y-3">
+      <div className="p-5 rounded-2xl bg-gradient-to-r from-indigo-950/40 to-amber-950/30 border border-indigo-500/40 space-y-3">
         <div className="flex items-center justify-between flex-wrap gap-2">
           <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-xl bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
+            <div className="p-2.5 rounded-xl bg-amber-500/20 text-amber-300 border border-indigo-500/30">
               <Crosshair size={22} />
             </div>
             <div>
@@ -146,7 +146,7 @@ export const VehicleCompletionStage: React.FC<VehicleCompletionStageProps> = ({
             <button
               onClick={onToggleCoMGizmo}
               className={`px-3 py-1.5 rounded-xl text-xs font-mono font-bold border cursor-pointer transition-all ${
-                showCoMGizmo ? "bg-indigo-500/20 border-indigo-500/50 text-indigo-300" : "bg-base-850 border-base-700 text-slate-500"
+                showCoMGizmo ? "bg-amber-500/20 border-indigo-500/50 text-amber-300" : "bg-base-850 border-base-700 text-slate-500"
               }`}
             >
               {showCoMGizmo ? "◉ 3D GIZMO VISIBLE" : "SHOW 3D CoM GIZMO"}
@@ -157,15 +157,15 @@ export const VehicleCompletionStage: React.FC<VehicleCompletionStageProps> = ({
         <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5">
           <div className="p-2.5 rounded-xl bg-base-900/80 border border-base-800 text-center">
             <span className="text-[9px] font-mono text-slate-500 uppercase block">LATERAL X</span>
-            <span className="font-bold font-mono text-indigo-300 tabular-nums">{comMm[0] >= 0 ? "+" : ""}{comMm[0]} mm</span>
+            <span className="font-bold font-mono text-amber-300 tabular-nums">{comMm[0] >= 0 ? "+" : ""}{comMm[0]} mm</span>
           </div>
           <div className="p-2.5 rounded-xl bg-base-900/80 border border-base-800 text-center">
             <span className="text-[9px] font-mono text-slate-500 uppercase block">HEIGHT Y</span>
-            <span className="font-bold font-mono text-indigo-300 tabular-nums">{comMm[1]} mm</span>
+            <span className="font-bold font-mono text-amber-300 tabular-nums">{comMm[1]} mm</span>
           </div>
           <div className="p-2.5 rounded-xl bg-base-900/80 border border-base-800 text-center">
             <span className="text-[9px] font-mono text-slate-500 uppercase block">LONGITUDINAL Z</span>
-            <span className="font-bold font-mono text-indigo-300 tabular-nums">{comMm[2] >= 0 ? "+" : ""}{comMm[2]} mm</span>
+            <span className="font-bold font-mono text-amber-300 tabular-nums">{comMm[2] >= 0 ? "+" : ""}{comMm[2]} mm</span>
           </div>
           <div className="p-2.5 rounded-xl bg-base-900/80 border border-base-800 text-center">
             <span className="text-[9px] font-mono text-slate-500 uppercase block">STATIC BIAS</span>
@@ -223,7 +223,7 @@ export const VehicleCompletionStage: React.FC<VehicleCompletionStageProps> = ({
       </div>
 
       {/* TRACK READINESS SIGN-OFF */}
-      <div className="p-5 rounded-2xl bg-gradient-to-r from-emerald-950/40 to-cyan-950/30 border border-emerald-500/40 space-y-3">
+      <div className="p-5 rounded-2xl bg-gradient-to-r from-emerald-950/40 to-amber-950/30 border border-emerald-500/40 space-y-3">
         <div className="flex items-center gap-3">
           <div className="p-2.5 rounded-xl bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
             <PenLine size={22} />
@@ -252,7 +252,7 @@ export const VehicleCompletionStage: React.FC<VehicleCompletionStageProps> = ({
           <div className="flex items-center justify-end gap-3 pt-1">
             <button
               onClick={onEnterAeroStudio}
-              className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-cyan-500/20 border border-cyan-500/50 hover:bg-cyan-500/30 text-cyan-300 font-mono font-bold text-xs transition-all cursor-pointer"
+              className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-amber-500/20 border border-amber-500/50 hover:bg-amber-500/30 text-amber-300 font-mono font-bold text-xs transition-all cursor-pointer"
             >
               <Wind size={14} />
               GO TO AERODYNAMICS STUDIO (STAGE 12)
@@ -276,7 +276,7 @@ export const VehicleCompletionStage: React.FC<VehicleCompletionStageProps> = ({
               disabled={!signature.trim()}
               className={`flex items-center gap-2 px-6 py-3 rounded-2xl font-mono font-bold text-xs uppercase tracking-wider shadow-lg transition-all active:scale-95 ${
                 signature.trim()
-                  ? "bg-gradient-to-r from-emerald-500 to-cyan-600 hover:from-emerald-400 hover:to-cyan-500 text-white shadow-emerald-500/25 cursor-pointer hover:scale-105"
+                  ? "bg-gradient-to-r from-emerald-500 to-amber-600 hover:from-emerald-400 hover:to-amber-500 text-white shadow-emerald-500/25 cursor-pointer hover:scale-105"
                   : "bg-base-800 text-slate-500 cursor-not-allowed"
               }`}
             >

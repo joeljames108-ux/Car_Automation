@@ -169,7 +169,7 @@ export class MasterModularEngine3DAssembler {
         clearcoat: 0.6,
       }),
       cobaltAnodized: new THREE.MeshPhysicalMaterial({
-        color: 0x2563eb, // Cobalt blue anodized
+        color: 0xb45309, // Cobalt blue anodized
         metalness: 0.94,
         roughness: 0.14,
         clearcoat: 0.6,
@@ -194,7 +194,7 @@ export class MasterModularEngine3DAssembler {
         roughness: 0.22,
         clearcoat: 0.85,
         sheen: 0.3,
-        sheenColor: new THREE.Color(0x38bdf8),
+        sheenColor: new THREE.Color(0xfbbf24),
       }),
       gialloModenaPowdercoat: new THREE.MeshPhysicalMaterial({
         color: 0xeab308, // Giallo Modena racing yellow
@@ -214,13 +214,13 @@ export class MasterModularEngine3DAssembler {
         roughness: 0.55,
       }),
       titaniumBluedExhaust: new THREE.MeshPhysicalMaterial({
-        color: 0x2563eb, // Titanium heat-blued with purple sheen
+        color: 0xb45309, // Titanium heat-blued with purple sheen
         metalness: 0.96,
         roughness: 0.16,
         clearcoat: 0.85,
         clearcoatRoughness: 0.06,
         sheen: 0.65,
-        sheenColor: new THREE.Color(0x9333ea),
+        sheenColor: new THREE.Color(0xd97706),
       }),
       inconelExhaust: new THREE.MeshPhysicalMaterial({
         color: 0xd97706, // Heat-tempered bronze/gold inconel

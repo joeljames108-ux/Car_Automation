@@ -8,16 +8,16 @@ import type { TwinEventType, TwinEvent } from "../sim/types";
 
 const EVENT_ICONS: Record<TwinEventType, { icon: React.ReactNode; color: string }> = {
   design_created:        { icon: <Star size={12} />,          color: "text-accent-400 bg-accent-500/15" },
-  design_modified:       { icon: <Info size={12} />,          color: "text-blue-400 bg-blue-500/15" },
+  design_modified:       { icon: <Info size={12} />,          color: "text-amber-400 bg-amber-500/15" },
   test_completed:        { icon: <CheckCircle2 size={12} />,  color: "text-ok-400 bg-ok-500/15" },
-  simulation_run:        { icon: <BarChart3 size={12} />,     color: "text-purple-400 bg-purple-500/15" },
+  simulation_run:        { icon: <BarChart3 size={12} />,     color: "text-amber-400 bg-amber-500/15" },
   manufacturing_started: { icon: <Info size={12} />,          color: "text-amber-400 bg-amber-500/15" },
   vehicle_launched:      { icon: <Star size={12} />,          color: "text-ok-400 bg-ok-500/15" },
   customer_feedback:     { icon: <Info size={12} />,          color: "text-slate-400 bg-slate-500/15" },
   warranty_claim:        { icon: <AlertTriangle size={12} />, color: "text-warn-400 bg-warn-500/15" },
-  race_entry:            { icon: <CheckCircle2 size={12} />,  color: "text-blue-400 bg-blue-500/15" },
+  race_entry:            { icon: <CheckCircle2 size={12} />,  color: "text-amber-400 bg-amber-500/15" },
   race_result:           { icon: <Star size={12} />,          color: "text-yellow-400 bg-yellow-500/15" },
-  facelift:              { icon: <Info size={12} />,          color: "text-purple-400 bg-purple-500/15" },
+  facelift:              { icon: <Info size={12} />,          color: "text-amber-400 bg-amber-500/15" },
   generation:            { icon: <Star size={12} />,          color: "text-accent-400 bg-accent-500/15" },
   recall:                { icon: <AlertTriangle size={12} />, color: "text-danger-400 bg-danger-500/15" },
   award:                 { icon: <Star size={12} />,          color: "text-yellow-400 bg-yellow-500/15" },
@@ -25,7 +25,7 @@ const EVENT_ICONS: Record<TwinEventType, { icon: React.ReactNode; color: string 
 };
 
 const SEVERITY_STYLES: Record<string, string> = {
-  info:    "border-l-2 border-blue-500/50",
+  info:    "border-l-2 border-amber-500/50",
   success: "border-l-2 border-ok-500/50",
   warning: "border-l-2 border-warn-500/50",
   danger:  "border-l-2 border-danger-500/50",
@@ -82,7 +82,7 @@ function MetricsChart({ data }: { data: { month: number; customerSatisfaction: n
             <text x={pad - 4} y={yScale(v)} textAnchor="end" dominantBaseline="central" fontSize="8" fill="#475569">{v}</text>
           </g>
         ))}
-        {polyline(data.map(d => d.customerSatisfaction), "#22d3ee")}
+        {polyline(data.map(d => d.customerSatisfaction), "#fbbf24")}
         {polyline(data.map(d => d.reliabilityScore), "#22c55e")}
         {polyline(data.map(d => d.warrantyClaimRate * 20), "#f97316")}
       </svg>
@@ -257,7 +257,7 @@ export function DigitalTwin() {
               </div>
               <div className="bg-base-900/80 p-2.5 rounded-lg border border-base-800 flex items-center justify-between">
                 <span className="text-slate-400">Peak Downforce:</span>
-                <strong className="text-cyan-400 font-bold">{vehicle.sim.downforce} N</strong>
+                <strong className="text-amber-400 font-bold">{vehicle.sim.downforce} N</strong>
               </div>
               <div className="bg-base-900/80 p-2.5 rounded-lg border border-base-800 flex items-center justify-between">
                 <span className="text-slate-400">Top Speed:</span>

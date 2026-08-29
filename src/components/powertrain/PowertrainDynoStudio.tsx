@@ -135,13 +135,13 @@ export const PowertrainDynoStudio: React.FC = () => {
           </button>
           <button
             onClick={() => applyTunePreset("stage1")}
-            className="px-2.5 py-1 rounded-lg bg-slate-850 hover:bg-slate-800 text-cyan-300 text-xs font-bold border border-slate-700 transition-all"
+            className="px-2.5 py-1 rounded-lg bg-slate-850 hover:bg-slate-800 text-amber-300 text-xs font-bold border border-slate-700 transition-all"
           >
             Stage 1 Reflash
           </button>
           <button
             onClick={() => applyTunePreset("stage3_e85")}
-            className="px-2.5 py-1 rounded-lg bg-slate-850 hover:bg-slate-800 text-purple-300 text-xs font-bold border border-slate-700 transition-all"
+            className="px-2.5 py-1 rounded-lg bg-slate-850 hover:bg-slate-800 text-amber-300 text-xs font-bold border border-slate-700 transition-all"
           >
             Stage 3 E85 Beast
           </button>
@@ -210,7 +210,7 @@ export const PowertrainDynoStudio: React.FC = () => {
             <div className="space-y-1">
               <div className="flex justify-between text-[11px] font-semibold">
                 <span className="text-slate-300">Turbo Boost</span>
-                <span className="font-mono text-cyan-400">{ecuState.boostBar} bar</span>
+                <span className="font-mono text-amber-400">{ecuState.boostBar} bar</span>
               </div>
               <input
                 type="range"
@@ -219,7 +219,7 @@ export const PowertrainDynoStudio: React.FC = () => {
                 step="0.1"
                 value={ecuState.boostBar}
                 onChange={(e) => setEcuState({ ...ecuState, boostBar: Number(e.target.value) })}
-                className="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-cyan-400"
+                className="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-amber-400"
               />
             </div>
           </div>
@@ -229,7 +229,7 @@ export const PowertrainDynoStudio: React.FC = () => {
             <div className="space-y-1">
               <div className="flex justify-between text-[11px] font-semibold">
                 <span className="text-slate-300">Ignition Timing</span>
-                <span className="font-mono text-indigo-400">{ecuState.ignitionTimingBtdcDeg}° BTDC</span>
+                <span className="font-mono text-amber-400">{ecuState.ignitionTimingBtdcDeg}° BTDC</span>
               </div>
               <input
                 type="range"
@@ -263,7 +263,7 @@ export const PowertrainDynoStudio: React.FC = () => {
             <div className="space-y-1">
               <div className="flex justify-between text-[11px] font-semibold">
                 <span className="text-slate-300">Cam Duration</span>
-                <span className="font-mono text-purple-400">{ecuState.camDurationDeg}°</span>
+                <span className="font-mono text-amber-400">{ecuState.camDurationDeg}°</span>
               </div>
               <input
                 type="range"
@@ -298,12 +298,12 @@ export const PowertrainDynoStudio: React.FC = () => {
               onClick={() => setEcuState({ ...ecuState, hasWaterMethanolInjection: !ecuState.hasWaterMethanolInjection })}
               className={`w-full flex items-center justify-between p-2.5 rounded-xl border text-xs font-bold transition-all cursor-pointer ${
                 ecuState.hasWaterMethanolInjection
-                  ? "bg-cyan-500/20 text-cyan-300 border-cyan-500/40 shadow-sm shadow-cyan-500/20"
+                  ? "bg-amber-500/20 text-amber-300 border-amber-500/40 shadow-sm shadow-cyan-500/20"
                   : "bg-slate-850 text-slate-400 border-slate-800 hover:text-slate-200"
               }`}
             >
               <div className="flex items-center gap-1.5">
-                <Droplet size={14} className={ecuState.hasWaterMethanolInjection ? "text-cyan-400" : ""} />
+                <Droplet size={14} className={ecuState.hasWaterMethanolInjection ? "text-amber-400" : ""} />
                 <span>Water-Methanol Injection (WMI)</span>
               </div>
               <span className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded bg-slate-900">
@@ -414,7 +414,7 @@ export const PowertrainDynoStudio: React.FC = () => {
                   {/* Torque Polyline (Cyan) */}
                   <polyline
                     fill="none"
-                    stroke="#06b6d4"
+                    stroke="#f59e0b"
                     strokeWidth="3"
                     points={results.dynoCurve
                       .map((d, i) => {
@@ -432,7 +432,7 @@ export const PowertrainDynoStudio: React.FC = () => {
                   {/* BMEP Polyline (Purple) */}
                   <polyline
                     fill="none"
-                    stroke="#a855f7"
+                    stroke="#f59e0b"
                     strokeWidth="3"
                     points={results.dynoCurve
                       .map((d, i) => {
@@ -474,12 +474,12 @@ export const PowertrainDynoStudio: React.FC = () => {
             </div>
             <div className="bg-slate-900 p-3 rounded-xl border border-slate-800 flex flex-col">
               <span className="text-[10px] font-bold text-slate-400 uppercase">Peak Torque</span>
-              <span className="text-base font-mono font-extrabold text-cyan-400">{results.peakTorqueNm} Nm</span>
+              <span className="text-base font-mono font-extrabold text-amber-400">{results.peakTorqueNm} Nm</span>
               <span className="text-[10px] text-slate-500">@ {results.peakTorqueRpm} RPM</span>
             </div>
             <div className="bg-slate-900 p-3 rounded-xl border border-slate-800 flex flex-col">
               <span className="text-[10px] font-bold text-slate-400 uppercase">Specific Output</span>
-              <span className="text-base font-mono font-extrabold text-purple-400">{results.specificOutputHpPerL} HP/L</span>
+              <span className="text-base font-mono font-extrabold text-amber-400">{results.specificOutputHpPerL} HP/L</span>
               <span className="text-[10px] text-slate-500">Power density ratio</span>
             </div>
             <div className="bg-slate-900 p-3 rounded-xl border border-slate-800 flex flex-col">

@@ -125,7 +125,7 @@ export function ApexAgentConsole({
       {/* ── TOP HEADER & AGENT MODE SELECTOR ── */}
       <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800/80 pb-4">
         <div className="flex items-center gap-3">
-          <div className="p-2.5 rounded-2xl bg-cyan-500/15 text-cyan-400 border border-cyan-500/30 shadow-[0_0_20px_rgba(56,189,248,0.25)]">
+          <div className="p-2.5 rounded-2xl bg-amber-500/15 text-amber-400 border border-amber-500/30 shadow-[0_0_20px_rgba(56,189,248,0.25)]">
             <Bot size={20} className="animate-pulse" />
           </div>
           <div>
@@ -149,7 +149,7 @@ export function ApexAgentConsole({
             onClick={() => setActiveMode("powertrain")}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer ${
               activeMode === "powertrain"
-                ? "bg-cyan-500 text-black shadow-md font-extrabold"
+                ? "bg-amber-500 text-black shadow-md font-extrabold"
                 : "text-slate-400 hover:text-slate-200"
             }`}
           >
@@ -160,7 +160,7 @@ export function ApexAgentConsole({
             onClick={() => setActiveMode("assembly_qa")}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer ${
               activeMode === "assembly_qa"
-                ? "bg-cyan-500 text-black shadow-md font-extrabold"
+                ? "bg-amber-500 text-black shadow-md font-extrabold"
                 : "text-slate-400 hover:text-slate-200"
             }`}
           >
@@ -171,7 +171,7 @@ export function ApexAgentConsole({
             onClick={() => setActiveMode("race_strategy")}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer ${
               activeMode === "race_strategy"
-                ? "bg-cyan-500 text-black shadow-md font-extrabold"
+                ? "bg-amber-500 text-black shadow-md font-extrabold"
                 : "text-slate-400 hover:text-slate-200"
             }`}
           >
@@ -182,7 +182,7 @@ export function ApexAgentConsole({
             onClick={() => setActiveMode("chat")}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer ${
               activeMode === "chat"
-                ? "bg-cyan-500 text-black shadow-md font-extrabold"
+                ? "bg-amber-500 text-black shadow-md font-extrabold"
                 : "text-slate-400 hover:text-slate-200"
             }`}
           >
@@ -211,7 +211,7 @@ export function ApexAgentConsole({
                 onClick={() => setSelectedPreset(p.id as TuningPreset)}
                 className={`p-3 rounded-2xl border text-left transition-all cursor-pointer ${
                   selectedPreset === p.id
-                    ? "bg-cyan-500/15 border-cyan-400 text-cyan-300 shadow-[0_0_15px_rgba(56,189,248,0.2)]"
+                    ? "bg-amber-500/15 border-amber-400 text-amber-300 shadow-[0_0_15px_rgba(56,189,248,0.2)]"
                     : "bg-slate-950/60 border-slate-800 text-slate-400 hover:bg-slate-900 hover:text-slate-200"
                 }`}
               >
@@ -243,7 +243,7 @@ export function ApexAgentConsole({
                 <span className="text-emerald-400 font-bold">
                   Power Delta: +{recommendation.expectedPowerDeltaHp} HP
                 </span>
-                <span className="text-cyan-400 font-bold">
+                <span className="text-amber-400 font-bold">
                   AFR Target: {recommendation.changes.afr || 12.2}:1
                 </span>
                 <span className="text-amber-400 font-bold">
@@ -257,7 +257,7 @@ export function ApexAgentConsole({
               className={`flex items-center gap-2 px-5 py-2.5 rounded-xl font-mono font-bold text-xs transition-all shadow-md active:scale-95 cursor-pointer shrink-0 ${
                 appliedPreset === selectedPreset
                   ? "bg-emerald-500 text-black font-extrabold"
-                  : "bg-cyan-500 hover:bg-cyan-400 text-black font-extrabold shadow-[0_0_20px_rgba(56,189,248,0.4)]"
+                  : "bg-amber-500 hover:bg-amber-400 text-black font-extrabold shadow-[0_0_20px_rgba(56,189,248,0.4)]"
               }`}
             >
               {appliedPreset === selectedPreset ? (
@@ -275,7 +275,7 @@ export function ApexAgentConsole({
           {/* Live Agent Diagnostics */}
           <div className="p-3.5 rounded-2xl bg-slate-950/60 border border-slate-800/80 space-y-2">
             <div className="text-xs font-mono font-extrabold text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
-              <Activity size={14} className="text-cyan-400" /> Chief Powertrain Live Diagnostics
+              <Activity size={14} className="text-amber-400" /> Chief Powertrain Live Diagnostics
             </div>
             <div className="space-y-1.5">
               {diagnostics.map((diag, idx) => (
@@ -298,7 +298,7 @@ export function ApexAgentConsole({
             </div>
             <div className="p-4 rounded-2xl bg-slate-950/80 border border-slate-800 text-center">
               <span className="text-[10px] font-mono text-slate-400 uppercase tracking-widest block">Torque Verification</span>
-              <span className="text-2xl font-mono font-extrabold text-cyan-400 uppercase mt-1 block">{qaReport.torqueVerification}</span>
+              <span className="text-2xl font-mono font-extrabold text-amber-400 uppercase mt-1 block">{qaReport.torqueVerification}</span>
             </div>
             <div className="p-4 rounded-2xl bg-slate-950/80 border border-slate-800 text-center">
               <span className="text-[10px] font-mono text-slate-400 uppercase tracking-widest block">Deck Clearance</span>
@@ -328,7 +328,7 @@ export function ApexAgentConsole({
             <div key={idx} className="p-4 rounded-2xl bg-slate-950/80 border border-slate-800 space-y-2.5">
               <div className="flex items-center justify-between border-b border-slate-800 pb-2">
                 <span className="text-xs font-mono font-extrabold text-slate-200 truncate">{cp.circuitName}</span>
-                <Flag size={14} className="text-cyan-400 shrink-0" />
+                <Flag size={14} className="text-amber-400 shrink-0" />
               </div>
               <div className="space-y-1.5 font-mono text-xs">
                 <div className="flex justify-between">
@@ -337,7 +337,7 @@ export function ApexAgentConsole({
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-400">Top Speed:</span>
-                  <span className="text-cyan-400 font-extrabold">{cp.topSpeedKmh} km/h</span>
+                  <span className="text-amber-400 font-extrabold">{cp.topSpeedKmh} km/h</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-slate-400">Fuel / Lap:</span>
@@ -362,7 +362,7 @@ export function ApexAgentConsole({
                 key={idx}
                 className={`p-2.5 rounded-xl max-w-[85%] ${
                   msg.sender === "user"
-                    ? "bg-cyan-500/20 text-cyan-200 border border-cyan-500/30 ml-auto text-right"
+                    ? "bg-amber-500/20 text-amber-200 border border-amber-500/30 ml-auto text-right"
                     : "bg-slate-900 text-slate-200 border border-slate-800 mr-auto"
                 }`}
               >
@@ -377,11 +377,11 @@ export function ApexAgentConsole({
               value={chatInput}
               onChange={(e) => setChatInput(e.target.value)}
               placeholder="Ask Chief Engineer Agent (e.g. 'Optimize for 98 RON fuel')..."
-              className="flex-1 bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-xs font-mono text-slate-100 focus:outline-none focus:border-cyan-400 transition-colors"
+              className="flex-1 bg-slate-950 border border-slate-800 rounded-xl px-3.5 py-2 text-xs font-mono text-slate-100 focus:outline-none focus:border-amber-400 transition-colors"
             />
             <button
               type="submit"
-              className="px-4 py-2 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-black font-extrabold text-xs font-mono transition-all flex items-center gap-1.5 cursor-pointer shrink-0"
+              className="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-black font-extrabold text-xs font-mono transition-all flex items-center gap-1.5 cursor-pointer shrink-0"
             >
               <Send size={14} /> Send
             </button>

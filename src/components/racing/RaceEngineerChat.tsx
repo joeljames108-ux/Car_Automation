@@ -163,10 +163,10 @@ export const RaceEngineerChat: React.FC<RaceEngineerChatProps> = memo(function R
             }`}>
               {msg.sender === 'engineer' && msg.category && (
                 <span className={`text-xs font-bold uppercase block mb-0.5 ${
-                  msg.category === 'strategy' ? 'text-blue-400' :
+                  msg.category === 'strategy' ? 'text-amber-400' :
                   msg.category === 'tire' ? 'text-yellow-400' :
                   msg.category === 'fuel' ? 'text-green-400' :
-                  msg.category === 'weather' ? 'text-cyan-400' : 'text-amber-400'
+                  msg.category === 'weather' ? 'text-amber-400' : 'text-amber-400'
                 }`}>{msg.category}</span>
               )}
               <p className="text-sm">{msg.text}</p>

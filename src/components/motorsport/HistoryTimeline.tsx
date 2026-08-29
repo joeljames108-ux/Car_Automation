@@ -77,7 +77,7 @@ export const HistoryTimeline = memo(function HistoryTimeline({ selectedTeam }: {
                   <span className="text-slate-400">{season.points}<span className="text-slate-600 ml-0.5">pts</span></span>
                   <span className="text-ok-400">{season.wins}<span className="text-slate-600 ml-0.5">W</span></span>
                   <span className="text-accent-300">{season.podiums}<span className="text-slate-600 ml-0.5">P</span></span>
-                  <span className="text-purple-400">{season.fastestLaps}<span className="text-slate-600 ml-0.5">FL</span></span>
+                  <span className="text-amber-400">{season.fastestLaps}<span className="text-slate-600 ml-0.5">FL</span></span>
                   {season.dnfs > 0 && <span className="text-danger-400">{season.dnfs}<span className="text-slate-600 ml-0.5">DNF</span></span>}
                 </div>
 

@@ -217,16 +217,16 @@ export class EngineMaterialManager {
 
     // 8. Anodized Colors
     this.materialCache.set('gold_anodized', new THREE.MeshPhysicalMaterial({ color: 0xf59e0b, metalness: 0.88, roughness: 0.15, clearcoat: 0.5 }));
-    this.materialCache.set('cobalt_anodized', new THREE.MeshPhysicalMaterial({ color: 0x2563eb, metalness: 0.88, roughness: 0.15, clearcoat: 0.5 }));
+    this.materialCache.set('cobalt_anodized', new THREE.MeshPhysicalMaterial({ color: 0xb45309, metalness: 0.88, roughness: 0.15, clearcoat: 0.5 }));
     this.materialCache.set('crimson_anodized', new THREE.MeshPhysicalMaterial({ color: 0xe11d48, metalness: 0.88, roughness: 0.15, clearcoat: 0.5 }));
 
     // 9. Powdercoat Valve Covers
     this.materialCache.set('rosso_corsa', new THREE.MeshPhysicalMaterial({ color: 0xdc2626, metalness: 0.20, roughness: 0.25, clearcoat: 0.8 }));
-    this.materialCache.set('monaco_blue', new THREE.MeshPhysicalMaterial({ color: 0x1d4ed8, metalness: 0.20, roughness: 0.25, clearcoat: 0.8 }));
+    this.materialCache.set('monaco_blue', new THREE.MeshPhysicalMaterial({ color: 0x92400e, metalness: 0.20, roughness: 0.25, clearcoat: 0.8 }));
     this.materialCache.set('stealth_black', new THREE.MeshPhysicalMaterial({ color: 0x0f172a, metalness: 0.15, roughness: 0.65 }));
 
     // 10. Exhaust Finishes
-    this.materialCache.set('titanium_blued', new THREE.MeshPhysicalMaterial({ color: 0x38bdf8, metalness: 0.92, roughness: 0.12, clearcoat: 0.7 }));
+    this.materialCache.set('titanium_blued', new THREE.MeshPhysicalMaterial({ color: 0xfbbf24, metalness: 0.92, roughness: 0.12, clearcoat: 0.7 }));
     this.materialCache.set('inconel_exhaust', new THREE.MeshPhysicalMaterial({ color: 0xd97706, metalness: 0.88, roughness: 0.28 }));
     this.materialCache.set('polished_chrome', new THREE.MeshPhysicalMaterial({ color: 0xffffff, metalness: 0.98, roughness: 0.04 }));
 

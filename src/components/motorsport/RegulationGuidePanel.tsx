@@ -55,11 +55,11 @@ export const RegulationGuidePanel = memo(function RegulationGuidePanel() {
       </div>
 
       {/* Overview card */}
-      <div className="glass-panel p-5 relative overflow-hidden border-cyan-500/20">
+      <div className="glass-panel p-5 relative overflow-hidden border-amber-500/20">
         <div className="flex flex-col md:flex-row md:items-start justify-between gap-3 mb-3">
           <div>
             <h3 className="text-lg font-bold text-slate-100 flex items-center gap-2">
-              <BookOpen size={20} className="text-cyan-400" /> {guide.name}
+              <BookOpen size={20} className="text-amber-400" /> {guide.name}
             </h3>
             <div className="flex items-center gap-4 mt-2 flex-wrap">
               <div className="flex items-center gap-1.5">
@@ -75,7 +75,7 @@ export const RegulationGuidePanel = memo(function RegulationGuidePanel() {
           </div>
           <div className="bg-base-950/80 p-3 rounded-xl border border-white/10 text-right shrink-0">
             <div className="text-[10px] text-slate-400">Estimated Budget</div>
-            <div className="text-sm font-mono font-bold text-cyan-300">
+            <div className="text-sm font-mono font-bold text-amber-300">
               ${(guide.budgetRange[0] / 1_000_000).toFixed(0)}M – ${(guide.budgetRange[1] / 1_000_000).toFixed(0)}M
             </div>
           </div>
@@ -92,7 +92,7 @@ export const RegulationGuidePanel = memo(function RegulationGuidePanel() {
           <div className="space-y-1.5">
             {guide.iconicRaces.map(r => (
               <div key={r} className="flex items-center gap-2 text-xs text-slate-300 bg-base-900/50 px-2.5 py-1.5 rounded-lg">
-                <ChevronRight size={12} className="text-cyan-400" /> {r}
+                <ChevronRight size={12} className="text-amber-400" /> {r}
               </div>
             ))}
           </div>
@@ -109,7 +109,7 @@ export const RegulationGuidePanel = memo(function RegulationGuidePanel() {
         {/* Recommended Specs */}
         <div className="glass-panel p-4 border-white/5">
           <h4 className="text-xs font-semibold text-slate-300 uppercase tracking-wider mb-3 flex items-center gap-1.5">
-            <Target size={14} className="text-cyan-400" /> Recommended Performance Targets
+            <Target size={14} className="text-amber-400" /> Recommended Performance Targets
           </h4>
           <div className="space-y-2.5 text-xs">
             <div className="flex justify-between bg-base-900/50 p-2 rounded-lg">
@@ -124,14 +124,14 @@ export const RegulationGuidePanel = memo(function RegulationGuidePanel() {
               <span className="text-slate-400">Aero Importance</span>
               <span className={`capitalize font-bold ${
                 guide.recommendedSpecs.aeroImportance === "critical" ? "text-danger-400" :
-                guide.recommendedSpecs.aeroImportance === "high" ? "text-amber-400" : "text-cyan-300"
+                guide.recommendedSpecs.aeroImportance === "high" ? "text-amber-400" : "text-amber-300"
               }`}>{guide.recommendedSpecs.aeroImportance}</span>
             </div>
             <div className="flex justify-between bg-base-900/50 p-2 rounded-lg">
               <span className="text-slate-400">Reliability Priority</span>
               <span className={`capitalize font-bold ${
                 guide.recommendedSpecs.reliabilityImportance === "critical" ? "text-danger-400" :
-                guide.recommendedSpecs.reliabilityImportance === "high" ? "text-amber-400" : "text-cyan-300"
+                guide.recommendedSpecs.reliabilityImportance === "high" ? "text-amber-400" : "text-amber-300"
               }`}>{guide.recommendedSpecs.reliabilityImportance}</span>
             </div>
           </div>

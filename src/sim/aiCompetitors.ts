@@ -11,11 +11,11 @@ import type {
 
 const COMPANY_TEMPLATES: Omit<AICompanyProfile, "vehicles" | "patents">[] = [
   { id: "apex_motors", name: "Apex Motors", logo: "🔺", color: "#ef4444", strategy: "performance", founded: 0, cash: 500_000_000, brandValue: 65, techLevel: 60, marketShare: 0.12, specialties: ["engine", "aerodynamics"], aggressiveness: 0.7, reactionSpeed: 0.6 },
-  { id: "volta_ev", name: "Volta EV", logo: "⚡", color: "#22d3ee", strategy: "innovation", founded: 0, cash: 800_000_000, brandValue: 55, techLevel: 75, marketShare: 0.08, specialties: ["battery", "electronics"], aggressiveness: 0.5, reactionSpeed: 0.8 },
+  { id: "volta_ev", name: "Volta EV", logo: "⚡", color: "#fbbf24", strategy: "innovation", founded: 0, cash: 800_000_000, brandValue: 55, techLevel: 75, marketShare: 0.08, specialties: ["battery", "electronics"], aggressiveness: 0.5, reactionSpeed: 0.8 },
   { id: "meridian_luxury", name: "Meridian", logo: "👑", color: "#d4af37", strategy: "luxury", founded: 0, cash: 1_200_000_000, brandValue: 85, techLevel: 50, marketShare: 0.15, specialties: ["interior", "safety"], aggressiveness: 0.3, reactionSpeed: 0.4 },
   { id: "thunder_auto", name: "Thunder Auto", logo: "🌩️", color: "#f97316", strategy: "performance", founded: 0, cash: 350_000_000, brandValue: 50, techLevel: 55, marketShare: 0.07, specialties: ["engine", "chassis"], aggressiveness: 0.8, reactionSpeed: 0.7 },
   { id: "greenpath", name: "GreenPath", logo: "🌿", color: "#22c55e", strategy: "value", founded: 0, cash: 600_000_000, brandValue: 40, techLevel: 45, marketShare: 0.18, specialties: ["manufacturing", "battery"], aggressiveness: 0.4, reactionSpeed: 0.5 },
-  { id: "pinnacle_gt", name: "Pinnacle GT", logo: "🏔️", color: "#8b5cf6", strategy: "balanced", founded: 0, cash: 450_000_000, brandValue: 58, techLevel: 58, marketShare: 0.10, specialties: ["aerodynamics", "chassis"], aggressiveness: 0.6, reactionSpeed: 0.6 },
+  { id: "pinnacle_gt", name: "Pinnacle GT", logo: "🏔️", color: "#f59e0b", strategy: "balanced", founded: 0, cash: 450_000_000, brandValue: 58, techLevel: 58, marketShare: 0.10, specialties: ["aerodynamics", "chassis"], aggressiveness: 0.6, reactionSpeed: 0.6 },
 ];
 
 const VEHICLE_NAME_PARTS = {

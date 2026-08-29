@@ -120,7 +120,7 @@ interface ExteriorComponentMesh3DProps {
 }
 
 const HOVER_GLOW_COLOR = 0x0284c7;
-const SELECT_GLOW_COLOR = 0x38bdf8;
+const SELECT_GLOW_COLOR = 0xfbbf24;
 
 /** Zone a classified GLB material maps to for paint-config-driven swaps. */
 function zoneForClassification(
@@ -200,11 +200,11 @@ export const ExteriorComponentMesh3D: React.FC<ExteriorComponentMesh3DProps> = (
       case "trunk_decklid":
         return generateTrunkLid3DGeometry();
       case "front_splitter_tray":
-        return generateFrontSplitter3DGeometry(aeroConfig);
+        return generateFrontSplitter3DGeometry();
       case "rear_diffuser_tunnel":
         return generateRearDiffuser3DGeometry(aeroConfig);
       case "rear_wing_spoiler":
-        return generateRearWing3DGeometry(aeroConfig);
+        return generateRearWing3DGeometry();
       case "side_skirts_aero":
         return generateSideSkirts3DGeometry();
       case "headlights_matrix":

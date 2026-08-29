@@ -49,9 +49,9 @@ export const StatDeltaBadges: React.FC<StatDeltaBadgesProps> = ({
       <div className={`grid grid-cols-2 gap-3 ${className}`}>
         <div className="bg-[#0b0f19]/80 border border-slate-800/80 rounded-2xl p-3">
           <span className="text-[10px] font-mono text-slate-400 flex items-center gap-1">
-            <TrendingUp size={iconSize} className="text-cyan-400" /> Peak Power
+            <TrendingUp size={iconSize} className="text-amber-400" /> Peak Power
           </span>
-          <div className="text-lg font-mono font-bold text-cyan-300 mt-1">
+          <div className="text-lg font-mono font-bold text-amber-300 mt-1">
             +{hp} HP
           </div>
         </div>
@@ -90,7 +90,7 @@ export const StatDeltaBadges: React.FC<StatDeltaBadgesProps> = ({
     return (
       <div className={`flex items-center gap-3 ${textCls} ${className}`}>
         {hp > 0 && (
-          <span className="text-cyan-600 dark:text-cyan-300 flex items-center gap-0.5">
+          <span className="text-amber-600 dark:text-amber-300 flex items-center gap-0.5">
             <TrendingUp size={iconSize} /> +{hp} HP
           </span>
         )}
@@ -116,7 +116,7 @@ export const StatDeltaBadges: React.FC<StatDeltaBadgesProps> = ({
   // sm size (used in ComponentLibrary card)
   return (
     <div className={`grid grid-cols-3 gap-1 ${textCls} ${className}`}>
-      <span className="flex items-center gap-0.5 text-cyan-300">
+      <span className="flex items-center gap-0.5 text-amber-300">
         <TrendingUp size={iconSize} />
         <span>+{hp} HP</span>
       </span>
@@ -147,17 +147,17 @@ export const TorqueClearanceReadout: React.FC<TorqueClearanceReadoutProps> = ({
 
   if (variant === "full") {
     return (
-      <div className={`p-2.5 rounded-xl bg-cyan-950/30 border border-cyan-500/30 font-mono text-[10px] space-y-1.5 ${className}`}>
-        <div className="flex items-center justify-between text-cyan-400 font-bold uppercase tracking-wide">
+      <div className={`p-2.5 rounded-xl bg-amber-950/30 border border-amber-500/30 font-mono text-[10px] space-y-1.5 ${className}`}>
+        <div className="flex items-center justify-between text-amber-400 font-bold uppercase tracking-wide">
           <span className="flex items-center gap-1">
             <Zap size={11} className="text-amber-400" />
             Fastener & Fit Specs
           </span>
-          <span className="text-[9px] text-cyan-300/80">{meta.name}</span>
+          <span className="text-[9px] text-amber-300/80">{meta.name}</span>
         </div>
 
         {meta.torqueSpec && (
-          <div className="flex items-center justify-between bg-base-900/60 p-1.5 rounded-lg border border-cyan-900/40">
+          <div className="flex items-center justify-between bg-base-900/60 p-1.5 rounded-lg border border-amber-900/40">
             <span className="text-slate-300">
               {meta.torqueSpec.fastenerName} ({meta.torqueSpec.boltCount}x)
             </span>
@@ -168,7 +168,7 @@ export const TorqueClearanceReadout: React.FC<TorqueClearanceReadoutProps> = ({
         )}
 
         {meta.clearanceSpec && (
-          <div className="flex items-center justify-between bg-base-900/60 p-1.5 rounded-lg border border-cyan-900/40">
+          <div className="flex items-center justify-between bg-base-900/60 p-1.5 rounded-lg border border-amber-900/40">
             <span className="text-slate-300">{meta.clearanceSpec.label}</span>
             <span className="text-emerald-400 font-bold">
               {meta.clearanceSpec.targetMm} mm ({meta.clearanceSpec.minMm}-{meta.clearanceSpec.maxMm})

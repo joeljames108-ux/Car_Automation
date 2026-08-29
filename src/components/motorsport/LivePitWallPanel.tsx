@@ -63,25 +63,32 @@ const LivePitWallPanelComponent: React.FC = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       if (document.hidden) return;
-      setSpeedKmh(prev => Math.round(270 + Math.sin(Date.now() / 400) * 35));
-      setRpm(prev => Math.round(11200 + Math.sin(Date.now() / 300) * 1200));
-      setGear(prev => (speedKmh > 260 ? 7 : speedKmh > 210 ? 6 : 5));
-      setErsDeployPct(prev => Math.max(15, Math.min(100, Math.round(75 + Math.sin(Date.now() / 1500) * 20))));
-      setGapToLeaderSec(prev => Number((1.42 + Math.sin(Date.now() / 2000) * 0.35).toFixed(3)));
+      const now = Date.now();
+      const nextSpeed = Math.round(270 + Math.sin(now / 400) * 35);
+      const nextRpm = Math.round(11200 + Math.sin(now / 300) * 1200);
+      const nextGear = nextSpeed > 260 ? 7 : nextSpeed > 210 ? 6 : 5;
+      const nextErs = Math.max(15, Math.min(100, Math.round(75 + Math.sin(now / 1500) * 20)));
+      const nextGap = Number((1.42 + Math.sin(now / 2000) * 0.35).toFixed(3));
+
+      setSpeedKmh(nextSpeed);
+      setRpm(nextRpm);
+      setGear(nextGear);
+      setErsDeployPct(nextErs);
+      setGapToLeaderSec(nextGap);
 
       setTires(prev => ({
-        fl: { ...prev.fl, tempC: Math.round(102 + Math.sin(Date.now() / 1200) * 4) },
-        fr: { ...prev.fr, tempC: Math.round(106 + Math.cos(Date.now() / 1100) * 5) },
-        rl: { ...prev.rl, tempC: Math.round(97 + Math.sin(Date.now() / 1400) * 3) },
-        rr: { ...prev.rr, tempC: Math.round(100 + Math.cos(Date.now() / 1300) * 3) },
+        fl: { ...prev.fl, tempC: Math.round(102 + Math.sin(now / 1200) * 4) },
+        fr: { ...prev.fr, tempC: Math.round(106 + Math.cos(now / 1100) * 5) },
+        rl: { ...prev.rl, tempC: Math.round(97 + Math.sin(now / 1400) * 3) },
+        rr: { ...prev.rr, tempC: Math.round(100 + Math.cos(now / 1300) * 3) },
       }));
-    }, 250);
+    }, 400);
 
     return () => clearInterval(interval);
-  }, [speedKmh]);
+  }, []);
 
   const getTireTempColor = (c: number) => {
-    if (c < 85) return "text-blue-400 border-blue-500/40 bg-blue-500/10";
+    if (c < 85) return "text-amber-400 border-amber-500/40 bg-amber-500/10";
     if (c <= 105) return "text-emerald-400 border-emerald-500/40 bg-emerald-500/10";
     return "text-rose-400 border-rose-500/40 bg-rose-500/10 animate-pulse";
   };
@@ -99,15 +106,15 @@ const LivePitWallPanelComponent: React.FC = () => {
         <TrackRacing3DViewport />
         
         {/* Live HUD Floating Overlay */}
-        <div className="absolute top-4 left-4 flex items-center gap-3 bg-base-950/85 backdrop-blur-md px-4 py-2 rounded-xl border border-cyan-500/30 text-xs font-mono shadow-xl pointer-events-none">
-          <div className="flex items-center gap-1.5 text-cyan-300 font-bold">
-            <span className="w-2 h-2 rounded-full bg-cyan-400 animate-ping" />
+        <div className="absolute top-4 left-4 flex items-center gap-3 bg-base-950/85 backdrop-blur-md px-4 py-2 rounded-xl border border-amber-500/30 text-xs font-mono shadow-xl pointer-events-none">
+          <div className="flex items-center gap-1.5 text-amber-300 font-bold">
+            <span className="w-2 h-2 rounded-full bg-amber-400 animate-ping" />
             <span>LIVE PIT WALL TELEMETRY</span>
           </div>
           <span className="text-slate-600">|</span>
           <span className="text-emerald-400 font-bold">P1 LEADER GAP: {gapToLeaderSec}s</span>
           <span className="text-slate-600">|</span>
-          <span className={`font-bold ${drsEnabled ? "text-cyan-400" : "text-slate-500"}`}>
+          <span className={`font-bold ${drsEnabled ? "text-amber-400" : "text-slate-500"}`}>
             DRS: {drsEnabled ? "ACTIVE (ZONE 2)" : "CLOSED"}
           </span>
         </div>
@@ -117,9 +124,9 @@ const LivePitWallPanelComponent: React.FC = () => {
       <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 gap-3">
         <div className="glass-panel p-3.5 rounded-xl border-white/5 bg-slate-900/60">
           <div className="text-[10px] font-mono text-slate-400 uppercase flex items-center gap-1.5">
-            <Gauge size={13} className="text-cyan-400" /> Ground Speed
+            <Gauge size={13} className="text-amber-400" /> Ground Speed
           </div>
-          <div className="text-xl font-mono font-black text-cyan-300 mt-1">
+          <div className="text-xl font-mono font-black text-amber-300 mt-1">
             {speedKmh} <span className="text-xs text-slate-500 font-normal">km/h</span>
           </div>
           <div className="text-[9px] text-slate-500 mt-0.5">Top: 324 km/h</div>
@@ -147,9 +154,9 @@ const LivePitWallPanelComponent: React.FC = () => {
 
         <div className="glass-panel p-3.5 rounded-xl border-white/5 bg-slate-900/60">
           <div className="text-[10px] font-mono text-slate-400 uppercase flex items-center gap-1.5">
-            <Clock size={13} className="text-purple-400" /> Pit Stop Target
+            <Clock size={13} className="text-amber-400" /> Pit Stop Target
           </div>
-          <div className="text-xl font-mono font-black text-purple-300 mt-1">
+          <div className="text-xl font-mono font-black text-amber-300 mt-1">
             LAP {pitWindowLap}
           </div>
           <div className="text-[9px] text-slate-500 mt-0.5">Stationary: ~2.35s</div>
@@ -157,9 +164,9 @@ const LivePitWallPanelComponent: React.FC = () => {
 
         <div className="glass-panel p-3.5 rounded-xl border-white/5 bg-slate-900/60 col-span-2 sm:col-span-1">
           <div className="text-[10px] font-mono text-slate-400 uppercase flex items-center gap-1.5">
-            <Wind size={13} className="text-blue-400" /> Aero Balance
+            <Wind size={13} className="text-amber-400" /> Aero Balance
           </div>
-          <div className="text-xl font-mono font-black text-blue-300 mt-1">
+          <div className="text-xl font-mono font-black text-amber-300 mt-1">
             44.2% <span className="text-xs text-slate-500 font-normal">Front</span>
           </div>
           <div className="text-[9px] text-slate-500 mt-0.5">Downforce: 1,420 kg</div>
@@ -254,7 +261,7 @@ const LivePitWallPanelComponent: React.FC = () => {
           <div className="glass-panel p-5 rounded-2xl border-white/10 bg-slate-900/70 space-y-3">
             <div className="flex items-center justify-between">
               <h3 className="text-xs font-bold text-slate-300 flex items-center gap-2">
-                <Disc className="w-4 h-4 text-cyan-400" />
+                <Disc className="w-4 h-4 text-amber-400" />
                 <span>4-CORNER LIVE TIRE PYROMETRY & THERMALS</span>
               </h3>
               <span className="text-[10px] font-mono text-slate-400 bg-slate-950 px-2 py-0.5 rounded border border-white/5">
@@ -316,7 +323,7 @@ const LivePitWallPanelComponent: React.FC = () => {
           {/* Live Driver Radio Feed */}
           <div className="glass-panel p-5 rounded-2xl border-white/10 bg-slate-900/70 space-y-3">
             <h3 className="text-xs font-bold text-slate-300 flex items-center gap-2">
-              <Radio className="w-4 h-4 text-cyan-400 animate-pulse" />
+              <Radio className="w-4 h-4 text-amber-400 animate-pulse" />
               <span>LIVE DRIVER RADIO TELEMETRY FEED</span>
             </h3>
 
@@ -333,7 +340,7 @@ const LivePitWallPanelComponent: React.FC = () => {
                   }`}
                 >
                   <div className="flex justify-between text-[10px] font-mono mb-1">
-                    <span className="font-bold text-cyan-400">{m.sender}</span>
+                    <span className="font-bold text-amber-400">{m.sender}</span>
                     <span className="text-slate-400">LAP {m.lap}</span>
                   </div>
                   <div className="font-mono text-[11px] leading-relaxed">{m.msg}</div>

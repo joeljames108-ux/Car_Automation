@@ -366,7 +366,7 @@ function CinemaTab() {
                     key={m.id}
                     onClick={() => setModelId(m.id)}
                     className={`px-2.5 py-2 rounded-lg border text-left transition-all ${
-                      modelId === m.id ? "border-violet-400/50 bg-violet-400/10" : "border-white/8 bg-white/[0.03] hover:border-white/20"
+                      modelId === m.id ? "border-violet-400/50 bg-amber-400/10" : "border-white/8 bg-white/[0.03] hover:border-white/20"
                     }`}
                   >
                     <span className="text-[10px] font-bold text-slate-100 block truncate">{m.label}</span>
@@ -406,7 +406,7 @@ function CinemaTab() {
               <div key={s.shot} className="rounded-xl border border-white/10 bg-[#0a111e]/70 p-3 flex flex-col gap-2">
                 <div className="flex items-center justify-between">
                   <span className="flex items-center gap-1.5 text-[11px] font-bold text-slate-100">
-                    <Film size={11} className="text-violet-300" /> {s.shot}
+                    <Film size={11} className="text-amber-300" /> {s.shot}
                   </span>
                   <NeonHorizonButton size="xs" variant="neon" icon={<Sparkles size={10} />} onClick={() => shootShot(s.shot, s.prompt)}>
                     Shoot

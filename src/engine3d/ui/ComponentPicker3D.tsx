@@ -78,7 +78,7 @@ export const ComponentPicker3D: React.FC = () => {
           {/* Progress Bar */}
           <div className="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden my-3">
             <div
-              className="bg-gradient-to-r from-cyan-500 to-indigo-500 h-full transition-all duration-300"
+              className="bg-gradient-to-r from-amber-500 to-indigo-500 h-full transition-all duration-300"
               style={{ width: `${progress.percentage}%` }}
             />
           </div>
@@ -91,7 +91,7 @@ export const ComponentPicker3D: React.FC = () => {
                 onClick={() => setActiveCategory(cat.id)}
                 className={`px-2.5 py-1 rounded-md whitespace-nowrap font-medium transition-colors ${
                   activeCategory === cat.id
-                    ? 'bg-cyan-600 text-white font-semibold shadow-sm'
+                    ? 'bg-amber-600 text-white font-semibold shadow-sm'
                     : 'bg-slate-800/60 text-slate-400 hover:text-slate-200 hover:bg-slate-800'
                 }`}
               >

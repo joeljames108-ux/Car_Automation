@@ -25,7 +25,7 @@ export const TrimDetailsSVG: React.FC<TrimDetailsSVGProps> = ({
   onMouseEnter,
   onMouseLeave,
 }) => {
-  const strokeColor = isSelected ? "#38bdf8" : isHovered ? "#0284c7" : "#020617";
+  const strokeColor = isSelected ? "#fbbf24" : isHovered ? "#0284c7" : "#020617";
 
   return (
     <g
@@ -53,7 +53,7 @@ export const TrimDetailsSVG: React.FC<TrimDetailsSVGProps> = ({
       {type === "handles" && (
         <g id="flush_door_handles">
           <rect x="510" y="295" width="32" height="7" rx="2.5" fill="#0f172a" stroke={strokeColor} strokeWidth="0.8" />
-          <circle cx="516" cy="298.5" r="1.5" fill="#38bdf8" />
+          <circle cx="516" cy="298.5" r="1.5" fill="#fbbf24" />
         </g>
       )}
 

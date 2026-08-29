@@ -315,7 +315,7 @@ export async function executeJob(
 
 function extractPaint(prompt: string): string {
   const m = prompt.match(/#([0-9a-fA-F]{6})/);
-  return m ? `#${m[1]}` : "#38bdf8";
+  return m ? `#${m[1]}` : "#fbbf24";
 }
 
 function delay(ms: number) {

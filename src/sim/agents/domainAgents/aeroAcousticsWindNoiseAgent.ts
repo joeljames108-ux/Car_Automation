@@ -9,7 +9,7 @@ const AERO_ACOUSTICS_IDENTITY: AgentIdentity = {
   name: "Aero-Acoustics & Wind Noise Specialist",
   domain: "aero_acoustics",
   icon: "🌬️",
-  color: "#6366f1",
+  color: "#f59e0b",
   priority: 5,
   description: "Predicts side-mirror aero whistle, sunroof buffeting resonances, and high-speed A-pillar cabin wind noise.",
   capabilities: ["Side Mirror Whistle Model", "Helmotz Buffeting Frequency", "A-Pillar Vortex Noise", "Glass Acoustic Thickness"],

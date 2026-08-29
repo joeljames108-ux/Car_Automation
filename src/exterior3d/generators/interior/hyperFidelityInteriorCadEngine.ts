@@ -731,7 +731,7 @@ export class HyperFidelityInteriorCadEngine {
     const dy = exploded * 0.35;
 
     const chromolyMat = new THREE.MeshPhysicalMaterial({
-      color: 0x38bdf8,
+      color: 0xfbbf24,
       metalness: 0.95,
       roughness: 0.18,
       clearcoat: 0.6,

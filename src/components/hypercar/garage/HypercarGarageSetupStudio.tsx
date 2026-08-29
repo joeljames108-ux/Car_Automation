@@ -225,9 +225,9 @@ export const HypercarGarageSetupStudio: React.FC<HypercarGarageSetupStudioProps>
               playHMIClickSound();
               setShowOptimizerModal(true);
             }}
-            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-purple-600/30 to-indigo-600/30 border border-purple-500/50 text-purple-300 font-bold text-xs hover:bg-purple-600/40 transition-all cursor-pointer shadow-lg shadow-purple-500/10"
+            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-amber-600/30 to-indigo-600/30 border border-amber-500/50 text-amber-300 font-bold text-xs hover:bg-amber-600/40 transition-all cursor-pointer shadow-lg shadow-purple-500/10"
           >
-            <Sparkles className="w-4 h-4 text-purple-400" />
+            <Sparkles className="w-4 h-4 text-amber-400" />
             AI Motorsport Setup Optimizer
           </button>
 
@@ -290,9 +290,9 @@ export const HypercarGarageSetupStudio: React.FC<HypercarGarageSetupStudioProps>
               <div className="grid grid-cols-2 gap-2">
                 {[
                   { id: "DRY_OPTIMAL", label: "Dry Optimal", icon: <Sun size={12} className="text-amber-400" /> },
-                  { id: "DAMP_TRACK", label: "Damp Track", icon: <CloudDrizzle size={12} className="text-cyan-400" /> },
-                  { id: "WET_RAIN", label: "Wet Rain", icon: <CloudRain size={12} className="text-blue-400" /> },
-                  { id: "TORRENTIAL_MONSOON", label: "Monsoon", icon: <CloudLightning size={12} className="text-purple-400" /> },
+                  { id: "DAMP_TRACK", label: "Damp Track", icon: <CloudDrizzle size={12} className="text-amber-400" /> },
+                  { id: "WET_RAIN", label: "Wet Rain", icon: <CloudRain size={12} className="text-amber-400" /> },
+                  { id: "TORRENTIAL_MONSOON", label: "Monsoon", icon: <CloudLightning size={12} className="text-amber-400" /> },
                 ].map((w) => (
                   <button
                     key={w.id}
@@ -326,7 +326,7 @@ export const HypercarGarageSetupStudio: React.FC<HypercarGarageSetupStudioProps>
               </div>
               <div className="p-2 rounded-lg bg-black/40 border border-white/5">
                 <span className="text-zinc-500 block text-[9px]">NIGHT RACING</span>
-                <span className="font-bold text-cyan-300">{activeCircuit.nightRacingHours} Hours</span>
+                <span className="font-bold text-amber-300">{activeCircuit.nightRacingHours} Hours</span>
               </div>
             </div>
           </div>
@@ -348,7 +348,7 @@ export const HypercarGarageSetupStudio: React.FC<HypercarGarageSetupStudioProps>
               </div>
               <div className="p-2 rounded-xl bg-black/40 border border-white/5">
                 <span className="text-[10px] text-zinc-500 block">L/D EFFICIENCY</span>
-                <span className="font-bold text-cyan-300">{aeroEfficiencyIndex}</span>
+                <span className="font-bold text-amber-300">{aeroEfficiencyIndex}</span>
               </div>
               <div className="p-2 rounded-xl bg-black/40 border border-white/5">
                 <span className="text-[10px] text-zinc-500 block">RELIABILITY INDEX</span>
@@ -378,7 +378,7 @@ export const HypercarGarageSetupStudio: React.FC<HypercarGarageSetupStudioProps>
                 </button>
                 <button
                   onClick={() => applyPreset("lemans_low_drag")}
-                  className="px-2 py-1 rounded bg-black/40 hover:bg-zinc-800 text-[10px] font-mono font-bold text-cyan-300 border border-white/10"
+                  className="px-2 py-1 rounded bg-black/40 hover:bg-zinc-800 text-[10px] font-mono font-bold text-amber-300 border border-white/10"
                 >
                   Le Mans Low Drag
                 </button>
@@ -396,7 +396,7 @@ export const HypercarGarageSetupStudio: React.FC<HypercarGarageSetupStudioProps>
               <div className="space-y-2">
                 <div className="flex justify-between text-xs font-mono">
                   <span className="text-zinc-400 flex items-center gap-1">
-                    <Wind className="w-3.5 h-3.5 text-cyan-400" /> REAR WING ANGLE
+                    <Wind className="w-3.5 h-3.5 text-amber-400" /> REAR WING ANGLE
                   </span>
                   <span className="text-amber-400 font-bold">{setup.rearWingAngleDeg.toFixed(1)}°</span>
                 </div>
@@ -539,8 +539,8 @@ export const HypercarGarageSetupStudio: React.FC<HypercarGarageSetupStudioProps>
                   { id: "SOFT_SPRINT", name: "Soft Compound", stints: "1 Stint (Sprint/Qualifying)", color: "border-red-500/50 bg-red-500/10 text-red-300" },
                   { id: "MEDIUM_DOUBLE_STINT", name: "Medium Compound", stints: "2 Stints (Standard Race)", color: "border-yellow-500/50 bg-yellow-500/10 text-yellow-300" },
                   { id: "HARD_TRIPLE_STINT", name: "Hard Compound", stints: "3 Stints (High Wear/Le Mans)", color: "border-zinc-500/50 bg-zinc-500/10 text-zinc-300" },
-                  { id: "WET_INTERMEDIATE", name: "Intermediate Wet", stints: "Damp to Light Rain", color: "border-blue-500/50 bg-blue-500/10 text-blue-300" },
-                  { id: "FULL_WET_MONSOON", name: "Full Monsoon Wet", stints: "Heavy Standing Water", color: "border-purple-500/50 bg-purple-500/10 text-purple-300" },
+                  { id: "WET_INTERMEDIATE", name: "Intermediate Wet", stints: "Damp to Light Rain", color: "border-amber-500/50 bg-amber-500/10 text-amber-300" },
+                  { id: "FULL_WET_MONSOON", name: "Full Monsoon Wet", stints: "Heavy Standing Water", color: "border-amber-500/50 bg-amber-500/10 text-amber-300" },
                 ].map((t) => {
                   const isRec = recommendedTires.includes(t.id);
                   return (
@@ -570,11 +570,11 @@ export const HypercarGarageSetupStudio: React.FC<HypercarGarageSetupStudioProps>
       {/* AI Motorsport Setup Optimizer Modal */}
       {showOptimizerModal && (
         <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-6">
-          <div className="bg-[#0b0f19] border border-purple-500/30 rounded-3xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col shadow-2xl">
+          <div className="bg-[#0b0f19] border border-amber-500/30 rounded-3xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col shadow-2xl">
             {/* Modal Header */}
-            <div className="p-6 border-b border-white/10 flex items-center justify-between bg-purple-950/20">
+            <div className="p-6 border-b border-white/10 flex items-center justify-between bg-amber-950/20">
               <div className="flex items-center gap-3">
-                <div className="p-2.5 rounded-2xl bg-purple-500/20 border border-purple-500/30 text-purple-400">
+                <div className="p-2.5 rounded-2xl bg-amber-500/20 border border-amber-500/30 text-amber-400">
                   <Sparkles className="w-6 h-6" />
                 </div>
                 <div>
@@ -613,7 +613,7 @@ export const HypercarGarageSetupStudio: React.FC<HypercarGarageSetupStudioProps>
                       onClick={() => setOptimizationGoal(g.id as OptimizationGoal)}
                       className={`p-3 rounded-2xl border text-left transition-all cursor-pointer ${
                         optimizationGoal === g.id
-                          ? "bg-purple-500/20 border-purple-500 text-purple-200 ring-1 ring-purple-500/50"
+                          ? "bg-amber-500/20 border-amber-500 text-amber-200 ring-1 ring-purple-500/50"
                           : "bg-zinc-900/60 border-white/10 text-zinc-400 hover:text-white"
                       }`}
                     >
@@ -626,26 +626,26 @@ export const HypercarGarageSetupStudio: React.FC<HypercarGarageSetupStudioProps>
 
               {/* Optimization KPI Cards */}
               <div className="grid grid-cols-4 gap-3 font-mono">
-                <div className="p-3.5 rounded-2xl bg-black/40 border border-purple-500/20">
-                  <span className="text-[9px] text-purple-400 block font-bold">EST. LAP TIME</span>
+                <div className="p-3.5 rounded-2xl bg-black/40 border border-amber-500/20">
+                  <span className="text-[9px] text-amber-400 block font-bold">EST. LAP TIME</span>
                   <span className="text-xl font-black text-white">{optimizerResult.predictedLapTimeString}</span>
                   <span className="text-[9px] text-emerald-400 block mt-1">
                     -{optimizerResult.lapTimeSavedVsBaselineSec}s vs Baseline
                   </span>
                 </div>
-                <div className="p-3.5 rounded-2xl bg-black/40 border border-purple-500/20">
-                  <span className="text-[9px] text-cyan-400 block font-bold">TOP SPEED</span>
+                <div className="p-3.5 rounded-2xl bg-black/40 border border-amber-500/20">
+                  <span className="text-[9px] text-amber-400 block font-bold">TOP SPEED</span>
                   <span className="text-xl font-black text-white">{optimizerResult.topSpeedKmh} km/h</span>
                   <span className="text-[9px] text-zinc-400 block mt-1">
                     Min Apex: {optimizerResult.minCorneringSpeedKmh} km/h
                   </span>
                 </div>
-                <div className="p-3.5 rounded-2xl bg-black/40 border border-purple-500/20">
+                <div className="p-3.5 rounded-2xl bg-black/40 border border-amber-500/20">
                   <span className="text-[9px] text-amber-400 block font-bold">AERO EFFICIENCY</span>
                   <span className="text-xl font-black text-white">{optimizerResult.aerodynamicEfficiencyLoverD} L/D</span>
                   <span className="text-[9px] text-zinc-400 block mt-1">Wing Angle: {optimizerResult.optimalSetup.rearWingAngleDeg}°</span>
                 </div>
-                <div className="p-3.5 rounded-2xl bg-black/40 border border-purple-500/20">
+                <div className="p-3.5 rounded-2xl bg-black/40 border border-amber-500/20">
                   <span className="text-[9px] text-rose-400 block font-bold">STINT LONGEVITY</span>
                   <span className="text-xl font-black text-white">{optimizerResult.stintMaxLaps} Laps</span>
                   <span className="text-[9px] text-zinc-400 block mt-1">{optimizerResult.tireWearPctPerLap}% Wear / lap</span>
@@ -676,8 +676,8 @@ export const HypercarGarageSetupStudio: React.FC<HypercarGarageSetupStudioProps>
               {/* Pareto Frontier Comparison */}
               <div className="p-4 rounded-2xl bg-zinc-900/60 border border-white/10 space-y-3">
                 <div className="flex items-center justify-between">
-                  <span className="font-mono text-purple-300 text-[10px] uppercase font-bold flex items-center gap-1.5">
-                    <BarChart3 className="w-4 h-4 text-purple-400" />
+                  <span className="font-mono text-amber-300 text-[10px] uppercase font-bold flex items-center gap-1.5">
+                    <BarChart3 className="w-4 h-4 text-amber-400" />
                     Pareto Trade-Off Frontier (Downforce vs Top Speed vs Lap Time)
                   </span>
                 </div>
@@ -689,7 +689,7 @@ export const HypercarGarageSetupStudio: React.FC<HypercarGarageSetupStudioProps>
                     >
                       <div className="font-bold text-white w-48">{pt.setupName}</div>
                       <div className="text-zinc-400">DF: {pt.downforceNAt250} N</div>
-                      <div className="text-cyan-300">Drag: {pt.dragNAt250} N</div>
+                      <div className="text-amber-300">Drag: {pt.dragNAt250} N</div>
                       <div className="text-amber-400">VMax: {pt.topSpeedKmh} km/h</div>
                       <div className="text-emerald-400 font-bold">Lap: {pt.predictedLapTimeSec}s</div>
                       <div className="text-rose-300">Life: {pt.tireLifeLaps} Laps</div>
@@ -699,15 +699,15 @@ export const HypercarGarageSetupStudio: React.FC<HypercarGarageSetupStudioProps>
               </div>
 
               {/* Engineering Recommendations */}
-              <div className="p-4 rounded-2xl bg-purple-950/20 border border-purple-500/30 space-y-2">
-                <span className="font-mono text-purple-300 text-[10px] uppercase font-bold flex items-center gap-1.5">
-                  <Cpu className="w-4 h-4 text-purple-400" />
+              <div className="p-4 rounded-2xl bg-amber-950/20 border border-amber-500/30 space-y-2">
+                <span className="font-mono text-amber-300 text-[10px] uppercase font-bold flex items-center gap-1.5">
+                  <Cpu className="w-4 h-4 text-amber-400" />
                   Race Engineer Advisory Notes
                 </span>
                 <ul className="space-y-1 text-zinc-300 text-[11px]">
                   {optimizerResult.engineeringRecommendations.map((rec, i) => (
                     <li key={i} className="flex items-start gap-2">
-                      <span className="text-purple-400 font-bold">•</span>
+                      <span className="text-amber-400 font-bold">•</span>
                       <span>{rec}</span>
                     </li>
                   ))}
@@ -722,7 +722,7 @@ export const HypercarGarageSetupStudio: React.FC<HypercarGarageSetupStudioProps>
               </div>
               <button
                 onClick={handleApplyOptimizerSetup}
-                className="flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-black text-xs uppercase tracking-wider shadow-lg shadow-purple-500/20 hover:brightness-110 transition-all cursor-pointer"
+                className="flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-amber-600 to-indigo-600 text-white font-black text-xs uppercase tracking-wider shadow-lg shadow-purple-500/20 hover:brightness-110 transition-all cursor-pointer"
               >
                 <CheckCircle2 className="w-4 h-4" />
                 Apply AI Optimal Setup to Pit Garage

@@ -15,10 +15,10 @@ export const DrivetrainStudio: React.FC = memo(function DrivetrainStudio() {
   return (
     <div className="space-y-6 animate-fade-in-up">
       {/* Studio Header */}
-      <div className="glass-panel p-6 border-blue-500/20 bg-gradient-to-r from-slate-900 via-slate-900/90 to-blue-950/30 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+      <div className="glass-panel p-6 border-amber-500/20 bg-gradient-to-r from-slate-900 via-slate-900/90 to-amber-950/30 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2 mb-2">
-            <Layers className="text-blue-400" size={24} />
+            <Layers className="text-amber-400" size={24} />
             <h2 className="text-xl font-bold text-slate-100 tracking-wide">
               8-Speed Seamless Shift Gearbox & Differential
             </h2>
@@ -30,7 +30,7 @@ export const DrivetrainStudio: React.FC = memo(function DrivetrainStudio() {
 
         <div className="flex items-center gap-3">
           <div className="text-right">
-            <div className="text-2xl font-black font-mono text-blue-400">
+            <div className="text-2xl font-black font-mono text-amber-400">
               {gb.shiftTimeMs} <span className="text-xs text-slate-400 font-normal">ms</span>
             </div>
             <div className="text-[10px] text-slate-400 uppercase tracking-wider">Seamless Shift Time</div>
@@ -44,7 +44,7 @@ export const DrivetrainStudio: React.FC = memo(function DrivetrainStudio() {
         <div className="bg-slate-900/60 p-4 rounded-xl border border-slate-800 space-y-3">
           <label className="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center justify-between">
             <span>Transmission Structural Casing</span>
-            <span className="text-[10px] text-blue-400 font-mono">Rear Suspension Mount</span>
+            <span className="text-[10px] text-amber-400 font-mono">Rear Suspension Mount</span>
           </label>
           <select
             value={gb.casingType}
@@ -52,7 +52,7 @@ export const DrivetrainStudio: React.FC = memo(function DrivetrainStudio() {
               playHMIClickSound();
               updateGearbox({ casingType: e.target.value as F1GearboxCasingType });
             }}
-            className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-blue-500 cursor-pointer"
+            className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-amber-500 cursor-pointer"
           >
             <option value="FULL_CARBON_MONOCOQUE">Full Carbon Fiber Monocoque (42 kg)</option>
             <option value="CARBON_TITANIUM_HYBRID">Carbon-Titanium Hybrid Casing (46 kg)</option>
@@ -67,7 +67,7 @@ export const DrivetrainStudio: React.FC = memo(function DrivetrainStudio() {
         <div className="bg-slate-900/60 p-4 rounded-xl border border-slate-800 space-y-2">
           <div className="flex justify-between items-center text-xs">
             <span className="font-bold text-slate-300 uppercase tracking-wider">Final Drive Ratio</span>
-            <span className="font-mono text-blue-400 font-bold">{gb.finalDriveRatio.toFixed(2)}:1</span>
+            <span className="font-mono text-amber-400 font-bold">{gb.finalDriveRatio.toFixed(2)}:1</span>
           </div>
           <input
             type="range"
@@ -76,7 +76,7 @@ export const DrivetrainStudio: React.FC = memo(function DrivetrainStudio() {
             step="0.02"
             value={gb.finalDriveRatio}
             onChange={(e) => updateGearbox({ finalDriveRatio: parseFloat(e.target.value) })}
-            className="w-full accent-blue-400 cursor-pointer"
+            className="w-full accent-amber-400 cursor-pointer"
           />
           <div className="flex justify-between text-[10px] text-slate-500">
             <span>3.20 (Monza Top Speed)</span>
@@ -89,7 +89,7 @@ export const DrivetrainStudio: React.FC = memo(function DrivetrainStudio() {
         <div className="bg-slate-900/60 p-4 rounded-xl border border-slate-800 space-y-2">
           <div className="flex justify-between items-center text-xs">
             <span className="font-bold text-slate-300 uppercase tracking-wider">Diff Lock On Throttle</span>
-            <span className="font-mono text-blue-400 font-bold">{gb.differentialLockOnPowerPercent}%</span>
+            <span className="font-mono text-amber-400 font-bold">{gb.differentialLockOnPowerPercent}%</span>
           </div>
           <input
             type="range"
@@ -98,7 +98,7 @@ export const DrivetrainStudio: React.FC = memo(function DrivetrainStudio() {
             step="1"
             value={gb.differentialLockOnPowerPercent}
             onChange={(e) => updateGearbox({ differentialLockOnPowerPercent: parseInt(e.target.value) })}
-            className="w-full accent-blue-400 cursor-pointer"
+            className="w-full accent-amber-400 cursor-pointer"
           />
           <div className="flex justify-between text-[10px] text-slate-500">
             <span>40% (Loose Exit)</span>
@@ -111,7 +111,7 @@ export const DrivetrainStudio: React.FC = memo(function DrivetrainStudio() {
         <div className="bg-slate-900/60 p-4 rounded-xl border border-slate-800 space-y-2">
           <div className="flex justify-between items-center text-xs">
             <span className="font-bold text-slate-300 uppercase tracking-wider">Diff Lock Off Throttle (Turn-In)</span>
-            <span className="font-mono text-blue-400 font-bold">{gb.differentialLockOffPowerPercent}%</span>
+            <span className="font-mono text-amber-400 font-bold">{gb.differentialLockOffPowerPercent}%</span>
           </div>
           <input
             type="range"
@@ -120,7 +120,7 @@ export const DrivetrainStudio: React.FC = memo(function DrivetrainStudio() {
             step="1"
             value={gb.differentialLockOffPowerPercent}
             onChange={(e) => updateGearbox({ differentialLockOffPowerPercent: parseInt(e.target.value) })}
-            className="w-full accent-blue-400 cursor-pointer"
+            className="w-full accent-amber-400 cursor-pointer"
           />
           <div className="flex justify-between text-[10px] text-slate-500">
             <span>25% (Agile Rotation)</span>
@@ -133,7 +133,7 @@ export const DrivetrainStudio: React.FC = memo(function DrivetrainStudio() {
         <div className="bg-slate-900/60 p-4 rounded-xl border border-slate-800 space-y-2">
           <div className="flex justify-between items-center text-xs">
             <span className="font-bold text-slate-300 uppercase tracking-wider">Differential Initial Preload</span>
-            <span className="font-mono text-blue-400 font-bold">{gb.differentialPreloadNm} Nm</span>
+            <span className="font-mono text-amber-400 font-bold">{gb.differentialPreloadNm} Nm</span>
           </div>
           <input
             type="range"
@@ -142,7 +142,7 @@ export const DrivetrainStudio: React.FC = memo(function DrivetrainStudio() {
             step="5"
             value={gb.differentialPreloadNm}
             onChange={(e) => updateGearbox({ differentialPreloadNm: parseInt(e.target.value) })}
-            className="w-full accent-blue-400 cursor-pointer"
+            className="w-full accent-amber-400 cursor-pointer"
           />
           <div className="flex justify-between text-[10px] text-slate-500">
             <span>40 Nm (Wet Weather)</span>
@@ -155,7 +155,7 @@ export const DrivetrainStudio: React.FC = memo(function DrivetrainStudio() {
         <div className="bg-slate-900/60 p-4 rounded-xl border border-slate-800 space-y-3">
           <label className="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center justify-between">
             <span>Half-Shaft Torque Tube</span>
-            <span className="text-[10px] text-blue-400 font-mono">1000 Nm Rating</span>
+            <span className="text-[10px] text-amber-400 font-mono">1000 Nm Rating</span>
           </label>
           <select
             value={gb.driveshaftMaterial}
@@ -163,7 +163,7 @@ export const DrivetrainStudio: React.FC = memo(function DrivetrainStudio() {
               playHMIClickSound();
               updateGearbox({ driveshaftMaterial: e.target.value as any });
             }}
-            className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-blue-500 cursor-pointer"
+            className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-amber-500 cursor-pointer"
           >
             <option value="CARBON_FIBER_OVERWRAPPED_TI">Carbon Overwrapped Titanium (Ultra Light)</option>
             <option value="HOLLOW_AERMET_STEEL">Hollow AerMet 100 Structural Steel</option>

@@ -27,7 +27,7 @@ export class SculptedBodyPanelsGenerator {
     trackWidthMm: number,
     materialGrade: MaterialGrade = 'forged',
     isXRay: boolean = false,
-    paintColorHex: number = 0x2563eb,
+    paintColorHex: number = 0xb45309,
     articulation: BodyClosuresArticulation = {},
     paintConfig?: Partial<PaintConfiguration>,
     trackWidthFrontMm?: number
@@ -124,7 +124,7 @@ export class SculptedBodyPanelsGenerator {
     });
 
     const titaniumExhaustMaterial = new THREE.MeshStandardMaterial({
-      color: 0x60a5fa, // Blue-purple titanium flame tint
+      color: 0xfbbf24, // Blue-purple titanium flame tint
       metalness: 0.96,
       roughness: 0.15,
     });
@@ -166,7 +166,7 @@ export class SculptedBodyPanelsGenerator {
     });
 
     const cyanHandleGlowMat = new THREE.MeshBasicMaterial({
-      color: 0x38bdf8, // Cyan Touch Handle Micro-LED
+      color: 0xfbbf24, // Cyan Touch Handle Micro-LED
     });
 
     const glassMaterial = new THREE.MeshPhysicalMaterial({
@@ -593,7 +593,7 @@ export class SculptedBodyPanelsGenerator {
     const badgeGeo = new THREE.CylinderGeometry(0.028, 0.028, 0.006, 24);
     badgeGeo.rotateX(Math.PI / 2);
     const badgeMat = new THREE.MeshStandardMaterial({
-      color: 0x38bdf8,
+      color: 0xfbbf24,
       metalness: 0.95,
       roughness: 0.1,
     });

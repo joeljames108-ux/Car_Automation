@@ -49,12 +49,12 @@ export function EVCompletionGate({
 
   return (
     <div
-      className={`space-y-6 p-6 md:p-8 rounded-3xl bg-gradient-to-b from-[#0e071c]/95 via-[#130b26]/90 to-[#060a14]/95 border border-purple-500/40 backdrop-blur-3xl shadow-[0_20px_60px_rgba(0,0,0,0.8)] select-none ${className}`}
+      className={`space-y-6 p-6 md:p-8 rounded-3xl bg-gradient-to-b from-[#0e071c]/95 via-[#130b26]/90 to-[#060a14]/95 border border-amber-500/40 backdrop-blur-3xl shadow-[0_20px_60px_rgba(0,0,0,0.8)] select-none ${className}`}
     >
       {/* ── CELEBRATION HEADER BANNER ── */}
       <div className="text-center space-y-3 max-w-2xl mx-auto">
-        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-purple-500/15 border border-purple-500/40 text-purple-300 text-xs font-mono font-extrabold tracking-widest uppercase shadow-[0_0_20px_rgba(192,132,252,0.3)]">
-          <Award size={15} className="text-purple-400" />
+        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-500/15 border border-amber-500/40 text-amber-300 text-xs font-mono font-extrabold tracking-widest uppercase shadow-[0_0_20px_rgba(192,132,252,0.3)]">
+          <Award size={15} className="text-amber-400" />
           <span>EV POWERTRAIN ASSEMBLY COMPLETED</span>
         </div>
         <h2 className="text-2xl md:text-3xl font-extrabold font-mono text-slate-100">
@@ -68,12 +68,12 @@ export function EVCompletionGate({
 
       {/* ── CUMULATIVE SPECS TILES ── */}
       <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
-        <div className="p-3 rounded-2xl bg-base-950/80 border border-purple-500/30 text-center">
+        <div className="p-3 rounded-2xl bg-base-950/80 border border-amber-500/30 text-center">
           <span className="block text-[10px] font-mono text-slate-400 uppercase">Total Motor Power</span>
-          <span className="text-lg md:text-xl font-extrabold font-mono text-purple-300">
+          <span className="text-lg md:text-xl font-extrabold font-mono text-amber-300">
             {currentTotalStats.hp} hp
           </span>
-          <span className="text-[10px] font-mono text-purple-400/80 block mt-0.5">
+          <span className="text-[10px] font-mono text-amber-400/80 block mt-0.5">
             {Math.round(currentTotalStats.hp / 1.341)} kW Output
           </span>
         </div>
@@ -88,12 +88,12 @@ export function EVCompletionGate({
           </span>
         </div>
 
-        <div className="p-3 rounded-2xl bg-base-950/80 border border-cyan-500/30 text-center">
+        <div className="p-3 rounded-2xl bg-base-950/80 border border-amber-500/30 text-center">
           <span className="block text-[10px] font-mono text-slate-400 uppercase">Battery Capacity</span>
-          <span className="text-lg md:text-xl font-extrabold font-mono text-cyan-300">
+          <span className="text-lg md:text-xl font-extrabold font-mono text-amber-300">
             {engineConfig.batteryCapacity || 90} kWh
           </span>
-          <span className="text-[10px] font-mono text-cyan-400/80 block mt-0.5">
+          <span className="text-[10px] font-mono text-amber-400/80 block mt-0.5">
             ~{sim.electricRange || 550} km Range
           </span>
         </div>
@@ -120,7 +120,7 @@ export function EVCompletionGate({
         <button
           type="button"
           onClick={onProceedToSummary}
-          className="w-full py-3.5 px-6 rounded-2xl bg-gradient-to-r from-purple-500 via-emerald-500 to-cyan-500 hover:from-purple-400 hover:to-cyan-400 text-black font-mono font-extrabold text-xs md:text-sm uppercase tracking-wider transition-all duration-300 shadow-[0_0_25px_rgba(192,132,252,0.5)] flex items-center justify-center gap-2 group cursor-pointer active:scale-98"
+          className="w-full py-3.5 px-6 rounded-2xl bg-gradient-to-r from-amber-500 via-emerald-500 to-amber-500 hover:from-amber-400 hover:to-amber-400 text-black font-mono font-extrabold text-xs md:text-sm uppercase tracking-wider transition-all duration-300 shadow-[0_0_25px_rgba(192,132,252,0.5)] flex items-center justify-center gap-2 group cursor-pointer active:scale-98"
         >
           <Sparkles size={16} className="animate-spin" />
           <span>View Final EV Dyno & Telemetry Certification</span>

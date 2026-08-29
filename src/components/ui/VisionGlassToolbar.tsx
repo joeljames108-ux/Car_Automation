@@ -40,7 +40,7 @@ function ToolbarButton({ action }: { action: ToolbarAction }) {
       <button
         onClick={action.onClick}
         aria-label={action.label}
-        className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+        className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500"
         style={{
           position: "relative",
           display: "flex",
@@ -174,9 +174,9 @@ function VisionGlassToolbarComponent({ actions }: VisionGlassToolbarProps) {
         top: "50%",
         transform: "translateY(-50%)",
         zIndex: 30,
-        background: "rgba(255, 252, 245, 0.58)",
-        backdropFilter: "blur(50px) saturate(220%)",
-        WebkitBackdropFilter: "blur(50px) saturate(220%)",
+        background: "rgba(255, 252, 245, 0.32)",
+        backdropFilter: "blur(60px) saturate(240%)",
+        WebkitBackdropFilter: "blur(60px) saturate(240%)",
         border: "1.5px solid rgba(255, 220, 180, 0.40)",
         borderRadius: 22,
         padding: "12px 8px",

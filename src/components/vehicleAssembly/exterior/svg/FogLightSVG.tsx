@@ -23,7 +23,7 @@ export const FogLightSVG: React.FC<FogLightSVGProps> = ({
   onMouseEnter,
   onMouseLeave,
 }) => {
-  const strokeColor = isSelected ? "#38bdf8" : isHovered ? "#0284c7" : "#020617";
+  const strokeColor = isSelected ? "#fbbf24" : isHovered ? "#0284c7" : "#020617";
 
   return (
     <g
@@ -36,7 +36,7 @@ export const FogLightSVG: React.FC<FogLightSVGProps> = ({
       onMouseLeave={onMouseLeave}
     >
       <circle cx="218" cy="342" r="5" fill="#0f172a" stroke={strokeColor} strokeWidth="1.0" />
-      <circle cx="218" cy="342" r="3.5" fill="#38bdf8" filter="url(#opticalLightBloom)" />
+      <circle cx="218" cy="342" r="3.5" fill="#fbbf24" filter="url(#opticalLightBloom)" />
       <circle cx="218" cy="342" r="1.8" fill="#ffffff" />
     </g>
   );

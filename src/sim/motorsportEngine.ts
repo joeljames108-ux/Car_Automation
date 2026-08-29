@@ -444,9 +444,9 @@ export function initialMotorsportState(): MotorsportState {
   const teams: MotorsportTeam[] = [];
 
   let idCounter = 1;
-  // Generate 35 teams per category = 210 total rival teams
+  // Generate 8 rival teams per category = 48 total rival teams for balanced championship performance
   categories.forEach(category => {
-    for (let i = 0; i < 35; i++) {
+    for (let i = 0; i < 8; i++) {
       const prefix = AI_TEAM_PREFIXES[i % AI_TEAM_PREFIXES.length];
       const baseName = AI_TEAM_NAMES[i % AI_TEAM_NAMES.length];
       const teamName = `${prefix} ${baseName} #${i + 1}`;

@@ -15,17 +15,17 @@ export const CalendarViewPanel = memo(function CalendarViewPanel() {
 
   return (
     <div className="space-y-4 animate-fade-in">
-      <div className="glass-panel p-5 border-cyan-500/20 relative overflow-hidden">
+      <div className="glass-panel p-5 border-amber-500/20 relative overflow-hidden">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-5">
           <div>
             <div className="flex items-center gap-2">
-              <span className="text-[10px] font-mono font-bold text-cyan-400 uppercase tracking-widest">GLOBAL TOUR</span>
-              <span className="bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 text-[9px] font-bold px-2 py-0.5 rounded-full">
+              <span className="text-[10px] font-mono font-bold text-amber-400 uppercase tracking-widest">GLOBAL TOUR</span>
+              <span className="bg-amber-500/20 text-amber-300 border border-amber-500/40 text-[9px] font-bold px-2 py-0.5 rounded-full">
                 {calendar.rounds} ROUNDS
               </span>
             </div>
             <h3 className="text-lg font-bold text-slate-100 flex items-center gap-2 mt-1">
-              <Calendar size={20} className="text-cyan-400" /> Season Championship Calendar
+              <Calendar size={20} className="text-amber-400" /> Season Championship Calendar
             </h3>
             <p className="text-xs text-slate-400 mt-0.5">
               Official grand prix schedule, circuit characteristics, pace types & elevation profiles.
@@ -63,7 +63,7 @@ export const CalendarViewPanel = memo(function CalendarViewPanel() {
             return (
               <div
                 key={trackId}
-                className="bg-base-950/80 rounded-xl p-4 border border-white/5 hover:border-cyan-400/40 transition-all card-hover flex flex-col justify-between relative overflow-hidden group"
+                className="bg-base-950/80 rounded-xl p-4 border border-white/5 hover:border-amber-400/40 transition-all card-hover flex flex-col justify-between relative overflow-hidden group"
               >
                 <div className="absolute top-0 right-0 p-3 opacity-10 font-mono font-black text-4xl text-slate-400 pointer-events-none group-hover:opacity-20 transition-opacity">
                   R{roundNum}
@@ -71,11 +71,11 @@ export const CalendarViewPanel = memo(function CalendarViewPanel() {
 
                 <div>
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-[10px] font-mono font-bold text-cyan-400 bg-cyan-500/10 border border-cyan-500/30 px-2 py-0.5 rounded-full">
+                    <span className="text-[10px] font-mono font-bold text-amber-400 bg-amber-500/10 border border-amber-500/30 px-2 py-0.5 rounded-full">
                       ROUND {roundNum}
                     </span>
                     <span className="text-xs font-semibold text-slate-300 flex items-center gap-1">
-                      <MapPin size={12} className="text-cyan-400" /> {track.country}
+                      <MapPin size={12} className="text-amber-400" /> {track.country}
                     </span>
                   </div>
 

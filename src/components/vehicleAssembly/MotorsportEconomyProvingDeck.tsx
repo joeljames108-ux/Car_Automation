@@ -56,7 +56,7 @@ export const MotorsportEconomyProvingDeck: React.FC = () => {
       {/* Header Banner */}
       <div className="flex flex-col md:flex-row items-start md:items-center justify-between px-6 py-4 rounded-2xl bg-[#060a12] border border-[#162236] shadow-2xl gap-4">
         <div className="flex items-center gap-3.5">
-          <div className="p-2.5 rounded-2xl bg-gradient-to-tr from-rose-500/20 via-amber-500/20 to-cyan-500/20 border border-amber-500/40 text-amber-400">
+          <div className="p-2.5 rounded-2xl bg-gradient-to-tr from-rose-500/20 via-amber-500/20 to-amber-500/20 border border-amber-500/40 text-amber-400">
             <Flame className="w-6 h-6 animate-pulse" />
           </div>
           <div>
@@ -128,7 +128,7 @@ export const MotorsportEconomyProvingDeck: React.FC = () => {
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-400">MAX INTAKE LIFT:</span>
-                  <span className="text-cyan-400 font-bold">{valvetrainResult.maxIntakeLiftMm} mm ({valvetrainResult.intakeDurationCrankDeg}° CA)</span>
+                  <span className="text-amber-400 font-bold">{valvetrainResult.maxIntakeLiftMm} mm ({valvetrainResult.intakeDurationCrankDeg}° CA)</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-400">HERTZIAN STRESS:</span>
@@ -136,7 +136,7 @@ export const MotorsportEconomyProvingDeck: React.FC = () => {
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-400">VOLUMETRIC EFFICIENCY:</span>
-                  <span className="text-purple-400 font-bold">{valvetrainResult.volumetricEfficiencyPct}%</span>
+                  <span className="text-amber-400 font-bold">{valvetrainResult.volumetricEfficiencyPct}%</span>
                 </div>
               </div>
 
@@ -160,9 +160,9 @@ export const MotorsportEconomyProvingDeck: React.FC = () => {
                 {valvetrainResult.liftProfilePoints.filter(p => p.crankAngleDeg >= 300 && p.crankAngleDeg <= 600).slice(0, 8).map((pt) => (
                   <div key={pt.crankAngleDeg} className="p-3 rounded-xl bg-[#02050a] border border-[#101826] flex flex-col gap-1">
                     <span className="text-[10px] text-gray-400">{pt.crankAngleDeg}° CA</span>
-                    <span className="text-cyan-400 font-bold">Lift: {pt.intakeLiftMm} mm</span>
+                    <span className="text-amber-400 font-bold">Lift: {pt.intakeLiftMm} mm</span>
                     <span className="text-amber-400">{pt.hertzianContactStressMpa} MPa</span>
-                    <span className="text-[10px] text-purple-400">{pt.effectiveFlowAreaCm2} cm² Flow</span>
+                    <span className="text-[10px] text-amber-400">{pt.effectiveFlowAreaCm2} cm² Flow</span>
                   </div>
                 ))}
               </div>
@@ -188,7 +188,7 @@ export const MotorsportEconomyProvingDeck: React.FC = () => {
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-400">OIL INJECTION RATE:</span>
-                  <span className="text-cyan-400 font-bold">{rotaryResult.oilInjectionRateCcPerMin} cc/min</span>
+                  <span className="text-amber-400 font-bold">{rotaryResult.oilInjectionRateCcPerMin} cc/min</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-400">APEX SEAL WEAR:</span>
@@ -217,7 +217,7 @@ export const MotorsportEconomyProvingDeck: React.FC = () => {
                   <div key={pt.rotorAngleDeg} className="p-3 rounded-xl bg-[#02050a] border border-[#101826] flex flex-col gap-1">
                     <span className="text-[10px] text-gray-400">Rotor {pt.rotorAngleDeg}°</span>
                     <span className="text-rose-400 font-bold">{pt.cylinderPressureBar} bar</span>
-                    <span className="text-cyan-400">v_slide: {pt.apexSealSlidingVelocityMs} m/s</span>
+                    <span className="text-amber-400">v_slide: {pt.apexSealSlidingVelocityMs} m/s</span>
                     <span className="text-[10px] text-emerald-400">h_film: {pt.apexSealFilmThicknessMicrons} μm</span>
                   </div>
                 ))}
@@ -244,11 +244,11 @@ export const MotorsportEconomyProvingDeck: React.FC = () => {
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-400">FACTORY OEE:</span>
-                  <span className="text-cyan-400 font-bold">{economyReport.factoryOverallEquipmentEffectivenessPct}%</span>
+                  <span className="text-amber-400 font-bold">{economyReport.factoryOverallEquipmentEffectivenessPct}%</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-400">ANNUAL DEMAND:</span>
-                  <span className="text-purple-400 font-bold">{economyReport.projectedAnnualSalesVolumeUnits.toLocaleString()} units</span>
+                  <span className="text-amber-400 font-bold">{economyReport.projectedAnnualSalesVolumeUnits.toLocaleString()} units</span>
                 </div>
               </div>
 
@@ -281,7 +281,7 @@ export const MotorsportEconomyProvingDeck: React.FC = () => {
                       </span>
                     </div>
                     <div className="flex justify-between items-center">
-                      <span className="text-cyan-400 font-bold text-sm">${c.spotPriceUsd.toLocaleString()}</span>
+                      <span className="text-amber-400 font-bold text-sm">${c.spotPriceUsd.toLocaleString()}</span>
                       <span className="text-[10px] text-gray-500">{c.unit}</span>
                     </div>
                     <div className="text-[10px] text-gray-400">

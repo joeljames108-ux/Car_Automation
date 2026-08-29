@@ -106,7 +106,7 @@ export const WeatherPanel: React.FC<WeatherPanelProps> = memo(function WeatherPa
             {/* Forecast line */}
             {forecast.length > 1 && (
               <polyline
-                fill="none" stroke="#3b82f6" strokeWidth="2"
+                fill="none" stroke="#d97706" strokeWidth="2"
                 points={forecast.map((f, i) =>
                   `${(i / Math.max(1, forecast.length - 1)) * 290 + 5},${90 - f.state.rainProbability * 0.85}`
                 ).join(' ')}
@@ -128,7 +128,7 @@ export const WeatherPanel: React.FC<WeatherPanelProps> = memo(function WeatherPa
           <span>+30 min</span>
         </div>
         <div className="mt-2 text-center">
-          <span className={`text-sm font-bold ${state.rainProbability > 60 ? 'text-blue-400' : state.rainProbability > 30 ? 'text-yellow-400' : 'text-green-400'}`}>
+          <span className={`text-sm font-bold ${state.rainProbability > 60 ? 'text-amber-400' : state.rainProbability > 30 ? 'text-yellow-400' : 'text-green-400'}`}>
             {state.rainProbability > 60 ? '\u26A1 HIGH RAIN RISK' :
              state.rainProbability > 30 ? '\u26A0\uFE0F POSSIBLE RAIN' : '\u2714 DRY CONDITIONS'}
           </span>

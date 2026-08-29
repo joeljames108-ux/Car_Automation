@@ -38,7 +38,7 @@ export class ParametricFrontWingCad {
     });
 
     const flapMaterial = new THREE.MeshStandardMaterial({
-      color: visualMode === 'cfdPressure' ? 0x38bdf8 : 0x1e293b,
+      color: visualMode === 'cfdPressure' ? 0xfbbf24 : 0x1e293b,
       metalness: 0.80,
       roughness: 0.22,
       wireframe: visualMode === 'wireframe',

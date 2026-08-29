@@ -84,7 +84,7 @@ export class HighFidelitySedanChassisGenerator {
     const frameMat = AutomotivePBRMaterialSystem.getChassisStructuralMaterial(materialGrade);
     const subframeMat = AutomotivePBRMaterialSystem.getChassisStructuralMaterial('cast');
     const socketMat = new THREE.MeshPhysicalMaterial({
-      color: 0x38bdf8,
+      color: 0xfbbf24,
       metalness: 0.96,
       roughness: 0.08,
       clearcoat: 0.9,

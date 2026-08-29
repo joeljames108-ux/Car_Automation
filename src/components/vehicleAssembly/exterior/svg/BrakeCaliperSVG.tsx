@@ -79,7 +79,7 @@ export const BrakeCaliperSVG: React.FC<BrakeCaliperSVGProps> = ({
       </text>
 
       {/* Bleeder Valve & Braided Line Banjo */}
-      <circle cx={cx - r + 10} cy={cy - 24} r="2" fill="#38bdf8" />
+      <circle cx={cx - r + 10} cy={cy - 24} r="2" fill="#fbbf24" />
     </g>
   );
 };

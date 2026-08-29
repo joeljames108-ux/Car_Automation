@@ -45,7 +45,7 @@ export const VehicleDynamicsCompositeStudioDeck: React.FC = () => {
       {/* Studio Header Ribbon */}
       <div className="flex items-center justify-between px-5 py-3 rounded-2xl bg-[#090d16] border border-[#182133] shadow-lg">
         <div className="flex items-center gap-3">
-          <div className="p-2 rounded-xl bg-gradient-to-tr from-cyan-500/20 to-indigo-500/20 border border-cyan-500/40 text-cyan-400">
+          <div className="p-2 rounded-xl bg-gradient-to-tr from-amber-500/20 to-indigo-500/20 border border-amber-500/40 text-amber-400">
             <Gauge className="w-5 h-5" />
           </div>
           <div>
@@ -62,7 +62,7 @@ export const VehicleDynamicsCompositeStudioDeck: React.FC = () => {
         <select
           value={heightMode}
           onChange={(e) => setHeightMode(e.target.value as AirSuspensionRideHeightMode)}
-          className="bg-[#0e1424] text-cyan-400 text-xs font-bold font-mono px-3 py-1.5 rounded-xl border border-cyan-500/40 cursor-pointer"
+          className="bg-[#0e1424] text-amber-400 text-xs font-bold font-mono px-3 py-1.5 rounded-xl border border-amber-500/40 cursor-pointer"
         >
           <option value="COMFORT_STANDARD">Comfort Standard (0 mm)</option>
           <option value="AERO_HIGH_SPEED">Aero High-Speed (-35 mm)</option>
@@ -76,11 +76,11 @@ export const VehicleDynamicsCompositeStudioDeck: React.FC = () => {
         {/* Card 1: PMSM Motor Flux Weakening & 22k RPM Rotor FEA */}
         <div className="flex flex-col p-4 rounded-2xl bg-[#090d16] border border-[#182133] gap-3">
           <div className="flex items-center justify-between pb-2 border-b border-[#182133]">
-            <div className="flex items-center gap-2 text-cyan-400 font-bold text-xs">
+            <div className="flex items-center gap-2 text-amber-400 font-bold text-xs">
               <Cpu className="w-4 h-4" />
               <span>PMSM ROTOR CENTRIFUGAL FEA & FLUX WEAKENING</span>
             </div>
-            <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-400 border border-cyan-500/40">
+            <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/40">
               {motorState.isFluxWeakeningActive ? 'FLUX WEAKENING' : 'BASE MTPA'}
             </span>
           </div>
@@ -95,7 +95,7 @@ export const VehicleDynamicsCompositeStudioDeck: React.FC = () => {
               step="500"
               value={motorRpm}
               onChange={(e) => setMotorRpm(Number(e.target.value))}
-              className="w-36 accent-cyan-500 cursor-pointer"
+              className="w-36 accent-amber-500 cursor-pointer"
             />
           </div>
 
@@ -103,7 +103,7 @@ export const VehicleDynamicsCompositeStudioDeck: React.FC = () => {
           <div className="grid grid-cols-2 gap-2 text-xs font-mono">
             <div className="p-2.5 rounded-xl bg-[#0c1220] border border-[#1c263d]">
               <div className="text-gray-400 text-[10px]">DELIVERED POWER</div>
-              <div className="text-sm font-bold text-cyan-400">{motorState.powerKw} kW ({Math.round(motorState.powerKw * 1.341)} BHP)</div>
+              <div className="text-sm font-bold text-amber-400">{motorState.powerKw} kW ({Math.round(motorState.powerKw * 1.341)} BHP)</div>
             </div>
             <div className="p-2.5 rounded-xl bg-[#0c1220] border border-[#1c263d]">
               <div className="text-gray-400 text-[10px]">d-q AXIS CURRENTS</div>
@@ -134,14 +134,14 @@ export const VehicleDynamicsCompositeStudioDeck: React.FC = () => {
 
           <div className="p-3 bg-[#05070c] rounded-xl border border-[#141b2b] text-xs font-mono text-gray-300">
             <div className="text-gray-400 text-[10px] mb-0.5">LAMINATE SCHEDULE</div>
-            <div className="text-cyan-400 font-bold">{cfrpState.laminateSchedule}</div>
+            <div className="text-amber-400 font-bold">{cfrpState.laminateSchedule}</div>
           </div>
 
           {/* Composite Specs */}
           <div className="grid grid-cols-2 gap-2 text-xs font-mono">
             <div className="p-2.5 rounded-xl bg-[#0c1220] border border-[#1c263d]">
               <div className="text-gray-400 text-[10px]">TORSIONAL RIGIDITY</div>
-              <div className="text-sm font-bold text-cyan-400">{cfrpState.torsionalRigidityKNmPerDeg} kNm/deg</div>
+              <div className="text-sm font-bold text-amber-400">{cfrpState.torsionalRigidityKNmPerDeg} kNm/deg</div>
             </div>
             <div className="p-2.5 rounded-xl bg-[#0c1220] border border-[#1c263d]">
               <div className="text-gray-400 text-[10px]">BARE TUB MASS</div>
@@ -161,11 +161,11 @@ export const VehicleDynamicsCompositeStudioDeck: React.FC = () => {
         {/* Card 3: Dual-Chamber Air Suspension */}
         <div className="flex flex-col p-4 rounded-2xl bg-[#090d16] border border-[#182133] gap-3">
           <div className="flex items-center justify-between pb-2 border-b border-[#182133]">
-            <div className="flex items-center gap-2 text-indigo-400 font-bold text-xs">
+            <div className="flex items-center gap-2 text-amber-400 font-bold text-xs">
               <Wind className="w-4 h-4" />
               <span>DUAL-CHAMBER AIR SUSPENSION</span>
             </div>
-            <span className="text-[10px] font-mono font-bold text-indigo-400">
+            <span className="text-[10px] font-mono font-bold text-amber-400">
               Clearance: {airState.chassisGroundClearanceMm} mm
             </span>
           </div>
@@ -180,7 +180,7 @@ export const VehicleDynamicsCompositeStudioDeck: React.FC = () => {
                     {c.isAuxiliaryChamberEngaged ? 'V1+V2 SOFT' : 'V1 FIRM'}
                   </span>
                 </div>
-                <div className="text-cyan-400 font-bold">{c.effectiveSpringRateNPerMm} N/mm</div>
+                <div className="text-amber-400 font-bold">{c.effectiveSpringRateNPerMm} N/mm</div>
                 <div className="text-[9px] text-gray-500">{c.airSpringPressureBar} bar • {c.springForceN} N</div>
               </div>
             ))}

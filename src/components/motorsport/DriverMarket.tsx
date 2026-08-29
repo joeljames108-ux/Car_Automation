@@ -25,7 +25,7 @@ const DriverCard = memo(function DriverCard({ driver, actions }: { driver: RaceD
   return (
     <div className="glass-panel p-3 card-hover">
       <div className="flex items-start gap-3">
-        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-accent-500/20 to-purple-500/20 border border-base-700 flex items-center justify-center text-lg font-bold text-accent-300">
+        <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-accent-500/20 to-amber-500/20 border border-base-700 flex items-center justify-center text-lg font-bold text-accent-300">
           {driver.name.charAt(0)}
         </div>
         <div className="flex-1 min-w-0">
@@ -40,9 +40,9 @@ const DriverCard = memo(function DriverCard({ driver, actions }: { driver: RaceD
           <div className="grid grid-cols-5 gap-1.5 mt-2">
             <SkillBar label="Skill" value={driver.skill} color="bg-accent-400" />
             <SkillBar label="Con" value={driver.consistency} color="bg-ok-400" />
-            <SkillBar label="Wet" value={driver.wetSkill} color="bg-blue-400" />
+            <SkillBar label="Wet" value={driver.wetSkill} color="bg-amber-400" />
             <SkillBar label="Agg" value={driver.aggression} color="bg-warn-400" />
-            <SkillBar label="Exp" value={driver.experience} color="bg-purple-400" />
+            <SkillBar label="Exp" value={driver.experience} color="bg-amber-400" />
           </div>
         </div>
         <div className="flex flex-col gap-1 shrink-0">
@@ -159,7 +159,7 @@ export const DriverMarket = memo(function DriverMarket({ selectedTeam }: { selec
               scoutNewDriver();
             }}
               disabled={company.motorsport.scoutedDrivers.length >= 4}
-              className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-xs font-semibold bg-purple-500/15 border border-purple-500/30 text-purple-300 hover:bg-purple-500/25 disabled:opacity-40 disabled:cursor-not-allowed transition-all cursor-pointer">
+              className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-xs font-semibold bg-amber-500/15 border border-amber-500/30 text-amber-300 hover:bg-amber-500/25 disabled:opacity-40 disabled:cursor-not-allowed transition-all cursor-pointer">
               <Search size={14} /> Scout New Talent
             </button>
             <span className="text-[10px] text-slate-500">

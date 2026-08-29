@@ -33,9 +33,72 @@ export class UniversalGlbExporter {
     rootGroup: THREE.Object3D,
     options?: Partial<GlbExportOptions>
   ): Promise<ExportedGlbResult> {
+    if (typeof (globalThis as any).document === 'undefined') {
+      const dummyCtx = {
+        drawImage: () => {},
+        getImageData: () => ({ data: new Uint8Array(256 * 256 * 4) }),
+        putImageData: () => {},
+        fillRect: () => {},
+        clearRect: () => {},
+        beginPath: () => {},
+        closePath: () => {},
+        moveTo: () => {},
+        lineTo: () => {},
+        arc: () => {},
+        fill: () => {},
+        stroke: () => {},
+        translate: () => {},
+        scale: () => {},
+        rotate: () => {},
+        save: () => {},
+        restore: () => {},
+        transform: () => {},
+        setTransform: () => {},
+        resetTransform: () => {},
+        createImageData: (w: number, h: number) => ({ data: new Uint8Array(w * h * 4) }),
+        createLinearGradient: () => ({ addColorStop: () => {} }),
+      };
+      class MockCanvas {
+        width = 256;
+        height = 256;
+        getContext() { return dummyCtx; }
+        toDataURL() { return 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg=='; }
+        toBlob(callback: (b: any) => void) {
+          if (callback) {
+            callback({
+              arrayBuffer: async () => new Uint8Array([137, 80, 78, 71, 13, 10, 26, 10]).buffer,
+            });
+          }
+        }
+      }
+      (globalThis as any).HTMLCanvasElement = MockCanvas;
+      (globalThis as any).HTMLImageElement = class HTMLImageElement {};
+      if (typeof (globalThis as any).ImageData === 'undefined') {
+        (globalThis as any).ImageData = class ImageData {
+          data: Uint8ClampedArray;
+          width: number;
+          height: number;
+          constructor(w: number, h: number) {
+            this.width = w;
+            this.height = h;
+            this.data = new Uint8ClampedArray(w * h * 4);
+          }
+        };
+      }
+      (globalThis as any).document = {
+        createElement: (tag: string) => {
+          if (tag === 'canvas') {
+            return new MockCanvas();
+          }
+          return {};
+        },
+      };
+    }
+
     if (typeof (globalThis as any).FileReader === 'undefined') {
       (globalThis as any).FileReader = class {
         onload: ((e: any) => void) | null = null;
+        onloadend: ((e: any) => void) | null = null;
         onerror: ((e: any) => void) | null = null;
         result: any = null;
         async readAsArrayBuffer(blob: any) {
@@ -43,6 +106,7 @@ export class UniversalGlbExporter {
             const buf = typeof blob.arrayBuffer === 'function' ? await blob.arrayBuffer() : new ArrayBuffer(0);
             this.result = buf;
             if (this.onload) this.onload({ target: this });
+            if (this.onloadend) this.onloadend({ target: this });
           } catch (err) {
             if (this.onerror) this.onerror(err);
           }
@@ -53,6 +117,7 @@ export class UniversalGlbExporter {
             const base64 = typeof Buffer !== 'undefined' ? Buffer.from(buf).toString('base64') : '';
             this.result = `data:${blob.type || 'application/octet-stream'};base64,${base64}`;
             if (this.onload) this.onload({ target: this });
+            if (this.onloadend) this.onloadend({ target: this });
           } catch (err) {
             if (this.onerror) this.onerror(err);
           }

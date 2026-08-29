@@ -23,7 +23,7 @@ export class CenterConsole3DGenerator {
     style: CenterConsoleStyle,
     materials: InteriorMaterialTheme,
     wheelbaseM: number,
-    ambientColorHex: string = '#06b6d4'
+    ambientColorHex: string = '#f59e0b'
   ): THREE.Group {
     const group = new THREE.Group();
     group.name = `CenterConsole_${style}`;

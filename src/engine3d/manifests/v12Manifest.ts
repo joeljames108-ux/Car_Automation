@@ -118,7 +118,7 @@ export const SPECIALTY_VARIANTS = {
   quartzGlass: {
     id: 'quartz_glass' as const,
     label: 'Scratch-Resistant Quartz Glass',
-    color: 0x38bdf8,
+    color: 0xfbbf24,
     metalness: 0.10,
     roughness: 0.05,
     transmission: 0.90,
@@ -588,7 +588,7 @@ export const V12_COMPONENT_MANIFESTS: Engine3DComponentManifest[] = [
     variants: [
       { id: 'titanium', label: 'Titanium-Aluminide Billet Wheel (76mm)', color: 0xa78bfa, metalness: 0.94, roughness: 0.12 },
       { id: 'billet', label: 'CNC Forged Milled Compressor Wheel', color: 0xe2e8f0, metalness: 0.90, roughness: 0.18 },
-      { id: 'ceramic', label: 'Ceramic Dual Ball Bearing Cartridge', color: 0x38bdf8, metalness: 0.85, roughness: 0.22 },
+      { id: 'ceramic', label: 'Ceramic Dual Ball Bearing Cartridge', color: 0xfbbf24, metalness: 0.85, roughness: 0.22 },
     ],
     massKg: 12.8,
     centerOfMassMm: { x: 0, y: 0, z: 0 },

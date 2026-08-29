@@ -40,7 +40,25 @@ export type AssemblyPhase =
   | "confirming"
   | "complete";
 
-export type MaterialGrade = "cast" | "forged" | "billet" | "titanium" | "ceramic";
+export type MaterialGrade =
+  | "cast"
+  | "forged"
+  | "billet"
+  | "titanium"
+  | "ceramic"
+  // ── Extended Metallurgy Grades ──
+  | "cast_iron"
+  | "nodular_iron"
+  | "cast_aluminum"
+  | "billet_7075"
+  | "maraging_steel"
+  | "titanium_alloy"
+  | "inconel_718"
+  | "haynes_230"
+  | "cmc"
+  | "mim_titanium"
+  | "chromoly"
+  | "hypereutectic_aluminum";
 
 export interface ComponentVariant {
   id: MaterialGrade;
@@ -49,6 +67,8 @@ export interface ComponentVariant {
   weightMultiplier: number;
   costMultiplier: number;
   reliabilityDelta: number;
+  /** Optional reference to the metallurgy database for detailed properties */
+  metallurgyId?: string;
 }
 
 export interface AssemblyComponentMeta {

@@ -26,7 +26,7 @@ export function GenericProvingDeck<T extends string = string>({
   phaseBadge,
   subtitle,
   icon,
-  iconGradient = "from-cyan-500/20 via-blue-500/20 to-emerald-500/20 border-cyan-500/40 text-cyan-400",
+  iconGradient = "from-amber-500/20 via-amber-500/20 to-emerald-500/20 border-amber-500/40 text-amber-400",
   headerBadges,
   tabs,
   activeTab,
@@ -50,7 +50,7 @@ export function GenericProvingDeck<T extends string = string>({
                 {title}
               </h1>
               {phaseBadge && (
-                <span className="px-2.5 py-0.5 rounded-full bg-cyan-500/20 border border-cyan-500/40 text-cyan-400 text-[10px] font-mono font-bold">
+                <span className="px-2.5 py-0.5 rounded-full bg-amber-500/20 border border-amber-500/40 text-amber-400 text-[10px] font-mono font-bold">
                   {phaseBadge}
                 </span>
               )}
@@ -81,14 +81,14 @@ export function GenericProvingDeck<T extends string = string>({
                 onClick={() => onTabChange(t.id)}
                 className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer ${
                   isSelected
-                    ? "bg-cyan-500 text-slate-950 shadow-[0_0_15px_rgba(6,182,212,0.4)]"
+                    ? "bg-amber-500 text-slate-950 shadow-[0_0_15px_rgba(6,182,212,0.4)]"
                     : "text-gray-400 hover:text-white hover:bg-white/5"
                 }`}
               >
                 {t.icon}
                 <span>{t.label}</span>
                 {t.badge && (
-                  <span className={`px-1.5 py-0.2 rounded text-[9px] ${isSelected ? "bg-slate-900/40 text-slate-900 font-extrabold" : "bg-cyan-500/20 text-cyan-300"}`}>
+                  <span className={`px-1.5 py-0.2 rounded text-[9px] ${isSelected ? "bg-slate-900/40 text-slate-900 font-extrabold" : "bg-amber-500/20 text-amber-300"}`}>
                     {t.badge}
                   </span>
                 )}

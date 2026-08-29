@@ -25,7 +25,8 @@ export const NeonHorizonSubNav: React.FC<NeonHorizonSubNavProps> = ({
   onReplayBoot,
 }) => {
   return (
-    <nav className="sticky top-16 z-30 bg-[#0e1626]/85 backdrop-blur-xl border-b border-white/8 shadow-lg select-none">
+    <nav className="sticky top-16 z-30 border-b shadow-lg select-none"
+      style={{ background: "rgba(8, 14, 28, 0.75)", backdropFilter: "blur(40px) saturate(200%)", borderColor: "rgba(255,255,255,0.05)" }}>
       <div className="max-w-full px-6 py-2.5 flex items-center justify-between gap-4 overflow-x-auto scrollbar-none">
         <div className="flex items-center gap-2">
           {stages.map((s) => {
@@ -37,13 +38,14 @@ export const NeonHorizonSubNav: React.FC<NeonHorizonSubNavProps> = ({
                   playHMIClickSound();
                   onSelectStage(s.id);
                 }}
-                className={`flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold tracking-wide whitespace-nowrap transition-all duration-200 cursor-pointer ${
-                  isCurrent
-                    ? "bg-sky-400/15 text-sky-300 border border-sky-400/30 font-bold shadow-[0_0_12px_rgba(56,189,248,0.2)]"
-                    : "bg-white/[0.04] text-slate-400 hover:text-slate-200 hover:bg-white/[0.08] border border-white/6"
-                }`}
+                className="flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold tracking-wide whitespace-nowrap transition-all duration-200 cursor-pointer"
+                style={{
+                  background: isCurrent ? "rgba(95, 168, 200, 0.10)" : "rgba(255,255,255,0.02)",
+                  color: isCurrent ? "#8cbcd0" : "#506070",
+                  border: isCurrent ? "1px solid rgba(95, 168, 200, 0.18)" : "1px solid rgba(255,255,255,0.03)",
+                }}
               >
-                <span className={isCurrent ? "text-sky-400" : "text-slate-500"}>{s.icon}</span>
+                <span style={{ color: isCurrent ? "#5fa8c8" : "#506070" }}>{s.icon}</span>
                 <span>{s.label}</span>
               </button>
             );
@@ -57,7 +59,8 @@ export const NeonHorizonSubNav: React.FC<NeonHorizonSubNavProps> = ({
                 playHMIClickSound();
                 onReplayBoot();
               }}
-              className="hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold font-mono tracking-wider text-fuchsia-300 bg-fuchsia-500/10 hover:bg-fuchsia-500/20 border border-fuchsia-400/30 hover:border-fuchsia-400/60 shadow-[0_0_12px_rgba(217,70,239,0.2)] transition-all cursor-pointer whitespace-nowrap"
+              className="hidden md:flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold font-mono tracking-wider transition-all cursor-pointer whitespace-nowrap border"
+              style={{ color: "#8878a8", background: "rgba(120, 104, 160, 0.06)", borderColor: "rgba(120, 104, 160, 0.15)" }}
             >
               <Orbit size={12} className="text-fuchsia-400 animate-spin" />
               <span>BOOT INTRO</span>

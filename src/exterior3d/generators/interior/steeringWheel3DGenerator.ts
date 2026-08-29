@@ -189,7 +189,7 @@ export class SteeringWheel3DGenerator {
     // Dual Rotary Thumb Dials (TC & ABS Adjusters)
     for (const z of [-0.06, 0.06]) {
       const dialGeo = new THREE.CylinderGeometry(0.016, 0.016, 0.014, 16);
-      const dialMat = new THREE.MeshStandardMaterial({ color: z < 0 ? 0x38bdf8 : 0xf59e0b, roughness: 0.3, metalness: 0.8 });
+      const dialMat = new THREE.MeshStandardMaterial({ color: z < 0 ? 0xfbbf24 : 0xf59e0b, roughness: 0.3, metalness: 0.8 });
       const dial = new THREE.Mesh(dialGeo, dialMat);
       dial.position.set(-0.018, -0.02, z);
       dial.rotation.z = Math.PI / 2;

@@ -80,7 +80,6 @@ const ApexAgentConsole = React.lazy(() => import("./agents/ApexAgentConsole").th
 const EngineBuilderFlow = React.lazy(() => import("./assembly/EngineBuilderFlow").then(m => ({ default: m.EngineBuilderFlow })));
 const ModularEngineStudio = React.lazy(() => import("./engineStudio/ModularEngineStudio").then(m => ({ default: m.ModularEngineStudio })));
 const Transmission3DStudio = React.lazy(() => import("./transmissionStudio/Transmission3DStudio").then(m => ({ default: m.Transmission3DStudio })));
-const UnifiedPowertrainStudio = React.lazy(() => import("./powertrainStudio/UnifiedPowertrainStudio").then(m => ({ default: m.UnifiedPowertrainStudio })));
 const AdvancedEngineTelemetryStudio = React.lazy(() => import("./engineStudio/AdvancedEngineTelemetryStudio").then(m => ({ default: m.AdvancedEngineTelemetryStudio })));
 
 // Engine layout → icon mapping
@@ -138,7 +137,7 @@ export function EngineDesigner() {
   const [modalRendered, setModalRendered] = useState(false);
   const [modalActive, setModalActive] = useState(false);
   const [showCompletionModal, setShowCompletionModal] = useState(false);
-  const [engineMode, setEngineMode] = useState<"3d_studio" | "assembly_flow" | "transmission_studio" | "unified_powertrain" | "advanced_telemetry">("unified_powertrain");
+  const [engineMode, setEngineMode] = useState<"3d_studio" | "assembly_flow" | "transmission_studio" | "advanced_telemetry">("assembly_flow");
   const [showSecondaryPanels, setShowSecondaryPanels] = useState(false);
 
   // Defer heavy lower deck analytics and agent suite to next frame for instant tab switching
@@ -184,7 +183,7 @@ export function EngineDesigner() {
 
   // Power & Torque chart — pink/magenta torque + teal power with dual fill
   const powerSeries = useMemo(() => [
-    { data: sim.powerCurve.map((p) => ({ x: p.rpm, y: p.power })), color: "#22d3ee", fill: true, label: "Power", unit: " hp" },
+    { data: sim.powerCurve.map((p) => ({ x: p.rpm, y: p.power })), color: "#fbbf24", fill: true, label: "Power", unit: " hp" },
     { data: sim.powerCurve.map((p) => ({ x: p.rpm, y: p.torque })), color: "#e879a0", fill: true, label: "Torque", unit: " Nm" },
   ], [sim.powerCurve]);
 
@@ -236,10 +235,10 @@ export function EngineDesigner() {
   return (
     <div className="space-y-4 stagger-enter select-none">
       {/* Top Banner: Auto-Optimize Preset Tuning Bar (Translucent Liquid Glass) */}
-      <div className="flex flex-wrap items-center justify-between gap-3 p-3 rounded-2xl bg-gradient-to-r from-base-900/90 via-base-850/80 to-base-900/90 border border-cyan-500/30 backdrop-blur-2xl shadow-[0_8px_32px_rgba(0,0,0,0.2)]">
+      <div className="flex flex-wrap items-center justify-between gap-3 p-3 rounded-2xl bg-gradient-to-r from-base-900/90 via-base-850/80 to-base-900/90 border border-amber-500/30 backdrop-blur-2xl shadow-[0_8px_32px_rgba(0,0,0,0.2)]">
         <div className="flex items-center gap-2">
-          <Sparkles size={16} className="text-cyan-400 animate-pulse" />
-          <span className="text-xs font-mono font-extrabold text-cyan-300 uppercase tracking-wider">
+          <Sparkles size={16} className="text-amber-400 animate-pulse" />
+          <span className="text-xs font-mono font-extrabold text-amber-300 uppercase tracking-wider">
             AUTO OPTIMIZE TARGET:
           </span>
         </div>
@@ -256,7 +255,7 @@ export function EngineDesigner() {
               onClick={() => setOptimizeGoal(opt.id)}
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer ${
                 optimizeGoal === opt.id
-                  ? "bg-cyan-500 text-black shadow-[0_0_14px_rgba(34,211,238,0.5)] scale-[1.02]"
+                  ? "bg-amber-500 text-black shadow-[0_0_14px_rgba(34,211,238,0.5)] scale-[1.02]"
                   : "bg-base-800/50 text-slate-300 hover:text-white hover:bg-base-750 border border-base-700 backdrop-blur-md"
               }`}
             >
@@ -270,28 +269,17 @@ export function EngineDesigner() {
       {/* Mode Switcher Bar */}
       <div className="flex items-center justify-between p-2 rounded-2xl bg-slate-900/90 border border-slate-800 backdrop-blur-xl shadow-lg">
         <div className="flex items-center gap-2 px-2">
-          <Layers size={15} className="text-cyan-400" />
+          <Layers size={15} className="text-amber-400" />
           <span className="text-xs font-bold uppercase tracking-wider text-slate-200">
             Engine Workspace:
           </span>
         </div>
         <div className="flex bg-slate-950 p-1 rounded-xl border border-slate-800 gap-1 flex-wrap">
           <button
-            onClick={() => setEngineMode("unified_powertrain")}
-            className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-              engineMode === "unified_powertrain"
-                ? "bg-gradient-to-r from-cyan-400 via-blue-500 to-violet-500 text-slate-950 shadow-lg shadow-cyan-500/30 font-extrabold"
-                : "text-cyan-400 hover:text-cyan-200 hover:bg-slate-900"
-            }`}
-          >
-            <Flame size={13} className={engineMode === "unified_powertrain" ? "text-slate-950" : "text-cyan-400"} />
-            <span>⚡ Unified Powertrain Flow Chain</span>
-          </button>
-          <button
             onClick={() => setEngineMode("assembly_flow")}
             className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
               engineMode === "assembly_flow"
-                ? "bg-cyan-500 text-slate-950 shadow-md shadow-cyan-500/30 font-extrabold"
+                ? "bg-amber-500 text-slate-950 shadow-md shadow-cyan-500/30 font-extrabold"
                 : "text-slate-400 hover:text-slate-200"
             }`}
           >
@@ -302,7 +290,7 @@ export function EngineDesigner() {
             onClick={() => setEngineMode("3d_studio")}
             className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
               engineMode === "3d_studio"
-                ? "bg-cyan-500 text-slate-950 shadow-md shadow-cyan-500/30 font-extrabold"
+                ? "bg-amber-500 text-slate-950 shadow-md shadow-cyan-500/30 font-extrabold"
                 : "text-slate-400 hover:text-slate-200"
             }`}
           >
@@ -313,7 +301,7 @@ export function EngineDesigner() {
             onClick={() => setEngineMode("transmission_studio")}
             className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
               engineMode === "transmission_studio"
-                ? "bg-cyan-500 text-slate-950 shadow-md shadow-cyan-500/30 font-extrabold"
+                ? "bg-amber-500 text-slate-950 shadow-md shadow-cyan-500/30 font-extrabold"
                 : "text-slate-400 hover:text-slate-200"
             }`}
           >
@@ -324,7 +312,7 @@ export function EngineDesigner() {
             onClick={() => setEngineMode("advanced_telemetry")}
             className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
               engineMode === "advanced_telemetry"
-                ? "bg-violet-500 text-white shadow-md shadow-violet-500/30 font-extrabold"
+                ? "bg-amber-500 text-white shadow-md shadow-violet-500/30 font-extrabold"
                 : "text-slate-400 hover:text-slate-200"
             }`}
           >
@@ -334,9 +322,7 @@ export function EngineDesigner() {
         </div>
       </div>
 
-      {engineMode === "unified_powertrain" ? (
-        <UnifiedPowertrainStudio />
-      ) : engineMode === "advanced_telemetry" ? (
+      {engineMode === "advanced_telemetry" ? (
         <AdvancedEngineTelemetryStudio />
       ) : engineMode === "transmission_studio" ? (
         <Transmission3DStudio />
@@ -393,7 +379,7 @@ export function EngineDesigner() {
               <LineChart series={powerSeries} xLabel="RPM" yLabel="hp / Nm" height={190} />
               <div className="flex justify-between text-[10px] text-slate-400 mt-1 font-mono">
                 <span className="flex items-center gap-1">
-                  <span className="h-2 w-3 bg-cyan-400 rounded-sm shadow-[0_0_6px_rgba(34,211,238,0.6)]" /> Power ({sim.peakPower} hp)
+                  <span className="h-2 w-3 bg-amber-400 rounded-sm shadow-[0_0_6px_rgba(34,211,238,0.6)]" /> Power ({sim.peakPower} hp)
                 </span>
                 <span className="flex items-center gap-1">
                   <span className="h-2 w-3 rounded-sm shadow-[0_0_6px_rgba(232,121,160,0.6)]" style={{ background: "#e879a0" }} /> Torque ({sim.peakTorque} Nm)
@@ -419,9 +405,9 @@ export function EngineDesigner() {
 
             {/* AI Suggestion Card */}
             <Section title="Apex AI Copilot" icon={<Lightbulb size={16} />}>
-              <div className="ai-suggestion-card bg-purple-950/20 border border-purple-500/30 p-3 rounded-xl space-y-2">
-                <div className="text-xs font-semibold text-purple-200">{suggestion.title}</div>
-                <div className="text-[10.5px] text-purple-300/80 leading-relaxed">{suggestion.detail}</div>
+              <div className="ai-suggestion-card bg-amber-950/20 border border-amber-500/30 p-3 rounded-xl space-y-2">
+                <div className="text-xs font-semibold text-amber-200">{suggestion.title}</div>
+                <div className="text-[10.5px] text-amber-300/80 leading-relaxed">{suggestion.detail}</div>
                 <div className="suggestion-impacts flex flex-wrap gap-1.5 pt-1">
                   {suggestion.impacts.map((impact, i) => (
                     <span key={i} className={`impact-badge ${impact.tone === "good" ? "good" : "caution"}`}>
@@ -429,11 +415,11 @@ export function EngineDesigner() {
                     </span>
                   ))}
                 </div>
-                <div className="ai-suggestion-actions flex items-center gap-2 pt-2 border-t border-purple-500/20">
-                  <button className="btn-apply flex items-center gap-1 px-3 py-1 rounded-lg bg-purple-500 text-black text-xs font-mono font-bold hover:bg-purple-400 transition-all cursor-pointer">
+                <div className="ai-suggestion-actions flex items-center gap-2 pt-2 border-t border-amber-500/20">
+                  <button className="btn-apply flex items-center gap-1 px-3 py-1 rounded-lg bg-amber-500 text-black text-xs font-mono font-bold hover:bg-amber-400 transition-all cursor-pointer">
                     <Check size={11} /> Apply
                   </button>
-                  <button className="btn-explain flex items-center gap-1 px-3 py-1 rounded-lg bg-base-800 text-purple-300 border border-purple-500/30 text-xs font-mono hover:bg-base-750 transition-all cursor-pointer">
+                  <button className="btn-explain flex items-center gap-1 px-3 py-1 rounded-lg bg-base-800 text-amber-300 border border-amber-500/30 text-xs font-mono hover:bg-base-750 transition-all cursor-pointer">
                     <Info size={11} /> Explain
                   </button>
                 </div>
@@ -491,10 +477,10 @@ export function EngineDesigner() {
           <div className={`schematic-backdrop ${modalActive ? "active" : ""}`} onClick={closeEnlargedModal}>
             <div className="schematic-modal-container" onClick={(e) => e.stopPropagation()}>
               {/* Top Bar with Back & Close */}
-              <div className="w-full flex items-center justify-between border-b border-blue-200/50 pb-3.5 mb-4">
+              <div className="w-full flex items-center justify-between border-b border-amber-200/50 pb-3.5 mb-4">
                 <button
                   onClick={closeEnlargedModal}
-                  className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-500/10 text-[#007aff] border border-blue-400/30 text-xs font-mono font-bold hover:bg-blue-500/20 transition-all shadow-sm active:scale-95 cursor-pointer"
+                  className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-500/10 text-amber-400 border border-amber-400/30 text-xs font-mono font-bold hover:bg-amber-500/20 transition-all shadow-sm active:scale-95 cursor-pointer"
                 >
                   <ArrowLeft size={14} /> Back
                 </button>
@@ -521,20 +507,20 @@ export function EngineDesigner() {
               </div>
 
               {/* Specifications Cards Grid */}
-              <div className="w-full grid grid-cols-2 sm:grid-cols-4 gap-2.5 mt-4 pt-3.5 border-t border-blue-200/40">
-                <div className="bg-white/85 border border-blue-200/50 rounded-2xl p-3 text-center shadow-sm backdrop-blur-md">
+              <div className="w-full grid grid-cols-2 sm:grid-cols-4 gap-2.5 mt-4 pt-3.5 border-t border-amber-200/40">
+                <div className="bg-white/85 border border-amber-200/50 rounded-2xl p-3 text-center shadow-sm backdrop-blur-md">
                   <span className="block text-[9.5px] font-mono text-slate-400 uppercase tracking-wider">Cylinders</span>
                   <span className="text-sm font-mono font-bold text-slate-800">{ENGINE_LAYOUTS[eng.layout]?.cylinders || "-"}</span>
                 </div>
-                <div className="bg-white/85 border border-blue-200/50 rounded-2xl p-3 text-center shadow-sm backdrop-blur-md">
+                <div className="bg-white/85 border border-amber-200/50 rounded-2xl p-3 text-center shadow-sm backdrop-blur-md">
                   <span className="block text-[9.5px] font-mono text-slate-400 uppercase tracking-wider">Base Weight</span>
                   <span className="text-sm font-mono font-bold text-slate-800">{ENGINE_LAYOUTS[eng.layout]?.weightBase} kg</span>
                 </div>
-                <div className="bg-white/85 border border-blue-200/50 rounded-2xl p-3 text-center shadow-sm backdrop-blur-md">
+                <div className="bg-white/85 border border-amber-200/50 rounded-2xl p-3 text-center shadow-sm backdrop-blur-md">
                   <span className="block text-[9.5px] font-mono text-slate-400 uppercase tracking-wider">Smoothness</span>
                   <span className="text-sm font-mono font-bold text-[#007aff]">{((ENGINE_LAYOUTS[eng.layout]?.balanceFactor || 0) * 100).toFixed(0)}%</span>
                 </div>
-                <div className="bg-white/85 border border-blue-200/50 rounded-2xl p-3 text-center shadow-sm backdrop-blur-md">
+                <div className="bg-white/85 border border-amber-200/50 rounded-2xl p-3 text-center shadow-sm backdrop-blur-md">
                   <span className="block text-[9.5px] font-mono text-slate-400 uppercase tracking-wider">Cost Factor</span>
                   <span className="text-sm font-mono font-bold text-slate-800">{ENGINE_LAYOUTS[eng.layout]?.costFactor}x</span>
                 </div>

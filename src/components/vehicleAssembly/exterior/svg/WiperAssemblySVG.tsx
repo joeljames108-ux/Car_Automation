@@ -23,7 +23,7 @@ export const WiperAssemblySVG: React.FC<WiperAssemblySVGProps> = ({
   onMouseEnter,
   onMouseLeave,
 }) => {
-  const strokeColor = isSelected ? "#38bdf8" : isHovered ? "#0284c7" : "#0f172a";
+  const strokeColor = isSelected ? "#fbbf24" : isHovered ? "#0284c7" : "#0f172a";
 
   return (
     <g

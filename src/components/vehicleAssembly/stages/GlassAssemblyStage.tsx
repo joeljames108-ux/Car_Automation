@@ -61,7 +61,7 @@ export const GlassAssemblyStage: React.FC<GlassAssemblyStageProps> = ({
     <div className="panel p-4 rounded-3xl space-y-4 shadow-xl">
       <div className="flex items-center justify-between border-b border-base-800/60 pb-3">
         <div className="flex items-center gap-2.5">
-          <div className="p-2 rounded-xl bg-cyan-500/15 text-cyan-400 border border-cyan-500/30">
+          <div className="p-2 rounded-xl bg-amber-500/15 text-amber-400 border border-amber-500/30">
             <Sparkles size={18} />
           </div>
           <div>
@@ -90,7 +90,7 @@ export const GlassAssemblyStage: React.FC<GlassAssemblyStageProps> = ({
               onClick={() => onUpdateGlass(g.id)}
               className={`p-3.5 rounded-2xl text-left transition-all border cursor-pointer ${
                 isSelected
-                  ? "bg-cyan-500/20 border-cyan-500/60 shadow-md ring-1 ring-cyan-500/40"
+                  ? "bg-amber-500/20 border-amber-500/60 shadow-md ring-1 ring-amber-500/40"
                   : "bg-base-900/60 border-base-800 hover:border-base-700 text-slate-400"
               }`}
             >
@@ -134,7 +134,7 @@ export const GlassAssemblyStage: React.FC<GlassAssemblyStageProps> = ({
       <div className="flex justify-end pt-2">
         <button
           onClick={onInstall}
-          className="flex items-center gap-2 px-6 py-3 rounded-2xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-mono font-bold text-xs uppercase tracking-wider shadow-lg shadow-cyan-500/25 transition-all cursor-pointer hover:scale-105 active:scale-95"
+          className="flex items-center gap-2 px-6 py-3 rounded-2xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-white font-mono font-bold text-xs uppercase tracking-wider shadow-lg shadow-cyan-500/25 transition-all cursor-pointer hover:scale-105 active:scale-95"
         >
           <CheckCircle2 size={16} />
           {isInstalled ? "RE-INSTALL GLAZING" : "INSTALL GLASS & PROCEED TO INTERIOR"}

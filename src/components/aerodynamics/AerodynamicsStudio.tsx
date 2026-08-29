@@ -251,15 +251,15 @@ export const AerodynamicsStudio: React.FC = () => {
       {/* TOP HEADER BAR */}
       <div className="flex items-center justify-between px-4 py-2.5 bg-slate-900/90 backdrop-blur border-b border-slate-800">
         <div className="flex items-center gap-3">
-          <div className="p-1.5 rounded-lg bg-cyan-500/10 border border-cyan-500/30 text-cyan-400">
+          <div className="p-1.5 rounded-lg bg-amber-500/10 border border-amber-500/30 text-amber-400">
             <Wind size={20} />
           </div>
           <div>
             <div className="flex items-center gap-2">
               <h1 className="text-sm font-bold tracking-wide uppercase text-slate-100">
-                AERODYNAMICS STUDIO <span className="text-cyan-400 font-mono">PHASE 111-125</span>
+                AERODYNAMICS STUDIO <span className="text-amber-400 font-mono">PHASE 111-125</span>
               </h1>
-              <span className="px-2 py-0.5 text-[10px] font-mono rounded bg-cyan-500/20 text-cyan-300 border border-cyan-500/40">
+              <span className="px-2 py-0.5 text-[10px] font-mono rounded bg-amber-500/20 text-amber-300 border border-amber-500/40">
                 3D PARAMETRIC CFD LAB
               </span>
             </div>
@@ -285,7 +285,7 @@ export const AerodynamicsStudio: React.FC = () => {
               onClick={() => handleApplyPreset(p.id)}
               className={`px-2.5 py-1 rounded-lg text-xs font-semibold font-mono transition-all border ${
                 config.preset === p.id
-                  ? 'bg-cyan-500/20 border-cyan-500 text-cyan-300 shadow-sm shadow-cyan-500/20'
+                  ? 'bg-amber-500/20 border-amber-500 text-amber-300 shadow-sm shadow-cyan-500/20'
                   : 'bg-slate-850 border-slate-800 text-slate-400 hover:border-slate-700 hover:text-slate-200'
               }`}
             >
@@ -320,12 +320,12 @@ export const AerodynamicsStudio: React.FC = () => {
                 onClick={() => setActiveSubsystem(item.id)}
                 className={`flex items-center justify-between p-2.5 rounded-lg text-left transition-all border ${
                   isActive
-                    ? 'bg-cyan-500/15 border-cyan-500/50 text-cyan-300 shadow-sm'
+                    ? 'bg-amber-500/15 border-amber-500/50 text-amber-300 shadow-sm'
                     : 'bg-slate-900/80 border-slate-800/80 text-slate-400 hover:border-slate-700 hover:text-slate-200'
                 }`}
               >
                 <div className="flex items-center gap-2">
-                  <span className={isActive ? 'text-cyan-400' : 'text-slate-400'}>{item.icon}</span>
+                  <span className={isActive ? 'text-amber-400' : 'text-slate-400'}>{item.icon}</span>
                   <span className="text-xs font-medium">{item.label}</span>
                 </div>
                 <span className="text-[10px] font-mono font-bold text-slate-400">{item.metric}</span>
@@ -352,14 +352,14 @@ export const AerodynamicsStudio: React.FC = () => {
           {/* Viewport Toolbar Overlay */}
           <div className="absolute top-3 left-3 z-10 flex items-center gap-2 flex-wrap max-w-full">
             {/* 3D Model Asset Source Selector */}
-            <div className="flex items-center bg-slate-900/95 backdrop-blur rounded-lg p-1 border border-cyan-500/40 shadow-lg">
-              <span className="text-[9px] font-mono font-bold text-cyan-400 uppercase px-1.5 flex items-center gap-1">
+            <div className="flex items-center bg-slate-900/95 backdrop-blur rounded-lg p-1 border border-amber-500/40 shadow-lg">
+              <span className="text-[9px] font-mono font-bold text-amber-400 uppercase px-1.5 flex items-center gap-1">
                 <Sparkles size={10} /> 3D MODEL:
               </span>
               <select
                 value={modelSource}
                 onChange={(e) => setModelSource(e.target.value as any)}
-                className="bg-slate-950 text-slate-200 text-[11px] font-mono font-bold px-2 py-0.5 rounded border border-slate-800 focus:outline-none focus:border-cyan-500"
+                className="bg-slate-950 text-slate-200 text-[11px] font-mono font-bold px-2 py-0.5 rounded border border-slate-800 focus:outline-none focus:border-amber-500"
               >
                 <option value="parametric_gt3">🏆 GT3 Hypercar (Parametric 3D CAD)</option>
                 <option value="ford_escort">🚗 Ford Escort RS Cosworth (Official GLB)</option>
@@ -383,7 +383,7 @@ export const AerodynamicsStudio: React.FC = () => {
                   onClick={() => setVisualMode(mode.id)}
                   className={`px-2 py-1 rounded text-[10px] font-mono font-semibold transition-all ${
                     visualMode === mode.id
-                      ? 'bg-cyan-500 text-slate-950 font-bold'
+                      ? 'bg-amber-500 text-slate-950 font-bold'
                       : 'text-slate-400 hover:text-slate-200'
                   }`}
                 >
@@ -396,7 +396,7 @@ export const AerodynamicsStudio: React.FC = () => {
               onClick={() => setShowStreamlines(!showStreamlines)}
               className={`px-2.5 py-1.5 rounded-lg text-xs font-mono font-semibold flex items-center gap-1.5 backdrop-blur border transition-all ${
                 showStreamlines
-                  ? 'bg-cyan-500/20 border-cyan-500/50 text-cyan-300'
+                  ? 'bg-amber-500/20 border-amber-500/50 text-amber-300'
                   : 'bg-slate-900/80 border-slate-800 text-slate-400'
               }`}
             >
@@ -417,7 +417,7 @@ export const AerodynamicsStudio: React.FC = () => {
             </button>
 
             {isLoadingModel && (
-              <div className="px-2.5 py-1 rounded-lg bg-cyan-500/20 border border-cyan-500/50 text-cyan-300 text-[10px] font-mono animate-pulse flex items-center gap-1.5">
+              <div className="px-2.5 py-1 rounded-lg bg-amber-500/20 border border-amber-500/50 text-amber-300 text-[10px] font-mono animate-pulse flex items-center gap-1.5">
                 <Activity size={10} className="animate-spin" />
                 Loading 3D Model...
               </div>
@@ -429,13 +429,13 @@ export const AerodynamicsStudio: React.FC = () => {
             <div className="flex items-center gap-2">
               <button
                 onClick={() => setIsPlaying(!isPlaying)}
-                className="p-1.5 rounded bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-400 border border-cyan-500/40"
+                className="p-1.5 rounded bg-amber-500/20 hover:bg-amber-500/30 text-amber-400 border border-amber-500/40"
               >
                 {isPlaying ? <Pause size={14} /> : <Play size={14} />}
               </button>
               <div className="text-xs font-mono">
                 <span className="text-slate-400">TUNNEL AIRSPEED:</span>{' '}
-                <span className="text-cyan-300 font-bold">{config.airspeedKmh} km/h</span>
+                <span className="text-amber-300 font-bold">{config.airspeedKmh} km/h</span>
               </div>
             </div>
 
@@ -446,7 +446,7 @@ export const AerodynamicsStudio: React.FC = () => {
               step={5}
               value={config.airspeedKmh}
               onChange={(e) => setConfig({ ...config, airspeedKmh: Number(e.target.value) })}
-              className="flex-1 accent-cyan-400 h-1.5 bg-slate-800 rounded-lg cursor-pointer"
+              className="flex-1 accent-amber-400 h-1.5 bg-slate-800 rounded-lg cursor-pointer"
             />
 
             <div className="text-[11px] font-mono text-slate-400">
@@ -461,7 +461,7 @@ export const AerodynamicsStudio: React.FC = () => {
         {/* 3. RIGHT RAIL: PARAMETRIC ENGINEERING CONTROLS */}
         <div className="lg:col-span-3 p-4 bg-slate-900/60 border-l border-slate-800 overflow-y-auto space-y-4">
           <div className="flex items-center justify-between pb-2 border-b border-slate-800">
-            <div className="text-xs font-bold font-mono uppercase tracking-wider text-cyan-400">
+            <div className="text-xs font-bold font-mono uppercase tracking-wider text-amber-400">
               {activeSubsystem} PARAMETERS
             </div>
             <span className="text-[10px] font-mono text-slate-400">3D MORPHING</span>
@@ -473,7 +473,7 @@ export const AerodynamicsStudio: React.FC = () => {
               <div>
                 <div className="flex justify-between text-xs font-mono mb-1">
                   <span className="text-slate-300">Flap Angle of Attack</span>
-                  <span className="text-cyan-400 font-bold">{config.frontWing.flapAngleDeg}°</span>
+                  <span className="text-amber-400 font-bold">{config.frontWing.flapAngleDeg}°</span>
                 </div>
                 <input
                   type="range"
@@ -487,14 +487,14 @@ export const AerodynamicsStudio: React.FC = () => {
                       frontWing: { ...config.frontWing, flapAngleDeg: Number(e.target.value) },
                     })
                   }
-                  className="w-full accent-cyan-400 h-1.5 bg-slate-800 rounded cursor-pointer"
+                  className="w-full accent-amber-400 h-1.5 bg-slate-800 rounded cursor-pointer"
                 />
               </div>
 
               <div>
                 <div className="flex justify-between text-xs font-mono mb-1">
                   <span className="text-slate-300">Flap Span Length</span>
-                  <span className="text-cyan-400 font-bold">{config.frontWing.flapLengthPct}%</span>
+                  <span className="text-amber-400 font-bold">{config.frontWing.flapLengthPct}%</span>
                 </div>
                 <input
                   type="range"
@@ -508,14 +508,14 @@ export const AerodynamicsStudio: React.FC = () => {
                       frontWing: { ...config.frontWing, flapLengthPct: Number(e.target.value) },
                     })
                   }
-                  className="w-full accent-cyan-400 h-1.5 bg-slate-800 rounded cursor-pointer"
+                  className="w-full accent-amber-400 h-1.5 bg-slate-800 rounded cursor-pointer"
                 />
               </div>
 
               <div>
                 <div className="flex justify-between text-xs font-mono mb-1">
                   <span className="text-slate-300">Front Ride Height</span>
-                  <span className="text-cyan-400 font-bold">{config.frontWing.rideHeightMm} mm</span>
+                  <span className="text-amber-400 font-bold">{config.frontWing.rideHeightMm} mm</span>
                 </div>
                 <input
                   type="range"
@@ -529,14 +529,14 @@ export const AerodynamicsStudio: React.FC = () => {
                       frontWing: { ...config.frontWing, rideHeightMm: Number(e.target.value) },
                     })
                   }
-                  className="w-full accent-cyan-400 h-1.5 bg-slate-800 rounded cursor-pointer"
+                  className="w-full accent-amber-400 h-1.5 bg-slate-800 rounded cursor-pointer"
                 />
               </div>
 
               <div>
                 <div className="flex justify-between text-xs font-mono mb-1">
                   <span className="text-slate-300">Trailing Gurney Height</span>
-                  <span className="text-cyan-400 font-bold">{config.frontWing.gurneyHeightMm} mm</span>
+                  <span className="text-amber-400 font-bold">{config.frontWing.gurneyHeightMm} mm</span>
                 </div>
                 <input
                   type="range"
@@ -550,7 +550,7 @@ export const AerodynamicsStudio: React.FC = () => {
                       frontWing: { ...config.frontWing, gurneyHeightMm: Number(e.target.value) },
                     })
                   }
-                  className="w-full accent-cyan-400 h-1.5 bg-slate-800 rounded cursor-pointer"
+                  className="w-full accent-amber-400 h-1.5 bg-slate-800 rounded cursor-pointer"
                 />
               </div>
 
@@ -568,7 +568,7 @@ export const AerodynamicsStudio: React.FC = () => {
                       }
                       className={`px-2.5 py-1 text-xs font-mono rounded ${
                         config.frontWing.elementCount === cnt
-                          ? 'bg-cyan-500 text-slate-950 font-bold'
+                          ? 'bg-amber-500 text-slate-950 font-bold'
                           : 'bg-slate-800 text-slate-400 hover:text-slate-200'
                       }`}
                     >
@@ -585,7 +585,7 @@ export const AerodynamicsStudio: React.FC = () => {
               <div>
                 <div className="flex justify-between text-xs font-mono mb-1">
                   <span className="text-slate-300">Wing Angle of Attack</span>
-                  <span className="text-cyan-400 font-bold">{config.rearWing.angleOfAttackDeg}°</span>
+                  <span className="text-amber-400 font-bold">{config.rearWing.angleOfAttackDeg}°</span>
                 </div>
                 <input
                   type="range"
@@ -599,14 +599,14 @@ export const AerodynamicsStudio: React.FC = () => {
                       rearWing: { ...config.rearWing, angleOfAttackDeg: Number(e.target.value) },
                     })
                   }
-                  className="w-full accent-cyan-400 h-1.5 bg-slate-800 rounded cursor-pointer"
+                  className="w-full accent-amber-400 h-1.5 bg-slate-800 rounded cursor-pointer"
                 />
               </div>
 
               <div>
                 <div className="flex justify-between text-xs font-mono mb-1">
                   <span className="text-slate-300">Wing Span</span>
-                  <span className="text-cyan-400 font-bold">{config.rearWing.spanMm} mm</span>
+                  <span className="text-amber-400 font-bold">{config.rearWing.spanMm} mm</span>
                 </div>
                 <input
                   type="range"
@@ -620,14 +620,14 @@ export const AerodynamicsStudio: React.FC = () => {
                       rearWing: { ...config.rearWing, spanMm: Number(e.target.value) },
                     })
                   }
-                  className="w-full accent-cyan-400 h-1.5 bg-slate-800 rounded cursor-pointer"
+                  className="w-full accent-amber-400 h-1.5 bg-slate-800 rounded cursor-pointer"
                 />
               </div>
 
               <div>
                 <div className="flex justify-between text-xs font-mono mb-1">
                   <span className="text-slate-300">Gurney Tab Height</span>
-                  <span className="text-cyan-400 font-bold">{config.rearWing.gurneyHeightMm} mm</span>
+                  <span className="text-amber-400 font-bold">{config.rearWing.gurneyHeightMm} mm</span>
                 </div>
                 <input
                   type="range"
@@ -641,7 +641,7 @@ export const AerodynamicsStudio: React.FC = () => {
                       rearWing: { ...config.rearWing, gurneyHeightMm: Number(e.target.value) },
                     })
                   }
-                  className="w-full accent-cyan-400 h-1.5 bg-slate-800 rounded cursor-pointer"
+                  className="w-full accent-amber-400 h-1.5 bg-slate-800 rounded cursor-pointer"
                 />
               </div>
 
@@ -657,7 +657,7 @@ export const AerodynamicsStudio: React.FC = () => {
                       },
                     })
                   }
-                  className="px-2.5 py-1 text-xs font-mono rounded bg-slate-800 text-cyan-300 border border-slate-700"
+                  className="px-2.5 py-1 text-xs font-mono rounded bg-slate-800 text-amber-300 border border-slate-700"
                 >
                   {config.rearWing.pylonType === 'swan_neck' ? '🦢 Swan Neck' : '📍 Bottom Mount'}
                 </button>
@@ -670,7 +670,7 @@ export const AerodynamicsStudio: React.FC = () => {
               <div>
                 <div className="flex justify-between text-xs font-mono mb-1">
                   <span className="text-slate-300">Venturi Throat Height</span>
-                  <span className="text-cyan-400 font-bold">{config.groundEffectFloor.tunnelThroatHeightMm} mm</span>
+                  <span className="text-amber-400 font-bold">{config.groundEffectFloor.tunnelThroatHeightMm} mm</span>
                 </div>
                 <input
                   type="range"
@@ -687,14 +687,14 @@ export const AerodynamicsStudio: React.FC = () => {
                       },
                     })
                   }
-                  className="w-full accent-cyan-400 h-1.5 bg-slate-800 rounded cursor-pointer"
+                  className="w-full accent-amber-400 h-1.5 bg-slate-800 rounded cursor-pointer"
                 />
               </div>
 
               <div>
                 <div className="flex justify-between text-xs font-mono mb-1">
                   <span className="text-slate-300">Expansion Ratio</span>
-                  <span className="text-cyan-400 font-bold">{config.groundEffectFloor.tunnelExpansionRatio.toFixed(1)}:1</span>
+                  <span className="text-amber-400 font-bold">{config.groundEffectFloor.tunnelExpansionRatio.toFixed(1)}:1</span>
                 </div>
                 <input
                   type="range"
@@ -711,14 +711,14 @@ export const AerodynamicsStudio: React.FC = () => {
                       },
                     })
                   }
-                  className="w-full accent-cyan-400 h-1.5 bg-slate-800 rounded cursor-pointer"
+                  className="w-full accent-amber-400 h-1.5 bg-slate-800 rounded cursor-pointer"
                 />
               </div>
 
               <div>
                 <div className="flex justify-between text-xs font-mono mb-1">
                   <span className="text-slate-300">Underbody Strake Count</span>
-                  <span className="text-cyan-400 font-bold">{config.groundEffectFloor.strakeCount} strakes</span>
+                  <span className="text-amber-400 font-bold">{config.groundEffectFloor.strakeCount} strakes</span>
                 </div>
                 <input
                   type="range"
@@ -735,7 +735,7 @@ export const AerodynamicsStudio: React.FC = () => {
                       },
                     })
                   }
-                  className="w-full accent-cyan-400 h-1.5 bg-slate-800 rounded cursor-pointer"
+                  className="w-full accent-amber-400 h-1.5 bg-slate-800 rounded cursor-pointer"
                 />
               </div>
             </div>
@@ -746,7 +746,7 @@ export const AerodynamicsStudio: React.FC = () => {
               <div>
                 <div className="flex justify-between text-xs font-mono mb-1">
                   <span className="text-slate-300">Diffuser Ramp Angle</span>
-                  <span className="text-cyan-400 font-bold">{config.diffuser.rampAngleDeg}°</span>
+                  <span className="text-amber-400 font-bold">{config.diffuser.rampAngleDeg}°</span>
                 </div>
                 <input
                   type="range"
@@ -760,14 +760,14 @@ export const AerodynamicsStudio: React.FC = () => {
                       diffuser: { ...config.diffuser, rampAngleDeg: Number(e.target.value) },
                     })
                   }
-                  className="w-full accent-cyan-400 h-1.5 bg-slate-800 rounded cursor-pointer"
+                  className="w-full accent-amber-400 h-1.5 bg-slate-800 rounded cursor-pointer"
                 />
               </div>
 
               <div>
                 <div className="flex justify-between text-xs font-mono mb-1">
                   <span className="text-slate-300">Diffuser Strake Count</span>
-                  <span className="text-cyan-400 font-bold">{config.diffuser.strakeCount}</span>
+                  <span className="text-amber-400 font-bold">{config.diffuser.strakeCount}</span>
                 </div>
                 <input
                   type="range"
@@ -781,14 +781,14 @@ export const AerodynamicsStudio: React.FC = () => {
                       diffuser: { ...config.diffuser, strakeCount: Number(e.target.value) },
                     })
                   }
-                  className="w-full accent-cyan-400 h-1.5 bg-slate-800 rounded cursor-pointer"
+                  className="w-full accent-amber-400 h-1.5 bg-slate-800 rounded cursor-pointer"
                 />
               </div>
 
               <div>
                 <div className="flex justify-between text-xs font-mono mb-1">
                   <span className="text-slate-300">Diffuser Exit Height</span>
-                  <span className="text-cyan-400 font-bold">{config.diffuser.exitHeightMm} mm</span>
+                  <span className="text-amber-400 font-bold">{config.diffuser.exitHeightMm} mm</span>
                 </div>
                 <input
                   type="range"
@@ -802,7 +802,7 @@ export const AerodynamicsStudio: React.FC = () => {
                       diffuser: { ...config.diffuser, exitHeightMm: Number(e.target.value) },
                     })
                   }
-                  className="w-full accent-cyan-400 h-1.5 bg-slate-800 rounded cursor-pointer"
+                  className="w-full accent-amber-400 h-1.5 bg-slate-800 rounded cursor-pointer"
                 />
               </div>
             </div>
@@ -813,7 +813,7 @@ export const AerodynamicsStudio: React.FC = () => {
               <div>
                 <div className="flex justify-between text-xs font-mono mb-1">
                   <span className="text-slate-300">Undercut Channel Depth</span>
-                  <span className="text-cyan-400 font-bold">{config.sidepod.undercutDepthMm} mm</span>
+                  <span className="text-amber-400 font-bold">{config.sidepod.undercutDepthMm} mm</span>
                 </div>
                 <input
                   type="range"
@@ -827,14 +827,14 @@ export const AerodynamicsStudio: React.FC = () => {
                       sidepod: { ...config.sidepod, undercutDepthMm: Number(e.target.value) },
                     })
                   }
-                  className="w-full accent-cyan-400 h-1.5 bg-slate-800 rounded cursor-pointer"
+                  className="w-full accent-amber-400 h-1.5 bg-slate-800 rounded cursor-pointer"
                 />
               </div>
 
               <div>
                 <div className="flex justify-between text-xs font-mono mb-1">
                   <span className="text-slate-300">Radiator Inlet Area</span>
-                  <span className="text-cyan-400 font-bold">{config.sidepod.inletAreaM2.toFixed(2)} m²</span>
+                  <span className="text-amber-400 font-bold">{config.sidepod.inletAreaM2.toFixed(2)} m²</span>
                 </div>
                 <input
                   type="range"
@@ -848,14 +848,14 @@ export const AerodynamicsStudio: React.FC = () => {
                       sidepod: { ...config.sidepod, inletAreaM2: Number(e.target.value) },
                     })
                   }
-                  className="w-full accent-cyan-400 h-1.5 bg-slate-800 rounded cursor-pointer"
+                  className="w-full accent-amber-400 h-1.5 bg-slate-800 rounded cursor-pointer"
                 />
               </div>
 
               <div>
                 <div className="flex justify-between text-xs font-mono mb-1">
                   <span className="text-slate-300">Vortex Fences Count</span>
-                  <span className="text-cyan-400 font-bold">{config.sidepod.vortexFencesCount}</span>
+                  <span className="text-amber-400 font-bold">{config.sidepod.vortexFencesCount}</span>
                 </div>
                 <input
                   type="range"
@@ -869,7 +869,7 @@ export const AerodynamicsStudio: React.FC = () => {
                       sidepod: { ...config.sidepod, vortexFencesCount: Number(e.target.value) },
                     })
                   }
-                  className="w-full accent-cyan-400 h-1.5 bg-slate-800 rounded cursor-pointer"
+                  className="w-full accent-amber-400 h-1.5 bg-slate-800 rounded cursor-pointer"
                 />
               </div>
             </div>
@@ -880,7 +880,7 @@ export const AerodynamicsStudio: React.FC = () => {
               <div>
                 <div className="flex justify-between text-xs font-mono mb-1">
                   <span className="text-slate-300">Canard Tier Count</span>
-                  <span className="text-cyan-400 font-bold">{config.canards.tierCount} tiers</span>
+                  <span className="text-amber-400 font-bold">{config.canards.tierCount} tiers</span>
                 </div>
                 <input
                   type="range"
@@ -894,14 +894,14 @@ export const AerodynamicsStudio: React.FC = () => {
                       canards: { ...config.canards, tierCount: Number(e.target.value) as 0 | 1 | 2 | 3 },
                     })
                   }
-                  className="w-full accent-cyan-400 h-1.5 bg-slate-800 rounded cursor-pointer"
+                  className="w-full accent-amber-400 h-1.5 bg-slate-800 rounded cursor-pointer"
                 />
               </div>
 
               <div>
                 <div className="flex justify-between text-xs font-mono mb-1">
                   <span className="text-slate-300">Canard Incidence Angle</span>
-                  <span className="text-cyan-400 font-bold">{config.canards.incidenceDeg}°</span>
+                  <span className="text-amber-400 font-bold">{config.canards.incidenceDeg}°</span>
                 </div>
                 <input
                   type="range"
@@ -915,7 +915,7 @@ export const AerodynamicsStudio: React.FC = () => {
                       canards: { ...config.canards, incidenceDeg: Number(e.target.value) },
                     })
                   }
-                  className="w-full accent-cyan-400 h-1.5 bg-slate-800 rounded cursor-pointer"
+                  className="w-full accent-amber-400 h-1.5 bg-slate-800 rounded cursor-pointer"
                 />
               </div>
             </div>
@@ -928,7 +928,7 @@ export const AerodynamicsStudio: React.FC = () => {
               <div className="grid grid-cols-2 gap-2 text-xs font-mono">
                 <div>
                   <div className="text-slate-500">Downforce</div>
-                  <div className="text-cyan-300 font-bold">{physics.components.frontWing.downforceN} N</div>
+                  <div className="text-amber-300 font-bold">{physics.components.frontWing.downforceN} N</div>
                 </div>
                 <div>
                   <div className="text-slate-500">Drag</div>
@@ -948,7 +948,7 @@ export const AerodynamicsStudio: React.FC = () => {
               <div className="grid grid-cols-2 gap-2 text-xs font-mono">
                 <div>
                   <div className="text-slate-500">Downforce</div>
-                  <div className="text-cyan-300 font-bold">{physics.components.rearWing.downforceN} N</div>
+                  <div className="text-amber-300 font-bold">{physics.components.rearWing.downforceN} N</div>
                 </div>
                 <div>
                   <div className="text-slate-500">Drag</div>
@@ -970,7 +970,7 @@ export const AerodynamicsStudio: React.FC = () => {
               <div className="grid grid-cols-2 gap-2 text-xs font-mono">
                 <div>
                   <div className="text-slate-500">Suction Force</div>
-                  <div className="text-cyan-300 font-bold">{physics.components.floor.downforceN} N</div>
+                  <div className="text-amber-300 font-bold">{physics.components.floor.downforceN} N</div>
                 </div>
                 <div>
                   <div className="text-slate-500">Drag</div>
@@ -992,7 +992,7 @@ export const AerodynamicsStudio: React.FC = () => {
               <div className="grid grid-cols-2 gap-2 text-xs font-mono">
                 <div>
                   <div className="text-slate-500">Downforce</div>
-                  <div className="text-cyan-300 font-bold">{physics.components.diffuser.downforceN} N</div>
+                  <div className="text-amber-300 font-bold">{physics.components.diffuser.downforceN} N</div>
                 </div>
                 <div>
                   <div className="text-slate-500">Drag</div>
@@ -1014,7 +1014,7 @@ export const AerodynamicsStudio: React.FC = () => {
               <div className="grid grid-cols-2 gap-2 text-xs font-mono">
                 <div>
                   <div className="text-slate-500">Downforce</div>
-                  <div className="text-cyan-300 font-bold">{physics.components.sidepods.downforceN} N</div>
+                  <div className="text-amber-300 font-bold">{physics.components.sidepods.downforceN} N</div>
                 </div>
                 <div>
                   <div className="text-slate-500">Cooling Drag</div>
@@ -1026,7 +1026,7 @@ export const AerodynamicsStudio: React.FC = () => {
               <div className="grid grid-cols-2 gap-2 text-xs font-mono">
                 <div>
                   <div className="text-slate-500">Downforce</div>
-                  <div className="text-cyan-300 font-bold">{physics.components.canards.downforceN} N</div>
+                  <div className="text-amber-300 font-bold">{physics.components.canards.downforceN} N</div>
                 </div>
                 <div>
                   <div className="text-slate-500">Drag</div>
@@ -1042,7 +1042,7 @@ export const AerodynamicsStudio: React.FC = () => {
       <div className="p-3 bg-slate-900/95 border-t border-slate-800 grid grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-3 text-center">
         <div className="p-2 rounded-lg bg-slate-950 border border-slate-800">
           <div className="text-[10px] font-mono text-slate-500 uppercase">Total Downforce</div>
-          <div className="text-sm font-bold font-mono text-cyan-300">{physics.totalDownforceN} N</div>
+          <div className="text-sm font-bold font-mono text-amber-300">{physics.totalDownforceN} N</div>
           <div className="text-[10px] font-mono text-slate-400">@{config.airspeedKmh} km/h</div>
         </div>
 
@@ -1062,13 +1062,13 @@ export const AerodynamicsStudio: React.FC = () => {
 
         <div className="p-2 rounded-lg bg-slate-950 border border-slate-800">
           <div className="text-[10px] font-mono text-slate-500 uppercase">L/D Efficiency</div>
-          <div className="text-sm font-bold font-mono text-cyan-400">{physics.liftToDragRatio.toFixed(2)}</div>
+          <div className="text-sm font-bold font-mono text-amber-400">{physics.liftToDragRatio.toFixed(2)}</div>
           <div className="text-[10px] font-mono text-slate-400">Lift / Drag Ratio</div>
         </div>
 
         <div className="p-2 rounded-lg bg-slate-950 border border-slate-800">
           <div className="text-[10px] font-mono text-slate-500 uppercase">Cornering Grip</div>
-          <div className="text-sm font-bold font-mono text-cyan-300">{physics.lapSimulation.lateralGAt200Kmh} G</div>
+          <div className="text-sm font-bold font-mono text-amber-300">{physics.lapSimulation.lateralGAt200Kmh} G</div>
           <div className="text-[10px] font-mono text-emerald-400 font-semibold">⚡ High Speed</div>
         </div>
 

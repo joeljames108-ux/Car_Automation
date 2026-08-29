@@ -16,7 +16,7 @@ export const AeroWorkbenchPanel: React.FC = () => {
   return (
     <div className="bg-slate-900/90 border border-white/10 rounded-3xl p-5 backdrop-blur-xl shadow-2xl space-y-4 font-mono text-xs">
       <div className="flex items-center gap-2 pb-3 border-b border-white/10">
-        <Wind className="text-cyan-400" size={18} />
+        <Wind className="text-amber-400" size={18} />
         <h3 className="text-sm font-bold text-slate-100 uppercase">
           AERODYNAMIC TUNNEL & DOWNFORCE TELEMETRY
         </h3>
@@ -26,7 +26,7 @@ export const AeroWorkbenchPanel: React.FC = () => {
       <div className="grid grid-cols-3 gap-2 text-center">
         <div className="p-3 rounded-2xl bg-slate-950 border border-white/10">
           <span className="text-slate-500 text-[10px] block">DRAG (Cd)</span>
-          <strong className="text-cyan-400 text-sm">{totalCd}</strong>
+          <strong className="text-amber-400 text-sm">{totalCd}</strong>
         </div>
         <div className="p-3 rounded-2xl bg-slate-950 border border-white/10">
           <span className="text-slate-500 text-[10px] block">LIFT/DOWNFORCE (Cl)</span>
@@ -52,7 +52,7 @@ export const AeroWorkbenchPanel: React.FC = () => {
             <span className="text-slate-300 font-bold">{pt.speedKmh} km/h</span>
             <span className="text-emerald-400 font-bold">{pt.downforceKg} kg</span>
             <span className="text-slate-400">{pt.dragForceN} N</span>
-            <span className="text-cyan-300">{pt.powerRequiredHp} hp</span>
+            <span className="text-amber-300">{pt.powerRequiredHp} hp</span>
           </div>
         ))}
       </div>

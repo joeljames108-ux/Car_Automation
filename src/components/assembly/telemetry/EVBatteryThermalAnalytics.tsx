@@ -48,7 +48,7 @@ export const EVBatteryThermalAnalytics: React.FC<EVBatteryThermalAnalyticsProps>
           cycleLife: 2800,
           runawayTempC: 450,
           costPerKwh: 220,
-          color: "#a855f7",
+          color: "#f59e0b",
         };
       case "nmc811":
       default:
@@ -58,7 +58,7 @@ export const EVBatteryThermalAnalytics: React.FC<EVBatteryThermalAnalyticsProps>
           cycleLife: 1500,
           runawayTempC: 210,
           costPerKwh: 125,
-          color: "#38bdf8",
+          color: "#fbbf24",
         };
     }
   }, [chemistry]);
@@ -106,13 +106,13 @@ export const EVBatteryThermalAnalytics: React.FC<EVBatteryThermalAnalyticsProps>
   }, [electricalMetrics.currentAmps, coolantFlowLpm]);
 
   return (
-    <div className="bg-slate-950/95 backdrop-blur-lg border border-purple-500/30 rounded-2xl p-5 shadow-2xl text-slate-100 flex flex-col gap-4">
+    <div className="bg-slate-950/95 backdrop-blur-lg border border-amber-500/30 rounded-2xl p-5 shadow-2xl text-slate-100 flex flex-col gap-4">
       {/* ── Header ── */}
       <div className="flex items-center justify-between border-b border-slate-800 pb-3">
         <div className="flex items-center gap-2.5">
-          <BatteryCharging className="w-5 h-5 text-purple-400 animate-pulse" />
+          <BatteryCharging className="w-5 h-5 text-amber-400 animate-pulse" />
           <div>
-            <h3 className="font-mono text-sm font-bold uppercase tracking-wider text-purple-300">
+            <h3 className="font-mono text-sm font-bold uppercase tracking-wider text-amber-300">
               EV Battery & 800V Architecture Analytics
             </h3>
             <span className="text-[11px] text-slate-400 font-mono">
@@ -124,7 +124,7 @@ export const EVBatteryThermalAnalytics: React.FC<EVBatteryThermalAnalyticsProps>
         {/* 800V Fast Charge Badge */}
         <div className={`px-2.5 py-1 rounded-lg text-xs font-mono font-bold flex items-center gap-1.5 border ${
           voltage === 800
-            ? "bg-purple-950/60 border-purple-500/40 text-purple-300"
+            ? "bg-amber-950/60 border-amber-500/40 text-amber-300"
             : "bg-slate-900 border-slate-700 text-slate-400"
         }`}>
           <Zap className="w-3.5 h-3.5" />
@@ -149,12 +149,12 @@ export const EVBatteryThermalAnalytics: React.FC<EVBatteryThermalAnalyticsProps>
                 onClick={() => setChemistry(c.id as any)}
                 className={`p-2.5 rounded-lg border text-left flex flex-col transition-all ${
                   chemistry === c.id
-                    ? "bg-purple-950/60 border-purple-500/80 text-purple-200 shadow-lg"
+                    ? "bg-amber-950/60 border-amber-500/80 text-amber-200 shadow-lg"
                     : "bg-slate-950/60 border-slate-800 text-slate-400 hover:border-slate-700"
                 }`}
               >
                 <span className="font-mono text-xs font-bold">{c.label}</span>
-                <span className="text-[10px] text-purple-300 font-mono">{c.sub}</span>
+                <span className="text-[10px] text-amber-300 font-mono">{c.sub}</span>
                 <span className="text-[9px] text-slate-500">{c.desc}</span>
               </button>
             ))}
@@ -163,7 +163,7 @@ export const EVBatteryThermalAnalytics: React.FC<EVBatteryThermalAnalyticsProps>
           <div className="grid grid-cols-3 gap-2 text-[11px] font-mono text-slate-400 pt-2 border-t border-slate-800">
             <div>Cycle Life: <b className="text-emerald-400">{chemSpecs.cycleLife}</b></div>
             <div>Runaway: <b className="text-amber-400">{chemSpecs.runawayTempC}°C</b></div>
-            <div>Cost: <b className="text-cyan-400">${chemSpecs.costPerKwh}/kWh</b></div>
+            <div>Cost: <b className="text-amber-400">${chemSpecs.costPerKwh}/kWh</b></div>
           </div>
         </div>
 
@@ -183,7 +183,7 @@ export const EVBatteryThermalAnalytics: React.FC<EVBatteryThermalAnalyticsProps>
               <button
                 onClick={() => setVoltage(800)}
                 className={`px-2 py-0.5 rounded text-[10px] font-mono ${
-                  voltage === 800 ? "bg-purple-600 text-white font-bold" : "bg-slate-950 text-slate-400"
+                  voltage === 800 ? "bg-amber-600 text-white font-bold" : "bg-slate-950 text-slate-400"
                 }`}
               >
                 800V (SiC)
@@ -202,14 +202,14 @@ export const EVBatteryThermalAnalytics: React.FC<EVBatteryThermalAnalyticsProps>
             </div>
             <div className="bg-slate-950/60 p-2 rounded border border-slate-800/80">
               <div className="text-[10px] text-slate-500">Harness Mass</div>
-              <div className="text-cyan-300 font-bold">{electricalMetrics.harnessMassKg} kg</div>
+              <div className="text-amber-300 font-bold">{electricalMetrics.harnessMassKg} kg</div>
             </div>
           </div>
 
           {/* Microchannel Cold Plate Thermal Status */}
           <div className="flex items-center justify-between text-xs font-mono pt-1">
             <div className="flex items-center gap-1.5">
-              <Thermometer className="w-3.5 h-3.5 text-cyan-400" />
+              <Thermometer className="w-3.5 h-3.5 text-amber-400" />
               <span className="text-slate-400">Cell Core Temp:</span>
               <span className={`font-bold ${thermalMetrics.coreTempC > 48 ? "text-red-400" : "text-emerald-400"}`}>
                 {thermalMetrics.coreTempC}°C (Safe &lt; 55°C)
@@ -226,7 +226,7 @@ export const EVBatteryThermalAnalytics: React.FC<EVBatteryThermalAnalyticsProps>
         <div className="flex flex-col gap-1">
           <div className="flex justify-between text-[11px] font-mono text-slate-400">
             <span>Discharge Demand</span>
-            <span className="text-purple-300 font-bold">{dischargePowerKw} kW</span>
+            <span className="text-amber-300 font-bold">{dischargePowerKw} kW</span>
           </div>
           <input
             type="range"
@@ -243,7 +243,7 @@ export const EVBatteryThermalAnalytics: React.FC<EVBatteryThermalAnalyticsProps>
         <div className="flex flex-col gap-1">
           <div className="flex justify-between text-[11px] font-mono text-slate-400">
             <span>Cooling Chiller Flow Rate</span>
-            <span className="text-cyan-300 font-bold">{coolantFlowLpm} L/min</span>
+            <span className="text-amber-300 font-bold">{coolantFlowLpm} L/min</span>
           </div>
           <input
             type="range"
@@ -252,7 +252,7 @@ export const EVBatteryThermalAnalytics: React.FC<EVBatteryThermalAnalyticsProps>
             step="1"
             value={coolantFlowLpm}
             onChange={(e) => setCoolantFlowLpm(parseInt(e.target.value))}
-            className="w-full h-1.5 bg-slate-800 rounded appearance-none cursor-pointer accent-cyan-400"
+            className="w-full h-1.5 bg-slate-800 rounded appearance-none cursor-pointer accent-amber-400"
           />
         </div>
       </div>

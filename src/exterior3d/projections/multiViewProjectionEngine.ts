@@ -97,7 +97,7 @@ export class MultiViewProjectionEngine {
           y: p2d.y - 4,
           text: `${inst.definition.nominalTorqueNm}Nm`,
           fontSize: 9,
-          fillColor: '#38bdf8',
+          fillColor: '#fbbf24',
           textAnchor: 'start',
         });
       }
@@ -236,7 +236,7 @@ export class MultiViewProjectionEngine {
     return {
       id: 'FALLBACK_FRAME',
       d: `M ${c.x - 150} ${c.y} L ${c.x + 150} ${c.y}`,
-      strokeColor: '#38bdf8',
+      strokeColor: '#fbbf24',
       strokeWidth: 1.5,
       fillColor: 'none',
     };
@@ -328,7 +328,7 @@ export class MultiViewProjectionEngine {
       lines.push({
         id: 'DIM_WHEELBASE_LINE',
         d: `M ${rAxleX} ${dimY} L ${fAxleX} ${dimY} M ${rAxleX} ${dimY - 8} L ${rAxleX} ${dimY + 8} M ${fAxleX} ${dimY - 8} L ${fAxleX} ${dimY + 8}`,
-        strokeColor: '#a855f7',
+        strokeColor: '#f59e0b',
         strokeWidth: 1.2,
         fillColor: 'none',
       });

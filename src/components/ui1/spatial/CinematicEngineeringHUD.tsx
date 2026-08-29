@@ -62,11 +62,11 @@ export const CinematicEngineeringHUD: React.FC<CinematicEngineeringHUDProps> = (
             }}
             className={`px-3 py-1.5 rounded-xl border text-xs font-bold font-mono tracking-wider transition-all flex items-center gap-1.5 cursor-pointer ${
               isEngineeringMode
-                ? "bg-cyan-500/20 text-cyan-300 border-cyan-400/50 shadow-[0_0_15px_rgba(6,182,212,0.3)]"
+                ? "bg-amber-500/20 text-amber-300 border-amber-400/50 shadow-[0_0_15px_rgba(6,182,212,0.3)]"
                 : "bg-white/5 text-slate-400 hover:text-white border-white/10 hover:bg-white/10"
             }`}
           >
-            <Layers size={13} className={isEngineeringMode ? "text-cyan-400 animate-pulse" : ""} />
+            <Layers size={13} className={isEngineeringMode ? "text-amber-400 animate-pulse" : ""} />
             <span>{isEngineeringMode ? "ENGINEERING CAD MODE" : "DESIGN SHOWCASE MODE"}</span>
           </button>
 
@@ -76,7 +76,7 @@ export const CinematicEngineeringHUD: React.FC<CinematicEngineeringHUDProps> = (
               playHMIClickSound();
               onOpenBlueprint();
             }}
-            className="px-3 py-1.5 rounded-xl bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-500/30 text-cyan-300 hover:text-cyan-200 text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer shadow-md"
+            className="px-3 py-1.5 rounded-xl bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 text-amber-300 hover:text-amber-200 text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer shadow-md"
           >
             <Ruler size={13} />
             <span>OPEN X-RAY BLUEPRINT</span>
@@ -137,9 +137,9 @@ export const CinematicEngineeringHUD: React.FC<CinematicEngineeringHUDProps> = (
             {[
               { label: "TWIN TURBOCHARGERS", val: `${turboTemp}°C`, status: "OPTIMAL", color: "#f97316" },
               { label: "EXHAUST HEADERS", val: `${exhaustTemp}°C`, status: "NOMINAL", color: "#eab308" },
-              { label: "ENGINE COOLANT", val: `${coolantTemp}°C`, status: "NORMAL", color: "#38bdf8" },
+              { label: "ENGINE COOLANT", val: `${coolantTemp}°C`, status: "NORMAL", color: "#fbbf24" },
               { label: "MOTOR OIL TEMP", val: `${oilTemp}°C`, status: "WARMED", color: "#10b981" },
-              { label: "CARBON BRAKE DISCS", val: `${brakeTemp}°C`, status: "PEAK BITE", color: "#ec4899" },
+              { label: "CARBON BRAKE DISCS", val: `${brakeTemp}°C`, status: "PEAK BITE", color: "#d97706" },
             ].map((th, i) => (
               <div key={i} className="p-2.5 rounded-xl bg-black/40 border border-white/10 flex flex-col gap-1">
                 <span className="text-[9px] text-slate-400 font-bold uppercase truncate">{th.label}</span>

@@ -74,22 +74,22 @@ export function ICECompletionGate({
 
       {/* ── CUMULATIVE SPECS TILES ── */}
       <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
-        <div className="p-3 rounded-2xl bg-base-950/80 border border-cyan-500/30 text-center">
+        <div className="p-3 rounded-2xl bg-base-950/80 border border-amber-500/30 text-center">
           <span className="block text-[10px] font-mono text-slate-400 uppercase">Power Output</span>
-          <span className="text-lg md:text-xl font-extrabold font-mono text-cyan-300">
+          <span className="text-lg md:text-xl font-extrabold font-mono text-amber-300">
             {currentTotalStats.hp} hp
           </span>
-          <span className="text-[10px] font-mono text-cyan-400/80 block mt-0.5">
+          <span className="text-[10px] font-mono text-amber-400/80 block mt-0.5">
             @ {sim.peakPowerRpm || 6500} RPM
           </span>
         </div>
 
-        <div className="p-3 rounded-2xl bg-base-950/80 border border-purple-500/30 text-center">
+        <div className="p-3 rounded-2xl bg-base-950/80 border border-amber-500/30 text-center">
           <span className="block text-[10px] font-mono text-slate-400 uppercase">Peak Torque</span>
-          <span className="text-lg md:text-xl font-extrabold font-mono text-purple-300">
+          <span className="text-lg md:text-xl font-extrabold font-mono text-amber-300">
             {currentTotalStats.torque} Nm
           </span>
-          <span className="text-[10px] font-mono text-purple-400/80 block mt-0.5">
+          <span className="text-[10px] font-mono text-amber-400/80 block mt-0.5">
             @ {sim.peakTorqueRpm || 4800} RPM
           </span>
         </div>
@@ -175,27 +175,27 @@ export function ICECompletionGate({
         {/* Branch A: Upgrade to Hybrid */}
         <div
           onClick={onEnableHybrid}
-          className="p-5 rounded-2xl bg-gradient-to-r from-purple-950/50 via-base-900/90 to-base-950/90 border border-purple-500/40 hover:border-purple-400 hover:shadow-[0_0_30px_rgba(192,132,252,0.3)] transition-all cursor-pointer space-y-3 group"
+          className="p-5 rounded-2xl bg-gradient-to-r from-amber-950/50 via-base-900/90 to-base-950/90 border border-amber-500/40 hover:border-amber-400 hover:shadow-[0_0_30px_rgba(192,132,252,0.3)] transition-all cursor-pointer space-y-3 group"
         >
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <div className="p-2 rounded-xl bg-purple-500/20 text-purple-300 border border-purple-500/40">
+              <div className="p-2 rounded-xl bg-amber-500/20 text-amber-300 border border-amber-500/40">
                 <Zap size={18} className="animate-pulse" />
               </div>
               <div>
-                <h4 className="text-sm font-extrabold font-mono text-purple-200">
+                <h4 className="text-sm font-extrabold font-mono text-amber-200">
                   Add 800V Hybrid Assist
                 </h4>
-                <p className="text-[10px] text-purple-300/80 font-mono">
+                <p className="text-[10px] text-amber-300/80 font-mono">
                   Axial-Flux Motor + SiC Inverter (+241 hp, +380 Nm)
                 </p>
               </div>
             </div>
-            <ArrowRight size={16} className="text-purple-400 group-hover:translate-x-1 transition-transform" />
+            <ArrowRight size={16} className="text-amber-400 group-hover:translate-x-1 transition-transform" />
           </div>
           <button
             type="button"
-            className="w-full py-2.5 px-4 rounded-xl bg-purple-500 hover:bg-purple-400 text-black font-mono font-extrabold text-xs uppercase tracking-wider transition-all shadow-[0_0_15px_rgba(192,132,252,0.4)] flex items-center justify-center gap-2"
+            className="w-full py-2.5 px-4 rounded-xl bg-amber-500 hover:bg-amber-400 text-black font-mono font-extrabold text-xs uppercase tracking-wider transition-all shadow-[0_0_15px_rgba(192,132,252,0.4)] flex items-center justify-center gap-2"
           >
             <span>Proceed to Hybrid Stage</span>
             <ArrowRight size={14} />
@@ -205,27 +205,27 @@ export function ICECompletionGate({
         {/* Branch B: Skip Directly to Finish */}
         <div
           onClick={onSkipHybrid}
-          className="p-5 rounded-2xl bg-gradient-to-r from-cyan-950/50 via-base-900/90 to-base-950/90 border border-cyan-500/40 hover:border-cyan-400 hover:shadow-[0_0_30px_rgba(34,211,238,0.3)] transition-all cursor-pointer space-y-3 group"
+          className="p-5 rounded-2xl bg-gradient-to-r from-amber-950/50 via-base-900/90 to-base-950/90 border border-amber-500/40 hover:border-amber-400 hover:shadow-[0_0_30px_rgba(34,211,238,0.3)] transition-all cursor-pointer space-y-3 group"
         >
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <div className="p-2 rounded-xl bg-cyan-500/20 text-cyan-300 border border-cyan-500/40">
+              <div className="p-2 rounded-xl bg-amber-500/20 text-amber-300 border border-amber-500/40">
                 <Flame size={18} />
               </div>
               <div>
-                <h4 className="text-sm font-extrabold font-mono text-cyan-200">
+                <h4 className="text-sm font-extrabold font-mono text-amber-200">
                   Keep Pure ICE Powertrain
                 </h4>
-                <p className="text-[10px] text-cyan-300/80 font-mono">
+                <p className="text-[10px] text-amber-300/80 font-mono">
                   Complete build without hybrid e-motor battery pack
                 </p>
               </div>
             </div>
-            <ArrowRight size={16} className="text-cyan-400 group-hover:translate-x-1 transition-transform" />
+            <ArrowRight size={16} className="text-amber-400 group-hover:translate-x-1 transition-transform" />
           </div>
           <button
             type="button"
-            className="w-full py-2.5 px-4 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-black font-mono font-extrabold text-xs uppercase tracking-wider transition-all shadow-[0_0_15px_rgba(34,211,238,0.4)] flex items-center justify-center gap-2"
+            className="w-full py-2.5 px-4 rounded-xl bg-amber-500 hover:bg-amber-400 text-black font-mono font-extrabold text-xs uppercase tracking-wider transition-all shadow-[0_0_15px_rgba(34,211,238,0.4)] flex items-center justify-center gap-2"
           >
             <span>Skip to Summary & Dyno</span>
             <ArrowRight size={14} />

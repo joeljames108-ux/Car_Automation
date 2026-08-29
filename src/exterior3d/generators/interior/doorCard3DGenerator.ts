@@ -24,7 +24,7 @@ export class DoorCard3DGenerator {
     audioSystem: AudioSystemSpecification,
     wheelbaseM: number,
     trackWidthM: number,
-    ambientColorHex: string = '#06b6d4'
+    ambientColorHex: string = '#f59e0b'
   ): THREE.Group {
     const group = new THREE.Group();
     group.name = 'DoorCardAssemblies';

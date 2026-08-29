@@ -42,7 +42,7 @@ export const TrunkLidSVG: React.FC<TrunkLidSVGProps> = ({
   };
 
   const strokeColor = isSelected
-    ? "#38bdf8"
+    ? "#fbbf24"
     : isHovered
     ? "#0284c7"
     : "#020617";
@@ -73,7 +73,7 @@ export const TrunkLidSVG: React.FC<TrunkLidSVGProps> = ({
         points="625,225 665,230 695,270 655,265"
         fill="#0284c7"
         fillOpacity="0.25"
-        stroke="#38bdf8"
+        stroke="#fbbf24"
         strokeWidth="1.0"
       />
       {/* Glass Specular Reflection Streak */}

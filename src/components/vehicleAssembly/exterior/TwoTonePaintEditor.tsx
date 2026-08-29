@@ -16,7 +16,7 @@ export const TwoTonePaintEditor: React.FC = () => {
         <select
           value={paintConfig.liveryStyle}
           onChange={(e) => updatePaintConfig({ liveryStyle: e.target.value as any })}
-          className="bg-slate-900 border border-white/10 rounded-lg px-2 py-1 text-cyan-300"
+          className="bg-slate-900 border border-white/10 rounded-lg px-2 py-1 text-amber-300"
         >
           <option value="monotone">Monotone Clean</option>
           <option value="two_tone_roof">Two-Tone Contrast Roof</option>
@@ -35,9 +35,9 @@ export const TwoTonePaintEditor: React.FC = () => {
           step="10"
           value={paintConfig.stripeWidthMm}
           onChange={(e) => updatePaintConfig({ stripeWidthMm: parseInt(e.target.value) })}
-          className="w-32 h-1.5 bg-slate-800 rounded appearance-none accent-cyan-400 cursor-pointer"
+          className="w-32 h-1.5 bg-slate-800 rounded appearance-none accent-amber-400 cursor-pointer"
         />
-        <span className="text-cyan-400">{paintConfig.stripeWidthMm}mm</span>
+        <span className="text-amber-400">{paintConfig.stripeWidthMm}mm</span>
       </div>
     </div>
   );

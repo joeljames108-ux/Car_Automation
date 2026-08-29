@@ -338,7 +338,7 @@ export const ModularLinearAssemblyStudio: React.FC = () => {
             }}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all border cursor-pointer ${
               activeTab === "stage_config" && !isInAeroStudio
-                ? "bg-cyan-500/20 border-cyan-500 text-cyan-300 shadow-sm"
+                ? "bg-amber-500/20 border-amber-500 text-amber-300 shadow-sm"
                 : "bg-base-900/60 border-base-800 text-slate-400 hover:text-slate-200"
             }`}
           >
@@ -368,7 +368,7 @@ export const ModularLinearAssemblyStudio: React.FC = () => {
             }}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all border cursor-pointer ${
               activeTab === "cad_tree"
-                ? "bg-purple-500/20 border-purple-500 text-purple-300 shadow-sm"
+                ? "bg-amber-500/20 border-amber-500 text-amber-300 shadow-sm"
                 : "bg-base-900/60 border-base-800 text-slate-400 hover:text-slate-200"
             }`}
           >
@@ -412,8 +412,8 @@ export const ModularLinearAssemblyStudio: React.FC = () => {
           onClick={() => setIsInAeroStudio(true)}
           className={`flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-mono font-bold transition-all border cursor-pointer ${
             isInAeroStudio
-              ? "bg-gradient-to-r from-cyan-500 to-blue-600 border-cyan-400 text-white shadow-lg shadow-cyan-500/30"
-              : "bg-base-900/80 border-base-800 text-cyan-400 hover:border-cyan-500/50"
+              ? "bg-gradient-to-r from-amber-500 to-amber-600 border-amber-400 text-white shadow-lg shadow-cyan-500/30"
+              : "bg-base-900/80 border-base-800 text-amber-400 hover:border-amber-500/50"
           }`}
         >
           <Wind size={13} className="animate-pulse" />

@@ -75,7 +75,7 @@ export class MasterBespokeInteriorSuite {
       totalLuminousFluxLumens: 400,
       powerConsumptionWatts: 16,
       electrochromicGlassOpacityPercent: 80,
-      activeColorHex: "#38bdf8",
+      activeColorHex: "#fbbf24",
     };
 
     // Calculate BOM Mass & Cost Estimates

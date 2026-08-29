@@ -22,8 +22,8 @@ export const SuspensionGeometryOverlay: React.FC<SuspensionGeometryOverlayProps>
       <line x1="240" y1="330" x2="160" y2="380" stroke="#0284c7" strokeWidth="0.8" strokeDasharray="3 3" />
       <line x1="225" y1="355" x2="160" y2="380" stroke="#0284c7" strokeWidth="0.8" strokeDasharray="3 3" />
       {/* Instant Center (IC Front) */}
-      <circle cx="160" cy="380" r="3.5" fill="#38bdf8" />
-      <text x="145" y="375" fill="#38bdf8" fontSize="8" fontFamily="monospace">IC_F</text>
+      <circle cx="160" cy="380" r="3.5" fill="#fbbf24" />
+      <text x="145" y="375" fill="#fbbf24" fontSize="8" fontFamily="monospace">IC_F</text>
 
       {/* Front Roll Center */}
       <circle cx="265" cy="365" r="4.5" fill="#f59e0b" />

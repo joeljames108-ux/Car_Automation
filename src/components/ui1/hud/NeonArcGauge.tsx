@@ -53,7 +53,7 @@ export const NeonArcGauge: React.FC<NeonArcGaugeProps> = ({
 
   const colors = {
     cyan: { stroke: "#7fb5d8", text: "text-sky-200" },
-    magenta: { stroke: "#9d8fc4", text: "text-violet-200" },
+    magenta: { stroke: "#9d8fc4", text: "text-amber-200" },
     gold: { stroke: "#d9b36c", text: "text-amber-200" },
     emerald: { stroke: "#6fbf9a", text: "text-emerald-200" },
   }[color];

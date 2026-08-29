@@ -482,7 +482,7 @@ export const InteriorStudioWorkbench: React.FC<InteriorStudioWorkbenchProps> = (
                     },
                   })
                 }
-                className="rounded accent-cyan-500 w-4 h-4"
+                className="rounded accent-amber-500 w-4 h-4"
               />
             </div>
             <p className="text-[11px]" style={{color: '#78716C'}}>
@@ -619,7 +619,7 @@ export const InteriorStudioWorkbench: React.FC<InteriorStudioWorkbenchProps> = (
                     ambientLighting: { ...config.ambientLighting, enabled: e.target.checked },
                   })
                 }
-                className="rounded accent-cyan-500 w-4 h-4"
+                className="rounded accent-amber-500 w-4 h-4"
               />
             </div>
 

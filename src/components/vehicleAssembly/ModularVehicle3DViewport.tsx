@@ -117,13 +117,13 @@ export const ModularVehicle3DViewport: React.FC<ModularVehicle3DViewportProps> =
   const [modelSource, setModelSource] = React.useState<
     'parametric' | 'volvo_p1800' | 'byd_atto3' | 'ford_escort' | 'bmw_i8' | 'mini_countryman' | 'v12_engine'
   >('parametric');
-  const [paintColor, setPaintColor] = React.useState<string>('#2563eb');
+  const [paintColor, setPaintColor] = React.useState<string>('#b45309');
   const [paintFinish, setPaintFinish] = React.useState<PaintFinishType>('satin_metallic');
   const [rimStyle, setRimStyle] = React.useState<RimArchitectureStyle>('turbofan');
   const [rimFinish, setRimFinish] = React.useState<'silver' | 'gloss_black' | 'satin_bronze' | 'gold' | 'gunmetal' | 'chrome'>('silver');
   const [headlightsOn, setHeadlightsOn] = React.useState<boolean>(true);
   const [underglowOn, setUnderglowOn] = React.useState<boolean>(false);
-  const [underglowColor, setUnderglowColor] = React.useState<string>('#06b6d4');
+  const [underglowColor, setUnderglowColor] = React.useState<string>('#f59e0b');
   const [articulationMode, setArticulationMode] = React.useState<'closed' | 'doors_open' | 'hood_open' | 'all_open'>('closed');
   const [showDiagnostics, setShowDiagnostics] = React.useState<boolean>(false);
   const [brakesGlowing, setBrakesGlowing] = React.useState<boolean>(false);
@@ -654,7 +654,7 @@ export const ModularVehicle3DViewport: React.FC<ModularVehicle3DViewportProps> =
               <select
                 value={modelSource}
                 onChange={(e) => setModelSource(e.target.value as any)}
-                className="px-3 py-1.5 rounded-2xl bg-amber-950/60 border border-amber-600/50 text-xs font-bold text-amber-400 focus:outline-none focus:border-amber-400 cursor-pointer shadow-md hover:border-cyan-400 transition-all"
+                className="px-3 py-1.5 rounded-2xl bg-amber-950/60 border border-amber-600/50 text-xs font-bold text-amber-400 focus:outline-none focus:border-amber-400 cursor-pointer shadow-md hover:border-amber-400 transition-all"
               >
                 <option value="parametric">⚡ Parametric Sculpted CAD</option>
                 <option value="volvo_p1800">🇸🇪 Volvo P1800 Restomod (FBX)</option>
@@ -730,13 +730,13 @@ export const ModularVehicle3DViewport: React.FC<ModularVehicle3DViewportProps> =
             <div className="flex items-center gap-1 p-1 rounded-2xl bg-amber-950/60 border border-amber-800/40">
               <button
                 onClick={() => applyCameraPreset('front_3_4')}
-                className={`px-2 py-1 rounded-lg text-[10px] font-bold ${cameraPreset === 'front_3_4' ? 'bg-cyan-500 text-slate-950' : 'text-amber-400/70 hover:text-amber-200'}`}
+                className={`px-2 py-1 rounded-lg text-[10px] font-bold ${cameraPreset === 'front_3_4' ? 'bg-amber-500 text-slate-950' : 'text-amber-400/70 hover:text-amber-200'}`}
               >
                 3/4 Front
               </button>
               <button
                 onClick={() => applyCameraPreset('side_profile')}
-                className={`px-2 py-1 rounded-lg text-[10px] font-bold ${cameraPreset === 'side_profile' ? 'bg-cyan-500 text-slate-950' : 'text-amber-400/70 hover:text-amber-200'}`}
+                className={`px-2 py-1 rounded-lg text-[10px] font-bold ${cameraPreset === 'side_profile' ? 'bg-amber-500 text-slate-950' : 'text-amber-400/70 hover:text-amber-200'}`}
               >
                 Side
               </button>
@@ -771,13 +771,13 @@ export const ModularVehicle3DViewport: React.FC<ModularVehicle3DViewportProps> =
 
               <div className="flex items-center gap-1.5 ml-1">
                 {[
-                  { label: 'Sapphire Blue', color: '#2563eb' },
+                  { label: 'Sapphire Blue', color: '#b45309' },
                   { label: 'Crimson Red', color: '#ef4444' },
                   { label: 'Emerald Green', color: '#10b981' },
                   { label: 'Carbon Slate', color: '#0f172a' },
                   { label: 'Racing Gold', color: '#eab308' },
                   { label: 'Solar Orange', color: '#f97316' },
-                  { label: 'Hyper Violet', color: '#8b5cf6' },
+                  { label: 'Hyper Violet', color: '#f59e0b' },
                   { label: 'Pure White', color: '#f8fafc' },
                 ].map((swatch) => (
                   <button
@@ -927,7 +927,7 @@ export const ModularVehicle3DViewport: React.FC<ModularVehicle3DViewportProps> =
                 }`}
                 title="Toggle 3D Master Bounding Box & Wheel Center Diagnostic Gizmo"
               >
-                <Ruler size={13} className={showDiagnostics ? 'text-indigo-400' : 'text-slate-500'} />
+                <Ruler size={13} className={showDiagnostics ? 'text-amber-400' : 'text-slate-500'} />
               </button>
             </div>
           </div>

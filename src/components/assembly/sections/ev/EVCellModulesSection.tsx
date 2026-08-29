@@ -94,7 +94,7 @@ export function EVCellModulesSection({
 
     // Studio Lighting
     scene.add(new THREE.AmbientLight(0xffffff, 1.2));
-    const mainLight = new THREE.DirectionalLight(0xa855f7, 2.5);
+    const mainLight = new THREE.DirectionalLight(0xf59e0b, 2.5);
     mainLight.position.set(4, 6, 4);
     scene.add(mainLight);
 
@@ -103,7 +103,7 @@ export function EVCellModulesSection({
     scene.add(blueFill);
 
     // Grid Floor
-    const grid = new THREE.GridHelper(10, 20, 0xa855f7, 0x1e293b);
+    const grid = new THREE.GridHelper(10, 20, 0xf59e0b, 0x1e293b);
     grid.position.y = -0.01;
     scene.add(grid);
 
@@ -134,10 +134,10 @@ export function EVCellModulesSection({
     for (let row = -1.5; row <= 1.5; row += 1.0) {
       for (let col = -3; col <= 3; col += 0.8) {
         const mat = new THREE.MeshStandardMaterial({
-          color: 0x38bdf8,
+          color: 0xfbbf24,
           metalness: 0.7,
           roughness: 0.3,
-          emissive: 0x38bdf8,
+          emissive: 0xfbbf24,
           emissiveIntensity: 0.2,
         });
         cellMaterialsRef.current.push(mat);
@@ -159,7 +159,7 @@ export function EVCellModulesSection({
     // 5. Top Glass/Carbon Protection Cover
     const coverGeom = new THREE.BoxGeometry(3.2, 0.06, 1.8);
     const coverMat = new THREE.MeshPhysicalMaterial({
-      color: 0xa855f7,
+      color: 0xf59e0b,
       metalness: 0.1,
       roughness: 0.1,
       transmission: 0.75,
@@ -224,8 +224,8 @@ export function EVCellModulesSection({
         mat.emissive.setHex(0xf59e0b);
         mat.emissiveIntensity = normTemp * 0.5;
       } else {
-        mat.color.setHex(0x38bdf8); // Cool blue baseline
-        mat.emissive.setHex(0x38bdf8);
+        mat.color.setHex(0xfbbf24); // Cool blue baseline
+        mat.emissive.setHex(0xfbbf24);
         mat.emissiveIntensity = 0.2;
       }
     });
@@ -234,9 +234,9 @@ export function EVCellModulesSection({
   return (
     <div className={`space-y-6 ${className}`}>
       {/* 3D INTERACTIVE EV BATTERY PACK ARCHITECTURE VIEWPORT */}
-      <div className="w-full bg-slate-950/90 rounded-2xl border border-purple-500/30 p-4 space-y-3 shadow-2xl">
+      <div className="w-full bg-slate-950/90 rounded-2xl border border-amber-500/30 p-4 space-y-3 shadow-2xl">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 font-mono text-xs text-slate-300">
-          <div className="flex items-center gap-2 font-bold text-purple-300">
+          <div className="flex items-center gap-2 font-bold text-amber-300">
             <Box size={16} />
             <span>3D EV BATTERY ARCHITECTURE: TRAY, CELL MODULES & COOLING LOOPS</span>
           </div>
@@ -245,7 +245,7 @@ export function EVCellModulesSection({
             {/* C-Rate Discharge Thermal Slider */}
             <div className="flex items-center gap-2">
               <Flame size={13} className={cRate > 5 ? "text-red-400 animate-pulse" : "text-amber-400"} />
-              <span>DISCHARGE: <span className="text-purple-300 font-bold">{cRate.toFixed(1)}C</span></span>
+              <span>DISCHARGE: <span className="text-amber-300 font-bold">{cRate.toFixed(1)}C</span></span>
               <input
                 type="range"
                 min="1.0"
@@ -259,8 +259,8 @@ export function EVCellModulesSection({
 
             {/* Exploded View Slider */}
             <div className="flex items-center gap-2">
-              <RefreshCw size={13} className="text-cyan-400" />
-              <span>EXPLODE: <span className="text-cyan-300 font-bold">{(explodedFactor * 100).toFixed(0)}%</span></span>
+              <RefreshCw size={13} className="text-amber-400" />
+              <span>EXPLODE: <span className="text-amber-300 font-bold">{(explodedFactor * 100).toFixed(0)}%</span></span>
               <input
                 type="range"
                 min="0"
@@ -268,7 +268,7 @@ export function EVCellModulesSection({
                 step="0.05"
                 value={explodedFactor}
                 onChange={(e) => setExplodedFactor(parseFloat(e.target.value))}
-                className="w-24 accent-cyan-400 cursor-pointer"
+                className="w-24 accent-amber-400 cursor-pointer"
               />
             </div>
           </div>
@@ -291,10 +291,10 @@ export function EVCellModulesSection({
           accent="purple"
         >
           <div className="space-y-3">
-            <div className="p-3 rounded-xl bg-base-950/80 border border-purple-500/20 space-y-2 text-xs font-mono">
+            <div className="p-3 rounded-xl bg-base-950/80 border border-amber-500/20 space-y-2 text-xs font-mono">
               <div className="flex justify-between">
                 <span className="text-slate-400">Pack Nominal Voltage</span>
-                <span className="text-purple-300 font-extrabold">800V Ultra-Fast DC</span>
+                <span className="text-amber-300 font-extrabold">800V Ultra-Fast DC</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-slate-400">Total Cell Count</span>
@@ -302,12 +302,12 @@ export function EVCellModulesSection({
               </div>
               <div className="flex justify-between">
                 <span className="text-slate-400">Gravimetric Density</span>
-                <span className="text-cyan-300 font-extrabold">320 Wh/kg</span>
+                <span className="text-amber-300 font-extrabold">320 Wh/kg</span>
               </div>
             </div>
 
-            <div className="p-3 rounded-xl bg-purple-950/20 border border-purple-500/20 space-y-1">
-              <span className="text-[10px] font-mono font-bold text-purple-300 uppercase tracking-wider block">
+            <div className="p-3 rounded-xl bg-amber-950/20 border border-amber-500/20 space-y-1">
+              <span className="text-[10px] font-mono font-bold text-amber-300 uppercase tracking-wider block">
                 THERMAL CELL ISOLATION
               </span>
               <p className="text-[11px] font-mono text-slate-300 leading-relaxed">

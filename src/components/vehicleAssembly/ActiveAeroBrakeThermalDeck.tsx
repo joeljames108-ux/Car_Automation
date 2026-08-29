@@ -78,9 +78,9 @@ export const ActiveAeroBrakeThermalDeck: React.FC = () => {
               max="320"
               value={speedKmh}
               onChange={(e) => setSpeedKmh(Number(e.target.value))}
-              className="w-32 accent-cyan-500 cursor-pointer"
+              className="w-32 accent-amber-500 cursor-pointer"
             />
-            <span className="text-xs font-mono font-bold text-cyan-400 w-16">{speedKmh} km/h</span>
+            <span className="text-xs font-mono font-bold text-amber-400 w-16">{speedKmh} km/h</span>
           </div>
 
           <button
@@ -113,14 +113,14 @@ export const ActiveAeroBrakeThermalDeck: React.FC = () => {
         {/* Column 1: Active Aerodynamics Actuator & Wing */}
         <div className="flex flex-col p-4 rounded-2xl bg-[#090d16] border border-[#182133] gap-3">
           <div className="flex items-center justify-between pb-2 border-b border-[#182133]">
-            <div className="flex items-center gap-2 text-cyan-400 font-bold text-xs">
+            <div className="flex items-center gap-2 text-amber-400 font-bold text-xs">
               <Wind className="w-4 h-4" />
               <span>ACTIVE AERO DYNAMICS</span>
             </div>
             <span className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded-full ${
               aeroState.airbrakeActive ? 'bg-rose-500/20 text-rose-400 border border-rose-500/40' :
               aeroState.drsActive ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/40' :
-              'bg-blue-500/20 text-blue-400 border border-blue-500/40'
+              'bg-amber-500/20 text-amber-400 border border-amber-500/40'
             }`}>
               {aeroState.airbrakeActive ? 'AIRBRAKE DEPLOYED' : aeroState.drsActive ? 'DRS SPRINT' : 'HIGH DOWNFORCE'}
             </span>
@@ -131,8 +131,8 @@ export const ActiveAeroBrakeThermalDeck: React.FC = () => {
             <svg viewBox="0 0 300 140" className="w-full h-32">
               <defs>
                 <linearGradient id="wingGrad" x1="0" y1="0" x2="1" y2="0">
-                  <stop offset="0%" stopColor="#06b6d4" />
-                  <stop offset="100%" stopColor="#3b82f6" />
+                  <stop offset="0%" stopColor="#f59e0b" />
+                  <stop offset="100%" stopColor="#d97706" />
                 </linearGradient>
               </defs>
               {/* Chassis Endplate Pylon */}
@@ -154,7 +154,7 @@ export const ActiveAeroBrakeThermalDeck: React.FC = () => {
           <div className="grid grid-cols-2 gap-2 text-xs font-mono">
             <div className="p-2.5 rounded-xl bg-[#0c1220] border border-[#1c263d]">
               <div className="text-gray-400 text-[10px]">TOTAL DOWNFORCE</div>
-              <div className="text-sm font-bold text-cyan-400">{aeroState.currentTotalDownforceN} N</div>
+              <div className="text-sm font-bold text-amber-400">{aeroState.currentTotalDownforceN} N</div>
             </div>
             <div className="p-2.5 rounded-xl bg-[#0c1220] border border-[#1c263d]">
               <div className="text-gray-400 text-[10px]">TOTAL DRAG</div>
@@ -257,11 +257,11 @@ export const ActiveAeroBrakeThermalDeck: React.FC = () => {
         {/* Column 3: Active eLSD & Direct Yaw Vectoring */}
         <div className="flex flex-col p-4 rounded-2xl bg-[#090d16] border border-[#182133] gap-3">
           <div className="flex items-center justify-between pb-2 border-b border-[#182133]">
-            <div className="flex items-center gap-2 text-indigo-400 font-bold text-xs">
+            <div className="flex items-center gap-2 text-amber-400 font-bold text-xs">
               <Activity className="w-4 h-4" />
               <span>ACTIVE eLSD & VECTORING</span>
             </div>
-            <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-400 border border-indigo-500/40">
+            <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-400 border border-indigo-500/40">
               SPORT DYNAMIC
             </span>
           </div>
@@ -270,14 +270,14 @@ export const ActiveAeroBrakeThermalDeck: React.FC = () => {
           <div className="flex flex-col items-center justify-center p-4 bg-[#05070c] rounded-xl border border-[#141b2b] gap-2">
             <div className="text-xs font-mono text-gray-400">LEFT / RIGHT TORQUE SPLIT</div>
             <div className="flex items-center gap-4 text-base font-bold font-mono">
-              <span className="text-cyan-400">{diffState.torqueLeftNm} Nm</span>
+              <span className="text-amber-400">{diffState.torqueLeftNm} Nm</span>
               <span className="text-gray-600">|</span>
               <span className="text-rose-400">{diffState.torqueRightNm} Nm</span>
             </div>
             {/* Split Bar */}
             <div className="w-full bg-gray-800 h-2.5 rounded-full overflow-hidden flex">
               <div
-                className="bg-cyan-500 h-full transition-all"
+                className="bg-amber-500 h-full transition-all"
                 style={{ width: `${(diffState.torqueLeftNm / (diffState.torqueLeftNm + diffState.torqueRightNm || 1)) * 100}%` }}
               />
               <div
@@ -291,7 +291,7 @@ export const ActiveAeroBrakeThermalDeck: React.FC = () => {
           <div className="grid grid-cols-2 gap-2 text-xs font-mono">
             <div className="p-2.5 rounded-xl bg-[#0c1220] border border-[#1c263d]">
               <div className="text-gray-400 text-[10px]">CLUTCH LOCKUP</div>
-              <div className="text-sm font-bold text-indigo-400">{diffState.clutchLockPct}%</div>
+              <div className="text-sm font-bold text-amber-400">{diffState.clutchLockPct}%</div>
             </div>
             <div className="p-2.5 rounded-xl bg-[#0c1220] border border-[#1c263d]">
               <div className="text-gray-400 text-[10px]">DIRECT YAW MOMENT</div>

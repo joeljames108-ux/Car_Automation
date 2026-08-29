@@ -33,7 +33,7 @@ export function KineticCanvasBackground() {
       alpha: number;
     }[] = [];
 
-    const colors = ["#00f0ff", "#a855f7", "#38bdf8", "#818cf8"];
+    const colors = ["#00f0ff", "#f59e0b", "#fbbf24", "#fbbf24"];
 
     for (let i = 0; i < particleCount; i++) {
       particles.push({

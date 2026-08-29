@@ -63,7 +63,7 @@ export const ZeroEmissionHighPerformanceStudioDeck: React.FC = () => {
       {/* Studio Header Ribbon */}
       <div className="flex items-center justify-between px-5 py-3 rounded-2xl bg-[#090d16] border border-[#182133] shadow-lg">
         <div className="flex items-center gap-3">
-          <div className="p-2 rounded-xl bg-gradient-to-tr from-cyan-500/20 via-emerald-500/20 to-purple-500/20 border border-cyan-500/40 text-cyan-400">
+          <div className="p-2 rounded-xl bg-gradient-to-tr from-amber-500/20 via-emerald-500/20 to-amber-500/20 border border-amber-500/40 text-amber-400">
             <Sparkles className="w-5 h-5" />
           </div>
           <div>
@@ -92,7 +92,7 @@ export const ZeroEmissionHighPerformanceStudioDeck: React.FC = () => {
           <select
             value={wingMode}
             onChange={(e) => setWingMode(e.target.value as ActiveWingPresetMode)}
-            className="bg-[#0e1424] text-cyan-400 text-xs font-bold font-mono px-3 py-1.5 rounded-xl border border-cyan-500/40 cursor-pointer"
+            className="bg-[#0e1424] text-amber-400 text-xs font-bold font-mono px-3 py-1.5 rounded-xl border border-amber-500/40 cursor-pointer"
           >
             <option value="STOWED_RETRACTED">Wing Retracted (0mm / 0°)</option>
             <option value="DRS_LOW_DRAG">DRS Low Drag (180mm / -3.5°)</option>
@@ -108,7 +108,7 @@ export const ZeroEmissionHighPerformanceStudioDeck: React.FC = () => {
         {/* Card 1: PEMFC & 700-Bar H2 Storage */}
         <div className="flex flex-col p-4 rounded-2xl bg-[#090d16] border border-[#182133] gap-3">
           <div className="flex items-center justify-between pb-2 border-b border-[#182133]">
-            <div className="flex items-center gap-2 text-cyan-400 font-bold text-xs">
+            <div className="flex items-center gap-2 text-amber-400 font-bold text-xs">
               <Zap className="w-4 h-4" />
               <span>PEMFC & 700-BAR H2 STORAGE</span>
             </div>
@@ -125,14 +125,14 @@ export const ZeroEmissionHighPerformanceStudioDeck: React.FC = () => {
               max="125"
               value={fcevPowerDemand}
               onChange={(e) => setFcevPowerDemand(Number(e.target.value))}
-              className="w-28 accent-cyan-500 cursor-pointer"
+              className="w-28 accent-amber-500 cursor-pointer"
             />
           </div>
 
           <div className="grid grid-cols-2 gap-2 text-xs font-mono">
             <div className="p-2 rounded-lg bg-[#0c1220] border border-[#1c263d]">
               <div className="text-gray-400 text-[10px]">CELL VOLTAGE</div>
-              <div className="text-cyan-400 font-bold">{fcevState.stack.cellOperatingVoltageV} V</div>
+              <div className="text-amber-400 font-bold">{fcevState.stack.cellOperatingVoltageV} V</div>
             </div>
             <div className="p-2 rounded-lg bg-[#0c1220] border border-[#1c263d]">
               <div className="text-gray-400 text-[10px]">700-BAR TANK</div>
@@ -181,7 +181,7 @@ export const ZeroEmissionHighPerformanceStudioDeck: React.FC = () => {
             </div>
             <div className="p-2 rounded-lg bg-[#0c1220] border border-[#1c263d]">
               <div className="text-gray-400 text-[10px]">PEAK CELL TEMP</div>
-              <div className={`font-bold ${immersionState.peakCellTemperatureCelsius > 60 ? 'text-rose-400' : 'text-cyan-400'}`}>
+              <div className={`font-bold ${immersionState.peakCellTemperatureCelsius > 60 ? 'text-rose-400' : 'text-amber-400'}`}>
                 {immersionState.peakCellTemperatureCelsius} °C
               </div>
             </div>
@@ -191,7 +191,7 @@ export const ZeroEmissionHighPerformanceStudioDeck: React.FC = () => {
             </div>
             <div className="p-2 rounded-lg bg-[#0c1220] border border-[#1c263d]">
               <div className="text-gray-400 text-[10px]">MAX FAST CHARGE</div>
-              <div className="text-purple-400 font-bold">{immersionState.maxAllowableFastChargeRateC} C Continuous</div>
+              <div className="text-amber-400 font-bold">{immersionState.maxAllowableFastChargeRateC} C Continuous</div>
             </div>
           </div>
         </div>
@@ -243,11 +243,11 @@ export const ZeroEmissionHighPerformanceStudioDeck: React.FC = () => {
         {/* Card 4: Dual-Axis Active Rear Wing */}
         <div className="flex flex-col p-4 rounded-2xl bg-[#090d16] border border-[#182133] gap-3">
           <div className="flex items-center justify-between pb-2 border-b border-[#182133]">
-            <div className="flex items-center gap-2 text-purple-400 font-bold text-xs">
+            <div className="flex items-center gap-2 text-amber-400 font-bold text-xs">
               <Wind className="w-4 h-4" />
               <span>DUAL-AXIS ACTIVE REAR WING</span>
             </div>
-            <span className="text-[10px] font-mono font-bold text-purple-400">
+            <span className="text-[10px] font-mono font-bold text-amber-400">
               L/D: {wingState.aeroForces.liftToDragRatio}
             </span>
           </div>
@@ -255,11 +255,11 @@ export const ZeroEmissionHighPerformanceStudioDeck: React.FC = () => {
           <div className="grid grid-cols-2 gap-2 text-xs font-mono">
             <div className="p-2.5 rounded-xl bg-[#0c1220] border border-[#1c263d]">
               <div className="text-gray-400 text-[10px]">HEIGHT / ANGLE</div>
-              <div className="text-purple-400 font-bold">{wingState.currentHeightMm} mm / {wingState.currentAngleOfAttackDeg}°</div>
+              <div className="text-amber-400 font-bold">{wingState.currentHeightMm} mm / {wingState.currentAngleOfAttackDeg}°</div>
             </div>
             <div className="p-2.5 rounded-xl bg-[#0c1220] border border-[#1c263d]">
               <div className="text-gray-400 text-[10px]">DOWNFORCE @ 245km/h</div>
-              <div className="text-cyan-400 font-bold">{wingState.aeroForces.downforceNewtons} N</div>
+              <div className="text-amber-400 font-bold">{wingState.aeroForces.downforceNewtons} N</div>
             </div>
             <div className="p-2.5 rounded-xl bg-[#0c1220] border border-[#1c263d]">
               <div className="text-gray-400 text-[10px]">DRAG FORCE</div>
@@ -287,11 +287,11 @@ export const ZeroEmissionHighPerformanceStudioDeck: React.FC = () => {
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs font-mono">
             <div className="p-2.5 rounded-xl bg-[#0c1220] border border-[#1c263d]">
               <div className="text-gray-400 text-[10px]">TOP SPEED</div>
-              <div className="text-cyan-400 font-bold">{lapTimeState.topSpeedKmh} km/h</div>
+              <div className="text-amber-400 font-bold">{lapTimeState.topSpeedKmh} km/h</div>
             </div>
             <div className="p-2.5 rounded-xl bg-[#0c1220] border border-[#1c263d]">
               <div className="text-gray-400 text-[10px]">PEAK LATERAL G</div>
-              <div className="text-purple-400 font-bold">{lapTimeState.peakLateralG} G</div>
+              <div className="text-amber-400 font-bold">{lapTimeState.peakLateralG} G</div>
             </div>
             <div className="p-2.5 rounded-xl bg-[#0c1220] border border-[#1c263d]">
               <div className="text-gray-400 text-[10px]">PEAK BRAKING</div>

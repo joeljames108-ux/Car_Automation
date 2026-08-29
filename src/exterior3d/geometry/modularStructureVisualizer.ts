@@ -114,7 +114,7 @@ export class ModularStructureVisualizer {
 
     const zAxisGeo = new THREE.CylinderGeometry(0.003, 0.003, axisLen, 12);
     zAxisGeo.rotateX(Math.PI / 2);
-    const zAxis = new THREE.Mesh(zAxisGeo, new THREE.MeshBasicMaterial({ color: 0x3b82f6 }));
+    const zAxis = new THREE.Mesh(zAxisGeo, new THREE.MeshBasicMaterial({ color: 0xd97706 }));
     zAxis.position.set(cogWorldX, cogWorldY, cogWorldZ);
     cogGroup.add(zAxis);
 
@@ -251,7 +251,7 @@ export class ModularStructureVisualizer {
       }
       const trussGeo = new THREE.BufferGeometry().setFromPoints(trussPoints);
       const trussMat = new THREE.LineBasicMaterial({
-        color: 0x38bdf8,
+        color: 0xfbbf24,
         transparent: true,
         opacity: 0.45,
       });

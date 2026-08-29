@@ -111,7 +111,7 @@ export class HyperFidelityHmiScreenRenderer {
     const rpmAngle = Math.PI * 0.8 + rpmRatio * (Math.PI * 1.4);
 
     const gradient = ctx.createLinearGradient(cx - radius, cy, cx + radius, cy);
-    gradient.addColorStop(0, "#38bdf8");
+    gradient.addColorStop(0, "#fbbf24");
     gradient.addColorStop(0.7, "#f59e0b");
     gradient.addColorStop(1.0, "#ef4444");
 
@@ -131,7 +131,7 @@ export class HyperFidelityHmiScreenRenderer {
     ctx.font = "bold 32px sans-serif";
     ctx.fillText("KM/H", cx, cy + 30);
 
-    ctx.fillStyle = t.gear === "M5" ? "#ef4444" : "#38bdf8";
+    ctx.fillStyle = t.gear === "M5" ? "#ef4444" : "#fbbf24";
     ctx.font = "bold 96px sans-serif";
     ctx.fillText(`${t.gear}`, cx, cy + 140);
 
@@ -160,7 +160,7 @@ export class HyperFidelityHmiScreenRenderer {
     const gCy = cy;
     ctx.beginPath();
     ctx.arc(gCx, gCy, 120, 0, Math.PI * 2);
-    ctx.strokeStyle = "#38bdf8";
+    ctx.strokeStyle = "#fbbf24";
     ctx.lineWidth = 3;
     ctx.stroke();
 
@@ -182,7 +182,7 @@ export class HyperFidelityHmiScreenRenderer {
     ctx.fillRect(bCx - 30, cy - 120, 60, 240);
 
     const boostHeight = (t.boostBar / 2.5) * 240;
-    ctx.fillStyle = "#38bdf8";
+    ctx.fillStyle = "#fbbf24";
     ctx.fillRect(bCx - 30, cy + 120 - boostHeight, 60, boostHeight);
 
     ctx.fillStyle = "#ffffff";
@@ -223,7 +223,7 @@ export class HyperFidelityHmiScreenRenderer {
     ctx.fillStyle = "#0f172a";
     ctx.fillRect(0, 0, width, 120);
 
-    ctx.fillStyle = "#38bdf8";
+    ctx.fillStyle = "#fbbf24";
     ctx.font = "bold 44px sans-serif";
     ctx.fillText("APEX PERFORMANCE HMI OS v4.2", 60, 75);
 
@@ -242,7 +242,7 @@ export class HyperFidelityHmiScreenRenderer {
     }
 
     // Media Dolby Audio Waveform Display
-    ctx.fillStyle = "#38bdf8";
+    ctx.fillStyle = "#fbbf24";
     for (let x = 120; x < width - 120; x += 16) {
       const h = Math.sin(x * 0.02) * 80 + 100;
       ctx.fillRect(x, height - 250 - h / 2, 10, h);

@@ -504,7 +504,7 @@ export function simulateRace(design: VehicleDesign, sim: SimResult, config: Race
 
   const ourCar: CompetitorResult = {
     position: 0, name: "You", totalTime, bestLap: Math.round(bestLap * 1000) / 1000,
-    laps: laps.length, pitted: pitStops > 0, retired: dnf, gapToLeader: 0, carColor: "#22d3ee",
+    laps: laps.length, pitted: pitStops > 0, retired: dnf, gapToLeader: 0, carColor: "#fbbf24",
   };
 
   const allCars = [...finalCompetitors, ourCar];

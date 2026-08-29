@@ -50,10 +50,10 @@ interface FinishSummarySectionProps {
   className?: string;
 }
 
-const GRADE_BADGES: Record<MaterialGrade, { label: string; color: string }> = {
+const GRADE_BADGES: Partial<Record<MaterialGrade, { label: string; color: string }>> = {
   cast: { label: "OEM CAST", color: "bg-slate-800 text-slate-300 border-slate-700" },
-  forged: { label: "RACE FORGED", color: "bg-cyan-500/20 text-cyan-300 border-cyan-500/40" },
-  billet: { label: "CNC BILLET", color: "bg-purple-500/20 text-purple-300 border-purple-500/40" },
+  forged: { label: "RACE FORGED", color: "bg-amber-500/20 text-amber-300 border-amber-500/40" },
+  billet: { label: "CNC BILLET", color: "bg-amber-500/20 text-amber-300 border-amber-500/40" },
   titanium: { label: "TITANIUM SPEC-R", color: "bg-amber-500/20 text-amber-300 border-amber-500/40" },
   ceramic: { label: "CERAMIC MATRIX", color: "bg-emerald-500/20 text-emerald-300 border-emerald-500/40" },
 };
@@ -100,7 +100,7 @@ Components Installed: ${installedComponents.length}`;
       {/* ── TOP CERTIFICATION HEADER ── */}
       <div className="flex flex-col md:flex-row items-center justify-between gap-4 border-b border-slate-800/80 pb-6">
         <div className="flex items-center gap-3.5">
-          <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-500/20 via-cyan-500/20 to-purple-500/20 border border-emerald-400/40 flex items-center justify-center text-emerald-300 shadow-[0_0_25px_rgba(52,211,153,0.3)] shrink-0">
+          <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-500/20 via-cyan-500/20 to-amber-500/20 border border-emerald-400/40 flex items-center justify-center text-emerald-300 shadow-[0_0_25px_rgba(52,211,153,0.3)] shrink-0">
             <Award size={28} className="text-emerald-400" />
           </div>
           <div>
@@ -132,7 +132,7 @@ Components Installed: ${installedComponents.length}`;
           <button
             type="button"
             onClick={onShowCompletionModal}
-            className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-emerald-400 to-cyan-400 text-black font-mono font-extrabold text-xs uppercase tracking-wider transition-all shadow-[0_0_20px_rgba(52,211,153,0.4)] cursor-pointer active:scale-95"
+            className="flex items-center gap-1.5 px-4 py-2 rounded-xl bg-gradient-to-r from-emerald-400 to-amber-400 text-black font-mono font-extrabold text-xs uppercase tracking-wider transition-all shadow-[0_0_20px_rgba(52,211,153,0.4)] cursor-pointer active:scale-95"
           >
             <Sparkles size={14} />
             <span>Celebration Certificate</span>
@@ -152,22 +152,22 @@ Components Installed: ${installedComponents.length}`;
 
       {/* ── CUMULATIVE SPECS 5-TILE ROW ── */}
       <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
-        <div className="p-3.5 rounded-2xl bg-base-950/80 border border-cyan-500/30 text-center">
+        <div className="p-3.5 rounded-2xl bg-base-950/80 border border-amber-500/30 text-center">
           <span className="block text-[10px] font-mono text-slate-400 uppercase">Certified Output</span>
-          <span className="text-xl md:text-2xl font-extrabold font-mono text-cyan-300">
+          <span className="text-xl md:text-2xl font-extrabold font-mono text-amber-300">
             {currentTotalStats.hp} hp
           </span>
-          <span className="text-[10px] font-mono text-cyan-400/80 block mt-0.5">
+          <span className="text-[10px] font-mono text-amber-400/80 block mt-0.5">
             {isEV ? `${Math.round(currentTotalStats.hp / 1.341)} kW` : `@ ${sim.peakPowerRpm || 6500} RPM`}
           </span>
         </div>
 
-        <div className="p-3.5 rounded-2xl bg-base-950/80 border border-purple-500/30 text-center">
+        <div className="p-3.5 rounded-2xl bg-base-950/80 border border-amber-500/30 text-center">
           <span className="block text-[10px] font-mono text-slate-400 uppercase">Peak Torque</span>
-          <span className="text-xl md:text-2xl font-extrabold font-mono text-purple-300">
+          <span className="text-xl md:text-2xl font-extrabold font-mono text-amber-300">
             {currentTotalStats.torque} Nm
           </span>
-          <span className="text-[10px] font-mono text-purple-400/80 block mt-0.5">
+          <span className="text-[10px] font-mono text-amber-400/80 block mt-0.5">
             {isEV ? "0 RPM Instantaneous" : `@ ${sim.peakTorqueRpm || 4800} RPM`}
           </span>
         </div>
@@ -245,7 +245,7 @@ Components Installed: ${installedComponents.length}`;
                         {variant?.label || badge.label}
                       </span>
                     </td>
-                    <td className="py-2.5 px-3 text-right text-cyan-300 font-bold">
+                    <td className="py-2.5 px-3 text-right text-amber-300 font-bold">
                       {hpGain > 0 ? `+${hpGain} hp` : "–"}
                     </td>
                     <td className="py-2.5 px-3 text-right text-slate-300 font-bold">

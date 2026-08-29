@@ -111,10 +111,10 @@ export const HypercarLivePhysicsHUD: React.FC<HypercarLivePhysicsHUDProps> = mem
 
           {/* Aerodynamics */}
           <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-black/50 border border-white/10">
-            <Wind className="w-4 h-4 text-cyan-400" />
+            <Wind className="w-4 h-4 text-amber-400" />
             <div>
               <div className="text-[9px] font-mono text-zinc-400">AERODYNAMICS @ 250 KM/H</div>
-              <div className="text-xs font-black font-mono text-cyan-300">
+              <div className="text-xs font-black font-mono text-amber-300">
                 {metrics.totalDownforceAt250KmhKg} <span className="text-[9px] text-zinc-400">kg DF</span> • {metrics.liftToDragRatio} <span className="text-[9px] text-zinc-400">L/D</span>
               </div>
             </div>
@@ -122,10 +122,10 @@ export const HypercarLivePhysicsHUD: React.FC<HypercarLivePhysicsHUDProps> = mem
 
           {/* Endurance Cooling & Reliability */}
           <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-black/50 border border-white/10">
-            <ThermometerSnowflake className="w-4 h-4 text-purple-400" />
+            <ThermometerSnowflake className="w-4 h-4 text-amber-400" />
             <div>
               <div className="text-[9px] font-mono text-zinc-400">ENDURANCE THERMAL</div>
-              <div className="text-xs font-black font-mono text-purple-300">
+              <div className="text-xs font-black font-mono text-amber-300">
                 {metrics.totalCoolingCapacityKw} <span className="text-[9px] text-zinc-400">kW</span> • {metrics.enduranceReliabilityScore}% <span className="text-[9px] text-emerald-400">Rel</span>
               </div>
             </div>

@@ -20,11 +20,11 @@ interface AmbientLightingStudioPanelProps {
 }
 
 export const AMBIENT_LIGHT_PRESETS: { name: string; primaryHex: string; secondaryHex: string; theme: AmbientLightingTheme }[] = [
-  { name: "Cyberpunk Neon Cyan", primaryHex: "#00f0ff", secondaryHex: "#3b82f6", theme: "cyberpunk_cyan" },
+  { name: "Cyberpunk Neon Cyan", primaryHex: "#00f0ff", secondaryHex: "#d97706", theme: "cyberpunk_cyan" },
   { name: "Golden Hour Amber", primaryHex: "#f59e0b", secondaryHex: "#d97706", theme: "amber_gold_lounge" },
   { name: "Titanium Pure White", primaryHex: "#f8fafc", secondaryHex: "#94a3b8", theme: "monochrome_white" },
   { name: "Scuderia Crimson Red", primaryHex: "#ef4444", secondaryHex: "#991b1b", theme: "scuderia_crimson" },
-  { name: "Ice Blue Calm", primaryHex: "#38bdf8", secondaryHex: "#0284c7", theme: "ice_blue_calm" },
+  { name: "Ice Blue Calm", primaryHex: "#fbbf24", secondaryHex: "#0284c7", theme: "ice_blue_calm" },
   { name: "GT3 Minimal Red", primaryHex: "#dc2626", secondaryHex: "#7f1d1d", theme: "gt_track_minimal_red" },
 ];
 

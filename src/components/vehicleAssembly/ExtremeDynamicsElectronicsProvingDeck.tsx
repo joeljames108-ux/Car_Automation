@@ -57,7 +57,7 @@ export const ExtremeDynamicsElectronicsProvingDeck: React.FC = () => {
       {/* Studio Header Ribbon */}
       <div className="flex items-center justify-between px-5 py-3 rounded-2xl bg-[#090d16] border border-[#182133] shadow-lg">
         <div className="flex items-center gap-3">
-          <div className="p-2 rounded-xl bg-gradient-to-tr from-rose-500/20 via-amber-500/20 to-cyan-500/20 border border-rose-500/40 text-rose-400">
+          <div className="p-2 rounded-xl bg-gradient-to-tr from-rose-500/20 via-amber-500/20 to-amber-500/20 border border-rose-500/40 text-rose-400">
             <Activity className="w-5 h-5" />
           </div>
           <div>
@@ -115,7 +115,7 @@ export const ExtremeDynamicsElectronicsProvingDeck: React.FC = () => {
           <div className="grid grid-cols-3 gap-2 text-xs font-mono">
             <div className="p-2 rounded-lg bg-[#0c1220] border border-[#1c263d]">
               <div className="text-gray-400 text-[10px]">DOWNFORCE</div>
-              <div className="text-cyan-400 font-bold">{porpState.diffuserState.diffuserDownforceN} N</div>
+              <div className="text-amber-400 font-bold">{porpState.diffuserState.diffuserDownforceN} N</div>
             </div>
             <div className="p-2 rounded-lg bg-[#0c1220] border border-[#1c263d]">
               <div className="text-gray-400 text-[10px]">HEAVE OSCILLATION</div>
@@ -127,7 +127,7 @@ export const ExtremeDynamicsElectronicsProvingDeck: React.FC = () => {
             </div>
             <div className="p-2 rounded-lg bg-[#0c1220] border border-[#1c263d]">
               <div className="text-gray-400 text-[10px]">PEAK VERTICAL G</div>
-              <div className="text-purple-400 font-bold">{porpState.peakVerticalAccelerationG} G</div>
+              <div className="text-amber-400 font-bold">{porpState.peakVerticalAccelerationG} G</div>
             </div>
             <div className="p-2 rounded-lg bg-[#0c1220] border border-[#1c263d]">
               <div className="text-gray-400 text-[10px]">AERO STALL</div>
@@ -145,7 +145,7 @@ export const ExtremeDynamicsElectronicsProvingDeck: React.FC = () => {
         {/* Card 2: 3-Level Flying Capacitor Inverter */}
         <div className="flex flex-col p-4 rounded-2xl bg-[#090d16] border border-[#182133] gap-3">
           <div className="flex items-center justify-between pb-2 border-b border-[#182133]">
-            <div className="flex items-center gap-2 text-cyan-400 font-bold text-xs">
+            <div className="flex items-center gap-2 text-amber-400 font-bold text-xs">
               <Cpu className="w-4 h-4" />
               <span>3L FLYING-CAPACITOR INVERTER & dv/dt</span>
             </div>
@@ -159,7 +159,7 @@ export const ExtremeDynamicsElectronicsProvingDeck: React.FC = () => {
             <select
               value={inverterTopology}
               onChange={(e) => setInverterTopology(e.target.value as InverterTopologyType)}
-              className="bg-[#0e1424] text-cyan-400 text-xs font-mono px-2 py-1 rounded border border-cyan-500/30"
+              className="bg-[#0e1424] text-amber-400 text-xs font-mono px-2 py-1 rounded border border-amber-500/30"
             >
               <option value="THREE_LEVEL_FLYING_CAPACITOR">3L Flying Capacitor (FC)</option>
               <option value="THREE_LEVEL_NPC">3L Neutral-Point-Clamped (NPC)</option>
@@ -186,11 +186,11 @@ export const ExtremeDynamicsElectronicsProvingDeck: React.FC = () => {
             </div>
             <div className="p-2 rounded-lg bg-[#0c1220] border border-[#1c263d]">
               <div className="text-gray-400 text-[10px]">FLY CAP VOLTAGE</div>
-              <div className="text-cyan-400 font-bold">{inverterState.flyingCapacitor.flyingCapacitorActualVoltageV} V</div>
+              <div className="text-amber-400 font-bold">{inverterState.flyingCapacitor.flyingCapacitorActualVoltageV} V</div>
             </div>
             <div className="p-2 rounded-lg bg-[#0c1220] border border-[#1c263d]">
               <div className="text-gray-400 text-[10px]">COMMON-MODE</div>
-              <div className="text-purple-400 font-bold">{inverterState.insulationStress.commonModeVoltageRmsV} V RMS</div>
+              <div className="text-amber-400 font-bold">{inverterState.insulationStress.commonModeVoltageRmsV} V RMS</div>
             </div>
             <div className="p-2 rounded-lg bg-[#0c1220] border border-[#1c263d]">
               <div className="text-gray-400 text-[10px]">INSULATION LIFE</div>
@@ -263,7 +263,7 @@ export const ExtremeDynamicsElectronicsProvingDeck: React.FC = () => {
             </div>
             <div className="p-2 rounded-lg bg-[#0c1220] border border-[#1c263d]">
               <div className="text-gray-400 text-[10px]">SAFETY MARGIN</div>
-              <div className="text-cyan-400 font-bold">{brakeState.safetyMarginToBoilingCelsius} °C</div>
+              <div className="text-amber-400 font-bold">{brakeState.safetyMarginToBoilingCelsius} °C</div>
             </div>
           </div>
         </div>
@@ -287,11 +287,11 @@ export const ExtremeDynamicsElectronicsProvingDeck: React.FC = () => {
             </div>
             <div className="p-2.5 rounded-xl bg-[#0c1220] border border-[#1c263d]">
               <div className="text-gray-400 text-[10px]">PEAK LATERAL OFFSET</div>
-              <div className="text-cyan-400 font-bold">{evasionState.peakLateralEvasionOffsetM} m</div>
+              <div className="text-amber-400 font-bold">{evasionState.peakLateralEvasionOffsetM} m</div>
             </div>
             <div className="p-2.5 rounded-xl bg-[#0c1220] border border-[#1c263d]">
               <div className="text-gray-400 text-[10px]">EVASION LATERAL G</div>
-              <div className="text-purple-400 font-bold">{evasionState.maxEvasionLateralG} G (Feasible: {evasionState.evasionFeasible ? 'YES' : 'NO'})</div>
+              <div className="text-amber-400 font-bold">{evasionState.maxEvasionLateralG} G (Feasible: {evasionState.evasionFeasible ? 'YES' : 'NO'})</div>
             </div>
             <div className="p-2.5 rounded-xl bg-[#0c1220] border border-[#1c263d]">
               <div className="text-gray-400 text-[10px]">BAND CONVERGENCE</div>

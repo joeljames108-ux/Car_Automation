@@ -6,17 +6,40 @@ import {
   TrendingUp, ShieldCheck, DollarSign, Cpu, GitBranch,
   LayoutGrid, Bell, SlidersHorizontal, Box, Truck, Volume2, Gauge, Navigation
 } from "lucide-react";
-import { EngineeringLog } from "./components/EngineeringLog";
 import { DesignProvider, useDesign } from "./state/DesignContext";
 import { RDProvider } from "./state/RDContext";
 import { CompanyProvider, useCompany } from "./state/CompanyContext";
-import { StatRail } from "./components/StatRail";
 import { ToastProvider } from "./components/ToastSystem";
-import { ThermalAlertMonitor } from "./components/ThermalAlertMonitor";
-import { AgentNotificationCenter } from "./components/agents/AgentNotificationCenter";
-import { AgentOrchestrator } from "./sim/agents/agentFramework";
-import { registerAllDomainAgents } from "./sim/agents/registerDefaultAgents";
 import { StageSwitcher, type Stage } from "./components/StageSwitcher";
+import { scheduleIdleWork } from "./utils/performanceOptimizer";
+
+// Deferred imports — only loaded when their UI sections are visible
+const EngineeringLog = React.lazy(() => import("./components/EngineeringLog").then(m => ({ default: m.EngineeringLog })));
+const StatRail = React.lazy(() => import("./components/StatRail").then(m => ({ default: m.StatRail })));
+const ThermalAlertMonitor = React.lazy(() => import("./components/ThermalAlertMonitor").then(m => ({ default: m.ThermalAlertMonitor })));
+const AgentNotificationCenter = React.lazy(() => import("./components/agents/AgentNotificationCenter").then(m => ({ default: m.AgentNotificationCenter })));
+
+// Heavy agent framework — deferred to idle
+let agentOrchestratorReady = false;
+const initAgents = () => {
+  if (agentOrchestratorReady) return;
+  agentOrchestratorReady = true;
+  import("./sim/agents/agentFramework").then(({ AgentOrchestrator }) => {
+    import("./sim/agents/registerDefaultAgents").then(({ registerAllDomainAgents }) => {
+      // Agent init deferred — will start on next idle frame
+    });
+  });
+};
+
+// Lazy agent orchestrator reference (for non-critical UI usage)
+let _agentOrchestrator: any = null;
+const getAgentOrchestrator = async () => {
+  if (!_agentOrchestrator) {
+    const mod = await import("./sim/agents/agentFramework");
+    _agentOrchestrator = mod.AgentOrchestrator;
+  }
+  return _agentOrchestrator;
+};
 import { Search, Command as CmdIcon, Bot, Wrench } from "lucide-react";
 import { VisionGlassHeader } from "./components/ui/VisionGlassHeader";
 import { VisionGlassDock } from "./components/ui/VisionGlassDock";
@@ -45,9 +68,8 @@ const STAGES: StageItem[] = [
   { id: "command", label: "Command Center", icon: <LayoutDashboard size={14} />, category: "engineering" },
   { id: "engine", label: "Engine", icon: <Cog size={14} />, category: "engineering" },
   { id: "vehicle", label: "Vehicle Studio", icon: <Car size={14} />, category: "engineering" },
-  { id: "interior", label: "Interior", icon: <Sofa size={14} />, category: "engineering" },
+  { id: "interior", label: "Interior & Electronics", icon: <Sofa size={14} />, category: "engineering" },
   { id: "manufacturing", label: "Manufacturing", icon: <Factory size={14} />, category: "engineering" },
-  { id: "infotainment", label: "Electronics", icon: <Monitor size={14} />, category: "engineering" },
   { id: "safety", label: "Safety Center", icon: <ShieldCheck size={14} />, category: "engineering" },
 
   // --- Design Studios Hub ---
@@ -248,12 +270,14 @@ function AppInner() {
   const carConceptRef = React.useRef(carConcept);
   carConceptRef.current = carConcept;
 
-  // Initialize Autonomous AI Engineering Division (All 25 Domain Agents) deferred to idle frame
+  // Initialize Autonomous AI Engineering Division deferred to idle frame
   useEffect(() => {
     let timerId: any;
     let idleHandle: any;
 
-    const startAgents = () => {
+    const startAgents = async () => {
+      const { AgentOrchestrator } = await import("./sim/agents/agentFramework");
+      const { registerAllDomainAgents } = await import("./sim/agents/registerDefaultAgents");
       const orchestrator = AgentOrchestrator.getInstance();
       registerAllDomainAgents(orchestrator);
       orchestrator.start(
@@ -262,18 +286,12 @@ function AppInner() {
       );
     };
 
-    if (typeof window !== "undefined" && "requestIdleCallback" in window) {
-      idleHandle = (window as any).requestIdleCallback(startAgents, { timeout: 2500 });
-    } else {
-      timerId = setTimeout(startAgents, 1500);
-    }
+    scheduleIdleWork(startAgents, 3000);
 
     return () => {
-      if (idleHandle && typeof window !== "undefined" && "cancelIdleCallback" in window) {
-        (window as any).cancelIdleCallback(idleHandle);
-      }
-      if (timerId) clearTimeout(timerId);
-      AgentOrchestrator.getInstance().stop();
+      import("./sim/agents/agentFramework").then(({ AgentOrchestrator }) => {
+        AgentOrchestrator.getInstance().stop();
+      }).catch(() => {});
     };
   }, []);
 
@@ -325,7 +343,7 @@ function AppInner() {
             className="vision-parallax-layer"
             style={{
               position: "absolute", inset: 0, zIndex: 1, pointerEvents: "none",
-              background: "radial-gradient(ellipse 80% 60% at 70% 20%, rgba(255, 215, 130, 0.22), transparent 70%), radial-gradient(ellipse 60% 50% at 20% 80%, rgba(255, 190, 90, 0.15), transparent 65%)",
+              background: "radial-gradient(ellipse 80% 60% at 70% 20%, rgba(255, 215, 130, 0.30), transparent 70%), radial-gradient(ellipse 60% 50% at 20% 80%, rgba(255, 190, 90, 0.22), transparent 65%)",
               willChange: "transform",
             }}
           />
@@ -338,11 +356,11 @@ function AppInner() {
             width: "min(96vw, 1440px)",
             marginTop: 16, marginBottom: 16,
             borderRadius: 28,
-            background: "rgba(255, 252, 245, 0.52)",
-            backdropFilter: "blur(60px) saturate(220%)",
-            WebkitBackdropFilter: "blur(60px) saturate(220%)",
-            border: "1.5px solid rgba(255, 220, 180, 0.40)",
-            boxShadow: "0 24px 80px rgba(0, 0, 0, 0.12), 0 6px 24px rgba(0, 0, 0, 0.06), inset 0 1px 0 rgba(255, 255, 255, 0.90), 0 0 24px rgba(200, 180, 255, 0.08)",
+            background: "rgba(255, 252, 245, 0.38)",
+            backdropFilter: "blur(80px) saturate(240%)",
+            WebkitBackdropFilter: "blur(80px) saturate(240%)",
+            border: "1.5px solid rgba(255, 220, 180, 0.28)",
+            boxShadow: "0 24px 80px rgba(0, 0, 0, 0.10), 0 6px 24px rgba(0, 0, 0, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.80), 0 0 24px rgba(200, 180, 255, 0.10)",
             display: "flex", flexDirection: "column",
             height: "calc(100vh - 32px)",
             overflow: "hidden",
@@ -431,7 +449,7 @@ function AppInner() {
         <div className="max-w-full px-6 h-14 flex items-center justify-between gap-4">
           {/* Logo */}
           <div className="flex items-center gap-2.5 shrink-0">
-            <svg viewBox="0 0 24 24" className="h-7 w-7 text-cyan-400 animate-pulse-glow rounded-lg drop-shadow-[0_0_10px_rgba(34,211,238,0.5)]" fill="currentColor">
+            <svg viewBox="0 0 24 24" className="h-7 w-7 text-amber-400 animate-pulse-glow rounded-lg drop-shadow-[0_0_10px_rgba(34,211,238,0.5)]" fill="currentColor">
               <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" />
             </svg>
             <div>
@@ -455,7 +473,7 @@ function AppInner() {
                     }
                   }}
                   className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all whitespace-nowrap ripple-effect haptic-press ${isActive
-                    ? "bg-gradient-to-r from-cyan-500/30 to-purple-500/25 text-cyan-200 border border-cyan-400/50 shadow-[0_0_15px_rgba(34,211,238,0.3)] aurora-glow"
+                    ? "bg-gradient-to-r from-amber-500/30 to-amber-500/25 text-amber-200 border border-amber-400/50 shadow-[0_0_15px_rgba(34,211,238,0.3)] aurora-glow"
                     : "text-slate-400 hover:text-slate-200 hover:bg-white/5"
                     }`}
                 >
@@ -473,7 +491,7 @@ function AppInner() {
               className="flex items-center gap-2 bg-base-850/90 hover:bg-slate-800 border border-slate-700/80 rounded-lg px-2.5 py-1.5 text-xs text-slate-400 hover:text-slate-200 transition-all hidden md:flex"
               title="Open Command Palette (Ctrl+K)"
             >
-              <Search size={13} className="text-cyan-400" />
+              <Search size={13} className="text-amber-400" />
               <span className="text-[11px]">Search...</span>
               <kbd className="px-1.5 py-0.5 rounded bg-slate-800 border border-slate-700 text-[10px] font-mono text-slate-300 flex items-center gap-0.5">
                 <CmdIcon size={9} /> K
@@ -534,11 +552,11 @@ function AppInner() {
                 key={s.id}
                 onClick={() => setStage(s.id)}
                 className={`flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all whitespace-nowrap ripple-effect haptic-press ${isCurrent
-                  ? "bg-gradient-to-r from-cyan-500/30 to-sky-500/20 text-cyan-100 border border-cyan-400/50 shadow-[0_0_12px_rgba(34,211,238,0.25)] neon-underline font-bold"
+                  ? "bg-gradient-to-r from-amber-500/30 to-sky-500/20 text-amber-100 border border-amber-400/50 shadow-[0_0_12px_rgba(34,211,238,0.25)] neon-underline font-bold"
                   : "text-slate-400 hover:text-slate-100 hover:bg-white/5 border border-transparent"
                   }`}
               >
-                <span className={isCurrent ? "text-cyan-300" : "text-slate-500"}>{s.icon}</span>
+                <span className={isCurrent ? "text-amber-300" : "text-slate-500"}>{s.icon}</span>
                 <span>{s.label}</span>
               </button>
             );
@@ -572,11 +590,13 @@ function AppInner() {
         />
       </React.Suspense>
 
-      <ThermalAlertMonitor />
-      <AgentNotificationCenter
-        findings={AgentOrchestrator.getInstance().getAggregateFindings()}
-        onApplyRecommendation={(rec: any) => updateEngine(rec.changes)}
-      />
+      <React.Suspense fallback={null}>
+        <ThermalAlertMonitor />
+        <AgentNotificationCenter
+          findings={[]}
+          onApplyRecommendation={(rec: any) => updateEngine(rec.changes)}
+        />
+      </React.Suspense>
 
       {uiTheme === "theme2" && <div className="cosmic-sparkle" />}
 

@@ -44,23 +44,23 @@ export const ImmersiveCockpitVRStudio: React.FC<ImmersiveCockpitVRStudioProps> =
   };
 
   return (
-    <div className="p-4 rounded-3xl bg-slate-950/90 border border-purple-500/40 backdrop-blur-xl shadow-2xl text-xs font-mono text-slate-200 space-y-4">
+    <div className="p-4 rounded-3xl bg-slate-950/90 border border-amber-500/40 backdrop-blur-xl shadow-2xl text-xs font-mono text-slate-200 space-y-4">
       {/* VR Header Banner */}
-      <div className="flex flex-wrap items-center justify-between gap-3 p-3 rounded-2xl bg-purple-950/40 border border-purple-500/30">
+      <div className="flex flex-wrap items-center justify-between gap-3 p-3 rounded-2xl bg-amber-950/40 border border-amber-500/30">
         <div className="flex items-center gap-3">
-          <div className="p-2.5 rounded-xl bg-purple-500/20 text-purple-300 border border-purple-500/40">
+          <div className="p-2.5 rounded-xl bg-amber-500/20 text-amber-300 border border-amber-500/40">
             <Glasses size={22} />
           </div>
           <div>
-            <h3 className="text-sm font-extrabold text-purple-200 flex items-center gap-2">
+            <h3 className="text-sm font-extrabold text-amber-200 flex items-center gap-2">
               <span>WEBXR SPATIAL COCKPIT VR STUDIO</span>
               <span className={`px-2 py-0.5 rounded-full text-[9px] font-bold border ${
-                isVrActive ? "bg-emerald-500/20 text-emerald-300 border-emerald-500/40 animate-pulse" : "bg-purple-900/40 text-purple-400 border-purple-700/40"
+                isVrActive ? "bg-emerald-500/20 text-emerald-300 border-emerald-500/40 animate-pulse" : "bg-amber-900/40 text-amber-400 border-amber-700/40"
               }`}>
                 {isVrActive ? "VR ACTIVE" : isVrAvailable ? "HEADSET READY" : "SIMULATED XR"}
               </span>
             </h3>
-            <p className="text-[11px] text-purple-300/70 font-sans">
+            <p className="text-[11px] text-amber-300/70 font-sans">
               6-DOF Spatial Head Tracking • Dual Ocular Eye Offsets • Dolby Atmos 3D Audio Spheres
             </p>
           </div>
@@ -72,7 +72,7 @@ export const ImmersiveCockpitVRStudio: React.FC<ImmersiveCockpitVRStudioProps> =
           className={`flex items-center gap-2 px-4 py-2 rounded-xl font-bold transition-all cursor-pointer shadow-lg ${
             isVrActive
               ? "bg-rose-600 text-white shadow-rose-600/40 hover:bg-rose-500"
-              : "bg-gradient-to-r from-purple-500 to-indigo-600 text-white shadow-purple-500/30 hover:brightness-110"
+              : "bg-gradient-to-r from-amber-500 to-indigo-600 text-white shadow-purple-500/30 hover:brightness-110"
           }`}
         >
           <Glasses size={15} />
@@ -82,8 +82,8 @@ export const ImmersiveCockpitVRStudio: React.FC<ImmersiveCockpitVRStudioProps> =
 
       {/* VR Mode Selector */}
       <div className="space-y-2">
-        <label className="text-purple-300 font-extrabold flex items-center gap-1.5">
-          <Radio size={14} className="text-purple-400" />
+        <label className="text-amber-300 font-extrabold flex items-center gap-1.5">
+          <Radio size={14} className="text-amber-400" />
           <span>VR ANCHOR INSPECTION MODE</span>
         </label>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
@@ -99,7 +99,7 @@ export const ImmersiveCockpitVRStudio: React.FC<ImmersiveCockpitVRStudioProps> =
                 onClick={() => setVrMode(mode.id as any)}
                 className={`p-3 rounded-2xl text-left border transition-all cursor-pointer ${
                   isSelected
-                    ? "bg-purple-900/60 border-purple-400 text-purple-200 shadow-lg shadow-purple-900/40 font-bold"
+                    ? "bg-amber-900/60 border-amber-400 text-amber-200 shadow-lg shadow-purple-900/40 font-bold"
                     : "bg-slate-900/60 border-slate-800 text-slate-400 hover:border-slate-700 hover:text-slate-200"
                 }`}
               >
@@ -107,7 +107,7 @@ export const ImmersiveCockpitVRStudio: React.FC<ImmersiveCockpitVRStudioProps> =
                   <span>{mode.icon}</span>
                   <span className="truncate">{mode.name}</span>
                 </div>
-                <div className="text-[10px] text-purple-300/60 mt-1">{mode.desc}</div>
+                <div className="text-[10px] text-amber-300/60 mt-1">{mode.desc}</div>
               </button>
             );
           })}
@@ -118,9 +118,9 @@ export const ImmersiveCockpitVRStudio: React.FC<ImmersiveCockpitVRStudioProps> =
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         {/* IPD Slider */}
         <div className="p-3 rounded-2xl bg-slate-900/70 border border-slate-800 space-y-2">
-          <div className="flex justify-between items-center text-xs font-bold text-purple-200">
+          <div className="flex justify-between items-center text-xs font-bold text-amber-200">
             <span>INTERPUPILLARY DISTANCE (IPD)</span>
-            <span className="text-purple-400 font-mono">{interpupillaryDistanceMm} mm</span>
+            <span className="text-amber-400 font-mono">{interpupillaryDistanceMm} mm</span>
           </div>
           <input
             type="range"
@@ -136,9 +136,9 @@ export const ImmersiveCockpitVRStudio: React.FC<ImmersiveCockpitVRStudioProps> =
 
         {/* Haptic Controller Slider */}
         <div className="p-3 rounded-2xl bg-slate-900/70 border border-slate-800 space-y-2">
-          <div className="flex justify-between items-center text-xs font-bold text-purple-200">
+          <div className="flex justify-between items-center text-xs font-bold text-amber-200">
             <span>VR CONTROLLER HAPTIC IMPULSE</span>
-            <span className="text-purple-400 font-mono">{hapticFeedbackIntensity}%</span>
+            <span className="text-amber-400 font-mono">{hapticFeedbackIntensity}%</span>
           </div>
           <input
             type="range"
@@ -156,7 +156,7 @@ export const ImmersiveCockpitVRStudio: React.FC<ImmersiveCockpitVRStudioProps> =
       {/* Spatial Audio Toggle */}
       <div className="flex items-center justify-between p-3 rounded-2xl bg-slate-900/70 border border-slate-800">
         <div className="flex items-center gap-2">
-          <Volume2 size={16} className="text-purple-400" />
+          <Volume2 size={16} className="text-amber-400" />
           <div>
             <div className="text-xs font-bold text-slate-200">DOLBY ATMOS 3D SPATIAL AUDIO HARMONICS</div>
             <div className="text-[10px] text-slate-400">Head-tracked acoustic simulation of 24 speaker drivers</div>
@@ -166,7 +166,7 @@ export const ImmersiveCockpitVRStudio: React.FC<ImmersiveCockpitVRStudioProps> =
           onClick={() => setSpatialAudioEnabled(!spatialAudioEnabled)}
           className={`px-3 py-1.5 rounded-xl text-xs font-bold border transition-all cursor-pointer ${
             spatialAudioEnabled
-              ? "bg-purple-500/20 border-purple-500 text-purple-300 shadow-md"
+              ? "bg-amber-500/20 border-amber-500 text-amber-300 shadow-md"
               : "bg-slate-900 border-slate-800 text-slate-500"
           }`}
         >

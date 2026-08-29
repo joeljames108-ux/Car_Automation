@@ -80,7 +80,7 @@ export const DependencyLines: React.FC = () => {
         <Line
           key={idx}
           points={[line.start, line.end]}
-          color="#06b6d4"
+          color="#f59e0b"
           lineWidth={1.5}
           dashed
           dashScale={15}

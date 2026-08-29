@@ -35,7 +35,7 @@ export const OemMarketCompetitionDashboard: React.FC = () => {
       {/* Top Banner */}
       <div className="bg-slate-900/80 backdrop-blur-xl p-6 rounded-2xl border border-slate-800 flex items-center justify-between shadow-xl">
         <div>
-          <h2 className="text-xl font-black tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-cyan-500">
+          <h2 className="text-xl font-black tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-amber-500">
             GLOBAL AUTOMOTIVE OEM MARKET COMPETITION
           </h2>
           <p className="text-xs text-slate-400 mt-1">
@@ -110,10 +110,10 @@ export const OemMarketCompetitionDashboard: React.FC = () => {
 
           <div className="bg-slate-900/60 p-4 rounded-xl border border-slate-800">
             <div className="text-xs text-slate-400 font-semibold flex items-center space-x-2">
-              <DollarSign className="w-4 h-4 text-cyan-400" />
+              <DollarSign className="w-4 h-4 text-amber-400" />
               <span>MONTHLY GROSS REVENUE</span>
             </div>
-            <div className="text-2xl font-mono font-black text-cyan-400 mt-2">
+            <div className="text-2xl font-mono font-black text-amber-400 mt-2">
               ${(playerShare.grossRevenueUSD / 1e6).toFixed(2)}M
             </div>
             <div className="text-[11px] text-slate-500 mt-1">${playerPriceUSD.toLocaleString()} MSRP</div>
@@ -121,10 +121,10 @@ export const OemMarketCompetitionDashboard: React.FC = () => {
 
           <div className="bg-slate-900/60 p-4 rounded-xl border border-slate-800">
             <div className="text-xs text-slate-400 font-semibold flex items-center space-x-2">
-              <Users className="w-4 h-4 text-purple-400" />
+              <Users className="w-4 h-4 text-amber-400" />
               <span>CUSTOMER SATISFACTION</span>
             </div>
-            <div className="text-2xl font-mono font-black text-purple-400 mt-2">
+            <div className="text-2xl font-mono font-black text-amber-400 mt-2">
               {playerShare.customerSatisfactionScore}%
             </div>
             <div className="text-[11px] text-slate-500 mt-1">High satisfaction grade</div>
@@ -149,7 +149,7 @@ export const OemMarketCompetitionDashboard: React.FC = () => {
             <div key={entry.oemId} className="bg-slate-950/80 p-4 rounded-xl border border-slate-800 space-y-2">
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-2">
-                  <span className={`w-3 h-3 rounded-full ${entry.oemId === "user_oem" ? "bg-emerald-400" : "bg-blue-500"}`} />
+                  <span className={`w-3 h-3 rounded-full ${entry.oemId === "user_oem" ? "bg-emerald-400" : "bg-amber-500"}`} />
                   <span className="text-xs font-bold text-white">{entry.oemName}</span>
                 </div>
                 <span className="text-xs font-mono font-black text-emerald-400">{entry.marketSharePct}% Share</span>
@@ -157,7 +157,7 @@ export const OemMarketCompetitionDashboard: React.FC = () => {
 
               <div className="w-full bg-slate-900 h-2.5 rounded-full overflow-hidden border border-slate-800">
                 <div
-                  className={`h-full transition-all duration-500 ${entry.oemId === "user_oem" ? "bg-emerald-500" : "bg-blue-600"}`}
+                  className={`h-full transition-all duration-500 ${entry.oemId === "user_oem" ? "bg-emerald-500" : "bg-amber-600"}`}
                   style={{ width: `${entry.marketSharePct}%` }}
                 />
               </div>

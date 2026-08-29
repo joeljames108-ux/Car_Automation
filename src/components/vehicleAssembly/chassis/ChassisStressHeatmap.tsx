@@ -105,14 +105,14 @@ export const ChassisStressHeatmap: React.FC<ChassisStressHeatmapProps> = ({
       {showDeformationMesh && (
         <g id="fea-mesh-elements" opacity="0.45" className="pointer-events-none">
           {/* Front Longitudinal Box Elements */}
-          <polygon points="210,240 290,205 320,245 230,270" fill="none" stroke="#38bdf8" strokeWidth="0.8" strokeDasharray="3 2" />
-          <polygon points="290,205 395,165 420,210 320,245" fill="none" stroke="#38bdf8" strokeWidth="0.8" strokeDasharray="3 2" />
+          <polygon points="210,240 290,205 320,245 230,270" fill="none" stroke="#fbbf24" strokeWidth="0.8" strokeDasharray="3 2" />
+          <polygon points="290,205 395,165 420,210 320,245" fill="none" stroke="#fbbf24" strokeWidth="0.8" strokeDasharray="3 2" />
           {/* Center Cabin Sill Elements */}
-          <polygon points="395,165 615,135 635,195 420,210" fill="none" stroke="#38bdf8" strokeWidth="0.8" strokeDasharray="3 2" />
-          <polygon points="420,210 635,195 670,240 480,260" fill="none" stroke="#38bdf8" strokeWidth="0.8" strokeDasharray="3 2" />
+          <polygon points="395,165 615,135 635,195 420,210" fill="none" stroke="#fbbf24" strokeWidth="0.8" strokeDasharray="3 2" />
+          <polygon points="420,210 635,195 670,240 480,260" fill="none" stroke="#fbbf24" strokeWidth="0.8" strokeDasharray="3 2" />
           {/* Rear Subframe Elements */}
-          <polygon points="615,135 730,175 745,215 635,195" fill="none" stroke="#38bdf8" strokeWidth="0.8" strokeDasharray="3 2" />
-          <polygon points="635,195 745,215 780,250 670,240" fill="none" stroke="#38bdf8" strokeWidth="0.8" strokeDasharray="3 2" />
+          <polygon points="615,135 730,175 745,215 635,195" fill="none" stroke="#fbbf24" strokeWidth="0.8" strokeDasharray="3 2" />
+          <polygon points="635,195 745,215 780,250 670,240" fill="none" stroke="#fbbf24" strokeWidth="0.8" strokeDasharray="3 2" />
         </g>
       )}
 
@@ -198,7 +198,7 @@ export const ChassisStressHeatmap: React.FC<ChassisStressHeatmapProps> = ({
                   height="22"
                   rx="4"
                   fill="#020617"
-                  stroke={isCritical ? "#ef4444" : isHigh ? "#f59e0b" : "#38bdf8"}
+                  stroke={isCritical ? "#ef4444" : isHigh ? "#f59e0b" : "#fbbf24"}
                   strokeWidth="1.2"
                   opacity="0.95"
                 />

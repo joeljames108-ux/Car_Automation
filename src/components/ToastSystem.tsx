@@ -74,15 +74,15 @@ export function ToastProvider({ children }: { children: React.ReactNode }) {
                 : t.type === "warning"
                 ? "bg-amber-950/70 border-amber-500/40 text-amber-200 shadow-amber-950/50"
                 : t.type === "rd"
-                ? "bg-purple-950/70 border-purple-500/40 text-purple-200 shadow-purple-950/50"
-                : "bg-cyan-950/70 border-cyan-500/40 text-cyan-200 shadow-cyan-950/50"
+                ? "bg-amber-950/70 border-amber-500/40 text-amber-200 shadow-purple-950/50"
+                : "bg-amber-950/70 border-amber-500/40 text-amber-200 shadow-cyan-950/50"
             }`}
           >
             <div className="mt-0.5 shrink-0">
               {t.type === "success" && <CheckCircle2 className="w-4 h-4 text-emerald-400" />}
               {t.type === "warning" && <AlertCircle className="w-4 h-4 text-amber-400" />}
-              {t.type === "rd" && <Sparkles className="w-4 h-4 text-purple-400 animate-spin" style={{ animationDuration: "6s" }} />}
-              {t.type === "info" && <Info className="w-4 h-4 text-cyan-400" />}
+              {t.type === "rd" && <Sparkles className="w-4 h-4 text-amber-400 animate-spin" style={{ animationDuration: "6s" }} />}
+              {t.type === "info" && <Info className="w-4 h-4 text-amber-400" />}
             </div>
             <div className="flex-1 min-w-0">
               <div className="text-xs font-bold tracking-wide">{t.title}</div>

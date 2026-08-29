@@ -25,7 +25,7 @@ export const NeonHorizonProgressRing: React.FC<NeonHorizonProgressRingProps> = (
 
   const colorMap = {
     cyan: { stroke: "#7fb5d8", text: "text-sky-300" },
-    magenta: { stroke: "#9d8fc4", text: "text-violet-300" },
+    magenta: { stroke: "#9d8fc4", text: "text-amber-300" },
     gold: { stroke: "#d9b36c", text: "text-amber-300" },
     emerald: { stroke: "#6fbf9a", text: "text-emerald-300" },
   }[color];

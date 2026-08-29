@@ -219,18 +219,18 @@ export function CinematicScrollViewport({
       {persistentHeader && <div className="w-full shrink-0 z-30 mb-3">{persistentHeader}</div>}
 
       {/* ── CINEMATIC TIMELINE HUD CONTROL BAR ── */}
-      <div className="w-full flex flex-wrap items-center justify-between gap-3 px-4 py-2.5 mb-3 rounded-2xl bg-base-950/85 border border-cyan-500/30 backdrop-blur-xl shadow-[0_0_25px_rgba(0,0,0,0.5)] z-20">
+      <div className="w-full flex flex-wrap items-center justify-between gap-3 px-4 py-2.5 mb-3 rounded-2xl bg-base-950/85 border border-amber-500/30 backdrop-blur-xl shadow-[0_0_25px_rgba(0,0,0,0.5)] z-20">
         <div className="flex items-center gap-3">
-          <div className="flex items-center justify-center w-8 h-8 rounded-xl bg-gradient-to-br from-cyan-500/25 to-blue-600/25 border border-cyan-400/40 text-cyan-300 shadow-[0_0_12px_rgba(34,211,238,0.3)]">
+          <div className="flex items-center justify-center w-8 h-8 rounded-xl bg-gradient-to-br from-amber-500/25 to-amber-600/25 border border-amber-400/40 text-amber-300 shadow-[0_0_12px_rgba(34,211,238,0.3)]">
             <Layers size={16} className="animate-pulse" />
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <span className="text-[10px] font-mono font-extrabold text-cyan-400 uppercase tracking-widest flex items-center gap-1.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-ping" />
+              <span className="text-[10px] font-mono font-extrabold text-amber-400 uppercase tracking-widest flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-ping" />
                 AUTOMOTIVE OS CONSOLE TIMELINE
               </span>
-              <span className="px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 text-[9px] font-mono font-extrabold border border-cyan-500/30">
+              <span className="px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 text-[9px] font-mono font-extrabold border border-amber-500/30">
                 STATE 0{activeSceneIndex + 1} / 0{totalScenes}
               </span>
             </div>
@@ -258,7 +258,7 @@ export function CinematicScrollViewport({
                   onClick={() => goToScene(idx)}
                   className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer ${
                     isActive
-                      ? "bg-gradient-to-r from-cyan-500 to-sky-400 text-slate-950 shadow-[0_0_15px_rgba(34,211,238,0.6)] font-black scale-105"
+                      ? "bg-gradient-to-r from-amber-500 to-sky-400 text-slate-950 shadow-[0_0_15px_rgba(34,211,238,0.6)] font-black scale-105"
                       : "text-slate-400 hover:text-slate-200 hover:bg-white/5"
                   }`}
                 >
@@ -276,7 +276,7 @@ export function CinematicScrollViewport({
               disabled={activeSceneIndex === 0}
               className={`p-2 rounded-xl border text-xs transition-all cursor-pointer ${
                 activeSceneIndex > 0
-                  ? "bg-base-900 border-cyan-500/30 text-cyan-300 hover:bg-cyan-500/20 hover:scale-105 shadow-sm"
+                  ? "bg-base-900 border-amber-500/30 text-amber-300 hover:bg-amber-500/20 hover:scale-105 shadow-sm"
                   : "bg-base-950/40 border-white/5 text-slate-600 cursor-not-allowed"
               }`}
               title="Previous Content State (Scroll Up / PageUp)"
@@ -288,7 +288,7 @@ export function CinematicScrollViewport({
               disabled={activeSceneIndex >= maxProgress}
               className={`p-2 rounded-xl border text-xs transition-all cursor-pointer ${
                 activeSceneIndex < maxProgress
-                  ? "bg-base-900 border-cyan-500/30 text-cyan-300 hover:bg-cyan-500/20 hover:scale-105 shadow-sm"
+                  ? "bg-base-900 border-amber-500/30 text-amber-300 hover:bg-amber-500/20 hover:scale-105 shadow-sm"
                   : "bg-base-950/40 border-white/5 text-slate-600 cursor-not-allowed"
               }`}
               title="Next Content State (Scroll Down / PageDown)"

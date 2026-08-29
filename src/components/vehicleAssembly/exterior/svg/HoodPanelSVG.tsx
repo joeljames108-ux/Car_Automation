@@ -42,7 +42,7 @@ export const HoodPanelSVG: React.FC<HoodPanelSVGProps> = ({
   };
 
   const strokeColor = isSelected
-    ? "#38bdf8"
+    ? "#fbbf24"
     : isHovered
     ? "#0284c7"
     : "#020617";
@@ -109,7 +109,7 @@ export const HoodPanelSVG: React.FC<HoodPanelSVGProps> = ({
         <polygon
           points="215,305 385,255 415,265 225,345"
           fill="none"
-          stroke="#38bdf8"
+          stroke="#fbbf24"
           strokeWidth="1.5"
           strokeDasharray="6 3"
         />

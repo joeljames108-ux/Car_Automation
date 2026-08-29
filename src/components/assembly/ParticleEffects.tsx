@@ -67,9 +67,9 @@ export function ParticleEffects({
       if (chosenPreset === "sparks") color = Math.random() > 0.5 ? "#f97316" : "#facc15";
       else if (chosenPreset === "dust") color = "#cbd5e1";
       else if (chosenPreset === "oil") color = "#eab308";
-      else if (chosenPreset === "coolant") color = "#38bdf8";
+      else if (chosenPreset === "coolant") color = "#fbbf24";
       else if (chosenPreset === "smoke") color = "#94a3b8";
-      else if (chosenPreset === "welding") color = Math.random() > 0.5 ? "#ffffff" : "#38bdf8";
+      else if (chosenPreset === "welding") color = Math.random() > 0.5 ? "#ffffff" : "#fbbf24";
 
       newParticles.push({
         id: Math.random(),

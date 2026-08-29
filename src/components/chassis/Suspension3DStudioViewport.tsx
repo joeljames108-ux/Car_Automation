@@ -558,7 +558,7 @@ const Suspension3DStudioViewportComponent: React.FC = () => {
       <div className="absolute top-3.5 left-3.5 right-3.5 flex flex-wrap items-center justify-between gap-2.5 pointer-events-none">
         {/* Title Badge */}
         <div className="flex items-center gap-3 pointer-events-auto bg-slate-900/85 dark:bg-slate-950/85 backdrop-blur-xl px-3.5 py-2 rounded-2xl border border-white/15 shadow-xl">
-          <div className="p-2 rounded-xl bg-gradient-to-tr from-cyan-500/25 to-blue-600/25 border border-cyan-500/40 text-cyan-300 shadow-md shadow-cyan-500/20">
+          <div className="p-2 rounded-xl bg-gradient-to-tr from-amber-500/25 to-amber-600/25 border border-amber-500/40 text-amber-300 shadow-md shadow-cyan-500/20">
             <Activity className="w-4 h-4" />
           </div>
           <div>
@@ -578,9 +578,9 @@ const Suspension3DStudioViewportComponent: React.FC = () => {
           <div className="flex items-center bg-slate-900/85 dark:bg-slate-950/85 backdrop-blur-xl p-1 rounded-2xl border border-white/15 shadow-xl gap-1">
             {[
               { id: "warm_sunset" as const, label: "Warm Studio", icon: Sun, color: "text-amber-400" },
-              { id: "titanium_slate" as const, label: "Titanium CAD", icon: Layers, color: "text-cyan-400" },
+              { id: "titanium_slate" as const, label: "Titanium CAD", icon: Layers, color: "text-amber-400" },
               { id: "luxury_showroom" as const, label: "Clean Light", icon: Sparkles, color: "text-slate-100" },
-              { id: "cyberpunk_neon" as const, label: "Neon Dark", icon: Zap, color: "text-purple-400" },
+              { id: "cyberpunk_neon" as const, label: "Neon Dark", icon: Zap, color: "text-amber-400" },
             ].map((env) => {
               const Icon = env.icon;
               const isSel = envPreset === env.id;
@@ -591,7 +591,7 @@ const Suspension3DStudioViewportComponent: React.FC = () => {
                   title={env.label}
                   className={`flex items-center gap-1 px-2.5 py-1 rounded-xl text-[10px] font-mono font-bold transition-all cursor-pointer ${
                     isSel
-                      ? "bg-cyan-500/20 border border-cyan-400/60 text-white shadow-sm"
+                      ? "bg-amber-500/20 border border-amber-400/60 text-white shadow-sm"
                       : "text-slate-400 hover:text-slate-200 hover:bg-white/5 border border-transparent"
                   }`}
                 >
@@ -624,13 +624,13 @@ const Suspension3DStudioViewportComponent: React.FC = () => {
       <div className="absolute top-20 left-3.5 bg-slate-900/85 dark:bg-slate-950/85 backdrop-blur-xl p-4 rounded-2xl border border-white/15 shadow-2xl w-80 space-y-4 pointer-events-auto">
         <div className="flex items-center justify-between border-b border-white/10 pb-2.5">
           <div className="flex items-center gap-1.5 text-xs font-extrabold font-mono text-white tracking-wider">
-            <Sliders size={14} className="text-cyan-400" />
+            <Sliders size={14} className="text-amber-400" />
             <span>KINEMATIC ARTICULATION</span>
           </div>
           <button
             onClick={handleReset}
             title="Reset to 0mm Datum"
-            className="flex items-center gap-1 text-[10px] font-mono text-slate-400 hover:text-cyan-300 transition-colors cursor-pointer px-2 py-0.5 rounded-lg bg-white/5 border border-white/10 hover:border-cyan-500/40"
+            className="flex items-center gap-1 text-[10px] font-mono text-slate-400 hover:text-amber-300 transition-colors cursor-pointer px-2 py-0.5 rounded-lg bg-white/5 border border-white/10 hover:border-amber-500/40"
           >
             <RotateCcw size={11} />
             <span>RESET</span>
@@ -643,7 +643,7 @@ const Suspension3DStudioViewportComponent: React.FC = () => {
             <span className="text-slate-200 font-semibold">Wheel Bump Travel:</span>
             <span className={`font-bold px-2 py-0.5 rounded-md text-[11px] ${
               wheelBumpMm > 0
-                ? "bg-cyan-500/20 text-cyan-300 border border-cyan-500/40"
+                ? "bg-amber-500/20 text-amber-300 border border-amber-500/40"
                 : wheelBumpMm < 0
                 ? "bg-amber-500/20 text-amber-300 border border-amber-500/40"
                 : "bg-white/10 text-white border border-white/15"
@@ -658,7 +658,7 @@ const Suspension3DStudioViewportComponent: React.FC = () => {
             step={1}
             value={wheelBumpMm}
             onChange={(e) => setWheelBumpMm(Number(e.target.value))}
-            className="w-full accent-cyan-400 bg-slate-800/80 rounded-lg cursor-pointer h-2"
+            className="w-full accent-amber-400 bg-slate-800/80 rounded-lg cursor-pointer h-2"
           />
           <div className="flex justify-between text-[9px] font-mono text-slate-400">
             <span>-50mm Rebound</span>
@@ -699,7 +699,7 @@ const Suspension3DStudioViewportComponent: React.FC = () => {
         <div className="space-y-1.5">
           <div className="flex justify-between text-xs font-mono">
             <span className="text-slate-200 font-semibold">Coil Spring Rate:</span>
-            <span className="font-bold px-2 py-0.5 rounded-md text-[11px] bg-purple-500/20 text-purple-300 border border-purple-500/40">
+            <span className="font-bold px-2 py-0.5 rounded-md text-[11px] bg-amber-500/20 text-amber-300 border border-amber-500/40">
               {springRateNmm} N/mm
             </span>
           </div>
@@ -724,24 +724,24 @@ const Suspension3DStudioViewportComponent: React.FC = () => {
       <div className="absolute bottom-3.5 right-3.5 bg-slate-900/85 dark:bg-slate-950/85 backdrop-blur-xl p-4 rounded-2xl border border-white/15 shadow-2xl w-80 space-y-2.5 pointer-events-auto font-mono text-xs">
         <div className="flex items-center justify-between border-b border-white/10 pb-2">
           <div className="flex items-center gap-1.5 text-xs font-extrabold text-white tracking-wider font-sans">
-            <Gauge size={14} className="text-cyan-400" />
+            <Gauge size={14} className="text-amber-400" />
             <span>KINEMATIC READOUT TELEMETRY</span>
           </div>
-          <span className="text-[9px] text-cyan-300 font-mono font-bold bg-cyan-500/20 px-1.5 py-0.5 rounded border border-cyan-500/30">
+          <span className="text-[9px] text-amber-300 font-mono font-bold bg-amber-500/20 px-1.5 py-0.5 rounded border border-amber-500/30">
             LIVE 60FPS
           </span>
         </div>
 
         <div className="flex justify-between items-center py-0.5">
           <span className="text-slate-300 font-medium">Dynamic Camber:</span>
-          <span className="font-extrabold text-cyan-300 bg-cyan-950/70 border border-cyan-500/30 px-2 py-0.5 rounded">
+          <span className="font-extrabold text-amber-300 bg-amber-950/70 border border-amber-500/30 px-2 py-0.5 rounded">
             {dynamicCamberDeg > 0 ? `+${dynamicCamberDeg}` : dynamicCamberDeg}°
           </span>
         </div>
 
         <div className="flex justify-between items-center py-0.5">
           <span className="text-slate-300 font-medium">Roll Center Height:</span>
-          <span className="font-extrabold text-purple-300 bg-purple-950/70 border border-purple-500/30 px-2 py-0.5 rounded">
+          <span className="font-extrabold text-amber-300 bg-amber-950/70 border border-amber-500/30 px-2 py-0.5 rounded">
             {rollCenterHeightMm} mm
           </span>
         </div>
@@ -762,7 +762,7 @@ const Suspension3DStudioViewportComponent: React.FC = () => {
 
         <div className="flex justify-between items-center py-0.5 border-t border-white/10 pt-1.5">
           <span className="text-slate-300 font-medium">Ackermann Steer Angle:</span>
-          <span className="font-extrabold text-blue-300 bg-blue-950/70 border border-blue-500/30 px-2 py-0.5 rounded">
+          <span className="font-extrabold text-amber-300 bg-amber-950/70 border border-amber-500/30 px-2 py-0.5 rounded">
             {ackermannDeg}°
           </span>
         </div>

@@ -145,12 +145,12 @@ export const InteriorCadInspectorViewport: React.FC<InteriorCadInspectorViewport
     keyLight.castShadow = true;
     scene.add(keyLight);
 
-    const fillLight = new THREE.DirectionalLight(0x38bdf8, 1.0);
+    const fillLight = new THREE.DirectionalLight(0xfbbf24, 1.0);
     fillLight.position.set(-3, 2, -2);
     scene.add(fillLight);
 
     // Floor Grid Helper
-    const grid = new THREE.GridHelper(10, 20, 0x38bdf8, 0x1e293b);
+    const grid = new THREE.GridHelper(10, 20, 0xfbbf24, 0x1e293b);
     grid.position.y = -0.01;
     scene.add(grid);
 
@@ -226,7 +226,7 @@ export const InteriorCadInspectorViewport: React.FC<InteriorCadInspectorViewport
 
       {/* Top Left Status Overlay */}
       <div className="absolute top-4 left-4 p-3 rounded-2xl backdrop-blur-xl bg-slate-950/90 border border-slate-800 space-y-1 z-10">
-        <div className="text-[10px] font-bold text-cyan-400 uppercase tracking-wider flex items-center gap-1.5">
+        <div className="text-[10px] font-bold text-amber-400 uppercase tracking-wider flex items-center gap-1.5">
           <Box size={13} /> 3D INTERIOR CAD INSPECTOR
         </div>
         <div className="text-xs font-black text-white">{state.name}</div>
@@ -249,7 +249,7 @@ export const InteriorCadInspectorViewport: React.FC<InteriorCadInspectorViewport
         <button
           onClick={handleExportGlb}
           disabled={isExportingGlb}
-          className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold border border-cyan-400 bg-gradient-to-r from-cyan-600 to-blue-600 text-white shadow-lg cursor-pointer hover:brightness-110 disabled:opacity-50"
+          className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold border border-amber-400 bg-gradient-to-r from-amber-600 to-orange-600 text-white shadow-lg cursor-pointer hover:brightness-110 disabled:opacity-50"
         >
           <Download size={13} className={isExportingGlb ? "animate-bounce" : ""} />
           <span>{isExportingGlb ? "EXPORTING..." : "EXPORT GLB"}</span>
@@ -266,9 +266,9 @@ export const InteriorCadInspectorViewport: React.FC<InteriorCadInspectorViewport
 
       {/* Selected Component CAD Metadata Inspector Drawer (Right Side) */}
       {selectedMeta && (
-        <div className="absolute top-20 right-4 w-72 p-4 rounded-2xl backdrop-blur-xl bg-slate-950/95 border border-cyan-500/40 shadow-2xl space-y-3 z-20">
+        <div className="absolute top-20 right-4 w-72 p-4 rounded-2xl backdrop-blur-xl bg-slate-950/95 border border-amber-500/40 shadow-2xl space-y-3 z-20">
           <div className="flex items-center justify-between border-b border-slate-800 pb-2">
-            <span className="text-[10px] font-bold text-cyan-400 uppercase tracking-wider flex items-center gap-1.5">
+            <span className="text-[10px] font-bold text-amber-400 uppercase tracking-wider flex items-center gap-1.5">
               <Info size={13} /> CAD COMPONENT SPEC
             </span>
             <button
@@ -287,11 +287,11 @@ export const InteriorCadInspectorViewport: React.FC<InteriorCadInspectorViewport
           <div className="grid grid-cols-2 gap-2 text-[10px]">
             <div className="p-2 rounded-xl bg-slate-900 border border-slate-800">
               <span className="text-slate-400">Mass:</span>
-              <div className="font-bold text-cyan-300 text-xs">{selectedMeta.massKg} kg</div>
+              <div className="font-bold text-amber-300 text-xs">{selectedMeta.massKg} kg</div>
             </div>
             <div className="p-2 rounded-xl bg-slate-900 border border-slate-800">
               <span className="text-slate-400">Triangles:</span>
-              <div className="font-bold text-purple-300 text-xs">{selectedMeta.triangleCount.toLocaleString()}</div>
+              <div className="font-bold text-amber-300 text-xs">{selectedMeta.triangleCount.toLocaleString()}</div>
             </div>
           </div>
 

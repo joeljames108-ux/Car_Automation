@@ -48,7 +48,7 @@ export const MotorsportHeader = memo(function MotorsportHeader() {
             { label: "Teams", value: teams.length, icon: <Flag size={14} />, color: "text-accent-300" },
             { label: "Wins", value: totalWins, icon: <Trophy size={14} />, color: "text-ok-400" },
             { label: "Titles", value: totalTitles, icon: <Zap size={14} />, color: "text-yellow-400" },
-            { label: "Podiums", value: totalPodiums, icon: <Timer size={14} />, color: "text-purple-400" },
+            { label: "Podiums", value: totalPodiums, icon: <Timer size={14} />, color: "text-amber-400" },
           ].map((stat, i) => (
             <div key={stat.label} className="text-center animate-count-up" style={{ animationDelay: `${i * 80}ms` }}>
               <div className={`flex items-center justify-center gap-1 mb-1 ${stat.color}`}>

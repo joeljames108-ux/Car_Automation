@@ -65,9 +65,9 @@ export function TransmissionSection({
   return (
     <div className={`space-y-4 ${className}`}>
       {/* Top Header Mode Switcher Bar */}
-      <div className="flex flex-wrap items-center justify-between gap-3 p-3 rounded-2xl bg-slate-950/80 border border-cyan-500/30 backdrop-blur-xl shadow-xl">
+      <div className="flex flex-wrap items-center justify-between gap-3 p-3 rounded-2xl bg-slate-950/80 border border-amber-500/30 backdrop-blur-xl shadow-xl">
         <div className="flex items-center gap-2.5">
-          <div className="p-2 rounded-xl bg-cyan-500/20 text-cyan-300 border border-cyan-500/40">
+          <div className="p-2 rounded-xl bg-amber-500/20 text-amber-300 border border-amber-500/40">
             <Cog size={18} className="animate-spin-slow" />
           </div>
           <div>
@@ -75,7 +75,7 @@ export function TransmissionSection({
               <span className="text-xs font-mono font-bold text-slate-200">
                 STAGE #14: TRANSMISSION & TRANSAXLE WORKSHOP
               </span>
-              <span className="px-2 py-0.5 text-[9px] font-mono font-bold rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 uppercase">
+              <span className="px-2 py-0.5 text-[9px] font-mono font-bold rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 uppercase">
                 3D CAD Studio Integrated
               </span>
             </div>
@@ -91,7 +91,7 @@ export function TransmissionSection({
             onClick={() => setViewMode("3d_studio")}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer ${
               viewMode === "3d_studio"
-                ? "bg-cyan-500 text-slate-950 shadow-md shadow-cyan-500/30"
+                ? "bg-amber-500 text-slate-950 shadow-md shadow-cyan-500/30"
                 : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/60"
             }`}
           >
@@ -102,7 +102,7 @@ export function TransmissionSection({
             onClick={() => setViewMode("cards")}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer ${
               viewMode === "cards"
-                ? "bg-cyan-500 text-slate-950 shadow-md shadow-cyan-500/30"
+                ? "bg-amber-500 text-slate-950 shadow-md shadow-cyan-500/30"
                 : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/60"
             }`}
           >
@@ -160,16 +160,16 @@ export function TransmissionSection({
                 <div className="grid grid-cols-2 gap-2">
                   <div className="p-2.5 rounded-xl bg-base-950/80 border border-slate-800 space-y-1">
                     <span className="text-[10px] font-mono text-slate-400 uppercase">Shift Time</span>
-                    <span className="text-xs font-mono font-bold text-cyan-300 block">25 ms Instant</span>
+                    <span className="text-xs font-mono font-bold text-amber-300 block">25 ms Instant</span>
                   </div>
                   <div className="p-2.5 rounded-xl bg-base-950/80 border border-slate-800 space-y-1">
                     <span className="text-[10px] font-mono text-slate-400 uppercase">Clutch Discs</span>
-                    <span className="text-xs font-mono font-bold text-cyan-300 block">Twin Carbon-Carbon</span>
+                    <span className="text-xs font-mono font-bold text-amber-300 block">Twin Carbon-Carbon</span>
                   </div>
                 </div>
 
-                <div className="p-3 rounded-xl bg-cyan-950/20 border border-cyan-500/20 space-y-1">
-                  <span className="text-[10px] font-mono font-bold text-cyan-300 uppercase tracking-wider block">
+                <div className="p-3 rounded-xl bg-amber-950/20 border border-amber-500/20 space-y-1">
+                  <span className="text-[10px] font-mono font-bold text-amber-300 uppercase tracking-wider block">
                     TORQUE TRANSFER & DRIVELINE LOSS
                   </span>
                   <p className="text-[11px] font-mono text-slate-300 leading-relaxed">

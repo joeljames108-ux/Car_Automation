@@ -129,13 +129,13 @@ export const TransmissionDynoTelemetry: React.FC<TransmissionDynoTelemetryProps>
   }, [gearRatios, finalDrive, redlineRpm, enginePeakTorqueNm]);
 
   return (
-    <div className="bg-slate-950/95 backdrop-blur-xl border border-cyan-500/30 rounded-2xl p-5 shadow-2xl text-slate-100 flex flex-col gap-4">
+    <div className="bg-slate-950/95 backdrop-blur-xl border border-amber-500/30 rounded-2xl p-5 shadow-2xl text-slate-100 flex flex-col gap-4">
       {/* ── Header ── */}
       <div className="flex items-center justify-between border-b border-slate-800 pb-3">
         <div className="flex items-center gap-2.5">
-          <Cog className="w-5 h-5 text-cyan-400 animate-spin" />
+          <Cog className="w-5 h-5 text-amber-400 animate-spin" />
           <div>
-            <h3 className="font-mono text-sm font-bold uppercase tracking-wider text-cyan-300">
+            <h3 className="font-mono text-sm font-bold uppercase tracking-wider text-amber-300">
               Transmission & Drivetrain Telemetry HUD
             </h3>
             <span className="text-[11px] text-slate-400 font-mono">
@@ -145,8 +145,8 @@ export const TransmissionDynoTelemetry: React.FC<TransmissionDynoTelemetryProps>
         </div>
 
         {/* Active Gear & Speed Badge */}
-        <div className="flex items-center gap-2 bg-slate-900 border border-cyan-500/40 px-3 py-1 rounded-xl text-xs font-mono font-bold text-cyan-200 shadow-[0_0_12px_rgba(34,211,238,0.25)]">
-          <Activity className="w-3.5 h-3.5 text-cyan-400 animate-pulse" />
+        <div className="flex items-center gap-2 bg-slate-900 border border-amber-500/40 px-3 py-1 rounded-xl text-xs font-mono font-bold text-amber-200 shadow-[0_0_12px_rgba(34,211,238,0.25)]">
+          <Activity className="w-3.5 h-3.5 text-amber-400 animate-pulse" />
           <span>GEAR {selectedGear} ({activeGearRatio}:1) · {currentSpeedKmh} km/h</span>
         </div>
       </div>
@@ -157,7 +157,7 @@ export const TransmissionDynoTelemetry: React.FC<TransmissionDynoTelemetryProps>
         <div className="lg:col-span-7 bg-slate-900/80 border border-slate-800 rounded-xl p-3 flex flex-col gap-2">
           <div className="flex justify-between items-center text-xs font-mono">
             <span className="text-slate-300 font-bold flex items-center gap-1.5">
-              <Gauge className="w-3.5 h-3.5 text-cyan-400" /> Tractive Force ($F_d$) vs Vehicle Speed ($V$)
+              <Gauge className="w-3.5 h-3.5 text-amber-400" /> Tractive Force ($F_d$) vs Vehicle Speed ($V$)
             </span>
             <span className="text-[10px] text-slate-500">Max Force: 16.0 kN</span>
           </div>
@@ -179,7 +179,7 @@ export const TransmissionDynoTelemetry: React.FC<TransmissionDynoTelemetryProps>
                   <path
                     d={curve.pathD}
                     fill="none"
-                    stroke={selectedGear === curve.gear ? "#22d3ee" : "#475569"}
+                    stroke={selectedGear === curve.gear ? "#fbbf24" : "#475569"}
                     strokeWidth={selectedGear === curve.gear ? "2.5" : "1.2"}
                     opacity={selectedGear === curve.gear ? 1 : 0.65}
                   />
@@ -187,7 +187,7 @@ export const TransmissionDynoTelemetry: React.FC<TransmissionDynoTelemetryProps>
                   <text
                     x={35 + (curve.gear - 1) * 38}
                     y={135 - (curve.gear === 1 ? 110 : 110 / (curve.gear * 0.75))}
-                    fill={selectedGear === curve.gear ? "#38bdf8" : "#64748b"}
+                    fill={selectedGear === curve.gear ? "#fbbf24" : "#64748b"}
                     fontSize="9"
                     fontFamily="monospace"
                     fontWeight="bold"
@@ -213,7 +213,7 @@ export const TransmissionDynoTelemetry: React.FC<TransmissionDynoTelemetryProps>
                 onClick={() => setSelectedGear(g.gear)}
                 className={`flex-1 py-1 px-1.5 rounded-lg text-center font-mono text-[11px] border transition-all ${
                   selectedGear === g.gear
-                    ? "bg-cyan-500/25 border-cyan-500 text-cyan-200 font-bold shadow-[0_0_8px_rgba(34,211,238,0.3)]"
+                    ? "bg-amber-500/25 border-amber-500 text-amber-200 font-bold shadow-[0_0_8px_rgba(34,211,238,0.3)]"
                     : "bg-slate-950/60 border-slate-800 text-slate-400 hover:text-slate-200"
                 }`}
               >
@@ -246,7 +246,7 @@ export const TransmissionDynoTelemetry: React.FC<TransmissionDynoTelemetryProps>
               </div>
               <div className="bg-slate-950/60 p-2 rounded border border-slate-800">
                 <div className="text-[9px] text-slate-500">Friction Coeff (μ)</div>
-                <div className="text-cyan-300 font-bold">{clutchState.frictionCoeff}</div>
+                <div className="text-amber-300 font-bold">{clutchState.frictionCoeff}</div>
               </div>
               <div className="bg-slate-950/60 p-2 rounded border border-slate-800">
                 <div className="text-[9px] text-slate-500">Torque Limit</div>
@@ -258,7 +258,7 @@ export const TransmissionDynoTelemetry: React.FC<TransmissionDynoTelemetryProps>
             <div className="flex flex-col gap-1 pt-1">
               <div className="flex justify-between text-[10px] font-mono text-slate-400">
                 <span>Launch Control Clutch Slip Duration</span>
-                <span className="text-cyan-300 font-bold">{launchControlSlipMs} ms</span>
+                <span className="text-amber-300 font-bold">{launchControlSlipMs} ms</span>
               </div>
               <input
                 type="range"
@@ -267,7 +267,7 @@ export const TransmissionDynoTelemetry: React.FC<TransmissionDynoTelemetryProps>
                 step="25"
                 value={launchControlSlipMs}
                 onChange={(e) => setLaunchControlSlipMs(parseInt(e.target.value))}
-                className="w-full h-1.5 bg-slate-800 rounded appearance-none cursor-pointer accent-cyan-400"
+                className="w-full h-1.5 bg-slate-800 rounded appearance-none cursor-pointer accent-amber-400"
               />
             </div>
           </div>
@@ -276,9 +276,9 @@ export const TransmissionDynoTelemetry: React.FC<TransmissionDynoTelemetryProps>
           <div className="bg-slate-900/80 border border-slate-800 rounded-xl p-3 flex flex-col gap-2">
             <div className="flex justify-between items-center text-xs font-mono">
               <span className="text-slate-300 font-bold flex items-center gap-1.5">
-                <Zap className="w-3.5 h-3.5 text-purple-400" /> Active E-Diff Torque Vectoring
+                <Zap className="w-3.5 h-3.5 text-amber-400" /> Active E-Diff Torque Vectoring
               </span>
-              <span className="text-purple-300 font-mono text-[10px] font-bold">
+              <span className="text-amber-300 font-mono text-[10px] font-bold">
                 Lock: {eDiffState.lockupPercentage}%
               </span>
             </div>
@@ -286,18 +286,18 @@ export const TransmissionDynoTelemetry: React.FC<TransmissionDynoTelemetryProps>
             <div className="grid grid-cols-2 gap-2 text-xs font-mono">
               <div className="bg-slate-950/60 p-2 rounded border border-slate-800">
                 <div className="text-[9px] text-slate-500">Left Wheel Torque</div>
-                <div className="text-cyan-300 font-bold">{eDiffState.leftWheelTorqueNm} Nm</div>
+                <div className="text-amber-300 font-bold">{eDiffState.leftWheelTorqueNm} Nm</div>
               </div>
               <div className="bg-slate-950/60 p-2 rounded border border-slate-800">
                 <div className="text-[9px] text-slate-500">Right Wheel Torque</div>
-                <div className="text-cyan-300 font-bold">{eDiffState.rightWheelTorqueNm} Nm</div>
+                <div className="text-amber-300 font-bold">{eDiffState.rightWheelTorqueNm} Nm</div>
               </div>
             </div>
 
             {/* Dynamic Yaw Moment */}
             <div className="flex items-center justify-between text-[11px] font-mono text-slate-400 pt-1 border-t border-slate-800">
               <span>Vectoring Yaw Moment:</span>
-              <span className="text-purple-300 font-bold">{eDiffState.vectoringYawMomentNm} Nm</span>
+              <span className="text-amber-300 font-bold">{eDiffState.vectoringYawMomentNm} Nm</span>
             </div>
           </div>
         </div>
@@ -309,7 +309,7 @@ export const TransmissionDynoTelemetry: React.FC<TransmissionDynoTelemetryProps>
         <div className="flex flex-col gap-1">
           <div className="flex justify-between text-[11px] font-mono text-slate-400">
             <span>Engine RPM</span>
-            <span className="text-cyan-300 font-bold">{currentRpm} RPM</span>
+            <span className="text-amber-300 font-bold">{currentRpm} RPM</span>
           </div>
           <input
             type="range"
@@ -318,7 +318,7 @@ export const TransmissionDynoTelemetry: React.FC<TransmissionDynoTelemetryProps>
             step="100"
             value={currentRpm}
             onChange={(e) => setCurrentRpm(parseInt(e.target.value))}
-            className="w-full h-1.5 bg-slate-800 rounded appearance-none cursor-pointer accent-cyan-400"
+            className="w-full h-1.5 bg-slate-800 rounded appearance-none cursor-pointer accent-amber-400"
           />
         </div>
 
@@ -326,7 +326,7 @@ export const TransmissionDynoTelemetry: React.FC<TransmissionDynoTelemetryProps>
         <div className="flex flex-col gap-1">
           <div className="flex justify-between text-[11px] font-mono text-slate-400">
             <span>Steering Angle (Diff Bias)</span>
-            <span className="text-purple-300 font-bold">{steeringAngleDeg}°</span>
+            <span className="text-amber-300 font-bold">{steeringAngleDeg}°</span>
           </div>
           <input
             type="range"

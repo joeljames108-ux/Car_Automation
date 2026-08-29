@@ -9,7 +9,7 @@ const ERGONOMICS_IDENTITY: AgentIdentity = {
   name: "Ergonomics & Driver Sightlines Specialist",
   domain: "ergonomics",
   icon: "👁️",
-  color: "#8b5cf6",
+  color: "#f59e0b",
   priority: 7,
   description: "Evaluates A-pillar blind spot angles, pedal box alignment, H-point seating height, and steering wheel reach envelopes.",
   capabilities: ["Sightline Raytracing", "H-Point Measurement", "Pedal Box Offset Check", "Reach Envelope Scoring"],

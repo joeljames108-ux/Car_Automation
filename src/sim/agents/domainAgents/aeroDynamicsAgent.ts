@@ -9,7 +9,7 @@ const AERO_IDENTITY: AgentIdentity = {
   name: "Aerodynamics Specialist",
   domain: "aerodynamics",
   icon: "🌀",
-  color: "#06b6d4",
+  color: "#f59e0b",
   priority: 9,
   description: "Optimizes downforce balance, drag coefficient (Cd), diffuser angle, and high-speed stability.",
   capabilities: ["Cd Calculation", "Aero Balance", "Downforce Tuning", "Flow Separation Warnings"],

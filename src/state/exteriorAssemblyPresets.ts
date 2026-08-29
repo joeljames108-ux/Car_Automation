@@ -614,8 +614,8 @@ const DRIFT_SPEC: ExteriorPresetSpecification = {
   paintConfig: {
     ...createDefaultPaintConfig(),
     finishType: "candy_translucent_tint",
-    primaryColorHex: "#ec4899", // Neon Cyberpunk Pink
-    secondaryColorHex: "#06b6d4",
+    primaryColorHex: "#d97706", // Neon Cyberpunk Pink
+    secondaryColorHex: "#f59e0b",
     tertiaryColorHex: "#facc15",
     liveryStyle: "f1_camo_livery",
   },
@@ -653,7 +653,7 @@ const DRIFT_SPEC: ExteriorPresetSpecification = {
   },
   brakeConfig: {
     ...createDefaultBrakeVisualConfig(),
-    caliperColorHex: "#06b6d4",
+    caliperColorHex: "#f59e0b",
     rotorType: "vented_slotted_steel",
   },
 };

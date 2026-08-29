@@ -30,7 +30,7 @@ export function NeonHorizonZoomableCard({
 
   const glowColors = {
     cyan: { text: "text-sky-300", bg: "bg-sky-400/10" },
-    magenta: { text: "text-violet-300", bg: "bg-violet-500/10" },
+    magenta: { text: "text-amber-300", bg: "bg-amber-500/10" },
     gold: { text: "text-amber-300", bg: "bg-amber-500/10" },
     emerald: { text: "text-emerald-300", bg: "bg-emerald-500/10" },
   }[glowColor];

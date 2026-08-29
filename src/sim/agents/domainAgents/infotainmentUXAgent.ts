@@ -9,7 +9,7 @@ const INFOTAINMENT_IDENTITY: AgentIdentity = {
   name: "Cockpit UX & HMI Systems Engineer",
   domain: "infotainment_ux",
   icon: "🖥️",
-  color: "#06b6d4",
+  color: "#f59e0b",
   priority: 6,
   description: "Monitors digital cockpit display latency, telemetry widget density, driver UI interaction friction, and OTA updates.",
   capabilities: ["HMI Latency Check", "Widget Density Optimization", "Driver Distraction Index", "OTA Risk Audit"],

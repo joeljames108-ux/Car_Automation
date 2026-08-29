@@ -24,7 +24,7 @@ export class Dashboard3DGenerator {
     dashClass: DashboardArchitectureClass,
     trackWidthM: number,
     materials: InteriorMaterialTheme,
-    ambientColorHex: string = '#06b6d4'
+    ambientColorHex: string = '#f59e0b'
   ): THREE.Group {
     const group = new THREE.Group();
     group.name = `Dashboard_${dashClass}`;
@@ -145,6 +145,51 @@ export class Dashboard3DGenerator {
     const upperCowl = new THREE.Mesh(upperCowlGeo, leatherMat);
     upperCowl.position.set(-0.32, 0.78, 0);
     root.add(upperCowl);
+    // Turbine-Style HVAC Air Vents (4 across dashboard)
+    for (let v = 0; v < 4; v++) {
+      const ventGroup = new THREE.Group();
+      const ventX = -0.55 + v * 0.28;
+      const ventZ = v < 2 ? -0.28 : 0.28;
+      const ringGeo = new THREE.TorusGeometry(0.028, 0.004, 8, 24);
+      const ring = new THREE.Mesh(ringGeo, aluMat);
+      ring.rotation.y = Math.PI / 2;
+      ventGroup.add(ring);
+      for (let b = 0; b < 5; b++) {
+        const bladeGeo = new THREE.BoxGeometry(0.002, 0.04, 0.003);
+        const blade = new THREE.Mesh(bladeGeo, aluMat);
+        blade.position.set(0, -0.02 + b * 0.01, 0);
+        blade.rotation.z = (b - 2) * 0.15;
+        ventGroup.add(blade);
+      }
+      const knobGeo = new THREE.SphereGeometry(0.006, 8, 8);
+      const knob = new THREE.Mesh(knobGeo, aluMat);
+      knob.position.set(0, 0, 0.025);
+      ventGroup.add(knob);
+      ventGroup.position.set(ventX, 0.66, ventZ);
+      root.add(ventGroup);
+    }
+
+    // Dashboard Button Row
+    for (let b = 0; b < 4; b++) {
+      const btnGeo = new THREE.CylinderGeometry(0.012, 0.012, 0.008, 12);
+      const btn = new THREE.Mesh(btnGeo, aluMat);
+      btn.rotation.x = Math.PI / 2;
+      btn.position.set(-0.50 + b * 0.04, 0.60, -0.22);
+      root.add(btn);
+      const rGeo = new THREE.TorusGeometry(0.014, 0.001, 6, 16);
+      const rMat = new THREE.MeshBasicMaterial({ color: b === 0 ? 0x22c55e : 0xf59e0b });
+      const rMesh = new THREE.Mesh(rGeo, rMat);
+      rMesh.rotation.y = Math.PI / 2;
+      rMesh.position.set(-0.50 + b * 0.04, 0.60, -0.215);
+      root.add(rMesh);
+    }
+
+    // Brushed Aluminum Dashboard Trim Strip
+    const trimGeo = new THREE.BoxGeometry(w * 0.88, 0.006, 0.015);
+    const trim = new THREE.Mesh(trimGeo, aluMat);
+    trim.position.set(-0.32, 0.72, 0);
+    root.add(trim);
+
 
     // Mid-Tier Open-Pore Wood Waterfall Fascia
     const woodFasciaGeo = new THREE.BoxGeometry(w * 0.96, 0.12, 0.03);
@@ -165,7 +210,7 @@ export class Dashboard3DGenerator {
     const clusterGeo = new THREE.PlaneGeometry(0.42, 0.20);
     const clusterMesh = new THREE.Mesh(clusterGeo, clusterMat);
     clusterMesh.position.set(-0.44, 0.75, -0.34);
-    clusterMesh.rotation.y = 0.08;
+    clusterMesh.rotation.y = Math.PI / 2 + 0.08;
     root.add(clusterMesh);
 
     // 14.5" Central Infotainment Screen
@@ -174,7 +219,7 @@ export class Dashboard3DGenerator {
     const infoGeo = new THREE.PlaneGeometry(0.48, 0.28);
     const infoMesh = new THREE.Mesh(infoGeo, infoMat);
     infoMesh.position.set(-0.47, 0.68, 0.08);
-    infoMesh.rotation.y = -0.12;
+    infoMesh.rotation.y = Math.PI / 2 - 0.12;
     infoMesh.rotation.x = -0.15;
     root.add(infoMesh);
 
@@ -184,7 +229,7 @@ export class Dashboard3DGenerator {
     const passGeo = new THREE.PlaneGeometry(0.36, 0.18);
     const passMesh = new THREE.Mesh(passGeo, passMat);
     passMesh.position.set(-0.46, 0.71, 0.44);
-    passMesh.rotation.y = -0.06;
+    passMesh.rotation.y = Math.PI / 2 - 0.06;
     root.add(passMesh);
 
     // Full-Width Ambient Light Ribbon (Under Upper Cowl)
@@ -247,7 +292,7 @@ export class Dashboard3DGenerator {
     for (let row = 0; row < 2; row++) {
       for (let col = 0; col < 3; col++) {
         const toggleGeo = new THREE.CylinderGeometry(0.005, 0.005, 0.024, 8);
-        const toggleMat = new THREE.MeshStandardMaterial({ color: col === 0 ? 0xef4444 : 0x38bdf8, metalness: 0.9, roughness: 0.2 });
+        const toggleMat = new THREE.MeshStandardMaterial({ color: col === 0 ? 0xef4444 : 0xfbbf24, metalness: 0.9, roughness: 0.2 });
         const toggle = new THREE.Mesh(toggleGeo, toggleMat);
         toggle.position.set(-0.46, 0.67 - row * 0.05, -0.02 + col * 0.06);
         toggle.rotation.x = Math.PI / 3;

@@ -131,7 +131,7 @@ const matChrome = new THREE.MeshStandardMaterial({
 const matLaserLights = new THREE.MeshStandardMaterial({
   name: 'Matrix_Laser_Headlight_Optics',
   color: 0xffffff,
-  emissive: new THREE.Color(0x38bdf8),
+  emissive: new THREE.Color(0xfbbf24),
   emissiveIntensity: 0.8,
 });
 
@@ -387,7 +387,7 @@ function buildCrashBoxesScene(): THREE.Scene {
 function buildRollCageScene(): THREE.Scene {
   const group = new THREE.Group();
   group.name = 'Roll_Cage_Assembly';
-  const matTubing = new THREE.MeshStandardMaterial({ name: 'Chromo_Roll_Cage_Steel', color: 0x38bdf8, metalness: 0.85, roughness: 0.20 });
+  const matTubing = new THREE.MeshStandardMaterial({ name: 'Chromo_Roll_Cage_Steel', color: 0xfbbf24, metalness: 0.85, roughness: 0.20 });
   const hoopFront = namedMesh(new THREE.CylinderGeometry(0.024, 0.024, 1.35, 12), matTubing, 'Roll_Cage_Front_Hoop', 0, 1.05, -0.45);
   hoopFront.rotation.z = Math.PI / 2;
   const hoopMain = namedMesh(new THREE.CylinderGeometry(0.026, 0.026, 1.38, 12), matTubing, 'Roll_Cage_Main_Hoop', 0, 1.12, 0.35);

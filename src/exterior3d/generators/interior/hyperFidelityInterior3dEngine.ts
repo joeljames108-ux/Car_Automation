@@ -19,12 +19,35 @@ import * as THREE from "three";
 import { MasterModularInteriorState, InteriorMaterialType } from "../../../sim/interior/masterInteriorTypes";
 import { InteriorMaterialPbrSynthesizer } from "../../materials/interiorMaterialPbrSynthesizer";
 
+// ── New Interior Detail Systems ──
+import { InteriorStitchingDetailSystem } from "./interiorStitchingDetailSystem";
+import { AmbientLightingZoneController, StarlightHeadlinerSystem } from "./ambientLightingZoneSystem";
+import { DashboardScreenContentSystem } from "./dashboardScreenContentSystem";
+import { SeatHarnessDetailSystem } from "./seatHarnessDetailSystem";
+import { InteriorTrimMaterialSystem } from "./interiorTrimMaterialSystem";
+import { SpeakerGrilleDetailSystem } from "./speakerGrilleDetailSystem";
+import { CabinLightingRenderSystem } from "./cabinLightingRenderSystem";
+import { InteriorWeatheringAgingSystem, type AgingConfig } from "./interiorWeatheringAgingSystem";
+
 export interface HyperInteriorGeometryOptions {
   explodedFactor?: number;
   steeringAngleRad?: number;
   doorOpenAngleDeg?: number;
   showErgonomicsOverlay?: boolean;
   qualityLevel?: "ultra" | "high" | "medium";
+  // New detail system options
+  enableStitching?: boolean;
+  enableAmbientLighting?: boolean;
+  enableScreenContent?: boolean;
+  enableHarnesses?: boolean;
+  enableTrimDetails?: boolean;
+  enableSpeakers?: boolean;
+  enableCabinLighting?: boolean;
+  enableWeathering?: boolean;
+  agingConfig?: AgingConfig;
+  ambientColorHex?: string;
+  speakerCount?: number;
+  speakerBrand?: "bespoke" | "bang_olufsen" | "burmester" | "naim" | "mark_levinson" | "focal" | "harman_kardon";
 }
 
 export class HyperFidelityInterior3dEngine {
@@ -144,6 +167,60 @@ export class HyperFidelityInterior3dEngine {
     if (state.safety.rollCage !== "none_standard_chassis") {
       const cageGroup = this.buildRollCageAssembly(state, exploded);
       root.add(cageGroup);
+    }
+
+    // ── NEW: Enhanced Detail Systems ──
+    const ambientColor = options.ambientColorHex || state.lighting.colorHex || "#f59e0b";
+    const stitchColor = state.materials.seatStitchingColorHex || "#d9a64e";
+    const isRacing = state.seating.frontSeatType.includes("bucket") ||
+                     state.seating.frontSeatType.includes("carbon");
+
+    // 11. Stitching Detail Subassembly (French seams, cross-stitch, piping)
+    if (options.enableStitching !== false) {
+      const stitchGroup = this.buildStitchingDetails(state, exploded, stitchColor);
+      root.add(stitchGroup);
+    }
+
+    // 12. Ambient Lighting Zones Subassembly (64-color fiber optics)
+    if (options.enableAmbientLighting !== false) {
+      const ambientGroup = this.buildAmbientLightingZones(state, exploded, ambientColor);
+      root.add(ambientGroup);
+    }
+
+    // 13. Dashboard Screen Content (procedural textures for all displays)
+    if (options.enableScreenContent !== false) {
+      const screenGroup = this.buildScreenContent(state, exploded);
+      root.add(screenGroup);
+    }
+
+    // 14. Racing Harness Subassembly (6-point / 4-point)
+    if (options.enableHarnesses !== false && isRacing) {
+      const harnessGroup = this.buildHarnessDetails(state, exploded);
+      root.add(harnessGroup);
+    }
+
+    // 15. Trim Material Details (knurled knobs, vent bezels, door sills)
+    if (options.enableTrimDetails !== false) {
+      const trimGroup = this.buildTrimDetails(state, exploded);
+      root.add(trimGroup);
+    }
+
+    // 16. Speaker Grille Details (perforated grilles, illuminated crests)
+    if (options.enableSpeakers !== false) {
+      const speakerGroup = this.buildSpeakerDetails(state, exploded, ambientColor);
+      root.add(speakerGroup);
+    }
+
+    // 17. Cabin Lighting Render (volumetric glow strips, floor spills)
+    if (options.enableCabinLighting !== false) {
+      const lightGroup = this.buildCabinLightingRender(state, exploded, ambientColor);
+      root.add(lightGroup);
+    }
+
+    // 18. Weathering & Aging (patina, UV fading, usage marks)
+    if (options.enableWeathering !== false && options.agingConfig) {
+      const weatherGroup = this.buildWeatheringEffects(root, options.agingConfig);
+      root.add(weatherGroup);
     }
 
     return root;
@@ -680,6 +757,361 @@ export class HyperFidelityInterior3dEngine {
 
     group.add(brace1);
     group.add(brace2);
+
+    return group;
+  }
+
+  // ════════════════════════════════════════════════════════════════════════
+  // 11. STITCHING DETAIL SUBASSEMBLY
+  // ════════════════════════════════════════════════════════════════════════
+  private static buildStitchingDetails(
+    state: MasterModularInteriorState,
+    exploded: number,
+    stitchColorHex: string
+  ): THREE.Group {
+    const group = new THREE.Group();
+    group.name = "Stitching_Details";
+    group.userData = { category: "materials" };
+
+    // Dashboard seam stitching
+    const dashSeamPath = [
+      new THREE.Vector3(-0.76, 0.90 + exploded * 0.4, -0.65),
+      new THREE.Vector3(-0.30, 0.90 + exploded * 0.4, -0.65),
+      new THREE.Vector3(0.15, 0.90 + exploded * 0.4, -0.65),
+      new THREE.Vector3(0.60, 0.90 + exploded * 0.4, -0.65),
+      new THREE.Vector3(0.76, 0.90 + exploded * 0.4, -0.65),
+    ];
+    group.add(InteriorStitchingDetailSystem.createFrenchSeam(dashSeamPath, stitchColorHex, 3.5, 4.0, 3.0, 0.4));
+
+    // Door panel piping
+    for (const side of [-1, 1]) {
+      const pipingPath = [
+        new THREE.Vector3(side * 0.82, 0.82 + exploded * 0.2, -0.50),
+        new THREE.Vector3(side * 0.82, 0.82 + exploded * 0.2, 0.0),
+        new THREE.Vector3(side * 0.82, 0.82 + exploded * 0.2, 0.55),
+      ];
+      group.add(InteriorStitchingDetailSystem.createContrastPiping(pipingPath, stitchColorHex, 3.0));
+    }
+
+    // Seat cross-stitch quilting (luxury seats)
+    if (state.seating.frontSeatType.includes("luxury") || state.seating.frontSeatType.includes("executive")) {
+      const quilt = InteriorStitchingDetailSystem.createCrossStitchDiamond(280, 300, 35, stitchColorHex, "#1a1d24", 0.5);
+      quilt.position.set(-0.68, 0.65 - exploded * 0.15, -0.15);
+      quilt.rotation.z = -0.18;
+      quilt.rotation.y = Math.PI / 2;
+      group.add(quilt);
+    }
+
+    // Steering wheel spiral wrap
+    group.add(InteriorStitchingDetailSystem.createSpiralWheelWrap(180, 600, stitchColorHex, "#181a20", 28));
+
+    return group;
+  }
+
+  // ════════════════════════════════════════════════════════════════════════
+  // 12. AMBIENT LIGHTING ZONES SUBASSEMBLY
+  // ════════════════════════════════════════════════════════════════════════
+  private static buildAmbientLightingZones(
+    state: MasterModularInteriorState,
+    exploded: number,
+    ambientColorHex: string
+  ): THREE.Group {
+    const group = new THREE.Group();
+    group.name = "Ambient_Lighting_Zones";
+    group.userData = { category: "materials" };
+
+    const mat = new THREE.MeshBasicMaterial({ color: new THREE.Color(ambientColorHex), transparent: true, opacity: 0.6, side: THREE.DoubleSide });
+
+    // Dashboard ribbon
+    const ribbon = new THREE.Mesh(new THREE.BoxGeometry(1.45, 0.005, 0.012), mat);
+    ribbon.position.set(-0.45, 0.74 + exploded * 0.4, 0.0);
+    group.add(ribbon);
+
+    // Door spears
+    for (const s of [-1, 1]) {
+      const spear = new THREE.Mesh(new THREE.BoxGeometry(0.005, 0.008, 0.95), mat);
+      spear.position.set(s * 0.82, 0.65 + exploded * 0.2, 0.15);
+      group.add(spear);
+    }
+
+    // Console halo, cupholder rings, seat accents, gear ring
+    const halo = new THREE.Mesh(new THREE.TorusGeometry(0.05, 0.003, 8, 32), mat);
+    halo.rotation.x = Math.PI / 2;
+    halo.position.set(0, 0.24, -0.15);
+    group.add(halo);
+
+    for (let i = 0; i < 2; i++) {
+      const ring = new THREE.Mesh(new THREE.TorusGeometry(0.04, 0.002, 8, 24), mat);
+      ring.rotation.x = Math.PI / 2;
+      ring.position.set(0, 0.50 - exploded * 0.1, 0.15 + i * 0.12);
+      group.add(ring);
+    }
+
+    for (const s of [-1, 1]) {
+      const accent = new THREE.Mesh(new THREE.BoxGeometry(0.003, 0.50, 0.003), mat);
+      accent.position.set(s * 0.68, 0.65 - exploded * 0.15, -0.30);
+      accent.rotation.z = s * 0.15;
+      group.add(accent);
+    }
+
+    const gearMat = new THREE.MeshBasicMaterial({ color: new THREE.Color("#f59e0b"), transparent: true, opacity: 0.7 });
+    const gearRing = new THREE.Mesh(new THREE.TorusGeometry(0.05, 0.003, 8, 32), gearMat);
+    gearRing.rotation.x = Math.PI / 2;
+    gearRing.position.set(0, 0.51 - exploded * 0.1, -0.15);
+    group.add(gearRing);
+
+    // Floor spill glow
+    const spillMat = new THREE.MeshBasicMaterial({ color: new THREE.Color(ambientColorHex), transparent: true, opacity: 0.25, side: THREE.DoubleSide });
+    for (const p of [[-0.68, 0.005, -0.55], [0.68, 0.005, -0.55], [-0.60, 0.005, 0.65], [0.60, 0.005, 0.65]] as [number, number, number][]) {
+      const spill = new THREE.Mesh(new THREE.PlaneGeometry(0.50, 0.50), spillMat);
+      spill.rotation.x = -Math.PI / 2;
+      spill.position.set(...p);
+      group.add(spill);
+    }
+
+    return group;
+  }
+
+  // ════════════════════════════════════════════════════════════════════════
+  // 13. DASHBOARD SCREEN CONTENT SUBASSEMBLY
+  // ════════════════════════════════════════════════════════════════════════
+  private static buildScreenContent(
+    state: MasterModularInteriorState,
+    exploded: number
+  ): THREE.Group {
+    const group = new THREE.Group();
+    group.name = "Screen_Content";
+    group.userData = { category: "dash" };
+
+    const cfg = { width: 512, height: 256, theme: "sport_cyan" as const, brightness: 1.0 };
+
+    try {
+      const cc = DashboardScreenContentSystem.createInstrumentCluster(cfg, { speedKmh: 0, rpm: 0, gear: 0, fuelPercent: 75, tempC: 90 });
+      const tex = new THREE.CanvasTexture(cc);
+      tex.minFilter = THREE.LinearFilter;
+      const mesh = new THREE.Mesh(new THREE.PlaneGeometry(0.38, 0.18), new THREE.MeshBasicMaterial({ map: tex }));
+      mesh.position.set(-0.68, 0.92 + exploded * 0.4, -0.53);
+      mesh.name = "Screen_Cluster";
+      group.add(mesh);
+    } catch { /* SSR */ }
+
+    try {
+      const ic = DashboardScreenContentSystem.createInfotainmentScreen(cfg, { mediaTitle: "Apex Drive", mediaArtist: "Studio Sessions", hvacTemp: 22, navDestination: "Circuit de Monaco" });
+      const tex = new THREE.CanvasTexture(ic);
+      tex.minFilter = THREE.LinearFilter;
+      const mesh = new THREE.Mesh(new THREE.PlaneGeometry(0.36, 0.24), new THREE.MeshBasicMaterial({ map: tex }));
+      mesh.position.set(0, 0.72 + exploded * 0.2, -0.31);
+      mesh.rotation.x = -Math.PI / 8;
+      mesh.name = "Screen_Infotainment";
+      group.add(mesh);
+    } catch { /* SSR */ }
+
+    if (state.dashboard.hasWindshieldHolographicHUD) {
+      try {
+        const hc = DashboardScreenContentSystem.createHUDOverlay({ width: 256, height: 128, theme: "sport_cyan", brightness: 1.0 }, { speedKmh: 0, navigationArrow: "straight" });
+        const tex = new THREE.CanvasTexture(hc);
+        const mesh = new THREE.Mesh(new THREE.PlaneGeometry(0.24, 0.12), new THREE.MeshBasicMaterial({ map: tex, transparent: true }));
+        mesh.position.set(-0.68, 0.98 + exploded * 0.4, -0.80);
+        mesh.name = "Screen_HUD";
+        group.add(mesh);
+      } catch { /* SSR */ }
+    }
+
+    if (state.dashboard.hasPassengerCoPilotDisplay) {
+      try {
+        const pc = DashboardScreenContentSystem.createRearEntertainment({ width: 384, height: 192, theme: "luxury_gold", brightness: 1.0 }, { temperature: 22, mediaPlaying: true, mediaTitle: "Rear Entertainment" });
+        const tex = new THREE.CanvasTexture(pc);
+        const mesh = new THREE.Mesh(new THREE.PlaneGeometry(0.34, 0.16), new THREE.MeshBasicMaterial({ map: tex }));
+        mesh.position.set(0.48, 0.78 + exploded * 0.4, -0.34);
+        mesh.name = "Screen_Passenger";
+        group.add(mesh);
+      } catch { /* SSR */ }
+    }
+
+    return group;
+  }
+
+  // ════════════════════════════════════════════════════════════════════════
+  // 14. RACING HARNESS SUBASSEMBLY
+  // ════════════════════════════════════════════════════════════════════════
+  private static buildHarnessDetails(
+    state: MasterModularInteriorState,
+    exploded: number
+  ): THREE.Group {
+    const group = new THREE.Group();
+    group.name = "Harness_Details";
+    group.userData = { category: "seats" };
+
+    const is6Point = state.seating.frontSeatType.includes("bucket") || state.seating.frontSeatType.includes("f1");
+    const beltColor = (state.materials as any)?.seatBeltColorHex || "#e11d48";
+    const hType = is6Point ? "sabelt_6point_f1" : "clubman_4_point";
+
+    const cfg = { type: hType as any, beltColorHex: beltColor, buckleColorHex: "#d1d5db", paddingColorHex: "#1a1a1a", shoulderWidthMm: 420, hasHansAnchors: is6Point, hasAntiSub: is6Point, hasTensioner: is6Point, seatWidthMm: 540, seatHeightMm: 720 };
+
+    const driver = SeatHarnessDetailSystem.createHarness(cfg);
+    driver.position.set(-0.68, 0.38 - exploded * 0.15, -0.10);
+    group.add(driver);
+
+    const pCfg = { ...cfg, type: (is6Point ? "schroth_enduro_pro" : "standard_3_point") as any, hasHansAnchors: false, hasAntiSub: false };
+    const passenger = SeatHarnessDetailSystem.createHarness(pCfg);
+    passenger.position.set(0.68, 0.38 - exploded * 0.15, -0.10);
+    group.add(passenger);
+
+    return group;
+  }
+
+  // ════════════════════════════════════════════════════════════════════════
+  // 15. TRIM MATERIAL DETAILS SUBASSEMBLY
+  // ════════════════════════════════════════════════════════════════════════
+  private static buildTrimDetails(
+    state: MasterModularInteriorState,
+    exploded: number
+  ): THREE.Group {
+    const group = new THREE.Group();
+    group.name = "Trim_Details";
+    group.userData = { category: "materials" };
+
+    const trimType = state.materials.dashboardTrimInsert || "carbon_fiber_gloss";
+
+    // Dashboard trim bar
+    group.add(InteriorTrimMaterialSystem.createDashboardTrimBorder(1400, trimType as any));
+
+    // Vent bezels
+    for (let i = 0; i < 4; i++) {
+      const vb = InteriorTrimMaterialSystem.createAirVentBezel(40, "brushed_aluminum" as any, undefined, true, state.lighting.colorHex || "#f59e0b");
+      vb.position.set(-0.58 + i * 0.38, 0.74 + exploded * 0.4, -0.34);
+      group.add(vb);
+    }
+
+    // Rotary knobs
+    for (let i = 0; i < 2; i++) {
+      const k = InteriorTrimMaterialSystem.createKnurledKnob(28, 18, "brushed_aluminum" as any);
+      k.position.set(-0.42 + i * 0.30, 0.62 + exploded * 0.4, -0.35);
+      k.rotation.x = Math.PI / 2;
+      group.add(k);
+    }
+
+    // Door sill plates
+    for (const s of [-1, 1]) {
+      const sp = InteriorTrimMaterialSystem.createDoorSillPlate(500, "brushed_aluminum" as any, undefined, state.lighting.colorHex || "#f59e0b");
+      sp.position.set(s * 0.82, 0.02, 0.15);
+      group.add(sp);
+    }
+
+    // Window switch surrounds
+    for (const s of [-1, 1]) {
+      const ws = InteriorTrimMaterialSystem.createWindowSwitchSurround("brushed_aluminum" as any);
+      ws.position.set(s * 0.82, 0.45, 0.20);
+      group.add(ws);
+    }
+
+    // Glove box trim
+    const gb = InteriorTrimMaterialSystem.createGloveBoxTrim(400, 180, trimType as any);
+    gb.position.set(0.55, 0.55, -0.35);
+    group.add(gb);
+
+    return group;
+  }
+
+  // ════════════════════════════════════════════════════════════════════════
+  // 16. SPEAKER GRILLE DETAILS SUBASSEMBLY
+  // ════════════════════════════════════════════════════════════════════════
+  private static buildSpeakerDetails(
+    state: MasterModularInteriorState,
+    exploded: number,
+    ambientColorHex: string
+  ): THREE.Group {
+    const group = new THREE.Group();
+    group.name = "Speaker_Details";
+    group.userData = { category: "materials" };
+
+    const spkCount = state.audio?.speakerCount || 16;
+    const brand = ((state.audio as any)?.systemClass === "bespoke_audiophile_32" ? "bang_olufsen" : (state.audio as any)?.systemClass === "ultra_3d_spatial_24" ? "burmester" : "bespoke") as any;
+
+    // Door woofers
+    for (const s of [-1, 1]) {
+      const w = SpeakerGrilleDetailSystem.createSpeaker({ type: "woofer", brand, diameterMm: 200, grillePattern: "hexagonal", hasIllumination: spkCount >= 16, illuminationColorHex: ambientColorHex, grilleColorHex: "#b0b8c0", surroundColorHex: "#1a1a1a", isMotorized: false, coneMaterial: "kevlar", location: "door_lower", isLeft: s < 0 });
+      w.position.set(-0.70, 0.35, s * 0.55);
+      w.rotation.y = s > 0 ? -0.2 : 0.2;
+      group.add(w);
+    }
+
+    // Door midranges
+    for (const s of [-1, 1]) {
+      const m = SpeakerGrilleDetailSystem.createSpeaker({ type: "midrange", brand, diameterMm: 130, grillePattern: "hexagonal", hasIllumination: spkCount >= 16, illuminationColorHex: ambientColorHex, grilleColorHex: "#b0b8c0", surroundColorHex: "#1a1a1a", isMotorized: false, coneMaterial: "composite", location: "door_upper", isLeft: s < 0 });
+      m.position.set(-0.68, 0.62, s * 0.52);
+      group.add(m);
+    }
+
+    // A-pillar tweeters
+    if (spkCount >= 8) {
+      for (const s of [-1, 1]) {
+        const t = SpeakerGrilleDetailSystem.createMotorizedTweeter({ type: "tweeter", brand, diameterMm: 25, grillePattern: "circular", hasIllumination: spkCount >= 16, illuminationColorHex: ambientColorHex, grilleColorHex: "#c0c4cc", surroundColorHex: "#111111", isMotorized: true, coneMaterial: "beryllium", location: "a_pillar", isLeft: s < 0 });
+        t.position.set(-0.60, 0.90, s * 0.42);
+        group.add(t);
+      }
+    }
+
+    return group;
+  }
+
+  // ════════════════════════════════════════════════════════════════════════
+  // 17. CABIN LIGHTING RENDER SUBASSEMBLY
+  // ════════════════════════════════════════════════════════════════════════
+  private static buildCabinLightingRender(
+    state: MasterModularInteriorState,
+    exploded: number,
+    ambientColorHex: string
+  ): THREE.Group {
+    const group = new THREE.Group();
+    group.name = "Cabin_Lighting_Render";
+    group.userData = { category: "materials" };
+
+    const glowMat = new THREE.MeshBasicMaterial({ color: new THREE.Color(ambientColorHex), transparent: true, opacity: 0.4, side: THREE.DoubleSide });
+
+    const dashGlow = new THREE.Mesh(new THREE.PlaneGeometry(1.45, 0.03), glowMat);
+    dashGlow.position.set(-0.45, 0.73 + exploded * 0.4, 0.0);
+    group.add(dashGlow);
+
+    for (const s of [-1, 1]) {
+      const dg = new THREE.Mesh(new THREE.PlaneGeometry(0.02, 0.95), glowMat);
+      dg.position.set(s * 0.82, 0.65 + exploded * 0.2, 0.15);
+      group.add(dg);
+    }
+
+    const cg = new THREE.Mesh(new THREE.PlaneGeometry(0.08, 0.08), glowMat);
+    cg.rotation.x = Math.PI / 2;
+    cg.position.set(0, 0.235, -0.15);
+    group.add(cg);
+
+    for (const s of [-1, 1]) {
+      const sg = new THREE.Mesh(new THREE.PlaneGeometry(0.003, 0.50), glowMat);
+      sg.position.set(s * 0.68, 0.65 - exploded * 0.15, -0.30);
+      sg.rotation.z = s * 0.15;
+      group.add(sg);
+    }
+
+    return group;
+  }
+
+  // ════════════════════════════════════════════════════════════════════════
+  // 18. WEATHERING & AGING EFFECTS SUBASSEMBLY
+  // ════════════════════════════════════════════════════════════════════════
+  private static buildWeatheringEffects(
+    cockpitRoot: THREE.Group,
+    agingConfig: AgingConfig
+  ): THREE.Group {
+    const group = new THREE.Group();
+    group.name = "Weathering_Aging_Effects";
+    group.userData = { category: "materials" };
+
+    try {
+      const ws = new InteriorWeatheringAgingSystem(agingConfig);
+      ws.applyAgingToScene(cockpitRoot as any);
+      const viz = ws.createWearVisualization(cockpitRoot as any);
+      viz.name = "Wear_Visualization";
+      group.add(viz);
+    } catch { /* Graceful degradation */ }
 
     return group;
   }

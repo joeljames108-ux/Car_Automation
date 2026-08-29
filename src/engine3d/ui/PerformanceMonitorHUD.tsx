@@ -27,7 +27,7 @@ export const PerformanceMonitorHUD: React.FC = () => {
         className="absolute top-3 left-3 z-50 px-2 py-1 bg-slate-900/90 hover:bg-slate-800 text-slate-300 rounded-lg text-[10px] font-mono border border-slate-700/80 shadow-lg cursor-pointer flex items-center gap-1"
         title="Show Performance Telemetry Monitor"
       >
-        <Activity size={12} className="text-cyan-400" />
+        <Activity size={12} className="text-amber-400" />
         <span>PERF</span>
       </button>
     );
@@ -42,7 +42,7 @@ export const PerformanceMonitorHUD: React.FC = () => {
   return (
     <div className="absolute top-3 left-3 z-50 bg-slate-950/90 backdrop-blur-md border border-slate-800 rounded-xl p-2.5 shadow-2xl text-slate-200 text-xs font-mono select-none w-56 space-y-2 pointer-events-auto">
       <div className="flex items-center justify-between border-b border-slate-800 pb-1.5">
-        <div className="flex items-center gap-1.5 font-bold text-[11px] text-cyan-400">
+        <div className="flex items-center gap-1.5 font-bold text-[11px] text-amber-400">
           <Activity size={13} />
           <span>ENGINE 3D TELEMETRY</span>
         </div>

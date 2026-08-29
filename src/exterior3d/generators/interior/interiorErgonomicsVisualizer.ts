@@ -27,7 +27,7 @@ export class InteriorErgonomicsVisualizer {
     );
 
     // 1. Driver Eyepoint Sphere (95th Percentile Male)
-    const eyepointMat = new THREE.MeshBasicMaterial({ color: 0x06b6d4, wireframe: true });
+    const eyepointMat = new THREE.MeshBasicMaterial({ color: 0xf59e0b, wireframe: true });
     const eyeGeo = new THREE.SphereGeometry(0.045, 12, 12);
     const eyeMesh = new THREE.Mesh(eyeGeo, eyepointMat);
     eyeMesh.position.set(-0.72, 0.88, -0.34);
@@ -35,7 +35,7 @@ export class InteriorErgonomicsVisualizer {
 
     // Eyepoint Sightline Ray Cone through Windshield
     const sightMat = new THREE.MeshBasicMaterial({
-      color: 0x38bdf8,
+      color: 0xfbbf24,
       transparent: true,
       opacity: 0.18,
       side: THREE.DoubleSide,
@@ -56,7 +56,7 @@ export class InteriorErgonomicsVisualizer {
 
     // 3. Driver Arm Reach Envelope (Spherical translucent bubble)
     const reachMat = new THREE.MeshBasicMaterial({
-      color: 0xa855f7,
+      color: 0xf59e0b,
       transparent: true,
       opacity: 0.12,
       wireframe: true,
@@ -75,7 +75,7 @@ export class InteriorErgonomicsVisualizer {
     group.add(hrLine);
 
     // 5. SAE J1100 Legroom Line (L34)
-    const lrMat = new THREE.LineBasicMaterial({ color: 0x3b82f6, linewidth: 2 });
+    const lrMat = new THREE.LineBasicMaterial({ color: 0xd97706, linewidth: 2 });
     const lrGeo = new THREE.BufferGeometry().setFromPoints([
       new THREE.Vector3(-0.68, 0.38, -0.34),
       new THREE.Vector3(-0.68 + clearances.driverLegroomMm / 1000, 0.12, -0.34),
@@ -84,7 +84,7 @@ export class InteriorErgonomicsVisualizer {
     group.add(lrLine);
 
     // 6. SAE J1100 Shoulder Room Bar (W3)
-    const srMat = new THREE.LineBasicMaterial({ color: 0xec4899, linewidth: 2 });
+    const srMat = new THREE.LineBasicMaterial({ color: 0xd97706, linewidth: 2 });
     const halfSr = clearances.shoulderRoomMm / 1000 / 2;
     const srGeo = new THREE.BufferGeometry().setFromPoints([
       new THREE.Vector3(-0.68, 0.62, -halfSr),

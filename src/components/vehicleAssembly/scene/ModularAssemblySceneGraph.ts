@@ -1480,15 +1480,15 @@ export class ModularAssemblySceneGraph {
     if (isPreview) {
       bodyMat = new THREE.MeshStandardMaterial({ color: 0x00f0ff, transparent: true, opacity: 0.55, wireframe: false });
     } else if (finish === "metallic") {
-      bodyMat = AutomotivePBRMaterialSystem.getMetallicFlakePaint(state.paintColor || "#22d3ee", 0.12, 0.85);
+      bodyMat = AutomotivePBRMaterialSystem.getMetallicFlakePaint(state.paintColor || "#fbbf24", 0.12, 0.85);
     } else if (finish === "pearl") {
-      bodyMat = AutomotivePBRMaterialSystem.getPearlescentPaint(state.paintColor || "#0ea5e9", "#c084fc");
+      bodyMat = AutomotivePBRMaterialSystem.getPearlescentPaint(state.paintColor || "#f59e0b", "#fbbf24");
     } else if (finish === "matte") {
       bodyMat = AutomotivePBRMaterialSystem.getMatteSatinPaint(state.paintColor || "#1e293b");
     } else if ((finish as string) === "candy") {
       bodyMat = AutomotivePBRMaterialSystem.getCandyApplePaint(state.paintColor || "#b91c1c");
     } else if ((finish as string) === "chameleon") {
-      bodyMat = AutomotivePBRMaterialSystem.getChameleonPaint(state.paintColor || "#8b5cf6", "#06b6d4");
+      bodyMat = AutomotivePBRMaterialSystem.getChameleonPaint(state.paintColor || "#f59e0b", "#f59e0b");
     } else if ((finish as string) === "carbon") {
       bodyMat = AutomotivePBRMaterialSystem.getForgedCarbon(true);
     } else {
@@ -2215,7 +2215,7 @@ export class ModularAssemblySceneGraph {
     ringX.rotation.y = Math.PI / 2;
     const ringY = new THREE.Mesh(ringGeo, new THREE.MeshBasicMaterial({ color: 0x22c55e, side: THREE.DoubleSide }));
     ringY.rotation.x = Math.PI / 2;
-    const ringZ = new THREE.Mesh(ringGeo, new THREE.MeshBasicMaterial({ color: 0xec4899, side: THREE.DoubleSide }));
+    const ringZ = new THREE.Mesh(ringGeo, new THREE.MeshBasicMaterial({ color: 0xd97706, side: THREE.DoubleSide }));
 
     this.comGizmoGroup.add(sphere, ringX, ringY, ringZ);
   }

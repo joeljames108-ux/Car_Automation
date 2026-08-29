@@ -57,7 +57,7 @@ export function generateRearBumper3DGeometry(): THREE.Group {
   // Quad Exhaust Tips (Titanium Burnt Gradient)
   const tipGeo = new THREE.CylinderGeometry(0.05, 0.05, 0.18, 16);
   const tipMat = new THREE.MeshPhysicalMaterial({
-    color: 0x60a5fa,
+    color: 0xfbbf24,
     metalness: 0.95,
     roughness: 0.15,
     sheen: 0.8,

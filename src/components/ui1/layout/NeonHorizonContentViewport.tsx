@@ -24,9 +24,8 @@ const TOP_NAV_TABS: { id: Stage; label: string; icon: React.ReactNode }[] = [
   { id: "command", label: "Command Center", icon: <Home size={18} /> },
   { id: "engine", label: "Engine", icon: <Cog size={18} /> },
   { id: "vehicle", label: "Vehicle Studio", icon: <Car size={18} /> },
-  { id: "interior", label: "Interior", icon: <Sofa size={18} /> },
+  { id: "interior", label: "Interior & Electronics", icon: <Sofa size={18} /> },
   { id: "manufacturing", label: "Manufacturing", icon: <Factory size={18} /> },
-  { id: "infotainment", label: "Electronics", icon: <Cpu size={18} /> },
   { id: "safety", label: "Safety Center", icon: <ShieldCheck size={18} /> },
 ];
 
@@ -43,7 +42,7 @@ export const NeonHorizonContentViewport: React.FC<NeonHorizonContentViewportProp
         {/* Instrument ruler strip */}
         <div className="nh-ruler -mt-2 opacity-30" aria-hidden="true" />
         {/* Top Cockpit Navigation Bar */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-7 gap-2 pb-4 border-b border-white/10 select-none">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2 pb-4 border-b border-white/10 select-none">
           {TOP_NAV_TABS.map((tab) => {
             const isActive = activeStage === tab.id;
             return (

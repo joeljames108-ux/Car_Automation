@@ -20,7 +20,7 @@ export interface AnimatedParticle {
 }
 
 export function generateWeldingSparks(originX: number, originY: number, count = 16): AnimatedParticle[] {
-  const colors = ["#ffffff", "#fef08a", "#fde047", "#f59e0b", "#ea580c", "#38bdf8"];
+  const colors = ["#ffffff", "#fef08a", "#fde047", "#f59e0b", "#ea580c", "#fbbf24"];
   const particles: AnimatedParticle[] = [];
 
   for (let i = 0; i < count; i++) {

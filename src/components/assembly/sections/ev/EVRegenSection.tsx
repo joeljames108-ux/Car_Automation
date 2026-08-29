@@ -85,8 +85,8 @@ export function EVRegenSection({
               }
             />
 
-            <div className="p-3 rounded-xl bg-purple-950/20 border border-purple-500/20 space-y-1 mt-2">
-              <span className="text-[10px] font-mono font-bold text-purple-300 uppercase tracking-wider block">
+            <div className="p-3 rounded-xl bg-amber-950/20 border border-amber-500/20 space-y-1 mt-2">
+              <span className="text-[10px] font-mono font-bold text-amber-300 uppercase tracking-wider block">
                 MAX RECUPERATION POWER
               </span>
               <p className="text-[11px] font-mono text-slate-300 leading-relaxed">

@@ -93,10 +93,10 @@ export function AssemblyProgressPanel({
       <div className="pb-3 border-b border-slate-800/80 mb-3">
         <div className="flex items-center justify-between">
           <h3 className="text-xs font-bold text-slate-100 uppercase tracking-wider flex items-center gap-1.5">
-            <Sparkles size={14} className="text-cyan-400" />
+            <Sparkles size={14} className="text-amber-400" />
             Assembly Dashboard
           </h3>
-          <span className="flex items-center gap-1 text-[10px] font-mono text-cyan-400">
+          <span className="flex items-center gap-1 text-[10px] font-mono text-amber-400">
             <Clock size={11} /> Time: {formatTime(elapsedSeconds)}
           </span>
         </div>
@@ -104,10 +104,10 @@ export function AssemblyProgressPanel({
 
       {/* Next Recommended Component Action Banner */}
       {nextRecommendedComponent && !isAssemblyComplete && (
-        <div className="p-2.5 mb-3 rounded-xl bg-gradient-to-r from-cyan-950/40 via-sky-950/30 to-base-850 border border-cyan-500/30 shadow-md">
+        <div className="p-2.5 mb-3 rounded-xl bg-gradient-to-r from-amber-950/40 via-sky-950/30 to-base-850 border border-amber-500/30 shadow-md">
           <div className="flex items-center justify-between">
             <div>
-              <span className="text-[9px] font-mono text-cyan-400 uppercase tracking-widest block font-bold">
+              <span className="text-[9px] font-mono text-amber-400 uppercase tracking-widest block font-bold">
                 NEXT RECOMMENDED STEP
               </span>
               <span className="text-xs font-bold text-slate-100">
@@ -116,7 +116,7 @@ export function AssemblyProgressPanel({
             </div>
             <button
               onClick={() => onStartInstall(nextRecommendedComponent.id)}
-              className="flex items-center gap-1 px-3 py-1 rounded-lg bg-cyan-500 text-black text-[10px] font-mono font-bold hover:bg-cyan-400 transition-all shadow-md active:scale-95 cursor-pointer"
+              className="flex items-center gap-1 px-3 py-1 rounded-lg bg-amber-500 text-black text-[10px] font-mono font-bold hover:bg-amber-400 transition-all shadow-md active:scale-95 cursor-pointer"
             >
               Install <ChevronRight size={12} />
             </button>
@@ -139,9 +139,9 @@ export function AssemblyProgressPanel({
       <div className="grid grid-cols-2 gap-2 mb-3">
         <div className="bg-base-850 border border-base-750 rounded-xl p-2.5">
           <span className="text-[10px] font-mono text-slate-400 flex items-center gap-1">
-            <TrendingUp size={11} className="text-cyan-400" /> Peak Power
+            <TrendingUp size={11} className="text-amber-400" /> Peak Power
           </span>
-          <div className="text-sm font-mono font-bold text-cyan-300 mt-0.5">
+          <div className="text-sm font-mono font-bold text-amber-300 mt-0.5">
             <AnimatedCounter value={currentStats.hp} suffix=" HP" />
           </div>
         </div>
@@ -196,7 +196,7 @@ export function AssemblyProgressPanel({
                   isDone
                     ? "bg-emerald-950/20 text-emerald-300 border border-emerald-500/20"
                     : isCurrent
-                    ? "bg-cyan-950/40 text-cyan-200 border border-cyan-400/50 animate-pulse"
+                    ? "bg-amber-950/40 text-amber-200 border border-amber-400/50 animate-pulse"
                     : "bg-base-850/50 text-slate-400 border border-base-800"
                 }`}
               >
@@ -206,7 +206,7 @@ export function AssemblyProgressPanel({
                     isDone
                       ? "bg-emerald-400 border-emerald-300 shadow-[0_0_8px_rgba(52,211,153,0.8)]"
                       : isCurrent
-                      ? "bg-cyan-400 border-cyan-300 animate-ping"
+                      ? "bg-amber-400 border-amber-300 animate-ping"
                       : "bg-base-800 border-base-700"
                   }`}
                 />
@@ -215,7 +215,7 @@ export function AssemblyProgressPanel({
                   {isDone ? (
                     <CheckCircle2 size={13} className="text-emerald-400 shrink-0" />
                   ) : isCurrent ? (
-                    <Play size={13} className="text-cyan-400 shrink-0" />
+                    <Play size={13} className="text-amber-400 shrink-0" />
                   ) : (
                     <Circle size={13} className="text-slate-600 shrink-0" />
                   )}
@@ -234,7 +234,7 @@ export function AssemblyProgressPanel({
           onClick={onToggleExplodedView}
           className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 px-2 rounded-xl text-[11px] font-mono font-bold transition-all border ${
             isExplodedView
-              ? "bg-cyan-500/20 text-cyan-300 border-cyan-500/40"
+              ? "bg-amber-500/20 text-amber-300 border-amber-500/40"
               : "bg-base-800 text-slate-300 border-base-750 hover:bg-base-750"
           }`}
         >

@@ -186,14 +186,14 @@ export const SpecialInteriorStudioViewport: React.FC = () => {
         {/* Left Slider Controls Overlay */}
         <div className="absolute top-20 left-4 bg-slate-900/85 backdrop-blur-md p-4 rounded-xl border border-slate-700/50 shadow-2xl w-80 space-y-4 pointer-events-auto">
           <div className="text-xs font-bold text-slate-200 border-b border-slate-800 pb-2 flex items-center space-x-2">
-            <Sliders className="w-4 h-4 text-cyan-400" />
+            <Sliders className="w-4 h-4 text-amber-400" />
             <span>SAE H-POINT SEAT ADJUSTMENTS</span>
           </div>
 
           <div>
             <div className="flex justify-between text-xs text-slate-300 mb-1.5 font-mono">
               <span>Seat Travel (Fore-Aft):</span>
-              <strong className="text-cyan-400">{seatTrackMm} mm</strong>
+              <strong className="text-amber-400">{seatTrackMm} mm</strong>
             </div>
             <input
               type="range"
@@ -202,14 +202,14 @@ export const SpecialInteriorStudioViewport: React.FC = () => {
               step={10}
               value={seatTrackMm}
               onChange={(e) => setSeatTrackMm(Number(e.target.value))}
-              className="w-full accent-cyan-500 bg-slate-950 rounded-lg cursor-pointer"
+              className="w-full accent-amber-500 bg-slate-950 rounded-lg cursor-pointer"
             />
           </div>
 
           <div>
             <div className="flex justify-between text-xs text-slate-300 mb-1.5 font-mono">
               <span>Torso Recline Angle:</span>
-              <strong className="text-purple-400">{torsoReclineDeg}°</strong>
+              <strong className="text-amber-400">{torsoReclineDeg}°</strong>
             </div>
             <input
               type="range"
@@ -248,12 +248,12 @@ export const SpecialInteriorStudioViewport: React.FC = () => {
 
           <div className="flex justify-between">
             <span className="text-slate-400">SAE H-Point (X/Z):</span>
-            <strong className="text-cyan-400">{ergonomics.hPointKinematics.hPointXMm} / {ergonomics.hPointKinematics.hPointZMm} mm</strong>
+            <strong className="text-amber-400">{ergonomics.hPointKinematics.hPointXMm} / {ergonomics.hPointKinematics.hPointZMm} mm</strong>
           </div>
 
           <div className="flex justify-between">
             <span className="text-slate-400">A-Pillar Obscuration:</span>
-            <strong className="text-purple-400">{ergonomics.visibility.leftAPillarBlindSpotDeg}°</strong>
+            <strong className="text-amber-400">{ergonomics.visibility.leftAPillarBlindSpotDeg}°</strong>
           </div>
 
           <div className="flex justify-between">

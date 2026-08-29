@@ -28,7 +28,7 @@ export const F1ConstructorWorkshop: React.FC<F1ConstructorWorkshopProps> = memo(
   const { activeStep } = useF1ConstructorStore();
 
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col selection:bg-cyan-500 selection:text-slate-950">
+    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col selection:bg-amber-500 selection:text-slate-950">
       {/* Top Persistent HUD & Cost Cap Status */}
       <F1BudgetBar />
 

@@ -49,7 +49,7 @@ export const MasterGrandPinnacleProvingDeck: React.FC = () => {
       {/* 100-Phase Grand Pinnacle Header Banner */}
       <div className="flex flex-col md:flex-row items-start md:items-center justify-between px-6 py-4 rounded-2xl bg-[#070b14] border border-[#1b263b] shadow-2xl gap-4">
         <div className="flex items-center gap-3.5">
-          <div className="p-2.5 rounded-2xl bg-gradient-to-tr from-cyan-500/20 via-emerald-500/20 to-purple-500/20 border border-cyan-500/40 text-cyan-400 shadow-inner">
+          <div className="p-2.5 rounded-2xl bg-gradient-to-tr from-amber-500/20 via-emerald-500/20 to-amber-500/20 border border-amber-500/40 text-amber-400 shadow-inner">
             <Award className="w-6 h-6 animate-pulse" />
           </div>
           <div>
@@ -78,7 +78,7 @@ export const MasterGrandPinnacleProvingDeck: React.FC = () => {
             className={`px-4 py-2 rounded-xl text-xs font-mono font-bold border transition-all flex items-center gap-2 ${
               isChargingMode
                 ? 'bg-amber-500/20 text-amber-400 border-amber-500/40 shadow-lg shadow-amber-500/10'
-                : 'bg-[#0e1726] text-gray-300 border-[#24334a] hover:border-cyan-500/40'
+                : 'bg-[#0e1726] text-gray-300 border-[#24334a] hover:border-amber-500/40'
             }`}
           >
             <Zap className="w-4 h-4" />
@@ -104,11 +104,11 @@ export const MasterGrandPinnacleProvingDeck: React.FC = () => {
               onClick={() => setActiveTab(tab.id as any)}
               className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-mono font-bold whitespace-nowrap transition-all border ${
                 isActive
-                  ? 'bg-gradient-to-r from-cyan-500/20 to-emerald-500/20 border-cyan-500/50 text-white shadow-lg'
+                  ? 'bg-gradient-to-r from-amber-500/20 to-emerald-500/20 border-amber-500/50 text-white shadow-lg'
                   : 'bg-[#080d18] border-[#152033] text-gray-400 hover:text-gray-200'
               }`}
             >
-              <Icon className={`w-4 h-4 ${isActive ? 'text-cyan-400' : 'text-gray-500'}`} />
+              <Icon className={`w-4 h-4 ${isActive ? 'text-amber-400' : 'text-gray-500'}`} />
               <span>{tab.label}</span>
             </button>
           );
@@ -123,7 +123,7 @@ export const MasterGrandPinnacleProvingDeck: React.FC = () => {
             {twinState.subsystemHealthSummaries.map((sub, idx) => (
               <div
                 key={sub.subsystemKey}
-                className="flex flex-col p-4 rounded-2xl bg-[#070b14] border border-[#182338] shadow-md justify-between gap-3 hover:border-cyan-500/40 transition-all"
+                className="flex flex-col p-4 rounded-2xl bg-[#070b14] border border-[#182338] shadow-md justify-between gap-3 hover:border-amber-500/40 transition-all"
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
@@ -141,7 +141,7 @@ export const MasterGrandPinnacleProvingDeck: React.FC = () => {
                   </span>
                 </div>
 
-                <div className="p-2.5 rounded-xl bg-[#03060c] border border-[#121c2e] text-[11px] font-mono text-cyan-300">
+                <div className="p-2.5 rounded-xl bg-[#03060c] border border-[#121c2e] text-[11px] font-mono text-amber-300">
                   {sub.liveTelemetrySnippet}
                 </div>
 
@@ -172,22 +172,22 @@ export const MasterGrandPinnacleProvingDeck: React.FC = () => {
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-400">CHARGE POWER:</span>
-                  <span className="text-cyan-400 font-bold">{twinState.megawattCharging.chargingPowerMegawatts} MW ({twinState.megawattCharging.chargeVoltageVolts}V / {twinState.megawattCharging.chargeCurrentAmperes}A)</span>
+                  <span className="text-amber-400 font-bold">{twinState.megawattCharging.chargingPowerMegawatts} MW ({twinState.megawattCharging.chargeVoltageVolts}V / {twinState.megawattCharging.chargeCurrentAmperes}A)</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-400">TIME TO 80% SOC:</span>
-                  <span className="text-purple-400 font-bold">{twinState.megawattCharging.timeToFullMinutes} minutes</span>
+                  <span className="text-amber-400 font-bold">{twinState.megawattCharging.timeToFullMinutes} minutes</span>
                 </div>
               </div>
             </div>
 
             <div className="lg:col-span-2 flex flex-col p-5 rounded-2xl bg-[#070b14] border border-[#182338] gap-4">
-              <h3 className="text-xs font-bold text-cyan-400 font-mono">CONTACT PIN CONSTRICTION THERMALS (HOLM MODEL)</h3>
+              <h3 className="text-xs font-bold text-amber-400 font-mono">CONTACT PIN CONSTRICTION THERMALS (HOLM MODEL)</h3>
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 font-mono text-xs">
                 {twinState.megawattCharging.contactPins.map((pin) => (
                   <div key={pin.pinId} className="p-3 rounded-xl bg-[#03060c] border border-[#121c2e] flex flex-col gap-1.5">
                     <span className="text-[10px] text-gray-400">{pin.pinId}</span>
-                    <span className="text-cyan-400 font-bold">{pin.currentAmperes} A</span>
+                    <span className="text-amber-400 font-bold">{pin.currentAmperes} A</span>
                     <span className="text-amber-400">{pin.contactTemperatureCelsius} °C (Max 90°C)</span>
                     <span className="text-[10px] text-emerald-400">{pin.contactResistanceMicroOhms} μΩ</span>
                   </div>
@@ -201,7 +201,7 @@ export const MasterGrandPinnacleProvingDeck: React.FC = () => {
         {activeTab === 'NDT_INSPECTION' && (
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 flex-1">
             <div className="flex flex-col p-5 rounded-2xl bg-[#070b14] border border-[#182338] gap-4">
-              <h3 className="text-xs font-bold text-purple-400 font-mono flex items-center gap-2">
+              <h3 className="text-xs font-bold text-amber-400 font-mono flex items-center gap-2">
                 <ShieldCheck className="w-4 h-4" /> VOLUMETRIC CT CERTIFICATION
               </h3>
               <div className="p-4 rounded-xl bg-[#03060c] border border-[#121c2e] flex flex-col gap-2 font-mono text-xs">
@@ -215,7 +215,7 @@ export const MasterGrandPinnacleProvingDeck: React.FC = () => {
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-400">WEIBULL FAILURE PROB:</span>
-                  <span className="text-cyan-400 font-bold">{twinState.ndtInspection.weibullFailureProbabilityPct}%</span>
+                  <span className="text-amber-400 font-bold">{twinState.ndtInspection.weibullFailureProbabilityPct}%</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-400">CERTIFICATION:</span>
@@ -229,7 +229,7 @@ export const MasterGrandPinnacleProvingDeck: React.FC = () => {
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 font-mono text-xs">
                 {twinState.ndtInspection.defectsDetected.map((d) => (
                   <div key={d.defectId} className="p-3 rounded-xl bg-[#03060c] border border-[#121c2e] flex flex-col gap-1.5">
-                    <span className="text-[10px] text-purple-400 font-bold">{d.defectType}</span>
+                    <span className="text-[10px] text-amber-400 font-bold">{d.defectType}</span>
                     <span className="text-gray-300">Size: {d.flawSizeMm} mm</span>
                     <span className="text-amber-400">Kt: {d.criticalStressConcentrationKt.toFixed(2)}</span>
                     <span className="text-[10px] text-gray-400">
@@ -252,7 +252,7 @@ export const MasterGrandPinnacleProvingDeck: React.FC = () => {
               <div className="p-4 rounded-xl bg-[#03060c] border border-[#121c2e] flex flex-col gap-2 font-mono text-xs">
                 <div className="flex justify-between">
                   <span className="text-gray-400">CURRENT HEIGHT:</span>
-                  <span className="text-cyan-400 font-bold">{twinState.porpoisingAeromechanics.diffuserState.currentRideHeightMm} mm</span>
+                  <span className="text-amber-400 font-bold">{twinState.porpoisingAeromechanics.diffuserState.currentRideHeightMm} mm</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-400">STALL THRESHOLD:</span>
@@ -266,7 +266,7 @@ export const MasterGrandPinnacleProvingDeck: React.FC = () => {
             </div>
 
             <div className="lg:col-span-2 flex flex-col p-5 rounded-2xl bg-[#070b14] border border-[#182338] gap-4">
-              <h3 className="text-xs font-bold text-cyan-400 font-mono">2-DOF HEAVE-PITCH LIMIT-CYCLE TIMELINE</h3>
+              <h3 className="text-xs font-bold text-amber-400 font-mono">2-DOF HEAVE-PITCH LIMIT-CYCLE TIMELINE</h3>
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 font-mono text-xs">
                 <div className="p-3 rounded-xl bg-[#03060c] border border-[#121c2e]">
                   <span className="text-[10px] text-gray-400">PORP FREQ</span>
@@ -282,7 +282,7 @@ export const MasterGrandPinnacleProvingDeck: React.FC = () => {
                 </div>
                 <div className="p-3 rounded-xl bg-[#03060c] border border-[#121c2e]">
                   <span className="text-[10px] text-gray-400">COMFORT INDEX</span>
-                  <div className="text-purple-400 font-bold text-sm">{twinState.porpoisingAeromechanics.driverComfortDiscomfortIndex}/100</div>
+                  <div className="text-amber-400 font-bold text-sm">{twinState.porpoisingAeromechanics.driverComfortDiscomfortIndex}/100</div>
                 </div>
               </div>
             </div>
@@ -303,11 +303,11 @@ export const MasterGrandPinnacleProvingDeck: React.FC = () => {
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-400">MIN CLEARANCE:</span>
-                  <span className="text-cyan-400 font-bold">{twinState.elasticBandEvasion.minimumClearanceToObstacleM} m</span>
+                  <span className="text-amber-400 font-bold">{twinState.elasticBandEvasion.minimumClearanceToObstacleM} m</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-400">PEAK LATERAL G:</span>
-                  <span className="text-purple-400 font-bold">{twinState.elasticBandEvasion.maxEvasionLateralG} G</span>
+                  <span className="text-amber-400 font-bold">{twinState.elasticBandEvasion.maxEvasionLateralG} G</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-400">SOLVER LATENCY:</span>
@@ -327,7 +327,7 @@ export const MasterGrandPinnacleProvingDeck: React.FC = () => {
                   <span>CURVATURE (rad/m)</span>
                 </div>
                 {twinState.elasticBandEvasion.elasticBandWaypoints.slice(0, 6).map((wp) => (
-                  <div key={wp.nodeIndex} className="flex justify-between text-cyan-300">
+                  <div key={wp.nodeIndex} className="flex justify-between text-amber-300">
                     <span>Node {wp.nodeIndex}</span>
                     <span>{wp.longitudinalXM}m</span>
                     <span>{wp.lateralYM}m</span>

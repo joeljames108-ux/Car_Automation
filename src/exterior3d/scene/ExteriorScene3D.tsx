@@ -12,6 +12,8 @@ import { useExterior3DStore } from "../store/useExterior3DStore";
 import { ExteriorLighting3D } from "./ExteriorLighting3D";
 import { ExteriorComponentMesh3D } from "./ExteriorComponentMesh3D";
 import { Car3DGeometryGenerator } from "../geometry/car3dGeometryGenerator";
+import { ExteriorPostProcessing, POST_PROCESSING_PRESETS } from "../postprocessing/ExteriorPostProcessingPipeline";
+
 
 export const ExteriorScene3D: React.FC = () => {
   const instances = useExterior3DStore((s) => s.instances);
@@ -75,6 +77,9 @@ export const ExteriorScene3D: React.FC = () => {
           maxDistance={8.5}
           maxPolarAngle={Math.PI / 2 + 0.05} // Prevent camera clipping below floor
         />
+
+        {/* Photorealistic Post-Processing Pipeline */}
+        <ExteriorPostProcessing config={POST_PROCESSING_PRESETS.photorealistic} />
       </Canvas>
     </div>
   );

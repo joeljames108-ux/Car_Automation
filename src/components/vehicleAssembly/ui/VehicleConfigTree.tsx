@@ -213,12 +213,12 @@ export const VehicleConfigTree: React.FC<VehicleConfigTreeProps> = ({
     <div className="panel p-3 rounded-2xl space-y-2 border border-base-800 text-xs font-mono shadow-xl select-none">
       <div className="flex items-center justify-between border-b border-base-800/60 pb-2">
         <div className="flex items-center gap-2">
-          <Layers size={14} className="text-cyan-400" />
+          <Layers size={14} className="text-amber-400" />
           <span className="font-bold text-slate-800 dark:text-slate-100 uppercase tracking-wider text-[11px]">
             CAD VEHICLE HIERARCHY TREE
           </span>
         </div>
-        <span className="text-[10px] px-2 py-0.5 rounded-full bg-cyan-500/15 text-cyan-400 font-bold">
+        <span className="text-[10px] px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-400 font-bold">
           12 SUBASSEMBLIES
         </span>
       </div>
@@ -237,7 +237,7 @@ export const VehicleConfigTree: React.FC<VehicleConfigTreeProps> = ({
                 onClick={() => onSelectStage(node.id)}
                 className={`group flex items-center justify-between p-1.5 rounded-xl transition-all cursor-pointer border ${
                   isSelected
-                    ? "bg-cyan-500/20 border-cyan-500/60 text-slate-100 shadow-sm"
+                    ? "bg-amber-500/20 border-amber-500/60 text-slate-100 shadow-sm"
                     : "bg-base-900/40 border-base-800/60 hover:bg-base-850 text-slate-400"
                 }`}
               >
@@ -252,7 +252,7 @@ export const VehicleConfigTree: React.FC<VehicleConfigTreeProps> = ({
                   ) : (
                     <div className="w-3.5" />
                   )}
-                  <Icon size={13} className={node.status === "INSTALLED" ? "text-cyan-400" : "text-slate-600"} />
+                  <Icon size={13} className={node.status === "INSTALLED" ? "text-amber-400" : "text-slate-600"} />
                   <span className="font-bold truncate text-[11px] text-slate-800 dark:text-slate-200">
                     {node.name}
                   </span>
@@ -280,7 +280,7 @@ export const VehicleConfigTree: React.FC<VehicleConfigTreeProps> = ({
                       title="X-Ray Mode"
                       className={`p-1 rounded text-[9px] font-bold cursor-pointer transition-all ${
                         mode === "xray"
-                          ? "bg-purple-500 text-white font-extrabold shadow-sm"
+                          ? "bg-amber-500 text-white font-extrabold shadow-sm"
                           : "hover:bg-base-800 text-slate-500 hover:text-slate-200"
                       }`}
                     >
@@ -291,7 +291,7 @@ export const VehicleConfigTree: React.FC<VehicleConfigTreeProps> = ({
                       title="Ghost Mode (Translucent)"
                       className={`p-1 rounded text-[9px] font-bold cursor-pointer transition-all ${
                         mode === "ghost"
-                          ? "bg-cyan-500 text-black font-extrabold shadow-sm"
+                          ? "bg-amber-500 text-black font-extrabold shadow-sm"
                           : "hover:bg-base-800 text-slate-500 hover:text-slate-200"
                       }`}
                     >
@@ -310,7 +310,7 @@ export const VehicleConfigTree: React.FC<VehicleConfigTreeProps> = ({
                       className="flex items-center justify-between p-1 rounded-lg bg-base-950/40 text-[10px] text-slate-400 border border-base-800/40"
                     >
                       <div className="flex items-center gap-1.5 truncate">
-                        <span className="w-1 h-1 rounded-full bg-cyan-500/80" />
+                        <span className="w-1 h-1 rounded-full bg-amber-500/80" />
                         <span className="truncate text-slate-300 font-medium">{child.name}</span>
                       </div>
                       <span className="text-[9px] text-slate-500 shrink-0 font-mono">{child.info}</span>

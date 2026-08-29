@@ -14,17 +14,17 @@ const CATEGORY_LABELS: Record<MotorsportCategory, string> = {
 const CATEGORY_COLORS: Record<MotorsportCategory, string> = {
   gt: "text-accent-300 bg-accent-500/15 border-accent-500/30",
   formula: "text-ok-400 bg-ok-500/15 border-ok-500/30",
-  hypercar: "text-purple-400 bg-purple-500/15 border-purple-500/30",
-  touring: "text-blue-400 bg-blue-500/15 border-blue-500/30",
+  hypercar: "text-amber-400 bg-amber-500/15 border-amber-500/30",
+  touring: "text-amber-400 bg-amber-500/15 border-amber-500/30",
   rally: "text-amber-400 bg-amber-500/15 border-amber-500/30",
   endurance: "text-orange-400 bg-orange-500/15 border-orange-500/30",
 };
 
 const CATEGORY_GRADIENTS: Record<MotorsportCategory, string> = {
-  gt: "from-cyan-500/10 to-transparent",
+  gt: "from-amber-500/10 to-transparent",
   formula: "from-emerald-500/10 to-transparent",
-  hypercar: "from-purple-500/10 to-transparent",
-  touring: "from-blue-500/10 to-transparent",
+  hypercar: "from-amber-500/10 to-transparent",
+  touring: "from-amber-500/10 to-transparent",
   rally: "from-amber-500/10 to-transparent",
   endurance: "from-orange-500/10 to-transparent",
 };
@@ -35,8 +35,8 @@ const STATUS_COLORS: Record<string, string> = {
 };
 
 const FACILITY_COLORS: Record<FacilityLevel, string> = {
-  basic: "text-slate-500", standard: "text-blue-400",
-  advanced: "text-purple-400", elite: "text-yellow-400",
+  basic: "text-slate-500", standard: "text-amber-400",
+  advanced: "text-amber-400", elite: "text-yellow-400",
 };
 
 const MoraleBar = memo(function MoraleBar({ value }: { value: number }) {
@@ -67,7 +67,7 @@ const SkillRadar = memo(function SkillRadar({ driver }: { driver: { skill: numbe
   return (
     <svg width="48" height="48" viewBox="0 0 48 48" className="shrink-0">
       <polygon points={bgPoints} fill="none" stroke="#1e293b" strokeWidth="0.5" />
-      <polygon points={points} fill="rgba(34,211,238,0.15)" stroke="#22d3ee" strokeWidth="1" />
+      <polygon points={points} fill="rgba(34,211,238,0.15)" stroke="#fbbf24" strokeWidth="1" />
     </svg>
   );
 });
@@ -86,57 +86,61 @@ function TeamCardComponent({ team, onSelect, isSelected }: {
         playHMIClickSound();
         onSelect();
       }}
-      className={`glass-panel p-4 cursor-pointer card-hover relative overflow-hidden ${isSelected ? "border-accent-500/50 shadow-[0_0_20px_-4px_rgba(34,211,238,0.15)]" : ""}`}
+      className={`p-4 rounded-2xl bg-slate-900/90 border cursor-pointer card-hover relative overflow-hidden text-white transition-all shadow-lg ${
+        isSelected
+          ? "border-amber-400 shadow-[0_0_25px_rgba(34,211,238,0.25)] bg-slate-900"
+          : "border-white/10 hover:border-white/25 hover:bg-slate-850"
+      }`}
     >
       {/* Category gradient accent */}
-      <div className={`absolute inset-0 bg-gradient-to-br ${CATEGORY_GRADIENTS[team.category]} pointer-events-none opacity-50`} />
+      <div className={`absolute inset-0 bg-gradient-to-br ${CATEGORY_GRADIENTS[team.category]} pointer-events-none opacity-40`} />
 
       {/* Livery stripe */}
-      <div className="absolute top-0 left-0 w-1 h-full rounded-l-xl" style={{ backgroundColor: team.liveryColor }} />
+      <div className="absolute top-0 left-0 w-1.5 h-full rounded-l-2xl shadow-sm" style={{ backgroundColor: team.liveryColor }} />
 
       <div className="relative">
         {/* Header row */}
         <div className="flex items-start justify-between mb-3">
           <div className="ml-2">
             <div className="flex items-center gap-2 mb-1">
-              <span className={`text-[10px] font-semibold px-1.5 py-0.5 rounded border ${CATEGORY_COLORS[team.category]}`}>
+              <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${CATEGORY_COLORS[team.category]}`}>
                 {CATEGORY_LABELS[team.category]}
               </span>
-              <span className={`text-[10px] font-medium capitalize ${FACILITY_COLORS[team.facilityLevel]}`}>
+              <span className={`text-[10px] font-bold capitalize ${FACILITY_COLORS[team.facilityLevel]}`}>
                 ★ {team.facilityLevel}
               </span>
             </div>
-            <h3 className="font-semibold text-slate-100 text-sm">{team.name}</h3>
-            <div className={`text-[10px] font-medium capitalize mt-0.5 ${STATUS_COLORS[team.status]}`}>
+            <h3 className="font-extrabold text-white text-sm tracking-wide">{team.name}</h3>
+            <div className={`text-[10px] font-bold capitalize mt-0.5 ${STATUS_COLORS[team.status]}`}>
               ● {team.status}
             </div>
           </div>
           {team.championships > 0 && (
-            <div className="flex items-center gap-1 px-2 py-1 rounded-lg bg-yellow-500/10 border border-yellow-500/20">
+            <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-yellow-500/20 border border-yellow-400/40 shadow-sm">
               <Trophy size={14} className="text-yellow-400" />
-              <span className="text-sm font-bold podium-gold">{team.championships}</span>
+              <span className="text-sm font-black text-yellow-300 font-mono">{team.championships}</span>
             </div>
           )}
         </div>
 
         {/* Stats grid */}
-        <div className="grid grid-cols-4 gap-1.5 mb-3 text-center ml-2">
+        <div className="grid grid-cols-4 gap-2 mb-3 text-center ml-2">
           {[
-            { label: "Wins", value: team.wins, color: "text-ok-400" },
-            { label: "Podiums", value: team.podiums, color: "text-accent-300" },
-            { label: "FL", value: team.fastestLaps, color: "text-purple-400" },
-            { label: "Dev", value: team.developmentPoints, color: "text-slate-300" },
+            { label: "Wins", value: team.wins, color: "text-emerald-400" },
+            { label: "Podiums", value: team.podiums, color: "text-amber-300" },
+            { label: "FL", value: team.fastestLaps, color: "text-amber-400" },
+            { label: "Dev", value: team.developmentPoints, color: "text-slate-200" },
           ].map(s => (
-            <div key={s.label} className="bg-base-850/50 rounded-lg p-1.5">
-              <div className={`text-sm font-bold font-mono ${s.color}`}>{s.value}</div>
-              <div className="text-[9px] text-slate-600">{s.label}</div>
+            <div key={s.label} className="bg-black/60 rounded-xl p-2 border border-white/5">
+              <div className={`text-sm font-black font-mono ${s.color}`}>{s.value}</div>
+              <div className="text-[9px] text-slate-400 uppercase font-bold tracking-wider">{s.label}</div>
             </div>
           ))}
         </div>
 
         {/* Morale */}
         <div className="mb-2 ml-2">
-          <div className="text-[10px] text-slate-500 mb-1">Team Morale</div>
+          <div className="text-[10px] text-slate-300 font-bold mb-1">Team Morale</div>
           <MoraleBar value={team.teamMorale} />
         </div>
 

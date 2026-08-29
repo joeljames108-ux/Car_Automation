@@ -280,7 +280,7 @@ export const CURATED_INTERIOR_PRESETS: Record<string, Omit<MasterModularInterior
       hasSeatVentilation: false,
       hasPneumaticMassage: false,
       has6PointRacingHarness: true,
-      harnessColorHex: "#06b6d4",
+      harnessColorHex: "#f59e0b",
       lumbarAdjustAxes: 2,
       frontSeatsMassKgTotal: 22.0,
       rearSeatsMassKgTotal: 0.0,
@@ -336,7 +336,7 @@ export const CURATED_INTERIOR_PRESETS: Record<string, Omit<MasterModularInterior
     materials: {
       seatPrimaryMaterial: "forged_carbon_composite",
       seatSecondaryMaterial: "perforated_alcantara",
-      seatStitchingColorHex: "#06b6d4",
+      seatStitchingColorHex: "#f59e0b",
       dashboardPrimaryMaterial: "forged_carbon_composite",
       dashboardTrimInsert: "forged_carbon_composite",
       accentMetalFinish: "titanium_satin_finish",
@@ -348,7 +348,7 @@ export const CURATED_INTERIOR_PRESETS: Record<string, Omit<MasterModularInterior
     lighting: {
       enabled: true,
       theme: "cyberpunk_cyan",
-      colorHex: "#06b6d4",
+      colorHex: "#f59e0b",
       brightnessPercent: 90,
       illuminatedZones: {
         footwells: true,

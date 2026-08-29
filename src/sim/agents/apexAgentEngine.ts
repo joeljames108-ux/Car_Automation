@@ -376,7 +376,7 @@ const ASSEMBLY_QA_IDENTITY: AgentIdentity = {
   name: "Robotic Assembly Inspector",
   domain: "assembly_qa",
   icon: "🤖",
-  color: "#3b82f6",
+  color: "#d97706",
   priority: 9,
   description: "Verifies modular assembly component torque specs, deck clearances, gasket seating, and sequence lock.",
   capabilities: ["Torque Verification", "Deck Clearance Check", "Missing Component Detection", "Assembly QA"],

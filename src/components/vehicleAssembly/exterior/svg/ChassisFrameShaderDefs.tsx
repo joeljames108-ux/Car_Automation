@@ -46,9 +46,9 @@ export const ChassisFrameShaderDefs: React.FC<ChassisFrameShaderDefsProps> = ({
 
       <linearGradient id="chassisRailTitanium" x1="0%" y1="0%" x2="100%" y2="100%">
         <stop offset="0%" stopColor="#6b7280" />
-        <stop offset="20%" stopColor="#818cf8" />
-        <stop offset="45%" stopColor="#c084fc" />
-        <stop offset="65%" stopColor="#f472b6" />
+        <stop offset="20%" stopColor="#fbbf24" />
+        <stop offset="45%" stopColor="#fbbf24" />
+        <stop offset="65%" stopColor="#fbbf24" />
         <stop offset="85%" stopColor="#fbbf24" />
         <stop offset="100%" stopColor="#4b5563" />
       </linearGradient>

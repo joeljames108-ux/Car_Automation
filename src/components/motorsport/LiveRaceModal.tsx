@@ -32,16 +32,16 @@ export const LiveRaceModal = memo(function LiveRaceModal({ isOpen, state, sim, o
 
   return (
     <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-xl flex items-center justify-center p-4 animate-fade-in">
-      <div className="bg-slate-900 border border-cyan-500/30 rounded-2xl max-w-4xl w-full p-6 shadow-[0_0_50px_rgba(34,211,238,0.2)] flex flex-col gap-5 max-h-[90vh] overflow-y-auto">
+      <div className="bg-slate-900 border border-amber-500/30 rounded-2xl max-w-4xl w-full p-6 shadow-[0_0_50px_rgba(34,211,238,0.2)] flex flex-col gap-5 max-h-[90vh] overflow-y-auto">
         {/* Header */}
         <div className="flex items-center justify-between border-b border-white/10 pb-4">
           <div className="flex items-center gap-3">
-            <div className="p-2.5 rounded-xl bg-cyan-500/20 border border-cyan-400/40 text-cyan-300">
+            <div className="p-2.5 rounded-xl bg-amber-500/20 border border-amber-400/40 text-amber-300">
               <Radio size={20} className="animate-pulse" />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <span className="text-xs font-mono font-bold text-cyan-400 uppercase tracking-widest">LIVE TELEMETRY FEED</span>
+                <span className="text-xs font-mono font-bold text-amber-400 uppercase tracking-widest">LIVE TELEMETRY FEED</span>
                 <span className="bg-rose-500/20 text-rose-400 border border-rose-500/40 text-[9px] font-bold px-2 py-0.5 rounded-full animate-pulse">RACE ACTIVE</span>
               </div>
               <h2 className="text-lg font-bold text-slate-100">Round {state.round}/{state.totalRounds} — {state.trackName}</h2>
@@ -52,7 +52,7 @@ export const LiveRaceModal = memo(function LiveRaceModal({ isOpen, state, sim, o
               playHMIClickSound();
               onFinishRace();
             }}
-            className="px-4 py-2 rounded-xl text-xs font-bold bg-cyan-500/20 border border-cyan-400/40 text-cyan-300 hover:bg-cyan-500/30 transition-all shadow-[0_0_12px_rgba(34,211,238,0.2)] cursor-pointer"
+            className="px-4 py-2 rounded-xl text-xs font-bold bg-amber-500/20 border border-amber-400/40 text-amber-300 hover:bg-amber-500/30 transition-all shadow-[0_0_12px_rgba(34,211,238,0.2)] cursor-pointer"
           >
             Skip to Final Results ➔
           </button>
@@ -63,7 +63,7 @@ export const LiveRaceModal = memo(function LiveRaceModal({ isOpen, state, sim, o
           <div className="flex items-center gap-4">
             <div>
               <div className="text-[10px] font-mono text-slate-500 uppercase">Current Lap</div>
-              <div className="font-mono text-2xl font-black text-cyan-300">{state.lap} <span className="text-xs text-slate-500 font-normal">/ {state.totalLaps}</span></div>
+              <div className="font-mono text-2xl font-black text-amber-300">{state.lap} <span className="text-xs text-slate-500 font-normal">/ {state.totalLaps}</span></div>
             </div>
             <div className="h-8 w-px bg-white/10" />
             <div>
@@ -107,14 +107,14 @@ export const LiveRaceModal = memo(function LiveRaceModal({ isOpen, state, sim, o
                   key={s.rank}
                   className={`flex items-center justify-between px-3 py-2 rounded-lg text-xs font-mono border transition-all ${
                     s.isPlayer
-                      ? "bg-cyan-500/15 border-cyan-400/40 text-cyan-200 font-bold shadow-[0_0_10px_rgba(34,211,238,0.15)]"
+                      ? "bg-amber-500/15 border-amber-400/40 text-amber-200 font-bold shadow-[0_0_10px_rgba(34,211,238,0.15)]"
                       : "bg-base-850/50 border-base-800 text-slate-300"
                   }`}
                 >
                   <div className="flex items-center gap-2">
                     <span className={`w-5 text-center font-bold ${s.rank === 1 ? "text-yellow-400" : s.rank <= 3 ? "text-slate-200" : "text-slate-500"}`}>P{s.rank}</span>
                     <span>{s.name}</span>
-                    {s.isPlayer && <span className="text-[9px] bg-cyan-400/20 text-cyan-300 px-1 rounded">YOU</span>}
+                    {s.isPlayer && <span className="text-[9px] bg-amber-400/20 text-amber-300 px-1 rounded">YOU</span>}
                   </div>
                   <div className="flex items-center gap-3">
                     <span className="text-slate-400 text-[11px]">{s.gap}</span>
@@ -128,13 +128,13 @@ export const LiveRaceModal = memo(function LiveRaceModal({ isOpen, state, sim, o
           {/* Race Radio & Event Ticker */}
           <div className="bg-base-950/60 rounded-xl p-4 border border-white/5 flex flex-col">
             <h3 className="text-xs font-bold text-slate-300 uppercase tracking-wider mb-3 flex items-center gap-2">
-              <Radio size={14} className="text-cyan-400" /> Pit Wall Commentary Ticker
+              <Radio size={14} className="text-amber-400" /> Pit Wall Commentary Ticker
             </h3>
             <div className="space-y-2 flex-1 overflow-y-auto max-h-60 pr-1">
               {state.feed.map((f, i) => (
                 <div key={i} className="text-xs bg-base-850/60 rounded-lg p-2.5 border border-base-800/80">
                   <div className="flex items-center justify-between mb-1">
-                    <span className="text-[10px] font-mono text-cyan-400 font-bold">{f.time}</span>
+                    <span className="text-[10px] font-mono text-amber-400 font-bold">{f.time}</span>
                     <span className="text-[9px] text-slate-500 font-mono uppercase">{f.type}</span>
                   </div>
                   <p className="text-slate-300 text-[11px] leading-relaxed">{f.text}</p>

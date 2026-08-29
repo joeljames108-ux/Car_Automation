@@ -393,8 +393,8 @@ export class Car3DGeometryGenerator {
     const frontX = frontAxleX + 0.82;
     const drlGeo = new THREE.BoxGeometry(0.05, 0.015, 0.35);
     const drlMat = new THREE.MeshStandardMaterial({
-      color: 0x38bdf8,
-      emissive: 0x38bdf8,
+      color: 0xfbbf24,
+      emissive: 0xfbbf24,
       emissiveIntensity: 2.5,
     });
 
@@ -468,8 +468,8 @@ export class Car3DGeometryGenerator {
 
     const glyphGeo = new THREE.OctahedronGeometry(0.04, 0);
     const hardpointMat = new THREE.MeshStandardMaterial({
-      color: 0x38bdf8,
-      emissive: 0x38bdf8,
+      color: 0xfbbf24,
+      emissive: 0xfbbf24,
       emissiveIntensity: 2.0,
       wireframe: true,
     });

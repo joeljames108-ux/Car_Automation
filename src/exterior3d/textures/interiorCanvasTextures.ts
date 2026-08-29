@@ -198,8 +198,8 @@ export class InteriorCanvasTextureFactory {
     }
 
     const isCorsa = t.driveMode === 'CORSA' || t.driveMode === 'TRACK';
-    const accentColor = isCorsa ? '#ef4444' : t.theme === 'luxury_gold_elegance' ? '#d97706' : '#06b6d4';
-    const secondaryColor = isCorsa ? '#f59e0b' : '#3b82f6';
+    const accentColor = isCorsa ? '#ef4444' : t.theme === 'luxury_gold_elegance' ? '#d97706' : '#f59e0b';
+    const secondaryColor = isCorsa ? '#f59e0b' : '#d97706';
 
     // 2. Central Massive Tachometer Arc (Motorsport Style)
     const cx = w / 2;
@@ -417,7 +417,7 @@ export class InteriorCanvasTextureFactory {
     ctx.fillText(`COOLANT: ${t.coolantTempC}°C`, rightX - 130, rightY + 80);
     ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
     ctx.fillRect(rightX - 130, rightY + 95, 260, 12);
-    ctx.fillStyle = '#38bdf8';
+    ctx.fillStyle = '#fbbf24';
     ctx.fillRect(rightX - 130, rightY + 95, 260 * (t.coolantTempC / 120), 12);
 
     // Bottom Status Bar (Odometer, Range, Clock)
@@ -437,7 +437,7 @@ export class InteriorCanvasTextureFactory {
     ctx.fillStyle = '#090d16';
     ctx.fillRect(0, 0, w, h);
 
-    const accent = theme === 'cyberpunk_neon_cyan' ? '#06b6d4' : theme === 'luxury_gold_elegance' ? '#f59e0b' : '#3b82f6';
+    const accent = theme === 'cyberpunk_neon_cyan' ? '#f59e0b' : theme === 'luxury_gold_elegance' ? '#f59e0b' : '#d97706';
 
     // 2. Top Header Bar
     ctx.fillStyle = '#0f172a';
@@ -556,7 +556,7 @@ export class InteriorCanvasTextureFactory {
     // Audio Waveform Equalizer Bars
     for (let i = 0; i < 28; i++) {
       const barH = 15 + Math.sin(i * 0.4 + 1.2) * 35 + Math.cos(i * 0.8) * 20;
-      ctx.fillStyle = i % 2 === 0 ? accent : '#38bdf8';
+      ctx.fillStyle = i % 2 === 0 ? accent : '#fbbf24';
       ctx.fillRect(rightX + 40 + (i * 18), mapY + 280 - barH, 12, barH);
     }
 
@@ -575,7 +575,7 @@ export class InteriorCanvasTextureFactory {
     ctx.fillText('DUAL-ZONE CLIMATE CONTROL', rightX + (rightW / 2), climY + 50);
 
     // Driver Temp Dial
-    ctx.fillStyle = '#38bdf8';
+    ctx.fillStyle = '#fbbf24';
     ctx.font = '900 54px sans-serif';
     ctx.fillText('21.5°C', rightX + (rightW * 0.28), climY + 140);
     ctx.fillStyle = '#94a3b8';
@@ -622,7 +622,7 @@ export class InteriorCanvasTextureFactory {
     ctx.fillStyle = '#090d16';
     ctx.fillRect(0, 0, w, h);
 
-    const accent = theme === 'cyberpunk_neon_cyan' ? '#06b6d4' : '#ef4444';
+    const accent = theme === 'cyberpunk_neon_cyan' ? '#f59e0b' : '#ef4444';
 
     ctx.fillStyle = 'rgba(255, 255, 255, 0.05)';
     ctx.beginPath();

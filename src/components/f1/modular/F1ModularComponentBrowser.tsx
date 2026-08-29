@@ -42,8 +42,8 @@ export const F1ModularComponentBrowser: React.FC = memo(function F1ModularCompon
       {/* Top Header & History Bar */}
       <div className="p-3 border-b border-white/10 flex items-center justify-between bg-black/40">
         <div className="flex items-center gap-2">
-          <div className="w-7 h-7 rounded-lg bg-cyan-500/10 border border-cyan-500/30 flex items-center justify-center">
-            <Wrench className="w-4 h-4 text-cyan-400" />
+          <div className="w-7 h-7 rounded-lg bg-amber-500/10 border border-amber-500/30 flex items-center justify-center">
+            <Wrench className="w-4 h-4 text-amber-400" />
           </div>
           <div>
             <h2 className="text-xs font-black tracking-wider uppercase text-white">Modular Assembly</h2>
@@ -94,7 +94,7 @@ export const F1ModularComponentBrowser: React.FC = memo(function F1ModularCompon
             playHMIClickSound();
             autoAssembleFactoryBaseline();
           }}
-          className="flex items-center justify-center gap-1 py-1.5 px-2 rounded-lg bg-cyan-500/10 border border-cyan-500/30 text-cyan-300 hover:bg-cyan-500/20 font-bold transition-all cursor-pointer"
+          className="flex items-center justify-center gap-1 py-1.5 px-2 rounded-lg bg-amber-500/10 border border-amber-500/30 text-amber-300 hover:bg-amber-500/20 font-bold transition-all cursor-pointer"
         >
           <Sparkles className="w-3 h-3" />
           Factory Works
@@ -117,7 +117,7 @@ export const F1ModularComponentBrowser: React.FC = memo(function F1ModularCompon
               }}
               className={`flex-shrink-0 px-2.5 py-1.5 rounded-lg text-[10px] font-bold tracking-wider transition-all border flex items-center gap-1.5 cursor-pointer ${
                 isSelected
-                  ? "bg-cyan-500 text-black border-cyan-400 shadow-md shadow-cyan-500/30 font-black"
+                  ? "bg-amber-500 text-black border-amber-400 shadow-md shadow-cyan-500/30 font-black"
                   : isInstalled
                   ? "bg-zinc-900/80 text-zinc-300 border-white/10 hover:border-white/30"
                   : "bg-amber-500/10 text-amber-300 border-amber-500/30 animate-pulse"
@@ -135,9 +135,9 @@ export const F1ModularComponentBrowser: React.FC = memo(function F1ModularCompon
         {activeSocket ? (
           <div>
             {/* Active Socket Card */}
-            <div className="p-3 rounded-xl bg-gradient-to-br from-zinc-900 to-black border border-cyan-500/30 mb-3">
+            <div className="p-3 rounded-xl bg-gradient-to-br from-zinc-900 to-black border border-amber-500/30 mb-3">
               <div className="flex items-center justify-between mb-1">
-                <span className="text-[10px] font-bold text-cyan-400 tracking-wider uppercase">
+                <span className="text-[10px] font-bold text-amber-400 tracking-wider uppercase">
                   {activeSocket.category} SOCKET
                 </span>
                 <span className="text-[9px] font-mono text-zinc-400">
@@ -184,7 +184,7 @@ export const F1ModularComponentBrowser: React.FC = memo(function F1ModularCompon
                     key={comp.id}
                     className={`p-3 rounded-xl border transition-all ${
                       isInstalled
-                        ? "bg-cyan-950/30 border-cyan-500/50 shadow-md shadow-cyan-500/10"
+                        ? "bg-amber-950/30 border-amber-500/50 shadow-md shadow-cyan-500/10"
                         : "bg-zinc-900/60 border-white/10 hover:border-white/20"
                     }`}
                   >
@@ -193,7 +193,7 @@ export const F1ModularComponentBrowser: React.FC = memo(function F1ModularCompon
                         <h5 className="text-xs font-bold text-white flex items-center gap-1.5">
                           {comp.name}
                           {comp.isFactoryStandard && (
-                            <span className="text-[9px] px-1.5 py-0.5 rounded bg-blue-500/20 text-blue-300 border border-blue-500/30">
+                            <span className="text-[9px] px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">
                               Works Spec
                             </span>
                           )}
@@ -223,7 +223,7 @@ export const F1ModularComponentBrowser: React.FC = memo(function F1ModularCompon
                       {comp.power && (
                         <div className="p-1.5 rounded bg-black/40 border border-white/5 col-span-2">
                           <span className="text-zinc-500 block text-[9px]">POWER</span>
-                          <span className="font-bold text-cyan-300">
+                          <span className="font-bold text-amber-300">
                             {comp.power.iceHorsepower} HP ICE + {comp.power.ersHorsepower} HP ERS
                           </span>
                         </div>
@@ -245,7 +245,7 @@ export const F1ModularComponentBrowser: React.FC = memo(function F1ModularCompon
                         disabled={!canInstallCheck.canInstall}
                         className={`w-full py-1.5 rounded-lg text-xs font-bold transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
                           canInstallCheck.canInstall
-                            ? "bg-cyan-500 hover:bg-cyan-400 text-black shadow-lg shadow-cyan-500/20 font-black"
+                            ? "bg-amber-500 hover:bg-amber-400 text-black shadow-lg shadow-cyan-500/20 font-black"
                             : "bg-zinc-800 text-zinc-500 cursor-not-allowed"
                         }`}
                       >

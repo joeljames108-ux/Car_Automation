@@ -52,8 +52,8 @@ export const Engine3DToolbar: React.FC<Engine3DToolbarProps> = ({
       <div className="flex flex-wrap items-center gap-2">
         {/* Camera Selector */}
         <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-slate-950/80 border border-white/10">
-          <Camera size={12} className="text-cyan-400" />
-          <span className="text-[10px] font-mono uppercase font-bold text-cyan-400">Cam:</span>
+          <Camera size={12} className="text-amber-400" />
+          <span className="text-[10px] font-mono uppercase font-bold text-amber-400">Cam:</span>
           <select
             value={cameraPreset}
             onChange={(e) => setCameraPreset(e.target.value as CameraPreset3D)}
@@ -93,7 +93,7 @@ export const Engine3DToolbar: React.FC<Engine3DToolbarProps> = ({
           title="Toggle Wireframe Mode"
           className={`px-2.5 py-1 rounded-lg text-[10px] font-mono transition-all font-bold cursor-pointer ${
             showWireframe
-              ? 'bg-cyan-500/25 text-cyan-300 border border-cyan-400/50 shadow-[0_0_10px_rgba(0,229,255,0.3)]'
+              ? 'bg-amber-500/25 text-amber-300 border border-amber-400/50 shadow-[0_0_10px_rgba(0,229,255,0.3)]'
               : 'text-slate-400 hover:text-slate-200'
           }`}
         >
@@ -106,7 +106,7 @@ export const Engine3DToolbar: React.FC<Engine3DToolbarProps> = ({
           title="Toggle Attachment Sockets"
           className={`px-2.5 py-1 rounded-lg text-[10px] font-mono transition-all font-bold cursor-pointer ${
             showAttachmentPoints
-              ? 'bg-cyan-500/25 text-cyan-300 border border-cyan-400/50 shadow-[0_0_10px_rgba(0,229,255,0.3)]'
+              ? 'bg-amber-500/25 text-amber-300 border border-amber-400/50 shadow-[0_0_10px_rgba(0,229,255,0.3)]'
               : 'text-slate-400 hover:text-slate-200'
           }`}
         >
@@ -119,7 +119,7 @@ export const Engine3DToolbar: React.FC<Engine3DToolbarProps> = ({
           title="Toggle Diagnostic Labels"
           className={`px-2.5 py-1 rounded-lg text-[10px] font-mono transition-all font-bold cursor-pointer ${
             showLabels
-              ? 'bg-cyan-500/25 text-cyan-300 border border-cyan-400/50 shadow-[0_0_10px_rgba(0,229,255,0.3)]'
+              ? 'bg-amber-500/25 text-amber-300 border border-amber-400/50 shadow-[0_0_10px_rgba(0,229,255,0.3)]'
               : 'text-slate-400 hover:text-slate-200'
           }`}
         >
@@ -132,7 +132,7 @@ export const Engine3DToolbar: React.FC<Engine3DToolbarProps> = ({
           title="Toggle Dependency Lines"
           className={`px-2.5 py-1 rounded-lg text-[10px] font-mono transition-all font-bold cursor-pointer ${
             showDependencies
-              ? 'bg-purple-500/25 text-purple-200 border border-purple-500/40 shadow-sm'
+              ? 'bg-amber-500/25 text-amber-200 border border-amber-500/40 shadow-sm'
               : 'text-slate-400 hover:text-slate-200'
           }`}
         >
@@ -146,9 +146,9 @@ export const Engine3DToolbar: React.FC<Engine3DToolbarProps> = ({
           type="button"
           onClick={() => rotateEngine90('x', 1)}
           title="Rotate 90° Z-to-Y (Pitch)"
-          className="flex items-center gap-1 px-2 py-1 rounded-lg text-[10px] font-mono text-cyan-300 hover:bg-cyan-500/20 transition-all font-bold cursor-pointer"
+          className="flex items-center gap-1 px-2 py-1 rounded-lg text-[10px] font-mono text-amber-300 hover:bg-amber-500/20 transition-all font-bold cursor-pointer"
         >
-          <RotateCw size={11} className="text-cyan-400" />
+          <RotateCw size={11} className="text-amber-400" />
           <span>Z→Y 90°</span>
         </button>
 

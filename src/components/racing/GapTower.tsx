@@ -38,7 +38,7 @@ interface GapTowerProps {
 }
 
 const SECTOR_COLORS = {
-  purple: 'text-purple-400 bg-purple-500/20',
+  purple: 'text-amber-400 bg-amber-500/20',
   green: 'text-green-400 bg-green-500/20',
   yellow: 'text-yellow-400 bg-yellow-500/10',
 };
@@ -166,7 +166,7 @@ export const GapTower: React.FC<GapTowerProps> = memo(function GapTower({
 
       {/* Footer */}
       <div className="bg-amber-900/30 px-3 py-1.5 flex items-center gap-4 text-xs text-amber-500 border-t border-amber-800/20">
-        <div className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-purple-500" /> Purple</div>
+        <div className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-amber-500" /> Purple</div>
         <div className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-green-500" /> Green</div>
         <div className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-yellow-500" /> Yellow</div>
         <span className="ml-auto">D = DRS</span>

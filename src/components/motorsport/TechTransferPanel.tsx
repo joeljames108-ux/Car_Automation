@@ -34,10 +34,10 @@ export const TechTransferPanel = memo(function TechTransferPanel({ selectedTeam 
           <div className="flex items-center gap-2 mb-4">
             <div className="w-3 h-3 rounded-full" style={{ backgroundColor: selectedTeam.liveryColor }} />
             <h3 className="text-sm font-semibold text-slate-100">{selectedTeam.name} · Tech Transfer</h3>
-            <div className="ml-auto flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-purple-500/15 border border-purple-500/25">
-              <Zap size={11} className="text-purple-400" />
-              <span className="text-sm font-bold font-mono text-purple-300">{pool}</span>
-              <span className="text-[10px] text-purple-400/60">pts</span>
+            <div className="ml-auto flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-amber-500/15 border border-amber-500/25">
+              <Zap size={11} className="text-amber-400" />
+              <span className="text-sm font-bold font-mono text-amber-300">{pool}</span>
+              <span className="text-[10px] text-amber-400/60">pts</span>
             </div>
           </div>
 
@@ -53,7 +53,7 @@ export const TechTransferPanel = memo(function TechTransferPanel({ selectedTeam 
               }}
                 className={`px-4 py-3 rounded-xl text-xs font-medium transition-all border cursor-pointer ${
                   direction === d.dir
-                    ? "bg-purple-500/15 border-purple-500/40 text-purple-300"
+                    ? "bg-amber-500/15 border-amber-500/40 text-amber-300"
                     : "bg-base-850 border-base-800 text-slate-400 hover:border-base-700"
                 }`}>
                 <div className="flex items-center gap-1.5 mb-1">{d.icon} <span className="font-semibold">{d.label}</span></div>
@@ -68,7 +68,7 @@ export const TechTransferPanel = memo(function TechTransferPanel({ selectedTeam 
             <div className="flex items-center gap-3">
               <input type="range" min={5} max={Math.max(5, pool)} step={5}
                 value={Math.min(points, pool)} onChange={e => setPoints(+e.target.value)} className="flex-1" />
-              <span className="text-lg font-bold font-mono text-purple-300 w-16 text-right">{Math.min(points, pool)}pts</span>
+              <span className="text-lg font-bold font-mono text-amber-300 w-16 text-right">{Math.min(points, pool)}pts</span>
             </div>
           </div>
 
@@ -77,7 +77,7 @@ export const TechTransferPanel = memo(function TechTransferPanel({ selectedTeam 
             transferMotorsportTech(selectedTeam.id, direction, Math.min(points, pool));
           }}
             disabled={pool < 5}
-            className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-purple-500/15 border border-purple-500/40 text-purple-300 hover:bg-purple-500/25 disabled:opacity-40 disabled:cursor-not-allowed transition-all text-sm font-semibold cursor-pointer">
+            className="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-amber-500/15 border border-amber-500/40 text-amber-300 hover:bg-amber-500/25 disabled:opacity-40 disabled:cursor-not-allowed transition-all text-sm font-semibold cursor-pointer">
             <ArrowRightLeft size={14} /> Transfer Technology
           </button>
         </div>
@@ -87,7 +87,7 @@ export const TechTransferPanel = memo(function TechTransferPanel({ selectedTeam 
       {company.motorsport.techTransferHistory.length > 0 && (
         <div className="glass-panel p-4">
           <h3 className="text-xs font-semibold text-slate-300 uppercase tracking-wider mb-3 flex items-center gap-1.5">
-            <Clock size={12} className="text-purple-400" /> Transfer History
+            <Clock size={12} className="text-amber-400" /> Transfer History
           </h3>
           <div className="space-y-2 max-h-64 overflow-y-auto">
             {[...company.motorsport.techTransferHistory].reverse().map((entry, i) => (
@@ -95,14 +95,14 @@ export const TechTransferPanel = memo(function TechTransferPanel({ selectedTeam 
                 <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${
                   entry.direction === "race_to_production"
                     ? "bg-accent-500/15 text-accent-300"
-                    : "bg-purple-500/15 text-purple-300"
+                    : "bg-amber-500/15 text-amber-300"
                 }`}>
                   {entry.direction === "race_to_production" ? <ArrowRight size={12} /> : <ArrowLeft size={12} />}
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="text-xs text-slate-200">
                     {entry.direction === "race_to_production" ? "Race → Production" : "Production → Race"} ·
-                    <span className="text-purple-300 ml-1 font-mono">{entry.points}pts</span>
+                    <span className="text-amber-300 ml-1 font-mono">{entry.points}pts</span>
                   </div>
                   <div className="text-[10px] text-slate-500 mt-0.5">{entry.bonus}</div>
                   <div className="flex items-center gap-2 mt-1">
@@ -115,7 +115,7 @@ export const TechTransferPanel = memo(function TechTransferPanel({ selectedTeam 
           </div>
           <div className="mt-3 pt-2 border-t border-base-800/50 text-center">
             <span className="text-xs text-slate-500">Total transferred: </span>
-            <span className="text-sm font-bold font-mono text-purple-300">{company.motorsport.totalTechTransferred}pts</span>
+            <span className="text-sm font-bold font-mono text-amber-300">{company.motorsport.totalTechTransferred}pts</span>
           </div>
         </div>
       )}

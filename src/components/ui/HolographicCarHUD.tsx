@@ -79,7 +79,7 @@ export function HolographicCarHUD({
     dirLight.position.set(4, 6, 4);
     scene.add(dirLight);
 
-    const purpleLight = new THREE.PointLight(0xa855f7, 3.0, 10);
+    const purpleLight = new THREE.PointLight(0xf59e0b, 3.0, 10);
     purpleLight.position.set(-3, 2, -2);
     scene.add(purpleLight);
 
@@ -126,7 +126,7 @@ export function HolographicCarHUD({
     const glassGeom = new THREE.SphereGeometry(0.55, 16, 16);
     glassGeom.scale(1.4, 0.7, 1.0);
     const glassMat = new THREE.MeshPhysicalMaterial({
-      color: 0x38bdf8,
+      color: 0xfbbf24,
       metalness: 0.1,
       roughness: 0.1,
       transmission: 0.8,
@@ -139,7 +139,7 @@ export function HolographicCarHUD({
 
     // 4. Active Rear Wing
     const wingGeom = new THREE.BoxGeometry(0.3, 0.04, 1.3);
-    const wingMat = new THREE.MeshStandardMaterial({ color: 0xa855f7, metalness: 0.8, roughness: 0.2 });
+    const wingMat = new THREE.MeshStandardMaterial({ color: 0xf59e0b, metalness: 0.8, roughness: 0.2 });
     const wingMesh = new THREE.Mesh(wingGeom, wingMat);
     wingMesh.position.set(-1.45, 0.7, 0);
     carGroup.add(wingMesh);
@@ -207,25 +207,25 @@ export function HolographicCarHUD({
 
   const subsystems = [
     { id: "engine" as Stage, label: "Engine V8", x: 140, y: 85, icon: <Cog size={12} />, color: "text-amber-400 border-amber-400/50 bg-amber-500/10" },
-    { id: "aero" as Stage, label: "Active Wing", x: 340, y: 55, icon: <Wind size={12} />, color: "text-cyan-400 border-cyan-400/50 bg-cyan-500/10" },
+    { id: "aero" as Stage, label: "Active Wing", x: 340, y: 55, icon: <Wind size={12} />, color: "text-amber-400 border-amber-400/50 bg-amber-500/10" },
     { id: "suspension3d" as Stage, label: "Double Wishbone", x: 260, y: 110, icon: <Activity size={12} />, color: "text-emerald-400 border-emerald-400/50 bg-emerald-500/10" },
-    { id: "interior" as Stage, label: "Cockpit HUD", x: 210, y: 70, icon: <Monitor size={12} />, color: "text-purple-400 border-purple-400/50 bg-purple-500/10" },
+    { id: "interior" as Stage, label: "Cockpit HUD", x: 210, y: 70, icon: <Monitor size={12} />, color: "text-amber-400 border-amber-400/50 bg-amber-500/10" },
     { id: "safety" as Stage, label: "Monocoque Cell", x: 180, y: 95, icon: <ShieldCheck size={12} />, color: "text-sky-400 border-sky-400/50 bg-sky-500/10" },
   ];
 
   return (
-    <div className="w-full bg-[#060a16]/90 border border-cyan-500/30 rounded-2xl p-4 shadow-[0_0_30px_rgba(34,211,238,0.12)] relative overflow-hidden">
+    <div className="w-full bg-[#060a16]/90 border border-amber-500/30 rounded-2xl p-4 shadow-[0_0_30px_rgba(34,211,238,0.12)] relative overflow-hidden">
       {/* Background Cyber Laser Reticles */}
-      <div className="absolute top-2 left-2 text-[9px] font-mono text-cyan-400/50 tracking-widest uppercase pointer-events-none z-10 flex items-center gap-2">
+      <div className="absolute top-2 left-2 text-[9px] font-mono text-amber-400/50 tracking-widest uppercase pointer-events-none z-10 flex items-center gap-2">
         <span>HUD // CAD TELEMETRY SYSTEM · 60FPS</span>
       </div>
 
       {/* Mode Switcher Toggle Pill */}
-      <div className="absolute top-2 right-2 z-20 flex items-center gap-1 bg-slate-900/90 border border-cyan-500/40 rounded-lg p-0.5 backdrop-blur-md">
+      <div className="absolute top-2 right-2 z-20 flex items-center gap-1 bg-slate-900/90 border border-amber-500/40 rounded-lg p-0.5 backdrop-blur-md">
         <button
           onClick={() => setRenderMode3D(true)}
           className={`flex items-center gap-1 px-2 py-0.5 rounded text-[9px] font-mono font-bold transition-all ${
-            renderMode3D ? "bg-cyan-500 text-slate-950 shadow-sm font-extrabold" : "text-slate-400 hover:text-white"
+            renderMode3D ? "bg-amber-500 text-slate-950 shadow-sm font-extrabold" : "text-slate-400 hover:text-white"
           }`}
         >
           <Box size={10} /> 3D MODEL
@@ -233,7 +233,7 @@ export function HolographicCarHUD({
         <button
           onClick={() => setRenderMode3D(false)}
           className={`flex items-center gap-1 px-2 py-0.5 rounded text-[9px] font-mono font-bold transition-all ${
-            !renderMode3D ? "bg-cyan-500 text-slate-950 shadow-sm font-extrabold" : "text-slate-400 hover:text-white"
+            !renderMode3D ? "bg-amber-500 text-slate-950 shadow-sm font-extrabold" : "text-slate-400 hover:text-white"
           }`}
         >
           <Eye size={10} /> 2D VECTOR
@@ -242,10 +242,10 @@ export function HolographicCarHUD({
 
       <div className="flex flex-col lg:flex-row items-center justify-between gap-6">
         {/* Left Holographic Vehicle Viewport (3D or 2D) */}
-        <div className="relative w-full lg:w-[480px] h-[165px] bg-[#030610] rounded-xl border border-cyan-500/20 p-2 flex items-center justify-center overflow-hidden">
+        <div className="relative w-full lg:w-[480px] h-[165px] bg-[#030610] rounded-xl border border-amber-500/20 p-2 flex items-center justify-center overflow-hidden">
           {renderMode3D ? (
             <div ref={mountRef} className="w-full h-full cursor-grab active:cursor-grabbing relative">
-              <div className="absolute bottom-1 right-2 text-[8px] font-mono text-cyan-400/60 pointer-events-none bg-black/40 px-1.5 py-0.5 rounded">
+              <div className="absolute bottom-1 right-2 text-[8px] font-mono text-amber-400/60 pointer-events-none bg-black/40 px-1.5 py-0.5 rounded">
                 ORBIT: DRAG · ZOOM: SCROLL
               </div>
             </div>
@@ -255,11 +255,11 @@ export function HolographicCarHUD({
               <div className="absolute inset-0 bg-[linear-gradient(90deg,transparent_0%,rgba(34,211,238,0.15)_50%,transparent_100%)] animate-[pulse_3s_ease-in-out_infinite] pointer-events-none" />
 
               {/* SVG Vector Supercar Silhouette Wireframe */}
-              <svg viewBox="0 0 400 150" className="w-full h-full text-cyan-400 drop-shadow-[0_0_12px_rgba(34,211,238,0.6)]">
+              <svg viewBox="0 0 400 150" className="w-full h-full text-amber-400 drop-shadow-[0_0_12px_rgba(34,211,238,0.6)]">
                 <defs>
                   <linearGradient id="hudGradient" x1="0" y1="0" x2="1" y2="0">
                     <stop offset="0%" stopColor="#00f0ff" stopOpacity="0.8" />
-                    <stop offset="50%" stopColor="#a855f7" stopOpacity="0.8" />
+                    <stop offset="50%" stopColor="#f59e0b" stopOpacity="0.8" />
                     <stop offset="100%" stopColor="#00f0ff" stopOpacity="0.8" />
                   </linearGradient>
                 </defs>
@@ -281,9 +281,9 @@ export function HolographicCarHUD({
 
                 {/* Front & Rear Rims */}
                 <circle cx="105" cy="108" r="18" fill="#040814" stroke="#00f0ff" strokeWidth="2.5" className="animate-spin" style={{ animationDuration: "3s", transformOrigin: "105px 108px" }} />
-                <circle cx="105" cy="108" r="8" fill="none" stroke="#a855f7" strokeWidth="1" />
+                <circle cx="105" cy="108" r="8" fill="none" stroke="#f59e0b" strokeWidth="1" />
                 <circle cx="310" cy="108" r="18" fill="#040814" stroke="#00f0ff" strokeWidth="2.5" className="animate-spin" style={{ animationDuration: "3s", transformOrigin: "310px 108px" }} />
-                <circle cx="310" cy="108" r="8" fill="none" stroke="#a855f7" strokeWidth="1" />
+                <circle cx="310" cy="108" r="8" fill="none" stroke="#f59e0b" strokeWidth="1" />
               </svg>
             </>
           )}
@@ -307,7 +307,7 @@ export function HolographicCarHUD({
         </div>
 
         {/* Right Dynamic RPM Tachometer & Gear HUD */}
-        <div className="flex-1 w-full flex flex-col sm:flex-row items-center justify-around gap-4 bg-[#040712]/80 p-3 rounded-xl border border-cyan-500/20">
+        <div className="flex-1 w-full flex flex-col sm:flex-row items-center justify-around gap-4 bg-[#040712]/80 p-3 rounded-xl border border-amber-500/20">
           {/* Tachometer Ring */}
           <div className="relative flex flex-col items-center justify-center w-32 h-32">
             <svg viewBox="0 0 100 100" className="w-full h-full transform -rotate-90">
@@ -331,26 +331,26 @@ export function HolographicCarHUD({
             {/* Center RPM Reading */}
             <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
               <span className="text-[10px] font-mono text-slate-400 uppercase">ENGINE RPM</span>
-              <span className="text-lg font-black font-mono text-cyan-300">{rpm}</span>
+              <span className="text-lg font-black font-mono text-amber-300">{rpm}</span>
               <span className="text-[9px] font-mono text-slate-500 uppercase">GEAR {gear}</span>
             </div>
           </div>
 
           {/* Quick HUD Metrics Column */}
           <div className="flex flex-col gap-2 min-w-[160px]">
-            <div className="flex items-center justify-between text-xs font-mono border-b border-cyan-500/20 pb-1">
+            <div className="flex items-center justify-between text-xs font-mono border-b border-amber-500/20 pb-1">
               <span className="text-slate-400">POWERTRAIN</span>
-              <span className="text-cyan-300 font-bold flex items-center">
+              <span className="text-amber-300 font-bold flex items-center">
                 <AnimatedCounter value={peakPower} duration={400} /> HP
               </span>
             </div>
-            <div className="flex items-center justify-between text-xs font-mono border-b border-cyan-500/20 pb-1">
+            <div className="flex items-center justify-between text-xs font-mono border-b border-amber-500/20 pb-1">
               <span className="text-slate-400">TORQUE</span>
-              <span className="text-purple-300 font-bold flex items-center">
+              <span className="text-amber-300 font-bold flex items-center">
                 <AnimatedCounter value={peakTorque} duration={400} /> Nm
               </span>
             </div>
-            <div className="flex items-center justify-between text-xs font-mono border-b border-cyan-500/20 pb-1">
+            <div className="flex items-center justify-between text-xs font-mono border-b border-amber-500/20 pb-1">
               <span className="text-slate-400">DOWNFORCE</span>
               <span className="text-emerald-300 font-bold flex items-center">
                 <AnimatedCounter value={downforce} duration={400} /> N

@@ -35,7 +35,7 @@ export const NvhSoundLab: React.FC = () => {
       {/* Top Banner */}
       <div className="bg-slate-900/80 backdrop-blur-xl p-6 rounded-2xl border border-slate-800 flex items-center justify-between shadow-xl">
         <div>
-          <h2 className="text-xl font-black tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-indigo-500">
+          <h2 className="text-xl font-black tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-indigo-500">
             NVH ACOUSTIC & PSYCHOACOUSTICS LABORATORY
           </h2>
           <p className="text-xs text-slate-400 mt-1">
@@ -75,7 +75,7 @@ export const NvhSoundLab: React.FC = () => {
         <div>
           <div className="flex justify-between text-xs text-slate-300 mb-2 font-mono">
             <span>ENGINE RPM:</span>
-            <strong className="text-purple-400">{engineRpm.toLocaleString()} RPM</strong>
+            <strong className="text-amber-400">{engineRpm.toLocaleString()} RPM</strong>
           </div>
           <input
             type="range"
@@ -91,7 +91,7 @@ export const NvhSoundLab: React.FC = () => {
         <div>
           <div className="flex justify-between text-xs text-slate-300 mb-2 font-mono">
             <span>VEHICLE SPEED:</span>
-            <strong className="text-indigo-400">{vehicleSpeedKmH} km/h</strong>
+            <strong className="text-amber-400">{vehicleSpeedKmH} km/h</strong>
           </div>
           <input
             type="range"
@@ -107,7 +107,7 @@ export const NvhSoundLab: React.FC = () => {
         <div>
           <div className="flex justify-between text-xs text-slate-300 mb-2 font-mono">
             <span>CYLINDER COUNT:</span>
-            <strong className="text-cyan-400">{cylinders} Cylinders ({acousticOutput.orderSweep.primaryFiringOrder}E)</strong>
+            <strong className="text-amber-400">{cylinders} Cylinders ({acousticOutput.orderSweep.primaryFiringOrder}E)</strong>
           </div>
           <input
             type="range"
@@ -116,7 +116,7 @@ export const NvhSoundLab: React.FC = () => {
             step={1}
             value={cylinders}
             onChange={(e) => setCylinders(Number(e.target.value))}
-            className="w-full accent-cyan-500 bg-slate-950 rounded-lg cursor-pointer"
+            className="w-full accent-amber-500 bg-slate-950 rounded-lg cursor-pointer"
           />
         </div>
       </div>
@@ -125,10 +125,10 @@ export const NvhSoundLab: React.FC = () => {
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <div className="bg-slate-900/60 p-4 rounded-xl border border-slate-800">
           <div className="text-xs text-slate-400 font-semibold flex items-center space-x-2">
-            <Gauge className="w-4 h-4 text-purple-400" />
+            <Gauge className="w-4 h-4 text-amber-400" />
             <span>FINAL CABIN NOISE</span>
           </div>
-          <div className="text-2xl font-mono font-black text-purple-400 mt-2">
+          <div className="text-2xl font-mono font-black text-amber-400 mt-2">
             {acousticOutput.finalCabinDba} <span className="text-xs text-slate-500">dBA</span>
           </div>
           <div className="text-[11px] text-slate-500 mt-1">Raw Uncancelled: {acousticOutput.orderSweep.totalSoundPressureDba} dBA</div>
@@ -136,10 +136,10 @@ export const NvhSoundLab: React.FC = () => {
 
         <div className="bg-slate-900/60 p-4 rounded-xl border border-slate-800">
           <div className="text-xs text-slate-400 font-semibold flex items-center space-x-2">
-            <Radio className="w-4 h-4 text-indigo-400" />
+            <Radio className="w-4 h-4 text-amber-400" />
             <span>ZWICKER LOUDNESS</span>
           </div>
-          <div className="text-2xl font-mono font-black text-indigo-400 mt-2">
+          <div className="text-2xl font-mono font-black text-amber-400 mt-2">
             {acousticOutput.psychoacoustics.zwickerLoudnessSones} <span className="text-xs text-slate-500">Sones</span>
           </div>
           <div className="text-[11px] text-slate-500 mt-1">Aures Sharpness: {acousticOutput.psychoacoustics.auresSharpnessAcums} Acums</div>
@@ -147,10 +147,10 @@ export const NvhSoundLab: React.FC = () => {
 
         <div className="bg-slate-900/60 p-4 rounded-xl border border-slate-800">
           <div className="text-xs text-slate-400 font-semibold flex items-center space-x-2">
-            <Sliders className="w-4 h-4 text-cyan-400" />
+            <Sliders className="w-4 h-4 text-amber-400" />
             <span>SPEECH ARTICULATION</span>
           </div>
-          <div className="text-2xl font-mono font-black text-cyan-400 mt-2">
+          <div className="text-2xl font-mono font-black text-amber-400 mt-2">
             {acousticOutput.psychoacoustics.articulationIndexPct}%
           </div>
           <div className="text-[11px] text-slate-500 mt-1">Roughness: {acousticOutput.psychoacoustics.asperRoughnessAsper} Asper</div>
@@ -174,7 +174,7 @@ export const NvhSoundLab: React.FC = () => {
                 <div className="text-[10px] text-slate-500">Source: {ord.sourceType}</div>
               </div>
               <div className="text-right font-mono">
-                <div className="text-xs font-bold text-purple-400">{ord.frequencyHz} Hz</div>
+                <div className="text-xs font-bold text-amber-400">{ord.frequencyHz} Hz</div>
                 <div className="text-[11px] text-slate-400">{ord.amplitudeDba} dBA</div>
               </div>
             </div>

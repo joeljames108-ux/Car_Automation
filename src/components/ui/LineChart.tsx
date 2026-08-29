@@ -143,7 +143,7 @@ export function LineChart({
       {allowZoom && (
         <button
           onClick={openZoomModal}
-          className="absolute top-1 right-1 opacity-0 group-hover:opacity-100 transition-opacity bg-white/90 border border-blue-400/40 text-[#007aff] p-1.5 rounded-full shadow-md z-30 hover:bg-blue-50 active:scale-95 cursor-pointer"
+          className="absolute top-1 right-1 opacity-0 group-hover:opacity-100 transition-opacity bg-white/90 border border-amber-400/40 text-amber-400 p-1.5 rounded-full shadow-md z-30 hover:bg-amber-50 active:scale-95 cursor-pointer"
           title="Click to Zoom Chart"
         >
           <Maximize2 size={12} />
@@ -152,7 +152,7 @@ export function LineChart({
 
       {/* Dynamic Hover Tooltip Banner */}
       {hoverIndex !== null && activeRpm !== null && (
-        <div className="line-chart-tooltip absolute top-1 left-2 z-20 flex items-center gap-3 bg-white/90 border border-cyan-500/40 rounded-lg px-3 py-1.5 backdrop-blur-md shadow-lg pointer-events-none text-xs font-mono">
+        <div className="line-chart-tooltip absolute top-1 left-2 z-20 flex items-center gap-3 bg-white/90 border border-amber-500/40 rounded-lg px-3 py-1.5 backdrop-blur-md shadow-lg pointer-events-none text-xs font-mono">
           <span className="text-slate-400 font-bold">{activeRpm} {xUnit || ""}:</span>
           {series.map((s, idx) => {
             const pt = s.data[hoverIndex];
@@ -282,7 +282,7 @@ export function LineChart({
                 y1="16"
                 x2={paths[0].points[hoverIndex].svgX}
                 y2={height - 28}
-                stroke="#38bdf8"
+                stroke="#fbbf24"
                 strokeWidth="1.5"
                 strokeDasharray="2 2"
                 vectorEffect="non-scaling-stroke"
@@ -325,10 +325,10 @@ export function LineChart({
             onClick={(e) => e.stopPropagation()}
           >
             {/* Top Bar with Back & Close */}
-            <div className="w-full flex items-center justify-between border-b border-blue-200/50 pb-3.5 mb-4">
+            <div className="w-full flex items-center justify-between border-b border-amber-200/50 pb-3.5 mb-4">
               <button
                 onClick={closeZoomModal}
-                className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-500/10 text-[#007aff] border border-blue-400/30 text-xs font-mono font-bold hover:bg-blue-500/20 transition-all shadow-sm active:scale-95 cursor-pointer"
+                className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-500/10 text-amber-400 border border-amber-400/30 text-xs font-mono font-bold hover:bg-amber-500/20 transition-all shadow-sm active:scale-95 cursor-pointer"
               >
                 <ArrowLeft size={14} /> Back
               </button>
@@ -346,7 +346,7 @@ export function LineChart({
             </div>
 
             {/* High-Resolution Expanded Chart */}
-            <div className="w-full bg-gradient-to-br from-white/95 via-blue-50/30 to-slate-100/50 border border-blue-200/50 rounded-2xl p-4 shadow-sm">
+            <div className="w-full bg-gradient-to-br from-white/95 via-amber-50/30 to-slate-100/50 border border-amber-200/50 rounded-2xl p-4 shadow-sm">
               <LineChart
                 series={series}
                 xLabel={xLabel}
@@ -361,9 +361,9 @@ export function LineChart({
             </div>
 
             {/* Specifications & Peak Values Bar */}
-            <div className="w-full grid grid-cols-2 sm:grid-cols-4 gap-2.5 mt-4 pt-3.5 border-t border-blue-200/40">
+            <div className="w-full grid grid-cols-2 sm:grid-cols-4 gap-2.5 mt-4 pt-3.5 border-t border-amber-200/40">
               {paths.map((p, idx) => (
-                <div key={idx} className="bg-white/85 border border-blue-200/50 rounded-2xl p-3 text-center shadow-sm backdrop-blur-md">
+                <div key={idx} className="bg-white/85 border border-amber-200/50 rounded-2xl p-3 text-center shadow-sm backdrop-blur-md">
                   <span className="block text-[9.5px] font-mono text-slate-400 uppercase tracking-wider">{p.label || `Series ${idx + 1}`} Peak</span>
                   <span className="text-sm font-mono font-bold" style={{ color: p.color }}>
                     {Math.round(p.peak.y).toLocaleString()}{p.unit || yUnit || ""}

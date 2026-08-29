@@ -69,7 +69,7 @@ export const ModularGltfShowcaseStudio: React.FC = () => {
       <div className="flex items-center justify-between px-6 py-3.5 bg-[#090d16] border-b border-[#182133] shadow-lg">
         {/* Studio Branding & Homologation Seal */}
         <div className="flex items-center gap-3">
-          <div className="p-2 rounded-xl bg-gradient-to-tr from-cyan-500/20 to-blue-500/20 border border-cyan-500/40 text-cyan-400">
+          <div className="p-2 rounded-xl bg-gradient-to-tr from-amber-500/20 to-amber-500/20 border border-amber-500/40 text-amber-400">
             <Sparkles className="w-5 h-5" />
           </div>
           <div>
@@ -77,7 +77,7 @@ export const ModularGltfShowcaseStudio: React.FC = () => {
               <h1 className="text-base font-bold tracking-wide text-white">
                 ANTIGRAVITY AUTOMOTIVE CAD STUDIO
               </h1>
-              <span className="px-2 py-0.5 text-[10px] font-mono font-bold rounded-full bg-cyan-500/10 text-cyan-400 border border-cyan-500/30">
+              <span className="px-2 py-0.5 text-[10px] font-mono font-bold rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/30">
                 100-PHASE V2.0
               </span>
             </div>
@@ -98,7 +98,7 @@ export const ModularGltfShowcaseStudio: React.FC = () => {
                 onClick={() => setActiveTab(t.id)}
                 className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all ${
                   isActive
-                    ? 'bg-cyan-500 text-black shadow-[0_0_12px_rgba(6,182,212,0.4)]'
+                    ? 'bg-amber-500 text-black shadow-[0_0_12px_rgba(6,182,212,0.4)]'
                     : 'text-gray-400 hover:text-gray-200 hover:bg-[#151c2e]'
                 }`}
               >
@@ -114,7 +114,7 @@ export const ModularGltfShowcaseStudio: React.FC = () => {
           <button
             onClick={handleExportGlb}
             disabled={isExporting}
-            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-black font-bold text-xs shadow-lg shadow-cyan-500/20 transition-all disabled:opacity-50 cursor-pointer"
+            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-black font-bold text-xs shadow-lg shadow-cyan-500/20 transition-all disabled:opacity-50 cursor-pointer"
           >
             <Download className="w-4 h-4" />
             {isExporting ? 'Exporting Binary...' : 'Export 3D GLB Asset'}
@@ -137,7 +137,7 @@ export const ModularGltfShowcaseStudio: React.FC = () => {
             MASS: <strong className="text-gray-100">{totalMassKg} kg</strong>
           </span>
           <span>
-            RIGIDITY: <strong className="text-cyan-400">{totalTorsionalRigidityNmPerDeg} Nm/deg</strong>
+            RIGIDITY: <strong className="text-amber-400">{totalTorsionalRigidityNmPerDeg} Nm/deg</strong>
           </span>
           <span>
             WEIGHT BIAS: <strong className="text-amber-400">{weightDistributionFrontPct}% F / {(100 - weightDistributionFrontPct).toFixed(1)}% R</strong>

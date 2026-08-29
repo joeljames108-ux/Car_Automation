@@ -12,8 +12,8 @@ import { mapRealCarToSolverParams } from '../../../sim/benchmarks/realCarSimulat
 import { playHMIClickSound, playHMITabSound } from '../../../utils/hmiSoundSynth';
 
 const TIER_COLORS = [
-  '#10b981', '#3b82f6', '#f59e0b', '#ef4444', '#8b5cf6',
-  '#06b6d4', '#ec4899', '#f97316', '#6366f1', '#14b8a6',
+  '#10b981', '#d97706', '#f59e0b', '#ef4444', '#f59e0b',
+  '#f59e0b', '#d97706', '#f97316', '#f59e0b', '#14b8a6',
 ];
 
 type SortKey = 'name' | 'hp' | 'weight' | 'topSpeed' | '0to100' | 'tier';
@@ -50,7 +50,13 @@ function pairsForMetric(
 }
 
 export const RealCar100BenchmarkStudio = memo(function RealCar100BenchmarkStudio() {
-  const [report, setReport] = useState<BenchmarkReport | null>(null);
+  const [report, setReport] = useState<BenchmarkReport | null>(() => {
+    try {
+      return BenchmarkCorrelationEngine.runFullBenchmark();
+    } catch {
+      return null;
+    }
+  });
   const [selectedTier, setSelectedTier] = useState<number>(0);
   const [searchQuery, setSearchQuery] = useState('');
   const [viewMode, setViewMode] = useState<ViewMode>('table');
@@ -66,10 +72,10 @@ export const RealCar100BenchmarkStudio = memo(function RealCar100BenchmarkStudio
     playHMIClickSound();
     setRunning(true);
     setTimeout(() => {
-      const r = BenchmarkCorrelationEngine.runFullBenchmark();
+      const r = BenchmarkCorrelationEngine.runFullBenchmark(undefined, true);
       setReport(r);
       setRunning(false);
-    }, 60);
+    }, 40);
   };
 
   const filteredCars = useMemo(() => {
@@ -443,7 +449,7 @@ function ResidualHistogram({ pairs }: { pairs: ScatterPair[] }) {
         return (
           <rect key={i}
             x={pad + i * bw + 0.5} y={height - pad - bh} width={bw - 1} height={bh}
-            fill={centerPct < 0 ? '#3b82f6' : '#f59e0b'} opacity={0.8} rx={1} />
+            fill={centerPct < 0 ? '#d97706' : '#f59e0b'} opacity={0.8} rx={1} />
         );
       })}
       <text x={pad} y={height - 6} fontSize={9} fill="#92400e">-{bins.maxAbs.toFixed(0)}%</text>
@@ -483,7 +489,7 @@ function SpeedTrace({ telemetry }: { telemetry: LapTelemetryPointLite[] }) {
         {cornerPeaks.map((t, i) => {
           const x = pad + (t.distanceM / (totalDist || 1)) * (width - 2 * pad);
           const y = height - pad - (t.speedKmh / (maxSpeed || 1)) * (height - 2 * pad);
-          return <circle key={`c${i}`} cx={x} cy={y} r={2.5} fill="#3b82f6" opacity={0.85} />;
+          return <circle key={`c${i}`} cx={x} cy={y} r={2.5} fill="#d97706" opacity={0.85} />;
         })}
         <text x={pad} y={pad - 8} fontSize={9} fill="#92400e">{maxSpeed.toFixed(0)} km/h max</text>
         <text x={width - pad} y={height - 6} fontSize={9} fill="#92400e" textAnchor="end">{(totalDist / 1000).toFixed(2)} km</text>

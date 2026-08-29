@@ -64,7 +64,7 @@ export const VehicleAssemblyTabSwitcher: React.FC<VehicleAssemblyTabSwitcherProp
           onClick={() => setActiveConsoleTab("catalog")}
           className={`flex-1 py-2 rounded-xl text-xs font-mono font-bold flex items-center justify-center gap-2 transition-all ${
             activeConsoleTab === "catalog"
-              ? "bg-cyan-500 text-slate-950 shadow-[0_0_12px_rgba(6,182,212,0.4)]"
+              ? "bg-amber-500 text-slate-950 shadow-[0_0_12px_rgba(6,182,212,0.4)]"
               : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200"
           }`}
         >
@@ -76,7 +76,7 @@ export const VehicleAssemblyTabSwitcher: React.FC<VehicleAssemblyTabSwitcherProp
           onClick={() => setActiveConsoleTab("dashboard")}
           className={`flex-1 py-2 rounded-xl text-xs font-mono font-bold flex items-center justify-center gap-2 transition-all ${
             activeConsoleTab === "dashboard"
-              ? "bg-cyan-500 text-slate-950 shadow-[0_0_12px_rgba(6,182,212,0.4)]"
+              ? "bg-amber-500 text-slate-950 shadow-[0_0_12px_rgba(6,182,212,0.4)]"
               : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200"
           }`}
         >

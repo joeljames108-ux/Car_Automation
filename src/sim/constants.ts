@@ -830,7 +830,7 @@ export function defaultInterior(): InteriorConfig {
     pedalSet: "sport", shiftKnob: "leather",
     rollCage: "none", fireExtinguisher: false, racingHarness: false,
     harnessPoints: 4, windowNet: false,
-    interiorWeight: 0, interiorColor: "#1a1a2e", accentColor: "#22d3ee",
+    interiorWeight: 0, interiorColor: "#1a1a2e", accentColor: "#fbbf24",
     trimFinish: "matte",
   };
 }

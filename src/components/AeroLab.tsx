@@ -88,11 +88,11 @@ export function AeroLab() {
             onClick={() => setLabMode("cfd_windtunnel")}
             className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-bold font-mono transition-all border ${
               labMode === "cfd_windtunnel"
-                ? "bg-cyan-500/20 border-cyan-400/60 text-cyan-200 shadow-sm"
+                ? "bg-amber-500/20 border-amber-400/60 text-amber-200 shadow-sm"
                 : "bg-base-850 border-base-800 text-slate-400 hover:text-slate-200"
             }`}
           >
-            <Wind size={14} className={labMode === "cfd_windtunnel" ? "text-cyan-400" : ""} />
+            <Wind size={14} className={labMode === "cfd_windtunnel" ? "text-amber-400" : ""} />
             🌪️ CFD WIND TUNNEL & FLOWFIELD
           </button>
           <button
@@ -208,7 +208,7 @@ export function AeroLab() {
                 update("front", { splitterExtension: 40, splitterAngle: 1, divePlanes: 0 });
                 update("diffuser", { angle: 6, gurneyFlap: false });
               }}
-              className="px-2.5 py-1 rounded-lg text-xs font-semibold bg-purple-500/15 border border-purple-500/30 text-purple-300 hover:bg-purple-500/25 transition-all shadow-sm"
+              className="px-2.5 py-1 rounded-lg text-xs font-semibold bg-amber-500/15 border border-amber-500/30 text-amber-300 hover:bg-amber-500/25 transition-all shadow-sm"
               title="Minimize drag coefficient for maximum top speed"
             >
               🚀 Low Drag Speed
@@ -227,7 +227,7 @@ export function AeroLab() {
           </div>
           <div className="bg-base-850/60 p-2 rounded-lg border border-base-800/80">
             <div className="text-[10px] text-slate-500 font-mono uppercase">Downforce Load</div>
-            <div className="text-sm font-bold font-mono text-cyan-300">{sim.downforce} N</div>
+            <div className="text-sm font-bold font-mono text-amber-300">{sim.downforce} N</div>
             <div className={`text-[10px] font-mono font-semibold ${sim.downforce > 1500 ? "text-ok-400" : "text-accent-400"}`}>
               {sim.downforce > 1500 ? "🟢 High Cornering Grip" : "⚪ Moderate Downforce"}
             </div>
@@ -480,7 +480,7 @@ export function AeroLab() {
               <div className="mt-4 pt-3 border-t border-base-800 flex justify-end">
                 <button
                   onClick={() => setLabMode("cfd_windtunnel")}
-                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold bg-cyan-500/20 border border-cyan-400/40 text-cyan-300 hover:bg-cyan-500/30 transition-all shadow-sm"
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold bg-amber-500/20 border border-amber-400/40 text-amber-300 hover:bg-amber-500/30 transition-all shadow-sm"
                 >
                   <Wind size={14} />
                   Open Full Interactive 3D Wind Tunnel Studio →
@@ -516,7 +516,7 @@ export function AeroLab() {
           <Section title="Drag & Downforce vs Speed" icon={<CircuitBoard size={16} />}>
             <LineChart
               series={[
-                { data: sim.dragVsSpeed.map((p) => ({ x: p.speed, y: p.downforce })), color: "#22d3ee", label: "Downforce (N)" },
+                { data: sim.dragVsSpeed.map((p) => ({ x: p.speed, y: p.downforce })), color: "#fbbf24", label: "Downforce (N)" },
                 { data: sim.dragVsSpeed.map((p) => ({ x: p.speed, y: p.drag })), color: "#f59e0b", label: "Drag (N)" },
               ]}
               xLabel="Speed" xUnit="km/h"
@@ -602,7 +602,7 @@ function AeroDashboard({
       <Section title="Downforce vs Speed" icon={<TrendingUp size={16} />}>
         <LineChart
           series={[
-            { data: sim.dragVsSpeed.map((p) => ({ x: p.speed, y: p.downforce })), color: "#22d3ee", label: "Downforce (N)" },
+            { data: sim.dragVsSpeed.map((p) => ({ x: p.speed, y: p.downforce })), color: "#fbbf24", label: "Downforce (N)" },
             { data: sim.dragVsSpeed.map((p) => ({ x: p.speed, y: p.drag })), color: "#f59e0b", label: "Drag (N)" },
           ]}
           xLabel="Speed" xUnit="km/h"
@@ -640,21 +640,21 @@ function AeroDashboard({
         </div>
       </Section>
 
-      <Section title="Chief Aero Engineer AI Assistant (Apex AI)" icon={<Bot size={18} className="text-cyan-400" />}>
-        <div className="bg-gradient-to-br from-slate-900/90 via-slate-900/95 to-slate-950/90 border border-cyan-500/40 rounded-2xl p-5 shadow-[0_0_35px_rgba(34,211,238,0.15)] relative overflow-hidden">
+      <Section title="Chief Aero Engineer AI Assistant (Apex AI)" icon={<Bot size={18} className="text-amber-400" />}>
+        <div className="bg-gradient-to-br from-slate-900/90 via-slate-900/95 to-slate-950/90 border border-amber-500/40 rounded-2xl p-5 shadow-[0_0_35px_rgba(34,211,238,0.15)] relative overflow-hidden">
           <div className="absolute top-0 right-0 p-4 opacity-15 pointer-events-none">
-            <Bot size={110} className="text-cyan-400" />
+            <Bot size={110} className="text-amber-400" />
           </div>
 
           <div className="flex items-start gap-4 relative z-10">
-            <div className="p-3 rounded-2xl bg-gradient-to-br from-cyan-500/30 to-sky-500/20 border border-cyan-400/50 text-cyan-300 shrink-0 shadow-[0_0_15px_rgba(34,211,238,0.3)]">
+            <div className="p-3 rounded-2xl bg-gradient-to-br from-amber-500/30 to-sky-500/20 border border-amber-400/50 text-amber-300 shrink-0 shadow-[0_0_15px_rgba(34,211,238,0.3)]">
               <Bot size={26} className="animate-pulse" />
             </div>
             <div className="flex-1">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2">
                 <div className="flex items-center gap-2">
                   <span className="text-base font-bold text-slate-100">Dr. Elena Vance</span>
-                  <span className="text-[10px] font-mono font-bold text-cyan-300 bg-cyan-500/20 border border-cyan-400/40 px-2 py-0.5 rounded-full shadow-[0_0_8px_rgba(34,211,238,0.2)]">
+                  <span className="text-[10px] font-mono font-bold text-amber-300 bg-amber-500/20 border border-amber-400/40 px-2 py-0.5 rounded-full shadow-[0_0_8px_rgba(34,211,238,0.2)]">
                     APEX CHIEF AERODYNAMICIST AI
                   </span>
                 </div>
@@ -668,9 +668,9 @@ function AeroDashboard({
                     update("underbody", { floorType: "ground_effect_tunnels", floorEdgeWings: true });
                     update("wheel", { wheelAero: "aero_discs" });
                   }}
-                  className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold bg-gradient-to-r from-cyan-500/25 via-sky-500/20 to-purple-500/25 border border-cyan-400/50 text-cyan-200 hover:bg-cyan-500/35 transition-all shadow-[0_0_16px_rgba(34,211,238,0.3)] active:scale-95"
+                  className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold bg-gradient-to-r from-amber-500/25 via-sky-500/20 to-amber-500/25 border border-amber-400/50 text-amber-200 hover:bg-amber-500/35 transition-all shadow-[0_0_16px_rgba(34,211,238,0.3)] active:scale-95"
                 >
-                  <Sparkles size={14} className="text-cyan-300 animate-spin" /> Auto-Optimize All Aero Setup
+                  <Sparkles size={14} className="text-amber-300 animate-spin" /> Auto-Optimize All Aero Setup
                 </button>
               </div>
 
@@ -678,7 +678,7 @@ function AeroDashboard({
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-3">
                 <div className="bg-base-950/80 rounded-lg p-2 border border-white/5 text-center">
                   <div className="text-[9px] font-mono text-slate-500 uppercase">L/D Efficiency Ratio</div>
-                  <div className="font-mono text-xs font-bold text-cyan-300">{(-sim.liftCoeff / Math.max(0.01, sim.dragCoeff)).toFixed(2)}:1</div>
+                  <div className="font-mono text-xs font-bold text-amber-300">{(-sim.liftCoeff / Math.max(0.01, sim.dragCoeff)).toFixed(2)}:1</div>
                 </div>
                 <div className="bg-base-950/80 rounded-lg p-2 border border-white/5 text-center">
                   <div className="text-[9px] font-mono text-slate-500 uppercase">Aero Balance</div>
@@ -692,7 +692,7 @@ function AeroDashboard({
                 </div>
                 <div className="bg-base-950/80 rounded-lg p-2 border border-white/5 text-center">
                   <div className="text-[9px] font-mono text-slate-500 uppercase">Cooling Index</div>
-                  <div className="font-mono text-xs font-bold text-purple-300">{(sim.coolingEfficiency * 100).toFixed(0)}%</div>
+                  <div className="font-mono text-xs font-bold text-amber-300">{(sim.coolingEfficiency * 100).toFixed(0)}%</div>
                 </div>
               </div>
               
@@ -700,11 +700,11 @@ function AeroDashboard({
               <div className="text-xs text-slate-300 leading-relaxed mb-3">
                 {sim.aeroBalance < 0.46 ? (
                   <p>
-                    <strong className="text-amber-400">Rear-Bias Understeer:</strong> Front downforce is insufficient (<span className="font-mono text-cyan-300">{(sim.aeroBalance * 100).toFixed(1)}% front</span>). At high speed, the front axle will wash out under braking and push through apex turns.
+                    <strong className="text-amber-400">Rear-Bias Understeer:</strong> Front downforce is insufficient (<span className="font-mono text-amber-300">{(sim.aeroBalance * 100).toFixed(1)}% front</span>). At high speed, the front axle will wash out under braking and push through apex turns.
                   </p>
                 ) : sim.aeroBalance > 0.55 ? (
                   <p>
-                    <strong className="text-rose-400">Front-Heavy Oversteer:</strong> Excess front loading (<span className="font-mono text-cyan-300">{(sim.aeroBalance * 100).toFixed(1)}% front</span>). Severe risk of high-speed rear breakaway on fast corner entries.
+                    <strong className="text-rose-400">Front-Heavy Oversteer:</strong> Excess front loading (<span className="font-mono text-amber-300">{(sim.aeroBalance * 100).toFixed(1)}% front</span>). Severe risk of high-speed rear breakaway on fast corner entries.
                   </p>
                 ) : (
                   <p>
@@ -724,7 +724,7 @@ function AeroDashboard({
                         update("front", { splitterExtension: 180, splitterAngle: 4.5 });
                         update("rearWing", { angleOfAttack: Math.max(2, ar.rearWing.angleOfAttack - 3) });
                       }}
-                      className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-cyan-500/20 border border-cyan-400/40 text-cyan-300 hover:bg-cyan-500/30 transition-all shrink-0"
+                      className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-amber-500/20 border border-amber-400/40 text-amber-300 hover:bg-amber-500/30 transition-all shrink-0"
                     >
                       Apply Front Trim
                     </button>
@@ -737,7 +737,7 @@ function AeroDashboard({
                         update("rearWing", { angleOfAttack: Math.min(28, ar.rearWing.angleOfAttack + 5), gurneyFlap: true });
                         update("diffuser", { angle: 14 });
                       }}
-                      className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-cyan-500/20 border border-cyan-400/40 text-cyan-300 hover:bg-cyan-500/30 transition-all shrink-0"
+                      className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-amber-500/20 border border-amber-400/40 text-amber-300 hover:bg-amber-500/30 transition-all shrink-0"
                     >
                       Apply Rear Trim
                     </button>

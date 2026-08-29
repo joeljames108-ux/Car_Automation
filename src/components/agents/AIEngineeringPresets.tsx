@@ -56,8 +56,8 @@ export const AI_PRESET_LIBRARY: AIEngineeringPresetItem[] = [
     id: "v12_hybrid_1000hp",
     title: "1,000 HP V12 Hybrid Valkyrie",
     badge: "Hypercar Flagship",
-    badgeColor: "bg-purple-500/20 text-purple-300 border-purple-500/40",
-    icon: <Flame size={20} className="text-purple-400 animate-pulse" />,
+    badgeColor: "bg-amber-500/20 text-amber-300 border-amber-500/40",
+    icon: <Flame size={20} className="text-amber-400 animate-pulse" />,
     description: "6.4L Screaming 9,200 RPM V12 + 180kW Solid-State PHEV Electric Drive generating 1,000 HP total output.",
     aiRationale: "Combines high-RPM atmospheric screaming V12 with instantaneous 800V SiC electric torque fill for zero turbo lag and hypercar dominance.",
     domain: "Powertrain & 800V Hybrid",
@@ -128,8 +128,8 @@ export const AI_PRESET_LIBRARY: AIEngineeringPresetItem[] = [
     id: "high_downforce",
     title: "Monaco High Downforce",
     badge: "Technical Circuit",
-    badgeColor: "bg-cyan-500/20 text-cyan-300 border-cyan-500/40",
-    icon: <Gauge size={20} className="text-cyan-400" />,
+    badgeColor: "bg-amber-500/20 text-amber-300 border-amber-500/40",
+    icon: <Gauge size={20} className="text-amber-400" />,
     description: "Maximizes ground effect, rear wing AoA, and aggressive splitter for maximum cornering speeds on tight circuits.",
     aiRationale: "Prioritizes lateral cornering Gs (+1.85G) and underbody Venturi suction over straight-line Vmax for technical street circuits.",
     domain: "Aerodynamics & CFD",
@@ -319,7 +319,7 @@ export function AIEngineeringPresets({
       {/* Header bar */}
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 p-4 rounded-2xl bg-slate-900/80 border border-slate-800 backdrop-blur-xl shadow-xl">
         <div className="flex items-center gap-3">
-          <div className="p-2.5 rounded-xl bg-cyan-500/20 text-cyan-400 border border-cyan-500/30 shadow-[0_0_15px_rgba(34,211,238,0.25)]">
+          <div className="p-2.5 rounded-xl bg-amber-500/20 text-amber-400 border border-amber-500/30 shadow-[0_0_15px_rgba(34,211,238,0.25)]">
             <Sparkles size={20} />
           </div>
           <div>
@@ -327,7 +327,7 @@ export function AIEngineeringPresets({
               <h3 className="text-sm font-bold text-slate-100 uppercase tracking-wider">
                 AI Engineering Presets & Architect Templates
               </h3>
-              <span className="px-2 py-0.5 rounded-full bg-cyan-500/10 text-cyan-300 border border-cyan-500/30 text-[10px] font-mono font-bold">
+              <span className="px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-300 border border-amber-500/30 text-[10px] font-mono font-bold">
                 6 NEURAL TEMPLATES
               </span>
             </div>
@@ -338,7 +338,7 @@ export function AIEngineeringPresets({
         </div>
 
         <div className="flex items-center gap-2 text-xs font-mono text-slate-400">
-          <Bot size={14} className="text-cyan-400" />
+          <Bot size={14} className="text-amber-400" />
           <span>Multi-Agent Verified</span>
         </div>
       </div>
@@ -355,7 +355,7 @@ export function AIEngineeringPresets({
               key={preset.id}
               className={`relative flex flex-col justify-between p-5 rounded-2xl transition-all duration-300 backdrop-blur-xl border ${
                 isApplied
-                  ? "bg-cyan-950/40 border-cyan-400/80 shadow-[0_0_30px_rgba(34,211,238,0.3)] ring-1 ring-cyan-400"
+                  ? "bg-amber-950/40 border-amber-400/80 shadow-[0_0_30px_rgba(34,211,238,0.3)] ring-1 ring-amber-400"
                   : "bg-slate-900/85 border-slate-800 hover:border-slate-700 hover:shadow-2xl"
               }`}
             >
@@ -383,7 +383,7 @@ export function AIEngineeringPresets({
 
                 {/* AI Rationale Box */}
                 <div className="p-3 rounded-xl bg-slate-950/70 border border-slate-800/80 mb-3.5 space-y-1.5">
-                  <div className="flex items-center justify-between text-[10px] font-mono text-cyan-400 font-bold">
+                  <div className="flex items-center justify-between text-[10px] font-mono text-amber-400 font-bold">
                     <span className="flex items-center gap-1">
                       <Bot size={12} /> {preset.agentName}
                     </span>
@@ -398,7 +398,7 @@ export function AIEngineeringPresets({
                 <div className="grid grid-cols-3 gap-2 p-2.5 rounded-xl bg-black/40 border border-white/5 mb-3.5 text-center font-mono">
                   <div>
                     <div className="text-[9px] text-slate-500 uppercase">Power</div>
-                    <div className="text-xs font-bold text-cyan-300">{preset.metrics.powerHp} HP</div>
+                    <div className="text-xs font-bold text-amber-300">{preset.metrics.powerHp} HP</div>
                     <div className={`text-[9px] ${hpDelta >= 0 ? "text-emerald-400" : "text-slate-500"}`}>
                       {hpDelta >= 0 ? `+${hpDelta}` : hpDelta} vs curr
                     </div>
@@ -412,7 +412,7 @@ export function AIEngineeringPresets({
                   </div>
                   <div>
                     <div className="text-[9px] text-slate-500 uppercase">0-60 MPH</div>
-                    <div className="text-xs font-bold text-purple-300">{preset.metrics.zeroToSixtySec}s</div>
+                    <div className="text-xs font-bold text-amber-300">{preset.metrics.zeroToSixtySec}s</div>
                     <div className="text-[9px] text-slate-500">AWD Launch</div>
                   </div>
                 </div>
@@ -421,7 +421,7 @@ export function AIEngineeringPresets({
                 <div className="space-y-1 mb-4">
                   {preset.keySpecs.map((spec, i) => (
                     <div key={i} className="flex items-center gap-1.5 text-[11px] text-slate-400">
-                      <div className="w-1.5 h-1.5 rounded-full bg-cyan-400/60" />
+                      <div className="w-1.5 h-1.5 rounded-full bg-amber-400/60" />
                       <span>{spec}</span>
                     </div>
                   ))}
@@ -435,7 +435,7 @@ export function AIEngineeringPresets({
                   className={`flex-1 flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl text-xs font-bold font-mono transition-all cursor-pointer ${
                     isApplied
                       ? "bg-emerald-500 text-slate-950 shadow-[0_0_15px_rgba(16,185,129,0.4)]"
-                      : "bg-cyan-500 text-slate-950 hover:bg-cyan-400 shadow-md shadow-cyan-500/20"
+                      : "bg-amber-500 text-slate-950 hover:bg-amber-400 shadow-md shadow-cyan-500/20"
                   }`}
                 >
                   {isApplied ? (
@@ -455,7 +455,7 @@ export function AIEngineeringPresets({
                   <button
                     onClick={() => handleAskAI(preset)}
                     title="Ask AI to customize this preset"
-                    className="p-2 rounded-xl bg-slate-950 border border-slate-800 text-slate-400 hover:text-cyan-300 hover:border-cyan-500/40 transition-all cursor-pointer"
+                    className="p-2 rounded-xl bg-slate-950 border border-slate-800 text-slate-400 hover:text-amber-300 hover:border-amber-500/40 transition-all cursor-pointer"
                   >
                     <Bot size={16} />
                   </button>

@@ -71,12 +71,12 @@ function ChassisHotspotViewerComponent({ onSelectStage }: ChassisHotspotViewerPr
         id: "engine",
         stage: "engine",
         label: "Engine Bay & Powertrain",
-        icon: <Gauge size={16} className="text-cyan-400" />,
+        icon: <Gauge size={16} className="text-amber-400" />,
         cx: 240,
         cy: 160,
         stat: `${sim.peakPower} HP | ${sim.peakTorque} Nm`,
         detail: `${design.engine.layout.toUpperCase()} ${sim.cylinderCount} Cyl (${dispLiters}L)`,
-        color: "from-cyan-500/20 to-blue-500/10 border-cyan-400/60 text-cyan-300",
+        color: "from-amber-500/20 to-amber-500/10 border-amber-400/60 text-amber-300",
         glowColor: "rgba(34, 211, 238, 0.6)",
         status: engineStatus,
         ring: getRingColor(engineStatus),
@@ -99,12 +99,12 @@ function ChassisHotspotViewerComponent({ onSelectStage }: ChassisHotspotViewerPr
         id: "rear-aero",
         stage: "aero",
         label: "Rear Wing & Diffuser",
-        icon: <Wind size={16} className="text-purple-400" />,
+        icon: <Wind size={16} className="text-amber-400" />,
         cx: 690,
         cy: 160,
         stat: `${sim.downforce || 0} kg Downforce @ 200km/h`,
         detail: `Rear Wing Angle ${design.vehicle.aero?.wingAngle || 0}° | Diffuser ${design.vehicle.aero?.diffuserAngle || 0}°`,
-        color: "from-purple-500/20 to-fuchsia-500/10 border-purple-400/60 text-purple-300",
+        color: "from-amber-500/20 to-fuchsia-500/10 border-amber-400/60 text-amber-300",
         glowColor: "rgba(192, 132, 252, 0.6)",
         status: rearAeroStatus,
         ring: getRingColor(rearAeroStatus),
@@ -141,12 +141,12 @@ function ChassisHotspotViewerComponent({ onSelectStage }: ChassisHotspotViewerPr
         id: "electronics",
         stage: "infotainment",
         label: "Cockpit & Telemetry ECU",
-        icon: <Cpu size={16} className="text-indigo-400" />,
+        icon: <Cpu size={16} className="text-amber-400" />,
         cx: 430,
         cy: 160,
         stat: `Infotainment OS: ${(design.infotainment?.osTier || "standard").toUpperCase()}`,
         detail: `ADAS Assist Level ${design.infotainment?.adasLevel || 0} | Drive ECU Active`,
-        color: "from-indigo-500/20 to-violet-500/10 border-indigo-400/60 text-indigo-300",
+        color: "from-indigo-500/20 to-violet-500/10 border-indigo-400/60 text-amber-300",
         glowColor: "rgba(129, 140, 248, 0.6)",
         status: ecuStatus,
         ring: getRingColor(ecuStatus),
@@ -165,23 +165,23 @@ function ChassisHotspotViewerComponent({ onSelectStage }: ChassisHotspotViewerPr
   const currentHotspotObj = hotspots.find((h) => h.id === activeHotspot);
 
   return (
-    <div className="panel backdrop-blur-xl border border-cyan-500/30 rounded-2xl p-5 shadow-[0_0_40px_rgba(0,0,0,0.5)] relative overflow-hidden group">
+    <div className="panel backdrop-blur-xl border border-amber-500/30 rounded-2xl p-5 shadow-[0_0_40px_rgba(0,0,0,0.5)] relative overflow-hidden group">
       {/* Background ambient lighting */}
-      <div className="absolute -top-24 -right-24 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-purple-500/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute -top-24 -right-24 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />
 
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4 relative z-10">
         <div className="flex items-center gap-3">
-          <div className="p-2.5 rounded-xl bg-cyan-500/20 border border-cyan-400/40 text-cyan-300 shadow-[0_0_15px_rgba(34,211,238,0.25)]">
+          <div className="p-2.5 rounded-xl bg-amber-500/20 border border-amber-400/40 text-amber-300 shadow-[0_0_15px_rgba(34,211,238,0.25)]">
             <Navigation size={20} className="animate-pulse" />
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <span className="text-[10px] font-mono font-bold text-cyan-400 uppercase tracking-widest">
+              <span className="text-[10px] font-mono font-bold text-amber-400 uppercase tracking-widest">
                 TELEMETRY CHASSIS BLUEPRINT
               </span>
-              <span className="bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 text-[9px] font-bold px-2 py-0.5 rounded-full flex items-center gap-1">
+              <span className="bg-amber-500/20 text-amber-300 border border-amber-500/40 text-[9px] font-bold px-2 py-0.5 rounded-full flex items-center gap-1">
                 <Sparkles size={10} /> CLICK TO TUNE
               </span>
             </div>
@@ -190,7 +190,7 @@ function ChassisHotspotViewerComponent({ onSelectStage }: ChassisHotspotViewerPr
         </div>
 
         <div className="text-xs text-slate-400 font-mono bg-slate-950/60 px-3 py-1.5 rounded-lg border border-slate-800 flex items-center gap-2">
-          <span className="inline-block w-2 h-2 rounded-full bg-cyan-400 animate-ping" />
+          <span className="inline-block w-2 h-2 rounded-full bg-amber-400 animate-ping" />
           <span>Hover reticles to inspect • Click to edit</span>
         </div>
       </div>
@@ -199,13 +199,13 @@ function ChassisHotspotViewerComponent({ onSelectStage }: ChassisHotspotViewerPr
       <div className="relative w-full overflow-x-auto py-2 flex justify-center items-center group">
         <button
           onClick={openZoomModal}
-          className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity bg-slate-900/90 border border-cyan-500/50 text-cyan-400 p-2 rounded-full shadow-lg z-30 hover:bg-cyan-950 active:scale-95 cursor-pointer flex items-center gap-1.5 text-xs font-mono font-bold px-3"
+          className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity bg-slate-900/90 border border-amber-500/50 text-amber-400 p-2 rounded-full shadow-lg z-30 hover:bg-amber-950 active:scale-95 cursor-pointer flex items-center gap-1.5 text-xs font-mono font-bold px-3"
           title="Click to Zoom Chassis Blueprint"
         >
           <Maximize2 size={12} />
           <span>Zoom Blueprint</span>
         </button>
-        <div className="relative w-[800px] h-[300px] flex-shrink-0 rounded-2xl overflow-hidden border border-cyan-500/30 bg-slate-950/80 shadow-[0_0_30px_rgba(0,0,0,0.5)]">
+        <div className="relative w-[800px] h-[300px] flex-shrink-0 rounded-2xl overflow-hidden border border-amber-500/30 bg-slate-950/80 shadow-[0_0_30px_rgba(0,0,0,0.5)]">
           {/* Blueprint Image */}
           <img
             src="/chassis_hotspots_diagram.png"
@@ -290,7 +290,7 @@ function ChassisHotspotViewerComponent({ onSelectStage }: ChassisHotspotViewerPr
 
                 <button
                   onClick={() => onSelectStage && onSelectStage(currentHotspotObj.stage)}
-                  className="mt-2.5 w-full py-1 px-2 rounded-lg bg-cyan-500/20 hover:bg-cyan-500/30 border border-cyan-400/40 text-cyan-200 text-xs font-bold flex items-center justify-center gap-1.5 transition-all"
+                  className="mt-2.5 w-full py-1 px-2 rounded-lg bg-amber-500/20 hover:bg-amber-500/30 border border-amber-400/40 text-amber-200 text-xs font-bold flex items-center justify-center gap-1.5 transition-all"
                 >
                   <span>Tune Module</span>
                   <ArrowRight size={12} />
@@ -312,10 +312,10 @@ function ChassisHotspotViewerComponent({ onSelectStage }: ChassisHotspotViewerPr
             onClick={(e) => e.stopPropagation()}
           >
             {/* Top Bar with Back & Close */}
-            <div className="w-full flex items-center justify-between border-b border-blue-200/50 pb-3.5 mb-4">
+            <div className="w-full flex items-center justify-between border-b border-amber-200/50 pb-3.5 mb-4">
               <button
                 onClick={closeZoomModal}
-                className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-500/10 text-[#007aff] border border-blue-400/30 text-xs font-mono font-bold hover:bg-blue-500/20 transition-all shadow-sm active:scale-95 cursor-pointer"
+                className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-500/10 text-amber-400 border border-amber-400/30 text-xs font-mono font-bold hover:bg-amber-500/20 transition-all shadow-sm active:scale-95 cursor-pointer"
               >
                 <ArrowLeft size={14} /> Back
               </button>
@@ -333,7 +333,7 @@ function ChassisHotspotViewerComponent({ onSelectStage }: ChassisHotspotViewerPr
             </div>
 
             {/* High-Resolution Expanded Blueprint Box */}
-            <div className="relative w-full h-[420px] bg-slate-950 border border-cyan-500/40 rounded-2xl overflow-hidden shadow-inner flex items-center justify-center p-2">
+            <div className="relative w-full h-[420px] bg-slate-950 border border-amber-500/40 rounded-2xl overflow-hidden shadow-inner flex items-center justify-center p-2">
               <img
                 src="/chassis_hotspots_diagram.png"
                 alt="F1 Supercar Chassis Telemetry Blueprint"
@@ -342,9 +342,9 @@ function ChassisHotspotViewerComponent({ onSelectStage }: ChassisHotspotViewerPr
             </div>
 
             {/* Hotspot Diagnostics Grid */}
-            <div className="w-full grid grid-cols-2 sm:grid-cols-3 gap-2.5 mt-4 pt-3.5 border-t border-blue-200/40">
+            <div className="w-full grid grid-cols-2 sm:grid-cols-3 gap-2.5 mt-4 pt-3.5 border-t border-amber-200/40">
               {hotspots.map((hs) => (
-                <div key={hs.id} className="bg-white/85 border border-blue-200/50 rounded-2xl p-3 text-left shadow-sm backdrop-blur-md">
+                <div key={hs.id} className="bg-white/85 border border-amber-200/50 rounded-2xl p-3 text-left shadow-sm backdrop-blur-md">
                   <div className="flex items-center gap-1.5 text-xs font-bold text-slate-800 mb-1">
                     {hs.icon}
                     <span>{hs.label}</span>

@@ -57,7 +57,7 @@ export const SteelUnibodyRenderer: React.FC<SteelUnibodyRendererProps> = ({ isHo
           Z
         "
         fill="url(#al-brushed-metallic)"
-        stroke={isHovered ? "#38bdf8" : "#94a3b8"}
+        stroke={isHovered ? "#fbbf24" : "#94a3b8"}
         strokeWidth={isHovered ? "3.5" : "2.2"}
         className="filter drop-shadow-md"
       />
@@ -126,7 +126,7 @@ export const SteelUnibodyRenderer: React.FC<SteelUnibodyRendererProps> = ({ isHo
       <use href="#swage-hole-deep" x="805" y="250" />
       <use href="#swage-hole-sm-deep" x="835" y="250" />
 
-      <text x="475" y="272" fill="#38bdf8" fontSize="9" fontFamily="monospace" textAnchor="middle" fontWeight="bold" opacity="0.95">
+      <text x="475" y="272" fill="#fbbf24" fontSize="9" fontFamily="monospace" textAnchor="middle" fontWeight="bold" opacity="0.95">
         STAMPED STEEL BODY-IN-WHITE (BIW) CHASSIS
       </text>
     </g>

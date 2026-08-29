@@ -117,7 +117,7 @@ export function buildV12EngineScene(explodedAmount: number = 0): THREE.Scene {
 
   const matTitaniumBlued = new THREE.MeshStandardMaterial({
     name: "Titanium_Heat_Blued_Primary",
-    color: 0x2563eb,
+    color: 0xb45309,
     metalness: 0.96,
     roughness: 0.16,
   });
@@ -145,7 +145,7 @@ export function buildV12EngineScene(explodedAmount: number = 0): THREE.Scene {
 
   const matQuartzGlass = new THREE.MeshPhysicalMaterial({
     name: "Quartz_ITB_Inspection_Glass",
-    color: 0x38bdf8,
+    color: 0xfbbf24,
     metalness: 0.1,
     roughness: 0.05,
     transmission: 0.85,
@@ -162,7 +162,7 @@ export function buildV12EngineScene(explodedAmount: number = 0): THREE.Scene {
 
   const matBlueSilicone = new THREE.MeshStandardMaterial({
     name: "High_Pressure_Blue_Silicone",
-    color: 0x2563eb,
+    color: 0xb45309,
     metalness: 0.1,
     roughness: 0.6,
   });

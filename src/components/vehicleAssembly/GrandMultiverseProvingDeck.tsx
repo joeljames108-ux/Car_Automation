@@ -70,7 +70,7 @@ export const GrandMultiverseProvingDeck: React.FC = () => {
         <>
           <div className="px-3 py-1.5 rounded-xl bg-[#0a1120] border border-[#1c2c47] text-gray-300">
             <span className="text-gray-500 mr-2">CFD Re:</span>
-            <span className="text-cyan-400 font-bold">{lbmResult.reynoldsNumber.toLocaleString()}</span>
+            <span className="text-amber-400 font-bold">{lbmResult.reynoldsNumber.toLocaleString()}</span>
           </div>
           <div className="px-3 py-1.5 rounded-xl bg-[#0a1120] border border-[#1c2c47] text-gray-300">
             <span className="text-gray-500 mr-2">V2X Latency:</span>
@@ -91,13 +91,13 @@ export const GrandMultiverseProvingDeck: React.FC = () => {
         {activeTab === 'LBM_WIND_TUNNEL' && (
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 flex-1">
             <div className="flex flex-col p-5 rounded-2xl bg-[#060a12] border border-[#162236] gap-4">
-              <h3 className="text-xs font-bold text-cyan-400 font-mono flex items-center gap-2">
+              <h3 className="text-xs font-bold text-amber-400 font-mono flex items-center gap-2">
                 <Wind className="w-4 h-4" /> AERODYNAMIC FORCES & PRESSURE COEFFICIENTS
               </h3>
               <div className="p-4 rounded-xl bg-[#02050a] border border-[#101826] flex flex-col gap-2 font-mono text-xs">
                 <div className="flex justify-between">
                   <span className="text-gray-400">INLET SPEED:</span>
-                  <span className="text-cyan-400 font-bold">{lbmResult.inletVelocityMs} m/s ({windSpeedKmh} km/h)</span>
+                  <span className="text-amber-400 font-bold">{lbmResult.inletVelocityMs} m/s ({windSpeedKmh} km/h)</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-400">DRAG FORCE (Cd):</span>
@@ -109,7 +109,7 @@ export const GrandMultiverseProvingDeck: React.FC = () => {
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-400">AERO EFFICIENCY (L/D):</span>
-                  <span className="text-purple-400 font-bold">{lbmResult.aerodynamicEfficiencyLOverD}</span>
+                  <span className="text-amber-400 font-bold">{lbmResult.aerodynamicEfficiencyLOverD}</span>
                 </div>
               </div>
 
@@ -121,7 +121,7 @@ export const GrandMultiverseProvingDeck: React.FC = () => {
                   max="350"
                   value={windSpeedKmh}
                   onChange={(e) => setWindSpeedKmh(Number(e.target.value))}
-                  className="w-full accent-cyan-400 cursor-pointer"
+                  className="w-full accent-amber-400 cursor-pointer"
                 />
               </div>
             </div>
@@ -137,10 +137,10 @@ export const GrandMultiverseProvingDeck: React.FC = () => {
                         cell.isSolidObstacle
                           ? 'bg-gray-800 text-gray-400 border border-gray-600'
                           : cell.velocityMagnitudeMs > 75
-                          ? 'bg-purple-600/40 text-purple-200 border border-purple-500/40'
+                          ? 'bg-amber-600/40 text-amber-200 border border-amber-500/40'
                           : cell.velocityMagnitudeMs > 60
-                          ? 'bg-cyan-500/30 text-cyan-200 border border-cyan-500/30'
-                          : 'bg-blue-950/40 text-blue-300'
+                          ? 'bg-amber-500/30 text-amber-200 border border-amber-500/30'
+                          : 'bg-amber-950/40 text-amber-300'
                       }`}
                     >
                       {cell.isSolidObstacle ? 'CAR' : `${Math.round(cell.velocityMagnitudeMs)}`}
@@ -166,7 +166,7 @@ export const GrandMultiverseProvingDeck: React.FC = () => {
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-400">DIRECT YAW MOMENT:</span>
-                  <span className="text-cyan-400 font-bold">{diffResult.directYawMomentNm} Nm</span>
+                  <span className="text-amber-400 font-bold">{diffResult.directYawMomentNm} Nm</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-400">CLUTCH LOCKUP:</span>
@@ -192,12 +192,12 @@ export const GrandMultiverseProvingDeck: React.FC = () => {
               <div className="grid grid-cols-2 gap-4 font-mono text-xs">
                 <div className="p-4 rounded-xl bg-[#02050a] border border-[#101826] flex flex-col gap-2">
                   <span className="text-gray-400">LEFT WHEEL TORQUE</span>
-                  <div className="text-cyan-400 font-bold text-xl">{diffResult.leftWheelTorqueNm} Nm</div>
+                  <div className="text-amber-400 font-bold text-xl">{diffResult.leftWheelTorqueNm} Nm</div>
                   <span className="text-[10px] text-gray-500">Outer/Inner Drive Allocation</span>
                 </div>
                 <div className="p-4 rounded-xl bg-[#02050a] border border-[#101826] flex flex-col gap-2">
                   <span className="text-gray-400">RIGHT WHEEL TORQUE</span>
-                  <div className="text-purple-400 font-bold text-xl">{diffResult.rightWheelTorqueNm} Nm</div>
+                  <div className="text-amber-400 font-bold text-xl">{diffResult.rightWheelTorqueNm} Nm</div>
                   <span className="text-[10px] text-gray-500">Outer/Inner Drive Allocation</span>
                 </div>
               </div>
@@ -209,17 +209,17 @@ export const GrandMultiverseProvingDeck: React.FC = () => {
         {activeTab === 'CABIN_ACOUSTICS' && (
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 flex-1">
             <div className="flex flex-col p-5 rounded-2xl bg-[#060a12] border border-[#162236] gap-4">
-              <h3 className="text-xs font-bold text-purple-400 font-mono flex items-center gap-2">
+              <h3 className="text-xs font-bold text-amber-400 font-mono flex items-center gap-2">
                 <Volume2 className="w-4 h-4" /> PSYCHOACOUSTIC METRICS (DIN 45631)
               </h3>
               <div className="p-4 rounded-xl bg-[#02050a] border border-[#101826] flex flex-col gap-2 font-mono text-xs">
                 <div className="flex justify-between">
                   <span className="text-gray-400">SOUND QUALITY:</span>
-                  <span className="text-purple-400 font-bold">{acousticReport.soundQualityClass}</span>
+                  <span className="text-amber-400 font-bold">{acousticReport.soundQualityClass}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-400">ZWICKER LOUDNESS:</span>
-                  <span className="text-cyan-400 font-bold">{acousticReport.zwickerLoudnessSones} Sones ({acousticReport.overallSplDbA} dBA)</span>
+                  <span className="text-amber-400 font-bold">{acousticReport.zwickerLoudnessSones} Sones ({acousticReport.overallSplDbA} dBA)</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-400">SPECTRAL SHARPNESS:</span>
@@ -235,7 +235,7 @@ export const GrandMultiverseProvingDeck: React.FC = () => {
                 onClick={() => setIsAncEnabled(!isAncEnabled)}
                 className={`px-4 py-2 rounded-xl text-xs font-mono font-bold border transition-all ${
                   isAncEnabled
-                    ? 'bg-purple-500/20 text-purple-400 border-purple-500/40'
+                    ? 'bg-amber-500/20 text-amber-400 border-amber-500/40'
                     : 'bg-[#0a1120] text-gray-400 border-[#1c2c47]'
                 }`}
               >
@@ -249,8 +249,8 @@ export const GrandMultiverseProvingDeck: React.FC = () => {
                 {acousticReport.barkBandSpectra.map((band) => (
                   <div key={band.barkIndex} className="p-2 rounded bg-[#02050a] border border-[#101826] flex flex-col items-center gap-1">
                     <span className="text-gray-500">Z{band.barkIndex}</span>
-                    <span className="text-cyan-400 font-bold">{band.soundPressureLevelDbA}</span>
-                    <span className="text-[9px] text-purple-400">{band.centerFrequencyHz}Hz</span>
+                    <span className="text-amber-400 font-bold">{band.soundPressureLevelDbA}</span>
+                    <span className="text-[9px] text-amber-400">{band.centerFrequencyHz}Hz</span>
                   </div>
                 ))}
               </div>
@@ -262,7 +262,7 @@ export const GrandMultiverseProvingDeck: React.FC = () => {
         {activeTab === 'V2X_PLATOONING' && (
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 flex-1">
             <div className="flex flex-col p-5 rounded-2xl bg-[#060a12] border border-[#162236] gap-4">
-              <h3 className="text-xs font-bold text-cyan-400 font-mono flex items-center gap-2">
+              <h3 className="text-xs font-bold text-amber-400 font-mono flex items-center gap-2">
                 <Share2 className="w-4 h-4" /> CACC PLATOON STRING STABILITY
               </h3>
               <div className="p-4 rounded-xl bg-[#02050a] border border-[#101826] flex flex-col gap-2 font-mono text-xs">
@@ -272,7 +272,7 @@ export const GrandMultiverseProvingDeck: React.FC = () => {
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-400">OVERALL ENERGY SAVING:</span>
-                  <span className="text-cyan-400 font-bold">{platoonResult.overallPlatoonEnergySavingsPct}% Drag Reduction</span>
+                  <span className="text-amber-400 font-bold">{platoonResult.overallPlatoonEnergySavingsPct}% Drag Reduction</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-400">STRING STABILITY:</span>
@@ -288,7 +288,7 @@ export const GrandMultiverseProvingDeck: React.FC = () => {
                   max="8"
                   value={platoonVehicleCount}
                   onChange={(e) => setPlatoonVehicleCount(Number(e.target.value))}
-                  className="w-full accent-cyan-400 cursor-pointer"
+                  className="w-full accent-amber-400 cursor-pointer"
                 />
               </div>
             </div>
@@ -302,13 +302,13 @@ export const GrandMultiverseProvingDeck: React.FC = () => {
                     className="flex items-center justify-between p-3 rounded-xl bg-[#02050a] border border-[#101826] text-gray-300"
                   >
                     <div className="flex items-center gap-2">
-                      <span className="text-cyan-400 font-bold">#{m.platoonPositionIndex}</span>
+                      <span className="text-amber-400 font-bold">#{m.platoonPositionIndex}</span>
                       <span className="text-gray-100">{m.vehicleId}</span>
                     </div>
                     <div className="flex items-center gap-4 text-xs">
-                      <span>Gap: <strong className="text-cyan-300">{m.interVehicleGapM}m</strong></span>
+                      <span>Gap: <strong className="text-amber-300">{m.interVehicleGapM}m</strong></span>
                       <span>Aero Saving: <strong className="text-emerald-400">-{m.aerodynamicDragReductionPct}%</strong></span>
-                      <span>V2X: <strong className="text-purple-400">{m.v2xPacketLatencyMs}ms</strong></span>
+                      <span>V2X: <strong className="text-amber-400">{m.v2xPacketLatencyMs}ms</strong></span>
                     </div>
                   </div>
                 ))}

@@ -34,7 +34,7 @@ function SeasonSimulatorComponent() {
             {[
               { label: "Power", value: Math.round(sim.peakPower), unit: "hp", icon: <Zap size={14} />, color: "text-accent-400" },
               { label: "Weight", value: Math.round(sim.weight), unit: "kg", icon: <Gauge size={14} />, color: "text-slate-400" },
-              { label: "Downforce", value: sim.downforce.toFixed(0), unit: "kg", icon: <TrendingUp size={14} />, color: "text-blue-400" },
+              { label: "Downforce", value: sim.downforce.toFixed(0), unit: "kg", icon: <TrendingUp size={14} />, color: "text-amber-400" },
               { label: "Reliability", value: `${Math.round(sim.reliability * 100)}`, unit: "%", icon: <Shield size={14} />, color: "text-ok-400" },
             ].map(s => (
               <div key={s.label} className="glass-panel p-3 text-center">
@@ -53,7 +53,7 @@ function SeasonSimulatorComponent() {
             </div>
           ) : (
             <button onClick={handleSimulate}
-              className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl bg-gradient-to-r from-accent-500/20 to-blue-500/20 border border-accent-500/40 text-accent-300 hover:from-accent-500/30 hover:to-blue-500/30 transition-all text-sm font-semibold group">
+              className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl bg-gradient-to-r from-accent-500/20 to-amber-500/20 border border-accent-500/40 text-accent-300 hover:from-accent-500/30 hover:to-amber-500/30 transition-all text-sm font-semibold group">
               <Play size={16} className="group-hover:scale-110 transition-transform" />
               Simulate Season {company.motorsport.currentSeason}
             </button>
@@ -90,8 +90,8 @@ function SeasonSimulatorComponent() {
                 { label: "Points", value: last.points, color: "text-slate-200" },
                 { label: "Wins", value: last.wins, color: "text-ok-400" },
                 { label: "Podiums", value: last.podiums, color: "text-accent-300" },
-                { label: "FL", value: last.fastestLaps, color: "text-purple-400" },
-                { label: "Poles", value: last.polePositions, color: "text-blue-400" },
+                { label: "FL", value: last.fastestLaps, color: "text-amber-400" },
+                { label: "Poles", value: last.polePositions, color: "text-amber-400" },
                 { label: "DNFs", value: last.dnfs, color: "text-danger-400" },
               ].map(s => (
                 <div key={s.label} className="bg-base-850/50 rounded-lg p-2">
@@ -168,7 +168,7 @@ function SeasonSimulatorComponent() {
               <span>8th: 4pts</span>
               <span>9th: 2pts</span>
               <span>10th: 1pt</span>
-              <span className="text-cyan-400 font-bold">+1 Fast Lap</span>
+              <span className="text-amber-400 font-bold">+1 Fast Lap</span>
             </div>
 
             {/* Championship Standings */}
@@ -252,7 +252,7 @@ function SeasonSimulatorComponent() {
                     </div>
 
                     <div className="text-right shrink-0">
-                      <div className="text-xs font-mono text-cyan-300 font-bold">+{res.techPointsEarned} R&D Tech Points</div>
+                      <div className="text-xs font-mono text-amber-300 font-bold">+{res.techPointsEarned} R&D Tech Points</div>
                       <div className="text-[10px] text-slate-500 font-mono mt-0.5">Budget Balance: ${(t.budget / 1e6).toFixed(1)}M</div>
                     </div>
                   </div>

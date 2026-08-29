@@ -17,7 +17,7 @@ type ModeId = "beginner" | "intermediate" | "expert";
 type StudioSubTab = "all" | "presets" | "dashboard" | "advisory" | "agents" | "assistant" | "logs";
 
 const ENGINEERS: Record<EngineerId, { label: string; icon: React.ReactNode; focus: string; tone: string; desc: string }> = {
-  chief:          { label: "Chief Engineer",        icon: <Wrench size={16} />,    focus: "Technical & Powertrain", tone: "text-cyan-400 border-cyan-500/40 bg-cyan-500/10", desc: "Monitors internal combustion stress, knock thresholds, and structural integrity." },
+  chief:          { label: "Chief Engineer",        icon: <Wrench size={16} />,    focus: "Technical & Powertrain", tone: "text-amber-400 border-amber-500/40 bg-amber-500/10", desc: "Monitors internal combustion stress, knock thresholds, and structural integrity." },
   race:           { label: "Race Engineer",         icon: <Trophy size={16} />,    focus: "Lap Time & Aerodynamics",tone: "text-amber-400 border-amber-500/40 bg-amber-500/10", desc: "Optimizes downforce balance, cornering stability, and power-to-weight ratio." },
   production:     { label: "Production Manager",    icon: <DollarSign size={16} />,focus: "Cost & Manufacturing",    tone: "text-emerald-400 border-emerald-500/40 bg-emerald-500/10", desc: "Controls bill-of-materials cost, defect rates, and assembly line throughput." },
   sustainability: { label: "Sustainability Expert", icon: <Leaf size={16} />,      focus: "Environmental Efficiency", tone: "text-green-400 border-green-500/40 bg-green-500/10", desc: "Evaluates carbon footprint, brake dust emissions, and fuel economy ratings." },
@@ -270,7 +270,7 @@ export function ApexAIStudio() {
                     {eng.icon}
                     <span>{eng.label}</span>
                   </div>
-                  {isSelected && <Check size={14} className="text-cyan-400" />}
+                  {isSelected && <Check size={14} className="text-amber-400" />}
                 </div>
                 <span className="text-[10px] font-mono opacity-80">{eng.focus}</span>
               </button>
@@ -285,7 +285,7 @@ export function ApexAIStudio() {
               key={mId}
               onClick={() => setMode(mId)}
               className={`px-3 py-1.5 rounded-xl font-bold transition-all cursor-pointer ${
-                mode === mId ? "bg-cyan-500/20 text-cyan-300 border border-cyan-500/40" : "text-slate-500 hover:text-slate-300"
+                mode === mId ? "bg-amber-500/20 text-amber-300 border border-amber-500/40" : "text-slate-500 hover:text-slate-300"
               }`}
             >
               {MODES[mId].label}
@@ -313,7 +313,7 @@ export function ApexAIStudio() {
                     key={cat}
                     onClick={() => setActiveCategory(cat)}
                     className={`px-2 py-0.5 rounded-lg font-semibold transition-all uppercase cursor-pointer ${
-                      activeCategory === cat ? "bg-cyan-500/20 text-cyan-300 border border-cyan-500/40" : "text-slate-500 hover:text-slate-300"
+                      activeCategory === cat ? "bg-amber-500/20 text-amber-300 border border-amber-500/40" : "text-slate-500 hover:text-slate-300"
                     }`}
                   >
                     {cat}
@@ -359,7 +359,7 @@ export function ApexAIStudio() {
           {/* Actionable Engineering Suggestions */}
           <div className="p-5 rounded-2xl bg-slate-900/80 border border-slate-800 backdrop-blur-xl shadow-xl space-y-3">
             <h3 className="text-xs font-bold text-slate-100 uppercase tracking-wider flex items-center gap-2">
-              <Lightbulb size={15} className="text-cyan-400" />
+              <Lightbulb size={15} className="text-amber-400" />
               Recommended Parameter Optimizations ({suggestions.length})
             </h3>
 
@@ -374,11 +374,11 @@ export function ApexAIStudio() {
                   return (
                     <div
                       key={s.id}
-                      className="p-4 rounded-xl bg-slate-950/60 border border-slate-800 hover:border-cyan-500/40 transition-all space-y-2.5"
+                      className="p-4 rounded-xl bg-slate-950/60 border border-slate-800 hover:border-amber-500/40 transition-all space-y-2.5"
                     >
                       <div className="flex items-center justify-between">
                         <h4 className="text-xs font-bold text-slate-200 flex items-center gap-1.5">
-                          <Sparkles size={13} className="text-cyan-400" />
+                          <Sparkles size={13} className="text-amber-400" />
                           {s.title}
                         </h4>
                         <button
@@ -387,7 +387,7 @@ export function ApexAIStudio() {
                           className={`px-3 py-1 rounded-lg text-xs font-mono font-bold transition-all flex items-center gap-1 cursor-pointer ${
                             isApplied
                               ? "bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 cursor-default"
-                              : "bg-cyan-500 text-black hover:bg-cyan-400 active:scale-95 shadow-md"
+                              : "bg-amber-500 text-black hover:bg-amber-400 active:scale-95 shadow-md"
                           }`}
                         >
                           {isApplied ? (
@@ -429,11 +429,11 @@ export function ApexAIStudio() {
 
         {/* Right Column (5 Cols): Interactive Apex AI Terminal Chat */}
         <div className="lg:col-span-5 flex flex-col gap-4">
-          <div className="p-5 rounded-2xl bg-slate-900/90 border border-cyan-500/30 backdrop-blur-xl shadow-2xl flex flex-col h-[580px]">
+          <div className="p-5 rounded-2xl bg-slate-900/90 border border-amber-500/30 backdrop-blur-xl shadow-2xl flex flex-col h-[580px]">
             {/* Terminal Header */}
             <div className="flex items-center justify-between pb-3 border-b border-slate-800 mb-3">
               <div className="flex items-center gap-2">
-                <Bot size={16} className="text-cyan-400" />
+                <Bot size={16} className="text-amber-400" />
                 <span className="text-xs font-bold text-slate-100 uppercase tracking-wider">Apex AI Interactive Terminal</span>
               </div>
               <span className="text-[10px] font-mono text-slate-400">{ENGINEERS[engineer].label} active</span>
@@ -449,7 +449,7 @@ export function ApexAIStudio() {
                   <div
                     className={`max-w-[88%] p-3 rounded-2xl text-xs leading-relaxed ${
                       msg.sender === "user"
-                        ? "bg-cyan-500 text-black font-medium rounded-tr-none"
+                        ? "bg-amber-500 text-black font-medium rounded-tr-none"
                         : "bg-slate-950 border border-slate-800 text-slate-200 rounded-tl-none"
                     }`}
                   >
@@ -462,7 +462,7 @@ export function ApexAIStudio() {
 
             {/* Quick Prompt Presets */}
             <div className="py-2 flex items-center gap-1.5 overflow-x-auto scrollbar-none border-t border-slate-800 mt-2">
-              <span className="text-[9px] font-mono text-cyan-400 font-bold uppercase shrink-0">AI BLUEPRINTS:</span>
+              <span className="text-[9px] font-mono text-amber-400 font-bold uppercase shrink-0">AI BLUEPRINTS:</span>
               {[
                 { label: "⚡ 1000 HP Valkyrie", prompt: "Load the 1000 HP V12 Hybrid Valkyrie blueprint" },
                 { label: "🏁 Sprint Race", prompt: "Deploy the Sprint Race Attack Spec" },
@@ -475,7 +475,7 @@ export function ApexAIStudio() {
                 <button
                   key={i}
                   onClick={() => handleSendMessage(p.prompt)}
-                  className="px-2 py-1 rounded-lg bg-slate-950/90 border border-cyan-500/30 text-cyan-200 hover:bg-cyan-500/20 text-[10px] font-mono whitespace-nowrap transition-all cursor-pointer shadow-sm"
+                  className="px-2 py-1 rounded-lg bg-slate-950/90 border border-amber-500/30 text-amber-200 hover:bg-amber-500/20 text-[10px] font-mono whitespace-nowrap transition-all cursor-pointer shadow-sm"
                 >
                   {p.label}
                 </button>
@@ -490,11 +490,11 @@ export function ApexAIStudio() {
                 onChange={(e) => setChatInput(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && handleSendMessage()}
                 placeholder="Ask Apex AI for vehicle optimization strategies..."
-                className="flex-1 bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-100 placeholder-slate-500 focus:outline-none focus:border-cyan-500 transition-all font-mono"
+                className="flex-1 bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-100 placeholder-slate-500 focus:outline-none focus:border-amber-500 transition-all font-mono"
               />
               <button
                 onClick={() => handleSendMessage()}
-                className="p-2 rounded-xl bg-cyan-500 text-black hover:bg-cyan-400 transition-all shadow-md active:scale-95 cursor-pointer"
+                className="p-2 rounded-xl bg-amber-500 text-black hover:bg-amber-400 transition-all shadow-md active:scale-95 cursor-pointer"
               >
                 <Send size={15} />
               </button>
@@ -508,12 +508,12 @@ export function ApexAIStudio() {
   return (
     <div className="w-full flex flex-col gap-6 text-slate-100 select-none pb-16 animate-fade-in">
       {/* ── TOP HERO BANNER: APEX AI CHIEF ENGINEERING & MULTI-AGENT STUDIO ── */}
-      <div className="relative p-6 rounded-3xl bg-gradient-to-r from-slate-900/90 via-cyan-950/40 to-slate-900/90 border border-cyan-500/30 backdrop-blur-2xl shadow-2xl overflow-hidden">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-cyan-500/10 rounded-full filter blur-3xl pointer-events-none" />
+      <div className="relative p-6 rounded-3xl bg-gradient-to-r from-slate-900/90 via-cyan-950/40 to-slate-900/90 border border-amber-500/30 backdrop-blur-2xl shadow-2xl overflow-hidden">
+        <div className="absolute top-0 right-0 w-96 h-96 bg-amber-500/10 rounded-full filter blur-3xl pointer-events-none" />
 
         <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 relative z-10">
           <div className="flex items-center gap-3.5">
-            <div className="p-3.5 rounded-2xl bg-cyan-500/20 text-cyan-400 border border-cyan-500/40 shadow-[0_0_20px_rgba(34,211,238,0.3)]">
+            <div className="p-3.5 rounded-2xl bg-amber-500/20 text-amber-400 border border-amber-500/40 shadow-[0_0_20px_rgba(34,211,238,0.3)]">
               <Bot size={32} />
             </div>
             <div>
@@ -530,8 +530,8 @@ export function ApexAIStudio() {
           </div>
 
           {/* Target Concept Philosophy Controls */}
-          <div className="flex items-center gap-2 bg-slate-950/80 px-3 py-2 rounded-2xl border border-cyan-500/30 font-mono">
-            <span className="text-[10px] text-cyan-400 flex items-center gap-1 font-bold">
+          <div className="flex items-center gap-2 bg-slate-950/80 px-3 py-2 rounded-2xl border border-amber-500/30 font-mono">
+            <span className="text-[10px] text-amber-400 flex items-center gap-1 font-bold">
               <Target size={13} /> CONCEPT:
             </span>
             {(["budget", "track", "luxury", "balanced"] as const).map((c) => (
@@ -545,8 +545,8 @@ export function ApexAIStudio() {
                       : c === "track"
                       ? "bg-amber-500/20 border-amber-500/40 text-amber-300"
                       : c === "luxury"
-                      ? "bg-purple-500/20 border-purple-500/40 text-purple-300"
-                      : "bg-cyan-500/20 border-cyan-500/40 text-cyan-300"
+                      ? "bg-amber-500/20 border-amber-500/40 text-amber-300"
+                      : "bg-amber-500/20 border-amber-500/40 text-amber-300"
                     : "bg-slate-900 border-slate-800 text-slate-500 hover:text-slate-300"
                 }`}
               >
@@ -574,7 +574,7 @@ export function ApexAIStudio() {
                 onClick={() => setStudioTab(tab.id)}
                 className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap cursor-pointer ${
                   isActive
-                    ? "bg-gradient-to-r from-cyan-500/30 to-purple-500/25 text-cyan-200 border border-cyan-400/50 shadow-[0_0_15px_rgba(34,211,238,0.3)]"
+                    ? "bg-gradient-to-r from-amber-500/30 to-amber-500/25 text-amber-200 border border-amber-400/50 shadow-[0_0_15px_rgba(34,211,238,0.3)]"
                     : "bg-slate-950/60 border border-slate-800/80 text-slate-400 hover:text-slate-200 hover:bg-slate-900/80"
                 }`}
               >
@@ -605,7 +605,7 @@ export function ApexAIStudio() {
           {/* Section 1: Chief Advisory Studio */}
           <div className="space-y-3">
             <h2 className="text-sm font-bold text-slate-300 uppercase tracking-widest flex items-center gap-2 pt-4 border-t border-slate-800/80">
-              <Wrench size={16} className="text-cyan-400" /> Chief Advisory & Live Diagnostics Studio
+              <Wrench size={16} className="text-amber-400" /> Chief Advisory & Live Diagnostics Studio
             </h2>
             {renderAdvisorySection()}
           </div>
@@ -629,7 +629,7 @@ export function ApexAIStudio() {
           {/* Section 3: Telemetry Log Stream */}
           <div className="space-y-3">
             <h2 className="text-sm font-bold text-slate-300 uppercase tracking-widest flex items-center gap-2 pt-4 border-t border-slate-800/80">
-              <FileText size={16} className="text-purple-400" /> Apex AI Telemetry Log & Event Stream
+              <FileText size={16} className="text-amber-400" /> Apex AI Telemetry Log & Event Stream
             </h2>
             <div className="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 backdrop-blur-xl shadow-xl">
               <EngineeringLog />

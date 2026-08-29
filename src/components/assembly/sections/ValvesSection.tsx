@@ -69,10 +69,10 @@ export function ValvesSection({
           accent="cyan"
         >
           <div className="space-y-3">
-            <div className="p-3 rounded-xl bg-base-950/80 border border-cyan-500/20 space-y-2">
+            <div className="p-3 rounded-xl bg-base-950/80 border border-amber-500/20 space-y-2">
               <div className="flex items-center justify-between text-xs font-mono">
                 <span className="text-slate-400">Exhaust Valve Cooling</span>
-                <span className="text-cyan-300 font-extrabold">Hollow Sodium-Filled</span>
+                <span className="text-amber-300 font-extrabold">Hollow Sodium-Filled</span>
               </div>
               <div className="flex items-center justify-between text-xs font-mono">
                 <span className="text-slate-400">Valve Spring Pressure</span>
@@ -80,12 +80,12 @@ export function ValvesSection({
               </div>
               <div className="flex items-center justify-between text-xs font-mono">
                 <span className="text-slate-400">Valve Float Margin</span>
-                <span className="text-cyan-300 font-extrabold">Safe up to 10,500 RPM</span>
+                <span className="text-amber-300 font-extrabold">Safe up to 10,500 RPM</span>
               </div>
             </div>
 
-            <div className="p-3 rounded-xl bg-cyan-950/20 border border-cyan-500/20 space-y-1">
-              <span className="text-[10px] font-mono font-bold text-cyan-300 uppercase tracking-wider block">
+            <div className="p-3 rounded-xl bg-amber-950/20 border border-amber-500/20 space-y-1">
+              <span className="text-[10px] font-mono font-bold text-amber-300 uppercase tracking-wider block">
                 VALVETRAIN INERTIA
               </span>
               <p className="text-[11px] font-mono text-slate-300 leading-relaxed">

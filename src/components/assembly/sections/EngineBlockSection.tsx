@@ -119,10 +119,10 @@ export function EngineBlockSection({
     const rodStrokeRatio = Math.round((rodLength / stroke) * 100) / 100;
 
     let character = "Square";
-    let characterColor = "text-cyan-400";
+    let characterColor = "text-amber-400";
     if (boreStrokeRatio > 1.05) {
       character = "Over-Square (High-Rev)";
-      characterColor = "text-cyan-300";
+      characterColor = "text-amber-300";
     } else if (boreStrokeRatio < 0.95) {
       character = "Under-Square (Torque)";
       characterColor = "text-amber-400";
@@ -154,7 +154,7 @@ export function EngineBlockSection({
           icon={<Cog size={18} />}
           accent="cyan"
           badge={
-            <span className="text-[10px] font-mono text-cyan-300 bg-cyan-950/80 border border-cyan-500/40 px-2 py-0.5 rounded-full font-bold shadow-[0_0_10px_rgba(34,211,238,0.2)]">
+            <span className="text-[10px] font-mono text-amber-300 bg-amber-950/80 border border-amber-500/40 px-2 py-0.5 rounded-full font-bold shadow-[0_0_10px_rgba(34,211,238,0.2)]">
               {kinematics.displacementLiters}L • {cylinders} CYL
             </span>
           }
@@ -187,12 +187,12 @@ export function EngineBlockSection({
                       onClick={() => updateEngine({ layout })}
                       className={`relative py-2 px-2 text-[11px] font-mono font-bold flex flex-col items-center justify-center rounded-xl border transition-all duration-200 cursor-pointer text-center group ${
                         isSelected
-                          ? "bg-gradient-to-b from-cyan-500/25 to-cyan-950/80 text-cyan-200 border-cyan-400 shadow-[0_0_15px_rgba(34,211,238,0.35)] scale-[1.02]"
+                          ? "bg-gradient-to-b from-amber-500/25 to-amber-950/80 text-amber-200 border-amber-400 shadow-[0_0_15px_rgba(34,211,238,0.35)] scale-[1.02]"
                           : "bg-slate-950/70 text-slate-400 border-slate-800 hover:text-slate-200 hover:border-slate-700 hover:bg-slate-900/60"
                       }`}
                     >
                       <div className="flex items-center gap-1.5 mb-0.5">
-                        <span className={isSelected ? "text-cyan-300" : "text-slate-500 group-hover:text-slate-300"}>
+                        <span className={isSelected ? "text-amber-300" : "text-slate-500 group-hover:text-slate-300"}>
                           {meta.icon}
                         </span>
                         <span className="truncate">{ENGINE_LAYOUTS[layout]?.label}</span>
@@ -207,12 +207,12 @@ export function EngineBlockSection({
             </div>
 
             {/* Live Kinematic Telemetry Bar */}
-            <div className="p-3 rounded-xl bg-slate-950/80 border border-cyan-500/20 space-y-2">
+            <div className="p-3 rounded-xl bg-slate-950/80 border border-amber-500/20 space-y-2">
               <div className="flex items-center justify-between text-[11px] font-mono">
                 <span className="text-slate-400 flex items-center gap-1">
-                  <Activity size={12} className="text-cyan-400" /> Displacement:
+                  <Activity size={12} className="text-amber-400" /> Displacement:
                 </span>
-                <span className="text-cyan-300 font-extrabold">
+                <span className="text-amber-300 font-extrabold">
                   {kinematics.totalDisplacementCc.toLocaleString()} cc ({kinematics.displacementLiters}L)
                 </span>
               </div>
@@ -250,7 +250,7 @@ export function EngineBlockSection({
                         rodLength: preset.rod,
                       })
                     }
-                    className="py-1 px-2 text-[10px] font-mono text-slate-300 bg-slate-900/80 border border-slate-800 hover:border-cyan-500/40 hover:text-cyan-300 rounded-lg transition-all text-left flex items-center justify-between"
+                    className="py-1 px-2 text-[10px] font-mono text-slate-300 bg-slate-900/80 border border-slate-800 hover:border-amber-500/40 hover:text-amber-300 rounded-lg transition-all text-left flex items-center justify-between"
                   >
                     <span>{preset.label}</span>
                     <span className="text-[9px] text-slate-500">{preset.bore}x{preset.stroke}</span>
@@ -305,7 +305,7 @@ export function EngineBlockSection({
           icon={<Layers size={18} />}
           accent="purple"
           badge={
-            <span className="text-[10px] font-mono text-purple-300 bg-purple-950/80 border border-purple-500/40 px-2 py-0.5 rounded-full font-bold shadow-[0_0_10px_rgba(192,132,252,0.2)]">
+            <span className="text-[10px] font-mono text-amber-300 bg-amber-950/80 border border-amber-500/40 px-2 py-0.5 rounded-full font-bold shadow-[0_0_10px_rgba(192,132,252,0.2)]">
               {componentMeta?.variants.length || 4} ALLOY TIERS
             </span>
           }

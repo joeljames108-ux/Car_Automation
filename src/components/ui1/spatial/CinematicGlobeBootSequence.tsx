@@ -266,7 +266,7 @@ export const CinematicGlobeBootSequence: React.FC<CinematicGlobeBootSequenceProp
         {/* Progress bar */}
         <div className="w-64 h-1.5 rounded-full bg-white/10 overflow-hidden mt-2 border border-white/10">
           <div
-            className="h-full bg-gradient-to-r from-cyan-400 via-sky-400 to-fuchsia-400 transition-all duration-150"
+            className="h-full bg-gradient-to-r from-amber-400 via-sky-400 to-fuchsia-400 transition-all duration-150"
             style={{ width: `${progress}%` }}
           />
         </div>

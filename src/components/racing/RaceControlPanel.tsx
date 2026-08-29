@@ -20,7 +20,7 @@ const FLAG_COLORS: Record<FlagColor, { bg: string; text: string; label: string; 
   double_yellow: { bg: 'bg-yellow-400', text: 'text-yellow-900', label: 'DOUBLE YELLOW', icon: '🟡🟡' },
   red: { bg: 'bg-red-600', text: 'text-red-100', label: 'RED FLAG', icon: '🔴' },
   chequered: { bg: 'bg-black', text: 'text-white', label: 'CHEQUERED FLAG', icon: '🏁' },
-  blue: { bg: 'bg-blue-500', text: 'text-blue-100', label: 'BLUE FLAG', icon: '🔵' },
+  blue: { bg: 'bg-amber-500', text: 'text-amber-100', label: 'BLUE FLAG', icon: '🔵' },
   white: { bg: 'bg-white', text: 'text-black', label: 'WHITE FLAG', icon: '\u26AA' },
   black: { bg: 'bg-gray-900', text: 'text-white', label: 'BLACK FLAG', icon: '\u26AB' },
   black_orange: { bg: 'bg-orange-600', text: 'text-orange-100', label: 'BLACK-ORANGE', icon: '🟠' },

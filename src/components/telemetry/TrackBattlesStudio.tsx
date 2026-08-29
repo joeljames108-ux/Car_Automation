@@ -149,13 +149,13 @@ export const TrackBattlesStudio: React.FC = memo(function TrackBattlesStudio() {
         {/* Lap Times Summary */}
         <div className="flex items-center gap-6 font-mono">
           <div className="text-right">
-            <div className="text-[10px] text-cyan-400 uppercase font-bold">{carA.name}</div>
-            <div className="text-base font-extrabold text-cyan-300">{results.lapTimeFormattedA}</div>
+            <div className="text-[10px] text-amber-400 uppercase font-bold">{carA.name}</div>
+            <div className="text-base font-extrabold text-amber-300">{results.lapTimeFormattedA}</div>
           </div>
           <div className="text-slate-600 font-bold text-lg">VS</div>
           <div>
-            <div className="text-[10px] text-indigo-400 uppercase font-bold">{carB.name}</div>
-            <div className="text-base font-extrabold text-indigo-300">{results.lapTimeFormattedB}</div>
+            <div className="text-[10px] text-amber-400 uppercase font-bold">{carB.name}</div>
+            <div className="text-base font-extrabold text-amber-300">{results.lapTimeFormattedB}</div>
           </div>
         </div>
       </div>
@@ -174,8 +174,8 @@ export const TrackBattlesStudio: React.FC = memo(function TrackBattlesStudio() {
           {/* Car A Horsepower */}
           <div className="space-y-1">
             <div className="flex justify-between text-xs font-semibold">
-              <span className="text-cyan-400">Car A Horsepower</span>
-              <span className="font-mono text-cyan-400">{carA.horsepowerHp} HP</span>
+              <span className="text-amber-400">Car A Horsepower</span>
+              <span className="font-mono text-amber-400">{carA.horsepowerHp} HP</span>
             </div>
             <input
               type="range"
@@ -184,15 +184,15 @@ export const TrackBattlesStudio: React.FC = memo(function TrackBattlesStudio() {
               step="25"
               value={carA.horsepowerHp}
               onChange={(e) => setCarA({ ...carA, horsepowerHp: Number(e.target.value) })}
-              className="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-cyan-400"
+              className="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-amber-400"
             />
           </div>
 
           {/* Car A Downforce */}
           <div className="space-y-1">
             <div className="flex justify-between text-xs font-semibold">
-              <span className="text-cyan-400">Car A Downforce (@200km/h)</span>
-              <span className="font-mono text-cyan-400">{carA.downforceNAt200} N</span>
+              <span className="text-amber-400">Car A Downforce (@200km/h)</span>
+              <span className="font-mono text-amber-400">{carA.downforceNAt200} N</span>
             </div>
             <input
               type="range"
@@ -201,15 +201,15 @@ export const TrackBattlesStudio: React.FC = memo(function TrackBattlesStudio() {
               step="250"
               value={carA.downforceNAt200}
               onChange={(e) => setCarA({ ...carA, downforceNAt200: Number(e.target.value) })}
-              className="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-cyan-400"
+              className="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-amber-400"
             />
           </div>
 
           {/* Car B Horsepower */}
           <div className="space-y-1 pt-2 border-t border-slate-800">
             <div className="flex justify-between text-xs font-semibold">
-              <span className="text-indigo-400">Car B Horsepower</span>
-              <span className="font-mono text-indigo-400">{carB.horsepowerHp} HP</span>
+              <span className="text-amber-400">Car B Horsepower</span>
+              <span className="font-mono text-amber-400">{carB.horsepowerHp} HP</span>
             </div>
             <input
               type="range"
@@ -225,8 +225,8 @@ export const TrackBattlesStudio: React.FC = memo(function TrackBattlesStudio() {
           {/* Car B Downforce */}
           <div className="space-y-1">
             <div className="flex justify-between text-xs font-semibold">
-              <span className="text-indigo-400">Car B Downforce (@200km/h)</span>
-              <span className="font-mono text-indigo-400">{carB.downforceNAt200} N</span>
+              <span className="text-amber-400">Car B Downforce (@200km/h)</span>
+              <span className="font-mono text-amber-400">{carB.downforceNAt200} N</span>
             </div>
             <input
               type="range"
@@ -273,7 +273,7 @@ export const TrackBattlesStudio: React.FC = memo(function TrackBattlesStudio() {
                   cx={activeFrame.lateralGA * 45}
                   cy={-activeFrame.longitudinalGA * 45}
                   r="8"
-                  fill="#06b6d4"
+                  fill="#f59e0b"
                   opacity="0.8"
                 />
 
@@ -282,13 +282,13 @@ export const TrackBattlesStudio: React.FC = memo(function TrackBattlesStudio() {
                   cx={activeFrame.lateralGB * 45}
                   cy={-activeFrame.longitudinalGB * 45}
                   r="8"
-                  fill="#818cf8"
+                  fill="#fbbf24"
                   opacity="0.8"
                 />
               </svg>
               <div className="flex justify-between w-full text-[10px] font-mono text-slate-400 pt-2 border-t border-slate-800">
-                <span className="text-cyan-400">Car A: {activeFrame.lateralGA}G Lat / {activeFrame.longitudinalGA}G Long</span>
-                <span className="text-indigo-400">Car B: {activeFrame.lateralGB}G Lat / {activeFrame.longitudinalGB}G Long</span>
+                <span className="text-amber-400">Car A: {activeFrame.lateralGA}G Lat / {activeFrame.longitudinalGA}G Long</span>
+                <span className="text-amber-400">Car B: {activeFrame.lateralGB}G Lat / {activeFrame.longitudinalGB}G Long</span>
               </div>
             </div>
 
@@ -302,18 +302,18 @@ export const TrackBattlesStudio: React.FC = memo(function TrackBattlesStudio() {
               <div className="space-y-2">
                 <div className="flex justify-between text-xs font-mono">
                   <span className="text-slate-400">Car A Speed</span>
-                  <span className="text-cyan-400 font-bold">{activeFrame.speedKmhA} km/h</span>
+                  <span className="text-amber-400 font-bold">{activeFrame.speedKmhA} km/h</span>
                 </div>
                 <div className="w-full h-2 bg-slate-900 rounded-full overflow-hidden">
-                  <div className="bg-cyan-500 h-full transition-all" style={{ width: `${(activeFrame.speedKmhA / results.topSpeedKmhA) * 100}%` }} />
+                  <div className="bg-amber-500 h-full transition-all" style={{ width: `${(activeFrame.speedKmhA / results.topSpeedKmhA) * 100}%` }} />
                 </div>
 
                 <div className="flex justify-between text-xs font-mono pt-2">
                   <span className="text-slate-400">Car B Speed</span>
-                  <span className="text-indigo-400 font-bold">{activeFrame.speedKmhB} km/h</span>
+                  <span className="text-amber-400 font-bold">{activeFrame.speedKmhB} km/h</span>
                 </div>
                 <div className="w-full h-2 bg-slate-900 rounded-full overflow-hidden">
-                  <div className="bg-indigo-500 h-full transition-all" style={{ width: `${(activeFrame.speedKmhB / results.topSpeedKmhB) * 100}%` }} />
+                  <div className="bg-amber-500 h-full transition-all" style={{ width: `${(activeFrame.speedKmhB / results.topSpeedKmhB) * 100}%` }} />
                 </div>
               </div>
 

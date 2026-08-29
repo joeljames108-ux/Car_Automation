@@ -41,15 +41,15 @@ export const StaffPitCrewPanel = memo(function StaffPitCrewPanel({ selectedTeam 
 
   return (
     <div className="space-y-4 animate-fade-in">
-      <div className="glass-panel p-5 border-purple-500/20 relative overflow-hidden">
+      <div className="glass-panel p-5 border-amber-500/20 relative overflow-hidden">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
           <div>
             <div className="flex items-center gap-2">
-              <span className="text-[10px] font-mono font-bold text-purple-400 uppercase tracking-widest">TEAM TALENT & CREW</span>
-              <span className="bg-purple-500/20 text-purple-300 border border-purple-500/40 text-[9px] font-bold px-2 py-0.5 rounded-full">KEY ROSTER</span>
+              <span className="text-[10px] font-mono font-bold text-amber-400 uppercase tracking-widest">TEAM TALENT & CREW</span>
+              <span className="bg-amber-500/20 text-amber-300 border border-amber-500/40 text-[9px] font-bold px-2 py-0.5 rounded-full">KEY ROSTER</span>
             </div>
             <h3 className="text-lg font-bold text-slate-100 flex items-center gap-2 mt-1">
-              <Users size={20} className="text-purple-400" /> Key Staff & Pit Crew Operations
+              <Users size={20} className="text-amber-400" /> Key Staff & Pit Crew Operations
             </h3>
             <p className="text-xs text-slate-400 mt-0.5">
               Manage Head Engineers, Race Strategists, and Pit Crew Chiefs to shave crucial tenths during pit stops and optimize development.
@@ -59,7 +59,7 @@ export const StaffPitCrewPanel = memo(function StaffPitCrewPanel({ selectedTeam 
           {selectedTeam && (
             <div className="bg-base-950/80 px-3.5 py-2 rounded-xl border border-white/10 text-right shrink-0">
               <div className="text-[10px] text-slate-400">Team Allocation</div>
-              <div className="text-sm font-bold text-purple-300">{selectedTeam.name}</div>
+              <div className="text-sm font-bold text-amber-300">{selectedTeam.name}</div>
             </div>
           )}
         </div>
@@ -72,13 +72,13 @@ export const StaffPitCrewPanel = memo(function StaffPitCrewPanel({ selectedTeam 
                 key={s.id}
                 className={`bg-base-950/70 p-4 rounded-xl border transition-all duration-300 flex flex-col justify-between space-y-3 ${
                   isTrained
-                    ? "border-purple-400 bg-purple-500/10 shadow-[0_0_20px_rgba(192,132,252,0.2)]"
-                    : "border-white/5 hover:border-purple-500/30"
+                    ? "border-amber-400 bg-amber-500/10 shadow-[0_0_20px_rgba(192,132,252,0.2)]"
+                    : "border-white/5 hover:border-amber-500/30"
                 }`}
               >
                 <div>
                   <div className="flex items-center justify-between mb-1.5">
-                    <span className="text-[10px] font-bold text-purple-400 uppercase tracking-wider bg-purple-500/10 px-2 py-0.5 rounded border border-purple-500/30">
+                    <span className="text-[10px] font-bold text-amber-400 uppercase tracking-wider bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/30">
                       {s.role}
                     </span>
                     <span className="text-xs font-mono text-slate-300 font-bold flex items-center gap-0.5">
@@ -98,10 +98,10 @@ export const StaffPitCrewPanel = memo(function StaffPitCrewPanel({ selectedTeam 
                     <div>
                       <div className="flex justify-between text-[10px] text-slate-400 mb-0.5">
                         <span>Skill Rating</span>
-                        <span className="text-cyan-300 font-mono font-bold">{s.skill}/100</span>
+                        <span className="text-amber-300 font-mono font-bold">{s.skill}/100</span>
                       </div>
                       <div className="h-1.5 bg-base-800 rounded-full overflow-hidden">
-                        <div className="h-full bg-cyan-400 rounded-full transition-all" style={{ width: `${s.skill}%` }} />
+                        <div className="h-full bg-amber-400 rounded-full transition-all" style={{ width: `${s.skill}%` }} />
                       </div>
                     </div>
 
@@ -118,7 +118,7 @@ export const StaffPitCrewPanel = memo(function StaffPitCrewPanel({ selectedTeam 
 
                   <button
                     onClick={() => handleTrain(s.id)}
-                    className="w-full py-1.5 rounded-lg text-xs font-semibold bg-purple-500/15 border border-purple-500/30 text-purple-300 hover:bg-purple-500/25 transition-all flex items-center justify-center gap-1.5"
+                    className="w-full py-1.5 rounded-lg text-xs font-semibold bg-amber-500/15 border border-amber-500/30 text-amber-300 hover:bg-amber-500/25 transition-all flex items-center justify-center gap-1.5"
                   >
                     <Flame size={12} /> Intensive Training Workshop
                   </button>

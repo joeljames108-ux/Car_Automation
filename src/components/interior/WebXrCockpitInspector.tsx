@@ -67,7 +67,7 @@ export const WebXrCockpitInspector: React.FC<WebXrCockpitInspectorProps> = ({ st
     const ambientLight = new THREE.AmbientLight(0xffffff, 1.2);
     scene.add(ambientLight);
 
-    const cabinLight = new THREE.PointLight(0x38bdf8, 1.5, 4);
+    const cabinLight = new THREE.PointLight(0xfbbf24, 1.5, 4);
     cabinLight.position.set(-0.68, 0.95, -0.34);
     scene.add(cabinLight);
 
@@ -109,7 +109,7 @@ export const WebXrCockpitInspector: React.FC<WebXrCockpitInspectorProps> = ({ st
       {/* WebXR Controls & Capability Banner */}
       <div className="absolute top-4 left-4 right-4 flex items-center justify-between p-3 rounded-2xl backdrop-blur-xl bg-slate-950/90 border border-slate-800 z-10">
         <div className="flex items-center gap-2">
-          <Glasses className="text-purple-400" size={18} />
+          <Glasses className="text-amber-400" size={18} />
           <div>
             <div className="text-xs font-black text-white">WEBXR SPATIAL VR COCKPIT INSPECTOR</div>
             <div className="text-[10px] text-slate-400">
@@ -121,7 +121,7 @@ export const WebXrCockpitInspector: React.FC<WebXrCockpitInspectorProps> = ({ st
         <div className="flex items-center gap-2">
           <button
             onClick={() => setDoorAngle(doorAngle > 0 ? 0 : 35)}
-            className="px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-800 text-xs font-bold text-cyan-300 cursor-pointer hover:bg-slate-800"
+            className="px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-800 text-xs font-bold text-amber-300 cursor-pointer hover:bg-slate-800"
           >
             {doorAngle > 0 ? "CLOSE DOOR" : "OPEN DOOR"}
           </button>
@@ -130,7 +130,7 @@ export const WebXrCockpitInspector: React.FC<WebXrCockpitInspectorProps> = ({ st
             onClick={enterVrSession}
             className={`flex items-center gap-1.5 px-4 py-1.5 rounded-xl text-xs font-bold border transition-all cursor-pointer ${
               isXrSupported
-                ? "bg-gradient-to-r from-purple-600 to-indigo-600 border-purple-400 text-white shadow-lg shadow-purple-500/30 hover:brightness-110"
+                ? "bg-gradient-to-r from-amber-600 to-indigo-600 border-amber-400 text-white shadow-lg shadow-purple-500/30 hover:brightness-110"
                 : "bg-slate-900 border-slate-800 text-slate-500 cursor-not-allowed"
             }`}
           >

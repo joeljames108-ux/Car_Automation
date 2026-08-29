@@ -28,6 +28,7 @@
     "@react-three/fiber": "^8.18.0",
     "@supabase/supabase-js": "^2.45.0",
     "@types/three": "^0.185.4",
+    "animejs": "^4.5.0",
     "framer-motion": "^12.43.0",
     "lucide-react": "^0.460.0",
     "react": "^18.3.1",

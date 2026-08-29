@@ -335,7 +335,7 @@ export class EngineMaterialLibrary {
         clearcoat: 0.7,
         clearcoatRoughness: 0.04,
         sheen: 0.15,
-        sheenColor: new THREE.Color(0x38bdf8),
+        sheenColor: new THREE.Color(0xfbbf24),
       });
       this.materialCache.set(key, mat);
     }
@@ -404,7 +404,7 @@ export class EngineMaterialLibrary {
     if (!this.materialCache.has(key)) {
       const mat = new THREE.MeshPhysicalMaterial({
         name: 'Quartz_ITB_Inspection_Glass',
-        color: new THREE.Color(0x38bdf8),
+        color: new THREE.Color(0xfbbf24),
         metalness: 0.10,
         roughness: 0.05,
         transmission: 0.90,
@@ -423,12 +423,12 @@ export class EngineMaterialLibrary {
     if (!this.materialCache.has(key)) {
       const mat = new THREE.MeshPhysicalMaterial({
         name: 'High_Pressure_Blue_Silicone',
-        color: new THREE.Color(0x2563eb),
+        color: new THREE.Color(0xb45309),
         metalness: 0.10,
         roughness: 0.60,
         envMapIntensity: 0.8,
         sheen: 0.3,
-        sheenColor: new THREE.Color(0x60a5fa),
+        sheenColor: new THREE.Color(0xfbbf24),
       });
       this.materialCache.set(key, mat);
     }
@@ -605,14 +605,14 @@ export class EngineMaterialLibrary {
     if (!this.materialCache.has(key)) {
       const mat = new THREE.MeshPhysicalMaterial({
         name: 'Titanium_Heat_Blued_PieCut',
-        color: new THREE.Color(0x2563eb),
+        color: new THREE.Color(0xb45309),
         metalness: 0.96,
         roughness: 0.16,
         clearcoat: 0.85,
         clearcoatRoughness: 0.06,
         sheen: 0.55,
-        sheenColor: new THREE.Color(0x9333ea),
-        specularColor: new THREE.Color(0x38bdf8),
+        sheenColor: new THREE.Color(0xd97706),
+        specularColor: new THREE.Color(0xfbbf24),
         envMapIntensity: 2.8,
       });
       this.materialCache.set(key, mat);
@@ -669,7 +669,7 @@ export class EngineMaterialLibrary {
         clearcoat: 0.85,
         clearcoatRoughness: 0.08,
         sheen: 0.3,
-        sheenColor: new THREE.Color(0x38bdf8),
+        sheenColor: new THREE.Color(0xfbbf24),
         envMapIntensity: 2.0,
       });
       this.materialCache.set(key, mat);
@@ -792,13 +792,13 @@ export class EngineMaterialLibrary {
     if (!this.materialCache.has(key)) {
       const mat = new THREE.MeshPhysicalMaterial({
         name: 'Anodized_Billet_Purple',
-        color: new THREE.Color(0x9333ea),
+        color: new THREE.Color(0xd97706),
         metalness: 0.88,
         roughness: 0.18,
         clearcoat: 0.8,
         clearcoatRoughness: 0.1,
         sheen: 0.35,
-        sheenColor: new THREE.Color(0xc084fc),
+        sheenColor: new THREE.Color(0xfbbf24),
         envMapIntensity: 2.2,
       });
       this.materialCache.set(key, mat);
@@ -836,7 +836,7 @@ export class EngineMaterialLibrary {
         clearcoat: 0.85,
         clearcoatRoughness: 0.08,
         sheen: 0.3,
-        sheenColor: new THREE.Color(0x38bdf8),
+        sheenColor: new THREE.Color(0xfbbf24),
         envMapIntensity: 2.4,
       });
       this.materialCache.set(key, mat);
@@ -1082,7 +1082,7 @@ export class EngineMaterialLibrary {
         case 'hover':
           mat = new THREE.MeshStandardMaterial({
             name: 'Highlight_Hover',
-            color: new THREE.Color(0x38bdf8),
+            color: new THREE.Color(0xfbbf24),
             metalness: 0.8,
             roughness: 0.2,
             emissive: new THREE.Color(0x0284c7),
@@ -1106,7 +1106,7 @@ export class EngineMaterialLibrary {
         case 'ghost':
           mat = new THREE.MeshPhysicalMaterial({
             name: 'Highlight_Ghost_Preview',
-            color: new THREE.Color(0x38bdf8),
+            color: new THREE.Color(0xfbbf24),
             metalness: 0.1,
             roughness: 0.1,
             transmission: 0.8,

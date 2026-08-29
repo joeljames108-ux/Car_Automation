@@ -40,7 +40,7 @@ export class ModularCabinInteriorGenerator {
 
     // 2. Center Infotainment Touchscreen Display
     const screenGeo = new THREE.BoxGeometry(0.04, 0.16, 0.32);
-    const screenMat = new THREE.MeshBasicMaterial({ color: 0x38bdf8 });
+    const screenMat = new THREE.MeshBasicMaterial({ color: 0xfbbf24 });
     const screen = new THREE.Mesh(screenGeo, screenMat);
     screen.position.set(-0.24, 0.76, 0);
     group.add(screen);

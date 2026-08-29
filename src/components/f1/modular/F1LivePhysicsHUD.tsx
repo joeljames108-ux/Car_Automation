@@ -39,7 +39,7 @@ export const F1LivePhysicsHUD: React.FC<F1LivePhysicsHUDProps> = memo(function F
                 d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
               />
               <path
-                className={metrics.completionPercentage === 100 ? "text-cyan-400" : "text-amber-400"}
+                className={metrics.completionPercentage === 100 ? "text-amber-400" : "text-amber-400"}
                 strokeDasharray={`${metrics.completionPercentage}, 100`}
                 strokeWidth="3.5"
                 strokeLinecap="round"
@@ -84,12 +84,12 @@ export const F1LivePhysicsHUD: React.FC<F1LivePhysicsHUDProps> = memo(function F
 
         {/* Power */}
         <div className="flex items-center gap-2">
-          <Zap className="w-4 h-4 text-cyan-400" />
+          <Zap className="w-4 h-4 text-amber-400" />
           <div>
             <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-wider block">
               POWER OUTPUT
             </span>
-            <span className="text-xs font-mono font-black text-cyan-300">
+            <span className="text-xs font-mono font-black text-amber-300">
               {metrics.totalPeakHorsepower} HP (ICE: {metrics.totalPeakHorsepower - metrics.ersHorsepower} + ERS: {metrics.ersHorsepower})
             </span>
           </div>
@@ -145,7 +145,7 @@ export const F1LivePhysicsHUD: React.FC<F1LivePhysicsHUDProps> = memo(function F
           disabled={!metrics.isCompleteAndLegal}
           className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-black uppercase tracking-wider transition-all shadow-xl ${
             metrics.isCompleteAndLegal
-              ? "bg-cyan-500 hover:bg-cyan-400 text-black shadow-cyan-500/30 font-black cursor-pointer"
+              ? "bg-amber-500 hover:bg-amber-400 text-black shadow-cyan-500/30 font-black cursor-pointer"
               : "bg-zinc-800 text-zinc-500 cursor-not-allowed"
           }`}
         >

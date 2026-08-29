@@ -83,7 +83,7 @@ export const InteriorEngineeringTelemetryDashboard: React.FC = () => {
       {/* Header */}
       <div className="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-slate-800">
         <div>
-          <div className="flex items-center gap-2 text-xs font-bold text-cyan-400 uppercase tracking-widest">
+          <div className="flex items-center gap-2 text-xs font-bold text-amber-400 uppercase tracking-widest">
             <Cpu size={14} /> AUTOMOTIVE CABIN TELEMETRY & PHYSICS DASHBOARD
           </div>
           <h1 className="text-2xl font-black text-white">{state.name}</h1>
@@ -92,7 +92,7 @@ export const InteriorEngineeringTelemetryDashboard: React.FC = () => {
         <button
           onClick={handleExportGlb}
           disabled={isExportingGlb}
-          className="flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold bg-gradient-to-r from-cyan-600 to-blue-600 border border-cyan-400 text-white shadow-lg cursor-pointer hover:brightness-110 disabled:opacity-50"
+          className="flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold bg-gradient-to-r from-amber-600 to-orange-600 border border-amber-400 text-white shadow-lg cursor-pointer hover:brightness-110 disabled:opacity-50"
         >
           <Download size={14} className={isExportingGlb ? "animate-bounce" : ""} />
           <span>{isExportingGlb ? "EXPORTING..." : "EXPORT FULL GLB CAD"}</span>
@@ -110,14 +110,14 @@ export const InteriorEngineeringTelemetryDashboard: React.FC = () => {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* 1. 3D CFD Airflow & ISO 7730 Thermal Comfort Panel */}
         <div className="p-5 rounded-3xl bg-slate-900/90 border border-slate-800 space-y-4">
-          <h3 className="text-sm font-bold text-cyan-400 uppercase tracking-wider flex items-center gap-2">
+          <h3 className="text-sm font-bold text-amber-400 uppercase tracking-wider flex items-center gap-2">
             <Wind size={16} /> 3D Voxel CFD & ISO 7730 Thermal Comfort
           </h3>
 
           <div className="grid grid-cols-2 gap-3 text-xs">
             <div className="p-3 rounded-2xl bg-slate-950 border border-slate-800">
               <span className="text-slate-400">Total Air Cells:</span>
-              <div className="text-lg font-bold text-cyan-300">{cfdSummary.totalAirCells}</div>
+              <div className="text-lg font-bold text-amber-300">{cfdSummary.totalAirCells}</div>
             </div>
 
             <div className="p-3 rounded-2xl bg-slate-950 border border-slate-800">
@@ -127,7 +127,7 @@ export const InteriorEngineeringTelemetryDashboard: React.FC = () => {
 
             <div className="p-3 rounded-2xl bg-slate-950 border border-slate-800">
               <span className="text-slate-400">Max Air Velocity:</span>
-              <div className="text-lg font-bold text-purple-300">{cfdSummary.maxAirVelocityMps} m/s</div>
+              <div className="text-lg font-bold text-amber-300">{cfdSummary.maxAirVelocityMps} m/s</div>
             </div>
 
             <div className="p-3 rounded-2xl bg-slate-950 border border-slate-800">
@@ -162,7 +162,7 @@ export const InteriorEngineeringTelemetryDashboard: React.FC = () => {
           <div className="grid grid-cols-2 gap-3 text-xs">
             <div className="p-3 rounded-2xl bg-slate-950 border border-slate-800">
               <span className="text-slate-400">Floor Accel RMS:</span>
-              <div className="text-lg font-bold text-cyan-300">{nvhSummary.floorAccelRmsMps2} m/s²</div>
+              <div className="text-lg font-bold text-amber-300">{nvhSummary.floorAccelRmsMps2} m/s²</div>
             </div>
 
             <div className="p-3 rounded-2xl bg-slate-950 border border-slate-800">
@@ -177,7 +177,7 @@ export const InteriorEngineeringTelemetryDashboard: React.FC = () => {
 
             <div className="p-3 rounded-2xl bg-slate-950 border border-slate-800">
               <span className="text-slate-400">Vibration VDV:</span>
-              <div className="text-lg font-bold text-purple-300">{nvhSummary.vibrationDoseValueVdv}</div>
+              <div className="text-lg font-bold text-amber-300">{nvhSummary.vibrationDoseValueVdv}</div>
             </div>
           </div>
 
@@ -189,7 +189,7 @@ export const InteriorEngineeringTelemetryDashboard: React.FC = () => {
                 <div key={pt.frequencyHz} className="flex items-center gap-2 text-[10px]">
                   <span className="w-12 text-slate-400 font-bold">{pt.frequencyHz} Hz</span>
                   <div className="flex-1 h-3 rounded-full bg-slate-950 overflow-hidden flex">
-                    <div className="h-full bg-cyan-500" style={{ width: `${(pt.seatSplDba / 100) * 100}%` }} />
+                    <div className="h-full bg-amber-500" style={{ width: `${(pt.seatSplDba / 100) * 100}%` }} />
                   </div>
                   <span className="text-emerald-400 font-bold">-{pt.attenuationDb} dB</span>
                 </div>
@@ -207,7 +207,7 @@ export const InteriorEngineeringTelemetryDashboard: React.FC = () => {
           <div className="space-y-2 text-xs">
             <div className="p-3 rounded-2xl bg-slate-950 border border-slate-800 flex justify-between">
               <span className="text-slate-400">H-Point X/Y/Z:</span>
-              <span className="font-bold text-cyan-300">
+              <span className="font-bold text-amber-300">
                 {ergoSummary.hPointCoordinatesMm.x}, {ergoSummary.hPointCoordinatesMm.y}, {ergoSummary.hPointCoordinatesMm.z} mm
               </span>
             </div>
@@ -224,7 +224,7 @@ export const InteriorEngineeringTelemetryDashboard: React.FC = () => {
 
             <div className="p-3 rounded-2xl bg-slate-950 border border-slate-800 flex justify-between">
               <span className="text-slate-400">SAE Overall Score:</span>
-              <span className="font-bold text-purple-300">{ergoSummary.overallSaeErgonomicsScore}/100</span>
+              <span className="font-bold text-amber-300">{ergoSummary.overallSaeErgonomicsScore}/100</span>
             </div>
           </div>
         </div>

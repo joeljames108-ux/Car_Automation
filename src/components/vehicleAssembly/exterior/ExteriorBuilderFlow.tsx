@@ -57,14 +57,14 @@ export const ExteriorBuilderFlow: React.FC = () => {
       {/* ── BULK ACTIONS & STAGE PROGRESS ── */}
       <div className="flex items-center justify-between p-3 rounded-2xl bg-slate-900/80 border border-white/10">
         <div className="flex items-center gap-2">
-          <Wrench size={16} className="text-cyan-400" />
+          <Wrench size={16} className="text-amber-400" />
           <span className="text-xs font-mono font-bold text-slate-200 uppercase">
             PROGRESSIVE EXTERIOR ASSEMBLY STAGES
           </span>
         </div>
         <button
           onClick={installAllComponents}
-          className="px-3 py-1 rounded-xl bg-cyan-500/20 hover:bg-cyan-500/30 text-cyan-300 border border-cyan-500/40 text-xs font-mono font-bold transition-all flex items-center gap-1.5"
+          className="px-3 py-1 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 border border-amber-500/40 text-xs font-mono font-bold transition-all flex items-center gap-1.5"
         >
           <Sparkles size={13} />
           <span>INSTALL ALL (ROBOTIC FAST TRACK)</span>
@@ -91,7 +91,7 @@ export const ExteriorBuilderFlow: React.FC = () => {
                     className={`w-6 h-6 rounded-lg flex items-center justify-center text-xs font-mono font-bold ${
                       cat.isComplete
                         ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/40"
-                        : "bg-cyan-500/20 text-cyan-400 border border-cyan-500/40"
+                        : "bg-amber-500/20 text-amber-400 border border-amber-500/40"
                     }`}
                   >
                     {cat.isComplete ? "✓" : isExpanded ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
@@ -109,7 +109,7 @@ export const ExteriorBuilderFlow: React.FC = () => {
                 {/* Mini Category Progress Bar */}
                 <div className="w-20 h-1.5 bg-slate-950 rounded-full overflow-hidden border border-white/5">
                   <div
-                    className="h-full bg-gradient-to-r from-cyan-500 to-emerald-400 transition-all duration-300"
+                    className="h-full bg-gradient-to-r from-amber-500 to-emerald-400 transition-all duration-300"
                     style={{ width: `${cat.percentage}%` }}
                   />
                 </div>

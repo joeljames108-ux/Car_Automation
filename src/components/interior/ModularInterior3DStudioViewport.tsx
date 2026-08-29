@@ -66,6 +66,7 @@ import {
 } from "../../exterior3d/environment/AutomotiveStudioEnvironment";
 import { DriverSeatCameraRig, SeatCameraAnchorId } from "../../exterior3d/generators/interior/driverSeatCameraRig";
 import { SeatPositionSelector } from "./SeatPositionSelector";
+import { DriverErgonomicsSystem } from "../../exterior3d/generators/interior/driverErgonomicsSystem";
 import { InteriorRaycastPicker, InteriorWorkbenchTabKey } from "../../exterior3d/generators/interior/interiorRaycastPicker";
 
 export type CockpitCameraPose =
@@ -205,6 +206,23 @@ const ModularInterior3DStudioViewportComponent: React.FC<ModularInterior3DStudio
   const [seatForeAftMm, setSeatForeAftMm] = useState<number>(0);
   const [seatHeightMm, setSeatHeightMm] = useState<number>(0);
   const [isAutoHeadPan, setIsAutoHeadPan] = useState<boolean>(false);
+  
+  // Advanced Driver Ergonomics System
+  const ergonomicsRef = useRef<DriverErgonomicsSystem>(new DriverErgonomicsSystem());
+  const [seatReclineDeg, setSeatReclineDeg] = useState<number>(22);
+  const [seatLateralMm, setSeatLateralMm] = useState<number>(0);
+  const [steeringTelescopingMm, setSteeringTelescopingMm] = useState<number>(0);
+  const [steeringTiltDeg, setSteeringTiltDeg] = useState<number>(0);
+  const [pedalReachMm, setPedalReachMm] = useState<number>(0);
+  const [pedalHeightMm, setPedalHeightMm] = useState<number>(0);
+  const [leftMirrorPanDeg, setLeftMirrorPanDeg] = useState<number>(-12);
+  const [leftMirrorTiltDeg, setLeftMirrorTiltDeg] = useState<number>(-3);
+  const [rightMirrorPanDeg, setRightMirrorPanDeg] = useState<number>(12);
+  const [rightMirrorTiltDeg, setRightMirrorTiltDeg] = useState<number>(-3);
+  const [rearviewPanDeg, setRearviewPanDeg] = useState<number>(0);
+  const [showVisibilitySim, setShowVisibilitySim] = useState<boolean>(false);
+  const [activeErgPreset, setActiveErgPreset] = useState<string | null>(null);
+
   const [showCrosshair, setShowCrosshair] = useState<boolean>(true);
   const [currentGazeTarget, setCurrentGazeTarget] = useState<string>("FORWARD ROAD & AR HEAD-UP DISPLAY");
 
@@ -558,7 +576,41 @@ const ModularInterior3DStudioViewportComponent: React.FC<ModularInterior3DStudio
     };
     window.addEventListener("resize", handleResize);
 
-    return () => {
+    
+  // Sync ergonomics state with DriverErgonomicsSystem
+  useEffect(() => {
+    const erg = ergonomicsRef.current;
+    erg.seat.foreAftMm = seatForeAftMm;
+    erg.seat.heightMm = seatHeightMm;
+    erg.seat.reclineDeg = seatReclineDeg;
+    erg.seat.lateralMm = seatLateralMm;
+    erg.steering.telescopingMm = steeringTelescopingMm;
+    erg.steering.tiltDeg = steeringTiltDeg;
+    erg.pedals.reachMm = pedalReachMm;
+    erg.pedals.heightMm = pedalHeightMm;
+    erg.mirrors.leftPanDeg = leftMirrorPanDeg;
+    erg.mirrors.leftTiltDeg = leftMirrorTiltDeg;
+    erg.mirrors.rightPanDeg = rightMirrorPanDeg;
+    erg.mirrors.rightTiltDeg = rightMirrorTiltDeg;
+    erg.mirrors.rearviewPanDeg = rearviewPanDeg;
+    erg.recompute();
+
+    // Update camera position from ergonomics eye point
+    if (cameraRigRef.current && activeCameraPose === "driver_seat_eye") {
+      cameraRigRef.current.setErgonomicAdjustments(
+        seatForeAftMm + (erg.seat.reclineDeg - 22) * 2,
+        seatHeightMm
+      );
+    }
+  }, [seatForeAftMm, seatHeightMm, seatReclineDeg, seatLateralMm,
+      steeringTelescopingMm, steeringTiltDeg,
+      pedalReachMm, pedalHeightMm,
+      leftMirrorPanDeg, leftMirrorTiltDeg,
+      rightMirrorPanDeg, rightMirrorTiltDeg,
+      rearviewPanDeg, activeCameraPose]);
+
+
+  return () => {
       cancelAnimationFrame(animId);
       document.removeEventListener("visibilitychange", handleVisibilityChange);
       container.removeEventListener("pointerdown", handlePointerDown);
@@ -845,7 +897,7 @@ const ModularInterior3DStudioViewportComponent: React.FC<ModularInterior3DStudio
             onClick={toggleDoor}
             className={`flex items-center gap-1 px-2.5 py-1.5 rounded-xl text-[10px] font-bold border transition-all cursor-pointer ${
               doorOpenAngleDeg > 0
-                ? "bg-cyan-500/20 border-cyan-500/50 text-cyan-300 shadow-sm"
+                ? "bg-amber-500/20 border-amber-500/50 text-amber-300 shadow-sm"
                 : "bg-slate-950 border-slate-800 text-slate-400 hover:text-slate-200"
             }`}
           >
@@ -873,7 +925,7 @@ const ModularInterior3DStudioViewportComponent: React.FC<ModularInterior3DStudio
           <button
             onClick={handleExportGlb}
             disabled={isExportingGlb}
-            className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl text-[10px] font-bold border border-cyan-500/40 bg-gradient-to-r from-cyan-600 to-blue-600 text-white shadow-md hover:brightness-110 disabled:opacity-50 cursor-pointer"
+            className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl text-[10px] font-bold border border-amber-500/40 bg-gradient-to-r from-amber-600 to-orange-600 text-white shadow-md hover:brightness-110 disabled:opacity-50 cursor-pointer"
           >
             <Download size={12} className={isExportingGlb ? "animate-bounce" : ""} />
             <span>{isExportingGlb ? "EXPORTING..." : "GLB"}</span>
@@ -885,8 +937,8 @@ const ModularInterior3DStudioViewportComponent: React.FC<ModularInterior3DStudio
               [
                 { id: "warm_sunset", icon: Sunset, color: "text-amber-400", title: "Warm Sunset" },
                 { id: "luxury_showroom", icon: Sun, color: "text-slate-100", title: "Showroom White" },
-                { id: "titanium_slate", icon: Compass, color: "text-cyan-400", title: "Titanium Slate" },
-                { id: "cyberpunk_neon", icon: Zap, color: "text-purple-400", title: "Cyberpunk Neon" },
+                { id: "titanium_slate", icon: Compass, color: "text-amber-400", title: "Titanium Slate" },
+                { id: "cyberpunk_neon", icon: Zap, color: "text-amber-400", title: "Cyberpunk Neon" },
                 { id: "obsidian_stealth", icon: Moon, color: "text-zinc-400", title: "Obsidian Stealth" },
               ] as const
             ).map((env) => {
@@ -939,7 +991,7 @@ const ModularInterior3DStudioViewportComponent: React.FC<ModularInterior3DStudio
 
         {/* Hovered Part Name */}
         {hoveredPartName && (
-          <div className="absolute top-3 left-3 px-3 py-1 rounded-xl bg-slate-950/80 backdrop-blur-md border border-cyan-500/30 text-[10px] text-cyan-300 font-bold pointer-events-none">
+          <div className="absolute top-3 left-3 px-3 py-1 rounded-xl bg-slate-950/80 backdrop-blur-md border border-amber-500/30 text-[10px] text-amber-300 font-bold pointer-events-none">
             TARGET: {hoveredPartName}
           </div>
         )}
@@ -1058,7 +1110,7 @@ const ModularInterior3DStudioViewportComponent: React.FC<ModularInterior3DStudio
             <div className="p-2 rounded-xl bg-slate-950/70 border border-slate-800 space-y-1">
               <div className="flex justify-between text-slate-400">
                 <span>LENS FOV (ZOOM):</span>
-                <span className="text-cyan-400 font-bold">{driverFov}°</span>
+                <span className="text-amber-400 font-bold">{driverFov}°</span>
               </div>
               <input
                 type="range"
@@ -1067,7 +1119,7 @@ const ModularInterior3DStudioViewportComponent: React.FC<ModularInterior3DStudio
                 step="1"
                 value={driverFov}
                 onChange={(e) => handleFovChange(parseInt(e.target.value))}
-                className="w-full h-1.5 rounded-lg accent-cyan-400 cursor-pointer"
+                className="w-full h-1.5 rounded-lg accent-amber-400 cursor-pointer"
               />
             </div>
 
@@ -1126,7 +1178,7 @@ const ModularInterior3DStudioViewportComponent: React.FC<ModularInterior3DStudio
         <div className="lg:col-span-5 p-3.5 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-3 shadow-xl">
           <div className="flex items-center justify-between border-b border-slate-800 pb-2">
             <div className="flex items-center gap-2">
-              <div className="p-1.5 rounded-lg bg-cyan-500/20 text-cyan-300">
+              <div className="p-1.5 rounded-lg bg-amber-500/20 text-amber-300">
                 <Tv size={14} />
               </div>
               <span className="text-xs font-bold text-slate-100 uppercase tracking-wider">
@@ -1156,7 +1208,7 @@ const ModularInterior3DStudioViewportComponent: React.FC<ModularInterior3DStudio
                   }}
                   className={`px-2 py-1.5 rounded-xl text-[10px] font-bold transition-all cursor-pointer ${
                     infotainmentMode === m.id
-                      ? "bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-md shadow-cyan-500/25"
+                      ? "bg-gradient-to-r from-amber-500 to-amber-600 text-white shadow-md shadow-cyan-500/25"
                       : "bg-slate-950/80 border border-slate-800 text-slate-400 hover:text-slate-200"
                   }`}
                 >
@@ -1210,7 +1262,7 @@ const ModularInterior3DStudioViewportComponent: React.FC<ModularInterior3DStudio
             <div className="p-2 rounded-xl bg-slate-950/70 border border-slate-800 space-y-1">
               <div className="flex justify-between text-slate-400">
                 <span>STEERING:</span>
-                <span className="text-cyan-400 font-bold">{steeringAngleDeg}°</span>
+                <span className="text-amber-400 font-bold">{steeringAngleDeg}°</span>
               </div>
               <input
                 type="range"
@@ -1219,7 +1271,7 @@ const ModularInterior3DStudioViewportComponent: React.FC<ModularInterior3DStudio
                 step="5"
                 value={steeringAngleDeg}
                 onChange={(e) => setSteeringAngleDeg(parseInt(e.target.value))}
-                className="w-full h-1.5 rounded-lg accent-cyan-400 cursor-pointer"
+                className="w-full h-1.5 rounded-lg accent-amber-400 cursor-pointer"
               />
             </div>
 

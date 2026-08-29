@@ -67,7 +67,7 @@ export const MultiViewTechnicalBlueprint: React.FC = () => {
       {/* Blueprint Header Toolbar */}
       <div className="flex items-center justify-between px-4 py-3 bg-[#101520] border-b border-[#1b2333]">
         <div className="flex items-center gap-3">
-          <div className="p-1.5 rounded-lg bg-cyan-500/10 border border-cyan-500/30 text-cyan-400">
+          <div className="p-1.5 rounded-lg bg-amber-500/10 border border-amber-500/30 text-amber-400">
             <Compass className="w-5 h-5" />
           </div>
           <div>
@@ -86,7 +86,7 @@ export const MultiViewTechnicalBlueprint: React.FC = () => {
               onClick={() => setActiveView(v.id)}
               className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
                 activeView === v.id
-                  ? 'bg-cyan-500 text-black shadow-[0_0_10px_rgba(6,182,212,0.4)]'
+                  ? 'bg-amber-500 text-black shadow-[0_0_10px_rgba(6,182,212,0.4)]'
                   : 'text-gray-400 hover:text-gray-200 hover:bg-[#161c2b]'
               }`}
             >
@@ -194,7 +194,7 @@ export const MultiViewTechnicalBlueprint: React.FC = () => {
             <button
               onClick={() => setShowDimensions(!showDimensions)}
               className={`text-xs px-2.5 py-1 rounded font-medium transition-all ${
-                showDimensions ? 'bg-purple-500/20 text-purple-400 border border-purple-500/40' : 'bg-gray-800 text-gray-400'
+                showDimensions ? 'bg-amber-500/20 text-amber-400 border border-amber-500/40' : 'bg-gray-800 text-gray-400'
               }`}
             >
               Dimensions
@@ -213,7 +213,7 @@ export const MultiViewTechnicalBlueprint: React.FC = () => {
         {/* Right Parametric Sidebar */}
         <div className="w-80 bg-[#0e121a] border-l border-[#1b2333] p-4 flex flex-col space-y-4 overflow-y-auto">
           <h4 className="text-xs font-bold text-gray-300 uppercase tracking-wider flex items-center gap-2">
-            <Sliders className="w-4 h-4 text-cyan-400" />
+            <Sliders className="w-4 h-4 text-amber-400" />
             Parametric Dimension Controls
           </h4>
 
@@ -221,7 +221,7 @@ export const MultiViewTechnicalBlueprint: React.FC = () => {
             <div>
               <div className="flex justify-between text-gray-400 mb-1">
                 <span>Wheelbase (WB):</span>
-                <span className="font-mono text-cyan-400 font-bold">{vehicleDimensions.wheelbaseMm} mm</span>
+                <span className="font-mono text-amber-400 font-bold">{vehicleDimensions.wheelbaseMm} mm</span>
               </div>
               <input
                 type="range"
@@ -232,14 +232,14 @@ export const MultiViewTechnicalBlueprint: React.FC = () => {
                 onChange={(e) =>
                   setVehicleDimensions({ ...vehicleDimensions, wheelbaseMm: parseInt(e.target.value) })
                 }
-                className="w-full accent-cyan-400 cursor-pointer"
+                className="w-full accent-amber-400 cursor-pointer"
               />
             </div>
 
             <div>
               <div className="flex justify-between text-gray-400 mb-1">
                 <span>Front Track (TF):</span>
-                <span className="font-mono text-cyan-400 font-bold">{vehicleDimensions.frontTrackMm} mm</span>
+                <span className="font-mono text-amber-400 font-bold">{vehicleDimensions.frontTrackMm} mm</span>
               </div>
               <input
                 type="range"
@@ -250,14 +250,14 @@ export const MultiViewTechnicalBlueprint: React.FC = () => {
                 onChange={(e) =>
                   setVehicleDimensions({ ...vehicleDimensions, frontTrackMm: parseInt(e.target.value) })
                 }
-                className="w-full accent-cyan-400 cursor-pointer"
+                className="w-full accent-amber-400 cursor-pointer"
               />
             </div>
 
             <div>
               <div className="flex justify-between text-gray-400 mb-1">
                 <span>Rear Track (TR):</span>
-                <span className="font-mono text-cyan-400 font-bold">{vehicleDimensions.rearTrackMm} mm</span>
+                <span className="font-mono text-amber-400 font-bold">{vehicleDimensions.rearTrackMm} mm</span>
               </div>
               <input
                 type="range"
@@ -268,14 +268,14 @@ export const MultiViewTechnicalBlueprint: React.FC = () => {
                 onChange={(e) =>
                   setVehicleDimensions({ ...vehicleDimensions, rearTrackMm: parseInt(e.target.value) })
                 }
-                className="w-full accent-cyan-400 cursor-pointer"
+                className="w-full accent-amber-400 cursor-pointer"
               />
             </div>
 
             <div>
               <div className="flex justify-between text-gray-400 mb-1">
                 <span>Ride Height (RH):</span>
-                <span className="font-mono text-cyan-400 font-bold">{vehicleDimensions.rideHeightMm} mm</span>
+                <span className="font-mono text-amber-400 font-bold">{vehicleDimensions.rideHeightMm} mm</span>
               </div>
               <input
                 type="range"
@@ -286,15 +286,15 @@ export const MultiViewTechnicalBlueprint: React.FC = () => {
                 onChange={(e) =>
                   setVehicleDimensions({ ...vehicleDimensions, rideHeightMm: parseInt(e.target.value) })
                 }
-                className="w-full accent-cyan-400 cursor-pointer"
+                className="w-full accent-amber-400 cursor-pointer"
               />
             </div>
           </div>
 
           {/* Hardpoint Inspector Box */}
           {selectedHardpointId && (
-            <div className="p-3 bg-[#141a24] rounded-xl border border-cyan-500/40 space-y-1.5 text-xs">
-              <span className="text-[10px] text-cyan-400 uppercase font-mono block">Selected Hardpoint</span>
+            <div className="p-3 bg-[#141a24] rounded-xl border border-amber-500/40 space-y-1.5 text-xs">
+              <span className="text-[10px] text-amber-400 uppercase font-mono block">Selected Hardpoint</span>
               <div className="font-bold text-gray-100">{selectedHardpointId}</div>
               <div className="text-gray-400 text-[11px]">
                 Status: <span className="text-emerald-400 font-semibold">100% Kinematic Aligned</span>

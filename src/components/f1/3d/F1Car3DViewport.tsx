@@ -310,15 +310,15 @@ const F1Car3DViewportComponent: React.FC = () => {
 
       {/* Top Left Viewport Badge */}
       <div className="absolute top-4 left-4 z-10 flex items-center gap-2">
-        <div className="px-3 py-1 rounded-xl bg-slate-900/80 backdrop-blur-md border border-slate-700 text-xs font-mono text-cyan-400 font-bold flex items-center gap-1.5 shadow-lg">
-          <Sparkles size={12} className="text-cyan-400" />
+        <div className="px-3 py-1 rounded-xl bg-slate-900/80 backdrop-blur-md border border-slate-700 text-xs font-mono text-amber-400 font-bold flex items-center gap-1.5 shadow-lg">
+          <Sparkles size={12} className="text-amber-400" />
           <span>F1 3D CAD STUDIO</span>
         </div>
         <button
           onClick={() => setAutoRotate(!autoRotate)}
           className={`p-1.5 rounded-lg border backdrop-blur-md transition-all ${
             autoRotate
-              ? "bg-cyan-500/20 border-cyan-500/40 text-cyan-300 shadow-md shadow-cyan-950/40"
+              ? "bg-amber-500/20 border-amber-500/40 text-amber-300 shadow-md shadow-cyan-950/40"
               : "bg-slate-900/70 border-slate-700 text-slate-400 hover:text-slate-200"
           }`}
           title="Auto Rotate Turntable"
@@ -341,7 +341,7 @@ const F1Car3DViewportComponent: React.FC = () => {
             onClick={() => applyCameraPreset(cam.id as any)}
             className={`px-2.5 py-1 rounded-lg text-[11px] font-semibold transition-all ${
               cameraPreset === cam.id
-                ? "bg-cyan-500/20 text-cyan-300 border border-cyan-500/40"
+                ? "bg-amber-500/20 text-amber-300 border border-amber-500/40"
                 : "text-slate-400 hover:text-slate-200 border border-transparent"
             }`}
           >
@@ -355,7 +355,7 @@ const F1Car3DViewportComponent: React.FC = () => {
         {/* Exploded View Slider */}
         <div className="flex items-center gap-3 w-full sm:w-auto">
           <div className="flex items-center gap-1.5 text-xs text-slate-400 font-semibold">
-            <Layers size={14} className="text-cyan-400" />
+            <Layers size={14} className="text-amber-400" />
             <span className="hidden sm:inline">Exploded:</span>
           </div>
           <input
@@ -365,9 +365,9 @@ const F1Car3DViewportComponent: React.FC = () => {
             step="0.01"
             value={explodedViewAmount}
             onChange={(e) => setExplodedViewAmount(parseFloat(e.target.value))}
-            className="w-28 sm:w-36 accent-cyan-400 cursor-pointer"
+            className="w-28 sm:w-36 accent-amber-400 cursor-pointer"
           />
-          <span className="font-mono text-xs text-cyan-400 w-9 font-bold">
+          <span className="font-mono text-xs text-amber-400 w-9 font-bold">
             {Math.round(explodedViewAmount * 100)}%
           </span>
         </div>
@@ -391,7 +391,7 @@ const F1Car3DViewportComponent: React.FC = () => {
             onClick={toggleWireframe}
             className={`px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-all border ${
               wireframeMode
-                ? "bg-cyan-500/20 border-cyan-500/40 text-cyan-300"
+                ? "bg-amber-500/20 border-amber-500/40 text-amber-300"
                 : "bg-slate-800/80 border-slate-700 text-slate-400 hover:text-slate-200"
             }`}
           >

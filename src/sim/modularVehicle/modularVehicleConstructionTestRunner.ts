@@ -193,7 +193,7 @@ export function runModularVehicleConstructionTests(): { passed: number; failed: 
             steeringWheelId: 'STEERING_FLAT_BOTTOM_SPORT',
             frontSeatsId: 'SEATS_SPORT_BOLSTERED',
             centerConsoleId: 'CONSOLE_SPORT_GATED',
-            ambientLightingColorHex: '#a855f7',
+            ambientLightingColorHex: '#f59e0b',
           },
           2850,
           1620

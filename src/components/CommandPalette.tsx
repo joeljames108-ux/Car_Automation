@@ -52,10 +52,8 @@ export function CommandPalette({ isOpen, onClose, onSelectStage }: CommandPalett
       { id: "mod_f1_constructor", category: "Modules", title: "🏎️ F1 Constructor Studio", subtitle: "Modular 3D Open-Wheel F1 Simulator", icon: <Flag size={16} />, action: () => onSelectStage("f1_constructor") },
       { id: "mod_hypercar_constructor", category: "Modules", title: "🏆 Hypercar Construction Studio", subtitle: "Modular 3D WEC Le Mans Endurance Simulator", icon: <Trophy size={16} />, action: () => onSelectStage("hypercar_constructor") },
       { id: "mod_engine", category: "Modules", title: "Engine Designer", subtitle: "ICE, Turbo, Hybrid, EV", icon: <Cog size={16} />, action: () => onSelectStage("engine") },
-      { id: "mod_vehicle", category: "Modules", title: "Vehicle Studio", subtitle: "Chassis, Exterior Styling, Paint & CFD Aero", icon: <Car size={16} />, action: () => onSelectStage("vehicle") },
-      { id: "mod_interior", category: "Modules", title: "Interior & Comfort", subtitle: "Cabin & Materials", icon: <Sofa size={16} />, action: () => onSelectStage("interior") },
+      { id: "mod_interior", category: "Modules", title: "Interior & Electronics Studio", subtitle: "Cabin, Cockpit Displays, ADAS & Avionics", icon: <Sofa size={16} />, action: () => onSelectStage("interior") },
       { id: "mod_manufacturing", category: "Modules", title: "Manufacturing", subtitle: "Tooling & Factory Cost", icon: <Factory size={16} />, action: () => onSelectStage("manufacturing") },
-      { id: "mod_infotainment", category: "Modules", title: "Electronics & Audio", subtitle: "Display & Sensors", icon: <Monitor size={16} />, action: () => onSelectStage("infotainment") },
       { id: "mod_safety", category: "Modules", title: "Safety Center", subtitle: "Crash Tests & Ratings", icon: <ShieldCheck size={16} />, action: () => onSelectStage("safety") },
       { id: "mod_rd", category: "Modules", title: "R&D Innovation Lab", subtitle: "Tech Trees & Patents", icon: <Microscope size={16} />, action: () => onSelectStage("rd") },
       { id: "mod_simulation", category: "Modules", title: "Simulation Dashboard", subtitle: "0-60, Lap Time, MPG", icon: <Activity size={16} />, action: () => onSelectStage("simulation") },
@@ -83,7 +81,7 @@ export function CommandPalette({ isOpen, onClose, onSelectStage }: CommandPalett
         category: "Presets" as const,
         title: p.name,
         subtitle: `${p.targetMSRP} • ${p.expectedPower}`,
-        icon: <Car size={16} className="text-cyan-400" />,
+        icon: <Car size={16} className="text-amber-400" />,
         action: () => {
           setDesign(p.generator());
           success("Preset Loaded", `Loaded vehicle preset: ${p.name}`);
@@ -141,7 +139,7 @@ export function CommandPalette({ isOpen, onClose, onSelectStage }: CommandPalett
       >
         {/* Search Bar Header */}
         <div className="flex items-center gap-3 px-4 py-3.5 border-b border-slate-800/80 bg-base-900/60">
-          <Search className="w-5 h-5 text-cyan-400 shrink-0" />
+          <Search className="w-5 h-5 text-amber-400 shrink-0" />
           <input
             ref={inputRef}
             type="text"
@@ -180,11 +178,11 @@ export function CommandPalette({ isOpen, onClose, onSelectStage }: CommandPalett
                   onMouseEnter={() => setSelectedIndex(idx)}
                   className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-left transition-all ${
                     isSelected
-                      ? "bg-cyan-500/20 text-cyan-200 border border-cyan-400/30 shadow-[0_0_15px_rgba(34,211,238,0.15)]"
+                      ? "bg-amber-500/20 text-amber-200 border border-amber-400/30 shadow-[0_0_15px_rgba(34,211,238,0.15)]"
                       : "text-slate-300 hover:bg-slate-800/50 hover:text-slate-100 border border-transparent"
                   }`}
                 >
-                  <div className={`p-2 rounded-lg shrink-0 ${isSelected ? "bg-cyan-500/30 text-cyan-200" : "bg-slate-800/60 text-slate-400"}`}>
+                  <div className={`p-2 rounded-lg shrink-0 ${isSelected ? "bg-amber-500/30 text-amber-200" : "bg-slate-800/60 text-slate-400"}`}>
                     {item.icon}
                   </div>
                   <div className="flex-1 min-w-0">
@@ -196,7 +194,7 @@ export function CommandPalette({ isOpen, onClose, onSelectStage }: CommandPalett
                     </div>
                     {item.subtitle && <div className="text-[11px] text-slate-500 truncate mt-0.5">{item.subtitle}</div>}
                   </div>
-                  {isSelected && <ArrowRight className="w-4 h-4 text-cyan-400 shrink-0 animate-pulse" />}
+                  {isSelected && <ArrowRight className="w-4 h-4 text-amber-400 shrink-0 animate-pulse" />}
                 </button>
               );
             })
@@ -210,7 +208,7 @@ export function CommandPalette({ isOpen, onClose, onSelectStage }: CommandPalett
             <span><kbd className="px-1.5 py-0.5 rounded bg-slate-800 border border-slate-700 text-slate-300">↵</kbd> Select</span>
             <span><kbd className="px-1.5 py-0.5 rounded bg-slate-800 border border-slate-700 text-slate-300">Esc</kbd> Close</span>
           </div>
-          <div className="flex items-center gap-1 text-cyan-400 font-medium">
+          <div className="flex items-center gap-1 text-amber-400 font-medium">
             <Command size={12} /> Ctrl + K
           </div>
         </div>

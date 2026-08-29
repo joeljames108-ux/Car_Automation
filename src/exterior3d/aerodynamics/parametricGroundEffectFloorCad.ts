@@ -33,7 +33,7 @@ export class ParametricGroundEffectFloorCad {
     });
 
     const strakeMaterial = new THREE.MeshStandardMaterial({
-      color: visualMode === 'cfdPressure' ? 0x38bdf8 : 0x1f2937,
+      color: visualMode === 'cfdPressure' ? 0xfbbf24 : 0x1f2937,
       metalness: 0.85,
       roughness: 0.20,
       wireframe: visualMode === 'wireframe',

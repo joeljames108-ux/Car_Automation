@@ -17,13 +17,17 @@ import { NeonHorizonToggle } from "../design/NeonHorizonToggle";
 import { NeonHorizonButton } from "../design/NeonHorizonButton";
 import { NeonHorizonBadge } from "../design/NeonHorizonBadge";
 import { NeonHorizonDataCard } from "../design/NeonHorizonDataCard";
+import { HyperFidelityExteriorStudioCustomizer } from "../../exterior/HyperFidelityExteriorStudioCustomizer";
+import { UltraFidelityExteriorStudioWorkbench } from "../../exterior/UltraFidelityExteriorStudioWorkbench";
+import { Phase8AeroKinematicsExteriorStudio } from "../../exterior/Phase8AeroKinematicsExteriorStudio";
+import { Phase9ExtremeAeroStudioWorkbench } from "../../exterior/Phase9ExtremeAeroStudioWorkbench";
 import type { BodyKit, SpoilerType, PaintFinish, BodyType, RoofScoopType } from "../../../sim/types";
 
 export function NeonExteriorStudio() {
   const { design, sim, updateExterior, updateAero } = useDesign();
   const { exterior } = design.vehicle;
 
-  const [activeTab, setActiveTab] = useState<"paint" | "aero_kit" | "lighting">("paint");
+  const [activeTab, setActiveTab] = useState<"phase9_extreme_aero" | "phase8_kinematics" | "ultra_cad_workbench" | "hyper_studio" | "paint" | "aero_kit" | "lighting">("phase9_extreme_aero");
 
   const colorPresets = [
     { name: "Electric Cyan", hex: "#8fb9d9" },
@@ -39,6 +43,10 @@ export function NeonExteriorStudio() {
       {/* Sub-Tabs */}
       <div className="flex items-center gap-2 p-1 bg-black/40 rounded-2xl border border-white/10 overflow-x-auto no-scrollbar">
         {[
+          { id: "phase9_extreme_aero" as const, label: "3D Extreme Aero Flaps", icon: <Sliders size={14} /> },
+          { id: "phase8_kinematics" as const, label: "3D Aero-Kinematics Studio", icon: <Wind size={14} /> },
+          { id: "ultra_cad_workbench" as const, label: "3D Ultra-CAD Workbench", icon: <Sparkles size={14} /> },
+          { id: "hyper_studio" as const, label: "3D Hyper-Fidelity Studio", icon: <Eye size={14} /> },
           { id: "paint" as const, label: "Cyberpunk Paint & Materials", icon: <Paintbrush size={14} /> },
           { id: "aero_kit" as const, label: "Aero Bodykit & Wing", icon: <Wind size={14} /> },
           { id: "lighting" as const, label: "Laser Optics & Accents", icon: <Sparkles size={14} /> },
@@ -50,10 +58,10 @@ export function NeonExteriorStudio() {
               setActiveTab(tab.id);
             }}
             className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs nh-font-mono font-bold transition-all cursor-pointer whitespace-nowrap ${
- activeTab === tab.id
- ? "bg-sky-400/20 text-sky-200 border border-sky-400/30"
- : "text-slate-400 hover:text-slate-200 hover:bg-white/5"
- }`}
+              activeTab === tab.id
+                ? "bg-emerald-400/20 text-emerald-200 border border-emerald-400/30"
+                : "text-slate-400 hover:text-slate-200 hover:bg-white/5"
+            }`}
           >
             {tab.icon}
             <span>{tab.label}</span>
@@ -61,21 +69,45 @@ export function NeonExteriorStudio() {
         ))}
       </div>
 
-      {/* Main Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        {/* Left Config Deck (7 cols) */}
-        <div className="lg:col-span-7 flex flex-col gap-6">
-          {activeTab === "paint" && (
-            <NeonHorizonGlassPanel
-              variant="primary"
-              corners="reticle"
-              header={{
-                title: "EXTERIOR PAINT & CLEARCOAT FINISH",
-                subtitle: "Select spectral basecoat and metallic flake reflection",
-                icon: <Paintbrush size={16} />,
-              }}
-              className="p-6 flex flex-col gap-5"
-            >
+      {activeTab === "phase9_extreme_aero" && (
+        <div className="w-full h-[700px]">
+          <Phase9ExtremeAeroStudioWorkbench />
+        </div>
+      )}
+
+      {activeTab === "phase8_kinematics" && (
+        <div className="w-full h-[700px]">
+          <Phase8AeroKinematicsExteriorStudio />
+        </div>
+      )}
+
+      {activeTab === "ultra_cad_workbench" && (
+        <div className="w-full h-[680px]">
+          <UltraFidelityExteriorStudioWorkbench />
+        </div>
+      )}
+
+      {activeTab === "hyper_studio" && (
+        <div className="w-full h-[650px]">
+          <HyperFidelityExteriorStudioCustomizer />
+        </div>
+      )}
+
+      {activeTab !== "phase8_kinematics" && activeTab !== "ultra_cad_workbench" && activeTab !== "hyper_studio" && (
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          {/* Left Config Deck (7 cols) */}
+          <div className="lg:col-span-7 flex flex-col gap-6">
+            {activeTab === "paint" && (
+              <NeonHorizonGlassPanel
+                variant="primary"
+                corners="reticle"
+                header={{
+                  title: "EXTERIOR PAINT & CLEARCOAT FINISH",
+                  subtitle: "Select spectral basecoat and metallic flake reflection",
+                  icon: <Paintbrush size={16} />,
+                }}
+                className="p-6 flex flex-col gap-5"
+              >
               {/* Color Swatches */}
               <div className="flex flex-col gap-2">
                 <span className="nh-label-caps text-slate-400 text-[10px]">PRESET COLOR PALETTE</span>
@@ -256,6 +288,7 @@ export function NeonExteriorStudio() {
           </NeonHorizonGlassPanel>
         </div>
       </div>
+      )}
     </div>
   );
 }

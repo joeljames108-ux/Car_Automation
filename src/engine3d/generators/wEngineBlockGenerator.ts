@@ -481,7 +481,119 @@ export function buildWEngineEndFlangesSuite(
 }
 
 // ============================================================================
-// 7. MASTER W-ENGINE BLOCK SCENE INTEGRATOR
+// ====================================================================
+// 7. STRUCTURAL EXTERIOR RIBBING & WEBBING
+// ====================================================================
+export function buildWEngineStructuralRibbing(specs: WBlockSpec, materials: V12BlockMaterialPalette): THREE.Group {
+  const g = new THREE.Group(); g.name = 'W_Engine_Ribbing';
+  const hL = ((specs.cylsPerRow - 1) * specs.boreSpacingM) / 2;
+  const m = materials.castAluminumBlock;
+  for (const z of [-1, 1]) {
+    for (let r = 0; r < specs.cylsPerRow * 2 + 2; r++) {
+      const rx = -hL - specs.boreSpacingM * 0.3 + r * specs.boreSpacingM * 0.5;
+      const rh = specs.deckHeightM * (0.4 + 0.2 * Math.sin(r * 0.7));
+      const rib = new THREE.Mesh(new THREE.BoxGeometry(0.004, rh, 0.012), m);
+      rib.position.set(rx, -specs.deckHeightM * 0.15, z * specs.blockWidthM * 0.47);
+      g.add(rib);
+    }
+  }
+  for (let b = 0; b < specs.cylsPerRow; b++) {
+    const mx = -hL + (b + 0.5) * specs.boreSpacingM;
+    const w = new THREE.Mesh(new THREE.BoxGeometry(specs.boreSpacingM * 0.6, 0.008, specs.blockWidthM * 0.7), m);
+    w.position.set(mx, -specs.deckHeightM * 0.35, 0);
+    g.add(w);
+  }
+  for (const z of [-1, 1]) {
+    for (let gi = 0; gi < specs.cylsPerRow + 2; gi++) {
+      const gx = -hL - specs.boreSpacingM * 0.25 + gi * specs.boreSpacingM * 0.85;
+      const s = new THREE.Shape(); s.moveTo(0,0); s.lineTo(0.015,0); s.lineTo(0,0.020); s.closePath();
+      const gs = new THREE.Mesh(new THREE.ExtrudeGeometry(s, {depth:0.003,bevelEnabled:false}), m);
+      gs.position.set(gx, -specs.deckHeightM * 0.32, z * specs.blockWidthM * 0.46);
+      g.add(gs);
+    }
+  }
+  return g;
+}
+
+// 8. OIL SQUIRTERS & PISTON COOLING JETS
+export function buildWEngineOilSquirters(specs: WBlockSpec, materials: V12BlockMaterialPalette): THREE.Group {
+  const g = new THREE.Group(); g.name = 'W_Engine_OilSquirters';
+  const hL = ((specs.cylsPerRow - 1) * specs.boreSpacingM) / 2;
+  const bMat = new THREE.MeshStandardMaterial({color:0xc0a030,metalness:0.85,roughness:0.2});
+  const hMat = new THREE.MeshStandardMaterial({color:0x1a1a1a,metalness:0.3,roughness:0.7});
+  const halfM = (specs.masterVAngleDeg / 2) * (Math.PI / 180);
+  const halfV = (specs.vrAngleDeg / 2) * (Math.PI / 180);
+  const rows = [{ms:1,vs:-1,sx:0},{ms:1,vs:1,sx:specs.boreSpacingM*0.5},{ms:-1,vs:-1,sx:0.015},{ms:-1,vs:1,sx:specs.boreSpacingM*0.5+0.015}];
+  for (const r of rows) {
+    const ta = r.ms * halfM + r.vs * halfV;
+    const oy = 0.16 * Math.cos(ta);
+    const oz = 0.16 * Math.sin(ta) + r.vs * r.ms * specs.rowStaggerM;
+    for (let i = 0; i < specs.cylsPerRow; i++) {
+      const cx = -hL + i * specs.boreSpacingM + r.sx;
+      const nz = new THREE.Mesh(new THREE.CylinderGeometry(0.004,0.003,0.018,8), bMat);
+      nz.position.set(cx, oy - 0.04, oz); g.add(nz);
+      const lc = new THREE.CatmullRomCurve3([new THREE.Vector3(cx,oy-0.04,oz),new THREE.Vector3(cx,-specs.deckHeightM*0.28,oz*0.6),new THREE.Vector3(cx,-specs.deckHeightM*0.32,0)]);
+      g.add(new THREE.Mesh(new THREE.TubeGeometry(lc,8,0.002,4,false), hMat));
+    }
+  }
+  const rc = new THREE.CatmullRomCurve3([new THREE.Vector3(-hL-0.02,-specs.deckHeightM*0.34,-specs.blockWidthM*0.15),new THREE.Vector3(0,-specs.deckHeightM*0.36,-specs.blockWidthM*0.15),new THREE.Vector3(hL+0.02,-specs.deckHeightM*0.34,-specs.blockWidthM*0.15)]);
+  g.add(new THREE.Mesh(new THREE.TubeGeometry(rc,16,0.005,6,false), bMat));
+  return g;
+}
+
+// 9. SENSOR BOSSES & WIRING CHANNELS
+export function buildWEngineSensorBosses(specs: WBlockSpec, materials: V12BlockMaterialPalette): THREE.Group {
+  const g = new THREE.Group(); g.name = 'W_Engine_Sensors';
+  const hL = ((specs.cylsPerRow - 1) * specs.boreSpacingM) / 2;
+  const sMat = new THREE.MeshStandardMaterial({color:0x222222,metalness:0.5,roughness:0.4});
+  const wMat = new THREE.MeshStandardMaterial({color:0x111111,metalness:0.1,roughness:0.8});
+  for (const ms of [-1, 1]) {
+    for (let k = 0; k < 2; k++) {
+      const kx = -hL * 0.4 + k * hL * 0.8;
+      const ky = specs.deckHeightM * 0.38;
+      const kz = ms * specs.blockWidthM * 0.32;
+      g.add(Object.assign(new THREE.Mesh(new THREE.CylinderGeometry(0.012,0.014,0.016,12), materials.castAluminumBlock), {position: new THREE.Vector3(kx,ky,kz)}));
+      g.add(Object.assign(new THREE.Mesh(new THREE.CylinderGeometry(0.008,0.008,0.012,10), sMat), {position: new THREE.Vector3(kx,ky+0.014,kz)}));
+      const wc = new THREE.CatmullRomCurve3([new THREE.Vector3(kx,ky+0.02,kz),new THREE.Vector3(kx+0.03,ky+0.03,kz*0.8),new THREE.Vector3(kx+0.06,ky+0.025,kz*0.6)]);
+      g.add(new THREE.Mesh(new THREE.TubeGeometry(wc,8,0.0015,4,false), wMat));
+    }
+  }
+  for (const ms of [-1, 1]) {
+    g.add(Object.assign(new THREE.Mesh(new THREE.CylinderGeometry(0.006,0.006,0.018,8), sMat), {position: new THREE.Vector3(hL*0.7,specs.deckHeightM*0.42+0.016,ms*specs.blockWidthM*0.38)}));
+  }
+  g.add(Object.assign(new THREE.Mesh(new THREE.CylinderGeometry(0.010,0.010,0.020,10), sMat), {position: new THREE.Vector3(0,-specs.deckHeightM*0.38,specs.blockWidthM*0.35)}));
+  g.add(Object.assign(new THREE.Mesh(new THREE.CylinderGeometry(0.008,0.008,0.025,10), sMat), {position: new THREE.Vector3(hL+0.05,-specs.deckHeightM*0.1,specs.blockWidthM*0.30), rotation: new THREE.Euler(0,0,Math.PI/2)}));
+  const hc = new THREE.CatmullRomCurve3([new THREE.Vector3(-hL-0.01,specs.deckHeightM*0.35,0),new THREE.Vector3(0,specs.deckHeightM*0.37,0),new THREE.Vector3(hL+0.01,specs.deckHeightM*0.35,0)]);
+  g.add(new THREE.Mesh(new THREE.TubeGeometry(hc,20,0.006,6,false), wMat));
+  return g;
+}
+
+// 10. INTAKE & EXHAUST PORT GEOMETRY
+export function buildWEnginePorts(specs: WBlockSpec, materials: V12BlockMaterialPalette): THREE.Group {
+  const g = new THREE.Group(); g.name = 'W_Engine_Ports';
+  const hL = ((specs.cylsPerRow - 1) * specs.boreSpacingM) / 2;
+  const iMat = new THREE.MeshPhysicalMaterial({color:0x1a1a2e,metalness:0.7,roughness:0.25,clearcoat:0.6});
+  const eMat = new THREE.MeshPhysicalMaterial({color:0x3a2a1a,metalness:0.6,roughness:0.35,clearcoat:0.3});
+  for (const ms of [-1, 1]) {
+    for (let i = 0; i < specs.cylsPerRow; i++) {
+      const ix = -hL + i * specs.boreSpacingM;
+      const iy = specs.deckHeightM * 0.50;
+      const iz = ms * specs.blockWidthM * 0.20;
+      const ic = new THREE.CatmullRomCurve3([new THREE.Vector3(ix,iy,iz),new THREE.Vector3(ix,iy+0.04,iz*0.7),new THREE.Vector3(ix,iy+0.06,iz*0.5)]);
+      g.add(new THREE.Mesh(new THREE.TubeGeometry(ic,8,0.012,8,false), iMat));
+      g.add(Object.assign(new THREE.Mesh(new THREE.BoxGeometry(0.030,0.006,0.025), materials.machinedDeckSurface), {position: new THREE.Vector3(ix,iy+0.065,iz*0.5)}));
+      const ex = ix;
+      const ey = specs.deckHeightM * 0.48;
+      const ez = ms * specs.blockWidthM * 0.38;
+      const ec = new THREE.CatmullRomCurve3([new THREE.Vector3(ex,ey,ez),new THREE.Vector3(ex,ey-0.02,ez*1.1),new THREE.Vector3(ex,ey-0.05,ez*1.15)]);
+      g.add(new THREE.Mesh(new THREE.TubeGeometry(ec,8,0.010,8,false), eMat));
+      g.add(Object.assign(new THREE.Mesh(new THREE.BoxGeometry(0.028,0.006,0.022), materials.machinedDeckSurface), {position: new THREE.Vector3(ex,ey-0.055,ez*1.15)}));
+    }
+  }
+  return g;
+}
+
+// 11. MASTER W-ENGINE BLOCK SCENE INTEGRATOR
 // ============================================================================
 
 export function buildWBlockScene(config?: Partial<EngineConfig> | number): THREE.Scene {

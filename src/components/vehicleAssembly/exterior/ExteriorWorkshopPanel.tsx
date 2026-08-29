@@ -41,7 +41,7 @@ export const ExteriorWorkshopPanel: React.FC = () => {
           onClick={() => setActiveTab("paint")}
           className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all whitespace-nowrap ${
             activeTab === "paint"
-              ? "bg-cyan-500 text-slate-950 shadow-[0_0_12px_rgba(6,182,212,0.4)]"
+              ? "bg-amber-500 text-slate-950 shadow-[0_0_12px_rgba(6,182,212,0.4)]"
               : "text-slate-400 hover:text-slate-200"
           }`}
         >
@@ -53,7 +53,7 @@ export const ExteriorWorkshopPanel: React.FC = () => {
           onClick={() => setActiveTab("materials")}
           className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all whitespace-nowrap ${
             activeTab === "materials"
-              ? "bg-cyan-500 text-slate-950 shadow-[0_0_12px_rgba(6,182,212,0.4)]"
+              ? "bg-amber-500 text-slate-950 shadow-[0_0_12px_rgba(6,182,212,0.4)]"
               : "text-slate-400 hover:text-slate-200"
           }`}
         >
@@ -65,7 +65,7 @@ export const ExteriorWorkshopPanel: React.FC = () => {
           onClick={() => setActiveTab("fit_finish")}
           className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all whitespace-nowrap ${
             activeTab === "fit_finish"
-              ? "bg-cyan-500 text-slate-950 shadow-[0_0_12px_rgba(6,182,212,0.4)]"
+              ? "bg-amber-500 text-slate-950 shadow-[0_0_12px_rgba(6,182,212,0.4)]"
               : "text-slate-400 hover:text-slate-200"
           }`}
         >
@@ -94,7 +94,7 @@ export const ExteriorWorkshopPanel: React.FC = () => {
                   }
                   className={`group relative h-10 rounded-xl border flex items-end p-1 transition-all ${
                     paintConfig.primaryColorHex.toLowerCase() === swatch.hex.toLowerCase()
-                      ? "border-cyan-400 scale-105 shadow-[0_0_10px_rgba(6,182,212,0.6)]"
+                      ? "border-amber-400 scale-105 shadow-[0_0_10px_rgba(6,182,212,0.6)]"
                       : "border-white/10 hover:border-white/40"
                   }`}
                   style={{ backgroundColor: swatch.hex }}
@@ -129,7 +129,7 @@ export const ExteriorWorkshopPanel: React.FC = () => {
                   onClick={() => updatePaintConfig({ finishType: finish })}
                   className={`p-2 rounded-xl border text-center transition-all ${
                     paintConfig.finishType === finish
-                      ? "bg-cyan-500/20 text-cyan-300 border-cyan-400 font-bold"
+                      ? "bg-amber-500/20 text-amber-300 border-amber-400 font-bold"
                       : "bg-slate-950 text-slate-400 border-white/10 hover:border-white/20"
                   }`}
                 >
@@ -153,7 +153,7 @@ export const ExteriorWorkshopPanel: React.FC = () => {
               type="checkbox"
               checked={paintConfig.roofContrastColor}
               onChange={(e) => updatePaintConfig({ roofContrastColor: e.target.checked })}
-              className="w-4 h-4 accent-cyan-400 cursor-pointer"
+              className="w-4 h-4 accent-amber-400 cursor-pointer"
             />
           </div>
         </div>
@@ -163,7 +163,7 @@ export const ExteriorWorkshopPanel: React.FC = () => {
       {activeTab === "materials" && (
         <div className="space-y-3 animate-fadeIn text-xs font-mono">
           <div className="p-3 rounded-2xl bg-slate-950 border border-white/10 space-y-1.5">
-            <span className="text-cyan-400 font-bold block">Carbon Fiber Monocoque</span>
+            <span className="text-amber-400 font-bold block">Carbon Fiber Monocoque</span>
             <p className="text-[11px] text-slate-400 font-sans">
               Autoclaved Toray T1000G pre-preg offers maximum torsional rigidity (38.5 kNm/deg) at 55% weight reduction over steel.
             </p>
@@ -192,7 +192,7 @@ export const ExteriorWorkshopPanel: React.FC = () => {
                 </span>
               </div>
               <div className="flex items-center gap-2">
-                <span className="text-cyan-300 font-bold">{item.measuredGapMm}mm</span>
+                <span className="text-amber-300 font-bold">{item.measuredGapMm}mm</span>
                 <span
                   className={`px-1.5 py-0.5 rounded text-[9px] font-bold uppercase ${
                     item.gapStatus === "nominal"

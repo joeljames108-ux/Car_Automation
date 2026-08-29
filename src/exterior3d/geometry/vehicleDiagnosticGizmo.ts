@@ -31,7 +31,7 @@ export class VehicleDiagnosticGizmo {
     const lineCenterlineMat = new THREE.LineBasicMaterial({ color: 0x06b6d4, linewidth: 2 }); // Cyan
     const lineAxleMat = new THREE.LineBasicMaterial({ color: 0x10b981, linewidth: 2 }); // Emerald
     const lineBoxMat = new THREE.LineBasicMaterial({ color: 0x6366f1, transparent: true, opacity: 0.75 }); // Indigo
-    const lineDatumMat = new THREE.LineBasicMaterial({ color: 0xa855f7, transparent: true, opacity: 0.5 }); // Purple
+    const lineDatumMat = new THREE.LineBasicMaterial({ color: 0xf59e0b, transparent: true, opacity: 0.5 }); // Purple
     const markerWheelMat = new THREE.MeshBasicMaterial({ color: 0xf59e0b }); // Amber
     const originMat = new THREE.MeshBasicMaterial({ color: 0xef4444 }); // Red
 

@@ -140,16 +140,16 @@ export function EngineAudioVisualizer({
 
   return (
     <div
-      className={`w-full bg-base-950/90 dark:bg-base-950/95 border border-cyan-500/30 rounded-2xl p-3.5 backdrop-blur-xl shadow-xl text-left select-none space-y-3 overflow-hidden ${className}`}
+      className={`w-full bg-base-950/90 dark:bg-base-950/95 border border-amber-500/30 rounded-2xl p-3.5 backdrop-blur-xl shadow-xl text-left select-none space-y-3 overflow-hidden ${className}`}
     >
       {/* Top Header Bar */}
       <div className="flex items-center justify-between gap-2.5">
         <div className="flex items-center gap-2.5 min-w-0">
-          <div className="p-2 rounded-xl bg-cyan-500/15 text-cyan-400 border border-cyan-500/30 shrink-0 shadow-[0_0_12px_rgba(34,211,238,0.2)]">
-            <Radio size={16} className="animate-pulse text-cyan-400" />
+          <div className="p-2 rounded-xl bg-amber-500/15 text-amber-400 border border-amber-500/30 shrink-0 shadow-[0_0_12px_rgba(34,211,238,0.2)]">
+            <Radio size={16} className="animate-pulse text-amber-400" />
           </div>
           <div className="min-w-0">
-            <div className="text-[10px] font-mono text-cyan-400 uppercase tracking-widest font-extrabold truncate">
+            <div className="text-[10px] font-mono text-amber-400 uppercase tracking-widest font-extrabold truncate">
               REAL-TIME AUDIO SYNTHESIZER
             </div>
             <div className="text-xs font-bold text-slate-100 font-mono truncate" title={profile.description}>
@@ -194,9 +194,9 @@ export function EngineAudioVisualizer({
       {/* Real-time FFT Frequency Canvas & Telemetry Panel */}
       <div className="grid grid-cols-1 sm:grid-cols-12 gap-3 items-center">
         {/* FFT Canvas (7 Cols) */}
-        <div className="sm:col-span-7 relative h-24 bg-base-900/90 border border-cyan-500/30 rounded-xl overflow-hidden flex items-center justify-center">
+        <div className="sm:col-span-7 relative h-24 bg-base-900/90 border border-amber-500/30 rounded-xl overflow-hidden flex items-center justify-center">
           <canvas ref={canvasRef} width={320} height={96} className="w-full h-full" />
-          <div className="absolute top-2 left-2 px-2 py-0.5 rounded bg-base-950/90 text-[9px] font-mono font-bold text-cyan-400 border border-cyan-500/30 backdrop-blur-md">
+          <div className="absolute top-2 left-2 px-2 py-0.5 rounded bg-base-950/90 text-[9px] font-mono font-bold text-amber-400 border border-amber-500/30 backdrop-blur-md">
             FFT SPECTRUM ANALYZER
           </div>
         </div>
@@ -209,7 +209,7 @@ export function EngineAudioVisualizer({
           </div>
           <div className="flex items-center justify-between text-slate-400 gap-1">
             <span className="font-semibold text-slate-400 truncate">2ND HARMONIC:</span>
-            <span className="text-cyan-400 font-bold shrink-0">{Math.round(firingFreq.secondary)} Hz</span>
+            <span className="text-amber-400 font-bold shrink-0">{Math.round(firingFreq.secondary)} Hz</span>
           </div>
           <div className="flex items-center justify-between text-slate-400 gap-1">
             <span className="font-semibold text-slate-400 truncate">REDLINE:</span>
@@ -235,7 +235,7 @@ export function EngineAudioVisualizer({
               }}
               className={`px-2.5 py-1 rounded-lg text-[10px] font-mono font-extrabold uppercase transition-all whitespace-nowrap cursor-pointer shrink-0 ${
                 activeLayout === layoutKey
-                  ? "bg-cyan-500 text-black shadow-[0_0_10px_rgba(34,211,238,0.4)] scale-[1.02]"
+                  ? "bg-amber-500 text-black shadow-[0_0_10px_rgba(34,211,238,0.4)] scale-[1.02]"
                   : "bg-base-950/80 hover:bg-base-800 text-slate-300 border border-base-750"
               }`}
             >

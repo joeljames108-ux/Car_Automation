@@ -252,13 +252,13 @@ const getStatusTooltip = (status: StudioStatus): string => {
 
 const getCategoryIconStyle = (color: string): { bg: string; text: string } => {
   switch (color) {
-    case "cyan": return { bg: "bg-cyan-500/20", text: "text-cyan-400" };
+    case "cyan": return { bg: "bg-amber-500/20", text: "text-amber-400" };
     case "sky": return { bg: "bg-sky-500/20", text: "text-sky-400" };
     case "orange": return { bg: "bg-orange-500/20", text: "text-orange-400" };
     case "amber": return { bg: "bg-amber-500/20", text: "text-amber-400" };
-    case "violet": return { bg: "bg-violet-500/20", text: "text-violet-400" };
+    case "violet": return { bg: "bg-amber-500/20", text: "text-amber-400" };
     case "emerald": return { bg: "bg-emerald-500/20", text: "text-emerald-400" };
-    default: return { bg: "bg-cyan-500/20", text: "text-cyan-400" };
+    default: return { bg: "bg-amber-500/20", text: "text-amber-400" };
   }
 };
 
@@ -388,7 +388,7 @@ export const GrandAutomotiveStudioHub: React.FC = () => {
     <div className="flex flex-col w-full h-full space-y-4 p-2 sm:p-4 select-none">
       {/* Keyboard Shortcuts Help */}
       <div className="fixed bottom-4 right-4 z-50 bg-slate-950/95 backdrop-blur-xl border border-slate-800 rounded-xl p-4 shadow-2xl text-xs text-slate-300 font-mono hidden sm:block">
-        <div className="flex items-center gap-2 mb-2 text-cyan-400 font-bold">Shortcuts</div>
+        <div className="flex items-center gap-2 mb-2 text-amber-400 font-bold">Shortcuts</div>
         <div className="grid grid-cols-2 gap-1 text-[10px]">
           <span>Ctrl+1-9</span><span>Quick studio</span>
           <span>Ctrl+[ / ]</span><span>Prev/Next</span>
@@ -409,7 +409,7 @@ export const GrandAutomotiveStudioHub: React.FC = () => {
               ) : (
                 <button
                   onClick={crumb.onClick}
-                  className="text-xs text-slate-400 hover:text-cyan-300 transition-colors truncate max-w-[120px] font-medium"
+                  className="text-xs text-slate-400 hover:text-amber-300 transition-colors truncate max-w-[120px] font-medium"
                 >
                   {crumb.label}
                 </button>
@@ -420,7 +420,7 @@ export const GrandAutomotiveStudioHub: React.FC = () => {
 
         {/* Studio Title */}
         <div className="flex items-center gap-3 lg:ml-auto">
-          <div className="p-2.5 rounded-xl bg-gradient-to-br from-cyan-400 via-blue-500 to-indigo-600 text-slate-950 shadow-lg shadow-cyan-500/30 font-extrabold">
+          <div className="p-2.5 rounded-xl bg-gradient-to-br from-amber-400 via-amber-500 to-indigo-600 text-slate-950 shadow-lg shadow-cyan-500/30 font-extrabold">
             <Sparkles size={20} />
           </div>
           <div>
@@ -437,11 +437,11 @@ export const GrandAutomotiveStudioHub: React.FC = () => {
         <div className="flex items-center gap-2">
           <button
             onClick={() => setShowPresets(!showPresets)}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold border transition-all cursor-pointer bg-slate-800 text-slate-300 border-slate-700 hover:text-cyan-300 hover:border-cyan-500/50"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold border transition-all cursor-pointer bg-slate-800 text-slate-300 border-slate-700 hover:text-amber-300 hover:border-amber-500/50"
             aria-label="Quick presets"
             title="Quick Presets (Ctrl+P)"
           >
-            <Zap size={14} className="text-cyan-400" />
+            <Zap size={14} className="text-amber-400" />
             <span className="hidden sm:inline">Presets</span>
             <ChevronDown size={12} className={showPresets ? "rotate-180" : ""} />
           </button>
@@ -461,13 +461,13 @@ export const GrandAutomotiveStudioHub: React.FC = () => {
                     onClick={() => handlePresetClick(preset)}
                     className={`flex items-center gap-2 px-3 py-2 rounded-lg text-xs font-medium transition-all cursor-pointer text-left ${
                       preset.color === "red" ? "hover:bg-red-500/10 text-red-300" :
-                      preset.color === "blue" ? "hover:bg-blue-500/10 text-blue-300" :
+                      preset.color === "blue" ? "hover:bg-amber-500/10 text-amber-300" :
                       preset.color === "orange" ? "hover:bg-orange-500/10 text-orange-300" :
                       "hover:bg-green-500/10 text-green-300"
                     }`}
                     title={preset.description}
                   >
-                    <div className={`p-1.5 rounded ${preset.color === "red" ? "bg-red-500/20" : preset.color === "blue" ? "bg-blue-500/20" : preset.color === "orange" ? "bg-orange-500/20" : "bg-green-500/20"}`}>
+                    <div className={`p-1.5 rounded ${preset.color === "red" ? "bg-red-500/20" : preset.color === "blue" ? "bg-amber-500/20" : preset.color === "orange" ? "bg-orange-500/20" : "bg-green-500/20"}`}>
                       {preset.icon}
                     </div>
                     <div className="flex flex-col">
@@ -485,12 +485,12 @@ export const GrandAutomotiveStudioHub: React.FC = () => {
             onClick={() => setCompareMode(!compareMode)}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold border transition-all cursor-pointer ${
               compareMode
-                ? "bg-violet-500/20 text-violet-300 border-violet-500/40 shadow-sm shadow-violet-500/20"
+                ? "bg-amber-500/20 text-amber-300 border-violet-500/40 shadow-sm shadow-violet-500/20"
                 : "bg-slate-800 text-slate-400 border-slate-700 hover:text-slate-200"
             }`}
             title={compareMode ? "Exit Compare Mode (Ctrl+B)" : "Enter Compare Mode (Ctrl+B)"}
           >
-            <GitCompare size={14} className={compareMode ? "text-violet-400" : ""} />
+            <GitCompare size={14} className={compareMode ? "text-amber-400" : ""} />
             <span className="hidden sm:inline">{compareMode ? "Comparing" : "Compare"}</span>
           </button>
 
@@ -525,7 +525,7 @@ export const GrandAutomotiveStudioHub: React.FC = () => {
                   onClick={() => handleTabClick(studioId)}
                   className={`flex items-center gap-1 px-2 py-1 rounded-lg text-xs font-medium transition-all whitespace-nowrap cursor-pointer ${
                     activeTab === studioId
-                      ? "bg-cyan-500/20 text-cyan-300 ring-1 ring-cyan-500/30"
+                      ? "bg-amber-500/20 text-amber-300 ring-1 ring-amber-500/30"
                       : "text-slate-400 hover:text-slate-100 hover:bg-slate-800/50"
                   }`}
                   title={tab.description}
@@ -601,7 +601,7 @@ export const GrandAutomotiveStudioHub: React.FC = () => {
                           aria-label={`Open studio tab: ${tab.label}`}
                           className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-lg transition-all whitespace-nowrap cursor-pointer active:scale-95 relative ${
                             isActive
-                              ? "bg-gradient-to-r from-cyan-400 to-sky-500 text-slate-950 shadow-lg shadow-cyan-500/30 font-extrabold ring-1 ring-cyan-300"
+                              ? "bg-gradient-to-r from-amber-400 to-sky-500 text-slate-950 shadow-lg shadow-cyan-500/30 font-extrabold ring-1 ring-amber-300"
                               : "text-slate-400 hover:text-slate-100 hover:bg-slate-800/80"
                           }`}
                           title={tab.description}
@@ -648,14 +648,14 @@ export const GrandAutomotiveStudioHub: React.FC = () => {
         {compareMode && (
           <div className="absolute inset-0 bg-slate-950/90 backdrop-blur-sm z-40 flex items-center justify-center pointer-events-none">
             <div className="bg-slate-900/95 border border-violet-500/30 rounded-2xl p-8 max-w-md text-center pointer-events-auto">
-              <GitCompare size={32} className="mx-auto text-violet-400 mb-4" />
+              <GitCompare size={32} className="mx-auto text-amber-400 mb-4" />
               <h3 className="text-lg font-bold text-slate-100 mb-2">Compare Mode Active</h3>
               <p className="text-sm text-slate-400 mb-4">
                 Changes are highlighted vs baseline. Toggle off to return to normal view.
               </p>
               <button
                 onClick={() => setCompareMode(false)}
-                className="px-4 py-2 rounded-lg bg-violet-500/20 text-violet-300 border border-violet-500/40 hover:bg-violet-500/30 text-sm font-bold transition-all"
+                className="px-4 py-2 rounded-lg bg-amber-500/20 text-amber-300 border border-violet-500/40 hover:bg-amber-500/30 text-sm font-bold transition-all"
               >
                 Exit Compare Mode
               </button>

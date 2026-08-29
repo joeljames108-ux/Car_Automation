@@ -86,8 +86,13 @@ export class BenchmarkCorrelationEngine {
   };
 
   private static readonly TRACKS = CircuitLapTimeSimulator.PRESET_TRACKS;
+  private static cachedReport: BenchmarkReport | null = null;
 
-  static runFullBenchmark(cars?: RealCarSpec[]): BenchmarkReport {
+  static runFullBenchmark(cars?: RealCarSpec[], forceRefresh = false): BenchmarkReport {
+    if (!cars && !forceRefresh && this.cachedReport) {
+      return this.cachedReport;
+    }
+
     const dataset = cars || ALL_REAL_SPORTS_CARS_100;
     const results: CarSimulationResult[] = [];
 
@@ -211,13 +216,19 @@ export class BenchmarkCorrelationEngine {
       if (c.passRSquared && c.passMAPE) passCount++;
     }
 
-    return {
+    const report: BenchmarkReport = {
       results,
       correlations,
       analyticalVsDiscreteCorrelation: anaVsDisc,
       overallPassRate: passCount / Math.max(1, correlations.length + 1),
       timestamp: new Date().toISOString(),
     };
+
+    if (!cars) {
+      this.cachedReport = report;
+    }
+
+    return report;
   }
 
   private static safeSim(

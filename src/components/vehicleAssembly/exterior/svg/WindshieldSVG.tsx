@@ -31,7 +31,7 @@ export const WindshieldSVG: React.FC<WindshieldSVGProps> = ({
   onMouseEnter,
   onMouseLeave,
 }) => {
-  const strokeColor = isSelected ? "#38bdf8" : isHovered ? "#0284c7" : "#020617";
+  const strokeColor = isSelected ? "#fbbf24" : isHovered ? "#0284c7" : "#020617";
 
   return (
     <g
@@ -68,7 +68,7 @@ export const WindshieldSVG: React.FC<WindshieldSVGProps> = ({
         stroke="#334155"
         strokeWidth="0.8"
       />
-      <circle cx="437" cy="197" r="1.5" fill="#38bdf8" />
+      <circle cx="437" cy="197" r="1.5" fill="#fbbf24" />
 
       {/* ── 4. Diagonal Specular Environment Sky Reflection ── */}
       <line

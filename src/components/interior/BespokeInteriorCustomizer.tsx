@@ -31,7 +31,7 @@ export const BespokeInteriorCustomizer: React.FC<BespokeInteriorCustomizerProps>
   const harnessColors = [
     { name: "Guards Red", hex: "#ef4444" },
     { name: "Racing Yellow", hex: "#eab308" },
-    { name: "Miami Blue", hex: "#06b6d4" },
+    { name: "Miami Blue", hex: "#f59e0b" },
     { name: "Acid Green", hex: "#84cc16" },
     { name: "Chalk Silver", hex: "#94a3b8" },
     { name: "Stealth Black", hex: "#0f172a" },

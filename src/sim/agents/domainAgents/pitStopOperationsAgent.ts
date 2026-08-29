@@ -9,7 +9,7 @@ const PIT_OPERATIONS_IDENTITY: AgentIdentity = {
   name: "Pit Stop & Track Operations Engineer",
   domain: "pit_operations",
   icon: "⏱️",
-  color: "#ec4899",
+  color: "#d97706",
   priority: 7,
   description: "Simulates pit lane crew reaction times, wheel nut gun speed, jackman synchronization, and pit traffic releases.",
   capabilities: ["Pit Duration Model", "Wheel Nut Torque Speed", "Jackman Sync Timing", "Traffic Release Window"],

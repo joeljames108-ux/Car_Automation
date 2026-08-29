@@ -87,7 +87,7 @@ export const AdvancedEngineTelemetryStudio: React.FC<AdvancedEngineTelemetryStud
               <h2 className="text-base font-bold text-slate-100 tracking-tight">
                 Advanced Engine Telemetry & NVH Studio
               </h2>
-              <span className="px-2 py-0.5 rounded-full bg-violet-500/20 text-violet-300 font-mono text-[10px] font-bold border border-violet-500/30">
+              <span className="px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 font-mono text-[10px] font-bold border border-violet-500/30">
                 12-CHANNEL REAL-TIME
               </span>
             </div>
@@ -108,9 +108,9 @@ export const AdvancedEngineTelemetryStudio: React.FC<AdvancedEngineTelemetryStud
               step={100}
               value={testRpm}
               onChange={(e) => setTestRpm(Number(e.target.value))}
-              className="w-24 h-1.5 bg-slate-800 rounded appearance-none accent-cyan-400 cursor-pointer"
+              className="w-24 h-1.5 bg-slate-800 rounded appearance-none accent-amber-400 cursor-pointer"
             />
-            <span className="text-cyan-300 font-bold w-14 text-right">{testRpm}</span>
+            <span className="text-amber-300 font-bold w-14 text-right">{testRpm}</span>
           </div>
 
           <div className="h-4 w-px bg-slate-800" />
@@ -225,7 +225,7 @@ export const AdvancedEngineTelemetryStudio: React.FC<AdvancedEngineTelemetryStud
 
                   <div className="text-[10.5px] font-mono text-slate-400 flex justify-between">
                     <span>Heat Flux:</span>
-                    <span className="text-cyan-300 font-bold">{(node.heatFluxW / 1000).toFixed(1)} kW</span>
+                    <span className="text-amber-300 font-bold">{(node.heatFluxW / 1000).toFixed(1)} kW</span>
                   </div>
                 </div>
               ))}
@@ -238,7 +238,7 @@ export const AdvancedEngineTelemetryStudio: React.FC<AdvancedEngineTelemetryStud
           <div className="flex flex-col h-full w-full bg-slate-950/90 p-4 rounded-2xl border border-slate-800 space-y-4 font-mono">
             <div className="flex items-center justify-between bg-slate-900/80 p-3 rounded-xl border border-slate-800">
               <div className="flex items-center gap-3">
-                <Layers size={18} className="text-cyan-400" />
+                <Layers size={18} className="text-amber-400" />
                 <div>
                   <h3 className="text-sm font-bold text-slate-100 font-sans">Hydrodynamic Journal Bearing Lubrication</h3>
                   <p className="text-xs text-slate-400 font-sans">Sommerfeld number calculation & oil film thickness</p>
@@ -252,7 +252,7 @@ export const AdvancedEngineTelemetryStudio: React.FC<AdvancedEngineTelemetryStud
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <div className="p-4 bg-slate-900/60 rounded-xl border border-slate-800 space-y-3">
                 <span className="text-xs text-slate-400 font-sans block font-bold">Main Bearing Oil Film</span>
-                <div className="text-3xl font-extrabold text-cyan-300">
+                <div className="text-3xl font-extrabold text-amber-300">
                   {report.bearings.mainBearingMinFilmThicknessMicron} µm
                 </div>
                 <p className="text-[11px] text-slate-400 leading-relaxed font-sans">
@@ -288,7 +288,7 @@ export const AdvancedEngineTelemetryStudio: React.FC<AdvancedEngineTelemetryStud
               </div>
               <div className="p-3 bg-slate-900/40 rounded-xl border border-slate-850">
                 <span className="text-[10px] text-slate-400 block">Oil Viscosity</span>
-                <span className="text-sm font-bold text-cyan-300">{report.bearings.oilViscosityCentistokes} cSt</span>
+                <span className="text-sm font-bold text-amber-300">{report.bearings.oilViscosityCentistokes} cSt</span>
               </div>
               <div className="p-3 bg-slate-900/40 rounded-xl border border-slate-850">
                 <span className="text-[10px] text-slate-400 block">Bearing Wear Rate</span>
@@ -307,13 +307,13 @@ export const AdvancedEngineTelemetryStudio: React.FC<AdvancedEngineTelemetryStud
           <div className="flex flex-col h-full w-full bg-slate-950/90 p-4 rounded-2xl border border-slate-800 space-y-4 font-mono">
             <div className="flex items-center justify-between bg-slate-900/80 p-3 rounded-xl border border-slate-800">
               <div className="flex items-center gap-3">
-                <Volume2 size={18} className="text-violet-400" />
+                <Volume2 size={18} className="text-amber-400" />
                 <div>
                   <h3 className="text-sm font-bold text-slate-100 font-sans">Computational Acoustic Spectrum & NVH</h3>
                   <p className="text-xs text-slate-400 font-sans">1/3 Octave band SPL decibel frequencies & cabin sound quality</p>
                 </div>
               </div>
-              <div className="text-xs font-bold px-3 py-1.5 rounded-lg bg-violet-950/60 border border-violet-500/40 text-violet-300">
+              <div className="text-xs font-bold px-3 py-1.5 rounded-lg bg-amber-950/60 border border-violet-500/40 text-amber-300">
                 Engine Sound Quality: {nvh.soundQualityScore} / 100
               </div>
             </div>
@@ -338,7 +338,7 @@ export const AdvancedEngineTelemetryStudio: React.FC<AdvancedEngineTelemetryStud
                     <div key={band.centerFreqHz} className="flex-1 flex flex-col items-center gap-1 group min-w-[20px]">
                       <div className="w-full bg-slate-800 rounded-t overflow-hidden h-28 flex items-end">
                         <div
-                          className="w-full bg-gradient-to-t from-violet-600 via-purple-500 to-cyan-400 group-hover:brightness-125 transition-all"
+                          className="w-full bg-gradient-to-t from-violet-600 via-purple-500 to-amber-400 group-hover:brightness-125 transition-all"
                           style={{ height: `${heightPct}%` }}
                         />
                       </div>
@@ -353,7 +353,7 @@ export const AdvancedEngineTelemetryStudio: React.FC<AdvancedEngineTelemetryStud
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
               <div className="p-3 bg-slate-900/40 rounded-xl border border-slate-850">
                 <span className="text-[10px] text-slate-400 block font-sans">Engine Bay SPL</span>
-                <span className="text-lg font-extrabold text-cyan-300">{nvh.overallDbA} dBA</span>
+                <span className="text-lg font-extrabold text-amber-300">{nvh.overallDbA} dBA</span>
               </div>
               <div className="p-3 bg-slate-900/40 rounded-xl border border-slate-850">
                 <span className="text-[10px] text-slate-400 block font-sans">Cabin Noise (WOT)</span>
@@ -361,7 +361,7 @@ export const AdvancedEngineTelemetryStudio: React.FC<AdvancedEngineTelemetryStud
               </div>
               <div className="p-3 bg-slate-900/40 rounded-xl border border-slate-850">
                 <span className="text-[10px] text-slate-400 block font-sans">Loudness</span>
-                <span className="text-lg font-extrabold text-violet-300">{nvh.loudnessSones} Sones</span>
+                <span className="text-lg font-extrabold text-amber-300">{nvh.loudnessSones} Sones</span>
               </div>
               <div className="p-3 bg-slate-900/40 rounded-xl border border-slate-850">
                 <span className="text-[10px] text-slate-400 block font-sans">Exhaust Firing Pulse</span>

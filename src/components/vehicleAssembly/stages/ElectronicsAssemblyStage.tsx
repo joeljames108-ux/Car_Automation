@@ -63,7 +63,7 @@ export const ElectronicsAssemblyStage: React.FC<ElectronicsAssemblyStageProps> =
     <div className="panel p-4 rounded-3xl space-y-4 shadow-xl">
       <div className="flex items-center justify-between border-b border-base-800/60 pb-3">
         <div className="flex items-center gap-2.5">
-          <div className="p-2 rounded-xl bg-cyan-500/15 text-cyan-400 border border-cyan-500/30">
+          <div className="p-2 rounded-xl bg-amber-500/15 text-amber-400 border border-amber-500/30">
             <Cpu size={18} />
           </div>
           <div>
@@ -92,14 +92,14 @@ export const ElectronicsAssemblyStage: React.FC<ElectronicsAssemblyStageProps> =
               onClick={() => onUpdateElectronics(e.id)}
               className={`p-3.5 rounded-2xl text-left transition-all border cursor-pointer ${
                 isSelected
-                  ? "bg-cyan-500/20 border-cyan-500/60 shadow-md ring-1 ring-cyan-500/40"
+                  ? "bg-amber-500/20 border-amber-500/60 shadow-md ring-1 ring-amber-500/40"
                   : "bg-base-900/60 border-base-800 hover:border-base-700 text-slate-400"
               }`}
             >
               <div className="font-bold text-xs font-mono text-slate-900 dark:text-slate-100 mb-1">{e.label}</div>
               <p className="text-[10px] text-slate-500 dark:text-slate-400 mb-2.5">{e.desc}</p>
               <div className="space-y-0.5 text-[10px] font-mono text-slate-400 border-t border-base-800/60 pt-2">
-                <div>Bus: <strong className="text-cyan-400">{e.bus}</strong></div>
+                <div>Bus: <strong className="text-amber-400">{e.bus}</strong></div>
                 <div>Power: <strong className={isHv && e.id === "800v_hv_harness" ? "text-orange-400" : "text-amber-400"}>{e.voltage}</strong></div>
               </div>
             </button>
@@ -144,7 +144,7 @@ export const ElectronicsAssemblyStage: React.FC<ElectronicsAssemblyStageProps> =
       <div className="flex justify-end pt-2">
         <button
           onClick={onInstall}
-          className="flex items-center gap-2 px-6 py-3 rounded-2xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white font-mono font-bold text-xs uppercase tracking-wider shadow-lg shadow-cyan-500/25 transition-all cursor-pointer hover:scale-105 active:scale-95"
+          className="flex items-center gap-2 px-6 py-3 rounded-2xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-white font-mono font-bold text-xs uppercase tracking-wider shadow-lg shadow-cyan-500/25 transition-all cursor-pointer hover:scale-105 active:scale-95"
         >
           <CheckCircle2 size={16} />
           {isInstalled ? "RE-WIRE ELECTRONICS" : "INSTALL ELECTRONICS & PROCEED TO EXTERIOR DETAILS"}

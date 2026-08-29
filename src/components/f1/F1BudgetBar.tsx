@@ -24,7 +24,7 @@ export const F1BudgetBar: React.FC = memo(function F1BudgetBar() {
       <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-4">
         {/* Car Name & FIA Status */}
         <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-cyan-500/20 to-blue-600/30 border border-cyan-500/40 flex items-center justify-center font-mono font-black text-cyan-400 text-sm shadow-inner">
+          <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-amber-500/20 to-amber-600/30 border border-amber-500/40 flex items-center justify-center font-mono font-black text-amber-400 text-sm shadow-inner">
             F1
           </div>
           <div>
@@ -75,9 +75,9 @@ export const F1BudgetBar: React.FC = memo(function F1BudgetBar() {
           {/* Downforce */}
           <div className="bg-slate-950/60 border border-slate-800 px-3 py-1.5 rounded-xl text-center">
             <div className="flex items-center gap-1 text-[10px] text-slate-500 uppercase tracking-wider justify-center">
-              <Wind size={10} className="text-cyan-400" /> Downforce
+              <Wind size={10} className="text-amber-400" /> Downforce
             </div>
-            <div className="font-mono text-sm font-black text-cyan-300">
+            <div className="font-mono text-sm font-black text-amber-300">
               {car.aero.totalDownforceAt250KmhKg} <span className="text-[10px] text-slate-500 font-normal">kg</span>
             </div>
           </div>
@@ -91,7 +91,7 @@ export const F1BudgetBar: React.FC = memo(function F1BudgetBar() {
             <div className="w-full h-1.5 bg-slate-800 rounded-full overflow-hidden">
               <div
                 className={`h-full transition-all ${
-                  budgetPercentage > 95 ? "bg-danger-500" : budgetPercentage > 80 ? "bg-amber-500" : "bg-cyan-500"
+                  budgetPercentage > 95 ? "bg-danger-500" : budgetPercentage > 80 ? "bg-amber-500" : "bg-amber-500"
                 }`}
                 style={{ width: `${budgetPercentage}%` }}
               />

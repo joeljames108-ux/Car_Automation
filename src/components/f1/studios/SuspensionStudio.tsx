@@ -35,15 +35,15 @@ export const SuspensionStudio: React.FC = memo(function SuspensionStudio() {
   return (
     <div className="space-y-6 animate-fade-in-up">
       {/* Studio Header */}
-      <div className="glass-panel p-6 border-purple-500/20 bg-gradient-to-r from-slate-900 via-slate-900/90 to-purple-950/30 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+      <div className="glass-panel p-6 border-amber-500/20 bg-gradient-to-r from-slate-900 via-slate-900/90 to-amber-950/30 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2 mb-2">
-            <Activity className="text-purple-400" size={24} />
+            <Activity className="text-amber-400" size={24} />
             <h2 className="text-xl font-bold text-slate-100 tracking-wide">
               Pushrod / Pullrod Kinematics & Platform Stability
             </h2>
             <div className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-slate-800/80 border border-slate-700 text-[10px] font-mono text-slate-400">
-              <span className={`w-1.5 h-1.5 rounded-full ${isSaving ? "bg-purple-400 animate-ping" : "bg-emerald-400"}`} />
+              <span className={`w-1.5 h-1.5 rounded-full ${isSaving ? "bg-amber-400 animate-ping" : "bg-emerald-400"}`} />
               <span>{isSaving ? "Saving..." : "Saved"}</span>
             </div>
           </div>
@@ -79,7 +79,7 @@ export const SuspensionStudio: React.FC = memo(function SuspensionStudio() {
             }}
             className={`px-3 py-1.5 rounded-xl border flex items-center gap-1.5 text-xs font-bold transition-all cursor-pointer ${
               showCompareBaseline
-                ? "bg-purple-500/20 text-purple-300 border-purple-500/40"
+                ? "bg-amber-500/20 text-amber-300 border-amber-500/40"
                 : "bg-slate-800 text-slate-400 border-slate-700 hover:text-slate-200"
             }`}
           >
@@ -88,7 +88,7 @@ export const SuspensionStudio: React.FC = memo(function SuspensionStudio() {
           </button>
 
           <div className="text-right">
-            <div className="text-2xl font-black font-mono text-purple-400 flex items-center gap-2 justify-end">
+            <div className="text-2xl font-black font-mono text-amber-400 flex items-center gap-2 justify-end">
               <span>{s.frontRideHeightStaticMm}F / {s.rearRideHeightStaticMm}R</span>
               <span className="text-xs text-slate-400 font-normal">mm</span>
               {deltas.frontRideHeight !== 0 && (
@@ -115,12 +115,12 @@ export const SuspensionStudio: React.FC = memo(function SuspensionStudio() {
               <span>Suspension Actuation Scheme</span>
               <span title="Pushrod vs Pullrod geometry affects aerodynamic blockage and center of gravity"><HelpCircle size={12} className="text-slate-500 cursor-help" /></span>
             </span>
-            <span className="text-[10px] text-purple-400 font-mono">Packaging</span>
+            <span className="text-[10px] text-amber-400 font-mono">Packaging</span>
           </label>
           <select
             value={s.frontLayout}
             onChange={(e) => handleUpdate({ frontLayout: e.target.value as F1SuspensionLayout, rearLayout: e.target.value as F1SuspensionLayout })}
-            className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-purple-500"
+            className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-amber-500"
           >
             <option value="FRONT_PULLROD_REAR_PUSHROD">Front Pullrod + Rear Pushrod (Modern F1)</option>
             <option value="FRONT_PUSHROD_REAR_PULLROD">Front Pushrod + Rear Pullrod</option>
@@ -141,7 +141,7 @@ export const SuspensionStudio: React.FC = memo(function SuspensionStudio() {
               <span>Front Static Ride Height</span>
               <span title="Lower ride height increases ground effect suction, but raises risk of skid block wear violation"><HelpCircle size={12} className="text-slate-500 cursor-help" /></span>
             </span>
-            <span className="font-mono text-purple-400 font-bold">{s.frontRideHeightStaticMm} mm</span>
+            <span className="font-mono text-amber-400 font-bold">{s.frontRideHeightStaticMm} mm</span>
           </div>
           <input
             type="range"
@@ -168,7 +168,7 @@ export const SuspensionStudio: React.FC = memo(function SuspensionStudio() {
               <span>Rear Static Ride Height</span>
               <span title="Controls overall car rake angle and diffuser expansion ratio"><HelpCircle size={12} className="text-slate-500 cursor-help" /></span>
             </span>
-            <span className="font-mono text-purple-400 font-bold">{s.rearRideHeightStaticMm} mm</span>
+            <span className="font-mono text-amber-400 font-bold">{s.rearRideHeightStaticMm} mm</span>
           </div>
           <input
             type="range"

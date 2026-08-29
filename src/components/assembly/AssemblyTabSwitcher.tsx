@@ -63,7 +63,7 @@ export function AssemblyTabSwitcher({
             onClick={() => setActiveTab("both")}
             className={`flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-mono font-bold transition-all ${
               activeTab === "both"
-                ? "bg-cyan-500 text-black shadow-[0_0_12px_rgba(34,211,238,0.4)]"
+                ? "bg-amber-500 text-black shadow-[0_0_12px_rgba(34,211,238,0.4)]"
                 : "text-slate-400 hover:text-slate-200"
             }`}
           >
@@ -73,7 +73,7 @@ export function AssemblyTabSwitcher({
             onClick={() => setActiveTab("parts")}
             className={`flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-mono font-bold transition-all ${
               activeTab === "parts"
-                ? "bg-cyan-500 text-black shadow-[0_0_12px_rgba(34,211,238,0.4)]"
+                ? "bg-amber-500 text-black shadow-[0_0_12px_rgba(34,211,238,0.4)]"
                 : "text-slate-400 hover:text-slate-200"
             }`}
           >
@@ -83,7 +83,7 @@ export function AssemblyTabSwitcher({
             onClick={() => setActiveTab("dashboard")}
             className={`flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-mono font-bold transition-all ${
               activeTab === "dashboard"
-                ? "bg-cyan-500 text-black shadow-[0_0_12px_rgba(34,211,238,0.4)]"
+                ? "bg-amber-500 text-black shadow-[0_0_12px_rgba(34,211,238,0.4)]"
                 : "text-slate-400 hover:text-slate-200"
             }`}
           >
@@ -95,7 +95,7 @@ export function AssemblyTabSwitcher({
           onClick={onToggleExplodedView}
           className={`flex items-center gap-1 px-2.5 py-1 rounded-lg text-[10px] font-mono font-bold transition-all border ${
             isExplodedView
-              ? "bg-cyan-500/15 text-cyan-300 border-cyan-500/40"
+              ? "bg-amber-500/15 text-amber-300 border-amber-500/40"
               : "text-slate-500 hover:text-slate-300 border-transparent"
           }`}
           title="Show side-by-side stacked view"

@@ -27,10 +27,10 @@ export const WindTunnelStudio: React.FC = memo(function WindTunnelStudio() {
   return (
     <div className="space-y-6 animate-fade-in-up">
       {/* Studio Header */}
-      <div className="glass-panel p-6 border-cyan-500/20 bg-gradient-to-r from-slate-900 via-slate-900/90 to-cyan-950/30 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+      <div className="glass-panel p-6 border-amber-500/20 bg-gradient-to-r from-slate-900 via-slate-900/90 to-amber-950/30 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2 mb-2">
-            <Gauge className="text-cyan-400" size={24} />
+            <Gauge className="text-amber-400" size={24} />
             <h2 className="text-xl font-bold text-slate-100 tracking-wide">
               60% Scale Rolling Road Wind Tunnel & CFD Rig
             </h2>
@@ -42,7 +42,7 @@ export const WindTunnelStudio: React.FC = memo(function WindTunnelStudio() {
 
         <div className="flex items-center gap-3">
           <div className="text-right">
-            <div className="text-2xl font-black font-mono text-cyan-400">
+            <div className="text-2xl font-black font-mono text-amber-400">
               {liftToDragRatio} <span className="text-xs text-slate-400 font-normal">L/D</span>
             </div>
             <div className="text-[10px] text-slate-400 uppercase tracking-wider">Aero Efficiency Index</div>
@@ -55,12 +55,12 @@ export const WindTunnelStudio: React.FC = memo(function WindTunnelStudio() {
         <div className="bg-slate-900/70 p-4 rounded-xl border border-slate-800 text-center">
           <div className="text-[10px] text-slate-500 uppercase tracking-wider mb-1">Tunnel Wind Speed</div>
           <div className="font-mono text-2xl font-bold text-slate-200">{windSpeedKmh} <span className="text-xs text-slate-400">km/h</span></div>
-          <div className="text-[11px] text-cyan-400 mt-1">FIA 180 km/h ATR Cap</div>
+          <div className="text-[11px] text-amber-400 mt-1">FIA 180 km/h ATR Cap</div>
         </div>
 
         <div className="bg-slate-900/70 p-4 rounded-xl border border-slate-800 text-center">
           <div className="text-[10px] text-slate-500 uppercase tracking-wider mb-1">Measured Downforce</div>
-          <div className="font-mono text-2xl font-bold text-cyan-300">{dynamicDownforce} <span className="text-xs text-slate-400">kg</span></div>
+          <div className="font-mono text-2xl font-bold text-amber-300">{dynamicDownforce} <span className="text-xs text-slate-400">kg</span></div>
           <div className="text-[11px] text-slate-400 mt-1">{aero.frontAeroBalancePercent}% Front Bias</div>
         </div>
 
@@ -93,7 +93,7 @@ export const WindTunnelStudio: React.FC = memo(function WindTunnelStudio() {
             step="5"
             value={windSpeedKmh}
             onChange={(e) => setWindSpeedKmh(parseInt(e.target.value))}
-            className="w-full sm:w-64 accent-cyan-400 cursor-pointer"
+            className="w-full sm:w-64 accent-amber-400 cursor-pointer"
           />
         </div>
 
@@ -105,7 +105,7 @@ export const WindTunnelStudio: React.FC = memo(function WindTunnelStudio() {
             }}
             className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
               tunnelRunning
-                ? "bg-cyan-500 text-slate-950 shadow-lg shadow-cyan-500/30"
+                ? "bg-amber-500 text-slate-950 shadow-lg shadow-cyan-500/30"
                 : "bg-slate-800 hover:bg-slate-700 text-slate-200"
             }`}
           >
@@ -120,7 +120,7 @@ export const WindTunnelStudio: React.FC = memo(function WindTunnelStudio() {
             }}
             className={`px-3 py-2 rounded-xl text-xs font-semibold border transition-all cursor-pointer ${
               smokeStreams
-                ? "bg-cyan-500/15 border-cyan-500/40 text-cyan-300"
+                ? "bg-amber-500/15 border-amber-500/40 text-amber-300"
                 : "bg-slate-800 border-slate-700 text-slate-400 hover:text-slate-200"
             }`}
           >

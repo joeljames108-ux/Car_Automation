@@ -177,7 +177,7 @@ function ModernAnalogClockComponent({
   const borderColor = isLight ? "rgba(255, 255, 255, 0.80)" : "rgba(56, 189, 248, 0.35)";
   const tickColor = isLight ? "#334155" : "#94a3b8";
   const hourHandColor = isLight ? "#0f172a" : "#f8fafc";
-  const minHandColor = isLight ? "#1e293b" : "#38bdf8";
+  const minHandColor = isLight ? "#1e293b" : "#fbbf24";
   const secHandColor = "#ef4444";
 
   return (

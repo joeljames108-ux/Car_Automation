@@ -51,7 +51,7 @@ export const AutonomousSensorGroundEffectDeck: React.FC = () => {
       {/* Studio Header Ribbon */}
       <div className="flex items-center justify-between px-5 py-3 rounded-2xl bg-[#090d16] border border-[#182133] shadow-lg">
         <div className="flex items-center gap-3">
-          <div className="p-2 rounded-xl bg-gradient-to-tr from-cyan-500/20 to-amber-500/20 border border-cyan-500/40 text-cyan-400">
+          <div className="p-2 rounded-xl bg-gradient-to-tr from-amber-500/20 to-amber-500/20 border border-amber-500/40 text-amber-400">
             <Activity className="w-5 h-5" />
           </div>
           <div>
@@ -68,7 +68,7 @@ export const AutonomousSensorGroundEffectDeck: React.FC = () => {
         <select
           value={compound}
           onChange={(e) => setCompound(e.target.value as TireCompoundType)}
-          className="bg-[#0e1424] text-cyan-400 text-xs font-bold font-mono px-3 py-1.5 rounded-xl border border-cyan-500/40 cursor-pointer"
+          className="bg-[#0e1424] text-amber-400 text-xs font-bold font-mono px-3 py-1.5 rounded-xl border border-amber-500/40 cursor-pointer"
         >
           <option value="ULTRA_SOFT_QUALIFYING">Ultra Soft Qualifying (Peak μ 1.78)</option>
           <option value="MEDIUM_CIRCUIT_SLICK">Medium Circuit Slick (Peak μ 1.62)</option>
@@ -82,11 +82,11 @@ export const AutonomousSensorGroundEffectDeck: React.FC = () => {
         {/* Card 1: Active Underbody Venturi Diffuser */}
         <div className="flex flex-col p-4 rounded-2xl bg-[#090d16] border border-[#182133] gap-3">
           <div className="flex items-center justify-between pb-2 border-b border-[#182133]">
-            <div className="flex items-center gap-2 text-cyan-400 font-bold text-xs">
+            <div className="flex items-center gap-2 text-amber-400 font-bold text-xs">
               <Wind className="w-4 h-4" />
               <span>ACTIVE UNDERBODY VENTURI DIFFUSER</span>
             </div>
-            <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-400 border border-cyan-500/40">
+            <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/40">
               L/D: {venturiState.groundEffectEfficiencyLOverD}
             </span>
           </div>
@@ -101,14 +101,14 @@ export const AutonomousSensorGroundEffectDeck: React.FC = () => {
               step="0.5"
               value={diffuserAngle}
               onChange={(e) => setDiffuserAngle(Number(e.target.value))}
-              className="w-36 accent-cyan-500 cursor-pointer"
+              className="w-36 accent-amber-500 cursor-pointer"
             />
           </div>
 
           <div className="grid grid-cols-2 gap-2 text-xs font-mono">
             <div className="p-2.5 rounded-xl bg-[#0c1220] border border-[#1c263d]">
               <div className="text-gray-400 text-[10px]">UNDERBODY DOWNFORCE</div>
-              <div className="text-sm font-bold text-cyan-400">{venturiState.totalUnderbodyDownforceN} N</div>
+              <div className="text-sm font-bold text-amber-400">{venturiState.totalUnderbodyDownforceN} N</div>
             </div>
             <div className="p-2.5 rounded-xl bg-[#0c1220] border border-[#1c263d]">
               <div className="text-gray-400 text-[10px]">THROAT SUCTION Cp</div>
@@ -154,7 +154,7 @@ export const AutonomousSensorGroundEffectDeck: React.FC = () => {
         {/* Card 3: ADAS Multi-Sensor EKF Fusion */}
         <div className="flex flex-col p-4 rounded-2xl bg-[#090d16] border border-[#182133] gap-3">
           <div className="flex items-center justify-between pb-2 border-b border-[#182133]">
-            <div className="flex items-center gap-2 text-indigo-400 font-bold text-xs">
+            <div className="flex items-center gap-2 text-amber-400 font-bold text-xs">
               <Eye className="w-4 h-4" />
               <span>ADAS MULTI-SENSOR EKF TRACKER</span>
             </div>
@@ -165,7 +165,7 @@ export const AutonomousSensorGroundEffectDeck: React.FC = () => {
 
           <div className="p-3 bg-[#05070c] rounded-xl border border-[#141b2b] text-xs font-mono text-gray-300">
             <div className="text-gray-400 text-[10px] mb-1">PRIMARY LEAD VEHICLE TRACK</div>
-            <div className="text-cyan-400 font-bold">
+            <div className="text-amber-400 font-bold">
               Range: {adasState.primaryLeadVehicle?.posYMetres}m • Vel: {Math.round((adasState.primaryLeadVehicle?.velocityMs || 0) * 3.6)} km/h
             </div>
             <div className="text-[10px] text-emerald-400 mt-1">

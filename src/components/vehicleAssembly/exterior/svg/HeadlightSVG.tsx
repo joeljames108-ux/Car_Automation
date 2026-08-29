@@ -31,7 +31,7 @@ export const HeadlightSVG: React.FC<HeadlightSVGProps> = ({
   onMouseEnter,
   onMouseLeave,
 }) => {
-  const strokeColor = isSelected ? "#38bdf8" : isHovered ? "#0284c7" : "#020617";
+  const strokeColor = isSelected ? "#fbbf24" : isHovered ? "#0284c7" : "#020617";
 
   return (
     <g
@@ -57,11 +57,11 @@ export const HeadlightSVG: React.FC<HeadlightSVGProps> = ({
 
       {/* ── 3. Adaptive Matrix LED Multi-Emitter Grid ── */}
       <g id="matrix_led_emitter_pixels">
-        <rect x="242" y="302" width="2.5" height="2.5" rx="0.5" fill="#38bdf8" />
-        <rect x="246" y="300" width="2.5" height="2.5" rx="0.5" fill="#38bdf8" />
-        <rect x="250" y="298" width="2.5" height="2.5" rx="0.5" fill="#38bdf8" />
-        <rect x="244" y="306" width="2.5" height="2.5" rx="0.5" fill="#38bdf8" />
-        <rect x="248" y="304" width="2.5" height="2.5" rx="0.5" fill="#38bdf8" />
+        <rect x="242" y="302" width="2.5" height="2.5" rx="0.5" fill="#fbbf24" />
+        <rect x="246" y="300" width="2.5" height="2.5" rx="0.5" fill="#fbbf24" />
+        <rect x="250" y="298" width="2.5" height="2.5" rx="0.5" fill="#fbbf24" />
+        <rect x="244" y="306" width="2.5" height="2.5" rx="0.5" fill="#fbbf24" />
+        <rect x="248" y="304" width="2.5" height="2.5" rx="0.5" fill="#fbbf24" />
       </g>
 
       {/* ── 4. Crystal C-Clamp DRL Light Guide Tube ── */}
@@ -77,7 +77,7 @@ export const HeadlightSVG: React.FC<HeadlightSVGProps> = ({
       <polygon
         points="205,315 255,290 270,305 215,335"
         fill="url(#headlightLensRefraction)"
-        stroke="#38bdf8"
+        stroke="#fbbf24"
         strokeWidth="0.6"
       />
     </g>

@@ -11,10 +11,12 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { useF1AssemblyStore, type F1SystemIsolationMode } from "../../../sim/f1/state/f1AssemblyStore";
 import { F1_SOCKET_ANCHORS, type F1SocketId } from "../../../sim/f1/modular/f1Sockets";
 import { F1ComponentRegistry } from "../../../sim/f1/modular/f1ComponentRegistry";
+import { playHMIClickSound } from "../../../utils/hmiSoundSynth";
 import {
   Eye, Box, Layers, RotateCcw, Volume2, Sparkles, ZoomIn, Info, ShieldAlert,
   Maximize2, EyeOff, Wind, Video, Compass, Camera
 } from "lucide-react";
+import { buildF1Component } from "./F1ProceduralGeometry";
 
 const F1ModularAssemblyViewportComponent: React.FC = () => {
   const mountRef = useRef<HTMLDivElement>(null);
@@ -30,7 +32,24 @@ const F1ModularAssemblyViewportComponent: React.FC = () => {
   const showAeroStreamlinesRef = useRef(false);
   showAeroStreamlinesRef.current = showAeroStreamlines;
 
+  const targetCameraPos = useRef<THREE.Vector3 | null>(null);
+  const targetCameraLookAt = useRef<THREE.Vector3 | null>(null);
+
+  const [isDrsOpen, setIsDrsOpen] = useState(false);
+  const isDrsOpenRef = useRef(false);
+  isDrsOpenRef.current = isDrsOpen;
+
+  const [isSnapshotFlash, setIsSnapshotFlash] = useState(false);
+  const [hoveredComponentInfo, setHoveredComponentInfo] = useState<{
+    socketId: F1SocketId;
+    componentName?: string;
+    category?: string;
+    massKg?: number;
+  } | null>(null);
+
   const [cameraPreset, setCameraPresetState] = useState<"iso" | "wing" | "cockpit" | "engine" | "rear">("iso");
+
+  // F1 geometry module already imported — no inline materials needed
 
   const {
     installedMap,
@@ -51,67 +70,7 @@ const F1ModularAssemblyViewportComponent: React.FC = () => {
 
   const [hoveredSocket, setHoveredSocket] = useState<F1SocketId | null>(null);
 
-  // ── Materials Cache ──
-  const carbonMaterial = useRef(
-    new THREE.MeshStandardMaterial({
-      color: 0x111113,
-      roughness: 0.28,
-      metalness: 0.85,
-    })
-  );
-
-  const liveryMaterial = useRef(
-    new THREE.MeshStandardMaterial({
-      color: 0x06b6d4, // Cyan Apex Works Livery
-      roughness: 0.2,
-      metalness: 0.6,
-    })
-  );
-
-  const titaniumMaterial = useRef(
-    new THREE.MeshStandardMaterial({
-      color: 0x6b7280,
-      roughness: 0.35,
-      metalness: 0.95,
-    })
-  );
-
-  const engineGoldMaterial = useRef(
-    new THREE.MeshStandardMaterial({
-      color: 0xd97706,
-      roughness: 0.3,
-      metalness: 0.9,
-    })
-  );
-
-  const rubberMaterial = useRef(
-    new THREE.MeshStandardMaterial({
-      color: 0x18181b,
-      roughness: 0.85,
-      metalness: 0.05,
-    })
-  );
-
-  const brakeGlowingMaterial = useRef(
-    new THREE.MeshStandardMaterial({
-      color: 0xef4444,
-      emissive: 0xd97706,
-      emissiveIntensity: 0.6,
-      roughness: 0.4,
-    })
-  );
-
-  const xrayBodyMaterial = useRef(
-    new THREE.MeshPhysicalMaterial({
-      color: 0x06b6d4,
-      transparent: true,
-      opacity: 0.22,
-      roughness: 0.1,
-      metalness: 0.1,
-      transmission: 0.7,
-      ior: 1.5,
-    })
-  );
+  // Materials are managed by F1ProceduralGeometry module
 
   // ── Initialize Scene ──
   useEffect(() => {
@@ -121,7 +80,7 @@ const F1ModularAssemblyViewportComponent: React.FC = () => {
     const height = container.clientHeight || 550;
 
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x0a0c10);
+    scene.background = new THREE.Color(0x0c0a08);
     sceneRef.current = scene;
 
     const camera = new THREE.PerspectiveCamera(42, width / height, 0.1, 100);
@@ -133,6 +92,9 @@ const F1ModularAssemblyViewportComponent: React.FC = () => {
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    renderer.toneMapping = THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure = 1.15;
+    renderer.outputColorSpace = THREE.SRGBColorSpace;
     container.appendChild(renderer.domElement);
     rendererRef.current = renderer;
 
@@ -144,28 +106,72 @@ const F1ModularAssemblyViewportComponent: React.FC = () => {
     controls.minDistance = 0.8;
     controlsRef.current = controls;
 
-    // Studio Lighting
-    const ambientLight = new THREE.AmbientLight(0xffffff, 1.2);
+    // ── Photorealistic Studio Lighting ──
+    const ambientLight = new THREE.AmbientLight(0xfff5ee, 0.8);
     scene.add(ambientLight);
 
-    const keyLight = new THREE.DirectionalLight(0xffffff, 2.5);
-    keyLight.position.set(5, 8, 5);
+    // Hemisphere light for natural sky/ground bounce
+    const hemiLight = new THREE.HemisphereLight(0xc4d4e8, 0x1a1410, 0.6);
+    scene.add(hemiLight);
+
+    // Key light — warm, slightly overhead
+    const keyLight = new THREE.DirectionalLight(0xfff0dd, 3.5);
+    keyLight.position.set(4, 8, 3);
     keyLight.castShadow = true;
-    keyLight.shadow.mapSize.width = 1024;
-    keyLight.shadow.mapSize.height = 1024;
+    keyLight.shadow.mapSize.width = 2048;
+    keyLight.shadow.mapSize.height = 2048;
+    keyLight.shadow.camera.near = 0.5;
+    keyLight.shadow.camera.far = 25;
+    keyLight.shadow.camera.left = -6;
+    keyLight.shadow.camera.right = 6;
+    keyLight.shadow.camera.top = 6;
+    keyLight.shadow.camera.bottom = -6;
+    keyLight.shadow.bias = -0.0005;
     scene.add(keyLight);
 
-    const rimLight = new THREE.DirectionalLight(0x06b6d4, 2.0);
-    rimLight.position.set(-5, 4, -4);
+    // Fill light — cool, from opposite side
+    const fillLight = new THREE.DirectionalLight(0x8ec5e8, 1.2);
+    fillLight.position.set(-6, 4, -2);
+    scene.add(fillLight);
+
+    // Rim / back light — cyan accent
+    const rimLight = new THREE.DirectionalLight(0xd4a006, 1.4);
+    rimLight.position.set(-3, 5, -6);
     scene.add(rimLight);
 
-    const floorLight = new THREE.DirectionalLight(0x3b82f6, 0.8);
-    floorLight.position.set(0, -3, 0);
-    scene.add(floorLight);
+    // Under-chassis glow
+    const underGlow = new THREE.PointLight(0xd4a006, 0.6, 3.5);
+    underGlow.position.set(0, -0.1, 1.5);
+    scene.add(underGlow);
 
-    // Workshop Grid Floor
-    const grid = new THREE.GridHelper(20, 40, 0x06b6d4, 0x1f2937);
-    grid.position.y = -0.001;
+    // Workshop Spot lights (top-down, for highlights)
+    const spotGeo = new THREE.SpotLight(0xffffff, 1.5, 12, Math.PI / 5, 0.4, 1);
+    spotGeo.position.set(0, 6, 1.5);
+    spotGeo.target.position.set(0, 0, 1.5);
+    scene.add(spotGeo, spotGeo.target);
+
+    // Reflective ground plane
+    const groundGeo = new THREE.PlaneGeometry(24, 24);
+    const groundMat = new THREE.MeshPhysicalMaterial({
+      color: 0x0d0a06,
+      roughness: 0.12,
+      metalness: 0.55,
+      clearcoat: 0.25,
+      clearcoatRoughness: 0.18,
+      envMapIntensity: 0.8,
+    });
+    const ground = new THREE.Mesh(groundGeo, groundMat);
+    ground.rotation.x = -Math.PI / 2;
+    ground.position.y = -0.002;
+    ground.receiveShadow = true;
+    scene.add(ground);
+
+    // Workshop Grid Floor (subtle)
+    // Subtle workshop floor grid — warm amber accent matching the Vision Glass theme
+    const grid = new THREE.GridHelper(20, 40, 0x92702a, 0x1a1508);
+    grid.position.y = 0.001;
+    grid.material.opacity = 0.08;
+    grid.material.transparent = true;
     scene.add(grid);
 
     // CFD Aerodynamic Streamline Particles
@@ -179,10 +185,10 @@ const F1ModularAssemblyViewportComponent: React.FC = () => {
     }
     streamlineGeo.setAttribute("position", new THREE.BufferAttribute(streamlinePos, 3));
     const streamlineMat = new THREE.PointsMaterial({
-      color: 0x06b6d4,
-      size: 0.045,
+      color: 0xd4a006,
+      size: 0.040,
       transparent: true,
-      opacity: 0.75,
+      opacity: 0.55,
       blending: THREE.AdditiveBlending,
     });
     const streamlines = new THREE.Points(streamlineGeo, streamlineMat);
@@ -215,10 +221,24 @@ const F1ModularAssemblyViewportComponent: React.FC = () => {
 
       if (document.hidden) return;
 
+      // Smooth Camera Preset Lerping
+      if (targetCameraPos.current && targetCameraLookAt.current) {
+        camera.position.lerp(targetCameraPos.current, 0.08);
+        controls.target.lerp(targetCameraLookAt.current, 0.08);
+        markDirty();
+        if (
+          camera.position.distanceTo(targetCameraPos.current) < 0.02 &&
+          controls.target.distanceTo(targetCameraLookAt.current) < 0.02
+        ) {
+          targetCameraPos.current = null;
+          targetCameraLookAt.current = null;
+        }
+      }
+
       const isStreamlinesActive = showAeroStreamlinesRef.current;
 
-      // Pulse Hotspots
-      if (hotspotsGroupRef.current && hotspotsGroupRef.current.children.length > 0) {
+      // Pulse Hotspots without forcing continuous markDirty when idle
+      if (hotspotsGroupRef.current && hotspotsGroupRef.current.children.length > 0 && isDirty) {
         const time = Date.now() * 0.003;
         hotspotsGroupRef.current.children.forEach((child) => {
           if (child instanceof THREE.Mesh) {
@@ -226,15 +246,15 @@ const F1ModularAssemblyViewportComponent: React.FC = () => {
             child.scale.set(scale, scale, scale);
           }
         });
-        markDirty();
       }
 
-      // Streamline Flow Animation
+      // Streamline Flow Animation with DRS speed multiplier
       if (streamlinesRef.current && isStreamlinesActive) {
         streamlinesRef.current.visible = true;
         const posArr = streamlinesRef.current.geometry.attributes.position.array as Float32Array;
+        const speedDelta = isDrsOpenRef.current ? 0.12 : 0.07;
         for (let i = 0; i < streamlineCount; i++) {
-          posArr[i * 3 + 2] += 0.07; // Move rearward
+          posArr[i * 3 + 2] += speedDelta; // Move rearward
           if (posArr[i * 3 + 2] > 4.2) {
             posArr[i * 3 + 2] = -2.8;
             posArr[i * 3 + 0] = (Math.random() - 0.5) * 1.9;
@@ -243,14 +263,15 @@ const F1ModularAssemblyViewportComponent: React.FC = () => {
         }
         streamlinesRef.current.geometry.attributes.position.needsUpdate = true;
         markDirty();
-      } else if (streamlinesRef.current) {
+      } else if (streamlinesRef.current && streamlinesRef.current.visible) {
         streamlinesRef.current.visible = false;
+        markDirty();
       }
 
-      if (isDirty || isStreamlinesActive) {
+      if (isDirty || isStreamlinesActive || targetCameraPos.current) {
         controls.update();
         renderer.render(scene, camera);
-        if (performance.now() - lastActiveTime > 2000 && !isStreamlinesActive) {
+        if (performance.now() - lastActiveTime > 1500 && !isStreamlinesActive && !targetCameraPos.current) {
           isDirty = false;
         }
       }
@@ -290,13 +311,6 @@ const F1ModularAssemblyViewportComponent: React.FC = () => {
       cancelAnimationFrame(animationFrameId);
       controls.dispose();
       renderer.dispose();
-      carbonMaterial.current.dispose();
-      liveryMaterial.current.dispose();
-      titaniumMaterial.current.dispose();
-      engineGoldMaterial.current.dispose();
-      rubberMaterial.current.dispose();
-      brakeGlowingMaterial.current.dispose();
-      xrayBodyMaterial.current.dispose();
       if (streamlinesRef.current?.geometry) {
         streamlinesRef.current.geometry.dispose();
       }
@@ -306,7 +320,10 @@ const F1ModularAssemblyViewportComponent: React.FC = () => {
     };
   }, []);
 
-  // ── Rebuild 3D Meshes on State Changes ──
+  const meshMapRef = useRef<Map<F1SocketId, THREE.Group>>(new Map());
+  const hotspotMapRef = useRef<Map<F1SocketId, THREE.Mesh>>(new Map());
+
+  // ── Rebuild 3D Meshes Only When Installed Parts, Isolation, or X-Ray Mode Change ──
   useEffect(() => {
     if (!assemblyGroupRef.current || !hotspotsGroupRef.current) return;
     const assemblyGroup = assemblyGroupRef.current;
@@ -326,28 +343,14 @@ const F1ModularAssemblyViewportComponent: React.FC = () => {
 
     disposeGeometries(assemblyGroup);
     disposeGeometries(hotspotsGroup);
+    meshMapRef.current.clear();
+    hotspotMapRef.current.clear();
 
     const allSockets = Object.keys(F1_SOCKET_ANCHORS) as F1SocketId[];
 
     allSockets.forEach((socketId) => {
       const socket = F1_SOCKET_ANCHORS[socketId];
       const componentId = installedMap[socketId];
-
-      // Convert mm to Three.js meters (scale: 0.001)
-      const basePos = new THREE.Vector3(
-        socket.positionMm[0] * 0.001,
-        socket.positionMm[1] * 0.001,
-        socket.positionMm[2] * 0.001
-      );
-
-      // Add exploded view displacement
-      const explodeOffset = new THREE.Vector3(
-        socket.normalVector[0] * explodedViewAmount * 1.2,
-        socket.normalVector[1] * explodedViewAmount * 1.2,
-        socket.normalVector[2] * explodedViewAmount * 1.2
-      );
-
-      const finalPos = basePos.clone().add(explodeOffset);
 
       // Check System Isolation Mode
       const isVisibleInIsolation =
@@ -367,188 +370,101 @@ const F1ModularAssemblyViewportComponent: React.FC = () => {
 
         const compGroup = new THREE.Group();
         compGroup.name = `COMP_${socketId}`;
-        compGroup.position.copy(finalPos);
+        compGroup.userData = { socketId };
 
-        // Snap animation lerp if active
-        if (snappingSocketId === socketId && snapAnimationProgress < 1.0) {
-          const hoverOffset = new THREE.Vector3(0, 0.4 * (1.0 - snapAnimationProgress), 0);
-          compGroup.position.add(hoverOffset);
-        }
-
-        const bodyMat = xrayMode && (socket.category === "AERO" || socket.category === "CHASSIS")
-          ? xrayBodyMaterial.current
-          : liveryMaterial.current;
-
-        // Build procedural geometry based on socket type
-        switch (socketId) {
-          case "SOCKET_SURVIVAL_CELL": {
-            // Main monocoque tub
-            const tubGeo = new THREE.BoxGeometry(0.72, 0.52, 2.2);
-            const tubMesh = new THREE.Mesh(tubGeo, bodyMat);
-            tubMesh.position.set(0, 0, 0);
-            compGroup.add(tubMesh);
-            break;
+        // ── Build photorealistic geometry from F1ProceduralGeometry module ──
+        const builtGroup = buildF1Component(socketId, xrayMode, isDrsOpen);
+        if (builtGroup) {
+          builtGroup.name = `COMP_${socketId}`;
+          builtGroup.userData = { socketId };
+          // Apply X-ray transparency to entire group if needed
+          if (xrayMode && (socket.category === "AERO" || socket.category === "CHASSIS")) {
+            builtGroup.traverse((child) => {
+              if (child instanceof THREE.Mesh && child.material instanceof THREE.Material) {
+                child.material = child.material.clone();
+                (child.material as THREE.MeshPhysicalMaterial).transparent = true;
+                (child.material as THREE.MeshPhysicalMaterial).opacity = 0.22;
+              }
+            });
           }
-
-          case "SOCKET_NOSE_CONE": {
-            // Tapered nose cone
-            const noseGeo = new THREE.ConeGeometry(0.32, 1.1, 16);
-            noseGeo.rotateX(-Math.PI / 2);
-            const noseMesh = new THREE.Mesh(noseGeo, bodyMat);
-            compGroup.add(noseMesh);
-            break;
-          }
-
-          case "SOCKET_FRONT_WING": {
-            // 4-element front wing mainplane & endplates
-            const wingGeo = new THREE.BoxGeometry(1.95, 0.04, 0.55);
-            const wingMesh = new THREE.Mesh(wingGeo, carbonMaterial.current);
-            compGroup.add(wingMesh);
-
-            // Endplates
-            const epL = new THREE.Mesh(new THREE.BoxGeometry(0.02, 0.28, 0.6), bodyMat);
-            epL.position.set(-0.98, 0.1, 0);
-            const epR = new THREE.Mesh(new THREE.BoxGeometry(0.02, 0.28, 0.6), bodyMat);
-            epR.position.set(0.98, 0.1, 0);
-            compGroup.add(epL, epR);
-            break;
-          }
-
-          case "SOCKET_HALO": {
-            const haloTorus = new THREE.TorusGeometry(0.28, 0.035, 12, 24, Math.PI);
-            haloTorus.rotateX(Math.PI / 2);
-            const haloMesh = new THREE.Mesh(haloTorus, titaniumMaterial.current);
-            compGroup.add(haloMesh);
-            break;
-          }
-
-          case "SOCKET_COCKPIT_TRIM": {
-            const wheelGeo = new THREE.BoxGeometry(0.26, 0.16, 0.04);
-            const wheelMesh = new THREE.Mesh(wheelGeo, carbonMaterial.current);
-            compGroup.add(wheelMesh);
-            break;
-          }
-
-          case "SOCKET_FLOOR_UNDERBODY": {
-            const floorGeo = new THREE.BoxGeometry(1.5, 0.04, 2.6);
-            const floorMesh = new THREE.Mesh(floorGeo, carbonMaterial.current);
-            compGroup.add(floorMesh);
-            break;
-          }
-
-          case "SOCKET_SIDEPOD_L": {
-            const sideGeo = new THREE.BoxGeometry(0.42, 0.38, 1.4);
-            const sideMesh = new THREE.Mesh(sideGeo, bodyMat);
-            compGroup.add(sideMesh);
-            break;
-          }
-
-          case "SOCKET_SIDEPOD_R": {
-            const sideGeo = new THREE.BoxGeometry(0.42, 0.38, 1.4);
-            const sideMesh = new THREE.Mesh(sideGeo, bodyMat);
-            compGroup.add(sideMesh);
-            break;
-          }
-
-          case "SOCKET_POWER_UNIT": {
-            const v6Geo = new THREE.BoxGeometry(0.48, 0.44, 0.62);
-            const v6Mesh = new THREE.Mesh(v6Geo, engineGoldMaterial.current);
-            compGroup.add(v6Mesh);
-            break;
-          }
-
-          case "SOCKET_GEARBOX": {
-            const gbGeo = new THREE.BoxGeometry(0.38, 0.34, 0.75);
-            const gbMesh = new THREE.Mesh(gbGeo, carbonMaterial.current);
-            compGroup.add(gbMesh);
-            break;
-          }
-
-          case "SOCKET_SUSPENSION_FL":
-          case "SOCKET_SUSPENSION_FR":
-          case "SOCKET_SUSPENSION_RL":
-          case "SOCKET_SUSPENSION_RR": {
-            const isRight = socketId.includes("FR") || socketId.includes("RR");
-            const armGeo = new THREE.CylinderGeometry(0.015, 0.015, 0.45);
-            armGeo.rotateZ(isRight ? -Math.PI / 4 : Math.PI / 4);
-            const armMesh = new THREE.Mesh(armGeo, carbonMaterial.current);
-            compGroup.add(armMesh);
-            break;
-          }
-
-          case "SOCKET_REAR_DIFFUSER": {
-            const diffGeo = new THREE.BoxGeometry(0.95, 0.18, 0.65);
-            diffGeo.rotateX(-0.2);
-            const diffMesh = new THREE.Mesh(diffGeo, carbonMaterial.current);
-            compGroup.add(diffMesh);
-            break;
-          }
-
-          case "SOCKET_REAR_WING": {
-            const rwGeo = new THREE.BoxGeometry(1.2, 0.04, 0.38);
-            const rwMesh = new THREE.Mesh(rwGeo, bodyMat);
-            compGroup.add(rwMesh);
-
-            const drsFlap = new THREE.Mesh(new THREE.BoxGeometry(1.18, 0.02, 0.18), carbonMaterial.current);
-            drsFlap.position.set(0, 0.12, -0.05);
-            compGroup.add(drsFlap);
-
-            const pylonL = new THREE.Mesh(new THREE.CylinderGeometry(0.015, 0.015, 0.65), carbonMaterial.current);
-            pylonL.position.set(-0.25, -0.3, 0);
-            const pylonR = new THREE.Mesh(new THREE.CylinderGeometry(0.015, 0.015, 0.65), carbonMaterial.current);
-            pylonR.position.set(0.25, -0.3, 0);
-            compGroup.add(pylonL, pylonR);
-            break;
-          }
-
-          case "SOCKET_WHEEL_FL":
-          case "SOCKET_WHEEL_FR":
-          case "SOCKET_WHEEL_RL":
-          case "SOCKET_WHEEL_RR": {
-            const isRear = socketId.includes("RL") || socketId.includes("RR");
-            const wheelRadius = 0.36;
-            const wheelWidth = isRear ? 0.42 : 0.32;
-
-            const tireGeo = new THREE.CylinderGeometry(wheelRadius, wheelRadius, wheelWidth, 24);
-            tireGeo.rotateZ(Math.PI / 2);
-            const tireMesh = new THREE.Mesh(tireGeo, rubberMaterial.current);
-
-            const discGeo = new THREE.CylinderGeometry(0.18, 0.18, 0.06, 16);
-            discGeo.rotateZ(Math.PI / 2);
-            const discMesh = new THREE.Mesh(discGeo, brakeGlowingMaterial.current);
-
-            compGroup.add(tireMesh, discMesh);
-            break;
-          }
+          compGroup.add(builtGroup);
         }
 
         assemblyGroup.add(compGroup);
+        meshMapRef.current.set(socketId, compGroup);
       } else if (showAttachmentHotspots) {
         // ── Render Empty Socket Hotspot Ring ──
         const ringGeo = new THREE.TorusGeometry(0.18, 0.018, 12, 24);
         const ringMat = new THREE.MeshBasicMaterial({
-          color: selectedSocketId === socketId ? 0xec4899 : 0x06b6d4,
+          color: selectedSocketId === socketId ? 0xd4a006 : 0x92702a,
           wireframe: true,
         });
         const ringMesh = new THREE.Mesh(ringGeo, ringMat);
         ringMesh.name = `HOTSPOT_${socketId}`;
-        ringMesh.position.copy(finalPos);
+        ringMesh.userData = { socketId };
         hotspotsGroup.add(ringMesh);
+        hotspotMapRef.current.set(socketId, ringMesh);
       }
     });
+
+    if (rendererRef.current && sceneRef.current && cameraRef.current) {
+      rendererRef.current.shadowMap.needsUpdate = true;
+      rendererRef.current.render(sceneRef.current, cameraRef.current);
+    }
   }, [
     installedMap,
-    selectedSocketId,
-    activeComponentPreviewId,
-    snappingSocketId,
-    snapAnimationProgress,
     systemIsolationMode,
     xrayMode,
     showAttachmentHotspots,
-    explodedViewAmount,
+    activeComponentPreviewId,
+    isDrsOpen,
   ]);
 
-  // ── Raycasting on Click ──
+  // ── High-Performance O(1) Transform Updates (Zero Geometry Reallocation on Slider / Snapping) ──
+  useEffect(() => {
+    const allSockets = Object.keys(F1_SOCKET_ANCHORS) as F1SocketId[];
+
+    allSockets.forEach((socketId) => {
+      const socket = F1_SOCKET_ANCHORS[socketId];
+      const basePos = new THREE.Vector3(
+        socket.positionMm[0] * 0.001,
+        socket.positionMm[1] * 0.001,
+        socket.positionMm[2] * 0.001
+      );
+
+      const explodeOffset = new THREE.Vector3(
+        socket.normalVector[0] * explodedViewAmount * 1.2,
+        socket.normalVector[1] * explodedViewAmount * 1.2,
+        socket.normalVector[2] * explodedViewAmount * 1.2
+      );
+
+      const finalPos = basePos.clone().add(explodeOffset);
+
+      const compGroup = meshMapRef.current.get(socketId);
+      if (compGroup) {
+        if (snappingSocketId === socketId && snapAnimationProgress < 1.0) {
+          const hoverOffset = new THREE.Vector3(0, 0.4 * (1.0 - snapAnimationProgress), 0);
+          compGroup.position.copy(finalPos).add(hoverOffset);
+        } else {
+          compGroup.position.copy(finalPos);
+        }
+      }
+
+      const ringMesh = hotspotMapRef.current.get(socketId);
+      if (ringMesh) {
+        ringMesh.position.copy(finalPos);
+        if (ringMesh.material instanceof THREE.MeshBasicMaterial) {
+          ringMesh.material.color.setHex(selectedSocketId === socketId ? 0xd4a006 : 0x92702a);
+        }
+      }
+    });
+
+    if (rendererRef.current && sceneRef.current && cameraRef.current) {
+      rendererRef.current.render(sceneRef.current, cameraRef.current);
+    }
+  }, [explodedViewAmount, snappingSocketId, snapAnimationProgress, selectedSocketId]);
+
+  // ── Raycasting on Click & Pointer Move ──
   const handlePointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
     if (!mountRef.current || !cameraRef.current || !sceneRef.current) return;
     const rect = mountRef.current.getBoundingClientRect();
@@ -577,40 +493,118 @@ const F1ModularAssemblyViewportComponent: React.FC = () => {
     }
   };
 
+  const lastHoveredSocketIdRef = useRef<string | null>(null);
+  const lastPointerMoveTimeRef = useRef<number>(0);
+
+  const handlePointerMove = useCallback((e: React.PointerEvent<HTMLDivElement>) => {
+    const now = performance.now();
+    if (now - lastPointerMoveTimeRef.current < 35) return; // ~30 FPS throttled raycasting
+    lastPointerMoveTimeRef.current = now;
+
+    if (!mountRef.current || !cameraRef.current || !sceneRef.current) return;
+    const rect = mountRef.current.getBoundingClientRect();
+    const x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+    const y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+
+    const raycaster = new THREE.Raycaster();
+    raycaster.setFromCamera(new THREE.Vector2(x, y), cameraRef.current);
+
+    const intersects = raycaster.intersectObjects(sceneRef.current.children, true);
+    for (const hit of intersects) {
+      let curr: THREE.Object3D | null = hit.object;
+      while (curr && curr !== sceneRef.current) {
+        if (curr.name.startsWith("COMP_") || curr.name.startsWith("HOTSPOT_")) {
+          const sId = curr.name.replace("COMP_", "").replace("HOTSPOT_", "") as F1SocketId;
+          if (lastHoveredSocketIdRef.current === sId) return;
+          lastHoveredSocketIdRef.current = sId;
+          const socket = F1_SOCKET_ANCHORS[sId];
+          const compId = installedMap[sId];
+          const comp = compId ? F1ComponentRegistry.getComponent(compId) : null;
+          setHoveredComponentInfo({
+            socketId: sId,
+            componentName: comp ? comp.name : `Empty ${socket?.category || "Socket"}`,
+            category: socket?.category,
+            massKg: comp?.massKg,
+          });
+          return;
+        }
+        curr = curr.parent;
+      }
+    }
+    if (lastHoveredSocketIdRef.current !== null) {
+      lastHoveredSocketIdRef.current = null;
+      setHoveredComponentInfo(null);
+    }
+  }, [installedMap]);
+
   const handleCameraPreset = (preset: "iso" | "wing" | "cockpit" | "engine" | "rear") => {
     setCameraPresetState(preset);
-    if (!cameraRef.current || !controlsRef.current) return;
-    const cam = cameraRef.current;
-    const ctrl = controlsRef.current;
-
     if (preset === "iso") {
-      cam.position.set(3.8, 2.2, 4.8);
-      ctrl.target.set(0, 0.4, 1.8);
+      targetCameraPos.current = new THREE.Vector3(3.8, 2.2, 4.8);
+      targetCameraLookAt.current = new THREE.Vector3(0, 0.4, 1.8);
     } else if (preset === "wing") {
-      cam.position.set(0, 0.6, -2.4);
-      ctrl.target.set(0, 0.3, 0);
+      targetCameraPos.current = new THREE.Vector3(0, 0.6, -2.4);
+      targetCameraLookAt.current = new THREE.Vector3(0, 0.3, 0);
     } else if (preset === "cockpit") {
-      cam.position.set(0, 0.88, 0.9);
-      ctrl.target.set(0, 0.55, -1.5);
+      targetCameraPos.current = new THREE.Vector3(0, 0.88, 0.9);
+      targetCameraLookAt.current = new THREE.Vector3(0, 0.55, -1.5);
     } else if (preset === "engine") {
-      cam.position.set(1.5, 1.2, 2.2);
-      ctrl.target.set(0, 0.4, 2.0);
+      targetCameraPos.current = new THREE.Vector3(1.5, 1.2, 2.2);
+      targetCameraLookAt.current = new THREE.Vector3(0, 0.4, 2.0);
     } else if (preset === "rear") {
-      cam.position.set(0, 0.75, 4.6);
-      ctrl.target.set(0, 0.4, 3.0);
+      targetCameraPos.current = new THREE.Vector3(0, 0.75, 4.6);
+      targetCameraLookAt.current = new THREE.Vector3(0, 0.4, 3.0);
     }
-    ctrl.update();
   };
+
+  const handleTakeSnapshot = useCallback(() => {
+    if (!rendererRef.current || !sceneRef.current || !cameraRef.current) return;
+    playHMIClickSound();
+    rendererRef.current.render(sceneRef.current, cameraRef.current);
+    const dataUrl = rendererRef.current.domElement.toDataURL("image/png");
+    const link = document.createElement("a");
+    link.download = `Apex_F1_Chassis_CAD_${Date.now()}.png`;
+    link.href = dataUrl;
+    link.click();
+    setIsSnapshotFlash(true);
+    setTimeout(() => setIsSnapshotFlash(false), 300);
+  }, []);
 
   return (
     <div className="relative w-full h-full bg-[#0a0c10] select-none overflow-hidden group">
       {/* 3D WebGL Canvas Container */}
-      <div ref={mountRef} onPointerDown={handlePointerDown} className="w-full h-full cursor-grab active:cursor-grabbing" />
+      <div
+        ref={mountRef}
+        onPointerDown={handlePointerDown}
+        onPointerMove={handlePointerMove}
+        className="w-full h-full cursor-grab active:cursor-grabbing"
+      />
+
+      {/* Snapshot Flash Overlay */}
+      {isSnapshotFlash && (
+        <div className="absolute inset-0 bg-white/40 pointer-events-none transition-opacity duration-300 z-50 animate-fade-out" />
+      )}
+
+      {/* Hovered Component Specs Pill (Floating Top Center) */}
+      {hoveredComponentInfo && (
+        <div className="absolute top-16 left-1/2 -translate-x-1/2 flex items-center gap-3 bg-black/85 backdrop-blur-md border border-amber-500/40 px-4 py-1.5 rounded-full shadow-2xl z-20 pointer-events-none animate-fade-in-up">
+          <div className="w-2 h-2 rounded-full bg-amber-400 animate-ping" />
+          <span className="text-xs font-black text-white">{hoveredComponentInfo.componentName}</span>
+          <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">
+            {hoveredComponentInfo.category}
+          </span>
+          {hoveredComponentInfo.massKg !== undefined && (
+            <span className="text-[10px] font-mono text-zinc-300 font-bold">
+              {hoveredComponentInfo.massKg} kg
+            </span>
+          )}
+        </div>
+      )}
 
       {/* Top Left Floating Viewport Toolbar */}
-      <div className="absolute top-4 left-4 flex items-center gap-2 bg-black/70 backdrop-blur-md border border-cyan-500/30 px-3 py-1.5 rounded-xl shadow-2xl z-10">
-        <span className="text-[11px] font-black tracking-widest uppercase text-cyan-400 flex items-center gap-1.5">
-          <Sparkles className="w-3.5 h-3.5 text-cyan-400 animate-pulse" />
+      <div className="absolute top-4 left-4 flex items-center gap-2 bg-black/80 backdrop-blur-md border border-amber-500/30 px-3 py-1.5 rounded-xl shadow-2xl z-10">
+        <span className="text-[11px] font-black tracking-widest uppercase text-amber-400 flex items-center gap-1.5">
+          <Sparkles className="w-3.5 h-3.5 text-amber-400 animate-pulse" />
           F1 CAD Viewport
         </span>
 
@@ -623,7 +617,7 @@ const F1ModularAssemblyViewportComponent: React.FC = () => {
             onClick={() => setSystemIsolationMode(mode)}
             className={`px-2 py-0.5 rounded text-[10px] font-bold tracking-wider transition-all cursor-pointer ${
               systemIsolationMode === mode
-                ? "bg-cyan-500 text-black shadow-md shadow-cyan-500/30"
+                ? "bg-amber-500 text-black shadow-md shadow-cyan-500/30"
                 : "text-zinc-400 hover:text-white hover:bg-white/10"
             }`}
           >
@@ -649,7 +643,7 @@ const F1ModularAssemblyViewportComponent: React.FC = () => {
         <button
           onClick={toggleAttachmentHotspots}
           className={`flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold transition-all cursor-pointer ${
-            showAttachmentHotspots ? "bg-cyan-500/20 text-cyan-400 border border-cyan-500/40" : "text-zinc-400 hover:text-white hover:bg-white/10"
+            showAttachmentHotspots ? "bg-amber-500/20 text-amber-400 border border-amber-500/40" : "text-zinc-400 hover:text-white hover:bg-white/10"
           }`}
           title="Toggle Empty Attachment Hotspots"
         >
@@ -661,17 +655,34 @@ const F1ModularAssemblyViewportComponent: React.FC = () => {
         <button
           onClick={() => setShowAeroStreamlines(!showAeroStreamlines)}
           className={`flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-bold transition-all cursor-pointer ${
-            showAeroStreamlines ? "bg-cyan-400 text-black shadow-sm" : "text-zinc-400 hover:text-white hover:bg-white/10"
+            showAeroStreamlines ? "bg-amber-400 text-black shadow-sm" : "text-zinc-400 hover:text-white hover:bg-white/10"
           }`}
           title="Toggle CFD Aerodynamic Streamlines"
         >
           <Wind className="w-3 h-3" />
           CFD Flow
         </button>
+
+        {/* DRS Actuator Toggle */}
+        <button
+          onClick={() => {
+            playHMIClickSound();
+            setIsDrsOpen(!isDrsOpen);
+          }}
+          className={`flex items-center gap-1 px-2.5 py-0.5 rounded text-[10px] font-black uppercase tracking-wider transition-all cursor-pointer border ${
+            isDrsOpen
+              ? "bg-emerald-500 text-black border-emerald-400 shadow-md shadow-emerald-500/30"
+              : "bg-black/60 text-zinc-400 border-white/10 hover:text-white hover:border-white/30"
+          }`}
+          title="Toggle DRS Rear Wing Flap Actuation"
+        >
+          <Sparkles className="w-3 h-3" />
+          DRS {isDrsOpen ? "OPEN (ACTIVE)" : "CLOSED"}
+        </button>
       </div>
 
-      {/* Top Right Camera Presets Floating Widget */}
-      <div className="absolute top-4 right-4 flex items-center gap-1.5 bg-black/75 backdrop-blur-md border border-white/15 px-3 py-1.5 rounded-xl z-10 text-xs">
+      {/* Top Right Camera Presets & Snapshot Floating Widget */}
+      <div className="absolute top-4 right-4 flex items-center gap-1.5 bg-black/80 backdrop-blur-md border border-white/15 px-3 py-1.5 rounded-xl z-10 text-xs shadow-2xl">
         <Camera className="w-3.5 h-3.5 text-zinc-400" />
         <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest mr-1">Views:</span>
         {[
@@ -686,17 +697,29 @@ const F1ModularAssemblyViewportComponent: React.FC = () => {
             onClick={() => handleCameraPreset(v.id as any)}
             className={`px-2 py-0.5 rounded text-[10px] font-bold transition-all cursor-pointer ${
               cameraPreset === v.id
-                ? "bg-cyan-500/25 border border-cyan-400/50 text-cyan-300"
+                ? "bg-amber-500/25 border border-amber-400/50 text-amber-300"
                 : "text-zinc-400 hover:text-white hover:bg-white/10"
             }`}
           >
             {v.label}
           </button>
         ))}
+
+        <div className="h-4 w-px bg-white/15 mx-1" />
+
+        {/* Snapshot Export Button */}
+        <button
+          onClick={handleTakeSnapshot}
+          className="flex items-center gap-1 px-2.5 py-0.5 rounded-lg bg-amber-500/20 text-amber-300 border border-amber-400/40 text-[10px] font-black uppercase tracking-wider hover:bg-amber-500 hover:text-black transition-all cursor-pointer"
+          title="Export 4K Studio Image of Chassis"
+        >
+          <Camera className="w-3 h-3" />
+          Export Render
+        </button>
       </div>
 
       {/* Exploded View Bottom Slider HUD */}
-      <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between bg-black/75 backdrop-blur-md border border-white/10 px-4 py-2 rounded-xl z-10">
+      <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between bg-black/80 backdrop-blur-md border border-white/10 px-4 py-2 rounded-xl z-10 shadow-2xl">
         <div className="flex items-center gap-3 w-1/2 max-w-sm">
           <span className="text-[11px] font-bold text-zinc-300 uppercase tracking-wider whitespace-nowrap">
             Exploded View
@@ -708,15 +731,15 @@ const F1ModularAssemblyViewportComponent: React.FC = () => {
             step="0.01"
             value={explodedViewAmount}
             onChange={(e) => setExplodedViewAmount(parseFloat(e.target.value))}
-            className="w-full h-1.5 bg-zinc-800 rounded-lg appearance-none cursor-pointer accent-cyan-400"
+            className="w-full h-1.5 bg-zinc-800 rounded-lg appearance-none cursor-pointer accent-amber-400"
           />
-          <span className="text-[11px] font-mono text-cyan-400 font-bold w-10 text-right">
+          <span className="text-[11px] font-mono text-amber-400 font-bold w-10 text-right">
             {Math.round(explodedViewAmount * 100)}%
           </span>
         </div>
 
         <div className="flex items-center gap-2 text-[11px] text-zinc-400">
-          <Info className="w-3.5 h-3.5 text-cyan-400" />
+          <Info className="w-3.5 h-3.5 text-amber-400" />
           <span>Click any 3D part or glowing cyan ring to select attachment socket</span>
         </div>
       </div>

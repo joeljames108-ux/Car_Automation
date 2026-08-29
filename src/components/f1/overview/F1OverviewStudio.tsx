@@ -50,11 +50,11 @@ export const F1OverviewStudio: React.FC = memo(function F1OverviewStudio() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {[
-              { id: "monocoque", title: "Carbon Monocoque", desc: "Layups, crash structures & ballast", icon: <Shield size={16} className="text-cyan-400" /> },
+              { id: "monocoque", title: "Carbon Monocoque", desc: "Layups, crash structures & ballast", icon: <Shield size={16} className="text-amber-400" /> },
               { id: "powerunit", title: "V6 Turbo Hybrid", desc: "ICE, MGU-K, MGU-H & 4MJ Battery", icon: <Zap size={16} className="text-amber-400" /> },
-              { id: "aerodynamics", title: "Ground Effect Aero", desc: "Venturi tunnels & 85mm DRS", icon: <Wind size={16} className="text-cyan-400" /> },
-              { id: "suspension", title: "Suspension Kinematics", desc: "Pushrod/pullrod & ride heights", icon: <Activity size={16} className="text-purple-400" /> },
-              { id: "drivetrain", title: "8-Speed Gearbox", desc: "14ms seamless shifts & differential", icon: <Layers size={16} className="text-blue-400" /> },
+              { id: "aerodynamics", title: "Ground Effect Aero", desc: "Venturi tunnels & 85mm DRS", icon: <Wind size={16} className="text-amber-400" /> },
+              { id: "suspension", title: "Suspension Kinematics", desc: "Pushrod/pullrod & ride heights", icon: <Activity size={16} className="text-amber-400" /> },
+              { id: "drivetrain", title: "8-Speed Gearbox", desc: "14ms seamless shifts & differential", icon: <Layers size={16} className="text-amber-400" /> },
               { id: "brakes", title: "Carbon Brakes", desc: "1050-hole discs & BBW regen", icon: <Gauge size={16} className="text-red-400" /> },
             ].map((dept) => (
               <button
@@ -63,16 +63,16 @@ export const F1OverviewStudio: React.FC = memo(function F1OverviewStudio() {
                   playHMIClickSound();
                   setActiveStep(dept.id as any);
                 }}
-                className="flex items-center justify-between p-3.5 rounded-xl bg-slate-800/60 hover:bg-slate-800 border border-slate-700/60 hover:border-cyan-500/40 transition-all text-left group cursor-pointer"
+                className="flex items-center justify-between p-3.5 rounded-xl bg-slate-800/60 hover:bg-slate-800 border border-slate-700/60 hover:border-amber-500/40 transition-all text-left group cursor-pointer"
               >
                 <div className="flex items-center gap-3">
                   <div className="p-2 rounded-lg bg-slate-900 border border-slate-700">{dept.icon}</div>
                   <div>
-                    <div className="text-xs font-bold text-slate-200 group-hover:text-cyan-300">{dept.title}</div>
+                    <div className="text-xs font-bold text-slate-200 group-hover:text-amber-300">{dept.title}</div>
                     <div className="text-[11px] text-slate-400">{dept.desc}</div>
                   </div>
                 </div>
-                <ChevronRight size={14} className="text-slate-500 group-hover:text-cyan-400 transition-transform group-hover:translate-x-1" />
+                <ChevronRight size={14} className="text-slate-500 group-hover:text-amber-400 transition-transform group-hover:translate-x-1" />
               </button>
             ))}
           </div>
@@ -89,12 +89,12 @@ export const F1OverviewStudio: React.FC = memo(function F1OverviewStudio() {
 
           <div className="space-y-2 max-h-[290px] overflow-y-auto custom-scrollbar pr-1">
             {/* Player's Car */}
-            <div className="flex items-center justify-between p-2 rounded-lg bg-cyan-950/40 border border-cyan-500/40 text-xs">
+            <div className="flex items-center justify-between p-2 rounded-lg bg-amber-950/40 border border-amber-500/40 text-xs">
               <div className="flex items-center gap-2">
-                <div className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
-                <span className="font-bold text-cyan-300">{car.name} (You)</span>
+                <div className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
+                <span className="font-bold text-amber-300">{car.name} (You)</span>
               </div>
-              <span className="font-mono font-bold text-cyan-400">Baseline</span>
+              <span className="font-mono font-bold text-amber-400">Baseline</span>
             </div>
 
             {/* Top 6 Rivals */}

@@ -67,8 +67,8 @@ const F1ConstructorMasterAppComponent: React.FC<F1ConstructorMasterAppProps> = (
             </button>
           )}
           <div className="h-4 w-px bg-white/20" />
-          <span className="text-xs font-black uppercase tracking-widest text-cyan-400 flex items-center gap-1.5">
-            <Sparkles className="w-3.5 h-3.5 text-cyan-400" />
+          <span className="text-xs font-black uppercase tracking-widest text-amber-400 flex items-center gap-1.5">
+            <Sparkles className="w-3.5 h-3.5 text-amber-400" />
             FIA Formula 1 Construction Studio
           </span>
         </div>
@@ -82,7 +82,7 @@ const F1ConstructorMasterAppComponent: React.FC<F1ConstructorMasterAppProps> = (
             }}
             className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
               currentMode === "CONSTRUCTION_CAD"
-                ? "bg-cyan-500/20 border border-cyan-400/50 text-cyan-300 shadow-sm"
+                ? "bg-amber-500/20 border border-amber-400/50 text-amber-300 shadow-sm"
                 : "bg-zinc-900 border border-white/10 text-zinc-400 hover:text-white"
             }`}
           >
@@ -97,11 +97,11 @@ const F1ConstructorMasterAppComponent: React.FC<F1ConstructorMasterAppProps> = (
             }}
             className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
               currentMode === "RD_LABS"
-                ? "bg-cyan-500/20 border border-cyan-400/50 text-cyan-300 shadow-sm"
+                ? "bg-amber-500/20 border border-amber-400/50 text-amber-300 shadow-sm"
                 : "bg-zinc-900 border border-white/10 text-zinc-400 hover:text-white"
             }`}
           >
-            <FlaskConical className="w-3.5 h-3.5 text-cyan-400" />
+            <FlaskConical className="w-3.5 h-3.5 text-amber-400" />
             <span>Deep R&D Laboratories</span>
           </button>
 
@@ -112,7 +112,7 @@ const F1ConstructorMasterAppComponent: React.FC<F1ConstructorMasterAppProps> = (
             }}
             className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
               currentMode === "GARAGE_SETUP"
-                ? "bg-cyan-500/20 border border-cyan-400/50 text-cyan-300 shadow-sm"
+                ? "bg-amber-500/20 border border-amber-400/50 text-amber-300 shadow-sm"
                 : "bg-zinc-900 border border-white/10 text-zinc-400 hover:text-white"
             }`}
           >
@@ -199,7 +199,7 @@ const F1ConstructorMasterAppComponent: React.FC<F1ConstructorMasterAppProps> = (
       {currentMode === "BENCHMARKS" && (
         <div className="w-full flex-1 flex flex-col min-h-0 overflow-y-auto p-4 bg-[#080a0f]">
           <div className="flex items-center justify-between mb-4 pb-2 border-b border-white/10 shrink-0">
-            <h2 className="text-sm font-black uppercase tracking-widest text-cyan-400">
+            <h2 className="text-sm font-black uppercase tracking-widest text-amber-400">
               100 Real-World Sports Car Benchmark & Simulation Validation Suite
             </h2>
             <button

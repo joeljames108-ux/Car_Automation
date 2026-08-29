@@ -206,7 +206,7 @@ export const AerodynamicWindTunnelViewport: React.FC = () => {
       {/* Wind Tunnel Header */}
       <div className="flex items-center justify-between px-5 py-3 bg-[#0d121c] border-b border-[#1b2333]">
         <div className="flex items-center gap-3">
-          <div className="p-2 rounded-xl bg-cyan-500/10 border border-cyan-500/30 text-cyan-400">
+          <div className="p-2 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-400">
             <Wind className="w-5 h-5" />
           </div>
           <div>
@@ -236,13 +236,13 @@ export const AerodynamicWindTunnelViewport: React.FC = () => {
 
         {/* Aerodynamic Telemetry HUD Overlay */}
         {aeroResults && (
-          <div className="absolute top-4 left-4 flex flex-col gap-2.5 bg-[#0b0f19]/90 backdrop-blur-md p-4 rounded-xl border border-cyan-500/30 shadow-2xl w-72 text-xs">
+          <div className="absolute top-4 left-4 flex flex-col gap-2.5 bg-[#0b0f19]/90 backdrop-blur-md p-4 rounded-xl border border-amber-500/30 shadow-2xl w-72 text-xs">
             <div className="flex items-center justify-between border-b border-gray-800 pb-2">
               <span className="font-bold text-gray-200 flex items-center gap-1.5">
-                <Gauge className="w-4 h-4 text-cyan-400" />
+                <Gauge className="w-4 h-4 text-amber-400" />
                 Aero Telemetry
               </span>
-              <span className="font-mono text-cyan-400 font-bold">{airspeedKmh} km/h</span>
+              <span className="font-mono text-amber-400 font-bold">{airspeedKmh} km/h</span>
             </div>
 
             <div className="space-y-1.5">
@@ -256,11 +256,11 @@ export const AerodynamicWindTunnelViewport: React.FC = () => {
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-400">Aero Balance (Front):</span>
-                <span className="font-mono font-bold text-cyan-400">{aeroResults.aeroBalanceFrontPct}% F / {(100 - aeroResults.aeroBalanceFrontPct).toFixed(1)}% R</span>
+                <span className="font-mono font-bold text-amber-400">{aeroResults.aeroBalanceFrontPct}% F / {(100 - aeroResults.aeroBalanceFrontPct).toFixed(1)}% R</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-400">LBM Reynolds No:</span>
-                <span className="font-mono font-bold text-purple-400">{LbmWindTunnelSolver.solveFlowField({ inletVelocityKmH: airspeedKmh, frontalAreaM2: 2.1, rideHeightMm: rideHeightFrontMm, diffuserRampAngleDeg: rearWingAngleDeg }).reynoldsNumber.toLocaleString()}</span>
+                <span className="font-mono font-bold text-amber-400">{LbmWindTunnelSolver.solveFlowField({ inletVelocityKmH: airspeedKmh, frontalAreaM2: 2.1, rideHeightMm: rideHeightFrontMm, diffuserRampAngleDeg: rearWingAngleDeg }).reynoldsNumber.toLocaleString()}</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-400">Ground Effect Suction:</span>
@@ -272,7 +272,7 @@ export const AerodynamicWindTunnelViewport: React.FC = () => {
               </div>
               <div className="flex justify-between">
                 <span className="text-gray-400">Ground Effect Suction:</span>
-                <span className="font-mono font-bold text-purple-400">{aeroResults.groundEffectSuctionN} N</span>
+                <span className="font-mono font-bold text-amber-400">{aeroResults.groundEffectSuctionN} N</span>
               </div>
             </div>
           </div>
@@ -281,7 +281,7 @@ export const AerodynamicWindTunnelViewport: React.FC = () => {
         {/* Right Wind Tunnel Controls Panel */}
         <div className="w-80 bg-[#0c1018] border-l border-[#1b2333] p-4 flex flex-col space-y-4 overflow-y-auto">
           <h4 className="text-xs font-bold text-gray-300 uppercase tracking-wider flex items-center gap-2">
-            <Sliders className="w-4 h-4 text-cyan-400" />
+            <Sliders className="w-4 h-4 text-amber-400" />
             Tunnel Environmental Controls
           </h4>
 
@@ -289,7 +289,7 @@ export const AerodynamicWindTunnelViewport: React.FC = () => {
             <div>
               <div className="flex justify-between text-gray-400 mb-1">
                 <span>Tunnel Airspeed:</span>
-                <span className="font-mono text-cyan-400 font-bold">{airspeedKmh} km/h</span>
+                <span className="font-mono text-amber-400 font-bold">{airspeedKmh} km/h</span>
               </div>
               <input
                 type="range"
@@ -298,14 +298,14 @@ export const AerodynamicWindTunnelViewport: React.FC = () => {
                 step="5"
                 value={airspeedKmh}
                 onChange={(e) => setAirspeedKmh(parseInt(e.target.value))}
-                className="w-full accent-cyan-400 cursor-pointer"
+                className="w-full accent-amber-400 cursor-pointer"
               />
             </div>
 
             <div>
               <div className="flex justify-between text-gray-400 mb-1">
                 <span>Rear Wing Angle:</span>
-                <span className="font-mono text-cyan-400 font-bold">{rearWingAngleDeg}°</span>
+                <span className="font-mono text-amber-400 font-bold">{rearWingAngleDeg}°</span>
               </div>
               <input
                 type="range"
@@ -314,14 +314,14 @@ export const AerodynamicWindTunnelViewport: React.FC = () => {
                 step="1"
                 value={rearWingAngleDeg}
                 onChange={(e) => setRearWingAngleDeg(parseInt(e.target.value))}
-                className="w-full accent-cyan-400 cursor-pointer"
+                className="w-full accent-amber-400 cursor-pointer"
               />
             </div>
 
             <div>
               <div className="flex justify-between text-gray-400 mb-1">
                 <span>Front Ride Height:</span>
-                <span className="font-mono text-cyan-400 font-bold">{rideHeightFrontMm} mm</span>
+                <span className="font-mono text-amber-400 font-bold">{rideHeightFrontMm} mm</span>
               </div>
               <input
                 type="range"
@@ -330,14 +330,14 @@ export const AerodynamicWindTunnelViewport: React.FC = () => {
                 step="5"
                 value={rideHeightFrontMm}
                 onChange={(e) => setRideHeightFrontMm(parseInt(e.target.value))}
-                className="w-full accent-cyan-400 cursor-pointer"
+                className="w-full accent-amber-400 cursor-pointer"
               />
             </div>
 
             <div>
               <div className="flex justify-between text-gray-400 mb-1">
                 <span>Rear Ride Height:</span>
-                <span className="font-mono text-cyan-400 font-bold">{rideHeightRearMm} mm</span>
+                <span className="font-mono text-amber-400 font-bold">{rideHeightRearMm} mm</span>
               </div>
               <input
                 type="range"
@@ -346,7 +346,7 @@ export const AerodynamicWindTunnelViewport: React.FC = () => {
                 step="5"
                 value={rideHeightRearMm}
                 onChange={(e) => setRideHeightRearMm(parseInt(e.target.value))}
-                className="w-full accent-cyan-400 cursor-pointer"
+                className="w-full accent-amber-400 cursor-pointer"
               />
             </div>
           </div>

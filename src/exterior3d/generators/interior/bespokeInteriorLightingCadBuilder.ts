@@ -33,7 +33,7 @@ export class BespokeInteriorLightingCadBuilder {
     const root = new THREE.Group();
     root.name = "BespokeLighting_Root";
 
-    const mainColor = new THREE.Color(state.lighting.colorHex || "#38bdf8");
+    const mainColor = new THREE.Color(state.lighting.colorHex || "#fbbf24");
     const emissiveMat = new THREE.MeshBasicMaterial({ color: mainColor });
 
     const dy = explodedFactor * 0.35;
@@ -79,7 +79,7 @@ export class BespokeInteriorLightingCadBuilder {
       totalLuminousFluxLumens: 450,
       powerConsumptionWatts: 18.5,
       electrochromicGlassOpacityPercent: 85,
-      activeColorHex: state.lighting.colorHex || "#38bdf8",
+      activeColorHex: state.lighting.colorHex || "#fbbf24",
     };
     root.userData = { metadata: meta };
 

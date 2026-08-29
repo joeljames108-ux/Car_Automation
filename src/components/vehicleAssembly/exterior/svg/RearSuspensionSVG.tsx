@@ -31,7 +31,7 @@ export const RearSuspensionSVG: React.FC<RearSuspensionSVGProps> = ({
   onMouseEnter,
   onMouseLeave,
 }) => {
-  const strokeColor = isSelected ? "#38bdf8" : isHovered ? "#0284c7" : "#020617";
+  const strokeColor = isSelected ? "#fbbf24" : isHovered ? "#0284c7" : "#020617";
   const strokeWidth = isSelected ? 2.5 : isHovered ? 2.0 : 1.2;
 
   return (
@@ -62,7 +62,7 @@ export const RearSuspensionSVG: React.FC<RearSuspensionSVGProps> = ({
       <g id="rear_pushrod_rocker">
         <line x1="710" y1="355" x2="685" y2="315" stroke="#cbd5e1" strokeWidth="3.0" />
         {/* Bellcrank Rocker Pivot */}
-        <polygon points="682,312 690,312 686,320" fill="#0284c7" stroke="#38bdf8" strokeWidth="0.8" />
+        <polygon points="682,312 690,312 686,320" fill="#0284c7" stroke="#fbbf24" strokeWidth="0.8" />
         <circle cx="686" cy="315" r="2.5" fill="#f59e0b" />
         {/* Inboard Horizontal Damper */}
         <rect x="655" y="312" width="28" height="6" rx="2" fill="#eab308" stroke="#a16207" strokeWidth="0.8" />

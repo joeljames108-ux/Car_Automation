@@ -84,16 +84,16 @@ export function RadiatorSection({
             <div className="grid grid-cols-2 gap-2">
               <div className="p-2.5 rounded-xl bg-base-950/80 border border-slate-800 space-y-1">
                 <span className="text-[10px] font-mono text-slate-400 uppercase">Core Thickness</span>
-                <span className="text-xs font-mono font-bold text-cyan-300 block">56mm Triple-Pass</span>
+                <span className="text-xs font-mono font-bold text-amber-300 block">56mm Triple-Pass</span>
               </div>
               <div className="p-2.5 rounded-xl bg-base-950/80 border border-slate-800 space-y-1">
                 <span className="text-[10px] font-mono text-slate-400 uppercase">Fan Flow Rate</span>
-                <span className="text-xs font-mono font-bold text-cyan-300 block">3,400 CFM Dual</span>
+                <span className="text-xs font-mono font-bold text-amber-300 block">3,400 CFM Dual</span>
               </div>
             </div>
 
-            <div className="p-3 rounded-xl bg-cyan-950/20 border border-cyan-500/20 space-y-1">
-              <span className="text-[10px] font-mono font-bold text-cyan-300 uppercase tracking-wider block">
+            <div className="p-3 rounded-xl bg-amber-950/20 border border-amber-500/20 space-y-1">
+              <span className="text-[10px] font-mono font-bold text-amber-300 uppercase tracking-wider block">
                 HEAT SOAK SUPPRESSION
               </span>
               <p className="text-[11px] font-mono text-slate-300 leading-relaxed">

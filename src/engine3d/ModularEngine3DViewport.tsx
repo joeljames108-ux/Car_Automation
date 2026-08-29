@@ -20,6 +20,7 @@ import type { EngineConfig } from '../sim/types';
 
 import { EngineInitializationHUD } from './ui/EngineInitializationHUD';
 import { PerformanceMonitorHUD } from './ui/PerformanceMonitorHUD';
+import { ViewportPauseCanvas } from '../utils/ViewportPauseCanvas';
 
 export interface ModularEngine3DViewportProps {
   className?: string;
@@ -81,8 +82,10 @@ export const ModularEngine3DViewport: React.FC<ModularEngine3DViewportProps> = (
 
   return (
     <div className={`relative w-full h-full overflow-hidden select-none ${className}`}>
-      {/* 3D WebGL Canvas Layer */}
-      <Engine3DScene className="w-full h-full absolute inset-0" />
+      {/* 3D WebGL Canvas Layer — paused when off-screen */}
+      <ViewportPauseCanvas rootMargin="300px" style={{position: 'absolute', inset: 0}}>
+        <Engine3DScene className="w-full h-full" />
+      </ViewportPauseCanvas>
 
       {/* Staged Asset Initialization HUD */}
       <EngineInitializationHUD />

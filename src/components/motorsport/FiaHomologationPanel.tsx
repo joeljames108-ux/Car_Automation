@@ -315,10 +315,10 @@ const FiaHomologationPanelComponent: React.FC = () => {
 
         <div className="glass-panel p-4 rounded-2xl border-white/10 bg-slate-900/70">
           <div className="text-xs text-slate-400 font-semibold flex items-center space-x-2">
-            <Scale className="w-4 h-4 text-purple-400" />
+            <Scale className="w-4 h-4 text-amber-400" />
             <span>SUCCESS BALLAST WEIGHT</span>
           </div>
-          <div className="text-2xl font-mono font-black text-purple-300 mt-2">
+          <div className="text-2xl font-mono font-black text-amber-300 mt-2">
             +{bopAdjustment.successBallastWeightKg} <span className="text-xs text-slate-500">kg</span>
           </div>
           <div className="text-[11px] text-slate-500 mt-1">
@@ -341,7 +341,7 @@ const FiaHomologationPanelComponent: React.FC = () => {
 
         <div className="glass-panel p-4 rounded-2xl border-white/10 bg-slate-900/70">
           <div className="text-xs text-slate-400 font-semibold flex items-center space-x-2">
-            <Award className="w-4 h-4 text-cyan-400" />
+            <Award className="w-4 h-4 text-amber-400" />
             <span>ESTIMATED BOP LAP DELTA</span>
           </div>
           <div
@@ -359,7 +359,7 @@ const FiaHomologationPanelComponent: React.FC = () => {
       {/* Technical Regulation Audit Checklist */}
       <div className="glass-panel p-5 rounded-2xl border-white/10 bg-slate-900/70 space-y-3">
         <h3 className="text-sm font-bold text-slate-200 flex items-center gap-2">
-          <Layers size={16} className="text-cyan-400" />
+          <Layers size={16} className="text-amber-400" />
           <span>FIA TECHNICAL HOMOLOGATION AUDIT CHECKLIST</span>
         </h3>
         <div className="space-y-2">

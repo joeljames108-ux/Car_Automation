@@ -71,16 +71,16 @@ export const ModularInteriorComparisonStudio: React.FC<ModularInteriorComparison
   };
 
   return (
-    <div className="space-y-4 p-4 rounded-2xl bg-slate-950/80 border border-purple-500/30 backdrop-blur-xl shadow-2xl text-xs font-mono">
+    <div className="space-y-4 p-4 rounded-2xl bg-slate-950/80 border border-amber-500/30 backdrop-blur-xl shadow-2xl text-xs font-mono">
       {/* Header */}
-      <div className="flex flex-wrap items-center justify-between gap-3 p-3 rounded-xl bg-purple-950/30 border border-purple-500/40">
+      <div className="flex flex-wrap items-center justify-between gap-3 p-3 rounded-xl bg-amber-950/30 border border-amber-500/40">
         <div className="flex items-center gap-2.5">
-          <div className="p-2 rounded-lg bg-purple-500/20 text-purple-300 border border-purple-500/40">
+          <div className="p-2 rounded-lg bg-amber-500/20 text-amber-300 border border-amber-500/40">
             <GitCompare size={18} />
           </div>
           <div>
             <h3 className="text-sm font-extrabold text-slate-100">CABIN ENGINEERING COMPARISON BENCH</h3>
-            <p className="text-[11px] text-purple-300/80">Benchmark current cabin configuration against production baselines</p>
+            <p className="text-[11px] text-amber-300/80">Benchmark current cabin configuration against production baselines</p>
           </div>
         </div>
 
@@ -90,7 +90,7 @@ export const ModularInteriorComparisonStudio: React.FC<ModularInteriorComparison
           <select
             value={benchmarkKey}
             onChange={(e) => setBenchmarkKey(e.target.value)}
-            className="px-3 py-1.5 rounded-xl bg-slate-900 border border-purple-500/40 text-purple-300 font-bold outline-none"
+            className="px-3 py-1.5 rounded-xl bg-slate-900 border border-amber-500/40 text-amber-300 font-bold outline-none"
           >
             {Object.entries(CURATED_INTERIOR_PRESETS).map(([k, p]) => (
               <option key={k} value={k}>
@@ -120,7 +120,7 @@ export const ModularInteriorComparisonStudio: React.FC<ModularInteriorComparison
             </div>
             <div className="p-2 rounded-lg" style={{backgroundColor: 'rgba(255,248,235,0.5)', border: '1px solid rgba(217,166,78,0.15)'}}>
               <span className="block" style={{color: '#78716C'}}>Ear Noise Level:</span>
-              <span className="font-extrabold text-cyan-600">{acousticA.driverEarSplDba} dBA</span>
+              <span className="font-extrabold text-amber-600">{acousticA.driverEarSplDba} dBA</span>
             </div>
             <div className="p-2 rounded-lg" style={{backgroundColor: 'rgba(255,248,235,0.5)', border: '1px solid rgba(217,166,78,0.15)'}}>
               <span className="block" style={{color: '#78716C'}}>SAE Ergo Score:</span>
@@ -138,10 +138,10 @@ export const ModularInteriorComparisonStudio: React.FC<ModularInteriorComparison
         </div>
 
         {/* Cabin B Card */}
-        <div className="p-4 rounded-xl bg-slate-900/60 border border-purple-500/30 space-y-3">
+        <div className="p-4 rounded-xl bg-slate-900/60 border border-amber-500/30 space-y-3">
           <div className="flex items-center justify-between">
-            <span className="font-bold text-purple-400">CABIN B (BENCHMARK)</span>
-            <span className="px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-300 text-[10px]">{benchmarkCabin.name}</span>
+            <span className="font-bold text-amber-400">CABIN B (BENCHMARK)</span>
+            <span className="px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 text-[10px]">{benchmarkCabin.name}</span>
           </div>
           <div className="grid grid-cols-2 gap-2 text-[11px]">
             <div className="p-2 rounded-lg bg-slate-950/80 border border-slate-800">
@@ -154,7 +154,7 @@ export const ModularInteriorComparisonStudio: React.FC<ModularInteriorComparison
             </div>
             <div className="p-2 rounded-lg bg-slate-950/80 border border-slate-800">
               <span className="block text-slate-400">Ear Noise Level:</span>
-              <span className="font-extrabold text-cyan-400">{acousticB.driverEarSplDba} dBA</span>
+              <span className="font-extrabold text-amber-400">{acousticB.driverEarSplDba} dBA</span>
             </div>
             <div className="p-2 rounded-lg bg-slate-950/80 border border-slate-800">
               <span className="block text-slate-400">SAE Ergo Score:</span>
@@ -164,7 +164,7 @@ export const ModularInteriorComparisonStudio: React.FC<ModularInteriorComparison
           <button
             onClick={handleExportGlbB}
             disabled={isExportingB}
-            className="w-full mt-2 py-1.5 px-3 rounded-lg bg-purple-600 text-white font-bold flex items-center justify-center gap-1.5 text-[10px] cursor-pointer hover:bg-purple-700 disabled:opacity-50"
+            className="w-full mt-2 py-1.5 px-3 rounded-lg bg-amber-600 text-white font-bold flex items-center justify-center gap-1.5 text-[10px] cursor-pointer hover:bg-amber-700 disabled:opacity-50"
           >
             <Download size={12} />
             <span>{isExportingB ? "EXPORTING..." : "EXPORT CABIN B GLB"}</span>

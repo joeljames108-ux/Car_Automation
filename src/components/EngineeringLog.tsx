@@ -206,7 +206,7 @@ export function EngineeringLogComponent() {
         }}
       >
         <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
-          <Cpu size={12} style={{ color: "#38bdf8" }} />
+          <Cpu size={12} style={{ color: "#fbbf24" }} />
           <span>Apex AI Log v2.4</span>
         </div>
         <span style={{ color: "#34d399", fontWeight: 600 }}>● Connected</span>

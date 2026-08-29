@@ -33,7 +33,7 @@ export const BodyPanelShaderDefs: React.FC<BodyPanelShaderDefsProps> = ({
       {/* ── 2. Contrast Roof / Two-Tone Paint Gradient ── */}
       <linearGradient id="roofPaintContrast" x1="0%" y1="0%" x2="0%" y2="100%">
         <stop offset="0%" stopColor={secondaryColor} stopOpacity="0.9" />
-        <stop offset="40%" stopColor="#38bdf8" stopOpacity="0.3" />
+        <stop offset="40%" stopColor="#fbbf24" stopOpacity="0.3" />
         <stop offset="100%" stopColor="#020617" stopOpacity="1.0" />
       </linearGradient>
 
@@ -60,7 +60,7 @@ export const BodyPanelShaderDefs: React.FC<BodyPanelShaderDefsProps> = ({
       {/* ── 6. Door Side Impact Beam Ghost Structure ── */}
       <linearGradient id="doorBeamGhost" x1="0%" y1="0%" x2="100%" y2="0%">
         <stop offset="0%" stopColor="#0284c7" stopOpacity="0.0" />
-        <stop offset="50%" stopColor="#38bdf8" stopOpacity="0.6" />
+        <stop offset="50%" stopColor="#fbbf24" stopOpacity="0.6" />
         <stop offset="100%" stopColor="#0284c7" stopOpacity="0.0" />
       </linearGradient>
 

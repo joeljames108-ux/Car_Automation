@@ -88,14 +88,14 @@ export function EVCoolingSection({
           accent="purple"
         >
           <div className="space-y-3">
-            <div className="p-3 rounded-xl bg-base-950/80 border border-purple-500/20 space-y-2 text-xs font-mono">
+            <div className="p-3 rounded-xl bg-base-950/80 border border-amber-500/20 space-y-2 text-xs font-mono">
               <div className="flex justify-between">
                 <span className="text-slate-400">Target Cell Window</span>
-                <span className="text-purple-300 font-extrabold">25°C – 35°C Optimal</span>
+                <span className="text-amber-300 font-extrabold">25°C – 35°C Optimal</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-slate-400">Coolant Fluid</span>
-                <span className="text-cyan-300 font-extrabold">Water-Glycol Dielectric</span>
+                <span className="text-amber-300 font-extrabold">Water-Glycol Dielectric</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-slate-400">Chiller Capacity</span>
@@ -103,8 +103,8 @@ export function EVCoolingSection({
               </div>
             </div>
 
-            <div className="p-3 rounded-xl bg-purple-950/20 border border-purple-500/20 space-y-1">
-              <span className="text-[10px] font-mono font-bold text-purple-300 uppercase tracking-wider block">
+            <div className="p-3 rounded-xl bg-amber-950/20 border border-amber-500/20 space-y-1">
+              <span className="text-[10px] font-mono font-bold text-amber-300 uppercase tracking-wider block">
                 UNIFORM CELL TEMPERATURE
               </span>
               <p className="text-[11px] font-mono text-slate-300 leading-relaxed">

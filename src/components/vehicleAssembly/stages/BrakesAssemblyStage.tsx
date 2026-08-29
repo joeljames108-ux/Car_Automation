@@ -76,7 +76,7 @@ export const BrakesAssemblyStage: React.FC<BrakesAssemblyStageProps> = ({
   const caliperColors = [
     { hex: "#ef4444", name: "Brembo Racing Red" },
     { hex: "#eab308", name: "Apex Acid Yellow" },
-    { hex: "#06b6d4", name: "Cyan Mist" },
+    { hex: "#f59e0b", name: "Cyan Mist" },
     { hex: "#10b981", name: "British Green" },
     { hex: "#f97316", name: "McLaren Orange" },
     { hex: "#0f172a", name: "Stealth Black" },
@@ -135,7 +135,7 @@ export const BrakesAssemblyStage: React.FC<BrakesAssemblyStageProps> = ({
               <p className="text-[10px] text-slate-500 dark:text-slate-400 mb-2.5">{b.desc}</p>
               <div className="space-y-1 text-[10px] font-mono text-slate-400 border-t border-base-800/60 pt-2">
                 <div>Rotors: <strong className="text-slate-200">{b.rotorSize}</strong></div>
-                <div>Core: <strong className="text-cyan-400">{b.rotorSpec}</strong></div>
+                <div>Core: <strong className="text-amber-400">{b.rotorSpec}</strong></div>
                 <div>Caliper: <strong className="text-amber-400">{b.pistons}-Piston {b.caliper}</strong></div>
                 <div>Fade Temp: <strong className="text-emerald-400">{b.fadeLimit}</strong></div>
               </div>

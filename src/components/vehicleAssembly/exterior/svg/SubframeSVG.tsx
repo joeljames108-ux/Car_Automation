@@ -42,7 +42,7 @@ export const SubframeSVG: React.FC<SubframeSVGProps> = ({
   };
 
   const strokeColor = isSelected
-    ? "#38bdf8"
+    ? "#fbbf24"
     : isHovered
     ? "#0284c7"
     : "#0f172a";
@@ -169,7 +169,7 @@ export const SubframeSVG: React.FC<SubframeSVGProps> = ({
           cy={340}
           r="45"
           fill="none"
-          stroke="#38bdf8"
+          stroke="#fbbf24"
           strokeWidth="1.5"
           strokeDasharray="4 4"
           className="animate-spin"

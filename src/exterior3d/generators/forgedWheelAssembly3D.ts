@@ -126,7 +126,7 @@ export class ForgedWheelAssembly3D {
     });
 
     const centerLockBlueMat = new THREE.MeshPhysicalMaterial({
-      color: 0x3b82f6, // Anodized Racing Blue (Right)
+      color: 0xd97706, // Anodized Racing Blue (Right)
       metalness: 0.92,
       roughness: 0.12,
       clearcoat: 0.9,

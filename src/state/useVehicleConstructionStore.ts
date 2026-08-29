@@ -144,7 +144,7 @@ export const useVehicleConstructionStore = create<VehicleConstructionState>((set
     rearSeatsId: 'REAR_SEATS_COMFORT',
     centerConsoleId: 'CONSOLE_SPORT_GATED',
     doorCardsId: 'DOOR_CARDS_NAPPA',
-    ambientLightingColorHex: '#06b6d4',
+    ambientLightingColorHex: '#f59e0b',
     ambientLightingBrightnessPct: 80,
     primaryTrimGrade: 'nappa_leather',
     accentTrimGrade: 'forged_carbon',
@@ -254,16 +254,28 @@ export const useVehicleConstructionStore = create<VehicleConstructionState>((set
     let totalRigidity = chassis.torsionalRigidityKNmPerDeg;
 
     // Metallurgy multipliers
-    const gradeMultipliers: Record<MaterialGrade, { mass: number; cost: number; rigidityAdd: number }> = {
+    const gradeMultipliers: Record<string, { mass: number; cost: number; rigidityAdd: number }> = {
       cast: { mass: 1.0, cost: 1.0, rigidityAdd: 0 },
       forged: { mass: 0.85, cost: 1.4, rigidityAdd: 6.0 },
       billet: { mass: 0.75, cost: 1.9, rigidityAdd: 14.0 },
       titanium: { mass: 0.60, cost: 3.8, rigidityAdd: 24.0 },
       ceramic: { mass: 0.55, cost: 4.2, rigidityAdd: 28.0 },
+      cast_iron: { mass: 1.15, cost: 0.85, rigidityAdd: -2.0 },
+      nodular_iron: { mass: 1.10, cost: 0.95, rigidityAdd: 2.0 },
+      cast_aluminum: { mass: 0.90, cost: 1.15, rigidityAdd: 3.0 },
+      billet_7075: { mass: 0.72, cost: 2.1, rigidityAdd: 16.0 },
+      maraging_steel: { mass: 0.80, cost: 2.5, rigidityAdd: 20.0 },
+      titanium_alloy: { mass: 0.58, cost: 4.0, rigidityAdd: 26.0 },
+      inconel_718: { mass: 0.88, cost: 3.6, rigidityAdd: 18.0 },
+      haynes_230: { mass: 0.90, cost: 3.4, rigidityAdd: 15.0 },
+      cmc: { mass: 0.52, cost: 4.8, rigidityAdd: 30.0 },
+      mim_titanium: { mass: 0.62, cost: 3.5, rigidityAdd: 22.0 },
+      chromoly: { mass: 0.82, cost: 1.6, rigidityAdd: 12.0 },
+      hypereutectic_aluminum: { mass: 0.86, cost: 1.35, rigidityAdd: 8.0 },
     };
 
     const chassisGrade = state.materialGrades.chassis_platform || 'forged';
-    const mult = gradeMultipliers[chassisGrade];
+    const mult = gradeMultipliers[chassisGrade] || { mass: 1.0, cost: 1.0, rigidityAdd: 0 };
     totalMass *= mult.mass;
     totalCost *= mult.cost;
     totalRigidity += mult.rigidityAdd;

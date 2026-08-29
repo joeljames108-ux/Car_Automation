@@ -74,7 +74,7 @@ function SystemBar({
 
 export const CommandCenterScreen1: React.FC<CommandCenterScreen1Props> = ({ design, sim }) => {
   const dragSeries = [
-    { data: sim.dragVsSpeed.map((d) => ({ x: d.speed, y: d.drag })), color: "#22d3ee", fill: true },
+    { data: sim.dragVsSpeed.map((d) => ({ x: d.speed, y: d.drag })), color: "#fbbf24", fill: true },
     { data: sim.dragVsSpeed.map((d) => ({ x: d.speed, y: d.downforce })), color: "#22c55e" },
   ];
 
@@ -84,11 +84,11 @@ export const CommandCenterScreen1: React.FC<CommandCenterScreen1Props> = ({ desi
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         {/* Card 1 (Top-Left): Power & Torque Curves (Internal Parallax: Moves Left) */}
         <div className="cinematic-card-left">
-          <Section title="POWER & TORQUE CURVES" icon={<TrendingUp size={16} className="text-cyan-400" />}>
+          <Section title="POWER & TORQUE CURVES" icon={<TrendingUp size={16} className="text-amber-400" />}>
             <PowerTorqueCurveChart powerCurve={sim.powerCurve} height={220} />
             <div className="flex items-center justify-between border-t border-white/10 pt-2.5 mt-2 text-xs font-mono">
               <div className="flex items-center gap-2">
-                <span className="w-2 h-2 rounded-full bg-cyan-400 shadow-[0_0_8px_rgba(34,211,238,0.8)]" />
+                <span className="w-2 h-2 rounded-full bg-amber-400 shadow-[0_0_8px_rgba(34,211,238,0.8)]" />
                 <span className="text-slate-300 font-bold">Horsepower (HP)</span>
               </div>
               <div className="flex items-center gap-2">
@@ -161,7 +161,7 @@ export const CommandCenterScreen1: React.FC<CommandCenterScreen1Props> = ({ desi
                 label="Engine Cooling Margin"
                 value={sim.coolingMargin}
                 good={0.5}
-                icon={<Thermometer size={12} className="text-cyan-400" />}
+                icon={<Thermometer size={12} className="text-amber-400" />}
               />
               <SystemBar
                 label="Brake Thermal Dissipation"
@@ -203,7 +203,7 @@ export const CommandCenterScreen1: React.FC<CommandCenterScreen1Props> = ({ desi
                 value={clamp(sim.infotainment.powerDraw / 200, 0, 1)}
                 good={0.4}
                 invert
-                icon={<Zap size={12} className="text-purple-400" />}
+                icon={<Zap size={12} className="text-amber-400" />}
               />
             </div>
           </Section>

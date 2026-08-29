@@ -70,10 +70,10 @@ export function HeadGasketSection({
           accent="cyan"
         >
           <div className="space-y-4">
-            <div className="p-3 rounded-xl bg-base-950/80 border border-cyan-500/20 space-y-2">
+            <div className="p-3 rounded-xl bg-base-950/80 border border-amber-500/20 space-y-2">
               <div className="flex items-center justify-between text-xs font-mono">
                 <span className="text-slate-400">Compressed Thickness</span>
-                <span className="text-cyan-300 font-extrabold">0.85 mm (0.033")</span>
+                <span className="text-amber-300 font-extrabold">0.85 mm (0.033")</span>
               </div>
               <div className="flex items-center justify-between text-xs font-mono">
                 <span className="text-slate-400">Combustion Sealing Ring</span>
@@ -81,8 +81,8 @@ export function HeadGasketSection({
               </div>
             </div>
 
-            <div className="p-3 rounded-xl bg-cyan-950/20 border border-cyan-500/20 space-y-1">
-              <span className="text-[10px] font-mono font-bold text-cyan-300 uppercase tracking-wider block">
+            <div className="p-3 rounded-xl bg-amber-950/20 border border-amber-500/20 space-y-1">
+              <span className="text-[10px] font-mono font-bold text-amber-300 uppercase tracking-wider block">
                 CYLINDER PRESSURE INTEGRITY
               </span>
               <p className="text-[11px] font-mono text-slate-300 leading-relaxed">

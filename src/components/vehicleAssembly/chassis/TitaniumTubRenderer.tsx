@@ -23,7 +23,7 @@ export const TitaniumTubRenderer: React.FC<TitaniumTubRendererProps> = ({ isHove
           Z
         "
         fill="#1e293b"
-        stroke={isHovered ? "#ec4899" : "#a855f7"}
+        stroke={isHovered ? "#d97706" : "#f59e0b"}
         strokeWidth={isHovered ? "3.5" : "2.2"}
         className="filter drop-shadow-2xl"
       />
@@ -52,24 +52,24 @@ export const TitaniumTubRenderer: React.FC<TitaniumTubRendererProps> = ({ isHove
       />
 
       {/* 3. Structural Webbing Lightening Grid */}
-      <path d="M 330 225 C 450 225 580 225 690 225 L 680 258 L 320 258 Z" fill="#0f172a" stroke="#a855f7" strokeWidth="1.5" />
-      <line x1="380" y1="225" x2="360" y2="258" stroke="#a855f7" strokeWidth="1.5" />
-      <line x1="440" y1="225" x2="420" y2="258" stroke="#a855f7" strokeWidth="1.5" />
-      <line x1="500" y1="225" x2="480" y2="258" stroke="#a855f7" strokeWidth="1.5" />
-      <line x1="560" y1="225" x2="540" y2="258" stroke="#a855f7" strokeWidth="1.5" />
-      <line x1="620" y1="225" x2="600" y2="258" stroke="#a855f7" strokeWidth="1.5" />
+      <path d="M 330 225 C 450 225 580 225 690 225 L 680 258 L 320 258 Z" fill="#0f172a" stroke="#f59e0b" strokeWidth="1.5" />
+      <line x1="380" y1="225" x2="360" y2="258" stroke="#f59e0b" strokeWidth="1.5" />
+      <line x1="440" y1="225" x2="420" y2="258" stroke="#f59e0b" strokeWidth="1.5" />
+      <line x1="500" y1="225" x2="480" y2="258" stroke="#f59e0b" strokeWidth="1.5" />
+      <line x1="560" y1="225" x2="540" y2="258" stroke="#f59e0b" strokeWidth="1.5" />
+      <line x1="620" y1="225" x2="600" y2="258" stroke="#f59e0b" strokeWidth="1.5" />
 
       {/* Cockpit Window Surround */}
       <path
         d="M 420 145 C 475 142 510 142 515 142 L 515 215 C 430 215 370 215 340 215 C 360 185 390 160 420 145 Z"
         fill="#070a12"
-        stroke="#ec4899"
+        stroke="#d97706"
         strokeWidth="2.5"
         opacity="0.9"
       />
 
       {/* Label */}
-      <text x="475" y="272" fill="#ec4899" fontSize="9" fontFamily="monospace" textAnchor="middle" fontWeight="bold" opacity="0.95">
+      <text x="475" y="272" fill="#d97706" fontSize="9" fontFamily="monospace" textAnchor="middle" fontWeight="bold" opacity="0.95">
         TITANIUM SPEC-R HYPERCAR TUB & IRIDESCENT HEAT-TINT WELDS
       </text>
     </g>

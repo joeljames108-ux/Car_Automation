@@ -17,7 +17,7 @@ function Pill({ label, color }: { label: string; color: "cyan" | "green" | "ambe
     green:  "bg-ok-500/15 text-ok-400 border-ok-500/30",
     amber:  "bg-warn-500/15 text-warn-400 border-warn-500/30",
     red:    "bg-danger-500/15 text-danger-400 border-danger-500/30",
-    purple: "bg-purple-500/15 text-purple-400 border-purple-500/30",
+    purple: "bg-amber-500/15 text-amber-400 border-amber-500/30",
   };
   return <span className={`text-[10px] font-semibold px-1.5 py-0.5 rounded border ${cls[color]}`}>{label}</span>;
 }
@@ -77,7 +77,7 @@ function EventCard({ event }: { event: MarketEvent }) {
     material_shortage: <AlertTriangle size={14} className="text-danger-400" />,
     tech_breakthrough: <TrendingUp size={14} className="text-accent-400" />,
     recession:         <TrendingDown size={14} className="text-danger-400" />,
-    luxury_boom:       <Globe size={14} className="text-purple-400" />,
+    luxury_boom:       <Globe size={14} className="text-amber-400" />,
     suv_craze:         <ShoppingCart size={14} className="text-amber-400" />,
     green_mandate:     <Globe size={14} className="text-ok-400" />,
   };
@@ -100,7 +100,7 @@ function EventCard({ event }: { event: MarketEvent }) {
           </span>
         )}
         {event.effects.luxuryDemandBonus && (
-          <span className="text-[10px] bg-purple-500/10 text-purple-400 px-1.5 py-0.5 rounded">
+          <span className="text-[10px] bg-amber-500/10 text-amber-400 px-1.5 py-0.5 rounded">
             Luxury {event.effects.luxuryDemandBonus > 0 ? "+" : ""}{Math.round(event.effects.luxuryDemandBonus * 100)}%
           </span>
         )}
@@ -234,11 +234,11 @@ export function DynamicEconomy() {
             <h3 className="text-xs font-semibold text-slate-300 uppercase tracking-wider mb-4">Customer Preferences</h3>
             <div className="space-y-3">
               <PrefBar label="EV Adoption"        value={economy.customerPreferences.evAdoption}        color="bg-ok-400" />
-              <PrefBar label="SUV Preference"     value={economy.customerPreferences.suvPreference}     color="bg-blue-400" />
-              <PrefBar label="Luxury Demand"      value={economy.customerPreferences.luxuryDemand}      color="bg-purple-400" />
+              <PrefBar label="SUV Preference"     value={economy.customerPreferences.suvPreference}     color="bg-amber-400" />
+              <PrefBar label="Luxury Demand"      value={economy.customerPreferences.luxuryDemand}      color="bg-amber-400" />
               <PrefBar label="Performance Focus"  value={economy.customerPreferences.performanceDemand} color="bg-accent-400" />
               <PrefBar label="Safety Priority"    value={economy.customerPreferences.safetyPriority}    color="bg-warn-400" />
-              <PrefBar label="Tech Savvy"         value={economy.customerPreferences.techPriority}      color="bg-blue-400" />
+              <PrefBar label="Tech Savvy"         value={economy.customerPreferences.techPriority}      color="bg-amber-400" />
               <PrefBar label="Eco-Conscious"      value={economy.customerPreferences.ecoFriendly}       color="bg-ok-400" />
             </div>
           </div>

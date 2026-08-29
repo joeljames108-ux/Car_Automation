@@ -18,7 +18,7 @@ export class ModularClosuresGenerator {
     trackWidthMm: number,
     materialGrade: MaterialGrade = 'forged',
     isXRay: boolean = false,
-    paintColorHex: number = 0x2563eb,
+    paintColorHex: number = 0xb45309,
     articulation?: BodyClosuresArticulation,
     paintConfig?: Partial<PaintConfiguration>,
     trackWidthFrontMm?: number

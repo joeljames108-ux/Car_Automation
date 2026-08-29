@@ -45,7 +45,7 @@ export const ChassisFrameSVG: React.FC<ChassisFrameSVGProps> = ({
   };
 
   const strokeColor = isSelected
-    ? "#38bdf8"
+    ? "#fbbf24"
     : isHovered
     ? "#0284c7"
     : "#1e293b";
@@ -121,7 +121,7 @@ export const ChassisFrameSVG: React.FC<ChassisFrameSVGProps> = ({
         <path
           d="M 370 330 C 370 310, 395 305, 395 325 L 395 350 L 370 355 Z"
           fill="#090d16"
-          stroke="#38bdf8"
+          stroke="#fbbf24"
           strokeWidth="0.8"
         />
       </g>
@@ -219,8 +219,8 @@ export const ChassisFrameSVG: React.FC<ChassisFrameSVGProps> = ({
         />
 
         {/* Rear Bulkhead Structural X-Brace (Matching Photos) */}
-        <line x1="640" y1="245" x2="725" y2="280" stroke="#38bdf8" strokeWidth="2.0" />
-        <line x1="710" y1="240" x2="655" y2="285" stroke="#38bdf8" strokeWidth="2.0" />
+        <line x1="640" y1="245" x2="725" y2="280" stroke="#fbbf24" strokeWidth="2.0" />
+        <line x1="710" y1="240" x2="655" y2="285" stroke="#fbbf24" strokeWidth="2.0" />
       </g>
 
       {/* ── 8. REAR WHEELHOUSES, TRUNK & REAR CRASH RAILS ── */}
@@ -257,7 +257,7 @@ export const ChassisFrameSVG: React.FC<ChassisFrameSVGProps> = ({
           height="260"
           rx="16"
           fill="none"
-          stroke="#38bdf8"
+          stroke="#fbbf24"
           strokeWidth="1.5"
           strokeDasharray="8 4"
           className="animate-pulse"

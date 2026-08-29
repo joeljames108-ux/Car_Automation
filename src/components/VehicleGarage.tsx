@@ -13,10 +13,10 @@ import type { GarageVehicle, VehicleVariantType } from "../sim/types";
 
 const VARIANT_COLORS: Record<VehicleVariantType, string> = {
   base:            "bg-slate-500/20 text-slate-400 border-slate-500/30",
-  trim:            "bg-blue-500/20 text-blue-400 border-blue-500/30",
+  trim:            "bg-amber-500/20 text-amber-400 border-amber-500/30",
   facelift:        "bg-amber-500/20 text-amber-400 border-amber-500/30",
   generation:      "bg-accent-500/20 text-accent-400 border-accent-500/30",
-  special_edition: "bg-purple-500/20 text-purple-400 border-purple-500/30",
+  special_edition: "bg-amber-500/20 text-amber-400 border-amber-500/30",
 };
 
 const VARIANT_LABELS: Record<VehicleVariantType, string> = {
@@ -87,7 +87,7 @@ function VehicleCard({
           <div className="text-[9px] text-slate-600">kg</div>
         </div>
         <div className="bg-base-850 rounded-lg p-1.5 text-center">
-          <Gauge size={10} className="mx-auto text-blue-400 mb-0.5" />
+          <Gauge size={10} className="mx-auto text-amber-400 mb-0.5" />
           <div className="font-mono text-xs text-slate-200">{Math.round(vehicle.topSpeed)}</div>
           <div className="text-[9px] text-slate-600">km/h</div>
         </div>

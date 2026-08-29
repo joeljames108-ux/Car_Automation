@@ -10,6 +10,7 @@ import { ExteriorScene3D } from "./scene/ExteriorScene3D";
 import { ExteriorComponentPicker3D } from "./ui/ExteriorComponentPicker3D";
 import { ExteriorComponentInspector3D } from "./ui/ExteriorComponentInspector3D";
 import { useExteriorAssembly3DBridge } from "./store/exteriorAssemblyBridge";
+import { ViewportPauseCanvas } from "../utils/ViewportPauseCanvas";
 
 interface ModularExterior3DViewportProps {
   className?: string;
@@ -26,8 +27,10 @@ export const ModularExterior3DViewport: React.FC<ModularExterior3DViewportProps>
       {/* Dynamic Ambient Background Glow */}
       <div className="absolute inset-0 pointer-events-none z-10" style={{background: 'radial-gradient(circle at 50% 35%, rgba(217,166,78,0.12), transparent 70%)'}} />
 
-      {/* Main React Three Fiber 3D Canvas */}
-      <ExteriorScene3D />
+      {/* Main React Three Fiber 3D Canvas — paused when off-screen */}
+      <ViewportPauseCanvas rootMargin="300px" style={{flex: 1, minHeight: 0}}>
+        <ExteriorScene3D />
+      </ViewportPauseCanvas>
 
       {/* Floating 3D Component Quick Installer */}
       <ExteriorComponentPicker3D />

@@ -118,7 +118,7 @@ export const InteriorAssemblyStage: React.FC<InteriorAssemblyStageProps> = ({
       {/* Header with Subtab Navigation */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-base-800/60 pb-3 gap-3">
         <div className="flex items-center gap-2.5">
-          <div className="p-2 rounded-xl bg-gradient-to-tr from-indigo-500/20 to-cyan-500/20 text-indigo-400 border border-indigo-500/30">
+          <div className="p-2 rounded-xl bg-gradient-to-tr from-indigo-500/20 to-amber-500/20 text-amber-400 border border-indigo-500/30">
             <Sofa size={18} />
           </div>
           <div>
@@ -126,7 +126,7 @@ export const InteriorAssemblyStage: React.FC<InteriorAssemblyStageProps> = ({
               <h3 className="text-sm font-bold font-mono text-slate-800 dark:text-slate-100 uppercase tracking-wider">
                 STAGE 9: INTERIOR COCKPIT & ELECTRONICS
               </h3>
-              <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
+              <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-indigo-500/30">
                 UNIFIED CABIN & ECU
               </span>
             </div>
@@ -142,7 +142,7 @@ export const InteriorAssemblyStage: React.FC<InteriorAssemblyStageProps> = ({
             onClick={() => setActiveTab("cockpit")}
             className={`flex items-center gap-1.5 px-3 py-1 rounded-lg text-[10px] font-mono font-bold transition-all cursor-pointer ${
               activeTab === "cockpit"
-                ? "bg-indigo-500 text-white shadow-sm"
+                ? "bg-amber-500 text-white shadow-sm"
                 : "text-slate-400 hover:text-slate-200"
             }`}
           >
@@ -153,7 +153,7 @@ export const InteriorAssemblyStage: React.FC<InteriorAssemblyStageProps> = ({
             onClick={() => setActiveTab("electronics")}
             className={`flex items-center gap-1.5 px-3 py-1 rounded-lg text-[10px] font-mono font-bold transition-all cursor-pointer ${
               activeTab === "electronics"
-                ? "bg-cyan-500 text-slate-950 shadow-sm"
+                ? "bg-amber-500 text-slate-950 shadow-sm"
                 : "text-slate-400 hover:text-slate-200"
             }`}
           >
@@ -176,7 +176,7 @@ export const InteriorAssemblyStage: React.FC<InteriorAssemblyStageProps> = ({
                   onClick={() => onUpdateInterior(i.id)}
                   className={`p-3.5 rounded-2xl text-left transition-all border cursor-pointer ${
                     isSelected
-                      ? "bg-indigo-500/20 border-indigo-500/60 shadow-md ring-1 ring-indigo-500/40"
+                      ? "bg-amber-500/20 border-indigo-500/60 shadow-md ring-1 ring-indigo-500/40"
                       : "bg-base-900/60 border-base-800 hover:border-base-700 text-slate-400"
                   }`}
                 >
@@ -188,7 +188,7 @@ export const InteriorAssemblyStage: React.FC<InteriorAssemblyStageProps> = ({
                   </p>
                   <div className="space-y-0.5 text-[10px] font-mono text-slate-400 border-t border-base-800/60 pt-2">
                     <div>Seats: <strong className="text-slate-200">{i.seats}</strong></div>
-                    <div>Steering: <strong className="text-cyan-400">{i.steering}</strong></div>
+                    <div>Steering: <strong className="text-amber-400">{i.steering}</strong></div>
                   </div>
                 </button>
               );
@@ -225,13 +225,13 @@ export const InteriorAssemblyStage: React.FC<InteriorAssemblyStageProps> = ({
               onClick={() => onUpdateMotecDisplay(!motecDisplay)}
               className={`p-3.5 rounded-2xl text-left transition-all border cursor-pointer ${
                 motecDisplay
-                  ? "bg-cyan-500/10 border-cyan-500/50 ring-1 ring-cyan-500/40"
+                  ? "bg-amber-500/10 border-amber-500/50 ring-1 ring-amber-500/40"
                   : "bg-base-900/60 border-base-800 hover:border-base-700"
               }`}
             >
               <div className="flex items-center justify-between mb-1">
                 <span className="font-bold text-xs font-mono text-slate-900 dark:text-slate-100 flex items-center gap-1.5">
-                  <Monitor size={13} className="text-cyan-400" /> DIGITAL MoTeC C1259 DISPLAY
+                  <Monitor size={13} className="text-amber-400" /> DIGITAL MoTeC C1259 DISPLAY
                 </span>
                 <span className={`px-2 py-0.5 rounded-lg text-[10px] font-mono font-bold border ${
                   motecDisplay ? "bg-emerald-500/20 border-emerald-500/50 text-emerald-500" : "bg-base-800 border-base-700 text-slate-500"
@@ -260,7 +260,7 @@ export const InteriorAssemblyStage: React.FC<InteriorAssemblyStageProps> = ({
                   onClick={() => onUpdateElectronics(e.id)}
                   className={`p-3.5 rounded-2xl text-left transition-all border cursor-pointer ${
                     isSelected
-                      ? "bg-cyan-500/20 border-cyan-500/60 shadow-md ring-1 ring-cyan-500/40"
+                      ? "bg-amber-500/20 border-amber-500/60 shadow-md ring-1 ring-amber-500/40"
                       : "bg-base-900/60 border-base-800 hover:border-base-700 text-slate-400"
                   }`}
                 >
@@ -271,7 +271,7 @@ export const InteriorAssemblyStage: React.FC<InteriorAssemblyStageProps> = ({
                     {e.desc}
                   </p>
                   <div className="space-y-0.5 text-[10px] font-mono text-slate-400 border-t border-base-800/60 pt-2">
-                    <div>Bus: <strong className="text-cyan-400">{e.bus}</strong></div>
+                    <div>Bus: <strong className="text-amber-400">{e.bus}</strong></div>
                     <div>Power: <strong className={isHv && e.id === "800v_hv_harness" ? "text-orange-400" : "text-amber-400"}>{e.voltage}</strong></div>
                   </div>
                 </button>
@@ -317,7 +317,7 @@ export const InteriorAssemblyStage: React.FC<InteriorAssemblyStageProps> = ({
       <div className="flex justify-end pt-2">
         <button
           onClick={onInstall}
-          className="flex items-center gap-2 px-6 py-3 rounded-2xl bg-gradient-to-r from-indigo-500 via-purple-600 to-cyan-500 hover:from-indigo-400 hover:to-cyan-400 text-white font-mono font-bold text-xs uppercase tracking-wider shadow-lg shadow-indigo-500/25 transition-all cursor-pointer hover:scale-105 active:scale-95"
+          className="flex items-center gap-2 px-6 py-3 rounded-2xl bg-gradient-to-r from-indigo-500 via-purple-600 to-amber-500 hover:from-indigo-400 hover:to-amber-400 text-white font-mono font-bold text-xs uppercase tracking-wider shadow-lg shadow-indigo-500/25 transition-all cursor-pointer hover:scale-105 active:scale-95"
         >
           <CheckCircle2 size={16} />
           {isInstalled ? "RE-INSTALL INTERIOR & ELECTRONICS" : "INSTALL INTERIOR & ELECTRONICS & PROCEED"}

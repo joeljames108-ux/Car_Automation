@@ -48,7 +48,7 @@ export const MasterMultiPhysicsProvingDeck: React.FC = () => {
       {/* Studio Header Ribbon */}
       <div className="flex items-center justify-between px-5 py-3 rounded-2xl bg-[#090d16] border border-[#182133] shadow-lg">
         <div className="flex items-center gap-3">
-          <div className="p-2 rounded-xl bg-gradient-to-tr from-cyan-500/20 to-rose-500/20 border border-cyan-500/40 text-cyan-400">
+          <div className="p-2 rounded-xl bg-gradient-to-tr from-amber-500/20 to-rose-500/20 border border-amber-500/40 text-amber-400">
             <Activity className="w-5 h-5" />
           </div>
           <div>
@@ -65,7 +65,7 @@ export const MasterMultiPhysicsProvingDeck: React.FC = () => {
         <select
           value={splitterMode}
           onChange={(e) => setSplitterMode(e.target.value as ActiveSplitterMode)}
-          className="bg-[#0e1424] text-cyan-400 text-xs font-bold font-mono px-3 py-1.5 rounded-xl border border-cyan-500/40 cursor-pointer"
+          className="bg-[#0e1424] text-amber-400 text-xs font-bold font-mono px-3 py-1.5 rounded-xl border border-amber-500/40 cursor-pointer"
         >
           <option value="TRACK_EXTENDED_DOWNFORCE">Track Extended (+60mm / -3.5°)</option>
           <option value="DRS_HIGH_SPEED_TRIM">DRS High-Speed Trim</option>
@@ -153,11 +153,11 @@ export const MasterMultiPhysicsProvingDeck: React.FC = () => {
         {/* Card 3: Active Front Splitter & S-Duct */}
         <div className="flex flex-col p-4 rounded-2xl bg-[#090d16] border border-[#182133] gap-3">
           <div className="flex items-center justify-between pb-2 border-b border-[#182133]">
-            <div className="flex items-center gap-2 text-cyan-400 font-bold text-xs">
+            <div className="flex items-center gap-2 text-amber-400 font-bold text-xs">
               <Wind className="w-4 h-4" />
               <span>ACTIVE FRONT SPLITTER & S-DUCT</span>
             </div>
-            <span className="text-[10px] font-mono font-bold text-cyan-400">
+            <span className="text-[10px] font-mono font-bold text-amber-400">
               Pitch: {frontAeroState.aerodynamicPitchBalanceFrontPct}% Front
             </span>
           </div>
@@ -165,7 +165,7 @@ export const MasterMultiPhysicsProvingDeck: React.FC = () => {
           <div className="grid grid-cols-2 gap-2 p-3 bg-[#05070c] rounded-xl border border-[#141b2b] text-xs font-mono">
             <div className="p-2 rounded-lg bg-[#0a0f1c] border border-[#182133]">
               <div className="text-gray-400 text-[10px]">SPLITTER LOAD</div>
-              <div className="text-cyan-400 font-bold">{frontAeroState.frontSplitterDownforceN} N</div>
+              <div className="text-amber-400 font-bold">{frontAeroState.frontSplitterDownforceN} N</div>
             </div>
             <div className="p-2 rounded-lg bg-[#0a0f1c] border border-[#182133]">
               <div className="text-gray-400 text-[10px]">S-DUCT JET LOAD</div>
@@ -177,7 +177,7 @@ export const MasterMultiPhysicsProvingDeck: React.FC = () => {
         {/* Card 4: Autonomous Model Predictive Control (MPC) */}
         <div className="flex flex-col p-4 rounded-2xl bg-[#090d16] border border-[#182133] gap-3">
           <div className="flex items-center justify-between pb-2 border-b border-[#182133]">
-            <div className="flex items-center gap-2 text-indigo-400 font-bold text-xs">
+            <div className="flex items-center gap-2 text-amber-400 font-bold text-xs">
               <Navigation className="w-4 h-4" />
               <span>REAL-TIME MPC PATH TRACKER</span>
             </div>
@@ -203,7 +203,7 @@ export const MasterMultiPhysicsProvingDeck: React.FC = () => {
           <div className="grid grid-cols-2 gap-2 text-xs font-mono">
             <div className="p-2.5 rounded-xl bg-[#0c1220] border border-[#1c263d]">
               <div className="text-gray-400 text-[10px]">STEERING COMMAND</div>
-              <div className="text-sm font-bold text-cyan-400">{mpcState.commandedSteeringAngleDeg}°</div>
+              <div className="text-sm font-bold text-amber-400">{mpcState.commandedSteeringAngleDeg}°</div>
             </div>
             <div className="p-2.5 rounded-xl bg-[#0c1220] border border-[#1c263d]">
               <div className="text-gray-400 text-[10px]">QP COST VALUE</div>

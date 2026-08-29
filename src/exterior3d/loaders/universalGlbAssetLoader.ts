@@ -12,6 +12,8 @@ import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js';
 import { FBXLoader } from 'three/examples/jsm/loaders/FBXLoader.js';
 import { GLBMaterialClassifier } from './glbMaterialClassifier';
 import { GLBScenePostProcessor } from './glbScenePostProcessor';
+import { GLBMaterialPipelineIntegrator } from '../materials/glbMaterialPipelineIntegrator';
+
 
 export interface LoadedGlbAsset {
   assetUri: string;
@@ -84,6 +86,8 @@ export class UniversalGlbAssetLoader {
             this.smoothGeometryNormals(fbxGroup);
             this.enhanceGlbMaterials(fbxGroup);
             GLBScenePostProcessor.process(fbxGroup);
+            // Fire-and-forget async material pipeline (non-blocking)
+            GLBMaterialPipelineIntegrator.integrate(fbxGroup).catch(() => {});
             const stats = this.analyzeScene(fbxGroup);
             const result: LoadedGlbAsset = {
               assetUri: uri,
@@ -120,6 +124,8 @@ export class UniversalGlbAssetLoader {
             this.smoothGeometryNormals(gltf.scene);
             this.enhanceGlbMaterials(gltf.scene);
             GLBScenePostProcessor.process(gltf.scene);
+            // Fire-and-forget async material pipeline (non-blocking)
+            GLBMaterialPipelineIntegrator.integrate(gltf.scene).catch(() => {});
             const stats = this.analyzeScene(gltf.scene);
             const result: LoadedGlbAsset = {
               assetUri: uri,
@@ -339,10 +345,14 @@ export class UniversalGlbAssetLoader {
     mr.position.set(0.3, 0.5, -0.45);
     group.add(ml, mr);
 
+    bodyMesh.name = 'body_paint_main';
     bodyMesh.position.y = 0.35;
     bodyMesh.castShadow = true;
     bodyMesh.receiveShadow = true;
     group.add(bodyMesh);
+
+    // --- Apply full GLB material pipeline to fallback (non-blocking) ---
+    GLBMaterialPipelineIntegrator.integrate(group, { applyEnvironment: false }).catch(() => {});
 
     const wheelMat = new THREE.MeshPhysicalMaterial({ color: 0x111111, metalness: 0.4, roughness: 0.7, clearcoat: 0.1, sheen: 0.15 });
     const wheelGeo = new THREE.CylinderGeometry(0.18, 0.18, 0.12, 64);
@@ -353,6 +363,7 @@ export class UniversalGlbAssetLoader {
       w.position.set(p[0], p[1], p[2]);
       w.rotation.z = Math.PI / 2;
       w.castShadow = true;
+      w.name = 'wheel_rim_fallback';
       group.add(w);
     });
 

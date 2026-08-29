@@ -111,8 +111,8 @@ export const ECU3DMapEditor: React.FC<ECU3DMapEditorProps> = ({
     const norm = Math.min(1.0, Math.max(0.0, (val - min) / (max - min || 1)));
     if (activeMapId === "ignition") {
       // Blue (retarded/low) -> Cyan -> Yellow -> Orange -> Red (advanced/high)
-      if (norm < 0.25) return "bg-blue-950/80 text-blue-300 border-blue-800/40";
-      if (norm < 0.50) return "bg-cyan-950/80 text-cyan-300 border-cyan-800/40";
+      if (norm < 0.25) return "bg-amber-950/80 text-amber-300 border-amber-800/40";
+      if (norm < 0.50) return "bg-amber-950/80 text-amber-300 border-amber-800/40";
       if (norm < 0.75) return "bg-amber-950/80 text-amber-300 border-amber-800/40";
       return "bg-rose-950/80 text-rose-300 border-rose-800/50 font-bold";
     }
@@ -121,11 +121,11 @@ export const ECU3DMapEditor: React.FC<ECU3DMapEditorProps> = ({
       if (val < 12.0) return "bg-rose-950/80 text-rose-300 border-rose-800/40";
       if (val < 13.8) return "bg-amber-950/80 text-amber-300 border-amber-800/40";
       if (val < 14.8) return "bg-emerald-950/80 text-emerald-300 border-emerald-800/40";
-      return "bg-blue-950/80 text-blue-300 border-blue-800/40";
+      return "bg-amber-950/80 text-amber-300 border-amber-800/40";
     }
     // Default VE / Duty heat
     if (norm < 0.3) return "bg-slate-900 text-slate-400 border-slate-800";
-    if (norm < 0.6) return "bg-cyan-950/80 text-cyan-300 border-cyan-800/40";
+    if (norm < 0.6) return "bg-amber-950/80 text-amber-300 border-amber-800/40";
     if (norm < 0.85) return "bg-amber-950/80 text-amber-300 border-amber-800/40";
     return "bg-rose-950/80 text-rose-300 border-rose-800/50 font-bold";
   };
@@ -137,13 +137,13 @@ export const ECU3DMapEditor: React.FC<ECU3DMapEditorProps> = ({
       {/* ================================================================= */}
       <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-3 bg-slate-900/80 p-3 rounded-xl border border-slate-800">
         <div className="flex items-center gap-3">
-          <div className="p-2 rounded-xl bg-gradient-to-br from-cyan-400 via-blue-500 to-violet-600 text-slate-950 font-bold shadow-lg shadow-cyan-500/20">
+          <div className="p-2 rounded-xl bg-gradient-to-br from-amber-400 via-amber-500 to-violet-600 text-slate-950 font-bold shadow-lg shadow-cyan-500/20">
             <Cpu size={18} />
           </div>
           <div>
             <div className="flex items-center gap-2">
               <h3 className="text-sm font-bold text-slate-100">16x16 ECU Calibration Suite</h3>
-              <span className="px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 font-mono text-[10px] font-bold border border-cyan-500/30">
+              <span className="px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 font-mono text-[10px] font-bold border border-amber-500/30">
                 LIVE MAP TRACER ACTIVE
               </span>
             </div>
@@ -170,7 +170,7 @@ export const ECU3DMapEditor: React.FC<ECU3DMapEditorProps> = ({
               }}
               className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg transition-all whitespace-nowrap cursor-pointer ${
                 activeMapId === tab.id
-                  ? "bg-gradient-to-r from-cyan-500 to-blue-600 text-slate-950 font-bold shadow-md shadow-cyan-500/30"
+                  ? "bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 font-bold shadow-md shadow-cyan-500/30"
                   : "text-slate-400 hover:text-slate-200"
               }`}
             >
@@ -188,7 +188,7 @@ export const ECU3DMapEditor: React.FC<ECU3DMapEditorProps> = ({
         <div className="flex items-center gap-2">
           <span className="text-slate-400">Selected Cell:</span>
           {selectedCell ? (
-            <span className="px-2 py-0.5 rounded bg-slate-800 text-cyan-300 font-bold border border-slate-700">
+            <span className="px-2 py-0.5 rounded bg-slate-800 text-amber-300 font-bold border border-slate-700">
               R{selectedCell.row} ({activeMap.axis.loadKPaBreakpoints[selectedCell.row]} kPa) × C{selectedCell.col} ({activeMap.axis.rpmBreakpoints[selectedCell.col]} RPM) = {activeMap.grid[selectedCell.row][selectedCell.col]} {activeMap.unit}
             </span>
           ) : (
@@ -239,7 +239,7 @@ export const ECU3DMapEditor: React.FC<ECU3DMapEditorProps> = ({
 
           <button
             onClick={handleSmoothMap}
-            className="flex items-center gap-1 px-3 py-1 bg-slate-800 hover:bg-cyan-950 text-cyan-300 rounded-lg border border-slate-700 hover:border-cyan-500/50 transition-all cursor-pointer font-sans text-xs font-semibold"
+            className="flex items-center gap-1 px-3 py-1 bg-slate-800 hover:bg-amber-950 text-amber-300 rounded-lg border border-slate-700 hover:border-amber-500/50 transition-all cursor-pointer font-sans text-xs font-semibold"
           >
             <Sparkles size={12} />
             <span>Smooth Matrix</span>
@@ -269,7 +269,7 @@ export const ECU3DMapEditor: React.FC<ECU3DMapEditorProps> = ({
                 <th
                   key={c}
                   className={`p-1 border border-slate-850 text-slate-400 bg-slate-900/90 ${
-                    liveTrace.colIndex === c ? "text-cyan-300 font-bold bg-cyan-950/60" : ""
+                    liveTrace.colIndex === c ? "text-amber-300 font-bold bg-amber-950/60" : ""
                   }`}
                 >
                   {rpm}
@@ -283,7 +283,7 @@ export const ECU3DMapEditor: React.FC<ECU3DMapEditorProps> = ({
                 {/* Y-Axis Label (kPa MAP) */}
                 <td
                   className={`p-1 border border-slate-850 text-slate-400 bg-slate-900/90 font-bold ${
-                    liveTrace.rowIndex === r ? "text-cyan-300 bg-cyan-950/60" : ""
+                    liveTrace.rowIndex === r ? "text-amber-300 bg-amber-950/60" : ""
                   }`}
                 >
                   {load}k
@@ -300,7 +300,7 @@ export const ECU3DMapEditor: React.FC<ECU3DMapEditorProps> = ({
                       key={c}
                       onClick={() => setSelectedCell({ row: r, col: c })}
                       className={`relative p-1.5 border border-slate-850 cursor-pointer transition-all hover:scale-105 hover:z-20 hover:brightness-125 ${colorClass} ${
-                        isSelected ? "ring-2 ring-cyan-400 z-30 font-extrabold shadow-lg" : ""
+                        isSelected ? "ring-2 ring-amber-400 z-30 font-extrabold shadow-lg" : ""
                       }`}
                     >
                       <span>{val}</span>
@@ -308,7 +308,7 @@ export const ECU3DMapEditor: React.FC<ECU3DMapEditorProps> = ({
                       {/* Live Dyno Tracer Dot Overlay */}
                       {isTraceCell && (
                         <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                          <div className="w-2.5 h-2.5 rounded-full bg-cyan-400 shadow-[0_0_10px_#22d3ee] animate-ping" />
+                          <div className="w-2.5 h-2.5 rounded-full bg-amber-400 shadow-[0_0_10px_#fbbf24] animate-ping" />
                           <div className="absolute w-2 h-2 rounded-full bg-white shadow-[0_0_8px_#ffffff]" />
                         </div>
                       )}
@@ -327,9 +327,9 @@ export const ECU3DMapEditor: React.FC<ECU3DMapEditorProps> = ({
       <div className="flex flex-wrap items-center justify-between gap-4 p-3 bg-slate-900/80 rounded-xl border border-slate-800 text-xs font-mono">
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-1.5">
-            <Gauge size={13} className="text-cyan-400" />
+            <Gauge size={13} className="text-amber-400" />
             <span className="text-slate-400">Live Dyno Load:</span>
-            <span className="text-cyan-300 font-bold">{currentRpm} RPM</span>
+            <span className="text-amber-300 font-bold">{currentRpm} RPM</span>
             <span className="text-slate-600">@</span>
             <span className="text-amber-300 font-bold">{currentMapKPa} kPa</span>
           </div>

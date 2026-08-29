@@ -75,7 +75,8 @@ export const NeonHorizonDock: React.FC<NeonHorizonDockProps> = ({
       </div>
 
       {/* Floating Scene Mode Switcher */}
-      <div className="flex items-center gap-1.5 p-1 rounded-2xl bg-[#0a111e]/90 backdrop-blur-2xl border border-white/10 shadow-[0_10px_30px_rgba(0,0,0,0.5)]">
+      <div className="flex items-center gap-1.5 p-1 rounded-2xl border"
+        style={{ background: "rgba(8, 14, 28, 0.88)", backdropFilter: "blur(40px) saturate(200%)", borderColor: "rgba(255,255,255,0.06)", boxShadow: "0 10px 30px rgba(0,0,0,0.40)" }}>
         {sceneModes.map((sm) => {
           const isActive = sceneMode === sm.id;
           return (
@@ -85,11 +86,12 @@ export const NeonHorizonDock: React.FC<NeonHorizonDockProps> = ({
                 playHMIClickSound();
                 if (onSelectSceneMode) onSelectSceneMode(sm.id);
               }}
-              className={`px-3.5 py-1 rounded-xl text-[11px] font-bold nh-font-body tracking-wider transition-all duration-200 cursor-pointer ${
-                isActive
-                  ? "bg-white/[0.10] text-white border border-white/20"
-                  : "text-slate-400 hover:text-slate-200 hover:bg-white/5 border border-transparent"
-              }`}
+              className="px-3.5 py-1 rounded-xl text-[11px] font-bold tracking-wider transition-all duration-200 cursor-pointer"
+              style={{
+                background: isActive ? "rgba(95, 168, 200, 0.10)" : "transparent",
+                color: isActive ? "#e4eaf4" : "#506070",
+                border: isActive ? "1px solid rgba(95, 168, 200, 0.15)" : "1px solid transparent",
+              }}
             >
               {sm.label}
             </button>
@@ -98,7 +100,8 @@ export const NeonHorizonDock: React.FC<NeonHorizonDockProps> = ({
       </div>
 
       {/* Main Glassmorphic Dock Bar with Vision OS Magnification */}
-      <div className="flex items-end gap-2 px-4 py-2 rounded-2xl bg-[#0a111e]/90 backdrop-blur-3xl border border-white/12 shadow-[0_18px_50px_rgba(0,0,0,0.60),inset_0_1px_0_rgba(255,255,255,0.10)] transition-all duration-300">
+      <div className="flex items-end gap-2 px-4 py-2 rounded-2xl border transition-all duration-300"
+        style={{ background: "rgba(8, 14, 28, 0.85)", backdropFilter: "blur(50px) saturate(220%)", borderColor: "rgba(255,255,255,0.06)", boxShadow: "0 18px 50px rgba(0,0,0,0.45), inset 0 1px 0 rgba(255,255,255,0.04)" }}>
         {dockItems.map((item, idx) => {
           const isActive = activeStage === item.id;
           const isHovered = hoveredIdx === idx;
@@ -108,7 +111,8 @@ export const NeonHorizonDock: React.FC<NeonHorizonDockProps> = ({
             <div key={item.id} className="relative flex flex-col items-center">
               {/* Tooltip on hover */}
               {isHovered && (
-                <div className="absolute -top-9 px-2.5 py-1 rounded-lg bg-[#0a111e]/95 backdrop-blur-md border border-white/12 text-[10px] nh-font-headline font-bold text-slate-200 uppercase tracking-wider whitespace-nowrap shadow-[0_4px_15px_rgba(0,0,0,0.6)] animate-nh-materialize z-50">
+                <div className="absolute -top-9 px-2.5 py-1 rounded-lg backdrop-blur-md text-[10px] font-bold uppercase tracking-wider whitespace-nowrap animate-nh-materialize z-50"
+                  style={{ background: "rgba(8, 14, 28, 0.92)", border: "1px solid rgba(255,255,255,0.06)", color: "#e4eaf4", boxShadow: "0 4px 15px rgba(0,0,0,0.40)" }}>
                   {item.label}
                 </div>
               )}
@@ -120,23 +124,22 @@ export const NeonHorizonDock: React.FC<NeonHorizonDockProps> = ({
                 }}
                 onMouseEnter={() => setHoveredIdx(idx)}
                 onMouseLeave={() => setHoveredIdx(null)}
+                className="nh-focus p-2.5 rounded-xl transition-all duration-200 flex items-center justify-center cursor-pointer"
                 style={{
                   transform: `scale(${mag})`,
                   transformOrigin: "bottom center",
                   transition: "transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1)",
+                  background: isActive ? "rgba(95, 168, 200, 0.12)" : "transparent",
+                  color: isActive ? "#8cbcd0" : "#506070",
+                  border: isActive ? "1px solid rgba(95, 168, 200, 0.20)" : "1px solid transparent",
                 }}
-                className={`nh-focus p-2.5 rounded-xl transition-all duration-200 flex items-center justify-center cursor-pointer ${
-                  isActive
-                    ? "bg-sky-400/15 text-sky-200 border border-sky-400/30 font-bold"
-                    : "text-slate-400 hover:text-slate-100 hover:bg-white/[0.07] border border-transparent"
-                }`}
               >
                 {item.icon}
               </button>
 
               {/* Active pip */}
               {isActive && (
-                <div className="w-1.5 h-1.5 rounded-full bg-sky-300/90 mt-1 animate-nh-pulse-dot" />
+                <div className="w-1.5 h-1.5 rounded-full mt-1 animate-nh-pulse-dot" style={{ background: "#5fa8c8" }} />
               )}
             </div>
           );
@@ -150,8 +153,8 @@ export const NeonHorizonDock: React.FC<NeonHorizonDockProps> = ({
             key={item.id}
             className={`h-1.5 rounded-full transition-all duration-300 ${
               activeStage === item.id
-                ? "w-4 bg-sky-300/80"
-                : "w-1.5 bg-white/15"
+                ? "w-4"
+                : "w-1.5"
             }`}
           />
         ))}

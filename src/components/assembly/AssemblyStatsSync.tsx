@@ -29,14 +29,14 @@ export function AssemblyStatsSync({
         className={`p-2 rounded-xl border shadow-sm flex items-center justify-center ${
           isInstalled
             ? "bg-emerald-100 text-emerald-700 border-emerald-200/80"
-            : "bg-cyan-100 text-cyan-700 border-cyan-200/80"
+            : "bg-amber-100 text-amber-700 border-amber-200/80"
         }`}
       >
         <CheckCircle2 size={22} className="stroke-[2.5]" />
       </div>
 
       <div>
-        <div className="text-[10px] font-mono text-cyan-700 uppercase tracking-widest font-extrabold flex items-center gap-1.5">
+        <div className="text-[10px] font-mono text-amber-700 uppercase tracking-widest font-extrabold flex items-center gap-1.5">
           {isInstalled ? "INSTALLED & TORQUED" : "COMPONENT SPECIFICATIONS"}
         </div>
         <div className="text-sm font-extrabold text-slate-800 tracking-tight">{meta.name}</div>

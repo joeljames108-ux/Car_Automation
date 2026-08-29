@@ -69,7 +69,7 @@ export class KinematicSuspension3DGenerator {
     });
 
     const heimJointMat = new THREE.MeshPhysicalMaterial({
-      color: 0x38bdf8,
+      color: 0xfbbf24,
       metalness: 0.96,
       roughness: 0.08,
       clearcoat: 0.8,

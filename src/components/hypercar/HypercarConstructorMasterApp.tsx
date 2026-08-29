@@ -136,7 +136,7 @@ const HypercarConstructorMasterAppComponent: React.FC<HypercarConstructorMasterA
             }}
             className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
               screen === "benchmark"
-                ? "bg-cyan-500/20 border border-cyan-400/50 text-cyan-300 shadow-sm"
+                ? "bg-amber-500/20 border border-amber-400/50 text-amber-300 shadow-sm"
                 : "bg-zinc-900 border border-white/10 text-zinc-400 hover:text-white"
             }`}
           >
@@ -198,7 +198,7 @@ const HypercarConstructorMasterAppComponent: React.FC<HypercarConstructorMasterA
       {screen === "benchmark" && (
         <div className="w-full flex-1 flex flex-col min-h-0 overflow-y-auto p-4 bg-[#080a0f]">
           <div className="flex items-center justify-between mb-4 pb-2 border-b border-white/10 shrink-0">
-            <h2 className="text-sm font-black uppercase tracking-widest text-cyan-400">
+            <h2 className="text-sm font-black uppercase tracking-widest text-amber-400">
               100 Real-World Sports Car Benchmark & Simulation Validation Suite
             </h2>
             <button

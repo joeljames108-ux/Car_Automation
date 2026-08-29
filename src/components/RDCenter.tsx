@@ -60,7 +60,7 @@ function TopBar({ state, view, setView }: { state: ReturnType<typeof useRD>["sta
           <span className="flex items-center gap-1.5"><DollarSign size={12} className="text-ok-400" /><span className="font-mono text-slate-200">{fmtMoney(state.cash)}</span></span>
           <span className="flex items-center gap-1.5"><Brain size={12} className="text-accent-400" /><span className="font-mono text-slate-200">{state.engineeringKnowledge} EK</span></span>
           <span className="flex items-center gap-1.5"><Sparkles size={12} className="text-amber-400" /><span className="font-mono text-slate-200">Innov {state.innovationScore}</span></span>
-          <span className="flex items-center gap-1.5"><Award size={12} className="text-purple-400" /><span className="font-mono text-slate-200">Brand {state.brandValue}</span></span>
+          <span className="flex items-center gap-1.5"><Award size={12} className="text-amber-400" /><span className="font-mono text-slate-200">Brand {state.brandValue}</span></span>
           <span className="flex items-center gap-1.5"><Calendar size={12} className="text-slate-500" /><span className="font-mono text-slate-400">Mo {state.month}</span></span>
         </div>
       </div>
@@ -120,7 +120,7 @@ function Overview() {
           {[
             { l: "Cash", v: fmtMoney(state.cash), c: "text-ok-400" },
             { l: "Engineering Knowledge", v: state.engineeringKnowledge + " EK", c: "text-accent-300" },
-            { l: "Brand Value", v: state.brandValue + " / 100", c: "text-purple-300" },
+            { l: "Brand Value", v: state.brandValue + " / 100", c: "text-amber-300" },
             { l: "Technologies Unlocked", v: `${completedTechs} / ${TECHNOLOGIES.length}`, c: "text-slate-200" },
             { l: "Active Projects", v: String(activeProjects), c: "text-slate-200" },
             { l: "Patents", v: String(state.patents.length), c: "text-slate-200" },
@@ -286,7 +286,7 @@ function TechTree() {
                   {st?.unlocked ? (
                     <CheckCircle2 size={16} className="text-ok-400 shrink-0" />
                   ) : st?.patented ? (
-                    <Lock size={14} className="text-purple-400 shrink-0" />
+                    <Lock size={14} className="text-amber-400 shrink-0" />
                   ) : activeProj ? (
                     <FlaskConical size={16} className="text-accent-400 shrink-0 animate-pulse" />
                   ) : null}
@@ -429,12 +429,12 @@ function Projects() {
                   {p.status === "complete" && !state.technologies[p.techId]?.patented && (
                     <button
                       onClick={() => patent(p.techId)}
-                      className="text-[10px] px-2 py-0.5 rounded bg-purple-500/15 text-purple-300 border border-purple-500/30 hover:bg-purple-500/25 flex items-center gap-1"
+                      className="text-[10px] px-2 py-0.5 rounded bg-amber-500/15 text-amber-300 border border-amber-500/30 hover:bg-amber-500/25 flex items-center gap-1"
                     >
                       <Lock size={10} /> Patent
                     </button>
                   )}
-                  {state.technologies[p.techId]?.patented && <span className="text-[10px] text-purple-400 flex items-center gap-1"><Lock size={10} /> Patented</span>}
+                  {state.technologies[p.techId]?.patented && <span className="text-[10px] text-amber-400 flex items-center gap-1"><Lock size={10} /> Patented</span>}
                 </div>
                 <span className="text-slate-600 font-mono">M{p.completedAtMonth}</span>
               </div>
@@ -450,7 +450,7 @@ function Projects() {
           {SKUNKWORKS_TEMPLATES.map((tmpl, i) => {
             const existing = state.skunkworks.find((s) => s.name === tmpl.name);
             return (
-              <div key={i} className="panel p-3 border border-purple-500/20">
+              <div key={i} className="panel p-3 border border-amber-500/20">
                 <div className="flex items-start justify-between mb-1.5">
                   <div className="text-sm font-semibold text-slate-200">{tmpl.name}</div>
                   {existing && <span className={`text-[10px] px-1.5 py-0.5 rounded capitalize ${existing.status === "breakthrough" ? "bg-ok-500/15 text-ok-300" : existing.status === "failed" ? "bg-danger-500/15 text-danger-300" : "bg-accent-500/15 text-accent-300"}`}>{existing.status}</span>}
@@ -465,14 +465,14 @@ function Projects() {
                 {existing && existing.status === "active" && (
                   <div>
                     <div className="flex justify-between text-[10px] text-slate-500 mb-1"><span>Progress</span><span className="font-mono">{((existing.monthsElapsed / existing.monthsTotal) * 100).toFixed(0)}%</span></div>
-                    <div className="h-1.5 bg-base-800 rounded-full overflow-hidden"><div className="bg-purple-500" style={{ width: `${(existing.monthsElapsed / existing.monthsTotal) * 100}%` }} /></div>
+                    <div className="h-1.5 bg-base-800 rounded-full overflow-hidden"><div className="bg-amber-500" style={{ width: `${(existing.monthsElapsed / existing.monthsTotal) * 100}%` }} /></div>
                   </div>
                 )}
                 {!existing && (
                   <button
                     onClick={() => startSkunkworks(i, 30)}
                     disabled={state.cash < tmpl.cost}
-                    className="w-full text-xs py-1.5 rounded-lg border bg-purple-500/10 border-purple-500/30 text-purple-300 hover:bg-purple-500/20 disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-1.5"
+                    className="w-full text-xs py-1.5 rounded-lg border bg-amber-500/10 border-amber-500/30 text-amber-300 hover:bg-amber-500/20 disabled:opacity-40 disabled:cursor-not-allowed flex items-center justify-center gap-1.5"
                   >
                     <Plus size={12} /> Launch Project — {fmtMoney(tmpl.cost)}
                   </button>
@@ -588,8 +588,8 @@ function Strategy() {
           <div className="mb-3 space-y-1.5">
             <div className="text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-1">Active Patents</div>
             {state.patents.map((p) => (
-              <div key={p.id} className="flex items-center justify-between text-xs py-1.5 px-3 rounded-lg bg-purple-500/5 border border-purple-500/20">
-                <span className="text-slate-300 flex items-center gap-1.5"><Lock size={12} className="text-purple-400" />{p.techName}</span>
+              <div key={p.id} className="flex items-center justify-between text-xs py-1.5 px-3 rounded-lg bg-amber-500/5 border border-amber-500/20">
+                <span className="text-slate-300 flex items-center gap-1.5"><Lock size={12} className="text-amber-400" />{p.techName}</span>
                 <span className="font-mono text-ok-400">+{fmtMoney(p.royaltyPerMonth)}/mo</span>
               </div>
             ))}
@@ -609,7 +609,7 @@ function Strategy() {
                   <button
                     onClick={() => patent(id)}
                     disabled={state.cash < cost}
-                    className="text-[10px] px-2 py-0.5 rounded bg-purple-500/15 text-purple-300 border border-purple-500/30 hover:bg-purple-500/25 disabled:opacity-40"
+                    className="text-[10px] px-2 py-0.5 rounded bg-amber-500/15 text-amber-300 border border-amber-500/30 hover:bg-amber-500/25 disabled:opacity-40"
                   >
                     Patent — {fmtMoney(cost)}
                   </button>

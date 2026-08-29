@@ -106,7 +106,7 @@ export const FinalExteriorAssemblyStage: React.FC<FinalExteriorAssemblyStageProp
               <p className="text-[10px] text-slate-500 dark:text-slate-400 mb-2.5">{ex.desc}</p>
               <div className="space-y-0.5 text-[10px] font-mono text-slate-400 border-t border-base-800/60 pt-2">
                 <div>Material: <strong className="text-amber-400">{ex.material}</strong></div>
-                <div>Sound: <strong className="text-cyan-300">{ex.soundProfile}</strong></div>
+                <div>Sound: <strong className="text-amber-300">{ex.soundProfile}</strong></div>
               </div>
             </button>
           );
@@ -117,9 +117,9 @@ export const FinalExteriorAssemblyStage: React.FC<FinalExteriorAssemblyStageProp
       <div className={`p-3.5 rounded-2xl bg-base-900/60 border border-base-800 space-y-2.5 ${exhaustType !== "quad_titanium" && exhaustType !== "f1_side_exit" ? "opacity-50" : ""}`}>
         <div className="flex items-center justify-between">
           <label className="text-xs font-bold font-mono text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
-            <Flame size={13} className="text-blue-400" /> TITANIUM HEAT-TINT BLUE GRADIENT
+            <Flame size={13} className="text-amber-400" /> TITANIUM HEAT-TINT BLUE GRADIENT
           </label>
-          <span className="text-xs font-mono font-bold text-blue-400 tabular-nums">{tint}%</span>
+          <span className="text-xs font-mono font-bold text-amber-400 tabular-nums">{tint}%</span>
         </div>
         <input
           type="range"
@@ -128,7 +128,7 @@ export const FinalExteriorAssemblyStage: React.FC<FinalExteriorAssemblyStageProp
           step="5"
           value={tint}
           onChange={(e) => onUpdateHeatTint(parseInt(e.target.value))}
-          className="w-full accent-blue-500 cursor-pointer"
+          className="w-full accent-amber-500 cursor-pointer"
         />
         <div className="flex items-center justify-between text-[9px] font-mono text-slate-500">
           <span>0% Raw Brushed Ti</span>

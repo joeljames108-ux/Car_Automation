@@ -125,7 +125,7 @@ export const ModularCarStructureWorkbench: React.FC<ModularCarStructureWorkbench
       case 'ceramic':
         return 'text-emerald-400 border-emerald-500/40 bg-emerald-950/40';
       case 'titanium':
-        return 'text-cyan-400 border-cyan-500/40 bg-cyan-950/40';
+        return 'text-amber-400 border-amber-500/40 bg-amber-950/40';
       case 'billet':
         return 'text-amber-400 border-amber-500/40 bg-amber-950/40';
       case 'forged':
@@ -148,7 +148,7 @@ export const ModularCarStructureWorkbench: React.FC<ModularCarStructureWorkbench
               <h2 className="text-sm font-extrabold text-amber-100 tracking-wider font-mono">
                 MODULAR STRUCTURE ARCHITECTURE WORKBENCH
               </h2>
-              <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/40">
+              <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40">
                 {telemetry.structuralRigidity.rigidityGrade.toUpperCase()}
               </span>
             </div>
@@ -164,7 +164,7 @@ export const ModularCarStructureWorkbench: React.FC<ModularCarStructureWorkbench
             onClick={onToggleCoG}
             className={`flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-mono transition-all border ${
               showCoG
-                ? 'bg-cyan-500/20 text-cyan-300 border-cyan-500/50 shadow-[0_0_10px_rgba(6,182,212,0.3)]'
+                ? 'bg-amber-500/20 text-amber-300 border-amber-500/50 shadow-[0_0_10px_rgba(6,182,212,0.3)]'
                 : 'bg-slate-900/60 text-slate-400 border-slate-800 hover:border-slate-700'
             }`}
           >
@@ -287,7 +287,7 @@ export const ModularCarStructureWorkbench: React.FC<ModularCarStructureWorkbench
                               <CornerDownRight size={12} className={isSelected ? 'text-amber-400' : 'text-slate-600'} />
                               <span className="font-semibold">{node.name}</span>
                               {node.isUnsprung && (
-                                <span className="px-1.5 py-0.2 rounded bg-purple-950/60 text-purple-300 border border-purple-800/40 text-[9px]">
+                                <span className="px-1.5 py-0.2 rounded bg-amber-950/60 text-amber-300 border border-amber-800/40 text-[9px]">
                                   UNSPRUNG
                                 </span>
                               )}
@@ -335,7 +335,7 @@ export const ModularCarStructureWorkbench: React.FC<ModularCarStructureWorkbench
               </div>
               <div className="bg-slate-950/60 p-2 rounded-lg border border-slate-800">
                 <span className="text-[10px] text-slate-500 block">MASS TYPE</span>
-                <strong className={selectedNode.isUnsprung ? 'text-purple-400 text-sm' : 'text-cyan-400 text-sm'}>
+                <strong className={selectedNode.isUnsprung ? 'text-amber-400 text-sm' : 'text-amber-400 text-sm'}>
                   {selectedNode.isUnsprung ? 'Unsprung' : 'Sprung'}
                 </strong>
               </div>
@@ -362,7 +362,7 @@ export const ModularCarStructureWorkbench: React.FC<ModularCarStructureWorkbench
                   <strong>+{selectedNode.localCoM.y.toFixed(2)}m</strong>
                 </div>
                 <div className="bg-slate-900 p-1 rounded border border-slate-800">
-                  <span className="text-[9px] text-blue-400 block">Z (Lateral)</span>
+                  <span className="text-[9px] text-amber-400 block">Z (Lateral)</span>
                   <strong>{selectedNode.localCoM.z === 0 ? '0.00m' : `${selectedNode.localCoM.z.toFixed(2)}m`}</strong>
                 </div>
               </div>
@@ -388,11 +388,11 @@ export const ModularCarStructureWorkbench: React.FC<ModularCarStructureWorkbench
               </div>
               <div className="flex justify-between text-xs">
                 <span className="text-slate-400">Sprung Mass</span>
-                <span className="text-cyan-300 font-semibold">{telemetry.sprungMassKg} kg</span>
+                <span className="text-amber-300 font-semibold">{telemetry.sprungMassKg} kg</span>
               </div>
               <div className="flex justify-between text-xs">
                 <span className="text-slate-400">Unsprung Mass (Corners)</span>
-                <span className="text-purple-300 font-semibold">{telemetry.unsprungMassKg} kg</span>
+                <span className="text-amber-300 font-semibold">{telemetry.unsprungMassKg} kg</span>
               </div>
             </div>
 
@@ -405,7 +405,7 @@ export const ModularCarStructureWorkbench: React.FC<ModularCarStructureWorkbench
                 </div>
                 <div className="bg-slate-950 p-1.5 rounded border border-slate-800">
                   <span className="text-[9px] text-slate-500 block">Ycg (Height)</span>
-                  <strong className="text-cyan-300">{telemetry.centerOfGravity.yMm} mm</strong>
+                  <strong className="text-amber-300">{telemetry.centerOfGravity.yMm} mm</strong>
                 </div>
                 <div className="bg-slate-950 p-1.5 rounded border border-slate-800">
                   <span className="text-[9px] text-slate-500 block">Zcg (Lateral)</span>
@@ -422,7 +422,7 @@ export const ModularCarStructureWorkbench: React.FC<ModularCarStructureWorkbench
               </div>
               <div className="w-full h-3 bg-slate-950 rounded-full overflow-hidden flex border border-slate-700">
                 <div style={{ width: `${telemetry.weightDistribution.frontPercent}%` }} className="bg-gradient-to-r from-amber-500 to-yellow-400" />
-                <div style={{ width: `${telemetry.weightDistribution.rearPercent}%` }} className="bg-gradient-to-r from-cyan-500 to-blue-500" />
+                <div style={{ width: `${telemetry.weightDistribution.rearPercent}%` }} className="bg-gradient-to-r from-amber-500 to-amber-500" />
               </div>
             </div>
           </div>
@@ -451,16 +451,16 @@ export const ModularCarStructureWorkbench: React.FC<ModularCarStructureWorkbench
               </div>
 
               {/* Rear Left */}
-              <div className="bg-slate-950/80 p-2.5 rounded-lg border border-cyan-500/40 space-y-0.5">
-                <span className="text-[10px] text-cyan-400 font-bold block">REAR LEFT (RL)</span>
-                <strong className="text-cyan-200 text-sm">{telemetry.cornerLoadsKg.rl} kg</strong>
+              <div className="bg-slate-950/80 p-2.5 rounded-lg border border-amber-500/40 space-y-0.5">
+                <span className="text-[10px] text-amber-400 font-bold block">REAR LEFT (RL)</span>
+                <strong className="text-amber-200 text-sm">{telemetry.cornerLoadsKg.rl} kg</strong>
                 <span className="text-[10px] text-slate-500 block">{telemetry.cornerForcesN.rl} N</span>
               </div>
 
               {/* Rear Right */}
-              <div className="bg-slate-950/80 p-2.5 rounded-lg border border-cyan-500/40 space-y-0.5">
-                <span className="text-[10px] text-cyan-400 font-bold block">REAR RIGHT (RR)</span>
-                <strong className="text-cyan-200 text-sm">{telemetry.cornerLoadsKg.rr} kg</strong>
+              <div className="bg-slate-950/80 p-2.5 rounded-lg border border-amber-500/40 space-y-0.5">
+                <span className="text-[10px] text-amber-400 font-bold block">REAR RIGHT (RR)</span>
+                <strong className="text-amber-200 text-sm">{telemetry.cornerLoadsKg.rr} kg</strong>
                 <span className="text-[10px] text-slate-500 block">{telemetry.cornerForcesN.rr} N</span>
               </div>
             </div>
@@ -481,11 +481,11 @@ export const ModularCarStructureWorkbench: React.FC<ModularCarStructureWorkbench
             <div className="space-y-2 text-xs">
               <div className="flex justify-between">
                 <span className="text-slate-400">Front Roll Center Height</span>
-                <strong className="text-cyan-300">{telemetry.kinematics.frontRollCenterHeightMm} mm</strong>
+                <strong className="text-amber-300">{telemetry.kinematics.frontRollCenterHeightMm} mm</strong>
               </div>
               <div className="flex justify-between">
                 <span className="text-slate-400">Rear Roll Center Height</span>
-                <strong className="text-cyan-300">{telemetry.kinematics.rearRollCenterHeightMm} mm</strong>
+                <strong className="text-amber-300">{telemetry.kinematics.rearRollCenterHeightMm} mm</strong>
               </div>
               <div className="flex justify-between">
                 <span className="text-slate-400">Roll Axis Inclination</span>
@@ -525,7 +525,7 @@ export const ModularCarStructureWorkbench: React.FC<ModularCarStructureWorkbench
               </div>
               <div className="flex justify-between">
                 <span className="text-slate-400">Bending Stiffness</span>
-                <strong className="text-cyan-300 font-bold">{telemetry.structuralRigidity.bendingStiffnessKNm} kNm</strong>
+                <strong className="text-amber-300 font-bold">{telemetry.structuralRigidity.bendingStiffnessKNm} kNm</strong>
               </div>
               <div className="flex justify-between">
                 <span className="text-slate-400">1st Torsional Frequency</span>

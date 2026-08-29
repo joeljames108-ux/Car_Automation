@@ -30,12 +30,11 @@ import { ModularEngineStudioWorkbench } from "./ModularEngineStudioWorkbench";
 import { ModularEngineDynoBench } from "./ModularEngineDynoBench";
 import { ModularEngineComparisonStudio } from "./ModularEngineComparisonStudio";
 import { Transmission3DStudio } from "../transmissionStudio/Transmission3DStudio";
-import { CoupledDynoBench } from "../powertrainStudio/CoupledDynoBench";
 
 export const ModularEngineStudio: React.FC = () => {
   const [engineInstance] = useState(() => MasterEngineStateEngine.getInstance());
   const [state, setState] = useState<MasterEngineState>(engineInstance.getState());
-  const [studioMode, setStudioMode] = useState<"viewport" | "dyno" | "transmission" | "coupled_dyno" | "compare">("viewport");
+  const [studioMode, setStudioMode] = useState<"viewport" | "dyno" | "transmission" | "compare">("viewport");
 
   useEffect(() => {
     const unsubscribe = engineInstance.subscribe((newState) => {
@@ -60,7 +59,7 @@ export const ModularEngineStudio: React.FC = () => {
       {/* Studio Header & Mode Switcher */}
       <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-3 bg-slate-900/90 backdrop-blur-xl p-3.5 rounded-2xl border border-slate-800 shadow-xl">
         <div className="flex items-center gap-3">
-          <div className="p-2.5 rounded-xl bg-gradient-to-br from-cyan-500 to-blue-600 text-slate-950 shadow-lg shadow-cyan-500/25 font-bold">
+          <div className="p-2.5 rounded-xl bg-gradient-to-br from-amber-500 to-amber-600 text-slate-950 shadow-lg shadow-cyan-500/25 font-bold">
             <Flame size={20} />
           </div>
           <div>
@@ -68,7 +67,7 @@ export const ModularEngineStudio: React.FC = () => {
               <h2 className="text-base font-bold text-slate-100 tracking-tight">
                 Modular 3D Engine Studio
               </h2>
-              <span className="px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 font-mono text-[10px] font-bold border border-cyan-500/30">
+              <span className="px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 font-mono text-[10px] font-bold border border-amber-500/30">
                 PRO STUDIO
               </span>
             </div>
@@ -86,7 +85,6 @@ export const ModularEngineStudio: React.FC = () => {
               { id: "viewport", label: "3D Engine", icon: <Layers size={13} /> },
               { id: "dyno", label: "Crank Dyno", icon: <Activity size={13} /> },
               { id: "transmission", label: "3D Transmission", icon: <Cog size={13} /> },
-              { id: "coupled_dyno", label: "Coupled Dyno", icon: <Zap size={13} /> },
               { id: "compare", label: "Compare A/B", icon: <Scale size={13} /> },
             ].map((tab) => (
               <button
@@ -94,7 +92,7 @@ export const ModularEngineStudio: React.FC = () => {
                 onClick={() => setStudioMode(tab.id as any)}
                 className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg transition-all cursor-pointer ${
                   studioMode === tab.id
-                    ? "bg-cyan-500 text-slate-950 font-bold shadow-md shadow-cyan-500/30"
+                    ? "bg-amber-500 text-slate-950 font-bold shadow-md shadow-cyan-500/30"
                     : "text-slate-400 hover:text-slate-200"
                 }`}
               >
@@ -168,12 +166,6 @@ export const ModularEngineStudio: React.FC = () => {
                 peakPower: state.performance.peakHorsepowerHp,
               } as any}
             />
-          </div>
-        )}
-
-        {studioMode === "coupled_dyno" && (
-          <div className="w-full h-full">
-            <CoupledDynoBench state={state} />
           </div>
         )}
 

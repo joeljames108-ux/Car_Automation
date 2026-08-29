@@ -38,6 +38,7 @@ import { UniversalGlbAssetLoader } from "../../loaders/universalGlbAssetLoader";
 import { FunctionalInstrumentClusterRenderer } from "./functionalInstrumentClusterRenderer";
 import { FunctionalInfotainmentRenderer } from "./functionalInfotainmentRenderer";
 import { InteriorErgonomicsVisualizer } from "./interiorErgonomicsVisualizer";
+import { CockpitElectronicsAvionicsModule } from "./cockpitElectronicsAvionicsModule";
 
 export class MasterModularInterior3DAssembler {
   private static clusterRendererInstance: FunctionalInstrumentClusterRenderer | null = null;
@@ -182,7 +183,7 @@ export class MasterModularInterior3DAssembler {
     const clusterRenderer = this.getClusterRenderer();
     const clusterTex = clusterRenderer.getTexture();
     const clusterMesh = this.buildClusterScreenMesh(clusterTex, state.dashboard.instrumentClusterStyle);
-    clusterMesh.position.set(dashXform.position.x - 0.12, dashXform.position.y + 0.10, -0.32);
+    clusterMesh.position.set(dashXform.position.x - 0.08, dashXform.position.y + 0.08, -0.32);
     this.tagGroupComponent(clusterMesh, "dashboard", "DIGITAL COCKPIT CLUSTER");
     root.add(clusterMesh);
 
@@ -190,7 +191,7 @@ export class MasterModularInterior3DAssembler {
     const infotainmentRenderer = this.getInfotainmentRenderer();
     const infoTex = infotainmentRenderer.getTexture();
     const centerScreenMesh = this.buildCenterTouchscreenMesh(infoTex, state.infotainment.screenSize);
-    centerScreenMesh.position.set(dashXform.position.x - 0.08, dashXform.position.y + 0.04, 0);
+    centerScreenMesh.position.set(dashXform.position.x - 0.06, dashXform.position.y + 0.02, 0.05);
     this.tagGroupComponent(centerScreenMesh, "dashboard", "CENTRAL INFOTAINMENT DISPLAY");
     root.add(centerScreenMesh);
 
@@ -199,6 +200,7 @@ export class MasterModularInterior3DAssembler {
     const steerMesh = this.buildSteeringWheelMesh(state.steering.typology, state.materials.accentMetalFinish, steeringAngleRad);
     steerMesh.position.copy(steerXform.position);
     steerMesh.rotation.copy(steerXform.rotation);
+    steerMesh.rotation.y += Math.PI;
     this.tagGroupComponent(steerMesh, "steering", "STEERING WHEEL & COLUMN");
     root.add(steerMesh);
 
@@ -247,6 +249,58 @@ export class MasterModularInterior3DAssembler {
     const overheadConsole = this.buildOverheadConsole(halfTrackM, explodedFactor);
     this.tagGroupComponent(overheadConsole, "lighting", "OVERHEAD CONSOLE");
     root.add(overheadConsole);
+
+    // 13. Cockpit Electronics & Avionics Suite
+    const electronicsSuite = CockpitElectronicsAvionicsModule.buildElectronicsSuite(halfTrackM * 2, (state.wheelbaseMm || 2850) / 1000);
+    this.tagGroupComponent(electronicsSuite, "electronics", "COCKPIT ELECTRONICS & AVIONICS");
+    root.add(electronicsSuite);
+
+    // === AMBIENT LIGHTING SYSTEM ===
+    const ambientLightMat = new THREE.MeshBasicMaterial({ color: 0xf59e0b, transparent: true, opacity: 0.8 });
+
+    // Dashboard ambient light strip (full width)
+    const dashAmbientGeo = new THREE.BoxGeometry(1.2, 0.004, 0.008);
+    const dashAmbient = new THREE.Mesh(dashAmbientGeo, ambientLightMat);
+    dashAmbient.position.set(-0.35, 0.70, 0);
+    root.add(dashAmbient);
+
+    // Door panel ambient strips (left and right)
+    [-halfTrackM + 0.05, halfTrackM - 0.05].forEach((zPos) => {
+      const doorAmbientGeo = new THREE.BoxGeometry(0.8, 0.003, 0.006);
+      const doorAmbient = new THREE.Mesh(doorAmbientGeo, ambientLightMat);
+      doorAmbient.position.set(-0.40, 0.52, zPos);
+      root.add(doorAmbient);
+    });
+
+    // Center console ambient strip
+    const consoleAmbientGeo = new THREE.BoxGeometry(0.5, 0.003, 0.006);
+    const consoleAmbient = new THREE.Mesh(consoleAmbientGeo, ambientLightMat);
+    consoleAmbient.position.set(-0.30, 0.35, 0.16);
+    root.add(consoleAmbient);
+    const consoleAmbient2 = consoleAmbient.clone();
+    consoleAmbient2.position.z = -0.16;
+    root.add(consoleAmbient2);
+
+    // Footwell ambient lights
+    [-0.34, 0.34].forEach((zPos) => {
+      const footGeo = new THREE.PlaneGeometry(0.20, 0.15);
+      const foot = new THREE.Mesh(footGeo, ambientLightMat);
+      foot.position.set(-0.10, 0.10, zPos);
+      foot.rotation.x = -Math.PI / 2;
+      root.add(foot);
+    });
+
+    // Starlight headliner fiber optic points
+    for (let i = 0; i < 40; i++) {
+      const x = -0.80 + Math.random() * 1.20;
+      const z = -0.50 + Math.random() * 1.00;
+      const starGeo = new THREE.SphereGeometry(0.002, 4, 4);
+      const starMat = new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, opacity: 0.3 + Math.random() * 0.5 });
+      const star = new THREE.Mesh(starGeo, starMat);
+      star.position.set(x, 1.26, z);
+      root.add(star);
+    }
+
 
     // 13. Multi-Zone Ambient Light Strips
     if (state.lighting.enabled) {
@@ -816,7 +870,7 @@ export class MasterModularInterior3DAssembler {
     const frameMat = new THREE.MeshPhysicalMaterial({ color: 0x09090b, roughness: 0.3, metalness: 0.8 });
     const scrMat = new THREE.MeshBasicMaterial({
       map: tex || undefined,
-      color: tex ? 0xffffff : 0x06b6d4,
+      color: tex ? 0xffffff : 0xf59e0b,
     });
 
     // Outer Bezel Housing
@@ -845,7 +899,7 @@ export class MasterModularInterior3DAssembler {
     const casingMat = new THREE.MeshPhysicalMaterial({ color: 0x18181b, roughness: 0.2, metalness: 0.9 });
     const scrMat = new THREE.MeshBasicMaterial({
       map: tex || undefined,
-      color: tex ? 0xffffff : 0x06b6d4,
+      color: tex ? 0xffffff : 0xf59e0b,
     });
 
     // CNC Aluminum Rear Casing

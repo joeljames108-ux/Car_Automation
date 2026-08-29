@@ -48,8 +48,8 @@ const TRIM_GRADES: { id: InteriorTrimGrade; name: string; badge: string }[] = [
 ];
 
 const AMBIENT_COLORS = [
-  { name: 'Cyan Neon', hex: '#06b6d4' },
-  { name: 'Hyper Purple', hex: '#a855f7' },
+  { name: 'Cyan Neon', hex: '#f59e0b' },
+  { name: 'Hyper Purple', hex: '#f59e0b' },
   { name: 'Emerald Green', hex: '#10b981' },
   { name: 'Amber Gold', hex: '#f59e0b' },
   { name: 'Crimson Red', hex: '#ef4444' },
@@ -69,14 +69,14 @@ export const ModularInteriorWorkshop: React.FC<ModularInteriorWorkshopProps> = (
   const currentSeatId = config.frontSeatsId || 'SEATS_SPORT_BOLSTERED';
   const currentConsoleId = config.centerConsoleId || 'CONSOLE_SPORT_GATED';
   const currentTrim = config.primaryTrimGrade || 'nappa_leather';
-  const ambientColor = config.ambientLightingColorHex || '#06b6d4';
+  const ambientColor = config.ambientLightingColorHex || '#f59e0b';
 
   return (
     <div className="bg-white/80 dark:bg-base-900/90 border border-slate-200 dark:border-slate-800 rounded-3xl p-5 backdrop-blur-xl shadow-xl space-y-4 font-mono">
       {/* Header & Subsystem Navigation Tabs */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-200 dark:border-slate-800">
         <div className="flex items-center gap-2.5">
-          <div className="p-2 rounded-2xl bg-cyan-500/10 text-cyan-600 dark:text-cyan-400">
+          <div className="p-2 rounded-2xl bg-amber-500/10 text-amber-600 dark:text-amber-400">
             <Armchair size={18} />
           </div>
           <div>
@@ -93,7 +93,7 @@ export const ModularInteriorWorkshop: React.FC<ModularInteriorWorkshopProps> = (
           <button
             onClick={() => setActiveTab('dashboards')}
             className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-              activeTab === 'dashboards' ? 'bg-cyan-500 text-slate-950 shadow-md' : 'text-slate-400 hover:text-slate-200'
+              activeTab === 'dashboards' ? 'bg-amber-500 text-slate-950 shadow-md' : 'text-slate-400 hover:text-slate-200'
             }`}
           >
             Dashboards
@@ -101,7 +101,7 @@ export const ModularInteriorWorkshop: React.FC<ModularInteriorWorkshopProps> = (
           <button
             onClick={() => setActiveTab('displays_steering')}
             className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-              activeTab === 'displays_steering' ? 'bg-cyan-500 text-slate-950 shadow-md' : 'text-slate-400 hover:text-slate-200'
+              activeTab === 'displays_steering' ? 'bg-amber-500 text-slate-950 shadow-md' : 'text-slate-400 hover:text-slate-200'
             }`}
           >
             Displays & Wheel
@@ -109,7 +109,7 @@ export const ModularInteriorWorkshop: React.FC<ModularInteriorWorkshopProps> = (
           <button
             onClick={() => setActiveTab('seating_console')}
             className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-              activeTab === 'seating_console' ? 'bg-cyan-500 text-slate-950 shadow-md' : 'text-slate-400 hover:text-slate-200'
+              activeTab === 'seating_console' ? 'bg-amber-500 text-slate-950 shadow-md' : 'text-slate-400 hover:text-slate-200'
             }`}
           >
             Seating & Console
@@ -117,7 +117,7 @@ export const ModularInteriorWorkshop: React.FC<ModularInteriorWorkshopProps> = (
           <button
             onClick={() => setActiveTab('trim_ambient')}
             className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-              activeTab === 'trim_ambient' ? 'bg-cyan-500 text-slate-950 shadow-md' : 'text-slate-400 hover:text-slate-200'
+              activeTab === 'trim_ambient' ? 'bg-amber-500 text-slate-950 shadow-md' : 'text-slate-400 hover:text-slate-200'
             }`}
           >
             Trim & Lighting
@@ -140,12 +140,12 @@ export const ModularInteriorWorkshop: React.FC<ModularInteriorWorkshopProps> = (
                   !isCompatible
                     ? 'opacity-40 bg-slate-100/40 dark:bg-base-950/40 border-slate-200 dark:border-slate-800 cursor-not-allowed'
                     : isSelected
-                    ? 'bg-cyan-500/10 dark:bg-cyan-950/40 border-cyan-500 dark:border-cyan-400 shadow-[0_0_12px_rgba(6,182,212,0.25)] cursor-pointer scale-102'
+                    ? 'bg-amber-500/10 dark:bg-amber-950/40 border-amber-500 dark:border-amber-400 shadow-[0_0_12px_rgba(6,182,212,0.25)] cursor-pointer scale-102'
                     : 'bg-slate-50 dark:bg-base-950/60 border-slate-200 dark:border-slate-800 hover:border-slate-400 cursor-pointer'
                 }`}
               >
                 <div className="flex items-center justify-between">
-                  <span className={`text-[10px] font-bold px-2 py-0.5 rounded ${isSelected ? 'bg-cyan-500 text-slate-950' : 'bg-slate-200 dark:bg-base-900 text-slate-500'}`}>
+                  <span className={`text-[10px] font-bold px-2 py-0.5 rounded ${isSelected ? 'bg-amber-500 text-slate-950' : 'bg-slate-200 dark:bg-base-900 text-slate-500'}`}>
                     {dash.style.replace('_', ' ').toUpperCase()}
                   </span>
                   {!isCompatible ? (
@@ -153,7 +153,7 @@ export const ModularInteriorWorkshop: React.FC<ModularInteriorWorkshopProps> = (
                       <Lock size={12} /> INCOMPATIBLE
                     </span>
                   ) : isSelected ? (
-                    <CheckCircle2 size={15} className="text-cyan-400" />
+                    <CheckCircle2 size={15} className="text-amber-400" />
                   ) : null}
                 </div>
 
@@ -165,7 +165,7 @@ export const ModularInteriorWorkshop: React.FC<ModularInteriorWorkshopProps> = (
                 </p>
 
                 <div className="flex justify-between text-[10px] text-slate-500 pt-2 border-t border-slate-200 dark:border-slate-800">
-                  <span>Mass: <strong className="text-cyan-600 dark:text-cyan-400">{dash.massKg} kg</strong></span>
+                  <span>Mass: <strong className="text-amber-600 dark:text-amber-400">{dash.massKg} kg</strong></span>
                   <span>Cost: <strong className="text-amber-600 dark:text-amber-400">${dash.costUSD}</strong></span>
                 </div>
               </div>
@@ -189,7 +189,7 @@ export const ModularInteriorWorkshop: React.FC<ModularInteriorWorkshopProps> = (
                     onClick={() => onUpdateInterior({ instrumentClusterId: cluster.id })}
                     className={`p-3 rounded-2xl border cursor-pointer transition-all ${
                       isSelected
-                        ? 'bg-cyan-500/10 dark:bg-cyan-950/40 border-cyan-500 dark:border-cyan-400 shadow-sm'
+                        ? 'bg-amber-500/10 dark:bg-amber-950/40 border-amber-500 dark:border-amber-400 shadow-sm'
                         : 'bg-slate-50 dark:bg-base-950/60 border-slate-200 dark:border-slate-800'
                     }`}
                   >
@@ -216,7 +216,7 @@ export const ModularInteriorWorkshop: React.FC<ModularInteriorWorkshopProps> = (
                     onClick={() => onUpdateInterior({ steeringWheelId: wheel.id })}
                     className={`p-3 rounded-2xl border cursor-pointer transition-all ${
                       isSelected
-                        ? 'bg-cyan-500/10 dark:bg-cyan-950/40 border-cyan-500 dark:border-cyan-400 shadow-sm'
+                        ? 'bg-amber-500/10 dark:bg-amber-950/40 border-amber-500 dark:border-amber-400 shadow-sm'
                         : 'bg-slate-50 dark:bg-base-950/60 border-slate-200 dark:border-slate-800'
                     }`}
                   >
@@ -248,7 +248,7 @@ export const ModularInteriorWorkshop: React.FC<ModularInteriorWorkshopProps> = (
                     onClick={() => onUpdateInterior({ frontSeatsId: seat.id })}
                     className={`p-3 rounded-2xl border cursor-pointer transition-all ${
                       isSelected
-                        ? 'bg-cyan-500/10 dark:bg-cyan-950/40 border-cyan-500 dark:border-cyan-400 shadow-sm'
+                        ? 'bg-amber-500/10 dark:bg-amber-950/40 border-amber-500 dark:border-amber-400 shadow-sm'
                         : 'bg-slate-50 dark:bg-base-950/60 border-slate-200 dark:border-slate-800'
                     }`}
                   >
@@ -275,7 +275,7 @@ export const ModularInteriorWorkshop: React.FC<ModularInteriorWorkshopProps> = (
                     onClick={() => onUpdateInterior({ centerConsoleId: con.id })}
                     className={`p-3 rounded-2xl border cursor-pointer transition-all ${
                       isSelected
-                        ? 'bg-cyan-500/10 dark:bg-cyan-950/40 border-cyan-500 dark:border-cyan-400 shadow-sm'
+                        ? 'bg-amber-500/10 dark:bg-amber-950/40 border-amber-500 dark:border-amber-400 shadow-sm'
                         : 'bg-slate-50 dark:bg-base-950/60 border-slate-200 dark:border-slate-800'
                     }`}
                   >
@@ -307,12 +307,12 @@ export const ModularInteriorWorkshop: React.FC<ModularInteriorWorkshopProps> = (
                     onClick={() => onUpdateInterior({ primaryTrimGrade: tg.id })}
                     className={`p-3 rounded-2xl border cursor-pointer transition-all flex items-center justify-between ${
                       isSelected
-                        ? 'bg-cyan-500/10 dark:bg-cyan-950/40 border-cyan-500 dark:border-cyan-400 shadow-sm'
+                        ? 'bg-amber-500/10 dark:bg-amber-950/40 border-amber-500 dark:border-amber-400 shadow-sm'
                         : 'bg-slate-50 dark:bg-base-950/60 border-slate-200 dark:border-slate-800'
                     }`}
                   >
                     <span className="text-xs font-bold text-slate-800 dark:text-slate-200">{tg.name}</span>
-                    <span className="text-[9px] font-bold px-2 py-0.5 rounded bg-cyan-500/10 text-cyan-400 border border-cyan-500/30">
+                    <span className="text-[9px] font-bold px-2 py-0.5 rounded bg-amber-500/10 text-amber-400 border border-amber-500/30">
                       {tg.badge}
                     </span>
                   </div>
@@ -332,7 +332,7 @@ export const ModularInteriorWorkshop: React.FC<ModularInteriorWorkshopProps> = (
                     key={col.hex}
                     onClick={() => onUpdateInterior({ ambientLightingColorHex: col.hex })}
                     className={`p-3 rounded-2xl border flex flex-col items-center gap-1.5 transition-all cursor-pointer ${
-                      isSelected ? 'border-cyan-400 bg-cyan-500/10 scale-105 ring-1 ring-cyan-400' : 'border-slate-800 bg-base-950'
+                      isSelected ? 'border-amber-400 bg-amber-500/10 scale-105 ring-1 ring-amber-400' : 'border-slate-800 bg-base-950'
                     }`}
                   >
                     <div className="w-5 h-5 rounded-full shadow-lg" style={{ backgroundColor: col.hex }} />

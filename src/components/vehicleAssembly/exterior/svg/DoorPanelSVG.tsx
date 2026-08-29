@@ -42,7 +42,7 @@ export const DoorPanelSVG: React.FC<DoorPanelSVGProps> = ({
   };
 
   const strokeColor = isSelected
-    ? "#38bdf8"
+    ? "#fbbf24"
     : isHovered
     ? "#0284c7"
     : "#020617";
@@ -98,7 +98,7 @@ export const DoorPanelSVG: React.FC<DoorPanelSVGProps> = ({
         stroke="#475569"
         strokeWidth="0.8"
       />
-      <circle cx="516" cy="298.5" r="1.5" fill="#38bdf8" />
+      <circle cx="516" cy="298.5" r="1.5" fill="#fbbf24" />
 
       {/* ── 5. Beltline Chrome / Gloss Black Trim ── */}
       <line

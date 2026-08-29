@@ -9,7 +9,7 @@ const NVH_IDENTITY: AgentIdentity = {
   name: "NVH & Comfort Engineer",
   domain: "nvh",
   icon: "🎧",
-  color: "#a855f7",
+  color: "#f59e0b",
   priority: 6,
   description: "Monitors cabin noise levels (dB), engine harmonic vibration, sound deadening, and ride plushness.",
   capabilities: ["Cabin dB Calculation", "Vibration Resonance", "Sound Deadening Optimization", "Ride Quality"],

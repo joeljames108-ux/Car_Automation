@@ -174,12 +174,12 @@ export class FunctionalInfotainmentRenderer {
     ctx.stroke();
 
     // Left Brand Logo & Title
-    ctx.fillStyle = "#38bdf8";
+    ctx.fillStyle = "#fbbf24";
     ctx.font = "bold 16px 'Courier New', monospace";
     ctx.fillText("ANTIGRAVITY // COCKPIT OS 4.0", 20, 32);
 
     // Drive Mode Pill
-    ctx.fillStyle = data.driveMode === "Corsa" ? "#ef4444" : "#06b6d4";
+    ctx.fillStyle = data.driveMode === "Corsa" ? "#ef4444" : "#f59e0b";
     ctx.fillRect(400, 14, 90, 24);
     ctx.fillStyle = "#020617";
     ctx.font = "bold 13px 'Courier New', monospace";
@@ -210,7 +210,7 @@ export class FunctionalInfotainmentRenderer {
       if (isSelected) {
         ctx.fillStyle = "rgba(6, 182, 212, 0.25)";
         ctx.fillRect(10, y, 120, btnH - 8);
-        ctx.strokeStyle = "#06b6d4";
+        ctx.strokeStyle = "#f59e0b";
         ctx.lineWidth = 2;
         ctx.strokeRect(10, y, 120, btnH - 8);
       } else {
@@ -218,7 +218,7 @@ export class FunctionalInfotainmentRenderer {
         ctx.fillRect(10, y, 120, btnH - 8);
       }
 
-      ctx.fillStyle = isSelected ? "#38bdf8" : "#64748b";
+      ctx.fillStyle = isSelected ? "#fbbf24" : "#64748b";
       ctx.font = "bold 12px 'Courier New', monospace";
       ctx.textAlign = "center";
       ctx.fillText(m.label, 70, y + btnH / 2);
@@ -290,7 +290,7 @@ export class FunctionalInfotainmentRenderer {
 
     tirePositions.forEach((t) => {
       // Tire box (Green = optimal ~90°C)
-      ctx.fillStyle = t.temp > 100 ? "#ef4444" : t.temp > 80 ? "#10b981" : "#3b82f6";
+      ctx.fillStyle = t.temp > 100 ? "#ef4444" : t.temp > 80 ? "#10b981" : "#d97706";
       ctx.fillRect(t.x, t.y, 25, 40);
 
       ctx.fillStyle = "#f8fafc";
@@ -307,7 +307,7 @@ export class FunctionalInfotainmentRenderer {
     ctx.strokeStyle = "rgba(6, 182, 212, 0.4)";
     ctx.strokeRect(rightX, 20, 260, 180);
 
-    ctx.fillStyle = "#38bdf8";
+    ctx.fillStyle = "#fbbf24";
     ctx.font = "bold 14px 'Courier New', monospace";
     ctx.fillText("LAP TELEMETRY // SECTOR 3", rightX + 15, 45);
 
@@ -318,7 +318,7 @@ export class FunctionalInfotainmentRenderer {
     ctx.fillText(`${lapMin}:${lapSec.padStart(5, "0")}`, rightX + 15, 80);
 
     const deltaSign = data.lapDeltaSeconds <= 0 ? "-" : "+";
-    ctx.fillStyle = data.lapDeltaSeconds <= 0 ? "#a855f7" : "#ef4444"; // Purple = fastest sector
+    ctx.fillStyle = data.lapDeltaSeconds <= 0 ? "#f59e0b" : "#ef4444"; // Purple = fastest sector
     ctx.font = "bold 18px 'Courier New', monospace";
     ctx.fillText(`DELTA: ${deltaSign}${Math.abs(data.lapDeltaSeconds).toFixed(2)}s`, rightX + 15, 110);
 
@@ -339,14 +339,14 @@ export class FunctionalInfotainmentRenderer {
   }
 
   private renderMediaMode(ctx: CanvasRenderingContext2D, w: number, h: number, data: InfotainmentTelemetryData) {
-    ctx.fillStyle = "#38bdf8";
+    ctx.fillStyle = "#fbbf24";
     ctx.font = "bold 18px 'Courier New', monospace";
     ctx.fillText("BESPOKE 24-SPEAKER DIAMOND SOUNDSTAGE // DOLBY ATMOS", 20, 35);
 
     ctx.fillStyle = "#f8fafc";
     ctx.font = "bold 22px 'Courier New', monospace";
     ctx.fillText(`NOW PLAYING: ${data.audioTrackTitle}`, 20, 75);
-    ctx.fillStyle = "#a855f7";
+    ctx.fillStyle = "#f59e0b";
     ctx.font = "16px 'Courier New', monospace";
     ctx.fillText(`ARTIST: ${data.audioArtist}`, 20, 105);
 
@@ -359,9 +359,9 @@ export class FunctionalInfotainmentRenderer {
     for (let i = 0; i < bands; i++) {
       const height = Math.sin(this.animTimer * 2 + i * 0.4) * 80 + 90;
       const grad = ctx.createLinearGradient(0, startY - height, 0, startY);
-      grad.addColorStop(0, "#06b6d4");
-      grad.addColorStop(0.6, "#8b5cf6");
-      grad.addColorStop(1, "#ec4899");
+      grad.addColorStop(0, "#f59e0b");
+      grad.addColorStop(0.6, "#f59e0b");
+      grad.addColorStop(1, "#d97706");
 
       ctx.fillStyle = grad;
       ctx.fillRect(startX + i * (bandW + 12), startY - height, bandW, height);
@@ -374,7 +374,7 @@ export class FunctionalInfotainmentRenderer {
     h: number,
     data: InfotainmentTelemetryData
   ) {
-    ctx.fillStyle = "#38bdf8";
+    ctx.fillStyle = "#fbbf24";
     ctx.font = "bold 18px 'Courier New', monospace";
     ctx.fillText("DYNAMIC CHASSIS & POWERTRAIN MAPPING", 20, 35);
 
@@ -386,11 +386,11 @@ export class FunctionalInfotainmentRenderer {
 
       ctx.fillStyle = isCurrent ? "rgba(6, 182, 212, 0.3)" : "rgba(15, 23, 42, 0.6)";
       ctx.fillRect(x, y, 170, 260);
-      ctx.strokeStyle = isCurrent ? "#06b6d4" : "rgba(148, 163, 184, 0.2)";
+      ctx.strokeStyle = isCurrent ? "#f59e0b" : "rgba(148, 163, 184, 0.2)";
       ctx.lineWidth = isCurrent ? 2 : 1;
       ctx.strokeRect(x, y, 170, 260);
 
-      ctx.fillStyle = isCurrent ? "#38bdf8" : "#f8fafc";
+      ctx.fillStyle = isCurrent ? "#fbbf24" : "#f8fafc";
       ctx.font = "bold 16px 'Courier New', monospace";
       ctx.fillText(mode.toUpperCase(), x + 20, y + 35);
 
@@ -409,7 +409,7 @@ export class FunctionalInfotainmentRenderer {
     h: number,
     data: InfotainmentTelemetryData
   ) {
-    ctx.fillStyle = "#38bdf8";
+    ctx.fillStyle = "#fbbf24";
     ctx.font = "bold 18px 'Courier New', monospace";
     ctx.fillText("DUAL-ZONE CLIMATE CONTROL & AIR IONIZER", 20, 35);
 
@@ -440,11 +440,11 @@ export class FunctionalInfotainmentRenderer {
     ctx.textAlign = "center";
     ctx.fillText(`${tempC.toFixed(1)}°C`, cx, cy + 10);
 
-    ctx.fillStyle = "#38bdf8";
+    ctx.fillStyle = "#fbbf24";
     ctx.font = "bold 13px 'Courier New', monospace";
     ctx.fillText(label, cx, cy - 35);
 
-    ctx.fillStyle = isHeating ? "#f97316" : "#06b6d4";
+    ctx.fillStyle = isHeating ? "#f97316" : "#f59e0b";
     ctx.font = "12px 'Courier New', monospace";
     ctx.fillText(isHeating ? "HEAT: ACTIVE" : "COOL: ACTIVE", cx, cy + 40);
     ctx.textAlign = "left";

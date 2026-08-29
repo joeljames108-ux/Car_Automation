@@ -274,7 +274,7 @@ function GaugeMeter({ value, max, label }: { value: number; max: number; label: 
             pointerEvents: "none",
           }}
         >
-          <div className="font-mono text-base font-black text-cyan-400 leading-none">
+          <div className="font-mono text-base font-black text-amber-400 leading-none">
             {value.toFixed(2)} <span className="text-xs font-bold">G</span>
           </div>
           <div className="label-mono text-[9px] text-slate-500 font-bold tracking-widest uppercase mt-1">

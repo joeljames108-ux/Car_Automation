@@ -27,18 +27,18 @@ export const ChassisFEAControlPanel: React.FC<ChassisFEAControlPanelProps> = ({
   chassisName,
 }) => {
   return (
-    <div className="bg-slate-950/90 backdrop-blur-md border border-cyan-500/30 rounded-xl p-4 shadow-2xl text-slate-100 flex flex-col gap-3.5">
+    <div className="bg-slate-950/90 backdrop-blur-md border border-amber-500/30 rounded-xl p-4 shadow-2xl text-slate-100 flex flex-col gap-3.5">
       {/* Header */}
       <div className="flex items-center justify-between border-b border-slate-800 pb-2">
         <div className="flex items-center gap-2">
-          <Activity className="w-4 h-4 text-cyan-400 animate-pulse" />
-          <span className="font-mono text-xs font-bold uppercase tracking-wider text-cyan-300">
+          <Activity className="w-4 h-4 text-amber-400 animate-pulse" />
+          <span className="font-mono text-xs font-bold uppercase tracking-wider text-amber-300">
             Chassis FEA Load Simulator
           </span>
         </div>
         <div className="flex items-center gap-1.5 px-2 py-0.5 bg-slate-900 border border-slate-700 rounded text-[10px] font-mono text-slate-400">
           <span>{chassisName}</span>
-          <span className="text-cyan-400 font-bold">{torsionalRigidity} kNm/°</span>
+          <span className="text-amber-400 font-bold">{torsionalRigidity} kNm/°</span>
         </div>
       </div>
 
@@ -82,7 +82,7 @@ export const ChassisFEAControlPanel: React.FC<ChassisFEAControlPanelProps> = ({
         <div className="flex flex-col gap-1">
           <div className="flex justify-between text-[11px] font-mono">
             <span className="text-slate-400">Aero Downforce</span>
-            <span className="text-cyan-400 font-bold">{downforceN} N</span>
+            <span className="text-amber-400 font-bold">{downforceN} N</span>
           </div>
           <input
             type="range"
@@ -91,7 +91,7 @@ export const ChassisFEAControlPanel: React.FC<ChassisFEAControlPanelProps> = ({
             step="250"
             value={downforceN}
             onChange={(e) => setDownforceN(parseInt(e.target.value))}
-            className="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-cyan-400"
+            className="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-amber-400"
           />
         </div>
       </div>
@@ -102,7 +102,7 @@ export const ChassisFEAControlPanel: React.FC<ChassisFEAControlPanelProps> = ({
           onClick={() => setShowDeformationMesh(!showDeformationMesh)}
           className={`flex items-center gap-1.5 px-2.5 py-1 rounded transition-colors ${
             showDeformationMesh
-              ? "bg-cyan-950/80 text-cyan-300 border border-cyan-500/40"
+              ? "bg-amber-950/80 text-amber-300 border border-amber-500/40"
               : "bg-slate-900 text-slate-400 border border-slate-800 hover:text-slate-200"
           }`}
         >

@@ -33,12 +33,12 @@ export const CinematicBlueprintXRayOverlay: React.FC<CinematicBlueprintXRayOverl
   };
 
   const layersList: { id: VehicleLayer; label: string; icon: React.ReactNode; color: string }[] = [
-    { id: "body", label: "Exterior Body Shell", icon: <Layers size={13} />, color: "#38bdf8" },
-    { id: "aero", label: "Aerodynamic Appendages", icon: <Wind size={13} />, color: "#06b6d4" },
-    { id: "chassis", label: "Carbon Monocoque & Subframe", icon: <ShieldCheck size={13} />, color: "#6366f1" },
+    { id: "body", label: "Exterior Body Shell", icon: <Layers size={13} />, color: "#fbbf24" },
+    { id: "aero", label: "Aerodynamic Appendages", icon: <Wind size={13} />, color: "#f59e0b" },
+    { id: "chassis", label: "Carbon Monocoque & Subframe", icon: <ShieldCheck size={13} />, color: "#f59e0b" },
     { id: "suspension", label: "Double Wishbone Suspension", icon: <Activity size={13} />, color: "#10b981" },
     { id: "powertrain", label: "V8 Twin-Turbo Powertrain", icon: <Cog size={13} />, color: "#f59e0b" },
-    { id: "interior", label: "OLED Cockpit & Carbon Seats", icon: <Sofa size={13} />, color: "#ec4899" },
+    { id: "interior", label: "OLED Cockpit & Carbon Seats", icon: <Sofa size={13} />, color: "#d97706" },
   ];
 
   return (
@@ -47,21 +47,21 @@ export const CinematicBlueprintXRayOverlay: React.FC<CinematicBlueprintXRayOverl
       onClick={onClose}
     >
       <div
-        className="relative w-full max-w-5xl max-h-[92vh] overflow-y-auto rounded-3xl bg-[#091122]/95 border-2 border-cyan-500/40 p-6 shadow-[0_0_90px_rgba(6,182,212,0.3)] flex flex-col gap-5 scrollbar-thin"
+        className="relative w-full max-w-5xl max-h-[92vh] overflow-y-auto rounded-3xl bg-[#091122]/95 border-2 border-amber-500/40 p-6 shadow-[0_0_90px_rgba(6,182,212,0.3)] flex flex-col gap-5 scrollbar-thin"
         onClick={(e) => e.stopPropagation()}
       >
         {/* CAD Blueprint Header */}
-        <div className="flex items-center justify-between border-b border-cyan-500/30 pb-4">
+        <div className="flex items-center justify-between border-b border-amber-500/30 pb-4">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-cyan-500/10 border border-cyan-400/30 flex items-center justify-center text-cyan-400 shadow-lg">
+            <div className="w-10 h-10 rounded-2xl bg-amber-500/10 border border-amber-400/30 flex items-center justify-center text-amber-400 shadow-lg">
               <Ruler size={20} className="animate-pulse" />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h2 className="text-lg font-black tracking-widest text-cyan-300 font-mono">
+                <h2 className="text-lg font-black tracking-widest text-amber-300 font-mono">
                   CAD BLUEPRINT & X-RAY DIAGNOSTICS
                 </h2>
-                <span className="px-2 py-0.5 rounded-full text-[9px] font-mono font-bold bg-cyan-500/20 text-cyan-300 border border-cyan-400/40 uppercase">
+                <span className="px-2 py-0.5 rounded-full text-[9px] font-mono font-bold bg-amber-500/20 text-amber-300 border border-amber-400/40 uppercase">
                   ISO 8855 CALIBRATED
                 </span>
               </div>
@@ -73,20 +73,20 @@ export const CinematicBlueprintXRayOverlay: React.FC<CinematicBlueprintXRayOverl
 
           <button
             onClick={onClose}
-            className="w-8 h-8 rounded-full bg-cyan-500/10 hover:bg-cyan-500/20 border border-cyan-400/30 flex items-center justify-center text-cyan-300 hover:text-white transition-all cursor-pointer"
+            className="w-8 h-8 rounded-full bg-amber-500/10 hover:bg-amber-500/20 border border-amber-400/30 flex items-center justify-center text-amber-300 hover:text-white transition-all cursor-pointer"
           >
             <X size={16} />
           </button>
         </div>
 
         {/* Blueprint Canvas & CAD Dimension Diagram */}
-        <div className="relative w-full aspect-[16/9] max-h-96 rounded-2xl border border-cyan-500/30 bg-[#060c18] overflow-hidden flex items-center justify-center">
+        <div className="relative w-full aspect-[16/9] max-h-96 rounded-2xl border border-amber-500/30 bg-[#060c18] overflow-hidden flex items-center justify-center">
           {/* Blueprint Grid Lines */}
           <div
             className="absolute inset-0 opacity-25"
             style={{
               backgroundImage:
-                "linear-gradient(to right, #06b6d4 1px, transparent 1px), linear-gradient(to bottom, #06b6d4 1px, transparent 1px)",
+                "linear-gradient(to right, #f59e0b 1px, transparent 1px), linear-gradient(to bottom, #f59e0b 1px, transparent 1px)",
               backgroundSize: "24px 24px",
             }}
           />
@@ -94,15 +94,15 @@ export const CinematicBlueprintXRayOverlay: React.FC<CinematicBlueprintXRayOverl
           {/* SVG Vehicle Wireframe & Dimensions */}
           <svg className="w-full h-full p-6 overflow-visible" viewBox="0 0 600 320">
             {/* Centerline axes */}
-            <line x1="20" y1="160" x2="580" y2="160" stroke="#06b6d4" strokeWidth="0.8" strokeDasharray="6 3" />
-            <line x1="300" y1="20" x2="300" y2="300" stroke="#06b6d4" strokeWidth="0.8" strokeDasharray="6 3" />
+            <line x1="20" y1="160" x2="580" y2="160" stroke="#f59e0b" strokeWidth="0.8" strokeDasharray="6 3" />
+            <line x1="300" y1="20" x2="300" y2="300" stroke="#f59e0b" strokeWidth="0.8" strokeDasharray="6 3" />
 
             {/* Layer 1: Exterior Body Wireframe */}
             {activeLayers.body && (
               <path
                 d="M 60 210 Q 120 205, 170 170 Q 220 90, 340 90 Q 420 90, 480 170 Q 510 205, 540 210 Z"
                 fill="none"
-                stroke="#38bdf8"
+                stroke="#fbbf24"
                 strokeWidth="2"
                 transform={`translate(0, ${-explodedPercent * 0.4})`}
                 className="filter drop-shadow-[0_0_8px_rgba(56,189,248,0.7)]"
@@ -112,19 +112,19 @@ export const CinematicBlueprintXRayOverlay: React.FC<CinematicBlueprintXRayOverl
             {/* Layer 2: Aero Wings & Diffuser */}
             {activeLayers.aero && (
               <g transform={`translate(0, ${-explodedPercent * 0.7})`}>
-                <rect x="40" y="210" width="40" height="8" rx="2" fill="none" stroke="#06b6d4" strokeWidth="2" />
-                <path d="M 500 110 L 535 90 L 540 100 L 505 120 Z" fill="none" stroke="#06b6d4" strokeWidth="2" />
-                <line x1="520" y1="100" x2="520" y2="160" stroke="#06b6d4" strokeWidth="1.5" />
+                <rect x="40" y="210" width="40" height="8" rx="2" fill="none" stroke="#f59e0b" strokeWidth="2" />
+                <path d="M 500 110 L 535 90 L 540 100 L 505 120 Z" fill="none" stroke="#f59e0b" strokeWidth="2" />
+                <line x1="520" y1="100" x2="520" y2="160" stroke="#f59e0b" strokeWidth="1.5" />
               </g>
             )}
 
             {/* Layer 3: Spaceframe Chassis */}
             {activeLayers.chassis && (
               <g transform={`translate(0, 0)`}>
-                <rect x="120" y="150" width="360" height="60" rx="8" fill="none" stroke="#6366f1" strokeWidth="2" />
-                <line x1="180" y1="150" x2="260" y2="90" stroke="#6366f1" strokeWidth="1.8" />
-                <line x1="260" y1="90" x2="380" y2="90" stroke="#6366f1" strokeWidth="1.8" />
-                <line x1="380" y1="90" x2="440" y2="150" stroke="#6366f1" strokeWidth="1.8" />
+                <rect x="120" y="150" width="360" height="60" rx="8" fill="none" stroke="#f59e0b" strokeWidth="2" />
+                <line x1="180" y1="150" x2="260" y2="90" stroke="#f59e0b" strokeWidth="1.8" />
+                <line x1="260" y1="90" x2="380" y2="90" stroke="#f59e0b" strokeWidth="1.8" />
+                <line x1="380" y1="90" x2="440" y2="150" stroke="#f59e0b" strokeWidth="1.8" />
               </g>
             )}
 
@@ -149,24 +149,24 @@ export const CinematicBlueprintXRayOverlay: React.FC<CinematicBlueprintXRayOverl
             {/* Layer 6: Cockpit Seats */}
             {activeLayers.interior && (
               <g transform={`translate(0, ${-explodedPercent * 0.1})`}>
-                <path d="M 330 190 L 330 140 Q 340 120, 360 120" fill="none" stroke="#ec4899" strokeWidth="2" />
+                <path d="M 330 190 L 330 140 Q 340 120, 360 120" fill="none" stroke="#d97706" strokeWidth="2" />
               </g>
             )}
 
             {/* Dimension Lines */}
             <g className="font-mono text-[9px] fill-cyan-300">
               {/* Wheelbase Dimension */}
-              <line x1="160" y1="260" x2="440" y2="260" stroke="#06b6d4" strokeWidth="1" />
-              <line x1="160" y1="250" x2="160" y2="270" stroke="#06b6d4" strokeWidth="1" />
-              <line x1="440" y1="250" x2="440" y2="270" stroke="#06b6d4" strokeWidth="1" />
+              <line x1="160" y1="260" x2="440" y2="260" stroke="#f59e0b" strokeWidth="1" />
+              <line x1="160" y1="250" x2="160" y2="270" stroke="#f59e0b" strokeWidth="1" />
+              <line x1="440" y1="250" x2="440" y2="270" stroke="#f59e0b" strokeWidth="1" />
               <text x="300" y="255" textAnchor="middle">
                 WHEELBASE: 2,720 mm
               </text>
 
               {/* Total Length Dimension */}
-              <line x1="60" y1="290" x2="540" y2="290" stroke="#06b6d4" strokeWidth="1" />
-              <line x1="60" y1="280" x2="60" y2="300" stroke="#06b6d4" strokeWidth="1" />
-              <line x1="540" y1="280" x2="540" y2="300" stroke="#06b6d4" strokeWidth="1" />
+              <line x1="60" y1="290" x2="540" y2="290" stroke="#f59e0b" strokeWidth="1" />
+              <line x1="60" y1="280" x2="60" y2="300" stroke="#f59e0b" strokeWidth="1" />
+              <line x1="540" y1="280" x2="540" y2="300" stroke="#f59e0b" strokeWidth="1" />
               <text x="300" y="285" textAnchor="middle">
                 OVERALL LENGTH: 4,680 mm
               </text>
@@ -197,8 +197,8 @@ export const CinematicBlueprintXRayOverlay: React.FC<CinematicBlueprintXRayOverl
         {/* Controls Grid */}
         <div className="grid md:grid-cols-2 gap-5">
           {/* Layer Peeling Checkboxes */}
-          <div className="p-4 rounded-2xl bg-[#0b1424] border border-cyan-500/20 flex flex-col gap-2.5">
-            <span className="font-mono text-xs font-bold text-cyan-300 uppercase flex items-center gap-1.5 mb-1">
+          <div className="p-4 rounded-2xl bg-[#0b1424] border border-amber-500/20 flex flex-col gap-2.5">
+            <span className="font-mono text-xs font-bold text-amber-300 uppercase flex items-center gap-1.5 mb-1">
               <Layers size={13} />
               <span>X-RAY LAYER VISIBILITY</span>
             </span>
@@ -212,11 +212,11 @@ export const CinematicBlueprintXRayOverlay: React.FC<CinematicBlueprintXRayOverl
                     onClick={() => toggleLayer(l.id)}
                     className={`flex items-center gap-2 p-2 rounded-xl border text-left text-xs font-mono font-semibold transition-all cursor-pointer ${
                       isOn
-                        ? "bg-cyan-500/15 text-white border-cyan-400/40 shadow-sm"
+                        ? "bg-amber-500/15 text-white border-amber-400/40 shadow-sm"
                         : "bg-white/[0.03] text-slate-500 border-white/5 hover:bg-white/5"
                     }`}
                   >
-                    {isOn ? <Eye size={12} className="text-cyan-400" /> : <EyeOff size={12} />}
+                    {isOn ? <Eye size={12} className="text-amber-400" /> : <EyeOff size={12} />}
                     <span className="truncate">{l.label}</span>
                   </button>
                 );
@@ -225,9 +225,9 @@ export const CinematicBlueprintXRayOverlay: React.FC<CinematicBlueprintXRayOverl
           </div>
 
           {/* Exploded View & FEA Stress Sliders */}
-          <div className="p-4 rounded-2xl bg-[#0b1424] border border-cyan-500/20 flex flex-col justify-between gap-4">
+          <div className="p-4 rounded-2xl bg-[#0b1424] border border-amber-500/20 flex flex-col justify-between gap-4">
             <div>
-              <div className="flex justify-between items-center text-xs font-mono text-cyan-300 font-bold mb-1.5">
+              <div className="flex justify-between items-center text-xs font-mono text-amber-300 font-bold mb-1.5">
                 <span>EXPLODED KINEMATICS SEPARATION</span>
                 <span>{explodedPercent}%</span>
               </div>
@@ -237,7 +237,7 @@ export const CinematicBlueprintXRayOverlay: React.FC<CinematicBlueprintXRayOverl
                 max="100"
                 value={explodedPercent}
                 onChange={(e) => setExplodedPercent(Number(e.target.value))}
-                className="w-full accent-cyan-400 cursor-pointer"
+                className="w-full accent-amber-400 cursor-pointer"
               />
             </div>
 

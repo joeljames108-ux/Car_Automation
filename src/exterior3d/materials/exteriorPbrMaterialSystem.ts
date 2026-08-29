@@ -116,7 +116,7 @@ export class ExteriorMaterialLibrary {
     if (this.cache.has(key)) return this.cache.get(key) as THREE.MeshPhysicalMaterial;
 
     const mat = new THREE.MeshPhysicalMaterial({
-      color: 0x38bdf8,
+      color: 0xfbbf24,
       transmission,
       opacity: 1,
       transparent: true,
@@ -144,7 +144,7 @@ export class ExteriorMaterialLibrary {
     return mat;
   }
 
-  public static getLightingEmissiveMaterial(hex = 0x38bdf8, intensity = 2.5): THREE.MeshStandardMaterial {
+  public static getLightingEmissiveMaterial(hex = 0xfbbf24, intensity = 2.5): THREE.MeshStandardMaterial {
     const key = `emissive_${hex}_${intensity}`;
     if (this.cache.has(key)) return this.cache.get(key) as THREE.MeshStandardMaterial;
 

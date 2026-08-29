@@ -87,8 +87,8 @@ export class FunctionalInstrumentClusterRenderer {
     const endAngle = startAngle + rpmFrac * (Math.PI * 1.5);
 
     const grad = ctx.createLinearGradient(cx - radius, cy, cx + radius, cy);
-    grad.addColorStop(0, "#06b6d4");
-    grad.addColorStop(0.7, "#3b82f6");
+    grad.addColorStop(0, "#f59e0b");
+    grad.addColorStop(0.7, "#d97706");
     grad.addColorStop(1, "#ef4444");
 
     ctx.strokeStyle = grad;
@@ -105,7 +105,7 @@ export class FunctionalInstrumentClusterRenderer {
     ctx.fillText(telemetry.gear, cx, cy - 20);
 
     // Digital Speedometer (km/h)
-    ctx.fillStyle = "#38bdf8";
+    ctx.fillStyle = "#fbbf24";
     ctx.font = "bold 38px 'Courier New', monospace";
     ctx.fillText(`${Math.round(telemetry.speedKmh)}`, cx, cy + 45);
     ctx.font = "14px sans-serif";
@@ -140,7 +140,7 @@ export class FunctionalInstrumentClusterRenderer {
     // Moving G-Dot
     const dotX = leftX + (telemetry.lateralG / 2.0) * 60;
     const dotY = cy - (telemetry.longitudinalG / 2.0) * 60;
-    ctx.fillStyle = "#06b6d4";
+    ctx.fillStyle = "#f59e0b";
     ctx.beginPath();
     ctx.arc(dotX, dotY, 7, 0, Math.PI * 2);
     ctx.fill();

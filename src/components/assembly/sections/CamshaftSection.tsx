@@ -97,8 +97,8 @@ export function CamshaftSection({
               onChange={(v) => updateEngine({ camTiming: v })}
             />
 
-            <div className="p-3 rounded-xl bg-cyan-950/20 border border-cyan-500/20 space-y-1">
-              <span className="text-[10px] font-mono font-bold text-cyan-300 uppercase tracking-wider block">
+            <div className="p-3 rounded-xl bg-amber-950/20 border border-amber-500/20 space-y-1">
+              <span className="text-[10px] font-mono font-bold text-amber-300 uppercase tracking-wider block">
                 POWERBAND DYNAMICS
               </span>
               <p className="text-[11px] font-mono text-slate-300 leading-relaxed">

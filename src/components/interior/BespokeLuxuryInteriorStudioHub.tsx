@@ -115,7 +115,7 @@ export const BespokeLuxuryInteriorStudioHubComponent: React.FC = () => {
       {/* Top Header */}
       <div className="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-slate-800">
         <div>
-          <div className="flex items-center gap-2 text-xs font-bold text-cyan-400 uppercase tracking-widest">
+          <div className="flex items-center gap-2 text-xs font-bold text-amber-400 uppercase tracking-widest">
             <Sparkles size={14} /> BESPOKE AUTOMOTIVE INTERIOR STUDIO
           </div>
           <h1 className="text-2xl md:text-3xl font-black text-white tracking-tight">
@@ -143,7 +143,7 @@ export const BespokeLuxuryInteriorStudioHubComponent: React.FC = () => {
                 onClick={() => setActiveTab(tab.id)}
                 className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                   isSelected
-                    ? "bg-gradient-to-r from-cyan-500 to-blue-600 text-white shadow-lg shadow-cyan-500/25"
+                    ? "bg-gradient-to-r from-amber-500 to-amber-600 text-white shadow-lg shadow-cyan-500/25"
                     : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/50"
                 }`}
               >
@@ -172,7 +172,7 @@ export const BespokeLuxuryInteriorStudioHubComponent: React.FC = () => {
                     dashboard: { ...interiorState.dashboard, typology: e.target.value as DashboardTypology },
                   })
                 }
-                className="w-full bg-slate-950 text-xs font-bold text-cyan-300 p-2 rounded-xl border border-slate-800"
+                className="w-full bg-slate-950 text-xs font-bold text-amber-300 p-2 rounded-xl border border-slate-800"
               >
                 {DASHBOARD_OPTIONS.map((d) => (
                   <option key={d.id} value={d.id}>{d.name}</option>
@@ -190,7 +190,7 @@ export const BespokeLuxuryInteriorStudioHubComponent: React.FC = () => {
                     steering: { ...interiorState.steering, typology: e.target.value as SteeringWheelTypology },
                   })
                 }
-                className="w-full bg-slate-950 text-xs font-bold text-cyan-300 p-2 rounded-xl border border-slate-800"
+                className="w-full bg-slate-950 text-xs font-bold text-amber-300 p-2 rounded-xl border border-slate-800"
               >
                 {STEERING_OPTIONS.map((s) => (
                   <option key={s.id} value={s.id}>{s.name}</option>
@@ -208,7 +208,7 @@ export const BespokeLuxuryInteriorStudioHubComponent: React.FC = () => {
                     seating: { ...interiorState.seating, frontSeatType: e.target.value as FrontSeatTypology },
                   })
                 }
-                className="w-full bg-slate-950 text-xs font-bold text-cyan-300 p-2 rounded-xl border border-slate-800"
+                className="w-full bg-slate-950 text-xs font-bold text-amber-300 p-2 rounded-xl border border-slate-800"
               >
                 {SEATING_OPTIONS.map((st) => (
                   <option key={st.id} value={st.id}>{st.name}</option>
@@ -226,7 +226,7 @@ export const BespokeLuxuryInteriorStudioHubComponent: React.FC = () => {
                     console: { ...interiorState.console, typology: e.target.value as CenterConsoleTypology },
                   })
                 }
-                className="w-full bg-slate-950 text-xs font-bold text-cyan-300 p-2 rounded-xl border border-slate-800"
+                className="w-full bg-slate-950 text-xs font-bold text-amber-300 p-2 rounded-xl border border-slate-800"
               >
                 {CONSOLE_OPTIONS.map((c) => (
                   <option key={c.id} value={c.id}>{c.name}</option>
@@ -241,7 +241,7 @@ export const BespokeLuxuryInteriorStudioHubComponent: React.FC = () => {
       {activeTab === "materials" && (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div className="p-5 rounded-3xl bg-slate-900/90 border border-slate-800 space-y-4">
-            <h3 className="text-sm font-bold text-cyan-400 uppercase tracking-wider flex items-center gap-2">
+            <h3 className="text-sm font-bold text-amber-400 uppercase tracking-wider flex items-center gap-2">
               <Palette size={16} /> Upholstery & Leather Finish
             </h3>
             
@@ -270,7 +270,7 @@ export const BespokeLuxuryInteriorStudioHubComponent: React.FC = () => {
               <div className="flex items-center gap-3">
                 <input
                   type="color"
-                  value={interiorState.materials.seatStitchingColorHex || "#38bdf8"}
+                  value={interiorState.materials.seatStitchingColorHex || "#fbbf24"}
                   onChange={(e) =>
                     setInteriorState({
                       ...interiorState,
@@ -279,8 +279,8 @@ export const BespokeLuxuryInteriorStudioHubComponent: React.FC = () => {
                   }
                   className="w-10 h-10 rounded-xl bg-transparent border-0 cursor-pointer"
                 />
-                <span className="text-xs font-mono text-cyan-300 font-bold">
-                  {interiorState.materials.seatStitchingColorHex || "#38bdf8"}
+                <span className="text-xs font-mono text-amber-300 font-bold">
+                  {interiorState.materials.seatStitchingColorHex || "#fbbf24"}
                 </span>
               </div>
             </div>
@@ -313,7 +313,7 @@ export const BespokeLuxuryInteriorStudioHubComponent: React.FC = () => {
           </div>
 
           <div className="p-5 rounded-3xl bg-slate-900/90 border border-slate-800 space-y-4">
-            <h3 className="text-sm font-bold text-purple-400 uppercase tracking-wider flex items-center gap-2">
+            <h3 className="text-sm font-bold text-amber-400 uppercase tracking-wider flex items-center gap-2">
               <Zap size={16} /> Ambient Lighting & Starlight
             </h3>
 
@@ -345,7 +345,7 @@ export const BespokeLuxuryInteriorStudioHubComponent: React.FC = () => {
       {activeTab === "acoustics" && (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="p-6 rounded-3xl bg-slate-900/90 border border-slate-800 space-y-5">
-            <h3 className="text-sm font-bold text-cyan-400 uppercase tracking-wider flex items-center gap-2">
+            <h3 className="text-sm font-bold text-amber-400 uppercase tracking-wider flex items-center gap-2">
               <Volume2 size={16} /> Real-Time Cabin NVH Simulation
             </h3>
 
@@ -366,7 +366,7 @@ export const BespokeLuxuryInteriorStudioHubComponent: React.FC = () => {
 
               <div className="flex justify-between text-xs">
                 <span className="text-slate-400">Vehicle Speed:</span>
-                <span className="text-cyan-400 font-bold">{vehicleSpeedKmh} km/h</span>
+                <span className="text-amber-400 font-bold">{vehicleSpeedKmh} km/h</span>
               </div>
               <input
                 type="range"
@@ -375,7 +375,7 @@ export const BespokeLuxuryInteriorStudioHubComponent: React.FC = () => {
                 step="5"
                 value={vehicleSpeedKmh}
                 onChange={(e) => setVehicleSpeedKmh(parseInt(e.target.value))}
-                className="w-full h-1.5 accent-cyan-400 rounded-lg cursor-pointer"
+                className="w-full h-1.5 accent-amber-400 rounded-lg cursor-pointer"
               />
             </div>
 
@@ -402,7 +402,7 @@ export const BespokeLuxuryInteriorStudioHubComponent: React.FC = () => {
             <div className="grid grid-cols-2 gap-3">
               <div className="p-3.5 rounded-2xl bg-slate-950 border border-slate-800">
                 <div className="text-[10px] font-bold text-slate-400">DRIVER EAR SPL (dBA)</div>
-                <div className="text-xl font-black text-cyan-300 mt-1">{acousticResult.driverEarSplDba} dBA</div>
+                <div className="text-xl font-black text-amber-300 mt-1">{acousticResult.driverEarSplDba} dBA</div>
               </div>
 
               <div className="p-3.5 rounded-2xl bg-slate-950 border border-slate-800">
@@ -417,7 +417,7 @@ export const BespokeLuxuryInteriorStudioHubComponent: React.FC = () => {
 
               <div className="p-3.5 rounded-2xl bg-slate-950 border border-slate-800">
                 <div className="text-[10px] font-bold text-slate-400">ZWICKER QUALITY</div>
-                <div className="text-xl font-black text-purple-300 mt-1">{acousticResult.soundQualityScoreZwicker}/100</div>
+                <div className="text-xl font-black text-amber-300 mt-1">{acousticResult.soundQualityScoreZwicker}/100</div>
               </div>
             </div>
           </div>
@@ -469,7 +469,7 @@ export const BespokeLuxuryInteriorStudioHubComponent: React.FC = () => {
           </div>
 
           <div className="p-6 rounded-3xl bg-slate-900/90 border border-slate-800 space-y-4">
-            <h3 className="text-sm font-bold text-cyan-400 uppercase tracking-wider flex items-center gap-2">
+            <h3 className="text-sm font-bold text-amber-400 uppercase tracking-wider flex items-center gap-2">
               <Shield size={16} /> SAE Ergonomics Results
             </h3>
 
@@ -481,12 +481,12 @@ export const BespokeLuxuryInteriorStudioHubComponent: React.FC = () => {
 
               <div className="p-3 rounded-2xl bg-slate-950 border border-slate-800">
                 <span className="text-slate-400">Knee Flexion Angle:</span>
-                <div className="text-lg font-bold text-cyan-300">{ergoResult.kneeAngleDeg}°</div>
+                <div className="text-lg font-bold text-amber-300">{ergoResult.kneeAngleDeg}°</div>
               </div>
 
               <div className="p-3 rounded-2xl bg-slate-950 border border-slate-800">
                 <span className="text-slate-400">Elbow Bend Angle:</span>
-                <div className="text-lg font-bold text-purple-300">{ergoResult.elbowAngleDeg}°</div>
+                <div className="text-lg font-bold text-amber-300">{ergoResult.elbowAngleDeg}°</div>
               </div>
 
               <div className="p-3 rounded-2xl bg-slate-950 border border-slate-800">
@@ -501,7 +501,7 @@ export const BespokeLuxuryInteriorStudioHubComponent: React.FC = () => {
       {/* CAD Spec & GLB Tab */}
       {activeTab === "cad" && (
         <div className="p-6 rounded-3xl bg-slate-900/90 border border-slate-800 space-y-4">
-          <h3 className="text-sm font-bold text-cyan-400 uppercase tracking-wider flex items-center gap-2">
+          <h3 className="text-sm font-bold text-amber-400 uppercase tracking-wider flex items-center gap-2">
             <Cpu size={16} /> CAD Assembly Metadata & Specification
           </h3>
           <pre className="p-4 rounded-2xl bg-slate-950 border border-slate-800 text-xs font-mono text-slate-300 overflow-x-auto">

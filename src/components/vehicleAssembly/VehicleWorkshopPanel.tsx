@@ -198,7 +198,7 @@ export const VehicleWorkshopPanel: React.FC<VehicleWorkshopPanelProps> = ({
         {/* Ribbon Header: Title + Completion Bar */}
         <div className="flex items-center justify-between text-xs">
           <div className="flex items-center gap-2">
-            <span className="p-1.5 rounded-xl bg-cyan-500/10 text-cyan-500 dark:text-cyan-400">
+            <span className="p-1.5 rounded-xl bg-amber-500/10 text-amber-500 dark:text-amber-400">
               <Car size={16} />
             </span>
             <strong className="text-slate-800 dark:text-slate-200 font-bold uppercase tracking-wider">
@@ -215,11 +215,11 @@ export const VehicleWorkshopPanel: React.FC<VehicleWorkshopPanelProps> = ({
             </span>
             <div className="w-32 h-2.5 bg-slate-200 dark:bg-base-950 rounded-full overflow-hidden border border-slate-300 dark:border-slate-800">
               <div
-                className="h-full bg-gradient-to-r from-cyan-500 to-blue-500 transition-all duration-500"
+                className="h-full bg-gradient-to-r from-amber-500 to-amber-500 transition-all duration-500"
                 style={{ width: `${progressPercentage}%` }}
               />
             </div>
-            <strong className="text-cyan-600 dark:text-cyan-400 font-bold w-9 text-right">
+            <strong className="text-amber-600 dark:text-amber-400 font-bold w-9 text-right">
               {progressPercentage}%
             </strong>
           </div>
@@ -230,7 +230,7 @@ export const VehicleWorkshopPanel: React.FC<VehicleWorkshopPanelProps> = ({
           {/* Scroll Left Button */}
           <button
             onClick={() => scrollRibbon("left")}
-            className="p-2 rounded-2xl bg-slate-100 dark:bg-base-950 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:text-cyan-500 dark:hover:text-cyan-400 hover:border-cyan-500/40 transition-all mr-2 shadow-sm"
+            className="p-2 rounded-2xl bg-slate-100 dark:bg-base-950 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:text-amber-500 dark:hover:text-amber-400 hover:border-amber-500/40 transition-all mr-2 shadow-sm"
           >
             <ChevronLeft size={16} />
           </button>
@@ -259,11 +259,11 @@ export const VehicleWorkshopPanel: React.FC<VehicleWorkshopPanelProps> = ({
                   onMouseLeave={() => onHoverComponent(null)}
                   className={`flex items-center gap-2 px-3.5 py-2 rounded-2xl text-xs font-bold whitespace-nowrap transition-all duration-200 border shadow-sm ${
                     isSelected
-                      ? "bg-cyan-500 text-slate-950 border-cyan-400 shadow-[0_0_15px_rgba(6,182,212,0.45)] scale-105"
+                      ? "bg-amber-500 text-slate-950 border-amber-400 shadow-[0_0_15px_rgba(6,182,212,0.45)] scale-105"
                       : isInstalled
                       ? "bg-emerald-500/10 dark:bg-emerald-950/30 text-emerald-600 dark:text-emerald-400 border-emerald-500/30 hover:border-emerald-400"
                       : installable
-                      ? "bg-slate-100 dark:bg-base-950 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-800 hover:border-cyan-500/40"
+                      ? "bg-slate-100 dark:bg-base-950 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-800 hover:border-amber-500/40"
                       : "bg-slate-100/50 dark:bg-base-950/40 text-slate-400 dark:text-slate-600 border-slate-200 dark:border-slate-800/60 opacity-60 cursor-not-allowed"
                   }`}
                 >
@@ -272,7 +272,7 @@ export const VehicleWorkshopPanel: React.FC<VehicleWorkshopPanelProps> = ({
                   ) : !installable ? (
                     <Lock size={13} className="text-slate-400" />
                   ) : (
-                    <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-md ${isSelected ? "bg-slate-950 text-cyan-300" : "bg-slate-200 dark:bg-base-900 text-slate-500"}`}>
+                    <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-md ${isSelected ? "bg-slate-950 text-amber-300" : "bg-slate-200 dark:bg-base-900 text-slate-500"}`}>
                       {item.number}
                     </span>
                   )}
@@ -285,7 +285,7 @@ export const VehicleWorkshopPanel: React.FC<VehicleWorkshopPanelProps> = ({
           {/* Scroll Right Button */}
           <button
             onClick={() => scrollRibbon("right")}
-            className="p-2 rounded-2xl bg-slate-100 dark:bg-base-950 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:text-cyan-500 dark:hover:text-cyan-400 hover:border-cyan-500/40 transition-all ml-2 shadow-sm"
+            className="p-2 rounded-2xl bg-slate-100 dark:bg-base-950 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:text-amber-500 dark:hover:text-amber-400 hover:border-amber-500/40 transition-all ml-2 shadow-sm"
           >
             <ChevronRight size={16} />
           </button>
@@ -299,7 +299,7 @@ export const VehicleWorkshopPanel: React.FC<VehicleWorkshopPanelProps> = ({
         {/* ── COLUMN 1: PART ARCHITECTURE & SPEC CONTROLS ── */}
         <div className="bg-white/80 dark:bg-base-900/90 border border-slate-200 dark:border-slate-800 rounded-3xl p-5 backdrop-blur-xl shadow-xl space-y-4">
           <div className="flex items-center gap-2.5 pb-2 border-b border-slate-200 dark:border-slate-800">
-            <div className="p-2 rounded-2xl bg-cyan-500/10 text-cyan-600 dark:text-cyan-400">
+            <div className="p-2 rounded-2xl bg-amber-500/10 text-amber-600 dark:text-amber-400">
               <Settings size={18} />
             </div>
             <div>
@@ -580,7 +580,7 @@ export const VehicleWorkshopPanel: React.FC<VehicleWorkshopPanelProps> = ({
         <div className="bg-white/80 dark:bg-base-900/90 border border-slate-200 dark:border-slate-800 rounded-3xl p-5 backdrop-blur-xl shadow-xl space-y-4">
           <div className="flex items-center justify-between pb-2 border-b border-slate-200 dark:border-slate-800">
             <div className="flex items-center gap-2.5">
-              <div className="p-2 rounded-2xl bg-purple-500/10 text-purple-600 dark:text-purple-400">
+              <div className="p-2 rounded-2xl bg-amber-500/10 text-amber-600 dark:text-amber-400">
                 <Layers size={18} />
               </div>
               <div>
@@ -592,7 +592,7 @@ export const VehicleWorkshopPanel: React.FC<VehicleWorkshopPanelProps> = ({
                 </p>
               </div>
             </div>
-            <span className="text-[10px] font-bold text-purple-600 dark:text-purple-400 bg-purple-500/10 px-2 py-0.5 rounded-full">
+            <span className="text-[10px] font-bold text-amber-600 dark:text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded-full">
               4 Grades
             </span>
           </div>
@@ -608,20 +608,20 @@ export const VehicleWorkshopPanel: React.FC<VehicleWorkshopPanelProps> = ({
                   onClick={() => handleVariantSelect(activeRibbonId as VehicleComponentId, tier.id)}
                   className={`p-3 rounded-2xl border cursor-pointer transition-all duration-200 space-y-1.5 ${
                     isSelected
-                      ? "bg-cyan-500/10 dark:bg-cyan-950/40 border-cyan-500 dark:border-cyan-400 shadow-[0_0_12px_rgba(6,182,212,0.25)]"
+                      ? "bg-amber-500/10 dark:bg-amber-950/40 border-amber-500 dark:border-amber-400 shadow-[0_0_12px_rgba(6,182,212,0.25)]"
                       : "bg-slate-50 dark:bg-base-950/60 border-slate-200 dark:border-slate-800 hover:border-slate-400 dark:hover:border-slate-700"
                   }`}
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      <div className={`w-3.5 h-3.5 rounded-full border flex items-center justify-center ${isSelected ? "border-cyan-500 bg-cyan-500" : "border-slate-400"}`}>
+                      <div className={`w-3.5 h-3.5 rounded-full border flex items-center justify-center ${isSelected ? "border-amber-500 bg-amber-500" : "border-slate-400"}`}>
                         {isSelected && <div className="w-1.5 h-1.5 rounded-full bg-slate-950" />}
                       </div>
                       <strong className="text-xs text-slate-800 dark:text-slate-200 font-bold">
                         {tier.name}
                       </strong>
                     </div>
-                    <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded ${isSelected ? "bg-cyan-500 text-slate-950" : "bg-slate-200 dark:bg-base-900 text-slate-500"}`}>
+                    <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded ${isSelected ? "bg-amber-500 text-slate-950" : "bg-slate-200 dark:bg-base-900 text-slate-500"}`}>
                       {tier.badge}
                     </span>
                   </div>
@@ -630,7 +630,7 @@ export const VehicleWorkshopPanel: React.FC<VehicleWorkshopPanelProps> = ({
                   <div className="flex items-center justify-between text-[10px] text-slate-500 dark:text-slate-400 pt-1 font-mono">
                     <div>
                       <span>Mass: </span>
-                      <strong className={isSelected ? "text-cyan-600 dark:text-cyan-400" : "text-slate-700 dark:text-slate-300"}>
+                      <strong className={isSelected ? "text-amber-600 dark:text-amber-400" : "text-slate-700 dark:text-slate-300"}>
                         {tier.weightLabel}
                       </strong>
                     </div>
@@ -678,7 +678,7 @@ export const VehicleWorkshopPanel: React.FC<VehicleWorkshopPanelProps> = ({
           <div className="grid grid-cols-2 gap-2.5">
             <div className="p-3 rounded-2xl bg-slate-50 dark:bg-base-950/70 border border-slate-200 dark:border-slate-800 space-y-1">
               <span className="text-[10px] text-slate-500 block">TOTAL CURB WEIGHT</span>
-              <strong className="text-sm text-cyan-600 dark:text-cyan-400 font-bold block">
+              <strong className="text-sm text-amber-600 dark:text-amber-400 font-bold block">
                 {Math.round(currentStats.weight || 1480)} kg
               </strong>
               <span className="text-[10px] text-slate-400 block">Baseline sports sedan</span>
@@ -694,7 +694,7 @@ export const VehicleWorkshopPanel: React.FC<VehicleWorkshopPanelProps> = ({
 
             <div className="p-3 rounded-2xl bg-slate-50 dark:bg-base-950/70 border border-slate-200 dark:border-slate-800 space-y-1">
               <span className="text-[10px] text-slate-500 block">LATERAL CORNERING GRIP</span>
-              <strong className="text-sm text-purple-600 dark:text-purple-400 font-bold block">
+              <strong className="text-sm text-amber-600 dark:text-amber-400 font-bold block">
                 {vehicleConfig.tireCompound === "slick" ? "1.45 G" : vehicleConfig.tireCompound === "supersoft" ? "1.32 G" : vehicleConfig.tireCompound === "soft" ? "1.24 G" : "1.12 G"}
               </strong>
               <span className="text-[10px] text-slate-400 block">Peak skidpad load</span>
@@ -710,8 +710,8 @@ export const VehicleWorkshopPanel: React.FC<VehicleWorkshopPanelProps> = ({
           </div>
 
           {/* Contextual Engineering Advisory Card */}
-          <div className="p-3.5 rounded-2xl bg-cyan-500/5 dark:bg-cyan-950/30 border border-cyan-500/20 text-xs space-y-1.5">
-            <div className="flex items-center gap-1.5 text-cyan-600 dark:text-cyan-400 font-bold">
+          <div className="p-3.5 rounded-2xl bg-amber-500/5 dark:bg-amber-950/30 border border-amber-500/20 text-xs space-y-1.5">
+            <div className="flex items-center gap-1.5 text-amber-600 dark:text-amber-400 font-bold">
               <Info size={14} />
               <span>ENGINEERING ADVISORY</span>
             </div>

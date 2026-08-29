@@ -87,7 +87,7 @@ function OverviewTab() {
 function PerformanceTab() {
   const { sim } = useDesign();
   const dragSeries = [
-    { data: sim.dragVsSpeed.map((d) => ({ x: d.speed, y: d.drag })), color: "#22d3ee", fill: true },
+    { data: sim.dragVsSpeed.map((d) => ({ x: d.speed, y: d.drag })), color: "#fbbf24", fill: true },
     { data: sim.dragVsSpeed.map((d) => ({ x: d.speed, y: d.downforce })), color: "#22c55e" },
   ];
   return (
@@ -130,7 +130,7 @@ function PerformanceTab() {
 function AeroTab() {
   const { sim } = useDesign();
   const dragSeries = [
-    { data: sim.dragVsSpeed.map((d) => ({ x: d.speed, y: d.drag })), color: "#22d3ee", fill: true },
+    { data: sim.dragVsSpeed.map((d) => ({ x: d.speed, y: d.drag })), color: "#fbbf24", fill: true },
     { data: sim.dragVsSpeed.map((d) => ({ x: d.speed, y: d.downforce })), color: "#22c55e" },
   ];
   const efficiencySeries = [{ data: sim.dragVsSpeed.map((d) => ({ x: d.speed, y: d.downforce > 0 && d.drag > 0 ? d.downforce / d.drag : 0 })), color: "#a78bfa", fill: true }];
@@ -166,7 +166,7 @@ function EngineTab() {
   const layout = ENGINE_LAYOUTS[eng.layout];
   const isElectric = eng.layout === "electric";
   const powerSeries = [
-    { data: sim.powerCurve.map((p) => ({ x: p.rpm, y: p.power })), color: "#22d3ee", fill: true },
+    { data: sim.powerCurve.map((p) => ({ x: p.rpm, y: p.power })), color: "#fbbf24", fill: true },
     { data: sim.powerCurve.map((p) => ({ x: p.rpm, y: p.torque })), color: "#f59e0b" },
   ];
   return (
@@ -273,7 +273,7 @@ function CostTab() {
   const { sim, design } = useDesign();
   const chassis = CHASSIS_TYPES[design.vehicle.chassis];
   const costBreakdown = [
-    { label: "Engine", value: sim.engineCost, color: "#22d3ee" },
+    { label: "Engine", value: sim.engineCost, color: "#fbbf24" },
     { label: "Vehicle Body", value: sim.vehicleCost - sim.engineCost, color: "#f59e0b" },
     { label: "Interior", value: sim.interiorCost, color: "#22c55e" },
   ];

@@ -23,7 +23,7 @@ export const TubularSpaceframeRenderer: React.FC<TubularSpaceframeRendererProps>
           Z
         "
         fill="#070a12"
-        stroke={isHovered ? "#38bdf8" : "#475569"}
+        stroke={isHovered ? "#fbbf24" : "#475569"}
         strokeWidth="1.5"
         strokeDasharray="4 4"
         opacity="0.6"

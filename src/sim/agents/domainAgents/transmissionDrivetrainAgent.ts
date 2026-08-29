@@ -9,7 +9,7 @@ const TRANSMISSION_IDENTITY: AgentIdentity = {
   name: "Transmission & Drivetrain Engineer",
   domain: "transmission",
   icon: "⚙️",
-  color: "#3b82f6",
+  color: "#d97706",
   priority: 8,
   description: "Optimizes dual-clutch shift speed, gear ratio steps, LSD lockup percentage, and gearbox oil cooling.",
   capabilities: ["Gear Ratio Tuning", "LSD Lockup Balancing", "Shift Speed Calibration", "Gearbox Oil Temp Monitoring"],

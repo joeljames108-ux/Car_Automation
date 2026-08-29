@@ -171,7 +171,7 @@ export const EngineAssemblyStage: React.FC<EngineAssemblyStageProps> = ({
               >
                 <div className="flex items-center justify-between mb-1">
                   <span className="font-bold text-xs font-mono text-slate-900 dark:text-slate-100">{p.label}</span>
-                  <span className="text-[9px] font-mono text-cyan-600 dark:text-cyan-300 font-bold">{p.anchor}</span>
+                  <span className="text-[9px] font-mono text-amber-600 dark:text-amber-300 font-bold">{p.anchor}</span>
                 </div>
                 <p className="text-[10px] text-slate-500 dark:text-slate-400 mb-2">{p.desc}</p>
                 <div className="text-[10px] font-mono text-emerald-600 dark:text-emerald-400 font-semibold">
@@ -189,7 +189,7 @@ export const EngineAssemblyStage: React.FC<EngineAssemblyStageProps> = ({
           <label className="text-xs font-bold font-mono text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
             <MoveHorizontal size={13} className="text-amber-400" /> LATERAL DROP-IN OFFSET TRIM
           </label>
-          <span className={`text-xs font-mono font-bold ${offsetMm === 0 ? "text-slate-400" : offsetMm > 0 ? "text-emerald-500" : "text-cyan-400"}`}>
+          <span className={`text-xs font-mono font-bold ${offsetMm === 0 ? "text-slate-400" : offsetMm > 0 ? "text-emerald-500" : "text-amber-400"}`}>
             {offsetMm > 0 ? "+" : ""}{offsetMm} mm {offsetMm > 0 ? "(LEFT)" : offsetMm < 0 ? "(RIGHT)" : "(CENTERED)"}
           </span>
         </div>

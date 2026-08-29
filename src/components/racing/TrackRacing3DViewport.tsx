@@ -242,7 +242,7 @@ const TrackRacing3DViewportComponent: React.FC = () => {
               playHMIClickSound();
               setIsRacingActive(!isRacingActive);
             }}
-            className="px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold flex items-center space-x-1.5 transition-all shadow-md shadow-blue-500/30 cursor-pointer"
+            className="px-3 py-1.5 rounded-lg bg-amber-600 hover:bg-amber-500 text-white text-xs font-bold flex items-center space-x-1.5 transition-all shadow-md shadow-blue-500/30 cursor-pointer"
           >
             {isRacingActive ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4 fill-white" />}
             <span>{isRacingActive ? "PAUSE RACE" : "RESUME RACE"}</span>
@@ -266,11 +266,11 @@ const TrackRacing3DViewportComponent: React.FC = () => {
         <div className="grid grid-cols-3 gap-2 font-mono text-center">
           <div className="bg-slate-950 p-2 rounded-lg border border-slate-800">
             <div className="text-[9px] text-slate-400">SECTOR 1</div>
-            <div className="text-xs font-bold text-cyan-400 mt-0.5">{(telemetry.sectorTimesMs[0] / 1000).toFixed(2)}s</div>
+            <div className="text-xs font-bold text-amber-400 mt-0.5">{(telemetry.sectorTimesMs[0] / 1000).toFixed(2)}s</div>
           </div>
           <div className="bg-slate-950 p-2 rounded-lg border border-slate-800">
             <div className="text-[9px] text-slate-400">SECTOR 2</div>
-            <div className="text-xs font-bold text-purple-400 mt-0.5">{(telemetry.sectorTimesMs[1] / 1000).toFixed(2)}s</div>
+            <div className="text-xs font-bold text-amber-400 mt-0.5">{(telemetry.sectorTimesMs[1] / 1000).toFixed(2)}s</div>
           </div>
           <div className="bg-slate-950 p-2 rounded-lg border border-slate-800">
             <div className="text-[9px] text-slate-400">SECTOR 3</div>
@@ -307,7 +307,7 @@ const TrackRacing3DViewportComponent: React.FC = () => {
           </div>
           <div className="flex justify-between">
             <span className="text-slate-400">Fuel Mass:</span>
-            <strong className="text-cyan-400">{telemetry.fuelRemainingKg} kg</strong>
+            <strong className="text-amber-400">{telemetry.fuelRemainingKg} kg</strong>
           </div>
         </div>
 

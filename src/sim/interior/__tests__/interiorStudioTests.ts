@@ -88,7 +88,7 @@ export function runInteriorStudioTests(): void {
 
   // Generate all 5 Dashboards
   dashboards.forEach((d) => {
-    const mesh = Dashboard3DGenerator.buildDashboard(d.architectureClass, 1.62, sampleTheme, '#06b6d4');
+    const mesh = Dashboard3DGenerator.buildDashboard(d.architectureClass, 1.62, sampleTheme, '#f59e0b');
     if (mesh.children.length === 0) throw new Error(`Dashboard ${d.id} generated 0 children`);
   });
   console.log(`[PASS] Successfully generated 3D meshes for all 5 Dashboard architectures`);
@@ -109,7 +109,7 @@ export function runInteriorStudioTests(): void {
 
   // Generate all 5 Center Consoles
   consoles.forEach((c) => {
-    const mesh = CenterConsole3DGenerator.buildCenterConsole(c.style, sampleTheme, 2.85, '#06b6d4');
+    const mesh = CenterConsole3DGenerator.buildCenterConsole(c.style, sampleTheme, 2.85, '#f59e0b');
     if (mesh.children.length === 0) throw new Error(`Center console ${c.id} generated 0 children`);
   });
   console.log(`[PASS] Successfully generated 3D meshes for all 5 Center Console styles`);
@@ -162,7 +162,7 @@ export function runInteriorStudioTests(): void {
         enabled: true,
         brightnessPercent: 80,
         primaryColorHex: '#00f0ff',
-        secondaryColorHex: '#3b82f6',
+        secondaryColorHex: '#d97706',
         colorMode: 'dual_zone_gradient',
         activeZones: ['dashboard_contour'],
         fiberOpticDiffuserDiffusion: 0.8,

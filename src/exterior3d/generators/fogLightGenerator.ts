@@ -22,7 +22,7 @@ export function generateFogLights3DGeometry(): THREE.Group {
   });
 
   const drlBladeMat = new THREE.MeshBasicMaterial({
-    color: 0x38bdf8,
+    color: 0xfbbf24,
   });
 
   [-1, 1].forEach((side) => {

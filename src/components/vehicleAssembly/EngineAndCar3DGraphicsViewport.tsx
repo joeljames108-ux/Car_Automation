@@ -199,7 +199,7 @@ const EngineAndCar3DGraphicsViewportComponent: React.FC = () => {
     groundMesh.receiveShadow = true;
     scene.add(groundMesh);
 
-    const gridHelper = new THREE.GridHelper(20, 40, 0x3b82f6, 0x1e293b);
+    const gridHelper = new THREE.GridHelper(20, 40, 0xd97706, 0x1e293b);
     gridHelper.position.y = 0;
     scene.add(gridHelper);
 
@@ -445,9 +445,9 @@ const EngineAndCar3DGraphicsViewportComponent: React.FC = () => {
       {/* Loading Overlay */}
       {isLoading && (
         <div className="absolute inset-0 bg-slate-950/80 backdrop-blur-sm flex flex-col items-center justify-center space-y-3 z-20 pointer-events-none">
-          <Loader2 className="w-10 h-10 text-blue-500 animate-spin" />
+          <Loader2 className="w-10 h-10 text-amber-500 animate-spin" />
           <div className="text-white text-sm font-semibold tracking-wider font-mono">LOADING PHOTOREALISTIC 3D GLB CAR MESH...</div>
-          <div className="text-xs text-blue-400 font-mono">PBR Clearcoat Shaders • Caliper Finishes • Micro-Details</div>
+          <div className="text-xs text-amber-400 font-mono">PBR Clearcoat Shaders • Caliper Finishes • Micro-Details</div>
         </div>
       )}
 
@@ -459,7 +459,7 @@ const EngineAndCar3DGraphicsViewportComponent: React.FC = () => {
             onClick={() => setViewMode("VEHICLE")}
             className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center space-x-1.5 transition-all ${
               viewMode === "VEHICLE"
-                ? "bg-blue-600 text-white shadow-md shadow-blue-500/30"
+                ? "bg-amber-600 text-white shadow-md shadow-amber-500/30"
                 : "text-slate-400 hover:text-white hover:bg-slate-800/50"
             }`}
           >
@@ -470,7 +470,7 @@ const EngineAndCar3DGraphicsViewportComponent: React.FC = () => {
             onClick={() => setViewMode("ENGINE")}
             className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center space-x-1.5 transition-all ${
               viewMode === "ENGINE"
-                ? "bg-blue-600 text-white shadow-md shadow-blue-500/30"
+                ? "bg-amber-600 text-white shadow-md shadow-amber-500/30"
                 : "text-slate-400 hover:text-white hover:bg-slate-800/50"
             }`}
           >
@@ -483,7 +483,7 @@ const EngineAndCar3DGraphicsViewportComponent: React.FC = () => {
             <select
               value={selectedCarStyle}
               onChange={(e) => setSelectedCarStyle(e.target.value as VehicleBodyStyle3D)}
-              className="bg-slate-950 text-blue-300 text-xs rounded-lg px-2.5 py-1.5 border border-slate-700 font-mono outline-none focus:border-blue-500 max-w-[280px]"
+              className="bg-slate-950 text-amber-300 text-xs rounded-lg px-2.5 py-1.5 border border-slate-700 font-mono outline-none focus:border-amber-500 max-w-[280px]"
             >
               <optgroup label="── Complete Vehicles ──">
                 {Car3DGlbAssetRegistry.getAssetsByCategory("SUPERCAR").map((a) => (
@@ -536,7 +536,7 @@ const EngineAndCar3DGraphicsViewportComponent: React.FC = () => {
             <select
               value={selectedEngineLayout}
               onChange={(e) => setSelectedEngineLayout(e.target.value as EngineLayout3D)}
-              className="bg-slate-950 text-blue-300 text-xs rounded-lg px-2.5 py-1.5 border border-slate-700 font-mono outline-none focus:border-blue-500"
+              className="bg-slate-950 text-amber-300 text-xs rounded-lg px-2.5 py-1.5 border border-slate-700 font-mono outline-none focus:border-amber-500"
             >
               <option value="INLINE_3">Inline-3 (I3 Turbo - 3 Cylinders)</option>
               <option value="INLINE_4">Inline-4 (I4 Turbo - 4 Cylinders)</option>
@@ -571,7 +571,7 @@ const EngineAndCar3DGraphicsViewportComponent: React.FC = () => {
           <button
             onClick={() => setIsXRay(!isXRay)}
             className={`px-2.5 py-1 rounded-lg text-xs font-semibold flex items-center space-x-1 transition-all ${
-              isXRay ? "bg-cyan-500/20 text-cyan-400 border border-cyan-500/40" : "text-slate-400 hover:text-white"
+              isXRay ? "bg-amber-500/20 text-amber-400 border border-amber-500/40" : "text-slate-400 hover:text-white"
             }`}
             title="Toggle X-Ray Structural Inspection"
           >
@@ -582,7 +582,7 @@ const EngineAndCar3DGraphicsViewportComponent: React.FC = () => {
           <button
             onClick={() => setIsWireframe(!isWireframe)}
             className={`p-2 rounded-lg text-xs transition-all ${
-              isWireframe ? "bg-blue-500/20 text-blue-400 border border-blue-500/40" : "text-slate-400 hover:text-white"
+              isWireframe ? "bg-amber-500/20 text-amber-400 border border-amber-500/40" : "text-slate-400 hover:text-white"
             }`}
             title="Toggle Wireframe Mesh Topology"
           >
@@ -591,7 +591,7 @@ const EngineAndCar3DGraphicsViewportComponent: React.FC = () => {
           <button
             onClick={() => setAutoRotate(!autoRotate)}
             className={`p-2 rounded-lg text-xs transition-all ${
-              autoRotate ? "bg-blue-500/20 text-blue-400 border border-blue-500/40" : "text-slate-400 hover:text-white"
+              autoRotate ? "bg-amber-500/20 text-amber-400 border border-amber-500/40" : "text-slate-400 hover:text-white"
             }`}
             title="Toggle Auto-Turntable Rotation"
           >
@@ -600,7 +600,7 @@ const EngineAndCar3DGraphicsViewportComponent: React.FC = () => {
           <button
             onClick={() => setShowMeshTree(!showMeshTree)}
             className={`p-2 rounded-lg text-xs transition-all ${
-              showMeshTree ? "bg-purple-500/20 text-purple-400 border border-purple-500/40" : "text-slate-400 hover:text-white"
+              showMeshTree ? "bg-amber-500/20 text-amber-400 border border-amber-500/40" : "text-slate-400 hover:text-white"
             }`}
             title="Toggle GLB Part Tree Drawer"
           >
@@ -617,7 +617,7 @@ const EngineAndCar3DGraphicsViewportComponent: React.FC = () => {
           <button
             onClick={() => applyCameraPreset("HERO_THREE_QUARTER")}
             className={`px-2.5 py-1 text-left rounded text-[11px] font-mono transition-all ${
-              activeCameraPreset === "HERO_THREE_QUARTER" ? "bg-blue-600 text-white font-bold" : "text-slate-300 hover:bg-slate-800"
+              activeCameraPreset === "HERO_THREE_QUARTER" ? "bg-amber-600 text-white font-bold" : "text-slate-300 hover:bg-slate-800"
             }`}
           >
             3/4 Hero
@@ -625,7 +625,7 @@ const EngineAndCar3DGraphicsViewportComponent: React.FC = () => {
           <button
             onClick={() => applyCameraPreset("SIDE_PROFILE")}
             className={`px-2.5 py-1 text-left rounded text-[11px] font-mono transition-all ${
-              activeCameraPreset === "SIDE_PROFILE" ? "bg-blue-600 text-white font-bold" : "text-slate-300 hover:bg-slate-800"
+              activeCameraPreset === "SIDE_PROFILE" ? "bg-amber-600 text-white font-bold" : "text-slate-300 hover:bg-slate-800"
             }`}
           >
             Side Aero
@@ -633,7 +633,7 @@ const EngineAndCar3DGraphicsViewportComponent: React.FC = () => {
           <button
             onClick={() => applyCameraPreset("COCKPIT_DRIVER")}
             className={`px-2.5 py-1 text-left rounded text-[11px] font-mono transition-all ${
-              activeCameraPreset === "COCKPIT_DRIVER" ? "bg-blue-600 text-white font-bold" : "text-slate-300 hover:bg-slate-800"
+              activeCameraPreset === "COCKPIT_DRIVER" ? "bg-amber-600 text-white font-bold" : "text-slate-300 hover:bg-slate-800"
             }`}
           >
             Cockpit
@@ -641,7 +641,7 @@ const EngineAndCar3DGraphicsViewportComponent: React.FC = () => {
           <button
             onClick={() => applyCameraPreset("ENGINE_BAY")}
             className={`px-2.5 py-1 text-left rounded text-[11px] font-mono transition-all ${
-              activeCameraPreset === "ENGINE_BAY" ? "bg-blue-600 text-white font-bold" : "text-slate-300 hover:bg-slate-800"
+              activeCameraPreset === "ENGINE_BAY" ? "bg-amber-600 text-white font-bold" : "text-slate-300 hover:bg-slate-800"
             }`}
           >
             Engine Bay
@@ -649,7 +649,7 @@ const EngineAndCar3DGraphicsViewportComponent: React.FC = () => {
           <button
             onClick={() => applyCameraPreset("REAR_DIFFUSER")}
             className={`px-2.5 py-1 text-left rounded text-[11px] font-mono transition-all ${
-              activeCameraPreset === "REAR_DIFFUSER" ? "bg-blue-600 text-white font-bold" : "text-slate-300 hover:bg-slate-800"
+              activeCameraPreset === "REAR_DIFFUSER" ? "bg-amber-600 text-white font-bold" : "text-slate-300 hover:bg-slate-800"
             }`}
           >
             Rear Exhaust
@@ -671,16 +671,16 @@ const EngineAndCar3DGraphicsViewportComponent: React.FC = () => {
           <button
             onClick={() => setLightingMode("CYBER_NEON")}
             className={`px-2.5 py-1 text-left rounded text-[11px] font-mono flex items-center space-x-1.5 transition-all ${
-              lightingMode === "CYBER_NEON" ? "bg-cyan-500/20 text-cyan-300 border border-cyan-500/40" : "text-slate-300 hover:bg-slate-800"
+              lightingMode === "CYBER_NEON" ? "bg-amber-500/20 text-amber-300 border border-amber-500/40" : "text-slate-300 hover:bg-slate-800"
             }`}
           >
-            <Sparkles className="w-3 h-3 text-cyan-400" />
+            <Sparkles className="w-3 h-3 text-amber-400" />
             <span>Cyber Neon</span>
           </button>
           <button
             onClick={() => setLightingMode("PROVING_GROUND_SUN")}
             className={`px-2.5 py-1 text-left rounded text-[11px] font-mono flex items-center space-x-1.5 transition-all ${
-              lightingMode === "PROVING_GROUND_SUN" ? "bg-blue-500/20 text-blue-300 border border-blue-500/40" : "text-slate-300 hover:bg-slate-800"
+              lightingMode === "PROVING_GROUND_SUN" ? "bg-amber-500/20 text-amber-300 border border-amber-500/40" : "text-slate-300 hover:bg-slate-800"
             }`}
           >
             <Sun className="w-3 h-3 text-yellow-400" />
@@ -694,7 +694,7 @@ const EngineAndCar3DGraphicsViewportComponent: React.FC = () => {
         <div className="absolute top-20 right-4 w-64 bg-slate-900/85 backdrop-blur-md p-3 rounded-xl border border-slate-700/60 shadow-xl pointer-events-auto space-y-3 z-10">
           <div className="flex items-center justify-between border-b border-slate-700/60 pb-2">
             <span className="text-xs font-bold text-white tracking-wide flex items-center space-x-1.5">
-              <Palette className="w-3.5 h-3.5 text-blue-400" />
+              <Palette className="w-3.5 h-3.5 text-amber-400" />
               <span>COLOR & TRIM STUDIO</span>
             </span>
           </div>
@@ -710,7 +710,7 @@ const EngineAndCar3DGraphicsViewportComponent: React.FC = () => {
                   title={color.name}
                   style={{ backgroundColor: color.displayHex }}
                   className={`w-full h-6 rounded-md border transition-all ${
-                    selectedPaintHex === color.hex ? "scale-110 border-white ring-2 ring-blue-500/60" : "border-slate-600 opacity-80 hover:opacity-100"
+                    selectedPaintHex === color.hex ? "scale-110 border-white ring-2 ring-amber-500/60" : "border-slate-600 opacity-80 hover:opacity-100"
                   }`}
                 />
               ))}
@@ -742,7 +742,7 @@ const EngineAndCar3DGraphicsViewportComponent: React.FC = () => {
           <div className="space-y-1.5 pt-1 border-t border-slate-700/60">
             <div className="flex items-center justify-between text-[11px] text-slate-300 font-mono">
               <span>DISASSEMBLY KINEMATICS</span>
-              <span className="text-blue-400 font-bold">{Math.round(explodedAmount * 100)}%</span>
+              <span className="text-amber-400 font-bold">{Math.round(explodedAmount * 100)}%</span>
             </div>
             <input
               type="range"
@@ -751,7 +751,7 @@ const EngineAndCar3DGraphicsViewportComponent: React.FC = () => {
               step="0.05"
               value={explodedAmount}
               onChange={(e) => setExplodedAmount(parseFloat(e.target.value))}
-              className="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-blue-500"
+              className="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-amber-500"
             />
           </div>
         </div>
@@ -762,16 +762,16 @@ const EngineAndCar3DGraphicsViewportComponent: React.FC = () => {
         <div className="absolute top-20 right-72 w-64 h-[500px] bg-slate-900/90 backdrop-blur-md p-3 rounded-xl border border-slate-700/60 shadow-2xl pointer-events-auto z-10 overflow-y-auto space-y-2">
           <div className="flex items-center justify-between border-b border-slate-700 pb-2">
             <span className="text-xs font-bold text-white font-mono flex items-center space-x-1.5">
-              <Sliders className="w-3.5 h-3.5 text-purple-400" />
+              <Sliders className="w-3.5 h-3.5 text-amber-400" />
               <span>GLB SUB-MESH TREE ({subMeshList.length})</span>
             </span>
             <button onClick={() => setShowMeshTree(false)} className="text-slate-400 hover:text-white text-xs">✕</button>
           </div>
           <div className="space-y-1">
             {subMeshList.map((mName, idx) => (
-              <div key={idx} className="text-[11px] font-mono text-slate-300 bg-slate-950/60 px-2 py-1 rounded border border-slate-800/60 flex items-center justify-between hover:border-purple-500/40">
+              <div key={idx} className="text-[11px] font-mono text-slate-300 bg-slate-950/60 px-2 py-1 rounded border border-slate-800/60 flex items-center justify-between hover:border-amber-500/40">
                 <span className="truncate max-w-[170px]">{mName}</span>
-                <span className="text-[9px] text-purple-400 bg-purple-500/10 px-1 rounded">MESH</span>
+                <span className="text-[9px] text-amber-400 bg-amber-500/10 px-1 rounded">MESH</span>
               </div>
             ))}
           </div>
@@ -780,19 +780,19 @@ const EngineAndCar3DGraphicsViewportComponent: React.FC = () => {
 
       {/* Bottom Telemetry Overlay HUD */}
       <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between pointer-events-none z-10">
-        <div className="bg-slate-900/80 backdrop-blur-md px-3 py-2 rounded-xl border border-slate-700/50 text-blue-200 text-xs font-mono flex items-center space-x-4">
+        <div className="bg-slate-900/80 backdrop-blur-md px-3 py-2 rounded-xl border border-slate-700/50 text-amber-200 text-xs font-mono flex items-center space-x-4">
           <div className="flex items-center space-x-1.5">
             <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
             <span className="text-white font-semibold">{loadedAssetName}</span>
-            {isGlbSource && <span className="bg-blue-500/20 text-blue-400 px-1.5 py-0.5 rounded text-[10px]">GLB 2.0</span>}
+            {isGlbSource && <span className="bg-amber-500/20 text-amber-400 px-1.5 py-0.5 rounded text-[10px]">GLB 2.0</span>}
           </div>
           <div className="flex items-center space-x-1.5">
             <Sparkles className="w-3.5 h-3.5 text-amber-400" />
             <span>PBR METALLIC CLEARCOAT 1.0</span>
           </div>
-          <div>NODES: <strong className="text-purple-400">{subMeshList.length}</strong></div>
+          <div>NODES: <strong className="text-amber-400">{subMeshList.length}</strong></div>
           <div>TRIANGLES: <strong className="text-emerald-400">{polyCount.toLocaleString()}</strong></div>
-          <div>VERTICES: <strong className="text-blue-400">{vertCount.toLocaleString()}</strong></div>
+          <div>VERTICES: <strong className="text-amber-400">{vertCount.toLocaleString()}</strong></div>
         </div>
 
         <div className="bg-slate-900/80 backdrop-blur-md px-3 py-2 rounded-xl border border-slate-700/50 text-slate-400 text-xs font-mono">

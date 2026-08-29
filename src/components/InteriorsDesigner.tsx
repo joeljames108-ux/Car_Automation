@@ -1,23 +1,31 @@
 // ============================================================================
-// ULTRA-FIDELITY 3D INTERIOR STUDIO — MAIN DESIGNER COMPONENT
+// ULTRA-FIDELITY 3D INTERIOR & ELECTRONICS STUDIO — MAIN DESIGNER COMPONENT
 // ============================================================================
 // Features:
 // - Photorealistic 3D Three.js First-Person Cockpit Viewport with 6 Camera Presets
 // - 5-Tab Glassmorphism Interior Studio Workbench (Materials, Displays, Seating, Audio, NVH)
+// - Integrated Vehicle Electronics, Avionics, CAN-FD, ADAS & Infotainment Suite
 // - Classic 2D Parametric Controls & Realistic Dashboard Cross-Section Preview
 // - Complete Two-Way State Synchronization with DesignContext
 // ============================================================================
 
-import React, { useState } from 'react';
-import { Sofa, Palette, Volume2, Snowflake, Shield, Gauge, Sparkles, Armchair, Eye, Box, Sliders } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import {
+  Sofa, Palette, Volume2, Snowflake, Shield, Gauge, Sparkles, Armchair,
+  Eye, Box, Sliders, Cpu, Monitor, Zap, Radio
+} from 'lucide-react';
 import { useDesign } from '../state/DesignContext';
 import { Section, Slider, Select, ChoiceGrid, Toggle, StatTile } from './ui/Controls';
-import { SEAT_TYPES, SEAT_MATERIALS, DASHBOARD_MATERIALS, STEERING_WHEEL_TYPES, STEERING_MATERIALS, PEDAL_SETS, SHIFT_KNOBS, ROLL_CAGES } from '../sim/constants';
+import {
+  SEAT_TYPES, SEAT_MATERIALS, DASHBOARD_MATERIALS, STEERING_WHEEL_TYPES,
+  STEERING_MATERIALS, PEDAL_SETS, SHIFT_KNOBS, ROLL_CAGES
+} from '../sim/constants';
 import { Interior3DViewport } from './interior/Interior3DViewport';
-import { InteriorStudioWorkbench } from './interior/InteriorStudioWorkbench';
 import { ModularInteriorStudio } from './interior/ModularInteriorStudio';
 import { MasterInteriorConfiguration } from '../exterior3d/types/interiorStudioTypes';
 import { COCKPIT_THEME_PRESETS } from '../exterior3d/manifests/interiorStudioCatalog';
+import { InfotainmentDesigner } from './InfotainmentDesigner';
+import { playHMITabSound } from '../utils/hmiSoundSynth';
 
 const SEAT_MATERIAL_OPTIONS = Object.entries(SEAT_MATERIALS).map(([k, v]) => ({ value: k, label: v.label }));
 const DASHBOARD_MATERIAL_OPTIONS = Object.entries(DASHBOARD_MATERIALS).map(([k, v]) => ({ value: k, label: v.label }));
@@ -32,12 +40,24 @@ const TRIM_FINISH_OPTIONS = [
   { value: "brushed", label: "Brushed" },
 ];
 
-export function InteriorsDesigner() {
+export type InteriorStudioViewMode = 'modular_studio' | 'electronics' | '3d_studio' | '2d_classic';
+
+interface InteriorsDesignerProps {
+  initialSubTab?: InteriorStudioViewMode;
+}
+
+export function InteriorsDesigner({ initialSubTab = 'modular_studio' }: InteriorsDesignerProps) {
   const { design, sim, updateInterior } = useDesign();
   const i = design.vehicle.interior;
   const chassis = design.vehicle.chassis;
 
-  const [viewMode, setViewMode] = useState<'modular_studio' | '3d_studio' | '2d_classic'>('modular_studio');
+  const [viewMode, setViewMode] = useState<InteriorStudioViewMode>(initialSubTab);
+
+  useEffect(() => {
+    if (initialSubTab) {
+      setViewMode(initialSubTab);
+    }
+  }, [initialSubTab]);
 
   // Convert current DesignContext state into a MasterInteriorConfiguration object
   const [studioConfig, setStudioConfig] = useState<MasterInteriorConfiguration>(() => {
@@ -83,7 +103,7 @@ export function InteriorsDesigner() {
         enabled: (i.ambientLighting ?? 0.8) > 0.05,
         brightnessPercent: Math.round((i.ambientLighting ?? 0.8) * 100),
         primaryColorHex: i.accentColor || '#00f0ff',
-        secondaryColorHex: '#3b82f6',
+        secondaryColorHex: '#d97706',
         colorMode: 'dual_zone_gradient',
         activeZones: ['dashboard_contour', 'center_console_halo', 'door_spear_accents', 'footwell_mood', 'speaker_grille_halo'],
         fiberOpticDiffuserDiffusion: 0.8,
@@ -104,42 +124,37 @@ export function InteriorsDesigner() {
     };
   });
 
-  // Synchronize updates between studio config and DesignContext
-  const handleStudioConfigChange = (updated: MasterInteriorConfiguration) => {
-    setStudioConfig(updated);
-
-    // Sync back key parameters into DesignContext
-    updateInterior({
-      interiorColor: updated.materials.primaryColorHex,
-      accentColor: updated.materials.stitchingColorHex,
-      ambientLighting: updated.ambientLighting.enabled ? updated.ambientLighting.brightnessPercent / 100 : 0,
-      seatCount: updated.seatCount,
-      soundDeadening: updated.soundDeadeningLevel,
-      racingHarness: updated.harnessType === 'sabelt_6_point_f1' || updated.harnessType === 'schroth_enduro_pro',
-      hasPremiumAudio: updated.audioSystemId === 'AUDIO_SPATIAL_24' || updated.audioSystemId === 'AUDIO_AUDIOPHILE_32',
-    });
-  };
-
   const chassisEng = design.vehicle.chassisEng;
   const wbMm = chassisEng?.wheelbase || 2850;
   const trMm = chassisEng?.trackWidthFront || 1620;
 
+  const handleTabSelect = (mode: InteriorStudioViewMode) => {
+    playHMITabSound();
+    setViewMode(mode);
+  };
+
   return (
     <div className="space-y-4">
-      {/* ── TOP SWITCHER: 3D PHOTOREALISTIC STUDIO vs 2D CONTROLS ── */}
-      <div className="flex items-center justify-between p-2 rounded-2xl backdrop-blur-xl shadow-xl" style={{backgroundColor: 'rgba(255,248,235,0.85)', border: '1px solid rgba(217,166,78,0.4)'}}>
+      {/* ── TOP SWITCHER: UNIFIED INTERIOR & ELECTRONICS STUDIO TABS ── */}
+      <div
+        className="flex items-center justify-between p-2 rounded-2xl backdrop-blur-xl shadow-xl border"
+        style={{
+          backgroundColor: 'rgba(255,248,235,0.88)',
+          borderColor: 'rgba(217,166,78,0.4)',
+        }}
+      >
         <div className="flex items-center gap-2 pl-2">
-          <Sparkles style={{color: '#92400E'}} size={18} />
-          <span className="text-xs font-black tracking-wider uppercase" style={{color: '#92400E'}}>
-            INTERIOR COCKPIT WORKBENCH
+          <Sparkles style={{ color: '#92400E' }} size={18} />
+          <span className="text-xs font-black tracking-wider uppercase" style={{ color: '#92400E' }}>
+            INTERIOR & ELECTRONICS WORKBENCH
           </span>
         </div>
 
         {/* Studio View Selector */}
-        <div className="flex items-center gap-1.5 p-1 rounded-xl" style={{backgroundColor: 'rgba(0,0,0,0.06)'}}>
+        <div className="flex items-center gap-1.5 p-1 rounded-xl" style={{ backgroundColor: 'rgba(0,0,0,0.06)' }}>
           <button
-            onClick={() => setViewMode('modular_studio')}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
+            onClick={() => handleTabSelect('modular_studio')}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
               viewMode === 'modular_studio'
                 ? 'shadow-md scale-[1.02]'
                 : 'hover:opacity-80'
@@ -150,12 +165,28 @@ export function InteriorsDesigner() {
             }}
           >
             <Sliders size={13} />
-            <span>MODULAR STUDIO</span>
+            <span>MODULAR CABIN</span>
           </button>
 
           <button
-            onClick={() => setViewMode('3d_studio')}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
+            onClick={() => handleTabSelect('electronics')}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+              viewMode === 'electronics'
+                ? 'shadow-md scale-[1.02]'
+                : 'hover:opacity-80'
+            }`}
+            style={{
+              backgroundColor: viewMode === 'electronics' ? '#B45309' : 'transparent',
+              color: viewMode === 'electronics' ? '#ffffff' : '#78350F'
+            }}
+          >
+            <Cpu size={13} />
+            <span>ELECTRONICS & AVIONICS</span>
+          </button>
+
+          <button
+            onClick={() => handleTabSelect('3d_studio')}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
               viewMode === '3d_studio'
                 ? 'shadow-md scale-[1.02]'
                 : 'hover:opacity-80'
@@ -166,12 +197,12 @@ export function InteriorsDesigner() {
             }}
           >
             <Eye size={13} />
-            <span>3D VIEWPORT ONLY</span>
+            <span>3D COCKPIT CAD</span>
           </button>
 
           <button
-            onClick={() => setViewMode('2d_classic')}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${
+            onClick={() => handleTabSelect('2d_classic')}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
               viewMode === '2d_classic'
                 ? 'shadow-md scale-[1.02]'
                 : 'hover:opacity-80'
@@ -191,8 +222,11 @@ export function InteriorsDesigner() {
       {viewMode === 'modular_studio' ? (
         /* MODE A: Integrated Modular Studio (3D Viewport + 5-Tab Material/Component Studio) */
         <ModularInteriorStudio />
+      ) : viewMode === 'electronics' ? (
+        /* MODE B: Vehicle Electronics, Infotainment, ADAS, CAN-FD & Avionics */
+        <InfotainmentDesigner />
       ) : viewMode === '3d_studio' ? (
-        /* MODE B: Pure Full-Size 3D Interactive Cockpit Viewport */
+        /* MODE C: Pure Full-Size 3D Interactive Cockpit Viewport */
         <div className="rounded-2xl overflow-hidden shadow-2xl border border-slate-800" style={{ height: '620px' }}>
           <Interior3DViewport
             config={studioConfig}
@@ -201,7 +235,7 @@ export function InteriorsDesigner() {
           />
         </div>
       ) : (
-        /* MODE C: Classic 2D Controls & Section Layouts */
+        /* MODE D: Classic 2D Controls & Section Layouts */
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
           <div className="lg:col-span-2 space-y-4">
             <Section title="Seating & Upholstery" icon={<Armchair size={16} />}>

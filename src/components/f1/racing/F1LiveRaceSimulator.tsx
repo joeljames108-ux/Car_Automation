@@ -158,159 +158,176 @@ const F1LiveRaceSimulatorComponent: React.FC<F1LiveRaceSimulatorProps> = ({
     return entries;
   });
 
-  // ── Physics & Race Loop Simulation ──
+  // Mutable ref for simulation loop to avoid recreating intervals on every tick
+  const simStateRef = useRef({
+    currentSector,
+    currentLap,
+    totalLaps,
+    fuelKg,
+    tireWear,
+    activeCompound,
+    nextPitCompound,
+    boxThisLap,
+    pitStopsCount,
+    isInPitLane,
+    ersMode,
+    engineStratMode,
+    metrics,
+    setup,
+    playbackSpeed,
+  });
+
+  useEffect(() => {
+    simStateRef.current = {
+      currentSector,
+      currentLap,
+      totalLaps,
+      fuelKg,
+      tireWear,
+      activeCompound,
+      nextPitCompound,
+      boxThisLap,
+      pitStopsCount,
+      isInPitLane,
+      ersMode,
+      engineStratMode,
+      metrics,
+      setup,
+      playbackSpeed,
+    };
+  });
+
+  // ── Physics & Race Loop Simulation (Stable Non-Recreating Interval) ──
   useEffect(() => {
     if (!isPlaying || isRaceFinished) return;
 
     const intervalTime = 1000 / playbackSpeed;
     const timer = setInterval(() => {
-      // 1. Advance telemetry sector
-      setCurrentSector((prevSector) => {
-        if (prevSector === 3) {
-          // Lap Completed
-          let executedPitStopThisLap = false;
+      const state = simStateRef.current;
+      const nextSector = (state.currentSector === 3 ? 1 : state.currentSector + 1) as 1 | 2 | 3;
+      let executedPitStopThisLap = false;
 
-          if (boxThisLap) {
-            executedPitStopThisLap = true;
-            setIsInPitLane(true);
-            setActiveCompound(nextPitCompound);
-            setTireWear(0);
-            setPitStopsCount((c) => c + 1);
-            setFuelKg((f) => Math.min(35.0, f + 10.0));
-            setBoxThisLap(false);
-            
-            const pitDuration = (2.2 + Math.random() * 0.4).toFixed(2);
-            addRadioMessage(
-              "ENGINEER",
-              `Box complete! Stationary for ${pitDuration}s. New ${nextPitCompound} tires fitted. Rejoining track!`,
-              "SUCCESS"
-            );
+      if (state.currentSector === 3) {
+        // Lap Completed
+        if (state.boxThisLap) {
+          executedPitStopThisLap = true;
+          setIsInPitLane(true);
+          setActiveCompound(state.nextPitCompound);
+          setTireWear(0);
+          setPitStopsCount((c) => c + 1);
+          setFuelKg((f) => Math.min(35.0, f + 10.0));
+          setBoxThisLap(false);
 
-            setTimeout(() => {
-              setIsInPitLane(false);
-            }, 1500 / playbackSpeed);
-          }
-
-          setCurrentLap((lap) => {
-            if (lap >= totalLaps) {
-              setIsRaceFinished(true);
-              setIsPlaying(false);
-              addRadioMessage("ENGINEER", "Chequered Flag! Outstanding drive! Bring the car home.", "SUCCESS");
-              return lap;
-            }
-            return lap + 1;
-          });
-
-          // Calculate Lap Time based on Vehicle Performance & Setup/Strategy
-          const massPenalty = (metrics.totalMassKg - 798) * 0.035; // +0.035s per kg
-          const powerBonus = (metrics.totalPeakHorsepower - 1000) * 0.008; // -0.008s per HP
-          const aeroBonus = (metrics.totalDownforceAt250KmhKg - 2500) * 0.0015;
-
-          // Strategy modifiers
-          const ersMod =
-            ersMode === "ATTACK_OVERTAKE" ? -0.35 : ersMode === "QUALIFYING_HOTLAP" ? -0.5 : ersMode === "ENERGY_SAVE" ? 0.25 : 0;
-          const engineMod = engineStratMode === "STRAT_1_MAX" ? -0.3 : engineStratMode === "STRAT_3_ECO" ? 0.4 : 0;
-          const tireWearPenalty = (tireWear / 100) * 1.8; // Up to 1.8s penalty on dead tires
-          const pitTimePenalty = executedPitStopThisLap ? 21.5 : 0; // 21.5s pit loss
-
-          const lapTime = Math.max(
-            78.0,
-            84.0 + massPenalty - powerBonus - aeroBonus + ersMod + engineMod + tireWearPenalty + pitTimePenalty + (Math.random() * 0.3 - 0.15)
+          const pitDuration = (2.2 + Math.random() * 0.4).toFixed(2);
+          addRadioMessage(
+            "ENGINEER",
+            `Box complete! Stationary for ${pitDuration}s. New ${state.nextPitCompound} tires fitted. Rejoining track!`,
+            "SUCCESS"
           );
 
-          setPlayerLapTimes((times) => [...times, Number(lapTime.toFixed(3))]);
-
-          // Update Fuel & Tire Wear based on compounds and engine mode
-          const fuelBurnRate = engineStratMode === "STRAT_1_MAX" ? 1.8 : engineStratMode === "STRAT_3_ECO" ? 0.9 : 1.35;
-          const wearRate = activeCompound === "SOFT" ? 12 : activeCompound === "MEDIUM" ? 7 : 4;
-          
-          setFuelKg((f) => Math.max(0.5, f - fuelBurnRate));
-          setTireWear((w) => {
-            const nextW = Math.min(100, w + wearRate);
-            if (nextW > 80 && w <= 80) {
-              addRadioMessage("ENGINEER", "WARNING: High tire degradation! Box recommended.", "WARNING");
-            }
-            return nextW;
-          });
-
-          // Dynamic Leaderboard Position Shuffle
-          setLeaderboard((prevBoard) => {
-            return prevBoard.map((entry) => {
-              if (entry.isPlayer) {
-                const newGap = executedPitStopThisLap
-                  ? entry.gapToLeaderSeconds + 21.5
-                  : Math.max(0, entry.gapToLeaderSeconds + (lapTime - 84.2));
-                return {
-                  ...entry,
-                  lapTimeSeconds: lapTime,
-                  gapToLeaderSeconds: newGap,
-                  tireWearPercent: executedPitStopThisLap ? 0 : tireWear,
-                  stopsCount: pitStopsCount + (executedPitStopThisLap ? 1 : 0),
-                };
-              } else {
-                // AI driver progress
-                const aiWear = Math.min(100, entry.tireWearPercent + 6);
-                const aiGapDelta = (Math.random() * 0.4 - 0.2);
-                return {
-                  ...entry,
-                  tireWearPercent: aiWear,
-                  gapToLeaderSeconds: Math.max(0, entry.gapToLeaderSeconds + aiGapDelta),
-                };
-              }
-            }).sort((a, b) => a.gapToLeaderSeconds - b.gapToLeaderSeconds)
-              .map((e, idx) => ({ ...e, position: idx + 1 }));
-          });
-
-          return 1;
+          setTimeout(() => {
+            setIsInPitLane(false);
+          }, 1500 / state.playbackSpeed);
         }
-        return (prevSector + 1) as 1 | 2 | 3;
-      });
+
+        setCurrentLap((lap) => {
+          if (lap >= state.totalLaps) {
+            setIsRaceFinished(true);
+            setIsPlaying(false);
+            addRadioMessage("ENGINEER", "Chequered Flag! Outstanding drive! Bring the car home.", "SUCCESS");
+            return lap;
+          }
+          return lap + 1;
+        });
+
+        // Calculate Lap Time based on Vehicle Performance & Setup/Strategy
+        const massPenalty = (state.metrics.totalMassKg - 798) * 0.035;
+        const powerBonus = (state.metrics.totalPeakHorsepower - 1000) * 0.008;
+        const aeroBonus = (state.metrics.totalDownforceAt250KmhKg - 2500) * 0.0015;
+
+        const ersMod =
+          state.ersMode === "ATTACK_OVERTAKE" ? -0.35 : state.ersMode === "QUALIFYING_HOTLAP" ? -0.5 : state.ersMode === "ENERGY_SAVE" ? 0.25 : 0;
+        const engineMod = state.engineStratMode === "STRAT_1_MAX" ? -0.3 : state.engineStratMode === "STRAT_3_ECO" ? 0.4 : 0;
+        const tireWearPenalty = (state.tireWear / 100) * 1.8;
+        const pitTimePenalty = executedPitStopThisLap ? 21.5 : 0;
+
+        const lapTime = Math.max(
+          78.0,
+          84.0 + massPenalty - powerBonus - aeroBonus + ersMod + engineMod + tireWearPenalty + pitTimePenalty + (Math.random() * 0.3 - 0.15)
+        );
+
+        setPlayerLapTimes((times) => [...times, Number(lapTime.toFixed(3))]);
+
+        const fuelBurnRate = state.engineStratMode === "STRAT_1_MAX" ? 1.8 : state.engineStratMode === "STRAT_3_ECO" ? 0.9 : 1.35;
+        const wearRate = state.activeCompound === "SOFT" ? 12 : state.activeCompound === "MEDIUM" ? 7 : 4;
+
+        setFuelKg((f) => Math.max(0.5, f - fuelBurnRate));
+        setTireWear((w) => {
+          const nextW = Math.min(100, w + wearRate);
+          if (nextW > 80 && w <= 80) {
+            addRadioMessage("ENGINEER", "WARNING: High tire degradation! Box recommended.", "WARNING");
+          }
+          return nextW;
+        });
+
+        setLeaderboard((prevBoard) => {
+          return prevBoard.map((entry) => {
+            if (entry.isPlayer) {
+              const newGap = executedPitStopThisLap
+                ? entry.gapToLeaderSeconds + 21.5
+                : Math.max(0, entry.gapToLeaderSeconds + (lapTime - 84.2));
+              return {
+                ...entry,
+                lapTimeSeconds: lapTime,
+                gapToLeaderSeconds: newGap,
+                tireWearPercent: executedPitStopThisLap ? 0 : state.tireWear,
+                stopsCount: state.pitStopsCount + (executedPitStopThisLap ? 1 : 0),
+              };
+            } else {
+              const aiWear = Math.min(100, entry.tireWearPercent + 6);
+              const aiGapDelta = (Math.random() * 0.4 - 0.2);
+              return {
+                ...entry,
+                tireWearPercent: aiWear,
+                gapToLeaderSeconds: Math.max(0, entry.gapToLeaderSeconds + aiGapDelta),
+              };
+            }
+          }).sort((a, b) => a.gapToLeaderSeconds - b.gapToLeaderSeconds)
+            .map((e, idx) => ({ ...e, position: idx + 1 }));
+        });
+      }
+
+      setCurrentSector(nextSector);
 
       // Speed & DRS Simulation
-      const speedBase = currentSector === 2 ? 210 : 330;
+      const speedBase = nextSector === 2 ? 210 : 330;
       const speedDrift = Math.floor(Math.random() * 15);
-      const drsOn = currentSector === 3 && currentLap > 1;
+      const drsOn = nextSector === 3 && state.currentLap > 1;
       setIsDrsActive(drsOn);
 
-      const stratBoost = engineStratMode === "STRAT_1_MAX" ? 12 : 0;
+      const stratBoost = state.engineStratMode === "STRAT_1_MAX" ? 12 : 0;
       setCurrentSpeedKmh(speedBase + speedDrift + (drsOn ? 18 : 0) + stratBoost);
 
       // ERS Battery Charge Cycle
       setErsBatteryPercent((b) => {
-        if (ersMode === "ATTACK_OVERTAKE" || ersMode === "QUALIFYING_HOTLAP") {
+        if (state.ersMode === "ATTACK_OVERTAKE" || state.ersMode === "QUALIFYING_HOTLAP") {
           return Math.max(5, b - 20);
-        } else if (ersMode === "ENERGY_SAVE") {
+        } else if (state.ersMode === "ENERGY_SAVE") {
           return Math.min(100, b + 25);
         }
-        return currentSector === 2 ? Math.min(100, b + 15) : Math.max(10, b - 12);
+        return nextSector === 2 ? Math.min(100, b + 15) : Math.max(10, b - 12);
       });
 
       // Tire Thermal Model
       setTireTempC(() => {
-        const baseTemp = activeCompound === "SOFT" ? 104 : activeCompound === "HARD" ? 92 : 98;
+        const baseTemp = state.activeCompound === "SOFT" ? 104 : state.activeCompound === "HARD" ? 92 : 98;
         return baseTemp + Math.floor(Math.random() * 6);
       });
 
     }, intervalTime);
 
     return () => clearInterval(timer);
-  }, [
-    isPlaying,
-    isRaceFinished,
-    playbackSpeed,
-    currentSector,
-    totalLaps,
-    metrics,
-    setup,
-    boxThisLap,
-    nextPitCompound,
-    ersMode,
-    engineStratMode,
-    tireWear,
-    activeCompound,
-    currentLap,
-    pitStopsCount,
-  ]);
+  }, [isPlaying, isRaceFinished, playbackSpeed]);
 
   const playerPosition = leaderboard.find((e) => e.isPlayer)?.position || 1;
 
@@ -332,7 +349,7 @@ const F1LiveRaceSimulatorComponent: React.FC<F1LiveRaceSimulatorProps> = ({
       <div className="p-4 bg-black/80 border-b border-white/10 flex items-center justify-between">
         <div className="flex items-center gap-4">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-cyan-500/20 border border-cyan-500/40 flex items-center justify-center text-cyan-400">
+            <div className="w-10 h-10 rounded-xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-400">
               <Flag className="w-5 h-5" />
             </div>
             <div>
@@ -360,7 +377,7 @@ const F1LiveRaceSimulatorComponent: React.FC<F1LiveRaceSimulatorProps> = ({
                 setIsPlaying(!isPlaying);
               }}
               disabled={isRaceFinished}
-              className="p-1.5 rounded-lg bg-cyan-500/20 text-cyan-300 hover:bg-cyan-500/30 text-xs font-bold transition-all cursor-pointer"
+              className="p-1.5 rounded-lg bg-amber-500/20 text-amber-300 hover:bg-amber-500/30 text-xs font-bold transition-all cursor-pointer"
             >
               {isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4" />}
             </button>
@@ -372,7 +389,7 @@ const F1LiveRaceSimulatorComponent: React.FC<F1LiveRaceSimulatorProps> = ({
                   setPlaybackSpeed(speed);
                 }}
                 className={`px-2.5 py-1 rounded-lg text-xs font-bold font-mono transition-all cursor-pointer ${
-                  playbackSpeed === speed ? "bg-cyan-500 text-black font-black" : "text-zinc-400 hover:text-white"
+                  playbackSpeed === speed ? "bg-amber-500 text-black font-black" : "text-zinc-400 hover:text-white"
                 }`}
               >
                 {speed}x
@@ -398,10 +415,10 @@ const F1LiveRaceSimulatorComponent: React.FC<F1LiveRaceSimulatorProps> = ({
         <div className="col-span-4 bg-zinc-900/60 border border-white/10 rounded-2xl p-4 flex flex-col h-full overflow-hidden">
           <div className="flex items-center justify-between pb-3 border-b border-white/10 mb-2">
             <span className="text-xs font-black uppercase tracking-wider text-zinc-300 flex items-center gap-2">
-              <Trophy className="w-3.5 h-3.5 text-cyan-400" />
+              <Trophy className="w-3.5 h-3.5 text-amber-400" />
               Live Timing Tower
             </span>
-            <span className="text-[10px] font-mono text-cyan-400 font-bold bg-cyan-950/60 px-2 py-0.5 rounded border border-cyan-500/30">
+            <span className="text-[10px] font-mono text-amber-400 font-bold bg-amber-950/60 px-2 py-0.5 rounded border border-amber-500/30">
               Sector {currentSector} / 3
             </span>
           </div>
@@ -412,7 +429,7 @@ const F1LiveRaceSimulatorComponent: React.FC<F1LiveRaceSimulatorProps> = ({
                 key={entry.position}
                 className={`flex items-center justify-between p-2.5 rounded-xl border text-xs font-mono transition-all ${
                   entry.isPlayer
-                    ? "bg-cyan-950/40 border-cyan-400 shadow-md shadow-cyan-500/20 text-white font-bold"
+                    ? "bg-amber-950/40 border-amber-400 shadow-md shadow-cyan-500/20 text-white font-bold"
                     : "bg-black/40 border-white/5 text-zinc-300"
                 }`}
               >
@@ -424,7 +441,7 @@ const F1LiveRaceSimulatorComponent: React.FC<F1LiveRaceSimulatorProps> = ({
                     <span className="font-bold block text-[11px] flex items-center gap-1.5">
                       {entry.driverName}
                       {entry.isPlayer && (
-                        <span className="text-[9px] bg-cyan-500 text-black px-1 rounded font-black">YOU</span>
+                        <span className="text-[9px] bg-amber-500 text-black px-1 rounded font-black">YOU</span>
                       )}
                     </span>
                     <span className="text-[9px] text-zinc-500">{entry.teamName}</span>
@@ -447,11 +464,11 @@ const F1LiveRaceSimulatorComponent: React.FC<F1LiveRaceSimulatorProps> = ({
         {/* Center & Right Column: Interactive Pit Wall & Telemetry Cockpit */}
         <div className="col-span-8 space-y-4 flex flex-col justify-between overflow-y-auto pr-1">
           {/* Tactical Pit Wall Command Center */}
-          <div className="p-4 rounded-2xl bg-zinc-900/80 border border-cyan-500/30 shadow-xl bg-gradient-to-r from-zinc-900/90 to-black">
+          <div className="p-4 rounded-2xl bg-zinc-900/80 border border-amber-500/30 shadow-xl bg-gradient-to-r from-zinc-900/90 to-black">
             <div className="flex items-center justify-between pb-3 border-b border-white/10 mb-3">
               <div className="flex items-center gap-2">
-                <Wrench className="w-4 h-4 text-cyan-400" />
-                <h3 className="text-xs font-black uppercase tracking-wider text-cyan-300">
+                <Wrench className="w-4 h-4 text-amber-400" />
+                <h3 className="text-xs font-black uppercase tracking-wider text-amber-300">
                   Pit Wall Tactical Strategy Center
                 </h3>
               </div>
@@ -532,7 +549,7 @@ const F1LiveRaceSimulatorComponent: React.FC<F1LiveRaceSimulatorProps> = ({
                     setEngineStratMode(newStrat);
                     addRadioMessage("ENGINEER", `Engine map set to ${newStrat.replace("_", " ")}`, "INFO");
                   }}
-                  className="w-full bg-zinc-900 text-xs font-bold text-cyan-400 border border-white/20 rounded-lg p-1.5 outline-none cursor-pointer"
+                  className="w-full bg-zinc-900 text-xs font-bold text-amber-400 border border-white/20 rounded-lg p-1.5 outline-none cursor-pointer"
                 >
                   <option value="STRAT_1_MAX">STRAT 1: MAX POWER (+25 HP)</option>
                   <option value="STRAT_2_RACE">STRAT 2: STANDARD RACE</option>
@@ -549,7 +566,7 @@ const F1LiveRaceSimulatorComponent: React.FC<F1LiveRaceSimulatorProps> = ({
               <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest block mb-1">
                 GPS SPEED
               </span>
-              <span className="text-3xl font-black font-mono text-cyan-400">{currentSpeedKmh}</span>
+              <span className="text-3xl font-black font-mono text-amber-400">{currentSpeedKmh}</span>
               <span className="text-[10px] font-mono text-zinc-500 ml-1">KM/H</span>
               <div className="mt-2 text-xs font-bold text-zinc-300">
                 Gear 8 • {(11800 + (currentSpeedKmh % 40) * 30).toLocaleString()} RPM
@@ -608,7 +625,7 @@ const F1LiveRaceSimulatorComponent: React.FC<F1LiveRaceSimulatorProps> = ({
                   <span className="text-zinc-400 block text-[10px]">FUEL MASS</span>
                   <div className="w-full bg-zinc-800 h-2 rounded-full overflow-hidden my-1.5">
                     <div
-                      className="bg-cyan-400 h-full rounded-full transition-all"
+                      className="bg-amber-400 h-full rounded-full transition-all"
                       style={{ width: `${(fuelKg / 35.0) * 100}%` }}
                     />
                   </div>
@@ -625,7 +642,7 @@ const F1LiveRaceSimulatorComponent: React.FC<F1LiveRaceSimulatorProps> = ({
             {/* Tactical Pit Wall Radio Feed */}
             <div className="col-span-5 p-4 rounded-2xl bg-zinc-900/60 border border-white/10 flex flex-col h-48 overflow-hidden">
               <div className="flex items-center gap-2 pb-2 border-b border-white/10 mb-2">
-                <Radio className="w-3.5 h-3.5 text-cyan-400" />
+                <Radio className="w-3.5 h-3.5 text-amber-400" />
                 <span className="text-xs font-black uppercase tracking-wider text-zinc-300">
                   Pit Wall Radio Channel
                 </span>
@@ -658,10 +675,10 @@ const F1LiveRaceSimulatorComponent: React.FC<F1LiveRaceSimulatorProps> = ({
 
           {/* Race Completed Celebration Modal */}
           {isRaceFinished && (
-            <div className="p-5 rounded-2xl bg-gradient-to-r from-cyan-950/90 to-black border-2 border-cyan-400 shadow-2xl flex items-center justify-between">
+            <div className="p-5 rounded-2xl bg-gradient-to-r from-amber-950/90 to-black border-2 border-amber-400 shadow-2xl flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <div className="w-12 h-12 rounded-xl bg-cyan-500/20 border border-cyan-500/40 flex items-center justify-center">
-                  <Trophy className="w-6 h-6 text-cyan-400" />
+                <div className="w-12 h-12 rounded-xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center">
+                  <Trophy className="w-6 h-6 text-amber-400" />
                 </div>
                 <div>
                   <h3 className="text-base font-black text-white uppercase tracking-wider">
@@ -675,7 +692,7 @@ const F1LiveRaceSimulatorComponent: React.FC<F1LiveRaceSimulatorProps> = ({
 
               <button
                 onClick={onExitSession}
-                className="px-6 py-3 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-black font-black text-xs uppercase tracking-wider shadow-lg shadow-cyan-500/30 transition-all cursor-pointer"
+                className="px-6 py-3 rounded-xl bg-amber-500 hover:bg-amber-400 text-black font-black text-xs uppercase tracking-wider shadow-lg shadow-cyan-500/30 transition-all cursor-pointer"
               >
                 View Championship Standings →
               </button>

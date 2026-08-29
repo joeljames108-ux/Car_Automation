@@ -129,7 +129,7 @@ const RadarChart = memo(function RadarChart({ a, b }: { a: GarageVehicle; b: Gar
         const p = getPoint(1, i);
         return <line key={i} x1={cx} y1={cy} x2={p.x} y2={p.y} stroke="#1e293b" strokeWidth="1.5" />;
       })}
-      <polygon points={polyPoints(axes.map(a => a.va))} fill="rgba(34,211,238,0.12)" stroke="#22d3ee" strokeWidth="1.5" />
+      <polygon points={polyPoints(axes.map(a => a.va))} fill="rgba(34,211,238,0.12)" stroke="#fbbf24" strokeWidth="1.5" />
       <polygon points={polyPoints(axes.map(a => a.vb))} fill="rgba(249,115,22,0.12)" stroke="#f97316" strokeWidth="1.5" />
       {axes.map((ax, i) => {
         const angle = (i / n) * 2 * Math.PI - Math.PI / 2;

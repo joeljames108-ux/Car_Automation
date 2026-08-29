@@ -88,7 +88,7 @@ function GlassSliderComponent({
           aria-valuenow={val}
           aria-valuetext={`${val}${unit}`}
           onChange={(e) => handleChange(Number(e.target.value))}
-          className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 rounded-full"
+          className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 rounded-full"
           style={{
             position: "absolute",
             inset: 0,

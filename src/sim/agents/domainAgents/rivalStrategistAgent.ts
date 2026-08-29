@@ -9,7 +9,7 @@ const RIVAL_IDENTITY: AgentIdentity = {
   name: "AI Rival Market Intelligence Agent",
   domain: "rival_strategy",
   icon: "👁️",
-  color: "#ec4899",
+  color: "#d97706",
   priority: 6,
   description: "Monitors competitor companies (Apex Motors, Volta EV, Meridian), tech levels, and market launch tactics.",
   capabilities: ["Competitor Benchmarking", "Tech Level Tracking", "Market Share Analysis", "Rival Strategy"],

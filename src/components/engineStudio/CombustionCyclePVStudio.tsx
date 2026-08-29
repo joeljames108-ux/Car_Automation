@@ -69,7 +69,7 @@ export const CombustionCyclePVStudio: React.FC<CombustionCyclePVStudioProps> = (
   const pressureChartSeries = useMemo(() => [
     {
       data: thermo.crankAnglePoints.map((p) => ({ x: p.crankAngleDeg, y: p.pressureBar })),
-      color: "#22d3ee",
+      color: "#fbbf24",
       fill: true,
       label: "Cylinder Pressure",
       unit: " bar",
@@ -124,7 +124,7 @@ export const CombustionCyclePVStudio: React.FC<CombustionCyclePVStudioProps> = (
         </div>
 
         <div className="flex items-center gap-2 font-mono text-xs text-slate-300 bg-slate-950 px-3 py-1.5 rounded-xl border border-slate-800">
-          <Activity size={13} className="text-cyan-400" />
+          <Activity size={13} className="text-amber-400" />
           <span>{rpm} RPM</span>
           <span className="text-slate-600">•</span>
           <span>{(throttle * 100).toFixed(0)}% WOT</span>
@@ -135,7 +135,7 @@ export const CombustionCyclePVStudio: React.FC<CombustionCyclePVStudioProps> = (
       <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-6 gap-2.5">
         <div className="p-3 bg-slate-900/70 rounded-xl border border-slate-800 space-y-1">
           <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider block">Indicated MEP (IMEP)</span>
-          <span className="text-base font-mono font-bold text-cyan-300">{thermo.imepBar} bar</span>
+          <span className="text-base font-mono font-bold text-amber-300">{thermo.imepBar} bar</span>
         </div>
         <div className="p-3 bg-slate-900/70 rounded-xl border border-slate-800 space-y-1">
           <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider block">Brake MEP (BMEP)</span>
@@ -151,11 +151,11 @@ export const CombustionCyclePVStudio: React.FC<CombustionCyclePVStudioProps> = (
         </div>
         <div className="p-3 bg-slate-900/70 rounded-xl border border-slate-800 space-y-1">
           <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider block">Pmax Location</span>
-          <span className="text-base font-mono font-bold text-violet-300">{thermo.pMaxCrankAngleDeg - 360}° ATDC</span>
+          <span className="text-base font-mono font-bold text-amber-300">{thermo.pMaxCrankAngleDeg - 360}° ATDC</span>
         </div>
         <div className="p-3 bg-slate-900/70 rounded-xl border border-slate-800 space-y-1">
           <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider block">Thermal Efficiency</span>
-          <span className="text-base font-mono font-bold text-cyan-300">{(thermo.indicatedThermalEfficiency * 100).toFixed(1)}%</span>
+          <span className="text-base font-mono font-bold text-amber-300">{(thermo.indicatedThermalEfficiency * 100).toFixed(1)}%</span>
         </div>
       </div>
 
@@ -165,7 +165,7 @@ export const CombustionCyclePVStudio: React.FC<CombustionCyclePVStudioProps> = (
         <div className="p-3 bg-slate-900/60 rounded-xl border border-slate-800 flex flex-col">
           <div className="flex items-center justify-between mb-2">
             <span className="text-xs font-mono font-bold text-slate-200 uppercase tracking-wider flex items-center gap-1.5">
-              <Zap size={14} className="text-cyan-400" />
+              <Zap size={14} className="text-amber-400" />
               Cylinder Pressure & Wiebe Heat Release (0° - 720°)
             </span>
             <span className="text-[10px] font-mono text-slate-400">Spark: {state.tuning?.ignitionTimingAdvanceDeg || 24}° BTDC</span>
@@ -194,11 +194,11 @@ export const CombustionCyclePVStudio: React.FC<CombustionCyclePVStudioProps> = (
       <div className="p-3 bg-slate-900/80 rounded-xl border border-slate-800 space-y-3">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
           <div className="flex items-center gap-2">
-            <Sliders size={14} className="text-cyan-400" />
+            <Sliders size={14} className="text-amber-400" />
             <span className="text-xs font-mono font-bold text-slate-200 uppercase tracking-wider">
               Scrub Crank Position:
             </span>
-            <span className="text-xs font-mono font-bold text-cyan-300 px-2 py-0.5 rounded bg-slate-950 border border-slate-800">
+            <span className="text-xs font-mono font-bold text-amber-300 px-2 py-0.5 rounded bg-slate-950 border border-slate-800">
               {scrubAngleDeg}° / 720°
             </span>
           </div>
@@ -214,7 +214,7 @@ export const CombustionCyclePVStudio: React.FC<CombustionCyclePVStudioProps> = (
           step={4}
           value={scrubAngleDeg}
           onChange={(e) => setScrubAngleDeg(Number(e.target.value))}
-          className="w-full h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-cyan-400"
+          className="w-full h-2 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-amber-400"
         />
 
         {/* Live Scrubbed Point Values */}
@@ -222,7 +222,7 @@ export const CombustionCyclePVStudio: React.FC<CombustionCyclePVStudioProps> = (
           <div className="grid grid-cols-2 sm:grid-cols-5 gap-2 pt-2 border-t border-slate-800/80 font-mono text-xs">
             <div className="flex items-center justify-between p-2 rounded bg-slate-950 border border-slate-850">
               <span className="text-slate-400 text-[10px]">Volume:</span>
-              <span className="text-cyan-300 font-bold">{scrubPoint.volumeCc} cc</span>
+              <span className="text-amber-300 font-bold">{scrubPoint.volumeCc} cc</span>
             </div>
             <div className="flex items-center justify-between p-2 rounded bg-slate-950 border border-slate-850">
               <span className="text-slate-400 text-[10px]">Pressure:</span>
@@ -238,7 +238,7 @@ export const CombustionCyclePVStudio: React.FC<CombustionCyclePVStudioProps> = (
             </div>
             <div className="flex items-center justify-between p-2 rounded bg-slate-950 border border-slate-850 col-span-2 sm:col-span-1">
               <span className="text-slate-400 text-[10px]">Heat Release:</span>
-              <span className="text-violet-300 font-bold">{scrubPoint.heatReleaseRateJDeg} J/deg</span>
+              <span className="text-amber-300 font-bold">{scrubPoint.heatReleaseRateJDeg} J/deg</span>
             </div>
           </div>
         )}

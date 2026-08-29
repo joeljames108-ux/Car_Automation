@@ -114,7 +114,7 @@ export function buildExhaustHeaderScene(bankSide: 'left' | 'right', configOrCyls
   const matSensorWire = matLib.getBlackPolymer();
   const matHeatTintPurple = new THREE.MeshStandardMaterial({
     name: 'Exhaust_Heat_Tint_Purple_Bronze_Zone',
-    color: new THREE.Color(0x7c3aed),
+    color: new THREE.Color(0xd97706),
     metalness: 0.94,
     roughness: 0.18,
   });

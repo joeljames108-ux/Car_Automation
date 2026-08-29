@@ -221,7 +221,7 @@ export const HypercarComponentBrowser: React.FC = memo(function HypercarComponen
                   {/* Metrics Badges */}
                   <div className="flex flex-wrap gap-1.5 mb-2.5 text-[9px] font-mono font-bold">
                     {comp.aero && (
-                      <span className="px-1.5 py-0.5 rounded bg-cyan-500/10 text-cyan-300 border border-cyan-500/30 flex items-center gap-1">
+                      <span className="px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-300 border border-amber-500/30 flex items-center gap-1">
                         <Wind className="w-2.5 h-2.5" />
                         +{comp.aero.downforceKgAt250Kmh}kg DF
                       </span>
@@ -239,7 +239,7 @@ export const HypercarComponentBrowser: React.FC = memo(function HypercarComponen
                       </span>
                     )}
                     {comp.endurance && (
-                      <span className="px-1.5 py-0.5 rounded bg-purple-500/10 text-purple-300 border border-purple-500/30 flex items-center gap-1">
+                      <span className="px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-300 border border-amber-500/30 flex items-center gap-1">
                         <Shield className="w-2.5 h-2.5" />
                         {comp.endurance.coolingCapacityKw} kW Cool
                       </span>

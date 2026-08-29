@@ -118,7 +118,7 @@ export function ComponentLibrary({
       {/* Header */}
       <div className="flex items-center justify-between pb-3 border-b border-base-800 mb-3">
         <div className="flex items-center gap-2">
-          <div className="p-1.5 rounded-lg bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
+          <div className="p-1.5 rounded-lg bg-amber-500/10 text-amber-400 border border-amber-500/20">
             <Wrench size={16} />
           </div>
           <div>
@@ -130,7 +130,7 @@ export function ComponentLibrary({
             </span>
           </div>
         </div>
-        <span className="px-2 py-0.5 rounded-full bg-cyan-500/10 text-cyan-400 border border-cyan-500/20 text-[10px] font-mono font-bold">
+        <span className="px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20 text-[10px] font-mono font-bold">
           {installedComponents.length} / {assemblyComponents.length} Installed
         </span>
       </div>
@@ -143,7 +143,7 @@ export function ComponentLibrary({
             onClick={() => setActiveTab(cat)}
             className={`px-2.5 py-1 rounded-lg text-[10px] font-mono font-semibold transition-all whitespace-nowrap ${
               activeTab === cat
-                ? "bg-cyan-500/20 text-cyan-200 border border-cyan-500/40 shadow-[0_0_10px_rgba(34,211,238,0.2)]"
+                ? "bg-amber-500/20 text-amber-200 border border-amber-500/40 shadow-[0_0_10px_rgba(34,211,238,0.2)]"
                 : "text-slate-400 hover:text-slate-200 hover:bg-base-800/60 border border-transparent"
             }`}
           >
@@ -178,11 +178,11 @@ export function ComponentLibrary({
               onMouseLeave={() => onHoverComponent(null)}
               className={`group relative p-3 rounded-xl border transition-all duration-200 assembly-card-3d ${getCategoryBorder(comp.category)} ${
                 isActive
-                  ? "bg-cyan-950/40 border-cyan-400 shadow-[0_0_20px_rgba(34,211,238,0.4)] scale-[1.01]"
+                  ? "bg-amber-950/40 border-amber-400 shadow-[0_0_20px_rgba(34,211,238,0.4)] scale-[1.01]"
                   : isInstalled
                   ? "bg-emerald-950/20 border-emerald-500/30 opacity-85"
                   : isAvailable
-                  ? "bg-base-850 border-base-750 hover:border-cyan-500/50 hover:bg-base-800/80 cursor-pointer"
+                  ? "bg-base-850 border-base-750 hover:border-amber-500/50 hover:bg-base-800/80 cursor-pointer"
                   : "bg-base-900/60 border-base-800/60 opacity-60 cursor-not-allowed"
               }`}
             >
@@ -194,7 +194,7 @@ export function ComponentLibrary({
                       isInstalled
                         ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/30"
                         : isAvailable
-                        ? "bg-cyan-500/10 text-cyan-400 border-cyan-500/30"
+                        ? "bg-amber-500/10 text-amber-400 border-amber-500/30"
                         : "bg-base-800 text-slate-500 border-base-700"
                     }`}
                   >
@@ -211,7 +211,7 @@ export function ComponentLibrary({
                     )}
                   </div>
                   <div>
-                    <h4 className="text-xs font-bold text-slate-100 group-hover:text-cyan-300 transition-colors">
+                    <h4 className="text-xs font-bold text-slate-100 group-hover:text-amber-300 transition-colors">
                       {comp.name}
                     </h4>
                     <span className="text-[9.5px] font-mono text-slate-400">{comp.category}</span>
@@ -225,7 +225,7 @@ export function ComponentLibrary({
                       <Check size={10} /> Installed
                     </span>
                   ) : isActive ? (
-                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 text-[9.5px] font-mono font-bold animate-pulse">
+                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 text-[9.5px] font-mono font-bold animate-pulse">
                       <Sparkles size={10} /> {phase.toUpperCase()}
                     </span>
                   ) : !isAvailable ? (
@@ -235,7 +235,7 @@ export function ComponentLibrary({
                   ) : (
                     <button
                       onClick={() => onStartInstall(comp.id)}
-                      className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-cyan-500/20 text-cyan-200 hover:bg-cyan-500 hover:text-black border border-cyan-500/40 text-[10px] font-mono font-bold transition-all shadow-sm active:scale-95 cursor-pointer"
+                      className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-amber-500/20 text-amber-200 hover:bg-amber-500 hover:text-black border border-amber-500/40 text-[10px] font-mono font-bold transition-all shadow-sm active:scale-95 cursor-pointer"
                     >
                       Install <ArrowRight size={10} />
                     </button>
@@ -259,7 +259,7 @@ export function ComponentLibrary({
                         }}
                         className={`px-1.5 py-1 rounded text-[9px] font-mono text-left truncate transition-all ${
                           currentVariant === v.id
-                            ? "bg-cyan-500/25 text-cyan-200 border border-cyan-500/50 font-bold shadow-sm"
+                            ? "bg-amber-500/25 text-amber-200 border border-amber-500/50 font-bold shadow-sm"
                             : "bg-base-800 text-slate-400 border border-base-750 hover:bg-base-750 hover:text-slate-200"
                         }`}
                         title={v.label}

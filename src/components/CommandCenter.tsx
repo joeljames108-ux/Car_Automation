@@ -15,6 +15,7 @@ import { computeScores, computeSummary } from "../sim/reviews";
 import { ENGINE_LAYOUTS, CHASSIS_TYPES, TIRE_COMPOUNDS } from "../sim/constants";
 import type { SimResult, VehicleDesign } from "../sim/types";
 import { ChassisHotspotViewer } from "./ChassisHotspotViewer";
+import { NotificationCenter, LiquidGlassCard, LiquidButton } from "./ui/LiquidGlass";
 
 interface Recommendation {
   id: string;
@@ -46,7 +47,7 @@ function CommandCenterComponent({ onSelectStage }: CommandCenterProps = {}) {
   );
 
   const dragSeries = useMemo(() => [
-    { data: sim.dragVsSpeed.map((d) => ({ x: d.speed, y: d.drag })), color: "#22d3ee", fill: true },
+    { data: sim.dragVsSpeed.map((d) => ({ x: d.speed, y: d.drag })), color: "#fbbf24", fill: true },
     { data: sim.dragVsSpeed.map((d) => ({ x: d.speed, y: d.downforce })), color: "#22c55e" },
   ], [sim.dragVsSpeed]);
 
@@ -74,16 +75,16 @@ function CommandCenterComponent({ onSelectStage }: CommandCenterProps = {}) {
 
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
         {/* Vehicle Concept Philosophy Selection Card */}
-        <div className="panel border border-cyan-500/40 rounded-2xl p-5 shadow-[0_0_30px_rgba(34,211,238,0.15)] relative overflow-hidden">
+        <div className="panel border border-amber-500/40 rounded-2xl p-5 shadow-[0_0_30px_rgba(34,211,238,0.15)] relative overflow-hidden">
           <div className="flex flex-col gap-4 relative z-10">
             <div className="flex items-center gap-3">
-              <div className="p-3 rounded-2xl bg-cyan-500/20 border border-cyan-400/40 text-cyan-300 shadow-[0_0_15px_rgba(34,211,238,0.2)]">
+              <div className="p-3 rounded-2xl bg-amber-500/20 border border-amber-400/40 text-amber-300 shadow-[0_0_15px_rgba(34,211,238,0.2)]">
                 <Target size={24} />
               </div>
               <div>
                 <div className="flex items-center gap-2">
-                  <span className="text-xs font-mono font-bold text-cyan-400 uppercase tracking-widest">VEHICLE CONCEPT INTENT</span>
-                  <span className="bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 text-[9px] font-bold px-2 py-0.5 rounded-full">AI TUNER ACTIVE</span>
+                  <span className="text-xs font-mono font-bold text-amber-400 uppercase tracking-widest">VEHICLE CONCEPT INTENT</span>
+                  <span className="bg-amber-500/20 text-amber-300 border border-amber-500/40 text-[9px] font-bold px-2 py-0.5 rounded-full">AI TUNER ACTIVE</span>
                 </div>
                 <h2 className="text-lg font-bold text-slate-100">Select Design Goal & AI Philosophy</h2>
                 <p className="text-xs text-slate-400">Tunes Apex AI Assistant to guide engineering decisions based on your target build concept</p>
@@ -95,15 +96,15 @@ function CommandCenterComponent({ onSelectStage }: CommandCenterProps = {}) {
               {[
                 { id: "budget", label: "Budget Focused", desc: "Max ROI, low cost & high reliability", color: "border-emerald-500/40 text-emerald-300 bg-emerald-500/10" },
                 { id: "track", label: "Track Focused", desc: "Peak lateral G, low weight & high aero", color: "border-amber-500/40 text-amber-300 bg-amber-500/10" },
-                { id: "luxury", label: "Luxury Focused", desc: "Supreme NVH, leather & comfort score", color: "border-purple-500/40 text-purple-300 bg-purple-500/10" },
-                { id: "balanced", label: "Balanced Build", desc: "All-round engineering harmony", color: "border-cyan-500/40 text-cyan-300 bg-cyan-500/10" },
+                { id: "luxury", label: "Luxury Focused", desc: "Supreme NVH, leather & comfort score", color: "border-amber-500/40 text-amber-300 bg-amber-500/10" },
+                { id: "balanced", label: "Balanced Build", desc: "All-round engineering harmony", color: "border-amber-500/40 text-amber-300 bg-amber-500/10" },
               ].map((c) => (
                 <button
                   key={c.id}
                   onClick={() => setCarConcept(c.id as any)}
                   className={`p-3 rounded-xl border text-left transition-all ${
                     carConcept === c.id
-                      ? `${c.color} shadow-[0_0_15px_rgba(34,211,238,0.2)] ring-1 ring-cyan-400`
+                      ? `${c.color} shadow-[0_0_15px_rgba(34,211,238,0.2)] ring-1 ring-amber-400`
                       : "bg-base-950/60 border-white/5 text-slate-400 hover:border-slate-700 hover:text-slate-200"
                   }`}
                 >
@@ -116,15 +117,15 @@ function CommandCenterComponent({ onSelectStage }: CommandCenterProps = {}) {
         </div>
 
         {/* Global UI Theme Selection Card */}
-        <div className="panel border border-purple-500/40 rounded-2xl p-5 shadow-[0_0_30px_rgba(168,85,247,0.15)] relative overflow-hidden">
+        <div className="panel border border-amber-500/40 rounded-2xl p-5 shadow-[0_0_30px_rgba(168,85,247,0.15)] relative overflow-hidden">
           <div className="flex flex-col gap-4 relative z-10">
             <div className="flex items-center gap-3">
-              <div className="p-3 rounded-2xl bg-purple-500/20 border border-purple-400/40 text-purple-300 shadow-[0_0_15px_rgba(168,85,247,0.2)]">
+              <div className="p-3 rounded-2xl bg-amber-500/20 border border-amber-400/40 text-amber-300 shadow-[0_0_15px_rgba(168,85,247,0.2)]">
                 <Wind size={24} />
               </div>
               <div>
                 <div className="flex items-center gap-2">
-                  <span className="text-xs font-mono font-bold text-purple-400 uppercase tracking-widest">GLOBAL UI SETTINGS</span>
+                  <span className="text-xs font-mono font-bold text-amber-400 uppercase tracking-widest">GLOBAL UI SETTINGS</span>
                 </div>
                 <h2 className="text-lg font-bold text-slate-100">Select Interface Theme</h2>
                 <p className="text-xs text-slate-400">Personalize your workspace aesthetics. More themes are in development!</p>
@@ -134,8 +135,8 @@ function CommandCenterComponent({ onSelectStage }: CommandCenterProps = {}) {
             {/* Theme Option Cards */}
             <div className="grid grid-cols-2 gap-2">
               {[
-                { id: "theme1", label: "UI 1", desc: "Kinetic Horizon — AnimMaster & HorizonX Design", color: "border-cyan-500/40 text-cyan-300 bg-cyan-500/10", activeShadow: "shadow-[0_0_15px_rgba(34,211,238,0.2)] ring-1 ring-cyan-400" },
-                { id: "theme2", label: "Theme 2", desc: "Cosmic Nebula — Deep Purple Sci-Fi", color: "border-purple-500/40 text-purple-300 bg-purple-500/10", activeShadow: "shadow-[0_0_15px_rgba(168,85,247,0.25)] ring-1 ring-purple-400" },
+                { id: "theme1", label: "UI 1", desc: "Kinetic Horizon — AnimMaster & HorizonX Design", color: "border-amber-500/40 text-amber-300 bg-amber-500/10", activeShadow: "shadow-[0_0_15px_rgba(34,211,238,0.2)] ring-1 ring-amber-400" },
+                { id: "theme2", label: "Theme 2", desc: "Cosmic Nebula — Deep Purple Sci-Fi", color: "border-amber-500/40 text-amber-300 bg-amber-500/10", activeShadow: "shadow-[0_0_15px_rgba(168,85,247,0.25)] ring-1 ring-purple-400" },
                 { id: "theme3", label: "Theme 3", desc: "Nordic Light Glass — Alabaster White", color: "border-sky-500/40 text-sky-400 bg-sky-500/10", activeShadow: "shadow-[0_0_15px_rgba(14,165,233,0.2)] ring-1 ring-sky-400" },
                 { id: "theme4", label: "Vision Glass", desc: "Spatial Glass Lounge (Default)", color: "border-sky-300/40 text-sky-200 bg-sky-500/10", activeShadow: "shadow-[0_0_15px_rgba(147,197,253,0.15)] ring-1 ring-sky-300" },
               ].map((t) => (
@@ -180,33 +181,54 @@ function CommandCenterComponent({ onSelectStage }: CommandCenterProps = {}) {
           <div className="text-[9px] text-slate-600">Revenue</div>
         </div>
         <div className="bg-base-900 border border-base-800 rounded-xl p-3 text-center hover:border-base-700 transition-all">
-          <Star size={12} className="mx-auto text-purple-400 mb-1" />
-          <div className="font-mono text-sm text-purple-400">{company.reputation}</div>
+          <Star size={12} className="mx-auto text-amber-400 mb-1" />
+          <div className="font-mono text-sm text-amber-400">{company.reputation}</div>
           <div className="text-[9px] text-slate-600">Reputation</div>
         </div>
         <div className="bg-base-900 border border-base-800 rounded-xl p-3 text-center hover:border-base-700 transition-all">
-          <Activity size={12} className="mx-auto text-blue-400 mb-1" />
-          <div className="font-mono text-sm text-blue-400">Mo.{company.economy.month}</div>
+          <Activity size={12} className="mx-auto text-amber-400 mb-1" />
+          <div className="font-mono text-sm text-amber-400">Mo.{company.economy.month}</div>
           <div className="text-[9px] text-slate-600">Game Month</div>
         </div>
       </div>
 
-      {/* Hero banner */}
-      <div className="panel p-5 relative overflow-hidden">
-        <div className="absolute inset-0 opacity-20 pointer-events-none"
-          style={{ background: "radial-gradient(ellipse at top right, rgba(34,211,238,0.3), transparent 60%)" }} />
-        <div className="relative flex flex-col md:flex-row md:items-center gap-4">
-          <div className="flex items-center gap-3">
-            <div className="flex items-center justify-center w-12 h-12 rounded-xl bg-accent-500/20 border border-accent-500/30">
-              <LayoutDashboard size={24} className="text-accent-300" />
+      {/* Hero Banner + Apex Liquid Glass Audio Notification Widget */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 items-stretch">
+        <div className="panel p-5 relative overflow-hidden lg:col-span-2 flex flex-col justify-between">
+          <div className="absolute inset-0 opacity-20 pointer-events-none"
+            style={{ background: "radial-gradient(ellipse at top right, rgba(245,158,11,0.25), transparent 60%)" }} />
+          <div className="relative flex flex-col md:flex-row md:items-center gap-4">
+            <div className="flex items-center gap-3">
+              <div className="flex items-center justify-center w-12 h-12 rounded-2xl bg-amber-500/20 border border-amber-400/40 shadow-[0_0_15px_rgba(245,158,11,0.2)]">
+                <LayoutDashboard size={24} className="text-amber-300" />
+              </div>
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className="text-[10px] font-mono font-bold text-amber-400 uppercase tracking-widest">REAL-TIME TELEMETRY</span>
+                  <span className="bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-[9px] font-bold px-2 py-0.5 rounded-full flex items-center gap-1">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" /> LIVE STREAM
+                  </span>
+                </div>
+                <h2 className="text-lg font-bold text-slate-100">Central Engineering Dashboard</h2>
+                <p className="text-xs text-slate-400">Real-time command center — updates instantly with every lab change</p>
+              </div>
             </div>
-            <div>
-              <h2 className="text-lg font-bold text-slate-100">Central Engineering Dashboard</h2>
-              <p className="text-xs text-slate-500">Real-time command center — updates instantly with every lab change</p>
-            </div>
+            <div className="flex-1" />
+            <HealthGauge value={overallHealth} />
           </div>
-          <div className="flex-1" />
-          <HealthGauge value={overallHealth} />
+
+          <div className="mt-4 pt-3 border-t border-white/5 flex items-center justify-between text-xs text-slate-400">
+            <div className="flex items-center gap-2">
+              <span className="inline-block w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
+              <span className="font-mono text-[11px]">Apex Spatial Engine v2.4 • 60 FPS Physics Loop</span>
+            </div>
+            <span className="font-mono text-[10px] text-slate-500">Optimum Balance Index: {(overallHealth * 100).toFixed(0)}%</span>
+          </div>
+        </div>
+
+        {/* Liquid Glass Audio Notification & Media Center */}
+        <div className="flex items-center justify-center">
+          <NotificationCenter className="w-full h-full" />
         </div>
       </div>
 
@@ -228,12 +250,12 @@ function CommandCenterComponent({ onSelectStage }: CommandCenterProps = {}) {
       {/* Vehicle specs */}
       <Section title="Vehicle Specifications" icon={<Car size={16} />}>
         <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-2">
-          <StatTile label="Architecture" value={layout.label} icon={<Cog size={11} className="text-cyan-400 shrink-0" />} />
-          <StatTile label="Displacement" value={sim.displacement} unit="cc" icon={<Fuel size={11} className="text-cyan-400 shrink-0" />} />
+          <StatTile label="Architecture" value={layout.label} icon={<Cog size={11} className="text-amber-400 shrink-0" />} />
+          <StatTile label="Displacement" value={sim.displacement} unit="cc" icon={<Fuel size={11} className="text-amber-400 shrink-0" />} />
           <StatTile label="Chassis" value={chassis.label} icon={<Car size={11} className="text-amber-400 shrink-0" />} />
           <StatTile label="Tire" value={tire.label} icon={<CircleDot size={11} className="text-emerald-400 shrink-0" />} />
           <StatTile label="Weight" value={sim.weight} unit="kg" accent="accent" icon={<Zap size={11} className="text-amber-400 shrink-0" />} />
-          <StatTile label="Power" value={sim.peakPower} unit="hp" accent="accent" icon={<Gauge size={11} className="text-cyan-400 shrink-0" />} />
+          <StatTile label="Power" value={sim.peakPower} unit="hp" accent="accent" icon={<Gauge size={11} className="text-amber-400 shrink-0" />} />
         </div>
       </Section>
 
@@ -313,7 +335,7 @@ function CommandCenterComponent({ onSelectStage }: CommandCenterProps = {}) {
                   {(sim.weightDistFront * 100).toFixed(0)}%
                 </div>
                 <div className="flex items-center justify-center text-[10px] font-mono font-bold text-white transition-all duration-500"
-                  style={{ width: ((1 - sim.weightDistFront) * 100) + "%", background: "linear-gradient(135deg, #22d3ee, #0891b2)", boxShadow: "inset 0 1px 1px rgba(255,255,255,0.2)" }}>
+                  style={{ width: ((1 - sim.weightDistFront) * 100) + "%", background: "linear-gradient(135deg, #fbbf24, #0891b2)", boxShadow: "inset 0 1px 1px rgba(255,255,255,0.2)" }}>
                   {(100 - sim.weightDistFront * 100).toFixed(0)}%
                 </div>
               </div>
@@ -359,21 +381,21 @@ function CommandCenterComponent({ onSelectStage }: CommandCenterProps = {}) {
                 <div className="text-[9px] text-slate-500 mt-1">Toe: {design.vehicle.toeF}°</div>
               </div>
               <div className="text-center">
-                <div className="text-[10px] text-cyan-400 font-semibold uppercase mb-2">Rear Axle</div>
+                <div className="text-[10px] text-amber-400 font-semibold uppercase mb-2">Rear Axle</div>
                 <div className="flex justify-center gap-3">
                   <div className="flex flex-col items-center">
                     <svg width="28" height="60" viewBox="0 0 28 60">
                       <rect x="10" y="2" width="8" height="56" rx="3" fill="#334155" stroke="#475569" strokeWidth="1" />
-                      <line x1="14" y1="0" x2={14 + Math.tan(design.vehicle.camberR * Math.PI / 180) * 56} y2="58" stroke="#22d3ee" strokeWidth="2.5" strokeLinecap="round" opacity="0.8" />
+                      <line x1="14" y1="0" x2={14 + Math.tan(design.vehicle.camberR * Math.PI / 180) * 56} y2="58" stroke="#fbbf24" strokeWidth="2.5" strokeLinecap="round" opacity="0.8" />
                     </svg>
-                    <div className="font-mono text-[10px] text-cyan-300 mt-1">{design.vehicle.camberR}°</div>
+                    <div className="font-mono text-[10px] text-amber-300 mt-1">{design.vehicle.camberR}°</div>
                   </div>
                   <div className="flex flex-col items-center">
                     <svg width="28" height="60" viewBox="0 0 28 60">
                       <rect x="10" y="2" width="8" height="56" rx="3" fill="#334155" stroke="#475569" strokeWidth="1" />
-                      <line x1="14" y1="0" x2={14 - Math.tan(design.vehicle.camberR * Math.PI / 180) * 56} y2="58" stroke="#22d3ee" strokeWidth="2.5" strokeLinecap="round" opacity="0.8" />
+                      <line x1="14" y1="0" x2={14 - Math.tan(design.vehicle.camberR * Math.PI / 180) * 56} y2="58" stroke="#fbbf24" strokeWidth="2.5" strokeLinecap="round" opacity="0.8" />
                     </svg>
-                    <div className="font-mono text-[10px] text-cyan-300 mt-1">{design.vehicle.camberR}°</div>
+                    <div className="font-mono text-[10px] text-amber-300 mt-1">{design.vehicle.camberR}°</div>
                   </div>
                 </div>
                 <div className="text-[9px] text-slate-500 mt-1">Toe: {design.vehicle.toeR}°</div>
@@ -423,10 +445,10 @@ function CommandCenterComponent({ onSelectStage }: CommandCenterProps = {}) {
             <StatTile label="Quality Score" value={sim.manufacturing.qualityScore.toFixed(0)} unit="/100" accent="ok" />
           </div>
           <div className="space-y-2">
-            <CostBar label="Engine" value={sim.engineCost} total={sim.totalCost} color="#22d3ee" icon={<Cog size={13} className="text-cyan-400 shrink-0" />} />
+            <CostBar label="Engine" value={sim.engineCost} total={sim.totalCost} color="#fbbf24" icon={<Cog size={13} className="text-amber-400 shrink-0" />} />
             <CostBar label="Body/Chassis" value={sim.vehicleCost - sim.engineCost} total={sim.totalCost} color="#f59e0b" icon={<Car size={13} className="text-amber-400 shrink-0" />} />
             <CostBar label="Interior" value={sim.interiorCost} total={sim.totalCost} color="#22c55e" icon={<Sofa size={13} className="text-emerald-400 shrink-0" />} />
-            <CostBar label="Manufacturing" value={sim.totalCost - sim.vehicleCost - sim.interiorCost} total={sim.totalCost} color="#a78bfa" icon={<Factory size={13} className="text-purple-400 shrink-0" />} />
+            <CostBar label="Manufacturing" value={sim.totalCost - sim.vehicleCost - sim.interiorCost} total={sim.totalCost} color="#a78bfa" icon={<Factory size={13} className="text-amber-400 shrink-0" />} />
           </div>
         </Section>
       </div>

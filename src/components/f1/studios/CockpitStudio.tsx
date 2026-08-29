@@ -17,7 +17,7 @@ export const CockpitStudio: React.FC = memo(function CockpitStudio() {
       <div className="glass-panel p-6 border-indigo-500/20 bg-gradient-to-r from-slate-900 via-slate-900/90 to-indigo-950/30 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2 mb-2">
-            <Sliders className="text-indigo-400" size={24} />
+            <Sliders className="text-amber-400" size={24} />
             <h2 className="text-xl font-bold text-slate-100 tracking-wide">
               Cockpit Ergonomics, F1 Steering Wheel & Electronics
             </h2>
@@ -29,7 +29,7 @@ export const CockpitStudio: React.FC = memo(function CockpitStudio() {
 
         <div className="flex items-center gap-3">
           <div className="text-right">
-            <div className="text-2xl font-black font-mono text-indigo-400">
+            <div className="text-2xl font-black font-mono text-amber-400">
               {c.telemetryChannelsCount} <span className="text-xs text-slate-400 font-normal">Channels</span>
             </div>
             <div className="text-[10px] text-slate-400 uppercase tracking-wider">
@@ -45,7 +45,7 @@ export const CockpitStudio: React.FC = memo(function CockpitStudio() {
         <div className="bg-slate-900/60 p-4 rounded-xl border border-slate-800 space-y-3">
           <label className="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center justify-between">
             <span>Steering Display Unit</span>
-            <span className="text-[10px] text-indigo-400 font-mono">PDU Display</span>
+            <span className="text-[10px] text-amber-400 font-mono">PDU Display</span>
           </label>
           <select
             value={c.steeringWheelDisplayType}
@@ -67,7 +67,7 @@ export const CockpitStudio: React.FC = memo(function CockpitStudio() {
         <div className="bg-slate-900/60 p-4 rounded-xl border border-slate-800 space-y-2">
           <div className="flex justify-between items-center text-xs">
             <span className="font-bold text-slate-300 uppercase tracking-wider">Steering Rotary Switches</span>
-            <span className="font-mono text-indigo-400 font-bold">{c.rotarySwitchCount} Rotary Selectors</span>
+            <span className="font-mono text-amber-400 font-bold">{c.rotarySwitchCount} Rotary Selectors</span>
           </div>
           <input
             type="range"
@@ -89,7 +89,7 @@ export const CockpitStudio: React.FC = memo(function CockpitStudio() {
         <div className="bg-slate-900/60 p-4 rounded-xl border border-slate-800 space-y-2">
           <div className="flex justify-between items-center text-xs">
             <span className="font-bold text-slate-300 uppercase tracking-wider">Tactile Pushbuttons</span>
-            <span className="font-mono text-indigo-400 font-bold">{c.pushbuttonCount} Buttons</span>
+            <span className="font-mono text-amber-400 font-bold">{c.pushbuttonCount} Buttons</span>
           </div>
           <input
             type="range"
@@ -111,7 +111,7 @@ export const CockpitStudio: React.FC = memo(function CockpitStudio() {
         <div className="bg-slate-900/60 p-4 rounded-xl border border-slate-800 space-y-3">
           <label className="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center justify-between">
             <span>Telemetry Acquisition Rate</span>
-            <span className="text-[10px] text-indigo-400 font-mono">Pit Radio Link</span>
+            <span className="text-[10px] text-amber-400 font-mono">Pit Radio Link</span>
           </label>
           <select
             value={c.telemetrySampleRateHz}
@@ -132,7 +132,7 @@ export const CockpitStudio: React.FC = memo(function CockpitStudio() {
         <div className="bg-slate-900/60 p-4 rounded-xl border border-slate-800 space-y-3">
           <label className="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center justify-between">
             <span>Driver Ergonomic Seat Insert</span>
-            <span className="text-[10px] text-indigo-400 font-mono">3D Body Scan</span>
+            <span className="text-[10px] text-amber-400 font-mono">3D Body Scan</span>
           </label>
           <div className="flex items-center gap-3 bg-slate-800/80 p-3 rounded-lg border border-slate-700">
             <input

@@ -51,7 +51,7 @@ export const AutonomousGrandProvingGroundDeck: React.FC = () => {
       {/* Studio Header Ribbon */}
       <div className="flex items-center justify-between px-5 py-3 rounded-2xl bg-[#090d16] border border-[#182133] shadow-lg">
         <div className="flex items-center gap-3">
-          <div className="p-2 rounded-xl bg-gradient-to-tr from-cyan-500/20 to-emerald-500/20 border border-cyan-500/40 text-cyan-400">
+          <div className="p-2 rounded-xl bg-gradient-to-tr from-amber-500/20 to-emerald-500/20 border border-amber-500/40 text-amber-400">
             <Activity className="w-5 h-5" />
           </div>
           <div>
@@ -68,7 +68,7 @@ export const AutonomousGrandProvingGroundDeck: React.FC = () => {
         <select
           value={awdMode}
           onChange={(e) => setAwdMode(e.target.value as AwdTerrainMode)}
-          className="bg-[#0e1424] text-cyan-400 text-xs font-bold font-mono px-3 py-1.5 rounded-xl border border-cyan-500/40 cursor-pointer"
+          className="bg-[#0e1424] text-amber-400 text-xs font-bold font-mono px-3 py-1.5 rounded-xl border border-amber-500/40 cursor-pointer"
         >
           <option value="DYNAMIC_REAR_BIASED">Dynamic Rear-Biased AWD</option>
           <option value="SNOW_MUD_LOCKED_50_50">Snow / Mud 50:50 Lock</option>
@@ -82,11 +82,11 @@ export const AutonomousGrandProvingGroundDeck: React.FC = () => {
         {/* Card 1: Steer-by-Wire Handwheel Haptics */}
         <div className="flex flex-col p-4 rounded-2xl bg-[#090d16] border border-[#182133] gap-3">
           <div className="flex items-center justify-between pb-2 border-b border-[#182133]">
-            <div className="flex items-center gap-2 text-cyan-400 font-bold text-xs">
+            <div className="flex items-center gap-2 text-amber-400 font-bold text-xs">
               <Compass className="w-4 h-4" />
               <span>STEER-BY-WIRE FORCE FEEDBACK (HWA)</span>
             </div>
-            <span className="text-[10px] font-mono font-bold text-cyan-400">
+            <span className="text-[10px] font-mono font-bold text-amber-400">
               Ratio: {sbwState.variableSteeringRatio}:1
             </span>
           </div>
@@ -100,14 +100,14 @@ export const AutonomousGrandProvingGroundDeck: React.FC = () => {
               max="90"
               value={handwheelDeg}
               onChange={(e) => setHandwheelDeg(Number(e.target.value))}
-              className="w-36 accent-cyan-500 cursor-pointer"
+              className="w-36 accent-amber-500 cursor-pointer"
             />
           </div>
 
           <div className="grid grid-cols-2 gap-2 text-xs font-mono">
             <div className="p-2.5 rounded-xl bg-[#0c1220] border border-[#1c263d]">
               <div className="text-gray-400 text-[10px]">ROAD WHEEL ANGLE (RWA)</div>
-              <div className="text-sm font-bold text-cyan-400">{sbwState.roadWheelAngleDeg}°</div>
+              <div className="text-sm font-bold text-amber-400">{sbwState.roadWheelAngleDeg}°</div>
             </div>
             <div className="p-2.5 rounded-xl bg-[#0c1220] border border-[#1c263d]">
               <div className="text-gray-400 text-[10px]">HAPTIC FEEDBACK TORQUE</div>
@@ -146,7 +146,7 @@ export const AutonomousGrandProvingGroundDeck: React.FC = () => {
           <div className="grid grid-cols-2 gap-2 text-xs font-mono">
             <div className="p-2.5 rounded-xl bg-[#0c1220] border border-[#1c263d]">
               <div className="text-gray-400 text-[10px]">CLUTCH CLAMPING FORCE</div>
-              <div className="text-sm font-bold text-cyan-400">{awdState.clutchClampingForceN} N</div>
+              <div className="text-sm font-bold text-amber-400">{awdState.clutchClampingForceN} N</div>
             </div>
             <div className="p-2.5 rounded-xl bg-[#0c1220] border border-[#1c263d]">
               <div className="text-gray-400 text-[10px]">CLUTCH OIL TEMP</div>
@@ -158,7 +158,7 @@ export const AutonomousGrandProvingGroundDeck: React.FC = () => {
         {/* Card 3: Multi-Zone Cabin Active Noise Cancellation */}
         <div className="flex flex-col p-4 rounded-2xl bg-[#090d16] border border-[#182133] gap-3">
           <div className="flex items-center justify-between pb-2 border-b border-[#182133]">
-            <div className="flex items-center gap-2 text-indigo-400 font-bold text-xs">
+            <div className="flex items-center gap-2 text-amber-400 font-bold text-xs">
               <Volume2 className="w-4 h-4" />
               <span>CABIN FxLMS ACTIVE NOISE CANCELLATION</span>
             </div>
@@ -178,7 +178,7 @@ export const AutonomousGrandProvingGroundDeck: React.FC = () => {
             {[ancState.driverZone, ancState.frontPassengerZone, ancState.rearLeftZone, ancState.rearRightZone].map((z) => (
               <div key={z.zoneName} className="p-2 rounded-lg bg-[#0a0f1c] border border-[#182133]">
                 <div className="text-[10px] text-gray-400 mb-0.5">{z.zoneName}</div>
-                <div className="text-indigo-400 font-bold">{z.residualNoiseSplDb} dB SPL</div>
+                <div className="text-amber-400 font-bold">{z.residualNoiseSplDb} dB SPL</div>
                 <div className="text-[9px] text-emerald-400">-{z.noiseAttenuationDb} dB • {z.psychoacousticLoudnessSones} sones</div>
               </div>
             ))}

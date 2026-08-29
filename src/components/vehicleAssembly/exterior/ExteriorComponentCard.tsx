@@ -43,11 +43,11 @@ export const ExteriorComponentCard: React.FC<ExteriorComponentCardProps> = ({
       onClick={onSelect}
       className={`group relative p-3.5 rounded-2xl border transition-all duration-300 cursor-pointer ${
         isSelected
-          ? "bg-cyan-950/40 border-cyan-400 shadow-[0_0_15px_rgba(6,182,212,0.3)]"
+          ? "bg-amber-950/40 border-amber-400 shadow-[0_0_15px_rgba(6,182,212,0.3)]"
           : isInstalled
           ? "bg-slate-900/60 border-emerald-500/30 hover:border-emerald-400/60"
           : isInstallable
-          ? "bg-slate-900/80 border-slate-700 hover:border-cyan-500/60 hover:bg-slate-850"
+          ? "bg-slate-900/80 border-slate-700 hover:border-amber-500/60 hover:bg-slate-850"
           : "bg-slate-950/40 border-slate-850 opacity-60 cursor-not-allowed"
       }`}
     >
@@ -55,7 +55,7 @@ export const ExteriorComponentCard: React.FC<ExteriorComponentCardProps> = ({
         {/* Left: Component Info & Subcategory */}
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 mb-1">
-            <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-cyan-400 px-2 py-0.5 rounded-full bg-cyan-950/60 border border-cyan-500/30">
+            <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-amber-400 px-2 py-0.5 rounded-full bg-amber-950/60 border border-amber-500/30">
               {component.subcategory}
             </span>
             {isInstalled && (
@@ -64,7 +64,7 @@ export const ExteriorComponentCard: React.FC<ExteriorComponentCardProps> = ({
               </span>
             )}
           </div>
-          <h4 className="text-xs font-bold text-slate-100 group-hover:text-cyan-300 transition-colors truncate">
+          <h4 className="text-xs font-bold text-slate-100 group-hover:text-amber-300 transition-colors truncate">
             {component.name}
           </h4>
           <p className="text-[11px] text-slate-400 line-clamp-1 mt-0.5">
@@ -79,7 +79,7 @@ export const ExteriorComponentCard: React.FC<ExteriorComponentCardProps> = ({
               <Check size={16} />
             </div>
           ) : isActive ? (
-            <div className="w-8 h-8 rounded-xl bg-cyan-500 text-slate-950 flex items-center justify-center font-mono font-bold text-xs animate-spin">
+            <div className="w-8 h-8 rounded-xl bg-amber-500 text-slate-950 flex items-center justify-center font-mono font-bold text-xs animate-spin">
               ⚡
             </div>
           ) : isInstallable ? (
@@ -88,7 +88,7 @@ export const ExteriorComponentCard: React.FC<ExteriorComponentCardProps> = ({
                 e.stopPropagation();
                 onInstall();
               }}
-              className="px-3 py-1.5 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-mono font-bold text-xs flex items-center gap-1 shadow-md hover:shadow-[0_0_10px_rgba(6,182,212,0.5)] transition-all"
+              className="px-3 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-mono font-bold text-xs flex items-center gap-1 shadow-md hover:shadow-[0_0_10px_rgba(6,182,212,0.5)] transition-all"
             >
               <Plus size={13} />
               <span>INSTALL</span>
@@ -111,7 +111,7 @@ export const ExteriorComponentCard: React.FC<ExteriorComponentCardProps> = ({
             onGradeChange(e.target.value as MaterialGrade);
           }}
           onClick={(e) => e.stopPropagation()}
-          className="bg-slate-950 border border-white/10 rounded-lg px-2 py-0.5 text-[11px] font-mono text-cyan-300 focus:outline-none focus:border-cyan-400 cursor-pointer"
+          className="bg-slate-950 border border-white/10 rounded-lg px-2 py-0.5 text-[11px] font-mono text-amber-300 focus:outline-none focus:border-amber-400 cursor-pointer"
         >
           {component.variants.map((v) => (
             <option key={v.id} value={v.id}>

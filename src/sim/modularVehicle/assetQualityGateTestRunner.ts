@@ -78,7 +78,7 @@ export class AssetQualityGateTestRunner {
     // Test 3: Automotive PBR Material System & Procedural Normal Textures
     const t2 = performance.now();
     try {
-      const paint = AutomotivePBRMaterialSystem.getAutomotivePaint('#38bdf8');
+      const paint = AutomotivePBRMaterialSystem.getAutomotivePaint('#fbbf24');
       const carbon = AutomotivePBRMaterialSystem.getCarbonFiber(true);
       const rotor = AutomotivePBRMaterialSystem.getBrakeRotorMaterial(false);
       const tire = AutomotivePBRMaterialSystem.getTireRubberMaterial();

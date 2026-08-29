@@ -102,11 +102,13 @@ const MegawattHypercarStudioViewportComponent: React.FC = () => {
     const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 50);
     camera.position.set(3.5, 1.8, 4.2);
 
-    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true, powerPreference: "high-performance" });
     renderer.setSize(width, height);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    renderer.shadowMap.autoUpdate = false;
+    renderer.shadowMap.needsUpdate = true;
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 1.35;
     mountRef.current.appendChild(renderer.domElement);
@@ -114,6 +116,7 @@ const MegawattHypercarStudioViewportComponent: React.FC = () => {
 
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
+    controls.dampingFactor = 0.05;
     controlsRef.current = controls;
 
     // Lights
@@ -127,7 +130,7 @@ const MegawattHypercarStudioViewportComponent: React.FC = () => {
     keyLight.shadow.mapSize.height = 1024;
     scene.add(keyLight);
 
-    const rimLight = new THREE.DirectionalLight(0x38bdf8, 1.8);
+    const rimLight = new THREE.DirectionalLight(0xfbbf24, 1.8);
     rimLight.position.set(-5, 4, -5);
     scene.add(rimLight);
 
@@ -139,19 +142,35 @@ const MegawattHypercarStudioViewportComponent: React.FC = () => {
     const hypercar3D = Car3DGeometryGenerator.buildCar3DGroup("HYPERCAR_MONOCOQUE", 0x111317);
     scene.add(hypercar3D);
 
+    // Adaptive Render Loop Controller
+    let isDirty = true;
+    let lastActiveTime = performance.now();
+    const markDirty = () => {
+      isDirty = true;
+      lastActiveTime = performance.now();
+    };
+
+    controls.addEventListener("change", markDirty);
+
     // Animation Loop with Tab Visibility Suspension
     let animId: number;
     const animate = () => {
       animId = requestAnimationFrame(animate);
       if (document.hidden) return;
 
-      controls.update();
-      renderer.render(scene, camera);
+      if (isDirty) {
+        controls.update();
+        renderer.render(scene, camera);
+        if (performance.now() - lastActiveTime > 1500) {
+          isDirty = false;
+        }
+      }
     };
     animate();
 
     const handleVisibilityChange = () => {
       if (!document.hidden && renderer && scene && camera) {
+        markDirty();
         renderer.render(scene, camera);
       }
     };
@@ -164,6 +183,7 @@ const MegawattHypercarStudioViewportComponent: React.FC = () => {
       camera.aspect = w / h;
       camera.updateProjectionMatrix();
       renderer.setSize(w, h);
+      markDirty();
     };
     window.addEventListener("resize", handleResize);
 
@@ -246,7 +266,7 @@ const MegawattHypercarStudioViewportComponent: React.FC = () => {
           <div>
             <div className="flex justify-between text-xs text-slate-300 mb-1.5 font-mono">
               <span>Ride Height (Venturi Throat):</span>
-              <strong className="text-cyan-400">{rideHeightMm} mm</strong>
+              <strong className="text-amber-400">{rideHeightMm} mm</strong>
             </div>
             <input
               type="range"
@@ -255,14 +275,14 @@ const MegawattHypercarStudioViewportComponent: React.FC = () => {
               step={1}
               value={rideHeightMm}
               onChange={(e) => setRideHeightMm(Number(e.target.value))}
-              className="w-full accent-cyan-500 bg-slate-950 rounded-lg cursor-pointer"
+              className="w-full accent-amber-500 bg-slate-950 rounded-lg cursor-pointer"
             />
           </div>
 
           <div>
             <div className="flex justify-between text-xs text-slate-300 mb-1.5 font-mono">
               <span>V12 ICE Output Power:</span>
-              <strong className="text-purple-400">{icePowerHp} HP</strong>
+              <strong className="text-amber-400">{icePowerHp} HP</strong>
             </div>
             <input
               type="range"
@@ -290,7 +310,7 @@ const MegawattHypercarStudioViewportComponent: React.FC = () => {
 
           <div className="flex justify-between">
             <span className="text-slate-400">Total Downforce @ {airspeedKmH}km/h:</span>
-            <strong className="text-cyan-400">{aero.totalDownforceKg} kg ({aero.totalDownforceN} N)</strong>
+            <strong className="text-amber-400">{aero.totalDownforceKg} kg ({aero.totalDownforceN} N)</strong>
           </div>
 
           <div className="flex justify-between">

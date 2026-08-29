@@ -9,7 +9,7 @@ const SUSPENSION_IDENTITY: AgentIdentity = {
   name: "Suspension Dynamics Agent",
   domain: "suspension",
   icon: "📐",
-  color: "#8b5cf6",
+  color: "#f59e0b",
   priority: 8,
   description: "Evaluates spring rates, damping coefficients, camber gain, and roll centre heights for optimal grip.",
   capabilities: ["Geometry Optimization", "Roll Resistance", "Damping Curves", "Ride Height Adjustment"],

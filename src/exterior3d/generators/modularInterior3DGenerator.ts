@@ -33,7 +33,7 @@ export class ModularInterior3DGenerator {
     const seatId = config.frontSeatsId || 'SEATS_SPORT_BOLSTERED';
     const consoleId = config.centerConsoleId || 'CONSOLE_SPORT_GATED';
     const trimGrade = config.primaryTrimGrade || 'nappa_leather';
-    const ambientColorHex = config.ambientLightingColorHex || '#06b6d4';
+    const ambientColorHex = config.ambientLightingColorHex || '#f59e0b';
 
     // 1. Modular Sculpted Dashboard
     const dashboardMesh = this.buildDashboard(dashId, halfTrM, trimGrade, ambientColorHex);
@@ -308,7 +308,7 @@ export class ModularInterior3DGenerator {
     // Sweeping Tachometer Arc Ring
     const tachoArc = new THREE.Mesh(
       new THREE.RingGeometry(0.045, 0.052, 24, 1, 0, Math.PI * 1.5),
-      new THREE.MeshBasicMaterial({ color: 0x38bdf8, side: THREE.DoubleSide })
+      new THREE.MeshBasicMaterial({ color: 0xfbbf24, side: THREE.DoubleSide })
     );
     tachoArc.rotation.y = Math.PI / 2;
     tachoArc.position.set(-0.01, 0, 0);
@@ -353,7 +353,7 @@ export class ModularInterior3DGenerator {
     const metalMat = new THREE.MeshStandardMaterial({ color: 0xd4d4d8, metalness: 0.95, roughness: 0.15 });
     const redAccentMat = new THREE.MeshBasicMaterial({ color: 0xdc2626 });
     const goldAccentMat = new THREE.MeshBasicMaterial({ color: 0xeab308 });
-    const blueAccentMat = new THREE.MeshBasicMaterial({ color: 0x3b82f6 });
+    const blueAccentMat = new THREE.MeshBasicMaterial({ color: 0xd97706 });
 
     // 1. Titanium Steering Column
     const col = new THREE.Mesh(new THREE.CylinderGeometry(0.024, 0.024, 0.28, 16), metalMat);

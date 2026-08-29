@@ -151,7 +151,7 @@ export function SafetyCenter() {
           <div className="text-[10px] text-slate-600">NCAP Stars</div>
         </div>
         <div className="panel p-3 text-center">
-          <Zap size={14} className="mx-auto text-purple-400 mb-1" />
+          <Zap size={14} className="mx-auto text-amber-400 mb-1" />
           <div className="font-mono text-sm text-slate-200">+{Math.round(safetySim.activeFeatureBonus * 100)}%</div>
           <div className="text-[10px] text-slate-600">ADAS Bonus</div>
         </div>
@@ -282,7 +282,7 @@ export function SafetyCenter() {
                 <svg viewBox="0 0 240 240" className="w-full max-w-[240px] mx-auto">
                   {[0.25, 0.5, 0.75, 1.0].map(l => <polygon key={l} points={gridPts(l)} fill="none" stroke="#1e293b" strokeWidth="1" />)}
                   {scores.map((_, i) => { const p = pt(1, i); return <line key={i} x1={cx} y1={cy} x2={p.x} y2={p.y} stroke="#1e293b" strokeWidth="1.5" />; })}
-                  <polygon points={filled} fill="rgba(34,211,238,0.15)" stroke="#22d3ee" strokeWidth="2" />
+                  <polygon points={filled} fill="rgba(34,211,238,0.15)" stroke="#fbbf24" strokeWidth="2" />
                   {scores.map((s, i) => {
                     const angle = (i / n) * 2 * Math.PI - Math.PI / 2;
                     const lx = cx + (r + 16) * Math.cos(angle);

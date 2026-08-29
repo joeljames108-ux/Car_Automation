@@ -56,12 +56,12 @@ export function InstallButton({
   if (isInstalling) {
     return (
       <div className={`flex items-center gap-2 ${className}`}>
-        <div className="flex-1 py-3 px-5 rounded-2xl bg-cyan-950/80 border border-cyan-400 shadow-[0_0_25px_rgba(34,211,238,0.4)] flex items-center justify-between text-cyan-300 font-mono text-xs font-bold">
+        <div className="flex-1 py-3 px-5 rounded-2xl bg-amber-950/80 border border-amber-400 shadow-[0_0_25px_rgba(34,211,238,0.4)] flex items-center justify-between text-amber-300 font-mono text-xs font-bold">
           <div className="flex items-center gap-2.5">
-            <Sparkles size={16} className="animate-spin text-cyan-400" />
+            <Sparkles size={16} className="animate-spin text-amber-400" />
             <div>
               <span className="block text-slate-100">{componentName}</span>
-              <span className="text-[10px] text-cyan-400 font-extrabold uppercase tracking-wider">
+              <span className="text-[10px] text-amber-400 font-extrabold uppercase tracking-wider">
                 {PHASE_LABELS[phase] || phase}
               </span>
             </div>
@@ -69,9 +69,9 @@ export function InstallButton({
 
           {/* Micro Progress Pulse */}
           <div className="flex items-center gap-1">
-            <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-ping" />
-            <span className="w-1.5 h-1.5 rounded-full bg-cyan-400" />
-            <span className="w-1.5 h-1.5 rounded-full bg-cyan-400" />
+            <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-ping" />
+            <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
+            <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
           </div>
         </div>
 
@@ -80,7 +80,7 @@ export function InstallButton({
           <button
             type="button"
             onClick={onSkipAnimation}
-            className="py-3 px-4 rounded-2xl bg-base-900/90 hover:bg-base-800 text-cyan-300 border border-cyan-500/30 text-xs font-mono font-bold transition-all shadow-md active:scale-95 cursor-pointer flex items-center gap-1.5 shrink-0"
+            className="py-3 px-4 rounded-2xl bg-base-900/90 hover:bg-base-800 text-amber-300 border border-amber-500/30 text-xs font-mono font-bold transition-all shadow-md active:scale-95 cursor-pointer flex items-center gap-1.5 shrink-0"
             title="Skip Animation"
           >
             <SkipForward size={14} />
@@ -109,7 +109,7 @@ export function InstallButton({
           <button
             type="button"
             onClick={onNext}
-            className="py-3 px-5 rounded-2xl bg-cyan-500 hover:bg-cyan-400 text-black font-mono font-extrabold text-xs uppercase tracking-wider transition-all shadow-[0_0_15px_rgba(34,211,238,0.4)] flex items-center gap-1.5 cursor-pointer shrink-0 active:scale-95"
+            className="py-3 px-5 rounded-2xl bg-amber-500 hover:bg-amber-400 text-black font-mono font-extrabold text-xs uppercase tracking-wider transition-all shadow-[0_0_15px_rgba(34,211,238,0.4)] flex items-center gap-1.5 cursor-pointer shrink-0 active:scale-95"
           >
             <span>Next Stage</span>
             <ArrowRight size={14} />
@@ -141,7 +141,7 @@ export function InstallButton({
       <button
         type="button"
         onClick={onInstall}
-        className="w-full py-3.5 px-6 rounded-2xl bg-gradient-to-r from-cyan-500 via-blue-500 to-cyan-500 hover:from-cyan-400 hover:to-blue-400 text-black font-mono font-extrabold text-xs md:text-sm uppercase tracking-wider transition-all duration-300 shadow-[0_0_25px_rgba(34,211,238,0.5)] hover:shadow-[0_0_35px_rgba(34,211,238,0.7)] flex items-center justify-center gap-2 group cursor-pointer active:scale-98"
+        className="w-full py-3.5 px-6 rounded-2xl bg-gradient-to-r from-amber-500 via-amber-500 to-amber-500 hover:from-amber-400 hover:to-amber-400 text-black font-mono font-extrabold text-xs md:text-sm uppercase tracking-wider transition-all duration-300 shadow-[0_0_25px_rgba(34,211,238,0.5)] hover:shadow-[0_0_35px_rgba(34,211,238,0.7)] flex items-center justify-center gap-2 group cursor-pointer active:scale-98"
       >
         <Wrench size={16} className="group-hover:rotate-45 transition-transform" />
         <span>Install {componentName}</span>

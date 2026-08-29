@@ -79,7 +79,7 @@ export const VehicleAssemblyViewer: React.FC<VehicleAssemblyViewerProps> = ({
       <div className="flex flex-wrap items-center justify-between gap-4 p-4 border-b border-slate-200/50 dark:border-slate-800/60 bg-white/40 dark:bg-base-950/40 backdrop-blur-md z-20">
         {/* Left: Viewport Status & Active Stage */}
         <div className="flex items-center gap-3">
-          <div className="p-2.5 rounded-2xl bg-cyan-500/10 border border-cyan-500/30 text-cyan-400">
+          <div className="p-2.5 rounded-2xl bg-amber-500/10 border border-amber-500/30 text-amber-400">
             <Boxes size={18} />
           </div>
           <div>
@@ -87,7 +87,7 @@ export const VehicleAssemblyViewer: React.FC<VehicleAssemblyViewerProps> = ({
               <h3 className="font-mono text-sm font-black tracking-wider uppercase text-slate-900 dark:text-slate-100">
                 CHASSIS & VEHICLE 3D WORKSTATION
               </h3>
-              <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-cyan-500/20 text-cyan-400 border border-cyan-500/40 animate-pulse">
+              <span className="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-amber-500/20 text-amber-400 border border-amber-500/40 animate-pulse">
                 3D WEBGL LIVE
               </span>
             </div>
@@ -104,7 +104,7 @@ export const VehicleAssemblyViewer: React.FC<VehicleAssemblyViewerProps> = ({
               onClick={onToggleExplodedView}
               className={`px-3 py-1.5 rounded-xl font-mono text-xs font-bold transition-all border ${
                 isExplodedView
-                  ? "bg-cyan-500/20 border-cyan-500 text-cyan-300"
+                  ? "bg-amber-500/20 border-amber-500 text-amber-300"
                   : "bg-white/5 border-white/10 text-slate-400 hover:text-slate-200"
               }`}
             >
@@ -115,7 +115,7 @@ export const VehicleAssemblyViewer: React.FC<VehicleAssemblyViewerProps> = ({
           {/* Sound Toggle */}
           <button
             onClick={handleToggleMute}
-            className="p-2 rounded-2xl bg-slate-100 dark:bg-base-950 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:text-cyan-500 dark:hover:text-cyan-400 transition-all shadow-sm cursor-pointer"
+            className="p-2 rounded-2xl bg-slate-100 dark:bg-base-950 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:text-amber-500 dark:hover:text-amber-400 transition-all shadow-sm cursor-pointer"
           >
             {isMuted ? <VolumeX size={16} /> : <Volume2 size={16} />}
           </button>
@@ -128,11 +128,11 @@ export const VehicleAssemblyViewer: React.FC<VehicleAssemblyViewerProps> = ({
 
         {/* Floating Active Stage Badge */}
         {activeComponentId && activeMeta && (
-          <div className="absolute top-4 left-4 z-30 flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-base-950/90 border border-cyan-500/40 backdrop-blur-md shadow-[0_0_15px_rgba(6,182,212,0.3)] text-xs font-mono text-slate-200">
-            <Sparkles size={13} className="text-cyan-400 animate-spin" />
+          <div className="absolute top-4 left-4 z-30 flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-base-950/90 border border-amber-500/40 backdrop-blur-md shadow-[0_0_15px_rgba(6,182,212,0.3)] text-xs font-mono text-slate-200">
+            <Sparkles size={13} className="text-amber-400 animate-spin" />
             <span className="font-extrabold text-slate-100">{activeMeta.name}</span>
             <span className="text-slate-500">·</span>
-            <span className="text-cyan-400 font-extrabold uppercase">{phase}</span>
+            <span className="text-amber-400 font-extrabold uppercase">{phase}</span>
           </div>
         )}
       </div>

@@ -94,36 +94,36 @@ export function StatDeltasPanel({
       {/* ── 2x2 STAT TILES GRID ── */}
       <div className="grid grid-cols-2 gap-2">
         {/* Horsepower Delta */}
-        <div className="p-2.5 rounded-xl bg-slate-950/90 border border-cyan-500/30 backdrop-blur-md space-y-1 shadow-[0_4px_16px_rgba(0,0,0,0.4)]">
+        <div className="p-2.5 rounded-xl bg-slate-950/90 border border-amber-500/30 backdrop-blur-md space-y-1 shadow-[0_4px_16px_rgba(0,0,0,0.4)]">
           <div className="flex items-center justify-between text-[10px] font-mono text-slate-400">
             <span className="flex items-center gap-1">
-              <Zap size={11} className="text-cyan-400" /> Power Delta
+              <Zap size={11} className="text-amber-400" /> Power Delta
             </span>
             <span className="text-slate-500">Total: {currentTotalStats.hp}hp</span>
           </div>
           <div className="flex items-baseline justify-between">
-            <span className="text-sm md:text-base font-extrabold font-mono text-cyan-300">
+            <span className="text-sm md:text-base font-extrabold font-mono text-amber-300">
               +{deltaHp} hp
             </span>
-            <span className="text-[10px] font-mono text-cyan-400/80 font-bold">
+            <span className="text-[10px] font-mono text-amber-400/80 font-bold">
               {variant.hpMultiplier > 1 ? `(${variant.hpMultiplier}x grade)` : "base"}
             </span>
           </div>
         </div>
 
         {/* Torque Delta */}
-        <div className="p-2.5 rounded-xl bg-slate-950/90 border border-purple-500/30 backdrop-blur-md space-y-1 shadow-[0_4px_16px_rgba(0,0,0,0.4)]">
+        <div className="p-2.5 rounded-xl bg-slate-950/90 border border-amber-500/30 backdrop-blur-md space-y-1 shadow-[0_4px_16px_rgba(0,0,0,0.4)]">
           <div className="flex items-center justify-between text-[10px] font-mono text-slate-400">
             <span className="flex items-center gap-1">
-              <Activity size={11} className="text-purple-400" /> Torque Delta
+              <Activity size={11} className="text-amber-400" /> Torque Delta
             </span>
             <span className="text-slate-500">Total: {currentTotalStats.torque}Nm</span>
           </div>
           <div className="flex items-baseline justify-between">
-            <span className="text-sm md:text-base font-extrabold font-mono text-purple-300">
+            <span className="text-sm md:text-base font-extrabold font-mono text-amber-300">
               +{deltaTorque} Nm
             </span>
-            <span className="text-[10px] font-mono text-purple-400/80 font-bold">
+            <span className="text-[10px] font-mono text-amber-400/80 font-bold">
               {variant.hpMultiplier > 1 ? `(${variant.hpMultiplier}x grade)` : "base"}
             </span>
           </div>
@@ -170,7 +170,7 @@ export function StatDeltasPanel({
       <div className="p-3 rounded-xl bg-slate-950/90 border border-slate-800/80 relative overflow-hidden">
         <div className="flex items-center justify-between mb-2">
           <span className="text-[10px] font-mono font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1">
-            <Layers size={11} className="text-cyan-400" /> Live Bore/Stroke Cutaway
+            <Layers size={11} className="text-amber-400" /> Live Bore/Stroke Cutaway
           </span>
           <span className="text-[9px] font-mono text-slate-500">
             {bore}mm Bore × {stroke}mm Stroke
@@ -212,7 +212,7 @@ export function StatDeltasPanel({
               y={bdcY}
               width={pistonWidth}
               height={pistonHeight}
-              fill="#38bdf8"
+              fill="#fbbf24"
               stroke="#0284c7"
               strokeWidth="1.5"
               rx="2"
@@ -245,17 +245,17 @@ export function StatDeltasPanel({
             />
 
             {/* Dimension Callout: Bore */}
-            <line x1={cx - cylWidth / 2} y1="10" x2={cx + cylWidth / 2} y2="10" stroke="#38bdf8" strokeWidth="1" />
-            <text x={cx} y="8" fill="#38bdf8" fontSize="8" fontFamily="monospace" textAnchor="middle">
+            <line x1={cx - cylWidth / 2} y1="10" x2={cx + cylWidth / 2} y2="10" stroke="#fbbf24" strokeWidth="1" />
+            <text x={cx} y="8" fill="#fbbf24" fontSize="8" fontFamily="monospace" textAnchor="middle">
               Ø{bore}mm Bore
             </text>
 
             {/* Dimension Callout: Stroke */}
-            <line x1={cx + cylWidth / 2 + 12} y1={topY} x2={cx + cylWidth / 2 + 12} y2={topY + cylHeight} stroke="#a855f7" strokeWidth="1" />
+            <line x1={cx + cylWidth / 2 + 12} y1={topY} x2={cx + cylWidth / 2 + 12} y2={topY + cylHeight} stroke="#f59e0b" strokeWidth="1" />
             <text
               x={cx + cylWidth / 2 + 16}
               y={topY + cylHeight / 2}
-              fill="#a855f7"
+              fill="#f59e0b"
               fontSize="8"
               fontFamily="monospace"
               dominantBaseline="middle"
@@ -267,7 +267,7 @@ export function StatDeltasPanel({
             <defs>
               <linearGradient id="combustionGradient" x1="0" y1="0" x2="0" y2="1">
                 <stop offset="0%" stopColor="#f59e0b" stopOpacity="0.8" />
-                <stop offset="100%" stopColor="#38bdf8" stopOpacity="0.1" />
+                <stop offset="100%" stopColor="#fbbf24" stopOpacity="0.1" />
               </linearGradient>
             </defs>
           </svg>
@@ -276,7 +276,7 @@ export function StatDeltasPanel({
 
       {/* ── ENGINEERING ADVISORY & TUNER NOTES ── */}
       <div className="p-3 rounded-xl bg-slate-950/80 border border-slate-800 text-[11px] font-mono space-y-1.5">
-        <div className="flex items-center gap-1.5 text-cyan-400 font-bold text-[10px] uppercase tracking-wider">
+        <div className="flex items-center gap-1.5 text-amber-400 font-bold text-[10px] uppercase tracking-wider">
           <Info size={12} />
           <span>Engineering Advisory</span>
         </div>

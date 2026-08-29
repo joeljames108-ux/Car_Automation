@@ -92,7 +92,7 @@ export const TransmissionAssemblyStage: React.FC<TransmissionAssemblyStageProps>
       {/* Header with Subtab Navigator */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between border-b border-base-800/60 pb-3 gap-3">
         <div className="flex items-center gap-2.5">
-          <div className="p-2 rounded-xl bg-purple-500/15 text-purple-400 border border-purple-500/30">
+          <div className="p-2 rounded-xl bg-amber-500/15 text-amber-400 border border-amber-500/30">
             <Gauge size={18} />
           </div>
           <div>
@@ -100,7 +100,7 @@ export const TransmissionAssemblyStage: React.FC<TransmissionAssemblyStageProps>
               <h3 className="text-sm font-bold font-mono text-slate-800 dark:text-slate-100 uppercase tracking-wider">
                 STAGE 3: DRIVETRAIN & TRANSAXLE GEARBOX
               </h3>
-              <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-purple-500/20 text-purple-300 border border-purple-500/30">
+              <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30">
                 AWD/RWD/FWD • LSD
               </span>
             </div>
@@ -115,7 +115,7 @@ export const TransmissionAssemblyStage: React.FC<TransmissionAssemblyStageProps>
           <button
             onClick={() => setActiveSubTab("gearbox")}
             className={`px-2.5 py-1 rounded-lg text-[10px] font-mono font-bold transition-all cursor-pointer ${
-              activeSubTab === "gearbox" ? "bg-purple-500 text-white shadow-sm" : "text-slate-400 hover:text-slate-200"
+              activeSubTab === "gearbox" ? "bg-amber-500 text-white shadow-sm" : "text-slate-400 hover:text-slate-200"
             }`}
           >
             GEARBOX
@@ -123,7 +123,7 @@ export const TransmissionAssemblyStage: React.FC<TransmissionAssemblyStageProps>
           <button
             onClick={() => setActiveSubTab("layout")}
             className={`px-2.5 py-1 rounded-lg text-[10px] font-mono font-bold transition-all cursor-pointer ${
-              activeSubTab === "layout" ? "bg-purple-500 text-white shadow-sm" : "text-slate-400 hover:text-slate-200"
+              activeSubTab === "layout" ? "bg-amber-500 text-white shadow-sm" : "text-slate-400 hover:text-slate-200"
             }`}
           >
             DRIVE LAYOUT
@@ -131,7 +131,7 @@ export const TransmissionAssemblyStage: React.FC<TransmissionAssemblyStageProps>
           <button
             onClick={() => setActiveSubTab("diffs")}
             className={`px-2.5 py-1 rounded-lg text-[10px] font-mono font-bold transition-all cursor-pointer ${
-              activeSubTab === "diffs" ? "bg-purple-500 text-white shadow-sm" : "text-slate-400 hover:text-slate-200"
+              activeSubTab === "diffs" ? "bg-amber-500 text-white shadow-sm" : "text-slate-400 hover:text-slate-200"
             }`}
           >
             DIFFERENTIALS
@@ -151,17 +151,17 @@ export const TransmissionAssemblyStage: React.FC<TransmissionAssemblyStageProps>
                   onClick={() => onUpdateTransmission(t.id)}
                   className={`p-3.5 rounded-2xl text-left transition-all border cursor-pointer ${
                     isSelected
-                      ? "bg-purple-500/20 border-purple-500/60 shadow-md ring-1 ring-purple-500/40"
+                      ? "bg-amber-500/20 border-amber-500/60 shadow-md ring-1 ring-purple-500/40"
                       : "bg-base-900/60 border-base-800 hover:border-base-700 text-slate-400"
                   }`}
                 >
                   <div className="flex items-center justify-between mb-1.5">
                     <span className="font-bold text-xs font-mono text-slate-900 dark:text-slate-100">{t.label}</span>
-                    <span className="text-[10px] font-mono text-purple-600 dark:text-purple-300 font-bold">{t.gears}</span>
+                    <span className="text-[10px] font-mono text-amber-600 dark:text-amber-300 font-bold">{t.gears}</span>
                   </div>
                   <p className="text-[10px] text-slate-500 dark:text-slate-400 mb-2.5">{t.desc}</p>
                   <div className="flex items-center justify-between text-[10px] font-mono pt-2 border-t border-base-800/60 text-slate-400 flex-wrap gap-1">
-                    <span>Shift: <strong className="text-cyan-600 dark:text-cyan-300">{t.shiftSpeed}</strong></span>
+                    <span>Shift: <strong className="text-amber-600 dark:text-amber-300">{t.shiftSpeed}</strong></span>
                     <span>Eff: <strong className="text-emerald-600 dark:text-emerald-300">{t.efficiency}</strong></span>
                     <span className="w-full sm:w-auto">{t.housing}</span>
                   </div>
@@ -176,16 +176,16 @@ export const TransmissionAssemblyStage: React.FC<TransmissionAssemblyStageProps>
               onClick={() => onUpdateDiffCoolingFins(!diffCoolingFins)}
               className={`p-3 rounded-2xl text-left transition-all border cursor-pointer ${
                 diffCoolingFins
-                  ? "bg-cyan-500/15 border-cyan-500/50 ring-1 ring-cyan-500/40"
+                  ? "bg-amber-500/15 border-amber-500/50 ring-1 ring-amber-500/40"
                   : "bg-base-900/60 border-base-800 hover:border-base-700"
               }`}
             >
               <div className="flex items-center justify-between mb-1">
                 <span className="font-bold text-xs font-mono text-slate-900 dark:text-slate-100 flex items-center gap-1.5">
-                  <Snowflake size={13} className="text-cyan-400" /> DIFF COOLING FINS
+                  <Snowflake size={13} className="text-amber-400" /> DIFF COOLING FINS
                 </span>
                 <span className={`px-2 py-0.5 rounded-lg text-[10px] font-mono font-bold border ${
-                  diffCoolingFins ? "bg-cyan-500/20 text-cyan-300 border-cyan-500/40" : "bg-base-850 text-slate-500 border-base-750"
+                  diffCoolingFins ? "bg-amber-500/20 text-amber-300 border-amber-500/40" : "bg-base-850 text-slate-500 border-base-750"
                 }`}>
                   {diffCoolingFins ? "FITTED" : "OMITTED"}
                 </span>
@@ -199,16 +199,16 @@ export const TransmissionAssemblyStage: React.FC<TransmissionAssemblyStageProps>
               onClick={() => onUpdateCvBoots(!cvBoots)}
               className={`p-3 rounded-2xl text-left transition-all border cursor-pointer ${
                 cvBoots
-                  ? "bg-purple-500/15 border-purple-500/50 ring-1 ring-purple-500/40"
+                  ? "bg-amber-500/15 border-amber-500/50 ring-1 ring-purple-500/40"
                   : "bg-base-900/60 border-base-800 hover:border-base-700"
               }`}
             >
               <div className="flex items-center justify-between mb-1">
                 <span className="font-bold text-xs font-mono text-slate-900 dark:text-slate-100 flex items-center gap-1.5">
-                  <ShieldCheck size={13} className="text-purple-400" /> REINFORCED CV BOOTS
+                  <ShieldCheck size={13} className="text-amber-400" /> REINFORCED CV BOOTS
                 </span>
                 <span className={`px-2 py-0.5 rounded-lg text-[10px] font-mono font-bold border ${
-                  cvBoots ? "bg-purple-500/20 text-purple-300 border-purple-500/40" : "bg-base-850 text-slate-500 border-base-750"
+                  cvBoots ? "bg-amber-500/20 text-amber-300 border-amber-500/40" : "bg-base-850 text-slate-500 border-base-750"
                 }`}>
                   {cvBoots ? "HIGH TEMP" : "OEM"}
                 </span>
@@ -227,7 +227,7 @@ export const TransmissionAssemblyStage: React.FC<TransmissionAssemblyStageProps>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
             {/* Drive Type */}
             <div className="p-3.5 rounded-2xl bg-base-900/60 border border-base-800 space-y-2">
-              <label className="text-xs font-bold font-mono text-cyan-400 block">
+              <label className="text-xs font-bold font-mono text-amber-400 block">
                 DRIVE WHEELS CONFIGURATION
               </label>
               <div className="grid grid-cols-3 gap-1.5">
@@ -237,7 +237,7 @@ export const TransmissionAssemblyStage: React.FC<TransmissionAssemblyStageProps>
                     onClick={() => updateVehicle({ driveType: dt as DriveType })}
                     className={`py-2 rounded-xl text-xs font-mono font-bold border transition-all cursor-pointer ${
                       (v.driveType || "rwd") === dt
-                        ? "bg-cyan-500/20 border-cyan-500 text-cyan-300 shadow-sm"
+                        ? "bg-amber-500/20 border-amber-500 text-amber-300 shadow-sm"
                         : "bg-base-950 border-base-800 text-slate-400 hover:text-slate-200"
                     }`}
                   >
@@ -254,7 +254,7 @@ export const TransmissionAssemblyStage: React.FC<TransmissionAssemblyStageProps>
 
             {/* Engine Position */}
             <div className="p-3.5 rounded-2xl bg-base-900/60 border border-base-800 space-y-2">
-              <label className="text-xs font-bold font-mono text-purple-400 block">
+              <label className="text-xs font-bold font-mono text-amber-400 block">
                 ENGINE POSITION IN CHASSIS
               </label>
               <div className="grid grid-cols-2 gap-1.5">
@@ -269,7 +269,7 @@ export const TransmissionAssemblyStage: React.FC<TransmissionAssemblyStageProps>
                     onClick={() => updateVehicle({ enginePosition: ep.id as EnginePosition })}
                     className={`py-2 px-1 rounded-xl text-[10px] font-mono font-bold border transition-all cursor-pointer truncate ${
                       (v.enginePosition || "front") === ep.id
-                        ? "bg-purple-500/20 border-purple-500 text-purple-300 shadow-sm"
+                        ? "bg-amber-500/20 border-amber-500 text-amber-300 shadow-sm"
                         : "bg-base-950 border-base-800 text-slate-400 hover:text-slate-200"
                     }`}
                   >
@@ -298,7 +298,7 @@ export const TransmissionAssemblyStage: React.FC<TransmissionAssemblyStageProps>
                 <div className="flex justify-between items-center text-xs font-mono font-bold text-slate-200">
                   <span>{d.name}</span>
                 </div>
-                <span className="text-[9px] font-mono text-cyan-400 bg-cyan-950/60 px-1.5 py-0.5 rounded font-bold">
+                <span className="text-[9px] font-mono text-amber-400 bg-amber-950/60 px-1.5 py-0.5 rounded font-bold">
                   {d.lock}
                 </span>
                 <p className="text-[10px] text-slate-400 leading-relaxed pt-1">{d.desc}</p>
@@ -315,7 +315,7 @@ export const TransmissionAssemblyStage: React.FC<TransmissionAssemblyStageProps>
         </div>
         <button
           onClick={onInstall}
-          className="flex items-center gap-2 px-6 py-3 rounded-2xl bg-gradient-to-r from-purple-500 to-indigo-600 hover:from-purple-400 hover:to-indigo-500 text-white font-mono font-bold text-xs uppercase tracking-wider shadow-lg shadow-purple-500/25 transition-all cursor-pointer hover:scale-105 active:scale-95"
+          className="flex items-center gap-2 px-6 py-3 rounded-2xl bg-gradient-to-r from-amber-500 to-indigo-600 hover:from-amber-400 hover:to-indigo-500 text-white font-mono font-bold text-xs uppercase tracking-wider shadow-lg shadow-purple-500/25 transition-all cursor-pointer hover:scale-105 active:scale-95"
         >
           <CheckCircle2 size={16} />
           {isInstalled ? "RE-INSTALL GEARBOX" : "INSTALL GEARBOX & PROCEED TO SUSPENSION"}

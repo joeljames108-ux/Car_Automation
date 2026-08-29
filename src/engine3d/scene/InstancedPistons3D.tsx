@@ -51,7 +51,7 @@ export const InstancedPistons3D: React.FC = () => {
       if (piston.selected) {
         tempColor.setHex(0x06b6d4);
       } else if (piston.highlighted) {
-        tempColor.setHex(0x38bdf8);
+        tempColor.setHex(0xfbbf24);
       } else {
         tempColor.setHex(piston.variant.color);
       }

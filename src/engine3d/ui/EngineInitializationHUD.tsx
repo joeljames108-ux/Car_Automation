@@ -60,19 +60,19 @@ export const EngineInitializationHUD: React.FC = () => {
           {isComplete ? (
             <CheckCircle2 size={15} className="text-emerald-400" />
           ) : (
-            <Flame size={15} className="text-cyan-400 animate-pulse" />
+            <Flame size={15} className="text-amber-400 animate-pulse" />
           )}
           <span className="text-xs font-bold text-slate-200 tracking-wide">
             {isComplete ? 'ASSET STREAMING READY' : 'ENGINE INITIALIZATION'}
           </span>
         </div>
-        <span className="text-xs font-mono font-bold text-cyan-400">{progress.percentage}%</span>
+        <span className="text-xs font-mono font-bold text-amber-400">{progress.percentage}%</span>
       </div>
 
       {/* Progress Bar Track */}
       <div className="w-full bg-slate-800/90 h-1.5 rounded-full overflow-hidden mb-1.5 border border-slate-700/50">
         <div
-          className="bg-gradient-to-r from-cyan-500 to-blue-500 h-full transition-all duration-300 rounded-full"
+          className="bg-gradient-to-r from-amber-500 to-amber-500 h-full transition-all duration-300 rounded-full"
           style={{ width: `${progress.percentage}%` }}
         />
       </div>

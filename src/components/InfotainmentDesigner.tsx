@@ -262,7 +262,7 @@ export function InfotainmentDesigner() {
           <div className="mt-3">
             <div className="flex justify-between items-baseline mb-1"><label className="label-mono">Ambient Colors</label><span className="font-mono text-xs text-amber-300">{info.ambientLightColors}</span></div>
             <input type="range" min={1} max={256} value={info.ambientLightColors} onChange={(e) => set("ambientLightColors", parseInt(e.target.value))} className="w-full" />
-            <div className="flex h-2 rounded-full mt-1 overflow-hidden" style={{ background: "linear-gradient(to right, #1e2839, #06b6d4, #22d3ee, #fbbf24, #ef4444, #a855f7)" }} />
+            <div className="flex h-2 rounded-full mt-1 overflow-hidden" style={{ background: "linear-gradient(to right, #1e2839, #f59e0b, #fbbf24, #fbbf24, #ef4444, #f59e0b)" }} />
           </div>
           <div className="mt-2 grid grid-cols-3 gap-1.5">
             <ToggleRow label="Dynamic" value={info.dynamicLighting} onChange={(v) => set("dynamicLighting", v)} />

@@ -69,14 +69,14 @@ export function EVBMSSection({
           accent="purple"
         >
           <div className="space-y-3">
-            <div className="p-3 rounded-xl bg-base-950/80 border border-purple-500/20 space-y-2 text-xs font-mono">
+            <div className="p-3 rounded-xl bg-base-950/80 border border-amber-500/20 space-y-2 text-xs font-mono">
               <div className="flex justify-between">
                 <span className="text-slate-400">Balancing Mode</span>
-                <span className="text-purple-300 font-extrabold">Active Bidirectional (2A)</span>
+                <span className="text-amber-300 font-extrabold">Active Bidirectional (2A)</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-slate-400">SoC Estimation Algorithm</span>
-                <span className="text-cyan-300 font-extrabold">Extended Kalman Filter (EKF)</span>
+                <span className="text-amber-300 font-extrabold">Extended Kalman Filter (EKF)</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-slate-400">Sampling Rate</span>
@@ -84,8 +84,8 @@ export function EVBMSSection({
               </div>
             </div>
 
-            <div className="p-3 rounded-xl bg-purple-950/20 border border-purple-500/20 space-y-1">
-              <span className="text-[10px] font-mono font-bold text-purple-300 uppercase tracking-wider block">
+            <div className="p-3 rounded-xl bg-amber-950/20 border border-amber-500/20 space-y-1">
+              <span className="text-[10px] font-mono font-bold text-amber-300 uppercase tracking-wider block">
                 BATTERY LONGEVITY BOOST
               </span>
               <p className="text-[11px] font-mono text-slate-300 leading-relaxed">

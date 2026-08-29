@@ -72,7 +72,7 @@ export function ZoomableGlassCard({
       {allowZoom && (
         <button
           onClick={openZoomModal}
-          className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-all duration-200 bg-white/90 border border-blue-400/40 text-[#007aff] p-1.5 rounded-full shadow-md z-20 hover:bg-blue-50 hover:scale-110 active:scale-95 cursor-pointer"
+          className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-all duration-200 bg-white/90 border border-amber-400/40 text-amber-400 p-1.5 rounded-full shadow-md z-20 hover:bg-amber-50 hover:scale-110 active:scale-95 cursor-pointer"
           title="Click to Zoom Card"
         >
           <Maximize2 size={12} />
@@ -92,10 +92,10 @@ export function ZoomableGlassCard({
             onClick={(e) => e.stopPropagation()}
           >
             {/* Top Bar with Back & Close */}
-            <div className="w-full flex items-center justify-between border-b border-blue-200/50 pb-3.5 mb-4">
+            <div className="w-full flex items-center justify-between border-b border-amber-200/50 pb-3.5 mb-4">
               <button
                 onClick={closeZoomModal}
-                className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-500/10 text-[#007aff] border border-blue-400/30 text-xs font-mono font-bold hover:bg-blue-500/20 transition-all shadow-sm active:scale-95 cursor-pointer"
+                className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-500/10 text-amber-400 border border-amber-400/30 text-xs font-mono font-bold hover:bg-amber-500/20 transition-all shadow-sm active:scale-95 cursor-pointer"
               >
                 <ArrowLeft size={14} /> Back
               </button>
@@ -117,7 +117,7 @@ export function ZoomableGlassCard({
               <div className="w-full flex items-center justify-between mb-3 text-xs font-mono">
                 {subtitle && <span className="text-slate-500">{subtitle}</span>}
                 {badge && (
-                  <span className="px-2.5 py-0.5 rounded-full bg-blue-500/10 border border-blue-400/30 text-[#007aff] font-bold">
+                  <span className="px-2.5 py-0.5 rounded-full bg-amber-500/10 border border-amber-400/30 text-[#007aff] font-bold">
                     {badge}
                   </span>
                 )}
@@ -125,7 +125,7 @@ export function ZoomableGlassCard({
             )}
 
             {/* High-Resolution Expanded Content Container */}
-            <div className="w-full bg-gradient-to-br from-white/95 via-blue-50/30 to-slate-100/50 border border-blue-200/50 rounded-2xl p-5 shadow-sm overflow-hidden">
+            <div className="w-full bg-gradient-to-br from-white/95 via-amber-50/30 to-slate-100/50 border border-amber-200/50 rounded-2xl p-5 shadow-sm overflow-hidden">
               {expandedContent || children}
             </div>
           </div>

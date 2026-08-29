@@ -127,11 +127,11 @@ export const LUXURY_MATERIAL_CATALOG: MaterialSwatchItem[] = [
 export const CONTRAST_STITCHING_COLORS = [
   { name: "Guards Red", hex: "#ef4444" },
   { name: "Racing Yellow", hex: "#eab308" },
-  { name: "Miami Blue", hex: "#06b6d4" },
+  { name: "Miami Blue", hex: "#f59e0b" },
   { name: "Acid Green", hex: "#84cc16" },
   { name: "Chalk White", hex: "#f8fafc" },
   { name: "Burnt Orange", hex: "#f97316" },
-  { name: "Amethyst Purple", hex: "#a855f7" },
+  { name: "Amethyst Purple", hex: "#f59e0b" },
   { name: "Stealth Black", hex: "#0f172a" },
 ];
 

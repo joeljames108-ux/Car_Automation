@@ -45,7 +45,7 @@ export const SeasonSummaryPanel = memo(function SeasonSummaryPanel() {
                   className={`p-4 rounded-xl border space-y-3 transition-all ${
                     isChamp
                       ? "bg-gradient-to-r from-yellow-500/15 via-amber-500/5 to-yellow-500/15 border-yellow-500/40 shadow-[0_0_20px_rgba(234,179,8,0.15)]"
-                      : "bg-base-950/70 border-white/5 hover:border-cyan-500/30"
+                      : "bg-base-950/70 border-white/5 hover:border-amber-500/30"
                   }`}
                 >
                   <div className="flex items-center justify-between">
@@ -76,15 +76,15 @@ export const SeasonSummaryPanel = memo(function SeasonSummaryPanel() {
                       <div className="text-[9px] text-slate-500 uppercase">Victories</div>
                     </div>
                     <div className="bg-base-900/60 p-2.5 rounded-lg border border-base-800">
-                      <div className="text-sm font-mono font-bold text-cyan-300">{lastRes.podiums} Podiums</div>
+                      <div className="text-sm font-mono font-bold text-amber-300">{lastRes.podiums} Podiums</div>
                       <div className="text-[9px] text-slate-500 uppercase">Podiums</div>
                     </div>
                     <div className="bg-base-900/60 p-2.5 rounded-lg border border-base-800">
-                      <div className="text-sm font-mono font-bold text-purple-400">{lastRes.fastestLaps} FL</div>
+                      <div className="text-sm font-mono font-bold text-amber-400">{lastRes.fastestLaps} FL</div>
                       <div className="text-[9px] text-slate-500 uppercase">Fastest Laps</div>
                     </div>
                     <div className="bg-base-900/60 p-2.5 rounded-lg border border-base-800">
-                      <div className="text-sm font-mono font-bold text-blue-400">{lastRes.polePositions} Poles</div>
+                      <div className="text-sm font-mono font-bold text-amber-400">{lastRes.polePositions} Poles</div>
                       <div className="text-[9px] text-slate-500 uppercase">Poles</div>
                     </div>
                     <div className="bg-base-900/60 p-2.5 rounded-lg border border-base-800">
@@ -96,7 +96,7 @@ export const SeasonSummaryPanel = memo(function SeasonSummaryPanel() {
                   {/* Financial & Morale Outcome */}
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between text-xs font-mono bg-base-900/40 p-2.5 rounded-lg border border-base-800/80 text-slate-400 gap-2">
                     <span>Balance: <strong className="text-emerald-400">${(t.budget / 1e6).toFixed(1)}M</strong></span>
-                    <span>Morale: <strong className="text-cyan-300">{t.teamMorale}%</strong></span>
+                    <span>Morale: <strong className="text-amber-300">{t.teamMorale}%</strong></span>
                     <span>Roster: <strong className="text-slate-200">{t.drivers.length}/2 Drivers Active</strong></span>
                   </div>
                 </div>

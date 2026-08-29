@@ -55,7 +55,7 @@ export const ChassisDynamicsSuspensionStudio: React.FC = () => {
       {/* Studio Header Ribbon */}
       <div className="flex items-center justify-between px-5 py-3 rounded-2xl bg-[#090d16] border border-[#182133] shadow-lg">
         <div className="flex items-center gap-3">
-          <div className="p-2 rounded-xl bg-gradient-to-tr from-cyan-500/20 to-indigo-500/20 border border-cyan-500/40 text-cyan-400">
+          <div className="p-2 rounded-xl bg-gradient-to-tr from-amber-500/20 to-indigo-500/20 border border-amber-500/40 text-amber-400">
             <Activity className="w-5 h-5" />
           </div>
           <div>
@@ -73,7 +73,7 @@ export const ChassisDynamicsSuspensionStudio: React.FC = () => {
           <select
             value={driveMode}
             onChange={(e) => setDriveMode(e.target.value as SuspensionDriveMode)}
-            className="bg-[#0e1424] text-cyan-400 text-xs font-bold font-mono px-3 py-1.5 rounded-xl border border-cyan-500/40 cursor-pointer"
+            className="bg-[#0e1424] text-amber-400 text-xs font-bold font-mono px-3 py-1.5 rounded-xl border border-amber-500/40 cursor-pointer"
           >
             <option value="COMFORT_PLUSH">Comfort Plush</option>
             <option value="BALANCED_TOURING">Balanced Touring</option>
@@ -88,11 +88,11 @@ export const ChassisDynamicsSuspensionStudio: React.FC = () => {
         {/* Column 1: Magnetorheological Skyhook Active Damping */}
         <div className="flex flex-col p-4 rounded-2xl bg-[#090d16] border border-[#182133] gap-3">
           <div className="flex items-center justify-between pb-2 border-b border-[#182133]">
-            <div className="flex items-center gap-2 text-cyan-400 font-bold text-xs">
+            <div className="flex items-center gap-2 text-amber-400 font-bold text-xs">
               <Sliders className="w-4 h-4" />
               <span>MR DAMPER SKYHOOK FORCES</span>
             </div>
-            <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-400 border border-cyan-500/40">
+            <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-400 border border-amber-500/40">
               {driveMode}
             </span>
           </div>
@@ -107,7 +107,7 @@ export const ChassisDynamicsSuspensionStudio: React.FC = () => {
                     {c.skyhookActive ? 'SKYHOOK' : 'IDLE'}
                   </span>
                 </div>
-                <div className="text-base font-bold font-mono text-cyan-400 my-0.5">
+                <div className="text-base font-bold font-mono text-amber-400 my-0.5">
                   {c.instantaneousDampingForceN} N
                 </div>
                 <div className="flex items-center justify-between text-[9px] font-mono text-gray-400">
@@ -219,7 +219,7 @@ export const ChassisDynamicsSuspensionStudio: React.FC = () => {
                 max="95"
                 value={batterySoc}
                 onChange={(e) => setBatterySoc(Number(e.target.value))}
-                className="w-24 accent-cyan-500 cursor-pointer"
+                className="w-24 accent-amber-500 cursor-pointer"
               />
             </div>
           </div>
@@ -233,7 +233,7 @@ export const ChassisDynamicsSuspensionStudio: React.FC = () => {
             </div>
             <div className="p-2 rounded-xl bg-[#0c1220] border border-[#1c263d]">
               <div className="text-[9px] text-gray-400">P2 MOTOR</div>
-              <div className="text-sm font-bold text-cyan-400">{hybridState.p2MotorPowerKw} kW</div>
+              <div className="text-sm font-bold text-amber-400">{hybridState.p2MotorPowerKw} kW</div>
               <div className="text-[9px] text-gray-500">{hybridState.p2MotorTorqueNm} Nm</div>
             </div>
             <div className="p-2 rounded-xl bg-[#0c1220] border border-[#1c263d]">
@@ -245,7 +245,7 @@ export const ChassisDynamicsSuspensionStudio: React.FC = () => {
 
           {/* Torque Fill Alert Badge */}
           {hybridState.electricTorqueFillActive && (
-            <div className="flex items-center gap-2 p-2 rounded-xl bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 text-xs font-mono animate-pulse">
+            <div className="flex items-center gap-2 p-2 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-400 text-xs font-mono animate-pulse">
               <Sparkles className="w-4 h-4" />
               <span>ELECTRIC INSTANT TORQUE FILL ACTIVE</span>
             </div>

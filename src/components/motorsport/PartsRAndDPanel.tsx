@@ -93,7 +93,7 @@ export const PartsRAndDPanel = memo(function PartsRAndDPanel({ selectedTeam }: {
 
                   <div className="text-xs text-slate-400 mt-2 flex items-center gap-4 flex-wrap">
                     <span>Pace: <strong className="text-emerald-400 font-mono font-bold">+{p.paceGain} pts</strong></span>
-                    <span>Reliability: <strong className={p.reliabilityDelta >= 0 ? "text-cyan-300 font-mono font-bold" : "text-danger-400 font-mono font-bold"}>
+                    <span>Reliability: <strong className={p.reliabilityDelta >= 0 ? "text-amber-300 font-mono font-bold" : "text-danger-400 font-mono font-bold"}>
                       {p.reliabilityDelta >= 0 ? `+${p.reliabilityDelta}%` : `${p.reliabilityDelta}%`}
                     </strong></span>
                     <span>Cost: <strong className="text-slate-200 font-mono font-bold">${(p.cost / 1e6).toFixed(1)}M</strong></span>

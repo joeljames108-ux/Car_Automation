@@ -154,7 +154,7 @@ export const RaceEngineeringDashboard: React.FC<RaceEngineeringDashboardProps> =
 
   const flagBg: Record<FlagColor, string> = {
     green: 'bg-green-500', yellow: 'bg-yellow-400', double_yellow: 'bg-yellow-400',
-    red: 'bg-red-600', chequered: 'bg-black', blue: 'bg-blue-500',
+    red: 'bg-red-600', chequered: 'bg-black', blue: 'bg-amber-500',
     white: 'bg-white', black: 'bg-black', black_orange: 'bg-orange-500',
   };
 
@@ -236,7 +236,7 @@ export const RaceEngineeringDashboard: React.FC<RaceEngineeringDashboardProps> =
               <div className="grid grid-cols-2 gap-3">
                 {([['FL', tireFL], ['FR', tireFR], ['RL', tireRL], ['RR', tireRR]] as [string, typeof tireFL][]).map(([label, tire]) => {
                   const s = tire.getState();
-                  const tempColor = s.temperature > 110 ? 'text-red-400' : s.temperature > 80 ? 'text-green-400' : 'text-blue-400';
+                  const tempColor = s.temperature > 110 ? 'text-red-400' : s.temperature > 80 ? 'text-green-400' : 'text-amber-400';
                   return (
                     <div key={label} className="bg-amber-950/40 rounded-xl p-2">
                       <div className="flex justify-between items-center">
@@ -533,10 +533,10 @@ export const RaceEngineeringDashboard: React.FC<RaceEngineeringDashboardProps> =
                   }`}>
                     <div className="flex justify-between items-start">
                       <span className={`text-xs font-bold uppercase ${
-                        msg.category === 'strategy' ? 'text-blue-400' :
+                        msg.category === 'strategy' ? 'text-amber-400' :
                         msg.category === 'tire' ? 'text-yellow-400' :
                         msg.category === 'fuel' ? 'text-green-400' :
-                        msg.category === 'weather' ? 'text-cyan-400' :
+                        msg.category === 'weather' ? 'text-amber-400' :
                         msg.category === 'danger' ? 'text-red-400' : 'text-amber-400'
                       }`}>{msg.category}</span>
                       <span className="text-amber-600 text-xs">{msg.priority}</span>

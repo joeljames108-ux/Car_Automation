@@ -29,7 +29,7 @@ export const AluminumSpaceframeRenderer: React.FC<AluminumSpaceframeRendererProp
 
       {/* 2. Extruded Aluminum Main Frame Rails (Box Extrusions) */}
       {/* Lower Sill Extrusion */}
-      <rect x="295" y="255" width="345" height="18" fill="url(#al-extrusion-grad)" stroke={isHovered ? "#38bdf8" : "#94a3b8"} strokeWidth="2" />
+      <rect x="295" y="255" width="345" height="18" fill="url(#al-extrusion-grad)" stroke={isHovered ? "#fbbf24" : "#94a3b8"} strokeWidth="2" />
       <line x1="295" y1="264" x2="640" y2="264" stroke="#ffffff" strokeWidth="1" opacity="0.6" />
 
       {/* Front Subframe Extrusion Rails */}
@@ -69,7 +69,7 @@ export const AluminumSpaceframeRenderer: React.FC<AluminumSpaceframeRendererProp
       <circle cx="515" cy="258" r="13" fill="none" stroke="url(#tig-weld-bead)" strokeWidth="4" />
 
       {/* Label */}
-      <text x="475" y="272" fill="#38bdf8" fontSize="9" fontFamily="monospace" textAnchor="middle" fontWeight="bold" opacity="0.95">
+      <text x="475" y="272" fill="#fbbf24" fontSize="9" fontFamily="monospace" textAnchor="middle" fontWeight="bold" opacity="0.95">
         HIGH-RIGIDITY EXTRUDED ALUMINUM SPACEFRAME (ASF)
       </text>
     </g>

@@ -39,7 +39,7 @@ export const AssemblyHealthDiagnostics: React.FC<AssemblyHealthDiagnosticsProps>
 }) => {
   const getScoreColor = (score: number) => {
     if (score >= 90) return "text-emerald-400 border-emerald-500/40 bg-emerald-500/15";
-    if (score >= 75) return "text-cyan-400 border-cyan-500/40 bg-cyan-500/15";
+    if (score >= 75) return "text-amber-400 border-amber-500/40 bg-amber-500/15";
     if (score >= 55) return "text-amber-400 border-amber-500/40 bg-amber-500/15";
     return "text-red-400 border-red-500/40 bg-red-500/15";
   };
@@ -49,7 +49,7 @@ export const AssemblyHealthDiagnostics: React.FC<AssemblyHealthDiagnosticsProps>
       {/* Top Header: Score & Rating */}
       <div className="flex items-center justify-between border-b border-base-800/60 pb-2.5">
         <div className="flex items-center gap-2">
-          <ShieldCheck size={16} className="text-cyan-400" />
+          <ShieldCheck size={16} className="text-amber-400" />
           <span className="font-bold text-slate-800 dark:text-slate-100 uppercase tracking-wider text-[11px]">
             ASSEMBLY HEALTH & PACKAGING STATUS
           </span>
@@ -68,7 +68,7 @@ export const AssemblyHealthDiagnostics: React.FC<AssemblyHealthDiagnosticsProps>
         </div>
         <div className="p-2 rounded-xl bg-base-900/60 border border-base-800 text-center">
           <span className="text-[9px] text-slate-500 block uppercase">CLEARANCE MARGIN</span>
-          <span className="font-bold text-cyan-300 text-xs">{healthReport.packagingClearanceScore}%</span>
+          <span className="font-bold text-amber-300 text-xs">{healthReport.packagingClearanceScore}%</span>
         </div>
         <div className="p-2 rounded-xl bg-base-900/60 border border-base-800 text-center">
           <span className="text-[9px] text-slate-500 block uppercase">THERMAL CAPACITY</span>
@@ -108,7 +108,7 @@ export const AssemblyHealthDiagnostics: React.FC<AssemblyHealthDiagnosticsProps>
           </div>
           <div>
             <span className="text-slate-500 block">3D CoM [X,Y,Z]</span>
-            <strong className="text-cyan-300">
+            <strong className="text-amber-300">
               [{physicalState.centerOfMassMm[0]}, {physicalState.centerOfMassMm[1]}, {physicalState.centerOfMassMm[2]}] mm
             </strong>
           </div>
@@ -153,12 +153,12 @@ export const AssemblyHealthDiagnostics: React.FC<AssemblyHealthDiagnosticsProps>
                 <div className="flex items-center justify-between">
                   <span className="font-bold text-[10px] text-slate-200 truncate">{issue.title}</span>
                   {issue.clearanceMm !== undefined && (
-                    <span className="text-[9px] font-mono text-cyan-400 shrink-0">{issue.clearanceMm}mm</span>
+                    <span className="text-[9px] font-mono text-amber-400 shrink-0">{issue.clearanceMm}mm</span>
                   )}
                 </div>
                 <p className="text-[9px] text-slate-400 leading-snug line-clamp-2 mt-0.5">{issue.description}</p>
                 {issue.recommendation && (
-                  <div className="text-[9px] text-cyan-300/90 font-medium mt-1">
+                  <div className="text-[9px] text-amber-300/90 font-medium mt-1">
                     ↳ Action: {issue.recommendation}
                   </div>
                 )}

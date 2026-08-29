@@ -147,8 +147,8 @@ export const ModularInteriorStudio: React.FC = () => {
               onClick={() => setViewMode("compare")}
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer ${
                 viewMode === "compare"
-                  ? "bg-purple-600 text-white shadow-md shadow-purple-600/30"
-                  : "bg-amber-100/60 text-purple-800 border border-purple-300 hover:bg-purple-100"
+                  ? "bg-amber-600 text-white shadow-md shadow-purple-600/30"
+                  : "bg-amber-100/60 text-amber-800 border border-amber-300 hover:bg-amber-100"
               }`}
             >
               <GitCompare size={13} />

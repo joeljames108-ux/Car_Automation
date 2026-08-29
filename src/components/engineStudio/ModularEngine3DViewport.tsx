@@ -313,11 +313,11 @@ export const ModularEngine3DViewportComponent: React.FC<ModularEngine3DViewportP
       {/* Top Floating Control Bar */}
       <div className="absolute top-4 left-4 right-4 flex items-center justify-between pointer-events-none">
         <div className="flex items-center gap-2 bg-slate-900/80 backdrop-blur-md px-3 py-1.5 rounded-xl border border-slate-700/60 pointer-events-auto shadow-lg">
-          <Layers size={14} className="text-cyan-400" />
+          <Layers size={14} className="text-amber-400" />
           <span className="text-xs font-semibold uppercase tracking-wider text-slate-300">
             {state.name}
           </span>
-          <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 font-mono font-bold">
+          <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 font-mono font-bold">
             {state.performance?.peakHorsepowerHp || 780} HP
           </span>
         </div>
@@ -337,7 +337,7 @@ export const ModularEngine3DViewportComponent: React.FC<ModularEngine3DViewportP
               onClick={() => setCameraPreset(preset.id)}
               className={`px-2.5 py-1 text-[11px] font-medium rounded-lg transition-all ${
                 activeCameraPreset === preset.id
-                  ? "bg-cyan-500 text-slate-950 font-bold shadow-md shadow-cyan-500/30"
+                  ? "bg-amber-500 text-slate-950 font-bold shadow-md shadow-cyan-500/30"
                   : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/60"
               }`}
             >
@@ -359,9 +359,9 @@ export const ModularEngine3DViewportComponent: React.FC<ModularEngine3DViewportP
             step="0.01"
             value={explodedFactor}
             onChange={(e) => handleExplodedChange(parseFloat(e.target.value))}
-            className="w-32 h-1.5 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-cyan-400"
+            className="w-32 h-1.5 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-amber-400"
           />
-          <span className="text-xs font-mono font-bold text-cyan-400 min-w-[36px]">
+          <span className="text-xs font-mono font-bold text-amber-400 min-w-[36px]">
             {Math.round(explodedFactor * 100)}%
           </span>
         </div>
@@ -379,7 +379,7 @@ export const ModularEngine3DViewportComponent: React.FC<ModularEngine3DViewportP
           </button>
 
           <div className="flex items-center gap-2">
-            <Activity size={14} className="text-cyan-400" />
+            <Activity size={14} className="text-amber-400" />
             <input
               type="range"
               min="0"

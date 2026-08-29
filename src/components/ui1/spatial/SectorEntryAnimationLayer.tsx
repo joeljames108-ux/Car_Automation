@@ -67,7 +67,7 @@ export const SectorEntryAnimationLayer: React.FC<SectorEntryAnimationLayerProps>
 
       {/* 2. Top-to-Bottom Holographic Scan Laser */}
       <div
-        className="absolute left-0 right-0 h-1 bg-gradient-to-r from-transparent via-white to-transparent shadow-[0_0_20px_#38bdf8]"
+        className="absolute left-0 right-0 h-1 bg-gradient-to-r from-transparent via-white to-transparent shadow-[0_0_20px_#fbbf24]"
         style={{
           top: `${animProgress * 100}%`,
           opacity: Math.sin(animProgress * Math.PI) * 0.8,
@@ -132,7 +132,7 @@ export const SectorEntryAnimationLayer: React.FC<SectorEntryAnimationLayerProps>
                   y1="150"
                   x2="270"
                   y2="150"
-                  stroke="#38bdf8"
+                  stroke="#fbbf24"
                   strokeWidth="3"
                   className="animate-pulse"
                 />
@@ -185,15 +185,15 @@ export const SectorEntryAnimationLayer: React.FC<SectorEntryAnimationLayerProps>
               {/* Downforce Force Vectors */}
               {animProgress > 0.5 && (
                 <g className="animate-pulse">
-                  <line x1="160" y1="50" x2="160" y2="85" stroke="#ec4899" strokeWidth="2.5" markerEnd="url(#arrow)" />
-                  <line x1="280" y1="50" x2="280" y2="95" stroke="#ec4899" strokeWidth="2.5" />
-                  <polygon points="156,80 160,88 164,80" fill="#ec4899" />
-                  <polygon points="276,90 280,98 284,90" fill="#ec4899" />
+                  <line x1="160" y1="50" x2="160" y2="85" stroke="#d97706" strokeWidth="2.5" markerEnd="url(#arrow)" />
+                  <line x1="280" y1="50" x2="280" y2="95" stroke="#d97706" strokeWidth="2.5" />
+                  <polygon points="156,80 160,88 164,80" fill="#d97706" />
+                  <polygon points="276,90 280,98 284,90" fill="#d97706" />
                 </g>
               )}
             </svg>
-            <div className="flex items-center gap-2 font-mono text-xs font-bold tracking-widest text-cyan-300 uppercase">
-              <Wind size={14} className="animate-pulse text-cyan-400" />
+            <div className="flex items-center gap-2 font-mono text-xs font-bold tracking-widest text-amber-300 uppercase">
+              <Wind size={14} className="animate-pulse text-amber-400" />
               <span>CFD WIND TUNNEL ACTIVATED · GENERATING DOWNFORCE</span>
             </div>
           </div>
@@ -242,8 +242,8 @@ export const SectorEntryAnimationLayer: React.FC<SectorEntryAnimationLayerProps>
                 </g>
               )}
             </svg>
-            <div className="flex items-center gap-2 font-mono text-xs font-bold tracking-widest text-indigo-300 uppercase">
-              <Shield size={14} className="animate-bounce text-indigo-400" />
+            <div className="flex items-center gap-2 font-mono text-xs font-bold tracking-widest text-amber-300 uppercase">
+              <Shield size={14} className="animate-bounce text-amber-400" />
               <span>CHASSIS HARDPOINTS LOCKED · TORSIONAL RIGIDITY MAXIMUM</span>
             </div>
           </div>
@@ -294,7 +294,7 @@ export const SectorEntryAnimationLayer: React.FC<SectorEntryAnimationLayerProps>
                 height="40"
                 rx="6"
                 fill="none"
-                stroke="#38bdf8"
+                stroke="#fbbf24"
                 strokeWidth="2"
                 opacity={animProgress}
               />
@@ -312,7 +312,7 @@ export const SectorEntryAnimationLayer: React.FC<SectorEntryAnimationLayerProps>
               {/* Magnetic Snap Reticles */}
               {animProgress > 0.7 && (
                 <g>
-                  <circle cx="110" cy="110" r="10" fill="none" stroke="#38bdf8" strokeWidth="1.5" className="animate-ping" />
+                  <circle cx="110" cy="110" r="10" fill="none" stroke="#fbbf24" strokeWidth="1.5" className="animate-ping" />
                   <circle cx="215" cy="110" r="10" fill="none" stroke="#10b981" strokeWidth="1.5" className="animate-ping" />
                 </g>
               )}

@@ -19,7 +19,7 @@ export const AeroStreamlineOverlay: React.FC<AeroStreamlineOverlayProps> = ({
       <path
         d="M 140 320 C 220 280, 380 180, 480 180 C 580 180, 720 240, 840 220"
         fill="none"
-        stroke="#38bdf8"
+        stroke="#fbbf24"
         strokeWidth="2.0"
         strokeDasharray="12 6"
         className="animate-pulse"

@@ -89,17 +89,17 @@ export const SuspensionDynamicsPanel: React.FC<SuspensionDynamicsPanelProps> = (
   }, [tireCompound]);
 
   return (
-    <div className="bg-slate-950/95 backdrop-blur-lg border border-cyan-500/30 rounded-2xl p-5 shadow-2xl text-slate-100 flex flex-col gap-4">
+    <div className="bg-slate-950/95 backdrop-blur-lg border border-amber-500/30 rounded-2xl p-5 shadow-2xl text-slate-100 flex flex-col gap-4">
       {/* ── Header ── */}
       <div className="flex items-center justify-between border-b border-slate-800 pb-3">
         <div className="flex items-center gap-2.5">
-          <Activity className="w-5 h-5 text-cyan-400 animate-pulse" />
+          <Activity className="w-5 h-5 text-amber-400 animate-pulse" />
           <div>
-            <h3 className="font-mono text-sm font-bold uppercase tracking-wider text-cyan-300">
+            <h3 className="font-mono text-sm font-bold uppercase tracking-wider text-amber-300">
               Vehicle Dynamics & Suspension Telemetry
             </h3>
             <span className="text-[11px] text-slate-400 font-mono">
-              Compound: <span className="text-cyan-400 uppercase font-bold">{tireCompound}</span> | Weight: {curbWeightKg} kg
+              Compound: <span className="text-amber-400 uppercase font-bold">{tireCompound}</span> | Weight: {curbWeightKg} kg
             </span>
           </div>
         </div>
@@ -109,7 +109,7 @@ export const SuspensionDynamicsPanel: React.FC<SuspensionDynamicsPanelProps> = (
           rollGradientDegPerG <= 2.0
             ? "bg-emerald-950/60 border-emerald-500/40 text-emerald-300"
             : rollGradientDegPerG <= 3.5
-            ? "bg-cyan-950/60 border-cyan-500/40 text-cyan-300"
+            ? "bg-amber-950/60 border-amber-500/40 text-amber-300"
             : "bg-amber-950/60 border-amber-500/40 text-amber-300"
         }`}>
           <span>Roll Gradient: {rollGradientDegPerG}°/g</span>
@@ -125,7 +125,7 @@ export const SuspensionDynamicsPanel: React.FC<SuspensionDynamicsPanelProps> = (
         <div className="lg:col-span-7 bg-slate-900/80 border border-slate-800 rounded-xl p-3 flex flex-col gap-2">
           <div className="flex justify-between items-center text-xs font-mono text-slate-400">
             <span>Pacejka MF 5.2 Lateral Grip Curve ($F_y$ vs $\alpha$)</span>
-            <span className="text-cyan-400 font-bold">Peak Slip: ~6.8°</span>
+            <span className="text-amber-400 font-bold">Peak Slip: ~6.8°</span>
           </div>
 
           <div className="relative h-36 w-full bg-slate-950/60 rounded-lg border border-slate-800/80 flex items-center justify-center overflow-hidden">
@@ -136,12 +136,12 @@ export const SuspensionDynamicsPanel: React.FC<SuspensionDynamicsPanelProps> = (
               <line x1="118" y1="10" x2="118" y2="95" stroke="#334155" strokeWidth="0.8" strokeDasharray="2 2" />
 
               {/* Peak Slip Marker */}
-              <text x="118" y="105" fill="#38bdf8" fontSize="8" fontFamily="monospace" textAnchor="middle">α = 7°</text>
+              <text x="118" y="105" fill="#fbbf24" fontSize="8" fontFamily="monospace" textAnchor="middle">α = 7°</text>
               <text x="240" y="105" fill="#64748b" fontSize="8" fontFamily="monospace" textAnchor="end">14° Slip</text>
-              <text x="12" y="18" fill="#38bdf8" fontSize="8" fontFamily="monospace">Lateral Force Fy (N)</text>
+              <text x="12" y="18" fill="#fbbf24" fontSize="8" fontFamily="monospace">Lateral Force Fy (N)</text>
 
               {/* Curve */}
-              <polyline fill="none" stroke="#38bdf8" strokeWidth="2.5" strokeLinecap="round" points={pacejkaPoints} />
+              <polyline fill="none" stroke="#fbbf24" strokeWidth="2.5" strokeLinecap="round" points={pacejkaPoints} />
 
               {/* Current Operating Point Marker */}
               {(() => {
@@ -158,8 +158,8 @@ export const SuspensionDynamicsPanel: React.FC<SuspensionDynamicsPanelProps> = (
 
           <div className="flex justify-between text-[11px] font-mono text-slate-400 px-1">
             <span>Operating Slip: <b className="text-amber-300">{currentSlipAngle.toFixed(1)}°</b></span>
-            <span>Front Aero: <b className="text-cyan-300">{aeroBalancePercentFront}%</b></span>
-            <span>Rear Aero: <b className="text-cyan-300">{(100 - aeroBalancePercentFront).toFixed(1)}%</b></span>
+            <span>Front Aero: <b className="text-amber-300">{aeroBalancePercentFront}%</b></span>
+            <span>Rear Aero: <b className="text-amber-300">{(100 - aeroBalancePercentFront).toFixed(1)}%</b></span>
           </div>
         </div>
 
@@ -175,10 +175,10 @@ export const SuspensionDynamicsPanel: React.FC<SuspensionDynamicsPanelProps> = (
             <div className="flex flex-col gap-1.5 text-[11px]">
               <div className="flex justify-between">
                 <span className="text-slate-400">Bump (Compression) Ratio:</span>
-                <span className="text-cyan-300 font-bold">ζ = {damperBumpRatio.toFixed(2)} (Target: 0.35-0.45)</span>
+                <span className="text-amber-300 font-bold">ζ = {damperBumpRatio.toFixed(2)} (Target: 0.35-0.45)</span>
               </div>
               <div className="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
-                <div className="bg-cyan-400 h-full rounded-full" style={{ width: `${(damperBumpRatio / 1.0) * 100}%` }} />
+                <div className="bg-amber-400 h-full rounded-full" style={{ width: `${(damperBumpRatio / 1.0) * 100}%` }} />
               </div>
 
               <div className="flex justify-between pt-1">
@@ -195,7 +195,7 @@ export const SuspensionDynamicsPanel: React.FC<SuspensionDynamicsPanelProps> = (
           <div className="bg-slate-900/80 border border-slate-800 rounded-xl p-3 flex flex-col gap-1.5 text-xs font-mono">
             <div className="flex justify-between text-slate-400">
               <span>Aerodynamic Balance (CoP)</span>
-              <span className="text-cyan-400 font-bold">{aeroBalancePercentFront}% Front</span>
+              <span className="text-amber-400 font-bold">{aeroBalancePercentFront}% Front</span>
             </div>
             <div className="text-[10px] text-slate-400">
               {aeroBalancePercentFront >= 42 && aeroBalancePercentFront <= 48 ? (
@@ -216,7 +216,7 @@ export const SuspensionDynamicsPanel: React.FC<SuspensionDynamicsPanelProps> = (
         <div className="flex flex-col gap-1">
           <div className="flex justify-between text-[11px] font-mono text-slate-400">
             <span>Front Roll Stiffness</span>
-            <span className="text-cyan-300 font-bold">{frontStiffness} Nm/°</span>
+            <span className="text-amber-300 font-bold">{frontStiffness} Nm/°</span>
           </div>
           <input
             type="range"
@@ -225,7 +225,7 @@ export const SuspensionDynamicsPanel: React.FC<SuspensionDynamicsPanelProps> = (
             step="50"
             value={frontStiffness}
             onChange={(e) => setFrontStiffness(parseInt(e.target.value))}
-            className="w-full h-1.5 bg-slate-800 rounded appearance-none cursor-pointer accent-cyan-400"
+            className="w-full h-1.5 bg-slate-800 rounded appearance-none cursor-pointer accent-amber-400"
           />
         </div>
 
@@ -233,7 +233,7 @@ export const SuspensionDynamicsPanel: React.FC<SuspensionDynamicsPanelProps> = (
         <div className="flex flex-col gap-1">
           <div className="flex justify-between text-[11px] font-mono text-slate-400">
             <span>Rear Roll Stiffness</span>
-            <span className="text-cyan-300 font-bold">{rearStiffness} Nm/°</span>
+            <span className="text-amber-300 font-bold">{rearStiffness} Nm/°</span>
           </div>
           <input
             type="range"
@@ -242,7 +242,7 @@ export const SuspensionDynamicsPanel: React.FC<SuspensionDynamicsPanelProps> = (
             step="50"
             value={rearStiffness}
             onChange={(e) => setRearStiffness(parseInt(e.target.value))}
-            className="w-full h-1.5 bg-slate-800 rounded appearance-none cursor-pointer accent-cyan-400"
+            className="w-full h-1.5 bg-slate-800 rounded appearance-none cursor-pointer accent-amber-400"
           />
         </div>
 

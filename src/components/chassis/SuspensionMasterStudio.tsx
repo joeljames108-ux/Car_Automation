@@ -32,7 +32,7 @@ export const SuspensionMasterStudio: React.FC = () => {
       {/* Studio Header & Subtab Switcher */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3.5 rounded-3xl bg-slate-900/80 dark:bg-slate-950/85 border border-white/15 backdrop-blur-xl shadow-2xl">
         <div className="flex items-center gap-3">
-          <div className="p-2.5 rounded-2xl bg-gradient-to-tr from-cyan-500/25 to-blue-600/25 border border-cyan-500/40 text-cyan-300 shadow-md shadow-cyan-500/20">
+          <div className="p-2.5 rounded-2xl bg-gradient-to-tr from-amber-500/25 to-amber-600/25 border border-amber-500/40 text-amber-300 shadow-md shadow-cyan-500/20">
             <Activity className="w-5 h-5" />
           </div>
           <div>
@@ -40,7 +40,7 @@ export const SuspensionMasterStudio: React.FC = () => {
               <h2 className="text-sm sm:text-base font-extrabold text-white tracking-wide">
                 3D SUSPENSION & CHASSIS DYNAMICS STUDIO
               </h2>
-              <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 border border-cyan-500/40">
+              <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40">
                 PRO KINEMATICS
               </span>
             </div>
@@ -56,7 +56,7 @@ export const SuspensionMasterStudio: React.FC = () => {
             onClick={() => setSubTab("kinematics_3d")}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all whitespace-nowrap cursor-pointer ${
               subTab === "kinematics_3d"
-                ? "bg-cyan-500 text-slate-950 shadow-md shadow-cyan-500/30 font-extrabold"
+                ? "bg-amber-500 text-slate-950 shadow-md shadow-cyan-500/30 font-extrabold"
                 : "text-slate-300 hover:text-white hover:bg-white/10"
             }`}
           >
@@ -68,7 +68,7 @@ export const SuspensionMasterStudio: React.FC = () => {
             onClick={() => setSubTab("mr_dynamics")}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all whitespace-nowrap cursor-pointer ${
               subTab === "mr_dynamics"
-                ? "bg-cyan-500 text-slate-950 shadow-md shadow-cyan-500/30 font-extrabold"
+                ? "bg-amber-500 text-slate-950 shadow-md shadow-cyan-500/30 font-extrabold"
                 : "text-slate-300 hover:text-white hover:bg-white/10"
             }`}
           >
@@ -80,7 +80,7 @@ export const SuspensionMasterStudio: React.FC = () => {
             onClick={() => setSubTab("damper_analysis")}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all whitespace-nowrap cursor-pointer ${
               subTab === "damper_analysis"
-                ? "bg-cyan-500 text-slate-950 shadow-md shadow-cyan-500/30 font-extrabold"
+                ? "bg-amber-500 text-slate-950 shadow-md shadow-cyan-500/30 font-extrabold"
                 : "text-slate-300 hover:text-white hover:bg-white/10"
             }`}
           >
@@ -92,7 +92,7 @@ export const SuspensionMasterStudio: React.FC = () => {
             onClick={() => setSubTab("split_view")}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all whitespace-nowrap cursor-pointer ${
               subTab === "split_view"
-                ? "bg-gradient-to-r from-cyan-400 to-indigo-500 text-slate-950 shadow-md shadow-cyan-500/30 font-extrabold"
+                ? "bg-gradient-to-r from-amber-400 to-indigo-500 text-slate-950 shadow-md shadow-cyan-500/30 font-extrabold"
                 : "text-slate-300 hover:text-white hover:bg-white/10"
             }`}
           >
@@ -120,7 +120,7 @@ export const SuspensionMasterStudio: React.FC = () => {
           <div className="flex items-center justify-between border-b border-white/10 pb-4 flex-wrap gap-2">
             <div>
               <h3 className="text-base font-bold text-white uppercase tracking-wider flex items-center gap-2">
-                <BarChart2 className="text-cyan-400" size={18} />
+                <BarChart2 className="text-amber-400" size={18} />
                 Damper Velocity Histogram & Ride Height Aero Sensitivity
               </h3>
               <p className="text-xs text-slate-300 dark:text-slate-400">
@@ -128,7 +128,7 @@ export const SuspensionMasterStudio: React.FC = () => {
               </p>
             </div>
             <div className="text-right">
-              <span className="text-xs font-mono text-cyan-300 font-bold bg-cyan-500/20 px-2.5 py-1 rounded-xl border border-cyan-500/40">
+              <span className="text-xs font-mono text-amber-300 font-bold bg-amber-500/20 px-2.5 py-1 rounded-xl border border-amber-500/40">
                 4-Way Adjustable Dampers
               </span>
             </div>
@@ -139,16 +139,16 @@ export const SuspensionMasterStudio: React.FC = () => {
             <div className="p-5 rounded-2xl bg-slate-950/70 border border-white/10 space-y-3 shadow-xl">
               <div className="flex items-center justify-between text-xs font-bold text-slate-200">
                 <span>DAMPER VELOCITY SPECTRUM (HISTOGRAM)</span>
-                <span className="text-cyan-400 font-mono">100Hz Telemetry Data</span>
+                <span className="text-amber-400 font-mono">100Hz Telemetry Data</span>
               </div>
               <div className="h-44 flex items-end gap-2 pt-4">
                 {[
-                  { range: "<-200", label: "Extreme Rebound", pct: 5, color: "bg-purple-500" },
-                  { range: "-150", label: "High Speed R", pct: 14, color: "bg-indigo-500" },
-                  { range: "-50", label: "Low Speed R", pct: 32, color: "bg-cyan-500" },
+                  { range: "<-200", label: "Extreme Rebound", pct: 5, color: "bg-amber-500" },
+                  { range: "-150", label: "High Speed R", pct: 14, color: "bg-amber-500" },
+                  { range: "-50", label: "Low Speed R", pct: 32, color: "bg-amber-500" },
                   { range: "0", label: "Neutral", pct: 45, color: "bg-emerald-500" },
-                  { range: "+50", label: "Low Speed C", pct: 30, color: "bg-cyan-500" },
-                  { range: "+150", label: "High Speed C", pct: 16, color: "bg-indigo-500" },
+                  { range: "+50", label: "Low Speed C", pct: 30, color: "bg-amber-500" },
+                  { range: "+150", label: "High Speed C", pct: 16, color: "bg-amber-500" },
                   { range: ">+200", label: "Kerb Strike C", pct: 8, color: "bg-amber-500" },
                 ].map((b) => (
                   <div key={b.range} className="flex-1 flex flex-col items-center gap-1 group">
@@ -177,7 +177,7 @@ export const SuspensionMasterStudio: React.FC = () => {
               <div className="space-y-2">
                 <div className="flex justify-between text-xs font-mono text-slate-200">
                   <span>Front Ride Height Sweep</span>
-                  <span className="text-cyan-300 font-bold">{frontRideHeightSweep} mm</span>
+                  <span className="text-amber-300 font-bold">{frontRideHeightSweep} mm</span>
                 </div>
                 <input
                   type="range"
@@ -186,7 +186,7 @@ export const SuspensionMasterStudio: React.FC = () => {
                   step="1"
                   value={frontRideHeightSweep}
                   onChange={(e) => setFrontRideHeightSweep(parseInt(e.target.value))}
-                  className="w-full accent-cyan-400 cursor-pointer h-2 bg-slate-800 rounded-lg"
+                  className="w-full accent-amber-400 cursor-pointer h-2 bg-slate-800 rounded-lg"
                 />
               </div>
 
@@ -209,7 +209,7 @@ export const SuspensionMasterStudio: React.FC = () => {
               <div className="grid grid-cols-2 gap-3 text-xs font-mono pt-2">
                 <div className="p-3 rounded-xl bg-slate-900/90 border border-white/10">
                   <span className="text-slate-400 block text-[9px] font-bold">PREDICTED DOWNFORCE</span>
-                  <span className="font-extrabold text-cyan-300 text-sm">
+                  <span className="font-extrabold text-amber-300 text-sm">
                     {Math.round(1200 * (1 - (frontRideHeightSweep - 30) * 0.012))} kg
                   </span>
                 </div>

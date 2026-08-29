@@ -51,7 +51,7 @@ export const WEC_RIVAL_HYPERCAR_TEAMS: WECHypercarTeam[] = [
     chassisType: "LMDh",
     engineSpec: "5.5L Naturally Aspirated V8 + Hybrid",
     drivers: ["E. Bamber", "A. Lynn", "S. Bourdais"],
-    primaryColor: "#3b82f6",
+    primaryColor: "#d97706",
     baseRating: 93,
   },
   {
@@ -81,7 +81,7 @@ export const WEC_RIVAL_HYPERCAR_TEAMS: WECHypercarTeam[] = [
     chassisType: "LMDh",
     engineSpec: "4.0L Twin-Turbo V8 + Hybrid",
     drivers: ["R. Rast", "R. Frijns", "S. van der Linde"],
-    primaryColor: "#6366f1",
+    primaryColor: "#f59e0b",
     baseRating: 92,
   },
   {

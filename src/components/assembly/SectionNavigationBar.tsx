@@ -83,9 +83,9 @@ export function SectionNavigationBar({
       <div className="flex items-center justify-between px-2 text-xs font-mono">
         <div className="flex items-center gap-2">
           {isEV ? (
-            <Zap size={14} className="text-purple-400 animate-pulse" />
+            <Zap size={14} className="text-amber-400 animate-pulse" />
           ) : (
-            <Flame size={14} className="text-cyan-400 animate-pulse" />
+            <Flame size={14} className="text-amber-400 animate-pulse" />
           )}
           <span className="font-extrabold text-slate-200 uppercase tracking-wider">
             {isEV ? "Electric Powertrain Pipeline" : "ICE Assembly Line"}
@@ -102,13 +102,13 @@ export function SectionNavigationBar({
               <div
                 className={`h-full transition-all duration-500 rounded-full ${
                   isEV
-                    ? "bg-gradient-to-r from-purple-500 to-emerald-400 shadow-[0_0_8px_rgba(192,132,252,0.6)]"
-                    : "bg-gradient-to-r from-cyan-500 to-blue-500 shadow-[0_0_8px_rgba(34,211,238,0.6)]"
+                    ? "bg-gradient-to-r from-amber-500 to-emerald-400 shadow-[0_0_8px_rgba(192,132,252,0.6)]"
+                    : "bg-gradient-to-r from-amber-500 to-amber-500 shadow-[0_0_8px_rgba(34,211,238,0.6)]"
                 }`}
                 style={{ width: `${flowProgressPercentage}%` }}
               />
             </div>
-            <span className="text-xs font-extrabold text-cyan-300">{flowProgressPercentage}%</span>
+            <span className="text-xs font-extrabold text-amber-300">{flowProgressPercentage}%</span>
           </div>
         </div>
       </div>
@@ -135,7 +135,7 @@ export function SectionNavigationBar({
             onClick={() => onNavigateToStage("powertrain_select")}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all shrink-0 cursor-pointer border ${
               currentStage === "powertrain_select"
-                ? "bg-cyan-500 text-black border-cyan-400 shadow-[0_0_15px_rgba(34,211,238,0.5)] scale-105"
+                ? "bg-amber-500 text-black border-amber-400 shadow-[0_0_15px_rgba(34,211,238,0.5)] scale-105"
                 : "bg-base-950/80 text-slate-400 border-base-800 hover:text-slate-200 hover:border-slate-700"
             }`}
           >
@@ -161,8 +161,8 @@ export function SectionNavigationBar({
                     ? "bg-base-950/40 text-slate-600 border-slate-900 cursor-not-allowed opacity-50"
                     : isCurrent
                     ? isEV
-                      ? "bg-purple-500 text-black border-purple-300 shadow-[0_0_18px_rgba(192,132,252,0.6)] scale-105"
-                      : "bg-cyan-500 text-black border-cyan-300 shadow-[0_0_18px_rgba(34,211,238,0.6)] scale-105"
+                      ? "bg-amber-500 text-black border-amber-300 shadow-[0_0_18px_rgba(192,132,252,0.6)] scale-105"
+                      : "bg-amber-500 text-black border-amber-300 shadow-[0_0_18px_rgba(34,211,238,0.6)] scale-105"
                     : isInstalled
                     ? "bg-base-900/90 text-slate-200 border-emerald-500/40 hover:border-emerald-400 hover:bg-base-850"
                     : "bg-base-950/80 text-slate-400 border-base-800 hover:text-slate-200 hover:border-slate-700 hover:bg-base-900"
@@ -181,7 +181,7 @@ export function SectionNavigationBar({
                   ) : isCurrent ? (
                     <Sparkles size={13} className="text-black animate-spin" />
                   ) : (
-                    <span className="w-2 h-2 rounded-full bg-slate-600 group-hover:bg-cyan-400 transition-colors inline-block" />
+                    <span className="w-2 h-2 rounded-full bg-slate-600 group-hover:bg-amber-400 transition-colors inline-block" />
                   )}
                 </span>
 
@@ -210,7 +210,7 @@ export function SectionNavigationBar({
             onClick={() => onNavigateToStage("finish")}
             className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-mono font-bold transition-all shrink-0 cursor-pointer border ${
               currentStage === "finish"
-                ? "bg-gradient-to-r from-emerald-400 to-cyan-400 text-black border-emerald-300 shadow-[0_0_15px_rgba(52,211,153,0.5)] scale-105"
+                ? "bg-gradient-to-r from-emerald-400 to-amber-400 text-black border-emerald-300 shadow-[0_0_15px_rgba(52,211,153,0.5)] scale-105"
                 : installedCount === totalCount
                 ? "bg-emerald-950/40 text-emerald-300 border-emerald-500/40 hover:bg-emerald-900/50"
                 : "bg-base-950/80 text-slate-500 border-base-850 hover:text-slate-300"

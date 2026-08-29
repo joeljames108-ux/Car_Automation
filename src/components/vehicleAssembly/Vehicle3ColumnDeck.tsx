@@ -107,7 +107,7 @@ export const Vehicle3ColumnDeck: React.FC<Vehicle3ColumnDeckProps> = ({
       {/* ── COLUMN 1: PART CONTROLS & GEOMETRIC DIMENSIONS ── */}
       <div className="bg-white/80 dark:bg-base-900/90 border border-slate-200 dark:border-slate-800 rounded-3xl p-5 backdrop-blur-xl shadow-xl space-y-4">
         <div className="flex items-center gap-2.5 pb-2 border-b border-slate-200 dark:border-slate-800">
-          <div className="p-2 rounded-2xl bg-cyan-500/10 text-cyan-600 dark:text-cyan-400">
+          <div className="p-2 rounded-2xl bg-amber-500/10 text-amber-600 dark:text-amber-400">
             <Settings size={18} />
           </div>
           <div>
@@ -178,7 +178,7 @@ export const Vehicle3ColumnDeck: React.FC<Vehicle3ColumnDeckProps> = ({
       <div className="bg-white/80 dark:bg-base-900/90 border border-slate-200 dark:border-slate-800 rounded-3xl p-5 backdrop-blur-xl shadow-xl space-y-4">
         <div className="flex items-center justify-between pb-2 border-b border-slate-200 dark:border-slate-800">
           <div className="flex items-center gap-2.5">
-            <div className="p-2 rounded-2xl bg-purple-500/10 text-purple-600 dark:text-purple-400">
+            <div className="p-2 rounded-2xl bg-amber-500/10 text-amber-600 dark:text-amber-400">
               <Layers size={18} />
             </div>
             <div>
@@ -190,7 +190,7 @@ export const Vehicle3ColumnDeck: React.FC<Vehicle3ColumnDeckProps> = ({
               </p>
             </div>
           </div>
-          <span className="text-[10px] font-bold text-purple-600 dark:text-purple-400 bg-purple-500/10 px-2 py-0.5 rounded-full">
+          <span className="text-[10px] font-bold text-amber-600 dark:text-amber-400 bg-amber-500/10 px-2 py-0.5 rounded-full">
             4 Grades
           </span>
         </div>
@@ -205,20 +205,20 @@ export const Vehicle3ColumnDeck: React.FC<Vehicle3ColumnDeckProps> = ({
                 onClick={() => onSelectMaterialGrade(tier.id)}
                 className={`p-3 rounded-2xl border cursor-pointer transition-all duration-200 space-y-1.5 ${
                   isSelected
-                    ? 'bg-cyan-500/10 dark:bg-cyan-950/40 border-cyan-500 dark:border-cyan-400 shadow-[0_0_12px_rgba(6,182,212,0.25)]'
+                    ? 'bg-amber-500/10 dark:bg-amber-950/40 border-amber-500 dark:border-amber-400 shadow-[0_0_12px_rgba(6,182,212,0.25)]'
                     : 'bg-slate-50 dark:bg-base-950/60 border-slate-200 dark:border-slate-800 hover:border-slate-400 dark:hover:border-slate-700'
                 }`}
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <div className={`w-3.5 h-3.5 rounded-full border flex items-center justify-center ${isSelected ? 'border-cyan-500 bg-cyan-500' : 'border-slate-400'}`}>
+                    <div className={`w-3.5 h-3.5 rounded-full border flex items-center justify-center ${isSelected ? 'border-amber-500 bg-amber-500' : 'border-slate-400'}`}>
                       {isSelected && <div className="w-1.5 h-1.5 rounded-full bg-slate-950" />}
                     </div>
                     <strong className="text-xs text-slate-800 dark:text-slate-200 font-bold">
                       {tier.name}
                     </strong>
                   </div>
-                  <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded ${isSelected ? 'bg-cyan-500 text-slate-950' : 'bg-slate-200 dark:bg-base-900 text-slate-500'}`}>
+                  <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded ${isSelected ? 'bg-amber-500 text-slate-950' : 'bg-slate-200 dark:bg-base-900 text-slate-500'}`}>
                     {tier.badge}
                   </span>
                 </div>
@@ -226,7 +226,7 @@ export const Vehicle3ColumnDeck: React.FC<Vehicle3ColumnDeckProps> = ({
                 <div className="flex items-center justify-between text-[10px] text-slate-500 dark:text-slate-400 pt-1 font-mono">
                   <div>
                     <span>Mass: </span>
-                    <strong className={isSelected ? 'text-cyan-600 dark:text-cyan-400' : 'text-slate-700 dark:text-slate-300'}>
+                    <strong className={isSelected ? 'text-amber-600 dark:text-amber-400' : 'text-slate-700 dark:text-slate-300'}>
                       {tier.massLabel}
                     </strong>
                   </div>
@@ -274,7 +274,7 @@ export const Vehicle3ColumnDeck: React.FC<Vehicle3ColumnDeckProps> = ({
         <div className="grid grid-cols-2 gap-2.5">
           <div className="p-3 rounded-2xl bg-slate-50 dark:bg-base-950/70 border border-slate-200 dark:border-slate-800 space-y-0.5">
             <span className="text-[10px] text-slate-500 block">TOTAL CURB MASS</span>
-            <strong className="text-sm text-cyan-600 dark:text-cyan-400 font-bold block">
+            <strong className="text-sm text-amber-600 dark:text-amber-400 font-bold block">
               {metrics.totalMassKg} kg
             </strong>
             <span className="text-[9px] text-slate-400 block">Complete wet weight</span>
@@ -290,7 +290,7 @@ export const Vehicle3ColumnDeck: React.FC<Vehicle3ColumnDeckProps> = ({
 
           <div className="p-3 rounded-2xl bg-slate-50 dark:bg-base-950/70 border border-slate-200 dark:border-slate-800 space-y-0.5">
             <span className="text-[10px] text-slate-500 block">0-100 KM/H ACCEL</span>
-            <strong className="text-sm text-purple-600 dark:text-purple-400 font-bold block">
+            <strong className="text-sm text-amber-600 dark:text-amber-400 font-bold block">
               {metrics.estimated0to100Kph} s
             </strong>
             <span className="text-[9px] text-slate-400 block">Top: {metrics.estimatedTopSpeedKph} km/h</span>
@@ -306,8 +306,8 @@ export const Vehicle3ColumnDeck: React.FC<Vehicle3ColumnDeckProps> = ({
         </div>
 
         {/* Engineering Advisory Card */}
-        <div className="p-3 rounded-2xl bg-cyan-500/5 dark:bg-cyan-950/30 border border-cyan-500/20 text-xs space-y-1">
-          <div className="flex items-center gap-1.5 text-cyan-600 dark:text-cyan-400 font-bold">
+        <div className="p-3 rounded-2xl bg-amber-500/5 dark:bg-amber-950/30 border border-amber-500/20 text-xs space-y-1">
+          <div className="flex items-center gap-1.5 text-amber-600 dark:text-amber-400 font-bold">
             <Info size={14} />
             <span>ENGINEERING ADVISORY</span>
           </div>
@@ -343,7 +343,7 @@ export const Vehicle3ColumnDeck: React.FC<Vehicle3ColumnDeckProps> = ({
           ) : (
             <button
               onClick={() => onInstallStage && onInstallStage(activeStage)}
-              className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-2xl bg-gradient-to-r from-cyan-500 via-blue-600 to-indigo-600 hover:from-cyan-400 hover:via-blue-500 hover:to-indigo-500 text-slate-950 font-extrabold text-xs tracking-wider uppercase transition-all shadow-lg shadow-cyan-500/25 hover:shadow-cyan-500/40 hover:scale-[1.02] cursor-pointer"
+              className="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-2xl bg-gradient-to-r from-amber-500 via-amber-600 to-indigo-600 hover:from-amber-400 hover:via-amber-500 hover:to-indigo-500 text-slate-950 font-extrabold text-xs tracking-wider uppercase transition-all shadow-lg shadow-cyan-500/25 hover:shadow-cyan-500/40 hover:scale-[1.02] cursor-pointer"
             >
               <Zap size={16} className="fill-current" />
               <span>INSTALL SUBSYSTEM TO VEHICLE</span>
@@ -353,7 +353,7 @@ export const Vehicle3ColumnDeck: React.FC<Vehicle3ColumnDeckProps> = ({
           {onNextStage && (
             <button
               onClick={onNextStage}
-              className="w-full flex items-center justify-center gap-2 py-2 px-3 rounded-2xl bg-slate-100 dark:bg-base-950 hover:bg-slate-200 dark:hover:bg-base-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:text-cyan-400 text-xs font-bold transition-all cursor-pointer"
+              className="w-full flex items-center justify-center gap-2 py-2 px-3 rounded-2xl bg-slate-100 dark:bg-base-950 hover:bg-slate-200 dark:hover:bg-base-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:text-amber-400 text-xs font-bold transition-all cursor-pointer"
             >
               <span>PROCEED TO NEXT STAGE</span>
               <ArrowRight size={14} />

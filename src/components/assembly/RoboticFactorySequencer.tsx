@@ -205,11 +205,11 @@ export const RoboticFactorySequencer: React.FC = () => {
       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between pb-3 border-b border-slate-800 gap-2">
         <div>
           <h3 className="text-sm font-bold text-slate-100 flex items-center gap-2">
-            <Cpu size={16} className="text-cyan-400" />
+            <Cpu size={16} className="text-amber-400" />
             12-Stage Robotic Assembly Sequencer
           </h3>
           <p className="text-[11px] text-slate-400">
-            Factory Station: <span className="text-cyan-300 font-bold">{activeStage.robotStation}</span>
+            Factory Station: <span className="text-amber-300 font-bold">{activeStage.robotStation}</span>
           </p>
         </div>
 
@@ -219,7 +219,7 @@ export const RoboticFactorySequencer: React.FC = () => {
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl font-bold text-xs transition-all shadow-md ${
               isPlaying
                 ? "bg-amber-500 text-slate-950 shadow-amber-500/30"
-                : "bg-cyan-500 text-slate-950 shadow-cyan-500/30 hover:bg-cyan-400"
+                : "bg-amber-500 text-slate-950 shadow-cyan-500/30 hover:bg-amber-400"
             }`}
           >
             {isPlaying ? <Pause size={13} /> : <Play size={13} />}
@@ -241,11 +241,11 @@ export const RoboticFactorySequencer: React.FC = () => {
           <span className="text-slate-400 font-semibold">
             Stage {activeStage.id} of 12: {activeStage.name}
           </span>
-          <span className="font-mono font-bold text-cyan-400">{progressPercent}% Assembly Complete</span>
+          <span className="font-mono font-bold text-amber-400">{progressPercent}% Assembly Complete</span>
         </div>
         <div className="w-full h-2 bg-slate-950 rounded-full overflow-hidden border border-slate-800">
           <div
-            className="h-full bg-gradient-to-r from-cyan-500 via-blue-500 to-emerald-400 transition-all duration-500 rounded-full"
+            className="h-full bg-gradient-to-r from-amber-500 via-amber-500 to-emerald-400 transition-all duration-500 rounded-full"
             style={{ width: `${progressPercent}%` }}
           />
         </div>
@@ -263,14 +263,14 @@ export const RoboticFactorySequencer: React.FC = () => {
               onClick={() => handleSelectStage(i)}
               className={`p-2.5 rounded-xl border text-left transition-all ${
                 isCurrent
-                  ? "bg-cyan-500/15 border-cyan-500 text-cyan-200 shadow-md shadow-cyan-500/20 scale-[1.02]"
+                  ? "bg-amber-500/15 border-amber-500 text-amber-200 shadow-md shadow-cyan-500/20 scale-[1.02]"
                   : isDone
                   ? "bg-slate-950/60 border-slate-700/80 text-slate-300 hover:bg-slate-800"
                   : "bg-slate-950/30 border-slate-800/40 text-slate-500 hover:bg-slate-900"
               }`}
             >
               <div className="flex items-center justify-between mb-1">
-                <span className="font-mono text-[10px] font-bold text-cyan-400">0{stg.id}</span>
+                <span className="font-mono text-[10px] font-bold text-amber-400">0{stg.id}</span>
                 {isDone && <CheckCircle2 size={12} className="text-emerald-400" />}
               </div>
               <span className="font-bold text-[11px] block leading-tight line-clamp-1">
@@ -286,7 +286,7 @@ export const RoboticFactorySequencer: React.FC = () => {
       <div className="bg-slate-950/80 p-3.5 rounded-xl border border-slate-800/80 space-y-3 shadow-inner">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
           <div className="flex items-center gap-2">
-            <span className="px-2 py-0.5 rounded-full bg-cyan-500/20 text-cyan-300 font-mono text-[10px] font-bold border border-cyan-500/30">
+            <span className="px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 font-mono text-[10px] font-bold border border-amber-500/30">
               STAGE {activeStage.id} ACTIVE
             </span>
             <span className="text-xs font-bold text-slate-100">{activeStage.name}</span>
@@ -304,7 +304,7 @@ export const RoboticFactorySequencer: React.FC = () => {
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center">
           <div className="bg-slate-900/60 p-2 rounded-lg border border-slate-800">
             <span className="text-[9px] text-slate-400 block uppercase">Cycle Time</span>
-            <span className="text-xs font-mono font-bold text-cyan-300">{activeStage.cycleTimeSec}s</span>
+            <span className="text-xs font-mono font-bold text-amber-300">{activeStage.cycleTimeSec}s</span>
           </div>
           <div className="bg-slate-900/60 p-2 rounded-lg border border-slate-800">
             <span className="text-[9px] text-slate-400 block uppercase">Target Torque</span>
@@ -314,7 +314,7 @@ export const RoboticFactorySequencer: React.FC = () => {
           </div>
           <div className="bg-slate-900/60 p-2 rounded-lg border border-slate-800">
             <span className="text-[9px] text-slate-400 block uppercase">Station ID</span>
-            <span className="text-xs font-mono font-bold text-purple-300">
+            <span className="text-xs font-mono font-bold text-amber-300">
               {activeStage.robotStation.split(" ")[0]}
             </span>
           </div>

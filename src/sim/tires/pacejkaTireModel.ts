@@ -64,7 +64,7 @@ export const TIRE_COMPOUNDS: Record<string, TireCompound> = {
     name: 'Wet', dryGrip: 0.95, wetGrip: 1.50, operatingWindow: [40, 80],
     degradationRate: 0.015, thermalInertia: 0.25, pressureSensitivity: 0.8,
     peakSlipAngle: 10.0, peakSlipRatio: 0.15, carcassStiffness: 22000,
-    rollingResistance: 0.0100, maxLoad: 8000, color: '#3b82f6', emoji: '\u{1F535}',
+    rollingResistance: 0.0100, maxLoad: 8000, color: '#d97706', emoji: '\u{1F535}',
   },
 };
 

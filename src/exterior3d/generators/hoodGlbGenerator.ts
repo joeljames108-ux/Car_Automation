@@ -313,7 +313,7 @@ export const HoodGlbPresets = {
     bodyType: 'supercar' as VehicleBodyType,
     wheelbaseMm: 2800,
     trackWidthMm: 1620,
-    paintColorHex: 0x2563eb,
+    paintColorHex: 0xb45309,
     materialGrade: 'forged' as MaterialGrade,
   },
   gt3: {

@@ -265,11 +265,11 @@ export const TrackDiagramModal: React.FC<TrackDiagramModalProps> = ({
               </div>
             </div>
 
-            <div className="bg-base-950/80 border border-cyan-500/30 rounded-xl p-3.5 relative overflow-hidden">
-              <div className="absolute top-0 right-0 w-16 h-16 bg-cyan-500/5 rounded-full blur-xl pointer-events-none" />
-              <div className="text-[11px] font-semibold text-cyan-400 tracking-wider uppercase flex items-center justify-between">
+            <div className="bg-base-950/80 border border-amber-500/30 rounded-xl p-3.5 relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-16 h-16 bg-amber-500/5 rounded-full blur-xl pointer-events-none" />
+              <div className="text-[11px] font-semibold text-amber-400 tracking-wider uppercase flex items-center justify-between">
                 <span>Sector 2</span>
-                <span className="w-2 h-2 rounded-full bg-cyan-400" />
+                <span className="w-2 h-2 rounded-full bg-amber-400" />
               </div>
               <div className="text-xl font-mono font-bold text-white mt-1">
                 {s2Time.toFixed(3)}s
@@ -318,11 +318,11 @@ export const TrackDiagramModal: React.FC<TrackDiagramModalProps> = ({
                 </span>
                 
                 {/* 3D vs 2D Toggle Switch */}
-                <div className="flex items-center gap-1 bg-slate-900 border border-cyan-500/30 rounded-lg p-0.5">
+                <div className="flex items-center gap-1 bg-slate-900 border border-amber-500/30 rounded-lg p-0.5">
                   <button
                     onClick={() => setMode3D(true)}
                     className={`flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-mono font-bold transition-all ${
-                      mode3D ? "bg-cyan-500 text-slate-950 font-extrabold shadow-sm" : "text-slate-400 hover:text-white"
+                      mode3D ? "bg-amber-500 text-slate-950 font-extrabold shadow-sm" : "text-slate-400 hover:text-white"
                     }`}
                   >
                     <Box size={11} /> 3D RIBBON
@@ -330,7 +330,7 @@ export const TrackDiagramModal: React.FC<TrackDiagramModalProps> = ({
                   <button
                     onClick={() => setMode3D(false)}
                     className={`flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-mono font-bold transition-all ${
-                      !mode3D ? "bg-cyan-500 text-slate-950 font-extrabold shadow-sm" : "text-slate-400 hover:text-white"
+                      !mode3D ? "bg-amber-500 text-slate-950 font-extrabold shadow-sm" : "text-slate-400 hover:text-white"
                     }`}
                   >
                     <Eye size={11} /> 2D PLAN
@@ -340,8 +340,8 @@ export const TrackDiagramModal: React.FC<TrackDiagramModalProps> = ({
 
               <div className="relative w-full flex-1 flex items-center justify-center p-2 min-h-[260px]">
                 {mode3D ? (
-                  <div ref={mount3DRef} className="w-full h-[260px] cursor-grab active:cursor-grabbing relative rounded-lg overflow-hidden border border-cyan-500/20">
-                    <div className="absolute bottom-1 right-2 text-[9px] font-mono text-cyan-400/60 pointer-events-none bg-black/60 px-2 py-0.5 rounded border border-cyan-500/30">
+                  <div ref={mount3DRef} className="w-full h-[260px] cursor-grab active:cursor-grabbing relative rounded-lg overflow-hidden border border-amber-500/20">
+                    <div className="absolute bottom-1 right-2 text-[9px] font-mono text-amber-400/60 pointer-events-none bg-black/60 px-2 py-0.5 rounded border border-amber-500/30">
                       ORBIT: DRAG · ELEVATION Δ: {track.altitudeChange}m
                     </div>
                   </div>
@@ -353,8 +353,8 @@ export const TrackDiagramModal: React.FC<TrackDiagramModalProps> = ({
                         <stop offset="100%" stopColor="#f87171" />
                       </linearGradient>
                       <linearGradient id="s2TrackGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" stopColor="#06b6d4" />
-                        <stop offset="100%" stopColor="#38bdf8" />
+                        <stop offset="0%" stopColor="#f59e0b" />
+                        <stop offset="100%" stopColor="#fbbf24" />
                       </linearGradient>
                       <linearGradient id="s3TrackGrad" x1="0%" y1="0%" x2="100%" y2="0%">
                         <stop offset="0%" stopColor="#f59e0b" />
@@ -383,14 +383,14 @@ export const TrackDiagramModal: React.FC<TrackDiagramModalProps> = ({
                       <circle cx="80" cy="220" r="5" fill="#22c55e" />
                       <text x="92" y="224" fill="#22c55e" fontSize="10" fontFamily="monospace" fontWeight="bold">DRS Zone</text>
 
-                      <circle cx="500" cy="140" r="5" fill="#a855f7" />
-                      <text x="512" y="144" fill="#a855f7" fontSize="10" fontFamily="monospace" fontWeight="bold">Speed Trap</text>
+                      <circle cx="500" cy="140" r="5" fill="#f59e0b" />
+                      <text x="512" y="144" fill="#f59e0b" fontSize="10" fontFamily="monospace" fontWeight="bold">Speed Trap</text>
 
                       {/* Sector Pills */}
                       <rect x="65" y="200" width="22" height="13" rx="3" fill="#ef4444" />
                       <text x="76" y="210" fill="#fff" fontSize="9" fontWeight="bold" textAnchor="middle">S1</text>
 
-                      <rect x="260" y="45" width="22" height="13" rx="3" fill="#06b6d4" />
+                      <rect x="260" y="45" width="22" height="13" rx="3" fill="#f59e0b" />
                       <text x="271" y="55" fill="#fff" fontSize="9" fontWeight="bold" textAnchor="middle">S2</text>
 
                       <rect x="420" y="125" width="22" height="13" rx="3" fill="#f59e0b" />
@@ -437,13 +437,13 @@ export const TrackDiagramModal: React.FC<TrackDiagramModalProps> = ({
               {/* Corner Segment Profile Breakdown */}
               <div className="bg-base-950 border border-base-800 rounded-xl p-4 space-y-3">
                 <h4 className="text-xs font-semibold text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
-                  <Activity size={14} className="text-cyan-400" /> Sector Key Corners
+                  <Activity size={14} className="text-amber-400" /> Sector Key Corners
                 </h4>
                 <div className="space-y-2 max-h-[140px] overflow-y-auto pr-1">
                   {track.segments.filter(s => s.type === "corner").slice(0, 4).map((c, i) => (
                     <div key={i} className="flex items-center justify-between text-xs p-2 rounded-lg bg-base-900/60 border border-base-850">
                       <span className="text-slate-300 font-medium">Turn {i + 1} Radius</span>
-                      <span className="font-mono text-cyan-400">{c.length}m ({c.arc}°)</span>
+                      <span className="font-mono text-amber-400">{c.length}m ({c.arc}°)</span>
                     </div>
                   ))}
                 </div>

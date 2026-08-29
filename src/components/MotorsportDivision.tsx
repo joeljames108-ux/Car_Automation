@@ -8,7 +8,7 @@ import {
   Play, History, BookOpen, Target, BarChart3,
   Star, CheckCircle, XCircle, Info, ChevronRight,
   Search, TrendingUp, Award, Settings, Wrench, Radio, Calendar,
-  Building2, Gavel, Flag, Flame, Layers
+  Building2, Gavel, Flag, Flame, Layers, Filter, ChevronDown
 } from "lucide-react";
 import { useCompany } from "../state/CompanyContext";
 import { useDesign } from "../state/DesignContext";
@@ -17,28 +17,30 @@ import { TRACKS } from "../sim/constants";
 import type { MotorsportCategory, MotorsportTeam } from "../sim/types";
 import { playHMIClickSound, playHMITabSound } from "../utils/hmiSoundSynth";
 
-// Modular sub-components from motorsport package
+// Fast-loaded core components
 import { TeamCard, CATEGORY_LABELS, CATEGORY_COLORS } from "./motorsport/TeamCard";
-import { CreateTeamForm } from "./motorsport/CreateTeamForm";
-import { DriverMarket } from "./motorsport/DriverMarket";
-import { StrategyPanel } from "./motorsport/StrategyPanel";
-import { SeasonSimulator } from "./motorsport/SeasonSimulator";
-import { AnalyticsPanel } from "./motorsport/AnalyticsPanel";
-import { TechTransferPanel } from "./motorsport/TechTransferPanel";
-import { HistoryTimeline } from "./motorsport/HistoryTimeline";
-import { HQInfrastructurePanel } from "./motorsport/HQInfrastructurePanel";
-import { StaffPitCrewPanel } from "./motorsport/StaffPitCrewPanel";
-import { PartsRAndDPanel } from "./motorsport/PartsRAndDPanel";
-import { PoliticalVotingPanel } from "./motorsport/PoliticalVotingPanel";
-import { GoverningBodyPanel } from "./motorsport/GoverningBodyPanel";
-import { CalendarViewPanel } from "./motorsport/CalendarViewPanel";
-import { RegulationGuidePanel } from "./motorsport/RegulationGuidePanel";
-import { SeasonSummaryPanel } from "./motorsport/SeasonSummaryPanel";
-import { LiveRaceModal, type LiveRaceState } from "./motorsport/LiveRaceModal";
-import { F1EntryWizardModal } from "./f1/F1EntryWizardModal";
-import { HypercarEntryWizardModal } from "./hypercar/HypercarEntryWizardModal";
 
-// Lazy-load heavy 3D constructor studios & panels for maximum performance
+// Code-split lazy loaded secondary panels for instant 60fps performance
+const CreateTeamForm = lazy(() => import("./motorsport/CreateTeamForm").then(m => ({ default: m.CreateTeamForm })));
+const DriverMarket = lazy(() => import("./motorsport/DriverMarket").then(m => ({ default: m.DriverMarket })));
+const StrategyPanel = lazy(() => import("./motorsport/StrategyPanel").then(m => ({ default: m.StrategyPanel })));
+const SeasonSimulator = lazy(() => import("./motorsport/SeasonSimulator").then(m => ({ default: m.SeasonSimulator })));
+const AnalyticsPanel = lazy(() => import("./motorsport/AnalyticsPanel").then(m => ({ default: m.AnalyticsPanel })));
+const TechTransferPanel = lazy(() => import("./motorsport/TechTransferPanel").then(m => ({ default: m.TechTransferPanel })));
+const HistoryTimeline = lazy(() => import("./motorsport/HistoryTimeline").then(m => ({ default: m.HistoryTimeline })));
+const HQInfrastructurePanel = lazy(() => import("./motorsport/HQInfrastructurePanel").then(m => ({ default: m.HQInfrastructurePanel })));
+const StaffPitCrewPanel = lazy(() => import("./motorsport/StaffPitCrewPanel").then(m => ({ default: m.StaffPitCrewPanel })));
+const PartsRAndDPanel = lazy(() => import("./motorsport/PartsRAndDPanel").then(m => ({ default: m.PartsRAndDPanel })));
+const PoliticalVotingPanel = lazy(() => import("./motorsport/PoliticalVotingPanel").then(m => ({ default: m.PoliticalVotingPanel })));
+const GoverningBodyPanel = lazy(() => import("./motorsport/GoverningBodyPanel").then(m => ({ default: m.GoverningBodyPanel })));
+const CalendarViewPanel = lazy(() => import("./motorsport/CalendarViewPanel").then(m => ({ default: m.CalendarViewPanel })));
+const RegulationGuidePanel = lazy(() => import("./motorsport/RegulationGuidePanel").then(m => ({ default: m.RegulationGuidePanel })));
+const SeasonSummaryPanel = lazy(() => import("./motorsport/SeasonSummaryPanel").then(m => ({ default: m.SeasonSummaryPanel })));
+const LiveRaceModal = lazy(() => import("./motorsport/LiveRaceModal").then(m => ({ default: m.LiveRaceModal })));
+const F1EntryWizardModal = lazy(() => import("./f1/F1EntryWizardModal").then(m => ({ default: m.F1EntryWizardModal })));
+const HypercarEntryWizardModal = lazy(() => import("./hypercar/HypercarEntryWizardModal").then(m => ({ default: m.HypercarEntryWizardModal })));
+
+// Heavy 3D constructor studios
 const F1ConstructorMasterApp = lazy(() =>
   import("./f1/F1ConstructorMasterApp").then(m => ({ default: m.F1ConstructorMasterApp }))
 );
@@ -83,7 +85,7 @@ const HUB_CATEGORIES: HubCategory[] = [
   {
     id: "race_ops",
     name: "Race Operations",
-    icon: <Flag size={14} className="text-cyan-400" />,
+    icon: <Flag size={14} className="text-amber-400" />,
     tabs: [
       { id: "teams", label: "Teams & Drivers" },
       { id: "pitwall", label: "Live 3D Pit Wall", badge: "LIVE" },
@@ -104,7 +106,7 @@ const HUB_CATEGORIES: HubCategory[] = [
   {
     id: "engineering",
     name: "Factory HQ & Engineering",
-    icon: <Building2 size={14} className="text-purple-400" />,
+    icon: <Building2 size={14} className="text-amber-400" />,
     tabs: [
       { id: "hq", label: "HQ Infrastructure" },
       { id: "staff", label: "Staff & Pit Crew" },
@@ -128,11 +130,20 @@ const HUB_CATEGORIES: HubCategory[] = [
   },
 ];
 
+const SERIES_FILTERS: { id: "all" | MotorsportCategory | "works"; label: string }[] = [
+  { id: "all", label: "All Series" },
+  { id: "formula", label: "Formula 1" },
+  { id: "hypercar", label: "Hypercar WEC" },
+  { id: "gt", label: "GT Series" },
+  { id: "touring", label: "Touring Car" },
+  { id: "rally", label: "Rally" },
+  { id: "endurance", label: "Endurance" },
+];
+
 function MotorsportDivisionComponent() {
   const {
-    company, assignMotorsportDriver, simulateMotorsportSeason,
-    scoutNewDriver, signScouted, releaseMotorsportDriver, renewMotorsportContract,
-    attractMotorsportSponsor, refreshSponsorMarket,
+    company, releaseMotorsportDriver, renewMotorsportContract,
+    simulateMotorsportSeason,
   } = useCompany();
   const { sim } = useDesign();
 
@@ -144,7 +155,12 @@ function MotorsportDivisionComponent() {
   const [showHypercarEntryWizard, setShowHypercarEntryWizard] = useState(false);
   const [hypercarInitialMode, setHypercarInitialMode] = useState<"assembly" | "rd_labs" | "garage" | "racing">("assembly");
   const [showLiveRaceModal, setShowLiveRaceModal] = useState(false);
-  const [liveRaceState, setLiveRaceState] = useState<LiveRaceState | null>(null);
+  const [liveRaceState, setLiveRaceState] = useState<any | null>(null);
+
+  // Performance Filters for Team Roster
+  const [seriesFilter, setSeriesFilter] = useState<"all" | MotorsportCategory | "works">("all");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [visibleTeamCount, setVisibleTeamCount] = useState(8);
 
   const selectedTeam = useMemo(() => {
     return company.motorsport.teams.find(t => t.id === selectedTeamId) ?? company.motorsport.teams[0] ?? null;
@@ -154,33 +170,24 @@ function MotorsportDivisionComponent() {
     return HUB_CATEGORIES.find(cat => cat.tabs.some(t => t.id === activeTab)) || HUB_CATEGORIES[0];
   }, [activeTab]);
 
-  const handleStartLiveRace = () => {
-    const calendar = getSeasonCalendar("gt");
-    setShowLiveRaceModal(true);
-    setLiveRaceState({
-      round: 1,
-      totalRounds: calendar.rounds,
-      trackName: TRACKS[calendar.tracks[0]]?.name || "Monza Circuit",
-      lap: 1,
-      totalLaps: 30,
-      isPlaying: true,
-      standings: [
-        { rank: 1, name: company.motorsport.teams[0]?.name || "Apex Racing", gap: "LEADER", pts: 25, isPlayer: true, pitStops: 0 },
-        { rank: 2, name: "Veloce Scuderia", gap: "+0.842s", pts: 18, isPlayer: false, pitStops: 0 },
-        { rank: 3, name: "Nordic Motorsport", gap: "+2.150s", pts: 15, isPlayer: false, pitStops: 0 },
-        { rank: 4, name: "Bavaria Sport", gap: "+3.910s", pts: 12, isPlayer: false, pitStops: 0 },
-        { rank: 5, name: "Kurogane Racing", gap: "+5.420s", pts: 10, isPlayer: false, pitStops: 0 },
-        { rank: 6, name: "Silverstone Dynamics", gap: "+7.100s", pts: 8, isPlayer: false, pitStops: 0 },
-      ],
-      feed: [
-        { time: "LAP 1", text: "GREEN FLAG! Cars launch into Turn 1 with heavy braking.", type: "info" },
-        { time: "LAP 1", text: "Apex Racing holds P1 into the chicane after a strong start!", type: "overtake" },
-      ],
-    });
-  };
+  const filteredTeams = useMemo(() => {
+    let list = company.motorsport.teams;
+    if (seriesFilter !== "all") {
+      list = list.filter(t => t.category === seriesFilter);
+    }
+    if (searchQuery.trim()) {
+      const q = searchQuery.toLowerCase();
+      list = list.filter(t => t.name.toLowerCase().includes(q));
+    }
+    return list;
+  }, [company.motorsport.teams, seriesFilter, searchQuery]);
+
+  const visibleTeams = useMemo(() => {
+    return filteredTeams.slice(0, visibleTeamCount);
+  }, [filteredTeams, visibleTeamCount]);
 
   const handleStepLap = () => {
-    setLiveRaceState(prev => {
+    setLiveRaceState((prev: any) => {
       if (!prev) return null;
       const nextLap = prev.lap + 1;
       return {
@@ -213,49 +220,48 @@ function MotorsportDivisionComponent() {
     return { totalWins: wins, totalTitles: titles, totalFastestLaps: fl };
   }, [company.motorsport.teams]);
 
-
   return (
-    <div className="space-y-4 animate-fade-in">
+    <div className="space-y-4 animate-fade-in text-white">
       {/* Header Dashboard Banner */}
-      <div className="glass-panel p-5 relative overflow-hidden border-yellow-500/20">
+      <div className="p-5 rounded-2xl bg-gradient-to-r from-slate-950 via-slate-900 to-amber-950/50 border border-yellow-500/30 shadow-2xl relative overflow-hidden text-white">
         <div
-          className="absolute inset-0 pointer-events-none opacity-20"
-          style={{ background: "radial-gradient(ellipse at top right, rgba(251,191,36,0.35), transparent 60%)" }}
+          className="absolute inset-0 pointer-events-none opacity-25"
+          style={{ background: "radial-gradient(ellipse at top right, rgba(251,191,36,0.45), transparent 60%)" }}
         />
         <div className="relative flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <div className="flex items-center justify-center w-12 h-12 rounded-2xl bg-gradient-to-br from-yellow-500/25 to-amber-600/20 border border-yellow-500/40 shadow-[0_0_20px_rgba(234,179,8,0.2)]">
+          <div className="flex items-center gap-3.5">
+            <div className="flex items-center justify-center w-12 h-12 rounded-2xl bg-gradient-to-br from-yellow-500/30 to-amber-600/30 border border-yellow-400/50 shadow-[0_0_20px_rgba(234,179,8,0.3)] shrink-0">
               <Trophy size={24} className="text-yellow-400" />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <span className="text-[10px] font-mono font-bold text-yellow-400 uppercase tracking-widest">WORLD MOTORSPORT DIVISION</span>
-                <span className="text-[9px] font-bold px-2 py-0.5 rounded-full bg-cyan-500/15 border border-cyan-500/30 text-cyan-300">
+                <span className="text-[10px] font-mono font-black text-yellow-400 uppercase tracking-widest">WORLD MOTORSPORT DIVISION</span>
+                <span className="text-[9px] font-mono font-bold px-2 py-0.5 rounded-full bg-amber-500/25 border border-amber-400/50 text-amber-300">
                   Season {company.motorsport.currentSeason}
                 </span>
               </div>
-              <h2 className="text-lg font-black text-slate-100 mt-0.5">Grand Prix Racing Operations & Engineering</h2>
-              <p className="text-xs text-slate-400">Manage race teams, elite constructor championships, factory HQ & technical BoP regulations.</p>
+              <h2 className="text-lg font-black text-white mt-0.5 tracking-wide">Grand Prix Racing Operations & Engineering</h2>
+              <p className="text-xs text-slate-300">Manage race teams, elite constructor championships, factory HQ & technical BoP regulations.</p>
             </div>
           </div>
 
           {/* Key Championship Statistics */}
-          <div className="grid grid-cols-4 gap-2 text-center bg-base-950/70 p-2.5 rounded-xl border border-white/5 shrink-0">
-            <div className="px-2">
-              <div className="text-lg font-black font-mono text-cyan-300">{company.motorsport.teams.length}</div>
-              <div className="text-[9px] text-slate-500 uppercase font-semibold">Teams</div>
+          <div className="grid grid-cols-4 gap-2 text-center bg-black/70 p-3 rounded-2xl border border-white/10 shrink-0 shadow-lg">
+            <div className="px-2.5">
+              <div className="text-xl font-black font-mono text-amber-300">{company.motorsport.teams.length}</div>
+              <div className="text-[9px] text-slate-400 uppercase font-bold tracking-wider">Teams</div>
             </div>
-            <div className="px-2 border-l border-white/5">
-              <div className="text-lg font-black font-mono text-emerald-400">{totalWins}</div>
-              <div className="text-[9px] text-slate-500 uppercase font-semibold">Wins</div>
+            <div className="px-2.5 border-l border-white/10">
+              <div className="text-xl font-black font-mono text-emerald-400">{totalWins}</div>
+              <div className="text-[9px] text-slate-400 uppercase font-bold tracking-wider">Wins</div>
             </div>
-            <div className="px-2 border-l border-white/5">
-              <div className="text-lg font-black font-mono text-yellow-400">{totalTitles}</div>
-              <div className="text-[9px] text-slate-500 uppercase font-semibold">Titles</div>
+            <div className="px-2.5 border-l border-white/10">
+              <div className="text-xl font-black font-mono text-yellow-400">{totalTitles}</div>
+              <div className="text-[9px] text-slate-400 uppercase font-bold tracking-wider">Titles</div>
             </div>
-            <div className="px-2 border-l border-white/5">
-              <div className="text-lg font-black font-mono text-purple-400">{totalFastestLaps}</div>
-              <div className="text-[9px] text-slate-500 uppercase font-semibold">FL</div>
+            <div className="px-2.5 border-l border-white/10">
+              <div className="text-xl font-black font-mono text-amber-400">{totalFastestLaps}</div>
+              <div className="text-[9px] text-slate-400 uppercase font-bold tracking-wider">FL</div>
             </div>
           </div>
         </div>
@@ -265,19 +271,19 @@ function MotorsportDivisionComponent() {
       {activeTab !== "f1_workshop" && activeTab !== "hypercar_workshop" && (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {/* F1 Banner */}
-          <div className="glass-panel p-4 border-cyan-500/30 bg-gradient-to-r from-slate-900 via-cyan-950/30 to-blue-950/40 rounded-2xl flex items-center justify-between gap-4 shadow-lg hover:border-cyan-400/50 transition-all card-hover">
+          <div className="p-4 rounded-2xl bg-gradient-to-r from-slate-950 via-cyan-950/70 to-amber-950/80 border border-amber-500/40 shadow-xl flex items-center justify-between gap-4 hover:border-amber-400/70 transition-all text-white">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-cyan-500/20 border border-cyan-500/40 flex items-center justify-center font-mono font-black text-cyan-400 text-sm shadow-[0_0_12px_rgba(34,211,238,0.2)]">
+              <div className="w-11 h-11 rounded-2xl bg-amber-500/25 border border-amber-400/60 flex items-center justify-center font-mono font-black text-amber-300 text-sm shadow-[0_0_15px_rgba(34,211,238,0.3)] shrink-0">
                 F1
               </div>
               <div>
-                <div className="text-sm font-bold text-slate-100 flex items-center gap-2">
+                <div className="text-sm font-black text-white flex items-center gap-2">
                   <span>Formula 1 Constructor Studio</span>
-                  <span className="text-[9px] font-mono px-2 py-0.5 rounded bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 font-bold">
+                  <span className="text-[9px] font-mono px-2 py-0.5 rounded-full bg-amber-500/25 text-amber-300 border border-amber-400/50 font-bold">
                     FIA Master
                   </span>
                 </div>
-                <p className="text-xs text-slate-400">Open-wheel monocoque, V6 turbo-hybrid, MGU-K & aero floor.</p>
+                <p className="text-xs text-slate-300 mt-0.5">Open-wheel monocoque, V6 turbo-hybrid, MGU-K & aero floor.</p>
               </div>
             </div>
 
@@ -286,7 +292,7 @@ function MotorsportDivisionComponent() {
                 playHMIClickSound();
                 setShowF1EntryWizard(true);
               }}
-              className="px-4 py-2 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-xs tracking-wide shadow-md shadow-cyan-500/25 transition-all whitespace-nowrap flex items-center gap-1.5 cursor-pointer"
+              className="px-5 py-2.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-black text-xs uppercase tracking-wider shadow-lg shadow-cyan-400/30 hover:shadow-cyan-400/50 transition-all whitespace-nowrap flex items-center gap-1.5 cursor-pointer shrink-0"
             >
               <span>Enter F1</span>
               <ChevronRight size={14} />
@@ -294,19 +300,19 @@ function MotorsportDivisionComponent() {
           </div>
 
           {/* Hypercar Banner */}
-          <div className="glass-panel p-4 border-amber-500/30 bg-gradient-to-r from-slate-900 via-amber-950/30 to-orange-950/40 rounded-2xl flex items-center justify-between gap-4 shadow-lg hover:border-amber-400/50 transition-all card-hover">
+          <div className="p-4 rounded-2xl bg-gradient-to-r from-slate-950 via-amber-950/70 to-orange-950/80 border border-amber-500/40 shadow-xl flex items-center justify-between gap-4 hover:border-amber-400/70 transition-all text-white">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center font-mono font-black text-amber-400 text-sm shadow-[0_0_12px_rgba(251,191,36,0.2)]">
+              <div className="w-11 h-11 rounded-2xl bg-amber-500/25 border border-amber-400/60 flex items-center justify-center font-mono font-black text-amber-300 text-sm shadow-[0_0_15px_rgba(251,191,36,0.3)] shrink-0">
                 LMH
               </div>
               <div>
-                <div className="text-sm font-bold text-slate-100 flex items-center gap-2">
+                <div className="text-sm font-black text-white flex items-center gap-2">
                   <span>Hypercar WEC Championship</span>
-                  <span className="text-[9px] font-mono px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/40 font-bold">
+                  <span className="text-[9px] font-mono px-2 py-0.5 rounded-full bg-amber-500/25 text-amber-300 border border-amber-400/50 font-bold">
                     24H Le Mans
                   </span>
                 </div>
-                <p className="text-xs text-slate-400">Enclosed carbon cockpit, e-AWD MGU, cooling & endurance setup.</p>
+                <p className="text-xs text-slate-300 mt-0.5">Enclosed carbon cockpit, e-AWD MGU, cooling & endurance setup.</p>
               </div>
             </div>
 
@@ -315,7 +321,7 @@ function MotorsportDivisionComponent() {
                 playHMIClickSound();
                 setShowHypercarEntryWizard(true);
               }}
-              className="px-4 py-2 rounded-xl bg-amber-500 hover:bg-amber-400 text-slate-950 font-bold text-xs tracking-wide shadow-md shadow-amber-500/25 transition-all whitespace-nowrap flex items-center gap-1.5 cursor-pointer"
+              className="px-5 py-2.5 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 font-black text-xs uppercase tracking-wider shadow-lg shadow-amber-400/30 hover:shadow-amber-400/50 transition-all whitespace-nowrap flex items-center gap-1.5 cursor-pointer shrink-0"
             >
               <span>Enter Hypercar</span>
               <ChevronRight size={14} />
@@ -325,7 +331,7 @@ function MotorsportDivisionComponent() {
       )}
 
       {/* Categorized 4-Tier Master Motorsport Navigation Bar */}
-      <div className="space-y-2 bg-base-950/80 p-2.5 rounded-2xl border border-white/10">
+      <div className="space-y-2.5 bg-slate-900/90 p-3 rounded-2xl border border-white/15 shadow-xl backdrop-blur-2xl text-white">
         {/* Category Header Selector */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
           {HUB_CATEGORIES.map((cat) => {
@@ -339,8 +345,8 @@ function MotorsportDivisionComponent() {
                 }}
                 className={`p-2.5 rounded-xl text-xs font-bold transition-all flex items-center gap-2 border cursor-pointer ${
                   isSelected
-                    ? "bg-cyan-500/15 border-cyan-400/40 text-cyan-200 shadow-[0_0_15px_rgba(34,211,238,0.15)]"
-                    : "bg-base-900/60 border-white/5 text-slate-400 hover:text-slate-200 hover:border-white/10"
+                    ? "bg-amber-500 text-black border-amber-400 shadow-lg shadow-cyan-500/30 font-black"
+                    : "bg-slate-800/80 border-white/10 text-slate-200 hover:bg-slate-700 hover:text-white"
                 }`}
               >
                 {cat.icon}
@@ -351,7 +357,7 @@ function MotorsportDivisionComponent() {
         </div>
 
         {/* Sub-tabs for the Active Category */}
-        <div className="flex items-center gap-1.5 pt-1 overflow-x-auto no-scrollbar">
+        <div className="flex items-center gap-2 pt-1 overflow-x-auto no-scrollbar">
           {activeCategory.tabs.map((tab) => {
             const isTabActive = activeTab === tab.id;
             return (
@@ -361,15 +367,15 @@ function MotorsportDivisionComponent() {
                   playHMIClickSound();
                   setActiveTab(tab.id);
                 }}
-                className={`px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all whitespace-nowrap flex items-center gap-1.5 border cursor-pointer ${
+                className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all whitespace-nowrap flex items-center gap-1.5 border cursor-pointer ${
                   isTabActive
-                    ? "bg-gradient-to-r from-cyan-500/20 to-blue-500/20 border-cyan-400/50 text-cyan-200 shadow-sm"
-                    : "bg-base-900/40 border-transparent text-slate-400 hover:text-slate-200 hover:border-white/5"
+                    ? "bg-amber-500/25 border-amber-400 text-amber-300 shadow-md shadow-cyan-500/20 font-extrabold"
+                    : "bg-slate-800/60 border-white/10 text-slate-300 hover:text-white hover:bg-slate-700/60"
                 }`}
               >
                 <span>{tab.label}</span>
                 {tab.badge && (
-                  <span className="text-[9px] font-mono px-1.5 py-0.2 rounded-full bg-cyan-400/20 text-cyan-300 font-bold">
+                  <span className="text-[9px] font-mono px-1.5 py-0.2 rounded-full bg-amber-400/20 text-amber-300 font-bold border border-amber-400/30">
                     {tab.badge}
                   </span>
                 )}
@@ -383,58 +389,100 @@ function MotorsportDivisionComponent() {
 
       {/* F1 CONSTRUCTOR MASTER STUDIO */}
       {activeTab === "f1_workshop" && (
-        <Suspense fallback={<div className="panel p-12 text-center text-xs text-cyan-400 animate-pulse">Loading F1 Constructor Studio...</div>}>
+        <Suspense fallback={<div className="p-12 text-center text-xs text-amber-400 animate-pulse bg-slate-900/60 rounded-2xl">Loading F1 Constructor Studio...</div>}>
           <F1ConstructorMasterApp initialMode={f1InitialMode} onBackToMainMotorsport={() => setActiveTab("teams")} />
         </Suspense>
       )}
 
       {/* HYPERCAR CONSTRUCTOR MASTER STUDIO */}
       {activeTab === "hypercar_workshop" && (
-        <Suspense fallback={<div className="panel p-12 text-center text-xs text-amber-400 animate-pulse">Loading Hypercar Constructor Studio...</div>}>
+        <Suspense fallback={<div className="p-12 text-center text-xs text-amber-400 animate-pulse bg-slate-900/60 rounded-2xl">Loading Hypercar Constructor Studio...</div>}>
           <HypercarConstructorMasterApp initialMode={hypercarInitialMode} onBackToMainMotorsport={() => setActiveTab("teams")} />
         </Suspense>
       )}
 
       {/* FIA HOMOLOGATION & BOP */}
       {activeTab === "homologation" && (
-        <Suspense fallback={<div className="panel p-12 text-center text-xs text-cyan-400 animate-pulse">Loading FIA Scrutineering Matrix...</div>}>
+        <Suspense fallback={<div className="p-12 text-center text-xs text-amber-400 animate-pulse bg-slate-900/60 rounded-2xl">Loading FIA Scrutineering Matrix...</div>}>
           <FiaHomologationPanel />
         </Suspense>
       )}
 
       {/* LIVE 3D PIT WALL */}
       {activeTab === "pitwall" && (
-        <Suspense fallback={<div className="panel p-12 text-center text-xs text-cyan-400 animate-pulse">Loading Live Pit Wall Telemetry...</div>}>
+        <Suspense fallback={<div className="p-12 text-center text-xs text-amber-400 animate-pulse bg-slate-900/60 rounded-2xl">Loading Live Pit Wall Telemetry...</div>}>
           <LivePitWallPanel />
         </Suspense>
       )}
 
-      {/* ===================== STANDARD FAST-SWITCH TAB PANELS ===================== */}
+      {/* ===================== FAST-SWITCH TEAMS & DRIVERS ===================== */}
 
       {/* TEAMS & ROSTER */}
       {activeTab === "teams" && (
         <div className="space-y-4 animate-fade-in">
           {showCreateForm ? (
-            <CreateTeamForm onClose={() => setShowCreateForm(false)} />
+            <Suspense fallback={<div className="p-6 text-center text-xs text-amber-400 animate-pulse">Loading Team Creator...</div>}>
+              <CreateTeamForm onClose={() => setShowCreateForm(false)} />
+            </Suspense>
           ) : (
             <button
               onClick={() => setShowCreateForm(true)}
-              className="w-full flex items-center justify-center gap-2 py-3.5 rounded-xl border-2 border-dashed border-white/10 text-slate-400 hover:border-cyan-500/40 hover:text-cyan-300 transition-all text-sm font-semibold bg-base-950/40 hover:bg-base-950/80"
+              className="w-full flex items-center justify-center gap-2 py-3.5 rounded-2xl border-2 border-dashed border-amber-500/30 hover:border-amber-400 text-slate-200 hover:text-amber-300 transition-all text-sm font-bold bg-slate-900/80 hover:bg-slate-800 shadow-md cursor-pointer"
             >
               <Plus size={16} /> Create New Championship Race Team
             </button>
           )}
 
           {company.motorsport.teams.length === 0 && !showCreateForm && (
-            <div className="panel p-10 text-center">
-              <Trophy size={36} className="mx-auto text-slate-700 mb-3" />
-              <p className="text-slate-400 text-sm font-semibold">No race teams formed yet.</p>
-              <p className="text-slate-600 text-xs mt-1">Create a team or enter F1/Hypercar to start competing in motorsport.</p>
+            <div className="p-10 text-center rounded-2xl bg-slate-900/60 border border-white/10">
+              <Trophy size={36} className="mx-auto text-slate-600 mb-3" />
+              <p className="text-slate-300 text-sm font-semibold">No race teams formed yet.</p>
+              <p className="text-slate-500 text-xs mt-1">Create a team or enter F1/Hypercar to start competing in motorsport.</p>
             </div>
           )}
 
+          {/* Series Filtering & Search Bar */}
+          {company.motorsport.teams.length > 0 && (
+            <div className="flex flex-col md:flex-row items-center justify-between gap-3 bg-slate-900/80 p-3 rounded-2xl border border-white/10">
+              {/* Category Pills */}
+              <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar w-full md:w-auto">
+                <Filter size={14} className="text-amber-400 ml-1 mr-1 shrink-0" />
+                {SERIES_FILTERS.map(f => (
+                  <button
+                    key={f.id}
+                    onClick={() => {
+                      playHMIClickSound();
+                      setSeriesFilter(f.id);
+                      setVisibleTeamCount(8);
+                    }}
+                    className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all whitespace-nowrap cursor-pointer ${
+                      seriesFilter === f.id
+                        ? "bg-amber-500 text-black font-extrabold shadow-sm"
+                        : "bg-slate-800/80 text-slate-300 hover:text-white border border-white/5"
+                    }`}
+                  >
+                    {f.label}
+                  </button>
+                ))}
+              </div>
+
+              {/* Search Box */}
+              <div className="relative w-full md:w-64">
+                <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
+                <input
+                  type="text"
+                  placeholder="Search constructors..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full bg-slate-950/80 border border-white/10 rounded-xl pl-9 pr-3 py-1.5 text-xs text-white placeholder-slate-500 focus:border-amber-400 focus:outline-none"
+                />
+              </div>
+            </div>
+          )}
+
+          {/* Team Cards Grid */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            {company.motorsport.teams.map(t => (
+            {visibleTeams.map(t => (
               <TeamCard
                 key={t.id}
                 team={t}
@@ -444,55 +492,68 @@ function MotorsportDivisionComponent() {
             ))}
           </div>
 
-          {/* Driver Management & Talent Market */}
+          {/* Load More Button if teams exceed visible count */}
+          {filteredTeams.length > visibleTeamCount && (
+            <div className="text-center pt-2">
+              <button
+                onClick={() => setVisibleTeamCount(prev => prev + 8)}
+                className="px-6 py-2.5 rounded-xl text-xs font-bold bg-slate-900 border border-amber-500/30 text-amber-300 hover:bg-slate-850 hover:border-amber-400 transition-all cursor-pointer shadow-md inline-flex items-center gap-1.5"
+              >
+                <span>Show More Constructors ({filteredTeams.length - visibleTeamCount} remaining)</span>
+                <ChevronDown size={14} />
+              </button>
+            </div>
+          )}
+
+          {/* Driver Management & Talent Market for Selected Team */}
           {selectedTeam && (
-            <div className="space-y-4">
-              <div className="glass-panel p-5 border-white/5 space-y-4">
+            <div className="space-y-4 mt-6">
+              <div className="p-5 rounded-2xl bg-slate-900/90 border border-white/10 shadow-xl space-y-4">
                 <div className="flex items-center justify-between">
-                  <h3 className="text-sm font-bold text-slate-100 flex items-center gap-2">
-                    <Users size={16} className="text-cyan-400" /> Active Driver Lineup — {selectedTeam.name}
+                  <h3 className="text-sm font-bold text-white flex items-center gap-2">
+                    <Users size={16} className="text-amber-400" /> Active Driver Lineup — {selectedTeam.name}
                   </h3>
-                  <span className="text-[10px] font-mono text-slate-400 bg-base-900 px-2 py-0.5 rounded border border-white/5">
+                  <span className="text-[10px] font-mono text-slate-300 bg-black/60 px-2.5 py-1 rounded-lg border border-white/10">
                     {selectedTeam.drivers.length}/2 Drivers Contracted
                   </span>
                 </div>
 
                 {selectedTeam.drivers.length === 0 ? (
-                  <div className="text-center py-6 bg-base-950/60 rounded-xl border border-white/5">
-                    <p className="text-xs text-slate-500">No active drivers signed to this team yet.</p>
-                    <p className="text-[10px] text-slate-600 mt-1">Hire free agents or scout rookies below.</p>
+                  <div className="text-center py-6 bg-black/40 rounded-xl border border-white/5">
+                    <p className="text-xs text-slate-400">No active drivers signed to this team yet.</p>
+                    <p className="text-[10px] text-slate-500 mt-1">Hire free agents or scout rookies below.</p>
                   </div>
                 ) : (
                   <div className="space-y-2">
                     {selectedTeam.drivers.map(d => {
                       const seasonsRemaining = Math.max(0, d.contractEndSeason - company.motorsport.currentSeason);
                       return (
-                        <div key={d.id} className="flex flex-col sm:flex-row sm:items-center justify-between bg-base-950/80 rounded-xl p-3.5 gap-3 border border-white/5 hover:border-cyan-500/30 transition-all">
+                        <div key={d.id} className="flex flex-col sm:flex-row sm:items-center justify-between bg-black/60 rounded-xl p-3.5 gap-3 border border-white/5 hover:border-amber-500/40 transition-all">
                           <div>
                             <div className="flex items-center gap-2">
-                              <span className="text-sm font-bold text-slate-100">{d.name}</span>
-                              <span className="text-[10px] text-slate-400 font-mono bg-base-900 px-1.5 py-0.5 rounded">{d.nationality}</span>
+                              <span className="text-sm font-bold text-white">{d.name}</span>
+                              <span className="text-[10px] text-slate-300 font-mono bg-slate-800 px-1.5 py-0.5 rounded">{d.nationality}</span>
                             </div>
-                            <div className="text-[11px] text-slate-400 mt-1 flex items-center gap-3 flex-wrap">
-                              <span>Skill: <strong className="text-cyan-300 font-mono">{d.skill}</strong></span>
+                            <div className="text-[11px] text-slate-300 mt-1 flex items-center gap-3 flex-wrap">
+                              <span>Skill: <strong className="text-amber-300 font-mono">{d.skill}</strong></span>
                               <span>Consistency: <strong className="text-emerald-400 font-mono">{d.consistency}</strong></span>
-                              <span>Wet Pace: <strong className="text-blue-400 font-mono">{d.wetSkill}</strong></span>
-                              <span>Salary: <strong className="text-slate-200 font-mono">${(d.salary / 1e6).toFixed(1)}M/yr</strong></span>
+                              <span>Wet Pace: <strong className="text-amber-400 font-mono">{d.wetSkill}</strong></span>
+                              <span>Salary: <strong className="text-slate-100 font-mono">${(d.salary / 1e6).toFixed(1)}M/yr</strong></span>
                             </div>
-                            <div className="text-[10px] text-slate-500 mt-1">
+                            <div className="text-[10px] text-slate-400 mt-1">
                               Contract: {seasonsRemaining > 0 ? `${seasonsRemaining} season(s) left` : <span className="text-amber-400 font-medium">Expiring this season!</span>}
                             </div>
                           </div>
                           <div className="flex items-center gap-2 shrink-0">
                             <button
                               onClick={() => renewMotorsportContract(selectedTeam.id, d.id, 2)}
-                              className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 hover:bg-emerald-500/25 transition-all"
+                              className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-emerald-500/20 border border-emerald-500/40 text-emerald-300 hover:bg-emerald-500/30 transition-all cursor-pointer"
                             >
                               Renew (+2 Yrs)
                             </button>
                             <button
                               onClick={() => releaseMotorsportDriver(selectedTeam.id, d.id)}
-                              className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-rose-500/15 border border-rose-500/30 text-rose-300 hover:bg-rose-500/25 transition-all"
+                              className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-rose-500/20 border border-rose-500/40 text-rose-300 hover:bg-rose-500/30 transition-all cursor-pointer"
                             >
                               Release
                             </button>
@@ -505,94 +566,163 @@ function MotorsportDivisionComponent() {
               </div>
 
               {/* Driver Market component */}
-              <DriverMarket selectedTeam={selectedTeam} />
+              <Suspense fallback={<div className="p-6 text-center text-xs text-amber-400 animate-pulse">Loading Driver Market...</div>}>
+                <DriverMarket selectedTeam={selectedTeam} />
+              </Suspense>
             </div>
           )}
         </div>
       )}
 
+      {/* ===================== OTHER LAZY LOADED TABS ===================== */}
+
       {/* HQ INFRASTRUCTURE */}
-      {activeTab === "hq" && <HQInfrastructurePanel selectedTeam={selectedTeam} />}
+      {activeTab === "hq" && (
+        <Suspense fallback={<div className="p-8 text-center text-xs text-amber-400 animate-pulse">Loading HQ Infrastructure...</div>}>
+          <HQInfrastructurePanel selectedTeam={selectedTeam} />
+        </Suspense>
+      )}
 
       {/* STAFF & PIT CREW */}
-      {activeTab === "staff" && <StaffPitCrewPanel selectedTeam={selectedTeam} />}
+      {activeTab === "staff" && (
+        <Suspense fallback={<div className="p-8 text-center text-xs text-amber-400 animate-pulse">Loading Staff & Pit Crew...</div>}>
+          <StaffPitCrewPanel selectedTeam={selectedTeam} />
+        </Suspense>
+      )}
 
       {/* PARTS R&D */}
-      {activeTab === "parts" && <PartsRAndDPanel selectedTeam={selectedTeam} />}
+      {activeTab === "parts" && (
+        <Suspense fallback={<div className="p-8 text-center text-xs text-amber-400 animate-pulse">Loading Parts R&D...</div>}>
+          <PartsRAndDPanel selectedTeam={selectedTeam} />
+        </Suspense>
+      )}
 
       {/* RACE STRATEGY */}
-      {activeTab === "strategy" && <StrategyPanel selectedTeam={selectedTeam} />}
+      {activeTab === "strategy" && (
+        <Suspense fallback={<div className="p-8 text-center text-xs text-amber-400 animate-pulse">Loading Strategy Panel...</div>}>
+          <StrategyPanel selectedTeam={selectedTeam} />
+        </Suspense>
+      )}
 
       {/* TECH TRANSFER */}
-      {activeTab === "transfer" && <TechTransferPanel selectedTeam={selectedTeam} />}
+      {activeTab === "transfer" && (
+        <Suspense fallback={<div className="p-8 text-center text-xs text-amber-400 animate-pulse">Loading Tech Transfer...</div>}>
+          <TechTransferPanel selectedTeam={selectedTeam} />
+        </Suspense>
+      )}
 
       {/* SEASON SIMULATOR */}
-      {activeTab === "season" && <SeasonSimulator />}
+      {activeTab === "season" && (
+        <Suspense fallback={<div className="p-8 text-center text-xs text-amber-400 animate-pulse">Loading Season Simulator...</div>}>
+          <SeasonSimulator />
+        </Suspense>
+      )}
 
       {/* RACE CALENDAR */}
-      {activeTab === "calendar" && <CalendarViewPanel />}
+      {activeTab === "calendar" && (
+        <Suspense fallback={<div className="p-8 text-center text-xs text-amber-400 animate-pulse">Loading Race Calendar...</div>}>
+          <CalendarViewPanel />
+        </Suspense>
+      )}
 
       {/* GOVERNING AUTHORITY */}
-      {activeTab === "governing" && <GoverningBodyPanel />}
+      {activeTab === "governing" && (
+        <Suspense fallback={<div className="p-8 text-center text-xs text-amber-400 animate-pulse">Loading Governing Authority...</div>}>
+          <GoverningBodyPanel />
+        </Suspense>
+      )}
 
       {/* POLITICAL VOTING */}
-      {activeTab === "votes" && <PoliticalVotingPanel />}
+      {activeTab === "votes" && (
+        <Suspense fallback={<div className="p-8 text-center text-xs text-amber-400 animate-pulse">Loading Political Voting...</div>}>
+          <PoliticalVotingPanel />
+        </Suspense>
+      )}
 
       {/* SEASON SUMMARY */}
-      {activeTab === "summary" && <SeasonSummaryPanel />}
+      {activeTab === "summary" && (
+        <Suspense fallback={<div className="p-8 text-center text-xs text-amber-400 animate-pulse">Loading Season Summary...</div>}>
+          <SeasonSummaryPanel />
+        </Suspense>
+      )}
 
       {/* ANALYTICS */}
-      {activeTab === "analytics" && <AnalyticsPanel selectedTeam={selectedTeam} />}
+      {activeTab === "analytics" && (
+        <Suspense fallback={<div className="p-8 text-center text-xs text-amber-400 animate-pulse">Loading Analytics Lab...</div>}>
+          <AnalyticsPanel selectedTeam={selectedTeam} />
+        </Suspense>
+      )}
 
       {/* REGULATIONS & GUIDES */}
-      {activeTab === "guide" && <RegulationGuidePanel />}
+      {activeTab === "guide" && (
+        <Suspense fallback={<div className="p-8 text-center text-xs text-amber-400 animate-pulse">Loading Regulation Guide...</div>}>
+          <RegulationGuidePanel />
+        </Suspense>
+      )}
 
       {/* TROPHY HISTORY */}
-      {activeTab === "history" && <HistoryTimeline selectedTeam={selectedTeam} />}
+      {activeTab === "history" && (
+        <Suspense fallback={<div className="p-8 text-center text-xs text-amber-400 animate-pulse">Loading History Timeline...</div>}>
+          <HistoryTimeline selectedTeam={selectedTeam} />
+        </Suspense>
+      )}
+
+      {/* ===================== CONDITIONALLY MOUNTED MODALS ===================== */}
 
       {/* F1 Entry Requirements Modal */}
-      <F1EntryWizardModal
-        isOpen={showF1EntryWizard}
-        onClose={() => setShowF1EntryWizard(false)}
-        onEnterConstructionStudio={() => {
-          setF1InitialMode("CONSTRUCTION_CAD");
-          setShowF1EntryWizard(false);
-          setActiveTab("f1_workshop");
-        }}
-        onEnterGarageAndRace={() => {
-          setF1InitialMode("GARAGE_SETUP");
-          setShowF1EntryWizard(false);
-          setActiveTab("f1_workshop");
-        }}
-      />
+      {showF1EntryWizard && (
+        <Suspense fallback={null}>
+          <F1EntryWizardModal
+            isOpen={showF1EntryWizard}
+            onClose={() => setShowF1EntryWizard(false)}
+            onEnterConstructionStudio={() => {
+              setF1InitialMode("CONSTRUCTION_CAD");
+              setShowF1EntryWizard(false);
+              setActiveTab("f1_workshop");
+            }}
+            onEnterGarageAndRace={() => {
+              setF1InitialMode("GARAGE_SETUP");
+              setShowF1EntryWizard(false);
+              setActiveTab("f1_workshop");
+            }}
+          />
+        </Suspense>
+      )}
 
       {/* Hypercar Entry Requirements Modal */}
-      <HypercarEntryWizardModal
-        isOpen={showHypercarEntryWizard}
-        onClose={() => setShowHypercarEntryWizard(false)}
-        onEnterStudio={() => {
-          setShowHypercarEntryWizard(false);
-          setActiveTab("hypercar_workshop");
-        }}
-        onProceedToRace={() => {
-          setShowHypercarEntryWizard(false);
-          setActiveTab("hypercar_workshop");
-        }}
-      />
+      {showHypercarEntryWizard && (
+        <Suspense fallback={null}>
+          <HypercarEntryWizardModal
+            isOpen={showHypercarEntryWizard}
+            onClose={() => setShowHypercarEntryWizard(false)}
+            onEnterStudio={() => {
+              setShowHypercarEntryWizard(false);
+              setActiveTab("hypercar_workshop");
+            }}
+            onProceedToRace={() => {
+              setShowHypercarEntryWizard(false);
+              setActiveTab("hypercar_workshop");
+            }}
+          />
+        </Suspense>
+      )}
 
       {/* Live Race Telemetry Modal */}
-      <LiveRaceModal
-        isOpen={showLiveRaceModal}
-        state={liveRaceState}
-        sim={sim}
-        onStepLap={handleStepLap}
-        onFinishRace={handleFinishLiveRace}
-        onClose={() => setShowLiveRaceModal(false)}
-      />
+      {showLiveRaceModal && (
+        <Suspense fallback={null}>
+          <LiveRaceModal
+            isOpen={showLiveRaceModal}
+            state={liveRaceState}
+            sim={sim}
+            onStepLap={handleStepLap}
+            onFinishRace={handleFinishLiveRace}
+            onClose={() => setShowLiveRaceModal(false)}
+          />
+        </Suspense>
+      )}
     </div>
   );
 }
 
 export const MotorsportDivision = memo(MotorsportDivisionComponent);
 export default MotorsportDivision;
-

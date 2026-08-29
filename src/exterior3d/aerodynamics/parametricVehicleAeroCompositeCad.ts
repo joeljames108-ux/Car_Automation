@@ -91,7 +91,7 @@ export class ParametricVehicleAeroCompositeCad {
 
     const lightEmissiveMaterial = new THREE.MeshStandardMaterial({
       color: 0xe0f2fe,
-      emissive: 0x38bdf8,
+      emissive: 0xfbbf24,
       emissiveIntensity: isWireframe ? 0 : 2.5,
       metalness: 0.2,
       roughness: 0.1,

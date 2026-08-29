@@ -14,20 +14,20 @@ export const GoverningBodyPanel = memo(function GoverningBodyPanel() {
 
   return (
     <div className="space-y-4 animate-fade-in">
-      <div className="glass-panel p-6 border-cyan-500/25 relative overflow-hidden">
+      <div className="glass-panel p-6 border-amber-500/25 relative overflow-hidden">
         <div className="absolute top-0 right-0 p-6 opacity-10 pointer-events-none">
-          <Building2 size={140} className="text-cyan-400" />
+          <Building2 size={140} className="text-amber-400" />
         </div>
 
         <div className="relative z-10 flex flex-col md:flex-row md:items-start justify-between gap-4 mb-6">
           <div className="flex items-center gap-3">
-            <div className="p-3 rounded-2xl bg-cyan-500/20 border border-cyan-400/40 text-cyan-300 shadow-[0_0_20px_rgba(34,211,238,0.2)]">
+            <div className="p-3 rounded-2xl bg-amber-500/20 border border-amber-400/40 text-amber-300 shadow-[0_0_20px_rgba(34,211,238,0.2)]">
               <Building2 size={24} />
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <span className="text-xs font-mono font-bold text-cyan-400 uppercase tracking-widest">WORLD MOTORSPORT COUNCIL</span>
-                <span className="bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 text-[9px] font-bold px-2 py-0.5 rounded-full">OFFICIAL AUTHORITY</span>
+                <span className="text-xs font-mono font-bold text-amber-400 uppercase tracking-widest">WORLD MOTORSPORT COUNCIL</span>
+                <span className="bg-amber-500/20 text-amber-300 border border-amber-500/40 text-[9px] font-bold px-2 py-0.5 rounded-full">OFFICIAL AUTHORITY</span>
               </div>
               <h2 className="text-xl font-bold text-slate-100">FIA International Motorsport Authority</h2>
               <p className="text-xs text-slate-400">Regulating technical specifications, race calendars, budget caps & pit protocols</p>
@@ -60,7 +60,7 @@ export const GoverningBodyPanel = memo(function GoverningBodyPanel() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
           <div className="bg-base-950/80 rounded-xl p-4 border border-white/5">
             <div className="text-[10px] font-mono text-slate-500 uppercase mb-1">Max Power Output</div>
-            <div className="text-xl font-black font-mono text-cyan-300">{reg.maxPowerHp} HP</div>
+            <div className="text-xl font-black font-mono text-amber-300">{reg.maxPowerHp} HP</div>
             <div className="text-[10px] text-slate-500 mt-1">Enforced by fuel flow restrictors</div>
           </div>
           <div className="bg-base-950/80 rounded-xl p-4 border border-white/5">
@@ -77,7 +77,7 @@ export const GoverningBodyPanel = memo(function GoverningBodyPanel() {
           </div>
           <div className="bg-base-950/80 rounded-xl p-4 border border-white/5">
             <div className="text-[10px] font-mono text-slate-500 uppercase mb-1">Mandatory Pit Stops</div>
-            <div className="text-xl font-black font-mono text-purple-400">{reg.mandatoryPitStops} Stops</div>
+            <div className="text-xl font-black font-mono text-amber-400">{reg.mandatoryPitStops} Stops</div>
             <div className="text-[10px] text-slate-500 mt-1">Multi-compound tire rules</div>
           </div>
         </div>
@@ -96,7 +96,7 @@ export const GoverningBodyPanel = memo(function GoverningBodyPanel() {
             </div>
             <div className="bg-base-900/60 p-3 rounded-lg border border-base-800 flex items-center justify-between">
               <span className="text-slate-300">Hybrid / EV Architecture:</span>
-              <span className={`font-semibold ${reg.evRequirement ? "text-cyan-400" : "text-slate-500"}`}>
+              <span className={`font-semibold ${reg.evRequirement ? "text-amber-400" : "text-slate-500"}`}>
                 {reg.evRequirement ? "MANDATORY" : "OPTIONAL"}
               </span>
             </div>

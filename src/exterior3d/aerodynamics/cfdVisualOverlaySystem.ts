@@ -30,7 +30,7 @@ export class CFDVisualOverlaySystem {
     const rearLength = Math.max(0.2, physics.rearDownforceN * forceScale);
     const rearDir = new THREE.Vector3(0, -1, 0);
     const rearOrigin = new THREE.Vector3(0, 0.6 + rearLength, 1.4);
-    const rearArrow = new THREE.ArrowHelper(rearDir, rearOrigin, rearLength, 0xec4899, 0.14, 0.08);
+    const rearArrow = new THREE.ArrowHelper(rearDir, rearOrigin, rearLength, 0xd97706, 0.14, 0.08);
     group.add(rearArrow);
 
     // 3. Total Drag Vector (Pointing FORWARD/AFT opposing motion at Center of Pressure)
@@ -165,7 +165,7 @@ export class CFDVisualOverlaySystem {
 
       const curveGeo = new THREE.BufferGeometry().setFromPoints(points);
       const curveMat = new THREE.LineBasicMaterial({
-        color: 0x38bdf8,
+        color: 0xfbbf24,
         transparent: true,
         opacity: 0.65,
       });

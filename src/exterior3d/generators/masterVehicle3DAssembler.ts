@@ -11,6 +11,7 @@
 import * as THREE from "three";
 import { MasterVehicleState } from "../../sim/masterVehicleState/masterVehicleTypes";
 import { MasterAttachmentGraph } from "../sockets/masterAttachmentGraph";
+import { SculptedBodyPanelsGenerator } from "./sculptedBodyPanelsGenerator";
 import { MasterInterior3DStudio } from "./interior/masterInterior3DStudio";
 
 export class MasterVehicle3DAssembler {
@@ -425,63 +426,45 @@ export class MasterVehicle3DAssembler {
   }
 
   private buildBodyPanelsShell(b: MasterVehicleState["bodyPanels"], c: MasterVehicleState["chassis"]): THREE.Group {
+    // Use the sculpted body panels generator for realistic curved geometry
+    const bodyType = (c.bodyType as any) || "supercar";
+    const paintColor = b.paintColorHex || "#ef4444";
+    const trackWidthMm = c.frontTrackMm || 1620;
+    const wheelbaseMm = c.wheelbaseMm || 2850;
+    
+    try {
+      const sculptedBody = SculptedBodyPanelsGenerator.buildSculptedBody(
+        bodyType,
+        wheelbaseMm,
+        trackWidthMm,
+        "forged",
+        false,
+        parseInt(paintColor.replace("#", "0x"), 16) || 0xef4444
+      );
+      sculptedBody.name = "Sculpted_Body_Shell";
+      return sculptedBody;
+    } catch (err) {
+      // Fallback to basic geometry if sculpted generator fails
+      console.warn("Sculpted body generator failed, using fallback:", err);
+      return this.buildBasicBodyFallback(b, c);
+    }
+  }
+
+  private buildBasicBodyFallback(b: MasterVehicleState["bodyPanels"], c: MasterVehicleState["chassis"]): THREE.Group {
     const group = new THREE.Group();
-    group.name = "BodyPanelsShell";
-
+    group.name = "Basic_Body_Fallback";
     const paintColor = new THREE.Color(b.paintColorHex || "#ef4444");
-    const paintMat = new THREE.MeshPhysicalMaterial({
-      color: paintColor,
-      roughness: b.paintFinish === "matte" ? 0.6 : 0.15,
-      metalness: 0.65,
-      clearcoat: b.paintFinish === "matte" ? 0.0 : 1.0,
-      clearcoatRoughness: 0.1,
-    });
-
-    const glassMat = new THREE.MeshPhysicalMaterial({
-      color: 0x050810,
-      roughness: 0.05,
-      metalness: 0.1,
-      transparent: true,
-      opacity: 0.45,
-    });
-
+    const paintMat = new THREE.MeshPhysicalMaterial({ color: paintColor, roughness: 0.15, metalness: 0.65, clearcoat: 1.0, clearcoatRoughness: 0.1 });
     const wbM = c.wheelbaseMm / 1000;
     const trM = c.frontTrackMm / 1000;
-
-    // 1. Hood with Twin NACA Ducts
     const hoodGeo = new THREE.BoxGeometry(trM * 0.82, 0.06, wbM * 0.42);
     const hoodMesh = new THREE.Mesh(hoodGeo, paintMat);
     hoodMesh.position.set(0, 0.28, -wbM * 0.38);
     group.add(hoodMesh);
-
-    // 2. Curved Windshield & Greenhouse Glass
-    const windshieldGeo = new THREE.BoxGeometry(trM * 0.76, 0.03, wbM * 0.35);
-    const windshieldMesh = new THREE.Mesh(windshieldGeo, glassMat);
-    windshieldMesh.rotation.x = Math.PI / 4;
-    windshieldMesh.position.set(0, 0.52, -wbM * 0.12);
-    group.add(windshieldMesh);
-
-    // 3. Roof Panel
     const roofGeo = new THREE.BoxGeometry(trM * 0.72, 0.04, wbM * 0.38);
     const roofMesh = new THREE.Mesh(roofGeo, paintMat);
     roofMesh.position.set(0, 0.64, wbM * 0.08);
     group.add(roofMesh);
-
-    // 4. Left & Right Sculpted Fenders & Sidepods
-    const fenderGeo = new THREE.BoxGeometry(0.22, 0.34, wbM * 0.95);
-    const fenderL = new THREE.Mesh(fenderGeo, paintMat);
-    fenderL.position.set(-trM * 0.48, 0.26, 0);
-
-    const fenderR = new THREE.Mesh(fenderGeo, paintMat);
-    fenderR.position.set(trM * 0.48, 0.26, 0);
-    group.add(fenderL, fenderR);
-
-    // 5. Rear Engine Decklid & Louvres
-    const deckGeo = new THREE.BoxGeometry(trM * 0.78, 0.05, wbM * 0.46);
-    const deckMesh = new THREE.Mesh(deckGeo, paintMat);
-    deckMesh.position.set(0, 0.42, wbM * 0.42);
-    group.add(deckMesh);
-
     return group;
   }
 

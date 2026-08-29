@@ -51,7 +51,7 @@ export const RaceTelemetryComparisonTool: React.FC = memo(function RaceTelemetry
     },
     {
       label: "RR Tire (°C)",
-      color: "#38bdf8",
+      color: "#fbbf24",
       unit: "°C",
       data: Array.from({ length: 15 }, (_, i) => ({ x: i + 1, y: 76 + i * 1.6 })),
     },
@@ -63,7 +63,7 @@ export const RaceTelemetryComparisonTool: React.FC = memo(function RaceTelemetry
       <div className="flex items-center justify-between border-b border-slate-800 pb-4">
         <div>
           <h3 className="text-base font-bold text-white flex items-center space-x-2">
-            <Timer className="w-5 h-5 text-blue-400" />
+            <Timer className="w-5 h-5 text-amber-400" />
             <span>RACE TELEMETRY & MULTI-LAP COMPARISON</span>
           </h3>
           <p className="text-xs text-slate-400 mt-0.5">
@@ -78,7 +78,7 @@ export const RaceTelemetryComparisonTool: React.FC = memo(function RaceTelemetry
               setActiveTab("LAP_TIME");
             }}
             className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-              activeTab === "LAP_TIME" ? "bg-blue-600 text-white shadow-md" : "text-slate-400 hover:text-white"
+              activeTab === "LAP_TIME" ? "bg-amber-600 text-white shadow-md" : "text-slate-400 hover:text-white"
             }`}
           >
             LAP TIMES
@@ -89,7 +89,7 @@ export const RaceTelemetryComparisonTool: React.FC = memo(function RaceTelemetry
               setActiveTab("TIRE_TEMP");
             }}
             className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-              activeTab === "TIRE_TEMP" ? "bg-blue-600 text-white shadow-md" : "text-slate-400 hover:text-white"
+              activeTab === "TIRE_TEMP" ? "bg-amber-600 text-white shadow-md" : "text-slate-400 hover:text-white"
             }`}
           >
             TIRE THERMALS

@@ -81,8 +81,8 @@ const DICKY_STYLES: { id: InstalledSubsystemsState["dickyStyle"]; label: string;
 
 const PAINT_SWATCHES = [
   "#dc2626", "#e11d48", "#ea580c", "#f59e0b", "#facc15", "#84cc16",
-  "#22c55e", "#10b981", "#14b8a6", "#06b6d4", "#3b82f6", "#2563eb",
-  "#1e40af", "#7c3aed", "#a855f7", "#ec4899", "#f43f5e", "#0f172a",
+  "#22c55e", "#10b981", "#14b8a6", "#f59e0b", "#d97706", "#b45309",
+  "#1e40af", "#d97706", "#f59e0b", "#d97706", "#f43f5e", "#0f172a",
   "#1e293b", "#334155", "#64748b", "#94a3b8", "#e2e8f0", "#ffffff",
 ];
 
@@ -184,7 +184,7 @@ export const BodyPanelsAssemblyStage: React.FC<BodyPanelsAssemblyStageProps> = (
                   </div>
                   <p className="text-[10px] text-slate-500 dark:text-slate-400 mb-2">{k.desc}</p>
                   <div className="flex items-center justify-between text-[10px] font-mono pt-2 border-t border-base-800/60">
-                    <span className="text-cyan-600 dark:text-cyan-300 font-semibold">{k.dragDelta}</span>
+                    <span className="text-amber-600 dark:text-amber-300 font-semibold">{k.dragDelta}</span>
                     <span className="text-slate-500">{k.material}</span>
                   </div>
                 </button>
@@ -297,7 +297,7 @@ export const BodyPanelsAssemblyStage: React.FC<BodyPanelsAssemblyStageProps> = (
                     <span className="font-bold text-xs font-mono text-slate-900 dark:text-slate-100">{b.label}</span>
                   </div>
                   <p className="text-[10px] text-slate-500 dark:text-slate-400 mb-2">{b.desc}</p>
-                  <div className="text-[10px] font-mono text-cyan-600 dark:text-cyan-300 font-semibold">{b.coolingDelta}</div>
+                  <div className="text-[10px] font-mono text-amber-600 dark:text-amber-300 font-semibold">{b.coolingDelta}</div>
                 </button>
               );
             })}
@@ -343,7 +343,7 @@ export const BodyPanelsAssemblyStage: React.FC<BodyPanelsAssemblyStageProps> = (
                     <span className="font-bold text-xs font-mono text-slate-900 dark:text-slate-100">{d.label}</span>
                   </div>
                   <p className="text-[10px] text-slate-500 dark:text-slate-400 mb-2">{d.desc}</p>
-                  <div className="text-[10px] font-mono text-cyan-600 dark:text-cyan-300 font-semibold">{d.downforceDelta}</div>
+                  <div className="text-[10px] font-mono text-amber-600 dark:text-amber-300 font-semibold">{d.downforceDelta}</div>
                 </button>
               );
             })}

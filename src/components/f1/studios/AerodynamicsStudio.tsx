@@ -38,16 +38,16 @@ export const AerodynamicsStudio: React.FC = memo(function AerodynamicsStudio() {
   return (
     <div className="space-y-6 animate-fade-in-up">
       {/* Studio Header */}
-      <div className="glass-panel p-6 border-cyan-500/20 bg-gradient-to-r from-slate-900 via-slate-900/90 to-cyan-950/30 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+      <div className="glass-panel p-6 border-amber-500/20 bg-gradient-to-r from-slate-900 via-slate-900/90 to-amber-950/30 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2 mb-2">
-            <Wind className="text-cyan-400" size={24} />
+            <Wind className="text-amber-400" size={24} />
             <h2 className="text-xl font-bold text-slate-100 tracking-wide">
               Aerodynamics, Ground Effect & DRS Studio
             </h2>
             {/* Auto-save indicator */}
             <div className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-slate-800/80 border border-slate-700 text-[10px] font-mono text-slate-400">
-              <span className={`w-1.5 h-1.5 rounded-full ${isSaving ? "bg-cyan-400 animate-ping" : "bg-emerald-400"}`} />
+              <span className={`w-1.5 h-1.5 rounded-full ${isSaving ? "bg-amber-400 animate-ping" : "bg-emerald-400"}`} />
               <span>{isSaving ? "Saving..." : "Saved"}</span>
             </div>
           </div>
@@ -84,7 +84,7 @@ export const AerodynamicsStudio: React.FC = memo(function AerodynamicsStudio() {
             }}
             className={`px-3 py-1.5 rounded-xl border flex items-center gap-1.5 text-xs font-bold transition-all cursor-pointer ${
               showCompareBaseline
-                ? "bg-cyan-500/20 text-cyan-300 border-cyan-500/40"
+                ? "bg-amber-500/20 text-amber-300 border-amber-500/40"
                 : "bg-slate-800 text-slate-400 border-slate-700 hover:text-slate-200"
             }`}
           >
@@ -94,7 +94,7 @@ export const AerodynamicsStudio: React.FC = memo(function AerodynamicsStudio() {
 
           {/* Key Aero Metrics with Delta Badges */}
           <div className="text-right">
-            <div className="text-2xl font-black font-mono text-cyan-400 flex items-center gap-2 justify-end">
+            <div className="text-2xl font-black font-mono text-amber-400 flex items-center gap-2 justify-end">
               <span>{aero.totalDownforceAt250KmhKg}</span>
               <span className="text-xs text-slate-400 font-normal">kg DF</span>
               {deltas.downforce !== 0 && (
@@ -130,12 +130,12 @@ export const AerodynamicsStudio: React.FC = memo(function AerodynamicsStudio() {
               <span>Aero Package Specification</span>
               <span title="Pre-indexed wing angle packages for specific circuit drag requirements"><HelpCircle size={12} className="text-slate-500 cursor-help" /></span>
             </span>
-            <span className="text-[10px] text-cyan-400 font-mono">Circuit Trim</span>
+            <span className="text-[10px] text-amber-400 font-mono">Circuit Trim</span>
           </label>
           <select
             value={aero.packagePreset}
             onChange={(e) => handleUpdateAero({ packagePreset: e.target.value as AeroPackageLevel })}
-            className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-cyan-500"
+            className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-amber-500"
           >
             <option value="ULTRA_LOW_DRAG_MONZA">Monza / Baku (Ultra-Low Drag 8°)</option>
             <option value="LOW_DRAG_SPA_SILVERSTONE">Spa / Silverstone (Low Drag 15°)</option>
@@ -157,7 +157,7 @@ export const AerodynamicsStudio: React.FC = memo(function AerodynamicsStudio() {
               <span>Front Wing Flap Angle</span>
               <span title="Controls front-end turn-in grip and front aero balance percentage"><HelpCircle size={12} className="text-slate-500 cursor-help" /></span>
             </span>
-            <span className="font-mono text-cyan-400 font-bold">{aero.frontWingFlapAngleDeg}°</span>
+            <span className="font-mono text-amber-400 font-bold">{aero.frontWingFlapAngleDeg}°</span>
           </div>
           <input
             type="range"
@@ -166,7 +166,7 @@ export const AerodynamicsStudio: React.FC = memo(function AerodynamicsStudio() {
             step="1"
             value={aero.frontWingFlapAngleDeg}
             onChange={(e) => handleUpdateAero({ frontWingFlapAngleDeg: parseInt(e.target.value) })}
-            className="w-full accent-cyan-400 cursor-pointer"
+            className="w-full accent-amber-400 cursor-pointer"
           />
           <div className="flex justify-between text-[10px] text-slate-500">
             <span>8° (Low Drag)</span>
@@ -184,7 +184,7 @@ export const AerodynamicsStudio: React.FC = memo(function AerodynamicsStudio() {
               <span>Rear Wing Angle of Attack</span>
               <span title="Main rear downforce generator; higher angles increase high-speed stability but add straightline drag"><HelpCircle size={12} className="text-slate-500 cursor-help" /></span>
             </span>
-            <span className="font-mono text-cyan-400 font-bold">{aero.rearWingMainPlaneAngleDeg}°</span>
+            <span className="font-mono text-amber-400 font-bold">{aero.rearWingMainPlaneAngleDeg}°</span>
           </div>
           <input
             type="range"
@@ -193,7 +193,7 @@ export const AerodynamicsStudio: React.FC = memo(function AerodynamicsStudio() {
             step="1"
             value={aero.rearWingMainPlaneAngleDeg}
             onChange={(e) => handleUpdateAero({ rearWingMainPlaneAngleDeg: parseInt(e.target.value) })}
-            className="w-full accent-cyan-400 cursor-pointer"
+            className="w-full accent-amber-400 cursor-pointer"
           />
           <div className="flex justify-between text-[10px] text-slate-500">
             <span>14°</span>
@@ -211,7 +211,7 @@ export const AerodynamicsStudio: React.FC = memo(function AerodynamicsStudio() {
               <span>Venturi Tunnel Throat Gap</span>
               <span title="Floor ground-effect suction throat height; lower gaps yield massive downforce but risk aerodynamic stall & porpoising"><HelpCircle size={12} className="text-slate-500 cursor-help" /></span>
             </span>
-            <span className="font-mono text-cyan-400 font-bold">{aero.floorVenturiThroatHeightMm} mm</span>
+            <span className="font-mono text-amber-400 font-bold">{aero.floorVenturiThroatHeightMm} mm</span>
           </div>
           <input
             type="range"
@@ -220,7 +220,7 @@ export const AerodynamicsStudio: React.FC = memo(function AerodynamicsStudio() {
             step="1"
             value={aero.floorVenturiThroatHeightMm}
             onChange={(e) => handleUpdateAero({ floorVenturiThroatHeightMm: parseInt(e.target.value) })}
-            className="w-full accent-cyan-400 cursor-pointer"
+            className="w-full accent-amber-400 cursor-pointer"
           />
           <div className="flex justify-between text-[10px] text-slate-500">
             <span>10mm (Porpoising Hazard)</span>
@@ -238,12 +238,12 @@ export const AerodynamicsStudio: React.FC = memo(function AerodynamicsStudio() {
               <span>Sidepod Bodywork Concept</span>
               <span title="Bodywork philosophy directing airflow toward rear diffuser and beam wing"><HelpCircle size={12} className="text-slate-500 cursor-help" /></span>
             </span>
-            <span className="text-[10px] text-cyan-400 font-mono">Downwash</span>
+            <span className="text-[10px] text-amber-400 font-mono">Downwash</span>
           </label>
           <select
             value={aero.sidepodPhilosophy}
             onChange={(e) => handleUpdateAero({ sidepodPhilosophy: e.target.value as SidepodPhilosophy })}
-            className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-cyan-500"
+            className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-amber-500"
           >
             <option value="AGGRESSIVE_DOWNWASH_RAMP">Downwash Ramp (Guides Air to Diffuser)</option>
             <option value="ZEROPOD_ULTRA_NARROW">Zeropod Ultra-Narrow Packaging</option>
@@ -275,7 +275,7 @@ export const AerodynamicsStudio: React.FC = memo(function AerodynamicsStudio() {
             step="1"
             value={aero.rearWingDrsFlapGapOpenMm}
             onChange={(e) => handleUpdateAero({ rearWingDrsFlapGapOpenMm: parseInt(e.target.value) })}
-            className="w-full accent-cyan-400 cursor-pointer"
+            className="w-full accent-amber-400 cursor-pointer"
           />
           <div className="flex justify-between text-[10px] text-slate-500">
             <span>60mm</span>

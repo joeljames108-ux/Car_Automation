@@ -91,7 +91,7 @@ export const VehicleComponentLibrary: React.FC<VehicleComponentLibraryProps> = (
       {/* Header & Category Filters */}
       <div className="mb-3 space-y-2">
         <div className="flex items-center justify-between">
-          <span className="text-xs font-mono font-bold text-cyan-600 dark:text-cyan-400 uppercase tracking-widest flex items-center gap-1.5">
+          <span className="text-xs font-mono font-bold text-amber-600 dark:text-amber-400 uppercase tracking-widest flex items-center gap-1.5">
             <Car size={14} /> VEHICLE SUBSYSTEM CATALOG
           </span>
           <span className="text-[10px] font-mono text-slate-600 dark:text-slate-400 bg-slate-100 dark:bg-slate-900 px-2 py-0.5 rounded-md border border-slate-200 dark:border-slate-800 font-bold">
@@ -107,7 +107,7 @@ export const VehicleComponentLibrary: React.FC<VehicleComponentLibraryProps> = (
               onClick={() => setActiveTab(cat)}
               className={`px-2.5 py-1 rounded-xl text-[10px] font-mono font-bold whitespace-nowrap transition-all ${
                 activeTab === cat
-                  ? "bg-cyan-500 text-slate-950 shadow-[0_0_10px_rgba(6,182,212,0.4)]"
+                  ? "bg-amber-500 text-slate-950 shadow-[0_0_10px_rgba(6,182,212,0.4)]"
                   : "bg-slate-100 dark:bg-slate-900/60 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 border border-slate-200 dark:border-slate-800"
               }`}
             >
@@ -142,10 +142,10 @@ export const VehicleComponentLibrary: React.FC<VehicleComponentLibraryProps> = (
                 isInstalled
                   ? "bg-emerald-950/20 border-emerald-500/40 opacity-90"
                   : isActive
-                  ? "bg-cyan-950/40 border-cyan-400 shadow-[0_0_20px_rgba(6,182,212,0.3)] animate-pulse"
+                  ? "bg-amber-950/40 border-amber-400 shadow-[0_0_20px_rgba(6,182,212,0.3)] animate-pulse"
                   : isAvailable
                   ? isHovered
-                    ? "bg-slate-900/90 border-cyan-500/60 shadow-lg"
+                    ? "bg-slate-900/90 border-amber-500/60 shadow-lg"
                     : "bg-slate-900/50 border-slate-800 hover:border-slate-700"
                   : "bg-slate-950/40 border-slate-900 opacity-60"
               }`}
@@ -153,7 +153,7 @@ export const VehicleComponentLibrary: React.FC<VehicleComponentLibraryProps> = (
               {/* Card Header: Title & Action Button */}
               <div className="flex items-start justify-between gap-2 mb-2">
                 <div>
-                  <span className="text-[9px] font-mono text-cyan-400 uppercase tracking-wide font-extrabold block">
+                  <span className="text-[9px] font-mono text-amber-400 uppercase tracking-wide font-extrabold block">
                     {comp.category}
                   </span>
                   <h4 className="text-xs font-bold text-slate-100 tracking-tight">{comp.name}</h4>
@@ -170,9 +170,9 @@ export const VehicleComponentLibrary: React.FC<VehicleComponentLibraryProps> = (
                     onClick={() => onStartInstall(comp.id)}
                     className={`flex items-center gap-1 px-3 py-1 rounded-xl text-[10px] font-mono font-bold transition-all shrink-0 ${
                       isActive
-                        ? "bg-cyan-500 text-slate-950 animate-pulse"
+                        ? "bg-amber-500 text-slate-950 animate-pulse"
                         : isAvailable
-                        ? "bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 hover:bg-cyan-500 hover:text-slate-950 shadow-md"
+                        ? "bg-amber-500/20 text-amber-300 border border-amber-500/40 hover:bg-amber-500 hover:text-slate-950 shadow-md"
                         : "bg-slate-900 text-slate-500 border border-slate-800 cursor-not-allowed"
                     }`}
                   >
@@ -209,7 +209,7 @@ export const VehicleComponentLibrary: React.FC<VehicleComponentLibraryProps> = (
                         onClick={() => handleVariantSelect(comp.id, variant.id)}
                         className={`p-1.5 rounded-lg border text-[9px] font-mono text-left truncate transition-all ${
                           currentVariantId === variant.id
-                            ? "bg-cyan-500/20 border-cyan-400 text-cyan-300 font-bold"
+                            ? "bg-amber-500/20 border-amber-400 text-amber-300 font-bold"
                             : "bg-slate-900/60 border-slate-800 text-slate-400 hover:text-slate-200"
                         }`}
                       >

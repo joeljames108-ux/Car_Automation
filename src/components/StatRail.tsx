@@ -244,19 +244,19 @@ export function StatRailComponent() {
           <div
             key={s.label}
             onClick={() => openStatModal(s)}
-            className="relative flex flex-col gap-1.5 bg-base-900/80 border border-base-800 rounded-xl p-3 transition-all duration-200 hover:border-cyan-500/50 hover:bg-base-850 cursor-pointer group shadow-sm overflow-hidden"
+            className="relative flex flex-col gap-1.5 bg-base-900/80 border border-base-800 rounded-xl p-3 transition-all duration-200 hover:border-amber-500/50 hover:bg-base-850 cursor-pointer group shadow-sm overflow-hidden"
             onMouseEnter={() => setHoveredLabel(s.label)}
             onMouseLeave={() => setHoveredLabel(null)}
           >
             {/* ── TOP ROW: Icon, Metric Label & Live Delta Badge ── */}
             <div className="flex items-center justify-between gap-2 w-full">
               <div className="flex items-center gap-2 min-w-0">
-                <div className="w-7 h-7 rounded-lg bg-cyan-500/10 border border-cyan-400/20 flex items-center justify-center text-cyan-400 shrink-0 group-hover:scale-105 transition-transform">
+                <div className="w-7 h-7 rounded-lg bg-amber-500/10 border border-amber-400/20 flex items-center justify-center text-amber-400 shrink-0 group-hover:scale-105 transition-transform">
                   {s.icon}
                 </div>
                 <div className="text-xs font-bold text-slate-100 uppercase tracking-wider flex items-center gap-1">
                   <span>{s.label}</span>
-                  <HelpCircle size={10} className="opacity-0 group-hover:opacity-100 text-cyan-400 transition-opacity shrink-0" />
+                  <HelpCircle size={10} className="opacity-0 group-hover:opacity-100 text-amber-400 transition-opacity shrink-0" />
                 </div>
               </div>
 
@@ -284,7 +284,7 @@ export function StatRailComponent() {
                 <span className="text-slate-600 font-sans text-xs">→</span>
 
                 <span className="font-bold text-slate-100">
-                  <span className="text-[8px] uppercase tracking-widest text-cyan-400 mr-0.5">NOW</span>
+                  <span className="text-[8px] uppercase tracking-widest text-amber-400 mr-0.5">NOW</span>
                   {!isNaN(Number(s.value)) ? (
                     <AnimatedCounter
                       value={Number(s.value)}
@@ -300,15 +300,15 @@ export function StatRailComponent() {
 
             {/* Popover Specs Card */}
             {hoveredLabel === s.label && (
-              <div className="stat-rail-popover absolute right-full mr-3 top-0 z-50 w-64 p-3.5 bg-white/95 border border-cyan-500/50 rounded-xl shadow-2xl backdrop-blur-xl animate-scale-reveal text-left pointer-events-none">
-                <div className="flex items-center gap-1.5 text-xs font-bold text-cyan-400 mb-1">
-                  <Info size={14} className="text-cyan-400 shrink-0" />
+              <div className="stat-rail-popover absolute right-full mr-3 top-0 z-50 w-64 p-3.5 bg-white/95 border border-amber-500/50 rounded-xl shadow-2xl backdrop-blur-xl animate-scale-reveal text-left pointer-events-none">
+                <div className="flex items-center gap-1.5 text-xs font-bold text-amber-400 mb-1">
+                  <Info size={14} className="text-amber-400 shrink-0" />
                   <span>{s.tooltipTitle}</span>
                 </div>
                 <p className="text-[11px] text-slate-300 leading-relaxed">{s.tooltipDesc}</p>
                 <div className="mt-2 pt-1.5 border-t border-slate-800/60 flex items-center justify-between text-[10px] font-mono text-slate-400">
                   <span>SPEC COMPARISON:</span>
-                  <span className="text-cyan-400 font-semibold">{s.initialValue} → {s.value} {s.unit}</span>
+                  <span className="text-amber-400 font-semibold">{s.initialValue} → {s.value} {s.unit}</span>
                 </div>
               </div>
             )}
@@ -327,10 +327,10 @@ export function StatRailComponent() {
             onClick={(e) => e.stopPropagation()}
           >
             {/* Top Bar with Back & Close */}
-            <div className="w-full flex items-center justify-between border-b border-blue-200/50 pb-3.5 mb-4">
+            <div className="w-full flex items-center justify-between border-b border-amber-200/50 pb-3.5 mb-4">
               <button
                 onClick={closeStatModal}
-                className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-blue-500/10 text-[#007aff] border border-blue-400/30 text-xs font-mono font-bold hover:bg-blue-500/20 transition-all shadow-sm active:scale-95 cursor-pointer"
+                className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-amber-500/10 text-amber-400 border border-amber-400/30 text-xs font-mono font-bold hover:bg-amber-500/20 transition-all shadow-sm active:scale-95 cursor-pointer"
               >
                 <ArrowLeft size={14} /> Back
               </button>
@@ -348,8 +348,8 @@ export function StatRailComponent() {
             </div>
 
             {/* Main Stat Card Display */}
-            <div className="w-full bg-gradient-to-br from-white/95 via-blue-50/30 to-slate-100/50 border border-blue-200/50 rounded-2xl p-6 shadow-sm flex flex-col items-center text-center">
-              <div className="w-14 h-14 rounded-2xl bg-blue-500/15 border border-blue-400/30 flex items-center justify-center text-[#007aff] mb-3 shadow-md">
+            <div className="w-full bg-gradient-to-br from-white/95 via-amber-50/30 to-slate-100/50 border border-amber-200/50 rounded-2xl p-6 shadow-sm flex flex-col items-center text-center">
+              <div className="w-14 h-14 rounded-2xl bg-amber-500/15 border border-amber-400/30 flex items-center justify-center text-[#007aff] mb-3 shadow-md">
                 {selectedStat.icon}
               </div>
               <h3 className="text-lg font-bold text-slate-800 tracking-wide mb-1">{selectedStat.tooltipTitle}</h3>
@@ -367,12 +367,12 @@ export function StatRailComponent() {
             </div>
 
             {/* Baseline Specs Comparison Grid */}
-            <div className="w-full grid grid-cols-2 gap-3 mt-4 pt-3.5 border-t border-blue-200/40">
-              <div className="bg-white/85 border border-blue-200/50 rounded-2xl p-3.5 text-center shadow-sm backdrop-blur-md">
+            <div className="w-full grid grid-cols-2 gap-3 mt-4 pt-3.5 border-t border-amber-200/40">
+              <div className="bg-white/85 border border-amber-200/50 rounded-2xl p-3.5 text-center shadow-sm backdrop-blur-md">
                 <span className="block text-[10px] font-mono text-slate-400 uppercase tracking-wider mb-1">Baseline Initial</span>
                 <span className="text-base font-mono font-bold text-slate-700">{selectedStat.initialValue} {selectedStat.unit}</span>
               </div>
-              <div className="bg-white/85 border border-blue-200/50 rounded-2xl p-3.5 text-center shadow-sm backdrop-blur-md">
+              <div className="bg-white/85 border border-amber-200/50 rounded-2xl p-3.5 text-center shadow-sm backdrop-blur-md">
                 <span className="block text-[10px] font-mono text-slate-400 uppercase tracking-wider mb-1">Current Spec</span>
                 <span className="text-base font-mono font-bold text-[#007aff]">{selectedStat.value} {selectedStat.unit}</span>
               </div>

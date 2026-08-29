@@ -127,7 +127,7 @@ export function RaceSimulator() {
 }
 
 function RaceResultView({ result }: { result: RaceResult }) {
-  const lapSeries = [{ data: result.lapRecords.map((l) => ({ x: l.lap, y: l.time })), color: "#22d3ee", fill: true, label: "Lap Time" }];
+  const lapSeries = [{ data: result.lapRecords.map((l) => ({ x: l.lap, y: l.time })), color: "#fbbf24", fill: true, label: "Lap Time" }];
   const tireTempSeries = [
     { data: result.lapRecords.map((l) => ({ x: l.lap, y: l.tireTempFL })), color: "#ef4444", label: "FL" },
     { data: result.lapRecords.map((l) => ({ x: l.lap, y: l.tireTempFR })), color: "#f87171", label: "FR" },
@@ -140,7 +140,7 @@ function RaceResultView({ result }: { result: RaceResult }) {
   ];
   const tempSeries = [
     { data: result.lapRecords.map((l) => ({ x: l.lap, y: l.brakeTemp })), color: "#f59e0b", label: "Brake" },
-    { data: result.lapRecords.map((l) => ({ x: l.lap, y: l.waterTemp })), color: "#22d3ee", label: "Water" },
+    { data: result.lapRecords.map((l) => ({ x: l.lap, y: l.waterTemp })), color: "#fbbf24", label: "Water" },
     { data: result.lapRecords.map((l) => ({ x: l.lap, y: l.oilTemp })), color: "#a78bfa", label: "Oil" },
   ];
   const posSeries = [{ data: result.lapRecords.map((l) => ({ x: l.lap, y: l.position })), color: "#22c55e", label: "Position" }];
@@ -149,7 +149,7 @@ function RaceResultView({ result }: { result: RaceResult }) {
     : [];
   const energySeries = result.lapRecords.some((l) => l.energyRecovered > 0)
     ? [
-        { data: result.lapRecords.map((l) => ({ x: l.lap, y: l.energyDeployed })), color: "#22d3ee", label: "Deployed" },
+        { data: result.lapRecords.map((l) => ({ x: l.lap, y: l.energyDeployed })), color: "#fbbf24", label: "Deployed" },
         { data: result.lapRecords.map((l) => ({ x: l.lap, y: l.energyRecovered })), color: "#22c55e", label: "Recovered" },
       ]
     : [];

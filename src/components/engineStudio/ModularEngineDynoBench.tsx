@@ -123,7 +123,7 @@ export const ModularEngineDynoBench: React.FC<ModularEngineDynoBenchProps> = ({ 
       <div className="flex items-center justify-between pb-3 border-b border-slate-800">
         <div>
           <h3 className="text-sm font-bold text-slate-100 flex items-center gap-2">
-            <Activity size={16} className="text-cyan-400" />
+            <Activity size={16} className="text-amber-400" />
             Virtual Engine Dynamometer Test Bench
           </h3>
           <p className="text-[11px] text-slate-400">
@@ -137,7 +137,7 @@ export const ModularEngineDynoBench: React.FC<ModularEngineDynoBenchProps> = ({ 
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all shadow-md ${
               isSweeping
                 ? "bg-amber-500 text-slate-950 shadow-amber-500/30"
-                : "bg-cyan-500 hover:bg-cyan-400 text-slate-950 shadow-cyan-500/30"
+                : "bg-amber-500 hover:bg-amber-400 text-slate-950 shadow-cyan-500/30"
             }`}
           >
             {isSweeping ? <Pause size={13} /> : <Play size={13} />}
@@ -240,8 +240,8 @@ export const ModularEngineDynoBench: React.FC<ModularEngineDynoBenchProps> = ({ 
         {/* Legend */}
         <div className="absolute top-3 right-5 flex items-center gap-4 text-[10px] font-mono">
           <div className="flex items-center gap-1.5">
-            <span className="w-2.5 h-2.5 rounded-full bg-cyan-400 shadow-sm shadow-cyan-400" />
-            <span className="text-cyan-300 font-bold">Horsepower (HP)</span>
+            <span className="w-2.5 h-2.5 rounded-full bg-amber-400 shadow-sm shadow-cyan-400" />
+            <span className="text-amber-300 font-bold">Horsepower (HP)</span>
           </div>
           <div className="flex items-center gap-1.5">
             <span className="w-2.5 h-2.5 rounded-full bg-amber-400 shadow-sm shadow-amber-400" />
@@ -261,11 +261,11 @@ export const ModularEngineDynoBench: React.FC<ModularEngineDynoBenchProps> = ({ 
           </span>
         </div>
 
-        <div className="bg-slate-950/60 p-2.5 rounded-xl border border-cyan-500/30">
-          <span className="text-[9px] uppercase tracking-wider text-cyan-400 block mb-0.5">
+        <div className="bg-slate-950/60 p-2.5 rounded-xl border border-amber-500/30">
+          <span className="text-[9px] uppercase tracking-wider text-amber-400 block mb-0.5">
             Power Output
           </span>
-          <span className="text-base font-mono font-bold text-cyan-300">
+          <span className="text-base font-mono font-bold text-amber-300">
             {activePoint.horsepowerHp} HP
           </span>
         </div>
@@ -311,7 +311,7 @@ export const ModularEngineDynoBench: React.FC<ModularEngineDynoBenchProps> = ({ 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-2 text-xs">
         <div className="bg-slate-950/40 p-3 rounded-xl border border-slate-800/80">
           <span className="text-[10px] text-slate-400 block">Peak Horsepower</span>
-          <span className="text-sm font-mono font-bold text-cyan-400">
+          <span className="text-sm font-mono font-bold text-amber-400">
             {perf?.peakHorsepowerHp} HP @ {perf?.peakHorsepowerRpm} RPM
           </span>
         </div>
@@ -323,7 +323,7 @@ export const ModularEngineDynoBench: React.FC<ModularEngineDynoBenchProps> = ({ 
         </div>
         <div className="bg-slate-950/40 p-3 rounded-xl border border-slate-800/80">
           <span className="text-[10px] text-slate-400 block">Specific Output</span>
-          <span className="text-sm font-mono font-bold text-purple-400">
+          <span className="text-sm font-mono font-bold text-amber-400">
             {perf?.specificOutputHpPerLiter} HP / Liter
           </span>
         </div>

@@ -59,9 +59,9 @@ export const VehicleComparisonStudio: React.FC = () => {
   return (
     <div className="flex flex-col gap-4 w-full h-full text-slate-100 p-4">
       {/* Header */}
-      <div className="flex items-center justify-between p-4 rounded-3xl bg-slate-950/80 border border-cyan-500/30 backdrop-blur-xl">
+      <div className="flex items-center justify-between p-4 rounded-3xl bg-slate-950/80 border border-amber-500/30 backdrop-blur-xl">
         <div className="flex items-center gap-3">
-          <div className="p-2.5 rounded-2xl bg-cyan-500/20 text-cyan-400 border border-cyan-500/40">
+          <div className="p-2.5 rounded-2xl bg-amber-500/20 text-amber-400 border border-amber-500/40">
             <GitCompare size={20} />
           </div>
           <div>
@@ -71,7 +71,7 @@ export const VehicleComparisonStudio: React.FC = () => {
         </div>
 
         <div className="flex items-center gap-2">
-          <span className="px-3 py-1 rounded-xl text-xs font-mono font-bold bg-cyan-500/20 text-cyan-300 border border-cyan-500/40">
+          <span className="px-3 py-1 rounded-xl text-xs font-mono font-bold bg-amber-500/20 text-amber-300 border border-amber-500/40">
             Δ Nürburgring: {delta.lapTimeDiffSec > 0 ? `+${delta.lapTimeDiffSec}s` : `${delta.lapTimeDiffSec}s`}
           </span>
         </div>
@@ -80,13 +80,13 @@ export const VehicleComparisonStudio: React.FC = () => {
       {/* Main 2-Column Comparison Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         {/* CAR A (Baseline) */}
-        <div className="p-5 rounded-3xl bg-slate-950/90 border border-cyan-500/40 backdrop-blur-xl flex flex-col gap-4">
+        <div className="p-5 rounded-3xl bg-slate-950/90 border border-amber-500/40 backdrop-blur-xl flex flex-col gap-4">
           <div className="flex justify-between items-center pb-3 border-b border-white/10">
             <div>
-              <span className="text-[10px] font-mono font-bold uppercase text-cyan-400">SPECIFICATION A (CURRENT BUILD)</span>
+              <span className="text-[10px] font-mono font-bold uppercase text-amber-400">SPECIFICATION A (CURRENT BUILD)</span>
               <h3 className="font-bold text-base text-white">{carA.name}</h3>
             </div>
-            <span className="px-2.5 py-1 rounded-xl text-xs font-mono font-bold bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">
+            <span className="px-2.5 py-1 rounded-xl text-xs font-mono font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30">
               ${carA.costAndBOM.totalManufacturingCostUSD.toLocaleString()}
             </span>
           </div>
@@ -106,27 +106,27 @@ export const VehicleComparisonStudio: React.FC = () => {
             </div>
             <div className="p-3 rounded-2xl bg-slate-900/60 border border-white/10">
               <span className="text-slate-400 text-[10px] uppercase block">Top Speed</span>
-              <span className="text-base font-bold text-cyan-400">{mA.topSpeedKmh} km/h</span>
+              <span className="text-base font-bold text-amber-400">{mA.topSpeedKmh} km/h</span>
             </div>
             <div className="p-3 rounded-2xl bg-slate-900/60 border border-white/10">
               <span className="text-slate-400 text-[10px] uppercase block">Downforce @ 160</span>
-              <span className="text-base font-bold text-cyan-300">{mA.downforceAt160KmhN} N</span>
+              <span className="text-base font-bold text-amber-300">{mA.downforceAt160KmhN} N</span>
             </div>
             <div className="p-3 rounded-2xl bg-slate-900/60 border border-white/10">
               <span className="text-slate-400 text-[10px] uppercase block">Lateral Grip</span>
-              <span className="text-base font-bold text-purple-400">{mA.maxLateralAccelerationG} g</span>
+              <span className="text-base font-bold text-amber-400">{mA.maxLateralAccelerationG} g</span>
             </div>
           </div>
         </div>
 
         {/* CAR B (Target / Variant) */}
-        <div className="p-5 rounded-3xl bg-slate-950/90 border border-purple-500/40 backdrop-blur-xl flex flex-col gap-4">
+        <div className="p-5 rounded-3xl bg-slate-950/90 border border-amber-500/40 backdrop-blur-xl flex flex-col gap-4">
           <div className="flex justify-between items-center pb-3 border-b border-white/10">
             <div>
-              <span className="text-[10px] font-mono font-bold uppercase text-purple-400">SPECIFICATION B (TARGET VARIANT)</span>
+              <span className="text-[10px] font-mono font-bold uppercase text-amber-400">SPECIFICATION B (TARGET VARIANT)</span>
               <h3 className="font-bold text-base text-white">{carB.name}</h3>
             </div>
-            <span className="px-2.5 py-1 rounded-xl text-xs font-mono font-bold bg-purple-500/20 text-purple-300 border border-purple-500/30">
+            <span className="px-2.5 py-1 rounded-xl text-xs font-mono font-bold bg-amber-500/20 text-amber-300 border border-amber-500/30">
               ${carB.costAndBOM.totalManufacturingCostUSD.toLocaleString()}
             </span>
           </div>
@@ -147,23 +147,23 @@ export const VehicleComparisonStudio: React.FC = () => {
             </div>
             <div className="p-3 rounded-2xl bg-slate-900/60 border border-white/10">
               <span className="text-slate-400 text-[10px] uppercase block">Top Speed</span>
-              <span className="text-base font-bold text-cyan-400">{mB.topSpeedKmh} km/h</span>
+              <span className="text-base font-bold text-amber-400">{mB.topSpeedKmh} km/h</span>
             </div>
             <div className="p-3 rounded-2xl bg-slate-900/60 border border-white/10">
               <span className="text-slate-400 text-[10px] uppercase block">Downforce @ 160</span>
-              <span className="text-base font-bold text-cyan-300">{mB.downforceAt160KmhN} N</span>
+              <span className="text-base font-bold text-amber-300">{mB.downforceAt160KmhN} N</span>
             </div>
             <div className="p-3 rounded-2xl bg-slate-900/60 border border-white/10">
               <span className="text-slate-400 text-[10px] uppercase block">Lateral Grip</span>
-              <span className="text-base font-bold text-purple-400">{mB.maxLateralAccelerationG} g</span>
+              <span className="text-base font-bold text-amber-400">{mB.maxLateralAccelerationG} g</span>
             </div>
           </div>
         </div>
       </div>
 
       {/* Multi-Sector Virtual Track Lap Delta Breakdown */}
-      <div className="p-5 rounded-3xl bg-slate-950/90 border border-cyan-500/30 backdrop-blur-xl space-y-3">
-        <h3 className="font-bold text-xs uppercase tracking-wider text-cyan-400 flex items-center gap-2">
+      <div className="p-5 rounded-3xl bg-slate-950/90 border border-amber-500/30 backdrop-blur-xl space-y-3">
+        <h3 className="font-bold text-xs uppercase tracking-wider text-amber-400 flex items-center gap-2">
           <Compass size={14} /> Multi-Sector Track Performance Comparison (Nürburgring Nordschleife)
         </h3>
 

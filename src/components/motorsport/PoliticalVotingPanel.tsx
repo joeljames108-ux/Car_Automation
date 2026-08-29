@@ -88,7 +88,7 @@ export const PoliticalVotingPanel = memo(function PoliticalVotingPanel() {
                   </div>
                 </div>
 
-                <div className="text-xs font-mono text-cyan-300 bg-cyan-500/10 p-2.5 rounded-lg border border-cyan-500/20">
+                <div className="text-xs font-mono text-amber-300 bg-amber-500/10 p-2.5 rounded-lg border border-amber-500/20">
                   ⚡ Impact: {m.effect}
                 </div>
 

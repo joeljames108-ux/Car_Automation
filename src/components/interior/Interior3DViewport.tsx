@@ -77,10 +77,13 @@ export const Interior3DViewport: React.FC<Interior3DViewportProps> = ({
     sceneRef.current = scene;
     scene.background = new THREE.Color(isNightMode ? 0x05070d : 0x1e2430);
 
-    // 2. Camera
+    // 2. Camera — Start at Driver POV
     const width = container.clientWidth;
     const height = container.clientHeight || 500;
-    const camera = new THREE.PerspectiveCamera(65, width / height, 0.05, 50);
+    const camera = new THREE.PerspectiveCamera(72, width / height, 0.02, 50);
+    // Set initial driver POV position
+    camera.position.set(-0.55, 0.92, -0.08);
+    camera.lookAt(0.80, 0.55, -1.5);
     cameraRef.current = camera;
 
     // 3. Renderer
@@ -103,26 +106,103 @@ export const Interior3DViewport: React.FC<Interior3DViewportProps> = ({
     controls.maxPolarAngle = Math.PI / 2 + 0.1;
     controlsRef.current = controls;
 
-    // 5. Lighting Rig
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.4);
+    // 5. Lighting Rig — Enhanced for dashboard/steering visibility
+    const ambientLight = new THREE.AmbientLight(0xffeedd, 0.6);
     scene.add(ambientLight);
 
-    const roofDomeLight = new THREE.PointLight(0xffeedd, 2.2, 3.5);
-    roofDomeLight.position.set(-0.75, 1.2, 0);
+    // Hemisphere light for natural sky/ground bounce
+    const hemiLight = new THREE.HemisphereLight(0xc8d8f0, 0x1a1410, 0.5);
+    scene.add(hemiLight);
+
+    // Roof dome light — warm overhead illumination
+    const roofDomeLight = new THREE.PointLight(0xfff0dd, 2.5, 4.0);
+    roofDomeLight.position.set(-0.70, 1.3, -0.10);
     scene.add(roofDomeLight);
 
-    const windshieldKeyLight = new THREE.DirectionalLight(0xa5c8ff, 1.8);
-    windshieldKeyLight.position.set(2.0, 2.5, 0);
+    // Windshield key light — daylight from front
+    const windshieldKeyLight = new THREE.DirectionalLight(0xd0e0f8, 2.2);
+    windshieldKeyLight.position.set(2.0, 2.5, -1.0);
     scene.add(windshieldKeyLight);
 
-    const cabinFillLight = new THREE.DirectionalLight(0x445577, 0.8);
-    cabinFillLight.position.set(-2.0, 1.0, 1.5);
+    // Cabin fill — soft fill from passenger side
+    const cabinFillLight = new THREE.DirectionalLight(0x667799, 1.0);
+    cabinFillLight.position.set(-1.0, 1.2, 1.0);
     scene.add(cabinFillLight);
+
+    // Dashboard accent light — illuminate instrument panel & steering wheel
+    const dashLight = new THREE.SpotLight(0xffffff, 2.0, 2.5, Math.PI / 3, 0.4, 1);
+    dashLight.position.set(-0.50, 1.2, -0.15);
+    dashLight.target.position.set(-0.50, 0.65, -0.35);
+    scene.add(dashLight, dashLight.target);
+
+    // Steering wheel highlight — focused light on the wheel rim
+    const wheelLight = new THREE.PointLight(0xffeedd, 1.0, 1.2);
+    wheelLight.position.set(-0.50, 0.90, 0.10);
+    scene.add(wheelLight);
+
+    // Floor bounce light — illuminate pedals and lower dash
+    const floorBounce = new THREE.PointLight(0x8899bb, 0.8, 1.5);
+    floorBounce.position.set(-0.50, 0.15, -0.35);
+    scene.add(floorBounce);
 
     // 6. Build Initial Cockpit Group
     const cockpit = MasterInterior3DStudio.buildCockpitScene(config, wheelbaseMm, trackWidthMm);
     cockpitGroupRef.current = cockpit;
     scene.add(cockpit);
+
+    // 6b. Add windshield environment and road ahead for driver context
+    // Road plane ahead of dashboard
+    const roadGeo = new THREE.PlaneGeometry(4, 12);
+    const roadMat = new THREE.MeshStandardMaterial({
+      color: 0x2a2d34,
+      roughness: 0.85,
+      metalness: 0.0,
+    });
+    const roadMesh = new THREE.Mesh(roadGeo, roadMat);
+    roadMesh.rotation.x = -Math.PI / 2;
+    roadMesh.position.set(-0.30, -0.02, -4.5);
+    scene.add(roadMesh);
+
+    // Road lane markings
+    const laneGeo = new THREE.PlaneGeometry(0.08, 10);
+    const laneMat = new THREE.MeshBasicMaterial({ color: 0xf0f0f0, transparent: true, opacity: 0.6 });
+    [-0.5, 0, 0.5].forEach((x) => {
+      const lane = new THREE.Mesh(laneGeo, laneMat);
+      lane.rotation.x = -Math.PI / 2;
+      lane.position.set(-0.30 + x, -0.01, -4.5);
+      scene.add(lane);
+    });
+
+    // Distant sky gradient backdrop
+    const skyGeo = new THREE.PlaneGeometry(20, 8);
+    const skyMat = new THREE.ShaderMaterial({
+      uniforms: {
+        topColor: { value: new THREE.Color(0x1a2a4a) },
+        bottomColor: { value: new THREE.Color(0x3a5a7a) },
+      },
+      vertexShader: `varying vec2 vUv; void main() { vUv = uv; gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0); }`,
+      fragmentShader: `uniform vec3 topColor; uniform vec3 bottomColor; varying vec2 vUv; void main() { gl_FragColor = vec4(mix(bottomColor, topColor, vUv.y), 1.0); }`,
+      side: THREE.DoubleSide,
+      depthWrite: false,
+    });
+    const skyMesh = new THREE.Mesh(skyGeo, skyMat);
+    skyMesh.position.set(-0.30, 2.0, -10.0);
+    scene.add(skyMesh);
+
+    // Windshield glass panel (semi-transparent)
+    const windshieldGeo = new THREE.PlaneGeometry(1.4, 0.6);
+    const windshieldMat = new THREE.MeshPhysicalMaterial({
+      color: 0x88bbdd,
+      transparent: true,
+      opacity: 0.08,
+      roughness: 0.0,
+      metalness: 0.1,
+      side: THREE.DoubleSide,
+    });
+    const windshield = new THREE.Mesh(windshieldGeo, windshieldMat);
+    windshield.position.set(-0.55, 1.0, -0.50);
+    windshield.rotation.y = Math.PI * 0.03;
+    scene.add(windshield);
 
     // 7. Pointer drag handlers for Driver POV Look-Around
     const handlePointerDown = (e: PointerEvent) => {
@@ -187,9 +267,10 @@ export const Interior3DViewport: React.FC<Interior3DViewportProps> = ({
         curYaw += (targetYawRef.current - curYaw) * 0.12;
         curPitch += (targetPitchRef.current - curPitch) * 0.12;
 
-        const eyeX = -0.68;
-        const eyeY = 0.88;
-        const eyeZ = -0.34;
+        // Driver eye position — matches driver_pov camera pose
+        const eyeX = -0.55;
+        const eyeY = 0.92;
+        const eyeZ = -0.08;
 
         camera.position.set(eyeX, eyeY, eyeZ);
 
@@ -427,7 +508,7 @@ export const Interior3DViewport: React.FC<Interior3DViewportProps> = ({
           <button
             onClick={() => setIsNightMode(!isNightMode)}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
-              isNightMode ? 'bg-indigo-600 text-white shadow-md' : 'bg-amber-500 text-slate-950 shadow-md font-bold'
+              isNightMode ? 'bg-amber-600 text-white shadow-md' : 'bg-amber-500 text-slate-950 shadow-md font-bold'
             }`}
           >
             {isNightMode ? <Moon size={13} /> : <Sun size={13} />}
@@ -439,7 +520,7 @@ export const Interior3DViewport: React.FC<Interior3DViewportProps> = ({
       {/* ── BOTTOM TELEMETRY PILL HUD ── */}
       <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between pointer-events-none">
         <div className="flex items-center gap-3 px-3 py-2 rounded-xl bg-slate-950/85 backdrop-blur-md border border-slate-800 text-xs text-slate-300 pointer-events-auto">
-          <span className="font-mono text-cyan-400 font-bold">DASH: {config.dashboardClass.replace(/_/g, ' ').toUpperCase()}</span>
+          <span className="font-mono text-amber-400 font-bold">DASH: {config.dashboardClass.replace(/_/g, ' ').toUpperCase()}</span>
           <span className="text-slate-600">|</span>
           <span className="font-mono text-amber-400">STEERING: {config.steeringTypology.replace(/_/g, ' ').toUpperCase()}</span>
           <span className="text-slate-600">|</span>

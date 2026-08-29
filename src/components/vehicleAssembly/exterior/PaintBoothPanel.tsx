@@ -14,7 +14,7 @@ export const PaintBoothPanel: React.FC = () => {
   return (
     <div className="bg-slate-900/90 border border-white/10 rounded-3xl p-5 backdrop-blur-xl shadow-2xl space-y-4">
       <div className="flex items-center gap-2 pb-3 border-b border-white/10">
-        <Palette className="text-cyan-400" size={18} />
+        <Palette className="text-amber-400" size={18} />
         <h3 className="text-sm font-mono font-bold text-slate-100 uppercase">
           BESPOKE AUTOMOTIVE PAINT BOOTH & CLEAR COAT LAB
         </h3>
@@ -37,7 +37,7 @@ export const PaintBoothPanel: React.FC = () => {
               }
               className={`group relative h-12 rounded-2xl border flex items-end p-1.5 transition-all ${
                 paintConfig.primaryColorHex.toLowerCase() === swatch.hex.toLowerCase()
-                  ? "border-cyan-400 scale-105 shadow-[0_0_12px_rgba(6,182,212,0.6)]"
+                  ? "border-amber-400 scale-105 shadow-[0_0_12px_rgba(6,182,212,0.6)]"
                   : "border-white/10 hover:border-white/40"
               }`}
               style={{ backgroundColor: swatch.hex }}
@@ -54,7 +54,7 @@ export const PaintBoothPanel: React.FC = () => {
       {/* Clear Coat DFT (Dry Film Thickness) Indicator */}
       <div className="p-3 rounded-2xl bg-slate-950 border border-white/10 flex items-center justify-between text-xs font-mono">
         <span className="text-slate-400">Total Coating Build:</span>
-        <strong className="text-cyan-400 font-bold">
+        <strong className="text-amber-400 font-bold">
           {paintConfig.eCoatPrimerMicrons +
             paintConfig.primerSurfacerMicrons +
             paintConfig.baseCoatMicrons +

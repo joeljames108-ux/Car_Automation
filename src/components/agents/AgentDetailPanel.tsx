@@ -34,7 +34,7 @@ export const AgentDetailPanel: React.FC<AgentDetailPanelProps> = ({
             <div>
               <div className="flex items-center gap-2">
                 <h3 className="text-lg font-bold text-white">{identity.name}</h3>
-                <span className="px-2 py-0.5 text-[10px] uppercase tracking-wider font-semibold rounded-md bg-cyan-500/20 text-cyan-300 border border-cyan-500/30">
+                <span className="px-2 py-0.5 text-[10px] uppercase tracking-wider font-semibold rounded-md bg-amber-500/20 text-amber-300 border border-amber-500/30">
                   Priority {identity.priority}
                 </span>
               </div>
@@ -82,7 +82,7 @@ export const AgentDetailPanel: React.FC<AgentDetailPanelProps> = ({
         {/* Live Diagnostics */}
         <div className="flex flex-col gap-3">
           <h4 className="text-xs uppercase tracking-wider font-semibold text-slate-400 flex items-center gap-2">
-            <Activity size={14} className="text-cyan-400" />
+            <Activity size={14} className="text-amber-400" />
             <span>Active Diagnostics ({findings.length})</span>
           </h4>
 
@@ -114,7 +114,7 @@ export const AgentDetailPanel: React.FC<AgentDetailPanelProps> = ({
                   {f.recommendation && onApplyRecommendation && (
                     <button
                       onClick={() => onApplyRecommendation(f.recommendation!)}
-                      className="mt-2 self-start px-3 py-1.5 bg-cyan-500/20 hover:bg-cyan-500/30 border border-cyan-500/40 rounded-xl text-cyan-300 text-xs font-semibold transition-colors"
+                      className="mt-2 self-start px-3 py-1.5 bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/40 rounded-xl text-amber-300 text-xs font-semibold transition-colors"
                     >
                       Apply: {f.recommendation.title}
                     </button>

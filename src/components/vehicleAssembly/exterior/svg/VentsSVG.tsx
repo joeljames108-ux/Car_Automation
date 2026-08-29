@@ -26,7 +26,7 @@ export const VentsSVG: React.FC<VentsSVGProps> = ({
   onMouseEnter,
   onMouseLeave,
 }) => {
-  const strokeColor = isSelected ? "#38bdf8" : isHovered ? "#0284c7" : "#020617";
+  const strokeColor = isSelected ? "#fbbf24" : isHovered ? "#0284c7" : "#020617";
 
   return (
     <g
@@ -46,7 +46,7 @@ export const VentsSVG: React.FC<VentsSVGProps> = ({
         strokeWidth="0.8"
       />
       {/* Airflow Velocity Gradient Line */}
-      <line x1="345" y1="268" x2="358" y2="268" stroke="#38bdf8" strokeWidth="1.2" />
+      <line x1="345" y1="268" x2="358" y2="268" stroke="#fbbf24" strokeWidth="1.2" />
     </g>
   );
 };

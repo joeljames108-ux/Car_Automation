@@ -31,7 +31,7 @@ export const FrontSuspensionSVG: React.FC<FrontSuspensionSVGProps> = ({
   onMouseEnter,
   onMouseLeave,
 }) => {
-  const strokeColor = isSelected ? "#38bdf8" : isHovered ? "#0284c7" : "#020617";
+  const strokeColor = isSelected ? "#fbbf24" : isHovered ? "#0284c7" : "#020617";
   const strokeWidth = isSelected ? 2.5 : isHovered ? 2.0 : 1.2;
 
   return (
@@ -83,7 +83,7 @@ export const FrontSuspensionSVG: React.FC<FrontSuspensionSVGProps> = ({
       <circle cx="278" cy="340" r="2.5" fill="#f59e0b" />
 
       {/* ── 5. Anti-Roll Sway Bar Drop Link ── */}
-      <line x1="250" y1="360" x2="255" y2="348" stroke="#38bdf8" strokeWidth="2.0" />
+      <line x1="250" y1="360" x2="255" y2="348" stroke="#fbbf24" strokeWidth="2.0" />
     </g>
   );
 };

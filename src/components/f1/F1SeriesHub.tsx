@@ -29,11 +29,11 @@ export const F1SeriesHub: React.FC<F1SeriesHubProps> = memo(function F1SeriesHub
   return (
     <div className="space-y-6 max-w-5xl mx-auto p-4 sm:p-6 animate-fade-in-up">
       {/* Hero Welcome Banner */}
-      <div className="glass-panel p-8 border-cyan-500/30 bg-gradient-to-br from-slate-900 via-slate-900/95 to-cyan-950/40 rounded-3xl shadow-2xl relative overflow-hidden">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
+      <div className="glass-panel p-8 border-amber-500/30 bg-gradient-to-br from-slate-900 via-slate-900/95 to-amber-950/40 rounded-3xl shadow-2xl relative overflow-hidden">
+        <div className="absolute top-0 right-0 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />
         
         <div className="relative z-10 space-y-3">
-          <div className="flex items-center gap-2 text-xs font-mono font-bold text-cyan-400 uppercase tracking-widest">
+          <div className="flex items-center gap-2 text-xs font-mono font-bold text-amber-400 uppercase tracking-widest">
             <Sparkles size={14} /> FIA FORMULA 1 CONSTRUCTOR CHAMPIONSHIP
           </div>
           <h1 className="text-3xl sm:text-4xl font-black text-slate-100 tracking-tight">
@@ -46,7 +46,7 @@ export const F1SeriesHub: React.FC<F1SeriesHubProps> = memo(function F1SeriesHub
           <div className="flex flex-wrap items-center gap-4 pt-4">
             <button
               onClick={handleStartSeason}
-              className="px-6 py-3.5 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-black text-sm tracking-wide shadow-lg shadow-cyan-500/25 flex items-center gap-2 transition-all group cursor-pointer"
+              className="px-6 py-3.5 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-black text-sm tracking-wide shadow-lg shadow-cyan-500/25 flex items-center gap-2 transition-all group cursor-pointer"
             >
               <span>ENTER F1 DESIGN WORKSHOP</span>
               <ChevronRight size={18} className="group-hover:translate-x-1 transition-transform" />
@@ -72,7 +72,7 @@ export const F1SeriesHub: React.FC<F1SeriesHubProps> = memo(function F1SeriesHub
         {/* 1. Team & Entry Configuration */}
         <div className="bg-slate-900/60 p-5 rounded-2xl border border-slate-800 space-y-4">
           <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-200">
-            <Users size={16} className="text-cyan-400" /> Team Entry Registration
+            <Users size={16} className="text-amber-400" /> Team Entry Registration
           </div>
 
           <div className="space-y-3">
@@ -82,7 +82,7 @@ export const F1SeriesHub: React.FC<F1SeriesHubProps> = memo(function F1SeriesHub
                 type="text"
                 value={teamName}
                 onChange={(e) => setTeamName(e.target.value)}
-                className="w-full mt-1 bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-100 font-semibold focus:outline-none focus:border-cyan-500"
+                className="w-full mt-1 bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-100 font-semibold focus:outline-none focus:border-amber-500"
               />
             </div>
 
@@ -91,7 +91,7 @@ export const F1SeriesHub: React.FC<F1SeriesHubProps> = memo(function F1SeriesHub
               <select
                 value={budgetTier}
                 onChange={(e) => setBudgetTier(parseInt(e.target.value))}
-                className="w-full mt-1 bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-cyan-500"
+                className="w-full mt-1 bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-amber-500"
               >
                 <option value={140}>$140M Maximum FIA Cost Cap (Works Team)</option>
                 <option value={115}>$115M Upper Midfield Budget</option>

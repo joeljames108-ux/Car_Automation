@@ -84,18 +84,18 @@ export function ConnectingRodsSection({
             />
 
             {/* Rod Ratio Readout */}
-            <div className="p-3 rounded-xl bg-base-950/80 border border-cyan-500/20 flex items-center justify-between">
+            <div className="p-3 rounded-xl bg-base-950/80 border border-amber-500/20 flex items-center justify-between">
               <span className="text-xs font-mono text-slate-400">Rod-to-Stroke Ratio</span>
               <div className="flex items-center gap-2">
-                <span className="text-sm font-mono font-extrabold text-cyan-300">{rodRatio}:1</span>
-                <span className="text-[10px] px-1.5 py-0.2 rounded font-mono font-bold bg-cyan-500/20 text-cyan-300">
+                <span className="text-sm font-mono font-extrabold text-amber-300">{rodRatio}:1</span>
+                <span className="text-[10px] px-1.5 py-0.2 rounded font-mono font-bold bg-amber-500/20 text-amber-300">
                   {parseFloat(rodRatio) > 1.65 ? "HIGH-RPM OPTIMAL" : "TORQUE BIASED"}
                 </span>
               </div>
             </div>
 
-            <div className="p-3 rounded-xl bg-cyan-950/20 border border-cyan-500/20 space-y-1">
-              <span className="text-[10px] font-mono font-bold text-cyan-300 uppercase tracking-wider block">
+            <div className="p-3 rounded-xl bg-amber-950/20 border border-amber-500/20 space-y-1">
+              <span className="text-[10px] font-mono font-bold text-amber-300 uppercase tracking-wider block">
                 BEAM CROSS-SECTION
               </span>
               <p className="text-[11px] font-mono text-slate-300 leading-relaxed">

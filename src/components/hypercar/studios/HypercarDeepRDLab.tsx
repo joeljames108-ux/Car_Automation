@@ -1,9 +1,12 @@
-import React, { useState, useMemo, memo } from "react";
+import React, { useState, useMemo, memo, lazy, Suspense } from "react";
 import {
   Shield, Zap, Wind, Flame, Activity, Sparkles, Layers,
   Sliders, Award, Gauge, Disc, ArrowRight, CheckCircle2, AlertTriangle
 } from "lucide-react";
-import { MegawattHypercarStudioViewport } from "../MegawattHypercarStudioViewport";
+
+const MegawattHypercarStudioViewport = lazy(() =>
+  import("../MegawattHypercarStudioViewport").then((m) => ({ default: m.MegawattHypercarStudioViewport }))
+);
 import { CarboTitaniumMonocoqueSolver } from "../../../sim/hypercar/carboTitaniumMonocoqueSolver";
 import { MegawattTriMotorPowertrainEngine } from "../../../sim/hypercar/megawattTriMotorPowertrainEngine";
 import { ActiveGroundEffectVenturiAeromechanics, type ActiveDrsMode } from "../../../sim/hypercar/activeGroundEffectVenturiAeromechanics";
@@ -22,8 +25,8 @@ interface HypercarRDTabDef {
 
 const HYPERCAR_RD_TABS: HypercarRDTabDef[] = [
   { id: "full_3d_lab", label: "Interactive 3D Megawatt Rig", icon: <Sparkles size={14} className="text-amber-400" />, badge: "3D CAD" },
-  { id: "carbotanium_fea", label: "Carbotanium FEA Tub", icon: <Shield size={14} className="text-blue-400" />, badge: "75 kNm/°" },
-  { id: "trimotor_powertrain", label: "800V Tri-Motor Powertrain", icon: <Zap size={14} className="text-cyan-400" />, badge: "1,600+ HP" },
+  { id: "carbotanium_fea", label: "Carbotanium FEA Tub", icon: <Shield size={14} className="text-amber-400" />, badge: "75 kNm/°" },
+  { id: "trimotor_powertrain", label: "800V Tri-Motor Powertrain", icon: <Zap size={14} className="text-amber-400" />, badge: "1,600+ HP" },
   { id: "venturi_aeromechanics", label: "Venturi Ground Effect CFD", icon: <Wind size={14} className="text-emerald-400" /> },
   { id: "csic_brakes", label: "420mm C/SiC Brake Thermal", icon: <Flame size={14} className="text-rose-400" />, badge: "1,450°C" },
   { id: "bop_scrutineering", label: "WEC 24H BoP Scrutineering", icon: <Award size={14} className="text-yellow-400" />, badge: "ACO/FIA" },
@@ -140,7 +143,13 @@ export const HypercarDeepRDLab: React.FC = memo(function HypercarDeepRDLab() {
       <div className="flex-1 overflow-y-auto min-h-0">
         {activeSubTab === "full_3d_lab" && (
           <div className="w-full h-[680px]">
-            <MegawattHypercarStudioViewport />
+            <Suspense fallback={
+              <div className="w-full h-full flex items-center justify-center bg-[#07090e] text-xs font-mono text-amber-400">
+                <span className="animate-pulse">Initializing Megawatt 3D Viewport & WebGL Rig...</span>
+              </div>
+            }>
+              <MegawattHypercarStudioViewport />
+            </Suspense>
           </div>
         )}
 
@@ -182,7 +191,7 @@ export const HypercarDeepRDLab: React.FC = memo(function HypercarDeepRDLab() {
               </div>
               <div className="bg-slate-900/70 p-4 rounded-xl border border-slate-800">
                 <span className="text-[10px] text-slate-500 uppercase tracking-wider block mb-1">Crash Absorption</span>
-                <span className="text-2xl font-black font-mono text-cyan-300">{(monocoqueFea.occupantCellCrushEnergyAbsorptionKj).toFixed(0)} kJ</span>
+                <span className="text-2xl font-black font-mono text-amber-300">{(monocoqueFea.occupantCellCrushEnergyAbsorptionKj).toFixed(0)} kJ</span>
                 <span className="text-xs text-slate-400 block mt-1">FIA 65G Impact Standard</span>
               </div>
             </div>
@@ -233,10 +242,10 @@ export const HypercarDeepRDLab: React.FC = memo(function HypercarDeepRDLab() {
 
         {activeSubTab === "trimotor_powertrain" && (
           <div className="max-w-6xl mx-auto p-6 space-y-6">
-            <div className="glass-panel p-6 border-cyan-500/20 bg-gradient-to-r from-slate-900 via-slate-900/90 to-cyan-950/30 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+            <div className="glass-panel p-6 border-amber-500/20 bg-gradient-to-r from-slate-900 via-slate-900/90 to-amber-950/30 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
               <div>
                 <div className="flex items-center gap-2 mb-2">
-                  <Zap className="text-cyan-400" size={24} />
+                  <Zap className="text-amber-400" size={24} />
                   <h2 className="text-xl font-bold text-slate-100 tracking-wide">
                     800V Tri-Motor e-AWD Hybrid Powertrain Engine
                   </h2>
@@ -247,7 +256,7 @@ export const HypercarDeepRDLab: React.FC = memo(function HypercarDeepRDLab() {
               </div>
 
               <div className="text-right">
-                <div className="text-2xl font-black font-mono text-cyan-300">
+                <div className="text-2xl font-black font-mono text-amber-300">
                   {powertrain.combinedPeakPowerHp.toFixed(0)} <span className="text-xs text-slate-400 font-normal">HP</span>
                 </div>
                 <div className="text-[10px] text-slate-400 uppercase tracking-wider">Total Combined Output</div>
@@ -257,7 +266,7 @@ export const HypercarDeepRDLab: React.FC = memo(function HypercarDeepRDLab() {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
               <div className="bg-slate-900/70 p-4 rounded-xl border border-slate-800">
                 <span className="text-[10px] text-slate-500 uppercase tracking-wider block mb-1">0-100 km/h Launch</span>
-                <span className="text-2xl font-black font-mono text-cyan-300">{powertrain.acceleration0_100KmHSec.toFixed(2)} s</span>
+                <span className="text-2xl font-black font-mono text-amber-300">{powertrain.acceleration0_100KmHSec.toFixed(2)} s</span>
                 <span className="text-xs text-slate-400 block mt-1">Torque Vectoring Active</span>
               </div>
               <div className="bg-slate-900/70 p-4 rounded-xl border border-slate-800">
@@ -272,7 +281,7 @@ export const HypercarDeepRDLab: React.FC = memo(function HypercarDeepRDLab() {
               </div>
               <div className="bg-slate-900/70 p-4 rounded-xl border border-slate-800">
                 <span className="text-[10px] text-slate-500 uppercase tracking-wider block mb-1">Total Wheel Torque</span>
-                <span className="text-2xl font-black font-mono text-purple-300">{powertrain.combinedPeakTorqueNm.toFixed(0)} Nm</span>
+                <span className="text-2xl font-black font-mono text-amber-300">{powertrain.combinedPeakTorqueNm.toFixed(0)} Nm</span>
                 <span className="text-xs text-slate-400 block mt-1">Instant Electric Surge</span>
               </div>
             </div>
@@ -288,7 +297,7 @@ export const HypercarDeepRDLab: React.FC = memo(function HypercarDeepRDLab() {
                   step="25"
                   value={icePowerHp}
                   onChange={(e) => setIcePowerHp(parseInt(e.target.value))}
-                  className="w-full accent-cyan-400 cursor-pointer"
+                  className="w-full accent-amber-400 cursor-pointer"
                 />
               </div>
               <div>
@@ -300,7 +309,7 @@ export const HypercarDeepRDLab: React.FC = memo(function HypercarDeepRDLab() {
                   step="10"
                   value={frontMotorKw}
                   onChange={(e) => setFrontMotorKw(parseInt(e.target.value))}
-                  className="w-full accent-cyan-400 cursor-pointer"
+                  className="w-full accent-amber-400 cursor-pointer"
                 />
               </div>
               <div>
@@ -312,7 +321,7 @@ export const HypercarDeepRDLab: React.FC = memo(function HypercarDeepRDLab() {
                   step="5"
                   value={batteryKwh}
                   onChange={(e) => setBatteryKwh(parseInt(e.target.value))}
-                  className="w-full accent-cyan-400 cursor-pointer"
+                  className="w-full accent-amber-400 cursor-pointer"
                 />
               </div>
             </div>
@@ -449,7 +458,7 @@ export const HypercarDeepRDLab: React.FC = memo(function HypercarDeepRDLab() {
               </div>
               <div className="bg-slate-900/70 p-4 rounded-xl border border-slate-800">
                 <span className="text-[10px] text-slate-500 uppercase tracking-wider block mb-1">Thermo-Elastic Stress</span>
-                <span className="text-2xl font-black font-mono text-purple-300">{brakeFea.thermoElasticHoopStressMpa.toFixed(0)} MPa</span>
+                <span className="text-2xl font-black font-mono text-amber-300">{brakeFea.thermoElasticHoopStressMpa.toFixed(0)} MPa</span>
                 <span className="text-xs text-slate-400 block mt-1">Friction Coeff μ: {brakeFea.padFadeCoefficientMu.toFixed(2)}</span>
               </div>
             </div>
@@ -496,7 +505,7 @@ export const HypercarDeepRDLab: React.FC = memo(function HypercarDeepRDLab() {
                   </div>
                   <div className="flex justify-between p-2 rounded bg-black/40 border border-white/5">
                     <span className="text-slate-400">Front MGU Deployment Threshold</span>
-                    <span className="font-mono font-bold text-cyan-300">120 - 190 km/h (Dry/Wet)</span>
+                    <span className="font-mono font-bold text-amber-300">120 - 190 km/h (Dry/Wet)</span>
                   </div>
                   <div className="flex justify-between p-2 rounded bg-black/40 border border-white/5">
                     <span className="text-slate-400">Virtual Energy Stint Limit</span>
@@ -507,7 +516,7 @@ export const HypercarDeepRDLab: React.FC = memo(function HypercarDeepRDLab() {
 
               <div className="bg-slate-900/70 p-5 rounded-2xl border border-slate-800 space-y-3">
                 <h3 className="text-xs font-black uppercase tracking-wider text-amber-400 flex items-center gap-2">
-                  <Sliders size={16} className="text-cyan-400" />
+                  <Sliders size={16} className="text-amber-400" />
                   Dynamic BoP Ballast & Restrictor Table
                 </h3>
                 <p className="text-xs text-slate-400 leading-relaxed">

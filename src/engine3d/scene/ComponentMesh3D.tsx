@@ -97,7 +97,7 @@ export const ComponentMesh3D: React.FC<ComponentMesh3DProps> = ({ instance }) =>
     };
   }, [instance.manifestRef.assetPath, instance.type, engineConfig?.layout, instance.instanceId]);
 
-  // ── 2. Reactive Material & Metallurgy Assignment (Zero 60FPS Traversal) ──
+  // ── 2. Reactive Material & Metallurgy Assignment (Preserve Multi-Material Colors) ──
   useEffect(() => {
     if (!modelGroup) return;
 
@@ -108,10 +108,48 @@ export const ComponentMesh3D: React.FC<ComponentMesh3DProps> = ({ instance }) =>
       engineConfig || undefined
     );
     const ghostMaterial = matLib.getHighlightMaterial('ghost');
-
     const targetMat = showWireframe ? ghostMaterial : variantMaterial;
+
+    // Named meshes that already have distinct materials from procedural generators
+    // should NOT be overwritten with the variant material
+    const preserveMaterialNames = new Set([
+      'Tungsten', 'Brass', 'Brass_', 'Brass Freeze',
+      'Coolant', 'Coolant Passage', 'Oil Gallery', 'Oil Gallery Passage',
+      'Nikasil', 'Bore', 'Fire Ring', 'ARP', 'Elastomer', 'Rubber',
+      'Silicone', 'Hose', 'Sensor', 'Gold', 'Anodized',
+      'CNC', 'Machined', 'Plated', 'Chrome', 'Polish',
+    ]);
+
     for (let i = 0; i < primaryMeshesRef.current.length; i++) {
-      primaryMeshesRef.current[i].material = targetMat;
+      const mesh = primaryMeshesRef.current[i];
+      const meshMat = mesh.material as THREE.MeshStandardMaterial;
+      const meshName = mesh.name || '';
+
+      // Check if this mesh has a distinctly named material that should be preserved
+      let shouldPreserve = false;
+      if (meshMat && meshMat.name && meshMat.name !== 'default' && meshMat.name !== '') {
+        for (const preserve of preserveMaterialNames) {
+          if (meshMat.name.includes(preserve) || meshName.includes(preserve)) {
+            shouldPreserve = true;
+            break;
+          }
+        }
+      }
+
+      // Also preserve meshes that have distinct non-gray colors (brass, blue, etc.)
+      if (meshMat && meshMat.color && !showWireframe) {
+        const hex = meshMat.color.getHex();
+        const isDistinctColor =
+          (hex > 0x000000 && hex < 0x333333) || // Very dark (oil, carbon)
+          (hex > 0xf50000) || // Gold/brass range
+          (hex > 0x001080 && hex < 0x0090ff) || // Blue (coolant)
+          (hex > 0x600000 && hex < 0xffffff && Math.abs(((hex >> 16) & 0xff) - ((hex >> 8) & 0xff)) > 30); // Distinct hue
+        if (isDistinctColor) shouldPreserve = true;
+      }
+
+      if (!shouldPreserve) {
+        mesh.material = targetMat;
+      }
     }
   }, [modelGroup, instance.variant?.id, instance.type, showWireframe, engineConfig]);
 
@@ -142,7 +180,7 @@ export const ComponentMesh3D: React.FC<ComponentMesh3DProps> = ({ instance }) =>
 
     // Interactive hover & selection emissive glow without full traversal
     if (isHovered || isSelected) {
-      const targetEmissive = isSelected ? 0x38bdf8 : 0x0284c7;
+      const targetEmissive = isSelected ? 0xfbbf24 : 0x0284c7;
       const targetIntensity = isSelected ? 0.25 : hoverPulse * 0.5;
 
       for (let i = 0; i < emissiveMeshesRef.current.length; i++) {

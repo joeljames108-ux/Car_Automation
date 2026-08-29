@@ -134,8 +134,8 @@ export class WindTunnelCfdPhysicsEngine {
       const pressureKPa = 101.3 + (i % 3 === 0 ? -12 : 8);
       const vorticity = (i % 5) * 2.5;
 
-      let color = "#38bdf8"; // Cyan (standard velocity)
-      if (pressureKPa < 95) color = "#a855f7"; // Purple (low pressure suction)
+      let color = "#fbbf24"; // Cyan (standard velocity)
+      if (pressureKPa < 95) color = "#f59e0b"; // Purple (low pressure suction)
       else if (pressureKPa > 105) color = "#ef4444"; // Red (high pressure stagnation)
       else if (speedFactor > 1.1) color = "#34d399"; // Emerald (high velocity)
 

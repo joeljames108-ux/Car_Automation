@@ -33,7 +33,7 @@ export const HOOD_GLB_ASSET_CONFIGS: HoodGlbAssetConfig[] = [
     bodyType: "supercar",
     wheelbaseMm: 2800,
     trackWidthMm: 1620,
-    paintColorHex: 0x2563eb,
+    paintColorHex: 0xb45309,
     materialGrade: "forged",
     assetPathClosed: "/models/exterior/bmw_i8_supercar_hood_closed.glb",
     assetPathOpen: "/models/exterior/bmw_i8_supercar_hood_open.glb",

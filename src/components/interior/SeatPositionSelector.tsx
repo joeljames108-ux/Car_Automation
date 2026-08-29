@@ -70,8 +70,8 @@ export const SeatPositionSelector: React.FC<SeatPositionSelectorProps> = ({
           onClick={onToggleAutoPan}
           className={`flex items-center gap-1 px-2.5 py-1.5 rounded-xl text-[11px] font-mono font-bold transition-all ml-auto cursor-pointer ${
             isAutoPan
-              ? "bg-cyan-500 text-slate-950 shadow-md shadow-cyan-500/30 animate-pulse"
-              : "bg-slate-900 text-cyan-400 border border-cyan-500/30 hover:bg-cyan-950/50"
+              ? "bg-amber-500 text-slate-950 shadow-md shadow-amber-500/30 animate-pulse"
+              : "bg-slate-900 text-amber-400 border border-amber-500/30 hover:bg-amber-950/50"
           }`}
         >
           <Sparkles size={13} />

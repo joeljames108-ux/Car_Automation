@@ -37,7 +37,7 @@ export const RearDiffuserSVG: React.FC<RearDiffuserSVGProps> = ({
   const finCount = aeroConfig?.diffuserFinCount || 7;
 
   const strokeColor = isSelected
-    ? "#38bdf8"
+    ? "#fbbf24"
     : isHovered
     ? "#0284c7"
     : "#020617";
@@ -65,10 +65,10 @@ export const RearDiffuserSVG: React.FC<RearDiffuserSVGProps> = ({
 
       {/* ── 2. Vertical Aerodynamic Guide Fins (Strakes) ── */}
       <g id="diffuser_strakes">
-        <line x1="750" y1="365" x2="765" y2="395" stroke="#38bdf8" strokeWidth="2.0" />
-        <line x1="760" y1="360" x2="775" y2="390" stroke="#38bdf8" strokeWidth="2.0" />
-        <line x1="770" y1="355" x2="785" y2="385" stroke="#38bdf8" strokeWidth="2.0" />
-        <line x1="780" y1="350" x2="795" y2="380" stroke="#38bdf8" strokeWidth="2.0" />
+        <line x1="750" y1="365" x2="765" y2="395" stroke="#fbbf24" strokeWidth="2.0" />
+        <line x1="760" y1="360" x2="775" y2="390" stroke="#fbbf24" strokeWidth="2.0" />
+        <line x1="770" y1="355" x2="785" y2="385" stroke="#fbbf24" strokeWidth="2.0" />
+        <line x1="780" y1="350" x2="795" y2="380" stroke="#fbbf24" strokeWidth="2.0" />
       </g>
 
       {/* ── 3. Central FIA Formula 1 Flashing Rain Light ── */}

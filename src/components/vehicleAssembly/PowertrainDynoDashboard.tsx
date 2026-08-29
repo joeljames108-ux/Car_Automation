@@ -110,11 +110,11 @@ export const PowertrainDynoDashboard: React.FC = () => {
             </div>
           </div>
 
-          <div className="flex items-center gap-2 bg-[#141b27] px-3 py-1.5 rounded-xl border border-cyan-500/30">
-            <TrendingUp className="w-4 h-4 text-cyan-400" />
+          <div className="flex items-center gap-2 bg-[#141b27] px-3 py-1.5 rounded-xl border border-amber-500/30">
+            <TrendingUp className="w-4 h-4 text-amber-400" />
             <div className="text-right">
               <span className="text-[10px] text-gray-400 block uppercase">Peak Torque</span>
-              <span className="font-mono font-bold text-cyan-400 text-xs">
+              <span className="font-mono font-bold text-amber-400 text-xs">
                 {dyno.peakTorqueNm} Nm <span className="text-gray-400 text-[10px]">@{dyno.peakTorqueRpm}</span>
               </span>
             </div>
@@ -134,8 +134,8 @@ export const PowertrainDynoDashboard: React.FC = () => {
                 Torque (Nm) & Power (BHP) Dyno Sweep
               </span>
               <div className="flex items-center gap-4 text-xs">
-                <span className="flex items-center gap-1.5 text-cyan-400 font-mono">
-                  <span className="w-3 h-0.5 bg-cyan-400 inline-block" /> Torque (Nm)
+                <span className="flex items-center gap-1.5 text-amber-400 font-mono">
+                  <span className="w-3 h-0.5 bg-amber-400 inline-block" /> Torque (Nm)
                 </span>
                 <span className="flex items-center gap-1.5 text-red-400 font-mono">
                   <span className="w-3 h-0.5 bg-red-400 inline-block" /> Power (BHP)
@@ -202,11 +202,11 @@ export const PowertrainDynoDashboard: React.FC = () => {
               </div>
               <div className="p-3 bg-[#111722] rounded-xl border border-[#1e2638]">
                 <span className="text-gray-400 block text-[10px] uppercase">Avg Lap Speed</span>
-                <span className="font-mono font-bold text-cyan-400 text-sm">{lap.avgSpeedKmh} km/h</span>
+                <span className="font-mono font-bold text-amber-400 text-sm">{lap.avgSpeedKmh} km/h</span>
               </div>
               <div className="p-3 bg-[#111722] rounded-xl border border-[#1e2638]">
                 <span className="text-gray-400 block text-[10px] uppercase">Circuit Length</span>
-                <span className="font-mono font-bold text-purple-400 text-sm">{(selectedTrack.totalLengthM / 1000).toFixed(2)} km</span>
+                <span className="font-mono font-bold text-amber-400 text-sm">{(selectedTrack.totalLengthM / 1000).toFixed(2)} km</span>
               </div>
             </div>
           </div>
@@ -215,7 +215,7 @@ export const PowertrainDynoDashboard: React.FC = () => {
         {/* Right Engine Parameter Controls */}
         <div className="w-80 bg-[#0c1018] border-l border-[#1b2333] p-4 flex flex-col space-y-4 overflow-y-auto">
           <h4 className="text-xs font-bold text-gray-300 uppercase tracking-wider flex items-center gap-2">
-            <Sliders className="w-4 h-4 text-cyan-400" />
+            <Sliders className="w-4 h-4 text-amber-400" />
             Powertrain Configuration
           </h4>
 
@@ -223,7 +223,7 @@ export const PowertrainDynoDashboard: React.FC = () => {
             <div>
               <div className="flex justify-between text-gray-400 mb-1">
                 <span>Displacement:</span>
-                <span className="font-mono text-cyan-400 font-bold">{displacement.toFixed(1)}L</span>
+                <span className="font-mono text-amber-400 font-bold">{displacement.toFixed(1)}L</span>
               </div>
               <input
                 type="range"
@@ -232,14 +232,14 @@ export const PowertrainDynoDashboard: React.FC = () => {
                 step="0.1"
                 value={displacement}
                 onChange={(e) => setDisplacement(parseFloat(e.target.value))}
-                className="w-full accent-cyan-400 cursor-pointer"
+                className="w-full accent-amber-400 cursor-pointer"
               />
             </div>
 
             <div>
               <div className="flex justify-between text-gray-400 mb-1">
                 <span>Cylinder Count:</span>
-                <span className="font-mono text-cyan-400 font-bold">{cylinderCount} Cylinders</span>
+                <span className="font-mono text-amber-400 font-bold">{cylinderCount} Cylinders</span>
               </div>
               <div className="grid grid-cols-4 gap-1.5 mt-1">
                 {[4, 6, 8, 12].map((cyl) => (
@@ -248,7 +248,7 @@ export const PowertrainDynoDashboard: React.FC = () => {
                     onClick={() => setCylinderCount(cyl)}
                     className={`py-1 rounded-lg font-mono text-xs transition-all ${
                       cylinderCount === cyl
-                        ? 'bg-cyan-500 text-black font-bold'
+                        ? 'bg-amber-500 text-black font-bold'
                         : 'bg-[#151c28] text-gray-400 hover:bg-[#1e2738]'
                     }`}
                   >
@@ -264,7 +264,7 @@ export const PowertrainDynoDashboard: React.FC = () => {
                   type="checkbox"
                   checked={isTurbocharged}
                   onChange={(e) => setIsTurbocharged(e.target.checked)}
-                  className="accent-cyan-400"
+                  className="accent-amber-400"
                 />
                 <span className="text-gray-300 font-semibold">Turbocharger Induction</span>
               </label>
@@ -298,7 +298,7 @@ export const PowertrainDynoDashboard: React.FC = () => {
                     onClick={() => setSelectedTrackId(t.id)}
                     className={`w-full text-left px-3 py-2 rounded-xl text-xs flex items-center justify-between transition-all ${
                       selectedTrackId === t.id
-                        ? 'bg-cyan-500/10 border border-cyan-500/40 text-cyan-300'
+                        ? 'bg-amber-500/10 border border-amber-500/40 text-amber-300'
                         : 'bg-[#131924] hover:bg-[#1a2332] text-gray-400'
                     }`}
                   >

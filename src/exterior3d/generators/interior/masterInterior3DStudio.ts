@@ -117,45 +117,45 @@ export class MasterInterior3DStudio {
     switch (viewpoint) {
       case 'driver_pov':
         return {
-          position: new THREE.Vector3(-0.70, 0.88, -0.34), // Seated driver eyepoint
-          target: new THREE.Vector3(0.10, 0.72, -0.15),
-          fov: 65,
+          position: new THREE.Vector3(-0.55, 0.92, -0.08), // Driver eye — headrest height, slightly back
+          target: new THREE.Vector3(0.80, 0.55, -1.5), // Looking forward and slightly down through windshield at road
+          fov: 75, // Wide angle to capture steering + dash + windshield + road
         };
 
       case 'steering_cluster_macro':
         return {
-          position: new THREE.Vector3(-0.62, 0.74, -0.34),
-          target: new THREE.Vector3(-0.44, 0.72, -0.34),
-          fov: 48,
+          position: new THREE.Vector3(-0.55, 0.82, -0.08), // Close behind steering wheel
+          target: new THREE.Vector3(-0.48, 0.70, -0.36), // Focus on instrument cluster area
+          fov: 42,
         };
 
       case 'center_console_macro':
         return {
-          position: new THREE.Vector3(-0.42, 0.65, -0.22),
-          target: new THREE.Vector3(-0.24, 0.26, 0),
-          fov: 52,
+          position: new THREE.Vector3(-0.38, 0.78, 0.05), // From driver's chest height
+          target: new THREE.Vector3(-0.22, 0.30, 0.15), // Looking down at shifter & HVAC
+          fov: 48,
         };
 
       case 'passenger_pov':
         return {
-          position: new THREE.Vector3(-0.70, 0.88, 0.34),
-          target: new THREE.Vector3(-0.35, 0.70, -0.20),
-          fov: 65,
+          position: new THREE.Vector3(-0.60, 0.90, 0.32), // Passenger eye position
+          target: new THREE.Vector3(-0.40, 0.72, -0.30), // Looking toward driver's dash
+          fov: 68,
         };
 
       case 'rear_vip_lounge':
         return {
-          position: new THREE.Vector3(-1.38, 0.92, 0),
-          target: new THREE.Vector3(-0.20, 0.68, 0),
-          fov: 72,
+          position: new THREE.Vector3(-1.20, 0.85, 0.05), // Rear seat center
+          target: new THREE.Vector3(-0.20, 0.72, -0.10), // Looking forward through cabin
+          fov: 75,
         };
 
       case 'overhead_panoramic':
       default:
         return {
-          position: new THREE.Vector3(-0.75, 2.20, 0),
-          target: new THREE.Vector3(-0.60, 0.40, 0),
-          fov: 60,
+          position: new THREE.Vector3(-0.60, 2.00, 0.10), // High overhead
+          target: new THREE.Vector3(-0.50, 0.35, -0.10), // Looking down at full cabin
+          fov: 58,
         };
     }
   }

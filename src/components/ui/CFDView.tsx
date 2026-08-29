@@ -580,7 +580,7 @@ function drawCalloutsAndPiP(ctx: CanvasRenderingContext2D, c: DrawCtx) {
   ctx.restore();
 
   // Reticle circle on rear wheel connected to Top-Left PiP
-  ctx.strokeStyle = "#38bdf8";
+  ctx.strokeStyle = "#fbbf24";
   ctx.lineWidth = 1.5;
   ctx.beginPath();
   ctx.arc(wheelRearX, groundY - 2, 18, 0, Math.PI * 2);
@@ -634,7 +634,7 @@ function drawCalloutsAndPiP(ctx: CanvasRenderingContext2D, c: DrawCtx) {
   ctx.restore();
 
   // Reticle circle on front wheel connected to Bottom-Left PiP
-  ctx.strokeStyle = "#38bdf8";
+  ctx.strokeStyle = "#fbbf24";
   ctx.lineWidth = 1.5;
   ctx.beginPath();
   ctx.arc(wheelFrontX, groundY - 2, 18, 0, Math.PI * 2);
@@ -648,7 +648,7 @@ function drawCalloutsAndPiP(ctx: CanvasRenderingContext2D, c: DrawCtx) {
   // 1. "Pressure Drag Center" Pin Badge on Car Roof/Center
   const dragPinX = carCenter;
   const dragPinY = groundY - 55;
-  ctx.fillStyle = "#38bdf8";
+  ctx.fillStyle = "#fbbf24";
   ctx.beginPath(); ctx.arc(dragPinX, dragPinY, 4, 0, Math.PI * 2); ctx.fill();
   ctx.strokeStyle = "#ffffff"; ctx.lineWidth = 1.5; ctx.stroke();
   ctx.beginPath(); ctx.moveTo(dragPinX, dragPinY); ctx.lineTo(dragPinX, dragPinY - 16); ctx.stroke();
@@ -696,11 +696,11 @@ function drawRightOverlays(ctx: CanvasRenderingContext2D, c: DrawCtx) {
   ctx.fillText("ACTIVE SIMULATION: [MODEL_X_WAKE_ANALYSIS_V4]", W - 238, 30);
 
   // Toggles inside Active Simulation Badge
-  ctx.fillStyle = "#38bdf8"; ctx.beginPath(); ctx.arc(W - 232, 46, 4, 0, Math.PI * 2); ctx.fill();
+  ctx.fillStyle = "#fbbf24"; ctx.beginPath(); ctx.arc(W - 232, 46, 4, 0, Math.PI * 2); ctx.fill();
   ctx.fillStyle = "#cbd5e1"; ctx.font = "8px monospace";
   ctx.fillText("Mesh Resolution: Fine", W - 222, 49);
 
-  ctx.fillStyle = "#38bdf8"; ctx.beginPath(); ctx.arc(W - 232, 61, 4, 0, Math.PI * 2); ctx.fill();
+  ctx.fillStyle = "#fbbf24"; ctx.beginPath(); ctx.arc(W - 232, 61, 4, 0, Math.PI * 2); ctx.fill();
   ctx.fillStyle = "#cbd5e1"; ctx.font = "8px monospace";
   ctx.fillText("Turbulence Model: k-omega SST", W - 222, 64);
 
@@ -768,7 +768,7 @@ function drawRightOverlays(ctx: CanvasRenderingContext2D, c: DrawCtx) {
   ctx.stroke();
 
   // Parabolic Cd curve
-  ctx.strokeStyle = "#38bdf8"; ctx.lineWidth = 1.5;
+  ctx.strokeStyle = "#fbbf24"; ctx.lineWidth = 1.5;
   ctx.beginPath();
   ctx.moveTo(W - 165, H - 95);
   ctx.quadraticCurveTo(W - 130, H - 45, W - 30, H - 42);
@@ -777,7 +777,7 @@ function drawRightOverlays(ctx: CanvasRenderingContext2D, c: DrawCtx) {
   // Pulsing Active Operating Point Dot
   const activeDotX = W - 115;
   const activeDotY = H - 54;
-  ctx.fillStyle = "#38bdf8"; ctx.beginPath(); ctx.arc(activeDotX, activeDotY, 4, 0, Math.PI * 2); ctx.fill();
+  ctx.fillStyle = "#fbbf24"; ctx.beginPath(); ctx.arc(activeDotX, activeDotY, 4, 0, Math.PI * 2); ctx.fill();
   ctx.strokeStyle = "#ffffff"; ctx.lineWidth = 1; ctx.stroke();
 
   // Axis Labels
@@ -848,8 +848,8 @@ function velocityColor(_baseSpeed: number, _p: number, x: number, y: number, car
   const inWake = x > carCx + 100 && y > groundY - 80 && y < groundY + 20;
   let v = 0.5 + overCar * 0.4 - (inWake ? 0.3 : 0);
   v = clamp(v, 0, 1);
-  if (v < 0.25) return lerpColor("#007aff", "#22d3ee", v / 0.25);
-  if (v < 0.5) return lerpColor("#22d3ee", "#10b981", (v - 0.25) / 0.25);
+  if (v < 0.25) return lerpColor("#007aff", "#fbbf24", v / 0.25);
+  if (v < 0.5) return lerpColor("#fbbf24", "#10b981", (v - 0.25) / 0.25);
   if (v < 0.75) return lerpColor("#10b981", "#f59e0b", (v - 0.5) / 0.25);
   return lerpColor("#f59e0b", "#ef4444", (v - 0.75) / 0.25);
 }

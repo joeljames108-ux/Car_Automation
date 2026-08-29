@@ -223,7 +223,7 @@ export class InteriorMaterialPbrSynthesizer {
       trimAccentMat: trimMat,
       carpetMat,
       headlinerMat,
-      stitchingColor: new THREE.Color(theme.stitchingColorHex || "#38bdf8"),
+      stitchingColor: new THREE.Color(theme.stitchingColorHex || "#fbbf24"),
     };
   }
 

@@ -128,9 +128,8 @@ const STAGES: StageItem[] = [
   { id: "command", label: "Command Center", icon: <Layers size={14} />, category: "engineering" },
   { id: "engine", label: "Engine", icon: <Cog size={14} />, category: "engineering" },
   { id: "vehicle", label: "Vehicle Studio", icon: <Car size={14} />, category: "engineering" },
-  { id: "interior", label: "Interior", icon: <Sofa size={14} />, category: "engineering" },
+  { id: "interior", label: "Interior & Electronics", icon: <Sofa size={14} />, category: "engineering" },
   { id: "manufacturing", label: "Manufacturing", icon: <Factory size={14} />, category: "engineering" },
-  { id: "infotainment", label: "Electronics", icon: <Monitor size={14} />, category: "engineering" },
   { id: "safety", label: "Safety Center", icon: <ShieldCheck size={14} />, category: "engineering" },
 
   // --- Design Studios Hub ---
@@ -234,7 +233,8 @@ export function NeonHorizonShell() {
   }, []);
 
   return (
-    <div className="relative min-h-screen text-slate-100 flex flex-col font-sans selection:bg-sky-400/20 selection:text-sky-200 overflow-x-hidden">
+    <div className="relative min-h-screen flex flex-col font-sans overflow-x-hidden"
+      style={{ color: "#e4eaf4", background: "#070b14" }}>
       {/* 1. Multi-Layer Cyberpunk Metropolis Parallax Background */}
       <CyberpunkCityBackground
         scene={sceneMode === "wind_tunnel" || stage === "aero" ? 2 : 1}
@@ -284,7 +284,13 @@ export function NeonHorizonShell() {
           const activeSectorHue = activeSectorDef.hue;
 
           return (
-            <div className="relative rounded-3xl bg-slate-950/80 border border-white/12 shadow-[0_20px_50px_rgba(0,0,0,0.5),inset_0_1px_0_rgba(255,255,255,0.1)] p-4 backdrop-blur-2xl transition-all duration-500 overflow-hidden">
+            <div className="relative rounded-3xl p-4 transition-all duration-500 overflow-hidden"
+              style={{
+                background: "rgba(8, 14, 28, 0.70)",
+                backdropFilter: "blur(40px) saturate(200%)",
+                border: "1px solid rgba(255,255,255,0.06)",
+                boxShadow: "0 20px 50px rgba(0,0,0,0.35), inset 0 1px 0 rgba(255,255,255,0.04)",
+              }}>
               {/* Header Bar with Mode Toggle */}
               <div className="flex items-center justify-between flex-wrap gap-3 pb-3 border-b border-white/10 select-none">
                 <div className="flex items-center gap-3">

@@ -28,9 +28,9 @@ export class CabinShell3DGenerator {
     const group = new THREE.Group();
     group.name = 'CabinShellAssembly';
 
-    const cabinLength = Math.max(1.65, Math.min(2.35, wheelbaseM * 0.72));
-    const cabinWidth = Math.max(1.36, Math.min(1.58, trackWidthM * 0.96));
-    const cabinHeight = 1.15;
+    const cabinLength = Math.max(1.85, Math.min(2.55, wheelbaseM * 0.82));
+    const cabinWidth = Math.max(1.48, Math.min(1.72, trackWidthM * 1.04));
+    const cabinHeight = 1.28;
 
     // Common PBR Materials
     const carpetMat = new THREE.MeshStandardMaterial({

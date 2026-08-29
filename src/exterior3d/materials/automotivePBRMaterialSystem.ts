@@ -276,7 +276,7 @@ export class AutomotivePBRMaterialSystem {
           clearcoatRoughness: 0.08,
           reflectivity: 0.95,
           sheen: 0.5,
-          sheenColor: new THREE.Color('#38bdf8'),
+          sheenColor: new THREE.Color('#fbbf24'),
           transparent: isXRay,
           opacity: isXRay ? 0.35 : 1.0,
         });
@@ -327,7 +327,7 @@ export class AutomotivePBRMaterialSystem {
   // 3. COMMON AUTOMOTIVE PBR HELPERS
   // ==========================================================================
 
-  public static getAutomotivePaint(colorHex: string = '#38bdf8', roughness: number = 0.08, metalness: number = 0.9): THREE.MeshPhysicalMaterial {
+  public static getAutomotivePaint(colorHex: string = '#fbbf24', roughness: number = 0.08, metalness: number = 0.9): THREE.MeshPhysicalMaterial {
     return new THREE.MeshPhysicalMaterial({
       color: new THREE.Color(colorHex),
       metalness,
@@ -339,7 +339,7 @@ export class AutomotivePBRMaterialSystem {
   }
 
   public static getMetallicFlakePaint(
-    colorHex: string = '#22d3ee',
+    colorHex: string = '#fbbf24',
     roughness: number = 0.12,
     flakeIntensity: number = 0.8
   ): THREE.MeshPhysicalMaterial {
@@ -365,8 +365,8 @@ export class AutomotivePBRMaterialSystem {
   }
 
   public static getPearlescentPaint(
-    baseHex: string = '#0ea5e9',
-    shimmerHex: string = '#c084fc'
+    baseHex: string = '#f59e0b',
+    shimmerHex: string = '#fbbf24'
   ): THREE.MeshPhysicalMaterial {
     const key = `paint_pearl_${baseHex}_${shimmerHex}`;
     if (this.materialCache.has(key)) {
@@ -440,8 +440,8 @@ export class AutomotivePBRMaterialSystem {
    * Generates Chroma Shift / Chameleon Color Shifting Paint
    */
   public static getChameleonPaint(
-    primaryHex: string = '#8b5cf6',
-    secondaryHex: string = '#06b6d4'
+    primaryHex: string = '#f59e0b',
+    secondaryHex: string = '#f59e0b'
   ): THREE.MeshPhysicalMaterial {
     const key = `paint_chameleon_${primaryHex}_${secondaryHex}`;
     if (this.materialCache.has(key)) {
@@ -529,15 +529,15 @@ export class AutomotivePBRMaterialSystem {
 
     // Von Mises Color Map Interpolation:
     // 0.0 -> Blue (#0284c7)
-    // 0.25 -> Cyan (#06b6d4)
+    // 0.25 -> Cyan (#f59e0b)
     // 0.50 -> Emerald (#10b981)
     // 0.75 -> Amber (#f59e0b)
     // 1.0 -> Crimson (#ef4444)
     let color: THREE.Color;
     if (clamped < 0.25) {
-      color = new THREE.Color('#0284c7').lerp(new THREE.Color('#06b6d4'), clamped / 0.25);
+      color = new THREE.Color('#0284c7').lerp(new THREE.Color('#f59e0b'), clamped / 0.25);
     } else if (clamped < 0.5) {
-      color = new THREE.Color('#06b6d4').lerp(new THREE.Color('#10b981'), (clamped - 0.25) / 0.25);
+      color = new THREE.Color('#f59e0b').lerp(new THREE.Color('#10b981'), (clamped - 0.25) / 0.25);
     } else if (clamped < 0.75) {
       color = new THREE.Color('#10b981').lerp(new THREE.Color('#f59e0b'), (clamped - 0.5) / 0.25);
     } else {
@@ -609,7 +609,7 @@ export class AutomotivePBRMaterialSystem {
           clearcoat: 0.6,
           reflectivity: 0.95,
           sheen: weldBluing ? 0.8 : 0,
-          sheenColor: new THREE.Color('#38bdf8'),
+          sheenColor: new THREE.Color('#fbbf24'),
         });
         break;
       case 'aluminum_6061':
@@ -688,7 +688,7 @@ export class AutomotivePBRMaterialSystem {
 
   public static getOpticalGlass(): THREE.MeshPhysicalMaterial {
     return new THREE.MeshPhysicalMaterial({
-      color: new THREE.Color('#38bdf8'),
+      color: new THREE.Color('#fbbf24'),
       metalness: 0.1,
       roughness: 0.02,
       transmission: 0.95,
@@ -740,11 +740,11 @@ export class AutomotivePBRMaterialSystem {
             metalness: 0.05,
           }),
           accent: new THREE.MeshStandardMaterial({
-            color: new THREE.Color('#38bdf8'),
+            color: new THREE.Color('#fbbf24'),
             metalness: 0.8,
             roughness: 0.2,
           }),
-          stitching: new THREE.MeshBasicMaterial({ color: 0x38bdf8 }),
+          stitching: new THREE.MeshBasicMaterial({ color: 0xfbbf24 }),
           screenGlass: new THREE.MeshPhysicalMaterial({
             color: 0x0284c7,
             transmission: 0.9,
@@ -784,7 +784,7 @@ export class AutomotivePBRMaterialSystem {
   // ==========================================================================
 
   public static getSuspensionSpringMaterial(rateNmm: number): THREE.Material {
-    const color = rateNmm > 80 ? new THREE.Color('#ef4444') : new THREE.Color('#3b82f6');
+    const color = rateNmm > 80 ? new THREE.Color('#ef4444') : new THREE.Color('#d97706');
     return new THREE.MeshPhysicalMaterial({
       color,
       metalness: 0.75,

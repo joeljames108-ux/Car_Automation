@@ -211,7 +211,7 @@ export const MasterVehicleAssemblyDeck: React.FC = () => {
         {/* Left Subsystem Inspector Column */}
         <div className="w-80 border-r flex flex-col overflow-y-auto p-4 space-y-4" style={{backgroundColor: 'rgba(255,248,235,0.7)', borderColor: 'rgba(217,166,78,0.25)'}}>
           <div className="flex items-center justify-between">
-            <h2 className="text-sm font-bold tracking-wider text-cyan-400 uppercase flex items-center gap-2">
+            <h2 className="text-sm font-bold tracking-wider text-amber-400 uppercase flex items-center gap-2">
               <Wrench className="w-4 h-4" />
               Subsystem Sockets
             </h2>
@@ -311,7 +311,7 @@ export const MasterVehicleAssemblyDeck: React.FC = () => {
                 step="0.01"
                 value={explodedProgress}
                 onChange={(e) => setExplodedProgress(parseFloat(e.target.value))}
-                className="w-24 accent-cyan-400 cursor-pointer"
+                className="w-24 accent-amber-400 cursor-pointer"
               />
               <span className="font-mono w-8" style={{color: '#92400E'}}>{Math.round(explodedProgress * 100)}%</span>
             </div>

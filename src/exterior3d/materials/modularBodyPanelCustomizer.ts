@@ -25,7 +25,7 @@ export interface PaintConfiguration {
 
 export const DEFAULT_PAINT_CONFIG: PaintConfiguration = {
   finishType: 'satin_metallic',
-  primaryColorHex: '#2563eb', // Cyber Sapphire Blue
+  primaryColorHex: '#b45309', // Cyber Sapphire Blue
   accentColorHex: '#09090b',  // Gloss Carbon Black
   showLiveryDecals: true,
   clearcoatIntensity: 0.98,
@@ -79,7 +79,7 @@ export class ModularBodyPanelCustomizer {
         clearcoatRoughness: 0.02,
         reflectivity: 0.98,
         sheen: 1.0,
-        sheenColor: new THREE.Color('#38bdf8'),
+        sheenColor: new THREE.Color('#fbbf24'),
         sheenRoughness: 0.22,
         transparent: isXRay,
         opacity: isXRay ? 0.25 : 1.0,
@@ -139,8 +139,8 @@ export class ModularBodyPanelCustomizer {
    */
   public static createTitaniumHeatStainMaterial(): THREE.MeshPhysicalMaterial {
     return new THREE.MeshPhysicalMaterial({
-      color: 0x3b82f6, // Cobalt blue tip
-      emissive: 0x1d4ed8,
+      color: 0xd97706, // Cobalt blue tip
+      emissive: 0x92400e,
       emissiveIntensity: 0.25,
       metalness: 0.98,
       roughness: 0.12,
@@ -157,7 +157,7 @@ export class ModularBodyPanelCustomizer {
     vfxGroup.name = 'Exhaust_Backfire_Flame_VFX';
 
     const flameCoreMat = new THREE.MeshBasicMaterial({
-      color: 0x38bdf8, // Hot cyan interior core
+      color: 0xfbbf24, // Hot cyan interior core
       transparent: true,
       opacity: 0.95,
     });

@@ -479,7 +479,7 @@ export const COCKPIT_THEME_PRESETS: Record<string, { name: string; config: Parti
         enabled: true,
         brightnessPercent: 85,
         primaryColorHex: '#00f0ff',
-        secondaryColorHex: '#3b82f6',
+        secondaryColorHex: '#d97706',
         colorMode: 'dual_zone_gradient',
         activeZones: ['dashboard_contour', 'center_console_halo', 'door_spear_accents', 'footwell_mood', 'speaker_grille_halo'],
         fiberOpticDiffuserDiffusion: 0.8,
@@ -615,9 +615,9 @@ export const COCKPIT_THEME_PRESETS: Record<string, { name: string; config: Parti
         primaryColorHex: '#0d111a',
         secondaryColorHex: '#1e1028',
         stitchingPattern: 'hexagonal_honeycomb',
-        stitchingColorHex: '#ec4899', // Hot Pink
+        stitchingColorHex: '#d97706', // Hot Pink
         trimAccents: 'anodized_dark_titanium',
-        seatBeltColorHex: '#ec4899',
+        seatBeltColorHex: '#d97706',
         carpetColorHex: '#080a0f',
         headlinerMaterial: 'panoramic_electrochromic_glass',
         headlinerColorHex: '#05070a',
@@ -625,8 +625,8 @@ export const COCKPIT_THEME_PRESETS: Record<string, { name: string; config: Parti
       ambientLighting: {
         enabled: true,
         brightnessPercent: 100,
-        primaryColorHex: '#ec4899', // Magenta
-        secondaryColorHex: '#06b6d4', // Cyan
+        primaryColorHex: '#d97706', // Magenta
+        secondaryColorHex: '#f59e0b', // Cyan
         colorMode: 'dual_zone_gradient',
         activeZones: ['dashboard_contour', 'center_console_halo', 'door_spear_accents', 'footwell_mood', 'air_vent_turbine_glow', 'speaker_grille_halo', 'seatback_crest', 'skylight_perimeter'],
         fiberOpticDiffuserDiffusion: 0.95,
@@ -724,7 +724,7 @@ export const COCKPIT_THEME_PRESETS: Record<string, { name: string; config: Parti
         enabled: true,
         brightnessPercent: 85,
         primaryColorHex: '#0284c7',
-        secondaryColorHex: '#38bdf8',
+        secondaryColorHex: '#fbbf24',
         colorMode: 'dual_zone_gradient',
         activeZones: ['dashboard_contour', 'center_console_halo', 'door_spear_accents', 'footwell_mood', 'speaker_grille_halo', 'skylight_perimeter'],
         fiberOpticDiffuserDiffusion: 0.85,

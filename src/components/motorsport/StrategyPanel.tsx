@@ -10,7 +10,7 @@ import type { MotorsportTeam, TireChoice } from "../../sim/types";
 
 const TIRE_COLORS: Record<TireChoice, string> = {
   soft: "bg-red-500", medium: "bg-yellow-500", hard: "bg-slate-200",
-  intermediate: "bg-green-500", wet: "bg-blue-500",
+  intermediate: "bg-green-500", wet: "bg-amber-500",
 };
 const TIRE_LABELS: Record<TireChoice, string> = {
   soft: "S", medium: "M", hard: "H", intermediate: "I", wet: "W",
@@ -74,7 +74,7 @@ export const StrategyPanel = memo(function StrategyPanel({ selectedTeam }: { sel
             <label className="label-mono block mb-2">Deploy Mode</label>
             <div className="grid grid-cols-2 gap-1.5">
               {([
-                { mode: "conservative" as const, label: "Conservative", desc: "🛡 Steady pace, low risk", color: "bg-blue-500/20 border-blue-500/40 text-blue-300" },
+                { mode: "conservative" as const, label: "Conservative", desc: "🛡 Steady pace, low risk", color: "bg-amber-500/20 border-amber-500/40 text-amber-300" },
                 { mode: "balanced" as const, label: "Balanced", desc: "⚖ Balanced approach", color: "bg-accent-500/20 border-accent-500/40 text-accent-300" },
                 { mode: "aggressive" as const, label: "Aggressive", desc: "⚠ Fast but risky", color: "bg-warn-500/20 border-warn-500/40 text-warn-300" },
                 { mode: "qualifying" as const, label: "Qualifying", desc: "🏁 Max attack!", color: "bg-danger-500/20 border-danger-500/40 text-danger-300" },
@@ -99,7 +99,7 @@ export const StrategyPanel = memo(function StrategyPanel({ selectedTeam }: { sel
                 <svg width="80" height="80" viewBox="0 0 80 80" className="shrink-0">
                   <circle cx="40" cy="40" r="32" fill="none" stroke="#1e2839" strokeWidth="6" />
                   <circle cx="40" cy="40" r="32" fill="none" stroke={
-                    selectedTeam.strategy.fuelLoad > 0.8 ? "#22d3ee" : selectedTeam.strategy.fuelLoad > 0.5 ? "#eab308" : "#ef4444"
+                    selectedTeam.strategy.fuelLoad > 0.8 ? "#fbbf24" : selectedTeam.strategy.fuelLoad > 0.5 ? "#eab308" : "#ef4444"
                   } strokeWidth="6"
                     strokeDasharray={`${selectedTeam.strategy.fuelLoad * 201} 201`}
                     strokeLinecap="round"
@@ -151,7 +151,7 @@ export const StrategyPanel = memo(function StrategyPanel({ selectedTeam }: { sel
                 <button key={w.id} onClick={() => updateStrategy(selectedTeam.id, { wetStrategy: w.id })}
                   className={`px-2 py-2 rounded-lg text-[10px] font-medium transition-all border ${
                     selectedTeam.strategy.wetStrategy === w.id
-                      ? "bg-blue-500/20 border-blue-500/50 text-blue-300"
+                      ? "bg-amber-500/20 border-amber-500/50 text-amber-300"
                       : "bg-base-850 border-base-800 text-slate-400"
                   }`}>
                   <div className="font-semibold text-xs">{w.label}</div>
@@ -225,7 +225,7 @@ export const StrategyPanel = memo(function StrategyPanel({ selectedTeam }: { sel
                 <button key={m.id} onClick={() => updateStrategy(selectedTeam.id, { enginePaceMode: m.id as any })}
                   className={`px-2 py-2 rounded-lg text-[10px] font-medium transition-all border ${
                     (selectedTeam.strategy.enginePaceMode || "neutral") === m.id
-                      ? "bg-purple-500/20 border-purple-500/50 text-purple-300"
+                      ? "bg-amber-500/20 border-amber-500/50 text-amber-300"
                       : "bg-base-850 border-base-800 text-slate-400"
                   }`}>
                   <div className="font-semibold text-xs">{m.label}</div>

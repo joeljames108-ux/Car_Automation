@@ -89,9 +89,9 @@ function VisionGlassDockComponent({
           maxWidth: "100%",
           overflowX: "auto",
           // Apple Vision OS Translucent Light Glass dock
-          background: "rgba(255, 255, 255, 0.78)",
-          backdropFilter: "blur(50px) saturate(200%)",
-          WebkitBackdropFilter: "blur(50px) saturate(200%)",
+          background: "rgba(255, 255, 255, 0.45)",
+          backdropFilter: "blur(60px) saturate(240%)",
+          WebkitBackdropFilter: "blur(60px) saturate(240%)",
           border: "1.5px solid rgba(255, 255, 255, 0.90)",
           boxShadow:
             "0 14px 45px rgba(0, 0, 0, 0.12), " +
@@ -124,7 +124,7 @@ function VisionGlassDockComponent({
               }}
               onMouseEnter={() => setHoveredCat(cat.id)}
               onMouseLeave={() => setHoveredCat(null)}
-              className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+              className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500"
               style={{
                 display: "flex",
                 alignItems: "center",
@@ -186,7 +186,7 @@ function VisionGlassDockComponent({
               aria-current={cur ? "page" : undefined}
               onMouseEnter={() => setHoveredIdx(idx)}
               onMouseLeave={() => setHoveredIdx(null)}
-              className={`focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 ${cur ? "dock-item-active" : ""}`}
+              className={`focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 ${cur ? "dock-item-active" : ""}`}
               style={{
                 display: "flex",
                 alignItems: "center",

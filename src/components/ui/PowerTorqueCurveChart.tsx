@@ -22,7 +22,7 @@ export const PowerTorqueCurveChart: React.FC<PowerTorqueCurveChartProps> = ({
   powerCurve,
   height = 220,
   showLegend = true,
-  powerColor = "#22d3ee",
+  powerColor = "#fbbf24",
   torqueColor = "#f59e0b",
   xLabel = "RPM",
   yLabel = "hp / Nm",
@@ -46,7 +46,7 @@ export const PowerTorqueCurveChart: React.FC<PowerTorqueCurveChartProps> = ({
       {showLegend && (
         <div className="flex justify-between text-[10px] text-slate-500 mt-1.5 px-1">
           <span className="flex items-center gap-1.5">
-            <span className="h-2 w-3 bg-cyan-400 rounded-sm" />
+            <span className="h-2 w-3 bg-amber-400 rounded-sm" />
             <span className="font-mono text-slate-300">Power (hp)</span>
           </span>
           <span className="flex items-center gap-1.5">
