@@ -1,5 +1,6 @@
-import { useState, useRef, useEffect, useCallback, memo } from "react";
+import { useState, useRef, useEffect, useCallback, useId, memo } from "react";
 import type { ReactNode } from "react";
+import { GlassFilter } from "./LiquidGlass";
 
 interface StageItem {
   id: string;
@@ -31,6 +32,7 @@ function VisionGlassDockComponent({
   const [hoveredCat, setHoveredCat] = useState<string | null>(null);
   const dockRef = useRef<HTMLDivElement>(null);
   const [isExpanded, setIsExpanded] = useState(true);
+  const filterId = useId().replace(/:/g, "-");
 
   const activeCategoryStages = stages.filter((s) => s.category === activeCategory);
 
@@ -61,6 +63,8 @@ function VisionGlassDockComponent({
         maxWidth: "96vw",
       }}
     >
+      <GlassFilter id={filterId} scale={20} />
+
       {/* ── Active Module Label (floating above dock) ── */}
       <div
         key={activeStage}
@@ -88,10 +92,10 @@ function VisionGlassDockComponent({
           gap: 3,
           maxWidth: "100%",
           overflowX: "auto",
-          // Apple Vision OS Translucent Light Glass dock
-          background: "rgba(255, 255, 255, 0.45)",
-          backdropFilter: "blur(60px) saturate(240%)",
-          WebkitBackdropFilter: "blur(60px) saturate(240%)",
+          // Apple Vision OS Translucent Light Glass dock with liquid refraction
+          background: "rgba(255, 255, 255, 0.40)",
+          backdropFilter: `url(#${filterId}) blur(50px) saturate(220%)`,
+          WebkitBackdropFilter: `url(#${filterId}) blur(50px) saturate(220%)`,
           border: "1.5px solid rgba(255, 255, 255, 0.90)",
           boxShadow:
             "0 14px 45px rgba(0, 0, 0, 0.12), " +

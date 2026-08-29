@@ -25,6 +25,7 @@ import { Engine3DGeometryGenerator, EngineLayout3D } from "../../exterior3d/geom
 import { Car3DGeometryGenerator, VehicleBodyStyle3D, CarGlbOptions } from "../../exterior3d/geometry/car3dGeometryGenerator";
 import { Car3DGlbAssetRegistry } from "../../exterior3d/geometry/car3dGlbAssetRegistry";
 import { disposeThreeScene } from "../../exterior3d/utils/threeDisposal";
+import { GlassFilter } from "../ui/LiquidGlass";
 import {
   Box,
   Layers,
@@ -98,6 +99,7 @@ const EngineAndCar3DGraphicsViewportComponent: React.FC = () => {
   const sceneRef = useRef<THREE.Scene | null>(null);
   const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
   const controlsRef = useRef<OrbitControls | null>(null);
+  const filterId = React.useId().replace(/:/g, "-");
   const cameraRef = useRef<THREE.PerspectiveCamera | null>(null);
   const currentModelGroup = useRef<THREE.Group | null>(null);
   const keyLightRef = useRef<THREE.DirectionalLight | null>(null);
@@ -452,15 +454,25 @@ const EngineAndCar3DGraphicsViewportComponent: React.FC = () => {
       )}
 
       {/* Top Vision Glass Toolbar */}
+      <GlassFilter id={filterId} scale={20} />
       <div className="absolute top-4 left-4 right-4 flex items-center justify-between pointer-events-none z-10">
         {/* Left: View Mode Switcher & Asset Selector */}
-        <div className="flex items-center space-x-3 pointer-events-auto bg-slate-900/80 backdrop-blur-md p-2 rounded-xl border border-slate-700/50 shadow-lg">
+        <div
+          className="flex items-center space-x-3 pointer-events-auto p-2 rounded-2xl border"
+          style={{
+            background: "rgba(15, 23, 42, 0.65)",
+            backdropFilter: `url(#${filterId}) blur(28px) saturate(180%)`,
+            WebkitBackdropFilter: `url(#${filterId}) blur(28px) saturate(180%)`,
+            borderColor: "rgba(255, 255, 255, 0.12)",
+            boxShadow: "0 15px 35px rgba(0,0,0,0.40), inset 1px 1px 1px -0.5px rgba(255,255,255,0.4), inset -1px -1px 1px -0.5px rgba(0,0,0,0.5)"
+          }}
+        >
           <button
             onClick={() => setViewMode("VEHICLE")}
-            className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center space-x-1.5 transition-all ${
+            className={`px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center space-x-1.5 transition-all active:scale-95 ${
               viewMode === "VEHICLE"
-                ? "bg-amber-600 text-white shadow-md shadow-amber-500/30"
-                : "text-slate-400 hover:text-white hover:bg-slate-800/50"
+                ? "bg-amber-500 text-slate-950 font-bold shadow-md shadow-amber-500/30"
+                : "text-slate-300 hover:text-white hover:bg-white/5"
             }`}
           >
             <Layers className="w-4 h-4" />
@@ -468,10 +480,10 @@ const EngineAndCar3DGraphicsViewportComponent: React.FC = () => {
           </button>
           <button
             onClick={() => setViewMode("ENGINE")}
-            className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center space-x-1.5 transition-all ${
+            className={`px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center space-x-1.5 transition-all active:scale-95 ${
               viewMode === "ENGINE"
-                ? "bg-amber-600 text-white shadow-md shadow-amber-500/30"
-                : "text-slate-400 hover:text-white hover:bg-slate-800/50"
+                ? "bg-amber-500 text-slate-950 font-bold shadow-md shadow-amber-500/30"
+                : "text-slate-300 hover:text-white hover:bg-white/5"
             }`}
           >
             <Box className="w-4 h-4" />
@@ -483,7 +495,7 @@ const EngineAndCar3DGraphicsViewportComponent: React.FC = () => {
             <select
               value={selectedCarStyle}
               onChange={(e) => setSelectedCarStyle(e.target.value as VehicleBodyStyle3D)}
-              className="bg-slate-950 text-amber-300 text-xs rounded-lg px-2.5 py-1.5 border border-slate-700 font-mono outline-none focus:border-amber-500 max-w-[280px]"
+              className="bg-slate-950/80 text-amber-300 text-xs rounded-xl px-2.5 py-1.5 border border-white/10 font-mono outline-none focus:border-amber-500 max-w-[280px]"
             >
               <optgroup label="── Complete Vehicles ──">
                 {Car3DGlbAssetRegistry.getAssetsByCategory("SUPERCAR").map((a) => (
@@ -536,7 +548,7 @@ const EngineAndCar3DGraphicsViewportComponent: React.FC = () => {
             <select
               value={selectedEngineLayout}
               onChange={(e) => setSelectedEngineLayout(e.target.value as EngineLayout3D)}
-              className="bg-slate-950 text-amber-300 text-xs rounded-lg px-2.5 py-1.5 border border-slate-700 font-mono outline-none focus:border-amber-500"
+              className="bg-slate-950/80 text-amber-300 text-xs rounded-xl px-2.5 py-1.5 border border-white/10 font-mono outline-none focus:border-amber-500"
             >
               <option value="INLINE_3">Inline-3 (I3 Turbo - 3 Cylinders)</option>
               <option value="INLINE_4">Inline-4 (I4 Turbo - 4 Cylinders)</option>
@@ -556,11 +568,20 @@ const EngineAndCar3DGraphicsViewportComponent: React.FC = () => {
         </div>
 
         {/* Right: Inspection Toggles & Part Tree Drawer Button */}
-        <div className="flex items-center space-x-2 pointer-events-auto bg-slate-900/80 backdrop-blur-md p-2 rounded-xl border border-slate-700/50 shadow-lg">
+        <div
+          className="flex items-center space-x-2 pointer-events-auto p-2 rounded-2xl border"
+          style={{
+            background: "rgba(15, 23, 42, 0.65)",
+            backdropFilter: `url(#${filterId}) blur(28px) saturate(180%)`,
+            WebkitBackdropFilter: `url(#${filterId}) blur(28px) saturate(180%)`,
+            borderColor: "rgba(255, 255, 255, 0.12)",
+            boxShadow: "0 15px 35px rgba(0,0,0,0.40), inset 1px 1px 1px -0.5px rgba(255,255,255,0.4), inset -1px -1px 1px -0.5px rgba(0,0,0,0.5)"
+          }}
+        >
           <button
             onClick={() => setIsSmoothNormals(!isSmoothNormals)}
-            className={`px-2.5 py-1 rounded-lg text-xs font-semibold flex items-center space-x-1 transition-all ${
-              isSmoothNormals ? "bg-emerald-500/20 text-emerald-400 border border-emerald-500/40" : "text-slate-400 hover:text-white"
+            className={`px-2.5 py-1 rounded-xl text-xs font-semibold flex items-center space-x-1 transition-all active:scale-95 ${
+              isSmoothNormals ? "bg-emerald-500/20 text-emerald-300 border border-emerald-500/40" : "text-slate-400 hover:text-white"
             }`}
             title="Toggle Smooth G2 Vertex Normal Shading"
           >
@@ -570,8 +591,8 @@ const EngineAndCar3DGraphicsViewportComponent: React.FC = () => {
 
           <button
             onClick={() => setIsXRay(!isXRay)}
-            className={`px-2.5 py-1 rounded-lg text-xs font-semibold flex items-center space-x-1 transition-all ${
-              isXRay ? "bg-amber-500/20 text-amber-400 border border-amber-500/40" : "text-slate-400 hover:text-white"
+            className={`px-2.5 py-1 rounded-xl text-xs font-semibold flex items-center space-x-1 transition-all active:scale-95 ${
+              isXRay ? "bg-amber-500/20 text-amber-300 border border-amber-500/40" : "text-slate-400 hover:text-white"
             }`}
             title="Toggle X-Ray Structural Inspection"
           >
@@ -581,8 +602,8 @@ const EngineAndCar3DGraphicsViewportComponent: React.FC = () => {
 
           <button
             onClick={() => setIsWireframe(!isWireframe)}
-            className={`p-2 rounded-lg text-xs transition-all ${
-              isWireframe ? "bg-amber-500/20 text-amber-400 border border-amber-500/40" : "text-slate-400 hover:text-white"
+            className={`p-2 rounded-xl text-xs transition-all active:scale-95 ${
+              isWireframe ? "bg-amber-500/20 text-amber-300 border border-amber-500/40" : "text-slate-400 hover:text-white"
             }`}
             title="Toggle Wireframe Mesh Topology"
           >
@@ -590,8 +611,8 @@ const EngineAndCar3DGraphicsViewportComponent: React.FC = () => {
           </button>
           <button
             onClick={() => setAutoRotate(!autoRotate)}
-            className={`p-2 rounded-lg text-xs transition-all ${
-              autoRotate ? "bg-amber-500/20 text-amber-400 border border-amber-500/40" : "text-slate-400 hover:text-white"
+            className={`p-2 rounded-xl text-xs transition-all active:scale-95 ${
+              autoRotate ? "bg-amber-500/20 text-amber-300 border border-amber-500/40" : "text-slate-400 hover:text-white"
             }`}
             title="Toggle Auto-Turntable Rotation"
           >
@@ -599,8 +620,8 @@ const EngineAndCar3DGraphicsViewportComponent: React.FC = () => {
           </button>
           <button
             onClick={() => setShowMeshTree(!showMeshTree)}
-            className={`p-2 rounded-lg text-xs transition-all ${
-              showMeshTree ? "bg-amber-500/20 text-amber-400 border border-amber-500/40" : "text-slate-400 hover:text-white"
+            className={`p-2 rounded-xl text-xs transition-all active:scale-95 ${
+              showMeshTree ? "bg-amber-500/20 text-amber-300 border border-amber-500/40" : "text-slate-400 hover:text-white"
             }`}
             title="Toggle GLB Part Tree Drawer"
           >
@@ -612,44 +633,53 @@ const EngineAndCar3DGraphicsViewportComponent: React.FC = () => {
       {/* Left Vertical Camera & Studio Lighting Bar */}
       <div className="absolute top-20 left-4 flex flex-col space-y-2 pointer-events-auto z-10">
         {/* Camera Presets */}
-        <div className="bg-slate-900/80 backdrop-blur-md p-1.5 rounded-xl border border-slate-700/50 flex flex-col space-y-1">
-          <div className="text-[10px] text-slate-400 font-mono font-semibold px-2 py-0.5 border-b border-slate-700/60">CAMERA</div>
+        <div
+          className="p-2 rounded-2xl border flex flex-col space-y-1"
+          style={{
+            background: "rgba(15, 23, 42, 0.65)",
+            backdropFilter: `url(#${filterId}) blur(24px) saturate(180%)`,
+            WebkitBackdropFilter: `url(#${filterId}) blur(24px) saturate(180%)`,
+            borderColor: "rgba(255, 255, 255, 0.12)",
+            boxShadow: "0 15px 35px rgba(0,0,0,0.40), inset 1px 1px 1px -0.5px rgba(255,255,255,0.4)"
+          }}
+        >
+          <div className="text-[10px] text-slate-400 font-mono font-semibold px-2 py-0.5 border-b border-white/10">CAMERA</div>
           <button
             onClick={() => applyCameraPreset("HERO_THREE_QUARTER")}
-            className={`px-2.5 py-1 text-left rounded text-[11px] font-mono transition-all ${
-              activeCameraPreset === "HERO_THREE_QUARTER" ? "bg-amber-600 text-white font-bold" : "text-slate-300 hover:bg-slate-800"
+            className={`px-2.5 py-1 text-left rounded-xl text-[11px] font-mono transition-all active:scale-95 ${
+              activeCameraPreset === "HERO_THREE_QUARTER" ? "bg-amber-500 text-slate-950 font-bold shadow" : "text-slate-300 hover:bg-white/5"
             }`}
           >
             3/4 Hero
           </button>
           <button
             onClick={() => applyCameraPreset("SIDE_PROFILE")}
-            className={`px-2.5 py-1 text-left rounded text-[11px] font-mono transition-all ${
-              activeCameraPreset === "SIDE_PROFILE" ? "bg-amber-600 text-white font-bold" : "text-slate-300 hover:bg-slate-800"
+            className={`px-2.5 py-1 text-left rounded-xl text-[11px] font-mono transition-all active:scale-95 ${
+              activeCameraPreset === "SIDE_PROFILE" ? "bg-amber-500 text-slate-950 font-bold shadow" : "text-slate-300 hover:bg-white/5"
             }`}
           >
             Side Aero
           </button>
           <button
             onClick={() => applyCameraPreset("COCKPIT_DRIVER")}
-            className={`px-2.5 py-1 text-left rounded text-[11px] font-mono transition-all ${
-              activeCameraPreset === "COCKPIT_DRIVER" ? "bg-amber-600 text-white font-bold" : "text-slate-300 hover:bg-slate-800"
+            className={`px-2.5 py-1 text-left rounded-xl text-[11px] font-mono transition-all active:scale-95 ${
+              activeCameraPreset === "COCKPIT_DRIVER" ? "bg-amber-500 text-slate-950 font-bold shadow" : "text-slate-300 hover:bg-white/5"
             }`}
           >
             Cockpit
           </button>
           <button
             onClick={() => applyCameraPreset("ENGINE_BAY")}
-            className={`px-2.5 py-1 text-left rounded text-[11px] font-mono transition-all ${
-              activeCameraPreset === "ENGINE_BAY" ? "bg-amber-600 text-white font-bold" : "text-slate-300 hover:bg-slate-800"
+            className={`px-2.5 py-1 text-left rounded-xl text-[11px] font-mono transition-all active:scale-95 ${
+              activeCameraPreset === "ENGINE_BAY" ? "bg-amber-500 text-slate-950 font-bold shadow" : "text-slate-300 hover:bg-white/5"
             }`}
           >
             Engine Bay
           </button>
           <button
             onClick={() => applyCameraPreset("REAR_DIFFUSER")}
-            className={`px-2.5 py-1 text-left rounded text-[11px] font-mono transition-all ${
-              activeCameraPreset === "REAR_DIFFUSER" ? "bg-amber-600 text-white font-bold" : "text-slate-300 hover:bg-slate-800"
+            className={`px-2.5 py-1 text-left rounded-xl text-[11px] font-mono transition-all active:scale-95 ${
+              activeCameraPreset === "REAR_DIFFUSER" ? "bg-amber-500 text-slate-950 font-bold shadow" : "text-slate-300 hover:bg-white/5"
             }`}
           >
             Rear Exhaust
@@ -657,12 +687,21 @@ const EngineAndCar3DGraphicsViewportComponent: React.FC = () => {
         </div>
 
         {/* Lighting Setup */}
-        <div className="bg-slate-900/80 backdrop-blur-md p-1.5 rounded-xl border border-slate-700/50 flex flex-col space-y-1">
-          <div className="text-[10px] text-slate-400 font-mono font-semibold px-2 py-0.5 border-b border-slate-700/60">LIGHTING</div>
+        <div
+          className="p-2 rounded-2xl border flex flex-col space-y-1"
+          style={{
+            background: "rgba(15, 23, 42, 0.65)",
+            backdropFilter: `url(#${filterId}) blur(24px) saturate(180%)`,
+            WebkitBackdropFilter: `url(#${filterId}) blur(24px) saturate(180%)`,
+            borderColor: "rgba(255, 255, 255, 0.12)",
+            boxShadow: "0 15px 35px rgba(0,0,0,0.40), inset 1px 1px 1px -0.5px rgba(255,255,255,0.4)"
+          }}
+        >
+          <div className="text-[10px] text-slate-400 font-mono font-semibold px-2 py-0.5 border-b border-white/10">LIGHTING</div>
           <button
             onClick={() => setLightingMode("SOFTBOX_MAIN")}
-            className={`px-2.5 py-1 text-left rounded text-[11px] font-mono flex items-center space-x-1.5 transition-all ${
-              lightingMode === "SOFTBOX_MAIN" ? "bg-amber-500/20 text-amber-300 border border-amber-500/40" : "text-slate-300 hover:bg-slate-800"
+            className={`px-2.5 py-1 text-left rounded-xl text-[11px] font-mono flex items-center space-x-1.5 transition-all active:scale-95 ${
+              lightingMode === "SOFTBOX_MAIN" ? "bg-amber-500/20 text-amber-300 border border-amber-500/40" : "text-slate-300 hover:bg-white/5"
             }`}
           >
             <Sun className="w-3 h-3 text-amber-400" />
@@ -670,8 +709,8 @@ const EngineAndCar3DGraphicsViewportComponent: React.FC = () => {
           </button>
           <button
             onClick={() => setLightingMode("CYBER_NEON")}
-            className={`px-2.5 py-1 text-left rounded text-[11px] font-mono flex items-center space-x-1.5 transition-all ${
-              lightingMode === "CYBER_NEON" ? "bg-amber-500/20 text-amber-300 border border-amber-500/40" : "text-slate-300 hover:bg-slate-800"
+            className={`px-2.5 py-1 text-left rounded-xl text-[11px] font-mono flex items-center space-x-1.5 transition-all active:scale-95 ${
+              lightingMode === "CYBER_NEON" ? "bg-amber-500/20 text-amber-300 border border-amber-500/40" : "text-slate-300 hover:bg-white/5"
             }`}
           >
             <Sparkles className="w-3 h-3 text-amber-400" />
@@ -679,8 +718,8 @@ const EngineAndCar3DGraphicsViewportComponent: React.FC = () => {
           </button>
           <button
             onClick={() => setLightingMode("PROVING_GROUND_SUN")}
-            className={`px-2.5 py-1 text-left rounded text-[11px] font-mono flex items-center space-x-1.5 transition-all ${
-              lightingMode === "PROVING_GROUND_SUN" ? "bg-amber-500/20 text-amber-300 border border-amber-500/40" : "text-slate-300 hover:bg-slate-800"
+            className={`px-2.5 py-1 text-left rounded-xl text-[11px] font-mono flex items-center space-x-1.5 transition-all active:scale-95 ${
+              lightingMode === "PROVING_GROUND_SUN" ? "bg-amber-500/20 text-amber-300 border border-amber-500/40" : "text-slate-300 hover:bg-white/5"
             }`}
           >
             <Sun className="w-3 h-3 text-yellow-400" />
@@ -691,8 +730,21 @@ const EngineAndCar3DGraphicsViewportComponent: React.FC = () => {
 
       {/* Right Customization Floating Panel */}
       {viewMode === "VEHICLE" && (
-        <div className="absolute top-20 right-4 w-64 bg-slate-900/85 backdrop-blur-md p-3 rounded-xl border border-slate-700/60 shadow-xl pointer-events-auto space-y-3 z-10">
-          <div className="flex items-center justify-between border-b border-slate-700/60 pb-2">
+        <div
+          className="absolute top-20 right-4 w-64 p-3 rounded-2xl border shadow-2xl pointer-events-auto space-y-3 z-10"
+          style={{
+            background: "rgba(15, 23, 42, 0.70)",
+            backdropFilter: `url(#${filterId}) blur(28px) saturate(190%)`,
+            WebkitBackdropFilter: `url(#${filterId}) blur(28px) saturate(190%)`,
+            borderColor: "rgba(255, 255, 255, 0.14)",
+            boxShadow:
+              "0 20px 45px rgba(0,0,0,0.50), " +
+              "inset 3px 3px 0.5px -3px rgba(255,255,255,0.7), " +
+              "inset -3px -3px 0.5px -3px rgba(0,0,0,0.6), " +
+              "inset 1px 1px 1px -0.5px rgba(255,255,255,0.5)"
+          }}
+        >
+          <div className="flex items-center justify-between border-b border-white/10 pb-2">
             <span className="text-xs font-bold text-white tracking-wide flex items-center space-x-1.5">
               <Palette className="w-3.5 h-3.5 text-amber-400" />
               <span>COLOR & TRIM STUDIO</span>
@@ -709,7 +761,7 @@ const EngineAndCar3DGraphicsViewportComponent: React.FC = () => {
                   onClick={() => setSelectedPaintHex(color.hex)}
                   title={color.name}
                   style={{ backgroundColor: color.displayHex }}
-                  className={`w-full h-6 rounded-md border transition-all ${
+                  className={`w-full h-6 rounded-lg border transition-all active:scale-95 ${
                     selectedPaintHex === color.hex ? "scale-110 border-white ring-2 ring-amber-500/60" : "border-slate-600 opacity-80 hover:opacity-100"
                   }`}
                 />
@@ -730,7 +782,7 @@ const EngineAndCar3DGraphicsViewportComponent: React.FC = () => {
                   onClick={() => setSelectedCaliperHex(cal.hex)}
                   title={cal.name}
                   style={{ backgroundColor: cal.hex }}
-                  className={`w-full h-5 rounded-md border transition-all ${
+                  className={`w-full h-5 rounded-lg border transition-all active:scale-95 ${
                     selectedCaliperHex === cal.hex ? "scale-110 border-white ring-2 ring-red-500/60" : "border-slate-600 opacity-80 hover:opacity-100"
                   }`}
                 />
@@ -739,7 +791,7 @@ const EngineAndCar3DGraphicsViewportComponent: React.FC = () => {
           </div>
 
           {/* Exploded Disassembly Kinematics Slider */}
-          <div className="space-y-1.5 pt-1 border-t border-slate-700/60">
+          <div className="space-y-1.5 pt-1 border-t border-white/10">
             <div className="flex items-center justify-between text-[11px] text-slate-300 font-mono">
               <span>DISASSEMBLY KINEMATICS</span>
               <span className="text-amber-400 font-bold">{Math.round(explodedAmount * 100)}%</span>
@@ -759,8 +811,17 @@ const EngineAndCar3DGraphicsViewportComponent: React.FC = () => {
 
       {/* Part Tree Hierarchy Drawer */}
       {showMeshTree && (
-        <div className="absolute top-20 right-72 w-64 h-[500px] bg-slate-900/90 backdrop-blur-md p-3 rounded-xl border border-slate-700/60 shadow-2xl pointer-events-auto z-10 overflow-y-auto space-y-2">
-          <div className="flex items-center justify-between border-b border-slate-700 pb-2">
+        <div
+          className="absolute top-20 right-72 w-64 h-[500px] p-3 rounded-2xl border shadow-2xl pointer-events-auto z-10 overflow-y-auto space-y-2"
+          style={{
+            background: "rgba(15, 23, 42, 0.85)",
+            backdropFilter: `url(#${filterId}) blur(28px) saturate(190%)`,
+            WebkitBackdropFilter: `url(#${filterId}) blur(28px) saturate(190%)`,
+            borderColor: "rgba(255, 255, 255, 0.14)",
+            boxShadow: "0 20px 50px rgba(0,0,0,0.6)"
+          }}
+        >
+          <div className="flex items-center justify-between border-b border-white/10 pb-2">
             <span className="text-xs font-bold text-white font-mono flex items-center space-x-1.5">
               <Sliders className="w-3.5 h-3.5 text-amber-400" />
               <span>GLB SUB-MESH TREE ({subMeshList.length})</span>
@@ -769,7 +830,7 @@ const EngineAndCar3DGraphicsViewportComponent: React.FC = () => {
           </div>
           <div className="space-y-1">
             {subMeshList.map((mName, idx) => (
-              <div key={idx} className="text-[11px] font-mono text-slate-300 bg-slate-950/60 px-2 py-1 rounded border border-slate-800/60 flex items-center justify-between hover:border-amber-500/40">
+              <div key={idx} className="text-[11px] font-mono text-slate-300 bg-slate-950/60 px-2 py-1 rounded-lg border border-slate-800/60 flex items-center justify-between hover:border-amber-500/40">
                 <span className="truncate max-w-[170px]">{mName}</span>
                 <span className="text-[9px] text-amber-400 bg-amber-500/10 px-1 rounded">MESH</span>
               </div>
@@ -780,7 +841,16 @@ const EngineAndCar3DGraphicsViewportComponent: React.FC = () => {
 
       {/* Bottom Telemetry Overlay HUD */}
       <div className="absolute bottom-4 left-4 right-4 flex items-center justify-between pointer-events-none z-10">
-        <div className="bg-slate-900/80 backdrop-blur-md px-3 py-2 rounded-xl border border-slate-700/50 text-amber-200 text-xs font-mono flex items-center space-x-4">
+        <div
+          className="px-4 py-2 rounded-2xl border text-amber-200 text-xs font-mono flex items-center space-x-4"
+          style={{
+            background: "rgba(15, 23, 42, 0.65)",
+            backdropFilter: `url(#${filterId}) blur(24px) saturate(180%)`,
+            WebkitBackdropFilter: `url(#${filterId}) blur(24px) saturate(180%)`,
+            borderColor: "rgba(255, 255, 255, 0.12)",
+            boxShadow: "0 12px 30px rgba(0,0,0,0.35), inset 1px 1px 1px -0.5px rgba(255,255,255,0.3)"
+          }}
+        >
           <div className="flex items-center space-x-1.5">
             <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
             <span className="text-white font-semibold">{loadedAssetName}</span>
@@ -795,7 +865,16 @@ const EngineAndCar3DGraphicsViewportComponent: React.FC = () => {
           <div>VERTICES: <strong className="text-amber-400">{vertCount.toLocaleString()}</strong></div>
         </div>
 
-        <div className="bg-slate-900/80 backdrop-blur-md px-3 py-2 rounded-xl border border-slate-700/50 text-slate-400 text-xs font-mono">
+        <div
+          className="px-3.5 py-2 rounded-2xl border text-slate-400 text-xs font-mono"
+          style={{
+            background: "rgba(15, 23, 42, 0.65)",
+            backdropFilter: `url(#${filterId}) blur(24px) saturate(180%)`,
+            WebkitBackdropFilter: `url(#${filterId}) blur(24px) saturate(180%)`,
+            borderColor: "rgba(255, 255, 255, 0.12)",
+            boxShadow: "0 12px 30px rgba(0,0,0,0.35), inset 1px 1px 1px -0.5px rgba(255,255,255,0.3)"
+          }}
+        >
           WEBGL 2.0 • 60 FPS • THREE.JS r160
         </div>
       </div>

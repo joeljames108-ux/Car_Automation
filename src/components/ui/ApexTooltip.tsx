@@ -1,6 +1,7 @@
-import { useState, useRef, useEffect, useCallback, type ReactNode } from "react";
+import { useState, useRef, useEffect, useCallback, useId, type ReactNode } from "react";
 import { Bot, AlertTriangle, Zap } from "lucide-react";
 import { getApexKnowledge, getImpactBadges, type ApexKnowledgeEntry } from "../../sim/apexKnowledge";
+import { GlassFilter } from "./LiquidGlass";
 
 interface ApexTooltipProps {
   /** The label text to look up in the knowledge database */
@@ -17,6 +18,7 @@ export function ApexTooltip({ label, entry: overrideEntry, children }: ApexToolt
   const triggerRef = useRef<HTMLSpanElement>(null);
   const tooltipRef = useRef<HTMLDivElement>(null);
   const hideTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const filterId = useId().replace(/:/g, "-");
 
   const knowledge = overrideEntry ?? getApexKnowledge(label);
 
@@ -69,12 +71,24 @@ export function ApexTooltip({ label, entry: overrideEntry, children }: ApexToolt
       )}
 
       {visible && (
-        <div
-          ref={tooltipRef}
-          className={`apex-tooltip ${position === "above" ? "apex-tooltip-above" : "apex-tooltip-below"}`}
-          onMouseEnter={show}
-          onMouseLeave={hide}
-        >
+        <>
+          <GlassFilter id={filterId} scale={18} />
+          <div
+            ref={tooltipRef}
+            className={`apex-tooltip ${position === "above" ? "apex-tooltip-above" : "apex-tooltip-below"}`}
+            onMouseEnter={show}
+            onMouseLeave={hide}
+            style={{
+              backdropFilter: `url(#${filterId}) blur(28px) saturate(190%)`,
+              WebkitBackdropFilter: `url(#${filterId}) blur(28px) saturate(190%)`,
+              boxShadow:
+                "0 24px 48px -8px rgba(0, 0, 0, 0.7), " +
+                "inset 3px 3px 0.5px -3px rgba(255, 255, 255, 0.7), " +
+                "inset -3px -3px 0.5px -3px rgba(0, 0, 0, 0.6), " +
+                "inset 1px 1px 1px -0.5px rgba(255, 255, 255, 0.5), " +
+                "0 0 20px rgba(245, 158, 11, 0.08)"
+            }}
+          >
           {/* Arrow */}
           <div className={`apex-tooltip-arrow ${position === "above" ? "apex-tooltip-arrow-below" : "apex-tooltip-arrow-above"}`} />
 
@@ -123,7 +137,8 @@ export function ApexTooltip({ label, entry: overrideEntry, children }: ApexToolt
             </div>
           )}
         </div>
-      )}
-    </span>
-  );
+      </>
+    )}
+  </span>
+);
 }

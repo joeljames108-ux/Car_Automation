@@ -15,7 +15,8 @@ import { computeScores, computeSummary } from "../sim/reviews";
 import { ENGINE_LAYOUTS, CHASSIS_TYPES, TIRE_COMPOUNDS } from "../sim/constants";
 import type { SimResult, VehicleDesign } from "../sim/types";
 import { ChassisHotspotViewer } from "./ChassisHotspotViewer";
-import { NotificationCenter, LiquidGlassCard, LiquidButton } from "./ui/LiquidGlass";
+import { LiquidGlassCard, LiquidButton } from "./ui/LiquidGlass";
+import { useCommandCenterAnime } from "./ui/AnimeCommandCenterFX";
 
 interface Recommendation {
   id: string;
@@ -68,14 +69,18 @@ function CommandCenterComponent({ onSelectStage }: CommandCenterProps = {}) {
     return `$${n.toFixed(0)}`;
   }
 
+  const containerRef = useCommandCenterAnime(`${carConcept}-${uiTheme}`);
+
   return (
-    <div className="space-y-4 stagger">
+    <div ref={containerRef} className="space-y-4">
       {/* Interactive Telemetry Chassis Blueprint */}
-      <ChassisHotspotViewer onSelectStage={onSelectStage} />
+      <div className="cmd-animate-tile">
+        <ChassisHotspotViewer onSelectStage={onSelectStage} />
+      </div>
 
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">
         {/* Vehicle Concept Philosophy Selection Card */}
-        <div className="panel border border-amber-500/40 rounded-2xl p-5 shadow-[0_0_30px_rgba(34,211,238,0.15)] relative overflow-hidden">
+        <div className="cmd-animate-tile panel border border-amber-500/40 rounded-2xl p-5 shadow-[0_0_30px_rgba(34,211,238,0.15)] relative overflow-hidden">
           <div className="flex flex-col gap-4 relative z-10">
             <div className="flex items-center gap-3">
               <div className="p-3 rounded-2xl bg-amber-500/20 border border-amber-400/40 text-amber-300 shadow-[0_0_15px_rgba(34,211,238,0.2)]">
@@ -117,7 +122,7 @@ function CommandCenterComponent({ onSelectStage }: CommandCenterProps = {}) {
         </div>
 
         {/* Global UI Theme Selection Card */}
-        <div className="panel border border-amber-500/40 rounded-2xl p-5 shadow-[0_0_30px_rgba(168,85,247,0.15)] relative overflow-hidden">
+        <div className="cmd-animate-tile panel border border-amber-500/40 rounded-2xl p-5 shadow-[0_0_30px_rgba(168,85,247,0.15)] relative overflow-hidden">
           <div className="flex flex-col gap-4 relative z-10">
             <div className="flex items-center gap-3">
               <div className="p-3 rounded-2xl bg-amber-500/20 border border-amber-400/40 text-amber-300 shadow-[0_0_15px_rgba(168,85,247,0.2)]">
@@ -159,7 +164,7 @@ function CommandCenterComponent({ onSelectStage }: CommandCenterProps = {}) {
       </div>
 
       {/* Company Status Strip */}
-      <div className="grid grid-cols-3 sm:grid-cols-6 gap-2">
+      <div className="cmd-animate-tile grid grid-cols-3 sm:grid-cols-6 gap-2">
         <div className="bg-base-900 border border-base-800 rounded-xl p-3 text-center hover:border-base-700 transition-all">
           <Fuel size={12} className="mx-auto text-warn-400 mb-1" />
           <div className="font-mono text-sm text-warn-400">${company.economy.fuelPrice.toFixed(2)}</div>
@@ -192,43 +197,36 @@ function CommandCenterComponent({ onSelectStage }: CommandCenterProps = {}) {
         </div>
       </div>
 
-      {/* Hero Banner + Apex Liquid Glass Audio Notification Widget */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 items-stretch">
-        <div className="panel p-5 relative overflow-hidden lg:col-span-2 flex flex-col justify-between">
-          <div className="absolute inset-0 opacity-20 pointer-events-none"
-            style={{ background: "radial-gradient(ellipse at top right, rgba(245,158,11,0.25), transparent 60%)" }} />
-          <div className="relative flex flex-col md:flex-row md:items-center gap-4">
-            <div className="flex items-center gap-3">
-              <div className="flex items-center justify-center w-12 h-12 rounded-2xl bg-amber-500/20 border border-amber-400/40 shadow-[0_0_15px_rgba(245,158,11,0.2)]">
-                <LayoutDashboard size={24} className="text-amber-300" />
-              </div>
-              <div>
-                <div className="flex items-center gap-2">
-                  <span className="text-[10px] font-mono font-bold text-amber-400 uppercase tracking-widest">REAL-TIME TELEMETRY</span>
-                  <span className="bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-[9px] font-bold px-2 py-0.5 rounded-full flex items-center gap-1">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" /> LIVE STREAM
-                  </span>
-                </div>
-                <h2 className="text-lg font-bold text-slate-100">Central Engineering Dashboard</h2>
-                <p className="text-xs text-slate-400">Real-time command center — updates instantly with every lab change</p>
-              </div>
+      {/* Hero Banner */}
+      <div className="cmd-animate-tile panel p-5 relative overflow-hidden flex flex-col justify-between">
+        <div className="absolute inset-0 opacity-20 pointer-events-none"
+          style={{ background: "radial-gradient(ellipse at top right, rgba(245,158,11,0.25), transparent 60%)" }} />
+        <div className="relative flex flex-col md:flex-row md:items-center gap-4">
+          <div className="flex items-center gap-3">
+            <div className="flex items-center justify-center w-12 h-12 rounded-2xl bg-amber-500/20 border border-amber-400/40 shadow-[0_0_15px_rgba(245,158,11,0.2)]">
+              <LayoutDashboard size={24} className="text-amber-300" />
             </div>
-            <div className="flex-1" />
-            <HealthGauge value={overallHealth} />
-          </div>
-
-          <div className="mt-4 pt-3 border-t border-white/5 flex items-center justify-between text-xs text-slate-400">
-            <div className="flex items-center gap-2">
-              <span className="inline-block w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
-              <span className="font-mono text-[11px]">Apex Spatial Engine v2.4 • 60 FPS Physics Loop</span>
+            <div>
+              <div className="flex items-center gap-2">
+                <span className="text-[10px] font-mono font-bold text-amber-400 uppercase tracking-widest">REAL-TIME TELEMETRY</span>
+                <span className="bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 text-[9px] font-bold px-2 py-0.5 rounded-full flex items-center gap-1">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" /> LIVE STREAM
+                </span>
+              </div>
+              <h2 className="text-lg font-bold text-slate-100">Central Engineering Dashboard</h2>
+              <p className="text-xs text-slate-400">Real-time command center — updates instantly with every lab change</p>
             </div>
-            <span className="font-mono text-[10px] text-slate-500">Optimum Balance Index: {(overallHealth * 100).toFixed(0)}%</span>
           </div>
+          <div className="flex-1" />
+          <HealthGauge value={overallHealth} />
         </div>
 
-        {/* Liquid Glass Audio Notification & Media Center */}
-        <div className="flex items-center justify-center">
-          <NotificationCenter className="w-full h-full" />
+        <div className="mt-4 pt-3 border-t border-white/5 flex items-center justify-between text-xs text-slate-400">
+          <div className="flex items-center gap-2">
+            <span className="inline-block w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
+            <span className="font-mono text-[11px]">Apex Spatial Engine v2.4 • 60 FPS Physics Loop</span>
+          </div>
+          <span className="font-mono text-[10px] text-slate-500">Optimum Balance Index: {(overallHealth * 100).toFixed(0)}%</span>
         </div>
       </div>
 
@@ -248,19 +246,21 @@ function CommandCenterComponent({ onSelectStage }: CommandCenterProps = {}) {
       )}
 
       {/* Vehicle specs */}
-      <Section title="Vehicle Specifications" icon={<Car size={16} />}>
-        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-2">
-          <StatTile label="Architecture" value={layout.label} icon={<Cog size={11} className="text-amber-400 shrink-0" />} />
-          <StatTile label="Displacement" value={sim.displacement} unit="cc" icon={<Fuel size={11} className="text-amber-400 shrink-0" />} />
-          <StatTile label="Chassis" value={chassis.label} icon={<Car size={11} className="text-amber-400 shrink-0" />} />
-          <StatTile label="Tire" value={tire.label} icon={<CircleDot size={11} className="text-emerald-400 shrink-0" />} />
-          <StatTile label="Weight" value={sim.weight} unit="kg" accent="accent" icon={<Zap size={11} className="text-amber-400 shrink-0" />} />
-          <StatTile label="Power" value={sim.peakPower} unit="hp" accent="accent" icon={<Gauge size={11} className="text-amber-400 shrink-0" />} />
-        </div>
-      </Section>
+      <div className="cmd-animate-tile">
+        <Section title="Vehicle Specifications" icon={<Car size={16} />}>
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-2">
+            <StatTile label="Architecture" value={layout.label} icon={<Cog size={11} className="text-amber-400 shrink-0" />} />
+            <StatTile label="Displacement" value={sim.displacement} unit="cc" icon={<Fuel size={11} className="text-amber-400 shrink-0" />} />
+            <StatTile label="Chassis" value={chassis.label} icon={<Car size={11} className="text-amber-400 shrink-0" />} />
+            <StatTile label="Tire" value={tire.label} icon={<CircleDot size={11} className="text-emerald-400 shrink-0" />} />
+            <StatTile label="Weight" value={sim.weight} unit="kg" accent="accent" icon={<Zap size={11} className="text-amber-400 shrink-0" />} />
+            <StatTile label="Power" value={sim.peakPower} unit="hp" accent="accent" icon={<Gauge size={11} className="text-amber-400 shrink-0" />} />
+          </div>
+        </Section>
+      </div>
 
       {/* Performance + Curves */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+      <div className="cmd-animate-tile grid grid-cols-1 lg:grid-cols-2 gap-4">
         <Section title="Power & Torque Curves" icon={<TrendingUp size={16} />}>
           <PowerTorqueCurveChart powerCurve={sim.powerCurve} height={220} />
         </Section>
@@ -277,7 +277,7 @@ function CommandCenterComponent({ onSelectStage }: CommandCenterProps = {}) {
       </div>
 
       {/* Aero + Thermal */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+      <div className="cmd-animate-tile grid grid-cols-1 lg:grid-cols-2 gap-4">
         <Section title="Aerodynamics" icon={<Wind size={16} />}>
           <LineChart series={dragSeries} xLabel="Speed" xUnit="km/h" yLabel="Force" yUnit="N" height={180} />
           <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mt-2">

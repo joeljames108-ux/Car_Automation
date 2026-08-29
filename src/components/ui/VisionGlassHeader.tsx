@@ -1,8 +1,9 @@
-import { useState, useEffect, useCallback, memo } from "react";
+import { useState, useEffect, useCallback, useId, memo } from "react";
 import {
   Save, FolderOpen, RotateCcw, Search, User, Settings2,
   Clock, ChevronDown, Sparkles, Wifi, Battery,
 } from "lucide-react";
+import { GlassFilter } from "./LiquidGlass";
 
 interface VisionGlassHeaderProps {
   month: number;
@@ -24,6 +25,7 @@ function VisionGlassHeaderComponent({
 }: VisionGlassHeaderProps) {
   const [time, setTime] = useState(new Date());
   const [hovered, setHovered] = useState<string | null>(null);
+  const filterId = useId().replace(/:/g, "-");
 
   useEffect(() => {
     const t = setInterval(() => setTime(new Date()), 30_000);
@@ -45,15 +47,17 @@ function VisionGlassHeaderComponent({
         justifyContent: "space-between",
         padding: "0 20px",
         height: 48,
-        borderBottom: "1px solid rgba(255,255,255,0.08)",
-        background: "rgba(255,255,255,0.06)",
-        backdropFilter: "blur(40px) saturate(180%)",
-        WebkitBackdropFilter: "blur(40px) saturate(180%)",
+        borderBottom: "1px solid rgba(255,255,255,0.12)",
+        background: "rgba(15, 23, 42, 0.55)",
+        backdropFilter: `url(#${filterId}) blur(36px) saturate(190%)`,
+        WebkitBackdropFilter: `url(#${filterId}) blur(36px) saturate(190%)`,
+        boxShadow: "0 4px 20px rgba(0,0,0,0.25), inset 0 -1px 0 rgba(255,255,255,0.08), inset 0 1px 0 rgba(255,255,255,0.25)",
         flexShrink: 0,
         position: "relative",
         zIndex: 20,
       }}
     >
+      <GlassFilter id={filterId} scale={15} />
       {/* ── LEFT: Logo + Brand ── */}
       <div style={{ display: "flex", alignItems: "center", gap: 10, minWidth: 180 }}>
         {/* Animated logo mark */}

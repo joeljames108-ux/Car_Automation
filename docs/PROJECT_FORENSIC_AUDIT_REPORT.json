@@ -1,17 +1,17 @@
 {
-  "auditTimestamp": "2026-08-29T17:05:12.124Z",
+  "auditTimestamp": "2026-08-29T17:42:33.014Z",
   "projectName": "Modular glTF Vehicle Construction System & Car Automation Simulator",
   "rootDirectory": "C:\\Users\\joelj\\Downloads\\project-bolt-sb1-a1kjcyhr (3)\\project",
-  "totalSourceFiles": 1187,
-  "totalCodeLines": 259910,
-  "totalCommentLines": 23199,
-  "totalBlankLines": 31501,
-  "totalSizeBytes": 13149192,
+  "totalSourceFiles": 1190,
+  "totalCodeLines": 261131,
+  "totalCommentLines": 23363,
+  "totalBlankLines": 31626,
+  "totalSizeBytes": 13221127,
   "subsystemBreakdown": {
     "simulation_core": {
-      "fileCount": 235,
-      "codeLines": 45648,
-      "sizeBytes": 2552979
+      "fileCount": 237,
+      "codeLines": 46441,
+      "sizeBytes": 2605325
     },
     "engine_assembly": {
       "fileCount": 69,
@@ -20,13 +20,13 @@
     },
     "modular_vehicle": {
       "fileCount": 93,
-      "codeLines": 25014,
-      "sizeBytes": 1292509
+      "codeLines": 25094,
+      "sizeBytes": 1296104
     },
     "exterior_3d": {
       "fileCount": 295,
-      "codeLines": 64674,
-      "sizeBytes": 3166228
+      "codeLines": 64678,
+      "sizeBytes": 3166395
     },
     "rendering_engine": {
       "fileCount": 15,
@@ -35,8 +35,8 @@
     },
     "state_management": {
       "fileCount": 27,
-      "codeLines": 6619,
-      "sizeBytes": 281334
+      "codeLines": 6631,
+      "sizeBytes": 282159
     },
     "ai_agent_framework": {
       "fileCount": 36,
@@ -44,9 +44,9 @@
       "sizeBytes": 185129
     },
     "ui_components": {
-      "fileCount": 336,
-      "codeLines": 78447,
-      "sizeBytes": 3893776
+      "fileCount": 337,
+      "codeLines": 78779,
+      "sizeBytes": 3908778
     },
     "asset_pipeline": {
       "fileCount": 0,
@@ -65,8 +65,8 @@
     }
   },
   "dependencyGraph": {
-    "totalNodes": 1187,
-    "totalEdges": 2734,
+    "totalNodes": 1190,
+    "totalEdges": 2741,
     "directAcyclicGraphValid": true,
     "cyclicDependencyPaths": [],
     "subsystemCouplingMatrix": {
@@ -104,7 +104,7 @@
         "rendering_engine": 0,
         "state_management": 9,
         "ai_agent_framework": 1,
-        "ui_components": 8,
+        "ui_components": 9,
         "asset_pipeline": 0,
         "testing_verification": 0,
         "documentation_audit": 0
@@ -169,7 +169,7 @@
         "rendering_engine": 11,
         "state_management": 146,
         "ai_agent_framework": 10,
-        "ui_components": 690,
+        "ui_components": 696,
         "asset_pipeline": 0,
         "testing_verification": 0,
         "documentation_audit": 0
@@ -294,6 +294,7 @@
       "src/sim/f1/types/f1Types.ts",
       "src/sim/hypercar/hypercarDynamicsSimulationEngine.ts",
       "src/sim/hypercar/types/hypercarTypes.ts",
+      "src/sim/laptime/gen1.js",
       "src/sim/metallurgyDatabase.ts",
       "src/sim/modularVehicle/index.ts",
       "src/sim/modularVehicle/runTransmissionTests.ts",
@@ -303,6 +304,7 @@
       "src/sim/physics/batteryModel.ts",
       "src/sim/physics/differentialModel.ts",
       "src/sim/physics/nvhModel.ts",
+      "src/sim/physics/pureCornerPhysics.ts",
       "src/sim/physics/thermalModel.ts",
       "src/sim/physics/trackSurfaceModel.ts",
       "src/sim/physics/turboModel.ts",
@@ -644,6 +646,11 @@
         "outDegree": 10
       },
       {
+        "modulePath": "src/components/CommandCenter.tsx",
+        "inDegree": 0,
+        "outDegree": 11
+      },
+      {
         "modulePath": "src/components/motorsport/TeamCard.tsx",
         "inDegree": 10,
         "outDegree": 1
@@ -695,11 +702,6 @@
       },
       {
         "modulePath": "src/components/AeroLab.tsx",
-        "inDegree": 0,
-        "outDegree": 10
-      },
-      {
-        "modulePath": "src/components/CommandCenter.tsx",
         "inDegree": 0,
         "outDegree": 10
       },
@@ -1067,6 +1069,11 @@
         "modulePath": "src/components/interior/BespokeLuxuryInteriorStudioHub.tsx",
         "inDegree": 4,
         "outDegree": 3
+      },
+      {
+        "modulePath": "src/components/ui/LiquidGlass.tsx",
+        "inDegree": 7,
+        "outDegree": 0
       },
       {
         "modulePath": "src/engine3d/generators/engineCoverGenerator.ts",
@@ -2028,6 +2035,7 @@
       "src/sim/f1/types/f1Types.ts",
       "src/sim/hypercar/hypercarDynamicsSimulationEngine.ts",
       "src/sim/hypercar/types/hypercarTypes.ts",
+      "src/sim/laptime/gen1.js",
       "src/sim/metallurgyDatabase.ts",
       "src/sim/modularVehicle/index.ts",
       "src/sim/modularVehicle/runTransmissionTests.ts",
@@ -2036,6 +2044,7 @@
       "src/sim/physics/batteryModel.ts",
       "src/sim/physics/differentialModel.ts",
       "src/sim/physics/nvhModel.ts",
+      "src/sim/physics/pureCornerPhysics.ts",
       "src/sim/physics/thermalModel.ts",
       "src/sim/physics/trackSurfaceModel.ts",
       "src/sim/physics/turboModel.ts",
@@ -2258,7 +2267,7 @@
       },
       {
         "filePath": "src/components/vehicleAssembly/EngineAndCar3DGraphicsViewport.tsx",
-        "lineCount": 808
+        "lineCount": 887
       },
       {
         "filePath": "src/components/vehicleAssembly/exterior/ExteriorSVGCanvas.tsx",
@@ -2266,7 +2275,7 @@
       },
       {
         "filePath": "src/components/vehicleAssembly/MasterVehicleStudio.tsx",
-        "lineCount": 749
+        "lineCount": 751
       },
       {
         "filePath": "src/components/vehicleAssembly/ModularCarStructureWorkbench.tsx",
@@ -2382,7 +2391,7 @@
       },
       {
         "filePath": "src/exterior3d/generators/interior/cabinLightingRenderSystem.ts",
-        "lineCount": 560
+        "lineCount": 564
       },
       {
         "filePath": "src/exterior3d/generators/interior/dashboardScreenContentSystem.ts",
@@ -2585,6 +2594,10 @@
         "lineCount": 542
       },
       {
+        "filePath": "src/sim/physics/pureCornerPhysics.ts",
+        "lineCount": 972
+      },
+      {
         "filePath": "src/sim/race.ts",
         "lineCount": 691
       },
@@ -2609,13 +2622,13 @@
         "lineCount": 865
       }
     ],
-    "missingTypeAnnotationCount": 313,
+    "missingTypeAnnotationCount": 316,
     "todoCommentCount": 0,
     "fixmeCommentCount": 0,
     "testCoverageRatioPct": 18,
     "recommendations": [
-      "Modularize 138 monolithic files (>500 lines) into focused subsystem domain modules.",
-      "Replace 313 loose 'any' type annotations with strict TypeScript generic/interface types.",
+      "Modularize 139 monolithic files (>500 lines) into focused subsystem domain modules.",
+      "Replace 316 loose 'any' type annotations with strict TypeScript generic/interface types.",
       "Maintain 100% deterministic transform snap repeatability across all 36 chassis sockets.",
       "Ensure all 3D assets implement strict level of detail (LOD 1-6) polygon and texture budgets."
     ]

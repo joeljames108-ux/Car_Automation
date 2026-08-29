@@ -50,12 +50,24 @@ interface FinishSummarySectionProps {
   className?: string;
 }
 
-const GRADE_BADGES: Partial<Record<MaterialGrade, { label: string; color: string }>> = {
+const GRADE_BADGES: Record<MaterialGrade, { label: string; color: string }> = {
   cast: { label: "OEM CAST", color: "bg-slate-800 text-slate-300 border-slate-700" },
   forged: { label: "RACE FORGED", color: "bg-amber-500/20 text-amber-300 border-amber-500/40" },
   billet: { label: "CNC BILLET", color: "bg-amber-500/20 text-amber-300 border-amber-500/40" },
   titanium: { label: "TITANIUM SPEC-R", color: "bg-amber-500/20 text-amber-300 border-amber-500/40" },
   ceramic: { label: "CERAMIC MATRIX", color: "bg-emerald-500/20 text-emerald-300 border-emerald-500/40" },
+  cast_iron: { label: "CAST IRON", color: "bg-slate-800 text-slate-300 border-slate-700" },
+  nodular_iron: { label: "NODULAR IRON", color: "bg-slate-750 text-slate-200 border-slate-600" },
+  cast_aluminum: { label: "CAST ALUMINUM", color: "bg-sky-500/20 text-sky-300 border-sky-500/40" },
+  billet_7075: { label: "BILLET 7075-T6", color: "bg-amber-500/20 text-amber-300 border-amber-500/40" },
+  maraging_steel: { label: "MARAGING STEEL", color: "bg-rose-500/20 text-rose-300 border-rose-500/40" },
+  titanium_alloy: { label: "TI-6AL-4V ALLOY", color: "bg-amber-500/20 text-amber-300 border-amber-500/40" },
+  inconel_718: { label: "INCONEL 718", color: "bg-orange-500/20 text-orange-300 border-orange-500/40" },
+  haynes_230: { label: "HAYNES 230", color: "bg-yellow-500/20 text-yellow-300 border-yellow-500/40" },
+  cmc: { label: "CERAMIC MATRIX CMC", color: "bg-emerald-500/20 text-emerald-300 border-emerald-500/40" },
+  mim_titanium: { label: "MIM POWDER TI", color: "bg-cyan-500/20 text-cyan-300 border-cyan-500/40" },
+  chromoly: { label: "4130 CHROMOLY", color: "bg-zinc-700 text-zinc-200 border-zinc-500" },
+  hypereutectic_aluminum: { label: "HYPEREUTECTIC AL", color: "bg-indigo-500/20 text-indigo-300 border-indigo-500/40" },
 };
 
 export function FinishSummarySection({
