@@ -136,13 +136,13 @@ export function solveLapTime(circuit: CircuitData, car: CarProfile, grip = 1.0):
     for (const c of sc[s]) {
       const r = solveCorner(c, cs, car, grip);
       cr.push(r); sct += r.cornerTime; tbe += r.brakingEnergy;
-      td += r.brakingDistance + r.accelerationDistance;
+      td += r.brakingDistance + c.accelerationDistance;
       if (r.lateralG > mlG) mlG = r.lateralG;
       const bg = (r.entrySpeed-r.apexSpeed)/Math.max(r.brakingTime,0.01)/G;
       if (bg > mbG) mbG = bg;
       cs = r.exitSpeed; cg = r.cornerExitGear; temp = r.tyreTemp;
       tdeg += Math.max(0, (temp-80)*0.001);
-      tf += car.power*c.cornerTime/42000000*850;
+      tf += car.power*r.cornerTime/42000000*850;
     }
     st[s] = sct; tt += sct;
   }

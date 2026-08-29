@@ -385,26 +385,26 @@ export function buildCylinderHeadDetails(
         for(const fx of [-0.006,0.006]){
           const b=createAllenSocketHead(0.004,0.008);
           b.translate(cx+fx,deckH*0.53,side*deckH*0.38+zO*boreDiam*0.18);
-          b.rotation.x=side*hV;
+          b.rotateX(side*hV);
           g.add(new THREE.Mesh(b,materials.arpHardenedFastener));
         }
       }
       // Spark plug tube
       const pt=new THREE.CylinderGeometry(0.008,0.008,0.045,12);
       pt.translate(cx,deckH*0.55,side*deckH*0.35);
-      pt.rotation.x=side*hV;
+      pt.rotateX(side*hV);
       g.add(new THREE.Mesh(pt,materials.nikasilCylinderBore));
       // Injector boss
       const ib=new THREE.CylinderGeometry(0.007,0.009,0.016,10);
       ib.translate(cx+boreSpacing*0.35,deckH*0.48,side*deckH*0.42);
-      ib.rotation.x=side*hV*1.2;
+      ib.rotateX(side*hV*1.2);
       g.add(new THREE.Mesh(ib,materials.castAluminumBlock));
     }
     // Dowel pins
     for(const dx of [-hL*0.7,hL*0.7]){
       const d=new THREE.CylinderGeometry(0.005,0.005,0.015,8);
       d.translate(dx,deckH*0.46,side*deckH*0.30);
-      d.rotation.x=side*hV;
+      d.rotateX(side*hV);
       g.add(new THREE.Mesh(d,materials.machinedDeckSurface));
     }
   }
