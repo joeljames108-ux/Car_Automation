@@ -1,0 +1,8 @@
+import * as THREE from "three";
+
+export class AdvancedGlbOptimizer {
+  private lodLevels = [{ distance: 5, ratio: 1.0 }, { distance: 15, ratio: 0.5 }, { distance: 30, ratio: 0.25 }, { distance: 50, ratio: 0.1 }];
+  generateLOD(original: THREE.Group): THREE.Group[] { return this.lodLevels.map(lod => { const g = original.clone(true); g.traverse(node => { if ((node as THREE.Mesh).isMesh) { const mesh = node as THREE.Mesh; if (mesh.geometry) { const idx = mesh.geometry.index; if (idx) { const keep = Math.floor(idx.count * lod.ratio); const ni = new Uint16Array(keep); for (let i = 0; i < keep; i++) ni[i] = idx.array[i]; mesh.geometry.setIndex(new THREE.BufferAttribute(ni, 1)); } } } }); return g; }); }
+  deduplicateVertices(geometry: THREE.BufferGeometry): THREE.BufferGeometry { const pos = geometry.attributes.position; const map = new Map<string, number>(); const np: number[] = [], ni: number[] = []; let nx = 0; const idx = geometry.index; const count = idx ? idx.count : pos.count; for (let i = 0; i < count; i++) { const vi = idx ? idx.array[i] : i; const key = pos.getX(vi).toFixed(6) + "," + pos.getY(vi).toFixed(6) + "," + pos.getZ(vi).toFixed(6); if (!map.has(key)) { map.set(key, nx); np.push(pos.getX(vi), pos.getY(vi), pos.getZ(vi)); nx++; } ni.push(map.get(key)!); } const ng = new THREE.BufferGeometry(); ng.setAttribute("position", new THREE.Float32BufferAttribute(np, 3)); ng.setIndex(ni); ng.computeVertexNormals(); return ng; }
+  computeBoundingVolumes(group: THREE.Group): void { group.traverse(node => { if ((node as THREE.Mesh).isMesh) { const mesh = node as THREE.Mesh; mesh.geometry.computeBoundingBox(); mesh.geometry.computeBoundingSphere(); } }); }
+}

@@ -1,0 +1,7 @@
+import * as THREE from "three";
+
+export class AdvancedTextureGenerator {
+  createNormalMap(w: number, h: number, freq: number, amp: number): THREE.DataTexture { const size = w * h; const data = new Uint8Array(4 * size); for (let y = 0; y < h; y++) { for (let x = 0; x < w; x++) { const i = (y * w + x) * 4; data[i] = Math.floor((Math.sin(x * freq) * Math.cos(y * freq * 0.7) * amp + 1) * 0.5 * 255); data[i + 1] = Math.floor((Math.cos(x * freq * 0.7) * Math.sin(y * freq) * amp + 1) * 0.5 * 255); data[i + 2] = 255; data[i + 3] = 255; } } const t = new THREE.DataTexture(data, w, h); t.needsUpdate = true; return t; }
+  createRoughnessMap(w: number, h: number, base: number): THREE.DataTexture { const size = w * h; const data = new Uint8Array(4 * size); for (let y = 0; y < h; y++) { for (let x = 0; x < w; x++) { const i = (y * w + x) * 4; const v = Math.floor((base + Math.random() * 0.1) * 255); data[i] = data[i + 1] = data[i + 2] = v; data[i + 3] = 255; } } const t = new THREE.DataTexture(data, w, h); t.needsUpdate = true; return t; }
+  createAmbientOcclusion(w: number, h: number): THREE.DataTexture { const size = w * h; const data = new Uint8Array(4 * size); for (let y = 0; y < h; y++) { for (let x = 0; x < w; x++) { const i = (y * w + x) * 4; const ao = Math.min(Math.min(x, w - x, y, h - y) / (Math.min(w, h) * 0.3), 1.0); const v = Math.floor(ao * 255); data[i] = data[i + 1] = data[i + 2] = v; data[i + 3] = 255; } } const t = new THREE.DataTexture(data, w, h); t.needsUpdate = true; return t; }
+}
