@@ -5,21 +5,19 @@
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%2322d3ee' d='M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5'/%3E%3C/svg%3E" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#0b0f19" />
-    <!-- Resource hints for heavy assets -->
-    <link rel="modulepreload" href="/src/main.tsx" />
-    <title>Apex Engineer — Vehicle Design Studio</title>
-    <meta name="theme-color" content="#0b0f19" />
     <meta name="description" content="Apex Engineer — Professional Modular Vehicle Assembly, Aerodynamics & Powertrain Simulation Studio." />
+    <title>Apex Engineer — Vehicle Design Studio</title>
+    <!-- Critical CSS: font loading -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <!-- Critical fonts: Inter (UI body) + JetBrains Mono (data/code) + system fallback for headings -->
     <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" media="print" onload="this.media='all'" />
-    <!-- Deferred: Outfit + Orbitron (heading fonts, loaded after paint) -->
     <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Orbitron:wght@400;500;600;700;800;900&display=swap" onload="this.media='all'" />
     <noscript>
       <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
     </noscript>
+    <!-- Preload critical vendor chunks for faster initial load -->
+    <link rel="modulepreload" href="/src/main.tsx" />
   </head>
   <body>
     <div id="root"></div>

@@ -30,6 +30,7 @@ const DEFAULT_SETUP: SetupParams = {
   diffPreload: 30, diffLock: 55,
   brakeBias: 56, tyrePressureF: 21.0, tyrePressureR: 21.5,
   camberF: -3.2, camberR: -2.5, toeF: 0.05, toeR: -0.1,
+};
 
 // Estimate lap time from setup (simplified physics model)
 export function estimateLapTime(setup: SetupParams, massKg: number, powerW: number, trackLengthM: number): number {
@@ -61,6 +62,7 @@ export function estimateLapTime(setup: SetupParams, massKg: number, powerW: numb
   const avgSpeed = Math.min(90, 0.45 * Math.sqrt(powerW/massKg * gripFactor) - 0.5 * dragFactor * 10 - balPenalty);
   const lapTime = trackLengthM / Math.max(10, avgSpeed);
   return lapTime;
+}
 
 // Gradient descent optimization
 export function optimizeSetup(
