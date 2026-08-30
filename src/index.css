@@ -101,7 +101,7 @@
     background: rgba(30, 41, 59, 0.5);
     backdrop-filter: blur(12px);
     border: 1px solid rgba(255, 255, 255, 0.08);
-    color: #cbd5e1;
+    color: rgba(255, 220, 150, 0.8);
     transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
@@ -3700,7 +3700,7 @@ a,
 }
 
 .custom-glass-select-option {
-  color: #cbd5e1;
+  color: rgba(255, 220, 150, 0.8);
 }
 
 .custom-glass-select-option:hover {
@@ -7045,17 +7045,17 @@ button:active,
 
 /* ── CSS Variables ── */
 .idash-root {
-  --idash-bg-base: #080c14;
-  --idash-bg-panel: #0d121f;
-  --idash-bg-card: #131929;
+  --idash-bg-base: #1a1008;
+  --idash-bg-panel: rgba(26, 16, 8, 0.95);
+  --idash-bg-card: rgba(40, 25, 12, 0.85);
   --idash-bg-hover: #1c253d;
   --idash-accent-blue: #2563eb;
   --idash-accent-cyan: #00e5ff;
   --idash-text-main: #f8fafc;
   --idash-text-muted: #94a3b8;
   --idash-text-bright: #e2e8f0;
-  --idash-border: #1e293b;
-  --idash-border-card: #243048;
+  --idash-border: rgba(180, 120, 40, 0.25);
+  --idash-border-card: rgba(180, 120, 40, 0.20);
   --idash-bar-fill: #1d72fe;
   --idash-font: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 
@@ -7077,7 +7077,7 @@ button:active,
 /* ── Header Bar ── */
 .idash-header {
   height: 52px;
-  background: #090d16;
+  background: rgba(26, 16, 8, 0.9);
   border-bottom: 1px solid var(--idash-border);
   display: flex;
   align-items: center;
@@ -7227,7 +7227,7 @@ button:active,
 
 .idash-stat-label {
   flex: 1;
-  color: #e2e8f0;
+  color: rgba(255, 230, 170, 0.9);
   font-weight: 600;
   font-size: 12.5px;
 }
@@ -7317,7 +7317,7 @@ button:active,
 }
 .idash-readout-label {
   flex: 1;
-  color: #cbd5e1;
+  color: rgba(255, 220, 150, 0.8);
   font-weight: 600;
 }
 .idash-readout-value {
@@ -7337,7 +7337,7 @@ button:active,
   width: 100%;
   background: var(--idash-bg-card);
   border: 1px solid var(--idash-border-card);
-  color: #cbd5e1;
+  color: rgba(255, 220, 150, 0.8);
   padding: 10px;
   border-radius: 8px;
   font-size: 12px;
@@ -7371,7 +7371,7 @@ button:active,
   gap: 8px;
   padding: 10px 20px;
   border-bottom: 1px solid var(--idash-border);
-  background: rgba(9, 13, 22, 0.85);
+  background: rgba(26, 16, 8, 0.85);
   backdrop-filter: blur(8px);
 }
 
@@ -7416,7 +7416,7 @@ button:active,
 
 /* Presets Carousel */
 .idash-presets-container {
-  background: rgba(13, 18, 31, 0.94);
+  background: rgba(26, 16, 8, 0.94);
   border-top: 1px solid var(--idash-border);
   padding: 12px 18px;
   backdrop-filter: blur(12px);
@@ -7467,7 +7467,7 @@ button:active,
 .idash-preset-name {
   font-size: 10.5px;
   font-weight: 800;
-  color: #cbd5e1;
+  color: rgba(255, 220, 150, 0.8);
   letter-spacing: 0.3px;
 }
 .idash-preset-card.active .idash-preset-name,
@@ -7521,7 +7521,7 @@ button:active,
 .idash-reset-btn {
   background: var(--idash-bg-card);
   border: 1px solid var(--idash-border-card);
-  color: #e2e8f0;
+  color: rgba(255, 230, 170, 0.9);
   padding: 5px 12px;
   border-radius: 6px;
   font-size: 11px;
@@ -7656,7 +7656,7 @@ button:active,
 }
 .idash-panel-left::-webkit-scrollbar-thumb,
 .idash-panel-right::-webkit-scrollbar-thumb {
-  background: #334155;
+  background: rgba(180, 120, 40, 0.4);
   border-radius: 2px;
 }
 
