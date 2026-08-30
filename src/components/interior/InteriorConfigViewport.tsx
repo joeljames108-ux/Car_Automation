@@ -86,6 +86,10 @@ export const InteriorConfigViewport: React.FC = () => {
           xmlns="http://www.w3.org/2000/svg"
           className="idash-svg"
         >
+          {/* Windshield Wipers Hint */}
+          <line x1="200" y1="72" x2="340" y2="72" stroke="#1a202c" strokeWidth="2" strokeLinecap="round" />
+          <line x1="260" y1="72" x2="400" y2="72" stroke="#1a202c" strokeWidth="2" strokeLinecap="round" />
+
           {/* Windshield & Body Line */}
           <path
             d="M50 80 Q300 30 550 80 L520 280 Q300 310 80 280 Z"
@@ -136,6 +140,8 @@ export const InteriorConfigViewport: React.FC = () => {
           {/* Seat detail stitching lines */}
           <line x1="115" y1="175" x2="115" y2="275" stroke="#ffffff15" strokeWidth="1" />
           <line x1="195" y1="175" x2="195" y2="275" stroke="#ffffff15" strokeWidth="1" />
+          {/* Left seat headrest */}
+          <rect x="110" y="140" width="90" height="24" rx="10" fill={interiorColor} stroke="#1a202c" strokeWidth="2" style={{ transition: "fill 0.3s ease" }} />
 
           <rect
             x="380"
@@ -150,6 +156,8 @@ export const InteriorConfigViewport: React.FC = () => {
           />
           <line x1="405" y1="175" x2="405" y2="275" stroke="#ffffff15" strokeWidth="1" />
           <line x1="485" y1="175" x2="485" y2="275" stroke="#ffffff15" strokeWidth="1" />
+          {/* Right seat headrest */}
+          <rect x="400" y="140" width="90" height="24" rx="10" fill={interiorColor} stroke="#1a202c" strokeWidth="2" style={{ transition: "fill 0.3s ease" }} />
 
           {/* Instrument Cluster */}
           <g transform="translate(140, 140)">
@@ -264,6 +272,13 @@ export const InteriorConfigViewport: React.FC = () => {
             )}
           </g>
 
+          {/* Air Vents */}
+          <rect x="105" y="148" width="28" height="8" rx="2" fill="#0f1318" stroke="#334155" strokeWidth="1" />
+          <rect x="380" y="148" width="28" height="8" rx="2" fill="#0f1318" stroke="#334155" strokeWidth="1" />
+          {/* Glove Box */}
+          <rect x="400" y="195" width="80" height="35" rx="4" fill="#151b28" stroke="#2d3748" strokeWidth="1.5" />
+          <line x1="410" y1="210" x2="470" y2="210" stroke="#2d3748" strokeWidth="1" />
+
           {/* Gear Shift / Center Console Area */}
           <rect x="268" y="200" width="64" height="80" rx="6" fill="#151b28" stroke="#2d3748" strokeWidth="1.5" />
           <rect x="282" y="210" width="36" height="24" rx="4" fill="#0f1318" stroke="#334155" strokeWidth="1" />
@@ -271,9 +286,12 @@ export const InteriorConfigViewport: React.FC = () => {
             D
           </text>
 
+          {/* Center Armrest */}
+          <rect x="225" y="250" width="150" height="16" rx="6" fill="#151b28" stroke="#2d3748" strokeWidth="1" />
+
           {/* Cup Holders */}
-          <circle cx="284" y="255" r="10" fill="#0b0f16" stroke="#2d3748" strokeWidth="1" />
-          <circle cx="316" y="255" r="10" fill="#0b0f16" stroke="#2d3748" strokeWidth="1" />
+          <circle cx="284" cy="255" r="10" fill="#0b0f16" stroke="#2d3748" strokeWidth="1" />
+          <circle cx="316" cy="255" r="10" fill="#0b0f16" stroke="#2d3748" strokeWidth="1" />
 
           {/* Door Panel Accents */}
           <line x1="55" y1="110" x2="55" y2="275" stroke="#252f44" strokeWidth="2" />

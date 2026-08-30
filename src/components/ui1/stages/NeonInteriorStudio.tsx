@@ -22,13 +22,14 @@ import { NeonHorizonDataCard } from "../design/NeonHorizonDataCard";
 import { InteriorsDesigner } from "../../InteriorsDesigner";
 import { ModularInteriorWorkshop } from "../../vehicleAssembly/ModularInteriorWorkshop";
 import { HyperFidelityCockpitStudioCustomizer } from "../../interior/HyperFidelityCockpitStudioCustomizer";
+import { InteriorDashboardConfiguratorStudio } from "../../interior/InteriorDashboardConfiguratorStudio";
 
-type InteriorStudioTab = "hyper_fidelity_studio" | "cockpit_3d_studio" | "interior_workshop" | "hmi_quick_tune";
+type InteriorStudioTab = "configurator" | "hyper_fidelity_studio" | "cockpit_3d_studio" | "interior_workshop" | "hmi_quick_tune";
 
 export function NeonInteriorStudio() {
   const { design, sim, updateInterior, updateInfotainment } = useDesign();
 
-  const [activeTab, setActiveTab] = useState<InteriorStudioTab>("hyper_fidelity_studio");
+  const [activeTab, setActiveTab] = useState<InteriorStudioTab>("configurator");
   const [clusterTheme, setClusterTheme] = useState<string>("cyberpunk_neon");
   const [seatType, setSeatType] = useState<string>("carbon_bucket");
   const [ambientColor, setAmbientColor] = useState<string>("#8fb9d9");
@@ -61,6 +62,7 @@ export function NeonInteriorStudio() {
       {/* Sub-Tabs */}
       <div className="flex items-center gap-2 p-1.5 bg-black/40 rounded-2xl border border-white/10 overflow-x-auto no-scrollbar">
         {[
+          { id: "configurator" as const, label: "Interior Configurator", icon: <Sliders size={14} /> },
           { id: "hyper_fidelity_studio" as const, label: "✨ Hyper-Fidelity 3D Studio", icon: <Sparkles size={14} /> },
           { id: "cockpit_3d_studio" as const, label: "3D Cockpit & Interior Designer", icon: <Box size={14} /> },
           { id: "interior_workshop" as const, label: "Modular Interior Workshop", icon: <Layers size={14} /> },
@@ -87,7 +89,14 @@ export function NeonInteriorStudio() {
         })}
       </div>
 
-      {/* View 0: Hyper-Fidelity 3D Studio */}
+      {/* View 0: Interior Dashboard Configurator */}
+      {activeTab === "configurator" && (
+        <div className="w-full rounded-3xl overflow-hidden border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] bg-[#0a0d14]" style={{height: 'calc(100vh - 180px)', minHeight: '600px'}}>
+          <InteriorDashboardConfiguratorStudio />
+        </div>
+      )}
+
+{/* View 0: Hyper-Fidelity 3D Studio */}
       {activeTab === "hyper_fidelity_studio" && (
         <div className="w-full h-[700px] rounded-3xl overflow-hidden border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
           <HyperFidelityCockpitStudioCustomizer />
