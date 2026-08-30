@@ -18,7 +18,8 @@ export type Stage =
   | "fender_louvers" | "vgt_turbo"
   | "blown_wing" | "skid_spark"
   | "boundary_suction" | "thermal_pcm"
-  | "higgsfield";
+  | "higgsfield"
+  | "interior_dashboard";
 
 // ── Lazy-loaded stage panel components ──
 const Transmission3DStudio = lazy(() => import("./transmissionStudio/Transmission3DStudio").then(m => ({ default: m.Transmission3DStudio })));
@@ -57,6 +58,7 @@ const NvhSoundLab = lazy(() => import("./NvhSoundLab").then(m => ({ default: m.N
 const SuspensionMasterStudio = lazy(() => import("./chassis/SuspensionMasterStudio").then(m => ({ default: m.SuspensionMasterStudio })));
 const GrandAutomotiveStudioHub = lazy(() => import("./GrandAutomotiveStudioHub").then(m => ({ default: m.GrandAutomotiveStudioHub })));
 const NeonHiggsfieldStudio = lazy(() => import("./ui1/stages/NeonHiggsfieldStudio").then(m => ({ default: m.NeonHiggsfieldStudio })));
+const InteriorDashboardConfiguratorStudio = lazy(() => import("./interior/InteriorDashboardConfiguratorStudio").then(m => ({ default: m.InteriorDashboardConfiguratorStudio })));
 
 interface StageSwitcherProps {
   stage: Stage;
@@ -129,6 +131,7 @@ const StageSwitcherComponent: React.FC<StageSwitcherProps> = ({ stage, onSelectS
           </div>
         )}
         {stage === "higgsfield" && <NeonHiggsfieldStudio />}
+        {stage === "interior_dashboard" && <InteriorDashboardConfiguratorStudio />}
       </div>
     </Suspense>
   );

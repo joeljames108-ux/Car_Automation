@@ -81,6 +81,7 @@ const STAGES: StageItem[] = [
   { id: "graphics3d", label: "3D Viewport Studio", icon: <Box size={14} />, category: "studios" },
   { id: "suspension3d", label: "3D Suspension Studio", icon: <Activity size={14} />, category: "studios" },
   { id: "ai", label: "Apex AI Studio", icon: <Bot size={14} />, category: "studios" },
+  { id: "interior_dashboard", label: "Interior Configurator", icon: <SlidersHorizontal size={14} />, category: "studios" },
 
   // --- Simulation & Testing ---
   { id: "simulation", label: "Simulation", icon: <Activity size={14} />, category: "simulation" },
