@@ -52,7 +52,7 @@ export const NeonHorizonToggle: React.FC<NeonHorizonToggleProps> = ({
         className={`relative w-11 h-6 rounded-full transition-all duration-300 p-0.5 border ${
  checked
  ? "bg-amber-500/15 border-amber-500/30"
- : "bg-amber-950/60 border-white/10"
+ : "bg-slate-900/80 border-white/10"
  }`}
       >
         <div

@@ -21,9 +21,9 @@ import { playHMIClickSound } from "../../../utils/hmiSoundSynth";
 
 /* ─── panel glass ─── */
 const glassPanel =
-  "rounded-2xl bg-amber-950/60/70 border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)]";
+  "rounded-2xl bg-slate-900/80/70 border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)]";
 const innerCard =
-  "p-3.5 rounded-2xl bg-amber-950/60/80 border border-white/8";
+  "p-3.5 rounded-2xl bg-slate-900/80/80 border border-white/8";
 
 export function NeonAeroLab() {
   const { sim, updateAero } = useDesign();
@@ -109,7 +109,7 @@ export function NeonAeroLab() {
       ctx.fill();
 
       // Car Body (Sleek Dark Hypercar with Red Taillights)
-      ctx.fillStyle = "#1a1008";
+      ctx.fillStyle = "#080c14";
       ctx.beginPath();
       ctx.roundRect(carX - 18, carY - 6, 36, 12, 4);
       ctx.fill();
@@ -412,7 +412,7 @@ export function NeonAeroLab() {
                   setFrameDropdownOpen(!frameDropdownOpen);
                   setBodyDropdownOpen(false);
                 }}
-                className="w-full p-3 rounded-2xl bg-amber-950/60/80 hover:bg-amber-950/60 border border-white/10 flex items-center justify-between transition-all cursor-pointer"
+                className="w-full p-3 rounded-2xl bg-slate-900/80/80 hover:bg-slate-900/80 border border-white/10 flex items-center justify-between transition-all cursor-pointer"
               >
                 <span className="text-sm font-medium text-slate-200">
                   {frameMaterial}
@@ -425,7 +425,7 @@ export function NeonAeroLab() {
                 />
               </button>
               {frameDropdownOpen && (
-                <div className="absolute top-full left-0 right-0 mt-1.5 p-1 rounded-2xl bg-amber-950/60 border border-white/15 shadow-2xl z-30 flex flex-col gap-1">
+                <div className="absolute top-full left-0 right-0 mt-1.5 p-1 rounded-2xl bg-slate-900/80 border border-white/15 shadow-2xl z-30 flex flex-col gap-1">
                   {[
                     "Carbon Fiber (Standard)",
                     "Forged Carbon Monocoque",
@@ -463,7 +463,7 @@ export function NeonAeroLab() {
                   setBodyDropdownOpen(!bodyDropdownOpen);
                   setFrameDropdownOpen(false);
                 }}
-                className="w-full p-3 rounded-2xl bg-amber-950/60/80 hover:bg-amber-950/60 border border-white/10 flex items-center justify-between transition-all cursor-pointer"
+                className="w-full p-3 rounded-2xl bg-slate-900/80/80 hover:bg-slate-900/80 border border-white/10 flex items-center justify-between transition-all cursor-pointer"
               >
                 <span className="text-sm font-medium text-slate-200">
                   {bodyMaterial}
@@ -476,7 +476,7 @@ export function NeonAeroLab() {
                 />
               </button>
               {bodyDropdownOpen && (
-                <div className="absolute top-full left-0 right-0 mt-1.5 p-1 rounded-2xl bg-amber-950/60 border border-white/15 shadow-2xl z-30 flex flex-col gap-1">
+                <div className="absolute top-full left-0 right-0 mt-1.5 p-1 rounded-2xl bg-slate-900/80 border border-white/15 shadow-2xl z-30 flex flex-col gap-1">
                   {[
                     "Carbon Fiber (Advanced)",
                     "Aramid Graphene Matrix",

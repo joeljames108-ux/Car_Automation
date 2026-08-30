@@ -81,7 +81,7 @@ export const RoofPanelSVG: React.FC<RoofPanelSVGProps> = ({
       {/* ── 3. Aerodynamic Antenna Shark Fin ── */}
       <polygon
         points="575,198 590,188 592,198"
-        fill="#1a1008"
+        fill="#080c14"
         stroke="#334155"
         strokeWidth="0.8"
       />

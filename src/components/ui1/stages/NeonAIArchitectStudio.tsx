@@ -141,7 +141,7 @@ export function NeonAIArchitectStudio() {
 
       {/* View 1: Apex AI Studio (5 Engineers + Chat + Recommendations) */}
       {activeTab === "apex_ai_studio" && (
-        <div className="w-full rounded-3xl overflow-hidden border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] bg-amber-950/60">
+        <div className="w-full rounded-3xl overflow-hidden border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] bg-slate-900/80">
           <ApexAIStudio />
         </div>
       )}
@@ -155,14 +155,14 @@ export function NeonAIArchitectStudio() {
 
       {/* View 2: Live Engineering Advisory (AIAssistant) */}
       {activeTab === "live_advisory" && (
-        <div className="w-full rounded-3xl overflow-hidden border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] bg-amber-950/60 p-4">
+        <div className="w-full rounded-3xl overflow-hidden border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] bg-slate-900/80 p-4">
           <AIAssistant embedded={true} />
         </div>
       )}
 
       {/* View 3: Multi-Agent Execution Console */}
       {activeTab === "agent_console" && (
-        <div className="w-full min-h-[550px] rounded-3xl overflow-hidden border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] bg-amber-950/60">
+        <div className="w-full min-h-[550px] rounded-3xl overflow-hidden border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] bg-slate-900/80">
           <ApexAgentConsole
             engineConfig={design.engine}
             powerHp={sim.peakPower}
@@ -174,7 +174,7 @@ export function NeonAIArchitectStudio() {
 
       {/* View 4: Agent Status Dashboard */}
       {activeTab === "agent_dashboard" && (
-        <div className="w-full rounded-3xl overflow-hidden border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] bg-amber-950/60 p-4">
+        <div className="w-full rounded-3xl overflow-hidden border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] bg-slate-900/80 p-4">
           <AgentDashboard />
         </div>
       )}

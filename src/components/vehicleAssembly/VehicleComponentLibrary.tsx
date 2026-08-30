@@ -142,7 +142,7 @@ export const VehicleComponentLibrary: React.FC<VehicleComponentLibraryProps> = (
                 isInstalled
                   ? "bg-emerald-950/20 border-emerald-500/40 opacity-90"
                   : isActive
-                  ? "bg-amber-950/40 border-amber-400 shadow-[0_0_20px_rgba(6,182,212,0.3)] animate-pulse"
+                  ? "bg-slate-900/60 border-amber-400 shadow-[0_0_20px_rgba(6,182,212,0.3)] animate-pulse"
                   : isAvailable
                   ? isHovered
                     ? "bg-slate-900/90 border-amber-500/60 shadow-lg"

@@ -46,7 +46,7 @@ export const ImmersiveCockpitVRStudio: React.FC<ImmersiveCockpitVRStudioProps> =
   return (
     <div className="p-4 rounded-3xl bg-slate-950/90 border border-amber-500/40 backdrop-blur-xl shadow-2xl text-xs font-mono text-slate-200 space-y-4">
       {/* VR Header Banner */}
-      <div className="flex flex-wrap items-center justify-between gap-3 p-3 rounded-2xl bg-amber-950/40 border border-amber-500/30">
+      <div className="flex flex-wrap items-center justify-between gap-3 p-3 rounded-2xl bg-slate-900/60 border border-amber-500/30">
         <div className="flex items-center gap-3">
           <div className="p-2.5 rounded-xl bg-amber-500/20 text-amber-300 border border-amber-500/40">
             <Glasses size={22} />
@@ -55,7 +55,7 @@ export const ImmersiveCockpitVRStudio: React.FC<ImmersiveCockpitVRStudioProps> =
             <h3 className="text-sm font-extrabold text-amber-200 flex items-center gap-2">
               <span>WEBXR SPATIAL COCKPIT VR STUDIO</span>
               <span className={`px-2 py-0.5 rounded-full text-[9px] font-bold border ${
-                isVrActive ? "bg-emerald-500/20 text-emerald-300 border-emerald-500/40 animate-pulse" : "bg-amber-900/40 text-amber-400 border-amber-700/40"
+                isVrActive ? "bg-emerald-500/20 text-emerald-300 border-emerald-500/40 animate-pulse" : "bg-slate-800/40 text-amber-400 border-amber-700/40"
               }`}>
                 {isVrActive ? "VR ACTIVE" : isVrAvailable ? "HEADSET READY" : "SIMULATED XR"}
               </span>
@@ -99,7 +99,7 @@ export const ImmersiveCockpitVRStudio: React.FC<ImmersiveCockpitVRStudioProps> =
                 onClick={() => setVrMode(mode.id as any)}
                 className={`p-3 rounded-2xl text-left border transition-all cursor-pointer ${
                   isSelected
-                    ? "bg-amber-900/60 border-amber-400 text-amber-200 shadow-lg shadow-purple-900/40 font-bold"
+                    ? "bg-slate-800/60 border-amber-400 text-amber-200 shadow-lg shadow-purple-900/40 font-bold"
                     : "bg-slate-900/60 border-slate-800 text-slate-400 hover:border-slate-700 hover:text-slate-200"
                 }`}
               >

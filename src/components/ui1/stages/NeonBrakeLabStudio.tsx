@@ -71,7 +71,7 @@ export function NeonBrakeLabStudio() {
             }}
             className="p-6 flex flex-col gap-4"
           >
-            <div className="grid grid-cols-10 gap-1.5 h-36 p-4 rounded-xl bg-amber-950/60 border border-sky-400/25 items-end shadow-[inset_0_0_20px_rgba(0,0,0,0.8)]">
+            <div className="grid grid-cols-10 gap-1.5 h-36 p-4 rounded-xl bg-slate-900/80 border border-sky-400/25 items-end shadow-[inset_0_0_20px_rgba(0,0,0,0.8)]">
               {Array.from({ length: 10 }).map((_, idx) => {
                 const stopTemp = Math.round(180 + (idx + 1) * 68 - (coolingDuctFlow / 100) * 80);
                 const heightPercent = Math.min(100, Math.max(15, (stopTemp / 900) * 100));
@@ -137,7 +137,7 @@ export function NeonBrakeLabStudio() {
                       className={`p-2.5 rounded-lg border text-center text-xs font-bold cursor-pointer transition-all ${
  isSelected
  ? "bg-amber-500/20 border-amber-500/30 text-sky-200"
- : "bg-amber-950/60 border-white/10 text-slate-400 hover:border-sky-400/25"
+ : "bg-slate-900/80 border-white/10 text-slate-400 hover:border-sky-400/25"
  }`}
                     >
                       {item.name}
@@ -158,7 +158,7 @@ export function NeonBrakeLabStudio() {
               onChange={(val) => setCoolingDuctFlow(val)}
             />
 
-            <div className="p-3.5 rounded-xl bg-amber-950/60 border border-sky-400/15 flex flex-col gap-2 font-mono text-xs">
+            <div className="p-3.5 rounded-xl bg-slate-900/80 border border-sky-400/15 flex flex-col gap-2 font-mono text-xs">
               <div className="flex items-center justify-between">
                 <span className="text-slate-400">Front Caliper:</span>
                 <span className="text-amber-300 font-bold">10-Piston Monobloc Titanium</span>

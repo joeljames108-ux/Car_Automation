@@ -338,7 +338,7 @@ export const ModularInteriorStudioWorkbench: React.FC<ModularInteriorStudioWorkb
                     onClick={() => engine.updateMaterials({ dashboardTrimInsert: t.id as InteriorMaterialType })}
                     className={`p-2 rounded-xl text-center border font-bold ${
                       state.materials.dashboardTrimInsert === t.id
-                        ? "bg-amber-950/50 border-amber-400 text-amber-300"
+                        ? "bg-slate-900/80 border-amber-400 text-amber-300"
                         : "bg-slate-900/40 border-slate-800 text-slate-400 hover:border-slate-700"
                     }`}
                   >

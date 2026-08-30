@@ -99,7 +99,7 @@ export function NeonHorizonCommandPalette({
 
   return (
     <div className="fixed inset-0 z-50 flex items-start justify-center pt-24 px-4 bg-black/75 backdrop-blur-md animate-nh-materialize">
-      <div className="w-full max-w-2xl bg-amber-950/60/95 border border-white/12 rounded-2xl overflow-hidden flex flex-col shadow-[0_30px_80px_rgba(0,0,0,0.65)]">
+      <div className="w-full max-w-2xl bg-slate-900/80/95 border border-white/12 rounded-2xl overflow-hidden flex flex-col shadow-[0_30px_80px_rgba(0,0,0,0.65)]">
         {/* Search Input Bar */}
         <div className="flex items-center gap-3 px-5 py-4 border-b border-white/8 bg-black/30">
           <Search size={18} className="text-amber-300/90" />

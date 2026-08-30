@@ -22,7 +22,7 @@ export const LightingShaderDefs: React.FC = () => {
       <radialGradient id="laserPhosphorCore" cx="50%" cy="50%" r="50%">
         <stop offset="0%" stopColor="#fef08a" stopOpacity="1.0" />
         <stop offset="40%" stopColor="#fbbf24" stopOpacity="0.9" />
-        <stop offset="100%" stopColor="#1a1008" stopOpacity="0.0" />
+        <stop offset="100%" stopColor="#080c14" stopOpacity="0.0" />
       </radialGradient>
 
       {/* ── 3. 3D OLED Taillight Surface Glow ── */}

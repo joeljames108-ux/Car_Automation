@@ -247,7 +247,7 @@ export const F1GarageSetupStudio: React.FC<F1GarageSetupStudioProps> = memo(func
   };
 
   return (
-    <div className="w-full h-full flex flex-col bg-amber-950/60 text-white select-none relative overflow-hidden">
+    <div className="w-full h-full flex flex-col bg-slate-900/80 text-white select-none relative overflow-hidden">
       {/* Top Header */}
       <div className="p-4 bg-black/70 backdrop-blur-md border-b border-white/10 flex items-center justify-between z-10 shrink-0">
         <div className="flex items-center gap-3">
@@ -401,7 +401,7 @@ export const F1GarageSetupStudio: React.FC<F1GarageSetupStudioProps> = memo(func
                 <button
                   key={key}
                   onClick={() => handleApplyPreset(key)}
-                  className="w-full py-1.5 px-3 rounded-xl bg-black/40 border border-white/5 hover:border-amber-500/30 hover:bg-amber-950/20 text-left text-xs font-bold text-zinc-300 hover:text-amber-300 flex items-center justify-between transition-all cursor-pointer"
+                  className="w-full py-1.5 px-3 rounded-xl bg-black/40 border border-white/5 hover:border-amber-500/30 hover:bg-slate-900/50 text-left text-xs font-bold text-zinc-300 hover:text-amber-300 flex items-center justify-between transition-all cursor-pointer"
                 >
                   <span>{p.label}</span>
                   <ChevronRight className="w-3.5 h-3.5 text-zinc-500" />
@@ -778,7 +778,7 @@ export const F1GarageSetupStudio: React.FC<F1GarageSetupStudioProps> = memo(func
             </div>
 
             {/* AI Projected Gains */}
-            <div className="p-4 rounded-2xl bg-amber-950/20 border border-amber-500/30 space-y-2">
+            <div className="p-4 rounded-2xl bg-slate-900/50 border border-amber-500/30 space-y-2">
               <div className="flex justify-between items-center text-xs">
                 <span className="text-zinc-300 font-bold">Projected Lap Time Delta</span>
                 <span className="font-mono font-black text-emerald-400 text-sm">

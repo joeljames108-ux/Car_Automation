@@ -650,9 +650,9 @@ export function getGradeColor(gradeId: string): { bg: string; text: string; bord
   if (!grade) return { bg: "bg-slate-900", text: "text-slate-400", border: "border-slate-700" };
 
   if (grade.costMultiplier <= 1.3) return { bg: "bg-slate-900/80", text: "text-slate-300", border: "border-slate-600" };
-  if (grade.costMultiplier <= 2.0) return { bg: "bg-amber-950/60", text: "text-amber-300", border: "border-amber-700" };
-  if (grade.costMultiplier <= 3.5) return { bg: "bg-amber-950/60", text: "text-amber-300", border: "border-amber-700" };
-  if (grade.costMultiplier <= 5.0) return { bg: "bg-amber-950/60", text: "text-amber-300", border: "border-amber-700" };
+  if (grade.costMultiplier <= 2.0) return { bg: "bg-slate-900/80", text: "text-amber-300", border: "border-amber-700" };
+  if (grade.costMultiplier <= 3.5) return { bg: "bg-slate-900/80", text: "text-amber-300", border: "border-amber-700" };
+  if (grade.costMultiplier <= 5.0) return { bg: "bg-slate-900/80", text: "text-amber-300", border: "border-amber-700" };
   return { bg: "bg-red-950/60", text: "text-red-300", border: "border-red-700" };
 }
 

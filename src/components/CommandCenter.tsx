@@ -420,7 +420,7 @@ function CommandCenterComponent({ onSelectStage }: CommandCenterProps = {}) {
               const minT = fastestLap?.time || 0;
               const range = maxT - minT || 1;
               const barPct = 40 + ((lap.time - minT) / range) * 60;
-              const grads = ["linear-gradient(90deg,#f59e0b,#fbbf24)","linear-gradient(90deg,#94a3b8,#cbd5e1)","linear-gradient(90deg,#d97706,#f59e0b)","linear-gradient(90deg,#64748b,#94a3b8)","linear-gradient(90deg,#475569,#64748b)","linear-gradient(90deg,#334155,#475569)","linear-gradient(90deg,#1e293b,#334155)","linear-gradient(90deg,#1a1008,#1e293b)"];
+              const grads = ["linear-gradient(90deg,#f59e0b,#fbbf24)","linear-gradient(90deg,#94a3b8,#cbd5e1)","linear-gradient(90deg,#d97706,#f59e0b)","linear-gradient(90deg,#64748b,#94a3b8)","linear-gradient(90deg,#475569,#64748b)","linear-gradient(90deg,#334155,#475569)","linear-gradient(90deg,#1e293b,#334155)","linear-gradient(90deg,#080c14,#1e293b)"];
               return (
                 <div key={lap.trackId} className="group flex items-center gap-2 py-1 px-2 rounded-lg hover:bg-base-800/80 transition-colors">
                   <span className="font-mono text-xs text-slate-500 w-4 text-right shrink-0">{i + 1}</span>

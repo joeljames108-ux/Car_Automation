@@ -419,7 +419,7 @@ export const WindTunnelAeroStudio: React.FC = () => {
                 {/* Car Body Silhouette */}
                 <path
                   d="M -220 120 L -180 115 L -100 80 L 20 70 L 140 85 L 180 100 L 220 120 L 220 135 L -220 135 Z"
-                  fill="#1a1008"
+                  fill="#080c14"
                   stroke="#fbbf24"
                   strokeWidth="2"
                 />

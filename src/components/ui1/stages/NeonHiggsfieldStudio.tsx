@@ -153,7 +153,7 @@ function JobCard({ job }: { job: GenerationJob }) {
     );
 
   return (
-    <div className="rounded-xl border border-white/10 bg-amber-950/60/80 overflow-hidden">
+    <div className="rounded-xl border border-white/10 bg-slate-900/80/80 overflow-hidden">
       <div className="aspect-video bg-black/40 relative flex items-center justify-center">
         {job.resultUrl && job.status === "done" ? (
           <img src={job.resultUrl} alt={job.title} className="w-full h-full object-cover" />
@@ -181,7 +181,7 @@ function PromptBox({ value, onChange }: { value: string; onChange: (v: string) =
       value={value}
       onChange={(e) => onChange(e.target.value)}
       rows={3}
-      className="w-full rounded-xl bg-amber-950/60/85 border border-white/10 focus:border-sky-400/35 outline-none px-3 py-2.5 text-[11px] leading-relaxed text-slate-200 font-mono resize-none"
+      className="w-full rounded-xl bg-slate-900/80/85 border border-white/10 focus:border-sky-400/35 outline-none px-3 py-2.5 text-[11px] leading-relaxed text-slate-200 font-mono resize-none"
       spellCheck={false}
     />
   );
@@ -313,7 +313,7 @@ function ImageLabTab() {
                 value={extra}
                 onChange={(e) => setExtra(e.target.value)}
                 placeholder="Extra direction… e.g. 85mm lens, motion blur wheels"
-                className="flex-1 rounded-lg bg-amber-950/60/85 border border-white/10 focus:border-amber-500/30 outline-none px-3 py-2 text-[11px] text-slate-200 placeholder:text-slate-600"
+                className="flex-1 rounded-lg bg-slate-900/80/85 border border-white/10 focus:border-amber-500/30 outline-none px-3 py-2 text-[11px] text-slate-200 placeholder:text-slate-600"
               />
               <NeonHorizonButton variant="neon" icon={<Wand2 size={13} />} onClick={generate}>
                 Generate
@@ -403,7 +403,7 @@ function CinemaTab() {
 
           <div className="grid md:grid-cols-2 gap-3 mt-1">
             {shots.map((s) => (
-              <div key={s.shot} className="rounded-xl border border-white/10 bg-amber-950/60/70 p-3 flex flex-col gap-2">
+              <div key={s.shot} className="rounded-xl border border-white/10 bg-slate-900/80/70 p-3 flex flex-col gap-2">
                 <div className="flex items-center justify-between">
                   <span className="flex items-center gap-1.5 text-[11px] font-bold text-slate-100">
                     <Film size={11} className="text-amber-300" /> {s.shot}
@@ -616,7 +616,7 @@ function BatchTab() {
             </NeonHorizonButton>
           </div>
           {jobs.length > 0 && (
-            <div className="rounded-xl border border-white/10 bg-amber-950/60/70 p-3">
+            <div className="rounded-xl border border-white/10 bg-slate-900/80/70 p-3">
               <div className="flex justify-between text-[10px] font-mono text-slate-400 mb-1.5">
                 <span>QUEUE PROGRESS</span>
                 <span>
@@ -685,7 +685,7 @@ function ConnectTab() {
               value={proxyUrl}
               onChange={(e) => setProxyUrl(e.target.value)}
               placeholder="https://your-proxy.example.com/higgsfield"
-              className="w-full rounded-lg bg-amber-950/60/85 border border-white/10 focus:border-amber-500/30 outline-none px-3 py-2 text-[11px] font-mono text-slate-200"
+              className="w-full rounded-lg bg-slate-900/80/85 border border-white/10 focus:border-amber-500/30 outline-none px-3 py-2 text-[11px] font-mono text-slate-200"
             />
             <p className="text-[9px] text-slate-500 mt-1.5">
               Proxy contract: POST /jobs {"{kind,model,prompt}"} → {"{id,status,resultUrl}"}; GET /jobs/:id for polling.

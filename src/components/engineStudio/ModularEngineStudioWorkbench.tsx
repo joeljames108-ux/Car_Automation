@@ -525,7 +525,7 @@ const ModularEngineStudioWorkbenchComponent: React.FC<ModularEngineStudioWorkben
                           superchargerPulleyRatio: preset.pulley,
                         })
                       }
-                      className="px-2.5 py-1 text-[10px] font-mono font-semibold rounded-lg bg-slate-800 hover:bg-amber-950/60 hover:text-amber-300 text-slate-200 border border-slate-700 whitespace-nowrap transition-all"
+                      className="px-2.5 py-1 text-[10px] font-mono font-semibold rounded-lg bg-slate-800 hover:bg-slate-900/80 hover:text-amber-300 text-slate-200 border border-slate-700 whitespace-nowrap transition-all"
                     >
                       {preset.label}
                     </button>
@@ -899,7 +899,7 @@ const ModularEngineStudioWorkbenchComponent: React.FC<ModularEngineStudioWorkben
                   className={`p-3 rounded-xl border space-y-1.5 ${
                     v.severity === "critical_hazard"
                       ? "bg-rose-950/30 border-rose-800/60"
-                      : "bg-amber-950/30 border-amber-800/60"
+                      : "bg-slate-900/60 border-slate-700/60"
                   }`}
                 >
                   <div className="flex items-center justify-between">

@@ -68,7 +68,7 @@ export function generateCarbonFiberCanvas(size: number = 256): HTMLCanvasElement
   for (let x = 0; x < size; x += tileSize) {
     for (let y = 0; y < size; y += tileSize) {
       const isAlt = ((x / tileSize) + (y / tileSize)) % 2 === 0;
-      ctx.fillStyle = isAlt ? '#1a1008' : '#334155';
+      ctx.fillStyle = isAlt ? '#080c14' : '#334155';
       ctx.fillRect(x, y, tileSize, tileSize);
 
       // Micro-weave diagonal gradient

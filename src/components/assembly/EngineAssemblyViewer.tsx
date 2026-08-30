@@ -133,7 +133,7 @@ export function EngineAssemblyViewer({
     <div className={`w-full flex flex-col gap-4 ${className}`}>
       {/* ── ROBOTIC ASSEMBLY VIEWER STAGE ── */}
       <div
-        className="relative w-full h-[520px] bg-gradient-to-b from-[#070a12] via-[#0b0f19] to-[#1a1008] border border-amber-500/30 rounded-3xl p-4 overflow-hidden backdrop-blur-2xl shadow-[0_20px_60px_rgba(0,0,0,0.85)] flex flex-col items-center justify-center select-none"
+        className="relative w-full h-[520px] bg-gradient-to-b from-[#070a12] via-[#0b0f19] to-[#080c14] border border-amber-500/30 rounded-3xl p-4 overflow-hidden backdrop-blur-2xl shadow-[0_20px_60px_rgba(0,0,0,0.85)] flex flex-col items-center justify-center select-none"
       >
         {/* Studio Lighting Ambient Glow */}
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_20%,rgba(56,189,248,0.12),transparent_65%)] pointer-events-none" />
@@ -155,7 +155,7 @@ export function EngineAssemblyViewer({
 
         {/* Floating Active Phase Banner on Top Left */}
         {activeComponentId && activeMeta && (
-          <div className="absolute top-5 left-5 z-30 flex items-center gap-2.5 px-4 py-2 rounded-full bg-amber-950/60/90 border border-amber-500/40 backdrop-blur-md shadow-[0_0_20px_rgba(56,189,248,0.25)] text-xs font-mono text-slate-200">
+          <div className="absolute top-5 left-5 z-30 flex items-center gap-2.5 px-4 py-2 rounded-full bg-slate-900/80/90 border border-amber-500/40 backdrop-blur-md shadow-[0_0_20px_rgba(56,189,248,0.25)] text-xs font-mono text-slate-200">
             <Sparkles size={14} className="text-amber-400 animate-spin" />
             <span className="font-extrabold text-slate-100">{activeMeta.name}</span>
             <span className="text-slate-500">·</span>
@@ -169,7 +169,7 @@ export function EngineAssemblyViewer({
           {activeComponentId && (
             <button
               onClick={onSkipAnimation}
-              className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-amber-950/60/90 hover:bg-amber-950/60 text-amber-300 border border-amber-500/30 text-xs font-mono font-bold transition-all shadow-md active:scale-95 cursor-pointer"
+              className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-slate-900/80/90 hover:bg-slate-900/80 text-amber-300 border border-amber-500/30 text-xs font-mono font-bold transition-all shadow-md active:scale-95 cursor-pointer"
             >
               <SkipForward size={13} /> Skip
             </button>
@@ -196,7 +196,7 @@ export function EngineAssemblyViewer({
       <div className="w-full">
         <Suspense
           fallback={
-            <div className="w-full h-32 rounded-3xl bg-amber-950/60/50 border border-slate-800 flex items-center justify-center text-slate-500 font-mono text-xs animate-pulse">
+            <div className="w-full h-32 rounded-3xl bg-slate-900/80/50 border border-slate-800 flex items-center justify-center text-slate-500 font-mono text-xs animate-pulse">
               Loading Audio Synthesizer Engine...
             </div>
           }

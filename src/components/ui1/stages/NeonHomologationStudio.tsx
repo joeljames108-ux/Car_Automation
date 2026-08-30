@@ -78,7 +78,7 @@ export function NeonHomologationStudio() {
             {checks.map((check) => (
               <div
                 key={check.id}
-                className="p-3.5 rounded-xl bg-amber-950/60 border border-white/10 flex items-center justify-between font-mono text-xs"
+                className="p-3.5 rounded-xl bg-slate-900/80 border border-white/10 flex items-center justify-between font-mono text-xs"
               >
                 <div className="flex items-center gap-3">
                   {check.pass ? (
@@ -114,7 +114,7 @@ export function NeonHomologationStudio() {
             className="p-6 flex flex-col gap-4 text-center items-center justify-center"
           >
             {passportIssued ? (
-              <div className="w-full flex flex-col items-center gap-3 p-4 rounded-xl bg-amber-950/60 border border-amber-400/40 animate-nh-materialize">
+              <div className="w-full flex flex-col items-center gap-3 p-4 rounded-xl bg-slate-900/80 border border-amber-400/40 animate-nh-materialize">
                 <div className="w-16 h-16 rounded-full bg-amber-400/20 border-2 border-amber-400 flex items-center justify-center text-amber-300">
                   <Award size={32} />
                 </div>

@@ -44,7 +44,7 @@ export class ModularBodyPanelCustomizer {
     // 1. Matte 2x2 Twill Carbon Fiber
     if (fullConfig.finishType === 'matte_carbon') {
       return new THREE.MeshStandardMaterial({
-        color: new THREE.Color('#1a1008'),
+        color: new THREE.Color('#080c14'),
         metalness: 0.92,
         roughness: 0.38,
         normalMap: typeof document !== 'undefined' ? AutomotivePBRMaterialSystem.getCarbonWeaveNormalTexture() : null,
@@ -56,7 +56,7 @@ export class ModularBodyPanelCustomizer {
     // 2. High-Gloss Lacquered Forged / Woven Carbon Fiber
     if (fullConfig.finishType === 'forged_carbon') {
       return new THREE.MeshPhysicalMaterial({
-        color: new THREE.Color('#1a1008'),
+        color: new THREE.Color('#080c14'),
         metalness: 0.94,
         roughness: 0.12,
         clearcoat: 1.0,

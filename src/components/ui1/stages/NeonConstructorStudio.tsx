@@ -117,7 +117,7 @@ export function NeonConstructorStudio() {
             {regChecks.map((chk, i) => (
               <div
                 key={i}
-                className="p-3 rounded-xl bg-amber-950/60 border border-sky-400/15 flex items-center justify-between"
+                className="p-3 rounded-xl bg-slate-900/80 border border-sky-400/15 flex items-center justify-between"
               >
                 <div>
                   <div className="text-xs font-bold text-slate-100">{chk.item}</div>

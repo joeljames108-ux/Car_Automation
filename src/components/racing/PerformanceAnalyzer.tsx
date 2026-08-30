@@ -65,7 +65,7 @@ export const PerformanceAnalyzer: React.FC<PerformanceAnalyzerProps> = memo(func
 
   if (laps.length === 0) {
     return (
-      <div className="bg-amber-900/40 rounded-2xl p-4 border border-amber-800/30">
+      <div className="bg-slate-800/40 rounded-2xl p-4 border border-slate-700/50">
         <p className="text-amber-400/50 text-sm text-center py-8">No lap data available. Start a race simulation.</p>
       </div>
     );
@@ -78,7 +78,7 @@ export const PerformanceAnalyzer: React.FC<PerformanceAnalyzerProps> = memo(func
   return (
     <div className="space-y-4">
       {/* Summary Stats */}
-      <div className="bg-amber-900/40 rounded-2xl p-4 border border-amber-800/30">
+      <div className="bg-slate-800/40 rounded-2xl p-4 border border-slate-700/50">
         <h3 className="text-amber-300 text-sm font-bold mb-3">PERFORMANCE SUMMARY</h3>
         {stats && (
           <div className="grid grid-cols-5 gap-4 text-center">
@@ -96,7 +96,7 @@ export const PerformanceAnalyzer: React.FC<PerformanceAnalyzerProps> = memo(func
       </div>
 
       {/* Lap Time Chart */}
-      <div className="bg-amber-900/40 rounded-2xl p-4 border border-amber-800/30">
+      <div className="bg-slate-800/40 rounded-2xl p-4 border border-slate-700/50">
         <h3 className="text-amber-300 text-sm font-bold mb-3">LAP TIME TREND</h3>
         <div className="h-32">
           <svg viewBox={`0 0 ${Math.max(1, laps.length * 30)} 120`} className="w-full h-full" preserveAspectRatio="none">
@@ -137,7 +137,7 @@ export const PerformanceAnalyzer: React.FC<PerformanceAnalyzerProps> = memo(func
 
       {/* Selected Lap Detail */}
       {deltaToBest && (
-        <div className="bg-amber-900/40 rounded-2xl p-4 border border-amber-800/30">
+        <div className="bg-slate-800/40 rounded-2xl p-4 border border-slate-700/50">
           <h3 className="text-amber-300 text-sm font-bold mb-3">
             LAP {selectedLap + 1} DETAIL
             <span className="text-amber-500 text-xs ml-2">
@@ -164,7 +164,7 @@ export const PerformanceAnalyzer: React.FC<PerformanceAnalyzerProps> = memo(func
       )}
 
       {/* Tire Degradation */}
-      <div className="bg-amber-900/40 rounded-2xl p-4 border border-amber-800/30">
+      <div className="bg-slate-800/40 rounded-2xl p-4 border border-slate-700/50">
         <h3 className="text-amber-300 text-sm font-bold mb-3">TIRE DEGRADATION CURVE</h3>
         <div className="h-24">
           <svg viewBox={`0 0 ${Math.max(1, laps.length * 30)} 90`} className="w-full h-full" preserveAspectRatio="none">

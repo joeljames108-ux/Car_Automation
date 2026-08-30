@@ -111,7 +111,7 @@ export function NeonLeaderboardStudio() {
                 className={`p-4 rounded-xl border transition-all cursor-pointer flex items-center justify-between ${
  isSelected
  ? "bg-amber-500/20 border-amber-500/30 text-sky-200"
- : "bg-amber-950/60 border-white/10 hover:border-sky-400/25"
+ : "bg-slate-900/80 border-white/10 hover:border-sky-400/25"
  }`}
               >
                 <div className="flex items-center gap-3">
@@ -143,7 +143,7 @@ export function NeonLeaderboardStudio() {
                   className={`p-3.5 rounded-xl border flex items-center justify-between transition-all ${
  isUser
  ? "bg-amber-500/20 border-amber-500/30 text-sky-200"
- : "bg-amber-950/60 border-white/10"
+ : "bg-slate-900/80 border-white/10"
  }`}
                 >
                   <div className="flex items-center gap-3">

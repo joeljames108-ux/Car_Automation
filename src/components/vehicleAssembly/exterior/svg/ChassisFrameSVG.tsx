@@ -98,11 +98,11 @@ export const ChassisFrameSVG: React.FC<ChassisFrameSVGProps> = ({
       <g id="sedan_front_shock_towers">
         {/* Left Shock Tower Dome */}
         <ellipse cx="265" cy="305" rx="22" ry="14" fill={getGradientId()} stroke={strokeColor} strokeWidth={strokeWidth} />
-        <circle cx="265" cy="305" r="5" fill="#1a1008" stroke="#64748b" strokeWidth="1" />
+        <circle cx="265" cy="305" r="5" fill="#080c14" stroke="#64748b" strokeWidth="1" />
 
         {/* Right Shock Tower Dome */}
         <ellipse cx="305" cy="345" rx="20" ry="12" fill={getGradientId()} stroke={strokeColor} strokeWidth={strokeWidth} />
-        <circle cx="305" cy="345" r="4" fill="#1a1008" stroke="#64748b" strokeWidth="1" />
+        <circle cx="305" cy="345" r="4" fill="#080c14" stroke="#64748b" strokeWidth="1" />
 
         {/* Diagonal Strut Braces to Cowl */}
         <line x1="265" y1="305" x2="350" y2="255" stroke="#94a3b8" strokeWidth="2.2" strokeLinecap="round" />

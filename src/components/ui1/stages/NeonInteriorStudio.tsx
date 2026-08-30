@@ -91,7 +91,7 @@ export function NeonInteriorStudio() {
 
       {/* View 0: Interior Dashboard Configurator */}
       {activeTab === "configurator" && (
-        <div className="w-full rounded-3xl overflow-hidden border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] bg-amber-950/60" style={{height: 'calc(100vh - 180px)', minHeight: '600px'}}>
+        <div className="w-full rounded-3xl overflow-hidden border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] bg-slate-900/80" style={{height: 'calc(100vh - 180px)', minHeight: '600px'}}>
           <InteriorDashboardConfiguratorStudio />
         </div>
       )}
@@ -105,14 +105,14 @@ export function NeonInteriorStudio() {
 
       {/* View 1: 3D Cockpit Designer */}
       {activeTab === "cockpit_3d_studio" && (
-        <div className="w-full rounded-3xl overflow-hidden border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] bg-amber-950/60 p-3">
+        <div className="w-full rounded-3xl overflow-hidden border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] bg-slate-900/80 p-3">
           <InteriorsDesigner />
         </div>
       )}
 
       {/* View 2: Modular Interior Workshop */}
       {activeTab === "interior_workshop" && (
-        <div className="w-full rounded-3xl overflow-hidden border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] bg-amber-950/60 p-3">
+        <div className="w-full rounded-3xl overflow-hidden border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] bg-slate-900/80 p-3">
           <ModularInteriorWorkshop
             activeChassisId={design.vehicle.chassis}
             config={{}}

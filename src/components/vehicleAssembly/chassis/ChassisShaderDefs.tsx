@@ -27,7 +27,7 @@ export const ChassisShaderDefs: React.FC = () => (
       <path d="M 0 0 L 6 6 L 12 0 L 6 -6 Z" fill="#1e293b" />
       <path d="M 6 6 L 12 12 L 18 6 L 12 0 Z" fill="#fbbf24" opacity="0.25" />
       <path d="M 0 12 L 6 18 L 12 12 L 6 6 Z" fill="#1e293b" />
-      <path d="M -6 6 L 0 12 L 6 6 L 0 0 Z" fill="#1a1008" />
+      <path d="M -6 6 L 0 12 L 6 6 L 0 0 Z" fill="#080c14" />
     </pattern>
 
     {/* 4. Brushed Aluminum Metallic Gradient */}
@@ -51,7 +51,7 @@ export const ChassisShaderDefs: React.FC = () => (
     {/* 6. Deep Cockpit Inner Cavity Shading */}
     <linearGradient id="biw-inner-cavity-dark" x1="0%" y1="0%" x2="0%" y2="100%">
       <stop offset="0%" stopColor="#1e293b" />
-      <stop offset="40%" stopColor="#1a1008" />
+      <stop offset="40%" stopColor="#080c14" />
       <stop offset="100%" stopColor="#020617" />
     </linearGradient>
 
@@ -75,7 +75,7 @@ export const ChassisShaderDefs: React.FC = () => (
     <radialGradient id="tire-rubber-sidewall-hd" cx="40%" cy="40%" r="60%">
       <stop offset="0%" stopColor="#334155" />
       <stop offset="50%" stopColor="#1e293b" />
-      <stop offset="85%" stopColor="#1a1008" />
+      <stop offset="85%" stopColor="#080c14" />
       <stop offset="100%" stopColor="#020617" />
     </radialGradient>
 
@@ -107,7 +107,7 @@ export const ChassisShaderDefs: React.FC = () => (
 
     {/* 13. High-Contrast CAD Blueprint Grid */}
     <pattern id="cad-grid-sleek" width="40" height="40" patternUnits="userSpaceOnUse">
-      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#1a1008" strokeWidth="1" opacity="0.4" />
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#080c14" strokeWidth="1" opacity="0.4" />
       <path d="M 20 0 L 20 40 M 0 20 L 40 20" fill="none" stroke="#1e293b" strokeWidth="0.5" strokeDasharray="2 2" opacity="0.3" />
     </pattern>
 

@@ -89,7 +89,7 @@ export const F1OverviewStudio: React.FC = memo(function F1OverviewStudio() {
 
           <div className="space-y-2 max-h-[290px] overflow-y-auto custom-scrollbar pr-1">
             {/* Player's Car */}
-            <div className="flex items-center justify-between p-2 rounded-lg bg-amber-950/40 border border-amber-500/40 text-xs">
+            <div className="flex items-center justify-between p-2 rounded-lg bg-slate-900/60 border border-amber-500/40 text-xs">
               <div className="flex items-center gap-2">
                 <div className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
                 <span className="font-bold text-amber-300">{car.name} (You)</span>

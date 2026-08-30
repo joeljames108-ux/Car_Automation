@@ -48,7 +48,7 @@ export const NeonHorizonSidebar: React.FC<NeonHorizonSidebarProps> = ({
 
   return (
     <aside className="hidden lg:flex flex-col gap-2 w-14 shrink-0 select-none z-30">
-      <div className="p-2 py-4 rounded-full bg-amber-950/60/85 backdrop-blur-2xl border border-white/12 shadow-[0_20px_50px_rgba(0,0,0,0.6)] flex flex-col items-center gap-3 sticky top-28">
+      <div className="p-2 py-4 rounded-full bg-slate-900/80/85 backdrop-blur-2xl border border-white/12 shadow-[0_20px_50px_rgba(0,0,0,0.6)] flex flex-col items-center gap-3 sticky top-28">
         {sidebarButtons.map((btn) => {
           const isActive = activeStage === btn.stage;
           const isHovered = hoveredButton === btn.id;
@@ -58,12 +58,12 @@ export const NeonHorizonSidebar: React.FC<NeonHorizonSidebarProps> = ({
               {/* Tooltip slide-out label (Vision Glass Toolbar Feature) */}
               {isHovered && (
                 <div
-                  className="absolute left-14 px-3 py-1.5 rounded-xl bg-amber-950/60/95 backdrop-blur-xl border border-white/12 text-xs font-semibold text-slate-200 whitespace-nowrap shadow-[0_10px_25px_rgba(0,0,0,0.6)] z-50 pointer-events-none flex items-center gap-1.5"
+                  className="absolute left-14 px-3 py-1.5 rounded-xl bg-slate-900/80/95 backdrop-blur-xl border border-white/12 text-xs font-semibold text-slate-200 whitespace-nowrap shadow-[0_10px_25px_rgba(0,0,0,0.6)] z-50 pointer-events-none flex items-center gap-1.5"
                   style={{ animation: "vg-tooltip-slide-in 0.2s ease-out" }}
                 >
                   <span>{btn.label}</span>
                   {/* Arrow indicator */}
-                  <div className="absolute -left-1 top-1/2 -translate-y-1/2 w-2 h-2 rotate-45 bg-amber-950/60 border-l border-b border-white/12" />
+                  <div className="absolute -left-1 top-1/2 -translate-y-1/2 w-2 h-2 rotate-45 bg-slate-900/80 border-l border-b border-white/12" />
                 </div>
               )}
 
@@ -106,11 +106,11 @@ export const NeonHorizonSidebar: React.FC<NeonHorizonSidebarProps> = ({
             <div className="relative flex items-center">
               {hoveredButton === "audio" && (
                 <div
-                  className="absolute left-14 px-3 py-1.5 rounded-xl bg-amber-950/60/95 backdrop-blur-xl border border-white/12 text-xs font-semibold text-slate-200 whitespace-nowrap shadow-[0_10px_25px_rgba(0,0,0,0.6)] z-50 pointer-events-none"
+                  className="absolute left-14 px-3 py-1.5 rounded-xl bg-slate-900/80/95 backdrop-blur-xl border border-white/12 text-xs font-semibold text-slate-200 whitespace-nowrap shadow-[0_10px_25px_rgba(0,0,0,0.6)] z-50 pointer-events-none"
                   style={{ animation: "vg-tooltip-slide-in 0.2s ease-out" }}
                 >
                   <span>{soundEnabled ? "Mute Audio" : "Unmute Audio"}</span>
-                  <div className="absolute -left-1 top-1/2 -translate-y-1/2 w-2 h-2 rotate-45 bg-amber-950/60 border-l border-b border-white/12" />
+                  <div className="absolute -left-1 top-1/2 -translate-y-1/2 w-2 h-2 rotate-45 bg-slate-900/80 border-l border-b border-white/12" />
                 </div>
               )}
               <button

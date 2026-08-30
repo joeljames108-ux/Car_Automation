@@ -79,7 +79,7 @@ export const BrakesAssemblyStage: React.FC<BrakesAssemblyStageProps> = ({
     { hex: "#f59e0b", name: "Cyan Mist" },
     { hex: "#10b981", name: "British Green" },
     { hex: "#f97316", name: "McLaren Orange" },
-    { hex: "#1a1008", name: "Stealth Black" },
+    { hex: "#080c14", name: "Stealth Black" },
     { hex: "#cbd5e1", name: "Silver Anodized" },
     { hex: "#d946ef", name: "Neon Magenta" },
   ];

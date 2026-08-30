@@ -102,7 +102,7 @@ export const ChassisFEAControlPanel: React.FC<ChassisFEAControlPanelProps> = ({
           onClick={() => setShowDeformationMesh(!showDeformationMesh)}
           className={`flex items-center gap-1.5 px-2.5 py-1 rounded transition-colors ${
             showDeformationMesh
-              ? "bg-amber-950/80 text-amber-300 border border-amber-500/40"
+              ? "bg-slate-950/80 text-amber-300 border border-amber-500/40"
               : "bg-slate-900 text-slate-400 border border-slate-800 hover:text-slate-200"
           }`}
         >

@@ -140,7 +140,7 @@ export const ModularInteriorWorkshop: React.FC<ModularInteriorWorkshopProps> = (
                   !isCompatible
                     ? 'opacity-40 bg-slate-100/40 dark:bg-base-950/40 border-slate-200 dark:border-slate-800 cursor-not-allowed'
                     : isSelected
-                    ? 'bg-amber-500/10 dark:bg-amber-950/40 border-amber-500 dark:border-amber-400 shadow-[0_0_12px_rgba(6,182,212,0.25)] cursor-pointer scale-102'
+                    ? 'bg-amber-500/10 dark:bg-slate-900/60 border-amber-500 dark:border-amber-400 shadow-[0_0_12px_rgba(6,182,212,0.25)] cursor-pointer scale-102'
                     : 'bg-slate-50 dark:bg-base-950/60 border-slate-200 dark:border-slate-800 hover:border-slate-400 cursor-pointer'
                 }`}
               >
@@ -189,7 +189,7 @@ export const ModularInteriorWorkshop: React.FC<ModularInteriorWorkshopProps> = (
                     onClick={() => onUpdateInterior({ instrumentClusterId: cluster.id })}
                     className={`p-3 rounded-2xl border cursor-pointer transition-all ${
                       isSelected
-                        ? 'bg-amber-500/10 dark:bg-amber-950/40 border-amber-500 dark:border-amber-400 shadow-sm'
+                        ? 'bg-amber-500/10 dark:bg-slate-900/60 border-amber-500 dark:border-amber-400 shadow-sm'
                         : 'bg-slate-50 dark:bg-base-950/60 border-slate-200 dark:border-slate-800'
                     }`}
                   >
@@ -216,7 +216,7 @@ export const ModularInteriorWorkshop: React.FC<ModularInteriorWorkshopProps> = (
                     onClick={() => onUpdateInterior({ steeringWheelId: wheel.id })}
                     className={`p-3 rounded-2xl border cursor-pointer transition-all ${
                       isSelected
-                        ? 'bg-amber-500/10 dark:bg-amber-950/40 border-amber-500 dark:border-amber-400 shadow-sm'
+                        ? 'bg-amber-500/10 dark:bg-slate-900/60 border-amber-500 dark:border-amber-400 shadow-sm'
                         : 'bg-slate-50 dark:bg-base-950/60 border-slate-200 dark:border-slate-800'
                     }`}
                   >
@@ -248,7 +248,7 @@ export const ModularInteriorWorkshop: React.FC<ModularInteriorWorkshopProps> = (
                     onClick={() => onUpdateInterior({ frontSeatsId: seat.id })}
                     className={`p-3 rounded-2xl border cursor-pointer transition-all ${
                       isSelected
-                        ? 'bg-amber-500/10 dark:bg-amber-950/40 border-amber-500 dark:border-amber-400 shadow-sm'
+                        ? 'bg-amber-500/10 dark:bg-slate-900/60 border-amber-500 dark:border-amber-400 shadow-sm'
                         : 'bg-slate-50 dark:bg-base-950/60 border-slate-200 dark:border-slate-800'
                     }`}
                   >
@@ -275,7 +275,7 @@ export const ModularInteriorWorkshop: React.FC<ModularInteriorWorkshopProps> = (
                     onClick={() => onUpdateInterior({ centerConsoleId: con.id })}
                     className={`p-3 rounded-2xl border cursor-pointer transition-all ${
                       isSelected
-                        ? 'bg-amber-500/10 dark:bg-amber-950/40 border-amber-500 dark:border-amber-400 shadow-sm'
+                        ? 'bg-amber-500/10 dark:bg-slate-900/60 border-amber-500 dark:border-amber-400 shadow-sm'
                         : 'bg-slate-50 dark:bg-base-950/60 border-slate-200 dark:border-slate-800'
                     }`}
                   >
@@ -307,7 +307,7 @@ export const ModularInteriorWorkshop: React.FC<ModularInteriorWorkshopProps> = (
                     onClick={() => onUpdateInterior({ primaryTrimGrade: tg.id })}
                     className={`p-3 rounded-2xl border cursor-pointer transition-all flex items-center justify-between ${
                       isSelected
-                        ? 'bg-amber-500/10 dark:bg-amber-950/40 border-amber-500 dark:border-amber-400 shadow-sm'
+                        ? 'bg-amber-500/10 dark:bg-slate-900/60 border-amber-500 dark:border-amber-400 shadow-sm'
                         : 'bg-slate-50 dark:bg-base-950/60 border-slate-200 dark:border-slate-800'
                     }`}
                   >

@@ -74,7 +74,7 @@ export function NeonEconomyStudio() {
             {bomItems.map((item, idx) => (
               <div
                 key={idx}
-                className="p-3.5 rounded-xl bg-amber-950/60 border border-sky-400/15 flex flex-col gap-1.5"
+                className="p-3.5 rounded-xl bg-slate-900/80 border border-sky-400/15 flex flex-col gap-1.5"
               >
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-bold text-slate-100">{item.category}</span>
@@ -121,7 +121,7 @@ export function NeonEconomyStudio() {
               color="magenta"
             />
 
-            <div className="p-4 rounded-xl bg-amber-950/60 border border-sky-400/15 flex flex-col gap-2">
+            <div className="p-4 rounded-xl bg-slate-900/80 border border-sky-400/15 flex flex-col gap-2">
               <div className="flex items-center justify-between">
                 <span className="text-xs text-slate-400">Unit Profit:</span>
                 <span className="text-xs font-bold nh-font-mono text-emerald-300">

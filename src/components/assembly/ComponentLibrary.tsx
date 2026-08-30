@@ -178,7 +178,7 @@ export function ComponentLibrary({
               onMouseLeave={() => onHoverComponent(null)}
               className={`group relative p-3 rounded-xl border transition-all duration-200 assembly-card-3d ${getCategoryBorder(comp.category)} ${
                 isActive
-                  ? "bg-amber-950/40 border-amber-400 shadow-[0_0_20px_rgba(34,211,238,0.4)] scale-[1.01]"
+                  ? "bg-slate-900/60 border-amber-400 shadow-[0_0_20px_rgba(34,211,238,0.4)] scale-[1.01]"
                   : isInstalled
                   ? "bg-emerald-950/20 border-emerald-500/30 opacity-85"
                   : isAvailable

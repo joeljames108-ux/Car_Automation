@@ -36,7 +36,7 @@ export const WeatherPanel: React.FC<WeatherPanelProps> = memo(function WeatherPa
   return (
     <div className="space-y-4">
       {/* Current Conditions */}
-      <div className="bg-amber-900/40 rounded-2xl p-4 border border-amber-800/30">
+      <div className="bg-slate-800/40 rounded-2xl p-4 border border-slate-700/50">
         <div className="flex items-center justify-between mb-3">
           <h3 className="text-amber-300 text-sm font-bold">{'\u2601'} CURRENT CONDITIONS</h3>
           <span className="text-2xl">{conditionIcon(state.condition)}</span>
@@ -64,7 +64,7 @@ export const WeatherPanel: React.FC<WeatherPanelProps> = memo(function WeatherPa
       </div>
 
       {/* Wind Compass */}
-      <div className="bg-amber-900/40 rounded-2xl p-4 border border-amber-800/30">
+      <div className="bg-slate-800/40 rounded-2xl p-4 border border-slate-700/50">
         <h3 className="text-amber-300 text-sm font-bold mb-3">WIND</h3>
         <div className="flex items-center justify-between">
           <div className="relative w-20 h-20">
@@ -92,7 +92,7 @@ export const WeatherPanel: React.FC<WeatherPanelProps> = memo(function WeatherPa
       </div>
 
       {/* Rain Radar */}
-      <div className="bg-amber-900/40 rounded-2xl p-4 border border-amber-800/30">
+      <div className="bg-slate-800/40 rounded-2xl p-4 border border-slate-700/50">
         <h3 className="text-amber-300 text-sm font-bold mb-3">RAIN PROBABILITY</h3>
         <div className="relative h-24">
           <svg viewBox="0 0 300 90" className="w-full h-full">
@@ -136,7 +136,7 @@ export const WeatherPanel: React.FC<WeatherPanelProps> = memo(function WeatherPa
       </div>
 
       {/* Tire Recommendation */}
-      <div className="bg-amber-900/40 rounded-2xl p-4 border border-amber-800/30">
+      <div className="bg-slate-800/40 rounded-2xl p-4 border border-slate-700/50">
         <h3 className="text-amber-300 text-sm font-bold mb-3">TIRE RECOMMENDATION</h3>
         <div className="flex items-center gap-4">
           <div className="w-10 h-10 rounded-full flex items-center justify-center text-lg"
@@ -161,7 +161,7 @@ export const WeatherPanel: React.FC<WeatherPanelProps> = memo(function WeatherPa
       </div>
 
       {/* Additional Data */}
-      <div className="bg-amber-900/40 rounded-2xl p-4 border border-amber-800/30">
+      <div className="bg-slate-800/40 rounded-2xl p-4 border border-slate-700/50">
         <h3 className="text-amber-300 text-sm font-bold mb-3">ADDITIONAL DATA</h3>
         <div className="grid grid-cols-2 gap-3 text-xs">
           <div className="flex justify-between"><span className="text-amber-500">Pressure</span><span className="text-amber-100">{Math.round(state.pressure)} hPa</span></div>

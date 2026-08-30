@@ -78,13 +78,13 @@ export const HoodPanelSVG: React.FC<HoodPanelSVGProps> = ({
       {/* ── 3. Dual Radiator Extraction Louvers (LH & RH) ── */}
       <g id="hood_heat_extraction_louvers">
         {/* Left Vent Gills */}
-        <path d="M270,300 L300,290 L305,294 L275,304 Z" fill="#1a1008" stroke="#334155" strokeWidth="0.8" />
-        <path d="M280,305 L310,295 L315,299 L285,309 Z" fill="#1a1008" stroke="#334155" strokeWidth="0.8" />
-        <path d="M290,310 L320,300 L325,304 L295,314 Z" fill="#1a1008" stroke="#334155" strokeWidth="0.8" />
+        <path d="M270,300 L300,290 L305,294 L275,304 Z" fill="#080c14" stroke="#334155" strokeWidth="0.8" />
+        <path d="M280,305 L310,295 L315,299 L285,309 Z" fill="#080c14" stroke="#334155" strokeWidth="0.8" />
+        <path d="M290,310 L320,300 L325,304 L295,314 Z" fill="#080c14" stroke="#334155" strokeWidth="0.8" />
 
         {/* Right Vent Gills */}
-        <path d="M285,280 L315,270 L320,274 L290,284 Z" fill="#1a1008" stroke="#334155" strokeWidth="0.8" />
-        <path d="M295,285 L325,275 L330,279 L300,289 Z" fill="#1a1008" stroke="#334155" strokeWidth="0.8" />
+        <path d="M285,280 L315,270 L320,274 L290,284 Z" fill="#080c14" stroke="#334155" strokeWidth="0.8" />
+        <path d="M295,285 L325,275 L330,279 L300,289 Z" fill="#080c14" stroke="#334155" strokeWidth="0.8" />
       </g>
 
       {/* ── 4. Center Power Bulge Crease Line ── */}

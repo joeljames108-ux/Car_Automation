@@ -43,9 +43,9 @@ export const VirtualProvingGroundStudioDeck: React.FC = () => {
   });
 
   return (
-    <div className="flex flex-col h-full w-full bg-amber-950/60 text-gray-100 p-4 gap-4 overflow-y-auto font-sans">
+    <div className="flex flex-col h-full w-full bg-slate-900/80 text-gray-100 p-4 gap-4 overflow-y-auto font-sans">
       {/* Studio Header Ribbon */}
-      <div className="flex items-center justify-between px-5 py-3 rounded-2xl bg-amber-950/60 border border-[#182133] shadow-lg">
+      <div className="flex items-center justify-between px-5 py-3 rounded-2xl bg-slate-900/80 border border-[#182133] shadow-lg">
         <div className="flex items-center gap-3">
           <div className="p-2 rounded-xl bg-gradient-to-tr from-amber-500/20 to-emerald-500/20 border border-amber-500/40 text-amber-400">
             <Compass className="w-5 h-5" />
@@ -64,7 +64,7 @@ export const VirtualProvingGroundStudioDeck: React.FC = () => {
         <select
           value={steerMode}
           onChange={(e) => setSteerMode(e.target.value as FourWheelSteeringMode)}
-          className="bg-amber-950/60 text-amber-400 text-xs font-bold font-mono px-3 py-1.5 rounded-xl border border-amber-500/40 cursor-pointer"
+          className="bg-slate-900/80 text-amber-400 text-xs font-bold font-mono px-3 py-1.5 rounded-xl border border-amber-500/40 cursor-pointer"
         >
           <option value="AUTO_SPEED_ADAPTIVE">Auto Speed Adaptive</option>
           <option value="CRAB_WALK_DIAGONAL">Crab-Walk Diagonal</option>
@@ -76,7 +76,7 @@ export const VirtualProvingGroundStudioDeck: React.FC = () => {
       {/* Main 3-Column Engineering Dashboard */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 flex-1">
         {/* Column 1: Active 4-Wheel Steering Telemetry */}
-        <div className="flex flex-col p-4 rounded-2xl bg-amber-950/60 border border-[#182133] gap-3">
+        <div className="flex flex-col p-4 rounded-2xl bg-slate-900/80 border border-[#182133] gap-3">
           <div className="flex items-center justify-between pb-2 border-b border-[#182133]">
             <div className="flex items-center gap-2 text-amber-400 font-bold text-xs">
               <Compass className="w-4 h-4" />
@@ -88,7 +88,7 @@ export const VirtualProvingGroundStudioDeck: React.FC = () => {
           </div>
 
           {/* Interactive Speed & Steer Sliders */}
-          <div className="flex flex-col gap-2 p-3 bg-amber-950/60 rounded-xl border border-[#141b2b] text-xs font-mono">
+          <div className="flex flex-col gap-2 p-3 bg-slate-900/80 rounded-xl border border-[#141b2b] text-xs font-mono">
             <div className="flex items-center justify-between">
               <span className="text-gray-400">VEHICLE SPEED: {vehicleSpeed} km/h</span>
               <input
@@ -115,19 +115,19 @@ export const VirtualProvingGroundStudioDeck: React.FC = () => {
 
           {/* 4-Wheel Steering Metrics */}
           <div className="grid grid-cols-2 gap-2 text-xs font-mono">
-            <div className="p-2.5 rounded-xl bg-amber-950/60 border border-[#1c263d]">
+            <div className="p-2.5 rounded-xl bg-slate-900/80 border border-[#1c263d]">
               <div className="text-gray-400 text-[10px]">REAR STEER ANGLE</div>
               <div className="text-sm font-bold text-amber-400">{fwsState.rearSteerAngleDeg}°</div>
             </div>
-            <div className="p-2.5 rounded-xl bg-amber-950/60 border border-[#1c263d]">
+            <div className="p-2.5 rounded-xl bg-slate-900/80 border border-[#1c263d]">
               <div className="text-gray-400 text-[10px]">TURNING RADIUS</div>
               <div className="text-sm font-bold text-emerald-400">{fwsState.effectiveTurningRadiusM} m</div>
             </div>
-            <div className="p-2.5 rounded-xl bg-amber-950/60 border border-[#1c263d]">
+            <div className="p-2.5 rounded-xl bg-slate-900/80 border border-[#1c263d]">
               <div className="text-gray-400 text-[10px]">RADIUS REDUCTION</div>
               <div className="text-sm font-bold text-amber-400">-{fwsState.turningRadiusReductionPct}%</div>
             </div>
-            <div className="p-2.5 rounded-xl bg-amber-950/60 border border-[#1c263d]">
+            <div className="p-2.5 rounded-xl bg-slate-900/80 border border-[#1c263d]">
               <div className="text-gray-400 text-[10px]">SIDESLIP ANGLE (β)</div>
               <div className="text-sm font-bold text-amber-400">{fwsState.sideSlipAngleBetaDeg}°</div>
             </div>
@@ -135,7 +135,7 @@ export const VirtualProvingGroundStudioDeck: React.FC = () => {
         </div>
 
         {/* Column 2: 800V SiC Inverter SVPWM Thermals */}
-        <div className="flex flex-col p-4 rounded-2xl bg-amber-950/60 border border-[#182133] gap-3">
+        <div className="flex flex-col p-4 rounded-2xl bg-slate-900/80 border border-[#182133] gap-3">
           <div className="flex items-center justify-between pb-2 border-b border-[#182133]">
             <div className="flex items-center gap-2 text-amber-400 font-bold text-xs">
               <Zap className="w-4 h-4" />
@@ -147,7 +147,7 @@ export const VirtualProvingGroundStudioDeck: React.FC = () => {
           </div>
 
           {/* Switching Frequency Slider */}
-          <div className="flex flex-col gap-2 p-3 bg-amber-950/60 rounded-xl border border-[#141b2b] text-xs font-mono">
+          <div className="flex flex-col gap-2 p-3 bg-slate-900/80 rounded-xl border border-[#141b2b] text-xs font-mono">
             <div className="flex items-center justify-between">
               <span className="text-gray-400">SVPWM FREQUENCY: {switchingFreq} kHz</span>
               <input
@@ -164,19 +164,19 @@ export const VirtualProvingGroundStudioDeck: React.FC = () => {
 
           {/* Inverter Loss & Temperature Breakdown */}
           <div className="grid grid-cols-2 gap-2 text-xs font-mono">
-            <div className="p-2.5 rounded-xl bg-amber-950/60 border border-[#1c263d]">
+            <div className="p-2.5 rounded-xl bg-slate-900/80 border border-[#1c263d]">
               <div className="text-gray-400 text-[10px]">MOSFET JUNCTION TEMP</div>
               <div className="text-sm font-bold text-rose-400">{inverterState.mosfetJunctionTempC}°C</div>
             </div>
-            <div className="p-2.5 rounded-xl bg-amber-950/60 border border-[#1c263d]">
+            <div className="p-2.5 rounded-xl bg-slate-900/80 border border-[#1c263d]">
               <div className="text-gray-400 text-[10px]">TOTAL INVERTER LOSS</div>
               <div className="text-sm font-bold text-amber-400">{inverterState.totalInverterLossWatts} W</div>
             </div>
-            <div className="p-2.5 rounded-xl bg-amber-950/60 border border-[#1c263d]">
+            <div className="p-2.5 rounded-xl bg-slate-900/80 border border-[#1c263d]">
               <div className="text-gray-400 text-[10px]">CONDUCTION LOSS</div>
               <div className="text-sm font-bold text-gray-200">{inverterState.conductionLossWatts} W</div>
             </div>
-            <div className="p-2.5 rounded-xl bg-amber-950/60 border border-[#1c263d]">
+            <div className="p-2.5 rounded-xl bg-slate-900/80 border border-[#1c263d]">
               <div className="text-gray-400 text-[10px]">SWITCHING LOSS</div>
               <div className="text-sm font-bold text-gray-200">{inverterState.switchingLossWatts} W</div>
             </div>
@@ -184,7 +184,7 @@ export const VirtualProvingGroundStudioDeck: React.FC = () => {
         </div>
 
         {/* Column 3: 3-Loop Multi-Fluid Thermal System */}
-        <div className="flex flex-col p-4 rounded-2xl bg-amber-950/60 border border-[#182133] gap-3">
+        <div className="flex flex-col p-4 rounded-2xl bg-slate-900/80 border border-[#182133] gap-3">
           <div className="flex items-center justify-between pb-2 border-b border-[#182133]">
             <div className="flex items-center gap-2 text-emerald-400 font-bold text-xs">
               <Droplets className="w-4 h-4" />
@@ -196,9 +196,9 @@ export const VirtualProvingGroundStudioDeck: React.FC = () => {
           </div>
 
           {/* 3 Distinct Loops */}
-          <div className="flex flex-col gap-2 p-3 bg-amber-950/60 rounded-xl border border-[#141b2b] text-xs font-mono">
+          <div className="flex flex-col gap-2 p-3 bg-slate-900/80 rounded-xl border border-[#141b2b] text-xs font-mono">
             {/* Loop 1: High-Temp ICE */}
-            <div className="flex items-center justify-between p-2 rounded-lg bg-amber-950/60 border border-[#182133]">
+            <div className="flex items-center justify-between p-2 rounded-lg bg-slate-900/80 border border-[#182133]">
               <div>
                 <div className="text-rose-400 font-bold text-[11px]">HIGH-TEMP ICE LOOP</div>
                 <div className="text-gray-400 text-[9px]">{thermalState.highTempIceLoop.flowRateLpm} L/min • {thermalState.highTempIceLoop.heatLoadKw} kW</div>
@@ -207,7 +207,7 @@ export const VirtualProvingGroundStudioDeck: React.FC = () => {
             </div>
 
             {/* Loop 2: Mid-Temp Inverter */}
-            <div className="flex items-center justify-between p-2 rounded-lg bg-amber-950/60 border border-[#182133]">
+            <div className="flex items-center justify-between p-2 rounded-lg bg-slate-900/80 border border-[#182133]">
               <div>
                 <div className="text-amber-400 font-bold text-[11px]">MID-TEMP INVERTER LOOP</div>
                 <div className="text-gray-400 text-[9px]">{thermalState.midTempEInverterLoop.flowRateLpm} L/min • {thermalState.midTempEInverterLoop.heatLoadKw} kW</div>
@@ -216,7 +216,7 @@ export const VirtualProvingGroundStudioDeck: React.FC = () => {
             </div>
 
             {/* Loop 3: Low-Temp Battery Chiller */}
-            <div className="flex items-center justify-between p-2 rounded-lg bg-amber-950/60 border border-[#182133]">
+            <div className="flex items-center justify-between p-2 rounded-lg bg-slate-900/80 border border-[#182133]">
               <div>
                 <div className="text-amber-400 font-bold text-[11px]">LOW-TEMP BATTERY CHILLER</div>
                 <div className="text-gray-400 text-[9px]">{thermalState.lowTempBatteryChillerLoop.flowRateLpm} L/min • COP {thermalState.chillerCopEfficiency}</div>
@@ -226,7 +226,7 @@ export const VirtualProvingGroundStudioDeck: React.FC = () => {
           </div>
 
           {/* Active ARB Roll Stiffness */}
-          <div className="p-2.5 rounded-xl bg-amber-950/60 border border-[#1c263d] text-xs font-mono">
+          <div className="p-2.5 rounded-xl bg-slate-900/80 border border-[#1c263d] text-xs font-mono">
             <div className="flex items-center justify-between mb-1">
               <span className="text-gray-400 text-[10px]">ACTIVE ARB ROLL ANGLE:</span>
               <span className="text-emerald-400 font-bold">{arbState.compensatedChassisRollAngleDeg}° (at 1.15g)</span>

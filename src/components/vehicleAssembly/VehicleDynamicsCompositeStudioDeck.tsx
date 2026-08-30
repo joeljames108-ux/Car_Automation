@@ -41,9 +41,9 @@ export const VehicleDynamicsCompositeStudioDeck: React.FC = () => {
   });
 
   return (
-    <div className="flex flex-col h-full w-full bg-amber-950/60 text-gray-100 p-4 gap-4 overflow-y-auto font-sans">
+    <div className="flex flex-col h-full w-full bg-slate-900/80 text-gray-100 p-4 gap-4 overflow-y-auto font-sans">
       {/* Studio Header Ribbon */}
-      <div className="flex items-center justify-between px-5 py-3 rounded-2xl bg-amber-950/60 border border-[#182133] shadow-lg">
+      <div className="flex items-center justify-between px-5 py-3 rounded-2xl bg-slate-900/80 border border-[#182133] shadow-lg">
         <div className="flex items-center gap-3">
           <div className="p-2 rounded-xl bg-gradient-to-tr from-amber-500/20 to-indigo-500/20 border border-amber-500/40 text-amber-400">
             <Gauge className="w-5 h-5" />
@@ -62,7 +62,7 @@ export const VehicleDynamicsCompositeStudioDeck: React.FC = () => {
         <select
           value={heightMode}
           onChange={(e) => setHeightMode(e.target.value as AirSuspensionRideHeightMode)}
-          className="bg-amber-950/60 text-amber-400 text-xs font-bold font-mono px-3 py-1.5 rounded-xl border border-amber-500/40 cursor-pointer"
+          className="bg-slate-900/80 text-amber-400 text-xs font-bold font-mono px-3 py-1.5 rounded-xl border border-amber-500/40 cursor-pointer"
         >
           <option value="COMFORT_STANDARD">Comfort Standard (0 mm)</option>
           <option value="AERO_HIGH_SPEED">Aero High-Speed (-35 mm)</option>
@@ -74,7 +74,7 @@ export const VehicleDynamicsCompositeStudioDeck: React.FC = () => {
       {/* Main 4-Card 2x2 Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 flex-1">
         {/* Card 1: PMSM Motor Flux Weakening & 22k RPM Rotor FEA */}
-        <div className="flex flex-col p-4 rounded-2xl bg-amber-950/60 border border-[#182133] gap-3">
+        <div className="flex flex-col p-4 rounded-2xl bg-slate-900/80 border border-[#182133] gap-3">
           <div className="flex items-center justify-between pb-2 border-b border-[#182133]">
             <div className="flex items-center gap-2 text-amber-400 font-bold text-xs">
               <Cpu className="w-4 h-4" />
@@ -86,7 +86,7 @@ export const VehicleDynamicsCompositeStudioDeck: React.FC = () => {
           </div>
 
           {/* Interactive RPM Slider */}
-          <div className="flex items-center justify-between p-3 bg-amber-950/60 rounded-xl border border-[#141b2b] text-xs font-mono">
+          <div className="flex items-center justify-between p-3 bg-slate-900/80 rounded-xl border border-[#141b2b] text-xs font-mono">
             <span className="text-gray-400">ROTOR SPEED: {motorRpm.toLocaleString()} RPM</span>
             <input
               type="range"
@@ -101,19 +101,19 @@ export const VehicleDynamicsCompositeStudioDeck: React.FC = () => {
 
           {/* Metrics Grid */}
           <div className="grid grid-cols-2 gap-2 text-xs font-mono">
-            <div className="p-2.5 rounded-xl bg-amber-950/60 border border-[#1c263d]">
+            <div className="p-2.5 rounded-xl bg-slate-900/80 border border-[#1c263d]">
               <div className="text-gray-400 text-[10px]">DELIVERED POWER</div>
               <div className="text-sm font-bold text-amber-400">{motorState.powerKw} kW ({Math.round(motorState.powerKw * 1.341)} BHP)</div>
             </div>
-            <div className="p-2.5 rounded-xl bg-amber-950/60 border border-[#1c263d]">
+            <div className="p-2.5 rounded-xl bg-slate-900/80 border border-[#1c263d]">
               <div className="text-gray-400 text-[10px]">d-q AXIS CURRENTS</div>
               <div className="text-sm font-bold text-amber-400">Id: {motorState.idCurrentAmps}A • Iq: {motorState.iqCurrentAmps}A</div>
             </div>
-            <div className="p-2.5 rounded-xl bg-amber-950/60 border border-[#1c263d]">
+            <div className="p-2.5 rounded-xl bg-slate-900/80 border border-[#1c263d]">
               <div className="text-gray-400 text-[10px]">CARBON SLEEVE HOOP STRESS</div>
               <div className="text-sm font-bold text-rose-400">{motorState.rotorMaxHoopStressMpa} MPa</div>
             </div>
-            <div className="p-2.5 rounded-xl bg-amber-950/60 border border-[#1c263d]">
+            <div className="p-2.5 rounded-xl bg-slate-900/80 border border-[#1c263d]">
               <div className="text-gray-400 text-[10px]">BURST SAFETY FACTOR</div>
               <div className="text-sm font-bold text-emerald-400">{motorState.carbonSleeveSafetyFactor}x</div>
             </div>
@@ -121,7 +121,7 @@ export const VehicleDynamicsCompositeStudioDeck: React.FC = () => {
         </div>
 
         {/* Card 2: CFRP Monocoque Ply Layup & Tsai-Wu Failure */}
-        <div className="flex flex-col p-4 rounded-2xl bg-amber-950/60 border border-[#182133] gap-3">
+        <div className="flex flex-col p-4 rounded-2xl bg-slate-900/80 border border-[#182133] gap-3">
           <div className="flex items-center justify-between pb-2 border-b border-[#182133]">
             <div className="flex items-center gap-2 text-amber-400 font-bold text-xs">
               <ShieldCheck className="w-4 h-4" />
@@ -132,26 +132,26 @@ export const VehicleDynamicsCompositeStudioDeck: React.FC = () => {
             </span>
           </div>
 
-          <div className="p-3 bg-amber-950/60 rounded-xl border border-[#141b2b] text-xs font-mono text-gray-300">
+          <div className="p-3 bg-slate-900/80 rounded-xl border border-[#141b2b] text-xs font-mono text-gray-300">
             <div className="text-gray-400 text-[10px] mb-0.5">LAMINATE SCHEDULE</div>
             <div className="text-amber-400 font-bold">{cfrpState.laminateSchedule}</div>
           </div>
 
           {/* Composite Specs */}
           <div className="grid grid-cols-2 gap-2 text-xs font-mono">
-            <div className="p-2.5 rounded-xl bg-amber-950/60 border border-[#1c263d]">
+            <div className="p-2.5 rounded-xl bg-slate-900/80 border border-[#1c263d]">
               <div className="text-gray-400 text-[10px]">TORSIONAL RIGIDITY</div>
               <div className="text-sm font-bold text-amber-400">{cfrpState.torsionalRigidityKNmPerDeg} kNm/deg</div>
             </div>
-            <div className="p-2.5 rounded-xl bg-amber-950/60 border border-[#1c263d]">
+            <div className="p-2.5 rounded-xl bg-slate-900/80 border border-[#1c263d]">
               <div className="text-gray-400 text-[10px]">BARE TUB MASS</div>
               <div className="text-sm font-bold text-emerald-400">{cfrpState.monocoqueBareTubMassKg} kg</div>
             </div>
-            <div className="p-2.5 rounded-xl bg-amber-950/60 border border-[#1c263d]">
+            <div className="p-2.5 rounded-xl bg-slate-900/80 border border-[#1c263d]">
               <div className="text-gray-400 text-[10px]">IN-PLANE STIFFNESS (A11)</div>
               <div className="text-sm font-bold text-gray-100">{cfrpState.a11StiffnessKnPerMm} kN/mm</div>
             </div>
-            <div className="p-2.5 rounded-xl bg-amber-950/60 border border-[#1c263d]">
+            <div className="p-2.5 rounded-xl bg-slate-900/80 border border-[#1c263d]">
               <div className="text-gray-400 text-[10px]">RESERVE FACTOR</div>
               <div className="text-sm font-bold text-emerald-400">{cfrpState.reserveFactor}x Safe</div>
             </div>
@@ -159,7 +159,7 @@ export const VehicleDynamicsCompositeStudioDeck: React.FC = () => {
         </div>
 
         {/* Card 3: Dual-Chamber Air Suspension */}
-        <div className="flex flex-col p-4 rounded-2xl bg-amber-950/60 border border-[#182133] gap-3">
+        <div className="flex flex-col p-4 rounded-2xl bg-slate-900/80 border border-[#182133] gap-3">
           <div className="flex items-center justify-between pb-2 border-b border-[#182133]">
             <div className="flex items-center gap-2 text-amber-400 font-bold text-xs">
               <Wind className="w-4 h-4" />
@@ -171,9 +171,9 @@ export const VehicleDynamicsCompositeStudioDeck: React.FC = () => {
           </div>
 
           {/* 4-Corner Air Springs */}
-          <div className="grid grid-cols-2 gap-2 p-3 bg-amber-950/60 rounded-xl border border-[#141b2b] text-xs font-mono">
+          <div className="grid grid-cols-2 gap-2 p-3 bg-slate-900/80 rounded-xl border border-[#141b2b] text-xs font-mono">
             {Object.values(airState.corners).map((c) => (
-              <div key={c.corner} className="p-2 rounded-lg bg-amber-950/60 border border-[#182133]">
+              <div key={c.corner} className="p-2 rounded-lg bg-slate-900/80 border border-[#182133]">
                 <div className="flex justify-between text-[10px] text-gray-400 mb-1">
                   <span>CORNER {c.corner}</span>
                   <span className={c.isAuxiliaryChamberEngaged ? 'text-emerald-400' : 'text-amber-400'}>
@@ -188,7 +188,7 @@ export const VehicleDynamicsCompositeStudioDeck: React.FC = () => {
         </div>
 
         {/* Card 4: Brake-by-Wire Blending */}
-        <div className="flex flex-col p-4 rounded-2xl bg-amber-950/60 border border-[#182133] gap-3">
+        <div className="flex flex-col p-4 rounded-2xl bg-slate-900/80 border border-[#182133] gap-3">
           <div className="flex items-center justify-between pb-2 border-b border-[#182133]">
             <div className="flex items-center gap-2 text-rose-400 font-bold text-xs">
               <Activity className="w-4 h-4" />
@@ -200,7 +200,7 @@ export const VehicleDynamicsCompositeStudioDeck: React.FC = () => {
           </div>
 
           {/* Pedal Slider */}
-          <div className="flex items-center justify-between p-3 bg-amber-950/60 rounded-xl border border-[#141b2b] text-xs font-mono">
+          <div className="flex items-center justify-between p-3 bg-slate-900/80 rounded-xl border border-[#141b2b] text-xs font-mono">
             <span className="text-gray-400">PEDAL TRAVEL: {pedalTravel} mm ({bbwState.pedalResistanceForceN} N)</span>
             <input
               type="range"
@@ -214,11 +214,11 @@ export const VehicleDynamicsCompositeStudioDeck: React.FC = () => {
 
           {/* Torque Split */}
           <div className="grid grid-cols-2 gap-2 text-xs font-mono">
-            <div className="p-2.5 rounded-xl bg-amber-950/60 border border-[#1c263d]">
+            <div className="p-2.5 rounded-xl bg-slate-900/80 border border-[#1c263d]">
               <div className="text-gray-400 text-[10px]">ELECTRIC REGEN TORQUE</div>
               <div className="text-sm font-bold text-emerald-400">{bbwState.electricMotorRegenTorqueNm} Nm</div>
             </div>
-            <div className="p-2.5 rounded-xl bg-amber-950/60 border border-[#1c263d]">
+            <div className="p-2.5 rounded-xl bg-slate-900/80 border border-[#1c263d]">
               <div className="text-gray-400 text-[10px]">HYDRAULIC FRICTION TORQUE</div>
               <div className="text-sm font-bold text-rose-400">{bbwState.frictionHydraulicTorqueNm} Nm ({bbwState.hydraulicCaliperPressureBar} bar)</div>
             </div>

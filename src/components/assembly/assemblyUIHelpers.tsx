@@ -47,7 +47,7 @@ export const StatDeltaBadges: React.FC<StatDeltaBadgesProps> = ({
   if (size === "lg") {
     return (
       <div className={`grid grid-cols-2 gap-3 ${className}`}>
-        <div className="bg-amber-950/60/80 border border-slate-800/80 rounded-2xl p-3">
+        <div className="bg-slate-900/80/80 border border-slate-800/80 rounded-2xl p-3">
           <span className="text-[10px] font-mono text-slate-400 flex items-center gap-1">
             <TrendingUp size={iconSize} className="text-amber-400" /> Peak Power
           </span>
@@ -56,7 +56,7 @@ export const StatDeltaBadges: React.FC<StatDeltaBadgesProps> = ({
           </div>
         </div>
 
-        <div className="bg-amber-950/60/80 border border-slate-800/80 rounded-2xl p-3">
+        <div className="bg-slate-900/80/80 border border-slate-800/80 rounded-2xl p-3">
           <span className="text-[10px] font-mono text-slate-400 flex items-center gap-1">
             <Zap size={iconSize} className="text-pink-400" /> Peak Torque
           </span>
@@ -65,7 +65,7 @@ export const StatDeltaBadges: React.FC<StatDeltaBadgesProps> = ({
           </div>
         </div>
 
-        <div className="bg-amber-950/60/80 border border-slate-800/80 rounded-2xl p-3">
+        <div className="bg-slate-900/80/80 border border-slate-800/80 rounded-2xl p-3">
           <span className="text-[10px] font-mono text-slate-400 flex items-center gap-1">
             <ShieldCheck size={iconSize} className="text-emerald-400" /> Durability
           </span>
@@ -74,7 +74,7 @@ export const StatDeltaBadges: React.FC<StatDeltaBadgesProps> = ({
           </div>
         </div>
 
-        <div className="bg-amber-950/60/80 border border-slate-800/80 rounded-2xl p-3">
+        <div className="bg-slate-900/80/80 border border-slate-800/80 rounded-2xl p-3">
           <span className="text-[10px] font-mono text-slate-400 flex items-center gap-1">
             <DollarSign size={iconSize} className="text-amber-400" /> Total Cost
           </span>
@@ -147,7 +147,7 @@ export const TorqueClearanceReadout: React.FC<TorqueClearanceReadoutProps> = ({
 
   if (variant === "full") {
     return (
-      <div className={`p-2.5 rounded-xl bg-amber-950/30 border border-amber-500/30 font-mono text-[10px] space-y-1.5 ${className}`}>
+      <div className={`p-2.5 rounded-xl bg-slate-900/60 border border-amber-500/30 font-mono text-[10px] space-y-1.5 ${className}`}>
         <div className="flex items-center justify-between text-amber-400 font-bold uppercase tracking-wide">
           <span className="flex items-center gap-1">
             <Zap size={11} className="text-amber-400" />
@@ -157,7 +157,7 @@ export const TorqueClearanceReadout: React.FC<TorqueClearanceReadoutProps> = ({
         </div>
 
         {meta.torqueSpec && (
-          <div className="flex items-center justify-between bg-base-900/60 p-1.5 rounded-lg border border-amber-900/40">
+          <div className="flex items-center justify-between bg-base-900/60 p-1.5 rounded-lg border border-slate-800/40">
             <span className="text-slate-300">
               {meta.torqueSpec.fastenerName} ({meta.torqueSpec.boltCount}x)
             </span>
@@ -168,7 +168,7 @@ export const TorqueClearanceReadout: React.FC<TorqueClearanceReadoutProps> = ({
         )}
 
         {meta.clearanceSpec && (
-          <div className="flex items-center justify-between bg-base-900/60 p-1.5 rounded-lg border border-amber-900/40">
+          <div className="flex items-center justify-between bg-base-900/60 p-1.5 rounded-lg border border-slate-800/40">
             <span className="text-slate-300">{meta.clearanceSpec.label}</span>
             <span className="text-emerald-400 font-bold">
               {meta.clearanceSpec.targetMm} mm ({meta.clearanceSpec.minMm}-{meta.clearanceSpec.maxMm})

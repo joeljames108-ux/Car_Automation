@@ -35,7 +35,7 @@ export const VehicleStatsPanel: React.FC<VehicleStatsPanelProps> = ({
     >
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
         {/* Total Weight */}
-        <div className="p-3 rounded-xl bg-amber-950/60/70 border border-white/6 flex flex-col justify-between">
+        <div className="p-3 rounded-xl bg-slate-900/80/70 border border-white/6 flex flex-col justify-between">
           <span className="nh-label-caps text-slate-400 text-[9px] mb-1">TOTAL WEIGHT</span>
           <div className="flex items-baseline gap-1">
             <span className="text-lg font-bold nh-font-headline text-slate-100">
@@ -46,7 +46,7 @@ export const VehicleStatsPanel: React.FC<VehicleStatsPanelProps> = ({
         </div>
 
         {/* Power / Weight */}
-        <div className="p-3 rounded-xl bg-amber-950/60/70 border border-white/6 flex flex-col justify-between">
+        <div className="p-3 rounded-xl bg-slate-900/80/70 border border-white/6 flex flex-col justify-between">
           <span className="nh-label-caps text-slate-400 text-[9px] mb-1">POWER / WEIGHT</span>
           <div className="flex items-baseline gap-1">
             <span className="text-lg font-bold nh-font-headline text-slate-100">
@@ -57,7 +57,7 @@ export const VehicleStatsPanel: React.FC<VehicleStatsPanelProps> = ({
         </div>
 
         {/* Top Speed */}
-        <div className="p-3 rounded-xl bg-amber-950/60/70 border border-white/6 flex flex-col justify-between">
+        <div className="p-3 rounded-xl bg-slate-900/80/70 border border-white/6 flex flex-col justify-between">
           <span className="nh-label-caps text-slate-400 text-[9px] mb-1">TOP SPEED</span>
           <div className="flex items-baseline gap-1">
             <span className="text-lg font-bold nh-font-headline text-slate-100">
@@ -68,7 +68,7 @@ export const VehicleStatsPanel: React.FC<VehicleStatsPanelProps> = ({
         </div>
 
         {/* 0-60 MPH */}
-        <div className="p-3 rounded-xl bg-amber-950/60/70 border border-white/6 flex flex-col justify-between">
+        <div className="p-3 rounded-xl bg-slate-900/80/70 border border-white/6 flex flex-col justify-between">
           <span className="nh-label-caps text-slate-400 text-[9px] mb-1">0-60 MPH</span>
           <div className="flex items-baseline gap-1">
             <span className="text-lg font-bold nh-font-headline text-emerald-300">
@@ -79,7 +79,7 @@ export const VehicleStatsPanel: React.FC<VehicleStatsPanelProps> = ({
         </div>
 
         {/* Quarter Mile */}
-        <div className="p-3 rounded-xl bg-amber-950/60/70 border border-white/6 flex flex-col justify-between">
+        <div className="p-3 rounded-xl bg-slate-900/80/70 border border-white/6 flex flex-col justify-between">
           <span className="nh-label-caps text-slate-400 text-[9px] mb-1">QUARTER MILE</span>
           <div className="flex items-baseline gap-1">
             <span className="text-lg font-bold nh-font-headline text-amber-300">
@@ -90,7 +90,7 @@ export const VehicleStatsPanel: React.FC<VehicleStatsPanelProps> = ({
         </div>
 
         {/* Braking 100-0 */}
-        <div className="p-3 rounded-xl bg-amber-950/60/70 border border-white/6 flex flex-col justify-between">
+        <div className="p-3 rounded-xl bg-slate-900/80/70 border border-white/6 flex flex-col justify-between">
           <span className="nh-label-caps text-slate-400 text-[9px] mb-1">BRAKING 100-0</span>
           <div className="flex items-baseline gap-1">
             <span className="text-lg font-bold nh-font-headline text-rose-300">

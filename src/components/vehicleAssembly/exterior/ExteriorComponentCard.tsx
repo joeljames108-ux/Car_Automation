@@ -43,7 +43,7 @@ export const ExteriorComponentCard: React.FC<ExteriorComponentCardProps> = ({
       onClick={onSelect}
       className={`group relative p-3.5 rounded-2xl border transition-all duration-300 cursor-pointer ${
         isSelected
-          ? "bg-amber-950/40 border-amber-400 shadow-[0_0_15px_rgba(6,182,212,0.3)]"
+          ? "bg-slate-900/60 border-amber-400 shadow-[0_0_15px_rgba(6,182,212,0.3)]"
           : isInstalled
           ? "bg-slate-900/60 border-emerald-500/30 hover:border-emerald-400/60"
           : isInstallable
@@ -55,7 +55,7 @@ export const ExteriorComponentCard: React.FC<ExteriorComponentCardProps> = ({
         {/* Left: Component Info & Subcategory */}
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 mb-1">
-            <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-amber-400 px-2 py-0.5 rounded-full bg-amber-950/60 border border-amber-500/30">
+            <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-amber-400 px-2 py-0.5 rounded-full bg-slate-900/80 border border-amber-500/30">
               {component.subcategory}
             </span>
             {isInstalled && (

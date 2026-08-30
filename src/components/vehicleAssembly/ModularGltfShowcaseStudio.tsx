@@ -64,9 +64,9 @@ export const ModularGltfShowcaseStudio: React.FC = () => {
   ];
 
   return (
-    <div className="flex flex-col h-screen w-full bg-amber-950/60 text-gray-100 font-sans overflow-hidden">
+    <div className="flex flex-col h-screen w-full bg-slate-900/80 text-gray-100 font-sans overflow-hidden">
       {/* Top Unified Studio Navigation Ribbon */}
-      <div className="flex items-center justify-between px-6 py-3.5 bg-amber-950/60 border-b border-[#182133] shadow-lg">
+      <div className="flex items-center justify-between px-6 py-3.5 bg-slate-900/80 border-b border-[#182133] shadow-lg">
         {/* Studio Branding & Homologation Seal */}
         <div className="flex items-center gap-3">
           <div className="p-2 rounded-xl bg-gradient-to-tr from-amber-500/20 to-amber-500/20 border border-amber-500/40 text-amber-400">
@@ -88,7 +88,7 @@ export const ModularGltfShowcaseStudio: React.FC = () => {
         </div>
 
         {/* Studio Workspace Tabs */}
-        <div className="flex items-center gap-1.5 bg-amber-950/60 p-1 rounded-xl border border-[#1b253b]">
+        <div className="flex items-center gap-1.5 bg-slate-900/80 p-1 rounded-xl border border-[#1b253b]">
           {tabs.map((t) => {
             const Icon = t.icon;
             const isActive = activeTab === t.id;
@@ -99,7 +99,7 @@ export const ModularGltfShowcaseStudio: React.FC = () => {
                 className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all ${
                   isActive
                     ? 'bg-amber-500 text-black shadow-[0_0_12px_rgba(6,182,212,0.4)]'
-                    : 'text-gray-400 hover:text-gray-200 hover:bg-amber-950/60'
+                    : 'text-gray-400 hover:text-gray-200 hover:bg-slate-900/80'
                 }`}
               >
                 <Icon className="w-4 h-4" />
@@ -123,7 +123,7 @@ export const ModularGltfShowcaseStudio: React.FC = () => {
       </div>
 
       {/* Main Studio Viewport Workspace */}
-      <div className="flex-1 overflow-hidden p-3 bg-amber-950/60">
+      <div className="flex-1 overflow-hidden p-3 bg-slate-900/80">
         {activeTab === '3D_ASSEMBLY' && <MasterVehicleAssemblyDeck />}
         {activeTab === 'CAD_BLUEPRINT' && <MultiViewTechnicalBlueprint />}
         {activeTab === 'CFD_WIND_TUNNEL' && <AerodynamicWindTunnelViewport />}
@@ -131,7 +131,7 @@ export const ModularGltfShowcaseStudio: React.FC = () => {
       </div>
 
       {/* Bottom Telemetry Status Bar */}
-      <div className="flex items-center justify-between px-6 py-2 bg-amber-950/60 border-t border-[#161e2e] text-xs font-mono text-gray-400">
+      <div className="flex items-center justify-between px-6 py-2 bg-slate-900/80 border-t border-[#161e2e] text-xs font-mono text-gray-400">
         <div className="flex items-center gap-6">
           <span>
             MASS: <strong className="text-gray-100">{totalMassKg} kg</strong>

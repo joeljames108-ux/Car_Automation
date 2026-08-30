@@ -120,7 +120,7 @@ export const VehicleAssemblyProgressPanel: React.FC<VehicleAssemblyProgressPanel
                 isInstalled
                   ? "bg-emerald-950/20 border-emerald-500/30 text-emerald-300"
                   : isActive
-                  ? "bg-amber-950/40 border-amber-400 text-amber-300 animate-pulse"
+                  ? "bg-slate-900/60 border-amber-400 text-amber-300 animate-pulse"
                   : "bg-slate-900/40 border-slate-800/80 text-slate-400"
               }`}
             >

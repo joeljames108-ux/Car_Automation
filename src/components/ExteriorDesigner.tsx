@@ -16,11 +16,11 @@ import type {
 const PAINT_SWATCHES = [
   "#e11d48", "#dc2626", "#ea580c", "#f59e0b", "#facc15", "#84cc16",
   "#22c55e", "#10b981", "#14b8a6", "#f59e0b", "#d97706", "#b45309",
-  "#1e40af", "#d97706", "#f59e0b", "#d97706", "#f43f5e", "#1a1008",
+  "#1e40af", "#d97706", "#f59e0b", "#d97706", "#f43f5e", "#080c14",
   "#1e293b", "#475569", "#94a3b8", "#e2e8f0", "#f8fafc", "#92400e",
 ];
 
-const BADGE_SWATCHES = ["#e11d48", "#facc15", "#fbbf24", "#e2e8f0", "#1a1008", "#84cc16"];
+const BADGE_SWATCHES = ["#e11d48", "#facc15", "#fbbf24", "#e2e8f0", "#080c14", "#84cc16"];
 
 function BodyPreview({ bodyType, finish }: {
   bodyType: BodyType; finish: PaintFinish;

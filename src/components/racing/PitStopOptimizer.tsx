@@ -39,9 +39,9 @@ export const PitStopOptimizer: React.FC<PitStopOptimizerProps> = memo(function P
   return (
     <div className="space-y-4">
       {/* Pit Window */}
-      <div className="bg-amber-900/40 rounded-2xl p-4 border border-amber-800/30">
+      <div className="bg-slate-800/40 rounded-2xl p-4 border border-slate-700/50">
         <h3 className="text-amber-300 text-sm font-bold mb-3">PIT WINDOW — {currentCompound.toUpperCase()}</h3>
-        <div className="relative h-8 bg-amber-950/60 rounded-full overflow-hidden mb-3">
+        <div className="relative h-8 bg-slate-900/80 rounded-full overflow-hidden mb-3">
           {/* Full race bar */}
           <div className="absolute inset-0 flex">
             {Array.from({ length: totalLaps }, (_, i) => (
@@ -49,8 +49,8 @@ export const PitStopOptimizer: React.FC<PitStopOptimizerProps> = memo(function P
                 i < currentLap ? 'bg-amber-800/30' :
                 i >= pitWindow.earliest && i <= pitWindow.latest ? 'bg-green-500/30' :
                 i === pitWindow.optimal ? 'bg-green-500/70' :
-                'bg-amber-950/40'
-              } border-r border-amber-900/20`} />
+                'bg-slate-900/60'
+              } border-r border-slate-800/20`} />
             ))}
           </div>
           {/* Current position */}
@@ -90,7 +90,7 @@ export const PitStopOptimizer: React.FC<PitStopOptimizerProps> = memo(function P
       </div>
 
       {/* Strategy Comparison */}
-      <div className="bg-amber-900/40 rounded-2xl p-4 border border-amber-800/30">
+      <div className="bg-slate-800/40 rounded-2xl p-4 border border-slate-700/50">
         <h3 className="text-amber-300 text-sm font-bold mb-3">STRATEGY COMPARISON</h3>
         <div className="space-y-2">
           {strategies.slice(0, 6).map((s, i) => (
@@ -99,11 +99,11 @@ export const PitStopOptimizer: React.FC<PitStopOptimizerProps> = memo(function P
               className={`flex items-center justify-between p-3 rounded-xl cursor-pointer transition-all ${
                 selectedStrategy === s.id
                   ? 'bg-amber-500/20 border border-amber-500/40'
-                  : 'bg-amber-950/30 border border-amber-800/20 hover:bg-amber-900/30'
+                  : 'bg-slate-900/60 border border-slate-800 hover:bg-slate-800/40'
               }`}>
               <div className="flex items-center gap-3">
                 <span className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${
-                  i === 0 ? 'bg-green-500 text-white' : 'bg-amber-900/50 text-amber-400'
+                  i === 0 ? 'bg-green-500 text-white' : 'bg-slate-800/60 text-amber-400'
                 }`}>{i + 1}</span>
                 <div>
                   <span className="text-amber-100 text-sm font-bold">{s.name}</span>
@@ -127,7 +127,7 @@ export const PitStopOptimizer: React.FC<PitStopOptimizerProps> = memo(function P
       </div>
 
       {/* Custom Pit Planner */}
-      <div className="bg-amber-900/40 rounded-2xl p-4 border border-amber-800/30">
+      <div className="bg-slate-800/40 rounded-2xl p-4 border border-slate-700/50">
         <h3 className="text-amber-300 text-sm font-bold mb-3">CUSTOM PIT PLANNER</h3>
         <div className="grid grid-cols-2 gap-4">
           <div>

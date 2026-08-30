@@ -47,7 +47,7 @@ export const CinematicBlueprintXRayOverlay: React.FC<CinematicBlueprintXRayOverl
       onClick={onClose}
     >
       <div
-        className="relative w-full max-w-5xl max-h-[92vh] overflow-y-auto rounded-3xl bg-amber-950/60/95 border-2 border-amber-500/40 p-6 shadow-[0_0_90px_rgba(6,182,212,0.3)] flex flex-col gap-5 scrollbar-thin"
+        className="relative w-full max-w-5xl max-h-[92vh] overflow-y-auto rounded-3xl bg-slate-900/80/95 border-2 border-amber-500/40 p-6 shadow-[0_0_90px_rgba(6,182,212,0.3)] flex flex-col gap-5 scrollbar-thin"
         onClick={(e) => e.stopPropagation()}
       >
         {/* CAD Blueprint Header */}
@@ -80,7 +80,7 @@ export const CinematicBlueprintXRayOverlay: React.FC<CinematicBlueprintXRayOverl
         </div>
 
         {/* Blueprint Canvas & CAD Dimension Diagram */}
-        <div className="relative w-full aspect-[16/9] max-h-96 rounded-2xl border border-amber-500/30 bg-amber-950/60 overflow-hidden flex items-center justify-center">
+        <div className="relative w-full aspect-[16/9] max-h-96 rounded-2xl border border-amber-500/30 bg-slate-900/80 overflow-hidden flex items-center justify-center">
           {/* Blueprint Grid Lines */}
           <div
             className="absolute inset-0 opacity-25"
@@ -197,7 +197,7 @@ export const CinematicBlueprintXRayOverlay: React.FC<CinematicBlueprintXRayOverl
         {/* Controls Grid */}
         <div className="grid md:grid-cols-2 gap-5">
           {/* Layer Peeling Checkboxes */}
-          <div className="p-4 rounded-2xl bg-amber-950/60 border border-amber-500/20 flex flex-col gap-2.5">
+          <div className="p-4 rounded-2xl bg-slate-900/80 border border-amber-500/20 flex flex-col gap-2.5">
             <span className="font-mono text-xs font-bold text-amber-300 uppercase flex items-center gap-1.5 mb-1">
               <Layers size={13} />
               <span>X-RAY LAYER VISIBILITY</span>
@@ -225,7 +225,7 @@ export const CinematicBlueprintXRayOverlay: React.FC<CinematicBlueprintXRayOverl
           </div>
 
           {/* Exploded View & FEA Stress Sliders */}
-          <div className="p-4 rounded-2xl bg-amber-950/60 border border-amber-500/20 flex flex-col justify-between gap-4">
+          <div className="p-4 rounded-2xl bg-slate-900/80 border border-amber-500/20 flex flex-col justify-between gap-4">
             <div>
               <div className="flex justify-between items-center text-xs font-mono text-amber-300 font-bold mb-1.5">
                 <span>EXPLODED KINEMATICS SEPARATION</span>

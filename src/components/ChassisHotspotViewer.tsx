@@ -158,7 +158,7 @@ function ChassisHotspotViewerComponent({ onSelectStage }: ChassisHotspotViewerPr
         cy: 225,
         stat: `Cornering ${(sim.lateralG || 1.2).toFixed(2)}g | ${(design.vehicle.tireCompound || "street").toUpperCase()}`,
         detail: `Wheel Width ${design.vehicle.wheelWidth || 9}" | Diameter ${design.vehicle.wheelDiameter || 19}"`,
-        color: "border-amber-500/60 bg-gradient-to-br from-slate-900/95 to-slate-950/95 text-amber-300",
+        color: "border-amber-500/60 bg-gradient-to-br from-slate-900/95 to-slate-950/95 text-slate-300",
         glowColor: "rgba(251, 191, 36, 0.6)",
         status: wheelStatus,
         ring: getRingColor(wheelStatus),
@@ -265,7 +265,7 @@ function ChassisHotspotViewerComponent({ onSelectStage }: ChassisHotspotViewerPr
           <Maximize2 size={12} />
           <span>Zoom Blueprint</span>
         </button>
-        <div className="relative w-[800px] h-[300px] flex-shrink-0 rounded-2xl overflow-hidden border border-slate-800 bg-amber-950/60 shadow-[0_0_30px_rgba(0,0,0,0.8)]">
+        <div className="relative w-[800px] h-[300px] flex-shrink-0 rounded-2xl overflow-hidden border border-slate-800 bg-[#090d16] shadow-[0_0_30px_rgba(0,0,0,0.8)]">
           {/* Blueprint Image */}
           <img
             src="/chassis_hotspots_diagram.png"
@@ -416,7 +416,7 @@ function ChassisHotspotViewerComponent({ onSelectStage }: ChassisHotspotViewerPr
               </div>
 
               {/* High-Resolution Expanded Blueprint Box */}
-              <div className="relative w-full h-[420px] bg-amber-950/60 border border-slate-800 rounded-2xl overflow-hidden shadow-inner flex items-center justify-center p-2">
+              <div className="relative w-full h-[420px] bg-[#090d16] border border-slate-800 rounded-2xl overflow-hidden shadow-inner flex items-center justify-center p-2">
                 <img
                   src="/chassis_hotspots_diagram.png"
                   alt="F1 Supercar Chassis Telemetry Blueprint"
@@ -429,7 +429,7 @@ function ChassisHotspotViewerComponent({ onSelectStage }: ChassisHotspotViewerPr
                 {hotspots.map((hs) => (
                   <div
                     key={hs.id}
-                    className="bg-slate-900/80 border border-slate-800 rounded-2xl p-3 text-left shadow-sm backdrop-blur-md"
+                    className="bg-[#090d16] border border-slate-800 rounded-2xl p-3 text-left shadow-sm backdrop-blur-md"
                   >
                     <div className="flex items-center gap-1.5 text-xs font-bold text-slate-100 mb-1">
                       {hs.icon}

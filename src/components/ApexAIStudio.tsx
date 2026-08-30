@@ -334,7 +334,7 @@ export function ApexAIStudio() {
                     className={`p-3 rounded-xl border text-xs flex items-start justify-between gap-3 ${
                       w.severity === "critical"
                         ? "bg-rose-950/30 border-rose-500/40 text-rose-200"
-                        : "bg-amber-950/20 border-amber-500/30 text-amber-200"
+                        : "bg-slate-900/50 border-amber-500/30 text-amber-200"
                     }`}
                   >
                     <div className="space-y-0.5">

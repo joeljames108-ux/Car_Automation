@@ -75,7 +75,7 @@ export function NeonFlywheelKersStudio() {
             }}
             className="p-6 flex flex-col gap-4"
           >
-            <div className="p-4 rounded-xl bg-amber-950/60 border border-sky-400/25 font-mono text-xs flex flex-col gap-3">
+            <div className="p-4 rounded-xl bg-slate-900/80 border border-sky-400/25 font-mono text-xs flex flex-col gap-3">
               <div className="flex items-center justify-between">
                 <span className="text-slate-400">Enclosure Pressure:</span>
                 <span className="text-amber-300 font-bold">10⁻⁴ mbar High Vacuum</span>
@@ -134,7 +134,7 @@ export function NeonFlywheelKersStudio() {
               onChange={(val) => setCvtRatio(val)}
             />
 
-            <div className="p-3.5 rounded-xl bg-amber-950/60 border border-sky-400/15 flex flex-col gap-2 font-mono text-xs">
+            <div className="p-3.5 rounded-xl bg-slate-900/80 border border-sky-400/15 flex flex-col gap-2 font-mono text-xs">
               <div className="flex items-center justify-between">
                 <span className="text-slate-400">Rim Rim Tip Speed:</span>
                 <span className="text-amber-300 font-bold">850 m/s (Mach 2.5)</span>

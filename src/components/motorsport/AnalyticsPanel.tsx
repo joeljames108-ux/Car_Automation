@@ -38,7 +38,7 @@ const RadarChart = memo(function RadarChart({ stats, size = 120 }: { stats: { la
             const a = (Math.PI * 2 * i) / n - Math.PI / 2;
             return `${cx + r * scale * Math.cos(a)},${cy + r * scale * Math.sin(a)}`;
           }).join(" ")}
-          fill="none" stroke="#1a1008" strokeWidth="0.5" />
+          fill="none" stroke="#080c14" strokeWidth="0.5" />
       ))}
       {/* Axis lines */}
       {bgPoints.map((p, i) => (

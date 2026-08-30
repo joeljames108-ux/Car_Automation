@@ -58,7 +58,7 @@ export function NeonHorizonSaveDialog({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-nh-materialize">
-      <div className="w-full max-w-xl bg-amber-950/60 border border-white/12 rounded-2xl shadow-[0_30px_80px_rgba(0,0,0,0.65)] overflow-hidden flex flex-col">
+      <div className="w-full max-w-xl bg-slate-900/80 border border-white/12 rounded-2xl shadow-[0_30px_80px_rgba(0,0,0,0.65)] overflow-hidden flex flex-col">
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-white/8 bg-black/30">
           <div className="flex items-center gap-2">
@@ -88,7 +88,7 @@ export function NeonHorizonSaveDialog({
                   className={`p-3.5 rounded-xl border transition-all cursor-pointer flex items-center justify-between ${
  isSelected
  ? "bg-amber-500/20 border-amber-500/30"
- : "bg-amber-950/60 border-white/10 hover:border-sky-400/25"
+ : "bg-slate-900/80 border-white/10 hover:border-sky-400/25"
  }`}
                 >
                   <div>

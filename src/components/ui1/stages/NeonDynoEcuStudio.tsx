@@ -91,7 +91,7 @@ export function NeonDynoEcuStudio() {
 
       {/* View 1: Embedded Powertrain Dyno Studio */}
       {activeTab === "standalone_dyno" && (
-        <div className="w-full rounded-3xl overflow-hidden border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] bg-amber-950/60">
+        <div className="w-full rounded-3xl overflow-hidden border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] bg-slate-900/80">
           <PowertrainDynoStudio />
         </div>
       )}

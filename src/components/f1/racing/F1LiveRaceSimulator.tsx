@@ -344,7 +344,7 @@ const F1LiveRaceSimulatorComponent: React.FC<F1LiveRaceSimulatorProps> = ({
   };
 
   return (
-    <div className="w-full h-full flex flex-col bg-amber-950/60 text-white select-none overflow-hidden">
+    <div className="w-full h-full flex flex-col bg-slate-900/80 text-white select-none overflow-hidden">
       {/* Top Session Header */}
       <div className="p-4 bg-black/80 border-b border-white/10 flex items-center justify-between">
         <div className="flex items-center gap-4">
@@ -418,7 +418,7 @@ const F1LiveRaceSimulatorComponent: React.FC<F1LiveRaceSimulatorProps> = ({
               <Trophy className="w-3.5 h-3.5 text-amber-400" />
               Live Timing Tower
             </span>
-            <span className="text-[10px] font-mono text-amber-400 font-bold bg-amber-950/60 px-2 py-0.5 rounded border border-amber-500/30">
+            <span className="text-[10px] font-mono text-amber-400 font-bold bg-slate-900/80 px-2 py-0.5 rounded border border-amber-500/30">
               Sector {currentSector} / 3
             </span>
           </div>
@@ -429,7 +429,7 @@ const F1LiveRaceSimulatorComponent: React.FC<F1LiveRaceSimulatorProps> = ({
                 key={entry.position}
                 className={`flex items-center justify-between p-2.5 rounded-xl border text-xs font-mono transition-all ${
                   entry.isPlayer
-                    ? "bg-amber-950/40 border-amber-400 shadow-md shadow-cyan-500/20 text-white font-bold"
+                    ? "bg-slate-900/60 border-amber-400 shadow-md shadow-cyan-500/20 text-white font-bold"
                     : "bg-black/40 border-white/5 text-zinc-300"
                 }`}
               >
@@ -656,7 +656,7 @@ const F1LiveRaceSimulatorComponent: React.FC<F1LiveRaceSimulatorProps> = ({
                       msg.type === "CRITICAL"
                         ? "bg-red-950/40 border-red-500/40 text-red-300"
                         : msg.type === "WARNING"
-                        ? "bg-amber-950/40 border-amber-500/40 text-amber-300"
+                        ? "bg-slate-900/60 border-amber-500/40 text-amber-300"
                         : msg.type === "SUCCESS"
                         ? "bg-emerald-950/40 border-emerald-500/40 text-emerald-300"
                         : "bg-black/40 border-white/5 text-zinc-300"

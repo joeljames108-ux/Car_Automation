@@ -401,7 +401,7 @@ export const UltraFidelityExteriorStudioWorkbench: React.FC = memo(function Ultr
   };
 
   return (
-    <div className="w-full h-full flex flex-col bg-amber-950/60 text-white rounded-2xl border border-white/10 overflow-hidden select-none">
+    <div className="w-full h-full flex flex-col bg-slate-900/80 text-white rounded-2xl border border-white/10 overflow-hidden select-none">
       {/* Top Header Bar */}
       <div className="px-5 py-3 bg-black/60 border-b border-white/10 flex items-center justify-between backdrop-blur-xl">
         <div className="flex items-center gap-3">

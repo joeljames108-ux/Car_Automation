@@ -31,13 +31,13 @@ export const NeonHorizonTabs: React.FC<NeonHorizonTabsProps> = ({
 
   const containerStyles = {
     glass:
-      "bg-amber-950/60/80 backdrop-blur-xl p-1 rounded-2xl border border-sky-400/15 shadow-inner flex items-center gap-1 overflow-x-auto no-scrollbar",
+      "bg-slate-900/80/80 backdrop-blur-xl p-1 rounded-2xl border border-sky-400/15 shadow-inner flex items-center gap-1 overflow-x-auto no-scrollbar",
     pills:
       "bg-black/30 p-1 rounded-xl border border-white/5 flex items-center gap-1 overflow-x-auto no-scrollbar",
     underline:
       "border-b border-sky-400/15 flex items-center gap-2 overflow-x-auto no-scrollbar px-2",
     compact:
-      "bg-amber-950/60/80 p-0.5 rounded-xl border border-white/10 flex items-center gap-0.5",
+      "bg-slate-900/80/80 p-0.5 rounded-xl border border-white/10 flex items-center gap-0.5",
   }[variant];
 
   return (

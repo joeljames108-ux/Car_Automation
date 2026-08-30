@@ -50,7 +50,7 @@ export const ChassisArchitectureSelector: React.FC<ChassisArchitectureSelectorPr
               onClick={() => onSelectChassis(chassis.id)}
               className={`p-3.5 rounded-2xl border cursor-pointer transition-all duration-200 flex flex-col justify-between space-y-2 select-none ${
                 isSelected
-                  ? 'bg-amber-500/10 dark:bg-amber-950/40 border-amber-500 dark:border-amber-400 shadow-[0_0_15px_rgba(6,182,212,0.3)] scale-102 ring-1 ring-amber-400'
+                  ? 'bg-amber-500/10 dark:bg-slate-900/60 border-amber-500 dark:border-amber-400 shadow-[0_0_15px_rgba(6,182,212,0.3)] scale-102 ring-1 ring-amber-400'
                   : 'bg-slate-50 dark:bg-base-950/60 border-slate-200 dark:border-slate-800 hover:border-slate-400 dark:hover:border-slate-700'
               }`}
             >

@@ -341,7 +341,7 @@ export const Phase8AeroKinematicsExteriorStudio: React.FC = () => {
   };
 
   return (
-    <div className="w-full h-full flex flex-col bg-amber-950/60 text-white rounded-2xl border border-white/10 overflow-hidden select-none">
+    <div className="w-full h-full flex flex-col bg-slate-900/80 text-white rounded-2xl border border-white/10 overflow-hidden select-none">
       {/* Top Header */}
       <div className="px-6 py-3.5 bg-white/5 border-b border-white/10 flex items-center justify-between backdrop-blur-md">
         <div className="flex items-center gap-3">
@@ -381,7 +381,7 @@ export const Phase8AeroKinematicsExteriorStudio: React.FC = () => {
         </div>
 
         {/* Right Engineering Control Deck */}
-        <div className="w-full lg:w-96 p-5 bg-amber-950/60 border-t lg:border-t-0 lg:border-l border-white/10 overflow-y-auto flex flex-col gap-5">
+        <div className="w-full lg:w-96 p-5 bg-slate-900/80 border-t lg:border-t-0 lg:border-l border-white/10 overflow-y-auto flex flex-col gap-5">
           {/* Section 1: Door Kinematics */}
           <div className="flex flex-col gap-2.5">
             <h3 className="text-xs font-bold tracking-wider text-amber-400 uppercase">Door Kinematics & Actuation</h3>

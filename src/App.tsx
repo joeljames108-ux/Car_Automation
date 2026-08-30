@@ -448,7 +448,7 @@ function AppInner() {
     <VisionGlassErrorBoundary>
       <div className={`min-h-screen bg-base-950 flex flex-col grid-bg transition-opacity duration-700 ${booted ? "opacity-100" : "opacity-0"} ${uiTheme}`}>
       {/* Top Header */}
-      <header className="border-b border-white/10 bg-amber-950/60/80 backdrop-blur-xl sticky top-0 z-40 shadow-[0_4px_30px_rgba(0,0,0,0.5)] inner-light">
+      <header className="border-b border-white/10 bg-slate-900/80/80 backdrop-blur-xl sticky top-0 z-40 shadow-[0_4px_30px_rgba(0,0,0,0.5)] inner-light">
         <div className="max-w-full px-6 h-14 flex items-center justify-between gap-4">
           {/* Logo */}
           <div className="flex items-center gap-2.5 shrink-0">
@@ -546,7 +546,7 @@ function AppInner() {
       </header>
 
       {/* Sub-Navigation Bar */}
-      <nav className="border-b border-white/5 bg-amber-950/60/60 backdrop-blur-md sticky top-14 z-30 shadow-md">
+      <nav className="border-b border-white/5 bg-slate-900/80/60 backdrop-blur-md sticky top-14 z-30 shadow-md">
         <div className="max-w-full px-6 py-2 flex items-center gap-1.5 overflow-x-auto no-scrollbar">
           {activeCategoryStages.map((s) => {
             const isCurrent = stage === s.id;

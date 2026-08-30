@@ -36,7 +36,7 @@ export const MirrorSVG: React.FC<MirrorSVGProps> = ({
       onMouseLeave={onMouseLeave}
     >
       {/* Aerodynamic Stalk Pylon */}
-      <line x1="400" y1="260" x2="385" y2="245" stroke="#1a1008" strokeWidth="2.5" strokeLinecap="round" />
+      <line x1="400" y1="260" x2="385" y2="245" stroke="#080c14" strokeWidth="2.5" strokeLinecap="round" />
       {/* Mirror Shell Housing */}
       <ellipse cx="385" cy="242" rx="12" ry="7" fill="url(#exposedCarbonWeave)" stroke={strokeColor} strokeWidth="1.0" />
       {/* Integrated Amber LED Turn Signal Blade */}

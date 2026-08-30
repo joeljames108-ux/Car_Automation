@@ -82,7 +82,7 @@ const DICKY_STYLES: { id: InstalledSubsystemsState["dickyStyle"]; label: string;
 const PAINT_SWATCHES = [
   "#dc2626", "#e11d48", "#ea580c", "#f59e0b", "#facc15", "#84cc16",
   "#22c55e", "#10b981", "#14b8a6", "#f59e0b", "#d97706", "#b45309",
-  "#1e40af", "#d97706", "#f59e0b", "#d97706", "#f43f5e", "#1a1008",
+  "#1e40af", "#d97706", "#f59e0b", "#d97706", "#f43f5e", "#080c14",
   "#1e293b", "#334155", "#64748b", "#94a3b8", "#e2e8f0", "#ffffff",
 ];
 

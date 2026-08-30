@@ -43,9 +43,9 @@ export const NeonHorizonSelect: React.FC<NeonHorizonSelectProps> = ({
 
   const variantStyles = {
     primary:
-      "bg-amber-950/60/85 border-white/12 text-slate-200 focus:border-sky-400/35",
+      "bg-slate-900/80/85 border-white/12 text-slate-200 focus:border-sky-400/35",
     secondary:
-      "bg-amber-950/60/70 border-white/15 text-slate-200 focus:border-amber-500/30",
+      "bg-slate-900/80/70 border-white/15 text-slate-200 focus:border-amber-500/30",
     minimal:
       "bg-black/30 border-white/10 text-slate-200 focus:border-amber-500/30",
   }[variant];
@@ -76,7 +76,7 @@ export const NeonHorizonSelect: React.FC<NeonHorizonSelectProps> = ({
               key={opt.value}
               value={opt.value}
               disabled={opt.disabled}
-              className="bg-amber-950/60 text-slate-100 py-1 font-sans"
+              className="bg-slate-900/80 text-slate-100 py-1 font-sans"
             >
               {opt.label} {opt.sublabel ? `(${opt.sublabel})` : ""}
             </option>

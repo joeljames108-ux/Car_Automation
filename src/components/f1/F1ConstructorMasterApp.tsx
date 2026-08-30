@@ -51,7 +51,7 @@ const F1ConstructorMasterAppComponent: React.FC<F1ConstructorMasterAppProps> = (
   };
 
   return (
-    <div className="w-full min-h-[750px] h-[calc(100vh-200px)] flex flex-col bg-amber-950/60 select-none overflow-hidden rounded-2xl border border-white/10 shadow-2xl">
+    <div className="w-full min-h-[750px] h-[calc(100vh-200px)] flex flex-col bg-slate-900/80 select-none overflow-hidden rounded-2xl border border-white/10 shadow-2xl">
       {/* Top Universal Mode Switcher & Exit Bar */}
       <div className="px-5 py-2.5 bg-zinc-950/95 border-b border-white/10 flex items-center justify-between z-20 shrink-0">
         <div className="flex items-center gap-3">
@@ -197,7 +197,7 @@ const F1ConstructorMasterAppComponent: React.FC<F1ConstructorMasterAppProps> = (
       )}
 
       {currentMode === "BENCHMARKS" && (
-        <div className="w-full flex-1 flex flex-col min-h-0 overflow-y-auto p-4 bg-amber-950/60">
+        <div className="w-full flex-1 flex flex-col min-h-0 overflow-y-auto p-4 bg-slate-900/80">
           <div className="flex items-center justify-between mb-4 pb-2 border-b border-white/10 shrink-0">
             <h2 className="text-sm font-black uppercase tracking-widest text-amber-400">
               100 Real-World Sports Car Benchmark & Simulation Validation Suite

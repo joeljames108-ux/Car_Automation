@@ -98,7 +98,7 @@ export const NeonMotorsportStudio = memo(function NeonMotorsportStudio() {
             {/* Tire Degradation SVG Curve */}
             <div className="flex flex-col gap-2 pt-2 border-t border-white/10">
               <span className="nh-label-caps text-slate-400 text-[10px]">TIRE WEAR CURVE & CLIFF PROJECTION</span>
-              <div className="h-32 w-full bg-amber-950/60 rounded-xl border border-sky-400/15 p-2">
+              <div className="h-32 w-full bg-slate-900/80 rounded-xl border border-sky-400/15 p-2">
                 <svg viewBox="0 0 400 100" className="w-full h-full overflow-visible">
                   {[20, 50, 80].map((y) => (
                     <line key={y} x1="20" y1={y} x2="380" y2={y} stroke="rgba(255,255,255,0.06)" strokeWidth="1" />
@@ -128,7 +128,7 @@ export const NeonMotorsportStudio = memo(function NeonMotorsportStudio() {
             }}
             className="p-6 flex flex-col gap-4"
           >
-            <div className="p-4 rounded-xl bg-amber-950/60 border border-sky-400/15 flex flex-col gap-2">
+            <div className="p-4 rounded-xl bg-slate-900/80 border border-sky-400/15 flex flex-col gap-2">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-bold text-amber-300">RACE ENGINEER:</span>
                 <span className="text-[10px] nh-font-mono text-slate-400">14:22:04</span>
@@ -138,7 +138,7 @@ export const NeonMotorsportStudio = memo(function NeonMotorsportStudio() {
               </p>
             </div>
 
-            <div className="p-4 rounded-xl bg-amber-950/60 border border-sky-400/15 flex flex-col gap-2">
+            <div className="p-4 rounded-xl bg-slate-900/80 border border-sky-400/15 flex flex-col gap-2">
               <div className="flex items-center justify-between">
                 <span className="text-xs text-slate-400">Average Pit Stop Time:</span>
                 <span className="text-xs font-bold nh-font-mono text-amber-300">2.18s</span>

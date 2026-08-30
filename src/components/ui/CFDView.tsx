@@ -1115,7 +1115,7 @@ function drawCar(ctx: CanvasRenderingContext2D, c: DrawCtx) {
   const bodyGrad = ctx.createLinearGradient(0, groundY - 80, 0, groundY);
   bodyGrad.addColorStop(0, "#2d3748");
   bodyGrad.addColorStop(0.3, "#1a202c");
-  bodyGrad.addColorStop(0.7, "#1a1008");
+  bodyGrad.addColorStop(0.7, "#080c14");
   bodyGrad.addColorStop(1, "#090d16");
 
   ctx.fillStyle = bodyGrad;
@@ -1180,7 +1180,7 @@ function drawCar(ctx: CanvasRenderingContext2D, c: DrawCtx) {
     ctx.rotate(-effectiveAngle * Math.PI / 180 * 0.3);
     
     // Wing Airfoil
-    ctx.fillStyle = "#1a1008";
+    ctx.fillStyle = "#080c14";
     ctx.fillRect(-26, -3, 52, 5);
     ctx.strokeStyle = c.aero.drs ? "#10b981" : "rgba(0, 122, 255, 0.8)";
     ctx.lineWidth = 1.5;
@@ -1195,7 +1195,7 @@ function drawCar(ctx: CanvasRenderingContext2D, c: DrawCtx) {
 
   // Front Aero Splitter
   if (c.aero.splitterLength > 0) {
-    ctx.fillStyle = "#1a1008";
+    ctx.fillStyle = "#080c14";
     ctx.fillRect(pts[0].x - 8, groundY - 7, c.aero.splitterLength / 4, 4);
     ctx.strokeStyle = "#007aff";
     ctx.lineWidth = 1;

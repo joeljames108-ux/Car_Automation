@@ -88,7 +88,7 @@ export function AssemblyProgressPanel({
   const assemblyComponents = useMemo(() => getAssemblyComponents(engineConfig), [engineConfig]);
 
   return (
-    <div className={`flex flex-col bg-amber-950/60/90 border border-slate-800/80 rounded-2xl p-4 backdrop-blur-xl shadow-2xl h-full select-none ${className}`}>
+    <div className={`flex flex-col bg-slate-900/80/90 border border-slate-800/80 rounded-2xl p-4 backdrop-blur-xl shadow-2xl h-full select-none ${className}`}>
       {/* Top Header */}
       <div className="pb-3 border-b border-slate-800/80 mb-3">
         <div className="flex items-center justify-between">
@@ -196,7 +196,7 @@ export function AssemblyProgressPanel({
                   isDone
                     ? "bg-emerald-950/20 text-emerald-300 border border-emerald-500/20"
                     : isCurrent
-                    ? "bg-amber-950/40 text-amber-200 border border-amber-400/50 animate-pulse"
+                    ? "bg-slate-900/60 text-amber-200 border border-amber-400/50 animate-pulse"
                     : "bg-base-850/50 text-slate-400 border border-base-800"
                 }`}
               >

@@ -192,7 +192,7 @@ export const InteriorConfigViewport: React.FC = () => {
 
               <linearGradient id="windshieldGlass" x1="300" y1="40" x2="300" y2="280" gradientUnits="userSpaceOnUse">
                 <stop offset="0%" stopColor="#1e293b" stopOpacity="0.85" />
-                <stop offset="35%" stopColor="#1a1008" stopOpacity="0.95" />
+                <stop offset="35%" stopColor="#080c14" stopOpacity="0.95" />
                 <stop offset="100%" stopColor="#090d16" />
               </linearGradient>
 
@@ -259,12 +259,12 @@ export const InteriorConfigViewport: React.FC = () => {
             <g id="driverSeat">
               <rect x="138" y="98" width="5" height="18" rx="2" fill="#94a3b8" />
               <rect x="157" y="98" width="5" height="18" rx="2" fill="#94a3b8" />
-              <rect x="126" y="76" width="48" height="30" rx="9" fill={interiorColor} stroke="#1a1008" strokeWidth="2" />
+              <rect x="126" y="76" width="48" height="30" rx="9" fill={interiorColor} stroke="#080c14" strokeWidth="2" />
               <rect x="126" y="76" width="48" height="30" rx="9" fill="url(#seatHighlight)" />
               <path
                 d="M 112 110 Q 150 102 188 110 Q 206 135 198 185 L 102 185 Q 94 135 112 110 Z"
                 fill={interiorColor}
-                stroke="#1a1008"
+                stroke="#080c14"
                 strokeWidth="2.5"
               />
               <path
@@ -274,7 +274,7 @@ export const InteriorConfigViewport: React.FC = () => {
               <path
                 d="M 98 185 L 202 185 Q 208 240 198 275 L 102 275 Q 92 240 98 185 Z"
                 fill={interiorColor}
-                stroke="#1a1008"
+                stroke="#080c14"
                 strokeWidth="2"
               />
             </g>
@@ -283,12 +283,12 @@ export const InteriorConfigViewport: React.FC = () => {
             <g id="passengerSeat">
               <rect x="438" y="98" width="5" height="18" rx="2" fill="#94a3b8" />
               <rect x="457" y="98" width="5" height="18" rx="2" fill="#94a3b8" />
-              <rect x="426" y="76" width="48" height="30" rx="9" fill={interiorColor} stroke="#1a1008" strokeWidth="2" />
+              <rect x="426" y="76" width="48" height="30" rx="9" fill={interiorColor} stroke="#080c14" strokeWidth="2" />
               <rect x="426" y="76" width="48" height="30" rx="9" fill="url(#seatHighlight)" />
               <path
                 d="M 412 110 Q 450 102 488 110 Q 506 135 498 185 L 402 185 Q 394 135 412 110 Z"
                 fill={interiorColor}
-                stroke="#1a1008"
+                stroke="#080c14"
                 strokeWidth="2.5"
               />
               <path
@@ -298,14 +298,14 @@ export const InteriorConfigViewport: React.FC = () => {
               <path
                 d="M 398 185 L 502 185 Q 508 240 498 275 L 402 275 Q 392 240 398 185 Z"
                 fill={interiorColor}
-                stroke="#1a1008"
+                stroke="#080c14"
                 strokeWidth="2"
               />
             </g>
 
             {/* Dashboard & Inlay */}
             <path d={getDashTopPath()} fill="url(#dashTopGrad)" stroke="#2d3a4f" strokeWidth="2" />
-            <path d="M 85 170 Q 300 156 515 170 L 510 184 Q 300 170 90 184 Z" fill={getTrimFill()} stroke="#1a1008" strokeWidth="1.2" />
+            <path d="M 85 170 Q 300 156 515 170 L 510 184 Q 300 170 90 184 Z" fill={getTrimFill()} stroke="#080c14" strokeWidth="1.2" />
 
             {/* Ambient LED Strip */}
             {ambientEnabled && (
@@ -342,13 +342,13 @@ export const InteriorConfigViewport: React.FC = () => {
             {screenSize > 0 && (
               <g transform={`translate(${screenSize > 8 ? 260 : 272}, 128)`}>
                 <rect width={screenSize > 8 ? 80 : 56} height="46" rx="4" fill="#000000" stroke="#475569" strokeWidth="2" />
-                <rect x="3" y="3" width={screenSize > 8 ? 74 : 50} height="40" rx="2" fill="#1a1008" />
+                <rect x="3" y="3" width={screenSize > 8 ? 74 : 50} height="40" rx="2" fill="#080c14" />
               </g>
             )}
 
             {/* Steering Wheel */}
             <g transform="translate(175, 215)">
-              <circle cx="0" cy="0" r="50" stroke="#1a1008" strokeWidth="13" fill="none" />
+              <circle cx="0" cy="0" r="50" stroke="#080c14" strokeWidth="13" fill="none" />
               <circle cx="0" cy="0" r="50" stroke="#334155" strokeWidth="9" fill="none" />
               <circle cx="0" cy="0" r="18" fill="#111827" stroke="#475569" strokeWidth="2" />
             </g>

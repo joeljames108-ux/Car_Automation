@@ -154,7 +154,7 @@ export function EngineBlockSection({
           icon={<Cog size={18} />}
           accent="cyan"
           badge={
-            <span className="text-[10px] font-mono text-amber-300 bg-amber-950/80 border border-amber-500/40 px-2 py-0.5 rounded-full font-bold shadow-[0_0_10px_rgba(34,211,238,0.2)]">
+            <span className="text-[10px] font-mono text-amber-300 bg-slate-950/80 border border-amber-500/40 px-2 py-0.5 rounded-full font-bold shadow-[0_0_10px_rgba(34,211,238,0.2)]">
               {kinematics.displacementLiters}L • {cylinders} CYL
             </span>
           }
@@ -305,7 +305,7 @@ export function EngineBlockSection({
           icon={<Layers size={18} />}
           accent="purple"
           badge={
-            <span className="text-[10px] font-mono text-amber-300 bg-amber-950/80 border border-amber-500/40 px-2 py-0.5 rounded-full font-bold shadow-[0_0_10px_rgba(192,132,252,0.2)]">
+            <span className="text-[10px] font-mono text-amber-300 bg-slate-950/80 border border-amber-500/40 px-2 py-0.5 rounded-full font-bold shadow-[0_0_10px_rgba(192,132,252,0.2)]">
               {componentMeta?.variants.length || 4} ALLOY TIERS
             </span>
           }

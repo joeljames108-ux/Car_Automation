@@ -234,7 +234,7 @@ export function NeonHorizonShell() {
 
   return (
     <div className="relative min-h-screen flex flex-col font-sans overflow-x-hidden"
-      style={{ color: "#e4eaf4", background: "#1a1008" }}>
+      style={{ color: "#e4eaf4", background: "#080c14" }}>
       {/* 1. Multi-Layer Cyberpunk Metropolis Parallax Background */}
       <CyberpunkCityBackground
         scene={sceneMode === "wind_tunnel" || stage === "aero" ? 2 : 1}

@@ -298,7 +298,7 @@ export const TransmissionAssemblyStage: React.FC<TransmissionAssemblyStageProps>
                 <div className="flex justify-between items-center text-xs font-mono font-bold text-slate-200">
                   <span>{d.name}</span>
                 </div>
-                <span className="text-[9px] font-mono text-amber-400 bg-amber-950/60 px-1.5 py-0.5 rounded font-bold">
+                <span className="text-[9px] font-mono text-amber-400 bg-slate-900/80 px-1.5 py-0.5 rounded font-bold">
                   {d.lock}
                 </span>
                 <p className="text-[10px] text-slate-400 leading-relaxed pt-1">{d.desc}</p>

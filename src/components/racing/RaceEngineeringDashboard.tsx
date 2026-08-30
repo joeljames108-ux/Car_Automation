@@ -168,9 +168,9 @@ export const RaceEngineeringDashboard: React.FC<RaceEngineeringDashboardProps> =
   ];
 
   return (
-    <div className={`${className} bg-amber-950/80 border border-amber-800/40 rounded-3xl overflow-hidden shadow-2xl font-mono`}>
+    <div className={`${className} bg-slate-950/80 border border-slate-700/60 rounded-3xl overflow-hidden shadow-2xl font-mono`}>
       {/* Header */}
-      <div className="w-full p-4 bg-amber-950/95 border-b border-amber-800/50 backdrop-blur-md">
+      <div className="w-full p-4 bg-slate-950/95 border-b border-slate-700/60 backdrop-blur-md">
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-3">
             <div className={`w-4 h-4 rounded-full ${flagBg[flagColor]} shadow-lg`} />
@@ -199,7 +199,7 @@ export const RaceEngineeringDashboard: React.FC<RaceEngineeringDashboardProps> =
               className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                 activeTab === tab.id
                   ? 'bg-amber-500 text-amber-950 shadow-md'
-                  : 'text-amber-400/70 hover:text-amber-200 hover:bg-amber-900/30'
+                  : 'text-amber-400/70 hover:text-amber-200 hover:bg-slate-800/40'
               }`}>
               {tab.icon} {tab.label}
             </button>
@@ -212,7 +212,7 @@ export const RaceEngineeringDashboard: React.FC<RaceEngineeringDashboardProps> =
         {activeTab === 'overview' && (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {/* Quick Telemetry */}
-            <div className="bg-amber-900/40 rounded-2xl p-4 border border-amber-800/30">
+            <div className="bg-slate-800/40 rounded-2xl p-4 border border-slate-700/50">
               <h3 className="text-amber-300 text-sm font-bold mb-3">\u25B2 LIVE TELEMETRY</h3>
               {currentFrame && (
                 <div className="grid grid-cols-2 gap-3">
@@ -220,10 +220,10 @@ export const RaceEngineeringDashboard: React.FC<RaceEngineeringDashboardProps> =
                   <div><span className="text-amber-500 text-xs">RPM</span><p className="text-amber-100 text-2xl font-bold">{currentFrame.rpm.toLocaleString()}</p></div>
                   <div><span className="text-amber-500 text-xs">GEAR</span><p className="text-amber-100 text-2xl font-bold">{currentFrame.gear}</p></div>
                   <div><span className="text-amber-500 text-xs">THROTTLE</span>
-                    <div className="w-full h-2 bg-amber-950 rounded-full mt-1"><div className="h-full bg-green-500 rounded-full" style={{ width: `${currentFrame.throttle * 100}%` }} /></div>
+                    <div className="w-full h-2 bg-slate-950 rounded-full mt-1"><div className="h-full bg-green-500 rounded-full" style={{ width: `${currentFrame.throttle * 100}%` }} /></div>
                   </div>
                   <div><span className="text-amber-500 text-xs">BRAKE</span>
-                    <div className="w-full h-2 bg-amber-950 rounded-full mt-1"><div className="h-full bg-red-500 rounded-full" style={{ width: `${currentFrame.brake * 100}%` }} /></div>
+                    <div className="w-full h-2 bg-slate-950 rounded-full mt-1"><div className="h-full bg-red-500 rounded-full" style={{ width: `${currentFrame.brake * 100}%` }} /></div>
                   </div>
                   <div><span className="text-amber-500 text-xs">DRS</span><p className={`text-lg font-bold ${currentFrame.drs ? 'text-green-400' : 'text-amber-600'}`}>{currentFrame.drs ? 'OPEN' : 'CLOSED'}</p></div>
                 </div>
@@ -231,14 +231,14 @@ export const RaceEngineeringDashboard: React.FC<RaceEngineeringDashboardProps> =
             </div>
 
             {/* Tire Overview */}
-            <div className="bg-amber-900/40 rounded-2xl p-4 border border-amber-800/30">
+            <div className="bg-slate-800/40 rounded-2xl p-4 border border-slate-700/50">
               <h3 className="text-amber-300 text-sm font-bold mb-3">{'\u25CF'} TIRE STATUS</h3>
               <div className="grid grid-cols-2 gap-3">
                 {([['FL', tireFL], ['FR', tireFR], ['RL', tireRL], ['RR', tireRR]] as [string, typeof tireFL][]).map(([label, tire]) => {
                   const s = tire.getState();
                   const tempColor = s.temperature > 110 ? 'text-red-400' : s.temperature > 80 ? 'text-green-400' : 'text-amber-400';
                   return (
-                    <div key={label} className="bg-amber-950/40 rounded-xl p-2">
+                    <div key={label} className="bg-slate-900/60 rounded-xl p-2">
                       <div className="flex justify-between items-center">
                         <span className="text-amber-500 text-xs font-bold">{label}</span>
                         <span className={tempColor + ' text-xs'}>{Math.round(s.temperature)}\u00B0C</span>
@@ -257,7 +257,7 @@ export const RaceEngineeringDashboard: React.FC<RaceEngineeringDashboardProps> =
             </div>
 
             {/* Weather Quick */}
-            <div className="bg-amber-900/40 rounded-2xl p-4 border border-amber-800/30">
+            <div className="bg-slate-800/40 rounded-2xl p-4 border border-slate-700/50">
               <h3 className="text-amber-300 text-sm font-bold mb-3">{'\u2601'} WEATHER</h3>
               {weatherState && (
                 <div className="space-y-2">
@@ -274,14 +274,14 @@ export const RaceEngineeringDashboard: React.FC<RaceEngineeringDashboardProps> =
             </div>
 
             {/* Fuel */}
-            <div className="bg-amber-900/40 rounded-2xl p-4 border border-amber-800/30">
+            <div className="bg-slate-800/40 rounded-2xl p-4 border border-slate-700/50">
               <h3 className="text-amber-300 text-sm font-bold mb-3">{'\u26FD'} FUEL</h3>
               <div className="space-y-2">
                 <div className="flex justify-between">
                   <span className="text-amber-500 text-xs">LOAD</span>
                   <span className="text-amber-100 font-bold">{fuelState.currentLoad.toFixed(1)} kg</span>
                 </div>
-                <div className="w-full h-3 bg-amber-950 rounded-full">
+                <div className="w-full h-3 bg-slate-950 rounded-full">
                   <div className="h-full bg-gradient-to-r from-amber-600 to-green-500 rounded-full transition-all"
                     style={{ width: `${(fuelState.currentLoad / fuelState.maxCapacity) * 100}%` }} />
                 </div>
@@ -293,7 +293,7 @@ export const RaceEngineeringDashboard: React.FC<RaceEngineeringDashboardProps> =
             </div>
 
             {/* Brakes */}
-            <div className="bg-amber-900/40 rounded-2xl p-4 border border-amber-800/30">
+            <div className="bg-slate-800/40 rounded-2xl p-4 border border-slate-700/50">
               <h3 className="text-amber-300 text-sm font-bold mb-3">{'\u2699'} BRAKES</h3>
               <div className="grid grid-cols-2 gap-3">
                 {brakes.getTemperatures().map((temp, i) => {
@@ -313,7 +313,7 @@ export const RaceEngineeringDashboard: React.FC<RaceEngineeringDashboardProps> =
             </div>
 
             {/* Aero */}
-            <div className="bg-amber-900/40 rounded-2xl p-4 border border-amber-800/30">
+            <div className="bg-slate-800/40 rounded-2xl p-4 border border-slate-700/50">
               <h3 className="text-amber-300 text-sm font-bold mb-3">{'\u{1F4A8}'} AERODYNAMICS</h3>
               {currentFrame && (() => {
                 const aeroForces = aero.calculateForces(currentFrame.speed, currentFrame.drs);
@@ -329,14 +329,14 @@ export const RaceEngineeringDashboard: React.FC<RaceEngineeringDashboardProps> =
             </div>
 
             {/* Engineer Messages */}
-            <div className="md:col-span-2 lg:col-span-3 bg-amber-900/40 rounded-2xl p-4 border border-amber-800/30">
+            <div className="md:col-span-2 lg:col-span-3 bg-slate-800/40 rounded-2xl p-4 border border-slate-700/50">
               <h3 className="text-amber-300 text-sm font-bold mb-3">{'\u260E'} RACE ENGINEER</h3>
               <div className="space-y-2 max-h-32 overflow-y-auto">
                 {engineerMessages.slice(-5).reverse().map(msg => (
                   <div key={msg.id} className={`text-sm px-3 py-2 rounded-xl ${
                     msg.priority === 'critical' ? 'bg-red-500/20 text-red-300' :
                     msg.priority === 'high' ? 'bg-orange-500/20 text-orange-300' :
-                    'bg-amber-950/40 text-amber-200'
+                    'bg-slate-900/60 text-amber-200'
                   }`}>
                     <span className="text-amber-500 text-xs mr-2">[{msg.category.toUpperCase()}]</span>
                     {msg.message}
@@ -353,7 +353,7 @@ export const RaceEngineeringDashboard: React.FC<RaceEngineeringDashboardProps> =
         {activeTab === 'telemetry' && (
           <div className="space-y-4">
             {/* Speed trace */}
-            <div className="bg-amber-900/40 rounded-2xl p-4 border border-amber-800/30">
+            <div className="bg-slate-800/40 rounded-2xl p-4 border border-slate-700/50">
               <h3 className="text-amber-300 text-sm font-bold mb-3">SPEED TRACE</h3>
               <div className="h-40 relative">
                 <svg viewBox="0 0 1000 160" className="w-full h-full">
@@ -369,7 +369,7 @@ export const RaceEngineeringDashboard: React.FC<RaceEngineeringDashboardProps> =
               </div>
             </div>
             {/* Throttle/Brake trace */}
-            <div className="bg-amber-900/40 rounded-2xl p-4 border border-amber-800/30">
+            <div className="bg-slate-800/40 rounded-2xl p-4 border border-slate-700/50">
               <h3 className="text-amber-300 text-sm font-bold mb-3">THROTTLE / BRAKE</h3>
               <div className="h-32 relative">
                 <svg viewBox="0 0 1000 128" className="w-full h-full">
@@ -389,13 +389,13 @@ export const RaceEngineeringDashboard: React.FC<RaceEngineeringDashboardProps> =
               </div>
             </div>
             {/* G-Force */}
-            <div className="bg-amber-900/40 rounded-2xl p-4 border border-amber-800/30">
+            <div className="bg-slate-800/40 rounded-2xl p-4 border border-slate-700/50">
               <h3 className="text-amber-300 text-sm font-bold mb-3">G-FORCE</h3>
               <div className="flex items-center justify-center">
                 <div className="relative w-40 h-40">
-                  <div className="absolute inset-0 rounded-full border border-amber-800/30" />
-                  <div className="absolute inset-4 rounded-full border border-amber-800/20" />
-                  <div className="absolute inset-8 rounded-full border border-amber-800/10" />
+                  <div className="absolute inset-0 rounded-full border border-slate-700/50" />
+                  <div className="absolute inset-4 rounded-full border border-slate-800" />
+                  <div className="absolute inset-8 rounded-full border border-slate-700/10" />
                   <div className="absolute w-full h-px bg-amber-800/20 top-1/2" />
                   <div className="absolute h-full w-px bg-amber-800/20 left-1/2" />
                   {currentFrame && (
@@ -423,7 +423,7 @@ export const RaceEngineeringDashboard: React.FC<RaceEngineeringDashboardProps> =
           <div className="space-y-4">
             <h3 className="text-amber-300 text-sm font-bold">RACE STRATEGIES</h3>
             {strategies.slice(0, 8).map((s, i) => (
-              <div key={s.id} className={`bg-amber-900/40 rounded-2xl p-4 border ${i === 0 ? 'border-amber-500/50' : 'border-amber-800/30'}`}>
+              <div key={s.id} className={`bg-slate-800/40 rounded-2xl p-4 border ${i === 0 ? 'border-amber-500/50' : 'border-slate-700/50'}`}>
                 <div className="flex justify-between items-center">
                   <div>
                     <span className="text-amber-100 font-bold text-sm">{s.name}</span>
@@ -458,7 +458,7 @@ export const RaceEngineeringDashboard: React.FC<RaceEngineeringDashboardProps> =
               const compound = tire.getCompound();
               const tempNorm = Math.min(1, state.temperature / 120);
               return (
-                <div key={pos} className="bg-amber-900/40 rounded-2xl p-4 border border-amber-800/30">
+                <div key={pos} className="bg-slate-800/40 rounded-2xl p-4 border border-slate-700/50">
                   <div className="flex justify-between items-center mb-3">
                     <h4 className="text-amber-100 font-bold">{pos} — {compound.name} {compound.emoji}</h4>
                     <div className="w-3 h-3 rounded-full" style={{ backgroundColor: compound.color }} />
@@ -471,7 +471,7 @@ export const RaceEngineeringDashboard: React.FC<RaceEngineeringDashboardProps> =
                   </div>
                   <div className="mt-3">
                     <div className="flex justify-between text-xs text-amber-500"><span>Wear</span><span>{state.wear.toFixed(1)}%</span></div>
-                    <div className="w-full h-2 bg-amber-950 rounded-full mt-1">
+                    <div className="w-full h-2 bg-slate-950 rounded-full mt-1">
                       <div className="h-full rounded-full transition-all" style={{
                         width: `${state.wear}%`,
                         backgroundColor: state.wear > 70 ? '#ef4444' : state.wear > 40 ? '#facc15' : '#22c55e',
@@ -488,7 +488,7 @@ export const RaceEngineeringDashboard: React.FC<RaceEngineeringDashboardProps> =
           <div className="space-y-4">
             {weatherState && (
               <>
-                <div className="bg-amber-900/40 rounded-2xl p-4 border border-amber-800/30">
+                <div className="bg-slate-800/40 rounded-2xl p-4 border border-slate-700/50">
                   <h3 className="text-amber-300 text-sm font-bold mb-3">CURRENT CONDITIONS</h3>
                   <div className="grid grid-cols-3 gap-4 text-sm">
                     <div><span className="text-amber-500">Condition</span><p className="text-amber-100 font-bold capitalize">{weatherState.condition.replace('_', ' ')}</p></div>
@@ -502,7 +502,7 @@ export const RaceEngineeringDashboard: React.FC<RaceEngineeringDashboardProps> =
                     <div><span className="text-amber-500">Rain</span><p className="text-amber-100 font-bold">{(weatherState.rainIntensity * 100).toFixed(0)}%</p></div>
                   </div>
                 </div>
-                <div className="bg-amber-900/40 rounded-2xl p-4 border border-amber-800/30">
+                <div className="bg-slate-800/40 rounded-2xl p-4 border border-slate-700/50">
                   <h3 className="text-amber-300 text-sm font-bold mb-3">TIRE RECOMMENDATION</h3>
                   <div className="flex items-center gap-3">
                     <div className="w-8 h-8 rounded-full" style={{
@@ -521,15 +521,15 @@ export const RaceEngineeringDashboard: React.FC<RaceEngineeringDashboardProps> =
 
         {activeTab === 'engineer' && (
           <div className="space-y-4">
-            <div className="bg-amber-900/40 rounded-2xl p-4 border border-amber-800/30">
+            <div className="bg-slate-800/40 rounded-2xl p-4 border border-slate-700/50">
               <h3 className="text-amber-300 text-sm font-bold mb-3">ENGINEER RADIO</h3>
               <div className="space-y-2 max-h-96 overflow-y-auto">
                 {engineerMessages.map(msg => (
                   <div key={msg.id} className={`p-3 rounded-xl text-sm ${
                     msg.priority === 'critical' ? 'bg-red-500/20 text-red-300 border border-red-500/30' :
                     msg.priority === 'high' ? 'bg-orange-500/15 text-orange-300 border border-orange-500/20' :
-                    msg.priority === 'medium' ? 'bg-amber-950/40 text-amber-200 border border-amber-800/20' :
-                    'bg-amber-950/20 text-amber-300/70'
+                    msg.priority === 'medium' ? 'bg-slate-900/60 text-amber-200 border border-slate-800' :
+                    'bg-slate-900/50 text-amber-300/70'
                   }`}>
                     <div className="flex justify-between items-start">
                       <span className={`text-xs font-bold uppercase ${

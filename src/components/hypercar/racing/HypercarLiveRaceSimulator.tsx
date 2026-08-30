@@ -190,7 +190,7 @@ export const HypercarLiveRaceSimulator: React.FC<HypercarLiveRaceSimulatorProps>
   }, [isPlaying, playbackSpeed, raceFinished]);
 
   return (
-    <div className="w-full h-full flex flex-col bg-amber-950/60 text-white select-none relative overflow-hidden">
+    <div className="w-full h-full flex flex-col bg-slate-900/80 text-white select-none relative overflow-hidden">
       {/* Dynamic 24H Atmosphere Sky Gradient Layer */}
       <div
         className={`absolute inset-0 pointer-events-none transition-colors duration-1000 opacity-25 ${

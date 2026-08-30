@@ -18,7 +18,7 @@ export const CFDVisualizationToggle: React.FC<CFDVisualizationToggleProps> = ({
   return (
     <div className={`flex flex-wrap items-center justify-between gap-4 w-full select-none ${className}`}>
       {/* Left Scene Mode Pill Bar (Track, Wind Tunnel, Lab, R&D, Showroom) */}
-      <div className="flex items-center gap-1.5 p-1.5 rounded-full bg-amber-950/60/85 backdrop-blur-2xl border border-white/12 shadow-[0_15px_40px_rgba(0,0,0,0.5)]">
+      <div className="flex items-center gap-1.5 p-1.5 rounded-full bg-slate-900/80/85 backdrop-blur-2xl border border-white/12 shadow-[0_15px_40px_rgba(0,0,0,0.5)]">
         {[
           { id: "track" as const, label: "Track" },
           { id: "wind_tunnel" as const, label: "Wind Tunnel" },
@@ -61,7 +61,7 @@ export const CFDVisualizationToggle: React.FC<CFDVisualizationToggleProps> = ({
       {/* Right Controls: CFD Visualization Toggle & Apex AI Floating Button */}
       <div className="flex items-center gap-3">
         {/* CFD Visualization Toggle */}
-        <div className="flex items-center gap-3 px-4 py-2 rounded-full bg-amber-950/60/85 backdrop-blur-2xl border border-white/12 shadow-[0_15px_40px_rgba(0,0,0,0.5)]">
+        <div className="flex items-center gap-3 px-4 py-2 rounded-full bg-slate-900/80/85 backdrop-blur-2xl border border-white/12 shadow-[0_15px_40px_rgba(0,0,0,0.5)]">
           <span className="text-xs font-bold text-slate-200">
             CFD Visualization
           </span>
@@ -105,7 +105,7 @@ export const CFDVisualizationToggle: React.FC<CFDVisualizationToggleProps> = ({
           onClick={() => {
             playHMIClickSound();
           }}
-          className="flex items-center gap-2 px-4 py-2 rounded-full bg-amber-950/60/90 hover:bg-amber-950/60 backdrop-blur-2xl border border-white/12 text-slate-200 text-xs font-bold shadow-[0_10px_30px_rgba(0,0,0,0.6)] cursor-pointer transition-all"
+          className="flex items-center gap-2 px-4 py-2 rounded-full bg-slate-900/80/90 hover:bg-slate-900/80 backdrop-blur-2xl border border-white/12 text-slate-200 text-xs font-bold shadow-[0_10px_30px_rgba(0,0,0,0.6)] cursor-pointer transition-all"
         >
           <Bot size={15} className="text-amber-300/90" />
           <span>Apex AI</span>

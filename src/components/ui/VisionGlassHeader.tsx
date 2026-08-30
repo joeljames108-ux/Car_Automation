@@ -240,7 +240,7 @@ function VisionGlassHeaderComponent({
                 padding: "3px 7px", borderRadius: 7,
                 fontSize: 10, fontWeight: units === u ? 700 : 500,
                 background: units === u ? "#ffffff" : "transparent",
-                color: units === u ? "#1a1008" : "#94a3b8",
+                color: units === u ? "#080c14" : "#94a3b8",
                 border: "none", cursor: "pointer",
                 transition: "all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1)",
                 boxShadow: units === u ? "0 1px 3px rgba(0,0,0,0.15)" : "none",

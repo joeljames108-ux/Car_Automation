@@ -81,9 +81,9 @@ export const TrunkLidSVG: React.FC<TrunkLidSVGProps> = ({
 
       {/* ── 3. Heat Extraction Louvers Behind Glass ── */}
       <g id="decklid_cooling_louvers">
-        <line x1="680" y1="272" x2="720" y2="280" stroke="#1a1008" strokeWidth="2.0" />
-        <line x1="685" y1="276" x2="725" y2="284" stroke="#1a1008" strokeWidth="2.0" />
-        <line x1="690" y1="280" x2="730" y2="288" stroke="#1a1008" strokeWidth="2.0" />
+        <line x1="680" y1="272" x2="720" y2="280" stroke="#080c14" strokeWidth="2.0" />
+        <line x1="685" y1="276" x2="725" y2="284" stroke="#080c14" strokeWidth="2.0" />
+        <line x1="690" y1="280" x2="730" y2="288" stroke="#080c14" strokeWidth="2.0" />
       </g>
 
       {/* ── 4. Ducktail Aerodynamic Trailing Lip ── */}

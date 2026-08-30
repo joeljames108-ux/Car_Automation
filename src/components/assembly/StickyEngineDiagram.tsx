@@ -118,7 +118,7 @@ function StickyEngineDiagramComponent({
           {activeComponentId && (
             <button
               onClick={onSkipAnimation}
-              className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-base-950/80 border border-amber-500/40 text-amber-300 hover:bg-amber-950/40 text-[11px] font-mono font-bold transition-all cursor-pointer"
+              className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-base-950/80 border border-amber-500/40 text-amber-300 hover:bg-slate-900/60 text-[11px] font-mono font-bold transition-all cursor-pointer"
             >
               <SkipForward size={11} /> Skip
             </button>

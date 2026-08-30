@@ -47,7 +47,7 @@ export const TireSVG: React.FC<TireSVGProps> = ({
       onMouseLeave={onMouseLeave}
     >
       {/* ── 1. Outer Tire Rubber Donut ── */}
-      <circle cx={cx} cy={cy} r={outerR} fill="url(#tireRubberTread)" stroke="#1a1008" strokeWidth="2.0" />
+      <circle cx={cx} cy={cy} r={outerR} fill="url(#tireRubberTread)" stroke="#080c14" strokeWidth="2.0" />
 
       {/* Rim Bead Seat Cutout */}
       <circle cx={cx} cy={cy} r={innerR} fill="none" stroke="#020617" strokeWidth="1.5" />

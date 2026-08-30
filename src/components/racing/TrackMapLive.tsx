@@ -78,7 +78,7 @@ export const TrackMapLive: React.FC<TrackMapLiveProps> = memo(function TrackMapL
   };
 
   return (
-    <div className="bg-amber-900/40 rounded-2xl p-4 border border-amber-800/30">
+    <div className="bg-slate-800/40 rounded-2xl p-4 border border-slate-700/50">
       <div className="flex justify-between items-center mb-3">
         <h3 className="text-amber-300 text-sm font-bold">{'\u2316'} TRACK MAP — {track.name.toUpperCase()}</h3>
         {safetyCarActive && <span className="text-yellow-400 text-xs font-bold animate-pulse">{'\u26A0'} SAFETY CAR</span>}

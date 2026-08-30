@@ -32,7 +32,7 @@ export const LUXURY_MATERIAL_CATALOG: MaterialSwatchItem[] = [
     id: "nappa_leather",
     name: "Obsidian Black Nappa",
     category: "leather",
-    previewGradient: "radial-gradient(circle at 35% 35%, #334155 0%, #1a1008 70%, #020617 100%)",
+    previewGradient: "radial-gradient(circle at 35% 35%, #334155 0%, #080c14 70%, #020617 100%)",
     roughness: 0.65,
     metalness: 0.1,
     description: "Ultra-fine grain bovine leather with natural breathable finish",
@@ -74,7 +74,7 @@ export const LUXURY_MATERIAL_CATALOG: MaterialSwatchItem[] = [
     id: "forged_carbon_composite",
     name: "Forged Carbon Marble",
     category: "carbon",
-    previewGradient: "radial-gradient(circle at 35% 35%, #64748b 0%, #334155 45%, #1a1008 100%)",
+    previewGradient: "radial-gradient(circle at 35% 35%, #64748b 0%, #334155 45%, #080c14 100%)",
     roughness: 0.35,
     metalness: 0.75,
     description: "Compression-moulded chopped carbon strand mosaic",
@@ -132,7 +132,7 @@ export const CONTRAST_STITCHING_COLORS = [
   { name: "Chalk White", hex: "#f8fafc" },
   { name: "Burnt Orange", hex: "#f97316" },
   { name: "Amethyst Purple", hex: "#f59e0b" },
-  { name: "Stealth Black", hex: "#1a1008" },
+  { name: "Stealth Black", hex: "#080c14" },
 ];
 
 export interface LuxuryMaterialSwatchWallProps {

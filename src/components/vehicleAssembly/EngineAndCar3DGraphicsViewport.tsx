@@ -62,7 +62,7 @@ export const CALIPER_PALETTE = [
   { name: "Acid Green", hex: "#84cc16" },
   { name: "Gold Anodized", hex: "#eab308" },
   { name: "Speed Yellow", hex: "#facc15" },
-  { name: "Gloss Black", hex: "#1a1008" },
+  { name: "Gloss Black", hex: "#080c14" },
 ];
 
 export type StudioLightingMode = "SOFTBOX_MAIN" | "CYBER_NEON" | "PROVING_GROUND_SUN";

@@ -219,8 +219,8 @@ export function StatDeltasPanel({
             />
 
             {/* Compression Rings */}
-            <line x1={cx - pistonWidth / 2} y1={bdcY + 4} x2={cx + pistonWidth / 2} y2={bdcY + 4} stroke="#1a1008" strokeWidth="1" />
-            <line x1={cx - pistonWidth / 2} y1={bdcY + 8} x2={cx + pistonWidth / 2} y2={bdcY + 8} stroke="#1a1008" strokeWidth="1" />
+            <line x1={cx - pistonWidth / 2} y1={bdcY + 4} x2={cx + pistonWidth / 2} y2={bdcY + 4} stroke="#080c14" strokeWidth="1" />
+            <line x1={cx - pistonWidth / 2} y1={bdcY + 8} x2={cx + pistonWidth / 2} y2={bdcY + 8} stroke="#080c14" strokeWidth="1" />
 
             {/* Connecting Rod */}
             <line

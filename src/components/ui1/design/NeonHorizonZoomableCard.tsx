@@ -88,7 +88,7 @@ export function NeonHorizonZoomableCard({
  }`}
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="rounded-3xl bg-amber-950/60/95 backdrop-blur-3xl border border-white/12 shadow-[0_40px_100px_rgba(0,0,0,0.8)] overflow-hidden p-6">
+            <div className="rounded-3xl bg-slate-900/80/95 backdrop-blur-3xl border border-white/12 shadow-[0_40px_100px_rgba(0,0,0,0.8)] overflow-hidden p-6">
               <div className="w-full flex items-center justify-between border-b border-white/10 pb-4 mb-4">
                 <button
                   onClick={closeZoomModal}

@@ -525,8 +525,8 @@ export function CarSilhouetteDiagram({ powerHp, downforceKg, weightKg, aeroBalan
           />
 
           {/* Wheels */}
-          <circle cx="85" cy="80" r="14" fill="#1a1008" stroke="#fbbf24" strokeWidth="3" />
-          <circle cx="280" cy="80" r="14" fill="#1a1008" stroke="#fbbf24" strokeWidth="3" />
+          <circle cx="85" cy="80" r="14" fill="#080c14" stroke="#fbbf24" strokeWidth="3" />
+          <circle cx="280" cy="80" r="14" fill="#080c14" stroke="#fbbf24" strokeWidth="3" />
 
           {/* Downforce Force Vectors (Arrows) */}
           {/* Front Wing Vector */}

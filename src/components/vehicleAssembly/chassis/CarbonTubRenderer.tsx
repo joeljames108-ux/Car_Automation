@@ -55,17 +55,17 @@ export const CarbonTubRenderer: React.FC<CarbonTubRendererProps> = ({ isHovered 
       </text>
 
       {/* 4. Front Carbon Nose Cone & Impact Crash Box */}
-      <path d="M 90 245 L 170 245 L 170 265 L 90 262 Z" fill="#1a1008" stroke="#fbbf24" strokeWidth="1.5" />
+      <path d="M 90 245 L 170 245 L 170 265 L 90 262 Z" fill="#080c14" stroke="#fbbf24" strokeWidth="1.5" />
       <line x1="130" y1="245" x2="130" y2="263" stroke="#fbbf24" strokeWidth="2" />
 
       {/* 5. Titanium Subframe Hardpoint Pickup Plates (Gold Iridescent) */}
       <rect x="220" y="210" width="20" height="35" rx="3" fill="url(#titanium-weld-tint)" stroke="#cbd5e1" strokeWidth="1.5" />
-      <circle cx="230" cy="220" r="3" fill="#1a1008" />
-      <circle cx="230" cy="235" r="3" fill="#1a1008" />
+      <circle cx="230" cy="220" r="3" fill="#080c14" />
+      <circle cx="230" cy="235" r="3" fill="#080c14" />
 
       <rect x="690" y="210" width="20" height="35" rx="3" fill="url(#titanium-weld-tint)" stroke="#cbd5e1" strokeWidth="1.5" />
-      <circle cx="700" cy="220" r="3" fill="#1a1008" />
-      <circle cx="700" cy="235" r="3" fill="#1a1008" />
+      <circle cx="700" cy="220" r="3" fill="#080c14" />
+      <circle cx="700" cy="235" r="3" fill="#080c14" />
 
       {/* 6. Honeycomb Core Cross-Section Rib Lines */}
       <path d="M 330 250 L 550 250" stroke="#f59e0b" strokeWidth="2" strokeDasharray="3 3" />

@@ -52,9 +52,9 @@ export const MotorsportEconomyProvingDeck: React.FC = () => {
   });
 
   return (
-    <div className="flex flex-col h-full w-full bg-amber-950/60 text-gray-100 p-4 gap-4 overflow-y-auto font-sans">
+    <div className="flex flex-col h-full w-full bg-slate-900/80 text-gray-100 p-4 gap-4 overflow-y-auto font-sans">
       {/* Header Banner */}
-      <div className="flex flex-col md:flex-row items-start md:items-center justify-between px-6 py-4 rounded-2xl bg-amber-950/60 border border-[#162236] shadow-2xl gap-4">
+      <div className="flex flex-col md:flex-row items-start md:items-center justify-between px-6 py-4 rounded-2xl bg-slate-900/80 border border-[#162236] shadow-2xl gap-4">
         <div className="flex items-center gap-3.5">
           <div className="p-2.5 rounded-2xl bg-gradient-to-tr from-rose-500/20 via-amber-500/20 to-amber-500/20 border border-amber-500/40 text-amber-400">
             <Flame className="w-6 h-6 animate-pulse" />
@@ -75,11 +75,11 @@ export const MotorsportEconomyProvingDeck: React.FC = () => {
         </div>
 
         <div className="flex items-center gap-3 font-mono text-xs">
-          <div className="px-3 py-1.5 rounded-xl bg-amber-950/60 border border-[#1c2c47] text-gray-300">
+          <div className="px-3 py-1.5 rounded-xl bg-slate-900/80 border border-[#1c2c47] text-gray-300">
             <span className="text-gray-500 mr-2">Desmo Max:</span>
             <span className="text-amber-400 font-bold">{valvetrainResult.maxEngineSpeedRpm} RPM</span>
           </div>
-          <div className="px-3 py-1.5 rounded-xl bg-amber-950/60 border border-[#1c2c47] text-gray-300">
+          <div className="px-3 py-1.5 rounded-xl bg-slate-900/80 border border-[#1c2c47] text-gray-300">
             <span className="text-gray-500 mr-2">Rotary Power:</span>
             <span className="text-rose-400 font-bold">{rotaryResult.brakeHorsepowerBhp} BHP</span>
           </div>
@@ -102,7 +102,7 @@ export const MotorsportEconomyProvingDeck: React.FC = () => {
               className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-mono font-bold whitespace-nowrap transition-all border ${
                 isActive
                   ? 'bg-gradient-to-r from-amber-500/20 to-rose-500/20 border-amber-500/50 text-white shadow-lg'
-                  : 'bg-amber-950/60 border-[#131d2e] text-gray-400 hover:text-gray-200'
+                  : 'bg-slate-900/80 border-[#131d2e] text-gray-400 hover:text-gray-200'
               }`}
             >
               <Icon className={`w-4 h-4 ${isActive ? 'text-amber-400' : 'text-gray-500'}`} />
@@ -117,11 +117,11 @@ export const MotorsportEconomyProvingDeck: React.FC = () => {
         {/* TAB 1: Desmodromic Valvetrain */}
         {activeTab === 'DESMODROMIC_VALVETRAIN' && (
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 flex-1">
-            <div className="flex flex-col p-5 rounded-2xl bg-amber-950/60 border border-[#162236] gap-4">
+            <div className="flex flex-col p-5 rounded-2xl bg-slate-900/80 border border-[#162236] gap-4">
               <h3 className="text-xs font-bold text-amber-400 font-mono flex items-center gap-2">
                 <Gauge className="w-4 h-4" /> VALVE KINEMATICS & FLOAT ELIMINATION
               </h3>
-              <div className="p-4 rounded-xl bg-amber-950/60 border border-[#101826] flex flex-col gap-2 font-mono text-xs">
+              <div className="p-4 rounded-xl bg-slate-900/80 border border-[#101826] flex flex-col gap-2 font-mono text-xs">
                 <div className="flex justify-between">
                   <span className="text-gray-400">VALVE FLOAT STATUS:</span>
                   <span className="text-emerald-400 font-bold">100% ELIMINATED (Positive Drive)</span>
@@ -154,11 +154,11 @@ export const MotorsportEconomyProvingDeck: React.FC = () => {
               </div>
             </div>
 
-            <div className="lg:col-span-2 flex flex-col p-5 rounded-2xl bg-amber-950/60 border border-[#162236] gap-4">
+            <div className="lg:col-span-2 flex flex-col p-5 rounded-2xl bg-slate-900/80 border border-[#162236] gap-4">
               <h3 className="text-xs font-bold text-gray-200 font-mono">720° 4-STROKE VALVE LIFT & CONTACT STRESS PROFILE</h3>
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 font-mono text-xs">
                 {valvetrainResult.liftProfilePoints.filter(p => p.crankAngleDeg >= 300 && p.crankAngleDeg <= 600).slice(0, 8).map((pt) => (
-                  <div key={pt.crankAngleDeg} className="p-3 rounded-xl bg-amber-950/60 border border-[#101826] flex flex-col gap-1">
+                  <div key={pt.crankAngleDeg} className="p-3 rounded-xl bg-slate-900/80 border border-[#101826] flex flex-col gap-1">
                     <span className="text-[10px] text-gray-400">{pt.crankAngleDeg}° CA</span>
                     <span className="text-amber-400 font-bold">Lift: {pt.intakeLiftMm} mm</span>
                     <span className="text-amber-400">{pt.hertzianContactStressMpa} MPa</span>
@@ -173,11 +173,11 @@ export const MotorsportEconomyProvingDeck: React.FC = () => {
         {/* TAB 2: Tri-Rotor Wankel */}
         {activeTab === 'TRI_ROTOR_WANKEL' && (
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 flex-1">
-            <div className="flex flex-col p-5 rounded-2xl bg-amber-950/60 border border-[#162236] gap-4">
+            <div className="flex flex-col p-5 rounded-2xl bg-slate-900/80 border border-[#162236] gap-4">
               <h3 className="text-xs font-bold text-rose-400 font-mono flex items-center gap-2">
                 <Flame className="w-4 h-4" /> 3-ROTOR 20B TURBOCHARGED ROTARY
               </h3>
-              <div className="p-4 rounded-xl bg-amber-950/60 border border-[#101826] flex flex-col gap-2 font-mono text-xs">
+              <div className="p-4 rounded-xl bg-slate-900/80 border border-[#101826] flex flex-col gap-2 font-mono text-xs">
                 <div className="flex justify-between">
                   <span className="text-gray-400">OUTPUT POWER:</span>
                   <span className="text-rose-400 font-bold">{rotaryResult.brakeHorsepowerBhp} BHP ({rotaryResult.brakeTorqueNm} Nm)</span>
@@ -210,11 +210,11 @@ export const MotorsportEconomyProvingDeck: React.FC = () => {
               </div>
             </div>
 
-            <div className="lg:col-span-2 flex flex-col p-5 rounded-2xl bg-amber-950/60 border border-[#162236] gap-4">
+            <div className="lg:col-span-2 flex flex-col p-5 rounded-2xl bg-slate-900/80 border border-[#162236] gap-4">
               <h3 className="text-xs font-bold text-gray-200 font-mono">360° EPITROCHOID ROTOR CHAMBER INDICATOR (P-V CYCLE)</h3>
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 font-mono text-xs">
                 {rotaryResult.chamberIndicatorDiagram.filter((_, idx) => idx % 4 === 0).slice(0, 8).map((pt) => (
-                  <div key={pt.rotorAngleDeg} className="p-3 rounded-xl bg-amber-950/60 border border-[#101826] flex flex-col gap-1">
+                  <div key={pt.rotorAngleDeg} className="p-3 rounded-xl bg-slate-900/80 border border-[#101826] flex flex-col gap-1">
                     <span className="text-[10px] text-gray-400">Rotor {pt.rotorAngleDeg}°</span>
                     <span className="text-rose-400 font-bold">{pt.cylinderPressureBar} bar</span>
                     <span className="text-amber-400">v_slide: {pt.apexSealSlidingVelocityMs} m/s</span>
@@ -229,11 +229,11 @@ export const MotorsportEconomyProvingDeck: React.FC = () => {
         {/* TAB 3: Global Macro-Economy */}
         {activeTab === 'GLOBAL_MACRO_ECONOMY' && (
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 flex-1">
-            <div className="flex flex-col p-5 rounded-2xl bg-amber-950/60 border border-[#162236] gap-4">
+            <div className="flex flex-col p-5 rounded-2xl bg-slate-900/80 border border-[#162236] gap-4">
               <h3 className="text-xs font-bold text-emerald-400 font-mono flex items-center gap-2">
                 <DollarSign className="w-4 h-4" /> BOM COST & PRICE ELASTICITY
               </h3>
-              <div className="p-4 rounded-xl bg-amber-950/60 border border-[#101826] flex flex-col gap-2 font-mono text-xs">
+              <div className="p-4 rounded-xl bg-slate-900/80 border border-[#101826] flex flex-col gap-2 font-mono text-xs">
                 <div className="flex justify-between">
                   <span className="text-gray-400">TOTAL BOM COST:</span>
                   <span className="text-gray-100 font-bold">${economyReport.totalVehicleBomCostUsd.toLocaleString()}</span>
@@ -260,7 +260,7 @@ export const MotorsportEconomyProvingDeck: React.FC = () => {
                     className={`flex-1 py-2 rounded-xl text-[10px] font-mono font-bold border transition-all ${
                       economyCycle === cycle
                         ? 'bg-emerald-500/20 text-emerald-400 border-emerald-500/40'
-                        : 'bg-amber-950/60 text-gray-400 border-[#1c2c47]'
+                        : 'bg-slate-900/80 text-gray-400 border-[#1c2c47]'
                     }`}
                   >
                     {cycle.replace('_', ' ')}
@@ -269,11 +269,11 @@ export const MotorsportEconomyProvingDeck: React.FC = () => {
               </div>
             </div>
 
-            <div className="lg:col-span-2 flex flex-col p-5 rounded-2xl bg-amber-950/60 border border-[#162236] gap-4">
+            <div className="lg:col-span-2 flex flex-col p-5 rounded-2xl bg-slate-900/80 border border-[#162236] gap-4">
               <h3 className="text-xs font-bold text-gray-200 font-mono">RAW MATERIAL COMMODITY SPOT PRICE INDICES</h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 font-mono text-xs">
                 {economyReport.rawMaterialCommodities.map((c) => (
-                  <div key={c.commodityId} className="p-3.5 rounded-xl bg-amber-950/60 border border-[#101826] flex flex-col gap-1.5">
+                  <div key={c.commodityId} className="p-3.5 rounded-xl bg-slate-900/80 border border-[#101826] flex flex-col gap-1.5">
                     <div className="flex justify-between items-center">
                       <span className="text-gray-300 font-bold text-[11px]">{c.name}</span>
                       <span className={`text-[10px] font-bold ${c.thirtyDayChangePct >= 0 ? 'text-rose-400' : 'text-emerald-400'}`}>

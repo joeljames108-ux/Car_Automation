@@ -44,9 +44,9 @@ export const MasterMultiPhysicsProvingDeck: React.FC = () => {
   });
 
   return (
-    <div className="flex flex-col h-full w-full bg-amber-950/60 text-gray-100 p-4 gap-4 overflow-y-auto font-sans">
+    <div className="flex flex-col h-full w-full bg-slate-900/80 text-gray-100 p-4 gap-4 overflow-y-auto font-sans">
       {/* Studio Header Ribbon */}
-      <div className="flex items-center justify-between px-5 py-3 rounded-2xl bg-amber-950/60 border border-[#182133] shadow-lg">
+      <div className="flex items-center justify-between px-5 py-3 rounded-2xl bg-slate-900/80 border border-[#182133] shadow-lg">
         <div className="flex items-center gap-3">
           <div className="p-2 rounded-xl bg-gradient-to-tr from-amber-500/20 to-rose-500/20 border border-amber-500/40 text-amber-400">
             <Activity className="w-5 h-5" />
@@ -65,7 +65,7 @@ export const MasterMultiPhysicsProvingDeck: React.FC = () => {
         <select
           value={splitterMode}
           onChange={(e) => setSplitterMode(e.target.value as ActiveSplitterMode)}
-          className="bg-amber-950/60 text-amber-400 text-xs font-bold font-mono px-3 py-1.5 rounded-xl border border-amber-500/40 cursor-pointer"
+          className="bg-slate-900/80 text-amber-400 text-xs font-bold font-mono px-3 py-1.5 rounded-xl border border-amber-500/40 cursor-pointer"
         >
           <option value="TRACK_EXTENDED_DOWNFORCE">Track Extended (+60mm / -3.5°)</option>
           <option value="DRS_HIGH_SPEED_TRIM">DRS High-Speed Trim</option>
@@ -76,7 +76,7 @@ export const MasterMultiPhysicsProvingDeck: React.FC = () => {
       {/* Main 4-Card 2x2 Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 flex-1">
         {/* Card 1: 2500-Bar Piezo Common Rail */}
-        <div className="flex flex-col p-4 rounded-2xl bg-amber-950/60 border border-[#182133] gap-3">
+        <div className="flex flex-col p-4 rounded-2xl bg-slate-900/80 border border-[#182133] gap-3">
           <div className="flex items-center justify-between pb-2 border-b border-[#182133]">
             <div className="flex items-center gap-2 text-rose-400 font-bold text-xs">
               <Flame className="w-4 h-4" />
@@ -88,7 +88,7 @@ export const MasterMultiPhysicsProvingDeck: React.FC = () => {
           </div>
 
           {/* Engine Load Slider */}
-          <div className="flex items-center justify-between p-3 bg-amber-950/60 rounded-xl border border-[#141b2b] text-xs font-mono">
+          <div className="flex items-center justify-between p-3 bg-slate-900/80 rounded-xl border border-[#141b2b] text-xs font-mono">
             <span className="text-gray-400">ENGINE LOAD: {engineLoad}% ({railState.railPressureBar} bar)</span>
             <input
               type="range"
@@ -101,11 +101,11 @@ export const MasterMultiPhysicsProvingDeck: React.FC = () => {
           </div>
 
           <div className="grid grid-cols-2 gap-2 text-xs font-mono">
-            <div className="p-2.5 rounded-xl bg-amber-950/60 border border-[#1c263d]">
+            <div className="p-2.5 rounded-xl bg-slate-900/80 border border-[#1c263d]">
               <div className="text-gray-400 text-[10px]">FUEL MASS PER CYCLE</div>
               <div className="text-sm font-bold text-rose-400">{railState.totalFuelInjectedPerCycleMg} mg (5 Pulses)</div>
             </div>
-            <div className="p-2.5 rounded-xl bg-amber-950/60 border border-[#1c263d]">
+            <div className="p-2.5 rounded-xl bg-slate-900/80 border border-[#1c263d]">
               <div className="text-gray-400 text-[10px]">SOOT REDUCTION</div>
               <div className="text-sm font-bold text-emerald-400">{railState.sootReductionEfficiencyPct}% Clean</div>
             </div>
@@ -113,7 +113,7 @@ export const MasterMultiPhysicsProvingDeck: React.FC = () => {
         </div>
 
         {/* Card 2: Carbon-Ceramic Thermal Stress FEA */}
-        <div className="flex flex-col p-4 rounded-2xl bg-amber-950/60 border border-[#182133] gap-3">
+        <div className="flex flex-col p-4 rounded-2xl bg-slate-900/80 border border-[#182133] gap-3">
           <div className="flex items-center justify-between pb-2 border-b border-[#182133]">
             <div className="flex items-center gap-2 text-amber-400 font-bold text-xs">
               <Disc className="w-4 h-4" />
@@ -125,7 +125,7 @@ export const MasterMultiPhysicsProvingDeck: React.FC = () => {
           </div>
 
           {/* Braking Power Slider */}
-          <div className="flex items-center justify-between p-3 bg-amber-950/60 rounded-xl border border-[#141b2b] text-xs font-mono">
+          <div className="flex items-center justify-between p-3 bg-slate-900/80 rounded-xl border border-[#141b2b] text-xs font-mono">
             <span className="text-gray-400">BRAKE POWER: {brakingPower} kW/wheel</span>
             <input
               type="range"
@@ -139,11 +139,11 @@ export const MasterMultiPhysicsProvingDeck: React.FC = () => {
           </div>
 
           <div className="grid grid-cols-2 gap-2 text-xs font-mono">
-            <div className="p-2.5 rounded-xl bg-amber-950/60 border border-[#1c263d]">
+            <div className="p-2.5 rounded-xl bg-slate-900/80 border border-[#1c263d]">
               <div className="text-gray-400 text-[10px]">HOOP STRESS</div>
               <div className="text-sm font-bold text-gray-200">{ccmState.peakThermoElasticHoopStressMpa} MPa</div>
             </div>
-            <div className="p-2.5 rounded-xl bg-amber-950/60 border border-[#1c263d]">
+            <div className="p-2.5 rounded-xl bg-slate-900/80 border border-[#1c263d]">
               <div className="text-gray-400 text-[10px]">DELAMINATION SF</div>
               <div className="text-sm font-bold text-emerald-400">{ccmState.delaminationSafetyFactor}x Safe</div>
             </div>
@@ -151,7 +151,7 @@ export const MasterMultiPhysicsProvingDeck: React.FC = () => {
         </div>
 
         {/* Card 3: Active Front Splitter & S-Duct */}
-        <div className="flex flex-col p-4 rounded-2xl bg-amber-950/60 border border-[#182133] gap-3">
+        <div className="flex flex-col p-4 rounded-2xl bg-slate-900/80 border border-[#182133] gap-3">
           <div className="flex items-center justify-between pb-2 border-b border-[#182133]">
             <div className="flex items-center gap-2 text-amber-400 font-bold text-xs">
               <Wind className="w-4 h-4" />
@@ -162,12 +162,12 @@ export const MasterMultiPhysicsProvingDeck: React.FC = () => {
             </span>
           </div>
 
-          <div className="grid grid-cols-2 gap-2 p-3 bg-amber-950/60 rounded-xl border border-[#141b2b] text-xs font-mono">
-            <div className="p-2 rounded-lg bg-amber-950/60 border border-[#182133]">
+          <div className="grid grid-cols-2 gap-2 p-3 bg-slate-900/80 rounded-xl border border-[#141b2b] text-xs font-mono">
+            <div className="p-2 rounded-lg bg-slate-900/80 border border-[#182133]">
               <div className="text-gray-400 text-[10px]">SPLITTER LOAD</div>
               <div className="text-amber-400 font-bold">{frontAeroState.frontSplitterDownforceN} N</div>
             </div>
-            <div className="p-2 rounded-lg bg-amber-950/60 border border-[#182133]">
+            <div className="p-2 rounded-lg bg-slate-900/80 border border-[#182133]">
               <div className="text-gray-400 text-[10px]">S-DUCT JET LOAD</div>
               <div className="text-emerald-400 font-bold">{frontAeroState.hoodSDuctDownforceN} N</div>
             </div>
@@ -175,7 +175,7 @@ export const MasterMultiPhysicsProvingDeck: React.FC = () => {
         </div>
 
         {/* Card 4: Autonomous Model Predictive Control (MPC) */}
-        <div className="flex flex-col p-4 rounded-2xl bg-amber-950/60 border border-[#182133] gap-3">
+        <div className="flex flex-col p-4 rounded-2xl bg-slate-900/80 border border-[#182133] gap-3">
           <div className="flex items-center justify-between pb-2 border-b border-[#182133]">
             <div className="flex items-center gap-2 text-amber-400 font-bold text-xs">
               <Navigation className="w-4 h-4" />
@@ -187,7 +187,7 @@ export const MasterMultiPhysicsProvingDeck: React.FC = () => {
           </div>
 
           {/* Cross-track Slider */}
-          <div className="flex items-center justify-between p-3 bg-amber-950/60 rounded-xl border border-[#141b2b] text-xs font-mono">
+          <div className="flex items-center justify-between p-3 bg-slate-900/80 rounded-xl border border-[#141b2b] text-xs font-mono">
             <span className="text-gray-400">CROSS-TRACK ERROR: {lateralOffset} m</span>
             <input
               type="range"
@@ -201,11 +201,11 @@ export const MasterMultiPhysicsProvingDeck: React.FC = () => {
           </div>
 
           <div className="grid grid-cols-2 gap-2 text-xs font-mono">
-            <div className="p-2.5 rounded-xl bg-amber-950/60 border border-[#1c263d]">
+            <div className="p-2.5 rounded-xl bg-slate-900/80 border border-[#1c263d]">
               <div className="text-gray-400 text-[10px]">STEERING COMMAND</div>
               <div className="text-sm font-bold text-amber-400">{mpcState.commandedSteeringAngleDeg}°</div>
             </div>
-            <div className="p-2.5 rounded-xl bg-amber-950/60 border border-[#1c263d]">
+            <div className="p-2.5 rounded-xl bg-slate-900/80 border border-[#1c263d]">
               <div className="text-gray-400 text-[10px]">QP COST VALUE</div>
               <div className="text-sm font-bold text-emerald-400">{mpcState.qpOptimizationCost}</div>
             </div>

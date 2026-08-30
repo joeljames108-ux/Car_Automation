@@ -63,11 +63,11 @@ export const VehicleCompletionModal: React.FC<VehicleCompletionModalProps> = ({
   ] as any;
 
   return createPortal(
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-amber-950/60/90 backdrop-blur-2xl animate-stage-transition-enter select-none">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/80/90 backdrop-blur-2xl animate-stage-transition-enter select-none">
       {/* Background ambient lighting */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_30%,rgba(6,182,212,0.15),transparent_70%)] pointer-events-none" />
 
-      <div className="relative w-full max-w-4xl bg-amber-950/60 border border-amber-500/40 rounded-3xl p-6 shadow-[0_0_80px_rgba(6,182,212,0.25)] text-left space-y-6 overflow-hidden">
+      <div className="relative w-full max-w-4xl bg-slate-900/80 border border-amber-500/40 rounded-3xl p-6 shadow-[0_0_80px_rgba(6,182,212,0.25)] text-left space-y-6 overflow-hidden">
         {/* Header Title */}
         <div className="flex items-center justify-between border-b border-slate-800 pb-4">
           <div className="flex items-center gap-3">
@@ -102,7 +102,7 @@ export const VehicleCompletionModal: React.FC<VehicleCompletionModalProps> = ({
         </div>
 
         {/* 3D Blueprint Display Viewport */}
-        <div className="h-72 w-full rounded-2xl bg-amber-950/60 border border-amber-500/30 overflow-hidden flex items-center justify-center p-2 relative">
+        <div className="h-72 w-full rounded-2xl bg-slate-900/80 border border-amber-500/30 overflow-hidden flex items-center justify-center p-2 relative">
           <ModularExterior3DViewport
             className="w-full h-full"
           />

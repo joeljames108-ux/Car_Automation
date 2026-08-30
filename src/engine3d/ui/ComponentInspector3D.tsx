@@ -33,7 +33,7 @@ export const ComponentInspector3D: React.FC = () => {
               {manifest.category}
             </span>
             {instance.cylinderIndex && (
-              <span className="text-xs font-mono px-2 py-0.5 rounded bg-amber-950 text-amber-300 border border-indigo-800/60">
+              <span className="text-xs font-mono px-2 py-0.5 rounded bg-slate-950 text-amber-300 border border-indigo-800/60">
                 Cyl #{instance.cylinderIndex}
               </span>
             )}

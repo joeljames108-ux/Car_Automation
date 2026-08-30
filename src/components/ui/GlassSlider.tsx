@@ -44,7 +44,7 @@ function GlassSliderComponent({
         display: "flex",
         flexDirection: "column",
         gap: 8,
-        color: "#1a1008",
+        color: "#080c14",
         boxShadow: "0 8px 32px rgba(0, 0, 0, 0.12), inset 0 1px 0 rgba(255, 255, 255, 1.0)",
         transition: "border-color 0.2s ease, box-shadow 0.2s ease",
       }}

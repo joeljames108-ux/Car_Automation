@@ -570,7 +570,7 @@ const MasterVehicleStudioInner: React.FC = () => {
                   { hex: "#f59e0b", name: "Cyan Mist" },
                   { hex: "#10b981", name: "British Green" },
                   { hex: "#f59e0b", name: "Apex Gold" },
-                  { hex: "#1a1008", name: "Midnight Stealth" },
+                  { hex: "#080c14", name: "Midnight Stealth" },
                 ].map((color) => (
                   <button
                     key={color.hex}

@@ -131,7 +131,7 @@ export function NeonVariableCompressionStudio() {
             }}
             className="p-6 flex flex-col gap-4"
           >
-            <div className="w-full h-52 bg-amber-950/60 rounded-xl border border-sky-400/25 overflow-hidden relative shadow-[inset_0_0_25px_rgba(0,0,0,0.85)]">
+            <div className="w-full h-52 bg-slate-900/80 rounded-xl border border-sky-400/25 overflow-hidden relative shadow-[inset_0_0_25px_rgba(0,0,0,0.85)]">
               <canvas ref={canvasRef} width={640} height={210} className="w-full h-full" />
               <div className="absolute bottom-2 right-3 flex items-center gap-2">
                 <span className="text-[10px] nh-font-mono text-amber-400">CYLINDER VOLUME V (TDC → BDC)</span>
@@ -155,7 +155,7 @@ export function NeonVariableCompressionStudio() {
                     className={`p-2.5 rounded-lg border text-center text-xs font-bold cursor-pointer transition-all ${
  isSelected
  ? "bg-amber-500/20 border-amber-500/30 text-sky-200"
- : "bg-amber-950/60 border-white/10 text-slate-400 hover:border-sky-400/25"
+ : "bg-slate-900/80 border-white/10 text-slate-400 hover:border-sky-400/25"
  }`}
                   >
                     {c.name}
@@ -199,7 +199,7 @@ export function NeonVariableCompressionStudio() {
               onChange={(val) => setBoostBar(val)}
             />
 
-            <div className="p-3.5 rounded-xl bg-amber-950/60 border border-sky-400/15 flex flex-col gap-2 font-mono text-xs">
+            <div className="p-3.5 rounded-xl bg-slate-900/80 border border-sky-400/15 flex flex-col gap-2 font-mono text-xs">
               <div className="flex items-center justify-between">
                 <span className="text-slate-400">Harmonic Multi-Link Arm:</span>
                 <span className="text-amber-300 font-bold">120 ms Full Stroke</span>

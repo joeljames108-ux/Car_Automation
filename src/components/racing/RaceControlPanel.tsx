@@ -52,7 +52,7 @@ export const RaceControlPanel: React.FC<RaceControlPanelProps> = memo(function R
       </div>
 
       {/* Race Status */}
-      <div className="bg-amber-900/40 rounded-2xl p-4 border border-amber-800/30">
+      <div className="bg-slate-800/40 rounded-2xl p-4 border border-slate-700/50">
         <h3 className="text-amber-300 text-sm font-bold mb-3">RACE STATUS</h3>
         <div className="grid grid-cols-2 gap-3">
           <div className="text-center">
@@ -88,7 +88,7 @@ export const RaceControlPanel: React.FC<RaceControlPanelProps> = memo(function R
 
       {/* DRS Zones */}
       {state.drsZones.length > 0 && (
-        <div className="bg-amber-900/40 rounded-2xl p-4 border border-amber-800/30">
+        <div className="bg-slate-800/40 rounded-2xl p-4 border border-slate-700/50">
           <h3 className="text-amber-300 text-sm font-bold mb-3">DRS ZONES</h3>
           <div className="space-y-2">
             {state.drsZones.map(zone => (
@@ -104,7 +104,7 @@ export const RaceControlPanel: React.FC<RaceControlPanelProps> = memo(function R
       )}
 
       {/* Incidents */}
-      <div className="bg-amber-900/40 rounded-2xl p-4 border border-amber-800/30">
+      <div className="bg-slate-800/40 rounded-2xl p-4 border border-slate-700/50">
         <h3 className="text-amber-300 text-sm font-bold mb-3">INCIDENTS ({incidents.length})</h3>
         <div className="space-y-2 max-h-48 overflow-y-auto">
           {incidents.length === 0 ? (
@@ -114,7 +114,7 @@ export const RaceControlPanel: React.FC<RaceControlPanelProps> = memo(function R
               <div key={inc.id} className={`p-2 rounded-xl text-xs ${
                 inc.severity === 'critical' ? 'bg-red-500/20 text-red-300' :
                 inc.severity === 'major' ? 'bg-orange-500/15 text-orange-300' :
-                'bg-amber-950/30 text-amber-200'
+                'bg-slate-900/60 text-amber-200'
               }`}>
                 <div className="flex justify-between">
                   <span className="font-bold">{inc.type.replace('_', ' ').toUpperCase()}</span>
@@ -128,7 +128,7 @@ export const RaceControlPanel: React.FC<RaceControlPanelProps> = memo(function R
       </div>
 
       {/* Flag History */}
-      <div className="bg-amber-900/40 rounded-2xl p-4 border border-amber-800/30">
+      <div className="bg-slate-800/40 rounded-2xl p-4 border border-slate-700/50">
         <h3 className="text-amber-300 text-sm font-bold mb-3">FLAG HISTORY</h3>
         <div className="space-y-1 max-h-32 overflow-y-auto">
           {state.flags.slice(-10).reverse().map((f, i) => {

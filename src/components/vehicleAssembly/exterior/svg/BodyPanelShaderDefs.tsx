@@ -16,7 +16,7 @@ export const BodyPanelShaderDefs: React.FC<BodyPanelShaderDefsProps> = ({
   paintConfig,
 }) => {
   const primaryColor = paintConfig?.primaryColorHex || "#0284c7";
-  const secondaryColor = paintConfig?.secondaryColorHex || "#1a1008";
+  const secondaryColor = paintConfig?.secondaryColorHex || "#080c14";
   const finish = paintConfig?.finishType || "liquid_metallic";
 
   return (

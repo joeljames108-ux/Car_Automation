@@ -109,7 +109,7 @@ export const HypercarDeepRDLab: React.FC = memo(function HypercarDeepRDLab() {
   }, [airspeedKmH, metrics.totalMassKg]);
 
   return (
-    <div className="w-full h-full flex flex-col bg-amber-950/60 text-white overflow-hidden select-none">
+    <div className="w-full h-full flex flex-col bg-slate-900/80 text-white overflow-hidden select-none">
       {/* Sub-Tabs Rail */}
       <div className="shrink-0 px-4 py-2 bg-black/60 border-b border-white/10 flex items-center gap-1.5 overflow-x-auto no-scrollbar">
         {HYPERCAR_RD_TABS.map((tab) => {
@@ -144,7 +144,7 @@ export const HypercarDeepRDLab: React.FC = memo(function HypercarDeepRDLab() {
         {activeSubTab === "full_3d_lab" && (
           <div className="w-full h-[680px]">
             <Suspense fallback={
-              <div className="w-full h-full flex items-center justify-center bg-amber-950/60 text-xs font-mono text-amber-400">
+              <div className="w-full h-full flex items-center justify-center bg-slate-900/80 text-xs font-mono text-amber-400">
                 <span className="animate-pulse">Initializing Megawatt 3D Viewport & WebGL Rig...</span>
               </div>
             }>

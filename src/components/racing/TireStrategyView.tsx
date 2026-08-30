@@ -31,7 +31,7 @@ export const TireStrategyView: React.FC<TireStrategyViewProps> = memo(function T
   );
 
   return (
-    <div className="bg-amber-900/40 rounded-2xl p-4 border border-amber-800/30">
+    <div className="bg-slate-800/40 rounded-2xl p-4 border border-slate-700/50">
       <h3 className="text-amber-300 text-sm font-bold mb-3">{'\u25CF'} TIRE STRATEGY MAP</h3>
 
       {/* Strategy visualization */}
@@ -40,7 +40,7 @@ export const TireStrategyView: React.FC<TireStrategyViewProps> = memo(function T
         <div className="absolute inset-0 flex">
           {Array.from({ length: totalLaps }, (_, i) => (
             <div key={i} className={`h-full flex-1 border-r ${
-              i === currentLap ? 'border-amber-400 bg-amber-400/10' : 'border-amber-900/20'
+              i === currentLap ? 'border-amber-400 bg-amber-400/10' : 'border-slate-800/20'
             }`} />
           ))}
         </div>
@@ -94,7 +94,7 @@ export const TireStrategyView: React.FC<TireStrategyViewProps> = memo(function T
             if (!tire) return null;
             const compound = TIRE_COMPOUNDS[tire.compound];
             return (
-              <div key={pos} className="bg-amber-950/40 rounded-xl p-2 text-center">
+              <div key={pos} className="bg-slate-900/60 rounded-xl p-2 text-center">
                 <span className="text-amber-500 text-xs block">{pos}</span>
                 <div className="w-4 h-4 rounded-full mx-auto my-1" style={{ backgroundColor: compound?.color || '#888' }} />
                 <span className="text-amber-100 text-xs block">{tire.wear.toFixed(1)}%</span>

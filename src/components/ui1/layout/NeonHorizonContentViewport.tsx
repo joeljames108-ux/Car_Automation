@@ -38,7 +38,7 @@ export const NeonHorizonContentViewport: React.FC<NeonHorizonContentViewportProp
   return (
     <div className={`flex-1 min-w-0 flex flex-col gap-4 ${className}`}>
       {/* Main Glass Cockpit Window Container */}
-      <div className="relative p-6 rounded-3xl bg-amber-950/60 backdrop-blur-3xl border border-white/12 shadow-[0_25px_60px_rgba(0,0,0,0.60),inset_0_1px_0_rgba(255,255,255,0.10)] flex flex-col gap-6 nh-edge-top nh-grain">
+      <div className="relative p-6 rounded-3xl bg-slate-900/80 backdrop-blur-3xl border border-white/12 shadow-[0_25px_60px_rgba(0,0,0,0.60),inset_0_1px_0_rgba(255,255,255,0.10)] flex flex-col gap-6 nh-edge-top nh-grain">
         {/* Instrument ruler strip */}
         <div className="nh-ruler -mt-2 opacity-30" aria-hidden="true" />
         {/* Top Cockpit Navigation Bar */}

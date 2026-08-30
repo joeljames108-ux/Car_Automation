@@ -23,7 +23,7 @@ export const WiperAssemblySVG: React.FC<WiperAssemblySVGProps> = ({
   onMouseEnter,
   onMouseLeave,
 }) => {
-  const strokeColor = isSelected ? "#fbbf24" : isHovered ? "#0284c7" : "#1a1008";
+  const strokeColor = isSelected ? "#fbbf24" : isHovered ? "#0284c7" : "#080c14";
 
   return (
     <g
@@ -36,7 +36,7 @@ export const WiperAssemblySVG: React.FC<WiperAssemblySVGProps> = ({
       onMouseLeave={onMouseLeave}
     >
       {/* Cowl Trough Panel */}
-      <polygon points="370,265 405,275 408,272 373,262" fill="#1a1008" stroke="#1e293b" strokeWidth="0.8" />
+      <polygon points="370,265 405,275 408,272 373,262" fill="#080c14" stroke="#1e293b" strokeWidth="0.8" />
       {/* Tandem Wiper Blades Parked Below Hood Line */}
       <line x1="375" y1="264" x2="430" y2="230" stroke={strokeColor} strokeWidth="1.6" strokeLinecap="round" />
       <circle cx="375" cy="264" r="2.5" fill="#475569" />

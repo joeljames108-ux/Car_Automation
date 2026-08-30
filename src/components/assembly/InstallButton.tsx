@@ -56,7 +56,7 @@ export function InstallButton({
   if (isInstalling) {
     return (
       <div className={`flex items-center gap-2 ${className}`}>
-        <div className="flex-1 py-3 px-5 rounded-2xl bg-amber-950/80 border border-amber-400 shadow-[0_0_25px_rgba(34,211,238,0.4)] flex items-center justify-between text-amber-300 font-mono text-xs font-bold">
+        <div className="flex-1 py-3 px-5 rounded-2xl bg-slate-950/80 border border-amber-400 shadow-[0_0_25px_rgba(34,211,238,0.4)] flex items-center justify-between text-amber-300 font-mono text-xs font-bold">
           <div className="flex items-center gap-2.5">
             <Sparkles size={16} className="animate-spin text-amber-400" />
             <div>

@@ -720,7 +720,7 @@ const SPEEDSTER_TARGA: ExteriorPresetSpecification = {
     ...createDefaultPaintConfig(),
     finishType: "liquid_metallic",
     primaryColorHex: "#ea580c", // Papaya Speedster
-    secondaryColorHex: "#1a1008",
+    secondaryColorHex: "#080c14",
     tertiaryColorHex: "#ea580c",
   },
   aeroConfig: {

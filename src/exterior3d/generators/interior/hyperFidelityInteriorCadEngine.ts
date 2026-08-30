@@ -267,7 +267,7 @@ export class HyperFidelityInteriorCadEngine {
 
     const aluMat = this.createAluminumMaterial();
     const carbonMat = this.createCarbonMaterial();
-    const leatherMat = this.createLeatherMaterial("nappa_leather", "#1a1008");
+    const leatherMat = this.createLeatherMaterial("nappa_leather", "#080c14");
 
     // Steering Column Tube
     const columnGeo = new THREE.CylinderGeometry(0.038, 0.048, 0.42, 24);
@@ -757,7 +757,7 @@ export class HyperFidelityInteriorCadEngine {
     // Panoramic Starlight Glass Roof Headliner
     const roofWidth = cageWidth + 0.12;
     const roofGeo = new THREE.BoxGeometry(roofWidth, 0.025, 1.65);
-    const fabricMat = this.createFabricMaterial((state.materials as any).headlinerColorHex || "#1a1008");
+    const fabricMat = this.createFabricMaterial((state.materials as any).headlinerColorHex || "#080c14");
     const roofMesh = new THREE.Mesh(roofGeo, fabricMat);
     roofMesh.position.set(0, 1.28 + dy, -0.40);
     roofMesh.receiveShadow = true;

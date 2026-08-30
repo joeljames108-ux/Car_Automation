@@ -225,7 +225,7 @@ export const CinematicGlobeBootSequence: React.FC<CinematicGlobeBootSequenceProp
   }, [onComplete]);
 
   return (
-    <div className="fixed inset-0 z-50 bg-amber-950/60 flex flex-col justify-between p-8 select-none overflow-hidden">
+    <div className="fixed inset-0 z-50 bg-slate-900/80 flex flex-col justify-between p-8 select-none overflow-hidden">
       <canvas ref={canvasRef} className="absolute inset-0 z-0" />
 
       {/* Top Header */}

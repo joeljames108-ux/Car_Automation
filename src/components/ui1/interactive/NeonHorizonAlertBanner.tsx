@@ -29,7 +29,7 @@ export function NeonHorizonAlertBanner({
     type === "danger"
       ? "bg-rose-950/80 border-rose-500/60 text-rose-200"
       : type === "warning"
-      ? "bg-amber-950/80 border-amber-500/60 text-amber-200"
+      ? "bg-slate-950/80 border-amber-500/60 text-amber-200"
       : "bg-slate-900/80 border-amber-500/30 text-sky-200";
 
   return (

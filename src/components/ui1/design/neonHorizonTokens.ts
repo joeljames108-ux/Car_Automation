@@ -63,7 +63,7 @@ export interface NeonHorizonTokens {
  */
 export const NEON_HORIZON_TOKENS: NeonHorizonTokens = {
   colors: {
-    bgVoid: "#1a1008",
+    bgVoid: "#060a14",
     bgDeep: "#0a1020",
     glassPrimary: "rgba(12, 20, 38, 0.82)",
     glassSecondary: "rgba(10, 16, 30, 0.70)",

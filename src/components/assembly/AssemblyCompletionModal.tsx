@@ -244,7 +244,7 @@ export function AssemblyCompletionModal({
                     strokeLinecap="round"
                     style={{ filter: "drop-shadow(0 0 6px rgba(34,211,238,0.9))" }}
                   />
-                  <circle cx="100" cy="110" r="8" fill="#1a1008" stroke="#fbbf24" strokeWidth="2.5" />
+                  <circle cx="100" cy="110" r="8" fill="#080c14" stroke="#fbbf24" strokeWidth="2.5" />
                 </g>
 
                 <text x="100" y="92" fill="#f8fafc" fontSize="18" fontFamily="monospace" textAnchor="middle" fontWeight="bold">

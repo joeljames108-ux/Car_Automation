@@ -350,7 +350,7 @@ export function EngineDesigner() {
         <>
           {/* Live Warnings Banner (If Active) */}
           {warnings.length > 0 && (
-            <div className="p-3 rounded-2xl bg-amber-950/30 border border-amber-500/30 backdrop-blur-xl">
+            <div className="p-3 rounded-2xl bg-slate-900/60 border border-amber-500/30 backdrop-blur-xl">
               <div className="flex items-center gap-2 mb-2">
                 <AlertTriangle size={14} className="text-amber-400" />
                 <span className="label-mono text-amber-300">Live Engineering Warnings</span>
@@ -405,7 +405,7 @@ export function EngineDesigner() {
 
             {/* AI Suggestion Card */}
             <Section title="Apex AI Copilot" icon={<Lightbulb size={16} />}>
-              <div className="ai-suggestion-card bg-amber-950/20 border border-amber-500/30 p-3 rounded-xl space-y-2">
+              <div className="ai-suggestion-card bg-slate-900/50 border border-amber-500/30 p-3 rounded-xl space-y-2">
                 <div className="text-xs font-semibold text-amber-200">{suggestion.title}</div>
                 <div className="text-[10.5px] text-amber-300/80 leading-relaxed">{suggestion.detail}</div>
                 <div className="suggestion-impacts flex flex-wrap gap-1.5 pt-1">

@@ -362,7 +362,7 @@ export function EngineWorkshopPanel({
                     comp.category
                   )} ${
                     isActive
-                      ? "bg-amber-950/40 border-amber-400 shadow-[0_0_20px_rgba(34,211,238,0.4)] scale-[1.01]"
+                      ? "bg-slate-900/60 border-amber-400 shadow-[0_0_20px_rgba(34,211,238,0.4)] scale-[1.01]"
                       : isInstalled
                       ? "bg-emerald-950/20 border-emerald-500/30 opacity-90"
                       : isAvailable
@@ -485,7 +485,7 @@ export function EngineWorkshopPanel({
                     isDone
                       ? "bg-emerald-950/20 text-emerald-300 border border-emerald-500/20"
                       : isCurrent
-                      ? "bg-amber-950/40 text-amber-200 border border-amber-400/50 animate-pulse"
+                      ? "bg-slate-900/60 text-amber-200 border border-amber-400/50 animate-pulse"
                       : "bg-base-850/50 text-slate-400 border border-base-800"
                   }`}
                 >

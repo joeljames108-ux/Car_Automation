@@ -24,7 +24,7 @@ export const F1LivePhysicsHUD: React.FC<F1LivePhysicsHUDProps> = memo(function F
   };
 
   return (
-    <div className="w-full bg-amber-950/60/95 backdrop-blur-md border-t border-white/10 px-6 py-3 flex items-center justify-between z-20 select-none">
+    <div className="w-full bg-slate-900/80/95 backdrop-blur-md border-t border-white/10 px-6 py-3 flex items-center justify-between z-20 select-none">
       {/* Physical & Aerodynamic Metrics Rail */}
       <div className="flex items-center gap-6">
         {/* Assembly Completion */}

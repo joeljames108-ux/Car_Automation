@@ -63,14 +63,14 @@ export function NeonActiveSuspensionStudio() {
             }}
             className="p-6 flex flex-col gap-4"
           >
-            <div className="grid grid-cols-2 gap-4 p-4 rounded-xl bg-amber-950/60 border border-sky-400/25 shadow-[inset_0_0_20px_rgba(0,0,0,0.8)]">
+            <div className="grid grid-cols-2 gap-4 p-4 rounded-xl bg-slate-900/80 border border-sky-400/25 shadow-[inset_0_0_20px_rgba(0,0,0,0.8)]">
               {[
                 { pos: "FRONT LEFT (FL)", pressure: "185 BAR", height: "+0.0 mm", color: "text-amber-300" },
                 { pos: "FRONT RIGHT (FR)", pressure: "185 BAR", height: "+0.0 mm", color: "text-amber-300" },
                 { pos: "REAR LEFT (RL)", pressure: "160 BAR", height: "-2.0 mm", color: "text-emerald-300" },
                 { pos: "REAR RIGHT (RR)", pressure: "160 BAR", height: "-2.0 mm", color: "text-emerald-300" },
               ].map((strut, idx) => (
-                <div key={idx} className="p-3 rounded-lg bg-amber-950/60 border border-white/10 flex flex-col gap-1 font-mono text-xs">
+                <div key={idx} className="p-3 rounded-lg bg-slate-900/80 border border-white/10 flex flex-col gap-1 font-mono text-xs">
                   <span className="text-[10px] text-slate-400 font-bold">{strut.pos}</span>
                   <div className="flex items-center justify-between">
                     <span className="text-slate-400">Pressure:</span>
@@ -102,7 +102,7 @@ export function NeonActiveSuspensionStudio() {
                     className={`p-2.5 rounded-lg border text-center text-xs font-bold cursor-pointer transition-all ${
  isSelected
  ? "bg-amber-500/20 border-amber-500/30 text-sky-200"
- : "bg-amber-950/60 border-white/10 text-slate-400 hover:border-sky-400/25"
+ : "bg-slate-900/80 border-white/10 text-slate-400 hover:border-sky-400/25"
  }`}
                   >
                     {m.name}
@@ -146,7 +146,7 @@ export function NeonActiveSuspensionStudio() {
               onChange={(val) => setCurveTiltAngle(val)}
             />
 
-            <div className="p-3.5 rounded-xl bg-amber-950/60 border border-sky-400/15 flex flex-col gap-2 font-mono text-xs">
+            <div className="p-3.5 rounded-xl bg-slate-900/80 border border-sky-400/15 flex flex-col gap-2 font-mono text-xs">
               <div className="flex items-center justify-between">
                 <span className="text-slate-400">48V Pump Power:</span>
                 <span className="text-amber-300 font-bold">12 kW Peak Electric</span>

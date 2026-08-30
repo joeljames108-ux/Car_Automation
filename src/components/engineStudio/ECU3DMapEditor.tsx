@@ -111,22 +111,22 @@ export const ECU3DMapEditor: React.FC<ECU3DMapEditorProps> = ({
     const norm = Math.min(1.0, Math.max(0.0, (val - min) / (max - min || 1)));
     if (activeMapId === "ignition") {
       // Blue (retarded/low) -> Cyan -> Yellow -> Orange -> Red (advanced/high)
-      if (norm < 0.25) return "bg-amber-950/80 text-amber-300 border-amber-800/40";
-      if (norm < 0.50) return "bg-amber-950/80 text-amber-300 border-amber-800/40";
-      if (norm < 0.75) return "bg-amber-950/80 text-amber-300 border-amber-800/40";
+      if (norm < 0.25) return "bg-slate-950/80 text-amber-300 border-slate-700/60";
+      if (norm < 0.50) return "bg-slate-950/80 text-amber-300 border-slate-700/60";
+      if (norm < 0.75) return "bg-slate-950/80 text-amber-300 border-slate-700/60";
       return "bg-rose-950/80 text-rose-300 border-rose-800/50 font-bold";
     }
     if (activeMapId === "afr") {
       // Red (rich <= 11.5) -> Green (stochiometric ~14.7) -> Blue (lean >= 15.0)
       if (val < 12.0) return "bg-rose-950/80 text-rose-300 border-rose-800/40";
-      if (val < 13.8) return "bg-amber-950/80 text-amber-300 border-amber-800/40";
+      if (val < 13.8) return "bg-slate-950/80 text-amber-300 border-slate-700/60";
       if (val < 14.8) return "bg-emerald-950/80 text-emerald-300 border-emerald-800/40";
-      return "bg-amber-950/80 text-amber-300 border-amber-800/40";
+      return "bg-slate-950/80 text-amber-300 border-slate-700/60";
     }
     // Default VE / Duty heat
     if (norm < 0.3) return "bg-slate-900 text-slate-400 border-slate-800";
-    if (norm < 0.6) return "bg-amber-950/80 text-amber-300 border-amber-800/40";
-    if (norm < 0.85) return "bg-amber-950/80 text-amber-300 border-amber-800/40";
+    if (norm < 0.6) return "bg-slate-950/80 text-amber-300 border-slate-700/60";
+    if (norm < 0.85) return "bg-slate-950/80 text-amber-300 border-slate-700/60";
     return "bg-rose-950/80 text-rose-300 border-rose-800/50 font-bold";
   };
 
@@ -239,7 +239,7 @@ export const ECU3DMapEditor: React.FC<ECU3DMapEditorProps> = ({
 
           <button
             onClick={handleSmoothMap}
-            className="flex items-center gap-1 px-3 py-1 bg-slate-800 hover:bg-amber-950 text-amber-300 rounded-lg border border-slate-700 hover:border-amber-500/50 transition-all cursor-pointer font-sans text-xs font-semibold"
+            className="flex items-center gap-1 px-3 py-1 bg-slate-800 hover:bg-slate-950 text-amber-300 rounded-lg border border-slate-700 hover:border-amber-500/50 transition-all cursor-pointer font-sans text-xs font-semibold"
           >
             <Sparkles size={12} />
             <span>Smooth Matrix</span>
@@ -269,7 +269,7 @@ export const ECU3DMapEditor: React.FC<ECU3DMapEditorProps> = ({
                 <th
                   key={c}
                   className={`p-1 border border-slate-850 text-slate-400 bg-slate-900/90 ${
-                    liveTrace.colIndex === c ? "text-amber-300 font-bold bg-amber-950/60" : ""
+                    liveTrace.colIndex === c ? "text-amber-300 font-bold bg-slate-900/80" : ""
                   }`}
                 >
                   {rpm}
@@ -283,7 +283,7 @@ export const ECU3DMapEditor: React.FC<ECU3DMapEditorProps> = ({
                 {/* Y-Axis Label (kPa MAP) */}
                 <td
                   className={`p-1 border border-slate-850 text-slate-400 bg-slate-900/90 font-bold ${
-                    liveTrace.rowIndex === r ? "text-amber-300 bg-amber-950/60" : ""
+                    liveTrace.rowIndex === r ? "text-amber-300 bg-slate-900/80" : ""
                   }`}
                 >
                   {load}k

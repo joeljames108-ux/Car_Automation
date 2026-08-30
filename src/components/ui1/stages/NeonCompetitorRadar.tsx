@@ -138,7 +138,7 @@ export function NeonCompetitorRadar() {
                   className={`p-3.5 rounded-xl border transition-all cursor-pointer flex flex-col gap-1.5 ${
  isSelected
  ? "bg-amber-500/20 border-amber-500/30 text-sky-200"
- : "bg-amber-950/60 border-white/10 hover:border-sky-400/25"
+ : "bg-slate-900/80 border-white/10 hover:border-sky-400/25"
  }`}
                 >
                   <div className="flex items-center justify-between">

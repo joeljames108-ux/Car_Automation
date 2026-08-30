@@ -73,8 +73,8 @@ export const AgentNotificationCenter: React.FC<AgentNotificationCenterProps> = (
                   f.severity === "critical"
                     ? "bg-rose-950/30 border-rose-500/40 text-rose-200"
                     : f.severity === "warning"
-                    ? "bg-amber-950/30 border-amber-500/40 text-amber-200"
-                    : "bg-amber-950/30 border-amber-500/40 text-amber-200"
+                    ? "bg-slate-900/60 border-amber-500/40 text-amber-200"
+                    : "bg-slate-900/60 border-amber-500/40 text-amber-200"
                 }`}
               >
                 <div className="flex items-start justify-between gap-2">

@@ -107,14 +107,14 @@ export function NeonFactoryFloor() {
 
       {/* View 1: Robotic Factory Sequencer */}
       {activeTab === "robotic_line" && (
-        <div className="w-full rounded-3xl overflow-hidden border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] bg-amber-950/60 p-3">
+        <div className="w-full rounded-3xl overflow-hidden border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] bg-slate-900/80 p-3">
           <RoboticFactorySequencer />
         </div>
       )}
 
       {/* View 2: Manufacturing Designer */}
       {activeTab === "production_pipeline" && (
-        <div className="w-full rounded-3xl overflow-hidden border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] bg-amber-950/60 p-4">
+        <div className="w-full rounded-3xl overflow-hidden border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] bg-slate-900/80 p-4">
           <ManufacturingDesigner />
         </div>
       )}

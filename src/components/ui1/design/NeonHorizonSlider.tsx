@@ -93,7 +93,7 @@ export const NeonHorizonSlider: React.FC<NeonHorizonSliderProps> = ({
 
       <div className="relative flex items-center h-5">
         {/* Track background */}
-        <div className="w-full h-1.5 bg-amber-950/60 rounded-full overflow-hidden border border-white/10 relative">
+        <div className="w-full h-1.5 bg-slate-900/80 rounded-full overflow-hidden border border-white/10 relative">
           {/* Active fill */}
           <div
             className={`h-full ${colorStyles.fill} rounded-full transition-all duration-75`}

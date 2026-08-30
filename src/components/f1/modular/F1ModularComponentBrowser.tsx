@@ -38,7 +38,7 @@ export const F1ModularComponentBrowser: React.FC = memo(function F1ModularCompon
   const candidateComponents = selectedSocketId ? F1ComponentRegistry.getComponentsForSocket(selectedSocketId) : [];
 
   return (
-    <div className="w-96 flex flex-col h-full bg-amber-950/60 border-r border-white/10 text-white select-none">
+    <div className="w-96 flex flex-col h-full bg-slate-900/80 border-r border-white/10 text-white select-none">
       {/* Top Header & History Bar */}
       <div className="p-3 border-b border-white/10 flex items-center justify-between bg-black/40">
         <div className="flex items-center gap-2">
@@ -184,7 +184,7 @@ export const F1ModularComponentBrowser: React.FC = memo(function F1ModularCompon
                     key={comp.id}
                     className={`p-3 rounded-xl border transition-all ${
                       isInstalled
-                        ? "bg-amber-950/30 border-amber-500/50 shadow-md shadow-cyan-500/10"
+                        ? "bg-slate-900/60 border-amber-500/50 shadow-md shadow-cyan-500/10"
                         : "bg-zinc-900/60 border-white/10 hover:border-white/20"
                     }`}
                   >

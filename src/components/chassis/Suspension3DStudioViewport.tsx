@@ -734,14 +734,14 @@ const Suspension3DStudioViewportComponent: React.FC = () => {
 
         <div className="flex justify-between items-center py-0.5">
           <span className="text-slate-300 font-medium">Dynamic Camber:</span>
-          <span className="font-extrabold text-amber-300 bg-amber-950/70 border border-amber-500/30 px-2 py-0.5 rounded">
+          <span className="font-extrabold text-amber-300 bg-slate-900/90 border border-amber-500/30 px-2 py-0.5 rounded">
             {dynamicCamberDeg > 0 ? `+${dynamicCamberDeg}` : dynamicCamberDeg}°
           </span>
         </div>
 
         <div className="flex justify-between items-center py-0.5">
           <span className="text-slate-300 font-medium">Roll Center Height:</span>
-          <span className="font-extrabold text-amber-300 bg-amber-950/70 border border-amber-500/30 px-2 py-0.5 rounded">
+          <span className="font-extrabold text-amber-300 bg-slate-900/90 border border-amber-500/30 px-2 py-0.5 rounded">
             {rollCenterHeightMm} mm
           </span>
         </div>
@@ -755,14 +755,14 @@ const Suspension3DStudioViewportComponent: React.FC = () => {
 
         <div className="flex justify-between items-center py-0.5">
           <span className="text-slate-300 font-medium">Anti-Squat Rating:</span>
-          <span className="font-extrabold text-amber-300 bg-amber-950/70 border border-amber-500/30 px-2 py-0.5 rounded">
+          <span className="font-extrabold text-amber-300 bg-slate-900/90 border border-amber-500/30 px-2 py-0.5 rounded">
             {antiSquatPct}%
           </span>
         </div>
 
         <div className="flex justify-between items-center py-0.5 border-t border-white/10 pt-1.5">
           <span className="text-slate-300 font-medium">Ackermann Steer Angle:</span>
-          <span className="font-extrabold text-amber-300 bg-amber-950/70 border border-amber-500/30 px-2 py-0.5 rounded">
+          <span className="font-extrabold text-amber-300 bg-slate-900/90 border border-amber-500/30 px-2 py-0.5 rounded">
             {ackermannDeg}°
           </span>
         </div>

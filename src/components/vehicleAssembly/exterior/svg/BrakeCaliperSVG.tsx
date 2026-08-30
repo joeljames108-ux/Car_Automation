@@ -61,14 +61,14 @@ export const BrakeCaliperSVG: React.FC<BrakeCaliperSVGProps> = ({
       </g>
 
       {/* Rotor Center Aluminum Hat Section */}
-      <circle cx={cx} cy={cy} r="14" fill="#1a1008" stroke="#475569" strokeWidth="1.0" />
+      <circle cx={cx} cy={cy} r="14" fill="#080c14" stroke="#475569" strokeWidth="1.0" />
       <circle cx={cx} cy={cy} r="4" fill="url(#chassisNodeBolt)" />
 
       {/* ── 2. 8-Piston Monobloc Brake Caliper (Leading Edge) ── */}
       <path
         d={`M${cx - r + 4},${cy - 22} L${cx - r + 16},${cy - 26} L${cx - r + 18},${cy + 22} L${cx - r + 6},${cy + 22} Z`}
         fill={caliperFill}
-        stroke="#1a1008"
+        stroke="#080c14"
         strokeWidth="1.0"
         filter="url(#shutLineShadow)"
       />

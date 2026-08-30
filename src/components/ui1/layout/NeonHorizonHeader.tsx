@@ -217,7 +217,7 @@ export const NeonHorizonHeader: React.FC<NeonHorizonHeaderProps> = ({
                 className="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase transition-all cursor-pointer"
                 style={{
                   background: units === u ? "#5fa8c8" : "transparent",
-                  color: units === u ? "#1a1008" : "#506070",
+                  color: units === u ? "#080c14" : "#506070",
                 }}
               >
                 {u}
@@ -285,7 +285,7 @@ export const NeonHorizonHeader: React.FC<NeonHorizonHeaderProps> = ({
           <div
             aria-label="User Profile"
             className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold cursor-pointer hover:scale-105 transition-transform"
-            style={{ background: "linear-gradient(135deg, #1a3048, #1a1008)", color: "#8cbcd0", border: "1px solid rgba(95, 168, 200, 0.20)", boxShadow: "0 2px 10px rgba(95, 168, 200, 0.15)" }}
+            style={{ background: "linear-gradient(135deg, #1a3048, #080c14)", color: "#8cbcd0", border: "1px solid rgba(95, 168, 200, 0.20)", boxShadow: "0 2px 10px rgba(95, 168, 200, 0.15)" }}
           >
             <User size={15} />
           </div>

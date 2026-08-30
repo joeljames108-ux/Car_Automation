@@ -122,7 +122,7 @@ export function NeonEnduranceStudio() {
             }}
             className="p-6 flex flex-col gap-4"
           >
-            <div className="w-full h-48 bg-amber-950/60 rounded-xl border border-sky-400/25 overflow-hidden relative flex items-center justify-center shadow-[inset_0_0_25px_rgba(0,0,0,0.85)]">
+            <div className="w-full h-48 bg-slate-900/80 rounded-xl border border-sky-400/25 overflow-hidden relative flex items-center justify-center shadow-[inset_0_0_25px_rgba(0,0,0,0.85)]">
               <canvas ref={radarCanvasRef} width={360} height={190} className="w-full h-full" />
               <div className="absolute top-2 left-3 flex items-center gap-2">
                 <div className="w-2 h-2 rounded-full bg-sky-300 animate-ping" />
@@ -147,7 +147,7 @@ export function NeonEnduranceStudio() {
                     className={`p-2.5 rounded-lg border text-center text-xs font-bold cursor-pointer transition-all ${
  isSelected
  ? "bg-amber-500/20 border-amber-500/30 text-sky-200"
- : "bg-amber-950/60 border-white/10 text-slate-400 hover:border-sky-400/25"
+ : "bg-slate-900/80 border-white/10 text-slate-400 hover:border-sky-400/25"
  }`}
                   >
                     {item.name}
@@ -192,7 +192,7 @@ export function NeonEnduranceStudio() {
                   className={`p-3.5 rounded-xl border transition-all cursor-pointer flex flex-col gap-1.5 ${
  isSelected
  ? "bg-amber-500/20 border-amber-500/30 text-sky-200"
- : "bg-amber-950/60 border-white/10 hover:border-sky-400/25"
+ : "bg-slate-900/80 border-white/10 hover:border-sky-400/25"
  }`}
                 >
                   <div className="flex items-center justify-between">

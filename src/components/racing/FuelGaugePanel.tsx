@@ -36,7 +36,7 @@ export const FuelGaugePanel: React.FC<FuelGaugePanelProps> = memo(function FuelG
   const isUnderFueled = fuelDelta < -1;
 
   return (
-    <div className="bg-amber-900/40 rounded-2xl p-4 border border-amber-800/30">
+    <div className="bg-slate-800/40 rounded-2xl p-4 border border-slate-700/50">
       <h3 className="text-amber-300 text-sm font-bold mb-3">{'\u26FD'} FUEL MANAGEMENT</h3>
 
       {/* Main fuel gauge */}
@@ -53,7 +53,7 @@ export const FuelGaugePanel: React.FC<FuelGaugePanelProps> = memo(function FuelG
         </div>
 
         {/* Fuel bar */}
-        <div className="relative h-6 bg-amber-950/60 rounded-full overflow-hidden">
+        <div className="relative h-6 bg-slate-900/80 rounded-full overflow-hidden">
           <div className="h-full rounded-full transition-all duration-500"
             style={{
               width: `${percentage}%`,
@@ -92,7 +92,7 @@ export const FuelGaugePanel: React.FC<FuelGaugePanelProps> = memo(function FuelG
       </div>
 
       {/* Fuel delta indicator */}
-      <div className="bg-amber-950/40 rounded-xl p-3 mb-4">
+      <div className="bg-slate-900/60 rounded-xl p-3 mb-4">
         <div className="flex justify-between items-center mb-1">
           <span className="text-amber-500 text-xs">FUEL TARGET STATUS</span>
           <span className={`text-xs font-bold ${isUnderFueled ? 'text-red-400' : isOverFueled ? 'text-green-400' : 'text-amber-300'}`}>
@@ -123,7 +123,7 @@ export const FuelGaugePanel: React.FC<FuelGaugePanelProps> = memo(function FuelG
               className={`p-2 rounded-xl text-center transition-all cursor-pointer ${
                 state.mixture === mix.id
                   ? 'ring-2 ring-amber-400 bg-amber-500/20'
-                  : 'bg-amber-950/30 hover:bg-amber-900/40'
+                  : 'bg-slate-900/60 hover:bg-slate-800/40'
               }`}
             >
               <span className="text-lg">{mix.icon}</span>
@@ -140,7 +140,7 @@ export const FuelGaugePanel: React.FC<FuelGaugePanelProps> = memo(function FuelG
           <span>FUEL CONSUMPTION</span>
           <span>{state.consumption.toFixed(1)} kg/lap</span>
         </div>
-        <div className="h-2 bg-amber-950/60 rounded-full">
+        <div className="h-2 bg-slate-900/80 rounded-full">
           <div className="h-full bg-amber-400 rounded-full transition-all"
             style={{ width: `${Math.min(100, (state.consumption / 5) * 100)}%` }} />
         </div>

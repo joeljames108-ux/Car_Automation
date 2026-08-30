@@ -73,7 +73,7 @@ export const ModularInteriorComparisonStudio: React.FC<ModularInteriorComparison
   return (
     <div className="space-y-4 p-4 rounded-2xl bg-slate-950/80 border border-amber-500/30 backdrop-blur-xl shadow-2xl text-xs font-mono">
       {/* Header */}
-      <div className="flex flex-wrap items-center justify-between gap-3 p-3 rounded-xl bg-amber-950/30 border border-amber-500/40">
+      <div className="flex flex-wrap items-center justify-between gap-3 p-3 rounded-xl bg-slate-900/60 border border-amber-500/40">
         <div className="flex items-center gap-2.5">
           <div className="p-2 rounded-lg bg-amber-500/20 text-amber-300 border border-amber-500/40">
             <GitCompare size={18} />

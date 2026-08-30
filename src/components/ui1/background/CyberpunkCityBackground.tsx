@@ -69,7 +69,7 @@ export const CyberpunkCityBackground: React.FC<CyberpunkCityBackgroundProps> = (
   }, [parallaxIntensity]);
 
   return (
-    <div className="fixed inset-0 pointer-events-none overflow-hidden z-0 select-none" style={{ background: "#1a1008" }}>
+    <div className="fixed inset-0 pointer-events-none overflow-hidden z-0 select-none" style={{ background: "#080c14" }}>
       {/* 1. Deep Arctic Gradient Base */}
       <div
         ref={bgRef}

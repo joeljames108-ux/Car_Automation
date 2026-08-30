@@ -526,7 +526,7 @@ export function MaterialGradePicker({
           <Layers size={13} className="text-amber-400" />
           <span>{title}</span>
         </label>
-        <span className="text-[10px] font-mono text-amber-300 bg-amber-950/80 border border-amber-500/40 px-2 py-0.5 rounded-full font-bold shadow-[0_0_10px_rgba(192,132,252,0.2)]">
+        <span className="text-[10px] font-mono text-amber-300 bg-slate-950/80 border border-amber-500/40 px-2 py-0.5 rounded-full font-bold shadow-[0_0_10px_rgba(192,132,252,0.2)]">
           {variants.length} Grades Available
         </span>
       </div>

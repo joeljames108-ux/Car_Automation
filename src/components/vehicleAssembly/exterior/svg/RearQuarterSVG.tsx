@@ -82,7 +82,7 @@ export const RearQuarterSVG: React.FC<RearQuarterSVGProps> = ({
         cx="630"
         cy="245"
         r="9"
-        fill="#1a1008"
+        fill="#080c14"
         stroke="url(#chromeTrimLuster)"
         strokeWidth="1.2"
       />

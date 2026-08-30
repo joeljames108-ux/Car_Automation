@@ -205,7 +205,7 @@ export const Vehicle3ColumnDeck: React.FC<Vehicle3ColumnDeckProps> = ({
                 onClick={() => onSelectMaterialGrade(tier.id)}
                 className={`p-3 rounded-2xl border cursor-pointer transition-all duration-200 space-y-1.5 ${
                   isSelected
-                    ? 'bg-amber-500/10 dark:bg-amber-950/40 border-amber-500 dark:border-amber-400 shadow-[0_0_12px_rgba(6,182,212,0.25)]'
+                    ? 'bg-amber-500/10 dark:bg-slate-900/60 border-amber-500 dark:border-amber-400 shadow-[0_0_12px_rgba(6,182,212,0.25)]'
                     : 'bg-slate-50 dark:bg-base-950/60 border-slate-200 dark:border-slate-800 hover:border-slate-400 dark:hover:border-slate-700'
                 }`}
               >
@@ -306,7 +306,7 @@ export const Vehicle3ColumnDeck: React.FC<Vehicle3ColumnDeckProps> = ({
         </div>
 
         {/* Engineering Advisory Card */}
-        <div className="p-3 rounded-2xl bg-amber-500/5 dark:bg-amber-950/30 border border-amber-500/20 text-xs space-y-1">
+        <div className="p-3 rounded-2xl bg-amber-500/5 dark:bg-slate-900/60 border border-amber-500/20 text-xs space-y-1">
           <div className="flex items-center gap-1.5 text-amber-600 dark:text-amber-400 font-bold">
             <Info size={14} />
             <span>ENGINEERING ADVISORY</span>

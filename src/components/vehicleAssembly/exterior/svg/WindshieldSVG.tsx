@@ -64,7 +64,7 @@ export const WindshieldSVG: React.FC<WindshieldSVGProps> = ({
       {/* ── 3. ADAS Forward Camera & Rain Sensor Housing ── */}
       <polygon
         points="435,192 443,195 440,202 432,199"
-        fill="#1a1008"
+        fill="#080c14"
         stroke="#334155"
         strokeWidth="0.8"
       />

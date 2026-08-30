@@ -45,7 +45,7 @@ export const F1WorkshopNav: React.FC<F1WorkshopNavProps> = memo(function F1Works
         <div className="text-[11px] font-bold uppercase tracking-wider text-slate-400">
           Design Departments
         </div>
-        <span className="text-[10px] font-mono text-amber-400 bg-amber-950/40 border border-amber-800/40 px-2 py-0.5 rounded-full">
+        <span className="text-[10px] font-mono text-amber-400 bg-slate-900/60 border border-slate-700/60 px-2 py-0.5 rounded-full">
           12 Studios
         </span>
       </div>

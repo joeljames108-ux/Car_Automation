@@ -107,14 +107,14 @@ export function NeonEngineStudio() {
 
       {/* View 2: Master Engine Workbench & Dyno */}
       {activeTab === "engine_workbench" && (
-        <div className="w-full rounded-3xl overflow-hidden border border-white/10 bg-amber-950/60 shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
+        <div className="w-full rounded-3xl overflow-hidden border border-white/10 bg-slate-900/80 shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
           <ModularEngineStudio />
         </div>
       )}
 
       {/* View 2B: Master 3D Transmission Studio */}
       {activeTab === "transmission_3d" && (
-        <div className="w-full rounded-3xl overflow-hidden border border-white/10 bg-amber-950/60 shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
+        <div className="w-full rounded-3xl overflow-hidden border border-white/10 bg-slate-900/80 shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
           <Transmission3DStudio />
         </div>
       )}

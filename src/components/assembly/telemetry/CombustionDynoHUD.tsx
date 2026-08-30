@@ -223,7 +223,7 @@ export const CombustionDynoHUD: React.FC<CombustionDynoHUDProps> = ({
             combustionMetrics.knockMargin >= 2.0
               ? "bg-emerald-950/40 border-emerald-500/40 text-emerald-300"
               : combustionMetrics.knockMargin >= 0.0
-              ? "bg-amber-950/40 border-amber-500/40 text-amber-300"
+              ? "bg-slate-900/60 border-amber-500/40 text-amber-300"
               : "bg-red-950/50 border-red-500/50 text-red-300 animate-pulse"
           }`}>
             <div className="flex items-center gap-2">

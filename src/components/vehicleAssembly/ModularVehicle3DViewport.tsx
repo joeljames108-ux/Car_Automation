@@ -626,7 +626,7 @@ export const ModularVehicle3DViewport: React.FC<ModularVehicle3DViewportProps> =
         <div className="w-full flex flex-wrap items-center justify-between gap-3">
           {/* Left: View Mode Toggles & 3D Model Selector */}
           <div className="flex flex-wrap items-center gap-2">
-            <div className="flex items-center gap-1.5 p-1 rounded-2xl bg-amber-950/60 border border-amber-800/40">
+            <div className="flex items-center gap-1.5 p-1 rounded-2xl bg-slate-900/80 border border-slate-700/60">
               <button
                 onClick={() => onSetViewMode('2d_blueprint')}
                 className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
@@ -654,7 +654,7 @@ export const ModularVehicle3DViewport: React.FC<ModularVehicle3DViewportProps> =
               <select
                 value={modelSource}
                 onChange={(e) => setModelSource(e.target.value as any)}
-                className="px-3 py-1.5 rounded-2xl bg-amber-950/60 border border-amber-600/50 text-xs font-bold text-amber-400 focus:outline-none focus:border-amber-400 cursor-pointer shadow-md hover:border-amber-400 transition-all"
+                className="px-3 py-1.5 rounded-2xl bg-slate-900/80 border border-amber-600/50 text-xs font-bold text-amber-400 focus:outline-none focus:border-amber-400 cursor-pointer shadow-md hover:border-amber-400 transition-all"
               >
                 <option value="parametric">⚡ Parametric Sculpted CAD</option>
                 <option value="volvo_p1800">🇸🇪 Volvo P1800 Restomod (FBX)</option>
@@ -670,7 +670,7 @@ export const ModularVehicle3DViewport: React.FC<ModularVehicle3DViewportProps> =
           {/* Right: Inspection Controls (Exploded View, X-Ray, Wireframe, Rotate, Camera Presets) */}
           <div className="flex flex-wrap items-center gap-2">
             {/* Exploded View Slider */}
-            <div className="flex items-center gap-2 px-3 py-1.5 rounded-2xl bg-amber-950/60 border border-amber-800/40 text-xs text-slate-300">
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-2xl bg-slate-900/80 border border-slate-700/60 text-xs text-slate-300">
               <Sliders size={13} className="text-amber-400" />
               <span className="text-[10px] text-slate-400 font-bold">Exploded:</span>
               <input
@@ -727,7 +727,7 @@ export const ModularVehicle3DViewport: React.FC<ModularVehicle3DViewportProps> =
             </button>
 
             {/* Camera Presets */}
-            <div className="flex items-center gap-1 p-1 rounded-2xl bg-amber-950/60 border border-amber-800/40">
+            <div className="flex items-center gap-1 p-1 rounded-2xl bg-slate-900/80 border border-slate-700/60">
               <button
                 onClick={() => applyCameraPreset('front_3_4')}
                 className={`px-2 py-1 rounded-lg text-[10px] font-bold ${cameraPreset === 'front_3_4' ? 'bg-amber-500 text-slate-950' : 'text-amber-400/70 hover:text-amber-200'}`}
@@ -752,7 +752,7 @@ export const ModularVehicle3DViewport: React.FC<ModularVehicle3DViewportProps> =
 
         {/* Sub-Toolbar (Paint Finish, Swatches, Rims, Aero, Brakes, VFX) */}
         {(viewMode === '3d_glb' || viewMode === 'xray_structural') && modelSource === 'parametric' && (
-          <div className="w-full flex flex-wrap items-center justify-between gap-2.5 pt-2.5 border-t border-amber-800/40 text-xs">
+          <div className="w-full flex flex-wrap items-center justify-between gap-2.5 pt-2.5 border-t border-slate-700/60 text-xs">
             {/* Paint Finish & Color Swatches */}
             <div className="flex flex-wrap items-center gap-2">
               <span className="text-[10px] text-amber-400/60 font-bold uppercase tracking-wider">Paint:</span>
@@ -774,7 +774,7 @@ export const ModularVehicle3DViewport: React.FC<ModularVehicle3DViewportProps> =
                   { label: 'Sapphire Blue', color: '#b45309' },
                   { label: 'Crimson Red', color: '#ef4444' },
                   { label: 'Emerald Green', color: '#10b981' },
-                  { label: 'Carbon Slate', color: '#1a1008' },
+                  { label: 'Carbon Slate', color: '#080c14' },
                   { label: 'Racing Gold', color: '#eab308' },
                   { label: 'Solar Orange', color: '#f97316' },
                   { label: 'Hyper Violet', color: '#f59e0b' },
@@ -940,13 +940,13 @@ export const ModularVehicle3DViewport: React.FC<ModularVehicle3DViewportProps> =
 
         {/* ── BOTTOM HUD CAD DIMENSIONS OVERLAY ── */}
         <div className="absolute bottom-3 left-4 right-4 z-20 flex items-center justify-between text-[11px] text-amber-400/70 pointer-events-none">
-          <div className="flex items-center gap-3 px-3 py-1.5 rounded-2xl bg-amber-950/60 border border-amber-800/40 backdrop-blur-md">
+          <div className="flex items-center gap-3 px-3 py-1.5 rounded-2xl bg-slate-900/80 border border-slate-700/60 backdrop-blur-md">
             <span>Wheelbase: <strong className="text-amber-400">{wheelbaseMm}mm</strong></span>
             <span>Track F/R: <strong className="text-amber-900">{trackWidthFrontMm}/{trackWidthRearMm}mm</strong></span>
             <span>Ride Height: <strong className="text-emerald-400">{rideHeightMm}mm</strong></span>
           </div>
 
-          <div className="px-3 py-1.5 rounded-2xl bg-amber-950/60 border border-amber-800/40 backdrop-blur-md text-[10px] text-amber-400/60">
+          <div className="px-3 py-1.5 rounded-2xl bg-slate-900/80 border border-slate-700/60 backdrop-blur-md text-[10px] text-amber-400/60">
             Left Click: Orbit • Right Click: Pan • Scroll: Zoom
           </div>
         </div>

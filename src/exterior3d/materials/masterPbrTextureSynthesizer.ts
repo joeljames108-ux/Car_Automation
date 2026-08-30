@@ -141,7 +141,7 @@ export class MasterPbrTextureSynthesizer {
     }
 
     // Curved cooling vanes / slots
-    ctx.strokeStyle = "#1a1008";
+    ctx.strokeStyle = "#080c14";
     ctx.lineWidth = 3;
     for (let i = 0; i < 16; i++) {
       const angle = (i * Math.PI * 2) / 16;

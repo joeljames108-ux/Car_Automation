@@ -78,14 +78,14 @@ export function Neon3DGraphicsStudio() {
 
       {/* Tab 1: All-in-One 3D Studio */}
       {activeTab === "all_in_one" && (
-        <div className="w-full min-h-[700px] h-[780px] rounded-3xl overflow-hidden border border-white/10 shadow-[0_25px_60px_rgba(0,0,0,0.6)] bg-amber-950/60 relative">
+        <div className="w-full min-h-[700px] h-[780px] rounded-3xl overflow-hidden border border-white/10 shadow-[0_25px_60px_rgba(0,0,0,0.6)] bg-slate-900/80 relative">
           <EngineAndCar3DGraphicsViewport />
         </div>
       )}
 
       {/* Tab 2: Modular Engine 3D Assembly */}
       {activeTab === "engine_assembly" && (
-        <div className="w-full min-h-[700px] h-[780px] rounded-3xl overflow-hidden border border-white/10 shadow-[0_25px_60px_rgba(0,0,0,0.6)] bg-amber-950/60 relative">
+        <div className="w-full min-h-[700px] h-[780px] rounded-3xl overflow-hidden border border-white/10 shadow-[0_25px_60px_rgba(0,0,0,0.6)] bg-slate-900/80 relative">
           <ModularEngine3DViewport
             className="w-full h-full"
             engineConfig={design.engine}
@@ -96,7 +96,7 @@ export function Neon3DGraphicsStudio() {
 
       {/* Tab 3: Modular Exterior 3D Assembly */}
       {activeTab === "exterior_assembly" && (
-        <div className="w-full min-h-[700px] h-[780px] rounded-3xl overflow-hidden border border-white/10 shadow-[0_25px_60px_rgba(0,0,0,0.6)] bg-amber-950/60 relative">
+        <div className="w-full min-h-[700px] h-[780px] rounded-3xl overflow-hidden border border-white/10 shadow-[0_25px_60px_rgba(0,0,0,0.6)] bg-slate-900/80 relative">
           <ModularExterior3DViewport
             className="w-full h-full"
           />

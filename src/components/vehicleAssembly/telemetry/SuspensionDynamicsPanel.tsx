@@ -109,8 +109,8 @@ export const SuspensionDynamicsPanel: React.FC<SuspensionDynamicsPanelProps> = (
           rollGradientDegPerG <= 2.0
             ? "bg-emerald-950/60 border-emerald-500/40 text-emerald-300"
             : rollGradientDegPerG <= 3.5
-            ? "bg-amber-950/60 border-amber-500/40 text-amber-300"
-            : "bg-amber-950/60 border-amber-500/40 text-amber-300"
+            ? "bg-slate-900/80 border-amber-500/40 text-amber-300"
+            : "bg-slate-900/80 border-amber-500/40 text-amber-300"
         }`}>
           <span>Roll Gradient: {rollGradientDegPerG}°/g</span>
           <span className="text-[10px] opacity-80">

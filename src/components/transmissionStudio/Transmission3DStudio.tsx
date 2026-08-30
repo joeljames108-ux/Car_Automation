@@ -644,7 +644,7 @@ const Transmission3DStudioComponent: React.FC<Transmission3DStudioProps> = ({
                 })}
 
                 {/* Final Drive Ratio */}
-                <div className="flex items-center gap-3 p-2.5 rounded-xl bg-amber-950/40 border border-amber-500/40 pt-3">
+                <div className="flex items-center gap-3 p-2.5 rounded-xl bg-slate-900/60 border border-amber-500/40 pt-3">
                   <span className="w-24 font-bold text-amber-300">Final Drive</span>
                   <input
                     type="range"
@@ -705,7 +705,7 @@ const Transmission3DStudioComponent: React.FC<Transmission3DStudioProps> = ({
                         onClick={() => setClutchType(c.id as any)}
                         className={`p-3 rounded-xl text-left border transition-all cursor-pointer ${
                           clutchType === c.id
-                            ? "bg-amber-950/50 border-amber-400 text-amber-300 shadow-md"
+                            ? "bg-slate-900/80 border-amber-400 text-amber-300 shadow-md"
                             : "bg-slate-900/60 border-slate-800 text-slate-300 hover:border-slate-700"
                         }`}
                       >
@@ -730,7 +730,7 @@ const Transmission3DStudioComponent: React.FC<Transmission3DStudioProps> = ({
                         onClick={() => setLsdType(d.id as any)}
                         className={`p-3 rounded-xl text-left border transition-all cursor-pointer ${
                           lsdType === d.id
-                            ? "bg-amber-950/50 border-amber-400 text-amber-300 shadow-md"
+                            ? "bg-slate-900/80 border-amber-400 text-amber-300 shadow-md"
                             : "bg-slate-900/60 border-slate-800 text-slate-300 hover:border-slate-700"
                         }`}
                       >

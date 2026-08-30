@@ -83,7 +83,7 @@ export function NeonRDCenterStudio() {
                   className={`p-3.5 rounded-xl border transition-all cursor-pointer flex flex-col gap-2 ${
  isUnlocked
  ? "bg-amber-500/20 border-amber-500/30 text-sky-200"
- : "bg-amber-950/60 border-white/10 opacity-75 hover:opacity-100 hover:border-sky-400/25"
+ : "bg-slate-900/80 border-white/10 opacity-75 hover:opacity-100 hover:border-sky-400/25"
  }`}
                 >
                   <div className="flex items-center justify-between">
@@ -132,7 +132,7 @@ export function NeonRDCenterStudio() {
               color="cyan"
             />
 
-            <div className="p-4 rounded-xl bg-amber-950/60 border border-sky-400/15 flex flex-col gap-2">
+            <div className="p-4 rounded-xl bg-slate-900/80 border border-sky-400/15 flex flex-col gap-2">
               <div className="flex items-center justify-between">
                 <span className="text-xs text-slate-400">Annual R&D Investment:</span>
                 <span className="text-xs font-bold nh-font-mono text-amber-300">

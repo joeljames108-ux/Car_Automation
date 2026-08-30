@@ -345,7 +345,7 @@ export const TrackLayoutMasterStudio: React.FC = memo(function TrackLayoutMaster
                     >
                       <circle
                         r={isCornerSelected ? "12" : "7"}
-                        fill={isCornerSelected ? "#fbbf24" : "#1a1008"}
+                        fill={isCornerSelected ? "#fbbf24" : "#080c14"}
                         stroke="#fbbf24"
                         strokeWidth="2"
                         className="transition-all"
@@ -353,7 +353,7 @@ export const TrackLayoutMasterStudio: React.FC = memo(function TrackLayoutMaster
                       <text
                         x="0"
                         y="3"
-                        fill={isCornerSelected ? "#1a1008" : "#fbbf24"}
+                        fill={isCornerSelected ? "#080c14" : "#fbbf24"}
                         fontSize="9"
                         fontFamily="monospace"
                         fontWeight="bold"

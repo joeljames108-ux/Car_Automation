@@ -66,7 +66,7 @@ export function NeonImmersionCoolingStudio() {
             }}
             className="p-6 flex flex-col gap-4"
           >
-            <div className="grid grid-cols-8 gap-2 p-4 rounded-xl bg-amber-950/60 border border-sky-400/25 shadow-[inset_0_0_20px_rgba(0,0,0,0.8)]">
+            <div className="grid grid-cols-8 gap-2 p-4 rounded-xl bg-slate-900/80 border border-sky-400/25 shadow-[inset_0_0_20px_rgba(0,0,0,0.8)]">
               {Array.from({ length: 32 }).map((_, idx) => {
                 const cellTemp = Math.round(maxCellTemp - Math.abs(idx - 16) * 0.4);
                 const isHot = cellTemp > 45;
@@ -105,7 +105,7 @@ export function NeonImmersionCoolingStudio() {
                       className={`p-2.5 rounded-lg border text-center text-xs font-bold cursor-pointer transition-all ${
  isSelected
  ? "bg-amber-500/20 border-amber-500/30 text-sky-200"
- : "bg-amber-950/60 border-white/10 text-slate-400 hover:border-sky-400/25"
+ : "bg-slate-900/80 border-white/10 text-slate-400 hover:border-sky-400/25"
  }`}
                     >
                       {item.name}
@@ -150,7 +150,7 @@ export function NeonImmersionCoolingStudio() {
               onChange={(val) => setChargePower(val)}
             />
 
-            <div className="p-3.5 rounded-xl bg-amber-950/60 border border-sky-400/15 flex flex-col gap-2 font-mono text-xs">
+            <div className="p-3.5 rounded-xl bg-slate-900/80 border border-sky-400/15 flex flex-col gap-2 font-mono text-xs">
               <div className="flex items-center justify-between">
                 <span className="text-slate-400">Fluid Boiling Point:</span>
                 <span className="text-amber-300 font-bold">110°C (Phase Change)</span>

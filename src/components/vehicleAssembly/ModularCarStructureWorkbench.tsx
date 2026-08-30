@@ -125,9 +125,9 @@ export const ModularCarStructureWorkbench: React.FC<ModularCarStructureWorkbench
       case 'ceramic':
         return 'text-emerald-400 border-emerald-500/40 bg-emerald-950/40';
       case 'titanium':
-        return 'text-amber-400 border-amber-500/40 bg-amber-950/40';
+        return 'text-amber-400 border-amber-500/40 bg-slate-900/60';
       case 'billet':
-        return 'text-amber-400 border-amber-500/40 bg-amber-950/40';
+        return 'text-amber-400 border-amber-500/40 bg-slate-900/60';
       case 'forged':
         return 'text-yellow-400 border-yellow-500/40 bg-yellow-950/40';
       default:
@@ -287,7 +287,7 @@ export const ModularCarStructureWorkbench: React.FC<ModularCarStructureWorkbench
                               <CornerDownRight size={12} className={isSelected ? 'text-amber-400' : 'text-slate-600'} />
                               <span className="font-semibold">{node.name}</span>
                               {node.isUnsprung && (
-                                <span className="px-1.5 py-0.2 rounded bg-amber-950/60 text-amber-300 border border-amber-800/40 text-[9px]">
+                                <span className="px-1.5 py-0.2 rounded bg-slate-900/80 text-amber-300 border border-slate-700/60 text-[9px]">
                                   UNSPRUNG
                                 </span>
                               )}

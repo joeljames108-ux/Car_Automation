@@ -65,9 +65,9 @@ export const GapTower: React.FC<GapTowerProps> = memo(function GapTower({
   };
 
   return (
-    <div className="bg-amber-950/80 rounded-2xl border border-amber-800/30 overflow-hidden">
+    <div className="bg-slate-950/80 rounded-2xl border border-slate-700/50 overflow-hidden">
       {/* Header */}
-      <div className="bg-amber-900/50 px-3 py-2 flex items-center text-xs font-bold text-amber-400 border-b border-amber-800/30">
+      <div className="bg-slate-800/60 px-3 py-2 flex items-center text-xs font-bold text-amber-400 border-b border-slate-700/50">
         <span className="w-8 text-center">#</span>
         <span className="w-7 text-center">N</span>
         <span className="w-28 ml-1">DRIVER</span>
@@ -96,7 +96,7 @@ export const GapTower: React.FC<GapTowerProps> = memo(function GapTower({
             <div key={entry.number}
               className={`px-3 py-1.5 flex items-center text-xs transition-colors ${
                 isHighlighted ? 'bg-amber-500/15' :
-                entry.status === 'retired' ? 'opacity-40' : 'hover:bg-amber-900/20'
+                entry.status === 'retired' ? 'opacity-40' : 'hover:bg-slate-800/30'
               }`}>
               {/* Position */}
               <span className={`w-8 text-center font-bold ${
@@ -165,7 +165,7 @@ export const GapTower: React.FC<GapTowerProps> = memo(function GapTower({
       </div>
 
       {/* Footer */}
-      <div className="bg-amber-900/30 px-3 py-1.5 flex items-center gap-4 text-xs text-amber-500 border-t border-amber-800/20">
+      <div className="bg-slate-800/40 px-3 py-1.5 flex items-center gap-4 text-xs text-amber-500 border-t border-slate-800">
         <div className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-amber-500" /> Purple</div>
         <div className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-green-500" /> Green</div>
         <div className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-yellow-500" /> Yellow</div>

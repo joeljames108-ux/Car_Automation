@@ -107,7 +107,7 @@ export function HybridOptionalSection({
   return (
     <div className={`space-y-6 ${className}`}>
       {/* ── SKIP BANNER ── */}
-      <div className="p-3.5 rounded-2xl bg-amber-950/30 border border-amber-500/30 flex items-center justify-between">
+      <div className="p-3.5 rounded-2xl bg-slate-900/60 border border-amber-500/30 flex items-center justify-between">
         <div className="flex items-center gap-2 text-xs font-mono text-amber-200">
           <Zap size={14} className="text-amber-400 animate-pulse" />
           <span className="font-extrabold">Optional Electrification Subsystem:</span>

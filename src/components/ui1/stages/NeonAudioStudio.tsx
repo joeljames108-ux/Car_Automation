@@ -144,7 +144,7 @@ export function NeonAudioStudio() {
             }}
             className="p-6 flex flex-col gap-4"
           >
-            <div className="w-full h-44 bg-amber-950/60 rounded-xl border border-sky-400/25 overflow-hidden relative shadow-[inset_0_0_20px_rgba(0,0,0,0.8)]">
+            <div className="w-full h-44 bg-slate-900/80 rounded-xl border border-sky-400/25 overflow-hidden relative shadow-[inset_0_0_20px_rgba(0,0,0,0.8)]">
               <canvas ref={canvasRef} width={600} height={180} className="w-full h-full" />
               <div className="absolute top-2 left-3 flex items-center gap-2">
                 <div className="w-2 h-2 rounded-full bg-sky-300 animate-ping" />
@@ -192,7 +192,7 @@ export function NeonAudioStudio() {
               onChange={(val) => setRpm(val)}
             />
 
-            <div className="flex items-center justify-between p-3 rounded-xl bg-amber-950/60 border border-sky-400/15">
+            <div className="flex items-center justify-between p-3 rounded-xl bg-slate-900/80 border border-sky-400/15">
               <div className="flex flex-col">
                 <span className="text-xs font-bold text-slate-200">Active Exhaust Bypass Valves</span>
                 <span className="text-[10px] text-slate-400">Open for full unmuffled racing resonance</span>
@@ -227,7 +227,7 @@ export function NeonAudioStudio() {
                       className={`p-2.5 rounded-lg border text-center text-xs font-bold cursor-pointer transition-all ${
  isSelected
  ? "bg-amber-500/20 border-amber-500/30 text-sky-200"
- : "bg-amber-950/60 border-white/10 text-slate-400 hover:border-sky-400/25"
+ : "bg-slate-900/80 border-white/10 text-slate-400 hover:border-sky-400/25"
  }`}
                     >
                       {item.name}

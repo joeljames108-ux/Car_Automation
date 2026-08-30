@@ -81,9 +81,9 @@ export const PowertrainDynoDashboard: React.FC = () => {
     .join(' ');
 
   return (
-    <div className="flex flex-col h-full bg-amber-950/60 text-gray-100 font-sans border border-[#1b2333] rounded-2xl overflow-hidden shadow-2xl">
+    <div className="flex flex-col h-full bg-slate-900/80 text-gray-100 font-sans border border-[#1b2333] rounded-2xl overflow-hidden shadow-2xl">
       {/* Dyno Header */}
-      <div className="flex items-center justify-between px-5 py-3.5 bg-amber-950/60 border-b border-[#1b2333]">
+      <div className="flex items-center justify-between px-5 py-3.5 bg-slate-900/80 border-b border-[#1b2333]">
         <div className="flex items-center gap-3">
           <div className="p-2 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-400">
             <Zap className="w-5 h-5" />
@@ -100,7 +100,7 @@ export const PowertrainDynoDashboard: React.FC = () => {
 
         {/* Peak Performance Badges */}
         <div className="flex items-center gap-3">
-          <div className="flex items-center gap-2 bg-amber-950/60 px-3 py-1.5 rounded-xl border border-red-500/30">
+          <div className="flex items-center gap-2 bg-slate-900/80 px-3 py-1.5 rounded-xl border border-red-500/30">
             <Flame className="w-4 h-4 text-red-400" />
             <div className="text-right">
               <span className="text-[10px] text-gray-400 block uppercase">Peak Power</span>
@@ -110,7 +110,7 @@ export const PowertrainDynoDashboard: React.FC = () => {
             </div>
           </div>
 
-          <div className="flex items-center gap-2 bg-amber-950/60 px-3 py-1.5 rounded-xl border border-amber-500/30">
+          <div className="flex items-center gap-2 bg-slate-900/80 px-3 py-1.5 rounded-xl border border-amber-500/30">
             <TrendingUp className="w-4 h-4 text-amber-400" />
             <div className="text-right">
               <span className="text-[10px] text-gray-400 block uppercase">Peak Torque</span>
@@ -127,7 +127,7 @@ export const PowertrainDynoDashboard: React.FC = () => {
         {/* Left Dyno Curves & Telemetry */}
         <div className="flex-1 p-5 flex flex-col space-y-4 overflow-y-auto">
           {/* Dyno Graph Card */}
-          <div className="p-4 bg-amber-950/60 rounded-2xl border border-[#1b2333] shadow-inner flex flex-col space-y-3">
+          <div className="p-4 bg-slate-900/80 rounded-2xl border border-[#1b2333] shadow-inner flex flex-col space-y-3">
             <div className="flex items-center justify-between">
               <span className="text-xs font-bold text-gray-300 flex items-center gap-2">
                 <Activity className="w-4 h-4 text-amber-400" />
@@ -144,7 +144,7 @@ export const PowertrainDynoDashboard: React.FC = () => {
             </div>
 
             {/* SVG Dyno Graph */}
-            <div className="relative h-64 w-full bg-amber-950/60 rounded-xl border border-[#161c28] p-2 flex items-center justify-center">
+            <div className="relative h-64 w-full bg-slate-900/80 rounded-xl border border-[#161c28] p-2 flex items-center justify-center">
               <svg viewBox={`0 0 ${chartW} ${chartH}`} className="w-full h-full overflow-visible">
                 {/* Horizontal Gridlines */}
                 {[0.25, 0.5, 0.75, 1.0].map((frac, i) => (
@@ -184,7 +184,7 @@ export const PowertrainDynoDashboard: React.FC = () => {
           </div>
 
           {/* Circuit Lap Simulator Card */}
-          <div className="p-4 bg-amber-950/60 rounded-2xl border border-[#1b2333] flex flex-col space-y-3">
+          <div className="p-4 bg-slate-900/80 rounded-2xl border border-[#1b2333] flex flex-col space-y-3">
             <div className="flex items-center justify-between">
               <span className="text-xs font-bold text-gray-300 flex items-center gap-2">
                 <Timer className="w-4 h-4 text-emerald-400" />
@@ -196,15 +196,15 @@ export const PowertrainDynoDashboard: React.FC = () => {
             </div>
 
             <div className="grid grid-cols-3 gap-3 text-xs">
-              <div className="p-3 bg-amber-950/60 rounded-xl border border-[#1e2638]">
+              <div className="p-3 bg-slate-900/80 rounded-xl border border-[#1e2638]">
                 <span className="text-gray-400 block text-[10px] uppercase">Top Speed</span>
                 <span className="font-mono font-bold text-amber-400 text-sm">{lap.topSpeedKmh} km/h</span>
               </div>
-              <div className="p-3 bg-amber-950/60 rounded-xl border border-[#1e2638]">
+              <div className="p-3 bg-slate-900/80 rounded-xl border border-[#1e2638]">
                 <span className="text-gray-400 block text-[10px] uppercase">Avg Lap Speed</span>
                 <span className="font-mono font-bold text-amber-400 text-sm">{lap.avgSpeedKmh} km/h</span>
               </div>
-              <div className="p-3 bg-amber-950/60 rounded-xl border border-[#1e2638]">
+              <div className="p-3 bg-slate-900/80 rounded-xl border border-[#1e2638]">
                 <span className="text-gray-400 block text-[10px] uppercase">Circuit Length</span>
                 <span className="font-mono font-bold text-amber-400 text-sm">{(selectedTrack.totalLengthM / 1000).toFixed(2)} km</span>
               </div>
@@ -213,7 +213,7 @@ export const PowertrainDynoDashboard: React.FC = () => {
         </div>
 
         {/* Right Engine Parameter Controls */}
-        <div className="w-80 bg-amber-950/60 border-l border-[#1b2333] p-4 flex flex-col space-y-4 overflow-y-auto">
+        <div className="w-80 bg-slate-900/80 border-l border-[#1b2333] p-4 flex flex-col space-y-4 overflow-y-auto">
           <h4 className="text-xs font-bold text-gray-300 uppercase tracking-wider flex items-center gap-2">
             <Sliders className="w-4 h-4 text-amber-400" />
             Powertrain Configuration
@@ -249,7 +249,7 @@ export const PowertrainDynoDashboard: React.FC = () => {
                     className={`py-1 rounded-lg font-mono text-xs transition-all ${
                       cylinderCount === cyl
                         ? 'bg-amber-500 text-black font-bold'
-                        : 'bg-amber-950/60 text-gray-400 hover:bg-[#1e2738]'
+                        : 'bg-slate-900/80 text-gray-400 hover:bg-[#1e2738]'
                     }`}
                   >
                     V{cyl}
@@ -299,7 +299,7 @@ export const PowertrainDynoDashboard: React.FC = () => {
                     className={`w-full text-left px-3 py-2 rounded-xl text-xs flex items-center justify-between transition-all ${
                       selectedTrackId === t.id
                         ? 'bg-amber-500/10 border border-amber-500/40 text-amber-300'
-                        : 'bg-amber-950/60 hover:bg-amber-950/60 text-gray-400'
+                        : 'bg-slate-900/80 hover:bg-slate-900/80 text-gray-400'
                     }`}
                   >
                     <span>{t.name}</span>

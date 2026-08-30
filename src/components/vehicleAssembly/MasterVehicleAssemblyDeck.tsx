@@ -239,7 +239,7 @@ export const MasterVehicleAssemblyDeck: React.FC = () => {
                         <CheckCircle2 className="w-3 h-3" /> Mated
                       </span>
                     ) : (
-                      <span className="flex items-center gap-1 text-[10px] text-amber-400 font-medium bg-amber-950/60 px-1.5 py-0.5 rounded border border-amber-800">
+                      <span className="flex items-center gap-1 text-[10px] text-amber-400 font-medium bg-slate-900/80 px-1.5 py-0.5 rounded border border-slate-700">
                         <AlertTriangle className="w-3 h-3" /> Open
                       </span>
                     )}

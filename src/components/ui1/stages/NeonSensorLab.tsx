@@ -136,7 +136,7 @@ export function NeonSensorLab() {
                 ref={canvasRef}
                 width={360}
                 height={360}
-                className="max-h-full max-w-full rounded-2xl bg-amber-950/60 border border-sky-400/25"
+                className="max-h-full max-w-full rounded-2xl bg-slate-900/80 border border-sky-400/25"
               />
             </div>
 
@@ -172,7 +172,7 @@ export function NeonSensorLab() {
               {sensorArray.map((sensor, idx) => (
                 <div
                   key={idx}
-                  className="p-3 rounded-xl bg-amber-950/60 border border-sky-400/15 flex flex-col gap-1"
+                  className="p-3 rounded-xl bg-slate-900/80 border border-sky-400/15 flex flex-col gap-1"
                 >
                   <div className="flex items-center justify-between">
                     <span className="text-xs font-bold text-slate-100">{sensor.name}</span>

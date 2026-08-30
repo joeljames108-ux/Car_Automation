@@ -108,7 +108,7 @@ export function AnimMasterComponentCatalog() {
               }}
               className="p-6"
             >
-              <div className="flex justify-center items-center p-8 bg-amber-950/60/80 rounded-2xl border border-sky-400/15 min-h-[300px] perspective-1000">
+              <div className="flex justify-center items-center p-8 bg-slate-900/80/80 rounded-2xl border border-sky-400/15 min-h-[300px] perspective-1000">
                 <div
                   onMouseMove={handleMouseMoveCard}
                   onMouseLeave={handleMouseLeaveCard}
@@ -117,7 +117,7 @@ export function AnimMasterComponentCatalog() {
                     transition: cardTilt.rx === 0 ? "transform 0.5s ease-out" : "none",
                     transformStyle: "preserve-3d",
                   }}
-                  className="w-full max-w-md bg-amber-950/60/90 p-6 rounded-2xl border border-amber-500/30 shadow-[0_20px_50px_rgba(0,0,0,0.8)] relative overflow-hidden cursor-pointer group"
+                  className="w-full max-w-md bg-slate-900/80/90 p-6 rounded-2xl border border-amber-500/30 shadow-[0_20px_50px_rgba(0,0,0,0.8)] relative overflow-hidden cursor-pointer group"
                 >
                   {/* Dynamic Glare */}
                   <div
@@ -141,15 +141,15 @@ export function AnimMasterComponentCatalog() {
                   </p>
 
                   <div className="grid grid-cols-3 gap-3 border-t border-sky-400/15 pt-4 nh-font-mono">
-                    <div className="bg-amber-950/60 p-2.5 rounded-xl border border-sky-400/15 text-center">
+                    <div className="bg-slate-900/80 p-2.5 rounded-xl border border-sky-400/15 text-center">
                       <div className="text-[9px] text-slate-400">POWER</div>
                       <div className="text-sm font-bold text-amber-300">1600 HP</div>
                     </div>
-                    <div className="bg-amber-950/60 p-2.5 rounded-xl border border-sky-400/15 text-center">
+                    <div className="bg-slate-900/80 p-2.5 rounded-xl border border-sky-400/15 text-center">
                       <div className="text-[9px] text-slate-400">REDLINE</div>
                       <div className="text-sm font-bold text-amber-300">8500 RPM</div>
                     </div>
-                    <div className="bg-amber-950/60 p-2.5 rounded-xl border border-sky-400/15 text-center">
+                    <div className="bg-slate-900/80 p-2.5 rounded-xl border border-sky-400/15 text-center">
                       <div className="text-[9px] text-slate-400">TOP SPEED</div>
                       <div className="text-sm font-bold text-emerald-300">480 km/h</div>
                     </div>
@@ -230,7 +230,7 @@ export function AnimMasterComponentCatalog() {
               ].map((item, i) => (
                 <div
                   key={i}
-                  className="p-3 rounded-xl bg-amber-950/60/80 border border-sky-400/15 flex items-center justify-between"
+                  className="p-3 rounded-xl bg-slate-900/80/80 border border-sky-400/15 flex items-center justify-between"
                 >
                   <span className="text-xs font-bold text-slate-100">{item.name}</span>
                   <div className="flex items-center gap-3">
@@ -281,7 +281,7 @@ export function AnimMasterComponentCatalog() {
             }}
             className="p-4"
           >
-            <pre className="p-3 rounded-xl bg-amber-950/60 border border-sky-400/15 text-[11px] nh-font-mono text-amber-300 overflow-x-auto">
+            <pre className="p-3 rounded-xl bg-slate-900/80 border border-sky-400/15 text-[11px] nh-font-mono text-amber-300 overflow-x-auto">
               <code>{`<NeonHorizonGlassPanel
   variant="primary"
   glow="cyan"

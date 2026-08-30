@@ -93,7 +93,7 @@ export function EngineCoverSection({
               </div>
             </div>
 
-            <div className="p-3 rounded-xl bg-amber-950/20 border border-amber-500/20 space-y-1">
+            <div className="p-3 rounded-xl bg-slate-900/50 border border-amber-500/20 space-y-1">
               <span className="text-[10px] font-mono font-bold text-amber-300 uppercase tracking-wider block">
                 RAM-AIR INDUCTION BOOST
               </span>

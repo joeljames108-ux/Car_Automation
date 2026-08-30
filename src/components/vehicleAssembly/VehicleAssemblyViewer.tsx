@@ -123,7 +123,7 @@ export const VehicleAssemblyViewer: React.FC<VehicleAssemblyViewerProps> = ({
       </div>
 
       {/* Main 3D Viewport Content Stage */}
-      <div className="relative w-full h-[520px] flex items-center justify-center bg-amber-950/60">
+      <div className="relative w-full h-[520px] flex items-center justify-center bg-slate-900/80">
         <Exterior3DWebGLViewer className="w-full h-full" />
 
         {/* Floating Active Stage Badge */}

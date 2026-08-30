@@ -355,7 +355,7 @@ export function AIEngineeringPresets({
               key={preset.id}
               className={`relative flex flex-col justify-between p-5 rounded-2xl transition-all duration-300 backdrop-blur-xl border ${
                 isApplied
-                  ? "bg-amber-950/40 border-amber-400/80 shadow-[0_0_30px_rgba(34,211,238,0.3)] ring-1 ring-amber-400"
+                  ? "bg-slate-900/60 border-amber-400/80 shadow-[0_0_30px_rgba(34,211,238,0.3)] ring-1 ring-amber-400"
                   : "bg-slate-900/85 border-slate-800 hover:border-slate-700 hover:shadow-2xl"
               }`}
             >

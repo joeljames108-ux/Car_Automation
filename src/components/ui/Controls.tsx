@@ -141,7 +141,7 @@ export function Slider({ label, value, min, max, step = 1, onChange, format, uni
           )}
 
           {/* Current Slider Value */}
-          <span className="slider-value-text font-mono text-xs font-extrabold text-amber-300 tracking-tight bg-amber-950/60 border border-amber-500/30 px-2 py-0.5 rounded-md shadow-[0_0_8px_rgba(245,158,11,0.2)]">
+          <span className="slider-value-text font-mono text-xs font-extrabold text-amber-300 tracking-tight bg-slate-900/80 border border-amber-500/30 px-2 py-0.5 rounded-md shadow-[0_0_8px_rgba(245,158,11,0.2)]">
             {format ? format(localVal) : localVal}{unit && <span className="text-slate-400 text-[10px] font-normal ml-0.5">{unit}</span>}
           </span>
         </div>

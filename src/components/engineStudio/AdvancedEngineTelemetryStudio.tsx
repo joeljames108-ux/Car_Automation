@@ -195,7 +195,7 @@ export const AdvancedEngineTelemetryStudio: React.FC<AdvancedEngineTelemetryStud
                     node.status === "critical"
                       ? "bg-rose-950/40 border-rose-500/50 shadow-[0_0_15px_rgba(244,63,94,0.2)]"
                       : node.status === "warning"
-                      ? "bg-amber-950/30 border-amber-500/40"
+                      ? "bg-slate-900/60 border-amber-500/40"
                       : "bg-slate-900/60 border-slate-800"
                   }`}
                 >
@@ -313,7 +313,7 @@ export const AdvancedEngineTelemetryStudio: React.FC<AdvancedEngineTelemetryStud
                   <p className="text-xs text-slate-400 font-sans">1/3 Octave band SPL decibel frequencies & cabin sound quality</p>
                 </div>
               </div>
-              <div className="text-xs font-bold px-3 py-1.5 rounded-lg bg-amber-950/60 border border-violet-500/40 text-amber-300">
+              <div className="text-xs font-bold px-3 py-1.5 rounded-lg bg-slate-900/80 border border-violet-500/40 text-amber-300">
                 Engine Sound Quality: {nvh.soundQualityScore} / 100
               </div>
             </div>

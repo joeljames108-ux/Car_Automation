@@ -465,7 +465,7 @@ const HypercarModularAssemblyViewportComponent: React.FC = () => {
   };
 
   return (
-    <div className="relative w-full h-full bg-amber-950/60 select-none overflow-hidden group">
+    <div className="relative w-full h-full bg-slate-900/80 select-none overflow-hidden group">
       {/* 3D Canvas Mount */}
       <div ref={mountRef} className="w-full h-full cursor-grab active:cursor-grabbing" />
 

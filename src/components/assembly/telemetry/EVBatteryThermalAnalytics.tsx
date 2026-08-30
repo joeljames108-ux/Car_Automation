@@ -124,7 +124,7 @@ export const EVBatteryThermalAnalytics: React.FC<EVBatteryThermalAnalyticsProps>
         {/* 800V Fast Charge Badge */}
         <div className={`px-2.5 py-1 rounded-lg text-xs font-mono font-bold flex items-center gap-1.5 border ${
           voltage === 800
-            ? "bg-amber-950/60 border-amber-500/40 text-amber-300"
+            ? "bg-slate-900/80 border-amber-500/40 text-amber-300"
             : "bg-slate-900 border-slate-700 text-slate-400"
         }`}>
           <Zap className="w-3.5 h-3.5" />
@@ -149,7 +149,7 @@ export const EVBatteryThermalAnalytics: React.FC<EVBatteryThermalAnalyticsProps>
                 onClick={() => setChemistry(c.id as any)}
                 className={`p-2.5 rounded-lg border text-left flex flex-col transition-all ${
                   chemistry === c.id
-                    ? "bg-amber-950/60 border-amber-500/80 text-amber-200 shadow-lg"
+                    ? "bg-slate-900/80 border-amber-500/80 text-amber-200 shadow-lg"
                     : "bg-slate-950/60 border-slate-800 text-slate-400 hover:border-slate-700"
                 }`}
               >

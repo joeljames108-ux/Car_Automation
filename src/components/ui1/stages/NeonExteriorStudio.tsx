@@ -33,7 +33,7 @@ export function NeonExteriorStudio() {
     { name: "Electric Cyan", hex: "#8fb9d9" },
     { name: "Acid Laser", hex: "#34d399" },
     { name: "Hyper Violet", hex: "#a78bfa" },
-    { name: "Stealth Carbon", hex: "#1a1008" },
+    { name: "Stealth Carbon", hex: "#080c14" },
     { name: "Solar Gold", hex: "#d9b36c" },
     { name: "Crimson Pulse", hex: "#ff5252" },
   ];
@@ -273,7 +273,7 @@ export function NeonExteriorStudio() {
               />
             </div>
 
-            <div className="p-4 rounded-xl bg-amber-950/60 border border-sky-400/15 flex items-center justify-between">
+            <div className="p-4 rounded-xl bg-slate-900/80 border border-sky-400/15 flex items-center justify-between">
               <div>
                 <span className="text-[10px] nh-font-mono text-slate-400">ACTIVE COLOR SPEC:</span>
                 <div className="text-sm font-bold nh-font-headline text-sky-200 mt-0.5">

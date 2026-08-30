@@ -88,7 +88,7 @@ export function NeonUltraCapacitorStudio() {
             }}
             className="p-6 flex flex-col gap-4"
           >
-            <div className="grid grid-cols-12 gap-1.5 h-36 p-4 rounded-xl bg-amber-950/60 border border-sky-400/25 items-end shadow-[inset_0_0_20px_rgba(0,0,0,0.8)]">
+            <div className="grid grid-cols-12 gap-1.5 h-36 p-4 rounded-xl bg-slate-900/80 border border-sky-400/25 items-end shadow-[inset_0_0_20px_rgba(0,0,0,0.8)]">
               {Array.from({ length: 12 }).map((_, idx) => {
                 const cellSoc = Math.max(0, capSoc - idx * 2.5);
                 const isDischarging = burstActive;
@@ -148,7 +148,7 @@ export function NeonUltraCapacitorStudio() {
               onChange={(val) => setRegenBias(val)}
             />
 
-            <div className="p-3.5 rounded-xl bg-amber-950/60 border border-sky-400/15 flex flex-col gap-2 font-mono text-xs">
+            <div className="p-3.5 rounded-xl bg-slate-900/80 border border-sky-400/15 flex flex-col gap-2 font-mono text-xs">
               <div className="flex items-center justify-between">
                 <span className="text-slate-400">Full Recharge Time:</span>
                 <span className="text-amber-300 font-bold">1.8 Seconds (Braking)</span>

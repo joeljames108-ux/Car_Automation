@@ -125,13 +125,13 @@ export const RaceEngineerChat: React.FC<RaceEngineerChatProps> = memo(function R
   };
 
   return (
-    <div className="bg-amber-900/40 rounded-2xl border border-amber-800/30 flex flex-col" style={{ height: '500px' }}>
+    <div className="bg-slate-800/40 rounded-2xl border border-slate-700/60 flex flex-col" style={{ height: '500px' }}>
       {/* Header */}
-      <div className="p-3 border-b border-amber-800/30 flex items-center gap-2">
+      <div className="p-3 border-b border-slate-700/60 flex items-center gap-2">
         <div className="w-8 h-8 rounded-full bg-amber-500 flex items-center justify-center text-amber-950 font-bold text-sm">RE</div>
         <div>
           <h3 className="text-amber-100 text-sm font-bold">Race Engineer</h3>
-          <p className="text-amber-400/60 text-xs">Lap {currentLap}/{totalLaps}</p>
+          <p className="text-slate-400 text-xs">Lap {currentLap}/{totalLaps}</p>
         </div>
         <div className="ml-auto flex items-center gap-1">
           <div className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
@@ -147,8 +147,8 @@ export const RaceEngineerChat: React.FC<RaceEngineerChatProps> = memo(function R
             <div className="w-12 h-12 rounded-full bg-amber-500/20 flex items-center justify-center mx-auto mb-3">
               <span className="text-xl">{'\u260E\uFE0F'}</span>
             </div>
-            <p className="text-amber-300 text-sm font-bold">Race Engineer Online</p>
-            <p className="text-amber-400/60 text-xs mt-1">I'm here to help you go faster. Ask me anything about strategy, tires, fuel, or race conditions.</p>
+            <p className="text-cyan-300 text-sm font-bold">Race Engineer Online</p>
+            <p className="text-slate-400 text-xs mt-1">I'm here to help you go faster. Ask me anything about strategy, tires, fuel, or race conditions.</p>
           </div>
         )}
 
@@ -156,10 +156,10 @@ export const RaceEngineerChat: React.FC<RaceEngineerChatProps> = memo(function R
           <div key={msg.id} className={`flex ${msg.sender === 'driver' ? 'justify-end' : 'justify-start'}`}>
             <div className={`max-w-[80%] rounded-2xl px-3 py-2 ${
               msg.sender === 'driver'
-                ? 'bg-amber-500/30 text-amber-100 rounded-br-sm'
+                ? 'bg-cyan-600/30 text-cyan-100 border border-cyan-500/40 rounded-br-sm'
                 : msg.priority === 'critical' ? 'bg-red-500/20 text-red-200 border border-red-500/30 rounded-bl-sm'
                 : msg.priority === 'high' ? 'bg-orange-500/15 text-orange-200 border border-orange-500/20 rounded-bl-sm'
-                : 'bg-amber-950/60 text-amber-200 rounded-bl-sm'
+                : 'bg-slate-800/80 text-slate-200 border border-slate-700/50 rounded-bl-sm'
             }`}>
               {msg.sender === 'engineer' && msg.category && (
                 <span className={`text-xs font-bold uppercase block mb-0.5 ${
@@ -180,7 +180,7 @@ export const RaceEngineerChat: React.FC<RaceEngineerChatProps> = memo(function R
         {/* Typing indicator */}
         {isTyping && (
           <div className="flex justify-start">
-            <div className="bg-amber-950/60 rounded-2xl rounded-bl-sm px-3 py-2">
+            <div className="bg-slate-900/80 rounded-2xl rounded-bl-sm px-3 py-2">
               <div className="flex gap-1">
                 <div className="w-2 h-2 bg-amber-400 rounded-full animate-bounce" style={{ animationDelay: '0ms' }} />
                 <div className="w-2 h-2 bg-amber-400 rounded-full animate-bounce" style={{ animationDelay: '150ms' }} />
@@ -194,11 +194,11 @@ export const RaceEngineerChat: React.FC<RaceEngineerChatProps> = memo(function R
       </div>
 
       {/* Quick commands */}
-      <div className="px-3 py-2 border-t border-amber-800/20">
+      <div className="px-3 py-2 border-t border-slate-800">
         <div className="flex flex-wrap gap-1.5 mb-2">
           {quickCommands.map((cmd, i) => (
             <button key={i} onClick={() => handleQuickCommand(cmd.query)}
-              className="px-2 py-1 rounded-lg bg-amber-950/40 text-amber-400/70 text-xs hover:bg-amber-900/40 hover:text-amber-200 transition-all cursor-pointer">
+              className="px-2 py-1 rounded-lg bg-slate-900/60 text-slate-300 text-xs hover:bg-slate-800/40 hover:text-amber-200 transition-all cursor-pointer">
               {cmd.label}
             </button>
           ))}
@@ -206,7 +206,7 @@ export const RaceEngineerChat: React.FC<RaceEngineerChatProps> = memo(function R
       </div>
 
       {/* Input */}
-      <div className="p-3 border-t border-amber-800/30">
+      <div className="p-3 border-t border-slate-700/60">
         <div className="flex gap-2">
           <input
             type="text"
@@ -214,10 +214,10 @@ export const RaceEngineerChat: React.FC<RaceEngineerChatProps> = memo(function R
             onChange={e => setInput(e.target.value)}
             onKeyDown={e => e.key === 'Enter' && handleSend()}
             placeholder="Ask your race engineer..."
-            className="flex-1 bg-amber-950/40 border border-amber-800/30 rounded-xl px-3 py-2 text-sm text-amber-100 placeholder-amber-600 outline-none focus:border-amber-500/50"
+            className="flex-1 bg-slate-900/60 border border-slate-700/60 rounded-xl px-3 py-2 text-sm text-slate-100 placeholder-slate-500 outline-none focus:border-cyan-500/50"
           />
           <button onClick={handleSend}
-            className="px-4 py-2 bg-amber-500 text-amber-950 rounded-xl text-sm font-bold hover:bg-amber-400 transition-all cursor-pointer">
+            className="px-4 py-2 bg-cyan-500 text-slate-950 rounded-xl text-sm font-bold hover:bg-cyan-400 transition-all cursor-pointer">
             {'\u27A4'}
           </button>
         </div>

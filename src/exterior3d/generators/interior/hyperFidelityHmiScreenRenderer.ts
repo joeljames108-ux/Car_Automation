@@ -220,7 +220,7 @@ export class HyperFidelityHmiScreenRenderer {
     ctx.fillRect(0, 0, width, height);
 
     // Header HMI Bar
-    ctx.fillStyle = "#1a1008";
+    ctx.fillStyle = "#070b14";
     ctx.fillRect(0, 0, width, 120);
 
     ctx.fillStyle = "#fbbf24";

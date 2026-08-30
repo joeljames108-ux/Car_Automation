@@ -51,9 +51,9 @@ export const ActiveAeroBrakeThermalDeck: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col h-full w-full bg-amber-950/60 text-gray-100 p-4 gap-4 overflow-y-auto font-sans">
+    <div className="flex flex-col h-full w-full bg-slate-900/80 text-gray-100 p-4 gap-4 overflow-y-auto font-sans">
       {/* Top Header Ribbon */}
-      <div className="flex items-center justify-between px-5 py-3 rounded-2xl bg-amber-950/60 border border-[#182133] shadow-lg">
+      <div className="flex items-center justify-between px-5 py-3 rounded-2xl bg-slate-900/80 border border-[#182133] shadow-lg">
         <div className="flex items-center gap-3">
           <div className="p-2 rounded-xl bg-gradient-to-tr from-rose-500/20 to-orange-500/20 border border-rose-500/40 text-rose-400">
             <Flame className="w-5 h-5" />
@@ -89,7 +89,7 @@ export const ActiveAeroBrakeThermalDeck: React.FC = () => {
             className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
               isBrakingHard
                 ? 'bg-rose-500 text-white shadow-[0_0_15px_rgba(244,63,94,0.6)]'
-                : 'bg-amber-950/60 text-gray-300 border border-[#232e48] hover:bg-[#1c263d]'
+                : 'bg-slate-900/80 text-gray-300 border border-[#232e48] hover:bg-[#1c263d]'
             }`}
           >
             AIRBRAKE TEST (HOLD)
@@ -100,7 +100,7 @@ export const ActiveAeroBrakeThermalDeck: React.FC = () => {
             className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
               drsPressed
                 ? 'bg-emerald-500 text-black shadow-[0_0_15px_rgba(16,185,129,0.5)]'
-                : 'bg-amber-950/60 text-gray-300 border border-[#232e48] hover:bg-[#1c263d]'
+                : 'bg-slate-900/80 text-gray-300 border border-[#232e48] hover:bg-[#1c263d]'
             }`}
           >
             DRS FLAP {drsPressed ? 'OPEN' : 'CLOSED'}
@@ -111,7 +111,7 @@ export const ActiveAeroBrakeThermalDeck: React.FC = () => {
       {/* Main 3-Column Engineering Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 flex-1">
         {/* Column 1: Active Aerodynamics Actuator & Wing */}
-        <div className="flex flex-col p-4 rounded-2xl bg-amber-950/60 border border-[#182133] gap-3">
+        <div className="flex flex-col p-4 rounded-2xl bg-slate-900/80 border border-[#182133] gap-3">
           <div className="flex items-center justify-between pb-2 border-b border-[#182133]">
             <div className="flex items-center gap-2 text-amber-400 font-bold text-xs">
               <Wind className="w-4 h-4" />
@@ -127,7 +127,7 @@ export const ActiveAeroBrakeThermalDeck: React.FC = () => {
           </div>
 
           {/* SVG Visualizer of Rear Wing Angle */}
-          <div className="flex items-center justify-center p-4 bg-amber-950/60 rounded-xl border border-[#141b2b]">
+          <div className="flex items-center justify-center p-4 bg-slate-900/80 rounded-xl border border-[#141b2b]">
             <svg viewBox="0 0 300 140" className="w-full h-32">
               <defs>
                 <linearGradient id="wingGrad" x1="0" y1="0" x2="1" y2="0">
@@ -152,19 +152,19 @@ export const ActiveAeroBrakeThermalDeck: React.FC = () => {
 
           {/* Aero Telemetry Metrics */}
           <div className="grid grid-cols-2 gap-2 text-xs font-mono">
-            <div className="p-2.5 rounded-xl bg-amber-950/60 border border-[#1c263d]">
+            <div className="p-2.5 rounded-xl bg-slate-900/80 border border-[#1c263d]">
               <div className="text-gray-400 text-[10px]">TOTAL DOWNFORCE</div>
               <div className="text-sm font-bold text-amber-400">{aeroState.currentTotalDownforceN} N</div>
             </div>
-            <div className="p-2.5 rounded-xl bg-amber-950/60 border border-[#1c263d]">
+            <div className="p-2.5 rounded-xl bg-slate-900/80 border border-[#1c263d]">
               <div className="text-gray-400 text-[10px]">TOTAL DRAG</div>
               <div className="text-sm font-bold text-rose-400">{aeroState.currentTotalDragN} N</div>
             </div>
-            <div className="p-2.5 rounded-xl bg-amber-950/60 border border-[#1c263d]">
+            <div className="p-2.5 rounded-xl bg-slate-900/80 border border-[#1c263d]">
               <div className="text-gray-400 text-[10px]">AERO BALANCE (F/R)</div>
               <div className="text-sm font-bold text-amber-400">{aeroState.centerOfPressureFrontPct}% F</div>
             </div>
-            <div className="p-2.5 rounded-xl bg-amber-950/60 border border-[#1c263d]">
+            <div className="p-2.5 rounded-xl bg-slate-900/80 border border-[#1c263d]">
               <div className="text-gray-400 text-[10px]">EFFICIENCY (L/D)</div>
               <div className="text-sm font-bold text-emerald-400">{aeroState.aeroEfficiencyLOverD}</div>
             </div>
@@ -172,7 +172,7 @@ export const ActiveAeroBrakeThermalDeck: React.FC = () => {
         </div>
 
         {/* Column 2: 4-Wheel Brake Thermal Pyrometry Heatmap */}
-        <div className="flex flex-col p-4 rounded-2xl bg-amber-950/60 border border-[#182133] gap-3">
+        <div className="flex flex-col p-4 rounded-2xl bg-slate-900/80 border border-[#182133] gap-3">
           <div className="flex items-center justify-between pb-2 border-b border-[#182133]">
             <div className="flex items-center gap-2 text-orange-400 font-bold text-xs">
               <Flame className="w-4 h-4" />
@@ -181,7 +181,7 @@ export const ActiveAeroBrakeThermalDeck: React.FC = () => {
             <select
               value={discMaterial}
               onChange={(e) => setDiscMaterial(e.target.value as BrakeDiscMaterial)}
-              className="bg-amber-950/60 text-gray-300 text-[10px] font-mono px-2 py-1 rounded-lg border border-[#212c44] cursor-pointer"
+              className="bg-slate-900/80 text-gray-300 text-[10px] font-mono px-2 py-1 rounded-lg border border-[#212c44] cursor-pointer"
             >
               <option value="CARBON_CERAMIC_CSIC">Carbon-Ceramic (C/SiC)</option>
               <option value="CAST_IRON_G3000">Cast Iron (G3000)</option>
@@ -189,9 +189,9 @@ export const ActiveAeroBrakeThermalDeck: React.FC = () => {
           </div>
 
           {/* 4-Wheel Rotor Heatmap Visual */}
-          <div className="grid grid-cols-2 gap-3 p-3 bg-amber-950/60 rounded-xl border border-[#141b2b] text-center">
+          <div className="grid grid-cols-2 gap-3 p-3 bg-slate-900/80 rounded-xl border border-[#141b2b] text-center">
             {/* Front Left */}
-            <div className="p-2 rounded-lg bg-amber-950/60 border border-[#182133]">
+            <div className="p-2 rounded-lg bg-slate-900/80 border border-[#182133]">
               <div className="text-[10px] font-mono text-gray-400">FRONT LEFT</div>
               <div
                 className="text-lg font-bold font-mono my-1"
@@ -203,7 +203,7 @@ export const ActiveAeroBrakeThermalDeck: React.FC = () => {
             </div>
 
             {/* Front Right */}
-            <div className="p-2 rounded-lg bg-amber-950/60 border border-[#182133]">
+            <div className="p-2 rounded-lg bg-slate-900/80 border border-[#182133]">
               <div className="text-[10px] font-mono text-gray-400">FRONT RIGHT</div>
               <div
                 className="text-lg font-bold font-mono my-1"
@@ -215,7 +215,7 @@ export const ActiveAeroBrakeThermalDeck: React.FC = () => {
             </div>
 
             {/* Rear Left */}
-            <div className="p-2 rounded-lg bg-amber-950/60 border border-[#182133]">
+            <div className="p-2 rounded-lg bg-slate-900/80 border border-[#182133]">
               <div className="text-[10px] font-mono text-gray-400">REAR LEFT</div>
               <div
                 className="text-lg font-bold font-mono my-1"
@@ -227,7 +227,7 @@ export const ActiveAeroBrakeThermalDeck: React.FC = () => {
             </div>
 
             {/* Rear Right */}
-            <div className="p-2 rounded-lg bg-amber-950/60 border border-[#182133]">
+            <div className="p-2 rounded-lg bg-slate-900/80 border border-[#182133]">
               <div className="text-[10px] font-mono text-gray-400">REAR RIGHT</div>
               <div
                 className="text-lg font-bold font-mono my-1"
@@ -241,11 +241,11 @@ export const ActiveAeroBrakeThermalDeck: React.FC = () => {
 
           {/* Fade & Stopping Distance Badges */}
           <div className="grid grid-cols-2 gap-2 text-xs font-mono">
-            <div className="p-2.5 rounded-xl bg-amber-950/60 border border-[#1c263d]">
+            <div className="p-2.5 rounded-xl bg-slate-900/80 border border-[#1c263d]">
               <div className="text-gray-400 text-[10px]">200-0 KM/H DISTANCE</div>
               <div className="text-sm font-bold text-gray-100">{currentStop.stoppingDistanceM} m</div>
             </div>
-            <div className="p-2.5 rounded-xl bg-amber-950/60 border border-[#1c263d]">
+            <div className="p-2.5 rounded-xl bg-slate-900/80 border border-[#1c263d]">
               <div className="text-gray-400 text-[10px]">FLUID TEMPERATURE</div>
               <div className={`text-sm font-bold ${currentStop.fluidBoilingWarning ? 'text-rose-400 animate-pulse' : 'text-emerald-400'}`}>
                 {currentStop.fluidTempC}°C
@@ -255,7 +255,7 @@ export const ActiveAeroBrakeThermalDeck: React.FC = () => {
         </div>
 
         {/* Column 3: Active eLSD & Direct Yaw Vectoring */}
-        <div className="flex flex-col p-4 rounded-2xl bg-amber-950/60 border border-[#182133] gap-3">
+        <div className="flex flex-col p-4 rounded-2xl bg-slate-900/80 border border-[#182133] gap-3">
           <div className="flex items-center justify-between pb-2 border-b border-[#182133]">
             <div className="flex items-center gap-2 text-amber-400 font-bold text-xs">
               <Activity className="w-4 h-4" />
@@ -267,7 +267,7 @@ export const ActiveAeroBrakeThermalDeck: React.FC = () => {
           </div>
 
           {/* Torque Split Dial */}
-          <div className="flex flex-col items-center justify-center p-4 bg-amber-950/60 rounded-xl border border-[#141b2b] gap-2">
+          <div className="flex flex-col items-center justify-center p-4 bg-slate-900/80 rounded-xl border border-[#141b2b] gap-2">
             <div className="text-xs font-mono text-gray-400">LEFT / RIGHT TORQUE SPLIT</div>
             <div className="flex items-center gap-4 text-base font-bold font-mono">
               <span className="text-amber-400">{diffState.torqueLeftNm} Nm</span>
@@ -289,11 +289,11 @@ export const ActiveAeroBrakeThermalDeck: React.FC = () => {
 
           {/* eLSD Clutch Lockup Metrics */}
           <div className="grid grid-cols-2 gap-2 text-xs font-mono">
-            <div className="p-2.5 rounded-xl bg-amber-950/60 border border-[#1c263d]">
+            <div className="p-2.5 rounded-xl bg-slate-900/80 border border-[#1c263d]">
               <div className="text-gray-400 text-[10px]">CLUTCH LOCKUP</div>
               <div className="text-sm font-bold text-amber-400">{diffState.clutchLockPct}%</div>
             </div>
-            <div className="p-2.5 rounded-xl bg-amber-950/60 border border-[#1c263d]">
+            <div className="p-2.5 rounded-xl bg-slate-900/80 border border-[#1c263d]">
               <div className="text-gray-400 text-[10px]">DIRECT YAW MOMENT</div>
               <div className="text-sm font-bold text-emerald-400">{diffState.directYawMomentNm} Nm</div>
             </div>

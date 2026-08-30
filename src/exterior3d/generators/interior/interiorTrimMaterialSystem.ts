@@ -93,7 +93,7 @@ export class InteriorTrimMaterialSystem {
         });
       case "carbon_fiber_gloss":
         return new THREE.MeshPhysicalMaterial({
-          color: new THREE.Color(colorHex || "#1a1008"),
+          color: new THREE.Color(colorHex || "#080c14"),
           roughness: 0.15,
           metalness: 0.4,
           clearcoat: 0.95,
