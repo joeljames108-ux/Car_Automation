@@ -25,6 +25,7 @@ import { ModularInteriorStudio } from './interior/ModularInteriorStudio';
 import { MasterInteriorConfiguration } from '../exterior3d/types/interiorStudioTypes';
 import { COCKPIT_THEME_PRESETS } from '../exterior3d/manifests/interiorStudioCatalog';
 import { InfotainmentDesigner } from './InfotainmentDesigner';
+import { InteriorDashboardConfiguratorStudio } from './interior/InteriorDashboardConfiguratorStudio';
 import { playHMITabSound } from '../utils/hmiSoundSynth';
 
 const SEAT_MATERIAL_OPTIONS = Object.entries(SEAT_MATERIALS).map(([k, v]) => ({ value: k, label: v.label }));
@@ -40,7 +41,7 @@ const TRIM_FINISH_OPTIONS = [
   { value: "brushed", label: "Brushed" },
 ];
 
-export type InteriorStudioViewMode = 'modular_studio' | 'electronics' | '3d_studio' | '2d_classic';
+export type InteriorStudioViewMode = 'modular_studio' | 'electronics' | '3d_studio' | '2d_classic' | 'configurator';
 
 interface InteriorsDesignerProps {
   initialSubTab?: InteriorStudioViewMode;
@@ -153,6 +154,18 @@ export function InteriorsDesigner({ initialSubTab = 'modular_studio' }: Interior
         {/* Studio View Selector */}
         <div className="flex items-center gap-1.5 p-1 rounded-xl" style={{ backgroundColor: 'rgba(0,0,0,0.06)' }}>
           <button
+            onClick={() => handleTabSelect('configurator')}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+              viewMode === 'configurator'
+                ? 'shadow-md scale-[1.02] bg-blue-600 text-white ring-2 ring-blue-400'
+                : 'hover:opacity-80 bg-blue-500/10 text-blue-800'
+            }`}
+          >
+            <Sliders size={13} />
+            <span>🎚️ 2D DASHBOARD CONFIGURATOR</span>
+          </button>
+
+          <button
             onClick={() => handleTabSelect('modular_studio')}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
               viewMode === 'modular_studio'
@@ -219,7 +232,11 @@ export function InteriorsDesigner({ initialSubTab = 'modular_studio' }: Interior
       </div>
 
       {/* ── CONDITIONAL VIEW MODE RENDERING ── */}
-      {viewMode === 'modular_studio' ? (
+      {viewMode === 'configurator' ? (
+        <div className="rounded-2xl overflow-hidden shadow-2xl border border-slate-800">
+          <InteriorDashboardConfiguratorStudio />
+        </div>
+      ) : viewMode === 'modular_studio' ? (
         /* MODE A: Integrated Modular Studio (3D Viewport + 5-Tab Material/Component Studio) */
         <ModularInteriorStudio />
       ) : viewMode === 'electronics' ? (
