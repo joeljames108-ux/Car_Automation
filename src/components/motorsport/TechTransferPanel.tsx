@@ -15,8 +15,8 @@ export const TechTransferPanel = memo(function TechTransferPanel({ selectedTeam 
   if (!selectedTeam) {
     return (
       <div className="glass-panel p-10 text-center">
-        <ArrowRightLeft size={36} className="mx-auto text-slate-700 mb-3" />
-        <p className="text-slate-500 text-sm">Select a team to transfer technology.</p>
+        <ArrowRightLeft size={36} className="mx-auto text-amber-500 mb-3" />
+        <p className="text-amber-300/50 text-sm">Select a team to transfer technology.</p>
       </div>
     );
   }
@@ -33,7 +33,7 @@ export const TechTransferPanel = memo(function TechTransferPanel({ selectedTeam 
         <div className="relative">
           <div className="flex items-center gap-2 mb-4">
             <div className="w-3 h-3 rounded-full" style={{ backgroundColor: selectedTeam.liveryColor }} />
-            <h3 className="text-sm font-semibold text-slate-100">{selectedTeam.name} · Tech Transfer</h3>
+            <h3 className="text-sm font-semibold text-amber-50">{selectedTeam.name} · Tech Transfer</h3>
             <div className="ml-auto flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-amber-500/15 border border-amber-500/25">
               <Zap size={11} className="text-amber-400" />
               <span className="text-sm font-bold font-mono text-amber-300">{pool}</span>
@@ -54,7 +54,7 @@ export const TechTransferPanel = memo(function TechTransferPanel({ selectedTeam 
                 className={`px-4 py-3 rounded-xl text-xs font-medium transition-all border cursor-pointer ${
                   direction === d.dir
                     ? "bg-amber-500/15 border-amber-500/40 text-amber-300"
-                    : "bg-base-850 border-base-800 text-slate-400 hover:border-base-700"
+                    : "bg-base-850 border-base-800 text-amber-200/60 hover:border-base-700"
                 }`}>
                 <div className="flex items-center gap-1.5 mb-1">{d.icon} <span className="font-semibold">{d.label}</span></div>
                 <div className="text-[10px] opacity-60">{d.desc}</div>
@@ -86,7 +86,7 @@ export const TechTransferPanel = memo(function TechTransferPanel({ selectedTeam 
       {/* Transfer History */}
       {company.motorsport.techTransferHistory.length > 0 && (
         <div className="glass-panel p-4">
-          <h3 className="text-xs font-semibold text-slate-300 uppercase tracking-wider mb-3 flex items-center gap-1.5">
+          <h3 className="text-xs font-semibold text-amber-100/80 uppercase tracking-wider mb-3 flex items-center gap-1.5">
             <Clock size={12} className="text-amber-400" /> Transfer History
           </h3>
           <div className="space-y-2 max-h-64 overflow-y-auto">
@@ -100,21 +100,21 @@ export const TechTransferPanel = memo(function TechTransferPanel({ selectedTeam 
                   {entry.direction === "race_to_production" ? <ArrowRight size={12} /> : <ArrowLeft size={12} />}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <div className="text-xs text-slate-200">
+                  <div className="text-xs text-amber-50">
                     {entry.direction === "race_to_production" ? "Race → Production" : "Production → Race"} ·
                     <span className="text-amber-300 ml-1 font-mono">{entry.points}pts</span>
                   </div>
-                  <div className="text-[10px] text-slate-500 mt-0.5">{entry.bonus}</div>
+                  <div className="text-[10px] text-amber-300/50 mt-0.5">{entry.bonus}</div>
                   <div className="flex items-center gap-2 mt-1">
-                    <span className="text-[9px] bg-base-800 rounded px-1.5 py-0.5 text-slate-500 capitalize">{entry.category}</span>
-                    <span className="text-[9px] text-slate-600">Month {entry.month}</span>
+                    <span className="text-[9px] bg-base-800 rounded px-1.5 py-0.5 text-amber-300/50 capitalize">{entry.category}</span>
+                    <span className="text-[9px] text-amber-400">Month {entry.month}</span>
                   </div>
                 </div>
               </div>
             ))}
           </div>
           <div className="mt-3 pt-2 border-t border-base-800/50 text-center">
-            <span className="text-xs text-slate-500">Total transferred: </span>
+            <span className="text-xs text-amber-300/50">Total transferred: </span>
             <span className="text-sm font-bold font-mono text-amber-300">{company.motorsport.totalTechTransferred}pts</span>
           </div>
         </div>

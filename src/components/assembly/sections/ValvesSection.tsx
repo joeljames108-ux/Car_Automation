@@ -71,15 +71,15 @@ export function ValvesSection({
           <div className="space-y-3">
             <div className="p-3 rounded-xl bg-base-950/80 border border-amber-500/20 space-y-2">
               <div className="flex items-center justify-between text-xs font-mono">
-                <span className="text-slate-400">Exhaust Valve Cooling</span>
+                <span className="text-amber-200/60">Exhaust Valve Cooling</span>
                 <span className="text-amber-300 font-extrabold">Hollow Sodium-Filled</span>
               </div>
               <div className="flex items-center justify-between text-xs font-mono">
-                <span className="text-slate-400">Valve Spring Pressure</span>
+                <span className="text-amber-200/60">Valve Spring Pressure</span>
                 <span className="text-emerald-300 font-extrabold">120 lbs Seat / 340 lbs Open</span>
               </div>
               <div className="flex items-center justify-between text-xs font-mono">
-                <span className="text-slate-400">Valve Float Margin</span>
+                <span className="text-amber-200/60">Valve Float Margin</span>
                 <span className="text-amber-300 font-extrabold">Safe up to 10,500 RPM</span>
               </div>
             </div>
@@ -88,7 +88,7 @@ export function ValvesSection({
               <span className="text-[10px] font-mono font-bold text-amber-300 uppercase tracking-wider block">
                 VALVETRAIN INERTIA
               </span>
-              <p className="text-[11px] font-mono text-slate-300 leading-relaxed">
+              <p className="text-[11px] font-mono text-amber-100/80 leading-relaxed">
                 Titanium retainers and one-piece inconel exhaust valves eliminate valve float at elevated redlines under high turbo exhaust backpressure.
               </p>
             </div>
@@ -109,7 +109,7 @@ export function ValvesSection({
               onSelectVariant={onSelectVariant}
             />
           ) : (
-            <p className="text-xs font-mono text-slate-500">Loading material variants...</p>
+            <p className="text-xs font-mono text-amber-300/50">Loading material variants...</p>
           )}
         </SectionCard>
 

@@ -63,7 +63,7 @@ export const ParametricAerodynamicsStudio: React.FC<ParametricAerodynamicsStudio
     ldRatio >= 2.4 ? { label: "ELITE HIGH-DOWNFORCE", cls: "text-emerald-400" }
     : ldRatio >= 1.7 ? { label: "GT3 RACE WINDOW", cls: "text-amber-400" }
     : ldRatio >= 1.1 ? { label: "BALANCED SPRINT", cls: "text-amber-400" }
-    : { label: "LOW DRAG / LOW GRIP", cls: "text-slate-400" };
+    : { label: "LOW DRAG / LOW GRIP", cls: "text-amber-200/60" };
 
   const isPorpoisingRisk = aero.diffuserAngleDeg > 16 && aero.frontSplitterLengthMm > 150;
 
@@ -77,14 +77,14 @@ export const ParametricAerodynamicsStudio: React.FC<ParametricAerodynamicsStudio
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h3 className="text-sm font-bold font-mono text-slate-800 dark:text-slate-100 uppercase tracking-wider">
+              <h3 className="text-sm font-bold font-mono text-slate-800 dark:text-amber-50 uppercase tracking-wider">
                 AERODYNAMICS STUDIO & LIVE CFD ANALYSIS
               </h3>
               <span className="text-[9px] font-mono px-2 py-0.5 rounded-full bg-amber-500/15 text-amber-600 dark:text-amber-300 font-bold border border-amber-500/30">
                 LIVE 3D PIVOT SYNC
               </span>
             </div>
-            <p className="text-[11px] font-mono text-slate-500 dark:text-slate-400">
+            <p className="text-[11px] font-mono text-amber-300/50 dark:text-amber-200/60">
               High-downforce swan-neck wing, splitter, venturi tunnels & canards — solved at 250 km/h reference condition.
             </p>
           </div>
@@ -93,19 +93,19 @@ export const ParametricAerodynamicsStudio: React.FC<ParametricAerodynamicsStudio
         {/* Live CFD Telemetry Strip incl. L/D */}
         <div className="flex items-center gap-2 flex-wrap font-mono text-xs">
           <div className="px-3 py-1.5 rounded-xl bg-base-900 border border-base-800">
-            <span className="text-slate-500 text-[10px] block">DOWNFORCE @250</span>
+            <span className="text-amber-300/50 text-[10px] block">DOWNFORCE @250</span>
             <span className="font-bold text-amber-400">{totalDownforceN.toLocaleString()} N</span>
           </div>
           <div className="px-3 py-1.5 rounded-xl bg-base-900 border border-base-800">
-            <span className="text-slate-500 text-[10px] block">DRAG CD</span>
+            <span className="text-amber-300/50 text-[10px] block">DRAG CD</span>
             <span className="font-bold text-amber-400">{totalCd.toFixed(3)}</span>
           </div>
           <div className="px-3 py-1.5 rounded-xl bg-gradient-to-br from-emerald-500/10 to-base-900 border border-emerald-500/40">
-            <span className="text-slate-500 text-[10px] block">L/D RATIO (CFD)</span>
+            <span className="text-amber-300/50 text-[10px] block">L/D RATIO (CFD)</span>
             <span className={`font-bold ${ldRating.cls}`}>{ldRatio.toFixed(2)} : 1</span>
           </div>
           <div className="px-3 py-1.5 rounded-xl bg-base-900 border border-base-800">
-            <span className="text-slate-500 text-[10px] block">AERO BALANCE</span>
+            <span className="text-amber-300/50 text-[10px] block">AERO BALANCE</span>
             <span className="font-bold text-emerald-400">{frontBalancePct}% F</span>
           </div>
         </div>
@@ -114,7 +114,7 @@ export const ParametricAerodynamicsStudio: React.FC<ParametricAerodynamicsStudio
       {/* L/D Efficiency Analysis Bar */}
       <div className="p-3.5 rounded-2xl bg-base-900/80 border border-base-800 space-y-2">
         <div className="flex items-center justify-between text-xs font-mono flex-wrap gap-2">
-          <span className="font-bold text-slate-300 dark:text-slate-200 flex items-center gap-1.5">
+          <span className="font-bold text-amber-100/80 dark:text-amber-50 flex items-center gap-1.5">
             <Activity size={13} className="text-emerald-400" /> LIFT-TO-DRAG EFFICIENCY MAP
           </span>
           <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full bg-base-800 ${ldRating.cls}`}>{ldRating.label}</span>
@@ -130,10 +130,10 @@ export const ParametricAerodynamicsStudio: React.FC<ParametricAerodynamicsStudio
             style={{ left: `calc(${Math.min(99, (ldRatio / 3.2) * 100)}% - 2px)` }}
           />
         </div>
-        <div className="flex items-center justify-between text-[9px] font-mono text-slate-500">
+        <div className="flex items-center justify-between text-[9px] font-mono text-amber-300/50">
           <span>Drag car (0.8)</span><span>Sprint (1.7)</span><span>GT3 race (2.4)</span><span>Time attack (3.2)</span>
         </div>
-        <p className="text-[10px] font-mono text-slate-500 dark:text-slate-400 pt-1">
+        <p className="text-[10px] font-mono text-amber-300/50 dark:text-amber-200/60 pt-1">
           Front axle carries {frontDownforceN.toLocaleString()} N · Rear axle carries {rearDownforceN.toLocaleString()} N · Total drag load {dragForceN.toLocaleString()} N.
         </p>
       </div>
@@ -150,7 +150,7 @@ export const ParametricAerodynamicsStudio: React.FC<ParametricAerodynamicsStudio
 
       {/* Quick Aero Packages Preset Bar */}
       <div className="flex items-center gap-2 p-2 rounded-2xl bg-base-900/80 border border-base-800 text-xs font-mono overflow-x-auto no-scrollbar">
-        <span className="text-[10px] text-slate-500 font-bold uppercase tracking-wider shrink-0 pl-1">
+        <span className="text-[10px] text-amber-300/50 font-bold uppercase tracking-wider shrink-0 pl-1">
           AERO PRESETS:
         </span>
         <button
@@ -169,7 +169,7 @@ export const ParametricAerodynamicsStudio: React.FC<ParametricAerodynamicsStudio
               gurneyFlap: false,
             })
           }
-          className="px-2.5 py-1 rounded-xl bg-base-850 hover:bg-base-800 text-slate-300 text-[10px] font-bold border border-base-750 shrink-0 cursor-pointer"
+          className="px-2.5 py-1 rounded-xl bg-base-850 hover:bg-base-800 text-amber-100/80 text-[10px] font-bold border border-base-750 shrink-0 cursor-pointer"
         >
           Street Fastback
         </button>
@@ -189,7 +189,7 @@ export const ParametricAerodynamicsStudio: React.FC<ParametricAerodynamicsStudio
               gurneyFlap: false,
             })
           }
-          className="px-2.5 py-1 rounded-xl bg-base-850 hover:bg-base-800 text-slate-300 text-[10px] font-bold border border-base-750 shrink-0 cursor-pointer"
+          className="px-2.5 py-1 rounded-xl bg-base-850 hover:bg-base-800 text-amber-100/80 text-[10px] font-bold border border-base-750 shrink-0 cursor-pointer"
         >
           Club Sport
         </button>
@@ -279,7 +279,7 @@ export const ParametricAerodynamicsStudio: React.FC<ParametricAerodynamicsStudio
             className={`flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-mono font-bold transition-all border cursor-pointer whitespace-nowrap ${
               activeAeroDept === tab.id
                 ? "bg-amber-500/20 border-amber-500/50 text-amber-600 dark:text-amber-200 shadow-sm"
-                : "bg-base-900/60 border-base-800 text-slate-500 hover:text-slate-300"
+                : "bg-base-900/60 border-base-800 text-amber-300/50 hover:text-amber-100/80"
             }`}
           >
             <span className={`w-1.5 h-1.5 rounded-full ${tab.active ? "bg-emerald-400" : "bg-slate-600"}`} />
@@ -294,7 +294,7 @@ export const ParametricAerodynamicsStudio: React.FC<ParametricAerodynamicsStudio
         {activeAeroDept === "rear_wing" && (
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <span className="font-bold text-xs font-mono text-slate-800 dark:text-slate-200">
+              <span className="font-bold text-xs font-mono text-slate-800 dark:text-amber-50">
                 HIGH-DOWNFORCE SWAN-NECK AEROFOIL PACKAGE
               </span>
               <button
@@ -302,7 +302,7 @@ export const ParametricAerodynamicsStudio: React.FC<ParametricAerodynamicsStudio
                 className={`px-3 py-1 rounded-xl text-xs font-mono font-bold border cursor-pointer transition-all ${
                   aero.rearWingEnabled
                     ? "bg-emerald-500/20 border-emerald-500/50 text-emerald-400"
-                    : "bg-base-850 border-base-700 text-slate-500"
+                    : "bg-base-850 border-base-700 text-amber-300/50"
                 }`}
               >
                 {aero.rearWingEnabled ? "✓ WING INSTALLED" : "+ ADD REAR WING"}
@@ -314,7 +314,7 @@ export const ParametricAerodynamicsStudio: React.FC<ParametricAerodynamicsStudio
                 {/* Dynamic AoA Slider */}
                 <div className="p-3 rounded-2xl bg-base-850 border border-base-800 space-y-1.5">
                   <div className="flex justify-between items-center text-xs font-mono">
-                    <span className="text-slate-300 font-bold">Dynamic Angle of Attack (AoA)</span>
+                    <span className="text-amber-100/80 font-bold">Dynamic Angle of Attack (AoA)</span>
                     <span className="text-amber-400 font-bold text-sm">{aero.rearWingAngleDeg}°</span>
                   </div>
                   <input
@@ -326,7 +326,7 @@ export const ParametricAerodynamicsStudio: React.FC<ParametricAerodynamicsStudio
                     onChange={(e) => onUpdateAero({ rearWingAngleDeg: parseInt(e.target.value) })}
                     className="w-full accent-amber-400 cursor-pointer"
                   />
-                  <div className="flex justify-between text-[9px] font-mono text-slate-500">
+                  <div className="flex justify-between text-[9px] font-mono text-amber-300/50">
                     <span>-5° (Low Drag DRS)</span>
                     <span>28° (Max Downforce Monaco)</span>
                   </div>
@@ -335,7 +335,7 @@ export const ParametricAerodynamicsStudio: React.FC<ParametricAerodynamicsStudio
                 {/* Wing Height Slider */}
                 <div className="p-3 rounded-2xl bg-base-850 border border-base-800 space-y-1.5">
                   <div className="flex justify-between items-center text-xs font-mono">
-                    <span className="text-slate-300 font-bold">Pylon Height</span>
+                    <span className="text-amber-100/80 font-bold">Pylon Height</span>
                     <span className="text-amber-400 font-bold text-sm">{aero.rearWingHeightMm} mm</span>
                   </div>
                   <input
@@ -352,7 +352,7 @@ export const ParametricAerodynamicsStudio: React.FC<ParametricAerodynamicsStudio
                 {/* Wing Span Width Slider */}
                 <div className="p-3 rounded-2xl bg-base-850 border border-base-800 space-y-1.5">
                   <div className="flex justify-between items-center text-xs font-mono">
-                    <span className="text-slate-300 font-bold">Wing Span Width</span>
+                    <span className="text-amber-100/80 font-bold">Wing Span Width</span>
                     <span className="text-amber-400 font-bold text-sm">{aero.rearWingWidthMm} mm</span>
                   </div>
                   <input
@@ -369,11 +369,11 @@ export const ParametricAerodynamicsStudio: React.FC<ParametricAerodynamicsStudio
                 {/* Gurney Flap & Endplates */}
                 <div className="p-3 rounded-2xl bg-base-850 border border-base-800 space-y-2">
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-mono text-slate-300 font-bold">Gurney Flap (Wickerbill)</span>
+                    <span className="text-xs font-mono text-amber-100/80 font-bold">Gurney Flap (Wickerbill)</span>
                     <button
                       onClick={() => onUpdateAero({ gurneyFlap: !aero.gurneyFlap })}
                       className={`px-2.5 py-0.5 rounded-lg text-xs font-mono font-bold border cursor-pointer ${
-                        aero.gurneyFlap ? "bg-amber-500/20 border-amber-500/50 text-amber-400" : "bg-base-800 border-base-700 text-slate-500"
+                        aero.gurneyFlap ? "bg-amber-500/20 border-amber-500/50 text-amber-400" : "bg-base-800 border-base-700 text-amber-300/50"
                       }`}
                     >
                       {aero.gurneyFlap ? "ON (+15% Cl)" : "OFF"}
@@ -381,11 +381,11 @@ export const ParametricAerodynamicsStudio: React.FC<ParametricAerodynamicsStudio
                   </div>
 
                   <div className="flex items-center justify-between pt-1 border-t border-base-800">
-                    <span className="text-xs font-mono text-slate-300">Mounting Type</span>
+                    <span className="text-xs font-mono text-amber-100/80">Mounting Type</span>
                     <select
                       value={aero.rearWingType}
                       onChange={(e) => onUpdateAero({ rearWingType: e.target.value as any })}
-                      className="bg-base-900 border border-base-700 rounded-lg text-xs font-mono text-slate-200 px-2 py-1"
+                      className="bg-base-900 border border-base-700 rounded-lg text-xs font-mono text-amber-50 px-2 py-1"
                     >
                       <option value="single_plane">Single Plane (Deck Mount)</option>
                       <option value="dual_plane">Dual Plane Slotted</option>
@@ -403,7 +403,7 @@ export const ParametricAerodynamicsStudio: React.FC<ParametricAerodynamicsStudio
         {activeAeroDept === "front_splitter" && (
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <span className="font-bold text-xs font-mono text-slate-800 dark:text-slate-200">
+              <span className="font-bold text-xs font-mono text-slate-800 dark:text-amber-50">
                 FRONT CARBON SPLITTER & AIR DAM
               </span>
               <button
@@ -411,7 +411,7 @@ export const ParametricAerodynamicsStudio: React.FC<ParametricAerodynamicsStudio
                 className={`px-3 py-1 rounded-xl text-xs font-mono font-bold border cursor-pointer transition-all ${
                   aero.frontSplitterEnabled
                     ? "bg-emerald-500/20 border-emerald-500/50 text-emerald-400"
-                    : "bg-base-850 border-base-700 text-slate-500"
+                    : "bg-base-850 border-base-700 text-amber-300/50"
                 }`}
               >
                 {aero.frontSplitterEnabled ? "✓ SPLITTER INSTALLED" : "+ ADD FRONT SPLITTER"}
@@ -422,7 +422,7 @@ export const ParametricAerodynamicsStudio: React.FC<ParametricAerodynamicsStudio
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2 border-t border-base-800/60">
                 <div className="p-3 rounded-2xl bg-base-850 border border-base-800 space-y-1.5">
                   <div className="flex justify-between items-center text-xs font-mono">
-                    <span className="text-slate-300 font-bold">Front Extension Depth</span>
+                    <span className="text-amber-100/80 font-bold">Front Extension Depth</span>
                     <span className="text-amber-400 font-bold text-sm">{aero.frontSplitterLengthMm} mm</span>
                   </div>
                   <input
@@ -438,7 +438,7 @@ export const ParametricAerodynamicsStudio: React.FC<ParametricAerodynamicsStudio
 
                 <div className="p-3 rounded-2xl bg-base-850 border border-base-800 space-y-1.5">
                   <div className="flex justify-between items-center text-xs font-mono">
-                    <span className="text-slate-300 font-bold">Splitter Rake Pitch</span>
+                    <span className="text-amber-100/80 font-bold">Splitter Rake Pitch</span>
                     <span className="text-amber-400 font-bold text-sm">{aero.frontSplitterAngleDeg}°</span>
                   </div>
                   <input
@@ -460,7 +460,7 @@ export const ParametricAerodynamicsStudio: React.FC<ParametricAerodynamicsStudio
         {activeAeroDept === "diffuser" && (
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <span className="font-bold text-xs font-mono text-slate-800 dark:text-slate-200">
+              <span className="font-bold text-xs font-mono text-slate-800 dark:text-amber-50">
                 UNDERBODY VENTURI DIFFUSER & TUNNELS
               </span>
               <button
@@ -468,7 +468,7 @@ export const ParametricAerodynamicsStudio: React.FC<ParametricAerodynamicsStudio
                 className={`px-3 py-1 rounded-xl text-xs font-mono font-bold border cursor-pointer transition-all ${
                   aero.diffuserEnabled
                     ? "bg-emerald-500/20 border-emerald-500/50 text-emerald-400"
-                    : "bg-base-850 border-base-700 text-slate-500"
+                    : "bg-base-850 border-base-700 text-amber-300/50"
                 }`}
               >
                 {aero.diffuserEnabled ? "✓ DIFFUSER INSTALLED" : "+ ADD DIFFUSER"}
@@ -479,7 +479,7 @@ export const ParametricAerodynamicsStudio: React.FC<ParametricAerodynamicsStudio
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2 border-t border-base-800/60">
                 <div className="p-3 rounded-2xl bg-base-850 border border-base-800 space-y-1.5">
                   <div className="flex justify-between items-center text-xs font-mono">
-                    <span className="text-slate-300 font-bold">Expansion Ramp Angle</span>
+                    <span className="text-amber-100/80 font-bold">Expansion Ramp Angle</span>
                     <span className="text-amber-400 font-bold text-sm">{aero.diffuserAngleDeg}°</span>
                   </div>
                   <input
@@ -495,7 +495,7 @@ export const ParametricAerodynamicsStudio: React.FC<ParametricAerodynamicsStudio
 
                 <div className="p-3 rounded-2xl bg-base-850 border border-base-800 space-y-1.5">
                   <div className="flex justify-between items-center text-xs font-mono">
-                    <span className="text-slate-300 font-bold">Vertical Strakes</span>
+                    <span className="text-amber-100/80 font-bold">Vertical Strakes</span>
                     <span className="text-amber-400 font-bold text-sm">{aero.diffuserStrakes} Strakes</span>
                   </div>
                   <input
@@ -512,7 +512,7 @@ export const ParametricAerodynamicsStudio: React.FC<ParametricAerodynamicsStudio
                 {/* Venturi Tunnel Count */}
                 <div className="p-3 rounded-2xl bg-base-850 border border-base-800 space-y-1.5 md:col-span-2">
                   <div className="flex justify-between items-center text-xs font-mono">
-                    <span className="text-slate-300 font-bold flex items-center gap-1.5">
+                    <span className="text-amber-100/80 font-bold flex items-center gap-1.5">
                       <Gauge size={12} className="text-emerald-400" /> UNDERBODY VENTURI TUNNELS
                     </span>
                     <span className="text-emerald-400 font-bold text-sm">
@@ -530,7 +530,7 @@ export const ParametricAerodynamicsStudio: React.FC<ParametricAerodynamicsStudio
                     className="w-full accent-emerald-400 cursor-pointer"
                   />
                   <div className="flex items-center justify-between">
-                    <div className="flex justify-between w-full text-[9px] font-mono text-slate-500">
+                    <div className="flex justify-between w-full text-[9px] font-mono text-amber-300/50">
                       <span>2 (Street)</span>
                       <span>4 (GT3 Spec ★)</span>
                       <span>6 (Time Attack)</span>
@@ -538,7 +538,7 @@ export const ParametricAerodynamicsStudio: React.FC<ParametricAerodynamicsStudio
                     <button
                       onClick={() => onUpdateAero({ underbodyVenturiTunnels: !aero.underbodyVenturiTunnels })}
                       className={`ml-3 px-2.5 py-0.5 rounded-lg text-xs font-mono font-bold border cursor-pointer whitespace-nowrap ${
-                        aero.underbodyVenturiTunnels ? "bg-emerald-500/20 border-emerald-500/50 text-emerald-400" : "bg-base-800 border-base-700 text-slate-500"
+                        aero.underbodyVenturiTunnels ? "bg-emerald-500/20 border-emerald-500/50 text-emerald-400" : "bg-base-800 border-base-700 text-amber-300/50"
                       }`}
                     >
                       {aero.underbodyVenturiTunnels ? "TUNNELS ON" : "TUNNELS OFF"}
@@ -554,13 +554,13 @@ export const ParametricAerodynamicsStudio: React.FC<ParametricAerodynamicsStudio
         {activeAeroDept === "canards" && (
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <span className="font-bold text-xs font-mono text-slate-800 dark:text-slate-200">
+              <span className="font-bold text-xs font-mono text-slate-800 dark:text-amber-50">
                 FRONT BUMPER CANARDS & DIVE PLANES
               </span>
               <button
                 onClick={() => onUpdateAero({ frontCanards: !aero.frontCanards })}
                 className={`px-3 py-1 rounded-xl text-xs font-mono font-bold border cursor-pointer transition-all ${
-                  aero.frontCanards ? "bg-emerald-500/20 border-emerald-500/50 text-emerald-400" : "bg-base-850 border-base-700 text-slate-500"
+                  aero.frontCanards ? "bg-emerald-500/20 border-emerald-500/50 text-emerald-400" : "bg-base-850 border-base-700 text-amber-300/50"
                 }`}
               >
                 {aero.frontCanards ? "✓ CANARDS INSTALLED" : "+ ADD CANARDS"}
@@ -570,7 +570,7 @@ export const ParametricAerodynamicsStudio: React.FC<ParametricAerodynamicsStudio
             {aero.frontCanards && (
               <div className="p-3 rounded-2xl bg-base-850 border border-base-800 space-y-1.5 pt-2">
                 <div className="flex justify-between items-center text-xs font-mono">
-                  <span className="text-slate-300 font-bold">Canard Incidence Angle</span>
+                  <span className="text-amber-100/80 font-bold">Canard Incidence Angle</span>
                   <span className="text-amber-400 font-bold text-sm">{aero.frontCanardAngleDeg}°</span>
                 </div>
                 <input
@@ -591,13 +591,13 @@ export const ParametricAerodynamicsStudio: React.FC<ParametricAerodynamicsStudio
         {activeAeroDept === "side_skirts" && (
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <span className="font-bold text-xs font-mono text-slate-800 dark:text-slate-200">
+              <span className="font-bold text-xs font-mono text-slate-800 dark:text-amber-50">
                 GROUND EFFECT SIDE SKIRTS & FLOOR
               </span>
               <button
                 onClick={() => onUpdateAero({ sideSkirtsEnabled: !aero.sideSkirtsEnabled })}
                 className={`px-3 py-1 rounded-xl text-xs font-mono font-bold border cursor-pointer transition-all ${
-                  aero.sideSkirtsEnabled ? "bg-emerald-500/20 border-emerald-500/50 text-emerald-400" : "bg-base-850 border-base-700 text-slate-500"
+                  aero.sideSkirtsEnabled ? "bg-emerald-500/20 border-emerald-500/50 text-emerald-400" : "bg-base-850 border-base-700 text-amber-300/50"
                 }`}
               >
                 {aero.sideSkirtsEnabled ? "✓ SIDE SKIRTS INSTALLED" : "+ ADD SIDE SKIRTS"}
@@ -607,7 +607,7 @@ export const ParametricAerodynamicsStudio: React.FC<ParametricAerodynamicsStudio
             {aero.sideSkirtsEnabled && (
               <div className="p-3 rounded-2xl bg-base-850 border border-base-800 space-y-1.5 pt-2">
                 <div className="flex justify-between items-center text-xs font-mono">
-                  <span className="text-slate-300 font-bold">Lateral Skirt Extension</span>
+                  <span className="text-amber-100/80 font-bold">Lateral Skirt Extension</span>
                   <span className="text-amber-400 font-bold text-sm">{aero.sideSkirtExtensionMm} mm</span>
                 </div>
                 <input

@@ -66,7 +66,7 @@ export function NeonHorizonZoomableCard({
       {allowZoom && (
         <button
           onClick={openZoomModal}
-          className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-all duration-200 bg-black/60 border border-white/15 text-slate-300 p-1.5 rounded-full shadow-lg z-20 hover:bg-white/10 hover:text-white hover:scale-110 active:scale-95 cursor-pointer backdrop-blur-md"
+          className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-all duration-200 bg-black/60 border border-white/15 text-amber-100/80 p-1.5 rounded-full shadow-lg z-20 hover:bg-white/10 hover:text-white hover:scale-110 active:scale-95 cursor-pointer backdrop-blur-md"
           title="Expand Panel"
         >
           <Maximize2 size={12} />
@@ -92,17 +92,17 @@ export function NeonHorizonZoomableCard({
               <div className="w-full flex items-center justify-between border-b border-white/10 pb-4 mb-4">
                 <button
                   onClick={closeZoomModal}
-                  className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/[0.06] text-slate-200 border border-white/12 text-xs font-mono font-bold hover:bg-white/[0.12] transition-all active:scale-95 cursor-pointer"
+                  className="flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/[0.06] text-amber-50 border border-white/12 text-xs font-mono font-bold hover:bg-white/[0.12] transition-all active:scale-95 cursor-pointer"
                 >
                   <ArrowLeft size={14} /> Back
                 </button>
-                <div className="flex items-center gap-2 text-xs font-mono font-bold uppercase tracking-widest text-slate-300">
+                <div className="flex items-center gap-2 text-xs font-mono font-bold uppercase tracking-widest text-amber-100/80">
                   <Sparkles size={14} className={glowColors.text} />
                   {title || "Neon Horizon Panel"}
                 </div>
                 <button
                   onClick={closeZoomModal}
-                  className="p-1.5 rounded-full text-slate-400 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
+                  className="p-1.5 rounded-full text-amber-200/60 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
                 >
                   <X size={18} />
                 </button>
@@ -110,7 +110,7 @@ export function NeonHorizonZoomableCard({
 
               {(subtitle || badge) && (
                 <div className="w-full flex items-center justify-between mb-3 text-xs font-mono">
-                  {subtitle && <span className="text-slate-400">{subtitle}</span>}
+                  {subtitle && <span className="text-amber-200/60">{subtitle}</span>}
                   {badge && (
                     <span className={`px-2.5 py-0.5 rounded-full ${glowColors.bg} border border-white/15 ${glowColors.text} font-bold`}>
                       {badge}

@@ -155,10 +155,10 @@ export function EngineAssemblyViewer({
 
         {/* Floating Active Phase Banner on Top Left */}
         {activeComponentId && activeMeta && (
-          <div className="absolute top-5 left-5 z-30 flex items-center gap-2.5 px-4 py-2 rounded-full bg-[#0b0f19]/90 border border-amber-500/40 backdrop-blur-md shadow-[0_0_20px_rgba(56,189,248,0.25)] text-xs font-mono text-slate-200">
+          <div className="absolute top-5 left-5 z-30 flex items-center gap-2.5 px-4 py-2 rounded-full bg-[#0b0f19]/90 border border-amber-500/40 backdrop-blur-md shadow-[0_0_20px_rgba(56,189,248,0.25)] text-xs font-mono text-amber-50">
             <Sparkles size={14} className="text-amber-400 animate-spin" />
-            <span className="font-extrabold text-slate-100">{activeMeta.name}</span>
-            <span className="text-slate-500">·</span>
+            <span className="font-extrabold text-amber-50">{activeMeta.name}</span>
+            <span className="text-amber-300/50">·</span>
             <span className="text-amber-400 font-extrabold uppercase tracking-widest">{phase}</span>
           </div>
         )}
@@ -185,7 +185,7 @@ export function EngineAssemblyViewer({
             <span className="text-[10px] font-mono text-amber-800 font-extrabold uppercase tracking-widest block">
               ENGINEERING INSIGHT
             </span>
-            <p className="text-[11.5px] text-slate-700 font-semibold truncate mt-0.5">
+            <p className="text-[11.5px] text-amber-500 font-semibold truncate mt-0.5">
               {activeMeta.tooltipAdvice}
             </p>
           </div>
@@ -196,7 +196,7 @@ export function EngineAssemblyViewer({
       <div className="w-full">
         <Suspense
           fallback={
-            <div className="w-full h-32 rounded-3xl bg-[#0b0f19]/50 border border-slate-800 flex items-center justify-center text-slate-500 font-mono text-xs animate-pulse">
+            <div className="w-full h-32 rounded-3xl bg-[#0b0f19]/50 border border-amber-800/30 flex items-center justify-center text-amber-300/50 font-mono text-xs animate-pulse">
               Loading Audio Synthesizer Engine...
             </div>
           }

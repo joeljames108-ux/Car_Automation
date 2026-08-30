@@ -40,11 +40,11 @@ export const NeonHorizonToggle: React.FC<NeonHorizonToggleProps> = ({
  } ${className}`}
     >
       <div className="flex flex-col pr-4">
-        <span className="text-xs font-semibold nh-font-body tracking-wider text-slate-200">
+        <span className="text-xs font-semibold nh-font-body tracking-wider text-amber-50">
           {label}
         </span>
         {description && (
-          <span className="text-[10px] text-slate-400 nh-font-mono">{description}</span>
+          <span className="text-[10px] text-amber-200/60 nh-font-mono">{description}</span>
         )}
       </div>
 

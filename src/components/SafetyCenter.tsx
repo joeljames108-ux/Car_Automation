@@ -30,7 +30,7 @@ function ScoreBar({ label, value, max = 100 }: { label: string; value: number; m
   return (
     <div>
       <div className="flex items-center justify-between mb-1">
-        <span className="text-xs text-slate-400">{label}</span>
+        <span className="text-xs text-amber-200/60">{label}</span>
         <span className={`text-xs font-mono font-semibold ${pct >= 80 ? "text-ok-400" : pct >= 60 ? "text-accent-300" : pct >= 40 ? "text-warn-400" : "text-danger-400"}`}>
           {Math.round(value)}/{max}
         </span>
@@ -110,21 +110,21 @@ export function SafetyCenter() {
               <ShieldCheck size={24} className="text-accent-300" />
             </div>
             <div>
-              <h2 className="text-lg font-bold text-slate-100">Safety Engineering Center</h2>
-              <p className="text-xs text-slate-500">Design crash structure, passive safety, and NCAP compliance</p>
+              <h2 className="text-lg font-bold text-amber-50">Safety Engineering Center</h2>
+              <p className="text-xs text-amber-300/50">Design crash structure, passive safety, and NCAP compliance</p>
             </div>
           </div>
           <div className="flex-1" />
           {/* Live KPIs */}
           <div className="flex items-center gap-4">
             <div className="text-right">
-              <div className="text-[10px] text-slate-500 uppercase tracking-wider">NCAP Stars</div>
+              <div className="text-[10px] text-amber-300/50 uppercase tracking-wider">NCAP Stars</div>
               <div className="flex justify-end mt-1">
                 <StarRating value={safetySim.ncapStars} />
               </div>
             </div>
             <div className="text-right">
-              <div className="text-[10px] text-slate-500 uppercase tracking-wider">Overall Score</div>
+              <div className="text-[10px] text-amber-300/50 uppercase tracking-wider">Overall Score</div>
               <div className={`text-2xl font-bold font-mono ${safetySim.overallScore >= 80 ? "text-ok-400" : safetySim.overallScore >= 60 ? "text-accent-300" : safetySim.overallScore >= 40 ? "text-warn-400" : "text-danger-400"}`}>
                 {safetySim.overallScore}
               </div>
@@ -136,24 +136,24 @@ export function SafetyCenter() {
       {/* Quick summary strip */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         <div className="panel p-3 text-center">
-          <Weight size={14} className="mx-auto text-slate-400 mb-1" />
-          <div className="font-mono text-sm text-slate-200">{safetySim.safetyWeight}<span className="text-[10px] text-slate-600 ml-0.5">kg</span></div>
-          <div className="text-[10px] text-slate-600">Added Weight</div>
+          <Weight size={14} className="mx-auto text-amber-200/60 mb-1" />
+          <div className="font-mono text-sm text-amber-50">{safetySim.safetyWeight}<span className="text-[10px] text-amber-400 ml-0.5">kg</span></div>
+          <div className="text-[10px] text-amber-400">Added Weight</div>
         </div>
         <div className="panel p-3 text-center">
           <DollarSign size={14} className="mx-auto text-ok-400 mb-1" />
-          <div className="font-mono text-sm text-slate-200">${safetyConfig ? safetySim.safetyCost.toLocaleString() : 0}</div>
-          <div className="text-[10px] text-slate-600">Safety Cost</div>
+          <div className="font-mono text-sm text-amber-50">${safetyConfig ? safetySim.safetyCost.toLocaleString() : 0}</div>
+          <div className="text-[10px] text-amber-400">Safety Cost</div>
         </div>
         <div className="panel p-3 text-center">
           <ShieldCheck size={14} className="mx-auto text-accent-400 mb-1" />
-          <div className="font-mono text-sm text-slate-200">{safetySim.ncapStars}★</div>
-          <div className="text-[10px] text-slate-600">NCAP Stars</div>
+          <div className="font-mono text-sm text-amber-50">{safetySim.ncapStars}★</div>
+          <div className="text-[10px] text-amber-400">NCAP Stars</div>
         </div>
         <div className="panel p-3 text-center">
           <Zap size={14} className="mx-auto text-amber-400 mb-1" />
-          <div className="font-mono text-sm text-slate-200">+{Math.round(safetySim.activeFeatureBonus * 100)}%</div>
-          <div className="text-[10px] text-slate-600">ADAS Bonus</div>
+          <div className="font-mono text-sm text-amber-50">+{Math.round(safetySim.activeFeatureBonus * 100)}%</div>
+          <div className="text-[10px] text-amber-400">ADAS Bonus</div>
         </div>
       </div>
 
@@ -161,7 +161,7 @@ export function SafetyCenter() {
       <div className="flex items-center gap-1 bg-base-850 rounded-lg p-1 border border-base-800">
         {tabs.map(t => (
           <button key={t.id} onClick={() => setActiveTab(t.id)}
-            className={`px-4 py-1.5 rounded-md text-xs font-medium transition-all ${activeTab === t.id ? "bg-accent-500/20 text-accent-300" : "text-slate-400 hover:text-slate-200"}`}>
+            className={`px-4 py-1.5 rounded-md text-xs font-medium transition-all ${activeTab === t.id ? "bg-accent-500/20 text-accent-300" : "text-amber-200/60 hover:text-amber-50"}`}>
             {t.label}
           </button>
         ))}
@@ -171,7 +171,7 @@ export function SafetyCenter() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           {/* Crumple Zones */}
           <div className="panel p-4 space-y-4">
-            <h3 className="text-xs font-semibold text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
+            <h3 className="text-xs font-semibold text-amber-100/80 uppercase tracking-wider flex items-center gap-1.5">
               <ShieldCheck size={12} className="text-accent-400" /> Crumple Zones
             </h3>
             <Select label="Front Crumple Zone" value={safetyConfig.frontCrumple}
@@ -184,7 +184,7 @@ export function SafetyCenter() {
 
           {/* Airbags */}
           <div className="panel p-4 space-y-4">
-            <h3 className="text-xs font-semibold text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
+            <h3 className="text-xs font-semibold text-amber-100/80 uppercase tracking-wider flex items-center gap-1.5">
               <AlertTriangle size={12} className="text-warn-400" /> Airbag System
             </h3>
             <Select label="Airbag Type" value={safetyConfig.airbagType}
@@ -196,7 +196,7 @@ export function SafetyCenter() {
 
           {/* Structural safety */}
           <div className="panel p-4 space-y-4">
-            <h3 className="text-xs font-semibold text-slate-300 uppercase tracking-wider">Structural Safety</h3>
+            <h3 className="text-xs font-semibold text-amber-100/80 uppercase tracking-wider">Structural Safety</h3>
             <Select label="Safety Cage" value={safetyConfig.safetyCage}
               options={CAGE_OPTIONS} onChange={v => updateSafety({ safetyCage: v })} />
             <Select label="Seatbelt System" value={safetyConfig.seatbeltType}
@@ -209,7 +209,7 @@ export function SafetyCenter() {
 
           {/* Safety features toggles */}
           <div className="panel p-4 space-y-3">
-            <h3 className="text-xs font-semibold text-slate-300 uppercase tracking-wider">Safety Features</h3>
+            <h3 className="text-xs font-semibold text-amber-100/80 uppercase tracking-wider">Safety Features</h3>
             <Toggle label="Rollover Protection"
               value={safetyConfig.rolloverProtection} onChange={v => updateSafety({ rolloverProtection: v })} />
             <Toggle label="Door Side Impact Beams"
@@ -232,19 +232,19 @@ export function SafetyCenter() {
         <div className="space-y-4">
           {/* Stars */}
           <div className="panel p-6 text-center">
-            <div className="text-sm text-slate-400 mb-3 uppercase tracking-wider font-mono">NCAP Star Rating</div>
+            <div className="text-sm text-amber-200/60 mb-3 uppercase tracking-wider font-mono">NCAP Star Rating</div>
             <div className="flex justify-center mb-3">
               <StarRating value={safetySim.ncapStars} />
             </div>
             <div className={`text-5xl font-bold font-mono mb-2 ${safetySim.overallScore >= 80 ? "text-ok-400" : safetySim.overallScore >= 60 ? "text-accent-300" : safetySim.overallScore >= 40 ? "text-warn-400" : "text-danger-400"}`}>
               {safetySim.overallScore}
             </div>
-            <div className="text-sm text-slate-500">Overall Safety Score</div>
+            <div className="text-sm text-amber-300/50">Overall Safety Score</div>
           </div>
 
           {/* Category breakdown */}
           <div className="panel p-4 space-y-3">
-            <h3 className="text-xs font-semibold text-slate-300 uppercase tracking-wider mb-3">Category Breakdown</h3>
+            <h3 className="text-xs font-semibold text-amber-100/80 uppercase tracking-wider mb-3">Category Breakdown</h3>
             <ScoreBar label="Frontal Crash Protection" value={safetySim.frontalCrashScore} />
             <ScoreBar label="Side Impact Protection" value={safetySim.sideCrashScore} />
             <ScoreBar label="Rear Impact Protection" value={safetySim.rearCrashScore} />
@@ -255,7 +255,7 @@ export function SafetyCenter() {
 
           {/* SVG Radar */}
           <div className="panel p-4">
-            <h3 className="text-xs font-semibold text-slate-300 uppercase tracking-wider mb-4 text-center">Safety Profile Radar</h3>
+            <h3 className="text-xs font-semibold text-amber-100/80 uppercase tracking-wider mb-4 text-center">Safety Profile Radar</h3>
             {(() => {
               const scores = [
                 { label: "Frontal", val: safetySim.frontalCrashScore },
@@ -296,7 +296,7 @@ export function SafetyCenter() {
 
           {/* Regional compliance */}
           <div className="panel p-4">
-            <h3 className="text-xs font-semibold text-slate-300 uppercase tracking-wider mb-3">Regional Compliance</h3>
+            <h3 className="text-xs font-semibold text-amber-100/80 uppercase tracking-wider mb-3">Regional Compliance</h3>
             <div className="space-y-2">
               {REGION_STANDARDS.map(rs => {
                 const passes = safetySim.overallScore >= rs.threshold;
@@ -305,8 +305,8 @@ export function SafetyCenter() {
                     {passes
                       ? <CheckCircle2 size={14} className="text-ok-400 shrink-0" />
                       : <Circle size={14} className="text-danger-400 shrink-0" />}
-                    <span className="text-xs text-slate-300 flex-1">{rs.label}</span>
-                    <span className="text-[10px] text-slate-500">Threshold: {rs.threshold}</span>
+                    <span className="text-xs text-amber-100/80 flex-1">{rs.label}</span>
+                    <span className="text-[10px] text-amber-300/50">Threshold: {rs.threshold}</span>
                     <span className={`text-xs font-semibold ${passes ? "text-ok-400" : "text-danger-400"}`}>
                       {passes ? "PASS" : "FAIL"}
                     </span>

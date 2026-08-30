@@ -620,7 +620,7 @@ export const ModularLinearAssemblyViewport: React.FC<ModularLinearAssemblyViewpo
       <div className="absolute top-4 left-4 flex flex-col gap-2 pointer-events-none">
         <div className="flex items-center gap-2 px-3 py-1.5 rounded-2xl bg-base-900/80 backdrop-blur-xl border border-base-800 shadow-lg pointer-events-auto">
           <span className="w-2.5 h-2.5 rounded-full bg-amber-400 animate-pulse shadow-[0_0_8px_#00e5ff]" />
-          <span className="text-xs font-mono font-bold text-slate-800 dark:text-slate-100 uppercase tracking-wider">
+          <span className="text-xs font-mono font-bold text-slate-800 dark:text-amber-50 uppercase tracking-wider">
             {activeStage.replace("_", " ")} STAGE
           </span>
           <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-600 dark:text-amber-300 font-bold">
@@ -629,8 +629,8 @@ export const ModularLinearAssemblyViewport: React.FC<ModularLinearAssemblyViewpo
         </div>
 
         {/* Real-Time Mass & CoM HUD Badge */}
-        <div className="flex items-center gap-2 px-3 py-1 rounded-xl bg-base-900/70 backdrop-blur-md border border-base-800/80 font-mono text-[10px] text-slate-400">
-          <span>MASS: <strong className="text-slate-200">{physicalState.totalCurbWeightKg} kg</strong></span>
+        <div className="flex items-center gap-2 px-3 py-1 rounded-xl bg-base-900/70 backdrop-blur-md border border-base-800/80 font-mono text-[10px] text-amber-200/60">
+          <span>MASS: <strong className="text-amber-50">{physicalState.totalCurbWeightKg} kg</strong></span>
           <span>•</span>
           <span>BIAS: <strong className="text-amber-300">{physicalState.weightDistributionFrontPct}% F</strong></span>
           <span>•</span>
@@ -672,7 +672,7 @@ export const ModularLinearAssemblyViewport: React.FC<ModularLinearAssemblyViewpo
               className={`px-2.5 py-1 rounded-xl text-[10px] font-mono font-bold transition-all cursor-pointer ${
                 activeCamPreset === c.id
                   ? "bg-amber-500/20 text-amber-600 dark:text-amber-300 border border-amber-500/40 shadow-sm"
-                  : "text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100"
+                  : "text-amber-300/50 dark:text-amber-200/60 hover:text-slate-900 dark:hover:text-amber-50"
               }`}
             >
               {c.label}
@@ -686,7 +686,7 @@ export const ModularLinearAssemblyViewport: React.FC<ModularLinearAssemblyViewpo
           className={`flex items-center gap-1.5 px-3 py-1.5 rounded-2xl text-[10px] font-mono font-bold transition-all border cursor-pointer ${
             showCADToolbar
               ? "bg-amber-500/20 border-amber-500/60 text-amber-300 shadow-sm"
-              : "bg-base-900/80 backdrop-blur-xl border-base-800 text-slate-400 hover:text-slate-200"
+              : "bg-base-900/80 backdrop-blur-xl border-base-800 text-amber-200/60 hover:text-amber-50"
           }`}
         >
           <Scissors size={13} />
@@ -698,7 +698,7 @@ export const ModularLinearAssemblyViewport: React.FC<ModularLinearAssemblyViewpo
           {(
             [
               { id: "warm_sunset", label: "Sunset", icon: Flame, color: "text-amber-400" },
-              { id: "luxury_showroom", label: "Showroom", icon: Sun, color: "text-slate-100" },
+              { id: "luxury_showroom", label: "Showroom", icon: Sun, color: "text-amber-50" },
               { id: "titanium_slate", label: "Titanium", icon: Compass, color: "text-amber-400" },
               { id: "blueprint_navy", label: "Blueprint", icon: Layers, color: "text-amber-400" },
               { id: "cyberpunk_neon", label: "Cyberpunk", icon: Zap, color: "text-amber-400" },
@@ -714,7 +714,7 @@ export const ModularLinearAssemblyViewport: React.FC<ModularLinearAssemblyViewpo
                 className={`p-1.5 rounded-xl transition-all cursor-pointer flex items-center gap-1 ${
                   isActive
                     ? "bg-amber-500/20 text-amber-300 border border-amber-500/40 shadow-sm"
-                    : "text-slate-400 hover:text-slate-200"
+                    : "text-amber-200/60 hover:text-amber-50"
                 }`}
                 title={STUDIO_ENVIRONMENT_PRESETS[env.id].name + " — " + STUDIO_ENVIRONMENT_PRESETS[env.id].tagline}
               >
@@ -735,7 +735,7 @@ export const ModularLinearAssemblyViewport: React.FC<ModularLinearAssemblyViewpo
             </span>
             <button
               onClick={() => setShowCADToolbar(false)}
-              className="text-[10px] text-slate-500 hover:text-slate-300 cursor-pointer"
+              className="text-[10px] text-amber-300/50 hover:text-amber-100/80 cursor-pointer"
             >
               ✕
             </button>
@@ -744,7 +744,7 @@ export const ModularLinearAssemblyViewport: React.FC<ModularLinearAssemblyViewpo
           {/* Section Cut Clipping Planes */}
           <div className="space-y-1.5">
             <div className="flex justify-between items-center text-[10px]">
-              <span className="text-slate-400">Section Clipping Plane</span>
+              <span className="text-amber-200/60">Section Clipping Plane</span>
               <div className="flex items-center gap-1.5">
                 {sectionPlane !== "off" && (
                   <button
@@ -752,7 +752,7 @@ export const ModularLinearAssemblyViewport: React.FC<ModularLinearAssemblyViewpo
                     className={`px-1.5 py-0.5 rounded text-[9px] font-bold border cursor-pointer ${
                       sectionInverted
                         ? "bg-amber-500/20 border-amber-500 text-amber-300"
-                        : "bg-base-950 border-base-800 text-slate-400 hover:text-slate-200"
+                        : "bg-base-950 border-base-800 text-amber-200/60 hover:text-amber-50"
                     }`}
                   >
                     INVERT
@@ -769,7 +769,7 @@ export const ModularLinearAssemblyViewport: React.FC<ModularLinearAssemblyViewpo
                   className={`py-1 rounded-lg text-[10px] font-bold border transition-all cursor-pointer ${
                     sectionPlane === axis
                       ? "bg-amber-500/20 border-amber-500 text-amber-300"
-                      : "bg-base-950 border-base-800 text-slate-500 hover:text-slate-300"
+                      : "bg-base-950 border-base-800 text-amber-300/50 hover:text-amber-100/80"
                   }`}
                 >
                   {axis.toUpperCase()}
@@ -792,7 +792,7 @@ export const ModularLinearAssemblyViewport: React.FC<ModularLinearAssemblyViewpo
           {/* 3D Calipers & Distance Dimensioning */}
           <div className="space-y-1.5 pt-2 border-t border-base-800">
             <div className="flex justify-between items-center text-[10px]">
-              <span className="text-slate-400 flex items-center gap-1">
+              <span className="text-amber-200/60 flex items-center gap-1">
                 <Crosshair size={11} className="text-amber-400" /> 3D CALIPER CALLOUTS
               </span>
               <span className="text-amber-400 font-bold uppercase text-[9px]">{activeCaliper}</span>
@@ -814,7 +814,7 @@ export const ModularLinearAssemblyViewport: React.FC<ModularLinearAssemblyViewpo
                   className={`py-1 px-1 rounded-lg text-[9px] font-bold border transition-all cursor-pointer truncate ${
                     activeCaliper === cal.id
                       ? "bg-amber-500/20 border-amber-500 text-amber-300 shadow-sm"
-                      : "bg-base-950 border-base-800 text-slate-500 hover:text-slate-300"
+                      : "bg-base-950 border-base-800 text-amber-300/50 hover:text-amber-100/80"
                   }`}
                 >
                   {cal.label}
@@ -826,7 +826,7 @@ export const ModularLinearAssemblyViewport: React.FC<ModularLinearAssemblyViewpo
           {/* Kinematic Steering Slider */}
           <div className="space-y-1 pt-2 border-t border-base-800">
             <div className="flex justify-between items-center text-[10px]">
-              <span className="text-slate-400">Steering Rack Angle</span>
+              <span className="text-amber-200/60">Steering Rack Angle</span>
               <span className="text-amber-400 font-bold">{steeringAngle}°</span>
             </div>
             <input
@@ -843,7 +843,7 @@ export const ModularLinearAssemblyViewport: React.FC<ModularLinearAssemblyViewpo
           {/* Kinematic Suspension Bump/Travel Slider */}
           <div className="space-y-1 pt-2 border-t border-base-800">
             <div className="flex justify-between items-center text-[10px]">
-              <span className="text-slate-400">Suspension Travel</span>
+              <span className="text-amber-200/60">Suspension Travel</span>
               <span className="text-emerald-400 font-bold">{suspensionTravel} mm</span>
             </div>
             <input
@@ -860,7 +860,7 @@ export const ModularLinearAssemblyViewport: React.FC<ModularLinearAssemblyViewpo
           {/* Closures Articulation (Doors, Bonnet, Dicky) */}
           <div className="space-y-2 pt-2 border-t border-base-800">
             <div className="flex justify-between items-center text-[10px]">
-              <span className="text-slate-400 flex items-center gap-1 font-bold">
+              <span className="text-amber-200/60 flex items-center gap-1 font-bold">
                 <Maximize2 size={11} className="text-pink-400" /> CLOSURES ARTICULATION
               </span>
               <div className="flex items-center gap-1">
@@ -869,7 +869,7 @@ export const ModularLinearAssemblyViewport: React.FC<ModularLinearAssemblyViewpo
                     handleClosuresChange(0, 0, 0);
                     assemblyAudio.playHydraulicClamp();
                   }}
-                  className="px-1.5 py-0.5 rounded text-[8px] font-mono bg-base-950 border border-base-800 text-slate-400 hover:text-slate-200 cursor-pointer"
+                  className="px-1.5 py-0.5 rounded text-[8px] font-mono bg-base-950 border border-base-800 text-amber-200/60 hover:text-amber-50 cursor-pointer"
                 >
                   CLOSE ALL
                 </button>
@@ -887,7 +887,7 @@ export const ModularLinearAssemblyViewport: React.FC<ModularLinearAssemblyViewpo
 
             {/* Doors slider */}
             <div className="space-y-0.5">
-              <div className="flex justify-between text-[9px] text-slate-400 font-mono">
+              <div className="flex justify-between text-[9px] text-amber-200/60 font-mono">
                 <span>Doors ({assemblyState.doorStyle || "butterfly"})</span>
                 <span className="text-pink-400 font-bold">{closuresDoorAngle}°</span>
               </div>
@@ -904,7 +904,7 @@ export const ModularLinearAssemblyViewport: React.FC<ModularLinearAssemblyViewpo
 
             {/* Bonnet slider */}
             <div className="space-y-0.5">
-              <div className="flex justify-between text-[9px] text-slate-400 font-mono">
+              <div className="flex justify-between text-[9px] text-amber-200/60 font-mono">
                 <span>Bonnet / Hood</span>
                 <span className="text-pink-400 font-bold">{closuresBonnetAngle}°</span>
               </div>
@@ -921,7 +921,7 @@ export const ModularLinearAssemblyViewport: React.FC<ModularLinearAssemblyViewpo
 
             {/* Dicky slider */}
             <div className="space-y-0.5">
-              <div className="flex justify-between text-[9px] text-slate-400 font-mono">
+              <div className="flex justify-between text-[9px] text-amber-200/60 font-mono">
                 <span>Dicky / Trunk</span>
                 <span className="text-pink-400 font-bold">{closuresDickyAngle}°</span>
               </div>
@@ -940,7 +940,7 @@ export const ModularLinearAssemblyViewport: React.FC<ModularLinearAssemblyViewpo
           {/* FEA Load Case Simulation */}
           <div className="space-y-1.5 pt-2 border-t border-base-800">
             <div className="flex justify-between items-center text-[10px]">
-              <span className="text-slate-400 flex items-center gap-1">
+              <span className="text-amber-200/60 flex items-center gap-1">
                 <Activity size={11} className="text-rose-400" /> FEA LOAD CASE
               </span>
               <span className="text-rose-400 font-bold uppercase text-[9px]">{feaLoadCase}</span>
@@ -966,7 +966,7 @@ export const ModularLinearAssemblyViewport: React.FC<ModularLinearAssemblyViewpo
                   className={`py-1 px-1.5 rounded-lg text-[9px] font-bold border transition-all cursor-pointer truncate ${
                     feaLoadCase === lc.id
                       ? "bg-rose-500/20 border-rose-500 text-rose-300 shadow-sm"
-                      : "bg-base-950 border-base-800 text-slate-500 hover:text-slate-300"
+                      : "bg-base-950 border-base-800 text-amber-300/50 hover:text-amber-100/80"
                   }`}
                 >
                   {lc.label}
@@ -978,7 +978,7 @@ export const ModularLinearAssemblyViewport: React.FC<ModularLinearAssemblyViewpo
           {/* Chassis Metallurgy Mode */}
           <div className="space-y-1.5 pt-2 border-t border-base-800">
             <div className="flex justify-between items-center text-[10px]">
-              <span className="text-slate-400 flex items-center gap-1">
+              <span className="text-amber-200/60 flex items-center gap-1">
                 <Shield size={11} className="text-amber-400" /> CHASSIS METALLURGY
               </span>
               <span className="text-amber-400 font-bold uppercase text-[9px]">{chassisMetallurgy}</span>
@@ -1006,7 +1006,7 @@ export const ModularLinearAssemblyViewport: React.FC<ModularLinearAssemblyViewpo
                   className={`py-1 px-1 rounded-lg text-[8px] font-bold border transition-all cursor-pointer truncate ${
                     chassisMetallurgy === met.id
                       ? "bg-amber-500/20 border-amber-500 text-amber-300 shadow-sm"
-                      : "bg-base-950 border-base-800 text-slate-500 hover:text-slate-300"
+                      : "bg-base-950 border-base-800 text-amber-300/50 hover:text-amber-100/80"
                   }`}
                 >
                   {met.label}
@@ -1017,19 +1017,19 @@ export const ModularLinearAssemblyViewport: React.FC<ModularLinearAssemblyViewpo
 
           {/* Structural Rigidity Telemetry Card */}
           <div className="p-2 rounded-xl bg-base-950/80 border border-base-800/80 space-y-1 text-[9px] font-mono">
-            <div className="flex justify-between text-slate-400">
+            <div className="flex justify-between text-amber-200/60">
               <span>TORSIONAL RIGIDITY:</span>
               <span className="text-amber-300 font-bold">48,200 Nm/deg</span>
             </div>
-            <div className="flex justify-between text-slate-400">
+            <div className="flex justify-between text-amber-200/60">
               <span>PEAK VON MISES:</span>
               <span className="text-rose-400 font-bold">418 MPa</span>
             </div>
-            <div className="flex justify-between text-slate-400">
+            <div className="flex justify-between text-amber-200/60">
               <span>YIELD STRENGTH:</span>
               <span className="text-emerald-400 font-bold">880 MPa</span>
             </div>
-            <div className="flex justify-between text-slate-400">
+            <div className="flex justify-between text-amber-200/60">
               <span>SAFETY FACTOR (Sf):</span>
               <span className="text-amber-300 font-bold">2.10 (OPTIMAL)</span>
             </div>
@@ -1038,7 +1038,7 @@ export const ModularLinearAssemblyViewport: React.FC<ModularLinearAssemblyViewpo
           {/* Paint Finish Studio */}
           <div className="space-y-1.5 pt-2 border-t border-base-800">
             <div className="flex justify-between items-center text-[10px]">
-              <span className="text-slate-400 flex items-center gap-1">
+              <span className="text-amber-200/60 flex items-center gap-1">
                 <Sparkles size={11} className="text-amber-400" /> PAINT FINISH STUDIO
               </span>
               <span className="text-amber-400 font-bold uppercase text-[9px]">{activeCustomPaintFinish}</span>
@@ -1066,7 +1066,7 @@ export const ModularLinearAssemblyViewport: React.FC<ModularLinearAssemblyViewpo
                   className={`py-1 px-1 rounded-lg text-[8px] font-bold border transition-all cursor-pointer truncate ${
                     activeCustomPaintFinish === p.id
                       ? "bg-amber-500/20 border-amber-500 text-amber-300 shadow-sm"
-                      : "bg-base-950 border-base-800 text-slate-500 hover:text-slate-300"
+                      : "bg-base-950 border-base-800 text-amber-300/50 hover:text-amber-100/80"
                   }`}
                 >
                   {p.label}
@@ -1078,7 +1078,7 @@ export const ModularLinearAssemblyViewport: React.FC<ModularLinearAssemblyViewpo
           {/* Exterior Lighting Studio */}
           <div className="space-y-1.5 pt-2 border-t border-base-800">
             <div className="flex justify-between items-center text-[10px]">
-              <span className="text-slate-400 flex items-center gap-1">
+              <span className="text-amber-200/60 flex items-center gap-1">
                 <Sun size={11} className="text-amber-400" /> EXTERIOR OPTICS
               </span>
               <span className="text-amber-400 font-bold uppercase text-[9px]">
@@ -1091,7 +1091,7 @@ export const ModularLinearAssemblyViewport: React.FC<ModularLinearAssemblyViewpo
                 className={`py-1 px-1 rounded-lg text-[8px] font-bold border transition-all cursor-pointer truncate ${
                   headlightsActive
                     ? "bg-amber-500/20 border-amber-500 text-amber-300 shadow-sm"
-                    : "bg-base-950 border-base-800 text-slate-500 hover:text-slate-300"
+                    : "bg-base-950 border-base-800 text-amber-300/50 hover:text-amber-100/80"
                 }`}
               >
                 Headlights
@@ -1101,7 +1101,7 @@ export const ModularLinearAssemblyViewport: React.FC<ModularLinearAssemblyViewpo
                 className={`py-1 px-1 rounded-lg text-[8px] font-bold border transition-all cursor-pointer truncate ${
                   drlActive
                     ? "bg-sky-500/20 border-sky-500 text-sky-300 shadow-sm"
-                    : "bg-base-950 border-base-800 text-slate-500 hover:text-slate-300"
+                    : "bg-base-950 border-base-800 text-amber-300/50 hover:text-amber-100/80"
                 }`}
               >
                 DRL Halos
@@ -1111,7 +1111,7 @@ export const ModularLinearAssemblyViewport: React.FC<ModularLinearAssemblyViewpo
                 className={`py-1 px-1 rounded-lg text-[8px] font-bold border transition-all cursor-pointer truncate ${
                   underglowActive
                     ? "bg-amber-500/20 border-amber-500 text-amber-300 shadow-sm"
-                    : "bg-base-950 border-base-800 text-slate-500 hover:text-slate-300"
+                    : "bg-base-950 border-base-800 text-amber-300/50 hover:text-amber-100/80"
                 }`}
               >
                 Underglow
@@ -1122,7 +1122,7 @@ export const ModularLinearAssemblyViewport: React.FC<ModularLinearAssemblyViewpo
           {/* Studio Environment & Lighting Lab */}
           <div className="space-y-2 pt-2 border-t border-base-800">
             <div className="flex justify-between items-center text-[10px]">
-              <span className="text-slate-400 flex items-center gap-1">
+              <span className="text-amber-200/60 flex items-center gap-1">
                 <Palette size={11} className="text-amber-400" /> STUDIO ENVIRONMENT
               </span>
               <span className="text-amber-400 font-bold uppercase text-[9px]">
@@ -1135,7 +1135,7 @@ export const ModularLinearAssemblyViewport: React.FC<ModularLinearAssemblyViewpo
               {(
                 [
                   { id: "warm_sunset", label: "Sunset", accent: "border-amber-500 text-amber-300" },
-                  { id: "luxury_showroom", label: "Showroom", accent: "border-slate-300 text-slate-200" },
+                  { id: "luxury_showroom", label: "Showroom", accent: "border-slate-300 text-amber-50" },
                   { id: "titanium_slate", label: "Slate CAD", accent: "border-amber-500 text-amber-300" },
                   { id: "blueprint_navy", label: "Blueprint", accent: "border-amber-500 text-amber-300" },
                   { id: "cyberpunk_neon", label: "Cyberpunk", accent: "border-amber-500 text-amber-300" },
@@ -1148,7 +1148,7 @@ export const ModularLinearAssemblyViewport: React.FC<ModularLinearAssemblyViewpo
                   className={`py-1 px-1 rounded-lg text-[8px] font-bold border transition-all cursor-pointer truncate ${
                     environmentPreset === preset.id
                       ? `bg-amber-500/20 ${preset.accent} shadow-sm`
-                      : "bg-base-950 border-base-800 text-slate-500 hover:text-slate-300"
+                      : "bg-base-950 border-base-800 text-amber-300/50 hover:text-amber-100/80"
                   }`}
                 >
                   {preset.label}
@@ -1158,7 +1158,7 @@ export const ModularLinearAssemblyViewport: React.FC<ModularLinearAssemblyViewpo
 
             {/* Custom Gradient Palette */}
             <div className="p-2 rounded-xl bg-base-950/80 border border-base-800/80 space-y-1.5 text-[9px]">
-              <div className="flex justify-between items-center text-slate-400">
+              <div className="flex justify-between items-center text-amber-200/60">
                 <span>GRADIENT PALETTE:</span>
                 <div className="flex items-center gap-1">
                   <input
@@ -1186,7 +1186,7 @@ export const ModularLinearAssemblyViewport: React.FC<ModularLinearAssemblyViewpo
               </div>
 
               {/* Exposure Slider */}
-              <div className="flex justify-between items-center text-slate-400">
+              <div className="flex justify-between items-center text-amber-200/60">
                 <span>EXPOSURE:</span>
                 <div className="flex items-center gap-1">
                   <input
@@ -1207,7 +1207,7 @@ export const ModularLinearAssemblyViewport: React.FC<ModularLinearAssemblyViewpo
               </div>
 
               {/* Floor Reflectivity */}
-              <div className="flex justify-between items-center text-slate-400">
+              <div className="flex justify-between items-center text-amber-200/60">
                 <span>FLOOR REFLECTIVITY:</span>
                 <div className="flex items-center gap-1">
                   <input
@@ -1234,7 +1234,7 @@ export const ModularLinearAssemblyViewport: React.FC<ModularLinearAssemblyViewpo
               </div>
 
               {/* Floor Grid Opacity */}
-              <div className="flex justify-between items-center text-slate-400">
+              <div className="flex justify-between items-center text-amber-200/60">
                 <span>CAD GRID OPACITY:</span>
                 <div className="flex items-center gap-1">
                   <input
@@ -1264,7 +1264,7 @@ export const ModularLinearAssemblyViewport: React.FC<ModularLinearAssemblyViewpo
 
           {/* Drivetrain Spin Animation */}
           <div className="flex items-center justify-between pt-2 border-t border-base-800 text-[10px]">
-            <span className="text-slate-400">Drivetrain Spin (3,600 RPM)</span>
+            <span className="text-amber-200/60">Drivetrain Spin (3,600 RPM)</span>
             <button
               onClick={() => {
                 const nextState = !isDrivetrainSpin;
@@ -1274,7 +1274,7 @@ export const ModularLinearAssemblyViewport: React.FC<ModularLinearAssemblyViewpo
               className={`px-2 py-1 rounded-lg border font-bold cursor-pointer transition-all ${
                 isDrivetrainSpin
                   ? "bg-emerald-500/20 border-emerald-500 text-emerald-400"
-                  : "bg-base-950 border-base-800 text-slate-500"
+                  : "bg-base-950 border-base-800 text-amber-300/50"
               }`}
             >
               {isDrivetrainSpin ? "SPINNING" : "STOPPED"}
@@ -1288,7 +1288,7 @@ export const ModularLinearAssemblyViewport: React.FC<ModularLinearAssemblyViewpo
         {/* Exploded View Slider */}
         <div className="flex items-center gap-2 px-2 border-r border-base-800/80">
           <Sliders size={13} className="text-amber-500" />
-          <span className="text-[10px] font-mono font-bold text-slate-700 dark:text-slate-300 whitespace-nowrap">
+          <span className="text-[10px] font-mono font-bold text-amber-500 dark:text-amber-100/80 whitespace-nowrap">
             EXPLODED VIEW
           </span>
           <input
@@ -1311,7 +1311,7 @@ export const ModularLinearAssemblyViewport: React.FC<ModularLinearAssemblyViewpo
           className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-[10px] font-mono font-bold transition-all border cursor-pointer ${
             showCoMGizmo
               ? "bg-amber-500/20 border-amber-500/50 text-amber-300 shadow-sm"
-              : "bg-base-850/80 border-base-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100"
+              : "bg-base-850/80 border-base-800 text-amber-400 dark:text-amber-200/60 hover:text-slate-900 dark:hover:text-amber-50"
           }`}
         >
           <Crosshair size={12} />
@@ -1324,7 +1324,7 @@ export const ModularLinearAssemblyViewport: React.FC<ModularLinearAssemblyViewpo
           className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-[10px] font-mono font-bold transition-all border cursor-pointer ${
             isXRay
               ? "bg-amber-500/20 border-amber-500/50 text-amber-600 dark:text-amber-300 shadow-sm"
-              : "bg-base-850/80 border-base-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100"
+              : "bg-base-850/80 border-base-800 text-amber-400 dark:text-amber-200/60 hover:text-slate-900 dark:hover:text-amber-50"
           }`}
         >
           <Eye size={12} />
@@ -1337,7 +1337,7 @@ export const ModularLinearAssemblyViewport: React.FC<ModularLinearAssemblyViewpo
           className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-[10px] font-mono font-bold transition-all border cursor-pointer ${
             isAutoRotate
               ? "bg-amber-500/20 border-amber-500/50 text-amber-600 dark:text-amber-300 shadow-sm"
-              : "bg-base-850/80 border-base-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100"
+              : "bg-base-850/80 border-base-800 text-amber-400 dark:text-amber-200/60 hover:text-slate-900 dark:hover:text-amber-50"
           }`}
         >
           <RotateCw size={12} className={isAutoRotate ? "animate-spin" : ""} />
@@ -1350,7 +1350,7 @@ export const ModularLinearAssemblyViewport: React.FC<ModularLinearAssemblyViewpo
           className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-[10px] font-mono font-bold transition-all border cursor-pointer ${
             showStreamlines
               ? "bg-emerald-500/20 border-emerald-500/50 text-emerald-600 dark:text-emerald-300 shadow-sm"
-              : "bg-base-850/80 border-base-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100"
+              : "bg-base-850/80 border-base-800 text-amber-400 dark:text-amber-200/60 hover:text-slate-900 dark:hover:text-amber-50"
           }`}
         >
           <Wind size={12} className={showStreamlines ? "animate-pulse text-emerald-400" : ""} />
@@ -1370,7 +1370,7 @@ export const ModularLinearAssemblyViewport: React.FC<ModularLinearAssemblyViewpo
           className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-[10px] font-mono font-bold transition-all border cursor-pointer ${
             isFeaStressActive
               ? "bg-rose-500/20 border-rose-500/50 text-rose-300 shadow-sm"
-              : "bg-base-850/80 border-base-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100"
+              : "bg-base-850/80 border-base-800 text-amber-400 dark:text-amber-200/60 hover:text-slate-900 dark:hover:text-amber-50"
           }`}
           title="FEA Von Mises Stress Heatmap"
         >
@@ -1390,7 +1390,7 @@ export const ModularLinearAssemblyViewport: React.FC<ModularLinearAssemblyViewpo
           className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-[10px] font-mono font-bold transition-all border cursor-pointer ${
             frameIsolation !== "all"
               ? "bg-amber-500/20 border-amber-500/50 text-amber-300 shadow-sm"
-              : "bg-base-850/80 border-base-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100"
+              : "bg-base-850/80 border-base-800 text-amber-400 dark:text-amber-200/60 hover:text-slate-900 dark:hover:text-amber-50"
           }`}
           title="Isolate Chassis Frame or Bodywork"
         >

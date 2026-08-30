@@ -65,7 +65,7 @@ export function AnimMasterComponentCatalog() {
   ];
 
   return (
-    <div className="w-full flex flex-col gap-6 text-slate-100 animate-nh-materialize">
+    <div className="w-full flex flex-col gap-6 text-amber-50 animate-nh-materialize">
       {/* Header Banner */}
       <NeonHorizonGlassPanel
         variant="window"
@@ -80,7 +80,7 @@ export function AnimMasterComponentCatalog() {
         className="p-6"
       >
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <p className="text-xs text-slate-300 max-w-2xl">
+          <p className="text-xs text-amber-100/80 max-w-2xl">
             Interactive playground for automotive design tokens, glassmorphism containers, physics sliders, and SVG gauges.
           </p>
           <div className="flex items-center gap-2">
@@ -133,24 +133,24 @@ export function AnimMasterComponentCatalog() {
                     <NeonHorizonBadge variant="magenta">HYPERCAR V8</NeonHorizonBadge>
                   </div>
 
-                  <h4 className="text-xl font-black text-slate-100 mb-2 group-hover:text-sky-300 transition-colors">
+                  <h4 className="text-xl font-black text-amber-50 mb-2 group-hover:text-sky-300 transition-colors">
                     Koenigsegg Jesko Attack Telemetry
                   </h4>
-                  <p className="text-xs text-slate-300 mb-6 leading-relaxed">
+                  <p className="text-xs text-amber-100/80 mb-6 leading-relaxed">
                     Ultra-high downforce active aerodynamics (1000kg @ 275km/h) coupled with a 1600 HP Twin-Turbo Flat-Plane V8.
                   </p>
 
                   <div className="grid grid-cols-3 gap-3 border-t border-sky-400/15 pt-4 nh-font-mono">
                     <div className="bg-[#05080f] p-2.5 rounded-xl border border-sky-400/15 text-center">
-                      <div className="text-[9px] text-slate-400">POWER</div>
+                      <div className="text-[9px] text-amber-200/60">POWER</div>
                       <div className="text-sm font-bold text-sky-300">1600 HP</div>
                     </div>
                     <div className="bg-[#05080f] p-2.5 rounded-xl border border-sky-400/15 text-center">
-                      <div className="text-[9px] text-slate-400">REDLINE</div>
+                      <div className="text-[9px] text-amber-200/60">REDLINE</div>
                       <div className="text-sm font-bold text-sky-300">8500 RPM</div>
                     </div>
                     <div className="bg-[#05080f] p-2.5 rounded-xl border border-sky-400/15 text-center">
-                      <div className="text-[9px] text-slate-400">TOP SPEED</div>
+                      <div className="text-[9px] text-amber-200/60">TOP SPEED</div>
                       <div className="text-sm font-bold text-emerald-300">480 km/h</div>
                     </div>
                   </div>
@@ -232,7 +232,7 @@ export function AnimMasterComponentCatalog() {
                   key={i}
                   className="p-3 rounded-xl bg-[#0a111e]/80 border border-sky-400/15 flex items-center justify-between"
                 >
-                  <span className="text-xs font-bold text-slate-100">{item.name}</span>
+                  <span className="text-xs font-bold text-amber-50">{item.name}</span>
                   <div className="flex items-center gap-3">
                     <span className="text-[10px] nh-font-mono text-sky-300">{item.latency}</span>
                     <NeonHorizonBadge variant="live">{item.status}</NeonHorizonBadge>

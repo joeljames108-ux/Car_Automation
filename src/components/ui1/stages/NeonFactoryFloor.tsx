@@ -39,7 +39,7 @@ export function NeonFactoryFloor() {
   ];
 
   return (
-    <div className="w-full flex flex-col gap-6 text-slate-100 animate-nh-materialize">
+    <div className="w-full flex flex-col gap-6 text-amber-50 animate-nh-materialize">
       {/* Header Banner */}
       <NeonHorizonGlassPanel
         variant="window"
@@ -95,7 +95,7 @@ export function NeonFactoryFloor() {
               className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs nh-font-mono font-bold transition-all cursor-pointer whitespace-nowrap ${
  isActive
  ? "bg-sky-400/20 text-sky-200 border border-sky-400/30"
- : "text-slate-400 hover:text-slate-200 hover:bg-white/5"
+ : "text-amber-200/60 hover:text-amber-50 hover:bg-white/5"
  }`}
             >
               {tab.icon}
@@ -135,12 +135,12 @@ export function NeonFactoryFloor() {
               className="p-5 flex flex-col gap-4"
             >
               <div className="flex items-center justify-between p-3 rounded-xl bg-black/40 border border-white/10">
-                <span className="text-xs text-slate-400 font-mono">CYCLE TIME</span>
+                <span className="text-xs text-amber-200/60 font-mono">CYCLE TIME</span>
                 <span className="text-sm font-bold font-mono text-sky-300">{st.cycleTime}</span>
               </div>
 
               <div className="flex items-center justify-between p-3 rounded-xl bg-black/40 border border-white/10">
-                <span className="text-xs text-slate-400 font-mono">STATION YIELD RATE</span>
+                <span className="text-xs text-amber-200/60 font-mono">STATION YIELD RATE</span>
                 <span className="text-sm font-bold font-mono text-emerald-400">{st.yieldRate}</span>
               </div>
             </NeonHorizonGlassPanel>

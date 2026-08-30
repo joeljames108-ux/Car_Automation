@@ -96,7 +96,7 @@ export function NeonSensorLab() {
   ];
 
   return (
-    <div className="w-full flex flex-col gap-6 text-slate-100 animate-nh-materialize">
+    <div className="w-full flex flex-col gap-6 text-amber-50 animate-nh-materialize">
       {/* Header */}
       <NeonHorizonGlassPanel
         variant="window"
@@ -143,15 +143,15 @@ export function NeonSensorLab() {
             <div className="flex items-center justify-center gap-6 border-t border-white/10 pt-3 w-full text-xs nh-font-mono">
               <div className="flex items-center gap-2">
                 <span className="w-2.5 h-2.5 rounded-full bg-sky-300" />
-                <span className="text-slate-300">Pointcloud</span>
+                <span className="text-amber-100/80">Pointcloud</span>
               </div>
               <div className="flex items-center gap-2">
                 <span className="w-2.5 h-2.5 rounded-full bg-sky-400" />
-                <span className="text-slate-300">3D Bounding Boxes</span>
+                <span className="text-amber-100/80">3D Bounding Boxes</span>
               </div>
               <div className="flex items-center gap-2">
                 <span className="w-2.5 h-2.5 rounded-full bg-amber-400" />
-                <span className="text-slate-300">Host Vehicle</span>
+                <span className="text-amber-100/80">Host Vehicle</span>
               </div>
             </div>
           </NeonHorizonGlassPanel>
@@ -175,12 +175,12 @@ export function NeonSensorLab() {
                   className="p-3 rounded-xl bg-[#0a111e] border border-sky-400/15 flex flex-col gap-1"
                 >
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold text-slate-100">{sensor.name}</span>
+                    <span className="text-xs font-bold text-amber-50">{sensor.name}</span>
                     <NeonHorizonBadge variant="emerald" size="xs">
                       {sensor.status}
                     </NeonHorizonBadge>
                   </div>
-                  <div className="flex items-center justify-between text-[10px] nh-font-mono text-slate-400">
+                  <div className="flex items-center justify-between text-[10px] nh-font-mono text-amber-200/60">
                     <span>FOV: {sensor.fov}</span>
                     <span className="text-sky-300">Latency: {sensor.latency}</span>
                   </div>

@@ -56,11 +56,11 @@ function SystemBar({
   return (
     <div className="space-y-1">
       <div className="flex items-center justify-between text-xs">
-        <span className="flex items-center gap-1.5 text-slate-300 font-mono text-[11px]">
+        <span className="flex items-center gap-1.5 text-amber-100/80 font-mono text-[11px]">
           {icon}
           {label}
         </span>
-        <span className="font-mono text-xs text-slate-200 font-bold">{pct.toFixed(0)}%</span>
+        <span className="font-mono text-xs text-amber-50 font-bold">{pct.toFixed(0)}%</span>
       </div>
       <div className="h-2 bg-base-850/90 rounded-full overflow-hidden border border-white/5 shadow-inner">
         <div
@@ -89,13 +89,13 @@ export const CommandCenterScreen1: React.FC<CommandCenterScreen1Props> = ({ desi
             <div className="flex items-center justify-between border-t border-white/10 pt-2.5 mt-2 text-xs font-mono">
               <div className="flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-amber-400 shadow-[0_0_8px_rgba(34,211,238,0.8)]" />
-                <span className="text-slate-300 font-bold">Horsepower (HP)</span>
+                <span className="text-amber-100/80 font-bold">Horsepower (HP)</span>
               </div>
               <div className="flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-amber-400 shadow-[0_0_8px_rgba(251,191,36,0.8)]" />
-                <span className="text-slate-300 font-bold">Torque (Nm)</span>
+                <span className="text-amber-100/80 font-bold">Torque (Nm)</span>
               </div>
-              <div className="text-[11px] text-slate-400">
+              <div className="text-[11px] text-amber-200/60">
                 Redline: <span className="text-rose-400 font-bold">{sim.redline || 8500} RPM</span>
               </div>
             </div>

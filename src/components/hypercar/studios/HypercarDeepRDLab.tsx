@@ -155,58 +155,58 @@ export const HypercarDeepRDLab: React.FC = memo(function HypercarDeepRDLab() {
 
         {activeSubTab === "carbotanium_fea" && (
           <div className="max-w-6xl mx-auto p-6 space-y-6">
-            <div className="glass-panel p-6 border-amber-500/20 bg-gradient-to-r from-slate-900 via-slate-900/90 to-amber-950/30 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+            <div className="glass-panel p-6 border-amber-500/20 bg-gradient-to-r from-amber-900/60 via-slate-900/90 to-amber-950/30 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
               <div>
                 <div className="flex items-center gap-2 mb-2">
                   <Shield className="text-amber-400" size={24} />
-                  <h2 className="text-xl font-bold text-slate-100 tracking-wide">
+                  <h2 className="text-xl font-bold text-amber-50 tracking-wide">
                     Carbotanium Monocoque Structural FEA & Tsai-Wu Failure Solver
                   </h2>
                 </div>
-                <p className="text-xs text-slate-400 max-w-2xl">
+                <p className="text-xs text-amber-200/60 max-w-2xl">
                   Analyze high-tensile carbon fiber woven with titanium thread weave. Evaluates torsional stiffness, shear strain, crash energy attenuation, and Tsai-Wu safety margins.
                 </p>
               </div>
 
               <div className="text-right">
                 <div className="text-2xl font-black font-mono text-amber-400">
-                  {(monocoqueFea.torsionalRigidityNmPerDeg / 1000).toFixed(1)} <span className="text-xs text-slate-400 font-normal">kNm/deg</span>
+                  {(monocoqueFea.torsionalRigidityNmPerDeg / 1000).toFixed(1)} <span className="text-xs text-amber-200/60 font-normal">kNm/deg</span>
                 </div>
-                <div className="text-[10px] text-slate-400 uppercase tracking-wider">Torsional Rigidity Target</div>
+                <div className="text-[10px] text-amber-200/60 uppercase tracking-wider">Torsional Rigidity Target</div>
               </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="bg-slate-900/70 p-4 rounded-xl border border-slate-800">
-                <span className="text-[10px] text-slate-500 uppercase tracking-wider block mb-1">Tsai-Wu Failure Index</span>
+              <div className="bg-amber-900/40 p-4 rounded-xl border border-amber-800/30">
+                <span className="text-[10px] text-amber-300/50 uppercase tracking-wider block mb-1">Tsai-Wu Failure Index</span>
                 <span className="text-2xl font-black font-mono text-emerald-400">{monocoqueFea.tsaiWuMaxFailureIndex.toFixed(3)}</span>
                 <span className="text-xs text-emerald-300 block mt-1">
                   Status: {monocoqueFea.tsaiWuMaxFailureIndex < 1.0 ? "STRUCTURALLY SECURE" : "PLASTIC DEFORMATION RISK"}
                 </span>
               </div>
-              <div className="bg-slate-900/70 p-4 rounded-xl border border-slate-800">
-                <span className="text-[10px] text-slate-500 uppercase tracking-wider block mb-1">Total Bare Monocoque Mass</span>
+              <div className="bg-amber-900/40 p-4 rounded-xl border border-amber-800/30">
+                <span className="text-[10px] text-amber-300/50 uppercase tracking-wider block mb-1">Total Bare Monocoque Mass</span>
                 <span className="text-2xl font-black font-mono text-amber-300">{monocoqueFea.monocoqueBareWeightKg.toFixed(1)} kg</span>
-                <span className="text-xs text-slate-400 block mt-1">Carbon + Titanium Matrix</span>
+                <span className="text-xs text-amber-200/60 block mt-1">Carbon + Titanium Matrix</span>
               </div>
-              <div className="bg-slate-900/70 p-4 rounded-xl border border-slate-800">
-                <span className="text-[10px] text-slate-500 uppercase tracking-wider block mb-1">Crash Absorption</span>
+              <div className="bg-amber-900/40 p-4 rounded-xl border border-amber-800/30">
+                <span className="text-[10px] text-amber-300/50 uppercase tracking-wider block mb-1">Crash Absorption</span>
                 <span className="text-2xl font-black font-mono text-amber-300">{(monocoqueFea.occupantCellCrushEnergyAbsorptionKj).toFixed(0)} kJ</span>
-                <span className="text-xs text-slate-400 block mt-1">FIA 65G Impact Standard</span>
+                <span className="text-xs text-amber-200/60 block mt-1">FIA 65G Impact Standard</span>
               </div>
             </div>
 
             {/* Interactive Parametric Sliders */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 bg-slate-900/50 p-4 rounded-2xl border border-slate-800">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 bg-amber-900/40 p-4 rounded-2xl border border-amber-800/30">
               <div>
-                <label className="text-xs font-bold text-slate-300 block mb-1">Composite Ply Schedule</label>
+                <label className="text-xs font-bold text-amber-100/80 block mb-1">Composite Ply Schedule</label>
                 <select
                   value={plyCount}
                   onChange={(e) => {
                     playHMIClickSound();
                     setPlyCount(parseInt(e.target.value) as 24 | 32 | 48);
                   }}
-                  className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-1.5 text-xs text-white outline-none cursor-pointer"
+                  className="w-full bg-amber-800/35 border border-amber-700/30 rounded-lg px-3 py-1.5 text-xs text-white outline-none cursor-pointer"
                 >
                   <option value={24}>24-Ply Lightweight Sprint Layup</option>
                   <option value={32}>32-Ply Le Mans Endurance Spec [0/45/-45/90]s</option>
@@ -214,7 +214,7 @@ export const HypercarDeepRDLab: React.FC = memo(function HypercarDeepRDLab() {
                 </select>
               </div>
               <div>
-                <label className="text-xs font-bold text-slate-300 block mb-1">Titanium Weave Ratio: {tiMeshVolPct}%</label>
+                <label className="text-xs font-bold text-amber-100/80 block mb-1">Titanium Weave Ratio: {tiMeshVolPct}%</label>
                 <input
                   type="range"
                   min="5"
@@ -225,7 +225,7 @@ export const HypercarDeepRDLab: React.FC = memo(function HypercarDeepRDLab() {
                 />
               </div>
               <div>
-                <label className="text-xs font-bold text-slate-300 block mb-1">Test Torsional Load: {appliedMomentNm} Nm</label>
+                <label className="text-xs font-bold text-amber-100/80 block mb-1">Test Torsional Load: {appliedMomentNm} Nm</label>
                 <input
                   type="range"
                   min="5000"
@@ -242,54 +242,54 @@ export const HypercarDeepRDLab: React.FC = memo(function HypercarDeepRDLab() {
 
         {activeSubTab === "trimotor_powertrain" && (
           <div className="max-w-6xl mx-auto p-6 space-y-6">
-            <div className="glass-panel p-6 border-amber-500/20 bg-gradient-to-r from-slate-900 via-slate-900/90 to-amber-950/30 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+            <div className="glass-panel p-6 border-amber-500/20 bg-gradient-to-r from-amber-900/60 via-slate-900/90 to-amber-950/30 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
               <div>
                 <div className="flex items-center gap-2 mb-2">
                   <Zap className="text-amber-400" size={24} />
-                  <h2 className="text-xl font-bold text-slate-100 tracking-wide">
+                  <h2 className="text-xl font-bold text-amber-50 tracking-wide">
                     800V Tri-Motor e-AWD Hybrid Powertrain Engine
                   </h2>
                 </div>
-                <p className="text-xs text-slate-400 max-w-2xl">
+                <p className="text-xs text-amber-200/60 max-w-2xl">
                   Simulates combined twin front permanent magnet synchronous axial-flux motors (700 kW) with rear twin-turbo combustion engine & MGU-K.
                 </p>
               </div>
 
               <div className="text-right">
                 <div className="text-2xl font-black font-mono text-amber-300">
-                  {powertrain.combinedPeakPowerHp.toFixed(0)} <span className="text-xs text-slate-400 font-normal">HP</span>
+                  {powertrain.combinedPeakPowerHp.toFixed(0)} <span className="text-xs text-amber-200/60 font-normal">HP</span>
                 </div>
-                <div className="text-[10px] text-slate-400 uppercase tracking-wider">Total Combined Output</div>
+                <div className="text-[10px] text-amber-200/60 uppercase tracking-wider">Total Combined Output</div>
               </div>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              <div className="bg-slate-900/70 p-4 rounded-xl border border-slate-800">
-                <span className="text-[10px] text-slate-500 uppercase tracking-wider block mb-1">0-100 km/h Launch</span>
+              <div className="bg-amber-900/40 p-4 rounded-xl border border-amber-800/30">
+                <span className="text-[10px] text-amber-300/50 uppercase tracking-wider block mb-1">0-100 km/h Launch</span>
                 <span className="text-2xl font-black font-mono text-amber-300">{powertrain.acceleration0_100KmHSec.toFixed(2)} s</span>
-                <span className="text-xs text-slate-400 block mt-1">Torque Vectoring Active</span>
+                <span className="text-xs text-amber-200/60 block mt-1">Torque Vectoring Active</span>
               </div>
-              <div className="bg-slate-900/70 p-4 rounded-xl border border-slate-800">
-                <span className="text-[10px] text-slate-500 uppercase tracking-wider block mb-1">0-200 km/h</span>
+              <div className="bg-amber-900/40 p-4 rounded-xl border border-amber-800/30">
+                <span className="text-[10px] text-amber-300/50 uppercase tracking-wider block mb-1">0-200 km/h</span>
                 <span className="text-2xl font-black font-mono text-amber-300">{powertrain.acceleration0_200KmHSec.toFixed(2)} s</span>
-                <span className="text-xs text-slate-400 block mt-1">1/4 Mile: {powertrain.quarterMileTimeSec.toFixed(2)} s</span>
+                <span className="text-xs text-amber-200/60 block mt-1">1/4 Mile: {powertrain.quarterMileTimeSec.toFixed(2)} s</span>
               </div>
-              <div className="bg-slate-900/70 p-4 rounded-xl border border-slate-800">
-                <span className="text-[10px] text-slate-500 uppercase tracking-wider block mb-1">V-Max Top Speed</span>
+              <div className="bg-amber-900/40 p-4 rounded-xl border border-amber-800/30">
+                <span className="text-[10px] text-amber-300/50 uppercase tracking-wider block mb-1">V-Max Top Speed</span>
                 <span className="text-2xl font-black font-mono text-emerald-400">{powertrain.topSpeedKmH.toFixed(0)} km/h</span>
-                <span className="text-xs text-slate-400 block mt-1">Aero Drag Limited</span>
+                <span className="text-xs text-amber-200/60 block mt-1">Aero Drag Limited</span>
               </div>
-              <div className="bg-slate-900/70 p-4 rounded-xl border border-slate-800">
-                <span className="text-[10px] text-slate-500 uppercase tracking-wider block mb-1">Total Wheel Torque</span>
+              <div className="bg-amber-900/40 p-4 rounded-xl border border-amber-800/30">
+                <span className="text-[10px] text-amber-300/50 uppercase tracking-wider block mb-1">Total Wheel Torque</span>
                 <span className="text-2xl font-black font-mono text-amber-300">{powertrain.combinedPeakTorqueNm.toFixed(0)} Nm</span>
-                <span className="text-xs text-slate-400 block mt-1">Instant Electric Surge</span>
+                <span className="text-xs text-amber-200/60 block mt-1">Instant Electric Surge</span>
               </div>
             </div>
 
             {/* Sliders */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 bg-slate-900/50 p-4 rounded-2xl border border-slate-800">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 bg-amber-900/40 p-4 rounded-2xl border border-amber-800/30">
               <div>
-                <label className="text-xs font-bold text-slate-300 block mb-1">Combustion ICE Output: {icePowerHp} HP</label>
+                <label className="text-xs font-bold text-amber-100/80 block mb-1">Combustion ICE Output: {icePowerHp} HP</label>
                 <input
                   type="range"
                   min="600"
@@ -301,7 +301,7 @@ export const HypercarDeepRDLab: React.FC = memo(function HypercarDeepRDLab() {
                 />
               </div>
               <div>
-                <label className="text-xs font-bold text-slate-300 block mb-1">Front Motors (Each): {frontMotorKw} kW</label>
+                <label className="text-xs font-bold text-amber-100/80 block mb-1">Front Motors (Each): {frontMotorKw} kW</label>
                 <input
                   type="range"
                   min="150"
@@ -313,7 +313,7 @@ export const HypercarDeepRDLab: React.FC = memo(function HypercarDeepRDLab() {
                 />
               </div>
               <div>
-                <label className="text-xs font-bold text-slate-300 block mb-1">Battery Pack Capacity: {batteryKwh} kWh</label>
+                <label className="text-xs font-bold text-amber-100/80 block mb-1">Battery Pack Capacity: {batteryKwh} kWh</label>
                 <input
                   type="range"
                   min="40"
@@ -330,56 +330,56 @@ export const HypercarDeepRDLab: React.FC = memo(function HypercarDeepRDLab() {
 
         {activeSubTab === "venturi_aeromechanics" && (
           <div className="max-w-6xl mx-auto p-6 space-y-6">
-            <div className="glass-panel p-6 border-emerald-500/20 bg-gradient-to-r from-slate-900 via-slate-900/90 to-emerald-950/30 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+            <div className="glass-panel p-6 border-emerald-500/20 bg-gradient-to-r from-amber-900/60 via-slate-900/90 to-emerald-950/30 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
               <div>
                 <div className="flex items-center gap-2 mb-2">
                   <Wind className="text-emerald-400" size={24} />
-                  <h2 className="text-xl font-bold text-slate-100 tracking-wide">
+                  <h2 className="text-xl font-bold text-amber-50 tracking-wide">
                     Venturi Ground-Effect Aeromechanics & Active DRS Solver
                   </h2>
                 </div>
-                <p className="text-xs text-slate-400 max-w-2xl">
+                <p className="text-xs text-amber-200/60 max-w-2xl">
                   Computes suction pressure in underbody venturi tunnels, vortex bursting boundaries, porpoising frequency oscillations, and active DRS drag shedding.
                 </p>
               </div>
 
               <div className="text-right">
                 <div className="text-2xl font-black font-mono text-emerald-400">
-                  {aero.liftToDragRatioLoverD.toFixed(2)} <span className="text-xs text-slate-400 font-normal">L/D</span>
+                  {aero.liftToDragRatioLoverD.toFixed(2)} <span className="text-xs text-amber-200/60 font-normal">L/D</span>
                 </div>
-                <div className="text-[10px] text-slate-400 uppercase tracking-wider">Aero Efficiency</div>
+                <div className="text-[10px] text-amber-200/60 uppercase tracking-wider">Aero Efficiency</div>
               </div>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              <div className="bg-slate-900/70 p-4 rounded-xl border border-slate-800">
-                <span className="text-[10px] text-slate-500 uppercase tracking-wider block mb-1">Total Downforce</span>
+              <div className="bg-amber-900/40 p-4 rounded-xl border border-amber-800/30">
+                <span className="text-[10px] text-amber-300/50 uppercase tracking-wider block mb-1">Total Downforce</span>
                 <span className="text-2xl font-black font-mono text-emerald-300">{aero.totalDownforceKg.toFixed(0)} kg</span>
-                <span className="text-xs text-slate-400 block mt-1">@ {airspeedKmH} km/h ({(aero.totalDownforceN / 1000).toFixed(1)} kN)</span>
+                <span className="text-xs text-amber-200/60 block mt-1">@ {airspeedKmH} km/h ({(aero.totalDownforceN / 1000).toFixed(1)} kN)</span>
               </div>
-              <div className="bg-slate-900/70 p-4 rounded-xl border border-slate-800">
-                <span className="text-[10px] text-slate-500 uppercase tracking-wider block mb-1">Underbody Venturi Share</span>
+              <div className="bg-amber-900/40 p-4 rounded-xl border border-amber-800/30">
+                <span className="text-[10px] text-amber-300/50 uppercase tracking-wider block mb-1">Underbody Venturi Share</span>
                 <span className="text-2xl font-black font-mono text-teal-300">{aero.underbodyVenturiSuctionPct.toFixed(0)}%</span>
-                <span className="text-xs text-slate-400 block mt-1">Ground-Effect Suction</span>
+                <span className="text-xs text-amber-200/60 block mt-1">Ground-Effect Suction</span>
               </div>
-              <div className="bg-slate-900/70 p-4 rounded-xl border border-slate-800">
-                <span className="text-[10px] text-slate-500 uppercase tracking-wider block mb-1">Measured Aerodynamic Drag</span>
+              <div className="bg-amber-900/40 p-4 rounded-xl border border-amber-800/30">
+                <span className="text-[10px] text-amber-300/50 uppercase tracking-wider block mb-1">Measured Aerodynamic Drag</span>
                 <span className="text-2xl font-black font-mono text-rose-300">{(aero.totalDragN / 9.81).toFixed(0)} kg</span>
-                <span className="text-xs text-slate-400 block mt-1">Drag Force: {(aero.totalDragN).toFixed(0)} N</span>
+                <span className="text-xs text-amber-200/60 block mt-1">Drag Force: {(aero.totalDragN).toFixed(0)} N</span>
               </div>
-              <div className="bg-slate-900/70 p-4 rounded-xl border border-slate-800">
-                <span className="text-[10px] text-slate-500 uppercase tracking-wider block mb-1">Porpoising Oscillation Status</span>
+              <div className="bg-amber-900/40 p-4 rounded-xl border border-amber-800/30">
+                <span className="text-[10px] text-amber-300/50 uppercase tracking-wider block mb-1">Porpoising Oscillation Status</span>
                 <span className={`text-2xl font-black font-mono ${aero.porpoisingRiskStatus !== "STABLE_NOMINAL" ? "text-rose-400 animate-pulse" : "text-emerald-400"}`}>
                   {aero.porpoisingRiskStatus === "STABLE_NOMINAL" ? "STABLE" : `${aero.porpoisingFrequencyHz.toFixed(1)} Hz LIMIT CYCLE`}
                 </span>
-                <span className="text-xs text-slate-400 block mt-1">Ground Clearance: {rideHeightMm}mm</span>
+                <span className="text-xs text-amber-200/60 block mt-1">Ground Clearance: {rideHeightMm}mm</span>
               </div>
             </div>
 
             {/* Sliders */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 bg-slate-900/50 p-4 rounded-2xl border border-slate-800">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 bg-amber-900/40 p-4 rounded-2xl border border-amber-800/30">
               <div>
-                <label className="text-xs font-bold text-slate-300 block mb-1">Airspeed: {airspeedKmH} km/h</label>
+                <label className="text-xs font-bold text-amber-100/80 block mb-1">Airspeed: {airspeedKmH} km/h</label>
                 <input
                   type="range"
                   min="120"
@@ -391,7 +391,7 @@ export const HypercarDeepRDLab: React.FC = memo(function HypercarDeepRDLab() {
                 />
               </div>
               <div>
-                <label className="text-xs font-bold text-slate-300 block mb-1">Static Ride Height: {rideHeightMm} mm</label>
+                <label className="text-xs font-bold text-amber-100/80 block mb-1">Static Ride Height: {rideHeightMm} mm</label>
                 <input
                   type="range"
                   min="20"
@@ -402,11 +402,11 @@ export const HypercarDeepRDLab: React.FC = memo(function HypercarDeepRDLab() {
                 />
               </div>
               <div>
-                <label className="text-xs font-bold text-slate-300 block mb-1">Active DRS Wing Configuration</label>
+                <label className="text-xs font-bold text-amber-100/80 block mb-1">Active DRS Wing Configuration</label>
                 <select
                   value={drsMode}
                   onChange={(e) => setDrsMode(e.target.value as ActiveDrsMode)}
-                  className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-1.5 text-xs text-white outline-none cursor-pointer"
+                  className="w-full bg-amber-800/35 border border-amber-700/30 rounded-lg px-3 py-1.5 text-xs text-white outline-none cursor-pointer"
                 >
                   <option value="HIGH_DOWNFORCE_CORNERING">High Downforce Cornering</option>
                   <option value="LOW_DRAG_STRAIGHT_SPRINT">Low Drag Straight Sprint (DRS Open)</option>
@@ -419,47 +419,47 @@ export const HypercarDeepRDLab: React.FC = memo(function HypercarDeepRDLab() {
 
         {activeSubTab === "csic_brakes" && (
           <div className="max-w-6xl mx-auto p-6 space-y-6">
-            <div className="glass-panel p-6 border-rose-500/20 bg-gradient-to-r from-slate-900 via-slate-900/90 to-rose-950/30 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+            <div className="glass-panel p-6 border-rose-500/20 bg-gradient-to-r from-amber-900/60 via-slate-900/90 to-rose-950/30 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
               <div>
                 <div className="flex items-center gap-2 mb-2">
                   <Flame className="text-rose-400" size={24} />
-                  <h2 className="text-xl font-bold text-slate-100 tracking-wide">
+                  <h2 className="text-xl font-bold text-amber-50 tracking-wide">
                     420mm Carbon-Silicon Carbide (C/SiC) Matrix Brake Thermal FEA
                   </h2>
                 </div>
-                <p className="text-xs text-slate-400 max-w-2xl">
+                <p className="text-xs text-amber-200/60 max-w-2xl">
                   Simulates full-stop deceleration thermal shock pyrometry, vane convective heat dissipation, and titanium 10-piston caliper hydraulic clamp force.
                 </p>
               </div>
 
               <div className="text-right">
                 <div className="text-2xl font-black font-mono text-rose-400">
-                  {brakeFea.rotorSurfaceTempPeakC.toFixed(0)} <span className="text-xs text-slate-400 font-normal">°C</span>
+                  {brakeFea.rotorSurfaceTempPeakC.toFixed(0)} <span className="text-xs text-amber-200/60 font-normal">°C</span>
                 </div>
-                <div className="text-[10px] text-slate-400 uppercase tracking-wider">Peak Rotor Surface Pyrometry</div>
+                <div className="text-[10px] text-amber-200/60 uppercase tracking-wider">Peak Rotor Surface Pyrometry</div>
               </div>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              <div className="bg-slate-900/70 p-4 rounded-xl border border-slate-800">
-                <span className="text-[10px] text-slate-500 uppercase tracking-wider block mb-1">100-0 km/h Stopping Distance</span>
+              <div className="bg-amber-900/40 p-4 rounded-xl border border-amber-800/30">
+                <span className="text-[10px] text-amber-300/50 uppercase tracking-wider block mb-1">100-0 km/h Stopping Distance</span>
                 <span className="text-2xl font-black font-mono text-emerald-300">{brakeFea.stopDistanceMeters.toFixed(1)} m</span>
-                <span className="text-xs text-slate-400 block mt-1">Decel: {brakeFea.decelerationG.toFixed(2)} G</span>
+                <span className="text-xs text-amber-200/60 block mt-1">Decel: {brakeFea.decelerationG.toFixed(2)} G</span>
               </div>
-              <div className="bg-slate-900/70 p-4 rounded-xl border border-slate-800">
-                <span className="text-[10px] text-slate-500 uppercase tracking-wider block mb-1">Hydraulic Clamping Force</span>
+              <div className="bg-amber-900/40 p-4 rounded-xl border border-amber-800/30">
+                <span className="text-[10px] text-amber-300/50 uppercase tracking-wider block mb-1">Hydraulic Clamping Force</span>
                 <span className="text-2xl font-black font-mono text-amber-300">{(brakeFea.hydraulicClampingForceN / 1000).toFixed(1)} kN</span>
-                <span className="text-xs text-slate-400 block mt-1">10-Piston Ti-N Caliper</span>
+                <span className="text-xs text-amber-200/60 block mt-1">10-Piston Ti-N Caliper</span>
               </div>
-              <div className="bg-slate-900/70 p-4 rounded-xl border border-slate-800">
-                <span className="text-[10px] text-slate-500 uppercase tracking-wider block mb-1">Vapor Lock Boiling Margin</span>
+              <div className="bg-amber-900/40 p-4 rounded-xl border border-amber-800/30">
+                <span className="text-[10px] text-amber-300/50 uppercase tracking-wider block mb-1">Vapor Lock Boiling Margin</span>
                 <span className="text-2xl font-black font-mono text-teal-300">{brakeFea.vaporLockBoilingMarginC.toFixed(0)}°C</span>
-                <span className="text-xs text-slate-400 block mt-1">Fluid Temp: {brakeFea.brakeFluidTempC.toFixed(0)}°C</span>
+                <span className="text-xs text-amber-200/60 block mt-1">Fluid Temp: {brakeFea.brakeFluidTempC.toFixed(0)}°C</span>
               </div>
-              <div className="bg-slate-900/70 p-4 rounded-xl border border-slate-800">
-                <span className="text-[10px] text-slate-500 uppercase tracking-wider block mb-1">Thermo-Elastic Stress</span>
+              <div className="bg-amber-900/40 p-4 rounded-xl border border-amber-800/30">
+                <span className="text-[10px] text-amber-300/50 uppercase tracking-wider block mb-1">Thermo-Elastic Stress</span>
                 <span className="text-2xl font-black font-mono text-amber-300">{brakeFea.thermoElasticHoopStressMpa.toFixed(0)} MPa</span>
-                <span className="text-xs text-slate-400 block mt-1">Friction Coeff μ: {brakeFea.padFadeCoefficientMu.toFixed(2)}</span>
+                <span className="text-xs text-amber-200/60 block mt-1">Friction Coeff μ: {brakeFea.padFadeCoefficientMu.toFixed(2)}</span>
               </div>
             </div>
           </div>
@@ -467,15 +467,15 @@ export const HypercarDeepRDLab: React.FC = memo(function HypercarDeepRDLab() {
 
         {activeSubTab === "bop_scrutineering" && (
           <div className="max-w-6xl mx-auto p-6 space-y-6">
-            <div className="glass-panel p-6 border-yellow-500/20 bg-gradient-to-r from-slate-900 via-slate-900/90 to-yellow-950/30 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+            <div className="glass-panel p-6 border-yellow-500/20 bg-gradient-to-r from-amber-900/60 via-slate-900/90 to-yellow-950/30 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
               <div>
                 <div className="flex items-center gap-2 mb-2">
                   <Award className="text-yellow-400" size={24} />
-                  <h2 className="text-xl font-bold text-slate-100 tracking-wide">
+                  <h2 className="text-xl font-bold text-amber-50 tracking-wide">
                     FIA / ACO World Endurance Championship BoP Scrutineering
                   </h2>
                 </div>
-                <p className="text-xs text-slate-400 max-w-2xl">
+                <p className="text-xs text-amber-200/60 max-w-2xl">
                   Balance of Performance homologation parameters for Le Mans Hypercar (LMH) & LMDh regulations.
                 </p>
               </div>
@@ -484,42 +484,42 @@ export const HypercarDeepRDLab: React.FC = memo(function HypercarDeepRDLab() {
                 <div className="text-2xl font-black font-mono text-emerald-400">
                   PASSPORT APPROVED
                 </div>
-                <div className="text-[10px] text-slate-400 uppercase tracking-wider">{homologationPassportId || "ACO-LMH-2026-042"}</div>
+                <div className="text-[10px] text-amber-200/60 uppercase tracking-wider">{homologationPassportId || "ACO-LMH-2026-042"}</div>
               </div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="bg-slate-900/70 p-5 rounded-2xl border border-slate-800 space-y-3">
+              <div className="bg-amber-900/40 p-5 rounded-2xl border border-amber-800/30 space-y-3">
                 <h3 className="text-xs font-black uppercase tracking-wider text-amber-400 flex items-center gap-2">
                   <CheckCircle2 size={16} className="text-emerald-400" />
                   LMH Technical Parameter Audit
                 </h3>
                 <div className="space-y-2 text-xs">
                   <div className="flex justify-between p-2 rounded bg-black/40 border border-white/5">
-                    <span className="text-slate-400">Minimum Vehicle Weight</span>
+                    <span className="text-amber-200/60">Minimum Vehicle Weight</span>
                     <span className="font-mono font-bold text-white">1030 kg (Compliant: {metrics.totalMassKg} kg)</span>
                   </div>
                   <div className="flex justify-between p-2 rounded bg-black/40 border border-white/5">
-                    <span className="text-slate-400">Maximum Power Cap</span>
+                    <span className="text-amber-200/60">Maximum Power Cap</span>
                     <span className="font-mono font-bold text-white">520 kW / 697 HP BoP Window</span>
                   </div>
                   <div className="flex justify-between p-2 rounded bg-black/40 border border-white/5">
-                    <span className="text-slate-400">Front MGU Deployment Threshold</span>
+                    <span className="text-amber-200/60">Front MGU Deployment Threshold</span>
                     <span className="font-mono font-bold text-amber-300">120 - 190 km/h (Dry/Wet)</span>
                   </div>
                   <div className="flex justify-between p-2 rounded bg-black/40 border border-white/5">
-                    <span className="text-slate-400">Virtual Energy Stint Limit</span>
+                    <span className="text-amber-200/60">Virtual Energy Stint Limit</span>
                     <span className="font-mono font-bold text-amber-300">900 MJ per Fuel/Energy Stint</span>
                   </div>
                 </div>
               </div>
 
-              <div className="bg-slate-900/70 p-5 rounded-2xl border border-slate-800 space-y-3">
+              <div className="bg-amber-900/40 p-5 rounded-2xl border border-amber-800/30 space-y-3">
                 <h3 className="text-xs font-black uppercase tracking-wider text-amber-400 flex items-center gap-2">
                   <Sliders size={16} className="text-amber-400" />
                   Dynamic BoP Ballast & Restrictor Table
                 </h3>
-                <p className="text-xs text-slate-400 leading-relaxed">
+                <p className="text-xs text-amber-200/60 leading-relaxed">
                   The automated Balance of Performance algorithm assigns ballast and power adjustments to equalize competitive lap time envelopes between pure ICE prototypes and hybrid 4WD hypercars across the 24H Le Mans circuit.
                 </p>
                 <div className="p-3 rounded-xl bg-emerald-500/10 border border-emerald-500/30 text-xs text-emerald-300 flex items-center gap-2">

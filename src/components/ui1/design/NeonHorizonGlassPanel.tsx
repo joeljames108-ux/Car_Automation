@@ -73,7 +73,7 @@ export const NeonHorizonGlassPanel: React.FC<NeonHorizonGlassPanelProps> = ({
     <div
       onClick={onClick}
       style={style}
-      className={`relative overflow-hidden text-slate-200 ${variantStyles} ${cornerStyles} ${glowStyles} ${hoverClass} ${className}`}
+      className={`relative overflow-hidden text-amber-50 ${variantStyles} ${cornerStyles} ${glowStyles} ${hoverClass} ${className}`}
     >
       {/* Header bar */}
       {header && (
@@ -81,11 +81,11 @@ export const NeonHorizonGlassPanel: React.FC<NeonHorizonGlassPanelProps> = ({
           <div className="flex items-center gap-2.5 min-w-0">
             {header.icon && <span className="text-sky-300/90 shrink-0">{header.icon}</span>}
             <div className="flex flex-col min-w-0">
-              <span className="text-xs font-bold tracking-wide uppercase text-slate-100 truncate">
+              <span className="text-xs font-bold tracking-wide uppercase text-amber-50 truncate">
                 {header.title}
               </span>
               {header.subtitle && (
-                <span className="text-[10px] text-slate-400 truncate">
+                <span className="text-[10px] text-amber-200/60 truncate">
                   {header.subtitle}
                 </span>
               )}

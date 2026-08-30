@@ -767,11 +767,11 @@ export function getImpactBadges(impacts: ImpactArea[]): { label: string; color: 
     durability: "bg-amber-500/20 text-amber-300 border-indigo-500/30",
     luxury: "bg-fuchsia-500/20 text-fuchsia-300 border-fuchsia-500/30",
     emissions: "bg-gray-500/20 text-gray-300 border-gray-500/30",
-    manufacturing: "bg-slate-500/20 text-slate-300 border-slate-500/30",
+    manufacturing: "bg-slate-500/20 text-amber-100/80 border-amber-500/30/30",
   };
 
   return impacts.map((impact) => ({
     label: impact.charAt(0).toUpperCase() + impact.slice(1),
-    color: IMPACT_COLORS[impact] || "bg-base-800 text-slate-400 border-base-700",
+    color: IMPACT_COLORS[impact] || "bg-base-800 text-amber-200/60 border-base-700",
   }));
 }

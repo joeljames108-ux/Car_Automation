@@ -440,13 +440,13 @@ const EngineAndCar3DGraphicsViewportComponent: React.FC = () => {
   }, [viewMode, selectedEngineLayout, selectedCarStyle, selectedPaintHex, selectedCaliperHex, isWireframe, isXRay, isSmoothNormals, explodedAmount]);
 
   return (
-    <div className="relative w-full h-[700px] bg-slate-950 rounded-2xl overflow-hidden border border-slate-800 shadow-2xl select-none">
+    <div className="relative w-full h-[700px] bg-amber-950/80 rounded-2xl overflow-hidden border border-amber-800/30 shadow-2xl select-none">
       {/* 3D WebGL Canvas Container */}
       <div ref={mountRef} className="w-full h-full cursor-grab active:cursor-grabbing" />
 
       {/* Loading Overlay */}
       {isLoading && (
-        <div className="absolute inset-0 bg-slate-950/80 backdrop-blur-sm flex flex-col items-center justify-center space-y-3 z-20 pointer-events-none">
+        <div className="absolute inset-0 bg-amber-950/80 backdrop-blur-sm flex flex-col items-center justify-center space-y-3 z-20 pointer-events-none">
           <Loader2 className="w-10 h-10 text-amber-500 animate-spin" />
           <div className="text-white text-sm font-semibold tracking-wider font-mono">LOADING PHOTOREALISTIC 3D GLB CAR MESH...</div>
           <div className="text-xs text-amber-400 font-mono">PBR Clearcoat Shaders • Caliper Finishes • Micro-Details</div>
@@ -472,7 +472,7 @@ const EngineAndCar3DGraphicsViewportComponent: React.FC = () => {
             className={`px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center space-x-1.5 transition-all active:scale-95 ${
               viewMode === "VEHICLE"
                 ? "bg-amber-500 text-slate-950 font-bold shadow-md shadow-amber-500/30"
-                : "text-slate-300 hover:text-white hover:bg-white/5"
+                : "text-amber-100/80 hover:text-white hover:bg-white/5"
             }`}
           >
             <Layers className="w-4 h-4" />
@@ -483,7 +483,7 @@ const EngineAndCar3DGraphicsViewportComponent: React.FC = () => {
             className={`px-3 py-1.5 rounded-xl text-xs font-semibold flex items-center space-x-1.5 transition-all active:scale-95 ${
               viewMode === "ENGINE"
                 ? "bg-amber-500 text-slate-950 font-bold shadow-md shadow-amber-500/30"
-                : "text-slate-300 hover:text-white hover:bg-white/5"
+                : "text-amber-100/80 hover:text-white hover:bg-white/5"
             }`}
           >
             <Box className="w-4 h-4" />
@@ -495,7 +495,7 @@ const EngineAndCar3DGraphicsViewportComponent: React.FC = () => {
             <select
               value={selectedCarStyle}
               onChange={(e) => setSelectedCarStyle(e.target.value as VehicleBodyStyle3D)}
-              className="bg-slate-950/80 text-amber-300 text-xs rounded-xl px-2.5 py-1.5 border border-white/10 font-mono outline-none focus:border-amber-500 max-w-[280px]"
+              className="bg-amber-950/80 text-amber-300 text-xs rounded-xl px-2.5 py-1.5 border border-white/10 font-mono outline-none focus:border-amber-500 max-w-[280px]"
             >
               <optgroup label="── Complete Vehicles ──">
                 {Car3DGlbAssetRegistry.getAssetsByCategory("SUPERCAR").map((a) => (
@@ -548,7 +548,7 @@ const EngineAndCar3DGraphicsViewportComponent: React.FC = () => {
             <select
               value={selectedEngineLayout}
               onChange={(e) => setSelectedEngineLayout(e.target.value as EngineLayout3D)}
-              className="bg-slate-950/80 text-amber-300 text-xs rounded-xl px-2.5 py-1.5 border border-white/10 font-mono outline-none focus:border-amber-500"
+              className="bg-amber-950/80 text-amber-300 text-xs rounded-xl px-2.5 py-1.5 border border-white/10 font-mono outline-none focus:border-amber-500"
             >
               <option value="INLINE_3">Inline-3 (I3 Turbo - 3 Cylinders)</option>
               <option value="INLINE_4">Inline-4 (I4 Turbo - 4 Cylinders)</option>
@@ -581,7 +581,7 @@ const EngineAndCar3DGraphicsViewportComponent: React.FC = () => {
           <button
             onClick={() => setIsSmoothNormals(!isSmoothNormals)}
             className={`px-2.5 py-1 rounded-xl text-xs font-semibold flex items-center space-x-1 transition-all active:scale-95 ${
-              isSmoothNormals ? "bg-emerald-500/20 text-emerald-300 border border-emerald-500/40" : "text-slate-400 hover:text-white"
+              isSmoothNormals ? "bg-emerald-500/20 text-emerald-300 border border-emerald-500/40" : "text-amber-200/60 hover:text-white"
             }`}
             title="Toggle Smooth G2 Vertex Normal Shading"
           >
@@ -592,7 +592,7 @@ const EngineAndCar3DGraphicsViewportComponent: React.FC = () => {
           <button
             onClick={() => setIsXRay(!isXRay)}
             className={`px-2.5 py-1 rounded-xl text-xs font-semibold flex items-center space-x-1 transition-all active:scale-95 ${
-              isXRay ? "bg-amber-500/20 text-amber-300 border border-amber-500/40" : "text-slate-400 hover:text-white"
+              isXRay ? "bg-amber-500/20 text-amber-300 border border-amber-500/40" : "text-amber-200/60 hover:text-white"
             }`}
             title="Toggle X-Ray Structural Inspection"
           >
@@ -603,7 +603,7 @@ const EngineAndCar3DGraphicsViewportComponent: React.FC = () => {
           <button
             onClick={() => setIsWireframe(!isWireframe)}
             className={`p-2 rounded-xl text-xs transition-all active:scale-95 ${
-              isWireframe ? "bg-amber-500/20 text-amber-300 border border-amber-500/40" : "text-slate-400 hover:text-white"
+              isWireframe ? "bg-amber-500/20 text-amber-300 border border-amber-500/40" : "text-amber-200/60 hover:text-white"
             }`}
             title="Toggle Wireframe Mesh Topology"
           >
@@ -612,7 +612,7 @@ const EngineAndCar3DGraphicsViewportComponent: React.FC = () => {
           <button
             onClick={() => setAutoRotate(!autoRotate)}
             className={`p-2 rounded-xl text-xs transition-all active:scale-95 ${
-              autoRotate ? "bg-amber-500/20 text-amber-300 border border-amber-500/40" : "text-slate-400 hover:text-white"
+              autoRotate ? "bg-amber-500/20 text-amber-300 border border-amber-500/40" : "text-amber-200/60 hover:text-white"
             }`}
             title="Toggle Auto-Turntable Rotation"
           >
@@ -621,7 +621,7 @@ const EngineAndCar3DGraphicsViewportComponent: React.FC = () => {
           <button
             onClick={() => setShowMeshTree(!showMeshTree)}
             className={`p-2 rounded-xl text-xs transition-all active:scale-95 ${
-              showMeshTree ? "bg-amber-500/20 text-amber-300 border border-amber-500/40" : "text-slate-400 hover:text-white"
+              showMeshTree ? "bg-amber-500/20 text-amber-300 border border-amber-500/40" : "text-amber-200/60 hover:text-white"
             }`}
             title="Toggle GLB Part Tree Drawer"
           >
@@ -643,11 +643,11 @@ const EngineAndCar3DGraphicsViewportComponent: React.FC = () => {
             boxShadow: "0 15px 35px rgba(0,0,0,0.40), inset 1px 1px 1px -0.5px rgba(255,255,255,0.4)"
           }}
         >
-          <div className="text-[10px] text-slate-400 font-mono font-semibold px-2 py-0.5 border-b border-white/10">CAMERA</div>
+          <div className="text-[10px] text-amber-200/60 font-mono font-semibold px-2 py-0.5 border-b border-white/10">CAMERA</div>
           <button
             onClick={() => applyCameraPreset("HERO_THREE_QUARTER")}
             className={`px-2.5 py-1 text-left rounded-xl text-[11px] font-mono transition-all active:scale-95 ${
-              activeCameraPreset === "HERO_THREE_QUARTER" ? "bg-amber-500 text-slate-950 font-bold shadow" : "text-slate-300 hover:bg-white/5"
+              activeCameraPreset === "HERO_THREE_QUARTER" ? "bg-amber-500 text-slate-950 font-bold shadow" : "text-amber-100/80 hover:bg-white/5"
             }`}
           >
             3/4 Hero
@@ -655,7 +655,7 @@ const EngineAndCar3DGraphicsViewportComponent: React.FC = () => {
           <button
             onClick={() => applyCameraPreset("SIDE_PROFILE")}
             className={`px-2.5 py-1 text-left rounded-xl text-[11px] font-mono transition-all active:scale-95 ${
-              activeCameraPreset === "SIDE_PROFILE" ? "bg-amber-500 text-slate-950 font-bold shadow" : "text-slate-300 hover:bg-white/5"
+              activeCameraPreset === "SIDE_PROFILE" ? "bg-amber-500 text-slate-950 font-bold shadow" : "text-amber-100/80 hover:bg-white/5"
             }`}
           >
             Side Aero
@@ -663,7 +663,7 @@ const EngineAndCar3DGraphicsViewportComponent: React.FC = () => {
           <button
             onClick={() => applyCameraPreset("COCKPIT_DRIVER")}
             className={`px-2.5 py-1 text-left rounded-xl text-[11px] font-mono transition-all active:scale-95 ${
-              activeCameraPreset === "COCKPIT_DRIVER" ? "bg-amber-500 text-slate-950 font-bold shadow" : "text-slate-300 hover:bg-white/5"
+              activeCameraPreset === "COCKPIT_DRIVER" ? "bg-amber-500 text-slate-950 font-bold shadow" : "text-amber-100/80 hover:bg-white/5"
             }`}
           >
             Cockpit
@@ -671,7 +671,7 @@ const EngineAndCar3DGraphicsViewportComponent: React.FC = () => {
           <button
             onClick={() => applyCameraPreset("ENGINE_BAY")}
             className={`px-2.5 py-1 text-left rounded-xl text-[11px] font-mono transition-all active:scale-95 ${
-              activeCameraPreset === "ENGINE_BAY" ? "bg-amber-500 text-slate-950 font-bold shadow" : "text-slate-300 hover:bg-white/5"
+              activeCameraPreset === "ENGINE_BAY" ? "bg-amber-500 text-slate-950 font-bold shadow" : "text-amber-100/80 hover:bg-white/5"
             }`}
           >
             Engine Bay
@@ -679,7 +679,7 @@ const EngineAndCar3DGraphicsViewportComponent: React.FC = () => {
           <button
             onClick={() => applyCameraPreset("REAR_DIFFUSER")}
             className={`px-2.5 py-1 text-left rounded-xl text-[11px] font-mono transition-all active:scale-95 ${
-              activeCameraPreset === "REAR_DIFFUSER" ? "bg-amber-500 text-slate-950 font-bold shadow" : "text-slate-300 hover:bg-white/5"
+              activeCameraPreset === "REAR_DIFFUSER" ? "bg-amber-500 text-slate-950 font-bold shadow" : "text-amber-100/80 hover:bg-white/5"
             }`}
           >
             Rear Exhaust
@@ -697,11 +697,11 @@ const EngineAndCar3DGraphicsViewportComponent: React.FC = () => {
             boxShadow: "0 15px 35px rgba(0,0,0,0.40), inset 1px 1px 1px -0.5px rgba(255,255,255,0.4)"
           }}
         >
-          <div className="text-[10px] text-slate-400 font-mono font-semibold px-2 py-0.5 border-b border-white/10">LIGHTING</div>
+          <div className="text-[10px] text-amber-200/60 font-mono font-semibold px-2 py-0.5 border-b border-white/10">LIGHTING</div>
           <button
             onClick={() => setLightingMode("SOFTBOX_MAIN")}
             className={`px-2.5 py-1 text-left rounded-xl text-[11px] font-mono flex items-center space-x-1.5 transition-all active:scale-95 ${
-              lightingMode === "SOFTBOX_MAIN" ? "bg-amber-500/20 text-amber-300 border border-amber-500/40" : "text-slate-300 hover:bg-white/5"
+              lightingMode === "SOFTBOX_MAIN" ? "bg-amber-500/20 text-amber-300 border border-amber-500/40" : "text-amber-100/80 hover:bg-white/5"
             }`}
           >
             <Sun className="w-3 h-3 text-amber-400" />
@@ -710,7 +710,7 @@ const EngineAndCar3DGraphicsViewportComponent: React.FC = () => {
           <button
             onClick={() => setLightingMode("CYBER_NEON")}
             className={`px-2.5 py-1 text-left rounded-xl text-[11px] font-mono flex items-center space-x-1.5 transition-all active:scale-95 ${
-              lightingMode === "CYBER_NEON" ? "bg-amber-500/20 text-amber-300 border border-amber-500/40" : "text-slate-300 hover:bg-white/5"
+              lightingMode === "CYBER_NEON" ? "bg-amber-500/20 text-amber-300 border border-amber-500/40" : "text-amber-100/80 hover:bg-white/5"
             }`}
           >
             <Sparkles className="w-3 h-3 text-amber-400" />
@@ -719,7 +719,7 @@ const EngineAndCar3DGraphicsViewportComponent: React.FC = () => {
           <button
             onClick={() => setLightingMode("PROVING_GROUND_SUN")}
             className={`px-2.5 py-1 text-left rounded-xl text-[11px] font-mono flex items-center space-x-1.5 transition-all active:scale-95 ${
-              lightingMode === "PROVING_GROUND_SUN" ? "bg-amber-500/20 text-amber-300 border border-amber-500/40" : "text-slate-300 hover:bg-white/5"
+              lightingMode === "PROVING_GROUND_SUN" ? "bg-amber-500/20 text-amber-300 border border-amber-500/40" : "text-amber-100/80 hover:bg-white/5"
             }`}
           >
             <Sun className="w-3 h-3 text-yellow-400" />
@@ -753,7 +753,7 @@ const EngineAndCar3DGraphicsViewportComponent: React.FC = () => {
 
           {/* Car Body Metallic Paint */}
           <div className="space-y-1.5">
-            <div className="text-[11px] text-slate-300 font-mono font-medium">METALLIC BODY PAINT</div>
+            <div className="text-[11px] text-amber-100/80 font-mono font-medium">METALLIC BODY PAINT</div>
             <div className="grid grid-cols-4 gap-1.5">
               {PAINT_PALETTE.map((color) => (
                 <button
@@ -762,7 +762,7 @@ const EngineAndCar3DGraphicsViewportComponent: React.FC = () => {
                   title={color.name}
                   style={{ backgroundColor: color.displayHex }}
                   className={`w-full h-6 rounded-lg border transition-all active:scale-95 ${
-                    selectedPaintHex === color.hex ? "scale-110 border-white ring-2 ring-amber-500/60" : "border-slate-600 opacity-80 hover:opacity-100"
+                    selectedPaintHex === color.hex ? "scale-110 border-white ring-2 ring-amber-500/60" : "border-amber-600/30 opacity-80 hover:opacity-100"
                   }`}
                 />
               ))}
@@ -771,7 +771,7 @@ const EngineAndCar3DGraphicsViewportComponent: React.FC = () => {
 
           {/* Brake Caliper Finish */}
           <div className="space-y-1.5">
-            <div className="text-[11px] text-slate-300 font-mono font-medium flex items-center justify-between">
+            <div className="text-[11px] text-amber-100/80 font-mono font-medium flex items-center justify-between">
               <span>BREMBO CALIPER FINISH</span>
               <Disc className="w-3 h-3 text-red-400" />
             </div>
@@ -783,7 +783,7 @@ const EngineAndCar3DGraphicsViewportComponent: React.FC = () => {
                   title={cal.name}
                   style={{ backgroundColor: cal.hex }}
                   className={`w-full h-5 rounded-lg border transition-all active:scale-95 ${
-                    selectedCaliperHex === cal.hex ? "scale-110 border-white ring-2 ring-red-500/60" : "border-slate-600 opacity-80 hover:opacity-100"
+                    selectedCaliperHex === cal.hex ? "scale-110 border-white ring-2 ring-red-500/60" : "border-amber-600/30 opacity-80 hover:opacity-100"
                   }`}
                 />
               ))}
@@ -792,7 +792,7 @@ const EngineAndCar3DGraphicsViewportComponent: React.FC = () => {
 
           {/* Exploded Disassembly Kinematics Slider */}
           <div className="space-y-1.5 pt-1 border-t border-white/10">
-            <div className="flex items-center justify-between text-[11px] text-slate-300 font-mono">
+            <div className="flex items-center justify-between text-[11px] text-amber-100/80 font-mono">
               <span>DISASSEMBLY KINEMATICS</span>
               <span className="text-amber-400 font-bold">{Math.round(explodedAmount * 100)}%</span>
             </div>
@@ -803,7 +803,7 @@ const EngineAndCar3DGraphicsViewportComponent: React.FC = () => {
               step="0.05"
               value={explodedAmount}
               onChange={(e) => setExplodedAmount(parseFloat(e.target.value))}
-              className="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-amber-500"
+              className="w-full h-1.5 bg-amber-800/35 rounded-lg appearance-none cursor-pointer accent-amber-500"
             />
           </div>
         </div>
@@ -826,11 +826,11 @@ const EngineAndCar3DGraphicsViewportComponent: React.FC = () => {
               <Sliders className="w-3.5 h-3.5 text-amber-400" />
               <span>GLB SUB-MESH TREE ({subMeshList.length})</span>
             </span>
-            <button onClick={() => setShowMeshTree(false)} className="text-slate-400 hover:text-white text-xs">✕</button>
+            <button onClick={() => setShowMeshTree(false)} className="text-amber-200/60 hover:text-white text-xs">✕</button>
           </div>
           <div className="space-y-1">
             {subMeshList.map((mName, idx) => (
-              <div key={idx} className="text-[11px] font-mono text-slate-300 bg-slate-950/60 px-2 py-1 rounded-lg border border-slate-800/60 flex items-center justify-between hover:border-amber-500/40">
+              <div key={idx} className="text-[11px] font-mono text-amber-100/80 bg-amber-950/60 px-2 py-1 rounded-lg border border-amber-800/30 flex items-center justify-between hover:border-amber-500/40">
                 <span className="truncate max-w-[170px]">{mName}</span>
                 <span className="text-[9px] text-amber-400 bg-amber-500/10 px-1 rounded">MESH</span>
               </div>
@@ -866,7 +866,7 @@ const EngineAndCar3DGraphicsViewportComponent: React.FC = () => {
         </div>
 
         <div
-          className="px-3.5 py-2 rounded-2xl border text-slate-400 text-xs font-mono"
+          className="px-3.5 py-2 rounded-2xl border text-amber-200/60 text-xs font-mono"
           style={{
             background: "rgba(15, 23, 42, 0.65)",
             backdropFilter: `url(#${filterId}) blur(24px) saturate(180%)`,

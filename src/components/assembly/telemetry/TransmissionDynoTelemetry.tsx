@@ -129,23 +129,23 @@ export const TransmissionDynoTelemetry: React.FC<TransmissionDynoTelemetryProps>
   }, [gearRatios, finalDrive, redlineRpm, enginePeakTorqueNm]);
 
   return (
-    <div className="bg-slate-950/95 backdrop-blur-xl border border-amber-500/30 rounded-2xl p-5 shadow-2xl text-slate-100 flex flex-col gap-4">
+    <div className="bg-amber-950/95 backdrop-blur-xl border border-amber-500/30 rounded-2xl p-5 shadow-2xl text-amber-50 flex flex-col gap-4">
       {/* ── Header ── */}
-      <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+      <div className="flex items-center justify-between border-b border-amber-800/30 pb-3">
         <div className="flex items-center gap-2.5">
           <Cog className="w-5 h-5 text-amber-400 animate-spin" />
           <div>
             <h3 className="font-mono text-sm font-bold uppercase tracking-wider text-amber-300">
               Transmission & Drivetrain Telemetry HUD
             </h3>
-            <span className="text-[11px] text-slate-400 font-mono">
+            <span className="text-[11px] text-amber-200/60 font-mono">
               {gearCount}-Speed Dual-Clutch / Sequential | Final Drive: {finalDrive}:1 | Redline: {redlineRpm} RPM
             </span>
           </div>
         </div>
 
         {/* Active Gear & Speed Badge */}
-        <div className="flex items-center gap-2 bg-slate-900 border border-amber-500/40 px-3 py-1 rounded-xl text-xs font-mono font-bold text-amber-200 shadow-[0_0_12px_rgba(34,211,238,0.25)]">
+        <div className="flex items-center gap-2 bg-amber-900/50 border border-amber-500/40 px-3 py-1 rounded-xl text-xs font-mono font-bold text-amber-200 shadow-[0_0_12px_rgba(34,211,238,0.25)]">
           <Activity className="w-3.5 h-3.5 text-amber-400 animate-pulse" />
           <span>GEAR {selectedGear} ({activeGearRatio}:1) · {currentSpeedKmh} km/h</span>
         </div>
@@ -154,16 +154,16 @@ export const TransmissionDynoTelemetry: React.FC<TransmissionDynoTelemetryProps>
       {/* ── Main Grid ── */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
         {/* Left: Tractive Force vs Speed Multi-Gear Curves */}
-        <div className="lg:col-span-7 bg-slate-900/80 border border-slate-800 rounded-xl p-3 flex flex-col gap-2">
+        <div className="lg:col-span-7 bg-amber-900/40 border border-amber-800/30 rounded-xl p-3 flex flex-col gap-2">
           <div className="flex justify-between items-center text-xs font-mono">
-            <span className="text-slate-300 font-bold flex items-center gap-1.5">
+            <span className="text-amber-100/80 font-bold flex items-center gap-1.5">
               <Gauge className="w-3.5 h-3.5 text-amber-400" /> Tractive Force ($F_d$) vs Vehicle Speed ($V$)
             </span>
-            <span className="text-[10px] text-slate-500">Max Force: 16.0 kN</span>
+            <span className="text-[10px] text-amber-300/50">Max Force: 16.0 kN</span>
           </div>
 
           {/* SVG Diagram Canvas */}
-          <div className="relative w-full h-[160px] bg-slate-950/80 rounded-lg border border-slate-800/80 overflow-hidden flex items-center justify-center">
+          <div className="relative w-full h-[160px] bg-amber-950/80 rounded-lg border border-amber-800/30 overflow-hidden flex items-center justify-center">
             <svg viewBox="0 0 400 150" className="w-full h-full">
               {/* Grid Lines */}
               {[30, 60, 90, 120].map((y) => (
@@ -214,11 +214,11 @@ export const TransmissionDynoTelemetry: React.FC<TransmissionDynoTelemetryProps>
                 className={`flex-1 py-1 px-1.5 rounded-lg text-center font-mono text-[11px] border transition-all ${
                   selectedGear === g.gear
                     ? "bg-amber-500/25 border-amber-500 text-amber-200 font-bold shadow-[0_0_8px_rgba(34,211,238,0.3)]"
-                    : "bg-slate-950/60 border-slate-800 text-slate-400 hover:text-slate-200"
+                    : "bg-amber-950/60 border-amber-800/30 text-amber-200/60 hover:text-amber-50"
                 }`}
               >
                 <div>G{g.gear}</div>
-                <div className="text-[9px] text-slate-500">{g.ratio}:1</div>
+                <div className="text-[9px] text-amber-300/50">{g.ratio}:1</div>
               </button>
             ))}
           </div>
@@ -227,9 +227,9 @@ export const TransmissionDynoTelemetry: React.FC<TransmissionDynoTelemetryProps>
         {/* Right: Clutch Thermal Slip & E-Diff Torque Vectoring */}
         <div className="lg:col-span-5 flex flex-col gap-3">
           {/* Clutch Thermal & Wear Card */}
-          <div className="bg-slate-900/80 border border-slate-800 rounded-xl p-3 flex flex-col gap-2">
+          <div className="bg-amber-900/40 border border-amber-800/30 rounded-xl p-3 flex flex-col gap-2">
             <div className="flex justify-between items-center text-xs font-mono">
-              <span className="text-slate-300 font-bold flex items-center gap-1.5">
+              <span className="text-amber-100/80 font-bold flex items-center gap-1.5">
                 <Flame className="w-3.5 h-3.5 text-amber-400" /> Multi-Plate Clutch Thermal State
               </span>
               <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
@@ -240,23 +240,23 @@ export const TransmissionDynoTelemetry: React.FC<TransmissionDynoTelemetryProps>
             </div>
 
             <div className="grid grid-cols-3 gap-2 text-xs font-mono">
-              <div className="bg-slate-950/60 p-2 rounded border border-slate-800">
-                <div className="text-[9px] text-slate-500">Slip Energy</div>
+              <div className="bg-amber-950/60 p-2 rounded border border-amber-800/30">
+                <div className="text-[9px] text-amber-300/50">Slip Energy</div>
                 <div className="text-amber-300 font-bold">{(clutchState.slipEnergyJoules / 1000).toFixed(1)} kJ</div>
               </div>
-              <div className="bg-slate-950/60 p-2 rounded border border-slate-800">
-                <div className="text-[9px] text-slate-500">Friction Coeff (μ)</div>
+              <div className="bg-amber-950/60 p-2 rounded border border-amber-800/30">
+                <div className="text-[9px] text-amber-300/50">Friction Coeff (μ)</div>
                 <div className="text-amber-300 font-bold">{clutchState.frictionCoeff}</div>
               </div>
-              <div className="bg-slate-950/60 p-2 rounded border border-slate-800">
-                <div className="text-[9px] text-slate-500">Torque Limit</div>
+              <div className="bg-amber-950/60 p-2 rounded border border-amber-800/30">
+                <div className="text-[9px] text-amber-300/50">Torque Limit</div>
                 <div className="text-emerald-300 font-bold">{clutchState.torqueCapacityNm} Nm</div>
               </div>
             </div>
 
             {/* Launch Control Slip Time Slider */}
             <div className="flex flex-col gap-1 pt-1">
-              <div className="flex justify-between text-[10px] font-mono text-slate-400">
+              <div className="flex justify-between text-[10px] font-mono text-amber-200/60">
                 <span>Launch Control Clutch Slip Duration</span>
                 <span className="text-amber-300 font-bold">{launchControlSlipMs} ms</span>
               </div>
@@ -267,15 +267,15 @@ export const TransmissionDynoTelemetry: React.FC<TransmissionDynoTelemetryProps>
                 step="25"
                 value={launchControlSlipMs}
                 onChange={(e) => setLaunchControlSlipMs(parseInt(e.target.value))}
-                className="w-full h-1.5 bg-slate-800 rounded appearance-none cursor-pointer accent-amber-400"
+                className="w-full h-1.5 bg-amber-800/35 rounded appearance-none cursor-pointer accent-amber-400"
               />
             </div>
           </div>
 
           {/* E-Diff Torque Vectoring Card */}
-          <div className="bg-slate-900/80 border border-slate-800 rounded-xl p-3 flex flex-col gap-2">
+          <div className="bg-amber-900/40 border border-amber-800/30 rounded-xl p-3 flex flex-col gap-2">
             <div className="flex justify-between items-center text-xs font-mono">
-              <span className="text-slate-300 font-bold flex items-center gap-1.5">
+              <span className="text-amber-100/80 font-bold flex items-center gap-1.5">
                 <Zap className="w-3.5 h-3.5 text-amber-400" /> Active E-Diff Torque Vectoring
               </span>
               <span className="text-amber-300 font-mono text-[10px] font-bold">
@@ -284,18 +284,18 @@ export const TransmissionDynoTelemetry: React.FC<TransmissionDynoTelemetryProps>
             </div>
 
             <div className="grid grid-cols-2 gap-2 text-xs font-mono">
-              <div className="bg-slate-950/60 p-2 rounded border border-slate-800">
-                <div className="text-[9px] text-slate-500">Left Wheel Torque</div>
+              <div className="bg-amber-950/60 p-2 rounded border border-amber-800/30">
+                <div className="text-[9px] text-amber-300/50">Left Wheel Torque</div>
                 <div className="text-amber-300 font-bold">{eDiffState.leftWheelTorqueNm} Nm</div>
               </div>
-              <div className="bg-slate-950/60 p-2 rounded border border-slate-800">
-                <div className="text-[9px] text-slate-500">Right Wheel Torque</div>
+              <div className="bg-amber-950/60 p-2 rounded border border-amber-800/30">
+                <div className="text-[9px] text-amber-300/50">Right Wheel Torque</div>
                 <div className="text-amber-300 font-bold">{eDiffState.rightWheelTorqueNm} Nm</div>
               </div>
             </div>
 
             {/* Dynamic Yaw Moment */}
-            <div className="flex items-center justify-between text-[11px] font-mono text-slate-400 pt-1 border-t border-slate-800">
+            <div className="flex items-center justify-between text-[11px] font-mono text-amber-200/60 pt-1 border-t border-amber-800/30">
               <span>Vectoring Yaw Moment:</span>
               <span className="text-amber-300 font-bold">{eDiffState.vectoringYawMomentNm} Nm</span>
             </div>
@@ -304,10 +304,10 @@ export const TransmissionDynoTelemetry: React.FC<TransmissionDynoTelemetryProps>
       </div>
 
       {/* ── Interactive Tuning Sliders ── */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2 border-t border-slate-800/80">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2 border-t border-amber-800/30">
         {/* Engine RPM Sweep */}
         <div className="flex flex-col gap-1">
-          <div className="flex justify-between text-[11px] font-mono text-slate-400">
+          <div className="flex justify-between text-[11px] font-mono text-amber-200/60">
             <span>Engine RPM</span>
             <span className="text-amber-300 font-bold">{currentRpm} RPM</span>
           </div>
@@ -318,13 +318,13 @@ export const TransmissionDynoTelemetry: React.FC<TransmissionDynoTelemetryProps>
             step="100"
             value={currentRpm}
             onChange={(e) => setCurrentRpm(parseInt(e.target.value))}
-            className="w-full h-1.5 bg-slate-800 rounded appearance-none cursor-pointer accent-amber-400"
+            className="w-full h-1.5 bg-amber-800/35 rounded appearance-none cursor-pointer accent-amber-400"
           />
         </div>
 
         {/* Cornering Steering Angle */}
         <div className="flex flex-col gap-1">
-          <div className="flex justify-between text-[11px] font-mono text-slate-400">
+          <div className="flex justify-between text-[11px] font-mono text-amber-200/60">
             <span>Steering Angle (Diff Bias)</span>
             <span className="text-amber-300 font-bold">{steeringAngleDeg}°</span>
           </div>
@@ -335,17 +335,17 @@ export const TransmissionDynoTelemetry: React.FC<TransmissionDynoTelemetryProps>
             step="1"
             value={steeringAngleDeg}
             onChange={(e) => setSteeringAngleDeg(parseInt(e.target.value))}
-            className="w-full h-1.5 bg-slate-800 rounded appearance-none cursor-pointer accent-purple-400"
+            className="w-full h-1.5 bg-amber-800/35 rounded appearance-none cursor-pointer accent-purple-400"
           />
         </div>
 
         {/* Shift Shock Index Metric */}
-        <div className="flex flex-col justify-center bg-slate-900/60 p-2.5 rounded-lg border border-slate-800">
+        <div className="flex flex-col justify-center bg-amber-900/40 p-2.5 rounded-lg border border-amber-800/30">
           <div className="flex justify-between text-[11px] font-mono">
-            <span className="text-slate-400">Shift Shock (Jerk):</span>
+            <span className="text-amber-200/60">Shift Shock (Jerk):</span>
             <span className="text-amber-300 font-bold">{shiftTransient.shiftShockJerkGPerSec} g/s</span>
           </div>
-          <div className="flex justify-between text-[10px] font-mono text-slate-500 pt-1">
+          <div className="flex justify-between text-[10px] font-mono text-amber-300/50 pt-1">
             <span>Sync Time: {shiftTransient.synchronizationTimeSec}s</span>
             <span>RPM Drop: {shiftTransient.rpmDropRatio * 100}%</span>
           </div>

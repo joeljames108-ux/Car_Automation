@@ -42,7 +42,7 @@ export function NeonDigitalTwinStudio() {
   };
 
   return (
-    <div className="w-full flex flex-col gap-6 text-slate-100 animate-nh-materialize">
+    <div className="w-full flex flex-col gap-6 text-amber-50 animate-nh-materialize">
       {/* Header */}
       <NeonHorizonGlassPanel
         variant="window"
@@ -84,12 +84,12 @@ export function NeonDigitalTwinStudio() {
                   className="p-3 rounded-xl bg-[#0a111e] border border-sky-400/15 flex flex-col gap-1.5"
                 >
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold text-slate-100 truncate pr-2">{sub.name}</span>
+                    <span className="text-xs font-bold text-amber-50 truncate pr-2">{sub.name}</span>
                     <NeonHorizonBadge variant="emerald" size="xs">
                       {sub.status}
                     </NeonHorizonBadge>
                   </div>
-                  <div className="flex items-center justify-between text-[10px] nh-font-mono text-slate-400">
+                  <div className="flex items-center justify-between text-[10px] nh-font-mono text-amber-200/60">
                     <span>Load: {sub.load} · {sub.temp}</span>
                     <span className="text-sky-300 font-bold">Health: {sub.health}</span>
                   </div>
@@ -112,15 +112,15 @@ export function NeonDigitalTwinStudio() {
           >
             <div className="p-4 rounded-xl bg-[#0a111e] border border-sky-400/15 flex flex-col gap-2">
               <div className="flex items-center justify-between">
-                <span className="text-xs text-slate-400">ECU Handshake:</span>
+                <span className="text-xs text-amber-200/60">ECU Handshake:</span>
                 <span className="text-xs font-bold nh-font-mono text-emerald-300">ESTABLISHED (0x7E0)</span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-xs text-slate-400">Security Access Level:</span>
+                <span className="text-xs text-amber-200/60">Security Access Level:</span>
                 <span className="text-xs font-bold nh-font-mono text-sky-300">OEM LEVEL 3 (UNLOCKED)</span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-xs text-slate-400">Flash Memory Checksum:</span>
+                <span className="text-xs text-amber-200/60">Flash Memory Checksum:</span>
                 <span className="text-xs font-bold nh-font-mono text-amber-300">0xA84F_92BC (VALID)</span>
               </div>
             </div>
@@ -133,7 +133,7 @@ export function NeonDigitalTwinStudio() {
             )}
 
             <div className="border-t border-white/10 pt-3 flex items-center justify-between">
-              <span className="text-xs text-slate-400">0 Diagnostic codes pending</span>
+              <span className="text-xs text-amber-200/60">0 Diagnostic codes pending</span>
               <NeonHorizonButton
                 variant="secondary"
                 size="sm"

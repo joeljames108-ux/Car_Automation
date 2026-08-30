@@ -30,12 +30,12 @@ const CATEGORY_GRADIENTS: Record<MotorsportCategory, string> = {
 };
 
 const STATUS_COLORS: Record<string, string> = {
-  inactive: "text-slate-500", developing: "text-warn-400",
+  inactive: "text-amber-300/50", developing: "text-warn-400",
   competing: "text-ok-400", champion: "text-yellow-400",
 };
 
 const FACILITY_COLORS: Record<FacilityLevel, string> = {
-  basic: "text-slate-500", standard: "text-amber-400",
+  basic: "text-amber-300/50", standard: "text-amber-400",
   advanced: "text-amber-400", elite: "text-yellow-400",
 };
 
@@ -46,7 +46,7 @@ const MoraleBar = memo(function MoraleBar({ value }: { value: number }) {
       <div className="flex-1 h-1.5 bg-base-800 rounded-full overflow-hidden">
         <div className={`h-full ${color} rounded-full transition-all duration-500`} style={{ width: `${value}%` }} />
       </div>
-      <span className="text-[10px] font-mono text-slate-400 w-8 text-right">{value}%</span>
+      <span className="text-[10px] font-mono text-amber-200/60 w-8 text-right">{value}%</span>
     </div>
   );
 });
@@ -86,10 +86,10 @@ function TeamCardComponent({ team, onSelect, isSelected }: {
         playHMIClickSound();
         onSelect();
       }}
-      className={`p-4 rounded-2xl bg-slate-900/90 border cursor-pointer card-hover relative overflow-hidden text-white transition-all shadow-lg ${
+      className={`p-4 rounded-2xl bg-amber-900/40 border cursor-pointer card-hover relative overflow-hidden text-white transition-all shadow-lg ${
         isSelected
-          ? "border-amber-400 shadow-[0_0_25px_rgba(34,211,238,0.25)] bg-slate-900"
-          : "border-white/10 hover:border-white/25 hover:bg-slate-850"
+          ? "border-amber-400 shadow-[0_0_25px_rgba(34,211,238,0.25)] bg-amber-900/50"
+          : "border-white/10 hover:border-white/25 hover:bg-amber-850/40"
       }`}
     >
       {/* Category gradient accent */}
@@ -129,18 +129,18 @@ function TeamCardComponent({ team, onSelect, isSelected }: {
             { label: "Wins", value: team.wins, color: "text-emerald-400" },
             { label: "Podiums", value: team.podiums, color: "text-amber-300" },
             { label: "FL", value: team.fastestLaps, color: "text-amber-400" },
-            { label: "Dev", value: team.developmentPoints, color: "text-slate-200" },
+            { label: "Dev", value: team.developmentPoints, color: "text-amber-50" },
           ].map(s => (
             <div key={s.label} className="bg-black/60 rounded-xl p-2 border border-white/5">
               <div className={`text-sm font-black font-mono ${s.color}`}>{s.value}</div>
-              <div className="text-[9px] text-slate-400 uppercase font-bold tracking-wider">{s.label}</div>
+              <div className="text-[9px] text-amber-200/60 uppercase font-bold tracking-wider">{s.label}</div>
             </div>
           ))}
         </div>
 
         {/* Morale */}
         <div className="mb-2 ml-2">
-          <div className="text-[10px] text-slate-300 font-bold mb-1">Team Morale</div>
+          <div className="text-[10px] text-amber-100/80 font-bold mb-1">Team Morale</div>
           <MoraleBar value={team.teamMorale} />
         </div>
 
@@ -153,8 +153,8 @@ function TeamCardComponent({ team, onSelect, isSelected }: {
                 <div key={d.id} className="flex items-center gap-2 bg-base-850/50 rounded-lg px-2 py-1.5">
                   <SkillRadar driver={d} />
                   <div className="flex-1 min-w-0">
-                    <div className="text-xs text-slate-200 font-medium truncate">{d.name}</div>
-                    <div className="flex items-center gap-2 text-[10px] text-slate-500">
+                    <div className="text-xs text-amber-50 font-medium truncate">{d.name}</div>
+                    <div className="flex items-center gap-2 text-[10px] text-amber-300/50">
                       <span>{d.nationality}</span>
                       <span className="text-accent-300 font-mono">{d.skill}/100</span>
                       {latestDev && latestDev.skillAfter > latestDev.skillBefore && (
@@ -163,7 +163,7 @@ function TeamCardComponent({ team, onSelect, isSelected }: {
                     </div>
                   </div>
                   {d.contractEndSeason > 0 && (
-                    <span className="text-[9px] text-slate-600 font-mono">S{d.contractEndSeason}</span>
+                    <span className="text-[9px] text-amber-400 font-mono">S{d.contractEndSeason}</span>
                   )}
                 </div>
               );
@@ -185,7 +185,7 @@ function TeamCardComponent({ team, onSelect, isSelected }: {
 
         {/* Last season summary */}
         {lastSeason && (
-          <div className="mt-2 ml-2 text-[10px] text-slate-600 border-t border-base-800/50 pt-2">
+          <div className="mt-2 ml-2 text-[10px] text-amber-400 border-t border-base-800/50 pt-2">
             Last season: <span className={lastSeason.position === 1 ? "podium-gold font-semibold" : lastSeason.position <= 3 ? "text-accent-300" : ""}>P{lastSeason.position}</span> · {lastSeason.points}pts · {lastSeason.wins}W {lastSeason.podiums}P {lastSeason.fastestLaps}FL {lastSeason.dnfs}DNF
           </div>
         )}

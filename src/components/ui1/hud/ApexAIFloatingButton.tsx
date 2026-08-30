@@ -27,15 +27,15 @@ export const ApexAIFloatingButton: React.FC<ApexAIFloatingButtonProps> = ({
         <div className="relative px-3.5 py-2 rounded-xl bg-[#0a111e]/95 backdrop-blur-xl border border-white/12 text-xs shadow-[0_10px_30px_rgba(0,0,0,0.6)] flex items-center gap-2 max-w-xs animate-nh-materialize">
           <Sparkles size={14} className="text-sky-300/90 shrink-0" />
           <div className="flex flex-col">
-            <span className="text-[9px] nh-label-caps text-slate-400">Apex AI Suggestion</span>
-            <span className="text-xs font-semibold text-slate-200">{recommendation}</span>
+            <span className="text-[9px] nh-label-caps text-amber-200/60">Apex AI Suggestion</span>
+            <span className="text-xs font-semibold text-amber-50">{recommendation}</span>
           </div>
           <button
             onClick={(e) => {
               e.stopPropagation();
               setShowTooltip(false);
             }}
-            className="p-1 text-slate-400 hover:text-white rounded-md transition-colors"
+            className="p-1 text-amber-200/60 hover:text-white rounded-md transition-colors"
           >
             <X size={12} />
           </button>
@@ -51,7 +51,7 @@ export const ApexAIFloatingButton: React.FC<ApexAIFloatingButtonProps> = ({
           <Bot size={18} className="text-sky-300" />
           <span className="absolute -top-1 -right-1 w-2 h-2 rounded-full bg-rose-400/90 border border-[#0a111e]" />
         </div>
-        <span className="text-xs font-bold nh-font-headline tracking-wider text-slate-100">
+        <span className="text-xs font-bold nh-font-headline tracking-wider text-amber-50">
           Apex AI
         </span>
         <span className="px-1.5 py-0.2 rounded-full bg-rose-400/80 text-[10px] nh-font-mono font-bold text-white">

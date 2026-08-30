@@ -104,23 +104,23 @@ export const WindTunnelAeroStudio: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col w-full h-full space-y-4 p-2 sm:p-4 select-none bg-slate-950 text-slate-100 min-h-[720px] rounded-2xl border border-slate-800 shadow-2xl">
+    <div className="flex flex-col w-full h-full space-y-4 p-2 sm:p-4 select-none bg-amber-950/80 text-amber-50 min-h-[720px] rounded-2xl border border-amber-800/30 shadow-2xl">
       {/* Studio Header */}
-      <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-3 bg-gradient-to-r from-slate-900 via-slate-950 to-slate-900 p-4 rounded-xl border border-slate-800 shadow-lg">
+      <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-3 bg-gradient-to-r from-amber-900/60 via-slate-950 to-amber-900/60 p-4 rounded-xl border border-amber-800/30 shadow-lg">
         <div className="flex items-center gap-3">
           <div className="p-2.5 rounded-xl bg-gradient-to-br from-sky-400 to-indigo-600 text-slate-950 shadow-md shadow-sky-500/30">
             <Wind size={22} />
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h1 className="text-lg font-black tracking-tight text-slate-100 uppercase">
+              <h1 className="text-lg font-black tracking-tight text-amber-50 uppercase">
                 Aero Lab & CFD Wind Tunnel Studio
               </h1>
               <span className="px-2 py-0.5 rounded-full bg-sky-500/20 text-sky-300 font-mono text-[10px] font-extrabold border border-sky-500/30">
                 ACTIVE CFD 3D
               </span>
             </div>
-            <p className="text-xs text-slate-400">
+            <p className="text-xs text-amber-200/60">
               Real-time Navier-Stokes boundary pressure solver, Venturi suction, DRS actuation & aeroelastic stability
             </p>
           </div>
@@ -128,34 +128,34 @@ export const WindTunnelAeroStudio: React.FC = () => {
 
         {/* Quick Test Presets */}
         <div className="flex flex-wrap items-center gap-2">
-          <span className="text-[11px] font-mono text-slate-400 uppercase font-bold">Presets:</span>
+          <span className="text-[11px] font-mono text-amber-200/60 uppercase font-bold">Presets:</span>
           <button
             onClick={() => applyPreset("monaco")}
-            className="px-2.5 py-1 rounded-lg bg-slate-850 hover:bg-slate-800 text-amber-300 text-xs font-bold border border-slate-700 transition-all"
+            className="px-2.5 py-1 rounded-lg bg-amber-850/40 hover:bg-amber-800/35 text-amber-300 text-xs font-bold border border-amber-700/30 transition-all"
           >
             Monaco High Downforce
           </button>
           <button
             onClick={() => applyPreset("lemans")}
-            className="px-2.5 py-1 rounded-lg bg-slate-850 hover:bg-slate-800 text-emerald-300 text-xs font-bold border border-slate-700 transition-all"
+            className="px-2.5 py-1 rounded-lg bg-amber-850/40 hover:bg-amber-800/35 text-emerald-300 text-xs font-bold border border-amber-700/30 transition-all"
           >
             Le Mans Low Drag
           </button>
           <button
             onClick={() => applyPreset("drs_sprint")}
-            className="px-2.5 py-1 rounded-lg bg-slate-850 hover:bg-slate-800 text-amber-300 text-xs font-bold border border-slate-700 transition-all"
+            className="px-2.5 py-1 rounded-lg bg-amber-850/40 hover:bg-amber-800/35 text-amber-300 text-xs font-bold border border-amber-700/30 transition-all"
           >
             DRS High Speed Sprint
           </button>
           <button
             onClick={() => applyPreset("ground_effect")}
-            className="px-2.5 py-1 rounded-lg bg-slate-850 hover:bg-slate-800 text-amber-300 text-xs font-bold border border-slate-700 transition-all"
+            className="px-2.5 py-1 rounded-lg bg-amber-850/40 hover:bg-amber-800/35 text-amber-300 text-xs font-bold border border-amber-700/30 transition-all"
           >
             Extreme Venturi Ground Effect
           </button>
           <button
             onClick={handleReset}
-            className="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-slate-200 transition-all"
+            className="p-1.5 rounded-lg bg-amber-800/35 hover:bg-amber-700/40 text-amber-200/60 hover:text-amber-50 transition-all"
             title="Reset Defaults"
           >
             <RotateCcw size={14} />
@@ -166,9 +166,9 @@ export const WindTunnelAeroStudio: React.FC = () => {
       {/* Main Grid: Controls + Visualizer */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 flex-1">
         {/* Left Control Column (4 cols) */}
-        <div className="lg:col-span-4 flex flex-col space-y-3 bg-slate-900/90 p-4 rounded-xl border border-slate-800">
-          <div className="flex items-center justify-between border-b border-slate-800 pb-2">
-            <div className="flex items-center gap-2 text-xs font-extrabold uppercase text-slate-300">
+        <div className="lg:col-span-4 flex flex-col space-y-3 bg-amber-900/40 p-4 rounded-xl border border-amber-800/30">
+          <div className="flex items-center justify-between border-b border-amber-800/30 pb-2">
+            <div className="flex items-center gap-2 text-xs font-extrabold uppercase text-amber-100/80">
               <Sliders size={14} className="text-sky-400" />
               <span>Tunnel & Geometry Controls</span>
             </div>
@@ -180,7 +180,7 @@ export const WindTunnelAeroStudio: React.FC = () => {
           {/* Airspeed Slider */}
           <div className="space-y-1">
             <div className="flex justify-between text-xs font-semibold">
-              <span className="text-slate-300">Wind Tunnel Airspeed</span>
+              <span className="text-amber-100/80">Wind Tunnel Airspeed</span>
               <span className="font-mono text-sky-400">{state.airSpeedKmh} km/h ({(state.airSpeedKmh / 3.6).toFixed(1)} m/s)</span>
             </div>
             <input
@@ -190,7 +190,7 @@ export const WindTunnelAeroStudio: React.FC = () => {
               step="5"
               value={state.airSpeedKmh}
               onChange={(e) => setState({ ...state, airSpeedKmh: Number(e.target.value) })}
-              className="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-sky-400"
+              className="w-full h-1.5 bg-amber-800/35 rounded-lg appearance-none cursor-pointer accent-sky-400"
             />
           </div>
 
@@ -198,7 +198,7 @@ export const WindTunnelAeroStudio: React.FC = () => {
           <div className="grid grid-cols-2 gap-3 pt-1">
             <div className="space-y-1">
               <div className="flex justify-between text-[11px] font-semibold">
-                <span className="text-slate-300">Front Wing Pitch</span>
+                <span className="text-amber-100/80">Front Wing Pitch</span>
                 <span className="font-mono text-amber-400">{state.frontWingAngleDeg}°</span>
               </div>
               <input
@@ -208,12 +208,12 @@ export const WindTunnelAeroStudio: React.FC = () => {
                 step="1"
                 value={state.frontWingAngleDeg}
                 onChange={(e) => setState({ ...state, frontWingAngleDeg: Number(e.target.value) })}
-                className="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-amber-400"
+                className="w-full h-1.5 bg-amber-800/35 rounded-lg appearance-none cursor-pointer accent-amber-400"
               />
             </div>
             <div className="space-y-1">
               <div className="flex justify-between text-[11px] font-semibold">
-                <span className="text-slate-300">Rear Wing Pitch</span>
+                <span className="text-amber-100/80">Rear Wing Pitch</span>
                 <span className="font-mono text-amber-400">{state.rearWingAngleDeg}°</span>
               </div>
               <input
@@ -223,7 +223,7 @@ export const WindTunnelAeroStudio: React.FC = () => {
                 step="1"
                 value={state.rearWingAngleDeg}
                 onChange={(e) => setState({ ...state, rearWingAngleDeg: Number(e.target.value) })}
-                className="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-indigo-400"
+                className="w-full h-1.5 bg-amber-800/35 rounded-lg appearance-none cursor-pointer accent-indigo-400"
               />
             </div>
           </div>
@@ -232,7 +232,7 @@ export const WindTunnelAeroStudio: React.FC = () => {
           <div className="grid grid-cols-2 gap-3 pt-1">
             <div className="space-y-1">
               <div className="flex justify-between text-[11px] font-semibold">
-                <span className="text-slate-300">Front Ride Height</span>
+                <span className="text-amber-100/80">Front Ride Height</span>
                 <span className="font-mono text-emerald-400">{state.rideHeightFrontMm} mm</span>
               </div>
               <input
@@ -242,12 +242,12 @@ export const WindTunnelAeroStudio: React.FC = () => {
                 step="2"
                 value={state.rideHeightFrontMm}
                 onChange={(e) => setState({ ...state, rideHeightFrontMm: Number(e.target.value) })}
-                className="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-emerald-400"
+                className="w-full h-1.5 bg-amber-800/35 rounded-lg appearance-none cursor-pointer accent-emerald-400"
               />
             </div>
             <div className="space-y-1">
               <div className="flex justify-between text-[11px] font-semibold">
-                <span className="text-slate-300">Rear Ride Height</span>
+                <span className="text-amber-100/80">Rear Ride Height</span>
                 <span className="font-mono text-emerald-400">{state.rideHeightRearMm} mm</span>
               </div>
               <input
@@ -257,7 +257,7 @@ export const WindTunnelAeroStudio: React.FC = () => {
                 step="2"
                 value={state.rideHeightRearMm}
                 onChange={(e) => setState({ ...state, rideHeightRearMm: Number(e.target.value) })}
-                className="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-emerald-400"
+                className="w-full h-1.5 bg-amber-800/35 rounded-lg appearance-none cursor-pointer accent-emerald-400"
               />
             </div>
           </div>
@@ -266,7 +266,7 @@ export const WindTunnelAeroStudio: React.FC = () => {
           <div className="grid grid-cols-2 gap-3 pt-1">
             <div className="space-y-1">
               <div className="flex justify-between text-[11px] font-semibold">
-                <span className="text-slate-300">Diffuser Ramp Angle</span>
+                <span className="text-amber-100/80">Diffuser Ramp Angle</span>
                 <span className="font-mono text-amber-400">{state.diffuserRampDeg}°</span>
               </div>
               <input
@@ -276,12 +276,12 @@ export const WindTunnelAeroStudio: React.FC = () => {
                 step="1"
                 value={state.diffuserRampDeg}
                 onChange={(e) => setState({ ...state, diffuserRampDeg: Number(e.target.value) })}
-                className="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-amber-400"
+                className="w-full h-1.5 bg-amber-800/35 rounded-lg appearance-none cursor-pointer accent-amber-400"
               />
             </div>
             <div className="space-y-1">
               <div className="flex justify-between text-[11px] font-semibold">
-                <span className="text-slate-300">Venturi Width</span>
+                <span className="text-amber-100/80">Venturi Width</span>
                 <span className="font-mono text-amber-400">{state.sidepodVenturiWidthMm} mm</span>
               </div>
               <input
@@ -291,26 +291,26 @@ export const WindTunnelAeroStudio: React.FC = () => {
                 step="25"
                 value={state.sidepodVenturiWidthMm}
                 onChange={(e) => setState({ ...state, sidepodVenturiWidthMm: Number(e.target.value) })}
-                className="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-purple-400"
+                className="w-full h-1.5 bg-amber-800/35 rounded-lg appearance-none cursor-pointer accent-purple-400"
               />
             </div>
           </div>
 
           {/* Actuators & Toggles */}
-          <div className="pt-2 border-t border-slate-800 grid grid-cols-2 gap-2">
+          <div className="pt-2 border-t border-amber-800/30 grid grid-cols-2 gap-2">
             <button
               onClick={() => setState({ ...state, drsActive: !state.drsActive })}
               className={`flex items-center justify-between p-2.5 rounded-xl border text-xs font-bold transition-all cursor-pointer ${
                 state.drsActive
                   ? "bg-amber-500/20 text-amber-300 border-amber-500/40 shadow-sm shadow-purple-500/20"
-                  : "bg-slate-850 text-slate-400 border-slate-800 hover:text-slate-200"
+                  : "bg-amber-850/40 text-amber-200/60 border-amber-800/30 hover:text-amber-50"
               }`}
             >
               <div className="flex items-center gap-1.5">
                 <Zap size={14} className={state.drsActive ? "text-amber-400" : ""} />
                 <span>DRS Wing Slot</span>
               </div>
-              <span className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded bg-slate-900">
+              <span className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded bg-amber-900/50">
                 {state.drsActive ? "OPEN" : "CLOSED"}
               </span>
             </button>
@@ -320,14 +320,14 @@ export const WindTunnelAeroStudio: React.FC = () => {
               className={`flex items-center justify-between p-2.5 rounded-xl border text-xs font-bold transition-all cursor-pointer ${
                 state.activeAirbrake
                   ? "bg-red-500/20 text-red-300 border-red-500/40 shadow-sm shadow-red-500/20"
-                  : "bg-slate-850 text-slate-400 border-slate-800 hover:text-slate-200"
+                  : "bg-amber-850/40 text-amber-200/60 border-amber-800/30 hover:text-amber-50"
               }`}
             >
               <div className="flex items-center gap-1.5">
                 <Shield size={14} className={state.activeAirbrake ? "text-red-400" : ""} />
                 <span>Active Airbrake</span>
               </div>
-              <span className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded bg-slate-900">
+              <span className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded bg-amber-900/50">
                 {state.activeAirbrake ? "DEPLOYED" : "STOWED"}
               </span>
             </button>
@@ -356,14 +356,14 @@ export const WindTunnelAeroStudio: React.FC = () => {
         {/* Right Flowfield & Telemetry Viewport (8 cols) */}
         <div className="lg:col-span-8 flex flex-col space-y-3">
           {/* Sub-view Navigation Pills */}
-          <div className="flex items-center justify-between bg-slate-900 p-1.5 rounded-xl border border-slate-800">
+          <div className="flex items-center justify-between bg-amber-900/50 p-1.5 rounded-xl border border-amber-800/30">
             <div className="flex items-center gap-1">
               <button
                 onClick={() => setActiveTab("flowfield")}
                 className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-lg transition-all ${
                   activeTab === "flowfield"
                     ? "bg-sky-500 text-slate-950 shadow-md shadow-sky-500/30"
-                    : "text-slate-400 hover:text-slate-200"
+                    : "text-amber-200/60 hover:text-amber-50"
                 }`}
               >
                 <Wind size={13} />
@@ -374,7 +374,7 @@ export const WindTunnelAeroStudio: React.FC = () => {
                 className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-lg transition-all ${
                   activeTab === "pressure"
                     ? "bg-sky-500 text-slate-950 shadow-md shadow-sky-500/30"
-                    : "text-slate-400 hover:text-slate-200"
+                    : "text-amber-200/60 hover:text-amber-50"
                 }`}
               >
                 <BarChart2 size={13} />
@@ -385,7 +385,7 @@ export const WindTunnelAeroStudio: React.FC = () => {
                 className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-lg transition-all ${
                   activeTab === "balance"
                     ? "bg-sky-500 text-slate-950 shadow-md shadow-sky-500/30"
-                    : "text-slate-400 hover:text-slate-200"
+                    : "text-amber-200/60 hover:text-amber-50"
                 }`}
               >
                 <Activity size={13} />
@@ -394,13 +394,13 @@ export const WindTunnelAeroStudio: React.FC = () => {
             </div>
 
             <div className="flex items-center gap-3 text-xs font-mono pr-2">
-              <span className="text-slate-400">q = <strong className="text-sky-300">{results.dynamicPressurePa} Pa</strong></span>
-              <span className="text-slate-400">L/D = <strong className="text-emerald-400">{results.liftToDragRatio}</strong></span>
+              <span className="text-amber-200/60">q = <strong className="text-sky-300">{results.dynamicPressurePa} Pa</strong></span>
+              <span className="text-amber-200/60">L/D = <strong className="text-emerald-400">{results.liftToDragRatio}</strong></span>
             </div>
           </div>
 
           {/* 3D Flowfield SVG Viewport */}
-          <div className="relative w-full h-[380px] bg-slate-950 rounded-xl border border-slate-800 overflow-hidden shadow-inner flex items-center justify-center">
+          <div className="relative w-full h-[380px] bg-amber-950/80 rounded-xl border border-amber-800/30 overflow-hidden shadow-inner flex items-center justify-center">
             {/* Background Grid Lines */}
             <svg className="absolute inset-0 w-full h-full opacity-20 pointer-events-none">
               <defs>
@@ -468,7 +468,7 @@ export const WindTunnelAeroStudio: React.FC = () => {
 
             {activeTab === "pressure" && (
               <div className="w-full h-full p-4 flex flex-col justify-between">
-                <div className="text-xs font-bold text-slate-400 uppercase flex items-center justify-between">
+                <div className="text-xs font-bold text-amber-200/60 uppercase flex items-center justify-between">
                   <span>Surface Pressure Coefficient (Cp) Distribution</span>
                   <span className="text-[10px] text-emerald-400 font-mono">Upper vs Underbody Vacuum</span>
                 </div>
@@ -485,11 +485,11 @@ export const WindTunnelAeroStudio: React.FC = () => {
                         style={{ height: `${Math.max(10, Math.min(120, Math.abs(pt.cpLower) * 60))}px` }}
                         title={`Station ${pt.stationX}mm: Cp Lower = ${pt.cpLower}`}
                       />
-                      <span className="text-[9px] font-mono text-slate-500">{pt.stationX}</span>
+                      <span className="text-[9px] font-mono text-amber-300/50">{pt.stationX}</span>
                     </div>
                   ))}
                 </div>
-                <div className="flex justify-center gap-6 text-[11px] font-mono text-slate-400 border-t border-slate-800 pt-2">
+                <div className="flex justify-center gap-6 text-[11px] font-mono text-amber-200/60 border-t border-amber-800/30 pt-2">
                   <div className="flex items-center gap-1.5">
                     <span className="w-2.5 h-2.5 rounded bg-amber-500" />
                     <span>Upper Surface Cp</span>
@@ -505,10 +505,10 @@ export const WindTunnelAeroStudio: React.FC = () => {
             {activeTab === "balance" && (
               <div className="w-full h-full p-6 flex flex-col justify-center space-y-6">
                 <div className="text-center space-y-1">
-                  <h3 className="text-sm font-black uppercase tracking-wider text-slate-200">
+                  <h3 className="text-sm font-black uppercase tracking-wider text-amber-50">
                     Aerodynamic Balance & Center of Pressure (COP)
                   </h3>
-                  <p className="text-xs text-slate-400">
+                  <p className="text-xs text-amber-200/60">
                     Optimal range: 42% - 48% Front for neutral cornering balance
                   </p>
                 </div>
@@ -519,7 +519,7 @@ export const WindTunnelAeroStudio: React.FC = () => {
                     <span className="text-amber-400">FRONT: {results.frontAeroBalancePct}% ({results.frontDownforceN} N)</span>
                     <span className="text-amber-400">REAR: {results.rearAeroBalancePct}% ({results.rearDownforceN} N)</span>
                   </div>
-                  <div className="w-full h-4 bg-slate-900 rounded-full overflow-hidden flex border border-slate-700">
+                  <div className="w-full h-4 bg-amber-900/50 rounded-full overflow-hidden flex border border-amber-700/30">
                     <div
                       className="bg-gradient-to-r from-amber-500 to-sky-400 transition-all duration-300"
                       style={{ width: `${results.frontAeroBalancePct}%` }}
@@ -533,16 +533,16 @@ export const WindTunnelAeroStudio: React.FC = () => {
 
                 {/* Additional metrics */}
                 <div className="grid grid-cols-3 gap-3 pt-2 text-center">
-                  <div className="p-3 bg-slate-900 rounded-xl border border-slate-800">
-                    <div className="text-[10px] uppercase font-bold text-slate-400">Total Downforce</div>
+                  <div className="p-3 bg-amber-900/50 rounded-xl border border-amber-800/30">
+                    <div className="text-[10px] uppercase font-bold text-amber-200/60">Total Downforce</div>
                     <div className="text-base font-mono font-extrabold text-amber-400">{results.totalDownforceN} N</div>
                   </div>
-                  <div className="p-3 bg-slate-900 rounded-xl border border-slate-800">
-                    <div className="text-[10px] uppercase font-bold text-slate-400">Total Aero Drag</div>
+                  <div className="p-3 bg-amber-900/50 rounded-xl border border-amber-800/30">
+                    <div className="text-[10px] uppercase font-bold text-amber-200/60">Total Aero Drag</div>
                     <div className="text-base font-mono font-extrabold text-red-400">{results.totalDragN} N</div>
                   </div>
-                  <div className="p-3 bg-slate-900 rounded-xl border border-slate-800">
-                    <div className="text-[10px] uppercase font-bold text-slate-400">Drag Power Penalty</div>
+                  <div className="p-3 bg-amber-900/50 rounded-xl border border-amber-800/30">
+                    <div className="text-[10px] uppercase font-bold text-amber-200/60">Drag Power Penalty</div>
                     <div className="text-base font-mono font-extrabold text-amber-400">{results.aerodynamicHorsepowerLossHp} HP</div>
                   </div>
                 </div>
@@ -552,25 +552,25 @@ export const WindTunnelAeroStudio: React.FC = () => {
 
           {/* Bottom Summary Metric Cards */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-            <div className="bg-slate-900 p-3 rounded-xl border border-slate-800 flex flex-col">
-              <span className="text-[10px] font-bold text-slate-400 uppercase">Cl (Lift Coeff.)</span>
+            <div className="bg-amber-900/50 p-3 rounded-xl border border-amber-800/30 flex flex-col">
+              <span className="text-[10px] font-bold text-amber-200/60 uppercase">Cl (Lift Coeff.)</span>
               <span className="text-base font-mono font-extrabold text-amber-400">{results.clTotal}</span>
-              <span className="text-[10px] text-slate-500">Downforce multiplier</span>
+              <span className="text-[10px] text-amber-300/50">Downforce multiplier</span>
             </div>
-            <div className="bg-slate-900 p-3 rounded-xl border border-slate-800 flex flex-col">
-              <span className="text-[10px] font-bold text-slate-400 uppercase">Cd (Drag Coeff.)</span>
+            <div className="bg-amber-900/50 p-3 rounded-xl border border-amber-800/30 flex flex-col">
+              <span className="text-[10px] font-bold text-amber-200/60 uppercase">Cd (Drag Coeff.)</span>
               <span className="text-base font-mono font-extrabold text-amber-400">{results.cdTotal}</span>
-              <span className="text-[10px] text-slate-500">Air resistance factor</span>
+              <span className="text-[10px] text-amber-300/50">Air resistance factor</span>
             </div>
-            <div className="bg-slate-900 p-3 rounded-xl border border-slate-800 flex flex-col">
-              <span className="text-[10px] font-bold text-slate-400 uppercase">Venturi Suction</span>
+            <div className="bg-amber-900/50 p-3 rounded-xl border border-amber-800/30 flex flex-col">
+              <span className="text-[10px] font-bold text-amber-200/60 uppercase">Venturi Suction</span>
               <span className="text-base font-mono font-extrabold text-amber-400">-{results.venturiSuctionPressureKPa} kPa</span>
-              <span className="text-[10px] text-slate-500">Floor vacuum pressure</span>
+              <span className="text-[10px] text-amber-300/50">Floor vacuum pressure</span>
             </div>
-            <div className="bg-slate-900 p-3 rounded-xl border border-slate-800 flex flex-col">
-              <span className="text-[10px] font-bold text-slate-400 uppercase">Aeroacoustics</span>
+            <div className="bg-amber-900/50 p-3 rounded-xl border border-amber-800/30 flex flex-col">
+              <span className="text-[10px] font-bold text-amber-200/60 uppercase">Aeroacoustics</span>
               <span className="text-base font-mono font-extrabold text-emerald-400">{results.vortexSheddingFreqHz} Hz</span>
-              <span className="text-[10px] text-slate-500">Vortex frequency</span>
+              <span className="text-[10px] text-amber-300/50">Vortex frequency</span>
             </div>
           </div>
         </div>

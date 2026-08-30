@@ -100,7 +100,7 @@ export function IntakeManifoldSection({
               onChange={(v) => updateEngine({ fuelSystem: v })}
             />
 
-            <div className="space-y-2 pt-2 border-t border-slate-800/80">
+            <div className="space-y-2 pt-2 border-t border-amber-800/30">
               <Slider
                 label="Air-Fuel Ratio (AFR)"
                 value={engineConfig.afr || 12.5}
@@ -135,7 +135,7 @@ export function IntakeManifoldSection({
               onSelectVariant={onSelectVariant}
             />
           ) : (
-            <p className="text-xs font-mono text-slate-500">Loading material variants...</p>
+            <p className="text-xs font-mono text-amber-300/50">Loading material variants...</p>
           )}
         </SectionCard>
 

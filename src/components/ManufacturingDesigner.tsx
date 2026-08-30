@@ -29,8 +29,8 @@ export function ManufacturingDesigner() {
   return (
     <div className="space-y-4 stagger">
       <div>
-        <h2 className="text-xl font-bold text-slate-100 mb-1">Manufacturing & Production</h2>
-        <p className="text-sm text-slate-500">Configure the production pipeline, factory, and quality systems. Cost and time update live.</p>
+        <h2 className="text-xl font-bold text-amber-50 mb-1">Manufacturing & Production</h2>
+        <p className="text-sm text-amber-300/50">Configure the production pipeline, factory, and quality systems. Cost and time update live.</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -49,7 +49,7 @@ export function ManufacturingDesigner() {
         {/* Process */}
         <Section title="Manufacturing Process" icon={<Wrench size={14} />}>
           <Select label="Process" value={m.process} options={PROCESS_OPTIONS} onChange={(v) => updateManufacturing({ process: v })} />
-          <p className="text-xs text-slate-500 mt-2">{MANUFACTURING_PROCESSES[m.process].description}</p>
+          <p className="text-xs text-amber-300/50 mt-2">{MANUFACTURING_PROCESSES[m.process].description}</p>
           <div className="grid grid-cols-2 gap-2 mt-3">
             <StatTile label="Labor Hours" value={MANUFACTURING_PROCESSES[m.process].laborHours} unit="h" accent="default" />
             <StatTile label="Base Defect Rate" value={MANUFACTURING_PROCESSES[m.process].defectRate} unit="/1k" accent="warn" />
@@ -61,7 +61,7 @@ export function ManufacturingDesigner() {
         {/* Factory */}
         <Section title="Factory Tier" icon={<Factory size={14} />}>
           <Select label="Factory" value={m.factoryTier} options={FACTORY_OPTIONS} onChange={(v) => updateManufacturing({ factoryTier: v })} />
-          <p className="text-xs text-slate-500 mt-2">{FACTORY_TIERS[m.factoryTier].description}</p>
+          <p className="text-xs text-amber-300/50 mt-2">{FACTORY_TIERS[m.factoryTier].description}</p>
           <div className="grid grid-cols-2 gap-2 mt-3">
             <StatTile label="Capacity" value={FACTORY_TIERS[m.factoryTier].capacity.toLocaleString()} unit="/yr" accent="default" />
             <StatTile label="Setup Cost" value={fmtCurrency(FACTORY_TIERS[m.factoryTier].setupCost)} accent="warn" />
@@ -83,7 +83,7 @@ export function ManufacturingDesigner() {
                   className={`px-2.5 py-1.5 rounded-lg text-xs font-medium transition-all border ${
                     m.assemblyLine === o.value
                       ? "bg-accent-500/20 border-accent-500/50 text-accent-300"
-                      : "bg-base-850 border-base-800 text-slate-400 hover:border-base-700"
+                      : "bg-base-850 border-base-800 text-amber-200/60 hover:border-base-700"
                   }`}
                 >
                   {o.label}
@@ -102,7 +102,7 @@ export function ManufacturingDesigner() {
         {/* Quality Control */}
         <Section title="Quality Control" icon={<ShieldCheck size={14} />}>
           <Select label="QC Level" value={m.qcLevel} options={QC_OPTIONS} onChange={(v) => updateManufacturing({ qcLevel: v })} />
-          <p className="text-xs text-slate-500 mt-2">{QC_LEVELS[m.qcLevel].description}</p>
+          <p className="text-xs text-amber-300/50 mt-2">{QC_LEVELS[m.qcLevel].description}</p>
           <div className="grid grid-cols-2 gap-2 mt-3">
             <StatTile label="Inspection Time" value={QC_LEVELS[m.qcLevel].inspectionTime} unit="h" accent="default" />
             <StatTile label="Defect Catch" value={`${Math.round(QC_LEVELS[m.qcLevel].defectCatchRate * 100)}%`} accent="ok" />
@@ -162,7 +162,7 @@ export function ManufacturingDesigner() {
         </div>
       </Section>
 
-      <div className="flex items-center gap-2 text-xs text-slate-600">
+      <div className="flex items-center gap-2 text-xs text-amber-400">
         <Clock size={12} />
         <span>Production time: {mfg.productionTime}h per unit · {mfg.productionTimePerYear.toLocaleString()}h annually</span>
       </div>
@@ -176,7 +176,7 @@ function CostBar({ label, value, total, color }: { label: string; value: number;
     <div>
       <div className="flex justify-between text-xs mb-1">
         <span className="label-mono">{label}</span>
-        <span className="font-mono text-slate-300">{fmtCurrency(value)} <span className="text-slate-600">({pctV}%)</span></span>
+        <span className="font-mono text-amber-100/80">{fmtCurrency(value)} <span className="text-amber-400">({pctV}%)</span></span>
       </div>
       <div className="h-2 bg-base-800 rounded-full overflow-hidden">
         <div className={`h-full ${color} rounded-full transition-all duration-500`} style={{ width: `${pctV}%` }} />

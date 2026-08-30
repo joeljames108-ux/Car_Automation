@@ -25,7 +25,7 @@ export function DetailedStats() {
       <Section title="Detailed Statistics" icon={<BarChart3 size={16} />}>
         <div className="flex flex-wrap gap-1 bg-base-850 rounded-lg p-1 border border-base-800">
           {tabs.map((t) => (
-            <button key={t.id} onClick={() => setTab(t.id)} className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-all ${tab === t.id ? "bg-accent-500/20 text-accent-300" : "text-slate-400 hover:text-slate-200"}`}>
+            <button key={t.id} onClick={() => setTab(t.id)} className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-all ${tab === t.id ? "bg-accent-500/20 text-accent-300" : "text-amber-200/60 hover:text-amber-50"}`}>
               {t.icon}{t.label}
             </button>
           ))}
@@ -294,8 +294,8 @@ function CostTab() {
           {costBreakdown.map((c) => (
             <div key={c.label}>
               <div className="flex justify-between text-xs mb-1">
-                <span className="text-slate-400">{c.label}</span>
-                <span className="font-mono text-slate-200">${(c.value / 1000).toFixed(1)}k</span>
+                <span className="text-amber-200/60">{c.label}</span>
+                <span className="font-mono text-amber-50">${(c.value / 1000).toFixed(1)}k</span>
               </div>
               <div className="h-3 bg-base-850 rounded-full overflow-hidden">
                 <div className="h-full rounded-full transition-all" style={{ width: `${(c.value / maxCost) * 100}%`, background: c.color }} />
@@ -337,7 +337,7 @@ function TracksTab() {
         <div className="overflow-x-auto">
           <table className="w-full text-xs">
             <thead>
-              <tr className="text-slate-500 border-b border-base-800">
+              <tr className="text-amber-300/50 border-b border-base-800">
                 <th className="text-left py-2 px-2 font-mono">#</th>
                 <th className="text-left py-2 px-2">Track</th>
                 <th className="text-right py-2 px-2 font-mono">Lap Time</th>
@@ -353,14 +353,14 @@ function TracksTab() {
                 const track = TRACKS[lap.trackId];
                 return (
                   <tr key={lap.trackId} className="border-b border-base-850 hover:bg-base-850/50">
-                    <td className="py-2 px-2 font-mono text-slate-500">{i + 1}</td>
-                    <td className="py-2 px-2 text-slate-200">{lap.trackName}</td>
+                    <td className="py-2 px-2 font-mono text-amber-300/50">{i + 1}</td>
+                    <td className="py-2 px-2 text-amber-50">{lap.trackName}</td>
                     <td className="py-2 px-2 font-mono text-right text-accent-300">{formatLap(lap.time)}</td>
-                    <td className="py-2 px-2 font-mono text-right text-slate-500">{i === 0 ? "—" : `+${(lap.time - fastest.time).toFixed(2)}`}</td>
-                    <td className="py-2 px-2 font-mono text-right text-slate-400">{lap.topSpeed}</td>
-                    <td className="py-2 px-2 font-mono text-right text-slate-400">{lap.avgSpeed}</td>
-                    <td className="py-2 px-2 font-mono text-right text-slate-500">{track.length.toFixed(2)}</td>
-                    <td className="py-2 px-2 text-slate-500">{track.highSpeed ? "High-speed" : "Technical"}</td>
+                    <td className="py-2 px-2 font-mono text-right text-amber-300/50">{i === 0 ? "—" : `+${(lap.time - fastest.time).toFixed(2)}`}</td>
+                    <td className="py-2 px-2 font-mono text-right text-amber-200/60">{lap.topSpeed}</td>
+                    <td className="py-2 px-2 font-mono text-right text-amber-200/60">{lap.avgSpeed}</td>
+                    <td className="py-2 px-2 font-mono text-right text-amber-300/50">{track.length.toFixed(2)}</td>
+                    <td className="py-2 px-2 text-amber-300/50">{track.highSpeed ? "High-speed" : "Technical"}</td>
                   </tr>
                 );
               })}
@@ -378,7 +378,7 @@ function RatingBar({ label, value, good }: { label: string; value: number; good:
   return (
     <div>
       <div className="flex justify-between text-xs mb-1">
-        <span className="text-slate-400">{label}</span>
+        <span className="text-amber-200/60">{label}</span>
         <span className={`font-mono ${isGood ? "text-ok-400" : "text-warn-400"}`}>{pct.toFixed(0)}%</span>
       </div>
       <div className="h-2 bg-base-850 rounded-full overflow-hidden">

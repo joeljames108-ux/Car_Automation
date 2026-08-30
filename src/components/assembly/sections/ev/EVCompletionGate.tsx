@@ -57,10 +57,10 @@ export function EVCompletionGate({
           <Award size={15} className="text-amber-400" />
           <span>EV POWERTRAIN ASSEMBLY COMPLETED</span>
         </div>
-        <h2 className="text-2xl md:text-3xl font-extrabold font-mono text-slate-100">
+        <h2 className="text-2xl md:text-3xl font-extrabold font-mono text-amber-50">
           800V {motorLabel} Fully Assembled
         </h2>
-        <p className="text-xs md:text-sm text-slate-400 font-mono leading-relaxed">
+        <p className="text-xs md:text-sm text-amber-200/60 font-mono leading-relaxed">
           All 12 high-voltage electrical, thermal, electrochemical and drivetrain subsystems have been
           mounted, high-potential dielectric tested, and pass ASIL-D safety validation checks.
         </p>
@@ -69,7 +69,7 @@ export function EVCompletionGate({
       {/* ── CUMULATIVE SPECS TILES ── */}
       <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
         <div className="p-3 rounded-2xl bg-base-950/80 border border-amber-500/30 text-center">
-          <span className="block text-[10px] font-mono text-slate-400 uppercase">Total Motor Power</span>
+          <span className="block text-[10px] font-mono text-amber-200/60 uppercase">Total Motor Power</span>
           <span className="text-lg md:text-xl font-extrabold font-mono text-amber-300">
             {currentTotalStats.hp} hp
           </span>
@@ -79,7 +79,7 @@ export function EVCompletionGate({
         </div>
 
         <div className="p-3 rounded-2xl bg-base-950/80 border border-emerald-500/30 text-center">
-          <span className="block text-[10px] font-mono text-slate-400 uppercase">Instant Torque</span>
+          <span className="block text-[10px] font-mono text-amber-200/60 uppercase">Instant Torque</span>
           <span className="text-lg md:text-xl font-extrabold font-mono text-emerald-300">
             {currentTotalStats.torque} Nm
           </span>
@@ -89,7 +89,7 @@ export function EVCompletionGate({
         </div>
 
         <div className="p-3 rounded-2xl bg-base-950/80 border border-amber-500/30 text-center">
-          <span className="block text-[10px] font-mono text-slate-400 uppercase">Battery Capacity</span>
+          <span className="block text-[10px] font-mono text-amber-200/60 uppercase">Battery Capacity</span>
           <span className="text-lg md:text-xl font-extrabold font-mono text-amber-300">
             {engineConfig.batteryCapacity || 90} kWh
           </span>
@@ -98,16 +98,16 @@ export function EVCompletionGate({
           </span>
         </div>
 
-        <div className="p-3 rounded-2xl bg-base-950/80 border border-slate-800 text-center">
-          <span className="block text-[10px] font-mono text-slate-400 uppercase">Powertrain Mass</span>
-          <span className="text-lg md:text-xl font-extrabold font-mono text-slate-100">
+        <div className="p-3 rounded-2xl bg-base-950/80 border border-amber-800/30 text-center">
+          <span className="block text-[10px] font-mono text-amber-200/60 uppercase">Powertrain Mass</span>
+          <span className="text-lg md:text-xl font-extrabold font-mono text-amber-50">
             {currentTotalStats.weight} kg
           </span>
-          <span className="text-[10px] font-mono text-slate-400 block mt-0.5">Pack + Motors</span>
+          <span className="text-[10px] font-mono text-amber-200/60 block mt-0.5">Pack + Motors</span>
         </div>
 
         <div className="col-span-2 sm:col-span-1 p-3 rounded-2xl bg-base-950/80 border border-amber-500/30 text-center">
-          <span className="block text-[10px] font-mono text-slate-400 uppercase">Total Hardware Cost</span>
+          <span className="block text-[10px] font-mono text-amber-200/60 uppercase">Total Hardware Cost</span>
           <span className="text-lg md:text-xl font-extrabold font-mono text-amber-300">
             ${(currentTotalStats.cost / 1000).toFixed(1)}k
           </span>

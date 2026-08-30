@@ -194,26 +194,26 @@ export const VehicleWorkshopPanel: React.FC<VehicleWorkshopPanelProps> = ({
       {/* ============================================================= */}
       {/* 1. HORIZONTAL PROGRESS & COMPONENT ASSEMBLY RIBBON            */}
       {/* ============================================================= */}
-      <div className="bg-white/80 dark:bg-base-900/90 border border-slate-200 dark:border-slate-800 rounded-3xl p-4 backdrop-blur-xl shadow-xl space-y-3">
+      <div className="bg-white/80 dark:bg-base-900/90 border border-slate-200 dark:border-amber-800/30 rounded-3xl p-4 backdrop-blur-xl shadow-xl space-y-3">
         {/* Ribbon Header: Title + Completion Bar */}
         <div className="flex items-center justify-between text-xs">
           <div className="flex items-center gap-2">
             <span className="p-1.5 rounded-xl bg-amber-500/10 text-amber-500 dark:text-amber-400">
               <Car size={16} />
             </span>
-            <strong className="text-slate-800 dark:text-slate-200 font-bold uppercase tracking-wider">
+            <strong className="text-slate-800 dark:text-amber-50 font-bold uppercase tracking-wider">
               CHASSIS & VEHICLE ASSEMBLY LINE
             </strong>
-            <span className="text-[11px] text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-base-950 px-2 py-0.5 rounded-lg border border-slate-200 dark:border-slate-800 font-semibold">
+            <span className="text-[11px] text-amber-300/50 dark:text-amber-200/60 bg-slate-100 dark:bg-base-950 px-2 py-0.5 rounded-lg border border-slate-200 dark:border-amber-800/30 font-semibold">
               {installedComponents.length} of {components.length} Installed
             </span>
           </div>
 
           <div className="flex items-center gap-3">
-            <span className="text-[11px] text-slate-500 dark:text-slate-400 font-bold">
+            <span className="text-[11px] text-amber-300/50 dark:text-amber-200/60 font-bold">
               Completion
             </span>
-            <div className="w-32 h-2.5 bg-slate-200 dark:bg-base-950 rounded-full overflow-hidden border border-slate-300 dark:border-slate-800">
+            <div className="w-32 h-2.5 bg-slate-200 dark:bg-base-950 rounded-full overflow-hidden border border-slate-300 dark:border-amber-800/30">
               <div
                 className="h-full bg-gradient-to-r from-amber-500 to-amber-500 transition-all duration-500"
                 style={{ width: `${progressPercentage}%` }}
@@ -230,7 +230,7 @@ export const VehicleWorkshopPanel: React.FC<VehicleWorkshopPanelProps> = ({
           {/* Scroll Left Button */}
           <button
             onClick={() => scrollRibbon("left")}
-            className="p-2 rounded-2xl bg-slate-100 dark:bg-base-950 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:text-amber-500 dark:hover:text-amber-400 hover:border-amber-500/40 transition-all mr-2 shadow-sm"
+            className="p-2 rounded-2xl bg-slate-100 dark:bg-base-950 border border-slate-200 dark:border-amber-800/30 text-amber-400 dark:text-amber-200/60 hover:text-amber-500 dark:hover:text-amber-400 hover:border-amber-500/40 transition-all mr-2 shadow-sm"
           >
             <ChevronLeft size={16} />
           </button>
@@ -263,16 +263,16 @@ export const VehicleWorkshopPanel: React.FC<VehicleWorkshopPanelProps> = ({
                       : isInstalled
                       ? "bg-emerald-500/10 dark:bg-emerald-950/30 text-emerald-600 dark:text-emerald-400 border-emerald-500/30 hover:border-emerald-400"
                       : installable
-                      ? "bg-slate-100 dark:bg-base-950 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-800 hover:border-amber-500/40"
-                      : "bg-slate-100/50 dark:bg-base-950/40 text-slate-400 dark:text-slate-600 border-slate-200 dark:border-slate-800/60 opacity-60 cursor-not-allowed"
+                      ? "bg-slate-100 dark:bg-base-950 text-amber-500 dark:text-amber-100/80 border-slate-200 dark:border-amber-800/30 hover:border-amber-500/40"
+                      : "bg-slate-100/50 dark:bg-base-950/40 text-amber-200/60 dark:text-amber-400 border-slate-200 dark:border-amber-800/30 opacity-60 cursor-not-allowed"
                   }`}
                 >
                   {isInstalled ? (
                     <CheckCircle2 size={14} className={isSelected ? "text-slate-950" : "text-emerald-400"} />
                   ) : !installable ? (
-                    <Lock size={13} className="text-slate-400" />
+                    <Lock size={13} className="text-amber-200/60" />
                   ) : (
-                    <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-md ${isSelected ? "bg-slate-950 text-amber-300" : "bg-slate-200 dark:bg-base-900 text-slate-500"}`}>
+                    <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-md ${isSelected ? "bg-amber-950/80 text-amber-300" : "bg-slate-200 dark:bg-base-900 text-amber-300/50"}`}>
                       {item.number}
                     </span>
                   )}
@@ -285,7 +285,7 @@ export const VehicleWorkshopPanel: React.FC<VehicleWorkshopPanelProps> = ({
           {/* Scroll Right Button */}
           <button
             onClick={() => scrollRibbon("right")}
-            className="p-2 rounded-2xl bg-slate-100 dark:bg-base-950 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:text-amber-500 dark:hover:text-amber-400 hover:border-amber-500/40 transition-all ml-2 shadow-sm"
+            className="p-2 rounded-2xl bg-slate-100 dark:bg-base-950 border border-slate-200 dark:border-amber-800/30 text-amber-400 dark:text-amber-200/60 hover:text-amber-500 dark:hover:text-amber-400 hover:border-amber-500/40 transition-all ml-2 shadow-sm"
           >
             <ChevronRight size={16} />
           </button>
@@ -297,13 +297,13 @@ export const VehicleWorkshopPanel: React.FC<VehicleWorkshopPanelProps> = ({
       {/* ============================================================= */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         {/* ── COLUMN 1: PART ARCHITECTURE & SPEC CONTROLS ── */}
-        <div className="bg-white/80 dark:bg-base-900/90 border border-slate-200 dark:border-slate-800 rounded-3xl p-5 backdrop-blur-xl shadow-xl space-y-4">
-          <div className="flex items-center gap-2.5 pb-2 border-b border-slate-200 dark:border-slate-800">
+        <div className="bg-white/80 dark:bg-base-900/90 border border-slate-200 dark:border-amber-800/30 rounded-3xl p-5 backdrop-blur-xl shadow-xl space-y-4">
+          <div className="flex items-center gap-2.5 pb-2 border-b border-slate-200 dark:border-amber-800/30">
             <div className="p-2 rounded-2xl bg-amber-500/10 text-amber-600 dark:text-amber-400">
               <Settings size={18} />
             </div>
             <div>
-              <h3 className="text-sm font-bold text-slate-800 dark:text-slate-100">
+              <h3 className="text-sm font-bold text-slate-800 dark:text-amber-50">
                 {activeRibbonId === "architecture"
                   ? "Platform & Powertrain Architecture"
                   : activeRibbonId === "chassis_frame"
@@ -318,7 +318,7 @@ export const VehicleWorkshopPanel: React.FC<VehicleWorkshopPanelProps> = ({
                   ? "Wheel Dimensions & Tire Compound"
                   : "Component Dimensions & Geometry"}
               </h3>
-              <p className="text-[11px] text-slate-500 dark:text-slate-400">
+              <p className="text-[11px] text-amber-300/50 dark:text-amber-200/60">
                 Parametric dimensions, layout geometry & kinematic tolerances
               </p>
             </div>
@@ -329,7 +329,7 @@ export const VehicleWorkshopPanel: React.FC<VehicleWorkshopPanelProps> = ({
             {activeRibbonId === "architecture" && (
               <>
                 <div>
-                  <label className="label-mono mb-1.5 block font-bold text-slate-300">Drivetrain Layout</label>
+                  <label className="label-mono mb-1.5 block font-bold text-amber-100/80">Drivetrain Layout</label>
                   <ChoiceGrid<DriveType>
                     options={[
                       { value: "rwd", label: "RWD (Rear-Wheel Drive)" },
@@ -341,7 +341,7 @@ export const VehicleWorkshopPanel: React.FC<VehicleWorkshopPanelProps> = ({
                   />
                 </div>
                 <div>
-                  <label className="label-mono mb-1.5 block font-bold text-slate-300">Engine Placement</label>
+                  <label className="label-mono mb-1.5 block font-bold text-amber-100/80">Engine Placement</label>
                   <ChoiceGrid<EnginePosition>
                     options={[
                       { value: "front", label: "Front (Over Axle)" },
@@ -358,7 +358,7 @@ export const VehicleWorkshopPanel: React.FC<VehicleWorkshopPanelProps> = ({
             {(activeRibbonId === "chassis_frame" || activeRibbonId === "floor_pan" || activeRibbonId === "pillars") && (
               <>
                 <div>
-                  <label className="label-mono mb-1.5 block font-bold text-slate-300">Chassis Construction</label>
+                  <label className="label-mono mb-1.5 block font-bold text-amber-100/80">Chassis Construction</label>
                   <ChoiceGrid<ChassisType>
                     options={[
                       { value: "monocoque", label: "Aluminum Monocoque" },
@@ -385,7 +385,7 @@ export const VehicleWorkshopPanel: React.FC<VehicleWorkshopPanelProps> = ({
             {(activeRibbonId === "suspension_front" || activeRibbonId === "subframe_front") && (
               <>
                 <div>
-                  <label className="label-mono mb-1.5 block font-bold text-slate-300">Front Suspension Geometry</label>
+                  <label className="label-mono mb-1.5 block font-bold text-amber-100/80">Front Suspension Geometry</label>
                   <ChoiceGrid<SuspensionType>
                     options={[
                       { value: "double_wishbone", label: "Double Wishbone Dual A-Arms" },
@@ -420,7 +420,7 @@ export const VehicleWorkshopPanel: React.FC<VehicleWorkshopPanelProps> = ({
             {(activeRibbonId === "suspension_rear" || activeRibbonId === "subframe_rear" || activeRibbonId === "rear_wheelhouses") && (
               <>
                 <div>
-                  <label className="label-mono mb-1.5 block font-bold text-slate-300">Rear Suspension Geometry</label>
+                  <label className="label-mono mb-1.5 block font-bold text-amber-100/80">Rear Suspension Geometry</label>
                   <ChoiceGrid<SuspensionType>
                     options={[
                       { value: "multilink", label: "5-Link Multilink Arms" },
@@ -455,7 +455,7 @@ export const VehicleWorkshopPanel: React.FC<VehicleWorkshopPanelProps> = ({
             {activeRibbonId === "brakes" && (
               <>
                 <div>
-                  <label className="label-mono mb-1.5 block font-bold text-slate-300">Braking Rotor Chemistry</label>
+                  <label className="label-mono mb-1.5 block font-bold text-amber-100/80">Braking Rotor Chemistry</label>
                   <ChoiceGrid<BrakeType>
                     options={[
                       { value: "slotted_steel", label: "Slotted Steel Discs" },
@@ -490,7 +490,7 @@ export const VehicleWorkshopPanel: React.FC<VehicleWorkshopPanelProps> = ({
             {activeRibbonId === "transmission" && (
               <>
                 <div>
-                  <label className="label-mono mb-1.5 block font-bold text-slate-300">Transmission Type</label>
+                  <label className="label-mono mb-1.5 block font-bold text-amber-100/80">Transmission Type</label>
                   <ChoiceGrid<TransmissionType>
                     options={[
                       { value: "dct_7", label: "7-Speed Dual Clutch (DCT)" },
@@ -517,7 +517,7 @@ export const VehicleWorkshopPanel: React.FC<VehicleWorkshopPanelProps> = ({
             {activeRibbonId === "wheels_tires" && (
               <>
                 <div>
-                  <label className="label-mono mb-1.5 block font-bold text-slate-300">Tire Compound Grade</label>
+                  <label className="label-mono mb-1.5 block font-bold text-amber-100/80">Tire Compound Grade</label>
                   <ChoiceGrid<TireCompound>
                     options={[
                       { value: "medium", label: "Medium Street Compound" },
@@ -577,17 +577,17 @@ export const VehicleWorkshopPanel: React.FC<VehicleWorkshopPanelProps> = ({
         </div>
 
         {/* ── COLUMN 2: METALLURGY & MATERIAL GRADE (4 TIERS) ── */}
-        <div className="bg-white/80 dark:bg-base-900/90 border border-slate-200 dark:border-slate-800 rounded-3xl p-5 backdrop-blur-xl shadow-xl space-y-4">
-          <div className="flex items-center justify-between pb-2 border-b border-slate-200 dark:border-slate-800">
+        <div className="bg-white/80 dark:bg-base-900/90 border border-slate-200 dark:border-amber-800/30 rounded-3xl p-5 backdrop-blur-xl shadow-xl space-y-4">
+          <div className="flex items-center justify-between pb-2 border-b border-slate-200 dark:border-amber-800/30">
             <div className="flex items-center gap-2.5">
               <div className="p-2 rounded-2xl bg-amber-500/10 text-amber-600 dark:text-amber-400">
                 <Layers size={18} />
               </div>
               <div>
-                <h3 className="text-sm font-bold text-slate-800 dark:text-slate-100">
+                <h3 className="text-sm font-bold text-slate-800 dark:text-amber-50">
                   Metallurgy & Material Grade
                 </h3>
-                <p className="text-[11px] text-slate-500 dark:text-slate-400">
+                <p className="text-[11px] text-amber-300/50 dark:text-amber-200/60">
                   Strength, structural density & thermal properties
                 </p>
               </div>
@@ -609,28 +609,28 @@ export const VehicleWorkshopPanel: React.FC<VehicleWorkshopPanelProps> = ({
                   className={`p-3 rounded-2xl border cursor-pointer transition-all duration-200 space-y-1.5 ${
                     isSelected
                       ? "bg-amber-500/10 dark:bg-amber-950/40 border-amber-500 dark:border-amber-400 shadow-[0_0_12px_rgba(6,182,212,0.25)]"
-                      : "bg-slate-50 dark:bg-base-950/60 border-slate-200 dark:border-slate-800 hover:border-slate-400 dark:hover:border-slate-700"
+                      : "bg-slate-50 dark:bg-base-950/60 border-slate-200 dark:border-amber-800/30 hover:border-slate-400 dark:hover:border-amber-700/30"
                   }`}
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <div className={`w-3.5 h-3.5 rounded-full border flex items-center justify-center ${isSelected ? "border-amber-500 bg-amber-500" : "border-slate-400"}`}>
-                        {isSelected && <div className="w-1.5 h-1.5 rounded-full bg-slate-950" />}
+                        {isSelected && <div className="w-1.5 h-1.5 rounded-full bg-amber-950/80" />}
                       </div>
-                      <strong className="text-xs text-slate-800 dark:text-slate-200 font-bold">
+                      <strong className="text-xs text-slate-800 dark:text-amber-50 font-bold">
                         {tier.name}
                       </strong>
                     </div>
-                    <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded ${isSelected ? "bg-amber-500 text-slate-950" : "bg-slate-200 dark:bg-base-900 text-slate-500"}`}>
+                    <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded ${isSelected ? "bg-amber-500 text-slate-950" : "bg-slate-200 dark:bg-base-900 text-amber-300/50"}`}>
                       {tier.badge}
                     </span>
                   </div>
 
                   {/* Stat Badges Strip */}
-                  <div className="flex items-center justify-between text-[10px] text-slate-500 dark:text-slate-400 pt-1 font-mono">
+                  <div className="flex items-center justify-between text-[10px] text-amber-300/50 dark:text-amber-200/60 pt-1 font-mono">
                     <div>
                       <span>Mass: </span>
-                      <strong className={isSelected ? "text-amber-600 dark:text-amber-400" : "text-slate-700 dark:text-slate-300"}>
+                      <strong className={isSelected ? "text-amber-600 dark:text-amber-400" : "text-amber-500 dark:text-amber-100/80"}>
                         {tier.weightLabel}
                       </strong>
                     </div>
@@ -654,17 +654,17 @@ export const VehicleWorkshopPanel: React.FC<VehicleWorkshopPanelProps> = ({
         </div>
 
         {/* ── COLUMN 3: ENGINEERING IMPACT & DELTAS + ADVISORY ── */}
-        <div className="bg-white/80 dark:bg-base-900/90 border border-slate-200 dark:border-slate-800 rounded-3xl p-5 backdrop-blur-xl shadow-xl space-y-4">
-          <div className="flex items-center justify-between pb-2 border-b border-slate-200 dark:border-slate-800">
+        <div className="bg-white/80 dark:bg-base-900/90 border border-slate-200 dark:border-amber-800/30 rounded-3xl p-5 backdrop-blur-xl shadow-xl space-y-4">
+          <div className="flex items-center justify-between pb-2 border-b border-slate-200 dark:border-amber-800/30">
             <div className="flex items-center gap-2.5">
               <div className="p-2 rounded-2xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
                 <Activity size={18} />
               </div>
               <div>
-                <h3 className="text-sm font-bold text-slate-800 dark:text-slate-100">
+                <h3 className="text-sm font-bold text-slate-800 dark:text-amber-50">
                   Specification & Impact
                 </h3>
-                <p className="text-[11px] text-slate-500 dark:text-slate-400">
+                <p className="text-[11px] text-amber-300/50 dark:text-amber-200/60">
                   Structural mass, torsional rigidity & vehicle dynamics
                 </p>
               </div>
@@ -676,36 +676,36 @@ export const VehicleWorkshopPanel: React.FC<VehicleWorkshopPanelProps> = ({
 
           {/* 4 Dynamic Metric Delta Tiles */}
           <div className="grid grid-cols-2 gap-2.5">
-            <div className="p-3 rounded-2xl bg-slate-50 dark:bg-base-950/70 border border-slate-200 dark:border-slate-800 space-y-1">
-              <span className="text-[10px] text-slate-500 block">TOTAL CURB WEIGHT</span>
+            <div className="p-3 rounded-2xl bg-slate-50 dark:bg-base-950/70 border border-slate-200 dark:border-amber-800/30 space-y-1">
+              <span className="text-[10px] text-amber-300/50 block">TOTAL CURB WEIGHT</span>
               <strong className="text-sm text-amber-600 dark:text-amber-400 font-bold block">
                 {Math.round(currentStats.weight || 1480)} kg
               </strong>
-              <span className="text-[10px] text-slate-400 block">Baseline sports sedan</span>
+              <span className="text-[10px] text-amber-200/60 block">Baseline sports sedan</span>
             </div>
 
-            <div className="p-3 rounded-2xl bg-slate-50 dark:bg-base-950/70 border border-slate-200 dark:border-slate-800 space-y-1">
-              <span className="text-[10px] text-slate-500 block">TORSIONAL RIGIDITY</span>
+            <div className="p-3 rounded-2xl bg-slate-50 dark:bg-base-950/70 border border-slate-200 dark:border-amber-800/30 space-y-1">
+              <span className="text-[10px] text-amber-300/50 block">TORSIONAL RIGIDITY</span>
               <strong className="text-sm text-emerald-600 dark:text-emerald-400 font-bold block">
                 {currentGrade === "titanium" ? "42.5" : currentGrade === "billet" ? "34.0" : currentGrade === "forged" ? "28.5" : "22.0"} kNm/deg
               </strong>
-              <span className="text-[10px] text-slate-400 block">Chassis deflection resistance</span>
+              <span className="text-[10px] text-amber-200/60 block">Chassis deflection resistance</span>
             </div>
 
-            <div className="p-3 rounded-2xl bg-slate-50 dark:bg-base-950/70 border border-slate-200 dark:border-slate-800 space-y-1">
-              <span className="text-[10px] text-slate-500 block">LATERAL CORNERING GRIP</span>
+            <div className="p-3 rounded-2xl bg-slate-50 dark:bg-base-950/70 border border-slate-200 dark:border-amber-800/30 space-y-1">
+              <span className="text-[10px] text-amber-300/50 block">LATERAL CORNERING GRIP</span>
               <strong className="text-sm text-amber-600 dark:text-amber-400 font-bold block">
                 {vehicleConfig.tireCompound === "slick" ? "1.45 G" : vehicleConfig.tireCompound === "supersoft" ? "1.32 G" : vehicleConfig.tireCompound === "soft" ? "1.24 G" : "1.12 G"}
               </strong>
-              <span className="text-[10px] text-slate-400 block">Peak skidpad load</span>
+              <span className="text-[10px] text-amber-200/60 block">Peak skidpad load</span>
             </div>
 
-            <div className="p-3 rounded-2xl bg-slate-50 dark:bg-base-950/70 border border-slate-200 dark:border-slate-800 space-y-1">
-              <span className="text-[10px] text-slate-500 block">HARDWARE BOM COST</span>
+            <div className="p-3 rounded-2xl bg-slate-50 dark:bg-base-950/70 border border-slate-200 dark:border-amber-800/30 space-y-1">
+              <span className="text-[10px] text-amber-300/50 block">HARDWARE BOM COST</span>
               <strong className="text-sm text-amber-600 dark:text-amber-400 font-bold block">
                 ${Math.round(currentStats.cost || 28500).toLocaleString()}
               </strong>
-              <span className="text-[10px] text-slate-400 block">Subsystem component sum</span>
+              <span className="text-[10px] text-amber-200/60 block">Subsystem component sum</span>
             </div>
           </div>
 
@@ -715,7 +715,7 @@ export const VehicleWorkshopPanel: React.FC<VehicleWorkshopPanelProps> = ({
               <Info size={14} />
               <span>ENGINEERING ADVISORY</span>
             </div>
-            <p className="text-[11px] text-slate-600 dark:text-slate-400 leading-relaxed">
+            <p className="text-[11px] text-amber-400 dark:text-amber-200/60 leading-relaxed">
               {currentGrade === "titanium"
                 ? "Titanium & Carbon Monocoque maximizes torsional stiffness (+32 kNm/deg) and eliminates cornering body flex at high cost (~4.5x BOM)."
                 : currentGrade === "billet"

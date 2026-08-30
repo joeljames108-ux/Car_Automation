@@ -10,13 +10,13 @@ export const TwoTonePaintEditor: React.FC = () => {
   const updatePaintConfig = useExteriorAssemblyStore((s) => s.updatePaintConfig);
 
   return (
-    <div className="p-4 rounded-2xl bg-slate-950 border border-white/10 space-y-3 text-xs font-mono">
+    <div className="p-4 rounded-2xl bg-amber-950/80 border border-white/10 space-y-3 text-xs font-mono">
       <div className="flex items-center justify-between">
-        <span className="text-slate-300 font-bold">Livery Style:</span>
+        <span className="text-amber-100/80 font-bold">Livery Style:</span>
         <select
           value={paintConfig.liveryStyle}
           onChange={(e) => updatePaintConfig({ liveryStyle: e.target.value as any })}
-          className="bg-slate-900 border border-white/10 rounded-lg px-2 py-1 text-amber-300"
+          className="bg-amber-900/50 border border-white/10 rounded-lg px-2 py-1 text-amber-300"
         >
           <option value="monotone">Monotone Clean</option>
           <option value="two_tone_roof">Two-Tone Contrast Roof</option>
@@ -27,7 +27,7 @@ export const TwoTonePaintEditor: React.FC = () => {
       </div>
 
       <div className="flex items-center justify-between">
-        <span className="text-slate-300">Stripe Width:</span>
+        <span className="text-amber-100/80">Stripe Width:</span>
         <input
           type="range"
           min="80"
@@ -35,7 +35,7 @@ export const TwoTonePaintEditor: React.FC = () => {
           step="10"
           value={paintConfig.stripeWidthMm}
           onChange={(e) => updatePaintConfig({ stripeWidthMm: parseInt(e.target.value) })}
-          className="w-32 h-1.5 bg-slate-800 rounded appearance-none accent-amber-400 cursor-pointer"
+          className="w-32 h-1.5 bg-amber-800/35 rounded appearance-none accent-amber-400 cursor-pointer"
         />
         <span className="text-amber-400">{paintConfig.stripeWidthMm}mm</span>
       </div>

@@ -100,7 +100,7 @@ const LivePitWallPanelComponent: React.FC = () => {
   ];
 
   return (
-    <div className="space-y-6 text-slate-100 animate-fade-in">
+    <div className="space-y-6 text-amber-50 animate-fade-in">
       {/* 3D Track Viewport Component */}
       <div className="relative rounded-2xl overflow-hidden border border-white/10 shadow-2xl bg-base-950">
         <TrackRacing3DViewport />
@@ -111,10 +111,10 @@ const LivePitWallPanelComponent: React.FC = () => {
             <span className="w-2 h-2 rounded-full bg-amber-400 animate-ping" />
             <span>LIVE PIT WALL TELEMETRY</span>
           </div>
-          <span className="text-slate-600">|</span>
+          <span className="text-amber-400">|</span>
           <span className="text-emerald-400 font-bold">P1 LEADER GAP: {gapToLeaderSec}s</span>
-          <span className="text-slate-600">|</span>
-          <span className={`font-bold ${drsEnabled ? "text-amber-400" : "text-slate-500"}`}>
+          <span className="text-amber-400">|</span>
+          <span className={`font-bold ${drsEnabled ? "text-amber-400" : "text-amber-300/50"}`}>
             DRS: {drsEnabled ? "ACTIVE (ZONE 2)" : "CLOSED"}
           </span>
         </div>
@@ -122,54 +122,54 @@ const LivePitWallPanelComponent: React.FC = () => {
 
       {/* Live Telemetry Data Stream Cards */}
       <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 gap-3">
-        <div className="glass-panel p-3.5 rounded-xl border-white/5 bg-slate-900/60">
-          <div className="text-[10px] font-mono text-slate-400 uppercase flex items-center gap-1.5">
+        <div className="glass-panel p-3.5 rounded-xl border-white/5 bg-amber-900/40">
+          <div className="text-[10px] font-mono text-amber-200/60 uppercase flex items-center gap-1.5">
             <Gauge size={13} className="text-amber-400" /> Ground Speed
           </div>
           <div className="text-xl font-mono font-black text-amber-300 mt-1">
-            {speedKmh} <span className="text-xs text-slate-500 font-normal">km/h</span>
+            {speedKmh} <span className="text-xs text-amber-300/50 font-normal">km/h</span>
           </div>
-          <div className="text-[9px] text-slate-500 mt-0.5">Top: 324 km/h</div>
+          <div className="text-[9px] text-amber-300/50 mt-0.5">Top: 324 km/h</div>
         </div>
 
-        <div className="glass-panel p-3.5 rounded-xl border-white/5 bg-slate-900/60">
-          <div className="text-[10px] font-mono text-slate-400 uppercase flex items-center gap-1.5">
+        <div className="glass-panel p-3.5 rounded-xl border-white/5 bg-amber-900/40">
+          <div className="text-[10px] font-mono text-amber-200/60 uppercase flex items-center gap-1.5">
             <Activity size={13} className="text-emerald-400" /> Gear & Engine RPM
           </div>
           <div className="text-xl font-mono font-black text-emerald-300 mt-1">
-            G{gear} <span className="text-xs text-slate-500 font-normal">@{rpm} RPM</span>
+            G{gear} <span className="text-xs text-amber-300/50 font-normal">@{rpm} RPM</span>
           </div>
-          <div className="text-[9px] text-slate-500 mt-0.5">Rev Limit: 12,500</div>
+          <div className="text-[9px] text-amber-300/50 mt-0.5">Rev Limit: 12,500</div>
         </div>
 
-        <div className="glass-panel p-3.5 rounded-xl border-white/5 bg-slate-900/60">
-          <div className="text-[10px] font-mono text-slate-400 uppercase flex items-center gap-1.5">
+        <div className="glass-panel p-3.5 rounded-xl border-white/5 bg-amber-900/40">
+          <div className="text-[10px] font-mono text-amber-200/60 uppercase flex items-center gap-1.5">
             <Zap size={13} className="text-amber-400" /> Hybrid ERS Battery
           </div>
           <div className="text-xl font-mono font-black text-amber-300 mt-1">
-            {ersDeployPct}% <span className="text-xs text-slate-500 font-normal">SOC</span>
+            {ersDeployPct}% <span className="text-xs text-amber-300/50 font-normal">SOC</span>
           </div>
-          <div className="text-[9px] text-slate-500 mt-0.5">Harvest: +160 kW</div>
+          <div className="text-[9px] text-amber-300/50 mt-0.5">Harvest: +160 kW</div>
         </div>
 
-        <div className="glass-panel p-3.5 rounded-xl border-white/5 bg-slate-900/60">
-          <div className="text-[10px] font-mono text-slate-400 uppercase flex items-center gap-1.5">
+        <div className="glass-panel p-3.5 rounded-xl border-white/5 bg-amber-900/40">
+          <div className="text-[10px] font-mono text-amber-200/60 uppercase flex items-center gap-1.5">
             <Clock size={13} className="text-amber-400" /> Pit Stop Target
           </div>
           <div className="text-xl font-mono font-black text-amber-300 mt-1">
             LAP {pitWindowLap}
           </div>
-          <div className="text-[9px] text-slate-500 mt-0.5">Stationary: ~2.35s</div>
+          <div className="text-[9px] text-amber-300/50 mt-0.5">Stationary: ~2.35s</div>
         </div>
 
-        <div className="glass-panel p-3.5 rounded-xl border-white/5 bg-slate-900/60 col-span-2 sm:col-span-1">
-          <div className="text-[10px] font-mono text-slate-400 uppercase flex items-center gap-1.5">
+        <div className="glass-panel p-3.5 rounded-xl border-white/5 bg-amber-900/40 col-span-2 sm:col-span-1">
+          <div className="text-[10px] font-mono text-amber-200/60 uppercase flex items-center gap-1.5">
             <Wind size={13} className="text-amber-400" /> Aero Balance
           </div>
           <div className="text-xl font-mono font-black text-amber-300 mt-1">
-            44.2% <span className="text-xs text-slate-500 font-normal">Front</span>
+            44.2% <span className="text-xs text-amber-300/50 font-normal">Front</span>
           </div>
-          <div className="text-[9px] text-slate-500 mt-0.5">Downforce: 1,420 kg</div>
+          <div className="text-[9px] text-amber-300/50 mt-0.5">Downforce: 1,420 kg</div>
         </div>
       </div>
 
@@ -177,8 +177,8 @@ const LivePitWallPanelComponent: React.FC = () => {
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
         {/* Left Column: Pit Strategy & Compound (5 cols) */}
         <div className="lg:col-span-5 space-y-4">
-          <div className="glass-panel p-5 rounded-2xl border-white/10 bg-slate-900/70 space-y-4">
-            <h3 className="text-xs font-bold text-slate-300 flex items-center gap-2">
+          <div className="glass-panel p-5 rounded-2xl border-white/10 bg-amber-900/40 space-y-4">
+            <h3 className="text-xs font-bold text-amber-100/80 flex items-center gap-2">
               <Zap className="w-4 h-4 text-amber-400" />
               <span>PIT STOP STRATEGY EXECUTION</span>
             </h3>
@@ -213,28 +213,28 @@ const LivePitWallPanelComponent: React.FC = () => {
                   className={`w-full text-left p-3.5 rounded-xl border transition-all ${
                     activeStrategy === st.id
                       ? "bg-amber-500/20 border-amber-500/60 text-white shadow-lg shadow-amber-500/10"
-                      : "bg-slate-950/70 border-slate-800 text-slate-400 hover:border-slate-700"
+                      : "bg-amber-950/70 border-amber-800/30 text-amber-200/60 hover:border-amber-700/30"
                   }`}
                 >
                   <div className="flex items-center justify-between">
                     <span className="text-xs font-bold">{st.label}</span>
                     <span className="text-[10px] font-mono text-amber-300 font-semibold">{st.delta}</span>
                   </div>
-                  <div className="text-[10px] text-slate-400 mt-1">{st.desc}</div>
+                  <div className="text-[10px] text-amber-200/60 mt-1">{st.desc}</div>
                 </button>
               ))}
             </div>
 
             {/* Tire Compound Switcher */}
             <div className="pt-2 border-t border-white/5 space-y-2">
-              <label className="text-[10px] font-mono text-slate-400 uppercase font-bold flex items-center gap-1.5">
+              <label className="text-[10px] font-mono text-amber-200/60 uppercase font-bold flex items-center gap-1.5">
                 <Flame size={12} className="text-rose-400" /> Next Stint Fitted Compound
               </label>
               <div className="grid grid-cols-2 gap-2">
                 {[
                   { id: "SOFT_SLICK", label: "Soft Slick (C5)", color: "border-red-500/60 text-red-300 bg-red-500/10" },
                   { id: "MEDIUM_SLICK", label: "Medium (C3)", color: "border-yellow-500/60 text-yellow-300 bg-yellow-500/10" },
-                  { id: "HARD_SLICK", label: "Hard Slick (C1)", color: "border-slate-400/60 text-slate-200 bg-slate-400/10" },
+                  { id: "HARD_SLICK", label: "Hard Slick (C1)", color: "border-slate-400/60 text-amber-50 bg-slate-400/10" },
                   { id: "WET_INTERMEDIATE", label: "Inter Wet", color: "border-emerald-500/60 text-emerald-300 bg-emerald-500/10" },
                 ].map(tc => (
                   <button
@@ -244,7 +244,7 @@ const LivePitWallPanelComponent: React.FC = () => {
                       setSelectedTireCompound(tc.id as any);
                     }}
                     className={`p-2.5 rounded-xl border text-xs font-bold text-center transition-all ${
-                      selectedTireCompound === tc.id ? tc.color : "bg-slate-950/60 border-slate-800 text-slate-500 hover:text-slate-300"
+                      selectedTireCompound === tc.id ? tc.color : "bg-amber-950/60 border-amber-800/30 text-amber-300/50 hover:text-amber-100/80"
                     }`}
                   >
                     {tc.label}
@@ -258,13 +258,13 @@ const LivePitWallPanelComponent: React.FC = () => {
         {/* Center/Right Column: 4-Corner Pyrometry & Live Radio (7 cols) */}
         <div className="lg:col-span-7 space-y-4">
           {/* 4-Corner Tire Pyrometry HUD */}
-          <div className="glass-panel p-5 rounded-2xl border-white/10 bg-slate-900/70 space-y-3">
+          <div className="glass-panel p-5 rounded-2xl border-white/10 bg-amber-900/40 space-y-3">
             <div className="flex items-center justify-between">
-              <h3 className="text-xs font-bold text-slate-300 flex items-center gap-2">
+              <h3 className="text-xs font-bold text-amber-100/80 flex items-center gap-2">
                 <Disc className="w-4 h-4 text-amber-400" />
                 <span>4-CORNER LIVE TIRE PYROMETRY & THERMALS</span>
               </h3>
-              <span className="text-[10px] font-mono text-slate-400 bg-slate-950 px-2 py-0.5 rounded border border-white/5">
+              <span className="text-[10px] font-mono text-amber-200/60 bg-amber-950/80 px-2 py-0.5 rounded border border-white/5">
                 Optimum Window: 95°C – 105°C
               </span>
             </div>
@@ -276,7 +276,7 @@ const LivePitWallPanelComponent: React.FC = () => {
                   <span>FRONT LEFT (FL)</span>
                   <span>{tires.fl.tempC}°C</span>
                 </div>
-                <div className="text-[10px] text-slate-400 mt-1 flex justify-between">
+                <div className="text-[10px] text-amber-200/60 mt-1 flex justify-between">
                   <span>Press: {tires.fl.pressureBar} bar</span>
                   <span>Wear: {tires.fl.wearPct}%</span>
                 </div>
@@ -288,7 +288,7 @@ const LivePitWallPanelComponent: React.FC = () => {
                   <span>FRONT RIGHT (FR)</span>
                   <span>{tires.fr.tempC}°C</span>
                 </div>
-                <div className="text-[10px] text-slate-400 mt-1 flex justify-between">
+                <div className="text-[10px] text-amber-200/60 mt-1 flex justify-between">
                   <span>Press: {tires.fr.pressureBar} bar</span>
                   <span>Wear: {tires.fr.wearPct}%</span>
                 </div>
@@ -300,7 +300,7 @@ const LivePitWallPanelComponent: React.FC = () => {
                   <span>REAR LEFT (RL)</span>
                   <span>{tires.rl.tempC}°C</span>
                 </div>
-                <div className="text-[10px] text-slate-400 mt-1 flex justify-between">
+                <div className="text-[10px] text-amber-200/60 mt-1 flex justify-between">
                   <span>Press: {tires.rl.pressureBar} bar</span>
                   <span>Wear: {tires.rl.wearPct}%</span>
                 </div>
@@ -312,7 +312,7 @@ const LivePitWallPanelComponent: React.FC = () => {
                   <span>REAR RIGHT (RR)</span>
                   <span>{tires.rr.tempC}°C</span>
                 </div>
-                <div className="text-[10px] text-slate-400 mt-1 flex justify-between">
+                <div className="text-[10px] text-amber-200/60 mt-1 flex justify-between">
                   <span>Press: {tires.rr.pressureBar} bar</span>
                   <span>Wear: {tires.rr.wearPct}%</span>
                 </div>
@@ -321,8 +321,8 @@ const LivePitWallPanelComponent: React.FC = () => {
           </div>
 
           {/* Live Driver Radio Feed */}
-          <div className="glass-panel p-5 rounded-2xl border-white/10 bg-slate-900/70 space-y-3">
-            <h3 className="text-xs font-bold text-slate-300 flex items-center gap-2">
+          <div className="glass-panel p-5 rounded-2xl border-white/10 bg-amber-900/40 space-y-3">
+            <h3 className="text-xs font-bold text-amber-100/80 flex items-center gap-2">
               <Radio className="w-4 h-4 text-amber-400 animate-pulse" />
               <span>LIVE DRIVER RADIO TELEMETRY FEED</span>
             </h3>
@@ -336,12 +336,12 @@ const LivePitWallPanelComponent: React.FC = () => {
                       ? "bg-rose-500/10 border-rose-500/30 text-rose-200"
                       : m.type === "WARNING"
                       ? "bg-amber-500/10 border-amber-500/30 text-amber-200"
-                      : "bg-slate-950/70 border-white/5 text-slate-300"
+                      : "bg-amber-950/70 border-white/5 text-amber-100/80"
                   }`}
                 >
                   <div className="flex justify-between text-[10px] font-mono mb-1">
                     <span className="font-bold text-amber-400">{m.sender}</span>
-                    <span className="text-slate-400">LAP {m.lap}</span>
+                    <span className="text-amber-200/60">LAP {m.lap}</span>
                   </div>
                   <div className="font-mono text-[11px] leading-relaxed">{m.msg}</div>
                 </div>

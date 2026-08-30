@@ -35,7 +35,7 @@ export const AgentNotificationCenter: React.FC<AgentNotificationCenterProps> = (
       {/* Floating Badge Trigger */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center gap-2.5 px-4 py-3 bg-slate-900/90 backdrop-blur-md border border-amber-500/40 rounded-full shadow-2xl hover:border-amber-400 transition-all text-white font-medium text-xs group"
+        className="flex items-center gap-2.5 px-4 py-3 bg-amber-900/40 backdrop-blur-md border border-amber-500/40 rounded-full shadow-2xl hover:border-amber-400 transition-all text-white font-medium text-xs group"
       >
         <div className="relative">
           <Bell size={16} className="text-amber-400 group-hover:rotate-12 transition-transform" />
@@ -51,15 +51,15 @@ export const AgentNotificationCenter: React.FC<AgentNotificationCenterProps> = (
 
       {/* Expanded Notification Drawer */}
       {isOpen && (
-        <div className="mt-3 w-96 max-h-[500px] overflow-y-auto bg-slate-950/95 backdrop-blur-xl border border-slate-800 rounded-2xl p-4 shadow-2xl text-slate-200 flex flex-col gap-3">
-          <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+        <div className="mt-3 w-96 max-h-[500px] overflow-y-auto bg-amber-950/95 backdrop-blur-xl border border-amber-800/30 rounded-2xl p-4 shadow-2xl text-amber-50 flex flex-col gap-3">
+          <div className="flex items-center justify-between border-b border-amber-800/30 pb-3">
             <div className="flex items-center gap-2">
               <Zap size={16} className="text-amber-400" />
               <h4 className="font-semibold text-sm text-white">Live AI Diagnostics</h4>
             </div>
             <button
               onClick={() => setIsOpen(false)}
-              className="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800"
+              className="text-amber-200/60 hover:text-white p-1 rounded-lg hover:bg-amber-800/35"
             >
               <X size={14} />
             </button>
@@ -88,7 +88,7 @@ export const AgentNotificationCenter: React.FC<AgentNotificationCenterProps> = (
                   </div>
                   <button
                     onClick={() => handleDismiss(f.id)}
-                    className="text-slate-400 hover:text-white p-0.5"
+                    className="text-amber-200/60 hover:text-white p-0.5"
                   >
                     <X size={12} />
                   </button>

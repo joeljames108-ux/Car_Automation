@@ -112,14 +112,14 @@ export function NeonHorizonCommandPalette({
               setQuery(e.target.value);
               setSelectedIndex(0);
             }}
-            className="flex-1 bg-transparent text-sm nh-font-headline text-slate-100 placeholder:text-slate-500 focus:outline-none"
+            className="flex-1 bg-transparent text-sm nh-font-headline text-amber-50 placeholder:text-amber-300/50 focus:outline-none"
           />
-          <span className="text-[10px] nh-font-mono text-slate-500 px-2 py-0.5 rounded bg-white/5 border border-white/10">
+          <span className="text-[10px] nh-font-mono text-amber-300/50 px-2 py-0.5 rounded bg-white/5 border border-white/10">
             ESC
           </span>
           <button
             onClick={onClose}
-            className="text-slate-400 hover:text-slate-200 transition-colors p-1 cursor-pointer"
+            className="text-amber-200/60 hover:text-amber-50 transition-colors p-1 cursor-pointer"
           >
             <X size={16} />
           </button>
@@ -128,7 +128,7 @@ export function NeonHorizonCommandPalette({
         {/* Results List */}
         <div className="max-h-96 overflow-y-auto p-2 flex flex-col gap-1 nh-scroll">
           {filteredItems.length === 0 ? (
-            <div className="p-8 text-center text-xs nh-font-mono text-slate-400">
+            <div className="p-8 text-center text-xs nh-font-mono text-amber-200/60">
               No matching studio or command found for "{query}".
             </div>
           ) : (
@@ -146,11 +146,11 @@ export function NeonHorizonCommandPalette({
                   className={`px-4 py-3 rounded-xl flex items-center justify-between transition-all cursor-pointer ${
  isSelected
  ? "bg-white/[0.08] text-white border border-white/15"
- : "text-slate-300 hover:bg-white/5 border border-transparent"
+ : "text-amber-100/80 hover:bg-white/5 border border-transparent"
  }`}
                 >
                   <div className="flex items-center gap-3">
-                    <span className={isSelected ? "text-sky-300" : "text-slate-400"}>
+                    <span className={isSelected ? "text-sky-300" : "text-amber-200/60"}>
                       {item.icon}
                     </span>
                     <span className="text-xs font-bold nh-font-headline">{item.label}</span>
@@ -168,7 +168,7 @@ export function NeonHorizonCommandPalette({
         </div>
 
         {/* Footer Hotkey Guide */}
-        <div className="px-5 py-2.5 bg-black/30 border-t border-white/8 flex items-center justify-between text-[11px] nh-font-mono text-slate-400">
+        <div className="px-5 py-2.5 bg-black/30 border-t border-white/8 flex items-center justify-between text-[11px] nh-font-mono text-amber-200/60">
           <div className="flex items-center gap-3">
             <span>↑↓ Navigate</span>
             <span>↵ Select</span>

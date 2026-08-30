@@ -128,9 +128,9 @@ export function LiquidButton({
 
   const variantClasses = {
     default:
-      "bg-white/10 dark:bg-white/5 text-slate-800 dark:text-slate-100 hover:bg-white/20 dark:hover:bg-white/10 active:scale-[0.97] hover:scale-105 border border-white/20 dark:border-white/10",
+      "bg-white/10 dark:bg-white/5 text-slate-800 dark:text-amber-50 hover:bg-white/20 dark:hover:bg-white/10 active:scale-[0.97] hover:scale-105 border border-white/20 dark:border-white/10",
     ghost:
-      "bg-transparent text-slate-700 dark:text-slate-300 hover:bg-black/5 dark:hover:bg-white/10 active:scale-[0.97] hover:scale-105",
+      "bg-transparent text-amber-500 dark:text-amber-100/80 hover:bg-black/5 dark:hover:bg-white/10 active:scale-[0.97] hover:scale-105",
     outline:
       "bg-transparent border border-zinc-300 dark:border-zinc-700 text-zinc-800 dark:text-zinc-200 hover:bg-zinc-100 dark:hover:bg-zinc-800 active:scale-[0.97]",
     pill:
@@ -207,7 +207,7 @@ export function LiquidGlassCard({
   const variantStyles = {
     warm: "border-amber-200/40 dark:border-amber-500/20 bg-gradient-to-br from-amber-50/40 via-white/30 to-amber-100/20 dark:from-zinc-900/60 dark:via-zinc-900/40 dark:to-black/80",
     cool: "border-sky-200/40 dark:border-sky-500/20 bg-gradient-to-br from-sky-50/40 via-white/30 to-sky-100/20 dark:from-zinc-900/60 dark:via-zinc-900/40 dark:to-black/80",
-    dark: "border-zinc-800/80 bg-zinc-950/70 text-slate-100 shadow-2xl",
+    dark: "border-zinc-800/80 bg-zinc-950/70 text-amber-50 shadow-2xl",
     neutral: "border-white/30 dark:border-white/10 bg-white/20 dark:bg-black/30",
   }[variant];
 

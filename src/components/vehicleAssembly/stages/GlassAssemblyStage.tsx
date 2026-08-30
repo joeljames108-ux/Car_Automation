@@ -65,10 +65,10 @@ export const GlassAssemblyStage: React.FC<GlassAssemblyStageProps> = ({
             <Sparkles size={18} />
           </div>
           <div>
-            <h3 className="text-sm font-bold font-mono text-slate-800 dark:text-slate-100 uppercase tracking-wider">
+            <h3 className="text-sm font-bold font-mono text-slate-800 dark:text-amber-50 uppercase tracking-wider">
               STAGE 8: GLASS CANOPY & ENGINE COVER
             </h3>
-            <p className="text-[11px] font-mono text-slate-500 dark:text-slate-400">
+            <p className="text-[11px] font-mono text-amber-300/50 dark:text-amber-200/60">
               Bond the windshield canopy, polycarbonate side windows and Lexan engine cover.
             </p>
           </div>
@@ -91,12 +91,12 @@ export const GlassAssemblyStage: React.FC<GlassAssemblyStageProps> = ({
               className={`p-3.5 rounded-2xl text-left transition-all border cursor-pointer ${
                 isSelected
                   ? "bg-amber-500/20 border-amber-500/60 shadow-md ring-1 ring-amber-500/40"
-                  : "bg-base-900/60 border-base-800 hover:border-base-700 text-slate-400"
+                  : "bg-base-900/60 border-base-800 hover:border-base-700 text-amber-200/60"
               }`}
             >
-              <div className="font-bold text-xs font-mono text-slate-900 dark:text-slate-100 mb-1">{g.label}</div>
-              <p className="text-[10px] text-slate-500 dark:text-slate-400 mb-2">{g.desc}</p>
-              <div className="space-y-0.5 text-[10px] font-mono text-slate-400 border-t border-base-800/60 pt-2">
+              <div className="font-bold text-xs font-mono text-slate-900 dark:text-amber-50 mb-1">{g.label}</div>
+              <p className="text-[10px] text-amber-300/50 dark:text-amber-200/60 mb-2">{g.desc}</p>
+              <div className="space-y-0.5 text-[10px] font-mono text-amber-200/60 border-t border-base-800/60 pt-2">
                 <div>Weight: <strong className="text-amber-400">{g.weight}</strong></div>
                 <div>Spec: <strong className="text-emerald-400">{g.safety}</strong></div>
               </div>
@@ -115,16 +115,16 @@ export const GlassAssemblyStage: React.FC<GlassAssemblyStageProps> = ({
         }`}
       >
         <div className="flex items-center justify-between mb-1">
-          <span className="font-bold text-xs font-mono text-slate-900 dark:text-slate-100 flex items-center gap-1.5">
+          <span className="font-bold text-xs font-mono text-slate-900 dark:text-amber-50 flex items-center gap-1.5">
             🔍 LEXAN ENGINE COVER INSPECTION WINDOW
           </span>
           <span className={`px-2 py-0.5 rounded-lg text-[10px] font-mono font-bold border ${
-            lexanEngineCover ? "bg-emerald-500/20 border-emerald-500/50 text-emerald-500" : "bg-base-800 border-base-700 text-slate-500"
+            lexanEngineCover ? "bg-emerald-500/20 border-emerald-500/50 text-emerald-500" : "bg-base-800 border-base-700 text-amber-300/50"
           }`}>
             {lexanEngineCover ? "✓ FITTED" : "OFF"}
           </span>
         </div>
-        <p className="text-[10px] text-slate-500 dark:text-slate-400">
+        <p className="text-[10px] text-amber-300/50 dark:text-amber-200/60">
           Hardcoated Lexan deck panel over the engine bay with billet quick-release fastener rings — scrutineer-visible
           without removing the decklid. -4.2 kg vs glass equivalent.
         </p>

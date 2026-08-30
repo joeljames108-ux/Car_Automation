@@ -4,7 +4,7 @@
  * ============================================================================
  * Displays 8 animated progress bars, overall rating badge, weight & cost.
  * Subscribes to the Zustand interiorDashboardConfigStore for real-time updates.
- * Includes interactive Compare Interiors modal trigger.
+ * Includes interactive Compare Interiors and Cabin Acoustic NVH Lab triggers.
  * ============================================================================
  */
 
@@ -13,6 +13,7 @@ import {
   useInteriorDashboardConfigStore,
 } from "../../state/interiorDashboardConfigStore";
 import { InteriorCompareModal } from "./InteriorCompareModal";
+import { InteriorSoundModal } from "./InteriorSoundModal";
 
 // Stat bar icon SVGs (inline for zero-dep rendering)
 const STAT_ICONS: Record<string, string> = {
@@ -50,6 +51,7 @@ const STAT_KEYS = [
 
 export const InteriorMetricsPanel: React.FC = () => {
   const [compareModalOpen, setCompareModalOpen] = useState(false);
+  const [soundModalOpen, setSoundModalOpen] = useState(false);
   const metrics = useInteriorDashboardConfigStore((s) => s.metrics);
 
   const ratingColor =
@@ -140,19 +142,41 @@ export const InteriorMetricsPanel: React.FC = () => {
         </span>
       </div>
 
-      {/* Compare Button */}
-      <button
-        className="idash-compare-btn"
-        onClick={() => setCompareModalOpen(true)}
-      >
-        <span style={{ marginRight: 6 }}>⇌</span>
-        COMPARE INTERIORS
-      </button>
+      {/* Actions (Compare & Acoustic Lab) */}
+      <div className="flex flex-col gap-2 mt-2">
+        <button
+          className="idash-compare-btn"
+          onClick={() => setCompareModalOpen(true)}
+          type="button"
+        >
+          <span style={{ marginRight: 6 }}>⇌</span>
+          COMPARE INTERIORS
+        </button>
 
-      {/* Compare Modal */}
+        <button
+          className="idash-compare-btn"
+          style={{
+            borderColor: "rgba(56, 189, 248, 0.4)",
+            color: "#38bdf8",
+            background: "rgba(14, 165, 233, 0.08)",
+          }}
+          onClick={() => setSoundModalOpen(true)}
+          type="button"
+        >
+          <span style={{ marginRight: 6 }}>🔊</span>
+          ACOUSTIC LAB &amp; NVH
+        </button>
+      </div>
+
+      {/* Modals */}
       <InteriorCompareModal
         isOpen={compareModalOpen}
         onClose={() => setCompareModalOpen(false)}
+      />
+
+      <InteriorSoundModal
+        isOpen={soundModalOpen}
+        onClose={() => setSoundModalOpen(false)}
       />
     </div>
   );

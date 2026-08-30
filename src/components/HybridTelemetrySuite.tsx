@@ -36,14 +36,14 @@ export function HybridTelemetrySuite() {
             </div>
             <div>
               <div className="flex flex-wrap items-center gap-2">
-                <h3 className="text-xs font-extrabold text-slate-800 dark:text-slate-100 font-mono tracking-wider">
+                <h3 className="text-xs font-extrabold text-slate-800 dark:text-amber-50 font-mono tracking-wider">
                   21 HYBRID & EV TELEMETRY SUITE
                 </h3>
                 <span className="px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-700 dark:text-amber-300 text-[9px] font-mono font-bold border border-amber-500/40 uppercase tracking-wider shrink-0">
                   REAL-TIME ODE PHYSICS
                 </span>
               </div>
-              <p className="text-[11px] text-slate-600 dark:text-slate-400 font-mono mt-0.5">
+              <p className="text-[11px] text-amber-400 dark:text-amber-200/60 font-mono mt-0.5">
                 SiC/GaN Switching · Submerged Cooling · Axial Vectoring
               </p>
             </div>
@@ -59,7 +59,7 @@ export function HybridTelemetrySuite() {
               className={`px-3 py-1 rounded-lg text-xs font-mono font-bold capitalize transition-all cursor-pointer whitespace-nowrap shrink-0 ${
                 activeTab === tab
                   ? "bg-amber-500 text-black shadow-[0_0_12px_rgba(34,211,238,0.5)] scale-[1.02]"
-                  : "text-slate-700 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-white/60 dark:hover:bg-white/10 border border-transparent"
+                  : "text-amber-500 dark:text-amber-200/60 hover:text-slate-900 dark:hover:text-amber-50 hover:bg-white/60 dark:hover:bg-white/10 border border-transparent"
               }`}
             >
               {tab}
@@ -72,47 +72,47 @@ export function HybridTelemetrySuite() {
       {activeTab === "overview" && (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           <div className="p-3.5 rounded-xl bg-white/50 dark:bg-base-950/60 border border-white/60 dark:border-amber-500/30 backdrop-blur-md space-y-1.5 shadow-sm hover:bg-white/70 dark:hover:bg-base-950/80 hover:border-amber-500/60 transition-all">
-            <span className="text-[10px] font-mono font-bold uppercase text-slate-600 dark:text-slate-400 tracking-wider block">Total Combined Power</span>
+            <span className="text-[10px] font-mono font-bold uppercase text-amber-400 dark:text-amber-200/60 tracking-wider block">Total Combined Power</span>
             <div className="flex items-baseline gap-1.5">
               <span className="text-xl font-extrabold font-mono text-amber-600 dark:text-amber-300">
                 {physicsData.sportsOutput.boostedPowerHp + Math.round((eng.hybridMotorPower || 180) * 1.341)}
               </span>
               <span className="text-xs font-bold font-mono text-amber-700 dark:text-amber-400">HP</span>
             </div>
-            <p className="text-[10px] text-slate-500 dark:text-slate-400 font-mono pt-1 border-t border-slate-200/50 dark:border-base-800">ICE V12 + Electric Assist (SiC Inverter)</p>
+            <p className="text-[10px] text-amber-300/50 dark:text-amber-200/60 font-mono pt-1 border-t border-slate-200/50 dark:border-base-800">ICE V12 + Electric Assist (SiC Inverter)</p>
           </div>
 
           <div className="p-3.5 rounded-xl bg-white/50 dark:bg-base-950/60 border border-white/60 dark:border-amber-500/30 backdrop-blur-md space-y-1.5 shadow-sm hover:bg-white/70 dark:hover:bg-base-950/80 hover:border-amber-500/60 transition-all">
-            <span className="text-[10px] font-mono font-bold uppercase text-slate-600 dark:text-slate-400 tracking-wider block">Inverter Efficiency</span>
+            <span className="text-[10px] font-mono font-bold uppercase text-amber-400 dark:text-amber-200/60 tracking-wider block">Inverter Efficiency</span>
             <div className="flex items-baseline gap-1.5">
               <span className="text-xl font-extrabold font-mono text-emerald-600 dark:text-emerald-400">
                 {(physicsData.peOutput.inverterEfficiencyFraction * 100).toFixed(1)}%
               </span>
               <span className="text-xs font-bold font-mono text-emerald-700 dark:text-emerald-300">eff</span>
             </div>
-            <p className="text-[10px] text-slate-500 dark:text-slate-400 font-mono pt-1 border-t border-slate-200/50 dark:border-base-800">{eng.voltageArchitecture || 800}V High Voltage Rail</p>
+            <p className="text-[10px] text-amber-300/50 dark:text-amber-200/60 font-mono pt-1 border-t border-slate-200/50 dark:border-base-800">{eng.voltageArchitecture || 800}V High Voltage Rail</p>
           </div>
 
           <div className="p-3.5 rounded-xl bg-white/50 dark:bg-base-950/60 border border-white/60 dark:border-amber-500/30 backdrop-blur-md space-y-1.5 shadow-sm hover:bg-white/70 dark:hover:bg-base-950/80 hover:border-amber-500/60 transition-all">
-            <span className="text-[10px] font-mono font-bold uppercase text-slate-600 dark:text-slate-400 tracking-wider block">Battery Pack Temp</span>
+            <span className="text-[10px] font-mono font-bold uppercase text-amber-400 dark:text-amber-200/60 tracking-wider block">Battery Pack Temp</span>
             <div className="flex items-baseline gap-1.5">
               <span className="text-xl font-extrabold font-mono text-amber-600 dark:text-amber-400">
                 {physicsData.batteryOutput.packTemperatureC}°C
               </span>
               <span className="text-xs font-bold font-mono text-amber-700 dark:text-amber-300">steady</span>
             </div>
-            <p className="text-[10px] text-slate-500 dark:text-slate-400 font-mono pt-1 border-t border-slate-200/50 dark:border-base-800">SOH: {(physicsData.batteryOutput.stateOfHealthFraction * 100).toFixed(0)}% Optimal</p>
+            <p className="text-[10px] text-amber-300/50 dark:text-amber-200/60 font-mono pt-1 border-t border-slate-200/50 dark:border-base-800">SOH: {(physicsData.batteryOutput.stateOfHealthFraction * 100).toFixed(0)}% Optimal</p>
           </div>
 
           <div className="p-3.5 rounded-xl bg-white/50 dark:bg-base-950/60 border border-white/60 dark:border-amber-500/30 backdrop-blur-md space-y-1.5 shadow-sm hover:bg-white/70 dark:hover:bg-base-950/80 hover:border-amber-500/60 transition-all">
-            <span className="text-[10px] font-mono font-bold uppercase text-slate-600 dark:text-slate-400 tracking-wider block">NACS 350kW Fast Charge</span>
+            <span className="text-[10px] font-mono font-bold uppercase text-amber-400 dark:text-amber-200/60 tracking-wider block">NACS 350kW Fast Charge</span>
             <div className="flex items-baseline gap-1.5">
               <span className="text-xl font-extrabold font-mono text-amber-600 dark:text-amber-400">
                 {physicsData.chargingOutput.chargeTimeMinutes}
               </span>
-              <span className="text-xs font-bold font-mono text-slate-700 dark:text-slate-300">mins (10-80%)</span>
+              <span className="text-xs font-bold font-mono text-amber-500 dark:text-amber-100/80">mins (10-80%)</span>
             </div>
-            <p className="text-[10px] text-slate-500 dark:text-slate-400 font-mono pt-1 border-t border-slate-200/50 dark:border-base-800">V2G/V2H: {physicsData.chargingOutput.v2xAvailablePowerKw} kW Output</p>
+            <p className="text-[10px] text-amber-300/50 dark:text-amber-200/60 font-mono pt-1 border-t border-slate-200/50 dark:border-base-800">V2G/V2H: {physicsData.chargingOutput.v2xAvailablePowerKw} kW Output</p>
           </div>
         </div>
       )}
@@ -125,15 +125,15 @@ export function HybridTelemetrySuite() {
           </h4>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
             <div className="p-3 rounded-xl bg-white/40 dark:bg-base-900/60 border border-white/50 dark:border-base-800 space-y-1">
-              <span className="text-[10px] text-slate-600 dark:text-slate-400 font-mono block font-bold">Stator Copper Loss (I²R)</span>
+              <span className="text-[10px] text-amber-400 dark:text-amber-200/60 font-mono block font-bold">Stator Copper Loss (I²R)</span>
               <div className="text-base font-bold font-mono text-amber-600 dark:text-amber-400">{physicsData.motorOutput.copperLossKw} kW</div>
             </div>
             <div className="p-3 rounded-xl bg-white/40 dark:bg-base-900/60 border border-white/50 dark:border-base-800 space-y-1">
-              <span className="text-[10px] text-slate-600 dark:text-slate-400 font-mono block font-bold">Iron Core Hysteresis Loss</span>
+              <span className="text-[10px] text-amber-400 dark:text-amber-200/60 font-mono block font-bold">Iron Core Hysteresis Loss</span>
               <div className="text-base font-bold font-mono text-amber-600 dark:text-amber-400">{physicsData.motorOutput.ironCoreLossKw} kW</div>
             </div>
             <div className="p-3 rounded-xl bg-white/40 dark:bg-base-900/60 border border-white/50 dark:border-base-800 space-y-1">
-              <span className="text-[10px] text-slate-600 dark:text-slate-400 font-mono block font-bold">Field Weakening Status</span>
+              <span className="text-[10px] text-amber-400 dark:text-amber-200/60 font-mono block font-bold">Field Weakening Status</span>
               <div className="text-xs font-bold font-mono text-amber-600 dark:text-amber-400 mt-0.5">
                 {physicsData.motorOutput.isFieldWeakeningActive ? "ACTIVE (High-Speed)" : "INACTIVE (Max Torque)"}
               </div>
@@ -150,19 +150,19 @@ export function HybridTelemetrySuite() {
           </h4>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             <div className="p-3 rounded-xl bg-white/40 dark:bg-base-900/60 border border-white/50 dark:border-base-800 space-y-1">
-              <span className="text-[10px] text-slate-600 dark:text-slate-400 font-mono block font-bold">Open Circuit Voltage</span>
-              <div className="text-base font-bold font-mono text-slate-800 dark:text-slate-100">{physicsData.batteryOutput.openCircuitVoltageV} V</div>
+              <span className="text-[10px] text-amber-400 dark:text-amber-200/60 font-mono block font-bold">Open Circuit Voltage</span>
+              <div className="text-base font-bold font-mono text-slate-800 dark:text-amber-50">{physicsData.batteryOutput.openCircuitVoltageV} V</div>
             </div>
             <div className="p-3 rounded-xl bg-white/40 dark:bg-base-900/60 border border-white/50 dark:border-base-800 space-y-1">
-              <span className="text-[10px] text-slate-600 dark:text-slate-400 font-mono block font-bold">Internal Resistance (R_int)</span>
+              <span className="text-[10px] text-amber-400 dark:text-amber-200/60 font-mono block font-bold">Internal Resistance (R_int)</span>
               <div className="text-base font-bold font-mono text-emerald-600 dark:text-emerald-400">{physicsData.batteryOutput.internalResistanceOhm} Ω</div>
             </div>
             <div className="p-3 rounded-xl bg-white/40 dark:bg-base-900/60 border border-white/50 dark:border-base-800 space-y-1">
-              <span className="text-[10px] text-slate-600 dark:text-slate-400 font-mono block font-bold">Max Continuous Discharge</span>
+              <span className="text-[10px] text-amber-400 dark:text-amber-200/60 font-mono block font-bold">Max Continuous Discharge</span>
               <div className="text-base font-bold font-mono text-amber-600 dark:text-amber-400">{physicsData.batteryOutput.maxContinuousDischargeKw} kW</div>
             </div>
             <div className="p-3 rounded-xl bg-white/40 dark:bg-base-900/60 border border-white/50 dark:border-base-800 space-y-1">
-              <span className="text-[10px] text-slate-600 dark:text-slate-400 font-mono block font-bold">Thermal Runaway Risk</span>
+              <span className="text-[10px] text-amber-400 dark:text-amber-200/60 font-mono block font-bold">Thermal Runaway Risk</span>
               <div className="text-base font-bold font-mono text-emerald-600 dark:text-emerald-400">
                 {(physicsData.batteryOutput.thermalRunawayRiskFraction * 100).toFixed(0)}% (SAFE)
               </div>
@@ -179,15 +179,15 @@ export function HybridTelemetrySuite() {
           </h4>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
             <div className="p-3 rounded-xl bg-white/40 dark:bg-base-900/60 border border-white/50 dark:border-base-800 space-y-1">
-              <span className="text-[10px] text-slate-600 dark:text-slate-400 font-mono block font-bold">Conduction Loss (I² × R_on)</span>
-              <div className="text-base font-bold font-mono text-slate-800 dark:text-slate-100">{physicsData.peOutput.conductionLossKw} kW</div>
+              <span className="text-[10px] text-amber-400 dark:text-amber-200/60 font-mono block font-bold">Conduction Loss (I² × R_on)</span>
+              <div className="text-base font-bold font-mono text-slate-800 dark:text-amber-50">{physicsData.peOutput.conductionLossKw} kW</div>
             </div>
             <div className="p-3 rounded-xl bg-white/40 dark:bg-base-900/60 border border-white/50 dark:border-base-800 space-y-1">
-              <span className="text-[10px] text-slate-600 dark:text-slate-400 font-mono block font-bold">16 kHz Switching Loss</span>
-              <div className="text-base font-bold font-mono text-slate-800 dark:text-slate-100">{physicsData.peOutput.switchingLossKw} kW</div>
+              <span className="text-[10px] text-amber-400 dark:text-amber-200/60 font-mono block font-bold">16 kHz Switching Loss</span>
+              <div className="text-base font-bold font-mono text-slate-800 dark:text-amber-50">{physicsData.peOutput.switchingLossKw} kW</div>
             </div>
             <div className="p-3 rounded-xl bg-white/40 dark:bg-base-900/60 border border-white/50 dark:border-base-800 space-y-1">
-              <span className="text-[10px] text-slate-600 dark:text-slate-400 font-mono block font-bold">ISO 26262 Isolation Resistance</span>
+              <span className="text-[10px] text-amber-400 dark:text-amber-200/60 font-mono block font-bold">ISO 26262 Isolation Resistance</span>
               <div className="text-base font-bold font-mono text-emerald-600 dark:text-emerald-400">{physicsData.peOutput.isolationResistanceMohm} MΩ</div>
             </div>
           </div>
@@ -202,15 +202,15 @@ export function HybridTelemetrySuite() {
           </h4>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
             <div className="p-3 rounded-xl bg-white/40 dark:bg-base-900/60 border border-white/50 dark:border-base-800 space-y-1">
-              <span className="text-[10px] text-slate-600 dark:text-slate-400 font-mono block font-bold">Energy Recovered per Stop</span>
+              <span className="text-[10px] text-amber-400 dark:text-amber-200/60 font-mono block font-bold">Energy Recovered per Stop</span>
               <div className="text-base font-bold font-mono text-emerald-600 dark:text-emerald-400">{physicsData.regenOutput.energyRecoveredKwh} kWh</div>
             </div>
             <div className="p-3 rounded-xl bg-white/40 dark:bg-base-900/60 border border-white/50 dark:border-base-800 space-y-1">
-              <span className="text-[10px] text-slate-600 dark:text-slate-400 font-mono block font-bold">Peak Regenerative Power</span>
+              <span className="text-[10px] text-amber-400 dark:text-amber-200/60 font-mono block font-bold">Peak Regenerative Power</span>
               <div className="text-base font-bold font-mono text-amber-600 dark:text-amber-400">{physicsData.regenOutput.peakRegenPowerKw} kW</div>
             </div>
             <div className="p-3 rounded-xl bg-white/40 dark:bg-base-900/60 border border-white/50 dark:border-base-800 space-y-1">
-              <span className="text-[10px] text-slate-600 dark:text-slate-400 font-mono block font-bold">Deceleration G-Force</span>
+              <span className="text-[10px] text-amber-400 dark:text-amber-200/60 font-mono block font-bold">Deceleration G-Force</span>
               <div className="text-base font-bold font-mono text-amber-700 dark:text-amber-300">{physicsData.regenOutput.decelerationG} G</div>
             </div>
           </div>
@@ -225,15 +225,15 @@ export function HybridTelemetrySuite() {
           </h4>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
             <div className="p-3 rounded-xl bg-white/40 dark:bg-base-900/60 border border-white/50 dark:border-base-800 space-y-1">
-              <span className="text-[10px] text-slate-600 dark:text-slate-400 font-mono block font-bold">Electric Torque Fill Boost</span>
+              <span className="text-[10px] text-amber-400 dark:text-amber-200/60 font-mono block font-bold">Electric Torque Fill Boost</span>
               <div className="text-base font-bold font-mono text-emerald-600 dark:text-emerald-400">+{physicsData.sportsOutput.boostedTorqueNm} Nm</div>
             </div>
             <div className="p-3 rounded-xl bg-white/40 dark:bg-base-900/60 border border-white/50 dark:border-base-800 space-y-1">
-              <span className="text-[10px] text-slate-600 dark:text-slate-400 font-mono block font-bold">Turbo Lag Reduction</span>
+              <span className="text-[10px] text-amber-400 dark:text-amber-200/60 font-mono block font-bold">Turbo Lag Reduction</span>
               <div className="text-base font-bold font-mono text-amber-600 dark:text-amber-400">-{physicsData.sportsOutput.turboLagReductionSec}s</div>
             </div>
             <div className="p-3 rounded-xl bg-white/40 dark:bg-base-900/60 border border-white/50 dark:border-base-800 space-y-1">
-              <span className="text-[10px] text-slate-600 dark:text-slate-400 font-mono block font-bold">0-60 mph Sprint Delta</span>
+              <span className="text-[10px] text-amber-400 dark:text-amber-200/60 font-mono block font-bold">0-60 mph Sprint Delta</span>
               <div className="text-base font-bold font-mono text-amber-700 dark:text-amber-300">{physicsData.sportsOutput.zeroToSixtyDeltaSec}s</div>
             </div>
           </div>

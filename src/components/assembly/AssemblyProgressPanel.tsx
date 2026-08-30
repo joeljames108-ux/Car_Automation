@@ -88,11 +88,11 @@ export function AssemblyProgressPanel({
   const assemblyComponents = useMemo(() => getAssemblyComponents(engineConfig), [engineConfig]);
 
   return (
-    <div className={`flex flex-col bg-[#0b0f19]/90 border border-slate-800/80 rounded-2xl p-4 backdrop-blur-xl shadow-2xl h-full select-none ${className}`}>
+    <div className={`flex flex-col bg-[#0b0f19]/90 border border-amber-800/30 rounded-2xl p-4 backdrop-blur-xl shadow-2xl h-full select-none ${className}`}>
       {/* Top Header */}
-      <div className="pb-3 border-b border-slate-800/80 mb-3">
+      <div className="pb-3 border-b border-amber-800/30 mb-3">
         <div className="flex items-center justify-between">
-          <h3 className="text-xs font-bold text-slate-100 uppercase tracking-wider flex items-center gap-1.5">
+          <h3 className="text-xs font-bold text-amber-50 uppercase tracking-wider flex items-center gap-1.5">
             <Sparkles size={14} className="text-amber-400" />
             Assembly Dashboard
           </h3>
@@ -110,7 +110,7 @@ export function AssemblyProgressPanel({
               <span className="text-[9px] font-mono text-amber-400 uppercase tracking-widest block font-bold">
                 NEXT RECOMMENDED STEP
               </span>
-              <span className="text-xs font-bold text-slate-100">
+              <span className="text-xs font-bold text-amber-50">
                 {nextRecommendedComponent.name}
               </span>
             </div>
@@ -131,14 +131,14 @@ export function AssemblyProgressPanel({
             <Check size={18} />
           </div>
           <h4 className="text-xs font-bold text-emerald-300">Assembly 100% Complete!</h4>
-          <p className="text-[10px] text-slate-300 font-mono">Factory Quality Rating: {qualityScore}%</p>
+          <p className="text-[10px] text-amber-100/80 font-mono">Factory Quality Rating: {qualityScore}%</p>
         </div>
       )}
 
       {/* Live Cumulative Stat Counters Grid */}
       <div className="grid grid-cols-2 gap-2 mb-3">
         <div className="bg-base-850 border border-base-750 rounded-xl p-2.5">
-          <span className="text-[10px] font-mono text-slate-400 flex items-center gap-1">
+          <span className="text-[10px] font-mono text-amber-200/60 flex items-center gap-1">
             <TrendingUp size={11} className="text-amber-400" /> Peak Power
           </span>
           <div className="text-sm font-mono font-bold text-amber-300 mt-0.5">
@@ -147,7 +147,7 @@ export function AssemblyProgressPanel({
         </div>
 
         <div className="bg-base-850 border border-base-750 rounded-xl p-2.5">
-          <span className="text-[10px] font-mono text-slate-400 flex items-center gap-1">
+          <span className="text-[10px] font-mono text-amber-200/60 flex items-center gap-1">
             <Zap size={11} className="text-pink-400" /> Peak Torque
           </span>
           <div className="text-sm font-mono font-bold text-pink-300 mt-0.5">
@@ -156,7 +156,7 @@ export function AssemblyProgressPanel({
         </div>
 
         <div className="bg-base-850 border border-base-750 rounded-xl p-2.5">
-          <span className="text-[10px] font-mono text-slate-400 flex items-center gap-1">
+          <span className="text-[10px] font-mono text-amber-200/60 flex items-center gap-1">
             <ShieldCheck size={11} className="text-emerald-400" /> Durability
           </span>
           <div className="text-sm font-mono font-bold text-emerald-300 mt-0.5">
@@ -165,7 +165,7 @@ export function AssemblyProgressPanel({
         </div>
 
         <div className="bg-base-850 border border-base-750 rounded-xl p-2.5">
-          <span className="text-[10px] font-mono text-slate-400 flex items-center gap-1">
+          <span className="text-[10px] font-mono text-amber-200/60 flex items-center gap-1">
             <DollarSign size={11} className="text-amber-400" /> Total Cost
           </span>
           <div className="text-sm font-mono font-bold text-amber-300 mt-0.5">
@@ -181,7 +181,7 @@ export function AssemblyProgressPanel({
 
       {/* Vertical Timeline Build Checklist */}
       <div className="flex-1 min-h-0 overflow-y-auto pr-1 mb-3 scrollbar-thin scrollbar-thumb-base-750">
-        <h4 className="text-[10px] font-mono text-slate-400 uppercase tracking-wider mb-2">
+        <h4 className="text-[10px] font-mono text-amber-200/60 uppercase tracking-wider mb-2">
           Vertical Build Timeline ({installedComponents.length}/{assemblyComponents.length})
         </h4>
         <div className="relative pl-3 space-y-2 border-l border-base-750 ml-1.5">
@@ -197,7 +197,7 @@ export function AssemblyProgressPanel({
                     ? "bg-emerald-950/20 text-emerald-300 border border-emerald-500/20"
                     : isCurrent
                     ? "bg-amber-950/40 text-amber-200 border border-amber-400/50 animate-pulse"
-                    : "bg-base-850/50 text-slate-400 border border-base-800"
+                    : "bg-base-850/50 text-amber-200/60 border border-base-800"
                 }`}
               >
                 {/* Timeline Connector Dot */}
@@ -217,11 +217,11 @@ export function AssemblyProgressPanel({
                   ) : isCurrent ? (
                     <Play size={13} className="text-amber-400 shrink-0" />
                   ) : (
-                    <Circle size={13} className="text-slate-600 shrink-0" />
+                    <Circle size={13} className="text-amber-400 shrink-0" />
                   )}
                   <span className="truncate">{comp.name}</span>
                 </div>
-                <span className="text-[9px] text-slate-500 uppercase shrink-0">{comp.category}</span>
+                <span className="text-[9px] text-amber-300/50 uppercase shrink-0">{comp.category}</span>
               </div>
             );
           })}
@@ -235,7 +235,7 @@ export function AssemblyProgressPanel({
           className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 px-2 rounded-xl text-[11px] font-mono font-bold transition-all border ${
             isExplodedView
               ? "bg-amber-500/20 text-amber-300 border-amber-500/40"
-              : "bg-base-800 text-slate-300 border-base-750 hover:bg-base-750"
+              : "bg-base-800 text-amber-100/80 border-base-750 hover:bg-base-750"
           }`}
         >
           <Eye size={13} /> {isExplodedView ? "Exploded" : "Condensed"}
@@ -263,7 +263,7 @@ export function AssemblyProgressPanel({
             </button>
             <button
               onClick={() => setShowResetConfirm(false)}
-              className="px-2 py-1 rounded-lg bg-base-800 text-slate-400 text-[10px] font-mono hover:bg-base-750"
+              className="px-2 py-1 rounded-lg bg-base-800 text-amber-200/60 text-[10px] font-mono hover:bg-base-750"
             >
               Cancel
             </button>

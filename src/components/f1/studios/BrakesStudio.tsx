@@ -140,15 +140,15 @@ export const BrakesStudio: React.FC = memo(function BrakesStudio() {
   return (
     <div className="space-y-6 animate-fade-in-up">
       {/* Studio Header */}
-      <div className="glass-panel p-6 border-red-500/20 bg-gradient-to-r from-slate-900 via-slate-900/90 to-red-950/30 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+      <div className="glass-panel p-6 border-red-500/20 bg-gradient-to-r from-amber-900/60 via-slate-900/90 to-red-950/30 flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2 mb-2">
             <Disc className="text-red-400" size={24} />
-            <h2 className="text-xl font-bold text-slate-100 tracking-wide">
+            <h2 className="text-xl font-bold text-amber-50 tracking-wide">
               Carbon-Carbon Brakes & Brake-By-Wire Architecture
             </h2>
           </div>
-          <p className="text-xs text-slate-400 max-w-2xl">
+          <p className="text-xs text-amber-200/60 max-w-2xl">
             Engineer the 5.8G deceleration braking system: 1050-hole ventilated carbon discs (operating at up to 1000°C), monobloc 6-piston calipers, front/rear brake cooling duct aero trade-offs, and rear MGU-K regen blending.
           </p>
         </div>
@@ -156,16 +156,16 @@ export const BrakesStudio: React.FC = memo(function BrakesStudio() {
         <div className="flex items-center gap-3">
           <div className="text-right">
             <div className="text-2xl font-black font-mono text-red-400">
-              {car.computedMaxBrakingGLong} <span className="text-xs text-slate-400 font-normal">G</span>
+              {car.computedMaxBrakingGLong} <span className="text-xs text-amber-200/60 font-normal">G</span>
             </div>
-            <div className="text-[10px] text-slate-400 uppercase tracking-wider">Peak Deceleration</div>
+            <div className="text-[10px] text-amber-200/60 uppercase tracking-wider">Peak Deceleration</div>
           </div>
         </div>
       </div>
 
       {/* Interactive 3D Carbon-Carbon Brake Assembly Viewport */}
-      <div className="w-full bg-slate-950/90 rounded-2xl border border-red-500/30 p-4 space-y-3 shadow-xl">
-        <div className="flex items-center justify-between font-mono text-xs text-slate-300">
+      <div className="w-full bg-amber-950/90 rounded-2xl border border-red-500/30 p-4 space-y-3 shadow-xl">
+        <div className="flex items-center justify-between font-mono text-xs text-amber-100/80">
           <div className="flex items-center gap-2 font-bold text-red-400">
             <Box size={14} />
             <span>3D CARBON-CARBON BRAKE DISC & MONOBLOC CALIPER VIEWPORT</span>
@@ -187,8 +187,8 @@ export const BrakesStudio: React.FC = memo(function BrakesStudio() {
           </div>
         </div>
 
-        <div ref={mount3DRef} className="w-full h-[240px] rounded-xl overflow-hidden cursor-grab active:cursor-grabbing border border-slate-800 relative">
-          <div className="absolute bottom-2 right-2 text-[9px] font-mono text-slate-400 bg-black/60 px-2 py-0.5 rounded border border-slate-700 pointer-events-none">
+        <div ref={mount3DRef} className="w-full h-[240px] rounded-xl overflow-hidden cursor-grab active:cursor-grabbing border border-amber-800/30 relative">
+          <div className="absolute bottom-2 right-2 text-[9px] font-mono text-amber-200/60 bg-black/60 px-2 py-0.5 rounded border border-amber-700/30 pointer-events-none">
             ORBIT: DRAG TO ROTATE 3D CALIPER · SCROLL TO ZOOM
           </div>
         </div>
@@ -197,8 +197,8 @@ export const BrakesStudio: React.FC = memo(function BrakesStudio() {
       {/* Control Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
         {/* 1. Carbon Disc Ventilation Holes */}
-        <div className="bg-slate-900/60 p-4 rounded-xl border border-slate-800 space-y-3">
-          <label className="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center justify-between">
+        <div className="bg-amber-900/40 p-4 rounded-xl border border-amber-800/30 space-y-3">
+          <label className="text-xs font-bold uppercase tracking-wider text-amber-100/80 flex items-center justify-between">
             <span>Disc Cooling Drill Pattern</span>
             <span className="text-[10px] text-red-400 font-mono">1,000°C Peak</span>
           </label>
@@ -211,21 +211,21 @@ export const BrakesStudio: React.FC = memo(function BrakesStudio() {
                 rearDiscHoleCount: e.target.value as BrakeDiscHolePattern,
               });
             }}
-            className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-red-500 cursor-pointer"
+            className="w-full bg-amber-800/35 border border-amber-700/30 rounded-lg px-3 py-2 text-xs text-amber-50 focus:outline-none focus:border-red-500 cursor-pointer"
           >
             <option value="600_HOLE_MEDIUM_COOLING">600 Holes (Low Drag / Silverstone)</option>
             <option value="1050_HOLE_HIGH_VENT">1050 Holes (Standard F1 GP)</option>
             <option value="1480_HOLE_CHEVRON_EXTREME">1480 Holes (Extreme Montreal / Singapore)</option>
           </select>
-          <p className="text-[11px] text-slate-500">
+          <p className="text-[11px] text-amber-300/50">
             More cooling holes reduce disc temperatures but reduce mechanical surface contact area.
           </p>
         </div>
 
         {/* 2. Default Brake Bias */}
-        <div className="bg-slate-900/60 p-4 rounded-xl border border-slate-800 space-y-2">
+        <div className="bg-amber-900/40 p-4 rounded-xl border border-amber-800/30 space-y-2">
           <div className="flex justify-between items-center text-xs">
-            <span className="font-bold text-slate-300 uppercase tracking-wider">Front Brake Bias</span>
+            <span className="font-bold text-amber-100/80 uppercase tracking-wider">Front Brake Bias</span>
             <span className="font-mono text-red-400 font-bold">{b.brakeBiasDefaultFrontPercent.toFixed(1)}% Front</span>
           </div>
           <input
@@ -237,7 +237,7 @@ export const BrakesStudio: React.FC = memo(function BrakesStudio() {
             onChange={(e) => updateBrakes({ brakeBiasDefaultFrontPercent: parseFloat(e.target.value) })}
             className="w-full accent-red-400 cursor-pointer"
           />
-          <div className="flex justify-between text-[10px] text-slate-500">
+          <div className="flex justify-between text-[10px] text-amber-300/50">
             <span>52.0% (Rear Bias / Rotate)</span>
             <span>56.5% (Standard)</span>
             <span>62.0% (Front Lock Risk)</span>
@@ -245,9 +245,9 @@ export const BrakesStudio: React.FC = memo(function BrakesStudio() {
         </div>
 
         {/* 3. Front Brake Duct Inlet Area */}
-        <div className="bg-slate-900/60 p-4 rounded-xl border border-slate-800 space-y-2">
+        <div className="bg-amber-900/40 p-4 rounded-xl border border-amber-800/30 space-y-2">
           <div className="flex justify-between items-center text-xs">
-            <span className="font-bold text-slate-300 uppercase tracking-wider">Front Brake Duct Inlet Size</span>
+            <span className="font-bold text-amber-100/80 uppercase tracking-wider">Front Brake Duct Inlet Size</span>
             <span className="font-mono text-red-400 font-bold">{b.frontBrakeDuctInletAreaCm2} cm²</span>
           </div>
           <input
@@ -259,7 +259,7 @@ export const BrakesStudio: React.FC = memo(function BrakesStudio() {
             onChange={(e) => updateBrakes({ frontBrakeDuctInletAreaCm2: parseInt(e.target.value) })}
             className="w-full accent-red-400 cursor-pointer"
           />
-          <div className="flex justify-between text-[10px] text-slate-500">
+          <div className="flex justify-between text-[10px] text-amber-300/50">
             <span>45 cm² (Min Drag)</span>
             <span>78 cm²</span>
             <span>130 cm² (Max Cooling)</span>
@@ -267,9 +267,9 @@ export const BrakesStudio: React.FC = memo(function BrakesStudio() {
         </div>
 
         {/* 4. Brake-by-Wire Response Latency */}
-        <div className="bg-slate-900/60 p-4 rounded-xl border border-slate-800 space-y-2">
+        <div className="bg-amber-900/40 p-4 rounded-xl border border-amber-800/30 space-y-2">
           <div className="flex justify-between items-center text-xs">
-            <span className="font-bold text-slate-300 uppercase tracking-wider">BBW MGU-K Regen Response</span>
+            <span className="font-bold text-amber-100/80 uppercase tracking-wider">BBW MGU-K Regen Response</span>
             <span className="font-mono text-red-400 font-bold">{b.brakeByWireReactionTimeMs} ms</span>
           </div>
           <input
@@ -281,7 +281,7 @@ export const BrakesStudio: React.FC = memo(function BrakesStudio() {
             onChange={(e) => updateBrakes({ brakeByWireReactionTimeMs: parseInt(e.target.value) })}
             className="w-full accent-red-400 cursor-pointer"
           />
-          <div className="flex justify-between text-[10px] text-slate-500">
+          <div className="flex justify-between text-[10px] text-amber-300/50">
             <span>4 ms (Ultra Fast)</span>
             <span>6 ms</span>
             <span>12 ms</span>
@@ -289,8 +289,8 @@ export const BrakesStudio: React.FC = memo(function BrakesStudio() {
         </div>
 
         {/* 5. Brake Pad Carbon Compound */}
-        <div className="bg-slate-900/60 p-4 rounded-xl border border-slate-800 space-y-3">
-          <label className="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center justify-between">
+        <div className="bg-amber-900/40 p-4 rounded-xl border border-amber-800/30 space-y-3">
+          <label className="text-xs font-bold uppercase tracking-wider text-amber-100/80 flex items-center justify-between">
             <span>Carbon-Carbon Pad Compound</span>
             <span className="text-[10px] text-red-400 font-mono">Bite Curve</span>
           </label>
@@ -300,19 +300,19 @@ export const BrakesStudio: React.FC = memo(function BrakesStudio() {
               playHMIClickSound();
               updateBrakes({ brakePadCompound: e.target.value as any });
             }}
-            className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-red-500 cursor-pointer"
+            className="w-full bg-amber-800/35 border border-amber-700/30 rounded-lg px-3 py-2 text-xs text-amber-50 focus:outline-none focus:border-red-500 cursor-pointer"
           >
             <option value="CARBONE_INDUSTRIE_CCR">Carbone Industrie CCR (Linear Modulation)</option>
             <option value="BREMBO_HIGH_FRICTION_CERAMIC">Brembo High-Initial-Bite Ceramic Matrix</option>
           </select>
-          <p className="text-[11px] text-slate-500">
+          <p className="text-[11px] text-amber-300/50">
             High-bite pads offer sharp initial deceleration into heavy braking zones like Monza Turn 1.
           </p>
         </div>
 
         {/* 6. High-Temp Hydraulic Fluid */}
-        <div className="bg-slate-900/60 p-4 rounded-xl border border-slate-800 space-y-3">
-          <label className="text-xs font-bold uppercase tracking-wider text-slate-300 flex items-center justify-between">
+        <div className="bg-amber-900/40 p-4 rounded-xl border border-amber-800/30 space-y-3">
+          <label className="text-xs font-bold uppercase tracking-wider text-amber-100/80 flex items-center justify-between">
             <span>Hydraulic Brake Fluid</span>
             <span className="text-[10px] text-red-400 font-mono">Boiling Point</span>
           </label>
@@ -322,12 +322,12 @@ export const BrakesStudio: React.FC = memo(function BrakesStudio() {
               playHMIClickSound();
               updateBrakes({ brakeFluidType: e.target.value as any });
             }}
-            className="w-full bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-red-500 cursor-pointer"
+            className="w-full bg-amber-800/35 border border-amber-700/30 rounded-lg px-3 py-2 text-xs text-amber-50 focus:outline-none focus:border-red-500 cursor-pointer"
           >
             <option value="SILICONE_ESTER_350C">Silicone Ester Racing Fluid (350°C Dry Boiling)</option>
             <option value="DOT_5_1_RACING">Castrol SRF DOT 5.1 Synthetic</option>
           </select>
-          <p className="text-[11px] text-slate-500">
+          <p className="text-[11px] text-amber-300/50">
             Zero-compressibility hydraulic fluid ensures a rock-solid pedal feel for the driver.
           </p>
         </div>

@@ -52,7 +52,7 @@ export const CinematicEngineeringHUD: React.FC<CinematicEngineeringHUDProps> = (
   return (
     <div className="relative w-full flex flex-col gap-3 font-mono select-none">
       {/* Top Engineering Control Ribbon */}
-      <div className="flex items-center justify-between flex-wrap gap-2.5 p-3 rounded-2xl bg-slate-950/85 border border-white/10 backdrop-blur-xl shadow-xl">
+      <div className="flex items-center justify-between flex-wrap gap-2.5 p-3 rounded-2xl bg-amber-950/85 border border-white/10 backdrop-blur-xl shadow-xl">
         {/* Left: Design vs Engineering Mode Switcher */}
         <div className="flex items-center gap-2">
           <button
@@ -63,7 +63,7 @@ export const CinematicEngineeringHUD: React.FC<CinematicEngineeringHUDProps> = (
             className={`px-3 py-1.5 rounded-xl border text-xs font-bold font-mono tracking-wider transition-all flex items-center gap-1.5 cursor-pointer ${
               isEngineeringMode
                 ? "bg-amber-500/20 text-amber-300 border-amber-400/50 shadow-[0_0_15px_rgba(6,182,212,0.3)]"
-                : "bg-white/5 text-slate-400 hover:text-white border-white/10 hover:bg-white/10"
+                : "bg-white/5 text-amber-200/60 hover:text-white border-white/10 hover:bg-white/10"
             }`}
           >
             <Layers size={13} className={isEngineeringMode ? "text-amber-400 animate-pulse" : ""} />
@@ -91,7 +91,7 @@ export const CinematicEngineeringHUD: React.FC<CinematicEngineeringHUDProps> = (
             className={`px-3 py-1.5 rounded-xl border text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
               thermalMapOpen
                 ? "bg-rose-500/20 text-rose-300 border-rose-500/40 shadow-[0_0_15px_rgba(244,63,94,0.3)]"
-                : "bg-white/5 text-slate-400 hover:text-white border-white/10 hover:bg-white/10"
+                : "bg-white/5 text-amber-200/60 hover:text-white border-white/10 hover:bg-white/10"
             }`}
           >
             <Thermometer size={13} className={thermalMapOpen ? "text-rose-400 animate-pulse" : ""} />
@@ -102,9 +102,9 @@ export const CinematicEngineeringHUD: React.FC<CinematicEngineeringHUDProps> = (
         {/* Right: Machine Heartbeat & RPM Pulse Indicator */}
         <div className="flex items-center gap-3">
           {/* Heartbeat EKG Pulse Wave */}
-          <div className="flex items-center gap-2 px-3 py-1 rounded-xl bg-slate-900/90 border border-white/10 shadow-inner">
+          <div className="flex items-center gap-2 px-3 py-1 rounded-xl bg-amber-900/40 border border-white/10 shadow-inner">
             <Radio size={12} className="text-emerald-400 animate-pulse" />
-            <span className="text-[10px] text-slate-400 font-bold">HEARTBEAT IDLE</span>
+            <span className="text-[10px] text-amber-200/60 font-bold">HEARTBEAT IDLE</span>
             <div className="w-16 h-3 flex items-center overflow-hidden">
               <svg className="w-full h-full" viewBox="0 0 60 14">
                 <path
@@ -130,7 +130,7 @@ export const CinematicEngineeringHUD: React.FC<CinematicEngineeringHUDProps> = (
               <Flame size={14} className="text-rose-400 animate-bounce" />
               <span>LIVE THERMAL DISSIPATION & PYROMETRY MAP</span>
             </span>
-            <span className="text-[10px] text-slate-400">MAX TOLERANCE: 950°C (INCONEL 718)</span>
+            <span className="text-[10px] text-amber-200/60">MAX TOLERANCE: 950°C (INCONEL 718)</span>
           </div>
 
           <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
@@ -142,11 +142,11 @@ export const CinematicEngineeringHUD: React.FC<CinematicEngineeringHUDProps> = (
               { label: "CARBON BRAKE DISCS", val: `${brakeTemp}°C`, status: "PEAK BITE", color: "#d97706" },
             ].map((th, i) => (
               <div key={i} className="p-2.5 rounded-xl bg-black/40 border border-white/10 flex flex-col gap-1">
-                <span className="text-[9px] text-slate-400 font-bold uppercase truncate">{th.label}</span>
+                <span className="text-[9px] text-amber-200/60 font-bold uppercase truncate">{th.label}</span>
                 <span className="text-sm font-black tracking-wider" style={{ color: th.color }}>
                   {th.val}
                 </span>
-                <span className="text-[8px] font-bold text-slate-500 uppercase">{th.status}</span>
+                <span className="text-[8px] font-bold text-amber-300/50 uppercase">{th.status}</span>
               </div>
             ))}
           </div>

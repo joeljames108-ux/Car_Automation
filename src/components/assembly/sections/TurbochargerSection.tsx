@@ -114,7 +114,7 @@ export function TurbochargerSection({
               onChange={(v) => updateEngine({ intercoolerType: v as EngineConfig["intercoolerType"] })}
             />
 
-            <div className="grid grid-cols-2 gap-2 pt-2 border-t border-slate-800/80">
+            <div className="grid grid-cols-2 gap-2 pt-2 border-t border-amber-800/30">
               <Slider
                 label="Compressor A/R"
                 value={engineConfig.compressorAR || 0.7}
@@ -133,7 +133,7 @@ export function TurbochargerSection({
               />
             </div>
 
-            <div className="pt-2 border-t border-slate-800/80">
+            <div className="pt-2 border-t border-amber-800/30">
               <Toggle
                 label="Motorsport Anti-Lag System (ALS)"
                 value={engineConfig.antiLag ?? false}
@@ -157,7 +157,7 @@ export function TurbochargerSection({
               onSelectVariant={onSelectVariant}
             />
           ) : (
-            <p className="text-xs font-mono text-slate-500">Loading material variants...</p>
+            <p className="text-xs font-mono text-amber-300/50">Loading material variants...</p>
           )}
         </SectionCard>
 

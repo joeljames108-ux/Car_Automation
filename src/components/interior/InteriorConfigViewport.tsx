@@ -142,13 +142,13 @@ export const InteriorConfigViewport: React.FC = () => {
         </div>
 
         {/* 3D WebGL vs 2D Schematic Toggle */}
-        <div className="flex items-center gap-1 bg-slate-900/90 p-1 rounded-xl border border-slate-800 ml-auto">
+        <div className="flex items-center gap-1 bg-amber-900/40 p-1 rounded-xl border border-amber-800/30 ml-auto">
           <button
             onClick={() => setViewportMode("3d")}
             className={`px-3 py-1 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
               viewportMode === "3d"
                 ? "bg-blue-600 text-white shadow-md shadow-blue-500/30"
-                : "text-slate-400 hover:text-slate-200"
+                : "text-amber-200/60 hover:text-amber-50"
             }`}
           >
             <Box size={13} />
@@ -160,7 +160,7 @@ export const InteriorConfigViewport: React.FC = () => {
             className={`px-3 py-1 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
               viewportMode === "2d"
                 ? "bg-blue-600 text-white shadow-md shadow-blue-500/30"
-                : "text-slate-400 hover:text-slate-200"
+                : "text-amber-200/60 hover:text-amber-50"
             }`}
           >
             <Layers size={13} />

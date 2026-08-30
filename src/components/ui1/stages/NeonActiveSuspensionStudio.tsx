@@ -28,7 +28,7 @@ export function NeonActiveSuspensionStudio() {
   const rollUnderCornering = ((100 - activeRollStiffness) * 0.015).toFixed(2);
 
   return (
-    <div className="w-full flex flex-col gap-6 text-slate-100 animate-nh-materialize">
+    <div className="w-full flex flex-col gap-6 text-amber-50 animate-nh-materialize">
       {/* Header */}
       <NeonHorizonGlassPanel
         variant="window"
@@ -71,13 +71,13 @@ export function NeonActiveSuspensionStudio() {
                 { pos: "REAR RIGHT (RR)", pressure: "160 BAR", height: "-2.0 mm", color: "text-emerald-300" },
               ].map((strut, idx) => (
                 <div key={idx} className="p-3 rounded-lg bg-[#0a111e] border border-white/10 flex flex-col gap-1 font-mono text-xs">
-                  <span className="text-[10px] text-slate-400 font-bold">{strut.pos}</span>
+                  <span className="text-[10px] text-amber-200/60 font-bold">{strut.pos}</span>
                   <div className="flex items-center justify-between">
-                    <span className="text-slate-400">Pressure:</span>
+                    <span className="text-amber-200/60">Pressure:</span>
                     <span className={`${strut.color} font-bold`}>{strut.pressure}</span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-slate-400">Venturi Gap:</span>
+                    <span className="text-amber-200/60">Venturi Gap:</span>
                     <span className="text-amber-300 font-bold">{strut.height}</span>
                   </div>
                 </div>
@@ -102,7 +102,7 @@ export function NeonActiveSuspensionStudio() {
                     className={`p-2.5 rounded-lg border text-center text-xs font-bold cursor-pointer transition-all ${
  isSelected
  ? "bg-sky-400/10 border-sky-400/30 text-sky-200"
- : "bg-[#0a111e] border-white/10 text-slate-400 hover:border-sky-400/25"
+ : "bg-[#0a111e] border-white/10 text-amber-200/60 hover:border-sky-400/25"
  }`}
                   >
                     {m.name}
@@ -148,11 +148,11 @@ export function NeonActiveSuspensionStudio() {
 
             <div className="p-3.5 rounded-xl bg-[#0a111e] border border-sky-400/15 flex flex-col gap-2 font-mono text-xs">
               <div className="flex items-center justify-between">
-                <span className="text-slate-400">48V Pump Power:</span>
+                <span className="text-amber-200/60">48V Pump Power:</span>
                 <span className="text-sky-300 font-bold">12 kW Peak Electric</span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-slate-400">Road Preview LiDAR:</span>
+                <span className="text-amber-200/60">Road Preview LiDAR:</span>
                 <span className="text-emerald-300 font-bold">15m Ahead Predictive</span>
               </div>
             </div>

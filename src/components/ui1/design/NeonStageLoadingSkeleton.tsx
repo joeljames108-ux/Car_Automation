@@ -16,10 +16,10 @@ export function NeonStageLoadingSkeleton({ stageName }: { stageName?: string }) 
               <span>INITIALIZING SUBSYSTEM</span>
               <span className="w-2 h-2 rounded-full bg-sky-300 animate-ping" />
             </div>
-            <div className="text-[11px] text-slate-400 font-mono">{stageName ? "Loading [" + stageName.toUpperCase() + "]" : "Streaming CAD..."}</div>
+            <div className="text-[11px] text-amber-200/60 font-mono">{stageName ? "Loading [" + stageName.toUpperCase() + "]" : "Streaming CAD..."}</div>
           </div>
         </div>
-        <div className="flex items-center gap-2 font-mono text-[10px] text-slate-500 bg-[#0e1626]/80 px-3 py-1.5 rounded-lg border border-white/[0.06]">
+        <div className="flex items-center gap-2 font-mono text-[10px] text-amber-300/50 bg-[#0e1626]/80 px-3 py-1.5 rounded-lg border border-white/[0.06]">
           <Activity size={12} className="text-sky-400 animate-pulse" /><span>120Hz STREAM</span>
         </div>
       </div>
@@ -32,7 +32,7 @@ export function NeonStageLoadingSkeleton({ stageName }: { stageName?: string }) 
           </div>
         ))}
       </div>
-      <div className="flex items-center justify-between text-[11px] font-mono text-slate-400 border-t border-white/[0.08] pt-4">
+      <div className="flex items-center justify-between text-[11px] font-mono text-amber-200/60 border-t border-white/[0.08] pt-4">
         <span>MEM: OK · SHADERS: COMPILING</span>
         <div className="w-48 h-1.5 bg-[#0e1626] rounded-full overflow-hidden border border-white/[0.08]">
           <div className="h-full bg-sky-400/60 w-2/3 rounded-full animate-pulse" />

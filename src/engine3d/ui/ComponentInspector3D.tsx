@@ -88,7 +88,7 @@ export const ComponentInspector3D: React.FC = () => {
           <div className="text-sm font-bold font-mono" style={{color: '#92400E'}}>${manifest.costUsd.toLocaleString()}</div>
         </div>
         {manifest.torqueSpec && (
-          <div className="col-span-2 pt-1 border-t border-slate-800">
+          <div className="col-span-2 pt-1 border-t border-amber-800/30">
             <div className="text-[10px] uppercase font-mono" style={{color: '#92400E'}}>{manifest.torqueSpec.fastenerName}</div>
             <div className="text-xs font-medium font-mono" style={{color: '#92400E'}}>
               Torque: {manifest.torqueSpec.snugNm} Nm {manifest.torqueSpec.finalAngleDeg > 0 && `+ ${manifest.torqueSpec.finalAngleDeg}°`}
@@ -96,7 +96,7 @@ export const ComponentInspector3D: React.FC = () => {
           </div>
         )}
         {manifest.clearanceSpec && (
-          <div className="col-span-2 pt-1 border-t border-slate-800">
+          <div className="col-span-2 pt-1 border-t border-amber-800/30">
             <div className="text-[10px] uppercase font-mono" style={{color: '#92400E'}}>{manifest.clearanceSpec.label}</div>
             <div className="text-xs font-medium font-mono" style={{color: '#92400E'}}>
               Target: {manifest.clearanceSpec.targetMm} mm ({manifest.clearanceSpec.minMm}–{manifest.clearanceSpec.maxMm} mm)

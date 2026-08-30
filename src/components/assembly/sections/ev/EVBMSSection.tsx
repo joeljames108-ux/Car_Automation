@@ -71,15 +71,15 @@ export function EVBMSSection({
           <div className="space-y-3">
             <div className="p-3 rounded-xl bg-base-950/80 border border-amber-500/20 space-y-2 text-xs font-mono">
               <div className="flex justify-between">
-                <span className="text-slate-400">Balancing Mode</span>
+                <span className="text-amber-200/60">Balancing Mode</span>
                 <span className="text-amber-300 font-extrabold">Active Bidirectional (2A)</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-slate-400">SoC Estimation Algorithm</span>
+                <span className="text-amber-200/60">SoC Estimation Algorithm</span>
                 <span className="text-amber-300 font-extrabold">Extended Kalman Filter (EKF)</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-slate-400">Sampling Rate</span>
+                <span className="text-amber-200/60">Sampling Rate</span>
                 <span className="text-emerald-300 font-extrabold">100Hz Per Cell</span>
               </div>
             </div>
@@ -88,7 +88,7 @@ export function EVBMSSection({
               <span className="text-[10px] font-mono font-bold text-amber-300 uppercase tracking-wider block">
                 BATTERY LONGEVITY BOOST
               </span>
-              <p className="text-[11px] font-mono text-slate-300 leading-relaxed">
+              <p className="text-[11px] font-mono text-amber-100/80 leading-relaxed">
                 Active cell balancing shuttles charge between weak and strong cells, preventing localized overcharging and extending pack cycle life by 40%.
               </p>
             </div>
@@ -109,7 +109,7 @@ export function EVBMSSection({
               onSelectVariant={onSelectVariant}
             />
           ) : (
-            <p className="text-xs font-mono text-slate-500">Loading material variants...</p>
+            <p className="text-xs font-mono text-amber-300/50">Loading material variants...</p>
           )}
         </SectionCard>
 

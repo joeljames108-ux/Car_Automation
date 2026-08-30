@@ -318,7 +318,7 @@ export function NeonHorizonShell() {
                         {activeSectorDef.cardinal}
                       </span>
                     </div>
-                    <p className="text-[11px] text-slate-400 font-sans">{activeSectorDef.description}</p>
+                    <p className="text-[11px] text-amber-200/60 font-sans">{activeSectorDef.description}</p>
                   </div>
                 </div>
 
@@ -329,10 +329,10 @@ export function NeonHorizonShell() {
                     className={`px-3 py-1.5 rounded-xl text-xs font-mono font-bold tracking-wider transition-all flex items-center gap-1.5 cursor-pointer border ${
                       spatialNavExpanded
                         ? "bg-sky-500/20 text-sky-300 border-sky-400/50 shadow-[0_0_15px_rgba(56,189,248,0.3)]"
-                        : "bg-white/5 text-slate-300 hover:text-white border-white/10 hover:bg-white/10"
+                        : "bg-white/5 text-amber-100/80 hover:text-white border-white/10 hover:bg-white/10"
                     }`}
                   >
-                    <Orbit size={13} className={spatialNavExpanded ? "animate-spin text-sky-400" : "text-slate-400"} />
+                    <Orbit size={13} className={spatialNavExpanded ? "animate-spin text-sky-400" : "text-amber-200/60"} />
                     <span>{spatialNavExpanded ? "COLLAPSE SPHERE" : "EXPLORE 3D PLANETARY SPHERE"}</span>
                   </button>
                 </div>
@@ -368,7 +368,7 @@ export function NeonHorizonShell() {
                           className={`flex items-center gap-2 px-3 py-1.5 rounded-xl border text-xs font-mono font-bold tracking-wide transition-all cursor-pointer whitespace-nowrap ${
                             isCurrent
                               ? "text-white shadow-lg scale-105"
-                              : "text-slate-400 hover:text-slate-200 border-white/8 hover:bg-white/5"
+                              : "text-amber-200/60 hover:text-amber-50 border-white/8 hover:bg-white/5"
                           }`}
                           style={
                             isCurrent

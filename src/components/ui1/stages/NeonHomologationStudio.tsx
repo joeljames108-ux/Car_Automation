@@ -40,7 +40,7 @@ export function NeonHomologationStudio() {
   };
 
   return (
-    <div className="w-full flex flex-col gap-6 text-slate-100 animate-nh-materialize">
+    <div className="w-full flex flex-col gap-6 text-amber-50 animate-nh-materialize">
       {/* Header */}
       <NeonHorizonGlassPanel
         variant="window"
@@ -87,8 +87,8 @@ export function NeonHomologationStudio() {
                     <XCircle size={16} className="text-rose-400" />
                   )}
                   <div className="flex flex-col">
-                    <span className="text-slate-100 font-bold">{check.name}</span>
-                    <span className="text-[10px] text-slate-400">Rule: {check.req}</span>
+                    <span className="text-amber-50 font-bold">{check.name}</span>
+                    <span className="text-[10px] text-amber-200/60">Rule: {check.req}</span>
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
@@ -119,14 +119,14 @@ export function NeonHomologationStudio() {
                   <Award size={32} />
                 </div>
                 <span className="text-sm font-bold text-amber-300">FIA GOLD HOMOLOGATION PASSPORT</span>
-                <span className="text-[10px] font-mono text-slate-300">
+                <span className="text-[10px] font-mono text-amber-100/80">
                   CHASSIS CERT HASH: 0x984F-A29E-FIA-2026
                 </span>
                 <NeonHorizonBadge variant="gold">OFFICIALLY HOMOLOGATED</NeonHorizonBadge>
               </div>
             ) : (
               <div className="w-full flex flex-col items-center gap-4 py-6">
-                <span className="text-xs text-slate-400 max-w-xs">
+                <span className="text-xs text-amber-200/60 max-w-xs">
                   All 6 technical scrutiny checks have satisfied FIA regulations. Click below to stamp and generate the permanent racing passport.
                 </span>
                 <NeonHorizonButton variant="primary" glow onClick={handleIssuePassport}>

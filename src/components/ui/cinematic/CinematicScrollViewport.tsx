@@ -234,11 +234,11 @@ export function CinematicScrollViewport({
                 STATE 0{activeSceneIndex + 1} / 0{totalScenes}
               </span>
             </div>
-            <div className="text-xs font-bold text-slate-100 flex items-center gap-1.5 mt-0.5">
+            <div className="text-xs font-bold text-amber-50 flex items-center gap-1.5 mt-0.5">
               {activeScene?.icon}
               <span>{activeScene?.title}</span>
               {activeScene?.subtitle && (
-                <span className="hidden md:inline text-[11px] font-normal text-slate-400 ml-1.5 pl-2 border-l border-white/10">
+                <span className="hidden md:inline text-[11px] font-normal text-amber-200/60 ml-1.5 pl-2 border-l border-white/10">
                   {activeScene.subtitle}
                 </span>
               )}
@@ -259,7 +259,7 @@ export function CinematicScrollViewport({
                   className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer ${
                     isActive
                       ? "bg-gradient-to-r from-amber-500 to-sky-400 text-slate-950 shadow-[0_0_15px_rgba(34,211,238,0.6)] font-black scale-105"
-                      : "text-slate-400 hover:text-slate-200 hover:bg-white/5"
+                      : "text-amber-200/60 hover:text-amber-50 hover:bg-white/5"
                   }`}
                 >
                   <span className="text-[10px]">0{idx + 1}</span>
@@ -277,7 +277,7 @@ export function CinematicScrollViewport({
               className={`p-2 rounded-xl border text-xs transition-all cursor-pointer ${
                 activeSceneIndex > 0
                   ? "bg-base-900 border-amber-500/30 text-amber-300 hover:bg-amber-500/20 hover:scale-105 shadow-sm"
-                  : "bg-base-950/40 border-white/5 text-slate-600 cursor-not-allowed"
+                  : "bg-base-950/40 border-white/5 text-amber-400 cursor-not-allowed"
               }`}
               title="Previous Content State (Scroll Up / PageUp)"
             >
@@ -289,7 +289,7 @@ export function CinematicScrollViewport({
               className={`p-2 rounded-xl border text-xs transition-all cursor-pointer ${
                 activeSceneIndex < maxProgress
                   ? "bg-base-900 border-amber-500/30 text-amber-300 hover:bg-amber-500/20 hover:scale-105 shadow-sm"
-                  : "bg-base-950/40 border-white/5 text-slate-600 cursor-not-allowed"
+                  : "bg-base-950/40 border-white/5 text-amber-400 cursor-not-allowed"
               }`}
               title="Next Content State (Scroll Down / PageDown)"
             >

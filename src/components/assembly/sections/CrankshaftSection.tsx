@@ -83,7 +83,7 @@ export function CrankshaftSection({
               onChange={(v) => updateEngine({ crank: v })}
             />
 
-            <div className="space-y-2 pt-2 border-t border-slate-800/80">
+            <div className="space-y-2 pt-2 border-t border-amber-800/30">
               <Slider
                 label="Rod Journal Length"
                 value={engineConfig.rodLength || 140}
@@ -98,7 +98,7 @@ export function CrankshaftSection({
               <span className="text-[10px] font-mono font-bold text-amber-300 uppercase tracking-wider block">
                 ROTATIONAL HARMONICS
               </span>
-              <p className="text-[11px] font-mono text-slate-300 leading-relaxed">
+              <p className="text-[11px] font-mono text-amber-100/80 leading-relaxed">
                 Full-counterweight design minimizes 2nd-order engine vibrations, preserving high-RPM main journal bearing oil film.
               </p>
             </div>
@@ -119,7 +119,7 @@ export function CrankshaftSection({
               onSelectVariant={onSelectVariant}
             />
           ) : (
-            <p className="text-xs font-mono text-slate-500">Loading material variants...</p>
+            <p className="text-xs font-mono text-amber-300/50">Loading material variants...</p>
           )}
         </SectionCard>
 

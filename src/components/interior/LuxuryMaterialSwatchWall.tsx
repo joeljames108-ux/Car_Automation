@@ -158,7 +158,7 @@ export const LuxuryMaterialSwatchWall: React.FC<LuxuryMaterialSwatchWallProps> =
       {/* Material Swatch Spheres Grid */}
       <div>
         <div className="flex items-center justify-between mb-2.5">
-          <label className="text-slate-200 font-bold flex items-center gap-1.5">
+          <label className="text-amber-50 font-bold flex items-center gap-1.5">
             <Palette size={14} style={{color: '#92400E'}} />
             <span>PHYSICAL MATERIAL SWATCHES</span>
           </label>
@@ -211,9 +211,9 @@ export const LuxuryMaterialSwatchWall: React.FC<LuxuryMaterialSwatchWallProps> =
 
       {/* Contrast Stitching Studio */}
       {selectedStitchColorHex && onSelectStitchColor && (
-        <div className="p-3 rounded-xl bg-slate-900/60 border border-slate-800 space-y-2.5">
+        <div className="p-3 rounded-xl bg-amber-900/40 border border-amber-800/30 space-y-2.5">
           <div className="flex items-center justify-between">
-            <label className="text-slate-200 font-bold flex items-center gap-1.5">
+            <label className="text-amber-50 font-bold flex items-center gap-1.5">
               <Sparkles size={13} className="text-amber-400" />
               <span>CONTRAST STITCHING THREAD</span>
             </label>
@@ -229,15 +229,15 @@ export const LuxuryMaterialSwatchWall: React.FC<LuxuryMaterialSwatchWallProps> =
                   onClick={() => onSelectStitchColor(stitch.hex)}
                   className={`flex items-center gap-2 p-1.5 rounded-lg border text-left transition-all ${
                     isSelected
-                      ? "bg-slate-950 border-amber-400 shadow-sm"
-                      : "bg-slate-950/40 border-slate-800 hover:border-slate-700"
+                      ? "bg-amber-950/80 border-amber-400 shadow-sm"
+                      : "bg-amber-950/40 border-amber-800/30 hover:border-amber-700/30"
                   }`}
                 >
                 <div
                   className="w-3.5 h-3.5 rounded-full border border-white/20 flex-shrink-0 shadow-inner"
                   style={{ backgroundColor: stitch.hex }}
                 />
-                <span className="text-[10px] font-bold text-slate-200 truncate">{stitch.name}</span>
+                <span className="text-[10px] font-bold text-amber-50 truncate">{stitch.name}</span>
               </button>
             );
           })}

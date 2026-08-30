@@ -34,15 +34,15 @@ export const ExteriorWorkshopPanel: React.FC = () => {
   const panelGapAudit = usePanelGapAudit();
 
   return (
-    <div className="bg-slate-900/90 border border-white/10 rounded-3xl p-4 backdrop-blur-xl shadow-2xl space-y-4">
+    <div className="bg-amber-900/40 border border-white/10 rounded-3xl p-4 backdrop-blur-xl shadow-2xl space-y-4">
       {/* ── WORKSHOP SUB-PANEL NAVIGATION TABS ── */}
-      <div className="flex items-center gap-1.5 bg-slate-950 p-1 rounded-2xl border border-white/10 overflow-x-auto">
+      <div className="flex items-center gap-1.5 bg-amber-950/80 p-1 rounded-2xl border border-white/10 overflow-x-auto">
         <button
           onClick={() => setActiveTab("paint")}
           className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all whitespace-nowrap ${
             activeTab === "paint"
               ? "bg-amber-500 text-slate-950 shadow-[0_0_12px_rgba(6,182,212,0.4)]"
-              : "text-slate-400 hover:text-slate-200"
+              : "text-amber-200/60 hover:text-amber-50"
           }`}
         >
           <Palette size={13} />
@@ -54,7 +54,7 @@ export const ExteriorWorkshopPanel: React.FC = () => {
           className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all whitespace-nowrap ${
             activeTab === "materials"
               ? "bg-amber-500 text-slate-950 shadow-[0_0_12px_rgba(6,182,212,0.4)]"
-              : "text-slate-400 hover:text-slate-200"
+              : "text-amber-200/60 hover:text-amber-50"
           }`}
         >
           <Layers size={13} />
@@ -66,7 +66,7 @@ export const ExteriorWorkshopPanel: React.FC = () => {
           className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all whitespace-nowrap ${
             activeTab === "fit_finish"
               ? "bg-amber-500 text-slate-950 shadow-[0_0_12px_rgba(6,182,212,0.4)]"
-              : "text-slate-400 hover:text-slate-200"
+              : "text-amber-200/60 hover:text-amber-50"
           }`}
         >
           <Gauge size={13} />
@@ -79,7 +79,7 @@ export const ExteriorWorkshopPanel: React.FC = () => {
         <div className="space-y-4 animate-fadeIn">
           {/* Preset Swatches Palette */}
           <div>
-            <label className="text-xs font-mono font-bold text-slate-300 block mb-2">
+            <label className="text-xs font-mono font-bold text-amber-100/80 block mb-2">
               HERITAGE AUTOMOTIVE COLORWAY
             </label>
             <div className="grid grid-cols-5 gap-2">
@@ -100,7 +100,7 @@ export const ExteriorWorkshopPanel: React.FC = () => {
                   style={{ backgroundColor: swatch.hex }}
                   title={`${swatch.name} — ${swatch.brandInspiration}`}
                 >
-                  <span className="text-[9px] font-mono font-bold text-white bg-slate-950/80 px-1 rounded truncate w-full">
+                  <span className="text-[9px] font-mono font-bold text-white bg-amber-950/80 px-1 rounded truncate w-full">
                     {swatch.name.split(" ")[1] || swatch.name}
                   </span>
                 </button>
@@ -110,7 +110,7 @@ export const ExteriorWorkshopPanel: React.FC = () => {
 
           {/* Paint Finish Selector */}
           <div className="space-y-2">
-            <label className="text-xs font-mono font-bold text-slate-300 block">
+            <label className="text-xs font-mono font-bold text-amber-100/80 block">
               CLEAR COAT & FINISH CHEMISTRY
             </label>
             <div className="grid grid-cols-3 gap-2 text-xs font-mono">
@@ -130,7 +130,7 @@ export const ExteriorWorkshopPanel: React.FC = () => {
                   className={`p-2 rounded-xl border text-center transition-all ${
                     paintConfig.finishType === finish
                       ? "bg-amber-500/20 text-amber-300 border-amber-400 font-bold"
-                      : "bg-slate-950 text-slate-400 border-white/10 hover:border-white/20"
+                      : "bg-amber-950/80 text-amber-200/60 border-white/10 hover:border-white/20"
                   }`}
                 >
                   {finish.replace(/_/g, " ").toUpperCase()}
@@ -140,12 +140,12 @@ export const ExteriorWorkshopPanel: React.FC = () => {
           </div>
 
           {/* Two-Tone Livery Partitioning */}
-          <div className="flex items-center justify-between p-3 rounded-2xl bg-slate-950 border border-white/10">
+          <div className="flex items-center justify-between p-3 rounded-2xl bg-amber-950/80 border border-white/10">
             <div>
-              <span className="text-xs font-mono font-bold text-slate-200 block">
+              <span className="text-xs font-mono font-bold text-amber-50 block">
                 Contrast Gloss Roof Pack
               </span>
-              <span className="text-[11px] text-slate-400">
+              <span className="text-[11px] text-amber-200/60">
                 Paints roof and A/B/C pillars in contrast gloss nero
               </span>
             </div>
@@ -162,15 +162,15 @@ export const ExteriorWorkshopPanel: React.FC = () => {
       {/* ── 2. METALLURGY & MATERIALS LAB ── */}
       {activeTab === "materials" && (
         <div className="space-y-3 animate-fadeIn text-xs font-mono">
-          <div className="p-3 rounded-2xl bg-slate-950 border border-white/10 space-y-1.5">
+          <div className="p-3 rounded-2xl bg-amber-950/80 border border-white/10 space-y-1.5">
             <span className="text-amber-400 font-bold block">Carbon Fiber Monocoque</span>
-            <p className="text-[11px] text-slate-400 font-sans">
+            <p className="text-[11px] text-amber-200/60 font-sans">
               Autoclaved Toray T1000G pre-preg offers maximum torsional rigidity (38.5 kNm/deg) at 55% weight reduction over steel.
             </p>
           </div>
-          <div className="p-3 rounded-2xl bg-slate-950 border border-white/10 space-y-1.5">
+          <div className="p-3 rounded-2xl bg-amber-950/80 border border-white/10 space-y-1.5">
             <span className="text-emerald-400 font-bold block">Aerospace Titanium Tub (Ti-6Al-4V)</span>
-            <p className="text-[11px] text-slate-400 font-sans">
+            <p className="text-[11px] text-amber-200/60 font-sans">
               Provides infinite fatigue life with superior acoustic vibration damping and exceptional high-temperature resistance.
             </p>
           </div>
@@ -183,11 +183,11 @@ export const ExteriorWorkshopPanel: React.FC = () => {
           {panelGapAudit.map((item, idx) => (
             <div
               key={idx}
-              className="flex items-center justify-between p-2.5 rounded-xl bg-slate-950 border border-white/10 text-xs font-mono"
+              className="flex items-center justify-between p-2.5 rounded-xl bg-amber-950/80 border border-white/10 text-xs font-mono"
             >
               <div>
-                <span className="text-slate-200 font-bold block">{item.rule.panelPairLabel}</span>
-                <span className="text-[10px] text-slate-500">
+                <span className="text-amber-50 font-bold block">{item.rule.panelPairLabel}</span>
+                <span className="text-[10px] text-amber-300/50">
                   Target: {item.rule.nominalGapMm}mm (±{item.rule.tolerancePlusMm}mm)
                 </span>
               </div>

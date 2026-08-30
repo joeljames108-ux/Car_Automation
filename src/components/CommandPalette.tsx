@@ -134,11 +134,11 @@ export function CommandPalette({ isOpen, onClose, onSelectStage }: CommandPalett
   return (
     <div className="fixed inset-0 z-50 flex items-start justify-center pt-20 px-4 bg-black/70 backdrop-blur-md animate-fade-in">
       <div
-        className="relative w-full max-w-2xl bg-base-950/90 border border-slate-700/60 rounded-2xl shadow-2xl overflow-hidden backdrop-blur-2xl animate-scale-reveal"
+        className="relative w-full max-w-2xl bg-base-950/90 border border-amber-700/30/60 rounded-2xl shadow-2xl overflow-hidden backdrop-blur-2xl animate-scale-reveal"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Search Bar Header */}
-        <div className="flex items-center gap-3 px-4 py-3.5 border-b border-slate-800/80 bg-base-900/60">
+        <div className="flex items-center gap-3 px-4 py-3.5 border-b border-amber-800/40 bg-base-900/60">
           <Search className="w-5 h-5 text-amber-400 shrink-0" />
           <input
             ref={inputRef}
@@ -149,11 +149,11 @@ export function CommandPalette({ isOpen, onClose, onSelectStage }: CommandPalett
               setQuery(e.target.value);
               setSelectedIndex(0);
             }}
-            className="flex-1 bg-transparent text-sm text-slate-100 placeholder-slate-500 focus:outline-none"
+            className="flex-1 bg-transparent text-sm text-amber-50 placeholder-slate-500 focus:outline-none"
           />
           <button
             onClick={onClose}
-            className="p-1 text-slate-400 hover:text-slate-200 rounded-lg hover:bg-slate-800 transition-colors"
+            className="p-1 text-amber-200/60 hover:text-amber-50 rounded-lg hover:bg-amber-800/40 transition-colors"
           >
             <X className="w-4 h-4" />
           </button>
@@ -162,7 +162,7 @@ export function CommandPalette({ isOpen, onClose, onSelectStage }: CommandPalett
         {/* Results List */}
         <div className="max-h-[60vh] overflow-y-auto p-2 space-y-1">
           {filteredItems.length === 0 ? (
-            <div className="py-12 text-center text-slate-500 text-sm">
+            <div className="py-12 text-center text-amber-300/50 text-sm">
               No matching modules, presets, or commands found for "{query}".
             </div>
           ) : (
@@ -179,20 +179,20 @@ export function CommandPalette({ isOpen, onClose, onSelectStage }: CommandPalett
                   className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-left transition-all ${
                     isSelected
                       ? "bg-amber-500/20 text-amber-200 border border-amber-400/30 shadow-[0_0_15px_rgba(34,211,238,0.15)]"
-                      : "text-slate-300 hover:bg-slate-800/50 hover:text-slate-100 border border-transparent"
+                      : "text-amber-100/80 hover:bg-amber-800/40 hover:text-amber-50 border border-transparent"
                   }`}
                 >
-                  <div className={`p-2 rounded-lg shrink-0 ${isSelected ? "bg-amber-500/30 text-amber-200" : "bg-slate-800/60 text-slate-400"}`}>
+                  <div className={`p-2 rounded-lg shrink-0 ${isSelected ? "bg-amber-500/30 text-amber-200" : "bg-amber-800/35/60 text-amber-200/60"}`}>
                     {item.icon}
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="text-xs font-semibold flex items-center gap-2">
                       {item.title}
-                      <span className="text-[10px] font-normal uppercase px-1.5 py-0.2 rounded bg-slate-800 text-slate-400 border border-slate-700/50">
+                      <span className="text-[10px] font-normal uppercase px-1.5 py-0.2 rounded bg-amber-800/35 text-amber-200/60 border border-amber-700/30/50">
                         {item.category}
                       </span>
                     </div>
-                    {item.subtitle && <div className="text-[11px] text-slate-500 truncate mt-0.5">{item.subtitle}</div>}
+                    {item.subtitle && <div className="text-[11px] text-amber-300/50 truncate mt-0.5">{item.subtitle}</div>}
                   </div>
                   {isSelected && <ArrowRight className="w-4 h-4 text-amber-400 shrink-0 animate-pulse" />}
                 </button>
@@ -202,11 +202,11 @@ export function CommandPalette({ isOpen, onClose, onSelectStage }: CommandPalett
         </div>
 
         {/* Footer info */}
-        <div className="px-4 py-2.5 border-t border-slate-800/80 bg-base-900/40 flex items-center justify-between text-[11px] text-slate-500">
+        <div className="px-4 py-2.5 border-t border-amber-800/40 bg-base-900/40 flex items-center justify-between text-[11px] text-amber-300/50">
           <div className="flex items-center gap-3">
-            <span><kbd className="px-1.5 py-0.5 rounded bg-slate-800 border border-slate-700 text-slate-300">↑↓</kbd> Navigate</span>
-            <span><kbd className="px-1.5 py-0.5 rounded bg-slate-800 border border-slate-700 text-slate-300">↵</kbd> Select</span>
-            <span><kbd className="px-1.5 py-0.5 rounded bg-slate-800 border border-slate-700 text-slate-300">Esc</kbd> Close</span>
+            <span><kbd className="px-1.5 py-0.5 rounded bg-amber-800/35 border border-amber-700/30 text-amber-100/80">↑↓</kbd> Navigate</span>
+            <span><kbd className="px-1.5 py-0.5 rounded bg-amber-800/35 border border-amber-700/30 text-amber-100/80">↵</kbd> Select</span>
+            <span><kbd className="px-1.5 py-0.5 rounded bg-amber-800/35 border border-amber-700/30 text-amber-100/80">Esc</kbd> Close</span>
           </div>
           <div className="flex items-center gap-1 text-amber-400 font-medium">
             <Command size={12} /> Ctrl + K

@@ -109,11 +109,11 @@ export function AssemblyCompletionModal({
                 <span className="px-2.5 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 text-[10px] font-mono font-extrabold tracking-wider shadow-[0_0_10px_rgba(34,211,238,0.25)]">
                   FACTORY VERIFIED
                 </span>
-                <span className="text-[10.5px] font-mono text-slate-400 uppercase tracking-widest flex items-center gap-1">
+                <span className="text-[10.5px] font-mono text-amber-200/60 uppercase tracking-widest flex items-center gap-1">
                   <Award size={12} className="text-amber-400" /> 100% Precision Build
                 </span>
               </div>
-              <h2 className="text-xl font-mono font-bold text-slate-100 mt-1 tracking-tight">
+              <h2 className="text-xl font-mono font-bold text-amber-50 mt-1 tracking-tight">
                 Engine Dyno & Telemetry Testing
               </h2>
             </div>
@@ -121,7 +121,7 @@ export function AssemblyCompletionModal({
 
           <button
             onClick={onClose}
-            className="p-2.5 rounded-full text-slate-400 hover:text-white bg-base-850/80 hover:bg-base-800 border border-base-750/80 transition-all shadow-md active:scale-95 cursor-pointer"
+            className="p-2.5 rounded-full text-amber-200/60 hover:text-white bg-base-850/80 hover:bg-base-800 border border-base-750/80 transition-all shadow-md active:scale-95 cursor-pointer"
             title="Close"
           >
             <X size={18} />
@@ -259,7 +259,7 @@ export function AssemblyCompletionModal({
             {/* Final Stats Summary Grid in Vision Glass Cards */}
             <div className="grid grid-cols-2 gap-3">
               <div className="bg-base-950/80 border border-base-800/90 rounded-2xl p-3.5 backdrop-blur-md shadow-sm">
-                <span className="text-[10px] font-mono text-slate-400 flex items-center gap-1.5 uppercase tracking-wider">
+                <span className="text-[10px] font-mono text-amber-200/60 flex items-center gap-1.5 uppercase tracking-wider">
                   <TrendingUp size={13} className="text-amber-400" /> Peak Power
                 </span>
                 <div className="text-lg font-mono font-bold text-amber-300 mt-1">
@@ -268,7 +268,7 @@ export function AssemblyCompletionModal({
               </div>
 
               <div className="bg-base-950/80 border border-base-800/90 rounded-2xl p-3.5 backdrop-blur-md shadow-sm">
-                <span className="text-[10px] font-mono text-slate-400 flex items-center gap-1.5 uppercase tracking-wider">
+                <span className="text-[10px] font-mono text-amber-200/60 flex items-center gap-1.5 uppercase tracking-wider">
                   <Zap size={13} className="text-pink-400" /> Peak Torque
                 </span>
                 <div className="text-lg font-mono font-bold text-pink-300 mt-1">
@@ -277,7 +277,7 @@ export function AssemblyCompletionModal({
               </div>
 
               <div className="bg-base-950/80 border border-base-800/90 rounded-2xl p-3.5 backdrop-blur-md shadow-sm">
-                <span className="text-[10px] font-mono text-slate-400 flex items-center gap-1.5 uppercase tracking-wider">
+                <span className="text-[10px] font-mono text-amber-200/60 flex items-center gap-1.5 uppercase tracking-wider">
                   <ShieldCheck size={13} className="text-emerald-400" /> Durability
                 </span>
                 <div className="text-lg font-mono font-bold text-emerald-300 mt-1">
@@ -286,7 +286,7 @@ export function AssemblyCompletionModal({
               </div>
 
               <div className="bg-base-950/80 border border-base-800/90 rounded-2xl p-3.5 backdrop-blur-md shadow-sm">
-                <span className="text-[10px] font-mono text-slate-400 flex items-center gap-1.5 uppercase tracking-wider">
+                <span className="text-[10px] font-mono text-amber-200/60 flex items-center gap-1.5 uppercase tracking-wider">
                   <DollarSign size={13} className="text-amber-400" /> Total Cost
                 </span>
                 <div className="text-lg font-mono font-bold text-amber-300 mt-1">

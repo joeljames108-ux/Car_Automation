@@ -85,7 +85,7 @@ export function NeonPorpoisingLabStudio() {
   }, [rideHeightMm, vehicleSpeed, heaveDamperStiffness, isPorpoisingZone, porpoisingHz, driverVerticalG]);
 
   return (
-    <div className="w-full flex flex-col gap-6 text-slate-100 animate-nh-materialize">
+    <div className="w-full flex flex-col gap-6 text-amber-50 animate-nh-materialize">
       {/* Header */}
       <NeonHorizonGlassPanel
         variant="window"
@@ -130,9 +130,9 @@ export function NeonPorpoisingLabStudio() {
             </div>
 
             <div className="flex items-center justify-between p-3 rounded-lg bg-[#0a111e] border border-white/10 font-mono text-xs">
-              <span className="text-slate-400">Venturi Throat Expansion:</span>
+              <span className="text-amber-200/60">Venturi Throat Expansion:</span>
               <span className="text-sky-300 font-bold">1:4.8 Diffuser Aspect</span>
-              <span className="text-slate-400">Floor Edge Skirt Vortex:</span>
+              <span className="text-amber-200/60">Floor Edge Skirt Vortex:</span>
               <span className="text-emerald-300 font-bold">SEALED (98%)</span>
             </div>
           </NeonHorizonGlassPanel>

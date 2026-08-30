@@ -83,12 +83,12 @@ export function EngineCoverSection({
             />
 
             <div className="grid grid-cols-2 gap-2">
-              <div className="p-2.5 rounded-xl bg-base-950/80 border border-slate-800 space-y-1">
-                <span className="text-[10px] font-mono text-slate-400 uppercase">ITB Window</span>
+              <div className="p-2.5 rounded-xl bg-base-950/80 border border-amber-800/30 space-y-1">
+                <span className="text-[10px] font-mono text-amber-200/60 uppercase">ITB Window</span>
                 <span className="text-xs font-mono font-bold text-amber-300 block">6-Port Acrylic Glass</span>
               </div>
-              <div className="p-2.5 rounded-xl bg-base-950/80 border border-slate-800 space-y-1">
-                <span className="text-[10px] font-mono text-slate-400 uppercase">Embossed Badge</span>
+              <div className="p-2.5 rounded-xl bg-base-950/80 border border-amber-800/30 space-y-1">
+                <span className="text-[10px] font-mono text-amber-200/60 uppercase">Embossed Badge</span>
                 <span className="text-xs font-mono font-bold text-amber-300 block">RACING V12 EVOLUTION</span>
               </div>
             </div>
@@ -97,7 +97,7 @@ export function EngineCoverSection({
               <span className="text-[10px] font-mono font-bold text-amber-300 uppercase tracking-wider block">
                 RAM-AIR INDUCTION BOOST
               </span>
-              <p className="text-[11px] font-mono text-slate-300 leading-relaxed">
+              <p className="text-[11px] font-mono text-amber-100/80 leading-relaxed">
                 Front ram-air induction scoop channels high-velocity ambient air directly over intake velocity stacks, pressurizing intake manifold at speeds above 150 km/h.
               </p>
             </div>
@@ -118,7 +118,7 @@ export function EngineCoverSection({
               onSelectVariant={onSelectVariant}
             />
           ) : (
-            <p className="text-xs font-mono text-slate-500">Loading material variants...</p>
+            <p className="text-xs font-mono text-amber-300/50">Loading material variants...</p>
           )}
         </SectionCard>
 

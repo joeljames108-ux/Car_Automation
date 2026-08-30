@@ -79,9 +79,9 @@ export const InteriorEngineeringTelemetryDashboard: React.FC = () => {
   };
 
   return (
-    <div className="w-full min-h-screen bg-slate-950 text-slate-100 p-4 md:p-6 space-y-6 font-sans">
+    <div className="w-full min-h-screen bg-amber-950/80 text-amber-50 p-4 md:p-6 space-y-6 font-sans">
       {/* Header */}
-      <div className="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-slate-800">
+      <div className="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-amber-800/30">
         <div>
           <div className="flex items-center gap-2 text-xs font-bold text-amber-400 uppercase tracking-widest">
             <Cpu size={14} /> AUTOMOTIVE CABIN TELEMETRY & PHYSICS DASHBOARD
@@ -109,40 +109,40 @@ export const InteriorEngineeringTelemetryDashboard: React.FC = () => {
       {/* Main Grid Section */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* 1. 3D CFD Airflow & ISO 7730 Thermal Comfort Panel */}
-        <div className="p-5 rounded-3xl bg-slate-900/90 border border-slate-800 space-y-4">
+        <div className="p-5 rounded-3xl bg-amber-900/40 border border-amber-800/30 space-y-4">
           <h3 className="text-sm font-bold text-amber-400 uppercase tracking-wider flex items-center gap-2">
             <Wind size={16} /> 3D Voxel CFD & ISO 7730 Thermal Comfort
           </h3>
 
           <div className="grid grid-cols-2 gap-3 text-xs">
-            <div className="p-3 rounded-2xl bg-slate-950 border border-slate-800">
-              <span className="text-slate-400">Total Air Cells:</span>
+            <div className="p-3 rounded-2xl bg-amber-950/80 border border-amber-800/30">
+              <span className="text-amber-200/60">Total Air Cells:</span>
               <div className="text-lg font-bold text-amber-300">{cfdSummary.totalAirCells}</div>
             </div>
 
-            <div className="p-3 rounded-2xl bg-slate-950 border border-slate-800">
-              <span className="text-slate-400">Avg Cabin Temp:</span>
+            <div className="p-3 rounded-2xl bg-amber-950/80 border border-amber-800/30">
+              <span className="text-amber-200/60">Avg Cabin Temp:</span>
               <div className="text-lg font-bold text-amber-300">{cfdSummary.averageCabinTempC}°C</div>
             </div>
 
-            <div className="p-3 rounded-2xl bg-slate-950 border border-slate-800">
-              <span className="text-slate-400">Max Air Velocity:</span>
+            <div className="p-3 rounded-2xl bg-amber-950/80 border border-amber-800/30">
+              <span className="text-amber-200/60">Max Air Velocity:</span>
               <div className="text-lg font-bold text-amber-300">{cfdSummary.maxAirVelocityMps} m/s</div>
             </div>
 
-            <div className="p-3 rounded-2xl bg-slate-950 border border-slate-800">
-              <span className="text-slate-400">HVAC Cooling Duty:</span>
+            <div className="p-3 rounded-2xl bg-amber-950/80 border border-amber-800/30">
+              <span className="text-amber-200/60">HVAC Cooling Duty:</span>
               <div className="text-lg font-bold text-emerald-300">{cfdSummary.hvacCoolingDutyKw} kW</div>
             </div>
           </div>
 
           {/* ISO 7730 Comfort Zones Table */}
           <div className="space-y-2">
-            <div className="text-xs font-bold text-slate-300">ISO 7730 Fanger PMV / PPD Zones</div>
+            <div className="text-xs font-bold text-amber-100/80">ISO 7730 Fanger PMV / PPD Zones</div>
             <div className="space-y-1.5">
               {cfdSummary.thermalComfortZones.map((z) => (
-                <div key={z.zoneName} className="p-2.5 rounded-xl bg-slate-950 border border-slate-800 flex items-center justify-between text-xs">
-                  <span className="font-bold text-slate-200">{z.zoneName}</span>
+                <div key={z.zoneName} className="p-2.5 rounded-xl bg-amber-950/80 border border-amber-800/30 flex items-center justify-between text-xs">
+                  <span className="font-bold text-amber-50">{z.zoneName}</span>
                   <div className="flex items-center gap-3">
                     <span className="text-amber-400 font-bold">PMV: {z.pmvIndex}</span>
                     <span className="text-rose-400 font-bold">PPD: {z.ppdPercent}%</span>
@@ -154,41 +154,41 @@ export const InteriorEngineeringTelemetryDashboard: React.FC = () => {
         </div>
 
         {/* 2. ISO 2631-1 Seat NVH & Transmissibility Panel */}
-        <div className="p-5 rounded-3xl bg-slate-900/90 border border-slate-800 space-y-4">
+        <div className="p-5 rounded-3xl bg-amber-900/40 border border-amber-800/30 space-y-4">
           <h3 className="text-sm font-bold text-amber-400 uppercase tracking-wider flex items-center gap-2">
             <Activity size={16} /> ISO 2631-1 Seat NVH Transmissibility
           </h3>
 
           <div className="grid grid-cols-2 gap-3 text-xs">
-            <div className="p-3 rounded-2xl bg-slate-950 border border-slate-800">
-              <span className="text-slate-400">Floor Accel RMS:</span>
+            <div className="p-3 rounded-2xl bg-amber-950/80 border border-amber-800/30">
+              <span className="text-amber-200/60">Floor Accel RMS:</span>
               <div className="text-lg font-bold text-amber-300">{nvhSummary.floorAccelRmsMps2} m/s²</div>
             </div>
 
-            <div className="p-3 rounded-2xl bg-slate-950 border border-slate-800">
-              <span className="text-slate-400">Seat Aw Accel:</span>
+            <div className="p-3 rounded-2xl bg-amber-950/80 border border-amber-800/30">
+              <span className="text-amber-200/60">Seat Aw Accel:</span>
               <div className="text-lg font-bold text-rose-300">{nvhSummary.weightedAccelAwMps2} m/s²</div>
             </div>
 
-            <div className="p-3 rounded-2xl bg-slate-950 border border-slate-800">
-              <span className="text-slate-400">SEAT Factor:</span>
+            <div className="p-3 rounded-2xl bg-amber-950/80 border border-amber-800/30">
+              <span className="text-amber-200/60">SEAT Factor:</span>
               <div className="text-lg font-bold text-emerald-300">{nvhSummary.seatFactorRatio}</div>
             </div>
 
-            <div className="p-3 rounded-2xl bg-slate-950 border border-slate-800">
-              <span className="text-slate-400">Vibration VDV:</span>
+            <div className="p-3 rounded-2xl bg-amber-950/80 border border-amber-800/30">
+              <span className="text-amber-200/60">Vibration VDV:</span>
               <div className="text-lg font-bold text-amber-300">{nvhSummary.vibrationDoseValueVdv}</div>
             </div>
           </div>
 
           {/* Spectrum Graph Bar Representation */}
           <div className="space-y-2">
-            <div className="text-xs font-bold text-slate-300">NVH Attenuation Spectrum (20 Hz - 500 Hz)</div>
+            <div className="text-xs font-bold text-amber-100/80">NVH Attenuation Spectrum (20 Hz - 500 Hz)</div>
             <div className="space-y-1">
               {nvhSpectrum.slice(0, 5).map((pt) => (
                 <div key={pt.frequencyHz} className="flex items-center gap-2 text-[10px]">
-                  <span className="w-12 text-slate-400 font-bold">{pt.frequencyHz} Hz</span>
-                  <div className="flex-1 h-3 rounded-full bg-slate-950 overflow-hidden flex">
+                  <span className="w-12 text-amber-200/60 font-bold">{pt.frequencyHz} Hz</span>
+                  <div className="flex-1 h-3 rounded-full bg-amber-950/80 overflow-hidden flex">
                     <div className="h-full bg-amber-500" style={{ width: `${(pt.seatSplDba / 100) * 100}%` }} />
                   </div>
                   <span className="text-emerald-400 font-bold">-{pt.attenuationDb} dB</span>
@@ -199,31 +199,31 @@ export const InteriorEngineeringTelemetryDashboard: React.FC = () => {
         </div>
 
         {/* 3. SAE J1100 Ergonomics & Sightline Biometrics */}
-        <div className="p-5 rounded-3xl bg-slate-900/90 border border-slate-800 space-y-4">
+        <div className="p-5 rounded-3xl bg-amber-900/40 border border-amber-800/30 space-y-4">
           <h3 className="text-sm font-bold text-emerald-400 uppercase tracking-wider flex items-center gap-2">
             <Eye size={16} /> SAE J1100 Ergonomics Biometrics
           </h3>
 
           <div className="space-y-2 text-xs">
-            <div className="p-3 rounded-2xl bg-slate-950 border border-slate-800 flex justify-between">
-              <span className="text-slate-400">H-Point X/Y/Z:</span>
+            <div className="p-3 rounded-2xl bg-amber-950/80 border border-amber-800/30 flex justify-between">
+              <span className="text-amber-200/60">H-Point X/Y/Z:</span>
               <span className="font-bold text-amber-300">
                 {ergoSummary.hPointCoordinatesMm.x}, {ergoSummary.hPointCoordinatesMm.y}, {ergoSummary.hPointCoordinatesMm.z} mm
               </span>
             </div>
 
-            <div className="p-3 rounded-2xl bg-slate-950 border border-slate-800 flex justify-between">
-              <span className="text-slate-400">Headroom Clearance:</span>
+            <div className="p-3 rounded-2xl bg-amber-950/80 border border-amber-800/30 flex justify-between">
+              <span className="text-amber-200/60">Headroom Clearance:</span>
               <span className="font-bold text-emerald-300">{ergoSummary.headroomClearanceMm} mm</span>
             </div>
 
-            <div className="p-3 rounded-2xl bg-slate-950 border border-slate-800 flex justify-between">
-              <span className="text-slate-400">A-Pillar Obscuration:</span>
+            <div className="p-3 rounded-2xl bg-amber-950/80 border border-amber-800/30 flex justify-between">
+              <span className="text-amber-200/60">A-Pillar Obscuration:</span>
               <span className="font-bold text-amber-300">{ergoSummary.aPillarObscurationDeg}°</span>
             </div>
 
-            <div className="p-3 rounded-2xl bg-slate-950 border border-slate-800 flex justify-between">
-              <span className="text-slate-400">SAE Overall Score:</span>
+            <div className="p-3 rounded-2xl bg-amber-950/80 border border-amber-800/30 flex justify-between">
+              <span className="text-amber-200/60">SAE Overall Score:</span>
               <span className="font-bold text-amber-300">{ergoSummary.overallSaeErgonomicsScore}/100</span>
             </div>
           </div>

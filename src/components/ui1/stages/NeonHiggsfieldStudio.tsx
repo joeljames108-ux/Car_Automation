@@ -158,18 +158,18 @@ function JobCard({ job }: { job: GenerationJob }) {
         {job.resultUrl && job.status === "done" ? (
           <img src={job.resultUrl} alt={job.title} className="w-full h-full object-cover" />
         ) : (
-          <span className="text-[10px] font-mono text-slate-500 uppercase tracking-widest">
+          <span className="text-[10px] font-mono text-amber-300/50 uppercase tracking-widest">
             {job.status === "running" ? "rendering…" : job.error ?? "no preview"}
           </span>
         )}
         <span className="absolute top-2 left-2">{statusIcon}</span>
-        <span className="absolute bottom-2 left-2 px-1.5 py-0.5 rounded bg-black/60 text-[9px] font-mono uppercase text-slate-300">
+        <span className="absolute bottom-2 left-2 px-1.5 py-0.5 rounded bg-black/60 text-[9px] font-mono uppercase text-amber-100/80">
           {job.modelId}
         </span>
       </div>
       <div className="px-2.5 py-2">
-        <p className="text-[11px] font-semibold text-slate-200 truncate">{job.title}</p>
-        <p className="text-[9px] text-slate-500 line-clamp-2 mt-0.5">{job.prompt}</p>
+        <p className="text-[11px] font-semibold text-amber-50 truncate">{job.title}</p>
+        <p className="text-[9px] text-amber-300/50 line-clamp-2 mt-0.5">{job.prompt}</p>
       </div>
     </div>
   );
@@ -181,7 +181,7 @@ function PromptBox({ value, onChange }: { value: string; onChange: (v: string) =
       value={value}
       onChange={(e) => onChange(e.target.value)}
       rows={3}
-      className="w-full rounded-xl bg-[#0a111e]/85 border border-white/10 focus:border-sky-400/35 outline-none px-3 py-2.5 text-[11px] leading-relaxed text-slate-200 font-mono resize-none"
+      className="w-full rounded-xl bg-[#0a111e]/85 border border-white/10 focus:border-sky-400/35 outline-none px-3 py-2.5 text-[11px] leading-relaxed text-amber-50 font-mono resize-none"
       spellCheck={false}
     />
   );
@@ -209,7 +209,7 @@ function Gallery() {
     >
       <div className="p-4 grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3 min-h-[120px]">
         {shown.length === 0 && (
-          <p className="col-span-full text-center text-[11px] text-slate-500 py-8">
+          <p className="col-span-full text-center text-[11px] text-amber-300/50 py-8">
             No generations yet — compose a prompt above and hit Generate.
           </p>
         )}
@@ -258,7 +258,7 @@ function ImageLabTab() {
           {/* Controls */}
           <div className="flex flex-col gap-3">
             <div>
-              <p className="text-[10px] uppercase tracking-widest text-slate-400 mb-1.5">Model</p>
+              <p className="text-[10px] uppercase tracking-widest text-amber-200/60 mb-1.5">Model</p>
               <div className="flex flex-col gap-1.5">
                 {HF_MODELS.filter((m) => m.kind === "image").map((m) => (
                   <button
@@ -270,14 +270,14 @@ function ImageLabTab() {
                         : "border-white/8 bg-white/[0.03] hover:border-white/20"
                     }`}
                   >
-                    <span className="text-[11px] font-bold text-slate-100">{m.label}</span>
-                    <span className="block text-[9px] text-slate-500">{m.blurb}</span>
+                    <span className="text-[11px] font-bold text-amber-50">{m.label}</span>
+                    <span className="block text-[9px] text-amber-300/50">{m.blurb}</span>
                   </button>
                 ))}
               </div>
             </div>
             <div>
-              <p className="text-[10px] uppercase tracking-widest text-slate-400 mb-1.5">Hero Paint</p>
+              <p className="text-[10px] uppercase tracking-widest text-amber-200/60 mb-1.5">Hero Paint</p>
               <input
                 type="color"
                 value={paintHex}
@@ -290,7 +290,7 @@ function ImageLabTab() {
           {/* Prompt */}
           <div className="flex flex-col gap-3">
             <div>
-              <p className="text-[10px] uppercase tracking-widest text-slate-400 mb-1.5">Scene Style</p>
+              <p className="text-[10px] uppercase tracking-widest text-amber-200/60 mb-1.5">Scene Style</p>
               <div className="flex flex-wrap gap-1.5">
                 {IMAGE_STYLES.map((s) => (
                   <button
@@ -299,7 +299,7 @@ function ImageLabTab() {
                     className={`px-2.5 py-1.5 rounded-lg text-[10px] font-semibold border transition-all ${
                       styleId === s.id
                         ? "border-sky-400/35 bg-sky-400/15 text-sky-100"
-                        : "border-white/10 bg-white/[0.03] text-slate-300 hover:border-white/25"
+                        : "border-white/10 bg-white/[0.03] text-amber-100/80 hover:border-white/25"
                     }`}
                   >
                     {s.label}
@@ -313,7 +313,7 @@ function ImageLabTab() {
                 value={extra}
                 onChange={(e) => setExtra(e.target.value)}
                 placeholder="Extra direction… e.g. 85mm lens, motion blur wheels"
-                className="flex-1 rounded-lg bg-[#0a111e]/85 border border-white/10 focus:border-sky-400/30 outline-none px-3 py-2 text-[11px] text-slate-200 placeholder:text-slate-600"
+                className="flex-1 rounded-lg bg-[#0a111e]/85 border border-white/10 focus:border-sky-400/30 outline-none px-3 py-2 text-[11px] text-amber-50 placeholder:text-amber-400"
               />
               <NeonHorizonButton variant="neon" icon={<Wand2 size={13} />} onClick={generate}>
                 Generate
@@ -359,7 +359,7 @@ function CinemaTab() {
         <div className="p-4 flex flex-col gap-3">
           <div className="grid md:grid-cols-2 gap-3">
             <div>
-              <p className="text-[10px] uppercase tracking-widest text-slate-400 mb-1.5">Video Model</p>
+              <p className="text-[10px] uppercase tracking-widest text-amber-200/60 mb-1.5">Video Model</p>
               <div className="grid grid-cols-3 gap-1.5">
                 {HF_MODELS.filter((m) => m.kind === "video").map((m) => (
                   <button
@@ -369,19 +369,19 @@ function CinemaTab() {
                       modelId === m.id ? "border-violet-400/50 bg-amber-400/10" : "border-white/8 bg-white/[0.03] hover:border-white/20"
                     }`}
                   >
-                    <span className="text-[10px] font-bold text-slate-100 block truncate">{m.label}</span>
-                    <span className="text-[9px] text-slate-500 block truncate">{m.vendor}</span>
+                    <span className="text-[10px] font-bold text-amber-50 block truncate">{m.label}</span>
+                    <span className="text-[9px] text-amber-300/50 block truncate">{m.vendor}</span>
                   </button>
                 ))}
               </div>
             </div>
             <div>
-              <p className="text-[10px] uppercase tracking-widest text-slate-400 mb-1.5">Viral Preset Overlay</p>
+              <p className="text-[10px] uppercase tracking-widest text-amber-200/60 mb-1.5">Viral Preset Overlay</p>
               <div className="flex flex-wrap gap-1.5">
                 <button
                   onClick={() => setPresetId(null)}
                   className={`px-2.5 py-1.5 rounded-lg text-[10px] font-semibold border transition-all ${
-                    presetId === null ? "border-fuchsia-400/50 bg-fuchsia-400/15 text-fuchsia-100" : "border-white/10 bg-white/[0.03] text-slate-300"
+                    presetId === null ? "border-fuchsia-400/50 bg-fuchsia-400/15 text-fuchsia-100" : "border-white/10 bg-white/[0.03] text-amber-100/80"
                   }`}
                 >
                   None
@@ -391,7 +391,7 @@ function CinemaTab() {
                     key={p.id}
                     onClick={() => setPresetId(p.id)}
                     className={`px-2.5 py-1.5 rounded-lg text-[10px] font-semibold border transition-all ${
-                      presetId === p.id ? "border-fuchsia-400/50 bg-fuchsia-400/15 text-fuchsia-100" : "border-white/10 bg-white/[0.03] text-slate-300 hover:border-white/25"
+                      presetId === p.id ? "border-fuchsia-400/50 bg-fuchsia-400/15 text-fuchsia-100" : "border-white/10 bg-white/[0.03] text-amber-100/80 hover:border-white/25"
                     }`}
                   >
                     {p.label}
@@ -405,20 +405,20 @@ function CinemaTab() {
             {shots.map((s) => (
               <div key={s.shot} className="rounded-xl border border-white/10 bg-[#0a111e]/70 p-3 flex flex-col gap-2">
                 <div className="flex items-center justify-between">
-                  <span className="flex items-center gap-1.5 text-[11px] font-bold text-slate-100">
+                  <span className="flex items-center gap-1.5 text-[11px] font-bold text-amber-50">
                     <Film size={11} className="text-amber-300" /> {s.shot}
                   </span>
                   <NeonHorizonButton size="xs" variant="neon" icon={<Sparkles size={10} />} onClick={() => shootShot(s.shot, s.prompt)}>
                     Shoot
                   </NeonHorizonButton>
                 </div>
-                <p className="text-[10px] leading-relaxed text-slate-400 line-clamp-3">{preset ? `${s.prompt}, ${preset.promptSuffix}` : s.prompt}</p>
+                <p className="text-[10px] leading-relaxed text-amber-200/60 line-clamp-3">{preset ? `${s.prompt}, ${preset.promptSuffix}` : s.prompt}</p>
               </div>
             ))}
           </div>
 
           <div className="flex items-center justify-between pt-1">
-            <p className="text-[10px] text-slate-500">Tip: connect the “web” backend to open each shot pre-filled in Higgsfield Cinema Studio.</p>
+            <p className="text-[10px] text-amber-300/50">Tip: connect the “web” backend to open each shot pre-filled in Higgsfield Cinema Studio.</p>
             <NeonHorizonButton size="sm" variant="secondary" icon={<ExternalLink size={11} />} onClick={() => openWebTool("https://higgsfield.ai/generate")}>
               Open Cinema Studio
             </NeonHorizonButton>
@@ -469,8 +469,8 @@ function AudioTab() {
                   vibeId === v.id ? "border-emerald-400/50 bg-emerald-400/10" : "border-white/8 bg-white/[0.03] hover:border-white/20"
                 }`}
               >
-                <span className="text-[11px] font-bold text-slate-100 block">{v.label}</span>
-                <span className="text-[9px] text-slate-500 leading-snug block mt-0.5">{v.desc}</span>
+                <span className="text-[11px] font-bold text-amber-50 block">{v.label}</span>
+                <span className="text-[9px] text-amber-300/50 leading-snug block mt-0.5">{v.desc}</span>
               </button>
             ))}
           </div>
@@ -526,24 +526,24 @@ function MarketingTab() {
       <div className="p-4 flex flex-col gap-4">
         <div className="rounded-xl border border-amber-400/20 bg-amber-400/[0.04] p-4">
           <p className="text-sm font-extrabold tracking-wide text-amber-100">{campaign.headline}</p>
-          <p className="text-[11px] italic text-slate-300 mt-1">“{campaign.tagline}”</p>
+          <p className="text-[11px] italic text-amber-100/80 mt-1">“{campaign.tagline}”</p>
         </div>
         <div className="grid md:grid-cols-2 gap-4">
           <div>
-            <p className="text-[10px] uppercase tracking-widest text-slate-400 mb-2">Channel Plan</p>
+            <p className="text-[10px] uppercase tracking-widest text-amber-200/60 mb-2">Channel Plan</p>
             <ul className="space-y-1.5">
               {campaign.channels.map((c) => (
-                <li key={c} className="flex items-center gap-2 text-[11px] text-slate-300">
+                <li key={c} className="flex items-center gap-2 text-[11px] text-amber-100/80">
                   <span className="w-1 h-1 rounded-full bg-amber-300" /> {c}
                 </li>
               ))}
             </ul>
           </div>
           <div>
-            <p className="text-[10px] uppercase tracking-widest text-slate-400 mb-2">Asset Checklist (via Higgsfield)</p>
+            <p className="text-[10px] uppercase tracking-widest text-amber-200/60 mb-2">Asset Checklist (via Higgsfield)</p>
             <ul className="space-y-1.5">
               {campaign.assetChecklist.map((a) => (
-                <li key={a} className="flex items-center gap-2 text-[11px] text-slate-300">
+                <li key={a} className="flex items-center gap-2 text-[11px] text-amber-100/80">
                   <CheckCircle2 size={11} className="text-emerald-300 shrink-0" /> {a}
                 </li>
               ))}
@@ -617,7 +617,7 @@ function BatchTab() {
           </div>
           {jobs.length > 0 && (
             <div className="rounded-xl border border-white/10 bg-[#0a111e]/70 p-3">
-              <div className="flex justify-between text-[10px] font-mono text-slate-400 mb-1.5">
+              <div className="flex justify-between text-[10px] font-mono text-amber-200/60 mb-1.5">
                 <span>QUEUE PROGRESS</span>
                 <span>
                   {doneCount}/{jobs.length} · {running} rendering
@@ -673,21 +673,21 @@ function ConnectTab() {
                 backend === b.id ? "border-sky-400/35 bg-sky-400/10" : "border-white/8 bg-white/[0.03] hover:border-white/20"
               }`}
             >
-              <span className="text-[11px] font-bold text-slate-100 block">{b.label}</span>
-              <span className="text-[9px] text-slate-500 leading-snug block mt-0.5">{b.desc}</span>
+              <span className="text-[11px] font-bold text-amber-50 block">{b.label}</span>
+              <span className="text-[9px] text-amber-300/50 leading-snug block mt-0.5">{b.desc}</span>
             </button>
           ))}
         </div>
         {backend === "api" && (
           <div className="px-4 pb-4">
-            <label className="text-[10px] uppercase tracking-widest text-slate-400 block mb-1.5">Proxy Endpoint</label>
+            <label className="text-[10px] uppercase tracking-widest text-amber-200/60 block mb-1.5">Proxy Endpoint</label>
             <input
               value={proxyUrl}
               onChange={(e) => setProxyUrl(e.target.value)}
               placeholder="https://your-proxy.example.com/higgsfield"
-              className="w-full rounded-lg bg-[#0a111e]/85 border border-white/10 focus:border-sky-400/30 outline-none px-3 py-2 text-[11px] font-mono text-slate-200"
+              className="w-full rounded-lg bg-[#0a111e]/85 border border-white/10 focus:border-sky-400/30 outline-none px-3 py-2 text-[11px] font-mono text-amber-50"
             />
-            <p className="text-[9px] text-slate-500 mt-1.5">
+            <p className="text-[9px] text-amber-300/50 mt-1.5">
               Proxy contract: POST /jobs {"{kind,model,prompt}"} → {"{id,status,resultUrl}"}; GET /jobs/:id for polling.
             </p>
           </div>
@@ -719,10 +719,10 @@ function ConnectTab() {
                 className="text-left px-3 py-2.5 rounded-xl border border-white/10 bg-white/[0.03] hover:border-sky-400/30 hover:bg-sky-400/[0.06] transition-all group"
               >
                 <span className="flex items-center justify-between">
-                  <span className="text-[11px] font-bold text-slate-100 group-hover:text-sky-200">{t.label}</span>
-                  <ExternalLink size={10} className="text-slate-500" />
+                  <span className="text-[11px] font-bold text-amber-50 group-hover:text-sky-200">{t.label}</span>
+                  <ExternalLink size={10} className="text-amber-300/50" />
                 </span>
-                <span className="text-[9px] text-slate-500 leading-snug block mt-0.5">{t.blurb}</span>
+                <span className="text-[9px] text-amber-300/50 leading-snug block mt-0.5">{t.blurb}</span>
               </button>
             ))}
           </div>
@@ -763,7 +763,7 @@ export function NeonHiggsfieldStudio() {
           </div>
           <div>
             <h2 className="text-base font-extrabold tracking-wide text-slate-50">Higgsfield Creative Suite</h2>
-            <p className="text-[10px] text-slate-400 uppercase tracking-[0.2em]">AI media generation · wired into APEX ENGINEER</p>
+            <p className="text-[10px] text-amber-200/60 uppercase tracking-[0.2em]">AI media generation · wired into APEX ENGINEER</p>
           </div>
         </div>
         <NeonHorizonBadge variant={backend === "api" ? "emerald" : backend === "web" ? "cyan" : "neutral"} pulse={backend !== "demo"}>
@@ -806,7 +806,7 @@ export function NeonHiggsfieldStudio() {
                     key={t.id}
                     onClick={() => go(t.id)}
                     className={`flex items-center gap-2.5 px-2.5 py-1.5 rounded-lg border text-left transition-all ${
-                      isActive ? "text-white" : "border-transparent text-slate-400 hover:bg-white/[0.05] hover:text-slate-200"
+                      isActive ? "text-white" : "border-transparent text-amber-200/60 hover:bg-white/[0.05] hover:text-amber-50"
                     }`}
                     style={
                       isActive
@@ -819,7 +819,7 @@ export function NeonHiggsfieldStudio() {
                   >
                     {t.icon}
                     <span className="text-[11px] font-bold tracking-wide">{t.label}</span>
-                    <span className="ml-auto font-mono text-[9px] text-slate-500">
+                    <span className="ml-auto font-mono text-[9px] text-amber-300/50">
                       {t.lat >= 0 ? "+" : ""}
                       {t.lat}° / {t.lng >= 0 ? "+" : ""}
                       {t.lng}°
@@ -896,7 +896,7 @@ export function NeonHiggsfieldStudio() {
                         {curTab.cardinal}
                       </span>
                     </div>
-                    <p className="text-[11px] text-slate-300 font-sans mt-0.5">{curTab.description}</p>
+                    <p className="text-[11px] text-amber-100/80 font-sans mt-0.5">{curTab.description}</p>
                   </div>
                 </div>
 
@@ -904,14 +904,14 @@ export function NeonHiggsfieldStudio() {
                 <div className="flex items-center gap-2">
                   <button
                     onClick={() => go(prevTab.id)}
-                    className="px-2.5 py-1 rounded-lg text-[10px] font-mono text-slate-300 hover:text-white bg-slate-950/80 hover:bg-slate-800 border border-white/10 transition-all flex items-center gap-1"
+                    className="px-2.5 py-1 rounded-lg text-[10px] font-mono text-amber-100/80 hover:text-white bg-amber-950/80 hover:bg-amber-800/35 border border-white/10 transition-all flex items-center gap-1"
                     title={`Rotate globe to ${prevTab.label}`}
                   >
                     ← {prevTab.label}
                   </button>
                   <button
                     onClick={() => go(nextTab.id)}
-                    className="px-2.5 py-1 rounded-lg text-[10px] font-mono text-slate-300 hover:text-white bg-slate-950/80 hover:bg-slate-800 border border-white/10 transition-all flex items-center gap-1"
+                    className="px-2.5 py-1 rounded-lg text-[10px] font-mono text-amber-100/80 hover:text-white bg-amber-950/80 hover:bg-amber-800/35 border border-white/10 transition-all flex items-center gap-1"
                     title={`Rotate globe to ${nextTab.label}`}
                   >
                     {nextTab.label} →

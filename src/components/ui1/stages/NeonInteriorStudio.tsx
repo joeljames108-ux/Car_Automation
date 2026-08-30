@@ -38,7 +38,7 @@ export function NeonInteriorStudio() {
   const ambientColors = ["#8fb9d9", "#a78bfa", "#34d399", "#d9b36c", "#ff5252"];
 
   return (
-    <div className="w-full flex flex-col gap-6 text-slate-100 animate-nh-materialize">
+    <div className="w-full flex flex-col gap-6 text-amber-50 animate-nh-materialize">
       {/* Header Banner */}
       <NeonHorizonGlassPanel
         variant="window"
@@ -79,7 +79,7 @@ export function NeonInteriorStudio() {
               className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs nh-font-mono font-bold transition-all cursor-pointer whitespace-nowrap ${
                 isActive
                   ? "bg-sky-400/20 text-sky-200 border border-sky-400/30"
-                  : "text-slate-400 hover:text-slate-200 hover:bg-white/5"
+                  : "text-amber-200/60 hover:text-amber-50 hover:bg-white/5"
               }`}
             >
               {tab.icon}
@@ -148,7 +148,7 @@ export function NeonInteriorStudio() {
               />
 
               <div className="flex flex-col gap-2 pt-2 border-t border-white/10">
-                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                <span className="text-[10px] font-bold text-amber-200/60 uppercase tracking-wider">
                   AMBIENT COCKPIT LED ILLUMINATION
                 </span>
                 <div className="flex items-center gap-3">

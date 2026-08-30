@@ -11,8 +11,8 @@ const SkillBar = memo(function SkillBar({ label, value, color }: { label: string
   return (
     <div>
       <div className="flex justify-between text-[10px] mb-0.5">
-        <span className="text-slate-500">{label}</span>
-        <span className="text-slate-300 font-mono">{value}</span>
+        <span className="text-amber-300/50">{label}</span>
+        <span className="text-amber-100/80 font-mono">{value}</span>
       </div>
       <div className="h-1 bg-base-800 rounded-full overflow-hidden">
         <div className={`h-full ${color} rounded-full transition-all duration-500`} style={{ width: `${value}%` }} />
@@ -30,10 +30,10 @@ const DriverCard = memo(function DriverCard({ driver, actions }: { driver: RaceD
         </div>
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2">
-            <span className="text-sm font-semibold text-slate-200 truncate">{driver.name}</span>
-            <span className="text-[10px] px-1.5 py-0.5 rounded bg-base-800 text-slate-400">{driver.nationality}</span>
+            <span className="text-sm font-semibold text-amber-50 truncate">{driver.name}</span>
+            <span className="text-[10px] px-1.5 py-0.5 rounded bg-base-800 text-amber-200/60">{driver.nationality}</span>
           </div>
-          <div className="text-[10px] text-slate-500 mt-0.5">
+          <div className="text-[10px] text-amber-300/50 mt-0.5">
             ${(driver.salary / 1_000_000).toFixed(1)}M/season
             {driver.contractEndSeason > 0 && <span className="ml-2 text-warn-400">Contract → S{driver.contractEndSeason}</span>}
           </div>
@@ -74,7 +74,7 @@ export const DriverMarket = memo(function DriverMarket({ selectedTeam }: { selec
             setTab(t.id);
           }}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-all cursor-pointer ${
-              tab === t.id ? "bg-accent-500/20 text-accent-300 tab-active-indicator" : "text-slate-400 hover:text-slate-200"
+              tab === t.id ? "bg-accent-500/20 text-accent-300 tab-active-indicator" : "text-amber-200/60 hover:text-amber-50"
             }`}>
             {t.icon} {t.label}
           </button>
@@ -86,13 +86,13 @@ export const DriverMarket = memo(function DriverMarket({ selectedTeam }: { selec
         <div className="space-y-3">
           {!selectedTeam ? (
             <div className="glass-panel p-8 text-center">
-              <Users size={32} className="mx-auto text-slate-700 mb-2" />
-              <p className="text-sm text-slate-500">Select a team to manage its drivers</p>
+              <Users size={32} className="mx-auto text-amber-500 mb-2" />
+              <p className="text-sm text-amber-300/50">Select a team to manage its drivers</p>
             </div>
           ) : selectedTeam.drivers.length === 0 ? (
             <div className="glass-panel p-8 text-center">
-              <UserPlus size={32} className="mx-auto text-slate-700 mb-2" />
-              <p className="text-sm text-slate-500">No drivers signed. Hire from Free Agents or Scout new talent.</p>
+              <UserPlus size={32} className="mx-auto text-amber-500 mb-2" />
+              <p className="text-sm text-amber-300/50">No drivers signed. Hire from Free Agents or Scout new talent.</p>
             </div>
           ) : (
             selectedTeam.drivers.map(d => (
@@ -126,7 +126,7 @@ export const DriverMarket = memo(function DriverMarket({ selectedTeam }: { selec
         <div className="space-y-3">
           {availableDrivers.length === 0 ? (
             <div className="glass-panel p-8 text-center">
-              <p className="text-sm text-slate-500">All drivers are signed to teams.</p>
+              <p className="text-sm text-amber-300/50">All drivers are signed to teams.</p>
             </div>
           ) : (
             availableDrivers.map((d, idx) => (
@@ -140,7 +140,7 @@ export const DriverMarket = memo(function DriverMarket({ selectedTeam }: { selec
                     Hire
                   </button>
                 ) : (
-                  <span className="text-[10px] text-slate-600">
+                  <span className="text-[10px] text-amber-400">
                     {!selectedTeam ? "Select team" : "Full roster"}
                   </span>
                 )
@@ -162,15 +162,15 @@ export const DriverMarket = memo(function DriverMarket({ selectedTeam }: { selec
               className="flex items-center gap-1.5 px-4 py-2.5 rounded-xl text-xs font-semibold bg-amber-500/15 border border-amber-500/30 text-amber-300 hover:bg-amber-500/25 disabled:opacity-40 disabled:cursor-not-allowed transition-all cursor-pointer">
               <Search size={14} /> Scout New Talent
             </button>
-            <span className="text-[10px] text-slate-500">
+            <span className="text-[10px] text-amber-300/50">
               {company.motorsport.scoutedDrivers.length}/4 scouted
             </span>
           </div>
           {company.motorsport.scoutedDrivers.length === 0 ? (
             <div className="glass-panel p-8 text-center">
-              <Search size={32} className="mx-auto text-slate-700 mb-2" />
-              <p className="text-sm text-slate-500">Scout young talent from feeder series.</p>
-              <p className="text-xs text-slate-600 mt-1">Cheaper but less experienced — high potential!</p>
+              <Search size={32} className="mx-auto text-amber-500 mb-2" />
+              <p className="text-sm text-amber-300/50">Scout young talent from feeder series.</p>
+              <p className="text-xs text-amber-400 mt-1">Cheaper but less experienced — high potential!</p>
             </div>
           ) : (
             company.motorsport.scoutedDrivers.map(d => (
@@ -184,7 +184,7 @@ export const DriverMarket = memo(function DriverMarket({ selectedTeam }: { selec
                     Sign
                   </button>
                 ) : (
-                  <span className="text-[10px] text-slate-600">
+                  <span className="text-[10px] text-amber-400">
                     {!selectedTeam ? "Select team" : "Full"}
                   </span>
                 )

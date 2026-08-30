@@ -69,7 +69,7 @@ export function NeonLeaderboardStudio() {
   const activeRecord = records[selectedCircuit] || records.nurburgring;
 
   return (
-    <div className="w-full flex flex-col gap-6 text-slate-100 animate-nh-materialize">
+    <div className="w-full flex flex-col gap-6 text-amber-50 animate-nh-materialize">
       {/* Header */}
       <NeonHorizonGlassPanel
         variant="window"
@@ -115,10 +115,10 @@ export function NeonLeaderboardStudio() {
  }`}
               >
                 <div className="flex items-center gap-3">
-                  <Flag size={16} className={isSelected ? "text-sky-400" : "text-slate-400"} />
-                  <span className="text-xs font-bold text-slate-100">{c.name}</span>
+                  <Flag size={16} className={isSelected ? "text-sky-400" : "text-amber-200/60"} />
+                  <span className="text-xs font-bold text-amber-50">{c.name}</span>
                 </div>
-                <ChevronRight size={14} className={isSelected ? "text-sky-400" : "text-slate-500"} />
+                <ChevronRight size={14} className={isSelected ? "text-sky-400" : "text-amber-300/50"} />
               </div>
             );
           })}
@@ -148,20 +148,20 @@ export function NeonLeaderboardStudio() {
                 >
                   <div className="flex items-center gap-3">
                     <span className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold ${
- entry.rank === 1 ? "bg-amber-400 text-slate-950" : entry.rank === 2 ? "bg-slate-300 text-slate-950" : entry.rank === 3 ? "bg-amber-700 text-slate-100" : "bg-sky-400/12 text-sky-300"
+ entry.rank === 1 ? "bg-amber-400 text-slate-950" : entry.rank === 2 ? "bg-slate-300 text-slate-950" : entry.rank === 3 ? "bg-amber-700 text-amber-50" : "bg-sky-400/12 text-sky-300"
  }`}>
                       #{entry.rank}
                     </span>
                     <div className="flex flex-col">
-                      <span className={`text-xs font-bold ${isUser ? "text-sky-300" : "text-slate-100"}`}>
+                      <span className={`text-xs font-bold ${isUser ? "text-sky-300" : "text-amber-50"}`}>
                         {entry.car}
                       </span>
-                      <span className="text-[10px] text-slate-400 font-mono">
+                      <span className="text-[10px] text-amber-200/60 font-mono">
                         {entry.driver} · {entry.power}
                       </span>
                     </div>
                   </div>
-                  <span className={`text-xs font-bold font-mono ${isUser ? "text-sky-300" : "text-slate-200"}`}>
+                  <span className={`text-xs font-bold font-mono ${isUser ? "text-sky-300" : "text-amber-50"}`}>
                     {entry.time}
                   </span>
                 </div>

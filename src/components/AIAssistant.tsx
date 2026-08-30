@@ -610,7 +610,7 @@ export function AIAssistant({ embedded = false }: { embedded?: boolean }) {
     return (
       <button
         onClick={() => setOpen(true)}
-        className="fixed bottom-4 right-4 z-50 flex items-center gap-2 px-3 py-2 rounded-xl bg-base-850 border border-base-700 text-slate-300 hover:border-accent-500/50 hover:text-accent-300 transition-all shadow-xl"
+        className="fixed bottom-4 right-4 z-50 flex items-center gap-2 px-3 py-2 rounded-xl bg-base-850 border border-base-700 text-amber-100/80 hover:border-accent-500/50 hover:text-accent-300 transition-all shadow-xl"
       >
         <Bot size={16} className="text-accent-400" />
         <span className="text-xs font-semibold">Apex AI</span>
@@ -632,8 +632,8 @@ export function AIAssistant({ embedded = false }: { embedded?: boolean }) {
                 <Bot size={15} className="text-accent-300" />
               </div>
               <div>
-                <div className="text-xs font-semibold text-slate-200 leading-tight">Apex AI Engineer</div>
-                <div className="text-[10px] text-slate-500 leading-tight">{ENGINEERS[engineer].label} · {MODES[mode].label}</div>
+                <div className="text-xs font-semibold text-amber-50 leading-tight">Apex AI Engineer</div>
+                <div className="text-[10px] text-amber-300/50 leading-tight">{ENGINEERS[engineer].label} · {MODES[mode].label}</div>
               </div>
             </div>
 
@@ -657,7 +657,7 @@ export function AIAssistant({ embedded = false }: { embedded?: boolean }) {
                         : c === "luxury"
                         ? "bg-amber-500/20 border-amber-500/40 text-amber-300"
                         : "bg-amber-500/20 border-amber-500/40 text-amber-300"
-                      : "bg-base-900 border-transparent text-slate-500 hover:text-slate-300"
+                      : "bg-base-900 border-transparent text-amber-300/50 hover:text-amber-100/80"
                   }`}
                 >
                   {c}
@@ -673,7 +673,7 @@ export function AIAssistant({ embedded = false }: { embedded?: boolean }) {
                   onClick={() => setEngineer(id)}
                   title={`${ENGINEERS[id].label} — ${ENGINEERS[id].focus}`}
                   className={`flex items-center justify-center w-6 h-6 rounded transition-all ${
-                    engineer === id ? "bg-accent-500/20 " + ENGINEERS[id].tone : "text-slate-500 hover:text-slate-300"
+                    engineer === id ? "bg-accent-500/20 " + ENGINEERS[id].tone : "text-amber-300/50 hover:text-amber-100/80"
                   }`}
                 >
                   {ENGINEERS[id].icon}
@@ -688,7 +688,7 @@ export function AIAssistant({ embedded = false }: { embedded?: boolean }) {
                   key={id}
                   onClick={() => setMode(id)}
                   className={`px-2 py-1 rounded text-[10px] font-medium transition-all ${
-                    mode === id ? "bg-accent-500/20 text-accent-300" : "text-slate-500 hover:text-slate-300"
+                    mode === id ? "bg-accent-500/20 text-accent-300" : "text-amber-300/50 hover:text-amber-100/80"
                   }`}
                 >
                   {MODES[id].label}
@@ -696,7 +696,7 @@ export function AIAssistant({ embedded = false }: { embedded?: boolean }) {
               ))}
             </div>
 
-            <button onClick={() => setOpen(false)} className="text-slate-500 hover:text-slate-300 p-1 rounded transition-colors">
+            <button onClick={() => setOpen(false)} className="text-amber-300/50 hover:text-amber-100/80 p-1 rounded transition-colors">
               <X size={14} />
             </button>
           </div>
@@ -707,9 +707,9 @@ export function AIAssistant({ embedded = false }: { embedded?: boolean }) {
             <div className="bg-base-900 p-3 max-h-[180px] overflow-y-auto">
               <div className="flex items-center gap-1.5 mb-2">
                 <AlertTriangle size={13} className="text-warn-400" />
-                <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">Live Warnings</span>
+                <span className="text-[11px] font-semibold text-amber-200/60 uppercase tracking-wider">Live Warnings</span>
                 {activeWarnings.length > 0 && (
-                  <span className="text-[10px] text-slate-600">{activeWarnings.length} active</span>
+                  <span className="text-[10px] text-amber-400">{activeWarnings.length} active</span>
                 )}
               </div>
               {activeWarnings.length === 0 ? (
@@ -722,12 +722,12 @@ export function AIAssistant({ embedded = false }: { embedded?: boolean }) {
                     <div key={w.id} className={`flex items-start gap-2 px-2 py-1.5 rounded-lg border text-xs ${sevColor(w.severity)}`}>
                       <span className={`mt-1 w-1.5 h-1.5 rounded-full shrink-0 ${sevDot(w.severity)}`} />
                       <div className="flex-1">
-                        <span className="text-[10px] text-slate-500 mr-1.5">{w.category}</span>
-                        <span className="text-slate-300">{w.text}</span>
+                        <span className="text-[10px] text-amber-300/50 mr-1.5">{w.category}</span>
+                        <span className="text-amber-100/80">{w.text}</span>
                       </div>
                       <button
                         onClick={() => setDismissed((prev) => new Set(prev).add(w.id))}
-                        className="text-slate-600 hover:text-slate-400 transition-colors"
+                        className="text-amber-400 hover:text-amber-200/60 transition-colors"
                         title="Dismiss"
                       >
                         <X size={12} />
@@ -742,17 +742,17 @@ export function AIAssistant({ embedded = false }: { embedded?: boolean }) {
             <div className="bg-base-900 p-3">
               <div className="flex items-center gap-1.5 mb-2">
                 <Lightbulb size={13} className="text-accent-400" />
-                <span className="text-[11px] font-semibold text-slate-400 uppercase tracking-wider">AI Suggestion</span>
+                <span className="text-[11px] font-semibold text-amber-200/60 uppercase tracking-wider">AI Suggestion</span>
                 {suggestions.length > 1 && (
                   <div className="flex items-center gap-1 ml-auto">
                     <button
                       onClick={() => setActiveSuggIdx((i) => (i - 1 + suggestions.length) % suggestions.length)}
-                      className="text-slate-600 hover:text-slate-300 text-[10px] px-1"
+                      className="text-amber-400 hover:text-amber-100/80 text-[10px] px-1"
                     >‹</button>
-                    <span className="text-[10px] text-slate-600">{Math.min(activeSuggIdx + 1, suggestions.length)}/{suggestions.length}</span>
+                    <span className="text-[10px] text-amber-400">{Math.min(activeSuggIdx + 1, suggestions.length)}/{suggestions.length}</span>
                     <button
                       onClick={() => setActiveSuggIdx((i) => (i + 1) % suggestions.length)}
-                      className="text-slate-600 hover:text-slate-300 text-[10px] px-1"
+                      className="text-amber-400 hover:text-amber-100/80 text-[10px] px-1"
                     >›</button>
                   </div>
                 )}
@@ -763,8 +763,8 @@ export function AIAssistant({ embedded = false }: { embedded?: boolean }) {
                   <div className="flex items-start gap-2 mb-1.5">
                     <Zap size={14} className="text-accent-400 mt-0.5 shrink-0" />
                     <div className="flex-1">
-                      <div className="text-sm font-medium text-slate-200">{activeSugg.title}</div>
-                      {mode !== "beginner" && <div className="text-[11px] text-slate-500 mt-0.5">{activeSugg.detail}</div>}
+                      <div className="text-sm font-medium text-amber-50">{activeSugg.title}</div>
+                      {mode !== "beginner" && <div className="text-[11px] text-amber-300/50 mt-0.5">{activeSugg.detail}</div>}
                     </div>
                   </div>
 
@@ -775,7 +775,7 @@ export function AIAssistant({ embedded = false }: { embedded?: boolean }) {
                         className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[10px] font-mono ${
                           imp.tone === "good" ? "text-ok-300 bg-ok-500/10"
                           : imp.tone === "bad" ? "text-danger-300 bg-danger-500/10"
-                          : "text-slate-400 bg-base-800"
+                          : "text-amber-200/60 bg-base-800"
                         }`}
                       >
                         <TrendingUp size={9} />
@@ -791,12 +791,12 @@ export function AIAssistant({ embedded = false }: { embedded?: boolean }) {
                     >
                       <Check size={12} /> Apply
                     </button>
-                    <button className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-base-800 border border-base-700 text-slate-400 text-xs hover:text-slate-200 transition-all">
+                    <button className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-base-800 border border-base-700 text-amber-200/60 text-xs hover:text-amber-50 transition-all">
                       <Info size={12} /> Explain
                     </button>
                     <button
                       onClick={() => setDismissed((prev) => new Set(prev).add(activeSugg.id))}
-                      className="px-2.5 py-1 rounded-lg bg-base-800 border border-base-700 text-slate-400 text-xs hover:text-slate-200 transition-all"
+                      className="px-2.5 py-1 rounded-lg bg-base-800 border border-base-700 text-amber-200/60 text-xs hover:text-amber-50 transition-all"
                     >
                       Ignore
                     </button>
@@ -809,7 +809,7 @@ export function AIAssistant({ embedded = false }: { embedded?: boolean }) {
           {/* Reaction ticker */}
           {reaction && (
             <div className="px-3 py-1.5 border-t border-base-800 bg-accent-500/5">
-              <div className="flex items-center gap-2 text-[11px] text-slate-400">
+              <div className="flex items-center gap-2 text-[11px] text-amber-200/60">
                 <span className={ENGINEERS[engineer].tone}>{ENGINEERS[engineer].icon}</span>
                 <span>"{reaction}"</span>
               </div>
@@ -823,7 +823,7 @@ export function AIAssistant({ embedded = false }: { embedded?: boolean }) {
                 <span className="text-[10px] font-mono text-amber-400 font-bold uppercase tracking-wider flex items-center gap-1">
                   <Sparkles size={12} /> AI Engineering Blueprint Templates
                 </span>
-                <span className="text-[9px] text-slate-500 font-mono">1-Click Neural Setup</span>
+                <span className="text-[9px] text-amber-300/50 font-mono">1-Click Neural Setup</span>
               </div>
               <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2">
                 {AI_PRESET_LIBRARY.map((preset) => (
@@ -833,12 +833,12 @@ export function AIAssistant({ embedded = false }: { embedded?: boolean }) {
                   >
                     <div>
                       <div className="flex items-center justify-between gap-1 mb-1">
-                        <span className="text-xs font-bold text-slate-200">{preset.title}</span>
+                        <span className="text-xs font-bold text-amber-50">{preset.title}</span>
                         <span className={`text-[8px] font-mono px-1.5 py-0.2 rounded border ${preset.badgeColor}`}>
                           {preset.badge}
                         </span>
                       </div>
-                      <p className="text-[10px] text-slate-400 line-clamp-2">{preset.description}</p>
+                      <p className="text-[10px] text-amber-200/60 line-clamp-2">{preset.description}</p>
                       <div className="mt-1.5 text-[9px] font-mono text-amber-300">
                         {preset.metrics.powerHp} HP • {preset.metrics.weightKg} kg • {preset.metrics.zeroToSixtySec}s 0-60
                       </div>
@@ -874,7 +874,7 @@ export function AIAssistant({ embedded = false }: { embedded?: boolean }) {
               {showPresetDrawer ? <ChevronUp size={11} /> : <ChevronDown size={11} />}
             </button>
 
-            <span className="text-[10px] text-slate-500 uppercase tracking-wider shrink-0 mr-1">Auto Optimize</span>
+            <span className="text-[10px] text-amber-300/50 uppercase tracking-wider shrink-0 mr-1">Auto Optimize</span>
             {[
               { id: "performance", label: "Max Performance", icon: <Trophy size={11} />, color: "text-orange-300 border-orange-500/30 hover:bg-orange-500/10" },
               { id: "cost", label: "Lowest Cost", icon: <DollarSign size={11} />, color: "text-emerald-300 border-emerald-500/30 hover:bg-emerald-500/10" },
@@ -893,7 +893,7 @@ export function AIAssistant({ embedded = false }: { embedded?: boolean }) {
             ))}
             <button
               onClick={() => setDismissed(new Set())}
-              className="flex items-center gap-1 px-2 py-1 rounded-lg border border-base-700 bg-base-900 text-[10px] text-slate-400 hover:text-slate-200 transition-all whitespace-nowrap ml-auto cursor-pointer"
+              className="flex items-center gap-1 px-2 py-1 rounded-lg border border-base-700 bg-base-900 text-[10px] text-amber-200/60 hover:text-amber-50 transition-all whitespace-nowrap ml-auto cursor-pointer"
             >
               <RotateCcw size={11} /> Reset alerts
             </button>

@@ -24,7 +24,7 @@ export const ExteriorDesignerIntegration: React.FC = () => {
   }, [isAssemblyComplete]);
 
   return (
-    <div className="w-full h-full min-h-[700px] flex flex-col space-y-4 font-sans text-slate-100">
+    <div className="w-full h-full min-h-[700px] flex flex-col space-y-4 font-sans text-amber-50">
       {/* ── TOP HEADER STATS & PROGRESS ── */}
       <ExteriorProgressPanel />
 

@@ -339,7 +339,7 @@ export const ModularInteriorStudioWorkbench: React.FC<ModularInteriorStudioWorkb
                     className={`p-2 rounded-xl text-center border font-bold ${
                       state.materials.dashboardTrimInsert === t.id
                         ? "bg-amber-950/50 border-amber-400 text-amber-300"
-                        : "bg-slate-900/40 border-slate-800 text-slate-400 hover:border-slate-700"
+                        : "bg-amber-900/40 border-amber-800/30 text-amber-200/60 hover:border-amber-700/30"
                     }`}
                   >
                     {t.label}
@@ -374,7 +374,7 @@ export const ModularInteriorStudioWorkbench: React.FC<ModularInteriorStudioWorkb
                     }`}
                   >
                     <div className="font-bold">{a.name}</div>
-                    <div className="text-[10px] text-slate-400 mt-1">{a.mass} kg • ${a.cost.toLocaleString()}</div>
+                    <div className="text-[10px] text-amber-200/60 mt-1">{a.mass} kg • ${a.cost.toLocaleString()}</div>
                   </button>
                 ))}
               </div>
@@ -399,14 +399,14 @@ export const ModularInteriorStudioWorkbench: React.FC<ModularInteriorStudioWorkb
                     }`}
                   >
                     <div className="font-bold">{c.name}</div>
-                    <div className="text-[10px] text-slate-400 mt-1">Mass: +{c.mass} kg</div>
+                    <div className="text-[10px] text-amber-200/60 mt-1">Mass: +{c.mass} kg</div>
                   </button>
                 ))}
               </div>
             </div>
 
             {/* Starlight Roof Toggle */}
-            <div className="pt-2 border-t border-slate-800">
+            <div className="pt-2 border-t border-amber-800/30">
               <button
                 onClick={() =>
                   engine.updateLighting({

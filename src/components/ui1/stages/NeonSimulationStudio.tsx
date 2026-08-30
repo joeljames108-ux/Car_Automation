@@ -34,7 +34,7 @@ export function NeonSimulationStudio() {
   const activeCircuit = circuits.find((c) => c.id === selectedCircuit) || circuits[0];
 
   return (
-    <div className="w-full flex flex-col gap-6 text-slate-100 animate-nh-materialize">
+    <div className="w-full flex flex-col gap-6 text-amber-50 animate-nh-materialize">
       {/* Header */}
       <NeonHorizonGlassPanel
         variant="window"
@@ -86,12 +86,12 @@ export function NeonSimulationStudio() {
  }`}
                   >
                     <div className="flex items-center justify-between">
-                      <span className="text-xs font-bold text-slate-100 truncate pr-2">{circuit.name}</span>
+                      <span className="text-xs font-bold text-amber-50 truncate pr-2">{circuit.name}</span>
                       <NeonHorizonBadge variant={isSelected ? "cyan" : "neutral"} size="xs">
                         {circuit.length}
                       </NeonHorizonBadge>
                     </div>
-                    <div className="flex items-center justify-between text-[10px] nh-font-mono text-slate-400">
+                    <div className="flex items-center justify-between text-[10px] nh-font-mono text-amber-200/60">
                       <span className="text-emerald-300 font-bold">Lap: {circuit.baseLap}</span>
                       <span className="text-amber-300">Trap: {circuit.topSpeedTrap}</span>
                     </div>
@@ -114,15 +114,15 @@ export function NeonSimulationStudio() {
             className="p-6 flex flex-col gap-3 font-mono text-xs"
           >
             <div className="p-3.5 rounded-xl bg-[#0a111e] border border-sky-400/15 flex items-center justify-between">
-              <span className="text-slate-400">Sector 1 (High Speed Apex):</span>
+              <span className="text-amber-200/60">Sector 1 (High Speed Apex):</span>
               <span className="text-sky-300 font-bold">24.810s</span>
             </div>
             <div className="p-3.5 rounded-xl bg-[#0a111e] border border-sky-400/15 flex items-center justify-between">
-              <span className="text-slate-400">Sector 2 (Technical Esses):</span>
+              <span className="text-amber-200/60">Sector 2 (Technical Esses):</span>
               <span className="text-sky-300 font-bold">48.240s</span>
             </div>
             <div className="p-3.5 rounded-xl bg-[#0a111e] border border-sky-400/15 flex items-center justify-between">
-              <span className="text-slate-400">Sector 3 (Main Straight):</span>
+              <span className="text-amber-200/60">Sector 3 (Main Straight):</span>
               <span className="text-sky-300 font-bold">29.750s</span>
             </div>
             <div className="p-3.5 rounded-xl bg-[#0e1626] border border-emerald-400/30 flex items-center justify-between mt-2">

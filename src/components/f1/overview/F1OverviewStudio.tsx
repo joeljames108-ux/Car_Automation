@@ -29,10 +29,10 @@ export const F1OverviewStudio: React.FC = memo(function F1OverviewStudio() {
       {/* KPI Performance Tiles */}
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
         {kpis.map((kpi) => (
-          <div key={kpi.label} className="bg-slate-900/80 p-3.5 rounded-xl border border-slate-800 shadow-md text-left">
-            <div className="text-[10px] text-slate-500 uppercase tracking-wider font-semibold truncate">{kpi.label}</div>
-            <div className="font-mono text-base sm:text-lg font-black text-slate-100 mt-0.5">{kpi.value}</div>
-            <div className="text-[10px] text-slate-400 mt-0.5 truncate">{kpi.subtext}</div>
+          <div key={kpi.label} className="bg-amber-900/40 p-3.5 rounded-xl border border-amber-800/30 shadow-md text-left">
+            <div className="text-[10px] text-amber-300/50 uppercase tracking-wider font-semibold truncate">{kpi.label}</div>
+            <div className="font-mono text-base sm:text-lg font-black text-amber-50 mt-0.5">{kpi.value}</div>
+            <div className="text-[10px] text-amber-200/60 mt-0.5 truncate">{kpi.subtext}</div>
           </div>
         ))}
       </div>
@@ -40,12 +40,12 @@ export const F1OverviewStudio: React.FC = memo(function F1OverviewStudio() {
       {/* Department Quick Jump Grid & Rival Intelligence */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Left 2 Cols: Subsystem Quick Access */}
-        <div className="lg:col-span-2 bg-slate-900/60 p-5 rounded-2xl border border-slate-800 space-y-4">
+        <div className="lg:col-span-2 bg-amber-900/40 p-5 rounded-2xl border border-amber-800/30 space-y-4">
           <div className="flex items-center justify-between">
-            <h3 className="text-sm font-bold uppercase tracking-wider text-slate-200">
+            <h3 className="text-sm font-bold uppercase tracking-wider text-amber-50">
               Department Engineering Workbenches
             </h3>
-            <span className="text-xs text-slate-400">Click to enter specialized studio</span>
+            <span className="text-xs text-amber-200/60">Click to enter specialized studio</span>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -63,28 +63,28 @@ export const F1OverviewStudio: React.FC = memo(function F1OverviewStudio() {
                   playHMIClickSound();
                   setActiveStep(dept.id as any);
                 }}
-                className="flex items-center justify-between p-3.5 rounded-xl bg-slate-800/60 hover:bg-slate-800 border border-slate-700/60 hover:border-amber-500/40 transition-all text-left group cursor-pointer"
+                className="flex items-center justify-between p-3.5 rounded-xl bg-amber-800/35/60 hover:bg-amber-800/35 border border-amber-700/30/60 hover:border-amber-500/40 transition-all text-left group cursor-pointer"
               >
                 <div className="flex items-center gap-3">
-                  <div className="p-2 rounded-lg bg-slate-900 border border-slate-700">{dept.icon}</div>
+                  <div className="p-2 rounded-lg bg-amber-900/50 border border-amber-700/30">{dept.icon}</div>
                   <div>
-                    <div className="text-xs font-bold text-slate-200 group-hover:text-amber-300">{dept.title}</div>
-                    <div className="text-[11px] text-slate-400">{dept.desc}</div>
+                    <div className="text-xs font-bold text-amber-50 group-hover:text-amber-300">{dept.title}</div>
+                    <div className="text-[11px] text-amber-200/60">{dept.desc}</div>
                   </div>
                 </div>
-                <ChevronRight size={14} className="text-slate-500 group-hover:text-amber-400 transition-transform group-hover:translate-x-1" />
+                <ChevronRight size={14} className="text-amber-300/50 group-hover:text-amber-400 transition-transform group-hover:translate-x-1" />
               </button>
             ))}
           </div>
         </div>
 
         {/* Right Col: Rival Constructor Pace Radar */}
-        <div className="bg-slate-900/60 p-5 rounded-2xl border border-slate-800 space-y-4">
+        <div className="bg-amber-900/40 p-5 rounded-2xl border border-amber-800/30 space-y-4">
           <div className="flex items-center justify-between">
-            <h3 className="text-sm font-bold uppercase tracking-wider text-slate-200 flex items-center gap-1.5">
+            <h3 className="text-sm font-bold uppercase tracking-wider text-amber-50 flex items-center gap-1.5">
               <Trophy size={14} className="text-amber-400" /> Rival Pace Benchmark
             </h3>
-            <span className="text-[10px] font-mono text-slate-400">Qualifying Delta</span>
+            <span className="text-[10px] font-mono text-amber-200/60">Qualifying Delta</span>
           </div>
 
           <div className="space-y-2 max-h-[290px] overflow-y-auto custom-scrollbar pr-1">
@@ -99,12 +99,12 @@ export const F1OverviewStudio: React.FC = memo(function F1OverviewStudio() {
 
             {/* Top 6 Rivals */}
             {F1_RIVAL_TEAMS.slice(0, 6).map((rival) => (
-              <div key={rival.teamId} className="flex items-center justify-between p-2 rounded-lg bg-slate-950/40 border border-slate-800/60 text-xs">
+              <div key={rival.teamId} className="flex items-center justify-between p-2 rounded-lg bg-amber-950/40 border border-amber-800/30 text-xs">
                 <div className="flex items-center gap-2">
                   <div className="w-2 h-2 rounded-full" style={{ backgroundColor: rival.colorHex }} />
-                  <span className="font-medium text-slate-300 truncate max-w-[130px]">{rival.teamName}</span>
+                  <span className="font-medium text-amber-100/80 truncate max-w-[130px]">{rival.teamName}</span>
                 </div>
-                <span className="font-mono text-slate-400">
+                <span className="font-mono text-amber-200/60">
                   {rival.estimatedLapTimeOffsetSec === 0 ? "Pole Ref" : `+${rival.estimatedLapTimeOffsetSec.toFixed(2)}s`}
                 </span>
               </div>

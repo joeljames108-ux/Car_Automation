@@ -34,7 +34,7 @@ export const MotorsportHeader = memo(function MotorsportHeader() {
           </div>
           <div>
             <h2 className="text-xl font-bold gradient-text">Motorsport Division</h2>
-            <p className="text-xs text-slate-500 mt-0.5">
+            <p className="text-xs text-amber-300/50 mt-0.5">
               Season {company.motorsport.currentSeason} · {teams.length} {teams.length === 1 ? "team" : "teams"} active
             </p>
           </div>
@@ -55,7 +55,7 @@ export const MotorsportHeader = memo(function MotorsportHeader() {
                 {stat.icon}
               </div>
               <div className={`text-2xl font-bold font-mono ${stat.color}`}>{stat.value}</div>
-              <div className="text-[10px] text-slate-600 uppercase tracking-wider">{stat.label}</div>
+              <div className="text-[10px] text-amber-400 uppercase tracking-wider">{stat.label}</div>
             </div>
           ))}
         </div>

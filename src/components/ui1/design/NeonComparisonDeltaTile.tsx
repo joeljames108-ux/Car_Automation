@@ -15,13 +15,13 @@ export function NeonComparisonDeltaTile({ label, value, unit, delta, deltaLabel,
   return (
     <NeonEntrance type="scale-pop" className={"p-3 rounded-xl bg-[#0e1626]/80 border border-white/[0.08] backdrop-blur-md relative overflow-hidden group hover:border-white/[0.15] transition-all " + className}>
       <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" style={{ background: "radial-gradient(circle at 50% 100%, " + accentColor + "15, transparent 70%)" }} />
-      <span className="text-[9px] font-mono font-bold uppercase tracking-wider text-slate-500 block mb-1">{label}</span>
+      <span className="text-[9px] font-mono font-bold uppercase tracking-wider text-amber-300/50 block mb-1">{label}</span>
       <div className="flex items-baseline justify-between gap-1">
         <span className="font-mono font-black text-lg" style={{ color: accentColor }}>
-          {value} {unit && <span className="text-xs font-normal text-slate-500">{unit}</span>}
+          {value} {unit && <span className="text-xs font-normal text-amber-300/50">{unit}</span>}
         </span>
         {delta !== undefined && (
-          <span className={"text-[10px] font-mono font-bold flex items-center gap-0.5 " + (isGood ? "text-emerald-400" : isBad ? "text-rose-400" : "text-slate-500")}>
+          <span className={"text-[10px] font-mono font-bold flex items-center gap-0.5 " + (isGood ? "text-emerald-400" : isBad ? "text-rose-400" : "text-amber-300/50")}>
             {isPos && <ArrowUp size={10} />}{isNeg && <ArrowDown size={10} />}{delta === 0 && <Minus size={10} />}
             {deltaLabel ?? (isPos ? "+" + delta : "" + delta)} {unit}
           </span>

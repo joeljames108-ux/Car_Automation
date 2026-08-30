@@ -73,34 +73,34 @@ export const AdvancedEngineTelemetryStudio: React.FC<AdvancedEngineTelemetryStud
   }, [state, testRpm, testThrottle]);
 
   return (
-    <div className="flex flex-col h-full w-full space-y-4 p-2 sm:p-4 bg-slate-950/60 rounded-2xl border border-slate-800">
+    <div className="flex flex-col h-full w-full space-y-4 p-2 sm:p-4 bg-amber-950/60 rounded-2xl border border-amber-800/30">
       {/* ================================================================= */}
       {/* STUDIO DECK HEADER & CONTROLS */}
       {/* ================================================================= */}
-      <div className="flex flex-col xl:flex-row items-start xl:items-center justify-between gap-3 bg-slate-900/90 backdrop-blur-xl p-3.5 rounded-2xl border border-slate-800 shadow-xl">
+      <div className="flex flex-col xl:flex-row items-start xl:items-center justify-between gap-3 bg-amber-900/40 backdrop-blur-xl p-3.5 rounded-2xl border border-amber-800/30 shadow-xl">
         <div className="flex items-center gap-3">
           <div className="p-2.5 rounded-xl bg-gradient-to-br from-violet-500 via-purple-600 to-indigo-700 text-white shadow-lg shadow-purple-500/25">
             <Radio size={20} className="animate-pulse" />
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h2 className="text-base font-bold text-slate-100 tracking-tight">
+              <h2 className="text-base font-bold text-amber-50 tracking-tight">
                 Advanced Engine Telemetry & NVH Studio
               </h2>
               <span className="px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 font-mono text-[10px] font-bold border border-violet-500/30">
                 12-CHANNEL REAL-TIME
               </span>
             </div>
-            <p className="text-xs text-slate-400">
+            <p className="text-xs text-amber-200/60">
               ECU 3D Calibration • P-V Combustion • 100-Node Thermal • Hydrodynamics • 1/3-Octave Acoustic Spectrum
             </p>
           </div>
         </div>
 
         {/* Test Condition Scrubbers (RPM & Throttle) */}
-        <div className="flex items-center gap-3 bg-slate-950 p-2 rounded-xl border border-slate-800 text-xs font-mono">
+        <div className="flex items-center gap-3 bg-amber-950/80 p-2 rounded-xl border border-amber-800/30 text-xs font-mono">
           <div className="flex items-center gap-2">
-            <span className="text-slate-400">RPM:</span>
+            <span className="text-amber-200/60">RPM:</span>
             <input
               type="range"
               min={1000}
@@ -108,15 +108,15 @@ export const AdvancedEngineTelemetryStudio: React.FC<AdvancedEngineTelemetryStud
               step={100}
               value={testRpm}
               onChange={(e) => setTestRpm(Number(e.target.value))}
-              className="w-24 h-1.5 bg-slate-800 rounded appearance-none accent-amber-400 cursor-pointer"
+              className="w-24 h-1.5 bg-amber-800/35 rounded appearance-none accent-amber-400 cursor-pointer"
             />
             <span className="text-amber-300 font-bold w-14 text-right">{testRpm}</span>
           </div>
 
-          <div className="h-4 w-px bg-slate-800" />
+          <div className="h-4 w-px bg-amber-800/35" />
 
           <div className="flex items-center gap-2">
-            <span className="text-slate-400">WOT:</span>
+            <span className="text-amber-200/60">WOT:</span>
             <input
               type="range"
               min={0.1}
@@ -124,7 +124,7 @@ export const AdvancedEngineTelemetryStudio: React.FC<AdvancedEngineTelemetryStud
               step={0.05}
               value={testThrottle}
               onChange={(e) => setTestThrottle(Number(e.target.value))}
-              className="w-20 h-1.5 bg-slate-800 rounded appearance-none accent-emerald-400 cursor-pointer"
+              className="w-20 h-1.5 bg-amber-800/35 rounded appearance-none accent-emerald-400 cursor-pointer"
             />
             <span className="text-emerald-300 font-bold w-10 text-right">{(testThrottle * 100).toFixed(0)}%</span>
           </div>
@@ -134,7 +134,7 @@ export const AdvancedEngineTelemetryStudio: React.FC<AdvancedEngineTelemetryStud
       {/* ================================================================= */}
       {/* STUDIO DECK NAVIGATION TABS */}
       {/* ================================================================= */}
-      <div className="flex bg-slate-900/90 p-1.5 rounded-xl border border-slate-800 gap-1.5 overflow-x-auto">
+      <div className="flex bg-amber-900/40 p-1.5 rounded-xl border border-amber-800/30 gap-1.5 overflow-x-auto">
         {[
           { id: "ecu_maps" as const, label: "3D ECU Map Editor", icon: <Cpu size={14} /> },
           { id: "pv_combustion" as const, label: "720° P-V Combustion", icon: <Flame size={14} /> },
@@ -148,7 +148,7 @@ export const AdvancedEngineTelemetryStudio: React.FC<AdvancedEngineTelemetryStud
             className={`flex items-center gap-2 px-4 py-2 text-xs font-semibold rounded-lg transition-all whitespace-nowrap cursor-pointer ${
               activeDeck === deck.id
                 ? "bg-gradient-to-r from-violet-500 to-indigo-600 text-white font-bold shadow-md shadow-violet-500/30"
-                : "text-slate-400 hover:text-slate-200 hover:bg-slate-850"
+                : "text-amber-200/60 hover:text-amber-50 hover:bg-amber-850/40"
             }`}
           >
             {deck.icon}
@@ -173,16 +173,16 @@ export const AdvancedEngineTelemetryStudio: React.FC<AdvancedEngineTelemetryStud
 
         {/* 3. 100-POINT THERMAL MAP */}
         {activeDeck === "thermal_nodes" && (
-          <div className="flex flex-col h-full w-full bg-slate-950/90 p-4 rounded-2xl border border-slate-800 space-y-4">
-            <div className="flex items-center justify-between bg-slate-900/80 p-3 rounded-xl border border-slate-800">
+          <div className="flex flex-col h-full w-full bg-amber-950/90 p-4 rounded-2xl border border-amber-800/30 space-y-4">
+            <div className="flex items-center justify-between bg-amber-900/40 p-3 rounded-xl border border-amber-800/30">
               <div className="flex items-center gap-3">
                 <Thermometer size={18} className="text-rose-400" />
                 <div>
-                  <h3 className="text-sm font-bold text-slate-100">100-Node Finite Thermal Distribution</h3>
-                  <p className="text-xs text-slate-400">Continuous heat flux & peak component limit monitoring</p>
+                  <h3 className="text-sm font-bold text-amber-50">100-Node Finite Thermal Distribution</h3>
+                  <p className="text-xs text-amber-200/60">Continuous heat flux & peak component limit monitoring</p>
                 </div>
               </div>
-              <div className="text-xs font-mono font-bold px-3 py-1.5 rounded-lg bg-slate-900 border border-slate-800 text-amber-300">
+              <div className="text-xs font-mono font-bold px-3 py-1.5 rounded-lg bg-amber-900/50 border border-amber-800/30 text-amber-300">
                 Overall Thermal Stress: {report.thermal.overallThermalStressIndex}%
               </div>
             </div>
@@ -196,12 +196,12 @@ export const AdvancedEngineTelemetryStudio: React.FC<AdvancedEngineTelemetryStud
                       ? "bg-rose-950/40 border-rose-500/50 shadow-[0_0_15px_rgba(244,63,94,0.2)]"
                       : node.status === "warning"
                       ? "bg-amber-950/30 border-amber-500/40"
-                      : "bg-slate-900/60 border-slate-800"
+                      : "bg-amber-900/40 border-amber-800/30"
                   }`}
                 >
                   <div className="flex items-center justify-between mb-1.5">
-                    <span className="text-xs font-bold text-slate-200">{node.name}</span>
-                    <span className="text-[10px] font-mono text-slate-400 uppercase">{node.category}</span>
+                    <span className="text-xs font-bold text-amber-50">{node.name}</span>
+                    <span className="text-[10px] font-mono text-amber-200/60 uppercase">{node.category}</span>
                   </div>
 
                   <div className="flex items-baseline justify-between font-mono my-2">
@@ -210,11 +210,11 @@ export const AdvancedEngineTelemetryStudio: React.FC<AdvancedEngineTelemetryStud
                     }`}>
                       {node.tempC}°C
                     </span>
-                    <span className="text-[11px] text-slate-400">Limit: {node.maxLimitC}°C</span>
+                    <span className="text-[11px] text-amber-200/60">Limit: {node.maxLimitC}°C</span>
                   </div>
 
                   {/* Temp Bar */}
-                  <div className="h-2 bg-slate-800 rounded-full overflow-hidden mb-2">
+                  <div className="h-2 bg-amber-800/35 rounded-full overflow-hidden mb-2">
                     <div
                       className={`h-full rounded-full transition-all ${
                         node.status === "critical" ? "bg-rose-500" : node.status === "warning" ? "bg-amber-500" : "bg-emerald-500"
@@ -223,7 +223,7 @@ export const AdvancedEngineTelemetryStudio: React.FC<AdvancedEngineTelemetryStud
                     />
                   </div>
 
-                  <div className="text-[10.5px] font-mono text-slate-400 flex justify-between">
+                  <div className="text-[10.5px] font-mono text-amber-200/60 flex justify-between">
                     <span>Heat Flux:</span>
                     <span className="text-amber-300 font-bold">{(node.heatFluxW / 1000).toFixed(1)} kW</span>
                   </div>
@@ -235,13 +235,13 @@ export const AdvancedEngineTelemetryStudio: React.FC<AdvancedEngineTelemetryStud
 
         {/* 4. HYDRODYNAMIC JOURNAL BEARINGS */}
         {activeDeck === "journal_bearings" && (
-          <div className="flex flex-col h-full w-full bg-slate-950/90 p-4 rounded-2xl border border-slate-800 space-y-4 font-mono">
-            <div className="flex items-center justify-between bg-slate-900/80 p-3 rounded-xl border border-slate-800">
+          <div className="flex flex-col h-full w-full bg-amber-950/90 p-4 rounded-2xl border border-amber-800/30 space-y-4 font-mono">
+            <div className="flex items-center justify-between bg-amber-900/40 p-3 rounded-xl border border-amber-800/30">
               <div className="flex items-center gap-3">
                 <Layers size={18} className="text-amber-400" />
                 <div>
-                  <h3 className="text-sm font-bold text-slate-100 font-sans">Hydrodynamic Journal Bearing Lubrication</h3>
-                  <p className="text-xs text-slate-400 font-sans">Sommerfeld number calculation & oil film thickness</p>
+                  <h3 className="text-sm font-bold text-amber-50 font-sans">Hydrodynamic Journal Bearing Lubrication</h3>
+                  <p className="text-xs text-amber-200/60 font-sans">Sommerfeld number calculation & oil film thickness</p>
                 </div>
               </div>
               <div className="text-xs font-bold px-3 py-1.5 rounded-lg bg-emerald-950/60 border border-emerald-500/40 text-emerald-300">
@@ -250,52 +250,52 @@ export const AdvancedEngineTelemetryStudio: React.FC<AdvancedEngineTelemetryStud
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="p-4 bg-slate-900/60 rounded-xl border border-slate-800 space-y-3">
-                <span className="text-xs text-slate-400 font-sans block font-bold">Main Bearing Oil Film</span>
+              <div className="p-4 bg-amber-900/40 rounded-xl border border-amber-800/30 space-y-3">
+                <span className="text-xs text-amber-200/60 font-sans block font-bold">Main Bearing Oil Film</span>
                 <div className="text-3xl font-extrabold text-amber-300">
                   {report.bearings.mainBearingMinFilmThicknessMicron} µm
                 </div>
-                <p className="text-[11px] text-slate-400 leading-relaxed font-sans">
+                <p className="text-[11px] text-amber-200/60 leading-relaxed font-sans">
                   Minimum hydrodynamic oil film thickness at {testRpm} RPM under peak pressure.
                 </p>
               </div>
 
-              <div className="p-4 bg-slate-900/60 rounded-xl border border-slate-800 space-y-3">
-                <span className="text-xs text-slate-400 font-sans block font-bold">Rod Bearing Oil Film</span>
+              <div className="p-4 bg-amber-900/40 rounded-xl border border-amber-800/30 space-y-3">
+                <span className="text-xs text-amber-200/60 font-sans block font-bold">Rod Bearing Oil Film</span>
                 <div className="text-3xl font-extrabold text-emerald-300">
                   {report.bearings.rodBearingMinFilmThicknessMicron} µm
                 </div>
-                <p className="text-[11px] text-slate-400 leading-relaxed font-sans">
+                <p className="text-[11px] text-amber-200/60 leading-relaxed font-sans">
                   Reciprocating big-end rod journal oil film clearance.
                 </p>
               </div>
 
-              <div className="p-4 bg-slate-900/60 rounded-xl border border-slate-800 space-y-3">
-                <span className="text-xs text-slate-400 font-sans block font-bold">Sommerfeld Number (S)</span>
+              <div className="p-4 bg-amber-900/40 rounded-xl border border-amber-800/30 space-y-3">
+                <span className="text-xs text-amber-200/60 font-sans block font-bold">Sommerfeld Number (S)</span>
                 <div className="text-3xl font-extrabold text-amber-300">
                   {report.bearings.sommerfeldNumber}
                 </div>
-                <p className="text-[11px] text-slate-400 leading-relaxed font-sans">
+                <p className="text-[11px] text-amber-200/60 leading-relaxed font-sans">
                   Dimensionless lubrication parameter balancing speed, load & viscosity.
                 </p>
               </div>
             </div>
 
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 pt-2">
-              <div className="p-3 bg-slate-900/40 rounded-xl border border-slate-850">
-                <span className="text-[10px] text-slate-400 block">Peak Pressure</span>
-                <span className="text-sm font-bold text-slate-200">{report.bearings.peakBearingPressureMPa} MPa</span>
+              <div className="p-3 bg-amber-900/40 rounded-xl border border-slate-850">
+                <span className="text-[10px] text-amber-200/60 block">Peak Pressure</span>
+                <span className="text-sm font-bold text-amber-50">{report.bearings.peakBearingPressureMPa} MPa</span>
               </div>
-              <div className="p-3 bg-slate-900/40 rounded-xl border border-slate-850">
-                <span className="text-[10px] text-slate-400 block">Oil Viscosity</span>
+              <div className="p-3 bg-amber-900/40 rounded-xl border border-slate-850">
+                <span className="text-[10px] text-amber-200/60 block">Oil Viscosity</span>
                 <span className="text-sm font-bold text-amber-300">{report.bearings.oilViscosityCentistokes} cSt</span>
               </div>
-              <div className="p-3 bg-slate-900/40 rounded-xl border border-slate-850">
-                <span className="text-[10px] text-slate-400 block">Bearing Wear Rate</span>
+              <div className="p-3 bg-amber-900/40 rounded-xl border border-slate-850">
+                <span className="text-[10px] text-amber-200/60 block">Bearing Wear Rate</span>
                 <span className="text-sm font-bold text-emerald-300">{report.bearings.bearingWearRateMicronPerHour} µm/hr</span>
               </div>
-              <div className="p-3 bg-slate-900/40 rounded-xl border border-slate-850">
-                <span className="text-[10px] text-slate-400 block">Hydrodynamic Status</span>
+              <div className="p-3 bg-amber-900/40 rounded-xl border border-slate-850">
+                <span className="text-[10px] text-amber-200/60 block">Hydrodynamic Status</span>
                 <span className="text-sm font-bold text-emerald-400">OPTIMAL FLUID FILM</span>
               </div>
             </div>
@@ -304,13 +304,13 @@ export const AdvancedEngineTelemetryStudio: React.FC<AdvancedEngineTelemetryStud
 
         {/* 5. NVH & ACOUSTIC SPECTRUM */}
         {activeDeck === "nvh_acoustics" && (
-          <div className="flex flex-col h-full w-full bg-slate-950/90 p-4 rounded-2xl border border-slate-800 space-y-4 font-mono">
-            <div className="flex items-center justify-between bg-slate-900/80 p-3 rounded-xl border border-slate-800">
+          <div className="flex flex-col h-full w-full bg-amber-950/90 p-4 rounded-2xl border border-amber-800/30 space-y-4 font-mono">
+            <div className="flex items-center justify-between bg-amber-900/40 p-3 rounded-xl border border-amber-800/30">
               <div className="flex items-center gap-3">
                 <Volume2 size={18} className="text-amber-400" />
                 <div>
-                  <h3 className="text-sm font-bold text-slate-100 font-sans">Computational Acoustic Spectrum & NVH</h3>
-                  <p className="text-xs text-slate-400 font-sans">1/3 Octave band SPL decibel frequencies & cabin sound quality</p>
+                  <h3 className="text-sm font-bold text-amber-50 font-sans">Computational Acoustic Spectrum & NVH</h3>
+                  <p className="text-xs text-amber-200/60 font-sans">1/3 Octave band SPL decibel frequencies & cabin sound quality</p>
                 </div>
               </div>
               <div className="text-xs font-bold px-3 py-1.5 rounded-lg bg-amber-950/60 border border-violet-500/40 text-amber-300">
@@ -329,20 +329,20 @@ export const AdvancedEngineTelemetryStudio: React.FC<AdvancedEngineTelemetryStud
             )}
 
             {/* Frequency Spectrum Bar Chart */}
-            <div className="p-4 bg-slate-900/60 rounded-xl border border-slate-800 space-y-2">
-              <span className="text-xs font-bold text-slate-300 font-sans block">1/3 Octave Frequency Spectrum (20 Hz - 16 kHz)</span>
-              <div className="flex items-end gap-1.5 h-36 pt-4 px-2 bg-slate-950 rounded-lg border border-slate-850 overflow-x-auto">
+            <div className="p-4 bg-amber-900/40 rounded-xl border border-amber-800/30 space-y-2">
+              <span className="text-xs font-bold text-amber-100/80 font-sans block">1/3 Octave Frequency Spectrum (20 Hz - 16 kHz)</span>
+              <div className="flex items-end gap-1.5 h-36 pt-4 px-2 bg-amber-950/80 rounded-lg border border-slate-850 overflow-x-auto">
                 {nvh.octaveBands.map((band) => {
                   const heightPct = Math.min(100, Math.max(10, (band.soundPressureLevelDb / 120) * 100));
                   return (
                     <div key={band.centerFreqHz} className="flex-1 flex flex-col items-center gap-1 group min-w-[20px]">
-                      <div className="w-full bg-slate-800 rounded-t overflow-hidden h-28 flex items-end">
+                      <div className="w-full bg-amber-800/35 rounded-t overflow-hidden h-28 flex items-end">
                         <div
                           className="w-full bg-gradient-to-t from-violet-600 via-purple-500 to-amber-400 group-hover:brightness-125 transition-all"
                           style={{ height: `${heightPct}%` }}
                         />
                       </div>
-                      <span className="text-[8px] text-slate-500 rotate-45 transform origin-left">{band.centerFreqHz}</span>
+                      <span className="text-[8px] text-amber-300/50 rotate-45 transform origin-left">{band.centerFreqHz}</span>
                     </div>
                   );
                 })}
@@ -351,20 +351,20 @@ export const AdvancedEngineTelemetryStudio: React.FC<AdvancedEngineTelemetryStud
 
             {/* Noise Breakdown Cards */}
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-              <div className="p-3 bg-slate-900/40 rounded-xl border border-slate-850">
-                <span className="text-[10px] text-slate-400 block font-sans">Engine Bay SPL</span>
+              <div className="p-3 bg-amber-900/40 rounded-xl border border-slate-850">
+                <span className="text-[10px] text-amber-200/60 block font-sans">Engine Bay SPL</span>
                 <span className="text-lg font-extrabold text-amber-300">{nvh.overallDbA} dBA</span>
               </div>
-              <div className="p-3 bg-slate-900/40 rounded-xl border border-slate-850">
-                <span className="text-[10px] text-slate-400 block font-sans">Cabin Noise (WOT)</span>
+              <div className="p-3 bg-amber-900/40 rounded-xl border border-slate-850">
+                <span className="text-[10px] text-amber-200/60 block font-sans">Cabin Noise (WOT)</span>
                 <span className="text-lg font-extrabold text-amber-300">{nvh.mechanicalNoise.cabinNoiseAtWOTDbA} dBA</span>
               </div>
-              <div className="p-3 bg-slate-900/40 rounded-xl border border-slate-850">
-                <span className="text-[10px] text-slate-400 block font-sans">Loudness</span>
+              <div className="p-3 bg-amber-900/40 rounded-xl border border-slate-850">
+                <span className="text-[10px] text-amber-200/60 block font-sans">Loudness</span>
                 <span className="text-lg font-extrabold text-amber-300">{nvh.loudnessSones} Sones</span>
               </div>
-              <div className="p-3 bg-slate-900/40 rounded-xl border border-slate-850">
-                <span className="text-[10px] text-slate-400 block font-sans">Exhaust Firing Pulse</span>
+              <div className="p-3 bg-amber-900/40 rounded-xl border border-slate-850">
+                <span className="text-[10px] text-amber-200/60 block font-sans">Exhaust Firing Pulse</span>
                 <span className="text-lg font-extrabold text-emerald-300">{nvh.exhaustResonance.fundamentalExhaustPulseFreqHz} Hz</span>
               </div>
             </div>

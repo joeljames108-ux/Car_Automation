@@ -55,10 +55,10 @@ export const ExteriorBuilderFlow: React.FC = () => {
       <ExteriorWorkshopPanel />
 
       {/* ── BULK ACTIONS & STAGE PROGRESS ── */}
-      <div className="flex items-center justify-between p-3 rounded-2xl bg-slate-900/80 border border-white/10">
+      <div className="flex items-center justify-between p-3 rounded-2xl bg-amber-900/40 border border-white/10">
         <div className="flex items-center gap-2">
           <Wrench size={16} className="text-amber-400" />
-          <span className="text-xs font-mono font-bold text-slate-200 uppercase">
+          <span className="text-xs font-mono font-bold text-amber-50 uppercase">
             PROGRESSIVE EXTERIOR ASSEMBLY STAGES
           </span>
         </div>
@@ -79,12 +79,12 @@ export const ExteriorBuilderFlow: React.FC = () => {
           return (
             <div
               key={cat.category}
-              className="rounded-3xl border border-white/10 bg-slate-900/60 backdrop-blur-md overflow-hidden transition-all"
+              className="rounded-3xl border border-white/10 bg-amber-900/40 backdrop-blur-md overflow-hidden transition-all"
             >
               {/* Category Accordion Header */}
               <button
                 onClick={() => toggleCategory(cat.category)}
-                className="w-full p-4 flex items-center justify-between hover:bg-slate-800/40 transition-colors text-left"
+                className="w-full p-4 flex items-center justify-between hover:bg-amber-800/35/40 transition-colors text-left"
               >
                 <div className="flex items-center gap-3">
                   <div
@@ -97,17 +97,17 @@ export const ExteriorBuilderFlow: React.FC = () => {
                     {cat.isComplete ? "✓" : isExpanded ? <ChevronDown size={14} /> : <ChevronRight size={14} />}
                   </div>
                   <div>
-                    <h3 className="text-xs font-extrabold font-mono text-slate-100 uppercase tracking-wide">
+                    <h3 className="text-xs font-extrabold font-mono text-amber-50 uppercase tracking-wide">
                       {cat.category}
                     </h3>
-                    <span className="text-[10px] font-mono text-slate-400">
+                    <span className="text-[10px] font-mono text-amber-200/60">
                       {cat.installed} / {cat.total} Subsystems Installed ({cat.percentage}%)
                     </span>
                   </div>
                 </div>
 
                 {/* Mini Category Progress Bar */}
-                <div className="w-20 h-1.5 bg-slate-950 rounded-full overflow-hidden border border-white/5">
+                <div className="w-20 h-1.5 bg-amber-950/80 rounded-full overflow-hidden border border-white/5">
                   <div
                     className="h-full bg-gradient-to-r from-amber-500 to-emerald-400 transition-all duration-300"
                     style={{ width: `${cat.percentage}%` }}

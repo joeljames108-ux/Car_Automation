@@ -317,27 +317,27 @@ export function AIEngineeringPresets({
   return (
     <div className={`w-full flex flex-col gap-4 ${className}`}>
       {/* Header bar */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 p-4 rounded-2xl bg-slate-900/80 border border-slate-800 backdrop-blur-xl shadow-xl">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 p-4 rounded-2xl bg-amber-900/40 border border-amber-800/30 backdrop-blur-xl shadow-xl">
         <div className="flex items-center gap-3">
           <div className="p-2.5 rounded-xl bg-amber-500/20 text-amber-400 border border-amber-500/30 shadow-[0_0_15px_rgba(34,211,238,0.25)]">
             <Sparkles size={20} />
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h3 className="text-sm font-bold text-slate-100 uppercase tracking-wider">
+              <h3 className="text-sm font-bold text-amber-50 uppercase tracking-wider">
                 AI Engineering Presets & Architect Templates
               </h3>
               <span className="px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-300 border border-amber-500/30 text-[10px] font-mono font-bold">
                 6 NEURAL TEMPLATES
               </span>
             </div>
-            <p className="text-xs text-slate-400 mt-0.5">
+            <p className="text-xs text-amber-200/60 mt-0.5">
               1-click autonomous setups backed by multi-agent powertrain, chassis, and aero solvers
             </p>
           </div>
         </div>
 
-        <div className="flex items-center gap-2 text-xs font-mono text-slate-400">
+        <div className="flex items-center gap-2 text-xs font-mono text-amber-200/60">
           <Bot size={14} className="text-amber-400" />
           <span>Multi-Agent Verified</span>
         </div>
@@ -356,40 +356,40 @@ export function AIEngineeringPresets({
               className={`relative flex flex-col justify-between p-5 rounded-2xl transition-all duration-300 backdrop-blur-xl border ${
                 isApplied
                   ? "bg-amber-950/40 border-amber-400/80 shadow-[0_0_30px_rgba(34,211,238,0.3)] ring-1 ring-amber-400"
-                  : "bg-slate-900/85 border-slate-800 hover:border-slate-700 hover:shadow-2xl"
+                  : "bg-amber-900/40 border-amber-800/30 hover:border-amber-700/30 hover:shadow-2xl"
               }`}
             >
               {/* Top Header */}
               <div>
                 <div className="flex items-start justify-between gap-2 mb-3">
                   <div className="flex items-center gap-2.5">
-                    <div className="p-2.5 rounded-xl bg-slate-950/80 border border-slate-800 text-slate-200">
+                    <div className="p-2.5 rounded-xl bg-amber-950/80 border border-amber-800/30 text-amber-50">
                       {preset.icon}
                     </div>
                     <div>
                       <span className={`inline-block px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase border mb-1 ${preset.badgeColor}`}>
                         {preset.badge}
                       </span>
-                      <h4 className="text-sm font-bold text-slate-100 leading-tight">
+                      <h4 className="text-sm font-bold text-amber-50 leading-tight">
                         {preset.title}
                       </h4>
                     </div>
                   </div>
                 </div>
 
-                <p className="text-xs text-slate-300 leading-relaxed mb-3">
+                <p className="text-xs text-amber-100/80 leading-relaxed mb-3">
                   {preset.description}
                 </p>
 
                 {/* AI Rationale Box */}
-                <div className="p-3 rounded-xl bg-slate-950/70 border border-slate-800/80 mb-3.5 space-y-1.5">
+                <div className="p-3 rounded-xl bg-amber-950/70 border border-amber-800/30 mb-3.5 space-y-1.5">
                   <div className="flex items-center justify-between text-[10px] font-mono text-amber-400 font-bold">
                     <span className="flex items-center gap-1">
                       <Bot size={12} /> {preset.agentName}
                     </span>
-                    <span className="text-slate-500">{preset.domain}</span>
+                    <span className="text-amber-300/50">{preset.domain}</span>
                   </div>
-                  <p className="text-[11px] text-slate-400 italic leading-snug">
+                  <p className="text-[11px] text-amber-200/60 italic leading-snug">
                     "{preset.aiRationale}"
                   </p>
                 </div>
@@ -397,30 +397,30 @@ export function AIEngineeringPresets({
                 {/* Performance Metrics Grid */}
                 <div className="grid grid-cols-3 gap-2 p-2.5 rounded-xl bg-black/40 border border-white/5 mb-3.5 text-center font-mono">
                   <div>
-                    <div className="text-[9px] text-slate-500 uppercase">Power</div>
+                    <div className="text-[9px] text-amber-300/50 uppercase">Power</div>
                     <div className="text-xs font-bold text-amber-300">{preset.metrics.powerHp} HP</div>
-                    <div className={`text-[9px] ${hpDelta >= 0 ? "text-emerald-400" : "text-slate-500"}`}>
+                    <div className={`text-[9px] ${hpDelta >= 0 ? "text-emerald-400" : "text-amber-300/50"}`}>
                       {hpDelta >= 0 ? `+${hpDelta}` : hpDelta} vs curr
                     </div>
                   </div>
                   <div>
-                    <div className="text-[9px] text-slate-500 uppercase">Weight</div>
+                    <div className="text-[9px] text-amber-300/50 uppercase">Weight</div>
                     <div className="text-xs font-bold text-amber-300">{preset.metrics.weightKg} kg</div>
-                    <div className={`text-[9px] ${weightDelta <= 0 ? "text-emerald-400" : "text-slate-500"}`}>
+                    <div className={`text-[9px] ${weightDelta <= 0 ? "text-emerald-400" : "text-amber-300/50"}`}>
                       {weightDelta <= 0 ? `${weightDelta}` : `+${weightDelta}`} vs curr
                     </div>
                   </div>
                   <div>
-                    <div className="text-[9px] text-slate-500 uppercase">0-60 MPH</div>
+                    <div className="text-[9px] text-amber-300/50 uppercase">0-60 MPH</div>
                     <div className="text-xs font-bold text-amber-300">{preset.metrics.zeroToSixtySec}s</div>
-                    <div className="text-[9px] text-slate-500">AWD Launch</div>
+                    <div className="text-[9px] text-amber-300/50">AWD Launch</div>
                   </div>
                 </div>
 
                 {/* Key Subsystems Specs */}
                 <div className="space-y-1 mb-4">
                   {preset.keySpecs.map((spec, i) => (
-                    <div key={i} className="flex items-center gap-1.5 text-[11px] text-slate-400">
+                    <div key={i} className="flex items-center gap-1.5 text-[11px] text-amber-200/60">
                       <div className="w-1.5 h-1.5 rounded-full bg-amber-400/60" />
                       <span>{spec}</span>
                     </div>
@@ -429,7 +429,7 @@ export function AIEngineeringPresets({
               </div>
 
               {/* Action Buttons */}
-              <div className="flex items-center gap-2 pt-3 border-t border-slate-800/80">
+              <div className="flex items-center gap-2 pt-3 border-t border-amber-800/30">
                 <button
                   onClick={() => handleApply(preset)}
                   className={`flex-1 flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl text-xs font-bold font-mono transition-all cursor-pointer ${
@@ -455,7 +455,7 @@ export function AIEngineeringPresets({
                   <button
                     onClick={() => handleAskAI(preset)}
                     title="Ask AI to customize this preset"
-                    className="p-2 rounded-xl bg-slate-950 border border-slate-800 text-slate-400 hover:text-amber-300 hover:border-amber-500/40 transition-all cursor-pointer"
+                    className="p-2 rounded-xl bg-amber-950/80 border border-amber-800/30 text-amber-200/60 hover:text-amber-300 hover:border-amber-500/40 transition-all cursor-pointer"
                   >
                     <Bot size={16} />
                   </button>

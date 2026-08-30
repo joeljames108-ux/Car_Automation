@@ -122,10 +122,10 @@ export function ComponentLibrary({
             <Wrench size={16} />
           </div>
           <div>
-            <h3 className="text-xs font-bold text-slate-100 uppercase tracking-wider">
+            <h3 className="text-xs font-bold text-amber-50 uppercase tracking-wider">
               {isEV ? "EV Powertrain Tray" : "Component Tray"}
             </h3>
-            <span className="text-[10px] text-slate-400 font-mono">
+            <span className="text-[10px] text-amber-200/60 font-mono">
               {isEV ? "Select high-voltage EV components" : "Select parts & materials"}
             </span>
           </div>
@@ -144,7 +144,7 @@ export function ComponentLibrary({
             className={`px-2.5 py-1 rounded-lg text-[10px] font-mono font-semibold transition-all whitespace-nowrap ${
               activeTab === cat
                 ? "bg-amber-500/20 text-amber-200 border border-amber-500/40 shadow-[0_0_10px_rgba(34,211,238,0.2)]"
-                : "text-slate-400 hover:text-slate-200 hover:bg-base-800/60 border border-transparent"
+                : "text-amber-200/60 hover:text-amber-50 hover:bg-base-800/60 border border-transparent"
             }`}
           >
             {cat}
@@ -195,7 +195,7 @@ export function ComponentLibrary({
                         ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/30"
                         : isAvailable
                         ? "bg-amber-500/10 text-amber-400 border-amber-500/30"
-                        : "bg-base-800 text-slate-500 border-base-700"
+                        : "bg-base-800 text-amber-300/50 border-base-700"
                     }`}
                   >
                     {COMPONENT_PNG_MAP[comp.id] ? (
@@ -211,10 +211,10 @@ export function ComponentLibrary({
                     )}
                   </div>
                   <div>
-                    <h4 className="text-xs font-bold text-slate-100 group-hover:text-amber-300 transition-colors">
+                    <h4 className="text-xs font-bold text-amber-50 group-hover:text-amber-300 transition-colors">
                       {comp.name}
                     </h4>
-                    <span className="text-[9.5px] font-mono text-slate-400">{comp.category}</span>
+                    <span className="text-[9.5px] font-mono text-amber-200/60">{comp.category}</span>
                   </div>
                 </div>
 
@@ -229,7 +229,7 @@ export function ComponentLibrary({
                       <Sparkles size={10} /> {phase.toUpperCase()}
                     </span>
                   ) : !isAvailable ? (
-                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-slate-800 text-slate-400 border border-slate-700 text-[9.5px] font-mono">
+                    <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-amber-800/35 text-amber-200/60 border border-amber-700/30 text-[9.5px] font-mono">
                       <Lock size={10} /> Locked
                     </span>
                   ) : (
@@ -246,7 +246,7 @@ export function ComponentLibrary({
               {/* Spec & Material Grade Architecture Selector */}
               {!isInstalled && (
                 <div className="mb-2 space-y-1">
-                  <span className="text-[9px] font-mono text-slate-400 flex items-center gap-0.5">
+                  <span className="text-[9px] font-mono text-amber-200/60 flex items-center gap-0.5">
                     <Layers size={9} /> {comp.category === "Hybrid & Electric" ? "Spec Architecture & Voltage:" : "Material Grade:"}
                   </span>
                   <div className="grid grid-cols-2 gap-1">
@@ -260,7 +260,7 @@ export function ComponentLibrary({
                         className={`px-1.5 py-1 rounded text-[9px] font-mono text-left truncate transition-all ${
                           currentVariant === v.id
                             ? "bg-amber-500/25 text-amber-200 border border-amber-500/50 font-bold shadow-sm"
-                            : "bg-base-800 text-slate-400 border border-base-750 hover:bg-base-750 hover:text-slate-200"
+                            : "bg-base-800 text-amber-200/60 border border-base-750 hover:bg-base-750 hover:text-amber-50"
                         }`}
                         title={v.label}
                       >

@@ -803,8 +803,8 @@ export const MasterSpatialNavGlobe: React.FC<MasterSpatialNavGlobeProps> = ({
                 onPointerLeave={() => setHoveredSectorId(null)}
                 className={`relative p-2.5 rounded-xl border text-left transition-all duration-300 flex flex-col justify-between overflow-hidden group ${
                   isActive
-                    ? "bg-slate-900/90 shadow-xl"
-                    : "bg-slate-950/60 hover:bg-slate-900/70 border-white/10 hover:border-white/20"
+                    ? "bg-amber-900/40 shadow-xl"
+                    : "bg-amber-950/60 hover:bg-amber-900/40 border-white/10 hover:border-white/20"
                 }`}
                 style={{
                   borderColor: isActive ? `hsl(${nHue} 92% 70% / 0.75)` : undefined,
@@ -834,8 +834,8 @@ export const MasterSpatialNavGlobe: React.FC<MasterSpatialNavGlobeProps> = ({
                     {s.icon}
                   </div>
 
-                  <span className="font-mono text-[9px] uppercase tracking-wider text-slate-400 font-semibold flex items-center gap-1">
-                    <Compass size={10} className={isActive ? "text-sky-400 animate-spin" : "text-slate-500"} />
+                  <span className="font-mono text-[9px] uppercase tracking-wider text-amber-200/60 font-semibold flex items-center gap-1">
+                    <Compass size={10} className={isActive ? "text-sky-400 animate-spin" : "text-amber-300/50"} />
                     {s.cardinal}
                   </span>
                 </div>
@@ -845,14 +845,14 @@ export const MasterSpatialNavGlobe: React.FC<MasterSpatialNavGlobeProps> = ({
                   <div className="flex items-center gap-1.5">
                     <span
                       className={`text-xs font-bold tracking-wide ${
-                        isActive ? "text-white" : "text-slate-300 group-hover:text-white"
+                        isActive ? "text-white" : "text-amber-100/80 group-hover:text-white"
                       }`}
                     >
                       {s.label}
                     </span>
                     {isActive && <Zap size={11} className="text-amber-400 fill-amber-400 animate-pulse" />}
                   </div>
-                  <p className="text-[10px] text-slate-400 line-clamp-1 mt-0.5 font-sans">
+                  <p className="text-[10px] text-amber-200/60 line-clamp-1 mt-0.5 font-sans">
                     {s.description}
                   </p>
                 </div>
@@ -882,7 +882,7 @@ export const MasterSpatialNavGlobe: React.FC<MasterSpatialNavGlobeProps> = ({
                     className={`transition-transform duration-200 ${
                       isActive
                         ? "text-sky-400 translate-x-0.5"
-                        : "text-slate-600 group-hover:text-slate-300 group-hover:translate-x-1"
+                        : "text-amber-400 group-hover:text-amber-100/80 group-hover:translate-x-1"
                     }`}
                   />
                 </div>
@@ -895,7 +895,7 @@ export const MasterSpatialNavGlobe: React.FC<MasterSpatialNavGlobeProps> = ({
       {/* ── Central 3D Canvas Globe Container ── */}
       <div
         ref={wrapRef}
-        className={`relative w-full overflow-hidden rounded-2xl border border-white/10 bg-slate-950/85 shadow-2xl cursor-grab touch-none select-none ${
+        className={`relative w-full overflow-hidden rounded-2xl border border-white/10 bg-amber-950/85 shadow-2xl cursor-grab touch-none select-none ${
           isCompact ? "aspect-[2/1] max-h-56" : "aspect-square max-h-[480px]"
         }`}
         role="tablist"
@@ -936,7 +936,7 @@ export const MasterSpatialNavGlobe: React.FC<MasterSpatialNavGlobeProps> = ({
               role="tab"
               aria-selected={isActive}
               className={`absolute left-0 top-0 flex items-center gap-1.5 whitespace-nowrap px-3 py-1.5 rounded-full border backdrop-blur-md transition-all duration-200 will-change-transform ${
-                isActive ? "text-white scale-105" : "text-slate-300 hover:text-white hover:scale-105"
+                isActive ? "text-white scale-105" : "text-amber-100/80 hover:text-white hover:scale-105"
               }`}
               style={
                 isActive

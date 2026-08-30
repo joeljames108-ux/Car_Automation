@@ -136,20 +136,20 @@ export const CombustionDynoHUD: React.FC<CombustionDynoHUDProps> = ({
   }, []);
 
   return (
-    <div className="bg-slate-950/95 backdrop-blur-lg border border-amber-500/30 rounded-2xl p-5 shadow-2xl text-slate-100 flex flex-col gap-4">
+    <div className="bg-amber-950/95 backdrop-blur-lg border border-amber-500/30 rounded-2xl p-5 shadow-2xl text-amber-50 flex flex-col gap-4">
       {/* ── Header ── */}
-      <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+      <div className="flex items-center justify-between border-b border-amber-800/30 pb-3">
         <div className="flex items-center gap-2.5">
           <Flame className="w-5 h-5 text-amber-400 animate-pulse" />
           <div>
             <h3 className="font-mono text-sm font-bold uppercase tracking-wider text-amber-300">
               Thermodynamic Combustion & P-V Dyno Analyzer
             </h3>
-            <span className="text-[11px] text-slate-400 font-mono">{fuelConfig.name}</span>
+            <span className="text-[11px] text-amber-200/60 font-mono">{fuelConfig.name}</span>
           </div>
         </div>
-        <div className="flex items-center gap-2 px-2.5 py-1 bg-slate-900 border border-slate-700 rounded-lg text-xs font-mono text-slate-300">
-          <span className="text-slate-500">Thermal Eff:</span>
+        <div className="flex items-center gap-2 px-2.5 py-1 bg-amber-900/50 border border-amber-700/30 rounded-lg text-xs font-mono text-amber-100/80">
+          <span className="text-amber-300/50">Thermal Eff:</span>
           <span className="text-emerald-400 font-bold">
             {(combustionMetrics.idealOttoEfficiency * 100).toFixed(1)}%
           </span>
@@ -159,15 +159,15 @@ export const CombustionDynoHUD: React.FC<CombustionDynoHUDProps> = ({
       {/* ── Grid: P-V Diagram & Key Metrics ── */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
         {/* P-V Indicator Plot */}
-        <div className="lg:col-span-7 bg-slate-900/80 border border-slate-800 rounded-xl p-3 flex flex-col gap-2">
-          <div className="flex justify-between items-center text-xs font-mono text-slate-400">
+        <div className="lg:col-span-7 bg-amber-900/40 border border-amber-800/30 rounded-xl p-3 flex flex-col gap-2">
+          <div className="flex justify-between items-center text-xs font-mono text-amber-200/60">
             <span>P-V Indicator Diagram (Pressure vs. Volume)</span>
             <span className="text-amber-400 font-bold">
               P_max: {combustionMetrics.cylinderPeakPressureEstimate.toFixed(0)} bar
             </span>
           </div>
 
-          <div className="relative h-44 w-full bg-slate-950/60 rounded-lg border border-slate-800/80 flex items-center justify-center overflow-hidden">
+          <div className="relative h-44 w-full bg-amber-950/60 rounded-lg border border-amber-800/30 flex items-center justify-center overflow-hidden">
             <svg viewBox="0 0 260 150" className="w-full h-full p-2">
               {/* Grid Lines */}
               <line x1="30" y1="20" x2="30" y2="135" stroke="#334155" strokeWidth="1" strokeDasharray="2 2" />
@@ -195,22 +195,22 @@ export const CombustionDynoHUD: React.FC<CombustionDynoHUDProps> = ({
             </svg>
           </div>
 
-          <div className="flex justify-between text-[11px] font-mono text-slate-400 px-1">
+          <div className="flex justify-between text-[11px] font-mono text-amber-200/60 px-1">
             <span>IMEP_gross: <b className="text-amber-300">{combustionMetrics.imepGross.toFixed(2)} bar</b></span>
             <span>BMEP: <b className="text-emerald-300">{combustionMetrics.bmep.toFixed(2)} bar</b></span>
-            <span>Pump Loss: <b className="text-slate-300">{(combustionMetrics.imepGross - combustionMetrics.bmep).toFixed(2)} bar</b></span>
+            <span>Pump Loss: <b className="text-amber-100/80">{(combustionMetrics.imepGross - combustionMetrics.bmep).toFixed(2)} bar</b></span>
           </div>
         </div>
 
         {/* Combustion Physics Side Panel */}
         <div className="lg:col-span-5 flex flex-col gap-3">
           {/* Wiebe Mass Fraction Burned Curve */}
-          <div className="bg-slate-900/80 border border-slate-800 rounded-xl p-3 flex flex-col gap-1.5">
-            <div className="flex justify-between text-xs font-mono text-slate-400">
+          <div className="bg-amber-900/40 border border-amber-800/30 rounded-xl p-3 flex flex-col gap-1.5">
+            <div className="flex justify-between text-xs font-mono text-amber-200/60">
               <span>Wiebe Mass Burned x(θ)</span>
               <span className="text-amber-400">CA50: ~8° ATDC</span>
             </div>
-            <div className="h-16 w-full bg-slate-950/60 rounded border border-slate-800/80 flex items-center justify-center p-1">
+            <div className="h-16 w-full bg-amber-950/60 rounded border border-amber-800/30 flex items-center justify-center p-1">
               <svg viewBox="0 0 160 65" className="w-full h-full">
                 <polyline fill="none" stroke="#fbbf24" strokeWidth="2" points={wiebePoints} />
                 <line x1="0" y1="32" x2="160" y2="32" stroke="#475569" strokeWidth="0.8" strokeDasharray="2 2" />
@@ -244,12 +244,12 @@ export const CombustionDynoHUD: React.FC<CombustionDynoHUDProps> = ({
           </div>
 
           {/* Helmholtz Intake Acoustic Tuning */}
-          <div className="bg-slate-900/80 border border-slate-800 rounded-xl p-3 flex flex-col gap-1 text-xs font-mono">
-            <div className="flex justify-between text-slate-400">
+          <div className="bg-amber-900/40 border border-amber-800/30 rounded-xl p-3 flex flex-col gap-1 text-xs font-mono">
+            <div className="flex justify-between text-amber-200/60">
               <span>Helmholtz Acoustic Peak</span>
               <span className="text-amber-400 font-bold">{combustionMetrics.tunedRpm} RPM</span>
             </div>
-            <div className="text-[10px] text-slate-500">
+            <div className="text-[10px] text-amber-300/50">
               Intake runner length ({runnerLen}mm) resonates at {combustionMetrics.tunedRpm} RPM for maximum ram-charge volumetric efficiency.
             </div>
           </div>
@@ -257,10 +257,10 @@ export const CombustionDynoHUD: React.FC<CombustionDynoHUDProps> = ({
       </div>
 
       {/* ── Interactive Live Tuning Sliders ── */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-3 pt-2 border-t border-slate-800/80">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-3 pt-2 border-t border-amber-800/30">
         {/* Compression Ratio */}
         <div className="flex flex-col gap-1">
-          <div className="flex justify-between text-[11px] font-mono text-slate-400">
+          <div className="flex justify-between text-[11px] font-mono text-amber-200/60">
             <span>Static CR</span>
             <span className="text-amber-300 font-bold">{cr.toFixed(1)}:1</span>
           </div>
@@ -271,13 +271,13 @@ export const CombustionDynoHUD: React.FC<CombustionDynoHUDProps> = ({
             step="0.1"
             value={cr}
             onChange={(e) => setCr(parseFloat(e.target.value))}
-            className="w-full h-1.5 bg-slate-800 rounded appearance-none cursor-pointer accent-amber-400"
+            className="w-full h-1.5 bg-amber-800/35 rounded appearance-none cursor-pointer accent-amber-400"
           />
         </div>
 
         {/* Turbo Boost */}
         <div className="flex flex-col gap-1">
-          <div className="flex justify-between text-[11px] font-mono text-slate-400">
+          <div className="flex justify-between text-[11px] font-mono text-amber-200/60">
             <span>Boost Pressure</span>
             <span className="text-amber-300 font-bold">{boost.toFixed(2)} bar</span>
           </div>
@@ -288,13 +288,13 @@ export const CombustionDynoHUD: React.FC<CombustionDynoHUDProps> = ({
             step="0.05"
             value={boost}
             onChange={(e) => setBoost(parseFloat(e.target.value))}
-            className="w-full h-1.5 bg-slate-800 rounded appearance-none cursor-pointer accent-amber-400"
+            className="w-full h-1.5 bg-amber-800/35 rounded appearance-none cursor-pointer accent-amber-400"
           />
         </div>
 
         {/* Intake Runner Length */}
         <div className="flex flex-col gap-1">
-          <div className="flex justify-between text-[11px] font-mono text-slate-400">
+          <div className="flex justify-between text-[11px] font-mono text-amber-200/60">
             <span>Runner Length</span>
             <span className="text-amber-300 font-bold">{runnerLen} mm</span>
           </div>
@@ -305,13 +305,13 @@ export const CombustionDynoHUD: React.FC<CombustionDynoHUDProps> = ({
             step="10"
             value={runnerLen}
             onChange={(e) => setRunnerLen(parseInt(e.target.value))}
-            className="w-full h-1.5 bg-slate-800 rounded appearance-none cursor-pointer accent-purple-400"
+            className="w-full h-1.5 bg-amber-800/35 rounded appearance-none cursor-pointer accent-purple-400"
           />
         </div>
 
         {/* Engine RPM */}
         <div className="flex flex-col gap-1">
-          <div className="flex justify-between text-[11px] font-mono text-slate-400">
+          <div className="flex justify-between text-[11px] font-mono text-amber-200/60">
             <span>Engine Speed</span>
             <span className="text-emerald-300 font-bold">{rpm} RPM</span>
           </div>
@@ -322,7 +322,7 @@ export const CombustionDynoHUD: React.FC<CombustionDynoHUDProps> = ({
             step="100"
             value={rpm}
             onChange={(e) => setRpm(parseInt(e.target.value))}
-            className="w-full h-1.5 bg-slate-800 rounded appearance-none cursor-pointer accent-emerald-400"
+            className="w-full h-1.5 bg-amber-800/35 rounded appearance-none cursor-pointer accent-emerald-400"
           />
         </div>
       </div>

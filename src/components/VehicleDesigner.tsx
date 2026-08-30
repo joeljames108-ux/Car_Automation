@@ -234,7 +234,7 @@ export function VehicleDesigner({ initialSubTab = "linear_assembly" }: VehicleDe
             </div>
             <div>
               <div className="flex items-center gap-2 flex-wrap">
-                <h2 className="text-sm font-extrabold tracking-wider uppercase font-mono text-slate-900 dark:text-slate-100">
+                <h2 className="text-sm font-extrabold tracking-wider uppercase font-mono text-slate-900 dark:text-amber-50">
                   UNIFIED VEHICLE ARCHITECTURE & ENGINEERING SUITE
                 </h2>
                 <span className="text-[10px] font-mono font-bold px-2.5 py-0.5 rounded-full bg-emerald-500/15 text-emerald-700 dark:text-emerald-300 border border-emerald-500/30 flex items-center gap-1.5">
@@ -242,7 +242,7 @@ export function VehicleDesigner({ initialSubTab = "linear_assembly" }: VehicleDe
                   UNIFIED MASTER CHAIN
                 </span>
               </div>
-              <p className="text-[11px] font-mono text-slate-600 dark:text-slate-400 mt-0.5">
+              <p className="text-[11px] font-mono text-amber-400 dark:text-amber-200/60 mt-0.5">
                 {activeTab === "linear_assembly" && "Flagship End-to-End Vehicle Engineering • 12-Stage Linear Assembly • 3D Kinematics • Packaging Diagnostics"}
                 {activeTab === "exterior" && "Paint Booth & Finishes • Custom Rims & Calipers • Widebody Kits • 3D Body-in-White Assembly"}
                 {activeTab === "aero" && "3D Parametric Aero Studio • CFD Wind Tunnel Streamlines • 10-Dept Aero Research & Active DRS"}
@@ -254,19 +254,19 @@ export function VehicleDesigner({ initialSubTab = "linear_assembly" }: VehicleDe
           {/* Quick Metrics Bar */}
           <div className="flex items-center gap-2 flex-wrap bg-base-800/40 p-1.5 rounded-2xl border border-base-700/40 font-mono text-[11px]">
             <div className="px-2.5 py-1 rounded-xl bg-base-850 border border-base-800 flex items-center">
-              <span className="text-slate-500 dark:text-slate-400 mr-1.5">WEIGHT</span>
-              <span className="font-bold text-slate-800 dark:text-slate-200">{Math.round(sim.weight || 1480)} kg</span>
+              <span className="text-amber-300/50 dark:text-amber-200/60 mr-1.5">WEIGHT</span>
+              <span className="font-bold text-slate-800 dark:text-amber-50">{Math.round(sim.weight || 1480)} kg</span>
             </div>
             <div className="px-2.5 py-1 rounded-xl bg-base-850 border border-base-800 flex items-center">
-              <span className="text-slate-500 dark:text-slate-400 mr-1.5">DRAG</span>
+              <span className="text-amber-300/50 dark:text-amber-200/60 mr-1.5">DRAG</span>
               <span className="font-bold text-amber-600 dark:text-amber-300">Cd {sim.dragCoeff.toFixed(3)}</span>
             </div>
             <div className="px-2.5 py-1 rounded-xl bg-base-850 border border-base-800 flex items-center">
-              <span className="text-slate-500 dark:text-slate-400 mr-1.5">DOWNFORCE</span>
+              <span className="text-amber-300/50 dark:text-amber-200/60 mr-1.5">DOWNFORCE</span>
               <span className="font-bold text-emerald-600 dark:text-emerald-300">{sim.downforce} N</span>
             </div>
             <div className="px-2.5 py-1 rounded-xl bg-base-850 border border-base-800 flex items-center">
-              <span className="text-slate-500 dark:text-slate-400 mr-1.5">0-100</span>
+              <span className="text-amber-300/50 dark:text-amber-200/60 mr-1.5">0-100</span>
               <span className="font-bold text-amber-600 dark:text-amber-300">{sim.accel0_100?.toFixed(1) || "3.8"}s</span>
             </div>
           </div>
@@ -283,10 +283,10 @@ export function VehicleDesigner({ initialSubTab = "linear_assembly" }: VehicleDe
                 className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-mono font-bold transition-all whitespace-nowrap cursor-pointer ${
                   isActive
                     ? "bg-amber-500/20 text-amber-700 dark:text-amber-200 border border-amber-500/50 shadow-sm"
-                    : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100 hover:bg-base-800/40 border border-transparent"
+                    : "text-amber-400 dark:text-amber-200/60 hover:text-slate-900 dark:hover:text-amber-50 hover:bg-base-800/40 border border-transparent"
                 }`}
               >
-                <span className={isActive ? "text-amber-600 dark:text-amber-300" : "text-slate-500 dark:text-slate-400"}>
+                <span className={isActive ? "text-amber-600 dark:text-amber-300" : "text-amber-300/50 dark:text-amber-200/60"}>
                   {tab.icon}
                 </span>
                 <span>{tab.label}</span>
@@ -295,7 +295,7 @@ export function VehicleDesigner({ initialSubTab = "linear_assembly" }: VehicleDe
                     className={`text-[9px] px-1.5 py-0.5 rounded font-extrabold ${
                       isActive
                         ? "bg-amber-500/20 text-amber-700 dark:text-amber-300 border border-amber-500/40"
-                        : "bg-base-800/80 text-slate-500 dark:text-slate-400 border border-base-700/40"
+                        : "bg-base-800/80 text-amber-300/50 dark:text-amber-200/60 border border-base-700/40"
                     }`}
                   >
                     {tab.badge}
@@ -332,7 +332,7 @@ export function VehicleDesigner({ initialSubTab = "linear_assembly" }: VehicleDe
                 className={`flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-bold font-mono transition-all border ${
                   exteriorViewMode === "paint_and_styling"
                     ? "bg-amber-500/20 border-amber-500/60 text-amber-700 dark:text-amber-200 shadow-sm"
-                    : "bg-base-850/80 border-base-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100"
+                    : "bg-base-850/80 border-base-800 text-amber-400 dark:text-amber-200/60 hover:text-slate-900 dark:hover:text-amber-50"
                 }`}
               >
                 <Palette size={14} className={exteriorViewMode === "paint_and_styling" ? "text-amber-600 dark:text-amber-400" : ""} />
@@ -346,15 +346,15 @@ export function VehicleDesigner({ initialSubTab = "linear_assembly" }: VehicleDe
                 className={`flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-bold font-mono transition-all border ${
                   exteriorViewMode === "biw_assembly"
                     ? "bg-emerald-500/20 border-emerald-500/60 text-emerald-700 dark:text-emerald-200 shadow-sm"
-                    : "bg-base-850/80 border-base-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100"
+                    : "bg-base-850/80 border-base-800 text-amber-400 dark:text-amber-200/60 hover:text-slate-900 dark:hover:text-amber-50"
                 }`}
               >
                 <Layers size={14} className={exteriorViewMode === "biw_assembly" ? "text-emerald-600 dark:text-emerald-400" : ""} />
                 🧩 3D BODY-IN-WHITE (BIW) WORKSTATION
               </button>
             </div>
-            <div className="text-[11px] font-mono text-slate-600 dark:text-slate-400">
-              Active Color: <span className="font-bold text-slate-900 dark:text-slate-200">{ext.paintColor}</span> ({(PAINT_FINISHES as Record<string, any>)[ext.paintFinish]?.label || "Gloss"})
+            <div className="text-[11px] font-mono text-amber-400 dark:text-amber-200/60">
+              Active Color: <span className="font-bold text-slate-900 dark:text-amber-50">{ext.paintColor}</span> ({(PAINT_FINISHES as Record<string, any>)[ext.paintFinish]?.label || "Gloss"})
             </div>
           </div>
 
@@ -378,11 +378,11 @@ export function VehicleDesigner({ initialSubTab = "linear_assembly" }: VehicleDe
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
                     <div className="bg-base-850 rounded-lg p-2.5 border border-base-800">
-                      <div className="label-mono text-slate-500">Design Origin</div>
-                      <div className="text-slate-300 font-semibold">{(BODY_TYPES as Record<string, any>)[ext.bodyType]?.origin || "Automotive Engineering"}</div>
+                      <div className="label-mono text-amber-300/50">Design Origin</div>
+                      <div className="text-amber-100/80 font-semibold">{(BODY_TYPES as Record<string, any>)[ext.bodyType]?.origin || "Automotive Engineering"}</div>
                     </div>
                     <div className="bg-base-850 rounded-lg p-2.5 border border-base-800">
-                      <div className="label-mono text-slate-500">Aerodynamic Impact</div>
+                      <div className="label-mono text-amber-300/50">Aerodynamic Impact</div>
                       <div className="text-amber-300 font-mono">
                         Cd {((BODY_TYPES as Record<string, any>)[ext.bodyType]?.dragDelta ?? 0) >= 0 ? "+" : ""}
                         {((BODY_TYPES as Record<string, any>)[ext.bodyType]?.dragDelta ?? 0).toFixed(3)} · Cl{" "}
@@ -391,21 +391,21 @@ export function VehicleDesigner({ initialSubTab = "linear_assembly" }: VehicleDe
                       </div>
                     </div>
                     <div className="bg-base-850 rounded-lg p-2.5 border border-base-800">
-                      <div className="label-mono text-slate-500">Weight Δ</div>
+                      <div className="label-mono text-amber-300/50">Weight Δ</div>
                       <div className="text-amber-300 font-mono">
                         {((BODY_TYPES as Record<string, any>)[ext.bodyType]?.weightDelta ?? 0) > 0 ? "+" : ""}
                         {(BODY_TYPES as Record<string, any>)[ext.bodyType]?.weightDelta ?? 0} kg
                       </div>
                     </div>
                   </div>
-                  <p className="text-[11px] text-slate-400 mt-2 font-mono">{(BODY_TYPES as Record<string, any>)[ext.bodyType]?.description || ""}</p>
+                  <p className="text-[11px] text-amber-200/60 mt-2 font-mono">{(BODY_TYPES as Record<string, any>)[ext.bodyType]?.description || ""}</p>
                 </Section>
 
                 {/* Paint & Finish */}
                 <Section title="Paint Booth & Surface Finish" icon={<Palette size={16} />}>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                      <label className="label-mono mb-2 block text-xs font-semibold text-slate-300">
+                      <label className="label-mono mb-2 block text-xs font-semibold text-amber-100/80">
                         Bodywork Paint Swatches
                       </label>
                       <div className="grid grid-cols-8 gap-1.5">
@@ -431,7 +431,7 @@ export function VehicleDesigner({ initialSubTab = "linear_assembly" }: VehicleDe
                           className="h-8 w-12 bg-transparent border border-base-800 rounded cursor-pointer"
                         />
                         <span className="font-mono text-xs text-amber-300 font-bold">{ext.paintColor}</span>
-                        <span className="text-[10px] text-slate-500 font-mono">(Custom Hex Code)</span>
+                        <span className="text-[10px] text-amber-300/50 font-mono">(Custom Hex Code)</span>
                       </div>
                     </div>
 
@@ -446,7 +446,7 @@ export function VehicleDesigner({ initialSubTab = "linear_assembly" }: VehicleDe
                         onChange={(val) => updateExterior({ paintFinish: val })}
                       />
                       <div className="mt-4">
-                        <label className="label-mono mb-2 block text-xs font-semibold text-slate-300">
+                        <label className="label-mono mb-2 block text-xs font-semibold text-amber-100/80">
                           Badge & Accent Color
                         </label>
                         <div className="flex gap-2">
@@ -536,7 +536,7 @@ export function VehicleDesigner({ initialSubTab = "linear_assembly" }: VehicleDe
                 {/* Body Kit & Aero Add-ons */}
                 <Section title="Body Kit & Aerodynamic Appendages" icon={<Layers size={16} />}>
                   <div className="mb-3">
-                    <label className="label-mono mb-1.5 block text-xs font-semibold text-slate-300">Aerodynamic Body Kit</label>
+                    <label className="label-mono mb-1.5 block text-xs font-semibold text-amber-100/80">Aerodynamic Body Kit</label>
                     <ChoiceGrid<BodyKit>
                       value={ext.bodyKit}
                       options={(Object.keys(BODY_KITS) as BodyKit[]).map((k) => ({
@@ -635,7 +635,7 @@ export function VehicleDesigner({ initialSubTab = "linear_assembly" }: VehicleDe
                 className={`flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-bold font-mono transition-all border ${
                   aeroViewMode === "studio_3d"
                     ? "bg-accent-500/20 border-accent-500/60 text-accent-700 dark:text-accent-300 shadow-sm"
-                    : "bg-base-850/80 border-base-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100"
+                    : "bg-base-850/80 border-base-800 text-amber-400 dark:text-amber-200/60 hover:text-slate-900 dark:hover:text-amber-50"
                 }`}
               >
                 <Box size={14} className={aeroViewMode === "studio_3d" ? "text-accent-600 dark:text-accent-400" : ""} />
@@ -649,7 +649,7 @@ export function VehicleDesigner({ initialSubTab = "linear_assembly" }: VehicleDe
                 className={`flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-bold font-mono transition-all border ${
                   aeroViewMode === "cfd_windtunnel"
                     ? "bg-amber-500/20 border-amber-400/60 text-amber-700 dark:text-amber-200 shadow-sm"
-                    : "bg-base-850/80 border-base-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100"
+                    : "bg-base-850/80 border-base-800 text-amber-400 dark:text-amber-200/60 hover:text-slate-900 dark:hover:text-amber-50"
                 }`}
               >
                 <Wind size={14} className={aeroViewMode === "cfd_windtunnel" ? "text-amber-600 dark:text-amber-400" : ""} />
@@ -663,14 +663,14 @@ export function VehicleDesigner({ initialSubTab = "linear_assembly" }: VehicleDe
                 className={`flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-bold font-mono transition-all border ${
                   aeroViewMode === "research_depts"
                     ? "bg-amber-500/20 border-amber-400/60 text-amber-700 dark:text-amber-200 shadow-sm"
-                    : "bg-base-850/80 border-base-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100"
+                    : "bg-base-850/80 border-base-800 text-amber-400 dark:text-amber-200/60 hover:text-slate-900 dark:hover:text-amber-50"
                 }`}
               >
                 <BarChart3 size={14} className={aeroViewMode === "research_depts" ? "text-amber-600 dark:text-amber-400" : ""} />
                 📊 10-DEPT AERO RESEARCH & DRS
               </button>
             </div>
-            <div className="hidden sm:flex items-center gap-2 text-[11px] font-mono text-slate-400">
+            <div className="hidden sm:flex items-center gap-2 text-[11px] font-mono text-amber-200/60">
               <span>CFD State:</span>
               <span className="text-emerald-400 font-semibold">Active Navier-Stokes Mesh</span>
             </div>
@@ -687,12 +687,12 @@ export function VehicleDesigner({ initialSubTab = "linear_assembly" }: VehicleDe
                 <div className="flex items-center gap-2">
                   <Wind size={20} className="text-amber-400" />
                   <div>
-                    <h3 className="text-sm font-bold text-slate-100">Aerodynamics Research Center</h3>
-                    <p className="text-[11px] text-slate-500">Fine-tune downforce distribution, ground effects & active aero</p>
+                    <h3 className="text-sm font-bold text-amber-50">Aerodynamics Research Center</h3>
+                    <p className="text-[11px] text-amber-300/50">Fine-tune downforce distribution, ground effects & active aero</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-2 flex-wrap">
-                  <span className="text-[10px] text-slate-400 font-mono font-semibold">AUTO BALANCE:</span>
+                  <span className="text-[10px] text-amber-200/60 font-mono font-semibold">AUTO BALANCE:</span>
                   <button
                     onClick={() => {
                       playHMIClickSound();
@@ -741,7 +741,7 @@ export function VehicleDesigner({ initialSubTab = "linear_assembly" }: VehicleDe
                     className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-mono font-bold transition-all whitespace-nowrap ${
                       aeroDept === d.id
                         ? "bg-amber-500/20 text-amber-300 border border-amber-500/40"
-                        : "text-slate-400 hover:text-slate-200 hover:bg-white/5 border border-transparent"
+                        : "text-amber-200/60 hover:text-amber-50 hover:bg-white/5 border border-transparent"
                     }`}
                   >
                     {d.icon}
@@ -951,7 +951,7 @@ export function VehicleDesigner({ initialSubTab = "linear_assembly" }: VehicleDe
 
                   {aeroDept !== "front" && aeroDept !== "rearwing" && aeroDept !== "diffuser" && aeroDept !== "active" && aeroDept !== "dashboard" && (
                     <Section title={`Aerodynamic Parameters: ${aeroDept.toUpperCase()}`} icon={<Wind size={16} />}>
-                      <p className="text-xs text-slate-400 font-mono mb-4">
+                      <p className="text-xs text-amber-200/60 font-mono mb-4">
                         Adjust micro-aero components to optimize boundary layer flow, reduce turbulence, and maximize cooling airflow efficiency.
                       </p>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -991,7 +991,7 @@ export function VehicleDesigner({ initialSubTab = "linear_assembly" }: VehicleDe
 
                   <Section title="Downforce Distribution Balance" icon={<Scale size={16} />}>
                     <div className="space-y-2 text-xs font-mono">
-                      <div className="flex justify-between text-slate-400 font-bold">
+                      <div className="flex justify-between text-amber-200/60 font-bold">
                         <span>Front Axle Downforce</span>
                         <span className="text-amber-400">{Math.round(sim.downforce * (1 - sim.aeroBalance))} N</span>
                       </div>
@@ -999,7 +999,7 @@ export function VehicleDesigner({ initialSubTab = "linear_assembly" }: VehicleDe
                         <div style={{ width: `${(1 - sim.aeroBalance) * 100}%` }} className="bg-amber-500 h-full transition-all" />
                         <div style={{ width: `${sim.aeroBalance * 100}%` }} className="bg-amber-500 h-full transition-all" />
                       </div>
-                      <div className="flex justify-between text-slate-400 font-bold pt-1">
+                      <div className="flex justify-between text-amber-200/60 font-bold pt-1">
                         <span>Rear Axle Downforce</span>
                         <span className="text-amber-400">{Math.round(sim.downforce * sim.aeroBalance)} N</span>
                       </div>

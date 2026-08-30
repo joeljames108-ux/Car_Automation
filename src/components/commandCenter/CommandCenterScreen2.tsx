@@ -76,11 +76,11 @@ function SystemBar({
   return (
     <div className="space-y-1">
       <div className="flex items-center justify-between text-xs">
-        <span className="flex items-center gap-1.5 text-slate-300 font-mono text-[11px]">
+        <span className="flex items-center gap-1.5 text-amber-100/80 font-mono text-[11px]">
           {icon}
           {label}
         </span>
-        <span className="font-mono text-xs text-slate-200 font-bold">{pct.toFixed(0)}%</span>
+        <span className="font-mono text-xs text-amber-50 font-bold">{pct.toFixed(0)}%</span>
       </div>
       <div className="h-2 bg-base-850/90 rounded-full overflow-hidden border border-white/5 shadow-inner">
         <div
@@ -95,7 +95,7 @@ function SystemBar({
 function ScoreTile({ label, value }: { label: string; value: number }) {
   return (
     <div className="bg-base-900/80 border border-white/5 rounded-xl p-3 text-center shadow-sm">
-      <div className="text-[10px] text-slate-400 uppercase tracking-wider font-mono mb-0.5">{label}</div>
+      <div className="text-[10px] text-amber-200/60 uppercase tracking-wider font-mono mb-0.5">{label}</div>
       <div className="text-xl font-bold font-mono text-amber-300">{value.toFixed(1)}</div>
     </div>
   );
@@ -112,7 +112,7 @@ function RecommendationRow({
     critical: "bg-rose-500/20 text-rose-300 border-rose-500/40 shadow-[0_0_10px_rgba(244,63,94,0.25)]",
     high: "bg-amber-500/20 text-amber-300 border-amber-500/40",
     medium: "bg-amber-500/20 text-amber-300 border-amber-500/40",
-    low: "bg-slate-500/20 text-slate-300 border-slate-500/40",
+    low: "bg-slate-500/20 text-amber-100/80 border-amber-500/30/40",
   };
 
   const getStageForCategory = (category: string) => {
@@ -140,12 +140,12 @@ function RecommendationRow({
         </span>
         <div className="flex-1 min-w-0">
           <div className="flex items-center justify-between gap-2 mb-0.5">
-            <span className="text-xs font-bold text-slate-200 truncate">{rec.title}</span>
-            <span className="text-[10px] font-mono text-slate-400 shrink-0">
+            <span className="text-xs font-bold text-amber-50 truncate">{rec.title}</span>
+            <span className="text-[10px] font-mono text-amber-200/60 shrink-0">
               {rec.metric} → <span className="text-emerald-400 font-bold">{rec.target}</span>
             </span>
           </div>
-          <p className="text-[11px] text-slate-400 leading-relaxed line-clamp-2">{rec.detail}</p>
+          <p className="text-[11px] text-amber-200/60 leading-relaxed line-clamp-2">{rec.detail}</p>
         </div>
       </div>
       {onSelectStage && (
@@ -220,12 +220,12 @@ export const CommandCenterScreen2: React.FC<CommandCenterScreen2Props> = ({
               <ScoreTile label="Daily Usability" value={scores?.dailyDrivability ?? 7.9} />
               <ScoreTile label="Comfort & Tech" value={scores?.luxuryScore ?? 8.4} />
             </div>
-            <div className="p-3 rounded-xl bg-base-950/80 border border-white/5 text-xs text-slate-300">
+            <div className="p-3 rounded-xl bg-base-950/80 border border-white/5 text-xs text-amber-100/80">
               <div className="flex items-center gap-2 mb-1 text-[11px] font-bold text-amber-300 font-mono">
                 <Award size={13} />
                 <span>OVERALL PRESS VERDICT</span>
               </div>
-              <p className="text-slate-400 text-[11px] leading-relaxed">
+              <p className="text-amber-200/60 text-[11px] leading-relaxed">
                 {summary?.verdict || "Remarkable powertrain precision and exceptional aerodynamic balance deliver outstanding track pacing with refined road manners."}
               </p>
             </div>
@@ -260,15 +260,15 @@ export const CommandCenterScreen2: React.FC<CommandCenterScreen2Props> = ({
             </div>
             <div className="space-y-1.5 text-xs font-mono">
               <div className="flex items-center justify-between p-2 rounded-lg bg-base-950/60 border border-white/5 text-[11px]">
-                <span className="text-slate-400">Suspension Pitch Frequency</span>
+                <span className="text-amber-200/60">Suspension Pitch Frequency</span>
                 <span className="text-amber-300 font-bold">1.85 Hz (Track Optimized)</span>
               </div>
               <div className="flex items-center justify-between p-2 rounded-lg bg-base-950/60 border border-white/5 text-[11px]">
-                <span className="text-slate-400">Yaw Moment of Inertia</span>
+                <span className="text-amber-200/60">Yaw Moment of Inertia</span>
                 <span className="text-amber-300 font-bold">2,140 kg·m²</span>
               </div>
               <div className="flex items-center justify-between p-2 rounded-lg bg-base-950/60 border border-white/5 text-[11px]">
-                <span className="text-slate-400">Total Unsprung Corner Mass</span>
+                <span className="text-amber-200/60">Total Unsprung Corner Mass</span>
                 <span className="text-emerald-300 font-bold">38.4 kg / corner</span>
               </div>
             </div>

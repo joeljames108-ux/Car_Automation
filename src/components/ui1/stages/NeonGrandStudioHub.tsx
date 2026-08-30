@@ -8,7 +8,7 @@ const GrandAutomotiveStudioHub = lazy(() => import("../../GrandAutomotiveStudioH
 
 export function NeonGrandStudioHub() {
   return (
-    <div className="w-full flex flex-col gap-6 text-slate-100 animate-nh-materialize">
+    <div className="w-full flex flex-col gap-6 text-amber-50 animate-nh-materialize">
       {/* Header Banner */}
       <NeonHorizonGlassPanel
         variant="window"
@@ -22,7 +22,7 @@ export function NeonGrandStudioHub() {
         }}
         className="p-6"
       >
-        <div className="text-xs text-slate-400 font-mono">
+        <div className="text-xs text-amber-200/60 font-mono">
           Unified real-time bidirectional engineering link active. Select any studio to calibrate telemetry, physics kinematics, or powertrain parameters.
         </div>
       </NeonHorizonGlassPanel>

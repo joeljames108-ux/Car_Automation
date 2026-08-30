@@ -106,16 +106,16 @@ export const EVBatteryThermalAnalytics: React.FC<EVBatteryThermalAnalyticsProps>
   }, [electricalMetrics.currentAmps, coolantFlowLpm]);
 
   return (
-    <div className="bg-slate-950/95 backdrop-blur-lg border border-amber-500/30 rounded-2xl p-5 shadow-2xl text-slate-100 flex flex-col gap-4">
+    <div className="bg-amber-950/95 backdrop-blur-lg border border-amber-500/30 rounded-2xl p-5 shadow-2xl text-amber-50 flex flex-col gap-4">
       {/* ── Header ── */}
-      <div className="flex items-center justify-between border-b border-slate-800 pb-3">
+      <div className="flex items-center justify-between border-b border-amber-800/30 pb-3">
         <div className="flex items-center gap-2.5">
           <BatteryCharging className="w-5 h-5 text-amber-400 animate-pulse" />
           <div>
             <h3 className="font-mono text-sm font-bold uppercase tracking-wider text-amber-300">
               EV Battery & 800V Architecture Analytics
             </h3>
-            <span className="text-[11px] text-slate-400 font-mono">
+            <span className="text-[11px] text-amber-200/60 font-mono">
               Pack: {packCapacityKwh} kWh | Cell Mass: {packCellMassKg} kg | {chemSpecs.name}
             </span>
           </div>
@@ -125,7 +125,7 @@ export const EVBatteryThermalAnalytics: React.FC<EVBatteryThermalAnalyticsProps>
         <div className={`px-2.5 py-1 rounded-lg text-xs font-mono font-bold flex items-center gap-1.5 border ${
           voltage === 800
             ? "bg-amber-950/60 border-amber-500/40 text-amber-300"
-            : "bg-slate-900 border-slate-700 text-slate-400"
+            : "bg-amber-900/50 border-amber-700/30 text-amber-200/60"
         }`}>
           <Zap className="w-3.5 h-3.5" />
           <span>{voltage}V System: 10-80% in {electricalMetrics.chargeTime10to80Min} min</span>
@@ -135,8 +135,8 @@ export const EVBatteryThermalAnalytics: React.FC<EVBatteryThermalAnalyticsProps>
       {/* ── Grid: Cell Chemistry & 800V Efficiency ── */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
         {/* Chemistry Selector Cards */}
-        <div className="lg:col-span-6 bg-slate-900/80 border border-slate-800 rounded-xl p-3 flex flex-col gap-2">
-          <span className="text-xs font-mono text-slate-400">Cell Chemistry Electrochemistry</span>
+        <div className="lg:col-span-6 bg-amber-900/40 border border-amber-800/30 rounded-xl p-3 flex flex-col gap-2">
+          <span className="text-xs font-mono text-amber-200/60">Cell Chemistry Electrochemistry</span>
 
           <div className="grid grid-cols-3 gap-2">
             {[
@@ -150,17 +150,17 @@ export const EVBatteryThermalAnalytics: React.FC<EVBatteryThermalAnalyticsProps>
                 className={`p-2.5 rounded-lg border text-left flex flex-col transition-all ${
                   chemistry === c.id
                     ? "bg-amber-950/60 border-amber-500/80 text-amber-200 shadow-lg"
-                    : "bg-slate-950/60 border-slate-800 text-slate-400 hover:border-slate-700"
+                    : "bg-amber-950/60 border-amber-800/30 text-amber-200/60 hover:border-amber-700/30"
                 }`}
               >
                 <span className="font-mono text-xs font-bold">{c.label}</span>
                 <span className="text-[10px] text-amber-300 font-mono">{c.sub}</span>
-                <span className="text-[9px] text-slate-500">{c.desc}</span>
+                <span className="text-[9px] text-amber-300/50">{c.desc}</span>
               </button>
             ))}
           </div>
 
-          <div className="grid grid-cols-3 gap-2 text-[11px] font-mono text-slate-400 pt-2 border-t border-slate-800">
+          <div className="grid grid-cols-3 gap-2 text-[11px] font-mono text-amber-200/60 pt-2 border-t border-amber-800/30">
             <div>Cycle Life: <b className="text-emerald-400">{chemSpecs.cycleLife}</b></div>
             <div>Runaway: <b className="text-amber-400">{chemSpecs.runawayTempC}°C</b></div>
             <div>Cost: <b className="text-amber-400">${chemSpecs.costPerKwh}/kWh</b></div>
@@ -168,14 +168,14 @@ export const EVBatteryThermalAnalytics: React.FC<EVBatteryThermalAnalyticsProps>
         </div>
 
         {/* 800V vs 400V Thermal & Electrical Losses */}
-        <div className="lg:col-span-6 bg-slate-900/80 border border-slate-800 rounded-xl p-3 flex flex-col gap-2.5">
+        <div className="lg:col-span-6 bg-amber-900/40 border border-amber-800/30 rounded-xl p-3 flex flex-col gap-2.5">
           <div className="flex justify-between items-center text-xs font-mono">
-            <span className="text-slate-400">Voltage Architecture</span>
+            <span className="text-amber-200/60">Voltage Architecture</span>
             <div className="flex gap-1.5">
               <button
                 onClick={() => setVoltage(400)}
                 className={`px-2 py-0.5 rounded text-[10px] font-mono ${
-                  voltage === 400 ? "bg-slate-700 text-white font-bold" : "bg-slate-950 text-slate-400"
+                  voltage === 400 ? "bg-slate-700 text-white font-bold" : "bg-amber-950/80 text-amber-200/60"
                 }`}
               >
                 400V
@@ -183,7 +183,7 @@ export const EVBatteryThermalAnalytics: React.FC<EVBatteryThermalAnalyticsProps>
               <button
                 onClick={() => setVoltage(800)}
                 className={`px-2 py-0.5 rounded text-[10px] font-mono ${
-                  voltage === 800 ? "bg-amber-600 text-white font-bold" : "bg-slate-950 text-slate-400"
+                  voltage === 800 ? "bg-amber-600 text-white font-bold" : "bg-amber-950/80 text-amber-200/60"
                 }`}
               >
                 800V (SiC)
@@ -192,16 +192,16 @@ export const EVBatteryThermalAnalytics: React.FC<EVBatteryThermalAnalyticsProps>
           </div>
 
           <div className="grid grid-cols-3 gap-2 text-xs font-mono">
-            <div className="bg-slate-950/60 p-2 rounded border border-slate-800/80">
-              <div className="text-[10px] text-slate-500">Current Load</div>
+            <div className="bg-amber-950/60 p-2 rounded border border-amber-800/30">
+              <div className="text-[10px] text-amber-300/50">Current Load</div>
               <div className="text-amber-300 font-bold">{electricalMetrics.currentAmps} A</div>
             </div>
-            <div className="bg-slate-950/60 p-2 rounded border border-slate-800/80">
-              <div className="text-[10px] text-slate-500">I²R Heat Loss</div>
+            <div className="bg-amber-950/60 p-2 rounded border border-amber-800/30">
+              <div className="text-[10px] text-amber-300/50">I²R Heat Loss</div>
               <div className="text-red-400 font-bold">{(electricalMetrics.jouleLossWatts / 1000).toFixed(2)} kW</div>
             </div>
-            <div className="bg-slate-950/60 p-2 rounded border border-slate-800/80">
-              <div className="text-[10px] text-slate-500">Harness Mass</div>
+            <div className="bg-amber-950/60 p-2 rounded border border-amber-800/30">
+              <div className="text-[10px] text-amber-300/50">Harness Mass</div>
               <div className="text-amber-300 font-bold">{electricalMetrics.harnessMassKg} kg</div>
             </div>
           </div>
@@ -210,21 +210,21 @@ export const EVBatteryThermalAnalytics: React.FC<EVBatteryThermalAnalyticsProps>
           <div className="flex items-center justify-between text-xs font-mono pt-1">
             <div className="flex items-center gap-1.5">
               <Thermometer className="w-3.5 h-3.5 text-amber-400" />
-              <span className="text-slate-400">Cell Core Temp:</span>
+              <span className="text-amber-200/60">Cell Core Temp:</span>
               <span className={`font-bold ${thermalMetrics.coreTempC > 48 ? "text-red-400" : "text-emerald-400"}`}>
                 {thermalMetrics.coreTempC}°C (Safe &lt; 55°C)
               </span>
             </div>
-            <span className="text-slate-500 text-[10px]">{coolantFlowLpm} L/min Flow</span>
+            <span className="text-amber-300/50 text-[10px]">{coolantFlowLpm} L/min Flow</span>
           </div>
         </div>
       </div>
 
       {/* ── Interactive Tuning Sliders ── */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2 border-t border-slate-800/80">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2 border-t border-amber-800/30">
         {/* Peak Discharge Power */}
         <div className="flex flex-col gap-1">
-          <div className="flex justify-between text-[11px] font-mono text-slate-400">
+          <div className="flex justify-between text-[11px] font-mono text-amber-200/60">
             <span>Discharge Demand</span>
             <span className="text-amber-300 font-bold">{dischargePowerKw} kW</span>
           </div>
@@ -235,13 +235,13 @@ export const EVBatteryThermalAnalytics: React.FC<EVBatteryThermalAnalyticsProps>
             step="20"
             value={dischargePowerKw}
             onChange={(e) => setDischargePowerKw(parseInt(e.target.value))}
-            className="w-full h-1.5 bg-slate-800 rounded appearance-none cursor-pointer accent-purple-400"
+            className="w-full h-1.5 bg-amber-800/35 rounded appearance-none cursor-pointer accent-purple-400"
           />
         </div>
 
         {/* Liquid Chiller Flow Rate */}
         <div className="flex flex-col gap-1">
-          <div className="flex justify-between text-[11px] font-mono text-slate-400">
+          <div className="flex justify-between text-[11px] font-mono text-amber-200/60">
             <span>Cooling Chiller Flow Rate</span>
             <span className="text-amber-300 font-bold">{coolantFlowLpm} L/min</span>
           </div>
@@ -252,7 +252,7 @@ export const EVBatteryThermalAnalytics: React.FC<EVBatteryThermalAnalyticsProps>
             step="1"
             value={coolantFlowLpm}
             onChange={(e) => setCoolantFlowLpm(parseInt(e.target.value))}
-            className="w-full h-1.5 bg-slate-800 rounded appearance-none cursor-pointer accent-amber-400"
+            className="w-full h-1.5 bg-amber-800/35 rounded appearance-none cursor-pointer accent-amber-400"
           />
         </div>
       </div>

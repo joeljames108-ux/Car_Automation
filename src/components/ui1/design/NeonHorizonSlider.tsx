@@ -76,9 +76,9 @@ export const NeonHorizonSlider: React.FC<NeonHorizonSliderProps> = ({
     >
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <span className="nh-label-caps text-slate-300">{label}</span>
+          <span className="nh-label-caps text-amber-100/80">{label}</span>
           {description && (
-            <span className="text-[10px] text-slate-500 nh-font-mono hidden sm:inline">
+            <span className="text-[10px] text-amber-300/50 nh-font-mono hidden sm:inline">
               {description}
             </span>
           )}
@@ -114,7 +114,7 @@ export const NeonHorizonSlider: React.FC<NeonHorizonSliderProps> = ({
 
         {/* Precision thumb marker */}
         <div
-          className={`absolute w-3.5 h-3.5 rounded-full bg-white border-2 border-slate-500/80 shadow-[0_1px_4px_rgba(0,0,0,0.5)] pointer-events-none transform -translate-x-1/2 transition-transform duration-75 ${
+          className={`absolute w-3.5 h-3.5 rounded-full bg-white border-2 border-amber-500/30/80 shadow-[0_1px_4px_rgba(0,0,0,0.5)] pointer-events-none transform -translate-x-1/2 transition-transform duration-75 ${
  isHovered ? "scale-110" : "scale-100"
  }`}
           style={{ left: `${percentage}%` }}

@@ -71,15 +71,15 @@ export function EVPDUSection({
           <div className="space-y-3">
             <div className="p-3 rounded-xl bg-base-950/80 border border-amber-500/20 space-y-2 text-xs font-mono">
               <div className="flex justify-between">
-                <span className="text-slate-400">DC-DC Output</span>
+                <span className="text-amber-200/60">DC-DC Output</span>
                 <span className="text-amber-300 font-extrabold">3.5 kW (12V/48V Dual)</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-slate-400">Main Contactor Type</span>
+                <span className="text-amber-200/60">Main Contactor Type</span>
                 <span className="text-emerald-300 font-extrabold">Hermetically Sealed Solid-State</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-slate-400">Arc Suppression</span>
+                <span className="text-amber-200/60">Arc Suppression</span>
                 <span className="text-amber-300 font-extrabold">Ultra-Fast 1.5ms Cutoff</span>
               </div>
             </div>
@@ -88,7 +88,7 @@ export function EVPDUSection({
               <span className="text-[10px] font-mono font-bold text-amber-300 uppercase tracking-wider block">
                 AUXILIARY SYSTEM INTEGRATION
               </span>
-              <p className="text-[11px] font-mono text-slate-300 leading-relaxed">
+              <p className="text-[11px] font-mono text-amber-100/80 leading-relaxed">
                 Centralizes high-voltage power routing to dual electric motor inverters, active aero actuators and cabin thermal heat pumps.
               </p>
             </div>
@@ -109,7 +109,7 @@ export function EVPDUSection({
               onSelectVariant={onSelectVariant}
             />
           ) : (
-            <p className="text-xs font-mono text-slate-500">Loading material variants...</p>
+            <p className="text-xs font-mono text-amber-300/50">Loading material variants...</p>
           )}
         </SectionCard>
 

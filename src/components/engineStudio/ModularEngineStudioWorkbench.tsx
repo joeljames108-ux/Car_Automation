@@ -81,9 +81,9 @@ const ModularEngineStudioWorkbenchComponent: React.FC<ModularEngineStudioWorkben
   const dt = state.drivetrain;
 
   return (
-    <div className="flex flex-col h-full bg-slate-900/90 backdrop-blur-xl border border-slate-800 rounded-2xl overflow-hidden shadow-2xl">
+    <div className="flex flex-col h-full bg-amber-900/40 backdrop-blur-xl border border-amber-800/30 rounded-2xl overflow-hidden shadow-2xl">
       {/* 7-Tab Navigation Bar */}
-      <div className="flex border-b border-slate-800 bg-slate-950/60 p-1.5 gap-1 overflow-x-auto">
+      <div className="flex border-b border-amber-800/30 bg-amber-950/60 p-1.5 gap-1 overflow-x-auto">
         {[
           { id: "block", label: "Short Block", icon: <Cog size={13} /> },
           { id: "heads", label: "Heads & Cams", icon: <Layers size={13} /> },
@@ -110,7 +110,7 @@ const ModularEngineStudioWorkbenchComponent: React.FC<ModularEngineStudioWorkben
             className={`flex items-center gap-1.5 px-3 py-2 text-xs font-semibold rounded-xl transition-all whitespace-nowrap ${
               activeTab === tab.id
                 ? "bg-amber-500 text-slate-950 shadow-md shadow-cyan-500/20 font-bold"
-                : "text-slate-400 hover:text-slate-200 hover:bg-slate-850"
+                : "text-amber-200/60 hover:text-amber-50 hover:bg-amber-850/40"
             }`}
           >
             {tab.icon}
@@ -120,26 +120,26 @@ const ModularEngineStudioWorkbenchComponent: React.FC<ModularEngineStudioWorkben
       </div>
 
       {/* Tab Contents */}
-      <div className="p-4 overflow-y-auto space-y-4 flex-1 text-xs text-slate-300 custom-scrollbar">
+      <div className="p-4 overflow-y-auto space-y-4 flex-1 text-xs text-amber-100/80 custom-scrollbar">
         {/* ================================================================= */}
         {/* TAB 1: SHORT BLOCK & ARCHITECTURE */}
         {/* ================================================================= */}
         {activeTab === "block" && (
           <div className="space-y-4">
             {/* Architecture Selector */}
-            <div className="bg-slate-950/50 p-3 rounded-xl border border-slate-800/80 space-y-2">
+            <div className="bg-amber-950/50 p-3 rounded-xl border border-amber-800/30 space-y-2">
               <label className="text-[11px] font-bold uppercase tracking-wider text-amber-400">
                 Engine Architecture & Cylinders
               </label>
               <div className="grid grid-cols-2 gap-2">
                 <div>
-                  <span className="text-[10px] text-slate-400">Layout Family</span>
+                  <span className="text-[10px] text-amber-200/60">Layout Family</span>
                   <select
                     value={state.architecture.family}
                     onChange={(e) =>
                       engine.updateArchitecture({ family: e.target.value as EngineArchitectureFamily })
                     }
-                    className="w-full mt-1 bg-slate-800 border border-slate-700 rounded-lg px-2 py-1.5 text-xs text-slate-100"
+                    className="w-full mt-1 bg-amber-800/35 border border-amber-700/30 rounded-lg px-2 py-1.5 text-xs text-amber-50"
                   >
                     <option value="inline">Inline</option>
                     <option value="v_engine">V-Engine</option>
@@ -148,13 +148,13 @@ const ModularEngineStudioWorkbenchComponent: React.FC<ModularEngineStudioWorkben
                   </select>
                 </div>
                 <div>
-                  <span className="text-[10px] text-slate-400">Cylinder Count</span>
+                  <span className="text-[10px] text-amber-200/60">Cylinder Count</span>
                   <select
                     value={state.architecture.cylinderCount}
                     onChange={(e) =>
                       engine.updateArchitecture({ cylinderCount: parseInt(e.target.value, 10) as any })
                     }
-                    className="w-full mt-1 bg-slate-800 border border-slate-700 rounded-lg px-2 py-1.5 text-xs text-slate-100"
+                    className="w-full mt-1 bg-amber-800/35 border border-amber-700/30 rounded-lg px-2 py-1.5 text-xs text-amber-50"
                   >
                     <option value="3">3 Cylinder</option>
                     <option value="4">4 Cylinder</option>
@@ -169,7 +169,7 @@ const ModularEngineStudioWorkbenchComponent: React.FC<ModularEngineStudioWorkben
             </div>
 
             {/* Bore & Stroke Dimensions */}
-            <div className="bg-slate-950/50 p-3 rounded-xl border border-slate-800/80 space-y-3">
+            <div className="bg-amber-950/50 p-3 rounded-xl border border-amber-800/30 space-y-3">
               <div className="flex justify-between items-center">
                 <label className="text-[11px] font-bold uppercase tracking-wider text-amber-400">
                   Displacement Geometry
@@ -182,7 +182,7 @@ const ModularEngineStudioWorkbenchComponent: React.FC<ModularEngineStudioWorkben
 
               <div>
                 <div className="flex justify-between text-[11px] mb-1">
-                  <span className="text-slate-400">Cylinder Bore</span>
+                  <span className="text-amber-200/60">Cylinder Bore</span>
                   <span className="font-mono text-amber-300">{state.block.boreMm} mm</span>
                 </div>
                 <input
@@ -192,13 +192,13 @@ const ModularEngineStudioWorkbenchComponent: React.FC<ModularEngineStudioWorkben
                   step="0.5"
                   value={state.block.boreMm}
                   onChange={(e) => engine.updateBlock({ boreMm: parseFloat(e.target.value) })}
-                  className="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-amber-400"
+                  className="w-full h-1.5 bg-amber-800/35 rounded-lg appearance-none cursor-pointer accent-amber-400"
                 />
               </div>
 
               <div>
                 <div className="flex justify-between text-[11px] mb-1">
-                  <span className="text-slate-400">Piston Stroke</span>
+                  <span className="text-amber-200/60">Piston Stroke</span>
                   <span className="font-mono text-amber-300">{state.block.strokeMm} mm</span>
                 </div>
                 <input
@@ -211,13 +211,13 @@ const ModularEngineStudioWorkbenchComponent: React.FC<ModularEngineStudioWorkben
                     engine.updateBlock({ strokeMm: parseFloat(e.target.value) });
                     engine.updateCrankshaft({ strokeMm: parseFloat(e.target.value) });
                   }}
-                  className="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-amber-400"
+                  className="w-full h-1.5 bg-amber-800/35 rounded-lg appearance-none cursor-pointer accent-amber-400"
                 />
               </div>
 
               <div>
                 <div className="flex justify-between text-[11px] mb-1">
-                  <span className="text-slate-400">Connecting Rod Length (Center-to-Center)</span>
+                  <span className="text-amber-200/60">Connecting Rod Length (Center-to-Center)</span>
                   <span className="font-mono text-amber-300">{state.connectingRods.rodLengthMm} mm</span>
                 </div>
                 <input
@@ -227,19 +227,19 @@ const ModularEngineStudioWorkbenchComponent: React.FC<ModularEngineStudioWorkben
                   step="0.5"
                   value={state.connectingRods.rodLengthMm}
                   onChange={(e) => engine.updateConnectingRods({ rodLengthMm: parseFloat(e.target.value) })}
-                  className="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-amber-400"
+                  className="w-full h-1.5 bg-amber-800/35 rounded-lg appearance-none cursor-pointer accent-amber-400"
                 />
               </div>
             </div>
 
             {/* Block Material & Crankshaft */}
             <div className="grid grid-cols-2 gap-2">
-              <div className="bg-slate-950/50 p-3 rounded-xl border border-slate-800/80 space-y-1.5">
-                <span className="text-[10px] text-slate-400 font-bold uppercase">Block Material</span>
+              <div className="bg-amber-950/50 p-3 rounded-xl border border-amber-800/30 space-y-1.5">
+                <span className="text-[10px] text-amber-200/60 font-bold uppercase">Block Material</span>
                 <select
                   value={state.block.material}
                   onChange={(e) => engine.updateBlock({ material: e.target.value as BlockMaterial })}
-                  className="w-full bg-slate-800 border border-slate-700 rounded-lg px-2 py-1.5 text-xs text-slate-100"
+                  className="w-full bg-amber-800/35 border border-amber-700/30 rounded-lg px-2 py-1.5 text-xs text-amber-50"
                 >
                   <option value="cast_iron">Cast Nodular Iron</option>
                   <option value="hypereutectic_aluminum">Hypereutectic Al</option>
@@ -248,14 +248,14 @@ const ModularEngineStudioWorkbenchComponent: React.FC<ModularEngineStudioWorkben
                 </select>
               </div>
 
-              <div className="bg-slate-950/50 p-3 rounded-xl border border-slate-800/80 space-y-1.5">
-                <span className="text-[10px] text-slate-400 font-bold uppercase">Crankshaft Plane</span>
+              <div className="bg-amber-950/50 p-3 rounded-xl border border-amber-800/30 space-y-1.5">
+                <span className="text-[10px] text-amber-200/60 font-bold uppercase">Crankshaft Plane</span>
                 <select
                   value={state.crankshaft.planeType}
                   onChange={(e) =>
                     engine.updateCrankshaft({ planeType: e.target.value as CrankshaftPlaneType })
                   }
-                  className="w-full bg-slate-800 border border-slate-700 rounded-lg px-2 py-1.5 text-xs text-slate-100"
+                  className="w-full bg-amber-800/35 border border-amber-700/30 rounded-lg px-2 py-1.5 text-xs text-amber-50"
                 >
                   <option value="flat_plane_180">Flat-Plane 180° (High Rev)</option>
                   <option value="cross_plane_90">Cross-Plane 90° (Smooth V8)</option>
@@ -265,14 +265,14 @@ const ModularEngineStudioWorkbenchComponent: React.FC<ModularEngineStudioWorkben
 
             {/* Pistons & Rods */}
             <div className="grid grid-cols-2 gap-2">
-              <div className="bg-slate-950/50 p-3 rounded-xl border border-slate-800/80 space-y-1.5">
-                <span className="text-[10px] text-slate-400 font-bold uppercase">Connecting Rods</span>
+              <div className="bg-amber-950/50 p-3 rounded-xl border border-amber-800/30 space-y-1.5">
+                <span className="text-[10px] text-amber-200/60 font-bold uppercase">Connecting Rods</span>
                 <select
                   value={state.connectingRods.style}
                   onChange={(e) =>
                     engine.updateConnectingRods({ style: e.target.value as ConnectingRodStyle })
                   }
-                  className="w-full bg-slate-800 border border-slate-700 rounded-lg px-2 py-1.5 text-xs text-slate-100"
+                  className="w-full bg-amber-800/35 border border-amber-700/30 rounded-lg px-2 py-1.5 text-xs text-amber-50"
                 >
                   <option value="i_beam_forged">I-Beam Forged Steel</option>
                   <option value="h_beam_billet_4340">H-Beam Billet 4340</option>
@@ -280,14 +280,14 @@ const ModularEngineStudioWorkbenchComponent: React.FC<ModularEngineStudioWorkben
                 </select>
               </div>
 
-              <div className="bg-slate-950/50 p-3 rounded-xl border border-slate-800/80 space-y-1.5">
-                <span className="text-[10px] text-slate-400 font-bold uppercase">Piston Alloy</span>
+              <div className="bg-amber-950/50 p-3 rounded-xl border border-amber-800/30 space-y-1.5">
+                <span className="text-[10px] text-amber-200/60 font-bold uppercase">Piston Alloy</span>
                 <select
                   value={state.pistons.materialClass}
                   onChange={(e) =>
                     engine.updatePistons({ materialClass: e.target.value as PistonMaterialClass })
                   }
-                  className="w-full bg-slate-800 border border-slate-700 rounded-lg px-2 py-1.5 text-xs text-slate-100"
+                  className="w-full bg-amber-800/35 border border-amber-700/30 rounded-lg px-2 py-1.5 text-xs text-amber-50"
                 >
                   <option value="hypereutectic_cast">Hypereutectic Cast</option>
                   <option value="4032_forged_high_silicon">4032 Forged Street</option>
@@ -304,7 +304,7 @@ const ModularEngineStudioWorkbenchComponent: React.FC<ModularEngineStudioWorkben
         {/* ================================================================= */}
         {activeTab === "heads" && (
           <div className="space-y-4">
-            <div className="bg-slate-950/50 p-3 rounded-xl border border-slate-800/80 space-y-2">
+            <div className="bg-amber-950/50 p-3 rounded-xl border border-amber-800/30 space-y-2">
               <label className="text-[11px] font-bold uppercase tracking-wider text-amber-400">
                 Valvetrain Class
               </label>
@@ -313,7 +313,7 @@ const ModularEngineStudioWorkbenchComponent: React.FC<ModularEngineStudioWorkben
                 onChange={(e) =>
                   engine.updateCylinderHeads({ valvetrain: e.target.value as CylinderHeadValvetrain })
                 }
-                className="w-full bg-slate-800 border border-slate-700 rounded-lg px-2 py-1.5 text-xs text-slate-100"
+                className="w-full bg-amber-800/35 border border-amber-700/30 rounded-lg px-2 py-1.5 text-xs text-amber-50"
               >
                 <option value="ohv_pushrod_2v">OHV Pushrod 2V</option>
                 <option value="sohc_4v">SOHC 4V</option>
@@ -324,7 +324,7 @@ const ModularEngineStudioWorkbenchComponent: React.FC<ModularEngineStudioWorkben
             </div>
 
             {/* Cam Duration & Lift */}
-            <div className="bg-slate-950/50 p-3 rounded-xl border border-slate-800/80 space-y-3">
+            <div className="bg-amber-950/50 p-3 rounded-xl border border-amber-800/30 space-y-3">
               <div className="flex justify-between items-center">
                 <label className="text-[11px] font-bold uppercase tracking-wider text-amber-400">
                   Camshaft Profile
@@ -336,7 +336,7 @@ const ModularEngineStudioWorkbenchComponent: React.FC<ModularEngineStudioWorkben
 
               <div>
                 <div className="flex justify-between text-[11px] mb-1">
-                  <span className="text-slate-400">Intake Duration</span>
+                  <span className="text-amber-200/60">Intake Duration</span>
                   <span className="font-mono text-amber-300">{state.camshafts.intakeDurationAdvDeg}°</span>
                 </div>
                 <input
@@ -348,13 +348,13 @@ const ModularEngineStudioWorkbenchComponent: React.FC<ModularEngineStudioWorkben
                   onChange={(e) =>
                     engine.updateCamshafts({ intakeDurationAdvDeg: parseInt(e.target.value, 10) })
                   }
-                  className="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-amber-400"
+                  className="w-full h-1.5 bg-amber-800/35 rounded-lg appearance-none cursor-pointer accent-amber-400"
                 />
               </div>
 
               <div>
                 <div className="flex justify-between text-[11px] mb-1">
-                  <span className="text-slate-400">Intake Lift</span>
+                  <span className="text-amber-200/60">Intake Lift</span>
                   <span className="font-mono text-amber-300">{state.camshafts.intakeLiftMm} mm</span>
                 </div>
                 <input
@@ -366,21 +366,21 @@ const ModularEngineStudioWorkbenchComponent: React.FC<ModularEngineStudioWorkben
                   onChange={(e) =>
                     engine.updateCamshafts({ intakeLiftMm: parseFloat(e.target.value) })
                   }
-                  className="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-amber-400"
+                  className="w-full h-1.5 bg-amber-800/35 rounded-lg appearance-none cursor-pointer accent-amber-400"
                 />
               </div>
             </div>
 
             {/* Valve Springs & Intake Manifold */}
             <div className="grid grid-cols-2 gap-2">
-              <div className="bg-slate-950/50 p-3 rounded-xl border border-slate-800/80 space-y-1.5">
-                <span className="text-[10px] text-slate-400 font-bold uppercase">Valve Springs</span>
+              <div className="bg-amber-950/50 p-3 rounded-xl border border-amber-800/30 space-y-1.5">
+                <span className="text-[10px] text-amber-200/60 font-bold uppercase">Valve Springs</span>
                 <select
                   value={state.valvesAndSprings.springType}
                   onChange={(e) =>
                     engine.updateValvesAndSprings({ springType: e.target.value as ValveSpringType })
                   }
-                  className="w-full bg-slate-800 border border-slate-700 rounded-lg px-2 py-1.5 text-xs text-slate-100"
+                  className="w-full bg-amber-800/35 border border-amber-700/30 rounded-lg px-2 py-1.5 text-xs text-amber-50"
                 >
                   <option value="single_ovate_beehive">Single Beehive</option>
                   <option value="dual_titanium_springs_pac">Dual Titanium PAC</option>
@@ -388,14 +388,14 @@ const ModularEngineStudioWorkbenchComponent: React.FC<ModularEngineStudioWorkben
                 </select>
               </div>
 
-              <div className="bg-slate-950/50 p-3 rounded-xl border border-slate-800/80 space-y-1.5">
-                <span className="text-[10px] text-slate-400 font-bold uppercase">Air Intake Style</span>
+              <div className="bg-amber-950/50 p-3 rounded-xl border border-amber-800/30 space-y-1.5">
+                <span className="text-[10px] text-amber-200/60 font-bold uppercase">Air Intake Style</span>
                 <select
                   value={state.intake.style}
                   onChange={(e) =>
                     engine.updateIntake({ style: e.target.value as IntakeManifoldStyle })
                   }
-                  className="w-full bg-slate-800 border border-slate-700 rounded-lg px-2 py-1.5 text-xs text-slate-100"
+                  className="w-full bg-amber-800/35 border border-amber-700/30 rounded-lg px-2 py-1.5 text-xs text-amber-50"
                 >
                   <option value="single_plenum_cast">Cast Single Plenum</option>
                   <option value="dual_plenum_ram_air">Dual Plenum Ram-Air</option>
@@ -412,7 +412,7 @@ const ModularEngineStudioWorkbenchComponent: React.FC<ModularEngineStudioWorkben
         {activeTab === "turbo" && (
           <div className="space-y-4">
             {/* 1. Aspiration & Forced Induction Archetype */}
-            <div className="bg-slate-950/50 p-3 rounded-xl border border-slate-800/80 space-y-2.5">
+            <div className="bg-amber-950/50 p-3 rounded-xl border border-amber-800/30 space-y-2.5">
               <label className="text-[11px] font-bold uppercase tracking-wider text-amber-400">
                 1. Aspiration & Forced Induction System
               </label>
@@ -481,18 +481,18 @@ const ModularEngineStudioWorkbenchComponent: React.FC<ModularEngineStudioWorkben
                       className={`p-2.5 rounded-xl border text-left transition-all ${
                         isSelected
                           ? "bg-amber-500/15 border-amber-500/80 shadow-md shadow-cyan-500/10 ring-1 ring-amber-400"
-                          : "bg-slate-900/60 border-slate-800 hover:border-slate-700 hover:bg-slate-850"
+                          : "bg-amber-900/40 border-amber-800/30 hover:border-amber-700/30 hover:bg-amber-850/40"
                       }`}
                     >
                       <div className="flex items-center justify-between mb-1">
-                        <span className={`text-xs font-bold ${isSelected ? "text-amber-300" : "text-slate-200"}`}>
+                        <span className={`text-xs font-bold ${isSelected ? "text-amber-300" : "text-amber-50"}`}>
                           {item.title}
                         </span>
-                        <span className="text-[9px] font-mono uppercase px-1.5 py-0.5 rounded bg-slate-950 text-slate-400 border border-slate-800">
+                        <span className="text-[9px] font-mono uppercase px-1.5 py-0.5 rounded bg-amber-950/80 text-amber-200/60 border border-amber-800/30">
                           {item.badge}
                         </span>
                       </div>
-                      <p className="text-[10px] text-slate-400 leading-relaxed">{item.desc}</p>
+                      <p className="text-[10px] text-amber-200/60 leading-relaxed">{item.desc}</p>
                     </button>
                   );
                 })}
@@ -501,8 +501,8 @@ const ModularEngineStudioWorkbenchComponent: React.FC<ModularEngineStudioWorkben
 
             {/* Quick Sizing Presets */}
             {state.turboSystem.type !== "naturally_aspirated" && (
-              <div className="bg-slate-950/50 p-3 rounded-xl border border-slate-800/80 space-y-2">
-                <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
+              <div className="bg-amber-950/50 p-3 rounded-xl border border-amber-800/30 space-y-2">
+                <span className="text-[10px] font-bold uppercase tracking-wider text-amber-200/60">
                   Quick Sizing & Boost Presets:
                 </span>
                 <div className="flex gap-1.5 overflow-x-auto pb-1">
@@ -525,7 +525,7 @@ const ModularEngineStudioWorkbenchComponent: React.FC<ModularEngineStudioWorkben
                           superchargerPulleyRatio: preset.pulley,
                         })
                       }
-                      className="px-2.5 py-1 text-[10px] font-mono font-semibold rounded-lg bg-slate-800 hover:bg-amber-950/60 hover:text-amber-300 text-slate-200 border border-slate-700 whitespace-nowrap transition-all"
+                      className="px-2.5 py-1 text-[10px] font-mono font-semibold rounded-lg bg-amber-800/35 hover:bg-amber-950/60 hover:text-amber-300 text-amber-50 border border-amber-700/30 whitespace-nowrap transition-all"
                     >
                       {preset.label}
                     </button>
@@ -536,7 +536,7 @@ const ModularEngineStudioWorkbenchComponent: React.FC<ModularEngineStudioWorkben
 
             {/* 2. Parametric Sizing & Dynamic Scalers */}
             {state.turboSystem.type !== "naturally_aspirated" && (
-              <div className="bg-slate-950/50 p-3 rounded-xl border border-slate-800/80 space-y-3.5">
+              <div className="bg-amber-950/50 p-3 rounded-xl border border-amber-800/30 space-y-3.5">
                 <div className="flex justify-between items-center">
                   <label className="text-[11px] font-bold uppercase tracking-wider text-amber-400">
                     2. Physical Geometry Sizing & Boost Parameters
@@ -549,7 +549,7 @@ const ModularEngineStudioWorkbenchComponent: React.FC<ModularEngineStudioWorkben
                 {/* Target Boost Pressure */}
                 <div>
                   <div className="flex justify-between text-[11px] mb-1">
-                    <span className="text-slate-400">Target Boost Pressure</span>
+                    <span className="text-amber-200/60">Target Boost Pressure</span>
                     <span className="font-mono text-rose-400 font-bold">{state.turboSystem.targetBoostPressureBar} bar</span>
                   </div>
                   <input
@@ -559,7 +559,7 @@ const ModularEngineStudioWorkbenchComponent: React.FC<ModularEngineStudioWorkben
                     step="0.05"
                     value={state.turboSystem.targetBoostPressureBar}
                     onChange={(e) => engine.updateTurboSystem({ targetBoostPressureBar: parseFloat(e.target.value) })}
-                    className="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-rose-500"
+                    className="w-full h-1.5 bg-amber-800/35 rounded-lg appearance-none cursor-pointer accent-rose-500"
                   />
                 </div>
 
@@ -568,7 +568,7 @@ const ModularEngineStudioWorkbenchComponent: React.FC<ModularEngineStudioWorkben
                   <>
                     <div>
                       <div className="flex justify-between text-[11px] mb-1">
-                        <span className="text-slate-400">Compressor Inducer Diameter (Physical Size)</span>
+                        <span className="text-amber-200/60">Compressor Inducer Diameter (Physical Size)</span>
                         <span className="font-mono text-amber-300 font-bold">{state.turboSystem.compressorInducerMm} mm</span>
                       </div>
                       <input
@@ -578,13 +578,13 @@ const ModularEngineStudioWorkbenchComponent: React.FC<ModularEngineStudioWorkben
                         step="1"
                         value={state.turboSystem.compressorInducerMm}
                         onChange={(e) => engine.updateTurboSystem({ compressorInducerMm: parseInt(e.target.value, 10) })}
-                        className="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-amber-400"
+                        className="w-full h-1.5 bg-amber-800/35 rounded-lg appearance-none cursor-pointer accent-amber-400"
                       />
                     </div>
 
                     <div>
                       <div className="flex justify-between text-[11px] mb-1">
-                        <span className="text-slate-400">Turbine Exducer Diameter</span>
+                        <span className="text-amber-200/60">Turbine Exducer Diameter</span>
                         <span className="font-mono text-amber-300 font-bold">{state.turboSystem.turbineExducerMm} mm</span>
                       </div>
                       <input
@@ -594,13 +594,13 @@ const ModularEngineStudioWorkbenchComponent: React.FC<ModularEngineStudioWorkben
                         step="1"
                         value={state.turboSystem.turbineExducerMm}
                         onChange={(e) => engine.updateTurboSystem({ turbineExducerMm: parseInt(e.target.value, 10) })}
-                        className="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-amber-400"
+                        className="w-full h-1.5 bg-amber-800/35 rounded-lg appearance-none cursor-pointer accent-amber-400"
                       />
                     </div>
 
                     <div>
                       <div className="flex justify-between text-[11px] mb-1">
-                        <span className="text-slate-400">Turbine Housing A/R Ratio</span>
+                        <span className="text-amber-200/60">Turbine Housing A/R Ratio</span>
                         <span className="font-mono text-amber-300 font-bold">{state.turboSystem.aRatio} A/R</span>
                       </div>
                       <input
@@ -610,7 +610,7 @@ const ModularEngineStudioWorkbenchComponent: React.FC<ModularEngineStudioWorkben
                         step="0.05"
                         value={state.turboSystem.aRatio}
                         onChange={(e) => engine.updateTurboSystem({ aRatio: parseFloat(e.target.value) })}
-                        className="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-amber-400"
+                        className="w-full h-1.5 bg-amber-800/35 rounded-lg appearance-none cursor-pointer accent-amber-400"
                       />
                     </div>
                   </>
@@ -621,7 +621,7 @@ const ModularEngineStudioWorkbenchComponent: React.FC<ModularEngineStudioWorkben
                   <>
                     <div>
                       <div className="flex justify-between text-[11px] mb-1">
-                        <span className="text-slate-400">Supercharger Blower Displacement</span>
+                        <span className="text-amber-200/60">Supercharger Blower Displacement</span>
                         <span className="font-mono text-amber-300 font-bold">{state.turboSystem.superchargerDisplacementLiters ?? 3.0} Liters</span>
                       </div>
                       <input
@@ -631,13 +631,13 @@ const ModularEngineStudioWorkbenchComponent: React.FC<ModularEngineStudioWorkben
                         step="0.1"
                         value={state.turboSystem.superchargerDisplacementLiters ?? 3.0}
                         onChange={(e) => engine.updateTurboSystem({ superchargerDisplacementLiters: parseFloat(e.target.value) })}
-                        className="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-amber-400"
+                        className="w-full h-1.5 bg-amber-800/35 rounded-lg appearance-none cursor-pointer accent-amber-400"
                       />
                     </div>
 
                     <div>
                       <div className="flex justify-between text-[11px] mb-1">
-                        <span className="text-slate-400">Drive Pulley Ratio</span>
+                        <span className="text-amber-200/60">Drive Pulley Ratio</span>
                         <span className="font-mono text-amber-300 font-bold">{(state.turboSystem.superchargerPulleyRatio ?? 2.4).toFixed(1)}:1</span>
                       </div>
                       <input
@@ -647,7 +647,7 @@ const ModularEngineStudioWorkbenchComponent: React.FC<ModularEngineStudioWorkben
                         step="0.1"
                         value={state.turboSystem.superchargerPulleyRatio ?? 2.4}
                         onChange={(e) => engine.updateTurboSystem({ superchargerPulleyRatio: parseFloat(e.target.value) })}
-                        className="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-amber-400"
+                        className="w-full h-1.5 bg-amber-800/35 rounded-lg appearance-none cursor-pointer accent-amber-400"
                       />
                     </div>
                   </>
@@ -657,14 +657,14 @@ const ModularEngineStudioWorkbenchComponent: React.FC<ModularEngineStudioWorkben
 
             {/* 3. Forced Induction Styling, Materials & Finishes */}
             {state.turboSystem.type !== "naturally_aspirated" && (
-              <div className="bg-slate-950/50 p-3 rounded-xl border border-slate-800/80 space-y-3">
+              <div className="bg-amber-950/50 p-3 rounded-xl border border-amber-800/30 space-y-3">
                 <label className="text-[11px] font-bold uppercase tracking-wider text-amber-400">
                   3. Forced Induction Materials & Aesthetic Finishes
                 </label>
 
                 {/* Housing Material & Color */}
                 <div>
-                  <span className="text-[10px] text-slate-400 block mb-1.5">Turbine / Blower Housing Finish</span>
+                  <span className="text-[10px] text-amber-200/60 block mb-1.5">Turbine / Blower Housing Finish</span>
                   <div className="grid grid-cols-3 gap-1.5">
                     {[
                       { id: "billet_polished", label: "Polished Billet", color: "#f8fafc" },
@@ -681,8 +681,8 @@ const ModularEngineStudioWorkbenchComponent: React.FC<ModularEngineStudioWorkben
                           onClick={() => engine.updateTurboSystem({ turboHousingFinish: item.id as TurboHousingFinish })}
                           className={`flex items-center gap-1.5 p-1.5 rounded-lg border text-left transition-all ${
                             isSelected
-                              ? "bg-slate-800 border-amber-400 ring-1 ring-amber-400 text-slate-100"
-                              : "bg-slate-900/80 border-slate-800 hover:border-slate-700 text-slate-300"
+                              ? "bg-amber-800/35 border-amber-400 ring-1 ring-amber-400 text-amber-50"
+                              : "bg-amber-900/40 border-amber-800/30 hover:border-amber-700/30 text-amber-100/80"
                           }`}
                         >
                           <span className="w-3 h-3 rounded-full border border-white/20 shrink-0" style={{ backgroundColor: item.color }} />
@@ -695,7 +695,7 @@ const ModularEngineStudioWorkbenchComponent: React.FC<ModularEngineStudioWorkben
 
                 {/* Compressor Wheel / Pulley Anodizing */}
                 <div>
-                  <span className="text-[10px] text-slate-400 block mb-1.5">Compressor Impeller / Pulley Finish</span>
+                  <span className="text-[10px] text-amber-200/60 block mb-1.5">Compressor Impeller / Pulley Finish</span>
                   <div className="grid grid-cols-3 gap-1.5">
                     {[
                       { id: "billet_gold", label: "Billet Gold", color: "#f59e0b" },
@@ -711,8 +711,8 @@ const ModularEngineStudioWorkbenchComponent: React.FC<ModularEngineStudioWorkben
                           onClick={() => engine.updateTurboSystem({ compressorWheelColor: item.id as CompressorWheelColor })}
                           className={`flex items-center gap-1.5 p-1.5 rounded-lg border text-left transition-all ${
                             isSelected
-                              ? "bg-slate-800 border-amber-400 ring-1 ring-amber-400 text-slate-100"
-                              : "bg-slate-900/80 border-slate-800 hover:border-slate-700 text-slate-300"
+                              ? "bg-amber-800/35 border-amber-400 ring-1 ring-amber-400 text-amber-50"
+                              : "bg-amber-900/40 border-amber-800/30 hover:border-amber-700/30 text-amber-100/80"
                           }`}
                         >
                           <span className="w-3 h-3 rounded-full border border-white/20 shrink-0" style={{ backgroundColor: item.color }} />
@@ -726,11 +726,11 @@ const ModularEngineStudioWorkbenchComponent: React.FC<ModularEngineStudioWorkben
                 {/* Wastegate & Silicone Coupler Options */}
                 <div className="grid grid-cols-2 gap-2">
                   <div>
-                    <span className="text-[10px] text-slate-400">Wastegate / BOV Cap</span>
+                    <span className="text-[10px] text-amber-200/60">Wastegate / BOV Cap</span>
                     <select
                       value={state.turboSystem.wastegateCapColor || "anodized_purple"}
                       onChange={(e) => engine.updateTurboSystem({ wastegateCapColor: e.target.value as WastegateCapColor })}
-                      className="w-full mt-1 bg-slate-800 border border-slate-700 rounded-lg px-2 py-1.5 text-xs text-slate-100 font-medium"
+                      className="w-full mt-1 bg-amber-800/35 border border-amber-700/30 rounded-lg px-2 py-1.5 text-xs text-amber-50 font-medium"
                     >
                       <option value="anodized_purple">Anodized Purple</option>
                       <option value="anodized_blue">Cobalt Blue</option>
@@ -741,11 +741,11 @@ const ModularEngineStudioWorkbenchComponent: React.FC<ModularEngineStudioWorkben
                   </div>
 
                   <div>
-                    <span className="text-[10px] text-slate-400">Silicone Coupler Boot</span>
+                    <span className="text-[10px] text-amber-200/60">Silicone Coupler Boot</span>
                     <select
                       value={state.turboSystem.couplerColor || "blue_silicone"}
                       onChange={(e) => engine.updateTurboSystem({ couplerColor: e.target.value as SiliconeCouplerColor })}
-                      className="w-full mt-1 bg-slate-800 border border-slate-700 rounded-lg px-2 py-1.5 text-xs text-slate-100 font-medium"
+                      className="w-full mt-1 bg-amber-800/35 border border-amber-700/30 rounded-lg px-2 py-1.5 text-xs text-amber-50 font-medium"
                     >
                       <option value="blue_silicone">4-Ply Silicone Blue</option>
                       <option value="red_silicone">4-Ply Silicone Red</option>
@@ -757,14 +757,14 @@ const ModularEngineStudioWorkbenchComponent: React.FC<ModularEngineStudioWorkben
             )}
 
             {/* 4. Exhaust Headers Style */}
-            <div className="bg-slate-950/50 p-3 rounded-xl border border-slate-800/80 space-y-2">
+            <div className="bg-amber-950/50 p-3 rounded-xl border border-amber-800/30 space-y-2">
               <label className="text-[11px] font-bold uppercase tracking-wider text-amber-400">
                 4. Exhaust Header Configuration
               </label>
               <select
                 value={state.exhaust.headerStyle}
                 onChange={(e) => engine.updateExhaust({ headerStyle: e.target.value as ExhaustHeaderStyle })}
-                className="w-full bg-slate-800 border border-slate-700 rounded-lg px-2 py-1.5 text-xs text-slate-100 font-medium"
+                className="w-full bg-amber-800/35 border border-amber-700/30 rounded-lg px-2 py-1.5 text-xs text-amber-50 font-medium"
               >
                 <option value="cast_iron_log">Cast Iron Log</option>
                 <option value="shorty_tuned_tubular">Shorty Tuned Tubular</option>
@@ -781,7 +781,7 @@ const ModularEngineStudioWorkbenchComponent: React.FC<ModularEngineStudioWorkben
         {/* ================================================================= */}
         {activeTab === "tuning" && (
           <div className="space-y-4">
-            <div className="bg-slate-950/50 p-3 rounded-xl border border-slate-800/80 space-y-3">
+            <div className="bg-amber-950/50 p-3 rounded-xl border border-amber-800/30 space-y-3">
               <div className="flex justify-between items-center">
                 <label className="text-[11px] font-bold uppercase tracking-wider text-amber-400">
                   Rev Limiter Target
@@ -799,11 +799,11 @@ const ModularEngineStudioWorkbenchComponent: React.FC<ModularEngineStudioWorkben
                 onChange={(e) =>
                   engine.updateTuning({ revLimiterRpm: parseInt(e.target.value, 10) })
                 }
-                className="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-amber-400"
+                className="w-full h-1.5 bg-amber-800/35 rounded-lg appearance-none cursor-pointer accent-amber-400"
               />
             </div>
 
-            <div className="bg-slate-950/50 p-3 rounded-xl border border-slate-800/80 space-y-3">
+            <div className="bg-amber-950/50 p-3 rounded-xl border border-amber-800/30 space-y-3">
               <div className="flex justify-between items-center">
                 <label className="text-[11px] font-bold uppercase tracking-wider text-amber-400">
                   Ignition Advance (WOT)
@@ -821,19 +821,19 @@ const ModularEngineStudioWorkbenchComponent: React.FC<ModularEngineStudioWorkben
                 onChange={(e) =>
                   engine.updateTuning({ ignitionTimingAdvanceDeg: parseInt(e.target.value, 10) })
                 }
-                className="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-amber-400"
+                className="w-full h-1.5 bg-amber-800/35 rounded-lg appearance-none cursor-pointer accent-amber-400"
               />
             </div>
 
             <div className="grid grid-cols-2 gap-2">
-              <div className="bg-slate-950/50 p-3 rounded-xl border border-slate-800/80 space-y-1.5">
-                <span className="text-[10px] text-slate-400 font-bold uppercase">Fuel Type Octane</span>
+              <div className="bg-amber-950/50 p-3 rounded-xl border border-amber-800/30 space-y-1.5">
+                <span className="text-[10px] text-amber-200/60 font-bold uppercase">Fuel Type Octane</span>
                 <select
                   value={state.fuelSystem.fuelTypeOctane}
                   onChange={(e) =>
                     engine.updateFuelSystem({ fuelTypeOctane: e.target.value as any })
                   }
-                  className="w-full bg-slate-800 border border-slate-700 rounded-lg px-2 py-1.5 text-xs text-slate-100"
+                  className="w-full bg-amber-800/35 border border-amber-700/30 rounded-lg px-2 py-1.5 text-xs text-amber-50"
                 >
                   <option value="pump_91">91 Octane Pump</option>
                   <option value="pump_93">93 Octane Premium</option>
@@ -842,14 +842,14 @@ const ModularEngineStudioWorkbenchComponent: React.FC<ModularEngineStudioWorkben
                 </select>
               </div>
 
-              <div className="bg-slate-950/50 p-3 rounded-xl border border-slate-800/80 space-y-1.5">
-                <span className="text-[10px] text-slate-400 font-bold uppercase">Lubrication</span>
+              <div className="bg-amber-950/50 p-3 rounded-xl border border-amber-800/30 space-y-1.5">
+                <span className="text-[10px] text-amber-200/60 font-bold uppercase">Lubrication</span>
                 <select
                   value={state.lubrication.systemType}
                   onChange={(e) =>
                     engine.updateLubrication({ systemType: e.target.value as LubricationSystemType })
                   }
-                  className="w-full bg-slate-800 border border-slate-700 rounded-lg px-2 py-1.5 text-xs text-slate-100"
+                  className="w-full bg-amber-800/35 border border-amber-700/30 rounded-lg px-2 py-1.5 text-xs text-amber-50"
                 >
                   <option value="wet_sump_baffled">Wet Sump Baffled</option>
                   <option value="dry_sump_3_stage">Dry Sump 3-Stage</option>
@@ -889,7 +889,7 @@ const ModularEngineStudioWorkbenchComponent: React.FC<ModularEngineStudioWorkben
             </div>
 
             {compat?.violations?.length === 0 ? (
-              <div className="p-4 text-center text-slate-500 text-xs">
+              <div className="p-4 text-center text-amber-300/50 text-xs">
                 No compatibility warnings. All parts are matched to safe mechanical tolerances.
               </div>
             ) : (
@@ -910,11 +910,11 @@ const ModularEngineStudioWorkbenchComponent: React.FC<ModularEngineStudioWorkben
                     >
                       {v.title}
                     </span>
-                    <span className="text-[9px] uppercase px-1.5 py-0.5 rounded bg-slate-900 font-mono">
+                    <span className="text-[9px] uppercase px-1.5 py-0.5 rounded bg-amber-900/50 font-mono">
                       {v.severity.replace("_", " ")}
                     </span>
                   </div>
-                  <p className="text-[11px] text-slate-300 leading-relaxed">{v.description}</p>
+                  <p className="text-[11px] text-amber-100/80 leading-relaxed">{v.description}</p>
                   <p className="text-[10px] text-amber-300/90 font-medium">
                     💡 Remedy: {v.recommendedRemedy}
                   </p>
@@ -930,13 +930,13 @@ const ModularEngineStudioWorkbenchComponent: React.FC<ModularEngineStudioWorkben
         {activeTab === "cosmetics" && (
           <div className="space-y-4">
             {/* Header & Beauty Cover Visibility Toggle */}
-            <div className="bg-slate-950/60 p-3 rounded-xl border border-slate-800 flex items-center justify-between">
+            <div className="bg-amber-950/60 p-3 rounded-xl border border-amber-800/30 flex items-center justify-between">
               <div>
                 <span className="text-[11px] font-bold uppercase tracking-wider text-amber-400 flex items-center gap-1.5">
                   <Sparkles size={14} className="text-amber-400" />
                   Engine Aesthetics & Covers
                 </span>
-                <p className="text-[10px] text-slate-400 mt-0.5">
+                <p className="text-[10px] text-amber-200/60 mt-0.5">
                   Customize 3D engine beauty cover models, titanium temper bluing, and powdercoats.
                 </p>
               </div>
@@ -949,7 +949,7 @@ const ModularEngineStudioWorkbenchComponent: React.FC<ModularEngineStudioWorkben
                 className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold border transition-all ${
                   (state.cosmetics?.showEngineCover ?? true)
                     ? "bg-amber-500/20 text-amber-300 border-amber-500/40 hover:bg-amber-500/30"
-                    : "bg-slate-800 text-slate-400 border-slate-700 hover:bg-slate-700"
+                    : "bg-amber-800/35 text-amber-200/60 border-amber-700/30 hover:bg-amber-700/40"
                 }`}
               >
                 {(state.cosmetics?.showEngineCover ?? true) ? (
@@ -967,7 +967,7 @@ const ModularEngineStudioWorkbenchComponent: React.FC<ModularEngineStudioWorkben
             </div>
 
             {/* 1. Engine Cover 3D Model Picker */}
-            <div className="bg-slate-950/50 p-3 rounded-xl border border-slate-800/80 space-y-2.5">
+            <div className="bg-amber-950/50 p-3 rounded-xl border border-amber-800/30 space-y-2.5">
               <label className="text-[11px] font-bold uppercase tracking-wider text-amber-400">
                 1. 3D Engine Cover Geometry Model
               </label>
@@ -1059,18 +1059,18 @@ const ModularEngineStudioWorkbenchComponent: React.FC<ModularEngineStudioWorkben
                       className={`p-2.5 rounded-xl border text-left transition-all ${
                         isSelected
                           ? "bg-amber-500/15 border-amber-500/80 shadow-md shadow-cyan-500/10 ring-1 ring-amber-400"
-                          : "bg-slate-900/60 border-slate-800 hover:border-slate-700 hover:bg-slate-850"
+                          : "bg-amber-900/40 border-amber-800/30 hover:border-amber-700/30 hover:bg-amber-850/40"
                       }`}
                     >
                       <div className="flex items-center justify-between mb-1">
-                        <span className={`text-xs font-bold ${isSelected ? "text-amber-300" : "text-slate-200"}`}>
+                        <span className={`text-xs font-bold ${isSelected ? "text-amber-300" : "text-amber-50"}`}>
                           {model.title}
                         </span>
-                        <span className="text-[9px] font-mono uppercase px-1.5 py-0.5 rounded bg-slate-950 text-slate-400 border border-slate-800">
+                        <span className="text-[9px] font-mono uppercase px-1.5 py-0.5 rounded bg-amber-950/80 text-amber-200/60 border border-amber-800/30">
                           {model.badge}
                         </span>
                       </div>
-                      <p className="text-[10px] text-slate-400 leading-relaxed">{model.desc}</p>
+                      <p className="text-[10px] text-amber-200/60 leading-relaxed">{model.desc}</p>
                     </button>
                   );
                 })}
@@ -1078,7 +1078,7 @@ const ModularEngineStudioWorkbenchComponent: React.FC<ModularEngineStudioWorkben
             </div>
 
             {/* 2. Cover Material & Finish */}
-            <div className="bg-slate-950/50 p-3 rounded-xl border border-slate-800/80 space-y-2">
+            <div className="bg-amber-950/50 p-3 rounded-xl border border-amber-800/30 space-y-2">
               <label className="text-[11px] font-bold uppercase tracking-wider text-amber-400">
                 2. Engine Cover Composite & Color
               </label>
@@ -1101,8 +1101,8 @@ const ModularEngineStudioWorkbenchComponent: React.FC<ModularEngineStudioWorkben
                       onClick={() => engine.updateCosmetics({ coverColor: item.id as EngineCoverColor })}
                       className={`flex items-center gap-2 p-2 rounded-lg border text-left transition-all ${
                         isSelected
-                          ? "bg-slate-800 border-amber-400 ring-1 ring-amber-400 text-slate-100"
-                          : "bg-slate-900/80 border-slate-800 hover:border-slate-700 text-slate-300"
+                          ? "bg-amber-800/35 border-amber-400 ring-1 ring-amber-400 text-amber-50"
+                          : "bg-amber-900/40 border-amber-800/30 hover:border-amber-700/30 text-amber-100/80"
                       }`}
                     >
                       <span
@@ -1117,7 +1117,7 @@ const ModularEngineStudioWorkbenchComponent: React.FC<ModularEngineStudioWorkben
             </div>
 
             {/* 3. Cover Bezel & Accent Trim */}
-            <div className="bg-slate-950/50 p-3 rounded-xl border border-slate-800/80 space-y-2">
+            <div className="bg-amber-950/50 p-3 rounded-xl border border-amber-800/30 space-y-2">
               <label className="text-[11px] font-bold uppercase tracking-wider text-amber-400">
                 3. Window Bezel & Fastener Accent
               </label>
@@ -1137,8 +1137,8 @@ const ModularEngineStudioWorkbenchComponent: React.FC<ModularEngineStudioWorkben
                       onClick={() => engine.updateCosmetics({ coverBezelColor: item.id as EngineCoverBezelColor })}
                       className={`flex items-center gap-2 p-2 rounded-lg border text-left transition-all ${
                         isSelected
-                          ? "bg-slate-800 border-amber-400 ring-1 ring-amber-400 text-slate-100"
-                          : "bg-slate-900/80 border-slate-800 hover:border-slate-700 text-slate-300"
+                          ? "bg-amber-800/35 border-amber-400 ring-1 ring-amber-400 text-amber-50"
+                          : "bg-amber-900/40 border-amber-800/30 hover:border-amber-700/30 text-amber-100/80"
                       }`}
                     >
                       <span
@@ -1153,7 +1153,7 @@ const ModularEngineStudioWorkbenchComponent: React.FC<ModularEngineStudioWorkben
             </div>
 
             {/* 4. Exhaust Headers Finish */}
-            <div className="bg-slate-950/50 p-3 rounded-xl border border-slate-800/80 space-y-2">
+            <div className="bg-amber-950/50 p-3 rounded-xl border border-amber-800/30 space-y-2">
               <label className="text-[11px] font-bold uppercase tracking-wider text-amber-400">
                 4. Exhaust Header Material & Finish
               </label>
@@ -1203,8 +1203,8 @@ const ModularEngineStudioWorkbenchComponent: React.FC<ModularEngineStudioWorkben
                       onClick={() => engine.updateCosmetics({ exhaustFinish: ex.id as ExhaustFinish })}
                       className={`p-2 rounded-xl border text-left transition-all ${
                         isSelected
-                          ? "bg-slate-800 border-amber-400 ring-1 ring-amber-400 text-slate-100"
-                          : "bg-slate-900/80 border-slate-800 hover:border-slate-700 text-slate-300"
+                          ? "bg-amber-800/35 border-amber-400 ring-1 ring-amber-400 text-amber-50"
+                          : "bg-amber-900/40 border-amber-800/30 hover:border-amber-700/30 text-amber-100/80"
                       }`}
                     >
                       <div className="flex items-center gap-2 mb-1">
@@ -1212,9 +1212,9 @@ const ModularEngineStudioWorkbenchComponent: React.FC<ModularEngineStudioWorkben
                           className="w-3.5 h-3.5 rounded-full border border-white/20 shadow-sm shrink-0"
                           style={{ backgroundColor: ex.color }}
                         />
-                        <span className="text-[11px] font-bold text-slate-200">{ex.label}</span>
+                        <span className="text-[11px] font-bold text-amber-50">{ex.label}</span>
                       </div>
-                      <p className="text-[9.5px] text-slate-400 leading-snug">{ex.desc}</p>
+                      <p className="text-[9.5px] text-amber-200/60 leading-snug">{ex.desc}</p>
                     </button>
                   );
                 })}
@@ -1222,7 +1222,7 @@ const ModularEngineStudioWorkbenchComponent: React.FC<ModularEngineStudioWorkben
             </div>
 
             {/* 5. Valve Cover Powdercoat */}
-            <div className="bg-slate-950/50 p-3 rounded-xl border border-slate-800/80 space-y-2">
+            <div className="bg-amber-950/50 p-3 rounded-xl border border-amber-800/30 space-y-2">
               <label className="text-[11px] font-bold uppercase tracking-wider text-amber-400">
                 5. Valve Cover Powdercoat Color
               </label>
@@ -1242,8 +1242,8 @@ const ModularEngineStudioWorkbenchComponent: React.FC<ModularEngineStudioWorkben
                       onClick={() => engine.updateCosmetics({ valveCoverColor: item.id as ValveCoverColor })}
                       className={`flex items-center gap-2 p-2 rounded-lg border text-left transition-all ${
                         isSelected
-                          ? "bg-slate-800 border-amber-400 ring-1 ring-amber-400 text-slate-100"
-                          : "bg-slate-900/80 border-slate-800 hover:border-slate-700 text-slate-300"
+                          ? "bg-amber-800/35 border-amber-400 ring-1 ring-amber-400 text-amber-50"
+                          : "bg-amber-900/40 border-amber-800/30 hover:border-amber-700/30 text-amber-100/80"
                       }`}
                     >
                       <span
@@ -1258,28 +1258,28 @@ const ModularEngineStudioWorkbenchComponent: React.FC<ModularEngineStudioWorkben
             </div>
 
             {/* 6. Custom 3D Badge Lettering & Anodizing Theme */}
-            <div className="bg-slate-950/50 p-3 rounded-xl border border-slate-800/80 space-y-3">
+            <div className="bg-amber-950/50 p-3 rounded-xl border border-amber-800/30 space-y-3">
               <label className="text-[11px] font-bold uppercase tracking-wider text-amber-400">
                 6. Custom 3D Laser-Etched Badge & Anodizing
               </label>
               <div className="grid grid-cols-2 gap-2">
                 <div>
-                  <span className="text-[10px] text-slate-400">3D Badge Text</span>
+                  <span className="text-[10px] text-amber-200/60">3D Badge Text</span>
                   <input
                     type="text"
                     value={state.cosmetics?.badgeEmblemText ?? "APEX V12"}
                     onChange={(e) => engine.updateCosmetics({ badgeEmblemText: e.target.value.toUpperCase() })}
                     placeholder="e.g. APEX V12"
                     maxLength={14}
-                    className="w-full mt-1 bg-slate-800 border border-slate-700 rounded-lg px-2 py-1.5 text-xs text-slate-100 font-mono tracking-wider font-bold uppercase focus:border-amber-400 focus:outline-none"
+                    className="w-full mt-1 bg-amber-800/35 border border-amber-700/30 rounded-lg px-2 py-1.5 text-xs text-amber-50 font-mono tracking-wider font-bold uppercase focus:border-amber-400 focus:outline-none"
                   />
                 </div>
                 <div>
-                  <span className="text-[10px] text-slate-400">Hardware Anodizing Theme</span>
+                  <span className="text-[10px] text-amber-200/60">Hardware Anodizing Theme</span>
                   <select
                     value={state.cosmetics?.anodizingTheme || "anodized_gold"}
                     onChange={(e) => engine.updateCosmetics({ anodizingTheme: e.target.value as AnodizingTheme })}
-                    className="w-full mt-1 bg-slate-800 border border-slate-700 rounded-lg px-2 py-1.5 text-xs text-slate-100 font-medium"
+                    className="w-full mt-1 bg-amber-800/35 border border-amber-700/30 rounded-lg px-2 py-1.5 text-xs text-amber-50 font-medium"
                   >
                     <option value="anodized_gold">Billet Gold Anodized</option>
                     <option value="anodized_blue">Cobalt Blue Anodized</option>
@@ -1299,9 +1299,9 @@ const ModularEngineStudioWorkbenchComponent: React.FC<ModularEngineStudioWorkben
         {activeTab === "drivetrain" && dt && (
           <div className="space-y-4">
             {/* Transmission Architecture Selection */}
-            <div className="p-3.5 bg-slate-950/60 rounded-xl border border-slate-800 space-y-3">
+            <div className="p-3.5 bg-amber-950/60 rounded-xl border border-amber-800/30 space-y-3">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-bold uppercase text-slate-200">Transmission Architecture</span>
+                <span className="text-xs font-bold uppercase text-amber-50">Transmission Architecture</span>
                 <span className="text-[10px] font-mono text-amber-400 font-bold">{dt.architecture.toUpperCase()}</span>
               </div>
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
@@ -1324,11 +1324,11 @@ const ModularEngineStudioWorkbenchComponent: React.FC<ModularEngineStudioWorkben
                     className={`p-2.5 rounded-xl border text-left transition-all cursor-pointer ${
                       dt.architecture === arch.id
                         ? "bg-amber-500/10 border-amber-500/50 text-amber-200 ring-1 ring-amber-500/30"
-                        : "bg-slate-900/50 border-slate-800 text-slate-400 hover:border-slate-700 hover:text-slate-200"
+                        : "bg-amber-900/40 border-amber-800/30 text-amber-200/60 hover:border-amber-700/30 hover:text-amber-50"
                     }`}
                   >
                     <div className="font-bold text-xs">{arch.label}</div>
-                    <div className="text-[10px] text-slate-500 mt-0.5 leading-tight">{arch.desc}</div>
+                    <div className="text-[10px] text-amber-300/50 mt-0.5 leading-tight">{arch.desc}</div>
                   </button>
                 ))}
               </div>
@@ -1337,8 +1337,8 @@ const ModularEngineStudioWorkbenchComponent: React.FC<ModularEngineStudioWorkben
             {/* Ratio Auto-Optimizer */}
             <div className="flex items-center justify-between p-3 bg-gradient-to-r from-amber-950/40 via-amber-950/20 to-slate-950/60 rounded-xl border border-amber-500/30">
               <div>
-                <div className="text-xs font-bold text-slate-200">Gear Ratio Optimization Engine</div>
-                <p className="text-[10px] text-slate-400">Synthesize close-ratio motorsport or wide-ratio highway steps</p>
+                <div className="text-xs font-bold text-amber-50">Gear Ratio Optimization Engine</div>
+                <p className="text-[10px] text-amber-200/60">Synthesize close-ratio motorsport or wide-ratio highway steps</p>
               </div>
               <div className="flex gap-2">
                 <button
@@ -1359,9 +1359,9 @@ const ModularEngineStudioWorkbenchComponent: React.FC<ModularEngineStudioWorkben
             </div>
 
             {/* Final Drive & Gear Ratios Deck */}
-            <div className="p-3.5 bg-slate-950/60 rounded-xl border border-slate-800 space-y-3">
+            <div className="p-3.5 bg-amber-950/60 rounded-xl border border-amber-800/30 space-y-3">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-bold uppercase text-slate-200">Final Drive Differential Ratio</span>
+                <span className="text-xs font-bold uppercase text-amber-50">Final Drive Differential Ratio</span>
                 <span className="text-xs font-mono font-bold text-amber-300">{dt.gearRatios.finalDrive.toFixed(2)} : 1</span>
               </div>
               <input
@@ -1380,10 +1380,10 @@ const ModularEngineStudioWorkbenchComponent: React.FC<ModularEngineStudioWorkben
               />
 
               {/* Individual Gear Ratios */}
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-2 border-t border-slate-800">
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-2 border-t border-amber-800/30">
                 {(["gear1", "gear2", "gear3", "gear4", "gear5", "gear6", "gear7", "gear8"] as (keyof GearRatioSet)[]).slice(0, dt.activeGearCount).map((gearKey, idx) => (
-                  <div key={gearKey} className="p-2 bg-slate-900/80 rounded-lg border border-slate-800 space-y-1">
-                    <div className="flex justify-between text-[10px] font-bold text-slate-400 uppercase">
+                  <div key={gearKey} className="p-2 bg-amber-900/40 rounded-lg border border-amber-800/30 space-y-1">
+                    <div className="flex justify-between text-[10px] font-bold text-amber-200/60 uppercase">
                       <span>Gear {idx + 1}</span>
                       <span className="text-amber-300 font-mono">{dt.gearRatios[gearKey]?.toFixed(2)}</span>
                     </div>
@@ -1409,8 +1409,8 @@ const ModularEngineStudioWorkbenchComponent: React.FC<ModularEngineStudioWorkben
             {/* Differential & Clutch Metallurgy */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {/* LSD */}
-              <div className="p-3.5 bg-slate-950/60 rounded-xl border border-slate-800 space-y-2">
-                <span className="text-xs font-bold uppercase text-slate-200">Limited-Slip Differential</span>
+              <div className="p-3.5 bg-amber-950/60 rounded-xl border border-amber-800/30 space-y-2">
+                <span className="text-xs font-bold uppercase text-amber-50">Limited-Slip Differential</span>
                 <div className="grid grid-cols-2 gap-1.5">
                   {[
                     { id: "e_lsd" as DifferentialType, label: "Electronic e-LSD" },
@@ -1424,7 +1424,7 @@ const ModularEngineStudioWorkbenchComponent: React.FC<ModularEngineStudioWorkben
                       className={`p-2 rounded-lg border text-xs font-bold text-left transition-all cursor-pointer ${
                         dt.lsdType === lsd.id
                           ? "bg-amber-500/20 border-amber-500/50 text-amber-200"
-                          : "bg-slate-900 border-slate-800 text-slate-400 hover:text-slate-200"
+                          : "bg-amber-900/50 border-amber-800/30 text-amber-200/60 hover:text-amber-50"
                       }`}
                     >
                       {lsd.label}
@@ -1434,8 +1434,8 @@ const ModularEngineStudioWorkbenchComponent: React.FC<ModularEngineStudioWorkben
               </div>
 
               {/* Clutch Package */}
-              <div className="p-3.5 bg-slate-950/60 rounded-xl border border-slate-800 space-y-2">
-                <span className="text-xs font-bold uppercase text-slate-200">Clutch Friction Package</span>
+              <div className="p-3.5 bg-amber-950/60 rounded-xl border border-amber-800/30 space-y-2">
+                <span className="text-xs font-bold uppercase text-amber-50">Clutch Friction Package</span>
                 <div className="grid grid-cols-3 gap-1.5">
                   {[
                     { id: "carbon_multi_plate" as ClutchMaterialType, label: "Carbon Multi" },
@@ -1448,15 +1448,15 @@ const ModularEngineStudioWorkbenchComponent: React.FC<ModularEngineStudioWorkben
                       className={`p-2 rounded-lg border text-xs font-bold text-center transition-all cursor-pointer ${
                         dt.clutchType === clutch.id
                           ? "bg-amber-500/20 border-amber-500/50 text-amber-200"
-                          : "bg-slate-900 border-slate-800 text-slate-400 hover:text-slate-200"
+                          : "bg-amber-900/50 border-amber-800/30 text-amber-200/60 hover:text-amber-50"
                       }`}
                     >
                       {clutch.label}
                     </button>
                   ))}
                 </div>
-                <div className="pt-2 flex justify-between items-center text-[10px] text-slate-400">
-                  <span>Flywheel Mass: <strong className="text-slate-200">{dt.flywheelMassKg} kg</strong></span>
+                <div className="pt-2 flex justify-between items-center text-[10px] text-amber-200/60">
+                  <span>Flywheel Mass: <strong className="text-amber-50">{dt.flywheelMassKg} kg</strong></span>
                   <span>Max Input TQ: <strong className="text-amber-300">{dt.maxInputTorqueNm} Nm</strong></span>
                 </div>
               </div>
@@ -1466,8 +1466,8 @@ const ModularEngineStudioWorkbenchComponent: React.FC<ModularEngineStudioWorkben
       </div>
 
       {/* Preset Quick Select Footer */}
-      <div className="p-3 border-t border-slate-800 bg-slate-950/80 flex items-center justify-between gap-2">
-        <span className="text-[10px] font-semibold text-slate-400 uppercase">Preset Architectures:</span>
+      <div className="p-3 border-t border-amber-800/30 bg-amber-950/80 flex items-center justify-between gap-2">
+        <span className="text-[10px] font-semibold text-amber-200/60 uppercase">Preset Architectures:</span>
         <div className="flex gap-1 overflow-x-auto">
           {[
             { id: "v8_twin_turbo", label: "4.0L V8 TT" },
@@ -1478,7 +1478,7 @@ const ModularEngineStudioWorkbenchComponent: React.FC<ModularEngineStudioWorkben
             <button
               key={preset.id}
               onClick={() => engine.loadPreset(preset.id)}
-              className="px-2 py-1 text-[10px] font-mono font-medium rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 border border-slate-700"
+              className="px-2 py-1 text-[10px] font-mono font-medium rounded-lg bg-amber-800/35 hover:bg-amber-700/40 text-amber-50 border border-amber-700/30"
             >
               {preset.label}
             </button>
@@ -1487,8 +1487,8 @@ const ModularEngineStudioWorkbenchComponent: React.FC<ModularEngineStudioWorkben
       </div>
 
       {/* Interactive Torque Curve SVG Chart */}
-      <div className="p-4 border-t border-slate-800 bg-slate-950/80">
-        <div className="text-xs font-bold text-slate-300 uppercase mb-3 flex items-center justify-between">
+      <div className="p-4 border-t border-amber-800/30 bg-amber-950/80">
+        <div className="text-xs font-bold text-amber-100/80 uppercase mb-3 flex items-center justify-between">
           <span>Interactive Torque & Power Curve</span>
           <span className="text-[10px] text-amber-400 font-mono">800 – 11,000 RPM</span>
         </div>
@@ -1579,8 +1579,8 @@ const ModularEngineStudioWorkbenchComponent: React.FC<ModularEngineStudioWorkben
       </div>
 
       {/* Component Health Monitor Strip */}
-      <div className="p-4 border-t border-slate-800 bg-slate-950/80">
-        <div className="text-xs font-bold text-slate-300 uppercase mb-3">Component Health Monitor</div>
+      <div className="p-4 border-t border-amber-800/30 bg-amber-950/80">
+        <div className="text-xs font-bold text-amber-100/80 uppercase mb-3">Component Health Monitor</div>
         <div className="grid grid-cols-5 gap-2">
           {[
             { label: "Pistons", stress: Math.min(100, Math.round(state.block.boreMm * 1.2 + ((state.turboSystem?.targetBoostPressureBar ?? 0) * 15))) },
@@ -1589,9 +1589,9 @@ const ModularEngineStudioWorkbenchComponent: React.FC<ModularEngineStudioWorkben
             { label: "Turbo", stress: Math.min(100, Math.round((state.turboSystem?.targetBoostPressureBar ?? 0) * 28)) },
             { label: "Bearings", stress: Math.min(100, Math.round(state.block.boreMm * 0.7 + ((state.crankshaft.strokeMm ?? 80) * 0.3))) },
           ].map((c) => (
-            <div key={c.label} className="p-2 rounded-xl bg-slate-900/60 border border-slate-800 text-center space-y-1.5">
-              <div className="text-[10px] font-bold text-slate-300 uppercase">{c.label}</div>
-              <div className="h-2 bg-slate-800 rounded-full overflow-hidden">
+            <div key={c.label} className="p-2 rounded-xl bg-amber-900/40 border border-amber-800/30 text-center space-y-1.5">
+              <div className="text-[10px] font-bold text-amber-100/80 uppercase">{c.label}</div>
+              <div className="h-2 bg-amber-800/35 rounded-full overflow-hidden">
                 <div
                   className={`h-full rounded-full transition-all ${
                     c.stress > 85 ? "bg-gradient-to-r from-rose-500 to-red-400" :

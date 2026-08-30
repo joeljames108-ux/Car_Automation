@@ -55,10 +55,10 @@ export const NeonHorizonContentViewport: React.FC<NeonHorizonContentViewportProp
                 className={`flex flex-col items-center justify-center p-2 rounded-2xl transition-all cursor-pointer group ${
  isActive
  ? "bg-sky-400/10 text-sky-300 border border-sky-400/30"
- : "text-slate-400 hover:text-slate-200 hover:bg-white/[0.04] border border-transparent"
+ : "text-amber-200/60 hover:text-amber-50 hover:bg-white/[0.04] border border-transparent"
  }`}
               >
-                <div className={`mb-1 transition-transform group-hover:scale-110 ${isActive ? "text-sky-400" : "text-slate-400"}`}>
+                <div className={`mb-1 transition-transform group-hover:scale-110 ${isActive ? "text-sky-400" : "text-amber-200/60"}`}>
                   {tab.icon}
                 </div>
                 <span className="text-[11px] font-semibold tracking-tight text-center truncate w-full">

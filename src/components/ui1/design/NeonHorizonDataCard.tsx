@@ -54,7 +54,7 @@ export const NeonHorizonDataCard: React.FC<NeonHorizonDataCardProps> = ({
       className={`p-3.5 flex flex-col justify-between ${className}`}
     >
       <div className="flex items-center justify-between gap-2 mb-1.5">
-        <span className="nh-label-caps text-slate-400 text-[10px] tracking-wider truncate">
+        <span className="nh-label-caps text-amber-200/60 text-[10px] tracking-wider truncate">
           {label}
         </span>
         {icon && (
@@ -70,7 +70,7 @@ export const NeonHorizonDataCard: React.FC<NeonHorizonDataCardProps> = ({
             {isNumeric ? <AnimatedCounter value={value as number} /> : value}
           </span>
           {unit && (
-            <span className="text-xs text-slate-400 nh-font-mono font-medium">
+            <span className="text-xs text-amber-200/60 nh-font-mono font-medium">
               {unit}
             </span>
           )}

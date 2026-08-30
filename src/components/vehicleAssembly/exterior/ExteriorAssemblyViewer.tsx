@@ -96,24 +96,24 @@ export const ExteriorAssemblyViewer: React.FC<ExteriorAssemblyViewerProps> = ({
 
   return (
     <div
-      className={`relative w-full h-full min-h-[550px] rounded-3xl bg-slate-950/95 border border-amber-500/30 backdrop-blur-2xl overflow-hidden shadow-2xl flex flex-col justify-between p-4 ${className}`}
+      className={`relative w-full h-full min-h-[550px] rounded-3xl bg-amber-950/95 border border-amber-500/30 backdrop-blur-2xl overflow-hidden shadow-2xl flex flex-col justify-between p-4 ${className}`}
     >
       {/* Dynamic Background Ambient Light Gradients */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_35%,rgba(6,182,212,0.12),transparent_70%)] pointer-events-none" />
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_80%,rgba(99,102,241,0.08),transparent_65%)] pointer-events-none" />
 
       {/* ── TOP HUD TOOLBAR ── */}
-      <div className="relative z-30 flex flex-wrap items-center justify-between gap-3 bg-slate-900/90 border border-white/10 p-2.5 rounded-2xl backdrop-blur-md shadow-lg">
+      <div className="relative z-30 flex flex-wrap items-center justify-between gap-3 bg-amber-900/40 border border-white/10 p-2.5 rounded-2xl backdrop-blur-md shadow-lg">
         {/* Left: View Mode Toggle & Preset Quick Select */}
         <div className="flex items-center gap-2">
           {/* 2D / 3D Mode Toggle */}
-          <div className="flex items-center gap-1 bg-slate-950 p-1 rounded-xl border border-white/10">
+          <div className="flex items-center gap-1 bg-amber-950/80 p-1 rounded-xl border border-white/10">
             <button
               onClick={() => setViewMode("2d")}
               className={`px-3 py-1 rounded-lg text-xs font-mono font-bold transition-all ${
                 viewMode === "2d"
                   ? "bg-amber-500 text-slate-950 shadow-[0_0_12px_rgba(6,182,212,0.5)]"
-                  : "text-slate-400 hover:text-slate-200"
+                  : "text-amber-200/60 hover:text-amber-50"
               }`}
             >
               2D
@@ -123,7 +123,7 @@ export const ExteriorAssemblyViewer: React.FC<ExteriorAssemblyViewerProps> = ({
               className={`px-3 py-1 rounded-lg text-xs font-mono font-bold transition-all flex items-center gap-1.5 ${
                 viewMode === "3d_webgl"
                   ? "bg-amber-500 text-slate-950 shadow-[0_0_12px_rgba(6,182,212,0.5)]"
-                  : "text-slate-400 hover:text-slate-200"
+                  : "text-amber-200/60 hover:text-amber-50"
               }`}
             >
               <Box size={13} />
@@ -134,7 +134,7 @@ export const ExteriorAssemblyViewer: React.FC<ExteriorAssemblyViewerProps> = ({
           {/* Preset Selector Dropdown */}
           <select
             onChange={(e) => loadPreset(e.target.value)}
-            className="bg-slate-950 border border-white/10 rounded-xl px-2.5 py-1 text-xs font-mono text-amber-300 focus:outline-none focus:border-amber-400 cursor-pointer"
+            className="bg-amber-950/80 border border-white/10 rounded-xl px-2.5 py-1 text-xs font-mono text-amber-300 focus:outline-none focus:border-amber-400 cursor-pointer"
             defaultValue=""
           >
             <option value="" disabled>
@@ -151,9 +151,9 @@ export const ExteriorAssemblyViewer: React.FC<ExteriorAssemblyViewerProps> = ({
         {/* Right: Exploded Slider & Workstation Audio Controls */}
         <div className="flex items-center gap-3">
           {/* Exploded View Continuous Slider */}
-          <div className="flex items-center gap-2 bg-slate-950 px-3 py-1 rounded-xl border border-white/10">
-            <Layers size={13} className={isExplodedView ? "text-amber-400" : "text-slate-500"} />
-            <span className="text-[11px] font-mono text-slate-300">Explode:</span>
+          <div className="flex items-center gap-2 bg-amber-950/80 px-3 py-1 rounded-xl border border-white/10">
+            <Layers size={13} className={isExplodedView ? "text-amber-400" : "text-amber-300/50"} />
+            <span className="text-[11px] font-mono text-amber-100/80">Explode:</span>
             <input
               type="range"
               min="0"
@@ -161,7 +161,7 @@ export const ExteriorAssemblyViewer: React.FC<ExteriorAssemblyViewerProps> = ({
               step="0.02"
               value={explodedAmount}
               onChange={(e) => setExplodedAmount(parseFloat(e.target.value))}
-              className="w-24 h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-amber-400"
+              className="w-24 h-1.5 bg-amber-800/35 rounded-lg appearance-none cursor-pointer accent-amber-400"
             />
             <span className="text-[10px] font-mono text-amber-300 w-8">{Math.round(explodedAmount * 100)}%</span>
           </div>
@@ -170,7 +170,7 @@ export const ExteriorAssemblyViewer: React.FC<ExteriorAssemblyViewerProps> = ({
           <button
             onClick={resetAssembly}
             title="Reset to Bare Chassis Frame"
-            className="p-1.5 bg-slate-950 hover:bg-slate-800 border border-white/10 rounded-xl text-slate-400 hover:text-rose-400 transition-colors"
+            className="p-1.5 bg-amber-950/80 hover:bg-amber-800/35 border border-white/10 rounded-xl text-amber-200/60 hover:text-rose-400 transition-colors"
           >
             <RotateCcw size={14} />
           </button>
@@ -178,7 +178,7 @@ export const ExteriorAssemblyViewer: React.FC<ExteriorAssemblyViewerProps> = ({
           {/* Audio Mute Toggle */}
           <button
             onClick={handleToggleMute}
-            className="p-1.5 bg-slate-950 hover:bg-slate-800 border border-white/10 rounded-xl text-slate-400 hover:text-amber-300 transition-colors"
+            className="p-1.5 bg-amber-950/80 hover:bg-amber-800/35 border border-white/10 rounded-xl text-amber-200/60 hover:text-amber-300 transition-colors"
           >
             {isMuted ? <VolumeX size={14} /> : <Volume2 size={14} />}
           </button>
@@ -213,16 +213,16 @@ export const ExteriorAssemblyViewer: React.FC<ExteriorAssemblyViewerProps> = ({
       </div>
 
       {/* ── BOTTOM STATS BAR & ENGINEERING ADVICE HUD ── */}
-      <div className="relative z-30 flex flex-col sm:flex-row items-center justify-between gap-3 bg-slate-900/90 border border-white/10 p-3 rounded-2xl backdrop-blur-md shadow-lg">
+      <div className="relative z-30 flex flex-col sm:flex-row items-center justify-between gap-3 bg-amber-900/40 border border-white/10 p-3 rounded-2xl backdrop-blur-md shadow-lg">
         {/* Left: Build Completion Metric */}
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-2">
             <CheckCircle2 size={16} className={isAssemblyComplete ? "text-emerald-400" : "text-amber-400"} />
-            <span className="text-xs font-mono font-extrabold text-slate-200">
+            <span className="text-xs font-mono font-extrabold text-amber-50">
               BUILD: {buildProgress}%
             </span>
           </div>
-          <div className="w-28 h-2 bg-slate-950 rounded-full overflow-hidden border border-white/10">
+          <div className="w-28 h-2 bg-amber-950/80 rounded-full overflow-hidden border border-white/10">
             <div
               className="h-full bg-gradient-to-r from-amber-500 to-emerald-400 transition-all duration-500"
               style={{ width: `${buildProgress}%` }}
@@ -232,23 +232,23 @@ export const ExteriorAssemblyViewer: React.FC<ExteriorAssemblyViewerProps> = ({
 
         {/* Center: Live Engineering Metrics */}
         <div className="flex items-center gap-4 text-xs font-mono">
-          <div className="text-slate-300">
-            <span className="text-slate-500">Weight:</span>{" "}
+          <div className="text-amber-100/80">
+            <span className="text-amber-300/50">Weight:</span>{" "}
             <strong className="text-amber-400 font-bold">{Math.round(totalWeight)} kg</strong>
           </div>
-          <div className="text-slate-300">
-            <span className="text-slate-500">Rigidity:</span>{" "}
+          <div className="text-amber-100/80">
+            <span className="text-amber-300/50">Rigidity:</span>{" "}
             <strong className="text-emerald-400 font-bold">{totalRigidity} kNm/deg</strong>
           </div>
-          <div className="text-slate-300">
-            <span className="text-slate-500">Cost:</span>{" "}
+          <div className="text-amber-100/80">
+            <span className="text-amber-300/50">Cost:</span>{" "}
             <strong className="text-amber-400 font-bold">${Math.round(totalCost).toLocaleString()}</strong>
           </div>
         </div>
 
         {/* Right: Selected Component Detail Badge */}
         {selectedMeta && (
-          <div className="text-[11px] font-mono text-slate-400 max-w-xs truncate">
+          <div className="text-[11px] font-mono text-amber-200/60 max-w-xs truncate">
             <span className="text-amber-300 font-bold">{selectedMeta.name}</span>
           </div>
         )}

@@ -105,13 +105,13 @@ export const Vehicle3ColumnDeck: React.FC<Vehicle3ColumnDeckProps> = ({
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 font-mono">
       {/* ── COLUMN 1: PART CONTROLS & GEOMETRIC DIMENSIONS ── */}
-      <div className="bg-white/80 dark:bg-base-900/90 border border-slate-200 dark:border-slate-800 rounded-3xl p-5 backdrop-blur-xl shadow-xl space-y-4">
-        <div className="flex items-center gap-2.5 pb-2 border-b border-slate-200 dark:border-slate-800">
+      <div className="bg-white/80 dark:bg-base-900/90 border border-slate-200 dark:border-amber-800/30 rounded-3xl p-5 backdrop-blur-xl shadow-xl space-y-4">
+        <div className="flex items-center gap-2.5 pb-2 border-b border-slate-200 dark:border-amber-800/30">
           <div className="p-2 rounded-2xl bg-amber-500/10 text-amber-600 dark:text-amber-400">
             <Settings size={18} />
           </div>
           <div>
-            <h3 className="text-sm font-bold text-slate-800 dark:text-slate-100 uppercase">
+            <h3 className="text-sm font-bold text-slate-800 dark:text-amber-50 uppercase">
               {activeStage === 'architecture'
                 ? 'Platform Architecture & Kinematics'
                 : activeStage === 'chassis_platform'
@@ -128,7 +128,7 @@ export const Vehicle3ColumnDeck: React.FC<Vehicle3ColumnDeckProps> = ({
                 ? 'Aerodynamic Downforce & DRS'
                 : 'Component Dimensions & Fasteners'}
             </h3>
-            <p className="text-[11px] text-slate-500 dark:text-slate-400">
+            <p className="text-[11px] text-amber-300/50 dark:text-amber-200/60">
               Parametric geometry, track width & ride height
             </p>
           </div>
@@ -175,17 +175,17 @@ export const Vehicle3ColumnDeck: React.FC<Vehicle3ColumnDeckProps> = ({
       </div>
 
       {/* ── COLUMN 2: METALLURGY & MATERIAL GRADE (4 TIERS) ── */}
-      <div className="bg-white/80 dark:bg-base-900/90 border border-slate-200 dark:border-slate-800 rounded-3xl p-5 backdrop-blur-xl shadow-xl space-y-4">
-        <div className="flex items-center justify-between pb-2 border-b border-slate-200 dark:border-slate-800">
+      <div className="bg-white/80 dark:bg-base-900/90 border border-slate-200 dark:border-amber-800/30 rounded-3xl p-5 backdrop-blur-xl shadow-xl space-y-4">
+        <div className="flex items-center justify-between pb-2 border-b border-slate-200 dark:border-amber-800/30">
           <div className="flex items-center gap-2.5">
             <div className="p-2 rounded-2xl bg-amber-500/10 text-amber-600 dark:text-amber-400">
               <Layers size={18} />
             </div>
             <div>
-              <h3 className="text-sm font-bold text-slate-800 dark:text-slate-100 uppercase">
+              <h3 className="text-sm font-bold text-slate-800 dark:text-amber-50 uppercase">
                 Metallurgy & Material Grade
               </h3>
-              <p className="text-[11px] text-slate-500 dark:text-slate-400">
+              <p className="text-[11px] text-amber-300/50 dark:text-amber-200/60">
                 Density, structural stiffness & thermal limits
               </p>
             </div>
@@ -206,27 +206,27 @@ export const Vehicle3ColumnDeck: React.FC<Vehicle3ColumnDeckProps> = ({
                 className={`p-3 rounded-2xl border cursor-pointer transition-all duration-200 space-y-1.5 ${
                   isSelected
                     ? 'bg-amber-500/10 dark:bg-amber-950/40 border-amber-500 dark:border-amber-400 shadow-[0_0_12px_rgba(6,182,212,0.25)]'
-                    : 'bg-slate-50 dark:bg-base-950/60 border-slate-200 dark:border-slate-800 hover:border-slate-400 dark:hover:border-slate-700'
+                    : 'bg-slate-50 dark:bg-base-950/60 border-slate-200 dark:border-amber-800/30 hover:border-slate-400 dark:hover:border-amber-700/30'
                 }`}
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
                     <div className={`w-3.5 h-3.5 rounded-full border flex items-center justify-center ${isSelected ? 'border-amber-500 bg-amber-500' : 'border-slate-400'}`}>
-                      {isSelected && <div className="w-1.5 h-1.5 rounded-full bg-slate-950" />}
+                      {isSelected && <div className="w-1.5 h-1.5 rounded-full bg-amber-950/80" />}
                     </div>
-                    <strong className="text-xs text-slate-800 dark:text-slate-200 font-bold">
+                    <strong className="text-xs text-slate-800 dark:text-amber-50 font-bold">
                       {tier.name}
                     </strong>
                   </div>
-                  <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded ${isSelected ? 'bg-amber-500 text-slate-950' : 'bg-slate-200 dark:bg-base-900 text-slate-500'}`}>
+                  <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded ${isSelected ? 'bg-amber-500 text-slate-950' : 'bg-slate-200 dark:bg-base-900 text-amber-300/50'}`}>
                     {tier.badge}
                   </span>
                 </div>
 
-                <div className="flex items-center justify-between text-[10px] text-slate-500 dark:text-slate-400 pt-1 font-mono">
+                <div className="flex items-center justify-between text-[10px] text-amber-300/50 dark:text-amber-200/60 pt-1 font-mono">
                   <div>
                     <span>Mass: </span>
-                    <strong className={isSelected ? 'text-amber-600 dark:text-amber-400' : 'text-slate-700 dark:text-slate-300'}>
+                    <strong className={isSelected ? 'text-amber-600 dark:text-amber-400' : 'text-amber-500 dark:text-amber-100/80'}>
                       {tier.massLabel}
                     </strong>
                   </div>
@@ -250,17 +250,17 @@ export const Vehicle3ColumnDeck: React.FC<Vehicle3ColumnDeckProps> = ({
       </div>
 
       {/* ── COLUMN 3: LIVE SPEC DELTAS & ENGINEERING ADVISORY ── */}
-      <div className="bg-white/80 dark:bg-base-900/90 border border-slate-200 dark:border-slate-800 rounded-3xl p-5 backdrop-blur-xl shadow-xl space-y-4">
-        <div className="flex items-center justify-between pb-2 border-b border-slate-200 dark:border-slate-800">
+      <div className="bg-white/80 dark:bg-base-900/90 border border-slate-200 dark:border-amber-800/30 rounded-3xl p-5 backdrop-blur-xl shadow-xl space-y-4">
+        <div className="flex items-center justify-between pb-2 border-b border-slate-200 dark:border-amber-800/30">
           <div className="flex items-center gap-2.5">
             <div className="p-2 rounded-2xl bg-emerald-500/10 text-emerald-600 dark:text-emerald-400">
               <Activity size={18} />
             </div>
             <div>
-              <h3 className="text-sm font-bold text-slate-800 dark:text-slate-100 uppercase">
+              <h3 className="text-sm font-bold text-slate-800 dark:text-amber-50 uppercase">
                 Vehicle Performance Impact
               </h3>
-              <p className="text-[11px] text-slate-500 dark:text-slate-400">
+              <p className="text-[11px] text-amber-300/50 dark:text-amber-200/60">
                 Live calculated mass, rigidity & dynamic grip
               </p>
             </div>
@@ -272,36 +272,36 @@ export const Vehicle3ColumnDeck: React.FC<Vehicle3ColumnDeckProps> = ({
 
         {/* Metric Delta Grid */}
         <div className="grid grid-cols-2 gap-2.5">
-          <div className="p-3 rounded-2xl bg-slate-50 dark:bg-base-950/70 border border-slate-200 dark:border-slate-800 space-y-0.5">
-            <span className="text-[10px] text-slate-500 block">TOTAL CURB MASS</span>
+          <div className="p-3 rounded-2xl bg-slate-50 dark:bg-base-950/70 border border-slate-200 dark:border-amber-800/30 space-y-0.5">
+            <span className="text-[10px] text-amber-300/50 block">TOTAL CURB MASS</span>
             <strong className="text-sm text-amber-600 dark:text-amber-400 font-bold block">
               {metrics.totalMassKg} kg
             </strong>
-            <span className="text-[9px] text-slate-400 block">Complete wet weight</span>
+            <span className="text-[9px] text-amber-200/60 block">Complete wet weight</span>
           </div>
 
-          <div className="p-3 rounded-2xl bg-slate-50 dark:bg-base-950/70 border border-slate-200 dark:border-slate-800 space-y-0.5">
-            <span className="text-[10px] text-slate-500 block">TORSIONAL RIGIDITY</span>
+          <div className="p-3 rounded-2xl bg-slate-50 dark:bg-base-950/70 border border-slate-200 dark:border-amber-800/30 space-y-0.5">
+            <span className="text-[10px] text-amber-300/50 block">TORSIONAL RIGIDITY</span>
             <strong className="text-sm text-emerald-600 dark:text-emerald-400 font-bold block">
               {metrics.torsionalRigidityKNmPerDeg} kNm/°
             </strong>
-            <span className="text-[9px] text-slate-400 block">Chassis deflection resistance</span>
+            <span className="text-[9px] text-amber-200/60 block">Chassis deflection resistance</span>
           </div>
 
-          <div className="p-3 rounded-2xl bg-slate-50 dark:bg-base-950/70 border border-slate-200 dark:border-slate-800 space-y-0.5">
-            <span className="text-[10px] text-slate-500 block">0-100 KM/H ACCEL</span>
+          <div className="p-3 rounded-2xl bg-slate-50 dark:bg-base-950/70 border border-slate-200 dark:border-amber-800/30 space-y-0.5">
+            <span className="text-[10px] text-amber-300/50 block">0-100 KM/H ACCEL</span>
             <strong className="text-sm text-amber-600 dark:text-amber-400 font-bold block">
               {metrics.estimated0to100Kph} s
             </strong>
-            <span className="text-[9px] text-slate-400 block">Top: {metrics.estimatedTopSpeedKph} km/h</span>
+            <span className="text-[9px] text-amber-200/60 block">Top: {metrics.estimatedTopSpeedKph} km/h</span>
           </div>
 
-          <div className="p-3 rounded-2xl bg-slate-50 dark:bg-base-950/70 border border-slate-200 dark:border-slate-800 space-y-0.5">
-            <span className="text-[10px] text-slate-500 block">HARDWARE BOM COST</span>
+          <div className="p-3 rounded-2xl bg-slate-50 dark:bg-base-950/70 border border-slate-200 dark:border-amber-800/30 space-y-0.5">
+            <span className="text-[10px] text-amber-300/50 block">HARDWARE BOM COST</span>
             <strong className="text-sm text-amber-600 dark:text-amber-400 font-bold block">
               ${metrics.totalBOMCostUSD.toLocaleString()}
             </strong>
-            <span className="text-[9px] text-slate-400 block">Subsystems total sum</span>
+            <span className="text-[9px] text-amber-200/60 block">Subsystems total sum</span>
           </div>
         </div>
 
@@ -311,7 +311,7 @@ export const Vehicle3ColumnDeck: React.FC<Vehicle3ColumnDeckProps> = ({
             <Info size={14} />
             <span>ENGINEERING ADVISORY</span>
           </div>
-          <p className="text-[11px] text-slate-600 dark:text-slate-400 leading-relaxed">
+          <p className="text-[11px] text-amber-400 dark:text-amber-200/60 leading-relaxed">
             {materialGrade === 'titanium'
               ? 'Titanium & Carbon Monocell delivers maximum torsional stiffness (+24 kNm/°) with 40% weight reduction for supreme cornering agility.'
               : materialGrade === 'billet'
@@ -323,7 +323,7 @@ export const Vehicle3ColumnDeck: React.FC<Vehicle3ColumnDeckProps> = ({
         </div>
 
         {/* ── 4. DEDICATED ASSEMBLY INSTALLATION ACTION BUTTONS ── */}
-        <div className="pt-2 border-t border-slate-200 dark:border-slate-800 space-y-2">
+        <div className="pt-2 border-t border-slate-200 dark:border-amber-800/30 space-y-2">
           {installedStages.includes(activeStage) ? (
             <div className="flex items-center gap-2">
               <div className="flex-1 flex items-center justify-center gap-2 py-2.5 px-3 rounded-2xl bg-emerald-500/15 border border-emerald-500/40 text-emerald-400 font-bold text-xs shadow-sm">
@@ -334,7 +334,7 @@ export const Vehicle3ColumnDeck: React.FC<Vehicle3ColumnDeckProps> = ({
                 <button
                   onClick={() => onRemoveStage(activeStage)}
                   title="Uninstall stage from chassis"
-                  className="p-2.5 rounded-2xl bg-slate-100 dark:bg-base-950 border border-slate-200 dark:border-slate-800 text-slate-400 hover:text-red-400 hover:border-red-500/40 transition-all cursor-pointer"
+                  className="p-2.5 rounded-2xl bg-slate-100 dark:bg-base-950 border border-slate-200 dark:border-amber-800/30 text-amber-200/60 hover:text-red-400 hover:border-red-500/40 transition-all cursor-pointer"
                 >
                   <RotateCcw size={15} />
                 </button>
@@ -353,7 +353,7 @@ export const Vehicle3ColumnDeck: React.FC<Vehicle3ColumnDeckProps> = ({
           {onNextStage && (
             <button
               onClick={onNextStage}
-              className="w-full flex items-center justify-center gap-2 py-2 px-3 rounded-2xl bg-slate-100 dark:bg-base-950 hover:bg-slate-200 dark:hover:bg-base-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 hover:text-amber-400 text-xs font-bold transition-all cursor-pointer"
+              className="w-full flex items-center justify-center gap-2 py-2 px-3 rounded-2xl bg-slate-100 dark:bg-base-950 hover:bg-slate-200 dark:hover:bg-base-900 border border-slate-200 dark:border-amber-800/30 text-amber-500 dark:text-amber-100/80 hover:text-amber-400 text-xs font-bold transition-all cursor-pointer"
             >
               <span>PROCEED TO NEXT STAGE</span>
               <ArrowRight size={14} />

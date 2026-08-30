@@ -75,17 +75,17 @@ export const NeonHorizonModal: React.FC<NeonHorizonModalProps> = ({
                 </div>
               )}
               <div>
-                <h3 className="text-sm font-bold nh-font-headline tracking-wider text-slate-100 uppercase">
+                <h3 className="text-sm font-bold nh-font-headline tracking-wider text-amber-50 uppercase">
                   {title}
                 </h3>
                 {subtitle && (
-                  <p className="text-xs text-slate-400 nh-font-mono">{subtitle}</p>
+                  <p className="text-xs text-amber-200/60 nh-font-mono">{subtitle}</p>
                 )}
               </div>
             </div>
             <button
               onClick={handleClose}
-              className="p-1.5 rounded-xl text-slate-400 hover:text-white hover:bg-white/10 transition-all cursor-pointer border border-transparent hover:border-white/20"
+              className="p-1.5 rounded-xl text-amber-200/60 hover:text-white hover:bg-white/10 transition-all cursor-pointer border border-transparent hover:border-white/20"
             >
               <X size={18} />
             </button>

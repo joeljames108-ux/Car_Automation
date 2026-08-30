@@ -34,7 +34,7 @@ export function NeonConstructorStudio() {
   ];
 
   return (
-    <div className="w-full flex flex-col gap-6 text-slate-100 animate-nh-materialize">
+    <div className="w-full flex flex-col gap-6 text-amber-50 animate-nh-materialize">
       {/* Header */}
       <NeonHorizonGlassPanel
         variant="window"
@@ -120,7 +120,7 @@ export function NeonConstructorStudio() {
                 className="p-3 rounded-xl bg-[#0a111e] border border-sky-400/15 flex items-center justify-between"
               >
                 <div>
-                  <div className="text-xs font-bold text-slate-100">{chk.item}</div>
+                  <div className="text-xs font-bold text-amber-50">{chk.item}</div>
                   <div className="text-[10px] nh-font-mono text-sky-300 mt-0.5">Value: {chk.val}</div>
                 </div>
                 <div className="flex items-center gap-1 text-emerald-400 nh-font-mono text-xs font-bold">

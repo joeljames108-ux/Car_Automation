@@ -102,23 +102,23 @@ export const PowertrainDynoStudio: React.FC = () => {
   };
 
   return (
-    <div className="flex flex-col w-full h-full space-y-4 p-2 sm:p-4 select-none bg-slate-950 text-slate-100 min-h-[720px] rounded-2xl border border-slate-800 shadow-2xl">
+    <div className="flex flex-col w-full h-full space-y-4 p-2 sm:p-4 select-none bg-amber-950/80 text-amber-50 min-h-[720px] rounded-2xl border border-amber-800/30 shadow-2xl">
       {/* Studio Header */}
-      <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-3 bg-gradient-to-r from-slate-900 via-slate-950 to-slate-900 p-4 rounded-xl border border-slate-800 shadow-lg">
+      <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-3 bg-gradient-to-r from-amber-900/60 via-slate-950 to-amber-900/60 p-4 rounded-xl border border-amber-800/30 shadow-lg">
         <div className="flex items-center gap-3">
           <div className="p-2.5 rounded-xl bg-gradient-to-br from-amber-400 to-red-600 text-slate-950 shadow-md shadow-amber-500/30">
             <Flame size={22} />
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h1 className="text-lg font-black tracking-tight text-slate-100 uppercase">
+              <h1 className="text-lg font-black tracking-tight text-amber-50 uppercase">
                 Master Powertrain Dyno & ECU Remapping Studio
               </h1>
               <span className="px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 font-mono text-[10px] font-extrabold border border-amber-500/30">
                 REAL-TIME DYNO
               </span>
             </div>
-            <p className="text-xs text-slate-400">
+            <p className="text-xs text-amber-200/60">
               Virtual dyno sweep solver, ECU fuel/ignition calibration, knock margin pyrometry & BMEP analysis
             </p>
           </div>
@@ -126,34 +126,34 @@ export const PowertrainDynoStudio: React.FC = () => {
 
         {/* Quick Tune Presets */}
         <div className="flex flex-wrap items-center gap-2">
-          <span className="text-[11px] font-mono text-slate-400 uppercase font-bold">Tune Presets:</span>
+          <span className="text-[11px] font-mono text-amber-200/60 uppercase font-bold">Tune Presets:</span>
           <button
             onClick={() => applyTunePreset("stock")}
-            className="px-2.5 py-1 rounded-lg bg-slate-850 hover:bg-slate-800 text-slate-300 text-xs font-bold border border-slate-700 transition-all"
+            className="px-2.5 py-1 rounded-lg bg-amber-850/40 hover:bg-amber-800/35 text-amber-100/80 text-xs font-bold border border-amber-700/30 transition-all"
           >
             Factory OEM
           </button>
           <button
             onClick={() => applyTunePreset("stage1")}
-            className="px-2.5 py-1 rounded-lg bg-slate-850 hover:bg-slate-800 text-amber-300 text-xs font-bold border border-slate-700 transition-all"
+            className="px-2.5 py-1 rounded-lg bg-amber-850/40 hover:bg-amber-800/35 text-amber-300 text-xs font-bold border border-amber-700/30 transition-all"
           >
             Stage 1 Reflash
           </button>
           <button
             onClick={() => applyTunePreset("stage3_e85")}
-            className="px-2.5 py-1 rounded-lg bg-slate-850 hover:bg-slate-800 text-amber-300 text-xs font-bold border border-slate-700 transition-all"
+            className="px-2.5 py-1 rounded-lg bg-amber-850/40 hover:bg-amber-800/35 text-amber-300 text-xs font-bold border border-amber-700/30 transition-all"
           >
             Stage 3 E85 Beast
           </button>
           <button
             onClick={() => applyTunePreset("track_endurance")}
-            className="px-2.5 py-1 rounded-lg bg-slate-850 hover:bg-slate-800 text-emerald-300 text-xs font-bold border border-slate-700 transition-all"
+            className="px-2.5 py-1 rounded-lg bg-amber-850/40 hover:bg-amber-800/35 text-emerald-300 text-xs font-bold border border-amber-700/30 transition-all"
           >
             Track Endurance
           </button>
           <button
             onClick={handleReset}
-            className="p-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-slate-200 transition-all"
+            className="p-1.5 rounded-lg bg-amber-800/35 hover:bg-amber-700/40 text-amber-200/60 hover:text-amber-50 transition-all"
             title="Reset Tune"
           >
             <RotateCcw size={14} />
@@ -164,9 +164,9 @@ export const PowertrainDynoStudio: React.FC = () => {
       {/* Main Grid Layout */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 flex-1">
         {/* Left ECU Tuning Controls (4 cols) */}
-        <div className="lg:col-span-4 flex flex-col space-y-3 bg-slate-900/90 p-4 rounded-xl border border-slate-800">
-          <div className="flex items-center justify-between border-b border-slate-800 pb-2">
-            <div className="flex items-center gap-2 text-xs font-extrabold uppercase text-slate-300">
+        <div className="lg:col-span-4 flex flex-col space-y-3 bg-amber-900/40 p-4 rounded-xl border border-amber-800/30">
+          <div className="flex items-center justify-between border-b border-amber-800/30 pb-2">
+            <div className="flex items-center gap-2 text-xs font-extrabold uppercase text-amber-100/80">
               <Cpu size={14} className="text-amber-400" />
               <span>ECU Calibration Controls</span>
             </div>
@@ -177,11 +177,11 @@ export const PowertrainDynoStudio: React.FC = () => {
 
           {/* Fuel Type Selector */}
           <div className="space-y-1">
-            <label className="text-xs font-semibold text-slate-300">Fuel Grade & Octane Rating</label>
+            <label className="text-xs font-semibold text-amber-100/80">Fuel Grade & Octane Rating</label>
             <select
               value={ecuState.fuelType}
               onChange={(e) => setEcuState({ ...ecuState, fuelType: e.target.value as FuelType })}
-              className="w-full bg-slate-950 border border-slate-800 text-xs font-bold text-slate-200 rounded-lg p-2 focus:outline-none focus:border-amber-500"
+              className="w-full bg-amber-950/80 border border-amber-800/30 text-xs font-bold text-amber-50 rounded-lg p-2 focus:outline-none focus:border-amber-500"
             >
               <option value="octane91">91 Octane (Pump Premium - 91 AKI)</option>
               <option value="octane98">98 Octane (Super High Octane - 98 RON)</option>
@@ -194,7 +194,7 @@ export const PowertrainDynoStudio: React.FC = () => {
           <div className="grid grid-cols-2 gap-3 pt-1">
             <div className="space-y-1">
               <div className="flex justify-between text-[11px] font-semibold">
-                <span className="text-slate-300">Displacement</span>
+                <span className="text-amber-100/80">Displacement</span>
                 <span className="font-mono text-amber-400">{ecuState.displacementL} L</span>
               </div>
               <input
@@ -204,12 +204,12 @@ export const PowertrainDynoStudio: React.FC = () => {
                 step="0.2"
                 value={ecuState.displacementL}
                 onChange={(e) => setEcuState({ ...ecuState, displacementL: Number(e.target.value) })}
-                className="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-amber-400"
+                className="w-full h-1.5 bg-amber-800/35 rounded-lg appearance-none cursor-pointer accent-amber-400"
               />
             </div>
             <div className="space-y-1">
               <div className="flex justify-between text-[11px] font-semibold">
-                <span className="text-slate-300">Turbo Boost</span>
+                <span className="text-amber-100/80">Turbo Boost</span>
                 <span className="font-mono text-amber-400">{ecuState.boostBar} bar</span>
               </div>
               <input
@@ -219,7 +219,7 @@ export const PowertrainDynoStudio: React.FC = () => {
                 step="0.1"
                 value={ecuState.boostBar}
                 onChange={(e) => setEcuState({ ...ecuState, boostBar: Number(e.target.value) })}
-                className="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-amber-400"
+                className="w-full h-1.5 bg-amber-800/35 rounded-lg appearance-none cursor-pointer accent-amber-400"
               />
             </div>
           </div>
@@ -228,7 +228,7 @@ export const PowertrainDynoStudio: React.FC = () => {
           <div className="grid grid-cols-2 gap-3 pt-1">
             <div className="space-y-1">
               <div className="flex justify-between text-[11px] font-semibold">
-                <span className="text-slate-300">Ignition Timing</span>
+                <span className="text-amber-100/80">Ignition Timing</span>
                 <span className="font-mono text-amber-400">{ecuState.ignitionTimingBtdcDeg}° BTDC</span>
               </div>
               <input
@@ -238,12 +238,12 @@ export const PowertrainDynoStudio: React.FC = () => {
                 step="1"
                 value={ecuState.ignitionTimingBtdcDeg}
                 onChange={(e) => setEcuState({ ...ecuState, ignitionTimingBtdcDeg: Number(e.target.value) })}
-                className="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-indigo-400"
+                className="w-full h-1.5 bg-amber-800/35 rounded-lg appearance-none cursor-pointer accent-indigo-400"
               />
             </div>
             <div className="space-y-1">
               <div className="flex justify-between text-[11px] font-semibold">
-                <span className="text-slate-300">Target AFR</span>
+                <span className="text-amber-100/80">Target AFR</span>
                 <span className="font-mono text-emerald-400">{ecuState.targetAfr}:1</span>
               </div>
               <input
@@ -253,7 +253,7 @@ export const PowertrainDynoStudio: React.FC = () => {
                 step="0.1"
                 value={ecuState.targetAfr}
                 onChange={(e) => setEcuState({ ...ecuState, targetAfr: Number(e.target.value) })}
-                className="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-emerald-400"
+                className="w-full h-1.5 bg-amber-800/35 rounded-lg appearance-none cursor-pointer accent-emerald-400"
               />
             </div>
           </div>
@@ -262,7 +262,7 @@ export const PowertrainDynoStudio: React.FC = () => {
           <div className="grid grid-cols-2 gap-3 pt-1">
             <div className="space-y-1">
               <div className="flex justify-between text-[11px] font-semibold">
-                <span className="text-slate-300">Cam Duration</span>
+                <span className="text-amber-100/80">Cam Duration</span>
                 <span className="font-mono text-amber-400">{ecuState.camDurationDeg}°</span>
               </div>
               <input
@@ -272,12 +272,12 @@ export const PowertrainDynoStudio: React.FC = () => {
                 step="5"
                 value={ecuState.camDurationDeg}
                 onChange={(e) => setEcuState({ ...ecuState, camDurationDeg: Number(e.target.value) })}
-                className="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-purple-400"
+                className="w-full h-1.5 bg-amber-800/35 rounded-lg appearance-none cursor-pointer accent-purple-400"
               />
             </div>
             <div className="space-y-1">
               <div className="flex justify-between text-[11px] font-semibold">
-                <span className="text-slate-300">Rev Limiter</span>
+                <span className="text-amber-100/80">Rev Limiter</span>
                 <span className="font-mono text-red-400">{ecuState.revLimitRpm} RPM</span>
               </div>
               <input
@@ -287,26 +287,26 @@ export const PowertrainDynoStudio: React.FC = () => {
                 step="250"
                 value={ecuState.revLimitRpm}
                 onChange={(e) => setEcuState({ ...ecuState, revLimitRpm: Number(e.target.value) })}
-                className="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-red-400"
+                className="w-full h-1.5 bg-amber-800/35 rounded-lg appearance-none cursor-pointer accent-red-400"
               />
             </div>
           </div>
 
           {/* Water Methanol Injection Toggle */}
-          <div className="pt-2 border-t border-slate-800">
+          <div className="pt-2 border-t border-amber-800/30">
             <button
               onClick={() => setEcuState({ ...ecuState, hasWaterMethanolInjection: !ecuState.hasWaterMethanolInjection })}
               className={`w-full flex items-center justify-between p-2.5 rounded-xl border text-xs font-bold transition-all cursor-pointer ${
                 ecuState.hasWaterMethanolInjection
                   ? "bg-amber-500/20 text-amber-300 border-amber-500/40 shadow-sm shadow-cyan-500/20"
-                  : "bg-slate-850 text-slate-400 border-slate-800 hover:text-slate-200"
+                  : "bg-amber-850/40 text-amber-200/60 border-amber-800/30 hover:text-amber-50"
               }`}
             >
               <div className="flex items-center gap-1.5">
                 <Droplet size={14} className={ecuState.hasWaterMethanolInjection ? "text-amber-400" : ""} />
                 <span>Water-Methanol Injection (WMI)</span>
               </div>
-              <span className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded bg-slate-900">
+              <span className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded bg-amber-900/50">
                 {ecuState.hasWaterMethanolInjection ? "ENABLED (+8 OCTANE)" : "DISABLED"}
               </span>
             </button>
@@ -337,14 +337,14 @@ export const PowertrainDynoStudio: React.FC = () => {
         {/* Right Dyno Graph Viewport (8 cols) */}
         <div className="lg:col-span-8 flex flex-col space-y-3">
           {/* Sub-graph Navigation Pills */}
-          <div className="flex items-center justify-between bg-slate-900 p-1.5 rounded-xl border border-slate-800">
+          <div className="flex items-center justify-between bg-amber-900/50 p-1.5 rounded-xl border border-amber-800/30">
             <div className="flex items-center gap-1">
               <button
                 onClick={() => setActiveGraphTab("power_torque")}
                 className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-lg transition-all ${
                   activeGraphTab === "power_torque"
                     ? "bg-amber-500 text-slate-950 shadow-md shadow-amber-500/30"
-                    : "text-slate-400 hover:text-slate-200"
+                    : "text-amber-200/60 hover:text-amber-50"
                 }`}
               >
                 <TrendingUp size={13} />
@@ -355,7 +355,7 @@ export const PowertrainDynoStudio: React.FC = () => {
                 className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-lg transition-all ${
                   activeGraphTab === "bmep_ve"
                     ? "bg-amber-500 text-slate-950 shadow-md shadow-amber-500/30"
-                    : "text-slate-400 hover:text-slate-200"
+                    : "text-amber-200/60 hover:text-amber-50"
                 }`}
               >
                 <BarChart2 size={13} />
@@ -366,7 +366,7 @@ export const PowertrainDynoStudio: React.FC = () => {
                 className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-lg transition-all ${
                   activeGraphTab === "egt_knock"
                     ? "bg-amber-500 text-slate-950 shadow-md shadow-amber-500/30"
-                    : "text-slate-400 hover:text-slate-200"
+                    : "text-amber-200/60 hover:text-amber-50"
                 }`}
               >
                 <Activity size={13} />
@@ -375,12 +375,12 @@ export const PowertrainDynoStudio: React.FC = () => {
             </div>
 
             <div className="flex items-center gap-3 text-xs font-mono pr-2">
-              <span className="text-slate-400">Peak: <strong className="text-amber-400">{results.peakPowerHp} HP</strong> @ {results.peakPowerRpm} RPM</span>
+              <span className="text-amber-200/60">Peak: <strong className="text-amber-400">{results.peakPowerHp} HP</strong> @ {results.peakPowerRpm} RPM</span>
             </div>
           </div>
 
           {/* SVG Dyno Graph Viewport */}
-          <div className="relative w-full h-[380px] bg-slate-950 rounded-xl border border-slate-800 overflow-hidden shadow-inner flex items-center justify-center p-4">
+          <div className="relative w-full h-[380px] bg-amber-950/80 rounded-xl border border-amber-800/30 overflow-hidden shadow-inner flex items-center justify-center p-4">
             <svg className="w-full h-full" viewBox="0 0 600 300">
               {/* Background Dyno Grid */}
               <defs>
@@ -467,25 +467,25 @@ export const PowertrainDynoStudio: React.FC = () => {
 
           {/* Summary Metric Cards */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-            <div className="bg-slate-900 p-3 rounded-xl border border-slate-800 flex flex-col">
-              <span className="text-[10px] font-bold text-slate-400 uppercase">Peak Horsepower</span>
+            <div className="bg-amber-900/50 p-3 rounded-xl border border-amber-800/30 flex flex-col">
+              <span className="text-[10px] font-bold text-amber-200/60 uppercase">Peak Horsepower</span>
               <span className="text-base font-mono font-extrabold text-amber-400">{results.peakPowerHp} HP</span>
-              <span className="text-[10px] text-slate-500">@ {results.peakPowerRpm} RPM</span>
+              <span className="text-[10px] text-amber-300/50">@ {results.peakPowerRpm} RPM</span>
             </div>
-            <div className="bg-slate-900 p-3 rounded-xl border border-slate-800 flex flex-col">
-              <span className="text-[10px] font-bold text-slate-400 uppercase">Peak Torque</span>
+            <div className="bg-amber-900/50 p-3 rounded-xl border border-amber-800/30 flex flex-col">
+              <span className="text-[10px] font-bold text-amber-200/60 uppercase">Peak Torque</span>
               <span className="text-base font-mono font-extrabold text-amber-400">{results.peakTorqueNm} Nm</span>
-              <span className="text-[10px] text-slate-500">@ {results.peakTorqueRpm} RPM</span>
+              <span className="text-[10px] text-amber-300/50">@ {results.peakTorqueRpm} RPM</span>
             </div>
-            <div className="bg-slate-900 p-3 rounded-xl border border-slate-800 flex flex-col">
-              <span className="text-[10px] font-bold text-slate-400 uppercase">Specific Output</span>
+            <div className="bg-amber-900/50 p-3 rounded-xl border border-amber-800/30 flex flex-col">
+              <span className="text-[10px] font-bold text-amber-200/60 uppercase">Specific Output</span>
               <span className="text-base font-mono font-extrabold text-amber-400">{results.specificOutputHpPerL} HP/L</span>
-              <span className="text-[10px] text-slate-500">Power density ratio</span>
+              <span className="text-[10px] text-amber-300/50">Power density ratio</span>
             </div>
-            <div className="bg-slate-900 p-3 rounded-xl border border-slate-800 flex flex-col">
-              <span className="text-[10px] font-bold text-slate-400 uppercase">Fuel Flow Rate</span>
+            <div className="bg-amber-900/50 p-3 rounded-xl border border-amber-800/30 flex flex-col">
+              <span className="text-[10px] font-bold text-amber-200/60 uppercase">Fuel Flow Rate</span>
               <span className="text-base font-mono font-extrabold text-emerald-400">{results.fuelFlowLitersPerHour} L/h</span>
-              <span className="text-[10px] text-slate-500">WOT consumption</span>
+              <span className="text-[10px] text-amber-300/50">WOT consumption</span>
             </div>
           </div>
         </div>

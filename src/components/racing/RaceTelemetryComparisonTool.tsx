@@ -58,27 +58,27 @@ export const RaceTelemetryComparisonTool: React.FC = memo(function RaceTelemetry
   ];
 
   return (
-    <div className="bg-slate-900/80 backdrop-blur-xl p-6 rounded-2xl border border-slate-800 space-y-5 text-slate-100 shadow-2xl">
+    <div className="bg-amber-900/40 backdrop-blur-xl p-6 rounded-2xl border border-amber-800/30 space-y-5 text-amber-50 shadow-2xl">
       {/* Header & Tabs */}
-      <div className="flex items-center justify-between border-b border-slate-800 pb-4">
+      <div className="flex items-center justify-between border-b border-amber-800/30 pb-4">
         <div>
           <h3 className="text-base font-bold text-white flex items-center space-x-2">
             <Timer className="w-5 h-5 text-amber-400" />
             <span>RACE TELEMETRY & MULTI-LAP COMPARISON</span>
           </h3>
-          <p className="text-xs text-slate-400 mt-0.5">
+          <p className="text-xs text-amber-200/60 mt-0.5">
             Compare lap deltas, cornering tire thermals, and brake energy recovery across stint laps.
           </p>
         </div>
 
-        <div className="flex items-center space-x-2 bg-slate-950 p-1 rounded-xl border border-slate-800">
+        <div className="flex items-center space-x-2 bg-amber-950/80 p-1 rounded-xl border border-amber-800/30">
           <button
             onClick={() => {
               playHMITabSound();
               setActiveTab("LAP_TIME");
             }}
             className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-              activeTab === "LAP_TIME" ? "bg-amber-600 text-white shadow-md" : "text-slate-400 hover:text-white"
+              activeTab === "LAP_TIME" ? "bg-amber-600 text-white shadow-md" : "text-amber-200/60 hover:text-white"
             }`}
           >
             LAP TIMES
@@ -89,7 +89,7 @@ export const RaceTelemetryComparisonTool: React.FC = memo(function RaceTelemetry
               setActiveTab("TIRE_TEMP");
             }}
             className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-              activeTab === "TIRE_TEMP" ? "bg-amber-600 text-white shadow-md" : "text-slate-400 hover:text-white"
+              activeTab === "TIRE_TEMP" ? "bg-amber-600 text-white shadow-md" : "text-amber-200/60 hover:text-white"
             }`}
           >
             TIRE THERMALS
@@ -98,7 +98,7 @@ export const RaceTelemetryComparisonTool: React.FC = memo(function RaceTelemetry
       </div>
 
       {/* Active Chart View */}
-      <div className="bg-slate-950/80 p-4 rounded-xl border border-slate-800">
+      <div className="bg-amber-950/80 p-4 rounded-xl border border-amber-800/30">
         {activeTab === "LAP_TIME" ? (
           <LineChart series={lapTimeSeries} xLabel="Lap Number" yLabel="Lap Time" yUnit="s" height={240} />
         ) : (

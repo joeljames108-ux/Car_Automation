@@ -238,7 +238,7 @@ export const CinematicGlobeBootSequence: React.FC<CinematicGlobeBootSequenceProp
             <h1 className="text-sm font-black tracking-widest text-white uppercase nh-gradient-text-cyan">
               APEX ENGINEER · BOOT CORE V5.0
             </h1>
-            <p className="text-[10px] font-mono text-slate-400 tracking-wider">
+            <p className="text-[10px] font-mono text-amber-200/60 tracking-wider">
               SPATIAL SPHERE & MULTI-PHYSICS SIMULATOR
             </p>
           </div>
@@ -249,7 +249,7 @@ export const CinematicGlobeBootSequence: React.FC<CinematicGlobeBootSequenceProp
             playHMIClickSound();
             onComplete();
           }}
-          className="px-4 py-1.5 rounded-full bg-white/5 hover:bg-white/15 border border-white/10 text-xs font-mono text-slate-300 hover:text-white transition-all flex items-center gap-1.5 cursor-pointer shadow-lg"
+          className="px-4 py-1.5 rounded-full bg-white/5 hover:bg-white/15 border border-white/10 text-xs font-mono text-amber-100/80 hover:text-white transition-all flex items-center gap-1.5 cursor-pointer shadow-lg"
         >
           <span>SKIP INTRO</span>
           <ArrowRight size={12} />
@@ -270,11 +270,11 @@ export const CinematicGlobeBootSequence: React.FC<CinematicGlobeBootSequenceProp
             style={{ width: `${progress}%` }}
           />
         </div>
-        <span className="font-mono text-[10px] text-slate-400 tracking-widest">{progress}% COMPILED</span>
+        <span className="font-mono text-[10px] text-amber-200/60 tracking-widest">{progress}% COMPILED</span>
       </div>
 
       {/* Footer telemetry */}
-      <div className="relative z-10 flex items-center justify-between text-[10px] font-mono text-slate-500 border-t border-white/10 pt-3">
+      <div className="relative z-10 flex items-center justify-between text-[10px] font-mono text-amber-300/50 border-t border-white/10 pt-3">
         <span>QUANTUM CORE · 60 FPS DETERMINISTIC SYNC</span>
         <span>LAT: 0.00° / LON: 0.00° / ORBIT: SYNCHRONOUS</span>
       </div>

@@ -109,7 +109,7 @@ export function NeonAudioStudio() {
   };
 
   return (
-    <div className="w-full flex flex-col gap-6 text-slate-100 animate-nh-materialize">
+    <div className="w-full flex flex-col gap-6 text-amber-50 animate-nh-materialize">
       {/* Header */}
       <NeonHorizonGlassPanel
         variant="window"
@@ -194,8 +194,8 @@ export function NeonAudioStudio() {
 
             <div className="flex items-center justify-between p-3 rounded-xl bg-[#0a111e] border border-sky-400/15">
               <div className="flex flex-col">
-                <span className="text-xs font-bold text-slate-200">Active Exhaust Bypass Valves</span>
-                <span className="text-[10px] text-slate-400">Open for full unmuffled racing resonance</span>
+                <span className="text-xs font-bold text-amber-50">Active Exhaust Bypass Valves</span>
+                <span className="text-[10px] text-amber-200/60">Open for full unmuffled racing resonance</span>
               </div>
               <NeonHorizonToggle
                 label="Active Bypass Valves"
@@ -209,7 +209,7 @@ export function NeonAudioStudio() {
             </div>
 
             <div className="flex flex-col gap-2">
-              <span className="text-xs font-bold text-slate-300">Exhaust Header Metallurgy:</span>
+              <span className="text-xs font-bold text-amber-100/80">Exhaust Header Metallurgy:</span>
               <div className="grid grid-cols-3 gap-2">
                 {[
                   { id: "titanium", name: "Titanium" },
@@ -227,7 +227,7 @@ export function NeonAudioStudio() {
                       className={`p-2.5 rounded-lg border text-center text-xs font-bold cursor-pointer transition-all ${
  isSelected
  ? "bg-sky-400/10 border-sky-400/30 text-sky-200"
- : "bg-[#0a111e] border-white/10 text-slate-400 hover:border-sky-400/25"
+ : "bg-[#0a111e] border-white/10 text-amber-200/60 hover:border-sky-400/25"
  }`}
                     >
                       {item.name}

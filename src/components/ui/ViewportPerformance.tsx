@@ -16,7 +16,7 @@ export const ViewportSkeleton: React.FC<{
   height?: string;
   label?: string;
 }> = ({ height = "h-[500px]", label = "Loading 3D Viewport..." }) => (
-  <div className={"relative overflow-hidden rounded-2xl bg-slate-900/80 border border-amber-500/20 " + height}>
+  <div className={"relative overflow-hidden rounded-2xl bg-amber-900/40 border border-amber-500/20 " + height}>
     <div className="absolute inset-0 bg-gradient-to-r from-transparent via-amber-500/5 to-transparent animate-[shimmer_2s_infinite]" />
     <div className="absolute inset-0 flex flex-col items-center justify-center gap-3">
       <div className="w-10 h-10 rounded-xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center">
@@ -49,12 +49,12 @@ export class ViewportErrorBoundary extends React.Component<
   render() {
     if (this.state.hasError) {
       return (
-        <div className="relative overflow-hidden rounded-2xl bg-slate-900/90 border border-red-500/30 h-[400px] flex flex-col items-center justify-center gap-4 p-6 text-center">
+        <div className="relative overflow-hidden rounded-2xl bg-amber-900/40 border border-red-500/30 h-[400px] flex flex-col items-center justify-center gap-4 p-6 text-center">
           <div className="w-12 h-12 rounded-xl bg-red-500/20 border border-red-500/40 flex items-center justify-center text-red-400 text-xl">!
           </div>
           <div>
             <h3 className="text-sm font-bold text-red-300 mb-1">{this.props.fallbackLabel || "3D Viewport"} Error</h3>
-            <p className="text-xs text-slate-400 max-w-md">{this.state.error?.message}</p>
+            <p className="text-xs text-amber-200/60 max-w-md">{this.state.error?.message}</p>
           </div>
           <button
             onClick={() => this.setState({ hasError: false, error: null })}

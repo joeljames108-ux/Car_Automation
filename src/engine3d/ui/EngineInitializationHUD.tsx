@@ -51,7 +51,7 @@ export const EngineInitializationHUD: React.FC = () => {
 
   return (
     <div
-      className={`absolute bottom-4 left-4 z-40 bg-slate-950/85 backdrop-blur-md border border-slate-800/80 rounded-xl p-3 shadow-2xl transition-all duration-500 w-72 pointer-events-none select-none ${
+      className={`absolute bottom-4 left-4 z-40 bg-amber-950/80 backdrop-blur-md border border-amber-800/40 rounded-xl p-3 shadow-2xl transition-all duration-500 w-72 pointer-events-none select-none ${
         isComplete ? 'opacity-0 translate-y-2' : 'opacity-100 translate-y-0'
       }`}
     >
@@ -62,7 +62,7 @@ export const EngineInitializationHUD: React.FC = () => {
           ) : (
             <Flame size={15} className="text-amber-400 animate-pulse" />
           )}
-          <span className="text-xs font-bold text-slate-200 tracking-wide">
+          <span className="text-xs font-bold text-amber-50 tracking-wide">
             {isComplete ? 'ASSET STREAMING READY' : 'ENGINE INITIALIZATION'}
           </span>
         </div>
@@ -70,15 +70,15 @@ export const EngineInitializationHUD: React.FC = () => {
       </div>
 
       {/* Progress Bar Track */}
-      <div className="w-full bg-slate-800/90 h-1.5 rounded-full overflow-hidden mb-1.5 border border-slate-700/50">
+      <div className="w-full bg-amber-900/50 h-1.5 rounded-full overflow-hidden mb-1.5 border border-amber-700/30">
         <div
           className="bg-gradient-to-r from-amber-500 to-amber-500 h-full transition-all duration-300 rounded-full"
           style={{ width: `${progress.percentage}%` }}
         />
       </div>
 
-      <div className="flex items-center justify-between text-[10px] text-slate-400 font-mono">
-        <span className="truncate max-w-[170px] text-slate-300 font-semibold">{currentStepName}</span>
+      <div className="flex items-center justify-between text-[10px] text-amber-200/60 font-mono">
+        <span className="truncate max-w-[170px] text-amber-100/80 font-semibold">{currentStepName}</span>
         <span>
           {progress.loadedAssets}/{progress.totalAssets}
         </span>

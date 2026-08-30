@@ -40,7 +40,7 @@ export function NeonDynoEcuStudio() {
   const tunedTorque = Math.round(sim.peakTorque * currentMultiplier * (boostTarget / 1.4));
 
   return (
-    <div className="w-full flex flex-col gap-6 text-slate-100 animate-nh-materialize">
+    <div className="w-full flex flex-col gap-6 text-amber-50 animate-nh-materialize">
       {/* Header */}
       <NeonHorizonGlassPanel
         variant="window"
@@ -79,7 +79,7 @@ export function NeonDynoEcuStudio() {
               className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs nh-font-mono font-bold transition-all cursor-pointer whitespace-nowrap ${
  isActive
  ? "bg-sky-400/20 text-sky-200 border border-sky-400/30"
- : "text-slate-400 hover:text-slate-200 hover:bg-white/5"
+ : "text-amber-200/60 hover:text-amber-50 hover:bg-white/5"
  }`}
             >
               {tab.icon}
@@ -168,15 +168,15 @@ export function NeonDynoEcuStudio() {
             >
               <div className="flex flex-col gap-3">
                 <div className="flex items-center justify-between p-3 rounded-xl bg-black/40 border border-white/10">
-                  <span className="text-xs text-slate-300 font-bold">HORSEPOWER GAIN</span>
+                  <span className="text-xs text-amber-100/80 font-bold">HORSEPOWER GAIN</span>
                   <span className="text-sm font-mono font-bold text-emerald-400">+{tunedHp - sim.peakPower} HP</span>
                 </div>
                 <div className="flex items-center justify-between p-3 rounded-xl bg-black/40 border border-white/10">
-                  <span className="text-xs text-slate-300 font-bold">TORQUE GAIN</span>
+                  <span className="text-xs text-amber-100/80 font-bold">TORQUE GAIN</span>
                   <span className="text-sm font-mono font-bold text-sky-400">+{tunedTorque - sim.peakTorque} Nm</span>
                 </div>
                 <div className="flex items-center justify-between p-3 rounded-xl bg-black/40 border border-white/10">
-                  <span className="text-xs text-slate-300 font-bold">TURBO LAG INDEX</span>
+                  <span className="text-xs text-amber-100/80 font-bold">TURBO LAG INDEX</span>
                   <span className="text-sm font-mono font-bold text-yellow-400">{antiLag ? "0.08s (ALS ON)" : "0.34s"}</span>
                 </div>
               </div>

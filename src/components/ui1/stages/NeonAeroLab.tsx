@@ -180,7 +180,7 @@ export function NeonAeroLab() {
   /* ─── Auto-Balance Pills (shared between views) ─── */
   const AutoBalancePills = (
     <div className="flex items-center gap-2 flex-wrap">
-      <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+      <span className="text-[10px] font-bold text-amber-200/60 uppercase tracking-wider">
         AUTO BALANCE:
       </span>
       <button
@@ -188,7 +188,7 @@ export function NeonAeroLab() {
         className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[10px] font-semibold transition-all cursor-pointer ${
  balanceMode === "balanced"
  ? "bg-emerald-500/20 text-emerald-300 border border-emerald-400/50"
- : "bg-white/[0.04] text-slate-400 hover:text-slate-200 border border-white/8"
+ : "bg-white/[0.04] text-amber-200/60 hover:text-amber-50 border border-white/8"
  }`}
       >
         <Scale size={12} className="text-emerald-400" />
@@ -199,7 +199,7 @@ export function NeonAeroLab() {
         className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[10px] font-semibold transition-all cursor-pointer ${
  balanceMode === "max_downforce"
  ? "bg-sky-400/15 text-sky-300 border border-sky-400/35"
- : "bg-white/[0.04] text-slate-400 hover:text-slate-200 border border-white/8"
+ : "bg-white/[0.04] text-amber-200/60 hover:text-amber-50 border border-white/8"
  }`}
       >
         <Wind size={12} className="text-sky-400" />
@@ -210,7 +210,7 @@ export function NeonAeroLab() {
         className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[10px] font-semibold transition-all cursor-pointer ${
  balanceMode === "low_drag"
  ? "bg-sky-400/15 text-sky-300 border border-sky-400/35"
- : "bg-white/[0.04] text-slate-400 hover:text-slate-200 border border-white/8"
+ : "bg-white/[0.04] text-amber-200/60 hover:text-amber-50 border border-white/8"
  }`}
       >
         <Rocket size={12} className="text-sky-400" />
@@ -234,7 +234,7 @@ export function NeonAeroLab() {
             className={`flex items-center gap-1 px-3 py-1.5 rounded-full text-[10px] font-semibold whitespace-nowrap transition-all cursor-pointer ${
  isActive
  ? "bg-sky-400/20 text-sky-100 border border-sky-300/40"
- : "bg-white/[0.04] text-slate-400 hover:text-slate-200 border border-white/6"
+ : "bg-white/[0.04] text-amber-200/60 hover:text-amber-50 border border-white/6"
  }`}
           >
             {tab.icon}
@@ -248,23 +248,23 @@ export function NeonAeroLab() {
   /* ─── CFD Lab Data + Camera card (shared) ─── */
   const CfdLabCard = (
     <div className={`${innerCard} p-4 flex flex-col justify-between gap-2.5`}>
-      <span className="text-xs font-bold text-slate-300 uppercase tracking-wider">
+      <span className="text-xs font-bold text-amber-100/80 uppercase tracking-wider">
         CFD LAB DATA
       </span>
       <div className="flex flex-col gap-1 text-xs">
         <div className="flex items-center justify-between">
-          <span className="text-slate-400">Drag Cd:</span>
-          <span className="font-bold text-slate-200">0.315</span>
+          <span className="text-amber-200/60">Drag Cd:</span>
+          <span className="font-bold text-amber-50">0.315</span>
         </div>
         <div className="flex items-center justify-between">
-          <span className="text-slate-400">Power Loss:</span>
-          <span className="font-bold text-slate-200">14 kW @ 200 km/h</span>
+          <span className="text-amber-200/60">Power Loss:</span>
+          <span className="font-bold text-amber-50">14 kW @ 200 km/h</span>
         </div>
       </div>
       <div className="flex items-center justify-between pt-1 border-t border-white/8">
         <div className="flex flex-col">
-          <span className="text-xs font-bold text-slate-200">Camera</span>
-          <span className="text-[10px] text-slate-400">Racetrack Cam</span>
+          <span className="text-xs font-bold text-amber-50">Camera</span>
+          <span className="text-[10px] text-amber-200/60">Racetrack Cam</span>
         </div>
         <button
           onClick={() => setCameraActive(!cameraActive)}
@@ -295,7 +295,7 @@ export function NeonAeroLab() {
     <div className={`${innerCard} p-4 flex flex-col justify-between gap-2`}>
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-1.5">
-          <span className="text-xs font-bold text-slate-300 uppercase tracking-wider">
+          <span className="text-xs font-bold text-amber-100/80 uppercase tracking-wider">
             AERO FORCES OVER VELOCITY
           </span>
           <span className="w-2 h-2 rounded-full border border-sky-400" />
@@ -306,7 +306,7 @@ export function NeonAeroLab() {
             className={`px-2 py-0.5 rounded-full text-[9px] font-semibold transition-all ${
  timeScale === "monthly"
  ? "bg-white text-slate-900 font-bold"
- : "text-slate-400"
+ : "text-amber-200/60"
  }`}
           >
             Monthly
@@ -316,7 +316,7 @@ export function NeonAeroLab() {
             className={`px-2 py-0.5 rounded-full text-[9px] font-semibold transition-all ${
  timeScale === "weekly"
  ? "bg-white text-slate-900 font-bold"
- : "text-slate-400"
+ : "text-amber-200/60"
  }`}
           >
             Weekly
@@ -324,9 +324,9 @@ export function NeonAeroLab() {
         </div>
       </div>
       <div className="w-full h-36 relative flex flex-col justify-between pt-1">
-        <span className="text-[8px] text-slate-500 font-mono">Newtons</span>
+        <span className="text-[8px] text-amber-300/50 font-mono">Newtons</span>
         <div className="flex-1 w-full relative">
-          <div className="absolute left-0 top-0 bottom-0 flex flex-col justify-between text-[7px] text-slate-600 font-mono pointer-events-none">
+          <div className="absolute left-0 top-0 bottom-0 flex flex-col justify-between text-[7px] text-amber-400 font-mono pointer-events-none">
             <span>200</span>
             <span>150</span>
             <span>100</span>
@@ -365,7 +365,7 @@ export function NeonAeroLab() {
             />
           </svg>
         </div>
-        <div className="flex items-center justify-between text-[8px] text-slate-500 font-mono pl-6 pr-2 pt-1 border-t border-white/6">
+        <div className="flex items-center justify-between text-[8px] text-amber-300/50 font-mono pl-6 pr-2 pt-1 border-t border-white/6">
           <span>Jan</span>
           <span>Feb</span>
           <span>Mar</span>
@@ -381,14 +381,14 @@ export function NeonAeroLab() {
      ========================================================================= */
   if (!isDashboardView) {
     return (
-      <div className="w-full flex flex-col gap-4 text-slate-100 animate-nh-materialize select-none">
+      <div className="w-full flex flex-col gap-4 text-amber-50 animate-nh-materialize select-none">
         {/* Title Row + Auto Balance */}
         <div className="flex items-center justify-between gap-4 flex-wrap">
           <div className="flex items-center gap-2.5">
-            <div className="w-7 h-7 rounded-full bg-white/[0.06] border border-white/10 flex items-center justify-center text-slate-200">
+            <div className="w-7 h-7 rounded-full bg-white/[0.06] border border-white/10 flex items-center justify-center text-amber-50">
               <Shield size={16} />
             </div>
-            <h2 className="text-sm font-bold text-slate-100 tracking-wide uppercase">
+            <h2 className="text-sm font-bold text-amber-50 tracking-wide uppercase">
               FRAME & BODY MATERIALS
             </h2>
           </div>
@@ -403,7 +403,7 @@ export function NeonAeroLab() {
           >
             {/* Dropdown 1: FRAME MATERIAL */}
             <div className="flex flex-col gap-1.5 relative">
-              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+              <span className="text-[10px] font-bold text-amber-200/60 uppercase tracking-wider">
                 FRAME MATERIAL
               </span>
               <button
@@ -414,12 +414,12 @@ export function NeonAeroLab() {
                 }}
                 className="w-full p-3 rounded-2xl bg-[#0e1626]/80 hover:bg-[#111a2b] border border-white/10 flex items-center justify-between transition-all cursor-pointer"
               >
-                <span className="text-sm font-medium text-slate-200">
+                <span className="text-sm font-medium text-amber-50">
                   {frameMaterial}
                 </span>
                 <ChevronDown
                   size={16}
-                  className={`text-slate-400 transition-transform ${
+                  className={`text-amber-200/60 transition-transform ${
  frameDropdownOpen ? "rotate-180" : ""
  }`}
                 />
@@ -442,7 +442,7 @@ export function NeonAeroLab() {
                       className={`p-2.5 rounded-xl text-left text-xs transition-colors cursor-pointer ${
  frameMaterial === mat
  ? "bg-sky-400/15 text-sky-300 font-bold"
- : "text-slate-300 hover:bg-white/5"
+ : "text-amber-100/80 hover:bg-white/5"
  }`}
                     >
                       {mat}
@@ -454,7 +454,7 @@ export function NeonAeroLab() {
 
             {/* Dropdown 2: BODY MATERIAL */}
             <div className="flex flex-col gap-1.5 relative">
-              <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+              <span className="text-[10px] font-bold text-amber-200/60 uppercase tracking-wider">
                 BODY MATERIAL
               </span>
               <button
@@ -465,12 +465,12 @@ export function NeonAeroLab() {
                 }}
                 className="w-full p-3 rounded-2xl bg-[#0e1626]/80 hover:bg-[#111a2b] border border-white/10 flex items-center justify-between transition-all cursor-pointer"
               >
-                <span className="text-sm font-medium text-slate-200">
+                <span className="text-sm font-medium text-amber-50">
                   {bodyMaterial}
                 </span>
                 <ChevronDown
                   size={16}
-                  className={`text-slate-400 transition-transform ${
+                  className={`text-amber-200/60 transition-transform ${
  bodyDropdownOpen ? "rotate-180" : ""
  }`}
                 />
@@ -493,7 +493,7 @@ export function NeonAeroLab() {
                       className={`p-2.5 rounded-xl text-left text-xs transition-colors cursor-pointer ${
  bodyMaterial === mat
  ? "bg-sky-400/15 text-sky-300 font-bold"
- : "text-slate-300 hover:bg-white/5"
+ : "text-amber-100/80 hover:bg-white/5"
  }`}
                     >
                       {mat}
@@ -506,23 +506,23 @@ export function NeonAeroLab() {
             {/* 2x2 Indicators Grid */}
             <div className="grid grid-cols-2 gap-3 pt-2">
               <div className={`${innerCard} flex flex-col justify-between`}>
-                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                <span className="text-[10px] font-bold text-amber-200/60 uppercase tracking-wider">
                   FRAME WT FACTOR
                 </span>
-                <span className="text-2xl font-extrabold text-slate-100 mt-2">
+                <span className="text-2xl font-extrabold text-amber-50 mt-2">
                   0.15
                 </span>
               </div>
               <div className={`${innerCard} flex flex-col justify-between`}>
-                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                <span className="text-[10px] font-bold text-amber-200/60 uppercase tracking-wider">
                   FRAME STRENGTH
                 </span>
-                <span className="text-2xl font-extrabold text-slate-100 mt-2">
+                <span className="text-2xl font-extrabold text-amber-50 mt-2">
                   0.98
                 </span>
               </div>
               <div className={`${innerCard} flex flex-col justify-between`}>
-                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                <span className="text-[10px] font-bold text-amber-200/60 uppercase tracking-wider">
                   FRAME $/kg
                 </span>
                 <span className="text-2xl font-extrabold text-amber-300 mt-2">
@@ -530,7 +530,7 @@ export function NeonAeroLab() {
                 </span>
               </div>
               <div className={`${innerCard} flex flex-col justify-between`}>
-                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                <span className="text-[10px] font-bold text-amber-200/60 uppercase tracking-wider">
                   CORROSION RESIST
                 </span>
                 <span className="text-2xl font-extrabold text-emerald-400 mt-2">
@@ -545,13 +545,13 @@ export function NeonAeroLab() {
             {/* 2 Metric Cards */}
             <div className="grid grid-cols-2 gap-3">
               <div className={`${innerCard} p-4 flex flex-col justify-between`}>
-                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                <span className="text-[10px] font-bold text-amber-200/60 uppercase tracking-wider">
                   TOP SPEED IMPACT
                 </span>
                 <div className="flex items-baseline justify-between mt-2">
-                  <span className="text-2xl font-extrabold text-slate-100">
+                  <span className="text-2xl font-extrabold text-amber-50">
                     284{" "}
-                    <span className="text-xs font-medium text-slate-400">
+                    <span className="text-xs font-medium text-amber-200/60">
                       km/h
                     </span>
                   </span>
@@ -561,11 +561,11 @@ export function NeonAeroLab() {
                 </div>
               </div>
               <div className={`${innerCard} p-4 flex flex-col justify-between`}>
-                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                <span className="text-[10px] font-bold text-amber-200/60 uppercase tracking-wider">
                   EST. LAP TIME IMPACT
                 </span>
                 <div className="flex items-baseline justify-between mt-2">
-                  <span className="text-2xl font-extrabold text-slate-100">
+                  <span className="text-2xl font-extrabold text-amber-50">
                     146.22s
                   </span>
                   <span className="flex items-center gap-1 text-[11px] font-semibold text-emerald-400">
@@ -594,14 +594,14 @@ export function NeonAeroLab() {
      VIEW 2: AERODYNAMICS RESEARCH CENTER (when on Aero Dashboard tab)
      ========================================================================= */
   return (
-    <div className="w-full flex flex-col gap-4 text-slate-100 animate-nh-materialize select-none">
+    <div className="w-full flex flex-col gap-4 text-amber-50 animate-nh-materialize select-none">
       {/* Title Row + Auto Balance */}
       <div className="flex items-center justify-between gap-4 flex-wrap">
         <div className="flex items-center gap-2.5">
-          <div className="w-7 h-7 rounded-full bg-white/[0.06] border border-white/10 flex items-center justify-center text-slate-200">
+          <div className="w-7 h-7 rounded-full bg-white/[0.06] border border-white/10 flex items-center justify-center text-amber-50">
             <Gauge size={16} />
           </div>
-          <h2 className="text-sm font-bold text-slate-100 tracking-wide uppercase">
+          <h2 className="text-sm font-bold text-amber-50 tracking-wide uppercase">
             Aerodynamics Research Center
           </h2>
         </div>
@@ -612,11 +612,11 @@ export function NeonAeroLab() {
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-3">
         {/* DRAG CO */}
         <div className={`${innerCard} p-4 flex flex-col justify-between`}>
-          <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+          <span className="text-[10px] font-bold text-amber-200/60 uppercase tracking-wider">
             DRAG CO
           </span>
           <div className="flex items-baseline justify-between mt-2">
-            <span className="text-2xl font-extrabold text-slate-100">
+            <span className="text-2xl font-extrabold text-amber-50">
               0.417
             </span>
             <span className="flex items-center gap-1 text-[10px] font-semibold text-emerald-400">
@@ -628,13 +628,13 @@ export function NeonAeroLab() {
 
         {/* DOWNFORCE LOAD */}
         <div className={`${innerCard} p-4 flex flex-col justify-between`}>
-          <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+          <span className="text-[10px] font-bold text-amber-200/60 uppercase tracking-wider">
             DOWNFORCE LOAD
           </span>
           <div className="flex items-baseline justify-between mt-2">
-            <span className="text-2xl font-extrabold text-slate-100">
+            <span className="text-2xl font-extrabold text-amber-50">
               5774{" "}
-              <span className="text-xs font-medium text-slate-400">N</span>
+              <span className="text-xs font-medium text-amber-200/60">N</span>
             </span>
             <span className="flex items-center gap-1 text-[10px] font-semibold text-emerald-400">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
@@ -645,13 +645,13 @@ export function NeonAeroLab() {
 
         {/* TOP SPEED IMPACT */}
         <div className={`${innerCard} p-4 flex flex-col justify-between`}>
-          <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+          <span className="text-[10px] font-bold text-amber-200/60 uppercase tracking-wider">
             TOP SPEED IMPACT
           </span>
           <div className="flex items-baseline justify-between mt-2">
-            <span className="text-2xl font-extrabold text-slate-100">
+            <span className="text-2xl font-extrabold text-amber-50">
               284{" "}
-              <span className="text-xs font-medium text-slate-400">km/h</span>
+              <span className="text-xs font-medium text-amber-200/60">km/h</span>
             </span>
             <span className="px-2 py-0.5 rounded-full bg-sky-400/10 text-sky-300 text-[10px] font-bold border border-sky-400/30">
               Sports Pace
@@ -661,11 +661,11 @@ export function NeonAeroLab() {
 
         {/* EST. LAP TIME IMPACT */}
         <div className={`${innerCard} p-4 flex flex-col justify-between`}>
-          <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+          <span className="text-[10px] font-bold text-amber-200/60 uppercase tracking-wider">
             EST. LAP TIME IMPACT
           </span>
           <div className="flex items-baseline justify-between mt-2">
-            <span className="text-2xl font-extrabold text-slate-100">
+            <span className="text-2xl font-extrabold text-amber-50">
               146.22s
             </span>
             <span className="flex items-center gap-1 text-[11px] font-semibold text-emerald-400">
@@ -684,8 +684,8 @@ export function NeonAeroLab() {
         {/* Col 1: AERO PERFORMANCE DASHBOARD (3x3 grid) */}
         <div className={`${innerCard} p-4 flex flex-col gap-3`}>
           <div className="flex items-center gap-1.5">
-            <BarChart3 size={14} className="text-slate-300" />
-            <span className="text-xs font-bold text-slate-300 uppercase tracking-wider">
+            <BarChart3 size={14} className="text-amber-100/80" />
+            <span className="text-xs font-bold text-amber-100/80 uppercase tracking-wider">
               AERO PERFORMANCE DASHBOARD
             </span>
           </div>
@@ -693,57 +693,57 @@ export function NeonAeroLab() {
           <div className="grid grid-cols-3 gap-2">
             {/* Row 1 */}
             <div className="flex flex-col gap-0.5">
-              <span className="text-[8px] font-bold text-slate-500 uppercase tracking-wider">
+              <span className="text-[8px] font-bold text-amber-300/50 uppercase tracking-wider">
                 DRAG COEFFICIENT
               </span>
-              <span className="text-lg font-extrabold text-slate-100">
+              <span className="text-lg font-extrabold text-amber-50">
                 0.417
               </span>
             </div>
             <div className="flex flex-col gap-0.5">
-              <span className="text-[8px] font-bold text-slate-500 uppercase tracking-wider">
+              <span className="text-[8px] font-bold text-amber-300/50 uppercase tracking-wider">
                 LIFT COEFFICIENT
               </span>
-              <span className="text-lg font-extrabold text-slate-100">
+              <span className="text-lg font-extrabold text-amber-50">
                 -0.897
               </span>
             </div>
             <div className="flex flex-col gap-0.5">
-              <span className="text-[8px] font-bold text-slate-500 uppercase tracking-wider">
+              <span className="text-[8px] font-bold text-amber-300/50 uppercase tracking-wider">
                 FRONT DOWNFORCE
               </span>
-              <span className="text-lg font-extrabold text-slate-100">
+              <span className="text-lg font-extrabold text-amber-50">
                 2741{" "}
-                <span className="text-[9px] font-medium text-slate-400">N</span>
+                <span className="text-[9px] font-medium text-amber-200/60">N</span>
               </span>
             </div>
 
             {/* Row 2 */}
             <div className="flex flex-col gap-0.5">
-              <span className="text-[8px] font-bold text-slate-500 uppercase tracking-wider">
+              <span className="text-[8px] font-bold text-amber-300/50 uppercase tracking-wider">
                 Dl @ 100 KM/H
               </span>
-              <span className="text-lg font-extrabold text-slate-100">
+              <span className="text-lg font-extrabold text-amber-50">
                 924{" "}
-                <span className="text-[9px] font-medium text-slate-400">N</span>
+                <span className="text-[9px] font-medium text-amber-200/60">N</span>
               </span>
             </div>
             <div className="flex flex-col gap-0.5">
-              <span className="text-[8px] font-bold text-slate-500 uppercase tracking-wider">
+              <span className="text-[8px] font-bold text-amber-300/50 uppercase tracking-wider">
                 Dl @ 200 KM/H
               </span>
-              <span className="text-lg font-extrabold text-slate-100">
+              <span className="text-lg font-extrabold text-amber-50">
                 3695{" "}
-                <span className="text-[9px] font-medium text-slate-400">N</span>
+                <span className="text-[9px] font-medium text-amber-200/60">N</span>
               </span>
             </div>
             <div className="flex flex-col gap-0.5">
-              <span className="text-[8px] font-bold text-slate-500 uppercase tracking-wider">
+              <span className="text-[8px] font-bold text-amber-300/50 uppercase tracking-wider">
                 TOP SPEED
               </span>
-              <span className="text-lg font-extrabold text-slate-100">
+              <span className="text-lg font-extrabold text-amber-50">
                 2813{" "}
-                <span className="text-[9px] font-medium text-slate-400">
+                <span className="text-[9px] font-medium text-amber-200/60">
                   km/h
                 </span>
               </span>
@@ -751,22 +751,22 @@ export function NeonAeroLab() {
 
             {/* Row 3 */}
             <div className="flex flex-col gap-0.5">
-              <span className="text-[8px] font-bold text-slate-500 uppercase tracking-wider">
+              <span className="text-[8px] font-bold text-amber-300/50 uppercase tracking-wider">
                 COOLING EFFL.
               </span>
-              <span className="text-lg font-extrabold text-slate-100">83%</span>
+              <span className="text-lg font-extrabold text-amber-50">83%</span>
             </div>
             <div className="flex flex-col gap-0.5">
-              <span className="text-[8px] font-bold text-slate-500 uppercase tracking-wider">
+              <span className="text-[8px] font-bold text-amber-300/50 uppercase tracking-wider">
                 AERO BALANCE
               </span>
-              <span className="text-lg font-extrabold text-slate-100">55%</span>
+              <span className="text-lg font-extrabold text-amber-50">55%</span>
             </div>
             <div className="flex flex-col gap-0.5">
-              <span className="text-[8px] font-bold text-slate-500 uppercase tracking-wider">
+              <span className="text-[8px] font-bold text-amber-300/50 uppercase tracking-wider">
                 WIND NOISE
               </span>
-              <span className="text-lg font-extrabold text-slate-100">64%</span>
+              <span className="text-lg font-extrabold text-amber-50">64%</span>
             </div>
           </div>
         </div>

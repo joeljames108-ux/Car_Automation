@@ -226,11 +226,11 @@ export const TrackDiagramModal: React.FC<TrackDiagramModalProps> = ({
             <div>
               <div className="flex items-center gap-2">
                 <h3 className="text-lg font-bold text-white tracking-wide">{track.name}</h3>
-                <span className="text-xs px-2 py-0.5 rounded-full bg-base-800 text-slate-400 border border-base-700">
+                <span className="text-xs px-2 py-0.5 rounded-full bg-base-800 text-amber-200/60 border border-base-700">
                   {track.country}
                 </span>
               </div>
-              <p className="text-xs text-slate-400 flex items-center gap-2 mt-0.5">
+              <p className="text-xs text-amber-200/60 flex items-center gap-2 mt-0.5">
                 <span>{track.length.toFixed(3)} km</span>
                 <span>•</span>
                 <span>{track.highSpeed ? "High Speed Circuit" : "Technical Circuit"}</span>
@@ -241,7 +241,7 @@ export const TrackDiagramModal: React.FC<TrackDiagramModalProps> = ({
           </div>
           <button
             onClick={onClose}
-            className="p-2 text-slate-400 hover:text-white rounded-lg hover:bg-base-800 transition-colors"
+            className="p-2 text-amber-200/60 hover:text-white rounded-lg hover:bg-base-800 transition-colors"
           >
             <X size={20} />
           </button>
@@ -260,7 +260,7 @@ export const TrackDiagramModal: React.FC<TrackDiagramModalProps> = ({
               <div className="text-xl font-mono font-bold text-white mt-1">
                 {s1Time.toFixed(3)}s
               </div>
-              <div className="text-[10px] text-slate-400 mt-1">
+              <div className="text-[10px] text-amber-200/60 mt-1">
                 Speed & Entry Zone
               </div>
             </div>
@@ -274,7 +274,7 @@ export const TrackDiagramModal: React.FC<TrackDiagramModalProps> = ({
               <div className="text-xl font-mono font-bold text-white mt-1">
                 {s2Time.toFixed(3)}s
               </div>
-              <div className="text-[10px] text-slate-400 mt-1">
+              <div className="text-[10px] text-amber-200/60 mt-1">
                 Technical Corners & Apex
               </div>
             </div>
@@ -288,7 +288,7 @@ export const TrackDiagramModal: React.FC<TrackDiagramModalProps> = ({
               <div className="text-xl font-mono font-bold text-white mt-1">
                 {s3Time.toFixed(3)}s
               </div>
-              <div className="text-[10px] text-slate-400 mt-1">
+              <div className="text-[10px] text-amber-200/60 mt-1">
                 Final Straight & Finish
               </div>
             </div>
@@ -313,16 +313,16 @@ export const TrackDiagramModal: React.FC<TrackDiagramModalProps> = ({
             {/* Visual Circuit Layout Canvas */}
             <div className="lg:col-span-2 bg-base-950 border border-base-800 rounded-xl p-5 flex flex-col justify-between items-center relative min-h-[320px]">
               <div className="w-full flex items-center justify-between mb-2">
-                <span className="text-xs font-semibold text-slate-300 flex items-center gap-1.5">
+                <span className="text-xs font-semibold text-amber-100/80 flex items-center gap-1.5">
                   <Navigation size={14} className="text-accent-400" /> Circuit Track Layout & Sector Map
                 </span>
                 
                 {/* 3D vs 2D Toggle Switch */}
-                <div className="flex items-center gap-1 bg-slate-900 border border-amber-500/30 rounded-lg p-0.5">
+                <div className="flex items-center gap-1 bg-amber-900/50 border border-amber-500/30 rounded-lg p-0.5">
                   <button
                     onClick={() => setMode3D(true)}
                     className={`flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-mono font-bold transition-all ${
-                      mode3D ? "bg-amber-500 text-slate-950 font-extrabold shadow-sm" : "text-slate-400 hover:text-white"
+                      mode3D ? "bg-amber-500 text-slate-950 font-extrabold shadow-sm" : "text-amber-200/60 hover:text-white"
                     }`}
                   >
                     <Box size={11} /> 3D RIBBON
@@ -330,7 +330,7 @@ export const TrackDiagramModal: React.FC<TrackDiagramModalProps> = ({
                   <button
                     onClick={() => setMode3D(false)}
                     className={`flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-mono font-bold transition-all ${
-                      !mode3D ? "bg-amber-500 text-slate-950 font-extrabold shadow-sm" : "text-slate-400 hover:text-white"
+                      !mode3D ? "bg-amber-500 text-slate-950 font-extrabold shadow-sm" : "text-amber-200/60 hover:text-white"
                     }`}
                   >
                     <Eye size={11} /> 2D PLAN
@@ -400,34 +400,34 @@ export const TrackDiagramModal: React.FC<TrackDiagramModalProps> = ({
                 )}
               </div>
 
-              <div className="w-full flex items-center justify-between border-t border-base-900 pt-3 text-[11px] text-slate-400">
+              <div className="w-full flex items-center justify-between border-t border-base-900 pt-3 text-[11px] text-amber-200/60">
                 <span className="flex items-center gap-1 text-emerald-400"><span className="w-2 h-2 rounded-full bg-emerald-400" /> 2 DRS Activation Zones</span>
-                <span className="font-mono text-slate-500">Physics Simulation Engine Active</span>
+                <span className="font-mono text-amber-300/50">Physics Simulation Engine Active</span>
               </div>
             </div>
 
             {/* Circuit Telemetry & Key Corner Specs */}
             <div className="space-y-4">
               <div className="bg-base-950 border border-base-800 rounded-xl p-4 space-y-3">
-                <h4 className="text-xs font-semibold text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
+                <h4 className="text-xs font-semibold text-amber-100/80 uppercase tracking-wider flex items-center gap-1.5">
                   <Gauge size={14} className="text-accent-400" /> Telemetry Benchmarks
                 </h4>
                 <div className="space-y-2.5 text-xs">
                   <div className="flex justify-between items-center pb-2 border-b border-base-850">
-                    <span className="text-slate-400">Top Speed:</span>
+                    <span className="text-amber-200/60">Top Speed:</span>
                     <span className="font-mono font-bold text-white">{topSpeed} km/h</span>
                   </div>
                   <div className="flex justify-between items-center pb-2 border-b border-base-850">
-                    <span className="text-slate-400">Average Speed:</span>
+                    <span className="text-amber-200/60">Average Speed:</span>
                     <span className="font-mono font-bold text-accent-300">{avgSpeed.toFixed(1)} km/h</span>
                   </div>
                   <div className="flex justify-between items-center pb-2 border-b border-base-850">
-                    <span className="text-slate-400">Peak Lateral Force:</span>
+                    <span className="text-amber-200/60">Peak Lateral Force:</span>
                     <span className="font-mono font-bold text-emerald-400">{maxG.toFixed(2)} G</span>
                   </div>
                   <div className="flex justify-between items-center">
-                    <span className="text-slate-400">Total Turn Count:</span>
-                    <span className="font-mono font-bold text-slate-200">
+                    <span className="text-amber-200/60">Total Turn Count:</span>
+                    <span className="font-mono font-bold text-amber-50">
                       {track.segments.filter(s => s.type === "corner").length} Corners
                     </span>
                   </div>
@@ -436,13 +436,13 @@ export const TrackDiagramModal: React.FC<TrackDiagramModalProps> = ({
 
               {/* Corner Segment Profile Breakdown */}
               <div className="bg-base-950 border border-base-800 rounded-xl p-4 space-y-3">
-                <h4 className="text-xs font-semibold text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
+                <h4 className="text-xs font-semibold text-amber-100/80 uppercase tracking-wider flex items-center gap-1.5">
                   <Activity size={14} className="text-amber-400" /> Sector Key Corners
                 </h4>
                 <div className="space-y-2 max-h-[140px] overflow-y-auto pr-1">
                   {track.segments.filter(s => s.type === "corner").slice(0, 4).map((c, i) => (
                     <div key={i} className="flex items-center justify-between text-xs p-2 rounded-lg bg-base-900/60 border border-base-850">
-                      <span className="text-slate-300 font-medium">Turn {i + 1} Radius</span>
+                      <span className="text-amber-100/80 font-medium">Turn {i + 1} Radius</span>
                       <span className="font-mono text-amber-400">{c.length}m ({c.arc}°)</span>
                     </div>
                   ))}
@@ -455,7 +455,7 @@ export const TrackDiagramModal: React.FC<TrackDiagramModalProps> = ({
 
         {/* Footer */}
         <div className="px-6 py-3 border-t border-base-800 bg-base-950 flex justify-between items-center">
-          <span className="text-xs text-slate-500 font-mono">
+          <span className="text-xs text-amber-300/50 font-mono">
             Telemetry calculated using Apex Physics Dynamics Engine
           </span>
           <button

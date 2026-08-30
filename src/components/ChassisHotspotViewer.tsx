@@ -185,11 +185,11 @@ function ChassisHotspotViewerComponent({ onSelectStage }: ChassisHotspotViewerPr
                 <Sparkles size={10} /> CLICK TO TUNE
               </span>
             </div>
-            <h3 className="text-base font-bold text-slate-100">Interactive Hotspot Diagnostics</h3>
+            <h3 className="text-base font-bold text-amber-50">Interactive Hotspot Diagnostics</h3>
           </div>
         </div>
 
-        <div className="text-xs text-slate-400 font-mono bg-slate-950/60 px-3 py-1.5 rounded-lg border border-slate-800 flex items-center gap-2">
+        <div className="text-xs text-amber-200/60 font-mono bg-amber-950/60 px-3 py-1.5 rounded-lg border border-amber-800/30 flex items-center gap-2">
           <span className="inline-block w-2 h-2 rounded-full bg-amber-400 animate-ping" />
           <span>Hover reticles to inspect • Click to edit</span>
         </div>
@@ -199,13 +199,13 @@ function ChassisHotspotViewerComponent({ onSelectStage }: ChassisHotspotViewerPr
       <div className="relative w-full overflow-x-auto py-2 flex justify-center items-center group">
         <button
           onClick={openZoomModal}
-          className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity bg-slate-900/90 border border-amber-500/50 text-amber-400 p-2 rounded-full shadow-lg z-30 hover:bg-amber-950 active:scale-95 cursor-pointer flex items-center gap-1.5 text-xs font-mono font-bold px-3"
+          className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity bg-amber-900/40 border border-amber-500/50 text-amber-400 p-2 rounded-full shadow-lg z-30 hover:bg-amber-950 active:scale-95 cursor-pointer flex items-center gap-1.5 text-xs font-mono font-bold px-3"
           title="Click to Zoom Chassis Blueprint"
         >
           <Maximize2 size={12} />
           <span>Zoom Blueprint</span>
         </button>
-        <div className="relative w-[800px] h-[300px] flex-shrink-0 rounded-2xl overflow-hidden border border-amber-500/30 bg-slate-950/80 shadow-[0_0_30px_rgba(0,0,0,0.5)]">
+        <div className="relative w-[800px] h-[300px] flex-shrink-0 rounded-2xl overflow-hidden border border-amber-500/30 bg-amber-950/80 shadow-[0_0_30px_rgba(0,0,0,0.5)]">
           {/* Blueprint Image */}
           <img
             src="/chassis_hotspots_diagram.png"
@@ -274,7 +274,7 @@ function ChassisHotspotViewerComponent({ onSelectStage }: ChassisHotspotViewerPr
               }}
             >
               <div
-                className={`w-64 p-3 rounded-xl bg-slate-950/90 backdrop-blur-2xl border ${currentHotspotObj.color} shadow-[0_0_30px_rgba(0,0,0,0.8)] animate-in fade-in zoom-in-95 duration-200 pointer-events-auto`}
+                className={`w-64 p-3 rounded-xl bg-amber-950/90 backdrop-blur-2xl border ${currentHotspotObj.color} shadow-[0_0_30px_rgba(0,0,0,0.8)] animate-in fade-in zoom-in-95 duration-200 pointer-events-auto`}
               >
                 <div className="flex items-center justify-between mb-1.5">
                   <div className="flex items-center gap-1.5 font-mono text-xs font-bold">
@@ -286,7 +286,7 @@ function ChassisHotspotViewerComponent({ onSelectStage }: ChassisHotspotViewerPr
                   </span>
                 </div>
                 <div className="text-sm font-bold text-white mb-0.5">{currentHotspotObj.stat}</div>
-                <div className="text-[11px] text-slate-400 leading-tight">{currentHotspotObj.detail}</div>
+                <div className="text-[11px] text-amber-200/60 leading-tight">{currentHotspotObj.detail}</div>
 
                 <button
                   onClick={() => onSelectStage && onSelectStage(currentHotspotObj.stage)}
@@ -319,13 +319,13 @@ function ChassisHotspotViewerComponent({ onSelectStage }: ChassisHotspotViewerPr
               >
                 <ArrowLeft size={14} /> Back
               </button>
-              <div className="flex items-center gap-2 text-xs font-mono font-bold uppercase tracking-widest text-slate-700">
+              <div className="flex items-center gap-2 text-xs font-mono font-bold uppercase tracking-widest text-amber-500">
                 <Navigation size={14} className="text-[#007aff]" />
                 Interactive Telemetry Chassis Blueprint
               </div>
               <button
                 onClick={closeZoomModal}
-                className="p-1.5 rounded-full text-slate-400 hover:text-slate-700 hover:bg-slate-200/50 transition-colors cursor-pointer"
+                className="p-1.5 rounded-full text-amber-200/60 hover:text-amber-500 hover:bg-slate-200/50 transition-colors cursor-pointer"
                 title="Close"
               >
                 <X size={18} />
@@ -333,7 +333,7 @@ function ChassisHotspotViewerComponent({ onSelectStage }: ChassisHotspotViewerPr
             </div>
 
             {/* High-Resolution Expanded Blueprint Box */}
-            <div className="relative w-full h-[420px] bg-slate-950 border border-amber-500/40 rounded-2xl overflow-hidden shadow-inner flex items-center justify-center p-2">
+            <div className="relative w-full h-[420px] bg-amber-950/80 border border-amber-500/40 rounded-2xl overflow-hidden shadow-inner flex items-center justify-center p-2">
               <img
                 src="/chassis_hotspots_diagram.png"
                 alt="F1 Supercar Chassis Telemetry Blueprint"
@@ -350,7 +350,7 @@ function ChassisHotspotViewerComponent({ onSelectStage }: ChassisHotspotViewerPr
                     <span>{hs.label}</span>
                   </div>
                   <div className="text-xs font-mono font-bold text-[#007aff]">{hs.stat}</div>
-                  <div className="text-[10px] text-slate-500 font-mono mt-0.5">{hs.detail}</div>
+                  <div className="text-[10px] text-amber-300/50 font-mono mt-0.5">{hs.detail}</div>
                 </div>
               ))}
             </div>

@@ -47,17 +47,17 @@ export const HQInfrastructurePanel = memo(function HQInfrastructurePanel({ selec
                 <span className="text-[10px] font-mono font-bold text-amber-400 uppercase tracking-widest">FACILITY MANAGEMENT</span>
                 <span className="bg-amber-500/20 text-amber-300 border border-amber-500/40 text-[9px] font-bold px-2 py-0.5 rounded-full">HQ CAMPUS</span>
               </div>
-              <h3 className="text-lg font-bold text-slate-100 flex items-center gap-2 mt-1">
+              <h3 className="text-lg font-bold text-amber-50 flex items-center gap-2 mt-1">
                 <Building2 size={20} className="text-amber-400" /> Team Headquarters & R&D Facilities
               </h3>
-              <p className="text-xs text-slate-400 mt-0.5">
+              <p className="text-xs text-amber-200/60 mt-0.5">
                 Construct and upgrade specialized facilities to boost aerodynamic efficiency, part manufacturing speed, and driver training.
               </p>
             </div>
 
             {selectedTeam && (
               <div className="bg-base-950/80 px-3.5 py-2 rounded-xl border border-white/10 text-right shrink-0">
-                <div className="text-[10px] text-slate-400">Assigned Team</div>
+                <div className="text-[10px] text-amber-200/60">Assigned Team</div>
                 <div className="text-sm font-bold text-amber-300">{selectedTeam.name}</div>
               </div>
             )}
@@ -84,12 +84,12 @@ export const HQInfrastructurePanel = memo(function HQInfrastructurePanel({ selec
                     </div>
                     <div className="min-w-0">
                       <div className="flex items-center gap-2 flex-wrap">
-                        <span className="text-sm font-bold text-slate-100">{b.name}</span>
+                        <span className="text-sm font-bold text-amber-50">{b.name}</span>
                         <span className="text-[10px] font-mono font-bold bg-amber-500/15 border border-amber-500/30 text-amber-300 px-2 py-0.5 rounded-full">
                           LVL {b.level}/{b.maxLevel}
                         </span>
                       </div>
-                      <p className="text-xs text-slate-400 mt-1">{b.desc}</p>
+                      <p className="text-xs text-amber-200/60 mt-1">{b.desc}</p>
                       <div className="text-[10px] font-mono text-emerald-400 mt-1 flex items-center gap-1">
                         <Zap size={10} /> {b.effect}
                       </div>

@@ -93,7 +93,7 @@ export function SectionCard({
 
   return (
     <div
-      className={`relative rounded-2xl bg-gradient-to-b from-slate-900/90 via-slate-950/95 to-black/95 border ${styles.border} backdrop-blur-2xl p-4 md:p-5 shadow-[0_12px_40px_rgba(0,0,0,0.6)] transition-all duration-300 flex flex-col justify-between overflow-hidden group ${className}`}
+      className={`relative rounded-2xl bg-gradient-to-b from-amber-900/60/90 via-slate-950/95 to-black/95 border ${styles.border} backdrop-blur-2xl p-4 md:p-5 shadow-[0_12px_40px_rgba(0,0,0,0.6)] transition-all duration-300 flex flex-col justify-between overflow-hidden group ${className}`}
     >
       {/* Top Laser Accent Light Line */}
       <div
@@ -107,7 +107,7 @@ export function SectionCard({
 
       {/* ── CARD HEADER ── */}
       <div className="space-y-3 relative z-10">
-        <div className="flex items-center justify-between gap-2 border-b border-slate-800/80 pb-3">
+        <div className="flex items-center justify-between gap-2 border-b border-amber-800/30 pb-3">
           <div className="flex items-center gap-2.5 min-w-0">
             {icon && (
               <div
@@ -121,7 +121,7 @@ export function SectionCard({
                 {title}
               </h4>
               {subtitle && (
-                <p className="text-[10px] md:text-[11px] text-slate-400 font-mono mt-0.5 truncate">
+                <p className="text-[10px] md:text-[11px] text-amber-200/60 font-mono mt-0.5 truncate">
                   {subtitle}
                 </p>
               )}
@@ -137,7 +137,7 @@ export function SectionCard({
 
       {/* ── CARD FOOTER (IF ANY) ── */}
       {footer && (
-        <div className="mt-4 pt-3 border-t border-slate-800/80 text-xs font-mono relative z-10">{footer}</div>
+        <div className="mt-4 pt-3 border-t border-amber-800/30 text-xs font-mono relative z-10">{footer}</div>
       )}
     </div>
   );

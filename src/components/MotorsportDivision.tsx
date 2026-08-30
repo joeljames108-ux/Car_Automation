@@ -241,7 +241,7 @@ function MotorsportDivisionComponent() {
                 </span>
               </div>
               <h2 className="text-lg font-black text-white mt-0.5 tracking-wide">Grand Prix Racing Operations & Engineering</h2>
-              <p className="text-xs text-slate-300">Manage race teams, elite constructor championships, factory HQ & technical BoP regulations.</p>
+              <p className="text-xs text-amber-100/80">Manage race teams, elite constructor championships, factory HQ & technical BoP regulations.</p>
             </div>
           </div>
 
@@ -249,19 +249,19 @@ function MotorsportDivisionComponent() {
           <div className="grid grid-cols-4 gap-2 text-center bg-black/70 p-3 rounded-2xl border border-white/10 shrink-0 shadow-lg">
             <div className="px-2.5">
               <div className="text-xl font-black font-mono text-amber-300">{company.motorsport.teams.length}</div>
-              <div className="text-[9px] text-slate-400 uppercase font-bold tracking-wider">Teams</div>
+              <div className="text-[9px] text-amber-200/60 uppercase font-bold tracking-wider">Teams</div>
             </div>
             <div className="px-2.5 border-l border-white/10">
               <div className="text-xl font-black font-mono text-emerald-400">{totalWins}</div>
-              <div className="text-[9px] text-slate-400 uppercase font-bold tracking-wider">Wins</div>
+              <div className="text-[9px] text-amber-200/60 uppercase font-bold tracking-wider">Wins</div>
             </div>
             <div className="px-2.5 border-l border-white/10">
               <div className="text-xl font-black font-mono text-yellow-400">{totalTitles}</div>
-              <div className="text-[9px] text-slate-400 uppercase font-bold tracking-wider">Titles</div>
+              <div className="text-[9px] text-amber-200/60 uppercase font-bold tracking-wider">Titles</div>
             </div>
             <div className="px-2.5 border-l border-white/10">
               <div className="text-xl font-black font-mono text-amber-400">{totalFastestLaps}</div>
-              <div className="text-[9px] text-slate-400 uppercase font-bold tracking-wider">FL</div>
+              <div className="text-[9px] text-amber-200/60 uppercase font-bold tracking-wider">FL</div>
             </div>
           </div>
         </div>
@@ -283,7 +283,7 @@ function MotorsportDivisionComponent() {
                     FIA Master
                   </span>
                 </div>
-                <p className="text-xs text-slate-300 mt-0.5">Open-wheel monocoque, V6 turbo-hybrid, MGU-K & aero floor.</p>
+                <p className="text-xs text-amber-100/80 mt-0.5">Open-wheel monocoque, V6 turbo-hybrid, MGU-K & aero floor.</p>
               </div>
             </div>
 
@@ -312,7 +312,7 @@ function MotorsportDivisionComponent() {
                     24H Le Mans
                   </span>
                 </div>
-                <p className="text-xs text-slate-300 mt-0.5">Enclosed carbon cockpit, e-AWD MGU, cooling & endurance setup.</p>
+                <p className="text-xs text-amber-100/80 mt-0.5">Enclosed carbon cockpit, e-AWD MGU, cooling & endurance setup.</p>
               </div>
             </div>
 
@@ -331,7 +331,7 @@ function MotorsportDivisionComponent() {
       )}
 
       {/* Categorized 4-Tier Master Motorsport Navigation Bar */}
-      <div className="space-y-2.5 bg-slate-900/90 p-3 rounded-2xl border border-white/15 shadow-xl backdrop-blur-2xl text-white">
+      <div className="space-y-2.5 bg-amber-900/40 p-3 rounded-2xl border border-white/15 shadow-xl backdrop-blur-2xl text-white">
         {/* Category Header Selector */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
           {HUB_CATEGORIES.map((cat) => {
@@ -346,7 +346,7 @@ function MotorsportDivisionComponent() {
                 className={`p-2.5 rounded-xl text-xs font-bold transition-all flex items-center gap-2 border cursor-pointer ${
                   isSelected
                     ? "bg-amber-500 text-black border-amber-400 shadow-lg shadow-cyan-500/30 font-black"
-                    : "bg-slate-800/80 border-white/10 text-slate-200 hover:bg-slate-700 hover:text-white"
+                    : "bg-amber-800/35/80 border-white/10 text-amber-50 hover:bg-amber-700/40 hover:text-white"
                 }`}
               >
                 {cat.icon}
@@ -370,7 +370,7 @@ function MotorsportDivisionComponent() {
                 className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all whitespace-nowrap flex items-center gap-1.5 border cursor-pointer ${
                   isTabActive
                     ? "bg-amber-500/25 border-amber-400 text-amber-300 shadow-md shadow-cyan-500/20 font-extrabold"
-                    : "bg-slate-800/60 border-white/10 text-slate-300 hover:text-white hover:bg-slate-700/60"
+                    : "bg-amber-800/35/60 border-white/10 text-amber-100/80 hover:text-white hover:bg-amber-700/40/60"
                 }`}
               >
                 <span>{tab.label}</span>
@@ -389,28 +389,28 @@ function MotorsportDivisionComponent() {
 
       {/* F1 CONSTRUCTOR MASTER STUDIO */}
       {activeTab === "f1_workshop" && (
-        <Suspense fallback={<div className="p-12 text-center text-xs text-amber-400 animate-pulse bg-slate-900/60 rounded-2xl">Loading F1 Constructor Studio...</div>}>
+        <Suspense fallback={<div className="p-12 text-center text-xs text-amber-400 animate-pulse bg-amber-900/40 rounded-2xl">Loading F1 Constructor Studio...</div>}>
           <F1ConstructorMasterApp initialMode={f1InitialMode} onBackToMainMotorsport={() => setActiveTab("teams")} />
         </Suspense>
       )}
 
       {/* HYPERCAR CONSTRUCTOR MASTER STUDIO */}
       {activeTab === "hypercar_workshop" && (
-        <Suspense fallback={<div className="p-12 text-center text-xs text-amber-400 animate-pulse bg-slate-900/60 rounded-2xl">Loading Hypercar Constructor Studio...</div>}>
+        <Suspense fallback={<div className="p-12 text-center text-xs text-amber-400 animate-pulse bg-amber-900/40 rounded-2xl">Loading Hypercar Constructor Studio...</div>}>
           <HypercarConstructorMasterApp initialMode={hypercarInitialMode} onBackToMainMotorsport={() => setActiveTab("teams")} />
         </Suspense>
       )}
 
       {/* FIA HOMOLOGATION & BOP */}
       {activeTab === "homologation" && (
-        <Suspense fallback={<div className="p-12 text-center text-xs text-amber-400 animate-pulse bg-slate-900/60 rounded-2xl">Loading FIA Scrutineering Matrix...</div>}>
+        <Suspense fallback={<div className="p-12 text-center text-xs text-amber-400 animate-pulse bg-amber-900/40 rounded-2xl">Loading FIA Scrutineering Matrix...</div>}>
           <FiaHomologationPanel />
         </Suspense>
       )}
 
       {/* LIVE 3D PIT WALL */}
       {activeTab === "pitwall" && (
-        <Suspense fallback={<div className="p-12 text-center text-xs text-amber-400 animate-pulse bg-slate-900/60 rounded-2xl">Loading Live Pit Wall Telemetry...</div>}>
+        <Suspense fallback={<div className="p-12 text-center text-xs text-amber-400 animate-pulse bg-amber-900/40 rounded-2xl">Loading Live Pit Wall Telemetry...</div>}>
           <LivePitWallPanel />
         </Suspense>
       )}
@@ -427,23 +427,23 @@ function MotorsportDivisionComponent() {
           ) : (
             <button
               onClick={() => setShowCreateForm(true)}
-              className="w-full flex items-center justify-center gap-2 py-3.5 rounded-2xl border-2 border-dashed border-amber-500/30 hover:border-amber-400 text-slate-200 hover:text-amber-300 transition-all text-sm font-bold bg-slate-900/80 hover:bg-slate-800 shadow-md cursor-pointer"
+              className="w-full flex items-center justify-center gap-2 py-3.5 rounded-2xl border-2 border-dashed border-amber-500/30 hover:border-amber-400 text-amber-50 hover:text-amber-300 transition-all text-sm font-bold bg-amber-900/40 hover:bg-amber-800/35 shadow-md cursor-pointer"
             >
               <Plus size={16} /> Create New Championship Race Team
             </button>
           )}
 
           {company.motorsport.teams.length === 0 && !showCreateForm && (
-            <div className="p-10 text-center rounded-2xl bg-slate-900/60 border border-white/10">
-              <Trophy size={36} className="mx-auto text-slate-600 mb-3" />
-              <p className="text-slate-300 text-sm font-semibold">No race teams formed yet.</p>
-              <p className="text-slate-500 text-xs mt-1">Create a team or enter F1/Hypercar to start competing in motorsport.</p>
+            <div className="p-10 text-center rounded-2xl bg-amber-900/40 border border-white/10">
+              <Trophy size={36} className="mx-auto text-amber-400 mb-3" />
+              <p className="text-amber-100/80 text-sm font-semibold">No race teams formed yet.</p>
+              <p className="text-amber-300/50 text-xs mt-1">Create a team or enter F1/Hypercar to start competing in motorsport.</p>
             </div>
           )}
 
           {/* Series Filtering & Search Bar */}
           {company.motorsport.teams.length > 0 && (
-            <div className="flex flex-col md:flex-row items-center justify-between gap-3 bg-slate-900/80 p-3 rounded-2xl border border-white/10">
+            <div className="flex flex-col md:flex-row items-center justify-between gap-3 bg-amber-900/40 p-3 rounded-2xl border border-white/10">
               {/* Category Pills */}
               <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar w-full md:w-auto">
                 <Filter size={14} className="text-amber-400 ml-1 mr-1 shrink-0" />
@@ -458,7 +458,7 @@ function MotorsportDivisionComponent() {
                     className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all whitespace-nowrap cursor-pointer ${
                       seriesFilter === f.id
                         ? "bg-amber-500 text-black font-extrabold shadow-sm"
-                        : "bg-slate-800/80 text-slate-300 hover:text-white border border-white/5"
+                        : "bg-amber-800/35/80 text-amber-100/80 hover:text-white border border-white/5"
                     }`}
                   >
                     {f.label}
@@ -468,13 +468,13 @@ function MotorsportDivisionComponent() {
 
               {/* Search Box */}
               <div className="relative w-full md:w-64">
-                <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
+                <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-amber-200/60 pointer-events-none" />
                 <input
                   type="text"
                   placeholder="Search constructors..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full bg-slate-950/80 border border-white/10 rounded-xl pl-9 pr-3 py-1.5 text-xs text-white placeholder-slate-500 focus:border-amber-400 focus:outline-none"
+                  className="w-full bg-amber-950/80 border border-white/10 rounded-xl pl-9 pr-3 py-1.5 text-xs text-white placeholder-slate-500 focus:border-amber-400 focus:outline-none"
                 />
               </div>
             </div>
@@ -497,7 +497,7 @@ function MotorsportDivisionComponent() {
             <div className="text-center pt-2">
               <button
                 onClick={() => setVisibleTeamCount(prev => prev + 8)}
-                className="px-6 py-2.5 rounded-xl text-xs font-bold bg-slate-900 border border-amber-500/30 text-amber-300 hover:bg-slate-850 hover:border-amber-400 transition-all cursor-pointer shadow-md inline-flex items-center gap-1.5"
+                className="px-6 py-2.5 rounded-xl text-xs font-bold bg-amber-900/50 border border-amber-500/30 text-amber-300 hover:bg-amber-850/40 hover:border-amber-400 transition-all cursor-pointer shadow-md inline-flex items-center gap-1.5"
               >
                 <span>Show More Constructors ({filteredTeams.length - visibleTeamCount} remaining)</span>
                 <ChevronDown size={14} />
@@ -508,20 +508,20 @@ function MotorsportDivisionComponent() {
           {/* Driver Management & Talent Market for Selected Team */}
           {selectedTeam && (
             <div className="space-y-4 mt-6">
-              <div className="p-5 rounded-2xl bg-slate-900/90 border border-white/10 shadow-xl space-y-4">
+              <div className="p-5 rounded-2xl bg-amber-900/40 border border-white/10 shadow-xl space-y-4">
                 <div className="flex items-center justify-between">
                   <h3 className="text-sm font-bold text-white flex items-center gap-2">
                     <Users size={16} className="text-amber-400" /> Active Driver Lineup — {selectedTeam.name}
                   </h3>
-                  <span className="text-[10px] font-mono text-slate-300 bg-black/60 px-2.5 py-1 rounded-lg border border-white/10">
+                  <span className="text-[10px] font-mono text-amber-100/80 bg-black/60 px-2.5 py-1 rounded-lg border border-white/10">
                     {selectedTeam.drivers.length}/2 Drivers Contracted
                   </span>
                 </div>
 
                 {selectedTeam.drivers.length === 0 ? (
                   <div className="text-center py-6 bg-black/40 rounded-xl border border-white/5">
-                    <p className="text-xs text-slate-400">No active drivers signed to this team yet.</p>
-                    <p className="text-[10px] text-slate-500 mt-1">Hire free agents or scout rookies below.</p>
+                    <p className="text-xs text-amber-200/60">No active drivers signed to this team yet.</p>
+                    <p className="text-[10px] text-amber-300/50 mt-1">Hire free agents or scout rookies below.</p>
                   </div>
                 ) : (
                   <div className="space-y-2">
@@ -532,15 +532,15 @@ function MotorsportDivisionComponent() {
                           <div>
                             <div className="flex items-center gap-2">
                               <span className="text-sm font-bold text-white">{d.name}</span>
-                              <span className="text-[10px] text-slate-300 font-mono bg-slate-800 px-1.5 py-0.5 rounded">{d.nationality}</span>
+                              <span className="text-[10px] text-amber-100/80 font-mono bg-amber-800/35 px-1.5 py-0.5 rounded">{d.nationality}</span>
                             </div>
-                            <div className="text-[11px] text-slate-300 mt-1 flex items-center gap-3 flex-wrap">
+                            <div className="text-[11px] text-amber-100/80 mt-1 flex items-center gap-3 flex-wrap">
                               <span>Skill: <strong className="text-amber-300 font-mono">{d.skill}</strong></span>
                               <span>Consistency: <strong className="text-emerald-400 font-mono">{d.consistency}</strong></span>
                               <span>Wet Pace: <strong className="text-amber-400 font-mono">{d.wetSkill}</strong></span>
-                              <span>Salary: <strong className="text-slate-100 font-mono">${(d.salary / 1e6).toFixed(1)}M/yr</strong></span>
+                              <span>Salary: <strong className="text-amber-50 font-mono">${(d.salary / 1e6).toFixed(1)}M/yr</strong></span>
                             </div>
-                            <div className="text-[10px] text-slate-400 mt-1">
+                            <div className="text-[10px] text-amber-200/60 mt-1">
                               Contract: {seasonsRemaining > 0 ? `${seasonsRemaining} season(s) left` : <span className="text-amber-400 font-medium">Expiring this season!</span>}
                             </div>
                           </div>

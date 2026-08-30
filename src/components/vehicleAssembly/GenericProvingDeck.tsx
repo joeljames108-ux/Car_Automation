@@ -88,7 +88,7 @@ export function GenericProvingDeck<T extends string = string>({
                 {t.icon}
                 <span>{t.label}</span>
                 {t.badge && (
-                  <span className={`px-1.5 py-0.2 rounded text-[9px] ${isSelected ? "bg-slate-900/40 text-slate-900 font-extrabold" : "bg-amber-500/20 text-amber-300"}`}>
+                  <span className={`px-1.5 py-0.2 rounded text-[9px] ${isSelected ? "bg-amber-900/40 text-slate-900 font-extrabold" : "bg-amber-500/20 text-amber-300"}`}>
                     {t.badge}
                   </span>
                 )}

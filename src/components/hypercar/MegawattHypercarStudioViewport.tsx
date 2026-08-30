@@ -199,15 +199,15 @@ const MegawattHypercarStudioViewportComponent: React.FC = () => {
   }, []);
 
   return (
-    <div className="space-y-6 text-slate-100">
+    <div className="space-y-6 text-amber-50">
       {/* Top Banner */}
-      <div className="bg-slate-900/80 backdrop-blur-xl p-6 rounded-2xl border border-slate-800 flex items-center justify-between shadow-2xl">
+      <div className="bg-amber-900/40 backdrop-blur-xl p-6 rounded-2xl border border-amber-800/30 flex items-center justify-between shadow-2xl">
         <div>
           <h2 className="text-xl font-black tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-amber-400 via-orange-500 to-red-500 flex items-center space-x-2">
             <Zap className="w-6 h-6 text-amber-400" />
             <span>1,600+ HP MEGAWATT HYPERCAR ENGINEERING STUDIO</span>
           </h2>
-          <p className="text-xs text-slate-400 mt-1">
+          <p className="text-xs text-amber-200/60 mt-1">
             Carbotanium monocoque FEA, active ground-effect Venturi suction, 2.5Hz porpoising limit cycles & 1,400°C carbon-ceramic brakes.
           </p>
         </div>
@@ -220,19 +220,19 @@ const MegawattHypercarStudioViewportComponent: React.FC = () => {
       </div>
 
       {/* Interactive 3D Viewport */}
-      <div className="relative w-full h-[600px] bg-slate-950 rounded-2xl overflow-hidden border border-slate-800 shadow-2xl">
+      <div className="relative w-full h-[600px] bg-amber-950/80 rounded-2xl overflow-hidden border border-amber-800/30 shadow-2xl">
         <div ref={mountRef} className="w-full h-full cursor-grab active:cursor-grabbing" />
 
         {/* DRS Mode Selector Toolbar */}
-        <div className="absolute top-4 left-4 flex items-center space-x-3 pointer-events-auto bg-slate-900/85 backdrop-blur-md p-2.5 rounded-xl border border-slate-700/50 shadow-lg text-xs">
-          <label className="font-bold text-slate-400">ACTIVE DRS WING:</label>
+        <div className="absolute top-4 left-4 flex items-center space-x-3 pointer-events-auto bg-amber-900/40 backdrop-blur-md p-2.5 rounded-xl border border-amber-700/30/50 shadow-lg text-xs">
+          <label className="font-bold text-amber-200/60">ACTIVE DRS WING:</label>
           <select
             value={drsMode}
             onChange={(e) => {
               playHMIClickSound();
               setDrsMode(e.target.value as ActiveDrsMode);
             }}
-            className="bg-slate-950 text-slate-200 text-xs rounded-lg px-2.5 py-1.5 border border-slate-700 font-mono outline-none cursor-pointer"
+            className="bg-amber-950/80 text-amber-50 text-xs rounded-lg px-2.5 py-1.5 border border-amber-700/30 font-mono outline-none cursor-pointer"
           >
             <option value="HIGH_DOWNFORCE_CORNERING">High Downforce Cornering Mode</option>
             <option value="LOW_DRAG_STRAIGHT_SPRINT">Low Drag Straight Sprint (DRS Open)</option>
@@ -241,14 +241,14 @@ const MegawattHypercarStudioViewportComponent: React.FC = () => {
         </div>
 
         {/* Left Slider Controls */}
-        <div className="absolute top-20 left-4 bg-slate-900/85 backdrop-blur-md p-4 rounded-xl border border-slate-700/50 shadow-2xl w-80 space-y-4 pointer-events-auto">
-          <div className="text-xs font-bold text-slate-200 border-b border-slate-800 pb-2 flex items-center space-x-2">
+        <div className="absolute top-20 left-4 bg-amber-900/40 backdrop-blur-md p-4 rounded-xl border border-amber-700/30/50 shadow-2xl w-80 space-y-4 pointer-events-auto">
+          <div className="text-xs font-bold text-amber-50 border-b border-amber-800/30 pb-2 flex items-center space-x-2">
             <Sliders className="w-4 h-4 text-amber-400" />
             <span>HYPERCAR KINETIC SLIDERS</span>
           </div>
 
           <div>
-            <div className="flex justify-between text-xs text-slate-300 mb-1.5 font-mono">
+            <div className="flex justify-between text-xs text-amber-100/80 mb-1.5 font-mono">
               <span>Vehicle Airspeed:</span>
               <strong className="text-amber-400">{airspeedKmH} km/h</strong>
             </div>
@@ -259,12 +259,12 @@ const MegawattHypercarStudioViewportComponent: React.FC = () => {
               step={10}
               value={airspeedKmH}
               onChange={(e) => setAirspeedKmH(Number(e.target.value))}
-              className="w-full accent-amber-500 bg-slate-950 rounded-lg cursor-pointer"
+              className="w-full accent-amber-500 bg-amber-950/80 rounded-lg cursor-pointer"
             />
           </div>
 
           <div>
-            <div className="flex justify-between text-xs text-slate-300 mb-1.5 font-mono">
+            <div className="flex justify-between text-xs text-amber-100/80 mb-1.5 font-mono">
               <span>Ride Height (Venturi Throat):</span>
               <strong className="text-amber-400">{rideHeightMm} mm</strong>
             </div>
@@ -275,12 +275,12 @@ const MegawattHypercarStudioViewportComponent: React.FC = () => {
               step={1}
               value={rideHeightMm}
               onChange={(e) => setRideHeightMm(Number(e.target.value))}
-              className="w-full accent-amber-500 bg-slate-950 rounded-lg cursor-pointer"
+              className="w-full accent-amber-500 bg-amber-950/80 rounded-lg cursor-pointer"
             />
           </div>
 
           <div>
-            <div className="flex justify-between text-xs text-slate-300 mb-1.5 font-mono">
+            <div className="flex justify-between text-xs text-amber-100/80 mb-1.5 font-mono">
               <span>V12 ICE Output Power:</span>
               <strong className="text-amber-400">{icePowerHp} HP</strong>
             </div>
@@ -291,42 +291,42 @@ const MegawattHypercarStudioViewportComponent: React.FC = () => {
               step={25}
               value={icePowerHp}
               onChange={(e) => setIcePowerHp(Number(e.target.value))}
-              className="w-full accent-purple-500 bg-slate-950 rounded-lg cursor-pointer"
+              className="w-full accent-purple-500 bg-amber-950/80 rounded-lg cursor-pointer"
             />
           </div>
         </div>
 
         {/* Right Telemetry Overlay */}
-        <div className="absolute bottom-4 right-4 bg-slate-900/85 backdrop-blur-md p-4 rounded-xl border border-slate-700/50 shadow-2xl w-80 space-y-2 font-mono text-xs pointer-events-auto">
-          <div className="text-xs font-bold text-slate-200 border-b border-slate-800 pb-1.5 font-sans flex items-center justify-between">
+        <div className="absolute bottom-4 right-4 bg-amber-900/40 backdrop-blur-md p-4 rounded-xl border border-amber-700/30/50 shadow-2xl w-80 space-y-2 font-mono text-xs pointer-events-auto">
+          <div className="text-xs font-bold text-amber-50 border-b border-amber-800/30 pb-1.5 font-sans flex items-center justify-between">
             <span>MEGAWATT HYPERCAR TELEMETRY</span>
             <span className="text-emerald-400">0-400 km/h: {powertrain.acceleration0_400KmHSec}s</span>
           </div>
 
           <div className="flex justify-between">
-            <span className="text-slate-400">Carbotanium Rigidity:</span>
+            <span className="text-amber-200/60">Carbotanium Rigidity:</span>
             <strong className="text-amber-400">{monocoqueFea.torsionalRigidityNmPerDeg.toLocaleString()} Nm/deg</strong>
           </div>
 
           <div className="flex justify-between">
-            <span className="text-slate-400">Total Downforce @ {airspeedKmH}km/h:</span>
+            <span className="text-amber-200/60">Total Downforce @ {airspeedKmH}km/h:</span>
             <strong className="text-amber-400">{aero.totalDownforceKg} kg ({aero.totalDownforceN} N)</strong>
           </div>
 
           <div className="flex justify-between">
-            <span className="text-slate-400">Porpoising Status:</span>
+            <span className="text-amber-200/60">Porpoising Status:</span>
             <strong className={`${aero.porpoisingRiskStatus.includes("PORPOISING") ? "text-rose-400" : "text-emerald-400"}`}>
               {aero.porpoisingRiskStatus}
             </strong>
           </div>
 
           <div className="flex justify-between">
-            <span className="text-slate-400">420mm Rotor Pyrometry:</span>
+            <span className="text-amber-200/60">420mm Rotor Pyrometry:</span>
             <strong className="text-rose-400">{brakeFea.rotorSurfaceTempPeakC}°C</strong>
           </div>
 
           <div className="flex justify-between">
-            <span className="text-slate-400">0-100 km/h Sprint:</span>
+            <span className="text-amber-200/60">0-100 km/h Sprint:</span>
             <strong className="text-emerald-400">{powertrain.acceleration0_100KmHSec}s</strong>
           </div>
         </div>

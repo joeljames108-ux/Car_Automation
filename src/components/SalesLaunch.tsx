@@ -123,23 +123,23 @@ export function SalesLaunch() {
               <DollarSign size={24} className="text-ok-400" />
             </div>
             <div>
-              <h2 className="text-lg font-bold text-slate-100">Sales & Launch</h2>
-              <p className="text-xs text-slate-500">Market positioning, pricing strategy, launch events, and revenue tracking</p>
+              <h2 className="text-lg font-bold text-amber-50">Sales & Launch</h2>
+              <p className="text-xs text-amber-300/50">Market positioning, pricing strategy, launch events, and revenue tracking</p>
             </div>
           </div>
           <div className="flex-1" />
           <div className="grid grid-cols-3 gap-3 text-center">
             <div>
               <div className="text-xl font-bold font-mono text-ok-400">{fmt(company.totalRevenue)}</div>
-              <div className="text-[10px] text-slate-600">Total Revenue</div>
+              <div className="text-[10px] text-amber-400">Total Revenue</div>
             </div>
             <div>
               <div className={`text-xl font-bold font-mono ${company.totalProfit >= 0 ? "text-ok-400" : "text-danger-400"}`}>{fmt(company.totalProfit)}</div>
-              <div className="text-[10px] text-slate-600">Total Profit</div>
+              <div className="text-[10px] text-amber-400">Total Profit</div>
             </div>
             <div>
               <div className="text-xl font-bold font-mono text-accent-300">{company.garage.filter(g => g.isLaunched).length}</div>
-              <div className="text-[10px] text-slate-600">Active Models</div>
+              <div className="text-[10px] text-amber-400">Active Models</div>
             </div>
           </div>
         </div>
@@ -150,7 +150,7 @@ export function SalesLaunch() {
         <label className="label-mono block mb-2">Vehicle</label>
         <select value={selectedVehicleId || ""}
           onChange={e => setSelectedVehicleId(e.target.value || null)}
-          className="w-full bg-base-850 border border-base-700 rounded-lg px-3 py-2 text-sm text-slate-200 focus:border-accent-500 focus:outline-none">
+          className="w-full bg-base-850 border border-base-700 rounded-lg px-3 py-2 text-sm text-amber-50 focus:border-accent-500 focus:outline-none">
           <option value="">— Select a vehicle to configure or track —</option>
           {company.garage.map(v => (
             <option key={v.id} value={v.id}>
@@ -164,7 +164,7 @@ export function SalesLaunch() {
       <div className="flex items-center gap-1 bg-base-850 rounded-lg p-1 border border-base-800">
         {tabs.map(t => (
           <button key={t.id} onClick={() => setActiveTab(t.id)}
-            className={`px-3 py-1.5 rounded-md text-xs font-medium transition-all whitespace-nowrap ${activeTab === t.id ? "bg-accent-500/20 text-accent-300" : "text-slate-400 hover:text-slate-200"}`}>
+            className={`px-3 py-1.5 rounded-md text-xs font-medium transition-all whitespace-nowrap ${activeTab === t.id ? "bg-accent-500/20 text-accent-300" : "text-amber-200/60 hover:text-amber-50"}`}>
             {t.label}
           </button>
         ))}
@@ -174,35 +174,35 @@ export function SalesLaunch() {
       {activeTab === "position" && (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           <div className="panel p-5">
-            <h3 className="text-xs font-bold text-slate-200 uppercase tracking-wider mb-3">1. Market Segment Target</h3>
-            <p className="text-xs text-slate-500 mb-3">Select the primary buyer demographic and vehicle price bracket for your model.</p>
+            <h3 className="text-xs font-bold text-amber-50 uppercase tracking-wider mb-3">1. Market Segment Target</h3>
+            <p className="text-xs text-amber-300/50 mb-3">Select the primary buyer demographic and vehicle price bracket for your model.</p>
             <div className="space-y-2">
               {SEGMENTS.map(s => (
                 <button key={s.value} onClick={() => setConfig(c => ({ ...c, marketSegment: s.value as MarketSegmentTarget }))}
                   className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm transition-all border ${
                     config.marketSegment === s.value
                       ? "bg-accent-500/15 border-accent-500/40 text-accent-300 font-semibold"
-                      : "bg-base-850 border-base-800 text-slate-400 hover:border-base-700"
+                      : "bg-base-850 border-base-800 text-amber-200/60 hover:border-base-700"
                   }`}>
                   <span>{s.label}</span>
-                  <span className="text-xs font-mono text-slate-500">{s.priceRange}</span>
+                  <span className="text-xs font-mono text-amber-300/50">{s.priceRange}</span>
                 </button>
               ))}
             </div>
           </div>
 
           <div className="panel p-5 space-y-4">
-            <h3 className="text-xs font-bold text-slate-200 uppercase tracking-wider mb-1">2. Strategic Pricing Philosophy</h3>
+            <h3 className="text-xs font-bold text-amber-50 uppercase tracking-wider mb-1">2. Strategic Pricing Philosophy</h3>
             <div className="space-y-2">
               {PRICING_STRATEGIES.map(s => (
                 <button key={s.value} onClick={() => setConfig(c => ({ ...c, pricingStrategy: s.value as PricingStrategy }))}
                   className={`w-full flex items-start gap-3 px-3.5 py-2.5 rounded-xl text-xs transition-all border ${
                     config.pricingStrategy === s.value
                       ? "bg-accent-500/15 border-accent-500/40 text-accent-300"
-                      : "bg-base-850 border-base-800 text-slate-400 hover:border-base-700"
+                      : "bg-base-850 border-base-800 text-amber-200/60 hover:border-base-700"
                   }`}>
                   <span className="font-bold shrink-0 pt-0.5">{s.label}</span>
-                  <span className="text-slate-400 text-left">{s.desc}</span>
+                  <span className="text-amber-200/60 text-left">{s.desc}</span>
                 </button>
               ))}
             </div>
@@ -214,7 +214,7 @@ export function SalesLaunch() {
       {activeTab === "marketing" && (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           <div className="panel p-5 space-y-4">
-            <h3 className="text-xs font-bold text-slate-200 uppercase tracking-wider">Pricing, Volume & Margin</h3>
+            <h3 className="text-xs font-bold text-amber-50 uppercase tracking-wider">Pricing, Volume & Margin</h3>
             <Slider label="Target MSRP Retail Price" value={config.targetPrice} min={5000} max={2000000} step={1000}
               onChange={v => setConfig(c => ({ ...c, targetPrice: v }))}
               format={v => `$${(v / 1000).toFixed(0)}k`} />
@@ -230,7 +230,7 @@ export function SalesLaunch() {
           </div>
 
           <div className="panel p-5 space-y-4">
-            <h3 className="text-xs font-bold text-slate-200 uppercase tracking-wider">Global Target Regions & Warranty</h3>
+            <h3 className="text-xs font-bold text-amber-50 uppercase tracking-wider">Global Target Regions & Warranty</h3>
             <div>
               <label className="label-mono block mb-2">Select Market Distribution Regions</label>
               <div className="grid grid-cols-2 gap-2">
@@ -239,7 +239,7 @@ export function SalesLaunch() {
                     className={`flex items-center gap-2 px-3 py-2 rounded-xl text-xs font-semibold border transition-all ${
                       config.regions.includes(r.value)
                         ? "bg-accent-500/15 border-accent-500/40 text-accent-300"
-                        : "bg-base-850 border-base-800 text-slate-400 hover:border-base-700"
+                        : "bg-base-850 border-base-800 text-amber-200/60 hover:border-base-700"
                     }`}>
                     <Globe size={12} /> {r.label}
                   </button>
@@ -262,22 +262,22 @@ export function SalesLaunch() {
       {activeTab === "projection" && (
         <div className="space-y-4">
           <div className="panel p-5">
-            <h3 className="text-xs font-bold text-slate-200 uppercase tracking-wider mb-4">Financial Projections & Break-Even</h3>
+            <h3 className="text-xs font-bold text-amber-50 uppercase tracking-wider mb-4">Financial Projections & Break-Even</h3>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-4">
               <div className="bg-base-850 rounded-xl p-3.5 text-center border border-base-800">
-                <div className="text-[10px] text-slate-500 uppercase font-mono mb-1">Est. Monthly Units</div>
-                <div className="text-xl font-bold font-mono text-slate-200">{projection.monthlyUnits.toLocaleString()}</div>
+                <div className="text-[10px] text-amber-300/50 uppercase font-mono mb-1">Est. Monthly Units</div>
+                <div className="text-xl font-bold font-mono text-amber-50">{projection.monthlyUnits.toLocaleString()}</div>
               </div>
               <div className="bg-base-850 rounded-xl p-3.5 text-center border border-base-800">
-                <div className="text-[10px] text-slate-500 uppercase font-mono mb-1">Est. Monthly Revenue</div>
+                <div className="text-[10px] text-amber-300/50 uppercase font-mono mb-1">Est. Monthly Revenue</div>
                 <div className="text-xl font-bold font-mono text-ok-400">{fmt(projection.monthlyRevenue)}</div>
               </div>
               <div className="bg-base-850 rounded-xl p-3.5 text-center border border-base-800">
-                <div className="text-[10px] text-slate-500 uppercase font-mono mb-1">Est. Monthly Net Profit</div>
+                <div className="text-[10px] text-amber-300/50 uppercase font-mono mb-1">Est. Monthly Net Profit</div>
                 <div className={`text-xl font-bold font-mono ${projection.monthlyProfit >= 0 ? "text-ok-400" : "text-danger-400"}`}>{fmt(projection.monthlyProfit)}</div>
               </div>
               <div className="bg-base-850 rounded-xl p-3.5 text-center border border-base-800">
-                <div className="text-[10px] text-slate-500 uppercase font-mono mb-1">Break-Even Time</div>
+                <div className="text-[10px] text-amber-300/50 uppercase font-mono mb-1">Break-Even Time</div>
                 <div className="text-xl font-bold font-mono text-accent-300">
                   {projection.breakEvenMonths ? `${projection.breakEvenMonths} Months` : "—"}
                 </div>
@@ -286,14 +286,14 @@ export function SalesLaunch() {
           </div>
 
           <div className="panel p-5">
-            <h3 className="text-xs font-bold text-slate-200 uppercase tracking-wider mb-3">Launch Event Format</h3>
+            <h3 className="text-xs font-bold text-amber-50 uppercase tracking-wider mb-3">Launch Event Format</h3>
             <div className="space-y-2">
               {LAUNCH_EVENTS.map(e => (
                 <button key={e.value} onClick={() => setConfig(c => ({ ...c, launchEvent: e.value as LaunchEventType }))}
                   className={`w-full flex items-center justify-between px-4 py-3 rounded-xl text-xs transition-all border ${
                     config.launchEvent === e.value
                       ? "bg-accent-500/15 border-accent-500/40 text-accent-300 font-bold"
-                      : "bg-base-850 border-base-800 text-slate-400 hover:border-base-700"
+                      : "bg-base-850 border-base-800 text-amber-200/60 hover:border-base-700"
                   }`}>
                   <span>{e.label}</span>
                   <span className="text-ok-400 font-mono font-bold">+{Math.round((e.boost - 1) * 100)}% Volume Boost</span>
@@ -305,13 +305,13 @@ export function SalesLaunch() {
           {!vehicle ? (
             <div className="panel p-6 text-center">
               <AlertTriangle size={24} className="mx-auto text-yellow-400 mb-2" />
-              <p className="text-slate-400 text-sm font-medium">Select a vehicle model from the dropdown above to launch it to market.</p>
+              <p className="text-amber-200/60 text-sm font-medium">Select a vehicle model from the dropdown above to launch it to market.</p>
             </div>
           ) : vehicle.isLaunched ? (
             <div className="panel p-6 text-center border-ok-500/40 bg-ok-500/10">
               <CheckCircle2 size={28} className="mx-auto text-ok-400 mb-2" />
               <p className="text-ok-300 text-sm font-bold">{vehicle.name} is active on the global commercial market!</p>
-              <p className="text-slate-400 text-xs mt-1">View revenue, profit, and monthly customer feedback in Tab 4 (Sales Dashboard).</p>
+              <p className="text-amber-200/60 text-xs mt-1">View revenue, profit, and monthly customer feedback in Tab 4 (Sales Dashboard).</p>
             </div>
           ) : (
             <div className="panel p-5 border-2 border-accent-500/40 bg-gradient-to-r from-accent-500/10 via-base-900 to-accent-500/10">
@@ -319,8 +319,8 @@ export function SalesLaunch() {
                 <div className="flex items-center gap-3">
                   <Rocket size={24} className="text-accent-400 shrink-0" />
                   <div>
-                    <div className="text-base font-bold text-slate-100">{vehicle.name}</div>
-                    <div className="text-xs text-slate-400 font-mono">{Math.round(vehicle.peakPower)}hp · {Math.round(vehicle.topSpeed)}km/h · Rating: {vehicle.overallRating}/100</div>
+                    <div className="text-base font-bold text-amber-50">{vehicle.name}</div>
+                    <div className="text-xs text-amber-200/60 font-mono">{Math.round(vehicle.peakPower)}hp · {Math.round(vehicle.topSpeed)}km/h · Rating: {vehicle.overallRating}/100</div>
                   </div>
                 </div>
               </div>
@@ -347,25 +347,25 @@ export function SalesLaunch() {
                 <div key={v.id} onClick={() => setSelectedVehicleId(v.id)}
                   className={`panel p-4 cursor-pointer transition-all hover:border-base-700 ${selectedVehicleId === v.id ? "border-ok-500/50" : ""}`}>
                   <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm font-semibold text-slate-100">{v.name}</span>
+                    <span className="text-sm font-semibold text-amber-50">{v.name}</span>
                     <CheckCircle2 size={13} className="text-ok-400" />
                   </div>
                   <div className="grid grid-cols-2 gap-1.5 text-xs">
                     <div className="bg-base-850 rounded p-1.5 text-center">
                       <div className="font-mono text-ok-400">{fmt(vRevenue)}</div>
-                      <div className="text-slate-600 text-[9px]">Revenue</div>
+                      <div className="text-amber-400 text-[9px]">Revenue</div>
                     </div>
                     <div className="bg-base-850 rounded p-1.5 text-center">
                       <div className={`font-mono ${vProfit >= 0 ? "text-ok-400" : "text-danger-400"}`}>{fmt(vProfit)}</div>
-                      <div className="text-slate-600 text-[9px]">Profit</div>
+                      <div className="text-amber-400 text-[9px]">Profit</div>
                     </div>
                     <div className="bg-base-850 rounded p-1.5 text-center">
-                      <div className="font-mono text-slate-200">{vUnits.toLocaleString()}</div>
-                      <div className="text-slate-600 text-[9px]">Units</div>
+                      <div className="font-mono text-amber-50">{vUnits.toLocaleString()}</div>
+                      <div className="text-amber-400 text-[9px]">Units</div>
                     </div>
                     <div className="bg-base-850 rounded p-1.5 text-center">
                       <div className="font-mono text-accent-300">{lastFb?.satisfaction ?? "—"}</div>
-                      <div className="text-slate-600 text-[9px]">Satisfaction</div>
+                      <div className="text-amber-400 text-[9px]">Satisfaction</div>
                     </div>
                   </div>
                 </div>
@@ -376,32 +376,32 @@ export function SalesLaunch() {
           {/* Selected vehicle detail */}
           {selectedVehicleId && salesHistory.length > 0 && (
             <div className="panel p-4">
-              <h3 className="text-xs font-semibold text-slate-300 uppercase tracking-wider mb-3">Period Sales Performance</h3>
+              <h3 className="text-xs font-semibold text-amber-100/80 uppercase tracking-wider mb-3">Period Sales Performance</h3>
               <table className="w-full text-xs">
                 <thead>
                   <tr className="border-b border-base-800">
-                    <th className="text-left px-2 py-2 text-slate-500 font-mono">Month</th>
-                    <th className="text-right px-2 py-2 text-slate-500 font-mono">Units</th>
-                    <th className="text-right px-2 py-2 text-slate-500 font-mono">Revenue</th>
-                    <th className="text-right px-2 py-2 text-slate-500 font-mono">Profit</th>
-                    <th className="text-right px-2 py-2 text-slate-500 font-mono">Market Share</th>
+                    <th className="text-left px-2 py-2 text-amber-300/50 font-mono">Month</th>
+                    <th className="text-right px-2 py-2 text-amber-300/50 font-mono">Units</th>
+                    <th className="text-right px-2 py-2 text-amber-300/50 font-mono">Revenue</th>
+                    <th className="text-right px-2 py-2 text-amber-300/50 font-mono">Profit</th>
+                    <th className="text-right px-2 py-2 text-amber-300/50 font-mono">Market Share</th>
                   </tr>
                 </thead>
                 <tbody>
                   {salesHistory.map((r, i) => (
                     <tr key={i} className="border-b border-base-800/50 hover:bg-base-850/30">
-                      <td className="px-2 py-2 font-mono text-slate-400">{r.month}</td>
-                      <td className="px-2 py-2 text-right font-mono text-slate-200">{r.unitsSold.toLocaleString()}</td>
+                      <td className="px-2 py-2 font-mono text-amber-200/60">{r.month}</td>
+                      <td className="px-2 py-2 text-right font-mono text-amber-50">{r.unitsSold.toLocaleString()}</td>
                       <td className="px-2 py-2 text-right font-mono text-ok-400">{fmt(r.revenue)}</td>
                       <td className={`px-2 py-2 text-right font-mono ${r.profit >= 0 ? "text-ok-400" : "text-danger-400"}`}>{fmt(r.profit)}</td>
-                      <td className="px-2 py-2 text-right font-mono text-slate-400">{(r.marketShare * 100).toFixed(1)}%</td>
+                      <td className="px-2 py-2 text-right font-mono text-amber-200/60">{(r.marketShare * 100).toFixed(1)}%</td>
                     </tr>
                   ))}
                 </tbody>
                 <tfoot className="border-t border-base-700">
                   <tr>
-                    <td className="px-2 py-2 text-xs font-semibold text-slate-300">TOTAL</td>
-                    <td className="px-2 py-2 text-right font-mono font-bold text-slate-200">{totalUnits.toLocaleString()}</td>
+                    <td className="px-2 py-2 text-xs font-semibold text-amber-100/80">TOTAL</td>
+                    <td className="px-2 py-2 text-right font-mono font-bold text-amber-50">{totalUnits.toLocaleString()}</td>
                     <td className="px-2 py-2 text-right font-mono font-bold text-ok-400">{fmt(totalRevenue)}</td>
                     <td className={`px-2 py-2 text-right font-mono font-bold ${totalProfit >= 0 ? "text-ok-400" : "text-danger-400"}`}>{fmt(totalProfit)}</td>
                     <td />
@@ -413,9 +413,9 @@ export function SalesLaunch() {
 
           {company.garage.filter(g => g.isLaunched).length === 0 && (
             <div className="panel p-10 text-center">
-              <DollarSign size={36} className="mx-auto text-slate-700 mb-3" />
-              <p className="text-slate-500 text-sm">No launched vehicles yet.</p>
-              <p className="text-xs text-slate-600 mt-1">Go to the Launch tab to bring a vehicle to market.</p>
+              <DollarSign size={36} className="mx-auto text-amber-500 mb-3" />
+              <p className="text-amber-300/50 text-sm">No launched vehicles yet.</p>
+              <p className="text-xs text-amber-400 mt-1">Go to the Launch tab to bring a vehicle to market.</p>
             </div>
           )}
         </div>

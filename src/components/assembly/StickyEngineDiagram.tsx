@@ -89,7 +89,7 @@ function StickyEngineDiagramComponent({
 
   return (
     <div
-      className={`relative w-full rounded-3xl bg-slate-900/90 dark:bg-base-950/90 border border-slate-700/60 dark:border-base-800/80 backdrop-blur-xl p-4 shadow-2xl flex flex-col gap-3.5 transition-all ${className}`}
+      className={`relative w-full rounded-3xl bg-amber-900/40 dark:bg-base-950/90 border border-amber-700/30/60 dark:border-base-800/80 backdrop-blur-xl p-4 shadow-2xl flex flex-col gap-3.5 transition-all ${className}`}
     >
       {/* ── TOP COMPACT HEADER HUD (Stage, Title, 3D WebGL Badge) ── */}
       <div className="flex items-center justify-between gap-3 border-b border-white/5 pb-3">
@@ -107,7 +107,7 @@ function StickyEngineDiagramComponent({
                 3D GLB
               </span>
             </div>
-            <h3 className="text-xs font-mono font-bold text-slate-200 truncate">
+            <h3 className="text-xs font-mono font-bold text-amber-50 truncate">
               {currentStageMeta.title}
             </h3>
           </div>
@@ -126,7 +126,7 @@ function StickyEngineDiagramComponent({
 
           <button
             onClick={handleToggleMute}
-            className="p-1.5 rounded-lg bg-base-950/80 border border-white/10 text-slate-400 hover:text-amber-300 transition-all cursor-pointer"
+            className="p-1.5 rounded-lg bg-base-950/80 border border-white/10 text-amber-200/60 hover:text-amber-300 transition-all cursor-pointer"
             title={isMuted ? "Unmute Audio" : "Mute Audio"}
           >
             {isMuted ? <VolumeX size={14} /> : <Volume2 size={14} />}
@@ -135,7 +135,7 @@ function StickyEngineDiagramComponent({
       </div>
 
       {/* ── CENTRAL STAGE WORKSTATION: 3D GLB REAL-TIME VIEWPORT ── */}
-      <div className="relative w-full h-[400px] md:h-[460px] rounded-2xl bg-slate-950/40 border border-white/5 backdrop-blur-md overflow-hidden flex items-center justify-center shadow-inner">
+      <div className="relative w-full h-[400px] md:h-[460px] rounded-2xl bg-amber-950/40 border border-white/5 backdrop-blur-md overflow-hidden flex items-center justify-center shadow-inner">
         <ModularEngine3DViewport
           className="w-full h-full"
           engineConfig={engineConfig}
@@ -149,8 +149,8 @@ function StickyEngineDiagramComponent({
         {activeComponentId && activeMeta && (
           <div className="absolute top-3 left-3 z-20 flex items-center gap-2 px-3 py-1.5 rounded-full bg-base-950/90 border border-amber-500/40 backdrop-blur-md shadow-[0_0_15px_rgba(34,211,238,0.3)] text-xs font-mono">
             <Sparkles size={13} className="text-amber-400 animate-spin" />
-            <span className="font-extrabold text-slate-100">{activeMeta.name}</span>
-            <span className="text-slate-500">·</span>
+            <span className="font-extrabold text-amber-50">{activeMeta.name}</span>
+            <span className="text-amber-300/50">·</span>
             <span className="text-amber-400 font-extrabold uppercase">{phase}</span>
           </div>
         )}
@@ -160,8 +160,8 @@ function StickyEngineDiagramComponent({
       <Engine3DToolbar />
 
       {/* ── BOTTOM STAGE ADVICE FOOTER ── */}
-      <div className="flex items-center justify-between gap-3 pt-1 text-[11px] font-mono text-slate-400 border-t border-white/5">
-        <span className="text-slate-400 truncate">
+      <div className="flex items-center justify-between gap-3 pt-1 text-[11px] font-mono text-amber-200/60 border-t border-white/5">
+        <span className="text-amber-200/60 truncate">
           {currentStageMeta.advice || "Assemble precision engineered components to complete this stage."}
         </span>
         <span className="text-amber-400 font-bold shrink-0">

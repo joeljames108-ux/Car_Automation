@@ -120,7 +120,7 @@ export function NeonWindTunnelPro() {
   const currentDownforce = Math.round(480 * Math.pow(windSpeed / 250, 2) * (drsActive ? 0.65 : 1.0));
 
   return (
-    <div className="w-full flex flex-col gap-6 text-slate-100 animate-nh-materialize">
+    <div className="w-full flex flex-col gap-6 text-amber-50 animate-nh-materialize">
       {/* Header */}
       <NeonHorizonGlassPanel
         variant="window"

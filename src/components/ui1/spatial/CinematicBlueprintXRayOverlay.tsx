@@ -65,7 +65,7 @@ export const CinematicBlueprintXRayOverlay: React.FC<CinematicBlueprintXRayOverl
                   ISO 8855 CALIBRATED
                 </span>
               </div>
-              <p className="text-xs text-slate-400 font-mono">
+              <p className="text-xs text-amber-200/60 font-mono">
                 Multi-Layer Structural Peeling, Exploded Kinematics & FEA Stress Hotspots
               </p>
             </div>
@@ -213,7 +213,7 @@ export const CinematicBlueprintXRayOverlay: React.FC<CinematicBlueprintXRayOverl
                     className={`flex items-center gap-2 p-2 rounded-xl border text-left text-xs font-mono font-semibold transition-all cursor-pointer ${
                       isOn
                         ? "bg-amber-500/15 text-white border-amber-400/40 shadow-sm"
-                        : "bg-white/[0.03] text-slate-500 border-white/5 hover:bg-white/5"
+                        : "bg-white/[0.03] text-amber-300/50 border-white/5 hover:bg-white/5"
                     }`}
                   >
                     {isOn ? <Eye size={12} className="text-amber-400" /> : <EyeOff size={12} />}
@@ -250,7 +250,7 @@ export const CinematicBlueprintXRayOverlay: React.FC<CinematicBlueprintXRayOverl
                 className={`px-3 py-1.5 rounded-xl border text-xs font-mono font-bold tracking-wider transition-all flex items-center gap-2 cursor-pointer ${
                   stressHeatMap
                     ? "bg-rose-500/20 text-rose-300 border-rose-500/40"
-                    : "bg-white/5 text-slate-400 border-white/10"
+                    : "bg-white/5 text-amber-200/60 border-white/10"
                 }`}
               >
                 <Activity size={13} className={stressHeatMap ? "text-rose-400 animate-pulse" : ""} />
@@ -270,7 +270,7 @@ export const CinematicBlueprintXRayOverlay: React.FC<CinematicBlueprintXRayOverl
                   });
                   setExplodedPercent(0);
                 }}
-                className="px-3 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-xs font-mono text-slate-300 border border-white/10 cursor-pointer"
+                className="px-3 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-xs font-mono text-amber-100/80 border border-white/10 cursor-pointer"
               >
                 RESET CAD POSE
               </button>

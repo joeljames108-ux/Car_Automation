@@ -29,7 +29,7 @@ export const NeonHorizonBadge: React.FC<NeonHorizonBadgeProps> = ({
     gold: "bg-amber-500/15 border-amber-400/40 text-amber-200",
     emerald: "bg-emerald-500/15 border-emerald-400/40 text-emerald-200",
     coral: "bg-rose-500/15 border-rose-400/40 text-rose-200",
-    neutral: "bg-slate-800/60 border-white/10 text-slate-300",
+    neutral: "bg-amber-800/35/60 border-white/10 text-amber-100/80",
     live: "bg-sky-400/12 border-sky-400/30 text-sky-100",
   }[variant];
 

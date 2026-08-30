@@ -111,9 +111,9 @@ export const BespokeLuxuryInteriorStudioHubComponent: React.FC = () => {
   }, [interiorState, manikinPercentile, seatForeAftMm]);
 
   return (
-    <div className="w-full h-full flex flex-col space-y-6 text-slate-100 p-4 md:p-6 bg-slate-950">
+    <div className="w-full h-full flex flex-col space-y-6 text-amber-50 p-4 md:p-6 bg-amber-950/80">
       {/* Top Header */}
-      <div className="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-slate-800">
+      <div className="flex flex-wrap items-center justify-between gap-4 pb-4 border-b border-amber-800/30">
         <div>
           <div className="flex items-center gap-2 text-xs font-bold text-amber-400 uppercase tracking-widest">
             <Sparkles size={14} /> BESPOKE AUTOMOTIVE INTERIOR STUDIO
@@ -121,13 +121,13 @@ export const BespokeLuxuryInteriorStudioHubComponent: React.FC = () => {
           <h1 className="text-2xl md:text-3xl font-black text-white tracking-tight">
             {interiorState.name}
           </h1>
-          <p className="text-xs text-slate-400 mt-1 max-w-2xl">
+          <p className="text-xs text-amber-200/60 mt-1 max-w-2xl">
             Precision bespoke cabin engineering with active acoustics, thermal comfort, and SAE J1100 biometrics.
           </p>
         </div>
 
         {/* Navigation Tabs */}
-        <div className="flex items-center gap-1.5 p-1 rounded-2xl backdrop-blur-xl bg-slate-900 border border-slate-800">
+        <div className="flex items-center gap-1.5 p-1 rounded-2xl backdrop-blur-xl bg-amber-900/50 border border-amber-800/30">
           {[
             { id: "visualizer" as const, label: "3D CAD Studio", icon: Box },
             { id: "materials" as const, label: "PBR Materials", icon: Palette },
@@ -144,7 +144,7 @@ export const BespokeLuxuryInteriorStudioHubComponent: React.FC = () => {
                 className={`flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                   isSelected
                     ? "bg-gradient-to-r from-amber-500 to-amber-600 text-white shadow-lg shadow-cyan-500/25"
-                    : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/50"
+                    : "text-amber-200/60 hover:text-amber-50 hover:bg-amber-800/35/50"
                 }`}
               >
                 <Icon size={14} />
@@ -162,8 +162,8 @@ export const BespokeLuxuryInteriorStudioHubComponent: React.FC = () => {
 
           {/* Quick Component Preset Switcher Bar */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-            <div className="p-3 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-1.5">
-              <label className="text-[10px] font-bold text-slate-400 uppercase">Dashboard Architecture</label>
+            <div className="p-3 rounded-2xl bg-amber-900/40 border border-amber-800/30 space-y-1.5">
+              <label className="text-[10px] font-bold text-amber-200/60 uppercase">Dashboard Architecture</label>
               <select
                 value={interiorState.dashboard.typology}
                 onChange={(e) =>
@@ -172,7 +172,7 @@ export const BespokeLuxuryInteriorStudioHubComponent: React.FC = () => {
                     dashboard: { ...interiorState.dashboard, typology: e.target.value as DashboardTypology },
                   })
                 }
-                className="w-full bg-slate-950 text-xs font-bold text-amber-300 p-2 rounded-xl border border-slate-800"
+                className="w-full bg-amber-950/80 text-xs font-bold text-amber-300 p-2 rounded-xl border border-amber-800/30"
               >
                 {DASHBOARD_OPTIONS.map((d) => (
                   <option key={d.id} value={d.id}>{d.name}</option>
@@ -180,8 +180,8 @@ export const BespokeLuxuryInteriorStudioHubComponent: React.FC = () => {
               </select>
             </div>
 
-            <div className="p-3 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-1.5">
-              <label className="text-[10px] font-bold text-slate-400 uppercase">Steering Wheel</label>
+            <div className="p-3 rounded-2xl bg-amber-900/40 border border-amber-800/30 space-y-1.5">
+              <label className="text-[10px] font-bold text-amber-200/60 uppercase">Steering Wheel</label>
               <select
                 value={interiorState.steering.typology}
                 onChange={(e) =>
@@ -190,7 +190,7 @@ export const BespokeLuxuryInteriorStudioHubComponent: React.FC = () => {
                     steering: { ...interiorState.steering, typology: e.target.value as SteeringWheelTypology },
                   })
                 }
-                className="w-full bg-slate-950 text-xs font-bold text-amber-300 p-2 rounded-xl border border-slate-800"
+                className="w-full bg-amber-950/80 text-xs font-bold text-amber-300 p-2 rounded-xl border border-amber-800/30"
               >
                 {STEERING_OPTIONS.map((s) => (
                   <option key={s.id} value={s.id}>{s.name}</option>
@@ -198,8 +198,8 @@ export const BespokeLuxuryInteriorStudioHubComponent: React.FC = () => {
               </select>
             </div>
 
-            <div className="p-3 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-1.5">
-              <label className="text-[10px] font-bold text-slate-400 uppercase">Seating Assembly</label>
+            <div className="p-3 rounded-2xl bg-amber-900/40 border border-amber-800/30 space-y-1.5">
+              <label className="text-[10px] font-bold text-amber-200/60 uppercase">Seating Assembly</label>
               <select
                 value={interiorState.seating.frontSeatType}
                 onChange={(e) =>
@@ -208,7 +208,7 @@ export const BespokeLuxuryInteriorStudioHubComponent: React.FC = () => {
                     seating: { ...interiorState.seating, frontSeatType: e.target.value as FrontSeatTypology },
                   })
                 }
-                className="w-full bg-slate-950 text-xs font-bold text-amber-300 p-2 rounded-xl border border-slate-800"
+                className="w-full bg-amber-950/80 text-xs font-bold text-amber-300 p-2 rounded-xl border border-amber-800/30"
               >
                 {SEATING_OPTIONS.map((st) => (
                   <option key={st.id} value={st.id}>{st.name}</option>
@@ -216,8 +216,8 @@ export const BespokeLuxuryInteriorStudioHubComponent: React.FC = () => {
               </select>
             </div>
 
-            <div className="p-3 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-1.5">
-              <label className="text-[10px] font-bold text-slate-400 uppercase">Center Console</label>
+            <div className="p-3 rounded-2xl bg-amber-900/40 border border-amber-800/30 space-y-1.5">
+              <label className="text-[10px] font-bold text-amber-200/60 uppercase">Center Console</label>
               <select
                 value={interiorState.console.typology}
                 onChange={(e) =>
@@ -226,7 +226,7 @@ export const BespokeLuxuryInteriorStudioHubComponent: React.FC = () => {
                     console: { ...interiorState.console, typology: e.target.value as CenterConsoleTypology },
                   })
                 }
-                className="w-full bg-slate-950 text-xs font-bold text-amber-300 p-2 rounded-xl border border-slate-800"
+                className="w-full bg-amber-950/80 text-xs font-bold text-amber-300 p-2 rounded-xl border border-amber-800/30"
               >
                 {CONSOLE_OPTIONS.map((c) => (
                   <option key={c.id} value={c.id}>{c.name}</option>
@@ -240,13 +240,13 @@ export const BespokeLuxuryInteriorStudioHubComponent: React.FC = () => {
       {/* Materials Customizer Tab */}
       {activeTab === "materials" && (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="p-5 rounded-3xl bg-slate-900/90 border border-slate-800 space-y-4">
+          <div className="p-5 rounded-3xl bg-amber-900/40 border border-amber-800/30 space-y-4">
             <h3 className="text-sm font-bold text-amber-400 uppercase tracking-wider flex items-center gap-2">
               <Palette size={16} /> Upholstery & Leather Finish
             </h3>
             
             <div className="space-y-2">
-              <label className="text-xs text-slate-400">Primary Material</label>
+              <label className="text-xs text-amber-200/60">Primary Material</label>
               <select
                 value={interiorState.materials.seatPrimaryMaterial}
                 onChange={(e) =>
@@ -255,7 +255,7 @@ export const BespokeLuxuryInteriorStudioHubComponent: React.FC = () => {
                     materials: { ...interiorState.materials, seatPrimaryMaterial: e.target.value as InteriorMaterialType },
                   })
                 }
-                className="w-full bg-slate-950 text-xs p-2.5 rounded-xl border border-slate-800 font-bold"
+                className="w-full bg-amber-950/80 text-xs p-2.5 rounded-xl border border-amber-800/30 font-bold"
               >
                 <option value="perforated_alcantara">Alcantara Synthetic Suede</option>
                 <option value="nappa_leather">Full-Grain Nappa Leather</option>
@@ -266,7 +266,7 @@ export const BespokeLuxuryInteriorStudioHubComponent: React.FC = () => {
             </div>
 
             <div className="space-y-2">
-              <label className="text-xs text-slate-400">Stitching Color</label>
+              <label className="text-xs text-amber-200/60">Stitching Color</label>
               <div className="flex items-center gap-3">
                 <input
                   type="color"
@@ -286,13 +286,13 @@ export const BespokeLuxuryInteriorStudioHubComponent: React.FC = () => {
             </div>
           </div>
 
-          <div className="p-5 rounded-3xl bg-slate-900/90 border border-slate-800 space-y-4">
+          <div className="p-5 rounded-3xl bg-amber-900/40 border border-amber-800/30 space-y-4">
             <h3 className="text-sm font-bold text-amber-400 uppercase tracking-wider flex items-center gap-2">
               <Sparkles size={16} /> Stitching & Trim Accents
             </h3>
 
             <div className="space-y-2">
-              <label className="text-xs text-slate-400">Decorative Trim Insert</label>
+              <label className="text-xs text-amber-200/60">Decorative Trim Insert</label>
               <select
                 value={interiorState.materials.dashboardTrimInsert}
                 onChange={(e) =>
@@ -301,7 +301,7 @@ export const BespokeLuxuryInteriorStudioHubComponent: React.FC = () => {
                     materials: { ...interiorState.materials, dashboardTrimInsert: e.target.value as InteriorMaterialType },
                   })
                 }
-                className="w-full bg-slate-950 text-xs p-2.5 rounded-xl border border-slate-800 font-bold"
+                className="w-full bg-amber-950/80 text-xs p-2.5 rounded-xl border border-amber-800/30 font-bold"
               >
                 <option value="3k_twill_carbon_fiber">3K Twill Gloss Carbon Fiber</option>
                 <option value="forged_carbon_composite">Forged Carbon Composite</option>
@@ -312,13 +312,13 @@ export const BespokeLuxuryInteriorStudioHubComponent: React.FC = () => {
             </div>
           </div>
 
-          <div className="p-5 rounded-3xl bg-slate-900/90 border border-slate-800 space-y-4">
+          <div className="p-5 rounded-3xl bg-amber-900/40 border border-amber-800/30 space-y-4">
             <h3 className="text-sm font-bold text-amber-400 uppercase tracking-wider flex items-center gap-2">
               <Zap size={16} /> Ambient Lighting & Starlight
             </h3>
 
             <div className="flex items-center justify-between">
-              <span className="text-xs text-slate-300 font-bold">Starlight Roof Headliner</span>
+              <span className="text-xs text-amber-100/80 font-bold">Starlight Roof Headliner</span>
               <input
                 type="checkbox"
                 checked={interiorState.lighting.illuminatedZones.starlightRoofHeadliner}
@@ -344,14 +344,14 @@ export const BespokeLuxuryInteriorStudioHubComponent: React.FC = () => {
       {/* NVH & Acoustics Simulation Tab */}
       {activeTab === "acoustics" && (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="p-6 rounded-3xl bg-slate-900/90 border border-slate-800 space-y-5">
+          <div className="p-6 rounded-3xl bg-amber-900/40 border border-amber-800/30 space-y-5">
             <h3 className="text-sm font-bold text-amber-400 uppercase tracking-wider flex items-center gap-2">
               <Volume2 size={16} /> Real-Time Cabin NVH Simulation
             </h3>
 
             <div className="space-y-3">
               <div className="flex justify-between text-xs">
-                <span className="text-slate-400">Engine RPM:</span>
+                <span className="text-amber-200/60">Engine RPM:</span>
                 <span className="text-rose-400 font-bold">{simRpm} RPM</span>
               </div>
               <input
@@ -365,7 +365,7 @@ export const BespokeLuxuryInteriorStudioHubComponent: React.FC = () => {
               />
 
               <div className="flex justify-between text-xs">
-                <span className="text-slate-400">Vehicle Speed:</span>
+                <span className="text-amber-200/60">Vehicle Speed:</span>
                 <span className="text-amber-400 font-bold">{vehicleSpeedKmh} km/h</span>
               </div>
               <input
@@ -379,14 +379,14 @@ export const BespokeLuxuryInteriorStudioHubComponent: React.FC = () => {
               />
             </div>
 
-            <div className="flex items-center justify-between p-3 rounded-2xl bg-slate-950 border border-slate-800">
-              <span className="text-xs font-bold text-slate-200">Active Noise Cancellation (ANC)</span>
+            <div className="flex items-center justify-between p-3 rounded-2xl bg-amber-950/80 border border-amber-800/30">
+              <span className="text-xs font-bold text-amber-50">Active Noise Cancellation (ANC)</span>
               <button
                 onClick={() => setAncEnabled(!ancEnabled)}
                 className={`px-3 py-1 rounded-xl text-xs font-bold border transition-all cursor-pointer ${
                   ancEnabled
                     ? "bg-emerald-500/20 border-emerald-500 text-emerald-300"
-                    : "bg-slate-900 border-slate-700 text-slate-400"
+                    : "bg-amber-900/50 border-amber-700/30 text-amber-200/60"
                 }`}
               >
                 {ancEnabled ? "ACTIVE" : "BYPASSED"}
@@ -394,29 +394,29 @@ export const BespokeLuxuryInteriorStudioHubComponent: React.FC = () => {
             </div>
           </div>
 
-          <div className="p-6 rounded-3xl bg-slate-900/90 border border-slate-800 space-y-4">
+          <div className="p-6 rounded-3xl bg-amber-900/40 border border-amber-800/30 space-y-4">
             <h3 className="text-sm font-bold text-emerald-400 uppercase tracking-wider flex items-center gap-2">
               <Activity size={16} /> Acoustic Telemetry Metrics
             </h3>
 
             <div className="grid grid-cols-2 gap-3">
-              <div className="p-3.5 rounded-2xl bg-slate-950 border border-slate-800">
-                <div className="text-[10px] font-bold text-slate-400">DRIVER EAR SPL (dBA)</div>
+              <div className="p-3.5 rounded-2xl bg-amber-950/80 border border-amber-800/30">
+                <div className="text-[10px] font-bold text-amber-200/60">DRIVER EAR SPL (dBA)</div>
                 <div className="text-xl font-black text-amber-300 mt-1">{acousticResult.driverEarSplDba} dBA</div>
               </div>
 
-              <div className="p-3.5 rounded-2xl bg-slate-950 border border-slate-800">
-                <div className="text-[10px] font-bold text-slate-400">REVERBERATION T60</div>
+              <div className="p-3.5 rounded-2xl bg-amber-950/80 border border-amber-800/30">
+                <div className="text-[10px] font-bold text-amber-200/60">REVERBERATION T60</div>
                 <div className="text-xl font-black text-amber-300 mt-1">{acousticResult.reverberationTimeT60Sec}s</div>
               </div>
 
-              <div className="p-3.5 rounded-2xl bg-slate-950 border border-slate-800">
-                <div className="text-[10px] font-bold text-slate-400">ANC ATTENUATION</div>
+              <div className="p-3.5 rounded-2xl bg-amber-950/80 border border-amber-800/30">
+                <div className="text-[10px] font-bold text-amber-200/60">ANC ATTENUATION</div>
                 <div className="text-xl font-black text-emerald-300 mt-1">-{acousticResult.ancAttenuationDb} dB</div>
               </div>
 
-              <div className="p-3.5 rounded-2xl bg-slate-950 border border-slate-800">
-                <div className="text-[10px] font-bold text-slate-400">ZWICKER QUALITY</div>
+              <div className="p-3.5 rounded-2xl bg-amber-950/80 border border-amber-800/30">
+                <div className="text-[10px] font-bold text-amber-200/60">ZWICKER QUALITY</div>
                 <div className="text-xl font-black text-amber-300 mt-1">{acousticResult.soundQualityScoreZwicker}/100</div>
               </div>
             </div>
@@ -427,13 +427,13 @@ export const BespokeLuxuryInteriorStudioHubComponent: React.FC = () => {
       {/* Ergonomics & Biometrics Tab */}
       {activeTab === "ergonomics" && (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="p-6 rounded-3xl bg-slate-900/90 border border-slate-800 space-y-4">
+          <div className="p-6 rounded-3xl bg-amber-900/40 border border-amber-800/30 space-y-4">
             <h3 className="text-sm font-bold text-amber-400 uppercase tracking-wider flex items-center gap-2">
               <Eye size={16} /> SAE J1100 Manikin Calibration
             </h3>
 
             <div className="space-y-2">
-              <label className="text-xs text-slate-400">Driver Percentile Manikin</label>
+              <label className="text-xs text-amber-200/60">Driver Percentile Manikin</label>
               <div className="grid grid-cols-3 gap-2">
                 {(["5th_female", "50th_male", "95th_male"] as const).map((p) => (
                   <button
@@ -442,7 +442,7 @@ export const BespokeLuxuryInteriorStudioHubComponent: React.FC = () => {
                     className={`py-2 rounded-xl text-xs font-bold border transition-all cursor-pointer ${
                       manikinPercentile === p
                         ? "bg-amber-500/20 border-amber-500 text-amber-300"
-                        : "bg-slate-950 border-slate-800 text-slate-400"
+                        : "bg-amber-950/80 border-amber-800/30 text-amber-200/60"
                     }`}
                   >
                     {p.replace("_", " ").toUpperCase()}
@@ -453,7 +453,7 @@ export const BespokeLuxuryInteriorStudioHubComponent: React.FC = () => {
 
             <div className="space-y-2">
               <div className="flex justify-between text-xs">
-                <span className="text-slate-400">Seat Fore / Aft Position:</span>
+                <span className="text-amber-200/60">Seat Fore / Aft Position:</span>
                 <span className="text-amber-300 font-bold">{seatForeAftMm} mm</span>
               </div>
               <input
@@ -468,29 +468,29 @@ export const BespokeLuxuryInteriorStudioHubComponent: React.FC = () => {
             </div>
           </div>
 
-          <div className="p-6 rounded-3xl bg-slate-900/90 border border-slate-800 space-y-4">
+          <div className="p-6 rounded-3xl bg-amber-900/40 border border-amber-800/30 space-y-4">
             <h3 className="text-sm font-bold text-amber-400 uppercase tracking-wider flex items-center gap-2">
               <Shield size={16} /> SAE Ergonomics Results
             </h3>
 
             <div className="grid grid-cols-2 gap-3 text-xs">
-              <div className="p-3 rounded-2xl bg-slate-950 border border-slate-800">
-                <span className="text-slate-400">Headroom:</span>
+              <div className="p-3 rounded-2xl bg-amber-950/80 border border-amber-800/30">
+                <span className="text-amber-200/60">Headroom:</span>
                 <div className="text-lg font-bold text-emerald-300">{ergoResult.headroomClearanceMm} mm</div>
               </div>
 
-              <div className="p-3 rounded-2xl bg-slate-950 border border-slate-800">
-                <span className="text-slate-400">Knee Flexion Angle:</span>
+              <div className="p-3 rounded-2xl bg-amber-950/80 border border-amber-800/30">
+                <span className="text-amber-200/60">Knee Flexion Angle:</span>
                 <div className="text-lg font-bold text-amber-300">{ergoResult.kneeAngleDeg}°</div>
               </div>
 
-              <div className="p-3 rounded-2xl bg-slate-950 border border-slate-800">
-                <span className="text-slate-400">Elbow Bend Angle:</span>
+              <div className="p-3 rounded-2xl bg-amber-950/80 border border-amber-800/30">
+                <span className="text-amber-200/60">Elbow Bend Angle:</span>
                 <div className="text-lg font-bold text-amber-300">{ergoResult.elbowAngleDeg}°</div>
               </div>
 
-              <div className="p-3 rounded-2xl bg-slate-950 border border-slate-800">
-                <span className="text-slate-400">SAE Overall Score:</span>
+              <div className="p-3 rounded-2xl bg-amber-950/80 border border-amber-800/30">
+                <span className="text-amber-200/60">SAE Overall Score:</span>
                 <div className="text-lg font-bold text-amber-300">{ergoResult.overallSaeErgonomicsScore}/100</div>
               </div>
             </div>
@@ -500,11 +500,11 @@ export const BespokeLuxuryInteriorStudioHubComponent: React.FC = () => {
 
       {/* CAD Spec & GLB Tab */}
       {activeTab === "cad" && (
-        <div className="p-6 rounded-3xl bg-slate-900/90 border border-slate-800 space-y-4">
+        <div className="p-6 rounded-3xl bg-amber-900/40 border border-amber-800/30 space-y-4">
           <h3 className="text-sm font-bold text-amber-400 uppercase tracking-wider flex items-center gap-2">
             <Cpu size={16} /> CAD Assembly Metadata & Specification
           </h3>
-          <pre className="p-4 rounded-2xl bg-slate-950 border border-slate-800 text-xs font-mono text-slate-300 overflow-x-auto">
+          <pre className="p-4 rounded-2xl bg-amber-950/80 border border-amber-800/30 text-xs font-mono text-amber-100/80 overflow-x-auto">
             {JSON.stringify(interiorState, null, 2)}
           </pre>
         </div>

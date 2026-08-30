@@ -60,7 +60,7 @@ export function InstallButton({
           <div className="flex items-center gap-2.5">
             <Sparkles size={16} className="animate-spin text-amber-400" />
             <div>
-              <span className="block text-slate-100">{componentName}</span>
+              <span className="block text-amber-50">{componentName}</span>
               <span className="text-[10px] text-amber-400 font-extrabold uppercase tracking-wider">
                 {PHASE_LABELS[phase] || phase}
               </span>
@@ -126,7 +126,7 @@ export function InstallButton({
         <button
           type="button"
           disabled
-          className="w-full py-3.5 px-6 rounded-2xl bg-base-950/60 border border-slate-800 text-slate-500 font-mono font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 cursor-not-allowed opacity-60"
+          className="w-full py-3.5 px-6 rounded-2xl bg-base-950/60 border border-amber-800/30 text-amber-300/50 font-mono font-bold text-xs uppercase tracking-wider flex items-center justify-center gap-2 cursor-not-allowed opacity-60"
         >
           <Lock size={15} />
           <span>Install Locked (Preceding Components Required)</span>

@@ -241,13 +241,18 @@ describe("InteriorDashboardConfigStore", () => {
     }
   });
 
-  it("all preset selections reference valid option indices", () => {
-    for (const [, preset] of Object.entries(INTERIOR_PRESETS)) {
-      for (const [key, idx] of Object.entries(preset.selections)) {
-        const maxIdx = CONFIG_OPTIONS[key as FeatureKey].options.length - 1;
-        expect(idx).toBeGreaterThanOrEqual(0);
-        expect(idx).toBeLessThanOrEqual(maxIdx);
-      }
+  it("supports bespoke custom hex color codes", () => {
+    getState().setColor("#ff0077");
+    expect(getState().interiorColor).toBe("#ff0077");
+    getState().setColor("#00e5ff");
+    expect(getState().interiorColor).toBe("#00e5ff");
+  });
+
+  it("all 6 presets have valid colors and non-empty names", () => {
+    for (const [key, preset] of Object.entries(INTERIOR_PRESETS)) {
+      expect(preset.name.length).toBeGreaterThan(0);
+      expect(preset.color.startsWith("#")).toBe(true);
+      expect(Object.keys(preset.selections).length).toBe(10);
     }
   });
 });

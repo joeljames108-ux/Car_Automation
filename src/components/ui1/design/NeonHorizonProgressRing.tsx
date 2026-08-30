@@ -66,7 +66,7 @@ export const NeonHorizonProgressRing: React.FC<NeonHorizonProgressRingProps> = (
           {label ?? `${Math.round(percentage)}%`}
         </span>
         {sublabel && (
-          <span className="text-[8px] text-slate-400 nh-font-mono uppercase tracking-wider mt-0.5">
+          <span className="text-[8px] text-amber-200/60 nh-font-mono uppercase tracking-wider mt-0.5">
             {sublabel}
           </span>
         )}

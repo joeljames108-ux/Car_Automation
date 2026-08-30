@@ -216,7 +216,7 @@ export const InteriorCadInspectorViewport: React.FC<InteriorCadInspectorViewport
   };
 
   return (
-    <div className="relative w-full h-[650px] rounded-3xl overflow-hidden border border-slate-800 shadow-2xl bg-slate-950 font-sans">
+    <div className="relative w-full h-[650px] rounded-3xl overflow-hidden border border-amber-800/30 shadow-2xl bg-amber-950/80 font-sans">
       {/* 3D WebGL Canvas */}
       <div
         ref={containerRef}
@@ -225,7 +225,7 @@ export const InteriorCadInspectorViewport: React.FC<InteriorCadInspectorViewport
       />
 
       {/* Top Left Status Overlay */}
-      <div className="absolute top-4 left-4 p-3 rounded-2xl backdrop-blur-xl bg-slate-950/90 border border-slate-800 space-y-1 z-10">
+      <div className="absolute top-4 left-4 p-3 rounded-2xl backdrop-blur-xl bg-amber-950/90 border border-amber-800/30 space-y-1 z-10">
         <div className="text-[10px] font-bold text-amber-400 uppercase tracking-wider flex items-center gap-1.5">
           <Box size={13} /> 3D INTERIOR CAD INSPECTOR
         </div>
@@ -239,7 +239,7 @@ export const InteriorCadInspectorViewport: React.FC<InteriorCadInspectorViewport
           className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold border transition-all cursor-pointer ${
             shadingMode === "wireframe_tech"
               ? "bg-amber-500/20 border-amber-500 text-amber-300"
-              : "bg-slate-900 border-slate-800 text-slate-300 hover:text-white"
+              : "bg-amber-900/50 border-amber-800/30 text-amber-100/80 hover:text-white"
           }`}
         >
           <Layers size={13} />
@@ -266,14 +266,14 @@ export const InteriorCadInspectorViewport: React.FC<InteriorCadInspectorViewport
 
       {/* Selected Component CAD Metadata Inspector Drawer (Right Side) */}
       {selectedMeta && (
-        <div className="absolute top-20 right-4 w-72 p-4 rounded-2xl backdrop-blur-xl bg-slate-950/95 border border-amber-500/40 shadow-2xl space-y-3 z-20">
-          <div className="flex items-center justify-between border-b border-slate-800 pb-2">
+        <div className="absolute top-20 right-4 w-72 p-4 rounded-2xl backdrop-blur-xl bg-amber-950/95 border border-amber-500/40 shadow-2xl space-y-3 z-20">
+          <div className="flex items-center justify-between border-b border-amber-800/30 pb-2">
             <span className="text-[10px] font-bold text-amber-400 uppercase tracking-wider flex items-center gap-1.5">
               <Info size={13} /> CAD COMPONENT SPEC
             </span>
             <button
               onClick={() => setSelectedMeta(null)}
-              className="text-slate-400 hover:text-slate-200 text-xs font-bold cursor-pointer"
+              className="text-amber-200/60 hover:text-amber-50 text-xs font-bold cursor-pointer"
             >
               ✕
             </button>
@@ -285,18 +285,18 @@ export const InteriorCadInspectorViewport: React.FC<InteriorCadInspectorViewport
           </div>
 
           <div className="grid grid-cols-2 gap-2 text-[10px]">
-            <div className="p-2 rounded-xl bg-slate-900 border border-slate-800">
-              <span className="text-slate-400">Mass:</span>
+            <div className="p-2 rounded-xl bg-amber-900/50 border border-amber-800/30">
+              <span className="text-amber-200/60">Mass:</span>
               <div className="font-bold text-amber-300 text-xs">{selectedMeta.massKg} kg</div>
             </div>
-            <div className="p-2 rounded-xl bg-slate-900 border border-slate-800">
-              <span className="text-slate-400">Triangles:</span>
+            <div className="p-2 rounded-xl bg-amber-900/50 border border-amber-800/30">
+              <span className="text-amber-200/60">Triangles:</span>
               <div className="font-bold text-amber-300 text-xs">{selectedMeta.triangleCount.toLocaleString()}</div>
             </div>
           </div>
 
-          <div className="p-2 rounded-xl bg-slate-900 border border-slate-800 text-[10px]">
-            <span className="text-slate-400">Bounding Box (X/Y/Z):</span>
+          <div className="p-2 rounded-xl bg-amber-900/50 border border-amber-800/30 text-[10px]">
+            <span className="text-amber-200/60">Bounding Box (X/Y/Z):</span>
             <div className="font-bold text-emerald-300 text-xs mt-0.5">
               {selectedMeta.dimensionsMm.x} × {selectedMeta.dimensionsMm.y} × {selectedMeta.dimensionsMm.z} mm
             </div>
@@ -305,7 +305,7 @@ export const InteriorCadInspectorViewport: React.FC<InteriorCadInspectorViewport
       )}
 
       {/* Bottom Exploded View & Kinematics Control Bar */}
-      <div className="absolute bottom-4 left-4 right-4 p-3 rounded-2xl backdrop-blur-xl bg-slate-950/90 border border-slate-800 shadow-2xl flex items-center justify-between gap-4 z-10">
+      <div className="absolute bottom-4 left-4 right-4 p-3 rounded-2xl backdrop-blur-xl bg-amber-950/90 border border-amber-800/30 shadow-2xl flex items-center justify-between gap-4 z-10">
         <div className="flex items-center gap-3 flex-1 min-w-[200px]">
           <div className="flex items-center gap-1.5 text-xs font-bold text-amber-400 whitespace-nowrap">
             <Maximize2 size={14} />

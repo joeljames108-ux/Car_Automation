@@ -207,7 +207,7 @@ function VisionGlassHeaderComponent({
         >
           <div className="flex items-center gap-1.5">
             <Search size={12} style={{ color: "#fbbf24" }} aria-hidden="true" />
-            <span className="font-medium text-slate-200">Search Studio...</span>
+            <span className="font-medium text-amber-50">Search Studio...</span>
           </div>
           <span style={{
             fontSize: 9, color: "#94a3b8", background: "rgba(255,255,255,0.08)",

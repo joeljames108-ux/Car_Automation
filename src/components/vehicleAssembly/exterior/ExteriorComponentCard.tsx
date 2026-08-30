@@ -45,10 +45,10 @@ export const ExteriorComponentCard: React.FC<ExteriorComponentCardProps> = ({
         isSelected
           ? "bg-amber-950/40 border-amber-400 shadow-[0_0_15px_rgba(6,182,212,0.3)]"
           : isInstalled
-          ? "bg-slate-900/60 border-emerald-500/30 hover:border-emerald-400/60"
+          ? "bg-amber-900/40 border-emerald-500/30 hover:border-emerald-400/60"
           : isInstallable
-          ? "bg-slate-900/80 border-slate-700 hover:border-amber-500/60 hover:bg-slate-850"
-          : "bg-slate-950/40 border-slate-850 opacity-60 cursor-not-allowed"
+          ? "bg-amber-900/40 border-amber-700/30 hover:border-amber-500/60 hover:bg-amber-850/40"
+          : "bg-amber-950/40 border-slate-850 opacity-60 cursor-not-allowed"
       }`}
     >
       <div className="flex items-start justify-between gap-3">
@@ -64,10 +64,10 @@ export const ExteriorComponentCard: React.FC<ExteriorComponentCardProps> = ({
               </span>
             )}
           </div>
-          <h4 className="text-xs font-bold text-slate-100 group-hover:text-amber-300 transition-colors truncate">
+          <h4 className="text-xs font-bold text-amber-50 group-hover:text-amber-300 transition-colors truncate">
             {component.name}
           </h4>
-          <p className="text-[11px] text-slate-400 line-clamp-1 mt-0.5">
+          <p className="text-[11px] text-amber-200/60 line-clamp-1 mt-0.5">
             {component.description}
           </p>
         </div>
@@ -94,7 +94,7 @@ export const ExteriorComponentCard: React.FC<ExteriorComponentCardProps> = ({
               <span>INSTALL</span>
             </button>
           ) : (
-            <div className="w-8 h-8 rounded-xl bg-slate-800 text-slate-500 flex items-center justify-center text-xs font-mono">
+            <div className="w-8 h-8 rounded-xl bg-amber-800/35 text-amber-300/50 flex items-center justify-center text-xs font-mono">
               🔒
             </div>
           )}
@@ -111,7 +111,7 @@ export const ExteriorComponentCard: React.FC<ExteriorComponentCardProps> = ({
             onGradeChange(e.target.value as MaterialGrade);
           }}
           onClick={(e) => e.stopPropagation()}
-          className="bg-slate-950 border border-white/10 rounded-lg px-2 py-0.5 text-[11px] font-mono text-amber-300 focus:outline-none focus:border-amber-400 cursor-pointer"
+          className="bg-amber-950/80 border border-white/10 rounded-lg px-2 py-0.5 text-[11px] font-mono text-amber-300 focus:outline-none focus:border-amber-400 cursor-pointer"
         >
           {component.variants.map((v) => (
             <option key={v.id} value={v.id}>
@@ -122,13 +122,13 @@ export const ExteriorComponentCard: React.FC<ExteriorComponentCardProps> = ({
 
         {/* Weight and Cost Badges */}
         <div className="flex items-center gap-2.5 text-[11px] font-mono">
-          <span className="text-slate-400 flex items-center gap-0.5">
-            <Scale size={11} className="text-slate-500" />
-            <strong className="text-slate-200">{effectiveWeight}kg</strong>
+          <span className="text-amber-200/60 flex items-center gap-0.5">
+            <Scale size={11} className="text-amber-300/50" />
+            <strong className="text-amber-50">{effectiveWeight}kg</strong>
           </span>
-          <span className="text-slate-400 flex items-center gap-0.5">
-            <DollarSign size={11} className="text-slate-500" />
-            <strong className="text-slate-200">${effectiveCost.toLocaleString()}</strong>
+          <span className="text-amber-200/60 flex items-center gap-0.5">
+            <DollarSign size={11} className="text-amber-300/50" />
+            <strong className="text-amber-50">${effectiveCost.toLocaleString()}</strong>
           </span>
         </div>
       </div>

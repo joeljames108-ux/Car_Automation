@@ -376,7 +376,7 @@ export const Interior3DViewport: React.FC<Interior3DViewportProps> = ({
   };
 
   return (
-    <div className="relative w-full h-[520px] rounded-2xl overflow-hidden shadow-2xl bg-slate-950 border border-amber-500/30">
+    <div className="relative w-full h-[520px] rounded-2xl overflow-hidden shadow-2xl bg-amber-950/80 border border-amber-500/30">
       {/* 3D WebGL Canvas Mount */}
       <div ref={mountRef} className="w-full h-full cursor-grab active:cursor-grabbing" />
 
@@ -393,10 +393,10 @@ export const Interior3DViewport: React.FC<Interior3DViewportProps> = ({
 
       {/* Driver Gaze HUD */}
       {activeViewpoint === 'driver_pov' && (
-        <div className="absolute top-14 left-1/2 -translate-x-1/2 flex items-center gap-2 px-3.5 py-1 rounded-full bg-slate-950/85 backdrop-blur-md border border-amber-500/40 text-[11px] font-mono font-bold text-amber-300 shadow-xl pointer-events-none">
+        <div className="absolute top-14 left-1/2 -translate-x-1/2 flex items-center gap-2 px-3.5 py-1 rounded-full bg-amber-950/85 backdrop-blur-md border border-amber-500/40 text-[11px] font-mono font-bold text-amber-300 shadow-xl pointer-events-none">
           <Eye size={12} className="text-amber-400 animate-pulse" />
           <span ref={gazeSpanRef}>👀 LOOKING AT: FORWARD WINDSHIELD & ROAD</span>
-          <span ref={coordsSpanRef} className="text-slate-400 font-normal">(0°, 0°)</span>
+          <span ref={coordsSpanRef} className="text-amber-200/60 font-normal">(0°, 0°)</span>
         </div>
       )}
 
@@ -519,15 +519,15 @@ export const Interior3DViewport: React.FC<Interior3DViewportProps> = ({
 
       {/* ── BOTTOM TELEMETRY PILL HUD ── */}
       <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between pointer-events-none">
-        <div className="flex items-center gap-3 px-3 py-2 rounded-xl bg-gradient-to-r from-amber-950/70 via-amber-900/50 to-amber-950/70 backdrop-blur-md border border-amber-500/30 text-xs text-slate-300 pointer-events-auto">
+        <div className="flex items-center gap-3 px-3 py-2 rounded-xl bg-gradient-to-r from-amber-950/70 via-amber-900/50 to-amber-950/70 backdrop-blur-md border border-amber-500/30 text-xs text-amber-100/80 pointer-events-auto">
           <span className="font-mono text-amber-400 font-bold">DASH: {config.dashboardClass.replace(/_/g, ' ').toUpperCase()}</span>
-          <span className="text-slate-600">|</span>
+          <span className="text-amber-400">|</span>
           <span className="font-mono text-amber-400">STEERING: {config.steeringTypology.replace(/_/g, ' ').toUpperCase()}</span>
-          <span className="text-slate-600">|</span>
+          <span className="text-amber-400">|</span>
           <span className="font-mono text-emerald-400">SEATS: {config.seatingClass.replace(/_/g, ' ').toUpperCase()} ({config.seatCount}x)</span>
         </div>
 
-        <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-gradient-to-r from-amber-950/70 via-amber-900/50 to-amber-950/70 backdrop-blur-md border border-amber-500/30 text-xs font-mono text-slate-400">
+        <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-gradient-to-r from-amber-950/70 via-amber-900/50 to-amber-950/70 backdrop-blur-md border border-amber-500/30 text-xs font-mono text-amber-200/60">
           <span>{activeViewpoint === 'driver_pov' ? 'DRAG: LOOK AROUND CABIN' : 'ORBIT: DRAG'}</span>
           <span>•</span>
           <span>SCROLL: ZOOM</span>

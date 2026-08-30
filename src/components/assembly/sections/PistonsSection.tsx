@@ -83,7 +83,7 @@ export function PistonsSection({
               onChange={(v) => updateEngine({ pistons: v })}
             />
 
-            <div className="space-y-2 pt-2 border-t border-slate-800/80">
+            <div className="space-y-2 pt-2 border-t border-amber-800/30">
               <Slider
                 label="Compression Ratio Tuning"
                 value={engineConfig.compressionRatio || 10.5}
@@ -99,7 +99,7 @@ export function PistonsSection({
               <span className="text-[10px] font-mono font-bold text-amber-300 uppercase tracking-wider block">
                 THERMAL BARRIER COATING
               </span>
-              <p className="text-[11px] font-mono text-slate-300 leading-relaxed">
+              <p className="text-[11px] font-mono text-amber-100/80 leading-relaxed">
                 Ceramic piston crown coatings deflect combustion heat downward into the power stroke, protecting the ring land from pre-ignition detonation.
               </p>
             </div>
@@ -120,7 +120,7 @@ export function PistonsSection({
               onSelectVariant={onSelectVariant}
             />
           ) : (
-            <p className="text-xs font-mono text-slate-500">Loading material variants...</p>
+            <p className="text-xs font-mono text-amber-300/50">Loading material variants...</p>
           )}
         </SectionCard>
 

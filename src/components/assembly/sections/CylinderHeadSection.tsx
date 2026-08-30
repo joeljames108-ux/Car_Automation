@@ -87,7 +87,7 @@ export function CylinderHeadSection({
               <span className="text-[10px] font-mono font-bold text-amber-300 uppercase tracking-wider block">
                 VOLUMETRIC EFFICIENCY
               </span>
-              <p className="text-[11px] font-mono text-slate-300 leading-relaxed">
+              <p className="text-[11px] font-mono text-amber-100/80 leading-relaxed">
                 5-Axis CNC porting of intake and exhaust runners eliminates boundary layer turbulence, increasing volumetric air charge flow by up to 28%.
               </p>
             </div>
@@ -108,7 +108,7 @@ export function CylinderHeadSection({
               onSelectVariant={onSelectVariant}
             />
           ) : (
-            <p className="text-xs font-mono text-slate-500">Loading material variants...</p>
+            <p className="text-xs font-mono text-amber-300/50">Loading material variants...</p>
           )}
         </SectionCard>
 

@@ -10,8 +10,8 @@ export function TestingLab() {
   return (
     <div className="space-y-4">
       <div>
-        <h2 className="text-xl font-bold text-slate-100 mb-1">Testing Laboratory</h2>
-        <p className="text-sm text-slate-500">Virtual validation: wind tunnel, crash safety, braking, skidpad, and slalom. All tests run live against the current design.</p>
+        <h2 className="text-xl font-bold text-amber-50 mb-1">Testing Laboratory</h2>
+        <p className="text-sm text-amber-300/50">Virtual validation: wind tunnel, crash safety, braking, skidpad, and slalom. All tests run live against the current design.</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -25,23 +25,23 @@ export function TestingLab() {
           </div>
           <div className="mt-4 grid grid-cols-3 gap-2 text-xs">
             <div className="bg-base-850 rounded-lg p-3 border border-base-800">
-              <div className="label-mono text-slate-500 mb-1">Drag Coefficient</div>
-              <div className="font-mono text-lg text-slate-200">{sim.dragCoeff.toFixed(3)}</div>
+              <div className="label-mono text-amber-300/50 mb-1">Drag Coefficient</div>
+              <div className="font-mono text-lg text-amber-50">{sim.dragCoeff.toFixed(3)}</div>
             </div>
             <div className="bg-base-850 rounded-lg p-3 border border-base-800">
-              <div className="label-mono text-slate-500 mb-1">Downforce</div>
+              <div className="label-mono text-amber-300/50 mb-1">Downforce</div>
               <div className="font-mono text-lg text-accent-300">{Math.round(sim.downforce)} N</div>
             </div>
             <div className="bg-base-850 rounded-lg p-3 border border-base-800">
-              <div className="label-mono text-slate-500 mb-1">Frontal Area</div>
-              <div className="font-mono text-lg text-slate-200">{sim.frontalArea.toFixed(2)} m²</div>
+              <div className="label-mono text-amber-300/50 mb-1">Frontal Area</div>
+              <div className="font-mono text-lg text-amber-50">{sim.frontalArea.toFixed(2)} m²</div>
             </div>
           </div>
           {/* Aero balance bar */}
           <div className="mt-3">
             <div className="flex justify-between text-xs mb-1">
               <span className="label-mono">Aero Balance (Front ↔ Rear)</span>
-              <span className="font-mono text-slate-400">{Math.round(sim.aeroBalance * 100)}% / {Math.round((1 - sim.aeroBalance) * 100)}%</span>
+              <span className="font-mono text-amber-200/60">{Math.round(sim.aeroBalance * 100)}% / {Math.round((1 - sim.aeroBalance) * 100)}%</span>
             </div>
             <div className="h-3 bg-gradient-to-r from-accent-500/30 to-ok-500/30 rounded-full overflow-hidden border border-base-800">
               <div className="h-full bg-accent-500 rounded-full transition-all duration-500" style={{ width: `${sim.aeroBalance * 100}%` }} />
@@ -79,7 +79,7 @@ export function TestingLab() {
             <StatTile label="Fade Resistance" value={t.brakeTest.fadeResistance} unit="/100" accent={t.brakeTest.fadeResistance > 70 ? "ok" : "warn"} />
             <StatTile label="Consistency" value={t.brakeTest.consistency} unit="/100" accent={t.brakeTest.consistency > 80 ? "ok" : "warn"} />
           </div>
-          <div className="mt-3 text-xs text-slate-500 flex items-center gap-1.5">
+          <div className="mt-3 text-xs text-amber-300/50 flex items-center gap-1.5">
             <Thermometer size={12} />
             <span>Brake disc: {design.vehicle.brakeDiscSize}mm · Pad compound: {design.vehicle.brakePadCompound}</span>
           </div>
@@ -143,7 +143,7 @@ function ScoreBar({ label, value }: { label: string; value: number }) {
     <div>
       <div className="flex justify-between text-xs mb-1">
         <span className="label-mono">{label}</span>
-        <span className="font-mono text-slate-300">{value}/100</span>
+        <span className="font-mono text-amber-100/80">{value}/100</span>
       </div>
       <div className="h-2 bg-base-800 rounded-full overflow-hidden">
         <div className={`h-full ${color} rounded-full transition-all duration-500`} style={{ width: `${value}%` }} />
@@ -277,7 +277,7 @@ function GaugeMeter({ value, max, label }: { value: number; max: number; label: 
           <div className="font-mono text-base font-black text-amber-400 leading-none">
             {value.toFixed(2)} <span className="text-xs font-bold">G</span>
           </div>
-          <div className="label-mono text-[9px] text-slate-500 font-bold tracking-widest uppercase mt-1">
+          <div className="label-mono text-[9px] text-amber-300/50 font-bold tracking-widest uppercase mt-1">
             {label}
           </div>
         </div>

@@ -221,11 +221,11 @@ export function HolographicCarHUD({
       </div>
 
       {/* Mode Switcher Toggle Pill */}
-      <div className="absolute top-2 right-2 z-20 flex items-center gap-1 bg-slate-900/90 border border-amber-500/40 rounded-lg p-0.5 backdrop-blur-md">
+      <div className="absolute top-2 right-2 z-20 flex items-center gap-1 bg-amber-900/40 border border-amber-500/40 rounded-lg p-0.5 backdrop-blur-md">
         <button
           onClick={() => setRenderMode3D(true)}
           className={`flex items-center gap-1 px-2 py-0.5 rounded text-[9px] font-mono font-bold transition-all ${
-            renderMode3D ? "bg-amber-500 text-slate-950 shadow-sm font-extrabold" : "text-slate-400 hover:text-white"
+            renderMode3D ? "bg-amber-500 text-slate-950 shadow-sm font-extrabold" : "text-amber-200/60 hover:text-white"
           }`}
         >
           <Box size={10} /> 3D MODEL
@@ -233,7 +233,7 @@ export function HolographicCarHUD({
         <button
           onClick={() => setRenderMode3D(false)}
           className={`flex items-center gap-1 px-2 py-0.5 rounded text-[9px] font-mono font-bold transition-all ${
-            !renderMode3D ? "bg-amber-500 text-slate-950 shadow-sm font-extrabold" : "text-slate-400 hover:text-white"
+            !renderMode3D ? "bg-amber-500 text-slate-950 shadow-sm font-extrabold" : "text-amber-200/60 hover:text-white"
           }`}
         >
           <Eye size={10} /> 2D VECTOR
@@ -330,34 +330,34 @@ export function HolographicCarHUD({
 
             {/* Center RPM Reading */}
             <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
-              <span className="text-[10px] font-mono text-slate-400 uppercase">ENGINE RPM</span>
+              <span className="text-[10px] font-mono text-amber-200/60 uppercase">ENGINE RPM</span>
               <span className="text-lg font-black font-mono text-amber-300">{rpm}</span>
-              <span className="text-[9px] font-mono text-slate-500 uppercase">GEAR {gear}</span>
+              <span className="text-[9px] font-mono text-amber-300/50 uppercase">GEAR {gear}</span>
             </div>
           </div>
 
           {/* Quick HUD Metrics Column */}
           <div className="flex flex-col gap-2 min-w-[160px]">
             <div className="flex items-center justify-between text-xs font-mono border-b border-amber-500/20 pb-1">
-              <span className="text-slate-400">POWERTRAIN</span>
+              <span className="text-amber-200/60">POWERTRAIN</span>
               <span className="text-amber-300 font-bold flex items-center">
                 <AnimatedCounter value={peakPower} duration={400} /> HP
               </span>
             </div>
             <div className="flex items-center justify-between text-xs font-mono border-b border-amber-500/20 pb-1">
-              <span className="text-slate-400">TORQUE</span>
+              <span className="text-amber-200/60">TORQUE</span>
               <span className="text-amber-300 font-bold flex items-center">
                 <AnimatedCounter value={peakTorque} duration={400} /> Nm
               </span>
             </div>
             <div className="flex items-center justify-between text-xs font-mono border-b border-amber-500/20 pb-1">
-              <span className="text-slate-400">DOWNFORCE</span>
+              <span className="text-amber-200/60">DOWNFORCE</span>
               <span className="text-emerald-300 font-bold flex items-center">
                 <AnimatedCounter value={downforce} duration={400} /> N
               </span>
             </div>
             <div className="flex items-center justify-between text-xs font-mono">
-              <span className="text-slate-400">CD DRAG</span>
+              <span className="text-amber-200/60">CD DRAG</span>
               <span className="text-amber-300 font-bold">
                 <AnimatedCounter value={dragCoeff} decimals={3} duration={400} />
               </span>

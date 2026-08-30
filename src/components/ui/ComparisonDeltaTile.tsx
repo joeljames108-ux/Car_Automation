@@ -30,16 +30,16 @@ export const ComparisonDeltaTile: React.FC<ComparisonDeltaTileProps> = ({
   const isBad = (isNegative && higherIsBetter) || (isPositive && !higherIsBetter);
 
   return (
-    <div className={`p-3 rounded-2xl bg-slate-900/60 border border-white/10 ${className}`}>
-      <span className="text-slate-400 text-[10px] uppercase block mb-0.5">{label}</span>
+    <div className={`p-3 rounded-2xl bg-amber-900/40 border border-white/10 ${className}`}>
+      <span className="text-amber-200/60 text-[10px] uppercase block mb-0.5">{label}</span>
       <div className="flex items-baseline justify-between gap-1">
         <span className={`text-base font-bold font-mono ${accentColor}`}>
-          {value} {unit && <span className="text-xs font-normal text-slate-400">{unit}</span>}
+          {value} {unit && <span className="text-xs font-normal text-amber-200/60">{unit}</span>}
         </span>
         {delta !== undefined && (
           <span
             className={`text-[10px] font-mono font-bold flex items-center gap-0.5 ${
-              isGood ? "text-emerald-400" : isBad ? "text-rose-400" : "text-slate-400"
+              isGood ? "text-emerald-400" : isBad ? "text-rose-400" : "text-amber-200/60"
             }`}
           >
             {isPositive && <ArrowUp size={10} />}

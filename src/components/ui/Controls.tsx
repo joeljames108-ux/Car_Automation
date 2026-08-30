@@ -43,12 +43,12 @@ export function Section({ title, icon, children, className = "", collapsible = f
             collapsible ? "cursor-pointer select-none group" : ""
           }`}
         >
-          <h3 className="text-xs font-semibold text-slate-300 flex items-center gap-1.5 uppercase tracking-wider group-hover:text-amber-300 transition-colors">
+          <h3 className="text-xs font-semibold text-amber-100/80 flex items-center gap-1.5 uppercase tracking-wider group-hover:text-amber-300 transition-colors">
             {icon}
             {title}
           </h3>
           {collapsible && (
-            <div className="p-1 rounded-md bg-base-800/80 text-slate-400 group-hover:text-amber-300 group-hover:bg-base-750 transition-all">
+            <div className="p-1 rounded-md bg-base-800/80 text-amber-200/60 group-hover:text-amber-300 group-hover:bg-base-750 transition-all">
               <ChevronDown
                 size={14}
                 className={`transition-transform duration-300 ${isOpen ? "rotate-180" : "rotate-0"}`}
@@ -114,12 +114,12 @@ export function Slider({ label, value, min, max, step = 1, onChange, format, uni
   const diff = Math.round((localVal - initialRef.current) * 100) / 100;
 
   return (
-    <div className="slider-card-capsule group/slider relative my-1.5 p-3 rounded-xl bg-slate-950/90 border border-slate-800/90 backdrop-blur-xl shadow-md transition-all duration-200 hover:border-amber-500/50 hover:shadow-[0_4px_20px_rgba(0,0,0,0.5)] select-none">
+    <div className="slider-card-capsule group/slider relative my-1.5 p-3 rounded-xl bg-amber-950/90 border border-amber-800/30 backdrop-blur-xl shadow-md transition-all duration-200 hover:border-amber-500/50 hover:shadow-[0_4px_20px_rgba(0,0,0,0.5)] select-none">
       {/* Header Row: Icon + Label (Left), Delta + Value (Right) */}
       <div className="flex justify-between items-center mb-2">
         <div className="flex items-center gap-1.5 min-w-0">
           <Zap size={13} className="slider-icon text-amber-400 shrink-0" />
-          <label className="text-xs font-mono font-bold tracking-wide text-slate-100 flex items-center gap-1 truncate">
+          <label className="text-xs font-mono font-bold tracking-wide text-amber-50 flex items-center gap-1 truncate">
             {label}
           </label>
           <ApexTooltip label={label} />
@@ -142,7 +142,7 @@ export function Slider({ label, value, min, max, step = 1, onChange, format, uni
 
           {/* Current Slider Value */}
           <span className="slider-value-text font-mono text-xs font-extrabold text-amber-300 tracking-tight bg-amber-950/60 border border-amber-500/30 px-2 py-0.5 rounded-md shadow-[0_0_8px_rgba(245,158,11,0.2)]">
-            {format ? format(localVal) : localVal}{unit && <span className="text-slate-400 text-[10px] font-normal ml-0.5">{unit}</span>}
+            {format ? format(localVal) : localVal}{unit && <span className="text-amber-200/60 text-[10px] font-normal ml-0.5">{unit}</span>}
           </span>
         </div>
       </div>
@@ -154,7 +154,7 @@ export function Slider({ label, value, min, max, step = 1, onChange, format, uni
           type="button"
           onClick={() => handleStepAdjust(-1)}
           disabled={localVal <= min}
-          className="slider-step-btn w-6 h-6 rounded-lg bg-slate-900 border border-slate-700/80 flex items-center justify-center text-slate-300 hover:text-amber-300 hover:border-amber-400/60 hover:bg-slate-800 disabled:opacity-20 disabled:pointer-events-none transition-all active:scale-90 shrink-0 font-bold text-xs shadow-sm cursor-pointer"
+          className="slider-step-btn w-6 h-6 rounded-lg bg-amber-900/50 border border-amber-700/30/80 flex items-center justify-center text-amber-100/80 hover:text-amber-300 hover:border-amber-400/60 hover:bg-amber-800/35 disabled:opacity-20 disabled:pointer-events-none transition-all active:scale-90 shrink-0 font-bold text-xs shadow-sm cursor-pointer"
           title={`Decrease by ${step}${unit || ""}`}
         >
           -
@@ -162,7 +162,7 @@ export function Slider({ label, value, min, max, step = 1, onChange, format, uni
 
         <div className="relative flex-1 flex items-center h-5">
           {/* Custom Solid Progress Track */}
-          <div className="slider-track-container absolute left-0 top-1/2 -translate-y-1/2 h-2.5 w-full bg-slate-900 rounded-full overflow-hidden pointer-events-none border border-slate-800 shadow-inner">
+          <div className="slider-track-container absolute left-0 top-1/2 -translate-y-1/2 h-2.5 w-full bg-amber-900/50 rounded-full overflow-hidden pointer-events-none border border-amber-800/30 shadow-inner">
             <div
               className="slider-track-fill h-full bg-gradient-to-r from-amber-500 to-orange-500 rounded-full shadow-[0_0_10px_rgba(245,158,11,0.5)] transition-[width] duration-75"
               style={{ width: `${percentage}%` }}
@@ -190,14 +190,14 @@ export function Slider({ label, value, min, max, step = 1, onChange, format, uni
           type="button"
           onClick={() => handleStepAdjust(1)}
           disabled={localVal >= max}
-          className="slider-step-btn w-6 h-6 rounded-lg bg-slate-900 border border-slate-700/80 flex items-center justify-center text-slate-300 hover:text-amber-300 hover:border-amber-400/60 hover:bg-slate-800 disabled:opacity-20 disabled:pointer-events-none transition-all active:scale-90 shrink-0 font-bold text-xs shadow-sm cursor-pointer"
+          className="slider-step-btn w-6 h-6 rounded-lg bg-amber-900/50 border border-amber-700/30/80 flex items-center justify-center text-amber-100/80 hover:text-amber-300 hover:border-amber-400/60 hover:bg-amber-800/35 disabled:opacity-20 disabled:pointer-events-none transition-all active:scale-90 shrink-0 font-bold text-xs shadow-sm cursor-pointer"
           title={`Increase by ${step}${unit || ""}`}
         >
           +
         </button>
       </div>
 
-      {hint && <p className="text-[10px] text-slate-400/80 mt-1 px-0.5 font-mono">{hint}</p>}
+      {hint && <p className="text-[10px] text-amber-200/60/80 mt-1 px-0.5 font-mono">{hint}</p>}
     </div>
   );
 }
@@ -237,7 +237,7 @@ export function Select<T extends string>({ label, value, options, onChange }: {
         className="custom-glass-select-trigger w-full bg-base-850 border border-base-700 rounded-xl px-3.5 py-2 text-xs font-semibold flex items-center justify-between gap-2 transition-all cursor-pointer hover:border-amber-400/50 shadow-sm text-left"
       >
         <span className="truncate">{selectedOption ? selectedOption.label : String(value)}</span>
-        <ChevronDown size={14} className={`transition-transform duration-200 shrink-0 text-slate-400 ${isOpen ? "rotate-180 text-amber-400" : ""}`} />
+        <ChevronDown size={14} className={`transition-transform duration-200 shrink-0 text-amber-200/60 ${isOpen ? "rotate-180 text-amber-400" : ""}`} />
       </button>
 
       {/* Custom Glass Dropdown Menu Popup */}
@@ -284,7 +284,7 @@ export function ChoiceGrid<T extends string>({ value, options, onChange, columns
           className={`px-3 py-2 rounded-xl text-xs font-mono font-bold transition-all border cursor-pointer ${
             value === o.value
               ? "bg-amber-500 text-black border-amber-400 shadow-[0_0_14px_rgba(245,158,11,0.5)] scale-[1.02]"
-              : "bg-base-850/80 border-base-750 text-slate-300 hover:text-slate-100 hover:bg-white/5"
+              : "bg-base-850/80 border-base-750 text-amber-100/80 hover:text-amber-50 hover:bg-white/5"
           }`}
         >
           {o.label}
@@ -324,14 +324,14 @@ export function StatTile({ label, value, unit, sub, accent = "default", icon, de
     ok: "text-ok-400",
     warn: "text-warn-400",
     danger: "text-danger-400",
-    default: "text-slate-200",
+    default: "text-amber-50",
   };
 
   const isNumeric = typeof value === "number";
 
   return (
     <div className="bg-base-850 border border-base-800 rounded-xl px-3.5 py-2.5 interactive-card transition-all duration-300 hover:border-amber-500/30">
-      <div className="label-mono mb-1 flex items-center gap-1.5 text-[11px] text-slate-400">
+      <div className="label-mono mb-1 flex items-center gap-1.5 text-[11px] text-amber-200/60">
         {icon}
         <span>{label}</span>
       </div>
@@ -341,9 +341,9 @@ export function StatTile({ label, value, unit, sub, accent = "default", icon, de
         ) : (
           <span>{value}</span>
         )}
-        {unit && <span className="text-xs font-normal text-slate-400">{unit}</span>}
+        {unit && <span className="text-xs font-normal text-amber-200/60">{unit}</span>}
       </div>
-      {sub && <div className="text-[10px] text-slate-500 mt-0.5 truncate">{sub}</div>}
+      {sub && <div className="text-[10px] text-amber-300/50 mt-0.5 truncate">{sub}</div>}
     </div>
   );
 }
@@ -355,7 +355,7 @@ export function ProgressBar({ value, max = 100, label, color = "bg-accent-500", 
   return (
     <div className={`w-full ${className}`}>
       {label && (
-        <div className="flex justify-between items-center text-xs mb-1 font-mono text-slate-300">
+        <div className="flex justify-between items-center text-xs mb-1 font-mono text-amber-100/80">
           <span>{label}</span>
           <span>{pct.toFixed(0)}%</span>
         </div>

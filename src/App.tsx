@@ -457,7 +457,7 @@ function AppInner() {
             </svg>
             <div>
               <span className="text-sm font-extrabold tracking-wider gradient-text block leading-none">APEX ENGINEER</span>
-              <span className="text-[9px] text-slate-500 font-mono tracking-widest uppercase">Design Studio</span>
+              <span className="text-[9px] text-amber-300/50 font-mono tracking-widest uppercase">Design Studio</span>
             </div>
           </div>
 
@@ -477,7 +477,7 @@ function AppInner() {
                   }}
                   className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all whitespace-nowrap ripple-effect haptic-press ${isActive
                     ? "bg-gradient-to-r from-amber-500/30 to-amber-500/25 text-amber-200 border border-amber-400/50 shadow-[0_0_15px_rgba(34,211,238,0.3)] aurora-glow"
-                    : "text-slate-400 hover:text-slate-200 hover:bg-white/5"
+                    : "text-amber-200/60 hover:text-amber-50 hover:bg-white/5"
                     }`}
                 >
                   {cat.icon}
@@ -491,19 +491,19 @@ function AppInner() {
           <div className="flex items-center gap-2 shrink-0">
             <button
               onClick={() => setCmdPaletteOpen(true)}
-              className="flex items-center gap-2 bg-base-850/90 hover:bg-slate-800 border border-slate-700/80 rounded-lg px-2.5 py-1.5 text-xs text-slate-400 hover:text-slate-200 transition-all hidden md:flex"
+              className="flex items-center gap-2 bg-base-850/90 hover:bg-amber-800/35 border border-amber-700/30/80 rounded-lg px-2.5 py-1.5 text-xs text-amber-200/60 hover:text-amber-50 transition-all hidden md:flex"
               title="Open Command Palette (Ctrl+K)"
             >
               <Search size={13} className="text-amber-400" />
               <span className="text-[11px]">Search...</span>
-              <kbd className="px-1.5 py-0.5 rounded bg-slate-800 border border-slate-700 text-[10px] font-mono text-slate-300 flex items-center gap-0.5">
+              <kbd className="px-1.5 py-0.5 rounded bg-amber-800/35 border border-amber-700/30 text-[10px] font-mono text-amber-100/80 flex items-center gap-0.5">
                 <CmdIcon size={9} /> K
               </kbd>
             </button>
 
             <div className="hidden lg:flex items-center gap-2 bg-base-850/80 border border-base-800 rounded-lg px-2.5 py-1 text-xs">
               <div className="flex items-center gap-1">
-                <span className="text-[10px] text-slate-500 font-mono">MO.</span>
+                <span className="text-[10px] text-amber-300/50 font-mono">MO.</span>
                 <span className="font-mono font-bold text-accent-300">{company.economy.month}</span>
               </div>
               <div className="h-3 w-px bg-base-700" />
@@ -522,22 +522,22 @@ function AppInner() {
             </div>
 
             <div className="flex items-center gap-0.5 bg-base-850 rounded-lg p-0.5 border border-base-800">
-              <button onClick={() => setUnits("metric")} className={`px-2 py-1 rounded text-[11px] font-medium transition-all ${units === "metric" ? "bg-accent-500/20 text-accent-300 font-bold" : "text-slate-500 hover:text-slate-300"}`}>
+              <button onClick={() => setUnits("metric")} className={`px-2 py-1 rounded text-[11px] font-medium transition-all ${units === "metric" ? "bg-accent-500/20 text-accent-300 font-bold" : "text-amber-300/50 hover:text-amber-100/80"}`}>
                 <Ruler size={11} className="inline mr-1" />Metric
               </button>
-              <button onClick={() => setUnits("imperial")} className={`px-2 py-1 rounded text-[11px] font-medium transition-all ${units === "imperial" ? "bg-accent-500/20 text-accent-300 font-bold" : "text-slate-500 hover:text-slate-300"}`}>
+              <button onClick={() => setUnits("imperial")} className={`px-2 py-1 rounded text-[11px] font-medium transition-all ${units === "imperial" ? "bg-accent-500/20 text-accent-300 font-bold" : "text-amber-300/50 hover:text-amber-100/80"}`}>
                 Imperial
               </button>
             </div>
 
             <div className="flex items-center gap-1">
-              <button onClick={() => setDialog({ open: true, mode: "save" })} className="p-1.5 rounded-lg text-slate-400 hover:text-slate-200 hover:bg-base-800 transition-all" title="Save Design">
+              <button onClick={() => setDialog({ open: true, mode: "save" })} className="p-1.5 rounded-lg text-amber-200/60 hover:text-amber-50 hover:bg-base-800 transition-all" title="Save Design">
                 <Save size={14} />
               </button>
-              <button onClick={() => setDialog({ open: true, mode: "load" })} className="p-1.5 rounded-lg text-slate-400 hover:text-slate-200 hover:bg-base-800 transition-all" title="Load Design">
+              <button onClick={() => setDialog({ open: true, mode: "load" })} className="p-1.5 rounded-lg text-amber-200/60 hover:text-amber-50 hover:bg-base-800 transition-all" title="Load Design">
                 <FolderOpen size={14} />
               </button>
-              <button onClick={resetDesign} className="p-1.5 rounded-lg text-slate-400 hover:text-slate-200 hover:bg-base-800 transition-all" title="Reset to Defaults">
+              <button onClick={resetDesign} className="p-1.5 rounded-lg text-amber-200/60 hover:text-amber-50 hover:bg-base-800 transition-all" title="Reset to Defaults">
                 <RotateCcw size={14} />
               </button>
             </div>
@@ -556,10 +556,10 @@ function AppInner() {
                 onClick={() => setStage(s.id)}
                 className={`flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all whitespace-nowrap ripple-effect haptic-press ${isCurrent
                   ? "bg-gradient-to-r from-amber-500/30 to-sky-500/20 text-amber-100 border border-amber-400/50 shadow-[0_0_12px_rgba(34,211,238,0.25)] neon-underline font-bold"
-                  : "text-slate-400 hover:text-slate-100 hover:bg-white/5 border border-transparent"
+                  : "text-amber-200/60 hover:text-amber-50 hover:bg-white/5 border border-transparent"
                   }`}
               >
-                <span className={isCurrent ? "text-amber-300" : "text-slate-500"}>{s.icon}</span>
+                <span className={isCurrent ? "text-amber-300" : "text-amber-300/50"}>{s.icon}</span>
                 <span>{s.label}</span>
               </button>
             );

@@ -40,9 +40,9 @@ export const F1WorkshopNav: React.FC<F1WorkshopNavProps> = memo(function F1Works
   };
 
   return (
-    <div className="w-full lg:w-64 bg-slate-900/70 backdrop-blur-md rounded-2xl border border-slate-800 p-3 space-y-1.5 shadow-2xl flex flex-col">
-      <div className="px-3 py-2 border-b border-slate-800/80 mb-1 flex items-center justify-between">
-        <div className="text-[11px] font-bold uppercase tracking-wider text-slate-400">
+    <div className="w-full lg:w-64 bg-amber-900/40 backdrop-blur-md rounded-2xl border border-amber-800/30 p-3 space-y-1.5 shadow-2xl flex flex-col">
+      <div className="px-3 py-2 border-b border-amber-800/30 mb-1 flex items-center justify-between">
+        <div className="text-[11px] font-bold uppercase tracking-wider text-amber-200/60">
           Design Departments
         </div>
         <span className="text-[10px] font-mono text-amber-400 bg-amber-950/40 border border-amber-800/40 px-2 py-0.5 rounded-full">
@@ -62,20 +62,20 @@ export const F1WorkshopNav: React.FC<F1WorkshopNavProps> = memo(function F1Works
               className={`w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-left transition-all group ${
                 isActive
                   ? "bg-amber-500/15 border border-amber-500/40 text-amber-300 shadow-md shadow-cyan-950/30"
-                  : "bg-slate-950/30 border border-transparent hover:bg-slate-800/60 hover:border-slate-700/60 text-slate-300"
+                  : "bg-amber-950/30 border border-transparent hover:bg-amber-800/35/60 hover:border-amber-700/30/60 text-amber-100/80"
               }`}
             >
               <div className="flex items-center gap-2.5 min-w-0">
                 <div
                   className={`p-1.5 rounded-lg transition-colors ${
-                    isActive ? "bg-amber-500/20 text-amber-400" : "bg-slate-800/80 text-slate-400 group-hover:text-slate-200"
+                    isActive ? "bg-amber-500/20 text-amber-400" : "bg-amber-800/35/80 text-amber-200/60 group-hover:text-amber-50"
                   }`}
                 >
                   {ICON_MAP[step.iconName] || <LayoutDashboard size={16} />}
                 </div>
                 <div className="truncate">
                   <div className="text-xs font-semibold truncate leading-snug">{step.shortTitle}</div>
-                  <div className="text-[10px] text-slate-500 truncate">{status?.highlightKpi || step.category}</div>
+                  <div className="text-[10px] text-amber-300/50 truncate">{status?.highlightKpi || step.category}</div>
                 </div>
               </div>
 

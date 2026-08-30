@@ -87,7 +87,7 @@ export function NeonEnduranceStudio() {
   ];
 
   return (
-    <div className="w-full flex flex-col gap-6 text-slate-100 animate-nh-materialize">
+    <div className="w-full flex flex-col gap-6 text-amber-50 animate-nh-materialize">
       {/* Header */}
       <NeonHorizonGlassPanel
         variant="window"
@@ -147,7 +147,7 @@ export function NeonEnduranceStudio() {
                     className={`p-2.5 rounded-lg border text-center text-xs font-bold cursor-pointer transition-all ${
  isSelected
  ? "bg-sky-400/10 border-sky-400/30 text-sky-200"
- : "bg-[#0a111e] border-white/10 text-slate-400 hover:border-sky-400/25"
+ : "bg-[#0a111e] border-white/10 text-amber-200/60 hover:border-sky-400/25"
  }`}
                   >
                     {item.name}
@@ -196,12 +196,12 @@ export function NeonEnduranceStudio() {
  }`}
                 >
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold text-slate-100">{driver.name}</span>
+                    <span className="text-xs font-bold text-amber-50">{driver.name}</span>
                     <NeonHorizonBadge variant={isSelected ? "cyan" : "neutral"} size="xs">
                       {isSelected ? "IN COCKPIT" : "IN PIT BOX"}
                     </NeonHorizonBadge>
                   </div>
-                  <div className="flex items-center justify-between text-[10px] nh-font-mono text-slate-400">
+                  <div className="flex items-center justify-between text-[10px] nh-font-mono text-amber-200/60">
                     <span>Stint: {driver.stint} · {driver.fatigue}</span>
                     <span className="text-emerald-300 font-bold">{driver.bpm}</span>
                   </div>

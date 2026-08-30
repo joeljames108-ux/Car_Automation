@@ -38,7 +38,7 @@ export function NeonGarageStudio() {
   ];
 
   return (
-    <div className="w-full flex flex-col gap-6 text-slate-100 animate-nh-materialize">
+    <div className="w-full flex flex-col gap-6 text-amber-50 animate-nh-materialize">
       {/* Header */}
       <NeonHorizonGlassPanel
         variant="window"
@@ -86,7 +86,7 @@ export function NeonGarageStudio() {
                     className={`p-3 rounded-xl border transition-all cursor-pointer text-xs font-bold ${
  isSelected
  ? "bg-sky-400/10 border-sky-400/30 text-sky-200"
- : "bg-[#0a111e] border-white/10 text-slate-300 hover:border-sky-400/25"
+ : "bg-[#0a111e] border-white/10 text-amber-100/80 hover:border-sky-400/25"
  }`}
                   >
                     {preset.name}
@@ -97,15 +97,15 @@ export function NeonGarageStudio() {
 
             <div className="p-4 rounded-xl bg-[#0a111e] border border-sky-400/15 flex flex-col gap-2 mt-2">
               <div className="flex items-center justify-between">
-                <span className="text-xs text-slate-400">VIN Chassis Serial:</span>
+                <span className="text-xs text-amber-200/60">VIN Chassis Serial:</span>
                 <span className="text-xs font-bold nh-font-mono text-sky-300">APX-2026-00984-GTX</span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-xs text-slate-400">Assembly Location:</span>
+                <span className="text-xs text-amber-200/60">Assembly Location:</span>
                 <span className="text-xs font-bold nh-font-mono text-amber-300">Apex Skunkworks Plant 01</span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-xs text-slate-400">Track Homologation:</span>
+                <span className="text-xs text-amber-200/60">Track Homologation:</span>
                 <span className="text-xs font-bold nh-font-mono text-emerald-300">FIA GT3 & Road Legal</span>
               </div>
             </div>
@@ -139,12 +139,12 @@ export function NeonGarageStudio() {
  }`}
                 >
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold text-slate-100">{car.name}</span>
+                    <span className="text-xs font-bold text-amber-50">{car.name}</span>
                     <NeonHorizonBadge variant={isSelected ? "cyan" : "neutral"} size="xs">
                       {car.badge}
                     </NeonHorizonBadge>
                   </div>
-                  <div className="flex items-center justify-between text-[10px] nh-font-mono text-slate-400">
+                  <div className="flex items-center justify-between text-[10px] nh-font-mono text-amber-200/60">
                     <span>{car.spec} · {car.power}</span>
                     <span className="text-amber-300 font-bold">{car.value}</span>
                   </div>

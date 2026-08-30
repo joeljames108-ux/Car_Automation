@@ -113,7 +113,7 @@ export function OilPanSection({
               <span className="text-[10px] font-mono font-bold text-amber-300 uppercase tracking-wider block">
                 HIGH-G LATERAL SCAVENGING
               </span>
-              <p className="text-[11px] font-mono text-slate-300 leading-relaxed">
+              <p className="text-[11px] font-mono text-amber-100/80 leading-relaxed">
                 Trapdoor baffles and a low-profile windage tray eliminate oil aeration and prevent oil starvation under 1.8G track cornering.
               </p>
             </div>
@@ -134,7 +134,7 @@ export function OilPanSection({
               onSelectVariant={onSelectVariant}
             />
           ) : (
-            <p className="text-xs font-mono text-slate-500">Loading material variants...</p>
+            <p className="text-xs font-mono text-amber-300/50">Loading material variants...</p>
           )}
         </SectionCard>
 

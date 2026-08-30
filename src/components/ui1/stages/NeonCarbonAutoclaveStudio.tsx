@@ -31,7 +31,7 @@ export function NeonCarbonAutoclaveStudio() {
   const tgTemp = prepregResin === "bismaleimide" ? "260°C" : prepregResin === "cyanate_ester" ? "220°C" : "195°C";
 
   return (
-    <div className="w-full flex flex-col gap-6 text-slate-100 animate-nh-materialize">
+    <div className="w-full flex flex-col gap-6 text-amber-50 animate-nh-materialize">
       {/* Header */}
       <NeonHorizonGlassPanel
         variant="window"
@@ -69,7 +69,7 @@ export function NeonCarbonAutoclaveStudio() {
             <div className="grid grid-cols-8 gap-2 p-4 rounded-xl bg-[#05080f] border border-sky-400/25 shadow-[inset_0_0_20px_rgba(0,0,0,0.8)]">
               {["0°", "+45°", "-45°", "90°", "0°", "+45°", "-45°", "90°", "90°", "-45°", "+45°", "0°", "90°", "-45°", "+45°", "0°"].map((ply, idx) => (
                 <div key={idx} className="p-2.5 rounded-lg bg-[#0a111e] border border-white/10 flex flex-col items-center justify-center font-mono text-[10px] text-center">
-                  <span className="text-slate-400">P{idx + 1}</span>
+                  <span className="text-amber-200/60">P{idx + 1}</span>
                   <span className="text-sky-300 font-bold text-xs">{ply}</span>
                 </div>
               ))}
@@ -92,7 +92,7 @@ export function NeonCarbonAutoclaveStudio() {
                     className={`p-2.5 rounded-lg border text-center text-xs font-bold cursor-pointer transition-all ${
  isSelected
  ? "bg-sky-400/10 border-sky-400/30 text-sky-200"
- : "bg-[#0a111e] border-white/10 text-slate-400 hover:border-sky-400/25"
+ : "bg-[#0a111e] border-white/10 text-amber-200/60 hover:border-sky-400/25"
  }`}
                   >
                     {r.name}
@@ -138,11 +138,11 @@ export function NeonCarbonAutoclaveStudio() {
 
             <div className="p-3.5 rounded-xl bg-[#0a111e] border border-sky-400/15 flex flex-col gap-2 font-mono text-xs">
               <div className="flex items-center justify-between">
-                <span className="text-slate-400">Fiber Volume Fraction (Vf):</span>
+                <span className="text-amber-200/60">Fiber Volume Fraction (Vf):</span>
                 <span className="text-emerald-300 font-bold">64.5% Optimal</span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-slate-400">Vacuum Bag Debulk:</span>
+                <span className="text-amber-200/60">Vacuum Bag Debulk:</span>
                 <span className="text-sky-300 font-bold">-0.98 Bar Vacuum</span>
               </div>
             </div>

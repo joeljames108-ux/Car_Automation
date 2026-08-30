@@ -88,7 +88,7 @@ export function NeonDiffuserStudio() {
   }, [flapAngle, blowingFlowRate, isSeparating]);
 
   return (
-    <div className="w-full flex flex-col gap-6 text-slate-100 animate-nh-materialize">
+    <div className="w-full flex flex-col gap-6 text-amber-50 animate-nh-materialize">
       {/* Header */}
       <NeonHorizonGlassPanel
         variant="window"
@@ -150,7 +150,7 @@ export function NeonDiffuserStudio() {
                     className={`p-2.5 rounded-lg border text-center text-xs font-bold cursor-pointer transition-all ${
  isSelected
  ? "bg-sky-400/10 border-sky-400/30 text-sky-200"
- : "bg-[#0a111e] border-white/10 text-slate-400 hover:border-sky-400/25"
+ : "bg-[#0a111e] border-white/10 text-amber-200/60 hover:border-sky-400/25"
  }`}
                   >
                     {m.name}
@@ -196,11 +196,11 @@ export function NeonDiffuserStudio() {
 
             <div className="p-3.5 rounded-xl bg-[#0a111e] border border-sky-400/15 flex flex-col gap-2 font-mono text-xs">
               <div className="flex items-center justify-between">
-                <span className="text-slate-400">Actuator Response:</span>
+                <span className="text-amber-200/60">Actuator Response:</span>
                 <span className="text-sky-300 font-bold">18 ms Brushless Stepper</span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-slate-400">Diffuser Strakes:</span>
+                <span className="text-amber-200/60">Diffuser Strakes:</span>
                 <span className="text-emerald-300 font-bold">4x Vortex Shedding Fences</span>
               </div>
             </div>

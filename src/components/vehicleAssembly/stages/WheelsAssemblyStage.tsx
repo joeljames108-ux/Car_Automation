@@ -95,10 +95,10 @@ export const WheelsAssemblyStage: React.FC<WheelsAssemblyStageProps> = ({
             <Disc size={18} />
           </div>
           <div>
-            <h3 className="text-sm font-bold font-mono text-slate-800 dark:text-slate-100 uppercase tracking-wider">
+            <h3 className="text-sm font-bold font-mono text-slate-800 dark:text-amber-50 uppercase tracking-wider">
               STAGE 6: WHEELS & MOTORSPORT TYRES
             </h3>
-            <p className="text-[11px] font-mono text-slate-500 dark:text-slate-400">
+            <p className="text-[11px] font-mono text-amber-300/50 dark:text-amber-200/60">
               Mount forged concave rims and high-grip compounds onto the 4-corner hubs.
             </p>
           </div>
@@ -112,7 +112,7 @@ export const WheelsAssemblyStage: React.FC<WheelsAssemblyStageProps> = ({
 
       {/* Wheel Rim Styles */}
       <div className="space-y-2">
-        <label className="text-xs font-bold font-mono text-slate-700 dark:text-slate-300 block">
+        <label className="text-xs font-bold font-mono text-amber-500 dark:text-amber-100/80 block">
           FORGED RIM ARCHITECTURE & FINISH
         </label>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -125,17 +125,17 @@ export const WheelsAssemblyStage: React.FC<WheelsAssemblyStageProps> = ({
                 className={`p-3.5 rounded-2xl text-left transition-all border cursor-pointer ${
                   isSelected
                     ? "bg-amber-500/20 border-amber-500/60 shadow-md ring-1 ring-amber-500/40"
-                    : "bg-base-900/60 border-base-800 hover:border-base-700 text-slate-400"
+                    : "bg-base-900/60 border-base-800 hover:border-base-700 text-amber-200/60"
                 }`}
               >
                 <div className="flex items-center justify-between mb-1">
-                  <span className="font-bold text-xs font-mono text-slate-900 dark:text-slate-100">{w.label}</span>
+                  <span className="font-bold text-xs font-mono text-slate-900 dark:text-amber-50">{w.label}</span>
                   <span className="text-[10px] font-mono text-amber-600 dark:text-amber-300 font-bold">{w.weight}</span>
                 </div>
-                <p className="text-[10px] text-slate-500 dark:text-slate-400 mb-2">{w.desc}</p>
+                <p className="text-[10px] text-amber-300/50 dark:text-amber-200/60 mb-2">{w.desc}</p>
                 <div className="space-y-0.5 text-[10px] font-mono pt-2 border-t border-base-800/60">
                   <div className="text-emerald-600 dark:text-emerald-400 font-semibold">{w.strength}</div>
-                  <div className="text-slate-500 dark:text-slate-400">{w.spec}</div>
+                  <div className="text-amber-300/50 dark:text-amber-200/60">{w.spec}</div>
                 </div>
               </button>
             );
@@ -145,7 +145,7 @@ export const WheelsAssemblyStage: React.FC<WheelsAssemblyStageProps> = ({
 
       {/* Tire Compound Selection */}
       <div className="space-y-2">
-        <label className="text-xs bold font-mono text-slate-700 dark:text-slate-300 block">
+        <label className="text-xs bold font-mono text-amber-500 dark:text-amber-100/80 block">
           TIRE COMPOUND & TREAD PATTERN
         </label>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-2.5">
@@ -158,13 +158,13 @@ export const WheelsAssemblyStage: React.FC<WheelsAssemblyStageProps> = ({
                 className={`p-3 rounded-2xl text-left transition-all border cursor-pointer ${
                   isSelected
                     ? "bg-amber-500/20 border-amber-500/60 shadow-md ring-1 ring-amber-500/40"
-                    : "bg-base-900/60 border-base-800 hover:border-base-700 text-slate-400"
+                    : "bg-base-900/60 border-base-800 hover:border-base-700 text-amber-200/60"
                 }`}
               >
-                <div className="font-bold text-xs font-mono text-slate-900 dark:text-slate-100 mb-1">{tc.label}</div>
-                <div className="space-y-0.5 text-[10px] font-mono text-slate-400">
+                <div className="font-bold text-xs font-mono text-slate-900 dark:text-amber-50 mb-1">{tc.label}</div>
+                <div className="space-y-0.5 text-[10px] font-mono text-amber-200/60">
                   <div>Grip: <strong className="text-emerald-400">{tc.gripCoeff}</strong></div>
-                  <div>Life: <strong className="text-slate-300">{tc.longevity}</strong></div>
+                  <div>Life: <strong className="text-amber-100/80">{tc.longevity}</strong></div>
                   <div>Weather: <strong className="text-amber-300">{tc.wetRating}</strong></div>
                   <div>Op. Temp: <strong className="text-orange-400">{tc.opTemp}</strong></div>
                 </div>
@@ -179,8 +179,8 @@ export const WheelsAssemblyStage: React.FC<WheelsAssemblyStageProps> = ({
         <div className="flex items-center gap-2">
           <Flame size={14} className="text-orange-400" />
           <div>
-            <div className="text-xs font-bold font-mono text-slate-700 dark:text-slate-200">TIRE WARMER PROTOCOL</div>
-            <div className="text-[10px] font-mono text-slate-500">
+            <div className="text-xs font-bold font-mono text-amber-500 dark:text-amber-50">TIRE WARMER PROTOCOL</div>
+            <div className="text-[10px] font-mono text-amber-300/50">
               {warmersOn ? `Blankets @ ${selectedTire.opTemp.split("–")[0]}°C — instant green-flag grip window` : "Cold tires — 1 formation lap to reach operating window"}
             </div>
           </div>
@@ -188,7 +188,7 @@ export const WheelsAssemblyStage: React.FC<WheelsAssemblyStageProps> = ({
         <button
           onClick={() => setWarmersOn(!warmersOn)}
           className={`px-3 py-1.5 rounded-xl text-xs font-mono font-bold border cursor-pointer transition-all ${
-            warmersOn ? "bg-orange-500/20 border-orange-500/50 text-orange-400" : "bg-base-800 border-base-700 text-slate-500"
+            warmersOn ? "bg-orange-500/20 border-orange-500/50 text-orange-400" : "bg-base-800 border-base-700 text-amber-300/50"
           }`}
         >
           {warmersOn ? (

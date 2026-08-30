@@ -262,7 +262,7 @@ export function ApexAIStudio() {
                 className={`p-3 rounded-2xl border transition-all text-left flex flex-col justify-between gap-1.5 cursor-pointer ${
                   isSelected
                     ? `${eng.tone} shadow-lg scale-[1.02]`
-                    : "bg-slate-900/60 border-slate-800/80 text-slate-400 hover:text-slate-200 hover:border-slate-700"
+                    : "bg-amber-900/35 border-amber-800/40 text-amber-200/60 hover:text-amber-50 hover:border-amber-700/30"
                 }`}
               >
                 <div className="flex items-center justify-between">
@@ -279,13 +279,13 @@ export function ApexAIStudio() {
         </div>
 
         {/* Mode Selector */}
-        <div className="flex items-center gap-1 bg-slate-950 p-1.5 rounded-2xl border border-slate-800 shrink-0 self-start md:self-auto font-mono text-xs">
+        <div className="flex items-center gap-1 bg-amber-950/80 p-1.5 rounded-2xl border border-amber-800/30 shrink-0 self-start md:self-auto font-mono text-xs">
           {(Object.keys(MODES) as ModeId[]).map((mId) => (
             <button
               key={mId}
               onClick={() => setMode(mId)}
               className={`px-3 py-1.5 rounded-xl font-bold transition-all cursor-pointer ${
-                mode === mId ? "bg-amber-500/20 text-amber-300 border border-amber-500/40" : "text-slate-500 hover:text-slate-300"
+                mode === mId ? "bg-amber-500/20 text-amber-300 border border-amber-500/40" : "text-amber-300/50 hover:text-amber-100/80"
               }`}
             >
               {MODES[mId].label}
@@ -299,21 +299,21 @@ export function ApexAIStudio() {
         {/* Left Column (7 Cols): Filterable Warnings & Actionable Suggestions */}
         <div className="lg:col-span-7 flex flex-col gap-5">
           {/* Live Diagnostic Warnings */}
-          <div className="p-5 rounded-2xl bg-slate-900/80 border border-slate-800 backdrop-blur-xl shadow-xl space-y-3">
+          <div className="p-5 rounded-2xl bg-amber-900/40 border border-amber-800/30 backdrop-blur-xl shadow-xl space-y-3">
             <div className="flex items-center justify-between flex-wrap gap-2">
-              <h3 className="text-xs font-bold text-slate-100 uppercase tracking-wider flex items-center gap-2">
+              <h3 className="text-xs font-bold text-amber-50 uppercase tracking-wider flex items-center gap-2">
                 <AlertTriangle size={15} className="text-amber-400" />
                 Live Diagnostic Warnings ({activeWarnings.length})
               </h3>
 
               {/* Filter Tabs */}
-              <div className="flex items-center gap-1 bg-slate-950 p-1 rounded-xl border border-slate-800 font-mono text-[10px]">
+              <div className="flex items-center gap-1 bg-amber-950/80 p-1 rounded-xl border border-amber-800/30 font-mono text-[10px]">
                 {(["all", "Engine", "Chassis", "Aero", "Manufacturing"] as const).map((cat) => (
                   <button
                     key={cat}
                     onClick={() => setActiveCategory(cat)}
                     className={`px-2 py-0.5 rounded-lg font-semibold transition-all uppercase cursor-pointer ${
-                      activeCategory === cat ? "bg-amber-500/20 text-amber-300 border border-amber-500/40" : "text-slate-500 hover:text-slate-300"
+                      activeCategory === cat ? "bg-amber-500/20 text-amber-300 border border-amber-500/40" : "text-amber-300/50 hover:text-amber-100/80"
                     }`}
                   >
                     {cat}
@@ -345,7 +345,7 @@ export function ApexAIStudio() {
                     </div>
                     <button
                       onClick={() => setDismissed((prev) => new Set(prev).add(w.id))}
-                      className="text-slate-500 hover:text-slate-300 transition-colors p-1 cursor-pointer"
+                      className="text-amber-300/50 hover:text-amber-100/80 transition-colors p-1 cursor-pointer"
                       title="Dismiss Alert"
                     >
                       <X size={13} />
@@ -357,14 +357,14 @@ export function ApexAIStudio() {
           </div>
 
           {/* Actionable Engineering Suggestions */}
-          <div className="p-5 rounded-2xl bg-slate-900/80 border border-slate-800 backdrop-blur-xl shadow-xl space-y-3">
-            <h3 className="text-xs font-bold text-slate-100 uppercase tracking-wider flex items-center gap-2">
+          <div className="p-5 rounded-2xl bg-amber-900/40 border border-amber-800/30 backdrop-blur-xl shadow-xl space-y-3">
+            <h3 className="text-xs font-bold text-amber-50 uppercase tracking-wider flex items-center gap-2">
               <Lightbulb size={15} className="text-amber-400" />
               Recommended Parameter Optimizations ({suggestions.length})
             </h3>
 
             {suggestions.length === 0 ? (
-              <div className="p-4 rounded-xl bg-slate-950/60 border border-slate-800 text-slate-400 text-xs">
+              <div className="p-4 rounded-xl bg-amber-950/60 border border-amber-800/30 text-amber-200/60 text-xs">
                 No immediate parameter changes needed for current vehicle configuration.
               </div>
             ) : (
@@ -374,10 +374,10 @@ export function ApexAIStudio() {
                   return (
                     <div
                       key={s.id}
-                      className="p-4 rounded-xl bg-slate-950/60 border border-slate-800 hover:border-amber-500/40 transition-all space-y-2.5"
+                      className="p-4 rounded-xl bg-amber-950/60 border border-amber-800/30 hover:border-amber-500/40 transition-all space-y-2.5"
                     >
                       <div className="flex items-center justify-between">
-                        <h4 className="text-xs font-bold text-slate-200 flex items-center gap-1.5">
+                        <h4 className="text-xs font-bold text-amber-50 flex items-center gap-1.5">
                           <Sparkles size={13} className="text-amber-400" />
                           {s.title}
                         </h4>
@@ -402,7 +402,7 @@ export function ApexAIStudio() {
                         </button>
                       </div>
 
-                      <p className="text-[11px] text-slate-400">{s.detail}</p>
+                      <p className="text-[11px] text-amber-200/60">{s.detail}</p>
 
                       {/* Impact Deltas Badges */}
                       <div className="flex items-center gap-2 pt-1 font-mono text-[10px]">
@@ -429,14 +429,14 @@ export function ApexAIStudio() {
 
         {/* Right Column (5 Cols): Interactive Apex AI Terminal Chat */}
         <div className="lg:col-span-5 flex flex-col gap-4">
-          <div className="p-5 rounded-2xl bg-slate-900/90 border border-amber-500/30 backdrop-blur-xl shadow-2xl flex flex-col h-[580px]">
+          <div className="p-5 rounded-2xl bg-amber-900/45 border border-amber-500/30 backdrop-blur-xl shadow-2xl flex flex-col h-[580px]">
             {/* Terminal Header */}
-            <div className="flex items-center justify-between pb-3 border-b border-slate-800 mb-3">
+            <div className="flex items-center justify-between pb-3 border-b border-amber-800/30 mb-3">
               <div className="flex items-center gap-2">
                 <Bot size={16} className="text-amber-400" />
-                <span className="text-xs font-bold text-slate-100 uppercase tracking-wider">Apex AI Interactive Terminal</span>
+                <span className="text-xs font-bold text-amber-50 uppercase tracking-wider">Apex AI Interactive Terminal</span>
               </div>
-              <span className="text-[10px] font-mono text-slate-400">{ENGINEERS[engineer].label} active</span>
+              <span className="text-[10px] font-mono text-amber-200/60">{ENGINEERS[engineer].label} active</span>
             </div>
 
             {/* Chat Messages Stream */}
@@ -450,18 +450,18 @@ export function ApexAIStudio() {
                     className={`max-w-[88%] p-3 rounded-2xl text-xs leading-relaxed ${
                       msg.sender === "user"
                         ? "bg-amber-500 text-black font-medium rounded-tr-none"
-                        : "bg-slate-950 border border-slate-800 text-slate-200 rounded-tl-none"
+                        : "bg-amber-950/80 border border-amber-800/30 text-amber-50 rounded-tl-none"
                     }`}
                   >
                     {msg.text}
                   </div>
-                  <span className="text-[9px] font-mono text-slate-500">{msg.time}</span>
+                  <span className="text-[9px] font-mono text-amber-300/50">{msg.time}</span>
                 </div>
               ))}
             </div>
 
             {/* Quick Prompt Presets */}
-            <div className="py-2 flex items-center gap-1.5 overflow-x-auto scrollbar-none border-t border-slate-800 mt-2">
+            <div className="py-2 flex items-center gap-1.5 overflow-x-auto scrollbar-none border-t border-amber-800/30 mt-2">
               <span className="text-[9px] font-mono text-amber-400 font-bold uppercase shrink-0">AI BLUEPRINTS:</span>
               {[
                 { label: "⚡ 1000 HP Valkyrie", prompt: "Load the 1000 HP V12 Hybrid Valkyrie blueprint" },
@@ -475,7 +475,7 @@ export function ApexAIStudio() {
                 <button
                   key={i}
                   onClick={() => handleSendMessage(p.prompt)}
-                  className="px-2 py-1 rounded-lg bg-slate-950/90 border border-amber-500/30 text-amber-200 hover:bg-amber-500/20 text-[10px] font-mono whitespace-nowrap transition-all cursor-pointer shadow-sm"
+                  className="px-2 py-1 rounded-lg bg-amber-950/85 border border-amber-500/30 text-amber-200 hover:bg-amber-500/20 text-[10px] font-mono whitespace-nowrap transition-all cursor-pointer shadow-sm"
                 >
                   {p.label}
                 </button>
@@ -490,7 +490,7 @@ export function ApexAIStudio() {
                 onChange={(e) => setChatInput(e.target.value)}
                 onKeyDown={(e) => e.key === "Enter" && handleSendMessage()}
                 placeholder="Ask Apex AI for vehicle optimization strategies..."
-                className="flex-1 bg-slate-950 border border-slate-800 rounded-xl px-3 py-2 text-xs text-slate-100 placeholder-slate-500 focus:outline-none focus:border-amber-500 transition-all font-mono"
+                className="flex-1 bg-amber-950/80 border border-amber-800/30 rounded-xl px-3 py-2 text-xs text-amber-50 placeholder-slate-500 focus:outline-none focus:border-amber-500 transition-all font-mono"
               />
               <button
                 onClick={() => handleSendMessage()}
@@ -506,9 +506,9 @@ export function ApexAIStudio() {
   );
 
   return (
-    <div className="w-full flex flex-col gap-6 text-slate-100 select-none pb-16 animate-fade-in">
+    <div className="w-full flex flex-col gap-6 text-amber-50 select-none pb-16 animate-fade-in">
       {/* ── TOP HERO BANNER: APEX AI CHIEF ENGINEERING & MULTI-AGENT STUDIO ── */}
-      <div className="relative p-6 rounded-3xl bg-gradient-to-r from-slate-900/90 via-cyan-950/40 to-slate-900/90 border border-amber-500/30 backdrop-blur-2xl shadow-2xl overflow-hidden">
+      <div className="relative p-6 rounded-3xl bg-gradient-to-r from-amber-900/60/90 via-cyan-950/40 to-amber-900/60/90 border border-amber-500/30 backdrop-blur-2xl shadow-2xl overflow-hidden">
         <div className="absolute top-0 right-0 w-96 h-96 bg-amber-500/10 rounded-full filter blur-3xl pointer-events-none" />
 
         <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 relative z-10">
@@ -518,19 +518,19 @@ export function ApexAIStudio() {
             </div>
             <div>
               <div className="flex items-center gap-2">
-                <h1 className="text-xl font-black text-slate-100 uppercase tracking-wider">APEX AI CHIEF ENGINEERING & MULTI-AGENT STUDIO</h1>
+                <h1 className="text-xl font-black text-amber-50 uppercase tracking-wider">APEX AI CHIEF ENGINEERING & MULTI-AGENT STUDIO</h1>
                 <span className="px-2.5 py-0.5 rounded-full bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 text-[10px] font-mono font-bold flex items-center gap-1">
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" /> ONLINE v2.4
                 </span>
               </div>
-              <p className="text-xs text-slate-400 font-mono mt-0.5">
+              <p className="text-xs text-amber-200/60 font-mono mt-0.5">
                 Complete neural advisory suite: live warnings, multi-agent console, AI assistant, telemetry & auto-tuning presets.
               </p>
             </div>
           </div>
 
           {/* Target Concept Philosophy Controls */}
-          <div className="flex items-center gap-2 bg-slate-950/80 px-3 py-2 rounded-2xl border border-amber-500/30 font-mono">
+          <div className="flex items-center gap-2 bg-amber-950/75 px-3 py-2 rounded-2xl border border-amber-500/30 font-mono">
             <span className="text-[10px] text-amber-400 flex items-center gap-1 font-bold">
               <Target size={13} /> CONCEPT:
             </span>
@@ -547,7 +547,7 @@ export function ApexAIStudio() {
                       : c === "luxury"
                       ? "bg-amber-500/20 border-amber-500/40 text-amber-300"
                       : "bg-amber-500/20 border-amber-500/40 text-amber-300"
-                    : "bg-slate-900 border-slate-800 text-slate-500 hover:text-slate-300"
+                    : "bg-amber-900/50 border-amber-800/30 text-amber-300/50 hover:text-amber-100/80"
                 }`}
               >
                 {c}
@@ -557,7 +557,7 @@ export function ApexAIStudio() {
         </div>
 
         {/* ── APEX AI STUDIO SUB-NAVIGATION TABS BAR ── */}
-        <div className="flex items-center gap-2 mt-6 pt-4 border-t border-slate-800/80 overflow-x-auto scrollbar-none">
+        <div className="flex items-center gap-2 mt-6 pt-4 border-t border-amber-800/40 overflow-x-auto scrollbar-none">
           {[
             { id: "all" as const, label: "All-in-One Studio Suite", icon: <Layers size={14} /> },
             { id: "presets" as const, label: "AI Engineering Presets", icon: <Sparkles size={14} /> },
@@ -575,7 +575,7 @@ export function ApexAIStudio() {
                 className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold transition-all whitespace-nowrap cursor-pointer ${
                   isActive
                     ? "bg-gradient-to-r from-amber-500/30 to-amber-500/25 text-amber-200 border border-amber-400/50 shadow-[0_0_15px_rgba(34,211,238,0.3)]"
-                    : "bg-slate-950/60 border border-slate-800/80 text-slate-400 hover:text-slate-200 hover:bg-slate-900/80"
+                    : "bg-amber-950/60 border border-amber-800/40 text-amber-200/60 hover:text-amber-50 hover:bg-amber-900/40"
                 }`}
               >
                 {tab.icon}
@@ -604,7 +604,7 @@ export function ApexAIStudio() {
 
           {/* Section 1: Chief Advisory Studio */}
           <div className="space-y-3">
-            <h2 className="text-sm font-bold text-slate-300 uppercase tracking-widest flex items-center gap-2 pt-4 border-t border-slate-800/80">
+            <h2 className="text-sm font-bold text-amber-100/80 uppercase tracking-widest flex items-center gap-2 pt-4 border-t border-amber-800/40">
               <Wrench size={16} className="text-amber-400" /> Chief Advisory & Live Diagnostics Studio
             </h2>
             {renderAdvisorySection()}
@@ -612,7 +612,7 @@ export function ApexAIStudio() {
 
           {/* Section 2: Autonomous Multi-Agent Console */}
           <div className="space-y-3">
-            <h2 className="text-sm font-bold text-slate-300 uppercase tracking-widest flex items-center gap-2 pt-4 border-t border-slate-800/80">
+            <h2 className="text-sm font-bold text-amber-100/80 uppercase tracking-widest flex items-center gap-2 pt-4 border-t border-amber-800/40">
               <Zap size={16} className="text-amber-400" /> Autonomous Multi-Agent Control Console
             </h2>
             <ApexAgentConsole
@@ -628,10 +628,10 @@ export function ApexAIStudio() {
 
           {/* Section 3: Telemetry Log Stream */}
           <div className="space-y-3">
-            <h2 className="text-sm font-bold text-slate-300 uppercase tracking-widest flex items-center gap-2 pt-4 border-t border-slate-800/80">
+            <h2 className="text-sm font-bold text-amber-100/80 uppercase tracking-widest flex items-center gap-2 pt-4 border-t border-amber-800/40">
               <FileText size={16} className="text-amber-400" /> Apex AI Telemetry Log & Event Stream
             </h2>
-            <div className="p-4 rounded-2xl bg-slate-900/80 border border-slate-800 backdrop-blur-xl shadow-xl">
+            <div className="p-4 rounded-2xl bg-amber-900/40 border border-amber-800/30 backdrop-blur-xl shadow-xl">
               <EngineeringLog />
             </div>
           </div>
@@ -670,7 +670,7 @@ export function ApexAIStudio() {
       {studioTab === "assistant" && <AIAssistant embedded={true} />}
 
       {studioTab === "logs" && (
-        <div className="p-6 rounded-2xl bg-slate-900/80 border border-slate-800 backdrop-blur-xl shadow-xl">
+        <div className="p-6 rounded-2xl bg-amber-900/40 border border-amber-800/30 backdrop-blur-xl shadow-xl">
           <EngineeringLog />
         </div>
       )}

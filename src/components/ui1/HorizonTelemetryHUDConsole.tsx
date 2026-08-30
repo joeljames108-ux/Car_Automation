@@ -52,7 +52,7 @@ export function HorizonTelemetryHUDConsole() {
   const activeLightsCount = Math.min(8, Math.max(0, Math.floor((rpm / 8500) * 8)));
 
   return (
-    <div className="w-full flex flex-col gap-5 text-slate-100 animate-nh-materialize">
+    <div className="w-full flex flex-col gap-5 text-amber-50 animate-nh-materialize">
       {/* Navigation Tabs */}
       <NeonHorizonTabs
         activeTab={activeSubTab}
@@ -86,7 +86,7 @@ export function HorizonTelemetryHUDConsole() {
  ? isRedline
  ? "bg-rose-500 animate-pulse"
  : "bg-sky-300"
- : "bg-slate-800 border border-white/5"
+ : "bg-amber-800/35 border border-white/5"
  }`}
                       />
                     );
@@ -110,22 +110,22 @@ export function HorizonTelemetryHUDConsole() {
               withScanline
               className="p-6 flex flex-col items-center justify-center text-center"
             >
-              <span className="nh-label-caps text-slate-400 text-xs mb-2">VEHICLE VELOCITY</span>
+              <span className="nh-label-caps text-amber-200/60 text-xs mb-2">VEHICLE VELOCITY</span>
               <div className="text-5xl font-black nh-font-headline nh-gradient-text-cyan">
-                {speed} <span className="text-lg nh-font-mono text-slate-400">km/h</span>
+                {speed} <span className="text-lg nh-font-mono text-amber-200/60">km/h</span>
               </div>
 
               <div className="w-full mt-6 flex justify-around border-t border-sky-400/15 pt-4 nh-font-mono text-xs">
                 <div>
-                  <div className="text-slate-400 text-[10px]">RPM</div>
+                  <div className="text-amber-200/60 text-[10px]">RPM</div>
                   <div className="text-sky-300 font-bold text-base">{rpm}</div>
                 </div>
                 <div>
-                  <div className="text-slate-400 text-[10px]">GEAR</div>
+                  <div className="text-amber-200/60 text-[10px]">GEAR</div>
                   <div className="text-sky-300 font-bold text-base">5 / 7</div>
                 </div>
                 <div>
-                  <div className="text-slate-400 text-[10px]">0-60 MPH</div>
+                  <div className="text-amber-200/60 text-[10px]">0-60 MPH</div>
                   <div className="text-emerald-300 font-bold text-base">{sim.accel0_60.toFixed(2)}s</div>
                 </div>
               </div>
@@ -144,7 +144,7 @@ export function HorizonTelemetryHUDConsole() {
               <div className="space-y-4">
                 <div>
                   <div className="flex justify-between text-xs nh-font-mono mb-1">
-                    <span className="text-slate-400">TURBO BOOST:</span>
+                    <span className="text-amber-200/60">TURBO BOOST:</span>
                     <span className="text-amber-300 font-bold">{boostBar} BAR</span>
                   </div>
                   <div className="w-full h-2.5 bg-[#0a111e] rounded-full p-0.5 border border-white/10">
@@ -157,7 +157,7 @@ export function HorizonTelemetryHUDConsole() {
 
                 <div>
                   <div className="flex justify-between text-xs nh-font-mono mb-1">
-                    <span className="text-slate-400">ENGINE OIL TEMP:</span>
+                    <span className="text-amber-200/60">ENGINE OIL TEMP:</span>
                     <span className="text-sky-300 font-bold">{oilTemp} °C</span>
                   </div>
                   <div className="w-full h-2.5 bg-[#0a111e] rounded-full p-0.5 border border-white/10">
@@ -170,7 +170,7 @@ export function HorizonTelemetryHUDConsole() {
 
                 <div>
                   <div className="flex justify-between text-xs nh-font-mono mb-1">
-                    <span className="text-slate-400">BRAKE ROTOR TEMP:</span>
+                    <span className="text-amber-200/60">BRAKE ROTOR TEMP:</span>
                     <span className="text-sky-300 font-bold">{brakeTemp} °C</span>
                   </div>
                   <div className="w-full h-2.5 bg-[#0a111e] rounded-full p-0.5 border border-white/10">
@@ -250,7 +250,7 @@ export function HorizonTelemetryHUDConsole() {
                       {item.priority} PRIORITY
                     </NeonHorizonBadge>
                   </div>
-                  <p className="text-xs font-semibold text-slate-100">{item.rec}</p>
+                  <p className="text-xs font-semibold text-amber-50">{item.rec}</p>
                 </div>
                 <div className="text-[11px] nh-font-mono font-bold text-emerald-300 border-t border-white/10 pt-2 flex items-center gap-1.5">
                   <TrendingUp size={12} />

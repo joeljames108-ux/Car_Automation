@@ -12,7 +12,7 @@ import { useDesign } from "../state/DesignContext";
 import type { GarageVehicle, VehicleVariantType } from "../sim/types";
 
 const VARIANT_COLORS: Record<VehicleVariantType, string> = {
-  base:            "bg-slate-500/20 text-slate-400 border-slate-500/30",
+  base:            "bg-slate-500/20 text-amber-200/60 border-amber-500/30/30",
   trim:            "bg-amber-500/20 text-amber-400 border-amber-500/30",
   facelift:        "bg-amber-500/20 text-amber-400 border-amber-500/30",
   generation:      "bg-accent-500/20 text-accent-400 border-accent-500/30",
@@ -58,19 +58,19 @@ function VehicleCard({
             <span className={`text-[10px] font-semibold px-1.5 py-0.5 rounded border ${VARIANT_COLORS[vehicle.variantType]}`}>
               {VARIANT_LABELS[vehicle.variantType]}
             </span>
-            <span className="text-[10px] text-slate-600">Gen {vehicle.generation}</span>
+            <span className="text-[10px] text-amber-400">Gen {vehicle.generation}</span>
             {vehicle.isLaunched && (
               <span className="text-[10px] text-ok-400 flex items-center gap-0.5">
                 <CheckCircle2 size={10} /> Launched
               </span>
             )}
           </div>
-          <h3 className="font-semibold text-slate-100 text-sm truncate">{vehicle.name}</h3>
-          <p className="text-[10px] text-slate-500 mt-0.5">{vehicle.modelName}</p>
+          <h3 className="font-semibold text-amber-50 text-sm truncate">{vehicle.name}</h3>
+          <p className="text-[10px] text-amber-300/50 mt-0.5">{vehicle.modelName}</p>
         </div>
         <div className={`text-base font-bold font-mono ${ratingColor(vehicle.overallRating)}`}>
           {vehicle.overallRating}
-          <span className="text-[10px] text-slate-600 ml-0.5">/100</span>
+          <span className="text-[10px] text-amber-400 ml-0.5">/100</span>
         </div>
       </div>
 
@@ -78,23 +78,23 @@ function VehicleCard({
       <div className="grid grid-cols-2 gap-1.5 mb-3">
         <div className="bg-base-850 rounded-lg p-1.5 text-center">
           <Zap size={10} className="mx-auto text-accent-400 mb-0.5" />
-          <div className="font-mono text-xs text-slate-200">{Math.round(vehicle.peakPower)}</div>
-          <div className="text-[9px] text-slate-600">hp</div>
+          <div className="font-mono text-xs text-amber-50">{Math.round(vehicle.peakPower)}</div>
+          <div className="text-[9px] text-amber-400">hp</div>
         </div>
         <div className="bg-base-850 rounded-lg p-1.5 text-center">
-          <Weight size={10} className="mx-auto text-slate-400 mb-0.5" />
-          <div className="font-mono text-xs text-slate-200">{Math.round(vehicle.weight)}</div>
-          <div className="text-[9px] text-slate-600">kg</div>
+          <Weight size={10} className="mx-auto text-amber-200/60 mb-0.5" />
+          <div className="font-mono text-xs text-amber-50">{Math.round(vehicle.weight)}</div>
+          <div className="text-[9px] text-amber-400">kg</div>
         </div>
         <div className="bg-base-850 rounded-lg p-1.5 text-center">
           <Gauge size={10} className="mx-auto text-amber-400 mb-0.5" />
-          <div className="font-mono text-xs text-slate-200">{Math.round(vehicle.topSpeed)}</div>
-          <div className="text-[9px] text-slate-600">km/h</div>
+          <div className="font-mono text-xs text-amber-50">{Math.round(vehicle.topSpeed)}</div>
+          <div className="text-[9px] text-amber-400">km/h</div>
         </div>
         <div className="bg-base-850 rounded-lg p-1.5 text-center">
           <DollarSign size={10} className="mx-auto text-ok-400 mb-0.5" />
-          <div className="font-mono text-xs text-slate-200">{(vehicle.price / 1000).toFixed(0)}k</div>
-          <div className="text-[9px] text-slate-600">USD</div>
+          <div className="font-mono text-xs text-amber-50">{(vehicle.price / 1000).toFixed(0)}k</div>
+          <div className="text-[9px] text-amber-400">USD</div>
         </div>
       </div>
 
@@ -109,7 +109,7 @@ function VehicleCard({
         <button
           onClick={(e) => { e.stopPropagation(); onDuplicate(); }}
           title="Duplicate"
-          className="p-1.5 rounded-lg text-xs text-slate-400 hover:text-slate-200 hover:bg-base-800 transition-all"
+          className="p-1.5 rounded-lg text-xs text-amber-200/60 hover:text-amber-50 hover:bg-base-800 transition-all"
         >
           <Copy size={12} />
         </button>
@@ -117,7 +117,7 @@ function VehicleCard({
           <button
             onClick={(e) => { e.stopPropagation(); setMenuOpen(m => !m); }}
             title="Create Variant"
-            className="p-1.5 rounded-lg text-xs text-slate-400 hover:text-slate-200 hover:bg-base-800 transition-all"
+            className="p-1.5 rounded-lg text-xs text-amber-200/60 hover:text-amber-50 hover:bg-base-800 transition-all"
           >
             <GitBranch size={12} />
           </button>
@@ -130,7 +130,7 @@ function VehicleCard({
                 <button
                   key={t}
                   onClick={() => { onCreateVariant(t); setMenuOpen(false); }}
-                  className="w-full text-left px-3 py-1.5 text-xs text-slate-300 hover:bg-base-800 transition-all"
+                  className="w-full text-left px-3 py-1.5 text-xs text-amber-100/80 hover:bg-base-800 transition-all"
                 >
                   {VARIANT_LABELS[t]}
                 </button>
@@ -141,7 +141,7 @@ function VehicleCard({
         <button
           onClick={(e) => { e.stopPropagation(); onDelete(); }}
           title="Delete"
-          className="p-1.5 rounded-lg text-xs text-slate-500 hover:text-danger-400 hover:bg-danger-500/10 transition-all"
+          className="p-1.5 rounded-lg text-xs text-amber-300/50 hover:text-danger-400 hover:bg-danger-500/10 transition-all"
         >
           <Trash2 size={12} />
         </button>
@@ -151,7 +151,7 @@ function VehicleCard({
       {vehicle.tags.length > 0 && (
         <div className="flex flex-wrap gap-1 mt-2">
           {vehicle.tags.slice(0, 3).map(t => (
-            <span key={t} className="text-[9px] bg-base-800 text-slate-500 px-1.5 py-0.5 rounded">
+            <span key={t} className="text-[9px] bg-base-800 text-amber-300/50 px-1.5 py-0.5 rounded">
               {t}
             </span>
           ))}
@@ -171,15 +171,15 @@ function FamilyTreeNode({ vehicle, allVehicles, depth = 0 }: {
     <div className={depth > 0 ? "ml-5 border-l border-base-800 pl-3" : ""}>
       <div className="flex items-center gap-2 py-1.5">
         {children.length > 0 ? (
-          <button onClick={() => setExpanded(e => !e)} className="text-slate-500 hover:text-slate-300 transition-all">
+          <button onClick={() => setExpanded(e => !e)} className="text-amber-300/50 hover:text-amber-100/80 transition-all">
             {expanded ? <ChevronDown size={12} /> : <ChevronRight size={12} />}
           </button>
         ) : <div className="w-3" />}
         <span className={`text-[10px] px-1.5 py-0.5 rounded border ${VARIANT_COLORS[vehicle.variantType]}`}>
           {VARIANT_LABELS[vehicle.variantType]}
         </span>
-        <span className="text-sm text-slate-200 font-medium">{vehicle.name}</span>
-        <span className="text-[10px] text-slate-600">Gen {vehicle.generation} · {Math.round(vehicle.peakPower)}hp</span>
+        <span className="text-sm text-amber-50 font-medium">{vehicle.name}</span>
+        <span className="text-[10px] text-amber-400">Gen {vehicle.generation} · {Math.round(vehicle.peakPower)}hp</span>
         {vehicle.isLaunched && <CheckCircle2 size={10} className="text-ok-400" />}
       </div>
       {expanded && children.map(c => (
@@ -261,14 +261,14 @@ export function VehicleGarage() {
               <Warehouse size={24} className="text-accent-300" />
             </div>
             <div>
-              <h2 className="text-lg font-bold text-slate-100">Vehicle Garage</h2>
-              <p className="text-xs text-slate-500">Permanent vehicle archive — every design, every generation</p>
+              <h2 className="text-lg font-bold text-amber-50">Vehicle Garage</h2>
+              <p className="text-xs text-amber-300/50">Permanent vehicle archive — every design, every generation</p>
             </div>
           </div>
           <div className="flex-1" />
           <div className="flex items-center gap-2">
             <span className="text-2xl font-bold font-mono text-accent-300">{company.garage.length}</span>
-            <span className="text-sm text-slate-500">vehicles stored</span>
+            <span className="text-sm text-amber-300/50">vehicles stored</span>
           </div>
         </div>
       </div>
@@ -276,7 +276,7 @@ export function VehicleGarage() {
       {/* Save current design */}
       <div className="panel p-4">
         <div className="flex items-center justify-between mb-3">
-          <h3 className="text-xs font-semibold text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
+          <h3 className="text-xs font-semibold text-amber-100/80 uppercase tracking-wider flex items-center gap-1.5">
             <Plus size={12} className="text-accent-400" /> Save Current Design
           </h3>
         </div>
@@ -286,18 +286,18 @@ export function VehicleGarage() {
               value={saveName.model}
               onChange={e => setSaveName(n => ({ ...n, model: e.target.value }))}
               placeholder="Model name (e.g. Falcon)"
-              className="bg-base-850 border border-base-700 rounded-lg px-3 py-2 text-sm text-slate-200 focus:border-accent-500 focus:outline-none flex-1 min-w-32"
+              className="bg-base-850 border border-base-700 rounded-lg px-3 py-2 text-sm text-amber-50 focus:border-accent-500 focus:outline-none flex-1 min-w-32"
             />
             <input
               value={saveName.variant}
               onChange={e => setSaveName(n => ({ ...n, variant: e.target.value }))}
               placeholder="Variant (e.g. GT, Sport)"
-              className="bg-base-850 border border-base-700 rounded-lg px-3 py-2 text-sm text-slate-200 focus:border-accent-500 focus:outline-none w-40"
+              className="bg-base-850 border border-base-700 rounded-lg px-3 py-2 text-sm text-amber-50 focus:border-accent-500 focus:outline-none w-40"
             />
             <button onClick={handleSave} className="px-4 py-2 rounded-lg text-xs font-semibold bg-accent-500/20 border border-accent-500/40 text-accent-300 hover:bg-accent-500/30 transition-all">
               Save to Garage
             </button>
-            <button onClick={() => setShowSaveDialog(false)} className="px-3 py-2 rounded-lg text-xs text-slate-500 hover:text-slate-300 hover:bg-base-800 transition-all">
+            <button onClick={() => setShowSaveDialog(false)} className="px-3 py-2 rounded-lg text-xs text-amber-300/50 hover:text-amber-100/80 hover:bg-base-800 transition-all">
               Cancel
             </button>
           </div>
@@ -315,32 +315,32 @@ export function VehicleGarage() {
       {variantModal.open && variantModal.parentVehicle && (
         <div className="panel p-5 border-accent-500/40 bg-base-900/90 backdrop-blur-md space-y-4">
           <div className="flex items-center justify-between border-b border-base-800 pb-3">
-            <h3 className="text-sm font-semibold text-slate-100 flex items-center gap-2">
+            <h3 className="text-sm font-semibold text-amber-50 flex items-center gap-2">
               <GitBranch size={16} className="text-accent-400" />
               Develop {VARIANT_LABELS[variantModal.variantType]} — {variantModal.parentVehicle.name}
             </h3>
-            <button onClick={() => setVariantModal(m => ({ ...m, open: false }))} className="text-xs text-slate-500 hover:text-slate-300">✕</button>
+            <button onClick={() => setVariantModal(m => ({ ...m, open: false }))} className="text-xs text-amber-300/50 hover:text-amber-100/80">✕</button>
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
             <div className="bg-base-850 rounded-xl p-3 border border-base-800">
-              <div className="text-[10px] text-slate-500 mb-1">Base Platform</div>
-              <div className="font-semibold text-slate-200">{variantModal.parentVehicle.modelName}</div>
-              <div className="text-[10px] text-slate-500 mt-0.5">Gen {variantModal.parentVehicle.generation}</div>
+              <div className="text-[10px] text-amber-300/50 mb-1">Base Platform</div>
+              <div className="font-semibold text-amber-50">{variantModal.parentVehicle.modelName}</div>
+              <div className="text-[10px] text-amber-300/50 mt-0.5">Gen {variantModal.parentVehicle.generation}</div>
             </div>
             <div className="bg-base-850 rounded-xl p-3 border border-base-800">
-              <div className="text-[10px] text-slate-500 mb-1">Variant Category</div>
+              <div className="text-[10px] text-amber-300/50 mb-1">Variant Category</div>
               <div className="font-semibold text-accent-300 capitalize">{VARIANT_LABELS[variantModal.variantType]}</div>
-              <div className="text-[10px] text-slate-500 mt-0.5">
+              <div className="text-[10px] text-amber-300/50 mt-0.5">
                 {variantModal.variantType === "facelift" ? "Mid-cycle refresh (LCI)" : variantModal.variantType === "generation" ? "Next-gen overhaul" : "Trim/Performance edition"}
               </div>
             </div>
             <div className="bg-base-850 rounded-xl p-3 border border-base-800">
-              <div className="text-[10px] text-slate-500 mb-1">Tooling Cost Discount</div>
+              <div className="text-[10px] text-amber-300/50 mb-1">Tooling Cost Discount</div>
               <div className="font-mono font-bold text-ok-400">
                 {variantModal.variantType === "facelift" ? "65% Saved" : variantModal.variantType === "trim" ? "80% Saved" : "25% Saved"}
               </div>
-              <div className="text-[10px] text-slate-500 mt-0.5">Carries over chassis R&D</div>
+              <div className="text-[10px] text-amber-300/50 mt-0.5">Carries over chassis R&D</div>
             </div>
           </div>
 
@@ -350,12 +350,12 @@ export function VehicleGarage() {
               value={variantModal.variantName}
               onChange={e => setVariantModal(m => ({ ...m, variantName: e.target.value }))}
               placeholder="e.g. GTS Edition, LCI Refresh, Mk II"
-              className="w-full bg-base-850 border border-base-700 rounded-lg px-3 py-2 text-sm text-slate-200 focus:border-accent-500 focus:outline-none"
+              className="w-full bg-base-850 border border-base-700 rounded-lg px-3 py-2 text-sm text-amber-50 focus:border-accent-500 focus:outline-none"
             />
           </div>
 
           <div className="flex justify-end gap-2 pt-2 border-t border-base-800">
-            <button onClick={() => setVariantModal(m => ({ ...m, open: false }))} className="px-4 py-2 rounded-lg text-xs text-slate-400 hover:bg-base-800 transition-all">
+            <button onClick={() => setVariantModal(m => ({ ...m, open: false }))} className="px-4 py-2 rounded-lg text-xs text-amber-200/60 hover:bg-base-800 transition-all">
               Cancel
             </button>
             <button onClick={confirmCreateVariant} className="px-4 py-2 rounded-lg text-xs font-semibold bg-accent-500/20 border border-accent-500/40 text-accent-300 hover:bg-accent-500/30 transition-all">
@@ -368,22 +368,22 @@ export function VehicleGarage() {
       {/* Controls */}
       <div className="flex items-center gap-2 flex-wrap">
         <div className="relative flex-1 min-w-48">
-          <Search size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
+          <Search size={13} className="absolute left-3 top-1/2 -translate-y-1/2 text-amber-300/50" />
           <input
             value={search}
             onChange={e => setSearch(e.target.value)}
             placeholder="Search vehicles…"
-            className="w-full bg-base-900 border border-base-800 rounded-lg pl-8 pr-3 py-2 text-sm text-slate-300 focus:border-accent-500 focus:outline-none"
+            className="w-full bg-base-900 border border-base-800 rounded-lg pl-8 pr-3 py-2 text-sm text-amber-100/80 focus:border-accent-500 focus:outline-none"
           />
         </div>
         <div className="flex items-center gap-1 bg-base-850 rounded-lg p-1 border border-base-800">
-          <Filter size={12} className="text-slate-500 ml-1 mr-0.5" />
+          <Filter size={12} className="text-amber-300/50 ml-1 mr-0.5" />
           {(["all", "base", "trim", "facelift", "generation", "special_edition"] as const).map(f => (
             <button
               key={f}
               onClick={() => setFilter(f)}
               className={`px-2 py-1 rounded text-[11px] font-medium transition-all ${
-                filter === f ? "bg-accent-500/20 text-accent-300" : "text-slate-500 hover:text-slate-300"
+                filter === f ? "bg-accent-500/20 text-accent-300" : "text-amber-300/50 hover:text-amber-100/80"
               }`}
             >
               {f === "all" ? "All" : VARIANT_LABELS[f as VehicleVariantType]}
@@ -391,17 +391,17 @@ export function VehicleGarage() {
           ))}
         </div>
         <div className="flex items-center gap-1 bg-base-850 rounded-lg p-1 border border-base-800">
-          <button onClick={() => setView("grid")} className={`px-2 py-1 rounded text-[11px] transition-all ${view === "grid" ? "bg-accent-500/20 text-accent-300" : "text-slate-500"}`}>Grid</button>
-          <button onClick={() => setView("tree")} className={`px-2 py-1 rounded text-[11px] transition-all ${view === "tree" ? "bg-accent-500/20 text-accent-300" : "text-slate-500"}`}>Tree</button>
+          <button onClick={() => setView("grid")} className={`px-2 py-1 rounded text-[11px] transition-all ${view === "grid" ? "bg-accent-500/20 text-accent-300" : "text-amber-300/50"}`}>Grid</button>
+          <button onClick={() => setView("tree")} className={`px-2 py-1 rounded text-[11px] transition-all ${view === "tree" ? "bg-accent-500/20 text-accent-300" : "text-amber-300/50"}`}>Tree</button>
         </div>
       </div>
 
       {/* Content */}
       {company.garage.length === 0 ? (
         <div className="panel p-12 text-center">
-          <Warehouse size={40} className="mx-auto text-slate-700 mb-4" />
-          <p className="text-slate-500 text-sm">Your garage is empty.</p>
-          <p className="text-slate-600 text-xs mt-1">Design a vehicle above and save it to start your collection.</p>
+          <Warehouse size={40} className="mx-auto text-amber-500 mb-4" />
+          <p className="text-amber-300/50 text-sm">Your garage is empty.</p>
+          <p className="text-amber-400 text-xs mt-1">Design a vehicle above and save it to start your collection.</p>
         </div>
       ) : view === "grid" ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
@@ -420,11 +420,11 @@ export function VehicleGarage() {
         </div>
       ) : (
         <div className="panel p-5">
-          <h3 className="text-xs font-semibold text-slate-300 uppercase tracking-wider mb-4 flex items-center gap-1.5">
+          <h3 className="text-xs font-semibold text-amber-100/80 uppercase tracking-wider mb-4 flex items-center gap-1.5">
             <GitBranch size={12} className="text-accent-400" /> Family Tree
           </h3>
           {roots.length === 0 ? (
-            <p className="text-slate-600 text-sm">No root vehicles yet.</p>
+            <p className="text-amber-400 text-sm">No root vehicles yet.</p>
           ) : (
             <div className="space-y-2">
               {roots.map(r => (
@@ -442,30 +442,30 @@ export function VehicleGarage() {
         return (
           <div className="panel p-5">
             <div className="flex items-center justify-between mb-3">
-              <h3 className="text-sm font-semibold text-slate-100">{v.name} — Notes</h3>
-              <button onClick={() => setSelectedId(null)} className="text-xs text-slate-500 hover:text-slate-300">✕</button>
+              <h3 className="text-sm font-semibold text-amber-50">{v.name} — Notes</h3>
+              <button onClick={() => setSelectedId(null)} className="text-xs text-amber-300/50 hover:text-amber-100/80">✕</button>
             </div>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-3">
               <div className="bg-base-850 rounded-lg p-3 text-center">
-                <div className="text-xs text-slate-500 mb-1">Created</div>
-                <div className="text-sm font-mono text-slate-300">{new Date(v.createdAt).toLocaleDateString()}</div>
+                <div className="text-xs text-amber-300/50 mb-1">Created</div>
+                <div className="text-sm font-mono text-amber-100/80">{new Date(v.createdAt).toLocaleDateString()}</div>
               </div>
               <div className="bg-base-850 rounded-lg p-3 text-center">
-                <div className="text-xs text-slate-500 mb-1">Units Sold</div>
-                <div className="text-sm font-mono text-slate-300">{v.totalUnitsSold.toLocaleString()}</div>
+                <div className="text-xs text-amber-300/50 mb-1">Units Sold</div>
+                <div className="text-sm font-mono text-amber-100/80">{v.totalUnitsSold.toLocaleString()}</div>
               </div>
               <div className="bg-base-850 rounded-lg p-3 text-center">
-                <div className="text-xs text-slate-500 mb-1">Children</div>
-                <div className="text-sm font-mono text-slate-300">{v.childIds.length}</div>
+                <div className="text-xs text-amber-300/50 mb-1">Children</div>
+                <div className="text-sm font-mono text-amber-100/80">{v.childIds.length}</div>
               </div>
               <div className="bg-base-850 rounded-lg p-3 text-center">
-                <div className="text-xs text-slate-500 mb-1">Status</div>
-                <div className={`text-sm font-medium ${v.isLaunched ? "text-ok-400" : "text-slate-400"}`}>
+                <div className="text-xs text-amber-300/50 mb-1">Status</div>
+                <div className={`text-sm font-medium ${v.isLaunched ? "text-ok-400" : "text-amber-200/60"}`}>
                   {v.isLaunched ? "On Market" : "In Development"}
                 </div>
               </div>
             </div>
-            {v.notes && <p className="text-sm text-slate-400">{v.notes}</p>}
+            {v.notes && <p className="text-sm text-amber-200/60">{v.notes}</p>}
             <div className="flex gap-2 mt-3">
               <button onClick={() => handleLoad(v)} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium bg-accent-500/15 border border-accent-500/30 text-accent-300 hover:bg-accent-500/25 transition-all">
                 <ArrowUpRight size={12} /> Load into Designer

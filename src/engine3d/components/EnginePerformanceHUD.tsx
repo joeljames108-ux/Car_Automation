@@ -28,7 +28,7 @@ export const EnginePerformanceHUD: React.FC = () => {
     return (
       <button
         onClick={() => setIsVisible(true)}
-        className="absolute bottom-3 left-3 z-30 px-2.5 py-1.5 rounded-lg bg-slate-950/80 border border-amber-500/30 text-amber-400 text-[10px] font-mono font-bold hover:bg-slate-900 transition-all shadow-lg backdrop-blur-md flex items-center gap-1.5 cursor-pointer"
+        className="absolute bottom-3 left-3 z-30 px-2.5 py-1.5 rounded-lg bg-amber-950/75 border border-amber-500/30 text-amber-400 text-[10px] font-mono font-bold hover:bg-amber-900/50 transition-all shadow-lg backdrop-blur-md flex items-center gap-1.5 cursor-pointer"
         title="Show Performance Telemetry"
       >
         <Activity size={12} className="animate-pulse" />
@@ -42,15 +42,15 @@ export const EnginePerformanceHUD: React.FC = () => {
   return (
     <div className="absolute bottom-3 left-3 z-30 flex flex-col gap-1.5 max-w-[280px] select-none pointer-events-auto">
       {/* Mini Bar */}
-      <div className="flex items-center gap-2 p-2 rounded-xl bg-slate-950/85 border border-slate-800/80 backdrop-blur-xl shadow-2xl">
+      <div className="flex items-center gap-2 p-2 rounded-xl bg-amber-950/80 border border-amber-800/40 backdrop-blur-xl shadow-2xl">
         <div className={`px-2 py-0.5 rounded-md border font-mono text-xs font-black ${fpsTone}`}>
           {metrics.fps} FPS
         </div>
-        <div className="flex flex-col text-[10px] font-mono text-slate-300">
+        <div className="flex flex-col text-[10px] font-mono text-amber-100/80">
           <span className="flex items-center gap-1">
             <Zap size={10} className="text-amber-400" /> {metrics.frameTimeMs} ms
           </span>
-          <span className="text-[9px] text-slate-400">
+          <span className="text-[9px] text-amber-200/60">
             {metrics.drawCalls} calls • {metrics.triangles > 1000 ? `${(metrics.triangles / 1000).toFixed(1)}k` : metrics.triangles} tris
           </span>
         </div>
@@ -64,14 +64,14 @@ export const EnginePerformanceHUD: React.FC = () => {
         <div className="ml-auto flex items-center gap-1">
           <button
             onClick={() => setIsExpanded(!isExpanded)}
-            className="p-1 rounded text-slate-400 hover:text-amber-300 hover:bg-slate-800 transition-colors"
+            className="p-1 rounded text-amber-200/60 hover:text-amber-300 hover:bg-amber-800/40 transition-colors"
             title="Toggle Extended Diagnostics"
           >
             <Activity size={12} />
           </button>
           <button
             onClick={() => setIsVisible(false)}
-            className="p-1 rounded text-slate-500 hover:text-slate-300 hover:bg-slate-800 transition-colors"
+            className="p-1 rounded text-amber-300/50 hover:text-amber-100/80 hover:bg-amber-800/40 transition-colors"
             title="Hide Telemetry"
           >
             <EyeOff size={12} />
@@ -81,42 +81,42 @@ export const EnginePerformanceHUD: React.FC = () => {
 
       {/* Expanded Metrics Drawer */}
       {isExpanded && (
-        <div className="p-3 rounded-xl bg-slate-950/95 border border-amber-500/30 backdrop-blur-2xl shadow-2xl text-[10.5px] font-mono space-y-2 text-slate-300 animate-in fade-in slide-in-from-bottom-2 duration-150">
-          <div className="flex items-center justify-between border-b border-slate-800 pb-1.5">
+        <div className="p-3 rounded-xl bg-amber-950/90 border border-amber-500/30 backdrop-blur-2xl shadow-2xl text-[10.5px] font-mono space-y-2 text-amber-100/80 animate-in fade-in slide-in-from-bottom-2 duration-150">
+          <div className="flex items-center justify-between border-b border-amber-800/30 pb-1.5">
             <span className="font-bold text-amber-300 flex items-center gap-1.5">
               <Cpu size={12} /> WebGL GPU Profiler
             </span>
-            <span className="text-[9px] text-slate-400">PBR High Fidelity</span>
+            <span className="text-[9px] text-amber-200/60">PBR High Fidelity</span>
           </div>
 
           <div className="grid grid-cols-2 gap-1.5 text-[10px]">
-            <div className="p-1.5 rounded-lg bg-slate-900/60 border border-slate-800">
-              <span className="text-slate-400 block text-[9px]">Draw Calls</span>
+            <div className="p-1.5 rounded-lg bg-amber-900/35 border border-amber-800/30">
+              <span className="text-amber-200/60 block text-[9px]">Draw Calls</span>
               <span className="font-bold text-amber-400">{metrics.drawCalls}</span>
             </div>
-            <div className="p-1.5 rounded-lg bg-slate-900/60 border border-slate-800">
-              <span className="text-slate-400 block text-[9px]">Triangles</span>
+            <div className="p-1.5 rounded-lg bg-amber-900/35 border border-amber-800/30">
+              <span className="text-amber-200/60 block text-[9px]">Triangles</span>
               <span className="font-bold text-emerald-400">{metrics.triangles.toLocaleString()}</span>
             </div>
-            <div className="p-1.5 rounded-lg bg-slate-900/60 border border-slate-800">
-              <span className="text-slate-400 block text-[9px]">Geometries</span>
-              <span className="font-bold text-slate-200">{metrics.geometries}</span>
+            <div className="p-1.5 rounded-lg bg-amber-900/35 border border-amber-800/30">
+              <span className="text-amber-200/60 block text-[9px]">Geometries</span>
+              <span className="font-bold text-amber-50">{metrics.geometries}</span>
             </div>
-            <div className="p-1.5 rounded-lg bg-slate-900/60 border border-slate-800">
-              <span className="text-slate-400 block text-[9px]">Textures</span>
-              <span className="font-bold text-slate-200">{metrics.textures}</span>
+            <div className="p-1.5 rounded-lg bg-amber-900/35 border border-amber-800/30">
+              <span className="text-amber-200/60 block text-[9px]">Textures</span>
+              <span className="font-bold text-amber-50">{metrics.textures}</span>
             </div>
-            <div className="p-1.5 rounded-lg bg-slate-900/60 border border-slate-800">
-              <span className="text-slate-400 block text-[9px]">Est. GPU VRAM</span>
+            <div className="p-1.5 rounded-lg bg-amber-900/35 border border-amber-800/30">
+              <span className="text-amber-200/60 block text-[9px]">Est. GPU VRAM</span>
               <span className="font-bold text-amber-300">{metrics.memoryEstimateMB} MB</span>
             </div>
-            <div className="p-1.5 rounded-lg bg-slate-900/60 border border-slate-800">
-              <span className="text-slate-400 block text-[9px]">Init Load Time</span>
+            <div className="p-1.5 rounded-lg bg-amber-900/35 border border-amber-800/30">
+              <span className="text-amber-200/60 block text-[9px]">Init Load Time</span>
               <span className="font-bold text-amber-300">{metrics.loadTimeMs || 42} ms</span>
             </div>
           </div>
 
-          <div className="flex items-center gap-1.5 text-[9px] text-emerald-400/90 pt-1 border-t border-slate-800">
+          <div className="flex items-center gap-1.5 text-[9px] text-emerald-400/90 pt-1 border-t border-amber-800/30">
             <ShieldCheck size={11} />
             <span>Zero Quality Loss — Hardware Instanced</span>
           </div>

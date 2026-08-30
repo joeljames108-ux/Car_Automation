@@ -256,7 +256,7 @@ export function EngineDesigner() {
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer ${
                 optimizeGoal === opt.id
                   ? "bg-amber-500 text-black shadow-[0_0_14px_rgba(34,211,238,0.5)] scale-[1.02]"
-                  : "bg-base-800/50 text-slate-300 hover:text-white hover:bg-base-750 border border-base-700 backdrop-blur-md"
+                  : "bg-base-800/50 text-amber-100/80 hover:text-white hover:bg-base-750 border border-base-700 backdrop-blur-md"
               }`}
             >
               {opt.icon}
@@ -267,20 +267,20 @@ export function EngineDesigner() {
       </div>
 
       {/* Mode Switcher Bar */}
-      <div className="flex items-center justify-between p-2 rounded-2xl bg-slate-900/90 border border-slate-800 backdrop-blur-xl shadow-lg">
+      <div className="flex items-center justify-between p-2 rounded-2xl bg-amber-900/40 border border-amber-800/30 backdrop-blur-xl shadow-lg">
         <div className="flex items-center gap-2 px-2">
           <Layers size={15} className="text-amber-400" />
-          <span className="text-xs font-bold uppercase tracking-wider text-slate-200">
+          <span className="text-xs font-bold uppercase tracking-wider text-amber-50">
             Engine Workspace:
           </span>
         </div>
-        <div className="flex bg-slate-950 p-1 rounded-xl border border-slate-800 gap-1 flex-wrap">
+        <div className="flex bg-amber-950/80 p-1 rounded-xl border border-amber-800/30 gap-1 flex-wrap">
           <button
             onClick={() => setEngineMode("assembly_flow")}
             className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
               engineMode === "assembly_flow"
                 ? "bg-amber-500 text-slate-950 shadow-md shadow-cyan-500/30 font-extrabold"
-                : "text-slate-400 hover:text-slate-200"
+                : "text-amber-200/60 hover:text-amber-50"
             }`}
           >
             <Cog size={13} />
@@ -291,7 +291,7 @@ export function EngineDesigner() {
             className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
               engineMode === "3d_studio"
                 ? "bg-amber-500 text-slate-950 shadow-md shadow-cyan-500/30 font-extrabold"
-                : "text-slate-400 hover:text-slate-200"
+                : "text-amber-200/60 hover:text-amber-50"
             }`}
           >
             <Sparkles size={13} />
@@ -302,7 +302,7 @@ export function EngineDesigner() {
             className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
               engineMode === "transmission_studio"
                 ? "bg-amber-500 text-slate-950 shadow-md shadow-cyan-500/30 font-extrabold"
-                : "text-slate-400 hover:text-slate-200"
+                : "text-amber-200/60 hover:text-amber-50"
             }`}
           >
             <Sliders size={13} />
@@ -313,7 +313,7 @@ export function EngineDesigner() {
             className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
               engineMode === "advanced_telemetry"
                 ? "bg-amber-500 text-white shadow-md shadow-violet-500/30 font-extrabold"
-                : "text-slate-400 hover:text-slate-200"
+                : "text-amber-200/60 hover:text-amber-50"
             }`}
           >
             <Radio size={13} />
@@ -361,7 +361,7 @@ export function EngineDesigner() {
                   <div key={w.id} className="engine-warning-bar bg-base-950/80 border border-amber-500/20 p-2 rounded-xl">
                     <span className="warning-dot" />
                     <span className="font-mono text-[10px] text-amber-400/80 uppercase tracking-wider">{w.category}</span>
-                    <span className="flex-1 text-[11px] text-slate-200">{w.text}</span>
+                    <span className="flex-1 text-[11px] text-amber-50">{w.text}</span>
                     <button onClick={() => setDismissedWarnings((prev) => [...prev, w.id])} className="text-red-400/50 hover:text-red-300 transition-colors">
                       <X size={12} />
                     </button>
@@ -377,7 +377,7 @@ export function EngineDesigner() {
             {/* Power & Torque Dyno Chart */}
             <Section title="Dyno Power & Torque" icon={<Zap size={16} />}>
               <LineChart series={powerSeries} xLabel="RPM" yLabel="hp / Nm" height={190} />
-              <div className="flex justify-between text-[10px] text-slate-400 mt-1 font-mono">
+              <div className="flex justify-between text-[10px] text-amber-200/60 mt-1 font-mono">
                 <span className="flex items-center gap-1">
                   <span className="h-2 w-3 bg-amber-400 rounded-sm shadow-[0_0_6px_rgba(34,211,238,0.6)]" /> Power ({sim.peakPower} hp)
                 </span>
@@ -484,12 +484,12 @@ export function EngineDesigner() {
                 >
                   <ArrowLeft size={14} /> Back
                 </button>
-                <span className="text-xs font-mono font-bold uppercase tracking-widest text-slate-700">
+                <span className="text-xs font-mono font-bold uppercase tracking-widest text-amber-500">
                   {ENGINE_LAYOUTS[eng.layout]?.label || eng.layout} Architecture Blueprint
                 </span>
                 <button
                   onClick={closeEnlargedModal}
-                  className="p-1.5 rounded-full text-slate-400 hover:text-slate-700 hover:bg-slate-200/50 transition-colors cursor-pointer"
+                  className="p-1.5 rounded-full text-amber-200/60 hover:text-amber-500 hover:bg-slate-200/50 transition-colors cursor-pointer"
                   title="Close"
                 >
                   <X size={18} />
@@ -509,19 +509,19 @@ export function EngineDesigner() {
               {/* Specifications Cards Grid */}
               <div className="w-full grid grid-cols-2 sm:grid-cols-4 gap-2.5 mt-4 pt-3.5 border-t border-amber-200/40">
                 <div className="bg-white/85 border border-amber-200/50 rounded-2xl p-3 text-center shadow-sm backdrop-blur-md">
-                  <span className="block text-[9.5px] font-mono text-slate-400 uppercase tracking-wider">Cylinders</span>
+                  <span className="block text-[9.5px] font-mono text-amber-200/60 uppercase tracking-wider">Cylinders</span>
                   <span className="text-sm font-mono font-bold text-slate-800">{ENGINE_LAYOUTS[eng.layout]?.cylinders || "-"}</span>
                 </div>
                 <div className="bg-white/85 border border-amber-200/50 rounded-2xl p-3 text-center shadow-sm backdrop-blur-md">
-                  <span className="block text-[9.5px] font-mono text-slate-400 uppercase tracking-wider">Base Weight</span>
+                  <span className="block text-[9.5px] font-mono text-amber-200/60 uppercase tracking-wider">Base Weight</span>
                   <span className="text-sm font-mono font-bold text-slate-800">{ENGINE_LAYOUTS[eng.layout]?.weightBase} kg</span>
                 </div>
                 <div className="bg-white/85 border border-amber-200/50 rounded-2xl p-3 text-center shadow-sm backdrop-blur-md">
-                  <span className="block text-[9.5px] font-mono text-slate-400 uppercase tracking-wider">Smoothness</span>
+                  <span className="block text-[9.5px] font-mono text-amber-200/60 uppercase tracking-wider">Smoothness</span>
                   <span className="text-sm font-mono font-bold text-[#007aff]">{((ENGINE_LAYOUTS[eng.layout]?.balanceFactor || 0) * 100).toFixed(0)}%</span>
                 </div>
                 <div className="bg-white/85 border border-amber-200/50 rounded-2xl p-3 text-center shadow-sm backdrop-blur-md">
-                  <span className="block text-[9.5px] font-mono text-slate-400 uppercase tracking-wider">Cost Factor</span>
+                  <span className="block text-[9.5px] font-mono text-amber-200/60 uppercase tracking-wider">Cost Factor</span>
                   <span className="text-sm font-mono font-bold text-slate-800">{ENGINE_LAYOUTS[eng.layout]?.costFactor}x</span>
                 </div>
               </div>

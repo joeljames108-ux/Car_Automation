@@ -263,7 +263,7 @@ export const NeonHorizonHeroHUD: React.FC<NeonHorizonHeroHUDProps> = ({
               className={`p-2 rounded-xl text-left border transition-all duration-200 flex items-center justify-between gap-2 group cursor-pointer ${
  hoveredNode === sub.id
  ? "bg-sky-400/12 border-sky-400/30 text-white"
- : "bg-black/30 border-white/10 text-slate-300 hover:border-white/15"
+ : "bg-black/30 border-white/10 text-amber-100/80 hover:border-white/15"
  }`}
             >
               <div className="flex items-center gap-2">
@@ -303,7 +303,7 @@ export const NeonHorizonHeroHUD: React.FC<NeonHorizonHeroHUDProps> = ({
                   className={`px-2 py-0.5 rounded text-[9px] nh-font-mono transition-all cursor-pointer ${
  cameraPreset === cp.id
  ? "bg-sky-400/25 text-sky-200 font-bold border border-sky-400/30"
- : "text-slate-400 hover:text-slate-200"
+ : "text-amber-200/60 hover:text-amber-50"
  }`}
                 >
                   {cp.label}

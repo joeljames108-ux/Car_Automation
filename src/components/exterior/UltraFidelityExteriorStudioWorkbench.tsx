@@ -409,7 +409,7 @@ export const UltraFidelityExteriorStudioWorkbench: React.FC = memo(function Ultr
             <Sparkles size={18} />
           </div>
           <div>
-            <h2 className="text-sm font-black tracking-wider text-slate-100 uppercase">
+            <h2 className="text-sm font-black tracking-wider text-amber-50 uppercase">
               Ultra-Fidelity Exterior 3D Studio & CAD Workbench
             </h2>
             <p className="text-[11px] text-zinc-400">
@@ -448,7 +448,7 @@ export const UltraFidelityExteriorStudioWorkbench: React.FC = memo(function Ultr
         </div>
 
         {/* Right Configuration Deck (4 cols) */}
-        <div className="lg:col-span-4 flex flex-col bg-slate-950/80 p-5 overflow-y-auto space-y-5">
+        <div className="lg:col-span-4 flex flex-col bg-amber-950/80 p-5 overflow-y-auto space-y-5">
           {/* Sub-Tabs */}
           <div className="flex items-center gap-1.5 p-1 bg-black/50 rounded-xl border border-white/10 overflow-x-auto no-scrollbar">
             {[
@@ -479,7 +479,7 @@ export const UltraFidelityExteriorStudioWorkbench: React.FC = memo(function Ultr
           {/* Paint Customizer */}
           {activeTab === "paint_shader" && (
             <div className="space-y-4 text-xs">
-              <h3 className="font-bold text-slate-200 uppercase tracking-wider text-[11px]">Spectral Basecoat</h3>
+              <h3 className="font-bold text-amber-50 uppercase tracking-wider text-[11px]">Spectral Basecoat</h3>
               <div className="grid grid-cols-4 gap-2">
                 {[
                   { name: "Cyan", hex: "#00e5ff" },
@@ -560,7 +560,7 @@ export const UltraFidelityExteriorStudioWorkbench: React.FC = memo(function Ultr
           {/* Active Aero Controls */}
           {activeTab === "active_aero" && (
             <div className="space-y-4 text-xs">
-              <h3 className="font-bold text-slate-200 uppercase tracking-wider text-[11px]">NACA 6412 Active Wing</h3>
+              <h3 className="font-bold text-amber-50 uppercase tracking-wider text-[11px]">NACA 6412 Active Wing</h3>
               <div>
                 <div className="flex justify-between text-[11px] mb-1">
                   <span className="text-zinc-400">Flap Angle of Attack</span>
@@ -579,7 +579,7 @@ export const UltraFidelityExteriorStudioWorkbench: React.FC = memo(function Ultr
               </div>
 
               <div className="flex items-center justify-between p-3 rounded-xl bg-black/40 border border-white/10">
-                <span className="font-bold text-slate-200">DRS Low-Drag Sprint</span>
+                <span className="font-bold text-amber-50">DRS Low-Drag Sprint</span>
                 <button
                   onClick={() => setIsDrsActive(!isDrsActive)}
                   className={`px-3 py-1 rounded-lg font-black text-[10px] tracking-wider transition-all cursor-pointer ${
@@ -591,7 +591,7 @@ export const UltraFidelityExteriorStudioWorkbench: React.FC = memo(function Ultr
               </div>
 
               <div className="flex items-center justify-between p-3 rounded-xl bg-black/40 border border-white/10">
-                <span className="font-bold text-slate-200">Kevlar Sealing Skirts</span>
+                <span className="font-bold text-amber-50">Kevlar Sealing Skirts</span>
                 <button
                   onClick={() => setShowUnderbodySkirts(!showUnderbodySkirts)}
                   className={`px-3 py-1 rounded-lg font-black text-[10px] tracking-wider transition-all cursor-pointer ${
@@ -607,9 +607,9 @@ export const UltraFidelityExteriorStudioWorkbench: React.FC = memo(function Ultr
           {/* Turbofans & Brakes */}
           {activeTab === "wheels_brakes" && (
             <div className="space-y-4 text-xs">
-              <h3 className="font-bold text-slate-200 uppercase tracking-wider text-[11px]">Running Gear Setup</h3>
+              <h3 className="font-bold text-amber-50 uppercase tracking-wider text-[11px]">Running Gear Setup</h3>
               <div className="flex items-center justify-between p-3 rounded-xl bg-black/40 border border-white/10">
-                <span className="font-bold text-slate-200">Carbon Turbofan Covers</span>
+                <span className="font-bold text-amber-50">Carbon Turbofan Covers</span>
                 <button
                   onClick={() => setHasTurbofanCover(!hasTurbofanCover)}
                   className={`px-3 py-1 rounded-lg font-black text-[10px] tracking-wider transition-all cursor-pointer ${
@@ -646,7 +646,7 @@ export const UltraFidelityExteriorStudioWorkbench: React.FC = memo(function Ultr
           {/* Laser Optics */}
           {activeTab === "laser_optics" && (
             <div className="space-y-3 text-xs">
-              <h3 className="font-bold text-slate-200 uppercase tracking-wider text-[11px]">Matrix Laser Optics Mode</h3>
+              <h3 className="font-bold text-amber-50 uppercase tracking-wider text-[11px]">Matrix Laser Optics Mode</h3>
               {[
                 { id: "DRL_DAYTIME" as const, label: "Daytime Crystal DRL" },
                 { id: "HIGH_BEAM_LASER" as const, label: "1.3M Pixel DMD High Beam" },
@@ -670,7 +670,7 @@ export const UltraFidelityExteriorStudioWorkbench: React.FC = memo(function Ultr
           {/* Motorsport Liveries */}
           {activeTab === "liveries" && (
             <div className="space-y-4 text-xs">
-              <h3 className="font-bold text-slate-200 uppercase tracking-wider text-[11px]">Competition Livery Style</h3>
+              <h3 className="font-bold text-amber-50 uppercase tracking-wider text-[11px]">Competition Livery Style</h3>
               <div className="grid grid-cols-2 gap-2">
                 {[
                   { id: "HERITAGE_LE_MANS_STRIPES" as const, label: "Le Mans Stripes" },

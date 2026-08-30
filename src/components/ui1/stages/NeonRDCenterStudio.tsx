@@ -39,7 +39,7 @@ export function NeonRDCenterStudio() {
   };
 
   return (
-    <div className="w-full flex flex-col gap-6 text-slate-100 animate-nh-materialize">
+    <div className="w-full flex flex-col gap-6 text-amber-50 animate-nh-materialize">
       {/* Header */}
       <NeonHorizonGlassPanel
         variant="window"
@@ -91,9 +91,9 @@ export function NeonRDCenterStudio() {
                       {isUnlocked ? (
                         <CheckCircle2 size={16} className="text-sky-400" />
                       ) : (
-                        <Lock size={16} className="text-slate-500" />
+                        <Lock size={16} className="text-amber-300/50" />
                       )}
-                      <span className="text-xs font-bold text-slate-100">{tech.name}</span>
+                      <span className="text-xs font-bold text-amber-50">{tech.name}</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <span className="text-xs nh-font-mono text-emerald-300 font-bold">{tech.impact}</span>
@@ -102,7 +102,7 @@ export function NeonRDCenterStudio() {
                       </NeonHorizonBadge>
                     </div>
                   </div>
-                  <p className="text-[11px] text-slate-300 leading-relaxed pl-6">{tech.desc}</p>
+                  <p className="text-[11px] text-amber-100/80 leading-relaxed pl-6">{tech.desc}</p>
                 </div>
               );
             })}
@@ -134,17 +134,17 @@ export function NeonRDCenterStudio() {
 
             <div className="p-4 rounded-xl bg-[#0a111e] border border-sky-400/15 flex flex-col gap-2">
               <div className="flex items-center justify-between">
-                <span className="text-xs text-slate-400">Annual R&D Investment:</span>
+                <span className="text-xs text-amber-200/60">Annual R&D Investment:</span>
                 <span className="text-xs font-bold nh-font-mono text-sky-300">
                   ${(monthlyBudgetM * 12).toFixed(1)}M
                 </span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-xs text-slate-400">Breakthrough Acceleration:</span>
+                <span className="text-xs text-amber-200/60">Breakthrough Acceleration:</span>
                 <span className="text-xs font-bold nh-font-mono text-emerald-300">+35% Faster</span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-xs text-slate-400">IP Valuation:</span>
+                <span className="text-xs text-amber-200/60">IP Valuation:</span>
                 <span className="text-xs font-bold nh-font-mono text-amber-300">$185M</span>
               </div>
             </div>

@@ -81,23 +81,23 @@ export const TrackBattlesStudio: React.FC = memo(function TrackBattlesStudio() {
   const activeFrame = results.telemetryFrames[playbackFrameIdx] || results.telemetryFrames[0];
 
   return (
-    <div className="flex flex-col w-full h-full space-y-4 p-2 sm:p-4 select-none bg-slate-950 text-slate-100 min-h-[720px] rounded-2xl border border-slate-800 shadow-2xl">
+    <div className="flex flex-col w-full h-full space-y-4 p-2 sm:p-4 select-none bg-amber-950/80 text-amber-50 min-h-[720px] rounded-2xl border border-amber-800/30 shadow-2xl">
       {/* Studio Header */}
-      <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-3 bg-gradient-to-r from-slate-900 via-slate-950 to-slate-900 p-4 rounded-xl border border-slate-800 shadow-lg">
+      <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-3 bg-gradient-to-r from-amber-900/60 via-slate-950 to-amber-900/60 p-4 rounded-xl border border-amber-800/30 shadow-lg">
         <div className="flex items-center gap-3">
           <div className="p-2.5 rounded-xl bg-gradient-to-br from-emerald-400 to-teal-600 text-slate-950 shadow-md shadow-emerald-500/30">
             <Trophy size={22} />
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h1 className="text-lg font-black tracking-tight text-slate-100 uppercase">
+              <h1 className="text-lg font-black tracking-tight text-amber-50 uppercase">
                 Track Battles & Telemetry Replay Studio
               </h1>
               <span className="px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 font-mono text-[10px] font-extrabold border border-emerald-500/30">
                 LAP SIMULATOR
               </span>
             </div>
-            <p className="text-xs text-slate-400">
+            <p className="text-xs text-amber-200/60">
               Multi-sector lap time delta solver, G-G friction circle diagrams & real-time telemetry playback
             </p>
           </div>
@@ -105,7 +105,7 @@ export const TrackBattlesStudio: React.FC = memo(function TrackBattlesStudio() {
 
         {/* Circuit Selector */}
         <div className="flex flex-wrap items-center gap-2">
-          <span className="text-[11px] font-mono text-slate-400 uppercase font-bold">Circuit:</span>
+          <span className="text-[11px] font-mono text-amber-200/60 uppercase font-bold">Circuit:</span>
           {(Object.keys(CIRCUITS_CATALOG) as CircuitId[]).map((cId) => {
             const c = CIRCUITS_CATALOG[cId];
             return (
@@ -119,7 +119,7 @@ export const TrackBattlesStudio: React.FC = memo(function TrackBattlesStudio() {
                 className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all border cursor-pointer ${
                   circuitId === cId
                     ? "bg-emerald-500 text-slate-950 border-emerald-400 shadow-md shadow-emerald-500/30 font-extrabold"
-                    : "bg-slate-850 text-slate-400 border-slate-800 hover:text-slate-200"
+                    : "bg-amber-850/40 text-amber-200/60 border-amber-800/30 hover:text-amber-50"
                 }`}
               >
                 {c.name}
@@ -130,14 +130,14 @@ export const TrackBattlesStudio: React.FC = memo(function TrackBattlesStudio() {
       </div>
 
       {/* Battle Winner Callout Banner */}
-      <div className="bg-gradient-to-r from-slate-900 via-slate-850 to-slate-900 p-4 rounded-xl border border-slate-800 flex flex-col md:flex-row items-center justify-between gap-4 shadow-inner">
+      <div className="bg-gradient-to-r from-amber-900/60 via-slate-850 to-amber-900/60 p-4 rounded-xl border border-amber-800/30 flex flex-col md:flex-row items-center justify-between gap-4 shadow-inner">
         <div className="flex items-center gap-3">
           <div className="p-2 rounded-lg bg-emerald-500/20 text-emerald-300 border border-emerald-500/30">
             <Award size={24} />
           </div>
           <div>
-            <div className="text-xs font-mono uppercase text-slate-400">Battle Winner</div>
-            <div className="text-base font-extrabold text-slate-100 flex items-center gap-2">
+            <div className="text-xs font-mono uppercase text-amber-200/60">Battle Winner</div>
+            <div className="text-base font-extrabold text-amber-50 flex items-center gap-2">
               <span>{results.winner === "A" ? carA.name : carB.name}</span>
               <span className="text-xs font-mono px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-300 font-bold border border-emerald-500/30">
                 {Math.abs(results.timeDeltaSec)}s FASTER
@@ -152,7 +152,7 @@ export const TrackBattlesStudio: React.FC = memo(function TrackBattlesStudio() {
             <div className="text-[10px] text-amber-400 uppercase font-bold">{carA.name}</div>
             <div className="text-base font-extrabold text-amber-300">{results.lapTimeFormattedA}</div>
           </div>
-          <div className="text-slate-600 font-bold text-lg">VS</div>
+          <div className="text-amber-400 font-bold text-lg">VS</div>
           <div>
             <div className="text-[10px] text-amber-400 uppercase font-bold">{carB.name}</div>
             <div className="text-base font-extrabold text-amber-300">{results.lapTimeFormattedB}</div>
@@ -163,9 +163,9 @@ export const TrackBattlesStudio: React.FC = memo(function TrackBattlesStudio() {
       {/* Main Grid: Controls + Graphs */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 flex-1">
         {/* Left Car Specs Tuning (4 cols) */}
-        <div className="lg:col-span-4 flex flex-col space-y-3 bg-slate-900/90 p-4 rounded-xl border border-slate-800">
-          <div className="flex items-center justify-between border-b border-slate-800 pb-2">
-            <div className="flex items-center gap-2 text-xs font-extrabold uppercase text-slate-300">
+        <div className="lg:col-span-4 flex flex-col space-y-3 bg-amber-900/40 p-4 rounded-xl border border-amber-800/30">
+          <div className="flex items-center justify-between border-b border-amber-800/30 pb-2">
+            <div className="flex items-center gap-2 text-xs font-extrabold uppercase text-amber-100/80">
               <Sliders size={14} className="text-emerald-400" />
               <span>Vehicle Setup (Car A vs Car B)</span>
             </div>
@@ -184,7 +184,7 @@ export const TrackBattlesStudio: React.FC = memo(function TrackBattlesStudio() {
               step="25"
               value={carA.horsepowerHp}
               onChange={(e) => setCarA({ ...carA, horsepowerHp: Number(e.target.value) })}
-              className="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-amber-400"
+              className="w-full h-1.5 bg-amber-800/35 rounded-lg appearance-none cursor-pointer accent-amber-400"
             />
           </div>
 
@@ -201,12 +201,12 @@ export const TrackBattlesStudio: React.FC = memo(function TrackBattlesStudio() {
               step="250"
               value={carA.downforceNAt200}
               onChange={(e) => setCarA({ ...carA, downforceNAt200: Number(e.target.value) })}
-              className="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-amber-400"
+              className="w-full h-1.5 bg-amber-800/35 rounded-lg appearance-none cursor-pointer accent-amber-400"
             />
           </div>
 
           {/* Car B Horsepower */}
-          <div className="space-y-1 pt-2 border-t border-slate-800">
+          <div className="space-y-1 pt-2 border-t border-amber-800/30">
             <div className="flex justify-between text-xs font-semibold">
               <span className="text-amber-400">Car B Horsepower</span>
               <span className="font-mono text-amber-400">{carB.horsepowerHp} HP</span>
@@ -218,7 +218,7 @@ export const TrackBattlesStudio: React.FC = memo(function TrackBattlesStudio() {
               step="25"
               value={carB.horsepowerHp}
               onChange={(e) => setCarB({ ...carB, horsepowerHp: Number(e.target.value) })}
-              className="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-indigo-400"
+              className="w-full h-1.5 bg-amber-800/35 rounded-lg appearance-none cursor-pointer accent-indigo-400"
             />
           </div>
 
@@ -235,16 +235,16 @@ export const TrackBattlesStudio: React.FC = memo(function TrackBattlesStudio() {
               step="250"
               value={carB.downforceNAt200}
               onChange={(e) => setCarB({ ...carB, downforceNAt200: Number(e.target.value) })}
-              className="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-indigo-400"
+              className="w-full h-1.5 bg-amber-800/35 rounded-lg appearance-none cursor-pointer accent-indigo-400"
             />
           </div>
 
           {/* Sector Splits Breakdown */}
-          <div className="pt-3 border-t border-slate-800 space-y-2">
-            <span className="text-xs font-bold text-slate-300 uppercase">Sector Time Splits</span>
+          <div className="pt-3 border-t border-amber-800/30 space-y-2">
+            <span className="text-xs font-bold text-amber-100/80 uppercase">Sector Time Splits</span>
             {results.sectors.map((sec, idx) => (
-              <div key={idx} className="p-2 rounded bg-slate-950 border border-slate-800 text-[11px] font-mono flex items-center justify-between">
-                <span className="text-slate-400 font-sans">{sec.name}</span>
+              <div key={idx} className="p-2 rounded bg-amber-950/80 border border-amber-800/30 text-[11px] font-mono flex items-center justify-between">
+                <span className="text-amber-200/60 font-sans">{sec.name}</span>
                 <span className={sec.deltaSec >= 0 ? "text-emerald-400 font-bold" : "text-red-400 font-bold"}>
                   {sec.deltaSec >= 0 ? `-${sec.deltaSec}s` : `+${Math.abs(sec.deltaSec)}s`}
                 </span>
@@ -257,8 +257,8 @@ export const TrackBattlesStudio: React.FC = memo(function TrackBattlesStudio() {
         <div className="lg:col-span-8 flex flex-col space-y-3">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             {/* G-G Friction Circle Diagram SVG */}
-            <div className="bg-slate-950 p-4 rounded-xl border border-slate-800 flex flex-col items-center justify-center space-y-2">
-              <span className="text-xs font-bold uppercase text-slate-400">Friction Circle (G-G Diagram)</span>
+            <div className="bg-amber-950/80 p-4 rounded-xl border border-amber-800/30 flex flex-col items-center justify-center space-y-2">
+              <span className="text-xs font-bold uppercase text-amber-200/60">Friction Circle (G-G Diagram)</span>
               <svg width="220" height="220" viewBox="-110 -110 220 220">
                 {/* Concentric G circles */}
                 <circle r="90" fill="none" stroke="#334155" strokeWidth="1" strokeDasharray="3 3" />
@@ -286,33 +286,33 @@ export const TrackBattlesStudio: React.FC = memo(function TrackBattlesStudio() {
                   opacity="0.8"
                 />
               </svg>
-              <div className="flex justify-between w-full text-[10px] font-mono text-slate-400 pt-2 border-t border-slate-800">
+              <div className="flex justify-between w-full text-[10px] font-mono text-amber-200/60 pt-2 border-t border-amber-800/30">
                 <span className="text-amber-400">Car A: {activeFrame.lateralGA}G Lat / {activeFrame.longitudinalGA}G Long</span>
                 <span className="text-amber-400">Car B: {activeFrame.lateralGB}G Lat / {activeFrame.longitudinalGB}G Long</span>
               </div>
             </div>
 
             {/* Live Playback Telemetry Gauge */}
-            <div className="bg-slate-950 p-4 rounded-xl border border-slate-800 flex flex-col justify-between space-y-3">
-              <div className="flex items-center justify-between border-b border-slate-800 pb-2">
-                <span className="text-xs font-bold uppercase text-slate-400">Telemetry Replay Feed</span>
+            <div className="bg-amber-950/80 p-4 rounded-xl border border-amber-800/30 flex flex-col justify-between space-y-3">
+              <div className="flex items-center justify-between border-b border-amber-800/30 pb-2">
+                <span className="text-xs font-bold uppercase text-amber-200/60">Telemetry Replay Feed</span>
                 <span className="text-xs font-mono text-emerald-400 font-bold">{activeFrame.distanceMeters}m</span>
               </div>
 
               <div className="space-y-2">
                 <div className="flex justify-between text-xs font-mono">
-                  <span className="text-slate-400">Car A Speed</span>
+                  <span className="text-amber-200/60">Car A Speed</span>
                   <span className="text-amber-400 font-bold">{activeFrame.speedKmhA} km/h</span>
                 </div>
-                <div className="w-full h-2 bg-slate-900 rounded-full overflow-hidden">
+                <div className="w-full h-2 bg-amber-900/50 rounded-full overflow-hidden">
                   <div className="bg-amber-500 h-full transition-all" style={{ width: `${(activeFrame.speedKmhA / results.topSpeedKmhA) * 100}%` }} />
                 </div>
 
                 <div className="flex justify-between text-xs font-mono pt-2">
-                  <span className="text-slate-400">Car B Speed</span>
+                  <span className="text-amber-200/60">Car B Speed</span>
                   <span className="text-amber-400 font-bold">{activeFrame.speedKmhB} km/h</span>
                 </div>
-                <div className="w-full h-2 bg-slate-900 rounded-full overflow-hidden">
+                <div className="w-full h-2 bg-amber-900/50 rounded-full overflow-hidden">
                   <div className="bg-amber-500 h-full transition-all" style={{ width: `${(activeFrame.speedKmhB / results.topSpeedKmhB) * 100}%` }} />
                 </div>
               </div>
@@ -337,13 +337,13 @@ export const TrackBattlesStudio: React.FC = memo(function TrackBattlesStudio() {
                         setIsPlaying(false);
                         setPlaybackFrameIdx(0);
                       }}
-                      className="p-1 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg transition-all cursor-pointer"
+                      className="p-1 bg-amber-800/35 hover:bg-amber-700/40 text-amber-100/80 rounded-lg transition-all cursor-pointer"
                       title="Reset to Lap Start"
                     >
                       <RotateCcw size={13} />
                     </button>
                   </div>
-                  <span className="text-[11px] font-mono text-slate-400">
+                  <span className="text-[11px] font-mono text-amber-200/60">
                     Frame: <strong className="text-white">{playbackFrameIdx + 1}</strong> / {results.telemetryFrames.length}
                   </span>
                 </div>
@@ -353,7 +353,7 @@ export const TrackBattlesStudio: React.FC = memo(function TrackBattlesStudio() {
                   max={results.telemetryFrames.length - 1}
                   value={playbackFrameIdx}
                   onChange={(e) => setPlaybackFrameIdx(Number(e.target.value))}
-                  className="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-emerald-400"
+                  className="w-full h-1.5 bg-amber-800/35 rounded-lg appearance-none cursor-pointer accent-emerald-400"
                 />
               </div>
             </div>

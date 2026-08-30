@@ -304,16 +304,16 @@ export const HyperFidelityCockpitStudioCustomizer: React.FC = () => {
   }, [config.presetTheme]);
 
   return (
-    <div className="flex flex-col w-full h-full bg-[#07090e] text-slate-100 rounded-xl overflow-hidden border border-slate-800 shadow-2xl font-sans">
+    <div className="flex flex-col w-full h-full bg-[#07090e] text-amber-50 rounded-xl overflow-hidden border border-amber-800/30 shadow-2xl font-sans">
       {/* Header Bar */}
-      <div className="flex items-center justify-between px-6 py-3.5 bg-[#0b0e17]/90 backdrop-blur-md border-b border-slate-800/80">
+      <div className="flex items-center justify-between px-6 py-3.5 bg-[#0b0e17]/90 backdrop-blur-md border-b border-amber-800/30">
         <div className="flex items-center gap-3">
           <div className="p-2 bg-amber-500/10 rounded-lg border border-amber-500/30 text-amber-400">
             <Sparkles className="w-5 h-5" />
           </div>
           <div>
             <h2 className="text-base font-semibold tracking-wide text-white">Hyper-Fidelity Cockpit 3D Studio</h2>
-            <p className="text-xs text-slate-400">Phase 5 Procedural CAD, Anisotropic BRDF & Acoustic Raytracing</p>
+            <p className="text-xs text-amber-200/60">Phase 5 Procedural CAD, Anisotropic BRDF & Acoustic Raytracing</p>
           </div>
         </div>
 
@@ -335,7 +335,7 @@ export const HyperFidelityCockpitStudioCustomizer: React.FC = () => {
         {/* 3D Viewport Canvas Container */}
         <div className="flex-1 h-full relative" ref={mountRef}>
           {/* Floating Camera Hotspot Switcher */}
-          <div className="absolute top-4 left-4 z-20 flex items-center gap-1.5 p-1.5 bg-[#0a0d14]/85 backdrop-blur-md rounded-xl border border-slate-800/90 shadow-xl">
+          <div className="absolute top-4 left-4 z-20 flex items-center gap-1.5 p-1.5 bg-[#0a0d14]/85 backdrop-blur-md rounded-xl border border-amber-800/30 shadow-xl">
             {(["driver_pov", "passenger_relax", "rear_vip_lounge", "panoramic_roof_skyview", "steering_macro_detail"] as StudioCameraPreset[]).map((cam) => (
               <button
                 key={cam}
@@ -343,7 +343,7 @@ export const HyperFidelityCockpitStudioCustomizer: React.FC = () => {
                 className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
                   activeCam === cam
                     ? "bg-amber-500/20 text-amber-300 border border-amber-500/40 shadow-sm"
-                    : "text-slate-400 hover:text-white hover:bg-slate-800/50"
+                    : "text-amber-200/60 hover:text-white hover:bg-amber-800/35/50"
                 }`}
               >
                 {cam.replace(/_/g, " ").toUpperCase()}
@@ -353,26 +353,26 @@ export const HyperFidelityCockpitStudioCustomizer: React.FC = () => {
 
           {/* Floating Acoustics NVH HUD Badge */}
           {acousticResult && (
-            <div className="absolute bottom-4 left-4 z-20 flex items-center gap-4 px-4 py-2.5 bg-[#0b0f19]/90 backdrop-blur-md rounded-xl border border-slate-800/90 shadow-xl text-xs">
+            <div className="absolute bottom-4 left-4 z-20 flex items-center gap-4 px-4 py-2.5 bg-[#0b0f19]/90 backdrop-blur-md rounded-xl border border-amber-800/30 shadow-xl text-xs">
               <div className="flex items-center gap-2 text-amber-400">
                 <Volume2 className="w-4 h-4" />
                 <span className="font-semibold">RT60: {acousticResult.reverberationTimeRt60Sec}s</span>
               </div>
-              <div className="h-4 w-px bg-slate-800" />
-              <div className="text-slate-300">STI: <span className="text-emerald-400 font-medium">{acousticResult.speechTransmissionIndexSti}</span></div>
-              <div className="h-4 w-px bg-slate-800" />
-              <div className="text-slate-300">ANC: <span className="text-amber-400 font-medium">{acousticResult.activeNoiseCancellationAttenDb} dB</span></div>
-              <div className="h-4 w-px bg-slate-800" />
-              <div className="text-slate-300">Driver Sweetspot: <span className="text-amber-400 font-medium">{acousticResult.driverSweetSpotScore}%</span></div>
+              <div className="h-4 w-px bg-amber-800/35" />
+              <div className="text-amber-100/80">STI: <span className="text-emerald-400 font-medium">{acousticResult.speechTransmissionIndexSti}</span></div>
+              <div className="h-4 w-px bg-amber-800/35" />
+              <div className="text-amber-100/80">ANC: <span className="text-amber-400 font-medium">{acousticResult.activeNoiseCancellationAttenDb} dB</span></div>
+              <div className="h-4 w-px bg-amber-800/35" />
+              <div className="text-amber-100/80">Driver Sweetspot: <span className="text-amber-400 font-medium">{acousticResult.driverSweetSpotScore}%</span></div>
             </div>
           )}
         </div>
 
         {/* Right Configuration Sidebar */}
-        <div className="w-80 bg-[#090c13]/95 backdrop-blur-xl border-l border-slate-800/90 p-5 flex flex-col gap-5 overflow-y-auto z-20">
+        <div className="w-80 bg-[#090c13]/95 backdrop-blur-xl border-l border-amber-800/30 p-5 flex flex-col gap-5 overflow-y-auto z-20">
           {/* Preset Theme Selector */}
           <div className="flex flex-col gap-2">
-            <label className="text-xs font-semibold text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
+            <label className="text-xs font-semibold text-amber-100/80 uppercase tracking-wider flex items-center gap-1.5">
               <Sliders className="w-3.5 h-3.5 text-amber-400" /> Cockpit Theme Preset
             </label>
             <div className="grid grid-cols-2 gap-2">
@@ -383,7 +383,7 @@ export const HyperFidelityCockpitStudioCustomizer: React.FC = () => {
                   className={`py-2 px-2.5 rounded-lg text-xs font-medium text-center border transition-all ${
                     config.presetTheme === t
                       ? "bg-amber-500/20 text-amber-300 border-amber-500/50 shadow-md shadow-cyan-950/30"
-                      : "bg-slate-900/60 text-slate-400 border-slate-800 hover:border-slate-700"
+                      : "bg-amber-900/40 text-amber-200/60 border-amber-800/30 hover:border-amber-700/30"
                   }`}
                 >
                   {t.replace(/_/g, " ").toUpperCase()}
@@ -395,7 +395,7 @@ export const HyperFidelityCockpitStudioCustomizer: React.FC = () => {
           {/* Exploded Subassembly Slider */}
           <div className="flex flex-col gap-2">
             <div className="flex justify-between text-xs">
-              <span className="font-semibold text-slate-300 flex items-center gap-1.5">
+              <span className="font-semibold text-amber-100/80 flex items-center gap-1.5">
                 <Layers className="w-3.5 h-3.5 text-amber-400" /> Exploded CAD View
               </span>
               <span className="text-amber-400 font-mono">{(config.explodedFactor * 100).toFixed(0)}%</span>
@@ -407,13 +407,13 @@ export const HyperFidelityCockpitStudioCustomizer: React.FC = () => {
               step="0.01"
               value={config.explodedFactor}
               onChange={(e) => setConfig((prev) => ({ ...prev, explodedFactor: parseFloat(e.target.value) }))}
-              className="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-amber-400"
+              className="w-full h-1.5 bg-amber-800/35 rounded-lg appearance-none cursor-pointer accent-amber-400"
             />
           </div>
 
           {/* Ambient Lighting Color Matrix */}
           <div className="flex flex-col gap-2.5">
-            <label className="text-xs font-semibold text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
+            <label className="text-xs font-semibold text-amber-100/80 uppercase tracking-wider flex items-center gap-1.5">
               <Palette className="w-3.5 h-3.5 text-emerald-400" /> Ambient Light Color
             </label>
             <div className="flex items-center gap-2">
@@ -433,7 +433,7 @@ export const HyperFidelityCockpitStudioCustomizer: React.FC = () => {
           {/* Circadian Color Temperature Kelvin Slider */}
           <div className="flex flex-col gap-2">
             <div className="flex justify-between text-xs">
-              <span className="font-semibold text-slate-300 flex items-center gap-1.5">
+              <span className="font-semibold text-amber-100/80 flex items-center gap-1.5">
                 <Sun className="w-3.5 h-3.5 text-amber-400" /> Circadian Kelvin (CCT)
               </span>
               <span className="text-amber-300 font-mono">{config.circadianKelvin}K</span>
@@ -451,7 +451,7 @@ export const HyperFidelityCockpitStudioCustomizer: React.FC = () => {
 
           {/* Leather & Surface Material Selector */}
           <div className="flex flex-col gap-2">
-            <label className="text-xs font-semibold text-slate-300 uppercase tracking-wider">
+            <label className="text-xs font-semibold text-amber-100/80 uppercase tracking-wider">
               Upholstery Material
             </label>
             {(["semi_aniline_leather", "nappa_leather", "perforated_alcantara"] as const).map((m) => (
@@ -460,8 +460,8 @@ export const HyperFidelityCockpitStudioCustomizer: React.FC = () => {
                 onClick={() => setConfig((prev) => ({ ...prev, activeLeatherType: m }))}
                 className={`py-2 px-3 rounded-lg text-xs font-medium text-left border transition-all ${
                   config.activeLeatherType === m
-                    ? "bg-slate-800 text-amber-300 border-amber-500/40"
-                    : "bg-slate-900/40 text-slate-400 border-slate-800/80 hover:border-slate-700"
+                    ? "bg-amber-800/35 text-amber-300 border-amber-500/40"
+                    : "bg-amber-900/40 text-amber-200/60 border-amber-800/30 hover:border-amber-700/30"
                 }`}
               >
                 {m.replace(/_/g, " ").toUpperCase()}
@@ -470,23 +470,23 @@ export const HyperFidelityCockpitStudioCustomizer: React.FC = () => {
           </div>
 
           {/* Atmospheric Toggles */}
-          <div className="flex flex-col gap-2.5 pt-2 border-t border-slate-800/80">
-            <label className="flex items-center justify-between text-xs text-slate-300 cursor-pointer">
+          <div className="flex flex-col gap-2.5 pt-2 border-t border-amber-800/30">
+            <label className="flex items-center justify-between text-xs text-amber-100/80 cursor-pointer">
               <span>Volumetric Sun Rays</span>
               <input
                 type="checkbox"
                 checked={config.hasVolumetricGodRays}
                 onChange={(e) => setConfig((prev) => ({ ...prev, hasVolumetricGodRays: e.target.checked }))}
-                className="w-4 h-4 rounded accent-amber-500 bg-slate-800 border-slate-700"
+                className="w-4 h-4 rounded accent-amber-500 bg-amber-800/35 border-amber-700/30"
               />
             </label>
-            <label className="flex items-center justify-between text-xs text-slate-300 cursor-pointer">
+            <label className="flex items-center justify-between text-xs text-amber-100/80 cursor-pointer">
               <span>Cabin Dust Particles</span>
               <input
                 type="checkbox"
                 checked={config.hasAtmosphericDust}
                 onChange={(e) => setConfig((prev) => ({ ...prev, hasAtmosphericDust: e.target.checked }))}
-                className="w-4 h-4 rounded accent-amber-500 bg-slate-800 border-slate-700"
+                className="w-4 h-4 rounded accent-amber-500 bg-amber-800/35 border-amber-700/30"
               />
             </label>
           </div>
