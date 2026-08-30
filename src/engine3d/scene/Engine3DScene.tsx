@@ -13,6 +13,7 @@ import { useEngine3DStore } from '../store/useEngine3DStore';
 import { useSnapAnimationTicker } from '../animations/useSnapAnimation';
 import { ModularEngineAssembly } from './ModularEngineAssembly';
 import { PostProcessingStack } from '../postprocessing/PostProcessingStack';
+import { EngineRuntimeMotion } from './EngineRuntimeMotion';
 
 import { globalPerformanceManager } from '../core/PerformanceManager';
 
@@ -109,6 +110,9 @@ export const SceneContent: React.FC = () => {
 
       {/* Core Modular 3D Engine Assembly */}
       <ModularEngineAssembly />
+
+      {/* Engine Runtime Motion - auto-starts when assembly completes */}
+      <EngineRuntimeMotion autoStart={true} initialRpm={800} />
 
       {/* Post-Processing Overlays & Studio Highlights */}
       <PostProcessingStack />
