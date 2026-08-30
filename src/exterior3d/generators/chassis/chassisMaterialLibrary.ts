@@ -23,7 +23,7 @@ export interface ChassisMaterialPreset {
 export class ChassisMaterialLibrary {
   private static _cache: Map<string, ChassisMaterialPreset> = new Map();
 
-  static 6061T6Aluminum(): ChassisMaterialPreset {
+  static aluminum6061T6(): ChassisMaterialPreset {
     const c = this._cache.get('6061-T6 Aluminum'); if (c) return c;
     const m = new THREE.MeshPhysicalMaterial({
       name: '6061-T6 Aluminum',
@@ -42,7 +42,7 @@ export class ChassisMaterialLibrary {
     return p;
   }
 
-  static 4130ChromolySteel(): ChassisMaterialPreset {
+  static chromolySteel4130(): ChassisMaterialPreset {
     const c = this._cache.get('4130 Chromoly Steel'); if (c) return c;
     const m = new THREE.MeshPhysicalMaterial({
       name: '4130 Chromoly Steel',
@@ -275,8 +275,8 @@ export class ChassisMaterialLibrary {
 
   static getAll(): ChassisMaterialPreset[] {
     return [
-      this.6061T6Aluminum(),
-      this.4130ChromolySteel(),
+      this.aluminum6061T6(),
+      this.chromolySteel4130(),
       this.aISI4340Steel(),
       this.titaniumGr5Ti6Al4V(),
       this.carbonFiberPrepregT700(),
@@ -297,13 +297,13 @@ export class ChassisMaterialLibrary {
 
   static getBestForApplication(app: 'monocoque' | 'roll_cage' | 'subframe' | 'crash_structure' | 'floor_pan' | 'heat_shield'): ChassisMaterialPreset {
     switch (app) {
-      case 'monocoque': return this['6061T6Aluminum']();
-      case 'roll_cage': return this['4130ChromolySteel']();
-      case 'subframe': return this['AISI4340Steel']();
-      case 'crash_structure': return this['BoronSteel22MnB5']();
-      case 'floor_pan': return this['6061T6Aluminum']();
-      case 'heat_shield': return this['Inconel718']();
-      default: return this['6061T6Aluminum']();
+      case 'monocoque': return this.aluminum6061T6();
+      case 'roll_cage': return this.chromolySteel4130();
+      case 'subframe': return this.aISI4340Steel();
+      case 'crash_structure': return this.boronSteel22MnB5();
+      case 'floor_pan': return this.aluminum6061T6();
+      case 'heat_shield': return this.inconel718();
+      default: return this.aluminum6061T6();
     }
   }
 }

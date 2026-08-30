@@ -95,81 +95,82 @@ export const InteriorConfig3DViewport: React.FC = () => {
     // 4. Primary Material
     let primaryMat: any = "nappa_leather";
     if (seatMatOpt.label.toLowerCase().includes("alcantara")) {
-      primaryMat = "perforated_alcantara";
+      primaryMat = "alcantara_suede";
     } else if (seatMatOpt.label.toLowerCase().includes("cloth")) {
-      primaryMat = "technical_fabric";
+      primaryMat = "ballistic_cordura";
     }
 
     // 5. Trim Material
-    let trimMat: any = "soft_touch_polyurethane";
+    let trimMat: any = "piano_black_lacquer";
     if (trimOpt.label.toLowerCase().includes("carbon")) {
-      trimMat = "3k_twill_carbon_fiber";
+      trimMat = "twill_gloss_carbon";
     } else if (trimOpt.label.toLowerCase().includes("wood")) {
       trimMat = "open_pore_walnut";
     } else if (trimOpt.label.toLowerCase().includes("aluminum")) {
-      trimMat = "brushed_billet_aluminum";
+      trimMat = "satin_brushed_aluminum";
     }
 
     const isAmbient = ambientOpt.label.toLowerCase().includes("enabled");
 
     return {
-      id: "CONFIG_3D_LIVE",
-      name: "Live Configurator Cockpit",
-      bodyType: "coupe",
       dashboardId: "DASH_LIVE",
       dashboardClass: dashClass,
       steeringWheelId: "STEER_LIVE",
       steeringTypology: steeringType,
-      seatingId: "SEAT_LIVE",
+      frontSeatsId: "SEAT_LIVE",
       seatingClass: seatingClass,
       seatCount: 4,
-      harnessType: seatingClass === "carbon_fixed_bucket" ? "6_point_competition" : "3_point_inertia",
+      harnessType: seatingClass === "carbon_fixed_bucket" ? "sabelt_6_point_f1" : "standard_3_point",
       centerConsoleId: "CONSOLE_LIVE",
-      centerConsoleStyle: "waterfall_slanted",
-      audioSystemId: "AUDIO_HIGH",
-      hasRollCage: false,
-      rollCageType: "none",
+      centerConsoleStyle: "crystal_rotary_dial",
+      digitalCockpit: {
+        layoutType: "pillar_to_pillar_hyperscreen",
+        uiTheme: "cyberpunk_neon_cyan",
+        virtualClusterSizeInches: 12.3,
+        infotainmentSizeInches: 14.5,
+        passengerScreenSizeInches: 10.25,
+        hasHolographicHUD: true,
+        hudProjectionDistanceM: 2.5,
+        hudFieldOfViewDeg: 12,
+        touchscreenHapticFeedback: true,
+        glassAntiReflectiveCoating: true,
+        ambientLightSync: true,
+      },
       materials: {
+        primaryUpholstery: primaryMat,
+        secondaryUpholstery: "nappa_leather",
         primaryColorHex: interiorColor,
         secondaryColorHex: "#111827",
+        stitchingPattern: "double_contrast_stitch",
         stitchingColorHex: "#ffffff",
-        primaryMaterial: primaryMat,
-        secondaryMaterial: "soft_touch_polyurethane",
-        dashboardUpperMaterial: "nappa_leather",
-        dashboardLowerMaterial: "soft_touch_polyurethane",
-        trimInsertMaterial: trimMat,
-        accentMetalMaterial: "brushed_billet_aluminum",
-        headlinerMaterial: "perforated_alcantara",
+        trimAccents: trimMat,
+        seatBeltColorHex: "#00e5ff",
         carpetColorHex: "#090d14",
+        headlinerMaterial: "alcantara_suede",
+        headlinerColorHex: "#090d14",
       },
       ambientLighting: {
         enabled: isAmbient,
+        brightnessPercent: isAmbient ? 85 : 0,
         primaryColorHex: isAmbient ? "#00e5ff" : "#000000",
         secondaryColorHex: isAmbient ? "#1d72fe" : "#000000",
-        intensityLumen: isAmbient ? 380 : 0,
-        dynamicPulseMode: "static_solid",
+        colorMode: "single_tone",
+        activeZones: ["dashboard_contour", "center_console_halo", "door_spear_accents"],
+        fiberOpticDiffuserDiffusion: 0.8,
       },
-      acoustics: {
-        soundDeadeningLevel: 0.85,
-        doubleGlazedAcousticGlass: true,
-        activeNoiseCancellationEnabled: true,
-        cabinNoiseDbAt120Kmh: 58,
-        speakerCount: 16,
-        totalAmplifierWattageRMS: 1200,
-        subwooferEnclosureVolumeLiters: 18,
+      audioSystemId: "AUDIO_HIGH",
+      rollCage: {
+        type: "none",
+        tubeDiameterMm: 45,
+        tubeMaterial: "chromoly_4130",
+        massKg: 0,
+        torsionalStiffnessBoostPercent: 0,
+        colorHex: "#1e293b",
       },
-      ergonomics: {
-        driverHPointZMm: 280,
-        steeringColumnReachMm: 640,
-        steeringColumnAngleDeg: 22,
-        pedalBoxOffsetMm: 950,
-        headroomClearanceMm: 980,
-        frontLegroomMm: 1080,
-        rearLegroomMm: 840,
-        driverVisibilityAngleDeg: 132,
-      },
-      totalMassKg: 145,
-      totalCostUSD: 6500,
+      soundDeadeningLevel: 0.85,
+      hasClimateDualZone: true,
+      hasFragranceDiffuser: true,
+      hasWirelessPhoneChargers: true,
     };
   }, [layoutOpt, wheelOpt, seatTypeOpt, seatMatOpt, trimOpt, ambientOpt, interiorColor]);
 

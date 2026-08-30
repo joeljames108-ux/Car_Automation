@@ -65,13 +65,13 @@ function rRect(w: number, h: number, r: number): THREE.Shape {
 // === INLINE ENGINE COVERS (I3/I4/I5/I6) ===================================
 // ============================================================================
 
-// MODEL: BMW M-POWER RIBBED COVER (Inline 6)
+/// MODEL: BMW M-POWER RIBBED COVER (Inline 6)
 export function buildInlineMPowerCover(opts: EngineCoverBuildOptions): THREE.Group {
   const group = new THREE.Group();
   group.name = 'Inline_M_Power_Ribbed_Cover';
   const matLib = globalMaterialLibrary;
-  const matCover = matLib.getBMW_Orange();
-  const matBezel = matLib.getBrushedAluminum();
+  const matCover = matLib.getCoverLamboOrange();
+  const matBezel = matLib.getBezelBrushedAluminum();
   const matBlack = matLib.getStealthBlackCeramic();
   const matChrome = matLib.getPolishedChrome();
   const matTitanium = matLib.getTitaniumAerospace();
@@ -147,8 +147,8 @@ export function buildInlineVTECCover(opts: EngineCoverBuildOptions): THREE.Group
   const group = new THREE.Group();
   group.name = 'Inline_VTEC_Earth_Dreams';
   const matLib = globalMaterialLibrary;
-  const matCover = matLib.getMazdaSoulRed();
-  const matBezel = matLib.getBrushedAluminum();
+  const matCover = matLib.getCoverMazdaRed();
+  const matBezel = matLib.getBezelBrushedAluminum();
   const matBlack = matLib.getStealthBlackCeramic();
 
   const cyls = opts.cylsPerBank || 4;
@@ -203,7 +203,30 @@ export function buildInlineJDMFlatCover(opts: EngineCoverBuildOptions): THREE.Gr
   const group = new THREE.Group();
   group.name = 'Inline_JDM_Turbo_Flat';
   const matLib = globalMaterialLibrary;
-  const matCover = matLib.getNismoUltima
+  const matCover = matLib.getCoverNismoRed();
+  const matBezel = matLib.getBezelBrushedAluminum();
+  const matTitanium = matLib.getTitaniumAerospace();
+
+  const cyls = opts.cylsPerBank || 4;
+  const coverLen = Math.max(0.40, cyls * 0.12);
+  const coverW = 0.24;
+
+  // 1. Low-profile planar cover
+  const mainGeo = new THREE.BoxGeometry(coverLen, coverW, 0.03);
+  addMeshAt(group, mainGeo, matCover, 0, 0, 0.025);
+
+  // 2. Twin billet center ridges
+  for (const side of [-1, 1]) {
+    const ridgeGeo = new THREE.BoxGeometry(coverLen * 0.85, 0.008, 0.01);
+    addMeshAt(group, ridgeGeo, matBezel, 0, side * 0.045, 0.045);
+  }
+
+  // 3. Oil filler cap
+  const capGeo = new THREE.CylinderGeometry(0.018, 0.018, 0.012, 20);
+  addMeshAt(group, capGeo, matTitanium, coverLen * 0.3, -coverW * 0.3, 0.05, Math.PI / 2);
+
+  return group;
+}
 
 // ============================================================================
 // === W-TYPE ENGINE COVERS (W12/W16/W18) ====================================
@@ -214,8 +237,8 @@ export function buildW12ContinentalGrandCover(opts: EngineCoverBuildOptions): TH
   const group = new THREE.Group();
   group.name = 'W12_Continental_Grand';
   const matLib = globalMaterialLibrary;
-  const matCover = matLib.getAMGGalacticBeige();
-  const matBezel = matLib.getDarkChrome();
+  const matCover = matLib.getCoverAmgBeige();
+  const matBezel = matLib.getPolishedChrome();
   const matChrome = matLib.getPolishedChrome();
   const matCarbon = matLib.getDryCarbonFiber();
 
@@ -256,8 +279,8 @@ export function buildW16ModifiedMonsterCover(opts: EngineCoverBuildOptions): THR
   const group = new THREE.Group();
   group.name = 'W16_Modified_Monster';
   const matLib = globalMaterialLibrary;
-  const matCover = matLib.getBugattiCarbonBlue();
-  const matBezel = matLib.getAnodizedRed();
+  const matCover = matLib.getCoverBugattiBlue();
+  const matBezel = matLib.getBezelAnodizedRed();
   const matTitanium = matLib.getTitaniumAerospace();
 
   // 1. Massive aggressive carbon fiber cover
@@ -292,8 +315,8 @@ export function buildW12CentralExhaustCover(opts: EngineCoverBuildOptions): THRE
   const group = new THREE.Group();
   group.name = 'W12_Central_Exhaust';
   const matLib = globalMaterialLibrary;
-  const matCover = matLib.getLamboArancio();
-  const matBezel = matLib.getBrushedAluminum();
+  const matCover = matLib.getCoverLamboOrange();
+  const matBezel = matLib.getBezelBrushedAluminum();
   const matInconel = matLib.getInconelExhaust();
 
   // 1. Bold orange cover
@@ -328,8 +351,8 @@ export function buildW16BentleyHeritageCover(opts: EngineCoverBuildOptions): THR
   const group = new THREE.Group();
   group.name = 'W16_Bentley_Heritage';
   const matLib = globalMaterialLibrary;
-  const matCover = matLib.getAMGGalacticBeige();
-  const matBezel = matLib.getBronzeAntique();
+  const matCover = matLib.getCoverAmgBeige();
+  const matBezel = matLib.getBezelBronzeAntique();
   const matChrome = matLib.getPolishedChrome();
 
   // 1. Grand tourer-style wide cover
@@ -365,8 +388,8 @@ export function buildRotary13BStreetCover(opts: EngineCoverBuildOptions): THREE.
   const group = new THREE.Group();
   group.name = 'Rotary_13B_Street';
   const matLib = globalMaterialLibrary;
-  const matCover = matLib.getMazdaSoulRed();
-  const matBezel = matLib.getBrushedAluminum();
+  const matCover = matLib.getCoverMazdaRed();
+  const matBezel = matLib.getBezelBrushedAluminum();
 
   // 1. Reuleaux triangle shape housing
   const rotorShape = new THREE.Shape();
@@ -425,4 +448,29 @@ export function buildRotary3RotorRaceCover(opts: EngineCoverBuildOptions): THREE
   }
 
   // 3. Turbo intake duct
-  const 
+  const ductGeo = new THREE.CylinderGeometry(0.035, 0.045, 0.22, 16);
+  addMeshAt(group, ductGeo, matTitanium, 0, 0.12, 0.05, 0, 0, Math.PI / 2);
+
+  // 4. Billet mounting brackets
+  const bracketGeo = new THREE.BoxGeometry(0.04, 0.02, 0.015);
+  addMeshAt(group, bracketGeo, matBezel, -0.22, -0.12, 0.04);
+  addMeshAt(group, bracketGeo, matBezel, 0.22, -0.12, 0.04);
+
+  return group;
+}
+
+// Master Dispatcher for Expanded Engine Covers
+export function buildExpandedCover(model: string, opts: EngineCoverBuildOptions): THREE.Group | null {
+  switch (model) {
+    case 'inline_m_power': return buildInlineMPowerCover(opts);
+    case 'inline_vtec': return buildInlineVTECCover(opts);
+    case 'inline_jdm_flat': return buildInlineJDMFlatCover(opts);
+    case 'w12_continental': return buildW12ContinentalGrandCover(opts);
+    case 'w16_monster': return buildW16ModifiedMonsterCover(opts);
+    case 'w12_central_exhaust': return buildW12CentralExhaustCover(opts);
+    case 'w16_bentley_heritage': return buildW16BentleyHeritageCover(opts);
+    case 'rotary_13b_street': return buildRotary13BStreetCover(opts);
+    case 'rotary_3rotor_race': return buildRotary3RotorRaceCover(opts);
+    default: return null;
+  }
+}

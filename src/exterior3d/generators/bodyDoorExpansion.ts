@@ -7,7 +7,7 @@ function m(c: number, mn = 0.5, r = 0.3, o?: Partial<THREE.MeshPhysicalMaterialP
   return new THREE.MeshPhysicalMaterial({ color: new THREE.Color(c), metalness: mn, roughness: r, clearcoat: 0.5, clearcoatRoughness: 0.2, envMapIntensity: 1.2, ...o });
 }
 
-function aM(g: THREE.Group, geo: THREE.BufferGeometry, material: THREE.Material, x: number, y: number, z: number, rx = 0, ry = 0, rz = 0): THREE.Mesh {
+function aM(g: THREE.Group, geo: THREE.BufferGeometry, material: THREE.Material, x = 0, y = 0, z = 0, rx = 0, ry = 0, rz = 0): THREE.Mesh {
   const me = new THREE.Mesh(geo, material);
   me.position.set(x, y, z);
   if (rx) me.rotation.x = rx; if (ry) me.rotation.y = ry; if (rz) me.rotation.z = rz;
@@ -239,13 +239,12 @@ export function buildAdvancedBodyFrameSystem(): THREE.Group {
 // MASTER EXPORT
 // ===========================================================================
 export function buildAllBodyDoorSystems(): THREE.Group {
-  const g=new THREE.Group();g.name="Complete_Body_Door_Expansion";
+  const g = new THREE.Group(); g.name = "Complete_Body_Door_Expansion";
   g.add(buildAdvancedDoorSystem());
-  g.add(buildAdvancedBodyPanelSystem());
-  g.add(buildAdvancedHoodTrunkSystem());
   g.add(buildAdvancedRoofSystem());
   g.add(buildAdvancedBumperSystem());
   g.add(buildAdvancedSideMirrorSystem());
   g.add(buildAdvancedWiperWashSystem());
   g.add(buildAdvancedBodyFrameSystem());
-  return g; }
+  return g;
+}
