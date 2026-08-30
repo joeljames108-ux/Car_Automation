@@ -5,9 +5,9 @@
 // streaming (Engine Block -> Head Assemblies -> Induction/Exhaust -> Subsystems).
 // ============================================================================
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { globalAssetCache, AssetLoadProgress } from '../assets/glbAssetLoader';
-import { Flame, CheckCircle2, Layers } from 'lucide-react';
+import { Flame, CheckCircle2, Layers, Loader2, Zap } from 'lucide-react';
 
 export const EngineInitializationHUD: React.FC = () => {
   const [progress, setProgress] = useState<AssetLoadProgress>({
@@ -19,6 +19,23 @@ export const EngineInitializationHUD: React.FC = () => {
   });
   const [isComplete, setIsComplete] = useState<boolean>(false);
   const [isVisible, setIsVisible] = useState<boolean>(true);
+  const [displayPercent, setDisplayPercent] = useState(0);
+  const animFrameRef = useRef<number>(0);
+
+  // Animated counter - smoothly interpolates to target
+  useEffect(() => {
+    const target = progress.percentage;
+    const animate = () => {
+      setDisplayPercent((prev) => {
+        const diff = target - prev;
+        if (Math.abs(diff) < 0.5) return target;
+        return prev + diff * 0.12;
+      });
+      animFrameRef.current = requestAnimationFrame(animate);
+    };
+    animFrameRef.current = requestAnimationFrame(animate);
+    return () => cancelAnimationFrame(animFrameRef.current);
+  }, [progress.percentage]);
 
   useEffect(() => {
     const unsubscribe = globalAssetCache.onProgress((p) => {
@@ -51,7 +68,7 @@ export const EngineInitializationHUD: React.FC = () => {
 
   return (
     <div
-      className={`absolute bottom-4 left-4 z-40 bg-slate-950/85 backdrop-blur-md border border-slate-800/80 rounded-xl p-3 shadow-2xl transition-all duration-500 w-72 pointer-events-none select-none ${
+      className={`absolute bottom-4 left-4 z-40 bg-amber-950/80 backdrop-blur-xl border border-amber-500/30 rounded-2xl p-4 shadow-2xl shadow-[0_0_30px_rgba(245,158,11,0.12)] transition-all duration-500 w-80 pointer-events-none select-none ${
         isComplete ? 'opacity-0 translate-y-2' : 'opacity-100 translate-y-0'
       }`}
     >
@@ -62,23 +79,23 @@ export const EngineInitializationHUD: React.FC = () => {
           ) : (
             <Flame size={15} className="text-amber-400 animate-pulse" />
           )}
-          <span className="text-xs font-bold text-slate-200 tracking-wide">
+          <span className="text-xs font-bold text-amber-100/90 tracking-wide">
             {isComplete ? 'ASSET STREAMING READY' : 'ENGINE INITIALIZATION'}
           </span>
         </div>
-        <span className="text-xs font-mono font-bold text-amber-400">{progress.percentage}%</span>
+        <span className="text-xs font-mono font-bold text-amber-400">{Math.round(displayPercent)}%</span>
       </div>
 
       {/* Progress Bar Track */}
-      <div className="w-full bg-slate-800/90 h-1.5 rounded-full overflow-hidden mb-1.5 border border-slate-700/50">
+      <div className="w-full bg-amber-900/40 h-1.5 rounded-full overflow-hidden mb-1.5 border border-amber-800/30">
         <div
-          className="bg-gradient-to-r from-amber-500 to-amber-500 h-full transition-all duration-300 rounded-full"
-          style={{ width: `${progress.percentage}%` }}
+          className="bg-gradient-to-r from-amber-600 via-amber-400 to-amber-300 h-full transition-all duration-300 rounded-full relative overflow-hidden" style={{ boxShadow: '0 0 10px rgba(245,158,11,0.4)' }}
+          style={{ width: `${displayPercent}%` }}
         />
       </div>
 
-      <div className="flex items-center justify-between text-[10px] text-slate-400 font-mono">
-        <span className="truncate max-w-[170px] text-slate-300 font-semibold">{currentStepName}</span>
+      <div className="flex items-center justify-between text-[10px] text-amber-300/50 font-mono">
+        <span className="truncate max-w-[170px] text-amber-200/70 font-semibold">{currentStepName}</span>
         <span>
           {progress.loadedAssets}/{progress.totalAssets}
         </span>
