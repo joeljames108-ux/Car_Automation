@@ -10,7 +10,7 @@
  *    - Day / Night lighting mode toggle
  * 2. 2D BLUEPRINT SVG MODE:
  *    - Clean vector schematic with reactive seats, ambient neon tube & cluster
- * 3. Presets Carousel + Apply & Continue Action
+ * 3. Presets Carousel + Dynamic Sync with Master Vehicle Design (DesignContext)
  * ============================================================================
  */
 
@@ -21,15 +21,64 @@ import {
   getSelectedOption,
 } from "../../state/interiorDashboardConfigStore";
 import { InteriorConfig3DViewport } from "./InteriorConfig3DViewport";
-import { Box, Layers } from "lucide-react";
+import { useDesign } from "../../state/DesignContext";
+import { playHMITabSound } from "../../utils/hmiSoundSynth";
+import { Box, Layers, CheckCircle2 } from "lucide-react";
 
 export const InteriorConfigViewport: React.FC = () => {
   const [viewportMode, setViewportMode] = useState<"3d" | "2d">("3d");
+  const [showAppliedToast, setShowAppliedToast] = useState<boolean>(false);
 
   const selections = useInteriorDashboardConfigStore((s) => s.selections);
   const interiorColor = useInteriorDashboardConfigStore((s) => s.interiorColor);
+  const metrics = useInteriorDashboardConfigStore((s) => s.metrics);
   const activePreset = useInteriorDashboardConfigStore((s) => s.activePreset);
   const applyPreset = useInteriorDashboardConfigStore((s) => s.applyPreset);
+
+  const { updateInterior } = useDesign();
+
+  // Handle Apply & Save to Master Vehicle Specification
+  const handleApplyAndContinue = () => {
+    playHMITabSound();
+
+    // Map selections to Master DesignContext InteriorConfig
+    const seatTypeLabel = getSelectedOption("seatType", selections).label.toLowerCase();
+    let seatType: any = "sport";
+    if (seatTypeLabel.includes("racing")) seatType = "carbon_bucket";
+    else if (seatTypeLabel.includes("standard")) seatType = "standard";
+
+    const seatMatLabel = getSelectedOption("seatMaterial", selections).label.toLowerCase();
+    let seatMaterial: any = "leather";
+    if (seatMatLabel.includes("alcantara")) seatMaterial = "alcantara";
+    else if (seatMatLabel.includes("cloth")) seatMaterial = "cloth";
+
+    const trimLabel = getSelectedOption("interiorTrim", selections).label.toLowerCase();
+    let dashMat: any = "soft_touch";
+    if (trimLabel.includes("carbon")) dashMat = "carbon_fiber";
+    else if (trimLabel.includes("wood")) dashMat = "wood";
+    else if (trimLabel.includes("aluminum")) dashMat = "aluminum";
+
+    const displaySize = (getSelectedOption("centerDisplay", selections).visualHints?.screenSize as number) || 0;
+
+    const wheelLabel = getSelectedOption("steeringWheel", selections).label.toLowerCase();
+    let wheelType: any = "sport";
+    if (wheelLabel.includes("yoke")) wheelType = "gt_wheel";
+    else if (wheelLabel.includes("2-spoke")) wheelType = "standard";
+
+    updateInterior({
+      seatType,
+      seatMaterial,
+      interiorColor,
+      dashboardMaterial: dashMat,
+      infotainmentSize: displaySize,
+      steeringWheel: wheelType,
+      ambientLighting: selections.ambientLighting === 1 ? 1 : 0,
+      interiorWeight: metrics.weight,
+    });
+
+    setShowAppliedToast(true);
+    setTimeout(() => setShowAppliedToast(false), 3000);
+  };
 
   // Visual hints from selections for 2D mode
   const clusterOpt = getSelectedOption("instrumentCluster", selections);
@@ -66,7 +115,15 @@ export const InteriorConfigViewport: React.FC = () => {
   };
 
   return (
-    <div className="idash-center-viewport">
+    <div className="idash-center-viewport relative">
+      {/* Toast Notification */}
+      {showAppliedToast && (
+        <div className="absolute top-14 left-1/2 -translate-x-1/2 z-40 bg-emerald-950/95 border border-emerald-500/80 text-emerald-200 px-4 py-2 rounded-xl shadow-2xl flex items-center gap-2 text-xs font-bold animate-in fade-in slide-in-from-top-2 duration-200">
+          <CheckCircle2 size={16} className="text-emerald-400" />
+          <span>Interior Configuration Saved &amp; Synced to Master Vehicle Design!</span>
+        </div>
+      )}
+
       {/* Tab Navigation + Mode Switcher */}
       <div className="idash-tab-nav">
         <div className="flex items-center gap-2">
@@ -326,11 +383,15 @@ export const InteriorConfigViewport: React.FC = () => {
             );
           })}
         </div>
-        <button className="idash-apply-btn" type="button">
+        <button
+          className="idash-apply-btn"
+          type="button"
+          onClick={handleApplyAndContinue}
+        >
           ✓ APPLY &amp; CONTINUE
         </button>
         <div className="idash-apply-hint">
-          Changes will be saved to your design
+          Changes will be saved to your design &amp; master vehicle physics
         </div>
       </div>
     </div>

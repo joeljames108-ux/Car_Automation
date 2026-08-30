@@ -4,13 +4,15 @@
  * ============================================================================
  * Displays 8 animated progress bars, overall rating badge, weight & cost.
  * Subscribes to the Zustand interiorDashboardConfigStore for real-time updates.
+ * Includes interactive Compare Interiors modal trigger.
  * ============================================================================
  */
 
-import React from "react";
+import React, { useState } from "react";
 import {
   useInteriorDashboardConfigStore,
 } from "../../state/interiorDashboardConfigStore";
+import { InteriorCompareModal } from "./InteriorCompareModal";
 
 // Stat bar icon SVGs (inline for zero-dep rendering)
 const STAT_ICONS: Record<string, string> = {
@@ -47,6 +49,7 @@ const STAT_KEYS = [
 ] as const;
 
 export const InteriorMetricsPanel: React.FC = () => {
+  const [compareModalOpen, setCompareModalOpen] = useState(false);
   const metrics = useInteriorDashboardConfigStore((s) => s.metrics);
 
   const ratingColor =
@@ -138,10 +141,19 @@ export const InteriorMetricsPanel: React.FC = () => {
       </div>
 
       {/* Compare Button */}
-      <button className="idash-compare-btn">
+      <button
+        className="idash-compare-btn"
+        onClick={() => setCompareModalOpen(true)}
+      >
         <span style={{ marginRight: 6 }}>⇌</span>
         COMPARE INTERIORS
       </button>
+
+      {/* Compare Modal */}
+      <InteriorCompareModal
+        isOpen={compareModalOpen}
+        onClose={() => setCompareModalOpen(false)}
+      />
     </div>
   );
 };
