@@ -29,11 +29,11 @@ export class StudioEnvironmentGenerator {
     if (ctx) {
       // 1. Rich warm studio gradient background
       const grad = ctx.createLinearGradient(0, 0, 0, canvas.height);
-      grad.addColorStop(0, '#3d2e18');
-      grad.addColorStop(0.25, '#4a3a20');
-      grad.addColorStop(0.5, '#2a1f10');
-      grad.addColorStop(0.75, '#1a1208');
-      grad.addColorStop(1, '#0d0a04');
+      grad.addColorStop(0, '#2a2e38');
+      grad.addColorStop(0.25, '#1e222c');
+      grad.addColorStop(0.5, '#15181f');
+      grad.addColorStop(0.75, '#0e1015');
+      grad.addColorStop(1, '#080a0d');
       ctx.fillStyle = grad;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
@@ -55,9 +55,9 @@ export class StudioEnvironmentGenerator {
 
       // 3. Floor bounce — warm amber gradient at bottom
       const floorGrad = ctx.createLinearGradient(0, canvas.height - 40, 0, canvas.height);
-      floorGrad.addColorStop(0, 'rgba(180, 140, 80, 0.0)');
-      floorGrad.addColorStop(0.5, 'rgba(180, 140, 80, 0.18)');
-      floorGrad.addColorStop(1, 'rgba(160, 120, 60, 0.35)');
+      floorGrad.addColorStop(0, 'rgba(140, 160, 180, 0.0)');
+      floorGrad.addColorStop(0.5, 'rgba(140, 160, 180, 0.12)');
+      floorGrad.addColorStop(1, 'rgba(120, 140, 160, 0.25)');
       ctx.fillStyle = floorGrad;
       ctx.fillRect(0, canvas.height - 40, canvas.width, 40);
 
@@ -66,9 +66,9 @@ export class StudioEnvironmentGenerator {
         canvas.width * 0.12, canvas.height * 0.45, 10,
         canvas.width * 0.12, canvas.height * 0.45, 140
       );
-      leftRim.addColorStop(0, 'rgba(255, 220, 120, 0.95)');
-      leftRim.addColorStop(0.5, 'rgba(255, 190, 80, 0.3)');
-      leftRim.addColorStop(1, 'rgba(255, 180, 60, 0)');
+      leftRim.addColorStop(0, 'rgba(200, 220, 255, 0.9)');
+      leftRim.addColorStop(0.5, 'rgba(180, 200, 240, 0.25)');
+      leftRim.addColorStop(1, 'rgba(160, 180, 220, 0)');
       ctx.fillStyle = leftRim;
       ctx.fillRect(0, 0, canvas.width * 0.45, canvas.height);
 
@@ -77,9 +77,9 @@ export class StudioEnvironmentGenerator {
         canvas.width * 0.88, canvas.height * 0.45, 10,
         canvas.width * 0.88, canvas.height * 0.45, 140
       );
-      rightRim.addColorStop(0, 'rgba(255, 170, 70, 0.85)');
-      rightRim.addColorStop(0.5, 'rgba(255, 150, 50, 0.25)');
-      rightRim.addColorStop(1, 'rgba(255, 140, 40, 0)');
+      rightRim.addColorStop(0, 'rgba(240, 230, 220, 0.8)');
+      rightRim.addColorStop(0.5, 'rgba(220, 210, 200, 0.2)');
+      rightRim.addColorStop(1, 'rgba(200, 190, 180, 0)');
       ctx.fillStyle = rightRim;
       ctx.fillRect(canvas.width * 0.55, 0, canvas.width * 0.45, canvas.height);
 
@@ -100,8 +100,8 @@ export class StudioEnvironmentGenerator {
         const br = 15 + Math.random() * 30;
         const bokeh = ctx.createRadialGradient(bx, by, 0, bx, by, br);
         const alpha = 0.03 + Math.random() * 0.06;
-        bokeh.addColorStop(0, `rgba(255, 220, 140, ${alpha})`);
-        bokeh.addColorStop(1, 'rgba(255, 220, 140, 0)');
+        bokeh.addColorStop(0, `rgba(200, 210, 230, ${alpha})`);
+        bokeh.addColorStop(1, 'rgba(200, 210, 230, 0)');
         ctx.fillStyle = bokeh;
         ctx.fillRect(bx - br, by - br, br * 2, br * 2);
       }
@@ -168,8 +168,8 @@ export class StudioEnvironmentGenerator {
 
       // 3. Subtle warm ambient glow beneath car for studio realism
       const warmGlow = ctx.createRadialGradient(256, 256, 30, 256, 256, 200);
-      warmGlow.addColorStop(0, 'rgba(180, 130, 60, 0.08)');
-      warmGlow.addColorStop(1, 'rgba(180, 130, 60, 0)');
+      warmGlow.addColorStop(0, 'rgba(100, 120, 150, 0.05)');
+      warmGlow.addColorStop(1, 'rgba(100, 120, 150, 0)');
       ctx.fillStyle = warmGlow;
       ctx.fillRect(0, 0, 512, 512);
     }
@@ -203,15 +203,15 @@ export class StudioEnvironmentGenerator {
     underGlow: THREE.PointLight;
   } {
     // 1. Ambient Baseline — warm golden fill
-    const ambient = new THREE.AmbientLight(0x2a1f10, 2.0);
+    const ambient = new THREE.AmbientLight(0x1a1e28, 1.4);
     scene.add(ambient);
 
     // Hemisphere for sky/ground color separation
-    const hemi = new THREE.HemisphereLight(0xfff5e6, 0x1a1208, 0.6);
+    const hemi = new THREE.HemisphereLight(0xd8e0f0, 0x0e1015, 0.5);
     scene.add(hemi);
 
     // 2. Overhead High-Intensity Softbox — car roof, hood, shoulder lines
-    const topSoftbox = new THREE.DirectionalLight(0xfff5e6, 4.2);
+    const topSoftbox = new THREE.DirectionalLight(0xf0f2f8, 3.5);
     topSoftbox.position.set(targetX, 8, 0);
     topSoftbox.castShadow = true;
     topSoftbox.shadow.mapSize.width = 2048;
@@ -226,23 +226,23 @@ export class StudioEnvironmentGenerator {
     scene.add(topSoftbox);
 
     // 3. Three-Quarter Key Light — warm golden key for body highlights
-    const keyLight = new THREE.DirectionalLight(0xffd699, 3.0);
+    const keyLight = new THREE.DirectionalLight(0xe8eaf0, 2.5);
     keyLight.position.set(targetX + 4.5, 4.5, 4);
     keyLight.castShadow = true;
     scene.add(keyLight);
 
     // 4. Opposing Fill Light — soft warm fill to lift shadows
-    const fillLight = new THREE.DirectionalLight(0x8b7355, 1.8);
+    const fillLight = new THREE.DirectionalLight(0x8090a8, 1.2);
     fillLight.position.set(targetX - 4.5, 3.5, 3);
     scene.add(fillLight);
 
     // 5. Rear Rim / Edge Light — dramatic edge separation
-    const rimLight = new THREE.DirectionalLight(0xffa833, 2.2);
+    const rimLight = new THREE.DirectionalLight(0xc8ddf0, 1.8);
     rimLight.position.set(targetX - 3.5, 3.5, -5.5);
     scene.add(rimLight);
 
     // 6. Underbody Floor Bounce — warm undercarriage fill
-    const underGlow = new THREE.PointLight(0xffaa33, 1.6, 8);
+    const underGlow = new THREE.PointLight(0xaabbcc, 0.8, 8);
     underGlow.position.set(targetX, 0.15, 0);
     scene.add(underGlow);
 
@@ -293,7 +293,7 @@ export class StudioEnvironmentGenerator {
   public static createReflectiveGroundPlane(): THREE.Mesh {
     const geo = new THREE.PlaneGeometry(14, 14);
     const mat = new THREE.MeshPhysicalMaterial({
-      color: 0x1a1208,
+      color: 0x0a0c12,
       metalness: 0.35,
       roughness: 0.08,
       clearcoat: 0.4,
@@ -318,14 +318,14 @@ export class StudioEnvironmentGenerator {
     group.name = 'Cyber_Floor_Grid';
 
     // Primary fine grid
-    const grid = new THREE.GridHelper(size, 60, 0xd4a843, 0x2a1f10);
+    const grid = new THREE.GridHelper(size, 60, 0x3a4050, 0x12151a);
     grid.position.y = 0;
     (grid.material as THREE.Material).transparent = true;
     (grid.material as THREE.Material).opacity = 0.22;
     group.add(grid);
 
     // Secondary coarse grid for scale reference
-    const coarseGrid = new THREE.GridHelper(size, 12, 0xd4a843, 0x2a1f10);
+    const coarseGrid = new THREE.GridHelper(size, 12, 0x4a5060, 0x181c22);
     coarseGrid.position.y = 0.001;
     (coarseGrid.material as THREE.Material).transparent = true;
     (coarseGrid.material as THREE.Material).opacity = 0.35;
@@ -339,9 +339,9 @@ export class StudioEnvironmentGenerator {
     const glowCtx = glowCanvas.getContext('2d');
     if (glowCtx) {
       const glowGrad = glowCtx.createRadialGradient(128, 128, 0, 128, 128, 128);
-      glowGrad.addColorStop(0, 'rgba(180, 140, 80, 0.08)');
-      glowGrad.addColorStop(0.5, 'rgba(180, 140, 80, 0.03)');
-      glowGrad.addColorStop(1, 'rgba(180, 140, 80, 0)');
+      glowGrad.addColorStop(0, 'rgba(140, 160, 180, 0.06)');
+      glowGrad.addColorStop(0.5, 'rgba(140, 160, 180, 0.02)');
+      glowGrad.addColorStop(1, 'rgba(140, 160, 180, 0)');
       glowCtx.fillStyle = glowGrad;
       glowCtx.fillRect(0, 0, 256, 256);
     }
@@ -375,8 +375,8 @@ export class StudioEnvironmentGenerator {
 
     if (ctx) {
       // Frosted glass background
-      ctx.fillStyle = 'rgba(255, 248, 235, 0.85)';
-      ctx.strokeStyle = 'rgba(217, 166, 78, 0.6)';
+      ctx.fillStyle = 'rgba(15, 18, 25, 0.88)';
+      ctx.strokeStyle = 'rgba(100, 130, 180, 0.5)';
       ctx.lineWidth = 3;
       const r = 12;
       ctx.beginPath();
@@ -393,7 +393,7 @@ export class StudioEnvironmentGenerator {
       ctx.fill();
       ctx.stroke();
 
-      ctx.fillStyle = '#92400E';
+      ctx.fillStyle = '#c8ddf0';
       ctx.font = 'bold 24px "JetBrains Mono", sans-serif';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';

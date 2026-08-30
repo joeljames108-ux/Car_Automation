@@ -78,47 +78,47 @@ export class CockpitElectronicsAvionicsModule {
     const g = new THREE.Group(); g.name = "Audio_System";
     [-1, 1].forEach((side) => {
       const dz = side * (halfTrack - 0.05);
-      g.add(Object.assign(new THREE.Mesh(new THREE.CylinderGeometry(0.018,0.018,0.015,12), chromeMat), { position: new THREE.Vector3(-0.45, 1.00, dz) }));
-      g.add(Object.assign(new THREE.Mesh(new THREE.TorusGeometry(0.020,0.002,6,16), blackMat), { position: new THREE.Vector3(-0.45, 1.00, dz + side * 0.01) }));
-      g.add(Object.assign(new THREE.Mesh(new THREE.CylinderGeometry(0.055,0.055,0.02,20), blackMat), { position: new THREE.Vector3(-0.30, 0.25, dz) }));
-      g.add(Object.assign(new THREE.Mesh(new THREE.CylinderGeometry(0.040,0.050,0.008,20), new THREE.MeshPhysicalMaterial({ color: 0x1a1a1a, roughness: 0.4, metalness: 0.1 })), { position: new THREE.Vector3(-0.30, 0.25, dz + side * 0.012) }));
-      g.add(Object.assign(new THREE.Mesh(new THREE.CylinderGeometry(0.08,0.08,0.03,24), blackMat), { position: new THREE.Vector3(0.40, 0.30, dz * 0.5) }));
+      g.add((m => { m.position.set(-0.45, 1.00, dz); return m; })(new THREE.Mesh(new THREE.CylinderGeometry(0.018,0.018,0.015,12), chromeMat)));
+      g.add((m => { m.position.set(-0.45, 1.00, dz + side * 0.01); return m; })(new THREE.Mesh(new THREE.TorusGeometry(0.020,0.002,6,16), blackMat)));
+      g.add((m => { m.position.set(-0.30, 0.25, dz); return m; })(new THREE.Mesh(new THREE.CylinderGeometry(0.055,0.055,0.02,20), blackMat)));
+      g.add((m => { m.position.set(-0.30, 0.25, dz + side * 0.012); return m; })(new THREE.Mesh(new THREE.CylinderGeometry(0.040,0.050,0.008,20), new THREE.MeshPhysicalMaterial({ color: 0x1a1a1a, roughness: 0.4, metalness: 0.1 }))));
+      g.add((m => { m.position.set(0.40, 0.30, dz * 0.5); return m; })(new THREE.Mesh(new THREE.CylinderGeometry(0.08,0.08,0.03,24), blackMat)));
     });
-    g.add(Object.assign(new THREE.Mesh(new THREE.CylinderGeometry(0.035,0.035,0.012,16), chromeMat), { position: new THREE.Vector3(-0.35, 0.87, 0) }));
-    g.add(Object.assign(new THREE.Mesh(new THREE.BoxGeometry(0.20,0.04,0.15), blackMat), { position: new THREE.Vector3(0.60, 0.15, 0) }));
+    g.add((m => { m.position.set(-0.35, 0.87, 0); return m; })(new THREE.Mesh(new THREE.CylinderGeometry(0.035,0.035,0.012,16), chromeMat)));
+    g.add((m => { m.position.set(0.60, 0.15, 0); return m; })(new THREE.Mesh(new THREE.BoxGeometry(0.20,0.04,0.15), blackMat)));
     for (let f = 0; f < 8; f++) {
-      g.add(Object.assign(new THREE.Mesh(new THREE.BoxGeometry(0.18,0.02,0.002), chromeMat), { position: new THREE.Vector3(0.60, 0.17, -0.06 + f * 0.017) }));
+      g.add((m => { m.position.set(0.60, 0.17, -0.06 + f * 0.017); return m; })(new THREE.Mesh(new THREE.BoxGeometry(0.18,0.02,0.002), chromeMat)));
     }
     return g;
   }
   private static buildClimateControlModule(blackMat: THREE.Material, screenMat: THREE.Material, ledMat: THREE.Material): THREE.Group {
     const g = new THREE.Group(); g.name = "Climate_Control";
-    g.add(Object.assign(new THREE.Mesh(new THREE.BoxGeometry(0.18,0.08,0.02), blackMat), { position: new THREE.Vector3(-0.35, 0.55, 0) }));
-    g.add(Object.assign(new THREE.Mesh(new THREE.PlaneGeometry(0.14,0.04), screenMat), { position: new THREE.Vector3(-0.35, 0.56, -0.012) }));
+    g.add((m => { m.position.set(-0.35, 0.55, 0); return m; })(new THREE.Mesh(new THREE.BoxGeometry(0.18,0.08,0.02), blackMat)));
+    g.add((m => { m.position.set(-0.35, 0.56, -0.012); return m; })(new THREE.Mesh(new THREE.PlaneGeometry(0.14,0.04), screenMat)));
     [-0.04, 0.04].forEach((zOff) => {
       const dial = new THREE.Mesh(new THREE.CylinderGeometry(0.018,0.018,0.008,20), blackMat); dial.rotation.x = Math.PI / 2; dial.position.set(-0.35, 0.52, zOff); g.add(dial);
       const ring = new THREE.Mesh(new THREE.TorusGeometry(0.020,0.002,6,16), new THREE.MeshBasicMaterial({ color: zOff < 0 ? 0xd97706 : 0xef4444 })); ring.rotation.y = Math.PI / 2; ring.position.set(-0.35, 0.52, zOff); g.add(ring);
     });
     for (let i = 0; i < 5; i++) {
-      g.add(Object.assign(new THREE.Mesh(new THREE.BoxGeometry(0.012,0.006,0.012), i < 3 ? ledMat : blackMat), { position: new THREE.Vector3(-0.42 + i * 0.02, 0.50, 0) }));
+      g.add((m => { m.position.set(-0.42 + i * 0.02, 0.50, 0); return m; })(new THREE.Mesh(new THREE.BoxGeometry(0.012,0.006,0.012), i < 3 ? ledMat : blackMat)));
     }
     [-0.06, 0.06].forEach((zOff, idx) => {
-      g.add(Object.assign(new THREE.Mesh(new THREE.PlaneGeometry(0.025,0.015), new THREE.MeshBasicMaterial({ color: idx === 0 ? 0xd97706 : 0xef4444, transparent: true, opacity: 0.6 })), { position: new THREE.Vector3(-0.30, 0.52, zOff) }));
+      g.add((m => { m.position.set(-0.30, 0.52, zOff); return m; })(new THREE.Mesh(new THREE.PlaneGeometry(0.025,0.015), new THREE.MeshBasicMaterial({ color: idx === 0 ? 0xd97706 : 0xef4444, transparent: true, opacity: 0.6 }))));
     });
     return g;
   }
   private static buildEcuUnit(blackMat: THREE.Material, chromeMat: THREE.Material, ledMat: THREE.Material): THREE.Group {
     const g = new THREE.Group(); g.name = "ECU_Processing_Unit";
-    g.add(Object.assign(new THREE.Mesh(new THREE.BoxGeometry(0.20,0.04,0.14), blackMat), { position: new THREE.Vector3(-0.55, 0.40, 0.32) }));
-    g.add(Object.assign(new THREE.Mesh(new THREE.BoxGeometry(0.18,0.005,0.12), chromeMat), { position: new THREE.Vector3(-0.55, 0.42, 0.32) }));
+    g.add((m => { m.position.set(-0.55, 0.40, 0.32); return m; })(new THREE.Mesh(new THREE.BoxGeometry(0.20,0.04,0.14), blackMat)));
+    g.add((m => { m.position.set(-0.55, 0.42, 0.32); return m; })(new THREE.Mesh(new THREE.BoxGeometry(0.18,0.005,0.12), chromeMat)));
     for (let f = 0; f < 10; f++) {
-      g.add(Object.assign(new THREE.Mesh(new THREE.BoxGeometry(0.16,0.015,0.002), chromeMat), { position: new THREE.Vector3(-0.55, 0.43, 0.27 + f * 0.012) }));
+      g.add((m => { m.position.set(-0.55, 0.43, 0.27 + f * 0.012); return m; })(new THREE.Mesh(new THREE.BoxGeometry(0.16,0.015,0.002), chromeMat)));
     }
     for (let p = 0; p < 6; p++) {
-      g.add(Object.assign(new THREE.Mesh(new THREE.BoxGeometry(0.015,0.012,0.008), blackMat), { position: new THREE.Vector3(-0.62 + p * 0.018, 0.39, 0.39) }));
-      g.add(Object.assign(new THREE.Mesh(new THREE.SphereGeometry(0.002,4,4), ledMat), { position: new THREE.Vector3(-0.62 + p * 0.018, 0.40, 0.395) }));
+      g.add((m => { m.position.set(-0.62 + p * 0.018, 0.39, 0.39); return m; })(new THREE.Mesh(new THREE.BoxGeometry(0.015,0.012,0.008), blackMat)));
+      g.add((m => { m.position.set(-0.62 + p * 0.018, 0.40, 0.395); return m; })(new THREE.Mesh(new THREE.SphereGeometry(0.002,4,4), ledMat)));
     }
-    g.add(Object.assign(new THREE.Mesh(new THREE.BoxGeometry(0.06,0.001,0.02), new THREE.MeshBasicMaterial({ color: 0xf59e0b })), { position: new THREE.Vector3(-0.55, 0.425, 0.32) }));
+    g.add((m => { m.position.set(-0.55, 0.425, 0.32); return m; })(new THREE.Mesh(new THREE.BoxGeometry(0.06,0.001,0.02), new THREE.MeshBasicMaterial({ color: 0xf59e0b }))));
     return g;
   }
 }

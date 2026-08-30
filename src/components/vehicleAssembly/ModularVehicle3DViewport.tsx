@@ -144,8 +144,8 @@ export const ModularVehicle3DViewport: React.FC<ModularVehicle3DViewportProps> =
 
     // 1. Scene, Camera & WebGL Renderer
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x1a1208);
-    scene.fog = new THREE.FogExp2(0x1a1208, 0.04);
+    scene.background = new THREE.Color(0x0a0c12);
+    scene.fog = new THREE.FogExp2(0x0a0c12, 0.03);
 
     const width = container.clientWidth || 800;
     const height = container.clientHeight || 480;
@@ -226,7 +226,7 @@ export const ModularVehicle3DViewport: React.FC<ModularVehicle3DViewportProps> =
     dustGeo.setAttribute('position', new THREE.BufferAttribute(dustPositions, 3));
     dustGeo.setAttribute('size', new THREE.BufferAttribute(dustSizes, 1));
     const dustMat = new THREE.PointsMaterial({
-      color: 0xffd699,
+      color: 0xc8ddf0,
       size: 0.035,
       transparent: true,
       opacity: 0.25,
@@ -240,9 +240,9 @@ export const ModularVehicle3DViewport: React.FC<ModularVehicle3DViewportProps> =
     // 3c. Volumetric light cone from above softbox
     const lightConeGeo = new THREE.ConeGeometry(2.5, 4, 32, 1, true);
     const lightConeMat = new THREE.MeshBasicMaterial({
-      color: 0xffd699,
+      color: 0xd0d8e8,
       transparent: true,
-      opacity: 0.03,
+      opacity: 0.02,
       side: THREE.DoubleSide,
       depthWrite: false,
       blending: THREE.AdditiveBlending,
@@ -619,9 +619,9 @@ export const ModularVehicle3DViewport: React.FC<ModularVehicle3DViewportProps> =
   };
 
   return (
-    <div className="relative w-full bg-amber-950/80 border border-amber-800/40 rounded-3xl overflow-hidden shadow-2xl font-mono flex flex-col">
+    <div className="relative w-full bg-slate-950/90 border border-slate-800/40 rounded-3xl overflow-hidden shadow-2xl font-mono flex flex-col">
       {/* ── TOP HEADER TOOLBAR (OUTSIDE DIAGRAM) ── */}
-      <div className="w-full p-4 flex flex-col gap-3 bg-amber-950/90 border-b border-amber-800/50 backdrop-blur-md">
+      <div className="w-full p-4 flex flex-col gap-3 bg-slate-950/90 border-b border-slate-800/50 backdrop-blur-md">
         {/* Main Row: Modes & Primary Controls */}
         <div className="w-full flex flex-wrap items-center justify-between gap-3">
           {/* Left: View Mode Toggles & 3D Model Selector */}
@@ -935,7 +935,7 @@ export const ModularVehicle3DViewport: React.FC<ModularVehicle3DViewportProps> =
       </div>
 
       {/* ── CANVAS RENDER STAGE (CLEAN & UNOBSTRUCTED 3D) ── */}
-      <div className="relative h-[560px] w-full flex items-center justify-center bg-amber-950/40">
+      <div className="relative h-[560px] w-full flex items-center justify-center bg-slate-950/60">
         <div ref={mountRef} className="w-full h-full cursor-grab active:cursor-grabbing" />
 
         {/* ── BOTTOM HUD CAD DIMENSIONS OVERLAY ── */}

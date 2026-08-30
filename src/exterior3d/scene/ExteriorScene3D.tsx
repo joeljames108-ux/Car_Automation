@@ -7,7 +7,7 @@
 
 import React, { useMemo } from "react";
 import { Canvas } from "@react-three/fiber";
-import { OrbitControls, ContactShadows } from "@react-three/drei";
+import { OrbitControls, ContactShadows, Environment, MeshReflectorMaterial } from "@react-three/drei";
 import { useExterior3DStore } from "../store/useExterior3DStore";
 import { ExteriorLighting3D } from "./ExteriorLighting3D";
 import { ExteriorComponentMesh3D } from "./ExteriorComponentMesh3D";
@@ -42,8 +42,11 @@ export const ExteriorScene3D: React.FC = () => {
         {/* Studio Lighting */}
         <ExteriorLighting3D />
 
+        {/* HDRI Environment Map for realistic metallic paint reflections */}
+        <Environment preset="studio" background={false} environmentIntensity={0.8} />
+
         {/* Dynamic Exterior Subsystems or Fallback 3D Vehicle */}
-        <group position={[0, -0.2, 0]}>
+        <group position={[0, -0.08, 0]}>
           {instanceList.length > 0 ? (
             instanceList.map((inst) => (
               <ExteriorComponentMesh3D
@@ -59,13 +62,32 @@ export const ExteriorScene3D: React.FC = () => {
           )}
         </group>
 
-        {/* Soft Ground Contact Shadow Catcher */}
+        {/* Reflective Dark Studio Floor */}
+        <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.1, 0]} receiveShadow>
+          <planeGeometry args={[30, 30]} />
+          <MeshReflectorMaterial
+            blur={[300, 100]}
+            resolution={1024}
+            mixBlur={1}
+            mixStrength={40}
+            roughness={0.15}
+            depthScale={1.2}
+            minDepthThreshold={0.4}
+            maxDepthThreshold={1.4}
+            color="#0a0a0f"
+            metalness={0.5}
+            mirror={0.5}
+          />
+        </mesh>
+
+        {/* Subtle ground contact shadow */}
         <ContactShadows
-          position={[0, -0.2, 0]}
-          opacity={0.75}
-          scale={10}
-          blur={2.0}
-          far={4.5}
+          position={[0, -0.09, 0]}
+          opacity={0.6}
+          scale={12}
+          blur={2.5}
+          far={4}
+          color="#000000"
         />
 
         {/* Orbit Camera Controller */}
@@ -75,11 +97,11 @@ export const ExteriorScene3D: React.FC = () => {
           dampingFactor={0.08}
           minDistance={1.8}
           maxDistance={8.5}
-          maxPolarAngle={Math.PI / 2 + 0.05} // Prevent camera clipping below floor
+          maxPolarAngle={Math.PI / 2 - 0.02}
         />
 
         {/* Photorealistic Post-Processing Pipeline */}
-        <ExteriorPostProcessing config={POST_PROCESSING_PRESETS.photorealistic} />
+        <ExteriorPostProcessing config={POST_PROCESSING_PRESETS.showroom} />
       </Canvas>
     </div>
   );

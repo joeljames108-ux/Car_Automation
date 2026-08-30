@@ -79,7 +79,7 @@ const MasterVehicleStudioInner: React.FC = () => {
     const height = container.clientHeight || 580;
 
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x0c0a08);
+    scene.background = new THREE.Color(0x0a0c12);
     sceneRef.current = scene;
 
     const camera = new THREE.PerspectiveCamera(40, width / height, 0.1, 100);
@@ -107,20 +107,20 @@ const MasterVehicleStudioInner: React.FC = () => {
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
     scene.add(ambientLight);
 
-    const keyLight = new THREE.DirectionalLight(0xfff8ee, 2.8);
+    const keyLight = new THREE.DirectionalLight(0xf0f2f8, 2.5);
     keyLight.position.set(6, 9, -6);
     scene.add(keyLight);
 
-    const fillLight = new THREE.DirectionalLight(0xf59e0b, 1.4);
+    const fillLight = new THREE.DirectionalLight(0x8090a8, 1.2);
     fillLight.position.set(-6, 4, 6);
     scene.add(fillLight);
 
-    const rimLight = new THREE.DirectionalLight(0xd97706, 1.2);
+    const rimLight = new THREE.DirectionalLight(0xc8ddf0, 1.5);
     rimLight.position.set(0, 7, 7);
     scene.add(rimLight);
 
     // Reflective Studio Floor Grid
-    const grid = new THREE.GridHelper(24, 48, 0xf59e0b, 0x1a1508);
+    const grid = new THREE.GridHelper(24, 48, 0x3a4050, 0x12151a);
     grid.position.y = -0.01;
     scene.add(grid);
 

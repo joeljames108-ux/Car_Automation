@@ -576,7 +576,19 @@ const ModularInterior3DStudioViewportComponent: React.FC<ModularInterior3DStudio
     };
     window.addEventListener("resize", handleResize);
 
-    
+    // Cleanup
+    return () => {
+      cancelAnimationFrame(animId);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+      container.removeEventListener("pointerdown", handlePointerDown);
+      window.removeEventListener("pointerup", handlePointerUp);
+      container.removeEventListener("pointermove", handlePointerMove);
+      container.removeEventListener("click", handleClick);
+      window.removeEventListener("resize", handleResize);
+      renderer.dispose();
+    };
+  }, [updateGazeDetection, seatForeAftMm, seatHeightMm, isAutoHeadPan]);
+
   // Sync ergonomics state with DriverErgonomicsSystem
   useEffect(() => {
     const erg = ergonomicsRef.current;
@@ -610,17 +622,7 @@ const ModularInterior3DStudioViewportComponent: React.FC<ModularInterior3DStudio
       rearviewPanDeg, activeCameraPose]);
 
 
-  return () => {
-      cancelAnimationFrame(animId);
-      document.removeEventListener("visibilitychange", handleVisibilityChange);
-      container.removeEventListener("pointerdown", handlePointerDown);
-      window.removeEventListener("pointerup", handlePointerUp);
-      container.removeEventListener("pointermove", handlePointerMove);
-      container.removeEventListener("click", handleClick);
-      window.removeEventListener("resize", handleResize);
-      renderer.dispose();
-    };
-  }, [updateGazeDetection, seatForeAftMm, seatHeightMm, isAutoHeadPan]);
+
 
   // Update Environment Preset
   const applyEnvironmentPreset = (presetId: StudioEnvironmentPreset) => {

@@ -23,9 +23,9 @@ export const ModularExterior3DViewport: React.FC<ModularExterior3DViewportProps>
   useExteriorAssembly3DBridge();
 
   return (
-    <div className={`relative w-full h-full rounded-3xl overflow-hidden backdrop-blur-2xl shadow-2xl ${className}`} style={{backgroundColor: 'rgba(255,248,235,0.85)', borderColor: 'rgba(217,166,78,0.3)', borderWidth: '1px', borderStyle: 'solid'}}>
+    <div className={`relative w-full h-full rounded-3xl overflow-hidden backdrop-blur-2xl shadow-2xl ${className}`} style={{backgroundColor: 'rgba(10,10,15,0.95)', borderColor: 'rgba(217,166,78,0.2)', borderWidth: '1px', borderStyle: 'solid'}}>
       {/* Dynamic Ambient Background Glow */}
-      <div className="absolute inset-0 pointer-events-none z-10" style={{background: 'radial-gradient(circle at 50% 35%, rgba(217,166,78,0.12), transparent 70%)'}} />
+      <div className="absolute inset-0 pointer-events-none z-10" style={{background: 'radial-gradient(circle at 50% 35%, rgba(200,221,240,0.08), transparent 70%)'}} />
 
       {/* Main React Three Fiber 3D Canvas — paused when off-screen */}
       <ViewportPauseCanvas rootMargin="300px" style={{flex: 1, minHeight: 0}}>
