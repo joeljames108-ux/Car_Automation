@@ -64,6 +64,7 @@ const VehicleComparisonStudio = React.lazy(() => import("./vehicleAssembly/Vehic
 const NvhSoundLab = React.lazy(() => import("./NvhSoundLab").then(m => ({ default: m.NvhSoundLab })));
 const ApexAIStudio = React.lazy(() => import("./ApexAIStudio").then(m => ({ default: m.ApexAIStudio })));
 const Transmission3DStudio = React.lazy(() => import("./transmissionStudio/Transmission3DStudio").then(m => ({ default: m.Transmission3DStudio })));
+const InteriorDashboardConfiguratorStudio = React.lazy(() => import("./interior/InteriorDashboardConfiguratorStudio").then(m => ({ default: m.InteriorDashboardConfiguratorStudio })));
 
 export type GrandStudioTab =
   | "vehicle_studio"
@@ -71,6 +72,7 @@ export type GrandStudioTab =
   | "dyno_ecu_studio"
   | "suspension_studio"
   | "interior_studio"
+  | "interior_dashboard_studio"
   | "aero_cfd_studio"
   | "aero_3d_studio"
   | "track_battle_studio"
@@ -127,6 +129,7 @@ const STUDIO_TABS: StudioTabConfig[] = [
   { id: "track_battle_studio", label: "Track Battles", icon: <Trophy size={14} />, category: "track_racing", shortcut: 5, description: "Telemetry replay with sector deltas and overtake analysis" },
   { id: "track_layout_studio", label: "Track Layouts", icon: <Navigation size={14} />, category: "track_racing", shortcut: 6, description: "Interactive track geometry with apex markers and elevation profiles" },
   { id: "interior_studio", label: "Cockpit Studio", icon: <LayersIcon size={14} />, category: "cockpit_factory", shortcut: 7, description: "Cockpit ergonomics, driver fit, and interior systems design" },
+  { id: "interior_dashboard_studio", label: "2D Dashboard Configurator", icon: <LayersIcon size={14} />, category: "cockpit_factory", description: "Real-time 2D dashboard configurator with live SVG viewport, presets, and stats" },
   { id: "manufacturing_studio", label: "Manufacturing", icon: <Factory size={14} />, category: "cockpit_factory", description: "Production line design and process optimization" },
   { id: "factory_line", label: "Robotic Factory", icon: <Cpu size={14} />, category: "cockpit_factory", description: "Robotic assembly sequencing and cycle time analysis" },
   { id: "dyno_ecu_studio", label: "Dyno & ECU", icon: <Gauge size={14} />, category: "analytics", shortcut: 8, description: "Live dyno pulls, ECU map overlays, and power loss breakdown" },
@@ -163,7 +166,7 @@ const STUDIO_CATEGORIES: StudioCategoryConfig[] = [
     label: "Cockpit & Factory",
     icon: <LayersIcon size={14} />,
     color: "amber",
-    tabs: ["interior_studio", "manufacturing_studio", "factory_line"],
+    tabs: ["interior_dashboard_studio", "interior_studio", "manufacturing_studio", "factory_line"],
   },
   {
     id: "analytics",
@@ -222,6 +225,7 @@ const STUDIO_COMPONENTS: Record<GrandStudioTab, React.ComponentType> = {
   dyno_ecu_studio: PowertrainDynoStudio,
   suspension_studio: SuspensionMasterStudio,
   interior_studio: InteriorsDesigner,
+  interior_dashboard_studio: InteriorDashboardConfiguratorStudio,
   aero_cfd_studio: WindTunnelAeroStudio,
   aero_3d_studio: AeroLab,
   track_battle_studio: TrackBattlesStudio,
