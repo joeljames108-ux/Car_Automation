@@ -357,40 +357,48 @@ export const InteriorConfigViewport: React.FC = () => {
       </div>
 
       {/* Bottom Presets Carousel */}
-      <div className="idash-presets-container">
-        <div className="idash-section-title" style={{ marginBottom: 8 }}>
+      <div className="idash-presets-container bg-[#0d121f] border-t border-slate-800 p-3.5 backdrop-blur-xl shrink-0">
+        <div className="text-xs font-mono font-bold tracking-widest text-cyan-400 uppercase mb-2 flex items-center gap-1.5">
+          <span className="w-1.5 h-1.5 rounded-full bg-cyan-400" />
           INTERIOR PRESETS
         </div>
-        <div className="idash-preset-list">
+        <div className="flex gap-2.5 overflow-x-auto pb-2 no-scrollbar">
           {Object.entries(INTERIOR_PRESETS).map(([key, preset]) => {
             const isActive = activePreset === key;
             return (
               <button
                 key={key}
                 type="button"
-                className={`idash-preset-card ${isActive ? "active" : ""}`}
+                className={`min-w-[95px] p-2 rounded-xl bg-slate-900/90 border transition-all duration-200 flex flex-col items-center gap-1.5 cursor-pointer text-center ${
+                  isActive
+                    ? "border-cyan-400 bg-slate-800 shadow-[0_0_14px_rgba(0,229,255,0.35)] scale-102"
+                    : "border-slate-800 hover:border-slate-600 hover:bg-slate-850"
+                }`}
                 onClick={() => applyPreset(key)}
               >
                 <div
-                  className="idash-preset-swatch"
+                  className="w-14 h-8 rounded-lg border border-white/20 transition-all"
                   style={{
                     backgroundColor: preset.color,
-                    boxShadow: isActive ? `0 0 10px ${preset.color}` : "none",
+                    boxShadow: isActive ? `0 0 12px ${preset.color}80` : "none",
                   }}
                 />
-                <span className="idash-preset-name">{preset.name}</span>
+                <span className={`text-[11px] font-bold tracking-tight truncate w-full ${isActive ? "text-white" : "text-slate-300"}`}>
+                  {preset.name}
+                </span>
               </button>
             );
           })}
         </div>
         <button
-          className="idash-apply-btn"
+          className="w-full py-2.5 px-4 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 text-white font-black text-xs uppercase tracking-wider transition-all shadow-lg shadow-cyan-500/25 active:scale-98 cursor-pointer mt-2 flex items-center justify-center gap-2"
           type="button"
           onClick={handleApplyAndContinue}
         >
-          ✓ APPLY &amp; CONTINUE
+          <span>✓</span>
+          <span>APPLY &amp; CONTINUE</span>
         </button>
-        <div className="idash-apply-hint">
+        <div className="text-center text-[10px] font-mono text-slate-400 mt-1.5">
           Changes will be saved to your design &amp; master vehicle physics
         </div>
       </div>

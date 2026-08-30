@@ -1,4 +1,4 @@
-import React, { ReactNode } from "react";
+import React, { ReactNode, useEffect, useRef } from "react";
 import {
   Home,
   Cog,
@@ -72,8 +72,8 @@ export const NeonHorizonContentViewport: React.FC<NeonHorizonContentViewportProp
           })}
         </div>
 
-        {/* Content Body */}
-        <div className="min-h-[540px]">
+        {/* Content Body — animated on stage switch */}
+        <div key={activeStage} className="min-h-[540px] animate-stage-enter">
           {children}
         </div>
         {/* Bottom measurement ruler */}

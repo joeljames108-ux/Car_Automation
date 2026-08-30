@@ -9,12 +9,10 @@
  */
 
 import React, { useState } from "react";
-import {
-  useInteriorDashboardConfigStore,
-} from "../../state/interiorDashboardConfigStore";
+import { useInteriorDashboardConfigStore } from "../../state/interiorDashboardConfigStore";
 import { InteriorCompareModal } from "./InteriorCompareModal";
 
-// Stat bar icon SVGs (inline for zero-dep rendering)
+// Stat bar icon SVGs
 const STAT_ICONS: Record<string, string> = {
   comfort: "☆",
   ergonomics: "◎",
@@ -64,24 +62,27 @@ export const InteriorMetricsPanel: React.FC = () => {
             : "#ef4444";
 
   return (
-    <div className="idash-panel-left">
+    <div className="idash-panel-left bg-[#0d121f] text-slate-100 border-r border-slate-800 p-4 flex flex-col gap-3 overflow-y-auto w-[310px] flex-shrink-0">
       {/* Section Header */}
-      <div className="idash-section-title">INTERIOR OVERVIEW</div>
+      <div className="text-xs font-mono font-bold tracking-widest text-cyan-400 uppercase flex items-center gap-1.5 pb-1 border-b border-slate-800/80">
+        <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
+        INTERIOR OVERVIEW
+      </div>
 
       {/* Stat Bars */}
-      <div className="idash-stats-list">
+      <div className="flex flex-col gap-2">
         {STAT_KEYS.map((key) => {
           const val = metrics[key];
           return (
-            <div key={key} className="idash-stat-row">
-              <div className="idash-stat-header">
-                <span className="idash-stat-icon">{STAT_ICONS[key]}</span>
-                <span className="idash-stat-label">{STAT_LABELS[key]}</span>
-                <span className="idash-stat-value">{val}%</span>
+            <div key={key} className="flex flex-col gap-1 p-2 rounded-xl bg-slate-900/90 border border-slate-800/80 shadow-sm">
+              <div className="flex items-center justify-between text-xs">
+                <span className="text-cyan-400 font-bold w-4 text-center">{STAT_ICONS[key]}</span>
+                <span className="text-white font-bold flex-1 px-1.5 text-left">{STAT_LABELS[key]}</span>
+                <span className="text-cyan-300 font-mono font-bold">{val}%</span>
               </div>
-              <div className="idash-progress-track">
+              <div className="h-1.5 w-full bg-slate-950 rounded-full overflow-hidden border border-slate-800">
                 <div
-                  className="idash-progress-fill"
+                  className="h-full bg-gradient-to-r from-blue-600 to-cyan-400 rounded-full transition-all duration-300 shadow-[0_0_8px_rgba(0,229,255,0.5)]"
                   style={{ width: `${val}%` }}
                 />
               </div>
@@ -91,62 +92,50 @@ export const InteriorMetricsPanel: React.FC = () => {
       </div>
 
       {/* Rating Badge */}
-      <div className="idash-rating-box">
-        <div className="idash-rating-info">
-          <span className="idash-rating-label-small">Interior Rating</span>
-          <span className="idash-rating-desc">{metrics.ratingLabel}</span>
+      <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-3 flex items-center justify-between shadow-sm">
+        <div className="flex flex-col">
+          <span className="text-[10px] font-mono text-slate-400 uppercase">Interior Rating</span>
+          <span className="text-sm font-extrabold text-white">{metrics.ratingLabel}</span>
         </div>
         <div
-          className="idash-rating-badge"
-          style={{ color: ratingColor, borderColor: ratingColor }}
+          className="w-10 h-10 rounded-xl flex items-center justify-center font-black text-xl border-2 bg-slate-950/80 shadow-md transition-all"
+          style={{ color: ratingColor, borderColor: ratingColor, textShadow: `0 0 10px ${ratingColor}60` }}
         >
           {metrics.overallRating}
         </div>
       </div>
 
-      {/* Market Appeal */}
-      <div className="idash-stat-readout">
-        <span className="idash-readout-icon">♛</span>
-        <span className="idash-readout-label">Market Appeal</span>
-        <span
-          className="idash-readout-value"
-          style={{ color: metrics.marketAppeal >= 60 ? "#4ade80" : "#facc15" }}
-        >
-          {metrics.marketAppeal}%
-        </span>
-      </div>
-
-      {/* Divider */}
-      <div className="idash-divider" />
-
-      {/* Weight */}
-      <div className="idash-stat-readout">
-        <span className="idash-readout-icon">⚖</span>
-        <span className="idash-readout-label">Weight</span>
-        <span className="idash-readout-value" style={{ color: "#e2e8f0" }}>
-          {metrics.weight} kg
-        </span>
-      </div>
-
-      {/* Cost */}
-      <div className="idash-stat-readout">
-        <span className="idash-readout-icon">💲</span>
-        <span className="idash-readout-label">Production Cost</span>
-        <span
-          className="idash-readout-value"
-          style={{ color: "#4ade80", fontWeight: 700 }}
-        >
-          $ {metrics.cost.toLocaleString()}
-        </span>
+      {/* Stats Readout */}
+      <div className="flex flex-col gap-1.5 p-2.5 rounded-xl bg-slate-900/90 border border-slate-800 text-xs">
+        <div className="flex items-center justify-between">
+          <span className="text-slate-400 flex items-center gap-1">
+            <span>♛</span> Market Appeal
+          </span>
+          <span className="font-mono font-bold" style={{ color: metrics.marketAppeal >= 60 ? "#4ade80" : "#facc15" }}>
+            {metrics.marketAppeal}%
+          </span>
+        </div>
+        <div className="flex items-center justify-between">
+          <span className="text-slate-400 flex items-center gap-1">
+            <span>⚖</span> Total Mass
+          </span>
+          <span className="font-mono font-bold text-white">{metrics.weight} kg</span>
+        </div>
+        <div className="flex items-center justify-between">
+          <span className="text-slate-400 flex items-center gap-1">
+            <span>💲</span> Production Cost
+          </span>
+          <span className="font-mono font-bold text-emerald-400">${metrics.cost.toLocaleString()}</span>
+        </div>
       </div>
 
       {/* Compare Button */}
       <button
-        className="idash-compare-btn"
+        className="w-full py-2.5 px-3 rounded-xl bg-slate-800 hover:bg-slate-750 text-slate-200 hover:text-white border border-slate-700 hover:border-cyan-500/50 text-xs font-mono font-bold transition-all shadow-sm active:scale-95 cursor-pointer flex items-center justify-center gap-2"
         onClick={() => setCompareModalOpen(true)}
       >
-        <span style={{ marginRight: 6 }}>⇌</span>
-        COMPARE INTERIORS
+        <span>⇌</span>
+        <span>COMPARE INTERIORS</span>
       </button>
 
       {/* Compare Modal */}
