@@ -104,12 +104,14 @@ export function buildCrankshaftScene(configOrThrows?: Partial<EngineConfig> | nu
 
   const matNitrided = matPrimaryCrank;
   const matMicroPolished = matLib.getMachinedBillet();
-  const matTungsten = new THREE.MeshStandardMaterial({
+  const matTungsten = new THREE.MeshPhysicalMaterial({
     name: 'Tungsten_Heavy_Metal_Slug',
     color: new THREE.Color(0x64748b),
     metalness: 0.95,
-    roughness: 0.22,
-  });
+    roughness: 0.22,,
+        clearcoat: 0.35,
+        clearcoatRoughness: 0.1,
+      };
   const matGoldReluctor = matLib.getGoldAnodized();
   const matDarkIron = matLib.getCastAluminum();
   const matElastomer = matLib.getRubberOring();

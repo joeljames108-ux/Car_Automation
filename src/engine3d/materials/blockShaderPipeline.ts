@@ -167,20 +167,20 @@ export function createHighResPlateauHoneTexture(): THREE.CanvasTexture {
 // ============================================================================
 
 export interface BlockShaderSuite {
-  primaryBlockMaterial: THREE.MeshStandardMaterial;
-  sandCastAluminum: THREE.MeshStandardMaterial;
-  castIron: THREE.MeshStandardMaterial;
-  billetAluminum: THREE.MeshStandardMaterial;
-  titaniumAlloy: THREE.MeshStandardMaterial;
-  carbonComposite: THREE.MeshStandardMaterial;
-  magnesiumAlloy: THREE.MeshStandardMaterial;
-  cncMilledDeck: THREE.MeshStandardMaterial;
-  plateauHonedNikasil: THREE.MeshStandardMaterial;
-  hardenedArpFastener: THREE.MeshStandardMaterial;
-  machinedBrassPlug: THREE.MeshStandardMaterial;
-  coolantWaterPassage: THREE.MeshStandardMaterial;
-  oilGalleryPassage: THREE.MeshStandardMaterial;
-  fireRingSeal: THREE.MeshStandardMaterial;
+  primaryBlockMaterial: THREE.MeshPhysicalMaterial;
+  sandCastAluminum: THREE.MeshPhysicalMaterial;
+  castIron: THREE.MeshPhysicalMaterial;
+  billetAluminum: THREE.MeshPhysicalMaterial;
+  titaniumAlloy: THREE.MeshPhysicalMaterial;
+  carbonComposite: THREE.MeshPhysicalMaterial;
+  magnesiumAlloy: THREE.MeshPhysicalMaterial;
+  cncMilledDeck: THREE.MeshPhysicalMaterial;
+  plateauHonedNikasil: THREE.MeshPhysicalMaterial;
+  hardenedArpFastener: THREE.MeshPhysicalMaterial;
+  machinedBrassPlug: THREE.MeshPhysicalMaterial;
+  coolantWaterPassage: THREE.MeshPhysicalMaterial;
+  oilGalleryPassage: THREE.MeshPhysicalMaterial;
+  fireRingSeal: THREE.MeshPhysicalMaterial;
 }
 
 export function initializeBlockShaderSuite(materialId?: string): BlockShaderSuite {
@@ -189,51 +189,71 @@ export function initializeBlockShaderSuite(materialId?: string): BlockShaderSuit
   const cncDeckTex = isBrowser ? createHighResCncFlyCutTexture() : null;
   const plateauHoneTex = isBrowser ? createHighResPlateauHoneTexture() : null;
 
-  const sandCastAluminum = new THREE.MeshStandardMaterial({
+  const sandCastAluminum = new THREE.MeshPhysicalMaterial({
     name: 'PBR_SandCast_Aluminum_A356',
-    color: new THREE.Color(0x94a3b8),
+    color: new THREE.Color(0xb0bec5),
     metalness: 0.88,
     roughness: 0.28,
     map: sandCastTex,
     bumpMap: sandCastTex,
-    bumpScale: 0.0012,
-    envMapIntensity: 2.2,
+    bumpScale: 0.0015,
+    envMapIntensity: 2.4,
+    clearcoat: 0.25,
+    clearcoatRoughness: 0.35,
   });
 
-  const castIron = new THREE.MeshStandardMaterial({
+  const castIron = new THREE.MeshPhysicalMaterial({
     name: 'PBR_Ductile_Cast_Iron',
-    color: new THREE.Color(0x384152),
+    color: new THREE.Color(0x454d5c),
     metalness: 0.85,
-    roughness: 0.38,
+    roughness: 0.36,
     map: sandCastTex,
     bumpMap: sandCastTex,
-    bumpScale: 0.0035,
-    envMapIntensity: 1.8,
+    bumpScale: 0.004,
+    envMapIntensity: 2.0,
+    clearcoat: 0.12,
+    clearcoatRoughness: 0.5,
   });
 
-  const billetAluminum = new THREE.MeshStandardMaterial({
+  const billetAluminum = new THREE.MeshPhysicalMaterial({
     name: 'PBR_CNC_Billet_Aluminum_6061',
-    color: new THREE.Color(0xe2e8f0),
+    color: new THREE.Color(0xe8ecf0),
     metalness: 0.95,
-    roughness: 0.12,
+    roughness: 0.10,
     map: cncDeckTex,
-    envMapIntensity: 2.6,
+    normalMap: cncDeckTex,
+    normalScale: new THREE.Vector2(0.3, 0.3),
+    envMapIntensity: 2.8,
+    clearcoat: 0.55,
+    clearcoatRoughness: 0.04,
+    sheen: 0.15,
+    sheenColor: new THREE.Color(0xc0c8d0),
   });
 
-  const titaniumAlloy = new THREE.MeshStandardMaterial({
+  const titaniumAlloy = new THREE.MeshPhysicalMaterial({
     name: 'PBR_Aerospace_Titanium_Ti6Al4V',
     color: new THREE.Color(0xb6bac6),
     metalness: 0.92,
-    roughness: 0.22,
-    envMapIntensity: 2.4,
+    roughness: 0.18,
+    normalMap: cncDeckTex,
+    normalScale: new THREE.Vector2(0.2, 0.2),
+    envMapIntensity: 2.6,
+    clearcoat: 0.4,
+    clearcoatRoughness: 0.08,
+    sheen: 0.2,
+    sheenColor: new THREE.Color(0xa5b4fc),
   });
 
-  const carbonComposite = new THREE.MeshStandardMaterial({
+  const carbonComposite = new THREE.MeshPhysicalMaterial({
     name: 'PBR_Autoclaved_Carbon_Composite',
     color: new THREE.Color(0x1e293b),
     metalness: 0.30,
-    roughness: 0.25,
-    envMapIntensity: 1.6,
+    roughness: 0.22,
+    envMapIntensity: 1.8,
+    clearcoat: 0.95,
+    clearcoatRoughness: 0.03,
+    sheen: 0.2,
+    sheenColor: new THREE.Color(0x475569),
   });
 
   const magnesiumAlloy = new THREE.MeshStandardMaterial({
@@ -269,22 +289,30 @@ export function initializeBlockShaderSuite(materialId?: string): BlockShaderSuit
     titaniumAlloy,
     carbonComposite,
     magnesiumAlloy,
-    cncMilledDeck: new THREE.MeshStandardMaterial({
+    cncMilledDeck: new THREE.MeshPhysicalMaterial({
       name: 'PBR_CNC_Milled_Deck',
       color: 0xe2e8f0,
       metalness: 0.94,
-      roughness: 0.12,
+      roughness: 0.10,
       map: cncDeckTex,
-      envMapIntensity: 2.5,
+      normalMap: cncDeckTex,
+      normalScale: new THREE.Vector2(0.25, 0.25),
+      envMapIntensity: 2.8,
+      clearcoat: 0.5,
+      clearcoatRoughness: 0.05,
     }),
-    plateauHonedNikasil: new THREE.MeshStandardMaterial({
+    plateauHonedNikasil: new THREE.MeshPhysicalMaterial({
       name: 'PBR_Plateau_Honed_Nikasil',
       color: 0xf1f5f9,
       metalness: 0.96,
-      roughness: 0.08,
+      roughness: 0.06,
       map: plateauHoneTex,
+      normalMap: plateauHoneTex,
+      normalScale: new THREE.Vector2(0.15, 0.15),
       side: THREE.DoubleSide,
-      envMapIntensity: 2.5,
+      envMapIntensity: 2.8,
+      clearcoat: 0.6,
+      clearcoatRoughness: 0.03,
     }),
     hardenedArpFastener: new THREE.MeshStandardMaterial({
       name: 'PBR_Hardened_ARP_Fastener',
@@ -293,12 +321,16 @@ export function initializeBlockShaderSuite(materialId?: string): BlockShaderSuit
       roughness: 0.15,
       envMapIntensity: 2.0,
     }),
-    machinedBrassPlug: new THREE.MeshStandardMaterial({
+    machinedBrassPlug: new THREE.MeshPhysicalMaterial({
       name: 'PBR_Machined_Brass_Plug',
-      color: 0xf59e0b,
+      color: 0xf0a028,
       metalness: 0.92,
-      roughness: 0.14,
-      envMapIntensity: 2.4,
+      roughness: 0.12,
+      envMapIntensity: 2.6,
+      clearcoat: 0.7,
+      clearcoatRoughness: 0.04,
+      sheen: 0.15,
+      sheenColor: new THREE.Color(0xfcd34d),
     }),
     coolantWaterPassage: new THREE.MeshStandardMaterial({
       name: 'PBR_Coolant_Passage',

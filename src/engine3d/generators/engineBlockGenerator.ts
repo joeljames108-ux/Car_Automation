@@ -40,14 +40,14 @@ if (typeof globalThis !== 'undefined' && typeof (globalThis as any).FileReader =
 
 // Re-export type interface for material palette compatibility
 export interface V12BlockMaterialPalette {
-  castAluminumBlock: THREE.MeshStandardMaterial;
-  machinedDeckSurface: THREE.MeshStandardMaterial;
-  nikasilCylinderBore: THREE.MeshStandardMaterial;
-  arpHardenedFastener: THREE.MeshStandardMaterial;
-  brassFreezePlug: THREE.MeshStandardMaterial;
-  coolantJacketInterior: THREE.MeshStandardMaterial;
-  oilGalleryPassage: THREE.MeshStandardMaterial;
-  gasketChannel: THREE.MeshStandardMaterial;
+  castAluminumBlock: THREE.MeshPhysicalMaterial;
+  machinedDeckSurface: THREE.MeshPhysicalMaterial;
+  nikasilCylinderBore: THREE.MeshPhysicalMaterial;
+  arpHardenedFastener: THREE.MeshPhysicalMaterial;
+  brassFreezePlug: THREE.MeshPhysicalMaterial;
+  coolantJacketInterior: THREE.MeshPhysicalMaterial;
+  oilGalleryPassage: THREE.MeshPhysicalMaterial;
+  gasketChannel: THREE.MeshPhysicalMaterial;
 }
 
 /**

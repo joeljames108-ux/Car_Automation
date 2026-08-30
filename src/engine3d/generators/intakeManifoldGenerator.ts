@@ -87,12 +87,14 @@ export function buildIntakeManifoldScene(bankSide: 'left' | 'right', configOrCyl
   const matLib = globalMaterialLibrary;
   const matCeramicRunner = matLib.getCeramicIntake();
   const matCobaltStack = matLib.getCobaltAnodized();
-  const matBrassPlate = new THREE.MeshStandardMaterial({
+  const matBrassPlate = new THREE.MeshPhysicalMaterial({
     name: 'Polished_Brass_Butterfly_Disc',
     color: new THREE.Color(0xfacc15),
     metalness: 0.85,
-    roughness: 0.22,
-  });
+    roughness: 0.22,,
+        clearcoat: 0.35,
+        clearcoatRoughness: 0.1,
+      };
   const matGoldFuelRail = matLib.getGoldAnodized();
   const matInjectorBillet = matLib.getMachinedBillet();
   const matBlackPolymer = matLib.getBlackPolymer();

@@ -86,24 +86,30 @@ export function buildPistonScene(configOrBore?: Partial<EngineConfig> | number):
 
   const matForgedBillet = matPrimaryCrown;
   const matThermalBarrier = matLib.getThermalBarrierCeramic();
-  const matMolySkirt = new THREE.MeshStandardMaterial({
+  const matMolySkirt = new THREE.MeshPhysicalMaterial({
     name: 'Moly_AntiFriction_Skirt_Coating',
     color: new THREE.Color(0x1e293b),
     metalness: 0.35,
-    roughness: 0.65,
-  });
-  const matTopRing = new THREE.MeshStandardMaterial({
+    roughness: 0.65,,
+        clearcoat: 0.35,
+        clearcoatRoughness: 0.1,
+      };
+  const matTopRing = new THREE.MeshPhysicalMaterial({
     name: 'Gas_Nitrided_Steel_Top_Ring',
     color: new THREE.Color(0x94a3b8),
     metalness: 0.90,
-    roughness: 0.20,
-  });
-  const matDlcPin = new THREE.MeshStandardMaterial({
+    roughness: 0.20,,
+        clearcoat: 0.35,
+        clearcoatRoughness: 0.1,
+      };
+  const matDlcPin = new THREE.MeshPhysicalMaterial({
     name: 'DLC_Diamond_Like_Carbon_WristPin',
     color: new THREE.Color(0x0f172a),
     metalness: 0.95,
-    roughness: 0.12,
-  });
+    roughness: 0.12,,
+        clearcoat: 0.35,
+        clearcoatRoughness: 0.1,
+      };
   const matBrassSpiroloc = matLib.getGoldAnodized();
   const matUnderCrown = matLib.getCastAluminum();
 
