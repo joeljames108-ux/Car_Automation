@@ -6738,6 +6738,7 @@ button:active,
   border-radius: 17px;
   padding: 1px;
   background: linear-gradient(135deg, rgba(245, 158, 11, 0.6), rgba(168, 85, 247, 0.2), rgba(251, 191, 36, 0.6));
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;
   mask-composite: exclude;
