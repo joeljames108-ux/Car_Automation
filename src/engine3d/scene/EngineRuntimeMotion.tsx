@@ -282,7 +282,7 @@ export const EngineRuntimeMotion: React.FC<EngineRuntimeMotionProps> = ({
           <CamshaftRotator key={"c"+bank+cam} crankAngleDeg={crankRef.current.angleDeg} position={[bank*0.05,0.12,0]} bank={cam as "intake"|"exhaust"} />
         )))}
         {pistonPositions.map((pos, i) => (
-          <React.Fragment key="v"+i>
+          <React.Fragment key={'v'+i}>
             <ValveActuator crankAngleDeg={crankRef.current.angleDeg} phaseOffsetDeg={firingOrder[i]??0} position={[pos[0]+0.015,0.1,pos[2]]} isIntake={true} />
             <ValveActuator crankAngleDeg={crankRef.current.angleDeg} phaseOffsetDeg={(firingOrder[i]??0)+360} position={[pos[0]-0.015,0.1,pos[2]]} isIntake={false} />
           </React.Fragment>
