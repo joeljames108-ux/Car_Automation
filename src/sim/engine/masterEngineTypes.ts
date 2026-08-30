@@ -461,18 +461,41 @@ export interface MasterEngineState {
 // ============================================================================
 
 export type EngineCoverModel =
+  // === V-TYPE (V6/V8/V10/V12) COVERS ===
   | "hypercar_quartz"
   | "gt3_endurance"
   | "billet_skeleton"
   | "heritage_wrinkle"
   | "stealth_vortex"
   | "exposed_itb"
-  | "inline_twin_cam_turbo"
-  | "boxer_twin_plenum_flat"
-  | "w16_quad_turbo_hypersport"
-  | "rotary_apex_trochoid"
   | "supercharged_v8_shaker"
-  | "f1_pneumatic_carbon_plenum";
+  | "f1_pneumatic_carbon_plenum"
+  // === INLINE (I3/I4/I5/I6) COVERS ===
+  | "inline_twin_cam_turbo"
+  | "inline_m_power_ribbed"
+  | "inline_vtec_earth" 
+  | "inline_jdm_turbo_flat"
+  | "inline_classic_ohv_ventilated"
+  | "inline_performance_skeleton"
+  // === BOXER / FLAT (FLAT-4/FLAT-6) COVERS ===
+  | "boxer_twin_plenum_flat"
+  | "boxer_gt3_intake_risers"
+  | "boxer_subaru_topmount"
+  | "boxer_aircooled_vintage"
+  | "boxer_race_drysump"
+  | "boxer_sport_integrated"
+  // === W-TYPE (W12/W16/W18) COVERS ===
+  | "w16_quad_turbo_hypersport"
+  | "w12_continental_grand"
+  | "w16_modified_monster"
+  | "w12_central_exhaust"
+  | "w16_bentley_heritage"
+  // === ROTARY (2/3/4-ROTOR) COVERS ===
+  | "rotary_apex_trochoid"
+  | "rotary_13b_street"
+  | "rotary_3rotor_race"
+  | "rotary_4rotor_le mans"
+  | "rotary_turbo_sports";
 
 export type EngineCoverColor =
   | "dry_carbon"
@@ -483,7 +506,19 @@ export type EngineCoverColor =
   | "british_racing_green"
   | "stealth_black"
   | "billet_silver"
-  | "gold_leaf";
+  | "gold_leaf"
+  | "bmw_m_orange"
+  | "subaru_wr_blue"
+  | "porsche_gts_red"
+  | "mazda_soul_red"
+  | "bugatti_carbon_blue"
+  | "lambo_arancio"
+  | "ferrari_yellow"
+  | "amg_galactic_beige"
+  | "nismo_ultimate_red"
+  | "cosworth_heritage_green"
+  | "brembo_gloss_red"
+  | "audi_rs_carbon";
 
 export type EngineCoverBezelColor =
   | "billet_gold"
@@ -491,7 +526,11 @@ export type EngineCoverBezelColor =
   | "crimson_red"
   | "cobalt_blue"
   | "stealth_black"
-  | "polished_chrome";
+  | "polished_chrome"
+  | "anodized_red"
+  | "brushed_aluminum"
+  | "dark_chrome"
+  | "bronze_antique";
 
 export type ExhaustFinish =
   | "titanium_blued"

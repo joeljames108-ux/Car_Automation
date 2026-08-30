@@ -919,6 +919,180 @@ export class EngineMaterialLibrary {
   /**
    * Resolves the authentic physical PBR material for any selected material variant string or component type.
    */
+
+  // --- EXPANDED ENGINE COVER COLOR PALETTE ---
+
+  public getCoverBmwOrange(): THREE.MeshPhysicalMaterial {
+    const key = 'cover_bmw_orange';
+    if (!this.materialCache.has(key)) {
+      const mat = new THREE.MeshPhysicalMaterial({
+        name: 'BMW_M_Orange', color: new THREE.Color(16739072),
+        metalness: 0.35, roughness: 0.18, clearcoat: 1, clearcoatRoughness: 0.05, envMapIntensity: 1.8,
+      });
+      this.materialCache.set(key, mat);
+    }
+    return this.materialCache.get(key) as THREE.MeshPhysicalMaterial;
+  }
+
+  public getCoverSubaruBlue(): THREE.MeshPhysicalMaterial {
+    const key = 'cover_subaru_blue';
+    if (!this.materialCache.has(key)) {
+      const mat = new THREE.MeshPhysicalMaterial({
+        name: 'Subaru_WR_Blue', color: new THREE.Color(11886),
+        metalness: 0.4, roughness: 0.15, clearcoat: 1, clearcoatRoughness: 0.03, envMapIntensity: 2,
+      });
+      this.materialCache.set(key, mat);
+    }
+    return this.materialCache.get(key) as THREE.MeshPhysicalMaterial;
+  }
+
+  public getCoverPorscheRed(): THREE.MeshPhysicalMaterial {
+    const key = 'cover_porsche_red';
+    if (!this.materialCache.has(key)) {
+      const mat = new THREE.MeshPhysicalMaterial({
+        name: 'Porsche_GTS_Red', color: new THREE.Color(10485760),
+        metalness: 0.3, roughness: 0.2, clearcoat: 1, clearcoatRoughness: 0.04, envMapIntensity: 1.6,
+      });
+      this.materialCache.set(key, mat);
+    }
+    return this.materialCache.get(key) as THREE.MeshPhysicalMaterial;
+  }
+
+  public getCoverMazdaRed(): THREE.MeshPhysicalMaterial {
+    const key = 'cover_mazda_red';
+    if (!this.materialCache.has(key)) {
+      const mat = new THREE.MeshPhysicalMaterial({
+        name: 'Mazda_Soul_Red', color: new THREE.Color(10027008),
+        metalness: 0.5, roughness: 0.12, clearcoat: 1, clearcoatRoughness: 0.02, envMapIntensity: 2,
+        sheen: 0.6, sheenColor: new THREE.Color(16724787),
+      });
+      this.materialCache.set(key, mat);
+    }
+    return this.materialCache.get(key) as THREE.MeshPhysicalMaterial;
+  }
+
+  public getCoverBugattiBlue(): THREE.MeshPhysicalMaterial {
+    const key = 'cover_bugatti_blue';
+    if (!this.materialCache.has(key)) {
+      const mat = new THREE.MeshPhysicalMaterial({
+        name: 'Bugatti_Carbon_Blue', color: new THREE.Color(661032),
+        metalness: 0.2, roughness: 0.25, clearcoat: 0.8, clearcoatRoughness: 0.1, envMapIntensity: 1.4,
+        sheen: 0.4, sheenColor: new THREE.Color(1985932),
+      });
+      this.materialCache.set(key, mat);
+    }
+    return this.materialCache.get(key) as THREE.MeshPhysicalMaterial;
+  }
+
+  public getCoverLamboOrange(): THREE.MeshPhysicalMaterial {
+    const key = 'cover_lambo_orange';
+    if (!this.materialCache.has(key)) {
+      const mat = new THREE.MeshPhysicalMaterial({
+        name: 'Lamborghini_Arancio', color: new THREE.Color(16747520),
+        metalness: 0.45, roughness: 0.1, clearcoat: 1, clearcoatRoughness: 0.02, envMapIntensity: 2.2,
+      });
+      this.materialCache.set(key, mat);
+    }
+    return this.materialCache.get(key) as THREE.MeshPhysicalMaterial;
+  }
+
+  public getCoverAmgBeige(): THREE.MeshPhysicalMaterial {
+    const key = 'cover_amg_beige';
+    if (!this.materialCache.has(key)) {
+      const mat = new THREE.MeshPhysicalMaterial({
+        name: 'AMG_Galactic_Beige', color: new THREE.Color(12888194),
+        metalness: 0.5, roughness: 0.15, clearcoat: 0.9, clearcoatRoughness: 0.05, envMapIntensity: 1.5,
+      });
+      this.materialCache.set(key, mat);
+    }
+    return this.materialCache.get(key) as THREE.MeshPhysicalMaterial;
+  }
+
+  public getCoverNismoRed(): THREE.MeshPhysicalMaterial {
+    const key = 'cover_nismo_red';
+    if (!this.materialCache.has(key)) {
+      const mat = new THREE.MeshPhysicalMaterial({
+        name: 'Nismo_Ultimate_Red', color: new THREE.Color(13369344),
+        metalness: 0.35, roughness: 0.18, clearcoat: 1, clearcoatRoughness: 0.04, envMapIntensity: 1.8,
+      });
+      this.materialCache.set(key, mat);
+    }
+    return this.materialCache.get(key) as THREE.MeshPhysicalMaterial;
+  }
+
+  public getCoverCosworthGreen(): THREE.MeshPhysicalMaterial {
+    const key = 'cover_cosworth_green';
+    if (!this.materialCache.has(key)) {
+      const mat = new THREE.MeshPhysicalMaterial({
+        name: 'Cosworth_Heritage_Green', color: new THREE.Color(19758),
+        metalness: 0.4, roughness: 0.2, clearcoat: 0.95, clearcoatRoughness: 0.04, envMapIntensity: 1.6,
+      });
+      this.materialCache.set(key, mat);
+    }
+    return this.materialCache.get(key) as THREE.MeshPhysicalMaterial;
+  }
+
+  public getCoverAudiRsCarbon(): THREE.MeshPhysicalMaterial {
+    const key = 'cover_audi_rs_carbon';
+    if (!this.materialCache.has(key)) {
+      const mat = new THREE.MeshPhysicalMaterial({
+        name: 'Audi_RS_Dark_Carbon', color: new THREE.Color(1710618),
+        metalness: 0.15, roughness: 0.3, clearcoat: 0.7, clearcoatRoughness: 0.12, envMapIntensity: 1.2,
+        sheen: 0.3, sheenColor: new THREE.Color(4210752),
+      });
+      this.materialCache.set(key, mat);
+    }
+    return this.materialCache.get(key) as THREE.MeshPhysicalMaterial;
+  }
+
+  public getBezelAnodizedRed(): THREE.MeshPhysicalMaterial {
+    const key = 'bezel_anodized_red';
+    if (!this.materialCache.has(key)) {
+      const mat = new THREE.MeshPhysicalMaterial({
+        name: 'Anodized_Red_Aluminum', color: new THREE.Color(12131356),
+        metalness: 0.85, roughness: 0.2, clearcoat: 0.3, clearcoatRoughness: 0.3, envMapIntensity: 1.4,
+      });
+      this.materialCache.set(key, mat);
+    }
+    return this.materialCache.get(key) as THREE.MeshPhysicalMaterial;
+  }
+
+  public getBezelBrushedAluminum(): THREE.MeshPhysicalMaterial {
+    const key = 'bezel_brushed_aluminum';
+    if (!this.materialCache.has(key)) {
+      const mat = new THREE.MeshPhysicalMaterial({
+        name: 'Brushed_6061_Aluminum', color: new THREE.Color(12632256),
+        metalness: 0.9, roughness: 0.35, envMapIntensity: 1.2,
+      });
+      this.materialCache.set(key, mat);
+    }
+    return this.materialCache.get(key) as THREE.MeshPhysicalMaterial;
+  }
+
+  public getBezelDarkChrome(): THREE.MeshPhysicalMaterial {
+    const key = 'bezel_dark_chrome';
+    if (!this.materialCache.has(key)) {
+      const mat = new THREE.MeshPhysicalMaterial({
+        name: 'Dark_Chrome_PVD', color: new THREE.Color(2763306),
+        metalness: 0.95, roughness: 0.1, clearcoat: 0.5, clearcoatRoughness: 0.15, envMapIntensity: 2,
+      });
+      this.materialCache.set(key, mat);
+    }
+    return this.materialCache.get(key) as THREE.MeshPhysicalMaterial;
+  }
+
+  public getBezelBronzeAntique(): THREE.MeshPhysicalMaterial {
+    const key = 'bezel_bronze_antique';
+    if (!this.materialCache.has(key)) {
+      const mat = new THREE.MeshPhysicalMaterial({
+        name: 'Antique_Bronze', color: new THREE.Color(9136404),
+        metalness: 0.8, roughness: 0.3, clearcoat: 0.2, clearcoatRoughness: 0.4, envMapIntensity: 1.1,
+      });
+      this.materialCache.set(key, mat);
+    }
+    return this.materialCache.get(key) as THREE.MeshPhysicalMaterial;
+  }
+
   public resolveMaterialForVariant(
     materialId?: string,
     fallbackType?: string,

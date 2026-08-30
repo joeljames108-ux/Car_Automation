@@ -26,6 +26,7 @@ import type {
   EngineCoverBezelColor,
 } from '../../sim/engine/masterEngineTypes';
 import type { EngineConfig } from '../../sim/types';
+import { buildExpandedCover } from './engineCoverExpansion';
 
 // Polyfill Node.js FileReader if executing in CLI
 if (typeof globalThis !== 'undefined' && typeof (globalThis as any).FileReader === 'undefined') {
@@ -1284,6 +1285,13 @@ export function buildEngineCoverScene(
   }
 
   const model: EngineCoverModel = opts.model || 'hypercar_quartz';
+
+  // Try expanded cover library first
+  const expandedCover = buildExpandedCover(model, opts);
+  if (expandedCover) {
+    scene.add(expandedCover);
+    return scene;
+  }
 
   let coverGroup: THREE.Group;
   switch (model) {

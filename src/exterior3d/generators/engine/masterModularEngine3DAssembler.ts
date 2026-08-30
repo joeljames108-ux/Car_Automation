@@ -685,6 +685,35 @@ export class MasterModularEngine3DAssembler {
 
       this.mountingGraph.attachMesh("ENGINE_COVER", coverSubsystem);
       this.rootGroup.add(coverSubsystem);
+
+      // --- HIDE INTERNAL COMPONENTS FOR OPTIMIZATION ---
+      // When engine cover is visible, hide detailed internals to save GPU
+      const internalNames = [
+        "ENGINE_BLOCK", "ENGINE_VALVE_COVERS",
+        "ENGINE_INTAKE_MANIFOLD", "ENGINE_EXHAUST_HEADER_L", "ENGINE_EXHAUST_HEADER_R",
+        "ENGINE_EXHAUST_HEADER_INLINE", "ENGINE_PISTONS", "ENGINE_TURBOCHARGERS",
+      ];
+      internalNames.forEach(name => {
+        const child = this.rootGroup.getObjectByName(name);
+        if (child && child instanceof THREE.Group) {
+          child.visible = false;
+          child.traverse(c => { if ((c as any).isMesh) (c as any).visible = false; });
+        }
+      });
+    } else {
+      // Cover OFF — show all internals
+      const internalNames = [
+        "ENGINE_BLOCK", "ENGINE_VALVE_COVERS",
+        "ENGINE_INTAKE_MANIFOLD", "ENGINE_EXHAUST_HEADER_L", "ENGINE_EXHAUST_HEADER_R",
+        "ENGINE_EXHAUST_HEADER_INLINE", "ENGINE_PISTONS", "ENGINE_TURBOCHARGERS",
+      ];
+      internalNames.forEach(name => {
+        const child = this.rootGroup.getObjectByName(name);
+        if (child && child instanceof THREE.Group) {
+          child.visible = true;
+          child.traverse(c => { if ((c as any).isMesh) (c as any).visible = true; });
+        }
+      });
     }
 
     // ------------------------------------------------------------------------
