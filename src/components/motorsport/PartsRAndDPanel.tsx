@@ -51,17 +51,17 @@ export const PartsRAndDPanel = memo(function PartsRAndDPanel({ selectedTeam }: {
               <span className="text-[10px] font-mono font-bold text-amber-400 uppercase tracking-widest">COMPONENT WORKSHOP</span>
               <span className="bg-amber-500/20 text-amber-300 border border-amber-500/40 text-[9px] font-bold px-2 py-0.5 rounded-full">PARTS R&D</span>
             </div>
-            <h3 className="text-lg font-bold text-amber-50 flex items-center gap-2 mt-1">
+            <h3 className="text-lg font-bold text-slate-100 flex items-center gap-2 mt-1">
               <Wrench size={20} className="text-amber-400" /> Motorsport Component Development
             </h3>
-            <p className="text-xs text-amber-200/60 mt-0.5">
+            <p className="text-xs text-slate-400 mt-0.5">
               Develop high-performance engine mappings, aero floors, light gearboxes, and brakes. Risk developing illegal breakthrough components for massive pace gains!
             </p>
           </div>
 
           {selectedTeam && (
             <div className="bg-base-950/80 px-3.5 py-2 rounded-xl border border-white/10 text-right shrink-0">
-              <div className="text-[10px] text-amber-200/60">Target Vehicle</div>
+              <div className="text-[10px] text-slate-400">Target Vehicle</div>
               <div className="text-sm font-bold text-amber-300">{selectedTeam.name}</div>
             </div>
           )}
@@ -80,8 +80,8 @@ export const PartsRAndDPanel = memo(function PartsRAndDPanel({ selectedTeam }: {
               >
                 <div className="flex-1">
                   <div className="flex items-center gap-2 flex-wrap">
-                    <h4 className="text-sm font-bold text-amber-50">{p.name}</h4>
-                    <span className="text-[10px] font-mono bg-base-900 border border-base-800 text-amber-100/80 px-2 py-0.5 rounded">
+                    <h4 className="text-sm font-bold text-slate-100">{p.name}</h4>
+                    <span className="text-[10px] font-mono bg-base-900 border border-base-800 text-slate-300 px-2 py-0.5 rounded">
                       {p.category}
                     </span>
                     {p.isIllegal && (
@@ -91,16 +91,16 @@ export const PartsRAndDPanel = memo(function PartsRAndDPanel({ selectedTeam }: {
                     )}
                   </div>
 
-                  <div className="text-xs text-amber-200/60 mt-2 flex items-center gap-4 flex-wrap">
+                  <div className="text-xs text-slate-400 mt-2 flex items-center gap-4 flex-wrap">
                     <span>Pace: <strong className="text-emerald-400 font-mono font-bold">+{p.paceGain} pts</strong></span>
                     <span>Reliability: <strong className={p.reliabilityDelta >= 0 ? "text-amber-300 font-mono font-bold" : "text-danger-400 font-mono font-bold"}>
                       {p.reliabilityDelta >= 0 ? `+${p.reliabilityDelta}%` : `${p.reliabilityDelta}%`}
                     </strong></span>
-                    <span>Cost: <strong className="text-amber-50 font-mono font-bold">${(p.cost / 1e6).toFixed(1)}M</strong></span>
+                    <span>Cost: <strong className="text-slate-200 font-mono font-bold">${(p.cost / 1e6).toFixed(1)}M</strong></span>
                   </div>
 
-                  <div className={`text-[10px] font-semibold mt-1.5 flex items-center gap-1 ${p.isIllegal ? "text-amber-400" : "text-amber-300/50"}`}>
-                    {p.isIllegal ? <AlertTriangle size={12} className="text-amber-400" /> : <Shield size={12} className="text-amber-300/50" />}
+                  <div className={`text-[10px] font-semibold mt-1.5 flex items-center gap-1 ${p.isIllegal ? "text-amber-400" : "text-slate-500"}`}>
+                    {p.isIllegal ? <AlertTriangle size={12} className="text-amber-400" /> : <Shield size={12} className="text-slate-500" />}
                     {p.riskPenalty}
                   </div>
                 </div>

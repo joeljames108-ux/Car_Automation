@@ -177,7 +177,7 @@ export function HybridOptionalSection({
               }
             />
 
-            <div className="space-y-2 pt-2 border-t border-amber-800/30">
+            <div className="space-y-2 pt-2 border-t border-slate-800/80">
               <Select
                 label="Battery Chemistry"
                 value={engineConfig.batteryChemistry || "solid_state"}
@@ -217,7 +217,7 @@ export function HybridOptionalSection({
               title={`${activeMeta.name} Variant`}
             />
           ) : (
-            <p className="text-xs font-mono text-amber-300/50">Loading material variants...</p>
+            <p className="text-xs font-mono text-slate-500">Loading material variants...</p>
           )}
         </SectionCard>
 

@@ -82,7 +82,7 @@ const DICKY_STYLES: { id: InstalledSubsystemsState["dickyStyle"]; label: string;
 const PAINT_SWATCHES = [
   "#dc2626", "#e11d48", "#ea580c", "#f59e0b", "#facc15", "#84cc16",
   "#22c55e", "#10b981", "#14b8a6", "#f59e0b", "#d97706", "#b45309",
-  "#1e40af", "#d97706", "#f59e0b", "#d97706", "#f43f5e", "#0f172a",
+  "#1e40af", "#d97706", "#f59e0b", "#d97706", "#f43f5e", "#1a1008",
   "#1e293b", "#334155", "#64748b", "#94a3b8", "#e2e8f0", "#ffffff",
 ];
 
@@ -121,10 +121,10 @@ export const BodyPanelsAssemblyStage: React.FC<BodyPanelsAssemblyStageProps> = (
             <Car size={18} />
           </div>
           <div>
-            <h3 className="text-sm font-bold font-mono text-slate-800 dark:text-amber-50 uppercase tracking-wider">
+            <h3 className="text-sm font-bold font-mono text-slate-800 dark:text-slate-100 uppercase tracking-wider">
               STAGE 7: BODYWORK, CLOSURES & BESPOKE PAINT
             </h3>
-            <p className="text-[11px] font-mono text-amber-300/50 dark:text-amber-200/60">
+            <p className="text-[11px] font-mono text-slate-500 dark:text-slate-400">
               Widebody carbon composite shell, door/bonnet/dicky kinematics, fender louvers & paint booth.
             </p>
           </div>
@@ -153,7 +153,7 @@ export const BodyPanelsAssemblyStage: React.FC<BodyPanelsAssemblyStageProps> = (
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer whitespace-nowrap ${
               subTab === t.id
                 ? "bg-pink-500/20 text-pink-300 border border-pink-500/50 shadow-sm"
-                : "text-amber-200/60 hover:text-amber-50"
+                : "text-slate-400 hover:text-slate-200"
             }`}
           >
             <t.icon size={13} />
@@ -175,17 +175,17 @@ export const BodyPanelsAssemblyStage: React.FC<BodyPanelsAssemblyStageProps> = (
                   className={`p-3.5 rounded-2xl text-left transition-all border cursor-pointer ${
                     isSelected
                       ? "bg-pink-500/20 border-pink-500/60 shadow-md ring-1 ring-pink-500/40"
-                      : "bg-base-900/60 border-base-800 hover:border-base-700 text-amber-200/60"
+                      : "bg-base-900/60 border-base-800 hover:border-base-700 text-slate-400"
                   }`}
                 >
                   <div className="flex items-center justify-between mb-1">
-                    <span className="font-bold text-xs font-mono text-slate-900 dark:text-amber-50">{k.label}</span>
+                    <span className="font-bold text-xs font-mono text-slate-900 dark:text-slate-100">{k.label}</span>
                     <span className="text-[10px] font-mono font-bold text-pink-400">{k.weightDelta}</span>
                   </div>
-                  <p className="text-[10px] text-amber-300/50 dark:text-amber-200/60 mb-2">{k.desc}</p>
+                  <p className="text-[10px] text-slate-500 dark:text-slate-400 mb-2">{k.desc}</p>
                   <div className="flex items-center justify-between text-[10px] font-mono pt-2 border-t border-base-800/60">
                     <span className="text-amber-600 dark:text-amber-300 font-semibold">{k.dragDelta}</span>
-                    <span className="text-amber-300/50">{k.material}</span>
+                    <span className="text-slate-500">{k.material}</span>
                   </div>
                 </button>
               );
@@ -202,16 +202,16 @@ export const BodyPanelsAssemblyStage: React.FC<BodyPanelsAssemblyStageProps> = (
             }`}
           >
             <div className="flex items-center justify-between mb-1">
-              <span className="font-bold text-xs font-mono text-slate-900 dark:text-amber-50 flex items-center gap-1.5">
+              <span className="font-bold text-xs font-mono text-slate-900 dark:text-slate-100 flex items-center gap-1.5">
                 <Wind size={13} className="text-pink-400" /> FENDER EXTRACTION LOUVERS
               </span>
               <span className={`px-2 py-0.5 rounded-lg text-[10px] font-mono font-bold border ${
-                fenderLouvers ? "bg-emerald-500/20 border-emerald-500/50 text-emerald-500" : "bg-base-800 border-base-700 text-amber-300/50"
+                fenderLouvers ? "bg-emerald-500/20 border-emerald-500/50 text-emerald-500" : "bg-base-800 border-base-700 text-slate-500"
               }`}>
                 {fenderLouvers ? "✓ CUT & FITTED" : "OFF"}
               </span>
             </div>
-            <p className="text-[10px] text-amber-300/50 dark:text-amber-200/60">
+            <p className="text-[10px] text-slate-500 dark:text-slate-400">
               CNC-cut carbon louver sets above all four arches — vents low-pressure wheel-well suction, drops front lift ~12 kg @ 250 km/h.
             </p>
           </button>
@@ -231,14 +231,14 @@ export const BodyPanelsAssemblyStage: React.FC<BodyPanelsAssemblyStageProps> = (
                   className={`p-3.5 rounded-2xl text-left transition-all border cursor-pointer ${
                     isSelected
                       ? "bg-pink-500/20 border-pink-500/60 shadow-md ring-1 ring-pink-500/40"
-                      : "bg-base-900/60 border-base-800 hover:border-base-700 text-amber-200/60"
+                      : "bg-base-900/60 border-base-800 hover:border-base-700 text-slate-400"
                   }`}
                 >
                   <div className="flex items-center justify-between mb-1">
-                    <span className="font-bold text-xs font-mono text-slate-900 dark:text-amber-50">{d.label}</span>
+                    <span className="font-bold text-xs font-mono text-slate-900 dark:text-slate-100">{d.label}</span>
                     <span className="text-[10px] font-mono text-pink-400 font-bold">MAX {d.maxAngle}°</span>
                   </div>
-                  <p className="text-[10px] text-amber-300/50 dark:text-amber-200/60">{d.desc}</p>
+                  <p className="text-[10px] text-slate-500 dark:text-slate-400">{d.desc}</p>
                 </button>
               );
             })}
@@ -246,7 +246,7 @@ export const BodyPanelsAssemblyStage: React.FC<BodyPanelsAssemblyStageProps> = (
 
           <div className="p-3.5 rounded-2xl bg-base-900/60 border border-base-800 space-y-3">
             <div className="flex items-center justify-between">
-              <label className="text-xs font-bold font-mono text-amber-500 dark:text-amber-100/80 flex items-center gap-1.5">
+              <label className="text-xs font-bold font-mono text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
                 <Sliders size={13} className="text-pink-400" /> DOOR ARTICULATION ANGLE
               </label>
               <span className="text-xs font-mono font-bold text-pink-400">{doorOpenAngleDeg}° OPEN</span>
@@ -266,7 +266,7 @@ export const BodyPanelsAssemblyStage: React.FC<BodyPanelsAssemblyStageProps> = (
                   key={b.v}
                   onClick={() => onUpdateBody({ doorOpenAngleDeg: b.v })}
                   className={`px-3 py-1 rounded-xl text-[10px] font-mono font-bold border transition-all cursor-pointer ${
-                    doorOpenAngleDeg === b.v ? "bg-pink-500/20 border-pink-500 text-pink-300" : "bg-base-850 border-base-800 text-amber-200/60"
+                    doorOpenAngleDeg === b.v ? "bg-pink-500/20 border-pink-500 text-pink-300" : "bg-base-850 border-base-800 text-slate-400"
                   }`}
                 >
                   {b.l}
@@ -290,13 +290,13 @@ export const BodyPanelsAssemblyStage: React.FC<BodyPanelsAssemblyStageProps> = (
                   className={`p-3.5 rounded-2xl text-left transition-all border cursor-pointer ${
                     isSelected
                       ? "bg-pink-500/20 border-pink-500/60 shadow-md ring-1 ring-pink-500/40"
-                      : "bg-base-900/60 border-base-800 hover:border-base-700 text-amber-200/60"
+                      : "bg-base-900/60 border-base-800 hover:border-base-700 text-slate-400"
                   }`}
                 >
                   <div className="flex items-center justify-between mb-1">
-                    <span className="font-bold text-xs font-mono text-slate-900 dark:text-amber-50">{b.label}</span>
+                    <span className="font-bold text-xs font-mono text-slate-900 dark:text-slate-100">{b.label}</span>
                   </div>
-                  <p className="text-[10px] text-amber-300/50 dark:text-amber-200/60 mb-2">{b.desc}</p>
+                  <p className="text-[10px] text-slate-500 dark:text-slate-400 mb-2">{b.desc}</p>
                   <div className="text-[10px] font-mono text-amber-600 dark:text-amber-300 font-semibold">{b.coolingDelta}</div>
                 </button>
               );
@@ -305,7 +305,7 @@ export const BodyPanelsAssemblyStage: React.FC<BodyPanelsAssemblyStageProps> = (
 
           <div className="p-3.5 rounded-2xl bg-base-900/60 border border-base-800 space-y-3">
             <div className="flex items-center justify-between">
-              <label className="text-xs font-bold font-mono text-amber-500 dark:text-amber-100/80 flex items-center gap-1.5">
+              <label className="text-xs font-bold font-mono text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
                 <FolderOpen size={13} className="text-pink-400" /> BONNET SERVICE OPEN ANGLE
               </label>
               <span className="text-xs font-mono font-bold text-pink-400">{bonnetOpenAngleDeg}° OPEN</span>
@@ -336,13 +336,13 @@ export const BodyPanelsAssemblyStage: React.FC<BodyPanelsAssemblyStageProps> = (
                   className={`p-3.5 rounded-2xl text-left transition-all border cursor-pointer ${
                     isSelected
                       ? "bg-pink-500/20 border-pink-500/60 shadow-md ring-1 ring-pink-500/40"
-                      : "bg-base-900/60 border-base-800 hover:border-base-700 text-amber-200/60"
+                      : "bg-base-900/60 border-base-800 hover:border-base-700 text-slate-400"
                   }`}
                 >
                   <div className="flex items-center justify-between mb-1">
-                    <span className="font-bold text-xs font-mono text-slate-900 dark:text-amber-50">{d.label}</span>
+                    <span className="font-bold text-xs font-mono text-slate-900 dark:text-slate-100">{d.label}</span>
                   </div>
-                  <p className="text-[10px] text-amber-300/50 dark:text-amber-200/60 mb-2">{d.desc}</p>
+                  <p className="text-[10px] text-slate-500 dark:text-slate-400 mb-2">{d.desc}</p>
                   <div className="text-[10px] font-mono text-amber-600 dark:text-amber-300 font-semibold">{d.downforceDelta}</div>
                 </button>
               );
@@ -351,7 +351,7 @@ export const BodyPanelsAssemblyStage: React.FC<BodyPanelsAssemblyStageProps> = (
 
           <div className="p-3.5 rounded-2xl bg-base-900/60 border border-base-800 space-y-3">
             <div className="flex items-center justify-between">
-              <label className="text-xs font-bold font-mono text-amber-500 dark:text-amber-100/80 flex items-center gap-1.5">
+              <label className="text-xs font-bold font-mono text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
                 <Sliders size={13} className="text-pink-400" /> DICKY ACCESS ANGLE
               </label>
               <span className="text-xs font-mono font-bold text-pink-400">{dickyOpenAngleDeg}° OPEN</span>
@@ -373,7 +373,7 @@ export const BodyPanelsAssemblyStage: React.FC<BodyPanelsAssemblyStageProps> = (
       {subTab === "paint" && (
         <div className="p-3.5 rounded-2xl bg-base-900/60 border border-base-800 space-y-3">
           <div className="flex items-center justify-between">
-            <label className="text-xs font-bold font-mono text-amber-500 dark:text-amber-100/80 flex items-center gap-1.5">
+            <label className="text-xs font-bold font-mono text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
               <Palette size={13} className="text-pink-400" /> BESPOKE PAINT BOOTH — MIXER SWATCHES
             </label>
             <div className="flex items-center gap-2">
@@ -383,7 +383,7 @@ export const BodyPanelsAssemblyStage: React.FC<BodyPanelsAssemblyStageProps> = (
                 onChange={(e) => onUpdateBody({ paintColor: e.target.value })}
                 className="h-6 w-8 bg-transparent border border-base-800 rounded cursor-pointer"
               />
-              <span className="text-xs font-mono font-bold text-slate-900 dark:text-amber-50">{paintColor}</span>
+              <span className="text-xs font-mono font-bold text-slate-900 dark:text-slate-100">{paintColor}</span>
             </div>
           </div>
 
@@ -410,7 +410,7 @@ export const BodyPanelsAssemblyStage: React.FC<BodyPanelsAssemblyStageProps> = (
                 className={`px-3 py-1 rounded-xl text-xs font-mono font-bold transition-all border cursor-pointer whitespace-nowrap ${
                   paintFinish === f.id
                     ? "bg-pink-500/20 border-pink-500/60 text-pink-600 dark:text-pink-300 shadow-sm"
-                    : "bg-base-850/60 border-base-800 text-amber-300/50 hover:text-amber-100/80"
+                    : "bg-base-850/60 border-base-800 text-slate-500 hover:text-slate-300"
                 }`}
               >
                 {f.label}
@@ -418,7 +418,7 @@ export const BodyPanelsAssemblyStage: React.FC<BodyPanelsAssemblyStageProps> = (
             ))}
           </div>
 
-          <p className="text-[9px] font-mono text-amber-400 dark:text-amber-300/50">
+          <p className="text-[9px] font-mono text-slate-600 dark:text-slate-500">
             Bespoke program: 9-stage hand-polished process · ceramic quartz top-coat option · batch code laser-etched inside driver sill.
           </p>
         </div>

@@ -214,7 +214,7 @@ export const VehicleConfigTree: React.FC<VehicleConfigTreeProps> = ({
       <div className="flex items-center justify-between border-b border-base-800/60 pb-2">
         <div className="flex items-center gap-2">
           <Layers size={14} className="text-amber-400" />
-          <span className="font-bold text-slate-800 dark:text-amber-50 uppercase tracking-wider text-[11px]">
+          <span className="font-bold text-slate-800 dark:text-slate-100 uppercase tracking-wider text-[11px]">
             CAD VEHICLE HIERARCHY TREE
           </span>
         </div>
@@ -237,30 +237,30 @@ export const VehicleConfigTree: React.FC<VehicleConfigTreeProps> = ({
                 onClick={() => onSelectStage(node.id)}
                 className={`group flex items-center justify-between p-1.5 rounded-xl transition-all cursor-pointer border ${
                   isSelected
-                    ? "bg-amber-500/20 border-amber-500/60 text-amber-50 shadow-sm"
-                    : "bg-base-900/40 border-base-800/60 hover:bg-base-850 text-amber-200/60"
+                    ? "bg-amber-500/20 border-amber-500/60 text-slate-100 shadow-sm"
+                    : "bg-base-900/40 border-base-800/60 hover:bg-base-850 text-slate-400"
                 }`}
               >
                 <div className="flex items-center gap-1.5 min-w-0">
                   {node.children ? (
                     <button
                       onClick={(e) => toggleExpand(node.id, e)}
-                      className="p-0.5 rounded hover:bg-base-800 text-amber-200/60"
+                      className="p-0.5 rounded hover:bg-base-800 text-slate-400"
                     >
                       {isExpanded ? <ChevronDown size={12} /> : <ChevronRight size={12} />}
                     </button>
                   ) : (
                     <div className="w-3.5" />
                   )}
-                  <Icon size={13} className={node.status === "INSTALLED" ? "text-amber-400" : "text-amber-400"} />
-                  <span className="font-bold truncate text-[11px] text-slate-800 dark:text-amber-50">
+                  <Icon size={13} className={node.status === "INSTALLED" ? "text-amber-400" : "text-slate-600"} />
+                  <span className="font-bold truncate text-[11px] text-slate-800 dark:text-slate-200">
                     {node.name}
                   </span>
                 </div>
 
                 {/* Right Actions: Mass Badge & CAD Visibility Tools */}
                 <div className="flex items-center gap-1.5 shrink-0">
-                  <span className="text-[10px] text-amber-300/50 font-semibold">{node.massKg}kg</span>
+                  <span className="text-[10px] text-slate-500 font-semibold">{node.massKg}kg</span>
 
                   {/* CAD Visibility Actions */}
                   <div className="flex items-center gap-0.5 opacity-80 group-hover:opacity-100">
@@ -270,7 +270,7 @@ export const VehicleConfigTree: React.FC<VehicleConfigTreeProps> = ({
                       className={`p-1 rounded text-[9px] font-bold cursor-pointer transition-all ${
                         mode === "isolated"
                           ? "bg-amber-500 text-black font-extrabold shadow-sm"
-                          : "hover:bg-base-800 text-amber-300/50 hover:text-amber-50"
+                          : "hover:bg-base-800 text-slate-500 hover:text-slate-200"
                       }`}
                     >
                       ISO
@@ -281,7 +281,7 @@ export const VehicleConfigTree: React.FC<VehicleConfigTreeProps> = ({
                       className={`p-1 rounded text-[9px] font-bold cursor-pointer transition-all ${
                         mode === "xray"
                           ? "bg-amber-500 text-white font-extrabold shadow-sm"
-                          : "hover:bg-base-800 text-amber-300/50 hover:text-amber-50"
+                          : "hover:bg-base-800 text-slate-500 hover:text-slate-200"
                       }`}
                     >
                       XRAY
@@ -292,7 +292,7 @@ export const VehicleConfigTree: React.FC<VehicleConfigTreeProps> = ({
                       className={`p-1 rounded text-[9px] font-bold cursor-pointer transition-all ${
                         mode === "ghost"
                           ? "bg-amber-500 text-black font-extrabold shadow-sm"
-                          : "hover:bg-base-800 text-amber-300/50 hover:text-amber-50"
+                          : "hover:bg-base-800 text-slate-500 hover:text-slate-200"
                       }`}
                     >
                       GST
@@ -307,13 +307,13 @@ export const VehicleConfigTree: React.FC<VehicleConfigTreeProps> = ({
                   {node.children.map((child) => (
                     <div
                       key={child.id}
-                      className="flex items-center justify-between p-1 rounded-lg bg-base-950/40 text-[10px] text-amber-200/60 border border-base-800/40"
+                      className="flex items-center justify-between p-1 rounded-lg bg-base-950/40 text-[10px] text-slate-400 border border-base-800/40"
                     >
                       <div className="flex items-center gap-1.5 truncate">
                         <span className="w-1 h-1 rounded-full bg-amber-500/80" />
-                        <span className="truncate text-amber-100/80 font-medium">{child.name}</span>
+                        <span className="truncate text-slate-300 font-medium">{child.name}</span>
                       </div>
-                      <span className="text-[9px] text-amber-300/50 shrink-0 font-mono">{child.info}</span>
+                      <span className="text-[9px] text-slate-500 shrink-0 font-mono">{child.info}</span>
                     </div>
                   ))}
                 </div>

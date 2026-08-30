@@ -52,7 +52,7 @@ export function NeonPressReviewsStudio() {
   ];
 
   return (
-    <div className="w-full flex flex-col gap-6 text-amber-50 animate-nh-materialize">
+    <div className="w-full flex flex-col gap-6 text-slate-100 animate-nh-materialize">
       {/* Header */}
       <NeonHorizonGlassPanel
         variant="window"
@@ -90,19 +90,19 @@ export function NeonPressReviewsStudio() {
           >
             <div className="flex flex-col gap-2.5">
               <div className="flex items-center justify-between">
-                <span className="text-base font-bold text-amber-50 nh-font-headline">
+                <span className="text-base font-bold text-slate-100 nh-font-headline">
                   "{rev.headline}"
                 </span>
                 <span className="text-sm font-bold nh-font-mono text-amber-300 ml-2 whitespace-nowrap">
                   {rev.score}
                 </span>
               </div>
-              <p className="text-xs text-amber-100/80 leading-relaxed italic opacity-90">
+              <p className="text-xs text-slate-300 leading-relaxed italic opacity-90">
                 "{rev.quote}"
               </p>
             </div>
 
-            <div className="flex items-center justify-between border-t border-white/10 pt-3 text-[11px] nh-font-mono text-amber-200/60">
+            <div className="flex items-center justify-between border-t border-white/10 pt-3 text-[11px] nh-font-mono text-slate-400">
               <span>By {rev.author}</span>
               <div className="flex items-center gap-1">
                 {Array.from({ length: 5 }).map((_, s) => (

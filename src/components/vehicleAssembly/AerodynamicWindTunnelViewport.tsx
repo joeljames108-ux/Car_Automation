@@ -202,9 +202,9 @@ export const AerodynamicWindTunnelViewport: React.FC = () => {
   }, [airspeedKmh, rearWingAngleDeg, rideHeightFrontMm, rideHeightRearMm, isPlaying]);
 
   return (
-    <div className="flex flex-col h-full bg-[#080b12] text-gray-100 font-sans border border-[#1b2333] rounded-2xl overflow-hidden shadow-2xl">
+    <div className="flex flex-col h-full bg-amber-950/60 text-gray-100 font-sans border border-[#1b2333] rounded-2xl overflow-hidden shadow-2xl">
       {/* Wind Tunnel Header */}
-      <div className="flex items-center justify-between px-5 py-3 bg-[#0d121c] border-b border-[#1b2333]">
+      <div className="flex items-center justify-between px-5 py-3 bg-amber-950/60 border-b border-[#1b2333]">
         <div className="flex items-center gap-3">
           <div className="p-2 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-400">
             <Wind className="w-5 h-5" />
@@ -222,7 +222,7 @@ export const AerodynamicWindTunnelViewport: React.FC = () => {
         <div className="flex items-center gap-2">
           <button
             onClick={() => setIsPlaying(!isPlaying)}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#141a26] hover:bg-[#1c2436] text-xs font-semibold border border-[#273248] transition-all"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-amber-950/60 hover:bg-amber-950/60 text-xs font-semibold border border-[#273248] transition-all"
           >
             {isPlaying ? <Pause className="w-3.5 h-3.5 text-amber-400" /> : <Play className="w-3.5 h-3.5 text-emerald-400" />}
             {isPlaying ? 'Pause Flow' : 'Resume Flow'}
@@ -236,7 +236,7 @@ export const AerodynamicWindTunnelViewport: React.FC = () => {
 
         {/* Aerodynamic Telemetry HUD Overlay */}
         {aeroResults && (
-          <div className="absolute top-4 left-4 flex flex-col gap-2.5 bg-[#0b0f19]/90 backdrop-blur-md p-4 rounded-xl border border-amber-500/30 shadow-2xl w-72 text-xs">
+          <div className="absolute top-4 left-4 flex flex-col gap-2.5 bg-amber-950/60/90 backdrop-blur-md p-4 rounded-xl border border-amber-500/30 shadow-2xl w-72 text-xs">
             <div className="flex items-center justify-between border-b border-gray-800 pb-2">
               <span className="font-bold text-gray-200 flex items-center gap-1.5">
                 <Gauge className="w-4 h-4 text-amber-400" />
@@ -279,7 +279,7 @@ export const AerodynamicWindTunnelViewport: React.FC = () => {
         )}
 
         {/* Right Wind Tunnel Controls Panel */}
-        <div className="w-80 bg-[#0c1018] border-l border-[#1b2333] p-4 flex flex-col space-y-4 overflow-y-auto">
+        <div className="w-80 bg-amber-950/60 border-l border-[#1b2333] p-4 flex flex-col space-y-4 overflow-y-auto">
           <h4 className="text-xs font-bold text-gray-300 uppercase tracking-wider flex items-center gap-2">
             <Sliders className="w-4 h-4 text-amber-400" />
             Tunnel Environmental Controls

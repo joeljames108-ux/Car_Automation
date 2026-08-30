@@ -85,14 +85,14 @@ export const NeonArcGauge: React.FC<NeonArcGaugeProps> = ({
 
       {/* Center Digital Telemetry Display */}
       <div className="absolute inset-0 flex flex-col items-center justify-center text-center mt-1">
-        <span className="text-[10px] nh-label-caps text-amber-200/60 leading-none mb-0.5">
+        <span className="text-[10px] nh-label-caps text-slate-400 leading-none mb-0.5">
           {label}
         </span>
         <span className={`text-base font-extrabold nh-font-headline ${colors.text} leading-tight`}>
           {Math.round(value)}
         </span>
         {unit && (
-          <span className="text-[9px] nh-font-mono text-amber-200/60/80 leading-none">{unit}</span>
+          <span className="text-[9px] nh-font-mono text-slate-400/80 leading-none">{unit}</span>
         )}
       </div>
     </div>

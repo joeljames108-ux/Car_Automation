@@ -67,10 +67,10 @@ export const ElectronicsAssemblyStage: React.FC<ElectronicsAssemblyStageProps> =
             <Cpu size={18} />
           </div>
           <div>
-            <h3 className="text-sm font-bold font-mono text-slate-800 dark:text-amber-50 uppercase tracking-wider">
+            <h3 className="text-sm font-bold font-mono text-slate-800 dark:text-slate-100 uppercase tracking-wider">
               STAGE 10: ELECTRONICS & WIRE HARNESS
             </h3>
-            <p className="text-[11px] font-mono text-amber-300/50 dark:text-amber-200/60">
+            <p className="text-[11px] font-mono text-slate-500 dark:text-slate-400">
               Route the ECU, vehicle dynamics controller, mil-spec looms and HV traction lines.
             </p>
           </div>
@@ -93,12 +93,12 @@ export const ElectronicsAssemblyStage: React.FC<ElectronicsAssemblyStageProps> =
               className={`p-3.5 rounded-2xl text-left transition-all border cursor-pointer ${
                 isSelected
                   ? "bg-amber-500/20 border-amber-500/60 shadow-md ring-1 ring-amber-500/40"
-                  : "bg-base-900/60 border-base-800 hover:border-base-700 text-amber-200/60"
+                  : "bg-base-900/60 border-base-800 hover:border-base-700 text-slate-400"
               }`}
             >
-              <div className="font-bold text-xs font-mono text-slate-900 dark:text-amber-50 mb-1">{e.label}</div>
-              <p className="text-[10px] text-amber-300/50 dark:text-amber-200/60 mb-2.5">{e.desc}</p>
-              <div className="space-y-0.5 text-[10px] font-mono text-amber-200/60 border-t border-base-800/60 pt-2">
+              <div className="font-bold text-xs font-mono text-slate-900 dark:text-slate-100 mb-1">{e.label}</div>
+              <p className="text-[10px] text-slate-500 dark:text-slate-400 mb-2.5">{e.desc}</p>
+              <div className="space-y-0.5 text-[10px] font-mono text-slate-400 border-t border-base-800/60 pt-2">
                 <div>Bus: <strong className="text-amber-400">{e.bus}</strong></div>
                 <div>Power: <strong className={isHv && e.id === "800v_hv_harness" ? "text-orange-400" : "text-amber-400"}>{e.voltage}</strong></div>
               </div>
@@ -117,16 +117,16 @@ export const ElectronicsAssemblyStage: React.FC<ElectronicsAssemblyStageProps> =
         }`}
       >
         <div className="flex items-center justify-between mb-1">
-          <span className="font-bold text-xs font-mono text-slate-900 dark:text-amber-50 flex items-center gap-1.5">
+          <span className="font-bold text-xs font-mono text-slate-900 dark:text-slate-100 flex items-center gap-1.5">
             <Cable size={13} className="text-amber-400" /> RAYCHEM MIL-SPEC WIRE LOOMS
           </span>
           <span className={`px-2 py-0.5 rounded-lg text-[10px] font-mono font-bold border ${
-            raychemLooms ? "bg-emerald-500/20 border-emerald-500/50 text-emerald-500" : "bg-base-800 border-base-700 text-amber-300/50"
+            raychemLooms ? "bg-emerald-500/20 border-emerald-500/50 text-emerald-500" : "bg-base-800 border-base-700 text-slate-500"
           }`}>
             {raychemLooms ? "✓ LOOMED" : "STANDARD HARNESS"}
           </span>
         </div>
-        <p className="text-[10px] text-amber-300/50 dark:text-amber-200/60">
+        <p className="text-[10px] text-slate-500 dark:text-slate-400">
           Tefzel 22AWG core with DR-25 heat-shrink jacketing, bonded into branch bundles at all four corners.
           55-pin Deutsch ASX connector at the ECU — rated to 200°C and impervious to race fuel vapor.
           {isHv && raychemLooms ? " HV traction lines run in separate shielded conduit per ISO 6469 clearance rules." : ""}

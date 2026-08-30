@@ -89,16 +89,16 @@ export const SuspensionDynamicsPanel: React.FC<SuspensionDynamicsPanelProps> = (
   }, [tireCompound]);
 
   return (
-    <div className="bg-amber-950/95 backdrop-blur-lg border border-amber-500/30 rounded-2xl p-5 shadow-2xl text-amber-50 flex flex-col gap-4">
+    <div className="bg-slate-950/95 backdrop-blur-lg border border-amber-500/30 rounded-2xl p-5 shadow-2xl text-slate-100 flex flex-col gap-4">
       {/* ── Header ── */}
-      <div className="flex items-center justify-between border-b border-amber-800/30 pb-3">
+      <div className="flex items-center justify-between border-b border-slate-800 pb-3">
         <div className="flex items-center gap-2.5">
           <Activity className="w-5 h-5 text-amber-400 animate-pulse" />
           <div>
             <h3 className="font-mono text-sm font-bold uppercase tracking-wider text-amber-300">
               Vehicle Dynamics & Suspension Telemetry
             </h3>
-            <span className="text-[11px] text-amber-200/60 font-mono">
+            <span className="text-[11px] text-slate-400 font-mono">
               Compound: <span className="text-amber-400 uppercase font-bold">{tireCompound}</span> | Weight: {curbWeightKg} kg
             </span>
           </div>
@@ -122,13 +122,13 @@ export const SuspensionDynamicsPanel: React.FC<SuspensionDynamicsPanelProps> = (
       {/* ── Grid: Pacejka Curve & Damping Ratios ── */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-5">
         {/* Pacejka Slip Angle Curve */}
-        <div className="lg:col-span-7 bg-amber-900/40 border border-amber-800/30 rounded-xl p-3 flex flex-col gap-2">
-          <div className="flex justify-between items-center text-xs font-mono text-amber-200/60">
+        <div className="lg:col-span-7 bg-slate-900/80 border border-slate-800 rounded-xl p-3 flex flex-col gap-2">
+          <div className="flex justify-between items-center text-xs font-mono text-slate-400">
             <span>Pacejka MF 5.2 Lateral Grip Curve ($F_y$ vs $\alpha$)</span>
             <span className="text-amber-400 font-bold">Peak Slip: ~6.8°</span>
           </div>
 
-          <div className="relative h-36 w-full bg-amber-950/60 rounded-lg border border-amber-800/30 flex items-center justify-center overflow-hidden">
+          <div className="relative h-36 w-full bg-slate-950/60 rounded-lg border border-slate-800/80 flex items-center justify-center overflow-hidden">
             <svg viewBox="0 0 250 110" className="w-full h-full p-2">
               {/* Grid Lines */}
               <line x1="10" y1="95" x2="245" y2="95" stroke="#475569" strokeWidth="1.2" />
@@ -156,7 +156,7 @@ export const SuspensionDynamicsPanel: React.FC<SuspensionDynamicsPanelProps> = (
             </svg>
           </div>
 
-          <div className="flex justify-between text-[11px] font-mono text-amber-200/60 px-1">
+          <div className="flex justify-between text-[11px] font-mono text-slate-400 px-1">
             <span>Operating Slip: <b className="text-amber-300">{currentSlipAngle.toFixed(1)}°</b></span>
             <span>Front Aero: <b className="text-amber-300">{aeroBalancePercentFront}%</b></span>
             <span>Rear Aero: <b className="text-amber-300">{(100 - aeroBalancePercentFront).toFixed(1)}%</b></span>
@@ -166,44 +166,44 @@ export const SuspensionDynamicsPanel: React.FC<SuspensionDynamicsPanelProps> = (
         {/* Damping & Aero Balance Status */}
         <div className="lg:col-span-5 flex flex-col gap-3">
           {/* Damper Critical Damping Ratios */}
-          <div className="bg-amber-900/40 border border-amber-800/30 rounded-xl p-3 flex flex-col gap-2 text-xs font-mono">
-            <div className="flex justify-between text-amber-200/60">
+          <div className="bg-slate-900/80 border border-slate-800 rounded-xl p-3 flex flex-col gap-2 text-xs font-mono">
+            <div className="flex justify-between text-slate-400">
               <span>Damper Damping Ratios (ζ)</span>
               <span className="text-emerald-400 font-bold">Optimized</span>
             </div>
 
             <div className="flex flex-col gap-1.5 text-[11px]">
               <div className="flex justify-between">
-                <span className="text-amber-200/60">Bump (Compression) Ratio:</span>
+                <span className="text-slate-400">Bump (Compression) Ratio:</span>
                 <span className="text-amber-300 font-bold">ζ = {damperBumpRatio.toFixed(2)} (Target: 0.35-0.45)</span>
               </div>
-              <div className="w-full bg-amber-800/35 h-2 rounded-full overflow-hidden">
+              <div className="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
                 <div className="bg-amber-400 h-full rounded-full" style={{ width: `${(damperBumpRatio / 1.0) * 100}%` }} />
               </div>
 
               <div className="flex justify-between pt-1">
-                <span className="text-amber-200/60">Rebound (Extension) Ratio:</span>
+                <span className="text-slate-400">Rebound (Extension) Ratio:</span>
                 <span className="text-emerald-300 font-bold">ζ = {damperReboundRatio.toFixed(2)} (Target: 0.65-0.75)</span>
               </div>
-              <div className="w-full bg-amber-800/35 h-2 rounded-full overflow-hidden">
+              <div className="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
                 <div className="bg-emerald-400 h-full rounded-full" style={{ width: `${(damperReboundRatio / 1.0) * 100}%` }} />
               </div>
             </div>
           </div>
 
           {/* Aero Center of Pressure Balance */}
-          <div className="bg-amber-900/40 border border-amber-800/30 rounded-xl p-3 flex flex-col gap-1.5 text-xs font-mono">
-            <div className="flex justify-between text-amber-200/60">
+          <div className="bg-slate-900/80 border border-slate-800 rounded-xl p-3 flex flex-col gap-1.5 text-xs font-mono">
+            <div className="flex justify-between text-slate-400">
               <span>Aerodynamic Balance (CoP)</span>
               <span className="text-amber-400 font-bold">{aeroBalancePercentFront}% Front</span>
             </div>
-            <div className="text-[10px] text-amber-200/60">
+            <div className="text-[10px] text-slate-400">
               {aeroBalancePercentFront >= 42 && aeroBalancePercentFront <= 48 ? (
                 <span className="text-emerald-400">✅ Neutral Balance: Optimal turn-in grip without high-speed snap oversteer.</span>
               ) : aeroBalancePercentFront > 48 ? (
                 <span className="text-amber-400">⚠️ Front-Heavy Aero: Risk of high-speed rear instability and oversteer.</span>
               ) : (
-                <span className="text-amber-200/60">ℹ️ Rear-Biased Aero: High stability, mild high-speed understeer.</span>
+                <span className="text-slate-400">ℹ️ Rear-Biased Aero: High stability, mild high-speed understeer.</span>
               )}
             </div>
           </div>
@@ -211,10 +211,10 @@ export const SuspensionDynamicsPanel: React.FC<SuspensionDynamicsPanelProps> = (
       </div>
 
       {/* ── Interactive Suspension Sliders ── */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2 border-t border-amber-800/30">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2 border-t border-slate-800/80">
         {/* Front Anti-Roll Stiffness */}
         <div className="flex flex-col gap-1">
-          <div className="flex justify-between text-[11px] font-mono text-amber-200/60">
+          <div className="flex justify-between text-[11px] font-mono text-slate-400">
             <span>Front Roll Stiffness</span>
             <span className="text-amber-300 font-bold">{frontStiffness} Nm/°</span>
           </div>
@@ -225,13 +225,13 @@ export const SuspensionDynamicsPanel: React.FC<SuspensionDynamicsPanelProps> = (
             step="50"
             value={frontStiffness}
             onChange={(e) => setFrontStiffness(parseInt(e.target.value))}
-            className="w-full h-1.5 bg-amber-800/35 rounded appearance-none cursor-pointer accent-amber-400"
+            className="w-full h-1.5 bg-slate-800 rounded appearance-none cursor-pointer accent-amber-400"
           />
         </div>
 
         {/* Rear Anti-Roll Stiffness */}
         <div className="flex flex-col gap-1">
-          <div className="flex justify-between text-[11px] font-mono text-amber-200/60">
+          <div className="flex justify-between text-[11px] font-mono text-slate-400">
             <span>Rear Roll Stiffness</span>
             <span className="text-amber-300 font-bold">{rearStiffness} Nm/°</span>
           </div>
@@ -242,13 +242,13 @@ export const SuspensionDynamicsPanel: React.FC<SuspensionDynamicsPanelProps> = (
             step="50"
             value={rearStiffness}
             onChange={(e) => setRearStiffness(parseInt(e.target.value))}
-            className="w-full h-1.5 bg-amber-800/35 rounded appearance-none cursor-pointer accent-amber-400"
+            className="w-full h-1.5 bg-slate-800 rounded appearance-none cursor-pointer accent-amber-400"
           />
         </div>
 
         {/* Cornering Slip Angle */}
         <div className="flex flex-col gap-1">
-          <div className="flex justify-between text-[11px] font-mono text-amber-200/60">
+          <div className="flex justify-between text-[11px] font-mono text-slate-400">
             <span>Tire Slip Angle (α)</span>
             <span className="text-amber-300 font-bold">{currentSlipAngle.toFixed(1)}°</span>
           </div>
@@ -259,7 +259,7 @@ export const SuspensionDynamicsPanel: React.FC<SuspensionDynamicsPanelProps> = (
             step="0.2"
             value={currentSlipAngle}
             onChange={(e) => setCurrentSlipAngle(parseFloat(e.target.value))}
-            className="w-full h-1.5 bg-amber-800/35 rounded appearance-none cursor-pointer accent-amber-400"
+            className="w-full h-1.5 bg-slate-800 rounded appearance-none cursor-pointer accent-amber-400"
           />
         </div>
       </div>

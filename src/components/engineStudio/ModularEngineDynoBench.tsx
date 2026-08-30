@@ -118,15 +118,15 @@ export const ModularEngineDynoBench: React.FC<ModularEngineDynoBenchProps> = ({ 
   const activeTorqueY = padding.top + graphH - (activePoint.torqueNm / maxTorque) * graphH;
 
   return (
-    <div className="flex flex-col h-full bg-amber-900/40 backdrop-blur-xl border border-amber-800/30 rounded-2xl overflow-hidden shadow-2xl p-4 space-y-4">
+    <div className="flex flex-col h-full bg-slate-900/90 backdrop-blur-xl border border-slate-800 rounded-2xl overflow-hidden shadow-2xl p-4 space-y-4">
       {/* Dyno Header & Controls */}
-      <div className="flex items-center justify-between pb-3 border-b border-amber-800/30">
+      <div className="flex items-center justify-between pb-3 border-b border-slate-800">
         <div>
-          <h3 className="text-sm font-bold text-amber-50 flex items-center gap-2">
+          <h3 className="text-sm font-bold text-slate-100 flex items-center gap-2">
             <Activity size={16} className="text-amber-400" />
             Virtual Engine Dynamometer Test Bench
           </h3>
-          <p className="text-[11px] text-amber-200/60">
+          <p className="text-[11px] text-slate-400">
             High-resolution multi-physics torque, power, and thermal telemetry
           </p>
         </div>
@@ -145,7 +145,7 @@ export const ModularEngineDynoBench: React.FC<ModularEngineDynoBenchProps> = ({ 
           </button>
           <button
             onClick={resetSweep}
-            className="p-1.5 bg-amber-800/35 hover:bg-amber-700/40 text-amber-100/80 rounded-xl border border-amber-700/30"
+            className="p-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl border border-slate-700"
             title="Reset to Peak Power RPM"
           >
             <RotateCcw size={14} />
@@ -154,7 +154,7 @@ export const ModularEngineDynoBench: React.FC<ModularEngineDynoBenchProps> = ({ 
       </div>
 
       {/* Live Dyno Graph */}
-      <div className="relative bg-amber-950/80 rounded-xl border border-amber-800/30 p-2 overflow-hidden shadow-inner">
+      <div className="relative bg-slate-950/80 rounded-xl border border-slate-800/80 p-2 overflow-hidden shadow-inner">
         <svg viewBox={`0 0 ${width} ${height}`} className="w-full h-auto">
           <defs>
             <linearGradient id="hpAreaGrad" x1="0" y1="0" x2="0" y2="1">
@@ -252,16 +252,16 @@ export const ModularEngineDynoBench: React.FC<ModularEngineDynoBenchProps> = ({ 
 
       {/* Real-Time Telemetry Gauges Grid */}
       <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2 text-center">
-        <div className="bg-amber-950/60 p-2.5 rounded-xl border border-amber-800/30">
-          <span className="text-[9px] uppercase tracking-wider text-amber-200/60 block mb-0.5">
+        <div className="bg-slate-950/60 p-2.5 rounded-xl border border-slate-800/80">
+          <span className="text-[9px] uppercase tracking-wider text-slate-400 block mb-0.5">
             Current RPM
           </span>
-          <span className="text-base font-mono font-bold text-amber-50">
+          <span className="text-base font-mono font-bold text-slate-100">
             {Math.round(activePoint.rpm)}
           </span>
         </div>
 
-        <div className="bg-amber-950/60 p-2.5 rounded-xl border border-amber-500/30">
+        <div className="bg-slate-950/60 p-2.5 rounded-xl border border-amber-500/30">
           <span className="text-[9px] uppercase tracking-wider text-amber-400 block mb-0.5">
             Power Output
           </span>
@@ -270,7 +270,7 @@ export const ModularEngineDynoBench: React.FC<ModularEngineDynoBenchProps> = ({ 
           </span>
         </div>
 
-        <div className="bg-amber-950/60 p-2.5 rounded-xl border border-amber-500/30">
+        <div className="bg-slate-950/60 p-2.5 rounded-xl border border-amber-500/30">
           <span className="text-[9px] uppercase tracking-wider text-amber-400 block mb-0.5">
             Brake Torque
           </span>
@@ -279,7 +279,7 @@ export const ModularEngineDynoBench: React.FC<ModularEngineDynoBenchProps> = ({ 
           </span>
         </div>
 
-        <div className="bg-amber-950/60 p-2.5 rounded-xl border border-rose-500/30">
+        <div className="bg-slate-950/60 p-2.5 rounded-xl border border-rose-500/30">
           <span className="text-[9px] uppercase tracking-wider text-rose-400 block mb-0.5">
             Turbo Boost
           </span>
@@ -288,8 +288,8 @@ export const ModularEngineDynoBench: React.FC<ModularEngineDynoBenchProps> = ({ 
           </span>
         </div>
 
-        <div className="bg-amber-950/60 p-2.5 rounded-xl border border-amber-800/30">
-          <span className="text-[9px] uppercase tracking-wider text-amber-200/60 block mb-0.5">
+        <div className="bg-slate-950/60 p-2.5 rounded-xl border border-slate-800/80">
+          <span className="text-[9px] uppercase tracking-wider text-slate-400 block mb-0.5">
             Exhaust EGT
           </span>
           <span className="text-base font-mono font-bold text-orange-400">
@@ -297,8 +297,8 @@ export const ModularEngineDynoBench: React.FC<ModularEngineDynoBenchProps> = ({ 
           </span>
         </div>
 
-        <div className="bg-amber-950/60 p-2.5 rounded-xl border border-amber-800/30">
-          <span className="text-[9px] uppercase tracking-wider text-amber-200/60 block mb-0.5">
+        <div className="bg-slate-950/60 p-2.5 rounded-xl border border-slate-800/80">
+          <span className="text-[9px] uppercase tracking-wider text-slate-400 block mb-0.5">
             BSFC Fuel
           </span>
           <span className="text-base font-mono font-bold text-emerald-400">
@@ -309,26 +309,26 @@ export const ModularEngineDynoBench: React.FC<ModularEngineDynoBenchProps> = ({ 
 
       {/* Engine Scorecard & Key Stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-2 text-xs">
-        <div className="bg-amber-950/40 p-3 rounded-xl border border-amber-800/30">
-          <span className="text-[10px] text-amber-200/60 block">Peak Horsepower</span>
+        <div className="bg-slate-950/40 p-3 rounded-xl border border-slate-800/80">
+          <span className="text-[10px] text-slate-400 block">Peak Horsepower</span>
           <span className="text-sm font-mono font-bold text-amber-400">
             {perf?.peakHorsepowerHp} HP @ {perf?.peakHorsepowerRpm} RPM
           </span>
         </div>
-        <div className="bg-amber-950/40 p-3 rounded-xl border border-amber-800/30">
-          <span className="text-[10px] text-amber-200/60 block">Peak Torque</span>
+        <div className="bg-slate-950/40 p-3 rounded-xl border border-slate-800/80">
+          <span className="text-[10px] text-slate-400 block">Peak Torque</span>
           <span className="text-sm font-mono font-bold text-amber-400">
             {perf?.peakTorqueNm} Nm @ {perf?.peakTorqueRpm} RPM
           </span>
         </div>
-        <div className="bg-amber-950/40 p-3 rounded-xl border border-amber-800/30">
-          <span className="text-[10px] text-amber-200/60 block">Specific Output</span>
+        <div className="bg-slate-950/40 p-3 rounded-xl border border-slate-800/80">
+          <span className="text-[10px] text-slate-400 block">Specific Output</span>
           <span className="text-sm font-mono font-bold text-amber-400">
             {perf?.specificOutputHpPerLiter} HP / Liter
           </span>
         </div>
-        <div className="bg-amber-950/40 p-3 rounded-xl border border-amber-800/30">
-          <span className="text-[10px] text-amber-200/60 block">Engine Mass & BOM</span>
+        <div className="bg-slate-950/40 p-3 rounded-xl border border-slate-800/80">
+          <span className="text-[10px] text-slate-400 block">Engine Mass & BOM</span>
           <span className="text-sm font-mono font-bold text-emerald-400">
             {perf?.engineTotalMassKg} kg | ${state.costAndBOM?.totalEngineBOMCostUSD?.toLocaleString()}
           </span>

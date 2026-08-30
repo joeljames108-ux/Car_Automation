@@ -63,9 +63,9 @@ export const MultiViewTechnicalBlueprint: React.FC = () => {
   ];
 
   return (
-    <div className="flex flex-col h-full bg-[#0a0d14] text-gray-200 border border-[#1b2333] rounded-2xl overflow-hidden shadow-2xl font-sans">
+    <div className="flex flex-col h-full bg-amber-950/60 text-gray-200 border border-[#1b2333] rounded-2xl overflow-hidden shadow-2xl font-sans">
       {/* Blueprint Header Toolbar */}
-      <div className="flex items-center justify-between px-4 py-3 bg-[#101520] border-b border-[#1b2333]">
+      <div className="flex items-center justify-between px-4 py-3 bg-amber-950/60 border-b border-[#1b2333]">
         <div className="flex items-center gap-3">
           <div className="p-1.5 rounded-lg bg-amber-500/10 border border-amber-500/30 text-amber-400">
             <Compass className="w-5 h-5" />
@@ -79,7 +79,7 @@ export const MultiViewTechnicalBlueprint: React.FC = () => {
         </div>
 
         {/* View Switcher Tabs */}
-        <div className="flex items-center gap-1.5 bg-[#0a0d14] p-1 rounded-xl border border-[#1b2333]">
+        <div className="flex items-center gap-1.5 bg-amber-950/60 p-1 rounded-xl border border-[#1b2333]">
           {views.map((v) => (
             <button
               key={v.id}
@@ -87,7 +87,7 @@ export const MultiViewTechnicalBlueprint: React.FC = () => {
               className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
                 activeView === v.id
                   ? 'bg-amber-500 text-black shadow-[0_0_10px_rgba(6,182,212,0.4)]'
-                  : 'text-gray-400 hover:text-gray-200 hover:bg-[#161c2b]'
+                  : 'text-gray-400 hover:text-gray-200 hover:bg-amber-950/60'
               }`}
             >
               {v.label}
@@ -99,10 +99,10 @@ export const MultiViewTechnicalBlueprint: React.FC = () => {
       {/* Main Canvas & Parameter Inspector */}
       <div className="flex flex-1 overflow-hidden">
         {/* SVG Drawing Canvas */}
-        <div className="flex-1 relative bg-[#07090e] flex items-center justify-center p-4">
+        <div className="flex-1 relative bg-amber-950/60 flex items-center justify-center p-4">
           <svg
             viewBox={blueprint.viewBox}
-            className="w-full h-full max-h-[500px] border border-[#182030] rounded-xl bg-[#0a0e17] shadow-inner"
+            className="w-full h-full max-h-[500px] border border-[#182030] rounded-xl bg-amber-950/60 shadow-inner"
           >
             {/* Grid Pattern */}
             <defs>
@@ -182,7 +182,7 @@ export const MultiViewTechnicalBlueprint: React.FC = () => {
           </svg>
 
           {/* Quick Toggle Overlays */}
-          <div className="absolute bottom-6 left-6 flex items-center gap-2 bg-[#121620]/90 backdrop-blur-md px-3 py-2 rounded-xl border border-[#232b3d] shadow-xl">
+          <div className="absolute bottom-6 left-6 flex items-center gap-2 bg-amber-950/60/90 backdrop-blur-md px-3 py-2 rounded-xl border border-[#232b3d] shadow-xl">
             <button
               onClick={() => setShowCenterlines(!showCenterlines)}
               className={`text-xs px-2.5 py-1 rounded font-medium transition-all ${
@@ -211,7 +211,7 @@ export const MultiViewTechnicalBlueprint: React.FC = () => {
         </div>
 
         {/* Right Parametric Sidebar */}
-        <div className="w-80 bg-[#0e121a] border-l border-[#1b2333] p-4 flex flex-col space-y-4 overflow-y-auto">
+        <div className="w-80 bg-amber-950/60 border-l border-[#1b2333] p-4 flex flex-col space-y-4 overflow-y-auto">
           <h4 className="text-xs font-bold text-gray-300 uppercase tracking-wider flex items-center gap-2">
             <Sliders className="w-4 h-4 text-amber-400" />
             Parametric Dimension Controls
@@ -293,7 +293,7 @@ export const MultiViewTechnicalBlueprint: React.FC = () => {
 
           {/* Hardpoint Inspector Box */}
           {selectedHardpointId && (
-            <div className="p-3 bg-[#141a24] rounded-xl border border-amber-500/40 space-y-1.5 text-xs">
+            <div className="p-3 bg-amber-950/60 rounded-xl border border-amber-500/40 space-y-1.5 text-xs">
               <span className="text-[10px] text-amber-400 uppercase font-mono block">Selected Hardpoint</span>
               <div className="font-bold text-gray-100">{selectedHardpointId}</div>
               <div className="text-gray-400 text-[11px]">

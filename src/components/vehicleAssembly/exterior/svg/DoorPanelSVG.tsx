@@ -94,7 +94,7 @@ export const DoorPanelSVG: React.FC<DoorPanelSVGProps> = ({
         width="32"
         height="7"
         rx="2.5"
-        fill="#0f172a"
+        fill="#1a1008"
         stroke="#475569"
         strokeWidth="0.8"
       />
@@ -113,7 +113,7 @@ export const DoorPanelSVG: React.FC<DoorPanelSVGProps> = ({
       {/* ── 6. Mirror Mounting Triangle Boss ── */}
       <polygon
         points="385,280 405,250 410,280"
-        fill="#0f172a"
+        fill="#1a1008"
         stroke="#334155"
         strokeWidth="1.0"
       />

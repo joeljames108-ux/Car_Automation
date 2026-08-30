@@ -18,7 +18,7 @@ export const CFDVisualizationToggle: React.FC<CFDVisualizationToggleProps> = ({
   return (
     <div className={`flex flex-wrap items-center justify-between gap-4 w-full select-none ${className}`}>
       {/* Left Scene Mode Pill Bar (Track, Wind Tunnel, Lab, R&D, Showroom) */}
-      <div className="flex items-center gap-1.5 p-1.5 rounded-full bg-[#111a2b]/85 backdrop-blur-2xl border border-white/12 shadow-[0_15px_40px_rgba(0,0,0,0.5)]">
+      <div className="flex items-center gap-1.5 p-1.5 rounded-full bg-amber-950/60/85 backdrop-blur-2xl border border-white/12 shadow-[0_15px_40px_rgba(0,0,0,0.5)]">
         {[
           { id: "track" as const, label: "Track" },
           { id: "wind_tunnel" as const, label: "Wind Tunnel" },
@@ -37,7 +37,7 @@ export const CFDVisualizationToggle: React.FC<CFDVisualizationToggleProps> = ({
               className={`px-4 py-1.5 rounded-full text-xs font-semibold transition-all cursor-pointer ${
  isActive
  ? "bg-white text-slate-900 shadow-md font-bold"
- : "text-amber-200/60 hover:text-amber-50"
+ : "text-slate-400 hover:text-slate-200"
  }`}
             >
               {scene.label}
@@ -61,14 +61,14 @@ export const CFDVisualizationToggle: React.FC<CFDVisualizationToggleProps> = ({
       {/* Right Controls: CFD Visualization Toggle & Apex AI Floating Button */}
       <div className="flex items-center gap-3">
         {/* CFD Visualization Toggle */}
-        <div className="flex items-center gap-3 px-4 py-2 rounded-full bg-[#111a2b]/85 backdrop-blur-2xl border border-white/12 shadow-[0_15px_40px_rgba(0,0,0,0.5)]">
-          <span className="text-xs font-bold text-amber-50">
+        <div className="flex items-center gap-3 px-4 py-2 rounded-full bg-amber-950/60/85 backdrop-blur-2xl border border-white/12 shadow-[0_15px_40px_rgba(0,0,0,0.5)]">
+          <span className="text-xs font-bold text-slate-200">
             CFD Visualization
           </span>
 
           {/* Color Map Gradient Spectrum Bar */}
           <div className="hidden sm:flex items-center gap-2 px-2 py-0.5 rounded-md bg-black/40 border border-white/10">
-            <span className="text-[9px] font-mono text-amber-200/60">Low</span>
+            <span className="text-[9px] font-mono text-slate-400">Low</span>
             <div className="flex flex-col items-center">
               <div
                 className="w-24 h-1.5 rounded-full"
@@ -77,9 +77,9 @@ export const CFDVisualizationToggle: React.FC<CFDVisualizationToggleProps> = ({
                     "linear-gradient(90deg, #8fb9d9 0%, #34d399 35%, #d9b36c 70%, #f43f5e 100%)",
                 }}
               />
-              <span className="text-[7px] text-amber-300/50 font-mono mt-0.5">Color map</span>
+              <span className="text-[7px] text-slate-500 font-mono mt-0.5">Color map</span>
             </div>
-            <span className="text-[9px] font-mono text-amber-200/60">High</span>
+            <span className="text-[9px] font-mono text-slate-400">High</span>
           </div>
 
           {/* iOS-style toggle */}
@@ -89,7 +89,7 @@ export const CFDVisualizationToggle: React.FC<CFDVisualizationToggleProps> = ({
               onChange(!enabled);
             }}
             className={`w-10 h-5 rounded-full p-0.5 transition-colors cursor-pointer border ${
- enabled ? "bg-sky-400/80 border-sky-300/40" : "bg-slate-700/80 border-white/10"
+ enabled ? "bg-amber-500/80 border-sky-300/40" : "bg-slate-700/80 border-white/10"
  }`}
           >
             <div
@@ -105,9 +105,9 @@ export const CFDVisualizationToggle: React.FC<CFDVisualizationToggleProps> = ({
           onClick={() => {
             playHMIClickSound();
           }}
-          className="flex items-center gap-2 px-4 py-2 rounded-full bg-[#111a2b]/90 hover:bg-[#182338] backdrop-blur-2xl border border-white/12 text-amber-50 text-xs font-bold shadow-[0_10px_30px_rgba(0,0,0,0.6)] cursor-pointer transition-all"
+          className="flex items-center gap-2 px-4 py-2 rounded-full bg-amber-950/60/90 hover:bg-amber-950/60 backdrop-blur-2xl border border-white/12 text-slate-200 text-xs font-bold shadow-[0_10px_30px_rgba(0,0,0,0.6)] cursor-pointer transition-all"
         >
-          <Bot size={15} className="text-sky-300/90" />
+          <Bot size={15} className="text-amber-300/90" />
           <span>Apex AI</span>
           <span className="w-4 h-4 rounded-full bg-rose-400/90 text-white text-[10px] flex items-center justify-center font-bold">
             1

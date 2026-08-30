@@ -29,8 +29,8 @@ export const ExteriorCompletionModal: React.FC<ExteriorCompletionModalProps> = (
     paintConfig.clearCoatMicrons;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-amber-950/80 backdrop-blur-xl animate-fadeIn">
-      <div className="relative max-w-lg w-full bg-amber-900/50 border border-amber-500/40 rounded-3xl p-6 shadow-2xl space-y-5 text-center">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-xl animate-fadeIn">
+      <div className="relative max-w-lg w-full bg-slate-900 border border-amber-500/40 rounded-3xl p-6 shadow-2xl space-y-5 text-center">
         <div className="w-16 h-16 rounded-3xl bg-amber-500/20 border border-amber-500/40 text-amber-300 flex items-center justify-center mx-auto">
           <Trophy size={32} />
         </div>
@@ -39,30 +39,30 @@ export const ExteriorCompletionModal: React.FC<ExteriorCompletionModalProps> = (
           <span className="text-xs font-mono font-bold text-amber-400 uppercase tracking-widest block">
             HOMOLOGATION CERTIFIED
           </span>
-          <h2 className="text-xl font-bold font-mono text-amber-50 mt-1">
+          <h2 className="text-xl font-bold font-mono text-slate-100 mt-1">
             BODY-IN-WHITE ASSEMBLY COMPLETE!
           </h2>
-          <p className="text-xs text-amber-200/60 mt-1">
+          <p className="text-xs text-slate-400 mt-1">
             All structural, optical, and closure subsystems have been precision aligned and torque-verified.
           </p>
         </div>
 
         {/* Final Specification Badges */}
-        <div className="grid grid-cols-4 gap-2 p-3 rounded-2xl bg-amber-950/80 border border-white/10 font-mono text-xs text-center">
+        <div className="grid grid-cols-4 gap-2 p-3 rounded-2xl bg-slate-950 border border-white/10 font-mono text-xs text-center">
           <div>
-            <span className="text-[10px] text-amber-300/50 block">WEIGHT</span>
+            <span className="text-[10px] text-slate-500 block">WEIGHT</span>
             <strong className="text-amber-400 font-bold">{Math.round(totalWeight)} kg</strong>
           </div>
           <div>
-            <span className="text-[10px] text-amber-300/50 block">RIGIDITY</span>
+            <span className="text-[10px] text-slate-500 block">RIGIDITY</span>
             <strong className="text-emerald-400 font-bold">{totalRigidity} kNm/deg</strong>
           </div>
           <div>
-            <span className="text-[10px] text-amber-300/50 block">PAINT BUILD</span>
+            <span className="text-[10px] text-slate-500 block">PAINT BUILD</span>
             <strong className="text-amber-400 font-bold">{totalDft} µm</strong>
           </div>
           <div>
-            <span className="text-[10px] text-amber-300/50 block">TOTAL BOM</span>
+            <span className="text-[10px] text-slate-500 block">TOTAL BOM</span>
             <strong className="text-amber-400 font-bold">${Math.round(totalCost).toLocaleString()}</strong>
           </div>
         </div>

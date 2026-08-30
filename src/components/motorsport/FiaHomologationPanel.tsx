@@ -170,9 +170,9 @@ const FiaHomologationPanelComponent: React.FC = () => {
   const seriesSpec = FIA_REGULATIONS[selectedSeries];
 
   return (
-    <div className="space-y-6 text-amber-50 animate-fade-in">
+    <div className="space-y-6 text-slate-100 animate-fade-in">
       {/* Header Banner */}
-      <div className="glass-panel p-6 rounded-2xl border border-amber-500/20 bg-amber-900/40 flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-2xl relative overflow-hidden">
+      <div className="glass-panel p-6 rounded-2xl border border-amber-500/20 bg-slate-900/80 flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-2xl relative overflow-hidden">
         <div
           className="absolute inset-0 pointer-events-none opacity-15"
           style={{ background: "radial-gradient(circle at top right, rgba(245,158,11,0.35), transparent 70%)" }}
@@ -186,11 +186,11 @@ const FiaHomologationPanelComponent: React.FC = () => {
               {seriesSpec.name}
             </span>
           </div>
-          <h2 className="text-xl font-black text-amber-50 flex items-center gap-2 mt-1">
+          <h2 className="text-xl font-black text-slate-100 flex items-center gap-2 mt-1">
             <Gavel className="w-6 h-6 text-amber-400" />
             <span>Homologation Verification & BoP Scrutineering</span>
           </h2>
-          <p className="text-xs text-amber-200/60 mt-0.5">
+          <p className="text-xs text-slate-400 mt-0.5">
             Real-time compliance checks, air restrictor sizing, boost pressure limits, and dynamic success ballast.
           </p>
         </div>
@@ -214,8 +214,8 @@ const FiaHomologationPanelComponent: React.FC = () => {
       </div>
 
       {/* Homologation Benchmark Presets Bar */}
-      <div className="glass-panel p-3.5 rounded-2xl border-white/5 bg-amber-900/40 flex items-center gap-2 overflow-x-auto no-scrollbar">
-        <span className="text-xs font-bold text-amber-200/60 flex items-center gap-1.5 shrink-0 px-2">
+      <div className="glass-panel p-3.5 rounded-2xl border-white/5 bg-slate-900/60 flex items-center gap-2 overflow-x-auto no-scrollbar">
+        <span className="text-xs font-bold text-slate-400 flex items-center gap-1.5 shrink-0 px-2">
           <Sparkles size={14} className="text-amber-400" /> Quick Benchmarks:
         </span>
         {PRESETS.map((p) => {
@@ -227,7 +227,7 @@ const FiaHomologationPanelComponent: React.FC = () => {
               className={`px-3 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all flex items-center gap-1.5 border cursor-pointer ${
                 isCurrent
                   ? "bg-amber-500/20 border-amber-500/50 text-amber-200 shadow-sm"
-                  : "bg-amber-950/60 border-amber-800/30 text-amber-200/60 hover:text-amber-50 hover:border-amber-700/30"
+                  : "bg-slate-950/60 border-slate-800 text-slate-400 hover:text-slate-200 hover:border-slate-700"
               }`}
             >
               <span>{p.name}</span>
@@ -237,9 +237,9 @@ const FiaHomologationPanelComponent: React.FC = () => {
       </div>
 
       {/* Series Selector & Vehicle Parameter Inputs */}
-      <div className="glass-panel p-5 rounded-2xl border-white/10 bg-amber-900/40 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="glass-panel p-5 rounded-2xl border-white/10 bg-slate-900/70 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         <div>
-          <label className="text-[11px] text-amber-200/60 font-mono font-bold block mb-1.5 uppercase">
+          <label className="text-[11px] text-slate-400 font-mono font-bold block mb-1.5 uppercase">
             FIA Championship Series:
           </label>
           <select
@@ -248,7 +248,7 @@ const FiaHomologationPanelComponent: React.FC = () => {
               playHMITabSound();
               setSelectedSeries(e.target.value as FiaRacingSeries);
             }}
-            className="w-full bg-amber-950/80 text-amber-50 text-xs rounded-xl p-2.5 border border-amber-700/30 font-mono outline-none"
+            className="w-full bg-slate-950 text-slate-200 text-xs rounded-xl p-2.5 border border-slate-700 font-mono outline-none"
           >
             <option value="FIA_GT3">FIA GT3 Championship</option>
             <option value="FIA_GT4">FIA GT4 European Series</option>
@@ -259,7 +259,7 @@ const FiaHomologationPanelComponent: React.FC = () => {
         </div>
 
         <div>
-          <label className="text-[11px] text-amber-200/60 font-mono font-bold block mb-1.5 uppercase">
+          <label className="text-[11px] text-slate-400 font-mono font-bold block mb-1.5 uppercase">
             Vehicle Dry Weight (kg):
           </label>
           <input
@@ -267,12 +267,12 @@ const FiaHomologationPanelComponent: React.FC = () => {
             step={10}
             value={curbWeightKg}
             onChange={(e) => setCurbWeightKg(Number(e.target.value))}
-            className="w-full bg-amber-950/80 text-amber-50 text-xs rounded-xl p-2.5 border border-amber-700/30 font-mono outline-none"
+            className="w-full bg-slate-950 text-slate-200 text-xs rounded-xl p-2.5 border border-slate-700 font-mono outline-none"
           />
         </div>
 
         <div>
-          <label className="text-[11px] text-amber-200/60 font-mono font-bold block mb-1.5 uppercase">
+          <label className="text-[11px] text-slate-400 font-mono font-bold block mb-1.5 uppercase">
             Peak Engine Power (hp):
           </label>
           <input
@@ -280,12 +280,12 @@ const FiaHomologationPanelComponent: React.FC = () => {
             step={10}
             value={peakPowerHp}
             onChange={(e) => setPeakPowerHp(Number(e.target.value))}
-            className="w-full bg-amber-950/80 text-amber-50 text-xs rounded-xl p-2.5 border border-amber-700/30 font-mono outline-none"
+            className="w-full bg-slate-950 text-slate-200 text-xs rounded-xl p-2.5 border border-slate-700 font-mono outline-none"
           />
         </div>
 
         <div>
-          <label className="text-[11px] text-amber-200/60 font-mono font-bold block mb-1.5 uppercase">
+          <label className="text-[11px] text-slate-400 font-mono font-bold block mb-1.5 uppercase">
             Displacement (Liters):
           </label>
           <input
@@ -293,54 +293,54 @@ const FiaHomologationPanelComponent: React.FC = () => {
             step={0.1}
             value={displacementLiters}
             onChange={(e) => setDisplacementLiters(Number(e.target.value))}
-            className="w-full bg-amber-950/80 text-amber-50 text-xs rounded-xl p-2.5 border border-amber-700/30 font-mono outline-none"
+            className="w-full bg-slate-950 text-slate-200 text-xs rounded-xl p-2.5 border border-slate-700 font-mono outline-none"
           />
         </div>
       </div>
 
       {/* BOP Adjustment Metric Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="glass-panel p-4 rounded-2xl border-white/10 bg-amber-900/40">
-          <div className="text-xs text-amber-200/60 font-semibold flex items-center space-x-2">
+        <div className="glass-panel p-4 rounded-2xl border-white/10 bg-slate-900/70">
+          <div className="text-xs text-slate-400 font-semibold flex items-center space-x-2">
             <Sliders className="w-4 h-4 text-amber-400" />
             <span>AIR RESTRICTOR SIZE</span>
           </div>
           <div className="text-2xl font-mono font-black text-amber-300 mt-2">
-            {bopAdjustment.intakeAirRestrictorMm} <span className="text-xs text-amber-300/50">mm</span>
+            {bopAdjustment.intakeAirRestrictorMm} <span className="text-xs text-slate-500">mm</span>
           </div>
-          <div className="text-[11px] text-amber-300/50 mt-1">
-            Calibrated Power: <strong className="text-amber-100/80">{bopAdjustment.calibratedPowerHp} hp</strong>
+          <div className="text-[11px] text-slate-500 mt-1">
+            Calibrated Power: <strong className="text-slate-300">{bopAdjustment.calibratedPowerHp} hp</strong>
           </div>
         </div>
 
-        <div className="glass-panel p-4 rounded-2xl border-white/10 bg-amber-900/40">
-          <div className="text-xs text-amber-200/60 font-semibold flex items-center space-x-2">
+        <div className="glass-panel p-4 rounded-2xl border-white/10 bg-slate-900/70">
+          <div className="text-xs text-slate-400 font-semibold flex items-center space-x-2">
             <Scale className="w-4 h-4 text-amber-400" />
             <span>SUCCESS BALLAST WEIGHT</span>
           </div>
           <div className="text-2xl font-mono font-black text-amber-300 mt-2">
-            +{bopAdjustment.successBallastWeightKg} <span className="text-xs text-amber-300/50">kg</span>
+            +{bopAdjustment.successBallastWeightKg} <span className="text-xs text-slate-500">kg</span>
           </div>
-          <div className="text-[11px] text-amber-300/50 mt-1">
-            Calibrated Weight: <strong className="text-amber-100/80">{bopAdjustment.calibratedWeightKg} kg</strong>
+          <div className="text-[11px] text-slate-500 mt-1">
+            Calibrated Weight: <strong className="text-slate-300">{bopAdjustment.calibratedWeightKg} kg</strong>
           </div>
         </div>
 
-        <div className="glass-panel p-4 rounded-2xl border-white/10 bg-amber-900/40">
-          <div className="text-xs text-amber-200/60 font-semibold flex items-center space-x-2">
+        <div className="glass-panel p-4 rounded-2xl border-white/10 bg-slate-900/70">
+          <div className="text-xs text-slate-400 font-semibold flex items-center space-x-2">
             <FileCheck className="w-4 h-4 text-emerald-400" />
             <span>CALIBRATED PWR-TO-WEIGHT</span>
           </div>
           <div className="text-2xl font-mono font-black text-emerald-300 mt-2">
-            {bopAdjustment.rawPtoWRatioHpPerKg} <span className="text-xs text-amber-300/50">hp/kg</span>
+            {bopAdjustment.rawPtoWRatioHpPerKg} <span className="text-xs text-slate-500">hp/kg</span>
           </div>
-          <div className="text-[11px] text-amber-300/50 mt-1">
-            Target Class P/W: <strong className="text-amber-100/80">{bopAdjustment.targetPtoWRatioHpPerKg}</strong>
+          <div className="text-[11px] text-slate-500 mt-1">
+            Target Class P/W: <strong className="text-slate-300">{bopAdjustment.targetPtoWRatioHpPerKg}</strong>
           </div>
         </div>
 
-        <div className="glass-panel p-4 rounded-2xl border-white/10 bg-amber-900/40">
-          <div className="text-xs text-amber-200/60 font-semibold flex items-center space-x-2">
+        <div className="glass-panel p-4 rounded-2xl border-white/10 bg-slate-900/70">
+          <div className="text-xs text-slate-400 font-semibold flex items-center space-x-2">
             <Award className="w-4 h-4 text-amber-400" />
             <span>ESTIMATED BOP LAP DELTA</span>
           </div>
@@ -352,13 +352,13 @@ const FiaHomologationPanelComponent: React.FC = () => {
             {bopAdjustment.estimatedLapTimeDeltaSec >= 0 ? "+" : ""}
             {bopAdjustment.estimatedLapTimeDeltaSec}s
           </div>
-          <div className="text-[11px] text-amber-300/50 mt-1">Grid equalization window</div>
+          <div className="text-[11px] text-slate-500 mt-1">Grid equalization window</div>
         </div>
       </div>
 
       {/* Technical Regulation Audit Checklist */}
-      <div className="glass-panel p-5 rounded-2xl border-white/10 bg-amber-900/40 space-y-3">
-        <h3 className="text-sm font-bold text-amber-50 flex items-center gap-2">
+      <div className="glass-panel p-5 rounded-2xl border-white/10 bg-slate-900/70 space-y-3">
+        <h3 className="text-sm font-bold text-slate-200 flex items-center gap-2">
           <Layers size={16} className="text-amber-400" />
           <span>FIA TECHNICAL HOMOLOGATION AUDIT CHECKLIST</span>
         </h3>
@@ -366,7 +366,7 @@ const FiaHomologationPanelComponent: React.FC = () => {
           {homologationResult.checks.map((check, idx) => (
             <div
               key={idx}
-              className="bg-amber-950/80 p-3.5 rounded-xl border border-amber-800/30 flex items-center justify-between gap-4"
+              className="bg-slate-950/80 p-3.5 rounded-xl border border-slate-800 flex items-center justify-between gap-4"
             >
               <div className="flex items-center space-x-3">
                 {check.passed ? (
@@ -375,7 +375,7 @@ const FiaHomologationPanelComponent: React.FC = () => {
                   <XCircle className="w-5 h-5 text-rose-400 shrink-0" />
                 )}
                 <div>
-                  <div className="text-xs font-bold text-amber-50">{check.ruleName}</div>
+                  <div className="text-xs font-bold text-slate-200">{check.ruleName}</div>
                   {check.deviationNote && (
                     <div className="text-[10px] text-rose-400 mt-0.5">{check.deviationNote}</div>
                   )}
@@ -383,7 +383,7 @@ const FiaHomologationPanelComponent: React.FC = () => {
               </div>
 
               <div className="text-right font-mono text-xs shrink-0">
-                <div className="text-amber-200/60">Req: {String(check.requiredValue)}</div>
+                <div className="text-slate-400">Req: {String(check.requiredValue)}</div>
                 <div className={`font-bold ${check.passed ? "text-emerald-400" : "text-rose-400"}`}>
                   Actual: {String(check.actualValue)}
                 </div>

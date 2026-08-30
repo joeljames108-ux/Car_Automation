@@ -152,7 +152,7 @@ export function EngineAudioVisualizer({
             <div className="text-[10px] font-mono text-amber-400 uppercase tracking-widest font-extrabold truncate">
               REAL-TIME AUDIO SYNTHESIZER
             </div>
-            <div className="text-xs font-bold text-amber-50 font-mono truncate" title={profile.description}>
+            <div className="text-xs font-bold text-slate-100 font-mono truncate" title={profile.description}>
               {profile.description}
             </div>
           </div>
@@ -165,7 +165,7 @@ export function EngineAudioVisualizer({
             className={`p-2 rounded-xl border transition-all cursor-pointer ${
               isMuted
                 ? "bg-rose-500/20 text-rose-400 border-rose-500/40 shadow-[0_0_10px_rgba(244,63,94,0.3)]"
-                : "bg-base-900/80 text-amber-100/80 border-base-700 hover:bg-base-800 hover:text-white"
+                : "bg-base-900/80 text-slate-300 border-base-700 hover:bg-base-800 hover:text-white"
             }`}
             title={isMuted ? "Unmute Engine Sound" : "Mute Engine Sound"}
           >
@@ -203,20 +203,20 @@ export function EngineAudioVisualizer({
 
         {/* Live Audio Telemetry Stats (5 Cols - Fixed Text Wrapping) */}
         <div className="sm:col-span-5 p-2.5 rounded-xl bg-base-900/70 border border-base-800 flex flex-col justify-center gap-1.5 text-[10px] font-mono min-w-0">
-          <div className="flex items-center justify-between text-amber-200/60 gap-1">
-            <span className="font-semibold text-amber-200/60 truncate">FIRING FREQ:</span>
+          <div className="flex items-center justify-between text-slate-400 gap-1">
+            <span className="font-semibold text-slate-400 truncate">FIRING FREQ:</span>
             <span className="text-amber-400 font-bold shrink-0">{Math.round(firingFreq.fundamental)} Hz</span>
           </div>
-          <div className="flex items-center justify-between text-amber-200/60 gap-1">
-            <span className="font-semibold text-amber-200/60 truncate">2ND HARMONIC:</span>
+          <div className="flex items-center justify-between text-slate-400 gap-1">
+            <span className="font-semibold text-slate-400 truncate">2ND HARMONIC:</span>
             <span className="text-amber-400 font-bold shrink-0">{Math.round(firingFreq.secondary)} Hz</span>
           </div>
-          <div className="flex items-center justify-between text-amber-200/60 gap-1">
-            <span className="font-semibold text-amber-200/60 truncate">REDLINE:</span>
+          <div className="flex items-center justify-between text-slate-400 gap-1">
+            <span className="font-semibold text-slate-400 truncate">REDLINE:</span>
             <span className="text-rose-400 font-bold shrink-0">{profile.defaultRedlineRpm} RPM</span>
           </div>
-          <div className="flex items-center justify-between text-amber-200/60 gap-1">
-            <span className="font-semibold text-amber-200/60 truncate">CYLINDERS:</span>
+          <div className="flex items-center justify-between text-slate-400 gap-1">
+            <span className="font-semibold text-slate-400 truncate">CYLINDERS:</span>
             <span className="text-emerald-400 font-bold shrink-0">{profile.cylinders} CYL</span>
           </div>
         </div>
@@ -236,7 +236,7 @@ export function EngineAudioVisualizer({
               className={`px-2.5 py-1 rounded-lg text-[10px] font-mono font-extrabold uppercase transition-all whitespace-nowrap cursor-pointer shrink-0 ${
                 activeLayout === layoutKey
                   ? "bg-amber-500 text-black shadow-[0_0_10px_rgba(34,211,238,0.4)] scale-[1.02]"
-                  : "bg-base-950/80 hover:bg-base-800 text-amber-100/80 border border-base-750"
+                  : "bg-base-950/80 hover:bg-base-800 text-slate-300 border border-base-750"
               }`}
             >
               {layoutKey.replace("_", " ")}

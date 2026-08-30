@@ -81,8 +81,8 @@ export function RadialGauge({ value, max = 10, label, size = 140 }: { value: num
         />
       </svg>
       <div className="absolute inset-0 flex flex-col items-center justify-center">
-        <span className="font-mono font-bold text-amber-50 transition-colors duration-300" style={{ fontSize: size * 0.22, color }}>{value.toFixed(1)}</span>
-        {label && <span className="text-[9px] uppercase tracking-wider text-amber-300/50 font-mono mt-0.5">{label}</span>}
+        <span className="font-mono font-bold text-slate-100 transition-colors duration-300" style={{ fontSize: size * 0.22, color }}>{value.toFixed(1)}</span>
+        {label && <span className="text-[9px] uppercase tracking-wider text-slate-500 font-mono mt-0.5">{label}</span>}
       </div>
     </div>
   );
@@ -103,19 +103,19 @@ export function BarCompare({ rows, labels, highlight }: {
         return (
           <div key={r.category}>
             <div className="flex items-center justify-between mb-1">
-              <span className="text-xs text-amber-200/60">{r.category}</span>
+              <span className="text-xs text-slate-400">{r.category}</span>
             </div>
             <div className="space-y-1">
               {all.map((val, i) => (
                 <div key={i} className="flex items-center gap-2">
-                  <span className="text-[10px] text-amber-300/50 w-20 shrink-0 truncate">{labels[i]}</span>
+                  <span className="text-[10px] text-slate-500 w-20 shrink-0 truncate">{labels[i]}</span>
                   <div className="flex-1 h-3 bg-base-850 rounded relative overflow-hidden">
                     <div
                       className="h-full rounded transition-all duration-500"
                       style={{ width: `${(val / max) * 100}%`, background: i === highlight ? "#fbbf24" : colors[i], opacity: val === best ? 1 : 0.6 }}
                     />
                   </div>
-                  <span className={`text-[10px] font-mono w-8 text-right ${val === best ? "text-ok-300" : "text-amber-200/60"}`}>{val.toFixed(1)}</span>
+                  <span className={`text-[10px] font-mono w-8 text-right ${val === best ? "text-ok-300" : "text-slate-400"}`}>{val.toFixed(1)}</span>
                 </div>
               ))}
             </div>
@@ -137,7 +137,7 @@ export function Podium({ winners }: { winners: { name: string; score: number; yo
         const realIdx = sorted.indexOf(w);
         return (
           <div key={i} className="flex flex-col items-center" style={{ width: 90 }}>
-            <div className={`text-xs font-medium mb-1 ${w.you ? "text-accent-300" : "text-amber-200/60"}`}>{w.name}</div>
+            <div className={`text-xs font-medium mb-1 ${w.you ? "text-accent-300" : "text-slate-400"}`}>{w.name}</div>
             <div className="font-mono text-sm font-bold mb-1" style={{ color: medals[realIdx] }}>{w.score.toFixed(1)}</div>
             <div
               className={`w-full rounded-t-md border-t-2 ${w.you ? "border-accent-400 bg-accent-500/20" : "border-base-600 bg-base-800"}`}
@@ -203,8 +203,8 @@ export function HorseshoeGauge({ value, max = 10, size = 180 }: { value: number;
         <path d={arc(startAngle, valEnd)} fill="none" stroke={color} strokeWidth="10" strokeLinecap="round" style={{ transition: "all 0.6s cubic-bezier(0.22,1,0.36,1)", filter: `drop-shadow(0 0 6px ${color}55)` }} />
       </svg>
       <div className="absolute inset-0 flex flex-col items-center justify-center">
-        <span className="font-mono font-bold text-amber-50 transition-colors duration-300" style={{ fontSize: size * 0.2, color }}>{value.toFixed(1)}</span>
-        <span className="text-[9px] uppercase tracking-wider text-amber-300/50 font-mono">/ {max}</span>
+        <span className="font-mono font-bold text-slate-100 transition-colors duration-300" style={{ fontSize: size * 0.2, color }}>{value.toFixed(1)}</span>
+        <span className="text-[9px] uppercase tracking-wider text-slate-500 font-mono">/ {max}</span>
       </div>
     </div>
   );
@@ -251,8 +251,8 @@ export function DonutChart({ segments, size = 140, totalLabel = "TOTAL" }: {
           })}
         </svg>
         <div className="absolute inset-0 flex flex-col items-center justify-center">
-          <span className="font-mono font-bold text-amber-50 text-base">{total.toLocaleString()}</span>
-          <span className="text-[9px] uppercase tracking-wider text-amber-300/50 font-mono">{totalLabel}</span>
+          <span className="font-mono font-bold text-slate-100 text-base">{total.toLocaleString()}</span>
+          <span className="text-[9px] uppercase tracking-wider text-slate-500 font-mono">{totalLabel}</span>
         </div>
       </div>
 
@@ -263,11 +263,11 @@ export function DonutChart({ segments, size = 140, totalLabel = "TOTAL" }: {
             <div key={i} className="flex items-center justify-between text-xs">
               <div className="flex items-center gap-2">
                 <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: s.color }} />
-                <span className="text-amber-100/80 text-xs font-medium">{s.label}</span>
+                <span className="text-slate-300 text-xs font-medium">{s.label}</span>
               </div>
               <div className="flex items-center gap-2 font-mono">
-                <span className="text-amber-200/60 text-xs font-bold">{s.value.toLocaleString()}</span>
-                <span className="text-[10px] text-amber-300/50 w-8 text-right">{pct}%</span>
+                <span className="text-slate-400 text-xs font-bold">{s.value.toLocaleString()}</span>
+                <span className="text-[10px] text-slate-500 w-8 text-right">{pct}%</span>
               </div>
             </div>
           );
@@ -288,11 +288,11 @@ export function CircuitDiagram({ trackName, country, lengthKm, turns }: {
       <div className="flex items-center justify-between">
         <div>
           <span className="text-[10px] font-mono text-amber-400 uppercase tracking-widest font-bold">CIRCUIT TELEMETRY LAYOUT</span>
-          <h4 className="text-sm font-bold text-amber-50">{trackName}</h4>
+          <h4 className="text-sm font-bold text-slate-100">{trackName}</h4>
         </div>
         <div className="text-right">
-          <span className="text-xs font-mono text-amber-100/80">{lengthKm} km</span>
-          <div className="text-[10px] text-amber-300/50 font-mono">{turns} Turn Apexes · {country}</div>
+          <span className="text-xs font-mono text-slate-300">{lengthKm} km</span>
+          <div className="text-[10px] text-slate-500 font-mono">{turns} Turn Apexes · {country}</div>
         </div>
       </div>
 
@@ -353,7 +353,7 @@ export function CircuitDiagram({ trackName, country, lengthKm, turns }: {
         </svg>
       </div>
 
-      <div className="flex items-center justify-between text-[10px] text-amber-200/60 font-mono pt-1 border-t border-white/5">
+      <div className="flex items-center justify-between text-[10px] text-slate-400 font-mono pt-1 border-t border-white/5">
         <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-emerald-500" /> DRS Activation Zone</span>
         <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-amber-400" /> High Downforce Apex</span>
         <span className="flex items-center gap-1"><span className="w-2 h-2 rounded-full bg-amber-400" /> Heavy Braking Point</span>
@@ -437,7 +437,7 @@ export function SectorTimesBarChart({ s1, s2, s3, bestS1 = 24.1, bestS2 = 32.4, 
       <div className="flex items-center justify-between">
         <span className="text-[10px] font-mono text-amber-400 uppercase tracking-widest font-bold">SECTOR TIME ANALYSIS (S1 / S2 / S3)</span>
         <div className="text-right">
-          <span className="text-[10px] text-amber-300/50 font-mono">TOTAL LAP TIME</span>
+          <span className="text-[10px] text-slate-500 font-mono">TOTAL LAP TIME</span>
           <div className="font-mono text-base font-black text-amber-300">{total}s</div>
         </div>
       </div>
@@ -445,7 +445,7 @@ export function SectorTimesBarChart({ s1, s2, s3, bestS1 = 24.1, bestS2 = 32.4, 
       <div className="grid grid-cols-3 gap-2">
         <div className={`p-2.5 rounded-lg border ${c1.bg} ${c1.border} space-y-1`}>
           <div className="flex items-center justify-between">
-            <span className="text-[10px] font-mono font-bold text-amber-200/60">SECTOR 1</span>
+            <span className="text-[10px] font-mono font-bold text-slate-400">SECTOR 1</span>
             <span className={`text-[8px] font-mono px-1 rounded ${c1.text}`}>{c1.badge}</span>
           </div>
           <div className={`font-mono text-lg font-bold ${c1.text}`}>{s1.toFixed(3)}s</div>
@@ -456,7 +456,7 @@ export function SectorTimesBarChart({ s1, s2, s3, bestS1 = 24.1, bestS2 = 32.4, 
 
         <div className={`p-2.5 rounded-lg border ${c2.bg} ${c2.border} space-y-1`}>
           <div className="flex items-center justify-between">
-            <span className="text-[10px] font-mono font-bold text-amber-200/60">SECTOR 2</span>
+            <span className="text-[10px] font-mono font-bold text-slate-400">SECTOR 2</span>
             <span className={`text-[8px] font-mono px-1 rounded ${c2.text}`}>{c2.badge}</span>
           </div>
           <div className={`font-mono text-lg font-bold ${c2.text}`}>{s2.toFixed(3)}s</div>
@@ -467,7 +467,7 @@ export function SectorTimesBarChart({ s1, s2, s3, bestS1 = 24.1, bestS2 = 32.4, 
 
         <div className={`p-2.5 rounded-lg border ${c3.bg} ${c3.border} space-y-1`}>
           <div className="flex items-center justify-between">
-            <span className="text-[10px] font-mono font-bold text-amber-200/60">SECTOR 3</span>
+            <span className="text-[10px] font-mono font-bold text-slate-400">SECTOR 3</span>
             <span className={`text-[8px] font-mono px-1 rounded ${c3.text}`}>{c3.badge}</span>
           </div>
           <div className={`font-mono text-lg font-bold ${c3.text}`}>{s3.toFixed(3)}s</div>
@@ -491,12 +491,12 @@ export function CarSilhouetteDiagram({ powerHp, downforceKg, weightKg, aeroBalan
       <div className="flex items-center justify-between">
         <div>
           <span className="text-[10px] font-mono text-amber-400 uppercase tracking-widest font-bold">AERODYNAMIC SILHOUETTE DIAGRAM</span>
-          <h4 className="text-xs font-bold text-amber-50">High-Velocity Pressure Vector Map</h4>
+          <h4 className="text-xs font-bold text-slate-200">High-Velocity Pressure Vector Map</h4>
         </div>
-        <div className="flex items-center gap-2 text-[10px] font-mono text-amber-200/60">
+        <div className="flex items-center gap-2 text-[10px] font-mono text-slate-400">
           <span>Power: <strong className="text-amber-400">{powerHp}hp</strong></span>
           <span>Downforce: <strong className="text-amber-300">{downforceKg}kg</strong></span>
-          <span>Weight: <strong className="text-amber-50">{weightKg}kg</strong></span>
+          <span>Weight: <strong className="text-slate-200">{weightKg}kg</strong></span>
         </div>
       </div>
 
@@ -525,8 +525,8 @@ export function CarSilhouetteDiagram({ powerHp, downforceKg, weightKg, aeroBalan
           />
 
           {/* Wheels */}
-          <circle cx="85" cy="80" r="14" fill="#0f172a" stroke="#fbbf24" strokeWidth="3" />
-          <circle cx="280" cy="80" r="14" fill="#0f172a" stroke="#fbbf24" strokeWidth="3" />
+          <circle cx="85" cy="80" r="14" fill="#1a1008" stroke="#fbbf24" strokeWidth="3" />
+          <circle cx="280" cy="80" r="14" fill="#1a1008" stroke="#fbbf24" strokeWidth="3" />
 
           {/* Downforce Force Vectors (Arrows) */}
           {/* Front Wing Vector */}

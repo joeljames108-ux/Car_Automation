@@ -103,16 +103,16 @@ export const WebXrCockpitInspector: React.FC<WebXrCockpitInspectorProps> = ({ st
   };
 
   return (
-    <div className="relative w-full h-[520px] rounded-3xl overflow-hidden border border-amber-800/30 shadow-2xl bg-amber-950/80 font-sans">
+    <div className="relative w-full h-[520px] rounded-3xl overflow-hidden border border-slate-800 shadow-2xl bg-slate-950 font-sans">
       <div ref={containerRef} className="w-full h-full" />
 
       {/* WebXR Controls & Capability Banner */}
-      <div className="absolute top-4 left-4 right-4 flex items-center justify-between p-3 rounded-2xl backdrop-blur-xl bg-amber-950/90 border border-amber-800/30 z-10">
+      <div className="absolute top-4 left-4 right-4 flex items-center justify-between p-3 rounded-2xl backdrop-blur-xl bg-slate-950/90 border border-slate-800 z-10">
         <div className="flex items-center gap-2">
           <Glasses className="text-amber-400" size={18} />
           <div>
             <div className="text-xs font-black text-white">WEBXR SPATIAL VR COCKPIT INSPECTOR</div>
-            <div className="text-[10px] text-amber-200/60">
+            <div className="text-[10px] text-slate-400">
               {isXrSupported ? "VR Headset Detected (Meta Quest / Vision Pro)" : "VR Emulation Mode Active"}
             </div>
           </div>
@@ -121,7 +121,7 @@ export const WebXrCockpitInspector: React.FC<WebXrCockpitInspectorProps> = ({ st
         <div className="flex items-center gap-2">
           <button
             onClick={() => setDoorAngle(doorAngle > 0 ? 0 : 35)}
-            className="px-3 py-1.5 rounded-xl bg-amber-900/50 border border-amber-800/30 text-xs font-bold text-amber-300 cursor-pointer hover:bg-amber-800/35"
+            className="px-3 py-1.5 rounded-xl bg-slate-900 border border-slate-800 text-xs font-bold text-amber-300 cursor-pointer hover:bg-slate-800"
           >
             {doorAngle > 0 ? "CLOSE DOOR" : "OPEN DOOR"}
           </button>
@@ -131,7 +131,7 @@ export const WebXrCockpitInspector: React.FC<WebXrCockpitInspectorProps> = ({ st
             className={`flex items-center gap-1.5 px-4 py-1.5 rounded-xl text-xs font-bold border transition-all cursor-pointer ${
               isXrSupported
                 ? "bg-gradient-to-r from-amber-600 to-indigo-600 border-amber-400 text-white shadow-lg shadow-purple-500/30 hover:brightness-110"
-                : "bg-amber-900/50 border-amber-800/30 text-amber-300/50 cursor-not-allowed"
+                : "bg-slate-900 border-slate-800 text-slate-500 cursor-not-allowed"
             }`}
           >
             <Glasses size={14} />

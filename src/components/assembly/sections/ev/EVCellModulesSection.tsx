@@ -234,8 +234,8 @@ export function EVCellModulesSection({
   return (
     <div className={`space-y-6 ${className}`}>
       {/* 3D INTERACTIVE EV BATTERY PACK ARCHITECTURE VIEWPORT */}
-      <div className="w-full bg-amber-950/90 rounded-2xl border border-amber-500/30 p-4 space-y-3 shadow-2xl">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 font-mono text-xs text-amber-100/80">
+      <div className="w-full bg-slate-950/90 rounded-2xl border border-amber-500/30 p-4 space-y-3 shadow-2xl">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 font-mono text-xs text-slate-300">
           <div className="flex items-center gap-2 font-bold text-amber-300">
             <Box size={16} />
             <span>3D EV BATTERY ARCHITECTURE: TRAY, CELL MODULES & COOLING LOOPS</span>
@@ -275,8 +275,8 @@ export function EVCellModulesSection({
         </div>
 
         {/* 3D WebGL Canvas Container */}
-        <div ref={mount3DRef} className="w-full h-[320px] rounded-xl overflow-hidden cursor-grab active:cursor-grabbing border border-amber-800/30 relative">
-          <div className="absolute bottom-2 right-2 text-[9px] font-mono text-amber-200/60 bg-black/70 px-2.5 py-1 rounded border border-amber-700/30 pointer-events-none">
+        <div ref={mount3DRef} className="w-full h-[320px] rounded-xl overflow-hidden cursor-grab active:cursor-grabbing border border-slate-800 relative">
+          <div className="absolute bottom-2 right-2 text-[9px] font-mono text-slate-400 bg-black/70 px-2.5 py-1 rounded border border-slate-700 pointer-events-none">
             ORBIT: DRAG TO ROTATE 3D PACK · SCROLL TO ZOOM · SLIDE EXPLODE TO INSPECT CELLS
           </div>
         </div>
@@ -293,15 +293,15 @@ export function EVCellModulesSection({
           <div className="space-y-3">
             <div className="p-3 rounded-xl bg-base-950/80 border border-amber-500/20 space-y-2 text-xs font-mono">
               <div className="flex justify-between">
-                <span className="text-amber-200/60">Pack Nominal Voltage</span>
+                <span className="text-slate-400">Pack Nominal Voltage</span>
                 <span className="text-amber-300 font-extrabold">800V Ultra-Fast DC</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-amber-200/60">Total Cell Count</span>
+                <span className="text-slate-400">Total Cell Count</span>
                 <span className="text-emerald-300 font-extrabold">~{estimatedCells} Cylindrical Cells</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-amber-200/60">Gravimetric Density</span>
+                <span className="text-slate-400">Gravimetric Density</span>
                 <span className="text-amber-300 font-extrabold">320 Wh/kg</span>
               </div>
             </div>
@@ -310,7 +310,7 @@ export function EVCellModulesSection({
               <span className="text-[10px] font-mono font-bold text-amber-300 uppercase tracking-wider block">
                 THERMAL CELL ISOLATION
               </span>
-              <p className="text-[11px] font-mono text-amber-100/80 leading-relaxed">
+              <p className="text-[11px] font-mono text-slate-300 leading-relaxed">
                 Aerogel inter-cell insulation barriers block cascading thermal runaway and sustain peak C-rates under launch control.
               </p>
             </div>
@@ -331,7 +331,7 @@ export function EVCellModulesSection({
               onSelectVariant={onSelectVariant}
             />
           ) : (
-            <p className="text-xs font-mono text-amber-300/50">Loading material variants...</p>
+            <p className="text-xs font-mono text-slate-500">Loading material variants...</p>
           )}
         </SectionCard>
 

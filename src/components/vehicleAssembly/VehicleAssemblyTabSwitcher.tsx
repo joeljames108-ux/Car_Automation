@@ -59,13 +59,13 @@ export const VehicleAssemblyTabSwitcher: React.FC<VehicleAssemblyTabSwitcherProp
   return (
     <div className={`flex flex-col h-full ${className}`}>
       {/* Console Tab Selector Buttons */}
-      <div className="flex items-center gap-2 mb-3 bg-white/90 dark:bg-base-900/90 p-1.5 rounded-2xl border border-slate-200 dark:border-amber-800/30 backdrop-blur-xl shadow-lg shrink-0">
+      <div className="flex items-center gap-2 mb-3 bg-white/90 dark:bg-base-900/90 p-1.5 rounded-2xl border border-slate-200 dark:border-slate-800 backdrop-blur-xl shadow-lg shrink-0">
         <button
           onClick={() => setActiveConsoleTab("catalog")}
           className={`flex-1 py-2 rounded-xl text-xs font-mono font-bold flex items-center justify-center gap-2 transition-all ${
             activeConsoleTab === "catalog"
               ? "bg-amber-500 text-slate-950 shadow-[0_0_12px_rgba(6,182,212,0.4)]"
-              : "text-amber-400 dark:text-amber-200/60 hover:text-slate-900 dark:hover:text-amber-50"
+              : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200"
           }`}
         >
           <Car size={13} />
@@ -77,7 +77,7 @@ export const VehicleAssemblyTabSwitcher: React.FC<VehicleAssemblyTabSwitcherProp
           className={`flex-1 py-2 rounded-xl text-xs font-mono font-bold flex items-center justify-center gap-2 transition-all ${
             activeConsoleTab === "dashboard"
               ? "bg-amber-500 text-slate-950 shadow-[0_0_12px_rgba(6,182,212,0.4)]"
-              : "text-amber-400 dark:text-amber-200/60 hover:text-slate-900 dark:hover:text-amber-50"
+              : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200"
           }`}
         >
           <Activity size={13} />

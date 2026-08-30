@@ -225,7 +225,7 @@ export const CURATED_INTERIOR_PRESETS: Record<string, Omit<MasterModularInterior
       centerConsolePrimary: "3k_twill_carbon_fiber",
       doorCardInsert: "3k_twill_carbon_fiber",
       headlinerMaterial: "perforated_alcantara",
-      carpetColorHex: "#0f172a",
+      carpetColorHex: "#1a1008",
     },
     lighting: {
       enabled: true,

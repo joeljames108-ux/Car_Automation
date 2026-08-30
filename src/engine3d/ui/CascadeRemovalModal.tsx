@@ -48,15 +48,15 @@ export const CascadeRemovalModal: React.FC<CascadeRemovalModalProps> = ({
         <div className="rounded-xl p-3 max-h-48 overflow-y-auto space-y-1.5 mb-4 text-xs font-mono" style={{backgroundColor: 'rgba(255,248,235,0.6)', border: '1px solid rgba(217,166,78,0.25)'}}>
           <div className="text-rose-300 font-bold">⊖ {targetInstance.manifestRef.displayName} (Root Target)</div>
           {dependentInstances.map((inst) => (
-            <div key={inst.instanceId} className="text-amber-200/60 pl-4 border-l border-amber-800/30">
+            <div key={inst.instanceId} className="text-slate-400 pl-4 border-l border-slate-800">
               ↳ ⊖ {inst.manifestRef.displayName} {inst.cylinderIndex && `(Cyl #${inst.cylinderIndex})`}
             </div>
           ))}
         </div>
 
         <div className="text-xs mb-6 flex justify-between font-mono p-2.5 rounded-lg" style={{color: '#92400E', backgroundColor: 'rgba(255,248,235,0.5)', border: '1px solid rgba(217,166,78,0.2)'}}>
-          <span>Total Parts: <strong className="text-amber-50">{totalCount}</strong></span>
-          <span>Mass Removed: <strong className="text-amber-50">{totalMassRemoved.toFixed(1)} kg</strong></span>
+          <span>Total Parts: <strong className="text-slate-200">{totalCount}</strong></span>
+          <span>Mass Removed: <strong className="text-slate-200">{totalMassRemoved.toFixed(1)} kg</strong></span>
         </div>
 
         {/* Action Buttons */}

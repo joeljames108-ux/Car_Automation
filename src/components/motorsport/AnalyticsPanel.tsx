@@ -38,7 +38,7 @@ const RadarChart = memo(function RadarChart({ stats, size = 120 }: { stats: { la
             const a = (Math.PI * 2 * i) / n - Math.PI / 2;
             return `${cx + r * scale * Math.cos(a)},${cy + r * scale * Math.sin(a)}`;
           }).join(" ")}
-          fill="none" stroke="#0f172a" strokeWidth="0.5" />
+          fill="none" stroke="#1a1008" strokeWidth="0.5" />
       ))}
       {/* Axis lines */}
       {bgPoints.map((p, i) => (
@@ -86,8 +86,8 @@ export const AnalyticsPanel = memo(function AnalyticsPanel({ selectedTeam }: { s
   if (company.motorsport.teams.length === 0) {
     return (
       <div className="glass-panel p-10 text-center">
-        <BarChart3 size={36} className="mx-auto text-amber-500 mb-3" />
-        <p className="text-amber-300/50 text-sm">No data yet. Create teams and simulate seasons.</p>
+        <BarChart3 size={36} className="mx-auto text-slate-700 mb-3" />
+        <p className="text-slate-500 text-sm">No data yet. Create teams and simulate seasons.</p>
       </div>
     );
   }
@@ -95,8 +95,8 @@ export const AnalyticsPanel = memo(function AnalyticsPanel({ selectedTeam }: { s
   if (!selectedTeam) {
     return (
       <div className="glass-panel p-10 text-center">
-        <BarChart3 size={36} className="mx-auto text-amber-500 mb-3" />
-        <p className="text-amber-300/50 text-sm">Select a team to view analytics.</p>
+        <BarChart3 size={36} className="mx-auto text-slate-700 mb-3" />
+        <p className="text-slate-500 text-sm">Select a team to view analytics.</p>
       </div>
     );
   }
@@ -106,7 +106,7 @@ export const AnalyticsPanel = memo(function AnalyticsPanel({ selectedTeam }: { s
       {/* Points Progression */}
       {pointsSeries.length > 0 && (
         <div className="glass-panel p-4">
-          <h3 className="text-xs font-semibold text-amber-100/80 uppercase tracking-wider mb-3 flex items-center gap-1.5">
+          <h3 className="text-xs font-semibold text-slate-300 uppercase tracking-wider mb-3 flex items-center gap-1.5">
             <TrendingUp size={12} className="text-accent-400" /> Points Progression
           </h3>
           <LineChart series={pointsSeries} height={160} xLabel="Season" yLabel="Points" />
@@ -116,7 +116,7 @@ export const AnalyticsPanel = memo(function AnalyticsPanel({ selectedTeam }: { s
       {/* Position History */}
       {posSeries.length > 0 && selectedTeam.seasonResults.length > 1 && (
         <div className="glass-panel p-4">
-          <h3 className="text-xs font-semibold text-amber-100/80 uppercase tracking-wider mb-3 flex items-center gap-1.5">
+          <h3 className="text-xs font-semibold text-slate-300 uppercase tracking-wider mb-3 flex items-center gap-1.5">
             <BarChart3 size={12} className="text-amber-400" /> Championship Position
           </h3>
           <LineChart series={posSeries} height={120} xLabel="Season" yLabel="Position" yMin={1} />
@@ -126,7 +126,7 @@ export const AnalyticsPanel = memo(function AnalyticsPanel({ selectedTeam }: { s
       {/* Driver Comparison */}
       {selectedTeam.drivers.length > 0 && (
         <div className="glass-panel p-4">
-          <h3 className="text-xs font-semibold text-amber-100/80 uppercase tracking-wider mb-3 flex items-center gap-1.5">
+          <h3 className="text-xs font-semibold text-slate-300 uppercase tracking-wider mb-3 flex items-center gap-1.5">
             <Users size={12} className="text-accent-400" /> Driver Comparison
           </h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -144,8 +144,8 @@ export const AnalyticsPanel = memo(function AnalyticsPanel({ selectedTeam }: { s
                 <div key={d.id} className="bg-base-850/50 rounded-xl p-4 border border-base-800/50">
                   <div className="flex items-start justify-between mb-3">
                     <div>
-                      <div className="text-sm font-semibold text-amber-50">{d.name}</div>
-                      <div className="text-[10px] text-amber-300/50">{d.nationality} · ${(d.salary / 1e6).toFixed(1)}M</div>
+                      <div className="text-sm font-semibold text-slate-200">{d.name}</div>
+                      <div className="text-[10px] text-slate-500">{d.nationality} · ${(d.salary / 1e6).toFixed(1)}M</div>
                     </div>
                     {latestDev && (
                       <div className="text-right">
@@ -162,7 +162,7 @@ export const AnalyticsPanel = memo(function AnalyticsPanel({ selectedTeam }: { s
                     <RadarChart stats={radarStats} size={140} />
                   </div>
                   {latestDev && (
-                    <div className="mt-2 pt-2 border-t border-base-800 text-[10px] text-amber-300/50 text-center italic">
+                    <div className="mt-2 pt-2 border-t border-base-800 text-[10px] text-slate-500 text-center italic">
                       "{latestDev.seasonHighlight}"
                     </div>
                   )}
@@ -175,7 +175,7 @@ export const AnalyticsPanel = memo(function AnalyticsPanel({ selectedTeam }: { s
 
       {/* Team Overview & Budget Breakdown */}
       <div className="glass-panel p-4 space-y-4">
-        <h3 className="text-xs font-semibold text-amber-100/80 uppercase tracking-wider flex items-center gap-1.5">
+        <h3 className="text-xs font-semibold text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
           <BarChart3 size={12} className="text-amber-400" /> Team Financial & Operational Overview
         </h3>
         
@@ -184,11 +184,11 @@ export const AnalyticsPanel = memo(function AnalyticsPanel({ selectedTeam }: { s
             { label: "Budget", value: `$${(selectedTeam.budget / 1e6).toFixed(0)}M`, color: "text-accent-300" },
             { label: "Facility", value: selectedTeam.facilityLevel, color: FACILITY_COLORS[selectedTeam.facilityLevel], capitalize: true },
             { label: "Tech Pool", value: String(selectedTeam.techTransferPool), color: "text-amber-400" },
-            { label: "Penalty Pts", value: String(selectedTeam.penaltyPoints), color: selectedTeam.penaltyPoints > 5 ? "text-danger-400" : "text-amber-100/80" },
+            { label: "Penalty Pts", value: String(selectedTeam.penaltyPoints), color: selectedTeam.penaltyPoints > 5 ? "text-danger-400" : "text-slate-300" },
             { label: "Sponsors", value: String(selectedTeam.sponsors.length), color: "text-ok-400" },
           ].map(s => (
             <div key={s.label} className="bg-base-850/50 rounded-lg p-3 text-center border border-base-800/50">
-              <div className="text-[10px] text-amber-300/50 mb-1">{s.label}</div>
+              <div className="text-[10px] text-slate-500 mb-1">{s.label}</div>
               <div className={`font-mono text-sm font-bold ${s.color} ${'capitalize' in s ? 'capitalize' : ''}`}>{s.value}</div>
             </div>
           ))}
@@ -196,7 +196,7 @@ export const AnalyticsPanel = memo(function AnalyticsPanel({ selectedTeam }: { s
 
         {/* Sponsor & Financial Allocation Donut Chart */}
         <div className="bg-base-850/40 p-4 rounded-xl border border-base-800">
-          <div className="text-xs font-bold text-amber-50 mb-3">Sponsor Revenue & Financial Allocation Breakdown</div>
+          <div className="text-xs font-bold text-slate-200 mb-3">Sponsor Revenue & Financial Allocation Breakdown</div>
           <DonutChart
             segments={[
               { label: "Base Budget", value: Math.round(selectedTeam.budget / 1e6), color: "#fbbf24" },

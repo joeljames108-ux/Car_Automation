@@ -85,7 +85,7 @@ export function ConnectingRodsSection({
 
             {/* Rod Ratio Readout */}
             <div className="p-3 rounded-xl bg-base-950/80 border border-amber-500/20 flex items-center justify-between">
-              <span className="text-xs font-mono text-amber-200/60">Rod-to-Stroke Ratio</span>
+              <span className="text-xs font-mono text-slate-400">Rod-to-Stroke Ratio</span>
               <div className="flex items-center gap-2">
                 <span className="text-sm font-mono font-extrabold text-amber-300">{rodRatio}:1</span>
                 <span className="text-[10px] px-1.5 py-0.2 rounded font-mono font-bold bg-amber-500/20 text-amber-300">
@@ -98,7 +98,7 @@ export function ConnectingRodsSection({
               <span className="text-[10px] font-mono font-bold text-amber-300 uppercase tracking-wider block">
                 BEAM CROSS-SECTION
               </span>
-              <p className="text-[11px] font-mono text-amber-100/80 leading-relaxed">
+              <p className="text-[11px] font-mono text-slate-300 leading-relaxed">
                 H-Beam forged 300M alloy connecting rods resist tensile elongation and lateral buckling under 2,000+ Nm cylinder peak forces.
               </p>
             </div>
@@ -119,7 +119,7 @@ export function ConnectingRodsSection({
               onSelectVariant={onSelectVariant}
             />
           ) : (
-            <p className="text-xs font-mono text-amber-300/50">Loading material variants...</p>
+            <p className="text-xs font-mono text-slate-500">Loading material variants...</p>
           )}
         </SectionCard>
 

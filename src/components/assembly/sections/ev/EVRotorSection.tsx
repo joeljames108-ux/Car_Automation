@@ -71,15 +71,15 @@ export function EVRotorSection({
           <div className="space-y-3">
             <div className="p-3 rounded-xl bg-base-950/80 border border-amber-500/20 space-y-2 text-xs font-mono">
               <div className="flex justify-between">
-                <span className="text-amber-200/60">Magnet Topology</span>
+                <span className="text-slate-400">Magnet Topology</span>
                 <span className="text-amber-300 font-extrabold">Halbach Neodymium N52UH</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-amber-200/60">Rotor Sleeve</span>
+                <span className="text-slate-400">Rotor Sleeve</span>
                 <span className="text-emerald-300 font-extrabold">Carbon-Fiber Overwrap</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-amber-200/60">Max Rotor Velocity</span>
+                <span className="text-slate-400">Max Rotor Velocity</span>
                 <span className="text-amber-300 font-extrabold">22,000 RPM Rated</span>
               </div>
             </div>
@@ -88,7 +88,7 @@ export function EVRotorSection({
               <span className="text-[10px] font-mono font-bold text-amber-300 uppercase tracking-wider block">
                 CENTRIFUGAL INTEGRITY
               </span>
-              <p className="text-[11px] font-mono text-amber-100/80 leading-relaxed">
+              <p className="text-[11px] font-mono text-slate-300 leading-relaxed">
                 Tensioned carbon-fiber sleeves lock magnets against extreme rotational G-forces, preventing magnet detachment at redline.
               </p>
             </div>
@@ -109,7 +109,7 @@ export function EVRotorSection({
               onSelectVariant={onSelectVariant}
             />
           ) : (
-            <p className="text-xs font-mono text-amber-300/50">Loading material variants...</p>
+            <p className="text-xs font-mono text-slate-500">Loading material variants...</p>
           )}
         </SectionCard>
 

@@ -91,8 +91,8 @@ function CommandCenterComponent({ onSelectStage }: CommandCenterProps = {}) {
                   <span className="text-xs font-mono font-bold text-amber-400 uppercase tracking-widest">VEHICLE CONCEPT INTENT</span>
                   <span className="bg-amber-500/20 text-amber-300 border border-amber-500/40 text-[9px] font-bold px-2 py-0.5 rounded-full">AI TUNER ACTIVE</span>
                 </div>
-                <h2 className="text-lg font-bold text-amber-50">Select Design Goal & AI Philosophy</h2>
-                <p className="text-xs text-amber-200/60">Tunes Apex AI Assistant to guide engineering decisions based on your target build concept</p>
+                <h2 className="text-lg font-bold text-slate-100">Select Design Goal & AI Philosophy</h2>
+                <p className="text-xs text-slate-400">Tunes Apex AI Assistant to guide engineering decisions based on your target build concept</p>
               </div>
             </div>
 
@@ -110,11 +110,11 @@ function CommandCenterComponent({ onSelectStage }: CommandCenterProps = {}) {
                   className={`p-3 rounded-xl border text-left transition-all ${
                     carConcept === c.id
                       ? `${c.color} shadow-[0_0_15px_rgba(34,211,238,0.2)] ring-1 ring-amber-400`
-                      : "bg-base-950/60 border-white/5 text-amber-200/60 hover:border-amber-700/30 hover:text-amber-50"
+                      : "bg-base-950/60 border-white/5 text-slate-400 hover:border-slate-700 hover:text-slate-200"
                   }`}
                 >
                   <div className="text-xs font-bold font-mono uppercase mb-0.5">{c.label}</div>
-                  <div className="text-[10px] text-amber-300/50 leading-tight">{c.desc}</div>
+                  <div className="text-[10px] text-slate-500 leading-tight">{c.desc}</div>
                 </button>
               ))}
             </div>
@@ -132,8 +132,8 @@ function CommandCenterComponent({ onSelectStage }: CommandCenterProps = {}) {
                 <div className="flex items-center gap-2">
                   <span className="text-xs font-mono font-bold text-amber-400 uppercase tracking-widest">GLOBAL UI SETTINGS</span>
                 </div>
-                <h2 className="text-lg font-bold text-amber-50">Select Interface Theme</h2>
-                <p className="text-xs text-amber-200/60">Personalize your workspace aesthetics. More themes are in development!</p>
+                <h2 className="text-lg font-bold text-slate-100">Select Interface Theme</h2>
+                <p className="text-xs text-slate-400">Personalize your workspace aesthetics. More themes are in development!</p>
               </div>
             </div>
 
@@ -142,8 +142,8 @@ function CommandCenterComponent({ onSelectStage }: CommandCenterProps = {}) {
               {[
                 { id: "theme1", label: "UI 1", desc: "Kinetic Horizon — AnimMaster & HorizonX Design", color: "border-amber-500/40 text-amber-300 bg-amber-500/10", activeShadow: "shadow-[0_0_15px_rgba(34,211,238,0.2)] ring-1 ring-amber-400" },
                 { id: "theme2", label: "Theme 2", desc: "Cosmic Nebula — Deep Purple Sci-Fi", color: "border-amber-500/40 text-amber-300 bg-amber-500/10", activeShadow: "shadow-[0_0_15px_rgba(168,85,247,0.25)] ring-1 ring-purple-400" },
-                { id: "theme3", label: "Theme 3", desc: "Nordic Light Glass — Alabaster White", color: "border-sky-500/40 text-sky-400 bg-sky-500/10", activeShadow: "shadow-[0_0_15px_rgba(14,165,233,0.2)] ring-1 ring-sky-400" },
-                { id: "theme4", label: "Vision Glass", desc: "Spatial Glass Lounge (Default)", color: "border-sky-300/40 text-sky-200 bg-sky-500/10", activeShadow: "shadow-[0_0_15px_rgba(147,197,253,0.15)] ring-1 ring-sky-300" },
+                { id: "theme3", label: "Theme 3", desc: "Nordic Light Glass — Alabaster White", color: "border-sky-500/40 text-amber-400 bg-amber-500/15", activeShadow: "shadow-[0_0_15px_rgba(14,165,233,0.2)] ring-1 ring-sky-400" },
+                { id: "theme4", label: "Vision Glass", desc: "Spatial Glass Lounge (Default)", color: "border-sky-300/40 text-sky-200 bg-amber-500/15", activeShadow: "shadow-[0_0_15px_rgba(147,197,253,0.15)] ring-1 ring-sky-300" },
               ].map((t) => (
                 <button
                   key={t.id}
@@ -151,11 +151,11 @@ function CommandCenterComponent({ onSelectStage }: CommandCenterProps = {}) {
                   className={`p-3 rounded-xl border text-left transition-all ${
                     uiTheme === t.id
                       ? `${t.color} ${t.activeShadow}`
-                      : "bg-base-950/60 border-white/5 text-amber-200/60 hover:border-amber-700/30 hover:text-amber-50"
+                      : "bg-base-950/60 border-white/5 text-slate-400 hover:border-slate-700 hover:text-slate-200"
                   }`}
                 >
                   <div className="text-xs font-bold font-mono uppercase mb-0.5">{t.label}</div>
-                  <div className="text-[10px] text-amber-300/50 leading-tight">{t.desc}</div>
+                  <div className="text-[10px] text-slate-500 leading-tight">{t.desc}</div>
                 </button>
               ))}
             </div>
@@ -168,32 +168,32 @@ function CommandCenterComponent({ onSelectStage }: CommandCenterProps = {}) {
         <div className="bg-base-900 border border-base-800 rounded-xl p-3 text-center hover:border-base-700 transition-all">
           <Fuel size={12} className="mx-auto text-warn-400 mb-1" />
           <div className="font-mono text-sm text-warn-400">${company.economy.fuelPrice.toFixed(2)}</div>
-          <div className="text-[9px] text-amber-400">Fuel $/gal</div>
+          <div className="text-[9px] text-slate-600">Fuel $/gal</div>
         </div>
         <div className="bg-base-900 border border-base-800 rounded-xl p-3 text-center hover:border-base-700 transition-all">
           <Warehouse size={12} className="mx-auto text-accent-400 mb-1" />
           <div className="font-mono text-sm text-accent-300">{company.garage.length}</div>
-          <div className="text-[9px] text-amber-400">Garage</div>
+          <div className="text-[9px] text-slate-600">Garage</div>
         </div>
         <div className="bg-base-900 border border-base-800 rounded-xl p-3 text-center hover:border-base-700 transition-all">
           <Trophy size={12} className="mx-auto text-yellow-400 mb-1" />
           <div className="font-mono text-sm text-yellow-400">{totalMsWins}</div>
-          <div className="text-[9px] text-amber-400">Race Wins</div>
+          <div className="text-[9px] text-slate-600">Race Wins</div>
         </div>
         <div className="bg-base-900 border border-base-800 rounded-xl p-3 text-center hover:border-base-700 transition-all">
           <DollarSign size={12} className="mx-auto text-ok-400 mb-1" />
           <div className="font-mono text-sm text-ok-400">{fmtMoney(company.totalRevenue)}</div>
-          <div className="text-[9px] text-amber-400">Revenue</div>
+          <div className="text-[9px] text-slate-600">Revenue</div>
         </div>
         <div className="bg-base-900 border border-base-800 rounded-xl p-3 text-center hover:border-base-700 transition-all">
           <Star size={12} className="mx-auto text-amber-400 mb-1" />
           <div className="font-mono text-sm text-amber-400">{company.reputation}</div>
-          <div className="text-[9px] text-amber-400">Reputation</div>
+          <div className="text-[9px] text-slate-600">Reputation</div>
         </div>
         <div className="bg-base-900 border border-base-800 rounded-xl p-3 text-center hover:border-base-700 transition-all">
           <Activity size={12} className="mx-auto text-amber-400 mb-1" />
           <div className="font-mono text-sm text-amber-400">Mo.{company.economy.month}</div>
-          <div className="text-[9px] text-amber-400">Game Month</div>
+          <div className="text-[9px] text-slate-600">Game Month</div>
         </div>
       </div>
 
@@ -213,20 +213,20 @@ function CommandCenterComponent({ onSelectStage }: CommandCenterProps = {}) {
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" /> LIVE STREAM
                 </span>
               </div>
-              <h2 className="text-lg font-bold text-amber-50">Central Engineering Dashboard</h2>
-              <p className="text-xs text-amber-200/60">Real-time command center — updates instantly with every lab change</p>
+              <h2 className="text-lg font-bold text-slate-100">Central Engineering Dashboard</h2>
+              <p className="text-xs text-slate-400">Real-time command center — updates instantly with every lab change</p>
             </div>
           </div>
           <div className="flex-1" />
           <HealthGauge value={overallHealth} />
         </div>
 
-        <div className="mt-4 pt-3 border-t border-white/5 flex items-center justify-between text-xs text-amber-200/60">
+        <div className="mt-4 pt-3 border-t border-white/5 flex items-center justify-between text-xs text-slate-400">
           <div className="flex items-center gap-2">
             <span className="inline-block w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
             <span className="font-mono text-[11px]">Apex Spatial Engine v2.4 • 60 FPS Physics Loop</span>
           </div>
-          <span className="font-mono text-[10px] text-amber-300/50">Optimum Balance Index: {(overallHealth * 100).toFixed(0)}%</span>
+          <span className="font-mono text-[10px] text-slate-500">Optimum Balance Index: {(overallHealth * 100).toFixed(0)}%</span>
         </div>
       </div>
 
@@ -313,7 +313,7 @@ function CommandCenterComponent({ onSelectStage }: CommandCenterProps = {}) {
           </div>
           <div className="grid grid-cols-2 gap-3">
             <div className="bg-base-800 border border-base-700/50 rounded-xl p-3 flex flex-col items-center">
-              <div className="text-[10px] uppercase tracking-widest text-amber-300/50 mb-2">Rigidity</div>
+              <div className="text-[10px] uppercase tracking-widest text-slate-500 mb-2">Rigidity</div>
               <div className="relative w-16 h-16">
                 <svg viewBox="0 0 36 36" className="w-full h-full -rotate-90">
                   <circle cx="18" cy="18" r="15" fill="none" stroke="#1e293b" strokeWidth="3" />
@@ -323,12 +323,12 @@ function CommandCenterComponent({ onSelectStage }: CommandCenterProps = {}) {
                     strokeDasharray="94.2" strokeDashoffset={94.2 * (1 - chassis.rigidityFactor)} />
                 </svg>
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <span className="font-mono text-sm font-bold text-amber-50">{(chassis.rigidityFactor * 100).toFixed(0)}%</span>
+                  <span className="font-mono text-sm font-bold text-slate-100">{(chassis.rigidityFactor * 100).toFixed(0)}%</span>
                 </div>
               </div>
             </div>
             <div className="bg-base-800 border border-base-700/50 rounded-xl p-3">
-              <div className="text-[10px] uppercase tracking-widest text-amber-300/50 mb-2">Weight Distribution F/R</div>
+              <div className="text-[10px] uppercase tracking-widest text-slate-500 mb-2">Weight Distribution F/R</div>
               <div className="flex h-6 rounded-lg overflow-hidden border border-base-700/50">
                 <div className="flex items-center justify-center text-[10px] font-mono font-bold text-white transition-all duration-500"
                   style={{ width: (sim.weightDistFront * 100) + "%", background: "linear-gradient(135deg, #f59e0b, #d97706)", boxShadow: "inset 0 1px 1px rgba(255,255,255,0.2)" }}>
@@ -339,12 +339,12 @@ function CommandCenterComponent({ onSelectStage }: CommandCenterProps = {}) {
                   {(100 - sim.weightDistFront * 100).toFixed(0)}%
                 </div>
               </div>
-              <div className="flex justify-between mt-1.5 text-[10px] text-amber-300/50 font-mono"><span>Front</span><span>Rear</span></div>
+              <div className="flex justify-between mt-1.5 text-[10px] text-slate-500 font-mono"><span>Front</span><span>Rear</span></div>
             </div>
           </div>
           <div className="mt-3 bg-base-800 border border-base-700/50 rounded-xl p-3">
             <div className="flex items-center justify-between text-xs mb-1.5">
-              <span className="flex items-center gap-1.5 text-amber-100/80"><ShieldCheck size={12} className="text-emerald-400" />Safety Factor</span>
+              <span className="flex items-center gap-1.5 text-slate-300"><ShieldCheck size={12} className="text-emerald-400" />Safety Factor</span>
               <span className="font-mono text-sm font-bold text-emerald-400">{(chassis.safetyFactor * 100).toFixed(0)}%</span>
             </div>
             <div className="h-2.5 bg-base-700 rounded-full overflow-hidden">
@@ -358,7 +358,7 @@ function CommandCenterComponent({ onSelectStage }: CommandCenterProps = {}) {
             <StatTile label="Spring F/R" value={design.vehicle.springRateF + "/" + design.vehicle.springRateR} unit="N/mm" />
           </div>
           <div className="bg-base-800 border border-base-700/50 rounded-xl p-4">
-            <div className="text-[10px] uppercase tracking-widest text-amber-300/50 mb-3">Wheel Alignment Overview</div>
+            <div className="text-[10px] uppercase tracking-widest text-slate-500 mb-3">Wheel Alignment Overview</div>
             <div className="grid grid-cols-2 gap-4">
               <div className="text-center">
                 <div className="text-[10px] text-amber-400 font-semibold uppercase mb-2">Front Axle</div>
@@ -378,7 +378,7 @@ function CommandCenterComponent({ onSelectStage }: CommandCenterProps = {}) {
                     <div className="font-mono text-[10px] text-amber-300 mt-1">{design.vehicle.camberF}°</div>
                   </div>
                 </div>
-                <div className="text-[9px] text-amber-300/50 mt-1">Toe: {design.vehicle.toeF}°</div>
+                <div className="text-[9px] text-slate-500 mt-1">Toe: {design.vehicle.toeF}°</div>
               </div>
               <div className="text-center">
                 <div className="text-[10px] text-amber-400 font-semibold uppercase mb-2">Rear Axle</div>
@@ -398,7 +398,7 @@ function CommandCenterComponent({ onSelectStage }: CommandCenterProps = {}) {
                     <div className="font-mono text-[10px] text-amber-300 mt-1">{design.vehicle.camberR}°</div>
                   </div>
                 </div>
-                <div className="text-[9px] text-amber-300/50 mt-1">Toe: {design.vehicle.toeR}°</div>
+                <div className="text-[9px] text-slate-500 mt-1">Toe: {design.vehicle.toeR}°</div>
               </div>
             </div>
           </div>
@@ -420,16 +420,16 @@ function CommandCenterComponent({ onSelectStage }: CommandCenterProps = {}) {
               const minT = fastestLap?.time || 0;
               const range = maxT - minT || 1;
               const barPct = 40 + ((lap.time - minT) / range) * 60;
-              const grads = ["linear-gradient(90deg,#f59e0b,#fbbf24)","linear-gradient(90deg,#94a3b8,#cbd5e1)","linear-gradient(90deg,#d97706,#f59e0b)","linear-gradient(90deg,#64748b,#94a3b8)","linear-gradient(90deg,#475569,#64748b)","linear-gradient(90deg,#334155,#475569)","linear-gradient(90deg,#1e293b,#334155)","linear-gradient(90deg,#0f172a,#1e293b)"];
+              const grads = ["linear-gradient(90deg,#f59e0b,#fbbf24)","linear-gradient(90deg,#94a3b8,#cbd5e1)","linear-gradient(90deg,#d97706,#f59e0b)","linear-gradient(90deg,#64748b,#94a3b8)","linear-gradient(90deg,#475569,#64748b)","linear-gradient(90deg,#334155,#475569)","linear-gradient(90deg,#1e293b,#334155)","linear-gradient(90deg,#1a1008,#1e293b)"];
               return (
                 <div key={lap.trackId} className="group flex items-center gap-2 py-1 px-2 rounded-lg hover:bg-base-800/80 transition-colors">
-                  <span className="font-mono text-xs text-amber-300/50 w-4 text-right shrink-0">{i + 1}</span>
-                  <Flag size={10} className={i === 0 ? "text-amber-400" : "text-amber-400"} />
-                  <span className="text-xs text-amber-200/60 flex-1 truncate min-w-0">{lap.trackName}</span>
+                  <span className="font-mono text-xs text-slate-500 w-4 text-right shrink-0">{i + 1}</span>
+                  <Flag size={10} className={i === 0 ? "text-amber-400" : "text-slate-600"} />
+                  <span className="text-xs text-slate-400 flex-1 truncate min-w-0">{lap.trackName}</span>
                   <div className="w-24 h-2 bg-base-800 rounded-full overflow-hidden shrink-0">
                     <div className="h-full rounded-full transition-all duration-700" style={{ width: barPct + "%", background: grads[i] || grads[7], boxShadow: i === 0 ? "0 0 8px rgba(245,158,11,0.4)" : "none" }} />
                   </div>
-                  <span className={"font-mono text-xs font-bold shrink-0 " + (i === 0 ? "text-amber-300" : "text-amber-100/80")}>{formatLap(lap.time)}</span>
+                  <span className={"font-mono text-xs font-bold shrink-0 " + (i === 0 ? "text-amber-300" : "text-slate-300")}>{formatLap(lap.time)}</span>
                 </div>
               );
             })}
@@ -472,7 +472,7 @@ function CommandCenterComponent({ onSelectStage }: CommandCenterProps = {}) {
             <div className="flex items-center gap-3 p-3 rounded-lg bg-base-850 border border-base-800">
               <div className="text-3xl font-bold text-accent-300 font-mono">{summary.overall.toFixed(1)}</div>
               <div className="flex-1">
-                <div className="text-xs text-amber-200/60">Overall Review Score</div>
+                <div className="text-xs text-slate-400">Overall Review Score</div>
                 <div className="flex gap-0.5 mt-0.5">
                   {[1, 2, 3, 4, 5].map((s) => (
                     <Star key={s} size={12} className={s <= Math.round(summary.overall / 2) ? "text-warn-400 fill-warn-400" : "text-base-700"} />
@@ -685,7 +685,7 @@ function HealthGauge({ value }: { value: number }) {
   return (
     <div className="flex items-center gap-3">
       <div className="text-right">
-        <div className="text-[10px] text-amber-300/50 uppercase tracking-wider">Vehicle Health</div>
+        <div className="text-[10px] text-slate-500 uppercase tracking-wider">Vehicle Health</div>
         <div className="text-sm font-semibold" style={{ color }}>{label}</div>
       </div>
       <div className="relative w-16 h-16">
@@ -713,7 +713,7 @@ function SystemBar({ label, value, good, icon, invert }: {
   return (
     <div className="group">
       <div className="flex items-center justify-between text-xs mb-1.5">
-        <span className="flex items-center gap-1.5 text-amber-100/80 font-medium">{icon}{label}</span>
+        <span className="flex items-center gap-1.5 text-slate-300 font-medium">{icon}{label}</span>
         <span className={"font-mono font-bold text-sm " + (isGood ? "text-emerald-400" : "text-amber-400")}>{pct.toFixed(0)}%</span>
       </div>
       <div className="h-3.5 bg-base-800 rounded-full overflow-hidden border border-base-700/50 shadow-inner relative">
@@ -731,8 +731,8 @@ function CostBar({ label, value, total, color, icon }: { label: string; value: n
   return (
     <div className="group">
       <div className="flex justify-between text-xs mb-1.5">
-        <span className="flex items-center gap-1.5 text-amber-100/80 font-medium">{icon}<span>{label}</span></span>
-        <span className="font-mono text-amber-50 font-semibold">{"$" + (value/1000).toFixed(1) + "k"} <span className="text-amber-300/50 text-[10px]">({"(" + pct.toFixed(0) + "%"})</span></span>
+        <span className="flex items-center gap-1.5 text-slate-300 font-medium">{icon}<span>{label}</span></span>
+        <span className="font-mono text-slate-200 font-semibold">{"$" + (value/1000).toFixed(1) + "k"} <span className="text-slate-500 text-[10px]">({"(" + pct.toFixed(0) + "%"})</span></span>
       </div>
       <div className="h-3.5 bg-base-800 rounded-full overflow-hidden border border-base-700/50 shadow-inner">
         <div className="h-full rounded-full transition-all duration-700 ease-out relative overflow-hidden group-hover:brightness-110"
@@ -761,7 +761,7 @@ function AlertCard({ rec }: { rec: Recommendation }) {
       <AlertTriangle size={14} className="text-danger-400 mt-0.5 shrink-0" />
       <div className="flex-1">
         <div className="text-xs font-semibold text-danger-300">{rec.title}</div>
-        <div className="text-[11px] text-amber-200/60 mt-0.5">{rec.detail}</div>
+        <div className="text-[11px] text-slate-400 mt-0.5">{rec.detail}</div>
       </div>
     </div>
   );
@@ -772,7 +772,7 @@ function RecommendationRow({ rec }: { rec: Recommendation }) {
     critical: { color: "text-danger-300 bg-danger-500/10 border-danger-500/30", dot: "bg-danger-500" },
     high: { color: "text-warn-300 bg-warn-500/10 border-warn-500/30", dot: "bg-warn-500" },
     medium: { color: "text-accent-300 bg-accent-500/10 border-accent-500/30", dot: "bg-accent-500" },
-    low: { color: "text-amber-100/80 bg-base-800 border-base-700", dot: "bg-slate-500" },
+    low: { color: "text-slate-300 bg-base-800 border-base-700", dot: "bg-slate-500" },
   };
   const cfg = priorityConfig[rec.priority];
   return (
@@ -780,19 +780,19 @@ function RecommendationRow({ rec }: { rec: Recommendation }) {
       <span className={`mt-1.5 w-2 h-2 rounded-full shrink-0 ${cfg.dot}`} />
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2 flex-wrap">
-          <span className="text-sm font-medium text-amber-50">{rec.title}</span>
+          <span className="text-sm font-medium text-slate-200">{rec.title}</span>
           <span className="text-[10px] uppercase tracking-wider opacity-70">{rec.category}</span>
         </div>
-        <div className="text-[11px] text-amber-200/60 mt-0.5">{rec.detail}</div>
+        <div className="text-[11px] text-slate-400 mt-0.5">{rec.detail}</div>
       </div>
       <div className="flex items-center gap-2 shrink-0 text-right">
         <div>
-          <div className="text-[10px] text-amber-400 uppercase">Current</div>
-          <div className="font-mono text-xs text-amber-100/80">{rec.metric}</div>
+          <div className="text-[10px] text-slate-600 uppercase">Current</div>
+          <div className="font-mono text-xs text-slate-300">{rec.metric}</div>
         </div>
-        <ArrowRight size={12} className="text-amber-400" />
+        <ArrowRight size={12} className="text-slate-600" />
         <div>
-          <div className="text-[10px] text-amber-400 uppercase">Target</div>
+          <div className="text-[10px] text-slate-600 uppercase">Target</div>
           <div className="font-mono text-xs text-ok-400">{rec.target}</div>
         </div>
       </div>

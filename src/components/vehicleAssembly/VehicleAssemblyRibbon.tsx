@@ -67,17 +67,17 @@ export const VehicleAssemblyRibbon: React.FC<VehicleAssemblyRibbonProps> = ({
   };
 
   return (
-    <div className="bg-white/80 dark:bg-base-900/90 border border-slate-200 dark:border-amber-800/30 rounded-3xl p-4 backdrop-blur-xl shadow-xl space-y-3 font-mono">
+    <div className="bg-white/80 dark:bg-base-900/90 border border-slate-200 dark:border-slate-800 rounded-3xl p-4 backdrop-blur-xl shadow-xl space-y-3 font-mono">
       {/* Ribbon Header: Title + Completion Progress */}
       <div className="flex flex-wrap items-center justify-between gap-3 text-xs">
         <div className="flex items-center gap-2">
           <span className="p-1.5 rounded-xl bg-amber-500/10 text-amber-500 dark:text-amber-400">
             <Car size={16} />
           </span>
-          <strong className="text-slate-800 dark:text-amber-50 font-bold uppercase tracking-wider">
+          <strong className="text-slate-800 dark:text-slate-200 font-bold uppercase tracking-wider">
             STEP 3: MODULAR ASSEMBLY LINE
           </strong>
-          <span className="text-[11px] text-amber-300/50 dark:text-amber-200/60 bg-slate-100 dark:bg-base-950 px-2 py-0.5 rounded-lg border border-slate-200 dark:border-amber-800/30 font-semibold">
+          <span className="text-[11px] text-slate-500 dark:text-slate-400 bg-slate-100 dark:bg-base-950 px-2 py-0.5 rounded-lg border border-slate-200 dark:border-slate-800 font-semibold">
             {installedStages.length} of {SUBSYSTEM_STAGES.length} Stages Installed
           </span>
         </div>
@@ -93,10 +93,10 @@ export const VehicleAssemblyRibbon: React.FC<VehicleAssemblyRibbonProps> = ({
             </button>
           )}
 
-          <span className="text-[11px] text-amber-300/50 dark:text-amber-200/60 font-bold">
+          <span className="text-[11px] text-slate-500 dark:text-slate-400 font-bold">
             Assembly Progress
           </span>
-          <div className="w-28 h-2.5 bg-slate-200 dark:bg-base-950 rounded-full overflow-hidden border border-slate-300 dark:border-amber-800/30">
+          <div className="w-28 h-2.5 bg-slate-200 dark:bg-base-950 rounded-full overflow-hidden border border-slate-300 dark:border-slate-800">
             <div
               className="h-full bg-gradient-to-r from-amber-500 to-amber-500 transition-all duration-500"
               style={{ width: `${completionPercentage}%` }}
@@ -112,7 +112,7 @@ export const VehicleAssemblyRibbon: React.FC<VehicleAssemblyRibbonProps> = ({
       <div className="relative flex items-center">
         <button
           onClick={() => scroll('left')}
-          className="p-2 rounded-2xl bg-slate-100 dark:bg-base-950 border border-slate-200 dark:border-amber-800/30 text-amber-400 dark:text-amber-200/60 hover:text-amber-500 hover:border-amber-500/40 transition-all mr-2 shadow-sm"
+          className="p-2 rounded-2xl bg-slate-100 dark:bg-base-950 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:text-amber-500 hover:border-amber-500/40 transition-all mr-2 shadow-sm"
         >
           <ChevronLeft size={16} />
         </button>
@@ -135,13 +135,13 @@ export const VehicleAssemblyRibbon: React.FC<VehicleAssemblyRibbonProps> = ({
                     ? 'bg-amber-500 text-slate-950 border-amber-400 shadow-[0_0_15px_rgba(6,182,212,0.45)] scale-105'
                     : isInstalled
                     ? 'bg-emerald-500/10 dark:bg-emerald-950/30 text-emerald-600 dark:text-emerald-400 border-emerald-500/30 hover:border-emerald-400'
-                    : 'bg-slate-100 dark:bg-base-950 text-amber-500 dark:text-amber-100/80 border-slate-200 dark:border-amber-800/30 hover:border-amber-500/40'
+                    : 'bg-slate-100 dark:bg-base-950 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-800 hover:border-amber-500/40'
                 }`}
               >
                 {isInstalled ? (
                   <CheckCircle2 size={14} className={isSelected ? 'text-slate-950' : 'text-emerald-400'} />
                 ) : (
-                  <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-md ${isSelected ? 'bg-amber-950/80 text-amber-300' : 'bg-slate-200 dark:bg-base-900 text-amber-300/50'}`}>
+                  <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-md ${isSelected ? 'bg-slate-950 text-amber-300' : 'bg-slate-200 dark:bg-base-900 text-slate-500'}`}>
                     #{s.stageNumber}
                   </span>
                 )}
@@ -153,7 +153,7 @@ export const VehicleAssemblyRibbon: React.FC<VehicleAssemblyRibbonProps> = ({
 
         <button
           onClick={() => scroll('right')}
-          className="p-2 rounded-2xl bg-slate-100 dark:bg-base-950 border border-slate-200 dark:border-amber-800/30 text-amber-400 dark:text-amber-200/60 hover:text-amber-500 hover:border-amber-500/40 transition-all ml-2 shadow-sm"
+          className="p-2 rounded-2xl bg-slate-100 dark:bg-base-950 border border-slate-200 dark:border-slate-800 text-slate-600 dark:text-slate-400 hover:text-amber-500 hover:border-amber-500/40 transition-all ml-2 shadow-sm"
         >
           <ChevronRight size={16} />
         </button>

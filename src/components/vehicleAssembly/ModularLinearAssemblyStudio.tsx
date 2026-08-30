@@ -339,7 +339,7 @@ export const ModularLinearAssemblyStudio: React.FC = () => {
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all border cursor-pointer ${
               activeTab === "stage_config" && !isInAeroStudio
                 ? "bg-amber-500/20 border-amber-500 text-amber-300 shadow-sm"
-                : "bg-base-900/60 border-base-800 text-amber-200/60 hover:text-amber-50"
+                : "bg-base-900/60 border-base-800 text-slate-400 hover:text-slate-200"
             }`}
           >
             <Wrench size={13} />
@@ -354,7 +354,7 @@ export const ModularLinearAssemblyStudio: React.FC = () => {
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all border cursor-pointer ${
               activeTab === "suspension_kinematics"
                 ? "bg-emerald-500/20 border-emerald-500 text-emerald-300 shadow-sm"
-                : "bg-base-900/60 border-base-800 text-amber-200/60 hover:text-amber-50"
+                : "bg-base-900/60 border-base-800 text-slate-400 hover:text-slate-200"
             }`}
           >
             <Activity size={13} />
@@ -369,7 +369,7 @@ export const ModularLinearAssemblyStudio: React.FC = () => {
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all border cursor-pointer ${
               activeTab === "cad_tree"
                 ? "bg-amber-500/20 border-amber-500 text-amber-300 shadow-sm"
-                : "bg-base-900/60 border-base-800 text-amber-200/60 hover:text-amber-50"
+                : "bg-base-900/60 border-base-800 text-slate-400 hover:text-slate-200"
             }`}
           >
             <Layers size={13} />
@@ -384,7 +384,7 @@ export const ModularLinearAssemblyStudio: React.FC = () => {
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all border cursor-pointer ${
               activeTab === "diagnostics"
                 ? "bg-emerald-500/20 border-emerald-500 text-emerald-300 shadow-sm"
-                : "bg-base-900/60 border-base-800 text-amber-200/60 hover:text-amber-50"
+                : "bg-base-900/60 border-base-800 text-slate-400 hover:text-slate-200"
             }`}
           >
             <ShieldCheck size={13} />
@@ -399,7 +399,7 @@ export const ModularLinearAssemblyStudio: React.FC = () => {
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all border cursor-pointer ${
               activeTab === "versions"
                 ? "bg-amber-500/20 border-amber-500 text-amber-300 shadow-sm"
-                : "bg-base-900/60 border-base-800 text-amber-200/60 hover:text-amber-50"
+                : "bg-base-900/60 border-base-800 text-slate-400 hover:text-slate-200"
             }`}
           >
             <GitBranch size={13} />
@@ -743,7 +743,7 @@ export const ModularLinearAssemblyStudio: React.FC = () => {
                   <h3 className="font-mono text-sm font-bold text-emerald-400 flex items-center gap-2">
                     <Wind size={16} /> 12. AERODYNAMICS STUDIO & ACTIVE SURFACES
                   </h3>
-                  <p className="text-xs text-amber-200/60">
+                  <p className="text-xs text-slate-400">
                     Configure high-downforce wings, front splitters, venturi diffuser angles, and DRS kinematics.
                   </p>
                 </div>

@@ -104,7 +104,7 @@ export class InteriorMaterialPbrSynthesizer {
     const primMatType = theme.primaryUpholstery || theme.seatPrimaryMaterial || "semi_aniline_leather";
     const secMatType = theme.secondaryUpholstery || theme.seatSecondaryMaterial || "perforated_alcantara";
     const primColor = theme.primaryColorHex || "#1e293b";
-    const secColor = theme.secondaryColorHex || "#0f172a";
+    const secColor = theme.secondaryColorHex || "#1a1008";
     const trimType = theme.trimAccents || theme.dashboardTrimInsert || "3k_twill_carbon_fiber";
 
     const primaryMat = this.createPbrMaterial({
@@ -206,7 +206,7 @@ export class InteriorMaterialPbrSynthesizer {
     }
 
     const carpetMat = new THREE.MeshStandardMaterial({
-      color: new THREE.Color(theme.carpetColorHex || "#0f172a"),
+      color: new THREE.Color(theme.carpetColorHex || "#1a1008"),
       roughness: 0.90,
       metalness: 0.02,
     });

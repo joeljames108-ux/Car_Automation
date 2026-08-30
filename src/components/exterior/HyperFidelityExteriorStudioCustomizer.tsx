@@ -305,16 +305,16 @@ export const HyperFidelityExteriorStudioCustomizer: React.FC = () => {
   }, [config.typologyStyle]);
 
   return (
-    <div className="flex flex-col w-full h-full bg-[#07090e] text-amber-50 rounded-xl overflow-hidden border border-amber-800/30 shadow-2xl font-sans">
+    <div className="flex flex-col w-full h-full bg-amber-950/60 text-slate-100 rounded-xl overflow-hidden border border-slate-800 shadow-2xl font-sans">
       {/* Header Bar */}
-      <div className="flex items-center justify-between px-6 py-3.5 bg-[#0b0e17]/90 backdrop-blur-md border-b border-amber-800/30">
+      <div className="flex items-center justify-between px-6 py-3.5 bg-amber-950/60/90 backdrop-blur-md border-b border-slate-800/80">
         <div className="flex items-center gap-3">
           <div className="p-2 bg-amber-500/10 rounded-lg border border-amber-500/30 text-amber-400">
             <Wind className="w-5 h-5" />
           </div>
           <div>
             <h2 className="text-base font-semibold tracking-wide text-white">Hyper-Fidelity Exterior 3D Studio</h2>
-            <p className="text-xs text-amber-200/60">Class-A Surfacing, Active DRS Morphing & C/SiC Rolling Gear</p>
+            <p className="text-xs text-slate-400">Class-A Surfacing, Active DRS Morphing & C/SiC Rolling Gear</p>
           </div>
         </div>
 
@@ -336,7 +336,7 @@ export const HyperFidelityExteriorStudioCustomizer: React.FC = () => {
         {/* 3D Viewport Canvas */}
         <div className="flex-1 h-full relative" ref={mountRef}>
           {/* Floating Camera Hotspot Bar */}
-          <div className="absolute top-4 left-4 z-20 flex items-center gap-1.5 p-1.5 bg-[#0a0d14]/85 backdrop-blur-md rounded-xl border border-amber-800/30 shadow-xl">
+          <div className="absolute top-4 left-4 z-20 flex items-center gap-1.5 p-1.5 bg-amber-950/60/85 backdrop-blur-md rounded-xl border border-slate-800/90 shadow-xl">
             {(["hero_front_three_quarter", "track_rear_three_quarter", "low_side_profile", "downforce_top_view", "wheel_brake_macro", "front_fascia_close"] as ExteriorCameraPreset[]).map((cam) => (
               <button
                 key={cam}
@@ -344,7 +344,7 @@ export const HyperFidelityExteriorStudioCustomizer: React.FC = () => {
                 className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
                   activeCam === cam
                     ? "bg-amber-500/20 text-amber-300 border border-amber-500/40 shadow-sm"
-                    : "text-amber-200/60 hover:text-white hover:bg-amber-800/35/50"
+                    : "text-slate-400 hover:text-white hover:bg-slate-800/50"
                 }`}
               >
                 {cam.replace(/_/g, " ").toUpperCase()}
@@ -354,26 +354,26 @@ export const HyperFidelityExteriorStudioCustomizer: React.FC = () => {
 
           {/* Floating CFD Aerodynamics HUD Badge */}
           {aeroTelemetry && (
-            <div className="absolute bottom-4 left-4 z-20 flex items-center gap-4 px-4 py-2.5 bg-[#0b0f19]/90 backdrop-blur-md rounded-xl border border-amber-800/30 shadow-xl text-xs">
+            <div className="absolute bottom-4 left-4 z-20 flex items-center gap-4 px-4 py-2.5 bg-amber-950/60/90 backdrop-blur-md rounded-xl border border-slate-800/90 shadow-xl text-xs">
               <div className="flex items-center gap-2 text-amber-400">
                 <Wind className="w-4 h-4" />
                 <span className="font-semibold">Downforce: {aeroTelemetry.downforceN} N</span>
               </div>
-              <div className="h-4 w-px bg-amber-800/35" />
-              <div className="text-amber-100/80">Drag: <span className="text-amber-400 font-medium">{aeroTelemetry.dragForceN} N</span></div>
-              <div className="h-4 w-px bg-amber-800/35" />
-              <div className="text-amber-100/80">L/D Efficiency: <span className="text-emerald-400 font-medium">{aeroTelemetry.liftToDragRatio}</span></div>
-              <div className="h-4 w-px bg-amber-800/35" />
-              <div className="text-amber-100/80">Aero Balance: <span className="text-amber-400 font-medium">{aeroTelemetry.frontAeroBalancePercent}% F</span></div>
+              <div className="h-4 w-px bg-slate-800" />
+              <div className="text-slate-300">Drag: <span className="text-amber-400 font-medium">{aeroTelemetry.dragForceN} N</span></div>
+              <div className="h-4 w-px bg-slate-800" />
+              <div className="text-slate-300">L/D Efficiency: <span className="text-emerald-400 font-medium">{aeroTelemetry.liftToDragRatio}</span></div>
+              <div className="h-4 w-px bg-slate-800" />
+              <div className="text-slate-300">Aero Balance: <span className="text-amber-400 font-medium">{aeroTelemetry.frontAeroBalancePercent}% F</span></div>
             </div>
           )}
         </div>
 
         {/* Right Configuration Sidebar */}
-        <div className="w-80 bg-[#090c13]/95 backdrop-blur-xl border-l border-amber-800/30 p-5 flex flex-col gap-5 overflow-y-auto z-20">
+        <div className="w-80 bg-amber-950/60/95 backdrop-blur-xl border-l border-slate-800/90 p-5 flex flex-col gap-5 overflow-y-auto z-20">
           {/* Typology Style Selector */}
           <div className="flex flex-col gap-2">
-            <label className="text-xs font-semibold text-amber-100/80 uppercase tracking-wider flex items-center gap-1.5">
+            <label className="text-xs font-semibold text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
               <Sliders className="w-3.5 h-3.5 text-amber-400" /> Body Typology Style
             </label>
             <div className="grid grid-cols-2 gap-2">
@@ -384,7 +384,7 @@ export const HyperFidelityExteriorStudioCustomizer: React.FC = () => {
                   className={`py-2 px-2 rounded-lg text-xs font-medium text-center border transition-all ${
                     config.typologyStyle === t
                       ? "bg-amber-500/20 text-amber-300 border-amber-500/50 shadow-md shadow-blue-950/30"
-                      : "bg-amber-900/40 text-amber-200/60 border-amber-800/30 hover:border-amber-700/30"
+                      : "bg-slate-900/60 text-slate-400 border-slate-800 hover:border-slate-700"
                   }`}
                 >
                   {t.replace(/_/g, " ").toUpperCase()}
@@ -396,7 +396,7 @@ export const HyperFidelityExteriorStudioCustomizer: React.FC = () => {
           {/* Active Aero Wing Pitch Angle Slider */}
           <div className="flex flex-col gap-2">
             <div className="flex justify-between text-xs">
-              <span className="font-semibold text-amber-100/80 flex items-center gap-1.5">
+              <span className="font-semibold text-slate-300 flex items-center gap-1.5">
                 <Wind className="w-3.5 h-3.5 text-amber-400" /> Active Rear Wing Pitch
               </span>
               <span className="text-amber-400 font-mono">{config.wingAngleDeg}&deg;</span>
@@ -408,27 +408,27 @@ export const HyperFidelityExteriorStudioCustomizer: React.FC = () => {
               step="1"
               value={config.wingAngleDeg}
               onChange={(e) => setConfig((prev) => ({ ...prev, wingAngleDeg: parseInt(e.target.value) }))}
-              className="w-full h-1.5 bg-amber-800/35 rounded-lg appearance-none cursor-pointer accent-amber-400"
+              className="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-amber-400"
             />
           </div>
 
           {/* DRS Flap Quick Toggle */}
-          <div className="flex items-center justify-between p-2.5 bg-amber-900/40 rounded-xl border border-amber-800/30">
-            <span className="text-xs font-medium text-amber-100/80 flex items-center gap-1.5">
+          <div className="flex items-center justify-between p-2.5 bg-slate-900/80 rounded-xl border border-slate-800">
+            <span className="text-xs font-medium text-slate-300 flex items-center gap-1.5">
               <Zap className="w-3.5 h-3.5 text-amber-400" /> DRS High-Speed Mode
             </span>
             <input
               type="checkbox"
               checked={config.drsActive}
               onChange={(e) => setConfig((prev) => ({ ...prev, drsActive: e.target.checked }))}
-              className="w-4 h-4 rounded accent-amber-500 bg-amber-800/35 border-amber-700/30"
+              className="w-4 h-4 rounded accent-amber-500 bg-slate-800 border-slate-700"
             />
           </div>
 
           {/* Exploded Subassembly Slider */}
           <div className="flex flex-col gap-2">
             <div className="flex justify-between text-xs">
-              <span className="font-semibold text-amber-100/80 flex items-center gap-1.5">
+              <span className="font-semibold text-slate-300 flex items-center gap-1.5">
                 <Layers className="w-3.5 h-3.5 text-amber-400" /> Exploded CAD View
               </span>
               <span className="text-amber-300 font-mono">{(config.explodedFactor * 100).toFixed(0)}%</span>
@@ -440,13 +440,13 @@ export const HyperFidelityExteriorStudioCustomizer: React.FC = () => {
               step="0.01"
               value={config.explodedFactor}
               onChange={(e) => setConfig((prev) => ({ ...prev, explodedFactor: parseFloat(e.target.value) }))}
-              className="w-full h-1.5 bg-amber-800/35 rounded-lg appearance-none cursor-pointer accent-purple-400"
+              className="w-full h-1.5 bg-slate-800 rounded-lg appearance-none cursor-pointer accent-purple-400"
             />
           </div>
 
           {/* Liquid Metal Paint Palette */}
           <div className="flex flex-col gap-2.5">
-            <label className="text-xs font-semibold text-amber-100/80 uppercase tracking-wider flex items-center gap-1.5">
+            <label className="text-xs font-semibold text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
               <Palette className="w-3.5 h-3.5 text-emerald-400" /> Multi-Layer Paint
             </label>
             <div className="flex items-center gap-2">

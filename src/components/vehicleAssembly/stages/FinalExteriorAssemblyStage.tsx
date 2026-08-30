@@ -73,10 +73,10 @@ export const FinalExteriorAssemblyStage: React.FC<FinalExteriorAssemblyStageProp
             <Flame size={18} />
           </div>
           <div>
-            <h3 className="text-sm font-bold font-mono text-slate-800 dark:text-amber-50 uppercase tracking-wider">
+            <h3 className="text-sm font-bold font-mono text-slate-800 dark:text-slate-100 uppercase tracking-wider">
               STAGE 11: FINAL EXTERIOR DETAILS & EXHAUST
             </h3>
-            <p className="text-[11px] font-mono text-amber-300/50 dark:text-amber-200/60">
+            <p className="text-[11px] font-mono text-slate-500 dark:text-slate-400">
               Titanium exhaust with heat-tint gradient, FIA tow hooks, aero mirrors & trim fasteners.
             </p>
           </div>
@@ -99,12 +99,12 @@ export const FinalExteriorAssemblyStage: React.FC<FinalExteriorAssemblyStageProp
               className={`p-3.5 rounded-2xl text-left transition-all border cursor-pointer ${
                 isSelected
                   ? "bg-amber-500/20 border-amber-500/60 shadow-md ring-1 ring-amber-500/40"
-                  : "bg-base-900/60 border-base-800 hover:border-base-700 text-amber-200/60"
+                  : "bg-base-900/60 border-base-800 hover:border-base-700 text-slate-400"
               }`}
             >
-              <div className="font-bold text-xs font-mono text-slate-900 dark:text-amber-50 mb-1">{ex.label}</div>
-              <p className="text-[10px] text-amber-300/50 dark:text-amber-200/60 mb-2.5">{ex.desc}</p>
-              <div className="space-y-0.5 text-[10px] font-mono text-amber-200/60 border-t border-base-800/60 pt-2">
+              <div className="font-bold text-xs font-mono text-slate-900 dark:text-slate-100 mb-1">{ex.label}</div>
+              <p className="text-[10px] text-slate-500 dark:text-slate-400 mb-2.5">{ex.desc}</p>
+              <div className="space-y-0.5 text-[10px] font-mono text-slate-400 border-t border-base-800/60 pt-2">
                 <div>Material: <strong className="text-amber-400">{ex.material}</strong></div>
                 <div>Sound: <strong className="text-amber-300">{ex.soundProfile}</strong></div>
               </div>
@@ -116,7 +116,7 @@ export const FinalExteriorAssemblyStage: React.FC<FinalExteriorAssemblyStageProp
       {/* Heat-Tint Gradient Control */}
       <div className={`p-3.5 rounded-2xl bg-base-900/60 border border-base-800 space-y-2.5 ${exhaustType !== "quad_titanium" && exhaustType !== "f1_side_exit" ? "opacity-50" : ""}`}>
         <div className="flex items-center justify-between">
-          <label className="text-xs font-bold font-mono text-amber-500 dark:text-amber-100/80 flex items-center gap-1.5">
+          <label className="text-xs font-bold font-mono text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
             <Flame size={13} className="text-amber-400" /> TITANIUM HEAT-TINT BLUE GRADIENT
           </label>
           <span className="text-xs font-mono font-bold text-amber-400 tabular-nums">{tint}%</span>
@@ -130,12 +130,12 @@ export const FinalExteriorAssemblyStage: React.FC<FinalExteriorAssemblyStageProp
           onChange={(e) => onUpdateHeatTint(parseInt(e.target.value))}
           className="w-full accent-amber-500 cursor-pointer"
         />
-        <div className="flex items-center justify-between text-[9px] font-mono text-amber-300/50">
+        <div className="flex items-center justify-between text-[9px] font-mono text-slate-500">
           <span>0% Raw Brushed Ti</span>
           <div className="flex-1 mx-3 h-1.5 rounded-full bg-gradient-to-r from-slate-400 via-yellow-600 to-indigo-700" />
           <span>100% Full Blue Burn</span>
         </div>
-        <p className="text-[10px] font-mono text-amber-300/50 dark:text-amber-200/60 pt-1 border-t border-base-800/60">
+        <p className="text-[10px] font-mono text-slate-500 dark:text-slate-400 pt-1 border-t border-base-800/60">
           Flame-treatment pass at ~800°C grows the oxide layer — straw → bronze → violet → electric blue. Live 3D preview updates tip materials instantly.
         </p>
       </div>
@@ -158,16 +158,16 @@ export const FinalExteriorAssemblyStage: React.FC<FinalExteriorAssemblyStageProp
             }`}
           >
             <div className="flex items-center justify-between mb-1">
-              <span className="font-bold text-xs font-mono text-slate-900 dark:text-amber-50 flex items-center gap-1.5">
+              <span className="font-bold text-xs font-mono text-slate-900 dark:text-slate-100 flex items-center gap-1.5">
                 <Anchor size={13} className="text-red-400" /> {h.label}
               </span>
               <span className={`px-2 py-0.5 rounded-lg text-[10px] font-mono font-bold border ${
-                h.value ? "bg-emerald-500/20 border-emerald-500/50 text-emerald-500" : "bg-base-800 border-base-700 text-amber-300/50"
+                h.value ? "bg-emerald-500/20 border-emerald-500/50 text-emerald-500" : "bg-base-800 border-base-700 text-slate-500"
               }`}>
                 {h.value ? "✓ FITTED" : "OFF"}
               </span>
             </div>
-            <p className="text-[10px] text-amber-300/50 dark:text-amber-200/60">{h.pos}. Required for circuit recovery within 90 seconds.</p>
+            <p className="text-[10px] text-slate-500 dark:text-slate-400">{h.pos}. Required for circuit recovery within 90 seconds.</p>
           </button>
         ))}
       </div>

@@ -43,24 +43,24 @@ export const NeonHorizonSelect: React.FC<NeonHorizonSelectProps> = ({
 
   const variantStyles = {
     primary:
-      "bg-[#0e1626]/85 border-white/12 text-amber-50 focus:border-sky-400/35",
+      "bg-amber-950/60/85 border-white/12 text-slate-200 focus:border-sky-400/35",
     secondary:
-      "bg-[#0e1626]/70 border-white/15 text-amber-50 focus:border-sky-400/30",
+      "bg-amber-950/60/70 border-white/15 text-slate-200 focus:border-amber-500/30",
     minimal:
-      "bg-black/30 border-white/10 text-amber-50 focus:border-sky-400/30",
+      "bg-black/30 border-white/10 text-slate-200 focus:border-amber-500/30",
   }[variant];
 
   return (
     <div className={`flex flex-col gap-1.5 ${className}`}>
       {label && (
         <div className="flex items-center justify-between">
-          <span className="nh-label-caps text-amber-200/60">{label}</span>
-          {sublabel && <span className="text-[10px] nh-font-mono text-sky-400/80">{sublabel}</span>}
+          <span className="nh-label-caps text-slate-400">{label}</span>
+          {sublabel && <span className="text-[10px] nh-font-mono text-amber-400/80">{sublabel}</span>}
         </div>
       )}
       <div className="relative flex items-center">
         {icon && (
-          <div className="absolute left-3 text-sky-400 pointer-events-none z-10">{icon}</div>
+          <div className="absolute left-3 text-amber-400 pointer-events-none z-10">{icon}</div>
         )}
         <select
           value={value}
@@ -76,7 +76,7 @@ export const NeonHorizonSelect: React.FC<NeonHorizonSelectProps> = ({
               key={opt.value}
               value={opt.value}
               disabled={opt.disabled}
-              className="bg-[#0a111e] text-amber-50 py-1 font-sans"
+              className="bg-amber-950/60 text-slate-100 py-1 font-sans"
             >
               {opt.label} {opt.sublabel ? `(${opt.sublabel})` : ""}
             </option>
@@ -84,7 +84,7 @@ export const NeonHorizonSelect: React.FC<NeonHorizonSelectProps> = ({
         </select>
         <ChevronDown
           size={15}
-          className="absolute right-3 text-sky-400/70 pointer-events-none transition-transform"
+          className="absolute right-3 text-amber-400/70 pointer-events-none transition-transform"
         />
       </div>
     </div>

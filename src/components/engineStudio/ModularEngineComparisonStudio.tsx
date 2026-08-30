@@ -77,25 +77,25 @@ export const ModularEngineComparisonStudio: React.FC<ModularEngineComparisonStud
     .join(" ");
 
   return (
-    <div className="flex flex-col h-full bg-amber-900/40 backdrop-blur-xl border border-amber-800/30 rounded-2xl overflow-hidden shadow-2xl p-4 space-y-4 text-xs text-amber-100/80">
+    <div className="flex flex-col h-full bg-slate-900/90 backdrop-blur-xl border border-slate-800 rounded-2xl overflow-hidden shadow-2xl p-4 space-y-4 text-xs text-slate-300">
       {/* Header & Engine B Preset Switcher */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between pb-3 border-b border-amber-800/30 gap-2">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between pb-3 border-b border-slate-800 gap-2">
         <div>
-          <h3 className="text-sm font-bold text-amber-50 flex items-center gap-2">
+          <h3 className="text-sm font-bold text-slate-100 flex items-center gap-2">
             <Scale size={16} className="text-amber-400" />
             Side-by-Side Engine Benchmark (A vs B)
           </h3>
-          <p className="text-[11px] text-amber-200/60">
+          <p className="text-[11px] text-slate-400">
             Comparing <span className="text-amber-300 font-bold">{currentEngine.name}</span> against Engine B
           </p>
         </div>
 
         <div className="flex items-center gap-2">
-          <span className="text-[10px] text-amber-200/60 uppercase font-semibold">Engine B:</span>
+          <span className="text-[10px] text-slate-400 uppercase font-semibold">Engine B:</span>
           <select
             value={selectedPresetB}
             onChange={(e) => setSelectedPresetB(e.target.value)}
-            className="bg-amber-800/35 border border-amber-700/30 rounded-lg px-2.5 py-1.5 text-xs text-rose-300 font-semibold"
+            className="bg-slate-800 border border-slate-700 rounded-lg px-2.5 py-1.5 text-xs text-rose-300 font-semibold"
           >
             <option value="v12_naturally_aspirated">6.5L V12 Screamer (NA)</option>
             <option value="inline_6_turbo">3.0L Straight-6 Turbo</option>
@@ -107,7 +107,7 @@ export const ModularEngineComparisonStudio: React.FC<ModularEngineComparisonStud
       </div>
 
       {/* Superimposed Dyno Curves */}
-      <div className="relative bg-amber-950/80 rounded-xl border border-amber-800/30 p-2 overflow-hidden shadow-inner">
+      <div className="relative bg-slate-950/80 rounded-xl border border-slate-800/80 p-2 overflow-hidden shadow-inner">
         <svg viewBox={`0 0 ${width} ${height}`} className="w-full h-auto">
           {/* Grid lines */}
           {[0.25, 0.5, 0.75, 1.0].map((r, i) => {
@@ -174,10 +174,10 @@ export const ModularEngineComparisonStudio: React.FC<ModularEngineComparisonStud
 
       {/* Delta Metrics Cards */}
       <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-        <div className="bg-amber-950/60 p-3 rounded-xl border border-amber-800/30 space-y-1">
-          <span className="text-[10px] text-amber-200/60 uppercase font-semibold">Horsepower Difference</span>
+        <div className="bg-slate-950/60 p-3 rounded-xl border border-slate-800 space-y-1">
+          <span className="text-[10px] text-slate-400 uppercase font-semibold">Horsepower Difference</span>
           <div className="flex items-baseline justify-between">
-            <span className="text-base font-mono font-bold text-amber-50">
+            <span className="text-base font-mono font-bold text-slate-100">
               {perfA?.peakHorsepowerHp} vs {perfB?.peakHorsepowerHp} HP
             </span>
             <span
@@ -190,10 +190,10 @@ export const ModularEngineComparisonStudio: React.FC<ModularEngineComparisonStud
           </div>
         </div>
 
-        <div className="bg-amber-950/60 p-3 rounded-xl border border-amber-800/30 space-y-1">
-          <span className="text-[10px] text-amber-200/60 uppercase font-semibold">Brake Torque</span>
+        <div className="bg-slate-950/60 p-3 rounded-xl border border-slate-800 space-y-1">
+          <span className="text-[10px] text-slate-400 uppercase font-semibold">Brake Torque</span>
           <div className="flex items-baseline justify-between">
-            <span className="text-base font-mono font-bold text-amber-50">
+            <span className="text-base font-mono font-bold text-slate-100">
               {perfA?.peakTorqueNm} vs {perfB?.peakTorqueNm} Nm
             </span>
             <span
@@ -206,10 +206,10 @@ export const ModularEngineComparisonStudio: React.FC<ModularEngineComparisonStud
           </div>
         </div>
 
-        <div className="bg-amber-950/60 p-3 rounded-xl border border-amber-800/30 space-y-1">
-          <span className="text-[10px] text-amber-200/60 uppercase font-semibold">Engine Total Weight</span>
+        <div className="bg-slate-950/60 p-3 rounded-xl border border-slate-800 space-y-1">
+          <span className="text-[10px] text-slate-400 uppercase font-semibold">Engine Total Weight</span>
           <div className="flex items-baseline justify-between">
-            <span className="text-base font-mono font-bold text-amber-50">
+            <span className="text-base font-mono font-bold text-slate-100">
               {perfA?.engineTotalMassKg} vs {perfB?.engineTotalMassKg} kg
             </span>
             <span
@@ -222,10 +222,10 @@ export const ModularEngineComparisonStudio: React.FC<ModularEngineComparisonStud
           </div>
         </div>
 
-        <div className="bg-amber-950/60 p-3 rounded-xl border border-amber-800/30 space-y-1">
-          <span className="text-[10px] text-amber-200/60 uppercase font-semibold">Specific Output</span>
+        <div className="bg-slate-950/60 p-3 rounded-xl border border-slate-800 space-y-1">
+          <span className="text-[10px] text-slate-400 uppercase font-semibold">Specific Output</span>
           <div className="flex items-baseline justify-between">
-            <span className="text-base font-mono font-bold text-amber-50">
+            <span className="text-base font-mono font-bold text-slate-100">
               {perfA?.specificOutputHpPerLiter} vs {perfB?.specificOutputHpPerLiter} HP/L
             </span>
             <span className="text-xs font-mono font-bold text-amber-300">
@@ -234,10 +234,10 @@ export const ModularEngineComparisonStudio: React.FC<ModularEngineComparisonStud
           </div>
         </div>
 
-        <div className="bg-amber-950/60 p-3 rounded-xl border border-amber-800/30 space-y-1">
-          <span className="text-[10px] text-amber-200/60 uppercase font-semibold">Redline RPM Limit</span>
+        <div className="bg-slate-950/60 p-3 rounded-xl border border-slate-800 space-y-1">
+          <span className="text-[10px] text-slate-400 uppercase font-semibold">Redline RPM Limit</span>
           <div className="flex items-baseline justify-between">
-            <span className="text-base font-mono font-bold text-amber-50">
+            <span className="text-base font-mono font-bold text-slate-100">
               {perfA?.redlineRpm} vs {perfB?.redlineRpm} RPM
             </span>
             <span className="text-xs font-mono font-bold text-amber-300">
@@ -246,10 +246,10 @@ export const ModularEngineComparisonStudio: React.FC<ModularEngineComparisonStud
           </div>
         </div>
 
-        <div className="bg-amber-950/60 p-3 rounded-xl border border-amber-800/30 space-y-1">
-          <span className="text-[10px] text-amber-200/60 uppercase font-semibold">Manufacturing BOM Cost</span>
+        <div className="bg-slate-950/60 p-3 rounded-xl border border-slate-800 space-y-1">
+          <span className="text-[10px] text-slate-400 uppercase font-semibold">Manufacturing BOM Cost</span>
           <div className="flex items-baseline justify-between">
-            <span className="text-base font-mono font-bold text-amber-50">
+            <span className="text-base font-mono font-bold text-slate-100">
               ${currentEngine.costAndBOM?.totalEngineBOMCostUSD?.toLocaleString()} vs ${engineBState.costAndBOM?.totalEngineBOMCostUSD?.toLocaleString()}
             </span>
             <span

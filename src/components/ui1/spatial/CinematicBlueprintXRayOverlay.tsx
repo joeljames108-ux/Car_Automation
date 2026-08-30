@@ -47,7 +47,7 @@ export const CinematicBlueprintXRayOverlay: React.FC<CinematicBlueprintXRayOverl
       onClick={onClose}
     >
       <div
-        className="relative w-full max-w-5xl max-h-[92vh] overflow-y-auto rounded-3xl bg-[#091122]/95 border-2 border-amber-500/40 p-6 shadow-[0_0_90px_rgba(6,182,212,0.3)] flex flex-col gap-5 scrollbar-thin"
+        className="relative w-full max-w-5xl max-h-[92vh] overflow-y-auto rounded-3xl bg-amber-950/60/95 border-2 border-amber-500/40 p-6 shadow-[0_0_90px_rgba(6,182,212,0.3)] flex flex-col gap-5 scrollbar-thin"
         onClick={(e) => e.stopPropagation()}
       >
         {/* CAD Blueprint Header */}
@@ -65,7 +65,7 @@ export const CinematicBlueprintXRayOverlay: React.FC<CinematicBlueprintXRayOverl
                   ISO 8855 CALIBRATED
                 </span>
               </div>
-              <p className="text-xs text-amber-200/60 font-mono">
+              <p className="text-xs text-slate-400 font-mono">
                 Multi-Layer Structural Peeling, Exploded Kinematics & FEA Stress Hotspots
               </p>
             </div>
@@ -80,7 +80,7 @@ export const CinematicBlueprintXRayOverlay: React.FC<CinematicBlueprintXRayOverl
         </div>
 
         {/* Blueprint Canvas & CAD Dimension Diagram */}
-        <div className="relative w-full aspect-[16/9] max-h-96 rounded-2xl border border-amber-500/30 bg-[#060c18] overflow-hidden flex items-center justify-center">
+        <div className="relative w-full aspect-[16/9] max-h-96 rounded-2xl border border-amber-500/30 bg-amber-950/60 overflow-hidden flex items-center justify-center">
           {/* Blueprint Grid Lines */}
           <div
             className="absolute inset-0 opacity-25"
@@ -197,7 +197,7 @@ export const CinematicBlueprintXRayOverlay: React.FC<CinematicBlueprintXRayOverl
         {/* Controls Grid */}
         <div className="grid md:grid-cols-2 gap-5">
           {/* Layer Peeling Checkboxes */}
-          <div className="p-4 rounded-2xl bg-[#0b1424] border border-amber-500/20 flex flex-col gap-2.5">
+          <div className="p-4 rounded-2xl bg-amber-950/60 border border-amber-500/20 flex flex-col gap-2.5">
             <span className="font-mono text-xs font-bold text-amber-300 uppercase flex items-center gap-1.5 mb-1">
               <Layers size={13} />
               <span>X-RAY LAYER VISIBILITY</span>
@@ -213,7 +213,7 @@ export const CinematicBlueprintXRayOverlay: React.FC<CinematicBlueprintXRayOverl
                     className={`flex items-center gap-2 p-2 rounded-xl border text-left text-xs font-mono font-semibold transition-all cursor-pointer ${
                       isOn
                         ? "bg-amber-500/15 text-white border-amber-400/40 shadow-sm"
-                        : "bg-white/[0.03] text-amber-300/50 border-white/5 hover:bg-white/5"
+                        : "bg-white/[0.03] text-slate-500 border-white/5 hover:bg-white/5"
                     }`}
                   >
                     {isOn ? <Eye size={12} className="text-amber-400" /> : <EyeOff size={12} />}
@@ -225,7 +225,7 @@ export const CinematicBlueprintXRayOverlay: React.FC<CinematicBlueprintXRayOverl
           </div>
 
           {/* Exploded View & FEA Stress Sliders */}
-          <div className="p-4 rounded-2xl bg-[#0b1424] border border-amber-500/20 flex flex-col justify-between gap-4">
+          <div className="p-4 rounded-2xl bg-amber-950/60 border border-amber-500/20 flex flex-col justify-between gap-4">
             <div>
               <div className="flex justify-between items-center text-xs font-mono text-amber-300 font-bold mb-1.5">
                 <span>EXPLODED KINEMATICS SEPARATION</span>
@@ -250,7 +250,7 @@ export const CinematicBlueprintXRayOverlay: React.FC<CinematicBlueprintXRayOverl
                 className={`px-3 py-1.5 rounded-xl border text-xs font-mono font-bold tracking-wider transition-all flex items-center gap-2 cursor-pointer ${
                   stressHeatMap
                     ? "bg-rose-500/20 text-rose-300 border-rose-500/40"
-                    : "bg-white/5 text-amber-200/60 border-white/10"
+                    : "bg-white/5 text-slate-400 border-white/10"
                 }`}
               >
                 <Activity size={13} className={stressHeatMap ? "text-rose-400 animate-pulse" : ""} />
@@ -270,7 +270,7 @@ export const CinematicBlueprintXRayOverlay: React.FC<CinematicBlueprintXRayOverl
                   });
                   setExplodedPercent(0);
                 }}
-                className="px-3 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-xs font-mono text-amber-100/80 border border-white/10 cursor-pointer"
+                className="px-3 py-1.5 rounded-xl bg-white/5 hover:bg-white/10 text-xs font-mono text-slate-300 border border-white/10 cursor-pointer"
               >
                 RESET CAD POSE
               </button>

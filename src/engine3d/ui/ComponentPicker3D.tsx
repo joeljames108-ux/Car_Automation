@@ -56,27 +56,27 @@ export const ComponentPicker3D: React.FC = () => {
     >
       {/* Main Drawer */}
       {isOpen ? (
-        <div className="w-full bg-amber-900/40 backdrop-blur-xl border border-amber-700/30/70 rounded-xl shadow-2xl p-4 text-amber-50 flex flex-col max-h-[calc(100vh-6rem)]">
+        <div className="w-full bg-slate-900/90 backdrop-blur-xl border border-slate-700/70 rounded-xl shadow-2xl p-4 text-slate-100 flex flex-col max-h-[calc(100vh-6rem)]">
           {/* Header & Collapse Button */}
-          <div className="flex items-center justify-between border-b border-amber-800/30 pb-3">
+          <div className="flex items-center justify-between border-b border-slate-800 pb-3">
             <div>
-              <h2 className="text-sm font-bold text-amber-50 flex items-center gap-2">
+              <h2 className="text-sm font-bold text-slate-100 flex items-center gap-2">
                 <span>⚙ Modular Engine Builder</span>
               </h2>
-              <div className="text-xs text-amber-200/60 mt-0.5">
+              <div className="text-xs text-slate-400 mt-0.5">
                 {progress.installedCount} of {progress.totalCount} Components Installed ({progress.percentage}%)
               </div>
             </div>
             <button
               onClick={() => setIsOpen(false)}
-              className="p-1 rounded-md text-amber-200/60 hover:text-amber-50 hover:bg-amber-800/35 transition-colors"
+              className="p-1 rounded-md text-slate-400 hover:text-slate-200 hover:bg-slate-800 transition-colors"
             >
               ◀
             </button>
           </div>
 
           {/* Progress Bar */}
-          <div className="w-full bg-amber-800/35 h-1.5 rounded-full overflow-hidden my-3">
+          <div className="w-full bg-slate-800 h-1.5 rounded-full overflow-hidden my-3">
             <div
               className="bg-gradient-to-r from-amber-500 to-indigo-500 h-full transition-all duration-300"
               style={{ width: `${progress.percentage}%` }}
@@ -92,7 +92,7 @@ export const ComponentPicker3D: React.FC = () => {
                 className={`px-2.5 py-1 rounded-md whitespace-nowrap font-medium transition-colors ${
                   activeCategory === cat.id
                     ? 'bg-amber-600 text-white font-semibold shadow-sm'
-                    : 'bg-amber-800/35/60 text-amber-200/60 hover:text-amber-50 hover:bg-amber-800/35'
+                    : 'bg-slate-800/60 text-slate-400 hover:text-slate-200 hover:bg-slate-800'
                 }`}
               >
                 {cat.label}
@@ -151,7 +151,7 @@ export const ComponentPicker3D: React.FC = () => {
                       </button>
                     ) : (
                       <span
-                        className="text-[10px] font-mono text-amber-300/50 bg-amber-900/50 border border-amber-800/30 px-2 py-0.5 rounded cursor-help"
+                        className="text-[10px] font-mono text-slate-500 bg-slate-900 border border-slate-800 px-2 py-0.5 rounded cursor-help"
                         title={check.reason}
                       >
                         🔒 Locked

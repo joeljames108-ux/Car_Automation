@@ -63,10 +63,10 @@ export function ICECompletionGate({
           <Award size={15} className="text-emerald-400" />
           <span>ICE MECHANICAL ASSEMBLY COMPLETED</span>
         </div>
-        <h2 className="text-2xl md:text-3xl font-extrabold font-mono text-amber-50">
+        <h2 className="text-2xl md:text-3xl font-extrabold font-mono text-slate-100">
           {layoutLabel} Powertrain Fully Assembled
         </h2>
-        <p className="text-xs md:text-sm text-amber-200/60 font-mono leading-relaxed">
+        <p className="text-xs md:text-sm text-slate-400 font-mono leading-relaxed">
           All 15 powertrain subsystems (including Radiator & Fans, Sequential Transmission, and Carbon Engine Cover)
           have been precisely mounted, torqued to OEM/Race specification, and pass cold-cranking QC diagnostic checks.
         </p>
@@ -75,7 +75,7 @@ export function ICECompletionGate({
       {/* ── CUMULATIVE SPECS TILES ── */}
       <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
         <div className="p-3 rounded-2xl bg-base-950/80 border border-amber-500/30 text-center">
-          <span className="block text-[10px] font-mono text-amber-200/60 uppercase">Power Output</span>
+          <span className="block text-[10px] font-mono text-slate-400 uppercase">Power Output</span>
           <span className="text-lg md:text-xl font-extrabold font-mono text-amber-300">
             {currentTotalStats.hp} hp
           </span>
@@ -85,7 +85,7 @@ export function ICECompletionGate({
         </div>
 
         <div className="p-3 rounded-2xl bg-base-950/80 border border-amber-500/30 text-center">
-          <span className="block text-[10px] font-mono text-amber-200/60 uppercase">Peak Torque</span>
+          <span className="block text-[10px] font-mono text-slate-400 uppercase">Peak Torque</span>
           <span className="text-lg md:text-xl font-extrabold font-mono text-amber-300">
             {currentTotalStats.torque} Nm
           </span>
@@ -94,16 +94,16 @@ export function ICECompletionGate({
           </span>
         </div>
 
-        <div className="p-3 rounded-2xl bg-base-950/80 border border-amber-800/30 text-center">
-          <span className="block text-[10px] font-mono text-amber-200/60 uppercase">Engine Mass</span>
-          <span className="text-lg md:text-xl font-extrabold font-mono text-amber-50">
+        <div className="p-3 rounded-2xl bg-base-950/80 border border-slate-800 text-center">
+          <span className="block text-[10px] font-mono text-slate-400 uppercase">Engine Mass</span>
+          <span className="text-lg md:text-xl font-extrabold font-mono text-slate-100">
             {currentTotalStats.weight} kg
           </span>
           <span className="text-[10px] font-mono text-emerald-400 block mt-0.5">Dry Weight</span>
         </div>
 
         <div className="p-3 rounded-2xl bg-base-950/80 border border-emerald-500/30 text-center">
-          <span className="block text-[10px] font-mono text-amber-200/60 uppercase">Reliability</span>
+          <span className="block text-[10px] font-mono text-slate-400 uppercase">Reliability</span>
           <span className="text-lg md:text-xl font-extrabold font-mono text-emerald-300">
             {currentTotalStats.reliability}%
           </span>
@@ -111,7 +111,7 @@ export function ICECompletionGate({
         </div>
 
         <div className="col-span-2 sm:col-span-1 p-3 rounded-2xl bg-base-950/80 border border-amber-500/30 text-center">
-          <span className="block text-[10px] font-mono text-amber-200/60 uppercase">Hardware Cost</span>
+          <span className="block text-[10px] font-mono text-slate-400 uppercase">Hardware Cost</span>
           <span className="text-lg md:text-xl font-extrabold font-mono text-amber-300">
             ${(currentTotalStats.cost / 1000).toFixed(1)}k
           </span>

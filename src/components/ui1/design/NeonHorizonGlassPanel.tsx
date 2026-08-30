@@ -34,17 +34,17 @@ export const NeonHorizonGlassPanel: React.FC<NeonHorizonGlassPanelProps> = ({
   // Smoked frosted glass — one coherent surface ramp, neutral depth only
   const variantStyles = {
     primary:
-      "bg-[#111a2b]/80 backdrop-blur-2xl border border-white/10 shadow-[0_18px_44px_rgba(0,0,0,0.45),inset_0_1px_0_rgba(255,255,255,0.08)]",
+      "bg-amber-950/60/80 backdrop-blur-2xl border border-white/10 shadow-[0_18px_44px_rgba(0,0,0,0.45),inset_0_1px_0_rgba(255,255,255,0.08)]",
     secondary:
-      "bg-[#0e1626]/70 backdrop-blur-xl border border-white/8 shadow-[0_12px_32px_rgba(0,0,0,0.38),inset_0_1px_0_rgba(255,255,255,0.06)]",
+      "bg-amber-950/60/70 backdrop-blur-xl border border-white/8 shadow-[0_12px_32px_rgba(0,0,0,0.38),inset_0_1px_0_rgba(255,255,255,0.06)]",
     tertiary:
-      "bg-[#151f31]/50 backdrop-blur-lg border border-white/6 shadow-[0_8px_20px_rgba(0,0,0,0.30)]",
+      "bg-amber-950/60/50 backdrop-blur-lg border border-white/6 shadow-[0_8px_20px_rgba(0,0,0,0.30)]",
     floating:
-      "bg-[#111a2b]/90 backdrop-blur-3xl border border-white/12 shadow-[0_24px_60px_rgba(0,0,0,0.55),inset_0_1px_0_rgba(255,255,255,0.10)]",
+      "bg-amber-950/60/90 backdrop-blur-3xl border border-white/12 shadow-[0_24px_60px_rgba(0,0,0,0.55),inset_0_1px_0_rgba(255,255,255,0.10)]",
     inset:
-      "bg-[#0a111e]/85 backdrop-blur-md border border-white/6 shadow-[inset_0_2px_8px_rgba(0,0,0,0.45)]",
+      "bg-amber-950/60/85 backdrop-blur-md border border-white/6 shadow-[inset_0_2px_8px_rgba(0,0,0,0.45)]",
     window:
-      "bg-[#111a2b]/85 backdrop-blur-3xl border border-white/12 shadow-[0_28px_70px_rgba(0,0,0,0.60),inset_0_1px_0_rgba(255,255,255,0.10)]",
+      "bg-amber-950/60/85 backdrop-blur-3xl border border-white/12 shadow-[0_28px_70px_rgba(0,0,0,0.60),inset_0_1px_0_rgba(255,255,255,0.10)]",
   }[variant];
 
   const cornerStyles = {
@@ -73,19 +73,19 @@ export const NeonHorizonGlassPanel: React.FC<NeonHorizonGlassPanelProps> = ({
     <div
       onClick={onClick}
       style={style}
-      className={`relative overflow-hidden text-amber-50 ${variantStyles} ${cornerStyles} ${glowStyles} ${hoverClass} ${className}`}
+      className={`relative overflow-hidden text-slate-200 ${variantStyles} ${cornerStyles} ${glowStyles} ${hoverClass} ${className}`}
     >
       {/* Header bar */}
       {header && (
         <div className="px-5 py-3.5 border-b border-white/8 bg-white/[0.02] flex items-center justify-between gap-3">
           <div className="flex items-center gap-2.5 min-w-0">
-            {header.icon && <span className="text-sky-300/90 shrink-0">{header.icon}</span>}
+            {header.icon && <span className="text-amber-300/90 shrink-0">{header.icon}</span>}
             <div className="flex flex-col min-w-0">
-              <span className="text-xs font-bold tracking-wide uppercase text-amber-50 truncate">
+              <span className="text-xs font-bold tracking-wide uppercase text-slate-100 truncate">
                 {header.title}
               </span>
               {header.subtitle && (
-                <span className="text-[10px] text-amber-200/60 truncate">
+                <span className="text-[10px] text-slate-400 truncate">
                   {header.subtitle}
                 </span>
               )}

@@ -316,7 +316,7 @@ export const Phase9ExtremeAeroStudioWorkbench: React.FC = () => {
   };
 
   return (
-    <div className="w-full h-full flex flex-col bg-[#040609] text-white rounded-2xl border border-white/10 overflow-hidden select-none">
+    <div className="w-full h-full flex flex-col bg-amber-950/60 text-white rounded-2xl border border-white/10 overflow-hidden select-none">
       {/* Top Header Bar */}
       <div className="px-6 py-3.5 bg-white/5 border-b border-white/10 flex items-center justify-between backdrop-blur-md">
         <div className="flex items-center gap-3">
@@ -354,7 +354,7 @@ export const Phase9ExtremeAeroStudioWorkbench: React.FC = () => {
         </div>
 
         {/* Right Engineering Controls */}
-        <div className="w-full lg:w-96 p-5 bg-[#080b12] border-t lg:border-t-0 lg:border-l border-white/10 overflow-y-auto flex flex-col gap-5">
+        <div className="w-full lg:w-96 p-5 bg-amber-950/60 border-t lg:border-t-0 lg:border-l border-white/10 overflow-y-auto flex flex-col gap-5">
           {/* Section 1: 4-Quadrant Flap Corner Controls */}
           <div className="flex flex-col gap-2.5">
             <div className="flex justify-between items-center">

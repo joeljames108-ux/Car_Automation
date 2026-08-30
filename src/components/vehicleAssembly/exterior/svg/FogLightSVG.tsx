@@ -35,7 +35,7 @@ export const FogLightSVG: React.FC<FogLightSVGProps> = ({
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
     >
-      <circle cx="218" cy="342" r="5" fill="#0f172a" stroke={strokeColor} strokeWidth="1.0" />
+      <circle cx="218" cy="342" r="5" fill="#1a1008" stroke={strokeColor} strokeWidth="1.0" />
       <circle cx="218" cy="342" r="3.5" fill="#fbbf24" filter="url(#opticalLightBloom)" />
       <circle cx="218" cy="342" r="1.8" fill="#ffffff" />
     </g>

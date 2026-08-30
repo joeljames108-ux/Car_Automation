@@ -89,7 +89,7 @@ export function EVInverterSection({
               <span className="text-[10px] font-mono font-bold text-amber-300 uppercase tracking-wider block">
                 99% INVERTER EFFICIENCY
               </span>
-              <p className="text-[11px] font-mono text-amber-100/80 leading-relaxed">
+              <p className="text-[11px] font-mono text-slate-300 leading-relaxed">
                 Silicon Carbide MOSFETs minimize switching losses at up to 25,000 motor RPM, delivering crisp torque response and lower heat rejection.
               </p>
             </div>
@@ -110,7 +110,7 @@ export function EVInverterSection({
               onSelectVariant={onSelectVariant}
             />
           ) : (
-            <p className="text-xs font-mono text-amber-300/50">Loading material variants...</p>
+            <p className="text-xs font-mono text-slate-500">Loading material variants...</p>
           )}
         </SectionCard>
 

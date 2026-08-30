@@ -87,7 +87,7 @@ export function NeonEnduranceStudio() {
   ];
 
   return (
-    <div className="w-full flex flex-col gap-6 text-amber-50 animate-nh-materialize">
+    <div className="w-full flex flex-col gap-6 text-slate-100 animate-nh-materialize">
       {/* Header */}
       <NeonHorizonGlassPanel
         variant="window"
@@ -122,11 +122,11 @@ export function NeonEnduranceStudio() {
             }}
             className="p-6 flex flex-col gap-4"
           >
-            <div className="w-full h-48 bg-[#05080f] rounded-xl border border-sky-400/25 overflow-hidden relative flex items-center justify-center shadow-[inset_0_0_25px_rgba(0,0,0,0.85)]">
+            <div className="w-full h-48 bg-amber-950/60 rounded-xl border border-sky-400/25 overflow-hidden relative flex items-center justify-center shadow-[inset_0_0_25px_rgba(0,0,0,0.85)]">
               <canvas ref={radarCanvasRef} width={360} height={190} className="w-full h-full" />
               <div className="absolute top-2 left-3 flex items-center gap-2">
                 <div className="w-2 h-2 rounded-full bg-sky-300 animate-ping" />
-                <span className="text-[10px] nh-font-mono font-bold text-sky-400">CIRCUIT DE LA SARTHE · DOPPLER 500kW</span>
+                <span className="text-[10px] nh-font-mono font-bold text-amber-400">CIRCUIT DE LA SARTHE · DOPPLER 500kW</span>
               </div>
             </div>
 
@@ -146,8 +146,8 @@ export function NeonEnduranceStudio() {
                     }}
                     className={`p-2.5 rounded-lg border text-center text-xs font-bold cursor-pointer transition-all ${
  isSelected
- ? "bg-sky-400/10 border-sky-400/30 text-sky-200"
- : "bg-[#0a111e] border-white/10 text-amber-200/60 hover:border-sky-400/25"
+ ? "bg-amber-500/20 border-amber-500/30 text-sky-200"
+ : "bg-amber-950/60 border-white/10 text-slate-400 hover:border-sky-400/25"
  }`}
                   >
                     {item.name}
@@ -191,17 +191,17 @@ export function NeonEnduranceStudio() {
                   }}
                   className={`p-3.5 rounded-xl border transition-all cursor-pointer flex flex-col gap-1.5 ${
  isSelected
- ? "bg-sky-400/10 border-sky-400/30 text-sky-200"
- : "bg-[#0a111e] border-white/10 hover:border-sky-400/25"
+ ? "bg-amber-500/20 border-amber-500/30 text-sky-200"
+ : "bg-amber-950/60 border-white/10 hover:border-sky-400/25"
  }`}
                 >
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold text-amber-50">{driver.name}</span>
+                    <span className="text-xs font-bold text-slate-100">{driver.name}</span>
                     <NeonHorizonBadge variant={isSelected ? "cyan" : "neutral"} size="xs">
                       {isSelected ? "IN COCKPIT" : "IN PIT BOX"}
                     </NeonHorizonBadge>
                   </div>
-                  <div className="flex items-center justify-between text-[10px] nh-font-mono text-amber-200/60">
+                  <div className="flex items-center justify-between text-[10px] nh-font-mono text-slate-400">
                     <span>Stint: {driver.stint} · {driver.fatigue}</span>
                     <span className="text-emerald-300 font-bold">{driver.bpm}</span>
                   </div>

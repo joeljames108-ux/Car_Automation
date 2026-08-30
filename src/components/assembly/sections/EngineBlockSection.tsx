@@ -163,10 +163,10 @@ export function EngineBlockSection({
             {/* Cylinder Bank Layout Grid */}
             <div className="space-y-2">
               <div className="flex items-center justify-between">
-                <label className="text-[11px] font-mono font-bold text-amber-100/80 uppercase tracking-wider block">
+                <label className="text-[11px] font-mono font-bold text-slate-300 uppercase tracking-wider block">
                   Cylinder Bank Layout
                 </label>
-                <span className="text-[10px] font-mono text-amber-300/50">
+                <span className="text-[10px] font-mono text-slate-500">
                   {ENGINE_LAYOUTS[engineConfig.layout]?.label}
                 </span>
               </div>
@@ -188,16 +188,16 @@ export function EngineBlockSection({
                       className={`relative py-2 px-2 text-[11px] font-mono font-bold flex flex-col items-center justify-center rounded-xl border transition-all duration-200 cursor-pointer text-center group ${
                         isSelected
                           ? "bg-gradient-to-b from-amber-500/25 to-amber-950/80 text-amber-200 border-amber-400 shadow-[0_0_15px_rgba(34,211,238,0.35)] scale-[1.02]"
-                          : "bg-amber-950/70 text-amber-200/60 border-amber-800/30 hover:text-amber-50 hover:border-amber-700/30 hover:bg-amber-900/40"
+                          : "bg-slate-950/70 text-slate-400 border-slate-800 hover:text-slate-200 hover:border-slate-700 hover:bg-slate-900/60"
                       }`}
                     >
                       <div className="flex items-center gap-1.5 mb-0.5">
-                        <span className={isSelected ? "text-amber-300" : "text-amber-300/50 group-hover:text-amber-100/80"}>
+                        <span className={isSelected ? "text-amber-300" : "text-slate-500 group-hover:text-slate-300"}>
                           {meta.icon}
                         </span>
                         <span className="truncate">{ENGINE_LAYOUTS[layout]?.label}</span>
                       </div>
-                      <span className="text-[9px] text-amber-300/50 font-normal">
+                      <span className="text-[9px] text-slate-500 font-normal">
                         {meta.angle}
                       </span>
                     </button>
@@ -207,9 +207,9 @@ export function EngineBlockSection({
             </div>
 
             {/* Live Kinematic Telemetry Bar */}
-            <div className="p-3 rounded-xl bg-amber-950/80 border border-amber-500/20 space-y-2">
+            <div className="p-3 rounded-xl bg-slate-950/80 border border-amber-500/20 space-y-2">
               <div className="flex items-center justify-between text-[11px] font-mono">
-                <span className="text-amber-200/60 flex items-center gap-1">
+                <span className="text-slate-400 flex items-center gap-1">
                   <Activity size={12} className="text-amber-400" /> Displacement:
                 </span>
                 <span className="text-amber-300 font-extrabold">
@@ -217,16 +217,16 @@ export function EngineBlockSection({
                 </span>
               </div>
 
-              <div className="grid grid-cols-2 gap-2 text-[10px] font-mono pt-1 border-t border-amber-800/30">
+              <div className="grid grid-cols-2 gap-2 text-[10px] font-mono pt-1 border-t border-slate-800/80">
                 <div>
-                  <span className="text-amber-300/50 block">B/S Ratio:</span>
+                  <span className="text-slate-500 block">B/S Ratio:</span>
                   <span className={`font-bold ${kinematics.characterColor}`}>
                     {kinematics.boreStrokeRatio} ({kinematics.character})
                   </span>
                 </div>
                 <div>
-                  <span className="text-amber-300/50 block">R/S Ratio:</span>
-                  <span className="font-bold text-amber-100/80">
+                  <span className="text-slate-500 block">R/S Ratio:</span>
+                  <span className="font-bold text-slate-300">
                     {kinematics.rodStrokeRatio} ({kinematics.rodStrokeRatio >= 1.7 ? "Low Friction" : "High Torque"})
                   </span>
                 </div>
@@ -235,7 +235,7 @@ export function EngineBlockSection({
 
             {/* Quick Presets */}
             <div className="space-y-1.5">
-              <label className="text-[10px] font-mono font-bold text-amber-200/60 uppercase tracking-wider block">
+              <label className="text-[10px] font-mono font-bold text-slate-400 uppercase tracking-wider block">
                 Geometry Presets
               </label>
               <div className="grid grid-cols-2 gap-1.5">
@@ -250,17 +250,17 @@ export function EngineBlockSection({
                         rodLength: preset.rod,
                       })
                     }
-                    className="py-1 px-2 text-[10px] font-mono text-amber-100/80 bg-amber-900/40 border border-amber-800/30 hover:border-amber-500/40 hover:text-amber-300 rounded-lg transition-all text-left flex items-center justify-between"
+                    className="py-1 px-2 text-[10px] font-mono text-slate-300 bg-slate-900/80 border border-slate-800 hover:border-amber-500/40 hover:text-amber-300 rounded-lg transition-all text-left flex items-center justify-between"
                   >
                     <span>{preset.label}</span>
-                    <span className="text-[9px] text-amber-300/50">{preset.bore}x{preset.stroke}</span>
+                    <span className="text-[9px] text-slate-500">{preset.bore}x{preset.stroke}</span>
                   </button>
                 ))}
               </div>
             </div>
 
             {/* Bore & Stroke Sliders */}
-            <div className="space-y-2 pt-2 border-t border-amber-800/30">
+            <div className="space-y-2 pt-2 border-t border-slate-800/80">
               <Slider
                 label="Cylinder Bore"
                 value={bore}
@@ -317,7 +317,7 @@ export function EngineBlockSection({
               onSelectVariant={onSelectVariant}
             />
           ) : (
-            <p className="text-xs font-mono text-amber-300/50">Loading material variants...</p>
+            <p className="text-xs font-mono text-slate-500">Loading material variants...</p>
           )}
         </SectionCard>
 

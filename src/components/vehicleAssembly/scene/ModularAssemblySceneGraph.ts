@@ -1518,7 +1518,7 @@ export class ModularAssemblySceneGraph {
           if (child.name.includes("Paint") || child.name.includes("Body") || child.name.includes("Fuselage") || child.name.includes("Fender") || child.name.includes("Haunch")) {
             child.material = bodyMat;
           } else if (child.name.includes("Glass") || child.name.includes("Canopy") || child.name.includes("Windshield")) {
-            child.material = AutomotivePBRMaterialSystem.getDielectricGlass("#0f172a", 0.65, 1.52);
+            child.material = AutomotivePBRMaterialSystem.getDielectricGlass("#1a1008", 0.65, 1.52);
           } else if (child.name.includes("Carbon") || child.name.includes("Splitter") || child.name.includes("Wing") || child.name.includes("Diffuser")) {
             child.material = AutomotivePBRMaterialSystem.getCarbonFiber(true);
           }

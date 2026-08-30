@@ -48,22 +48,22 @@ export const InteriorCompareModal: React.FC<InteriorCompareModalProps> = ({
   const featureKeys = Object.keys(CONFIG_OPTIONS) as FeatureKey[];
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-amber-950/80 backdrop-blur-md p-4 animate-in fade-in duration-200">
-      <div className="bg-amber-900/50 border border-amber-700/30/80 rounded-2xl max-w-4xl w-full max-h-[85vh] flex flex-col shadow-2xl overflow-hidden text-amber-50">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-md p-4 animate-in fade-in duration-200">
+      <div className="bg-slate-900 border border-slate-700/80 rounded-2xl max-w-4xl w-full max-h-[85vh] flex flex-col shadow-2xl overflow-hidden text-slate-100">
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-amber-800/30 bg-amber-950/60">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-800 bg-slate-950/60">
           <div className="flex items-center gap-2.5">
             <div className="p-2 rounded-lg bg-blue-500/20 text-cyan-400 border border-cyan-500/30">
               <Sparkles size={18} />
             </div>
             <div>
               <h2 className="text-base font-bold text-white">Interior Specification Comparison</h2>
-              <p className="text-xs text-amber-200/60">Side-by-side automotive engineering matrix &amp; stat deltas</p>
+              <p className="text-xs text-slate-400">Side-by-side automotive engineering matrix &amp; stat deltas</p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="p-1.5 rounded-lg text-amber-200/60 hover:text-white hover:bg-amber-800/35 transition-all cursor-pointer"
+            className="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-all cursor-pointer"
             aria-label="Close modal"
           >
             <X size={18} />
@@ -79,59 +79,59 @@ export const InteriorCompareModal: React.FC<InteriorCompareModalProps> = ({
               <span className="text-[10px] font-mono font-bold text-cyan-400 uppercase tracking-wider">YOUR ACTIVE BUILD</span>
               <div className="flex items-center justify-between">
                 <span className="text-2xl font-black text-white">{currentMetrics.overallRating}</span>
-                <span className="text-xs font-bold text-amber-100/80">{currentMetrics.comfort}% Comfort</span>
+                <span className="text-xs font-bold text-slate-300">{currentMetrics.comfort}% Comfort</span>
               </div>
-              <div className="text-xs text-amber-200/60 flex justify-between font-mono">
+              <div className="text-xs text-slate-400 flex justify-between font-mono">
                 <span>{currentMetrics.weight} kg</span>
                 <span className="text-emerald-400 font-bold">${currentMetrics.cost.toLocaleString()}</span>
               </div>
             </div>
 
             {/* Baseline */}
-            <div className="bg-amber-950/60 border border-amber-800/30 rounded-xl p-3.5 flex flex-col gap-2">
-              <span className="text-[10px] font-mono font-bold text-amber-200/60 uppercase tracking-wider">ORIGINAL 80S (BASE)</span>
+            <div className="bg-slate-950/60 border border-slate-800 rounded-xl p-3.5 flex flex-col gap-2">
+              <span className="text-[10px] font-mono font-bold text-slate-400 uppercase tracking-wider">ORIGINAL 80S (BASE)</span>
               <div className="flex items-center justify-between">
-                <span className="text-2xl font-black text-amber-100/80">{baselineMetrics.overallRating}</span>
-                <span className="text-xs font-bold text-amber-200/60">{baselineMetrics.comfort}% Comfort</span>
+                <span className="text-2xl font-black text-slate-300">{baselineMetrics.overallRating}</span>
+                <span className="text-xs font-bold text-slate-400">{baselineMetrics.comfort}% Comfort</span>
               </div>
-              <div className="text-xs text-amber-200/60 flex justify-between font-mono">
+              <div className="text-xs text-slate-400 flex justify-between font-mono">
                 <span>{baselineMetrics.weight} kg</span>
-                <span className="text-amber-100/80">${baselineMetrics.cost.toLocaleString()}</span>
+                <span className="text-slate-300">${baselineMetrics.cost.toLocaleString()}</span>
               </div>
             </div>
 
             {/* Sport 80s */}
-            <div className="bg-amber-950/60 border border-amber-800/30 rounded-xl p-3.5 flex flex-col gap-2">
+            <div className="bg-slate-950/60 border border-slate-800 rounded-xl p-3.5 flex flex-col gap-2">
               <span className="text-[10px] font-mono font-bold text-amber-400 uppercase tracking-wider">SPORT 80S</span>
               <div className="flex items-center justify-between">
                 <span className="text-2xl font-black text-amber-300">{sportMetrics.overallRating}</span>
-                <span className="text-xs font-bold text-amber-200/60">{sportMetrics.comfort}% Comfort</span>
+                <span className="text-xs font-bold text-slate-400">{sportMetrics.comfort}% Comfort</span>
               </div>
-              <div className="text-xs text-amber-200/60 flex justify-between font-mono">
+              <div className="text-xs text-slate-400 flex justify-between font-mono">
                 <span>{sportMetrics.weight} kg</span>
-                <span className="text-amber-100/80">${sportMetrics.cost.toLocaleString()}</span>
+                <span className="text-slate-300">${sportMetrics.cost.toLocaleString()}</span>
               </div>
             </div>
 
             {/* Luxury 80s */}
-            <div className="bg-amber-950/60 border border-amber-800/30 rounded-xl p-3.5 flex flex-col gap-2">
+            <div className="bg-slate-950/60 border border-slate-800 rounded-xl p-3.5 flex flex-col gap-2">
               <span className="text-[10px] font-mono font-bold text-emerald-400 uppercase tracking-wider">LUXURY 80S</span>
               <div className="flex items-center justify-between">
                 <span className="text-2xl font-black text-emerald-300">{luxuryMetrics.overallRating}</span>
-                <span className="text-xs font-bold text-amber-200/60">{luxuryMetrics.comfort}% Comfort</span>
+                <span className="text-xs font-bold text-slate-400">{luxuryMetrics.comfort}% Comfort</span>
               </div>
-              <div className="text-xs text-amber-200/60 flex justify-between font-mono">
+              <div className="text-xs text-slate-400 flex justify-between font-mono">
                 <span>{luxuryMetrics.weight} kg</span>
-                <span className="text-amber-100/80">${luxuryMetrics.cost.toLocaleString()}</span>
+                <span className="text-slate-300">${luxuryMetrics.cost.toLocaleString()}</span>
               </div>
             </div>
           </div>
 
           {/* Feature Matrix Table */}
-          <div className="border border-amber-800/30 rounded-xl overflow-hidden">
+          <div className="border border-slate-800 rounded-xl overflow-hidden">
             <table className="w-full text-xs text-left border-collapse">
               <thead>
-                <tr className="bg-amber-950/80 text-amber-200/60 uppercase font-mono border-b border-amber-800/30">
+                <tr className="bg-slate-950 text-slate-400 uppercase font-mono border-b border-slate-800">
                   <th className="py-2.5 px-4 font-semibold">Subsystem / Feature</th>
                   <th className="py-2.5 px-4 font-semibold text-cyan-400 bg-blue-950/20">Your Active Build</th>
                   <th className="py-2.5 px-4 font-semibold">Original 80s</th>
@@ -148,12 +148,12 @@ export const InteriorCompareModal: React.FC<InteriorCompareModalProps> = ({
                   const luxVal = getSelectedOptionLabel(key, luxurySelections);
 
                   return (
-                    <tr key={key} className="hover:bg-amber-800/35/30 transition-colors">
-                      <td className="py-2.5 px-4 font-bold text-amber-100/80">{label}</td>
+                    <tr key={key} className="hover:bg-slate-800/30 transition-colors">
+                      <td className="py-2.5 px-4 font-bold text-slate-300">{label}</td>
                       <td className="py-2.5 px-4 font-bold text-cyan-300 bg-blue-950/20">{currentVal}</td>
-                      <td className="py-2.5 px-4 text-amber-200/60">{baseVal}</td>
-                      <td className="py-2.5 px-4 text-amber-200/60">{sportVal}</td>
-                      <td className="py-2.5 px-4 text-amber-200/60">{luxVal}</td>
+                      <td className="py-2.5 px-4 text-slate-400">{baseVal}</td>
+                      <td className="py-2.5 px-4 text-slate-400">{sportVal}</td>
+                      <td className="py-2.5 px-4 text-slate-400">{luxVal}</td>
                     </tr>
                   );
                 })}
@@ -163,8 +163,8 @@ export const InteriorCompareModal: React.FC<InteriorCompareModalProps> = ({
         </div>
 
         {/* Footer */}
-        <div className="px-6 py-4 border-t border-amber-800/30 bg-amber-950/60 flex items-center justify-between">
-          <span className="text-xs text-amber-200/60">
+        <div className="px-6 py-4 border-t border-slate-800 bg-slate-950/60 flex items-center justify-between">
+          <span className="text-xs text-slate-400">
             Selected configurations update in real time across the 3D cockpit and 2D blueprints.
           </span>
           <button

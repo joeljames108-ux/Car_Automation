@@ -82,12 +82,12 @@ export function RadiatorSection({
             />
 
             <div className="grid grid-cols-2 gap-2">
-              <div className="p-2.5 rounded-xl bg-base-950/80 border border-amber-800/30 space-y-1">
-                <span className="text-[10px] font-mono text-amber-200/60 uppercase">Core Thickness</span>
+              <div className="p-2.5 rounded-xl bg-base-950/80 border border-slate-800 space-y-1">
+                <span className="text-[10px] font-mono text-slate-400 uppercase">Core Thickness</span>
                 <span className="text-xs font-mono font-bold text-amber-300 block">56mm Triple-Pass</span>
               </div>
-              <div className="p-2.5 rounded-xl bg-base-950/80 border border-amber-800/30 space-y-1">
-                <span className="text-[10px] font-mono text-amber-200/60 uppercase">Fan Flow Rate</span>
+              <div className="p-2.5 rounded-xl bg-base-950/80 border border-slate-800 space-y-1">
+                <span className="text-[10px] font-mono text-slate-400 uppercase">Fan Flow Rate</span>
                 <span className="text-xs font-mono font-bold text-amber-300 block">3,400 CFM Dual</span>
               </div>
             </div>
@@ -96,7 +96,7 @@ export function RadiatorSection({
               <span className="text-[10px] font-mono font-bold text-amber-300 uppercase tracking-wider block">
                 HEAT SOAK SUPPRESSION
               </span>
-              <p className="text-[11px] font-mono text-amber-100/80 leading-relaxed">
+              <p className="text-[11px] font-mono text-slate-300 leading-relaxed">
                 Maintains cylinder head coolant jacket at an optimal 88°C under continuous 11,000 RPM dyno pulls, preventing hot-spot detonation.
               </p>
             </div>
@@ -117,7 +117,7 @@ export function RadiatorSection({
               onSelectVariant={onSelectVariant}
             />
           ) : (
-            <p className="text-xs font-mono text-amber-300/50">Loading material variants...</p>
+            <p className="text-xs font-mono text-slate-500">Loading material variants...</p>
           )}
         </SectionCard>
 

@@ -77,7 +77,7 @@ export const GlassCardPro: React.FC<GlassCardProProps> = memo(({
     <div
       ref={ref}
       className={"relative overflow-hidden rounded-2xl border border-white/[0.08] " +
-        "bg-gradient-to-br from-amber-900/60/65 to-slate-950/75 " +
+        "bg-gradient-to-br from-slate-900/65 to-slate-950/75 " +
         "backdrop-blur-xl shadow-[0_20px_40px_-15px_rgba(0,0,0,0.6)] " +
         "transition-all duration-300 hover:border-white/[0.14] " + className}
       style={style}

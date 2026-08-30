@@ -124,37 +124,37 @@ export const ECU3DMapEditor: React.FC<ECU3DMapEditorProps> = ({
       return "bg-amber-950/80 text-amber-300 border-amber-800/40";
     }
     // Default VE / Duty heat
-    if (norm < 0.3) return "bg-amber-900/50 text-amber-200/60 border-amber-800/30";
+    if (norm < 0.3) return "bg-slate-900 text-slate-400 border-slate-800";
     if (norm < 0.6) return "bg-amber-950/80 text-amber-300 border-amber-800/40";
     if (norm < 0.85) return "bg-amber-950/80 text-amber-300 border-amber-800/40";
     return "bg-rose-950/80 text-rose-300 border-rose-800/50 font-bold";
   };
 
   return (
-    <div className="flex flex-col h-full w-full bg-amber-950/90 backdrop-blur-2xl p-4 rounded-2xl border border-amber-800/30 shadow-2xl space-y-4">
+    <div className="flex flex-col h-full w-full bg-slate-950/90 backdrop-blur-2xl p-4 rounded-2xl border border-slate-800 shadow-2xl space-y-4">
       {/* ================================================================= */}
       {/* MAP EDITOR HEADER & SELECTOR TABS */}
       {/* ================================================================= */}
-      <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-3 bg-amber-900/40 p-3 rounded-xl border border-amber-800/30">
+      <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-3 bg-slate-900/80 p-3 rounded-xl border border-slate-800">
         <div className="flex items-center gap-3">
           <div className="p-2 rounded-xl bg-gradient-to-br from-amber-400 via-amber-500 to-violet-600 text-slate-950 font-bold shadow-lg shadow-cyan-500/20">
             <Cpu size={18} />
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h3 className="text-sm font-bold text-amber-50">16x16 ECU Calibration Suite</h3>
+              <h3 className="text-sm font-bold text-slate-100">16x16 ECU Calibration Suite</h3>
               <span className="px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 font-mono text-[10px] font-bold border border-amber-500/30">
                 LIVE MAP TRACER ACTIVE
               </span>
             </div>
-            <p className="text-xs text-amber-200/60">
+            <p className="text-xs text-slate-400">
               Bi-linear interpolated 256-cell lookup tables • 3D surface mapping
             </p>
           </div>
         </div>
 
         {/* Map Type Switcher */}
-        <div className="flex bg-amber-950/80 p-1 rounded-xl border border-amber-800/30 gap-1 overflow-x-auto">
+        <div className="flex bg-slate-950 p-1 rounded-xl border border-slate-800 gap-1 overflow-x-auto">
           {[
             { id: "ignition" as const, label: "Ignition Timing", icon: <Zap size={12} /> },
             { id: "fuel" as const, label: "Fuel VE %", icon: <Flame size={12} /> },
@@ -171,7 +171,7 @@ export const ECU3DMapEditor: React.FC<ECU3DMapEditorProps> = ({
               className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg transition-all whitespace-nowrap cursor-pointer ${
                 activeMapId === tab.id
                   ? "bg-gradient-to-r from-amber-500 to-amber-600 text-slate-950 font-bold shadow-md shadow-cyan-500/30"
-                  : "text-amber-200/60 hover:text-amber-50"
+                  : "text-slate-400 hover:text-slate-200"
               }`}
             >
               {tab.icon}
@@ -184,15 +184,15 @@ export const ECU3DMapEditor: React.FC<ECU3DMapEditorProps> = ({
       {/* ================================================================= */}
       {/* TOOLBAR — CELL EDIT CONTROLS, BUMPS, SMOOTHING */}
       {/* ================================================================= */}
-      <div className="flex flex-wrap items-center justify-between gap-3 bg-amber-900/40 p-2.5 rounded-xl border border-amber-800/30 text-xs font-mono">
+      <div className="flex flex-wrap items-center justify-between gap-3 bg-slate-900/60 p-2.5 rounded-xl border border-slate-800 text-xs font-mono">
         <div className="flex items-center gap-2">
-          <span className="text-amber-200/60">Selected Cell:</span>
+          <span className="text-slate-400">Selected Cell:</span>
           {selectedCell ? (
-            <span className="px-2 py-0.5 rounded bg-amber-800/35 text-amber-300 font-bold border border-amber-700/30">
+            <span className="px-2 py-0.5 rounded bg-slate-800 text-amber-300 font-bold border border-slate-700">
               R{selectedCell.row} ({activeMap.axis.loadKPaBreakpoints[selectedCell.row]} kPa) × C{selectedCell.col} ({activeMap.axis.rpmBreakpoints[selectedCell.col]} RPM) = {activeMap.grid[selectedCell.row][selectedCell.col]} {activeMap.unit}
             </span>
           ) : (
-            <span className="text-amber-400">Click any cell to edit</span>
+            <span className="text-slate-600">Click any cell to edit</span>
           )}
         </div>
 
@@ -201,7 +201,7 @@ export const ECU3DMapEditor: React.FC<ECU3DMapEditorProps> = ({
           <button
             onClick={() => handleBumpCell(-5.0)}
             disabled={!selectedCell}
-            className="flex items-center gap-1 px-2.5 py-1 bg-amber-800/35 hover:bg-amber-700/40 disabled:opacity-40 text-rose-300 rounded-lg border border-amber-700/30 transition-all cursor-pointer"
+            className="flex items-center gap-1 px-2.5 py-1 bg-slate-800 hover:bg-slate-700 disabled:opacity-40 text-rose-300 rounded-lg border border-slate-700 transition-all cursor-pointer"
             title="-5 Units"
           >
             <Minus size={11} />
@@ -210,7 +210,7 @@ export const ECU3DMapEditor: React.FC<ECU3DMapEditorProps> = ({
           <button
             onClick={() => handleBumpCell(-1.0)}
             disabled={!selectedCell}
-            className="flex items-center gap-1 px-2.5 py-1 bg-amber-800/35 hover:bg-amber-700/40 disabled:opacity-40 text-rose-300 rounded-lg border border-amber-700/30 transition-all cursor-pointer"
+            className="flex items-center gap-1 px-2.5 py-1 bg-slate-800 hover:bg-slate-700 disabled:opacity-40 text-rose-300 rounded-lg border border-slate-700 transition-all cursor-pointer"
             title="-1 Unit"
           >
             <Minus size={11} />
@@ -219,7 +219,7 @@ export const ECU3DMapEditor: React.FC<ECU3DMapEditorProps> = ({
           <button
             onClick={() => handleBumpCell(1.0)}
             disabled={!selectedCell}
-            className="flex items-center gap-1 px-2.5 py-1 bg-amber-800/35 hover:bg-amber-700/40 disabled:opacity-40 text-emerald-300 rounded-lg border border-amber-700/30 transition-all cursor-pointer"
+            className="flex items-center gap-1 px-2.5 py-1 bg-slate-800 hover:bg-slate-700 disabled:opacity-40 text-emerald-300 rounded-lg border border-slate-700 transition-all cursor-pointer"
             title="+1 Unit"
           >
             <Plus size={11} />
@@ -228,18 +228,18 @@ export const ECU3DMapEditor: React.FC<ECU3DMapEditorProps> = ({
           <button
             onClick={() => handleBumpCell(5.0)}
             disabled={!selectedCell}
-            className="flex items-center gap-1 px-2.5 py-1 bg-amber-800/35 hover:bg-amber-700/40 disabled:opacity-40 text-emerald-300 rounded-lg border border-amber-700/30 transition-all cursor-pointer"
+            className="flex items-center gap-1 px-2.5 py-1 bg-slate-800 hover:bg-slate-700 disabled:opacity-40 text-emerald-300 rounded-lg border border-slate-700 transition-all cursor-pointer"
             title="+5 Units"
           >
             <Plus size={11} />
             <span>+5</span>
           </button>
 
-          <div className="h-4 w-px bg-amber-800/35 mx-1" />
+          <div className="h-4 w-px bg-slate-800 mx-1" />
 
           <button
             onClick={handleSmoothMap}
-            className="flex items-center gap-1 px-3 py-1 bg-amber-800/35 hover:bg-amber-950 text-amber-300 rounded-lg border border-amber-700/30 hover:border-amber-500/50 transition-all cursor-pointer font-sans text-xs font-semibold"
+            className="flex items-center gap-1 px-3 py-1 bg-slate-800 hover:bg-amber-950 text-amber-300 rounded-lg border border-slate-700 hover:border-amber-500/50 transition-all cursor-pointer font-sans text-xs font-semibold"
           >
             <Sparkles size={12} />
             <span>Smooth Matrix</span>
@@ -247,7 +247,7 @@ export const ECU3DMapEditor: React.FC<ECU3DMapEditorProps> = ({
 
           <button
             onClick={handleResetMap}
-            className="flex items-center gap-1 px-3 py-1 bg-amber-800/35 hover:bg-amber-700/40 text-amber-100/80 rounded-lg border border-amber-700/30 transition-all cursor-pointer font-sans text-xs font-semibold"
+            className="flex items-center gap-1 px-3 py-1 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg border border-slate-700 transition-all cursor-pointer font-sans text-xs font-semibold"
           >
             <RotateCcw size={12} />
             <span>Reset Base</span>
@@ -258,17 +258,17 @@ export const ECU3DMapEditor: React.FC<ECU3DMapEditorProps> = ({
       {/* ================================================================= */}
       {/* 16x16 GRID TABLE WITH LIVE TRACER DOT */}
       {/* ================================================================= */}
-      <div className="flex-1 w-full overflow-x-auto rounded-xl border border-amber-800/30 bg-amber-950/80 p-2">
+      <div className="flex-1 w-full overflow-x-auto rounded-xl border border-slate-800 bg-slate-950 p-2">
         <table className="w-full text-center border-collapse font-mono text-[10.5px]">
           <thead>
             <tr>
-              <th className="p-1 text-[9px] text-amber-300/50 border border-slate-850 bg-amber-900/50 uppercase">
+              <th className="p-1 text-[9px] text-slate-500 border border-slate-850 bg-slate-900 uppercase">
                 MAP \ RPM
               </th>
               {activeMap.axis.rpmBreakpoints.map((rpm, c) => (
                 <th
                   key={c}
-                  className={`p-1 border border-slate-850 text-amber-200/60 bg-amber-900/40 ${
+                  className={`p-1 border border-slate-850 text-slate-400 bg-slate-900/90 ${
                     liveTrace.colIndex === c ? "text-amber-300 font-bold bg-amber-950/60" : ""
                   }`}
                 >
@@ -282,7 +282,7 @@ export const ECU3DMapEditor: React.FC<ECU3DMapEditorProps> = ({
               <tr key={r}>
                 {/* Y-Axis Label (kPa MAP) */}
                 <td
-                  className={`p-1 border border-slate-850 text-amber-200/60 bg-amber-900/40 font-bold ${
+                  className={`p-1 border border-slate-850 text-slate-400 bg-slate-900/90 font-bold ${
                     liveTrace.rowIndex === r ? "text-amber-300 bg-amber-950/60" : ""
                   }`}
                 >
@@ -324,29 +324,29 @@ export const ECU3DMapEditor: React.FC<ECU3DMapEditorProps> = ({
       {/* ================================================================= */}
       {/* LIVE ENGINE TRACER RIBBON & STATS */}
       {/* ================================================================= */}
-      <div className="flex flex-wrap items-center justify-between gap-4 p-3 bg-amber-900/40 rounded-xl border border-amber-800/30 text-xs font-mono">
+      <div className="flex flex-wrap items-center justify-between gap-4 p-3 bg-slate-900/80 rounded-xl border border-slate-800 text-xs font-mono">
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-1.5">
             <Gauge size={13} className="text-amber-400" />
-            <span className="text-amber-200/60">Live Dyno Load:</span>
+            <span className="text-slate-400">Live Dyno Load:</span>
             <span className="text-amber-300 font-bold">{currentRpm} RPM</span>
-            <span className="text-amber-400">@</span>
+            <span className="text-slate-600">@</span>
             <span className="text-amber-300 font-bold">{currentMapKPa} kPa</span>
           </div>
 
-          <div className="h-3 w-px bg-amber-800/35" />
+          <div className="h-3 w-px bg-slate-800" />
 
           <div className="flex items-center gap-1.5">
             <TrendingUp size={13} className="text-emerald-400" />
-            <span className="text-amber-200/60">Interpolated Output:</span>
+            <span className="text-slate-400">Interpolated Output:</span>
             <span className="text-emerald-300 font-bold text-sm">
               {liveTrace.interpolatedValue} {activeMap.unit}
             </span>
           </div>
         </div>
 
-        <div className="text-[11px] text-amber-300/50">
-          Target Map: <span className="text-amber-100/80 font-bold">{activeMap.name}</span>
+        <div className="text-[11px] text-slate-500">
+          Target Map: <span className="text-slate-300 font-bold">{activeMap.name}</span>
         </div>
       </div>
     </div>

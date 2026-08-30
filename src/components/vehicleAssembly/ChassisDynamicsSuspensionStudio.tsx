@@ -51,9 +51,9 @@ export const ChassisDynamicsSuspensionStudio: React.FC = () => {
   }, [throttlePct, batterySoc]);
 
   return (
-    <div className="flex flex-col h-full w-full bg-[#05070c] text-gray-100 p-4 gap-4 overflow-y-auto font-sans">
+    <div className="flex flex-col h-full w-full bg-amber-950/60 text-gray-100 p-4 gap-4 overflow-y-auto font-sans">
       {/* Studio Header Ribbon */}
-      <div className="flex items-center justify-between px-5 py-3 rounded-2xl bg-[#090d16] border border-[#182133] shadow-lg">
+      <div className="flex items-center justify-between px-5 py-3 rounded-2xl bg-amber-950/60 border border-[#182133] shadow-lg">
         <div className="flex items-center gap-3">
           <div className="p-2 rounded-xl bg-gradient-to-tr from-amber-500/20 to-indigo-500/20 border border-amber-500/40 text-amber-400">
             <Activity className="w-5 h-5" />
@@ -73,7 +73,7 @@ export const ChassisDynamicsSuspensionStudio: React.FC = () => {
           <select
             value={driveMode}
             onChange={(e) => setDriveMode(e.target.value as SuspensionDriveMode)}
-            className="bg-[#0e1424] text-amber-400 text-xs font-bold font-mono px-3 py-1.5 rounded-xl border border-amber-500/40 cursor-pointer"
+            className="bg-amber-950/60 text-amber-400 text-xs font-bold font-mono px-3 py-1.5 rounded-xl border border-amber-500/40 cursor-pointer"
           >
             <option value="COMFORT_PLUSH">Comfort Plush</option>
             <option value="BALANCED_TOURING">Balanced Touring</option>
@@ -86,7 +86,7 @@ export const ChassisDynamicsSuspensionStudio: React.FC = () => {
       {/* 3-Column Studio Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 flex-1">
         {/* Column 1: Magnetorheological Skyhook Active Damping */}
-        <div className="flex flex-col p-4 rounded-2xl bg-[#090d16] border border-[#182133] gap-3">
+        <div className="flex flex-col p-4 rounded-2xl bg-amber-950/60 border border-[#182133] gap-3">
           <div className="flex items-center justify-between pb-2 border-b border-[#182133]">
             <div className="flex items-center gap-2 text-amber-400 font-bold text-xs">
               <Sliders className="w-4 h-4" />
@@ -98,9 +98,9 @@ export const ChassisDynamicsSuspensionStudio: React.FC = () => {
           </div>
 
           {/* 4-Corner Damping Visualizer */}
-          <div className="grid grid-cols-2 gap-2.5 p-3 bg-[#05070c] rounded-xl border border-[#141b2b]">
+          <div className="grid grid-cols-2 gap-2.5 p-3 bg-amber-950/60 rounded-xl border border-[#141b2b]">
             {Object.values(mrState.corners).map((c) => (
-              <div key={c.corner} className="p-2.5 rounded-lg bg-[#0a0f1c] border border-[#182133]">
+              <div key={c.corner} className="p-2.5 rounded-lg bg-amber-950/60 border border-[#182133]">
                 <div className="flex items-center justify-between text-[10px] font-mono text-gray-400 mb-1">
                   <span>{c.corner.replace('_', ' ')}</span>
                   <span className={c.skyhookActive ? 'text-emerald-400 font-bold' : 'text-gray-500'}>
@@ -120,11 +120,11 @@ export const ChassisDynamicsSuspensionStudio: React.FC = () => {
 
           {/* Modal Vibration Metrics */}
           <div className="grid grid-cols-2 gap-2 text-xs font-mono">
-            <div className="p-2.5 rounded-xl bg-[#0c1220] border border-[#1c263d]">
+            <div className="p-2.5 rounded-xl bg-amber-950/60 border border-[#1c263d]">
               <div className="text-gray-400 text-[10px]">DISSIPATED POWER</div>
               <div className="text-sm font-bold text-emerald-400">{mrState.totalDamperDissipatedPowerWatts} W</div>
             </div>
-            <div className="p-2.5 rounded-xl bg-[#0c1220] border border-[#1c263d]">
+            <div className="p-2.5 rounded-xl bg-amber-950/60 border border-[#1c263d]">
               <div className="text-gray-400 text-[10px]">CHASSIS HEAVE ACCEL</div>
               <div className="text-sm font-bold text-amber-400">{mrState.chassisHeaveAccelMs2} m/s²</div>
             </div>
@@ -132,7 +132,7 @@ export const ChassisDynamicsSuspensionStudio: React.FC = () => {
         </div>
 
         {/* Column 2: Crashworthiness FEA Energy Absorption */}
-        <div className="flex flex-col p-4 rounded-2xl bg-[#090d16] border border-[#182133] gap-3">
+        <div className="flex flex-col p-4 rounded-2xl bg-amber-950/60 border border-[#182133] gap-3">
           <div className="flex items-center justify-between pb-2 border-b border-[#182133]">
             <div className="flex items-center gap-2 text-rose-400 font-bold text-xs">
               <ShieldCheck className="w-4 h-4" />
@@ -141,7 +141,7 @@ export const ChassisDynamicsSuspensionStudio: React.FC = () => {
             <select
               value={crashMaterial}
               onChange={(e) => setCrashMaterial(e.target.value as CrashRailCrossSection)}
-              className="bg-[#0e1424] text-gray-300 text-[10px] font-mono px-2 py-1 rounded-lg border border-[#212c44] cursor-pointer"
+              className="bg-amber-950/60 text-gray-300 text-[10px] font-mono px-2 py-1 rounded-lg border border-[#212c44] cursor-pointer"
             >
               <option value="OCTAGONAL_ULTRA_HIGH_STRENGTH_STEEL">Octagonal UHSS Steel</option>
               <option value="HEXAGONAL_ALUMINUM_6063_T6">Hexagonal Aluminum 6063-T6</option>
@@ -150,7 +150,7 @@ export const ChassisDynamicsSuspensionStudio: React.FC = () => {
           </div>
 
           {/* Crash Pulse Metrics */}
-          <div className="flex flex-col p-3 bg-[#05070c] rounded-xl border border-[#141b2b] gap-2">
+          <div className="flex flex-col p-3 bg-amber-950/60 rounded-xl border border-[#141b2b] gap-2">
             <div className="flex items-center justify-between text-xs font-mono">
               <span className="text-gray-400">NCAP 64 KM/H SAFETY:</span>
               <span className="text-amber-400 font-bold">
@@ -175,11 +175,11 @@ export const ChassisDynamicsSuspensionStudio: React.FC = () => {
 
           {/* Deceleration & Force Badges */}
           <div className="grid grid-cols-2 gap-2 text-xs font-mono">
-            <div className="p-2.5 rounded-xl bg-[#0c1220] border border-[#1c263d]">
+            <div className="p-2.5 rounded-xl bg-amber-950/60 border border-[#1c263d]">
               <div className="text-gray-400 text-[10px]">TOTAL ENERGY ABSORBED</div>
               <div className="text-sm font-bold text-gray-100">{crashResult.totalEnergyAbsorbedKj} kJ</div>
             </div>
-            <div className="p-2.5 rounded-xl bg-[#0c1220] border border-[#1c263d]">
+            <div className="p-2.5 rounded-xl bg-amber-950/60 border border-[#1c263d]">
               <div className="text-gray-400 text-[10px]">PEAK DECELERATION</div>
               <div className="text-sm font-bold text-rose-400">{crashResult.peakDecelerationG} g</div>
             </div>
@@ -187,7 +187,7 @@ export const ChassisDynamicsSuspensionStudio: React.FC = () => {
         </div>
 
         {/* Column 3: P2/P4 Hybrid EMS Power Split */}
-        <div className="flex flex-col p-4 rounded-2xl bg-[#090d16] border border-[#182133] gap-3">
+        <div className="flex flex-col p-4 rounded-2xl bg-amber-950/60 border border-[#182133] gap-3">
           <div className="flex items-center justify-between pb-2 border-b border-[#182133]">
             <div className="flex items-center gap-2 text-emerald-400 font-bold text-xs">
               <Zap className="w-4 h-4" />
@@ -199,7 +199,7 @@ export const ChassisDynamicsSuspensionStudio: React.FC = () => {
           </div>
 
           {/* Interactive Throttle & SOC Sliders */}
-          <div className="flex flex-col gap-2 p-3 bg-[#05070c] rounded-xl border border-[#141b2b] text-xs font-mono">
+          <div className="flex flex-col gap-2 p-3 bg-amber-950/60 rounded-xl border border-[#141b2b] text-xs font-mono">
             <div className="flex items-center justify-between">
               <span className="text-gray-400">DRIVER THROTTLE: {throttlePct}%</span>
               <input
@@ -226,17 +226,17 @@ export const ChassisDynamicsSuspensionStudio: React.FC = () => {
 
           {/* Power Split Breakdown */}
           <div className="grid grid-cols-3 gap-2 text-center text-xs font-mono">
-            <div className="p-2 rounded-xl bg-[#0c1220] border border-[#1c263d]">
+            <div className="p-2 rounded-xl bg-amber-950/60 border border-[#1c263d]">
               <div className="text-[9px] text-gray-400">ICE TWIN-TURBO</div>
               <div className="text-sm font-bold text-rose-400">{hybridState.enginePowerKw} kW</div>
               <div className="text-[9px] text-gray-500">{hybridState.engineTorqueNm} Nm</div>
             </div>
-            <div className="p-2 rounded-xl bg-[#0c1220] border border-[#1c263d]">
+            <div className="p-2 rounded-xl bg-amber-950/60 border border-[#1c263d]">
               <div className="text-[9px] text-gray-400">P2 MOTOR</div>
               <div className="text-sm font-bold text-amber-400">{hybridState.p2MotorPowerKw} kW</div>
               <div className="text-[9px] text-gray-500">{hybridState.p2MotorTorqueNm} Nm</div>
             </div>
-            <div className="p-2 rounded-xl bg-[#0c1220] border border-[#1c263d]">
+            <div className="p-2 rounded-xl bg-amber-950/60 border border-[#1c263d]">
               <div className="text-[9px] text-gray-400">P4 REAR e-AXLE</div>
               <div className="text-sm font-bold text-emerald-400">{hybridState.p4RearAxlePowerKw} kW</div>
               <div className="text-[9px] text-gray-500">{hybridState.p4RearAxleTorqueNm} Nm</div>

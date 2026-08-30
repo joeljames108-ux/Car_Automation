@@ -101,14 +101,14 @@ export const SuspensionAssemblyStage: React.FC<SuspensionAssemblyStageProps> = (
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h3 className="text-sm font-bold font-mono text-slate-800 dark:text-amber-50 uppercase tracking-wider">
+              <h3 className="text-sm font-bold font-mono text-slate-800 dark:text-slate-100 uppercase tracking-wider">
                 STAGE 4: 4-CORNER SUSPENSION & KINEMATICS
               </h3>
               <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30">
                 PRO KINEMATICS • 1000Hz MR
               </span>
             </div>
-            <p className="text-[11px] font-mono text-amber-300/50 dark:text-amber-200/60">
+            <p className="text-[11px] font-mono text-slate-500 dark:text-slate-400">
               Attach wishbones & pushrods. Solve roll center height, camber gain & active anti-roll bars.
             </p>
           </div>
@@ -119,7 +119,7 @@ export const SuspensionAssemblyStage: React.FC<SuspensionAssemblyStageProps> = (
           <button
             onClick={() => setActiveSubTab("geometry")}
             className={`px-2.5 py-1 rounded-lg text-[10px] font-mono font-bold transition-all cursor-pointer ${
-              activeSubTab === "geometry" ? "bg-amber-500 text-white shadow-sm" : "text-amber-200/60 hover:text-amber-50"
+              activeSubTab === "geometry" ? "bg-amber-500 text-white shadow-sm" : "text-slate-400 hover:text-slate-200"
             }`}
           >
             GEOMETRY
@@ -127,7 +127,7 @@ export const SuspensionAssemblyStage: React.FC<SuspensionAssemblyStageProps> = (
           <button
             onClick={() => setActiveSubTab("kinematics")}
             className={`px-2.5 py-1 rounded-lg text-[10px] font-mono font-bold transition-all cursor-pointer ${
-              activeSubTab === "kinematics" ? "bg-amber-500 text-white shadow-sm" : "text-amber-200/60 hover:text-amber-50"
+              activeSubTab === "kinematics" ? "bg-amber-500 text-white shadow-sm" : "text-slate-400 hover:text-slate-200"
             }`}
           >
             KINEMATICS
@@ -135,7 +135,7 @@ export const SuspensionAssemblyStage: React.FC<SuspensionAssemblyStageProps> = (
           <button
             onClick={() => setActiveSubTab("damping")}
             className={`px-2.5 py-1 rounded-lg text-[10px] font-mono font-bold transition-all cursor-pointer ${
-              activeSubTab === "damping" ? "bg-amber-500 text-white shadow-sm" : "text-amber-200/60 hover:text-amber-50"
+              activeSubTab === "damping" ? "bg-amber-500 text-white shadow-sm" : "text-slate-400 hover:text-slate-200"
             }`}
           >
             DAMPING & ARB
@@ -156,15 +156,15 @@ export const SuspensionAssemblyStage: React.FC<SuspensionAssemblyStageProps> = (
                   className={`p-3.5 rounded-2xl text-left transition-all border cursor-pointer ${
                     isSelected
                       ? "bg-amber-500/20 border-amber-500/60 shadow-md ring-1 ring-amber-500/40"
-                      : "bg-base-900/60 border-base-800 hover:border-base-700 text-amber-200/60"
+                      : "bg-base-900/60 border-base-800 hover:border-base-700 text-slate-400"
                   }`}
                 >
                   <div className="flex items-center justify-between mb-1.5">
-                    <span className="font-bold text-xs font-mono text-slate-900 dark:text-amber-50">{s.label}</span>
+                    <span className="font-bold text-xs font-mono text-slate-900 dark:text-slate-100">{s.label}</span>
                     <span className="text-[10px] font-mono text-amber-600 dark:text-amber-300 font-bold">{s.camberGain}</span>
                   </div>
-                  <p className="text-[10px] text-amber-300/50 dark:text-amber-200/60 mb-2.5">{s.desc}</p>
-                  <div className="flex items-center justify-between text-[10px] font-mono pt-2 border-t border-base-800/60 text-amber-200/60">
+                  <p className="text-[10px] text-slate-500 dark:text-slate-400 mb-2.5">{s.desc}</p>
+                  <div className="flex items-center justify-between text-[10px] font-mono pt-2 border-t border-base-800/60 text-slate-400">
                     <span>Roll Stiffness: <strong className="text-amber-600 dark:text-amber-300">{s.rollStiffness}</strong></span>
                     <span className="text-emerald-600 dark:text-emerald-300 font-bold">4-Corner Inboard</span>
                   </div>
@@ -178,8 +178,8 @@ export const SuspensionAssemblyStage: React.FC<SuspensionAssemblyStageProps> = (
             <div className="flex items-center gap-2">
               <Zap size={16} className="text-amber-400" />
               <div>
-                <div className="text-xs font-bold font-mono text-amber-50">ELECTRONIC ACTIVE COILOVERS</div>
-                <div className="text-[10px] text-amber-200/60 font-mono">1,000Hz solenoid valving with real-time compression/rebound tuning</div>
+                <div className="text-xs font-bold font-mono text-slate-200">ELECTRONIC ACTIVE COILOVERS</div>
+                <div className="text-[10px] text-slate-400 font-mono">1,000Hz solenoid valving with real-time compression/rebound tuning</div>
               </div>
             </div>
             <button
@@ -187,7 +187,7 @@ export const SuspensionAssemblyStage: React.FC<SuspensionAssemblyStageProps> = (
               className={`px-3 py-1 rounded-xl text-xs font-mono font-bold border transition-all cursor-pointer ${
                 activeCoilovers
                   ? "bg-amber-500/20 border-amber-500 text-amber-300 shadow-sm"
-                  : "bg-base-950 border-base-800 text-amber-300/50"
+                  : "bg-base-950 border-base-800 text-slate-500"
               }`}
             >
               {activeCoilovers ? "ENABLED" : "DISABLED"}
@@ -203,7 +203,7 @@ export const SuspensionAssemblyStage: React.FC<SuspensionAssemblyStageProps> = (
             {/* Camber Angle */}
             <div className="space-y-1.5">
               <div className="flex justify-between items-center text-xs font-mono">
-                <span className="text-amber-100/80 font-bold">Static Camber</span>
+                <span className="text-slate-300 font-bold">Static Camber</span>
                 <span className="text-amber-400 font-bold">{camberAngleDeg}°</span>
               </div>
               <input
@@ -220,7 +220,7 @@ export const SuspensionAssemblyStage: React.FC<SuspensionAssemblyStageProps> = (
             {/* Caster Angle */}
             <div className="space-y-1.5">
               <div className="flex justify-between items-center text-xs font-mono">
-                <span className="text-amber-100/80 font-bold">Caster Angle</span>
+                <span className="text-slate-300 font-bold">Caster Angle</span>
                 <span className="text-amber-400 font-bold">{casterAngleDeg}°</span>
               </div>
               <input
@@ -237,7 +237,7 @@ export const SuspensionAssemblyStage: React.FC<SuspensionAssemblyStageProps> = (
             {/* Spring Rate */}
             <div className="space-y-1.5">
               <div className="flex justify-between items-center text-xs font-mono">
-                <span className="text-amber-100/80 font-bold">Spring Rate</span>
+                <span className="text-slate-300 font-bold">Spring Rate</span>
                 <span className="text-emerald-400 font-bold">{springRateNmm} N/mm</span>
               </div>
               <input
@@ -254,15 +254,15 @@ export const SuspensionAssemblyStage: React.FC<SuspensionAssemblyStageProps> = (
 
           {/* Roll Center Solvers Card */}
           <div className="p-3.5 rounded-2xl bg-base-950/80 border border-base-800 space-y-1.5 text-xs font-mono">
-            <div className="flex justify-between text-amber-200/60">
+            <div className="flex justify-between text-slate-400">
               <span>Front Roll Center Height:</span>
               <span className="text-amber-300 font-bold">58 mm above ground</span>
             </div>
-            <div className="flex justify-between text-amber-200/60">
+            <div className="flex justify-between text-slate-400">
               <span>Rear Roll Center Height:</span>
               <span className="text-amber-300 font-bold">82 mm above ground</span>
             </div>
-            <div className="flex justify-between text-amber-200/60">
+            <div className="flex justify-between text-slate-400">
               <span>Roll Axis Inclination:</span>
               <span className="text-emerald-300 font-bold">+0.48° Forward Downward Pitch</span>
             </div>
@@ -277,7 +277,7 @@ export const SuspensionAssemblyStage: React.FC<SuspensionAssemblyStageProps> = (
             {/* Front ARB */}
             <div className="space-y-1.5">
               <div className="flex justify-between items-center text-xs font-mono">
-                <span className="text-amber-100/80 font-bold">Front Anti-Roll Bar</span>
+                <span className="text-slate-300 font-bold">Front Anti-Roll Bar</span>
                 <span className="text-amber-400 font-bold">{arbFrontNmPerDeg} Nm/° (Ø{arbBarMm(arbFrontNmPerDeg)}mm)</span>
               </div>
               <input
@@ -294,7 +294,7 @@ export const SuspensionAssemblyStage: React.FC<SuspensionAssemblyStageProps> = (
             {/* Rear ARB */}
             <div className="space-y-1.5">
               <div className="flex justify-between items-center text-xs font-mono">
-                <span className="text-amber-100/80 font-bold">Rear Anti-Roll Bar</span>
+                <span className="text-slate-300 font-bold">Rear Anti-Roll Bar</span>
                 <span className="text-amber-400 font-bold">{arbRearNmPerDeg} Nm/° (Ø{arbBarMm(arbRearNmPerDeg)}mm)</span>
               </div>
               <input
@@ -317,7 +317,7 @@ export const SuspensionAssemblyStage: React.FC<SuspensionAssemblyStageProps> = (
 
       {/* Install Button */}
       <div className="flex justify-between items-center pt-2">
-        <div className="text-[11px] font-mono text-amber-300/50">
+        <div className="text-[11px] font-mono text-slate-500">
           Unsprung Corner Mass: <strong className="text-amber-400">18.4 kg / corner</strong>
         </div>
         <button

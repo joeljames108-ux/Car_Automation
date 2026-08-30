@@ -99,13 +99,13 @@ export function ZoomableGlassCard({
               >
                 <ArrowLeft size={14} /> Back
               </button>
-              <div className="flex items-center gap-2 text-xs font-mono font-bold uppercase tracking-widest text-amber-500">
+              <div className="flex items-center gap-2 text-xs font-mono font-bold uppercase tracking-widest text-slate-700">
                 <Sparkles size={14} className="text-[#007aff]" />
                 {title || "Vision Glass Panel"}
               </div>
               <button
                 onClick={closeZoomModal}
-                className="p-1.5 rounded-full text-amber-200/60 hover:text-amber-500 hover:bg-slate-200/50 transition-colors cursor-pointer"
+                className="p-1.5 rounded-full text-slate-400 hover:text-slate-700 hover:bg-slate-200/50 transition-colors cursor-pointer"
                 title="Close"
               >
                 <X size={18} />
@@ -115,7 +115,7 @@ export function ZoomableGlassCard({
             {/* Subtitle / Badge Header */}
             {(subtitle || badge) && (
               <div className="w-full flex items-center justify-between mb-3 text-xs font-mono">
-                {subtitle && <span className="text-amber-300/50">{subtitle}</span>}
+                {subtitle && <span className="text-slate-500">{subtitle}</span>}
                 {badge && (
                   <span className="px-2.5 py-0.5 rounded-full bg-amber-500/10 border border-amber-400/30 text-[#007aff] font-bold">
                     {badge}

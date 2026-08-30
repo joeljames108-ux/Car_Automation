@@ -153,7 +153,7 @@ export function LineChart({
       {/* Dynamic Hover Tooltip Banner */}
       {hoverIndex !== null && activeRpm !== null && (
         <div className="line-chart-tooltip absolute top-1 left-2 z-20 flex items-center gap-3 bg-white/90 border border-amber-500/40 rounded-lg px-3 py-1.5 backdrop-blur-md shadow-lg pointer-events-none text-xs font-mono">
-          <span className="text-amber-200/60 font-bold">{activeRpm} {xUnit || ""}:</span>
+          <span className="text-slate-400 font-bold">{activeRpm} {xUnit || ""}:</span>
           {series.map((s, idx) => {
             const pt = s.data[hoverIndex];
             if (!pt) return null;
@@ -309,7 +309,7 @@ export function LineChart({
       </div>
 
       {xLabel && (
-        <div className="text-center text-[10px] text-amber-300/50 font-mono font-bold mt-1">
+        <div className="text-center text-[10px] text-slate-500 font-mono font-bold mt-1">
           {xLabel}{xUnit && ` (${xUnit})`}
         </div>
       )}
@@ -332,13 +332,13 @@ export function LineChart({
               >
                 <ArrowLeft size={14} /> Back
               </button>
-              <div className="flex items-center gap-2 text-xs font-mono font-bold uppercase tracking-widest text-amber-500">
+              <div className="flex items-center gap-2 text-xs font-mono font-bold uppercase tracking-widest text-slate-700">
                 <TrendingUp size={14} className="text-[#007aff]" />
                 {yLabel || "Telemetry"} Analytics Curve
               </div>
               <button
                 onClick={closeZoomModal}
-                className="p-1.5 rounded-full text-amber-200/60 hover:text-amber-500 hover:bg-slate-200/50 transition-colors cursor-pointer"
+                className="p-1.5 rounded-full text-slate-400 hover:text-slate-700 hover:bg-slate-200/50 transition-colors cursor-pointer"
                 title="Close"
               >
                 <X size={18} />
@@ -364,11 +364,11 @@ export function LineChart({
             <div className="w-full grid grid-cols-2 sm:grid-cols-4 gap-2.5 mt-4 pt-3.5 border-t border-amber-200/40">
               {paths.map((p, idx) => (
                 <div key={idx} className="bg-white/85 border border-amber-200/50 rounded-2xl p-3 text-center shadow-sm backdrop-blur-md">
-                  <span className="block text-[9.5px] font-mono text-amber-200/60 uppercase tracking-wider">{p.label || `Series ${idx + 1}`} Peak</span>
+                  <span className="block text-[9.5px] font-mono text-slate-400 uppercase tracking-wider">{p.label || `Series ${idx + 1}`} Peak</span>
                   <span className="text-sm font-mono font-bold" style={{ color: p.color }}>
                     {Math.round(p.peak.y).toLocaleString()}{p.unit || yUnit || ""}
                   </span>
-                  <span className="block text-[9px] font-mono text-amber-200/60 mt-0.5">@ {p.peak.x} {xUnit || ""}</span>
+                  <span className="block text-[9px] font-mono text-slate-400 mt-0.5">@ {p.peak.x} {xUnit || ""}</span>
                 </div>
               ))}
             </div>

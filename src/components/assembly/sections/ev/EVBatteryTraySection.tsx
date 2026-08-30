@@ -99,7 +99,7 @@ export function EVBatteryTraySection({
               <span className="text-[10px] font-mono font-bold text-amber-300 uppercase tracking-wider block">
                 STRUCTURAL RIGIDITY CONTRIBUTION
               </span>
-              <p className="text-[11px] font-mono text-amber-100/80 leading-relaxed">
+              <p className="text-[11px] font-mono text-slate-300 leading-relaxed">
                 Extruded aluminum side sills and a bonded underbody titanium skid plate boost overall vehicle torsional stiffness by +35%.
               </p>
             </div>
@@ -120,7 +120,7 @@ export function EVBatteryTraySection({
               onSelectVariant={onSelectVariant}
             />
           ) : (
-            <p className="text-xs font-mono text-amber-300/50">Loading material variants...</p>
+            <p className="text-xs font-mono text-slate-500">Loading material variants...</p>
           )}
         </SectionCard>
 

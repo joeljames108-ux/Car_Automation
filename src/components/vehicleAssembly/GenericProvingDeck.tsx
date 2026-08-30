@@ -35,9 +35,9 @@ export function GenericProvingDeck<T extends string = string>({
   className = "",
 }: GenericProvingDeckProps<T>) {
   return (
-    <div className={`flex flex-col h-full w-full bg-[#030509] text-gray-100 p-4 gap-4 overflow-y-auto font-sans ${className}`}>
+    <div className={`flex flex-col h-full w-full bg-amber-950/60 text-gray-100 p-4 gap-4 overflow-y-auto font-sans ${className}`}>
       {/* Studio Header Ribbon */}
-      <div className="flex flex-col md:flex-row items-start md:items-center justify-between px-6 py-4 rounded-2xl bg-[#070b14] border border-[#1b263b] shadow-2xl gap-4">
+      <div className="flex flex-col md:flex-row items-start md:items-center justify-between px-6 py-4 rounded-2xl bg-amber-950/60 border border-[#1b263b] shadow-2xl gap-4">
         <div className="flex items-center gap-3.5">
           {icon && (
             <div className={`p-2.5 rounded-2xl bg-gradient-to-tr border ${iconGradient}`}>
@@ -72,7 +72,7 @@ export function GenericProvingDeck<T extends string = string>({
 
       {/* Tab Switcher if tabs provided */}
       {tabs && tabs.length > 0 && onTabChange && (
-        <div className="flex flex-wrap gap-2 p-1.5 rounded-2xl bg-[#070b14] border border-[#1b263b]">
+        <div className="flex flex-wrap gap-2 p-1.5 rounded-2xl bg-amber-950/60 border border-[#1b263b]">
           {tabs.map((t) => {
             const isSelected = activeTab === t.id;
             return (
@@ -88,7 +88,7 @@ export function GenericProvingDeck<T extends string = string>({
                 {t.icon}
                 <span>{t.label}</span>
                 {t.badge && (
-                  <span className={`px-1.5 py-0.2 rounded text-[9px] ${isSelected ? "bg-amber-900/40 text-slate-900 font-extrabold" : "bg-amber-500/20 text-amber-300"}`}>
+                  <span className={`px-1.5 py-0.2 rounded text-[9px] ${isSelected ? "bg-slate-900/40 text-slate-900 font-extrabold" : "bg-amber-500/20 text-amber-300"}`}>
                     {t.badge}
                   </span>
                 )}

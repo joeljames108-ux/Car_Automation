@@ -51,7 +51,7 @@ export function NeonTransmissionStudio() {
   ];
 
   return (
-    <div className="w-full flex flex-col gap-6 text-amber-50 animate-nh-materialize">
+    <div className="w-full flex flex-col gap-6 text-slate-100 animate-nh-materialize">
       {/* Header Banner */}
       <NeonHorizonGlassPanel
         variant="window"
@@ -198,13 +198,13 @@ export function NeonTransmissionStudio() {
               {gearSpeeds.map((g, idx) => (
                 <div key={g.gear} className="flex flex-col gap-1">
                   <div className="flex justify-between text-xs nh-font-mono">
-                    <span className="text-amber-100/80 font-bold">{g.gear} Gear ({g.ratio.toFixed(2)}:1)</span>
-                    <span className="text-sky-300 font-bold">{g.speed} km/h</span>
+                    <span className="text-slate-300 font-bold">{g.gear} Gear ({g.ratio.toFixed(2)}:1)</span>
+                    <span className="text-amber-300 font-bold">{g.speed} km/h</span>
                   </div>
-                  <div className="w-full h-2.5 bg-[#05080f] rounded-full p-0.5 border border-white/10">
+                  <div className="w-full h-2.5 bg-amber-950/60 rounded-full p-0.5 border border-white/10">
                     <div
                       style={{ width: `${Math.min(100, (g.speed / 420) * 100)}%` }}
-                      className="h-full bg-sky-400/60 rounded-full"
+                      className="h-full bg-amber-500/60 rounded-full"
                     />
                   </div>
                 </div>

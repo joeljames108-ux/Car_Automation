@@ -100,10 +100,10 @@ export const EngineAssemblyStage: React.FC<EngineAssemblyStageProps> = ({
             <Cog size={18} />
           </div>
           <div>
-            <h3 className="text-sm font-bold font-mono text-slate-800 dark:text-amber-50 uppercase tracking-wider">
+            <h3 className="text-sm font-bold font-mono text-slate-800 dark:text-slate-100 uppercase tracking-wider">
               STAGE 2: ENGINE POWERTRAIN DROP-IN & MOUNTING
             </h3>
-            <p className="text-[11px] font-mono text-amber-300/50 dark:text-amber-200/60">
+            <p className="text-[11px] font-mono text-slate-500 dark:text-slate-400">
               Drop-in your previously designed engine. Select the chassis anchor and fine-trim lateral offset.
             </p>
           </div>
@@ -123,7 +123,7 @@ export const EngineAssemblyStage: React.FC<EngineAssemblyStageProps> = ({
           </div>
           <div>
             <div className="flex items-center gap-2 flex-wrap">
-              <span className="font-bold text-sm font-mono text-slate-900 dark:text-amber-50">
+              <span className="font-bold text-sm font-mono text-slate-900 dark:text-slate-100">
                 {engine.layout?.toUpperCase() || "V8"} · {(displacementCc / 1000).toFixed(1)}L
               </span>
               <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-amber-500/15 text-amber-600 dark:text-amber-300 font-bold uppercase">
@@ -133,7 +133,7 @@ export const EngineAssemblyStage: React.FC<EngineAssemblyStageProps> = ({
                 <Plug size={9} /> LIVE DROP-IN SYNC
               </span>
             </div>
-            <span className="text-[11px] font-mono text-amber-300/50 dark:text-amber-200/60">
+            <span className="text-[11px] font-mono text-slate-500 dark:text-slate-400">
               Source: Engine Studio design · Bore {(engine.bore || 88)}mm × Stroke {(engine.stroke || 82)}mm
             </span>
           </div>
@@ -141,19 +141,19 @@ export const EngineAssemblyStage: React.FC<EngineAssemblyStageProps> = ({
 
         <div className="flex items-center gap-3 font-mono text-xs">
           <div className="text-right">
-            <span className="text-amber-300/50 dark:text-amber-200/60 text-[10px] block">PEAK OUTPUT</span>
+            <span className="text-slate-500 dark:text-slate-400 text-[10px] block">PEAK OUTPUT</span>
             <span className="font-bold text-amber-600 dark:text-amber-300 text-sm">~{estHp} HP</span>
           </div>
           <div className="text-right pl-3 border-l border-base-800">
-            <span className="text-amber-300/50 dark:text-amber-200/60 text-[10px] block">PEAK TORQUE</span>
-            <span className="font-bold text-slate-800 dark:text-amber-50 text-sm">~{estTorque} Nm</span>
+            <span className="text-slate-500 dark:text-slate-400 text-[10px] block">PEAK TORQUE</span>
+            <span className="font-bold text-slate-800 dark:text-slate-200 text-sm">~{estTorque} Nm</span>
           </div>
         </div>
       </div>
 
       {/* Engine Mounting Position Selector */}
       <div className="space-y-2">
-        <label className="text-xs font-bold font-mono text-amber-500 dark:text-amber-100/80 block">
+        <label className="text-xs font-bold font-mono text-slate-700 dark:text-slate-300 block">
           ENGINE MOUNTING LOCATION & ANCHOR POINT
         </label>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-2.5">
@@ -166,14 +166,14 @@ export const EngineAssemblyStage: React.FC<EngineAssemblyStageProps> = ({
                 className={`p-3 rounded-2xl text-left transition-all border cursor-pointer ${
                   isSelected
                     ? "bg-amber-500/20 border-amber-500/60 shadow-md ring-1 ring-amber-500/40"
-                    : "bg-base-900/60 border-base-800 hover:border-base-700 text-amber-200/60"
+                    : "bg-base-900/60 border-base-800 hover:border-base-700 text-slate-400"
                 }`}
               >
                 <div className="flex items-center justify-between mb-1">
-                  <span className="font-bold text-xs font-mono text-slate-900 dark:text-amber-50">{p.label}</span>
+                  <span className="font-bold text-xs font-mono text-slate-900 dark:text-slate-100">{p.label}</span>
                   <span className="text-[9px] font-mono text-amber-600 dark:text-amber-300 font-bold">{p.anchor}</span>
                 </div>
-                <p className="text-[10px] text-amber-300/50 dark:text-amber-200/60 mb-2">{p.desc}</p>
+                <p className="text-[10px] text-slate-500 dark:text-slate-400 mb-2">{p.desc}</p>
                 <div className="text-[10px] font-mono text-emerald-600 dark:text-emerald-400 font-semibold">
                   Est. Bias: {p.weightDist}
                 </div>
@@ -186,10 +186,10 @@ export const EngineAssemblyStage: React.FC<EngineAssemblyStageProps> = ({
       {/* Lateral Drop-In Offset Trim */}
       <div className="p-3.5 rounded-2xl bg-base-900/60 border border-base-800 space-y-2.5">
         <div className="flex items-center justify-between">
-          <label className="text-xs font-bold font-mono text-amber-500 dark:text-amber-100/80 flex items-center gap-1.5">
+          <label className="text-xs font-bold font-mono text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
             <MoveHorizontal size={13} className="text-amber-400" /> LATERAL DROP-IN OFFSET TRIM
           </label>
-          <span className={`text-xs font-mono font-bold ${offsetMm === 0 ? "text-amber-200/60" : offsetMm > 0 ? "text-emerald-500" : "text-amber-400"}`}>
+          <span className={`text-xs font-mono font-bold ${offsetMm === 0 ? "text-slate-400" : offsetMm > 0 ? "text-emerald-500" : "text-amber-400"}`}>
             {offsetMm > 0 ? "+" : ""}{offsetMm} mm {offsetMm > 0 ? "(LEFT)" : offsetMm < 0 ? "(RIGHT)" : "(CENTERED)"}
           </span>
         </div>
@@ -202,12 +202,12 @@ export const EngineAssemblyStage: React.FC<EngineAssemblyStageProps> = ({
           onChange={(e) => onUpdateOffset(parseInt(e.target.value))}
           className="w-full accent-amber-400 cursor-pointer"
         />
-        <div className="flex justify-between text-[9px] font-mono text-amber-300/50">
+        <div className="flex justify-between text-[9px] font-mono text-slate-500">
           <span>-150 mm (Right Bay)</span>
           <span>Centered</span>
           <span>+150 mm (Left Bay)</span>
         </div>
-        <p className="text-[10px] font-mono text-amber-300/50 dark:text-amber-200/60 pt-1 border-t border-base-800/60">
+        <p className="text-[10px] font-mono text-slate-500 dark:text-slate-400 pt-1 border-t border-base-800/60">
           {crossWeightNote}
         </p>
       </div>

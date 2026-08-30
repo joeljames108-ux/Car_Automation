@@ -550,14 +550,14 @@ const Suspension3DStudioViewportComponent: React.FC = () => {
   };
 
   return (
-    <div className="relative w-full h-[650px] rounded-3xl overflow-hidden border border-white/15 dark:border-white/10 shadow-2xl backdrop-blur-xl bg-gradient-to-b from-amber-900/60/90 via-slate-900/80 to-slate-950/90 select-none">
+    <div className="relative w-full h-[650px] rounded-3xl overflow-hidden border border-white/15 dark:border-white/10 shadow-2xl backdrop-blur-xl bg-gradient-to-b from-slate-900/90 via-slate-900/80 to-slate-950/90 select-none">
       {/* 3D WebGL Canvas */}
       <div ref={mountRef} className="w-full h-full cursor-grab active:cursor-grabbing" />
 
       {/* Top Header & Interactive Selectors */}
       <div className="absolute top-3.5 left-3.5 right-3.5 flex flex-wrap items-center justify-between gap-2.5 pointer-events-none">
         {/* Title Badge */}
-        <div className="flex items-center gap-3 pointer-events-auto bg-amber-900/40 dark:bg-amber-950/85 backdrop-blur-xl px-3.5 py-2 rounded-2xl border border-white/15 shadow-xl">
+        <div className="flex items-center gap-3 pointer-events-auto bg-slate-900/85 dark:bg-slate-950/85 backdrop-blur-xl px-3.5 py-2 rounded-2xl border border-white/15 shadow-xl">
           <div className="p-2 rounded-xl bg-gradient-to-tr from-amber-500/25 to-amber-600/25 border border-amber-500/40 text-amber-300 shadow-md shadow-cyan-500/20">
             <Activity className="w-4 h-4" />
           </div>
@@ -566,7 +566,7 @@ const Suspension3DStudioViewportComponent: React.FC = () => {
               <span>3D SUSPENSION KINEMATICS STUDIO</span>
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
             </div>
-            <div className="text-[10px] text-amber-100/80 dark:text-amber-200/60 font-mono">
+            <div className="text-[10px] text-slate-300 dark:text-slate-400 font-mono">
               Real-time Camber Gain & Bump Articulation Solver
             </div>
           </div>
@@ -575,11 +575,11 @@ const Suspension3DStudioViewportComponent: React.FC = () => {
         {/* Studio Controls: Environment + Geometry Dropdown */}
         <div className="flex items-center gap-2 pointer-events-auto">
           {/* Environment Studio Preset Selector */}
-          <div className="flex items-center bg-amber-900/40 dark:bg-amber-950/85 backdrop-blur-xl p-1 rounded-2xl border border-white/15 shadow-xl gap-1">
+          <div className="flex items-center bg-slate-900/85 dark:bg-slate-950/85 backdrop-blur-xl p-1 rounded-2xl border border-white/15 shadow-xl gap-1">
             {[
               { id: "warm_sunset" as const, label: "Warm Studio", icon: Sun, color: "text-amber-400" },
               { id: "titanium_slate" as const, label: "Titanium CAD", icon: Layers, color: "text-amber-400" },
-              { id: "luxury_showroom" as const, label: "Clean Light", icon: Sparkles, color: "text-amber-50" },
+              { id: "luxury_showroom" as const, label: "Clean Light", icon: Sparkles, color: "text-slate-100" },
               { id: "cyberpunk_neon" as const, label: "Neon Dark", icon: Zap, color: "text-amber-400" },
             ].map((env) => {
               const Icon = env.icon;
@@ -592,7 +592,7 @@ const Suspension3DStudioViewportComponent: React.FC = () => {
                   className={`flex items-center gap-1 px-2.5 py-1 rounded-xl text-[10px] font-mono font-bold transition-all cursor-pointer ${
                     isSel
                       ? "bg-amber-500/20 border border-amber-400/60 text-white shadow-sm"
-                      : "text-amber-200/60 hover:text-amber-50 hover:bg-white/5 border border-transparent"
+                      : "text-slate-400 hover:text-slate-200 hover:bg-white/5 border border-transparent"
                   }`}
                 >
                   <Icon size={12} className={env.color} />
@@ -603,25 +603,25 @@ const Suspension3DStudioViewportComponent: React.FC = () => {
           </div>
 
           {/* Suspension Geometry Dropdown */}
-          <div className="relative bg-amber-900/40 dark:bg-amber-950/85 backdrop-blur-xl rounded-2xl border border-white/15 shadow-xl">
+          <div className="relative bg-slate-900/85 dark:bg-slate-950/85 backdrop-blur-xl rounded-2xl border border-white/15 shadow-xl">
             <select
               value={suspensionType}
               onChange={(e) => setSuspensionType(e.target.value as SuspensionType3D)}
               className="bg-transparent text-white text-xs font-mono font-bold rounded-2xl px-3.5 py-2 outline-none cursor-pointer pr-8 appearance-none"
             >
-              <option value="DOUBLE_WISHBONE" className="bg-amber-900/50 text-white">Double Wishbone A-Arm</option>
-              <option value="MACPHERSON_STRUT" className="bg-amber-900/50 text-white">MacPherson Strut</option>
-              <option value="PUSHROD_MOTORSPORT" className="bg-amber-900/50 text-white">Pushrod Inboard Rocker</option>
-              <option value="PULLROD_FORMULA" className="bg-amber-900/50 text-white">Pullrod Formula Monoposto</option>
-              <option value="MULTI_LINK_5ARM" className="bg-amber-900/50 text-white">5-Link Multi-Link Rear</option>
+              <option value="DOUBLE_WISHBONE" className="bg-slate-900 text-white">Double Wishbone A-Arm</option>
+              <option value="MACPHERSON_STRUT" className="bg-slate-900 text-white">MacPherson Strut</option>
+              <option value="PUSHROD_MOTORSPORT" className="bg-slate-900 text-white">Pushrod Inboard Rocker</option>
+              <option value="PULLROD_FORMULA" className="bg-slate-900 text-white">Pullrod Formula Monoposto</option>
+              <option value="MULTI_LINK_5ARM" className="bg-slate-900 text-white">5-Link Multi-Link Rear</option>
             </select>
-            <ChevronDown size={14} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-amber-200/60 pointer-events-none" />
+            <ChevronDown size={14} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
           </div>
         </div>
       </div>
 
       {/* Left Kinematic Articulation Sliders Panel */}
-      <div className="absolute top-20 left-3.5 bg-amber-900/40 dark:bg-amber-950/85 backdrop-blur-xl p-4 rounded-2xl border border-white/15 shadow-2xl w-80 space-y-4 pointer-events-auto">
+      <div className="absolute top-20 left-3.5 bg-slate-900/85 dark:bg-slate-950/85 backdrop-blur-xl p-4 rounded-2xl border border-white/15 shadow-2xl w-80 space-y-4 pointer-events-auto">
         <div className="flex items-center justify-between border-b border-white/10 pb-2.5">
           <div className="flex items-center gap-1.5 text-xs font-extrabold font-mono text-white tracking-wider">
             <Sliders size={14} className="text-amber-400" />
@@ -630,7 +630,7 @@ const Suspension3DStudioViewportComponent: React.FC = () => {
           <button
             onClick={handleReset}
             title="Reset to 0mm Datum"
-            className="flex items-center gap-1 text-[10px] font-mono text-amber-200/60 hover:text-amber-300 transition-colors cursor-pointer px-2 py-0.5 rounded-lg bg-white/5 border border-white/10 hover:border-amber-500/40"
+            className="flex items-center gap-1 text-[10px] font-mono text-slate-400 hover:text-amber-300 transition-colors cursor-pointer px-2 py-0.5 rounded-lg bg-white/5 border border-white/10 hover:border-amber-500/40"
           >
             <RotateCcw size={11} />
             <span>RESET</span>
@@ -640,7 +640,7 @@ const Suspension3DStudioViewportComponent: React.FC = () => {
         {/* Wheel Bump Travel */}
         <div className="space-y-1.5">
           <div className="flex justify-between text-xs font-mono">
-            <span className="text-amber-50 font-semibold">Wheel Bump Travel:</span>
+            <span className="text-slate-200 font-semibold">Wheel Bump Travel:</span>
             <span className={`font-bold px-2 py-0.5 rounded-md text-[11px] ${
               wheelBumpMm > 0
                 ? "bg-amber-500/20 text-amber-300 border border-amber-500/40"
@@ -658,9 +658,9 @@ const Suspension3DStudioViewportComponent: React.FC = () => {
             step={1}
             value={wheelBumpMm}
             onChange={(e) => setWheelBumpMm(Number(e.target.value))}
-            className="w-full accent-amber-400 bg-amber-800/35/80 rounded-lg cursor-pointer h-2"
+            className="w-full accent-amber-400 bg-slate-800/80 rounded-lg cursor-pointer h-2"
           />
-          <div className="flex justify-between text-[9px] font-mono text-amber-200/60">
+          <div className="flex justify-between text-[9px] font-mono text-slate-400">
             <span>-50mm Rebound</span>
             <span>0mm Datum</span>
             <span>+50mm Bump</span>
@@ -670,7 +670,7 @@ const Suspension3DStudioViewportComponent: React.FC = () => {
         {/* Steering Lock Angle */}
         <div className="space-y-1.5">
           <div className="flex justify-between text-xs font-mono">
-            <span className="text-amber-50 font-semibold">Steering Lock Angle:</span>
+            <span className="text-slate-200 font-semibold">Steering Lock Angle:</span>
             <span className={`font-bold px-2 py-0.5 rounded-md text-[11px] ${
               steeringAngleDeg !== 0
                 ? "bg-emerald-500/20 text-emerald-300 border border-emerald-500/40"
@@ -686,9 +686,9 @@ const Suspension3DStudioViewportComponent: React.FC = () => {
             step={1}
             value={steeringAngleDeg}
             onChange={(e) => setSteeringAngleDeg(Number(e.target.value))}
-            className="w-full accent-emerald-400 bg-amber-800/35/80 rounded-lg cursor-pointer h-2"
+            className="w-full accent-emerald-400 bg-slate-800/80 rounded-lg cursor-pointer h-2"
           />
-          <div className="flex justify-between text-[9px] font-mono text-amber-200/60">
+          <div className="flex justify-between text-[9px] font-mono text-slate-400">
             <span>-30° Left</span>
             <span>0° Center</span>
             <span>+30° Right</span>
@@ -698,7 +698,7 @@ const Suspension3DStudioViewportComponent: React.FC = () => {
         {/* Coil Spring Stiffness */}
         <div className="space-y-1.5">
           <div className="flex justify-between text-xs font-mono">
-            <span className="text-amber-50 font-semibold">Coil Spring Rate:</span>
+            <span className="text-slate-200 font-semibold">Coil Spring Rate:</span>
             <span className="font-bold px-2 py-0.5 rounded-md text-[11px] bg-amber-500/20 text-amber-300 border border-amber-500/40">
               {springRateNmm} N/mm
             </span>
@@ -710,9 +710,9 @@ const Suspension3DStudioViewportComponent: React.FC = () => {
             step={5}
             value={springRateNmm}
             onChange={(e) => setSpringRateNmm(Number(e.target.value))}
-            className="w-full accent-purple-400 bg-amber-800/35/80 rounded-lg cursor-pointer h-2"
+            className="w-full accent-purple-400 bg-slate-800/80 rounded-lg cursor-pointer h-2"
           />
-          <div className="flex justify-between text-[9px] font-mono text-amber-200/60">
+          <div className="flex justify-between text-[9px] font-mono text-slate-400">
             <span>60 (Touring)</span>
             <span>120 (Sport)</span>
             <span>220 (FIA GT3)</span>
@@ -721,7 +721,7 @@ const Suspension3DStudioViewportComponent: React.FC = () => {
       </div>
 
       {/* Right Kinematics Readout Telemetry HUD */}
-      <div className="absolute bottom-3.5 right-3.5 bg-amber-900/40 dark:bg-amber-950/85 backdrop-blur-xl p-4 rounded-2xl border border-white/15 shadow-2xl w-80 space-y-2.5 pointer-events-auto font-mono text-xs">
+      <div className="absolute bottom-3.5 right-3.5 bg-slate-900/85 dark:bg-slate-950/85 backdrop-blur-xl p-4 rounded-2xl border border-white/15 shadow-2xl w-80 space-y-2.5 pointer-events-auto font-mono text-xs">
         <div className="flex items-center justify-between border-b border-white/10 pb-2">
           <div className="flex items-center gap-1.5 text-xs font-extrabold text-white tracking-wider font-sans">
             <Gauge size={14} className="text-amber-400" />
@@ -733,35 +733,35 @@ const Suspension3DStudioViewportComponent: React.FC = () => {
         </div>
 
         <div className="flex justify-between items-center py-0.5">
-          <span className="text-amber-100/80 font-medium">Dynamic Camber:</span>
+          <span className="text-slate-300 font-medium">Dynamic Camber:</span>
           <span className="font-extrabold text-amber-300 bg-amber-950/70 border border-amber-500/30 px-2 py-0.5 rounded">
             {dynamicCamberDeg > 0 ? `+${dynamicCamberDeg}` : dynamicCamberDeg}°
           </span>
         </div>
 
         <div className="flex justify-between items-center py-0.5">
-          <span className="text-amber-100/80 font-medium">Roll Center Height:</span>
+          <span className="text-slate-300 font-medium">Roll Center Height:</span>
           <span className="font-extrabold text-amber-300 bg-amber-950/70 border border-amber-500/30 px-2 py-0.5 rounded">
             {rollCenterHeightMm} mm
           </span>
         </div>
 
         <div className="flex justify-between items-center py-0.5">
-          <span className="text-amber-100/80 font-medium">Anti-Dive Rating:</span>
+          <span className="text-slate-300 font-medium">Anti-Dive Rating:</span>
           <span className="font-extrabold text-emerald-300 bg-emerald-950/70 border border-emerald-500/30 px-2 py-0.5 rounded">
             {antiDivePct}%
           </span>
         </div>
 
         <div className="flex justify-between items-center py-0.5">
-          <span className="text-amber-100/80 font-medium">Anti-Squat Rating:</span>
+          <span className="text-slate-300 font-medium">Anti-Squat Rating:</span>
           <span className="font-extrabold text-amber-300 bg-amber-950/70 border border-amber-500/30 px-2 py-0.5 rounded">
             {antiSquatPct}%
           </span>
         </div>
 
         <div className="flex justify-between items-center py-0.5 border-t border-white/10 pt-1.5">
-          <span className="text-amber-100/80 font-medium">Ackermann Steer Angle:</span>
+          <span className="text-slate-300 font-medium">Ackermann Steer Angle:</span>
           <span className="font-extrabold text-amber-300 bg-amber-950/70 border border-amber-500/30 px-2 py-0.5 rounded">
             {ackermannDeg}°
           </span>

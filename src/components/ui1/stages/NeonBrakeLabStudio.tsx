@@ -36,7 +36,7 @@ export function NeonBrakeLabStudio() {
   };
 
   return (
-    <div className="w-full flex flex-col gap-6 text-amber-50 animate-nh-materialize">
+    <div className="w-full flex flex-col gap-6 text-slate-100 animate-nh-materialize">
       {/* Header */}
       <NeonHorizonGlassPanel
         variant="window"
@@ -71,7 +71,7 @@ export function NeonBrakeLabStudio() {
             }}
             className="p-6 flex flex-col gap-4"
           >
-            <div className="grid grid-cols-10 gap-1.5 h-36 p-4 rounded-xl bg-[#05080f] border border-sky-400/25 items-end shadow-[inset_0_0_20px_rgba(0,0,0,0.8)]">
+            <div className="grid grid-cols-10 gap-1.5 h-36 p-4 rounded-xl bg-amber-950/60 border border-sky-400/25 items-end shadow-[inset_0_0_20px_rgba(0,0,0,0.8)]">
               {Array.from({ length: 10 }).map((_, idx) => {
                 const stopTemp = Math.round(180 + (idx + 1) * 68 - (coolingDuctFlow / 100) * 80);
                 const heightPercent = Math.min(100, Math.max(15, (stopTemp / 900) * 100));
@@ -87,10 +87,10 @@ export function NeonBrakeLabStudio() {
  ? "bg-rose-500"
  : isCurrent
  ? "bg-amber-400"
- : "bg-sky-400/40"
+ : "bg-amber-500/40"
  }`}
                     />
-                    <span className="text-[9px] font-mono font-bold text-amber-200/60">#{idx + 1}</span>
+                    <span className="text-[9px] font-mono font-bold text-slate-400">#{idx + 1}</span>
                   </div>
                 );
               })}
@@ -100,7 +100,7 @@ export function NeonBrakeLabStudio() {
               <NeonHorizonButton variant="primary" glow size="sm" onClick={handleSimulateEmergencyStop}>
                 <Play size={14} className="mr-1.5" /> TRIGGER STOP #{simulatedStops} (200-0 KM/H)
               </NeonHorizonButton>
-              <span className="text-xs font-mono text-amber-200/60">
+              <span className="text-xs font-mono text-slate-400">
                 DOT 5.1 Fluid Boiling: <strong className="text-emerald-400">325°C Safe</strong>
               </span>
             </div>
@@ -119,7 +119,7 @@ export function NeonBrakeLabStudio() {
             className="p-6 flex flex-col gap-4"
           >
             <div className="flex flex-col gap-2">
-              <span className="text-xs font-bold text-amber-100/80">Brake Disc Metallurgy:</span>
+              <span className="text-xs font-bold text-slate-300">Brake Disc Metallurgy:</span>
               <div className="grid grid-cols-3 gap-2">
                 {[
                   { id: "carbon_ceramic", name: "Carbon-Ceramic" },
@@ -136,8 +136,8 @@ export function NeonBrakeLabStudio() {
                       }}
                       className={`p-2.5 rounded-lg border text-center text-xs font-bold cursor-pointer transition-all ${
  isSelected
- ? "bg-sky-400/10 border-sky-400/30 text-sky-200"
- : "bg-[#0a111e] border-white/10 text-amber-200/60 hover:border-sky-400/25"
+ ? "bg-amber-500/20 border-amber-500/30 text-sky-200"
+ : "bg-amber-950/60 border-white/10 text-slate-400 hover:border-sky-400/25"
  }`}
                     >
                       {item.name}
@@ -158,13 +158,13 @@ export function NeonBrakeLabStudio() {
               onChange={(val) => setCoolingDuctFlow(val)}
             />
 
-            <div className="p-3.5 rounded-xl bg-[#0a111e] border border-sky-400/15 flex flex-col gap-2 font-mono text-xs">
+            <div className="p-3.5 rounded-xl bg-amber-950/60 border border-sky-400/15 flex flex-col gap-2 font-mono text-xs">
               <div className="flex items-center justify-between">
-                <span className="text-amber-200/60">Front Caliper:</span>
-                <span className="text-sky-300 font-bold">10-Piston Monobloc Titanium</span>
+                <span className="text-slate-400">Front Caliper:</span>
+                <span className="text-amber-300 font-bold">10-Piston Monobloc Titanium</span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-amber-200/60">Rotor Dimension:</span>
+                <span className="text-slate-400">Rotor Dimension:</span>
                 <span className="text-amber-300 font-bold">420 x 40 mm Ventilated</span>
               </div>
             </div>

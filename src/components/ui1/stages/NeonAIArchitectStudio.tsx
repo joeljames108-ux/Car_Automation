@@ -86,7 +86,7 @@ export function NeonAIArchitectStudio() {
   ];
 
   return (
-    <div className="w-full flex flex-col gap-6 text-amber-50 animate-nh-materialize">
+    <div className="w-full flex flex-col gap-6 text-slate-100 animate-nh-materialize">
       {/* Header Banner */}
       <NeonHorizonGlassPanel
         variant="window"
@@ -128,8 +128,8 @@ export function NeonAIArchitectStudio() {
               }}
               className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs nh-font-mono font-bold transition-all cursor-pointer whitespace-nowrap ${
  isActive
- ? "bg-sky-400/20 text-sky-200 border border-sky-400/30"
- : "text-amber-200/60 hover:text-amber-50 hover:bg-white/5"
+ ? "bg-amber-500/25 text-sky-200 border border-amber-500/30"
+ : "text-slate-400 hover:text-slate-200 hover:bg-white/5"
  }`}
             >
               {tab.icon}
@@ -141,7 +141,7 @@ export function NeonAIArchitectStudio() {
 
       {/* View 1: Apex AI Studio (5 Engineers + Chat + Recommendations) */}
       {activeTab === "apex_ai_studio" && (
-        <div className="w-full rounded-3xl overflow-hidden border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] bg-[#0a111e]">
+        <div className="w-full rounded-3xl overflow-hidden border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] bg-amber-950/60">
           <ApexAIStudio />
         </div>
       )}
@@ -155,14 +155,14 @@ export function NeonAIArchitectStudio() {
 
       {/* View 2: Live Engineering Advisory (AIAssistant) */}
       {activeTab === "live_advisory" && (
-        <div className="w-full rounded-3xl overflow-hidden border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] bg-[#0a111e] p-4">
+        <div className="w-full rounded-3xl overflow-hidden border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] bg-amber-950/60 p-4">
           <AIAssistant embedded={true} />
         </div>
       )}
 
       {/* View 3: Multi-Agent Execution Console */}
       {activeTab === "agent_console" && (
-        <div className="w-full min-h-[550px] rounded-3xl overflow-hidden border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] bg-[#0a111e]">
+        <div className="w-full min-h-[550px] rounded-3xl overflow-hidden border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] bg-amber-950/60">
           <ApexAgentConsole
             engineConfig={design.engine}
             powerHp={sim.peakPower}
@@ -174,7 +174,7 @@ export function NeonAIArchitectStudio() {
 
       {/* View 4: Agent Status Dashboard */}
       {activeTab === "agent_dashboard" && (
-        <div className="w-full rounded-3xl overflow-hidden border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] bg-[#0a111e] p-4">
+        <div className="w-full rounded-3xl overflow-hidden border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] bg-amber-950/60 p-4">
           <AgentDashboard />
         </div>
       )}
@@ -202,17 +202,17 @@ export function NeonAIArchitectStudio() {
                 className="p-6 flex flex-col justify-between gap-5"
               >
                 <div className="flex flex-col gap-3">
-                  <p className="text-sm text-amber-50 leading-relaxed bg-black/40 p-3.5 rounded-xl border border-white/8">
+                  <p className="text-sm text-slate-200 leading-relaxed bg-black/40 p-3.5 rounded-xl border border-white/8">
                     "{ag.rec}"
                   </p>
-                  <div className="flex items-center gap-2 text-xs nh-font-mono text-sky-300 font-bold">
-                    <TrendingUp size={14} className="text-sky-400" />
+                  <div className="flex items-center gap-2 text-xs nh-font-mono text-amber-300 font-bold">
+                    <TrendingUp size={14} className="text-amber-400" />
                     <span>Impact: {ag.impact}</span>
                   </div>
                 </div>
 
                 <div className="flex items-center justify-between pt-3 border-t border-white/10">
-                  <span className="text-[10px] nh-font-mono text-amber-200/60">STATUS: {isApplied ? "ACTIVE" : "STANDBY"}</span>
+                  <span className="text-[10px] nh-font-mono text-slate-400">STATUS: {isApplied ? "ACTIVE" : "STANDBY"}</span>
                   <NeonHorizonButton
                     variant={isApplied ? "secondary" : "primary"}
                     size="sm"

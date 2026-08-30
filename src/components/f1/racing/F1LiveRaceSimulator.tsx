@@ -344,7 +344,7 @@ const F1LiveRaceSimulatorComponent: React.FC<F1LiveRaceSimulatorProps> = ({
   };
 
   return (
-    <div className="w-full h-full flex flex-col bg-[#0a0c10] text-white select-none overflow-hidden">
+    <div className="w-full h-full flex flex-col bg-amber-950/60 text-white select-none overflow-hidden">
       {/* Top Session Header */}
       <div className="p-4 bg-black/80 border-b border-white/10 flex items-center justify-between">
         <div className="flex items-center gap-4">

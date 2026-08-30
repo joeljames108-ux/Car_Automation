@@ -72,28 +72,28 @@ export const ModularInteriorWorkshop: React.FC<ModularInteriorWorkshopProps> = (
   const ambientColor = config.ambientLightingColorHex || '#f59e0b';
 
   return (
-    <div className="bg-white/80 dark:bg-base-900/90 border border-slate-200 dark:border-amber-800/30 rounded-3xl p-5 backdrop-blur-xl shadow-xl space-y-4 font-mono">
+    <div className="bg-white/80 dark:bg-base-900/90 border border-slate-200 dark:border-slate-800 rounded-3xl p-5 backdrop-blur-xl shadow-xl space-y-4 font-mono">
       {/* Header & Subsystem Navigation Tabs */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-200 dark:border-amber-800/30">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-200 dark:border-slate-800">
         <div className="flex items-center gap-2.5">
           <div className="p-2 rounded-2xl bg-amber-500/10 text-amber-600 dark:text-amber-400">
             <Armchair size={18} />
           </div>
           <div>
-            <h3 className="text-sm font-bold text-slate-800 dark:text-amber-50 uppercase">
+            <h3 className="text-sm font-bold text-slate-800 dark:text-slate-100 uppercase">
               MODULAR COCKPIT & INTERIOR STUDIO
             </h3>
-            <p className="text-[11px] text-amber-300/50 dark:text-amber-200/60">
+            <p className="text-[11px] text-slate-500 dark:text-slate-400">
               Independently attachable dashboards, displays, wheels, seats & ambient lighting
             </p>
           </div>
         </div>
 
-        <div className="flex items-center gap-1.5 p-1 rounded-2xl bg-slate-100 dark:bg-base-950 border border-slate-200 dark:border-amber-800/30">
+        <div className="flex items-center gap-1.5 p-1 rounded-2xl bg-slate-100 dark:bg-base-950 border border-slate-200 dark:border-slate-800">
           <button
             onClick={() => setActiveTab('dashboards')}
             className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-              activeTab === 'dashboards' ? 'bg-amber-500 text-slate-950 shadow-md' : 'text-amber-200/60 hover:text-amber-50'
+              activeTab === 'dashboards' ? 'bg-amber-500 text-slate-950 shadow-md' : 'text-slate-400 hover:text-slate-200'
             }`}
           >
             Dashboards
@@ -101,7 +101,7 @@ export const ModularInteriorWorkshop: React.FC<ModularInteriorWorkshopProps> = (
           <button
             onClick={() => setActiveTab('displays_steering')}
             className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-              activeTab === 'displays_steering' ? 'bg-amber-500 text-slate-950 shadow-md' : 'text-amber-200/60 hover:text-amber-50'
+              activeTab === 'displays_steering' ? 'bg-amber-500 text-slate-950 shadow-md' : 'text-slate-400 hover:text-slate-200'
             }`}
           >
             Displays & Wheel
@@ -109,7 +109,7 @@ export const ModularInteriorWorkshop: React.FC<ModularInteriorWorkshopProps> = (
           <button
             onClick={() => setActiveTab('seating_console')}
             className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-              activeTab === 'seating_console' ? 'bg-amber-500 text-slate-950 shadow-md' : 'text-amber-200/60 hover:text-amber-50'
+              activeTab === 'seating_console' ? 'bg-amber-500 text-slate-950 shadow-md' : 'text-slate-400 hover:text-slate-200'
             }`}
           >
             Seating & Console
@@ -117,7 +117,7 @@ export const ModularInteriorWorkshop: React.FC<ModularInteriorWorkshopProps> = (
           <button
             onClick={() => setActiveTab('trim_ambient')}
             className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-              activeTab === 'trim_ambient' ? 'bg-amber-500 text-slate-950 shadow-md' : 'text-amber-200/60 hover:text-amber-50'
+              activeTab === 'trim_ambient' ? 'bg-amber-500 text-slate-950 shadow-md' : 'text-slate-400 hover:text-slate-200'
             }`}
           >
             Trim & Lighting
@@ -138,14 +138,14 @@ export const ModularInteriorWorkshop: React.FC<ModularInteriorWorkshopProps> = (
                 onClick={() => isCompatible && onUpdateInterior({ dashboardId: dash.id })}
                 className={`p-4 rounded-2xl border transition-all duration-200 space-y-2 select-none ${
                   !isCompatible
-                    ? 'opacity-40 bg-slate-100/40 dark:bg-base-950/40 border-slate-200 dark:border-amber-800/30 cursor-not-allowed'
+                    ? 'opacity-40 bg-slate-100/40 dark:bg-base-950/40 border-slate-200 dark:border-slate-800 cursor-not-allowed'
                     : isSelected
                     ? 'bg-amber-500/10 dark:bg-amber-950/40 border-amber-500 dark:border-amber-400 shadow-[0_0_12px_rgba(6,182,212,0.25)] cursor-pointer scale-102'
-                    : 'bg-slate-50 dark:bg-base-950/60 border-slate-200 dark:border-amber-800/30 hover:border-slate-400 cursor-pointer'
+                    : 'bg-slate-50 dark:bg-base-950/60 border-slate-200 dark:border-slate-800 hover:border-slate-400 cursor-pointer'
                 }`}
               >
                 <div className="flex items-center justify-between">
-                  <span className={`text-[10px] font-bold px-2 py-0.5 rounded ${isSelected ? 'bg-amber-500 text-slate-950' : 'bg-slate-200 dark:bg-base-900 text-amber-300/50'}`}>
+                  <span className={`text-[10px] font-bold px-2 py-0.5 rounded ${isSelected ? 'bg-amber-500 text-slate-950' : 'bg-slate-200 dark:bg-base-900 text-slate-500'}`}>
                     {dash.style.replace('_', ' ').toUpperCase()}
                   </span>
                   {!isCompatible ? (
@@ -157,14 +157,14 @@ export const ModularInteriorWorkshop: React.FC<ModularInteriorWorkshopProps> = (
                   ) : null}
                 </div>
 
-                <h4 className="text-xs font-bold text-slate-800 dark:text-amber-50">
+                <h4 className="text-xs font-bold text-slate-800 dark:text-slate-100">
                   {dash.name}
                 </h4>
-                <p className="text-[10px] text-amber-300/50 dark:text-amber-200/60 line-clamp-2">
+                <p className="text-[10px] text-slate-500 dark:text-slate-400 line-clamp-2">
                   {dash.description}
                 </p>
 
-                <div className="flex justify-between text-[10px] text-amber-300/50 pt-2 border-t border-slate-200 dark:border-amber-800/30">
+                <div className="flex justify-between text-[10px] text-slate-500 pt-2 border-t border-slate-200 dark:border-slate-800">
                   <span>Mass: <strong className="text-amber-600 dark:text-amber-400">{dash.massKg} kg</strong></span>
                   <span>Cost: <strong className="text-amber-600 dark:text-amber-400">${dash.costUSD}</strong></span>
                 </div>
@@ -179,7 +179,7 @@ export const ModularInteriorWorkshop: React.FC<ModularInteriorWorkshopProps> = (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {/* Instrument Clusters */}
           <div className="space-y-2">
-            <label className="text-xs font-bold text-amber-100/80 block">Instrument Cluster</label>
+            <label className="text-xs font-bold text-slate-300 block">Instrument Cluster</label>
             <div className="space-y-2">
               {INSTRUMENT_CLUSTER_CATALOG.map((cluster) => {
                 const isSelected = currentClusterId === cluster.id;
@@ -190,14 +190,14 @@ export const ModularInteriorWorkshop: React.FC<ModularInteriorWorkshopProps> = (
                     className={`p-3 rounded-2xl border cursor-pointer transition-all ${
                       isSelected
                         ? 'bg-amber-500/10 dark:bg-amber-950/40 border-amber-500 dark:border-amber-400 shadow-sm'
-                        : 'bg-slate-50 dark:bg-base-950/60 border-slate-200 dark:border-amber-800/30'
+                        : 'bg-slate-50 dark:bg-base-950/60 border-slate-200 dark:border-slate-800'
                     }`}
                   >
-                    <div className="flex justify-between text-xs font-bold text-slate-800 dark:text-amber-50">
+                    <div className="flex justify-between text-xs font-bold text-slate-800 dark:text-slate-200">
                       <span>{cluster.name}</span>
                       <span className="text-amber-500">${cluster.costUSD}</span>
                     </div>
-                    <p className="text-[10px] text-amber-300/50 mt-1">{cluster.description}</p>
+                    <p className="text-[10px] text-slate-500 mt-1">{cluster.description}</p>
                   </div>
                 );
               })}
@@ -206,7 +206,7 @@ export const ModularInteriorWorkshop: React.FC<ModularInteriorWorkshopProps> = (
 
           {/* Steering Wheels */}
           <div className="space-y-2">
-            <label className="text-xs font-bold text-amber-100/80 block">Steering Wheel</label>
+            <label className="text-xs font-bold text-slate-300 block">Steering Wheel</label>
             <div className="space-y-2">
               {STEERING_WHEEL_CATALOG.map((wheel) => {
                 const isSelected = currentWheelId === wheel.id;
@@ -217,14 +217,14 @@ export const ModularInteriorWorkshop: React.FC<ModularInteriorWorkshopProps> = (
                     className={`p-3 rounded-2xl border cursor-pointer transition-all ${
                       isSelected
                         ? 'bg-amber-500/10 dark:bg-amber-950/40 border-amber-500 dark:border-amber-400 shadow-sm'
-                        : 'bg-slate-50 dark:bg-base-950/60 border-slate-200 dark:border-amber-800/30'
+                        : 'bg-slate-50 dark:bg-base-950/60 border-slate-200 dark:border-slate-800'
                     }`}
                   >
-                    <div className="flex justify-between text-xs font-bold text-slate-800 dark:text-amber-50">
+                    <div className="flex justify-between text-xs font-bold text-slate-800 dark:text-slate-200">
                       <span>{wheel.name}</span>
                       <span className="text-amber-500">${wheel.costUSD}</span>
                     </div>
-                    <p className="text-[10px] text-amber-300/50 mt-1">{wheel.description}</p>
+                    <p className="text-[10px] text-slate-500 mt-1">{wheel.description}</p>
                   </div>
                 );
               })}
@@ -238,7 +238,7 @@ export const ModularInteriorWorkshop: React.FC<ModularInteriorWorkshopProps> = (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {/* Seating */}
           <div className="space-y-2">
-            <label className="text-xs font-bold text-amber-100/80 block">Front Seating</label>
+            <label className="text-xs font-bold text-slate-300 block">Front Seating</label>
             <div className="space-y-2">
               {SEATING_CATALOG.map((seat) => {
                 const isSelected = currentSeatId === seat.id;
@@ -249,14 +249,14 @@ export const ModularInteriorWorkshop: React.FC<ModularInteriorWorkshopProps> = (
                     className={`p-3 rounded-2xl border cursor-pointer transition-all ${
                       isSelected
                         ? 'bg-amber-500/10 dark:bg-amber-950/40 border-amber-500 dark:border-amber-400 shadow-sm'
-                        : 'bg-slate-50 dark:bg-base-950/60 border-slate-200 dark:border-amber-800/30'
+                        : 'bg-slate-50 dark:bg-base-950/60 border-slate-200 dark:border-slate-800'
                     }`}
                   >
-                    <div className="flex justify-between text-xs font-bold text-slate-800 dark:text-amber-50">
+                    <div className="flex justify-between text-xs font-bold text-slate-800 dark:text-slate-200">
                       <span>{seat.name}</span>
                       <span className="text-amber-500">${seat.costUSD}</span>
                     </div>
-                    <p className="text-[10px] text-amber-300/50 mt-1">{seat.description}</p>
+                    <p className="text-[10px] text-slate-500 mt-1">{seat.description}</p>
                   </div>
                 );
               })}
@@ -265,7 +265,7 @@ export const ModularInteriorWorkshop: React.FC<ModularInteriorWorkshopProps> = (
 
           {/* Center Consoles */}
           <div className="space-y-2">
-            <label className="text-xs font-bold text-amber-100/80 block">Center Console & Shifter</label>
+            <label className="text-xs font-bold text-slate-300 block">Center Console & Shifter</label>
             <div className="space-y-2">
               {CENTER_CONSOLE_CATALOG.map((con) => {
                 const isSelected = currentConsoleId === con.id;
@@ -276,14 +276,14 @@ export const ModularInteriorWorkshop: React.FC<ModularInteriorWorkshopProps> = (
                     className={`p-3 rounded-2xl border cursor-pointer transition-all ${
                       isSelected
                         ? 'bg-amber-500/10 dark:bg-amber-950/40 border-amber-500 dark:border-amber-400 shadow-sm'
-                        : 'bg-slate-50 dark:bg-base-950/60 border-slate-200 dark:border-amber-800/30'
+                        : 'bg-slate-50 dark:bg-base-950/60 border-slate-200 dark:border-slate-800'
                     }`}
                   >
-                    <div className="flex justify-between text-xs font-bold text-slate-800 dark:text-amber-50">
+                    <div className="flex justify-between text-xs font-bold text-slate-800 dark:text-slate-200">
                       <span>{con.name}</span>
                       <span className="text-amber-500">${con.costUSD}</span>
                     </div>
-                    <p className="text-[10px] text-amber-300/50 mt-1">{con.description}</p>
+                    <p className="text-[10px] text-slate-500 mt-1">{con.description}</p>
                   </div>
                 );
               })}
@@ -297,7 +297,7 @@ export const ModularInteriorWorkshop: React.FC<ModularInteriorWorkshopProps> = (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {/* Trim Materials */}
           <div className="space-y-2">
-            <label className="text-xs font-bold text-amber-100/80 block">Primary Interior Trim</label>
+            <label className="text-xs font-bold text-slate-300 block">Primary Interior Trim</label>
             <div className="space-y-2">
               {TRIM_GRADES.map((tg) => {
                 const isSelected = currentTrim === tg.id;
@@ -308,10 +308,10 @@ export const ModularInteriorWorkshop: React.FC<ModularInteriorWorkshopProps> = (
                     className={`p-3 rounded-2xl border cursor-pointer transition-all flex items-center justify-between ${
                       isSelected
                         ? 'bg-amber-500/10 dark:bg-amber-950/40 border-amber-500 dark:border-amber-400 shadow-sm'
-                        : 'bg-slate-50 dark:bg-base-950/60 border-slate-200 dark:border-amber-800/30'
+                        : 'bg-slate-50 dark:bg-base-950/60 border-slate-200 dark:border-slate-800'
                     }`}
                   >
-                    <span className="text-xs font-bold text-slate-800 dark:text-amber-50">{tg.name}</span>
+                    <span className="text-xs font-bold text-slate-800 dark:text-slate-200">{tg.name}</span>
                     <span className="text-[9px] font-bold px-2 py-0.5 rounded bg-amber-500/10 text-amber-400 border border-amber-500/30">
                       {tg.badge}
                     </span>
@@ -323,7 +323,7 @@ export const ModularInteriorWorkshop: React.FC<ModularInteriorWorkshopProps> = (
 
           {/* Ambient Lighting Spectrum */}
           <div className="space-y-2">
-            <label className="text-xs font-bold text-amber-100/80 block">Ambient LED Lightstrip Hue</label>
+            <label className="text-xs font-bold text-slate-300 block">Ambient LED Lightstrip Hue</label>
             <div className="grid grid-cols-3 gap-2">
               {AMBIENT_COLORS.map((col) => {
                 const isSelected = ambientColor === col.hex;
@@ -332,11 +332,11 @@ export const ModularInteriorWorkshop: React.FC<ModularInteriorWorkshopProps> = (
                     key={col.hex}
                     onClick={() => onUpdateInterior({ ambientLightingColorHex: col.hex })}
                     className={`p-3 rounded-2xl border flex flex-col items-center gap-1.5 transition-all cursor-pointer ${
-                      isSelected ? 'border-amber-400 bg-amber-500/10 scale-105 ring-1 ring-amber-400' : 'border-amber-800/30 bg-base-950'
+                      isSelected ? 'border-amber-400 bg-amber-500/10 scale-105 ring-1 ring-amber-400' : 'border-slate-800 bg-base-950'
                     }`}
                   >
                     <div className="w-5 h-5 rounded-full shadow-lg" style={{ backgroundColor: col.hex }} />
-                    <span className="text-[10px] text-amber-100/80 font-bold">{col.name}</span>
+                    <span className="text-[10px] text-slate-300 font-bold">{col.name}</span>
                   </button>
                 );
               })}

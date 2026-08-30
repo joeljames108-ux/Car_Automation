@@ -53,16 +53,16 @@ const METRICS: MetricRow[] = [
 const SECTIONS = [...new Set(METRICS.map(m => m.section))];
 
 function Delta({ a, b, metric }: { a: number; b: number; metric: MetricRow }) {
-  if (a === 0 && b === 0) return <span className="text-amber-400">—</span>;
+  if (a === 0 && b === 0) return <span className="text-slate-600">—</span>;
   const diff = b - a;
   const pct = a !== 0 ? ((diff / Math.abs(a)) * 100) : 0;
   const better = metric.higherIsBetter ? diff > 0 : diff < 0;
   const worse = metric.higherIsBetter ? diff < 0 : diff > 0;
 
-  if (Math.abs(pct) < 0.5) return <span className="text-amber-300/50 flex items-center gap-0.5"><Minus size={10} /> same</span>;
+  if (Math.abs(pct) < 0.5) return <span className="text-slate-500 flex items-center gap-0.5"><Minus size={10} /> same</span>;
 
   return (
-    <span className={`flex items-center gap-0.5 text-[11px] font-semibold ${better ? "text-ok-400" : worse ? "text-danger-400" : "text-amber-200/60"}`}>
+    <span className={`flex items-center gap-0.5 text-[11px] font-semibold ${better ? "text-ok-400" : worse ? "text-danger-400" : "text-slate-400"}`}>
       {diff > 0 ? <ArrowUp size={10} /> : <ArrowDown size={10} />}
       {Math.abs(pct).toFixed(1)}%
     </span>
@@ -75,14 +75,14 @@ const VehicleSelect = memo(function VehicleSelect({ label, value, vehicles, onCh
 }) {
   return (
     <div className="flex-1">
-      <div className="text-[10px] uppercase tracking-wider text-amber-300/50 font-mono mb-1">{label}</div>
+      <div className="text-[10px] uppercase tracking-wider text-slate-500 font-mono mb-1">{label}</div>
       <select
         value={value || ""}
         onChange={e => {
           playHMIClickSound();
           onChange(e.target.value || null);
         }}
-        className="w-full bg-base-850 border border-base-700 rounded-lg px-3 py-2 text-sm text-amber-50 focus:border-accent-500 focus:outline-none cursor-pointer"
+        className="w-full bg-base-850 border border-base-700 rounded-lg px-3 py-2 text-sm text-slate-200 focus:border-accent-500 focus:outline-none cursor-pointer"
       >
         <option value="">— Select Vehicle —</option>
         {vehicles.map(v => (
@@ -182,8 +182,8 @@ function EngineeringComparisonComponent() {
             <GitCompare size={24} className="text-amber-400" />
           </div>
           <div>
-            <h2 className="text-lg font-bold text-amber-50">Engineering Comparison</h2>
-            <p className="text-xs text-amber-200/60">Side-by-side analysis of any two vehicles from your garage</p>
+            <h2 className="text-lg font-bold text-slate-100">Engineering Comparison</h2>
+            <p className="text-xs text-slate-400">Side-by-side analysis of any two vehicles from your garage</p>
           </div>
         </div>
       </div>
@@ -209,10 +209,10 @@ function EngineeringComparisonComponent() {
       </div>
 
       {company.garage.length < 2 && (
-        <div className="p-10 text-center rounded-2xl border bg-amber-900/40 border-amber-800/30">
-          <GitCompare size={36} className="mx-auto text-amber-500 mb-3" />
-          <p className="text-amber-200/60 text-sm">You need at least 2 vehicles in your garage to compare.</p>
-          <p className="text-amber-300/50 text-xs mt-1">Go to the Garage tab and save some designs first.</p>
+        <div className="p-10 text-center rounded-2xl border bg-slate-900/60 border-slate-800">
+          <GitCompare size={36} className="mx-auto text-slate-700 mb-3" />
+          <p className="text-slate-400 text-sm">You need at least 2 vehicles in your garage to compare.</p>
+          <p className="text-slate-500 text-xs mt-1">Go to the Garage tab and save some designs first.</p>
         </div>
       )}
 
@@ -229,7 +229,7 @@ function EngineeringComparisonComponent() {
               boxShadow: "0 15px 35px rgba(0,0,0,0.35), inset 1px 1px 1px -0.5px rgba(255,255,255,0.3)"
             }}
           >
-            <h3 className="text-xs font-semibold text-amber-100/80 uppercase tracking-wider mb-4">Performance Profile</h3>
+            <h3 className="text-xs font-semibold text-slate-300 uppercase tracking-wider mb-4">Performance Profile</h3>
             <div className="flex items-center gap-8 flex-wrap">
               <div className="flex-1 min-w-[200px]">
                 <RadarChart a={vA} b={vB} />
@@ -237,19 +237,19 @@ function EngineeringComparisonComponent() {
               <div className="space-y-3">
                 <div className="flex items-center gap-2">
                   <div className="w-4 h-0.5 bg-amber-400 rounded" />
-                  <span className="text-sm text-amber-50 font-medium">{vA.name}</span>
-                  <span className="text-xs text-amber-200/60">(A)</span>
+                  <span className="text-sm text-slate-200 font-medium">{vA.name}</span>
+                  <span className="text-xs text-slate-400">(A)</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <div className="w-4 h-0.5 bg-orange-400 rounded" />
-                  <span className="text-sm text-amber-50 font-medium">{vB.name}</span>
-                  <span className="text-xs text-amber-200/60">(B)</span>
+                  <span className="text-sm text-slate-200 font-medium">{vB.name}</span>
+                  <span className="text-xs text-slate-400">(B)</span>
                 </div>
                 <div className="mt-4 space-y-1">
-                  <div className="text-xs text-amber-200/60">Overall Rating</div>
+                  <div className="text-xs text-slate-400">Overall Rating</div>
                   <div className="flex items-center gap-3">
                     <span className="text-xl font-bold font-mono text-amber-400">{vA.overallRating}</span>
-                    <span className="text-amber-400">→</span>
+                    <span className="text-slate-600">→</span>
                     <span className={`text-xl font-bold font-mono ${vB.overallRating >= vA.overallRating ? "text-emerald-400" : "text-rose-400"}`}>{vB.overallRating}</span>
                   </div>
                 </div>
@@ -265,7 +265,7 @@ function EngineeringComparisonComponent() {
                 setSection(null);
               }}
               className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all border cursor-pointer active:scale-95 ${
-                section === null ? "bg-amber-500/20 border-amber-500/40 text-amber-300 shadow" : "bg-amber-900/40 border-white/5 text-amber-200/60 hover:text-white"
+                section === null ? "bg-amber-500/20 border-amber-500/40 text-amber-300 shadow" : "bg-slate-900/60 border-white/5 text-slate-400 hover:text-white"
               }`}
             >
               All
@@ -278,7 +278,7 @@ function EngineeringComparisonComponent() {
                   setSection(s);
                 }}
                 className={`px-3 py-1.5 rounded-xl text-xs font-semibold transition-all border cursor-pointer active:scale-95 ${
-                  section === s ? "bg-amber-500/20 border-amber-500/40 text-amber-300 shadow" : "bg-amber-900/40 border-white/5 text-amber-200/60 hover:text-white"
+                  section === s ? "bg-amber-500/20 border-amber-500/40 text-amber-300 shadow" : "bg-slate-900/60 border-white/5 text-slate-400 hover:text-white"
                 }`}
               >
                 {s}
@@ -302,15 +302,15 @@ function EngineeringComparisonComponent() {
               }}
             >
               <div className="px-4 py-2.5 bg-white/5 border-b border-white/10">
-                <span className="text-xs font-semibold text-amber-50 uppercase tracking-wider">{sectionName}</span>
+                <span className="text-xs font-semibold text-slate-200 uppercase tracking-wider">{sectionName}</span>
               </div>
               <table className="w-full">
                 <thead>
                   <tr className="border-b border-white/10">
-                    <th className="text-left px-4 py-2 text-[10px] text-amber-200/60 font-mono uppercase">Metric</th>
+                    <th className="text-left px-4 py-2 text-[10px] text-slate-400 font-mono uppercase">Metric</th>
                     <th className="text-right px-4 py-2 text-[10px] text-amber-400 font-mono uppercase">{vA.variantName} (A)</th>
                     <th className="text-right px-4 py-2 text-[10px] text-orange-400 font-mono uppercase">{vB.variantName} (B)</th>
-                    <th className="text-right px-4 py-2 text-[10px] text-amber-200/60 font-mono uppercase">Δ Change</th>
+                    <th className="text-right px-4 py-2 text-[10px] text-slate-400 font-mono uppercase">Δ Change</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -319,9 +319,9 @@ function EngineeringComparisonComponent() {
                     const valB = m.getValue(vB);
                     return (
                       <tr key={m.label} className={`border-b border-white/5 transition-colors hover:bg-white/5 ${i % 2 === 0 ? "" : "bg-white/[0.02]"}`}>
-                        <td className="px-4 py-2 text-xs text-amber-100/80">{m.label}</td>
-                        <td className="px-4 py-2 text-right font-mono text-xs text-amber-300">{m.format(valA)}{m.unit && <span className="text-amber-300/50 ml-0.5 text-[10px]">{m.unit}</span>}</td>
-                        <td className="px-4 py-2 text-right font-mono text-xs text-orange-300">{m.format(valB)}{m.unit && <span className="text-amber-300/50 ml-0.5 text-[10px]">{m.unit}</span>}</td>
+                        <td className="px-4 py-2 text-xs text-slate-300">{m.label}</td>
+                        <td className="px-4 py-2 text-right font-mono text-xs text-amber-300">{m.format(valA)}{m.unit && <span className="text-slate-500 ml-0.5 text-[10px]">{m.unit}</span>}</td>
+                        <td className="px-4 py-2 text-right font-mono text-xs text-orange-300">{m.format(valB)}{m.unit && <span className="text-slate-500 ml-0.5 text-[10px]">{m.unit}</span>}</td>
                         <td className="px-4 py-2 text-right"><Delta a={valA} b={valB} metric={m} /></td>
                       </tr>
                     );

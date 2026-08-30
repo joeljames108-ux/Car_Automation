@@ -72,11 +72,11 @@ export function HeadGasketSection({
           <div className="space-y-4">
             <div className="p-3 rounded-xl bg-base-950/80 border border-amber-500/20 space-y-2">
               <div className="flex items-center justify-between text-xs font-mono">
-                <span className="text-amber-200/60">Compressed Thickness</span>
+                <span className="text-slate-400">Compressed Thickness</span>
                 <span className="text-amber-300 font-extrabold">0.85 mm (0.033")</span>
               </div>
               <div className="flex items-center justify-between text-xs font-mono">
-                <span className="text-amber-200/60">Combustion Sealing Ring</span>
+                <span className="text-slate-400">Combustion Sealing Ring</span>
                 <span className="text-emerald-300 font-extrabold">Integrated Stopper Ring</span>
               </div>
             </div>
@@ -85,7 +85,7 @@ export function HeadGasketSection({
               <span className="text-[10px] font-mono font-bold text-amber-300 uppercase tracking-wider block">
                 CYLINDER PRESSURE INTEGRITY
               </span>
-              <p className="text-[11px] font-mono text-amber-100/80 leading-relaxed">
+              <p className="text-[11px] font-mono text-slate-300 leading-relaxed">
                 Multi-layer stainless spring steel embossing accommodates head lift under high boost without blowing coolant seals.
               </p>
             </div>
@@ -106,7 +106,7 @@ export function HeadGasketSection({
               onSelectVariant={onSelectVariant}
             />
           ) : (
-            <p className="text-xs font-mono text-amber-300/50">Loading material variants...</p>
+            <p className="text-xs font-mono text-slate-500">Loading material variants...</p>
           )}
         </SectionCard>
 

@@ -571,7 +571,7 @@ const F1ModularAssemblyViewportComponent: React.FC = () => {
   }, []);
 
   return (
-    <div className="relative w-full h-full bg-[#0a0c10] select-none overflow-hidden group">
+    <div className="relative w-full h-full bg-amber-950/60 select-none overflow-hidden group">
       {/* 3D WebGL Canvas Container */}
       <div
         ref={mountRef}

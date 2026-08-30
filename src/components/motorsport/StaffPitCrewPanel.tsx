@@ -48,17 +48,17 @@ export const StaffPitCrewPanel = memo(function StaffPitCrewPanel({ selectedTeam 
               <span className="text-[10px] font-mono font-bold text-amber-400 uppercase tracking-widest">TEAM TALENT & CREW</span>
               <span className="bg-amber-500/20 text-amber-300 border border-amber-500/40 text-[9px] font-bold px-2 py-0.5 rounded-full">KEY ROSTER</span>
             </div>
-            <h3 className="text-lg font-bold text-amber-50 flex items-center gap-2 mt-1">
+            <h3 className="text-lg font-bold text-slate-100 flex items-center gap-2 mt-1">
               <Users size={20} className="text-amber-400" /> Key Staff & Pit Crew Operations
             </h3>
-            <p className="text-xs text-amber-200/60 mt-0.5">
+            <p className="text-xs text-slate-400 mt-0.5">
               Manage Head Engineers, Race Strategists, and Pit Crew Chiefs to shave crucial tenths during pit stops and optimize development.
             </p>
           </div>
 
           {selectedTeam && (
             <div className="bg-base-950/80 px-3.5 py-2 rounded-xl border border-white/10 text-right shrink-0">
-              <div className="text-[10px] text-amber-200/60">Team Allocation</div>
+              <div className="text-[10px] text-slate-400">Team Allocation</div>
               <div className="text-sm font-bold text-amber-300">{selectedTeam.name}</div>
             </div>
           )}
@@ -81,13 +81,13 @@ export const StaffPitCrewPanel = memo(function StaffPitCrewPanel({ selectedTeam 
                     <span className="text-[10px] font-bold text-amber-400 uppercase tracking-wider bg-amber-500/10 px-2 py-0.5 rounded border border-amber-500/30">
                       {s.role}
                     </span>
-                    <span className="text-xs font-mono text-amber-100/80 font-bold flex items-center gap-0.5">
-                      <DollarSign size={12} className="text-amber-300/50" />{(s.salary / 1e6).toFixed(1)}M/yr
+                    <span className="text-xs font-mono text-slate-300 font-bold flex items-center gap-0.5">
+                      <DollarSign size={12} className="text-slate-500" />{(s.salary / 1e6).toFixed(1)}M/yr
                     </span>
                   </div>
 
-                  <h4 className="text-base font-bold text-amber-50">{s.name}</h4>
-                  <div className="text-xs text-amber-200/60 mt-1">Specialty: <span className="text-amber-50 font-medium">{s.spec}</span></div>
+                  <h4 className="text-base font-bold text-slate-100">{s.name}</h4>
+                  <div className="text-xs text-slate-400 mt-1">Specialty: <span className="text-slate-200 font-medium">{s.spec}</span></div>
                   <div className="text-[10px] font-mono text-emerald-400 mt-1 flex items-center gap-1">
                     <Award size={10} /> {s.bonus}
                   </div>
@@ -96,7 +96,7 @@ export const StaffPitCrewPanel = memo(function StaffPitCrewPanel({ selectedTeam 
                 <div className="pt-2 border-t border-white/5 space-y-2">
                   <div className="grid grid-cols-2 gap-2 text-xs">
                     <div>
-                      <div className="flex justify-between text-[10px] text-amber-200/60 mb-0.5">
+                      <div className="flex justify-between text-[10px] text-slate-400 mb-0.5">
                         <span>Skill Rating</span>
                         <span className="text-amber-300 font-mono font-bold">{s.skill}/100</span>
                       </div>
@@ -106,7 +106,7 @@ export const StaffPitCrewPanel = memo(function StaffPitCrewPanel({ selectedTeam 
                     </div>
 
                     <div>
-                      <div className="flex justify-between text-[10px] text-amber-200/60 mb-0.5">
+                      <div className="flex justify-between text-[10px] text-slate-400 mb-0.5">
                         <span>Morale</span>
                         <span className="text-emerald-400 font-mono font-bold">{s.morale}%</span>
                       </div>

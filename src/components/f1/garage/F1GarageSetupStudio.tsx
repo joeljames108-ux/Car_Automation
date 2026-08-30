@@ -247,7 +247,7 @@ export const F1GarageSetupStudio: React.FC<F1GarageSetupStudioProps> = memo(func
   };
 
   return (
-    <div className="w-full h-full flex flex-col bg-[#0a0c10] text-white select-none relative overflow-hidden">
+    <div className="w-full h-full flex flex-col bg-amber-950/60 text-white select-none relative overflow-hidden">
       {/* Top Header */}
       <div className="p-4 bg-black/70 backdrop-blur-md border-b border-white/10 flex items-center justify-between z-10 shrink-0">
         <div className="flex items-center gap-3">

@@ -647,9 +647,9 @@ export function thermalEfficiencyIndex(grade: MetallurgyGrade): number {
 /** Get color coding for a material grade based on its cost tier */
 export function getGradeColor(gradeId: string): { bg: string; text: string; border: string } {
   const grade = getMaterialGrade(gradeId);
-  if (!grade) return { bg: "bg-amber-900/50", text: "text-amber-200/60", border: "border-amber-700/30" };
+  if (!grade) return { bg: "bg-slate-900", text: "text-slate-400", border: "border-slate-700" };
 
-  if (grade.costMultiplier <= 1.3) return { bg: "bg-amber-900/40", text: "text-amber-100/80", border: "border-amber-600/30" };
+  if (grade.costMultiplier <= 1.3) return { bg: "bg-slate-900/80", text: "text-slate-300", border: "border-slate-600" };
   if (grade.costMultiplier <= 2.0) return { bg: "bg-amber-950/60", text: "text-amber-300", border: "border-amber-700" };
   if (grade.costMultiplier <= 3.5) return { bg: "bg-amber-950/60", text: "text-amber-300", border: "border-amber-700" };
   if (grade.costMultiplier <= 5.0) return { bg: "bg-amber-950/60", text: "text-amber-300", border: "border-amber-700" };

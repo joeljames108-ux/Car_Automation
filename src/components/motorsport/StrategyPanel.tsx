@@ -25,7 +25,7 @@ const TireBadge = memo(function TireBadge({ tire, active, onClick }: { tire: Tir
       }}
       className={`w-8 h-8 rounded-full flex items-center justify-center text-[10px] font-bold transition-all border-2 cursor-pointer ${
         active ? `${TIRE_COLORS[tire]} border-white/40 text-slate-900 shadow-lg scale-110` :
-        "bg-base-800 border-base-700 text-amber-300/50 hover:border-base-600"
+        "bg-base-800 border-base-700 text-slate-500 hover:border-base-600"
       }`}>
       {TIRE_LABELS[tire]}
     </button>
@@ -38,8 +38,8 @@ export const StrategyPanel = memo(function StrategyPanel({ selectedTeam }: { sel
   if (company.motorsport.teams.length === 0) {
     return (
       <div className="glass-panel p-10 text-center">
-        <Settings size={36} className="mx-auto text-amber-500 mb-3" />
-        <p className="text-amber-300/50 text-sm">Create a team first to configure race strategy.</p>
+        <Settings size={36} className="mx-auto text-slate-700 mb-3" />
+        <p className="text-slate-500 text-sm">Create a team first to configure race strategy.</p>
       </div>
     );
   }
@@ -47,8 +47,8 @@ export const StrategyPanel = memo(function StrategyPanel({ selectedTeam }: { sel
   if (!selectedTeam) {
     return (
       <div className="glass-panel p-10 text-center">
-        <Settings size={36} className="mx-auto text-amber-500 mb-3" />
-        <p className="text-amber-300/50 text-sm">Select a team from the Teams tab to configure strategy.</p>
+        <Settings size={36} className="mx-auto text-slate-700 mb-3" />
+        <p className="text-slate-500 text-sm">Select a team from the Teams tab to configure strategy.</p>
       </div>
     );
   }
@@ -58,7 +58,7 @@ export const StrategyPanel = memo(function StrategyPanel({ selectedTeam }: { sel
       {/* Team indicator */}
       <div className="flex items-center gap-2">
         <div className="w-3 h-3 rounded-full" style={{ backgroundColor: selectedTeam.liveryColor }} />
-        <span className="text-sm font-semibold text-amber-50">{selectedTeam.name}</span>
+        <span className="text-sm font-semibold text-slate-200">{selectedTeam.name}</span>
         <span className={`text-[10px] font-semibold px-1.5 py-0.5 rounded border ${CATEGORY_COLORS[selectedTeam.category]}`}>
           {CATEGORY_LABELS[selectedTeam.category]}
         </span>
@@ -81,7 +81,7 @@ export const StrategyPanel = memo(function StrategyPanel({ selectedTeam }: { sel
               ]).map(m => (
                 <button key={m.mode} onClick={() => updateStrategy(selectedTeam.id, { deployMode: m.mode })}
                   className={`px-2 py-2.5 rounded-xl text-xs font-medium transition-all border ${
-                    selectedTeam.strategy.deployMode === m.mode ? m.color : "bg-base-850 border-base-800 text-amber-200/60 hover:border-base-700"
+                    selectedTeam.strategy.deployMode === m.mode ? m.color : "bg-base-850 border-base-800 text-slate-400 hover:border-base-700"
                   }`}>
                   <div className="font-semibold">{m.label}</div>
                   <div className="text-[10px] opacity-60 mt-0.5">{m.desc}</div>
@@ -115,7 +115,7 @@ export const StrategyPanel = memo(function StrategyPanel({ selectedTeam }: { sel
                     value={selectedTeam.strategy.fuelLoad}
                     onChange={e => updateStrategy(selectedTeam.id, { fuelLoad: +e.target.value })}
                     className="w-full" />
-                  <div className="flex justify-between text-[10px] text-amber-400 mt-1">
+                  <div className="flex justify-between text-[10px] text-slate-600 mt-1">
                     <span>Light (fast)</span>
                     <span>Full (safe)</span>
                   </div>
@@ -133,7 +133,7 @@ export const StrategyPanel = memo(function StrategyPanel({ selectedTeam }: { sel
                   className={`w-9 h-9 rounded-lg text-sm font-bold transition-all border ${
                     selectedTeam.strategy.pitStopCount === n
                       ? "bg-accent-500/25 border-accent-500/50 text-accent-300"
-                      : "bg-base-850 border-base-800 text-amber-300/50 hover:border-base-700"
+                      : "bg-base-850 border-base-800 text-slate-500 hover:border-base-700"
                   }`}>{n}</button>
               ))}
             </div>
@@ -152,7 +152,7 @@ export const StrategyPanel = memo(function StrategyPanel({ selectedTeam }: { sel
                   className={`px-2 py-2 rounded-lg text-[10px] font-medium transition-all border ${
                     selectedTeam.strategy.wetStrategy === w.id
                       ? "bg-amber-500/20 border-amber-500/50 text-amber-300"
-                      : "bg-base-850 border-base-800 text-amber-200/60"
+                      : "bg-base-850 border-base-800 text-slate-400"
                   }`}>
                   <div className="font-semibold text-xs">{w.label}</div>
                   <div className="opacity-60">{w.desc}</div>
@@ -167,7 +167,7 @@ export const StrategyPanel = memo(function StrategyPanel({ selectedTeam }: { sel
             <div className="flex gap-2 flex-wrap items-center">
               {selectedTeam.strategy.tireStrategy.map((tire, i) => (
                 <div key={i} className="flex items-center gap-1.5 bg-base-850/50 rounded-xl px-3 py-2 border border-base-800">
-                  <span className="text-[10px] text-amber-300/50 font-mono">S{i + 1}</span>
+                  <span className="text-[10px] text-slate-500 font-mono">S{i + 1}</span>
                   <div className="flex gap-1">
                     {(["soft", "medium", "hard", "intermediate", "wet"] as TireChoice[]).map(t => (
                       <TireBadge key={t} tire={t} active={tire === t}
@@ -183,7 +183,7 @@ export const StrategyPanel = memo(function StrategyPanel({ selectedTeam }: { sel
               <button onClick={() => updateStrategy(selectedTeam.id, {
                 tireStrategy: [...selectedTeam.strategy.tireStrategy, "medium"]
               })}
-                className="px-3 py-2 rounded-xl text-[10px] border border-dashed border-base-700 text-amber-300/50 hover:text-accent-300 hover:border-accent-500/30 transition-all">
+                className="px-3 py-2 rounded-xl text-[10px] border border-dashed border-base-700 text-slate-500 hover:text-accent-300 hover:border-accent-500/30 transition-all">
                 + Stint
               </button>
             </div>
@@ -206,8 +206,8 @@ export const StrategyPanel = memo(function StrategyPanel({ selectedTeam }: { sel
                 <input type="checkbox" className="hidden" checked={selectedTeam.strategy[opt.key]}
                   onChange={e => updateStrategy(selectedTeam.id, { [opt.key]: e.target.checked })} />
                 <div>
-                  <span className="text-xs text-amber-100/80 font-medium">{opt.label}</span>
-                  <div className="text-[10px] text-amber-300/50">{opt.desc}</div>
+                  <span className="text-xs text-slate-300 font-medium">{opt.label}</span>
+                  <div className="text-[10px] text-slate-500">{opt.desc}</div>
                 </div>
               </label>
             ))}
@@ -226,7 +226,7 @@ export const StrategyPanel = memo(function StrategyPanel({ selectedTeam }: { sel
                   className={`px-2 py-2 rounded-lg text-[10px] font-medium transition-all border ${
                     (selectedTeam.strategy.enginePaceMode || "neutral") === m.id
                       ? "bg-amber-500/20 border-amber-500/50 text-amber-300"
-                      : "bg-base-850 border-base-800 text-amber-200/60"
+                      : "bg-base-850 border-base-800 text-slate-400"
                   }`}>
                   <div className="font-semibold text-xs">{m.label}</div>
                   <div className="opacity-60">{m.desc}</div>
@@ -248,7 +248,7 @@ export const StrategyPanel = memo(function StrategyPanel({ selectedTeam }: { sel
                   className={`px-2 py-2 rounded-lg text-[10px] font-medium transition-all border ${
                     (selectedTeam.strategy.driverRiskLevel || "normal") === r.id
                       ? "bg-amber-500/20 border-amber-500/50 text-amber-300"
-                      : "bg-base-850 border-base-800 text-amber-200/60"
+                      : "bg-base-850 border-base-800 text-slate-400"
                   }`}>
                   <div className="font-semibold text-xs">{r.label}</div>
                   <div className="opacity-60">{r.desc}</div>
@@ -270,7 +270,7 @@ export const StrategyPanel = memo(function StrategyPanel({ selectedTeam }: { sel
                   className={`px-2 py-2 rounded-lg text-[10px] font-medium transition-all border ${
                     (selectedTeam.strategy.pitStopRisk || "balanced") === p.id
                       ? "bg-ok-500/20 border-ok-500/50 text-ok-300"
-                      : "bg-base-850 border-base-800 text-amber-200/60"
+                      : "bg-base-850 border-base-800 text-slate-400"
                   }`}>
                   <div className="font-semibold text-xs">{p.label}</div>
                   <div className="opacity-60">{p.desc}</div>

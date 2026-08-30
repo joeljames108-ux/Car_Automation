@@ -74,7 +74,7 @@ export const NeonHorizonDock: React.FC<NeonHorizonDockProps> = ({
       {/* Floating Active Module Label (Vision Glass Dock Feature) */}
       <div
         key={activeStage}
-        className="text-[10px] font-bold text-amber-100/80/80 tracking-widest uppercase animate-nh-materialize pointer-events-none"
+        className="text-[10px] font-bold text-slate-300/80 tracking-widest uppercase animate-nh-materialize pointer-events-none"
       >
         {activeItemLabel}
       </div>

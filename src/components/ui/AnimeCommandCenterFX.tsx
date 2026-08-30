@@ -137,7 +137,7 @@ export function AnimeCircuitRadar({
             ANIME.JS RADAR SCANNER
           </span>
         </div>
-        <span className="text-[9px] font-mono text-amber-200/60 bg-white/5 px-2 py-0.5 rounded-full border border-white/10">
+        <span className="text-[9px] font-mono text-slate-400 bg-white/5 px-2 py-0.5 rounded-full border border-white/10">
           60Hz TELEMETRY
         </span>
       </div>
@@ -214,20 +214,20 @@ export function AnimeCircuitRadar({
       {/* Real-time telemetry readout pill bar */}
       <div className="grid grid-cols-3 gap-2 w-full mt-2 relative z-10 pt-2 border-t border-white/5 text-center">
         <div className="bg-black/30 rounded-lg py-1 px-1.5 border border-white/5">
-          <div className="text-[8.5px] text-amber-200/60 font-mono">VELOCITY</div>
+          <div className="text-[8.5px] text-slate-400 font-mono">VELOCITY</div>
           <div className="text-xs font-mono font-bold text-amber-300">
             <AnimeNumber value={speedKmh} decimals={0} suffix=" km/h" />
           </div>
         </div>
         <div className="bg-black/30 rounded-lg py-1 px-1.5 border border-white/5">
-          <div className="text-[8.5px] text-amber-200/60 font-mono">LATERAL G</div>
+          <div className="text-[8.5px] text-slate-400 font-mono">LATERAL G</div>
           <div className="text-xs font-mono font-bold text-emerald-300">
             <AnimeNumber value={lateralG} decimals={2} suffix=" G" />
           </div>
         </div>
         <div className="bg-black/30 rounded-lg py-1 px-1.5 border border-white/5">
-          <div className="text-[8.5px] text-amber-200/60 font-mono">DOWNFORCE</div>
-          <div className="text-xs font-mono font-bold text-sky-300">
+          <div className="text-[8.5px] text-slate-400 font-mono">DOWNFORCE</div>
+          <div className="text-xs font-mono font-bold text-amber-300">
             <AnimeNumber value={downforceKg} decimals={0} suffix=" N" />
           </div>
         </div>

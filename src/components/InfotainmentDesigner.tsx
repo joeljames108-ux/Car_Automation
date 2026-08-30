@@ -31,10 +31,10 @@ function ChoiceCard<T extends string | number>({ value, options, onChange, colum
       {options.map((o) => (
         <button key={String(o.value)} onClick={() => onChange(o.value)}
           className={`px-2.5 py-2 rounded-lg text-xs font-medium transition-all border text-left ${
-            value === o.value ? "bg-accent-500/20 border-accent-500/50 text-accent-300" : "bg-base-850 border-base-800 text-amber-200/60 hover:border-base-700"
+            value === o.value ? "bg-accent-500/20 border-accent-500/50 text-accent-300" : "bg-base-850 border-base-800 text-slate-400 hover:border-base-700"
           }`}>
           <div>{o.label}</div>
-          {o.sub && <div className="text-[10px] text-amber-400 mt-0.5 normal-case font-normal">{o.sub}</div>}
+          {o.sub && <div className="text-[10px] text-slate-600 mt-0.5 normal-case font-normal">{o.sub}</div>}
         </button>
       ))}
     </div>
@@ -48,8 +48,8 @@ function ToggleRow({ label, desc, value, onChange }: { label: string; desc?: str
         value ? "bg-accent-500/10 border-accent-500/30" : "bg-base-850 border-base-800"
       }`}>
       <div className="min-w-0 pr-2">
-        <div className={`text-xs font-medium ${value ? "text-accent-300" : "text-amber-100/80"}`}>{label}</div>
-        {desc && <div className="text-[10px] text-amber-400 mt-0.5">{desc}</div>}
+        <div className={`text-xs font-medium ${value ? "text-accent-300" : "text-slate-300"}`}>{label}</div>
+        {desc && <div className="text-[10px] text-slate-600 mt-0.5">{desc}</div>}
       </div>
       <span className={`relative w-9 h-5 rounded-full transition-colors shrink-0 ${value ? "bg-accent-500" : "bg-base-700"}`}>
         <span className={`absolute top-0.5 left-0.5 h-4 w-4 rounded-full bg-white transition-transform ${value ? "translate-x-4" : ""}`} />
@@ -61,7 +61,7 @@ function ToggleRow({ label, desc, value, onChange }: { label: string; desc?: str
 function StatRow({ icon, label, value, color }: { icon: React.ReactNode; label: string; value: string; color: string }) {
   return (
     <div className="flex items-center justify-between text-xs">
-      <span className="flex items-center gap-1.5 text-amber-300/50"><span className="text-amber-400">{icon}</span>{label}</span>
+      <span className="flex items-center gap-1.5 text-slate-500"><span className="text-slate-600">{icon}</span>{label}</span>
       <span className={"font-mono " + color}>{value}</span>
     </div>
   );
@@ -70,10 +70,10 @@ function StatRow({ icon, label, value, color }: { icon: React.ReactNode; label: 
 function moduleStatsRow(m: { cost: number; weight: number; power: number; luxury: number; tech: number }) {
   return (
     <div className="mt-2 grid grid-cols-4 gap-2 text-center">
-      <div><div className="text-[9px] text-amber-400 uppercase">Cost</div><div className="font-mono text-[11px] text-accent-300">${m.cost}</div></div>
-      <div><div className="text-[9px] text-amber-400 uppercase">Weight</div><div className="font-mono text-[11px] text-amber-100/80">{m.weight}kg</div></div>
-      <div><div className="text-[9px] text-amber-400 uppercase">Power</div><div className="font-mono text-[11px] text-warn-400">{m.power}W</div></div>
-      <div><div className="text-[9px] text-amber-400 uppercase">Luxury</div><div className="font-mono text-[11px] text-amber-300">{(m.luxury * 100).toFixed(0)}%</div></div>
+      <div><div className="text-[9px] text-slate-600 uppercase">Cost</div><div className="font-mono text-[11px] text-accent-300">${m.cost}</div></div>
+      <div><div className="text-[9px] text-slate-600 uppercase">Weight</div><div className="font-mono text-[11px] text-slate-300">{m.weight}kg</div></div>
+      <div><div className="text-[9px] text-slate-600 uppercase">Power</div><div className="font-mono text-[11px] text-warn-400">{m.power}W</div></div>
+      <div><div className="text-[9px] text-slate-600 uppercase">Luxury</div><div className="font-mono text-[11px] text-amber-300">{(m.luxury * 100).toFixed(0)}%</div></div>
     </div>
   );
 }
@@ -84,16 +84,16 @@ function ImpactPanel({ sim }: { sim: ReturnType<typeof simulate> }) {
   const i = sim.infotainment;
   const costPct = Math.min(100, (i.totalCost / Math.max(sim.totalCost, 1)) * 100);
   const rows: { icon: React.ReactNode; label: string; value: string; color: string }[] = [
-    { icon: <DollarSign size={12} />, label: "Hardware Cost", value: "$" + i.hardwareCost.toLocaleString(), color: "text-amber-50" },
-    { icon: <DollarSign size={12} />, label: "Software Cost", value: "$" + i.softwareCost.toLocaleString(), color: "text-amber-50" },
+    { icon: <DollarSign size={12} />, label: "Hardware Cost", value: "$" + i.hardwareCost.toLocaleString(), color: "text-slate-200" },
+    { icon: <DollarSign size={12} />, label: "Software Cost", value: "$" + i.softwareCost.toLocaleString(), color: "text-slate-200" },
     { icon: <DollarSign size={12} />, label: "Total Cost", value: "$" + i.totalCost.toLocaleString(), color: "text-accent-300" },
-    { icon: <Activity size={12} />, label: "Share of Vehicle", value: costPct.toFixed(1) + "%", color: "text-amber-200/60" },
+    { icon: <Activity size={12} />, label: "Share of Vehicle", value: costPct.toFixed(1) + "%", color: "text-slate-400" },
     { icon: <DollarSign size={12} />, label: "Retail Price Impact", value: "+$" + i.retailPriceImpact.toLocaleString(), color: "text-ok-400" },
     { icon: <Zap size={12} />, label: "Power Draw", value: i.powerDraw + " W", color: "text-warn-400" },
-    { icon: <Car size={12} />, label: "Weight", value: i.weight + " kg", color: "text-amber-200/60" },
+    { icon: <Car size={12} />, label: "Weight", value: i.weight + " kg", color: "text-slate-400" },
     { icon: <Thermometer size={12} />, label: "Heat Generation", value: (i.heatGeneration * 100).toFixed(0) + "%", color: "text-warn-400" },
-    { icon: <Cpu size={12} />, label: "Wiring Complexity", value: (i.wiringComplexity * 100).toFixed(0) + "%", color: "text-amber-200/60" },
-    { icon: <Wrench size={12} />, label: "Assembly Time", value: i.assemblyTime + " hr", color: "text-amber-200/60" },
+    { icon: <Cpu size={12} />, label: "Wiring Complexity", value: (i.wiringComplexity * 100).toFixed(0) + "%", color: "text-slate-400" },
+    { icon: <Wrench size={12} />, label: "Assembly Time", value: i.assemblyTime + " hr", color: "text-slate-400" },
     { icon: <BatteryCharging size={12} />, label: "Battery Needed", value: i.batterySizeRequired + " kWh", color: "text-warn-400" },
     { icon: <ShieldAlert size={12} />, label: "Cyber Risk", value: (i.cybersecurityRisk * 100).toFixed(0) + "%", color: i.cybersecurityRisk > 0.5 ? "text-danger-400" : i.cybersecurityRisk > 0.3 ? "text-warn-400" : "text-ok-400" },
     { icon: <Activity size={12} />, label: "Reliability", value: (i.reliability * 100).toFixed(0) + "%", color: i.reliability > 0.85 ? "text-ok-400" : i.reliability > 0.7 ? "text-warn-400" : "text-danger-400" },
@@ -101,35 +101,35 @@ function ImpactPanel({ sim }: { sim: ReturnType<typeof simulate> }) {
     { icon: <Cpu size={12} />, label: "Technology Score", value: (i.technologyScore * 100).toFixed(0) + "%", color: "text-accent-300" },
     { icon: <ShieldAlert size={12} />, label: "Safety Bonus", value: "+" + (i.safetyBonus * 100).toFixed(0) + "%", color: "text-ok-400" },
     { icon: <Users size={12} />, label: "Customer Appeal", value: (i.customerSatisfaction * 100).toFixed(0) + "%", color: "text-ok-400" },
-    { icon: <Wrench size={12} />, label: "Maintenance/yr", value: "$" + i.maintenanceCost.toLocaleString(), color: "text-amber-200/60" },
+    { icon: <Wrench size={12} />, label: "Maintenance/yr", value: "$" + i.maintenanceCost.toLocaleString(), color: "text-slate-400" },
     { icon: <ShieldAlert size={12} />, label: "Warranty Risk", value: (i.warrantyRisk * 100).toFixed(0) + "%", color: i.warrantyRisk > 0.4 ? "text-danger-400" : "text-warn-400" },
-    { icon: <Gauge size={12} />, label: "Boot Time", value: i.bootTime + " s", color: "text-amber-200/60" },
-    { icon: <Mic size={12} />, label: "Voice Accuracy", value: (i.voiceAccuracy * 100).toFixed(0) + "%", color: "text-amber-200/60" },
+    { icon: <Gauge size={12} />, label: "Boot Time", value: i.bootTime + " s", color: "text-slate-400" },
+    { icon: <Mic size={12} />, label: "Voice Accuracy", value: (i.voiceAccuracy * 100).toFixed(0) + "%", color: "text-slate-400" },
     { icon: <Bot size={12} />, label: "Active Features", value: String(i.featureCount), color: "text-accent-300" },
   ];
   return (
     <div className="panel p-4 sticky top-20">
       <div className="flex items-center gap-2 mb-3">
         <Activity size={16} className="text-accent-400" />
-        <h3 className="text-xs font-semibold text-amber-100/80 uppercase tracking-wider">Live Impact</h3>
+        <h3 className="text-xs font-semibold text-slate-300 uppercase tracking-wider">Live Impact</h3>
       </div>
       {/* Trim name */}
       <div className="mb-4 p-3 rounded-lg border border-accent-500/30 bg-accent-500/5">
-        <div className="text-[10px] text-amber-300/50 uppercase tracking-wider mb-0.5">Generated Trim</div>
+        <div className="text-[10px] text-slate-500 uppercase tracking-wider mb-0.5">Generated Trim</div>
         <div className="text-base font-bold text-accent-300">{i.trimName}</div>
-        <div className="text-[11px] text-amber-300/50 mt-0.5">{i.trimDescription}</div>
+        <div className="text-[11px] text-slate-500 mt-0.5">{i.trimDescription}</div>
       </div>
       {/* Tech gauge */}
       <div className="flex flex-col items-center mb-4">
         <RadialGauge value={i.technologyScore * 10} max={10} label="Tech" size={120} />
         <div className="mt-2 grid grid-cols-3 gap-2 w-full text-center">
-          <div><div className="text-[10px] text-amber-400 uppercase">Luxury</div><div className="font-mono text-sm text-amber-300">{(i.luxuryScore * 100).toFixed(0)}</div></div>
-          <div><div className="text-[10px] text-amber-400 uppercase">Appeal</div><div className="font-mono text-sm text-ok-400">{(i.customerSatisfaction * 100).toFixed(0)}</div></div>
-          <div><div className="text-[10px] text-amber-400 uppercase">Reliab.</div><div className="font-mono text-sm text-accent-300">{(i.reliability * 100).toFixed(0)}</div></div>
+          <div><div className="text-[10px] text-slate-600 uppercase">Luxury</div><div className="font-mono text-sm text-amber-300">{(i.luxuryScore * 100).toFixed(0)}</div></div>
+          <div><div className="text-[10px] text-slate-600 uppercase">Appeal</div><div className="font-mono text-sm text-ok-400">{(i.customerSatisfaction * 100).toFixed(0)}</div></div>
+          <div><div className="text-[10px] text-slate-600 uppercase">Reliab.</div><div className="font-mono text-sm text-accent-300">{(i.reliability * 100).toFixed(0)}</div></div>
         </div>
       </div>
       <div className="space-y-1.5">{rows.map((r) => <StatRow key={r.label} {...r} />)}</div>
-      <div className="mt-3 pt-3 border-t border-base-800 text-[10px] text-amber-400">Updates in real time as you configure modules.</div>
+      <div className="mt-3 pt-3 border-t border-base-800 text-[10px] text-slate-600">Updates in real time as you configure modules.</div>
     </div>
   );
 }
@@ -150,10 +150,10 @@ export function InfotainmentDesigner() {
           <div className="absolute top-0 right-0 w-48 h-48 bg-accent-500/5 rounded-full blur-3xl -mr-24 -mt-24 pointer-events-none animate-pulse" style={{ animationDuration: "4s" }} />
           <div className="relative flex items-center gap-2">
             <CircuitBoard size={18} className="text-accent-400" />
-            <h2 className="text-sm font-semibold text-amber-50">Vehicle Electronics Studio</h2>
-            <span className="text-xs text-amber-300/50">— Build your own trim, module by module</span>
+            <h2 className="text-sm font-semibold text-slate-200">Vehicle Electronics Studio</h2>
+            <span className="text-xs text-slate-500">— Build your own trim, module by module</span>
           </div>
-          <p className="relative text-xs text-amber-300/50 mt-1">Every electronic, comfort, and infotainment module can be selected individually. Each choice affects cost, weight, power, reliability, luxury, safety, and customer appeal. A unique trim name is generated automatically.</p>
+          <p className="relative text-xs text-slate-500 mt-1">Every electronic, comfort, and infotainment module can be selected individually. Each choice affects cost, weight, power, reliability, luxury, safety, and customer appeal. A unique trim name is generated automatically.</p>
         </div>
 
         {/* 1. Instrument Cluster */}
@@ -383,11 +383,11 @@ export function InfotainmentDesigner() {
               <Crown size={18} className="text-amber-400" />
               <span className="text-lg font-bold text-accent-300">{sim.infotainment.trimName}</span>
             </div>
-            <p className="text-sm text-amber-200/60">{sim.infotainment.trimDescription}</p>
+            <p className="text-sm text-slate-400">{sim.infotainment.trimDescription}</p>
             <div className="mt-3 grid grid-cols-2 md:grid-cols-4 gap-2 text-center">
               <div className="bg-base-850 border border-base-800 rounded-lg px-2 py-1.5"><div className="label-mono">Total Cost</div><div className="font-mono text-sm text-accent-300">${sim.infotainment.totalCost.toLocaleString()}</div></div>
               <div className="bg-base-850 border border-base-800 rounded-lg px-2 py-1.5"><div className="label-mono">Retail +</div><div className="font-mono text-sm text-ok-400">${sim.infotainment.retailPriceImpact.toLocaleString()}</div></div>
-              <div className="bg-base-850 border border-base-800 rounded-lg px-2 py-1.5"><div className="label-mono">Features</div><div className="font-mono text-sm text-amber-50">{sim.infotainment.featureCount}</div></div>
+              <div className="bg-base-850 border border-base-800 rounded-lg px-2 py-1.5"><div className="label-mono">Features</div><div className="font-mono text-sm text-slate-200">{sim.infotainment.featureCount}</div></div>
               <div className="bg-base-850 border border-base-800 rounded-lg px-2 py-1.5"><div className="label-mono">Appeal</div><div className="font-mono text-sm text-ok-400">{(sim.infotainment.customerSatisfaction * 100).toFixed(0)}%</div></div>
             </div>
           </div>

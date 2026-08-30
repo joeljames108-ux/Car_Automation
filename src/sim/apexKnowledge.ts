@@ -754,7 +754,7 @@ export function getImpactBadges(impacts: ImpactArea[]): { label: string; color: 
     weight: "bg-amber-500/20 text-amber-300 border-amber-500/30",
     cost: "bg-emerald-500/20 text-emerald-300 border-emerald-500/30",
     handling: "bg-amber-500/20 text-amber-300 border-amber-500/30",
-    aero: "bg-sky-500/20 text-sky-300 border-sky-500/30",
+    aero: "bg-sky-500/20 text-amber-300 border-sky-500/30",
     reliability: "bg-amber-500/20 text-amber-300 border-amber-500/30",
     efficiency: "bg-green-500/20 text-green-300 border-green-500/30",
     comfort: "bg-pink-500/20 text-pink-300 border-pink-500/30",
@@ -767,11 +767,11 @@ export function getImpactBadges(impacts: ImpactArea[]): { label: string; color: 
     durability: "bg-amber-500/20 text-amber-300 border-indigo-500/30",
     luxury: "bg-fuchsia-500/20 text-fuchsia-300 border-fuchsia-500/30",
     emissions: "bg-gray-500/20 text-gray-300 border-gray-500/30",
-    manufacturing: "bg-slate-500/20 text-amber-100/80 border-amber-500/30/30",
+    manufacturing: "bg-slate-500/20 text-slate-300 border-slate-500/30",
   };
 
   return impacts.map((impact) => ({
     label: impact.charAt(0).toUpperCase() + impact.slice(1),
-    color: IMPACT_COLORS[impact] || "bg-base-800 text-amber-200/60 border-base-700",
+    color: IMPACT_COLORS[impact] || "bg-base-800 text-slate-400 border-base-700",
   }));
 }

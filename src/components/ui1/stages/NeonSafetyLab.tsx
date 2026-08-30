@@ -33,7 +33,7 @@ export function NeonSafetyLab() {
   ];
 
   return (
-    <div className="w-full flex flex-col gap-6 text-amber-50 animate-nh-materialize">
+    <div className="w-full flex flex-col gap-6 text-slate-100 animate-nh-materialize">
       {/* Header */}
       <NeonHorizonGlassPanel
         variant="window"
@@ -90,8 +90,8 @@ export function NeonSafetyLab() {
 
             {/* Crash Pulse Deceleration SVG Chart */}
             <div className="flex flex-col gap-2 pt-2 border-t border-white/10">
-              <span className="nh-label-caps text-amber-200/60 text-[10px]">DECELERATION PULSE WAVEFORM (G vs TIME)</span>
-              <div className="h-36 w-full bg-[#05080f] rounded-xl border border-sky-400/15 p-2">
+              <span className="nh-label-caps text-slate-400 text-[10px]">DECELERATION PULSE WAVEFORM (G vs TIME)</span>
+              <div className="h-36 w-full bg-amber-950/60 rounded-xl border border-sky-400/15 p-2">
                 <svg viewBox="0 0 400 120" className="w-full h-full overflow-visible">
                   <defs>
                     <linearGradient id="crashGrad" x1="0" y1="0" x2="0" y2="1">
@@ -132,18 +132,18 @@ export function NeonSafetyLab() {
             {ncapRatings.map((ncap, idx) => (
               <div
                 key={idx}
-                className="p-3.5 rounded-xl bg-[#0a111e] border border-sky-400/15 flex flex-col gap-1.5"
+                className="p-3.5 rounded-xl bg-amber-950/60 border border-sky-400/15 flex flex-col gap-1.5"
               >
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold text-amber-50">{ncap.category}</span>
-                  <span className="text-xs nh-font-mono font-bold text-sky-300">{ncap.score}</span>
+                  <span className="text-xs font-bold text-slate-100">{ncap.category}</span>
+                  <span className="text-xs nh-font-mono font-bold text-amber-300">{ncap.score}</span>
                 </div>
                 <div className="flex items-center gap-1">
                   {Array.from({ length: 5 }).map((_, s) => (
                     <Star
                       key={s}
                       size={12}
-                      className={s < ncap.stars ? "text-amber-400 fill-amber-400" : "text-amber-400"}
+                      className={s < ncap.stars ? "text-amber-400 fill-amber-400" : "text-slate-600"}
                     />
                   ))}
                 </div>

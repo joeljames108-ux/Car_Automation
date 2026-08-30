@@ -42,9 +42,9 @@ export const AutonomousEvProvingGroundDeck: React.FC = () => {
   });
 
   return (
-    <div className="flex flex-col h-full w-full bg-[#05070c] text-gray-100 p-4 gap-4 overflow-y-auto font-sans">
+    <div className="flex flex-col h-full w-full bg-amber-950/60 text-gray-100 p-4 gap-4 overflow-y-auto font-sans">
       {/* Studio Header Ribbon */}
-      <div className="flex items-center justify-between px-5 py-3 rounded-2xl bg-[#090d16] border border-[#182133] shadow-lg">
+      <div className="flex items-center justify-between px-5 py-3 rounded-2xl bg-amber-950/60 border border-[#182133] shadow-lg">
         <div className="flex items-center gap-3">
           <div className="p-2 rounded-xl bg-gradient-to-tr from-amber-500/20 to-rose-500/20 border border-amber-500/40 text-amber-400">
             <Activity className="w-5 h-5" />
@@ -64,7 +64,7 @@ export const AutonomousEvProvingGroundDeck: React.FC = () => {
           <select
             value={refrigerant}
             onChange={(e) => setRefrigerant(e.target.value as RefrigerantType)}
-            className="bg-[#0e1424] text-amber-400 text-xs font-bold font-mono px-3 py-1.5 rounded-xl border border-amber-500/40 cursor-pointer"
+            className="bg-amber-950/60 text-amber-400 text-xs font-bold font-mono px-3 py-1.5 rounded-xl border border-amber-500/40 cursor-pointer"
           >
             <option value="R1234yf_LOW_GWP">R1234yf Eco Refrigerant</option>
             <option value="R744_CO2_NATURAL">R744 (CO2 Transcritical)</option>
@@ -75,7 +75,7 @@ export const AutonomousEvProvingGroundDeck: React.FC = () => {
       {/* Main 3-Column Engineering Dashboard */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 flex-1">
         {/* Column 1: Heat Pump P-h Vapor Compression */}
-        <div className="flex flex-col p-4 rounded-2xl bg-[#090d16] border border-[#182133] gap-3">
+        <div className="flex flex-col p-4 rounded-2xl bg-amber-950/60 border border-[#182133] gap-3">
           <div className="flex items-center justify-between pb-2 border-b border-[#182133]">
             <div className="flex items-center gap-2 text-rose-400 font-bold text-xs">
               <Flame className="w-4 h-4" />
@@ -86,12 +86,12 @@ export const AutonomousEvProvingGroundDeck: React.FC = () => {
             </span>
           </div>
 
-          <div className="flex items-center justify-between p-2.5 bg-[#05070c] rounded-xl border border-[#141b2b] text-xs font-mono">
+          <div className="flex items-center justify-between p-2.5 bg-amber-950/60 rounded-xl border border-[#141b2b] text-xs font-mono">
             <span className="text-gray-400">MODE:</span>
             <select
               value={hpMode}
               onChange={(e) => setHpMode(e.target.value as HeatPumpOperatingMode)}
-              className="bg-[#0c1220] text-gray-200 text-[10px] font-mono px-2 py-1 rounded-lg border border-[#212c44] cursor-pointer"
+              className="bg-amber-950/60 text-gray-200 text-[10px] font-mono px-2 py-1 rounded-lg border border-[#212c44] cursor-pointer"
             >
               <option value="CABIN_HEATING_HEAT_PUMP">Cabin Heating (Heat Pump)</option>
               <option value="CABIN_COOLING_AC">Cabin Cooling (AC)</option>
@@ -101,19 +101,19 @@ export const AutonomousEvProvingGroundDeck: React.FC = () => {
 
           {/* Thermal Metrics */}
           <div className="grid grid-cols-2 gap-2 text-xs font-mono">
-            <div className="p-2.5 rounded-xl bg-[#0c1220] border border-[#1c263d]">
+            <div className="p-2.5 rounded-xl bg-amber-950/60 border border-[#1c263d]">
               <div className="text-gray-400 text-[10px]">HEAT CAPACITY</div>
               <div className="text-sm font-bold text-rose-400">{hpState.heatingThermalCapacityKw} kW</div>
             </div>
-            <div className="p-2.5 rounded-xl bg-[#0c1220] border border-[#1c263d]">
+            <div className="p-2.5 rounded-xl bg-amber-950/60 border border-[#1c263d]">
               <div className="text-gray-400 text-[10px]">COMPRESSOR POWER</div>
               <div className="text-sm font-bold text-gray-200">{hpState.compressorPowerConsumptionWatts} W</div>
             </div>
-            <div className="p-2.5 rounded-xl bg-[#0c1220] border border-[#1c263d]">
+            <div className="p-2.5 rounded-xl bg-amber-950/60 border border-[#1c263d]">
               <div className="text-gray-400 text-[10px]">WASTE HEAT RECOVERY</div>
               <div className="text-sm font-bold text-emerald-400">{hpState.powertrainWasteHeatScavengedKw} kW</div>
             </div>
-            <div className="p-2.5 rounded-xl bg-[#0c1220] border border-[#1c263d]">
+            <div className="p-2.5 rounded-xl bg-amber-950/60 border border-[#1c263d]">
               <div className="text-gray-400 text-[10px]">CABIN SUPPLY AIR</div>
               <div className="text-sm font-bold text-amber-400">{hpState.cabinSupplyAirTempC}°C</div>
             </div>
@@ -121,7 +121,7 @@ export const AutonomousEvProvingGroundDeck: React.FC = () => {
         </div>
 
         {/* Column 2: Solid-State Lithium Battery Model */}
-        <div className="flex flex-col p-4 rounded-2xl bg-[#090d16] border border-[#182133] gap-3">
+        <div className="flex flex-col p-4 rounded-2xl bg-amber-950/60 border border-[#182133] gap-3">
           <div className="flex items-center justify-between pb-2 border-b border-[#182133]">
             <div className="flex items-center gap-2 text-emerald-400 font-bold text-xs">
               <BatteryCharging className="w-4 h-4" />
@@ -133,7 +133,7 @@ export const AutonomousEvProvingGroundDeck: React.FC = () => {
           </div>
 
           {/* Interactive Stack Pressure Slider */}
-          <div className="flex items-center justify-between p-3 bg-[#05070c] rounded-xl border border-[#141b2b] text-xs font-mono">
+          <div className="flex items-center justify-between p-3 bg-amber-950/60 rounded-xl border border-[#141b2b] text-xs font-mono">
             <span className="text-gray-400">STACK PRELOAD: {stackPressure} MPa</span>
             <input
               type="range"
@@ -148,19 +148,19 @@ export const AutonomousEvProvingGroundDeck: React.FC = () => {
 
           {/* Cell Metrics */}
           <div className="grid grid-cols-2 gap-2 text-xs font-mono">
-            <div className="p-2.5 rounded-xl bg-[#0c1220] border border-[#1c263d]">
+            <div className="p-2.5 rounded-xl bg-amber-950/60 border border-[#1c263d]">
               <div className="text-gray-400 text-[10px]">TERMINAL VOLTAGE</div>
               <div className="text-sm font-bold text-emerald-400">{ssbState.cellTerminalVoltageVolts} V</div>
             </div>
-            <div className="p-2.5 rounded-xl bg-[#0c1220] border border-[#1c263d]">
+            <div className="p-2.5 rounded-xl bg-amber-950/60 border border-[#1c263d]">
               <div className="text-gray-400 text-[10px]">10-80% FAST CHARGE</div>
               <div className="text-sm font-bold text-amber-400">{ssbState.tenToEightyPctFastChargeTimeMin} min</div>
             </div>
-            <div className="p-2.5 rounded-xl bg-[#0c1220] border border-[#1c263d]">
+            <div className="p-2.5 rounded-xl bg-amber-950/60 border border-[#1c263d]">
               <div className="text-gray-400 text-[10px]">DENDRITE SUPPRESSION</div>
               <div className="text-sm font-bold text-emerald-400">{ssbState.dendriteGrowthSuppressionIndexPct}%</div>
             </div>
-            <div className="p-2.5 rounded-xl bg-[#0c1220] border border-[#1c263d]">
+            <div className="p-2.5 rounded-xl bg-amber-950/60 border border-[#1c263d]">
               <div className="text-gray-400 text-[10px]">JUNCTION TEMP</div>
               <div className="text-sm font-bold text-amber-400">{ssbState.cellJunctionTempC}°C</div>
             </div>
@@ -168,7 +168,7 @@ export const AutonomousEvProvingGroundDeck: React.FC = () => {
         </div>
 
         {/* Column 3: Twin-Motor Planetary Torque Vectoring */}
-        <div className="flex flex-col p-4 rounded-2xl bg-[#090d16] border border-[#182133] gap-3">
+        <div className="flex flex-col p-4 rounded-2xl bg-amber-950/60 border border-[#182133] gap-3">
           <div className="flex items-center justify-between pb-2 border-b border-[#182133]">
             <div className="flex items-center gap-2 text-amber-400 font-bold text-xs">
               <Compass className="w-4 h-4" />
@@ -180,7 +180,7 @@ export const AutonomousEvProvingGroundDeck: React.FC = () => {
           </div>
 
           {/* Steering Slider */}
-          <div className="flex items-center justify-between p-3 bg-[#05070c] rounded-xl border border-[#141b2b] text-xs font-mono">
+          <div className="flex items-center justify-between p-3 bg-amber-950/60 rounded-xl border border-[#141b2b] text-xs font-mono">
             <span className="text-gray-400">STEERING ANGLE: {steerAngle}°</span>
             <input
               type="range"
@@ -194,19 +194,19 @@ export const AutonomousEvProvingGroundDeck: React.FC = () => {
 
           {/* Motor Torque Split */}
           <div className="grid grid-cols-2 gap-2 text-xs font-mono">
-            <div className="p-2.5 rounded-xl bg-[#0c1220] border border-[#1c263d]">
+            <div className="p-2.5 rounded-xl bg-amber-950/60 border border-[#1c263d]">
               <div className="text-gray-400 text-[10px]">LEFT MOTOR TORQUE</div>
               <div className="text-sm font-bold text-amber-400">{tvState.leftMotorTorqueNm} Nm</div>
             </div>
-            <div className="p-2.5 rounded-xl bg-[#0c1220] border border-[#1c263d]">
+            <div className="p-2.5 rounded-xl bg-amber-950/60 border border-[#1c263d]">
               <div className="text-gray-400 text-[10px]">RIGHT MOTOR TORQUE</div>
               <div className="text-sm font-bold text-amber-400">{tvState.rightMotorTorqueNm} Nm</div>
             </div>
-            <div className="p-2.5 rounded-xl bg-[#0c1220] border border-[#1c263d]">
+            <div className="p-2.5 rounded-xl bg-amber-950/60 border border-[#1c263d]">
               <div className="text-gray-400 text-[10px]">DIRECT YAW MOMENT</div>
               <div className="text-sm font-bold text-emerald-400">{tvState.directYawMomentGeneratedNm} Nm</div>
             </div>
-            <div className="p-2.5 rounded-xl bg-[#0c1220] border border-[#1c263d]">
+            <div className="p-2.5 rounded-xl bg-amber-950/60 border border-[#1c263d]">
               <div className="text-gray-400 text-[10px]">PLANETARY SUN SPEED</div>
               <div className="text-sm font-bold text-gray-200">{tvState.rightKinematics.sunSpeedRpm} RPM</div>
             </div>

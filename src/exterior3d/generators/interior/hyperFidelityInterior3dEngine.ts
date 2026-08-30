@@ -359,7 +359,7 @@ export class HyperFidelityInterior3dEngine {
 
     const rimMat = this.getPbrMaterial(state.materials.seatPrimaryMaterial || "leather", "#181a20", 0.6, 0.1);
     const spokeMat = this.getPbrMaterial("aluminum", "#64748b", 0.2, 0.9);
-    const carbonMat = this.getPbrMaterial("carbon", "#0f172a", 0.2, 0.9);
+    const carbonMat = this.getPbrMaterial("carbon", "#1a1008", 0.2, 0.9);
 
     const steerCenterX = -0.68;
     const steerCenterY = 0.78 + exploded * 0.35;
@@ -421,7 +421,7 @@ export class HyperFidelityInterior3dEngine {
     group.userData = { category: "console" };
 
     const bodyMat = this.getPbrMaterial("leather", "#151821", 0.5, 0.1);
-    const accentMat = this.getPbrMaterial("carbon", "#0f172a", 0.25, 0.85);
+    const accentMat = this.getPbrMaterial("carbon", "#1a1008", 0.25, 0.85);
     const chromeMat = this.getPbrMaterial("aluminum", "#cbd5e1", 0.15, 0.95);
 
     // Main Tunnel Body
@@ -496,7 +496,7 @@ export class HyperFidelityInterior3dEngine {
     group.userData = { category: "seats" };
 
     const seatMat = this.getPbrMaterial(state.materials.seatPrimaryMaterial || "leather", "#1e222b", 0.5, 0.05);
-    const shellMat = this.getPbrMaterial("carbon", "#0f172a", 0.2, 0.9);
+    const shellMat = this.getPbrMaterial("carbon", "#1a1008", 0.2, 0.9);
 
     const isBucket = state.seating.frontSeatType.includes("bucket");
 
@@ -689,7 +689,7 @@ export class HyperFidelityInterior3dEngine {
     group.userData = { category: "dash" };
 
     const alumMat = this.getPbrMaterial("aluminum", "#cbd5e1", 0.15, 0.95);
-    const rubberMat = this.getPbrMaterial("rubber", "#0f172a", 0.8, 0.05);
+    const rubberMat = this.getPbrMaterial("rubber", "#1a1008", 0.8, 0.05);
 
     const pedalX = -0.68;
     const pedalY = 0.18 - exploded * 0.1;

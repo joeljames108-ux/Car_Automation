@@ -716,7 +716,7 @@ export const COCKPIT_THEME_PRESETS: Record<string, { name: string; config: Parti
         stitchingColorHex: '#0284c7', // Marine blue stitch
         trimAccents: 'open_pore_walnut',
         seatBeltColorHex: '#0284c7',
-        carpetColorHex: '#0f172a',
+        carpetColorHex: '#1a1008',
         headlinerMaterial: 'panoramic_electrochromic_glass',
         headlinerColorHex: '#f8fafc',
       },

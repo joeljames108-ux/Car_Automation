@@ -55,7 +55,7 @@ export const F1EntryWizardModal: React.FC<F1EntryWizardModalProps> = memo(functi
 
         {/* Card body */}
         <div className="relative rounded-[28px] overflow-hidden">
-          <div className="absolute inset-0 bg-[#080c14]" />
+          <div className="absolute inset-0 bg-amber-950/60" />
           {/* Carbon fiber pattern */}
           <div
             className="absolute inset-0 opacity-[0.02]"

@@ -111,14 +111,14 @@ export const ChassisAssemblyStage: React.FC<ChassisAssemblyStageProps> = ({
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h3 className="text-sm font-bold font-mono text-slate-800 dark:text-amber-50 uppercase tracking-wider">
+              <h3 className="text-sm font-bold font-mono text-slate-800 dark:text-slate-100 uppercase tracking-wider">
                 STAGE 1: CHASSIS ARCHITECTURE & HARDPOINTS
               </h3>
               <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/30">
                 MODULAR PLATFORM • FEA
               </span>
             </div>
-            <p className="text-[11px] font-mono text-amber-300/50 dark:text-amber-200/60">
+            <p className="text-[11px] font-mono text-slate-500 dark:text-slate-400">
               Select structural platform, metallurgy grade, torsional rigidity target & CAD datum hardpoints.
             </p>
           </div>
@@ -129,7 +129,7 @@ export const ChassisAssemblyStage: React.FC<ChassisAssemblyStageProps> = ({
           <button
             onClick={() => setActiveSubTab("quick_arch")}
             className={`px-2.5 py-1 rounded-lg text-[10px] font-mono font-bold transition-all cursor-pointer ${
-              activeSubTab === "quick_arch" ? "bg-amber-500 text-slate-950 shadow-sm" : "text-amber-200/60 hover:text-amber-50"
+              activeSubTab === "quick_arch" ? "bg-amber-500 text-slate-950 shadow-sm" : "text-slate-400 hover:text-slate-200"
             }`}
           >
             ARCHITECTURE
@@ -137,7 +137,7 @@ export const ChassisAssemblyStage: React.FC<ChassisAssemblyStageProps> = ({
           <button
             onClick={() => setActiveSubTab("metallurgy")}
             className={`px-2.5 py-1 rounded-lg text-[10px] font-mono font-bold transition-all cursor-pointer ${
-              activeSubTab === "metallurgy" ? "bg-amber-500 text-slate-950 shadow-sm" : "text-amber-200/60 hover:text-amber-50"
+              activeSubTab === "metallurgy" ? "bg-amber-500 text-slate-950 shadow-sm" : "text-slate-400 hover:text-slate-200"
             }`}
           >
             METALLURGY
@@ -145,7 +145,7 @@ export const ChassisAssemblyStage: React.FC<ChassisAssemblyStageProps> = ({
           <button
             onClick={() => setActiveSubTab("fea_hotspots")}
             className={`px-2.5 py-1 rounded-lg text-[10px] font-mono font-bold transition-all cursor-pointer ${
-              activeSubTab === "fea_hotspots" ? "bg-amber-500 text-slate-950 shadow-sm" : "text-amber-200/60 hover:text-amber-50"
+              activeSubTab === "fea_hotspots" ? "bg-amber-500 text-slate-950 shadow-sm" : "text-slate-400 hover:text-slate-200"
             }`}
           >
             FEA STRESS
@@ -157,7 +157,7 @@ export const ChassisAssemblyStage: React.FC<ChassisAssemblyStageProps> = ({
       {activeSubTab === "quick_arch" && (
         <div className="space-y-3 animate-stage-transition-enter">
           <div className="space-y-2">
-            <label className="text-xs font-bold font-mono text-amber-500 dark:text-amber-100/80 block">
+            <label className="text-xs font-bold font-mono text-slate-700 dark:text-slate-300 block">
               PRIMARY STRUCTURAL ARCHITECTURE
             </label>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-2.5">
@@ -170,17 +170,17 @@ export const ChassisAssemblyStage: React.FC<ChassisAssemblyStageProps> = ({
                     className={`p-3 rounded-2xl text-left transition-all border cursor-pointer ${
                       isSelected
                         ? "bg-amber-500/20 border-amber-500/60 shadow-md ring-1 ring-amber-500/40"
-                        : "bg-base-900/60 border-base-800 hover:border-base-700 text-amber-200/60"
+                        : "bg-base-900/60 border-base-800 hover:border-base-700 text-slate-400"
                     }`}
                   >
                     <div className="flex items-center justify-between mb-1">
-                      <span className="font-bold text-xs font-mono text-slate-900 dark:text-amber-50">{a.label}</span>
+                      <span className="font-bold text-xs font-mono text-slate-900 dark:text-slate-100">{a.label}</span>
                       <span className="text-[10px] font-mono text-amber-600 dark:text-amber-300 font-bold">{a.rigidity}</span>
                     </div>
-                    <p className="text-[10px] text-amber-300/50 dark:text-amber-200/60 mb-2 leading-relaxed">{a.desc}</p>
+                    <p className="text-[10px] text-slate-500 dark:text-slate-400 mb-2 leading-relaxed">{a.desc}</p>
                     <div className="flex items-center justify-between text-[9px] font-mono pt-1.5 border-t border-base-800/60">
-                      <span className="text-amber-300/50">Tare: <strong className="text-emerald-600 dark:text-emerald-400">{a.massKg} kg</strong></span>
-                      <span className="text-amber-300/50 truncate ml-1">{a.material}</span>
+                      <span className="text-slate-500">Tare: <strong className="text-emerald-600 dark:text-emerald-400">{a.massKg} kg</strong></span>
+                      <span className="text-slate-500 truncate ml-1">{a.material}</span>
                     </div>
                   </button>
                 );
@@ -192,7 +192,7 @@ export const ChassisAssemblyStage: React.FC<ChassisAssemblyStageProps> = ({
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3 p-3.5 rounded-2xl bg-base-900/60 border border-base-800">
             <div className="space-y-1.5">
               <div className="flex justify-between items-center text-xs font-mono">
-                <span className="text-amber-500 dark:text-amber-100/80 font-bold">Wheelbase</span>
+                <span className="text-slate-700 dark:text-slate-300 font-bold">Wheelbase</span>
                 <span className="text-amber-600 dark:text-amber-300 font-bold">{chassis.wheelbaseMm} mm</span>
               </div>
               <input
@@ -208,7 +208,7 @@ export const ChassisAssemblyStage: React.FC<ChassisAssemblyStageProps> = ({
 
             <div className="space-y-1.5">
               <div className="flex justify-between items-center text-xs font-mono">
-                <span className="text-amber-500 dark:text-amber-100/80 font-bold">Track Width</span>
+                <span className="text-slate-700 dark:text-slate-300 font-bold">Track Width</span>
                 <span className="text-amber-600 dark:text-amber-300 font-bold">{chassis.frontTrackMm} mm</span>
               </div>
               <input
@@ -229,7 +229,7 @@ export const ChassisAssemblyStage: React.FC<ChassisAssemblyStageProps> = ({
 
             <div className="space-y-1.5">
               <div className="flex justify-between items-center text-xs font-mono">
-                <span className="text-amber-500 dark:text-amber-100/80 font-bold">Ride Height</span>
+                <span className="text-slate-700 dark:text-slate-300 font-bold">Ride Height</span>
                 <span className="text-emerald-600 dark:text-emerald-300 font-bold">{chassis.rideHeightMm} mm</span>
               </div>
               <input
@@ -257,16 +257,16 @@ export const ChassisAssemblyStage: React.FC<ChassisAssemblyStageProps> = ({
                 className={`p-3 rounded-2xl border cursor-pointer transition-all ${
                   metallurgy === m.id
                     ? "bg-amber-500/20 border-amber-500 ring-1 ring-amber-500/40 shadow-md"
-                    : "bg-base-900/60 border-base-800 hover:border-base-700 text-amber-200/60"
+                    : "bg-base-900/60 border-base-800 hover:border-base-700 text-slate-400"
                 }`}
               >
                 <div className="flex justify-between items-center mb-1">
-                  <span className="font-bold text-xs font-mono text-amber-50">{m.label}</span>
+                  <span className="font-bold text-xs font-mono text-slate-100">{m.label}</span>
                   <span className="text-[9px] font-mono text-amber-400 font-bold">{m.yield}</span>
                 </div>
-                <p className="text-[10px] text-amber-200/60 mb-2 leading-relaxed">{m.desc}</p>
-                <div className="text-[9px] font-mono text-amber-300/50 pt-1.5 border-t border-base-800/60">
-                  Density: <strong className="text-amber-100/80">{m.density}</strong>
+                <p className="text-[10px] text-slate-400 mb-2 leading-relaxed">{m.desc}</p>
+                <div className="text-[9px] font-mono text-slate-500 pt-1.5 border-t border-base-800/60">
+                  Density: <strong className="text-slate-300">{m.density}</strong>
                 </div>
               </div>
             ))}
@@ -279,15 +279,15 @@ export const ChassisAssemblyStage: React.FC<ChassisAssemblyStageProps> = ({
         <div className="space-y-3 animate-stage-transition-enter">
           <div className="p-3.5 rounded-2xl bg-base-950/80 border border-base-800 space-y-2">
             <div className="flex justify-between text-xs font-mono">
-              <span className="text-amber-200/60">Torsional Stiffness Target:</span>
+              <span className="text-slate-400">Torsional Stiffness Target:</span>
               <span className="text-amber-400 font-bold">54,000 Nm/deg (Target Exceeded)</span>
             </div>
             <div className="flex justify-between text-xs font-mono">
-              <span className="text-amber-200/60">Peak Von Mises Stress Node:</span>
+              <span className="text-slate-400">Peak Von Mises Stress Node:</span>
               <span className="text-rose-400 font-bold">Front Shock Tower Knuckle (385 MPa)</span>
             </div>
             <div className="flex justify-between text-xs font-mono">
-              <span className="text-amber-200/60">Structural Safety Factor (Sf):</span>
+              <span className="text-slate-400">Structural Safety Factor (Sf):</span>
               <span className="text-emerald-400 font-bold">2.28 (Aero Elastic Compliant)</span>
             </div>
           </div>
@@ -296,9 +296,9 @@ export const ChassisAssemblyStage: React.FC<ChassisAssemblyStageProps> = ({
 
       {/* Hardpoint Datum Map */}
       <div className="p-3.5 rounded-2xl bg-base-900/80 border border-base-800 space-y-2.5">
-        <label className="text-xs font-bold font-mono text-amber-500 dark:text-amber-100/80 flex items-center gap-1.5">
+        <label className="text-xs font-bold font-mono text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
           <Crosshair size={13} className="text-amber-400" /> STRUCTURAL HARDPOINT DATUM MAP
-          <span className="ml-auto flex items-center gap-1 text-[9px] text-amber-300/50 normal-case">
+          <span className="ml-auto flex items-center gap-1 text-[9px] text-slate-500 normal-case">
             <Ruler size={11} /> live CAD coordinates (X lateral / Z longitudinal, mm)
           </span>
         </label>
@@ -306,8 +306,8 @@ export const ChassisAssemblyStage: React.FC<ChassisAssemblyStageProps> = ({
           {hardpoints.map((hp) => (
             <div key={hp.id} className="px-2 py-1.5 rounded-lg bg-base-850 border border-base-750 font-mono text-[9px]">
               <div className="font-bold text-amber-600 dark:text-amber-300">{hp.id}</div>
-              <div className="text-amber-300/50 dark:text-amber-200/60 truncate" title={hp.name}>{hp.name}</div>
-              <div className="text-amber-400 dark:text-amber-300/50 tabular-nums">
+              <div className="text-slate-500 dark:text-slate-400 truncate" title={hp.name}>{hp.name}</div>
+              <div className="text-slate-600 dark:text-slate-500 tabular-nums">
                 X {hp.x >= 0 ? "+" : ""}{hp.x.toFixed(0)} · Z {hp.z >= 0 ? "+" : ""}{hp.z.toFixed(0)}
               </div>
             </div>
@@ -317,7 +317,7 @@ export const ChassisAssemblyStage: React.FC<ChassisAssemblyStageProps> = ({
 
       {/* Install Button */}
       <div className="flex justify-between items-center pt-2">
-        <div className="text-[11px] font-mono text-amber-300/50">
+        <div className="text-[11px] font-mono text-slate-500">
           Chassis Base Mass: <strong className="text-amber-400">{chassis.wheelbaseMm > 2800 ? "112 kg" : "86 kg"}</strong>
         </div>
         <button

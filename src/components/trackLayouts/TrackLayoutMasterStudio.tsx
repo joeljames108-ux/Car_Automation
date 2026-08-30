@@ -58,23 +58,23 @@ export const TrackLayoutMasterStudio: React.FC = memo(function TrackLayoutMaster
   }, [isPlaying]);
 
   return (
-    <div className="flex flex-col w-full h-full space-y-4 p-2 sm:p-4 select-none bg-amber-950/80 text-amber-50 min-h-[720px] rounded-2xl border border-amber-800/30 shadow-2xl">
+    <div className="flex flex-col w-full h-full space-y-4 p-2 sm:p-4 select-none bg-slate-950 text-slate-100 min-h-[720px] rounded-2xl border border-slate-800 shadow-2xl">
       {/* Studio Header */}
-      <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-3 bg-gradient-to-r from-amber-900/60 via-slate-950 to-amber-900/60 p-4 rounded-xl border border-amber-800/30 shadow-lg">
+      <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-3 bg-gradient-to-r from-slate-900 via-slate-950 to-slate-900 p-4 rounded-xl border border-slate-800 shadow-lg">
         <div className="flex items-center gap-3">
           <div className="p-2.5 rounded-xl bg-gradient-to-br from-amber-400 via-teal-500 to-emerald-600 text-slate-950 shadow-lg shadow-cyan-500/30 font-extrabold">
             <Navigation size={22} />
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h1 className="text-lg font-black tracking-tight text-amber-50 uppercase">
+              <h1 className="text-lg font-black tracking-tight text-slate-100 uppercase">
                 Interactive Track Layouts & Circuit Geometry Studio
               </h1>
               <span className="px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 font-mono text-[10px] font-extrabold border border-amber-500/30">
                 23 WORLD CIRCUITS
               </span>
             </div>
-            <p className="text-xs text-amber-200/60">
+            <p className="text-xs text-slate-400">
               Interactive 2D vector path maps, corner apex telemetry, DRS zones & ghost car playback
             </p>
           </div>
@@ -95,7 +95,7 @@ export const TrackLayoutMasterStudio: React.FC = memo(function TrackLayoutMaster
                 className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all border cursor-pointer whitespace-nowrap ${
                   selectedTrackId === tId
                     ? "bg-amber-500 text-slate-950 border-amber-400 shadow-md shadow-cyan-500/30 font-extrabold"
-                    : "bg-amber-850/40 text-amber-200/60 border-amber-800/30 hover:text-amber-50"
+                    : "bg-slate-850 text-slate-400 border-slate-800 hover:text-slate-200"
                 }`}
               >
                 {trk.name.split(" ")[0]}
@@ -108,9 +108,9 @@ export const TrackLayoutMasterStudio: React.FC = memo(function TrackLayoutMaster
       {/* Main Studio Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 flex-1">
         {/* Left Circuit Selector List (4 cols) */}
-        <div className="lg:col-span-4 flex flex-col space-y-3 bg-amber-900/40 p-4 rounded-xl border border-amber-800/30">
-          <div className="flex items-center justify-between border-b border-amber-800/30 pb-2">
-            <div className="flex items-center gap-2 text-xs font-extrabold uppercase text-amber-100/80">
+        <div className="lg:col-span-4 flex flex-col space-y-3 bg-slate-900/90 p-4 rounded-xl border border-slate-800">
+          <div className="flex items-center justify-between border-b border-slate-800 pb-2">
+            <div className="flex items-center gap-2 text-xs font-extrabold uppercase text-slate-300">
               <Flag size={14} className="text-amber-400" />
               <span>Select Racetrack Circuit</span>
             </div>
@@ -134,14 +134,14 @@ export const TrackLayoutMasterStudio: React.FC = memo(function TrackLayoutMaster
                   className={`w-full flex items-center justify-between p-2.5 rounded-xl border text-left transition-all cursor-pointer ${
                     isSelected
                       ? "bg-amber-500/20 text-amber-200 border-amber-400/40 shadow-sm shadow-cyan-500/20 font-bold"
-                      : "bg-amber-950/60 text-amber-100/80 border-amber-800/30 hover:bg-amber-850/40 hover:text-amber-50"
+                      : "bg-slate-950/60 text-slate-300 border-slate-800/80 hover:bg-slate-850 hover:text-slate-100"
                   }`}
                 >
                   <div className="flex items-center gap-2.5">
                     <span className="w-2 h-2 rounded-full bg-amber-400" />
                     <div>
                       <div className="text-xs font-bold">{trk.name}</div>
-                      <div className="text-[10px] text-amber-200/60 font-mono">{trk.country} • {trk.keyCorners.length} Apex Corners</div>
+                      <div className="text-[10px] text-slate-400 font-mono">{trk.country} • {trk.keyCorners.length} Apex Corners</div>
                     </div>
                   </div>
                   {isSelected && <ChevronRight size={16} className="text-amber-400" />}
@@ -152,8 +152,8 @@ export const TrackLayoutMasterStudio: React.FC = memo(function TrackLayoutMaster
 
           {/* Selected Corner Inspector Card (if clicked) */}
           {selectedCorner && (
-            <div className="p-3 bg-amber-950/80 rounded-xl border border-amber-500/30 space-y-2 animate-fade-in">
-              <div className="flex items-center justify-between border-b border-amber-800/30 pb-1.5">
+            <div className="p-3 bg-slate-950 rounded-xl border border-amber-500/30 space-y-2 animate-fade-in">
+              <div className="flex items-center justify-between border-b border-slate-800 pb-1.5">
                 <span className="text-xs font-bold text-amber-300 uppercase">
                   Turn {selectedCorner.number}: {selectedCorner.name}
                 </span>
@@ -167,7 +167,7 @@ export const TrackLayoutMasterStudio: React.FC = memo(function TrackLayoutMaster
                 <div>Lateral G: <strong className="text-amber-400">{selectedCorner.lateralG} G</strong></div>
                 <div>Apex Radius: <strong className="text-amber-400">{selectedCorner.radiusMeters} m</strong></div>
                 <div>Braking Dist: <strong className="text-red-400">{selectedCorner.brakingDistanceMeters} m</strong></div>
-                <div>Elevation: <strong className="text-amber-100/80">{selectedCorner.elevationMeters} m</strong></div>
+                <div>Elevation: <strong className="text-slate-300">{selectedCorner.elevationMeters} m</strong></div>
               </div>
             </div>
           )}
@@ -176,7 +176,7 @@ export const TrackLayoutMasterStudio: React.FC = memo(function TrackLayoutMaster
         {/* Right Interactive SVG Viewport (8 cols) */}
         <div className="lg:col-span-8 flex flex-col space-y-3">
           {/* Sub-view Navigation Pills */}
-          <div className="flex items-center justify-between bg-amber-900/50 p-1.5 rounded-xl border border-amber-800/30">
+          <div className="flex items-center justify-between bg-slate-900 p-1.5 rounded-xl border border-slate-800">
             <div className="flex items-center gap-1">
               <button
                 onClick={() => {
@@ -186,7 +186,7 @@ export const TrackLayoutMasterStudio: React.FC = memo(function TrackLayoutMaster
                 className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-lg transition-all cursor-pointer ${
                   activeTab === "inspector"
                     ? "bg-amber-500 text-slate-950 shadow-md shadow-cyan-500/30"
-                    : "text-amber-200/60 hover:text-amber-50"
+                    : "text-slate-400 hover:text-slate-200"
                 }`}
               >
                 <Activity size={13} />
@@ -200,7 +200,7 @@ export const TrackLayoutMasterStudio: React.FC = memo(function TrackLayoutMaster
                 className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-lg transition-all cursor-pointer ${
                   activeTab === "heatmap"
                     ? "bg-amber-500 text-slate-950 shadow-md shadow-cyan-500/30"
-                    : "text-amber-200/60 hover:text-amber-50"
+                    : "text-slate-400 hover:text-slate-200"
                 }`}
               >
                 <Gauge size={13} />
@@ -214,7 +214,7 @@ export const TrackLayoutMasterStudio: React.FC = memo(function TrackLayoutMaster
                 className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-lg transition-all cursor-pointer ${
                   activeTab === "compare"
                     ? "bg-amber-500 text-slate-950 shadow-md shadow-cyan-500/30"
-                    : "text-amber-200/60 hover:text-amber-50"
+                    : "text-slate-400 hover:text-slate-200"
                 }`}
               >
                 <GitCompare size={13} />
@@ -229,7 +229,7 @@ export const TrackLayoutMasterStudio: React.FC = memo(function TrackLayoutMaster
                   playHMIClickSound();
                   setIsPlaying(!isPlaying);
                 }}
-                className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-amber-800/35 hover:bg-amber-700/40 text-amber-50 text-xs font-semibold transition-all cursor-pointer"
+                className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold transition-all cursor-pointer"
               >
                 {isPlaying ? <Pause size={12} /> : <Play size={12} />}
                 <span>{isPlaying ? "Pause Ghost" : "Play Ghost"}</span>
@@ -238,7 +238,7 @@ export const TrackLayoutMasterStudio: React.FC = memo(function TrackLayoutMaster
           </div>
 
           {/* SVG Vector Circuit Layout Viewport */}
-          <div className="relative w-full h-[400px] bg-amber-950/80 rounded-xl border border-amber-800/30 overflow-hidden shadow-inner flex items-center justify-center p-4">
+          <div className="relative w-full h-[400px] bg-slate-950 rounded-xl border border-slate-800 overflow-hidden shadow-inner flex items-center justify-center p-4">
             {activeTab !== "compare" && (
               <svg className="w-full h-full" viewBox="0 0 600 300">
                 <defs>
@@ -345,7 +345,7 @@ export const TrackLayoutMasterStudio: React.FC = memo(function TrackLayoutMaster
                     >
                       <circle
                         r={isCornerSelected ? "12" : "7"}
-                        fill={isCornerSelected ? "#fbbf24" : "#0f172a"}
+                        fill={isCornerSelected ? "#fbbf24" : "#1a1008"}
                         stroke="#fbbf24"
                         strokeWidth="2"
                         className="transition-all"
@@ -353,7 +353,7 @@ export const TrackLayoutMasterStudio: React.FC = memo(function TrackLayoutMaster
                       <text
                         x="0"
                         y="3"
-                        fill={isCornerSelected ? "#0f172a" : "#fbbf24"}
+                        fill={isCornerSelected ? "#1a1008" : "#fbbf24"}
                         fontSize="9"
                         fontFamily="monospace"
                         fontWeight="bold"
@@ -383,13 +383,13 @@ export const TrackLayoutMasterStudio: React.FC = memo(function TrackLayoutMaster
             {/* Track Comparison Matrix View */}
             {activeTab === "compare" && (
               <div className="w-full h-full flex flex-col justify-between p-4 space-y-4">
-                <div className="flex items-center justify-between border-b border-amber-800/30 pb-2">
-                  <span className="text-xs font-bold uppercase text-amber-100/80">Dual Track Circuit Comparison</span>
+                <div className="flex items-center justify-between border-b border-slate-800 pb-2">
+                  <span className="text-xs font-bold uppercase text-slate-300">Dual Track Circuit Comparison</span>
                   <div className="flex items-center gap-2">
                     <select
                       value={compareTrackId}
                       onChange={(e) => setCompareTrackId(e.target.value as TrackId)}
-                      className="bg-amber-900/50 border border-amber-800/30 text-xs font-bold text-amber-50 rounded p-1.5"
+                      className="bg-slate-900 border border-slate-800 text-xs font-bold text-slate-200 rounded p-1.5"
                     >
                       {(Object.keys(TRACK_LAYOUT_CATALOG) as TrackId[]).map((tId) => (
                         <option key={tId} value={tId}>{TRACK_LAYOUT_CATALOG[tId].name}</option>
@@ -399,18 +399,18 @@ export const TrackLayoutMasterStudio: React.FC = memo(function TrackLayoutMaster
                 </div>
 
                 <div className="grid grid-cols-2 gap-4 flex-1">
-                  <div className="p-4 bg-amber-900/40 rounded-xl border border-amber-500/30 flex flex-col space-y-2">
+                  <div className="p-4 bg-slate-900/80 rounded-xl border border-amber-500/30 flex flex-col space-y-2">
                     <span className="text-xs font-extrabold text-amber-300 uppercase">{currentTrack.name}</span>
-                    <span className="text-[11px] font-mono text-amber-200/60">Country: {currentTrack.country}</span>
-                    <span className="text-[11px] font-mono text-amber-200/60">Key Apex Corners: {currentTrack.keyCorners.length}</span>
-                    <span className="text-[11px] font-mono text-amber-200/60">DRS Zones: {currentTrack.drsZoneAnchors.length}</span>
+                    <span className="text-[11px] font-mono text-slate-400">Country: {currentTrack.country}</span>
+                    <span className="text-[11px] font-mono text-slate-400">Key Apex Corners: {currentTrack.keyCorners.length}</span>
+                    <span className="text-[11px] font-mono text-slate-400">DRS Zones: {currentTrack.drsZoneAnchors.length}</span>
                   </div>
 
-                  <div className="p-4 bg-amber-900/40 rounded-xl border border-indigo-500/30 flex flex-col space-y-2">
+                  <div className="p-4 bg-slate-900/80 rounded-xl border border-indigo-500/30 flex flex-col space-y-2">
                     <span className="text-xs font-extrabold text-amber-300 uppercase">{compareTrack.name}</span>
-                    <span className="text-[11px] font-mono text-amber-200/60">Country: {compareTrack.country}</span>
-                    <span className="text-[11px] font-mono text-amber-200/60">Key Apex Corners: {compareTrack.keyCorners.length}</span>
-                    <span className="text-[11px] font-mono text-amber-200/60">DRS Zones: {compareTrack.drsZoneAnchors.length}</span>
+                    <span className="text-[11px] font-mono text-slate-400">Country: {compareTrack.country}</span>
+                    <span className="text-[11px] font-mono text-slate-400">Key Apex Corners: {compareTrack.keyCorners.length}</span>
+                    <span className="text-[11px] font-mono text-slate-400">DRS Zones: {compareTrack.drsZoneAnchors.length}</span>
                   </div>
                 </div>
               </div>
@@ -420,8 +420,8 @@ export const TrackLayoutMasterStudio: React.FC = memo(function TrackLayoutMaster
           {/* Bottom Summary Info Bar & Elevation Profile */}
           <div className="space-y-3">
             {/* Elevation Profile Bar */}
-            <div className="bg-amber-900/50 p-3 rounded-xl border border-amber-800/30 space-y-2">
-              <div className="flex items-center justify-between text-[11px] font-bold text-amber-100/80">
+            <div className="bg-slate-900 p-3 rounded-xl border border-slate-800 space-y-2">
+              <div className="flex items-center justify-between text-[11px] font-bold text-slate-300">
                 <span className="uppercase">Circuit Elevation Profile (Meters above Sea Level)</span>
                 <span className="text-amber-400 font-mono">Max Change: 104m (Spa Raidillon)</span>
               </div>
@@ -436,7 +436,7 @@ export const TrackLayoutMasterStudio: React.FC = memo(function TrackLayoutMaster
                   </div>
                 ))}
               </div>
-              <div className="flex justify-between text-[9px] text-amber-300/50 font-mono">
+              <div className="flex justify-between text-[9px] text-slate-500 font-mono">
                 <span>Start/Finish Line</span>
                 <span>Mid-Lap Summit</span>
                 <span>Final Sector</span>
@@ -444,25 +444,25 @@ export const TrackLayoutMasterStudio: React.FC = memo(function TrackLayoutMaster
             </div>
 
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-              <div className="bg-amber-900/50 p-3 rounded-xl border border-amber-800/30 flex flex-col">
-                <span className="text-[10px] font-bold text-amber-200/60 uppercase">Selected Circuit</span>
+              <div className="bg-slate-900 p-3 rounded-xl border border-slate-800 flex flex-col">
+                <span className="text-[10px] font-bold text-slate-400 uppercase">Selected Circuit</span>
                 <span className="text-xs font-bold text-amber-300 truncate">{currentTrack.name}</span>
-                <span className="text-[10px] text-amber-300/50">{currentTrack.country}</span>
+                <span className="text-[10px] text-slate-500">{currentTrack.country}</span>
               </div>
-              <div className="bg-amber-900/50 p-3 rounded-xl border border-amber-800/30 flex flex-col">
-                <span className="text-[10px] font-bold text-amber-200/60 uppercase">DRS Zones</span>
+              <div className="bg-slate-900 p-3 rounded-xl border border-slate-800 flex flex-col">
+                <span className="text-[10px] font-bold text-slate-400 uppercase">DRS Zones</span>
                 <span className="text-base font-mono font-extrabold text-emerald-400">{currentTrack.drsZoneAnchors.length} Zones</span>
-                <span className="text-[10px] text-amber-300/50">Overtaking straights</span>
+                <span className="text-[10px] text-slate-500">Overtaking straights</span>
               </div>
-              <div className="bg-amber-900/50 p-3 rounded-xl border border-amber-800/30 flex flex-col">
-                <span className="text-[10px] font-bold text-amber-200/60 uppercase">Apex Corners</span>
+              <div className="bg-slate-900 p-3 rounded-xl border border-slate-800 flex flex-col">
+                <span className="text-[10px] font-bold text-slate-400 uppercase">Apex Corners</span>
                 <span className="text-base font-mono font-extrabold text-amber-400">{currentTrack.keyCorners.length} Turns</span>
-                <span className="text-[10px] text-amber-300/50 font-mono">Key apex callouts</span>
+                <span className="text-[10px] text-slate-500 font-mono">Key apex callouts</span>
               </div>
-              <div className="bg-amber-900/50 p-3 rounded-xl border border-amber-800/30 flex flex-col">
-                <span className="text-[10px] font-bold text-amber-200/60 uppercase">Sector Split</span>
+              <div className="bg-slate-900 p-3 rounded-xl border border-slate-800 flex flex-col">
+                <span className="text-[10px] font-bold text-slate-400 uppercase">Sector Split</span>
                 <span className="text-base font-mono font-extrabold text-amber-400">3 Sectors</span>
-                <span className="text-[10px] text-amber-300/50 font-mono">S1 / S2 / S3</span>
+                <span className="text-[10px] text-slate-500 font-mono">S1 / S2 / S3</span>
               </div>
             </div>
           </div>

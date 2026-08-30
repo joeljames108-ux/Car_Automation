@@ -71,15 +71,15 @@ export function EVGearboxSection({
           <div className="space-y-3">
             <div className="p-3 rounded-xl bg-base-950/80 border border-amber-500/20 space-y-2 text-xs font-mono">
               <div className="flex justify-between">
-                <span className="text-amber-200/60">Final Drive Reduction</span>
+                <span className="text-slate-400">Final Drive Reduction</span>
                 <span className="text-amber-300 font-extrabold">9.34 : 1 Ratio</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-amber-200/60">Differential Type</span>
+                <span className="text-slate-400">Differential Type</span>
                 <span className="text-emerald-300 font-extrabold">Active Torque-Vectoring E-Diff</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-amber-200/60">Max Axle Torque</span>
+                <span className="text-slate-400">Max Axle Torque</span>
                 <span className="text-amber-300 font-extrabold">3,800+ Nm Wheel Torque</span>
               </div>
             </div>
@@ -88,7 +88,7 @@ export function EVGearboxSection({
               <span className="text-[10px] font-mono font-bold text-amber-300 uppercase tracking-wider block">
                 NVH ACOUSTIC REFINEMENT
               </span>
-              <p className="text-[11px] font-mono text-amber-100/80 leading-relaxed">
+              <p className="text-[11px] font-mono text-slate-300 leading-relaxed">
                 Precision ground helical gear teeth minimize high-frequency gear whine and handle instantaneous 0-RPM torque shock without deflection.
               </p>
             </div>
@@ -109,7 +109,7 @@ export function EVGearboxSection({
               onSelectVariant={onSelectVariant}
             />
           ) : (
-            <p className="text-xs font-mono text-amber-300/50">Loading material variants...</p>
+            <p className="text-xs font-mono text-slate-500">Loading material variants...</p>
           )}
         </SectionCard>
 

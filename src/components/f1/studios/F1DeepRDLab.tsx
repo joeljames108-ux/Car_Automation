@@ -56,7 +56,7 @@ export const F1DeepRDLab: React.FC = memo(function F1DeepRDLab() {
   const [activeSubTab, setActiveSubTab] = useState<F1RDSubTab>("windtunnel");
 
   return (
-    <div className="w-full h-full flex flex-col bg-[#07090e] text-white overflow-hidden select-none">
+    <div className="w-full h-full flex flex-col bg-amber-950/60 text-white overflow-hidden select-none">
       {/* Top Cost Cap & Resource Bar */}
       <div className="shrink-0">
         <F1BudgetBar />

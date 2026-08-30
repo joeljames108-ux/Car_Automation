@@ -210,22 +210,22 @@ export function HolographicCarHUD({
     { id: "aero" as Stage, label: "Active Wing", x: 340, y: 55, icon: <Wind size={12} />, color: "text-amber-400 border-amber-400/50 bg-amber-500/10" },
     { id: "suspension3d" as Stage, label: "Double Wishbone", x: 260, y: 110, icon: <Activity size={12} />, color: "text-emerald-400 border-emerald-400/50 bg-emerald-500/10" },
     { id: "interior" as Stage, label: "Cockpit HUD", x: 210, y: 70, icon: <Monitor size={12} />, color: "text-amber-400 border-amber-400/50 bg-amber-500/10" },
-    { id: "safety" as Stage, label: "Monocoque Cell", x: 180, y: 95, icon: <ShieldCheck size={12} />, color: "text-sky-400 border-sky-400/50 bg-sky-500/10" },
+    { id: "safety" as Stage, label: "Monocoque Cell", x: 180, y: 95, icon: <ShieldCheck size={12} />, color: "text-amber-400 border-sky-400/50 bg-amber-500/15" },
   ];
 
   return (
-    <div className="w-full bg-[#060a16]/90 border border-amber-500/30 rounded-2xl p-4 shadow-[0_0_30px_rgba(34,211,238,0.12)] relative overflow-hidden">
+    <div className="w-full bg-amber-950/60/90 border border-amber-500/30 rounded-2xl p-4 shadow-[0_0_30px_rgba(34,211,238,0.12)] relative overflow-hidden">
       {/* Background Cyber Laser Reticles */}
       <div className="absolute top-2 left-2 text-[9px] font-mono text-amber-400/50 tracking-widest uppercase pointer-events-none z-10 flex items-center gap-2">
         <span>HUD // CAD TELEMETRY SYSTEM · 60FPS</span>
       </div>
 
       {/* Mode Switcher Toggle Pill */}
-      <div className="absolute top-2 right-2 z-20 flex items-center gap-1 bg-amber-900/40 border border-amber-500/40 rounded-lg p-0.5 backdrop-blur-md">
+      <div className="absolute top-2 right-2 z-20 flex items-center gap-1 bg-slate-900/90 border border-amber-500/40 rounded-lg p-0.5 backdrop-blur-md">
         <button
           onClick={() => setRenderMode3D(true)}
           className={`flex items-center gap-1 px-2 py-0.5 rounded text-[9px] font-mono font-bold transition-all ${
-            renderMode3D ? "bg-amber-500 text-slate-950 shadow-sm font-extrabold" : "text-amber-200/60 hover:text-white"
+            renderMode3D ? "bg-amber-500 text-slate-950 shadow-sm font-extrabold" : "text-slate-400 hover:text-white"
           }`}
         >
           <Box size={10} /> 3D MODEL
@@ -233,7 +233,7 @@ export function HolographicCarHUD({
         <button
           onClick={() => setRenderMode3D(false)}
           className={`flex items-center gap-1 px-2 py-0.5 rounded text-[9px] font-mono font-bold transition-all ${
-            !renderMode3D ? "bg-amber-500 text-slate-950 shadow-sm font-extrabold" : "text-amber-200/60 hover:text-white"
+            !renderMode3D ? "bg-amber-500 text-slate-950 shadow-sm font-extrabold" : "text-slate-400 hover:text-white"
           }`}
         >
           <Eye size={10} /> 2D VECTOR
@@ -242,7 +242,7 @@ export function HolographicCarHUD({
 
       <div className="flex flex-col lg:flex-row items-center justify-between gap-6">
         {/* Left Holographic Vehicle Viewport (3D or 2D) */}
-        <div className="relative w-full lg:w-[480px] h-[165px] bg-[#030610] rounded-xl border border-amber-500/20 p-2 flex items-center justify-center overflow-hidden">
+        <div className="relative w-full lg:w-[480px] h-[165px] bg-amber-950/60 rounded-xl border border-amber-500/20 p-2 flex items-center justify-center overflow-hidden">
           {renderMode3D ? (
             <div ref={mountRef} className="w-full h-full cursor-grab active:cursor-grabbing relative">
               <div className="absolute bottom-1 right-2 text-[8px] font-mono text-amber-400/60 pointer-events-none bg-black/40 px-1.5 py-0.5 rounded">
@@ -307,7 +307,7 @@ export function HolographicCarHUD({
         </div>
 
         {/* Right Dynamic RPM Tachometer & Gear HUD */}
-        <div className="flex-1 w-full flex flex-col sm:flex-row items-center justify-around gap-4 bg-[#040712]/80 p-3 rounded-xl border border-amber-500/20">
+        <div className="flex-1 w-full flex flex-col sm:flex-row items-center justify-around gap-4 bg-amber-950/60/80 p-3 rounded-xl border border-amber-500/20">
           {/* Tachometer Ring */}
           <div className="relative flex flex-col items-center justify-center w-32 h-32">
             <svg viewBox="0 0 100 100" className="w-full h-full transform -rotate-90">
@@ -330,34 +330,34 @@ export function HolographicCarHUD({
 
             {/* Center RPM Reading */}
             <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
-              <span className="text-[10px] font-mono text-amber-200/60 uppercase">ENGINE RPM</span>
+              <span className="text-[10px] font-mono text-slate-400 uppercase">ENGINE RPM</span>
               <span className="text-lg font-black font-mono text-amber-300">{rpm}</span>
-              <span className="text-[9px] font-mono text-amber-300/50 uppercase">GEAR {gear}</span>
+              <span className="text-[9px] font-mono text-slate-500 uppercase">GEAR {gear}</span>
             </div>
           </div>
 
           {/* Quick HUD Metrics Column */}
           <div className="flex flex-col gap-2 min-w-[160px]">
             <div className="flex items-center justify-between text-xs font-mono border-b border-amber-500/20 pb-1">
-              <span className="text-amber-200/60">POWERTRAIN</span>
+              <span className="text-slate-400">POWERTRAIN</span>
               <span className="text-amber-300 font-bold flex items-center">
                 <AnimatedCounter value={peakPower} duration={400} /> HP
               </span>
             </div>
             <div className="flex items-center justify-between text-xs font-mono border-b border-amber-500/20 pb-1">
-              <span className="text-amber-200/60">TORQUE</span>
+              <span className="text-slate-400">TORQUE</span>
               <span className="text-amber-300 font-bold flex items-center">
                 <AnimatedCounter value={peakTorque} duration={400} /> Nm
               </span>
             </div>
             <div className="flex items-center justify-between text-xs font-mono border-b border-amber-500/20 pb-1">
-              <span className="text-amber-200/60">DOWNFORCE</span>
+              <span className="text-slate-400">DOWNFORCE</span>
               <span className="text-emerald-300 font-bold flex items-center">
                 <AnimatedCounter value={downforce} duration={400} /> N
               </span>
             </div>
             <div className="flex items-center justify-between text-xs font-mono">
-              <span className="text-amber-200/60">CD DRAG</span>
+              <span className="text-slate-400">CD DRAG</span>
               <span className="text-amber-300 font-bold">
                 <AnimatedCounter value={dragCoeff} decimals={3} duration={400} />
               </span>

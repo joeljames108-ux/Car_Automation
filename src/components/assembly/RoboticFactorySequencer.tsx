@@ -200,15 +200,15 @@ export const RoboticFactorySequencer: React.FC = () => {
   const progressPercent = Math.round(((currentStageIndex + 1) / ASSEMBLY_STAGES.length) * 100);
 
   return (
-    <div className="flex flex-col h-full bg-amber-900/40 backdrop-blur-xl border border-amber-800/30 rounded-2xl overflow-hidden shadow-2xl p-4 space-y-4 text-xs text-amber-100/80">
+    <div className="flex flex-col h-full bg-slate-900/90 backdrop-blur-xl border border-slate-800 rounded-2xl overflow-hidden shadow-2xl p-4 space-y-4 text-xs text-slate-300">
       {/* Header & Controls */}
-      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between pb-3 border-b border-amber-800/30 gap-2">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between pb-3 border-b border-slate-800 gap-2">
         <div>
-          <h3 className="text-sm font-bold text-amber-50 flex items-center gap-2">
+          <h3 className="text-sm font-bold text-slate-100 flex items-center gap-2">
             <Cpu size={16} className="text-amber-400" />
             12-Stage Robotic Assembly Sequencer
           </h3>
-          <p className="text-[11px] text-amber-200/60">
+          <p className="text-[11px] text-slate-400">
             Factory Station: <span className="text-amber-300 font-bold">{activeStage.robotStation}</span>
           </p>
         </div>
@@ -227,7 +227,7 @@ export const RoboticFactorySequencer: React.FC = () => {
           </button>
           <button
             onClick={handleReset}
-            className="p-1.5 bg-amber-800/35 hover:bg-amber-700/40 text-amber-100/80 rounded-xl border border-amber-700/30"
+            className="p-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl border border-slate-700"
             title="Reset to Stage 1"
           >
             <RotateCcw size={14} />
@@ -238,12 +238,12 @@ export const RoboticFactorySequencer: React.FC = () => {
       {/* Progress Bar */}
       <div className="space-y-1.5">
         <div className="flex justify-between text-[11px]">
-          <span className="text-amber-200/60 font-semibold">
+          <span className="text-slate-400 font-semibold">
             Stage {activeStage.id} of 12: {activeStage.name}
           </span>
           <span className="font-mono font-bold text-amber-400">{progressPercent}% Assembly Complete</span>
         </div>
-        <div className="w-full h-2 bg-amber-950/80 rounded-full overflow-hidden border border-amber-800/30">
+        <div className="w-full h-2 bg-slate-950 rounded-full overflow-hidden border border-slate-800">
           <div
             className="h-full bg-gradient-to-r from-amber-500 via-amber-500 to-emerald-400 transition-all duration-500 rounded-full"
             style={{ width: `${progressPercent}%` }}
@@ -265,8 +265,8 @@ export const RoboticFactorySequencer: React.FC = () => {
                 isCurrent
                   ? "bg-amber-500/15 border-amber-500 text-amber-200 shadow-md shadow-cyan-500/20 scale-[1.02]"
                   : isDone
-                  ? "bg-amber-950/60 border-amber-700/30/80 text-amber-100/80 hover:bg-amber-800/35"
-                  : "bg-amber-950/30 border-amber-800/30 text-amber-300/50 hover:bg-amber-900/50"
+                  ? "bg-slate-950/60 border-slate-700/80 text-slate-300 hover:bg-slate-800"
+                  : "bg-slate-950/30 border-slate-800/40 text-slate-500 hover:bg-slate-900"
               }`}
             >
               <div className="flex items-center justify-between mb-1">
@@ -276,20 +276,20 @@ export const RoboticFactorySequencer: React.FC = () => {
               <span className="font-bold text-[11px] block leading-tight line-clamp-1">
                 {stg.name}
               </span>
-              <span className="text-[9px] text-amber-200/60 block mt-0.5">{stg.category}</span>
+              <span className="text-[9px] text-slate-400 block mt-0.5">{stg.category}</span>
             </button>
           );
         })}
       </div>
 
       {/* Active Stage Detail Deck */}
-      <div className="bg-amber-950/80 p-3.5 rounded-xl border border-amber-800/30 space-y-3 shadow-inner">
+      <div className="bg-slate-950/80 p-3.5 rounded-xl border border-slate-800/80 space-y-3 shadow-inner">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
           <div className="flex items-center gap-2">
             <span className="px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 font-mono text-[10px] font-bold border border-amber-500/30">
               STAGE {activeStage.id} ACTIVE
             </span>
-            <span className="text-xs font-bold text-amber-50">{activeStage.name}</span>
+            <span className="text-xs font-bold text-slate-100">{activeStage.name}</span>
           </div>
           <span className="text-[10px] font-mono text-emerald-400 flex items-center gap-1">
             <Sparkles size={11} />
@@ -297,29 +297,29 @@ export const RoboticFactorySequencer: React.FC = () => {
           </span>
         </div>
 
-        <p className="text-amber-100/80 text-[11px] leading-relaxed">
+        <p className="text-slate-300 text-[11px] leading-relaxed">
           {activeStage.subsystemSummary}
         </p>
 
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center">
-          <div className="bg-amber-900/40 p-2 rounded-lg border border-amber-800/30">
-            <span className="text-[9px] text-amber-200/60 block uppercase">Cycle Time</span>
+          <div className="bg-slate-900/60 p-2 rounded-lg border border-slate-800">
+            <span className="text-[9px] text-slate-400 block uppercase">Cycle Time</span>
             <span className="text-xs font-mono font-bold text-amber-300">{activeStage.cycleTimeSec}s</span>
           </div>
-          <div className="bg-amber-900/40 p-2 rounded-lg border border-amber-800/30">
-            <span className="text-[9px] text-amber-200/60 block uppercase">Target Torque</span>
+          <div className="bg-slate-900/60 p-2 rounded-lg border border-slate-800">
+            <span className="text-[9px] text-slate-400 block uppercase">Target Torque</span>
             <span className="text-xs font-mono font-bold text-amber-300">
               {activeStage.fastenerTorqueNm > 0 ? `${activeStage.fastenerTorqueNm} Nm` : "N/A"}
             </span>
           </div>
-          <div className="bg-amber-900/40 p-2 rounded-lg border border-amber-800/30">
-            <span className="text-[9px] text-amber-200/60 block uppercase">Station ID</span>
+          <div className="bg-slate-900/60 p-2 rounded-lg border border-slate-800">
+            <span className="text-[9px] text-slate-400 block uppercase">Station ID</span>
             <span className="text-xs font-mono font-bold text-amber-300">
               {activeStage.robotStation.split(" ")[0]}
             </span>
           </div>
-          <div className="bg-amber-900/40 p-2 rounded-lg border border-amber-800/30">
-            <span className="text-[9px] text-amber-200/60 block uppercase">QA Status</span>
+          <div className="bg-slate-900/60 p-2 rounded-lg border border-slate-800">
+            <span className="text-[9px] text-slate-400 block uppercase">QA Status</span>
             <span className="text-xs font-mono font-bold text-emerald-400 flex items-center justify-center gap-1">
               <CheckCircle2 size={11} /> Certified
             </span>

@@ -20,7 +20,7 @@ export const SeasonSummaryPanel = memo(function SeasonSummaryPanel() {
                 COMPLETED
               </span>
             </div>
-            <h3 className="text-lg font-black text-amber-50 flex items-center gap-2 mt-1">
+            <h3 className="text-lg font-black text-slate-100 flex items-center gap-2 mt-1">
               <Trophy size={20} className="text-yellow-400" /> Motorsport Season {Math.max(1, company.motorsport.currentSeason - 1)} Summary
             </h3>
           </div>
@@ -28,9 +28,9 @@ export const SeasonSummaryPanel = memo(function SeasonSummaryPanel() {
 
         {company.motorsport.teams.length === 0 ? (
           <div className="text-center py-8 bg-base-950/60 rounded-xl border border-white/5">
-            <Trophy size={32} className="mx-auto text-amber-500 mb-2" />
-            <p className="text-xs text-amber-300/50">No completed seasons on record yet.</p>
-            <p className="text-[10px] text-amber-400 mt-1">Create teams and simulate seasons to build your motorsport legacy.</p>
+            <Trophy size={32} className="mx-auto text-slate-700 mb-2" />
+            <p className="text-xs text-slate-500">No completed seasons on record yet.</p>
+            <p className="text-[10px] text-slate-600 mt-1">Create teams and simulate seasons to build your motorsport legacy.</p>
           </div>
         ) : (
           <div className="space-y-4">
@@ -50,7 +50,7 @@ export const SeasonSummaryPanel = memo(function SeasonSummaryPanel() {
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      <h4 className="text-base font-bold text-amber-50">{t.name}</h4>
+                      <h4 className="text-base font-bold text-slate-100">{t.name}</h4>
                       <span className={`text-[10px] font-semibold px-2 py-0.5 rounded-full border ${CATEGORY_COLORS[t.category]}`}>
                         {CATEGORY_LABELS[t.category]}
                       </span>
@@ -61,43 +61,43 @@ export const SeasonSummaryPanel = memo(function SeasonSummaryPanel() {
                           👑 WORLD CHAMPION
                         </span>
                       )}
-                      <span className={isChamp ? "text-yellow-400 text-base font-black" : "text-amber-100/80"}>P{lastRes.position}</span>
+                      <span className={isChamp ? "text-yellow-400 text-base font-black" : "text-slate-300"}>P{lastRes.position}</span>
                     </div>
                   </div>
 
                   {/* Performance Summary Metrics */}
                   <div className="grid grid-cols-2 sm:grid-cols-6 gap-2 text-center">
                     <div className="bg-base-900/60 p-2.5 rounded-lg border border-base-800">
-                      <div className="text-sm font-mono font-bold text-amber-50">{lastRes.points} PTS</div>
-                      <div className="text-[9px] text-amber-300/50 uppercase">Season Points</div>
+                      <div className="text-sm font-mono font-bold text-slate-100">{lastRes.points} PTS</div>
+                      <div className="text-[9px] text-slate-500 uppercase">Season Points</div>
                     </div>
                     <div className="bg-base-900/60 p-2.5 rounded-lg border border-base-800">
                       <div className="text-sm font-mono font-bold text-emerald-400">{lastRes.wins} Wins</div>
-                      <div className="text-[9px] text-amber-300/50 uppercase">Victories</div>
+                      <div className="text-[9px] text-slate-500 uppercase">Victories</div>
                     </div>
                     <div className="bg-base-900/60 p-2.5 rounded-lg border border-base-800">
                       <div className="text-sm font-mono font-bold text-amber-300">{lastRes.podiums} Podiums</div>
-                      <div className="text-[9px] text-amber-300/50 uppercase">Podiums</div>
+                      <div className="text-[9px] text-slate-500 uppercase">Podiums</div>
                     </div>
                     <div className="bg-base-900/60 p-2.5 rounded-lg border border-base-800">
                       <div className="text-sm font-mono font-bold text-amber-400">{lastRes.fastestLaps} FL</div>
-                      <div className="text-[9px] text-amber-300/50 uppercase">Fastest Laps</div>
+                      <div className="text-[9px] text-slate-500 uppercase">Fastest Laps</div>
                     </div>
                     <div className="bg-base-900/60 p-2.5 rounded-lg border border-base-800">
                       <div className="text-sm font-mono font-bold text-amber-400">{lastRes.polePositions} Poles</div>
-                      <div className="text-[9px] text-amber-300/50 uppercase">Poles</div>
+                      <div className="text-[9px] text-slate-500 uppercase">Poles</div>
                     </div>
                     <div className="bg-base-900/60 p-2.5 rounded-lg border border-base-800">
                       <div className="text-sm font-mono font-bold text-emerald-400">+{lastRes.techPointsEarned} R&D</div>
-                      <div className="text-[9px] text-amber-300/50 uppercase">Tech Points</div>
+                      <div className="text-[9px] text-slate-500 uppercase">Tech Points</div>
                     </div>
                   </div>
 
                   {/* Financial & Morale Outcome */}
-                  <div className="flex flex-col sm:flex-row sm:items-center justify-between text-xs font-mono bg-base-900/40 p-2.5 rounded-lg border border-base-800/80 text-amber-200/60 gap-2">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between text-xs font-mono bg-base-900/40 p-2.5 rounded-lg border border-base-800/80 text-slate-400 gap-2">
                     <span>Balance: <strong className="text-emerald-400">${(t.budget / 1e6).toFixed(1)}M</strong></span>
                     <span>Morale: <strong className="text-amber-300">{t.teamMorale}%</strong></span>
-                    <span>Roster: <strong className="text-amber-50">{t.drivers.length}/2 Drivers Active</strong></span>
+                    <span>Roster: <strong className="text-slate-200">{t.drivers.length}/2 Drivers Active</strong></span>
                   </div>
                 </div>
               );

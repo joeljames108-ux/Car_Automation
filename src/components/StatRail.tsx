@@ -81,7 +81,7 @@ export function StatRailComponent() {
       value: sim.peakPower,
       unit: "hp",
       deltaText: pwrDiff > 0 ? `+${pwrDiff} hp` : pwrDiff < 0 ? `${pwrDiff} hp` : "Base",
-      deltaColor: pwrDiff > 0 ? "bg-emerald-500/15 text-emerald-400 border-emerald-500/30" : pwrDiff < 0 ? "bg-rose-500/15 text-rose-400 border-rose-500/30" : "bg-slate-500/10 text-amber-200/60 border-amber-500/30/20",
+      deltaColor: pwrDiff > 0 ? "bg-emerald-500/15 text-emerald-400 border-emerald-500/30" : pwrDiff < 0 ? "bg-rose-500/15 text-rose-400 border-rose-500/30" : "bg-slate-500/10 text-slate-400 border-slate-500/20",
       tooltipTitle: "Peak Horsepower Output",
       tooltipDesc: "Calculated from engine displacement, RPM limit, turbo boost pressure, and valvetrain tuning.",
       subMetric: `${pwrToWeight} hp/tonne`
@@ -93,7 +93,7 @@ export function StatRailComponent() {
       value: sim.peakTorque,
       unit: "Nm",
       deltaText: trqDiff > 0 ? `+${trqDiff} Nm` : trqDiff < 0 ? `${trqDiff} Nm` : "Base",
-      deltaColor: trqDiff > 0 ? "bg-emerald-500/15 text-emerald-400 border-emerald-500/30" : trqDiff < 0 ? "bg-rose-500/15 text-rose-400 border-rose-500/30" : "bg-slate-500/10 text-amber-200/60 border-amber-500/30/20",
+      deltaColor: trqDiff > 0 ? "bg-emerald-500/15 text-emerald-400 border-emerald-500/30" : trqDiff < 0 ? "bg-rose-500/15 text-rose-400 border-rose-500/30" : "bg-slate-500/10 text-slate-400 border-slate-500/20",
       tooltipTitle: "Peak Torque Force",
       tooltipDesc: "Low-end pulling force. Influenced by cylinder bore/stroke ratio, boost pressure, and hybrid motor assist.",
       subMetric: `@ ${sim.peakTorqueRpm || 3500} RPM`
@@ -105,7 +105,7 @@ export function StatRailComponent() {
       value: sim.weight,
       unit: "kg",
       deltaText: wgtDiff > 0 ? `+${wgtDiff} kg` : wgtDiff < 0 ? `${wgtDiff} kg` : "Base",
-      deltaColor: wgtDiff < 0 ? "bg-emerald-500/15 text-emerald-400 border-emerald-500/30" : wgtDiff > 0 ? "bg-amber-500/15 text-amber-400 border-amber-500/30" : "bg-slate-500/10 text-amber-200/60 border-amber-500/30/20",
+      deltaColor: wgtDiff < 0 ? "bg-emerald-500/15 text-emerald-400 border-emerald-500/30" : wgtDiff > 0 ? "bg-amber-500/15 text-amber-400 border-amber-500/30" : "bg-slate-500/10 text-slate-400 border-slate-500/20",
       tooltipTitle: "Curb Weight",
       tooltipDesc: "Total vehicle mass including chassis materials, engine block metal, interior trim, and battery packs.",
       subMetric: `Bias: ${sim.weightDistFront || 55}% F / ${100 - (sim.weightDistFront || 55)}% R`
@@ -117,7 +117,7 @@ export function StatRailComponent() {
       value: sim.accel0_60,
       unit: "s",
       deltaText: accDiff > 0 ? `+${accDiff}s` : accDiff < 0 ? `${accDiff}s` : "Base",
-      deltaColor: accDiff < 0 ? "bg-emerald-500/15 text-emerald-400 border-emerald-500/30" : accDiff > 0 ? "bg-rose-500/15 text-rose-400 border-rose-500/30" : "bg-slate-500/10 text-amber-200/60 border-amber-500/30/20",
+      deltaColor: accDiff < 0 ? "bg-emerald-500/15 text-emerald-400 border-emerald-500/30" : accDiff > 0 ? "bg-rose-500/15 text-rose-400 border-rose-500/30" : "bg-slate-500/10 text-slate-400 border-slate-500/20",
       tooltipTitle: "0 to 60 mph Acceleration",
       tooltipDesc: "Derived from power-to-weight ratio, tire compound grip coefficient, gearbox launch control, and AWD traction.",
       subMetric: `Limit: ${(sim.accel0_60 < 3.0 ? "AWD Launch" : "Grip Limited")}`
@@ -129,7 +129,7 @@ export function StatRailComponent() {
       value: (sim.quarterMile || 11.5).toFixed(2),
       unit: "s",
       deltaText: qtrDiff > 0 ? `+${qtrDiff}s` : qtrDiff < 0 ? `${qtrDiff}s` : "Base",
-      deltaColor: qtrDiff < 0 ? "bg-emerald-500/15 text-emerald-400 border-emerald-500/30" : qtrDiff > 0 ? "bg-rose-500/15 text-rose-400 border-rose-500/30" : "bg-slate-500/10 text-amber-200/60 border-amber-500/30/20",
+      deltaColor: qtrDiff < 0 ? "bg-emerald-500/15 text-emerald-400 border-emerald-500/30" : qtrDiff > 0 ? "bg-rose-500/15 text-rose-400 border-rose-500/30" : "bg-slate-500/10 text-slate-400 border-slate-500/20",
       tooltipTitle: "Quarter Mile Drag Strip",
       tooltipDesc: "Elapsed time for standing 1/4 mile sprint including launch slip and gear shift delays.",
       subMetric: `@ ${sim.quarterMileSpeed?.toFixed(0) || 205} km/h trap`
@@ -141,7 +141,7 @@ export function StatRailComponent() {
       value: (sim.lateralG || 1.1).toFixed(2),
       unit: "G",
       deltaText: latDiff > 0 ? `+${latDiff} G` : latDiff < 0 ? `${latDiff} G` : "Base",
-      deltaColor: latDiff > 0 ? "bg-emerald-500/15 text-emerald-400 border-emerald-500/30" : latDiff < 0 ? "bg-rose-500/15 text-rose-400 border-rose-500/30" : "bg-slate-500/10 text-amber-200/60 border-amber-500/30/20",
+      deltaColor: latDiff > 0 ? "bg-emerald-500/15 text-emerald-400 border-emerald-500/30" : latDiff < 0 ? "bg-rose-500/15 text-rose-400 border-rose-500/30" : "bg-slate-500/10 text-slate-400 border-slate-500/20",
       tooltipTitle: "Peak Lateral Cornering Acceleration",
       tooltipDesc: "Maximum sustained cornering G-force on 300ft skidpad before mechanical understeer or slide.",
       subMetric: `Skidpad: ${(sim.skidpad || sim.lateralG * 0.95).toFixed(2)} G`
@@ -153,7 +153,7 @@ export function StatRailComponent() {
       value: (sim.brakingDist || 32).toFixed(1),
       unit: "m",
       deltaText: brkDiff > 0 ? `+${brkDiff}m` : brkDiff < 0 ? `${brkDiff}m` : "Base",
-      deltaColor: brkDiff < 0 ? "bg-emerald-500/15 text-emerald-400 border-emerald-500/30" : brkDiff > 0 ? "bg-rose-500/15 text-rose-400 border-rose-500/30" : "bg-slate-500/10 text-amber-200/60 border-amber-500/30/20",
+      deltaColor: brkDiff < 0 ? "bg-emerald-500/15 text-emerald-400 border-emerald-500/30" : brkDiff > 0 ? "bg-rose-500/15 text-rose-400 border-rose-500/30" : "bg-slate-500/10 text-slate-400 border-slate-500/20",
       tooltipTitle: "Emergency Braking Distance",
       tooltipDesc: "Distance required to decelerate from 60mph to 0. Calculated from brake rotor size, caliper pistons, and tire compound.",
       subMetric: `Cooling: ${((sim.brakeCooling || 0.85) * 100).toFixed(0)}%`
@@ -165,7 +165,7 @@ export function StatRailComponent() {
       value: sim.downforce || 0,
       unit: "N",
       deltaText: dwnDiff > 0 ? `+${dwnDiff} N` : dwnDiff < 0 ? `${dwnDiff} N` : "Base",
-      deltaColor: dwnDiff > 0 ? "bg-emerald-500/15 text-emerald-400 border-emerald-500/30" : dwnDiff < 0 ? "bg-rose-500/15 text-rose-400 border-rose-500/30" : "bg-slate-500/10 text-amber-200/60 border-amber-500/30/20",
+      deltaColor: dwnDiff > 0 ? "bg-emerald-500/15 text-emerald-400 border-emerald-500/30" : dwnDiff < 0 ? "bg-rose-500/15 text-rose-400 border-rose-500/30" : "bg-slate-500/10 text-slate-400 border-slate-500/20",
       tooltipTitle: "Total Aerodynamic Load",
       tooltipDesc: "Total downward aerodynamic force pressing vehicle into asphalt at 200 km/h.",
       subMetric: `Balance: ${((sim.aeroBalance || 0.5) * 100).toFixed(1)}% Front`
@@ -177,7 +177,7 @@ export function StatRailComponent() {
       value: sim.topSpeed,
       unit: "km/h",
       deltaText: spdDiff > 0 ? `+${spdDiff} km/h` : spdDiff < 0 ? `${spdDiff} km/h` : "Base",
-      deltaColor: spdDiff > 0 ? "bg-emerald-500/15 text-emerald-400 border-emerald-500/30" : spdDiff < 0 ? "bg-rose-500/15 text-rose-400 border-rose-500/30" : "bg-slate-500/10 text-amber-200/60 border-amber-500/30/20",
+      deltaColor: spdDiff > 0 ? "bg-emerald-500/15 text-emerald-400 border-emerald-500/30" : spdDiff < 0 ? "bg-rose-500/15 text-rose-400 border-rose-500/30" : "bg-slate-500/10 text-slate-400 border-slate-500/20",
       tooltipTitle: "Terminal Aerodynamic Speed",
       tooltipDesc: "Maximum velocity where aerodynamic drag force equals peak engine wheel horsepower.",
       subMetric: `Drag Cd: ${sim.dragCoeff || 0.31}`
@@ -189,7 +189,7 @@ export function StatRailComponent() {
       value: (sim.fuelEconomy || 8.5).toFixed(1),
       unit: "L/100k",
       deltaText: fueDiff < 0 ? `${fueDiff} L` : fueDiff > 0 ? `+${fueDiff} L` : "Base",
-      deltaColor: fueDiff < 0 ? "bg-emerald-500/15 text-emerald-400 border-emerald-500/30" : fueDiff > 0 ? "bg-amber-500/15 text-amber-400 border-amber-500/30" : "bg-slate-500/10 text-amber-200/60 border-amber-500/30/20",
+      deltaColor: fueDiff < 0 ? "bg-emerald-500/15 text-emerald-400 border-emerald-500/30" : fueDiff > 0 ? "bg-amber-500/15 text-amber-400 border-amber-500/30" : "bg-slate-500/10 text-slate-400 border-slate-500/20",
       tooltipTitle: "Combined Fuel Consumption",
       tooltipDesc: "Estimated EPA / WLTP combined cycle fuel consumption per 100km.",
       subMetric: `Thermal Eff: ${((sim.thermalEfficiency || 0.38) * 100).toFixed(0)}%`
@@ -201,7 +201,7 @@ export function StatRailComponent() {
       value: `$${(sim.totalCost / 1000).toFixed(0)}k`,
       unit: "",
       deltaText: cstDiff > 0 ? `+$${cstDiff}k` : cstDiff < 0 ? `-$${Math.abs(cstDiff)}k` : "Base",
-      deltaColor: cstDiff <= 0 ? "bg-emerald-500/15 text-emerald-400 border-emerald-500/30" : "bg-sky-500/15 text-sky-400 border-sky-500/30",
+      deltaColor: cstDiff <= 0 ? "bg-emerald-500/15 text-emerald-400 border-emerald-500/30" : "bg-sky-500/15 text-amber-400 border-sky-500/30",
       tooltipTitle: "Estimated MSRP",
       tooltipDesc: "Total production BOM cost plus manufacturing tooling amortization and engineering markup.",
       subMetric: `Tier: ${sim.totalCost > 150000 ? "Supercar" : sim.totalCost > 40000 ? "Premium" : "Economy"}`
@@ -217,7 +217,7 @@ export function StatRailComponent() {
         value: sim.batteryEnergy || 0,
         unit: "kWh",
         deltaText: batDiff > 0 ? `+${batDiff} kWh` : batDiff < 0 ? `${batDiff} kWh` : "Base",
-        deltaColor: batDiff > 0 ? "bg-emerald-500/15 text-emerald-400 border-emerald-500/30" : "bg-slate-500/10 text-amber-200/60 border-amber-500/30/20",
+        deltaColor: batDiff > 0 ? "bg-emerald-500/15 text-emerald-400 border-emerald-500/30" : "bg-slate-500/10 text-slate-400 border-slate-500/20",
         tooltipTitle: "EV Battery Capacity",
         tooltipDesc: "Usable lithium-ion / solid-state energy storage feeding electric drive motors.",
         subMetric: `Range: ${sim.electricRange || 450} km`
@@ -231,11 +231,11 @@ export function StatRailComponent() {
     <div className="flex flex-col gap-2.5 stagger-enter relative select-none w-full">
       {/* Panel Header */}
       <div className="label-mono px-1 flex items-center justify-between mb-0.5">
-        <div className="flex items-center gap-1.5 text-xs font-black text-amber-50 tracking-wider uppercase">
+        <div className="flex items-center gap-1.5 text-xs font-black text-slate-100 tracking-wider uppercase">
           <span className="w-1.5 h-1.5 rounded-full bg-ok-400 animate-pulse" />
           LIVE STATS
         </div>
-        <span className="text-[10px] text-amber-300/50 font-mono font-semibold">HOVER FOR SPECS</span>
+        <span className="text-[10px] text-slate-500 font-mono font-semibold">HOVER FOR SPECS</span>
       </div>
 
       {/* Metric Cards - 2-Row Precision Integrated Layout */}
@@ -254,7 +254,7 @@ export function StatRailComponent() {
                 <div className="w-7 h-7 rounded-lg bg-amber-500/10 border border-amber-400/20 flex items-center justify-center text-amber-400 shrink-0 group-hover:scale-105 transition-transform">
                   {s.icon}
                 </div>
-                <div className="text-xs font-bold text-amber-50 uppercase tracking-wider flex items-center gap-1">
+                <div className="text-xs font-bold text-slate-100 uppercase tracking-wider flex items-center gap-1">
                   <span>{s.label}</span>
                   <HelpCircle size={10} className="opacity-0 group-hover:opacity-100 text-amber-400 transition-opacity shrink-0" />
                 </div>
@@ -269,21 +269,21 @@ export function StatRailComponent() {
             {/* ── BOTTOM ROW: Initial → Present Spec Comparison Bar ── */}
             <div className="flex items-center justify-between gap-2 pt-1 border-t border-white/5 text-[11px] font-mono w-full">
               {/* Sub-metric label on the left (No truncation!) */}
-              <span className="text-[9.5px] text-amber-300/50 font-medium truncate max-w-[130px]" title={s.subMetric}>
+              <span className="text-[9.5px] text-slate-500 font-medium truncate max-w-[130px]" title={s.subMetric}>
                 {s.subMetric}
               </span>
 
               {/* Initial → Present Specs Inline */}
               <div className="flex items-center gap-1.5 shrink-0">
-                <span className="text-amber-300/50">
-                  <span className="text-[8px] uppercase tracking-widest text-amber-300/50 mr-0.5">INIT</span>
+                <span className="text-slate-500">
+                  <span className="text-[8px] uppercase tracking-widest text-slate-500 mr-0.5">INIT</span>
                   {s.initialValue}
                   {s.unit ? ` ${s.unit}` : ""}
                 </span>
 
-                <span className="text-amber-400 font-sans text-xs">→</span>
+                <span className="text-slate-600 font-sans text-xs">→</span>
 
-                <span className="font-bold text-amber-50">
+                <span className="font-bold text-slate-100">
                   <span className="text-[8px] uppercase tracking-widest text-amber-400 mr-0.5">NOW</span>
                   {!isNaN(Number(s.value)) ? (
                     <AnimatedCounter
@@ -305,8 +305,8 @@ export function StatRailComponent() {
                   <Info size={14} className="text-amber-400 shrink-0" />
                   <span>{s.tooltipTitle}</span>
                 </div>
-                <p className="text-[11px] text-amber-100/80 leading-relaxed">{s.tooltipDesc}</p>
-                <div className="mt-2 pt-1.5 border-t border-amber-800/30 flex items-center justify-between text-[10px] font-mono text-amber-200/60">
+                <p className="text-[11px] text-slate-300 leading-relaxed">{s.tooltipDesc}</p>
+                <div className="mt-2 pt-1.5 border-t border-slate-800/60 flex items-center justify-between text-[10px] font-mono text-slate-400">
                   <span>SPEC COMPARISON:</span>
                   <span className="text-amber-400 font-semibold">{s.initialValue} → {s.value} {s.unit}</span>
                 </div>
@@ -334,13 +334,13 @@ export function StatRailComponent() {
               >
                 <ArrowLeft size={14} /> Back
               </button>
-              <div className="flex items-center gap-2 text-xs font-mono font-bold uppercase tracking-widest text-amber-500">
+              <div className="flex items-center gap-2 text-xs font-mono font-bold uppercase tracking-widest text-slate-700">
                 <Activity size={14} className="text-[#007aff]" />
                 {selectedStat.label} Telemetry Analysis
               </div>
               <button
                 onClick={closeStatModal}
-                className="p-1.5 rounded-full text-amber-200/60 hover:text-amber-500 hover:bg-slate-200/50 transition-colors cursor-pointer"
+                className="p-1.5 rounded-full text-slate-400 hover:text-slate-700 hover:bg-slate-200/50 transition-colors cursor-pointer"
                 title="Close"
               >
                 <X size={18} />
@@ -353,7 +353,7 @@ export function StatRailComponent() {
                 {selectedStat.icon}
               </div>
               <h3 className="text-lg font-bold text-slate-800 tracking-wide mb-1">{selectedStat.tooltipTitle}</h3>
-              <p className="text-xs text-amber-400 max-w-md leading-relaxed mb-4">{selectedStat.tooltipDesc}</p>
+              <p className="text-xs text-slate-600 max-w-md leading-relaxed mb-4">{selectedStat.tooltipDesc}</p>
 
               {/* Huge Live Value */}
               <div className="flex items-baseline gap-2 mb-2">
@@ -369,11 +369,11 @@ export function StatRailComponent() {
             {/* Baseline Specs Comparison Grid */}
             <div className="w-full grid grid-cols-2 gap-3 mt-4 pt-3.5 border-t border-amber-200/40">
               <div className="bg-white/85 border border-amber-200/50 rounded-2xl p-3.5 text-center shadow-sm backdrop-blur-md">
-                <span className="block text-[10px] font-mono text-amber-200/60 uppercase tracking-wider mb-1">Baseline Initial</span>
-                <span className="text-base font-mono font-bold text-amber-500">{selectedStat.initialValue} {selectedStat.unit}</span>
+                <span className="block text-[10px] font-mono text-slate-400 uppercase tracking-wider mb-1">Baseline Initial</span>
+                <span className="text-base font-mono font-bold text-slate-700">{selectedStat.initialValue} {selectedStat.unit}</span>
               </div>
               <div className="bg-white/85 border border-amber-200/50 rounded-2xl p-3.5 text-center shadow-sm backdrop-blur-md">
-                <span className="block text-[10px] font-mono text-amber-200/60 uppercase tracking-wider mb-1">Current Spec</span>
+                <span className="block text-[10px] font-mono text-slate-400 uppercase tracking-wider mb-1">Current Spec</span>
                 <span className="text-base font-mono font-bold text-[#007aff]">{selectedStat.value} {selectedStat.unit}</span>
               </div>
             </div>

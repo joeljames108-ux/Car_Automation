@@ -6,19 +6,19 @@ import { Zap, Gauge, Timer, Weight, TrendingUp, DollarSign, Wind, Shield } from 
 function NT({ label, value, unit, icon, accent, sub }: { label: string; value: number | string; unit?: string; icon?: React.ReactNode; accent?: string; sub?: string }) {
   accent = accent || "#8fb9d9";
   return (
-    <div className="p-3 rounded-xl bg-[#0e1626]/80 border border-white/[0.08] backdrop-blur-md relative overflow-hidden group hover:border-white/[0.15] transition-all">
+    <div className="p-3 rounded-xl bg-amber-950/60/80 border border-white/[0.08] backdrop-blur-md relative overflow-hidden group hover:border-white/[0.15] transition-all">
       <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" style={{ background: "radial-gradient(circle at 50% 100%, " + accent + "15, transparent 70%)" }} />
       <div className="flex items-center justify-between mb-1.5">
-        <span className="text-[9px] font-mono font-bold uppercase tracking-wider text-amber-300/50">{label}</span>
+        <span className="text-[9px] font-mono font-bold uppercase tracking-wider text-slate-500">{label}</span>
         {icon && <span style={{ color: accent }}>{icon}</span>}
       </div>
       <div className="flex items-baseline gap-1">
         <span className="font-mono font-black text-lg" style={{ color: accent }}>
           {typeof value === "number" ? <AnimatedCounter value={value} decimals={value < 10 ? 1 : 0} /> : value}
         </span>
-        {unit && <span className="text-[10px] font-mono text-amber-300/50">{unit}</span>}
+        {unit && <span className="text-[10px] font-mono text-slate-500">{unit}</span>}
       </div>
-      {sub && <div className="text-[8px] font-mono text-amber-400 mt-0.5">{sub}</div>}
+      {sub && <div className="text-[8px] font-mono text-slate-600 mt-0.5">{sub}</div>}
       <div className="absolute bottom-0 left-0 right-0 h-[2px]" style={{ background: "linear-gradient(90deg, transparent, " + accent + "40, transparent)" }} />
     </div>
   );

@@ -193,7 +193,7 @@ export const HypercarGarageSetupStudio: React.FC<HypercarGarageSetupStudioProps>
   };
 
   return (
-    <div className="w-full h-full flex flex-col bg-[#07090e] text-white select-none">
+    <div className="w-full h-full flex flex-col bg-amber-950/60 text-white select-none">
       {/* Top Header Bar */}
       <div className="p-4 bg-black/60 border-b border-white/10 flex items-center justify-between">
         <div className="flex items-center gap-3">
@@ -570,7 +570,7 @@ export const HypercarGarageSetupStudio: React.FC<HypercarGarageSetupStudioProps>
       {/* AI Motorsport Setup Optimizer Modal */}
       {showOptimizerModal && (
         <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-md flex items-center justify-center p-6">
-          <div className="bg-[#0b0f19] border border-amber-500/30 rounded-3xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col shadow-2xl">
+          <div className="bg-amber-950/60 border border-amber-500/30 rounded-3xl w-full max-w-4xl max-h-[90vh] overflow-hidden flex flex-col shadow-2xl">
             {/* Modal Header */}
             <div className="p-6 border-b border-white/10 flex items-center justify-between bg-amber-950/20">
               <div className="flex items-center gap-3">

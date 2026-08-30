@@ -96,7 +96,7 @@ export function NeonTrackBattle() {
   };
 
   return (
-    <div className="w-full flex flex-col gap-6 text-amber-50 animate-nh-materialize">
+    <div className="w-full flex flex-col gap-6 text-slate-100 animate-nh-materialize">
       {/* Header Panel */}
       <NeonHorizonGlassPanel
         variant="window"
@@ -175,17 +175,17 @@ export function NeonTrackBattle() {
 
             {/* Sector Times */}
             <div className="w-full grid grid-cols-3 gap-3 border-t border-white/10 pt-4 mt-4 nh-font-mono text-center text-xs">
-              <div className="bg-[#05080f] p-2.5 rounded-xl border border-sky-400/15">
-                <span className="text-amber-200/60 text-[10px]">SECTOR 1</span>
+              <div className="bg-amber-950/60 p-2.5 rounded-xl border border-sky-400/15">
+                <span className="text-slate-400 text-[10px]">SECTOR 1</span>
                 <div className="text-emerald-300 font-bold text-sm mt-0.5">34.21s</div>
               </div>
-              <div className="bg-[#05080f] p-2.5 rounded-xl border border-sky-400/15">
-                <span className="text-amber-200/60 text-[10px]">SECTOR 2</span>
-                <div className="text-sky-300 font-bold text-sm mt-0.5">1:02.84s</div>
+              <div className="bg-amber-950/60 p-2.5 rounded-xl border border-sky-400/15">
+                <span className="text-slate-400 text-[10px]">SECTOR 2</span>
+                <div className="text-amber-300 font-bold text-sm mt-0.5">1:02.84s</div>
               </div>
-              <div className="bg-[#05080f] p-2.5 rounded-xl border border-sky-400/15">
-                <span className="text-amber-200/60 text-[10px]">SECTOR 3</span>
-                <div className="text-sky-300 font-bold text-sm mt-0.5">42.15s</div>
+              <div className="bg-amber-950/60 p-2.5 rounded-xl border border-sky-400/15">
+                <span className="text-slate-400 text-[10px]">SECTOR 3</span>
+                <div className="text-amber-300 font-bold text-sm mt-0.5">42.15s</div>
               </div>
             </div>
           </NeonHorizonGlassPanel>
@@ -212,11 +212,11 @@ export function NeonTrackBattle() {
               ].map((tire) => (
                 <div
                   key={tire.pos}
-                  className="p-3 rounded-xl bg-[#0a111e] border border-sky-400/15 flex flex-col items-center justify-center text-center"
+                  className="p-3 rounded-xl bg-amber-950/60 border border-sky-400/15 flex flex-col items-center justify-center text-center"
                 >
-                  <span className="text-[10px] nh-font-mono text-sky-400 font-bold">{tire.pos} TIRE</span>
-                  <span className="text-lg font-black nh-font-headline text-amber-50 my-0.5">{tire.temp}</span>
-                  <span className="text-[10px] nh-font-mono text-amber-200/60">{tire.psi}</span>
+                  <span className="text-[10px] nh-font-mono text-amber-400 font-bold">{tire.pos} TIRE</span>
+                  <span className="text-lg font-black nh-font-headline text-slate-100 my-0.5">{tire.temp}</span>
+                  <span className="text-[10px] nh-font-mono text-slate-400">{tire.psi}</span>
                 </div>
               ))}
             </div>
@@ -232,7 +232,7 @@ export function NeonTrackBattle() {
             }}
             className="p-5 flex flex-col items-center justify-center text-center"
           >
-            <div className="w-32 h-32 rounded-full border-2 border-dashed border-sky-400/30 relative flex items-center justify-center my-2">
+            <div className="w-32 h-32 rounded-full border-2 border-dashed border-amber-500/30 relative flex items-center justify-center my-2">
               {/* Traction Limit Arc */}
               <div className="w-20 h-20 rounded-full border border-white/15" />
               {/* G-Force Marker */}
@@ -243,8 +243,8 @@ export function NeonTrackBattle() {
                 className="w-4 h-4 rounded-full bg-rose-400 absolute"
               />
             </div>
-            <div className="text-xs nh-font-mono text-amber-100/80">
-              LATERAL: <span className="text-sky-300 font-bold">{lateralG} G</span> · LONGITUDINAL: <span className="text-amber-300 font-bold">1.45 G</span>
+            <div className="text-xs nh-font-mono text-slate-300">
+              LATERAL: <span className="text-amber-300 font-bold">{lateralG} G</span> · LONGITUDINAL: <span className="text-amber-300 font-bold">1.45 G</span>
             </div>
           </NeonHorizonGlassPanel>
         </div>

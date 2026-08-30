@@ -87,18 +87,18 @@ export function SectionNavigationBar({
           ) : (
             <Flame size={14} className="text-amber-400 animate-pulse" />
           )}
-          <span className="font-extrabold text-amber-50 uppercase tracking-wider">
+          <span className="font-extrabold text-slate-200 uppercase tracking-wider">
             {isEV ? "Electric Powertrain Pipeline" : "ICE Assembly Line"}
           </span>
-          <span className="px-2 py-0.5 rounded-md bg-base-900 border border-amber-800/30 text-[10px] text-amber-200/60">
+          <span className="px-2 py-0.5 rounded-md bg-base-900 border border-slate-800 text-[10px] text-slate-400">
             {installedCount} of {totalCount} Installed
           </span>
         </div>
 
         <div className="flex items-center gap-3">
           <div className="hidden sm:flex items-center gap-2">
-            <span className="text-[10px] text-amber-200/60">Completion</span>
-            <div className="w-24 h-2 rounded-full bg-base-950 border border-amber-800/30 overflow-hidden">
+            <span className="text-[10px] text-slate-400">Completion</span>
+            <div className="w-24 h-2 rounded-full bg-base-950 border border-slate-800 overflow-hidden">
               <div
                 className={`h-full transition-all duration-500 rounded-full ${
                   isEV
@@ -118,7 +118,7 @@ export function SectionNavigationBar({
         {/* Left Scroll Arrow */}
         <button
           onClick={() => handleScroll("left")}
-          className="p-1.5 rounded-xl bg-base-950/80 hover:bg-base-800 text-amber-200/60 hover:text-white border border-amber-800/30 transition-all cursor-pointer shrink-0 active:scale-90"
+          className="p-1.5 rounded-xl bg-base-950/80 hover:bg-base-800 text-slate-400 hover:text-white border border-slate-800 transition-all cursor-pointer shrink-0 active:scale-90"
           title="Scroll Left"
         >
           <ChevronLeft size={16} />
@@ -136,7 +136,7 @@ export function SectionNavigationBar({
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all shrink-0 cursor-pointer border ${
               currentStage === "powertrain_select"
                 ? "bg-amber-500 text-black border-amber-400 shadow-[0_0_15px_rgba(34,211,238,0.5)] scale-105"
-                : "bg-base-950/80 text-amber-200/60 border-base-800 hover:text-amber-50 hover:border-amber-700/30"
+                : "bg-base-950/80 text-slate-400 border-base-800 hover:text-slate-200 hover:border-slate-700"
             }`}
           >
             <Layers size={13} />
@@ -158,14 +158,14 @@ export function SectionNavigationBar({
                 onClick={() => onNavigateToStage(stage.id)}
                 className={`group relative flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-mono font-bold transition-all shrink-0 border cursor-pointer ${
                   !isUnlocked
-                    ? "bg-base-950/40 text-amber-400 border-amber-900/30 cursor-not-allowed opacity-50"
+                    ? "bg-base-950/40 text-slate-600 border-slate-900 cursor-not-allowed opacity-50"
                     : isCurrent
                     ? isEV
                       ? "bg-amber-500 text-black border-amber-300 shadow-[0_0_18px_rgba(192,132,252,0.6)] scale-105"
                       : "bg-amber-500 text-black border-amber-300 shadow-[0_0_18px_rgba(34,211,238,0.6)] scale-105"
                     : isInstalled
-                    ? "bg-base-900/90 text-amber-50 border-emerald-500/40 hover:border-emerald-400 hover:bg-base-850"
-                    : "bg-base-950/80 text-amber-200/60 border-base-800 hover:text-amber-50 hover:border-amber-700/30 hover:bg-base-900"
+                    ? "bg-base-900/90 text-slate-200 border-emerald-500/40 hover:border-emerald-400 hover:bg-base-850"
+                    : "bg-base-950/80 text-slate-400 border-base-800 hover:text-slate-200 hover:border-slate-700 hover:bg-base-900"
                 }`}
                 title={stage.title}
               >
@@ -177,7 +177,7 @@ export function SectionNavigationBar({
                       className={isCurrent ? "text-black" : "text-emerald-400"}
                     />
                   ) : !isUnlocked ? (
-                    <Lock size={12} className="text-amber-400" />
+                    <Lock size={12} className="text-slate-600" />
                   ) : isCurrent ? (
                     <Sparkles size={13} className="text-black animate-spin" />
                   ) : (
@@ -213,7 +213,7 @@ export function SectionNavigationBar({
                 ? "bg-gradient-to-r from-emerald-400 to-amber-400 text-black border-emerald-300 shadow-[0_0_15px_rgba(52,211,153,0.5)] scale-105"
                 : installedCount === totalCount
                 ? "bg-emerald-950/40 text-emerald-300 border-emerald-500/40 hover:bg-emerald-900/50"
-                : "bg-base-950/80 text-amber-300/50 border-base-850 hover:text-amber-100/80"
+                : "bg-base-950/80 text-slate-500 border-base-850 hover:text-slate-300"
             }`}
           >
             <Award size={13} />
@@ -224,7 +224,7 @@ export function SectionNavigationBar({
         {/* Right Scroll Arrow */}
         <button
           onClick={() => handleScroll("right")}
-          className="p-1.5 rounded-xl bg-base-950/80 hover:bg-base-800 text-amber-200/60 hover:text-white border border-amber-800/30 transition-all cursor-pointer shrink-0 active:scale-90"
+          className="p-1.5 rounded-xl bg-base-950/80 hover:bg-base-800 text-slate-400 hover:text-white border border-slate-800 transition-all cursor-pointer shrink-0 active:scale-90"
           title="Scroll Right"
         >
           <ChevronRight size={16} />

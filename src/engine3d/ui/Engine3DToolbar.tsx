@@ -42,7 +42,7 @@ export const Engine3DToolbar: React.FC<Engine3DToolbarProps> = ({
 
   return (
     <div
-      className={`flex flex-wrap items-center justify-between gap-2 p-2.5 rounded-2xl bg-amber-900/40 backdrop-blur-xl border border-white/10 text-xs shadow-xl text-amber-50 ${
+      className={`flex flex-wrap items-center justify-between gap-2 p-2.5 rounded-2xl bg-slate-900/85 backdrop-blur-xl border border-white/10 text-xs shadow-xl text-slate-200 ${
         isFloating
           ? 'absolute top-3 left-1/2 -translate-x-1/2 z-20 max-w-[95vw]'
           : 'w-full'
@@ -51,16 +51,16 @@ export const Engine3DToolbar: React.FC<Engine3DToolbarProps> = ({
       {/* Left: Camera & Lighting Presets */}
       <div className="flex flex-wrap items-center gap-2">
         {/* Camera Selector */}
-        <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-amber-950/75 border border-white/10">
+        <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-slate-950/80 border border-white/10">
           <Camera size={12} className="text-amber-400" />
           <span className="text-[10px] font-mono uppercase font-bold text-amber-400">Cam:</span>
           <select
             value={cameraPreset}
             onChange={(e) => setCameraPreset(e.target.value as CameraPreset3D)}
-            className="bg-transparent text-xs focus:outline-none cursor-pointer font-medium text-amber-50"
+            className="bg-transparent text-xs focus:outline-none cursor-pointer font-medium text-slate-200"
           >
             {presetsList.map((preset) => (
-              <option key={preset.id} value={preset.id} className="bg-amber-950 text-amber-50">
+              <option key={preset.id} value={preset.id} className="bg-slate-900 text-slate-100">
                 {preset.label}
               </option>
             ))}
@@ -68,16 +68,16 @@ export const Engine3DToolbar: React.FC<Engine3DToolbarProps> = ({
         </div>
 
         {/* Lighting Selector */}
-        <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-amber-950/75 border border-white/10">
+        <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-slate-950/80 border border-white/10">
           <Sun size={12} className="text-amber-400" />
           <span className="text-[10px] font-mono uppercase font-bold text-amber-400">Light:</span>
           <select
             value={lightingPreset}
             onChange={(e) => setLightingPreset(e.target.value as LightingPreset)}
-            className="bg-transparent text-xs focus:outline-none cursor-pointer font-medium text-amber-50"
+            className="bg-transparent text-xs focus:outline-none cursor-pointer font-medium text-slate-200"
           >
             {lightingList.map((light) => (
-              <option key={light.id} value={light.id} className="bg-amber-950 text-amber-50">
+              <option key={light.id} value={light.id} className="bg-slate-900 text-slate-100">
                 {light.label}
               </option>
             ))}
@@ -86,7 +86,7 @@ export const Engine3DToolbar: React.FC<Engine3DToolbarProps> = ({
       </div>
 
       {/* Center: Diagnostic Toggles */}
-      <div className="flex items-center gap-1 p-0.5 rounded-xl bg-amber-950/75 border border-white/10">
+      <div className="flex items-center gap-1 p-0.5 rounded-xl bg-slate-950/80 border border-white/10">
         <button
           type="button"
           onClick={toggleWireframe}
@@ -94,7 +94,7 @@ export const Engine3DToolbar: React.FC<Engine3DToolbarProps> = ({
           className={`px-2.5 py-1 rounded-lg text-[10px] font-mono transition-all font-bold cursor-pointer ${
             showWireframe
               ? 'bg-amber-500/25 text-amber-300 border border-amber-400/50 shadow-[0_0_10px_rgba(0,229,255,0.3)]'
-              : 'text-amber-200/60 hover:text-amber-50'
+              : 'text-slate-400 hover:text-slate-200'
           }`}
         >
           Wire
@@ -107,7 +107,7 @@ export const Engine3DToolbar: React.FC<Engine3DToolbarProps> = ({
           className={`px-2.5 py-1 rounded-lg text-[10px] font-mono transition-all font-bold cursor-pointer ${
             showAttachmentPoints
               ? 'bg-amber-500/25 text-amber-300 border border-amber-400/50 shadow-[0_0_10px_rgba(0,229,255,0.3)]'
-              : 'text-amber-200/60 hover:text-amber-50'
+              : 'text-slate-400 hover:text-slate-200'
           }`}
         >
           Sockets
@@ -120,7 +120,7 @@ export const Engine3DToolbar: React.FC<Engine3DToolbarProps> = ({
           className={`px-2.5 py-1 rounded-lg text-[10px] font-mono transition-all font-bold cursor-pointer ${
             showLabels
               ? 'bg-amber-500/25 text-amber-300 border border-amber-400/50 shadow-[0_0_10px_rgba(0,229,255,0.3)]'
-              : 'text-amber-200/60 hover:text-amber-50'
+              : 'text-slate-400 hover:text-slate-200'
           }`}
         >
           Labels
@@ -133,7 +133,7 @@ export const Engine3DToolbar: React.FC<Engine3DToolbarProps> = ({
           className={`px-2.5 py-1 rounded-lg text-[10px] font-mono transition-all font-bold cursor-pointer ${
             showDependencies
               ? 'bg-amber-500/25 text-amber-200 border border-amber-500/40 shadow-sm'
-              : 'text-amber-200/60 hover:text-amber-50'
+              : 'text-slate-400 hover:text-slate-200'
           }`}
         >
           Deps
@@ -141,7 +141,7 @@ export const Engine3DToolbar: React.FC<Engine3DToolbarProps> = ({
       </div>
 
       {/* Axis Rotation Quick Actions */}
-      <div className="flex items-center gap-1 p-0.5 rounded-xl bg-amber-950/75 border border-white/10">
+      <div className="flex items-center gap-1 p-0.5 rounded-xl bg-slate-950/80 border border-white/10">
         <button
           type="button"
           onClick={() => rotateEngine90('x', 1)}
@@ -156,9 +156,9 @@ export const Engine3DToolbar: React.FC<Engine3DToolbarProps> = ({
           type="button"
           onClick={() => rotateEngine90('y', 1)}
           title="Rotate 90° around Y (Yaw)"
-          className="flex items-center gap-1 px-2 py-1 rounded-lg text-[10px] font-mono text-amber-100/80 hover:bg-white/10 transition-all font-bold cursor-pointer"
+          className="flex items-center gap-1 px-2 py-1 rounded-lg text-[10px] font-mono text-slate-300 hover:bg-white/10 transition-all font-bold cursor-pointer"
         >
-          <RotateCw size={11} className="text-amber-200/60" />
+          <RotateCw size={11} className="text-slate-400" />
           <span>Yaw 90°</span>
         </button>
 
@@ -166,9 +166,9 @@ export const Engine3DToolbar: React.FC<Engine3DToolbarProps> = ({
           type="button"
           onClick={() => rotateEngine90('z', 1)}
           title="Rotate 90° around Z (Roll)"
-          className="flex items-center gap-1 px-2 py-1 rounded-lg text-[10px] font-mono text-amber-100/80 hover:bg-white/10 transition-all font-bold cursor-pointer"
+          className="flex items-center gap-1 px-2 py-1 rounded-lg text-[10px] font-mono text-slate-300 hover:bg-white/10 transition-all font-bold cursor-pointer"
         >
-          <RotateCw size={11} className="text-amber-200/60" />
+          <RotateCw size={11} className="text-slate-400" />
           <span>Roll 90°</span>
         </button>
 
@@ -176,7 +176,7 @@ export const Engine3DToolbar: React.FC<Engine3DToolbarProps> = ({
           type="button"
           onClick={resetEngineRotation}
           title="Reset Engine Orientation"
-          className="p-1 rounded-lg text-[10px] font-mono text-amber-200/60 hover:text-amber-50 hover:bg-white/10 transition-all cursor-pointer"
+          className="p-1 rounded-lg text-[10px] font-mono text-slate-400 hover:text-slate-200 hover:bg-white/10 transition-all cursor-pointer"
         >
           <RotateCcw size={11} />
         </button>

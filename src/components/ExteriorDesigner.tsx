@@ -16,11 +16,11 @@ import type {
 const PAINT_SWATCHES = [
   "#e11d48", "#dc2626", "#ea580c", "#f59e0b", "#facc15", "#84cc16",
   "#22c55e", "#10b981", "#14b8a6", "#f59e0b", "#d97706", "#b45309",
-  "#1e40af", "#d97706", "#f59e0b", "#d97706", "#f43f5e", "#0f172a",
+  "#1e40af", "#d97706", "#f59e0b", "#d97706", "#f43f5e", "#1a1008",
   "#1e293b", "#475569", "#94a3b8", "#e2e8f0", "#f8fafc", "#92400e",
 ];
 
-const BADGE_SWATCHES = ["#e11d48", "#facc15", "#fbbf24", "#e2e8f0", "#0f172a", "#84cc16"];
+const BADGE_SWATCHES = ["#e11d48", "#facc15", "#fbbf24", "#e2e8f0", "#1a1008", "#84cc16"];
 
 function BodyPreview({ bodyType, finish }: {
   bodyType: BodyType; finish: PaintFinish;
@@ -30,7 +30,7 @@ function BodyPreview({ bodyType, finish }: {
       <img src="/agera.png" alt="Car Preview" loading="lazy" decoding="async" className="w-full h-auto block" />
 
       {/* finish label */}
-      <div className="absolute top-2 left-2 text-[9px] font-mono text-amber-300/50 uppercase tracking-wider">
+      <div className="absolute top-2 left-2 text-[9px] font-mono text-slate-500 uppercase tracking-wider">
         {BODY_TYPES[bodyType].label} · {PAINT_FINISHES[finish].label}
       </div>
     </div>
@@ -55,21 +55,21 @@ export function ExteriorDesigner() {
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
             <div className="bg-base-850 rounded-lg p-2 border border-base-800">
-              <div className="label-mono text-amber-300/50">Origin</div>
-              <div className="text-amber-100/80">{BODY_TYPES[ext.bodyType].origin}</div>
+              <div className="label-mono text-slate-500">Origin</div>
+              <div className="text-slate-300">{BODY_TYPES[ext.bodyType].origin}</div>
             </div>
             <div className="bg-base-850 rounded-lg p-2 border border-base-800">
-              <div className="label-mono text-amber-300/50">Aero Impact</div>
-              <div className="text-amber-100/80">
+              <div className="label-mono text-slate-500">Aero Impact</div>
+              <div className="text-slate-300">
                 Cd {BODY_TYPES[ext.bodyType].dragDelta >= 0 ? "+" : ""}{BODY_TYPES[ext.bodyType].dragDelta.toFixed(3)} · Cl {BODY_TYPES[ext.bodyType].liftDelta >= 0 ? "+" : ""}{BODY_TYPES[ext.bodyType].liftDelta.toFixed(3)}
               </div>
             </div>
             <div className="bg-base-850 rounded-lg p-2 border border-base-800">
-              <div className="label-mono text-amber-300/50">Weight Δ</div>
-              <div className="text-amber-100/80">{BODY_TYPES[ext.bodyType].weightDelta > 0 ? "+" : ""}{BODY_TYPES[ext.bodyType].weightDelta} kg</div>
+              <div className="label-mono text-slate-500">Weight Δ</div>
+              <div className="text-slate-300">{BODY_TYPES[ext.bodyType].weightDelta > 0 ? "+" : ""}{BODY_TYPES[ext.bodyType].weightDelta} kg</div>
             </div>
           </div>
-          <p className="text-[11px] text-amber-300/50 mt-2">{BODY_TYPES[ext.bodyType].description}</p>
+          <p className="text-[11px] text-slate-500 mt-2">{BODY_TYPES[ext.bodyType].description}</p>
         </Section>
 
         <Section title="Paint & Finish" icon={<Palette size={16} />}>
@@ -94,7 +94,7 @@ export function ExteriorDesigner() {
                   onChange={(e) => updateExterior({ paintColor: e.target.value })}
                   className="h-8 w-12 bg-transparent border border-base-800 rounded cursor-pointer"
                 />
-                <span className="font-mono text-xs text-amber-200/60">{ext.paintColor}</span>
+                <span className="font-mono text-xs text-slate-400">{ext.paintColor}</span>
               </div>
             </div>
             <div>
@@ -140,16 +140,16 @@ export function ExteriorDesigner() {
           </div>
           <div className="grid grid-cols-3 gap-2 mt-3 text-[10px]">
             <div className="bg-base-850 rounded p-1.5 border border-base-800 text-center">
-              <div className="label-mono text-amber-300/50">Aero</div>
-              <div className="font-mono text-amber-100/80">{(RIM_DESIGNS[ext.rimDesign].aeroFactor).toFixed(2)}×</div>
+              <div className="label-mono text-slate-500">Aero</div>
+              <div className="font-mono text-slate-300">{(RIM_DESIGNS[ext.rimDesign].aeroFactor).toFixed(2)}×</div>
             </div>
             <div className="bg-base-850 rounded p-1.5 border border-base-800 text-center">
-              <div className="label-mono text-amber-300/50">Weight</div>
-              <div className="font-mono text-amber-100/80">{(RIM_DESIGNS[ext.rimDesign].weightFactor).toFixed(2)}×</div>
+              <div className="label-mono text-slate-500">Weight</div>
+              <div className="font-mono text-slate-300">{(RIM_DESIGNS[ext.rimDesign].weightFactor).toFixed(2)}×</div>
             </div>
             <div className="bg-base-850 rounded p-1.5 border border-base-800 text-center">
-              <div className="label-mono text-amber-300/50">Brake Cool</div>
-              <div className="font-mono text-amber-100/80">{(RIM_DESIGNS[ext.rimDesign].brakeCooling * 100).toFixed(0)}%</div>
+              <div className="label-mono text-slate-500">Brake Cool</div>
+              <div className="font-mono text-slate-300">{(RIM_DESIGNS[ext.rimDesign].brakeCooling * 100).toFixed(0)}%</div>
             </div>
           </div>
         </Section>
@@ -171,20 +171,20 @@ export function ExteriorDesigner() {
           </div>
           <div className="grid grid-cols-4 gap-2 mt-3 text-[10px]">
             <div className="bg-base-850 rounded p-1.5 border border-base-800 text-center">
-              <div className="label-mono text-amber-300/50">Headlight Wt</div>
-              <div className="font-mono text-amber-100/80">{HEADLIGHT_TYPES[ext.headlightType].weight} kg</div>
+              <div className="label-mono text-slate-500">Headlight Wt</div>
+              <div className="font-mono text-slate-300">{HEADLIGHT_TYPES[ext.headlightType].weight} kg</div>
             </div>
             <div className="bg-base-850 rounded p-1.5 border border-base-800 text-center">
-              <div className="label-mono text-amber-300/50">Draw</div>
-              <div className="font-mono text-amber-100/80">{HEADLIGHT_TYPES[ext.headlightType].powerDraw} W</div>
+              <div className="label-mono text-slate-500">Draw</div>
+              <div className="font-mono text-slate-300">{HEADLIGHT_TYPES[ext.headlightType].powerDraw} W</div>
             </div>
             <div className="bg-base-850 rounded p-1.5 border border-base-800 text-center">
-              <div className="label-mono text-amber-300/50">Taillight Wt</div>
-              <div className="font-mono text-amber-100/80">{TAILLIGHT_TYPES[ext.taillightType].weight} kg</div>
+              <div className="label-mono text-slate-500">Taillight Wt</div>
+              <div className="font-mono text-slate-300">{TAILLIGHT_TYPES[ext.taillightType].weight} kg</div>
             </div>
             <div className="bg-base-850 rounded p-1.5 border border-base-800 text-center">
-              <div className="label-mono text-amber-300/50">Brightness</div>
-              <div className="font-mono text-amber-100/80">{(HEADLIGHT_TYPES[ext.headlightType].brightness * 100).toFixed(0)}%</div>
+              <div className="label-mono text-slate-500">Brightness</div>
+              <div className="font-mono text-slate-300">{(HEADLIGHT_TYPES[ext.headlightType].brightness * 100).toFixed(0)}%</div>
             </div>
           </div>
         </Section>
@@ -198,7 +198,7 @@ export function ExteriorDesigner() {
               onChange={(val) => updateExterior({ bodyKit: val })}
               columns={4}
             />
-            <p className="text-[11px] text-amber-300/50 mt-2">{BODY_KITS[ext.bodyKit].description}</p>
+            <p className="text-[11px] text-slate-500 mt-2">{BODY_KITS[ext.bodyKit].description}</p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -254,12 +254,12 @@ export function ExteriorDesigner() {
         </Section>
 
         <Section title="Aero Forces" icon={<Gauge size={16} />}>
-          <div className="text-[11px] text-amber-300/50 space-y-1">
-            <div className="flex justify-between"><span>Body type Cd Δ</span><span className="font-mono text-amber-100/80">{BODY_TYPES[ext.bodyType].dragDelta >= 0 ? "+" : ""}{BODY_TYPES[ext.bodyType].dragDelta.toFixed(3)}</span></div>
-            <div className="flex justify-between"><span>Body kit Cd Δ</span><span className="font-mono text-amber-100/80">{BODY_KITS[ext.bodyKit].dragDelta >= 0 ? "+" : ""}{BODY_KITS[ext.bodyKit].dragDelta.toFixed(3)}</span></div>
-            <div className="flex justify-between"><span>Spoiler Cl Δ</span><span className="font-mono text-amber-100/80">{SPOILER_TYPES[ext.spoilerType].liftDelta >= 0 ? "+" : ""}{SPOILER_TYPES[ext.spoilerType].liftDelta.toFixed(3)}</span></div>
-            <div className="flex justify-between"><span>Paint Cd Δ</span><span className="font-mono text-amber-100/80">{PAINT_FINISHES[ext.paintFinish].dragDelta >= 0 ? "+" : ""}{PAINT_FINISHES[ext.paintFinish].dragDelta.toFixed(3)}</span></div>
-            <div className="flex justify-between"><span>Headlight Cd Δ</span><span className="font-mono text-amber-100/80">{HEADLIGHT_TYPES[ext.headlightType].dragDelta >= 0 ? "+" : ""}{HEADLIGHT_TYPES[ext.headlightType].dragDelta.toFixed(3)}</span></div>
+          <div className="text-[11px] text-slate-500 space-y-1">
+            <div className="flex justify-between"><span>Body type Cd Δ</span><span className="font-mono text-slate-300">{BODY_TYPES[ext.bodyType].dragDelta >= 0 ? "+" : ""}{BODY_TYPES[ext.bodyType].dragDelta.toFixed(3)}</span></div>
+            <div className="flex justify-between"><span>Body kit Cd Δ</span><span className="font-mono text-slate-300">{BODY_KITS[ext.bodyKit].dragDelta >= 0 ? "+" : ""}{BODY_KITS[ext.bodyKit].dragDelta.toFixed(3)}</span></div>
+            <div className="flex justify-between"><span>Spoiler Cl Δ</span><span className="font-mono text-slate-300">{SPOILER_TYPES[ext.spoilerType].liftDelta >= 0 ? "+" : ""}{SPOILER_TYPES[ext.spoilerType].liftDelta.toFixed(3)}</span></div>
+            <div className="flex justify-between"><span>Paint Cd Δ</span><span className="font-mono text-slate-300">{PAINT_FINISHES[ext.paintFinish].dragDelta >= 0 ? "+" : ""}{PAINT_FINISHES[ext.paintFinish].dragDelta.toFixed(3)}</span></div>
+            <div className="flex justify-between"><span>Headlight Cd Δ</span><span className="font-mono text-slate-300">{HEADLIGHT_TYPES[ext.headlightType].dragDelta >= 0 ? "+" : ""}{HEADLIGHT_TYPES[ext.headlightType].dragDelta.toFixed(3)}</span></div>
           </div>
         </Section>
       </div>

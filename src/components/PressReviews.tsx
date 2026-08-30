@@ -37,7 +37,7 @@ function ScoreBar({ score }: { score: number }) {
       <div className="flex-1 h-1.5 bg-base-800 rounded-full overflow-hidden">
         <div className={color + " h-full transition-all"} style={{ width: pct + "%" }} />
       </div>
-      <span className="font-mono text-xs text-amber-100/80 w-8 text-right">{score.toFixed(1)}</span>
+      <span className="font-mono text-xs text-slate-300 w-8 text-right">{score.toFixed(1)}</span>
     </div>
   );
 }
@@ -45,11 +45,11 @@ function ScoreBar({ score }: { score: number }) {
 function ScoreGrid({ scores, title }: { scores: CategoryScore[]; title: string }) {
   return (
     <div>
-      <div className="label-mono text-amber-300/50 mb-2">{title}</div>
+      <div className="label-mono text-slate-500 mb-2">{title}</div>
       <div className="space-y-1.5">
         {scores.map((s) => (
           <div key={s.key} className="flex items-center gap-3">
-            <span className="text-xs text-amber-200/60 w-28 shrink-0">{s.label}</span>
+            <span className="text-xs text-slate-400 w-28 shrink-0">{s.label}</span>
             <div className="flex-1"><ScoreBar score={s.score} /></div>
           </div>
         ))}
@@ -63,7 +63,7 @@ function MagCard({ review }: { review: MagazineReview }) {
     review.category === "performance" ? "text-orange-300 bg-orange-500/10 border-orange-500/30"
     : review.category === "luxury" ? "text-amber-300 bg-amber-500/10 border-amber-500/30"
     : review.category === "economy" ? "text-emerald-300 bg-emerald-500/10 border-emerald-500/30"
-    : "text-sky-300 bg-sky-500/10 border-sky-500/30";
+    : "text-amber-300 bg-amber-500/15 border-sky-500/30";
   return (
     <div className="panel p-4 space-y-3 transition-all duration-300 hover:border-base-700 hover:shadow-[0_8px_24px_-12px_rgba(0,0,0,0.4)]">
       <div className="flex items-start justify-between gap-3">
@@ -72,27 +72,27 @@ function MagCard({ review }: { review: MagazineReview }) {
             <span className={"text-[10px] px-1.5 py-0.5 rounded border flex items-center gap-1 " + catColor}>
               {CAT_ICON[review.category]}{review.category}
             </span>
-            <h4 className="text-sm font-semibold text-amber-50">{review.magName}</h4>
+            <h4 className="text-sm font-semibold text-slate-200">{review.magName}</h4>
           </div>
         </div>
         <div className="text-right shrink-0">
           <div className="text-2xl font-mono font-bold text-accent-300">{review.score.toFixed(1)}</div>
-          <div className="text-[10px] text-amber-300/50">/ 10</div>
+          <div className="text-[10px] text-slate-500">/ 10</div>
         </div>
       </div>
-      <p className="text-xs italic text-amber-200/60 border-l-2 border-base-700 pl-3">{review.verdict}</p>
-      <p className="text-xs text-amber-200/60 leading-relaxed">{review.article}</p>
+      <p className="text-xs italic text-slate-400 border-l-2 border-base-700 pl-3">{review.verdict}</p>
+      <p className="text-xs text-slate-400 leading-relaxed">{review.article}</p>
       <div className="grid grid-cols-2 gap-3 pt-1">
         <div>
           <div className="text-[10px] text-ok-400 mb-1 flex items-center gap-1"><ThumbsUp size={10} /> Pros</div>
           <ul className="space-y-0.5">
-            {review.pros.map((p, i) => <li key={i} className="text-[11px] text-amber-200/60 flex gap-1"><span className="text-ok-500">+</span>{p}</li>)}
+            {review.pros.map((p, i) => <li key={i} className="text-[11px] text-slate-400 flex gap-1"><span className="text-ok-500">+</span>{p}</li>)}
           </ul>
         </div>
         <div>
           <div className="text-[10px] text-danger-400 mb-1 flex items-center gap-1"><ThumbsDown size={10} /> Cons</div>
           <ul className="space-y-0.5">
-            {review.cons.map((c, i) => <li key={i} className="text-[11px] text-amber-200/60 flex gap-1"><span className="text-danger-500">−</span>{c}</li>)}
+            {review.cons.map((c, i) => <li key={i} className="text-[11px] text-slate-400 flex gap-1"><span className="text-danger-500">−</span>{c}</li>)}
           </ul>
         </div>
       </div>
@@ -150,7 +150,7 @@ export function PressReviews() {
     d === "Very High" ? "text-ok-300 bg-ok-500/15 border-ok-500/40"
     : d === "High" ? "text-accent-300 bg-accent-500/15 border-accent-500/40"
     : d === "Moderate" ? "text-warn-300 bg-warn-500/15 border-warn-500/40"
-    : "text-amber-200/60 bg-base-800 border-base-700";
+    : "text-slate-400 bg-base-800 border-base-700";
 
   return (
     <div className="space-y-4 stagger">
@@ -160,11 +160,11 @@ export function PressReviews() {
         <div className="relative">
           <div className="flex items-center gap-2 mb-3">
             <Newspaper size={18} className="text-accent-400" />
-            <h2 className="text-sm font-semibold text-amber-50">Press & Industry Reviews</h2>
-            <span className="text-xs text-amber-300/50">— {design.name || "Unnamed Prototype"}</span>
+            <h2 className="text-sm font-semibold text-slate-200">Press & Industry Reviews</h2>
+            <span className="text-xs text-slate-500">— {design.name || "Unnamed Prototype"}</span>
             <button
               onClick={() => setSeed((x) => x + 1)}
-              className="ml-auto text-[10px] px-2 py-1 rounded-lg bg-base-800 border border-base-700 text-amber-200/60 hover:text-amber-50 transition-all"
+              className="ml-auto text-[10px] px-2 py-1 rounded-lg bg-base-800 border border-base-700 text-slate-400 hover:text-slate-200 transition-all"
             >
               Re-roll reviews
             </button>
@@ -203,7 +203,7 @@ export function PressReviews() {
                 { label: "Awards", val: wonAwards.length, icon: <Trophy size={12} />, raw: true },
               ].map((c) => (
                 <div key={c.label}>
-                  <div className="flex items-center gap-1.5 text-[11px] text-amber-200/60 mb-1">
+                  <div className="flex items-center gap-1.5 text-[11px] text-slate-400 mb-1">
                     <span className="text-accent-400">{c.icon}</span>{c.label}
                   </div>
                   {c.raw ? (
@@ -229,7 +229,7 @@ export function PressReviews() {
                 onClick={() => setTab(t.id)}
                 className={
                   "flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all " +
-                  (active ? "bg-accent-500/20 text-accent-300" : "text-amber-200/60 hover:text-amber-50 hover:bg-base-850")
+                  (active ? "bg-accent-500/20 text-accent-300" : "text-slate-400 hover:text-slate-200 hover:bg-base-850")
                 }
               >
                 {t.icon}{t.label}
@@ -251,7 +251,7 @@ export function PressReviews() {
               <div className="grid grid-cols-4 gap-2 mt-3 w-full">
                 {radarAxes.map((a) => (
                   <div key={a.label} className="text-center">
-                    <div className="text-[10px] text-amber-300/50">{a.label}</div>
+                    <div className="text-[10px] text-slate-500">{a.label}</div>
                     <div className="font-mono text-xs text-accent-300">{a.value.toFixed(1)}</div>
                   </div>
                 ))}
@@ -289,7 +289,7 @@ export function PressReviews() {
               <div className="text-4xl font-mono font-bold text-amber-300">{avgStars.toFixed(1)}</div>
               <div>
                 <StarRow n={Math.round(avgStars)} />
-                <div className="text-[10px] text-amber-300/50 mt-0.5">{review.customerReviews.length} verified owners</div>
+                <div className="text-[10px] text-slate-500 mt-0.5">{review.customerReviews.length} verified owners</div>
               </div>
             </div>
             <div className="flex items-end gap-1 h-10">
@@ -299,7 +299,7 @@ export function PressReviews() {
                 return (
                   <div key={star} className="flex flex-col items-center gap-1" style={{ width: 28 }}>
                     <div className="w-5 bg-amber-500/60 rounded-sm" style={{ height: Math.max(pct, 4) + "%" }} />
-                    <span className="text-[9px] text-amber-300/50 font-mono">{star}</span>
+                    <span className="text-[9px] text-slate-500 font-mono">{star}</span>
                   </div>
                 );
               })}
@@ -310,21 +310,21 @@ export function PressReviews() {
               <div key={i} className="bg-base-850 border border-base-800 rounded-xl p-3 transition-all duration-300 hover:border-base-700 hover:bg-base-800/40">
                 <div className="flex items-center justify-between mb-2">
                   <div className="flex items-center gap-2">
-                    <div className="w-7 h-7 rounded-full bg-base-800 flex items-center justify-center text-[10px] text-amber-200/60 font-mono">
+                    <div className="w-7 h-7 rounded-full bg-base-800 flex items-center justify-center text-[10px] text-slate-400 font-mono">
                       {c.author.split(" ").map((n) => n[0]).join("")}
                     </div>
                     <div>
-                      <div className="text-xs font-medium text-amber-100/80">{c.author}</div>
+                      <div className="text-xs font-medium text-slate-300">{c.author}</div>
                       <StarRow n={c.stars} />
                     </div>
                   </div>
-                  <span className="text-[10px] text-amber-400">Verified Owner</span>
+                  <span className="text-[10px] text-slate-600">Verified Owner</span>
                 </div>
-                <div className="text-xs font-medium text-amber-50 mb-1">{c.title}</div>
-                <p className="text-[11px] text-amber-200/60 leading-relaxed mb-2">{c.body}</p>
+                <div className="text-xs font-medium text-slate-200 mb-1">{c.title}</div>
+                <p className="text-[11px] text-slate-400 leading-relaxed mb-2">{c.body}</p>
                 <div className="flex flex-wrap gap-1.5">
                   {Object.entries(c.categories).map(([k, v]) => (
-                    <span key={k} className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-base-800 text-amber-200/60">
+                    <span key={k} className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-base-800 text-slate-400">
                       {k}: <span className={v >= 7 ? "text-ok-300" : v >= 5 ? "text-warn-300" : "text-danger-300"}>{v.toFixed(1)}</span>
                     </span>
                   ))}
@@ -342,7 +342,7 @@ export function PressReviews() {
             <div className="bg-base-850 rounded-xl p-3 border border-base-800 flex flex-col items-center justify-center">
               <RadialGauge value={(review.longTerm.engineReliability + review.longTerm.suspensionDurability + review.longTerm.electronicsFailures) / 3} label="Durability" size={150} />
               <div className="mt-2 text-2xl font-mono font-bold text-accent-300">{review.longTerm.reliabilityGrade}</div>
-              <div className="text-[10px] text-amber-300/50 uppercase tracking-wider">Reliability Grade</div>
+              <div className="text-[10px] text-slate-500 uppercase tracking-wider">Reliability Grade</div>
             </div>
             <div className="lg:col-span-2 grid grid-cols-2 md:grid-cols-4 gap-2 content-center">
               <StatTile label="Engine Reliability" value={review.longTerm.engineReliability.toFixed(1)} unit="/10" accent="ok" />
@@ -355,7 +355,7 @@ export function PressReviews() {
             </div>
           </div>
           <div className="mb-4">
-            <div className="label-mono text-amber-300/50 mb-2">Wear Breakdown</div>
+            <div className="label-mono text-slate-500 mb-2">Wear Breakdown</div>
             <div className="space-y-2">
               {[
                 { label: "Engine", val: review.longTerm.engineReliability },
@@ -366,17 +366,17 @@ export function PressReviews() {
                 { label: "Battery Health", val: review.longTerm.batteryHealth },
               ].map((m) => (
                 <div key={m.label} className="flex items-center gap-3">
-                  <span className="text-xs text-amber-200/60 w-28 shrink-0">{m.label}</span>
+                  <span className="text-xs text-slate-400 w-28 shrink-0">{m.label}</span>
                   <div className="flex-1"><ScoreBar score={m.val} /></div>
                 </div>
               ))}
             </div>
           </div>
           <div>
-            <div className="label-mono text-amber-300/50 mb-2">Owner Reports</div>
+            <div className="label-mono text-slate-500 mb-2">Owner Reports</div>
             <ul className="space-y-1.5">
               {review.longTerm.notes.map((n, i) => (
-                <li key={i} className="flex items-start gap-2 text-xs text-amber-200/60 bg-base-850 border border-base-800 rounded-lg px-3 py-2">
+                <li key={i} className="flex items-start gap-2 text-xs text-slate-400 bg-base-850 border border-base-800 rounded-lg px-3 py-2">
                   <Clock size={12} className="text-warn-400 mt-0.5 shrink-0" />
                   {n}
                 </li>
@@ -392,24 +392,24 @@ export function PressReviews() {
           <div className="space-y-3">
             {review.influencers.map((inf, i) => (
               <div key={i} className="bg-base-850 border border-base-800 rounded-xl p-3 flex items-start gap-3">
-                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-accent-500/30 to-base-700 flex items-center justify-center text-amber-100/80 font-bold text-sm shrink-0">
+                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-accent-500/30 to-base-700 flex items-center justify-center text-slate-300 font-bold text-sm shrink-0">
                   {inf.name.split(" ").map((n) => n[0]).join("")}
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 flex-wrap">
-                    <span className="text-sm font-medium text-amber-50">{inf.name}</span>
-                    <span className="text-[11px] text-amber-300/50">@{inf.channel}</span>
-                    <span className="text-[10px] text-amber-300/50">{inf.subscribers} subs</span>
-                    <span className="text-[10px] px-1.5 py-0.5 rounded bg-base-800 text-amber-200/60">{inf.niche}</span>
+                    <span className="text-sm font-medium text-slate-200">{inf.name}</span>
+                    <span className="text-[11px] text-slate-500">@{inf.channel}</span>
+                    <span className="text-[10px] text-slate-500">{inf.subscribers} subs</span>
+                    <span className="text-[10px] px-1.5 py-0.5 rounded bg-base-800 text-slate-400">{inf.niche}</span>
                     {inf.viral && <span className="text-[10px] px-1.5 py-0.5 rounded bg-orange-500/15 text-orange-300 border border-orange-500/30 flex items-center gap-0.5"><Flame size={9} />Viral</span>}
                   </div>
-                  <p className="text-xs text-amber-200/60 mt-1">{inf.verdict}</p>
+                  <p className="text-xs text-slate-400 mt-1">{inf.verdict}</p>
                 </div>
                 <div className="text-right shrink-0">
                   <div className={"text-xs font-mono font-semibold " + (inf.demandImpact >= 0 ? "text-ok-300" : "text-danger-300")}>
                     {inf.demandImpact >= 0 ? "+" : ""}{inf.demandImpact}%
                   </div>
-                  <div className="text-[10px] text-amber-400">demand</div>
+                  <div className="text-[10px] text-slate-600">demand</div>
                 </div>
               </div>
             ))}
@@ -434,10 +434,10 @@ export function PressReviews() {
             <table className="w-full text-xs">
               <thead>
                 <tr className="border-b border-base-800">
-                  <th className="text-left py-2 px-3 label-mono text-amber-300/50">Category</th>
+                  <th className="text-left py-2 px-3 label-mono text-slate-500">Category</th>
                   <th className="text-center py-2 px-3 label-mono text-accent-300">{carName}</th>
                   {review.comparison.competitors.map((c) => (
-                    <th key={c} className="text-center py-2 px-3 label-mono text-amber-200/60">{c}</th>
+                    <th key={c} className="text-center py-2 px-3 label-mono text-slate-400">{c}</th>
                   ))}
                 </tr>
               </thead>
@@ -447,12 +447,12 @@ export function PressReviews() {
                   const best = Math.max(...allVals);
                   return (
                     <tr key={r.category} className="border-b border-base-800/50">
-                      <td className="py-2 px-3 text-amber-200/60">{r.category}</td>
-                      <td className={"text-center py-2 px-3 font-mono font-semibold " + (r.yours === best ? "text-ok-300" : "text-amber-100/80")}>
+                      <td className="py-2 px-3 text-slate-400">{r.category}</td>
+                      <td className={"text-center py-2 px-3 font-mono font-semibold " + (r.yours === best ? "text-ok-300" : "text-slate-300")}>
                         {r.yours.toFixed(1)}{r.yours === best && <span className="text-[9px] ml-1">★</span>}
                       </td>
                       {r.competitors.map((c, i) => (
-                        <td key={i} className={"text-center py-2 px-3 font-mono " + (c === best ? "text-ok-300 font-semibold" : "text-amber-200/60")}>
+                        <td key={i} className={"text-center py-2 px-3 font-mono " + (c === best ? "text-ok-300 font-semibold" : "text-slate-400")}>
                           {c.toFixed(1)}{c === best && <span className="text-[9px] ml-1">★</span>}
                         </td>
                       ))}
@@ -460,12 +460,12 @@ export function PressReviews() {
                   );
                 })}
                 <tr className="border-t-2 border-base-700 bg-base-850/50">
-                  <td className="py-2 px-3 font-semibold text-amber-100/80">Overall</td>
-                  <td className={"text-center py-2 px-3 font-mono font-bold " + (review.comparison.winnerIndex === 0 ? "text-amber-300" : "text-amber-100/80")}>
+                  <td className="py-2 px-3 font-semibold text-slate-300">Overall</td>
+                  <td className={"text-center py-2 px-3 font-mono font-bold " + (review.comparison.winnerIndex === 0 ? "text-amber-300" : "text-slate-300")}>
                     {compTotals[0].toFixed(1)}
                   </td>
                   {review.comparison.competitors.map((_, i) => (
-                    <td key={i} className={"text-center py-2 px-3 font-mono font-bold " + (review.comparison.winnerIndex === i + 1 ? "text-amber-300" : "text-amber-200/60")}>
+                    <td key={i} className={"text-center py-2 px-3 font-mono font-bold " + (review.comparison.winnerIndex === i + 1 ? "text-amber-300" : "text-slate-400")}>
                       {compTotals[i + 1].toFixed(1)}
                     </td>
                   ))}
@@ -477,7 +477,7 @@ export function PressReviews() {
             {review.comparison.winnerIndex === 0 ? (
               <span className="text-amber-300 flex items-center justify-center gap-1.5"><Trophy size={15} /> {carName} wins the comparison test</span>
             ) : (
-              <span className="text-amber-200/60">{review.comparison.competitors[review.comparison.winnerIndex - 1]} wins this round</span>
+              <span className="text-slate-400">{review.comparison.competitors[review.comparison.winnerIndex - 1]} wins this round</span>
             )}
           </div>
         </Section>
@@ -492,7 +492,7 @@ export function PressReviews() {
                 <Trophy size={18} />
                 <span className="font-semibold">{wonAwards.length} award{wonAwards.length > 1 ? "s" : ""} won</span>
               </div>
-              <p className="text-xs text-amber-200/60 mt-1">Awards boost market demand and brand prestige.</p>
+              <p className="text-xs text-slate-400 mt-1">Awards boost market demand and brand prestige.</p>
             </div>
           )}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
@@ -501,10 +501,10 @@ export function PressReviews() {
                 key={a.name}
                 className={"flex items-start gap-3 p-3 rounded-xl border transition-all " + (a.won ? "bg-amber-500/10 border-amber-500/40" : "bg-base-850 border-base-800 opacity-50")}
               >
-                <Trophy size={18} className={a.won ? "text-amber-300 shrink-0" : "text-amber-400 shrink-0"} />
+                <Trophy size={18} className={a.won ? "text-amber-300 shrink-0" : "text-slate-600 shrink-0"} />
                 <div className="flex-1">
-                  <div className={"text-sm font-medium " + (a.won ? "text-amber-200" : "text-amber-200/60")}>{a.name}</div>
-                  <div className="text-[11px] text-amber-300/50">{a.description}</div>
+                  <div className={"text-sm font-medium " + (a.won ? "text-amber-200" : "text-slate-400")}>{a.name}</div>
+                  <div className="text-[11px] text-slate-500">{a.description}</div>
                 </div>
                 {a.won && <span className="text-[10px] text-ok-300 bg-ok-500/15 px-2 py-0.5 rounded-full shrink-0">WON</span>}
               </div>
@@ -520,7 +520,7 @@ export function PressReviews() {
             <div className="bg-base-850 rounded-xl p-4 border border-base-800 flex flex-col items-center justify-center">
               <RadialGauge value={gradeToScore(review.reliability.grade)} max={10} label="Score" size={150} />
               <div className="mt-2 text-4xl font-mono font-bold text-accent-300">{review.reliability.grade}</div>
-              <div className="text-[10px] text-amber-300/50 uppercase tracking-wider mt-0.5">Reliability Grade</div>
+              <div className="text-[10px] text-slate-500 uppercase tracking-wider mt-0.5">Reliability Grade</div>
             </div>
             <div className="lg:col-span-2 grid grid-cols-2 md:grid-cols-5 gap-2 content-center">
               <StatTile label="Engine Failures" value={review.reliability.engineFailures} sub="per 1k units" accent={review.reliability.engineFailures < 15 ? "ok" : "danger"} />
@@ -544,17 +544,17 @@ export function PressReviews() {
                 const good = pct < 30;
                 return (
                   <div key={m.label} className="flex items-center gap-3">
-                    <span className="text-xs text-amber-200/60 w-36 shrink-0">{m.label}</span>
+                    <span className="text-xs text-slate-400 w-36 shrink-0">{m.label}</span>
                     <div className="flex-1 h-2 bg-base-800 rounded-full overflow-hidden">
                       <div className={"h-full rounded-full " + (good ? "bg-ok-500" : pct < 60 ? "bg-warn-500" : "bg-danger-500")} style={{ width: pct + "%" }} />
                     </div>
-                    <span className={"text-[10px] font-mono w-8 text-right " + (good ? "text-ok-300" : "text-amber-200/60")}>{m.val}</span>
+                    <span className={"text-[10px] font-mono w-8 text-right " + (good ? "text-ok-300" : "text-slate-400")}>{m.val}</span>
                   </div>
                 );
               })}
             </div>
           </div>
-          <div className="text-[11px] text-amber-300/50 mt-3">
+          <div className="text-[11px] text-slate-500 mt-3">
             Grades range from <span className="text-ok-300 font-mono">A+</span> (exceptional) to <span className="text-danger-300 font-mono">F</span> (unreliable). Lower incident counts indicate better long-term durability.
           </div>
         </Section>

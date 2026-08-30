@@ -376,7 +376,7 @@ export const Interior3DViewport: React.FC<Interior3DViewportProps> = ({
   };
 
   return (
-    <div className="relative w-full h-[520px] rounded-2xl overflow-hidden shadow-2xl bg-amber-950/80 border border-amber-500/30">
+    <div className="relative w-full h-[520px] rounded-2xl overflow-hidden shadow-2xl bg-slate-950 border border-amber-500/30">
       {/* 3D WebGL Canvas Mount */}
       <div ref={mountRef} className="w-full h-full cursor-grab active:cursor-grabbing" />
 
@@ -393,10 +393,10 @@ export const Interior3DViewport: React.FC<Interior3DViewportProps> = ({
 
       {/* Driver Gaze HUD */}
       {activeViewpoint === 'driver_pov' && (
-        <div className="absolute top-14 left-1/2 -translate-x-1/2 flex items-center gap-2 px-3.5 py-1 rounded-full bg-amber-950/85 backdrop-blur-md border border-amber-500/40 text-[11px] font-mono font-bold text-amber-300 shadow-xl pointer-events-none">
+        <div className="absolute top-14 left-1/2 -translate-x-1/2 flex items-center gap-2 px-3.5 py-1 rounded-full bg-slate-950/85 backdrop-blur-md border border-amber-500/40 text-[11px] font-mono font-bold text-amber-300 shadow-xl pointer-events-none">
           <Eye size={12} className="text-amber-400 animate-pulse" />
           <span ref={gazeSpanRef}>👀 LOOKING AT: FORWARD WINDSHIELD & ROAD</span>
-          <span ref={coordsSpanRef} className="text-amber-200/60 font-normal">(0°, 0°)</span>
+          <span ref={coordsSpanRef} className="text-slate-400 font-normal">(0°, 0°)</span>
         </div>
       )}
 
@@ -416,13 +416,13 @@ export const Interior3DViewport: React.FC<Interior3DViewportProps> = ({
           />
 
           {/* Camera Viewpoint Selector */}
-          <div className="flex items-center gap-1.5 p-1.5 rounded-xl backdrop-blur-md shadow-lg pointer-events-auto bg-gradient-to-r from-amber-950/70 via-amber-900/50 to-amber-950/70 border border-amber-500/30">
+          <div className="flex items-center gap-1.5 p-1.5 rounded-xl backdrop-blur-md shadow-lg pointer-events-auto bg-slate-950/85 border border-slate-800">
           <button
             onClick={() => setViewpoint('driver_pov')}
             className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
               activeViewpoint === 'driver_pov'
                 ? 'bg-amber-500 text-slate-950 font-bold shadow-md shadow-amber-500/30'
-                : 'text-amber-200 hover:text-amber-100 hover:bg-amber-900/60'
+                : 'text-amber-300 hover:text-white hover:bg-slate-800'
             }`}
           >
             <Eye size={13} />
@@ -434,7 +434,7 @@ export const Interior3DViewport: React.FC<Interior3DViewportProps> = ({
             className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
               activeViewpoint === 'steering_cluster_macro'
                 ? 'bg-amber-500 text-slate-950 font-bold shadow-md shadow-amber-500/30'
-                : 'text-amber-200 hover:text-amber-100 hover:bg-amber-900/60'
+                : 'text-slate-400 hover:text-white hover:bg-slate-800'
             }`}
           >
             <Gauge size={13} />
@@ -446,7 +446,7 @@ export const Interior3DViewport: React.FC<Interior3DViewportProps> = ({
             className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
               activeViewpoint === 'center_console_macro'
                 ? 'bg-amber-500 text-slate-950 font-bold shadow-md shadow-amber-500/30'
-                : 'text-amber-200 hover:text-amber-100 hover:bg-amber-900/60'
+                : 'text-slate-400 hover:text-white hover:bg-slate-800'
             }`}
           >
             <Sliders size={13} />
@@ -458,7 +458,7 @@ export const Interior3DViewport: React.FC<Interior3DViewportProps> = ({
             className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
               activeViewpoint === 'passenger_pov'
                 ? 'bg-amber-500 text-slate-950 font-bold shadow-md shadow-amber-500/30'
-                : 'text-amber-200 hover:text-amber-100 hover:bg-amber-900/60'
+                : 'text-slate-400 hover:text-white hover:bg-slate-800'
             }`}
           >
             <Compass size={13} />
@@ -470,7 +470,7 @@ export const Interior3DViewport: React.FC<Interior3DViewportProps> = ({
             className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
               activeViewpoint === 'rear_vip_lounge'
                 ? 'bg-amber-500 text-slate-950 font-bold shadow-md shadow-amber-500/30'
-                : 'text-amber-200 hover:text-amber-100 hover:bg-amber-900/60'
+                : 'text-slate-400 hover:text-white hover:bg-slate-800'
             }`}
           >
             <Sparkles size={13} />
@@ -482,7 +482,7 @@ export const Interior3DViewport: React.FC<Interior3DViewportProps> = ({
               className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
                 activeViewpoint === 'overhead_panoramic'
                   ? 'bg-amber-500 text-slate-950 font-bold shadow-md shadow-amber-500/30'
-                  : 'text-amber-200 hover:text-amber-100 hover:bg-amber-900/60'
+                  : 'text-slate-400 hover:text-white hover:bg-slate-800'
               }`}
             >
               <Maximize2 size={13} />
@@ -492,12 +492,12 @@ export const Interior3DViewport: React.FC<Interior3DViewportProps> = ({
         </div>
 
         {/* Right Tools: Auto Pan & Day/Night Toggle */}
-        <div className="flex items-center gap-2 p-1.5 rounded-xl bg-gradient-to-r from-amber-950/70 via-amber-900/50 to-amber-950/70 backdrop-blur-md border border-amber-500/30 shadow-lg pointer-events-auto">
+        <div className="flex items-center gap-2 p-1.5 rounded-xl bg-slate-950/85 backdrop-blur-md border border-slate-800 shadow-lg pointer-events-auto">
           {activeViewpoint === 'driver_pov' && (
             <button
               onClick={() => setIsAutoPan(!isAutoPan)}
               className={`flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-all cursor-pointer ${
-                isAutoPan ? 'bg-emerald-500/20 border border-emerald-500 text-emerald-300' : 'bg-amber-950/50 text-amber-400 hover:text-amber-200'
+                isAutoPan ? 'bg-emerald-500/20 border border-emerald-500 text-emerald-300' : 'bg-slate-900 text-slate-400 hover:text-white'
               }`}
             >
               {isAutoPan ? <Pause size={12} /> : <Play size={12} />}
@@ -519,15 +519,15 @@ export const Interior3DViewport: React.FC<Interior3DViewportProps> = ({
 
       {/* ── BOTTOM TELEMETRY PILL HUD ── */}
       <div className="absolute bottom-3 left-3 right-3 flex items-center justify-between pointer-events-none">
-        <div className="flex items-center gap-3 px-3 py-2 rounded-xl bg-gradient-to-r from-amber-950/70 via-amber-900/50 to-amber-950/70 backdrop-blur-md border border-amber-500/30 text-xs text-amber-100/80 pointer-events-auto">
+        <div className="flex items-center gap-3 px-3 py-2 rounded-xl bg-slate-950/85 backdrop-blur-md border border-slate-800 text-xs text-slate-300 pointer-events-auto">
           <span className="font-mono text-amber-400 font-bold">DASH: {config.dashboardClass.replace(/_/g, ' ').toUpperCase()}</span>
-          <span className="text-amber-400">|</span>
+          <span className="text-slate-600">|</span>
           <span className="font-mono text-amber-400">STEERING: {config.steeringTypology.replace(/_/g, ' ').toUpperCase()}</span>
-          <span className="text-amber-400">|</span>
+          <span className="text-slate-600">|</span>
           <span className="font-mono text-emerald-400">SEATS: {config.seatingClass.replace(/_/g, ' ').toUpperCase()} ({config.seatCount}x)</span>
         </div>
 
-        <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-gradient-to-r from-amber-950/70 via-amber-900/50 to-amber-950/70 backdrop-blur-md border border-amber-500/30 text-xs font-mono text-amber-200/60">
+        <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-slate-950/85 backdrop-blur-md border border-slate-800 text-xs font-mono text-slate-400">
           <span>{activeViewpoint === 'driver_pov' ? 'DRAG: LOOK AROUND CABIN' : 'ORBIT: DRAG'}</span>
           <span>•</span>
           <span>SCROLL: ZOOM</span>

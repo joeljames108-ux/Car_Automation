@@ -348,15 +348,15 @@ const Transmission3DStudioComponent: React.FC<Transmission3DStudioProps> = ({
   };
 
   return (
-    <div className="flex flex-col w-full space-y-4 font-mono text-amber-50 select-none">
+    <div className="flex flex-col w-full space-y-4 font-mono text-slate-100 select-none">
       {/* Top Header & Architecture Selector Bar */}
-      <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-3 p-3.5 rounded-2xl bg-amber-950/85 border border-amber-500/30 backdrop-blur-xl shadow-2xl">
+      <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-3 p-3.5 rounded-2xl bg-slate-950/85 border border-amber-500/30 backdrop-blur-xl shadow-2xl">
         <div className="flex items-center gap-3">
           <div className="p-2.5 rounded-xl bg-amber-500/20 text-amber-300 border border-amber-500/40">
             <Cog size={22} className="animate-spin-slow" />
           </div>
           <div>
-            <h2 className="text-base font-extrabold text-amber-50 flex items-center gap-2">
+            <h2 className="text-base font-extrabold text-slate-100 flex items-center gap-2">
               <span>3D TRANSMISSION & TRANSAXLE WORKSHOP</span>
               <span className="px-2 py-0.5 text-[10px] rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 font-bold">
                 PHYSICS SIMULATOR
@@ -369,7 +369,7 @@ const Transmission3DStudioComponent: React.FC<Transmission3DStudioProps> = ({
         </div>
 
         {/* 5 Architecture Type Selection Buttons */}
-        <div className="flex items-center gap-1 p-1 rounded-xl bg-amber-900/40 border border-amber-800/30 overflow-x-auto">
+        <div className="flex items-center gap-1 p-1 rounded-xl bg-slate-900/80 border border-slate-800 overflow-x-auto">
           {[
             { id: "dct_7", label: "7-Speed DCT" },
             { id: "manual_6", label: "6-Speed Manual" },
@@ -383,7 +383,7 @@ const Transmission3DStudioComponent: React.FC<Transmission3DStudioProps> = ({
               className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all whitespace-nowrap cursor-pointer ${
                 archType === arch.id
                   ? "bg-amber-500 text-slate-950 shadow-md shadow-cyan-500/30"
-                  : "text-amber-200/60 hover:text-amber-50 hover:bg-amber-800/35/60"
+                  : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/60"
               }`}
             >
               {arch.label}
@@ -396,19 +396,19 @@ const Transmission3DStudioComponent: React.FC<Transmission3DStudioProps> = ({
       <div className="grid grid-cols-1 xl:grid-cols-12 gap-4">
         {/* Left: 3D Interactive WebGL Transmission Viewport (7 Columns) */}
         <div className="xl:col-span-7 flex flex-col space-y-3">
-          <div className="relative w-full h-[580px] rounded-2xl overflow-hidden bg-amber-950/80 border border-amber-500/30 shadow-2xl flex flex-col">
+          <div className="relative w-full h-[580px] rounded-2xl overflow-hidden bg-slate-950 border border-amber-500/30 shadow-2xl flex flex-col">
             {/* WebGL Canvas */}
             <div ref={containerRef} className="w-full flex-1" />
 
             {/* Top HUD Overlay Controls */}
             <div className="absolute top-3 left-3 right-3 flex flex-wrap items-center justify-between gap-2 pointer-events-none">
               {/* Active Specs Badge */}
-              <div className="flex items-center gap-2 p-2 rounded-xl bg-amber-950/85 border border-amber-500/40 backdrop-blur-md pointer-events-auto">
+              <div className="flex items-center gap-2 p-2 rounded-xl bg-slate-950/85 border border-amber-500/40 backdrop-blur-md pointer-events-auto">
                 <div className="p-1.5 rounded-lg bg-amber-500/20 text-amber-400">
                   <Activity size={16} />
                 </div>
                 <div>
-                  <div className="text-xs font-bold text-amber-50">{archType.toUpperCase()} TRANSAXLE</div>
+                  <div className="text-xs font-bold text-slate-100">{archType.toUpperCase()} TRANSAXLE</div>
                   <div className="text-[10px] text-amber-400">
                     Ratio: {activeRatio.toFixed(2)}:1 • Output: {outputRpm} RPM • {outputTorqueNm.toLocaleString()} N·m
                   </div>
@@ -416,7 +416,7 @@ const Transmission3DStudioComponent: React.FC<Transmission3DStudioProps> = ({
               </div>
 
               {/* Camera Presets Quick Bar */}
-              <div className="flex items-center gap-1 p-1 rounded-xl bg-amber-950/85 border border-amber-700/30/60 backdrop-blur-md pointer-events-auto">
+              <div className="flex items-center gap-1 p-1 rounded-xl bg-slate-950/85 border border-slate-700/60 backdrop-blur-md pointer-events-auto">
                 {[
                   { id: "iso_wide", label: "ISO Wide" },
                   { id: "bellhousing", label: "Clutch" },
@@ -431,7 +431,7 @@ const Transmission3DStudioComponent: React.FC<Transmission3DStudioProps> = ({
                     className={`px-2 py-1 rounded-lg text-[10px] font-bold transition-all cursor-pointer ${
                       activeCameraPose === c.id
                         ? "bg-amber-500 text-slate-950 shadow-md"
-                        : "text-amber-200/60 hover:text-amber-50 hover:bg-amber-800/35/60"
+                        : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/60"
                     }`}
                   >
                     {c.label}
@@ -441,7 +441,7 @@ const Transmission3DStudioComponent: React.FC<Transmission3DStudioProps> = ({
             </div>
 
             {/* Bottom Interactive Inspection Controls Bar */}
-            <div className="absolute bottom-3 left-3 right-3 p-3 rounded-xl bg-amber-950/90 border border-amber-500/30 backdrop-blur-xl flex flex-wrap items-center justify-between gap-4">
+            <div className="absolute bottom-3 left-3 right-3 p-3 rounded-xl bg-slate-950/90 border border-amber-500/30 backdrop-blur-xl flex flex-wrap items-center justify-between gap-4">
               {/* Exploded View Slider */}
               <div className="flex items-center gap-3 min-w-[220px] flex-1">
                 <div className="flex items-center gap-1.5 text-xs font-bold text-amber-300">
@@ -455,7 +455,7 @@ const Transmission3DStudioComponent: React.FC<Transmission3DStudioProps> = ({
                   step="0.01"
                   value={explodedProgress}
                   onChange={(e) => setExplodedProgress(parseFloat(e.target.value))}
-                  className="w-full accent-amber-400 h-1.5 bg-amber-800/35 rounded-lg cursor-pointer"
+                  className="w-full accent-amber-400 h-1.5 bg-slate-800 rounded-lg cursor-pointer"
                 />
                 <span className="text-xs text-amber-400 font-bold min-w-[36px]">
                   {Math.round(explodedProgress * 100)}%
@@ -468,7 +468,7 @@ const Transmission3DStudioComponent: React.FC<Transmission3DStudioProps> = ({
                 className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold border transition-all cursor-pointer ${
                   xRayMode
                     ? "bg-amber-500/20 text-amber-300 border-amber-400 shadow-md shadow-cyan-500/20"
-                    : "bg-amber-900/40 text-amber-200/60 border-amber-800/30 hover:text-amber-50"
+                    : "bg-slate-900/60 text-slate-400 border-slate-800 hover:text-slate-200"
                 }`}
               >
                 <Eye size={14} />
@@ -481,7 +481,7 @@ const Transmission3DStudioComponent: React.FC<Transmission3DStudioProps> = ({
                 className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold border transition-all cursor-pointer ${
                   isRotating
                     ? "bg-emerald-500/20 text-emerald-300 border-emerald-500/40 shadow-md shadow-emerald-500/20"
-                    : "bg-amber-900/40 text-amber-200/60 border-amber-800/30 hover:text-amber-50"
+                    : "bg-slate-900/60 text-slate-400 border-slate-800 hover:text-slate-200"
                 }`}
               >
                 <RotateCw size={14} className={isRotating ? "animate-spin-slow" : ""} />
@@ -492,9 +492,9 @@ const Transmission3DStudioComponent: React.FC<Transmission3DStudioProps> = ({
         </div>
 
         {/* Right: Telemetry & Interactive Shifter Workbench (5 Columns) */}
-        <div className="xl:col-span-5 h-[580px] rounded-2xl bg-amber-950/85 border border-amber-500/30 backdrop-blur-xl shadow-2xl flex flex-col overflow-hidden">
+        <div className="xl:col-span-5 h-[580px] rounded-2xl bg-slate-950/85 border border-amber-500/30 backdrop-blur-xl shadow-2xl flex flex-col overflow-hidden">
           {/* Tab Navigation Header */}
-          <div className="flex items-center gap-1.5 p-2.5 bg-amber-900/40 border-b border-amber-800/30">
+          <div className="flex items-center gap-1.5 p-2.5 bg-slate-900/60 border-b border-slate-800">
             {[
               { id: "shifter", label: "GEAR SHIFTER & RPM", icon: Gauge },
               { id: "ratios", label: "RATIOS & FINAL DRIVE", icon: Sliders },
@@ -510,7 +510,7 @@ const Transmission3DStudioComponent: React.FC<Transmission3DStudioProps> = ({
                   className={`flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                     isActive
                       ? "bg-amber-500 text-slate-950 shadow-md shadow-cyan-500/30"
-                      : "text-amber-200/60 hover:text-amber-50 hover:bg-amber-900/40"
+                      : "text-slate-400 hover:text-slate-200 hover:bg-slate-900/50"
                   }`}
                 >
                   <Icon size={14} />
@@ -527,7 +527,7 @@ const Transmission3DStudioComponent: React.FC<Transmission3DStudioProps> = ({
               <div className="space-y-4">
                 {/* Live Gear Selector Buttons */}
                 <div>
-                  <label className="text-amber-100/80 font-bold mb-2 block flex items-center justify-between">
+                  <label className="text-slate-300 font-bold mb-2 block flex items-center justify-between">
                     <span>SELECT GEAR POSITION</span>
                     <span className="text-amber-400">SHIFT TIME: {shiftTimeMs}ms</span>
                   </label>
@@ -540,11 +540,11 @@ const Transmission3DStudioComponent: React.FC<Transmission3DStudioProps> = ({
                         className={`p-3 rounded-xl text-center border font-extrabold text-sm transition-all cursor-pointer ${
                           currentGear === g
                             ? "bg-amber-500 text-slate-950 border-amber-400 shadow-lg shadow-cyan-500/30 scale-102"
-                            : "bg-amber-900/40 border-amber-800/30 text-amber-100/80 hover:border-amber-500/50"
+                            : "bg-slate-900/60 border-slate-800 text-slate-300 hover:border-amber-500/50"
                         }`}
                       >
                         GEAR {g}
-                        <div className="text-[9px] text-amber-200/60 font-normal mt-0.5">
+                        <div className="text-[9px] text-slate-400 font-normal mt-0.5">
                           {((DEFAULT_GEAR_RATIOS[archType] as any)[`gear${g}`] || 1.0).toFixed(2)}:1
                         </div>
                       </button>
@@ -553,9 +553,9 @@ const Transmission3DStudioComponent: React.FC<Transmission3DStudioProps> = ({
                 </div>
 
                 {/* Engine Input RPM Slider */}
-                <div className="p-3 rounded-xl bg-amber-900/40 border border-amber-800/30 space-y-2">
+                <div className="p-3 rounded-xl bg-slate-900/60 border border-slate-800 space-y-2">
                   <div className="flex items-center justify-between font-bold">
-                    <span className="text-amber-100/80">ENGINE INPUT RPM</span>
+                    <span className="text-slate-300">ENGINE INPUT RPM</span>
                     <span className="text-amber-400 text-sm">{simRpm} RPM</span>
                   </div>
                   <input
@@ -565,9 +565,9 @@ const Transmission3DStudioComponent: React.FC<Transmission3DStudioProps> = ({
                     step="100"
                     value={simRpm}
                     onChange={(e) => setSimRpm(parseInt(e.target.value))}
-                    className="w-full accent-amber-400 h-1.5 bg-amber-800/35 rounded-lg cursor-pointer"
+                    className="w-full accent-amber-400 h-1.5 bg-slate-800 rounded-lg cursor-pointer"
                   />
-                  <div className="flex justify-between text-[10px] text-amber-300/50">
+                  <div className="flex justify-between text-[10px] text-slate-500">
                     <span>Idle (1,000 RPM)</span>
                     <span>Peak Power (6,500 RPM)</span>
                     <span>Redline (9,000 RPM)</span>
@@ -575,9 +575,9 @@ const Transmission3DStudioComponent: React.FC<Transmission3DStudioProps> = ({
                 </div>
 
                 {/* Engine Torque Slider */}
-                <div className="p-3 rounded-xl bg-amber-900/40 border border-amber-800/30 space-y-2">
+                <div className="p-3 rounded-xl bg-slate-900/60 border border-slate-800 space-y-2">
                   <div className="flex items-center justify-between font-bold">
-                    <span className="text-amber-100/80">ENGINE FLYWHEEL TORQUE</span>
+                    <span className="text-slate-300">ENGINE FLYWHEEL TORQUE</span>
                     <span className="text-emerald-400 text-sm">{engineTorqueNm} N·m</span>
                   </div>
                   <input
@@ -587,9 +587,9 @@ const Transmission3DStudioComponent: React.FC<Transmission3DStudioProps> = ({
                     step="50"
                     value={engineTorqueNm}
                     onChange={(e) => setEngineTorqueNm(parseInt(e.target.value))}
-                    className="w-full accent-emerald-400 h-1.5 bg-amber-800/35 rounded-lg cursor-pointer"
+                    className="w-full accent-emerald-400 h-1.5 bg-slate-800 rounded-lg cursor-pointer"
                   />
-                  <div className="flex justify-between text-[10px] text-amber-300/50">
+                  <div className="flex justify-between text-[10px] text-slate-500">
                     <span>200 N·m</span>
                     <span>650 N·m (GT3)</span>
                     <span>1,500 N·m (Hypercar)</span>
@@ -598,12 +598,12 @@ const Transmission3DStudioComponent: React.FC<Transmission3DStudioProps> = ({
 
                 {/* Key Telemetry Tiles */}
                 <div className="grid grid-cols-2 gap-2">
-                  <div className="p-3 rounded-xl bg-amber-900/40 border border-amber-800/30">
-                    <div className="text-[10px] text-amber-200/60 font-bold">OUTPUT SHAFT RPM</div>
+                  <div className="p-3 rounded-xl bg-slate-900/40 border border-slate-800">
+                    <div className="text-[10px] text-slate-400 font-bold">OUTPUT SHAFT RPM</div>
                     <div className="text-base font-extrabold text-amber-300 mt-1">{outputRpm} RPM</div>
                   </div>
-                  <div className="p-3 rounded-xl bg-amber-900/40 border border-amber-800/30">
-                    <div className="text-[10px] text-amber-200/60 font-bold">WHEEL TORQUE</div>
+                  <div className="p-3 rounded-xl bg-slate-900/40 border border-slate-800">
+                    <div className="text-[10px] text-slate-400 font-bold">WHEEL TORQUE</div>
                     <div className="text-base font-extrabold text-emerald-400 mt-1">{outputTorqueNm.toLocaleString()} N·m</div>
                   </div>
                 </div>
@@ -613,7 +613,7 @@ const Transmission3DStudioComponent: React.FC<Transmission3DStudioProps> = ({
             {/* ── TAB 2: GEAR RATIOS & FINAL DRIVE ── */}
             {activeTab === "ratios" && (
               <div className="space-y-4">
-                <div className="text-xs font-bold text-amber-100/80 uppercase flex items-center justify-between">
+                <div className="text-xs font-bold text-slate-300 uppercase flex items-center justify-between">
                   <span>INDIVIDUAL GEAR RATIO SPECS</span>
                   <span className="text-[10px] text-amber-400 font-mono">Top Speed at 7,200 RPM</span>
                 </div>
@@ -626,8 +626,8 @@ const Transmission3DStudioComponent: React.FC<Transmission3DStudioProps> = ({
                   const topSpeedKmh = Math.round(wheelRps * 2 * Math.PI * 0.33 * 3.6);
 
                   return (
-                    <div key={g} className="flex items-center gap-3 p-2 rounded-xl bg-amber-900/40 border border-amber-800/30">
-                      <span className="w-16 font-bold text-amber-100/80">Gear {g}</span>
+                    <div key={g} className="flex items-center gap-3 p-2 rounded-xl bg-slate-900/60 border border-slate-800">
+                      <span className="w-16 font-bold text-slate-300">Gear {g}</span>
                       <input
                         type="range"
                         min="0.4"
@@ -635,7 +635,7 @@ const Transmission3DStudioComponent: React.FC<Transmission3DStudioProps> = ({
                         step="0.05"
                         value={ratioVal}
                         onChange={(e) => setRatios({ ...ratios, [key]: parseFloat(e.target.value) })}
-                        className="flex-1 accent-amber-400 h-1.5 bg-amber-800/35 rounded-lg cursor-pointer"
+                        className="flex-1 accent-amber-400 h-1.5 bg-slate-800 rounded-lg cursor-pointer"
                       />
                       <span className="w-14 text-right font-bold text-amber-400">{ratioVal.toFixed(2)}:1</span>
                       <span className="w-20 text-right font-mono font-bold text-emerald-400 text-xs">{topSpeedKmh} km/h</span>
@@ -653,14 +653,14 @@ const Transmission3DStudioComponent: React.FC<Transmission3DStudioProps> = ({
                     step="0.05"
                     value={ratios.finalDrive}
                     onChange={(e) => setRatios({ ...ratios, finalDrive: parseFloat(e.target.value) })}
-                    className="flex-1 accent-amber-400 h-1.5 bg-amber-800/35 rounded-lg cursor-pointer"
+                    className="flex-1 accent-amber-400 h-1.5 bg-slate-800 rounded-lg cursor-pointer"
                   />
                   <span className="w-14 text-right font-bold text-amber-300">{ratios.finalDrive.toFixed(2)}:1</span>
                 </div>
 
                 {/* Velocity Staircase Chart */}
-                <div className="p-3 rounded-xl bg-amber-900/40 border border-amber-800/30 space-y-2">
-                  <div className="text-[11px] font-bold text-amber-100/80 uppercase">Velocity Staircase Map (Gears 1-8)</div>
+                <div className="p-3 rounded-xl bg-slate-900/80 border border-slate-800 space-y-2">
+                  <div className="text-[11px] font-bold text-slate-300 uppercase">Velocity Staircase Map (Gears 1-8)</div>
                   <div className="h-24 flex items-end gap-1.5 pt-2">
                     {[1, 2, 3, 4, 5, 6, 7, 8].map((g) => {
                       const key = `gear${g}` as keyof GearRatioConfig;
@@ -680,7 +680,7 @@ const Transmission3DStudioComponent: React.FC<Transmission3DStudioProps> = ({
                               currentGear === g ? "bg-gradient-to-t from-amber-500 to-sky-400 ring-1 ring-amber-300" : "bg-slate-700 hover:bg-slate-600"
                             }`}
                           />
-                          <div className="text-[9px] font-bold text-amber-200/60">G{g}</div>
+                          <div className="text-[9px] font-bold text-slate-400">G{g}</div>
                         </div>
                       );
                     })}
@@ -693,7 +693,7 @@ const Transmission3DStudioComponent: React.FC<Transmission3DStudioProps> = ({
             {activeTab === "metallurgy" && (
               <div className="space-y-4">
                 <div>
-                  <label className="text-amber-100/80 font-bold mb-2 block">CLUTCH FRICTION DISCS COMPOUND</label>
+                  <label className="text-slate-300 font-bold mb-2 block">CLUTCH FRICTION DISCS COMPOUND</label>
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
                     {[
                       { id: "organic", name: "Organic Fiber", friction: "0.38 µ", torque: "650 N·m" },
@@ -706,18 +706,18 @@ const Transmission3DStudioComponent: React.FC<Transmission3DStudioProps> = ({
                         className={`p-3 rounded-xl text-left border transition-all cursor-pointer ${
                           clutchType === c.id
                             ? "bg-amber-950/50 border-amber-400 text-amber-300 shadow-md"
-                            : "bg-amber-900/40 border-amber-800/30 text-amber-100/80 hover:border-amber-700/30"
+                            : "bg-slate-900/60 border-slate-800 text-slate-300 hover:border-slate-700"
                         }`}
                       >
                         <div className="font-bold">{c.name}</div>
-                        <div className="text-[10px] text-amber-200/60 mt-1">{c.friction} • Max: {c.torque}</div>
+                        <div className="text-[10px] text-slate-400 mt-1">{c.friction} • Max: {c.torque}</div>
                       </button>
                     ))}
                   </div>
                 </div>
 
                 <div>
-                  <label className="text-amber-100/80 font-bold mb-2 block">DIFFERENTIAL ARCHITECTURE & LSD LOCK</label>
+                  <label className="text-slate-300 font-bold mb-2 block">DIFFERENTIAL ARCHITECTURE & LSD LOCK</label>
                   <div className="grid grid-cols-2 gap-2">
                     {[
                       { id: "open", name: "Open Differential", lock: "0% Lockup" },
@@ -731,11 +731,11 @@ const Transmission3DStudioComponent: React.FC<Transmission3DStudioProps> = ({
                         className={`p-3 rounded-xl text-left border transition-all cursor-pointer ${
                           lsdType === d.id
                             ? "bg-amber-950/50 border-amber-400 text-amber-300 shadow-md"
-                            : "bg-amber-900/40 border-amber-800/30 text-amber-100/80 hover:border-amber-700/30"
+                            : "bg-slate-900/60 border-slate-800 text-slate-300 hover:border-slate-700"
                         }`}
                       >
                         <div className="font-bold">{d.name}</div>
-                        <div className="text-[10px] text-amber-200/60 mt-1">{d.lock}</div>
+                        <div className="text-[10px] text-slate-400 mt-1">{d.lock}</div>
                       </button>
                     ))}
                   </div>
@@ -743,8 +743,8 @@ const Transmission3DStudioComponent: React.FC<Transmission3DStudioProps> = ({
 
                 {/* Component Material Metallurgy Grade Picker if available */}
                 {componentMeta && selectedVariant && onSelectVariant && (
-                  <div className="pt-3 border-t border-amber-800/30">
-                    <label className="text-amber-100/80 font-bold mb-2 block flex items-center justify-between">
+                  <div className="pt-3 border-t border-slate-800">
+                    <label className="text-slate-300 font-bold mb-2 block flex items-center justify-between">
                       <span>GEARSET & BELLHOUSING METALLURGY GRADE</span>
                       <span className="text-[10px] text-amber-400 font-normal">Stage #14 Specification</span>
                     </label>
@@ -761,26 +761,26 @@ const Transmission3DStudioComponent: React.FC<Transmission3DStudioProps> = ({
             {/* ── TAB 4: HYDRAULIC & THERMAL TELEMETRY ── */}
             {activeTab === "telemetry" && (
               <div className="space-y-3">
-                <div className="text-xs font-bold text-amber-100/80 uppercase">TRANSMISSION HYDRAULICS & THERMAL TELEMETRY</div>
+                <div className="text-xs font-bold text-slate-300 uppercase">TRANSMISSION HYDRAULICS & THERMAL TELEMETRY</div>
 
                 <div className="grid grid-cols-2 gap-2">
-                  <div className="p-3 rounded-xl bg-amber-900/40 border border-amber-800/30">
-                    <div className="text-[10px] text-amber-200/60 font-bold">MECHATRONICS HYDRAULIC PRESSURE</div>
+                  <div className="p-3 rounded-xl bg-slate-900/60 border border-slate-800">
+                    <div className="text-[10px] text-slate-400 font-bold">MECHATRONICS HYDRAULIC PRESSURE</div>
                     <div className="text-lg font-extrabold text-amber-300 mt-1">{clutchPressureBar.toFixed(1)} bar</div>
                   </div>
 
-                  <div className="p-3 rounded-xl bg-amber-900/40 border border-amber-800/30">
-                    <div className="text-[10px] text-amber-200/60 font-bold">TRANSMISSION FLUID TEMP</div>
+                  <div className="p-3 rounded-xl bg-slate-900/60 border border-slate-800">
+                    <div className="text-[10px] text-slate-400 font-bold">TRANSMISSION FLUID TEMP</div>
                     <div className="text-lg font-extrabold text-amber-400 mt-1">94.2 °C</div>
                   </div>
 
-                  <div className="p-3 rounded-xl bg-amber-900/40 border border-amber-800/30">
-                    <div className="text-[10px] text-amber-200/60 font-bold">GEAR SHIFT DURATION</div>
+                  <div className="p-3 rounded-xl bg-slate-900/60 border border-slate-800">
+                    <div className="text-[10px] text-slate-400 font-bold">GEAR SHIFT DURATION</div>
                     <div className="text-lg font-extrabold text-emerald-400 mt-1">{shiftTimeMs} ms</div>
                   </div>
 
-                  <div className="p-3 rounded-xl bg-amber-900/40 border border-amber-800/30">
-                    <div className="text-[10px] text-amber-200/60 font-bold">MECHANICAL EFFICIENCY</div>
+                  <div className="p-3 rounded-xl bg-slate-900/60 border border-slate-800">
+                    <div className="text-[10px] text-slate-400 font-bold">MECHANICAL EFFICIENCY</div>
                     <div className="text-lg font-extrabold text-amber-400 mt-1">97.4%</div>
                   </div>
                 </div>

@@ -89,7 +89,7 @@ export function EVRegenSection({
               <span className="text-[10px] font-mono font-bold text-amber-300 uppercase tracking-wider block">
                 MAX RECUPERATION POWER
               </span>
-              <p className="text-[11px] font-mono text-amber-100/80 leading-relaxed">
+              <p className="text-[11px] font-mono text-slate-300 leading-relaxed">
                 Recovers up to 350kW of kinetic energy during high-speed track deceleration, recharging the solid-state pack for corner-exit launch boost.
               </p>
             </div>
@@ -110,7 +110,7 @@ export function EVRegenSection({
               onSelectVariant={onSelectVariant}
             />
           ) : (
-            <p className="text-xs font-mono text-amber-300/50">Loading material variants...</p>
+            <p className="text-xs font-mono text-slate-500">Loading material variants...</p>
           )}
         </SectionCard>
 

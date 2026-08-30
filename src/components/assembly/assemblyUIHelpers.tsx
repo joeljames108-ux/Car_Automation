@@ -47,8 +47,8 @@ export const StatDeltaBadges: React.FC<StatDeltaBadgesProps> = ({
   if (size === "lg") {
     return (
       <div className={`grid grid-cols-2 gap-3 ${className}`}>
-        <div className="bg-[#0b0f19]/80 border border-amber-800/30 rounded-2xl p-3">
-          <span className="text-[10px] font-mono text-amber-200/60 flex items-center gap-1">
+        <div className="bg-amber-950/60/80 border border-slate-800/80 rounded-2xl p-3">
+          <span className="text-[10px] font-mono text-slate-400 flex items-center gap-1">
             <TrendingUp size={iconSize} className="text-amber-400" /> Peak Power
           </span>
           <div className="text-lg font-mono font-bold text-amber-300 mt-1">
@@ -56,8 +56,8 @@ export const StatDeltaBadges: React.FC<StatDeltaBadgesProps> = ({
           </div>
         </div>
 
-        <div className="bg-[#0b0f19]/80 border border-amber-800/30 rounded-2xl p-3">
-          <span className="text-[10px] font-mono text-amber-200/60 flex items-center gap-1">
+        <div className="bg-amber-950/60/80 border border-slate-800/80 rounded-2xl p-3">
+          <span className="text-[10px] font-mono text-slate-400 flex items-center gap-1">
             <Zap size={iconSize} className="text-pink-400" /> Peak Torque
           </span>
           <div className="text-lg font-mono font-bold text-pink-300 mt-1">
@@ -65,8 +65,8 @@ export const StatDeltaBadges: React.FC<StatDeltaBadgesProps> = ({
           </div>
         </div>
 
-        <div className="bg-[#0b0f19]/80 border border-amber-800/30 rounded-2xl p-3">
-          <span className="text-[10px] font-mono text-amber-200/60 flex items-center gap-1">
+        <div className="bg-amber-950/60/80 border border-slate-800/80 rounded-2xl p-3">
+          <span className="text-[10px] font-mono text-slate-400 flex items-center gap-1">
             <ShieldCheck size={iconSize} className="text-emerald-400" /> Durability
           </span>
           <div className="text-lg font-mono font-bold text-emerald-300 mt-1">
@@ -74,8 +74,8 @@ export const StatDeltaBadges: React.FC<StatDeltaBadgesProps> = ({
           </div>
         </div>
 
-        <div className="bg-[#0b0f19]/80 border border-amber-800/30 rounded-2xl p-3">
-          <span className="text-[10px] font-mono text-amber-200/60 flex items-center gap-1">
+        <div className="bg-amber-950/60/80 border border-slate-800/80 rounded-2xl p-3">
+          <span className="text-[10px] font-mono text-slate-400 flex items-center gap-1">
             <DollarSign size={iconSize} className="text-amber-400" /> Total Cost
           </span>
           <div className="text-lg font-mono font-bold text-amber-300 mt-1">
@@ -158,7 +158,7 @@ export const TorqueClearanceReadout: React.FC<TorqueClearanceReadoutProps> = ({
 
         {meta.torqueSpec && (
           <div className="flex items-center justify-between bg-base-900/60 p-1.5 rounded-lg border border-amber-900/40">
-            <span className="text-amber-100/80">
+            <span className="text-slate-300">
               {meta.torqueSpec.fastenerName} ({meta.torqueSpec.boltCount}x)
             </span>
             <span className="text-amber-400 font-bold">
@@ -169,7 +169,7 @@ export const TorqueClearanceReadout: React.FC<TorqueClearanceReadoutProps> = ({
 
         {meta.clearanceSpec && (
           <div className="flex items-center justify-between bg-base-900/60 p-1.5 rounded-lg border border-amber-900/40">
-            <span className="text-amber-100/80">{meta.clearanceSpec.label}</span>
+            <span className="text-slate-300">{meta.clearanceSpec.label}</span>
             <span className="text-emerald-400 font-bold">
               {meta.clearanceSpec.targetMm} mm ({meta.clearanceSpec.minMm}-{meta.clearanceSpec.maxMm})
             </span>
@@ -181,7 +181,7 @@ export const TorqueClearanceReadout: React.FC<TorqueClearanceReadoutProps> = ({
 
   // compact mode (used in hover tooltips)
   return (
-    <div className={`mt-1.5 pt-1.5 border-t border-slate-200 dark:border-amber-800/30 flex items-center gap-3 text-[10px] font-mono ${className}`}>
+    <div className={`mt-1.5 pt-1.5 border-t border-slate-200 dark:border-slate-800 flex items-center gap-3 text-[10px] font-mono ${className}`}>
       {meta.torqueSpec && (
         <span className="text-amber-700 dark:text-amber-400 font-bold flex items-center gap-1">
           <Wrench size={10} /> {meta.torqueSpec.snugNm} Nm + {meta.torqueSpec.finalAngleDeg}° ({meta.torqueSpec.boltCount}x)

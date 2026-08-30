@@ -86,7 +86,7 @@ export const BumperSVG: React.FC<BumperSVGProps> = ({
           <circle cx="210" cy="328" r="1.5" fill="#334155" />
 
           {/* Tow Hook Eyelet Access Cap */}
-          <circle cx="188" cy="348" r="3" fill="#0f172a" stroke="#475569" strokeWidth="0.5" />
+          <circle cx="188" cy="348" r="3" fill="#1a1008" stroke="#475569" strokeWidth="0.5" />
         </g>
       ) : (
         // ── REAR BUMPER FASCIA ──

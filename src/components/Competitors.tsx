@@ -165,19 +165,19 @@ export function Competitors() {
               <Trophy size={24} className="text-accent-300" />
             </div>
             <div>
-              <h2 className="text-lg font-bold text-amber-50">Competitors</h2>
-              <p className="text-xs text-amber-300/50">Benchmark your design against the world's fastest production hypercars</p>
+              <h2 className="text-lg font-bold text-slate-100">Competitors</h2>
+              <p className="text-xs text-slate-500">Benchmark your design against the world's fastest production hypercars</p>
             </div>
           </div>
           <div className="flex-1" />
           <div className="flex items-center gap-2 bg-base-850 border border-base-800 rounded-lg px-3 py-2">
             <Target size={14} className="text-accent-300" />
-            <span className="text-xs text-amber-200/60">Your design ranks</span>
+            <span className="text-xs text-slate-400">Your design ranks</span>
             <span className="text-sm font-bold text-accent-300 font-mono">#{yourRank.index}</span>
-            <span className="text-xs text-amber-300/50">of {yourRank.total}</span>
-            <span className="text-amber-400 mx-1">·</span>
-            <span className="text-xs text-amber-200/60">on</span>
-            <span className="text-xs font-semibold text-amber-50">{sortOption.label}</span>
+            <span className="text-xs text-slate-500">of {yourRank.total}</span>
+            <span className="text-slate-600 mx-1">·</span>
+            <span className="text-xs text-slate-400">on</span>
+            <span className="text-xs font-semibold text-slate-200">{sortOption.label}</span>
           </div>
         </div>
       </div>
@@ -188,25 +188,25 @@ export function Competitors() {
       {/* Controls */}
       <div className="flex flex-col md:flex-row gap-3 md:items-center">
         <div className="flex items-center gap-2 relative flex-1">
-          <Search size={14} className="text-amber-300/50 absolute left-3" />
+          <Search size={14} className="text-slate-500 absolute left-3" />
           <input
             value={query}
             onChange={(e) => { setQuery(e.target.value); setPage(0); }}
             placeholder="Search by brand or model..."
-            className="w-full bg-base-850 border border-base-800 rounded-lg pl-9 pr-3 py-2 text-sm text-amber-50 focus:border-accent-500 focus:outline-none"
+            className="w-full bg-base-850 border border-base-800 rounded-lg pl-9 pr-3 py-2 text-sm text-slate-200 focus:border-accent-500 focus:outline-none"
           />
           {query && (
-            <button onClick={() => setQuery("")} className="absolute right-2 text-amber-300/50 hover:text-amber-100/80">
+            <button onClick={() => setQuery("")} className="absolute right-2 text-slate-500 hover:text-slate-300">
               <X size={14} />
             </button>
           )}
         </div>
         <div className="flex items-center gap-2 bg-base-850 border border-base-800 rounded-lg p-1">
-          <Filter size={14} className="text-amber-300/50 ml-2" />
+          <Filter size={14} className="text-slate-500 ml-2" />
           <select
             value={brandFilter}
             onChange={(e) => { setBrandFilter(e.target.value); setPage(0); }}
-            className="bg-transparent text-sm text-amber-50 focus:outline-none pr-2"
+            className="bg-transparent text-sm text-slate-200 focus:outline-none pr-2"
           >
             <option value="" className="bg-base-900">All Brands ({brands.length})</option>
             {brands.map((b) => (
@@ -215,11 +215,11 @@ export function Competitors() {
           </select>
         </div>
         <div className="flex items-center gap-2 bg-base-850 border border-base-800 rounded-lg p-1">
-          <ArrowUpDown size={14} className="text-amber-300/50 ml-2" />
+          <ArrowUpDown size={14} className="text-slate-500 ml-2" />
           <select
             value={sortKey}
             onChange={(e) => setSortKey(e.target.value as SortKey)}
-            className="bg-transparent text-sm text-amber-50 focus:outline-none pr-2"
+            className="bg-transparent text-sm text-slate-200 focus:outline-none pr-2"
           >
             {(["Performance", "Lap Times", "Cost"] as const).map((group) => (
               <optgroup key={group} label={group}>
@@ -235,25 +235,25 @@ export function Competitors() {
       </div>
 
       {/* Results count + pagination */}
-      <div className="flex items-center justify-between text-xs text-amber-300/50 px-1">
+      <div className="flex items-center justify-between text-xs text-slate-500 px-1">
         <span>{filtered.length} cars{brandFilter ? ` · ${brandFilter}` : ""}{query ? ` matching "${query}"` : ""}</span>
         {pageCount > 1 && (
           <div className="flex items-center gap-1">
             <button onClick={() => setPage(0)} disabled={safePage === 0}
-              className="p-1 rounded hover:bg-base-800 disabled:opacity-30 disabled:hover:bg-transparent text-amber-200/60">
+              className="p-1 rounded hover:bg-base-800 disabled:opacity-30 disabled:hover:bg-transparent text-slate-400">
               <ChevronLeft size={14} /><ChevronLeft size={14} className="-ml-3" />
             </button>
             <button onClick={() => setPage(safePage - 1)} disabled={safePage === 0}
-              className="p-1 rounded hover:bg-base-800 disabled:opacity-30 disabled:hover:bg-transparent text-amber-200/60">
+              className="p-1 rounded hover:bg-base-800 disabled:opacity-30 disabled:hover:bg-transparent text-slate-400">
               <ChevronLeft size={14} />
             </button>
-            <span className="font-mono text-amber-200/60 px-2">{safePage + 1} / {pageCount}</span>
+            <span className="font-mono text-slate-400 px-2">{safePage + 1} / {pageCount}</span>
             <button onClick={() => setPage(safePage + 1)} disabled={safePage >= pageCount - 1}
-              className="p-1 rounded hover:bg-base-800 disabled:opacity-30 disabled:hover:bg-transparent text-amber-200/60">
+              className="p-1 rounded hover:bg-base-800 disabled:opacity-30 disabled:hover:bg-transparent text-slate-400">
               <ChevronRight size={14} />
             </button>
             <button onClick={() => setPage(pageCount - 1)} disabled={safePage >= pageCount - 1}
-              className="p-1 rounded hover:bg-base-800 disabled:opacity-30 disabled:hover:bg-transparent text-amber-200/60">
+              className="p-1 rounded hover:bg-base-800 disabled:opacity-30 disabled:hover:bg-transparent text-slate-400">
               <ChevronRight size={14} /><ChevronRight size={14} className="-ml-3" />
             </button>
           </div>
@@ -272,12 +272,12 @@ export function Competitors() {
       {pageCount > 1 && (
         <div className="flex items-center justify-center gap-2 py-2">
           <button onClick={() => setPage(safePage - 1)} disabled={safePage === 0}
-            className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-base-850 border border-base-800 text-sm text-amber-100/80 hover:border-accent-500/40 disabled:opacity-30">
+            className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-base-850 border border-base-800 text-sm text-slate-300 hover:border-accent-500/40 disabled:opacity-30">
             <ChevronLeft size={14} /> Prev
           </button>
-          <span className="font-mono text-sm text-amber-200/60">{safePage + 1} / {pageCount}</span>
+          <span className="font-mono text-sm text-slate-400">{safePage + 1} / {pageCount}</span>
           <button onClick={() => setPage(safePage + 1)} disabled={safePage >= pageCount - 1}
-            className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-base-850 border border-base-800 text-sm text-amber-100/80 hover:border-accent-500/40 disabled:opacity-30">
+            className="flex items-center gap-1 px-3 py-1.5 rounded-lg bg-base-850 border border-base-800 text-sm text-slate-300 hover:border-accent-500/40 disabled:opacity-30">
             Next <ChevronRight size={14} />
           </button>
         </div>
@@ -289,7 +289,7 @@ export function Competitors() {
       {/* Lap time rankings */}
       <LapTimeBoard cars={ranked} yourCar={yourCar} />
 
-      <div className="flex items-center gap-2 text-[11px] text-amber-400 px-1">
+      <div className="flex items-center gap-2 text-[11px] text-slate-600 px-1">
         <Info size={12} />
         Performance figures sourced from manufacturer and published press data. Lap times are official or independently verified where available.
       </div>
@@ -308,7 +308,7 @@ function YourDesignBanner({ design, sim, units }: {
       <div className="flex items-center gap-2 mb-3">
         <div className="w-1.5 h-5 rounded-full bg-accent-500" />
         <h3 className="text-sm font-bold text-accent-300 uppercase tracking-wider">Your Design</h3>
-        <span className="text-xs text-amber-300/50 ml-1">{design.name}</span>
+        <span className="text-xs text-slate-500 ml-1">{design.name}</span>
       </div>
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-2">
         <MiniStat icon={<Zap size={13} />} label="Power" value={fmtPower(sim.peakPower * 0.7457, units)} accent />
@@ -325,10 +325,10 @@ function YourDesignBanner({ design, sim, units }: {
 function MiniStat({ icon, label, value, accent }: { icon: React.ReactNode; label: string; value: string; accent?: boolean }) {
   return (
     <div className="bg-base-850 border border-base-800 rounded-lg px-3 py-2">
-      <div className="flex items-center gap-1.5 text-amber-300/50 text-[10px] uppercase tracking-wider mb-0.5">
+      <div className="flex items-center gap-1.5 text-slate-500 text-[10px] uppercase tracking-wider mb-0.5">
         {icon}{label}
       </div>
-      <div className={`font-mono font-bold text-sm ${accent ? "text-accent-300" : "text-amber-50"}`}>{value}</div>
+      <div className={`font-mono font-bold text-sm ${accent ? "text-accent-300" : "text-slate-200"}`}>{value}</div>
     </div>
   );
 }
@@ -378,15 +378,15 @@ function CarCard({ car, rank, isBest, sortLabel }: { car: Competitor; rank: numb
           </div>
         )}
         <div className="absolute top-2 left-2 w-6 h-6 rounded-md bg-base-950/80 border border-base-700 flex items-center justify-center">
-          <span className="text-xs font-mono font-bold text-amber-100/80">{rank}</span>
+          <span className="text-xs font-mono font-bold text-slate-300">{rank}</span>
         </div>
         <div className="absolute bottom-2 left-2 flex items-center gap-2">
           <div className="w-7 h-7 rounded-md flex items-center justify-center shrink-0" style={{ background: `${logoColor}22`, border: `1px solid ${logoColor}55` }}>
             <Building2 size={14} style={{ color: logoColor }} />
           </div>
           <div>
-            <div className="text-[10px] text-amber-200/60 uppercase tracking-wider">{car.company}</div>
-            <div className="text-sm font-bold text-amber-50 leading-tight">{car.model}</div>
+            <div className="text-[10px] text-slate-400 uppercase tracking-wider">{car.company}</div>
+            <div className="text-sm font-bold text-slate-100 leading-tight">{car.model}</div>
           </div>
         </div>
       </div>
@@ -399,12 +399,12 @@ function CarCard({ car, rank, isBest, sortLabel }: { car: Competitor; rank: numb
           <CardStat label="Weight" value={`${car.weight_kg}`} unit="kg" />
         </div>
         <div className="flex items-center justify-between pt-1 border-t border-base-800">
-          <span className="text-[10px] text-amber-300/50">{car.engine_desc}</span>
-          <span className="text-[10px] text-amber-400">{car.drivetrain}</span>
+          <span className="text-[10px] text-slate-500">{car.engine_desc}</span>
+          <span className="text-[10px] text-slate-600">{car.drivetrain}</span>
         </div>
         <div className="flex items-center justify-between">
-          <span className="text-[10px] text-amber-300/50">{car.year ?? "—"} · {car.country}</span>
-          <span className="text-xs font-mono font-bold text-amber-100/80">{fmtCurrency(car.price_usd)}</span>
+          <span className="text-[10px] text-slate-500">{car.year ?? "—"} · {car.country}</span>
+          <span className="text-xs font-mono font-bold text-slate-300">{fmtCurrency(car.price_usd)}</span>
         </div>
       </div>
     </div>
@@ -415,7 +415,7 @@ function CardStat({ label, value, unit }: { label: string; value: string; unit: 
   return (
     <div className="bg-base-850 rounded px-2 py-1.5">
       <div className="label-mono">{label}</div>
-      <div className="font-mono text-sm text-amber-50">{value}<span className="text-amber-300/50 text-[10px] ml-0.5">{unit}</span></div>
+      <div className="font-mono text-sm text-slate-200">{value}<span className="text-slate-500 text-[10px] ml-0.5">{unit}</span></div>
     </div>
   );
 }
@@ -452,23 +452,23 @@ function ComparisonTable({ cars, yourCar, sortKey, sortOption, totalCars }: {
   }
 
   const renderCell = (val: number | null, mkey: SortKey) => {
-    if (val === null) return <span className="text-amber-400">—</span>;
+    if (val === null) return <span className="text-slate-600">—</span>;
     const m = metrics.find((mm) => mm.key === mkey)!;
     const isBest = val === best[mkey];
-    return <span className={isBest ? "text-ok-400 font-bold" : "text-amber-50"}>{m.fmt(val)}</span>;
+    return <span className={isBest ? "text-ok-400 font-bold" : "text-slate-200"}>{m.fmt(val)}</span>;
   };
 
   return (
     <div className="panel overflow-hidden">
       <div className="flex items-center gap-2 px-4 py-3 border-b border-base-800">
         <Gauge size={16} className="text-accent-300" />
-        <h3 className="text-sm font-bold text-amber-50">Spec Comparison</h3>
-        <span className="text-[10px] text-amber-300/50 ml-1">Top {Math.min(50, totalCars)} of {totalCars} · Green = best in column</span>
+        <h3 className="text-sm font-bold text-slate-200">Spec Comparison</h3>
+        <span className="text-[10px] text-slate-500 ml-1">Top {Math.min(50, totalCars)} of {totalCars} · Green = best in column</span>
       </div>
       <div className="overflow-x-auto">
         <table className="w-full text-xs">
           <thead>
-            <tr className="bg-base-850 text-amber-200/60">
+            <tr className="bg-base-850 text-slate-400">
               <th className="text-left px-3 py-2 font-medium sticky left-0 bg-base-850">Car</th>
               {metrics.map((m) => (
                 <th key={m.key} className={`text-right px-3 py-2 font-medium whitespace-nowrap ${sortKey === m.key ? "text-accent-300" : ""}`}>
@@ -488,8 +488,8 @@ function ComparisonTable({ cars, yourCar, sortKey, sortOption, totalCars }: {
             </tr>
             {cars.map((car) => (
               <tr key={car.id} className="border-b border-base-800/50 hover:bg-base-850/40">
-                <td className="px-3 py-2 text-amber-100/80 sticky left-0 bg-base-900 whitespace-nowrap">
-                  <span className="text-amber-300/50">{car.company}</span> {car.model}
+                <td className="px-3 py-2 text-slate-300 sticky left-0 bg-base-900 whitespace-nowrap">
+                  <span className="text-slate-500">{car.company}</span> {car.model}
                 </td>
                 {metrics.map((m) => (
                   <td key={m.key} className="text-right px-3 py-2 font-mono">
@@ -518,7 +518,7 @@ function LapTimeBoard({ cars, yourCar }: { cars: Competitor[]; yourCar: Record<s
     <div className="panel overflow-hidden">
       <div className="flex items-center gap-2 px-4 py-3 border-b border-base-800">
         <Flag size={16} className="text-accent-300" />
-        <h3 className="text-sm font-bold text-amber-50">Lap Time Leaderboard</h3>
+        <h3 className="text-sm font-bold text-slate-200">Lap Time Leaderboard</h3>
       </div>
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-0 divide-y lg:divide-y-0 lg:divide-x divide-base-800">
         {tracks.map((track) => {
@@ -534,16 +534,16 @@ function LapTimeBoard({ cars, yourCar }: { cars: Competitor[]; yourCar: Record<s
           return (
             <div key={track.key} className="p-4">
               <div className="flex items-center gap-2 mb-3">
-                <span className="text-[10px] font-mono font-bold text-amber-300/50 bg-base-850 border border-base-700 rounded px-1.5 py-0.5">{track.flag}</span>
-                <span className="text-xs font-semibold text-amber-100/80">{track.label}</span>
-                <span className="text-[10px] text-amber-400 ml-auto">{valid.length} times</span>
+                <span className="text-[10px] font-mono font-bold text-slate-500 bg-base-850 border border-base-700 rounded px-1.5 py-0.5">{track.flag}</span>
+                <span className="text-xs font-semibold text-slate-300">{track.label}</span>
+                <span className="text-[10px] text-slate-600 ml-auto">{valid.length} times</span>
               </div>
               <div className="space-y-1">
                 {ranked.slice(0, 8).map((r, i) => (
                   <div key={i} className={`flex items-center gap-2 px-2 py-1.5 rounded ${r.isYou ? "bg-accent-500/10 border border-accent-500/30" : "hover:bg-base-850/50"}`}>
-                    <span className={`w-5 text-center font-mono text-[11px] ${i === 0 ? "text-warn-400 font-bold" : "text-amber-300/50"}`}>{i + 1}</span>
-                    <span className={`flex-1 text-xs truncate ${r.isYou ? "text-accent-300 font-semibold" : "text-amber-100/80"}`}>{r.isYou ? "★ " : ""}{r.name}</span>
-                    <span className="font-mono text-xs text-amber-50">{formatLap(r.time)}</span>
+                    <span className={`w-5 text-center font-mono text-[11px] ${i === 0 ? "text-warn-400 font-bold" : "text-slate-500"}`}>{i + 1}</span>
+                    <span className={`flex-1 text-xs truncate ${r.isYou ? "text-accent-300 font-semibold" : "text-slate-300"}`}>{r.isYou ? "★ " : ""}{r.name}</span>
+                    <span className="font-mono text-xs text-slate-200">{formatLap(r.time)}</span>
                   </div>
                 ))}
               </div>

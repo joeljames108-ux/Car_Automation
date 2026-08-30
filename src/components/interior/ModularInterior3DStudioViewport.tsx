@@ -801,14 +801,14 @@ const ModularInterior3DStudioViewportComponent: React.FC<ModularInterior3DStudio
   return (
     <div className="w-full flex flex-col space-y-3 select-none font-mono">
       {/* ── TOP EXTERNAL STUDIO TOOLBAR (OUTSIDE CANVAS) ── */}
-      <div className="flex flex-wrap items-center justify-between gap-2.5 p-3 rounded-2xl backdrop-blur-xl bg-gradient-to-r from-amber-950/70 via-amber-900/50 to-amber-950/70 border border-amber-500/30 shadow-xl">
+      <div className="flex flex-wrap items-center justify-between gap-2.5 p-3 rounded-2xl backdrop-blur-xl bg-slate-900/90 border border-slate-800 shadow-xl">
         {/* Left: Cabin badge & Specs */}
         <div className="flex items-center gap-2.5">
           <div className="p-2 rounded-xl bg-gradient-to-tr from-amber-500/20 to-orange-500/20 text-amber-300 border border-amber-500/30">
             <Layers size={16} />
           </div>
           <div>
-            <div className="text-xs font-bold text-amber-50 flex items-center gap-1.5">
+            <div className="text-xs font-bold text-slate-100 flex items-center gap-1.5">
               <span>{state.name.toUpperCase()}</span>
               {activeCameraPose === "driver_seat_eye" && (
                 <span className="px-1.5 py-0.5 rounded text-[8px] font-mono bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 animate-pulse">
@@ -816,14 +816,14 @@ const ModularInterior3DStudioViewportComponent: React.FC<ModularInterior3DStudio
                 </span>
               )}
             </div>
-            <div className="text-[10px] text-amber-200/60">
+            <div className="text-[10px] text-slate-400">
               {state.metrics.totalInteriorMassKg} kg • ${state.metrics.totalInteriorCostUSD.toLocaleString()} • Comfort: <strong className="text-amber-400">{state.metrics.comfortIndexPercent}%</strong>
             </div>
           </div>
         </div>
 
         {/* Center: Camera Pose View Selector */}
-        <div className="flex items-center gap-1 bg-amber-950/60 p-1 rounded-xl border border-amber-500/30 flex-wrap">
+        <div className="flex items-center gap-1 bg-slate-950 p-1 rounded-xl border border-slate-800 flex-wrap">
           <span className="text-[9px] font-bold text-amber-400 px-2 py-0.5 uppercase tracking-wider flex items-center gap-1">
             <Compass size={11} /> VIEW:
           </span>
@@ -846,7 +846,7 @@ const ModularInterior3DStudioViewportComponent: React.FC<ModularInterior3DStudio
                 className={`flex items-center gap-1 px-2 py-1 rounded-lg text-[10px] font-bold transition-all cursor-pointer ${
                   isSelected
                     ? "bg-amber-500 text-slate-950 shadow-md shadow-amber-500/25"
-                    : "text-amber-200 hover:text-amber-100 hover:bg-amber-900/60"
+                    : "text-slate-400 hover:text-slate-200 hover:bg-slate-850"
                 }`}
               >
                 <Icon size={11} />
@@ -887,7 +887,7 @@ const ModularInterior3DStudioViewportComponent: React.FC<ModularInterior3DStudio
             className={`p-1.5 rounded-xl border text-xs transition-all cursor-pointer ${
               isAudioMuted
                 ? "bg-rose-500/20 border-rose-500/40 text-rose-300"
-                : "bg-amber-950/50 border-amber-500/30 text-amber-200 hover:text-amber-100"
+                : "bg-slate-950 border-slate-800 text-slate-300 hover:text-white"
             }`}
             title={isAudioMuted ? "Unmute Engine Audio" : "Mute Engine Audio"}
           >
@@ -900,7 +900,7 @@ const ModularInterior3DStudioViewportComponent: React.FC<ModularInterior3DStudio
             className={`flex items-center gap-1 px-2.5 py-1.5 rounded-xl text-[10px] font-bold border transition-all cursor-pointer ${
               doorOpenAngleDeg > 0
                 ? "bg-amber-500/20 border-amber-500/50 text-amber-300 shadow-sm"
-                : "bg-amber-950/50 border-amber-500/30 text-amber-200 hover:text-amber-100"
+                : "bg-slate-950 border-slate-800 text-slate-400 hover:text-slate-200"
             }`}
           >
             <DoorOpen size={12} />
@@ -916,7 +916,7 @@ const ModularInterior3DStudioViewportComponent: React.FC<ModularInterior3DStudio
             className={`flex items-center gap-1 px-2.5 py-1.5 rounded-xl text-[10px] font-bold border transition-all cursor-pointer ${
               showErgonomics
                 ? "bg-amber-500/20 border-amber-500/50 text-amber-300 shadow-sm"
-                : "bg-amber-950/50 border-amber-500/30 text-amber-200 hover:text-amber-100"
+                : "bg-slate-950 border-slate-800 text-slate-400 hover:text-slate-200"
             }`}
           >
             <Eye size={12} />
@@ -934,11 +934,11 @@ const ModularInterior3DStudioViewportComponent: React.FC<ModularInterior3DStudio
           </button>
 
           {/* Environment Presets */}
-          <div className="flex items-center bg-amber-950/80 p-0.5 rounded-xl border border-amber-800/30">
+          <div className="flex items-center bg-slate-950 p-0.5 rounded-xl border border-slate-800">
             {(
               [
                 { id: "warm_sunset", icon: Sunset, color: "text-amber-400", title: "Warm Sunset" },
-                { id: "luxury_showroom", icon: Sun, color: "text-amber-50", title: "Showroom White" },
+                { id: "luxury_showroom", icon: Sun, color: "text-slate-100", title: "Showroom White" },
                 { id: "titanium_slate", icon: Compass, color: "text-amber-400", title: "Titanium Slate" },
                 { id: "cyberpunk_neon", icon: Zap, color: "text-amber-400", title: "Cyberpunk Neon" },
                 { id: "obsidian_stealth", icon: Moon, color: "text-zinc-400", title: "Obsidian Stealth" },
@@ -953,7 +953,7 @@ const ModularInterior3DStudioViewportComponent: React.FC<ModularInterior3DStudio
                   className={`p-1 rounded-lg transition-all cursor-pointer ${
                     isSelected
                       ? "bg-amber-500/20 text-amber-300 border border-amber-500/40"
-                      : "text-amber-200/60 hover:text-amber-50"
+                      : "text-slate-400 hover:text-slate-200"
                   }`}
                   title={env.title}
                 >
@@ -966,7 +966,7 @@ const ModularInterior3DStudioViewportComponent: React.FC<ModularInterior3DStudio
       </div>
 
       {/* ── CLEAN 3D HERO CANVAS (UNOBSTRUCTED) ── */}
-      <div className="relative w-full h-[500px] md:h-[560px] rounded-3xl overflow-hidden bg-gradient-to-b from-amber-950/70 via-amber-900/40 to-amber-950/70 border border-amber-500/30 shadow-2xl flex flex-col">
+      <div className="relative w-full h-[500px] md:h-[560px] rounded-3xl overflow-hidden bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 border border-slate-800 shadow-2xl flex flex-col">
         <div ref={containerRef} className="w-full flex-1" />
 
         {/* Subtle Reticle (Only in Driver POV) */}
@@ -982,10 +982,10 @@ const ModularInterior3DStudioViewportComponent: React.FC<ModularInterior3DStudio
 
         {/* Floating subtle Gaze HUD */}
         {activeCameraPose === "driver_seat_eye" && (
-          <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex items-center gap-2 px-3.5 py-1 rounded-full bg-amber-950/80 backdrop-blur-md border border-amber-500/30 text-[10px] pointer-events-none text-amber-200 shadow-lg">
+          <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex items-center gap-2 px-3.5 py-1 rounded-full bg-slate-950/80 backdrop-blur-md border border-amber-500/30 text-[10px] pointer-events-none text-amber-200 shadow-lg">
             <Eye size={12} className="text-amber-400" />
             <span className="font-bold uppercase tracking-wider">{currentGazeTarget}</span>
-            <span className="text-amber-200/60">
+            <span className="text-slate-400">
               ({driverYawDeg > 0 ? `+${driverYawDeg}° R` : `${driverYawDeg}° L`}, {driverPitchDeg}°)
             </span>
           </div>
@@ -993,7 +993,7 @@ const ModularInterior3DStudioViewportComponent: React.FC<ModularInterior3DStudio
 
         {/* Hovered Part Name */}
         {hoveredPartName && (
-          <div className="absolute top-3 left-3 px-3 py-1 rounded-xl bg-amber-950/80 backdrop-blur-md border border-amber-500/30 text-[10px] text-amber-300 font-bold pointer-events-none">
+          <div className="absolute top-3 left-3 px-3 py-1 rounded-xl bg-slate-950/80 backdrop-blur-md border border-amber-500/30 text-[10px] text-amber-300 font-bold pointer-events-none">
             TARGET: {hoveredPartName}
           </div>
         )}
@@ -1010,13 +1010,13 @@ const ModularInterior3DStudioViewportComponent: React.FC<ModularInterior3DStudio
       {/* ── EXTERNAL COCKPIT ERGONOMICS & LIVE DYNAMICS WORKBENCH (OUTSIDE CANVAS) ── */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-3.5">
         {/* Panel 1: Driver Cockpit & Ergonomics Controls (7 Cols) */}
-        <div className="lg:col-span-7 p-3.5 rounded-2xl bg-gradient-to-br from-amber-950/60 to-amber-900/40 border border-amber-500/30 space-y-3 shadow-xl">
-          <div className="flex items-center justify-between border-b border-amber-500/30 pb-2">
+        <div className="lg:col-span-7 p-3.5 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-3 shadow-xl">
+          <div className="flex items-center justify-between border-b border-slate-800 pb-2">
             <div className="flex items-center gap-2">
               <div className="p-1.5 rounded-lg bg-amber-500/20 text-amber-300">
                 <Crosshair size={14} />
               </div>
-              <span className="text-xs font-bold text-amber-50 uppercase tracking-wider">
+              <span className="text-xs font-bold text-slate-100 uppercase tracking-wider">
                 DRIVER SEAT ERGONOMICS & HEAD LOOK-AROUND
               </span>
             </div>
@@ -1025,7 +1025,7 @@ const ModularInterior3DStudioViewportComponent: React.FC<ModularInterior3DStudio
               className={`px-2.5 py-1 rounded-xl text-[10px] font-bold border transition-all cursor-pointer flex items-center gap-1.5 ${
                 isAutoHeadPan
                   ? "bg-emerald-500/20 border-emerald-500 text-emerald-300 animate-pulse"
-                  : "bg-amber-950/50 border-amber-500/30 text-amber-200 hover:text-amber-100"
+                  : "bg-slate-950 border-slate-800 text-slate-400 hover:text-slate-200"
               }`}
             >
               {isAutoHeadPan ? <Pause size={11} /> : <Play size={11} />}
@@ -1035,7 +1035,7 @@ const ModularInterior3DStudioViewportComponent: React.FC<ModularInterior3DStudio
 
           {/* Quick Gaze Target Buttons */}
           <div className="space-y-1.5">
-            <div className="text-[10px] text-amber-200/60 flex justify-between">
+            <div className="text-[10px] text-slate-400 flex justify-between">
               <span>QUICK GAZE HOTSPOTS:</span>
               <span className="text-amber-400 font-bold">8 POSE TARGETS</span>
             </div>
@@ -1047,7 +1047,7 @@ const ModularInterior3DStudioViewportComponent: React.FC<ModularInterior3DStudio
                   className={`px-2 py-1.5 rounded-xl text-[10px] font-bold border transition-all truncate cursor-pointer flex items-center gap-1 ${
                     currentGazeTarget === hotspot.targetDescription
                       ? "bg-amber-500/20 border-amber-500 text-amber-300 shadow-sm"
-                      : "bg-amber-950/50 border-amber-500/30 text-amber-200 hover:text-amber-100 hover:bg-amber-900/60"
+                      : "bg-slate-950/80 border-slate-800 text-slate-400 hover:text-slate-200 hover:bg-slate-850"
                   }`}
                   title={hotspot.label}
                 >
@@ -1059,10 +1059,10 @@ const ModularInterior3DStudioViewportComponent: React.FC<ModularInterior3DStudio
           </div>
 
           {/* Sliders Grid: Yaw, Pitch, FOV, Fore/Aft, Height */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5 pt-2 border-t border-amber-500/25 text-[10px]">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5 pt-2 border-t border-slate-800/80 text-[10px]">
             {/* Head Pan */}
-            <div className="p-2 rounded-xl bg-amber-950/50 border border-amber-500/30 space-y-1">
-              <div className="flex justify-between text-amber-200/60">
+            <div className="p-2 rounded-xl bg-slate-950/70 border border-slate-800 space-y-1">
+              <div className="flex justify-between text-slate-400">
                 <span>HEAD PAN (YAW):</span>
                 <span className="text-amber-400 font-bold">{driverYawDeg}°</span>
               </div>
@@ -1085,8 +1085,8 @@ const ModularInterior3DStudioViewportComponent: React.FC<ModularInterior3DStudio
             </div>
 
             {/* Head Tilt */}
-            <div className="p-2 rounded-xl bg-amber-950/50 border border-amber-500/30 space-y-1">
-              <div className="flex justify-between text-amber-200/60">
+            <div className="p-2 rounded-xl bg-slate-950/70 border border-slate-800 space-y-1">
+              <div className="flex justify-between text-slate-400">
                 <span>HEAD TILT (PITCH):</span>
                 <span className="text-amber-400 font-bold">{driverPitchDeg}°</span>
               </div>
@@ -1109,8 +1109,8 @@ const ModularInterior3DStudioViewportComponent: React.FC<ModularInterior3DStudio
             </div>
 
             {/* Lens FOV */}
-            <div className="p-2 rounded-xl bg-amber-950/50 border border-amber-500/30 space-y-1">
-              <div className="flex justify-between text-amber-200/60">
+            <div className="p-2 rounded-xl bg-slate-950/70 border border-slate-800 space-y-1">
+              <div className="flex justify-between text-slate-400">
                 <span>LENS FOV (ZOOM):</span>
                 <span className="text-amber-400 font-bold">{driverFov}°</span>
               </div>
@@ -1126,8 +1126,8 @@ const ModularInterior3DStudioViewportComponent: React.FC<ModularInterior3DStudio
             </div>
 
             {/* Seat Fore / Aft */}
-            <div className="p-2 rounded-xl bg-amber-950/50 border border-amber-500/30 space-y-1">
-              <div className="flex justify-between text-amber-200/60">
+            <div className="p-2 rounded-xl bg-slate-950/70 border border-slate-800 space-y-1">
+              <div className="flex justify-between text-slate-400">
                 <span>SEAT FORE / AFT:</span>
                 <span className="text-emerald-400 font-bold">{seatForeAftMm} mm</span>
               </div>
@@ -1143,8 +1143,8 @@ const ModularInterior3DStudioViewportComponent: React.FC<ModularInterior3DStudio
             </div>
 
             {/* Eye Height */}
-            <div className="p-2 rounded-xl bg-amber-950/50 border border-amber-500/30 space-y-1">
-              <div className="flex justify-between text-amber-200/60">
+            <div className="p-2 rounded-xl bg-slate-950/70 border border-slate-800 space-y-1">
+              <div className="flex justify-between text-slate-400">
                 <span>EYE HEIGHT:</span>
                 <span className="text-emerald-400 font-bold">{seatHeightMm} mm</span>
               </div>
@@ -1160,14 +1160,14 @@ const ModularInterior3DStudioViewportComponent: React.FC<ModularInterior3DStudio
             </div>
 
             {/* Reticle Toggle */}
-            <div className="p-2 rounded-xl bg-amber-950/70 border border-amber-800/30 flex items-center justify-between">
-              <span className="text-amber-200/60">CROSSHAIR:</span>
+            <div className="p-2 rounded-xl bg-slate-950/70 border border-slate-800 flex items-center justify-between">
+              <span className="text-slate-400">CROSSHAIR:</span>
               <button
                 onClick={() => setShowCrosshair(!showCrosshair)}
                 className={`px-2 py-0.5 rounded-lg font-bold border transition-all cursor-pointer ${
                   showCrosshair
                     ? "bg-amber-500/20 border-amber-500/50 text-amber-300"
-                    : "bg-amber-900/50 border-amber-800/30 text-amber-300/50"
+                    : "bg-slate-900 border-slate-800 text-slate-500"
                 }`}
               >
                 {showCrosshair ? "ON" : "OFF"}
@@ -1177,13 +1177,13 @@ const ModularInterior3DStudioViewportComponent: React.FC<ModularInterior3DStudio
         </div>
 
         {/* Panel 2: Live HMI & Dynamics Telemetry (5 Cols) */}
-        <div className="lg:col-span-5 p-3.5 rounded-2xl bg-amber-900/40 border border-amber-800/30 space-y-3 shadow-xl">
-          <div className="flex items-center justify-between border-b border-amber-800/30 pb-2">
+        <div className="lg:col-span-5 p-3.5 rounded-2xl bg-slate-900/90 border border-slate-800 space-y-3 shadow-xl">
+          <div className="flex items-center justify-between border-b border-slate-800 pb-2">
             <div className="flex items-center gap-2">
               <div className="p-1.5 rounded-lg bg-amber-500/20 text-amber-300">
                 <Tv size={14} />
               </div>
-              <span className="text-xs font-bold text-amber-50 uppercase tracking-wider">
+              <span className="text-xs font-bold text-slate-100 uppercase tracking-wider">
                 CENTRAL HMI & DYNAMICS SIMULATOR
               </span>
             </div>
@@ -1194,7 +1194,7 @@ const ModularInterior3DStudioViewportComponent: React.FC<ModularInterior3DStudio
 
           {/* HMI Screen Mode Switcher */}
           <div className="space-y-1.5">
-            <div className="text-[10px] text-amber-200/60">INFOTAINMENT DASHBOARD STREAM:</div>
+            <div className="text-[10px] text-slate-400">INFOTAINMENT DASHBOARD STREAM:</div>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-1.5">
               {[
                 { id: "telemetry", label: "Telemetry" },
@@ -1211,7 +1211,7 @@ const ModularInterior3DStudioViewportComponent: React.FC<ModularInterior3DStudio
                   className={`px-2 py-1.5 rounded-xl text-[10px] font-bold transition-all cursor-pointer ${
                     infotainmentMode === m.id
                       ? "bg-gradient-to-r from-amber-500 to-amber-600 text-white shadow-md shadow-cyan-500/25"
-                      : "bg-amber-950/80 border border-amber-800/30 text-amber-200/60 hover:text-amber-50"
+                      : "bg-slate-950/80 border border-slate-800 text-slate-400 hover:text-slate-200"
                   }`}
                 >
                   {m.label}
@@ -1221,10 +1221,10 @@ const ModularInterior3DStudioViewportComponent: React.FC<ModularInterior3DStudio
           </div>
 
           {/* Dynamics Sliders: Exploded, RPM, Steering, Door */}
-          <div className="grid grid-cols-2 gap-2.5 pt-2 border-t border-amber-800/30 text-[10px]">
+          <div className="grid grid-cols-2 gap-2.5 pt-2 border-t border-slate-800/80 text-[10px]">
             {/* Exploded View */}
-            <div className="p-2 rounded-xl bg-amber-950/50 border border-amber-500/30 space-y-1">
-              <div className="flex justify-between text-amber-200/60">
+            <div className="p-2 rounded-xl bg-slate-950/70 border border-slate-800 space-y-1">
+              <div className="flex justify-between text-slate-400">
                 <span className="flex items-center gap-1">
                   <Maximize2 size={11} className="text-amber-400" /> EXPLODED:
                 </span>
@@ -1242,8 +1242,8 @@ const ModularInterior3DStudioViewportComponent: React.FC<ModularInterior3DStudio
             </div>
 
             {/* Engine RPM */}
-            <div className="p-2 rounded-xl bg-amber-950/50 border border-amber-500/30 space-y-1">
-              <div className="flex justify-between text-amber-200/60">
+            <div className="p-2 rounded-xl bg-slate-950/70 border border-slate-800 space-y-1">
+              <div className="flex justify-between text-slate-400">
                 <span className="flex items-center gap-1">
                   <Activity size={11} className="text-rose-400" /> RPM SOUND:
                 </span>
@@ -1261,8 +1261,8 @@ const ModularInterior3DStudioViewportComponent: React.FC<ModularInterior3DStudio
             </div>
 
             {/* Steering Angle */}
-            <div className="p-2 rounded-xl bg-amber-950/50 border border-amber-500/30 space-y-1">
-              <div className="flex justify-between text-amber-200/60">
+            <div className="p-2 rounded-xl bg-slate-950/70 border border-slate-800 space-y-1">
+              <div className="flex justify-between text-slate-400">
                 <span>STEERING:</span>
                 <span className="text-amber-400 font-bold">{steeringAngleDeg}°</span>
               </div>
@@ -1278,8 +1278,8 @@ const ModularInterior3DStudioViewportComponent: React.FC<ModularInterior3DStudio
             </div>
 
             {/* Driver Door Angle */}
-            <div className="p-2 rounded-xl bg-amber-950/50 border border-amber-500/30 space-y-1">
-              <div className="flex justify-between text-amber-200/60">
+            <div className="p-2 rounded-xl bg-slate-950/70 border border-slate-800 space-y-1">
+              <div className="flex justify-between text-slate-400">
                 <span>DOOR SWING:</span>
                 <span className="text-emerald-400 font-bold">{doorOpenAngleDeg}°</span>
               </div>

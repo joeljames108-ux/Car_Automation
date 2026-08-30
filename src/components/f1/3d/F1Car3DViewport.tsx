@@ -304,13 +304,13 @@ const F1Car3DViewportComponent: React.FC = () => {
   }, [engineRpm, audioEnabled]);
 
   return (
-    <div className="relative w-full h-[520px] rounded-2xl overflow-hidden border border-amber-800/30 bg-amber-950/80 shadow-2xl group">
+    <div className="relative w-full h-[520px] rounded-2xl overflow-hidden border border-slate-800 bg-slate-950 shadow-2xl group">
       {/* 3D WebGL Canvas Container */}
       <div ref={containerRef} className="w-full h-full cursor-grab active:cursor-grabbing" />
 
       {/* Top Left Viewport Badge */}
       <div className="absolute top-4 left-4 z-10 flex items-center gap-2">
-        <div className="px-3 py-1 rounded-xl bg-amber-900/40 backdrop-blur-md border border-amber-700/30 text-xs font-mono text-amber-400 font-bold flex items-center gap-1.5 shadow-lg">
+        <div className="px-3 py-1 rounded-xl bg-slate-900/80 backdrop-blur-md border border-slate-700 text-xs font-mono text-amber-400 font-bold flex items-center gap-1.5 shadow-lg">
           <Sparkles size={12} className="text-amber-400" />
           <span>F1 3D CAD STUDIO</span>
         </div>
@@ -319,7 +319,7 @@ const F1Car3DViewportComponent: React.FC = () => {
           className={`p-1.5 rounded-lg border backdrop-blur-md transition-all ${
             autoRotate
               ? "bg-amber-500/20 border-amber-500/40 text-amber-300 shadow-md shadow-cyan-950/40"
-              : "bg-amber-900/40 border-amber-700/30 text-amber-200/60 hover:text-amber-50"
+              : "bg-slate-900/70 border-slate-700 text-slate-400 hover:text-slate-200"
           }`}
           title="Auto Rotate Turntable"
         >
@@ -328,7 +328,7 @@ const F1Car3DViewportComponent: React.FC = () => {
       </div>
 
       {/* Top Right Camera Presets */}
-      <div className="absolute top-4 right-4 z-10 flex items-center gap-1 bg-amber-900/40 backdrop-blur-md p-1 rounded-xl border border-amber-700/30 shadow-lg">
+      <div className="absolute top-4 right-4 z-10 flex items-center gap-1 bg-slate-900/80 backdrop-blur-md p-1 rounded-xl border border-slate-700 shadow-lg">
         {[
           { id: "ORBIT_HERO", label: "Hero 3/4" },
           { id: "AERO_TUNNEL", label: "Front" },
@@ -342,7 +342,7 @@ const F1Car3DViewportComponent: React.FC = () => {
             className={`px-2.5 py-1 rounded-lg text-[11px] font-semibold transition-all ${
               cameraPreset === cam.id
                 ? "bg-amber-500/20 text-amber-300 border border-amber-500/40"
-                : "text-amber-200/60 hover:text-amber-50 border border-transparent"
+                : "text-slate-400 hover:text-slate-200 border border-transparent"
             }`}
           >
             {cam.label}
@@ -351,10 +351,10 @@ const F1Car3DViewportComponent: React.FC = () => {
       </div>
 
       {/* Bottom Control Bar */}
-      <div className="absolute bottom-4 left-4 right-4 z-10 flex flex-wrap items-center justify-between gap-3 bg-amber-900/40 backdrop-blur-md p-3 rounded-xl border border-amber-800/30 shadow-2xl">
+      <div className="absolute bottom-4 left-4 right-4 z-10 flex flex-wrap items-center justify-between gap-3 bg-slate-900/85 backdrop-blur-md p-3 rounded-xl border border-slate-800 shadow-2xl">
         {/* Exploded View Slider */}
         <div className="flex items-center gap-3 w-full sm:w-auto">
-          <div className="flex items-center gap-1.5 text-xs text-amber-200/60 font-semibold">
+          <div className="flex items-center gap-1.5 text-xs text-slate-400 font-semibold">
             <Layers size={14} className="text-amber-400" />
             <span className="hidden sm:inline">Exploded:</span>
           </div>
@@ -380,7 +380,7 @@ const F1Car3DViewportComponent: React.FC = () => {
             className={`px-3 py-1.5 rounded-lg text-xs font-bold font-mono transition-all border ${
               drsOpen
                 ? "bg-ok-500/20 border-ok-500/50 text-ok-300 shadow-md shadow-ok-950/40"
-                : "bg-amber-800/35/80 border-amber-700/30 text-amber-200/60 hover:text-amber-50"
+                : "bg-slate-800/80 border-slate-700 text-slate-400 hover:text-slate-200"
             }`}
           >
             DRS {drsOpen ? "OPEN (85mm)" : "CLOSED"}
@@ -392,7 +392,7 @@ const F1Car3DViewportComponent: React.FC = () => {
             className={`px-2.5 py-1.5 rounded-lg text-xs font-semibold transition-all border ${
               wireframeMode
                 ? "bg-amber-500/20 border-amber-500/40 text-amber-300"
-                : "bg-amber-800/35/80 border-amber-700/30 text-amber-200/60 hover:text-amber-50"
+                : "bg-slate-800/80 border-slate-700 text-slate-400 hover:text-slate-200"
             }`}
           >
             Wireframe
@@ -404,7 +404,7 @@ const F1Car3DViewportComponent: React.FC = () => {
             className={`flex items-center gap-1 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all border ${
               audioEnabled
                 ? "bg-amber-500/20 border-amber-500/40 text-amber-300 shadow-md shadow-amber-950/40"
-                : "bg-amber-800/35/80 border-amber-700/30 text-amber-200/60 hover:text-amber-50"
+                : "bg-slate-800/80 border-slate-700 text-slate-400 hover:text-slate-200"
             }`}
           >
             {audioEnabled ? <Volume2 size={13} /> : <VolumeX size={13} />}
@@ -413,7 +413,7 @@ const F1Car3DViewportComponent: React.FC = () => {
 
           {/* RPM Slider if audio enabled */}
           {audioEnabled && (
-            <div className="flex items-center gap-2 bg-amber-950/60 px-2 py-1 rounded-lg border border-amber-800/30">
+            <div className="flex items-center gap-2 bg-slate-950/60 px-2 py-1 rounded-lg border border-slate-800">
               <input
                 type="range"
                 min="3500"

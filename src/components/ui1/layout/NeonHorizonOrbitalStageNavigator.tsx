@@ -95,23 +95,23 @@ export const NeonHorizonOrbitalStageNavigator: React.FC<NeonHorizonOrbitalStageN
       onClick={onClose}
     >
       <div
-        className="relative w-full max-w-4xl max-h-[90vh] overflow-y-auto rounded-3xl bg-amber-950/95 border border-white/15 p-6 shadow-[0_0_80px_rgba(0,180,255,0.2)] flex flex-col gap-5 scrollbar-thin"
+        className="relative w-full max-w-4xl max-h-[90vh] overflow-y-auto rounded-3xl bg-slate-950/95 border border-white/15 p-6 shadow-[0_0_80px_rgba(0,180,255,0.2)] flex flex-col gap-5 scrollbar-thin"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header Strip */}
         <div className="flex items-center justify-between border-b border-white/10 pb-4">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-sky-500/10 border border-sky-400/30 flex items-center justify-center text-sky-400 shadow-lg">
+            <div className="w-10 h-10 rounded-2xl bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-amber-400 shadow-lg">
               <Orbit size={20} className="animate-spin-slow" />
             </div>
             <div>
               <div className="flex items-center gap-2">
                 <h2 className="text-lg font-black tracking-wide text-white">ORBITAL STAGE NAVIGATOR</h2>
-                <span className="px-2 py-0.5 rounded-full text-[9px] font-mono font-bold bg-sky-400/15 text-sky-300 border border-sky-400/30 uppercase">
+                <span className="px-2 py-0.5 rounded-full text-[9px] font-mono font-bold bg-amber-500/15 text-amber-300 border border-amber-500/30 uppercase">
                   3D Planetary Waypoint System
                 </span>
               </div>
-              <p className="text-xs text-amber-200/60">
+              <p className="text-xs text-slate-400">
                 Click any orbital facet to rotate the planetary sphere and fly directly into that workspace stage.
               </p>
             </div>
@@ -119,7 +119,7 @@ export const NeonHorizonOrbitalStageNavigator: React.FC<NeonHorizonOrbitalStageN
 
           <button
             onClick={onClose}
-            className="w-8 h-8 rounded-full bg-white/5 hover:bg-white/15 border border-white/10 flex items-center justify-center text-amber-200/60 hover:text-white transition-all"
+            className="w-8 h-8 rounded-full bg-white/5 hover:bg-white/15 border border-white/10 flex items-center justify-center text-slate-400 hover:text-white transition-all"
           >
             <X size={16} />
           </button>
@@ -147,7 +147,7 @@ export const NeonHorizonOrbitalStageNavigator: React.FC<NeonHorizonOrbitalStageN
                 className={`px-4 py-2 rounded-xl text-xs font-bold font-mono tracking-wide border transition-all duration-200 ${
                   isCatActive
                     ? "text-white shadow-lg"
-                    : "text-amber-200/60 hover:text-amber-50 border-white/10 hover:bg-white/5"
+                    : "text-slate-400 hover:text-slate-200 border-white/10 hover:bg-white/5"
                 }`}
                 style={
                   isCatActive
@@ -166,7 +166,7 @@ export const NeonHorizonOrbitalStageNavigator: React.FC<NeonHorizonOrbitalStageN
         </div>
 
         {/* 3D Interactive Planetary Sphere & Surrounding Waypoint Cards */}
-        <div className="p-2 bg-amber-900/40 rounded-2xl border border-white/10">
+        <div className="p-2 bg-slate-900/60 rounded-2xl border border-white/10">
           <NeonHiggsfieldGlobe
             tabs={globeTabs}
             activeId={activeStage}
@@ -181,14 +181,14 @@ export const NeonHorizonOrbitalStageNavigator: React.FC<NeonHorizonOrbitalStageN
         </div>
 
         {/* Footer Actions */}
-        <div className="flex items-center justify-between pt-2 border-t border-white/10 text-xs text-amber-200/60 font-mono">
+        <div className="flex items-center justify-between pt-2 border-t border-white/10 text-xs text-slate-400 font-mono">
           <span className="flex items-center gap-1.5">
-            <Navigation size={12} className="text-sky-400" />
+            <Navigation size={12} className="text-amber-400" />
             DRAG SPHERE TO ROTATE · SELECT ANY WAYPOINT TO ENGAGE
           </span>
           <button
             onClick={onClose}
-            className="px-4 py-1.5 rounded-xl bg-sky-500 hover:bg-sky-400 text-slate-950 font-bold tracking-wider transition-all shadow-md"
+            className="px-4 py-1.5 rounded-xl bg-sky-500 hover:bg-amber-500 text-slate-950 font-bold tracking-wider transition-all shadow-md"
           >
             ENTER STAGE
           </button>

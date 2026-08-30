@@ -24,16 +24,16 @@ export const CalendarViewPanel = memo(function CalendarViewPanel() {
                 {calendar.rounds} ROUNDS
               </span>
             </div>
-            <h3 className="text-lg font-bold text-amber-50 flex items-center gap-2 mt-1">
+            <h3 className="text-lg font-bold text-slate-100 flex items-center gap-2 mt-1">
               <Calendar size={20} className="text-amber-400" /> Season Championship Calendar
             </h3>
-            <p className="text-xs text-amber-200/60 mt-0.5">
+            <p className="text-xs text-slate-400 mt-0.5">
               Official grand prix schedule, circuit characteristics, pace types & elevation profiles.
             </p>
           </div>
 
           <div className="flex items-center gap-2 flex-wrap">
-            <span className="text-xs font-mono text-amber-200/60">Category:</span>
+            <span className="text-xs font-mono text-slate-400">Category:</span>
             <div className="flex gap-1 flex-wrap">
               {(Object.keys(CATEGORY_LABELS) as MotorsportCategory[]).map(cat => (
                 <button
@@ -43,7 +43,7 @@ export const CalendarViewPanel = memo(function CalendarViewPanel() {
                     setSelectedCategory(cat);
                   }}
                   className={`px-2.5 py-1 rounded-lg text-xs font-semibold transition-all border cursor-pointer ${
-                    selectedCategory === cat ? CATEGORY_COLORS[cat] : "bg-base-850 border-base-800 text-amber-200/60 hover:border-base-700"
+                    selectedCategory === cat ? CATEGORY_COLORS[cat] : "bg-base-850 border-base-800 text-slate-400 hover:border-base-700"
                   }`}
                 >
                   {CATEGORY_LABELS[cat]}
@@ -65,7 +65,7 @@ export const CalendarViewPanel = memo(function CalendarViewPanel() {
                 key={trackId}
                 className="bg-base-950/80 rounded-xl p-4 border border-white/5 hover:border-amber-400/40 transition-all card-hover flex flex-col justify-between relative overflow-hidden group"
               >
-                <div className="absolute top-0 right-0 p-3 opacity-10 font-mono font-black text-4xl text-amber-200/60 pointer-events-none group-hover:opacity-20 transition-opacity">
+                <div className="absolute top-0 right-0 p-3 opacity-10 font-mono font-black text-4xl text-slate-400 pointer-events-none group-hover:opacity-20 transition-opacity">
                   R{roundNum}
                 </div>
 
@@ -74,32 +74,32 @@ export const CalendarViewPanel = memo(function CalendarViewPanel() {
                     <span className="text-[10px] font-mono font-bold text-amber-400 bg-amber-500/10 border border-amber-500/30 px-2 py-0.5 rounded-full">
                       ROUND {roundNum}
                     </span>
-                    <span className="text-xs font-semibold text-amber-100/80 flex items-center gap-1">
+                    <span className="text-xs font-semibold text-slate-300 flex items-center gap-1">
                       <MapPin size={12} className="text-amber-400" /> {track.country}
                     </span>
                   </div>
 
-                  <h4 className="text-sm font-bold text-amber-50 mb-1">{track.name}</h4>
-                  <p className="text-[11px] text-amber-200/60 mb-3">{track.length} km · {track.highSpeed ? "High Speed Circuit" : "Technical Circuit"}</p>
+                  <h4 className="text-sm font-bold text-slate-100 mb-1">{track.name}</h4>
+                  <p className="text-[11px] text-slate-400 mb-3">{track.length} km · {track.highSpeed ? "High Speed Circuit" : "Technical Circuit"}</p>
 
                   <div className="grid grid-cols-3 gap-1.5 text-center text-[10px] font-mono bg-base-900/80 rounded-lg p-2 mb-3 border border-base-800">
                     <div>
-                      <div className="text-amber-300/50 font-sans text-[9px]">Length</div>
-                      <div className="text-amber-50 font-bold">{track.length} km</div>
+                      <div className="text-slate-500 font-sans text-[9px]">Length</div>
+                      <div className="text-slate-200 font-bold">{track.length} km</div>
                     </div>
                     <div>
-                      <div className="text-amber-300/50 font-sans text-[9px]">Pace Type</div>
-                      <div className="text-amber-50 font-bold">{track.highSpeed ? "Speed" : "Tech"}</div>
+                      <div className="text-slate-500 font-sans text-[9px]">Pace Type</div>
+                      <div className="text-slate-200 font-bold">{track.highSpeed ? "Speed" : "Tech"}</div>
                     </div>
                     <div>
-                      <div className="text-amber-300/50 font-sans text-[9px]">Elevation</div>
-                      <div className="text-amber-50 font-bold">{track.altitudeChange || 15}m</div>
+                      <div className="text-slate-500 font-sans text-[9px]">Elevation</div>
+                      <div className="text-slate-200 font-bold">{track.altitudeChange || 15}m</div>
                     </div>
                   </div>
                 </div>
 
                 <div className="flex items-center justify-between pt-2 border-t border-white/5 text-xs">
-                  <span className="text-amber-300/50 font-mono text-[10px]">EVENT SCRUTINY:</span>
+                  <span className="text-slate-500 font-mono text-[10px]">EVENT SCRUTINY:</span>
                   <span className="text-emerald-400 font-semibold flex items-center gap-1 text-[11px]">
                     <CheckCircle size={12} /> CONFIRMED
                   </span>

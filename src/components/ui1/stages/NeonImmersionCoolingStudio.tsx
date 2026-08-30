@@ -31,7 +31,7 @@ export function NeonImmersionCoolingStudio() {
   const runawayRisk = maxCellTemp > 55 ? "HIGH" : maxCellTemp > 45 ? "MODERATE" : "MINIMAL (SAFE)";
 
   return (
-    <div className="w-full flex flex-col gap-6 text-amber-50 animate-nh-materialize">
+    <div className="w-full flex flex-col gap-6 text-slate-100 animate-nh-materialize">
       {/* Header */}
       <NeonHorizonGlassPanel
         variant="window"
@@ -66,7 +66,7 @@ export function NeonImmersionCoolingStudio() {
             }}
             className="p-6 flex flex-col gap-4"
           >
-            <div className="grid grid-cols-8 gap-2 p-4 rounded-xl bg-[#05080f] border border-sky-400/25 shadow-[inset_0_0_20px_rgba(0,0,0,0.8)]">
+            <div className="grid grid-cols-8 gap-2 p-4 rounded-xl bg-amber-950/60 border border-sky-400/25 shadow-[inset_0_0_20px_rgba(0,0,0,0.8)]">
               {Array.from({ length: 32 }).map((_, idx) => {
                 const cellTemp = Math.round(maxCellTemp - Math.abs(idx - 16) * 0.4);
                 const isHot = cellTemp > 45;
@@ -76,7 +76,7 @@ export function NeonImmersionCoolingStudio() {
                     className={`h-12 rounded-lg border flex flex-col items-center justify-center font-mono text-[9px] font-bold transition-all ${
  isHot
  ? "bg-amber-500/20 border-amber-500/50 text-amber-300"
- : "bg-sky-400/10 border-sky-400/25 text-sky-300"
+ : "bg-amber-500/20 border-sky-400/25 text-amber-300"
  }`}
                   >
                     <span>C{idx + 1}</span>
@@ -87,7 +87,7 @@ export function NeonImmersionCoolingStudio() {
             </div>
 
             <div className="flex flex-col gap-2">
-              <span className="text-xs font-bold text-amber-100/80">Immersion Dielectric Chemistry:</span>
+              <span className="text-xs font-bold text-slate-300">Immersion Dielectric Chemistry:</span>
               <div className="grid grid-cols-3 gap-2">
                 {[
                   { id: "synthetic_hydrocarbon", name: "Synthetic Hydrocarbon" },
@@ -104,8 +104,8 @@ export function NeonImmersionCoolingStudio() {
                       }}
                       className={`p-2.5 rounded-lg border text-center text-xs font-bold cursor-pointer transition-all ${
  isSelected
- ? "bg-sky-400/10 border-sky-400/30 text-sky-200"
- : "bg-[#0a111e] border-white/10 text-amber-200/60 hover:border-sky-400/25"
+ ? "bg-amber-500/20 border-amber-500/30 text-sky-200"
+ : "bg-amber-950/60 border-white/10 text-slate-400 hover:border-sky-400/25"
  }`}
                     >
                       {item.name}
@@ -150,13 +150,13 @@ export function NeonImmersionCoolingStudio() {
               onChange={(val) => setChargePower(val)}
             />
 
-            <div className="p-3.5 rounded-xl bg-[#0a111e] border border-sky-400/15 flex flex-col gap-2 font-mono text-xs">
+            <div className="p-3.5 rounded-xl bg-amber-950/60 border border-sky-400/15 flex flex-col gap-2 font-mono text-xs">
               <div className="flex items-center justify-between">
-                <span className="text-amber-200/60">Fluid Boiling Point:</span>
-                <span className="text-sky-300 font-bold">110°C (Phase Change)</span>
+                <span className="text-slate-400">Fluid Boiling Point:</span>
+                <span className="text-amber-300 font-bold">110°C (Phase Change)</span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-amber-200/60">Dielectric Breakdown:</span>
+                <span className="text-slate-400">Dielectric Breakdown:</span>
                 <span className="text-emerald-300 font-bold">&gt; 45 kV / 2.5mm</span>
               </div>
             </div>

@@ -56,7 +56,7 @@ export const ChassisFrameShaderDefs: React.FC<ChassisFrameShaderDefsProps> = ({
       {/* ── 2. Floor Pan Stamped Sheet Gradients ── */}
       <linearGradient id="chassisFloorPanGrad" x1="0%" y1="0%" x2="0%" y2="100%">
         <stop offset="0%" stopColor="#1e293b" stopOpacity="0.95" />
-        <stop offset="50%" stopColor="#0f172a" stopOpacity="0.98" />
+        <stop offset="50%" stopColor="#1a1008" stopOpacity="0.98" />
         <stop offset="100%" stopColor="#020617" stopOpacity="1.0" />
       </linearGradient>
 
@@ -71,7 +71,7 @@ export const ChassisFrameShaderDefs: React.FC<ChassisFrameShaderDefsProps> = ({
         <stop offset="0%" stopColor="#f1f5f9" />
         <stop offset="40%" stopColor="#94a3b8" />
         <stop offset="80%" stopColor="#475569" />
-        <stop offset="100%" stopColor="#0f172a" />
+        <stop offset="100%" stopColor="#1a1008" />
       </radialGradient>
 
       <radialGradient id="chassisWeldNugget" cx="50%" cy="50%" r="50%">
@@ -102,7 +102,7 @@ export const ChassisFrameShaderDefs: React.FC<ChassisFrameShaderDefsProps> = ({
 
       {/* ── 5. Carbon Fiber 2x2 Twill Pattern ── */}
       <pattern id="chassisCarbonPattern" width="8" height="8" patternUnits="userSpaceOnUse">
-        <rect width="8" height="8" fill="#0f172a" />
+        <rect width="8" height="8" fill="#1a1008" />
         <path d="M0 0 L4 0 L8 4 L8 8 L4 8 L0 4 Z" fill="#1e293b" opacity="0.6" />
         <path d="M4 0 L8 0 L4 4 L0 4 Z" fill="#334155" opacity="0.4" />
         <path d="M0 4 L4 4 L8 8 L4 8 Z" fill="#334155" opacity="0.4" />

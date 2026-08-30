@@ -109,7 +109,7 @@ export function NeonAudioStudio() {
   };
 
   return (
-    <div className="w-full flex flex-col gap-6 text-amber-50 animate-nh-materialize">
+    <div className="w-full flex flex-col gap-6 text-slate-100 animate-nh-materialize">
       {/* Header */}
       <NeonHorizonGlassPanel
         variant="window"
@@ -144,11 +144,11 @@ export function NeonAudioStudio() {
             }}
             className="p-6 flex flex-col gap-4"
           >
-            <div className="w-full h-44 bg-[#05080f] rounded-xl border border-sky-400/25 overflow-hidden relative shadow-[inset_0_0_20px_rgba(0,0,0,0.8)]">
+            <div className="w-full h-44 bg-amber-950/60 rounded-xl border border-sky-400/25 overflow-hidden relative shadow-[inset_0_0_20px_rgba(0,0,0,0.8)]">
               <canvas ref={canvasRef} width={600} height={180} className="w-full h-full" />
               <div className="absolute top-2 left-3 flex items-center gap-2">
                 <div className="w-2 h-2 rounded-full bg-sky-300 animate-ping" />
-                <span className="text-[10px] nh-font-mono font-bold text-sky-400">PROCEDURAL OSCILLATOR · {rpm} Hz FREQ</span>
+                <span className="text-[10px] nh-font-mono font-bold text-amber-400">PROCEDURAL OSCILLATOR · {rpm} Hz FREQ</span>
               </div>
             </div>
 
@@ -161,10 +161,10 @@ export function NeonAudioStudio() {
                 <Flame size={14} className="mr-1 text-amber-400" /> TURBO BOV
               </NeonHorizonButton>
               <NeonHorizonButton variant="ghost" size="sm" onClick={playSubsystemEngageSound}>
-                <Zap size={14} className="mr-1 text-sky-400" /> SERVO THUD
+                <Zap size={14} className="mr-1 text-amber-400" /> SERVO THUD
               </NeonHorizonButton>
               <NeonHorizonButton variant="ghost" size="sm" onClick={playHologramScanSound}>
-                <Radio size={14} className="mr-1 text-sky-400" /> SCAN CHIRP
+                <Radio size={14} className="mr-1 text-amber-400" /> SCAN CHIRP
               </NeonHorizonButton>
             </div>
           </NeonHorizonGlassPanel>
@@ -192,10 +192,10 @@ export function NeonAudioStudio() {
               onChange={(val) => setRpm(val)}
             />
 
-            <div className="flex items-center justify-between p-3 rounded-xl bg-[#0a111e] border border-sky-400/15">
+            <div className="flex items-center justify-between p-3 rounded-xl bg-amber-950/60 border border-sky-400/15">
               <div className="flex flex-col">
-                <span className="text-xs font-bold text-amber-50">Active Exhaust Bypass Valves</span>
-                <span className="text-[10px] text-amber-200/60">Open for full unmuffled racing resonance</span>
+                <span className="text-xs font-bold text-slate-200">Active Exhaust Bypass Valves</span>
+                <span className="text-[10px] text-slate-400">Open for full unmuffled racing resonance</span>
               </div>
               <NeonHorizonToggle
                 label="Active Bypass Valves"
@@ -209,7 +209,7 @@ export function NeonAudioStudio() {
             </div>
 
             <div className="flex flex-col gap-2">
-              <span className="text-xs font-bold text-amber-100/80">Exhaust Header Metallurgy:</span>
+              <span className="text-xs font-bold text-slate-300">Exhaust Header Metallurgy:</span>
               <div className="grid grid-cols-3 gap-2">
                 {[
                   { id: "titanium", name: "Titanium" },
@@ -226,8 +226,8 @@ export function NeonAudioStudio() {
                       }}
                       className={`p-2.5 rounded-lg border text-center text-xs font-bold cursor-pointer transition-all ${
  isSelected
- ? "bg-sky-400/10 border-sky-400/30 text-sky-200"
- : "bg-[#0a111e] border-white/10 text-amber-200/60 hover:border-sky-400/25"
+ ? "bg-amber-500/20 border-amber-500/30 text-sky-200"
+ : "bg-amber-950/60 border-white/10 text-slate-400 hover:border-sky-400/25"
  }`}
                     >
                       {item.name}

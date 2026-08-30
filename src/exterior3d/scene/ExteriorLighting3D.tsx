@@ -30,13 +30,13 @@ export const ExteriorLighting3D: React.FC = () => {
       <directionalLight position={[0, 12, 0]} intensity={1.0} color="#ffffff" />
 
       {/* Rear Rim Light — cool blue for dramatic edge highlight */}
-      <directionalLight position={[-6, 5, -8]} intensity={1.2} color="#c8ddf0" />
+      <directionalLight position={[-6, 5, -8]} intensity={1.2} color="#fde68a" />
 
       {/* Side Fill Light — very subtle warm from left */}
-      <directionalLight position={[-8, 4, 2]} intensity={0.5} color="#fef3c7" />
+      <directionalLight position={[-8, 4, 2]} intensity={0.5} color="#fbbf24" />
 
       {/* Underbody Bounce — subtle cool fill from below */}
-      <directionalLight position={[0, -3, 0]} intensity={0.3} color="#94a3b8" />
+      <directionalLight position={[0, -3, 0]} intensity={0.3} color="#b89060" />
 
       {/* Spot accent on the car — tight spot for dramatic highlight */}
       <spotLight

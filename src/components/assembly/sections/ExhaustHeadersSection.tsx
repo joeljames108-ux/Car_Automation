@@ -87,7 +87,7 @@ export function ExhaustHeadersSection({
               onChange={(v) => updateEngine({ exhaustCollectorDia: v })}
             />
 
-            <div className="grid grid-cols-2 gap-2 pt-2 border-t border-amber-800/30">
+            <div className="grid grid-cols-2 gap-2 pt-2 border-t border-slate-800/80">
               <Toggle
                 label="Sport Catalytic Converter"
                 value={engineConfig.exhaustCat ?? true}
@@ -116,7 +116,7 @@ export function ExhaustHeadersSection({
               onSelectVariant={onSelectVariant}
             />
           ) : (
-            <p className="text-xs font-mono text-amber-300/50">Loading material variants...</p>
+            <p className="text-xs font-mono text-slate-500">Loading material variants...</p>
           )}
         </SectionCard>
 

@@ -148,60 +148,26 @@ export const InteriorConfigControls: React.FC = () => {
 
       {/* Color Palette */}
       <div className="idash-color-section">
-        <div className="flex items-center justify-between mb-2">
-          <div className="idash-section-title" style={{ margin: 0 }}>
-            INTERIOR COLOR
-          </div>
-          <span className="text-[11px] font-mono text-cyan-400 font-bold uppercase">
-            {interiorColor}
-          </span>
-        </div>
-        <div className="idash-color-swatches flex items-center flex-wrap gap-2">
+        <div className="idash-section-title">INTERIOR COLOR</div>
+        <div className="idash-color-swatches">
           {INTERIOR_COLOR_SWATCHES.map((swatch) => (
             <button
               key={swatch.hex}
               type="button"
-              className={`idash-swatch ${interiorColor.toLowerCase() === swatch.hex.toLowerCase() ? "active" : ""}`}
+              className={`idash-swatch ${interiorColor === swatch.hex ? "active" : ""}`}
               style={{ backgroundColor: swatch.hex }}
               onClick={() => setColor(swatch.hex)}
               title={swatch.name}
               aria-label={`Select ${swatch.name} color`}
             />
           ))}
-
-          {/* Bespoke Custom Color Picker */}
-          <label
-            className={`relative flex items-center justify-center w-8 h-8 rounded-full border-2 cursor-pointer transition-all ${
-              !INTERIOR_COLOR_SWATCHES.some(
-                (s) => s.hex.toLowerCase() === interiorColor.toLowerCase()
-              )
-                ? "border-cyan-400 scale-110 shadow-lg shadow-cyan-500/40"
-                : "border-amber-700/30 hover:border-amber-500/30"
-            }`}
-            style={{
-              background:
-                "conic-gradient(from 180deg at 50% 50%, #ff0000, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff, #ff0000)",
-            }}
-            title="Custom Hex Color Picker"
-          >
-            <input
-              type="color"
-              value={interiorColor}
-              onChange={(e) => setColor(e.target.value)}
-              className="absolute inset-0 opacity-0 w-full h-full cursor-pointer"
-              aria-label="Custom color picker"
-            />
-            <span className="text-[10px] font-black text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.9)] pointer-events-none">
-              +
-            </span>
-          </label>
         </div>
       </div>
 
       {/* Info Popover Modal */}
       {selectedInfoKey && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-amber-950/75 backdrop-blur-sm p-4 animate-in fade-in duration-150">
-          <div className="bg-amber-900/50 border border-amber-700/30 rounded-2xl p-5 max-w-sm w-full shadow-2xl space-y-3.5">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/75 backdrop-blur-sm p-4 animate-in fade-in duration-150">
+          <div className="bg-slate-900 border border-slate-700 rounded-2xl p-5 max-w-sm w-full shadow-2xl space-y-3.5">
             <div className="flex items-start justify-between">
               <div className="flex items-center gap-2">
                 <div className="p-1.5 rounded-lg bg-blue-500/20 text-cyan-400">
@@ -213,14 +179,14 @@ export const InteriorConfigControls: React.FC = () => {
               </div>
               <button
                 onClick={() => setSelectedInfoKey(null)}
-                className="text-amber-200/60 hover:text-white p-1 rounded-lg hover:bg-amber-800/35 transition-colors"
+                className="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800 transition-colors"
                 aria-label="Close dialog"
               >
                 <X size={16} />
               </button>
             </div>
 
-            <p className="text-xs text-amber-100/80 leading-relaxed">
+            <p className="text-xs text-slate-300 leading-relaxed">
               {FEATURE_EXPLANATIONS[selectedInfoKey].desc}
             </p>
 

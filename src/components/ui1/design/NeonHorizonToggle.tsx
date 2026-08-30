@@ -27,8 +27,8 @@ export const NeonHorizonToggle: React.FC<NeonHorizonToggleProps> = ({
   };
 
   const knobStyles = {
-    cyan: "bg-sky-400 border-sky-300/70",
-    magenta: "bg-sky-400 border-sky-300/70",
+    cyan: "bg-amber-500 border-sky-300/70",
+    magenta: "bg-amber-500 border-sky-300/70",
     emerald: "bg-emerald-400 border-emerald-300/70",
   }[color];
 
@@ -40,19 +40,19 @@ export const NeonHorizonToggle: React.FC<NeonHorizonToggleProps> = ({
  } ${className}`}
     >
       <div className="flex flex-col pr-4">
-        <span className="text-xs font-semibold nh-font-body tracking-wider text-amber-50">
+        <span className="text-xs font-semibold nh-font-body tracking-wider text-slate-200">
           {label}
         </span>
         {description && (
-          <span className="text-[10px] text-amber-200/60 nh-font-mono">{description}</span>
+          <span className="text-[10px] text-slate-400 nh-font-mono">{description}</span>
         )}
       </div>
 
       <div
         className={`relative w-11 h-6 rounded-full transition-all duration-300 p-0.5 border ${
  checked
- ? "bg-sky-400/15 border-sky-400/30"
- : "bg-[#0a111e] border-white/10"
+ ? "bg-amber-500/15 border-amber-500/30"
+ : "bg-amber-950/60 border-white/10"
  }`}
       >
         <div

@@ -101,7 +101,7 @@ export function CamshaftSection({
               <span className="text-[10px] font-mono font-bold text-amber-300 uppercase tracking-wider block">
                 POWERBAND DYNAMICS
               </span>
-              <p className="text-[11px] font-mono text-amber-100/80 leading-relaxed">
+              <p className="text-[11px] font-mono text-slate-300 leading-relaxed">
                 Higher duration ({engineConfig.camDuration || 270}°) increases top-end breathing above 7,000 RPM while broad lift fills mid-range torque.
               </p>
             </div>
@@ -122,7 +122,7 @@ export function CamshaftSection({
               onSelectVariant={onSelectVariant}
             />
           ) : (
-            <p className="text-xs font-mono text-amber-300/50">Loading material variants...</p>
+            <p className="text-xs font-mono text-slate-500">Loading material variants...</p>
           )}
         </SectionCard>
 

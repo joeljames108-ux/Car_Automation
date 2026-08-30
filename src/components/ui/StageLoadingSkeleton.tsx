@@ -22,12 +22,12 @@ export const StageLoadingSkeleton: React.FC<StageLoadingSkeletonProps> = ({ stag
               <span>INITIALIZING SUBSYSTEM PIPELINE</span>
               <span className="w-2 h-2 rounded-full bg-amber-400 animate-ping" />
             </div>
-            <div className="text-[11px] text-amber-200/60 font-mono">
+            <div className="text-[11px] text-slate-400 font-mono">
               {stageName ? `Loading module [${stageName.toUpperCase()}]` : "Streaming CAD & Multi-Physics Solvers..."}
             </div>
           </div>
         </div>
-        <div className="flex items-center gap-2 font-mono text-[10px] text-amber-300/50 bg-base-950/80 px-3 py-1.5 rounded-lg border border-white/5">
+        <div className="flex items-center gap-2 font-mono text-[10px] text-slate-500 bg-base-950/80 px-3 py-1.5 rounded-lg border border-white/5">
           <Activity size={12} className="text-amber-400 animate-pulse" />
           <span>120Hz STREAM</span>
         </div>
@@ -62,12 +62,12 @@ export const StageLoadingSkeleton: React.FC<StageLoadingSkeletonProps> = ({ stag
             <div className="h-2 w-3/4 bg-white/5 rounded animate-pulse" />
             <div className="h-2 w-1/2 bg-sky-500/20 rounded animate-pulse" />
           </div>
-          <div className="h-8 w-full bg-sky-500/10 rounded border border-sky-500/20 animate-pulse" />
+          <div className="h-8 w-full bg-amber-500/15 rounded border border-sky-500/20 animate-pulse" />
         </div>
       </div>
 
       {/* Bottom Progress Bar Skeleton */}
-      <div className="flex items-center justify-between text-[11px] font-mono text-amber-200/60 border-t border-white/10 pt-4">
+      <div className="flex items-center justify-between text-[11px] font-mono text-slate-400 border-t border-white/10 pt-4">
         <span>MEM: OK · SHADERS: COMPILING</span>
         <div className="w-48 h-1.5 bg-base-950 rounded-full overflow-hidden border border-white/10">
           <div className="h-full bg-gradient-to-r from-amber-400 via-sky-400 to-amber-500 w-2/3 rounded-full animate-pulse" />

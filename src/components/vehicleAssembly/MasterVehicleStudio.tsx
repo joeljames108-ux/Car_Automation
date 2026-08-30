@@ -267,7 +267,7 @@ const MasterVehicleStudioInner: React.FC = () => {
   const compat = state.compatibility;
 
   return (
-    <div className="flex flex-col xl:flex-row gap-4 w-full h-full min-h-[720px] text-amber-50">
+    <div className="flex flex-col xl:flex-row gap-4 w-full h-full min-h-[720px] text-slate-100">
       {/* â”€â”€ 3D VIEWPORT CANVAS â”€â”€ */}
       <div className="flex-1 flex flex-col bg-base-950/90 rounded-3xl border border-base-800 overflow-hidden shadow-2xl backdrop-blur-xl relative">
         {/* Top Viewport Header */}
@@ -283,28 +283,28 @@ const MasterVehicleStudioInner: React.FC = () => {
                   v{state.version}.0 MODULAR 3D
                 </span>
               </div>
-              <p className="text-[11px] text-amber-400 dark:text-amber-200/60">Master Vehicle Scene Graph & Multi-Physics Digital Twin</p>
+              <p className="text-[11px] text-slate-600 dark:text-slate-400">Master Vehicle Scene Graph & Multi-Physics Digital Twin</p>
             </div>
           </div>
 
           {/* Quick Camera Preset Buttons */}
           <div className="flex items-center gap-1 bg-base-950/80 p-1 rounded-xl border border-base-800">
-            <button onClick={() => setCameraPose("iso")} className="px-2.5 py-1 rounded-lg text-xs font-semibold hover:bg-base-800/50 text-amber-500 dark:text-amber-100/80">
+            <button onClick={() => setCameraPose("iso")} className="px-2.5 py-1 rounded-lg text-xs font-semibold hover:bg-base-800/50 text-slate-700 dark:text-slate-300">
               3/4 Iso
             </button>
-            <button onClick={() => setCameraPose("front")} className="px-2.5 py-1 rounded-lg text-xs font-semibold hover:bg-base-800/50 text-amber-500 dark:text-amber-100/80">
+            <button onClick={() => setCameraPose("front")} className="px-2.5 py-1 rounded-lg text-xs font-semibold hover:bg-base-800/50 text-slate-700 dark:text-slate-300">
               Front
             </button>
-            <button onClick={() => setCameraPose("side")} className="px-2.5 py-1 rounded-lg text-xs font-semibold hover:bg-base-800/50 text-amber-500 dark:text-amber-100/80">
+            <button onClick={() => setCameraPose("side")} className="px-2.5 py-1 rounded-lg text-xs font-semibold hover:bg-base-800/50 text-slate-700 dark:text-slate-300">
               Side
             </button>
-            <button onClick={() => setCameraPose("rear")} className="px-2.5 py-1 rounded-lg text-xs font-semibold hover:bg-base-800/50 text-amber-500 dark:text-amber-100/80">
+            <button onClick={() => setCameraPose("rear")} className="px-2.5 py-1 rounded-lg text-xs font-semibold hover:bg-base-800/50 text-slate-700 dark:text-slate-300">
               Diffuser
             </button>
-            <button onClick={() => setCameraPose("engine")} className="px-2.5 py-1 rounded-lg text-xs font-semibold hover:bg-base-800/50 text-amber-500 dark:text-amber-100/80">
+            <button onClick={() => setCameraPose("engine")} className="px-2.5 py-1 rounded-lg text-xs font-semibold hover:bg-base-800/50 text-slate-700 dark:text-slate-300">
               Engine
             </button>
-            <button onClick={() => setCameraPose("top")} className="px-2.5 py-1 rounded-lg text-xs font-semibold hover:bg-base-800/50 text-amber-500 dark:text-amber-100/80">
+            <button onClick={() => setCameraPose("top")} className="px-2.5 py-1 rounded-lg text-xs font-semibold hover:bg-base-800/50 text-slate-700 dark:text-slate-300">
               Top
             </button>
           </div>
@@ -319,7 +319,7 @@ const MasterVehicleStudioInner: React.FC = () => {
                 <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-amber-600 dark:text-amber-400 flex items-center gap-1">
                   <Zap size={11} /> Parameter Delta
                 </span>
-                <span className="text-[10px] text-amber-300/50 dark:text-amber-200/60 font-mono">{lastDelta.parameterName}</span>
+                <span className="text-[10px] text-slate-500 dark:text-slate-400 font-mono">{lastDelta.parameterName}</span>
               </div>
               <div className="grid grid-cols-2 gap-2 text-xs font-mono">
                 {lastDelta.deltaDownforceN !== 0 && (
@@ -361,7 +361,7 @@ const MasterVehicleStudioInner: React.FC = () => {
             {/* Exploded View Slider */}
             <div className="flex items-center gap-3 bg-base-950/80 px-3 py-1.5 rounded-xl border border-base-800">
               <Layers size={15} className="text-amber-500 dark:text-amber-400" />
-              <span className="text-xs font-semibold text-amber-500 dark:text-amber-100/80 whitespace-nowrap">Exploded View:</span>
+              <span className="text-xs font-semibold text-slate-700 dark:text-slate-300 whitespace-nowrap">Exploded View:</span>
               <input
                 type="range"
                 min="0"
@@ -381,7 +381,7 @@ const MasterVehicleStudioInner: React.FC = () => {
                 className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
                   xRayEnabled
                     ? "bg-amber-500/30 text-amber-700 dark:text-amber-200 border border-amber-400/50 shadow-[0_0_12px_rgba(168,85,247,0.3)]"
-                    : "bg-base-950/80 text-amber-400 dark:text-amber-200/60 hover:text-slate-900 dark:hover:text-white border border-base-800"
+                    : "bg-base-950/80 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white border border-base-800"
                 }`}
               >
                 <Eye size={14} /> X-Ray Shell
@@ -392,7 +392,7 @@ const MasterVehicleStudioInner: React.FC = () => {
                 className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold transition-all ${
                   streamlinesEnabled
                     ? "bg-amber-500/30 text-amber-700 dark:text-amber-200 border border-amber-400/50 shadow-[0_0_12px_rgba(245,158,11,0.3)]"
-                    : "bg-base-950/80 text-amber-400 dark:text-amber-200/60 hover:text-slate-900 dark:hover:text-white border border-base-800"
+                    : "bg-base-950/80 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white border border-base-800"
                 }`}
               >
                 <Wind size={14} /> Wind Tunnel Smoke
@@ -403,7 +403,7 @@ const MasterVehicleStudioInner: React.FC = () => {
 
         {/* Subsystem Isolation Bar */}
         <div className="flex items-center gap-1.5 px-4 py-2 border-t border-base-800/50 bg-base-900/60 overflow-x-auto no-scrollbar">
-          <span className="text-[11px] font-bold text-amber-300/50 dark:text-amber-200/60 uppercase tracking-wider mr-1">Isolate:</span>
+          <span className="text-[11px] font-bold text-slate-500 dark:text-slate-400 uppercase tracking-wider mr-1">Isolate:</span>
           {(["all", "chassis", "powertrain", "suspension", "aero", "body_panels", "interior"] as const).map((cat) => (
             <button
               key={cat}
@@ -411,7 +411,7 @@ const MasterVehicleStudioInner: React.FC = () => {
               className={`px-3 py-1 rounded-xl text-xs font-semibold capitalize transition-all ${
                 activeCategory === cat
                   ? "bg-amber-500 text-slate-950 font-bold shadow-[0_0_10px_rgba(245,158,11,0.5)]"
-                  : "bg-base-950/60 text-amber-400 dark:text-amber-200/60 hover:text-slate-900 dark:hover:text-white border border-base-800/50"
+                  : "bg-base-950/60 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white border border-base-800/50"
               }`}
             >
               {cat === "all" ? "Entire Vehicle" : cat.replace("_", " ")}
@@ -427,7 +427,7 @@ const MasterVehicleStudioInner: React.FC = () => {
           <button
             onClick={() => setActiveTab("quick_adjust")}
             className={`py-2 rounded-xl text-xs font-bold transition-all ${
-              activeTab === "quick_adjust" ? "bg-amber-500/20 text-amber-700 dark:text-amber-300 border border-amber-400/40" : "text-amber-400 dark:text-amber-200/60 hover:text-slate-900 dark:hover:text-white"
+              activeTab === "quick_adjust" ? "bg-amber-500/20 text-amber-700 dark:text-amber-300 border border-amber-400/40" : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
             }`}
           >
             Adjust
@@ -435,7 +435,7 @@ const MasterVehicleStudioInner: React.FC = () => {
           <button
             onClick={() => setActiveTab("telemetry")}
             className={`py-2 rounded-xl text-xs font-bold transition-all ${
-              activeTab === "telemetry" ? "bg-amber-500/20 text-amber-700 dark:text-amber-300 border border-amber-400/40" : "text-amber-400 dark:text-amber-200/60 hover:text-slate-900 dark:hover:text-white"
+              activeTab === "telemetry" ? "bg-amber-500/20 text-amber-700 dark:text-amber-300 border border-amber-400/40" : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
             }`}
           >
             Dynamics
@@ -443,7 +443,7 @@ const MasterVehicleStudioInner: React.FC = () => {
           <button
             onClick={() => setActiveTab("packaging")}
             className={`py-2 rounded-xl text-xs font-bold transition-all relative ${
-              activeTab === "packaging" ? "bg-amber-500/20 text-amber-700 dark:text-amber-300 border border-amber-400/40" : "text-amber-400 dark:text-amber-200/60 hover:text-slate-900 dark:hover:text-white"
+              activeTab === "packaging" ? "bg-amber-500/20 text-amber-700 dark:text-amber-300 border border-amber-400/40" : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
             }`}
           >
             Packaging
@@ -454,7 +454,7 @@ const MasterVehicleStudioInner: React.FC = () => {
           <button
             onClick={() => setActiveTab("bom")}
             className={`py-2 rounded-xl text-xs font-bold transition-all ${
-              activeTab === "bom" ? "bg-amber-500/20 text-amber-700 dark:text-amber-300 border border-amber-400/40" : "text-amber-400 dark:text-amber-200/60 hover:text-slate-900 dark:hover:text-white"
+              activeTab === "bom" ? "bg-amber-500/20 text-amber-700 dark:text-amber-300 border border-amber-400/40" : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white"
             }`}
           >
             BOM & Cost
@@ -471,7 +471,7 @@ const MasterVehicleStudioInner: React.FC = () => {
             {/* Rear Wing Angle */}
             <div className="p-3 rounded-2xl bg-base-900/60 border border-base-800 space-y-1.5">
               <div className="flex justify-between items-center text-xs">
-                <span className="font-semibold text-amber-500 dark:text-amber-100/80">Rear Wing Angle</span>
+                <span className="font-semibold text-slate-700 dark:text-slate-300">Rear Wing Angle</span>
                 <span className="font-mono font-bold text-amber-600 dark:text-amber-300">{state.aero.rearWingAngleDeg}Â°</span>
               </div>
               <input
@@ -483,7 +483,7 @@ const MasterVehicleStudioInner: React.FC = () => {
                 onChange={(e) => stateEngine.updateAero({ rearWingAngleDeg: parseInt(e.target.value) })}
                 className="w-full accent-amber-400 cursor-pointer"
               />
-              <div className="flex justify-between text-[10px] text-amber-300/50 dark:text-amber-200/60 font-mono">
+              <div className="flex justify-between text-[10px] text-slate-500 dark:text-slate-400 font-mono">
                 <span>0Â° (Low Drag)</span>
                 <span>28Â° (Max Downforce)</span>
               </div>
@@ -492,7 +492,7 @@ const MasterVehicleStudioInner: React.FC = () => {
             {/* Turbo Boost */}
             <div className="p-3 rounded-2xl bg-base-900/60 border border-base-800 space-y-1.5">
               <div className="flex justify-between items-center text-xs">
-                <span className="font-semibold text-amber-500 dark:text-amber-100/80">Turbo Boost Pressure</span>
+                <span className="font-semibold text-slate-700 dark:text-slate-300">Turbo Boost Pressure</span>
                 <span className="font-mono font-bold text-amber-600 dark:text-amber-300">{state.powertrain.boostBar.toFixed(2)} bar</span>
               </div>
               <input
@@ -504,7 +504,7 @@ const MasterVehicleStudioInner: React.FC = () => {
                 onChange={(e) => stateEngine.updatePowertrain({ boostBar: parseFloat(e.target.value) })}
                 className="w-full accent-amber-400 cursor-pointer"
               />
-              <div className="flex justify-between text-[10px] text-amber-300/50 dark:text-amber-200/60 font-mono">
+              <div className="flex justify-between text-[10px] text-slate-500 dark:text-slate-400 font-mono">
                 <span>0.4 bar (Street)</span>
                 <span>2.4 bar (Qualifying)</span>
               </div>
@@ -513,7 +513,7 @@ const MasterVehicleStudioInner: React.FC = () => {
             {/* Front Splitter Extension */}
             <div className="p-3 rounded-2xl bg-base-900/60 border border-base-800 space-y-1.5">
               <div className="flex justify-between items-center text-xs">
-                <span className="font-semibold text-amber-500 dark:text-amber-100/80">Front Splitter Extension</span>
+                <span className="font-semibold text-slate-700 dark:text-slate-300">Front Splitter Extension</span>
                 <span className="font-mono font-bold text-amber-600 dark:text-amber-300">{state.aero.frontSplitterLengthMm} mm</span>
               </div>
               <input
@@ -530,7 +530,7 @@ const MasterVehicleStudioInner: React.FC = () => {
             {/* Wheelbase Dimension */}
             <div className="p-3 rounded-2xl bg-base-900/60 border border-base-800 space-y-1.5">
               <div className="flex justify-between items-center text-xs">
-                <span className="font-semibold text-amber-500 dark:text-amber-100/80">Chassis Wheelbase</span>
+                <span className="font-semibold text-slate-700 dark:text-slate-300">Chassis Wheelbase</span>
                 <span className="font-mono font-bold text-amber-600 dark:text-amber-300">{state.chassis.wheelbaseMm} mm</span>
               </div>
               <input
@@ -547,7 +547,7 @@ const MasterVehicleStudioInner: React.FC = () => {
             {/* Front Track Width */}
             <div className="p-3 rounded-2xl bg-base-900/60 border border-base-800 space-y-1.5">
               <div className="flex justify-between items-center text-xs">
-                <span className="font-semibold text-amber-500 dark:text-amber-100/80">Front Track Width</span>
+                <span className="font-semibold text-slate-700 dark:text-slate-300">Front Track Width</span>
                 <span className="font-mono font-bold text-amber-600 dark:text-amber-300">{state.chassis.frontTrackMm} mm</span>
               </div>
               <input
@@ -563,14 +563,14 @@ const MasterVehicleStudioInner: React.FC = () => {
 
             {/* Paint Finish Selector */}
             <div className="p-3 rounded-2xl bg-base-900/60 border border-base-800 space-y-2">
-              <span className="text-xs font-semibold text-amber-500 dark:text-amber-100/80 block">Exterior Paint Finish</span>
+              <span className="text-xs font-semibold text-slate-700 dark:text-slate-300 block">Exterior Paint Finish</span>
               <div className="flex items-center gap-2">
                 {[
                   { hex: "#ef4444", name: "Rosso Corsa" },
                   { hex: "#f59e0b", name: "Cyan Mist" },
                   { hex: "#10b981", name: "British Green" },
                   { hex: "#f59e0b", name: "Apex Gold" },
-                  { hex: "#0f172a", name: "Midnight Stealth" },
+                  { hex: "#1a1008", name: "Midnight Stealth" },
                 ].map((color) => (
                   <button
                     key={color.hex}
@@ -598,48 +598,48 @@ const MasterVehicleStudioInner: React.FC = () => {
             {/* Performance Grid */}
             <div className="grid grid-cols-2 gap-2.5">
               <div className="p-3 rounded-2xl bg-base-900/60 border border-base-800">
-                <span className="text-[10px] text-amber-300/50 dark:text-amber-200/60 uppercase font-mono block">0â€“100 km/h</span>
+                <span className="text-[10px] text-slate-500 dark:text-slate-400 uppercase font-mono block">0â€“100 km/h</span>
                 <span className="text-xl font-bold font-mono text-emerald-600 dark:text-emerald-400">{m.zeroToHundredKmhSec}s</span>
               </div>
               <div className="p-3 rounded-2xl bg-base-900/60 border border-base-800">
-                <span className="text-[10px] text-amber-300/50 dark:text-amber-200/60 uppercase font-mono block">Top Speed</span>
+                <span className="text-[10px] text-slate-500 dark:text-slate-400 uppercase font-mono block">Top Speed</span>
                 <span className="text-xl font-bold font-mono text-amber-600 dark:text-amber-400">{m.topSpeedKmh} km/h</span>
               </div>
               <div className="p-3 rounded-2xl bg-base-900/60 border border-base-800">
-                <span className="text-[10px] text-amber-300/50 dark:text-amber-200/60 uppercase font-mono block">Peak Power</span>
+                <span className="text-[10px] text-slate-500 dark:text-slate-400 uppercase font-mono block">Peak Power</span>
                 <span className="text-xl font-bold font-mono text-amber-600 dark:text-amber-400">{m.peakHorsepowerHp} hp</span>
               </div>
               <div className="p-3 rounded-2xl bg-base-900/60 border border-base-800">
-                <span className="text-[10px] text-amber-300/50 dark:text-amber-200/60 uppercase font-mono block">Curb Mass</span>
-                <span className="text-xl font-bold font-mono text-slate-800 dark:text-amber-50">{m.totalCurbMassKg} kg</span>
+                <span className="text-[10px] text-slate-500 dark:text-slate-400 uppercase font-mono block">Curb Mass</span>
+                <span className="text-xl font-bold font-mono text-slate-800 dark:text-slate-200">{m.totalCurbMassKg} kg</span>
               </div>
               <div className="p-3 rounded-2xl bg-base-900/60 border border-base-800">
-                <span className="text-[10px] text-amber-300/50 dark:text-amber-200/60 uppercase font-mono block">Downforce @ 160</span>
+                <span className="text-[10px] text-slate-500 dark:text-slate-400 uppercase font-mono block">Downforce @ 160</span>
                 <span className="text-xl font-bold font-mono text-amber-600 dark:text-amber-300">{m.downforceAt160KmhN} N</span>
               </div>
               <div className="p-3 rounded-2xl bg-base-900/60 border border-base-800">
-                <span className="text-[10px] text-amber-300/50 dark:text-amber-200/60 uppercase font-mono block">Max Lateral G</span>
+                <span className="text-[10px] text-slate-500 dark:text-slate-400 uppercase font-mono block">Max Lateral G</span>
                 <span className="text-xl font-bold font-mono text-amber-600 dark:text-amber-400">{m.maxLateralAccelerationG} g</span>
               </div>
             </div>
 
             {/* Track Lap Times */}
             <div className="p-3.5 rounded-2xl bg-base-900/60 border border-base-800 space-y-2">
-              <span className="text-xs font-bold text-slate-800 dark:text-amber-100/80 flex items-center gap-1.5">
+              <span className="text-xs font-bold text-slate-800 dark:text-slate-300 flex items-center gap-1.5">
                 <Compass size={14} className="text-amber-600 dark:text-amber-400" /> Virtual Track Lap Sim
               </span>
               <div className="space-y-1.5 text-xs font-mono">
                 <div className="flex justify-between items-center py-1 border-b border-base-800/40">
-                  <span className="text-amber-300/50 dark:text-amber-200/60">NÃ¼rburgring Nordschleife</span>
+                  <span className="text-slate-500 dark:text-slate-400">NÃ¼rburgring Nordschleife</span>
                   <span className="font-bold text-emerald-600 dark:text-emerald-400">{Math.floor(m.nurburgringNordschleifeLapSec / 60)}:{String(Math.floor(m.nurburgringNordschleifeLapSec % 60)).padStart(2, "0")}.{Math.round((m.nurburgringNordschleifeLapSec % 1) * 10)}</span>
                 </div>
                 <div className="flex justify-between items-center py-1 border-b border-base-800/40">
-                  <span className="text-amber-300/50 dark:text-amber-200/60">Spa-Francorchamps</span>
-                  <span className="font-bold text-slate-800 dark:text-amber-50">{Math.floor(m.spaFrancorchampsLapSec / 60)}:{String(Math.floor(m.spaFrancorchampsLapSec % 60)).padStart(2, "0")}.{Math.round((m.spaFrancorchampsLapSec % 1) * 10)}</span>
+                  <span className="text-slate-500 dark:text-slate-400">Spa-Francorchamps</span>
+                  <span className="font-bold text-slate-800 dark:text-slate-200">{Math.floor(m.spaFrancorchampsLapSec / 60)}:{String(Math.floor(m.spaFrancorchampsLapSec % 60)).padStart(2, "0")}.{Math.round((m.spaFrancorchampsLapSec % 1) * 10)}</span>
                 </div>
                 <div className="flex justify-between items-center py-1">
-                  <span className="text-amber-300/50 dark:text-amber-200/60">Silverstone GP</span>
-                  <span className="font-bold text-slate-800 dark:text-amber-50">{Math.floor(m.silverstoneGPLapSec / 60)}:{String(Math.floor(m.silverstoneGPLapSec % 60)).padStart(2, "0")}.{Math.round((m.silverstoneGPLapSec % 1) * 10)}</span>
+                  <span className="text-slate-500 dark:text-slate-400">Silverstone GP</span>
+                  <span className="font-bold text-slate-800 dark:text-slate-200">{Math.floor(m.silverstoneGPLapSec / 60)}:{String(Math.floor(m.silverstoneGPLapSec % 60)).padStart(2, "0")}.{Math.round((m.silverstoneGPLapSec % 1) * 10)}</span>
                 </div>
               </div>
             </div>
@@ -668,7 +668,7 @@ const MasterVehicleStudioInner: React.FC = () => {
               <div className="p-4 rounded-2xl bg-emerald-500/10 border border-emerald-500/30 text-center space-y-2">
                 <CheckCircle2 size={24} className="text-emerald-500 mx-auto" />
                 <p className="text-xs font-bold text-emerald-700 dark:text-emerald-200">100% Engineering Compatibility</p>
-                <p className="text-[11px] text-amber-300/50 dark:text-amber-200/60">All mechanical clearances, torque envelopes, and thermal loads are within valid physical tolerances.</p>
+                <p className="text-[11px] text-slate-500 dark:text-slate-400">All mechanical clearances, torque envelopes, and thermal loads are within valid physical tolerances.</p>
               </div>
             ) : (
               <div className="space-y-2.5">
@@ -684,7 +684,7 @@ const MasterVehicleStudioInner: React.FC = () => {
                     <div className="flex items-center gap-1.5 font-bold text-xs mb-1">
                       <AlertTriangle size={13} /> {v.title}
                     </div>
-                    <p className="text-[11px] text-amber-500 dark:text-amber-100/80 mb-2">{v.explanation}</p>
+                    <p className="text-[11px] text-slate-700 dark:text-slate-300 mb-2">{v.explanation}</p>
                     <div className="p-2 rounded-xl bg-base-950/60 border border-base-800 text-[10px] text-amber-700 dark:text-amber-300">
                       <span className="font-bold">Actionable Remedy:</span> {v.remedySuggestion}
                     </div>
@@ -705,35 +705,35 @@ const MasterVehicleStudioInner: React.FC = () => {
             <div className="p-3.5 rounded-2xl bg-base-900/80 border border-base-800 space-y-1">
               <span className="text-[10px] font-mono text-amber-600 dark:text-amber-400 uppercase">Estimated Manufacturing Cost</span>
               <div className="text-2xl font-bold font-mono text-slate-900 dark:text-white">${cost.totalManufacturingCostUSD.toLocaleString()}</div>
-              <span className="text-[10px] text-amber-300/50 dark:text-amber-200/60 block">Suggested MSRP: ${cost.suggestedMSRPUSD.toLocaleString()}</span>
+              <span className="text-[10px] text-slate-500 dark:text-slate-400 block">Suggested MSRP: ${cost.suggestedMSRPUSD.toLocaleString()}</span>
             </div>
 
             <div className="space-y-1 text-xs font-mono">
-              <div className="flex justify-between py-1 border-b border-base-800/40 text-amber-500 dark:text-amber-100/80">
+              <div className="flex justify-between py-1 border-b border-base-800/40 text-slate-700 dark:text-slate-300">
                 <span>Chassis Structure</span>
                 <span>${cost.chassisCapExUSD.toLocaleString()}</span>
               </div>
-              <div className="flex justify-between py-1 border-b border-base-800/40 text-amber-500 dark:text-amber-100/80">
+              <div className="flex justify-between py-1 border-b border-base-800/40 text-slate-700 dark:text-slate-300">
                 <span>Powertrain Engine</span>
                 <span>${cost.powertrainCapExUSD.toLocaleString()}</span>
               </div>
-              <div className="flex justify-between py-1 border-b border-base-800/40 text-amber-500 dark:text-amber-100/80">
+              <div className="flex justify-between py-1 border-b border-base-800/40 text-slate-700 dark:text-slate-300">
                 <span>Transmission</span>
                 <span>${cost.transmissionCapExUSD.toLocaleString()}</span>
               </div>
-              <div className="flex justify-between py-1 border-b border-base-800/40 text-amber-500 dark:text-amber-100/80">
+              <div className="flex justify-between py-1 border-b border-base-800/40 text-slate-700 dark:text-slate-300">
                 <span>Suspension & Brakes</span>
                 <span>${cost.suspensionWheelsUSD.toLocaleString()}</span>
               </div>
-              <div className="flex justify-between py-1 border-b border-base-800/40 text-amber-500 dark:text-amber-100/80">
+              <div className="flex justify-between py-1 border-b border-base-800/40 text-slate-700 dark:text-slate-300">
                 <span>Aero Package</span>
                 <span>${cost.aeroPackageUSD.toLocaleString()}</span>
               </div>
-              <div className="flex justify-between py-1 border-b border-base-800/40 text-amber-500 dark:text-amber-100/80">
+              <div className="flex justify-between py-1 border-b border-base-800/40 text-slate-700 dark:text-slate-300">
                 <span>Interior Cabin</span>
                 <span>${cost.interiorCabinUSD.toLocaleString()}</span>
               </div>
-              <div className="flex justify-between py-1 text-amber-500 dark:text-amber-100/80">
+              <div className="flex justify-between py-1 text-slate-700 dark:text-slate-300">
                 <span>Assembly Labor</span>
                 <span>${cost.assemblyLaborUSD.toLocaleString()}</span>
               </div>

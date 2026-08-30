@@ -24,7 +24,7 @@ export const NeonHorizonProgressRing: React.FC<NeonHorizonProgressRingProps> = (
   const offset = circumference - (Math.min(100, Math.max(0, percentage)) / 100) * circumference;
 
   const colorMap = {
-    cyan: { stroke: "#7fb5d8", text: "text-sky-300" },
+    cyan: { stroke: "#7fb5d8", text: "text-amber-300" },
     magenta: { stroke: "#9d8fc4", text: "text-amber-300" },
     gold: { stroke: "#d9b36c", text: "text-amber-300" },
     emerald: { stroke: "#6fbf9a", text: "text-emerald-300" },
@@ -66,7 +66,7 @@ export const NeonHorizonProgressRing: React.FC<NeonHorizonProgressRingProps> = (
           {label ?? `${Math.round(percentage)}%`}
         </span>
         {sublabel && (
-          <span className="text-[8px] text-amber-200/60 nh-font-mono uppercase tracking-wider mt-0.5">
+          <span className="text-[8px] text-slate-400 nh-font-mono uppercase tracking-wider mt-0.5">
             {sublabel}
           </span>
         )}

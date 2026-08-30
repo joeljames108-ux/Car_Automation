@@ -49,10 +49,10 @@ export const PoliticalVotingPanel = memo(function PoliticalVotingPanel() {
               <span className="text-[10px] font-mono font-bold text-yellow-400 uppercase tracking-widest">WORLD MOTORSPORT COUNCIL</span>
               <span className="bg-yellow-500/20 text-yellow-300 border border-yellow-500/40 text-[9px] font-bold px-2 py-0.5 rounded-full">POLITICAL INFLUENCE</span>
             </div>
-            <h3 className="text-lg font-bold text-amber-50 flex items-center gap-2 mt-1">
+            <h3 className="text-lg font-bold text-slate-100 flex items-center gap-2 mt-1">
               <Gavel size={20} className="text-yellow-400" /> Governing Body Political Rule Voting
             </h3>
-            <p className="text-xs text-amber-200/60 mt-0.5">
+            <p className="text-xs text-slate-400 mt-0.5">
               Cast your team's vote on proposed regulation changes. Sway political decisions to favor your engineering strengths or handicap rival constructors.
             </p>
           </div>
@@ -66,7 +66,7 @@ export const PoliticalVotingPanel = memo(function PoliticalVotingPanel() {
             return (
               <div key={m.id} className="bg-base-950/70 p-4 rounded-xl border border-white/5 space-y-3">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                  <h4 className="text-sm font-bold text-amber-50 flex items-center gap-2">
+                  <h4 className="text-sm font-bold text-slate-100 flex items-center gap-2">
                     <Vote size={14} className="text-yellow-400" /> {m.title}
                   </h4>
                   <span className="text-xs font-mono text-yellow-300 bg-yellow-500/10 border border-yellow-500/30 px-2.5 py-0.5 rounded-full font-bold">
@@ -74,7 +74,7 @@ export const PoliticalVotingPanel = memo(function PoliticalVotingPanel() {
                   </span>
                 </div>
 
-                <p className="text-xs text-amber-200/60 leading-relaxed">{m.desc}</p>
+                <p className="text-xs text-slate-400 leading-relaxed">{m.desc}</p>
 
                 {/* Visual voting bar */}
                 <div className="space-y-1">
@@ -82,7 +82,7 @@ export const PoliticalVotingPanel = memo(function PoliticalVotingPanel() {
                     <div className="bg-emerald-500 h-full transition-all" style={{ width: `${pctFor}%` }} />
                     <div className="bg-rose-500 h-full transition-all" style={{ width: `${100 - pctFor}%` }} />
                   </div>
-                  <div className="flex justify-between text-[10px] font-mono text-amber-300/50">
+                  <div className="flex justify-between text-[10px] font-mono text-slate-500">
                     <span className="text-emerald-400">{pctFor.toFixed(0)}% Support</span>
                     <span className="text-rose-400">{(100 - pctFor).toFixed(0)}% Oppose</span>
                   </div>

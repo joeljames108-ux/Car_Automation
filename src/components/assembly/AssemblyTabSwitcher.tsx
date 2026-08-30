@@ -64,7 +64,7 @@ export function AssemblyTabSwitcher({
             className={`flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-mono font-bold transition-all ${
               activeTab === "both"
                 ? "bg-amber-500 text-black shadow-[0_0_12px_rgba(34,211,238,0.4)]"
-                : "text-amber-200/60 hover:text-amber-50"
+                : "text-slate-400 hover:text-slate-200"
             }`}
           >
             <Layers size={13} /> Split View
@@ -74,7 +74,7 @@ export function AssemblyTabSwitcher({
             className={`flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-mono font-bold transition-all ${
               activeTab === "parts"
                 ? "bg-amber-500 text-black shadow-[0_0_12px_rgba(34,211,238,0.4)]"
-                : "text-amber-200/60 hover:text-amber-50"
+                : "text-slate-400 hover:text-slate-200"
             }`}
           >
             <Wrench size={13} /> Parts Library
@@ -84,7 +84,7 @@ export function AssemblyTabSwitcher({
             className={`flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-mono font-bold transition-all ${
               activeTab === "dashboard"
                 ? "bg-amber-500 text-black shadow-[0_0_12px_rgba(34,211,238,0.4)]"
-                : "text-amber-200/60 hover:text-amber-50"
+                : "text-slate-400 hover:text-slate-200"
             }`}
           >
             <Activity size={13} /> Dyno Specs
@@ -96,7 +96,7 @@ export function AssemblyTabSwitcher({
           className={`flex items-center gap-1 px-2.5 py-1 rounded-lg text-[10px] font-mono font-bold transition-all border ${
             isExplodedView
               ? "bg-amber-500/15 text-amber-300 border-amber-500/40"
-              : "text-amber-300/50 hover:text-amber-100/80 border-transparent"
+              : "text-slate-500 hover:text-slate-300 border-transparent"
           }`}
           title="Show side-by-side stacked view"
         >

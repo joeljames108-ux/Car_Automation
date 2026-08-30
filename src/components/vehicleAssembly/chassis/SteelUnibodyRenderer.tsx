@@ -75,14 +75,14 @@ export const SteelUnibodyRenderer: React.FC<SteelUnibodyRendererProps> = ({ isHo
       {/* 6. Door Apertures & Window Frames */}
       <path
         d="M 420 145 C 475 142 510 142 515 142 L 515 215 C 430 215 370 215 340 215 C 360 185 390 160 420 145 Z"
-        fill="#0f172a"
+        fill="#1a1008"
         stroke="#cbd5e1"
         strokeWidth="2.5"
         opacity="0.9"
       />
       <path
         d="M 525 142 C 585 138 645 155 695 188 C 675 215 635 215 525 215 Z"
-        fill="#0f172a"
+        fill="#1a1008"
         stroke="#cbd5e1"
         strokeWidth="2.5"
         opacity="0.9"
@@ -93,8 +93,8 @@ export const SteelUnibodyRenderer: React.FC<SteelUnibodyRendererProps> = ({ isHo
       <path d="M 290 210 C 335 178 375 155 420 145" fill="none" stroke="#cbd5e1" strokeWidth="6" strokeLinecap="round" />
       <path d="M 290 210 C 335 178 375 155 420 145" fill="none" stroke="#475569" strokeWidth="2" strokeDasharray="8 4" />
       <path d="M 515 140 Q 520 180 520 258 L 512 258 Q 512 180 515 140 Z" fill="#94a3b8" stroke="#475569" strokeWidth="1.5" />
-      <circle cx="516" cy="175" r="3" fill="#0f172a" />
-      <circle cx="516" cy="195" r="3" fill="#0f172a" />
+      <circle cx="516" cy="175" r="3" fill="#1a1008" />
+      <circle cx="516" cy="195" r="3" fill="#1a1008" />
       <path d="M 420 145 C 500 132 580 130 635 140" fill="none" stroke="#e2e8f0" strokeWidth="3" />
       <path d="M 635 140 C 695 160 760 185 810 210" fill="none" stroke="#cbd5e1" strokeWidth="6" strokeLinecap="round" />
 

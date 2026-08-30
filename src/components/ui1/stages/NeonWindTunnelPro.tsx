@@ -120,7 +120,7 @@ export function NeonWindTunnelPro() {
   const currentDownforce = Math.round(480 * Math.pow(windSpeed / 250, 2) * (drsActive ? 0.65 : 1.0));
 
   return (
-    <div className="w-full flex flex-col gap-6 text-amber-50 animate-nh-materialize">
+    <div className="w-full flex flex-col gap-6 text-slate-100 animate-nh-materialize">
       {/* Header */}
       <NeonHorizonGlassPanel
         variant="window"
@@ -155,11 +155,11 @@ export function NeonWindTunnelPro() {
             }}
             className="p-6 flex flex-col gap-4"
           >
-            <div className="w-full h-52 bg-[#05080f] rounded-xl border border-sky-400/25 overflow-hidden relative shadow-[inset_0_0_25px_rgba(0,0,0,0.85)]">
+            <div className="w-full h-52 bg-amber-950/60 rounded-xl border border-sky-400/25 overflow-hidden relative shadow-[inset_0_0_25px_rgba(0,0,0,0.85)]">
               <canvas ref={canvasRef} width={640} height={210} className="w-full h-full" />
               <div className="absolute top-2 left-3 flex items-center gap-2">
                 <div className="w-2 h-2 rounded-full bg-sky-300 animate-ping" />
-                <span className="text-[10px] nh-font-mono font-bold text-sky-400">PARTICLE STREAMLINES · {windSpeed} KM/H AIRFLOW</span>
+                <span className="text-[10px] nh-font-mono font-bold text-amber-400">PARTICLE STREAMLINES · {windSpeed} KM/H AIRFLOW</span>
               </div>
             </div>
 

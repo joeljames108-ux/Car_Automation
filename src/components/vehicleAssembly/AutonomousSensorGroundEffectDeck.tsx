@@ -47,9 +47,9 @@ export const AutonomousSensorGroundEffectDeck: React.FC = () => {
   });
 
   return (
-    <div className="flex flex-col h-full w-full bg-[#05070c] text-gray-100 p-4 gap-4 overflow-y-auto font-sans">
+    <div className="flex flex-col h-full w-full bg-amber-950/60 text-gray-100 p-4 gap-4 overflow-y-auto font-sans">
       {/* Studio Header Ribbon */}
-      <div className="flex items-center justify-between px-5 py-3 rounded-2xl bg-[#090d16] border border-[#182133] shadow-lg">
+      <div className="flex items-center justify-between px-5 py-3 rounded-2xl bg-amber-950/60 border border-[#182133] shadow-lg">
         <div className="flex items-center gap-3">
           <div className="p-2 rounded-xl bg-gradient-to-tr from-amber-500/20 to-amber-500/20 border border-amber-500/40 text-amber-400">
             <Activity className="w-5 h-5" />
@@ -68,7 +68,7 @@ export const AutonomousSensorGroundEffectDeck: React.FC = () => {
         <select
           value={compound}
           onChange={(e) => setCompound(e.target.value as TireCompoundType)}
-          className="bg-[#0e1424] text-amber-400 text-xs font-bold font-mono px-3 py-1.5 rounded-xl border border-amber-500/40 cursor-pointer"
+          className="bg-amber-950/60 text-amber-400 text-xs font-bold font-mono px-3 py-1.5 rounded-xl border border-amber-500/40 cursor-pointer"
         >
           <option value="ULTRA_SOFT_QUALIFYING">Ultra Soft Qualifying (Peak μ 1.78)</option>
           <option value="MEDIUM_CIRCUIT_SLICK">Medium Circuit Slick (Peak μ 1.62)</option>
@@ -80,7 +80,7 @@ export const AutonomousSensorGroundEffectDeck: React.FC = () => {
       {/* Main 4-Card 2x2 Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 flex-1">
         {/* Card 1: Active Underbody Venturi Diffuser */}
-        <div className="flex flex-col p-4 rounded-2xl bg-[#090d16] border border-[#182133] gap-3">
+        <div className="flex flex-col p-4 rounded-2xl bg-amber-950/60 border border-[#182133] gap-3">
           <div className="flex items-center justify-between pb-2 border-b border-[#182133]">
             <div className="flex items-center gap-2 text-amber-400 font-bold text-xs">
               <Wind className="w-4 h-4" />
@@ -92,7 +92,7 @@ export const AutonomousSensorGroundEffectDeck: React.FC = () => {
           </div>
 
           {/* Diffuser Angle Slider */}
-          <div className="flex items-center justify-between p-3 bg-[#05070c] rounded-xl border border-[#141b2b] text-xs font-mono">
+          <div className="flex items-center justify-between p-3 bg-amber-950/60 rounded-xl border border-[#141b2b] text-xs font-mono">
             <span className="text-gray-400">DIFFUSER RAMP: {diffuserAngle}°</span>
             <input
               type="range"
@@ -106,19 +106,19 @@ export const AutonomousSensorGroundEffectDeck: React.FC = () => {
           </div>
 
           <div className="grid grid-cols-2 gap-2 text-xs font-mono">
-            <div className="p-2.5 rounded-xl bg-[#0c1220] border border-[#1c263d]">
+            <div className="p-2.5 rounded-xl bg-amber-950/60 border border-[#1c263d]">
               <div className="text-gray-400 text-[10px]">UNDERBODY DOWNFORCE</div>
               <div className="text-sm font-bold text-amber-400">{venturiState.totalUnderbodyDownforceN} N</div>
             </div>
-            <div className="p-2.5 rounded-xl bg-[#0c1220] border border-[#1c263d]">
+            <div className="p-2.5 rounded-xl bg-amber-950/60 border border-[#1c263d]">
               <div className="text-gray-400 text-[10px]">THROAT SUCTION Cp</div>
               <div className="text-sm font-bold text-rose-400">{venturiState.throatSuctionCpMin}</div>
             </div>
-            <div className="p-2.5 rounded-xl bg-[#0c1220] border border-[#1c263d]">
+            <div className="p-2.5 rounded-xl bg-amber-950/60 border border-[#1c263d]">
               <div className="text-gray-400 text-[10px]">CENTER OF PRESSURE (CP)</div>
               <div className="text-sm font-bold text-amber-400">{venturiState.centerOfPressurePctFront}% Front</div>
             </div>
-            <div className="p-2.5 rounded-xl bg-[#0c1220] border border-[#1c263d]">
+            <div className="p-2.5 rounded-xl bg-amber-950/60 border border-[#1c263d]">
               <div className="text-gray-400 text-[10px]">VORTEX SEALING</div>
               <div className="text-sm font-bold text-emerald-400">{venturiState.vortexSealIntensityPct}%</div>
             </div>
@@ -126,7 +126,7 @@ export const AutonomousSensorGroundEffectDeck: React.FC = () => {
         </div>
 
         {/* Card 2: 4-Wheel Tire Thermal Pyrometry & Wear */}
-        <div className="flex flex-col p-4 rounded-2xl bg-[#090d16] border border-[#182133] gap-3">
+        <div className="flex flex-col p-4 rounded-2xl bg-amber-950/60 border border-[#182133] gap-3">
           <div className="flex items-center justify-between pb-2 border-b border-[#182133]">
             <div className="flex items-center gap-2 text-amber-400 font-bold text-xs">
               <Disc className="w-4 h-4" />
@@ -137,9 +137,9 @@ export const AutonomousSensorGroundEffectDeck: React.FC = () => {
             </span>
           </div>
 
-          <div className="grid grid-cols-2 gap-2 p-3 bg-[#05070c] rounded-xl border border-[#141b2b] text-xs font-mono">
+          <div className="grid grid-cols-2 gap-2 p-3 bg-amber-950/60 rounded-xl border border-[#141b2b] text-xs font-mono">
             {[tireState.fl, tireState.fr, tireState.rl, tireState.rr].map((t) => (
-              <div key={t.corner} className="p-2 rounded-lg bg-[#0a0f1c] border border-[#182133]">
+              <div key={t.corner} className="p-2 rounded-lg bg-amber-950/60 border border-[#182133]">
                 <div className="flex justify-between text-[10px] text-gray-400 mb-1">
                   <span>TIRE {t.corner}</span>
                   <span className="text-emerald-400">{t.remainingTreadLifePct}% Life</span>
@@ -152,7 +152,7 @@ export const AutonomousSensorGroundEffectDeck: React.FC = () => {
         </div>
 
         {/* Card 3: ADAS Multi-Sensor EKF Fusion */}
-        <div className="flex flex-col p-4 rounded-2xl bg-[#090d16] border border-[#182133] gap-3">
+        <div className="flex flex-col p-4 rounded-2xl bg-amber-950/60 border border-[#182133] gap-3">
           <div className="flex items-center justify-between pb-2 border-b border-[#182133]">
             <div className="flex items-center gap-2 text-amber-400 font-bold text-xs">
               <Eye className="w-4 h-4" />
@@ -163,7 +163,7 @@ export const AutonomousSensorGroundEffectDeck: React.FC = () => {
             </span>
           </div>
 
-          <div className="p-3 bg-[#05070c] rounded-xl border border-[#141b2b] text-xs font-mono text-gray-300">
+          <div className="p-3 bg-amber-950/60 rounded-xl border border-[#141b2b] text-xs font-mono text-gray-300">
             <div className="text-gray-400 text-[10px] mb-1">PRIMARY LEAD VEHICLE TRACK</div>
             <div className="text-amber-400 font-bold">
               Range: {adasState.primaryLeadVehicle?.posYMetres}m • Vel: {Math.round((adasState.primaryLeadVehicle?.velocityMs || 0) * 3.6)} km/h
@@ -175,7 +175,7 @@ export const AutonomousSensorGroundEffectDeck: React.FC = () => {
         </div>
 
         {/* Card 4: Active Electro-Hydraulic Roll Control (eHRC) */}
-        <div className="flex flex-col p-4 rounded-2xl bg-[#090d16] border border-[#182133] gap-3">
+        <div className="flex flex-col p-4 rounded-2xl bg-amber-950/60 border border-[#182133] gap-3">
           <div className="flex items-center justify-between pb-2 border-b border-[#182133]">
             <div className="flex items-center gap-2 text-emerald-400 font-bold text-xs">
               <Activity className="w-4 h-4" />
@@ -187,7 +187,7 @@ export const AutonomousSensorGroundEffectDeck: React.FC = () => {
           </div>
 
           {/* Lateral G Slider */}
-          <div className="flex items-center justify-between p-3 bg-[#05070c] rounded-xl border border-[#141b2b] text-xs font-mono">
+          <div className="flex items-center justify-between p-3 bg-amber-950/60 rounded-xl border border-[#141b2b] text-xs font-mono">
             <span className="text-gray-400">LATERAL ACCEL: {lateralG}g</span>
             <input
               type="range"
@@ -201,11 +201,11 @@ export const AutonomousSensorGroundEffectDeck: React.FC = () => {
           </div>
 
           <div className="grid grid-cols-2 gap-2 text-xs font-mono">
-            <div className="p-2.5 rounded-xl bg-[#0c1220] border border-[#1c263d]">
+            <div className="p-2.5 rounded-xl bg-amber-950/60 border border-[#1c263d]">
               <div className="text-gray-400 text-[10px]">COUNTER-TORQUE</div>
               <div className="text-sm font-bold text-emerald-400">{ehrcState.rotaryActuatorTorqueNm} Nm</div>
             </div>
-            <div className="p-2.5 rounded-xl bg-[#0c1220] border border-[#1c263d]">
+            <div className="p-2.5 rounded-xl bg-amber-950/60 border border-[#1c263d]">
               <div className="text-gray-400 text-[10px]">HYDRAULIC PRESSURE</div>
               <div className="text-sm font-bold text-gray-200">{ehrcState.hydraulicSystemPressureBar} bar ({ehrcState.counterTorqueResponseTimeMs}ms)</div>
             </div>

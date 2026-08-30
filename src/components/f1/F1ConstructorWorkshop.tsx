@@ -28,7 +28,7 @@ export const F1ConstructorWorkshop: React.FC<F1ConstructorWorkshopProps> = memo(
   const { activeStep } = useF1ConstructorStore();
 
   return (
-    <div className="min-h-screen bg-amber-950/80 text-amber-50 flex flex-col selection:bg-amber-500 selection:text-slate-950">
+    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col selection:bg-amber-500 selection:text-slate-950">
       {/* Top Persistent HUD & Cost Cap Status */}
       <F1BudgetBar />
 
@@ -43,7 +43,7 @@ export const F1ConstructorWorkshop: React.FC<F1ConstructorWorkshopProps> = memo(
                 playHMIClickSound();
                 onBackToMotorsport();
               }}
-              className="w-full py-2.5 px-4 rounded-xl bg-amber-900/40 hover:bg-amber-800/35 border border-amber-800/30 text-xs font-semibold text-amber-200/60 hover:text-amber-50 transition-all text-center cursor-pointer"
+              className="w-full py-2.5 px-4 rounded-xl bg-slate-900/80 hover:bg-slate-800 border border-slate-800 text-xs font-semibold text-slate-400 hover:text-slate-200 transition-all text-center cursor-pointer"
             >
               ← Return to Motorsport Hub
             </button>

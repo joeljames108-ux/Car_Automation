@@ -52,7 +52,7 @@ export class DashboardScreenContentSystem {
       luxury_gold: {
         primary: "#d9a64e",
         secondary: "#b8860b",
-        bg: "#0a0d14",
+        bg: "#1a1008",
         text: "#e8d5a0",
         accent: "#f5d68a",
         warning: "#ef4444",

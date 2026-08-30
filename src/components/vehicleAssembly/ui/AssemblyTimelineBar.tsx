@@ -53,8 +53,8 @@ export const AssemblyTimelineBar: React.FC<AssemblyTimelineBarProps> = ({
           title="Undo Action (Ctrl+Z)"
           className={`flex items-center gap-1 px-2.5 py-1.5 rounded-xl border text-[11px] font-bold transition-all cursor-pointer ${
             canUndo
-              ? "bg-base-900 border-base-700 text-amber-50 hover:border-amber-500 hover:text-amber-400"
-              : "opacity-40 cursor-not-allowed bg-base-950 border-base-900 text-amber-400"
+              ? "bg-base-900 border-base-700 text-slate-200 hover:border-amber-500 hover:text-amber-400"
+              : "opacity-40 cursor-not-allowed bg-base-950 border-base-900 text-slate-600"
           }`}
         >
           <RotateCcw size={12} />
@@ -67,8 +67,8 @@ export const AssemblyTimelineBar: React.FC<AssemblyTimelineBarProps> = ({
           title="Redo Action (Ctrl+Y)"
           className={`flex items-center gap-1 px-2.5 py-1.5 rounded-xl border text-[11px] font-bold transition-all cursor-pointer ${
             canRedo
-              ? "bg-base-900 border-base-700 text-amber-50 hover:border-amber-500 hover:text-amber-400"
-              : "opacity-40 cursor-not-allowed bg-base-950 border-base-900 text-amber-400"
+              ? "bg-base-900 border-base-700 text-slate-200 hover:border-amber-500 hover:text-amber-400"
+              : "opacity-40 cursor-not-allowed bg-base-950 border-base-900 text-slate-600"
           }`}
         >
           <RotateCw size={12} />
@@ -91,8 +91,8 @@ export const AssemblyTimelineBar: React.FC<AssemblyTimelineBarProps> = ({
                 isActive
                   ? "bg-amber-500/20 border-amber-500 text-amber-300 font-bold shadow-sm ring-1 ring-amber-500/40"
                   : isInstalled
-                  ? "bg-base-900/60 border-base-800 text-amber-100/80 hover:border-base-700"
-                  : "bg-base-950/40 border-base-900 text-amber-400 hover:text-amber-200/60"
+                  ? "bg-base-900/60 border-base-800 text-slate-300 hover:border-base-700"
+                  : "bg-base-950/40 border-base-900 text-slate-600 hover:text-slate-400"
               }`}
             >
               <span className={`w-1.5 h-1.5 rounded-full ${isInstalled ? "bg-emerald-400" : "bg-slate-600"}`} />

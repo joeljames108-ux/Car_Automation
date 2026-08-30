@@ -146,7 +146,7 @@ export const SectorEntryAnimationLayer: React.FC<SectorEntryAnimationLayerProps>
                 </g>
               )}
             </svg>
-            <div className="flex items-center gap-2 font-mono text-xs font-bold tracking-widest text-sky-300 uppercase">
+            <div className="flex items-center gap-2 font-mono text-xs font-bold tracking-widest text-amber-300 uppercase">
               <Cog size={14} className="animate-spin text-amber-400" />
               <span>ENGAGING POWERTRAIN MATRIX · MECHANICAL SYNC</span>
             </div>

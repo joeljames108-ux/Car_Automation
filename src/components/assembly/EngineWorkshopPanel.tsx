@@ -199,10 +199,10 @@ export function EngineWorkshopPanel({
               <Wrench size={16} />
             </div>
             <div>
-              <h3 className="text-xs font-mono font-bold text-amber-50 uppercase tracking-wider flex items-center gap-1.5">
+              <h3 className="text-xs font-mono font-bold text-slate-100 uppercase tracking-wider flex items-center gap-1.5">
                 {isEV ? "⚡ EV Powertrain Tray" : "🤖 Robotic Assembly Tray"}
               </h3>
-              <span className="text-[10px] text-amber-200/60 font-mono flex items-center gap-1">
+              <span className="text-[10px] text-slate-400 font-mono flex items-center gap-1">
                 <Clock size={10} className="text-amber-400" />
                 Time: {formatTime(elapsedSeconds)} · {installedComponents.length} / {assemblyComponents.length} Installed
               </span>
@@ -216,7 +216,7 @@ export function EngineWorkshopPanel({
               className={`px-2.5 py-1 rounded-lg text-[10.5px] font-mono font-bold transition-all cursor-pointer ${
                 viewTab === "parts"
                   ? "bg-amber-500 text-black shadow-[0_0_10px_rgba(34,211,238,0.4)]"
-                  : "text-amber-200/60 hover:text-amber-50"
+                  : "text-slate-400 hover:text-slate-200"
               }`}
             >
               Parts
@@ -226,7 +226,7 @@ export function EngineWorkshopPanel({
               className={`px-2.5 py-1 rounded-lg text-[10.5px] font-mono font-bold transition-all cursor-pointer ${
                 viewTab === "timeline"
                   ? "bg-amber-500 text-black shadow-[0_0_10px_rgba(34,211,238,0.4)]"
-                  : "text-amber-200/60 hover:text-amber-50"
+                  : "text-slate-400 hover:text-slate-200"
               }`}
             >
               Timeline
@@ -236,7 +236,7 @@ export function EngineWorkshopPanel({
 
         {/* Progress Bar & Quick Stats Strip */}
         <div>
-          <div className="flex items-center justify-between text-[10px] font-mono text-amber-200/60 mb-1">
+          <div className="flex items-center justify-between text-[10px] font-mono text-slate-400 mb-1">
             <span className="flex items-center gap-1 text-amber-300 font-bold">
               <Sparkles size={11} className={progressPercentage > 0 && !isAssemblyComplete ? "animate-spin" : ""} />
               Assembly Progress: {progressPercentage}%
@@ -254,25 +254,25 @@ export function EngineWorkshopPanel({
         {/* Cumulative Live Stat Badges */}
         <div className="grid grid-cols-4 gap-1.5 pt-0.5">
           <div className="bg-base-950/80 border border-base-800/80 rounded-xl p-1.5 text-center">
-            <span className="text-[9px] font-mono text-amber-200/60 block truncate">Power</span>
+            <span className="text-[9px] font-mono text-slate-400 block truncate">Power</span>
             <div className="text-xs font-mono font-bold text-amber-300">
               <AnimatedCounter value={currentStats.hp} suffix="hp" />
             </div>
           </div>
           <div className="bg-base-950/80 border border-base-800/80 rounded-xl p-1.5 text-center">
-            <span className="text-[9px] font-mono text-amber-200/60 block truncate">Torque</span>
+            <span className="text-[9px] font-mono text-slate-400 block truncate">Torque</span>
             <div className="text-xs font-mono font-bold text-pink-300">
               <AnimatedCounter value={currentStats.torque} suffix="Nm" />
             </div>
           </div>
           <div className="bg-base-950/80 border border-base-800/80 rounded-xl p-1.5 text-center">
-            <span className="text-[9px] font-mono text-amber-200/60 block truncate">Durability</span>
+            <span className="text-[9px] font-mono text-slate-400 block truncate">Durability</span>
             <div className="text-xs font-mono font-bold text-emerald-300">
               <AnimatedCounter value={currentStats.reliability} suffix="%" />
             </div>
           </div>
           <div className="bg-base-950/80 border border-base-800/80 rounded-xl p-1.5 text-center">
-            <span className="text-[9px] font-mono text-amber-200/60 block truncate">Cost</span>
+            <span className="text-[9px] font-mono text-slate-400 block truncate">Cost</span>
             <div className="text-xs font-mono font-bold text-amber-300">
               <AnimatedCounter value={currentStats.cost} prefix="$" />
             </div>
@@ -288,7 +288,7 @@ export function EngineWorkshopPanel({
               </div>
               <div>
                 <span className="text-xs font-bold text-emerald-300 block">Assembly 100% Complete!</span>
-                <span className="text-[9.5px] font-mono text-amber-100/80">Quality Score: {qualityScore}%</span>
+                <span className="text-[9.5px] font-mono text-slate-300">Quality Score: {qualityScore}%</span>
               </div>
             </div>
             {onShowCompletionModal && (
@@ -306,7 +306,7 @@ export function EngineWorkshopPanel({
               <span className="text-[8.5px] font-mono text-amber-400 uppercase tracking-widest block font-bold">
                 NEXT RECOMMENDED STEP
               </span>
-              <span className="text-xs font-bold text-amber-50">{nextRecommendedComponent.name}</span>
+              <span className="text-xs font-bold text-slate-100">{nextRecommendedComponent.name}</span>
             </div>
             <button
               onClick={() => onStartInstall(nextRecommendedComponent.id)}
@@ -330,7 +330,7 @@ export function EngineWorkshopPanel({
                 className={`px-2.5 py-1 rounded-lg text-[10px] font-mono font-semibold transition-all whitespace-nowrap cursor-pointer ${
                   activeCategory === cat
                     ? "bg-amber-500/20 text-amber-200 border border-amber-500/40 shadow-[0_0_10px_rgba(34,211,238,0.2)]"
-                    : "text-amber-200/60 hover:text-amber-50 hover:bg-base-800/60 border border-transparent"
+                    : "text-slate-400 hover:text-slate-200 hover:bg-base-800/60 border border-transparent"
                 }`}
               >
                 {cat}
@@ -379,7 +379,7 @@ export function EngineWorkshopPanel({
                             ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/30"
                             : isAvailable
                             ? "bg-amber-500/10 text-amber-400 border-amber-500/30"
-                            : "bg-base-800 text-amber-300/50 border-base-700"
+                            : "bg-base-800 text-slate-500 border-base-700"
                         }`}
                       >
                         {COMPONENT_PNG_MAP[comp.id] ? (
@@ -395,10 +395,10 @@ export function EngineWorkshopPanel({
                         )}
                       </div>
                       <div>
-                        <h4 className="text-xs font-bold text-amber-50 group-hover:text-amber-300 transition-colors">
+                        <h4 className="text-xs font-bold text-slate-100 group-hover:text-amber-300 transition-colors">
                           {comp.name}
                         </h4>
-                        <span className="text-[9px] font-mono text-amber-200/60">{comp.category}</span>
+                        <span className="text-[9px] font-mono text-slate-400">{comp.category}</span>
                       </div>
                     </div>
 
@@ -413,7 +413,7 @@ export function EngineWorkshopPanel({
                           <Sparkles size={9} /> {phase.toUpperCase()}
                         </span>
                       ) : !isAvailable ? (
-                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-amber-800/35 text-amber-200/60 border border-amber-700/30 text-[9px] font-mono">
+                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-slate-800 text-slate-400 border border-slate-700 text-[9px] font-mono">
                           <Lock size={9} /> Locked
                         </span>
                       ) : (
@@ -430,7 +430,7 @@ export function EngineWorkshopPanel({
                   {/* Material Grade / Variant Picker */}
                   {!isInstalled && (
                     <div className="mb-2 space-y-1">
-                      <span className="text-[8.5px] font-mono text-amber-200/60 flex items-center gap-0.5">
+                      <span className="text-[8.5px] font-mono text-slate-400 flex items-center gap-0.5">
                         <Layers size={8.5} /> Material Grade & Spec:
                       </span>
                       <div className="grid grid-cols-2 gap-1">
@@ -444,7 +444,7 @@ export function EngineWorkshopPanel({
                             className={`px-1.5 py-0.5 rounded text-[8.5px] font-mono text-left truncate transition-all cursor-pointer ${
                               currentVariant === v.id
                                 ? "bg-amber-500/25 text-amber-200 border border-amber-500/50 font-bold shadow-sm"
-                                : "bg-base-800 text-amber-200/60 border border-base-750 hover:bg-base-750 hover:text-amber-50"
+                                : "bg-base-800 text-slate-400 border border-base-750 hover:bg-base-750 hover:text-slate-200"
                             }`}
                             title={v.label}
                           >
@@ -486,7 +486,7 @@ export function EngineWorkshopPanel({
                       ? "bg-emerald-950/20 text-emerald-300 border border-emerald-500/20"
                       : isCurrent
                       ? "bg-amber-950/40 text-amber-200 border border-amber-400/50 animate-pulse"
-                      : "bg-base-850/50 text-amber-200/60 border border-base-800"
+                      : "bg-base-850/50 text-slate-400 border border-base-800"
                   }`}
                 >
                   <div
@@ -505,11 +505,11 @@ export function EngineWorkshopPanel({
                     ) : isCurrent ? (
                       <Play size={13} className="text-amber-400 shrink-0" />
                     ) : (
-                      <Circle size={13} className="text-amber-400 shrink-0" />
+                      <Circle size={13} className="text-slate-600 shrink-0" />
                     )}
                     <span className="truncate">{comp.name}</span>
                   </div>
-                  <span className="text-[9px] text-amber-300/50 uppercase shrink-0">{comp.category}</span>
+                  <span className="text-[9px] text-slate-500 uppercase shrink-0">{comp.category}</span>
                 </div>
               );
             })}
@@ -524,7 +524,7 @@ export function EngineWorkshopPanel({
           className={`flex-1 flex items-center justify-center gap-1.5 py-1.5 px-2 rounded-xl text-[10.5px] font-mono font-bold transition-all border cursor-pointer ${
             isExplodedView
               ? "bg-amber-500/20 text-amber-300 border-amber-500/40 shadow-sm"
-              : "bg-base-800 text-amber-100/80 border-base-750 hover:bg-base-750"
+              : "bg-base-800 text-slate-300 border-base-750 hover:bg-base-750"
           }`}
         >
           <Eye size={12} /> {isExplodedView ? "Exploded 3D" : "Condensed 3D"}
@@ -552,7 +552,7 @@ export function EngineWorkshopPanel({
             </button>
             <button
               onClick={() => setShowResetConfirm(false)}
-              className="px-2 py-1 rounded-lg bg-base-800 text-amber-200/60 text-[10px] font-mono hover:bg-base-750 cursor-pointer"
+              className="px-2 py-1 rounded-lg bg-base-800 text-slate-400 text-[10px] font-mono hover:bg-base-750 cursor-pointer"
             >
               Cancel
             </button>

@@ -619,9 +619,9 @@ export const ModularVehicle3DViewport: React.FC<ModularVehicle3DViewportProps> =
   };
 
   return (
-    <div className="relative w-full bg-amber-950/90 border border-amber-800/30 rounded-3xl overflow-hidden shadow-2xl font-mono flex flex-col">
+    <div className="relative w-full bg-slate-950/90 border border-slate-800/40 rounded-3xl overflow-hidden shadow-2xl font-mono flex flex-col">
       {/* ── TOP HEADER TOOLBAR (OUTSIDE DIAGRAM) ── */}
-      <div className="w-full p-4 flex flex-col gap-3 bg-amber-950/90 border-b border-amber-800/30 backdrop-blur-md">
+      <div className="w-full p-4 flex flex-col gap-3 bg-slate-950/90 border-b border-slate-800/50 backdrop-blur-md">
         {/* Main Row: Modes & Primary Controls */}
         <div className="w-full flex flex-wrap items-center justify-between gap-3">
           {/* Left: View Mode Toggles & 3D Model Selector */}
@@ -670,9 +670,9 @@ export const ModularVehicle3DViewport: React.FC<ModularVehicle3DViewportProps> =
           {/* Right: Inspection Controls (Exploded View, X-Ray, Wireframe, Rotate, Camera Presets) */}
           <div className="flex flex-wrap items-center gap-2">
             {/* Exploded View Slider */}
-            <div className="flex items-center gap-2 px-3 py-1.5 rounded-2xl bg-amber-950/60 border border-amber-800/40 text-xs text-amber-100/80">
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-2xl bg-amber-950/60 border border-amber-800/40 text-xs text-slate-300">
               <Sliders size={13} className="text-amber-400" />
-              <span className="text-[10px] text-amber-200/60 font-bold">Exploded:</span>
+              <span className="text-[10px] text-slate-400 font-bold">Exploded:</span>
               <input
                 type="range"
                 min="0"
@@ -693,7 +693,7 @@ export const ModularVehicle3DViewport: React.FC<ModularVehicle3DViewportProps> =
               className={`p-2 rounded-2xl border text-xs font-bold transition-all cursor-pointer ${
                 isXRayActive
                   ? 'bg-amber-600/20 text-amber-300 border-amber-500/50 shadow-md'
-                  : 'bg-base-950/80 border-amber-800/30 text-amber-400/70 hover:text-amber-200'
+                  : 'bg-base-950/80 border-slate-800 text-amber-400/70 hover:text-amber-200'
               }`}
               title="Toggle X-Ray Structural View"
             >
@@ -706,7 +706,7 @@ export const ModularVehicle3DViewport: React.FC<ModularVehicle3DViewportProps> =
               className={`p-2 rounded-2xl border text-xs font-bold transition-all cursor-pointer ${
                 isWireframeActive
                   ? 'bg-amber-500/20 text-amber-300 border-amber-500/50 shadow-md'
-                  : 'bg-base-950/80 border-amber-800/30 text-amber-400/70 hover:text-amber-200'
+                  : 'bg-base-950/80 border-slate-800 text-amber-400/70 hover:text-amber-200'
               }`}
               title="Toggle CAD Wireframe Mesh"
             >
@@ -719,7 +719,7 @@ export const ModularVehicle3DViewport: React.FC<ModularVehicle3DViewportProps> =
               className={`p-2 rounded-2xl border text-xs font-bold transition-all cursor-pointer ${
                 isRotating
                   ? 'bg-amber-500/20 text-amber-300 border-amber-500/50 shadow-md'
-                  : 'bg-base-950/80 border-amber-800/30 text-amber-400/70 hover:text-amber-200'
+                  : 'bg-base-950/80 border-slate-800 text-amber-400/70 hover:text-amber-200'
               }`}
               title="Toggle Auto-Rotation"
             >
@@ -774,7 +774,7 @@ export const ModularVehicle3DViewport: React.FC<ModularVehicle3DViewportProps> =
                   { label: 'Sapphire Blue', color: '#b45309' },
                   { label: 'Crimson Red', color: '#ef4444' },
                   { label: 'Emerald Green', color: '#10b981' },
-                  { label: 'Carbon Slate', color: '#0f172a' },
+                  { label: 'Carbon Slate', color: '#1a1008' },
                   { label: 'Racing Gold', color: '#eab308' },
                   { label: 'Solar Orange', color: '#f97316' },
                   { label: 'Hyper Violet', color: '#f59e0b' },
@@ -834,7 +834,7 @@ export const ModularVehicle3DViewport: React.FC<ModularVehicle3DViewportProps> =
                 }`}
                 title="Toggle Matrix LED Headlights & Taillights"
               >
-                <Zap size={12} className={headlightsOn ? 'text-amber-400' : 'text-amber-300/50'} />
+                <Zap size={12} className={headlightsOn ? 'text-amber-400' : 'text-slate-500'} />
                 <span>{headlightsOn ? 'Lights: ON' : 'Lights: OFF'}</span>
               </button>
 
@@ -848,7 +848,7 @@ export const ModularVehicle3DViewport: React.FC<ModularVehicle3DViewportProps> =
                 }`}
                 title="Toggle Cyber Underbody Neon Glow"
               >
-                <Sparkles size={12} className={underglowOn ? 'text-amber-400' : 'text-amber-300/50'} />
+                <Sparkles size={12} className={underglowOn ? 'text-amber-400' : 'text-slate-500'} />
                 <span>{underglowOn ? 'Neon: ON' : 'Neon: OFF'}</span>
               </button>
 
@@ -874,7 +874,7 @@ export const ModularVehicle3DViewport: React.FC<ModularVehicle3DViewportProps> =
                 }`}
                 title="Toggle Thermal Carbon-Ceramic Glowing Brake Rotors"
               >
-                <Disc size={12} className={brakesGlowing ? 'text-amber-400 animate-pulse' : 'text-amber-300/50'} />
+                <Disc size={12} className={brakesGlowing ? 'text-amber-400 animate-pulse' : 'text-slate-500'} />
                 <span>{brakesGlowing ? 'Brakes: HOT' : 'Brakes: COOL'}</span>
               </button>
 
@@ -899,7 +899,7 @@ export const ModularVehicle3DViewport: React.FC<ModularVehicle3DViewportProps> =
                 }`}
                 title="Toggle 3D Real-Time CFD Streamlines & Wingtip Vortices"
               >
-                <Wind size={12} className={showCFD ? 'text-emerald-400' : 'text-amber-300/50'} />
+                <Wind size={12} className={showCFD ? 'text-emerald-400' : 'text-slate-500'} />
                 <span>{showCFD ? 'CFD: ON' : 'CFD: OFF'}</span>
               </button>
 
@@ -913,7 +913,7 @@ export const ModularVehicle3DViewport: React.FC<ModularVehicle3DViewportProps> =
                 }`}
                 title="Trigger High-RPM Exhaust Backfire Flames & Embers"
               >
-                <Flame size={12} className={exhaustBackfire ? 'text-orange-400 animate-pulse' : 'text-amber-300/50'} />
+                <Flame size={12} className={exhaustBackfire ? 'text-orange-400 animate-pulse' : 'text-slate-500'} />
                 <span>{exhaustBackfire ? 'Flames: ON' : 'Flames: OFF'}</span>
               </button>
 
@@ -927,7 +927,7 @@ export const ModularVehicle3DViewport: React.FC<ModularVehicle3DViewportProps> =
                 }`}
                 title="Toggle 3D Master Bounding Box & Wheel Center Diagnostic Gizmo"
               >
-                <Ruler size={13} className={showDiagnostics ? 'text-amber-400' : 'text-amber-300/50'} />
+                <Ruler size={13} className={showDiagnostics ? 'text-amber-400' : 'text-slate-500'} />
               </button>
             </div>
           </div>
@@ -935,7 +935,7 @@ export const ModularVehicle3DViewport: React.FC<ModularVehicle3DViewportProps> =
       </div>
 
       {/* ── CANVAS RENDER STAGE (CLEAN & UNOBSTRUCTED 3D) ── */}
-      <div className="relative h-[560px] w-full flex items-center justify-center bg-amber-950/60">
+      <div className="relative h-[560px] w-full flex items-center justify-center bg-slate-950/60">
         <div ref={mountRef} className="w-full h-full cursor-grab active:cursor-grabbing" />
 
         {/* ── BOTTOM HUD CAD DIMENSIONS OVERLAY ── */}

@@ -297,7 +297,7 @@ export class AutomotivePBRMaterialSystem {
       case 'ceramic':
         // Carbon Ceramic / Silicon Carbide Matrix
         mat = new THREE.MeshStandardMaterial({
-          color: new THREE.Color('#0f172a'),
+          color: new THREE.Color('#1a1008'),
           metalness: 0.88,
           roughness: 0.24,
           normalMap: this.getCarbonWeaveNormalTexture(),
@@ -490,7 +490,7 @@ export class AutomotivePBRMaterialSystem {
    * Generates Optical-Grade Dielectric Tinted Glass Material
    */
   public static getDielectricGlass(
-    tintHex: string = '#0f172a',
+    tintHex: string = '#1a1008',
     opacity: number = 0.65,
     ior: number = 1.52
   ): THREE.MeshPhysicalMaterial {
@@ -653,7 +653,7 @@ export class AutomotivePBRMaterialSystem {
   public static getCarbonFiber(gloss: boolean = true): THREE.MeshPhysicalMaterial | THREE.MeshStandardMaterial {
     if (gloss) {
       return new THREE.MeshPhysicalMaterial({
-        color: new THREE.Color('#070b14'),
+        color: new THREE.Color('#1a1008'),
         metalness: 0.94,
         roughness: 0.12,
         clearcoat: 1.0,
@@ -662,7 +662,7 @@ export class AutomotivePBRMaterialSystem {
       });
     }
     return new THREE.MeshStandardMaterial({
-      color: new THREE.Color('#0f172a'),
+      color: new THREE.Color('#1a1008'),
       metalness: 0.9,
       roughness: 0.38,
       normalMap: this.getCarbonWeaveNormalTexture(),
@@ -757,7 +757,7 @@ export class AutomotivePBRMaterialSystem {
       default:
         return {
           primary: new THREE.MeshStandardMaterial({
-            color: new THREE.Color('#0f172a'),
+            color: new THREE.Color('#1a1008'),
             roughness: 0.65,
             metalness: 0.1,
             normalMap: this.getPerforatedLeatherNormalTexture(),

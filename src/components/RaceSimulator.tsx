@@ -59,9 +59,9 @@ export function RaceSimulator() {
               />
             </div>
             <Select<TrackId> label="Circuit" value={config.trackId} options={trackOptions} onChange={(v) => update({ trackId: v })} />
-            <div className="grid grid-cols-2 gap-2 text-[11px] text-amber-300/50">
-              <div><span className="text-amber-200/60">Length:</span> {TRACKS[config.trackId].length.toFixed(2)} km</div>
-              <div><span className="text-amber-200/60">Type:</span> {TRACKS[config.trackId].highSpeed ? "High-speed" : "Technical"}</div>
+            <div className="grid grid-cols-2 gap-2 text-[11px] text-slate-500">
+              <div><span className="text-slate-400">Length:</span> {TRACKS[config.trackId].length.toFixed(2)} km</div>
+              <div><span className="text-slate-400">Type:</span> {TRACKS[config.trackId].highSpeed ? "High-speed" : "Technical"}</div>
             </div>
             <Slider label="Laps" value={config.laps} min={1} max={100} onChange={(v) => update({ laps: v })} />
           </div>
@@ -110,14 +110,14 @@ export function RaceSimulator() {
         {!result && !running && (
           <div className="panel p-12 flex flex-col items-center justify-center text-center">
             <Trophy size={40} className="text-base-700 mb-3" />
-            <h3 className="text-sm font-semibold text-amber-200/60">No race run yet</h3>
-            <p className="text-xs text-amber-400 mt-1 max-w-xs">Configure your race and click Start Race to simulate with tire heating, fuel strategy, hybrid energy management, and AI competitors.</p>
+            <h3 className="text-sm font-semibold text-slate-400">No race run yet</h3>
+            <p className="text-xs text-slate-600 mt-1 max-w-xs">Configure your race and click Start Race to simulate with tire heating, fuel strategy, hybrid energy management, and AI competitors.</p>
           </div>
         )}
         {running && (
           <div className="panel p-12 flex flex-col items-center justify-center text-center">
             <Loader2 size={32} className="text-accent-400 animate-spin mb-3" />
-            <h3 className="text-sm font-semibold text-amber-100/80">Simulating race...</h3>
+            <h3 className="text-sm font-semibold text-slate-300">Simulating race...</h3>
           </div>
         )}
         {result && <RaceResultView result={result} />}
@@ -162,7 +162,7 @@ function RaceResultView({ result }: { result: RaceResult }) {
         {result.dnf ? (
           <div className="bg-danger-500/10 border border-danger-500/30 rounded-lg px-4 py-3 mb-3">
             <div className="flex items-center gap-2 text-danger-400 text-sm font-semibold"><AlertTriangle size={16} />DNF — {result.dnfReason}</div>
-            <p className="text-xs text-amber-300/50 mt-1">Retired on lap {result.laps} of {result.config.laps}</p>
+            <p className="text-xs text-slate-500 mt-1">Retired on lap {result.laps} of {result.config.laps}</p>
           </div>
         ) : (
           <div className="bg-accent-500/10 border border-accent-500/30 rounded-lg px-4 py-3 mb-3">
@@ -211,7 +211,7 @@ function RaceResultView({ result }: { result: RaceResult }) {
         </Section>
         <Section title="Tire Temperatures (Per Corner)" icon={<Thermometer size={16} />}>
           <LineChart series={tireTempSeries} xLabel="Lap" yLabel="Temp" yUnit="°C" height={200} />
-          <div className="flex gap-3 text-[9px] text-amber-300/50 mt-1">
+          <div className="flex gap-3 text-[9px] text-slate-500 mt-1">
             <span className="flex items-center gap-1"><span className="h-2 w-2 bg-danger-500 rounded-sm" />FL</span>
             <span className="flex items-center gap-1"><span className="h-2 w-2 bg-red-400 rounded-sm" />FR</span>
             <span className="flex items-center gap-1"><span className="h-2 w-2 bg-warn-400 rounded-sm" />RL</span>
@@ -241,12 +241,12 @@ function RaceResultView({ result }: { result: RaceResult }) {
         <div className="space-y-1 max-h-[300px] overflow-y-auto">
           {result.competitors.map((c) => (
             <div key={c.name} className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-all duration-300 ${c.name === "You" ? "bg-accent-500/15 border border-accent-500/30" : "bg-base-850 border border-base-800 hover:border-base-700"}`}>
-              <span className="font-mono text-xs text-amber-300/50 w-6">P{c.position}</span>
+              <span className="font-mono text-xs text-slate-500 w-6">P{c.position}</span>
               <span className="h-3 w-3 rounded-sm" style={{ background: c.carColor }} />
-              <span className="text-sm text-amber-50 flex-1 truncate">{c.name}</span>
+              <span className="text-sm text-slate-200 flex-1 truncate">{c.name}</span>
               {c.retired && <span className="text-[10px] text-danger-400 font-mono">DNF</span>}
-              <span className="font-mono text-xs text-amber-200/60">{formatTime(c.totalTime)}</span>
-              {c.gapToLeader > 0 && <span className="font-mono text-[10px] text-amber-400 w-16 text-right">+{c.gapToLeader.toFixed(1)}s</span>}
+              <span className="font-mono text-xs text-slate-400">{formatTime(c.totalTime)}</span>
+              {c.gapToLeader > 0 && <span className="font-mono text-[10px] text-slate-600 w-16 text-right">+{c.gapToLeader.toFixed(1)}s</span>}
             </div>
           ))}
         </div>
@@ -258,9 +258,9 @@ function RaceResultView({ result }: { result: RaceResult }) {
           <div className="space-y-1.5">
             {result.incidents.map((inc, i) => (
               <div key={i} className="flex items-start gap-2 text-xs bg-base-850 rounded-lg px-3 py-2">
-                <span className="font-mono text-amber-300/50 shrink-0">L{inc.lap}</span>
+                <span className="font-mono text-slate-500 shrink-0">L{inc.lap}</span>
                 <span className="text-warn-400 shrink-0">{inc.type}</span>
-                <span className="text-amber-200/60">{inc.description}</span>
+                <span className="text-slate-400">{inc.description}</span>
               </div>
             ))}
           </div>
@@ -272,7 +272,7 @@ function RaceResultView({ result }: { result: RaceResult }) {
         <div className="overflow-x-auto">
           <table className="w-full text-xs">
             <thead>
-              <tr className="text-amber-300/50 border-b border-base-800">
+              <tr className="text-slate-500 border-b border-base-800">
                 <th className="text-left py-2 px-2 font-mono">Lap</th>
                 <th className="text-right py-2 px-2 font-mono">Time</th>
                 <th className="text-right py-2 px-2 font-mono">Fuel</th>
@@ -287,14 +287,14 @@ function RaceResultView({ result }: { result: RaceResult }) {
             <tbody>
               {result.lapRecords.map((l) => (
                 <tr key={l.lap} className={`border-b border-base-850 transition-colors duration-200 hover:bg-base-850/60 ${l.pitted ? "bg-warn-500/5" : ""}`}>
-                  <td className="py-1.5 px-2 font-mono text-amber-200/60">{l.lap}</td>
-                  <td className="py-1.5 px-2 font-mono text-right text-amber-50">{formatLap(l.time)}</td>
+                  <td className="py-1.5 px-2 font-mono text-slate-400">{l.lap}</td>
+                  <td className="py-1.5 px-2 font-mono text-right text-slate-200">{formatLap(l.time)}</td>
                   <td className="py-1.5 px-2 font-mono text-right text-warn-400">{l.fuel}L</td>
                   <td className="py-1.5 px-2 font-mono text-right text-danger-400">{(l.tireWearFL * 100).toFixed(0)}%</td>
-                  <td className="py-1.5 px-2 font-mono text-right text-amber-200/60">{Math.round((l.tireTempFL + l.tireTempFR + l.tireTempRL + l.tireTempRR) / 4)}°</td>
-                  <td className="py-1.5 px-2 font-mono text-right text-amber-200/60">{l.brakeTemp}°</td>
+                  <td className="py-1.5 px-2 font-mono text-right text-slate-400">{Math.round((l.tireTempFL + l.tireTempFR + l.tireTempRL + l.tireTempRR) / 4)}°</td>
+                  <td className="py-1.5 px-2 font-mono text-right text-slate-400">{l.brakeTemp}°</td>
                   <td className="py-1.5 px-2 font-mono text-right text-accent-300">P{l.position}</td>
-                  {result.lapRecords.some((l2) => l2.batterySOC > 0) && <td className="py-1.5 px-2 font-mono text-right text-amber-300/50">{(l.batterySOC * 100).toFixed(0)}%</td>}
+                  {result.lapRecords.some((l2) => l2.batterySOC > 0) && <td className="py-1.5 px-2 font-mono text-right text-slate-500">{(l.batterySOC * 100).toFixed(0)}%</td>}
                   <td className="py-1.5 px-2 text-center">{l.pitted && <span className="text-warn-400">●</span>}</td>
                 </tr>
               ))}
@@ -317,7 +317,7 @@ function SuggestionCard({ suggestion }: { suggestion: StrategySuggestion }) {
     critical: "text-danger-400",
     high: "text-warn-400",
     medium: "text-accent-300",
-    low: "text-amber-200/60",
+    low: "text-slate-400",
   };
   const categoryIcons = {
     tire: <Disc size={14} />,
@@ -331,10 +331,10 @@ function SuggestionCard({ suggestion }: { suggestion: StrategySuggestion }) {
     <div className={`rounded-lg px-3 py-2.5 border ${priorityColors[suggestion.priority]}`}>
       <div className="flex items-center gap-2 mb-1">
         <span className={priorityText[suggestion.priority]}>{categoryIcons[suggestion.category]}</span>
-        <span className="text-sm font-semibold text-amber-50">{suggestion.title}</span>
+        <span className="text-sm font-semibold text-slate-200">{suggestion.title}</span>
         <span className={`text-[9px] uppercase font-mono ml-auto ${priorityText[suggestion.priority]}`}>{suggestion.priority}</span>
       </div>
-      <p className="text-xs text-amber-200/60">{suggestion.description}</p>
+      <p className="text-xs text-slate-400">{suggestion.description}</p>
       <p className="text-[10px] text-ok-400 mt-1 font-mono">Expected gain: {suggestion.expectedGain}</p>
     </div>
   );

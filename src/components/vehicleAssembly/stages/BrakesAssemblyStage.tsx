@@ -79,7 +79,7 @@ export const BrakesAssemblyStage: React.FC<BrakesAssemblyStageProps> = ({
     { hex: "#f59e0b", name: "Cyan Mist" },
     { hex: "#10b981", name: "British Green" },
     { hex: "#f97316", name: "McLaren Orange" },
-    { hex: "#0f172a", name: "Stealth Black" },
+    { hex: "#1a1008", name: "Stealth Black" },
     { hex: "#cbd5e1", name: "Silver Anodized" },
     { hex: "#d946ef", name: "Neon Magenta" },
   ];
@@ -100,10 +100,10 @@ export const BrakesAssemblyStage: React.FC<BrakesAssemblyStageProps> = ({
             <Disc size={18} />
           </div>
           <div>
-            <h3 className="text-sm font-bold font-mono text-slate-800 dark:text-amber-50 uppercase tracking-wider">
+            <h3 className="text-sm font-bold font-mono text-slate-800 dark:text-slate-100 uppercase tracking-wider">
               STAGE 5: BRAKING HARDWARE & CALIPER FINISH
             </h3>
-            <p className="text-[11px] font-mono text-amber-300/50 dark:text-amber-200/60">
+            <p className="text-[11px] font-mono text-slate-500 dark:text-slate-400">
               Mount ventilated rotors and multi-piston monobloc calipers. Set hydraulic bias.
             </p>
           </div>
@@ -126,15 +126,15 @@ export const BrakesAssemblyStage: React.FC<BrakesAssemblyStageProps> = ({
               className={`p-3.5 rounded-2xl text-left transition-all border cursor-pointer ${
                 isSelected
                   ? "bg-red-500/20 border-red-500/60 shadow-md ring-1 ring-red-500/40"
-                  : "bg-base-900/60 border-base-800 hover:border-base-700 text-amber-200/60"
+                  : "bg-base-900/60 border-base-800 hover:border-base-700 text-slate-400"
               }`}
             >
               <div className="flex items-center justify-between mb-1.5">
-                <span className="font-bold text-xs font-mono text-slate-900 dark:text-amber-50">{b.label}</span>
+                <span className="font-bold text-xs font-mono text-slate-900 dark:text-slate-100">{b.label}</span>
               </div>
-              <p className="text-[10px] text-amber-300/50 dark:text-amber-200/60 mb-2.5">{b.desc}</p>
-              <div className="space-y-1 text-[10px] font-mono text-amber-200/60 border-t border-base-800/60 pt-2">
-                <div>Rotors: <strong className="text-amber-50">{b.rotorSize}</strong></div>
+              <p className="text-[10px] text-slate-500 dark:text-slate-400 mb-2.5">{b.desc}</p>
+              <div className="space-y-1 text-[10px] font-mono text-slate-400 border-t border-base-800/60 pt-2">
+                <div>Rotors: <strong className="text-slate-200">{b.rotorSize}</strong></div>
                 <div>Core: <strong className="text-amber-400">{b.rotorSpec}</strong></div>
                 <div>Caliper: <strong className="text-amber-400">{b.pistons}-Piston {b.caliper}</strong></div>
                 <div>Fade Temp: <strong className="text-emerald-400">{b.fadeLimit}</strong></div>
@@ -147,7 +147,7 @@ export const BrakesAssemblyStage: React.FC<BrakesAssemblyStageProps> = ({
       {/* Brake Bias Trim */}
       <div className="p-3.5 rounded-2xl bg-base-900/60 border border-base-800 space-y-2.5">
         <div className="flex items-center justify-between">
-          <label className="text-xs font-bold font-mono text-amber-500 dark:text-amber-100/80 flex items-center gap-1.5">
+          <label className="text-xs font-bold font-mono text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
             <SlidersHorizontal size={13} className="text-red-400" /> HYDRAULIC BRAKE BIAS (COCKPIT ADJUSTER)
           </label>
           <span className="text-xs font-mono font-bold text-red-400 tabular-nums">
@@ -163,19 +163,19 @@ export const BrakesAssemblyStage: React.FC<BrakesAssemblyStageProps> = ({
           onChange={(e) => onUpdateBrakeBias(parseInt(e.target.value))}
           className="w-full accent-red-500 cursor-pointer"
         />
-        <div className="flex justify-between text-[9px] font-mono text-amber-300/50">
+        <div className="flex justify-between text-[9px] font-mono text-slate-500">
           <span>50% (Rear-Biased)</span>
           <span>62% Neutral</span>
           <span>75% (Front-Stable)</span>
         </div>
-        <p className="text-[10px] font-mono text-amber-300/50 dark:text-amber-200/60 pt-1 border-t border-base-800/60">
+        <p className="text-[10px] font-mono text-slate-500 dark:text-slate-400 pt-1 border-t border-base-800/60">
           {biasNote} · Selected: {selected.pistons}-piston front / {Math.max(4, selected.pistons - 2)}-piston rear calipers.
         </p>
       </div>
 
       {/* Caliper Color Palette */}
       <div className="p-3.5 rounded-2xl bg-base-900/60 border border-base-800 space-y-2">
-        <label className="text-xs font-bold font-mono text-amber-500 dark:text-amber-100/80 block flex items-center gap-1.5">
+        <label className="text-xs font-bold font-mono text-slate-700 dark:text-slate-300 block flex items-center gap-1.5">
           <Palette size={13} className="text-red-400" /> MONOBLOC CALIPER FINISH
         </label>
         <div className="flex items-center gap-2.5 flex-wrap">

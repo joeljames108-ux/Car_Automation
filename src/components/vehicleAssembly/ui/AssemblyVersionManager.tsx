@@ -57,7 +57,7 @@ export const AssemblyVersionManager: React.FC<AssemblyVersionManagerProps> = ({
       <div className="flex items-center justify-between border-b border-base-800/60 pb-2">
         <div className="flex items-center gap-2">
           <GitBranch size={15} className="text-amber-400" />
-          <span className="font-bold text-slate-800 dark:text-amber-50 uppercase tracking-wider text-[11px]">
+          <span className="font-bold text-slate-800 dark:text-slate-100 uppercase tracking-wider text-[11px]">
             ENGINEERING REVISIONS & DESIGN FREEZE
           </span>
         </div>
@@ -68,7 +68,7 @@ export const AssemblyVersionManager: React.FC<AssemblyVersionManagerProps> = ({
             className={`flex items-center gap-1.5 px-2.5 py-1 rounded-xl border text-[10px] font-bold transition-all cursor-pointer ${
               isCurrentFrozen
                 ? "bg-amber-500/20 border-amber-500/60 text-amber-300 shadow-sm"
-                : "bg-base-900 border-base-700 text-amber-200/60 hover:text-amber-50"
+                : "bg-base-900 border-base-700 text-slate-400 hover:text-slate-200"
             }`}
           >
             {isCurrentFrozen ? <Lock size={12} /> : <Unlock size={12} />}
@@ -93,7 +93,7 @@ export const AssemblyVersionManager: React.FC<AssemblyVersionManagerProps> = ({
             placeholder="Revision Name (e.g. GT3 V1.1 Track Spec)..."
             value={newVersionName}
             onChange={(e) => setNewVersionName(e.target.value)}
-            className="flex-1 bg-base-950 border border-base-700 rounded-lg px-2.5 py-1 text-xs text-amber-50 font-mono focus:outline-none focus:border-amber-400"
+            className="flex-1 bg-base-950 border border-base-700 rounded-lg px-2.5 py-1 text-xs text-slate-100 font-mono focus:outline-none focus:border-amber-400"
             autoFocus
           />
           <button
@@ -104,7 +104,7 @@ export const AssemblyVersionManager: React.FC<AssemblyVersionManagerProps> = ({
           </button>
           <button
             onClick={() => setIsAdding(false)}
-            className="px-2 py-1 rounded-lg bg-base-800 text-amber-200/60 text-[10px] cursor-pointer"
+            className="px-2 py-1 rounded-lg bg-base-800 text-slate-400 text-[10px] cursor-pointer"
           >
             CANCEL
           </button>
@@ -121,9 +121,9 @@ export const AssemblyVersionManager: React.FC<AssemblyVersionManagerProps> = ({
             <div className="min-w-0">
               <div className="flex items-center gap-1.5">
                 {ver.frozen && <Lock size={11} className="text-amber-400 shrink-0" />}
-                <span className="font-bold text-amber-50 truncate text-[11px]">{ver.name}</span>
+                <span className="font-bold text-slate-200 truncate text-[11px]">{ver.name}</span>
               </div>
-              <div className="flex items-center gap-2 text-[9px] text-amber-300/50 mt-0.5">
+              <div className="flex items-center gap-2 text-[9px] text-slate-500 mt-0.5">
                 <span>{ver.totalMassKg} kg</span>
                 <span>•</span>
                 <span className="text-emerald-400 font-bold">{ver.healthScore}/100 Quality</span>
@@ -139,14 +139,14 @@ export const AssemblyVersionManager: React.FC<AssemblyVersionManagerProps> = ({
                 className={`p-1.5 rounded-lg border text-[9px] font-bold cursor-pointer transition-all ${
                   compareVersionId === ver.id
                     ? "bg-amber-500/20 border-amber-500 text-amber-300"
-                    : "bg-base-850 border-base-700 text-amber-200/60 hover:text-amber-50"
+                    : "bg-base-850 border-base-700 text-slate-400 hover:text-slate-200"
                 }`}
               >
                 <GitCompare size={12} />
               </button>
               <button
                 onClick={() => onLoadVersion(ver.id)}
-                className="px-2 py-1 rounded-lg bg-base-800 hover:bg-base-700 text-amber-100/80 text-[10px] font-bold border border-base-700 cursor-pointer"
+                className="px-2 py-1 rounded-lg bg-base-800 hover:bg-base-700 text-slate-300 text-[10px] font-bold border border-base-700 cursor-pointer"
               >
                 RESTORE
               </button>
@@ -164,7 +164,7 @@ export const AssemblyVersionManager: React.FC<AssemblyVersionManagerProps> = ({
             </span>
             <button
               onClick={() => setCompareVersionId(null)}
-              className="text-[10px] text-amber-200/60 hover:text-amber-50 cursor-pointer"
+              className="text-[10px] text-slate-400 hover:text-slate-200 cursor-pointer"
             >
               ✕ CLOSE
             </button>
@@ -172,7 +172,7 @@ export const AssemblyVersionManager: React.FC<AssemblyVersionManagerProps> = ({
 
           <div className="grid grid-cols-3 gap-2 text-[10px]">
             <div className="p-2 rounded-lg bg-base-950 border border-base-800">
-              <span className="text-amber-300/50 block text-[9px]">MASS DELTA</span>
+              <span className="text-slate-500 block text-[9px]">MASS DELTA</span>
               <strong className={currentMassKg < comparedVersion.totalMassKg ? "text-emerald-400" : "text-amber-400"}>
                 {currentMassKg} kg vs {comparedVersion.totalMassKg} kg (
                 {currentMassKg - comparedVersion.totalMassKg > 0 ? "+" : ""}
@@ -180,14 +180,14 @@ export const AssemblyVersionManager: React.FC<AssemblyVersionManagerProps> = ({
               </strong>
             </div>
             <div className="p-2 rounded-lg bg-base-950 border border-base-800">
-              <span className="text-amber-300/50 block text-[9px]">QUALITY SCORE</span>
+              <span className="text-slate-500 block text-[9px]">QUALITY SCORE</span>
               <strong className={currentHealthScore >= comparedVersion.healthScore ? "text-emerald-400" : "text-amber-400"}>
                 {currentHealthScore}/100 vs {comparedVersion.healthScore}/100
               </strong>
             </div>
             <div className="p-2 rounded-lg bg-base-950 border border-base-800">
-              <span className="text-amber-300/50 block text-[9px]">ENGINE MOUNT</span>
-              <strong className="text-amber-50">
+              <span className="text-slate-500 block text-[9px]">ENGINE MOUNT</span>
+              <strong className="text-slate-200">
                 {comparedVersion.state.enginePosition.toUpperCase()}
               </strong>
             </div>

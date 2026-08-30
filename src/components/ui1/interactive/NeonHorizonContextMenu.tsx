@@ -56,15 +56,15 @@ export const NeonHorizonContextMenu: React.FC<NeonHorizonContextMenuProps> = ({
                 className={`flex items-center justify-between px-3 py-1.5 rounded-lg text-xs font-semibold nh-font-body tracking-wider transition-all duration-150 cursor-pointer ${
  item.danger
  ? "text-rose-300 hover:bg-rose-500/20"
- : "text-amber-50 hover:bg-white/[0.07] hover:text-white"
+ : "text-slate-200 hover:bg-white/[0.07] hover:text-white"
  }`}
               >
                 <div className="flex items-center gap-2">
-                  {item.icon && <span className="text-sky-300/80">{item.icon}</span>}
+                  {item.icon && <span className="text-amber-300/80">{item.icon}</span>}
                   <span>{item.label}</span>
                 </div>
                 {item.shortcut && (
-                  <kbd className="text-[10px] nh-font-mono text-amber-200/60 opacity-60">
+                  <kbd className="text-[10px] nh-font-mono text-slate-400 opacity-60">
                     {item.shortcut}
                   </kbd>
                 )}

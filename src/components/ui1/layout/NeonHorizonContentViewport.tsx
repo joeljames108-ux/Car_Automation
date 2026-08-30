@@ -38,7 +38,7 @@ export const NeonHorizonContentViewport: React.FC<NeonHorizonContentViewportProp
   return (
     <div className={`flex-1 min-w-0 flex flex-col gap-4 ${className}`}>
       {/* Main Glass Cockpit Window Container */}
-      <div className="relative p-6 rounded-3xl bg-[#111a2b]/85 backdrop-blur-3xl border border-white/12 shadow-[0_25px_60px_rgba(0,0,0,0.60),inset_0_1px_0_rgba(255,255,255,0.10)] flex flex-col gap-6 nh-edge-top nh-grain">
+      <div className="relative p-6 rounded-3xl bg-amber-950/60 backdrop-blur-3xl border border-white/12 shadow-[0_25px_60px_rgba(0,0,0,0.60),inset_0_1px_0_rgba(255,255,255,0.10)] flex flex-col gap-6 nh-edge-top nh-grain">
         {/* Instrument ruler strip */}
         <div className="nh-ruler -mt-2 opacity-30" aria-hidden="true" />
         {/* Top Cockpit Navigation Bar */}
@@ -54,18 +54,18 @@ export const NeonHorizonContentViewport: React.FC<NeonHorizonContentViewportProp
                 }}
                 className={`flex flex-col items-center justify-center p-2 rounded-2xl transition-all cursor-pointer group ${
  isActive
- ? "bg-sky-400/10 text-sky-300 border border-sky-400/30"
- : "text-amber-200/60 hover:text-amber-50 hover:bg-white/[0.04] border border-transparent"
+ ? "bg-amber-500/20 text-amber-300 border border-amber-500/30"
+ : "text-amber-200/50 hover:text-amber-100 hover:bg-white/[0.04] border border-transparent"
  }`}
               >
-                <div className={`mb-1 transition-transform group-hover:scale-110 ${isActive ? "text-sky-400" : "text-amber-200/60"}`}>
+                <div className={`mb-1 transition-transform group-hover:scale-110 ${isActive ? "text-amber-400" : "text-slate-400"}`}>
                   {tab.icon}
                 </div>
                 <span className="text-[11px] font-semibold tracking-tight text-center truncate w-full">
                   {tab.label}
                 </span>
                 {isActive && (
-                  <div className="w-6 h-0.5 bg-sky-400 rounded-full mt-1.5" />
+                  <div className="w-6 h-0.5 bg-amber-400 rounded-full mt-1.5" />
                 )}
               </button>
             );

@@ -54,7 +54,7 @@ export const NeonHorizonModal: React.FC<NeonHorizonModalProps> = ({
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       {/* Backdrop */}
       <div
-        className="fixed inset-0 bg-[#05080f]/80 backdrop-blur-md transition-opacity duration-300"
+        className="fixed inset-0 bg-amber-950/60/80 backdrop-blur-md transition-opacity duration-300"
         onClick={handleClose}
       />
 
@@ -70,22 +70,22 @@ export const NeonHorizonModal: React.FC<NeonHorizonModalProps> = ({
           <div className="px-6 py-4 border-b border-white/8 bg-black/25 flex items-center justify-between">
             <div className="flex items-center gap-3">
               {icon && (
-                <div className="p-2 rounded-xl bg-sky-400/10 border border-sky-400/25 text-sky-300">
+                <div className="p-2 rounded-xl bg-amber-500/20 border border-sky-400/25 text-amber-300">
                   {icon}
                 </div>
               )}
               <div>
-                <h3 className="text-sm font-bold nh-font-headline tracking-wider text-amber-50 uppercase">
+                <h3 className="text-sm font-bold nh-font-headline tracking-wider text-slate-100 uppercase">
                   {title}
                 </h3>
                 {subtitle && (
-                  <p className="text-xs text-amber-200/60 nh-font-mono">{subtitle}</p>
+                  <p className="text-xs text-slate-400 nh-font-mono">{subtitle}</p>
                 )}
               </div>
             </div>
             <button
               onClick={handleClose}
-              className="p-1.5 rounded-xl text-amber-200/60 hover:text-white hover:bg-white/10 transition-all cursor-pointer border border-transparent hover:border-white/20"
+              className="p-1.5 rounded-xl text-slate-400 hover:text-white hover:bg-white/10 transition-all cursor-pointer border border-transparent hover:border-white/20"
             >
               <X size={18} />
             </button>

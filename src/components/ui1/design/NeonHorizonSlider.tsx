@@ -35,16 +35,16 @@ export const NeonHorizonSlider: React.FC<NeonHorizonSliderProps> = ({
 
   const colorStyles = {
     cyan: {
-      fill: "bg-sky-400/70",
+      fill: "bg-amber-500/70",
       glow: "",
-      text: "text-sky-300",
-      badge: "border-sky-400/30 bg-sky-400/10 text-sky-200",
+      text: "text-amber-300",
+      badge: "border-amber-500/30 bg-amber-500/20 text-sky-200",
     },
     magenta: {
-      fill: "bg-sky-400/70",
+      fill: "bg-amber-500/70",
       glow: "",
-      text: "text-sky-300",
-      badge: "border-sky-400/30 bg-sky-400/10 text-sky-200",
+      text: "text-amber-300",
+      badge: "border-amber-500/30 bg-amber-500/20 text-sky-200",
     },
     gold: {
       fill: "bg-amber-400/70",
@@ -76,9 +76,9 @@ export const NeonHorizonSlider: React.FC<NeonHorizonSliderProps> = ({
     >
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <span className="nh-label-caps text-amber-100/80">{label}</span>
+          <span className="nh-label-caps text-slate-300">{label}</span>
           {description && (
-            <span className="text-[10px] text-amber-300/50 nh-font-mono hidden sm:inline">
+            <span className="text-[10px] text-slate-500 nh-font-mono hidden sm:inline">
               {description}
             </span>
           )}
@@ -93,7 +93,7 @@ export const NeonHorizonSlider: React.FC<NeonHorizonSliderProps> = ({
 
       <div className="relative flex items-center h-5">
         {/* Track background */}
-        <div className="w-full h-1.5 bg-[#0e1626] rounded-full overflow-hidden border border-white/10 relative">
+        <div className="w-full h-1.5 bg-amber-950/60 rounded-full overflow-hidden border border-white/10 relative">
           {/* Active fill */}
           <div
             className={`h-full ${colorStyles.fill} rounded-full transition-all duration-75`}
@@ -114,7 +114,7 @@ export const NeonHorizonSlider: React.FC<NeonHorizonSliderProps> = ({
 
         {/* Precision thumb marker */}
         <div
-          className={`absolute w-3.5 h-3.5 rounded-full bg-white border-2 border-amber-500/30/80 shadow-[0_1px_4px_rgba(0,0,0,0.5)] pointer-events-none transform -translate-x-1/2 transition-transform duration-75 ${
+          className={`absolute w-3.5 h-3.5 rounded-full bg-white border-2 border-slate-500/80 shadow-[0_1px_4px_rgba(0,0,0,0.5)] pointer-events-none transform -translate-x-1/2 transition-transform duration-75 ${
  isHovered ? "scale-110" : "scale-100"
  }`}
           style={{ left: `${percentage}%` }}

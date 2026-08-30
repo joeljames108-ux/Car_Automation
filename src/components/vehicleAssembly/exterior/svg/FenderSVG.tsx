@@ -79,10 +79,10 @@ export const FenderSVG: React.FC<FenderSVGProps> = ({
 
       {/* ── 3. Fender Top Pressure Relief Louvers ── */}
       <g id="fender_arch_gills">
-        <line x1="250" y1="295" x2="260" y2="300" stroke="#0f172a" strokeWidth="1.5" />
-        <line x1="260" y1="292" x2="270" y2="297" stroke="#0f172a" strokeWidth="1.5" />
-        <line x1="270" y1="289" x2="280" y2="294" stroke="#0f172a" strokeWidth="1.5" />
-        <line x1="280" y1="286" x2="290" y2="291" stroke="#0f172a" strokeWidth="1.5" />
+        <line x1="250" y1="295" x2="260" y2="300" stroke="#1a1008" strokeWidth="1.5" />
+        <line x1="260" y1="292" x2="270" y2="297" stroke="#1a1008" strokeWidth="1.5" />
+        <line x1="270" y1="289" x2="280" y2="294" stroke="#1a1008" strokeWidth="1.5" />
+        <line x1="280" y1="286" x2="290" y2="291" stroke="#1a1008" strokeWidth="1.5" />
       </g>
 
       {/* ── 4. Amber LED Side Marker Turn Indicator ── */}

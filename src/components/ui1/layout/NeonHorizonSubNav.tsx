@@ -73,9 +73,9 @@ export const NeonHorizonSubNav: React.FC<NeonHorizonSubNavProps> = ({
                 playHMIClickSound();
                 onOpenOrbitalNav();
               }}
-              className="hidden sm:flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold font-mono tracking-wider text-sky-300 bg-sky-400/10 hover:bg-sky-400/20 border border-sky-400/30 hover:border-sky-400/60 shadow-[0_0_15px_rgba(56,189,248,0.25)] transition-all cursor-pointer whitespace-nowrap shrink-0 group"
+              className="hidden sm:flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold font-mono tracking-wider text-amber-300 bg-amber-500/20 hover:bg-amber-500/25 border border-amber-500/30 hover:border-sky-400/60 shadow-[0_0_15px_rgba(56,189,248,0.25)] transition-all cursor-pointer whitespace-nowrap shrink-0 group"
             >
-              <Orbit size={13} className="text-sky-400 group-hover:rotate-180 transition-transform duration-500" />
+              <Orbit size={13} className="text-amber-400 group-hover:rotate-180 transition-transform duration-500" />
               <span>3D GLOBE NAV</span>
             </button>
           )}

@@ -169,7 +169,7 @@ export const NeonHorizonHeader: React.FC<NeonHorizonHeaderProps> = ({
           >
             <Search size={13} style={{ color: "#5fa8c8" }} />
             <span className="text-[11px]">Search Studio...</span>
-            <kbd className="px-1.5 py-0.5 rounded-md bg-white/10 border border-white/15 text-[10px] text-amber-100/80 flex items-center gap-0.5 font-mono">
+            <kbd className="px-1.5 py-0.5 rounded-md bg-white/10 border border-white/15 text-[10px] text-slate-300 flex items-center gap-0.5 font-mono">
               <CmdIcon size={9} /> K
             </kbd>
           </button>
@@ -178,7 +178,7 @@ export const NeonHorizonHeader: React.FC<NeonHorizonHeaderProps> = ({
           <div className="hidden xl:flex items-center gap-2.5 rounded-full px-3.5 py-1 text-xs"
             style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)" }}>
             <div className="flex items-center gap-1.5">
-              <span className="text-[10px] text-amber-200/60 uppercase font-mono">MO.</span>
+              <span className="text-[10px] text-slate-400 uppercase font-mono">MO.</span>
               <span className="font-bold font-mono" style={{ color: "#8cbcd0" }}>{month}</span>
             </div>
             <div className="h-3 w-px bg-white/10" />
@@ -217,7 +217,7 @@ export const NeonHorizonHeader: React.FC<NeonHorizonHeaderProps> = ({
                 className="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase transition-all cursor-pointer"
                 style={{
                   background: units === u ? "#5fa8c8" : "transparent",
-                  color: units === u ? "#070b14" : "#506070",
+                  color: units === u ? "#1a1008" : "#506070",
                 }}
               >
                 {u}
@@ -285,7 +285,7 @@ export const NeonHorizonHeader: React.FC<NeonHorizonHeaderProps> = ({
           <div
             aria-label="User Profile"
             className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold cursor-pointer hover:scale-105 transition-transform"
-            style={{ background: "linear-gradient(135deg, #1a3048, #0c1c30)", color: "#8cbcd0", border: "1px solid rgba(95, 168, 200, 0.20)", boxShadow: "0 2px 10px rgba(95, 168, 200, 0.15)" }}
+            style={{ background: "linear-gradient(135deg, #1a3048, #1a1008)", color: "#8cbcd0", border: "1px solid rgba(95, 168, 200, 0.20)", boxShadow: "0 2px 10px rgba(95, 168, 200, 0.15)" }}
           >
             <User size={15} />
           </div>

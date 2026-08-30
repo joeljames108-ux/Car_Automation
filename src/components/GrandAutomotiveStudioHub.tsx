@@ -242,7 +242,7 @@ const getStatusColor = (status: StudioStatus): string => {
   switch (status) {
     case "configured": return "text-emerald-400";
     case "needs_attention": return "text-amber-400";
-    default: return "text-amber-300/50";
+    default: return "text-slate-500";
   }
 };
 
@@ -257,7 +257,7 @@ const getStatusTooltip = (status: StudioStatus): string => {
 const getCategoryIconStyle = (color: string): { bg: string; text: string } => {
   switch (color) {
     case "cyan": return { bg: "bg-amber-500/20", text: "text-amber-400" };
-    case "sky": return { bg: "bg-sky-500/20", text: "text-sky-400" };
+    case "sky": return { bg: "bg-sky-500/20", text: "text-amber-400" };
     case "orange": return { bg: "bg-orange-500/20", text: "text-orange-400" };
     case "amber": return { bg: "bg-amber-500/20", text: "text-amber-400" };
     case "violet": return { bg: "bg-amber-500/20", text: "text-amber-400" };
@@ -391,7 +391,7 @@ export const GrandAutomotiveStudioHub: React.FC = () => {
   return (
     <div className="flex flex-col w-full h-full space-y-4 p-2 sm:p-4 select-none">
       {/* Keyboard Shortcuts Help */}
-      <div className="fixed bottom-4 right-4 z-50 bg-amber-950/95 backdrop-blur-xl border border-amber-800/30 rounded-xl p-4 shadow-2xl text-xs text-amber-100/80 font-mono hidden sm:block">
+      <div className="fixed bottom-4 right-4 z-50 bg-slate-950/95 backdrop-blur-xl border border-slate-800 rounded-xl p-4 shadow-2xl text-xs text-slate-300 font-mono hidden sm:block">
         <div className="flex items-center gap-2 mb-2 text-amber-400 font-bold">Shortcuts</div>
         <div className="grid grid-cols-2 gap-1 text-[10px]">
           <span>Ctrl+1-9</span><span>Quick studio</span>
@@ -402,18 +402,18 @@ export const GrandAutomotiveStudioHub: React.FC = () => {
       </div>
 
       {/* Top Grand Studio Navigation Bar */}
-      <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-3 bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 p-3.5 rounded-2xl border border-amber-800/30 shadow-2xl backdrop-blur-2xl">
+      <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-3 bg-gradient-to-r from-slate-950 via-slate-900 to-slate-950 p-3.5 rounded-2xl border border-slate-800 shadow-2xl backdrop-blur-2xl">
         {/* Breadcrumb Trail */}
         <nav className="flex items-center gap-1.5 flex-wrap w-full lg:w-auto" aria-label="Studio breadcrumb">
           {breadcrumbs.map((crumb, i) => (
             <span key={crumb.label} className="flex items-center gap-1.5">
-              {i > 0 && <ChevronRight size={12} className="text-amber-300/50" />}
+              {i > 0 && <ChevronRight size={12} className="text-slate-500" />}
               {crumb.current ? (
-                <span className="text-xs font-bold text-amber-50 truncate max-w-[150px]">{crumb.label}</span>
+                <span className="text-xs font-bold text-slate-100 truncate max-w-[150px]">{crumb.label}</span>
               ) : (
                 <button
                   onClick={crumb.onClick}
-                  className="text-xs text-amber-200/60 hover:text-amber-300 transition-colors truncate max-w-[120px] font-medium"
+                  className="text-xs text-slate-400 hover:text-amber-300 transition-colors truncate max-w-[120px] font-medium"
                 >
                   {crumb.label}
                 </button>
@@ -428,10 +428,10 @@ export const GrandAutomotiveStudioHub: React.FC = () => {
             <Sparkles size={20} />
           </div>
           <div>
-            <h1 className="text-base sm:text-lg font-black tracking-tight text-amber-50 uppercase">
+            <h1 className="text-base sm:text-lg font-black tracking-tight text-slate-100 uppercase">
               Grand Automotive Engineering Studio Suite
             </h1>
-            <p className="text-xs text-amber-200/60">
+            <p className="text-xs text-slate-400">
               Unified 3D Assembly, Dyno ECU, Suspension, CFD Wind Tunnel, Track Layouts, NVH & Factory Studios
             </p>
           </div>
@@ -441,7 +441,7 @@ export const GrandAutomotiveStudioHub: React.FC = () => {
         <div className="flex items-center gap-2">
           <button
             onClick={() => setShowPresets(!showPresets)}
-            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold border transition-all cursor-pointer bg-amber-800/35 text-amber-100/80 border-amber-700/30 hover:text-amber-300 hover:border-amber-500/50"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold border transition-all cursor-pointer bg-slate-800 text-slate-300 border-slate-700 hover:text-amber-300 hover:border-amber-500/50"
             aria-label="Quick presets"
             title="Quick Presets (Ctrl+P)"
           >
@@ -451,10 +451,10 @@ export const GrandAutomotiveStudioHub: React.FC = () => {
           </button>
 
           {showPresets && (
-            <div className="absolute right-4 top-full mt-2 z-50 bg-amber-950/95 backdrop-blur-xl border border-amber-800/30 rounded-xl p-2 shadow-2xl">
+            <div className="absolute right-4 top-full mt-2 z-50 bg-slate-950/95 backdrop-blur-xl border border-slate-800 rounded-xl p-2 shadow-2xl">
               <div className="flex items-center gap-2 mb-2 px-2">
-                <span className="text-xs font-bold text-amber-100/80">Quick Presets</span>
-                <span title="Load pre-configured studio combinations for common workflows" className="flex items-center text-amber-300/50 hover:text-amber-100/80 cursor-help">
+                <span className="text-xs font-bold text-slate-300">Quick Presets</span>
+                <span title="Load pre-configured studio combinations for common workflows" className="flex items-center text-slate-500 hover:text-slate-300 cursor-help">
                   <HelpCircle size={12} />
                 </span>
               </div>
@@ -476,7 +476,7 @@ export const GrandAutomotiveStudioHub: React.FC = () => {
                     </div>
                     <div className="flex flex-col">
                       <span className="font-bold">{preset.label}</span>
-                      <span className="text-[10px] text-amber-300/50">{preset.studios.length} studios</span>
+                      <span className="text-[10px] text-slate-500">{preset.studios.length} studios</span>
                     </div>
                   </button>
                 ))}
@@ -490,7 +490,7 @@ export const GrandAutomotiveStudioHub: React.FC = () => {
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold border transition-all cursor-pointer ${
               compareMode
                 ? "bg-amber-500/20 text-amber-300 border-violet-500/40 shadow-sm shadow-violet-500/20"
-                : "bg-amber-800/35 text-amber-200/60 border-amber-700/30 hover:text-amber-50"
+                : "bg-slate-800 text-slate-400 border-slate-700 hover:text-slate-200"
             }`}
             title={compareMode ? "Exit Compare Mode (Ctrl+B)" : "Enter Compare Mode (Ctrl+B)"}
           >
@@ -504,7 +504,7 @@ export const GrandAutomotiveStudioHub: React.FC = () => {
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-bold border transition-all cursor-pointer ${
               !isAudioMuted
                 ? "bg-emerald-500/20 text-emerald-300 border-emerald-500/40 shadow-sm shadow-emerald-500/20"
-                : "bg-amber-800/35 text-amber-200/60 border-amber-700/30 hover:text-amber-50"
+                : "bg-slate-800 text-slate-400 border-slate-700 hover:text-slate-200"
             }`}
             title="Toggle Procedural Powertrain Audio Synthesizer"
           >
@@ -516,9 +516,9 @@ export const GrandAutomotiveStudioHub: React.FC = () => {
 
       {/* Recent Studios Quick Access */}
       {recentStudios.length > 1 && (
-        <div className="flex items-center gap-2 bg-amber-950/50 p-2 rounded-xl border border-amber-800/30">
-          <History size={12} className="text-amber-300/50" />
-          <span className="text-xs font-bold text-amber-200/60">Recent:</span>
+        <div className="flex items-center gap-2 bg-slate-950/50 p-2 rounded-xl border border-slate-800">
+          <History size={12} className="text-slate-500" />
+          <span className="text-xs font-bold text-slate-400">Recent:</span>
           <div className="flex items-center gap-1 overflow-x-auto">
             {recentStudios.slice(0, 3).map((studioId, i) => {
               const tab = STUDIO_TABS.find((t) => t.id === studioId);
@@ -530,7 +530,7 @@ export const GrandAutomotiveStudioHub: React.FC = () => {
                   className={`flex items-center gap-1 px-2 py-1 rounded-lg text-xs font-medium transition-all whitespace-nowrap cursor-pointer ${
                     activeTab === studioId
                       ? "bg-amber-500/20 text-amber-300 ring-1 ring-amber-500/30"
-                      : "text-amber-200/60 hover:text-amber-50 hover:bg-amber-800/35/50"
+                      : "text-slate-400 hover:text-slate-100 hover:bg-slate-800/50"
                   }`}
                   title={tab.description}
                 >
@@ -545,7 +545,7 @@ export const GrandAutomotiveStudioHub: React.FC = () => {
       )}
 
       {/* Category-Grouped Studio Navigation */}
-      <div className="bg-amber-950/80 p-3 rounded-2xl border border-amber-800/30">
+      <div className="bg-slate-950/80 p-3 rounded-2xl border border-slate-800">
         <div className="space-y-3">
           {STUDIO_CATEGORIES.map((category) => {
             const isExpanded = expandedCategories.has(category.id);
@@ -559,7 +559,7 @@ export const GrandAutomotiveStudioHub: React.FC = () => {
                 {/* Category Header */}
                 <button
                   onClick={() => handleCategoryToggle(category.id)}
-                  className="w-full flex items-center justify-between px-3 py-2.5 rounded-xl transition-all hover:bg-amber-900/40"
+                  className="w-full flex items-center justify-between px-3 py-2.5 rounded-xl transition-all hover:bg-slate-900/50"
                   aria-expanded={isExpanded}
                 >
                   <div className="flex items-center gap-2">
@@ -567,8 +567,8 @@ export const GrandAutomotiveStudioHub: React.FC = () => {
                       {category.icon}
                     </div>
                     <div>
-                      <div className="text-xs font-bold text-amber-50 uppercase tracking-wider">{category.label}</div>
-                      <div className="text-[10px] text-amber-300/50">
+                      <div className="text-xs font-bold text-slate-100 uppercase tracking-wider">{category.label}</div>
+                      <div className="text-[10px] text-slate-500">
                         {categoryTabs.filter((t) => studioStatuses[t.id] === "configured").length} / {categoryTabs.length} configured
                       </div>
                     </div>
@@ -582,7 +582,7 @@ export const GrandAutomotiveStudioHub: React.FC = () => {
                         <span className="w-1.5 h-1.5 rounded-full bg-amber-400" title="Has studios needing attention" />
                       )}
                     </div>
-                    <ChevronDown size={14} className={`text-amber-300/50 transition-transform ${isExpanded ? "rotate-180" : ""}`} />
+                    <ChevronDown size={14} className={`text-slate-500 transition-transform ${isExpanded ? "rotate-180" : ""}`} />
                   </div>
                 </button>
 
@@ -606,7 +606,7 @@ export const GrandAutomotiveStudioHub: React.FC = () => {
                           className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold rounded-lg transition-all whitespace-nowrap cursor-pointer active:scale-95 relative ${
                             isActive
                               ? "bg-gradient-to-r from-amber-400 to-sky-500 text-slate-950 shadow-lg shadow-cyan-500/30 font-extrabold ring-1 ring-amber-300"
-                              : "text-amber-200/60 hover:text-amber-50 hover:bg-amber-800/35/80"
+                              : "text-slate-400 hover:text-slate-100 hover:bg-slate-800/80"
                           }`}
                           title={tab.description}
                         >
@@ -618,7 +618,7 @@ export const GrandAutomotiveStudioHub: React.FC = () => {
                           {tab.icon}
                           <span>{tab.label}</span>
                           {tab.shortcut && (
-                            <kbd className="ml-1 px-1.5 py-0.5 rounded bg-amber-900/40 border border-amber-700/30 text-[9px] font-mono text-amber-200/60 hidden sm:inline-flex">
+                            <kbd className="ml-1 px-1.5 py-0.5 rounded bg-slate-900/50 border border-slate-700 text-[9px] font-mono text-slate-400 hidden sm:inline-flex">
                               Ctrl+{tab.shortcut}
                             </kbd>
                           )}
@@ -650,11 +650,11 @@ export const GrandAutomotiveStudioHub: React.FC = () => {
 
         {/* Compare Mode Overlay */}
         {compareMode && (
-          <div className="absolute inset-0 bg-amber-950/90 backdrop-blur-sm z-40 flex items-center justify-center pointer-events-none">
-            <div className="bg-amber-900/40 border border-violet-500/30 rounded-2xl p-8 max-w-md text-center pointer-events-auto">
+          <div className="absolute inset-0 bg-slate-950/90 backdrop-blur-sm z-40 flex items-center justify-center pointer-events-none">
+            <div className="bg-slate-900/95 border border-violet-500/30 rounded-2xl p-8 max-w-md text-center pointer-events-auto">
               <GitCompare size={32} className="mx-auto text-amber-400 mb-4" />
-              <h3 className="text-lg font-bold text-amber-50 mb-2">Compare Mode Active</h3>
-              <p className="text-sm text-amber-200/60 mb-4">
+              <h3 className="text-lg font-bold text-slate-100 mb-2">Compare Mode Active</h3>
+              <p className="text-sm text-slate-400 mb-4">
                 Changes are highlighted vs baseline. Toggle off to return to normal view.
               </p>
               <button

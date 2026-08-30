@@ -182,7 +182,7 @@ export class InteriorCanvasTextureFactory {
   ): void {
     // 1. Dark OLED Background with subtle vignette
     const bgGrad = ctx.createRadialGradient(w / 2, h / 2, 100, w / 2, h / 2, w * 0.7);
-    bgGrad.addColorStop(0, '#0a0d14');
+    bgGrad.addColorStop(0, '#1a1008');
     bgGrad.addColorStop(1, '#020306');
     ctx.fillStyle = bgGrad;
     ctx.fillRect(0, 0, w, h);
@@ -440,7 +440,7 @@ export class InteriorCanvasTextureFactory {
     const accent = theme === 'cyberpunk_neon_cyan' ? '#f59e0b' : theme === 'luxury_gold_elegance' ? '#f59e0b' : '#d97706';
 
     // 2. Top Header Bar
-    ctx.fillStyle = '#0f172a';
+    ctx.fillStyle = '#1a1008';
     ctx.fillRect(0, 0, w, 110);
     ctx.strokeStyle = 'rgba(255, 255, 255, 0.1)';
     ctx.beginPath();
@@ -592,7 +592,7 @@ export class InteriorCanvasTextureFactory {
 
     // 5. Bottom Dock: Shortcuts (Nav, Audio, Vehicle Settings, HVAC, Phone)
     const dockY = h - 100;
-    ctx.fillStyle = '#0f172a';
+    ctx.fillStyle = '#1a1008';
     ctx.fillRect(0, dockY, w, 100);
 
     const icons = ['🗺️ NAVIGATION', '🎵 MEDIA', '⚡ DRIVE DYNAMICS', '❄️ CLIMATE', '📱 TELEPHONE', '⚙️ SETTINGS'];

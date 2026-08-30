@@ -47,7 +47,7 @@ describe("F1 & Hypercar Performance Optimization & Telemetry Test Suite", () => 
   // ==========================================================================
   describe("MegawattTriMotorPowertrainEngine Speed & Precision", () => {
     it("solves 800V tri-motor kinematics in under 5ms", () => {
-      // Warmup pass
+      // Warmup
       MegawattTriMotorPowertrainEngine.solvePowertrainKinetics({
         vehicleMassKg: 1400,
         icePowerHp: 900,
@@ -84,7 +84,7 @@ describe("F1 & Hypercar Performance Optimization & Telemetry Test Suite", () => 
   // ==========================================================================
   describe("CarboTitaniumMonocoqueSolver FEA Speed & Precision", () => {
     it("computes Tsai-Wu failure criteria and torsional rigidity in under 5ms", () => {
-      // Warmup pass
+      // Warmup
       CarboTitaniumMonocoqueSolver.solveMonocoque({
         plyCount: 24,
         titaniumMeshVolRatioPct: 15,
@@ -119,7 +119,7 @@ describe("F1 & Hypercar Performance Optimization & Telemetry Test Suite", () => 
   // ==========================================================================
   describe("ActiveGroundEffectVenturiAeromechanics CFD Speed & Precision", () => {
     it("evaluates aerodynamic polar and porpoising stability in under 2ms", () => {
-      // Warmup pass
+      // Warmup
       ActiveGroundEffectVenturiAeromechanics.solveAeromechanics({
         airspeedKmH: 300,
         rideHeightMm: 40,
@@ -169,7 +169,7 @@ describe("F1 & Hypercar Performance Optimization & Telemetry Test Suite", () => 
         totalPistonAreaCm2: 85,
       };
 
-      // Warmup pass
+      // Warmup
       CarbonCeramicMatrixBrakeThermalFea.solveBrakeThermalFea({
         entrySpeedKmH: 250,
         vehicleMassKg: 1480,

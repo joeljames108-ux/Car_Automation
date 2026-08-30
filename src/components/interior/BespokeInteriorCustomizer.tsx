@@ -34,7 +34,7 @@ export const BespokeInteriorCustomizer: React.FC<BespokeInteriorCustomizerProps>
     { name: "Miami Blue", hex: "#f59e0b" },
     { name: "Acid Green", hex: "#84cc16" },
     { name: "Chalk Silver", hex: "#94a3b8" },
-    { name: "Stealth Black", hex: "#0f172a" },
+    { name: "Stealth Black", hex: "#1a1008" },
   ];
 
   const quiltPatterns = [

@@ -51,14 +51,14 @@ interface FinishSummarySectionProps {
 }
 
 const GRADE_BADGES: Record<MaterialGrade, { label: string; color: string }> = {
-  cast: { label: "OEM CAST", color: "bg-amber-800/35 text-amber-100/80 border-amber-700/30" },
+  cast: { label: "OEM CAST", color: "bg-slate-800 text-slate-300 border-slate-700" },
   forged: { label: "RACE FORGED", color: "bg-amber-500/20 text-amber-300 border-amber-500/40" },
   billet: { label: "CNC BILLET", color: "bg-amber-500/20 text-amber-300 border-amber-500/40" },
   titanium: { label: "TITANIUM SPEC-R", color: "bg-amber-500/20 text-amber-300 border-amber-500/40" },
   ceramic: { label: "CERAMIC MATRIX", color: "bg-emerald-500/20 text-emerald-300 border-emerald-500/40" },
-  cast_iron: { label: "CAST IRON", color: "bg-amber-800/35 text-amber-100/80 border-amber-700/30" },
-  nodular_iron: { label: "NODULAR IRON", color: "bg-slate-750 text-amber-50 border-amber-600/30" },
-  cast_aluminum: { label: "CAST ALUMINUM", color: "bg-sky-500/20 text-sky-300 border-sky-500/40" },
+  cast_iron: { label: "CAST IRON", color: "bg-slate-800 text-slate-300 border-slate-700" },
+  nodular_iron: { label: "NODULAR IRON", color: "bg-slate-750 text-slate-200 border-slate-600" },
+  cast_aluminum: { label: "CAST ALUMINUM", color: "bg-sky-500/20 text-amber-300 border-sky-500/40" },
   billet_7075: { label: "BILLET 7075-T6", color: "bg-amber-500/20 text-amber-300 border-amber-500/40" },
   maraging_steel: { label: "MARAGING STEEL", color: "bg-rose-500/20 text-rose-300 border-rose-500/40" },
   titanium_alloy: { label: "TI-6AL-4V ALLOY", color: "bg-amber-500/20 text-amber-300 border-amber-500/40" },
@@ -110,7 +110,7 @@ Components Installed: ${installedComponents.length}`;
       className={`space-y-6 p-6 md:p-8 rounded-3xl bg-gradient-to-b from-slate-950/40 via-slate-900/30 to-slate-950/40 border border-white/10 backdrop-blur-xl shadow-[0_12px_40px_rgba(0,0,0,0.35)] select-none ${className}`}
     >
       {/* ── TOP CERTIFICATION HEADER ── */}
-      <div className="flex flex-col md:flex-row items-center justify-between gap-4 border-b border-amber-800/30 pb-6">
+      <div className="flex flex-col md:flex-row items-center justify-between gap-4 border-b border-slate-800/80 pb-6">
         <div className="flex items-center gap-3.5">
           <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-500/20 via-cyan-500/20 to-amber-500/20 border border-emerald-400/40 flex items-center justify-center text-emerald-300 shadow-[0_0_25px_rgba(52,211,153,0.3)] shrink-0">
             <Award size={28} className="text-emerald-400" />
@@ -120,11 +120,11 @@ Components Installed: ${installedComponents.length}`;
               <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-extrabold bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 uppercase tracking-widest">
                 CERTIFIED BENCH-TESTED
               </span>
-              <span className="text-xs font-mono text-amber-200/60">
+              <span className="text-xs font-mono text-slate-400">
                 {installedComponents.length} Components Mounted
               </span>
             </div>
-            <h2 className="text-xl md:text-2xl font-extrabold font-mono text-amber-50 mt-0.5">
+            <h2 className="text-xl md:text-2xl font-extrabold font-mono text-slate-100 mt-0.5">
               {layoutLabel}
             </h2>
           </div>
@@ -135,7 +135,7 @@ Components Installed: ${installedComponents.length}`;
           <button
             type="button"
             onClick={handleCopySummary}
-            className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-base-950/80 hover:bg-base-900 text-amber-100/80 border border-amber-700/30 text-xs font-mono font-bold transition-all cursor-pointer shadow-sm active:scale-95"
+            className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-base-950/80 hover:bg-base-900 text-slate-300 border border-slate-700 text-xs font-mono font-bold transition-all cursor-pointer shadow-sm active:scale-95"
           >
             {copied ? <Check size={14} className="text-emerald-400" /> : <Copy size={14} />}
             <span>{copied ? "Copied to Clipboard!" : "Copy Spec Sheet"}</span>
@@ -153,7 +153,7 @@ Components Installed: ${installedComponents.length}`;
           <button
             type="button"
             onClick={onResetFlow}
-            className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-base-950/80 hover:bg-red-950/40 text-amber-200/60 hover:text-red-300 border border-amber-800/30 hover:border-red-500/40 text-xs font-mono font-bold transition-all cursor-pointer active:scale-95"
+            className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-base-950/80 hover:bg-red-950/40 text-slate-400 hover:text-red-300 border border-slate-800 hover:border-red-500/40 text-xs font-mono font-bold transition-all cursor-pointer active:scale-95"
             title="Reset Assembly"
           >
             <RotateCcw size={14} />
@@ -165,7 +165,7 @@ Components Installed: ${installedComponents.length}`;
       {/* ── CUMULATIVE SPECS 5-TILE ROW ── */}
       <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
         <div className="p-3.5 rounded-2xl bg-base-950/80 border border-amber-500/30 text-center">
-          <span className="block text-[10px] font-mono text-amber-200/60 uppercase">Certified Output</span>
+          <span className="block text-[10px] font-mono text-slate-400 uppercase">Certified Output</span>
           <span className="text-xl md:text-2xl font-extrabold font-mono text-amber-300">
             {currentTotalStats.hp} hp
           </span>
@@ -175,7 +175,7 @@ Components Installed: ${installedComponents.length}`;
         </div>
 
         <div className="p-3.5 rounded-2xl bg-base-950/80 border border-amber-500/30 text-center">
-          <span className="block text-[10px] font-mono text-amber-200/60 uppercase">Peak Torque</span>
+          <span className="block text-[10px] font-mono text-slate-400 uppercase">Peak Torque</span>
           <span className="text-xl md:text-2xl font-extrabold font-mono text-amber-300">
             {currentTotalStats.torque} Nm
           </span>
@@ -184,16 +184,16 @@ Components Installed: ${installedComponents.length}`;
           </span>
         </div>
 
-        <div className="p-3.5 rounded-2xl bg-base-950/80 border border-amber-800/30 text-center">
-          <span className="block text-[10px] font-mono text-amber-200/60 uppercase">Powertrain Mass</span>
-          <span className="text-xl md:text-2xl font-extrabold font-mono text-amber-50">
+        <div className="p-3.5 rounded-2xl bg-base-950/80 border border-slate-800 text-center">
+          <span className="block text-[10px] font-mono text-slate-400 uppercase">Powertrain Mass</span>
+          <span className="text-xl md:text-2xl font-extrabold font-mono text-slate-100">
             {currentTotalStats.weight} kg
           </span>
-          <span className="text-[10px] font-mono text-amber-200/60 block mt-0.5">Dry Weight</span>
+          <span className="text-[10px] font-mono text-slate-400 block mt-0.5">Dry Weight</span>
         </div>
 
         <div className="p-3.5 rounded-2xl bg-base-950/80 border border-emerald-500/30 text-center">
-          <span className="block text-[10px] font-mono text-amber-200/60 uppercase">Durability Score</span>
+          <span className="block text-[10px] font-mono text-slate-400 uppercase">Durability Score</span>
           <span className="text-xl md:text-2xl font-extrabold font-mono text-emerald-300">
             {currentTotalStats.reliability}%
           </span>
@@ -201,7 +201,7 @@ Components Installed: ${installedComponents.length}`;
         </div>
 
         <div className="col-span-2 sm:col-span-1 p-3.5 rounded-2xl bg-base-950/80 border border-amber-500/30 text-center">
-          <span className="block text-[10px] font-mono text-amber-200/60 uppercase">Total BOM Cost</span>
+          <span className="block text-[10px] font-mono text-slate-400 uppercase">Total BOM Cost</span>
           <span className="text-xl md:text-2xl font-extrabold font-mono text-amber-300">
             ${currentTotalStats.cost.toLocaleString()}
           </span>
@@ -219,7 +219,7 @@ Components Installed: ${installedComponents.length}`;
         <div className="overflow-x-auto no-scrollbar">
           <table className="w-full text-left text-xs font-mono border-collapse">
             <thead>
-              <tr className="border-b border-amber-800/30 text-amber-200/60 text-[10px] uppercase">
+              <tr className="border-b border-slate-800 text-slate-400 text-[10px] uppercase">
                 <th className="py-2.5 px-3">Stage</th>
                 <th className="py-2.5 px-3">Subsystem Component</th>
                 <th className="py-2.5 px-3">Category</th>
@@ -244,12 +244,12 @@ Components Installed: ${installedComponents.length}`;
 
                 return (
                   <tr key={compId} className="hover:bg-base-900/60 transition-colors">
-                    <td className="py-2.5 px-3 text-amber-300/50 font-bold">#{idx + 1}</td>
-                    <td className="py-2.5 px-3 font-extrabold text-amber-50 flex items-center gap-1.5">
+                    <td className="py-2.5 px-3 text-slate-500 font-bold">#{idx + 1}</td>
+                    <td className="py-2.5 px-3 font-extrabold text-slate-100 flex items-center gap-1.5">
                       <CheckCircle2 size={13} className="text-emerald-400 shrink-0" />
                       <span>{meta.name}</span>
                     </td>
-                    <td className="py-2.5 px-3 text-amber-200/60">{meta.category}</td>
+                    <td className="py-2.5 px-3 text-slate-400">{meta.category}</td>
                     <td className="py-2.5 px-3">
                       <span
                         className={`inline-block px-2 py-0.5 rounded text-[9.5px] font-extrabold border ${badge.color}`}
@@ -260,7 +260,7 @@ Components Installed: ${installedComponents.length}`;
                     <td className="py-2.5 px-3 text-right text-amber-300 font-bold">
                       {hpGain > 0 ? `+${hpGain} hp` : "–"}
                     </td>
-                    <td className="py-2.5 px-3 text-right text-amber-100/80 font-bold">
+                    <td className="py-2.5 px-3 text-right text-slate-300 font-bold">
                       +{mass} kg
                     </td>
                     <td className="py-2.5 px-3 text-right text-emerald-300 font-bold">

@@ -57,21 +57,21 @@ export const ModularEngineStudio: React.FC = () => {
   return (
     <div className="flex flex-col h-full w-full space-y-4 p-2 sm:p-4">
       {/* Studio Header & Mode Switcher */}
-      <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-3 bg-amber-900/40 backdrop-blur-xl p-3.5 rounded-2xl border border-amber-800/30 shadow-xl">
+      <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-3 bg-slate-900/90 backdrop-blur-xl p-3.5 rounded-2xl border border-slate-800 shadow-xl">
         <div className="flex items-center gap-3">
           <div className="p-2.5 rounded-xl bg-gradient-to-br from-amber-500 to-amber-600 text-slate-950 shadow-lg shadow-cyan-500/25 font-bold">
             <Flame size={20} />
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h2 className="text-base font-bold text-amber-50 tracking-tight">
+              <h2 className="text-base font-bold text-slate-100 tracking-tight">
                 Modular 3D Engine Studio
               </h2>
               <span className="px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 font-mono text-[10px] font-bold border border-amber-500/30">
                 PRO STUDIO
               </span>
             </div>
-            <p className="text-xs text-amber-200/60">
+            <p className="text-xs text-slate-400">
               Single-source-of-truth procedural engine construction, 4-stroke kinematics & dyno
             </p>
           </div>
@@ -80,7 +80,7 @@ export const ModularEngineStudio: React.FC = () => {
         {/* View Switcher & Action Buttons */}
         <div className="flex flex-wrap items-center gap-2">
           {/* Mode Tabs */}
-          <div className="flex bg-amber-950/80 p-1 rounded-xl border border-amber-800/30 flex-wrap gap-1">
+          <div className="flex bg-slate-950 p-1 rounded-xl border border-slate-800 flex-wrap gap-1">
             {[
               { id: "viewport", label: "3D Engine", icon: <Layers size={13} /> },
               { id: "dyno", label: "Crank Dyno", icon: <Activity size={13} /> },
@@ -93,7 +93,7 @@ export const ModularEngineStudio: React.FC = () => {
                 className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg transition-all cursor-pointer ${
                   studioMode === tab.id
                     ? "bg-amber-500 text-slate-950 font-bold shadow-md shadow-cyan-500/30"
-                    : "text-amber-200/60 hover:text-amber-50"
+                    : "text-slate-400 hover:text-slate-200"
                 }`}
               >
                 {tab.icon}
@@ -106,14 +106,14 @@ export const ModularEngineStudio: React.FC = () => {
           <div className="flex items-center gap-1">
             <button
               onClick={() => engineInstance.undo()}
-              className="p-2 bg-amber-800/35 hover:bg-amber-700/40 text-amber-100/80 rounded-xl border border-amber-700/30 transition-all"
+              className="p-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl border border-slate-700 transition-all"
               title="Undo Parameter Change"
             >
               <Undo2 size={14} />
             </button>
             <button
               onClick={() => engineInstance.redo()}
-              className="p-2 bg-amber-800/35 hover:bg-amber-700/40 text-amber-100/80 rounded-xl border border-amber-700/30 transition-all"
+              className="p-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-xl border border-slate-700 transition-all"
               title="Redo Parameter Change"
             >
               <Redo2 size={14} />
@@ -123,7 +123,7 @@ export const ModularEngineStudio: React.FC = () => {
           {/* Export JSON */}
           <button
             onClick={handleExportJSON}
-            className="flex items-center gap-1 px-3 py-2 bg-amber-800/35 hover:bg-amber-700/40 text-amber-50 text-xs font-semibold rounded-xl border border-amber-700/30 transition-all"
+            className="flex items-center gap-1 px-3 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold rounded-xl border border-slate-700 transition-all"
             title="Export Engine Spec to JSON"
           >
             <Download size={13} />

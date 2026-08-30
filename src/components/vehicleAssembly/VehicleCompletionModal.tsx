@@ -63,13 +63,13 @@ export const VehicleCompletionModal: React.FC<VehicleCompletionModalProps> = ({
   ] as any;
 
   return createPortal(
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-[#020617]/90 backdrop-blur-2xl animate-stage-transition-enter select-none">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-amber-950/60/90 backdrop-blur-2xl animate-stage-transition-enter select-none">
       {/* Background ambient lighting */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_30%,rgba(6,182,212,0.15),transparent_70%)] pointer-events-none" />
 
-      <div className="relative w-full max-w-4xl bg-[#0b0f19] border border-amber-500/40 rounded-3xl p-6 shadow-[0_0_80px_rgba(6,182,212,0.25)] text-left space-y-6 overflow-hidden">
+      <div className="relative w-full max-w-4xl bg-amber-950/60 border border-amber-500/40 rounded-3xl p-6 shadow-[0_0_80px_rgba(6,182,212,0.25)] text-left space-y-6 overflow-hidden">
         {/* Header Title */}
-        <div className="flex items-center justify-between border-b border-amber-800/30 pb-4">
+        <div className="flex items-center justify-between border-b border-slate-800 pb-4">
           <div className="flex items-center gap-3">
             <div className="p-3 rounded-2xl bg-amber-500/20 text-amber-300 border border-amber-500/40 shadow-[0_0_20px_rgba(6,182,212,0.3)]">
               <Trophy size={24} className="animate-bounce" />
@@ -78,7 +78,7 @@ export const VehicleCompletionModal: React.FC<VehicleCompletionModalProps> = ({
               <span className="text-xs font-mono font-bold text-amber-400 uppercase tracking-widest flex items-center gap-1">
                 <Sparkles size={12} /> VEHICLE BUILD COMPLETE
               </span>
-              <h2 className="text-xl font-extrabold text-amber-50 tracking-tight mt-0.5">
+              <h2 className="text-xl font-extrabold text-slate-100 tracking-tight mt-0.5">
                 COMPLETED CHASSIS & POWERTRAIN ASSEMBLY
               </h2>
             </div>
@@ -87,7 +87,7 @@ export const VehicleCompletionModal: React.FC<VehicleCompletionModalProps> = ({
           <div className="flex items-center gap-2">
             <button
               onClick={onReset}
-              className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-amber-900/50 border border-amber-800/30 text-amber-100/80 hover:text-amber-300 text-xs font-mono font-bold transition-all"
+              className="flex items-center gap-1.5 px-3 py-2 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-amber-300 text-xs font-mono font-bold transition-all"
             >
               <RotateCcw size={12} /> REBUILD
             </button>
@@ -102,7 +102,7 @@ export const VehicleCompletionModal: React.FC<VehicleCompletionModalProps> = ({
         </div>
 
         {/* 3D Blueprint Display Viewport */}
-        <div className="h-72 w-full rounded-2xl bg-[#030712] border border-amber-500/30 overflow-hidden flex items-center justify-center p-2 relative">
+        <div className="h-72 w-full rounded-2xl bg-amber-950/60 border border-amber-500/30 overflow-hidden flex items-center justify-center p-2 relative">
           <ModularExterior3DViewport
             className="w-full h-full"
           />
@@ -110,25 +110,25 @@ export const VehicleCompletionModal: React.FC<VehicleCompletionModalProps> = ({
 
         {/* Final Performance Stat Telemetry Grid */}
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 font-mono">
-          <div className="bg-amber-900/40 p-3 rounded-2xl border border-amber-800/30">
-            <span className="text-[10px] text-amber-200/60 font-bold block uppercase">TOTAL CURB WEIGHT</span>
+          <div className="bg-slate-900/80 p-3 rounded-2xl border border-slate-800">
+            <span className="text-[10px] text-slate-400 font-bold block uppercase">TOTAL CURB WEIGHT</span>
             <span className="text-amber-300 font-extrabold text-lg mt-0.5 block">{stats.weight} kg</span>
           </div>
 
-          <div className="bg-amber-900/40 p-3 rounded-2xl border border-amber-800/30">
-            <span className="text-[10px] text-amber-200/60 font-bold block uppercase">POWER-TO-WEIGHT</span>
+          <div className="bg-slate-900/80 p-3 rounded-2xl border border-slate-800">
+            <span className="text-[10px] text-slate-400 font-bold block uppercase">POWER-TO-WEIGHT</span>
             <span className="text-pink-300 font-extrabold text-lg mt-0.5 block">
               {(stats.hp / Math.max(0.5, stats.weight / 1000)).toFixed(0)} HP/T
             </span>
           </div>
 
-          <div className="bg-amber-900/40 p-3 rounded-2xl border border-amber-800/30">
-            <span className="text-[10px] text-amber-200/60 font-bold block uppercase">DURABILITY SCORE</span>
+          <div className="bg-slate-900/80 p-3 rounded-2xl border border-slate-800">
+            <span className="text-[10px] text-slate-400 font-bold block uppercase">DURABILITY SCORE</span>
             <span className="text-emerald-300 font-extrabold text-lg mt-0.5 block">{stats.reliability}%</span>
           </div>
 
-          <div className="bg-amber-900/40 p-3 rounded-2xl border border-amber-800/30">
-            <span className="text-[10px] text-amber-200/60 font-bold block uppercase">TOTAL SUBSYSTEM COST</span>
+          <div className="bg-slate-900/80 p-3 rounded-2xl border border-slate-800">
+            <span className="text-[10px] text-slate-400 font-bold block uppercase">TOTAL SUBSYSTEM COST</span>
             <span className="text-amber-300 font-extrabold text-lg mt-0.5 block">${stats.cost.toLocaleString()}</span>
           </div>
         </div>

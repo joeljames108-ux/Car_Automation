@@ -122,14 +122,14 @@ export const SceneContent: React.FC = () => {
         far={1.0}
         resolution={512}
         frames={1}
-        color="#0f172a"
+        color="#2a1a0a"
       />
 
       {/* Reflective Ground Plane */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.13, 0]} receiveShadow>
         <circleGeometry args={[2.0, 64]} />
         <meshPhysicalMaterial
-          color="#0c1220"
+          color="#1a1208"
           roughness={0.12}
           metalness={0.7}
           clearcoat={0.4}

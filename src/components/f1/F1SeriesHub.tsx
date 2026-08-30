@@ -29,17 +29,17 @@ export const F1SeriesHub: React.FC<F1SeriesHubProps> = memo(function F1SeriesHub
   return (
     <div className="space-y-6 max-w-5xl mx-auto p-4 sm:p-6 animate-fade-in-up">
       {/* Hero Welcome Banner */}
-      <div className="glass-panel p-8 border-amber-500/30 bg-gradient-to-br from-amber-900/60 via-slate-900/95 to-amber-950/40 rounded-3xl shadow-2xl relative overflow-hidden">
+      <div className="glass-panel p-8 border-amber-500/30 bg-gradient-to-br from-slate-900 via-slate-900/95 to-amber-950/40 rounded-3xl shadow-2xl relative overflow-hidden">
         <div className="absolute top-0 right-0 w-96 h-96 bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />
         
         <div className="relative z-10 space-y-3">
           <div className="flex items-center gap-2 text-xs font-mono font-bold text-amber-400 uppercase tracking-widest">
             <Sparkles size={14} /> FIA FORMULA 1 CONSTRUCTOR CHAMPIONSHIP
           </div>
-          <h1 className="text-3xl sm:text-4xl font-black text-amber-50 tracking-tight">
+          <h1 className="text-3xl sm:text-4xl font-black text-slate-100 tracking-tight">
             Build Your Formula 1 Car From Scratch
           </h1>
-          <p className="text-sm text-amber-200/60 max-w-2xl leading-relaxed">
+          <p className="text-sm text-slate-400 max-w-2xl leading-relaxed">
             Enter the pinnacle of motorsport engineering. Design a 1,000+ HP V6 turbo-hybrid power unit, autoclave carbon fiber monocoque, ground-effect venturi aero floor, and 8-speed seamless shift gearbox to compete across a 24-race world championship.
           </p>
 
@@ -58,7 +58,7 @@ export const F1SeriesHub: React.FC<F1SeriesHubProps> = memo(function F1SeriesHub
                   playHMIClickSound();
                   onCancel();
                 }}
-                className="px-5 py-3 rounded-xl bg-amber-800/35/80 hover:bg-amber-700/40 text-xs font-semibold text-amber-100/80 transition-all border border-amber-700/30 cursor-pointer"
+                className="px-5 py-3 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-xs font-semibold text-slate-300 transition-all border border-slate-700 cursor-pointer"
               >
                 Back to Motorsport Menu
               </button>
@@ -70,28 +70,28 @@ export const F1SeriesHub: React.FC<F1SeriesHubProps> = memo(function F1SeriesHub
       {/* Season Setup Cards Grid */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {/* 1. Team & Entry Configuration */}
-        <div className="bg-amber-900/40 p-5 rounded-2xl border border-amber-800/30 space-y-4">
-          <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-amber-50">
+        <div className="bg-slate-900/60 p-5 rounded-2xl border border-slate-800 space-y-4">
+          <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-200">
             <Users size={16} className="text-amber-400" /> Team Entry Registration
           </div>
 
           <div className="space-y-3">
             <div>
-              <label className="text-[11px] text-amber-200/60 uppercase">Constructor Team Name</label>
+              <label className="text-[11px] text-slate-400 uppercase">Constructor Team Name</label>
               <input
                 type="text"
                 value={teamName}
                 onChange={(e) => setTeamName(e.target.value)}
-                className="w-full mt-1 bg-amber-800/35 border border-amber-700/30 rounded-lg px-3 py-2 text-xs text-amber-50 font-semibold focus:outline-none focus:border-amber-500"
+                className="w-full mt-1 bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-100 font-semibold focus:outline-none focus:border-amber-500"
               />
             </div>
 
             <div>
-              <label className="text-[11px] text-amber-200/60 uppercase">Season Cost Cap Budget</label>
+              <label className="text-[11px] text-slate-400 uppercase">Season Cost Cap Budget</label>
               <select
                 value={budgetTier}
                 onChange={(e) => setBudgetTier(parseInt(e.target.value))}
-                className="w-full mt-1 bg-amber-800/35 border border-amber-700/30 rounded-lg px-3 py-2 text-xs text-amber-50 focus:outline-none focus:border-amber-500"
+                className="w-full mt-1 bg-slate-800 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-100 focus:outline-none focus:border-amber-500"
               >
                 <option value={140}>$140M Maximum FIA Cost Cap (Works Team)</option>
                 <option value={115}>$115M Upper Midfield Budget</option>
@@ -102,45 +102,45 @@ export const F1SeriesHub: React.FC<F1SeriesHubProps> = memo(function F1SeriesHub
         </div>
 
         {/* 2. 24-Race World Championship Calendar */}
-        <div className="bg-amber-900/40 p-5 rounded-2xl border border-amber-800/30 space-y-3">
+        <div className="bg-slate-900/60 p-5 rounded-2xl border border-slate-800 space-y-3">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-amber-50">
+            <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-200">
               <Calendar size={16} className="text-amber-400" /> 24-Race World Tour
             </div>
-            <span className="text-[10px] font-mono text-amber-200/60">Round 1: Bahrain</span>
+            <span className="text-[10px] font-mono text-slate-400">Round 1: Bahrain</span>
           </div>
 
           <div className="space-y-2 max-h-48 overflow-y-auto custom-scrollbar pr-1">
             {F1_OFFICIAL_CALENDAR.map((race, idx) => (
-              <div key={race.id} className="flex items-center justify-between p-2 rounded-lg bg-amber-950/40 border border-amber-800/30 text-xs">
+              <div key={race.id} className="flex items-center justify-between p-2 rounded-lg bg-slate-950/40 border border-slate-800/60 text-xs">
                 <div className="flex items-center gap-2">
-                  <span className="font-mono text-amber-300/50 text-[10px]">R{idx + 1}</span>
+                  <span className="font-mono text-slate-500 text-[10px]">R{idx + 1}</span>
                   <span>{race.flagEmoji}</span>
-                  <span className="text-amber-100/80 font-medium">{race.name}</span>
+                  <span className="text-slate-300 font-medium">{race.name}</span>
                 </div>
-                <span className="font-mono text-[10px] text-amber-300/50">{race.downforceRequirement} DF</span>
+                <span className="font-mono text-[10px] text-slate-500">{race.downforceRequirement} DF</span>
               </div>
             ))}
           </div>
         </div>
 
         {/* 3. 10 Rival Constructor Grid */}
-        <div className="bg-amber-900/40 p-5 rounded-2xl border border-amber-800/30 space-y-3">
+        <div className="bg-slate-900/60 p-5 rounded-2xl border border-slate-800 space-y-3">
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-amber-50">
+            <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-200">
               <Trophy size={16} className="text-pink-400" /> 10 Rival Constructors
             </div>
-            <span className="text-[10px] font-mono text-amber-200/60">20 Drivers</span>
+            <span className="text-[10px] font-mono text-slate-400">20 Drivers</span>
           </div>
 
           <div className="space-y-2 max-h-48 overflow-y-auto custom-scrollbar pr-1">
             {F1_RIVAL_TEAMS.map((rival) => (
-              <div key={rival.teamId} className="flex items-center justify-between p-2 rounded-lg bg-amber-950/40 border border-amber-800/30 text-xs">
+              <div key={rival.teamId} className="flex items-center justify-between p-2 rounded-lg bg-slate-950/40 border border-slate-800/60 text-xs">
                 <div className="flex items-center gap-2">
                   <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: rival.colorHex }} />
-                  <span className="text-amber-100/80 font-medium truncate max-w-[120px]">{rival.teamName}</span>
+                  <span className="text-slate-300 font-medium truncate max-w-[120px]">{rival.teamName}</span>
                 </div>
-                <span className="font-mono text-[10px] text-amber-200/60">{rival.driver1Name.split(" ")[1]} / {rival.driver2Name.split(" ")[1]}</span>
+                <span className="font-mono text-[10px] text-slate-400">{rival.driver1Name.split(" ")[1]} / {rival.driver2Name.split(" ")[1]}</span>
               </div>
             ))}
           </div>

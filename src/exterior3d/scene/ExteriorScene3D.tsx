@@ -74,7 +74,7 @@ export const ExteriorScene3D: React.FC = () => {
             depthScale={1.2}
             minDepthThreshold={0.4}
             maxDepthThreshold={1.4}
-            color="#0a0a0f"
+            color="#1a1208"
             metalness={0.5}
             mirror={0.5}
           />
@@ -87,7 +87,7 @@ export const ExteriorScene3D: React.FC = () => {
           scale={12}
           blur={2.5}
           far={4}
-          color="#000000"
+          color="#2a1a0a"
         />
 
         {/* Orbit Camera Controller */}

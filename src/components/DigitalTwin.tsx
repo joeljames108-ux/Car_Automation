@@ -13,7 +13,7 @@ const EVENT_ICONS: Record<TwinEventType, { icon: React.ReactNode; color: string 
   simulation_run:        { icon: <BarChart3 size={12} />,     color: "text-amber-400 bg-amber-500/15" },
   manufacturing_started: { icon: <Info size={12} />,          color: "text-amber-400 bg-amber-500/15" },
   vehicle_launched:      { icon: <Star size={12} />,          color: "text-ok-400 bg-ok-500/15" },
-  customer_feedback:     { icon: <Info size={12} />,          color: "text-amber-200/60 bg-slate-500/15" },
+  customer_feedback:     { icon: <Info size={12} />,          color: "text-slate-400 bg-slate-500/15" },
   warranty_claim:        { icon: <AlertTriangle size={12} />, color: "text-warn-400 bg-warn-500/15" },
   race_entry:            { icon: <CheckCircle2 size={12} />,  color: "text-amber-400 bg-amber-500/15" },
   race_result:           { icon: <Star size={12} />,          color: "text-yellow-400 bg-yellow-500/15" },
@@ -21,7 +21,7 @@ const EVENT_ICONS: Record<TwinEventType, { icon: React.ReactNode; color: string 
   generation:            { icon: <Star size={12} />,          color: "text-accent-400 bg-accent-500/15" },
   recall:                { icon: <AlertTriangle size={12} />, color: "text-danger-400 bg-danger-500/15" },
   award:                 { icon: <Star size={12} />,          color: "text-yellow-400 bg-yellow-500/15" },
-  review_published:      { icon: <Info size={12} />,          color: "text-amber-200/60 bg-slate-500/15" },
+  review_published:      { icon: <Info size={12} />,          color: "text-slate-400 bg-slate-500/15" },
 };
 
 const SEVERITY_STYLES: Record<string, string> = {
@@ -32,7 +32,7 @@ const SEVERITY_STYLES: Record<string, string> = {
 };
 
 function EventRow({ event }: { event: TwinEvent }) {
-  const meta = EVENT_ICONS[event.type] ?? { icon: <Info size={12} />, color: "text-amber-200/60 bg-slate-500/15" };
+  const meta = EVENT_ICONS[event.type] ?? { icon: <Info size={12} />, color: "text-slate-400 bg-slate-500/15" };
   const sevStyle = event.severity ? SEVERITY_STYLES[event.severity] : "border-l-2 border-base-800";
   return (
     <div className={`flex items-start gap-3 py-3 ${sevStyle} pl-3 hover:bg-base-850/30 transition-all`}>
@@ -41,15 +41,15 @@ function EventRow({ event }: { event: TwinEvent }) {
       </div>
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2 mb-0.5 flex-wrap">
-          <span className="text-xs font-semibold text-amber-50">{event.title}</span>
-          <span className="text-[10px] text-amber-400 font-mono">Month {event.month}</span>
-          <span className="text-[9px] uppercase tracking-wider text-amber-400">{event.type.replace(/_/g, " ")}</span>
+          <span className="text-xs font-semibold text-slate-200">{event.title}</span>
+          <span className="text-[10px] text-slate-600 font-mono">Month {event.month}</span>
+          <span className="text-[9px] uppercase tracking-wider text-slate-600">{event.type.replace(/_/g, " ")}</span>
         </div>
-        <p className="text-[11px] text-amber-200/60 leading-relaxed">{event.description}</p>
+        <p className="text-[11px] text-slate-400 leading-relaxed">{event.description}</p>
         {event.data && Object.keys(event.data).length > 0 && (
           <div className="flex flex-wrap gap-1.5 mt-1.5">
             {Object.entries(event.data).map(([k, v]) => (
-              <span key={k} className="text-[10px] bg-base-800 text-amber-200/60 px-2 py-0.5 rounded font-mono">
+              <span key={k} className="text-[10px] bg-base-800 text-slate-400 px-2 py-0.5 rounded font-mono">
                 {k}: {String(v)}
               </span>
             ))}
@@ -61,7 +61,7 @@ function EventRow({ event }: { event: TwinEvent }) {
 }
 
 function MetricsChart({ data }: { data: { month: number; customerSatisfaction: number; reliabilityScore: number; warrantyClaimRate: number }[] }) {
-  if (data.length < 2) return <p className="text-amber-400 text-xs text-center py-4">Needs 2+ months of data.</p>;
+  if (data.length < 2) return <p className="text-slate-600 text-xs text-center py-4">Needs 2+ months of data.</p>;
   const w = 400; const h = 120; const pad = 30;
   const months = data.map(d => d.month);
   const minM = Math.min(...months); const maxM = Math.max(...months);
@@ -155,8 +155,8 @@ export function DigitalTwin() {
             <Cpu size={24} className="text-accent-300" />
           </div>
           <div>
-            <h2 className="text-lg font-bold text-amber-50">Digital Twin</h2>
-            <p className="text-xs text-amber-300/50">Complete per-vehicle lifecycle — engineering, testing, manufacturing, warranty, race data</p>
+            <h2 className="text-lg font-bold text-slate-100">Digital Twin</h2>
+            <p className="text-xs text-slate-500">Complete per-vehicle lifecycle — engineering, testing, manufacturing, warranty, race data</p>
           </div>
         </div>
       </div>
@@ -166,7 +166,7 @@ export function DigitalTwin() {
         <label className="label-mono block mb-2">Select Vehicle</label>
         <select value={selectedId || ""}
           onChange={e => setSelectedId(e.target.value || null)}
-          className="w-full bg-base-850 border border-base-700 rounded-lg px-3 py-2 text-sm text-amber-50 focus:border-accent-500 focus:outline-none">
+          className="w-full bg-base-850 border border-base-700 rounded-lg px-3 py-2 text-sm text-slate-200 focus:border-accent-500 focus:outline-none">
           <option value="">— Select a vehicle to view its digital twin —</option>
           {company.garage.map(v => (
             <option key={v.id} value={v.id}>
@@ -178,8 +178,8 @@ export function DigitalTwin() {
 
       {!selectedId && (
         <div className="panel p-10 text-center">
-          <Cpu size={40} className="mx-auto text-amber-500 mb-4" />
-          <p className="text-amber-300/50 text-sm">Select a vehicle above to view its digital twin.</p>
+          <Cpu size={40} className="mx-auto text-slate-700 mb-4" />
+          <p className="text-slate-500 text-sm">Select a vehicle above to view its digital twin.</p>
         </div>
       )}
 
@@ -188,19 +188,19 @@ export function DigitalTwin() {
           {/* Summary stats */}
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
             <div className="panel p-3 text-center">
-              <div className="text-[10px] text-amber-300/50 uppercase tracking-wider mb-1">Events Logged</div>
+              <div className="text-[10px] text-slate-500 uppercase tracking-wider mb-1">Events Logged</div>
               <div className="text-xl font-bold font-mono text-accent-300">{twin?.events.length ?? 0}</div>
             </div>
             <div className="panel p-3 text-center">
-              <div className="text-[10px] text-amber-300/50 uppercase tracking-wider mb-1">Units Produced</div>
-              <div className="text-xl font-bold font-mono text-amber-50">{(twin?.totalUnitsProduced ?? vehicle.totalUnitsSold).toLocaleString()}</div>
+              <div className="text-[10px] text-slate-500 uppercase tracking-wider mb-1">Units Produced</div>
+              <div className="text-xl font-bold font-mono text-slate-200">{(twin?.totalUnitsProduced ?? vehicle.totalUnitsSold).toLocaleString()}</div>
             </div>
             <div className="panel p-3 text-center">
-              <div className="text-[10px] text-amber-300/50 uppercase tracking-wider mb-1">Lifetime Rating</div>
+              <div className="text-[10px] text-slate-500 uppercase tracking-wider mb-1">Lifetime Rating</div>
               <div className="text-xl font-bold font-mono text-ok-400">{twin?.lifetimeRating ?? vehicle.overallRating}</div>
             </div>
             <div className="panel p-3 text-center">
-              <div className="text-[10px] text-amber-300/50 uppercase tracking-wider mb-1">Warranty Claims</div>
+              <div className="text-[10px] text-slate-500 uppercase tracking-wider mb-1">Warranty Claims</div>
               <div className="text-xl font-bold font-mono text-warn-400">{twin?.totalWarrantyClaims ?? 0}</div>
             </div>
           </div>
@@ -209,10 +209,10 @@ export function DigitalTwin() {
           <div className="panel p-4 bg-gradient-to-r from-base-900 via-base-850 to-base-900 border border-base-700">
             <div className="flex items-center justify-between flex-wrap gap-2 mb-3">
               <div>
-                <h3 className="text-xs font-bold text-amber-50 uppercase tracking-wider flex items-center gap-1.5">
+                <h3 className="text-xs font-bold text-slate-200 uppercase tracking-wider flex items-center gap-1.5">
                   <AlertTriangle size={14} className="text-yellow-400" /> Digital Twin Quality Control & Recalls
                 </h3>
-                <p className="text-[11px] text-amber-200/60 mt-0.5">
+                <p className="text-[11px] text-slate-400 mt-0.5">
                   Monitor real-time warranty claim rates and trigger engineering fixes to prevent customer churn.
                 </p>
               </div>
@@ -252,15 +252,15 @@ export function DigitalTwin() {
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs font-mono">
               <div className="bg-base-900/80 p-2.5 rounded-lg border border-base-800 flex items-center justify-between">
-                <span className="text-amber-200/60">Current 0-60 Spec:</span>
+                <span className="text-slate-400">Current 0-60 Spec:</span>
                 <strong className="text-ok-400 font-bold">{vehicle.sim.accel0_60}s</strong>
               </div>
               <div className="bg-base-900/80 p-2.5 rounded-lg border border-base-800 flex items-center justify-between">
-                <span className="text-amber-200/60">Peak Downforce:</span>
+                <span className="text-slate-400">Peak Downforce:</span>
                 <strong className="text-amber-400 font-bold">{vehicle.sim.downforce} N</strong>
               </div>
               <div className="bg-base-900/80 p-2.5 rounded-lg border border-base-800 flex items-center justify-between">
-                <span className="text-amber-200/60">Top Speed:</span>
+                <span className="text-slate-400">Top Speed:</span>
                 <strong className="text-accent-300 font-bold">{vehicle.sim.topSpeed} km/h</strong>
               </div>
             </div>
@@ -269,7 +269,7 @@ export function DigitalTwin() {
           {/* Metrics chart */}
           {metricsData.length > 0 && (
             <div className="panel p-4">
-              <h3 className="text-xs font-semibold text-amber-100/80 uppercase tracking-wider mb-3 flex items-center gap-1.5">
+              <h3 className="text-xs font-semibold text-slate-300 uppercase tracking-wider mb-3 flex items-center gap-1.5">
                 <BarChart3 size={12} className="text-accent-400" /> Metrics Over Time
               </h3>
               <MetricsChart data={metricsData} />
@@ -279,12 +279,12 @@ export function DigitalTwin() {
           {/* Timeline */}
           <div className="panel p-4">
             <div className="flex items-center justify-between mb-3 flex-wrap gap-2">
-              <h3 className="text-xs font-semibold text-amber-100/80 uppercase tracking-wider flex items-center gap-1.5">
+              <h3 className="text-xs font-semibold text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
                 <Clock size={12} className="text-accent-400" /> Event Timeline
               </h3>
               <div className="flex items-center gap-2">
                 <select value={filterType} onChange={e => setFilterType(e.target.value as any)}
-                  className="bg-base-850 border border-base-700 rounded-lg px-2 py-1 text-xs text-amber-100/80 focus:outline-none focus:border-accent-500">
+                  className="bg-base-850 border border-base-700 rounded-lg px-2 py-1 text-xs text-slate-300 focus:outline-none focus:border-accent-500">
                   <option value="all">All Events</option>
                   {eventTypes.map(t => <option key={t} value={t}>{t.replace(/_/g, " ")}</option>)}
                 </select>
@@ -299,26 +299,26 @@ export function DigitalTwin() {
               <div className="bg-base-850 rounded-xl p-3 mb-3 space-y-2 border border-base-700">
                 <input value={newEvent.title} onChange={e => setNewEvent(n => ({ ...n, title: e.target.value }))}
                   placeholder="Event title"
-                  className="w-full bg-base-900 border border-base-800 rounded-lg px-3 py-2 text-xs text-amber-100/80 focus:border-accent-500 focus:outline-none" />
+                  className="w-full bg-base-900 border border-base-800 rounded-lg px-3 py-2 text-xs text-slate-300 focus:border-accent-500 focus:outline-none" />
                 <input value={newEvent.description} onChange={e => setNewEvent(n => ({ ...n, description: e.target.value }))}
                   placeholder="Description"
-                  className="w-full bg-base-900 border border-base-800 rounded-lg px-3 py-2 text-xs text-amber-100/80 focus:border-accent-500 focus:outline-none" />
+                  className="w-full bg-base-900 border border-base-800 rounded-lg px-3 py-2 text-xs text-slate-300 focus:border-accent-500 focus:outline-none" />
                 <select value={newEvent.type} onChange={e => setNewEvent(n => ({ ...n, type: e.target.value as TwinEventType }))}
-                  className="w-full bg-base-900 border border-base-800 rounded-lg px-3 py-2 text-xs text-amber-100/80 focus:border-accent-500 focus:outline-none">
+                  className="w-full bg-base-900 border border-base-800 rounded-lg px-3 py-2 text-xs text-slate-300 focus:border-accent-500 focus:outline-none">
                   {(Object.keys(EVENT_ICONS) as TwinEventType[]).map(t => <option key={t} value={t}>{t.replace(/_/g, " ")}</option>)}
                 </select>
                 <div className="flex gap-2">
                   <button onClick={handleAddEvent} className="flex-1 py-1.5 rounded-lg text-xs font-semibold bg-accent-500/20 border border-accent-500/40 text-accent-300 hover:bg-accent-500/30 transition-all">Add Event</button>
-                  <button onClick={() => setShowAddEvent(false)} className="px-3 py-1.5 rounded-lg text-xs text-amber-300/50 hover:text-amber-100/80 transition-all">Cancel</button>
+                  <button onClick={() => setShowAddEvent(false)} className="px-3 py-1.5 rounded-lg text-xs text-slate-500 hover:text-slate-300 transition-all">Cancel</button>
                 </div>
               </div>
             )}
 
             {filteredEvents.length === 0 ? (
               <div className="text-center py-8">
-                <Clock size={28} className="mx-auto text-amber-500 mb-2" />
-                <p className="text-amber-400 text-sm">No events yet.</p>
-                <p className="text-xs text-amber-500 mt-1">Log events manually or advance months to generate automatic feedback events.</p>
+                <Clock size={28} className="mx-auto text-slate-700 mb-2" />
+                <p className="text-slate-600 text-sm">No events yet.</p>
+                <p className="text-xs text-slate-700 mt-1">Log events manually or advance months to generate automatic feedback events.</p>
               </div>
             ) : (
               <div className="divide-y divide-base-800/50">
@@ -330,7 +330,7 @@ export function DigitalTwin() {
           {/* Customer feedback summary */}
           {feedback.length > 0 && (
             <div className="panel p-4">
-              <h3 className="text-xs font-semibold text-amber-100/80 uppercase tracking-wider mb-3">Latest Customer Feedback</h3>
+              <h3 className="text-xs font-semibold text-slate-300 uppercase tracking-wider mb-3">Latest Customer Feedback</h3>
               {(() => {
                 const last = feedback[feedback.length - 1];
                 return (
@@ -345,7 +345,7 @@ export function DigitalTwin() {
                     ].map(([label, val]) => (
                       <div key={label as string} className="bg-base-850 rounded-lg p-2">
                         <div className={`text-base font-bold font-mono ${(val as number) >= 70 ? "text-ok-400" : (val as number) >= 50 ? "text-accent-300" : "text-warn-400"}`}>{Math.round(val as number)}</div>
-                        <div className="text-[9px] text-amber-400">{label}</div>
+                        <div className="text-[9px] text-slate-600">{label}</div>
                       </div>
                     ))}
                   </div>

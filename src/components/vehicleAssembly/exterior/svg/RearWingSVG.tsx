@@ -61,14 +61,14 @@ export const RearWingSVG: React.FC<RearWingSVGProps> = ({
         <path
           d="M670,250 C665,200 680,165 700,165 L705,170 C690,170 675,205 680,250 Z"
           fill="url(#exposedCarbonWeave)"
-          stroke="#0f172a"
+          stroke="#1a1008"
           strokeWidth="0.8"
         />
         {/* Right Pylon Arch */}
         <path
           d="M720,265 C715,215 730,180 750,180 L755,185 C740,185 725,220 730,265 Z"
           fill="url(#exposedCarbonWeave)"
-          stroke="#0f172a"
+          stroke="#1a1008"
           strokeWidth="0.8"
         />
       </g>

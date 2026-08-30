@@ -623,8 +623,8 @@ export function NeonHiggsfieldGlobe({ tabs, activeId, onSelect, onArrive }: Neon
               onPointerLeave={() => setHoveredTabId(null)}
               className={`nh-station-card relative p-2.5 rounded-xl border text-left transition-all duration-300 flex flex-col justify-between overflow-hidden group ${
                 isActive
-                  ? "bg-amber-900/40 shadow-xl"
-                  : "bg-amber-950/60 hover:bg-amber-900/40 border-white/10 hover:border-white/20"
+                  ? "bg-slate-900/90 shadow-xl"
+                  : "bg-slate-950/60 hover:bg-slate-900/70 border-white/10 hover:border-white/20"
               }`}
               style={{
                 borderColor: isActive ? `hsl(${nHue} 92% 70% / 0.7)` : undefined,
@@ -652,8 +652,8 @@ export function NeonHiggsfieldGlobe({ tabs, activeId, onSelect, onArrive }: Neon
                   {t.icon}
                 </div>
 
-                <span className="font-mono text-[9px] uppercase tracking-wider text-amber-200/60 font-semibold flex items-center gap-1">
-                  <Compass size={10} className={isActive ? "text-sky-400 animate-spin" : "text-amber-300/50"} />
+                <span className="font-mono text-[9px] uppercase tracking-wider text-slate-400 font-semibold flex items-center gap-1">
+                  <Compass size={10} className={isActive ? "text-amber-400 animate-spin" : "text-slate-500"} />
                   {t.cardinal || `${t.lat >= 0 ? "+" : ""}${t.lat}°, ${t.lng >= 0 ? "+" : ""}${t.lng}°`}
                 </span>
               </div>
@@ -661,13 +661,13 @@ export function NeonHiggsfieldGlobe({ tabs, activeId, onSelect, onArrive }: Neon
               {/* Label & Description */}
               <div className="z-10">
                 <div className="flex items-center gap-1.5">
-                  <span className={`text-xs font-bold tracking-wide ${isActive ? "text-white" : "text-amber-100/80 group-hover:text-white"}`}>
+                  <span className={`text-xs font-bold tracking-wide ${isActive ? "text-white" : "text-slate-300 group-hover:text-white"}`}>
                     {t.label}
                   </span>
                   {isActive && <Zap size={11} className="text-amber-400 fill-amber-400 animate-pulse" />}
                 </div>
                 {t.description && (
-                  <p className="text-[10px] text-amber-200/60 line-clamp-1 mt-0.5 font-sans">
+                  <p className="text-[10px] text-slate-400 line-clamp-1 mt-0.5 font-sans">
                     {t.description}
                   </p>
                 )}
@@ -684,7 +684,7 @@ export function NeonHiggsfieldGlobe({ tabs, activeId, onSelect, onArrive }: Neon
                   {isActive ? "● LOCKED · ACTIVE" : isHovered ? "FLY TO STATION →" : "STANDBY"}
                 </span>
 
-                <ArrowRight size={10} className={`transition-transform duration-200 ${isActive ? "text-sky-400 translate-x-0.5" : "text-amber-400 group-hover:text-amber-100/80 group-hover:translate-x-1"}`} />
+                <ArrowRight size={10} className={`transition-transform duration-200 ${isActive ? "text-amber-400 translate-x-0.5" : "text-slate-600 group-hover:text-slate-300 group-hover:translate-x-1"}`} />
               </div>
             </button>
           );
@@ -694,17 +694,17 @@ export function NeonHiggsfieldGlobe({ tabs, activeId, onSelect, onArrive }: Neon
       {/* ── Central 3D Canvas Globe Container ── */}
       <div
         ref={wrapRef}
-        className="relative w-full aspect-square max-h-[460px] mx-auto overflow-hidden rounded-2xl border border-white/10 bg-amber-950/80 shadow-2xl cursor-grab touch-none select-none"
+        className="relative w-full aspect-square max-h-[460px] mx-auto overflow-hidden rounded-2xl border border-white/10 bg-slate-950/80 shadow-2xl cursor-grab touch-none select-none"
         role="tablist"
         aria-label="Higgsfield suite orbital navigation"
       >
         <canvas ref={canvasRef} className="absolute inset-0 z-0" />
 
         {/* HUD Telemetry Overlays */}
-        <span className={`${cornerCls} top-2.5 left-3.5 flex items-center gap-1.5 text-sky-300/60`}>
+        <span className={`${cornerCls} top-2.5 left-3.5 flex items-center gap-1.5 text-amber-300/60`}>
           <Navigation size={10} /> ORBITAL 3D NAV · DRAG TO SPIN
         </span>
-        <span ref={readoutRef} className={`${cornerCls} bottom-2.5 left-3.5 text-sky-300/60`} />
+        <span ref={readoutRef} className={`${cornerCls} bottom-2.5 left-3.5 text-amber-300/60`} />
         <span
           className={`${cornerCls} bottom-2.5 right-3.5 flex items-center gap-1.5`}
           style={{ color: "rgba(148,197,255,0.65)" }}
@@ -712,7 +712,7 @@ export function NeonHiggsfieldGlobe({ tabs, activeId, onSelect, onArrive }: Neon
           <Radar size={10} />
           <span ref={statusRef}>TARGET LOCKED</span>
         </span>
-        <span className={`${cornerCls} top-2.5 right-3.5 flex items-center gap-1.5 text-sky-300/60`}>
+        <span className={`${cornerCls} top-2.5 right-3.5 flex items-center gap-1.5 text-amber-300/60`}>
           <Crosshair size={10} />
         </span>
 
@@ -733,7 +733,7 @@ export function NeonHiggsfieldGlobe({ tabs, activeId, onSelect, onArrive }: Neon
               role="tab"
               aria-selected={isActive}
               className={`absolute left-0 top-0 flex items-center gap-1.5 whitespace-nowrap px-3 py-1.5 rounded-full border backdrop-blur-md transition-all duration-200 will-change-transform ${
-                isActive ? "text-white scale-105" : "text-amber-100/80 hover:text-white hover:scale-105"
+                isActive ? "text-white scale-105" : "text-slate-300 hover:text-white hover:scale-105"
               }`}
               style={
                 isActive

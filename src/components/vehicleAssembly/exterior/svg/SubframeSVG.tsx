@@ -45,7 +45,7 @@ export const SubframeSVG: React.FC<SubframeSVGProps> = ({
     ? "#fbbf24"
     : isHovered
     ? "#0284c7"
-    : "#0f172a";
+    : "#1a1008";
 
   const strokeWidth = isSelected ? 2.5 : isHovered ? 2.0 : 1.2;
 

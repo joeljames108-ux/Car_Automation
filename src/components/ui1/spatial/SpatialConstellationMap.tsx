@@ -55,17 +55,17 @@ export const SpatialConstellationMap: React.FC<SpatialConstellationMapProps> = (
 
   return (
     <div
-      className={`relative p-3 rounded-2xl bg-amber-950/85 border border-white/10 backdrop-blur-xl shadow-2xl flex flex-col select-none ${
+      className={`relative p-3 rounded-2xl bg-slate-950/85 border border-white/10 backdrop-blur-xl shadow-2xl flex flex-col select-none ${
         compact ? "w-64" : "w-full max-w-sm"
       } ${className}`}
     >
       {/* Header telemetry */}
       <div className="flex items-center justify-between pb-2 mb-2 border-b border-white/10">
-        <div className="flex items-center gap-1.5 font-mono text-[10px] font-bold tracking-wider text-amber-100/80 uppercase">
-          <Orbit size={12} className="text-sky-400 animate-spin-slow" />
+        <div className="flex items-center gap-1.5 font-mono text-[10px] font-bold tracking-wider text-slate-300 uppercase">
+          <Orbit size={12} className="text-amber-400 animate-spin-slow" />
           <span>CONSTELLATION RADAR</span>
         </div>
-        <div className="flex items-center gap-1 font-mono text-[9px] text-sky-400 font-bold">
+        <div className="flex items-center gap-1 font-mono text-[9px] text-amber-400 font-bold">
           <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
           <span>{activeNode.label}</span>
         </div>
@@ -161,12 +161,12 @@ export const SpatialConstellationMap: React.FC<SpatialConstellationMapProps> = (
       </div>
 
       {/* Sector Footnote */}
-      <div className="flex items-center justify-between pt-2 border-t border-white/10 font-mono text-[9px] text-amber-200/60">
+      <div className="flex items-center justify-between pt-2 border-t border-white/10 font-mono text-[9px] text-slate-400">
         <span className="flex items-center gap-1">
-          <Compass size={10} className="text-sky-400" />
+          <Compass size={10} className="text-amber-400" />
           {activeNode.domain}
         </span>
-        <span className="text-sky-300 font-bold">1-CLICK LOCK</span>
+        <span className="text-amber-300 font-bold">1-CLICK LOCK</span>
       </div>
     </div>
   );

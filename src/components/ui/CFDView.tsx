@@ -153,18 +153,18 @@ export function CFDView({ aero, dragCoeff, liftCoeff, downforce, className = "" 
     <Section title="CFD Lab — Wind Tunnel #3" icon={<Wind size={16} />} className={className}>
       {/* Header bar */}
       <div className="flex items-center justify-between mb-2 px-3 py-1.5 bg-white/50 backdrop-blur-md rounded-lg border border-white/70 font-mono text-[10px] text-[#1c1c1e]">
-        <div className="flex items-center gap-3 text-amber-500 font-bold">
+        <div className="flex items-center gap-3 text-slate-700 font-bold">
           <span className="flex items-center gap-1">
             <span className={`w-1.5 h-1.5 rounded-full ${simRunning ? "bg-[#059669] animate-pulse" : "bg-slate-400"}`} />
             {simRunning ? "SIMULATION RUNNING" : "READY"}
           </span>
-          <span className="text-amber-200/60">|</span>
+          <span className="text-slate-400">|</span>
           <span>AIR SPEED: <span className="text-[#007aff] font-bold">{airSpeed} km/h</span></span>
-          <span className="text-amber-200/60">|</span>
+          <span className="text-slate-400">|</span>
           <span>Re: <span className="text-slate-800 font-bold">{(airSpeed * 21000).toLocaleString(undefined, { maximumFractionDigits: 0 })}</span></span>
         </div>
         <div className="flex items-center gap-2">
-          <span className="text-amber-400 font-bold">MESH: 2.4M cells</span>
+          <span className="text-slate-600 font-bold">MESH: 2.4M cells</span>
           {simRunning && <span className="text-[#007aff] font-bold">{simProgress.toFixed(0)}%</span>}
         </div>
       </div>
@@ -172,42 +172,42 @@ export function CFDView({ aero, dragCoeff, liftCoeff, downforce, className = "" 
       {/* Live Data Stat Strip (Outside Canvas Diagram) */}
       <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-2 mb-2">
         <div className="bg-white/60 backdrop-blur-md rounded-xl p-2 border border-white/80 text-center shadow-sm">
-          <div className="text-[9px] font-extrabold uppercase text-amber-300/50 tracking-wider">Drag Cd</div>
+          <div className="text-[9px] font-extrabold uppercase text-slate-500 tracking-wider">Drag Cd</div>
           <div className="text-xs font-mono font-black text-[#1c1c1e]">{dragCoeff.toFixed(3)}</div>
         </div>
         <div className="bg-white/60 backdrop-blur-md rounded-xl p-2 border border-white/80 text-center shadow-sm">
-          <div className="text-[9px] font-extrabold uppercase text-amber-300/50 tracking-wider">Front Lift</div>
+          <div className="text-[9px] font-extrabold uppercase text-slate-500 tracking-wider">Front Lift</div>
           <div className="text-xs font-mono font-black text-[#007aff]">{frontLift} kg</div>
         </div>
         <div className="bg-white/60 backdrop-blur-md rounded-xl p-2 border border-white/80 text-center shadow-sm">
-          <div className="text-[9px] font-extrabold uppercase text-amber-300/50 tracking-wider">Rear Down</div>
+          <div className="text-[9px] font-extrabold uppercase text-slate-500 tracking-wider">Rear Down</div>
           <div className="text-xs font-mono font-black text-[#059669]">{rearDown} kg</div>
         </div>
         <div className="bg-white/60 backdrop-blur-md rounded-xl p-2 border border-white/80 text-center shadow-sm">
-          <div className="text-[9px] font-extrabold uppercase text-amber-300/50 tracking-wider">Drag Force</div>
+          <div className="text-[9px] font-extrabold uppercase text-slate-500 tracking-wider">Drag Force</div>
           <div className="text-xs font-mono font-black text-[#1c1c1e]">{dragForce} N</div>
         </div>
         <div className="bg-white/60 backdrop-blur-md rounded-xl p-2 border border-white/80 text-center shadow-sm">
-          <div className="text-[9px] font-extrabold uppercase text-amber-300/50 tracking-wider">Flow Sep</div>
+          <div className="text-[9px] font-extrabold uppercase text-slate-500 tracking-wider">Flow Sep</div>
           <div className="text-xs font-mono font-black text-[#1c1c1e]">{(sim.separationRisk * 100).toFixed(0)}%</div>
         </div>
         <div className="bg-white/60 backdrop-blur-md rounded-xl p-2 border border-white/80 text-center shadow-sm">
-          <div className="text-[9px] font-extrabold uppercase text-amber-300/50 tracking-wider">Velocity</div>
+          <div className="text-[9px] font-extrabold uppercase text-slate-500 tracking-wider">Velocity</div>
           <div className="text-xs font-mono font-black text-[#007aff]">{airVelocity} km/h</div>
         </div>
         <div className="bg-white/60 backdrop-blur-md rounded-xl p-2 border border-white/80 text-center shadow-sm">
-          <div className="text-[9px] font-extrabold uppercase text-amber-300/50 tracking-wider">Pressure</div>
+          <div className="text-[9px] font-extrabold uppercase text-slate-500 tracking-wider">Pressure</div>
           <div className="text-xs font-mono font-black text-[#1c1c1e]">{pressure} kPa</div>
         </div>
         <div className="bg-white/60 backdrop-blur-md rounded-xl p-2 border border-white/80 text-center shadow-sm">
-          <div className="text-[9px] font-extrabold uppercase text-amber-300/50 tracking-wider">Ride Height</div>
+          <div className="text-[9px] font-extrabold uppercase text-slate-500 tracking-wider">Ride Height</div>
           <div className="text-xs font-mono font-black text-[#1c1c1e]">{aero.rideHeight} mm</div>
         </div>
       </div>
 
       {/* Clean Unobstructed Canvas Viewport */}
       <div
-        className="relative bg-gradient-to-b from-amber-900/60 via-slate-950 to-black rounded-xl overflow-hidden border border-white/80 shadow-md cursor-grab active:cursor-grabbing group"
+        className="relative bg-gradient-to-b from-slate-900 via-slate-950 to-black rounded-xl overflow-hidden border border-white/80 shadow-md cursor-grab active:cursor-grabbing group"
         onMouseDown={onMouseDown} onMouseMove={onMouseMove} onMouseUp={onMouseUp} onMouseLeave={onMouseUp}
         onWheel={onWheel}
       >
@@ -221,13 +221,13 @@ export function CFDView({ aero, dragCoeff, liftCoeff, downforce, className = "" 
 
       {/* Map Label & Heatmap Legend Row (Outside Canvas Diagram) */}
       <div className="flex items-center justify-between mt-2 px-3 py-1.5 bg-white/50 backdrop-blur-md rounded-xl border border-white/80 text-[#1c1c1e]">
-        <div className="font-mono text-[10px] font-extrabold text-amber-500 uppercase tracking-wider">
+        <div className="font-mono text-[10px] font-extrabold text-slate-700 uppercase tracking-wider">
           {MODE_LABELS[mode].label} Map
         </div>
         <div className="flex items-center gap-2">
-          <span className="font-mono text-[9px] font-extrabold text-amber-300/50">LOW</span>
+          <span className="font-mono text-[9px] font-extrabold text-slate-500">LOW</span>
           <div className="w-24 h-2.5 rounded-full shadow-inner" style={{ background: "linear-gradient(to right, #1e40af, #22c55e, #eab308, #f97316, #ef4444)" }} />
-          <span className="font-mono text-[9px] font-extrabold text-amber-300/50">HIGH</span>
+          <span className="font-mono text-[9px] font-extrabold text-slate-500">HIGH</span>
         </div>
       </div>
 
@@ -285,13 +285,13 @@ export function CFDView({ aero, dragCoeff, liftCoeff, downforce, className = "" 
           <RotateCcw size={11} /> Reset
         </button>
         <div className="flex items-center gap-1">
-          <span className="text-[10px] text-amber-300/50 font-mono">SPEED</span>
+          <span className="text-[10px] text-slate-500 font-mono">SPEED</span>
           {[1, 5, 20].map((s) => (
             <button
               key={s}
               onClick={() => setSpeed(s)}
               className={`px-1.5 py-0.5 rounded text-[10px] font-mono transition-all ${
-                speed === s ? "bg-accent-500/20 text-accent-300" : "text-amber-300/50 hover:text-amber-100/80"
+                speed === s ? "bg-accent-500/20 text-accent-300" : "text-slate-500 hover:text-slate-300"
               }`}
             >
               ×{s}
@@ -300,7 +300,7 @@ export function CFDView({ aero, dragCoeff, liftCoeff, downforce, className = "" 
         </div>
         <div className="flex-1" />
         <div className="flex items-center gap-2">
-          <span className="text-[10px] text-amber-300/50 font-mono">WIND</span>
+          <span className="text-[10px] text-slate-500 font-mono">WIND</span>
           <input
             type="range" min={40} max={300} value={airSpeed}
             onChange={(e) => setAirSpeed(parseInt(e.target.value))}
@@ -322,10 +322,10 @@ export function CFDView({ aero, dragCoeff, liftCoeff, downforce, className = "" 
 // ---------- Data overlay component ----------
 
 function DataLine({ label, value, tone = "default" }: { label: string; value: string; tone?: "default" | "ok" | "warn" | "danger" }) {
-  const colors = { default: "text-amber-100/80", ok: "text-ok-400", warn: "text-warn-400", danger: "text-danger-400" };
+  const colors = { default: "text-slate-300", ok: "text-ok-400", warn: "text-warn-400", danger: "text-danger-400" };
   return (
     <div className="flex items-center gap-2">
-      <span className="text-amber-300/50">{label}</span>
+      <span className="text-slate-500">{label}</span>
       <span className={colors[tone]}>{value}</span>
     </div>
   );
@@ -1115,7 +1115,7 @@ function drawCar(ctx: CanvasRenderingContext2D, c: DrawCtx) {
   const bodyGrad = ctx.createLinearGradient(0, groundY - 80, 0, groundY);
   bodyGrad.addColorStop(0, "#2d3748");
   bodyGrad.addColorStop(0.3, "#1a202c");
-  bodyGrad.addColorStop(0.7, "#0f172a");
+  bodyGrad.addColorStop(0.7, "#1a1008");
   bodyGrad.addColorStop(1, "#090d16");
 
   ctx.fillStyle = bodyGrad;
@@ -1180,7 +1180,7 @@ function drawCar(ctx: CanvasRenderingContext2D, c: DrawCtx) {
     ctx.rotate(-effectiveAngle * Math.PI / 180 * 0.3);
     
     // Wing Airfoil
-    ctx.fillStyle = "#0f172a";
+    ctx.fillStyle = "#1a1008";
     ctx.fillRect(-26, -3, 52, 5);
     ctx.strokeStyle = c.aero.drs ? "#10b981" : "rgba(0, 122, 255, 0.8)";
     ctx.lineWidth = 1.5;
@@ -1195,7 +1195,7 @@ function drawCar(ctx: CanvasRenderingContext2D, c: DrawCtx) {
 
   // Front Aero Splitter
   if (c.aero.splitterLength > 0) {
-    ctx.fillStyle = "#0f172a";
+    ctx.fillStyle = "#1a1008";
     ctx.fillRect(pts[0].x - 8, groundY - 7, c.aero.splitterLength / 4, 4);
     ctx.strokeStyle = "#007aff";
     ctx.lineWidth = 1;

@@ -65,34 +65,34 @@ export function TransmissionSection({
   return (
     <div className={`space-y-4 ${className}`}>
       {/* Top Header Mode Switcher Bar */}
-      <div className="flex flex-wrap items-center justify-between gap-3 p-3 rounded-2xl bg-amber-950/80 border border-amber-500/30 backdrop-blur-xl shadow-xl">
+      <div className="flex flex-wrap items-center justify-between gap-3 p-3 rounded-2xl bg-slate-950/80 border border-amber-500/30 backdrop-blur-xl shadow-xl">
         <div className="flex items-center gap-2.5">
           <div className="p-2 rounded-xl bg-amber-500/20 text-amber-300 border border-amber-500/40">
             <Cog size={18} className="animate-spin-slow" />
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <span className="text-xs font-mono font-bold text-amber-50">
+              <span className="text-xs font-mono font-bold text-slate-200">
                 STAGE #14: TRANSMISSION & TRANSAXLE WORKSHOP
               </span>
               <span className="px-2 py-0.5 text-[9px] font-mono font-bold rounded-full bg-amber-500/20 text-amber-300 border border-amber-500/40 uppercase">
                 3D CAD Studio Integrated
               </span>
             </div>
-            <p className="text-[11px] font-mono text-amber-200/60">
+            <p className="text-[11px] font-mono text-slate-400">
               Interactive 3D WebGL Transaxle, 60fps shaft kinematics, gear ratio tuning & driveline physics
             </p>
           </div>
         </div>
 
         {/* View Mode Toggle */}
-        <div className="flex items-center gap-1 p-1 rounded-xl bg-amber-900/40 border border-amber-800/30">
+        <div className="flex items-center gap-1 p-1 rounded-xl bg-slate-900/90 border border-slate-800">
           <button
             onClick={() => setViewMode("3d_studio")}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer ${
               viewMode === "3d_studio"
                 ? "bg-amber-500 text-slate-950 shadow-md shadow-cyan-500/30"
-                : "text-amber-200/60 hover:text-amber-50 hover:bg-amber-800/35/60"
+                : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/60"
             }`}
           >
             <Box size={13} />
@@ -103,7 +103,7 @@ export function TransmissionSection({
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer ${
               viewMode === "cards"
                 ? "bg-amber-500 text-slate-950 shadow-md shadow-cyan-500/30"
-                : "text-amber-200/60 hover:text-amber-50 hover:bg-amber-800/35/60"
+                : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/60"
             }`}
           >
             <Sliders size={13} />
@@ -158,12 +158,12 @@ export function TransmissionSection({
                 />
 
                 <div className="grid grid-cols-2 gap-2">
-                  <div className="p-2.5 rounded-xl bg-base-950/80 border border-amber-800/30 space-y-1">
-                    <span className="text-[10px] font-mono text-amber-200/60 uppercase">Shift Time</span>
+                  <div className="p-2.5 rounded-xl bg-base-950/80 border border-slate-800 space-y-1">
+                    <span className="text-[10px] font-mono text-slate-400 uppercase">Shift Time</span>
                     <span className="text-xs font-mono font-bold text-amber-300 block">25 ms Instant</span>
                   </div>
-                  <div className="p-2.5 rounded-xl bg-base-950/80 border border-amber-800/30 space-y-1">
-                    <span className="text-[10px] font-mono text-amber-200/60 uppercase">Clutch Discs</span>
+                  <div className="p-2.5 rounded-xl bg-base-950/80 border border-slate-800 space-y-1">
+                    <span className="text-[10px] font-mono text-slate-400 uppercase">Clutch Discs</span>
                     <span className="text-xs font-mono font-bold text-amber-300 block">Twin Carbon-Carbon</span>
                   </div>
                 </div>
@@ -172,7 +172,7 @@ export function TransmissionSection({
                   <span className="text-[10px] font-mono font-bold text-amber-300 uppercase tracking-wider block">
                     TORQUE TRANSFER & DRIVELINE LOSS
                   </span>
-                  <p className="text-[11px] font-mono text-amber-100/80 leading-relaxed">
+                  <p className="text-[11px] font-mono text-slate-300 leading-relaxed">
                     Precision ground helical gears and lightened chrome-moly flywheel minimize drivetrain parasitic friction loss, sending 94% of flywheel power straight to the tires.
                   </p>
                 </div>
@@ -193,7 +193,7 @@ export function TransmissionSection({
                   onSelectVariant={onSelectVariant}
                 />
               ) : (
-                <p className="text-xs font-mono text-amber-300/50">Loading material variants...</p>
+                <p className="text-xs font-mono text-slate-500">Loading material variants...</p>
               )}
             </SectionCard>
 

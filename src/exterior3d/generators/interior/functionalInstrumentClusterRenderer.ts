@@ -122,7 +122,7 @@ export class FunctionalInstrumentClusterRenderer {
 
     // 2. Left Side: G-Force Telemetry & Boost
     const leftX = w * 0.22;
-    ctx.fillStyle = "#0f172a";
+    ctx.fillStyle = "#1a1008";
     ctx.strokeStyle = "#0284c7";
     ctx.lineWidth = 2;
     ctx.fillRect(leftX - 80, cy - 80, 160, 160);
@@ -153,7 +153,7 @@ export class FunctionalInstrumentClusterRenderer {
 
     // 3. Right Side: Boost & Thermal Gauges
     const rightX = w * 0.78;
-    ctx.fillStyle = "#0f172a";
+    ctx.fillStyle = "#1a1008";
     ctx.strokeStyle = "#059669";
     ctx.lineWidth = 2;
     ctx.fillRect(rightX - 80, cy - 80, 160, 160);

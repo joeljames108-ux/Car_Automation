@@ -144,7 +144,7 @@ export const SpecialInteriorStudioViewport: React.FC = () => {
   }, [theme, leatherHex, ambientHex]);
 
   return (
-    <div className="space-y-6 text-amber-50">
+    <div className="space-y-6 text-slate-100">
       {/* Top Banner */}
       <div className="backdrop-blur-xl p-6 rounded-2xl flex items-center justify-between shadow-2xl" style={{backgroundColor: 'rgba(255,248,235,0.9)', border: '1px solid rgba(217,166,78,0.4)'}}>
         <div>
@@ -184,14 +184,14 @@ export const SpecialInteriorStudioViewport: React.FC = () => {
         </div>
 
         {/* Left Slider Controls Overlay */}
-        <div className="absolute top-20 left-4 bg-amber-900/40 backdrop-blur-md p-4 rounded-xl border border-amber-700/30/50 shadow-2xl w-80 space-y-4 pointer-events-auto">
-          <div className="text-xs font-bold text-amber-50 border-b border-amber-800/30 pb-2 flex items-center space-x-2">
+        <div className="absolute top-20 left-4 bg-slate-900/85 backdrop-blur-md p-4 rounded-xl border border-slate-700/50 shadow-2xl w-80 space-y-4 pointer-events-auto">
+          <div className="text-xs font-bold text-slate-200 border-b border-slate-800 pb-2 flex items-center space-x-2">
             <Sliders className="w-4 h-4 text-amber-400" />
             <span>SAE H-POINT SEAT ADJUSTMENTS</span>
           </div>
 
           <div>
-            <div className="flex justify-between text-xs text-amber-100/80 mb-1.5 font-mono">
+            <div className="flex justify-between text-xs text-slate-300 mb-1.5 font-mono">
               <span>Seat Travel (Fore-Aft):</span>
               <strong className="text-amber-400">{seatTrackMm} mm</strong>
             </div>
@@ -202,12 +202,12 @@ export const SpecialInteriorStudioViewport: React.FC = () => {
               step={10}
               value={seatTrackMm}
               onChange={(e) => setSeatTrackMm(Number(e.target.value))}
-              className="w-full accent-amber-500 bg-amber-950/80 rounded-lg cursor-pointer"
+              className="w-full accent-amber-500 bg-slate-950 rounded-lg cursor-pointer"
             />
           </div>
 
           <div>
-            <div className="flex justify-between text-xs text-amber-100/80 mb-1.5 font-mono">
+            <div className="flex justify-between text-xs text-slate-300 mb-1.5 font-mono">
               <span>Torso Recline Angle:</span>
               <strong className="text-amber-400">{torsoReclineDeg}°</strong>
             </div>
@@ -218,12 +218,12 @@ export const SpecialInteriorStudioViewport: React.FC = () => {
               step={1}
               value={torsoReclineDeg}
               onChange={(e) => setTorsoReclineDeg(Number(e.target.value))}
-              className="w-full accent-purple-500 bg-amber-950/80 rounded-lg cursor-pointer"
+              className="w-full accent-purple-500 bg-slate-950 rounded-lg cursor-pointer"
             />
           </div>
 
           <div>
-            <div className="flex justify-between text-xs text-amber-100/80 mb-1.5 font-mono">
+            <div className="flex justify-between text-xs text-slate-300 mb-1.5 font-mono">
               <span>Solar Soak Radiation:</span>
               <strong className="text-amber-400">{solarSoakWm2} W/m²</strong>
             </div>
@@ -234,35 +234,35 @@ export const SpecialInteriorStudioViewport: React.FC = () => {
               step={50}
               value={solarSoakWm2}
               onChange={(e) => setSolarSoakWm2(Number(e.target.value))}
-              className="w-full accent-amber-500 bg-amber-950/80 rounded-lg cursor-pointer"
+              className="w-full accent-amber-500 bg-slate-950 rounded-lg cursor-pointer"
             />
           </div>
         </div>
 
         {/* Right Telemetry Readout Overlay */}
-        <div className="absolute bottom-4 right-4 bg-amber-900/40 backdrop-blur-md p-4 rounded-xl border border-amber-700/30/50 shadow-2xl w-80 space-y-2.5 pointer-events-auto font-mono text-xs">
-          <div className="text-xs font-bold text-amber-50 border-b border-amber-800/30 pb-1.5 font-sans flex items-center justify-between">
+        <div className="absolute bottom-4 right-4 bg-slate-900/85 backdrop-blur-md p-4 rounded-xl border border-slate-700/50 shadow-2xl w-80 space-y-2.5 pointer-events-auto font-mono text-xs">
+          <div className="text-xs font-bold text-slate-200 border-b border-slate-800 pb-1.5 font-sans flex items-center justify-between">
             <span>ERGONOMICS & HVAC TELEMETRY</span>
             <span className="text-emerald-400">{ergonomics.overallErgonomicsScore}/100</span>
           </div>
 
           <div className="flex justify-between">
-            <span className="text-amber-200/60">SAE H-Point (X/Z):</span>
+            <span className="text-slate-400">SAE H-Point (X/Z):</span>
             <strong className="text-amber-400">{ergonomics.hPointKinematics.hPointXMm} / {ergonomics.hPointKinematics.hPointZMm} mm</strong>
           </div>
 
           <div className="flex justify-between">
-            <span className="text-amber-200/60">A-Pillar Obscuration:</span>
+            <span className="text-slate-400">A-Pillar Obscuration:</span>
             <strong className="text-amber-400">{ergonomics.visibility.leftAPillarBlindSpotDeg}°</strong>
           </div>
 
           <div className="flex justify-between">
-            <span className="text-amber-200/60">HVAC Cooldown Time:</span>
+            <span className="text-slate-400">HVAC Cooldown Time:</span>
             <strong className="text-amber-400">{hvac.cooldownPullDownTimeMinutes} min</strong>
           </div>
 
           <div className="flex justify-between">
-            <span className="text-amber-200/60">AR HUD Virtual Distance:</span>
+            <span className="text-slate-400">AR HUD Virtual Distance:</span>
             <strong className="text-emerald-400">{hmi.arHudSpec.virtualImageDistanceMeters} m</strong>
           </div>
         </div>

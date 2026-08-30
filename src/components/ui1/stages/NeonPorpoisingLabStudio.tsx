@@ -85,7 +85,7 @@ export function NeonPorpoisingLabStudio() {
   }, [rideHeightMm, vehicleSpeed, heaveDamperStiffness, isPorpoisingZone, porpoisingHz, driverVerticalG]);
 
   return (
-    <div className="w-full flex flex-col gap-6 text-amber-50 animate-nh-materialize">
+    <div className="w-full flex flex-col gap-6 text-slate-100 animate-nh-materialize">
       {/* Header */}
       <NeonHorizonGlassPanel
         variant="window"
@@ -120,7 +120,7 @@ export function NeonPorpoisingLabStudio() {
             }}
             className="p-6 flex flex-col gap-4"
           >
-            <div className="w-full h-52 bg-[#05080f] rounded-xl border border-sky-400/25 overflow-hidden relative shadow-[inset_0_0_25px_rgba(0,0,0,0.85)]">
+            <div className="w-full h-52 bg-amber-950/60 rounded-xl border border-sky-400/25 overflow-hidden relative shadow-[inset_0_0_25px_rgba(0,0,0,0.85)]">
               <canvas ref={canvasRef} width={640} height={210} className="w-full h-full" />
               <div className="absolute top-2 left-3 flex items-center gap-2">
                 <span className={`text-[10px] nh-font-mono font-bold ${isPorpoisingZone ? "text-rose-400" : "text-emerald-400"}`}>
@@ -129,10 +129,10 @@ export function NeonPorpoisingLabStudio() {
               </div>
             </div>
 
-            <div className="flex items-center justify-between p-3 rounded-lg bg-[#0a111e] border border-white/10 font-mono text-xs">
-              <span className="text-amber-200/60">Venturi Throat Expansion:</span>
-              <span className="text-sky-300 font-bold">1:4.8 Diffuser Aspect</span>
-              <span className="text-amber-200/60">Floor Edge Skirt Vortex:</span>
+            <div className="flex items-center justify-between p-3 rounded-lg bg-amber-950/60 border border-white/10 font-mono text-xs">
+              <span className="text-slate-400">Venturi Throat Expansion:</span>
+              <span className="text-amber-300 font-bold">1:4.8 Diffuser Aspect</span>
+              <span className="text-slate-400">Floor Edge Skirt Vortex:</span>
               <span className="text-emerald-300 font-bold">SEALED (98%)</span>
             </div>
           </NeonHorizonGlassPanel>
