@@ -13,6 +13,8 @@
 import * as THREE from 'three';
 import { Chassis50Definition, ChassisArchitectureClass } from '../types/vehicleConstructionTypes';
 import { MaterialGrade } from '../../sim/assemblyTypes';
+import { ChassisStructuralGeometry, StructuralDimensions } from './chassis/chassisStructuralGeometry';
+import { ChassisMaterialLibrary } from './chassis/chassisMaterialLibrary';
 
 export class ModularChassisFamilyGenerator {
   public static buildChassisMesh(
@@ -141,6 +143,26 @@ export class ModularChassisFamilyGenerator {
     const rearTowerRight = towerRight.clone();
     rearTowerRight.position.set(rearAxleX, rhM + 0.28, halfTrM * 0.72);
     parent.add(rearTowerLeft, rearTowerRight);
+
+    // ═══ DETAILED STRUCTURAL COMPONENTS ═══
+    const dims: StructuralDimensions = {
+      wheelbaseM: wbM, trackFrontM: halfTfM * 2, trackRearM: halfTrM * 2,
+      rideHeightM: rhM, chassisWidth: halfTfM * 2,
+      frontOverhangM: 0.35, rearOverhangM: 0.35,
+    };
+    parent.add(ChassisStructuralGeometry.buildCurvedFrameRails(dims, material));
+    parent.add(ChassisStructuralGeometry.buildCrossMembers(dims, material));
+    parent.add(ChassisStructuralGeometry.buildFloorPan(dims, material));
+    parent.add(ChassisStructuralGeometry.buildDrivelineTunnel(dims, material));
+    parent.add(ChassisStructuralGeometry.buildRockerSills(dims, material));
+    parent.add(ChassisStructuralGeometry.buildFrontSubframe(dims, material));
+    parent.add(ChassisStructuralGeometry.buildRearSubframe(dims, material));
+    parent.add(ChassisStructuralGeometry.buildCrashStructures(dims, material));
+    parent.add(ChassisStructuralGeometry.buildFirewall(dims, material));
+    parent.add(ChassisStructuralGeometry.buildFuelCell(dims, material));
+    parent.add(ChassisStructuralGeometry.buildAccessoryTrays(dims, material));
+    parent.add(ChassisStructuralGeometry.buildHeatShield(dims, material));
+    parent.add(ChassisStructuralGeometry.buildWeldBeads(dims, material));
   }
 
   // ── 2. TUBULAR SPACEFRAME GENERATOR ──
