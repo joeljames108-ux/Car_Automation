@@ -7665,6 +7665,44 @@ button:active,
   will-change: transform, opacity, filter;
 }
 
+
+/* ── Cross-Fade Slide Transitions for Stage Switching ── */
+@keyframes enterSlideRight {
+  from { opacity: 0; transform: translateX(40px) scale(0.98); filter: blur(3px); }
+  to   { opacity: 1; transform: translateX(0) scale(1); filter: blur(0); }
+}
+@keyframes enterSlideLeft {
+  from { opacity: 0; transform: translateX(-40px) scale(0.98); filter: blur(3px); }
+  to   { opacity: 1; transform: translateX(0) scale(1); filter: blur(0); }
+}
+@keyframes exitSlideLeft {
+  from { opacity: 1; transform: translateX(0) scale(1); filter: blur(0); }
+  to   { opacity: 0; transform: translateX(-40px) scale(0.97); filter: blur(2px); }
+}
+@keyframes exitSlideRight {
+  from { opacity: 1; transform: translateX(0) scale(1); filter: blur(0); }
+  to   { opacity: 0; transform: translateX(40px) scale(0.97); filter: blur(2px); }
+}
+.animate-enter-slide-right {
+  animation: enterSlideRight 420ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  will-change: transform, opacity, filter;
+}
+.animate-enter-slide-left {
+  animation: enterSlideLeft 420ms cubic-bezier(0.22, 1, 0.36, 1) both;
+  will-change: transform, opacity, filter;
+}
+.animate-exit-slide-left {
+  animation: exitSlideLeft 420ms cubic-bezier(0.55, 0, 0.45, 1) both;
+  will-change: transform, opacity, filter;
+}
+.animate-exit-slide-right {
+  animation: exitSlideRight 420ms cubic-bezier(0.55, 0, 0.45, 1) both;
+  will-change: transform, opacity, filter;
+}
+.animate-exit {
+  animation-fill-mode: forwards;
+}
+
 /* ── Scrollbar Styling ── */
 .idash-panel-left::-webkit-scrollbar,
 .idash-panel-right::-webkit-scrollbar {
