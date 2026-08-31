@@ -79,7 +79,7 @@ export function NeonInteriorStudio() {
               className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs nh-font-mono font-bold transition-all cursor-pointer whitespace-nowrap ${
                 isActive
                   ? "bg-cyan-500/20 text-cyan-200 border border-cyan-400/50 shadow-[0_0_12px_rgba(0,229,255,0.25)]"
-                  : "text-slate-400 hover:text-slate-200 hover:bg-white/5"
+                  : "text-amber-300/60 hover:text-amber-100 hover:bg-white/5"
               }`}
             >
               {tab.icon}
@@ -91,7 +91,7 @@ export function NeonInteriorStudio() {
 
       {/* View 0: Interior Dashboard Configurator */}
       {activeTab === "configurator" && (
-        <div className="w-full rounded-3xl overflow-hidden border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] bg-slate-900/80" style={{height: 'calc(100vh - 180px)', minHeight: '600px'}}>
+        <div className="w-full rounded-3xl overflow-hidden border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] bg-amber-950/80" style={{height: 'calc(100vh - 180px)', minHeight: '600px'}}>
           <InteriorDashboardConfiguratorStudio />
         </div>
       )}
@@ -105,14 +105,14 @@ export function NeonInteriorStudio() {
 
       {/* View 1: 3D Cockpit Designer */}
       {activeTab === "cockpit_3d_studio" && (
-        <div className="w-full rounded-3xl overflow-hidden border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] bg-slate-900/80 p-3">
+        <div className="w-full rounded-3xl overflow-hidden border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] bg-amber-950/80 p-3">
           <InteriorsDesigner />
         </div>
       )}
 
       {/* View 2: Modular Interior Workshop */}
       {activeTab === "interior_workshop" && (
-        <div className="w-full rounded-3xl overflow-hidden border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] bg-slate-900/80 p-3">
+        <div className="w-full rounded-3xl overflow-hidden border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] bg-amber-950/80 p-3">
           <ModularInteriorWorkshop
             activeChassisId={design.vehicle.chassis}
             config={{}}
@@ -148,7 +148,7 @@ export function NeonInteriorStudio() {
               />
 
               <div className="flex flex-col gap-2 pt-2 border-t border-white/10">
-                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                <span className="text-[10px] font-bold text-amber-300/60 uppercase tracking-wider">
                   AMBIENT COCKPIT LED ILLUMINATION
                 </span>
                 <div className="flex items-center gap-3">

@@ -140,31 +140,31 @@ export function NeonEvBatteryStudio() {
             }}
             className="p-6 flex flex-col gap-4"
           >
-            <div className="p-4 rounded-xl bg-slate-900/80 border border-sky-400/15 flex flex-col gap-2">
+            <div className="p-4 rounded-xl bg-amber-950/80 border border-sky-400/15 flex flex-col gap-2">
               <div className="flex items-center justify-between">
-                <span className="text-xs text-slate-400">Gravimetric Density:</span>
+                <span className="text-xs text-amber-300/60">Gravimetric Density:</span>
                 <span className="text-xs font-bold nh-font-mono text-amber-300">{currentChem.density}</span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-xs text-slate-400">Max Discharge Rate:</span>
+                <span className="text-xs text-amber-300/60">Max Discharge Rate:</span>
                 <span className="text-xs font-bold nh-font-mono text-amber-300">{currentChem.maxC}</span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-xs text-slate-400">Runaway Threshold:</span>
+                <span className="text-xs text-amber-300/60">Runaway Threshold:</span>
                 <span className="text-xs font-bold nh-font-mono text-emerald-300">{currentChem.runawayTemp}</span>
               </div>
             </div>
 
             {/* Battery Module Temperature Heatmap visual */}
             <div className="flex flex-col gap-2 border-t border-white/10 pt-3">
-              <span className="nh-label-caps text-slate-400 text-[10px]">MODULE THERMAL EQUALIZATION</span>
+              <span className="nh-label-caps text-amber-300/60 text-[10px]">MODULE THERMAL EQUALIZATION</span>
               <div className="grid grid-cols-4 gap-2">
                 {[32.4, 33.1, 33.8, 32.7, 34.2, 34.9, 34.0, 33.5].map((temp, idx) => (
                   <div
                     key={idx}
-                    className="p-2 rounded-lg bg-slate-900/80 border border-sky-400/20 flex flex-col items-center justify-center text-center"
+                    className="p-2 rounded-lg bg-amber-950/80 border border-sky-400/20 flex flex-col items-center justify-center text-center"
                   >
-                    <span className="text-[9px] text-slate-400">MOD {idx + 1}</span>
+                    <span className="text-[9px] text-amber-300/60">MOD {idx + 1}</span>
                     <span className="text-xs font-bold nh-font-mono text-amber-300">{temp}°C</span>
                   </div>
                 ))}

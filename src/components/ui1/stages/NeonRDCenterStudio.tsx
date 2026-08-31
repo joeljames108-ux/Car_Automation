@@ -83,7 +83,7 @@ export function NeonRDCenterStudio() {
                   className={`p-3.5 rounded-xl border transition-all cursor-pointer flex flex-col gap-2 ${
  isUnlocked
  ? "bg-amber-500/20 border-amber-500/30 text-sky-200"
- : "bg-slate-900/80 border-white/10 opacity-75 hover:opacity-100 hover:border-sky-400/25"
+ : "bg-amber-950/80 border-white/10 opacity-75 hover:opacity-100 hover:border-sky-400/25"
  }`}
                 >
                   <div className="flex items-center justify-between">
@@ -91,7 +91,7 @@ export function NeonRDCenterStudio() {
                       {isUnlocked ? (
                         <CheckCircle2 size={16} className="text-amber-400" />
                       ) : (
-                        <Lock size={16} className="text-slate-500" />
+                        <Lock size={16} className="text-amber-400/50" />
                       )}
                       <span className="text-xs font-bold text-slate-100">{tech.name}</span>
                     </div>
@@ -102,7 +102,7 @@ export function NeonRDCenterStudio() {
                       </NeonHorizonBadge>
                     </div>
                   </div>
-                  <p className="text-[11px] text-slate-300 leading-relaxed pl-6">{tech.desc}</p>
+                  <p className="text-[11px] text-amber-200/70 leading-relaxed pl-6">{tech.desc}</p>
                 </div>
               );
             })}
@@ -132,19 +132,19 @@ export function NeonRDCenterStudio() {
               color="cyan"
             />
 
-            <div className="p-4 rounded-xl bg-slate-900/80 border border-sky-400/15 flex flex-col gap-2">
+            <div className="p-4 rounded-xl bg-amber-950/80 border border-sky-400/15 flex flex-col gap-2">
               <div className="flex items-center justify-between">
-                <span className="text-xs text-slate-400">Annual R&D Investment:</span>
+                <span className="text-xs text-amber-300/60">Annual R&D Investment:</span>
                 <span className="text-xs font-bold nh-font-mono text-amber-300">
                   ${(monthlyBudgetM * 12).toFixed(1)}M
                 </span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-xs text-slate-400">Breakthrough Acceleration:</span>
+                <span className="text-xs text-amber-300/60">Breakthrough Acceleration:</span>
                 <span className="text-xs font-bold nh-font-mono text-emerald-300">+35% Faster</span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-xs text-slate-400">IP Valuation:</span>
+                <span className="text-xs text-amber-300/60">IP Valuation:</span>
                 <span className="text-xs font-bold nh-font-mono text-amber-300">$185M</span>
               </div>
             </div>

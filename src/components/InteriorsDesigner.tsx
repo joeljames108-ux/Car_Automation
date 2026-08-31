@@ -233,7 +233,7 @@ export function InteriorsDesigner({ initialSubTab = 'modular_studio' }: Interior
 
       {/* ── CONDITIONAL VIEW MODE RENDERING ── */}
       {viewMode === 'configurator' ? (
-        <div className="rounded-2xl overflow-hidden shadow-2xl border border-slate-800">
+        <div className="rounded-2xl overflow-hidden shadow-2xl border border-amber-800/30">
           <InteriorDashboardConfiguratorStudio />
         </div>
       ) : viewMode === 'modular_studio' ? (
@@ -244,7 +244,7 @@ export function InteriorsDesigner({ initialSubTab = 'modular_studio' }: Interior
         <InfotainmentDesigner />
       ) : viewMode === '3d_studio' ? (
         /* MODE C: Pure Full-Size 3D Interactive Cockpit Viewport */
-        <div className="rounded-2xl overflow-hidden shadow-2xl border border-slate-800" style={{ height: '620px' }}>
+        <div className="rounded-2xl overflow-hidden shadow-2xl border border-amber-800/30" style={{ height: '620px' }}>
           <Interior3DViewport
             config={studioConfig}
             wheelbaseMm={wbMm}
@@ -388,11 +388,11 @@ function WeightBar({ label, value, max }: { label: string; value: number; max: n
   return (
     <div>
       <div className="flex justify-between text-xs mb-1">
-        <span className="text-slate-400">{label}</span>
-        <span className="font-mono text-slate-300">{value.toFixed(1)} kg</span>
+        <span className="text-amber-300/70">{label}</span>
+        <span className="font-mono text-amber-200">{value.toFixed(1)} kg</span>
       </div>
-      <div className="h-2 bg-base-850 rounded-full overflow-hidden">
-        <div className="h-full bg-accent-500/60 rounded-full transition-all" style={{ width: `${pct}%` }} />
+      <div className="h-2 bg-amber-950/40 rounded-full overflow-hidden">
+        <div className="h-full bg-amber-500/60 rounded-full transition-all" style={{ width: `${pct}%` }} />
       </div>
     </div>
   );
@@ -403,11 +403,11 @@ function RatingBar({ label, value }: { label: string; value: number }) {
   return (
     <div>
       <div className="flex justify-between text-xs mb-1">
-        <span className="text-slate-400">{label}</span>
-        <span className="font-mono text-accent-300">{pct.toFixed(0)}%</span>
+        <span className="text-amber-300/70">{label}</span>
+        <span className="font-mono text-amber-300">{pct.toFixed(0)}%</span>
       </div>
-      <div className="h-2 bg-base-850 rounded-full overflow-hidden">
-        <div className="h-full bg-ok-500 rounded-full transition-all" style={{ width: `${pct}%` }} />
+      <div className="h-2 bg-amber-950/40 rounded-full overflow-hidden">
+        <div className="h-full bg-emerald-500 rounded-full transition-all" style={{ width: `${pct}%` }} />
       </div>
     </div>
   );

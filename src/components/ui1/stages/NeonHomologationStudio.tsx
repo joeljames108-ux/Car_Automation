@@ -78,7 +78,7 @@ export function NeonHomologationStudio() {
             {checks.map((check) => (
               <div
                 key={check.id}
-                className="p-3.5 rounded-xl bg-slate-900/80 border border-white/10 flex items-center justify-between font-mono text-xs"
+                className="p-3.5 rounded-xl bg-amber-950/80 border border-white/10 flex items-center justify-between font-mono text-xs"
               >
                 <div className="flex items-center gap-3">
                   {check.pass ? (
@@ -88,7 +88,7 @@ export function NeonHomologationStudio() {
                   )}
                   <div className="flex flex-col">
                     <span className="text-slate-100 font-bold">{check.name}</span>
-                    <span className="text-[10px] text-slate-400">Rule: {check.req}</span>
+                    <span className="text-[10px] text-amber-300/60">Rule: {check.req}</span>
                   </div>
                 </div>
                 <div className="flex items-center gap-3">
@@ -114,19 +114,19 @@ export function NeonHomologationStudio() {
             className="p-6 flex flex-col gap-4 text-center items-center justify-center"
           >
             {passportIssued ? (
-              <div className="w-full flex flex-col items-center gap-3 p-4 rounded-xl bg-slate-900/80 border border-amber-400/40 animate-nh-materialize">
+              <div className="w-full flex flex-col items-center gap-3 p-4 rounded-xl bg-amber-950/80 border border-amber-400/40 animate-nh-materialize">
                 <div className="w-16 h-16 rounded-full bg-amber-400/20 border-2 border-amber-400 flex items-center justify-center text-amber-300">
                   <Award size={32} />
                 </div>
                 <span className="text-sm font-bold text-amber-300">FIA GOLD HOMOLOGATION PASSPORT</span>
-                <span className="text-[10px] font-mono text-slate-300">
+                <span className="text-[10px] font-mono text-amber-200/70">
                   CHASSIS CERT HASH: 0x984F-A29E-FIA-2026
                 </span>
                 <NeonHorizonBadge variant="gold">OFFICIALLY HOMOLOGATED</NeonHorizonBadge>
               </div>
             ) : (
               <div className="w-full flex flex-col items-center gap-4 py-6">
-                <span className="text-xs text-slate-400 max-w-xs">
+                <span className="text-xs text-amber-300/60 max-w-xs">
                   All 6 technical scrutiny checks have satisfied FIA regulations. Click below to stamp and generate the permanent racing passport.
                 </span>
                 <NeonHorizonButton variant="primary" glow onClick={handleIssuePassport}>

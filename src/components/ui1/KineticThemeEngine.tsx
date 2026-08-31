@@ -34,7 +34,7 @@ export const THEME_PRESETS: Record<UI1VibeTheme, KineticThemeTokens> = {
     id: "kinetic_horizon",
     name: "Kinetic Horizon",
     description: "Ice steel & quiet violet — muted aerospace glass (default)",
-    bgRoot: "#080c14",
+    bgRoot: "#1a1008",
     panelBg: "rgba(15, 22, 36, 0.78)",
     primaryGlow: "rgba(127, 181, 216, 0.25)",
     secondaryGlow: "rgba(157, 143, 196, 0.20)",

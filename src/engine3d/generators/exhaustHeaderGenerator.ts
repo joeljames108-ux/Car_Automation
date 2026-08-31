@@ -107,10 +107,10 @@ export function buildExhaustHeaderScene(bankSide: 'left' | 'right', configOrCyls
     name: 'Copper_Exhaust_Flange_Nut',
     color: new THREE.Color(0xb45309),
     metalness: 0.85,
-    roughness: 0.28,,
-        clearcoat: 0.35,
-        clearcoatRoughness: 0.1,
-      };
+    roughness: 0.28,
+clearcoat: 0.35,
+clearcoatRoughness: 0.,
+      });
   const matSensorBillet = matLib.getNitridedCrank();
   const matFlexBellows = matLib.getStainlessFlexBellows();
   const matSensorWire = matLib.getBlackPolymer();
@@ -118,18 +118,18 @@ export function buildExhaustHeaderScene(bankSide: 'left' | 'right', configOrCyls
     name: 'Exhaust_Heat_Tint_Purple_Bronze_Zone',
     color: new THREE.Color(0xd97706),
     metalness: 0.94,
-    roughness: 0.18,,
-        clearcoat: 0.35,
-        clearcoatRoughness: 0.1,
-      };
+    roughness: 0.18,
+clearcoat: 0.35,
+clearcoatRoughness: 0.,
+      });
   const matHeatTintStraw = new THREE.MeshPhysicalMaterial({
     name: 'Exhaust_Heat_Tint_Straw_Bronze_Zone',
     color: new THREE.Color(0xd97706),
     metalness: 0.92,
-    roughness: 0.20,,
-        clearcoat: 0.35,
-        clearcoatRoughness: 0.1,
-      };
+    roughness: 0.20,
+clearcoat: 0.35,
+clearcoatRoughness: 0.,
+      });
 
   const spec = V12_EXHAUST_SPECS;
   const cylSpacingM = 0.100;

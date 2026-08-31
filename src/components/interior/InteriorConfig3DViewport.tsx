@@ -327,19 +327,19 @@ export const InteriorConfig3DViewport: React.FC = () => {
   };
 
   return (
-    <div className="relative w-full h-full min-h-[360px] flex flex-col select-none overflow-hidden rounded-xl bg-slate-950">
+    <div className="relative w-full h-full min-h-[360px] flex flex-col select-none overflow-hidden rounded-xl bg-amber-950">
       {/* 3D WebGL Canvas Mount */}
       <div ref={mountRef} className="w-full flex-1 cursor-grab active:cursor-grabbing relative" />
 
       {/* Floating 3D Control Bar (Top Right) */}
-      <div className="absolute top-3 right-3 z-20 flex items-center gap-1.5 bg-slate-950/80 backdrop-blur-md p-1.5 rounded-xl border border-slate-800 shadow-xl">
+      <div className="absolute top-3 right-3 z-20 flex items-center gap-1.5 bg-amber-950/80 backdrop-blur-md p-1.5 rounded-xl border border-amber-800/30 shadow-xl">
         {/* Camera Pose Buttons */}
         <button
           onClick={() => setCameraPose("driver")}
           className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
             activeCameraPose === "driver"
               ? "bg-blue-600 text-white shadow-md shadow-blue-500/30"
-              : "text-slate-400 hover:text-slate-200 hover:bg-slate-800"
+              : "text-amber-300/70 hover:text-amber-100 hover:bg-amber-900/40"
           }`}
           title="Driver Point of View"
         >
@@ -352,7 +352,7 @@ export const InteriorConfig3DViewport: React.FC = () => {
           className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
             activeCameraPose === "steering"
               ? "bg-blue-600 text-white shadow-md shadow-blue-500/30"
-              : "text-slate-400 hover:text-slate-200 hover:bg-slate-800"
+              : "text-amber-300/70 hover:text-amber-100 hover:bg-amber-900/40"
           }`}
           title="Steering & Digital Cluster Macro"
         >
@@ -365,7 +365,7 @@ export const InteriorConfig3DViewport: React.FC = () => {
           className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
             activeCameraPose === "console"
               ? "bg-blue-600 text-white shadow-md shadow-blue-500/30"
-              : "text-slate-400 hover:text-slate-200 hover:bg-slate-800"
+              : "text-amber-300/70 hover:text-amber-100 hover:bg-amber-900/40"
           }`}
           title="Center Console & Infotainment Screen"
         >
@@ -378,7 +378,7 @@ export const InteriorConfig3DViewport: React.FC = () => {
           className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
             activeCameraPose === "wide"
               ? "bg-blue-600 text-white shadow-md shadow-blue-500/30"
-              : "text-slate-400 hover:text-slate-200 hover:bg-slate-800"
+              : "text-amber-300/70 hover:text-amber-100 hover:bg-amber-900/40"
           }`}
           title="Wide Isometric 3D Showcase"
         >
@@ -391,7 +391,7 @@ export const InteriorConfig3DViewport: React.FC = () => {
         {/* Day / Night Toggle */}
         <button
           onClick={() => setIsNightMode(!isNightMode)}
-          className="p-1.5 rounded-lg text-slate-400 hover:text-amber-300 hover:bg-slate-800 transition-all"
+          className="p-1.5 rounded-lg text-amber-300/70 hover:text-amber-300 hover:bg-amber-900/40 transition-all"
           title={isNightMode ? "Switch to Day Lighting" : "Switch to Night Ambient Lighting"}
         >
           {isNightMode ? <Moon size={14} className="text-cyan-400" /> : <Sun size={14} className="text-amber-400" />}
@@ -401,7 +401,7 @@ export const InteriorConfig3DViewport: React.FC = () => {
         <button
           onClick={() => setIsAutoRotate(!isAutoRotate)}
           className={`p-1.5 rounded-lg transition-all ${
-            isAutoRotate ? "text-cyan-400 bg-cyan-500/20" : "text-slate-400 hover:text-slate-200 hover:bg-slate-800"
+            isAutoRotate ? "text-cyan-400 bg-cyan-500/20" : "text-amber-300/70 hover:text-amber-100 hover:bg-amber-900/40"
           }`}
           title="Toggle 360° Cinematic Orbit"
         >
@@ -411,7 +411,7 @@ export const InteriorConfig3DViewport: React.FC = () => {
         {/* Reset Camera */}
         <button
           onClick={() => setCameraPose("driver")}
-          className="p-1.5 rounded-lg text-slate-400 hover:text-slate-200 hover:bg-slate-800 transition-all"
+          className="p-1.5 rounded-lg text-amber-300/70 hover:text-amber-100 hover:bg-amber-900/40 transition-all"
           title="Reset Camera Target"
         >
           <RotateCcw size={14} />
@@ -419,7 +419,7 @@ export const InteriorConfig3DViewport: React.FC = () => {
       </div>
 
       {/* Real-Time Telemetry HUD Badge (Bottom Left) */}
-      <div className="absolute bottom-3 left-3 z-20 flex items-center gap-2 bg-slate-950/85 backdrop-blur-md px-3 py-1.5 rounded-lg border border-slate-800 text-[11px] font-mono text-slate-300 pointer-events-none">
+      <div className="absolute bottom-3 left-3 z-20 flex items-center gap-2 bg-amber-950/85 backdrop-blur-md px-3 py-1.5 rounded-lg border border-amber-800/30 text-[11px] font-mono text-amber-200 pointer-events-none">
         <Sparkles size={13} className="text-cyan-400 animate-pulse" />
         <span>3D PBR REAL-TIME ENGINE • 60 FPS</span>
       </div>

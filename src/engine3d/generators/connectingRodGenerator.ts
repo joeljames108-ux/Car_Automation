@@ -90,26 +90,26 @@ export function buildConnectingRodScene(configOrStroke?: Partial<EngineConfig> |
     name: 'ARP_CustomAge_625_Fastener',
     color: new THREE.Color(0x1e293b),
     metalness: 0.95,
-    roughness: 0.18,,
-        clearcoat: 0.35,
-        clearcoatRoughness: 0.1,
-      };
+    roughness: 0.18,
+clearcoat: 0.35,
+clearcoatRoughness: 0.1,
+    });
   const matBronzeBushing = new THREE.MeshPhysicalMaterial({
     name: 'Silicon_Bronze_Pin_Bushing',
     color: new THREE.Color(0xd97706),
     metalness: 0.85,
-    roughness: 0.32,,
-        clearcoat: 0.35,
-        clearcoatRoughness: 0.1,
-      };
+    roughness: 0.32,
+clearcoat: 0.35,
+clearcoatRoughness: 0.1,
+    });
   const matBearingShell = new THREE.MeshPhysicalMaterial({
     name: 'TriMetal_Bearing_Shell_Liner',
     color: new THREE.Color(0xcbd5e1),
     metalness: 0.90,
-    roughness: 0.15,,
-        clearcoat: 0.35,
-        clearcoatRoughness: 0.1,
-      };
+    roughness: 0.15,
+clearcoat: 0.35,
+clearcoatRoughness: 0.1,
+    });
   const matDarkSteel = matLib.getCastAluminum();
 
   const spec: ConnectingRodSpec = {

@@ -58,7 +58,7 @@ export function NeonHorizonSaveDialog({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-nh-materialize">
-      <div className="w-full max-w-xl bg-slate-900/80 border border-white/12 rounded-2xl shadow-[0_30px_80px_rgba(0,0,0,0.65)] overflow-hidden flex flex-col">
+      <div className="w-full max-w-xl bg-amber-950/80 border border-white/12 rounded-2xl shadow-[0_30px_80px_rgba(0,0,0,0.65)] overflow-hidden flex flex-col">
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-white/8 bg-black/30">
           <div className="flex items-center gap-2">
@@ -67,14 +67,14 @@ export function NeonHorizonSaveDialog({
               {mode === "save" ? "Save Vehicle Blueprint Snapshot" : "Load Vehicle Blueprint"}
             </h3>
           </div>
-          <button onClick={onClose} className="text-slate-400 hover:text-slate-200 cursor-pointer">
+          <button onClick={onClose} className="text-amber-300/60 hover:text-amber-100 cursor-pointer">
             <X size={16} />
           </button>
         </div>
 
         {/* Blueprint Slots */}
         <div className="p-6 flex flex-col gap-3 nh-scroll">
-          <span className="nh-label-caps text-slate-400 text-[10px]">BLUEPRINT STORAGE SLOTS</span>
+          <span className="nh-label-caps text-amber-300/60 text-[10px]">BLUEPRINT STORAGE SLOTS</span>
           <div className="flex flex-col gap-2">
             {slots.map((s) => {
               const isSelected = activeSlot === s.id;
@@ -88,12 +88,12 @@ export function NeonHorizonSaveDialog({
                   className={`p-3.5 rounded-xl border transition-all cursor-pointer flex items-center justify-between ${
  isSelected
  ? "bg-amber-500/20 border-amber-500/30"
- : "bg-slate-900/80 border-white/10 hover:border-sky-400/25"
+ : "bg-amber-950/80 border-white/10 hover:border-sky-400/25"
  }`}
                 >
                   <div>
                     <h4 className="text-xs font-bold text-slate-100">{s.name}</h4>
-                    <span className="text-[10px] nh-font-mono text-slate-400">
+                    <span className="text-[10px] nh-font-mono text-amber-300/60">
                       {s.power} · {s.weight} · {s.date}
                     </span>
                   </div>

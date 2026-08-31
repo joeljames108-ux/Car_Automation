@@ -263,7 +263,7 @@ export const NeonHorizonHeroHUD: React.FC<NeonHorizonHeroHUDProps> = ({
               className={`p-2 rounded-xl text-left border transition-all duration-200 flex items-center justify-between gap-2 group cursor-pointer ${
  hoveredNode === sub.id
  ? "bg-amber-500/12 border-amber-500/30 text-white"
- : "bg-black/30 border-white/10 text-slate-300 hover:border-white/15"
+ : "bg-black/30 border-white/10 text-amber-200/70 hover:border-white/15"
  }`}
             >
               <div className="flex items-center gap-2">
@@ -285,7 +285,7 @@ export const NeonHorizonHeroHUD: React.FC<NeonHorizonHeroHUDProps> = ({
         <div className="lg:col-span-5 flex flex-col items-center justify-center relative min-h-[190px]">
           <div
             ref={mountRef}
-            className="w-full h-44 rounded-2xl overflow-hidden border border-white/10 bg-slate-900/80/90 shadow-[inset_0_2px_18px_rgba(0,0,0,0.45)] relative"
+            className="w-full h-44 rounded-2xl overflow-hidden border border-white/10 bg-amber-950/80/90 shadow-[inset_0_2px_18px_rgba(0,0,0,0.45)] relative"
           />
 
           {/* Top Camera Controls Overlay */}
@@ -303,7 +303,7 @@ export const NeonHorizonHeroHUD: React.FC<NeonHorizonHeroHUDProps> = ({
                   className={`px-2 py-0.5 rounded text-[9px] nh-font-mono transition-all cursor-pointer ${
  cameraPreset === cp.id
  ? "bg-amber-500/25 text-sky-200 font-bold border border-amber-500/30"
- : "text-slate-400 hover:text-slate-200"
+ : "text-amber-300/60 hover:text-amber-100"
  }`}
                 >
                   {cp.label}
@@ -339,7 +339,7 @@ export const NeonHorizonHeroHUD: React.FC<NeonHorizonHeroHUDProps> = ({
         </div>
 
         {/* Right Live Gauges & Telemetry Cluster */}
-        <div className="lg:col-span-4 flex items-center justify-around gap-2 bg-slate-900/80/70 p-3 rounded-2xl border border-white/8">
+        <div className="lg:col-span-4 flex items-center justify-around gap-2 bg-amber-950/80/70 p-3 rounded-2xl border border-white/8">
           <NeonRadialDial rpm={rpm} gear={gear} size={125} />
 
           <div className="flex flex-col gap-2">

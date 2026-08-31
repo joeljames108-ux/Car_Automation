@@ -97,12 +97,12 @@ export function NeonPressReviewsStudio() {
                   {rev.score}
                 </span>
               </div>
-              <p className="text-xs text-slate-300 leading-relaxed italic opacity-90">
+              <p className="text-xs text-amber-200/70 leading-relaxed italic opacity-90">
                 "{rev.quote}"
               </p>
             </div>
 
-            <div className="flex items-center justify-between border-t border-white/10 pt-3 text-[11px] nh-font-mono text-slate-400">
+            <div className="flex items-center justify-between border-t border-white/10 pt-3 text-[11px] nh-font-mono text-amber-300/60">
               <span>By {rev.author}</span>
               <div className="flex items-center gap-1">
                 {Array.from({ length: 5 }).map((_, s) => (

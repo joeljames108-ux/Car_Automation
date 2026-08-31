@@ -31,13 +31,13 @@ export const NeonHorizonTabs: React.FC<NeonHorizonTabsProps> = ({
 
   const containerStyles = {
     glass:
-      "bg-slate-900/80/80 backdrop-blur-xl p-1 rounded-2xl border border-sky-400/15 shadow-inner flex items-center gap-1 overflow-x-auto no-scrollbar",
+      "bg-amber-950/80/80 backdrop-blur-xl p-1 rounded-2xl border border-sky-400/15 shadow-inner flex items-center gap-1 overflow-x-auto no-scrollbar",
     pills:
       "bg-black/30 p-1 rounded-xl border border-white/5 flex items-center gap-1 overflow-x-auto no-scrollbar",
     underline:
       "border-b border-sky-400/15 flex items-center gap-2 overflow-x-auto no-scrollbar px-2",
     compact:
-      "bg-slate-900/80/80 p-0.5 rounded-xl border border-white/10 flex items-center gap-0.5",
+      "bg-amber-950/80/80 p-0.5 rounded-xl border border-white/10 flex items-center gap-0.5",
   }[variant];
 
   return (
@@ -54,10 +54,10 @@ export const NeonHorizonTabs: React.FC<NeonHorizonTabsProps> = ({
               className={`nh-focus relative px-4 py-2 text-xs font-semibold nh-font-body tracking-wider transition-all duration-200 flex items-center gap-2 ${
  isActive
  ? "text-sky-200 font-bold"
- : "text-slate-400 hover:text-slate-200 hover:bg-white/5 rounded-t-lg"
+ : "text-amber-300/60 hover:text-amber-100 hover:bg-white/5 rounded-t-lg"
  } ${tab.disabled ? "opacity-30 cursor-not-allowed" : "cursor-pointer"}`}
             >
-              {tab.icon && <span className={isActive ? "text-amber-400" : "text-slate-500"}>{tab.icon}</span>}
+              {tab.icon && <span className={isActive ? "text-amber-400" : "text-amber-400/50"}>{tab.icon}</span>}
               <span>{tab.label}</span>
               {tab.badge}
               {isActive && (
@@ -75,10 +75,10 @@ export const NeonHorizonTabs: React.FC<NeonHorizonTabsProps> = ({
             className={`nh-focus px-3.5 py-1.5 rounded-xl text-xs font-semibold nh-font-body tracking-wider transition-all duration-200 flex items-center gap-2 whitespace-nowrap ${
  isActive
  ? "bg-white/[0.08] text-white border border-white/15 shadow-[inset_0_1px_0_rgba(255,255,255,0.10)] font-bold"
- : "text-slate-400 hover:text-slate-200 hover:bg-white/5 border border-transparent"
+ : "text-amber-300/60 hover:text-amber-100 hover:bg-white/5 border border-transparent"
  } ${tab.disabled ? "opacity-30 cursor-not-allowed" : "cursor-pointer active:scale-95"}`}
           >
-            {tab.icon && <span className={isActive ? "text-amber-300" : "text-slate-400"}>{tab.icon}</span>}
+            {tab.icon && <span className={isActive ? "text-amber-300" : "text-amber-300/60"}>{tab.icon}</span>}
             <span>{tab.label}</span>
             {tab.badge}
           </button>

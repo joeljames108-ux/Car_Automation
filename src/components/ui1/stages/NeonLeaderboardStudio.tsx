@@ -111,14 +111,14 @@ export function NeonLeaderboardStudio() {
                 className={`p-4 rounded-xl border transition-all cursor-pointer flex items-center justify-between ${
  isSelected
  ? "bg-amber-500/20 border-amber-500/30 text-sky-200"
- : "bg-slate-900/80 border-white/10 hover:border-sky-400/25"
+ : "bg-amber-950/80 border-white/10 hover:border-sky-400/25"
  }`}
               >
                 <div className="flex items-center gap-3">
-                  <Flag size={16} className={isSelected ? "text-amber-400" : "text-slate-400"} />
+                  <Flag size={16} className={isSelected ? "text-amber-400" : "text-amber-300/60"} />
                   <span className="text-xs font-bold text-slate-100">{c.name}</span>
                 </div>
-                <ChevronRight size={14} className={isSelected ? "text-amber-400" : "text-slate-500"} />
+                <ChevronRight size={14} className={isSelected ? "text-amber-400" : "text-amber-400/50"} />
               </div>
             );
           })}
@@ -143,7 +143,7 @@ export function NeonLeaderboardStudio() {
                   className={`p-3.5 rounded-xl border flex items-center justify-between transition-all ${
  isUser
  ? "bg-amber-500/20 border-amber-500/30 text-sky-200"
- : "bg-slate-900/80 border-white/10"
+ : "bg-amber-950/80 border-white/10"
  }`}
                 >
                   <div className="flex items-center gap-3">
@@ -156,12 +156,12 @@ export function NeonLeaderboardStudio() {
                       <span className={`text-xs font-bold ${isUser ? "text-amber-300" : "text-slate-100"}`}>
                         {entry.car}
                       </span>
-                      <span className="text-[10px] text-slate-400 font-mono">
+                      <span className="text-[10px] text-amber-300/60 font-mono">
                         {entry.driver} · {entry.power}
                       </span>
                     </div>
                   </div>
-                  <span className={`text-xs font-bold font-mono ${isUser ? "text-amber-300" : "text-slate-200"}`}>
+                  <span className={`text-xs font-bold font-mono ${isUser ? "text-amber-300" : "text-amber-100"}`}>
                     {entry.time}
                   </span>
                 </div>

@@ -83,7 +83,7 @@ export function NeonEngineStudio() {
               className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs nh-font-mono font-bold transition-all cursor-pointer whitespace-nowrap ${
  isActive
  ? "bg-amber-500/25 text-sky-200 border border-amber-500/30"
- : "text-slate-400 hover:text-slate-200 hover:bg-white/5"
+ : "text-amber-300/60 hover:text-amber-100 hover:bg-white/5"
  }`}
             >
               {tab.icon}
@@ -107,14 +107,14 @@ export function NeonEngineStudio() {
 
       {/* View 2: Master Engine Workbench & Dyno */}
       {activeTab === "engine_workbench" && (
-        <div className="w-full rounded-3xl overflow-hidden border border-white/10 bg-slate-900/80 shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
+        <div className="w-full rounded-3xl overflow-hidden border border-white/10 bg-amber-950/80 shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
           <ModularEngineStudio />
         </div>
       )}
 
       {/* View 2B: Master 3D Transmission Studio */}
       {activeTab === "transmission_3d" && (
-        <div className="w-full rounded-3xl overflow-hidden border border-white/10 bg-slate-900/80 shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
+        <div className="w-full rounded-3xl overflow-hidden border border-white/10 bg-amber-950/80 shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
           <Transmission3DStudio />
         </div>
       )}
@@ -358,7 +358,7 @@ export function NeonEngineStudio() {
 
               {/* Firing Cylinder Indicator */}
               <div className="flex flex-col gap-2 p-3.5 rounded-2xl bg-black/40 border border-white/10">
-                <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                <span className="text-[10px] font-bold text-amber-300/60 uppercase tracking-wider">
                   CYLINDER FIRING SEQUENCE
                 </span>
                 <div className="flex items-center gap-1.5 flex-wrap">
@@ -371,7 +371,7 @@ export function NeonEngineStudio() {
                         className={`w-7 h-7 rounded-lg flex items-center justify-center text-xs font-bold font-mono transition-all ${
  isFiring
  ? "bg-sky-300 text-slate-950 scale-110"
- : "bg-white/[0.04] text-slate-400 border border-white/6"
+ : "bg-white/[0.04] text-amber-300/60 border border-white/6"
  }`}
                       >
                         {cylNum}
@@ -384,12 +384,12 @@ export function NeonEngineStudio() {
               {/* Thermal Safety Gauge */}
               <div className="flex flex-col gap-2 p-3.5 rounded-2xl bg-black/40 border border-white/10">
                 <div className="flex items-center justify-between">
-                  <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">
+                  <span className="text-[10px] font-bold text-amber-300/60 uppercase tracking-wider">
                     THERMAL KNOCK SAFETY MARGIN
                   </span>
                   <span className="text-xs font-bold text-emerald-400 font-mono">94% SAFE</span>
                 </div>
-                <div className="w-full h-2 rounded-full bg-slate-800 overflow-hidden">
+                <div className="w-full h-2 rounded-full bg-amber-900/30 overflow-hidden">
                   <div className="h-full bg-gradient-to-r from-emerald-500 via-yellow-500 to-rose-500 w-[94%]" />
                 </div>
               </div>

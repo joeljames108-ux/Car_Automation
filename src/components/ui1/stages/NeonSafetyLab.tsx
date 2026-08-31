@@ -90,8 +90,8 @@ export function NeonSafetyLab() {
 
             {/* Crash Pulse Deceleration SVG Chart */}
             <div className="flex flex-col gap-2 pt-2 border-t border-white/10">
-              <span className="nh-label-caps text-slate-400 text-[10px]">DECELERATION PULSE WAVEFORM (G vs TIME)</span>
-              <div className="h-36 w-full bg-slate-900/80 rounded-xl border border-sky-400/15 p-2">
+              <span className="nh-label-caps text-amber-300/60 text-[10px]">DECELERATION PULSE WAVEFORM (G vs TIME)</span>
+              <div className="h-36 w-full bg-amber-950/80 rounded-xl border border-sky-400/15 p-2">
                 <svg viewBox="0 0 400 120" className="w-full h-full overflow-visible">
                   <defs>
                     <linearGradient id="crashGrad" x1="0" y1="0" x2="0" y2="1">
@@ -132,7 +132,7 @@ export function NeonSafetyLab() {
             {ncapRatings.map((ncap, idx) => (
               <div
                 key={idx}
-                className="p-3.5 rounded-xl bg-slate-900/80 border border-sky-400/15 flex flex-col gap-1.5"
+                className="p-3.5 rounded-xl bg-amber-950/80 border border-sky-400/15 flex flex-col gap-1.5"
               >
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-bold text-slate-100">{ncap.category}</span>

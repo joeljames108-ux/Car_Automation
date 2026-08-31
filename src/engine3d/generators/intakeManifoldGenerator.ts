@@ -91,10 +91,10 @@ export function buildIntakeManifoldScene(bankSide: 'left' | 'right', configOrCyl
     name: 'Polished_Brass_Butterfly_Disc',
     color: new THREE.Color(0xfacc15),
     metalness: 0.85,
-    roughness: 0.22,,
-        clearcoat: 0.35,
-        clearcoatRoughness: 0.1,
-      };
+    roughness: 0.22,
+clearcoat: 0.35,
+clearcoatRoughness: 0.,
+      });
   const matGoldFuelRail = matLib.getGoldAnodized();
   const matInjectorBillet = matLib.getMachinedBillet();
   const matBlackPolymer = matLib.getBlackPolymer();

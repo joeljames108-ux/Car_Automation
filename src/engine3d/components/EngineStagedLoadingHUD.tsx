@@ -58,12 +58,11 @@ export const EngineStagedLoadingHUD: React.FC = () => {
 
       <div className="w-48 h-1.5 bg-slate-900 rounded-full overflow-hidden border border-amber-500/30">
         <div
-          className="h-full bg-gradient-to-r from-amber-600 via-amber-400 to-amber-300 transition-all duration-150 ease-out relative overflow-hidden" style={{ boxShadow: '0 0 10px rgba(245,158,11,0.3)' }}
+          className="h-full bg-gradient-to-r from-amber-600 via-amber-400 to-amber-300 transition-all duration-150 ease-out relative overflow-hidden"
+          style={{ width: displayPercent + "%", boxShadow: "0 0 10px rgba(245,158,11,0.3)" }}
         >
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent" style={{ animation: 'shimmer 1.5s infinite' }} />
-        </div
-          style={{ width: `${displayPercent}%` }}
-        />
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent" style={{ animation: "shimmer 1.5s infinite" }} />
+        </div>
       </div>
 
       {progress.activeItem && (

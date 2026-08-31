@@ -108,18 +108,18 @@ export function buildCylinderHeadScene(bankSide: 'left' | 'right', configOrCyls?
     name: 'Beryllium_Copper_Valve_Seat',
     color: new THREE.Color(0xb45309),
     metalness: 0.88,
-    roughness: 0.26,,
-        clearcoat: 0.35,
-        clearcoatRoughness: 0.1,
-      };
+    roughness: 0.26,
+clearcoat: 0.35,
+clearcoatRoughness: 0.,
+      });
   const matArpStud = new THREE.MeshPhysicalMaterial({
     name: 'ARP_Hardened_Head_Fastener',
     color: new THREE.Color(0x1e293b),
     metalness: 0.95,
-    roughness: 0.20,,
-        clearcoat: 0.35,
-        clearcoatRoughness: 0.1,
-      };
+    roughness: 0.20,
+clearcoat: 0.35,
+clearcoatRoughness: 0.,
+      });
   const matCeramicInsulator = matLib.getCeramicIntake();
   const matCoilBoot = matLib.getRubberOring();
 

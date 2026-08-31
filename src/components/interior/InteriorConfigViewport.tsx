@@ -142,13 +142,13 @@ export const InteriorConfigViewport: React.FC = () => {
         </div>
 
         {/* 3D WebGL vs 2D Schematic Toggle */}
-        <div className="flex items-center gap-1 bg-slate-900/90 p-1 rounded-xl border border-slate-800 ml-auto">
+        <div className="flex items-center gap-1 bg-amber-950/80/90 p-1 rounded-xl border border-amber-800/30 ml-auto">
           <button
             onClick={() => setViewportMode("3d")}
             className={`px-3 py-1 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
               viewportMode === "3d"
                 ? "bg-blue-600 text-white shadow-md shadow-blue-500/30"
-                : "text-slate-400 hover:text-slate-200"
+                : "text-amber-300/70 hover:text-amber-100"
             }`}
           >
             <Box size={13} />
@@ -160,7 +160,7 @@ export const InteriorConfigViewport: React.FC = () => {
             className={`px-3 py-1 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
               viewportMode === "2d"
                 ? "bg-blue-600 text-white shadow-md shadow-blue-500/30"
-                : "text-slate-400 hover:text-slate-200"
+                : "text-amber-300/70 hover:text-amber-100"
             }`}
           >
             <Layers size={13} />
@@ -357,7 +357,7 @@ export const InteriorConfigViewport: React.FC = () => {
       </div>
 
       {/* Bottom Presets Carousel */}
-      <div className="idash-presets-container bg-[#0d121f] border-t border-slate-800 p-3.5 backdrop-blur-xl shrink-0">
+      <div className="idash-presets-container bg-[#0d121f] border-t border-amber-800/30 p-3.5 backdrop-blur-xl shrink-0">
         <div className="text-xs font-mono font-bold tracking-widest text-cyan-400 uppercase mb-2 flex items-center gap-1.5">
           <span className="w-1.5 h-1.5 rounded-full bg-cyan-400" />
           INTERIOR PRESETS
@@ -369,10 +369,10 @@ export const InteriorConfigViewport: React.FC = () => {
               <button
                 key={key}
                 type="button"
-                className={`min-w-[95px] p-2 rounded-xl bg-slate-900/90 border transition-all duration-200 flex flex-col items-center gap-1.5 cursor-pointer text-center ${
+                className={`min-w-[95px] p-2 rounded-xl bg-amber-950/80/90 border transition-all duration-200 flex flex-col items-center gap-1.5 cursor-pointer text-center ${
                   isActive
-                    ? "border-cyan-400 bg-slate-800 shadow-[0_0_14px_rgba(0,229,255,0.35)] scale-102"
-                    : "border-slate-800 hover:border-slate-600 hover:bg-slate-850"
+                    ? "border-cyan-400 bg-amber-900/40 shadow-[0_0_14px_rgba(0,229,255,0.35)] scale-102"
+                    : "border-amber-800/30 hover:border-amber-600/30 hover:bg-slate-850"
                 }`}
                 onClick={() => applyPreset(key)}
               >
@@ -383,7 +383,7 @@ export const InteriorConfigViewport: React.FC = () => {
                     boxShadow: isActive ? `0 0 12px ${preset.color}80` : "none",
                   }}
                 />
-                <span className={`text-[11px] font-bold tracking-tight truncate w-full ${isActive ? "text-white" : "text-slate-300"}`}>
+                <span className={`text-[11px] font-bold tracking-tight truncate w-full ${isActive ? "text-white" : "text-amber-200"}`}>
                   {preset.name}
                 </span>
               </button>
@@ -398,7 +398,7 @@ export const InteriorConfigViewport: React.FC = () => {
           <span>✓</span>
           <span>APPLY &amp; CONTINUE</span>
         </button>
-        <div className="text-center text-[10px] font-mono text-slate-400 mt-1.5">
+        <div className="text-center text-[10px] font-mono text-amber-300/70 mt-1.5">
           Changes will be saved to your design &amp; master vehicle physics
         </div>
       </div>

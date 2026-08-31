@@ -76,7 +76,7 @@ export const NeonRadialDial: React.FC<NeonRadialDialProps> = ({
 
       {/* Center Gear & RPM Hub */}
       <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
-        <span className="text-[10px] nh-label-caps text-slate-400 leading-none">GEAR</span>
+        <span className="text-[10px] nh-label-caps text-amber-300/60 leading-none">GEAR</span>
         <span className="text-2xl font-black nh-font-headline text-white leading-none my-0.5">
           {gear === 0 ? "N" : gear}
         </span>

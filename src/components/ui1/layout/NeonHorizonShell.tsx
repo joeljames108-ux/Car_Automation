@@ -38,6 +38,7 @@ import { NeonHorizonHeroHUD } from "../hud/NeonHorizonHeroHUD";
 import { ApexAIFloatingButton } from "../hud/ApexAIFloatingButton";
 import { CFDVisualizationToggle } from "../hud/CFDVisualizationToggle";
 import { StageLoadingSkeleton } from "../../ui/StageLoadingSkeleton";
+import { StageErrorBoundary } from "../../ui/StageErrorBoundary";
 import { SPATIAL_SECTORS } from "../spatial/MasterSpatialNavGlobe";
 import { Globe, Orbit, Compass, LayoutGrid } from "lucide-react";
 import type { WorkspaceCategory } from "../../ui/UI1Layout";
@@ -234,7 +235,7 @@ export function NeonHorizonShell() {
 
   return (
     <div className="relative min-h-screen flex flex-col font-sans overflow-x-hidden"
-      style={{ color: "#e4eaf4", background: "#080c14" }}>
+      style={{ color: "#e4eaf4", background: "#1a1008" }}>
       {/* 1. Multi-Layer Cyberpunk Metropolis Parallax Background */}
       <CyberpunkCityBackground
         scene={sceneMode === "wind_tunnel" || stage === "aero" ? 2 : 1}
@@ -318,7 +319,7 @@ export function NeonHorizonShell() {
                         {activeSectorDef.cardinal}
                       </span>
                     </div>
-                    <p className="text-[11px] text-slate-400 font-sans">{activeSectorDef.description}</p>
+                    <p className="text-[11px] text-amber-300/60 font-sans">{activeSectorDef.description}</p>
                   </div>
                 </div>
 
@@ -329,10 +330,10 @@ export function NeonHorizonShell() {
                     className={`px-3 py-1.5 rounded-xl text-xs font-mono font-bold tracking-wider transition-all flex items-center gap-1.5 cursor-pointer border ${
                       spatialNavExpanded
                         ? "bg-sky-500/20 text-amber-300 border-sky-400/50 shadow-[0_0_15px_rgba(56,189,248,0.3)]"
-                        : "bg-white/5 text-slate-300 hover:text-white border-white/10 hover:bg-white/10"
+                        : "bg-white/5 text-amber-200/70 hover:text-white border-white/10 hover:bg-white/10"
                     }`}
                   >
-                    <Orbit size={13} className={spatialNavExpanded ? "animate-spin text-amber-400" : "text-slate-400"} />
+                    <Orbit size={13} className={spatialNavExpanded ? "animate-spin text-amber-400" : "text-amber-300/60"} />
                     <span>{spatialNavExpanded ? "COLLAPSE SPHERE" : "EXPLORE 3D PLANETARY SPHERE"}</span>
                   </button>
                 </div>
@@ -368,7 +369,7 @@ export function NeonHorizonShell() {
                           className={`flex items-center gap-2 px-3 py-1.5 rounded-xl border text-xs font-mono font-bold tracking-wide transition-all cursor-pointer whitespace-nowrap ${
                             isCurrent
                               ? "text-white shadow-lg scale-105"
-                              : "text-slate-400 hover:text-slate-200 border-white/8 hover:bg-white/5"
+                              : "text-amber-300/60 hover:text-amber-100 border-white/8 hover:bg-white/5"
                           }`}
                           style={
                             isCurrent
@@ -436,7 +437,7 @@ export function NeonHorizonShell() {
 
           {/* Center Stage Viewport */}
           <NeonHorizonContentViewport activeStage={stage} onSelectStage={handleStageSelect}>
-            <React.Suspense fallback={<StageLoadingSkeleton stageName={stage} />}>
+            <StageErrorBoundary stageName={stage}><React.Suspense fallback={<StageLoadingSkeleton stageName={stage} />}>
               {stage === "command" ? (
                 <NeonCommandCenter onSelectStage={(st) => handleStageSelect(st as Stage)} />
               ) : stage === "aero" ? (
@@ -556,7 +557,7 @@ export function NeonHorizonShell() {
               ) : (
                 <StageSwitcher stage={stage} onSelectStage={(st) => handleStageSelect(st as Stage)} />
               )}
-            </React.Suspense>
+            </React.Suspense></StageErrorBoundary>
           </NeonHorizonContentViewport>
 
           {/* Right Dual-Column Stat Rail */}

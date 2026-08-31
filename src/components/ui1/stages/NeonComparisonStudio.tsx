@@ -82,7 +82,7 @@ export function NeonComparisonStudio() {
               className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs nh-font-mono font-bold transition-all cursor-pointer whitespace-nowrap ${
  isActive
  ? "bg-amber-500/25 text-sky-200 border border-amber-500/30"
- : "text-slate-400 hover:text-slate-200 hover:bg-white/5"
+ : "text-amber-300/60 hover:text-amber-100 hover:bg-white/5"
  }`}
             >
               {tab.icon}
@@ -118,11 +118,11 @@ export function NeonComparisonStudio() {
                     className={`p-3.5 rounded-2xl border transition-all cursor-pointer flex flex-col gap-1 ${
  isSelected
  ? "bg-amber-500/20 border-amber-500/30 text-sky-200"
- : "bg-slate-900/80 border-white/10 hover:border-sky-400/25"
+ : "bg-amber-950/80 border-white/10 hover:border-sky-400/25"
  }`}
                   >
                     <span className="text-sm font-bold text-slate-100">{b.name}</span>
-                    <div className="flex items-center justify-between text-xs nh-font-mono text-slate-400 pt-1">
+                    <div className="flex items-center justify-between text-xs nh-font-mono text-amber-300/60 pt-1">
                       <span>{b.power} HP</span>
                       <span>{b.weight} kg</span>
                       <span>{b.topSpeed} km/h</span>
@@ -157,8 +157,8 @@ export function NeonComparisonStudio() {
 
       {/* View 2: Garage Fleet Comparison */}
       {activeTab === "garage_compare" && (
-        <div className="w-full rounded-3xl overflow-hidden border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] bg-slate-900/80 p-4">
-          <React.Suspense fallback={<div className="p-8 text-center text-slate-500 font-mono text-xs">Loading comparison matrix...</div>}>
+        <div className="w-full rounded-3xl overflow-hidden border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] bg-amber-950/80 p-4">
+          <React.Suspense fallback={<div className="p-8 text-center text-amber-400/50 font-mono text-xs">Loading comparison matrix...</div>}>
             <EngineeringComparison />
           </React.Suspense>
         </div>
@@ -166,8 +166,8 @@ export function NeonComparisonStudio() {
 
       {/* View 3: Vehicle Assembly Matrix */}
       {activeTab === "vehicle_matrix" && (
-        <div className="w-full rounded-3xl overflow-hidden border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] bg-slate-900/80">
-          <React.Suspense fallback={<div className="p-8 text-center text-slate-500 font-mono text-xs">Loading assembly matrix...</div>}>
+        <div className="w-full rounded-3xl overflow-hidden border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] bg-amber-950/80">
+          <React.Suspense fallback={<div className="p-8 text-center text-amber-400/50 font-mono text-xs">Loading assembly matrix...</div>}>
             <VehicleComparisonStudio />
           </React.Suspense>
         </div>

@@ -23,10 +23,10 @@ export const NeonHorizonStatRail: React.FC<NeonHorizonStatRailProps> = ({ sim })
     <div className="hidden xl:flex flex-col gap-4 w-72 shrink-0 select-none">
       <div className="sticky top-28 flex flex-col gap-4">
         {/* SIMULATION PROGRESS Panel */}
-        <div className="p-5 rounded-3xl bg-slate-900/80/85 backdrop-blur-3xl border border-white/12 shadow-[0_25px_60px_rgba(0,0,0,0.60),inset_0_1px_0_rgba(255,255,255,0.10)] flex flex-col items-center gap-5 nh-edge-top">
+        <div className="p-5 rounded-3xl bg-amber-950/80/85 backdrop-blur-3xl border border-white/12 shadow-[0_25px_60px_rgba(0,0,0,0.60),inset_0_1px_0_rgba(255,255,255,0.10)] flex flex-col items-center gap-5 nh-edge-top">
           {/* Header Bar with Engineering Log Toggle Button */}
           <div className="w-full flex items-center justify-between">
-            <span className="text-xs font-bold tracking-widest text-slate-300 uppercase">
+            <span className="text-xs font-bold tracking-widest text-amber-200/70 uppercase">
               SIMULATION PROGRESS
             </span>
             <button
@@ -38,7 +38,7 @@ export const NeonHorizonStatRail: React.FC<NeonHorizonStatRailProps> = ({ sim })
               className={`p-1.5 rounded-lg text-xs flex items-center gap-1 transition-all cursor-pointer ${
  showLog
  ? "bg-amber-500/25 text-amber-300 border border-sky-400/35"
- : "bg-white/5 text-slate-400 hover:text-slate-200 border border-white/10"
+ : "bg-white/5 text-amber-300/60 hover:text-amber-100 border border-white/10"
  }`}
             >
               <Terminal size={13} />
@@ -95,7 +95,7 @@ export const NeonHorizonStatRail: React.FC<NeonHorizonStatRailProps> = ({ sim })
               className={`w-11 h-11 rounded-full flex items-center justify-center transition-all cursor-pointer ${
  activeMode === "race"
  ? "bg-amber-500/25 text-sky-100 border border-sky-300/40"
- : "bg-white/[0.06] text-slate-300 hover:bg-white/[0.12] border border-white/8"
+ : "bg-white/[0.06] text-amber-200/70 hover:bg-white/[0.12] border border-white/8"
  }`}
             >
               <Flag size={18} />
@@ -110,7 +110,7 @@ export const NeonHorizonStatRail: React.FC<NeonHorizonStatRailProps> = ({ sim })
               className={`w-11 h-11 rounded-full flex items-center justify-center transition-all cursor-pointer ${
  activeMode === "aero"
  ? "bg-amber-500/25 text-sky-100 border border-sky-300/40"
- : "bg-white/[0.06] text-slate-300 hover:bg-white/[0.12] border border-white/8"
+ : "bg-white/[0.06] text-amber-200/70 hover:bg-white/[0.12] border border-white/8"
  }`}
             >
               <Wind size={18} />
@@ -125,7 +125,7 @@ export const NeonHorizonStatRail: React.FC<NeonHorizonStatRailProps> = ({ sim })
               className={`w-11 h-11 rounded-full flex items-center justify-center transition-all cursor-pointer ${
  activeMode === "chip"
  ? "bg-amber-500/25 text-sky-100 border border-sky-300/40"
- : "bg-white/[0.06] text-slate-300 hover:bg-white/[0.12] border border-white/8"
+ : "bg-white/[0.06] text-amber-200/70 hover:bg-white/[0.12] border border-white/8"
  }`}
             >
               <Cpu size={18} />
@@ -135,62 +135,62 @@ export const NeonHorizonStatRail: React.FC<NeonHorizonStatRailProps> = ({ sim })
           {/* Telemetry Rows */}
           <div className="w-full flex flex-col gap-2.5 pt-2 border-t border-white/10">
             {/* POWER */}
-            <div className="flex items-center justify-between p-3 rounded-2xl bg-slate-900/80/70 border border-white/6 hover:border-amber-500/30 transition-colors">
+            <div className="flex items-center justify-between p-3 rounded-2xl bg-amber-950/80/70 border border-white/6 hover:border-amber-500/30 transition-colors">
               <div className="flex items-center gap-2.5">
                 <div className="w-8 h-8 rounded-full bg-amber-500/20 flex items-center justify-center text-amber-400">
                   <Flag size={15} />
                 </div>
-                <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">
+                <span className="text-xs font-bold text-amber-300/60 uppercase tracking-wider">
                   POWER
                 </span>
               </div>
               <span className="text-base font-extrabold text-slate-100">
-                <AnimatedCounter value={power} /> <span className="text-xs font-medium text-slate-400">hp</span>
+                <AnimatedCounter value={power} /> <span className="text-xs font-medium text-amber-300/60">hp</span>
               </span>
             </div>
 
             {/* TORQUE */}
-            <div className="flex items-center justify-between p-3 rounded-2xl bg-slate-900/80/70 border border-white/6 hover:border-amber-500/30 transition-colors">
+            <div className="flex items-center justify-between p-3 rounded-2xl bg-amber-950/80/70 border border-white/6 hover:border-amber-500/30 transition-colors">
               <div className="flex items-center gap-2.5">
                 <div className="w-8 h-8 rounded-full bg-amber-500/20 flex items-center justify-center text-amber-400">
                   <Gauge size={15} />
                 </div>
-                <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">
+                <span className="text-xs font-bold text-amber-300/60 uppercase tracking-wider">
                   TORQUE
                 </span>
               </div>
               <span className="text-base font-extrabold text-slate-100">
-                <AnimatedCounter value={torque} /> <span className="text-xs font-medium text-slate-400">Nm</span>
+                <AnimatedCounter value={torque} /> <span className="text-xs font-medium text-amber-300/60">Nm</span>
               </span>
             </div>
 
             {/* WEIGHT */}
-            <div className="flex items-center justify-between p-3 rounded-2xl bg-slate-900/80/70 border border-white/6 hover:border-amber-500/30 transition-colors">
+            <div className="flex items-center justify-between p-3 rounded-2xl bg-amber-950/80/70 border border-white/6 hover:border-amber-500/30 transition-colors">
               <div className="flex items-center gap-2.5">
                 <div className="w-8 h-8 rounded-full bg-amber-500/20 flex items-center justify-center text-amber-400">
                   <Weight size={15} />
                 </div>
-                <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">
+                <span className="text-xs font-bold text-amber-300/60 uppercase tracking-wider">
                   WEIGHT
                 </span>
               </div>
               <span className="text-base font-extrabold text-slate-100">
-                <AnimatedCounter value={weight} /> <span className="text-xs font-medium text-slate-400">kg</span>
+                <AnimatedCounter value={weight} /> <span className="text-xs font-medium text-amber-300/60">kg</span>
               </span>
             </div>
 
             {/* 0-60 */}
-            <div className="flex items-center justify-between p-3 rounded-2xl bg-slate-900/80/70 border border-white/6 hover:border-amber-500/30 transition-colors">
+            <div className="flex items-center justify-between p-3 rounded-2xl bg-amber-950/80/70 border border-white/6 hover:border-amber-500/30 transition-colors">
               <div className="flex items-center gap-2.5">
                 <div className="w-8 h-8 rounded-full bg-amber-500/20 flex items-center justify-center text-amber-400">
                   <Timer size={15} />
                 </div>
-                <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">
+                <span className="text-xs font-bold text-amber-300/60 uppercase tracking-wider">
                   0-60
                 </span>
               </div>
               <span className="text-base font-extrabold text-slate-100">
-                {zeroToSixty.toFixed(2)} <span className="text-xs font-medium text-slate-400">s</span>
+                {zeroToSixty.toFixed(2)} <span className="text-xs font-medium text-amber-300/60">s</span>
               </span>
             </div>
           </div>

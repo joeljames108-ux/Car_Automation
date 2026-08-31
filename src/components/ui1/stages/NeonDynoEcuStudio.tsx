@@ -79,7 +79,7 @@ export function NeonDynoEcuStudio() {
               className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs nh-font-mono font-bold transition-all cursor-pointer whitespace-nowrap ${
  isActive
  ? "bg-amber-500/25 text-sky-200 border border-amber-500/30"
- : "text-slate-400 hover:text-slate-200 hover:bg-white/5"
+ : "text-amber-300/60 hover:text-amber-100 hover:bg-white/5"
  }`}
             >
               {tab.icon}
@@ -91,7 +91,7 @@ export function NeonDynoEcuStudio() {
 
       {/* View 1: Embedded Powertrain Dyno Studio */}
       {activeTab === "standalone_dyno" && (
-        <div className="w-full rounded-3xl overflow-hidden border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] bg-slate-900/80">
+        <div className="w-full rounded-3xl overflow-hidden border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] bg-amber-950/80">
           <PowertrainDynoStudio />
         </div>
       )}
@@ -168,15 +168,15 @@ export function NeonDynoEcuStudio() {
             >
               <div className="flex flex-col gap-3">
                 <div className="flex items-center justify-between p-3 rounded-xl bg-black/40 border border-white/10">
-                  <span className="text-xs text-slate-300 font-bold">HORSEPOWER GAIN</span>
+                  <span className="text-xs text-amber-200/70 font-bold">HORSEPOWER GAIN</span>
                   <span className="text-sm font-mono font-bold text-emerald-400">+{tunedHp - sim.peakPower} HP</span>
                 </div>
                 <div className="flex items-center justify-between p-3 rounded-xl bg-black/40 border border-white/10">
-                  <span className="text-xs text-slate-300 font-bold">TORQUE GAIN</span>
+                  <span className="text-xs text-amber-200/70 font-bold">TORQUE GAIN</span>
                   <span className="text-sm font-mono font-bold text-amber-400">+{tunedTorque - sim.peakTorque} Nm</span>
                 </div>
                 <div className="flex items-center justify-between p-3 rounded-xl bg-black/40 border border-white/10">
-                  <span className="text-xs text-slate-300 font-bold">TURBO LAG INDEX</span>
+                  <span className="text-xs text-amber-200/70 font-bold">TURBO LAG INDEX</span>
                   <span className="text-sm font-mono font-bold text-yellow-400">{antiLag ? "0.08s (ALS ON)" : "0.34s"}</span>
                 </div>
               </div>

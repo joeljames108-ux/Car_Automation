@@ -33,7 +33,7 @@ export const SeatPositionSelector: React.FC<SeatPositionSelectorProps> = ({
     seatCount <= 2 ? ["DRIVER", "FRONT_PASSENGER"] : ["DRIVER", "FRONT_PASSENGER", "REAR_LEFT", "REAR_RIGHT"];
 
   return (
-    <div className="flex flex-wrap items-center gap-2 p-1.5 rounded-2xl bg-slate-950/85 backdrop-blur-xl border border-amber-500/35 shadow-2xl">
+    <div className="flex flex-wrap items-center gap-2 p-1.5 rounded-2xl bg-amber-950/85 backdrop-blur-xl border border-amber-500/35 shadow-2xl">
       {/* Label */}
       <div className="flex items-center gap-1.5 px-3 py-1 text-[11px] font-mono font-extrabold text-amber-400 border-r border-amber-500/30">
         <Eye size={14} className="text-amber-400" />
@@ -53,7 +53,7 @@ export const SeatPositionSelector: React.FC<SeatPositionSelectorProps> = ({
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer ${
                 isActive
                   ? "bg-gradient-to-r from-amber-400 to-orange-500 text-slate-950 shadow-lg shadow-amber-500/30 font-black scale-105"
-                  : "bg-slate-900/80 text-amber-200/80 hover:text-amber-100 hover:bg-slate-800/80 border border-amber-500/20"
+                  : "bg-amber-950/80/80 text-amber-200/80 hover:text-amber-100 hover:bg-amber-900/40/80 border border-amber-500/20"
               }`}
               title={cfg.name}
             >
@@ -71,7 +71,7 @@ export const SeatPositionSelector: React.FC<SeatPositionSelectorProps> = ({
           className={`flex items-center gap-1 px-2.5 py-1.5 rounded-xl text-[11px] font-mono font-bold transition-all ml-auto cursor-pointer ${
             isAutoPan
               ? "bg-amber-500 text-slate-950 shadow-md shadow-amber-500/30 animate-pulse"
-              : "bg-slate-900 text-amber-400 border border-amber-500/30 hover:bg-slate-900/80"
+              : "bg-amber-950/80 text-amber-400 border border-amber-500/30 hover:bg-amber-950/80/80"
           }`}
         >
           <Sparkles size={13} />

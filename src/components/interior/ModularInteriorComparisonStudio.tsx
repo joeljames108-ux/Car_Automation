@@ -71,9 +71,9 @@ export const ModularInteriorComparisonStudio: React.FC<ModularInteriorComparison
   };
 
   return (
-    <div className="space-y-4 p-4 rounded-2xl bg-slate-950/80 border border-amber-500/30 backdrop-blur-xl shadow-2xl text-xs font-mono">
+    <div className="space-y-4 p-4 rounded-2xl bg-amber-950/80 border border-amber-500/30 backdrop-blur-xl shadow-2xl text-xs font-mono">
       {/* Header */}
-      <div className="flex flex-wrap items-center justify-between gap-3 p-3 rounded-xl bg-slate-900/60 border border-amber-500/40">
+      <div className="flex flex-wrap items-center justify-between gap-3 p-3 rounded-xl bg-amber-950/80/60 border border-amber-500/40">
         <div className="flex items-center gap-2.5">
           <div className="p-2 rounded-lg bg-amber-500/20 text-amber-300 border border-amber-500/40">
             <GitCompare size={18} />
@@ -86,11 +86,11 @@ export const ModularInteriorComparisonStudio: React.FC<ModularInteriorComparison
 
         {/* Benchmark Preset Selector */}
         <div className="flex items-center gap-2">
-          <span className="text-slate-400">BENCHMARK CABIN:</span>
+          <span className="text-amber-300/70">BENCHMARK CABIN:</span>
           <select
             value={benchmarkKey}
             onChange={(e) => setBenchmarkKey(e.target.value)}
-            className="px-3 py-1.5 rounded-xl bg-slate-900 border border-amber-500/40 text-amber-300 font-bold outline-none"
+            className="px-3 py-1.5 rounded-xl bg-amber-950/80 border border-amber-500/40 text-amber-300 font-bold outline-none"
           >
             {Object.entries(CURATED_INTERIOR_PRESETS).map(([k, p]) => (
               <option key={k} value={k}>
@@ -138,26 +138,26 @@ export const ModularInteriorComparisonStudio: React.FC<ModularInteriorComparison
         </div>
 
         {/* Cabin B Card */}
-        <div className="p-4 rounded-xl bg-slate-900/60 border border-amber-500/30 space-y-3">
+        <div className="p-4 rounded-xl bg-amber-950/80/60 border border-amber-500/30 space-y-3">
           <div className="flex items-center justify-between">
             <span className="font-bold text-amber-400">CABIN B (BENCHMARK)</span>
             <span className="px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 text-[10px]">{benchmarkCabin.name}</span>
           </div>
           <div className="grid grid-cols-2 gap-2 text-[11px]">
-            <div className="p-2 rounded-lg bg-slate-950/80 border border-slate-800">
-              <span className="block text-slate-400">Total Mass:</span>
+            <div className="p-2 rounded-lg bg-amber-950/80 border border-amber-800/30">
+              <span className="block text-amber-300/70">Total Mass:</span>
               <span className="font-extrabold text-slate-100">{benchmarkCabin.metrics.totalInteriorMassKg} kg</span>
             </div>
-            <div className="p-2 rounded-lg bg-slate-950/80 border border-slate-800">
-              <span className="block text-slate-400">BOM Cost:</span>
+            <div className="p-2 rounded-lg bg-amber-950/80 border border-amber-800/30">
+              <span className="block text-amber-300/70">BOM Cost:</span>
               <span className="font-extrabold text-slate-100">${benchmarkCabin.metrics.totalInteriorCostUSD.toLocaleString()}</span>
             </div>
-            <div className="p-2 rounded-lg bg-slate-950/80 border border-slate-800">
-              <span className="block text-slate-400">Ear Noise Level:</span>
+            <div className="p-2 rounded-lg bg-amber-950/80 border border-amber-800/30">
+              <span className="block text-amber-300/70">Ear Noise Level:</span>
               <span className="font-extrabold text-amber-400">{acousticB.driverEarSplDba} dBA</span>
             </div>
-            <div className="p-2 rounded-lg bg-slate-950/80 border border-slate-800">
-              <span className="block text-slate-400">SAE Ergo Score:</span>
+            <div className="p-2 rounded-lg bg-amber-950/80 border border-amber-800/30">
+              <span className="block text-amber-300/70">SAE Ergo Score:</span>
               <span className="font-extrabold text-emerald-400">{ergoB.overallSaeErgonomicsScore}/100</span>
             </div>
           </div>
@@ -173,36 +173,36 @@ export const ModularInteriorComparisonStudio: React.FC<ModularInteriorComparison
       </div>
 
       {/* Delta Scorecard Grid */}
-      <div className="p-4 rounded-xl bg-slate-900/80 border border-slate-800 space-y-3">
-        <h4 className="font-bold text-slate-200 flex items-center gap-2">
+      <div className="p-4 rounded-xl bg-amber-950/80/80 border border-amber-800/30 space-y-3">
+        <h4 className="font-bold text-amber-100 flex items-center gap-2">
           <Zap size={14} className="text-amber-400" />
           <span>DELTA PERFORMANCE SCORECARD (B vs A)</span>
         </h4>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-          <div className="p-3 rounded-lg bg-slate-950 border border-slate-800 text-center">
-            <span className="text-slate-400 text-[10px] block">MASS DELTA</span>
+          <div className="p-3 rounded-lg bg-amber-950 border border-amber-800/30 text-center">
+            <span className="text-amber-300/70 text-[10px] block">MASS DELTA</span>
             <span className={`text-base font-extrabold ${delta.massDiffKg < 0 ? "text-emerald-400" : "text-red-400"}`}>
               {delta.massDiffKg > 0 ? `+${delta.massDiffKg}` : delta.massDiffKg} kg
             </span>
           </div>
 
-          <div className="p-3 rounded-lg bg-slate-950 border border-slate-800 text-center">
-            <span className="text-slate-400 text-[10px] block">COST DELTA</span>
+          <div className="p-3 rounded-lg bg-amber-950 border border-amber-800/30 text-center">
+            <span className="text-amber-300/70 text-[10px] block">COST DELTA</span>
             <span className={`text-base font-extrabold ${delta.costDiffUSD < 0 ? "text-emerald-400" : "text-amber-400"}`}>
               {delta.costDiffUSD > 0 ? `+$${delta.costDiffUSD.toLocaleString()}` : `-$${Math.abs(delta.costDiffUSD).toLocaleString()}`}
             </span>
           </div>
 
-          <div className="p-3 rounded-lg bg-slate-950 border border-slate-800 text-center">
-            <span className="text-slate-400 text-[10px] block">COMFORT DELTA</span>
-            <span className={`text-base font-extrabold ${delta.comfortDiffPercent > 0 ? "text-emerald-400" : "text-slate-400"}`}>
+          <div className="p-3 rounded-lg bg-amber-950 border border-amber-800/30 text-center">
+            <span className="text-amber-300/70 text-[10px] block">COMFORT DELTA</span>
+            <span className={`text-base font-extrabold ${delta.comfortDiffPercent > 0 ? "text-emerald-400" : "text-amber-300/70"}`}>
               {delta.comfortDiffPercent > 0 ? `+${delta.comfortDiffPercent}%` : `${delta.comfortDiffPercent}%`}
             </span>
           </div>
 
-          <div className="p-3 rounded-lg bg-slate-950 border border-slate-800 text-center">
-            <span className="text-slate-400 text-[10px] block">LATERAL G SUPPORT</span>
-            <span className={`text-base font-extrabold ${delta.lateralGSupportDiff > 0 ? "text-emerald-400" : "text-slate-400"}`}>
+          <div className="p-3 rounded-lg bg-amber-950 border border-amber-800/30 text-center">
+            <span className="text-amber-300/70 text-[10px] block">LATERAL G SUPPORT</span>
+            <span className={`text-base font-extrabold ${delta.lateralGSupportDiff > 0 ? "text-emerald-400" : "text-amber-300/70"}`}>
               {delta.lateralGSupportDiff > 0 ? `+${delta.lateralGSupportDiff}G` : `${delta.lateralGSupportDiff}G`}
             </span>
           </div>

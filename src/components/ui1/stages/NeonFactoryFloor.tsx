@@ -95,7 +95,7 @@ export function NeonFactoryFloor() {
               className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs nh-font-mono font-bold transition-all cursor-pointer whitespace-nowrap ${
  isActive
  ? "bg-amber-500/25 text-sky-200 border border-amber-500/30"
- : "text-slate-400 hover:text-slate-200 hover:bg-white/5"
+ : "text-amber-300/60 hover:text-amber-100 hover:bg-white/5"
  }`}
             >
               {tab.icon}
@@ -107,14 +107,14 @@ export function NeonFactoryFloor() {
 
       {/* View 1: Robotic Factory Sequencer */}
       {activeTab === "robotic_line" && (
-        <div className="w-full rounded-3xl overflow-hidden border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] bg-slate-900/80 p-3">
+        <div className="w-full rounded-3xl overflow-hidden border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] bg-amber-950/80 p-3">
           <RoboticFactorySequencer />
         </div>
       )}
 
       {/* View 2: Manufacturing Designer */}
       {activeTab === "production_pipeline" && (
-        <div className="w-full rounded-3xl overflow-hidden border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] bg-slate-900/80 p-4">
+        <div className="w-full rounded-3xl overflow-hidden border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] bg-amber-950/80 p-4">
           <ManufacturingDesigner />
         </div>
       )}
@@ -135,12 +135,12 @@ export function NeonFactoryFloor() {
               className="p-5 flex flex-col gap-4"
             >
               <div className="flex items-center justify-between p-3 rounded-xl bg-black/40 border border-white/10">
-                <span className="text-xs text-slate-400 font-mono">CYCLE TIME</span>
+                <span className="text-xs text-amber-300/60 font-mono">CYCLE TIME</span>
                 <span className="text-sm font-bold font-mono text-amber-300">{st.cycleTime}</span>
               </div>
 
               <div className="flex items-center justify-between p-3 rounded-xl bg-black/40 border border-white/10">
-                <span className="text-xs text-slate-400 font-mono">STATION YIELD RATE</span>
+                <span className="text-xs text-amber-300/60 font-mono">STATION YIELD RATE</span>
                 <span className="text-sm font-bold font-mono text-emerald-400">{st.yieldRate}</span>
               </div>
             </NeonHorizonGlassPanel>

@@ -65,7 +65,7 @@ export function NeonChassisStudio() {
               className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs nh-font-mono font-bold transition-all cursor-pointer whitespace-nowrap ${
  isActive
  ? "bg-amber-500/25 text-sky-200 border border-amber-500/30"
- : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-base-800/40"
+ : "text-slate-600 dark:text-amber-300/60 hover:text-slate-900 dark:hover:text-amber-100 hover:bg-base-800/40"
  }`}
             >
               {tab.icon}
@@ -266,25 +266,25 @@ export function NeonChassisStudio() {
               <NeonPerformanceKPIGrid sim={sim} metrics={["power", "weight", "lateralG", "accel0_100"]} />
               <div className="grid grid-cols-2 gap-2">
                 <div className="p-2 rounded-xl bg-white/[0.04] border border-white/6 flex items-center justify-between">
-                  <span className="text-[10px] font-mono text-slate-400">FL CORNER</span>
+                  <span className="text-[10px] font-mono text-amber-300/60">FL CORNER</span>
                   <span className="text-xs font-mono font-bold text-amber-300">
                     {Math.round((vehicleWeight * weightDistribution) / 2)} kg
                   </span>
                 </div>
                 <div className="p-2 rounded-xl bg-white/[0.04] border border-white/6 flex items-center justify-between">
-                  <span className="text-[10px] font-mono text-slate-400">FR CORNER</span>
+                  <span className="text-[10px] font-mono text-amber-300/60">FR CORNER</span>
                   <span className="text-xs font-mono font-bold text-amber-300">
                     {Math.round((vehicleWeight * weightDistribution) / 2)} kg
                   </span>
                 </div>
                 <div className="p-2 rounded-xl bg-white/[0.04] border border-white/6 flex items-center justify-between">
-                  <span className="text-[10px] font-mono text-slate-400">RL CORNER</span>
+                  <span className="text-[10px] font-mono text-amber-300/60">RL CORNER</span>
                   <span className="text-xs font-mono font-bold text-amber-300">
                     {Math.round((vehicleWeight * (1 - weightDistribution)) / 2)} kg
                   </span>
                 </div>
                 <div className="p-2 rounded-xl bg-white/[0.04] border border-white/6 flex items-center justify-between">
-                  <span className="text-[10px] font-mono text-slate-400">RR CORNER</span>
+                  <span className="text-[10px] font-mono text-amber-300/60">RR CORNER</span>
                   <span className="text-xs font-mono font-bold text-amber-300">
                     {Math.round((vehicleWeight * (1 - weightDistribution)) / 2)} kg
                   </span>

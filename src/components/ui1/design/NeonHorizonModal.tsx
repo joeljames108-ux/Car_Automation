@@ -54,7 +54,7 @@ export const NeonHorizonModal: React.FC<NeonHorizonModalProps> = ({
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       {/* Backdrop */}
       <div
-        className="fixed inset-0 bg-slate-900/80/80 backdrop-blur-md transition-opacity duration-300"
+        className="fixed inset-0 bg-amber-950/80/80 backdrop-blur-md transition-opacity duration-300"
         onClick={handleClose}
       />
 
@@ -79,13 +79,13 @@ export const NeonHorizonModal: React.FC<NeonHorizonModalProps> = ({
                   {title}
                 </h3>
                 {subtitle && (
-                  <p className="text-xs text-slate-400 nh-font-mono">{subtitle}</p>
+                  <p className="text-xs text-amber-300/60 nh-font-mono">{subtitle}</p>
                 )}
               </div>
             </div>
             <button
               onClick={handleClose}
-              className="p-1.5 rounded-xl text-slate-400 hover:text-white hover:bg-white/10 transition-all cursor-pointer border border-transparent hover:border-white/20"
+              className="p-1.5 rounded-xl text-amber-300/60 hover:text-white hover:bg-white/10 transition-all cursor-pointer border border-transparent hover:border-white/20"
             >
               <X size={18} />
             </button>

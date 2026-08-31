@@ -6,7 +6,7 @@ export function NeonCircuitDiagram({ trackName, country, lengthKm, turns }: { tr
     <div className="panel p-4 rounded-2xl space-y-3">
       <div className="flex items-center justify-between">
         <div><span className="text-[9px] font-mono text-amber-400/80 uppercase tracking-widest font-bold">Circuit Telemetry</span><h4 className="text-sm font-bold text-slate-800 dark:text-slate-100">{trackName}</h4></div>
-        <div className="text-right"><span className="text-xs font-mono text-slate-700 dark:text-slate-300">{lengthKm} km</span><div className="text-[10px] text-slate-500 dark:text-slate-400 font-mono">{turns} Turns</div></div>
+        <div className="text-right"><span className="text-xs font-mono text-slate-700 dark:text-amber-200/70">{lengthKm} km</span><div className="text-[10px] text-amber-400/50 dark:text-amber-300/60 font-mono">{turns} Turns</div></div>
       </div>
       <div className="h-32 w-full flex items-center justify-center"><svg viewBox="0 0 400 160" className="w-full h-full">
         <defs><linearGradient id="nCG" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stopColor="#8fb9d9" /><stop offset="50%" stopColor="#6e8cb5" /><stop offset="100%" stopColor="#9d8fc4" /></linearGradient></defs>

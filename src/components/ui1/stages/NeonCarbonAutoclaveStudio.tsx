@@ -66,10 +66,10 @@ export function NeonCarbonAutoclaveStudio() {
             }}
             className="p-6 flex flex-col gap-4"
           >
-            <div className="grid grid-cols-8 gap-2 p-4 rounded-xl bg-slate-900/80 border border-sky-400/25 shadow-[inset_0_0_20px_rgba(0,0,0,0.8)]">
+            <div className="grid grid-cols-8 gap-2 p-4 rounded-xl bg-amber-950/80 border border-sky-400/25 shadow-[inset_0_0_20px_rgba(0,0,0,0.8)]">
               {["0°", "+45°", "-45°", "90°", "0°", "+45°", "-45°", "90°", "90°", "-45°", "+45°", "0°", "90°", "-45°", "+45°", "0°"].map((ply, idx) => (
-                <div key={idx} className="p-2.5 rounded-lg bg-slate-900/80 border border-white/10 flex flex-col items-center justify-center font-mono text-[10px] text-center">
-                  <span className="text-slate-400">P{idx + 1}</span>
+                <div key={idx} className="p-2.5 rounded-lg bg-amber-950/80 border border-white/10 flex flex-col items-center justify-center font-mono text-[10px] text-center">
+                  <span className="text-amber-300/60">P{idx + 1}</span>
                   <span className="text-amber-300 font-bold text-xs">{ply}</span>
                 </div>
               ))}
@@ -92,7 +92,7 @@ export function NeonCarbonAutoclaveStudio() {
                     className={`p-2.5 rounded-lg border text-center text-xs font-bold cursor-pointer transition-all ${
  isSelected
  ? "bg-amber-500/20 border-amber-500/30 text-sky-200"
- : "bg-slate-900/80 border-white/10 text-slate-400 hover:border-sky-400/25"
+ : "bg-amber-950/80 border-white/10 text-amber-300/60 hover:border-sky-400/25"
  }`}
                   >
                     {r.name}
@@ -136,13 +136,13 @@ export function NeonCarbonAutoclaveStudio() {
               onChange={(val) => setVesselPressure(val)}
             />
 
-            <div className="p-3.5 rounded-xl bg-slate-900/80 border border-sky-400/15 flex flex-col gap-2 font-mono text-xs">
+            <div className="p-3.5 rounded-xl bg-amber-950/80 border border-sky-400/15 flex flex-col gap-2 font-mono text-xs">
               <div className="flex items-center justify-between">
-                <span className="text-slate-400">Fiber Volume Fraction (Vf):</span>
+                <span className="text-amber-300/60">Fiber Volume Fraction (Vf):</span>
                 <span className="text-emerald-300 font-bold">64.5% Optimal</span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-slate-400">Vacuum Bag Debulk:</span>
+                <span className="text-amber-300/60">Vacuum Bag Debulk:</span>
                 <span className="text-amber-300 font-bold">-0.98 Bar Vacuum</span>
               </div>
             </div>

@@ -175,16 +175,16 @@ export function NeonTrackBattle() {
 
             {/* Sector Times */}
             <div className="w-full grid grid-cols-3 gap-3 border-t border-white/10 pt-4 mt-4 nh-font-mono text-center text-xs">
-              <div className="bg-slate-900/80 p-2.5 rounded-xl border border-sky-400/15">
-                <span className="text-slate-400 text-[10px]">SECTOR 1</span>
+              <div className="bg-amber-950/80 p-2.5 rounded-xl border border-sky-400/15">
+                <span className="text-amber-300/60 text-[10px]">SECTOR 1</span>
                 <div className="text-emerald-300 font-bold text-sm mt-0.5">34.21s</div>
               </div>
-              <div className="bg-slate-900/80 p-2.5 rounded-xl border border-sky-400/15">
-                <span className="text-slate-400 text-[10px]">SECTOR 2</span>
+              <div className="bg-amber-950/80 p-2.5 rounded-xl border border-sky-400/15">
+                <span className="text-amber-300/60 text-[10px]">SECTOR 2</span>
                 <div className="text-amber-300 font-bold text-sm mt-0.5">1:02.84s</div>
               </div>
-              <div className="bg-slate-900/80 p-2.5 rounded-xl border border-sky-400/15">
-                <span className="text-slate-400 text-[10px]">SECTOR 3</span>
+              <div className="bg-amber-950/80 p-2.5 rounded-xl border border-sky-400/15">
+                <span className="text-amber-300/60 text-[10px]">SECTOR 3</span>
                 <div className="text-amber-300 font-bold text-sm mt-0.5">42.15s</div>
               </div>
             </div>
@@ -212,11 +212,11 @@ export function NeonTrackBattle() {
               ].map((tire) => (
                 <div
                   key={tire.pos}
-                  className="p-3 rounded-xl bg-slate-900/80 border border-sky-400/15 flex flex-col items-center justify-center text-center"
+                  className="p-3 rounded-xl bg-amber-950/80 border border-sky-400/15 flex flex-col items-center justify-center text-center"
                 >
                   <span className="text-[10px] nh-font-mono text-amber-400 font-bold">{tire.pos} TIRE</span>
                   <span className="text-lg font-black nh-font-headline text-slate-100 my-0.5">{tire.temp}</span>
-                  <span className="text-[10px] nh-font-mono text-slate-400">{tire.psi}</span>
+                  <span className="text-[10px] nh-font-mono text-amber-300/60">{tire.psi}</span>
                 </div>
               ))}
             </div>
@@ -243,7 +243,7 @@ export function NeonTrackBattle() {
                 className="w-4 h-4 rounded-full bg-rose-400 absolute"
               />
             </div>
-            <div className="text-xs nh-font-mono text-slate-300">
+            <div className="text-xs nh-font-mono text-amber-200/70">
               LATERAL: <span className="text-amber-300 font-bold">{lateralG} G</span> · LONGITUDINAL: <span className="text-amber-300 font-bold">1.45 G</span>
             </div>
           </NeonHorizonGlassPanel>

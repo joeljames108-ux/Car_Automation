@@ -67,19 +67,19 @@ export function NeonVgtTurboStudio() {
             }}
             className="p-6 flex flex-col gap-4"
           >
-            <div className="grid grid-cols-3 gap-3 p-4 rounded-xl bg-slate-900/80 border border-sky-400/25 font-mono text-xs">
-              <div className="p-3 rounded-lg bg-slate-900/80 border border-white/10 flex flex-col items-center">
-                <span className="text-slate-400 text-[10px]">Inlet Temp</span>
+            <div className="grid grid-cols-3 gap-3 p-4 rounded-xl bg-amber-950/80 border border-sky-400/25 font-mono text-xs">
+              <div className="p-3 rounded-lg bg-amber-950/80 border border-white/10 flex flex-col items-center">
+                <span className="text-amber-300/60 text-[10px]">Inlet Temp</span>
                 <span className="text-amber-400 font-bold text-sm">985°C EGT</span>
-                <span className="text-slate-500 text-[10px]">Inconel 718</span>
+                <span className="text-amber-400/50 text-[10px]">Inconel 718</span>
               </div>
-              <div className="p-3 rounded-lg bg-slate-900/80 border border-white/10 flex flex-col items-center">
-                <span className="text-slate-400 text-[10px]">Pressure Ratio</span>
+              <div className="p-3 rounded-lg bg-amber-950/80 border border-white/10 flex flex-col items-center">
+                <span className="text-amber-300/60 text-[10px]">Pressure Ratio</span>
                 <span className="text-amber-300 font-bold text-sm">3.85 : 1 P₃/P₁</span>
                 <span className="text-emerald-400 text-[10px]">High Surge Margin</span>
               </div>
-              <div className="p-3 rounded-lg bg-slate-900/80 border border-white/10 flex flex-col items-center">
-                <span className="text-slate-400 text-[10px]">Shaft Bearings</span>
+              <div className="p-3 rounded-lg bg-amber-950/80 border border-white/10 flex flex-col items-center">
+                <span className="text-amber-300/60 text-[10px]">Shaft Bearings</span>
                 <span className="text-amber-300 font-bold text-sm">Dual Ceramic Ball</span>
                 <span className="text-amber-400 text-[10px]">Water-Cooled CHRA</span>
               </div>
@@ -103,7 +103,7 @@ export function NeonVgtTurboStudio() {
                     className={`p-2.5 rounded-lg border text-center text-xs font-bold cursor-pointer transition-all ${
  isSelected
  ? "bg-amber-500/20 border-amber-500/30 text-sky-200"
- : "bg-slate-900/80 border-white/10 text-slate-400 hover:border-sky-400/25"
+ : "bg-amber-950/80 border-white/10 text-amber-300/60 hover:border-sky-400/25"
  }`}
                   >
                     {m.name}
@@ -147,13 +147,13 @@ export function NeonVgtTurboStudio() {
               onChange={(val) => setEngineRpm(val)}
             />
 
-            <div className="p-3.5 rounded-xl bg-slate-900/80 border border-sky-400/15 flex flex-col gap-2 font-mono text-xs">
+            <div className="p-3.5 rounded-xl bg-amber-950/80 border border-sky-400/15 flex flex-col gap-2 font-mono text-xs">
               <div className="flex items-center justify-between">
-                <span className="text-slate-400">Turbine Wheel:</span>
+                <span className="text-amber-300/60">Turbine Wheel:</span>
                 <span className="text-emerald-300 font-bold">Titanium-Aluminide (TiAl)</span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-slate-400">Wastegate Bypass:</span>
+                <span className="text-amber-300/60">Wastegate Bypass:</span>
                 <span className="text-amber-300 font-bold">Internal Electronic Diverter</span>
               </div>
             </div>

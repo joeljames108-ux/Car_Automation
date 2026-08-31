@@ -105,11 +105,11 @@ export function NeonCompetitorRadar() {
             <div className="flex items-center justify-center gap-6 border-t border-white/10 pt-3 text-xs nh-font-mono">
               <div className="flex items-center gap-2">
                 <span className="w-3 h-3 rounded-full bg-sky-300" />
-                <span className="text-slate-200">Your Vehicle</span>
+                <span className="text-amber-100">Your Vehicle</span>
               </div>
               <div className="flex items-center gap-2">
                 <span className="w-3 h-3 rounded-full bg-amber-400" />
-                <span className="text-slate-200">Selected Rival</span>
+                <span className="text-amber-100">Selected Rival</span>
               </div>
             </div>
           </NeonHorizonGlassPanel>
@@ -138,14 +138,14 @@ export function NeonCompetitorRadar() {
                   className={`p-3.5 rounded-xl border transition-all cursor-pointer flex flex-col gap-1.5 ${
  isSelected
  ? "bg-amber-500/20 border-amber-500/30 text-sky-200"
- : "bg-slate-900/80 border-white/10 hover:border-sky-400/25"
+ : "bg-amber-950/80 border-white/10 hover:border-sky-400/25"
  }`}
                 >
                   <div className="flex items-center justify-between">
                     <span className="text-xs font-bold text-slate-100">{r.name}</span>
                     <span className="text-xs nh-font-mono font-bold text-amber-300">{r.price}</span>
                   </div>
-                  <div className="flex items-center justify-between text-[10px] nh-font-mono text-slate-400">
+                  <div className="flex items-center justify-between text-[10px] nh-font-mono text-amber-300/60">
                     <span>{r.power} · {r.weight}</span>
                     <span className="text-amber-300">0-60: {r.zeroSixty}</span>
                   </div>

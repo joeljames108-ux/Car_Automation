@@ -43,9 +43,9 @@ export const NeonHorizonButton: React.FC<NeonHorizonButtonProps> = ({
     primary:
       "bg-amber-500/15 text-sky-200 border border-amber-500/30 hover:bg-amber-500/25 hover:border-sky-300/50 hover:text-white shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]",
     secondary:
-      "bg-white/[0.05] text-slate-200 border border-white/10 hover:bg-white/[0.09] hover:border-white/20 shadow-[0_2px_8px_rgba(0,0,0,0.25)]",
+      "bg-white/[0.05] text-amber-100 border border-white/10 hover:bg-white/[0.09] hover:border-white/20 shadow-[0_2px_8px_rgba(0,0,0,0.25)]",
     ghost:
-      "bg-transparent text-slate-400 hover:text-slate-100 hover:bg-white/[0.06] border border-transparent hover:border-white/10",
+      "bg-transparent text-amber-300/60 hover:text-slate-100 hover:bg-white/[0.06] border border-transparent hover:border-white/10",
     danger:
       "bg-rose-500/12 text-rose-200 border border-rose-400/30 hover:bg-rose-500/22 hover:border-rose-300/50 hover:text-white",
     neon:

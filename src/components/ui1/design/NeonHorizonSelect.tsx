@@ -43,18 +43,18 @@ export const NeonHorizonSelect: React.FC<NeonHorizonSelectProps> = ({
 
   const variantStyles = {
     primary:
-      "bg-slate-900/80/85 border-white/12 text-slate-200 focus:border-sky-400/35",
+      "bg-amber-950/80/85 border-white/12 text-amber-100 focus:border-sky-400/35",
     secondary:
-      "bg-slate-900/80/70 border-white/15 text-slate-200 focus:border-amber-500/30",
+      "bg-amber-950/80/70 border-white/15 text-amber-100 focus:border-amber-500/30",
     minimal:
-      "bg-black/30 border-white/10 text-slate-200 focus:border-amber-500/30",
+      "bg-black/30 border-white/10 text-amber-100 focus:border-amber-500/30",
   }[variant];
 
   return (
     <div className={`flex flex-col gap-1.5 ${className}`}>
       {label && (
         <div className="flex items-center justify-between">
-          <span className="nh-label-caps text-slate-400">{label}</span>
+          <span className="nh-label-caps text-amber-300/60">{label}</span>
           {sublabel && <span className="text-[10px] nh-font-mono text-amber-400/80">{sublabel}</span>}
         </div>
       )}
@@ -76,7 +76,7 @@ export const NeonHorizonSelect: React.FC<NeonHorizonSelectProps> = ({
               key={opt.value}
               value={opt.value}
               disabled={opt.disabled}
-              className="bg-slate-900/80 text-slate-100 py-1 font-sans"
+              className="bg-amber-950/80 text-slate-100 py-1 font-sans"
             >
               {opt.label} {opt.sublabel ? `(${opt.sublabel})` : ""}
             </option>

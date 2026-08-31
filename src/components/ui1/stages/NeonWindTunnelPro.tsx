@@ -155,7 +155,7 @@ export function NeonWindTunnelPro() {
             }}
             className="p-6 flex flex-col gap-4"
           >
-            <div className="w-full h-52 bg-slate-900/80 rounded-xl border border-sky-400/25 overflow-hidden relative shadow-[inset_0_0_25px_rgba(0,0,0,0.85)]">
+            <div className="w-full h-52 bg-amber-950/80 rounded-xl border border-sky-400/25 overflow-hidden relative shadow-[inset_0_0_25px_rgba(0,0,0,0.85)]">
               <canvas ref={canvasRef} width={640} height={210} className="w-full h-full" />
               <div className="absolute top-2 left-3 flex items-center gap-2">
                 <div className="w-2 h-2 rounded-full bg-sky-300 animate-ping" />

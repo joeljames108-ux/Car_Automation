@@ -97,8 +97,8 @@ export const NeonMotorsportStudio = memo(function NeonMotorsportStudio() {
 
             {/* Tire Degradation SVG Curve */}
             <div className="flex flex-col gap-2 pt-2 border-t border-white/10">
-              <span className="nh-label-caps text-slate-400 text-[10px]">TIRE WEAR CURVE & CLIFF PROJECTION</span>
-              <div className="h-32 w-full bg-slate-900/80 rounded-xl border border-sky-400/15 p-2">
+              <span className="nh-label-caps text-amber-300/60 text-[10px]">TIRE WEAR CURVE & CLIFF PROJECTION</span>
+              <div className="h-32 w-full bg-amber-950/80 rounded-xl border border-sky-400/15 p-2">
                 <svg viewBox="0 0 400 100" className="w-full h-full overflow-visible">
                   {[20, 50, 80].map((y) => (
                     <line key={y} x1="20" y1={y} x2="380" y2={y} stroke="rgba(255,255,255,0.06)" strokeWidth="1" />
@@ -128,27 +128,27 @@ export const NeonMotorsportStudio = memo(function NeonMotorsportStudio() {
             }}
             className="p-6 flex flex-col gap-4"
           >
-            <div className="p-4 rounded-xl bg-slate-900/80 border border-sky-400/15 flex flex-col gap-2">
+            <div className="p-4 rounded-xl bg-amber-950/80 border border-sky-400/15 flex flex-col gap-2">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-bold text-amber-300">RACE ENGINEER:</span>
-                <span className="text-[10px] nh-font-mono text-slate-400">14:22:04</span>
+                <span className="text-[10px] nh-font-mono text-amber-300/60">14:22:04</span>
               </div>
-              <p className="text-xs text-slate-200 italic">
+              <p className="text-xs text-amber-100 italic">
                 "Box this lap for Hard compound. Push on in-lap, we have a 2.4s undercut buffer to P2."
               </p>
             </div>
 
-            <div className="p-4 rounded-xl bg-slate-900/80 border border-sky-400/15 flex flex-col gap-2">
+            <div className="p-4 rounded-xl bg-amber-950/80 border border-sky-400/15 flex flex-col gap-2">
               <div className="flex items-center justify-between">
-                <span className="text-xs text-slate-400">Average Pit Stop Time:</span>
+                <span className="text-xs text-amber-300/60">Average Pit Stop Time:</span>
                 <span className="text-xs font-bold nh-font-mono text-amber-300">2.18s</span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-xs text-slate-400">Pit Lane Loss Delta:</span>
+                <span className="text-xs text-amber-300/60">Pit Lane Loss Delta:</span>
                 <span className="text-xs font-bold nh-font-mono text-amber-300">21.4s</span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-xs text-slate-400">Safety Car Probability:</span>
+                <span className="text-xs text-amber-300/60">Safety Car Probability:</span>
                 <span className="text-xs font-bold nh-font-mono text-emerald-300">32%</span>
               </div>
             </div>

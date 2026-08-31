@@ -147,7 +147,7 @@ export function NeonNvhLab() {
               <canvas ref={canvasRef} width={360} height={176} className="w-full h-full object-cover" />
             </div>
 
-            <div className="w-full flex justify-between items-center border-t border-white/10 pt-2 text-[10px] nh-font-mono text-slate-400">
+            <div className="w-full flex justify-between items-center border-t border-white/10 pt-2 text-[10px] nh-font-mono text-amber-300/60">
               <span>20 Hz (SUB)</span>
               <span>1 kHz (MID)</span>
               <span>20 kHz (AIR)</span>

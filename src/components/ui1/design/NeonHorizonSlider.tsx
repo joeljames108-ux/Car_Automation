@@ -76,9 +76,9 @@ export const NeonHorizonSlider: React.FC<NeonHorizonSliderProps> = ({
     >
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <span className="nh-label-caps text-slate-300">{label}</span>
+          <span className="nh-label-caps text-amber-200/70">{label}</span>
           {description && (
-            <span className="text-[10px] text-slate-500 nh-font-mono hidden sm:inline">
+            <span className="text-[10px] text-amber-400/50 nh-font-mono hidden sm:inline">
               {description}
             </span>
           )}
@@ -93,7 +93,7 @@ export const NeonHorizonSlider: React.FC<NeonHorizonSliderProps> = ({
 
       <div className="relative flex items-center h-5">
         {/* Track background */}
-        <div className="w-full h-1.5 bg-slate-900/80 rounded-full overflow-hidden border border-white/10 relative">
+        <div className="w-full h-1.5 bg-amber-950/80 rounded-full overflow-hidden border border-white/10 relative">
           {/* Active fill */}
           <div
             className={`h-full ${colorStyles.fill} rounded-full transition-all duration-75`}

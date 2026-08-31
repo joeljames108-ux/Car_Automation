@@ -29,8 +29,8 @@ export function NeonHorizonAlertBanner({
     type === "danger"
       ? "bg-rose-950/80 border-rose-500/60 text-rose-200"
       : type === "warning"
-      ? "bg-slate-950/80 border-amber-500/60 text-amber-200"
-      : "bg-slate-900/80 border-amber-500/30 text-sky-200";
+      ? "bg-amber-950/80 border-amber-500/60 text-amber-200"
+      : "bg-amber-950/80 border-amber-500/30 text-sky-200";
 
   return (
     <div
@@ -55,7 +55,7 @@ export function NeonHorizonAlertBanner({
           setVisible(false);
           onDismiss?.();
         }}
-        className="p-1 rounded-lg hover:bg-white/10 transition-colors text-slate-300 hover:text-white cursor-pointer"
+        className="p-1 rounded-lg hover:bg-white/10 transition-colors text-amber-200/70 hover:text-white cursor-pointer"
       >
         <X size={16} />
       </button>

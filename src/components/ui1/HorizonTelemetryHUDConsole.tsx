@@ -86,7 +86,7 @@ export function HorizonTelemetryHUDConsole() {
  ? isRedline
  ? "bg-rose-500 animate-pulse"
  : "bg-sky-300"
- : "bg-slate-800 border border-white/5"
+ : "bg-amber-900/30 border border-white/5"
  }`}
                       />
                     );
@@ -110,22 +110,22 @@ export function HorizonTelemetryHUDConsole() {
               withScanline
               className="p-6 flex flex-col items-center justify-center text-center"
             >
-              <span className="nh-label-caps text-slate-400 text-xs mb-2">VEHICLE VELOCITY</span>
+              <span className="nh-label-caps text-amber-300/60 text-xs mb-2">VEHICLE VELOCITY</span>
               <div className="text-5xl font-black nh-font-headline nh-gradient-text-cyan">
-                {speed} <span className="text-lg nh-font-mono text-slate-400">km/h</span>
+                {speed} <span className="text-lg nh-font-mono text-amber-300/60">km/h</span>
               </div>
 
               <div className="w-full mt-6 flex justify-around border-t border-sky-400/15 pt-4 nh-font-mono text-xs">
                 <div>
-                  <div className="text-slate-400 text-[10px]">RPM</div>
+                  <div className="text-amber-300/60 text-[10px]">RPM</div>
                   <div className="text-amber-300 font-bold text-base">{rpm}</div>
                 </div>
                 <div>
-                  <div className="text-slate-400 text-[10px]">GEAR</div>
+                  <div className="text-amber-300/60 text-[10px]">GEAR</div>
                   <div className="text-amber-300 font-bold text-base">5 / 7</div>
                 </div>
                 <div>
-                  <div className="text-slate-400 text-[10px]">0-60 MPH</div>
+                  <div className="text-amber-300/60 text-[10px]">0-60 MPH</div>
                   <div className="text-emerald-300 font-bold text-base">{sim.accel0_60.toFixed(2)}s</div>
                 </div>
               </div>
@@ -144,10 +144,10 @@ export function HorizonTelemetryHUDConsole() {
               <div className="space-y-4">
                 <div>
                   <div className="flex justify-between text-xs nh-font-mono mb-1">
-                    <span className="text-slate-400">TURBO BOOST:</span>
+                    <span className="text-amber-300/60">TURBO BOOST:</span>
                     <span className="text-amber-300 font-bold">{boostBar} BAR</span>
                   </div>
-                  <div className="w-full h-2.5 bg-slate-900/80 rounded-full p-0.5 border border-white/10">
+                  <div className="w-full h-2.5 bg-amber-950/80 rounded-full p-0.5 border border-white/10">
                     <div
                       style={{ width: `${(boostBar / 2.0) * 100}%` }}
                       className="h-full bg-gradient-to-r from-amber-500 to-yellow-400 rounded-full transition-all duration-100"
@@ -157,10 +157,10 @@ export function HorizonTelemetryHUDConsole() {
 
                 <div>
                   <div className="flex justify-between text-xs nh-font-mono mb-1">
-                    <span className="text-slate-400">ENGINE OIL TEMP:</span>
+                    <span className="text-amber-300/60">ENGINE OIL TEMP:</span>
                     <span className="text-amber-300 font-bold">{oilTemp} °C</span>
                   </div>
-                  <div className="w-full h-2.5 bg-slate-900/80 rounded-full p-0.5 border border-white/10">
+                  <div className="w-full h-2.5 bg-amber-950/80 rounded-full p-0.5 border border-white/10">
                     <div
                       style={{ width: `${(oilTemp / 130) * 100}%` }}
                       className="h-full bg-amber-500/60 rounded-full transition-all duration-100"
@@ -170,10 +170,10 @@ export function HorizonTelemetryHUDConsole() {
 
                 <div>
                   <div className="flex justify-between text-xs nh-font-mono mb-1">
-                    <span className="text-slate-400">BRAKE ROTOR TEMP:</span>
+                    <span className="text-amber-300/60">BRAKE ROTOR TEMP:</span>
                     <span className="text-amber-300 font-bold">{brakeTemp} °C</span>
                   </div>
-                  <div className="w-full h-2.5 bg-slate-900/80 rounded-full p-0.5 border border-white/10">
+                  <div className="w-full h-2.5 bg-amber-950/80 rounded-full p-0.5 border border-white/10">
                     <div
                       style={{ width: `${(brakeTemp / 800) * 100}%` }}
                       className="h-full bg-amber-500/60 rounded-full transition-all duration-100"
@@ -242,7 +242,7 @@ export function HorizonTelemetryHUDConsole() {
               { agent: "SUSPENSION DYNAMICS AGENT", rec: "Stiffen Front Anti-Roll Bar by 12% to eliminate understeer on turn-in", impact: "+0.04 Lateral G", priority: "medium" },
               { agent: "THERMAL MANAGEMENT AGENT", rec: "Expand Front Brake Cooling Duct aperture by 15mm", impact: "-45°C Rotor Peak Temp", priority: "high" },
             ].map((item, idx) => (
-              <div key={idx} className="p-4 rounded-xl bg-slate-900/80/80 border border-sky-400/25 flex flex-col justify-between gap-3">
+              <div key={idx} className="p-4 rounded-xl bg-amber-950/80/80 border border-sky-400/25 flex flex-col justify-between gap-3">
                 <div>
                   <div className="flex items-center justify-between mb-2">
                     <span className="text-[10px] nh-font-mono font-bold text-amber-400 uppercase tracking-widest">{item.agent}</span>

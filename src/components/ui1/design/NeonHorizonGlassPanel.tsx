@@ -34,17 +34,17 @@ export const NeonHorizonGlassPanel: React.FC<NeonHorizonGlassPanelProps> = ({
   // Smoked frosted glass — one coherent surface ramp, neutral depth only
   const variantStyles = {
     primary:
-      "bg-slate-900/80/80 backdrop-blur-2xl border border-white/10 shadow-[0_18px_44px_rgba(0,0,0,0.45),inset_0_1px_0_rgba(255,255,255,0.08)]",
+      "bg-amber-950/80/80 backdrop-blur-2xl border border-white/10 shadow-[0_18px_44px_rgba(0,0,0,0.45),inset_0_1px_0_rgba(255,255,255,0.08)]",
     secondary:
-      "bg-slate-900/80/70 backdrop-blur-xl border border-white/8 shadow-[0_12px_32px_rgba(0,0,0,0.38),inset_0_1px_0_rgba(255,255,255,0.06)]",
+      "bg-amber-950/80/70 backdrop-blur-xl border border-white/8 shadow-[0_12px_32px_rgba(0,0,0,0.38),inset_0_1px_0_rgba(255,255,255,0.06)]",
     tertiary:
-      "bg-slate-900/80/50 backdrop-blur-lg border border-white/6 shadow-[0_8px_20px_rgba(0,0,0,0.30)]",
+      "bg-amber-950/80/50 backdrop-blur-lg border border-white/6 shadow-[0_8px_20px_rgba(0,0,0,0.30)]",
     floating:
-      "bg-slate-900/80/90 backdrop-blur-3xl border border-white/12 shadow-[0_24px_60px_rgba(0,0,0,0.55),inset_0_1px_0_rgba(255,255,255,0.10)]",
+      "bg-amber-950/80/90 backdrop-blur-3xl border border-white/12 shadow-[0_24px_60px_rgba(0,0,0,0.55),inset_0_1px_0_rgba(255,255,255,0.10)]",
     inset:
-      "bg-slate-900/80/85 backdrop-blur-md border border-white/6 shadow-[inset_0_2px_8px_rgba(0,0,0,0.45)]",
+      "bg-amber-950/80/85 backdrop-blur-md border border-white/6 shadow-[inset_0_2px_8px_rgba(0,0,0,0.45)]",
     window:
-      "bg-slate-900/80/85 backdrop-blur-3xl border border-white/12 shadow-[0_28px_70px_rgba(0,0,0,0.60),inset_0_1px_0_rgba(255,255,255,0.10)]",
+      "bg-amber-950/80/85 backdrop-blur-3xl border border-white/12 shadow-[0_28px_70px_rgba(0,0,0,0.60),inset_0_1px_0_rgba(255,255,255,0.10)]",
   }[variant];
 
   const cornerStyles = {
@@ -73,7 +73,7 @@ export const NeonHorizonGlassPanel: React.FC<NeonHorizonGlassPanelProps> = ({
     <div
       onClick={onClick}
       style={style}
-      className={`relative overflow-hidden text-slate-200 ${variantStyles} ${cornerStyles} ${glowStyles} ${hoverClass} ${className}`}
+      className={`relative overflow-hidden text-amber-100 ${variantStyles} ${cornerStyles} ${glowStyles} ${hoverClass} ${className}`}
     >
       {/* Header bar */}
       {header && (
@@ -85,7 +85,7 @@ export const NeonHorizonGlassPanel: React.FC<NeonHorizonGlassPanelProps> = ({
                 {header.title}
               </span>
               {header.subtitle && (
-                <span className="text-[10px] text-slate-400 truncate">
+                <span className="text-[10px] text-amber-300/60 truncate">
                   {header.subtitle}
                 </span>
               )}

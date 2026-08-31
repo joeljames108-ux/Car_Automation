@@ -60,7 +60,7 @@ export function NeonExteriorStudio() {
             className={`flex items-center gap-2 px-4 py-2 rounded-xl text-xs nh-font-mono font-bold transition-all cursor-pointer whitespace-nowrap ${
               activeTab === tab.id
                 ? "bg-emerald-400/20 text-emerald-200 border border-emerald-400/30"
-                : "text-slate-400 hover:text-slate-200 hover:bg-white/5"
+                : "text-amber-300/60 hover:text-amber-100 hover:bg-white/5"
             }`}
           >
             {tab.icon}
@@ -110,7 +110,7 @@ export function NeonExteriorStudio() {
               >
               {/* Color Swatches */}
               <div className="flex flex-col gap-2">
-                <span className="nh-label-caps text-slate-400 text-[10px]">PRESET COLOR PALETTE</span>
+                <span className="nh-label-caps text-amber-300/60 text-[10px]">PRESET COLOR PALETTE</span>
                 <div className="grid grid-cols-3 sm:grid-cols-6 gap-3">
                   {colorPresets.map((c) => {
                     const isSelected = exterior.paintColor.toLowerCase() === c.hex.toLowerCase();
@@ -273,9 +273,9 @@ export function NeonExteriorStudio() {
               />
             </div>
 
-            <div className="p-4 rounded-xl bg-slate-900/80 border border-sky-400/15 flex items-center justify-between">
+            <div className="p-4 rounded-xl bg-amber-950/80 border border-sky-400/15 flex items-center justify-between">
               <div>
-                <span className="text-[10px] nh-font-mono text-slate-400">ACTIVE COLOR SPEC:</span>
+                <span className="text-[10px] nh-font-mono text-amber-300/60">ACTIVE COLOR SPEC:</span>
                 <div className="text-sm font-bold nh-font-headline text-sky-200 mt-0.5">
                   {exterior.paintColor.toUpperCase()} ({exterior.paintFinish.toUpperCase()})
                 </div>

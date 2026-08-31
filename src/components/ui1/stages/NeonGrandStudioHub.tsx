@@ -22,13 +22,13 @@ export function NeonGrandStudioHub() {
         }}
         className="p-6"
       >
-        <div className="text-xs text-slate-400 font-mono">
+        <div className="text-xs text-amber-300/60 font-mono">
           Unified real-time bidirectional engineering link active. Select any studio to calibrate telemetry, physics kinematics, or powertrain parameters.
         </div>
       </NeonHorizonGlassPanel>
 
       {/* Embedded Studio Hub Container */}
-      <div className="w-full rounded-3xl overflow-hidden border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] bg-slate-900/80">
+      <div className="w-full rounded-3xl overflow-hidden border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)] bg-amber-950/80">
         <Suspense fallback={<StageLoadingSkeleton stageName="studio" />}>
           <GrandAutomotiveStudioHub />
         </Suspense>

@@ -38,7 +38,7 @@ export const NeonHorizonContentViewport: React.FC<NeonHorizonContentViewportProp
   return (
     <div className={`flex-1 min-w-0 flex flex-col gap-4 ${className}`}>
       {/* Main Glass Cockpit Window Container */}
-      <div className="relative p-6 rounded-3xl bg-slate-900/80 backdrop-blur-3xl border border-white/12 shadow-[0_25px_60px_rgba(0,0,0,0.60),inset_0_1px_0_rgba(255,255,255,0.10)] flex flex-col gap-6 nh-edge-top nh-grain">
+      <div className="relative p-6 rounded-3xl bg-amber-950/80 backdrop-blur-3xl border border-white/12 shadow-[0_25px_60px_rgba(0,0,0,0.60),inset_0_1px_0_rgba(255,255,255,0.10)] flex flex-col gap-6 nh-edge-top nh-grain">
         {/* Instrument ruler strip */}
         <div className="nh-ruler -mt-2 opacity-30" aria-hidden="true" />
         {/* Top Cockpit Navigation Bar */}
@@ -58,7 +58,7 @@ export const NeonHorizonContentViewport: React.FC<NeonHorizonContentViewportProp
  : "text-amber-200/50 hover:text-amber-100 hover:bg-white/[0.04] border border-transparent"
  }`}
               >
-                <div className={`mb-1 transition-transform group-hover:scale-110 ${isActive ? "text-amber-400" : "text-slate-400"}`}>
+                <div className={`mb-1 transition-transform group-hover:scale-110 ${isActive ? "text-amber-400" : "text-amber-300/60"}`}>
                   {tab.icon}
                 </div>
                 <span className="text-[11px] font-semibold tracking-tight text-center truncate w-full">

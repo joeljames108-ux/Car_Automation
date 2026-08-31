@@ -22,15 +22,15 @@ export function NeonDonutChart({ segments, size = 140, totalLabel = "TOTAL" }: {
         </svg>
         <div className="absolute inset-0 flex flex-col items-center justify-center">
           <span className="font-mono font-bold text-slate-100 text-base"><AnimatedCounter value={total} /></span>
-          <span className="text-[9px] uppercase tracking-wider text-slate-500 font-mono">{totalLabel}</span>
+          <span className="text-[9px] uppercase tracking-wider text-amber-400/50 font-mono">{totalLabel}</span>
         </div>
       </div>
       <div className="space-y-1.5 flex-1 w-full">
         {segments.map((s, i) => { const pct = Math.round((s.value / total) * 100);
           return (
             <div key={i} className="flex items-center justify-between text-xs">
-              <div className="flex items-center gap-2"><span className="w-2.5 h-2.5 rounded-full shrink-0" style={{backgroundColor:s.color}} /><span className="text-slate-300 text-xs font-medium">{s.label}</span></div>
-              <div className="flex items-center gap-2 font-mono"><span className="text-slate-400 text-xs font-bold">{s.value.toLocaleString()}</span><span className="text-[10px] text-slate-500 w-8 text-right">{pct}%</span></div>
+              <div className="flex items-center gap-2"><span className="w-2.5 h-2.5 rounded-full shrink-0" style={{backgroundColor:s.color}} /><span className="text-amber-200/70 text-xs font-medium">{s.label}</span></div>
+              <div className="flex items-center gap-2 font-mono"><span className="text-amber-300/60 text-xs font-bold">{s.value.toLocaleString()}</span><span className="text-[10px] text-amber-400/50 w-8 text-right">{pct}%</span></div>
             </div>
           );
         })}
@@ -63,7 +63,7 @@ export function NeonHorseshoeGauge({ value, max = 10, size = 180 }: { value: num
       </svg>
       <div className="absolute inset-0 flex flex-col items-center justify-center">
         <span className="font-mono font-bold text-slate-100" style={{fontSize:size*0.2,color}}>{value.toFixed(1)}</span>
-        <span className="text-[9px] uppercase tracking-wider text-slate-500 font-mono">/ {max}</span>
+        <span className="text-[9px] uppercase tracking-wider text-amber-400/50 font-mono">/ {max}</span>
       </div>
     </div>
   );

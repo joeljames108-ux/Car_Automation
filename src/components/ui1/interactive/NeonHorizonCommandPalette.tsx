@@ -99,7 +99,7 @@ export function NeonHorizonCommandPalette({
 
   return (
     <div className="fixed inset-0 z-50 flex items-start justify-center pt-24 px-4 bg-black/75 backdrop-blur-md animate-nh-materialize">
-      <div className="w-full max-w-2xl bg-slate-900/80/95 border border-white/12 rounded-2xl overflow-hidden flex flex-col shadow-[0_30px_80px_rgba(0,0,0,0.65)]">
+      <div className="w-full max-w-2xl bg-amber-950/80/95 border border-white/12 rounded-2xl overflow-hidden flex flex-col shadow-[0_30px_80px_rgba(0,0,0,0.65)]">
         {/* Search Input Bar */}
         <div className="flex items-center gap-3 px-5 py-4 border-b border-white/8 bg-black/30">
           <Search size={18} className="text-amber-300/90" />
@@ -112,14 +112,14 @@ export function NeonHorizonCommandPalette({
               setQuery(e.target.value);
               setSelectedIndex(0);
             }}
-            className="flex-1 bg-transparent text-sm nh-font-headline text-slate-100 placeholder:text-slate-500 focus:outline-none"
+            className="flex-1 bg-transparent text-sm nh-font-headline text-slate-100 placeholder:text-amber-400/50 focus:outline-none"
           />
-          <span className="text-[10px] nh-font-mono text-slate-500 px-2 py-0.5 rounded bg-white/5 border border-white/10">
+          <span className="text-[10px] nh-font-mono text-amber-400/50 px-2 py-0.5 rounded bg-white/5 border border-white/10">
             ESC
           </span>
           <button
             onClick={onClose}
-            className="text-slate-400 hover:text-slate-200 transition-colors p-1 cursor-pointer"
+            className="text-amber-300/60 hover:text-amber-100 transition-colors p-1 cursor-pointer"
           >
             <X size={16} />
           </button>
@@ -128,7 +128,7 @@ export function NeonHorizonCommandPalette({
         {/* Results List */}
         <div className="max-h-96 overflow-y-auto p-2 flex flex-col gap-1 nh-scroll">
           {filteredItems.length === 0 ? (
-            <div className="p-8 text-center text-xs nh-font-mono text-slate-400">
+            <div className="p-8 text-center text-xs nh-font-mono text-amber-300/60">
               No matching studio or command found for "{query}".
             </div>
           ) : (
@@ -146,11 +146,11 @@ export function NeonHorizonCommandPalette({
                   className={`px-4 py-3 rounded-xl flex items-center justify-between transition-all cursor-pointer ${
  isSelected
  ? "bg-white/[0.08] text-white border border-white/15"
- : "text-slate-300 hover:bg-white/5 border border-transparent"
+ : "text-amber-200/70 hover:bg-white/5 border border-transparent"
  }`}
                 >
                   <div className="flex items-center gap-3">
-                    <span className={isSelected ? "text-amber-300" : "text-slate-400"}>
+                    <span className={isSelected ? "text-amber-300" : "text-amber-300/60"}>
                       {item.icon}
                     </span>
                     <span className="text-xs font-bold nh-font-headline">{item.label}</span>
@@ -168,7 +168,7 @@ export function NeonHorizonCommandPalette({
         </div>
 
         {/* Footer Hotkey Guide */}
-        <div className="px-5 py-2.5 bg-black/30 border-t border-white/8 flex items-center justify-between text-[11px] nh-font-mono text-slate-400">
+        <div className="px-5 py-2.5 bg-black/30 border-t border-white/8 flex items-center justify-between text-[11px] nh-font-mono text-amber-300/60">
           <div className="flex items-center gap-3">
             <span>↑↓ Navigate</span>
             <span>↵ Select</span>

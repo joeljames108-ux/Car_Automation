@@ -143,7 +143,7 @@ export function NeonFourWheelSteerStudio() {
             }}
             className="p-6 flex flex-col gap-4"
           >
-            <div className="w-full h-52 bg-slate-900/80 rounded-xl border border-sky-400/25 overflow-hidden relative flex items-center justify-center shadow-[inset_0_0_25px_rgba(0,0,0,0.85)]">
+            <div className="w-full h-52 bg-amber-950/80 rounded-xl border border-sky-400/25 overflow-hidden relative flex items-center justify-center shadow-[inset_0_0_25px_rgba(0,0,0,0.85)]">
               <canvas ref={canvasRef} width={400} height={210} />
               <div className="absolute top-2 left-3 flex items-center gap-2">
                 <span className="text-[10px] nh-font-mono text-amber-400">FRONT: +15.0° (CYAN)</span>
@@ -171,7 +171,7 @@ export function NeonFourWheelSteerStudio() {
                     className={`p-2.5 rounded-lg border text-center text-xs font-bold cursor-pointer transition-all ${
  isSelected
  ? "bg-amber-500/20 border-amber-500/30 text-sky-200"
- : "bg-slate-900/80 border-white/10 text-slate-400 hover:border-sky-400/25"
+ : "bg-amber-950/80 border-white/10 text-amber-300/60 hover:border-sky-400/25"
  }`}
                   >
                     {m.name}
@@ -215,13 +215,13 @@ export function NeonFourWheelSteerStudio() {
               onChange={(val) => setSteerAngle(val)}
             />
 
-            <div className="p-3.5 rounded-xl bg-slate-900/80 border border-sky-400/15 flex flex-col gap-2 font-mono text-xs">
+            <div className="p-3.5 rounded-xl bg-amber-950/80 border border-sky-400/15 flex flex-col gap-2 font-mono text-xs">
               <div className="flex items-center justify-between">
-                <span className="text-slate-400">Phase Crossover Speed:</span>
+                <span className="text-amber-300/60">Phase Crossover Speed:</span>
                 <span className="text-amber-300 font-bold">70 km/h Threshold</span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-slate-400">Rear Actuator Latency:</span>
+                <span className="text-amber-300/60">Rear Actuator Latency:</span>
                 <span className="text-emerald-300 font-bold">12 ms Brushless</span>
               </div>
             </div>

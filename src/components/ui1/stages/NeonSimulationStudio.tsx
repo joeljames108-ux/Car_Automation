@@ -82,7 +82,7 @@ export function NeonSimulationStudio() {
                     className={`p-3.5 rounded-xl border transition-all cursor-pointer flex flex-col gap-1.5 ${
  isSelected
  ? "bg-amber-500/20 border-amber-500/30 text-sky-200"
- : "bg-slate-900/80 border-white/10 hover:border-sky-400/25"
+ : "bg-amber-950/80 border-white/10 hover:border-sky-400/25"
  }`}
                   >
                     <div className="flex items-center justify-between">
@@ -91,7 +91,7 @@ export function NeonSimulationStudio() {
                         {circuit.length}
                       </NeonHorizonBadge>
                     </div>
-                    <div className="flex items-center justify-between text-[10px] nh-font-mono text-slate-400">
+                    <div className="flex items-center justify-between text-[10px] nh-font-mono text-amber-300/60">
                       <span className="text-emerald-300 font-bold">Lap: {circuit.baseLap}</span>
                       <span className="text-amber-300">Trap: {circuit.topSpeedTrap}</span>
                     </div>
@@ -113,19 +113,19 @@ export function NeonSimulationStudio() {
             }}
             className="p-6 flex flex-col gap-3 font-mono text-xs"
           >
-            <div className="p-3.5 rounded-xl bg-slate-900/80 border border-sky-400/15 flex items-center justify-between">
-              <span className="text-slate-400">Sector 1 (High Speed Apex):</span>
+            <div className="p-3.5 rounded-xl bg-amber-950/80 border border-sky-400/15 flex items-center justify-between">
+              <span className="text-amber-300/60">Sector 1 (High Speed Apex):</span>
               <span className="text-amber-300 font-bold">24.810s</span>
             </div>
-            <div className="p-3.5 rounded-xl bg-slate-900/80 border border-sky-400/15 flex items-center justify-between">
-              <span className="text-slate-400">Sector 2 (Technical Esses):</span>
+            <div className="p-3.5 rounded-xl bg-amber-950/80 border border-sky-400/15 flex items-center justify-between">
+              <span className="text-amber-300/60">Sector 2 (Technical Esses):</span>
               <span className="text-amber-300 font-bold">48.240s</span>
             </div>
-            <div className="p-3.5 rounded-xl bg-slate-900/80 border border-sky-400/15 flex items-center justify-between">
-              <span className="text-slate-400">Sector 3 (Main Straight):</span>
+            <div className="p-3.5 rounded-xl bg-amber-950/80 border border-sky-400/15 flex items-center justify-between">
+              <span className="text-amber-300/60">Sector 3 (Main Straight):</span>
               <span className="text-amber-300 font-bold">29.750s</span>
             </div>
-            <div className="p-3.5 rounded-xl bg-slate-900/80 border border-emerald-400/30 flex items-center justify-between mt-2">
+            <div className="p-3.5 rounded-xl bg-amber-950/80 border border-emerald-400/30 flex items-center justify-between mt-2">
               <span className="text-emerald-200 font-bold">Theoretical Best:</span>
               <span className="text-emerald-400 font-bold">{activeCircuit.baseLap}</span>
             </div>
