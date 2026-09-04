@@ -21,9 +21,9 @@ import { playHMIClickSound } from "../../../utils/hmiSoundSynth";
 
 /* ─── panel glass ─── */
 const glassPanel =
-  "rounded-2xl bg-amber-950/80/70 border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)]";
+  "rounded-2xl bg-amber-950/70 border border-white/10 shadow-[0_20px_50px_rgba(0,0,0,0.5)]";
 const innerCard =
-  "p-3.5 rounded-2xl bg-amber-950/80/80 border border-white/8";
+  "p-3.5 rounded-2xl bg-amber-950/80 border border-white/8";
 
 export function NeonAeroLab() {
   const { sim, updateAero } = useDesign();
@@ -412,7 +412,7 @@ export function NeonAeroLab() {
                   setFrameDropdownOpen(!frameDropdownOpen);
                   setBodyDropdownOpen(false);
                 }}
-                className="w-full p-3 rounded-2xl bg-amber-950/80/80 hover:bg-amber-950/80 border border-white/10 flex items-center justify-between transition-all cursor-pointer"
+                className="w-full p-3 rounded-2xl bg-amber-950/80 hover:bg-amber-950/80 border border-white/10 flex items-center justify-between transition-all cursor-pointer"
               >
                 <span className="text-sm font-medium text-amber-100">
                   {frameMaterial}
@@ -463,7 +463,7 @@ export function NeonAeroLab() {
                   setBodyDropdownOpen(!bodyDropdownOpen);
                   setFrameDropdownOpen(false);
                 }}
-                className="w-full p-3 rounded-2xl bg-amber-950/80/80 hover:bg-amber-950/80 border border-white/10 flex items-center justify-between transition-all cursor-pointer"
+                className="w-full p-3 rounded-2xl bg-amber-950/80 hover:bg-amber-950/80 border border-white/10 flex items-center justify-between transition-all cursor-pointer"
               >
                 <span className="text-sm font-medium text-amber-100">
                   {bodyMaterial}

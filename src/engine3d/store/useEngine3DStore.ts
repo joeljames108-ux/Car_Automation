@@ -57,6 +57,11 @@ export interface Engine3DStoreState {
   isAssemblyComplete: boolean;
   isAutoAssembling: boolean;
 
+  // ── 4-Stroke Engine Animation & View Controls ──
+  cutawayMode: boolean;
+  slowMotionScale: number; // 1.0, 0.5, 0.25, 0.1
+
+
   // ── Actions ──
   setEngineConfig: (cfg: Partial<EngineConfig>) => void;
   setEngineRotation: (rot: [number, number, number]) => void;
@@ -78,6 +83,9 @@ export interface Engine3DStoreState {
   toggleAttachmentPoints: () => void;
   toggleLabels: () => void;
   toggleDependencies: () => void;
+  setCutawayMode: (enabled: boolean) => void;
+  toggleCutawayMode: () => void;
+  setSlowMotionScale: (scale: number) => void;
   resetAssembly: () => void;
   autoAssembleAll: () => Promise<void>;
   syncFromEngine: () => void;
@@ -112,6 +120,12 @@ export const useEngine3DStore = create<Engine3DStoreState>((set, get) => {
     progress: { installedCount: 0, totalCount: getAllV12Manifests().length, percentage: 0 },
     isAssemblyComplete: false,
     isAutoAssembling: false,
+    cutawayMode: false,
+    slowMotionScale: 1.0,
+
+    setCutawayMode: (enabled) => set({ cutawayMode: enabled }),
+    toggleCutawayMode: () => set((s) => ({ cutawayMode: !s.cutawayMode })),
+    setSlowMotionScale: (scale) => set({ slowMotionScale: scale }),
 
     setEngineRotation: (rot) => set({ engineRotation: rot }),
 

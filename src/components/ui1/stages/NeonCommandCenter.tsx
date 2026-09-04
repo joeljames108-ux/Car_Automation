@@ -155,7 +155,7 @@ export const NeonCommandCenter: React.FC<NeonCommandCenterProps> = ({ onSelectSt
                 className={`p-4 rounded-2xl border transition-all duration-300 flex flex-col justify-between gap-3 cursor-pointer select-none ${
  isSelected
  ? "bg-amber-500/20 border-amber-500/30 text-sky-200 shadow-[inset_0_1px_1px_rgba(255,255,255,0.2)] scale-[1.02]"
- : "bg-amber-950/80/75 border-white/10 hover:border-amber-500/30 hover:bg-amber-950/80/80"
+ : "bg-amber-950/75 border-white/10 hover:border-amber-500/30 hover:bg-amber-950/80"
  }`}
               >
                 <div>
@@ -256,13 +256,13 @@ export const NeonCommandCenter: React.FC<NeonCommandCenterProps> = ({ onSelectSt
 
             {/* Quick Metrics */}
             <div className="grid grid-cols-2 gap-3 pt-1">
-              <div className="p-3 rounded-xl bg-amber-950/80/80 border border-sky-400/15">
+              <div className="p-3 rounded-xl bg-amber-950/80 border border-sky-400/15">
                 <span className="nh-label-caps text-amber-300/60 text-[9px]">TORSIONAL RIGIDITY</span>
                 <div className="text-base font-bold nh-font-headline text-sky-200 mt-0.5">
                   74.0 <span className="text-[10px] nh-font-mono text-amber-300/60">kNm/°</span>
                 </div>
               </div>
-              <div className="p-3 rounded-xl bg-amber-950/80/80 border border-sky-400/15">
+              <div className="p-3 rounded-xl bg-amber-950/80 border border-sky-400/15">
                 <span className="nh-label-caps text-amber-300/60 text-[9px]">CHASSIS MASS FACTOR</span>
                 <div className="text-base font-bold nh-font-headline text-emerald-300 mt-0.5">
                   0.15 <span className="text-[10px] nh-font-mono text-amber-300/60">(Ultralight)</span>

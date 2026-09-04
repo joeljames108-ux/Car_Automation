@@ -285,7 +285,7 @@ export const NeonHorizonHeroHUD: React.FC<NeonHorizonHeroHUDProps> = ({
         <div className="lg:col-span-5 flex flex-col items-center justify-center relative min-h-[190px]">
           <div
             ref={mountRef}
-            className="w-full h-44 rounded-2xl overflow-hidden border border-white/10 bg-amber-950/80/90 shadow-[inset_0_2px_18px_rgba(0,0,0,0.45)] relative"
+            className="w-full h-44 rounded-2xl overflow-hidden border border-white/10 bg-amber-950/90 shadow-[inset_0_2px_18px_rgba(0,0,0,0.45)] relative"
           />
 
           {/* Top Camera Controls Overlay */}
@@ -339,7 +339,7 @@ export const NeonHorizonHeroHUD: React.FC<NeonHorizonHeroHUDProps> = ({
         </div>
 
         {/* Right Live Gauges & Telemetry Cluster */}
-        <div className="lg:col-span-4 flex items-center justify-around gap-2 bg-amber-950/80/70 p-3 rounded-2xl border border-white/8">
+        <div className="lg:col-span-4 flex items-center justify-around gap-2 bg-amber-950/70 p-3 rounded-2xl border border-white/8">
           <NeonRadialDial rpm={rpm} gear={gear} size={125} />
 
           <div className="flex flex-col gap-2">

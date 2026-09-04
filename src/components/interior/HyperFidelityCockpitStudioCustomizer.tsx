@@ -304,9 +304,9 @@ export const HyperFidelityCockpitStudioCustomizer: React.FC = () => {
   }, [config.presetTheme]);
 
   return (
-    <div className="flex flex-col w-full h-full bg-amber-950/80/80 text-slate-100 rounded-xl overflow-hidden border border-amber-800/30 shadow-2xl font-sans">
+    <div className="flex flex-col w-full h-full bg-amber-950/80 text-slate-100 rounded-xl overflow-hidden border border-amber-800/30 shadow-2xl font-sans">
       {/* Header Bar */}
-      <div className="flex items-center justify-between px-6 py-3.5 bg-amber-950/80/80/90 backdrop-blur-md border-b border-amber-800/30/80">
+      <div className="flex items-center justify-between px-6 py-3.5 bg-amber-950/90 backdrop-blur-md border-b border-amber-800/80">
         <div className="flex items-center gap-3">
           <div className="p-2 bg-amber-500/10 rounded-lg border border-amber-500/30 text-amber-400">
             <Sparkles className="w-5 h-5" />
@@ -335,7 +335,7 @@ export const HyperFidelityCockpitStudioCustomizer: React.FC = () => {
         {/* 3D Viewport Canvas Container */}
         <div className="flex-1 h-full relative" ref={mountRef}>
           {/* Floating Camera Hotspot Switcher */}
-          <div className="absolute top-4 left-4 z-20 flex items-center gap-1.5 p-1.5 bg-amber-950/80/80/85 backdrop-blur-md rounded-xl border border-amber-800/30/90 shadow-xl">
+          <div className="absolute top-4 left-4 z-20 flex items-center gap-1.5 p-1.5 bg-amber-950/85 backdrop-blur-md rounded-xl border border-amber-800/90 shadow-xl">
             {(["driver_pov", "passenger_relax", "rear_vip_lounge", "panoramic_roof_skyview", "steering_macro_detail"] as StudioCameraPreset[]).map((cam) => (
               <button
                 key={cam}
@@ -343,7 +343,7 @@ export const HyperFidelityCockpitStudioCustomizer: React.FC = () => {
                 className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
                   activeCam === cam
                     ? "bg-amber-500/20 text-amber-300 border border-amber-500/40 shadow-sm"
-                    : "text-amber-300/70 hover:text-amber-50 hover:bg-amber-900/40/50"
+                    : "text-amber-300/70 hover:text-amber-50 hover:bg-amber-900/50"
                 }`}
               >
                 {cam.replace(/_/g, " ").toUpperCase()}
@@ -353,7 +353,7 @@ export const HyperFidelityCockpitStudioCustomizer: React.FC = () => {
 
           {/* Floating Acoustics NVH HUD Badge */}
           {acousticResult && (
-            <div className="absolute bottom-4 left-4 z-20 flex items-center gap-4 px-4 py-2.5 bg-amber-950/80/80/90 backdrop-blur-md rounded-xl border border-amber-800/30/90 shadow-xl text-xs">
+            <div className="absolute bottom-4 left-4 z-20 flex items-center gap-4 px-4 py-2.5 bg-amber-950/90 backdrop-blur-md rounded-xl border border-amber-800/90 shadow-xl text-xs">
               <div className="flex items-center gap-2 text-amber-400">
                 <Volume2 className="w-4 h-4" />
                 <span className="font-semibold">RT60: {acousticResult.reverberationTimeRt60Sec}s</span>
@@ -369,7 +369,7 @@ export const HyperFidelityCockpitStudioCustomizer: React.FC = () => {
         </div>
 
         {/* Right Configuration Sidebar */}
-        <div className="w-80 bg-amber-950/80/80/95 backdrop-blur-xl border-l border-amber-800/30/90 p-5 flex flex-col gap-5 overflow-y-auto z-20">
+        <div className="w-80 bg-amber-950/95 backdrop-blur-xl border-l border-amber-800/90 p-5 flex flex-col gap-5 overflow-y-auto z-20">
           {/* Preset Theme Selector */}
           <div className="flex flex-col gap-2">
             <label className="text-xs font-semibold text-amber-200 uppercase tracking-wider flex items-center gap-1.5">
@@ -383,7 +383,7 @@ export const HyperFidelityCockpitStudioCustomizer: React.FC = () => {
                   className={`py-2 px-2.5 rounded-lg text-xs font-medium text-center border transition-all ${
                     config.presetTheme === t
                       ? "bg-amber-500/20 text-amber-300 border-amber-500/50 shadow-md shadow-cyan-950/30"
-                      : "bg-amber-950/80/60 text-amber-300/70 border-amber-800/30 hover:border-amber-700/30"
+                      : "bg-amber-950/60 text-amber-300/70 border-amber-800/30 hover:border-amber-700/30"
                   }`}
                 >
                   {t.replace(/_/g, " ").toUpperCase()}
@@ -461,7 +461,7 @@ export const HyperFidelityCockpitStudioCustomizer: React.FC = () => {
                 className={`py-2 px-3 rounded-lg text-xs font-medium text-left border transition-all ${
                   config.activeLeatherType === m
                     ? "bg-amber-900/40 text-amber-300 border-amber-500/40"
-                    : "bg-amber-950/80/40 text-amber-300/70 border-amber-800/30/80 hover:border-amber-700/30"
+                    : "bg-amber-950/40 text-amber-300/70 border-amber-800/80 hover:border-amber-700/30"
                 }`}
               >
                 {m.replace(/_/g, " ").toUpperCase()}
@@ -470,7 +470,7 @@ export const HyperFidelityCockpitStudioCustomizer: React.FC = () => {
           </div>
 
           {/* Atmospheric Toggles */}
-          <div className="flex flex-col gap-2.5 pt-2 border-t border-amber-800/30/80">
+          <div className="flex flex-col gap-2.5 pt-2 border-t border-amber-800/80">
             <label className="flex items-center justify-between text-xs text-amber-200 cursor-pointer">
               <span>Volumetric Sun Rays</span>
               <input

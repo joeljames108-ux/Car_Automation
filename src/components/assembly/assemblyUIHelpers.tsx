@@ -47,7 +47,7 @@ export const StatDeltaBadges: React.FC<StatDeltaBadgesProps> = ({
   if (size === "lg") {
     return (
       <div className={`grid grid-cols-2 gap-3 ${className}`}>
-        <div className="bg-slate-900/80/80 border border-slate-800/80 rounded-2xl p-3">
+        <div className="bg-slate-900/80 border border-slate-800/80 rounded-2xl p-3">
           <span className="text-[10px] font-mono text-slate-400 flex items-center gap-1">
             <TrendingUp size={iconSize} className="text-amber-400" /> Peak Power
           </span>
@@ -56,7 +56,7 @@ export const StatDeltaBadges: React.FC<StatDeltaBadgesProps> = ({
           </div>
         </div>
 
-        <div className="bg-slate-900/80/80 border border-slate-800/80 rounded-2xl p-3">
+        <div className="bg-slate-900/80 border border-slate-800/80 rounded-2xl p-3">
           <span className="text-[10px] font-mono text-slate-400 flex items-center gap-1">
             <Zap size={iconSize} className="text-pink-400" /> Peak Torque
           </span>
@@ -65,7 +65,7 @@ export const StatDeltaBadges: React.FC<StatDeltaBadgesProps> = ({
           </div>
         </div>
 
-        <div className="bg-slate-900/80/80 border border-slate-800/80 rounded-2xl p-3">
+        <div className="bg-slate-900/80 border border-slate-800/80 rounded-2xl p-3">
           <span className="text-[10px] font-mono text-slate-400 flex items-center gap-1">
             <ShieldCheck size={iconSize} className="text-emerald-400" /> Durability
           </span>
@@ -74,7 +74,7 @@ export const StatDeltaBadges: React.FC<StatDeltaBadgesProps> = ({
           </div>
         </div>
 
-        <div className="bg-slate-900/80/80 border border-slate-800/80 rounded-2xl p-3">
+        <div className="bg-slate-900/80 border border-slate-800/80 rounded-2xl p-3">
           <span className="text-[10px] font-mono text-slate-400 flex items-center gap-1">
             <DollarSign size={iconSize} className="text-amber-400" /> Total Cost
           </span>

@@ -108,7 +108,7 @@ export function AnimMasterComponentCatalog() {
               }}
               className="p-6"
             >
-              <div className="flex justify-center items-center p-8 bg-slate-900/80/80 rounded-2xl border border-sky-400/15 min-h-[300px] perspective-1000">
+              <div className="flex justify-center items-center p-8 bg-slate-900/80 rounded-2xl border border-sky-400/15 min-h-[300px] perspective-1000">
                 <div
                   onMouseMove={handleMouseMoveCard}
                   onMouseLeave={handleMouseLeaveCard}
@@ -117,7 +117,7 @@ export function AnimMasterComponentCatalog() {
                     transition: cardTilt.rx === 0 ? "transform 0.5s ease-out" : "none",
                     transformStyle: "preserve-3d",
                   }}
-                  className="w-full max-w-md bg-slate-900/80/90 p-6 rounded-2xl border border-amber-500/30 shadow-[0_20px_50px_rgba(0,0,0,0.8)] relative overflow-hidden cursor-pointer group"
+                  className="w-full max-w-md bg-slate-900/90 p-6 rounded-2xl border border-amber-500/30 shadow-[0_20px_50px_rgba(0,0,0,0.8)] relative overflow-hidden cursor-pointer group"
                 >
                   {/* Dynamic Glare */}
                   <div
@@ -230,7 +230,7 @@ export function AnimMasterComponentCatalog() {
               ].map((item, i) => (
                 <div
                   key={i}
-                  className="p-3 rounded-xl bg-slate-900/80/80 border border-sky-400/15 flex items-center justify-between"
+                  className="p-3 rounded-xl bg-slate-900/80 border border-sky-400/15 flex items-center justify-between"
                 >
                   <span className="text-xs font-bold text-slate-100">{item.name}</span>
                   <div className="flex items-center gap-3">

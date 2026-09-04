@@ -166,7 +166,7 @@ export const NeonHorizonOrbitalStageNavigator: React.FC<NeonHorizonOrbitalStageN
         </div>
 
         {/* 3D Interactive Planetary Sphere & Surrounding Waypoint Cards */}
-        <div className="p-2 bg-amber-900/40/60 rounded-2xl border border-white/10">
+        <div className="p-2 bg-amber-900/60 rounded-2xl border border-white/10">
           <NeonHiggsfieldGlobe
             tabs={globeTabs}
             activeId={activeStage}

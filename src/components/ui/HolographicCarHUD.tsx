@@ -214,7 +214,7 @@ export function HolographicCarHUD({
   ];
 
   return (
-    <div className="w-full bg-slate-900/80/90 border border-amber-500/30 rounded-2xl p-4 shadow-[0_0_30px_rgba(34,211,238,0.12)] relative overflow-hidden">
+    <div className="w-full bg-slate-900/90 border border-amber-500/30 rounded-2xl p-4 shadow-[0_0_30px_rgba(34,211,238,0.12)] relative overflow-hidden">
       {/* Background Cyber Laser Reticles */}
       <div className="absolute top-2 left-2 text-[9px] font-mono text-amber-400/50 tracking-widest uppercase pointer-events-none z-10 flex items-center gap-2">
         <span>HUD // CAD TELEMETRY SYSTEM · 60FPS</span>
@@ -307,7 +307,7 @@ export function HolographicCarHUD({
         </div>
 
         {/* Right Dynamic RPM Tachometer & Gear HUD */}
-        <div className="flex-1 w-full flex flex-col sm:flex-row items-center justify-around gap-4 bg-slate-900/80/80 p-3 rounded-xl border border-amber-500/20">
+        <div className="flex-1 w-full flex flex-col sm:flex-row items-center justify-around gap-4 bg-slate-900/80 p-3 rounded-xl border border-amber-500/20">
           {/* Tachometer Ring */}
           <div className="relative flex flex-col items-center justify-center w-32 h-32">
             <svg viewBox="0 0 100 100" className="w-full h-full transform -rotate-90">

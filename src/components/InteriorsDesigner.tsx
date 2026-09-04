@@ -12,18 +12,14 @@
 import React, { useState, useEffect } from 'react';
 import {
   Sofa, Palette, Volume2, Snowflake, Shield, Gauge, Sparkles, Armchair,
-  Eye, Box, Sliders, Cpu, Monitor, Zap, Radio
+Box, Sliders, Cpu, Monitor, Zap, Radio
 } from 'lucide-react';
-import { useDesign } from '../state/DesignContext';
 import { Section, Slider, Select, ChoiceGrid, Toggle, StatTile } from './ui/Controls';
 import {
   SEAT_TYPES, SEAT_MATERIALS, DASHBOARD_MATERIALS, STEERING_WHEEL_TYPES,
   STEERING_MATERIALS, PEDAL_SETS, SHIFT_KNOBS, ROLL_CAGES
 } from '../sim/constants';
-import { Interior3DViewport } from './interior/Interior3DViewport';
-import { ModularInteriorStudio } from './interior/ModularInteriorStudio';
-import { MasterInteriorConfiguration } from '../exterior3d/types/interiorStudioTypes';
-import { COCKPIT_THEME_PRESETS } from '../exterior3d/manifests/interiorStudioCatalog';
+import { useDesign } from '../state/DesignContext';
 import { InfotainmentDesigner } from './InfotainmentDesigner';
 import { InteriorDashboardConfiguratorStudio } from './interior/InteriorDashboardConfiguratorStudio';
 import { playHMITabSound } from '../utils/hmiSoundSynth';
@@ -41,13 +37,13 @@ const TRIM_FINISH_OPTIONS = [
   { value: "brushed", label: "Brushed" },
 ];
 
-export type InteriorStudioViewMode = 'modular_studio' | 'electronics' | '3d_studio' | '2d_classic' | 'configurator';
+export type InteriorStudioViewMode = 'electronics' | '2d_classic' | 'configurator';
 
 interface InteriorsDesignerProps {
   initialSubTab?: InteriorStudioViewMode;
 }
 
-export function InteriorsDesigner({ initialSubTab = 'modular_studio' }: InteriorsDesignerProps) {
+export function InteriorsDesigner({ initialSubTab = 'configurator' }: InteriorsDesignerProps) {
   const { design, sim, updateInterior } = useDesign();
   const i = design.vehicle.interior;
   const chassis = design.vehicle.chassis;
@@ -60,74 +56,7 @@ export function InteriorsDesigner({ initialSubTab = 'modular_studio' }: Interior
     }
   }, [initialSubTab]);
 
-  // Convert current DesignContext state into a MasterInteriorConfiguration object
-  const [studioConfig, setStudioConfig] = useState<MasterInteriorConfiguration>(() => {
-    const base = COCKPIT_THEME_PRESETS.THEME_MIDNIGHT_STEALTH.config;
-    return {
-      dashboardId: 'DASH_HYPER_GLASS_03',
-      dashboardClass: 'hyper_minimalist_glass',
-      steeringWheelId: 'STEER_FLAT_BOTTOM',
-      steeringTypology: 'flat_bottom_sport',
-      frontSeatsId: 'SEAT_SPORT_RECARO',
-      seatingClass: 'sport_bolstered_recaro',
-      seatCount: (i.seatCount as 1 | 2 | 4 | 5) || 2,
-      harnessType: i.racingHarness ? 'sabelt_6_point_f1' : 'standard_3_point',
-      centerConsoleId: 'CONSOLE_ROTARY_CRYSTAL',
-      centerConsoleStyle: 'crystal_rotary_dial',
-      digitalCockpit: {
-        layoutType: 'pillar_to_pillar_hyperscreen',
-        uiTheme: 'cyberpunk_neon_cyan',
-        virtualClusterSizeInches: 12.3,
-        infotainmentSizeInches: Math.max(10, i.infotainmentSize || 14.5),
-        passengerScreenSizeInches: 12.3,
-        hasHolographicHUD: true,
-        hudProjectionDistanceM: 2.5,
-        hudFieldOfViewDeg: 12.0,
-        touchscreenHapticFeedback: true,
-        glassAntiReflectiveCoating: true,
-        ambientLightSync: true,
-      },
-      materials: {
-        primaryUpholstery: i.seatMaterial === 'alcantara' ? 'alcantara_suede' : 'nappa_leather',
-        secondaryUpholstery: 'nappa_leather',
-        primaryColorHex: i.interiorColor || '#12151c',
-        secondaryColorHex: '#1e2430',
-        stitchingPattern: 'diamond_quilted',
-        stitchingColorHex: i.accentColor || '#00f0ff',
-        trimAccents: i.dashboardMaterial === 'carbon_fiber' ? 'twill_gloss_carbon' : i.dashboardMaterial === 'wood' ? 'open_pore_walnut' : 'satin_brushed_aluminum',
-        seatBeltColorHex: i.accentColor || '#00f0ff',
-        carpetColorHex: '#0a0d13',
-        headlinerMaterial: 'starlight_fiber_optic',
-        headlinerColorHex: '#080a0f',
-      },
-      ambientLighting: {
-        enabled: (i.ambientLighting ?? 0.8) > 0.05,
-        brightnessPercent: Math.round((i.ambientLighting ?? 0.8) * 100),
-        primaryColorHex: i.accentColor || '#00f0ff',
-        secondaryColorHex: '#d97706',
-        colorMode: 'dual_zone_gradient',
-        activeZones: ['dashboard_contour', 'center_console_halo', 'door_spear_accents', 'footwell_mood', 'speaker_grille_halo'],
-        fiberOpticDiffuserDiffusion: 0.8,
-      },
-      audioSystemId: i.hasPremiumAudio ? 'AUDIO_SPATIAL_24' : 'AUDIO_BASE_8',
-      rollCage: {
-        type: i.rollCage === 'full' ? 'full_6_point_bolt_in' : i.rollCage === 'half' ? 'rear_4_point_half_cage' : 'none',
-        tubeDiameterMm: 45,
-        tubeMaterial: 'chromoly_4130',
-        massKg: i.rollCage === 'full' ? 38 : i.rollCage === 'half' ? 18 : 0,
-        torsionalStiffnessBoostPercent: i.rollCage === 'full' ? 24 : 10,
-        colorHex: '#94a3b8',
-      },
-      soundDeadeningLevel: i.soundDeadening ?? 0.7,
-      hasClimateDualZone: i.climateControl ?? true,
-      hasFragranceDiffuser: true,
-      hasWirelessPhoneChargers: true,
-    };
-  });
 
-  const chassisEng = design.vehicle.chassisEng;
-  const wbMm = chassisEng?.wheelbase || 2850;
-  const trMm = chassisEng?.trackWidthFront || 1620;
 
   const handleTabSelect = (mode: InteriorStudioViewMode) => {
     playHMITabSound();
@@ -166,22 +95,6 @@ export function InteriorsDesigner({ initialSubTab = 'modular_studio' }: Interior
           </button>
 
           <button
-            onClick={() => handleTabSelect('modular_studio')}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-              viewMode === 'modular_studio'
-                ? 'shadow-md scale-[1.02]'
-                : 'hover:opacity-80'
-            }`}
-            style={{
-              backgroundColor: viewMode === 'modular_studio' ? '#B45309' : 'transparent',
-              color: viewMode === 'modular_studio' ? '#ffffff' : '#78350F'
-            }}
-          >
-            <Sliders size={13} />
-            <span>MODULAR CABIN</span>
-          </button>
-
-          <button
             onClick={() => handleTabSelect('electronics')}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
               viewMode === 'electronics'
@@ -195,22 +108,6 @@ export function InteriorsDesigner({ initialSubTab = 'modular_studio' }: Interior
           >
             <Cpu size={13} />
             <span>ELECTRONICS & AVIONICS</span>
-          </button>
-
-          <button
-            onClick={() => handleTabSelect('3d_studio')}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-              viewMode === '3d_studio'
-                ? 'shadow-md scale-[1.02]'
-                : 'hover:opacity-80'
-            }`}
-            style={{
-              backgroundColor: viewMode === '3d_studio' ? '#B45309' : 'transparent',
-              color: viewMode === '3d_studio' ? '#ffffff' : '#78350F'
-            }}
-          >
-            <Eye size={13} />
-            <span>3D COCKPIT CAD</span>
           </button>
 
           <button
@@ -236,21 +133,9 @@ export function InteriorsDesigner({ initialSubTab = 'modular_studio' }: Interior
         <div className="rounded-2xl overflow-hidden shadow-2xl border border-amber-800/30">
           <InteriorDashboardConfiguratorStudio />
         </div>
-      ) : viewMode === 'modular_studio' ? (
-        /* MODE A: Integrated Modular Studio (3D Viewport + 5-Tab Material/Component Studio) */
-        <ModularInteriorStudio />
-      ) : viewMode === 'electronics' ? (
+        ) : viewMode === 'electronics' ? (
         /* MODE B: Vehicle Electronics, Infotainment, ADAS, CAN-FD & Avionics */
         <InfotainmentDesigner />
-      ) : viewMode === '3d_studio' ? (
-        /* MODE C: Pure Full-Size 3D Interactive Cockpit Viewport */
-        <div className="rounded-2xl overflow-hidden shadow-2xl border border-amber-800/30" style={{ height: '620px' }}>
-          <Interior3DViewport
-            config={studioConfig}
-            wheelbaseMm={wbMm}
-            trackWidthMm={trMm}
-          />
-        </div>
       ) : (
         /* MODE D: Classic 2D Controls & Section Layouts */
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">

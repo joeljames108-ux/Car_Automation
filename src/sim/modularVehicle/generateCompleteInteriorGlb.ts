@@ -171,7 +171,7 @@ export class CompleteInteriorGlbMasterGenerator {
       hasSportPedals: true,
     });
     if (explodedFactor > 0) {
-      cabinEnv.children.forEach((c) => {
+      cabinEnv.children.forEach((c: THREE.Object3D) => {
         if (c.name === "Cabin_OverheadHeadliner") c.position.y += explodedFactor * 0.5;
         if (c.name === "Cabin_FloorTub") c.position.y -= explodedFactor * 0.3;
       });

@@ -94,20 +94,20 @@ export class Seating3DGenerator {
 
     // 1. Front Driver Seat (Always Present)
     const driverSeat = this.buildSingleSeat(seatClass, harnessType, upholsteryMat, secondaryUpholsteryMat, shellCarbonMat, harnessBeltMat, camLockMat, badgeGlowMat, true);
-    driverSeat.position.set(-0.72, 0.28, -seatOffsetZ);
+    driverSeat.position.set(-0.62, 0.34, -seatOffsetZ);
     group.add(driverSeat);
 
     // 2. Front Passenger Seat (if seatCount >= 2)
     if (seatCount >= 2) {
       const passengerSeat = this.buildSingleSeat(seatClass, harnessType, upholsteryMat, secondaryUpholsteryMat, shellCarbonMat, harnessBeltMat, camLockMat, badgeGlowMat, false);
-      passengerSeat.position.set(-0.72, 0.28, seatOffsetZ);
+      passengerSeat.position.set(-0.62, 0.34, seatOffsetZ);
       group.add(passengerSeat);
     }
 
     // 3. Rear Seating Bench / VIP Lounge (if seatCount >= 4)
     if (seatCount >= 4) {
       const rearBench = this.buildRearSeating(seatCount === 5, upholsteryMat, secondaryUpholsteryMat, seatOffsetZ * 2.2);
-      rearBench.position.set(-1.42, 0.32, 0);
+      rearBench.position.set(-1.32, 0.36, 0);
       group.add(rearBench);
     }
 

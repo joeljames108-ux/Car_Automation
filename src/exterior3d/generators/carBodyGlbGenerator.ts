@@ -252,7 +252,7 @@ export function buildApexGT3HypercarScene(): THREE.Scene {
   loftedShell.name = 'Hypercar_CatmullRom_Lofted_Shell';
   // Align ISO 8855 (+X forward, +Z right) to scene standard (-Z forward, +X right)
   loftedShell.rotation.y = -Math.PI / 2;
-  loftedShell.position.set(0, 0, 0.45);
+  loftedShell.position.set(0, 0, -0.45); // Aligned: shell front wheel X=0.90 -> Z=-0.90 + offset -0.45 = -1.35 = GLB front wheel Z
   bodyGroup.add(loftedShell);
 
   // Batch 1: Stamped G2 primary surfaces & real 3D radiator cavities
@@ -394,69 +394,6 @@ export function buildApexGT3HypercarScene(): THREE.Scene {
   taillights.position.set(0, 0.68, 2.15);
   root.add(taillights);
 
-  // High-Density Mechanical, Cockpit & Racing Hardware Meshes
-  root.add(generatePowertrainBayMesh());
-  root.add(generateDetailedCockpitMesh('hypercar'));
-  root.add(generateExteriorRacingHardwareMesh());
-  root.add(generateInconelExhaustHeadersMesh());
-  root.add(generateUnderbodyAerodynamicsVenturiMesh());
-  root.add(generateChassisDoorSillAndExtinguisherMesh());
-  root.add(generateWheelBalancersAndHubDetailMesh());
-  root.add(generateSpaceframeSubframeAndCrashStructureMesh());
-  root.add(generateDrivetrainDifferentialAndCoolersMesh());
-  root.add(generateActiveAeroAndFenderLouversMesh());
-  root.add(generateCockpitMotorsportElectronicsMesh());
-  root.add(generateFuelCellAndRefuelingSystemMesh());
-  root.add(generatePneumaticAirJacksSystemMesh());
-  root.add(generateSteeringRackAndShaftAssemblyMesh());
-  root.add(generateAuxiliaryCoolersAndDuctingMesh());
-  root.add(generateTelemetrySensorsAndAeroCurlsMesh());
-  root.add(generateDrySumpLubricationAndCatchCanMesh());
-  root.add(generateTwinIntercoolersAndBlowOffValvesMesh());
-  root.add(generatePedalBoxBulkheadMasterCylindersMesh());
-  root.add(generateDualTierDivePlanesAndFrontVenturiMesh());
-  root.add(generateRoofRamAirSnorkelMesh());
-  root.add(generateInboardPushrodAndHeaveDamperMesh());
-  root.add(generateRotorFloatingBobbinsAndTireValvesMesh());
-  root.add(generateCockpitDashDisplayAndShiftLightsMesh());
-  root.add(generateRearDiffuserStrakesAndRainLightMesh());
-  root.add(generateExhaustThermalShieldsAndRearAeroMesh());
-  root.add(generateHybridKersAndInverterSystemMesh());
-  root.add(generateRacingClutchFlywheelAndStarterMesh());
-  root.add(generateSwanNeckWingPylonsAndPitchPlatesMesh());
-  root.add(generateBumperAirCurtainsAndCaliperBleedersMesh());
-  root.add(generateRollCagePaddingAndConsoleDialsMesh());
-  root.add(generateSplitterTurnbucklesAndKeelMesh());
-  root.add(generateTurboThermalBlanketsAndWaterLinesMesh());
-  root.add(generateSequentialShifterLinkageAndHeelPlateMesh());
-  root.add(generateCaliperBridgesAndPadClipsMesh());
-  root.add(generateWingEndplateAeroStrakesAndTireVentsMesh());
-  root.add(generateDorsalSharkFinAndPitotMesh());
-  root.add(generatePneumaticShiftActuatorAndGasBottleMesh());
-  root.add(generateSeatHaloRestraintsAndBracketsMesh());
-  root.add(generateHubDrivePinsAndLocknutMesh());
-  root.add(generateExhaustResonatorsAndO2SensorsMesh());
-  root.add(generateAerocatchLatchesAndTowHookMesh());
-  root.add(generateHelmetBlowerAndVentilationMesh());
-  root.add(generateClutchInspectionAndSlaveLineMesh());
-  root.add(generateRideHeightLasersAndFloorStrakesMesh());
-  root.add(generateExhaustFlameDispersersAndHangersMesh());
-  root.add(generateWingletGurneyAndFastenersMesh());
-  root.add(generateCockpitDigitalCamerasAndMonitorsMesh());
-  root.add(generateEmergencyCutoffAndFabricTowStrapsMesh());
-  root.add(generateBilletOilCatchTankAndBreathersMesh());
-  root.add(generateFrontSplitterRampsAndSkidPlatesMesh());
-  root.add(generateDrsActuatorAndFlapBearingsMesh());
-  root.add(generateDriverDrinkBottleAndFootboardMesh());
-  root.add(generateHoodNacaDuctsAndRadiatorScreensMesh());
-  root.add(generateRotorWearSensorsAndHubInfraredMesh());
-  root.add(generateExhaustSlipSpringsAndLambdaPlugsMesh());
-  root.add(generateTransaxleDualCoolersAndScoopsMesh());
-  root.add(generateBrakeRotorInternalVanesAndHatsMesh());
-  root.add(generateCockpitCenterNetAndHydrationMesh());
-  root.add(generateActiveSplitterFlapMotorsMesh());
-  root.add(generateChassisGroundStrapsAndReluctorRingsMesh());
-
   return scene;
 }
 
@@ -580,7 +517,7 @@ export function buildSportsGTCoupeScene(): THREE.Scene {
   );
   loftedGt.name = 'GT_Coupe_CatmullRom_Lofted_Shell';
   loftedGt.rotation.y = -Math.PI / 2;
-  loftedGt.position.set(0, 0, 0.50);
+  loftedGt.position.set(0, 0, -0.40); // Aligned: shell front wheel X=0.95 -> Z=-0.95 + offset -0.40 = -1.35 = GLB front wheel Z
   root.add(loftedGt);
 
   // Batch 1: Stamped GT Coupe primary body surfaces replacing primitive boxes
@@ -644,78 +581,6 @@ export function buildSportsGTCoupeScene(): THREE.Scene {
   gtMirrors.position.set(0, 0.68, -0.42);
   root.add(gtMirrors);
 
-  // High-Density Mechanical & Cockpit Hardware for GT Coupe
-  root.add(generatePowertrainBayMesh());
-  root.add(generateDetailedCockpitMesh('gt'));
-  root.add(generateExteriorRacingHardwareMesh());
-  root.add(generateInconelExhaustHeadersMesh());
-  root.add(generateUnderbodyAerodynamicsVenturiMesh());
-  root.add(generateChassisDoorSillAndExtinguisherMesh());
-  root.add(generateWheelBalancersAndHubDetailMesh());
-  root.add(generateSpaceframeSubframeAndCrashStructureMesh());
-  root.add(generateDrivetrainDifferentialAndCoolersMesh());
-  root.add(generateActiveAeroAndFenderLouversMesh());
-  root.add(generateCockpitMotorsportElectronicsMesh());
-  root.add(generateFuelCellAndRefuelingSystemMesh());
-  root.add(generatePneumaticAirJacksSystemMesh());
-  root.add(generateSteeringRackAndShaftAssemblyMesh());
-  root.add(generateAuxiliaryCoolersAndDuctingMesh());
-  root.add(generateTelemetrySensorsAndAeroCurlsMesh());
-  root.add(generateDrySumpLubricationAndCatchCanMesh());
-  root.add(generateTwinIntercoolersAndBlowOffValvesMesh());
-  root.add(generatePedalBoxBulkheadMasterCylindersMesh());
-  root.add(generateDualTierDivePlanesAndFrontVenturiMesh());
-  root.add(generateRoofRamAirSnorkelMesh());
-  root.add(generateInboardPushrodAndHeaveDamperMesh());
-  root.add(generateRotorFloatingBobbinsAndTireValvesMesh());
-  root.add(generateCockpitDashDisplayAndShiftLightsMesh());
-  root.add(generateRearDiffuserStrakesAndRainLightMesh());
-  root.add(generateExhaustThermalShieldsAndRearAeroMesh());
-  root.add(generateHybridKersAndInverterSystemMesh());
-  root.add(generateRacingClutchFlywheelAndStarterMesh());
-  root.add(generateSwanNeckWingPylonsAndPitchPlatesMesh());
-  root.add(generateBumperAirCurtainsAndCaliperBleedersMesh());
-  root.add(generateRollCagePaddingAndConsoleDialsMesh());
-  root.add(generateSplitterTurnbucklesAndKeelMesh());
-  root.add(generateTurboThermalBlanketsAndWaterLinesMesh());
-  root.add(generateSequentialShifterLinkageAndHeelPlateMesh());
-  root.add(generateCaliperBridgesAndPadClipsMesh());
-  root.add(generateWingEndplateAeroStrakesAndTireVentsMesh());
-  root.add(generateDorsalSharkFinAndPitotMesh());
-  root.add(generatePneumaticShiftActuatorAndGasBottleMesh());
-  root.add(generateSeatHaloRestraintsAndBracketsMesh());
-  root.add(generateHubDrivePinsAndLocknutMesh());
-  root.add(generateExhaustResonatorsAndO2SensorsMesh());
-  root.add(generateAerocatchLatchesAndTowHookMesh());
-  root.add(generateHelmetBlowerAndVentilationMesh());
-  root.add(generateClutchInspectionAndSlaveLineMesh());
-  root.add(generateRideHeightLasersAndFloorStrakesMesh());
-  root.add(generateExhaustFlameDispersersAndHangersMesh());
-  root.add(generateWingletGurneyAndFastenersMesh());
-  root.add(generateCockpitDigitalCamerasAndMonitorsMesh());
-  root.add(generateEmergencyCutoffAndFabricTowStrapsMesh());
-  root.add(generateBilletOilCatchTankAndBreathersMesh());
-  root.add(generateFrontSplitterRampsAndSkidPlatesMesh());
-  root.add(generateDrsActuatorAndFlapBearingsMesh());
-  root.add(generateDriverDrinkBottleAndFootboardMesh());
-  root.add(generateHoodNacaDuctsAndRadiatorScreensMesh());
-  root.add(generateRotorWearSensorsAndHubInfraredMesh());
-  root.add(generateExhaustSlipSpringsAndLambdaPlugsMesh());
-  root.add(generateTransaxleDualCoolersAndScoopsMesh());
-  root.add(generateBrakeRotorInternalVanesAndHatsMesh());
-  root.add(generateCockpitCenterNetAndHydrationMesh());
-  root.add(generateActiveSplitterFlapMotorsMesh());
-  root.add(generateChassisGroundStrapsAndReluctorRingsMesh());
-
-  root.add(namedMesh(new THREE.BoxGeometry(1.10, 0.28, 0.08), matCarbon, 'Front_Lower_Hex_Grille', 0, 0.34, -2.28));
-
-  // Batch 1: Stamped primary surfaces & contoured wheel arches
-  root.add(StampedBodyPrimarySurfaces.buildStampedBody({
-    paintMaterial: matPaintMain,
-    carbonMaterial: matCarbonTwill,
-    glassMaterial: matGlassTinted,
-  }));
-  root.add(generateFenders3DGeometry());
 
   return scene;
 }
@@ -731,10 +596,37 @@ export function buildButterflyDoorsScene(): THREE.Scene {
   for (const sx of [-1, 1]) {
     const doorGroup = new THREE.Group();
     doorGroup.name = `Butterfly_Door_Assembly_${sx < 0 ? 'LH' : 'RH'}`;
-    doorGroup.add(namedMesh(new THREE.BoxGeometry(0.06, 0.58, 1.25), matPaintMain, `Door_Outer_Skin_${sx < 0 ? 'LH' : 'RH'}`, sx * 0.88, 0.62, 0.0));
-    doorGroup.add(namedMesh(new THREE.BoxGeometry(0.04, 0.52, 1.15), matCarbonTwill, `Door_Inner_Card_${sx < 0 ? 'LH' : 'RH'}`, sx * 0.84, 0.62, 0.0));
-    doorGroup.add(namedMesh(new THREE.BoxGeometry(0.015, 0.38, 1.05), matGlassTinted, `Door_Frameless_Window_${sx < 0 ? 'LH' : 'RH'}`, sx * 0.85, 0.98, 0.05));
-    root.add(doorGroup);
+    // Sculpted outer door skin with parametric curvature
+    const doorLen = 1.25, doorH = 0.58;
+    const skinGeo = new THREE.PlaneGeometry(doorLen, doorH, 24, 16);
+    skinGeo.rotateY(Math.PI / 2);
+    const sP = skinGeo.attributes.position;
+    for (let i = 0; i < sP.count; i++) {
+      const pz = sP.getZ(i), py = sP.getY(i);
+      const u = (pz + doorLen/2)/doorLen, h = (py + doorH/2)/doorH;
+      const wt = Math.sin(u*Math.PI)*0.045;
+      const th = Math.sin(h*Math.PI)*0.032 - Math.pow(h,2.5)*0.020;
+      const sc = Math.exp(-Math.pow((h-0.85)*8.0,2))*0.015;
+      const is = u>0.4 ? -Math.sin((u-0.4)/0.6*Math.PI)*(1.0-h)*0.042 : 0;
+      sP.setX(i, sx*(wt+th+sc+is));
+    }
+    skinGeo.computeVertexNormals();
+    const skinMat2 = new THREE.MeshPhysicalMaterial({color:0x991b1b,metalness:0.88,roughness:0.14,clearcoat:1.0,clearcoatRoughness:0.01,side:THREE.DoubleSide});
+    const skin = new THREE.Mesh(skinGeo, skinMat2);
+    skin.position.set(0, 0, sx*0.86);
+    skin.castShadow = true;
+    doorGroup.add(skin);
+    // Frameless curved window
+    const wGeo = new THREE.PlaneGeometry(doorLen*0.85, doorH*0.65, 12, 8);
+    wGeo.rotateY(Math.PI/2);
+    const wP = wGeo.attributes.position;
+    for (let i=0;i<wP.count;i++){const h=(wP.getY(i)+doorH*0.325)/(doorH*0.65);wP.setX(i,sx*Math.sin(h*Math.PI)*0.012);}
+    wGeo.computeVertexNormals();
+    doorGroup.add(new THREE.Mesh(wGeo, matGlassTinted));
+    doorGroup.children[doorGroup.children.length-1].position.set(-0.05, 0.20, sx*0.87);
+    // Flush door handle
+    const hGeo = new THREE.CylinderGeometry(0.005,0.005,0.12,8); hGeo.rotateZ(Math.PI/2);
+    const hMesh = new THREE.Mesh(hGeo, matChrome); hMesh.position.set(-0.10,0.04,sx*0.82); doorGroup.add(hMesh); root.add(doorGroup);
   }
   return scene;
 }
@@ -747,12 +639,64 @@ export function buildAerodynamicWidebodyKitScene(): THREE.Scene {
   root.name = 'Aero_Widebody_Kit_Master';
   scene.add(root);
 
-  root.add(namedMesh(new THREE.BoxGeometry(1.98, 0.04, 0.72), matCarbonTwill, 'Aero_Front_Splitter_Track', 0, 0.12, -2.18));
-  for (const sx of [-1, 1]) {
-    root.add(namedMesh(new THREE.BoxGeometry(0.14, 0.035, 2.50), matCarbonTwill, `Aero_Side_Skirt_${sx < 0 ? 'LH' : 'RH'}`, sx * 0.96, 0.12, 0.0));
+  // Sculpted front splitter with airfoil cross-section
+  const splGeo = new THREE.PlaneGeometry(1.98, 0.72, 24, 12);
+  splGeo.rotateX(-Math.PI/2);
+  const sPos = splGeo.attributes.position;
+  for (let i=0;i<sPos.count;i++){
+    const x=sPos.getX(i),z=sPos.getZ(i);
+    const w=z/0.36;
+    sPos.setY(i, -0.008 - Math.pow(Math.abs(w),3)*0.012 + (x<0?0.004:-0.003)*Math.abs(w));
   }
-  root.add(namedMesh(new THREE.BoxGeometry(1.72, 0.18, 0.88), matCarbonTwill, 'Aero_Rear_Venturi_Diffuser', 0, 0.20, 2.10));
-  root.add(namedMesh(new THREE.BoxGeometry(1.95, 0.04, 0.40), matCarbonTwill, 'Aero_Swan_Neck_Wing_Blade', 0, 1.18, 2.18));
+  splGeo.computeVertexNormals();
+  const splMat = new THREE.MeshPhysicalMaterial({color:0x1e293b,metalness:0.65,roughness:0.25,clearcoat:0.8,clearcoatRoughness:0.05});
+  const spl = new THREE.Mesh(splGeo, splMat); spl.position.set(0,0.12,-2.18); spl.name="Aero_Front_Splitter_Track"; root.add(spl);
+
+  // Sculpted side skirts with subtle inward taper
+  for (const sx of [-1, 1]) {
+    const skGeo = new THREE.PlaneGeometry(2.50, 0.14, 20, 8);
+    skGeo.rotateX(-Math.PI/2);
+    const skP = skGeo.attributes.position;
+    for (let i=0;i<skP.count;i++){
+      const x=skP.getX(i);
+      const u=(x+1.25)/2.50;
+      skP.setY(i, -0.005 - Math.pow(u-0.5,2)*0.008);
+    }
+    skGeo.computeVertexNormals();
+    const sk = new THREE.Mesh(skGeo, splMat);
+    sk.position.set(0,0.12,sx*0.96); sk.rotation.y=Math.PI/2;
+    sk.name="Aero_Side_Skirt_"+(sx<0?"LH":"RH"); root.add(sk);
+  }
+
+  // Sculpted rear diffuser with venturi expansion
+  const difGeo = new THREE.PlaneGeometry(0.88, 1.72, 20, 16);
+  difGeo.rotateX(-Math.PI/2);
+  const dPos = difGeo.attributes.position;
+  for (let i=0;i<dPos.count;i++){
+    const x=dPos.getX(i),z=dPos.getZ(i);
+    const u=z/(1.72/2);
+    dPos.setY(i, -0.02 - (x+0.44)/0.88*0.06 - Math.pow(Math.abs(u),2)*0.015);
+  }
+  difGeo.computeVertexNormals();
+  const dif = new THREE.Mesh(difGeo, splMat);
+  dif.position.set(0,0.20,2.10); dif.name="Aero_Rear_Venturi_Diffuser"; root.add(dif);
+
+  // Sculpted swan-neck wing blade with airfoil profile
+  const wingGeo = new THREE.PlaneGeometry(0.40, 1.95, 16, 24);
+  wingGeo.rotateX(-Math.PI/2);
+  const wPos = wingGeo.attributes.position;
+  for (let i=0;i<wPos.count;i++){
+    const x=wPos.getX(i),z=wPos.getZ(i);
+    const u=z/(1.95/2);
+    const chord = 0.40 * (1.0 - Math.pow(Math.abs(u),1.8)*0.25);
+    const thick = chord * 0.08;
+    const camberLine = Math.sin(u*Math.PI*0.8)*0.012;
+    const t = (x+chord/2)/chord;
+    wPos.setY(i, thick*Math.sin(t*Math.PI) + camberLine);
+  }
+  wingGeo.computeVertexNormals();
+  const wing = new THREE.Mesh(wingGeo, splMat);
+  wing.position.set(0,1.18,2.18); wing.name="Aero_Swan_Neck_Wing_Blade"; root.add(wing);
   return scene;
 }
 
@@ -782,10 +726,15 @@ function buildAPillarScene(): THREE.Scene {
   const group = new THREE.Group();
   group.name = 'A_Pillar_Assembly';
   for (const sx of [-1, 1]) {
-    const pillarGeo = new THREE.BoxGeometry(0.08, 0.72, 0.08);
-    const pillar = namedMesh(pillarGeo, matPaintMain, `A_Pillar_Upright_${sx < 0 ? 'LH' : 'RH'}`, sx * 0.72, 0.85, -0.65);
-    pillar.rotation.z = sx * -0.22;
-    pillar.rotation.x = -0.45;
+    const aCurve = new THREE.CatmullRomCurve3([
+      new THREE.Vector3(sx*0.72, 0.68, -0.65),
+      new THREE.Vector3(sx*0.68, 0.82, -0.72),
+      new THREE.Vector3(sx*0.64, 0.98, -0.80),
+      new THREE.Vector3(sx*0.62, 1.12, -0.90),
+    ]);
+    const pillarGeo = new THREE.TubeGeometry(aCurve, 20, 0.022, 10, false);
+    const pillar = namedMesh(pillarGeo, matPaintMain, `A_Pillar_Upright_${sx < 0 ? "LH" : "RH"}`, 0, 0, 0);
+    pillar.castShadow = true;
     group.add(pillar);
   }
   return sceneFromGroup(group, 'A_Pillar_Scene');
@@ -795,9 +744,14 @@ function buildBPillarScene(): THREE.Scene {
   const group = new THREE.Group();
   group.name = 'B_Pillar_Assembly';
   for (const sx of [-1, 1]) {
-    const pillarGeo = new THREE.BoxGeometry(0.09, 0.68, 0.09);
-    const pillar = namedMesh(pillarGeo, matPaintMain, `B_Pillar_Upright_${sx < 0 ? 'LH' : 'RH'}`, sx * 0.74, 0.82, 0.25);
-    pillar.rotation.z = sx * -0.08;
+    const bCurve = new THREE.CatmullRomCurve3([
+      new THREE.Vector3(sx*0.74, 0.62, 0.25),
+      new THREE.Vector3(sx*0.70, 0.82, 0.25),
+      new THREE.Vector3(sx*0.68, 1.00, 0.24),
+    ]);
+    const pillarGeo = new THREE.TubeGeometry(bCurve, 16, 0.022, 10, false);
+    const pillar = namedMesh(pillarGeo, matPaintMain, `B_Pillar_Upright_${sx < 0 ? "LH" : "RH"}`, 0, 0, 0);
+    pillar.castShadow = true;
     group.add(pillar);
   }
   return sceneFromGroup(group, 'B_Pillar_Scene');
@@ -807,10 +761,15 @@ function buildCPillarScene(): THREE.Scene {
   const group = new THREE.Group();
   group.name = 'C_Pillar_Assembly';
   for (const sx of [-1, 1]) {
-    const pillarGeo = new THREE.BoxGeometry(0.12, 0.64, 0.22);
-    const pillar = namedMesh(pillarGeo, matPaintMain, `C_Pillar_Fastback_${sx < 0 ? 'LH' : 'RH'}`, sx * 0.76, 0.84, 1.15);
-    pillar.rotation.x = 0.35;
-    pillar.rotation.z = sx * -0.15;
+    const cCurve = new THREE.CatmullRomCurve3([
+      new THREE.Vector3(sx*0.76, 1.12, 0.85),
+      new THREE.Vector3(sx*0.78, 0.98, 1.00),
+      new THREE.Vector3(sx*0.80, 0.84, 1.15),
+      new THREE.Vector3(sx*0.82, 0.70, 1.30),
+    ]);
+    const pillarGeo = new THREE.TubeGeometry(cCurve, 20, 0.022, 10, false);
+    const pillar = namedMesh(pillarGeo, matPaintMain, `C_Pillar_Fastback_${sx < 0 ? "LH" : "RH"}`, 0, 0, 0);
+    pillar.castShadow = true;
     group.add(pillar);
   }
   return sceneFromGroup(group, 'C_Pillar_Scene');
@@ -820,7 +779,9 @@ function buildRockerPanelsScene(): THREE.Scene {
   const group = new THREE.Group();
   group.name = 'Rocker_Panels_Assembly';
   for (const sx of [-1, 1]) {
-    const sillGeo = new THREE.BoxGeometry(0.12, 0.16, 2.55);
+    const skGeo = new THREE.CylinderGeometry(0.08, 0.08, 2.55, 12, 1, false);
+    skGeo.rotateZ(Math.PI / 2);
+    const sillGeo = skGeo;
     group.add(namedMesh(sillGeo, matPaintMain, `Rocker_Panel_Sill_${sx < 0 ? 'LH' : 'RH'}`, sx * 0.86, 0.18, 0));
   }
   return sceneFromGroup(group, 'Rocker_Panels_Scene');
@@ -863,7 +824,29 @@ function buildFrontBumperScene(): THREE.Scene {
   const group = new THREE.Group();
   group.name = 'Front_Bumper_Fascia_Assembly';
   const bumperGeo = new THREE.BoxGeometry(1.86, 0.42, 0.38);
-  group.add(namedMesh(bumperGeo, matPaintMain, 'Front_Bumper_Main_Fascia', 0, 0.38, -2.10));
+  // Sculpted front bumper with compound curvature
+  const fbGeo = new THREE.PlaneGeometry(1.86, 0.42, 24, 12);
+  const fbPos = fbGeo.attributes.position;
+  for (let i=0;i<fbPos.count;i++){
+    const x=fbPos.getX(i),y=fbPos.getY(i);
+    const u=x/0.93, v=y/0.21;
+    fbPos.setZ(i, -0.04-Math.pow(Math.abs(u),2)*0.06-Math.pow(Math.abs(v),2)*0.02 + (v>0?0.01:0)*Math.abs(u));
+  }
+  fbGeo.computeVertexNormals();
+  const fbMat = new THREE.MeshPhysicalMaterial({color:0x991b1b,metalness:0.88,roughness:0.14,clearcoat:1.0,clearcoatRoughness:0.01,side:THREE.DoubleSide});
+  const fb = new THREE.Mesh(fbGeo, fbMat); fb.position.set(0,0.38,-2.10); fb.rotation.y=Math.PI;
+  fb.name="Front_Bumper_Main_Fascia"; fb.castShadow=true; group.add(fb);
+  // Sculpted central air intake
+  const intakeGeo = new THREE.PlaneGeometry(1.20, 0.22, 16, 8);
+  const iPos = intakeGeo.attributes.position;
+  for (let i=0;i<iPos.count;i++){
+    const x=iPos.getX(i),y=iPos.getY(i);
+    const u=x/0.6;
+    iPos.setZ(i, -0.02-Math.pow(Math.abs(u),2)*0.03);
+  }
+  intakeGeo.computeVertexNormals();
+  const intake = new THREE.Mesh(intakeGeo, matCarbonTwill);
+  intake.position.set(0,0.32,-2.25); intake.name="Front_Bumper_Central_Air_Intake"; group.add(intake);
   const ductGeo = new THREE.BoxGeometry(1.20, 0.22, 0.12);
   group.add(namedMesh(ductGeo, matCarbonTwill, 'Front_Bumper_Central_Air_Intake', 0, 0.32, -2.25));
   return sceneFromGroup(group, 'Front_Bumper_Scene');

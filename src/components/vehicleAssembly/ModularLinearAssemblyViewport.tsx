@@ -58,7 +58,7 @@ import {
   AutomotiveStudioEnvironmentManager,
 } from "../../exterior3d/environment/AutomotiveStudioEnvironment";
 
-export type CameraPresetType = "front34" | "side" | "rear34" | "top" | "engine_zoom" | "cockpit" | "undercarriage";
+export type CameraPresetType = "front" | "rear" | "side" | "side_left" | "side_right" | "front34" | "rear34" | "top" | "engine_zoom" | "cockpit" | "undercarriage";
 
 export type CaliperPresetType = "off" | "wheelbase" | "front_track" | "rear_track" | "ride_height" | "engine_offset" | "wing_span";
 
@@ -78,6 +78,12 @@ interface ModularLinearAssemblyViewportProps {
   showCoMGizmo: boolean;
   onToggleCoMGizmo: () => void;
   visibilityModeRequest?: { stage: AssemblyStageId; mode: "normal" | "ghost" | "xray" | "hidden" | "isolated" } | null;
+  visualMode?: "full" | "body_off" | "chassis_only" | "powertrain_only" | "suspension_only" | "aero_only" | "cutaway" | "exploded" | "anatomy" | "360";
+  onVisualModeChange?: (mode: "full" | "body_off" | "chassis_only" | "powertrain_only" | "suspension_only" | "aero_only" | "cutaway" | "exploded" | "anatomy" | "360") => void;
+  bodyOn?: boolean;
+  onToggleBodyOn?: () => void;
+  isTransparentBody?: boolean;
+  onToggleTransparentBody?: () => void;
 }
 
 export const ModularLinearAssemblyViewport: React.FC<ModularLinearAssemblyViewportProps> = ({
@@ -96,6 +102,12 @@ export const ModularLinearAssemblyViewport: React.FC<ModularLinearAssemblyViewpo
   showCoMGizmo,
   onToggleCoMGizmo,
   visibilityModeRequest,
+  visualMode,
+  onVisualModeChange,
+  bodyOn,
+  onToggleBodyOn,
+  isTransparentBody,
+  onToggleTransparentBody,
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const sceneRef = useRef<THREE.Scene | null>(null);
@@ -116,7 +128,8 @@ export const ModularLinearAssemblyViewport: React.FC<ModularLinearAssemblyViewpo
   const [isContactShadowActive, setIsContactShadowActive] = useState<boolean>(true);
   const currentEnvTextureRef = useRef<THREE.CanvasTexture | null>(null);
 
-  const [activeCamPreset, setActiveCamPreset] = useState<CameraPresetType>("front34");
+  const [activeCamPreset, setActiveCamPreset] = useState<CameraPresetType>("front");
+  const [showAlignmentGrid, setShowAlignmentGrid] = useState<boolean>(false);
 
   // CAD Tools State
   const [sectionPlane, setSectionPlane] = useState<"off" | "x" | "y" | "z">("off");
@@ -139,6 +152,25 @@ export const ModularLinearAssemblyViewport: React.FC<ModularLinearAssemblyViewpo
   const [headlightsActive, setHeadlightsActive] = useState<boolean>(true);
   const [drlActive, setDrlActive] = useState<boolean>(true);
   const [underglowActive, setUnderglowActive] = useState<boolean>(true);
+
+  // Visual Inspection Modes State (Phase 6 & Phase 14)
+  const [localVisualMode, setLocalVisualMode] = useState<"full" | "body_off" | "chassis_only" | "powertrain_only" | "suspension_only" | "aero_only" | "cutaway" | "exploded" | "anatomy" | "360">(
+    visualMode || assemblyState.visualMode || "full"
+  );
+  const [localTransparent, setLocalTransparent] = useState<boolean>(
+    isTransparentBody !== undefined ? isTransparentBody : (assemblyState.isTransparentBody ?? false)
+  );
+
+  const activeVisualMode = visualMode || localVisualMode;
+  const activeTransparent = isTransparentBody !== undefined ? isTransparentBody : localTransparent;
+  const activeBodyOn = bodyOn !== undefined ? bodyOn : (assemblyState.bodyOn !== false && activeVisualMode !== "body_off");
+
+  const effectiveAssemblyState: InstalledSubsystemsState = {
+    ...assemblyState,
+    visualMode: activeVisualMode,
+    isTransparentBody: activeTransparent,
+    bodyOn: activeBodyOn,
+  };
 
   // Initialize Three.js Scene
   useEffect(() => {
@@ -329,9 +361,9 @@ export const ModularLinearAssemblyViewport: React.FC<ModularLinearAssemblyViewpo
   // Update 3D components whenever assembly state, preview stage, exploded factor, or x-ray changes
   useEffect(() => {
     if (sceneGraphRef.current) {
-      sceneGraphRef.current.updateScene(assemblyState, previewStage, explodedProgress, isXRay);
+      sceneGraphRef.current.updateScene(effectiveAssemblyState, previewStage, explodedProgress, isXRay);
     }
-  }, [assemblyState, previewStage, explodedProgress, isXRay]);
+  }, [effectiveAssemblyState, previewStage, explodedProgress, isXRay]);
 
   // Sync closures state when assemblyState changes
   useEffect(() => {
@@ -578,20 +610,33 @@ export const ModularLinearAssemblyViewport: React.FC<ModularLinearAssemblyViewpo
     const wb = assemblyState.chassis.wheelbaseMm / 1000;
 
     switch (preset) {
+      case "front":
+        camera.position.set(0, 0.55, -(wb * 0.5) - 3.2);
+        controls.target.set(0, 0.42, -(wb * 0.5) * 0.2);
+        break;
+      case "rear":
+        camera.position.set(0, 0.60, (wb * 0.5) + 3.2);
+        controls.target.set(0, 0.42, (wb * 0.5) * 0.2);
+        break;
+      case "side":
+      case "side_left":
+        camera.position.set(-4.8, 0.50, 0);
+        controls.target.set(0, 0.40, 0);
+        break;
+      case "side_right":
+        camera.position.set(4.8, 0.50, 0);
+        controls.target.set(0, 0.40, 0);
+        break;
       case "front34":
         camera.position.set(3.8, 1.8, -(wb * 0.5) - 3.2);
         controls.target.set(0, 0.35, -(wb * 0.1));
-        break;
-      case "side":
-        camera.position.set(5.2, 0.85, 0);
-        controls.target.set(0, 0.35, 0);
         break;
       case "rear34":
         camera.position.set(-3.6, 1.7, (wb * 0.5) + 3.2);
         controls.target.set(0, 0.35, (wb * 0.1));
         break;
       case "top":
-        camera.position.set(0, 6.8, 0.01);
+        camera.position.set(0, 6.5, 0.001);
         controls.target.set(0, 0, 0);
         break;
       case "engine_zoom":
@@ -616,6 +661,57 @@ export const ModularLinearAssemblyViewport: React.FC<ModularLinearAssemblyViewpo
       {/* Three.js Container */}
       <div ref={containerRef} className="w-full h-full cursor-grab active:cursor-grabbing" />
 
+      {/* CAD Alignment Crosshair & Symmetry Datum Overlay */}
+      {showAlignmentGrid && (
+        <div className="absolute inset-0 pointer-events-none z-10">
+          <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <pattern id="cadGridSmall" width="20" height="20" patternUnits="userSpaceOnUse">
+                <path d="M 20 0 L 0 0 0 20" fill="none" stroke="rgba(245, 158, 11, 0.08)" strokeWidth="0.5" />
+              </pattern>
+              <pattern id="cadGridLarge" width="100" height="100" patternUnits="userSpaceOnUse">
+                <rect width="100" height="100" fill="url(#cadGridSmall)" />
+                <path d="M 100 0 L 0 0 0 100" fill="none" stroke="rgba(245, 158, 11, 0.2)" strokeWidth="1" />
+              </pattern>
+            </defs>
+            <rect width="100%" height="100%" fill="url(#cadGridLarge)" />
+
+            {/* Vertical Centerline Datum (X=0) */}
+            <line x1="50%" y1="0" x2="50%" y2="100%" stroke="rgba(245, 158, 11, 0.75)" strokeWidth="1.5" strokeDasharray="6 3" />
+            <circle cx="50%" cy="50%" r="4" fill="none" stroke="#f59e0b" strokeWidth="2" />
+            <circle cx="50%" cy="50%" r="20" fill="none" stroke="rgba(245, 158, 11, 0.4)" strokeWidth="1" strokeDasharray="3 3" />
+
+            {/* Horizontal Datum (Ground / Axle Level) */}
+            <line x1="0" y1="58%" x2="100%" y2="58%" stroke="rgba(56, 189, 248, 0.65)" strokeWidth="1.5" strokeDasharray="6 3" />
+
+            {/* Corner Crosshair Reticles */}
+            <path d="M 30 50 L 50 50 M 50 30 L 50 50" stroke="#f59e0b" strokeWidth="2" fill="none" />
+            <path d="M calc(100% - 30px) 50 L calc(100% - 50px) 50 M calc(100% - 50px) 30 L calc(100% - 50px) 50" stroke="#f59e0b" strokeWidth="2" fill="none" />
+            <path d="M 30 calc(100% - 70px) L 50 calc(100% - 70px) M 50 calc(100% - 50px) L 50 calc(100% - 70px)" stroke="#f59e0b" strokeWidth="2" fill="none" />
+            <path d="M calc(100% - 30px) calc(100% - 70px) L calc(100% - 50px) calc(100% - 70px) M calc(100% - 50px) calc(100% - 50px) L calc(100% - 50px) calc(100% - 70px)" stroke="#f59e0b" strokeWidth="2" fill="none" />
+          </svg>
+
+          {/* Datum Callout Badges */}
+          <div className="absolute top-16 left-1/2 -translate-x-1/2 flex items-center gap-2 px-3 py-1 rounded-xl bg-base-950/90 border border-amber-500/50 backdrop-blur-md text-[10px] font-mono text-amber-300 shadow-xl">
+            <Crosshair size={12} className="text-amber-400 animate-spin" />
+            <span className="font-bold">CAD SYMMETRY DATUM ACTIVE</span>
+            <span className="text-slate-500">|</span>
+            <span>WB: {(assemblyState.chassis.wheelbaseMm).toFixed(0)}mm</span>
+            <span className="text-slate-500">|</span>
+            <span>TRACK: {(assemblyState.chassis.frontTrackMm).toFixed(0)}mm</span>
+            <span className="text-slate-500">|</span>
+            <span className="text-emerald-400 font-bold">OFFSET: 0.000mm</span>
+          </div>
+
+          <div className="absolute top-[59%] left-4 text-[9px] font-mono text-sky-400 bg-base-950/80 px-2 py-0.5 rounded border border-sky-500/30">
+            GROUND REFERENCE: Y = 0.000m (ROAD PLANE)
+          </div>
+          <div className="absolute bottom-20 left-1/2 -translate-x-1/2 text-[9px] font-mono text-amber-400 bg-base-950/80 px-2 py-0.5 rounded border border-amber-500/30">
+            CENTERLINE: X = 0.000m (LATERAL SYMMETRY)
+          </div>
+        </div>
+      )}
+
       {/* Top Left: Subsystem Badge & Physical Telemetry */}
       <div className="absolute top-4 left-4 flex flex-col gap-2 pointer-events-none">
         <div className="flex items-center gap-2 px-3 py-1.5 rounded-2xl bg-base-900/80 backdrop-blur-xl border border-base-800 shadow-lg pointer-events-auto">
@@ -635,6 +731,53 @@ export const ModularLinearAssemblyViewport: React.FC<ModularLinearAssemblyViewpo
           <span>BIAS: <strong className="text-amber-300">{physicalState.weightDistributionFrontPct}% F</strong></span>
           <span>•</span>
           <span>CoM Z: <strong className="text-amber-300">{physicalState.centerOfMassMm[2]}mm</strong></span>
+        </div>
+
+        {/* CAD Visualization Modes (Phase 6 & Phase 14) */}
+        <div className="flex items-center gap-1 p-1 rounded-xl bg-base-900/85 backdrop-blur-xl border border-base-800 shadow-xl pointer-events-auto flex-wrap max-w-sm">
+          {(
+            [
+              { id: "full", label: "FULL" },
+              { id: "body_off", label: "BODY OFF" },
+              { id: "chassis_only", label: "CHASSIS" },
+              { id: "powertrain_only", label: "POWERTRAIN" },
+              { id: "suspension_only", label: "SUSPENSION" },
+              { id: "aero_only", label: "AERO" },
+            ] as const
+          ).map((m) => {
+            const isActive = activeVisualMode === m.id;
+            return (
+              <button
+                key={m.id}
+                onClick={() => {
+                  setLocalVisualMode(m.id);
+                  if (onVisualModeChange) onVisualModeChange(m.id);
+                }}
+                className={`px-2 py-0.5 rounded-lg text-[9px] font-mono font-bold transition-all border cursor-pointer ${
+                  isActive
+                    ? "bg-amber-500/20 border-amber-500 text-amber-300 shadow-sm"
+                    : "bg-base-950/70 border-base-800 text-slate-400 hover:text-slate-200"
+                }`}
+              >
+                {m.label}
+              </button>
+            );
+          })}
+          <button
+            onClick={() => {
+              const nextTransp = !activeTransparent;
+              setLocalTransparent(nextTransp);
+              if (onToggleTransparentBody) onToggleTransparentBody();
+            }}
+            className={`px-2 py-0.5 rounded-lg text-[9px] font-mono font-bold transition-all border cursor-pointer ${
+              activeTransparent
+                ? "bg-cyan-500/20 border-cyan-500 text-cyan-300 shadow-sm"
+                : "bg-base-950/70 border-base-800 text-slate-400 hover:text-slate-200"
+            }`}
+            title="Toggle Semi-Transparent Body to inspect internal chassis & packaging"
+          >
+            TRANSPARENT
+          </button>
         </div>
       </div>
 
@@ -657,8 +800,11 @@ export const ModularLinearAssemblyViewport: React.FC<ModularLinearAssemblyViewpo
         <div className="flex items-center bg-base-900/80 backdrop-blur-xl p-1 rounded-2xl border border-base-800 shadow-lg">
           {(
             [
+              { id: "front", label: "Front" },
+              { id: "rear", label: "Back" },
+              { id: "side_left", label: "Side (L)" },
+              { id: "side_right", label: "Side (R)" },
               { id: "front34", label: "Front 3/4" },
-              { id: "side", label: "Side" },
               { id: "rear34", label: "Rear 3/4" },
               { id: "top", label: "Top" },
               { id: "engine_zoom", label: "Engine" },
@@ -679,6 +825,20 @@ export const ModularLinearAssemblyViewport: React.FC<ModularLinearAssemblyViewpo
             </button>
           ))}
         </div>
+
+        {/* Alignment HUD Toggle Button */}
+        <button
+          onClick={() => setShowAlignmentGrid(!showAlignmentGrid)}
+          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-2xl text-[10px] font-mono font-bold transition-all border cursor-pointer ${
+            showAlignmentGrid
+              ? "bg-amber-500/25 border-amber-500 text-amber-300 shadow-md shadow-amber-500/20"
+              : "bg-base-900/80 backdrop-blur-xl border-base-800 text-slate-400 hover:text-slate-200"
+          }`}
+          title="Toggle CAD Alignment Crosshairs, Ground Contact Plane & Symmetry Datum Overlay"
+        >
+          <Crosshair size={13} className={showAlignmentGrid ? "animate-spin" : ""} />
+          <span>ALIGNMENT</span>
+        </button>
 
         {/* CAD Tools Toggle Button */}
         <button

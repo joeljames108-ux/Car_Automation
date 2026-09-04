@@ -63,7 +63,7 @@ export const VehicleCompletionModal: React.FC<VehicleCompletionModalProps> = ({
   ] as any;
 
   return createPortal(
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/80/90 backdrop-blur-2xl animate-stage-transition-enter select-none">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/90 backdrop-blur-2xl animate-stage-transition-enter select-none">
       {/* Background ambient lighting */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_30%,rgba(6,182,212,0.15),transparent_70%)] pointer-events-none" />
 

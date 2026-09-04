@@ -242,7 +242,7 @@ export function HorizonTelemetryHUDConsole() {
               { agent: "SUSPENSION DYNAMICS AGENT", rec: "Stiffen Front Anti-Roll Bar by 12% to eliminate understeer on turn-in", impact: "+0.04 Lateral G", priority: "medium" },
               { agent: "THERMAL MANAGEMENT AGENT", rec: "Expand Front Brake Cooling Duct aperture by 15mm", impact: "-45°C Rotor Peak Temp", priority: "high" },
             ].map((item, idx) => (
-              <div key={idx} className="p-4 rounded-xl bg-amber-950/80/80 border border-sky-400/25 flex flex-col justify-between gap-3">
+              <div key={idx} className="p-4 rounded-xl bg-amber-950/80 border border-sky-400/25 flex flex-col justify-between gap-3">
                 <div>
                   <div className="flex items-center justify-between mb-2">
                     <span className="text-[10px] nh-font-mono font-bold text-amber-400 uppercase tracking-widest">{item.agent}</span>

@@ -43,9 +43,9 @@ export const NeonHorizonSelect: React.FC<NeonHorizonSelectProps> = ({
 
   const variantStyles = {
     primary:
-      "bg-amber-950/80/85 border-white/12 text-amber-100 focus:border-sky-400/35",
+      "bg-amber-950/85 border-white/12 text-amber-100 focus:border-sky-400/35",
     secondary:
-      "bg-amber-950/80/70 border-white/15 text-amber-100 focus:border-amber-500/30",
+      "bg-amber-950/70 border-white/15 text-amber-100 focus:border-amber-500/30",
     minimal:
       "bg-black/30 border-white/10 text-amber-100 focus:border-amber-500/30",
   }[variant];

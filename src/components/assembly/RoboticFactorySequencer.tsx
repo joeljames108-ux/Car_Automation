@@ -243,7 +243,7 @@ export const RoboticFactorySequencer: React.FC = () => {
           </span>
           <span className="font-mono font-bold text-amber-400">{progressPercent}% Assembly Complete</span>
         </div>
-        <div className="w-full h-2 bg-slate-950 rounded-full overflow-hidden border border-slate-800">
+        <div className="w-full h-2 bg-slate-800/60 dark:bg-slate-950 rounded-full overflow-hidden border border-slate-700/60 dark:border-slate-800">
           <div
             className="h-full bg-gradient-to-r from-amber-500 via-amber-500 to-emerald-400 transition-all duration-500 rounded-full"
             style={{ width: `${progressPercent}%` }}
@@ -265,8 +265,8 @@ export const RoboticFactorySequencer: React.FC = () => {
                 isCurrent
                   ? "bg-amber-500/15 border-amber-500 text-amber-200 shadow-md shadow-cyan-500/20 scale-[1.02]"
                   : isDone
-                  ? "bg-slate-950/60 border-slate-700/80 text-slate-300 hover:bg-slate-800"
-                  : "bg-slate-950/30 border-slate-800/40 text-slate-500 hover:bg-slate-900"
+                  ? "bg-slate-800/50 dark:bg-slate-950/60 border-slate-700/80 text-slate-300 hover:bg-slate-700/60"
+                  : "bg-slate-800/30 dark:bg-slate-950/30 border-slate-700/40 text-slate-400 hover:bg-slate-700/40"
               }`}
             >
               <div className="flex items-center justify-between mb-1">
@@ -283,7 +283,7 @@ export const RoboticFactorySequencer: React.FC = () => {
       </div>
 
       {/* Active Stage Detail Deck */}
-      <div className="bg-slate-950/80 p-3.5 rounded-xl border border-slate-800/80 space-y-3 shadow-inner">
+      <div className="bg-slate-900/40 dark:bg-slate-950/80 p-3.5 rounded-xl border border-slate-700/60 dark:border-slate-800/80 space-y-3 shadow-inner">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
           <div className="flex items-center gap-2">
             <span className="px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 font-mono text-[10px] font-bold border border-amber-500/30">
@@ -302,23 +302,23 @@ export const RoboticFactorySequencer: React.FC = () => {
         </p>
 
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center">
-          <div className="bg-slate-900/60 p-2 rounded-lg border border-slate-800">
+          <div className="bg-slate-800/40 dark:bg-slate-900/60 p-2 rounded-lg border border-slate-700/50 dark:border-slate-800">
             <span className="text-[9px] text-slate-400 block uppercase">Cycle Time</span>
             <span className="text-xs font-mono font-bold text-amber-300">{activeStage.cycleTimeSec}s</span>
           </div>
-          <div className="bg-slate-900/60 p-2 rounded-lg border border-slate-800">
+          <div className="bg-slate-800/40 dark:bg-slate-900/60 p-2 rounded-lg border border-slate-700/50 dark:border-slate-800">
             <span className="text-[9px] text-slate-400 block uppercase">Target Torque</span>
             <span className="text-xs font-mono font-bold text-amber-300">
               {activeStage.fastenerTorqueNm > 0 ? `${activeStage.fastenerTorqueNm} Nm` : "N/A"}
             </span>
           </div>
-          <div className="bg-slate-900/60 p-2 rounded-lg border border-slate-800">
+          <div className="bg-slate-800/40 dark:bg-slate-900/60 p-2 rounded-lg border border-slate-700/50 dark:border-slate-800">
             <span className="text-[9px] text-slate-400 block uppercase">Station ID</span>
             <span className="text-xs font-mono font-bold text-amber-300">
               {activeStage.robotStation.split(" ")[0]}
             </span>
           </div>
-          <div className="bg-slate-900/60 p-2 rounded-lg border border-slate-800">
+          <div className="bg-slate-800/40 dark:bg-slate-900/60 p-2 rounded-lg border border-slate-700/50 dark:border-slate-800">
             <span className="text-[9px] text-slate-400 block uppercase">QA Status</span>
             <span className="text-xs font-mono font-bold text-emerald-400 flex items-center justify-center gap-1">
               <CheckCircle2 size={11} /> Certified

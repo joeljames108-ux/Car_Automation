@@ -3615,24 +3615,43 @@ a,
 .theme4 .vision-glass-content .bg-slate-900\/90,
 .theme4 .vision-glass-content .bg-slate-900\/80,
 .theme4 .vision-glass-content .bg-slate-900\/75,
+.theme4 .vision-glass-content .bg-slate-900\/70,
 .theme4 .vision-glass-content .bg-slate-900\/60,
+.theme4 .vision-glass-content .bg-slate-900\/50,
+.theme4 .vision-glass-content .bg-slate-900\/40,
 .theme4 .vision-glass-content .bg-slate-950,
 .theme4 .vision-glass-content .bg-slate-950\/95,
 .theme4 .vision-glass-content .bg-slate-950\/90,
 .theme4 .vision-glass-content .bg-slate-950\/80,
+.theme4 .vision-glass-content .bg-slate-950\/75,
+.theme4 .vision-glass-content .bg-slate-950\/70,
 .theme4 .vision-glass-content .bg-slate-950\/60,
+.theme4 .vision-glass-content .bg-slate-950\/50,
+.theme4 .vision-glass-content .bg-slate-950\/40,
 .theme4 .vision-glass-content .bg-gray-900,
 .theme4 .vision-glass-content .bg-gray-950,
 .theme4 .vision-glass-content .bg-black,
 .theme4 .vision-glass-content .bg-black\/90,
 .theme4 .vision-glass-content .bg-black\/80,
+.theme4 .vision-glass-content .bg-black\/70,
 .theme4 .vision-glass-content .bg-black\/60,
+.theme4 .vision-glass-content .bg-black\/50,
 .theme4 .vision-glass-content .bg-black\/40,
+.theme4 .vision-glass-content .bg-black\/30,
 .theme4 .vision-glass-content .bg-black\/20,
 .theme4 .vision-glass-content .bg-zinc-900,
 .theme4 .vision-glass-content .bg-zinc-900\/80,
 .theme4 .vision-glass-content .bg-zinc-950,
 .theme4 .vision-glass-content .bg-zinc-800,
+.theme4 .vision-glass-content [class*="bg-slate-950"],
+.theme4 .vision-glass-content [class*="bg-slate-900"],
+.theme4 .vision-glass-content [class*="bg-slate-850"],
+.theme4 .vision-glass-content [class*="bg-slate-800"],
+.theme4 .vision-glass-content [class*="bg-black/"],
+.theme4 .vision-glass-content [class*="bg-zinc-950"],
+.theme4 .vision-glass-content [class*="bg-zinc-900"],
+.theme4 .vision-glass-content [class*="bg-gray-950"],
+.theme4 .vision-glass-content [class*="bg-gray-900"],
 .theme4 .vision-glass-content [class*="bg-gradient-to"] {
   background-color: rgba(255, 252, 245, 0.52) !important;
   background-image: none !important;
@@ -3641,6 +3660,14 @@ a,
   border: 1px solid rgba(255, 255, 255, 0.70) !important;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.85) !important;
   color: #1c1c1e !important;
+}
+
+.theme4 .vision-glass-content [class*="bg-slate-"]:hover,
+.theme4 .vision-glass-content [class*="bg-black"]:hover,
+.theme4 .vision-glass-content [class*="hover:bg-slate-"]:hover,
+.theme4 .vision-glass-content [class*="hover:bg-black"]:hover {
+  background-color: rgba(255, 255, 255, 0.80) !important;
+  border-color: rgba(245, 158, 11, 0.50) !important;
 }
 
 /* ── INNER STAT TILES, DRIVER CARDS & SMALL BOXES → Translucent Light Glass ── */
@@ -3682,11 +3709,68 @@ a,
 /* Morale / Progress Bar Track Backgrounds in Vision Glass UI */
 .theme4 .vision-glass-content .bg-base-800.rounded-full,
 .theme4 .vision-glass-content .bg-base-900.rounded-full,
+.theme4 .vision-glass-content .bg-slate-800.rounded-full,
+.theme4 .vision-glass-content .bg-slate-900.rounded-full,
+.theme4 .vision-glass-content .bg-slate-950.rounded-full,
 .theme4 .vision-glass-content .h-1\.5.bg-base-800,
 .theme4 .vision-glass-content .h-1.bg-base-800,
-.theme4 .vision-glass-content .h-2.bg-base-800 {
+.theme4 .vision-glass-content .h-2.bg-base-800,
+.theme4 .vision-glass-content .h-1\.5.bg-slate-900,
+.theme4 .vision-glass-content .h-1\.5.bg-slate-800,
+.theme4 .vision-glass-content .h-2.bg-slate-950,
+.theme4 .vision-glass-content .h-2.bg-slate-900 {
   background-color: rgba(0, 0, 0, 0.08) !important;
   border: 1px solid rgba(0, 0, 0, 0.06) !important;
+}
+
+/* Badges & Alloy Tags on Unselected Cards */
+.theme4 .vision-glass-content span[class*="bg-slate-900"],
+.theme4 .vision-glass-content span[class*="bg-slate-800"],
+.theme4 .vision-glass-content span[class*="bg-slate-950"],
+.theme4 .vision-glass-content span[class*="bg-black/"] {
+  background-color: rgba(0, 0, 0, 0.06) !important;
+  border-color: rgba(0, 0, 0, 0.10) !important;
+  color: #334155 !important;
+  font-weight: 700 !important;
+}
+
+/* Radio Check & Mode Indicator Circles */
+.theme4 .vision-glass-content [class*="border-slate-"][class*="bg-slate-"],
+.theme4 .vision-glass-content [class*="border-slate-"][class*="bg-black"],
+.theme4 .vision-glass-content .border-slate-700.bg-slate-900,
+.theme4 .vision-glass-content .border-slate-600.bg-slate-800 {
+  background-color: rgba(255, 255, 255, 0.85) !important;
+  border-color: rgba(0, 0, 0, 0.25) !important;
+}
+
+/* Cutaway / 2D Cross-section Box & SVG Overrides */
+.theme4 .vision-glass-content .bg-black\/50,
+.theme4 .vision-glass-content .bg-black\/70,
+.theme4 .vision-glass-content [class*="bg-black/10"],
+.theme4 .vision-glass-content [class*="bg-black/20"],
+.theme4 .vision-glass-content [class*="bg-black/30"],
+.theme4 .vision-glass-content [class*="bg-black/40"],
+.theme4 .vision-glass-content [class*="bg-black/50"] {
+  background-color: rgba(255, 253, 248, 0.65) !important;
+  border-color: rgba(0, 0, 0, 0.08) !important;
+}
+
+.theme4 .vision-glass-content svg line[stroke="#1e293b"],
+.theme4 .vision-glass-content svg line[stroke="#080c14"] {
+  stroke: rgba(0, 0, 0, 0.12) !important;
+}
+
+.theme4 .vision-glass-content svg rect[stroke="#334155"] {
+  stroke: rgba(0, 0, 0, 0.30) !important;
+}
+
+/* Subtle Borders Override for Slate Borders in Light Theme */
+.theme4 .vision-glass-content .border-slate-900,
+.theme4 .vision-glass-content .border-slate-800,
+.theme4 .vision-glass-content .border-slate-700,
+.theme4 .vision-glass-content [class*="border-slate-800"],
+.theme4 .vision-glass-content [class*="border-slate-700"] {
+  border-color: rgba(0, 0, 0, 0.08) !important;
 }
 
 /* ── CUSTOM SPATIAL GLASS SELECT DROPDOWN STYLING ── */

@@ -184,7 +184,7 @@ export const SpecialInteriorStudioViewport: React.FC = () => {
         </div>
 
         {/* Left Slider Controls Overlay */}
-        <div className="absolute top-20 left-4 bg-amber-950/80/85 backdrop-blur-md p-4 rounded-xl border border-amber-700/30/50 shadow-2xl w-80 space-y-4 pointer-events-auto">
+        <div className="absolute top-20 left-4 bg-amber-950/85 backdrop-blur-md p-4 rounded-xl border border-amber-700/50 shadow-2xl w-80 space-y-4 pointer-events-auto">
           <div className="text-xs font-bold text-amber-100 border-b border-amber-800/30 pb-2 flex items-center space-x-2">
             <Sliders className="w-4 h-4 text-amber-400" />
             <span>SAE H-POINT SEAT ADJUSTMENTS</span>
@@ -240,7 +240,7 @@ export const SpecialInteriorStudioViewport: React.FC = () => {
         </div>
 
         {/* Right Telemetry Readout Overlay */}
-        <div className="absolute bottom-4 right-4 bg-amber-950/80/85 backdrop-blur-md p-4 rounded-xl border border-amber-700/30/50 shadow-2xl w-80 space-y-2.5 pointer-events-auto font-mono text-xs">
+        <div className="absolute bottom-4 right-4 bg-amber-950/85 backdrop-blur-md p-4 rounded-xl border border-amber-700/50 shadow-2xl w-80 space-y-2.5 pointer-events-auto font-mono text-xs">
           <div className="text-xs font-bold text-amber-100 border-b border-amber-800/30 pb-1.5 font-sans flex items-center justify-between">
             <span>ERGONOMICS & HVAC TELEMETRY</span>
             <span className="text-emerald-400">{ergonomics.overallErgonomicsScore}/100</span>

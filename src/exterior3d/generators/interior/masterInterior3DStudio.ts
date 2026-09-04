@@ -64,7 +64,7 @@ export class MasterInterior3DStudio {
       config.steeringTypology,
       config.materials
     );
-    steeringWheel.position.set(-0.48, 0.68, -0.34);
+    steeringWheel.position.set(-0.44, 0.72, -0.34);
     root.add(steeringWheel);
 
     // 3. Seating Subassembly (Front Driver + Passenger + Rear VIP Bench)

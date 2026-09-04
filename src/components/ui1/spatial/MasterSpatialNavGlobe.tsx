@@ -804,7 +804,7 @@ export const MasterSpatialNavGlobe: React.FC<MasterSpatialNavGlobeProps> = ({
                 className={`relative p-2.5 rounded-xl border text-left transition-all duration-300 flex flex-col justify-between overflow-hidden group ${
                   isActive
                     ? "bg-amber-950/90 shadow-xl"
-                    : "bg-amber-950/60 hover:bg-amber-900/40/70 border-white/10 hover:border-white/20"
+                    : "bg-amber-950/60 hover:bg-amber-900/70 border-white/10 hover:border-white/20"
                 }`}
                 style={{
                   borderColor: isActive ? `hsl(${nHue} 92% 70% / 0.75)` : undefined,

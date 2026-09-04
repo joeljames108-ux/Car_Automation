@@ -182,7 +182,7 @@ export const MultiViewTechnicalBlueprint: React.FC = () => {
           </svg>
 
           {/* Quick Toggle Overlays */}
-          <div className="absolute bottom-6 left-6 flex items-center gap-2 bg-slate-900/80/90 backdrop-blur-md px-3 py-2 rounded-xl border border-[#232b3d] shadow-xl">
+          <div className="absolute bottom-6 left-6 flex items-center gap-2 bg-slate-900/90 backdrop-blur-md px-3 py-2 rounded-xl border border-[#232b3d] shadow-xl">
             <button
               onClick={() => setShowCenterlines(!showCenterlines)}
               className={`text-xs px-2.5 py-1 rounded font-medium transition-all ${

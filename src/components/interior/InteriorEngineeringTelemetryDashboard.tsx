@@ -109,7 +109,7 @@ export const InteriorEngineeringTelemetryDashboard: React.FC = () => {
       {/* Main Grid Section */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* 1. 3D CFD Airflow & ISO 7730 Thermal Comfort Panel */}
-        <div className="p-5 rounded-3xl bg-amber-950/80/90 border border-amber-800/30 space-y-4">
+        <div className="p-5 rounded-3xl bg-amber-950/90 border border-amber-800/30 space-y-4">
           <h3 className="text-sm font-bold text-amber-400 uppercase tracking-wider flex items-center gap-2">
             <Wind size={16} /> 3D Voxel CFD & ISO 7730 Thermal Comfort
           </h3>
@@ -154,7 +154,7 @@ export const InteriorEngineeringTelemetryDashboard: React.FC = () => {
         </div>
 
         {/* 2. ISO 2631-1 Seat NVH & Transmissibility Panel */}
-        <div className="p-5 rounded-3xl bg-amber-950/80/90 border border-amber-800/30 space-y-4">
+        <div className="p-5 rounded-3xl bg-amber-950/90 border border-amber-800/30 space-y-4">
           <h3 className="text-sm font-bold text-amber-400 uppercase tracking-wider flex items-center gap-2">
             <Activity size={16} /> ISO 2631-1 Seat NVH Transmissibility
           </h3>
@@ -199,7 +199,7 @@ export const InteriorEngineeringTelemetryDashboard: React.FC = () => {
         </div>
 
         {/* 3. SAE J1100 Ergonomics & Sightline Biometrics */}
-        <div className="p-5 rounded-3xl bg-amber-950/80/90 border border-amber-800/30 space-y-4">
+        <div className="p-5 rounded-3xl bg-amber-950/90 border border-amber-800/30 space-y-4">
           <h3 className="text-sm font-bold text-emerald-400 uppercase tracking-wider flex items-center gap-2">
             <Eye size={16} /> SAE J1100 Ergonomics Biometrics
           </h3>

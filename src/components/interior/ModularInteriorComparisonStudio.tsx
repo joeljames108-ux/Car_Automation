@@ -73,7 +73,7 @@ export const ModularInteriorComparisonStudio: React.FC<ModularInteriorComparison
   return (
     <div className="space-y-4 p-4 rounded-2xl bg-amber-950/80 border border-amber-500/30 backdrop-blur-xl shadow-2xl text-xs font-mono">
       {/* Header */}
-      <div className="flex flex-wrap items-center justify-between gap-3 p-3 rounded-xl bg-amber-950/80/60 border border-amber-500/40">
+      <div className="flex flex-wrap items-center justify-between gap-3 p-3 rounded-xl bg-amber-950/60 border border-amber-500/40">
         <div className="flex items-center gap-2.5">
           <div className="p-2 rounded-lg bg-amber-500/20 text-amber-300 border border-amber-500/40">
             <GitCompare size={18} />
@@ -138,7 +138,7 @@ export const ModularInteriorComparisonStudio: React.FC<ModularInteriorComparison
         </div>
 
         {/* Cabin B Card */}
-        <div className="p-4 rounded-xl bg-amber-950/80/60 border border-amber-500/30 space-y-3">
+        <div className="p-4 rounded-xl bg-amber-950/60 border border-amber-500/30 space-y-3">
           <div className="flex items-center justify-between">
             <span className="font-bold text-amber-400">CABIN B (BENCHMARK)</span>
             <span className="px-2 py-0.5 rounded-full bg-amber-500/20 text-amber-300 text-[10px]">{benchmarkCabin.name}</span>
@@ -173,7 +173,7 @@ export const ModularInteriorComparisonStudio: React.FC<ModularInteriorComparison
       </div>
 
       {/* Delta Scorecard Grid */}
-      <div className="p-4 rounded-xl bg-amber-950/80/80 border border-amber-800/30 space-y-3">
+      <div className="p-4 rounded-xl bg-amber-950/80 border border-amber-800/30 space-y-3">
         <h4 className="font-bold text-amber-100 flex items-center gap-2">
           <Zap size={14} className="text-amber-400" />
           <span>DELTA PERFORMANCE SCORECARD (B vs A)</span>

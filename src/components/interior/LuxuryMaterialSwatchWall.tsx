@@ -211,7 +211,7 @@ export const LuxuryMaterialSwatchWall: React.FC<LuxuryMaterialSwatchWallProps> =
 
       {/* Contrast Stitching Studio */}
       {selectedStitchColorHex && onSelectStitchColor && (
-        <div className="p-3 rounded-xl bg-amber-950/80/60 border border-amber-800/30 space-y-2.5">
+        <div className="p-3 rounded-xl bg-amber-950/60 border border-amber-800/30 space-y-2.5">
           <div className="flex items-center justify-between">
             <label className="text-amber-100 font-bold flex items-center gap-1.5">
               <Sparkles size={13} className="text-amber-400" />

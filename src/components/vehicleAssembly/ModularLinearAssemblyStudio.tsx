@@ -113,11 +113,12 @@ export const ModularLinearAssemblyStudio: React.FC = () => {
     installedStages: new Set<AssemblyStageId>(["chassis", "engine"]),
     chassis: {
       type: "gt3",
-      architecture: "spaceframe",
-      wheelbaseMm: 2700,
-      frontTrackMm: 1620,
-      rearTrackMm: 1640,
-      rideHeightMm: 95,
+      category: (design.vehicle.category as any) || "gt3_race_car",
+      architecture: (design.vehicle.chassisArchId === "ev_skateboard" ? "ev_skateboard" : design.vehicle.chassisArchId === "ladder_frame" ? "ladder" : design.vehicle.chassisArchId === "carbon_monocoque" ? "carbon_tub" : "spaceframe"),
+      wheelbaseMm: design.vehicle.dimensions?.wheelbaseMm || 2700,
+      frontTrackMm: design.vehicle.dimensions?.frontTrackMm || 1620,
+      rearTrackMm: design.vehicle.dimensions?.rearTrackMm || 1640,
+      rideHeightMm: design.vehicle.dimensions?.rideHeightMm || 95,
     },
     engine: design.engine,
     enginePosition: "mid",
@@ -136,10 +137,19 @@ export const ModularLinearAssemblyStudio: React.FC = () => {
     tireCompound: "semi_slick",
     bodyKit: "gt3_aero",
     fenderLouvers: true,
-    doorStyle: "butterfly",
-    doorOpenAngleDeg: 0,
+    headlightStyle: "matrix_led_blade",
+    headlightColor: "#38bdf8",
+    headlightsActive: true,
+    headlightSmokedLens: false,
+    taillightStyle: "continuous_oled_blade",
     bonnetStyle: "extractor_vents",
+    bonnetFinish: "body_paint",
+    hoodPins: "aerocatch_flush",
     bonnetOpenAngleDeg: 0,
+    doorStyle: "butterfly",
+    mirrorStyle: "aerofoil_stalk_carbon",
+    doorHandleStyle: "flush_aerodynamic",
+    doorOpenAngleDeg: 0,
     dickyStyle: "vented_decklid",
     dickyOpenAngleDeg: 0,
     paintColor: "#dc2626",
@@ -192,6 +202,24 @@ export const ModularLinearAssemblyStudio: React.FC = () => {
       engine: design.engine,
     }));
   }, [design.engine]);
+
+  // Sync live vehicle category, chassis architecture, and dimensions from Vehicle Tab
+  useEffect(() => {
+    if (design.vehicle.category || design.vehicle.dimensions || design.vehicle.chassisArchId) {
+      setAssemblyState((prev) => ({
+        ...prev,
+        chassis: {
+          ...prev.chassis,
+          category: (design.vehicle.category as any) || prev.chassis.category,
+          architecture: (design.vehicle.chassisArchId === "ev_skateboard" ? "ev_skateboard" : design.vehicle.chassisArchId === "ladder_frame" ? "ladder" : design.vehicle.chassisArchId === "carbon_monocoque" ? "carbon_tub" : prev.chassis.architecture),
+          wheelbaseMm: design.vehicle.dimensions?.wheelbaseMm || prev.chassis.wheelbaseMm,
+          frontTrackMm: design.vehicle.dimensions?.frontTrackMm || prev.chassis.frontTrackMm,
+          rearTrackMm: design.vehicle.dimensions?.rearTrackMm || prev.chassis.rearTrackMm,
+          rideHeightMm: design.vehicle.dimensions?.rideHeightMm || prev.chassis.rideHeightMm,
+        },
+      }));
+    }
+  }, [design.vehicle.category, design.vehicle.dimensions, design.vehicle.chassisArchId]);
 
   // Compute live manifests based on installed components
   const installedManifests = useMemo<ComponentManifest[]>(() => {
@@ -616,6 +644,15 @@ export const ModularLinearAssemblyStudio: React.FC = () => {
               paintColor={assemblyState.paintColor}
               paintFinish={assemblyState.paintFinish}
               fenderLouvers={assemblyState.fenderLouvers ?? false}
+              headlightStyle={assemblyState.headlightStyle}
+              headlightColor={assemblyState.headlightColor}
+              headlightsActive={assemblyState.headlightsActive}
+              headlightSmokedLens={assemblyState.headlightSmokedLens}
+              taillightStyle={assemblyState.taillightStyle}
+              bonnetFinish={assemblyState.bonnetFinish}
+              hoodPins={assemblyState.hoodPins}
+              mirrorStyle={assemblyState.mirrorStyle}
+              doorHandleStyle={assemblyState.doorHandleStyle}
               onUpdateBody={(patch) => {
                 setAssemblyState((prev) => {
                   const updated = { ...prev, ...patch };

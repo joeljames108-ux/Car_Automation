@@ -92,7 +92,7 @@ export const NeonArcGauge: React.FC<NeonArcGaugeProps> = ({
           {Math.round(value)}
         </span>
         {unit && (
-          <span className="text-[9px] nh-font-mono text-amber-300/60/80 leading-none">{unit}</span>
+          <span className="text-[9px] nh-font-mono text-amber-300/80 leading-none">{unit}</span>
         )}
       </div>
     </div>

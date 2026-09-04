@@ -79,7 +79,7 @@ export function PowertrainSelector({
           className={`relative rounded-3xl p-6 md:p-7 border transition-all duration-500 flex flex-col justify-between overflow-hidden cursor-pointer ${
             hoveredCard === "ice" || currentMode === "ice"
               ? "bg-gradient-to-b from-amber-950/40 via-base-900/80 to-base-950/95 border-amber-400/60 shadow-[0_0_40px_rgba(34,211,238,0.25)] scale-[1.01]"
-              : "bg-base-950/70 border-slate-800 hover:border-slate-700"
+              : "bg-base-900/40 dark:bg-base-950/70 border-slate-700/60 dark:border-slate-800 hover:border-amber-400/60"
           }`}
           onClick={() => onSelectPowertrain("ice")}
         >
@@ -113,7 +113,7 @@ export function PowertrainSelector({
                 className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all ${
                   currentMode === "ice"
                     ? "border-amber-400 bg-amber-500 text-black shadow-[0_0_12px_rgba(34,211,238,0.6)]"
-                    : "border-slate-700 bg-slate-900"
+                    : "border-slate-600 bg-slate-800/80 dark:border-slate-700 dark:bg-slate-900"
                 }`}
               >
                 {currentMode === "ice" && <CheckCircle2 size={14} />}
@@ -199,7 +199,7 @@ export function PowertrainSelector({
           className={`relative rounded-3xl p-6 md:p-7 border transition-all duration-500 flex flex-col justify-between overflow-hidden cursor-pointer ${
             hoveredCard === "electric" || currentMode === "electric"
               ? "bg-gradient-to-b from-amber-950/40 via-base-900/80 to-base-950/95 border-amber-400/60 shadow-[0_0_40px_rgba(192,132,252,0.25)] scale-[1.01]"
-              : "bg-base-950/70 border-slate-800 hover:border-slate-700"
+              : "bg-base-900/40 dark:bg-base-950/70 border-slate-700/60 dark:border-slate-800 hover:border-amber-400/60"
           }`}
           onClick={() => onSelectPowertrain("electric")}
         >
@@ -233,7 +233,7 @@ export function PowertrainSelector({
                 className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all ${
                   currentMode === "electric"
                     ? "border-amber-400 bg-amber-500 text-black shadow-[0_0_12px_rgba(192,132,252,0.6)]"
-                    : "border-slate-700 bg-slate-900"
+                    : "border-slate-600 bg-slate-800/80 dark:border-slate-700 dark:bg-slate-900"
                 }`}
               >
                 {currentMode === "electric" && <CheckCircle2 size={14} />}

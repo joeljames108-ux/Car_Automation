@@ -33,8 +33,11 @@ export type AssemblyStageId =
   | "complete"
   | "aero_studio";
 
+import { VehicleCategoryId } from "../../../sim/modularVehicle/vehicleTypeRegistry";
+
 export interface ChassisConfig3D {
   type: "gt3" | "sports" | "coupe" | "sedan" | "hypercar" | "supercar" | "track";
+  category?: VehicleCategoryId;
   architecture: "monocoque" | "spaceframe" | "carbon_tub" | "tubular_cradle" | "ladder" | "ev_skateboard";
   wheelbaseMm: number;
   frontTrackMm: number;
@@ -91,8 +94,18 @@ export interface InstalledSubsystemsState {
   fenderLouvers?: boolean; // Stage 7: fender vent louvers
   doorStyle?: "butterfly" | "scissor" | "gullwing" | "conventional";
   doorOpenAngleDeg?: number;
-  bonnetStyle?: "extractor_vents" | "naca_ducts" | "louvered" | "smooth_supercar";
+  mirrorStyle?: "aerofoil_stalk_carbon" | "digital_camera_fin" | "gt3_convex_mirror";
+  doorHandleStyle?: "flush_aerodynamic" | "racing_pull_strap" | "shaved_clean";
+  sideAirScoop?: "deep_radiator_channel" | "naca_sill_duct" | "carbon_sideblade";
+  bonnetStyle?: "extractor_vents" | "naca_ducts" | "louvered" | "smooth_supercar" | "power_bulge_v8" | "transparent_polycarbonate";
   bonnetOpenAngleDeg?: number;
+  bonnetFinish?: "body_paint" | "exposed_carbon" | "stealth_matte";
+  hoodPins?: "aerocatch_flush" | "billet_pins" | "hidden_latches";
+  headlightStyle?: "matrix_led_blade" | "laser_quad_projector" | "cyber_lightbar_strip" | "halo_ring_gt3" | "retro_popup_aero";
+  headlightColor?: string;
+  headlightsActive?: boolean;
+  headlightSmokedLens?: boolean;
+  taillightStyle?: "continuous_oled_blade" | "dual_ring_halo" | "segmented_arrows" | "f1_rain_light";
   dickyStyle?: "vented_decklid" | "ducktail_trunk" | "carbon_tailgate" | "active_airbrake";
   dickyOpenAngleDeg?: number;
   paintColor: string;
@@ -109,6 +122,10 @@ export interface InstalledSubsystemsState {
   towHooksFront?: boolean; // Stage 11: front tow hook
   towHooksRear?: boolean; // Stage 11: rear tow hook
   aero: AeroParameters3D;
+  // Visual Inspection Modes (Phase 6 & 14)
+  bodyOn?: boolean;
+  isTransparentBody?: boolean;
+  visualMode?: "full" | "body_off" | "chassis_only" | "powertrain_only" | "suspension_only" | "aero_only" | "cutaway" | "exploded" | "anatomy" | "360";
 }
 
 export class ModularAssemblySceneGraph {
@@ -486,6 +503,98 @@ export class ModularAssemblySceneGraph {
     if (isXRay) {
       this.applyXRayMode();
     }
+
+    // Apply Visual Inspection Modes (Phase 6 & Phase 14)
+    this.applyVisualMode(state, explodedProgress, wb);
+  }
+
+  /**
+   * Applies the visual inspection mode (Full, Body Off, Chassis Only, Powertrain Only, Suspension Only, Aero Only, Transparent Body)
+   */
+  private applyVisualMode(state: InstalledSubsystemsState, explodedProgress: number, wb: number) {
+    const mode = state.visualMode || "full";
+    const bodyOn = state.bodyOn !== false;
+    const isTransp = state.isTransparentBody ?? false;
+
+    // Reset default visibilities
+    this.chassisGroup.visible = true;
+    this.engineGroup.visible = true;
+    this.transmissionGroup.visible = true;
+    this.suspensionGroup.visible = true;
+    this.brakesGroup.visible = true;
+    this.wheelsGroup.visible = true;
+    this.bodyGroup.visible = bodyOn;
+    this.glassGroup.visible = bodyOn;
+    this.interiorGroup.visible = true;
+    this.electronicsGroup.visible = true;
+    this.exteriorDetailsGroup.visible = bodyOn;
+    this.aeroGroup.visible = true;
+
+    if (mode === "body_off" || !bodyOn) {
+      this.bodyGroup.visible = false;
+      this.glassGroup.visible = false;
+      this.exteriorDetailsGroup.visible = false;
+    } else if (mode === "chassis_only") {
+      this.engineGroup.visible = false;
+      this.transmissionGroup.visible = false;
+      this.suspensionGroup.visible = false;
+      this.brakesGroup.visible = false;
+      this.wheelsGroup.visible = false;
+      this.bodyGroup.visible = false;
+      this.glassGroup.visible = false;
+      this.interiorGroup.visible = false;
+      this.electronicsGroup.visible = false;
+      this.exteriorDetailsGroup.visible = false;
+      this.aeroGroup.visible = false;
+    } else if (mode === "powertrain_only") {
+      this.chassisGroup.visible = false;
+      this.suspensionGroup.visible = false;
+      this.brakesGroup.visible = false;
+      this.wheelsGroup.visible = false;
+      this.bodyGroup.visible = false;
+      this.glassGroup.visible = false;
+      this.interiorGroup.visible = false;
+      this.electronicsGroup.visible = false;
+      this.exteriorDetailsGroup.visible = false;
+      this.aeroGroup.visible = false;
+    } else if (mode === "suspension_only") {
+      this.chassisGroup.visible = false;
+      this.engineGroup.visible = false;
+      this.transmissionGroup.visible = false;
+      this.bodyGroup.visible = false;
+      this.glassGroup.visible = false;
+      this.interiorGroup.visible = false;
+      this.electronicsGroup.visible = false;
+      this.exteriorDetailsGroup.visible = false;
+      this.aeroGroup.visible = false;
+    } else if (mode === "aero_only") {
+      this.chassisGroup.visible = false;
+      this.engineGroup.visible = false;
+      this.transmissionGroup.visible = false;
+      this.suspensionGroup.visible = false;
+      this.brakesGroup.visible = false;
+      this.wheelsGroup.visible = false;
+      this.interiorGroup.visible = false;
+      this.electronicsGroup.visible = false;
+      this.bodyGroup.visible = false;
+      this.glassGroup.visible = false;
+    } else if (mode === "exploded") {
+      this.applyExplodedOffsets(Math.max(0.75, explodedProgress), wb);
+    }
+
+    // Apply Transparent Body mode
+    if (this.bodyGroup.visible && isTransp) {
+      this.bodyGroup.traverse((child) => {
+        if (child instanceof THREE.Mesh && child.material) {
+          const mats = Array.isArray(child.material) ? child.material : [child.material];
+          mats.forEach((m) => {
+            m.transparent = true;
+            m.opacity = 0.28;
+            m.depthWrite = false;
+          });
+        }
+      });
+    }
   }
 
   // ==========================================================================
@@ -522,30 +631,30 @@ export class ModularAssemblySceneGraph {
     if (aero.rearWingEnabled) {
       const wingHeightM = aero.rearWingHeightMm / 1000;
       const wingWidthM = aero.rearWingWidthMm / 1000;
-      const wingZ = (wb * 0.5) + 0.62; // Deck position
+      const wingZ = (wb * 0.5) + 0.40; // Mounted firmly on rear deck
 
-      // Set Pivot position at the base mounting brackets on the rear deck
-      this.rearWingPivot.position.set(0, rh + 0.82 + (wingHeightM * 0.55), wingZ);
+      // Set Pivot position on the rear deck
+      this.rearWingPivot.position.set(0, rh + 0.72, wingZ);
 
-      // ROTATE PIVOT BY USER ANGLE IN REAL TIME!
+      // Rotate Pivot by user angle in real time
       this.rearWingPivot.rotation.x = (aero.rearWingAngleDeg * Math.PI) / 180;
 
-      // Swan-Neck Upright Pylons (Mount to top surface of wing for laminar underside flow)
-      [-0.32, 0.32].forEach((xPos) => {
+      // Swan-Neck Upright Pylons (Anchored cleanly behind decklid glass at Z = wb/2 + 0.32)
+      [-0.30, 0.30].forEach((xPos) => {
         const pylonCurve = new THREE.CubicBezierCurve3(
-          new THREE.Vector3(xPos, -wingHeightM * 0.75, 0.08),
-          new THREE.Vector3(xPos, -wingHeightM * 0.35, 0.04),
-          new THREE.Vector3(xPos, -wingHeightM * 0.05, -0.06),
-          new THREE.Vector3(xPos, 0.04, -0.04)
+          new THREE.Vector3(xPos, -wingHeightM * 0.55, -0.08),
+          new THREE.Vector3(xPos, -wingHeightM * 0.25, -0.05),
+          new THREE.Vector3(xPos, -wingHeightM * 0.05, -0.02),
+          new THREE.Vector3(xPos, 0.04, 0.0)
         );
-        const pylonGeo = new THREE.TubeGeometry(pylonCurve, 16, 0.018, 8, false);
+        const pylonGeo = new THREE.TubeGeometry(pylonCurve, 16, 0.016, 8, false);
         const pylon = new THREE.Mesh(pylonGeo, carbonMat);
         this.rearWingMeshGroup.add(pylon);
       });
 
-      // Main Cambered Aerofoil Wing Chord (Cambered teardrop profile)
-      const chordDepth = 0.34;
-      const chordThickness = 0.035;
+      // Main Cambered Aerofoil Wing Chord
+      const chordDepth = 0.32;
+      const chordThickness = 0.032;
       const mainChordGeo = new THREE.CylinderGeometry(chordDepth * 0.48, chordDepth * 0.52, wingWidthM, 16);
       const mainWing = new THREE.Mesh(mainChordGeo, carbonMat);
       mainWing.rotation.z = Math.PI / 2;
@@ -556,18 +665,18 @@ export class ModularAssemblySceneGraph {
 
       // Secondary Slotted Flap (if dual plane or swan neck)
       if (aero.rearWingType === "dual_plane" || aero.rearWingType === "swan_neck") {
-        const flapDepth = 0.18;
+        const flapDepth = 0.16;
         const flapGeo = new THREE.CylinderGeometry(flapDepth * 0.46, flapDepth * 0.52, wingWidthM * 0.96, 12);
         const flap = new THREE.Mesh(flapGeo, carbonMat);
         flap.rotation.z = Math.PI / 2;
-        flap.rotation.x = -0.18;
-        flap.scale.set(1.0, 0.02 / (flapDepth * 0.5), 1.0);
-        flap.position.set(0, 0.065, -0.14);
+        flap.rotation.x = -0.16;
+        flap.scale.set(1.0, 0.018 / (flapDepth * 0.5), 1.0);
+        flap.position.set(0, 0.055, -0.12);
         this.rearWingMeshGroup.add(flap);
       }
 
-      // Aerodynamic Endplates with Vortex Spill Fences
-      const endplateHeight = aero.endplateSize === "extended" ? 0.36 : aero.endplateSize === "compact" ? 0.20 : 0.26;
+      // Aerodynamic Endplates
+      const endplateHeight = aero.endplateSize === "extended" ? 0.34 : aero.endplateSize === "compact" ? 0.20 : 0.26;
       const endplateDepth = chordDepth * 1.35;
       const endplateGeo = new THREE.BoxGeometry(0.012, endplateHeight, endplateDepth);
       [-wingWidthM * 0.5, wingWidthM * 0.5].forEach((sideX) => {
@@ -576,59 +685,60 @@ export class ModularAssemblySceneGraph {
         this.rearWingMeshGroup.add(endplate);
       });
 
-      // Optional Titanium Gurney Flap
+      // Titanium Gurney Flap
       if (aero.gurneyFlap) {
-        const gurneyGeo = new THREE.BoxGeometry(wingWidthM * 0.98, 0.022, 0.008);
+        const gurneyGeo = new THREE.BoxGeometry(wingWidthM * 0.98, 0.020, 0.008);
         const gurney = new THREE.Mesh(gurneyGeo, this.materials.aluminum);
-        gurney.position.set(0, 0.024, chordDepth * 0.46);
+        gurney.position.set(0, 0.022, chordDepth * 0.46);
         this.rearWingMeshGroup.add(gurney);
       }
     }
 
-    // 2. FRONT SPLITTER WITH SWEPT TRAY & DOWNTURN CANARDS
+    // 2. FRONT SPLITTER WITH SWEPT TRAY & SUPPORT RODS (MOUNTED FLUSH UNDER BUMPER)
     if (aero.frontSplitterEnabled) {
       const splitExtM = aero.frontSplitterLengthMm / 1000;
-      const splitZ = -(wb * 0.5) - 0.72;
+      const splitZ = -(wb * 0.5) - 0.36;
 
-      this.frontSplitterPivot.position.set(0, rh + 0.06, splitZ);
+      this.frontSplitterPivot.position.set(0, rh + 0.02, splitZ);
       this.frontSplitterPivot.rotation.x = -(aero.frontSplitterAngleDeg * Math.PI) / 180;
 
-      // Swept Carbon Fiber Splitter Tray (Contoured Leading Edge)
-      const splitterWidth = tf * 1.95;
-      const splitterLength = 0.42 + splitExtM;
-      const splitterGeo = new THREE.BoxGeometry(splitterWidth, 0.022, splitterLength);
+      // Swept Carbon Fiber Splitter Tray (Proportional extension hugging bumper)
+      const splitterWidth = tf * 1.84;
+      const splitterLength = 0.28 + splitExtM;
+      const splitterGeo = new THREE.BoxGeometry(splitterWidth, 0.018, splitterLength);
       const splitter = new THREE.Mesh(splitterGeo, carbonMat);
       splitter.position.set(0, 0, -splitExtM * 0.5);
       this.frontSplitterPivot.add(splitter);
 
       // Splitter Lateral Vertical Endplate Fences
-      const endFenceGeo = new THREE.BoxGeometry(0.015, 0.12, splitterLength * 0.9);
+      const endFenceGeo = new THREE.BoxGeometry(0.012, 0.08, splitterLength * 0.9);
       [-splitterWidth * 0.5, splitterWidth * 0.5].forEach((fenceX) => {
         const fence = new THREE.Mesh(endFenceGeo, carbonMat);
-        fence.position.set(fenceX, 0.05, -splitExtM * 0.5);
+        fence.position.set(fenceX, 0.04, -splitExtM * 0.5);
         this.frontSplitterPivot.add(fence);
       });
 
-      // Adjustable Titanium Support Turnbuckle Struts
-      const strutGeo = new THREE.CylinderGeometry(0.006, 0.006, 0.24, 8);
-      [-0.32, 0.32].forEach((strutX) => {
+      // Adjustable Titanium Support Turnbuckle Struts connecting into front bumper
+      const strutGeo = new THREE.CylinderGeometry(0.005, 0.005, 0.18, 8);
+      [-0.28, 0.28].forEach((strutX) => {
         const strut = new THREE.Mesh(strutGeo, this.materials.chrome);
-        strut.rotation.x = -Math.PI / 7;
-        strut.position.set(strutX, 0.10, -splitExtM * 0.85);
+        strut.rotation.x = -Math.PI / 6;
+        strut.position.set(strutX, 0.08, -splitExtM * 0.6);
         this.frontSplitterPivot.add(strut);
       });
     }
 
     // 3. REAR VENTURI DIFFUSER WITH EXPANSION RAMPS & FIA RAIN LIGHT
     if (aero.diffuserEnabled) {
-      const diffZ = (wb * 0.5) + 0.42;
-      this.diffuserPivot.position.set(0, rh + 0.08, diffZ);
+      const diffZ = (wb * 0.5) + 0.28;
+      this.diffuserPivot.position.set(0, rh + 0.02, diffZ);
       this.diffuserPivot.rotation.x = -(aero.diffuserAngleDeg * Math.PI) / 180;
 
       const exitWidthM = aero.diffuserExitWidthMm / 1000;
-      const diffGeo = new THREE.BoxGeometry(exitWidthM, 0.018, 0.72);
+      const diffGeo = new THREE.BoxGeometry(exitWidthM, 0.016, 0.48);
       const diffMesh = new THREE.Mesh(diffGeo, carbonMat);
-      diffMesh.position.set(0, 0, 0.34);
+      diffMesh.position.set(0, 0.04, 0.24);
+      diffMesh.rotation.x = -0.15;
       this.diffuserPivot.add(diffMesh);
 
       // Vertical Aerodynamic Vortex Strakes
@@ -636,16 +746,17 @@ export class ModularAssemblySceneGraph {
       const strakeSpacing = exitWidthM / (strakesCount + 1);
       for (let i = 1; i <= strakesCount; i++) {
         const sx = -exitWidthM / 2 + i * strakeSpacing;
-        const strakeGeo = new THREE.BoxGeometry(0.010, 0.12, 0.68);
+        const strakeGeo = new THREE.BoxGeometry(0.008, 0.08, 0.44);
         const strake = new THREE.Mesh(strakeGeo, carbonMat);
-        strake.position.set(sx, -0.05, 0.34);
+        strake.position.set(sx, -0.02, 0.24);
+        strake.rotation.x = -0.15;
         this.diffuserPivot.add(strake);
       }
 
       // Central FIA Motorsport Flashing Rain Light
-      const rainLightGeo = new THREE.BoxGeometry(0.08, 0.04, 0.03);
+      const rainLightGeo = new THREE.BoxGeometry(0.07, 0.035, 0.025);
       const rainLight = new THREE.Mesh(rainLightGeo, this.materials.ledRed);
-      rainLight.position.set(0, 0.02, 0.68);
+      rainLight.position.set(0, 0.08, 0.48);
       this.diffuserPivot.add(rainLight);
     }
 
@@ -791,21 +902,7 @@ export class ModularAssemblySceneGraph {
     const group = new THREE.Group();
 
     // Map vehicle chassis configuration to authored high-fidelity GLB model
-    let chassisGlbUri = "/models/chassis/sports_car_chassis_01.glb";
-    if (c.architecture === "carbon_tub" || c.type === "hypercar" || c.type === "supercar") {
-      chassisGlbUri = "/models/chassis/supercar_monocoque_chassis_01.glb";
-    } else if (c.architecture === "tubular_cradle" || c.type === "gt3" || c.type === "track") {
-      chassisGlbUri = "/models/chassis/gt3_race_chassis_01.glb";
-    } else if (c.architecture === "ev_skateboard") {
-      chassisGlbUri = "/models/chassis/ev_skateboard_chassis_01.glb";
-    } else if (c.architecture === "ladder") {
-      chassisGlbUri = "/models/chassis/offroad_ladder_chassis_01.glb";
-    } else if (c.architecture === "monocoque" || c.type === "sedan") {
-      chassisGlbUri = "/models/chassis/hatchback_chassis_01.glb";
-    }
 
-    // Trigger async preload
-    this.preloadGlbChassisOrBody(chassisGlbUri);
 
     const metallurgyMat = this.chassisMetallurgyMode !== "default"
       ? AutomotivePBRMaterialSystem.getChassisMetallurgyMaterial(this.chassisMetallurgyMode, true)
@@ -826,28 +923,111 @@ export class ModularAssemblySceneGraph {
     const tf = (c.frontTrackMm / 2) / 1000;
     const rh = c.rideHeightMm / 1000;
 
-    // Check if authored GLB chassis frame is cached
-    const cachedGlb = this.glbCache.get(chassisGlbUri);
-    if (cachedGlb && !isPreview) {
-      const glbInstance = cachedGlb.clone();
-      glbInstance.scale.set(tf * 1.1, 0.95, wb * 0.42);
-      glbInstance.position.set(0, rh + 0.18, -(wb * 0.05));
-      if (this.showFeaStress) {
-        glbInstance.traverse((child) => {
-          if (child instanceof THREE.Mesh) {
-            const isHighStressNode = child.name.includes("Tower") || child.name.includes("Cradle") || child.name.includes("Wishbone") || child.name.includes("Crash") || child.name.includes("Hoop");
-            const nodeRatio = isHighStressNode ? 0.88 : child.name.includes("Crossmember") ? 0.62 : 0.35;
-            child.material = AutomotivePBRMaterialSystem.getFeaLoadCaseStressMaterial(this.activeFeaLoadCase, nodeRatio);
-          }
-        });
-      } else if (metallurgyMat) {
-        glbInstance.traverse((child) => {
-          if (child instanceof THREE.Mesh) {
-            child.material = metallurgyMat;
-          }
-        });
+    // Procedural High-Fidelity CAD Frame & Carbon Monocoque Subassembly
+
+    // Category-Specific Chassis Structural Geometry
+    const cat = c.category;
+    if (cat === "formula_open_wheel") {
+      // 1. Single-seater narrow survival cell
+      const tubGeo = new THREE.BoxGeometry(tf * 0.72, 0.42, wb * 0.95);
+      const tub = new THREE.Mesh(tubGeo, mat);
+      tub.position.set(0, rh + 0.22, -(wb * 0.05));
+      group.add(tub);
+
+      // Cockpit cutout
+      const cockpitCutGeo = new THREE.BoxGeometry(tf * 0.52, 0.32, wb * 0.45);
+      const cockpitCut = new THREE.Mesh(cockpitCutGeo, this.materials.castIron);
+      cockpitCut.position.set(0, rh + 0.32, -(wb * 0.05));
+      group.add(cockpitCut);
+
+      // Titanium Halo Safety Arch
+      const haloCurve = new THREE.CatmullRomCurve3([
+        new THREE.Vector3(0, rh + 0.48, -(wb * 0.25)),
+        new THREE.Vector3(0, rh + 0.76, -(wb * 0.10)),
+        new THREE.Vector3(-tf * 0.30, rh + 0.72, wb * 0.06),
+        new THREE.Vector3(tf * 0.30, rh + 0.72, wb * 0.06),
+        new THREE.Vector3(0, rh + 0.76, -(wb * 0.10)),
+      ]);
+      const haloGeo = new THREE.TubeGeometry(haloCurve, 20, 0.022, 8, true);
+      const haloMesh = new THREE.Mesh(haloGeo, chromeMat);
+      group.add(haloMesh);
+
+      // Formula Stressed Engine / Gearbox Sub-Cradle
+      const cradleGeo = new THREE.BoxGeometry(tf * 0.65, 0.20, wb * 0.45);
+      const cradle = new THREE.Mesh(cradleGeo, aluMat);
+      cradle.position.set(0, rh + 0.18, wb * 0.45);
+      group.add(cradle);
+
+      // Front crash cone
+      const crashConeGeo = new THREE.ConeGeometry(0.12, 0.55, 6);
+      const crashCone = new THREE.Mesh(crashConeGeo, mat);
+      crashCone.rotation.x = -Math.PI / 2;
+      crashCone.position.set(0, rh + 0.18, -(wb * 0.5) - 0.28);
+      group.add(crashCone);
+
+      return group;
+    }
+
+    if (cat === "suv" || cat === "offroad_4x4" || cat === "pickup") {
+      // Heavy-Duty Boxed Steel Ladder Frame Rails
+      const railLength = wb * 1.38;
+      const railGeo = new THREE.BoxGeometry(0.12, 0.18, railLength);
+      const railL = new THREE.Mesh(railGeo, chromeMat);
+      railL.position.set(-tf * 0.62, rh + 0.22, 0);
+      const railR = new THREE.Mesh(railGeo, chromeMat);
+      railR.position.set(tf * 0.62, rh + 0.22, 0);
+      group.add(railL, railR);
+
+      // 5 Heavy Tubular Steel Crossmembers
+      for (let i = 0; i < 5; i++) {
+        const cz = -wb * 0.6 + i * (wb * 0.3);
+        const cmGeo = new THREE.CylinderGeometry(0.04, 0.04, tf * 1.24, 12);
+        const cm = new THREE.Mesh(cmGeo, aluMat);
+        cm.rotation.z = Math.PI / 2;
+        cm.position.set(0, rh + 0.22, cz);
+        group.add(cm);
       }
-      group.add(glbInstance);
+
+      // Front Winch Mounting Plate & Heavy Sump Skid Plate
+      const skidGeo = new THREE.BoxGeometry(tf * 1.05, 0.03, 0.65);
+      const skid = new THREE.Mesh(skidGeo, aluMat);
+      skid.rotation.x = 0.22;
+      skid.position.set(0, rh + 0.14, -(wb * 0.58));
+      group.add(skid);
+
+      // Rear Tow Hitch / Shackle Receiver
+      const hitchGeo = new THREE.BoxGeometry(0.12, 0.12, 0.22);
+      const hitch = new THREE.Mesh(hitchGeo, chromeMat);
+      hitch.position.set(0, rh + 0.22, (wb * 0.68));
+      group.add(hitch);
+
+      return group;
+    }
+
+    if (cat === "ev_platform") {
+      // Structural EV Skateboard Platform with Underfloor Battery Pack
+      const packGeo = new THREE.BoxGeometry(tf * 1.62, 0.16, wb * 0.82);
+      const pack = new THREE.Mesh(packGeo, mat);
+      pack.position.set(0, rh + 0.14, 0);
+      group.add(pack);
+
+      // Reinforced Aluminum Side Crash Sills
+      const sillGeo = new THREE.BoxGeometry(0.16, 0.22, wb * 0.86);
+      const sillL = new THREE.Mesh(sillGeo, aluMat);
+      sillL.position.set(-tf * 0.88, rh + 0.15, 0);
+      const sillR = new THREE.Mesh(sillGeo, aluMat);
+      sillR.position.set(tf * 0.88, rh + 0.15, 0);
+      group.add(sillL, sillR);
+
+      // Front & Rear Electric Drive Unit Subframes
+      const eduFrontGeo = new THREE.BoxGeometry(tf * 0.88, 0.26, 0.44);
+      const eduFront = new THREE.Mesh(eduFrontGeo, aluMat);
+      eduFront.position.set(0, rh + 0.20, -(wb * 0.48));
+      const eduRear = new THREE.Mesh(eduFrontGeo, aluMat);
+      eduRear.position.set(0, rh + 0.20, (wb * 0.48));
+      group.add(eduFront, eduRear);
+
+      return group;
     }
 
     // 1. Carbon Monocell Cockpit Tub
@@ -870,11 +1050,10 @@ export class ModularAssemblySceneGraph {
     sillR.position.set(tf * 0.88, rh + 0.16, 0);
     group.add(sillL, sillR);
 
-    // 4. Front Crash Structure (Aluminum Honeycomb Cone)
-    const crashBoxGeo = new THREE.ConeGeometry(0.18, 0.42, 6);
+    // 4. Front Crash Structure (Aluminum Honeycomb Core, compact within front bulkhead)
+    const crashBoxGeo = new THREE.BoxGeometry(tf * 0.72, 0.18, 0.22);
     const crashBox = new THREE.Mesh(crashBoxGeo, aluMat);
-    crashBox.rotation.x = -Math.PI / 2;
-    crashBox.position.set(0, rh + 0.22, -(wb * 0.5) - 0.22);
+    crashBox.position.set(0, rh + 0.20, -(wb * 0.5) - 0.12);
     group.add(crashBox);
 
     // 5. Front Subframe Extrusions & Suspension Hardpoint Clevises
@@ -1167,7 +1346,8 @@ export class ModularAssemblySceneGraph {
 
     corners.forEach((c) => {
       const cornerGroup = new THREE.Group();
-      cornerGroup.position.set(c.x, rh + 0.18, c.z);
+      const tireRadius = c.isFront ? 0.33 : 0.35;
+      cornerGroup.position.set(c.x, tireRadius, c.z);
 
       // 1. Aero Carbon Upper Wishbone (A-Arm)
       const uArmGeo = new THREE.BoxGeometry(0.28, 0.02, 0.18);
@@ -1290,7 +1470,8 @@ export class ModularAssemblySceneGraph {
 
     corners.forEach((c) => {
       const corner = new THREE.Group();
-      corner.position.set(c.x, rh + 0.18, c.z);
+      const tireRadius = c.isFront ? 0.33 : 0.35;
+      corner.position.set(c.x, tireRadius, c.z);
 
       // 1. 410mm Carbon-Ceramic Ventilated Rotor (Cross-Drilled)
       const radius = c.isFront ? 0.21 : 0.19;
@@ -1392,11 +1573,11 @@ export class ModularAssemblySceneGraph {
 
     corners.forEach((c) => {
       const wheel = new THREE.Group();
-      wheel.position.set(c.x, rh + 0.18, c.z);
-
       const tireRadius = c.isFront ? 0.33 : 0.35;
       const tireWidth = c.isFront ? 0.27 : 0.33;
       const rimRadius = c.isFront ? 0.245 : 0.255;
+      // Wheel center placed at tireRadius so bottom of tire touches ground plane (Y = 0)
+      wheel.position.set(c.x, tireRadius, c.z);
 
       // 1. Competition Michelin Pilot Sport Cup 2 Tire (Curved Sidewall Profile)
       const tireTorusGeo = new THREE.TorusGeometry(tireRadius * 0.78, tireRadius * 0.24, 16, 36);
@@ -1498,35 +1679,201 @@ export class ModularAssemblySceneGraph {
     const carbonMat = isPreview ? bodyMat : this.materials.carbonGloss;
     const trimMat = isPreview ? bodyMat : this.materials.castIron;
 
-    // Determine and preload matching full car body GLB model
-    let bodyGlbUri = "/models/exterior/hypercar_apex_gt3.glb";
-    if (state.chassis.type === "coupe") {
-      bodyGlbUri = "/models/exterior/sports_coupe_gt.glb";
-    } else if (state.chassis.type === "sedan") {
-      bodyGlbUri = "/models/exterior/hatchback_ford_escort.glb";
-    }
-    this.preloadGlbChassisOrBody(bodyGlbUri);
 
-    // If full vehicle GLB is cached and not in preview, mount it with active paint
-    const cachedBodyGlb = this.glbCache.get(bodyGlbUri);
-    if (cachedBodyGlb && !isPreview) {
-      const bodyInstance = cachedBodyGlb.clone();
-      bodyInstance.scale.set(tf * 1.05, 0.96, wb * 0.40);
-      bodyInstance.position.set(0, rh + 0.16, 0);
-      bodyInstance.traverse((child) => {
-        if (child instanceof THREE.Mesh) {
-          if (child.name.includes("Paint") || child.name.includes("Body") || child.name.includes("Fuselage") || child.name.includes("Fender") || child.name.includes("Haunch")) {
-            child.material = bodyMat;
-          } else if (child.name.includes("Glass") || child.name.includes("Canopy") || child.name.includes("Windshield")) {
-            child.material = AutomotivePBRMaterialSystem.getDielectricGlass("#080c14", 0.65, 1.52);
-          } else if (child.name.includes("Carbon") || child.name.includes("Splitter") || child.name.includes("Wing") || child.name.includes("Diffuser")) {
-            child.material = AutomotivePBRMaterialSystem.getCarbonFiber(true);
-          }
-        }
+
+    // High-Fidelity Modular PBR Body Panels & Closures
+
+    const cat = state.chassis.category;
+
+    // ── CATEGORY 1: FORMULA / OPEN-WHEEL BODYWORK ──
+    if (cat === "formula_open_wheel") {
+      // 1. Slender Needle Fuselage
+      const fuseGeo = new THREE.CylinderGeometry(tf * 0.28, tf * 0.42, wb * 0.95, 16);
+      const fuse = new THREE.Mesh(fuseGeo, bodyMat);
+      fuse.rotation.x = Math.PI / 2;
+      fuse.position.set(0, rh + 0.24, -(wb * 0.05));
+      group.add(fuse);
+
+      // 2. High-Nose Cone
+      const noseGeo = new THREE.ConeGeometry(tf * 0.26, 0.72, 16);
+      const nose = new THREE.Mesh(noseGeo, bodyMat);
+      nose.rotation.x = -Math.PI / 2;
+      nose.position.set(0, rh + 0.22, -(wb * 0.5) - 0.35);
+      group.add(nose);
+
+      // 3. Sidepods with Radiator Inlets
+      const podGeo = new THREE.BoxGeometry(0.24, 0.26, wb * 0.48);
+      [-1, 1].forEach((side) => {
+        const pod = new THREE.Mesh(podGeo, bodyMat);
+        pod.position.set(side * (tf * 0.48), rh + 0.20, -(wb * 0.05));
+        group.add(pod);
+
+        const inletGeo = new THREE.BoxGeometry(0.20, 0.18, 0.06);
+        const inlet = new THREE.Mesh(inletGeo, trimMat);
+        inlet.position.set(side * (tf * 0.48), rh + 0.20, -(wb * 0.30));
+        group.add(inlet);
       });
-      group.add(bodyInstance);
+
+      // 4. Overhead Periscope Airbox Scoop & Engine Cover Fin
+      const airboxGeo = new THREE.CylinderGeometry(0.08, 0.12, 0.32, 12);
+      const airbox = new THREE.Mesh(airboxGeo, bodyMat);
+      airbox.rotation.x = 0.35;
+      airbox.position.set(0, rh + 0.74, wb * 0.02);
+      group.add(airbox);
+
+      const sharkFinGeo = new THREE.BoxGeometry(0.02, 0.38, wb * 0.45);
+      const sharkFin = new THREE.Mesh(sharkFinGeo, carbonMat);
+      sharkFin.position.set(0, rh + 0.62, wb * 0.22);
+      group.add(sharkFin);
+
+      // 5. Front Multi-Tier Open-Wheel Wing Assembly
+      const fWingGeo = new THREE.BoxGeometry(tf * 1.85, 0.02, 0.28);
+      const fWing = new THREE.Mesh(fWingGeo, carbonMat);
+      fWing.position.set(0, rh + 0.10, -(wb * 0.5) - 0.48);
+      group.add(fWing);
+
+      [-tf * 0.92, tf * 0.92].forEach((epX) => {
+        const epGeo = new THREE.BoxGeometry(0.015, 0.18, 0.32);
+        const ep = new THREE.Mesh(epGeo, carbonMat);
+        ep.position.set(epX, rh + 0.15, -(wb * 0.5) - 0.48);
+        group.add(ep);
+      });
+
+      // Notice: NO closed wheel arches added — authentic open-wheel configuration!
+      return group;
     }
 
+    // ── CATEGORY 2: SUV & OFF-ROAD 4x4 BODYWORK ──
+    if (cat === "suv" || cat === "offroad_4x4") {
+      // 1. Tall Boxy Lower Fuselage
+      const suvBodyGeo = new THREE.BoxGeometry(tf * 1.72, 0.56, wb * 1.25);
+      const suvBody = new THREE.Mesh(suvBodyGeo, bodyMat);
+      suvBody.position.set(0, rh + 0.38, 0);
+      group.add(suvBody);
+
+      // 2. High Boxy Greenhouse Cabin
+      const cabGeo = new THREE.BoxGeometry(tf * 1.48, 0.62, wb * 0.88);
+      const cab = new THREE.Mesh(cabGeo, bodyMat);
+      cab.position.set(0, rh + 0.82, -(wb * 0.02));
+      group.add(cab);
+
+      // 3. Roof Rack Rails & Crossbars
+      const railGeo = new THREE.CylinderGeometry(0.016, 0.016, wb * 0.82, 8);
+      [-tf * 0.68, tf * 0.68].forEach((rx) => {
+        const rail = new THREE.Mesh(railGeo, trimMat);
+        rail.rotation.x = Math.PI / 2;
+        rail.position.set(rx, rh + 1.15, -(wb * 0.02));
+        group.add(rail);
+      });
+      for (let i = -1; i <= 1; i++) {
+        const crossGeo = new THREE.CylinderGeometry(0.014, 0.014, tf * 1.34, 8);
+        const cross = new THREE.Mesh(crossGeo, trimMat);
+        cross.rotation.z = Math.PI / 2;
+        cross.position.set(0, rh + 1.16, -(wb * 0.02) + i * 0.28);
+        group.add(cross);
+      }
+
+      // 4. Rugged Squared Wheel Arch Claddings
+      const sqArchGeo = new THREE.BoxGeometry(0.24, 0.34, 0.68);
+      [-tf * 0.92, tf * 0.92].forEach((ax) => {
+        const fArch = new THREE.Mesh(sqArchGeo, trimMat);
+        fArch.position.set(ax, rh + 0.32, -(wb * 0.5));
+        const rArch = new THREE.Mesh(sqArchGeo, trimMat);
+        rArch.position.set(ax, rh + 0.34, wb * 0.5);
+        group.add(fArch, rArch);
+      });
+
+      // 5. Upright Bold Front Grille & Bullbar
+      const suvGrilleGeo = new THREE.BoxGeometry(tf * 1.15, 0.38, 0.12);
+      const suvGrille = new THREE.Mesh(suvGrilleGeo, trimMat);
+      suvGrille.position.set(0, rh + 0.44, -(wb * 0.5) - 0.42);
+      group.add(suvGrille);
+
+      // 6. Rear Tailgate External Spare Wheel Carrier
+      const spareGeo = new THREE.CylinderGeometry(0.32, 0.32, 0.22, 16);
+      const spare = new THREE.Mesh(spareGeo, trimMat);
+      spare.rotation.x = Math.PI / 2;
+      spare.position.set(0, rh + 0.55, (wb * 0.5) + 0.42);
+      group.add(spare);
+
+      return group;
+    }
+
+    // ── CATEGORY 3: PICKUP TRUCK BODYWORK ──
+    if (cat === "pickup") {
+      // 1. Front Passenger Cab
+      const cabGeo = new THREE.BoxGeometry(tf * 1.68, 0.64, wb * 0.62);
+      const cab = new THREE.Mesh(cabGeo, bodyMat);
+      cab.position.set(0, rh + 0.80, -(wb * 0.18));
+      group.add(cab);
+
+      // Front Hood & Engine Compartment
+      const hoodGeo = new THREE.BoxGeometry(tf * 1.62, 0.38, wb * 0.48);
+      const hood = new THREE.Mesh(hoodGeo, bodyMat);
+      hood.position.set(0, rh + 0.50, -(wb * 0.52));
+      group.add(hood);
+
+      // 2. Open Rear Cargo Bed with Side Walls
+      const bedFloorGeo = new THREE.BoxGeometry(tf * 1.62, 0.08, wb * 0.62);
+      const bedFloor = new THREE.Mesh(bedFloorGeo, trimMat);
+      bedFloor.position.set(0, rh + 0.36, wb * 0.32);
+      group.add(bedFloor);
+
+      // Bed Sidewalls
+      const wallGeo = new THREE.BoxGeometry(0.08, 0.36, wb * 0.62);
+      [-tf * 0.82, tf * 0.82].forEach((wx) => {
+        const wall = new THREE.Mesh(wallGeo, bodyMat);
+        wall.position.set(wx, rh + 0.54, wb * 0.32);
+        group.add(wall);
+      });
+
+      // Tailgate
+      const tgGeo = new THREE.BoxGeometry(tf * 1.62, 0.36, 0.08);
+      const tg = new THREE.Mesh(tgGeo, bodyMat);
+      tg.position.set(0, rh + 0.54, (wb * 0.32) + (wb * 0.31));
+      group.add(tg);
+
+      return group;
+    }
+
+    // ── CATEGORY 4: HATCHBACK BODYWORK ──
+    if (cat === "hatchback") {
+      // 1. Compact 2-Box Lower Fuselage
+      const hatchBodyGeo = new THREE.BoxGeometry(tf * 1.62, 0.46, wb * 1.15);
+      const hatchBody = new THREE.Mesh(hatchBodyGeo, bodyMat);
+      hatchBody.position.set(0, rh + 0.32, 0);
+      group.add(hatchBody);
+
+      // 2. 2-Box Greenhouse extending straight back to truncated vertical hatch
+      const hatchCabGeo = new THREE.BoxGeometry(tf * 1.36, 0.52, wb * 0.78);
+      const hatchCab = new THREE.Mesh(hatchCabGeo, bodyMat);
+      hatchCab.position.set(0, rh + 0.72, -(wb * 0.05));
+      group.add(hatchCab);
+
+      // 3. Integrated Rooftop Rear Hatch Spoiler
+      const spoilerGeo = new THREE.BoxGeometry(tf * 1.28, 0.04, 0.22);
+      const spoiler = new THREE.Mesh(spoilerGeo, carbonMat);
+      spoiler.position.set(0, rh + 0.98, (wb * 0.32));
+      group.add(spoiler);
+
+      // Flared Fenders
+      const archRadius = 0.36;
+      const archWidth = 0.20;
+      const archGeo = new THREE.TorusGeometry(archRadius, archWidth * 0.45, 12, 24, Math.PI * 0.92);
+      [-tf * 0.95, tf * 0.95].forEach((ax, idx) => {
+        const fF = new THREE.Mesh(archGeo, bodyMat);
+        fF.rotation.y = idx === 0 ? Math.PI / 2 : -Math.PI / 2;
+        fF.position.set(ax, rh + 0.22, -(wb * 0.5));
+        const rF = new THREE.Mesh(archGeo, bodyMat);
+        rF.rotation.y = idx === 0 ? Math.PI / 2 : -Math.PI / 2;
+        rF.position.set(ax, rh + 0.22, wb * 0.5);
+        group.add(fF, rF);
+      });
+
+      return group;
+    }
+
+    // ── DEFAULT: SCULPTED SPORTS / SUPERCAR / GT3 / HYPERCAR BODY ──
     // ── 1. SCULPTED MAIN MONOCOQUE FUSELAGE & COCKPIT GREENHOUSE ──
     // Lower aerodynamic tub with side waistline taper (Coke-bottle styling)
     const tubLength = wb * 1.15;
@@ -1558,41 +1905,41 @@ export class ModularAssemblySceneGraph {
     const archWidth = 0.22;
     const archGeo = new THREE.TorusGeometry(archRadius, archWidth * 0.45, 12, 24, Math.PI * 0.92);
 
-    // Front Left & Right Flared Fenders
+    // Front Left & Right Flared Fenders (centered at front axle Z = -wb/2, Y = 0.33)
     const fFL = new THREE.Mesh(archGeo, bodyMat);
     fFL.rotation.y = Math.PI / 2;
     fFL.rotation.z = Math.PI * 0.04;
     fFL.scale.set(1.0, 1.1, 1.35);
-    fFL.position.set(-tf * 0.98, rh + 0.22, -(wb * 0.5));
+    fFL.position.set(-tf * 0.98, 0.33, -(wb * 0.5));
 
     const fFR = new THREE.Mesh(archGeo, bodyMat);
     fFR.rotation.y = -Math.PI / 2;
     fFR.rotation.z = Math.PI * 0.04;
     fFR.scale.set(1.0, 1.1, 1.35);
-    fFR.position.set(tf * 0.98, rh + 0.22, -(wb * 0.5));
+    fFR.position.set(tf * 0.98, 0.33, -(wb * 0.5));
 
-    // Rear Left & Right Muscular Widebody Haunches
+    // Rear Left & Right Muscular Widebody Haunches (centered at rear axle Z = +wb/2, Y = 0.35)
     const fRL = new THREE.Mesh(archGeo, bodyMat);
     fRL.rotation.y = Math.PI / 2;
     fRL.rotation.z = Math.PI * 0.04;
     fRL.scale.set(1.0, 1.18, 1.45);
-    fRL.position.set(-tr * 0.98, rh + 0.24, (wb * 0.5));
+    fRL.position.set(-tr * 0.98, 0.35, (wb * 0.5));
 
     const fRR = new THREE.Mesh(archGeo, bodyMat);
     fRR.rotation.y = -Math.PI / 2;
     fRR.rotation.z = Math.PI * 0.04;
     fRR.scale.set(1.0, 1.18, 1.45);
-    fRR.position.set(tr * 0.98, rh + 0.24, (wb * 0.5));
+    fRR.position.set(tr * 0.98, 0.35, (wb * 0.5));
 
     group.add(fFL, fFR, fRL, fRR);
 
-    // Front Fender Inner Carbon Wheel Liners
+    // Front Fender Inner Carbon Wheel Liners (centered at front axle)
     const linerGeo = new THREE.CylinderGeometry(archRadius * 0.92, archRadius * 0.92, archWidth * 0.8, 16, 1, true, 0, Math.PI);
     [-tf * 0.98, tf * 0.98].forEach((xPos, idx) => {
       const liner = new THREE.Mesh(linerGeo, trimMat);
       liner.rotation.z = Math.PI / 2;
       liner.rotation.x = idx === 0 ? Math.PI : 0;
-      liner.position.set(xPos, rh + 0.22, -(wb * 0.5));
+      liner.position.set(xPos, 0.33, -(wb * 0.5));
       group.add(liner);
     });
 
@@ -1600,208 +1947,348 @@ export class ModularAssemblySceneGraph {
     if (state.fenderLouvers && !isPreview) {
       const louverFinGeo = new THREE.BoxGeometry(0.14, 0.008, 0.045);
       [-(wb * 0.5), wb * 0.5].forEach((zPos) => {
+        const archY = zPos < 0 ? 0.33 : 0.35;
         [-1, 1].forEach((side) => {
           for (let i = 0; i < 4; i++) {
             const fin = new THREE.Mesh(louverFinGeo, carbonMat);
             fin.rotation.x = 0.32;
-            fin.position.set(side * tf * 0.95, rh + 0.56 - i * 0.006, zPos + (i - 1.5) * 0.065);
+            fin.position.set(side * tf * 0.95, archY + 0.34 - i * 0.006, zPos + (i - 1.5) * 0.065);
             group.add(fin);
           }
         });
       });
     }
 
-    // ── 3. AERODYNAMIC FRONT NOSE CONE & BUMPER FASCIA ──
-    const noseLength = 0.62;
-    const noseGeo = new THREE.ConeGeometry(tf * 0.96, noseLength, 16);
-    const noseMesh = new THREE.Mesh(noseGeo, bodyMat);
-    noseMesh.rotation.x = -Math.PI / 2;
-    noseMesh.scale.set(1.05, 0.38, 1.0);
-    noseMesh.position.set(0, rh + 0.32, -(wb * 0.5) - (noseLength * 0.45));
-    group.add(noseMesh);
+    // ── 3. AERODYNAMIC FRONT BUMPER FASCIA ──
+    const frontBumperLength = 0.37;
+    const frontBumperGeo = new THREE.BoxGeometry(tf * 1.82, 0.28, frontBumperLength);
+    const frontBumperMesh = new THREE.Mesh(frontBumperGeo, bodyMat);
+    frontBumperMesh.position.set(0, rh + 0.22, -(wb * 0.5) - 0.335);
+    group.add(frontBumperMesh);
 
-    // Front Radiator Air Intake Grille (Trapezoidal Center Mesh)
-    const grilleGeo = new THREE.BoxGeometry(tf * 0.92, 0.18, 0.08);
+    // Front Radiator Air Intake Grille
+    const grilleGeo = new THREE.BoxGeometry(tf * 0.95, 0.14, 0.04);
     const grilleMesh = new THREE.Mesh(grilleGeo, trimMat);
-    grilleMesh.position.set(0, rh + 0.22, -(wb * 0.5) - 0.64);
+    grilleMesh.position.set(0, rh + 0.16, -(wb * 0.5) - 0.49);
     group.add(grilleMesh);
 
     // Outboard Brake Cooling Ducts
-    const brakeDuctGeo = new THREE.BoxGeometry(0.24, 0.12, 0.06);
+    const brakeDuctGeo = new THREE.BoxGeometry(0.20, 0.10, 0.04);
     [-1, 1].forEach((side) => {
       const duct = new THREE.Mesh(brakeDuctGeo, carbonMat);
-      duct.position.set(side * tf * 0.72, rh + 0.22, -(wb * 0.5) - 0.62);
-      duct.rotation.y = side * -0.22;
+      duct.position.set(side * tf * 0.72, rh + 0.18, -(wb * 0.5) - 0.48);
+      duct.rotation.y = side * -0.18;
       group.add(duct);
     });
 
     // ── 4. REAR AERO BUMPER FASCIA & EXTRACTION MESH ──
-    const rearBumperLength = 0.58;
-    const rearBumperGeo = new THREE.BoxGeometry(tr * 1.88, 0.38, rearBumperLength);
+    const rearBumperLength = 0.39;
+    const rearBumperGeo = new THREE.BoxGeometry(tr * 1.88, 0.36, rearBumperLength);
     const rearBumper = new THREE.Mesh(rearBumperGeo, bodyMat);
-    rearBumper.position.set(0, rh + 0.36, (wb * 0.5) + (rearBumperLength * 0.5));
+    rearBumper.position.set(0, rh + 0.34, (wb * 0.5) + 0.15 + (rearBumperLength * 0.5));
     group.add(rearBumper);
 
     // Rear Heat Extraction Hex Mesh Panel
-    const rearMeshGeo = new THREE.BoxGeometry(tr * 1.55, 0.18, 0.04);
+    const rearMeshGeo = new THREE.BoxGeometry(tr * 1.55, 0.16, 0.04);
     const rearMesh = new THREE.Mesh(rearMeshGeo, trimMat);
-    rearMesh.position.set(0, rh + 0.35, (wb * 0.5) + rearBumperLength + 0.01);
+    rearMesh.position.set(0, rh + 0.33, (wb * 0.5) + 0.52);
     group.add(rearMesh);
 
     // ── 5. SCULPTED SIDE SKIRTS WITH VORTEX FENCES ──
-    const skirtLength = wb * 0.88;
-    const skirtGeo = new THREE.BoxGeometry(0.18, 0.045, skirtLength);
+    const skirtLength = Math.max(0.6, wb - 0.76);
+    const skirtGeo = new THREE.BoxGeometry(0.18, 0.04, skirtLength);
     const skirtL = new THREE.Mesh(skirtGeo, carbonMat);
-    skirtL.position.set(-tf * 0.98, rh + 0.08, 0);
+    skirtL.position.set(-tf * 0.96, rh + 0.02, 0);
     const skirtR = new THREE.Mesh(skirtGeo, carbonMat);
-    skirtR.position.set(tf * 0.98, rh + 0.08, 0);
+    skirtR.position.set(tf * 0.96, rh + 0.02, 0);
     group.add(skirtL, skirtR);
 
     // Side Skirt Rear Aero Winglets
-    const wingletGeo = new THREE.BoxGeometry(0.02, 0.12, 0.18);
+    const wingletGeo = new THREE.BoxGeometry(0.02, 0.12, 0.16);
     const wingletL = new THREE.Mesh(wingletGeo, carbonMat);
-    wingletL.position.set(-tf * 1.04, rh + 0.14, wb * 0.38);
+    wingletL.position.set(-tf * 1.02, rh + 0.10, wb * 0.36);
     const wingletR = new THREE.Mesh(wingletGeo, carbonMat);
-    wingletR.position.set(tf * 1.04, rh + 0.14, wb * 0.38);
+    wingletR.position.set(tf * 1.02, rh + 0.10, wb * 0.36);
     group.add(wingletL, wingletR);
 
-    // ── 6. MATRIX LED HEADLIGHT CLUSTERS & OLED REAR LIGHTBAR ──
-    // Swept-back, razor-sharp headlight clusters with dual projector lenses
+    // ── 6. INDIVIDUAL HEADLIGHT CLUSTERS & LIGHTING OPTICS ──
+    const headlightStyle = state.headlightStyle || "matrix_led_blade";
+    const drlColor = new THREE.Color(state.headlightColor || "#38bdf8");
+    const drlMat = new THREE.MeshBasicMaterial({ color: drlColor });
+    const lensMat = state.headlightSmokedLens
+      ? new THREE.MeshPhysicalMaterial({ color: 0x18181b, transmission: 0.72, roughness: 0.1, ior: 1.52, transparent: true })
+      : new THREE.MeshPhysicalMaterial({ color: 0xffffff, transmission: 0.94, roughness: 0.04, ior: 1.52, transparent: true });
+
     [-1, 1].forEach((side) => {
-      const headHousingGeo = new THREE.BoxGeometry(0.26, 0.055, 0.28);
-      const headHousing = new THREE.Mesh(headHousingGeo, trimMat);
-      headHousing.rotation.y = side * -0.28;
-      headHousing.rotation.z = side * -0.06;
-      headHousing.position.set(side * tf * 0.68, rh + 0.44, -(wb * 0.5) - 0.52);
+      const headHousingGroup = new THREE.Group();
+      headHousingGroup.rotation.y = side * -0.22;
+      headHousingGroup.position.set(side * tf * 0.68, rh + 0.40, -(wb * 0.5) - 0.46);
 
-      // Glowing Ice-Blue DRL Blade
-      const drlGeo = new THREE.BoxGeometry(0.24, 0.015, 0.26);
-      const drl = new THREE.Mesh(drlGeo, this.materials.ledCyan);
-      drl.position.set(0, -0.015, 0.01);
-      headHousing.add(drl);
+      // Blackened internal reflector bucket
+      const bucketGeo = new THREE.BoxGeometry(0.24, 0.065, 0.18);
+      const bucket = new THREE.Mesh(bucketGeo, trimMat);
+      headHousingGroup.add(bucket);
 
-      // Dual Projector Crystal Lenses
-      for (let p = 0; p < 2; p++) {
-        const projGeo = new THREE.SphereGeometry(0.025, 12, 12);
-        const proj = new THREE.Mesh(projGeo, this.materials.ledWhite);
-        proj.position.set((p - 0.5) * 0.08, 0.01, -0.06);
-        headHousing.add(proj);
+      // Glass Cover Lens
+      const coverGeo = new THREE.BoxGeometry(0.25, 0.07, 0.02);
+      const cover = new THREE.Mesh(coverGeo, lensMat);
+      cover.position.set(0, 0, -0.09);
+      headHousingGroup.add(cover);
+
+      if (headlightStyle === "matrix_led_blade") {
+        // Thin L-shaped continuous DRL blade
+        const bladeGeo = new THREE.BoxGeometry(0.22, 0.012, 0.012);
+        const blade = new THREE.Mesh(bladeGeo, drlMat);
+        blade.position.set(0, -0.02, -0.075);
+        headHousingGroup.add(blade);
+        // 3 Interior Matrix Projector Cubes
+        for (let p = 0; p < 3; p++) {
+          const cubeGeo = new THREE.BoxGeometry(0.038, 0.028, 0.035);
+          const cube = new THREE.Mesh(cubeGeo, this.materials.ledWhite);
+          cube.position.set((p - 1) * 0.055, 0.008, -0.06);
+          headHousingGroup.add(cube);
+        }
+      } else if (headlightStyle === "laser_quad_projector") {
+        // Dual round projector optics with titanium bezels
+        [-0.055, 0.055].forEach((px) => {
+          const bezelGeo = new THREE.TorusGeometry(0.028, 0.006, 8, 20);
+          const bezel = new THREE.Mesh(bezelGeo, this.materials.aluminum);
+          bezel.position.set(px, 0, -0.07);
+          const lens = new THREE.Mesh(new THREE.SphereGeometry(0.024, 12, 12), this.materials.ledWhite);
+          lens.position.set(px, 0, -0.065);
+          const ring = new THREE.Mesh(new THREE.TorusGeometry(0.026, 0.003, 8, 20), drlMat);
+          ring.position.set(px, 0, -0.072);
+          headHousingGroup.add(bezel, lens, ring);
+        });
+      } else if (headlightStyle === "halo_ring_gt3") {
+        // Dual Angel-Eye Halo Rings
+        [-0.055, 0.055].forEach((px) => {
+          const haloGeo = new THREE.TorusGeometry(0.028, 0.004, 10, 24);
+          const halo = new THREE.Mesh(haloGeo, drlMat);
+          halo.position.set(px, 0, -0.072);
+          const center = new THREE.Mesh(new THREE.SphereGeometry(0.018, 12, 12), this.materials.ledWhite);
+          center.position.set(px, 0, -0.065);
+          headHousingGroup.add(halo, center);
+        });
+      } else if (headlightStyle === "cyber_lightbar_strip") {
+        // Full horizon blade with end accents
+        const barGeo = new THREE.BoxGeometry(0.24, 0.018, 0.015);
+        const bar = new THREE.Mesh(barGeo, drlMat);
+        bar.position.set(0, 0, -0.075);
+        headHousingGroup.add(bar);
+      } else {
+        // retro_popup_aero: Aerodynamic low-drag recessed pod
+        const podGeo = new THREE.BoxGeometry(0.20, 0.045, 0.12);
+        const pod = new THREE.Mesh(podGeo, bodyMat);
+        pod.position.set(0, 0.015, -0.02);
+        const lamp = new THREE.Mesh(new THREE.SphereGeometry(0.028, 12, 12), this.materials.ledWhite);
+        lamp.position.set(0, 0, -0.07);
+        headHousingGroup.add(pod, lamp);
       }
 
-      group.add(headHousing);
+      group.add(headHousingGroup);
     });
 
-    // Full-Width 3D Continuous OLED Taillight Strip (Smoked Housing)
-    const tailHousingGeo = new THREE.BoxGeometry(tr * 1.78, 0.05, 0.06);
-    const tailHousing = new THREE.Mesh(tailHousingGeo, trimMat);
-    tailHousing.position.set(0, rh + 0.53, (wb * 0.5) + rearBumperLength + 0.01);
+    // ── 7. REAR TAILLIGHTS ──
+    const taillightStyle = state.taillightStyle || "continuous_oled_blade";
+    const tailZ = (wb * 0.5) + 0.52;
+    if (taillightStyle === "dual_ring_halo") {
+      [-1, 1].forEach((side) => {
+        [-0.12, 0.12].forEach((offset) => {
+          const ringGeo = new THREE.TorusGeometry(0.042, 0.008, 10, 24);
+          const ring = new THREE.Mesh(ringGeo, this.materials.ledRed);
+          ring.position.set(side * (tr * 0.72 + offset), rh + 0.48, tailZ);
+          group.add(ring);
+        });
+      });
+    } else if (taillightStyle === "segmented_arrows") {
+      [-1, 1].forEach((side) => {
+        for (let a = 0; a < 4; a++) {
+          const chevronGeo = new THREE.BoxGeometry(0.035, 0.015, 0.01);
+          const chevron = new THREE.Mesh(chevronGeo, this.materials.ledRed);
+          chevron.rotation.z = side * 0.45;
+          chevron.position.set(side * (tr * 0.55 + a * 0.06), rh + 0.48, tailZ);
+          group.add(chevron);
+        }
+      });
+    } else {
+      // Continuous OLED Light Blade
+      const tailHousingGeo = new THREE.BoxGeometry(tr * 1.78, 0.045, 0.05);
+      const tailHousing = new THREE.Mesh(tailHousingGeo, trimMat);
+      tailHousing.position.set(0, rh + 0.48, tailZ);
+      const tailBarGeo = new THREE.BoxGeometry(tr * 1.74, 0.022, 0.015);
+      const tailBar = new THREE.Mesh(tailBarGeo, this.materials.ledRed);
+      tailBar.position.set(0, 0, 0.025);
+      tailHousing.add(tailBar);
+      group.add(tailHousing);
+    }
 
-    const tailBarGeo = new THREE.BoxGeometry(tr * 1.74, 0.025, 0.02);
-    const tailBar = new THREE.Mesh(tailBarGeo, this.materials.ledRed);
-    tailBar.position.set(0, 0, 0.025);
-    tailHousing.add(tailBar);
-    group.add(tailHousing);
+    // ── 8. DOORS (LEFT & RIGHT) WITH ARTICULATION PIVOTS ──
+    const doorLength = wb * 0.42;
+    const doorHeight = 0.42;
+    const doorThickness = 0.10;
 
-    // ── 7. DOORS (LEFT & RIGHT) WITH ARTICULATION PIVOTS ──
-    const doorLength = wb * 0.46;
-    const doorHeight = 0.44;
-    const doorThickness = 0.12;
+    // Hinge at A-pillar base
+    this.leftDoorPivot.position.set(-tf * 0.92, rh + 0.38, -(wb * 0.14));
+    this.rightDoorPivot.position.set(tf * 0.92, rh + 0.38, -(wb * 0.14));
 
-    this.leftDoorPivot.position.set(-tf * 0.92, rh + 0.38, -(wb * 0.16));
-    this.rightDoorPivot.position.set(tf * 0.92, rh + 0.38, -(wb * 0.16));
-
-    // Left Door Assembly (Sculpted Outer Skin)
+    // Left Door Assembly
     const doorSkinGeo = new THREE.BoxGeometry(doorThickness, doorHeight, doorLength);
     const leftDoorSkin = new THREE.Mesh(doorSkinGeo, bodyMat);
     leftDoorSkin.position.set(0, 0, doorLength * 0.5);
     this.leftDoorPivot.add(leftDoorSkin);
 
-    // Left Side NACA Air Scoop
-    const leftDuctGeo = new THREE.BoxGeometry(0.05, 0.18, doorLength * 0.55);
-    const leftDuct = new THREE.Mesh(leftDuctGeo, carbonMat);
-    leftDuct.position.set(-0.045, -0.04, doorLength * 0.55);
-    this.leftDoorPivot.add(leftDuct);
+    // Left Door Handle
+    const handleStyle = state.doorHandleStyle || "flush_aerodynamic";
+    if (handleStyle !== "shaved_clean") {
+      const handleGeo = new THREE.BoxGeometry(0.015, 0.025, 0.12);
+      const handleMat = handleStyle === "racing_pull_strap" ? this.materials.redAnodized : carbonMat;
+      const leftHandle = new THREE.Mesh(handleGeo, handleMat);
+      leftHandle.position.set(-doorThickness * 0.52, doorHeight * 0.18, doorLength * 0.82);
+      this.leftDoorPivot.add(leftHandle);
+    }
 
-    // Left Aerofoil Stalk Mirror
-    const mirrorStemGeo = new THREE.CylinderGeometry(0.012, 0.012, 0.14, 8);
-    const leftStem = new THREE.Mesh(mirrorStemGeo, carbonMat);
-    leftStem.rotation.z = Math.PI / 3;
-    leftStem.position.set(-0.06, doorHeight * 0.42, doorLength * 0.12);
-    const mirrorHeadGeo = new THREE.SphereGeometry(0.065, 12, 8);
-    const leftMirrorHead = new THREE.Mesh(mirrorHeadGeo, carbonMat);
-    leftMirrorHead.scale.set(1.4, 0.65, 0.85);
-    leftMirrorHead.position.set(-0.12, doorHeight * 0.48, doorLength * 0.12);
-    this.leftDoorPivot.add(leftStem, leftMirrorHead);
+    // Left Side Mirror
+    const mirrorStyle = state.mirrorStyle || "aerofoil_stalk_carbon";
+    if (mirrorStyle === "digital_camera_fin") {
+      const finGeo = new THREE.BoxGeometry(0.14, 0.02, 0.06);
+      const fin = new THREE.Mesh(finGeo, carbonMat);
+      fin.position.set(-0.09, doorHeight * 0.44, doorLength * 0.12);
+      const lens = new THREE.Mesh(new THREE.SphereGeometry(0.008, 8, 8), this.materials.ledCyan);
+      lens.position.set(-0.16, doorHeight * 0.44, doorLength * 0.12);
+      this.leftDoorPivot.add(fin, lens);
+    } else {
+      const stemGeo = new THREE.CylinderGeometry(0.012, 0.012, 0.12, 8);
+      const leftStem = new THREE.Mesh(stemGeo, carbonMat);
+      leftStem.rotation.z = Math.PI / 3;
+      leftStem.position.set(-0.06, doorHeight * 0.40, doorLength * 0.12);
+      const mirrorHeadGeo = new THREE.SphereGeometry(0.06, 12, 8);
+      const leftMirrorHead = new THREE.Mesh(mirrorHeadGeo, carbonMat);
+      leftMirrorHead.scale.set(1.4, 0.65, 0.85);
+      leftMirrorHead.position.set(-0.12, doorHeight * 0.46, doorLength * 0.12);
+      this.leftDoorPivot.add(leftStem, leftMirrorHead);
+    }
 
     // Right Door Assembly
     const rightDoorSkin = new THREE.Mesh(doorSkinGeo, bodyMat);
     rightDoorSkin.position.set(0, 0, doorLength * 0.5);
     this.rightDoorPivot.add(rightDoorSkin);
 
-    const rightDuct = new THREE.Mesh(leftDuctGeo, carbonMat);
-    rightDuct.position.set(0.045, -0.04, doorLength * 0.55);
-    this.rightDoorPivot.add(rightDuct);
+    if (handleStyle !== "shaved_clean") {
+      const handleGeo = new THREE.BoxGeometry(0.015, 0.025, 0.12);
+      const handleMat = handleStyle === "racing_pull_strap" ? this.materials.redAnodized : carbonMat;
+      const rightHandle = new THREE.Mesh(handleGeo, handleMat);
+      rightHandle.position.set(doorThickness * 0.52, doorHeight * 0.18, doorLength * 0.82);
+      this.rightDoorPivot.add(rightHandle);
+    }
 
-    const rightStem = new THREE.Mesh(mirrorStemGeo, carbonMat);
-    rightStem.rotation.z = -Math.PI / 3;
-    rightStem.position.set(0.06, doorHeight * 0.42, doorLength * 0.12);
-    const rightMirrorHead = new THREE.Mesh(mirrorHeadGeo, carbonMat);
-    rightMirrorHead.scale.set(1.4, 0.65, 0.85);
-    rightMirrorHead.position.set(0.12, doorHeight * 0.48, doorLength * 0.12);
-    this.rightDoorPivot.add(rightStem, rightMirrorHead);
+    if (mirrorStyle === "digital_camera_fin") {
+      const finGeo = new THREE.BoxGeometry(0.14, 0.02, 0.06);
+      const finR = new THREE.Mesh(finGeo, carbonMat);
+      finR.position.set(0.09, doorHeight * 0.44, doorLength * 0.12);
+      const lensR = new THREE.Mesh(new THREE.SphereGeometry(0.008, 8, 8), this.materials.ledCyan);
+      lensR.position.set(0.16, doorHeight * 0.44, doorLength * 0.12);
+      this.rightDoorPivot.add(finR, lensR);
+    } else {
+      const stemGeo = new THREE.CylinderGeometry(0.012, 0.012, 0.12, 8);
+      const rightStem = new THREE.Mesh(stemGeo, carbonMat);
+      rightStem.rotation.z = -Math.PI / 3;
+      rightStem.position.set(0.06, doorHeight * 0.40, doorLength * 0.12);
+      const rightMirrorHead = new THREE.Mesh(new THREE.SphereGeometry(0.06, 12, 8), carbonMat);
+      rightMirrorHead.scale.set(1.4, 0.65, 0.85);
+      rightMirrorHead.position.set(0.12, doorHeight * 0.46, doorLength * 0.12);
+      this.rightDoorPivot.add(rightStem, rightMirrorHead);
+    }
 
-    // ── 8. BONNET (FRONT CLAMSHELL HOOD) WITH PIVOT ──
-    const bonnetLength = wb * 0.54;
-    this.bonnetPivot.position.set(0, rh + 0.50, -(wb * 0.12));
+    // ── 9. BONNET (HOOD) WITH INDIVIDUAL STYLES & PIVOT ──
+    const bonnetLength = (wb * 0.5 + 0.42) - (wb * 0.14);
+    const bonnetWidth = tf * 1.45;
+    this.bonnetPivot.position.set(0, rh + 0.50, -(wb * 0.14));
 
-    const bonnetSkinGeo = new THREE.BoxGeometry(tf * 1.58, 0.06, bonnetLength);
-    const bonnetSkin = new THREE.Mesh(bonnetSkinGeo, bodyMat);
+    const hoodMat = state.bonnetFinish === "exposed_carbon"
+      ? carbonMat
+      : state.bonnetFinish === "stealth_matte"
+      ? this.materials.carbon
+      : bodyMat;
+
+    const bonnetSkinGeo = new THREE.BoxGeometry(bonnetWidth, 0.045, bonnetLength);
+    const bonnetSkin = new THREE.Mesh(bonnetSkinGeo, hoodMat);
     bonnetSkin.position.set(0, 0, -(bonnetLength * 0.5));
     this.bonnetPivot.add(bonnetSkin);
 
-    // Central Bonnet Aerodynamic Power Bulge
-    const bulgeGeo = new THREE.BoxGeometry(tf * 0.55, 0.035, bonnetLength * 0.85);
-    const bulge = new THREE.Mesh(bulgeGeo, bodyMat);
-    bulge.position.set(0, 0.025, -(bonnetLength * 0.5));
-    this.bonnetPivot.add(bulge);
-
-    // Bonnet NACA Ducts & S-Duct Radiator Chimneys
-    if (state.bonnetStyle !== "smooth_supercar") {
-      const bVentGeo = new THREE.BoxGeometry(tf * 0.32, 0.02, bonnetLength * 0.38);
-      const bVentL = new THREE.Mesh(bVentGeo, carbonMat);
-      bVentL.position.set(-tf * 0.36, 0.035, -(bonnetLength * 0.52));
-      const bVentR = new THREE.Mesh(bVentGeo, carbonMat);
-      bVentR.position.set(tf * 0.36, 0.035, -(bonnetLength * 0.52));
-      this.bonnetPivot.add(bVentL, bVentR);
-
-      // AeroCatch Quick-Release Fastener Pins
-      const pinGeo = new THREE.CylinderGeometry(0.018, 0.018, 0.015, 12);
-      const pinL = new THREE.Mesh(pinGeo, this.materials.aluminum);
-      pinL.position.set(-tf * 0.52, 0.035, -(bonnetLength * 0.84));
-      const pinR = new THREE.Mesh(pinGeo, this.materials.aluminum);
-      pinR.position.set(tf * 0.52, 0.035, -(bonnetLength * 0.84));
-      this.bonnetPivot.add(pinL, pinR);
+    const bStyle = state.bonnetStyle || "extractor_vents";
+    if (bStyle === "extractor_vents") {
+      // Dual recessed chimney extraction ducts
+      const ventGeo = new THREE.BoxGeometry(bonnetWidth * 0.28, 0.02, bonnetLength * 0.32);
+      const ventL = new THREE.Mesh(ventGeo, carbonMat);
+      ventL.position.set(-bonnetWidth * 0.26, 0.025, -(bonnetLength * 0.45));
+      const ventR = new THREE.Mesh(ventGeo, carbonMat);
+      ventR.position.set(bonnetWidth * 0.26, 0.025, -(bonnetLength * 0.45));
+      this.bonnetPivot.add(ventL, ventR);
+    } else if (bStyle === "naca_ducts") {
+      // Dual submerged NACA air inlets
+      [-bonnetWidth * 0.25, bonnetWidth * 0.25].forEach((nx) => {
+        const nacaGeo = new THREE.ConeGeometry(0.08, 0.22, 3);
+        const naca = new THREE.Mesh(nacaGeo, carbonMat);
+        naca.rotation.x = Math.PI / 2;
+        naca.position.set(nx, 0.024, -(bonnetLength * 0.55));
+        this.bonnetPivot.add(naca);
+      });
+    } else if (bStyle === "louvered") {
+      // 5 longitudinal louvers per side
+      for (let l = 0; l < 5; l++) {
+        const louverGeo = new THREE.BoxGeometry(bonnetWidth * 0.22, 0.008, 0.035);
+        [-bonnetWidth * 0.26, bonnetWidth * 0.26].forEach((lx) => {
+          const louver = new THREE.Mesh(louverGeo, carbonMat);
+          louver.rotation.x = 0.25;
+          louver.position.set(lx, 0.025, -(bonnetLength * 0.35) - l * 0.065);
+          this.bonnetPivot.add(louver);
+        });
+      }
+    } else if (bStyle === "power_bulge_v8") {
+      // Sculpted central power bulge
+      const bulgeGeo = new THREE.BoxGeometry(bonnetWidth * 0.42, 0.038, bonnetLength * 0.72);
+      const bulge = new THREE.Mesh(bulgeGeo, hoodMat);
+      bulge.position.set(0, 0.035, -(bonnetLength * 0.50));
+      this.bonnetPivot.add(bulge);
+    } else if (bStyle === "transparent_polycarbonate") {
+      // Clear glass inspection window
+      const winGeo = new THREE.BoxGeometry(bonnetWidth * 0.52, 0.015, bonnetLength * 0.52);
+      const win = new THREE.Mesh(winGeo, new THREE.MeshPhysicalMaterial({ color: 0xffffff, transmission: 0.92, roughness: 0.05 }));
+      win.position.set(0, 0.025, -(bonnetLength * 0.50));
+      this.bonnetPivot.add(win);
     }
 
-    // ── 9. DICKY (REAR TRUNK / ENGINE DECKLID) WITH PIVOT ──
-    const dickyLength = wb * 0.46;
-    this.dickyPivot.position.set(0, rh + 0.54, (wb * 0.14));
+    // Hood Pins (AeroCatch or Billet Pins)
+    const pinStyle = state.hoodPins || "aerocatch_flush";
+    if (pinStyle !== "hidden_latches") {
+      [-bonnetWidth * 0.38, bonnetWidth * 0.38].forEach((px) => {
+        const pinGeo = new THREE.CylinderGeometry(0.016, 0.016, 0.012, 12);
+        const pin = new THREE.Mesh(pinGeo, this.materials.aluminum);
+        pin.position.set(px, 0.025, -(bonnetLength * 0.88));
+        this.bonnetPivot.add(pin);
+      });
+    }
 
-    const dickySkinGeo = new THREE.BoxGeometry(tr * 1.54, 0.06, dickyLength);
+    // ── 10. DICKY (REAR TRUNK / ENGINE DECKLID) WITH PIVOT ──
+    const dickyLength = wb * 0.38;
+    this.dickyPivot.position.set(0, rh + 0.52, (wb * 0.14));
+
+    const dickySkinGeo = new THREE.BoxGeometry(tr * 1.46, 0.045, dickyLength);
     const dickySkin = new THREE.Mesh(dickySkinGeo, bodyMat);
     dickySkin.position.set(0, 0, dickyLength * 0.5);
     this.dickyPivot.add(dickySkin);
 
     // Decklid Louvers / Engine Cooling Slots
-    const dLouversGeo = new THREE.BoxGeometry(tr * 0.78, 0.018, dickyLength * 0.45);
+    const dLouversGeo = new THREE.BoxGeometry(tr * 0.72, 0.016, dickyLength * 0.45);
     const dLouvers = new THREE.Mesh(dLouversGeo, carbonMat);
-    dLouvers.position.set(0, 0.035, dickyLength * 0.45);
+    dLouvers.position.set(0, 0.025, dickyLength * 0.45);
     this.dickyPivot.add(dLouvers);
 
     if (state.dickyStyle === "ducktail_trunk" || state.dickyStyle === "active_airbrake") {
-      const ducktailGeo = new THREE.BoxGeometry(tr * 1.52, 0.045, 0.12);
+      const ducktailGeo = new THREE.BoxGeometry(tr * 1.48, 0.04, 0.10);
       const ducktail = new THREE.Mesh(ducktailGeo, carbonMat);
-      ducktail.position.set(0, 0.065, dickyLength * 0.95);
+      ducktail.position.set(0, 0.05, dickyLength * 0.95);
       ducktail.rotation.x = Math.PI / 7;
       this.dickyPivot.add(ducktail);
     }
@@ -2100,22 +2587,14 @@ export class ModularAssemblySceneGraph {
       ? new THREE.MeshStandardMaterial({ color: 0x00f0ff, transparent: true, opacity: 0.5 })
       : this.materials.carbonGloss;
 
-    // 1. Carbon Stalk Wing Mirrors with Aerofoil Profile
-    const mirrorStalkGeo = new THREE.BoxGeometry(0.22, 0.025, 0.08);
-    const mirrorL = new THREE.Mesh(mirrorStalkGeo, carbonMat);
-    mirrorL.position.set(-tf * 1.02, rh + 0.68, -(wb * 0.22));
-    const mirrorR = new THREE.Mesh(mirrorStalkGeo, carbonMat);
-    mirrorR.position.set(tf * 1.02, rh + 0.68, -(wb * 0.22));
-    group.add(mirrorL, mirrorR);
-
-    // 2. Quad Titanium Exhaust Tips with Heat-Tint Blue Gradient
+    // 1. Titanium Exhaust Tips with Heat-Tint Blue Gradient
     // Intensity 0% = raw brushed titanium, 100% = full blue/purple flame tint at the exits.
     const tint = Math.min(100, Math.max(0, heatTintIntensity ?? 70)) / 100;
     const tipBaseColor = new THREE.Color(0x9aa5b5).lerp(new THREE.Color(0x8ea2c8), tint);
     const tipExitColor = new THREE.Color(0xb7c0cd).lerp(new THREE.Color(0x4338ca), tint);
 
     if (!isPreview) {
-      const tipGeo = new THREE.CylinderGeometry(0.055, 0.055, 0.22, 20);
+      const tipGeo = new THREE.CylinderGeometry(0.048, 0.048, 0.14, 20);
       const tipMat = new THREE.MeshPhysicalMaterial({
         color: tipBaseColor,
         roughness: 0.16 - tint * 0.04,
@@ -2123,7 +2602,7 @@ export class ModularAssemblySceneGraph {
         sheen: tint,
         sheenColor: new THREE.Color(0x6366f1),
       });
-      const exitGeo = new THREE.CylinderGeometry(0.05, 0.05, 0.03, 20);
+      const exitGeo = new THREE.CylinderGeometry(0.044, 0.044, 0.02, 20);
       const exitMat = new THREE.MeshStandardMaterial({
         color: tipExitColor,
         roughness: 0.25,
@@ -2132,34 +2611,34 @@ export class ModularAssemblySceneGraph {
       });
 
       const isQuad = exhaust === "quad_titanium";
-      const xs = isQuad ? [-0.19, -0.065, 0.065, 0.19] : exhaust === "center_dual" ? [-0.09, 0.09] : [-tr * 0.85, tr * 0.85];
+      const xs = isQuad ? [-0.18, -0.065, 0.065, 0.18] : exhaust === "center_dual" ? [-0.08, 0.08] : [-tr * 0.78, tr * 0.78];
       xs.forEach((x) => {
         const tipMesh = new THREE.Mesh(tipGeo, tipMat);
         tipMesh.rotation.x = Math.PI / 2;
-        tipMesh.position.set(x, rh + 0.29, (wb * 0.5) + 0.74);
+        tipMesh.position.set(x, rh + 0.22, (wb * 0.5) + 0.46);
         group.add(tipMesh);
 
         const exitMesh = new THREE.Mesh(exitGeo, exitMat);
         exitMesh.rotation.x = Math.PI / 2;
-        exitMesh.position.set(x, rh + 0.29, (wb * 0.5) + 0.86);
+        exitMesh.position.set(x, rh + 0.22, (wb * 0.5) + 0.51);
         group.add(exitMesh);
       });
     }
 
-    // 3. Racing Tow Hooks (FIA compliant red loops)
-    const hookLoopGeo = new THREE.TorusGeometry(0.045, 0.012, 10, 20);
-    const towStrapGeo = new THREE.BoxGeometry(0.04, 0.015, 0.14);
+    // 2. Racing Tow Hooks (FIA compliant red loops, anchored into crash beams)
+    const hookLoopGeo = new THREE.TorusGeometry(0.038, 0.010, 10, 20);
+    const towStrapGeo = new THREE.BoxGeometry(0.035, 0.012, 0.08);
     if (towHooksFront && !isPreview) {
       const frontLoop = new THREE.Mesh(hookLoopGeo, this.materials.redAnodized);
-      frontLoop.position.set(tf * 0.55, rh + 0.24, -(wb * 0.5) - 0.78);
+      frontLoop.position.set(tf * 0.45, rh + 0.18, -(wb * 0.5) - 0.49);
       group.add(frontLoop);
       const strap = new THREE.Mesh(towStrapGeo, this.materials.redAnodized);
-      strap.position.set(tf * 0.55, rh + 0.24, -(wb * 0.5) - 0.72);
+      strap.position.set(tf * 0.45, rh + 0.18, -(wb * 0.5) - 0.45);
       group.add(strap);
     }
     if (towHooksRear && !isPreview) {
       const rearLoop = new THREE.Mesh(hookLoopGeo, this.materials.redAnodized);
-      rearLoop.position.set(tr * 0.55, rh + 0.26, (wb * 0.5) + 0.76);
+      rearLoop.position.set(tr * 0.45, rh + 0.22, (wb * 0.5) + 0.49);
       group.add(rearLoop);
     }
 

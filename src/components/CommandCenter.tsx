@@ -77,11 +77,11 @@ function CommandCenterComponent({ onSelectStage }: CommandCenterProps = {}) {
       {/* Interactive Telemetry Chassis Blueprint */}
       <div className="cmd-animate-tile">
         <VehicleViewSystem onSelectStage={onSelectStage} />
+      </div>
 
       {/* Live Telemetry Gauges */}
       <div className="cmd-animate-tile">
         <TelemetryPulse />
-      </div>
       </div>
 
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">

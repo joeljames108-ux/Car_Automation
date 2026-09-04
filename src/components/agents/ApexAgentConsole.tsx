@@ -120,7 +120,7 @@ export function ApexAgentConsole({
 
   return (
     <div
-      className={`w-full bg-slate-900/80/90 border border-slate-800 rounded-3xl p-5 backdrop-blur-2xl shadow-[0_20px_60px_rgba(0,0,0,0.45)] text-slate-100 select-none space-y-4 ${className}`}
+      className={`w-full bg-slate-900/90 border border-slate-800 rounded-3xl p-5 backdrop-blur-2xl shadow-[0_20px_60px_rgba(0,0,0,0.45)] text-slate-100 select-none space-y-4 ${className}`}
     >
       {/* ── TOP HEADER & AGENT MODE SELECTOR ── */}
       <div className="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800/80 pb-4">

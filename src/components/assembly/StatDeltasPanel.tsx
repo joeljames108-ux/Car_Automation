@@ -45,7 +45,7 @@ export function StatDeltasPanel({
 }: StatDeltasPanelProps) {
   if (!componentMeta) {
     return (
-      <div className={`p-4 rounded-xl bg-slate-950/70 border border-slate-800 text-center ${className}`}>
+      <div className={`p-4 rounded-xl bg-slate-900/40 dark:bg-slate-950/70 border border-slate-700/60 dark:border-slate-800 text-center ${className}`}>
         <p className="text-xs font-mono text-slate-500">No component metadata available.</p>
       </div>
     );
@@ -86,7 +86,7 @@ export function StatDeltasPanel({
           <Activity size={13} className="text-emerald-400" />
           <span>Engineering Impact & Deltas</span>
         </label>
-        <span className="text-[10px] font-mono text-emerald-300 bg-emerald-950/80 border border-emerald-500/40 px-2 py-0.5 rounded-full font-bold shadow-[0_0_10px_rgba(52,211,153,0.2)]">
+        <span className="text-[10px] font-mono text-emerald-300 bg-emerald-950/40 border border-emerald-500/40 px-2 py-0.5 rounded-full font-bold shadow-[0_0_10px_rgba(52,211,153,0.2)]">
           LIVE COMPUTED
         </span>
       </div>
@@ -94,7 +94,7 @@ export function StatDeltasPanel({
       {/* ── 2x2 STAT TILES GRID ── */}
       <div className="grid grid-cols-2 gap-2">
         {/* Horsepower Delta */}
-        <div className="p-2.5 rounded-xl bg-slate-950/90 border border-amber-500/30 backdrop-blur-md space-y-1 shadow-[0_4px_16px_rgba(0,0,0,0.4)]">
+        <div className="p-2.5 rounded-xl bg-slate-900/40 dark:bg-slate-950/90 border border-amber-500/30 backdrop-blur-md space-y-1 shadow-[0_4px_16px_rgba(0,0,0,0.1)] dark:shadow-[0_4px_16px_rgba(0,0,0,0.4)]">
           <div className="flex items-center justify-between text-[10px] font-mono text-slate-400">
             <span className="flex items-center gap-1">
               <Zap size={11} className="text-amber-400" /> Power Delta
@@ -112,7 +112,7 @@ export function StatDeltasPanel({
         </div>
 
         {/* Torque Delta */}
-        <div className="p-2.5 rounded-xl bg-slate-950/90 border border-amber-500/30 backdrop-blur-md space-y-1 shadow-[0_4px_16px_rgba(0,0,0,0.4)]">
+        <div className="p-2.5 rounded-xl bg-slate-900/40 dark:bg-slate-950/90 border border-amber-500/30 backdrop-blur-md space-y-1 shadow-[0_4px_16px_rgba(0,0,0,0.1)] dark:shadow-[0_4px_16px_rgba(0,0,0,0.4)]">
           <div className="flex items-center justify-between text-[10px] font-mono text-slate-400">
             <span className="flex items-center gap-1">
               <Activity size={11} className="text-amber-400" /> Torque Delta
@@ -130,7 +130,7 @@ export function StatDeltasPanel({
         </div>
 
         {/* Weight Delta */}
-        <div className="p-2.5 rounded-xl bg-slate-950/90 border border-emerald-500/30 backdrop-blur-md space-y-1 shadow-[0_4px_16px_rgba(0,0,0,0.4)]">
+        <div className="p-2.5 rounded-xl bg-slate-900/40 dark:bg-slate-950/90 border border-emerald-500/30 backdrop-blur-md space-y-1 shadow-[0_4px_16px_rgba(0,0,0,0.1)] dark:shadow-[0_4px_16px_rgba(0,0,0,0.4)]">
           <div className="flex items-center justify-between text-[10px] font-mono text-slate-400">
             <span className="flex items-center gap-1">
               <Scale size={11} className="text-emerald-400" /> Component Mass
@@ -148,7 +148,7 @@ export function StatDeltasPanel({
         </div>
 
         {/* Cost Delta */}
-        <div className="p-2.5 rounded-xl bg-slate-950/90 border border-amber-500/30 backdrop-blur-md space-y-1 shadow-[0_4px_16px_rgba(0,0,0,0.4)]">
+        <div className="p-2.5 rounded-xl bg-slate-900/40 dark:bg-slate-950/90 border border-amber-500/30 backdrop-blur-md space-y-1 shadow-[0_4px_16px_rgba(0,0,0,0.1)] dark:shadow-[0_4px_16px_rgba(0,0,0,0.4)]">
           <div className="flex items-center justify-between text-[10px] font-mono text-slate-400">
             <span className="flex items-center gap-1">
               <DollarSign size={11} className="text-amber-400" /> Hardware Cost
@@ -167,7 +167,7 @@ export function StatDeltasPanel({
       </div>
 
       {/* ── INTERACTIVE 2D CYLINDER CROSS-SECTION SCHEMATIC ── */}
-      <div className="p-3 rounded-xl bg-slate-950/90 border border-slate-800/80 relative overflow-hidden">
+      <div className="p-3 rounded-xl bg-slate-900/40 dark:bg-slate-950/90 border border-slate-700/60 dark:border-slate-800/80 relative overflow-hidden">
         <div className="flex items-center justify-between mb-2">
           <span className="text-[10px] font-mono font-bold text-slate-400 uppercase tracking-wider flex items-center gap-1">
             <Layers size={11} className="text-amber-400" /> Live Bore/Stroke Cutaway
@@ -177,7 +177,7 @@ export function StatDeltasPanel({
           </span>
         </div>
 
-        <div className="flex items-center justify-center bg-black/50 rounded-lg p-2 border border-slate-900">
+        <div className="flex items-center justify-center bg-black/10 dark:bg-black/50 rounded-lg p-2 border border-slate-300/40 dark:border-slate-900">
           <svg width={svgWidth} height={svgHeight} className="overflow-visible">
             {/* Grid background lines */}
             <line x1="10" y1="20" x2={svgWidth - 10} y2="20" stroke="#1e293b" strokeDasharray="2 2" />
@@ -275,7 +275,7 @@ export function StatDeltasPanel({
       </div>
 
       {/* ── ENGINEERING ADVISORY & TUNER NOTES ── */}
-      <div className="p-3 rounded-xl bg-slate-950/80 border border-slate-800 text-[11px] font-mono space-y-1.5">
+      <div className="p-3 rounded-xl bg-slate-900/40 dark:bg-slate-950/80 border border-slate-700/60 dark:border-slate-800 text-[11px] font-mono space-y-1.5">
         <div className="flex items-center gap-1.5 text-amber-400 font-bold text-[10px] uppercase tracking-wider">
           <Info size={12} />
           <span>Engineering Advisory</span>

@@ -155,7 +155,7 @@ export function EngineAssemblyViewer({
 
         {/* Floating Active Phase Banner on Top Left */}
         {activeComponentId && activeMeta && (
-          <div className="absolute top-5 left-5 z-30 flex items-center gap-2.5 px-4 py-2 rounded-full bg-slate-900/80/90 border border-amber-500/40 backdrop-blur-md shadow-[0_0_20px_rgba(56,189,248,0.25)] text-xs font-mono text-slate-200">
+          <div className="absolute top-5 left-5 z-30 flex items-center gap-2.5 px-4 py-2 rounded-full bg-slate-900/90 border border-amber-500/40 backdrop-blur-md shadow-[0_0_20px_rgba(56,189,248,0.25)] text-xs font-mono text-slate-200">
             <Sparkles size={14} className="text-amber-400 animate-spin" />
             <span className="font-extrabold text-slate-100">{activeMeta.name}</span>
             <span className="text-slate-500">·</span>
@@ -169,7 +169,7 @@ export function EngineAssemblyViewer({
           {activeComponentId && (
             <button
               onClick={onSkipAnimation}
-              className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-slate-900/80/90 hover:bg-slate-900/80 text-amber-300 border border-amber-500/30 text-xs font-mono font-bold transition-all shadow-md active:scale-95 cursor-pointer"
+              className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-slate-900/90 hover:bg-slate-900/80 text-amber-300 border border-amber-500/30 text-xs font-mono font-bold transition-all shadow-md active:scale-95 cursor-pointer"
             >
               <SkipForward size={13} /> Skip
             </button>
@@ -196,7 +196,7 @@ export function EngineAssemblyViewer({
       <div className="w-full">
         <Suspense
           fallback={
-            <div className="w-full h-32 rounded-3xl bg-slate-900/80/50 border border-slate-800 flex items-center justify-center text-slate-500 font-mono text-xs animate-pulse">
+            <div className="w-full h-32 rounded-3xl bg-slate-900/50 border border-slate-800 flex items-center justify-center text-slate-500 font-mono text-xs animate-pulse">
               Loading Audio Synthesizer Engine...
             </div>
           }

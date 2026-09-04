@@ -98,14 +98,17 @@ export const DependencyLines: React.FC = () => {
 
 export const ModularEngineAssembly: React.FC = () => {
   const instances = useEngine3DStore((s) => s.instances);
+  const isAssemblyComplete = useEngine3DStore((s) => s.isAssemblyComplete);
   const showAttachmentPoints = useEngine3DStore((s) => s.showAttachmentPoints);
   const showDependencies = useEngine3DStore((s) => s.showDependencies);
   const engineRotation = useEngine3DStore((s) => s.engineRotation);
   const instanceList = Object.values(instances);
 
-  const fallbackMesh = useMemo(() => {
-    return Engine3DGeometryGenerator.buildEngine3DGroup("V_BANK_8");
-  }, []);
+  // When assembly is complete or empty showcase, yield to EngineRuntimeMotion's authentic V12 GLB
+  const isShowcase = instanceList.length === 0 || isAssemblyComplete;
+  if (isShowcase) {
+    return null;
+  }
 
   return (
     <group
@@ -113,14 +116,10 @@ export const ModularEngineAssembly: React.FC = () => {
       rotation={engineRotation}
       position={[0, -0.08, 0]}
     >
-      {/* Render live independent component instances, or fallback to high-detail 3D engine model */}
-      {instanceList.length > 0 ? (
-        instanceList.map((instance) => (
-          <ComponentMesh3D key={instance.instanceId} instance={instance} />
-        ))
-      ) : (
-        <primitive object={fallbackMesh} />
-      )}
+      {/* Render live independent component instances */}
+      {instanceList.map((instance) => (
+        <ComponentMesh3D key={instance.instanceId} instance={instance} />
+      ))}
 
       {/* Optional Diagnostic Overlays */}
       {showAttachmentPoints && <AttachmentPointVisualizer />}

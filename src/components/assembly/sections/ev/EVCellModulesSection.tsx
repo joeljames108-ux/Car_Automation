@@ -234,7 +234,7 @@ export function EVCellModulesSection({
   return (
     <div className={`space-y-6 ${className}`}>
       {/* 3D INTERACTIVE EV BATTERY PACK ARCHITECTURE VIEWPORT */}
-      <div className="w-full bg-slate-950/90 rounded-2xl border border-amber-500/30 p-4 space-y-3 shadow-2xl">
+      <div className="w-full bg-slate-900/40 dark:bg-slate-950/90 rounded-2xl border border-amber-500/30 p-4 space-y-3 shadow-2xl">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 font-mono text-xs text-slate-300">
           <div className="flex items-center gap-2 font-bold text-amber-300">
             <Box size={16} />
@@ -276,7 +276,7 @@ export function EVCellModulesSection({
 
         {/* 3D WebGL Canvas Container */}
         <div ref={mount3DRef} className="w-full h-[320px] rounded-xl overflow-hidden cursor-grab active:cursor-grabbing border border-slate-800 relative">
-          <div className="absolute bottom-2 right-2 text-[9px] font-mono text-slate-400 bg-black/70 px-2.5 py-1 rounded border border-slate-700 pointer-events-none">
+          <div className="absolute bottom-2 right-2 text-[9px] font-mono text-slate-400 bg-slate-900/80 dark:bg-black/70 px-2.5 py-1 rounded border border-slate-700 pointer-events-none">
             ORBIT: DRAG TO ROTATE 3D PACK · SCROLL TO ZOOM · SLIDE EXPLODE TO INSPECT CELLS
           </div>
         </div>

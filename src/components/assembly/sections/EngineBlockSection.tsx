@@ -154,7 +154,7 @@ export function EngineBlockSection({
           icon={<Cog size={18} />}
           accent="cyan"
           badge={
-            <span className="text-[10px] font-mono text-amber-300 bg-slate-950/80 border border-amber-500/40 px-2 py-0.5 rounded-full font-bold shadow-[0_0_10px_rgba(34,211,238,0.2)]">
+            <span className="text-[10px] font-mono text-amber-300 bg-slate-900/40 dark:bg-slate-950/80 border border-amber-500/40 px-2 py-0.5 rounded-full font-bold shadow-[0_0_10px_rgba(34,211,238,0.2)]">
               {kinematics.displacementLiters}L • {cylinders} CYL
             </span>
           }
@@ -188,7 +188,7 @@ export function EngineBlockSection({
                       className={`relative py-2 px-2 text-[11px] font-mono font-bold flex flex-col items-center justify-center rounded-xl border transition-all duration-200 cursor-pointer text-center group ${
                         isSelected
                           ? "bg-gradient-to-b from-amber-500/25 to-amber-950/80 text-amber-200 border-amber-400 shadow-[0_0_15px_rgba(34,211,238,0.35)] scale-[1.02]"
-                          : "bg-slate-950/70 text-slate-400 border-slate-800 hover:text-slate-200 hover:border-slate-700 hover:bg-slate-900/60"
+                          : "bg-slate-900/40 dark:bg-slate-950/70 text-slate-300 dark:text-slate-400 border-slate-700/50 dark:border-slate-800 hover:text-amber-300 hover:border-amber-400/60 hover:bg-slate-800/50"
                       }`}
                     >
                       <div className="flex items-center gap-1.5 mb-0.5">
@@ -207,7 +207,7 @@ export function EngineBlockSection({
             </div>
 
             {/* Live Kinematic Telemetry Bar */}
-            <div className="p-3 rounded-xl bg-slate-950/80 border border-amber-500/20 space-y-2">
+            <div className="p-3 rounded-xl bg-slate-900/40 dark:bg-slate-950/80 border border-amber-500/20 space-y-2">
               <div className="flex items-center justify-between text-[11px] font-mono">
                 <span className="text-slate-400 flex items-center gap-1">
                   <Activity size={12} className="text-amber-400" /> Displacement:
@@ -305,7 +305,7 @@ export function EngineBlockSection({
           icon={<Layers size={18} />}
           accent="purple"
           badge={
-            <span className="text-[10px] font-mono text-amber-300 bg-slate-950/80 border border-amber-500/40 px-2 py-0.5 rounded-full font-bold shadow-[0_0_10px_rgba(192,132,252,0.2)]">
+            <span className="text-[10px] font-mono text-amber-300 bg-slate-900/40 dark:bg-slate-950/80 border border-amber-500/40 px-2 py-0.5 rounded-full font-bold shadow-[0_0_10px_rgba(192,132,252,0.2)]">
               {componentMeta?.variants.length || 4} ALLOY TIERS
             </span>
           }

@@ -236,7 +236,7 @@ export const AerodynamicWindTunnelViewport: React.FC = () => {
 
         {/* Aerodynamic Telemetry HUD Overlay */}
         {aeroResults && (
-          <div className="absolute top-4 left-4 flex flex-col gap-2.5 bg-slate-900/80/90 backdrop-blur-md p-4 rounded-xl border border-amber-500/30 shadow-2xl w-72 text-xs">
+          <div className="absolute top-4 left-4 flex flex-col gap-2.5 bg-slate-900/90 backdrop-blur-md p-4 rounded-xl border border-amber-500/30 shadow-2xl w-72 text-xs">
             <div className="flex items-center justify-between border-b border-gray-800 pb-2">
               <span className="font-bold text-gray-200 flex items-center gap-1.5">
                 <Gauge className="w-4 h-4 text-amber-400" />

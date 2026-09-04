@@ -1,183 +1,467 @@
 // ============================================================================
-// ENGINE RUNTIME MOTION - Pistons, Crankshaft, Camshafts, Valves, Turbo
+// ENGINE RUNTIME MOTION — REALISTIC 4-STROKE FIRING & REVVING ANIMATION SYSTEM
+// ============================================================================
+// Drives the authentic 559-node V12 racing engine GLB:
+// - Non-linear Slider-Crank kinematics on 12 forged pistons & ring packs
+// - Articulated connecting rods pivoting on orbiting crankpins
+// - Crankshaft main shaft & 6 counterweights rotating on longitudinal X-axis
+// - 4 Camshafts rotating at half-speed (ω/2) with 48 cam lobes
+// - 12 ITB throttle butterfly plates & spindles reacting to throttle input
+// - Front accessory damper pulley, alternator pulley, tensioner, cooling fan
+// - Flywheel mass & titanium exhaust headers
+// - Real-time Cylinder Cutaway (X-Ray) mode with crystal quartz transparency
+// - 4-Stroke Cycle: AIR INTAKE → COMPRESSION → IGNITION → POWER → EXHAUST
+// - Firing Order Matrix HUD (1-12-5-8-3-10-6-7-2-11-4-9) & Slow-Motion controls
 // ============================================================================
 
-import React, { useRef, useState, useMemo, useEffect } from 'react';
+import React, { useRef, useState, useMemo, useEffect, useCallback } from 'react';
 import { useFrame } from '@react-three/fiber';
+import { useGLTF } from '@react-three/drei';
 import * as THREE from 'three';
+import {
+  Play,
+  Pause,
+  Zap,
+  Flame,
+  Wind,
+  Layers,
+  Eye,
+  Sliders,
+  Gauge,
+  Activity,
+  RotateCw,
+  Sparkles,
+  Volume2,
+  VolumeX,
+  ChevronUp,
+  ChevronDown,
+} from 'lucide-react';
 import { useEngine3DStore } from '../store/useEngine3DStore';
 import {
-  calculatePistonDisplacement, calculateConRodAngle, calculateValveLift,
-  calculateEngineVibration, getFiringOrderForType, getCamshaftAngle,
-  PISTON_CONFIGS, advanceCrankshaft, advanceTurbocharger,
-  createInitialCrankshaftState, createTurbochargerState,
-  type CrankshaftState, type TurbochargerState, type EngineType, type EngineVibration,
+  EngineSimulationState,
+  type EngineSimulationSnapshot,
+} from '../physics/EngineSimulationState';
+import { EngineGlbAnimator } from '../animations/EngineGlbAnimator';
+import {
+  type CylinderCycleState,
+  type EngineType,
 } from '../animations/engineRuntimeAnimations';
-import { globalMaterialLibrary } from '../materials/pbrMaterialSystem';
+import { apexAudio } from '../../components/assembly/engineAudioEngine';
 
-// Crankshaft Rotator
-const CrankshaftRotator: React.FC<{angleRad:number;vibration:EngineVibration}> =
-  React.memo(({angleRad, vibration}) => {
-    const ref = useRef<THREE.Group>(null);
-    const mat = useMemo(() => globalMaterialLibrary.getNitridedCrank(), []);
-    useFrame(() => {
-      if (!ref.current) return;
-      ref.current.rotation.x = angleRad;
-      ref.current.position.x = vibration.primaryX + vibration.secondaryX;
-      ref.current.position.y = vibration.primaryY + vibration.secondaryY;
-    });
-    return (
-      <group ref={ref} name="Crankshaft_Assembly">
-        <mesh castShadow><cylinderGeometry args={[0.025,0.025,0.52,24]}/><primitive object={mat} attach="material"/></mesh>
-        {[0,1,2,3,4,5].map(i => {
-          const z = -0.20+i*0.08; const p = (i*120*Math.PI)/180;
-          return (<group key={i} position={[0,0,z]} rotation={[p,0,0]}>
-            <mesh castShadow position={[0,0.02,0]}><boxGeometry args={[0.008,0.04,0.012]}/><primitive object={mat} attach="material"/></mesh>
-            <mesh castShadow position={[0,-0.02,0]}><cylinderGeometry args={[0.018,0.018,0.012,12]}/><primitive object={mat} attach="material"/></mesh>
-          </group>);
-        })}
-        {[0,1,2,3,4,5,6].map(i => (
-          <mesh key={i} position={[0,0,-0.24+i*0.08]} castShadow><cylinderGeometry args={[0.016,0.016,0.015,16]}/><meshStandardMaterial color="#c0c0c0" metalness={0.9} roughness={0.15}/></mesh>
-        ))}
-        <mesh position={[0,0,0.28]} castShadow rotation={[Math.PI/2,0,0]}><cylinderGeometry args={[0.045,0.045,0.015,32]}/><meshPhysicalMaterial color="#505050" metalness={0.85} roughness={0.2} clearcoat={0.3}/></mesh>
-      </group>
-    );
-  });
-
-// Piston Assembly
-const PistonAssembly: React.FC<{crankAngleDeg:number;phaseOffsetDeg:number;position:[number,number,number];bankAngle:number;pistonRadius:number}> =
-  React.memo(({crankAngleDeg, phaseOffsetDeg, position, bankAngle, pistonRadius}) => {
-    const pistonHeadRef = useRef<THREE.Mesh>(null);
-    const conrodRef = useRef<THREE.Mesh>(null);
-    const config = PISTON_CONFIGS.V12;
-    const pistonMat = useMemo(() => globalMaterialLibrary.getMachinedBillet(), []);
-    const conrodMat = useMemo(() => globalMaterialLibrary.getForgedSteel(), []);
-    useFrame(() => {
-      const angle = (crankAngleDeg + phaseOffsetDeg) % 720;
-      const pistonY = calculatePistonDisplacement(angle, config) * (config.strokeMm / 2000);
-      if (pistonHeadRef.current) pistonHeadRef.current.position.y = pistonY;
-      if (conrodRef.current) { conrodRef.current.position.y = pistonY*0.5; conrodRef.current.rotation.z = calculateConRodAngle(angle, config); }
-    });
-    return (
-      <group position={position} rotation={[(bankAngle*Math.PI)/180,0,0]}>
-        <mesh ref={pistonHeadRef} castShadow><cylinderGeometry args={[pistonRadius,pistonRadius*0.95,0.02,20]}/><primitive object={pistonMat} attach="material"/></mesh>
-        {[0,0.004,0.008].map((y,i) => (<mesh key={i} position={[0,y+0.01,0]}><torusGeometry args={[pistonRadius*1.01,0.001,8,24]}/><meshStandardMaterial color="#888" metalness={0.9} roughness={0.1}/></mesh>))}
-        <mesh position={[0,-0.008,0]} rotation={[0,0,Math.PI/2]}><cylinderGeometry args={[0.004,0.004,pistonRadius*1.6,12]}/><meshStandardMaterial color="#aaa" metalness={0.85} roughness={0.2}/></mesh>
-        <mesh ref={conrodRef} castShadow position={[0,-0.04,0]}><boxGeometry args={[0.006,0.05,0.004]}/><primitive object={conrodMat} attach="material"/></mesh>
-        <mesh position={[0,-0.065,0]}><torusGeometry args={[0.012,0.003,8,16]}/><primitive object={conrodMat} attach="material"/></mesh>
-      </group>
-    );
-  });
-
-// Camshaft Rotator
-const CamshaftRotator: React.FC<{crankAngleDeg:number;position:[number,number,number];bank:"intake"|"exhaust"}> =
-  React.memo(({crankAngleDeg, position, bank}) => {
-    const ref = useRef<THREE.Group>(null);
-    const camMat = useMemo(() => globalMaterialLibrary.getMachinedBillet(), []);
-    useFrame(() => {
-      if (!ref.current) return;
-      ref.current.rotation.x = (getCamshaftAngle(crankAngleDeg, bank) * Math.PI) / 180;
-    });
-    return (
-      <group ref={ref} position={position}>
-        <mesh castShadow><cylinderGeometry args={[0.008,0.008,0.44,16]}/><primitive object={camMat} attach="material"/></mesh>
-        {Array.from({length:12}, (_,i) => {
-          const z = -0.18+i*0.032; const lp = (i*60*Math.PI)/180;
-          return (<group key={i} position={[0,0,z]} rotation={[lp,0,0]}><mesh castShadow position={[0.006,0,0]}><sphereGeometry args={[0.005,8,8]}/><meshStandardMaterial color="#d4a030" metalness={0.7} roughness={0.25}/></mesh></group>);
-        })}
-        {[0,1,2,3].map(i => (<mesh key={i} position={[0,0,-0.14+i*0.1]} castShadow><torusGeometry args={[0.012,0.002,8,16]}/><meshStandardMaterial color="#707070" metalness={0.8} roughness={0.2}/></mesh>))}
-      </group>
-    );
-  });
-
-// Valve Actuator
-const ValveActuator: React.FC<{crankAngleDeg:number;phaseOffsetDeg:number;position:[number,number,number];isIntake:boolean}> =
-  React.memo(({crankAngleDeg, phaseOffsetDeg, position, isIntake}) => {
-    const valveRef = useRef<THREE.Group>(null);
-    const valveMat = useMemo(() => globalMaterialLibrary.getInconelExhaust(), []);
-    useFrame(() => {
-      if (!valveRef.current) return;
-      const camAngle = getCamshaftAngle(crankAngleDeg, isIntake ? "intake" : "exhaust") + phaseOffsetDeg;
-      valveRef.current.position.y = -calculateValveLift(camAngle) * 0.001;
-    });
-    return (
-      <group ref={valveRef} position={position}>
-        <mesh castShadow rotation={[Math.PI/2,0,0]}><cylinderGeometry args={[0.008,0.004,0.002,12]}/><primitive object={valveMat} attach="material"/></mesh>
-        <mesh castShadow position={[0,0.02,0]}><cylinderGeometry args={[0.0015,0.0015,0.04,8]}/><primitive object={valveMat} attach="material"/></mesh>
-        <mesh position={[0,0.015,0]}><torusGeometry args={[0.005,0.0008,6,24]}/><meshStandardMaterial color="#4488cc" metalness={0.6} roughness={0.3}/></mesh>
-      </group>
-    );
-  });
-
-// Turbocharger Spin
-const TurbochargerSpin: React.FC<{turbineSpeedRpm:number;position:[number,number,number]}> =
-  React.memo(({turbineSpeedRpm, position}) => {
-    const tRef = useRef<THREE.Group>(null);
-    const cRef = useRef<THREE.Group>(null);
-    const tMat = useMemo(() => globalMaterialLibrary.getInconelExhaust(), []);
-    const cMat = useMemo(() => globalMaterialLibrary.getMachinedBillet(), []);
-    useFrame(() => {
-      if (!tRef.current || !cRef.current) return;
-      const inc = (turbineSpeedRpm / 60) * 2 * Math.PI / 60 * 0.001;
-      tRef.current.rotation.z += inc; cRef.current.rotation.z += inc;
-    });
-    return (
-      <group position={position} name="Turbocharger">
-        <mesh castShadow position={[0,0,-0.025]}><torusGeometry args={[0.025,0.012,12,24]}/><meshPhysicalMaterial color="#8b4513" metalness={0.6} roughness={0.5} clearcoat={0.1}/></mesh>
-        <mesh castShadow position={[0,0,0.025]}><torusGeometry args={[0.028,0.01,12,24]}/><meshPhysicalMaterial color="#b0c4de" metalness={0.8} roughness={0.15} clearcoat={0.5}/></mesh>
-        <group ref={tRef} position={[0,0,-0.025]}><mesh castShadow rotation={[Math.PI/2,0,0]}><cylinderGeometry args={[0.018,0.012,0.008,8]}/><primitive object={tMat} attach="material"/></mesh>
-          {Array.from({length:8},(_,i)=>(<mesh key={i} rotation={[0,(i*45*Math.PI)/180,Math.PI/2]}><boxGeometry args={[0.002,0.014,0.005]}/><primitive object={tMat} attach="material"/></mesh>))}
-        </group>
-        <group ref={cRef} position={[0,0,0.025]}><mesh castShadow rotation={[Math.PI/2,0,0]}><cylinderGeometry args={[0.02,0.014,0.006,8]}/><primitive object={cMat} attach="material"/></mesh>
-          {Array.from({length:12},(_,i)=>(<mesh key={i} rotation={[0,(i*30*Math.PI)/180,Math.PI/2]}><boxGeometry args={[0.0015,0.016,0.004]}/><primitive object={cMat} attach="material"/></mesh>))}
-        </group>
-        <mesh castShadow rotation={[Math.PI/2,0,0]}><cylinderGeometry args={[0.004,0.004,0.06,12]}/><meshStandardMaterial color="#888" metalness={0.9} roughness={0.1}/></mesh>
-      </group>
-    );
-  });
-
-// Exhaust Pulse Glow
-const ExhaustPulseGlow: React.FC<{intensity:number;position:[number,number,number];temperature:number}> =
-  React.memo(({intensity, position, temperature}) => {
-    const meshRef = useRef<THREE.Mesh>(null);
-    useFrame(() => {
-      if (!meshRef.current) return;
-      const mat = meshRef.current.material as THREE.MeshStandardMaterial;
-      mat.emissiveIntensity = intensity * 3.0;
-      mat.emissive.setRGB(0.4 + temperature * 0.6, 0.1 + temperature * 0.2, 0.05);
-      meshRef.current.scale.setScalar(0.5 + intensity * 1.5);
-    });
-    return (<mesh ref={meshRef} position={position}><sphereGeometry args={[0.006,8,8]}/><meshStandardMaterial color="#1a0800" emissive="#ff4400" emissiveIntensity={0} transparent opacity={0.6}/></mesh>);
-  });
-
-// Oil Pump Gear
-const OilPumpGear: React.FC<{angleRad:number;position:[number,number,number]}> =
-  React.memo(({angleRad, position}) => {
-    const ref = useRef<THREE.Group>(null);
-    useFrame(() => { if (ref.current) ref.current.rotation.z = angleRad; });
-    return (
-      <group ref={ref} position={position} name="Oil_Pump">
-        <mesh castShadow rotation={[Math.PI/2,0,0]}><torusGeometry args={[0.012,0.003,6,16]}/><meshStandardMaterial color="#c8a020" metalness={0.7} roughness={0.25}/></mesh>
-        {Array.from({length:12},(_,i)=>(<mesh key={i} position={[Math.cos(i*30*Math.PI/180)*0.015,Math.sin(i*30*Math.PI/180)*0.015,0]}><boxGeometry args={[0.003,0.002,0.003]}/><meshStandardMaterial color="#c8a020" metalness={0.7} roughness={0.3}/></mesh>))}
-      </group>
-    );
-  });
-
-// RPM Control Overlay
-const RuntimeControlOverlay: React.FC<{currentRpm:number;targetRpm:number;isRunning:boolean;onSetRpm:(rpm:number)=>void;onToggle:()=>void}> =
-  ({currentRpm, targetRpm, isRunning, onSetRpm, onToggle}) => (
-    <div style={{position:"absolute",bottom:16,left:"50%",transform:"translateX(-50%)",display:"flex",alignItems:"center",gap:12,background:"rgba(26,16,8,0.92)",border:"1px solid rgba(251,191,36,0.3)",borderRadius:12,padding:"8px 16px",zIndex:10,fontFamily:"monospace",color:"#fbbf24",fontSize:12,backdropFilter:"blur(8px)"}}>
-      <button onClick={onToggle} style={{background:isRunning?"rgba(220,38,38,0.3)":"rgba(34,197,94,0.3)",border:"1px solid "+(isRunning?"#ef4444":"#22c55e"),color:isRunning?"#fca5a5":"#86efac",borderRadius:6,padding:"4px 10px",cursor:"pointer",fontSize:11,fontWeight:"bold"}}>
-        {isRunning?"STOP":"START"}
-      </button>
-      <div style={{display:"flex",flexDirection:"column",alignItems:"center",gap:2}}><span style={{fontSize:10,opacity:0.6}}>RPM</span><span style={{fontSize:16,fontWeight:"bold",color:currentRpm>6000?"#ef4444":"#fbbf24"}}>{Math.round(currentRpm).toLocaleString()}</span></div>
-      <input type="range" min={0} max={9000} step={100} value={targetRpm} onChange={e=>onSetRpm(Number(e.target.value))} style={{width:120,accentColor:"#fbbf24",cursor:"pointer"}}/>
-      <div style={{display:"flex",gap:4}}>{[800,2000,4000,6000,8000].map(rpm=>(<button key={rpm} onClick={()=>onSetRpm(rpm)} style={{background:targetRpm===rpm?"rgba(251,191,36,0.3)":"transparent",border:"1px solid rgba(251,191,36,0.2)",color:"#fbbf24",borderRadius:4,padding:"2px 6px",cursor:"pointer",fontSize:9}}>{rpm}</button>))}</div>
-    </div>
-  );
+// Pre-load the master V12 racing engine GLB so it mounts instantly
+useGLTF.preload('/models/v12_racing_engine.glb');
 
 // ============================================================================
-// MASTER ENGINE RUNTIME MOTION COMPONENT
+// 1. 12-CYLINDER FIRING ORDER & CYCLE PHASE HUD
+// ============================================================================
+
+interface FiringOrderHudProps {
+  cylinderStates: CylinderCycleState[];
+  snapshot: EngineSimulationSnapshot | null;
+}
+
+const FiringOrderHud: React.FC<FiringOrderHudProps> = React.memo(({ cylinderStates, snapshot }) => {
+  if (!snapshot || snapshot.state === 'OFF') return null;
+
+  // Split cylinders into Bank 1 (Left: 1, 3, 5, 7, 9, 11) and Bank 2 (Right: 2, 4, 6, 8, 10, 12)
+  const leftBankIndices = [0, 2, 4, 6, 8, 10]; // Cylinders 1, 3, 5, 7, 9, 11
+  const rightBankIndices = [1, 3, 5, 7, 9, 11]; // Cylinders 2, 4, 6, 8, 10, 12
+
+  const getPhaseColor = (state?: CylinderCycleState) => {
+    if (!state) return '#334155';
+    if (state.isSparkFiring) return '#ffffff';
+    switch (state.phase) {
+      case 'INTAKE': return '#00e5ff'; // Cyan
+      case 'COMPRESSION': return '#fbbf24'; // Warm yellow
+      case 'POWER': return '#ff3b00'; // Fiery red-orange
+      case 'EXHAUST': return '#f97316'; // Amber
+      default: return '#334155';
+    }
+  };
+
+  const getPhaseShortName = (state?: CylinderCycleState) => {
+    if (!state) return 'IDLE';
+    if (state.isSparkFiring) return 'SPARK';
+    switch (state.phase) {
+      case 'INTAKE': return 'INTK';
+      case 'COMPRESSION': return 'COMP';
+      case 'POWER': return 'POWR';
+      case 'EXHAUST': return 'EXHT';
+    }
+  };
+
+  return (
+    <div className="absolute top-4 left-4 z-20 flex flex-col gap-1.5 p-3 rounded-2xl bg-slate-950/85 backdrop-blur-md border border-amber-500/25 shadow-2xl pointer-events-auto font-mono text-[10px] select-none min-w-[280px]">
+      <div className="flex items-center justify-between border-b border-slate-800 pb-1.5">
+        <div className="flex items-center gap-1.5 text-amber-400 font-bold tracking-wider">
+          <Activity className="w-3.5 h-3.5 text-amber-400 animate-pulse" />
+          <span>4-STROKE FIRING ORDER (60° V12)</span>
+        </div>
+        <span className="text-slate-400 text-[9px] bg-slate-800/80 px-1.5 py-0.5 rounded border border-slate-700">
+          1-12-5-8-3-10-6-7-2-11-4-9
+        </span>
+      </div>
+
+      {/* 4-Stroke Phase Legend */}
+      <div className="flex items-center justify-between text-[9px] text-slate-400 px-1 py-0.5 bg-slate-900/60 rounded">
+        <span className="flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-[#00e5ff]" />INTAKE</span>
+        <span className="flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-[#fbbf24]" />COMPR</span>
+        <span className="flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-[#ff3b00]" />POWER</span>
+        <span className="flex items-center gap-1"><span className="w-1.5 h-1.5 rounded-full bg-[#f97316]" />EXHST</span>
+      </div>
+
+      {/* Cylinder Matrix: Bank 1 (Left) & Bank 2 (Right) */}
+      <div className="grid grid-cols-2 gap-2 mt-1">
+        {/* Left Bank */}
+        <div className="flex flex-col gap-1 bg-slate-900/50 p-1.5 rounded-xl border border-slate-800">
+          <div className="text-[9px] text-slate-400 font-bold px-1 text-center">BANK 1 (LEFT)</div>
+          <div className="grid grid-cols-3 gap-1">
+            {leftBankIndices.map((cylIdx) => {
+              const cylState = cylinderStates[cylIdx];
+              const color = getPhaseColor(cylState);
+              const isFiring = cylState?.isSparkFiring || cylState?.phase === 'POWER';
+              return (
+                <div
+                  key={cylIdx}
+                  className="flex flex-col items-center justify-center p-1 rounded-lg border transition-all duration-75"
+                  style={{
+                    backgroundColor: isFiring ? `${color}22` : 'rgba(15, 23, 42, 0.6)',
+                    borderColor: isFiring ? color : 'rgba(51, 65, 85, 0.4)',
+                    boxShadow: isFiring ? `0 0 8px ${color}66` : 'none',
+                  }}
+                >
+                  <span className="font-bold text-[10px]" style={{ color }}>
+                    #{cylIdx + 1}
+                  </span>
+                  <span className="text-[8px] font-semibold" style={{ color: isFiring ? '#ffffff' : color }}>
+                    {getPhaseShortName(cylState)}
+                  </span>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Right Bank */}
+        <div className="flex flex-col gap-1 bg-slate-900/50 p-1.5 rounded-xl border border-slate-800">
+          <div className="text-[9px] text-slate-400 font-bold px-1 text-center">BANK 2 (RIGHT)</div>
+          <div className="grid grid-cols-3 gap-1">
+            {rightBankIndices.map((cylIdx) => {
+              const cylState = cylinderStates[cylIdx];
+              const color = getPhaseColor(cylState);
+              const isFiring = cylState?.isSparkFiring || cylState?.phase === 'POWER';
+              return (
+                <div
+                  key={cylIdx}
+                  className="flex flex-col items-center justify-center p-1 rounded-lg border transition-all duration-75"
+                  style={{
+                    backgroundColor: isFiring ? `${color}22` : 'rgba(15, 23, 42, 0.6)',
+                    borderColor: isFiring ? color : 'rgba(51, 65, 85, 0.4)',
+                    boxShadow: isFiring ? `0 0 8px ${color}66` : 'none',
+                  }}
+                >
+                  <span className="font-bold text-[10px]" style={{ color }}>
+                    #{cylIdx + 1}
+                  </span>
+                  <span className="text-[8px] font-semibold" style={{ color: isFiring ? '#ffffff' : color }}>
+                    {getPhaseShortName(cylState)}
+                  </span>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+});
+
+// ============================================================================
+// 2. RUNTIME TELEMETRY & VIEW CONTROLS OVERLAY
+// ============================================================================
+
+interface RuntimeControlOverlayProps {
+  snapshot: EngineSimulationSnapshot | null;
+  onToggleEngine: () => void;
+  onRevBurst: () => void;
+  onSetTargetRpm: (rpm: number) => void;
+  onSetThrottle: (throttle: number) => void;
+  onSetTimeScale: (scale: number) => void;
+  cutawayMode: boolean;
+  onToggleCutaway: () => void;
+  explodedFactor: number;
+  onSetExploded: (f: number) => void;
+  onShiftUp: () => void;
+  onShiftDown: () => void;
+  onSetGear: (gear: number) => void;
+  isAudioMuted: boolean;
+  onToggleAudio: () => void;
+}
+
+const RuntimeControlOverlay: React.FC<RuntimeControlOverlayProps> = ({
+  snapshot,
+  onToggleEngine,
+  onRevBurst,
+  onSetTargetRpm,
+  onSetThrottle,
+  onSetTimeScale,
+  cutawayMode,
+  onToggleCutaway,
+  explodedFactor,
+  onSetExploded,
+  onShiftUp,
+  onShiftDown,
+  onSetGear,
+  isAudioMuted,
+  onToggleAudio,
+}) => {
+  const isRunning = snapshot ? snapshot.state !== 'OFF' : false;
+  const rpm = snapshot ? Math.round(snapshot.rpm) : 0;
+  const throttle = snapshot ? Math.round(snapshot.throttle * 100) : 0;
+  const boost = snapshot ? snapshot.boostPressureBar.toFixed(2) : '0.00';
+  const turboRpm = snapshot ? Math.round(snapshot.turboRpm).toLocaleString() : '0';
+  const timeScale = snapshot ? snapshot.timeScale : 1.0;
+  const stateLabel = snapshot ? snapshot.state : 'OFF';
+  const currentGear = snapshot ? snapshot.currentGear : 1;
+  const speedKmh = snapshot ? snapshot.vehicleSpeedKmh : 0;
+  const isShifting = snapshot ? snapshot.isShifting : false;
+
+  const rpmColor =
+    rpm > 8000 ? '#ef4444' : rpm > 6500 ? '#f97316' : rpm > 3000 ? '#eab308' : '#22c55e';
+
+  return (
+    <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 z-20 flex flex-col items-center gap-2 max-w-[95vw] w-auto font-mono select-none pointer-events-auto">
+      {/* Top Telemetry Strip: Boost, RPM, Turbo, Gear, Speed */}
+      <div className="flex items-center gap-3.5 bg-slate-950/85 backdrop-blur-md px-4 py-1.5 rounded-2xl border border-slate-800 shadow-xl text-xs text-slate-300">
+        <div className="flex items-center gap-2">
+          <span className="text-slate-500 text-[10px]">STATE:</span>
+          <span
+            className="font-bold text-[11px] px-1.5 py-0.5 rounded border"
+            style={{
+              color: isRunning ? '#22c55e' : '#94a3b8',
+              backgroundColor: isRunning ? '#22c55e15' : '#33415520',
+              borderColor: isRunning ? '#22c55e40' : '#47556940',
+            }}
+          >
+            {stateLabel}
+          </span>
+        </div>
+
+        <div className="h-3 w-px bg-slate-800" />
+
+        {/* Big RPM Counter */}
+        <div className="flex items-baseline gap-1">
+          <span className="text-slate-500 text-[10px]">RPM:</span>
+          <span className="font-extrabold text-base tracking-tight" style={{ color: rpmColor }}>
+            {rpm.toLocaleString()}
+          </span>
+        </div>
+
+        <div className="h-3 w-px bg-slate-800" />
+
+        {/* Turbo Boost */}
+        <div className="flex items-center gap-1.5">
+          <Wind className="w-3.5 h-3.5 text-cyan-400" />
+          <span className="text-slate-500 text-[10px]">BOOST:</span>
+          <span className="font-bold text-cyan-300">{boost} <span className="text-[9px] text-slate-500">BAR</span></span>
+        </div>
+
+        <div className="h-3 w-px bg-slate-800" />
+
+        {/* Turbo RPM */}
+        <div className="flex items-center gap-1 text-[11px]">
+          <span className="text-slate-500 text-[10px]">TURBO:</span>
+          <span className="font-semibold text-slate-300">{turboRpm}</span>
+        </div>
+
+        <div className="h-3 w-px bg-slate-800" />
+
+        {/* Current Gear Badge */}
+        <div className="flex items-center gap-1.5">
+          <span className="text-slate-500 text-[10px]">GEAR:</span>
+          <span
+            className={`font-black text-xs px-2 py-0.5 rounded border transition-all ${
+              isShifting
+                ? 'bg-amber-400 text-slate-950 border-amber-300 shadow-[0_0_10px_rgba(251,191,36,0.8)] scale-110'
+                : 'bg-slate-900 text-amber-400 border-amber-500/40'
+            }`}
+          >
+            {isShifting ? 'SHIFT' : `G${currentGear}`}
+          </span>
+        </div>
+
+        <div className="h-3 w-px bg-slate-800" />
+
+        {/* Vehicle Road Speed */}
+        <div className="flex items-baseline gap-1">
+          <span className="text-slate-500 text-[10px]">SPEED:</span>
+          <span className="font-extrabold text-xs text-emerald-400">
+            {speedKmh} <span className="text-[9px] text-slate-500">KM/H</span>
+          </span>
+        </div>
+      </div>
+
+      {/* Main Interactive Control Bar */}
+      <div className="flex flex-wrap items-center justify-center gap-2.5 bg-slate-950/90 backdrop-blur-xl p-2.5 rounded-2xl border border-amber-500/30 shadow-2xl">
+        {/* START / STOP Push Button */}
+        <button
+          onClick={onToggleEngine}
+          className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl font-bold text-xs tracking-wider transition-all border shadow-lg ${
+            isRunning
+              ? 'bg-rose-500/20 text-rose-300 border-rose-500/50 hover:bg-rose-500/30 active:scale-95'
+              : 'bg-emerald-500/20 text-emerald-300 border-emerald-500/50 hover:bg-emerald-500/30 active:scale-95'
+          }`}
+        >
+          {isRunning ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5" />}
+          <span>{isRunning ? 'STOP' : 'START'}</span>
+        </button>
+
+        {/* REV BURST Trigger */}
+        <button
+          onClick={onRevBurst}
+          disabled={!isRunning}
+          className="flex items-center gap-1 px-2.5 py-1.5 rounded-xl font-bold text-xs bg-amber-500/20 text-amber-300 border border-amber-500/40 hover:bg-amber-500/30 active:scale-95 disabled:opacity-40 disabled:pointer-events-none transition-all"
+        >
+          <Flame className="w-3.5 h-3.5 text-amber-400" />
+          <span>REV!</span>
+        </button>
+
+        {/* AUDIO MUTE / UNMUTE */}
+        <button
+          onClick={onToggleAudio}
+          className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl text-xs font-bold transition-all border ${
+            !isAudioMuted
+              ? 'bg-amber-500/20 text-amber-300 border-amber-500/50 shadow-[0_0_10px_rgba(245,158,11,0.25)]'
+              : 'bg-slate-900/80 text-slate-500 border-slate-800 hover:text-slate-400'
+          }`}
+          title={isAudioMuted ? 'Unmute V12 Audio' : 'Mute V12 Audio'}
+        >
+          {!isAudioMuted ? <Volume2 className="w-3.5 h-3.5 text-amber-400 animate-pulse" /> : <VolumeX className="w-3.5 h-3.5 text-slate-500" />}
+          <span className="hidden sm:inline">{!isAudioMuted ? 'SOUND' : 'MUTED'}</span>
+        </button>
+
+        {/* 7-SPEED SEQUENTIAL PADDLE SHIFTER */}
+        <div className="flex items-center gap-1 bg-slate-900/80 p-1 rounded-xl border border-slate-800">
+          <button
+            onClick={onShiftDown}
+            disabled={!isRunning || currentGear <= 1}
+            className="flex items-center gap-0.5 px-2 py-1 rounded-lg text-[10px] font-black bg-slate-800 hover:bg-amber-500/20 text-slate-300 hover:text-amber-300 border border-slate-700 hover:border-amber-500/50 transition-all disabled:opacity-30 active:scale-95"
+            title="Downshift with Auto-Blip Rev Match"
+          >
+            <ChevronDown className="w-3 h-3 text-amber-400" />
+            <span>DOWN</span>
+          </button>
+
+          <div
+            className={`px-2 py-0.5 rounded-lg font-black text-xs min-w-[30px] text-center border transition-all ${
+              isShifting
+                ? 'bg-amber-400 text-slate-950 border-amber-300 shadow-[0_0_8px_rgba(251,191,36,0.8)] scale-105'
+                : 'bg-slate-950 text-amber-300 border-amber-500/40'
+            }`}
+          >
+            G{currentGear}
+          </div>
+
+          <button
+            onClick={onShiftUp}
+            disabled={!isRunning || currentGear >= 7}
+            className="flex items-center gap-0.5 px-2 py-1 rounded-lg text-[10px] font-black bg-slate-800 hover:bg-amber-500/20 text-slate-300 hover:text-amber-300 border border-slate-700 hover:border-amber-500/50 transition-all disabled:opacity-30 active:scale-95"
+            title="Upshift with Flat-Shift Ignition Cut Pop"
+          >
+            <span>UP</span>
+            <ChevronUp className="w-3 h-3 text-amber-400" />
+          </button>
+        </div>
+
+        {/* Throttle Slider */}
+        <div className="flex items-center gap-2 bg-slate-900/80 px-2.5 py-1 rounded-xl border border-slate-800">
+          <span className="text-[10px] text-slate-400 font-semibold">THROTTLE:</span>
+          <input
+            type="range"
+            min={0}
+            max={100}
+            value={throttle}
+            disabled={!isRunning}
+            onChange={(e) => onSetThrottle(Number(e.target.value) / 100)}
+            className="w-20 sm:w-28 accent-amber-400 cursor-pointer disabled:opacity-40"
+          />
+          <span className="text-[10px] font-bold text-amber-400 w-7 text-right">{throttle}%</span>
+        </div>
+
+        {/* Preset RPM Buttons */}
+        <div className="hidden lg:flex items-center gap-1">
+          {[800, 2500, 5000, 7000, 8500].map((presetRpm) => (
+            <button
+              key={presetRpm}
+              onClick={() => onSetTargetRpm(presetRpm)}
+              disabled={!isRunning}
+              className="px-1.5 py-1 rounded-lg text-[9px] font-bold bg-slate-900/80 hover:bg-amber-500/20 text-slate-300 hover:text-amber-300 border border-slate-800 hover:border-amber-500/40 transition-all disabled:opacity-40"
+            >
+              {presetRpm}
+            </button>
+          ))}
+        </div>
+
+        {/* Slow-Motion Selector */}
+        <div className="flex items-center gap-1 bg-slate-900/80 px-2 py-1 rounded-xl border border-slate-800">
+          <span className="text-[9px] text-slate-400 font-semibold mr-0.5">SPEED:</span>
+          {[
+            { label: '1.0x', val: 1.0 },
+            { label: '0.5x', val: 0.5 },
+            { label: '0.25x', val: 0.25 },
+            { label: '0.1x', val: 0.1 },
+          ].map((spd) => (
+            <button
+              key={spd.val}
+              onClick={() => onSetTimeScale(spd.val)}
+              className={`px-1.5 py-0.5 rounded text-[9px] font-bold transition-all ${
+                timeScale === spd.val
+                  ? 'bg-amber-400 text-slate-950 shadow'
+                  : 'text-slate-400 hover:text-amber-300'
+              }`}
+            >
+              {spd.label}
+            </button>
+          ))}
+        </div>
+
+        {/* Cutaway (X-Ray) Mode Toggle */}
+        <button
+          onClick={onToggleCutaway}
+          className={`flex items-center gap-1 px-2.5 py-1.5 rounded-xl text-xs font-bold transition-all border ${
+            cutawayMode
+              ? 'bg-cyan-500/25 text-cyan-300 border-cyan-400 shadow-[0_0_12px_rgba(6,182,212,0.4)]'
+              : 'bg-slate-900/80 text-slate-400 border-slate-800 hover:text-cyan-300 hover:border-cyan-500/40'
+          }`}
+          title="Make engine block & heads transparent crystal quartz to view internal pistons & crankshaft"
+        >
+          <Eye className="w-3.5 h-3.5" />
+          <span>CUTAWAY</span>
+        </button>
+
+        {/* Exploded View Slider */}
+        <div className="flex items-center gap-1.5 bg-slate-900/80 px-2.5 py-1 rounded-xl border border-slate-800">
+          <Layers className="w-3 h-3 text-amber-400" />
+          <span className="text-[9px] text-slate-400 font-semibold">EXPLODE:</span>
+          <input
+            type="range"
+            min={0}
+            max={100}
+            value={Math.round(explodedFactor * 100)}
+            onChange={(e) => onSetExploded(Number(e.target.value) / 100)}
+            className="w-16 sm:w-20 accent-amber-400 cursor-pointer"
+          />
+          <span className="text-[9px] font-bold text-amber-400 w-6 text-right">
+            {Math.round(explodedFactor * 100)}%
+          </span>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+// ============================================================================
+// 3. MASTER ENGINE RUNTIME MOTION COMPONENT
 // ============================================================================
 
 export interface EngineRuntimeMotionProps {
@@ -187,114 +471,202 @@ export interface EngineRuntimeMotionProps {
 }
 
 export const EngineRuntimeMotion: React.FC<EngineRuntimeMotionProps> = ({
-  engineType = "V12",
+  engineType = 'V12',
   autoStart = true,
   initialRpm = 800,
 }) => {
-  const progress = useEngine3DStore((s) => s.progress);
-  const [runtimeActive, setRuntimeActive] = useState(false);
-  const crankRef = useRef<CrankshaftState>(createInitialCrankshaftState());
-  const turboRef = useRef<TurbochargerState>(createTurbochargerState());
-  const targetRpmRef = useRef(initialRpm);
-  const frameTimeRef = useRef(performance.now());
-  const [displayRpm, setDisplayRpm] = useState(0);
+  // Load the authentic 559-node V12 racing engine GLB
+  const gltf = useGLTF('/models/v12_racing_engine.glb');
+  const engineModel = useMemo(() => gltf.scene.clone(true), [gltf.scene]);
 
-  // Auto-start when assembly reaches 100%
+  // Store bindings
+  const progress = useEngine3DStore((s) => s.progress);
+  const cutawayMode = useEngine3DStore((s) => s.cutawayMode);
+  const toggleCutawayMode = useEngine3DStore((s) => s.toggleCutawayMode);
+  const setCutawayMode = useEngine3DStore((s) => s.setCutawayMode);
+  const slowMotionScale = useEngine3DStore((s) => s.slowMotionScale);
+  const setSlowMotionScale = useEngine3DStore((s) => s.setSlowMotionScale);
+  const explodedAmount = useEngine3DStore((s) => s.explodedAmount);
+  const setExplodedAmount = useEngine3DStore((s) => s.setExplodedAmount);
+
+  // Physics Simulation & GLB Node Animator instances
+  const simRef = useRef<EngineSimulationState>(new EngineSimulationState({ idleRpm: initialRpm }));
+  const animatorRef = useRef<EngineGlbAnimator>(new EngineGlbAnimator());
+  const lastTimeRef = useRef<number>(performance.now());
+
+  // Reactive State for Overlays
+  const [snapshot, setSnapshot] = useState<EngineSimulationSnapshot | null>(null);
+  const [cylinderStates, setCylinderStates] = useState<CylinderCycleState[]>([]);
+
+  // Bind GLB model into Animator once mounted
   useEffect(() => {
-    if (progress.percentage >= 100 && autoStart && !runtimeActive) {
+    if (engineModel) {
+      animatorRef.current.bindModel(engineModel);
+      animatorRef.current.setCutawayMode(cutawayMode);
+      animatorRef.current.setExplodedFactor(explodedAmount);
+    }
+  }, [engineModel]);
+
+  // Sync Cutaway Mode change
+  useEffect(() => {
+    animatorRef.current.setCutawayMode(cutawayMode);
+  }, [cutawayMode]);
+
+  // Sync Exploded View change
+  useEffect(() => {
+    animatorRef.current.setExplodedFactor(explodedAmount);
+  }, [explodedAmount]);
+
+  // Audio & Sequential Shifting State
+  const [isAudioMuted, setIsAudioMuted] = useState<boolean>(() => apexAudio.getMuteState());
+  const prevStateRef = useRef<string>('OFF');
+
+  // Auto-start engine when assembly completes (or initial load)
+  useEffect(() => {
+    if (autoStart) {
       const timer = setTimeout(() => {
-        crankRef.current.targetRpm = initialRpm;
-        targetRpmRef.current = initialRpm;
-        setRuntimeActive(true);
-      }, 800);
+        simRef.current.startEngine();
+      }, 600);
       return () => clearTimeout(timer);
     }
-  }, [progress.percentage, autoStart, runtimeActive, initialRpm]);
+  }, [autoStart]);
 
-  // Frame tick — advance crankshaft and turbo
+  // Clean up audio graph on unmount
+  useEffect(() => {
+    return () => {
+      apexAudio.stopEngineAudioGraph();
+    };
+  }, []);
+
+  // Main Render Loop Tick: Update physics & GLB transforms every frame
   useFrame(() => {
-    if (!runtimeActive) return;
     const now = performance.now();
-    const delta = Math.min(0.05, (now - frameTimeRef.current) / 1000);
-    frameTimeRef.current = now;
-    crankRef.current = advanceCrankshaft(crankRef.current, delta);
-    if (targetRpmRef.current > 1000) {
-      turboRef.current = advanceTurbocharger(turboRef.current, crankRef.current.rpm, Math.min(1, targetRpmRef.current / 8000), delta);
+    const deltaSec = Math.min(0.05, (now - lastTimeRef.current) / 1000);
+    lastTimeRef.current = now;
+
+    // Advance physics state (rotational dynamics, starter, turbo, limiter, gearbox)
+    const snap = simRef.current.update(deltaSec);
+
+    // Advance GLB node transforms & VFX (pistons, rods, crank, cams, valves, sparks, injectors)
+    animatorRef.current.update(snap);
+
+    // Update telemetry state for HUD
+    setSnapshot(snap);
+    setCylinderStates(animatorRef.current.getCylinderCycleStates());
+
+    // Real-time V12 Acoustic Audio Synthesis Pipeline
+    if (!isAudioMuted && snap.state !== 'OFF') {
+      if (prevStateRef.current === 'OFF' && snap.state === 'CRANKING') {
+        apexAudio.initAudioContext();
+        apexAudio.triggerTestFireSequence('v12', 8500);
+      } else {
+        apexAudio.updateEngineAudio({
+          layout: 'v12',
+          rpm: snap.rpm,
+          throttle: snap.throttle,
+          engineLoad: Math.max(0.12, snap.throttle),
+          forcedInduction: 'turbo_twin',
+          boostPressureBar: snap.boostPressureBar,
+        });
+      }
+
+      // Exhaust backfire crackles & fireballs
+      if (snap.backfireIntensity > 0.45) {
+        apexAudio.triggerExhaustPop(snap.backfireIntensity > 0.8 ? 'flame_spit' : 'heavy');
+      }
+
+      // Turbo blow-off valve atmospheric dump
+      if (snap.bovFlutterIntensity > 0.45) {
+        apexAudio.triggerBlowOffValve(snap.boostPressureBar);
+      }
+    } else if (prevStateRef.current !== 'OFF' && snap.state === 'OFF') {
+      apexAudio.stopEngineAudioGraph();
     }
-    // Throttle RPM display to 10fps
-    if (Math.floor(now / 100) !== Math.floor((now - delta * 1000) / 100)) {
-      setDisplayRpm(crankRef.current.rpm);
-    }
+    prevStateRef.current = snap.state;
   });
 
-  const firingOrder = useMemo(() => getFiringOrderForType(engineType), [engineType]);
-  const bankAngle = PISTON_CONFIGS[engineType]?.bankAngle ?? 60;
-
-  const pistonPositions = useMemo(() => {
-    const pos: [number,number,number][] = [];
-    for (let i = 0; i < 12; i++) {
-      pos.push([i < 6 ? 0.04 : -0.04, 0.08, -0.09 + (i % 6) * 0.035]);
+  // User Actions
+  const handleToggleEngine = useCallback(() => {
+    if (simRef.current.getSnapshot().state === 'OFF') {
+      apexAudio.initAudioContext();
     }
-    return pos;
+    simRef.current.toggleEngine();
   }, []);
 
-  const exhaustPositions = useMemo(() => {
-    const pos: [number,number,number][] = [];
-    for (let i = 0; i < 12; i++) {
-      pos.push([i < 6 ? 0.08 : -0.08, 0.05, -0.09 + (i % 6) * 0.035]);
-    }
-    return pos;
+  const handleRevBurst = useCallback(() => {
+    simRef.current.revBurst(7500, 0.5);
   }, []);
 
-  const vibration = useMemo(
-    () => calculateEngineVibration(crankRef.current.angleDeg, crankRef.current.rpm, engineType),
-    [runtimeActive, displayRpm]
-  );
+  const handleSetTargetRpm = useCallback((target: number) => {
+    simRef.current.setTargetRpm(target);
+  }, []);
 
-  const handleSetRpm = (rpm: number) => {
-    targetRpmRef.current = rpm;
-    crankRef.current.targetRpm = rpm;
-  };
+  const handleSetThrottle = useCallback((th: number) => {
+    simRef.current.setThrottle(th);
+  }, []);
 
-  const handleToggle = () => {
-    if (runtimeActive) {
-      targetRpmRef.current = 0;
-      crankRef.current.targetRpm = 0;
-      setTimeout(() => setRuntimeActive(false), 1000);
-    } else {
-      crankRef.current.targetRpm = 800;
-      targetRpmRef.current = 800;
-      setRuntimeActive(true);
-      frameTimeRef.current = performance.now();
-    }
-  };
+  const handleSetTimeScale = useCallback((scale: number) => {
+    simRef.current.setTimeScale(scale);
+    setSlowMotionScale(scale);
+  }, [setSlowMotionScale]);
 
-  if (!runtimeActive) return null;
+  const handleToggleAudio = useCallback(() => {
+    const muted = apexAudio.toggleMute();
+    setIsAudioMuted(muted);
+  }, []);
+
+  const handleShiftUp = useCallback(() => {
+    simRef.current.shiftUp();
+  }, []);
+
+  const handleShiftDown = useCallback(() => {
+    simRef.current.shiftDown();
+  }, []);
+
+  const handleSetGear = useCallback((gear: number) => {
+    simRef.current.setGear(gear);
+  }, []);
+
+  const engineRotation = useEngine3DStore((s) => s.engineRotation);
+  const instances = useEngine3DStore((s) => s.instances);
+  const isAssemblyComplete = useEngine3DStore((s) => s.isAssemblyComplete);
+  const instanceCount = Object.keys(instances).length;
+  const isShowcase = instanceCount === 0 || isAssemblyComplete || (snapshot !== null && snapshot.state !== 'OFF');
 
   return (
     <>
-      <group name="Engine_Runtime_Motion">
-        <CrankshaftRotator angleRad={(crankRef.current.angleDeg * Math.PI) / 180} vibration={vibration} />
-        {pistonPositions.map((pos, i) => (
-          <PistonAssembly key={i} crankAngleDeg={crankRef.current.angleDeg} phaseOffsetDeg={firingOrder[i] ?? 0} position={pos} bankAngle={bankAngle} pistonRadius={0.014} />
-        ))}
-        {[-1,1].map(bank => ["intake","exhaust"].map(cam => (
-          <CamshaftRotator key={"c"+bank+cam} crankAngleDeg={crankRef.current.angleDeg} position={[bank*0.05,0.12,0]} bank={cam as "intake"|"exhaust"} />
-        )))}
-        {pistonPositions.map((pos, i) => (
-          <React.Fragment key={'v'+i}>
-            <ValveActuator crankAngleDeg={crankRef.current.angleDeg} phaseOffsetDeg={firingOrder[i]??0} position={[pos[0]+0.015,0.1,pos[2]]} isIntake={true} />
-            <ValveActuator crankAngleDeg={crankRef.current.angleDeg} phaseOffsetDeg={(firingOrder[i]??0)+360} position={[pos[0]-0.015,0.1,pos[2]]} isIntake={false} />
-          </React.Fragment>
-        ))}
-        <TurbochargerSpin turbineSpeedRpm={turboRef.current.turbineSpeedRpm} position={[0,0.06,0.22]} />
-        <OilPumpGear angleRad={(crankRef.current.angleDeg * Math.PI) / 180} position={[0,-0.06,0.15]} />
-        {exhaustPositions.map((pos, i) => {
-          const a = (crankRef.current.angleDeg + (firingOrder[i]??0) + 460) % 720;
-          return (<ExhaustPulseGlow key={i} intensity={Math.max(0, Math.sin((a/120)*Math.PI)) * (crankRef.current.rpm/3000)} position={pos} temperature={0.6} />);
-        })}
-      </group>
-      <RuntimeControlOverlay currentRpm={crankRef.current.rpm} targetRpm={targetRpmRef.current} isRunning={runtimeActive} onSetRpm={handleSetRpm} onToggle={handleToggle} />
+      {/* Authentic V12 Racing Engine GLB with Direct Node Kinematics */}
+      {isShowcase && (
+        <group
+          name="Engine_Runtime_Motion_Master"
+          rotation={engineRotation}
+          position={[0, -0.08, 0]}
+        >
+          <primitive object={engineModel} name="V12_Racing_Engine_Live" />
+        </group>
+      )}
+
+      {/* 12-Cylinder Firing Order Matrix & Phase Indicator HUD */}
+      <FiringOrderHud cylinderStates={cylinderStates} snapshot={snapshot} />
+
+      {/* Interactive Runtime Cockpit Telemetry & View Controls */}
+      <RuntimeControlOverlay
+        snapshot={snapshot}
+        onToggleEngine={handleToggleEngine}
+        onRevBurst={handleRevBurst}
+        onSetTargetRpm={handleSetTargetRpm}
+        onSetThrottle={handleSetThrottle}
+        onSetTimeScale={handleSetTimeScale}
+        cutawayMode={cutawayMode}
+        onToggleCutaway={toggleCutawayMode}
+        explodedFactor={explodedAmount}
+        onSetExploded={setExplodedAmount}
+        onShiftUp={handleShiftUp}
+        onShiftDown={handleShiftDown}
+        onSetGear={handleSetGear}
+        isAudioMuted={isAudioMuted}
+        onToggleAudio={handleToggleAudio}
+      />
     </>
   );
 };

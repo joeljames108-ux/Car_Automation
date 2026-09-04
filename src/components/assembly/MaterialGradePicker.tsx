@@ -336,7 +336,7 @@ function PropertyBar({
           {unit && <span className="text-slate-500 font-normal ml-0.5">{unit}</span>}
         </span>
       </div>
-      <div className="h-1.5 w-full bg-slate-900 rounded-full overflow-hidden">
+      <div className="h-1.5 w-full bg-slate-800/60 dark:bg-slate-900 rounded-full overflow-hidden">
         <div
           className={`h-full rounded-full transition-all duration-500`}
           style={{
@@ -359,7 +359,7 @@ function PropertyBar({
 function MetallurgyDetailPanel({ grade }: { grade: MetallurgyGrade }) {
   const p = grade.properties;
   return (
-    <div className="mt-3 p-3 rounded-xl bg-slate-950/80 border border-slate-800/80 space-y-3">
+    <div className="mt-3 p-3 rounded-xl bg-slate-900/40 dark:bg-slate-950/80 border border-slate-700/50 dark:border-slate-800/80 space-y-3">
       {/* Material Family & Designation */}
       <div className="flex items-center gap-2 pb-2 border-b border-slate-800/60">
         <Beaker size={12} className="text-amber-400 shrink-0" />
@@ -491,7 +491,7 @@ function MetallurgyDetailPanel({ grade }: { grade: MetallurgyGrade }) {
           {p.keyAlloyingElements.map((el, i) => (
             <span
               key={i}
-              className="text-[8px] font-mono px-1.5 py-0.5 rounded bg-slate-900/80 text-slate-400 border border-slate-800/60"
+              className="text-[8px] font-mono px-1.5 py-0.5 rounded bg-slate-800/50 dark:bg-slate-900/80 text-slate-400 border border-slate-700/60 dark:border-slate-800/60"
             >
               {el}
             </span>
@@ -500,7 +500,7 @@ function MetallurgyDetailPanel({ grade }: { grade: MetallurgyGrade }) {
       </div>
 
       {/* Microstructure */}
-      <div className="p-2 rounded-lg bg-slate-900/60 border border-slate-800/40">
+      <div className="p-2 rounded-lg bg-slate-800/40 dark:bg-slate-900/60 border border-slate-700/40 dark:border-slate-800/40">
         <div className="text-[9px] font-mono text-slate-500 mb-1">Microstructure</div>
         <div className="text-[9px] font-mono text-slate-300 italic">{p.microstructure}</div>
       </div>
@@ -526,7 +526,7 @@ export function MaterialGradePicker({
           <Layers size={13} className="text-amber-400" />
           <span>{title}</span>
         </label>
-        <span className="text-[10px] font-mono text-amber-300 bg-slate-950/80 border border-amber-500/40 px-2 py-0.5 rounded-full font-bold shadow-[0_0_10px_rgba(192,132,252,0.2)]">
+        <span className="text-[10px] font-mono text-amber-300 bg-slate-900/40 dark:bg-slate-950/80 border border-amber-500/40 px-2 py-0.5 rounded-full font-bold shadow-[0_0_10px_rgba(192,132,252,0.2)]">
           {variants.length} Grades Available
         </span>
       </div>
@@ -545,7 +545,7 @@ export function MaterialGradePicker({
               className={`rounded-xl border transition-all duration-300 overflow-hidden ${
                 isSelected
                   ? "bg-gradient-to-r from-amber-950/80 via-slate-900/90 to-slate-950/95 border-amber-400 shadow-[0_0_25px_rgba(192,132,252,0.25)] scale-[1.01]"
-                  : "bg-slate-950/70 border-slate-800/80 hover:border-slate-700 hover:bg-slate-900/60"
+                  : "bg-slate-900/40 dark:bg-slate-950/70 border-slate-700/50 dark:border-slate-800/80 hover:border-amber-400/60 hover:bg-slate-800/40"
               }`}
             >
               {/* Subtle top edge active glow */}
@@ -575,7 +575,7 @@ export function MaterialGradePicker({
                           className={`text-[9px] px-1.5 py-0.2 rounded font-mono font-bold border shrink-0 ${
                             isSelected
                               ? "bg-amber-500/20 text-amber-300 border-amber-500/40"
-                              : "bg-slate-900 text-slate-400 border-slate-800"
+                              : "bg-slate-800/60 dark:bg-slate-900 text-slate-400 border-slate-700/60 dark:border-slate-800"
                           }`}
                         >
                           {spec.badge}
@@ -605,7 +605,7 @@ export function MaterialGradePicker({
                       className={`w-4 h-4 rounded-full border flex items-center justify-center transition-all ${
                         isSelected
                           ? "border-amber-400 bg-amber-500 shadow-[0_0_10px_rgba(192,132,252,0.6)]"
-                          : "border-slate-700 bg-slate-900/80 group-hover:border-slate-600"
+                          : "border-slate-600 bg-slate-800/80 dark:border-slate-700 dark:bg-slate-900/80 group-hover:border-slate-500"
                       }`}
                     >
                       {isSelected && <div className="w-1.5 h-1.5 rounded-full bg-white" />}

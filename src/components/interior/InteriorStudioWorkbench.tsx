@@ -583,7 +583,7 @@ export const InteriorStudioWorkbench: React.FC<InteriorStudioWorkbenchProps> = (
       {activeTab === 'sound_ambient' && (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 pt-1">
           {/* Audio System */}
-          <div className="p-3 rounded-xl bg-amber-950/80/60 border border-white/10 space-y-2">
+          <div className="p-3 rounded-xl bg-amber-950/60 border border-white/10 space-y-2">
             <label className="text-xs font-bold uppercase tracking-wider flex items-center justify-between" style={{color: '#92400E'}}>
               <span>◆ Sound Stage System</span>
               <span className="font-mono" style={{color: '#78716C'}}>{AUDIO_SYSTEM_CATALOG[config.audioSystemId]?.speakerCount} Speakers</span>

@@ -88,7 +88,7 @@ export function AssemblyProgressPanel({
   const assemblyComponents = useMemo(() => getAssemblyComponents(engineConfig), [engineConfig]);
 
   return (
-    <div className={`flex flex-col bg-slate-900/80/90 border border-slate-800/80 rounded-2xl p-4 backdrop-blur-xl shadow-2xl h-full select-none ${className}`}>
+    <div className={`flex flex-col bg-slate-900/90 border border-slate-800/80 rounded-2xl p-4 backdrop-blur-xl shadow-2xl h-full select-none ${className}`}>
       {/* Top Header */}
       <div className="pb-3 border-b border-slate-800/80 mb-3">
         <div className="flex items-center justify-between">

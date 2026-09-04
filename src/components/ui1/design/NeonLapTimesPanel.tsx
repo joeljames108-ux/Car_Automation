@@ -11,7 +11,7 @@ export function NeonLapTimesPanel({ lapTimes, className = "" }: { lapTimes: Neon
   const fastest = sorted[0];
   return (
     <div className={"space-y-4 " + className}>
-      <div className="rounded-xl bg-amber-950/80/80 border border-white/[0.08] p-4 backdrop-blur-md">
+      <div className="rounded-xl bg-amber-950/80 border border-white/[0.08] p-4 backdrop-blur-md">
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-2"><Map size={14} className="text-amber-400" /><span className="text-[10px] font-mono font-bold uppercase tracking-widest text-amber-400/70">Circuit Comparison</span></div>
           {fastest && <span className="text-[10px] font-mono text-amber-400/50">Fastest: <span className="text-emerald-400 font-bold">{fastest.trackName}</span></span>}
@@ -34,7 +34,7 @@ export function NeonLapTimesPanel({ lapTimes, className = "" }: { lapTimes: Neon
           })}
         </div>
       </div>
-      <div className="rounded-xl bg-amber-950/80/80 border border-white/[0.08] p-4 backdrop-blur-md">
+      <div className="rounded-xl bg-amber-950/80 border border-white/[0.08] p-4 backdrop-blur-md">
         <div className="flex items-center gap-2 mb-3"><Table size={14} className="text-amber-400" /><span className="text-[10px] font-mono font-bold uppercase tracking-widest text-amber-400/70">Full Lap Times</span></div>
         <div className="overflow-x-auto"><table className="w-full text-[11px]">
           <thead><tr className="text-amber-400/50 border-b border-white/[0.06]"><th className="text-left py-2 px-2 font-mono">#</th><th className="text-left py-2 px-2">Track</th><th className="text-right py-2 px-2 font-mono">Time</th><th className="text-right py-2 px-2 font-mono">Delta</th><th className="text-right py-2 px-2 font-mono">Top</th></tr></thead>

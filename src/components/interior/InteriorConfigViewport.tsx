@@ -266,7 +266,7 @@ export const InteriorConfigViewport: React.FC = () => {
             )}
 
             {/* Cluster Binnacle */}
-            <g transform="translate(130, 132)">
+            <g transform="translate(108, 132)">
               <path d="M 0 42 Q 45 8 90 42 Z" fill="#fde68a" stroke="#a08040" strokeWidth="2" />
               <rect x="6" y="14" width="78" height="30" rx="4" fill="#fef3c7" stroke="#d97706" strokeWidth="1.5" />
               {clusterType === "analog" && (
@@ -294,7 +294,7 @@ export const InteriorConfigViewport: React.FC = () => {
             )}
 
             {/* Steering Wheel */}
-            <g transform="translate(175, 215)">
+            <g transform="translate(150, 215)">
               <circle cx="0" cy="0" r="50" stroke="#92400e" strokeWidth="13" fill="none" />
               <circle cx="0" cy="0" r="50" stroke="#a08040" strokeWidth="9" fill="none" />
               <circle cx="0" cy="0" r="18" fill="#fde68a" stroke="#b45309" strokeWidth="2" />

@@ -307,7 +307,7 @@ export const HyperFidelityExteriorStudioCustomizer: React.FC = () => {
   return (
     <div className="flex flex-col w-full h-full bg-slate-900/80 text-slate-100 rounded-xl overflow-hidden border border-slate-800 shadow-2xl font-sans">
       {/* Header Bar */}
-      <div className="flex items-center justify-between px-6 py-3.5 bg-slate-900/80/90 backdrop-blur-md border-b border-slate-800/80">
+      <div className="flex items-center justify-between px-6 py-3.5 bg-slate-900/90 backdrop-blur-md border-b border-slate-800/80">
         <div className="flex items-center gap-3">
           <div className="p-2 bg-amber-500/10 rounded-lg border border-amber-500/30 text-amber-400">
             <Wind className="w-5 h-5" />
@@ -336,7 +336,7 @@ export const HyperFidelityExteriorStudioCustomizer: React.FC = () => {
         {/* 3D Viewport Canvas */}
         <div className="flex-1 h-full relative" ref={mountRef}>
           {/* Floating Camera Hotspot Bar */}
-          <div className="absolute top-4 left-4 z-20 flex items-center gap-1.5 p-1.5 bg-slate-900/80/85 backdrop-blur-md rounded-xl border border-slate-800/90 shadow-xl">
+          <div className="absolute top-4 left-4 z-20 flex items-center gap-1.5 p-1.5 bg-slate-900/85 backdrop-blur-md rounded-xl border border-slate-800/90 shadow-xl">
             {(["hero_front_three_quarter", "track_rear_three_quarter", "low_side_profile", "downforce_top_view", "wheel_brake_macro", "front_fascia_close"] as ExteriorCameraPreset[]).map((cam) => (
               <button
                 key={cam}
@@ -354,7 +354,7 @@ export const HyperFidelityExteriorStudioCustomizer: React.FC = () => {
 
           {/* Floating CFD Aerodynamics HUD Badge */}
           {aeroTelemetry && (
-            <div className="absolute bottom-4 left-4 z-20 flex items-center gap-4 px-4 py-2.5 bg-slate-900/80/90 backdrop-blur-md rounded-xl border border-slate-800/90 shadow-xl text-xs">
+            <div className="absolute bottom-4 left-4 z-20 flex items-center gap-4 px-4 py-2.5 bg-slate-900/90 backdrop-blur-md rounded-xl border border-slate-800/90 shadow-xl text-xs">
               <div className="flex items-center gap-2 text-amber-400">
                 <Wind className="w-4 h-4" />
                 <span className="font-semibold">Downforce: {aeroTelemetry.downforceN} N</span>
@@ -370,7 +370,7 @@ export const HyperFidelityExteriorStudioCustomizer: React.FC = () => {
         </div>
 
         {/* Right Configuration Sidebar */}
-        <div className="w-80 bg-slate-900/80/95 backdrop-blur-xl border-l border-slate-800/90 p-5 flex flex-col gap-5 overflow-y-auto z-20">
+        <div className="w-80 bg-slate-900/95 backdrop-blur-xl border-l border-slate-800/90 p-5 flex flex-col gap-5 overflow-y-auto z-20">
           {/* Typology Style Selector */}
           <div className="flex flex-col gap-2">
             <label className="text-xs font-semibold text-slate-300 uppercase tracking-wider flex items-center gap-1.5">

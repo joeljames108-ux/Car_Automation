@@ -76,7 +76,7 @@ export const SimulationProgressPanel: React.FC<SimulationProgressPanelProps> = (
 
       {/* Stat Readouts */}
       <div className="flex flex-col gap-2.5">
-        <div className="flex items-center justify-between p-2 rounded-xl bg-amber-950/80/60 border border-white/6">
+        <div className="flex items-center justify-between p-2 rounded-xl bg-amber-950/60 border border-white/6">
           <div className="flex items-center gap-2">
             <Zap size={14} className="text-amber-300/80" />
             <span className="nh-label-caps text-amber-300/60 text-[10px]">POWER</span>
@@ -89,7 +89,7 @@ export const SimulationProgressPanel: React.FC<SimulationProgressPanelProps> = (
           </div>
         </div>
 
-        <div className="flex items-center justify-between p-2 rounded-xl bg-amber-950/80/60 border border-white/6">
+        <div className="flex items-center justify-between p-2 rounded-xl bg-amber-950/60 border border-white/6">
           <div className="flex items-center gap-2">
             <Gauge size={14} className="text-amber-400" />
             <span className="nh-label-caps text-amber-300/60 text-[10px]">TORQUE</span>
@@ -102,7 +102,7 @@ export const SimulationProgressPanel: React.FC<SimulationProgressPanelProps> = (
           </div>
         </div>
 
-        <div className="flex items-center justify-between p-2 rounded-xl bg-amber-950/80/60 border border-white/6">
+        <div className="flex items-center justify-between p-2 rounded-xl bg-amber-950/60 border border-white/6">
           <div className="flex items-center gap-2">
             <Weight size={14} className="text-amber-300/80" />
             <span className="nh-label-caps text-amber-300/60 text-[10px]">WEIGHT</span>
@@ -115,7 +115,7 @@ export const SimulationProgressPanel: React.FC<SimulationProgressPanelProps> = (
           </div>
         </div>
 
-        <div className="flex items-center justify-between p-2 rounded-xl bg-amber-950/80/60 border border-white/6">
+        <div className="flex items-center justify-between p-2 rounded-xl bg-amber-950/60 border border-white/6">
           <div className="flex items-center gap-2">
             <Timer size={14} className="text-emerald-400" />
             <span className="nh-label-caps text-amber-300/60 text-[10px]">0-60 MPH</span>

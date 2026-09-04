@@ -258,6 +258,25 @@ export interface VehicleConfig {
   ballastPositionX: number;// -1 (rear) to 1 (front)
   ballastPositionY: number;// -1 (right) to 1 (left)
   ballastPositionZ: number;// -1 (low) to 1 (high)
+  // ---- Vehicle Platform System (18 Categories) ----
+  category?: string;
+  subcategory?: string;
+  architecture?: string;
+  chassisArchId?: string;
+  dimensions?: {
+    wheelbaseMm: number;
+    frontTrackMm: number;
+    rearTrackMm: number;
+    rideHeightMm: number;
+    overallLengthMm: number;
+    overallWidthMm: number;
+    overallHeightMm: number;
+    frontOverhangMm: number;
+    rearOverhangMm: number;
+    cabinPositionPct: number;
+    engineBayVolumeL?: number;
+    luggageVolumeL?: number;
+  };
   // ---- Phase 1: Deep chassis engineering sub-configs ----
   chassisEng: import("./types/chassis").ChassisEngineeringConfig;
   suspensionGeo: import("./types/chassis").SuspensionGeometryConfig;

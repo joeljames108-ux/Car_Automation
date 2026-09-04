@@ -5,9 +5,26 @@
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%2322d3ee' d='M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5'/%3E%3C/svg%3E" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#0b0f19" />
+    <meta name="color-scheme" content="dark" />
     <meta name="description" content="Apex Engineer — Professional Modular Vehicle Assembly, Aerodynamics & Powertrain Simulation Studio." />
     <title>Apex Engineer — Vehicle Design Studio</title>
-    <!-- Critical CSS: font loading -->
+    <!-- Critical CSS: font loading & dark theme canvas initialization -->
+    <style>
+      html, body {
+        margin: 0;
+        padding: 0;
+        background-color: #0b0f19;
+        color: #f1f5f9;
+        overflow-x: hidden;
+        height: 100%;
+        width: 100%;
+      }
+      #root {
+        min-height: 100%;
+        display: flex;
+        flex-direction: column;
+      }
+    </style>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" />

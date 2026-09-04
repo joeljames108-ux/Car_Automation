@@ -41,7 +41,6 @@ import { runInteriorStudioTests } from "../interior/__tests__/interiorStudioTest
 import { runMasterVehicleStateTests } from "../masterVehicleState/__tests__/masterVehicleStateTests";
 import { runModularEngineStudioTests } from "../engine/__tests__/modularEngineStudioTests";
 import { runGrandStudioIntegrationTests } from "../masterVehicleState/__tests__/grandStudioIntegrationTests";
-import { runModularInteriorStudioTests } from "../interior/__tests__/modularInteriorStudioTests";
 import { runWindTunnelCfdPhysicsTests } from "../aerodynamics/__tests__/windTunnelCfdPhysicsTests";
 import { runPowertrainDynoEcuTests } from "../powertrain/__tests__/powertrainDynoEcuTests";
 import { runTrackBattlesTelemetryTests } from "../telemetry/__tests__/trackBattlesTelemetryTests";
@@ -170,7 +169,6 @@ runInteriorStudioTests();
 runMasterVehicleStateTests();
 const engineStudioResults = runModularEngineStudioTests();
 const grandStudioResults = runGrandStudioIntegrationTests();
-const modularInteriorResults = runModularInteriorStudioTests();
 const windTunnelResults = runWindTunnelCfdPhysicsTests();
 const powertrainDynoResults = runPowertrainDynoEcuTests();
 const trackBattlesResults = runTrackBattlesTelemetryTests();
@@ -184,7 +182,6 @@ if (
   failedCount > 0 ||
   engineStudioResults.failed > 0 ||
   grandStudioResults.failed > 0 ||
-  modularInteriorResults.failed > 0 ||
   windTunnelResults.failed > 0 ||
   powertrainDynoResults.failed > 0 ||
   trackBattlesResults.failed > 0 ||

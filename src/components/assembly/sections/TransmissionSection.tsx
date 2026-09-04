@@ -65,7 +65,7 @@ export function TransmissionSection({
   return (
     <div className={`space-y-4 ${className}`}>
       {/* Top Header Mode Switcher Bar */}
-      <div className="flex flex-wrap items-center justify-between gap-3 p-3 rounded-2xl bg-slate-950/80 border border-amber-500/30 backdrop-blur-xl shadow-xl">
+      <div className="flex flex-wrap items-center justify-between gap-3 p-3 rounded-2xl bg-slate-900/40 dark:bg-slate-950/80 border border-amber-500/30 backdrop-blur-xl shadow-xl">
         <div className="flex items-center gap-2.5">
           <div className="p-2 rounded-xl bg-amber-500/20 text-amber-300 border border-amber-500/40">
             <Cog size={18} className="animate-spin-slow" />
@@ -86,12 +86,12 @@ export function TransmissionSection({
         </div>
 
         {/* View Mode Toggle */}
-        <div className="flex items-center gap-1 p-1 rounded-xl bg-slate-900/90 border border-slate-800">
+        <div className="flex items-center gap-1 p-1 rounded-xl bg-slate-800/40 dark:bg-slate-900/90 border border-slate-700/60 dark:border-slate-800">
           <button
             onClick={() => setViewMode("3d_studio")}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer ${
               viewMode === "3d_studio"
-                ? "bg-amber-500 text-slate-950 shadow-md shadow-cyan-500/30"
+                ? "bg-amber-500 text-slate-900 dark:text-slate-950 shadow-md shadow-cyan-500/30"
                 : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/60"
             }`}
           >
@@ -102,7 +102,7 @@ export function TransmissionSection({
             onClick={() => setViewMode("cards")}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-mono font-bold transition-all cursor-pointer ${
               viewMode === "cards"
-                ? "bg-amber-500 text-slate-950 shadow-md shadow-cyan-500/30"
+                ? "bg-amber-500 text-slate-900 dark:text-slate-950 shadow-md shadow-cyan-500/30"
                 : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/60"
             }`}
           >
@@ -168,7 +168,7 @@ export function TransmissionSection({
                   </div>
                 </div>
 
-                <div className="p-3 rounded-xl bg-slate-900/50 border border-amber-500/20 space-y-1">
+                <div className="p-3 rounded-xl bg-slate-800/40 dark:bg-slate-900/50 border border-amber-500/20 space-y-1">
                   <span className="text-[10px] font-mono font-bold text-amber-300 uppercase tracking-wider block">
                     TORQUE TRANSFER & DRIVELINE LOSS
                   </span>

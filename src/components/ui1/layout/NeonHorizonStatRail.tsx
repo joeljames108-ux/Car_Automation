@@ -23,7 +23,7 @@ export const NeonHorizonStatRail: React.FC<NeonHorizonStatRailProps> = ({ sim })
     <div className="hidden xl:flex flex-col gap-4 w-72 shrink-0 select-none">
       <div className="sticky top-28 flex flex-col gap-4">
         {/* SIMULATION PROGRESS Panel */}
-        <div className="p-5 rounded-3xl bg-amber-950/80/85 backdrop-blur-3xl border border-white/12 shadow-[0_25px_60px_rgba(0,0,0,0.60),inset_0_1px_0_rgba(255,255,255,0.10)] flex flex-col items-center gap-5 nh-edge-top">
+        <div className="p-5 rounded-3xl bg-amber-950/85 backdrop-blur-3xl border border-white/12 shadow-[0_25px_60px_rgba(0,0,0,0.60),inset_0_1px_0_rgba(255,255,255,0.10)] flex flex-col items-center gap-5 nh-edge-top">
           {/* Header Bar with Engineering Log Toggle Button */}
           <div className="w-full flex items-center justify-between">
             <span className="text-xs font-bold tracking-widest text-amber-200/70 uppercase">
@@ -135,7 +135,7 @@ export const NeonHorizonStatRail: React.FC<NeonHorizonStatRailProps> = ({ sim })
           {/* Telemetry Rows */}
           <div className="w-full flex flex-col gap-2.5 pt-2 border-t border-white/10">
             {/* POWER */}
-            <div className="flex items-center justify-between p-3 rounded-2xl bg-amber-950/80/70 border border-white/6 hover:border-amber-500/30 transition-colors">
+            <div className="flex items-center justify-between p-3 rounded-2xl bg-amber-950/70 border border-white/6 hover:border-amber-500/30 transition-colors">
               <div className="flex items-center gap-2.5">
                 <div className="w-8 h-8 rounded-full bg-amber-500/20 flex items-center justify-center text-amber-400">
                   <Flag size={15} />
@@ -150,7 +150,7 @@ export const NeonHorizonStatRail: React.FC<NeonHorizonStatRailProps> = ({ sim })
             </div>
 
             {/* TORQUE */}
-            <div className="flex items-center justify-between p-3 rounded-2xl bg-amber-950/80/70 border border-white/6 hover:border-amber-500/30 transition-colors">
+            <div className="flex items-center justify-between p-3 rounded-2xl bg-amber-950/70 border border-white/6 hover:border-amber-500/30 transition-colors">
               <div className="flex items-center gap-2.5">
                 <div className="w-8 h-8 rounded-full bg-amber-500/20 flex items-center justify-center text-amber-400">
                   <Gauge size={15} />
@@ -165,7 +165,7 @@ export const NeonHorizonStatRail: React.FC<NeonHorizonStatRailProps> = ({ sim })
             </div>
 
             {/* WEIGHT */}
-            <div className="flex items-center justify-between p-3 rounded-2xl bg-amber-950/80/70 border border-white/6 hover:border-amber-500/30 transition-colors">
+            <div className="flex items-center justify-between p-3 rounded-2xl bg-amber-950/70 border border-white/6 hover:border-amber-500/30 transition-colors">
               <div className="flex items-center gap-2.5">
                 <div className="w-8 h-8 rounded-full bg-amber-500/20 flex items-center justify-center text-amber-400">
                   <Weight size={15} />
@@ -180,7 +180,7 @@ export const NeonHorizonStatRail: React.FC<NeonHorizonStatRailProps> = ({ sim })
             </div>
 
             {/* 0-60 */}
-            <div className="flex items-center justify-between p-3 rounded-2xl bg-amber-950/80/70 border border-white/6 hover:border-amber-500/30 transition-colors">
+            <div className="flex items-center justify-between p-3 rounded-2xl bg-amber-950/70 border border-white/6 hover:border-amber-500/30 transition-colors">
               <div className="flex items-center gap-2.5">
                 <div className="w-8 h-8 rounded-full bg-amber-500/20 flex items-center justify-center text-amber-400">
                   <Timer size={15} />

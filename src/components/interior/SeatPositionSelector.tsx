@@ -53,7 +53,7 @@ export const SeatPositionSelector: React.FC<SeatPositionSelectorProps> = ({
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all cursor-pointer ${
                 isActive
                   ? "bg-gradient-to-r from-amber-400 to-orange-500 text-slate-950 shadow-lg shadow-amber-500/30 font-black scale-105"
-                  : "bg-amber-950/80/80 text-amber-200/80 hover:text-amber-100 hover:bg-amber-900/40/80 border border-amber-500/20"
+                  : "bg-amber-950/80 text-amber-200/80 hover:text-amber-100 hover:bg-amber-900/80 border border-amber-500/20"
               }`}
               title={cfg.name}
             >
@@ -71,7 +71,7 @@ export const SeatPositionSelector: React.FC<SeatPositionSelectorProps> = ({
           className={`flex items-center gap-1 px-2.5 py-1.5 rounded-xl text-[11px] font-mono font-bold transition-all ml-auto cursor-pointer ${
             isAutoPan
               ? "bg-amber-500 text-slate-950 shadow-md shadow-amber-500/30 animate-pulse"
-              : "bg-amber-950/80 text-amber-400 border border-amber-500/30 hover:bg-amber-950/80/80"
+              : "bg-amber-950/80 text-amber-400 border border-amber-500/30 hover:bg-amber-950/80"
           }`}
         >
           <Sparkles size={13} />

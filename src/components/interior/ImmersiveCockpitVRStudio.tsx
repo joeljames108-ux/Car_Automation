@@ -46,7 +46,7 @@ export const ImmersiveCockpitVRStudio: React.FC<ImmersiveCockpitVRStudioProps> =
   return (
     <div className="p-4 rounded-3xl bg-amber-950/90 border border-amber-500/40 backdrop-blur-xl shadow-2xl text-xs font-mono text-amber-100 space-y-4">
       {/* VR Header Banner */}
-      <div className="flex flex-wrap items-center justify-between gap-3 p-3 rounded-2xl bg-amber-950/80/60 border border-amber-500/30">
+      <div className="flex flex-wrap items-center justify-between gap-3 p-3 rounded-2xl bg-amber-950/60 border border-amber-500/30">
         <div className="flex items-center gap-3">
           <div className="p-2.5 rounded-xl bg-amber-500/20 text-amber-300 border border-amber-500/40">
             <Glasses size={22} />
@@ -55,7 +55,7 @@ export const ImmersiveCockpitVRStudio: React.FC<ImmersiveCockpitVRStudioProps> =
             <h3 className="text-sm font-extrabold text-amber-200 flex items-center gap-2">
               <span>WEBXR SPATIAL COCKPIT VR STUDIO</span>
               <span className={`px-2 py-0.5 rounded-full text-[9px] font-bold border ${
-                isVrActive ? "bg-emerald-500/20 text-emerald-300 border-emerald-500/40 animate-pulse" : "bg-amber-900/40/40 text-amber-400 border-amber-700/40"
+                isVrActive ? "bg-emerald-500/20 text-emerald-300 border-emerald-500/40 animate-pulse" : "bg-amber-900/40 text-amber-400 border-amber-700/40"
               }`}>
                 {isVrActive ? "VR ACTIVE" : isVrAvailable ? "HEADSET READY" : "SIMULATED XR"}
               </span>
@@ -99,8 +99,8 @@ export const ImmersiveCockpitVRStudio: React.FC<ImmersiveCockpitVRStudioProps> =
                 onClick={() => setVrMode(mode.id as any)}
                 className={`p-3 rounded-2xl text-left border transition-all cursor-pointer ${
                   isSelected
-                    ? "bg-amber-900/40/60 border-amber-400 text-amber-200 shadow-lg shadow-purple-900/40 font-bold"
-                    : "bg-amber-950/80/60 border-amber-800/30 text-amber-300/70 hover:border-amber-700/30 hover:text-amber-100"
+                    ? "bg-amber-900/60 border-amber-400 text-amber-200 shadow-lg shadow-purple-900/40 font-bold"
+                    : "bg-amber-950/60 border-amber-800/30 text-amber-300/70 hover:border-amber-700/30 hover:text-amber-100"
                 }`}
               >
                 <div className="text-xs flex items-center gap-1.5">
@@ -117,7 +117,7 @@ export const ImmersiveCockpitVRStudio: React.FC<ImmersiveCockpitVRStudioProps> =
       {/* Interpupillary Distance (IPD) & Haptics Sliders */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
         {/* IPD Slider */}
-        <div className="p-3 rounded-2xl bg-amber-950/80/70 border border-amber-800/30 space-y-2">
+        <div className="p-3 rounded-2xl bg-amber-950/70 border border-amber-800/30 space-y-2">
           <div className="flex justify-between items-center text-xs font-bold text-amber-200">
             <span>INTERPUPILLARY DISTANCE (IPD)</span>
             <span className="text-amber-400 font-mono">{interpupillaryDistanceMm} mm</span>
@@ -135,7 +135,7 @@ export const ImmersiveCockpitVRStudio: React.FC<ImmersiveCockpitVRStudioProps> =
         </div>
 
         {/* Haptic Controller Slider */}
-        <div className="p-3 rounded-2xl bg-amber-950/80/70 border border-amber-800/30 space-y-2">
+        <div className="p-3 rounded-2xl bg-amber-950/70 border border-amber-800/30 space-y-2">
           <div className="flex justify-between items-center text-xs font-bold text-amber-200">
             <span>VR CONTROLLER HAPTIC IMPULSE</span>
             <span className="text-amber-400 font-mono">{hapticFeedbackIntensity}%</span>
@@ -154,7 +154,7 @@ export const ImmersiveCockpitVRStudio: React.FC<ImmersiveCockpitVRStudioProps> =
       </div>
 
       {/* Spatial Audio Toggle */}
-      <div className="flex items-center justify-between p-3 rounded-2xl bg-amber-950/80/70 border border-amber-800/30">
+      <div className="flex items-center justify-between p-3 rounded-2xl bg-amber-950/70 border border-amber-800/30">
         <div className="flex items-center gap-2">
           <Volume2 size={16} className="text-amber-400" />
           <div>

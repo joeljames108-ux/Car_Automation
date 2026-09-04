@@ -21,3 +21,12 @@ dist-ssr
 *.sln
 *.sw?
 .env
+
+# Root loose models, archives and temp downloads
+/*.glb
+*.zip
+*.rar
+Telegram Desktop/
+src/src/
+temp_junk_src/
+start.cmd

@@ -9,7 +9,16 @@ export default defineConfig({
     compression({ algorithm: "brotliCompress", threshold: 10240 }),
   ],
   server: {
-    watch: { ignored: ["**/dist/**"] },
+    watch: {
+      ignored: [
+        "**/Telegram Desktop/**",
+        "**/*.avi",
+        "**/*.mp4",
+        "**/*.mkv",
+        "**/brain/**",
+        "**/.git/**",
+      ],
+    },
     hmr: { overlay: false },
   },
   build: {
@@ -52,12 +61,12 @@ export default defineConfig({
           if (id.includes("/ui1/spatial/")) return "app-ui1-spatial";
           if (id.includes("/ui1/hud/")) return "app-ui1-hud";
           if (id.includes("/ui1/")) return "app-ui1-core";
-          // Simulation
-          if (id.includes("/sim/")) return "app-simulation";
-          // Physics engine (lazy loaded)
+          // Physics engine (chunked for rapid initial page load & Lighthouse performance)
           if (id.includes("/sim/physics/") || id.includes("/sim/tires/") ||
               id.includes("/sim/suspension/") || id.includes("/sim/aerodynamics/") ||
               id.includes("/sim/brakes/") || id.includes("/sim/weather/")) return "app-physics";
+          // General Simulation
+          if (id.includes("/sim/")) return "app-simulation";
         },
       },
     },

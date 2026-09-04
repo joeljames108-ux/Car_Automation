@@ -47,7 +47,7 @@ export const CinematicBlueprintXRayOverlay: React.FC<CinematicBlueprintXRayOverl
       onClick={onClose}
     >
       <div
-        className="relative w-full max-w-5xl max-h-[92vh] overflow-y-auto rounded-3xl bg-amber-950/80/95 border-2 border-amber-500/40 p-6 shadow-[0_0_90px_rgba(6,182,212,0.3)] flex flex-col gap-5 scrollbar-thin"
+        className="relative w-full max-w-5xl max-h-[92vh] overflow-y-auto rounded-3xl bg-amber-950/95 border-2 border-amber-500/40 p-6 shadow-[0_0_90px_rgba(6,182,212,0.3)] flex flex-col gap-5 scrollbar-thin"
         onClick={(e) => e.stopPropagation()}
       >
         {/* CAD Blueprint Header */}

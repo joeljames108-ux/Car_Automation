@@ -49,7 +49,7 @@ export const InteriorCompareModal: React.FC<InteriorCompareModalProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-amber-50/80 backdrop-blur-md p-4 animate-in fade-in duration-200">
-      <div className="bg-amber-50/80 border border-amber-700/30/80 rounded-2xl max-w-4xl w-full max-h-[85vh] flex flex-col shadow-2xl overflow-hidden text-amber-900">
+      <div className="bg-amber-50/80 border border-amber-700/80 rounded-2xl max-w-4xl w-full max-h-[85vh] flex flex-col shadow-2xl overflow-hidden text-amber-900">
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-amber-800/30 bg-amber-50/60">
           <div className="flex items-center gap-2.5">
@@ -148,7 +148,7 @@ export const InteriorCompareModal: React.FC<InteriorCompareModalProps> = ({
                   const luxVal = getSelectedOptionLabel(key, luxurySelections);
 
                   return (
-                    <tr key={key} className="hover:bg-amber-900/40/30 transition-colors">
+                    <tr key={key} className="hover:bg-amber-900/30 transition-colors">
                       <td className="py-2.5 px-4 font-bold text-amber-200">{label}</td>
                       <td className="py-2.5 px-4 font-bold text-cyan-300 bg-blue-950/20">{currentVal}</td>
                       <td className="py-2.5 px-4 text-amber-300/70">{baseVal}</td>
