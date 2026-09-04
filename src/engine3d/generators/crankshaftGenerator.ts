@@ -165,7 +165,7 @@ clearcoatRoughness: 0.1,
     });
 
     // Radial Pressurized Oil Feed Hole
-    const oilDrillingGeo = new THREE.CylinderGeometry(0.0035, 0.0035, 0.015, 16);
+    const oilDrillingGeo = new THREE.CylinderGeometry(0.0035, 0.0035, 0.015, 24);
     const oilDrillingMesh = new THREE.Mesh(oilDrillingGeo, matDarkIron);
     oilDrillingMesh.name = `Main_Oil_Supply_Drilling_${m + 1}`;
     oilDrillingMesh.position.set(mx, spec.mainJournalRadiusM - 0.004, 0);

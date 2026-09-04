@@ -14,7 +14,8 @@ import { formatLap } from "../sim/utils/formatLap";
 import { computeScores, computeSummary } from "../sim/reviews";
 import { ENGINE_LAYOUTS, CHASSIS_TYPES, TIRE_COMPOUNDS } from "../sim/constants";
 import type { SimResult, VehicleDesign } from "../sim/types";
-import { ChassisHotspotViewer } from "./ChassisHotspotViewer";
+import { VehicleViewSystem } from "./VehicleViewSystem";
+import { TelemetryPulse } from "./TelemetryPulse";
 import { LiquidGlassCard, LiquidButton } from "./ui/LiquidGlass";
 import { useCommandCenterAnime } from "./ui/AnimeCommandCenterFX";
 
@@ -75,7 +76,12 @@ function CommandCenterComponent({ onSelectStage }: CommandCenterProps = {}) {
     <div ref={containerRef} className="space-y-4">
       {/* Interactive Telemetry Chassis Blueprint */}
       <div className="cmd-animate-tile">
-        <ChassisHotspotViewer onSelectStage={onSelectStage} />
+        <VehicleViewSystem onSelectStage={onSelectStage} />
+
+      {/* Live Telemetry Gauges */}
+      <div className="cmd-animate-tile">
+        <TelemetryPulse />
+      </div>
       </div>
 
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-4">

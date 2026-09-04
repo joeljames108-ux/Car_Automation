@@ -256,12 +256,14 @@ export function initializeBlockShaderSuite(materialId?: string): BlockShaderSuit
     sheenColor: new THREE.Color(0x475569),
   });
 
-  const magnesiumAlloy = new THREE.MeshStandardMaterial({
+  const magnesiumAlloy = new THREE.MeshPhysicalMaterial({
     name: 'PBR_Lightweight_Magnesium_AZ91D',
     color: new THREE.Color(0x9c9c94),
     metalness: 0.82,
     roughness: 0.38,
     envMapIntensity: 2.0,
+    clearcoat: 0.2,
+    clearcoatRoughness: 0.1,
   });
 
   // Resolve primary block material based on material ID
@@ -314,12 +316,14 @@ export function initializeBlockShaderSuite(materialId?: string): BlockShaderSuit
       clearcoat: 0.6,
       clearcoatRoughness: 0.03,
     }),
-    hardenedArpFastener: new THREE.MeshStandardMaterial({
+    hardenedArpFastener: new THREE.MeshPhysicalMaterial({
       name: 'PBR_Hardened_ARP_Fastener',
       color: 0x1e293b,
       metalness: 0.95,
       roughness: 0.15,
       envMapIntensity: 2.0,
+      clearcoat: 0.4,
+      clearcoatRoughness: 0.1,
     }),
     machinedBrassPlug: new THREE.MeshPhysicalMaterial({
       name: 'PBR_Machined_Brass_Plug',
@@ -332,28 +336,34 @@ export function initializeBlockShaderSuite(materialId?: string): BlockShaderSuit
       sheen: 0.15,
       sheenColor: new THREE.Color(0xfcd34d),
     }),
-    coolantWaterPassage: new THREE.MeshStandardMaterial({
+    coolantWaterPassage: new THREE.MeshPhysicalMaterial({
       name: 'PBR_Coolant_Passage',
       color: 0x0284c7,
       metalness: 0.70,
       roughness: 0.35,
       envMapIntensity: 1.8,
+      clearcoat: 0.3,
+      clearcoatRoughness: 0.1,
     }),
-    oilGalleryPassage: new THREE.MeshStandardMaterial({
+    oilGalleryPassage: new THREE.MeshPhysicalMaterial({
       name: 'PBR_Oil_Gallery_Passage',
       color: 0x1e293b,
       metalness: 0.85,
       roughness: 0.25,
       envMapIntensity: 1.6,
+      clearcoat: 0.3,
+      clearcoatRoughness: 0.1,
     }),
-    fireRingSeal: new THREE.MeshStandardMaterial({
+    fireRingSeal: new THREE.MeshPhysicalMaterial({
       name: 'PBR_Fire_Ring_Seal',
       color: 0x475569,
       metalness: 0.90,
       roughness: 0.20,
       envMapIntensity: 1.8,
+      clearcoat: 0.3,
+      clearcoatRoughness: 0.1,
     }),
-  };
+  } as BlockShaderSuite;
 }
 
 export default initializeBlockShaderSuite;

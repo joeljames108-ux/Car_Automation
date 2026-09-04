@@ -92,7 +92,7 @@ export const InteriorConfigViewport: React.FC = () => {
   const screenSize = (displayOpt.visualHints?.screenSize as number) ?? 0;
   const spokeCount = (wheelOpt.visualHints?.spokeCount as number) ?? 2;
   const ambientEnabled = (ambientOpt.visualHints?.enabled as boolean) ?? false;
-  const ambientColor = (ambientOpt.visualHints?.glowColor as string) ?? "#00e5ff";
+  const ambientColor = (ambientOpt.visualHints?.glowColor as string) ?? "#f59e0b";
   const dashShape = (layoutOpt.visualHints?.shape as string) ?? "classic";
   const trimLabel = trimOpt.label.toLowerCase();
 
@@ -111,64 +111,11 @@ export const InteriorConfigViewport: React.FC = () => {
     if (trimLabel.includes("carbon")) return "url(#trimCarbon)";
     if (trimLabel.includes("wood")) return "url(#trimWood)";
     if (trimLabel.includes("aluminum")) return "url(#trimAluminum)";
-    return "#1e293b";
+    return "#92400e";
   };
 
   return (
-    <div className="idash-center-viewport relative">
-      {/* Toast Notification */}
-      {showAppliedToast && (
-        <div className="absolute top-14 left-1/2 -translate-x-1/2 z-40 bg-emerald-950/95 border border-emerald-500/80 text-emerald-200 px-4 py-2 rounded-xl shadow-2xl flex items-center gap-2 text-xs font-bold animate-in fade-in slide-in-from-top-2 duration-200">
-          <CheckCircle2 size={16} className="text-emerald-400" />
-          <span>Interior Configuration Saved &amp; Synced to Master Vehicle Design!</span>
-        </div>
-      )}
-
-      {/* Tab Navigation + Mode Switcher */}
-      <div className="idash-tab-nav">
-        <div className="flex items-center gap-2">
-          <button className="idash-tab-btn" type="button">
-            <span className="idash-tab-icon">🚗</span>
-            <span>EXTERIOR</span>
-          </button>
-          <button className="idash-tab-btn active" type="button">
-            <span className="idash-tab-icon">⚙</span>
-            <span>INTERIOR</span>
-          </button>
-          <button className="idash-tab-btn" type="button">
-            <span className="idash-tab-icon">⚡</span>
-            <span>ELECTRONICS</span>
-          </button>
-        </div>
-
-        {/* 3D WebGL vs 2D Schematic Toggle */}
-        <div className="flex items-center gap-1 bg-amber-950/80/90 p-1 rounded-xl border border-amber-800/30 ml-auto">
-          <button
-            onClick={() => setViewportMode("3d")}
-            className={`px-3 py-1 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
-              viewportMode === "3d"
-                ? "bg-blue-600 text-white shadow-md shadow-blue-500/30"
-                : "text-amber-300/70 hover:text-amber-100"
-            }`}
-          >
-            <Box size={13} />
-            <span>3D WebGL Cockpit</span>
-          </button>
-
-          <button
-            onClick={() => setViewportMode("2d")}
-            className={`px-3 py-1 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 cursor-pointer ${
-              viewportMode === "2d"
-                ? "bg-blue-600 text-white shadow-md shadow-blue-500/30"
-                : "text-amber-300/70 hover:text-amber-100"
-            }`}
-          >
-            <Layers size={13} />
-            <span>2D Blueprint</span>
-          </button>
-        </div>
-      </div>
-
+    <div className="idash-center-viewport relative flex flex-col">
       {/* Main Viewport Content (3D or 2D) */}
       <div className="idash-viewport-canvas">
         {viewportMode === "3d" ? (
@@ -185,15 +132,15 @@ export const InteriorConfigViewport: React.FC = () => {
           >
             <defs>
               <linearGradient id="cabinSky" x1="300" y1="0" x2="300" y2="300" gradientUnits="userSpaceOnUse">
-                <stop offset="0%" stopColor="#0c1220" />
-                <stop offset="50%" stopColor="#151e33" />
-                <stop offset="100%" stopColor="#080c14" />
+                <stop offset="0%" stopColor="#fef3c7" />
+                <stop offset="50%" stopColor="#fde68a" />
+                <stop offset="100%" stopColor="#d97706" />
               </linearGradient>
 
               <linearGradient id="windshieldGlass" x1="300" y1="40" x2="300" y2="280" gradientUnits="userSpaceOnUse">
                 <stop offset="0%" stopColor="#1e293b" stopOpacity="0.85" />
-                <stop offset="35%" stopColor="#080c14" stopOpacity="0.95" />
-                <stop offset="100%" stopColor="#090d16" />
+                <stop offset="35%" stopColor="#d97706" stopOpacity="0.95" />
+                <stop offset="100%" stopColor="#f59e0b" />
               </linearGradient>
 
               <linearGradient id="seatHighlight" x1="0" y1="0" x2="1" y2="0">
@@ -231,9 +178,9 @@ export const InteriorConfigViewport: React.FC = () => {
               </linearGradient>
 
               <linearGradient id="dashTopGrad" x1="300" y1="120" x2="300" y2="220" gradientUnits="userSpaceOnUse">
-                <stop offset="0%" stopColor="#232d40" />
-                <stop offset="40%" stopColor="#192030" />
-                <stop offset="100%" stopColor="#0f1522" />
+                <stop offset="0%" stopColor="#fde68a" />
+                <stop offset="40%" stopColor="#fef3c7" />
+                <stop offset="100%" stopColor="#f59e0b" />
               </linearGradient>
 
               <filter id="neonGlow" x="-20%" y="-20%" width="140%" height="140%">
@@ -250,7 +197,7 @@ export const InteriorConfigViewport: React.FC = () => {
             <path
               d="M 50 65 Q 300 25 550 65 L 525 275 Q 300 305 75 275 Z"
               fill="url(#windshieldGlass)"
-              stroke="#1e293b"
+              stroke="#d97706"
               strokeWidth="2.5"
             />
 
@@ -259,12 +206,12 @@ export const InteriorConfigViewport: React.FC = () => {
             <g id="driverSeat">
               <rect x="138" y="98" width="5" height="18" rx="2" fill="#94a3b8" />
               <rect x="157" y="98" width="5" height="18" rx="2" fill="#94a3b8" />
-              <rect x="126" y="76" width="48" height="30" rx="9" fill={interiorColor} stroke="#080c14" strokeWidth="2" />
+              <rect x="126" y="76" width="48" height="30" rx="9" fill={interiorColor} stroke="#92400e" strokeWidth="2" />
               <rect x="126" y="76" width="48" height="30" rx="9" fill="url(#seatHighlight)" />
               <path
                 d="M 112 110 Q 150 102 188 110 Q 206 135 198 185 L 102 185 Q 94 135 112 110 Z"
                 fill={interiorColor}
-                stroke="#080c14"
+                stroke="#92400e"
                 strokeWidth="2.5"
               />
               <path
@@ -274,7 +221,7 @@ export const InteriorConfigViewport: React.FC = () => {
               <path
                 d="M 98 185 L 202 185 Q 208 240 198 275 L 102 275 Q 92 240 98 185 Z"
                 fill={interiorColor}
-                stroke="#080c14"
+                stroke="#92400e"
                 strokeWidth="2"
               />
             </g>
@@ -283,12 +230,12 @@ export const InteriorConfigViewport: React.FC = () => {
             <g id="passengerSeat">
               <rect x="438" y="98" width="5" height="18" rx="2" fill="#94a3b8" />
               <rect x="457" y="98" width="5" height="18" rx="2" fill="#94a3b8" />
-              <rect x="426" y="76" width="48" height="30" rx="9" fill={interiorColor} stroke="#080c14" strokeWidth="2" />
+              <rect x="426" y="76" width="48" height="30" rx="9" fill={interiorColor} stroke="#92400e" strokeWidth="2" />
               <rect x="426" y="76" width="48" height="30" rx="9" fill="url(#seatHighlight)" />
               <path
                 d="M 412 110 Q 450 102 488 110 Q 506 135 498 185 L 402 185 Q 394 135 412 110 Z"
                 fill={interiorColor}
-                stroke="#080c14"
+                stroke="#92400e"
                 strokeWidth="2.5"
               />
               <path
@@ -298,14 +245,14 @@ export const InteriorConfigViewport: React.FC = () => {
               <path
                 d="M 398 185 L 502 185 Q 508 240 498 275 L 402 275 Q 392 240 398 185 Z"
                 fill={interiorColor}
-                stroke="#080c14"
+                stroke="#92400e"
                 strokeWidth="2"
               />
             </g>
 
             {/* Dashboard & Inlay */}
-            <path d={getDashTopPath()} fill="url(#dashTopGrad)" stroke="#2d3a4f" strokeWidth="2" />
-            <path d="M 85 170 Q 300 156 515 170 L 510 184 Q 300 170 90 184 Z" fill={getTrimFill()} stroke="#080c14" strokeWidth="1.2" />
+            <path d={getDashTopPath()} fill="url(#dashTopGrad)" stroke="#d97706" strokeWidth="2" />
+            <path d="M 85 170 Q 300 156 515 170 L 510 184 Q 300 170 90 184 Z" fill={getTrimFill()} stroke="#92400e" strokeWidth="1.2" />
 
             {/* Ambient LED Strip */}
             {ambientEnabled && (
@@ -320,17 +267,17 @@ export const InteriorConfigViewport: React.FC = () => {
 
             {/* Cluster Binnacle */}
             <g transform="translate(130, 132)">
-              <path d="M 0 42 Q 45 8 90 42 Z" fill="#101726" stroke="#334155" strokeWidth="2" />
-              <rect x="6" y="14" width="78" height="30" rx="4" fill="#06090e" stroke="#1e293b" strokeWidth="1.5" />
+              <path d="M 0 42 Q 45 8 90 42 Z" fill="#fde68a" stroke="#a08040" strokeWidth="2" />
+              <rect x="6" y="14" width="78" height="30" rx="4" fill="#fef3c7" stroke="#d97706" strokeWidth="1.5" />
               {clusterType === "analog" && (
                 <g>
-                  <circle cx="25" cy="29" r="11" fill="#0a0f18" stroke="#00e5ff" strokeWidth="1.5" />
-                  <circle cx="65" cy="29" r="11" fill="#0a0f18" stroke="#00e5ff" strokeWidth="1.5" />
+                  <circle cx="25" cy="29" r="11" fill="#fef3c7" stroke="#fbbf24" strokeWidth="1.5" />
+                  <circle cx="65" cy="29" r="11" fill="#fef3c7" stroke="#fbbf24" strokeWidth="1.5" />
                 </g>
               )}
               {clusterType === "digital" && (
                 <g>
-                  <rect x="8" y="16" width="74" height="26" rx="2" fill="#0369a1" fillOpacity="0.25" />
+                  <rect x="8" y="16" width="74" height="26" rx="2" fill="#d97706" fillOpacity="0.25" />
                   <text x="45" y="27" fill="#ffffff" fontSize="9" fontFamily="monospace" textAnchor="middle" fontWeight="900">
                     120
                   </text>
@@ -341,25 +288,25 @@ export const InteriorConfigViewport: React.FC = () => {
             {/* Center Display Screen */}
             {screenSize > 0 && (
               <g transform={`translate(${screenSize > 8 ? 260 : 272}, 128)`}>
-                <rect width={screenSize > 8 ? 80 : 56} height="46" rx="4" fill="#000000" stroke="#475569" strokeWidth="2" />
-                <rect x="3" y="3" width={screenSize > 8 ? 74 : 50} height="40" rx="2" fill="#080c14" />
+                <rect width={screenSize > 8 ? 80 : 56} height="46" rx="4" fill="#fef3c7" stroke="#b45309" strokeWidth="2" />
+                <rect x="3" y="3" width={screenSize > 8 ? 74 : 50} height="40" rx="2" fill="#fef3c7" />
               </g>
             )}
 
             {/* Steering Wheel */}
             <g transform="translate(175, 215)">
-              <circle cx="0" cy="0" r="50" stroke="#080c14" strokeWidth="13" fill="none" />
-              <circle cx="0" cy="0" r="50" stroke="#334155" strokeWidth="9" fill="none" />
-              <circle cx="0" cy="0" r="18" fill="#111827" stroke="#475569" strokeWidth="2" />
+              <circle cx="0" cy="0" r="50" stroke="#92400e" strokeWidth="13" fill="none" />
+              <circle cx="0" cy="0" r="50" stroke="#a08040" strokeWidth="9" fill="none" />
+              <circle cx="0" cy="0" r="18" fill="#fde68a" stroke="#b45309" strokeWidth="2" />
             </g>
           </svg>
         )}
       </div>
 
       {/* Bottom Presets Carousel */}
-      <div className="idash-presets-container bg-[#0d121f] border-t border-amber-800/30 p-3.5 backdrop-blur-xl shrink-0">
-        <div className="text-xs font-mono font-bold tracking-widest text-cyan-400 uppercase mb-2 flex items-center gap-1.5">
-          <span className="w-1.5 h-1.5 rounded-full bg-cyan-400" />
+      <div className="idash-presets-container bg-amber-50/70 border-t border-amber-300/30 p-3.5 shrink-0">
+        <div className="text-xs font-mono font-bold tracking-widest text-amber-700 uppercase mb-2 font-black tracking-widest flex items-center gap-1.5">
+          <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
           INTERIOR PRESETS
         </div>
         <div className="flex gap-2.5 overflow-x-auto pb-2 no-scrollbar">
@@ -369,10 +316,10 @@ export const InteriorConfigViewport: React.FC = () => {
               <button
                 key={key}
                 type="button"
-                className={`min-w-[95px] p-2 rounded-xl bg-amber-950/80/90 border transition-all duration-200 flex flex-col items-center gap-1.5 cursor-pointer text-center ${
+                className={`min-w-[95px] p-2 rounded-xl bg-amber-100/60 border border-white/[0.06] transition-all hover:bg-amber-200/30 duration-200 flex flex-col items-center gap-1.5 cursor-pointer text-center ${
                   isActive
-                    ? "border-cyan-400 bg-amber-900/40 shadow-[0_0_14px_rgba(0,229,255,0.35)] scale-102"
-                    : "border-amber-800/30 hover:border-amber-600/30 hover:bg-slate-850"
+                    ? "border-amber-400/50 bg-amber-100/60 shadow-[0_0_16px_rgba(251,191,36,0.25)] scale-102"
+                    : "border-amber-800/30 hover:border-amber-400/30 hover:bg-amber-100/40"
                 }`}
                 onClick={() => applyPreset(key)}
               >
@@ -383,7 +330,7 @@ export const InteriorConfigViewport: React.FC = () => {
                     boxShadow: isActive ? `0 0 12px ${preset.color}80` : "none",
                   }}
                 />
-                <span className={`text-[11px] font-bold tracking-tight truncate w-full ${isActive ? "text-white" : "text-amber-200"}`}>
+                <span className={`text-[11px] font-bold tracking-tight truncate w-full ${isActive ? "text-amber-900" : "text-amber-700"}`}>
                   {preset.name}
                 </span>
               </button>
@@ -391,14 +338,14 @@ export const InteriorConfigViewport: React.FC = () => {
           })}
         </div>
         <button
-          className="w-full py-2.5 px-4 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-500 hover:to-cyan-400 text-white font-black text-xs uppercase tracking-wider transition-all shadow-lg shadow-cyan-500/25 active:scale-98 cursor-pointer mt-2 flex items-center justify-center gap-2"
+          className="w-full py-2.5 px-4 rounded-xl bg-gradient-to-r from-amber-600 to-amber-500 hover:from-amber-500 hover:to-amber-400 border border-amber-400/20 text-amber-900 font-black text-xs uppercase tracking-wider transition-all shadow-lg shadow-[0_4px_20px_rgba(217,119,6,0.3)] active:scale-98 cursor-pointer mt-2 flex items-center justify-center gap-2"
           type="button"
           onClick={handleApplyAndContinue}
         >
           <span>✓</span>
           <span>APPLY &amp; CONTINUE</span>
         </button>
-        <div className="text-center text-[10px] font-mono text-amber-300/70 mt-1.5">
+        <div className="text-center text-[10px] font-mono text-amber-600 mt-1.5">
           Changes will be saved to your design &amp; master vehicle physics
         </div>
       </div>

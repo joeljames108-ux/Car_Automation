@@ -137,7 +137,7 @@ clearcoatRoughness: 0.,
 
     // M8 Flange Mounting Studs with Copper Lock Nuts (2 per runner)
     [-0.018, 0.018].forEach((sx, sIdx) => {
-      const studGeo = new THREE.CylinderGeometry(0.0025, 0.0025, 0.024, 12);
+      const studGeo = new THREE.CylinderGeometry(0.0025, 0.0025, 0.024, 20);
       const studMesh = new THREE.Mesh(studGeo, matThrottleShaft);
       studMesh.name = `Runner_Flange_M8_Stud_${r + 1}_${sIdx === 0 ? 'F' : 'R'}`;
       studMesh.position.set(cx + sx, 0.016, 0.006);

@@ -12,7 +12,6 @@ import { solveChassisHardpoints } from '../../exterior3d/physics/chassisHardpoin
 import { ModularVehicleAttachmentEngine } from '../../exterior3d/physics/vehicleAttachmentEngine';
 import { ModularChassisFamilyGenerator } from '../../exterior3d/generators/modularChassisFamilyGenerator';
 import { ModularClosuresGenerator } from '../../exterior3d/generators/modularClosuresGenerator';
-import { ModularCabinInteriorGenerator } from '../../exterior3d/generators/modularCabinInteriorGenerator';
 import { ModularInterior3DGenerator } from '../../exterior3d/generators/modularInterior3DGenerator';
 import { ModularLightingGlassAeroGenerator } from '../../exterior3d/generators/modularLightingGlassAeroGenerator';
 import {
@@ -150,7 +149,7 @@ export function runModularVehicleConstructionTests(): { passed: number; failed: 
           throw new Error(`Closures missing panels (found ${closures.children.length})`);
         }
 
-        const interior = ModularCabinInteriorGenerator.buildInterior(2700, 1640);
+        const interior = ModularInterior3DGenerator.buildModularInterior({}, 2700, 1640);
         if (interior.children.length < 5) {
           throw new Error(`Interior missing cockpit elements (found ${interior.children.length})`);
         }

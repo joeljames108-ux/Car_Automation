@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useId, memo } from "react";
 import {
   Save, FolderOpen, RotateCcw, Search, User, Settings2,
-  Clock, ChevronDown, Sparkles, Wifi, Battery,
+  Clock, ChevronDown, Sparkles, Wifi, Battery, Maximize2, Minimize2,
 } from "lucide-react";
 import { GlassFilter } from "./LiquidGlass";
 
@@ -16,12 +16,14 @@ interface VisionGlassHeaderProps {
   onSearch: () => void;
   onAdvanceMonth: () => void;
   onSetUiTheme?: (theme: "theme1" | "theme2" | "theme3" | "theme4") => void;
+  focusMode?: boolean;
+  onToggleFocusMode?: () => void;
 }
 
 function VisionGlassHeaderComponent({
   month, totalRevenue, units,
   onSetUnits, onSave, onLoad, onReset, onSearch, onAdvanceMonth,
-  onSetUiTheme,
+  onSetUiTheme, focusMode = false, onToggleFocusMode,
 }: VisionGlassHeaderProps) {
   const [time, setTime] = useState(new Date());
   const [hovered, setHovered] = useState<string | null>(null);
@@ -41,6 +43,7 @@ function VisionGlassHeaderComponent({
   return (
     <header
       role="banner"
+      className="vision-glass-header"
       style={{
         display: "flex",
         alignItems: "center",
@@ -59,7 +62,7 @@ function VisionGlassHeaderComponent({
     >
       <GlassFilter id={filterId} scale={15} />
       {/* ── LEFT: Logo + Brand ── */}
-      <div style={{ display: "flex", alignItems: "center", gap: 10, minWidth: 180 }}>
+      <div className="vision-glass-header-brand" style={{ display: "flex", alignItems: "center", gap: 10, minWidth: 180 }}>
         {/* Animated logo mark */}
         <div
           style={{
@@ -112,6 +115,7 @@ function VisionGlassHeaderComponent({
 
       {/* ── CENTER: Status Pill Cluster ── */}
       <div
+        className="vision-glass-header-status"
         style={{
           display: "flex", alignItems: "center", gap: 6,
           position: "absolute", left: "50%", transform: "translateX(-50%)",
@@ -188,14 +192,14 @@ function VisionGlassHeaderComponent({
       </div>
 
       {/* ── RIGHT: Actions cluster ── */}
-      <div style={{ display: "flex", alignItems: "center", gap: 5, minWidth: 180, justifyContent: "flex-end" }}>
+      <div className="vision-glass-header-actions" style={{ display: "flex", alignItems: "center", gap: 5, minWidth: 180, justifyContent: "flex-end" }}>
         {/* Search capsule */}
         <button
           onClick={onSearch}
           onMouseEnter={() => setHovered("search")}
           onMouseLeave={() => setHovered(null)}
           aria-label="Search studio modules (Control plus K)"
-          className="expanding-search-input btn-interactive flex items-center justify-between gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400"
+          className="vision-glass-search expanding-search-input btn-interactive flex items-center justify-between gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400"
           style={{
             background: hovered === "search" ? "rgba(255,255,255,0.12)" : "rgba(255,255,255,0.06)",
             border: hovered === "search" ? "1px solid rgba(56,189,248,0.4)" : "1px solid rgba(255,255,255,0.10)",
@@ -207,9 +211,9 @@ function VisionGlassHeaderComponent({
         >
           <div className="flex items-center gap-1.5">
             <Search size={12} style={{ color: "#fbbf24" }} aria-hidden="true" />
-            <span className="font-medium text-slate-200">Search Studio...</span>
+            <span className="vision-glass-search-label font-medium text-slate-200">Search Studio...</span>
           </div>
-          <span style={{
+          <span className="vision-glass-search-shortcut" style={{
             fontSize: 9, color: "#94a3b8", background: "rgba(255,255,255,0.08)",
             padding: "1px 5px", borderRadius: 4, fontFamily: "monospace", fontWeight: 700,
           }}>
@@ -219,6 +223,7 @@ function VisionGlassHeaderComponent({
 
         {/* Unit toggle */}
         <div
+          className="vision-glass-unit-toggle"
           role="radiogroup"
           aria-label="Measurement Units"
           style={{
@@ -246,7 +251,8 @@ function VisionGlassHeaderComponent({
                 boxShadow: units === u ? "0 1px 3px rgba(0,0,0,0.15)" : "none",
               }}
             >
-              {u.charAt(0).toUpperCase() + u.slice(1)}
+              <span className="vision-glass-unit-full">{u.charAt(0).toUpperCase() + u.slice(1)}</span>
+              <span className="vision-glass-unit-short" aria-hidden="true">{u === "metric" ? "M" : "I"}</span>
             </button>
           ))}
         </div>
@@ -264,7 +270,7 @@ function VisionGlassHeaderComponent({
             aria-label={a.tip}
             onMouseEnter={() => setHovered(a.id)}
             onMouseLeave={() => setHovered(null)}
-            className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400"
+            className="vision-glass-icon-action focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400"
             style={{
               padding: 5, borderRadius: 8,
               color: hovered === a.id ? "#f8fafc" : "#94a3b8",
@@ -278,12 +284,38 @@ function VisionGlassHeaderComponent({
           </button>
         ))}
 
+        {onToggleFocusMode && (
+          <button
+            type="button"
+            onClick={onToggleFocusMode}
+            title={focusMode ? "Exit Focus Workspace (Ctrl + Shift + F)" : "Enter Focus Workspace (Ctrl + Shift + F)"}
+            aria-label={focusMode ? "Exit focus workspace" : "Enter focus workspace"}
+            aria-pressed={focusMode}
+            className="vision-glass-focus-toggle focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400"
+            style={{
+              display: "flex", alignItems: "center", gap: 5,
+              padding: "4px 8px", borderRadius: 9,
+              fontSize: 9, fontWeight: 700,
+              color: focusMode ? "#07111f" : "#cbd5e1",
+              background: focusMode ? "#fbbf24" : "rgba(255,255,255,0.08)",
+              border: focusMode ? "1px solid rgba(251,191,36,0.85)" : "1px solid rgba(255,255,255,0.12)",
+              cursor: "pointer",
+              transition: "all 0.2s ease",
+              boxShadow: focusMode ? "0 0 14px rgba(251,191,36,0.35)" : "none",
+            }}
+          >
+            {focusMode ? <Minimize2 size={12} aria-hidden="true" /> : <Maximize2 size={12} aria-hidden="true" />}
+            <span className="vision-glass-focus-label">{focusMode ? "EXIT FOCUS" : "FOCUS"}</span>
+          </button>
+        )}
+
         {/* Quick UI Mode Switcher (Glass UI <-> UI 1) */}
         {onSetUiTheme && (
           <button
             onClick={() => onSetUiTheme("theme1")}
             title="Switch to UI 1 (Kinetic Horizon 3D)"
             aria-label="Switch to UI 1 Kinetic Horizon"
+            className="vision-glass-theme-switch"
             style={{
               padding: "4px 10px", borderRadius: 12,
               fontSize: 10, fontWeight: 700,
@@ -305,6 +337,7 @@ function VisionGlassHeaderComponent({
         {/* User avatar */}
         <div
           aria-label="User Profile"
+          className="vision-glass-profile"
           style={{
             width: 26, height: 26, borderRadius: "50%",
             background: "linear-gradient(135deg, #0088ff 0%, #fbbf24 100%)",

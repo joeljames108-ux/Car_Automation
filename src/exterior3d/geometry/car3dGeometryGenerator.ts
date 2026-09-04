@@ -548,13 +548,15 @@ export class Car3DGeometryGenerator {
         break;
     }
 
-    // 1. Chassis
+    // 1. Chassis Subsystem Node
+    const chassisGroup = new THREE.Group();
+    chassisGroup.name = "CHASSIS";
     const chassisMesh = HighFidelitySedanChassisGenerator.buildChassis3D();
-    carGroup.add(chassisMesh);
+    chassisGroup.add(chassisMesh);
 
     // 2. Structural Reinforcements
     const structGroup = new THREE.Group();
-    structGroup.name = "STRUCTURAL_REINFORCEMENTS";
+    structGroup.name = "CHASSIS_REINFORCEMENTS";
 
     const braceGeo1 = new THREE.CylinderGeometry(0.015, 0.015, 1.4, 16);
     braceGeo1.rotateZ(Math.PI / 4);
@@ -573,9 +575,12 @@ export class Car3DGeometryGenerator {
     rearBraceMesh.position.set(0, 0.15, -1.2);
     structGroup.add(rearBraceMesh);
 
-    carGroup.add(structGroup);
+    chassisGroup.add(structGroup);
+    carGroup.add(chassisGroup);
 
-    // 3. Sculpted Body Panels
+    // 3. Sculpted Body Panels Subsystem Node
+    const bodyGroup = new THREE.Group();
+    bodyGroup.name = "BODY";
     const bodySkinMesh = SculptedBodyPanelsGenerator.buildSculptedBody(
       mappedBodyType,
       wheelbaseMm,
@@ -590,9 +595,12 @@ export class Car3DGeometryGenerator {
     if (explodedProgress > 0) {
       bodySkinMesh.position.y += explodedProgress * 0.4;
     }
-    carGroup.add(bodySkinMesh);
+    bodyGroup.add(bodySkinMesh);
+    carGroup.add(bodyGroup);
 
-    // 4. Wheels & Brakes
+    // 4. Wheels, Tires & Brakes Subsystem Nodes
+    const wheelBrakeGroup = new THREE.Group();
+    wheelBrakeGroup.name = "WHEELS_TIRES_BRAKES";
     const wheelsMesh = ForgedWheelAssembly3D.buildWheelsAndBrakes(
       wheelbaseMm,
       trackWidthFrontMm,
@@ -609,14 +617,18 @@ export class Car3DGeometryGenerator {
     if (explodedProgress > 0) {
       wheelsMesh.position.z += explodedProgress * 0.3;
     }
-    carGroup.add(wheelsMesh);
+    wheelBrakeGroup.add(wheelsMesh);
+    carGroup.add(wheelBrakeGroup);
 
-    // 5. Cockpit Interior
+    // 5. Cockpit Interior Subsystem Node
+    const interiorGroup = new THREE.Group();
+    interiorGroup.name = "INTERIOR";
     const interiorMesh = PhotorealisticInteriorStudio.buildInteriorCockpit3D({
       primaryLeatherColorHex: "#1e222d",
       ambientLightColorHex: "#00f0ff",
     });
-    carGroup.add(interiorMesh);
+    interiorGroup.add(interiorMesh);
+    carGroup.add(interiorGroup);
 
     carGroup.rotation.y = Math.PI;
     carGroup.position.set(0, 0, 0);

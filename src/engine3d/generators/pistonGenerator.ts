@@ -215,7 +215,7 @@ clearcoatRoughness: 0.,
     const hx = Math.sin(angle) * (spec.boreRadiusM - 0.004);
     const hy = Math.cos(angle) * (spec.boreRadiusM - 0.004);
 
-    const holeGeo = new THREE.CylinderGeometry(0.0012, 0.0012, 0.008, 16);
+    const holeGeo = new THREE.CylinderGeometry(0.0012, 0.0012, 0.008, 24);
     holeGeo.rotateX(Math.PI / 2);
     const holeMesh = new THREE.Mesh(holeGeo, matUnderCrown);
     holeMesh.name = `Oil_Drainback_Drilling_${h + 1}`;
@@ -263,7 +263,7 @@ clearcoatRoughness: 0.,
     skirtGroup.add(trussMesh);
 
     // CNC Weight-Pad Lightening Recess Pockets
-    const pocketGeo = new THREE.CylinderGeometry(0.006, 0.006, 0.004, 16);
+    const pocketGeo = new THREE.CylinderGeometry(0.006, 0.006, 0.004, 24);
     pocketGeo.rotateZ(Math.PI / 2);
     const pocketMesh = new THREE.Mesh(pocketGeo, matForgedBillet);
     pocketMesh.name = `Weight_Reduction_Pocket_${tIdx + 1}`;
@@ -306,7 +306,7 @@ clearcoatRoughness: 0.,
 
   // Forced Pin Bore Lubrication Feed Slots & Pin Anti-Rotation Boss
   [-0.018, 0.018].forEach((bx, bIdx) => {
-    const feedGeo = new THREE.CylinderGeometry(0.002, 0.002, 0.012, 16);
+    const feedGeo = new THREE.CylinderGeometry(0.002, 0.002, 0.012, 24);
     const feedMesh = new THREE.Mesh(feedGeo, matUnderCrown);
     feedMesh.name = `WristPin_Forced_Oil_Feed_Slot_${bIdx + 1}`;
     feedMesh.position.set(bx, 0, -0.002);

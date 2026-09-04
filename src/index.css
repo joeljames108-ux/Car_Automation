@@ -101,7 +101,7 @@
     background: rgba(30, 41, 59, 0.5);
     backdrop-filter: blur(12px);
     border: 1px solid rgba(255, 255, 255, 0.08);
-    color: #cbd5e1;
+    color: #78350f;
     transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
@@ -4573,6 +4573,101 @@ a,
    Phase 5: Panel & Card Redesign — iOS-style nested glass system
    ══════════════════════════════════════════════════════════════════ */
 
+/* ══════════════════════════════════════════════════════════════════════
+   INTERIOR CONFIGURATOR — Vision Glass Liquid Glass Overrides
+   ══════════════════════════════════════════════════════════════════════ */
+
+/* Main configurator wrapper */
+.theme4 .idash-root {
+  background: rgba(255, 255, 255, 0.35) !important;
+  backdrop-filter: blur(40px) saturate(220%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.40) !important;
+  border-radius: 20px !important;
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.60) !important;
+}
+
+/* Left panel — stat bars */
+.theme4 .idash-panel-left,
+.theme4 [class*="bg-amber-50"] {
+  background: rgba(255, 252, 245, 0.52) !important;
+  backdrop-filter: blur(36px) saturate(200%) !important;
+  border-color: rgba(0, 0, 0, 0.04) !important;
+}
+
+/* Right panel — steppers */
+.theme4 .idash-panel-right {
+  background: rgba(255, 252, 245, 0.52) !important;
+  backdrop-filter: blur(36px) saturate(200%) !important;
+  border-color: rgba(0, 0, 0, 0.04) !important;
+}
+
+/* Center viewport canvas */
+.theme4 .idash-viewport-canvas {
+  background: rgba(255, 255, 255, 0.28) !important;
+  backdrop-filter: blur(20px) !important;
+  border-radius: 14px !important;
+}
+
+/* Presets container */
+.theme4 .idash-presets-container {
+  background: rgba(255, 252, 245, 0.42) !important;
+  backdrop-filter: blur(30px) !important;
+  border-color: rgba(0, 0, 0, 0.04) !important;
+}
+
+/* 3D viewport container */
+.theme4 [class*="bg-amber-50/40"] {
+  background: rgba(255, 255, 255, 0.25) !important;
+}
+
+/* Stepper buttons — iOS style */
+.theme4 [class*="bg-amber-200/50"] {
+  background: rgba(255, 255, 255, 0.50) !important;
+  border-color: rgba(0, 0, 0, 0.08) !important;
+  color: #3a3a3c !important;
+}
+
+.theme4 [class*="bg-amber-200/50"]:hover {
+  background: rgba(255, 255, 255, 0.65) !important;
+  border-color: rgba(0, 122, 255, 0.25) !important;
+  color: #007aff !important;
+}
+
+/* Stat bar cards */
+.theme4 [class*="bg-amber-100/60"] {
+  background: rgba(255, 255, 255, 0.42) !important;
+  backdrop-filter: blur(28px) saturate(220%) !important;
+}
+
+/* Progress bars — iOS blue fill */
+.theme4 [class*="from-amber-500 to-amber-400"] {
+  background: linear-gradient(90deg, rgba(0, 122, 255, 0.8), rgba(0, 122, 255, 0.6)) !important;
+  box-shadow: 0 0 6px rgba(0, 122, 255, 0.2) !important;
+}
+
+/* Tab nav */
+.theme4 .idash-tab-nav {
+  background: rgba(255, 255, 255, 0.08) !important;
+  border-color: rgba(0, 0, 0, 0.04) !important;
+}
+
+/* Apply button */
+.theme4 [class*="from-amber-600 to-amber-500"] {
+  background: linear-gradient(90deg, rgba(0, 122, 255, 0.8), rgba(0, 122, 255, 0.6)) !important;
+  color: white !important;
+}
+
+/* Info modal overlay */
+.theme4 .fixed.inset-0.z-50 {
+  background: rgba(0, 0, 0, 0.3) !important;
+}
+
+/* Compare modal */
+.theme4 [class*="bg-amber-50/80"] {
+  background: rgba(255, 255, 255, 0.85) !important;
+  backdrop-filter: blur(40px) !important;
+}
+
 /* ── OUTER CONTAINER PANELS → Darker frosted glass ── */
 .theme4 .vision-glass-content .panel,
 .theme4 .vision-glass-content .panel-glow,
@@ -7045,10 +7140,10 @@ button:active,
 
 /* ── CSS Variables ── */
 .idash-root {
-  --idash-bg-base: rgba(26,16,8,0.95);
-  --idash-bg-panel: rgba(30,20,10,0.92);
-  --idash-bg-card: rgba(40,25,12,0.85);
-  --idash-bg-hover: rgba(60,40,20,0.8);
+  --idash-bg-base: rgba(254,243,199,0.95);
+  --idash-bg-panel: rgba(255,247,215,0.88);
+  --idash-bg-card: rgba(255,247,215,0.7);
+  --idash-bg-hover: rgba(255,247,215,0.5);
   --idash-accent-blue: #d97706;
   --idash-accent-cyan: #fbbf24;
   --idash-text-main: #fef3c7;
@@ -7077,7 +7172,7 @@ button:active,
 /* ── Header Bar ── */
 .idash-header {
   height: 52px;
-  background: #080c14;
+  background: rgba(254,243,199,0.92);
   border-bottom: 1px solid var(--idash-border);
   display: flex;
   align-items: center;
@@ -7139,11 +7234,11 @@ button:active,
   color: var(--idash-text-muted);
 }
 .idash-stat-emoji { font-size: 14px; }
-.idash-stat-num { color: #ffffff; font-weight: 800; font-size: 13px; }
+.idash-stat-num { color: #92400e; font-weight: 800; font-size: 13px; }
 .idash-stat-desc { font-size: 10px; color: var(--idash-text-muted); font-weight: 600; }
 
 .idash-tier-badge {
-  background: linear-gradient(135deg, rgba(37, 99, 235, 0.25), rgba(0, 229, 255, 0.2));
+  background: linear-gradient(135deg, rgba(217,119,6,0.2), rgba(245,158,11,0.15));
   border: 1px solid var(--idash-accent-cyan);
   padding: 4px 10px;
   border-radius: 6px;
@@ -7157,10 +7252,7 @@ button:active,
   display: flex;
   gap: 8px;
 }
-.idash-icon-btn {
-  background: var(--idash-bg-card);
-  border: 1px solid var(--idash-border-card);
-  color: #ffffff;
+.idash-icon-btn { background: var(--idash-bg-card); border: 1px solid var(--idash-border-card); color: #92400e;
   font-size: 16px;
   cursor: pointer;
   padding: 6px 8px;
@@ -7179,20 +7271,12 @@ button:active,
 }
 
 /* ── Left Panel ── */
-.idash-panel-left {
-  background: var(--idash-bg-panel);
-  border-right: 1px solid var(--idash-border);
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  overflow-y: auto;
-}
+.idash-panel-left { background: rgba(255,247,215,0.6); backdrop-filter: blur(24px); border-right: 1px solid rgba(255,255,255,0.08); padding: 16px; display: flex; flex-direction: column; gap: 12px; overflow-y: auto; width: 310px; flex-shrink: 0; }
 
 .idash-section-title {
   font-size: 11.5px;
   letter-spacing: 1.4px;
-  color: #38bdf8;
+  color: #d97706;
   font-weight: 800;
   text-transform: uppercase;
 }
@@ -7227,14 +7311,12 @@ button:active,
 
 .idash-stat-label {
   flex: 1;
-  color: #e2e8f0;
+  color: #78350f;
   font-weight: 600;
   font-size: 12.5px;
 }
 
-.idash-stat-value {
-  font-weight: 800;
-  color: #38bdf8;
+.idash-stat-value { font-weight: 800; color: #92400e;
   font-size: 13px;
   min-width: 38px;
   text-align: right;
@@ -7243,18 +7325,18 @@ button:active,
 
 .idash-progress-track {
   height: 7px;
-  background: #131b2e;
-  border: 1px solid #1e2840;
+  background: rgba(180,140,60,0.15);
+  border: 1px solid rgba(180,140,60,0.2);
   border-radius: 4px;
   overflow: hidden;
 }
 
 .idash-progress-fill {
   height: 100%;
-  background: linear-gradient(90deg, #2563eb, #00e5ff);
+  background: linear-gradient(90deg, #d97706, #f59e0b);
   border-radius: 3px;
   transition: width 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 0 10px rgba(0, 229, 255, 0.4);
+  box-shadow: 0 0 10px rgba(245,158,11,0.4);
   min-width: 0;
 }
 
@@ -7280,10 +7362,7 @@ button:active,
   color: var(--idash-text-muted);
   font-weight: 600;
 }
-.idash-rating-desc {
-  font-weight: 800;
-  font-size: 15px;
-  color: #ffffff;
+.idash-rating-desc { font-weight: 800; font-size: 15px; color: #92400e;
 }
 
 .idash-rating-badge {
@@ -7296,8 +7375,8 @@ button:active,
   justify-content: center;
   border: 2px solid;
   border-radius: 10px;
-  background: rgba(0, 0, 0, 0.35);
-  box-shadow: 0 0 14px rgba(0, 229, 255, 0.2);
+  background: rgba(254,243,199,0.3);
+  box-shadow: 0 0 14px rgba(245,158,11,0.2);
   transition: color 0.3s, border-color 0.3s;
 }
 
@@ -7309,15 +7388,9 @@ button:active,
   font-size: 13px;
   padding: 3px 0;
 }
-.idash-readout-icon {
-  font-size: 14px;
-  width: 18px;
-  text-align: center;
-  color: #38bdf8;
+.idash-readout-icon { font-size: 14px; width: 18px; text-align: center; color: #d97706;
 }
-.idash-readout-label {
-  flex: 1;
-  color: #cbd5e1;
+.idash-readout-label { flex: 1; color: #92400e; font-weight: 600;
   font-weight: 600;
 }
 .idash-readout-value {
@@ -7333,11 +7406,7 @@ button:active,
   margin: 4px 0;
 }
 
-.idash-compare-btn {
-  width: 100%;
-  background: var(--idash-bg-card);
-  border: 1px solid var(--idash-border-card);
-  color: #cbd5e1;
+.idash-compare-btn { width: 100%; background: var(--idash-bg-card); border: 1px solid var(--idash-border-card); color: #92400e;
   padding: 10px;
   border-radius: 8px;
   font-size: 12px;
@@ -7347,9 +7416,7 @@ button:active,
   letter-spacing: 0.5px;
   margin-top: 4px;
 }
-.idash-compare-btn:hover {
-  background: var(--idash-bg-hover);
-  color: #ffffff;
+.idash-compare-btn:hover { background: var(--idash-bg-hover); color: #78350f;
   border-color: var(--idash-accent-cyan);
 }
 
@@ -7358,65 +7425,28 @@ button:active,
   display: flex;
   flex-direction: column;
   position: relative;
-  background: radial-gradient(ellipse at center, #151f33 0%, #080c14 85%);
+  background: radial-gradient(ellipse at center, rgba(255,247,215,0.95) 0%, rgba(254,243,199,0.85) 85%);
   padding: 0;
   overflow: hidden;
   min-height: 0;
 }
 
 /* Tab Navigation */
-.idash-tab-nav {
-  display: flex;
-  justify-content: center;
-  gap: 8px;
-  padding: 10px 20px;
-  border-bottom: 1px solid var(--idash-border);
-  background: rgba(9, 13, 22, 0.85);
-  backdrop-filter: blur(8px);
-}
+.idash-tab-nav { display: flex; align-items: center; gap: 8px; padding: 8px 14px; background: rgba(255,255,255,0.03); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255,255,255,0.08); }
 
-.idash-tab-btn {
-  background: transparent;
-  border: none;
-  color: #94a3b8;
-  padding: 8px 22px;
-  font-weight: 700;
-  font-size: 12.5px;
-  cursor: pointer;
-  border-bottom: 2px solid transparent;
-  transition: all 0.2s;
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  letter-spacing: 0.6px;
-}
-.idash-tab-btn:hover { color: #ffffff; }
-.idash-tab-btn.active {
-  color: #ffffff;
-  border-bottom-color: var(--idash-accent-cyan);
-  text-shadow: 0 0 10px rgba(0, 229, 255, 0.6);
-}
+.idash-tab-btn { display: flex; align-items: center; gap: 6px; padding: 7px 16px; border-radius: 10px; font-size: 13px; font-weight: 700; color: #92400e; border: 1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.03); transition: all 0.2s; cursor: pointer; letter-spacing: 0.02em; }
+.idash-tab-btn:hover { color: #78350f; }
+.idash-tab-btn.active { background: rgba(217,119,6,0.2); color: #78350f; border-color: rgba(217,119,6,0.4); }
 .idash-tab-icon { font-size: 14px; }
 
 /* SVG Canvas */
-.idash-viewport-canvas {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 16px 20px;
-  min-height: 0;
-}
+.idash-viewport-canvas { flex: 1; position: relative; min-height: 0; background: rgba(255,247,215,0.6); overflow: hidden; border-radius: 0 0 16px 0; }
 
-.idash-svg {
-  width: 92%;
-  max-height: 100%;
-  filter: drop-shadow(0 16px 36px rgba(0, 0, 0, 0.7));
-}
+.idash-svg { width: 100%; height: 100%; object-fit: contain; }
 
 /* Presets Carousel */
 .idash-presets-container {
-  background: rgba(13, 18, 31, 0.94);
+  background: rgba(254,243,199,0.85);
   border-top: 1px solid var(--idash-border);
   padding: 12px 18px;
   backdrop-filter: blur(12px);
@@ -7453,7 +7483,7 @@ button:active,
 .idash-preset-card.active {
   border-color: var(--idash-accent-cyan);
   background: var(--idash-bg-hover);
-  box-shadow: 0 0 14px rgba(0, 229, 255, 0.35);
+  box-shadow: 0 0 14px rgba(217,119,6,0.35);
 }
 
 .idash-preset-swatch {
@@ -7502,15 +7532,7 @@ button:active,
 }
 
 /* ── Right Panel ── */
-.idash-panel-right {
-  background: var(--idash-bg-panel);
-  border-left: 1px solid var(--idash-border);
-  padding: 16px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  overflow-y: auto;
-}
+.idash-panel-right { background: rgba(42,28,12,0.7); backdrop-filter: blur(24px); border-left: 1px solid rgba(255,255,255,0.08); padding: 16px; display: flex; flex-direction: column; gap: 12px; overflow-y: auto; width: 340px; flex-shrink: 0; }
 
 .idash-config-header {
   display: flex;
@@ -7716,5 +7738,194 @@ button:active,
 .idash-panel-right::-webkit-scrollbar-thumb {
   background: #334155;
   border-radius: 2px;
+}
+
+/* ── Global workspace navigation and Vision Glass responsiveness ── */
+.skip-link {
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  z-index: 200;
+  transform: translateY(-180%);
+  padding: 9px 12px;
+  border-radius: 8px;
+  background: #0f172a;
+  color: #f8fafc;
+  font-size: 13px;
+  font-weight: 700;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.35);
+  transition: transform 160ms ease;
+}
+
+.skip-link:focus {
+  transform: translateY(0);
+  outline: 2px solid #38bdf8;
+  outline-offset: 3px;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+#vision-workspace:focus,
+#main-workspace:focus {
+  outline: 2px solid #38bdf8;
+  outline-offset: -2px;
+}
+
+.vision-glass-unit-short {
+  display: none;
+}
+
+@media (max-width: 1280px) {
+  .vision-glass-header-status,
+  .vision-glass-toolbar {
+    display: none !important;
+  }
+
+  .vision-glass-window {
+    width: calc(100vw - 24px) !important;
+  }
+}
+
+@media (max-width: 960px) {
+  .vision-glass-window {
+    width: calc(100vw - 16px) !important;
+    height: calc(100vh - 16px) !important;
+    margin-top: 8px !important;
+    margin-bottom: 8px !important;
+    border-radius: 20px !important;
+  }
+
+  .vision-glass-content {
+    padding: 12px 12px 112px !important;
+  }
+
+  .vision-glass-dock {
+    bottom: 7px !important;
+  }
+
+  .vision-glass-dock-bar {
+    padding: 5px 7px !important;
+    border-radius: 18px !important;
+  }
+
+  .vision-glass-dock-stage-label {
+    display: none;
+  }
+}
+
+@media (max-width: 720px) {
+  .vision-glass-header {
+    height: 46px !important;
+    padding: 0 10px !important;
+  }
+
+  .vision-glass-header-brand,
+  .vision-glass-header-actions {
+    min-width: auto !important;
+  }
+
+  .vision-glass-header-brand > div:last-child > div:last-child,
+  .vision-glass-search-label,
+  .vision-glass-search-shortcut,
+  .vision-glass-theme-switch,
+  .vision-glass-profile {
+    display: none !important;
+  }
+
+  .vision-glass-search {
+    padding: 6px !important;
+  }
+
+  .vision-glass-unit-full {
+    display: none;
+  }
+
+  .vision-glass-unit-short {
+    display: inline;
+  }
+
+  .vision-glass-unit-toggle button {
+    min-width: 24px;
+    padding: 3px 6px !important;
+  }
+
+  .vision-glass-dock-category-label {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .vision-glass-window {
+    width: 100vw !important;
+    height: 100vh !important;
+    margin: 0 !important;
+    border-radius: 0 !important;
+  }
+
+  .vision-glass-header-actions {
+    gap: 2px !important;
+  }
+
+  .vision-glass-icon-action {
+    padding: 4px !important;
+  }
+
+  .vision-glass-dock-bar {
+    max-width: calc(100vw - 12px) !important;
+  }
+}
+
+/* ── Focus Workspace Mode ── */
+.vision-focus-mode .vision-glass-window {
+  width: min(99vw, 1680px) !important;
+  margin-top: 8px !important;
+  margin-bottom: 8px !important;
+  height: calc(100vh - 16px) !important;
+  transition: width 320ms cubic-bezier(0.22, 1, 0.36, 1), margin 320ms ease;
+}
+
+.vision-focus-mode .vision-glass-content {
+  padding-bottom: 26px !important;
+}
+
+.vision-focus-mode .vision-glass-dock {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translate(-50%, 28px) !important;
+  transition: opacity 180ms ease, transform 280ms ease, visibility 180ms ease;
+}
+
+.vision-glass-focus-toggle {
+  min-height: 28px;
+}
+
+@media (max-width: 720px) {
+  .vision-glass-focus-label {
+    display: none;
+  }
+
+  .vision-glass-focus-toggle {
+    width: 28px;
+    padding: 5px !important;
+    justify-content: center;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .vision-focus-mode .vision-glass-window,
+  .vision-focus-mode .vision-glass-dock {
+    transition: none !important;
+  }
 }
 

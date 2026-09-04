@@ -167,7 +167,7 @@ function VisionGlassToolbarComponent({ actions }: VisionGlassToolbarProps) {
     <nav
       role="toolbar"
       aria-label="Quick Actions Navigation"
-      className="hidden md:flex flex-col items-center"
+      className="vision-glass-toolbar hidden md:flex flex-col items-center"
       style={{
         position: "absolute",
         left: 18,

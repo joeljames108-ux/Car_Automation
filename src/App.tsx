@@ -82,7 +82,6 @@ const STAGES: StageItem[] = [
   { id: "graphics3d", label: "3D Viewport Studio", icon: <Box size={14} />, category: "studios" },
   { id: "suspension3d", label: "3D Suspension Studio", icon: <Activity size={14} />, category: "studios" },
   { id: "ai", label: "Apex AI Studio", icon: <Bot size={14} />, category: "studios" },
-  { id: "interior_dashboard", label: "Interior Configurator", icon: <SlidersHorizontal size={14} />, category: "studios" },
 
   // --- Simulation & Testing ---
   { id: "simulation", label: "Simulation", icon: <Activity size={14} />, category: "simulation" },
@@ -157,6 +156,13 @@ function AppInner() {
   const [activeCategory, setActiveCategory] = useState<WorkspaceCategory>("engineering");
   const [dialog, setDialog] = useState<{ open: boolean; mode: "save" | "load" }>({ open: false, mode: "save" });
   const [cmdPaletteOpen, setCmdPaletteOpen] = useState(false);
+  const [focusMode, setFocusMode] = useState<boolean>(() => {
+    try {
+      return window.localStorage.getItem("apex-engineer:focus-mode") === "true";
+    } catch {
+      return false;
+    }
+  });
   const { design, sim, carConcept, updateEngine, resetDesign, units, setUnits, uiTheme, setUiTheme } = useDesign();
   const { company, advanceAllSystems } = useCompany();
   const [booted, setBooted] = useState(false);
@@ -167,22 +173,38 @@ function AppInner() {
   const handleCloseDialog = useCallback(() => setDialog((prev) => ({ open: false, mode: prev.mode })), []);
   const handleSearch = useCallback(() => setCmdPaletteOpen(true), []);
   const handleCloseCmdPalette = useCallback(() => setCmdPaletteOpen(false), []);
-  const handleSelectStage = useCallback((st: string) => setStage(st as Stage), []);
+  const handleToggleFocusMode = useCallback(() => {
+    setFocusMode((previous) => {
+      const next = !previous;
+      try {
+        window.localStorage.setItem("apex-engineer:focus-mode", String(next));
+      } catch {
+        // Focus mode still works for this session when storage is unavailable.
+      }
+      return next;
+    });
+    setCmdPaletteOpen(false);
+  }, []);
+  const handleSelectStage = useCallback((st: string) => {
+    const selectedStage = STAGES.find((item) => item.id === st);
+    if (selectedStage) setActiveCategory(selectedStage.category);
+    setStage(st as Stage);
+  }, []);
   const handleSelectCategory = useCallback((cat: string) => setActiveCategory(cat as WorkspaceCategory), []);
 
   const toolbarActions = useMemo(() => [
-    { id: "command", icon: <LayoutGrid size={17} />, label: "Dashboard", onClick: () => setStage("command"), isActive: stage === "command" },
-    { id: "interior_dashboard", icon: <SlidersHorizontal size={17} />, label: "Interior Configurator", onClick: () => setStage("interior_dashboard"), isActive: stage === "interior_dashboard" },
-    { id: "studio", icon: <SparklesIcon size={17} />, label: "Studio Hub", onClick: () => setStage("studio"), isActive: stage === "studio" },
+    { id: "command", icon: <LayoutGrid size={17} />, label: "Dashboard", onClick: () => handleSelectStage("command"), isActive: stage === "command" },
+    { id: "interior_dashboard", icon: <SlidersHorizontal size={17} />, label: "Interior Configurator", onClick: () => handleSelectStage("interior_dashboard"), isActive: stage === "interior_dashboard" },
+    { id: "studio", icon: <SparklesIcon size={17} />, label: "Studio Hub", onClick: () => handleSelectStage("studio"), isActive: stage === "studio" },
     { id: "search", icon: <Search size={17} />, label: "Search (Ctrl+K)", onClick: handleSearch },
-    { id: "simulation", icon: <Activity size={17} />, label: "Analytics", onClick: () => setStage("simulation"), isActive: stage === "simulation" },
-    { id: "ai", icon: <Bot size={17} />, label: "Apex AI Studio", onClick: () => setStage("ai"), isActive: stage === "ai" },
-    { id: "safety", icon: <Bell size={17} />, label: "Safety & Alerts", onClick: () => setStage("safety"), isActive: stage === "safety" },
-    { id: "vehicle", icon: <SlidersHorizontal size={17} />, label: "Vehicle Controls", onClick: () => setStage("vehicle"), isActive: stage === "vehicle" },
-  ], [stage, handleSearch]);
+    { id: "simulation", icon: <Activity size={17} />, label: "Analytics", onClick: () => handleSelectStage("simulation"), isActive: stage === "simulation" },
+    { id: "ai", icon: <Bot size={17} />, label: "Apex AI Studio", onClick: () => handleSelectStage("ai"), isActive: stage === "ai" },
+    { id: "safety", icon: <Bell size={17} />, label: "Safety & Alerts", onClick: () => handleSelectStage("safety"), isActive: stage === "safety" },
+    { id: "vehicle", icon: <SlidersHorizontal size={17} />, label: "Vehicle Controls", onClick: () => handleSelectStage("vehicle"), isActive: stage === "vehicle" },
+  ], [stage, handleSearch, handleSelectStage]);
 
   // Phase 1 Scroll Animation Physics (120Hz / 60fps rAF lerp engine)
-  const scrollRef = React.useRef<HTMLDivElement>(null);
+  const scrollRef = React.useRef<HTMLElement>(null);
   const bgRef = React.useRef<HTMLDivElement>(null);
   const lightRef = React.useRef<HTMLDivElement>(null);
   const progressFillRef = React.useRef<HTMLDivElement>(null);
@@ -260,11 +282,14 @@ function AppInner() {
       if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "k") {
         e.preventDefault();
         setCmdPaletteOpen((prev: boolean) => !prev);
+      } else if (uiTheme === "theme4" && (e.ctrlKey || e.metaKey) && e.shiftKey && e.key.toLowerCase() === "f") {
+        e.preventDefault();
+        handleToggleFocusMode();
       }
     }
     window.addEventListener("keydown", handleGlobalKeydown);
     return () => window.removeEventListener("keydown", handleGlobalKeydown);
-  }, []);
+  }, [handleToggleFocusMode, uiTheme]);
 
   const designRef = React.useRef(design);
   designRef.current = design;
@@ -318,7 +343,7 @@ function AppInner() {
     return (
       <VisionGlassErrorBoundary>
         <div
-          className="theme4"
+          className={`theme4 vision-glass-app${focusMode ? " vision-focus-mode" : ""}`}
           style={{
             position: "fixed", inset: 0,
             background: "#111118",
@@ -350,11 +375,13 @@ function AppInner() {
               willChange: "transform",
             }}
           />
+          <a className="skip-link" href="#vision-workspace">Skip to workspace</a>
+
           {/* ===== Left Vertical Toolbar (Phase 7 Component) ===== */}
-          <VisionGlassToolbar actions={toolbarActions} />
+          {!focusMode && <VisionGlassToolbar actions={toolbarActions} />}
 
           {/* ===== Floating Liquid Glass Window ===== */}
-          <div style={{
+          <div className="vision-glass-window" style={{
             position: "relative", zIndex: 10,
             width: "min(96vw, 1440px)",
             marginTop: 16, marginBottom: 16,
@@ -382,6 +409,8 @@ function AppInner() {
               onSearch={handleSearch}
               onAdvanceMonth={advanceAllSystems}
               onSetUiTheme={setUiTheme}
+              focusMode={focusMode}
+              onToggleFocusMode={handleToggleFocusMode}
             />
 
             {/* ── SPATIAL GLASS SCROLL PROGRESS INDICATOR BAR (Phase 1) ── */}
@@ -394,21 +423,30 @@ function AppInner() {
             </div>
 
             {/* ── SCROLLABLE CONTENT WITH MOMENTUM (Phase 1) ── */}
-            <div
+            <main
               ref={scrollRef}
+              id="vision-workspace"
+              tabIndex={-1}
+              aria-label="Active engineering workspace"
               className="vision-glass-content vision-scroll-momentum"
               style={{
                 flex: 1, overflowY: "auto", overflowX: "hidden",
                 padding: "16px 20px 140px 20px",
               }}
             >
+              <div className="sr-only" aria-live="polite">
+                {STAGES.find((item) => item.id === stage)?.label ?? stage} workspace opened.
+              </div>
+              <div className="sr-only" aria-live="polite">
+                {focusMode ? "Focus workspace mode enabled. Navigation chrome hidden." : "Focus workspace mode disabled."}
+              </div>
               <div style={{ display: "flex", gap: 16 }}>
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <StageSwitcher stage={stage} onSelectStage={handleSelectStage} />
                 </div>
 
                 {/* Right Sidebar — Live Stats (Top) + Engineering Log (Bottom) */}
-                <div className="hidden xl:flex flex-col gap-4" style={{ width: 300, flexShrink: 0 }}>
+                {!focusMode && <div className="hidden xl:flex flex-col gap-4" style={{ width: 300, flexShrink: 0 }}>
                   <div style={{ position: "sticky", top: 8, display: "flex", flexDirection: "column", gap: 12 }}>
                     {/* Live Stat Rail (Top) */}
                     <div className="stat-rail-container">
@@ -417,9 +455,9 @@ function AppInner() {
                     {/* Engineering Log Panel (Bottom) */}
                     <EngineeringLog />
                   </div>
-                </div>
+                </div>}
               </div>
-            </div>
+            </main>
 
             {/* ── BOTTOM DOCK (Phase 4 Component) ── */}
             <VisionGlassDock
@@ -435,7 +473,13 @@ function AppInner() {
           {/* Overlays */}
           <React.Suspense fallback={null}>
             <SaveLoadDialog open={dialog.open} mode={dialog.mode} onClose={handleCloseDialog} />
-            <CommandPalette isOpen={cmdPaletteOpen} onClose={handleCloseCmdPalette} onSelectStage={handleSelectStage} />
+            <CommandPalette
+              isOpen={cmdPaletteOpen}
+              onClose={handleCloseCmdPalette}
+              onSelectStage={handleSelectStage}
+              focusMode={focusMode}
+              onToggleFocusMode={handleToggleFocusMode}
+            />
           </React.Suspense>
           <ThermalAlertMonitor />
         </div>
@@ -447,6 +491,7 @@ function AppInner() {
   return (
     <VisionGlassErrorBoundary>
       <div className={`min-h-screen bg-base-950 flex flex-col grid-bg transition-opacity duration-700 ${booted ? "opacity-100" : "opacity-0"} ${uiTheme}`}>
+      <a className="skip-link" href="#main-workspace">Skip to workspace</a>
       {/* Top Header */}
       <header className="border-b border-white/10 bg-slate-900/80/80 backdrop-blur-xl sticky top-0 z-40 shadow-[0_4px_30px_rgba(0,0,0,0.5)] inner-light">
         <div className="max-w-full px-6 h-14 flex items-center justify-between gap-4">
@@ -468,6 +513,7 @@ function AppInner() {
               return (
                 <button
                   key={cat.id}
+                  aria-current={isActive ? "page" : undefined}
                   onClick={() => {
                     setActiveCategory(cat.id);
                     const firstInCat = STAGES.find(s => s.category === cat.id);
@@ -546,14 +592,15 @@ function AppInner() {
       </header>
 
       {/* Sub-Navigation Bar */}
-      <nav className="border-b border-white/5 bg-slate-900/80/60 backdrop-blur-md sticky top-14 z-30 shadow-md">
+      <nav aria-label="Workspace modules" className="border-b border-white/5 bg-slate-900/80/60 backdrop-blur-md sticky top-14 z-30 shadow-md">
         <div className="max-w-full px-6 py-2 flex items-center gap-1.5 overflow-x-auto no-scrollbar">
           {activeCategoryStages.map((s) => {
             const isCurrent = stage === s.id;
             return (
               <button
                 key={s.id}
-                onClick={() => setStage(s.id)}
+                aria-current={isCurrent ? "page" : undefined}
+                onClick={() => handleSelectStage(s.id)}
                 className={`flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all whitespace-nowrap ripple-effect haptic-press ${isCurrent
                   ? "bg-gradient-to-r from-amber-500/30 to-sky-500/20 text-amber-100 border border-amber-400/50 shadow-[0_0_12px_rgba(34,211,238,0.25)] neon-underline font-bold"
                   : "text-slate-400 hover:text-slate-100 hover:bg-white/5 border border-transparent"
@@ -568,16 +615,19 @@ function AppInner() {
       </nav>
 
       {/* Main content */}
-      <div className="flex-1 max-w-full w-full px-6 py-4 pb-44 flex gap-4">
+      <main id="main-workspace" tabIndex={-1} aria-label="Active engineering workspace" className="flex-1 max-w-full w-full px-6 py-4 pb-44 flex gap-4">
+        <div className="sr-only" aria-live="polite">
+          {STAGES.find((item) => item.id === stage)?.label ?? stage} workspace opened.
+        </div>
         <div className="flex-1 min-w-0">
-          <StageSwitcher stage={stage} onSelectStage={(st) => setStage(st as Stage)} />
+          <StageSwitcher stage={stage} onSelectStage={handleSelectStage} />
         </div>
         <div className="hidden lg:block w-80 shrink-0">
           <div className="sticky top-20 stat-rail-container">
             <StatRail />
           </div>
         </div>
-      </div>
+      </main>
 
       <React.Suspense fallback={null}>
         <SaveLoadDialog

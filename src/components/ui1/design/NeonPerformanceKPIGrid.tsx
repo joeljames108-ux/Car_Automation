@@ -1,12 +1,13 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useRef, useEffect, useState } from "react";
 import { AnimatedCounter } from "../../ui/AnimatedCounter";
+import { useSpring, SPRING_PRESETS } from "../ux/useSpringPhysics";
 import type { SimResult } from "../../../sim/types";
 import { Zap, Gauge, Timer, Weight, TrendingUp, DollarSign, Wind, Shield } from "lucide-react";
 
 function NT({ label, value, unit, icon, accent, sub }: { label: string; value: number | string; unit?: string; icon?: React.ReactNode; accent?: string; sub?: string }) {
   accent = accent || "#8fb9d9";
   return (
-    <div className="p-3 rounded-xl bg-amber-950/80/80 border border-white/[0.08] backdrop-blur-md relative overflow-hidden group hover:border-white/[0.15] transition-all">
+    <div className='p-3 rounded-xl bg-amber-950/80 border border-white/[0.08] backdrop-blur-md relative overflow-hidden group hover:border-white/[0.15] transition-all'>
       <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" style={{ background: "radial-gradient(circle at 50% 100%, " + accent + "15, transparent 70%)" }} />
       <div className="flex items-center justify-between mb-1.5">
         <span className="text-[9px] font-mono font-bold uppercase tracking-wider text-amber-400/50">{label}</span>
@@ -50,7 +51,7 @@ export function NeonPerformanceKPIGrid({ sim, metrics = ALL, className = "" }: {
   };
   return (
     <div className={"grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2 " + className}>
-      {metrics.map(m => { const d = D[m]; return <NT key={m} label={d.l} value={d.v} unit={d.u} icon={d.i} accent={d.a} sub={d.s} />; })}
+      {metrics.map(function(m) { var d = D[m]; return <NT key={m} label={d.l} value={d.v} unit={d.u} icon={d.i} accent={d.a} sub={d.s} />; })}
     </div>
   );
 }

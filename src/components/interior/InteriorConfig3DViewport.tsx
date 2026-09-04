@@ -13,28 +13,22 @@
 
 import React, { useRef, useEffect, useState, useCallback } from "react";
 import * as THREE from "three";
-import { OrbitControls } from "three-stdlib";
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import {
   useInteriorDashboardConfigStore,
   getSelectedOption,
 } from "../../state/interiorDashboardConfigStore";
 import { MasterInterior3DStudio } from "../../exterior3d/generators/interior/masterInterior3DStudio";
-import {
+import type {
   MasterInteriorConfiguration,
   DashboardArchitectureClass,
   SteeringWheelTypology,
   SeatingArchitectureClass,
 } from "../../exterior3d/types/interiorStudioTypes";
 import {
-  Eye,
-  Crosshair,
-  Sliders,
-  Maximize2,
   Sun,
   Moon,
   RotateCcw,
-  Sparkles,
-  Compass,
 } from "lucide-react";
 
 export const InteriorConfig3DViewport: React.FC = () => {
@@ -182,7 +176,7 @@ export const InteriorConfig3DViewport: React.FC = () => {
     // 1. Scene
     const scene = new THREE.Scene();
     sceneRef.current = scene;
-    scene.background = new THREE.Color(isNightMode ? 0x070b14 : 0x161e2e);
+    scene.background = new THREE.Color(isNightMode ? 0xfef3c7 : 0xfde68a);
 
     // 2. Camera
     const width = container.clientWidth;
@@ -225,11 +219,11 @@ export const InteriorConfig3DViewport: React.FC = () => {
     dirLight.castShadow = true;
     scene.add(dirLight);
 
-    const domeLight = new THREE.HemisphereLight(0x38bdf8, 0x090d16, isNightMode ? 0.4 : 0.9);
+    const domeLight = new THREE.HemisphereLight(0xf59e0b, 0xfef3c7, isNightMode ? 0.4 : 0.9);
     scene.add(domeLight);
 
     // Subtle neon cockpit pointlight
-    const cockpitGlow = new THREE.PointLight(0x00e5ff, isNightMode ? 1.4 : 0.6, 2.5);
+    const cockpitGlow = new THREE.PointLight(0xf59e0b, isNightMode ? 1.4 : 0.6, 2.5);
     cockpitGlow.position.set(0, 0.75, -0.5);
     scene.add(cockpitGlow);
 
@@ -291,137 +285,34 @@ export const InteriorConfig3DViewport: React.FC = () => {
   // Update Lighting on Night Mode Toggle
   useEffect(() => {
     if (!sceneRef.current) return;
-    sceneRef.current.background = new THREE.Color(isNightMode ? 0x070b14 : 0x161e2e);
+    sceneRef.current.background = new THREE.Color(isNightMode ? 0xfef3c7 : 0xfde68a);
     const amb = sceneRef.current.getObjectByName("ambientLight") as THREE.AmbientLight | null;
     if (amb) {
-      amb.intensity = isNightMode ? 0.45 : 1.2;
+      amb.intensity = isNightMode ? 0.45 : 1.8;
     }
   }, [isNightMode]);
 
-  // Camera Pose Switcher
-  const setCameraPose = (pose: "driver" | "steering" | "console" | "wide") => {
-    setActiveCameraPose(pose);
-    if (!cameraRef.current || !controlsRef.current) return;
-    const cam = cameraRef.current;
-    const ctrl = controlsRef.current;
 
-    switch (pose) {
-      case "driver":
-        cam.position.set(-0.48, 0.95, -0.05);
-        ctrl.target.set(-0.48, 0.75, -1.2);
-        break;
-      case "steering":
-        cam.position.set(-0.48, 0.82, -0.08);
-        ctrl.target.set(-0.48, 0.68, -0.55);
-        break;
-      case "console":
-        cam.position.set(0.0, 0.95, 0.1);
-        ctrl.target.set(0.0, 0.45, -0.45);
-        break;
-      case "wide":
-        cam.position.set(1.4, 1.3, 1.2);
-        ctrl.target.set(0.0, 0.6, -0.4);
-        break;
-    }
-    ctrl.update();
-  };
 
   return (
-    <div className="relative w-full h-full min-h-[360px] flex flex-col select-none overflow-hidden rounded-xl bg-amber-950">
-      {/* 3D WebGL Canvas Mount */}
-      <div ref={mountRef} className="w-full flex-1 cursor-grab active:cursor-grabbing relative" />
-
-      {/* Floating 3D Control Bar (Top Right) */}
-      <div className="absolute top-3 right-3 z-20 flex items-center gap-1.5 bg-amber-950/80 backdrop-blur-md p-1.5 rounded-xl border border-amber-800/30 shadow-xl">
-        {/* Camera Pose Buttons */}
-        <button
-          onClick={() => setCameraPose("driver")}
-          className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
-            activeCameraPose === "driver"
-              ? "bg-blue-600 text-white shadow-md shadow-blue-500/30"
-              : "text-amber-300/70 hover:text-amber-100 hover:bg-amber-900/40"
-          }`}
-          title="Driver Point of View"
-        >
-          <Eye size={13} />
-          <span>Driver POV</span>
-        </button>
-
-        <button
-          onClick={() => setCameraPose("steering")}
-          className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
-            activeCameraPose === "steering"
-              ? "bg-blue-600 text-white shadow-md shadow-blue-500/30"
-              : "text-amber-300/70 hover:text-amber-100 hover:bg-amber-900/40"
-          }`}
-          title="Steering & Digital Cluster Macro"
-        >
-          <Crosshair size={13} />
-          <span>Cluster</span>
-        </button>
-
-        <button
-          onClick={() => setCameraPose("console")}
-          className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
-            activeCameraPose === "console"
-              ? "bg-blue-600 text-white shadow-md shadow-blue-500/30"
-              : "text-amber-300/70 hover:text-amber-100 hover:bg-amber-900/40"
-          }`}
-          title="Center Console & Infotainment Screen"
-        >
-          <Sliders size={13} />
-          <span>Console</span>
-        </button>
-
-        <button
-          onClick={() => setCameraPose("wide")}
-          className={`px-2.5 py-1 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
-            activeCameraPose === "wide"
-              ? "bg-blue-600 text-white shadow-md shadow-blue-500/30"
-              : "text-amber-300/70 hover:text-amber-100 hover:bg-amber-900/40"
-          }`}
-          title="Wide Isometric 3D Showcase"
-        >
-          <Maximize2 size={13} />
-          <span>Showcase</span>
-        </button>
-
-        <div className="w-px h-4 bg-slate-700 mx-1" />
-
-        {/* Day / Night Toggle */}
+    <div className="relative w-full h-full min-h-[400px] overflow-hidden rounded-2xl bg-amber-50/60">
+      <div ref={mountRef} className="w-full h-full min-h-[400px]" /><div className="absolute top-4 right-4 flex gap-2 z-10">
         <button
           onClick={() => setIsNightMode(!isNightMode)}
-          className="p-1.5 rounded-lg text-amber-300/70 hover:text-amber-300 hover:bg-amber-900/40 transition-all"
-          title={isNightMode ? "Switch to Day Lighting" : "Switch to Night Ambient Lighting"}
+          className="p-2 rounded-lg bg-amber-200/60 text-amber-800 hover:bg-amber-300/70 transition-all text-xs"
+          title={isNightMode ? "Day Mode" : "Night Mode"}
         >
-          {isNightMode ? <Moon size={14} className="text-cyan-400" /> : <Sun size={14} className="text-amber-400" />}
+          {isNightMode ? <Sun size={14} /> : <Moon size={14} />}
         </button>
-
-        {/* Auto Rotate Toggle */}
         <button
           onClick={() => setIsAutoRotate(!isAutoRotate)}
-          className={`p-1.5 rounded-lg transition-all ${
-            isAutoRotate ? "text-cyan-400 bg-cyan-500/20" : "text-amber-300/70 hover:text-amber-100 hover:bg-amber-900/40"
+          className={`p-2 rounded-lg transition-all text-xs ${
+            isAutoRotate ? "bg-amber-500 text-amber-950" : "bg-amber-200/60 text-amber-800 hover:bg-amber-300/70"
           }`}
-          title="Toggle 360° Cinematic Orbit"
-        >
-          <Compass size={14} />
-        </button>
-
-        {/* Reset Camera */}
-        <button
-          onClick={() => setCameraPose("driver")}
-          className="p-1.5 rounded-lg text-amber-300/70 hover:text-amber-100 hover:bg-amber-900/40 transition-all"
-          title="Reset Camera Target"
+          title="Auto Rotate"
         >
           <RotateCcw size={14} />
         </button>
-      </div>
-
-      {/* Real-Time Telemetry HUD Badge (Bottom Left) */}
-      <div className="absolute bottom-3 left-3 z-20 flex items-center gap-2 bg-amber-950/85 backdrop-blur-md px-3 py-1.5 rounded-lg border border-amber-800/30 text-[11px] font-mono text-amber-200 pointer-events-none">
-        <Sparkles size={13} className="text-cyan-400 animate-pulse" />
-        <span>3D PBR REAL-TIME ENGINE • 60 FPS</span>
       </div>
     </div>
   );

@@ -14,7 +14,7 @@ export interface CarModelEntry {
   origin: string;
   power: string;
   weight: string;
-  paintFinish: string;
+  paintFinish?: string;
 }
 
 export const CAR_MODEL_REGISTRY: CarModelEntry[] = [

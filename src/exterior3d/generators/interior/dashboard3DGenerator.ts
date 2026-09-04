@@ -15,6 +15,7 @@ import {
   InteriorMaterialTheme,
 } from '../../types/interiorStudioTypes';
 import { InteriorCanvasTextureFactory } from '../../textures/interiorCanvasTextures';
+import { createDashboardCowlGeometry, createDashboardBolsterGeometry, createDashboardTrimGeometry, createGT3DashShellGeometry } from './dashboardCurvatureSystem';
 
 export class Dashboard3DGenerator {
   /**
@@ -141,7 +142,7 @@ export class Dashboard3DGenerator {
     ambientMat: THREE.Material
   ): void {
     // Upper Cowl (Curved Leather Top)
-    const upperCowlGeo = new THREE.BoxGeometry(w, 0.16, 0.48);
+    const upperCowlGeo = createDashboardCowlGeometry(w, 0.16, 0.48);
     const upperCowl = new THREE.Mesh(upperCowlGeo, leatherMat);
     upperCowl.position.set(-0.32, 0.78, 0);
     root.add(upperCowl);
@@ -192,14 +193,14 @@ export class Dashboard3DGenerator {
 
 
     // Mid-Tier Open-Pore Wood Waterfall Fascia
-    const woodFasciaGeo = new THREE.BoxGeometry(w * 0.96, 0.12, 0.03);
+    const woodFasciaGeo = createDashboardTrimGeometry(w * 0.96, 0.12, 0.03);
     const woodFascia = new THREE.Mesh(woodFasciaGeo, woodMat);
     woodFascia.position.set(-0.46, 0.70, 0);
     woodFascia.rotation.x = -0.15;
     root.add(woodFascia);
 
     // Lower Knee Bolster Subframe
-    const lowerBolsterGeo = new THREE.BoxGeometry(w * 0.94, 0.28, 0.36);
+    const lowerBolsterGeo = createDashboardBolsterGeometry(w * 0.94, 0.28, 0.36);
     const lowerBolster = new THREE.Mesh(lowerBolsterGeo, leatherMat);
     lowerBolster.position.set(-0.36, 0.52, 0);
     root.add(lowerBolster);
@@ -255,7 +256,7 @@ export class Dashboard3DGenerator {
     aluMat: THREE.Material
   ): void {
     // Ultra-lightweight Carbon Dash Shell
-    const shellGeo = new THREE.BoxGeometry(w * 0.88, 0.22, 0.38);
+    const shellGeo = createGT3DashShellGeometry(w * 0.88, 0.22, 0.38);
     const shell = new THREE.Mesh(shellGeo, carbonMat);
     shell.position.set(-0.30, 0.74, 0);
     root.add(shell);
@@ -368,13 +369,13 @@ export class Dashboard3DGenerator {
     ambientMat: THREE.Material
   ): void {
     // Upper Hand-Stitched Leather Cowl
-    const upperGeo = new THREE.BoxGeometry(w, 0.18, 0.50);
+    const upperGeo = createDashboardCowlGeometry(w, 0.18, 0.50);
     const upper = new THREE.Mesh(upperGeo, primaryLeather);
     upper.position.set(-0.32, 0.78, 0);
     root.add(upper);
 
     // Lower Contrast Leather Fascia
-    const lowerGeo = new THREE.BoxGeometry(w * 0.94, 0.24, 0.38);
+    const lowerGeo = createDashboardBolsterGeometry(w * 0.94, 0.24, 0.38);
     const lower = new THREE.Mesh(lowerGeo, secondaryLeather);
     lower.position.set(-0.34, 0.54, 0);
     root.add(lower);

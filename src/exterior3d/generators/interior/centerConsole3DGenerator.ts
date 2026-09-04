@@ -10,6 +10,7 @@
 // ============================================================================
 
 import * as THREE from 'three';
+import { createCenterConsoleGeometry } from './dashboardCurvatureSystem';
 import {
   CenterConsoleStyle,
   InteriorMaterialTheme,

@@ -47,6 +47,7 @@ import { runPowertrainDynoEcuTests } from "../powertrain/__tests__/powertrainDyn
 import { runTrackBattlesTelemetryTests } from "../telemetry/__tests__/trackBattlesTelemetryTests";
 import { runTrackLayoutCatalogTests } from "../../components/trackLayouts/__tests__/trackLayoutCatalogTests";
 import { runDrivetrainSolverTests } from "../engine/__tests__/drivetrainSolverTests";
+import { runMultimodeCapabilitiesTests } from "./__tests__/multimodeCapabilitiesTest";
 
 console.log("=================================================");
 console.log("  MODULAR VEHICLE, EXTERIOR & AI AGENT TESTS");
@@ -176,6 +177,7 @@ const trackBattlesResults = runTrackBattlesTelemetryTests();
 const trackLayoutResults = runTrackLayoutCatalogTests();
 const packagingResults = runAssemblyPackagingTests();
 const drivetrainResults = runDrivetrainSolverTests();
+const multimodeResults = runMultimodeCapabilitiesTests();
 
 if (
   constrResults.failed > 0 ||
@@ -188,7 +190,8 @@ if (
   trackBattlesResults.failed > 0 ||
   trackLayoutResults.failed > 0 ||
   packagingResults.failed > 0 ||
-  drivetrainResults.failed > 0
+  drivetrainResults.failed > 0 ||
+  multimodeResults.failed > 0
 ) {
   process.exit(1);
 }

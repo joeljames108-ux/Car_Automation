@@ -27,6 +27,30 @@ import { Car3DGlbAssetRegistry } from "../../exterior3d/geometry/car3dGlbAssetRe
 import { disposeThreeScene } from "../../exterior3d/utils/threeDisposal";
 import { GlassFilter } from "../ui/LiquidGlass";
 import {
+  MultiModeVisualizationHUD,
+  MultiModeState,
+} from "../../exterior3d/visualization/MultiModeVisualizationHUD";
+import {
+  SUBSYSTEM_CAPABILITIES,
+  SubsystemCapability,
+} from "../../exterior3d/visualization/multimodeCapabilities";
+import { CutawayClippingManager } from "../../exterior3d/visualization/CutawayClippingManager";
+import { FlowVisualizationSystem } from "../../exterior3d/visualization/FlowVisualizationSystem";
+import {
+  GetLayersGradientShader,
+  GetLayersGradientId,
+  GETLAYERS_GRADIENTS,
+} from "../../exterior3d/layers/GetLayersGradientShader";
+import {
+  GetLayers3DSceneManager,
+  GetLayers3DSceneId,
+  GETLAYERS_SCENE_PRESETS,
+} from "../../exterior3d/layers/GetLayers3DScenePresets";
+import {
+  GetLayersStudioPanel,
+  LayerItem,
+} from "../../exterior3d/layers/GetLayersStudioPanel";
+import {
   Box,
   Layers,
   RotateCcw,
@@ -106,6 +130,86 @@ const EngineAndCar3DGraphicsViewportComponent: React.FC = () => {
   const fillLightRef = useRef<THREE.DirectionalLight | null>(null);
   const rimLightRef = useRef<THREE.DirectionalLight | null>(null);
 
+  // Multi-Mode Visualization Studio Managers & State
+  const cutawayManagerRef = useRef<CutawayClippingManager>(new CutawayClippingManager());
+  const flowSystemRef = useRef<FlowVisualizationSystem>(new FlowVisualizationSystem());
+
+  const [multiModeState, setMultiModeState] = useState<MultiModeState>({
+    is360: true,
+    isExploded: false,
+    isAnatomy: false,
+    isCutaway: false,
+    isXRay: false,
+    activeSubsystemId: "engine",
+    explodedProgress: 0,
+    isAutoPlayingExplosion: false,
+    cutawayConfig: {
+      enabled: false,
+      axis: "X",
+      depth: 0,
+      invert: false,
+      showInternalComponents: true,
+    },
+    flowConfig: {
+      coolant: true,
+      oil: true,
+      air: true,
+      fuel: true,
+      exhaust: true,
+      power: true,
+    },
+    selectedPart: SUBSYSTEM_CAPABILITIES.engine.anatomy.parts[0] || null,
+    isolatedPartName: null,
+    autoSpin: false,
+    autoSpinSpeed: 1,
+  });
+
+  const multiModeStateRef = useRef(multiModeState);
+  useEffect(() => {
+    multiModeStateRef.current = multiModeState;
+  }, [multiModeState]);
+
+  // GetLayers.ai State
+  const [activeGradient, setActiveGradient] = useState<GetLayersGradientId>("strigil");
+  const [activeScenePreset, setActiveScenePreset] = useState<GetLayers3DSceneId>("argent_massif");
+  const [bloomStrength, setBloomStrength] = useState<number>(0.3);
+  const [fogDensity, setFogDensity] = useState<number>(0.035);
+  const [exposure, setExposure] = useState<number>(1.35);
+
+  const gradientShaderRef = useRef<GetLayersGradientShader | null>(null);
+  const getLayersSceneRef = useRef<GetLayers3DSceneManager | null>(null);
+  const bloomPassRef = useRef<UnrealBloomPass | null>(null);
+  const mousePosRef = useRef<{ x: number; y: number }>({ x: 0.5, y: 0.5 });
+
+  const [layersState, setLayersState] = useState<LayerItem[]>([
+    { id: "body", name: "Stamped Body & Haunches", category: "Bodywork", visible: true, meshCount: 18 },
+    { id: "aero", name: "Aerodynamics & Splitters", category: "Aero", visible: true, meshCount: 14 },
+    { id: "powertrain", name: "Twin-Turbo V8 & Bay", category: "Engine", visible: true, meshCount: 38 },
+    { id: "drivetrain", name: "Transaxle & Differential", category: "Drivetrain", visible: true, meshCount: 12 },
+    { id: "suspension", name: "Pushrod Suspension & Brakes", category: "Chassis", visible: true, meshCount: 22 },
+    { id: "wheels", name: "Forged Wheels & Tires", category: "Wheels", visible: true, meshCount: 8 },
+    { id: "cockpit", name: "Cockpit & Racing Glass", category: "Interior", visible: true, meshCount: 16 },
+    { id: "internals", name: "Internal Cutaway CAD Parts", category: "Cutaway", visible: true, meshCount: 40 },
+  ]);
+
+  useEffect(() => {
+    if (bloomPassRef.current) {
+      bloomPassRef.current.strength = bloomStrength;
+    }
+  }, [bloomStrength]);
+
+  useEffect(() => {
+    if (sceneRef.current && sceneRef.current.fog instanceof THREE.FogExp2) {
+      sceneRef.current.fog.density = fogDensity;
+    }
+  }, [fogDensity]);
+
+  useEffect(() => {
+    if (rendererRef.current) {
+      rendererRef.current.toneMappingExposure = exposure;
+    }
+  }, [exposure]);
+
   useEffect(() => {
     if (!mountRef.current) return;
 
@@ -132,8 +236,15 @@ const EngineAndCar3DGraphicsViewportComponent: React.FC = () => {
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 1.35;
     renderer.outputColorSpace = THREE.SRGBColorSpace;
+    renderer.localClippingEnabled = true;
+    cutawayManagerRef.current.attachRenderer(renderer);
     mountRef.current.appendChild(renderer.domElement);
     rendererRef.current = renderer;
+
+    // Attach Flow particle system & Cutaway internals to scene
+    scene.add(flowSystemRef.current.getGroup());
+    const cutawayInternals = cutawayManagerRef.current.buildInternalCutawayGroup();
+    scene.add(cutawayInternals);
 
     // Post-Processing Pipeline
     const composer = new EffectComposer(renderer);
@@ -145,9 +256,29 @@ const EngineAndCar3DGraphicsViewportComponent: React.FC = () => {
     saoPass.params.saoScale = 1.25;
     saoPass.params.saoKernelRadius = 60;
     saoPass.params.saoBlur = true;
-    composer.addPass(saoPass);
-    const bloomPass = new UnrealBloomPass(new THREE.Vector2(width, height), 0.25, 0.6, 0.85);
+    const bloomPass = new UnrealBloomPass(new THREE.Vector2(width, height), bloomStrength, 0.6, 0.85);
     composer.addPass(bloomPass);
+    bloomPassRef.current = bloomPass;
+
+    // GetLayers.ai Background Gradient & 3D Scene Systems
+    const bgScene = new THREE.Scene();
+    const bgCamera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+    const gradientShader = new GetLayersGradientShader();
+    bgScene.add(gradientShader.getMesh());
+    gradientShaderRef.current = gradientShader;
+
+    const getLayersScene = new GetLayers3DSceneManager();
+    scene.add(getLayersScene.getGroup());
+    getLayersSceneRef.current = getLayersScene;
+
+    const handleMouseMove = (e: MouseEvent) => {
+      if (!mountRef.current) return;
+      const rect = mountRef.current.getBoundingClientRect();
+      const x = (e.clientX - rect.left) / rect.width;
+      const y = 1.0 - (e.clientY - rect.top) / rect.height;
+      mousePosRef.current = { x, y };
+    };
+    mountRef.current.addEventListener("mousemove", handleMouseMove);
     const fxaaPass = new ShaderPass(FXAAShader);
     fxaaPass.uniforms["resolution"].value.set(1 / width, 1 / height);
     composer.addPass(fxaaPass);
@@ -215,11 +346,37 @@ const EngineAndCar3DGraphicsViewportComponent: React.FC = () => {
     // 6. ANIMATION LOOP WITH TAB VISIBILITY SUSPENSION
     let animationFrameId: number;
     let orbitTime = 0;
+    const clock = new THREE.Clock();
+    let explosionDirection = 1;
+
     const animate = () => {
       animationFrameId = requestAnimationFrame(animate);
       if (document.hidden) return;
 
-      if (autoRotateRef.current) {
+      const delta = clock.getDelta();
+
+      // Animate flow streamlines
+      flowSystemRef.current.update(delta);
+
+      // Handle auto-playing sequential assembly/disassembly
+      if (multiModeStateRef.current.isAutoPlayingExplosion) {
+        setMultiModeState((prev) => {
+          let nextP = prev.explodedProgress + delta * 0.35 * explosionDirection;
+          if (nextP >= 1.0) {
+            nextP = 1.0;
+            explosionDirection = -1;
+          } else if (nextP <= 0.0) {
+            nextP = 0.0;
+            explosionDirection = 1;
+          }
+          return { ...prev, explodedProgress: nextP };
+        });
+      }
+
+      // Handle 360 inspection auto-spin or standard orbit
+      if (multiModeStateRef.current.autoSpin && currentModelGroup.current) {
+        currentModelGroup.current.rotation.y += delta * 0.6 * multiModeStateRef.current.autoSpinSpeed;
+      } else if (autoRotateRef.current) {
         orbitTime += 0.004;
         const radius = 4.2;
         camera.position.x = Math.sin(orbitTime) * radius;
@@ -229,6 +386,18 @@ const EngineAndCar3DGraphicsViewportComponent: React.FC = () => {
         if (controlsRef.current) controlsRef.current.target.set(0, 0.3, 0);
       }
       if (controlsRef.current) controlsRef.current.update();
+
+      // Render GetLayers.ai WebGL Fluid Gradient Backdrop
+      if (gradientShaderRef.current) {
+        gradientShaderRef.current.update(delta, mousePosRef.current.x, mousePosRef.current.y);
+        renderer.autoClear = false;
+        renderer.clear();
+        renderer.render(bgScene, bgCamera);
+      }
+      if (getLayersSceneRef.current) {
+        getLayersSceneRef.current.update(delta);
+      }
+
       composer.render();
     };
     animate();
@@ -257,6 +426,9 @@ const EngineAndCar3DGraphicsViewportComponent: React.FC = () => {
       cancelAnimationFrame(animationFrameId);
       document.removeEventListener("visibilitychange", handleVisibilityChange);
       window.removeEventListener("resize", handleResize);
+      if (mountRef.current) mountRef.current.removeEventListener("mousemove", handleMouseMove);
+      gradientShaderRef.current?.dispose();
+      getLayersSceneRef.current?.dispose();
       disposeThreeScene(scene, renderer, composer);
     };
   }, []);
@@ -437,16 +609,131 @@ const EngineAndCar3DGraphicsViewportComponent: React.FC = () => {
     return () => {
       active = false;
     };
-  }, [viewMode, selectedEngineLayout, selectedCarStyle, selectedPaintHex, selectedCaliperHex, isWireframe, isXRay, isSmoothNormals, explodedAmount]);
+  }, [viewMode, selectedEngineLayout, selectedCarStyle, selectedPaintHex, selectedCaliperHex, isWireframe, isXRay, isSmoothNormals, explodedAmount, multiModeState.explodedProgress]);
+
+  // Reactive updates for Cutaway Clipping & Internal components
+  useEffect(() => {
+    if (!currentModelGroup.current) return;
+    cutawayManagerRef.current.updateConfig(
+      {
+        ...multiModeState.cutawayConfig,
+        enabled: multiModeState.isCutaway,
+      },
+      currentModelGroup.current
+    );
+  }, [multiModeState.isCutaway, multiModeState.cutawayConfig]);
+
+  // Reactive updates for Anatomy Flow Streamlines
+  useEffect(() => {
+    flowSystemRef.current.setEnabled(multiModeState.isAnatomy);
+    flowSystemRef.current.setFlowConfig(multiModeState.flowConfig);
+  }, [multiModeState.isAnatomy, multiModeState.flowConfig]);
+
+  useEffect(() => {
+    const sub = SUBSYSTEM_CAPABILITIES[multiModeState.activeSubsystemId] || SUBSYSTEM_CAPABILITIES.engine;
+    flowSystemRef.current.buildFlowPaths(sub.anatomy.flows);
+  }, [multiModeState.activeSubsystemId]);
+
+  // Handle Raycaster Click-to-Isolate
+  const handleViewportPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (!mountRef.current || !cameraRef.current || !currentModelGroup.current) return;
+    const rect = mountRef.current.getBoundingClientRect();
+    const x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+    const y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+
+    const raycaster = new THREE.Raycaster();
+    raycaster.setFromCamera(new THREE.Vector2(x, y), cameraRef.current);
+    const hits = raycaster.intersectObjects(currentModelGroup.current.children, true);
+
+    if (hits.length > 0) {
+      const hitObj = hits[0].object as THREE.Mesh;
+      const hitName = hitObj.name || "";
+      const sub = SUBSYSTEM_CAPABILITIES[multiModeState.activeSubsystemId] || SUBSYSTEM_CAPABILITIES.engine;
+      const matchedPart =
+        sub.anatomy.parts.find((p) => hitName.toLowerCase().includes(p.name.toLowerCase().split(" ")[0])) ||
+        sub.anatomy.parts[0];
+
+      setMultiModeState((prev) => ({
+        ...prev,
+        selectedPart: matchedPart || null,
+        isolatedPartName: prev.isolatedPartName === hitName ? null : hitName,
+      }));
+    }
+  };
+
+  // Handle HUD Camera Preset
+  const handleHUDCameraPreset = (presetName: string) => {
+    if (!cameraRef.current || !controlsRef.current) return;
+    const sub = SUBSYSTEM_CAPABILITIES[multiModeState.activeSubsystemId] || SUBSYSTEM_CAPABILITIES.engine;
+    const preset = sub.cameraPresets.find((p) => p.name === presetName) || sub.cameraPresets[0];
+    if (preset) {
+      setAutoRotate(false);
+      cameraRef.current.position.set(preset.pos[0], preset.pos[1], preset.pos[2]);
+      controlsRef.current.target.set(preset.target[0], preset.target[1], preset.target[2]);
+      cameraRef.current.fov = preset.fov;
+      cameraRef.current.updateProjectionMatrix();
+      controlsRef.current.update();
+    }
+  };
+
+  // Reset All Modes
+  const handleResetAllModes = () => {
+    setMultiModeState({
+      is360: true,
+      isExploded: false,
+      isAnatomy: false,
+      isCutaway: false,
+      isXRay: false,
+      activeSubsystemId: "engine",
+      explodedProgress: 0,
+      isAutoPlayingExplosion: false,
+      cutawayConfig: {
+        enabled: false,
+        axis: "X",
+        depth: 0,
+        invert: false,
+        showInternalComponents: true,
+      },
+      flowConfig: {
+        coolant: true,
+        oil: true,
+        air: true,
+        fuel: true,
+        exhaust: true,
+        power: true,
+      },
+      selectedPart: SUBSYSTEM_CAPABILITIES.engine.anatomy.parts[0] || null,
+      isolatedPartName: null,
+      autoSpin: false,
+      autoSpinSpeed: 1,
+    });
+    if (controlsRef.current && cameraRef.current) {
+      cameraRef.current.position.set(3.2, 1.8, 3.8);
+      controlsRef.current.target.set(0, 0.3, 0);
+      controlsRef.current.update();
+    }
+  };
 
   return (
-    <div className="relative w-full h-[700px] bg-slate-950 rounded-2xl overflow-hidden border border-slate-800 shadow-2xl select-none">
+    <div className="relative w-full h-[750px] bg-slate-950 rounded-2xl overflow-hidden border border-slate-800 shadow-2xl select-none">
       {/* 3D WebGL Canvas Container */}
-      <div ref={mountRef} className="w-full h-full cursor-grab active:cursor-grabbing" />
+      <div
+        ref={mountRef}
+        onPointerDown={handleViewportPointerDown}
+        className="w-full h-full cursor-grab active:cursor-grabbing"
+      />
+
+      {/* Multi-Mode Visualization Studio HUD */}
+      <MultiModeVisualizationHUD
+        state={multiModeState}
+        onUpdateState={(updates) => setMultiModeState((prev) => ({ ...prev, ...updates }))}
+        onCameraPreset={handleHUDCameraPreset}
+        onResetAll={handleResetAllModes}
+      />
 
       {/* Loading Overlay */}
       {isLoading && (
-        <div className="absolute inset-0 bg-slate-950/80 backdrop-blur-sm flex flex-col items-center justify-center space-y-3 z-20 pointer-events-none">
+        <div className="absolute inset-0 bg-slate-950/80 backdrop-blur-sm flex flex-col items-center justify-center space-y-3 z-30 pointer-events-none">
           <Loader2 className="w-10 h-10 text-amber-500 animate-spin" />
           <div className="text-white text-sm font-semibold tracking-wider font-mono">LOADING PHOTOREALISTIC 3D GLB CAR MESH...</div>
           <div className="text-xs text-amber-400 font-mono">PBR Clearcoat Shaders • Caliper Finishes • Micro-Details</div>
@@ -630,8 +917,91 @@ const EngineAndCar3DGraphicsViewportComponent: React.FC = () => {
         </div>
       </div>
 
+      {/* GetLayers.ai Studio & Layer Inspector HUD */}
+      <GetLayersStudioPanel
+        activeGradient={activeGradient}
+        onSelectGradient={(id) => {
+          setActiveGradient(id);
+          if (gradientShaderRef.current && sceneRef.current) {
+            gradientShaderRef.current.setGradient(id, sceneRef.current);
+          }
+        }}
+        activeScenePreset={activeScenePreset}
+        onSelectScenePreset={(id) => {
+          setActiveScenePreset(id);
+          if (getLayersSceneRef.current && sceneRef.current) {
+            getLayersSceneRef.current.applyScenePreset(id, sceneRef.current);
+            const preset = GETLAYERS_SCENE_PRESETS[id];
+            if (preset) {
+              setBloomStrength(preset.bloomStrength);
+              setFogDensity(preset.fogDensity);
+            }
+          }
+        }}
+        layers={layersState}
+        onToggleLayer={(layerId) => {
+          setLayersState((prev) =>
+            prev.map((l) => (l.id === layerId ? { ...l, visible: !l.visible } : l))
+          );
+          if (!currentModelGroup.current) return;
+          const target = layersState.find((l) => l.id === layerId);
+          const nextVis = target ? !target.visible : false;
+          currentModelGroup.current.traverse((child) => {
+            if (child instanceof THREE.Mesh) {
+              const name = child.name.toLowerCase();
+              let m = false;
+              if (layerId === "body" && (name.includes("hood") || name.includes("door") || name.includes("fender") || name.includes("roof") || name.includes("bumper") || name.includes("fascia") || name.includes("stamped") || name.includes("fuselage") || name.includes("shell") || name.includes("cowl"))) m = true;
+              if (layerId === "aero" && (name.includes("wing") || name.includes("splitter") || name.includes("diffuser") || name.includes("canard") || name.includes("louver") || name.includes("aero") || name.includes("strake") || name.includes("vane"))) m = true;
+              if (layerId === "powertrain" && (name.includes("engine") || name.includes("turbo") || name.includes("exhaust") || name.includes("header") || name.includes("cooler") || name.includes("intake") || name.includes("manifold") || name.includes("inconel") || name.includes("cylinder"))) m = true;
+              if (layerId === "drivetrain" && (name.includes("transaxle") || name.includes("differential") || name.includes("gear") || name.includes("drivetrain") || name.includes("clutch") || name.includes("flywheel"))) m = true;
+              if (layerId === "suspension" && (name.includes("suspension") || name.includes("brake") || name.includes("caliper") || name.includes("pushrod") || name.includes("damper") || name.includes("rotor") || name.includes("a-arm") || name.includes("spring"))) m = true;
+              if (layerId === "wheels" && (name.includes("wheel") || name.includes("tire") || name.includes("rim") || name.includes("hub") || name.includes("lug") || name.includes("centerlock"))) m = true;
+              if (layerId === "cockpit" && (name.includes("cockpit") || name.includes("cabin") || name.includes("seat") || name.includes("dash") || name.includes("canopy") || name.includes("glass") || name.includes("windshield") || name.includes("window") || name.includes("yoke") || name.includes("steering"))) m = true;
+              if (layerId === "internals" && (name.includes("cutaway") || name.includes("internal") || name.includes("piston") || name.includes("crank") || name.includes("valve"))) m = true;
+              if (m) child.visible = nextVis;
+            }
+          });
+        }}
+        onSoloLayer={(layerId) => {
+          setLayersState((prev) =>
+            prev.map((l) => ({ ...l, visible: l.id === layerId }))
+          );
+          if (!currentModelGroup.current) return;
+          currentModelGroup.current.traverse((child) => {
+            if (child instanceof THREE.Mesh) {
+              const name = child.name.toLowerCase();
+              let m = false;
+              if (layerId === "body" && (name.includes("hood") || name.includes("door") || name.includes("fender") || name.includes("roof") || name.includes("bumper") || name.includes("fascia") || name.includes("stamped") || name.includes("fuselage") || name.includes("shell") || name.includes("cowl"))) m = true;
+              if (layerId === "aero" && (name.includes("wing") || name.includes("splitter") || name.includes("diffuser") || name.includes("canard") || name.includes("louver") || name.includes("aero") || name.includes("strake") || name.includes("vane"))) m = true;
+              if (layerId === "powertrain" && (name.includes("engine") || name.includes("turbo") || name.includes("exhaust") || name.includes("header") || name.includes("cooler") || name.includes("intake") || name.includes("manifold") || name.includes("inconel") || name.includes("cylinder"))) m = true;
+              if (layerId === "drivetrain" && (name.includes("transaxle") || name.includes("differential") || name.includes("gear") || name.includes("drivetrain") || name.includes("clutch") || name.includes("flywheel"))) m = true;
+              if (layerId === "suspension" && (name.includes("suspension") || name.includes("brake") || name.includes("caliper") || name.includes("pushrod") || name.includes("damper") || name.includes("rotor") || name.includes("a-arm") || name.includes("spring"))) m = true;
+              if (layerId === "wheels" && (name.includes("wheel") || name.includes("tire") || name.includes("rim") || name.includes("hub") || name.includes("lug") || name.includes("centerlock"))) m = true;
+              if (layerId === "cockpit" && (name.includes("cockpit") || name.includes("cabin") || name.includes("seat") || name.includes("dash") || name.includes("canopy") || name.includes("glass") || name.includes("windshield") || name.includes("window") || name.includes("yoke") || name.includes("steering"))) m = true;
+              if (layerId === "internals" && (name.includes("cutaway") || name.includes("internal") || name.includes("piston") || name.includes("crank") || name.includes("valve"))) m = true;
+              child.visible = m;
+            }
+          });
+        }}
+        bloomStrength={bloomStrength}
+        onChangeBloom={setBloomStrength}
+        fogDensity={fogDensity}
+        onChangeFog={setFogDensity}
+        exposure={exposure}
+        onChangeExposure={setExposure}
+        currentColorName={PAINT_PALETTE.find((p) => p.hex === selectedPaintHex)?.name || "Apex Pearl Blue"}
+        currentWheelFinish="Satin Bronze"
+        activeModes={[
+          multiModeState.is360 ? "/360" : "",
+          multiModeState.isExploded ? "/exploded" : "",
+          multiModeState.isAnatomy ? "/anatomy" : "",
+          multiModeState.isCutaway ? "/cutaway" : "",
+          multiModeState.isXRay ? "/xray" : "",
+        ].filter(Boolean)}
+      />
+
       {/* Left Vertical Camera & Studio Lighting Bar */}
-      <div className="absolute top-20 left-4 flex flex-col space-y-2 pointer-events-auto z-10">
+      <div className="absolute top-28 left-4 flex flex-col space-y-2 pointer-events-auto z-10">
         {/* Camera Presets */}
         <div
           className="p-2 rounded-2xl border flex flex-col space-y-1"

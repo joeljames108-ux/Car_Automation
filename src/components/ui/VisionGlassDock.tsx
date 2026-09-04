@@ -50,6 +50,7 @@ function VisionGlassDockComponent({
     <nav
       role="navigation"
       aria-label="Workspace Module Dock"
+      className="vision-glass-dock"
       style={{
         position: "absolute",
         bottom: 12,
@@ -86,6 +87,7 @@ function VisionGlassDockComponent({
         ref={dockRef}
         role="toolbar"
         aria-label="Module Stages"
+        className="vision-glass-dock-bar"
         style={{
           display: "flex",
           alignItems: "flex-end",
@@ -158,7 +160,7 @@ function VisionGlassDockComponent({
               }}
             >
               <span style={{ display: "flex", alignItems: "center" }} aria-hidden="true">{cat.icon}</span>
-              <span>{cat.label}</span>
+              <span className="vision-glass-dock-category-label">{cat.label}</span>
             </button>
           );
         })}
@@ -224,7 +226,7 @@ function VisionGlassDockComponent({
               >
                 {s.icon}
               </span>
-              <span>{s.label}</span>
+              <span className="vision-glass-dock-stage-label">{s.label}</span>
             </button>
           );
         })}

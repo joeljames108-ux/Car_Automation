@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import {
   Layers,
   Zap,
@@ -25,6 +25,32 @@ import { NeonHorizonDataCard } from "../design/NeonHorizonDataCard";
 import type { Stage } from "../../StageSwitcher";
 import { NeonPowerTorqueCurveChart } from "../design/NeonPowerTorqueCurveChart";
 import { NeonPerformanceKPIGrid } from "../design/NeonPerformanceKPIGrid";
+import { useSpring, SPRING_PRESETS } from "../ux/useSpringPhysics";
+
+/** Spring-animated scroll-reveal wrapper for stat cards */
+const SpringRevealCard: React.FC<{ children: React.ReactNode; delay?: number; className?: string }> = ({ children, delay = 0, className = "" }) => {
+  const ref = useRef<HTMLDivElement>(null);
+  const [isVisible, setIsVisible] = useState(false);
+  useEffect(() => {
+    var el = ref.current;
+    if (!el) return;
+    var obs = new IntersectionObserver(function(entries) {
+      if (entries[0].isIntersecting) { setIsVisible(true); obs.disconnect(); }
+    }, { threshold: 0.15, rootMargin: "0px 0px -50px 0px" });
+    obs.observe(el);
+    return function() { obs.disconnect(); };
+  }, []);
+  var sp = useSpring(isVisible ? 1 : 0, SPRING_PRESETS.gentle);
+  return (
+    <div ref={ref} className={className} style={{
+      opacity: sp,
+      transform: "translateY(" + ((1 - sp) * 20) + "px) scale(" + (0.95 + sp * 0.05) + ")",
+      transition: "none",
+    }}>
+      {children}
+    </div>
+  );
+};
 
 export interface NeonCommandCenterProps {
   onSelectStage?: (stage: Stage) => void;

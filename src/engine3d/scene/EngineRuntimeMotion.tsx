@@ -94,7 +94,7 @@ const CamshaftRotator: React.FC<{crankAngleDeg:number;position:[number,number,nu
 const ValveActuator: React.FC<{crankAngleDeg:number;phaseOffsetDeg:number;position:[number,number,number];isIntake:boolean}> =
   React.memo(({crankAngleDeg, phaseOffsetDeg, position, isIntake}) => {
     const valveRef = useRef<THREE.Group>(null);
-    const valveMat = useMemo(() => globalMaterialLibrary.getInconel(), []);
+    const valveMat = useMemo(() => globalMaterialLibrary.getInconelExhaust(), []);
     useFrame(() => {
       if (!valveRef.current) return;
       const camAngle = getCamshaftAngle(crankAngleDeg, isIntake ? "intake" : "exhaust") + phaseOffsetDeg;
@@ -114,7 +114,7 @@ const TurbochargerSpin: React.FC<{turbineSpeedRpm:number;position:[number,number
   React.memo(({turbineSpeedRpm, position}) => {
     const tRef = useRef<THREE.Group>(null);
     const cRef = useRef<THREE.Group>(null);
-    const tMat = useMemo(() => globalMaterialLibrary.getInconel(), []);
+    const tMat = useMemo(() => globalMaterialLibrary.getInconelExhaust(), []);
     const cMat = useMemo(() => globalMaterialLibrary.getMachinedBillet(), []);
     useFrame(() => {
       if (!tRef.current || !cRef.current) return;

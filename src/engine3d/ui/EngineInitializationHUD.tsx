@@ -1,13 +1,10 @@
 // ============================================================================
 // MODULAR GLB ENGINE ASSEMBLY — STAGED INITIALIZATION PROGRESS HUD
 // ============================================================================
-// Non-blocking, glassmorphic floating progress indicator showing staged asset
-// streaming (Engine Block -> Head Assemblies -> Induction/Exhaust -> Subsystems).
-// ============================================================================
 
 import React, { useEffect, useState, useRef } from 'react';
 import { globalAssetCache, AssetLoadProgress } from '../assets/glbAssetLoader';
-import { Flame, CheckCircle2, Layers, Loader2, Zap } from 'lucide-react';
+import { Flame, CheckCircle2 } from 'lucide-react';
 
 export const EngineInitializationHUD: React.FC = () => {
   const [progress, setProgress] = useState<AssetLoadProgress>({
@@ -22,7 +19,6 @@ export const EngineInitializationHUD: React.FC = () => {
   const [displayPercent, setDisplayPercent] = useState(0);
   const animFrameRef = useRef<number>(0);
 
-  // Animated counter - smoothly interpolates to target
   useEffect(() => {
     const target = progress.percentage;
     const animate = () => {
@@ -42,7 +38,6 @@ export const EngineInitializationHUD: React.FC = () => {
       setProgress(p);
       if (p.percentage >= 100) {
         setIsComplete(true);
-        // Smoothly fade out 1.2s after completion
         const timer = setTimeout(() => {
           setIsVisible(false);
         }, 1200);
@@ -68,7 +63,7 @@ export const EngineInitializationHUD: React.FC = () => {
 
   return (
     <div
-      className={`absolute bottom-4 left-4 z-40 bg-amber-950/80 backdrop-blur-xl border border-amber-500/30 rounded-2xl p-4 shadow-2xl shadow-[0_0_30px_rgba(245,158,11,0.12)] transition-all duration-500 w-80 pointer-events-none select-none ${
+      className={`absolute bottom-4 left-4 z-40 bg-amber-950/80 backdrop-blur-xl border border-amber-500/30 rounded-2xl p-4 shadow-2xl transition-all duration-500 w-80 pointer-events-none select-none ${
         isComplete ? 'opacity-0 translate-y-2' : 'opacity-100 translate-y-0'
       }`}
     >
@@ -86,11 +81,10 @@ export const EngineInitializationHUD: React.FC = () => {
         <span className="text-xs font-mono font-bold text-amber-400">{Math.round(displayPercent)}%</span>
       </div>
 
-      {/* Progress Bar Track */}
       <div className="w-full bg-amber-900/40 h-1.5 rounded-full overflow-hidden mb-1.5 border border-amber-800/30">
         <div
-          className="bg-gradient-to-r from-amber-600 via-amber-400 to-amber-300 h-full transition-all duration-300 rounded-full relative overflow-hidden" style={{ boxShadow: '0 0 10px rgba(245,158,11,0.4)' }}
-          style={{ width: `${displayPercent}%` }}
+          className="bg-gradient-to-r from-amber-600 via-amber-400 to-amber-300 h-full transition-all duration-300 rounded-full relative overflow-hidden"
+          style={{ width: `${displayPercent}%`, boxShadow: '0 0 10px rgba(245,158,11,0.4)' }}
         />
       </div>
 

@@ -13,6 +13,14 @@ import { MasterVehicleState } from "../../sim/masterVehicleState/masterVehicleTy
 import { MasterAttachmentGraph } from "../sockets/masterAttachmentGraph";
 import { SculptedBodyPanelsGenerator } from "./sculptedBodyPanelsGenerator";
 import { MasterInterior3DStudio } from "./interior/masterInterior3DStudio";
+import { generateWheel3DGeometry } from "./wheelGenerator";
+import { generateTire3DGeometry } from "./tireGenerator";
+import { generateBrakes3DGeometry } from "./brakeCaliperGenerator";
+import { generateFrontSuspension3DGeometry } from "./frontSuspensionGenerator";
+import { generateRearSuspension3DGeometry } from "./rearSuspensionGenerator";
+import { generateFrontSplitter3DGeometry } from "./frontSplitterGenerator";
+import { generateRearDiffuser3DGeometry } from "./rearDiffuserGenerator";
+import { generateRearWing3DGeometry } from "./rearWingGenerator";
 
 export class MasterVehicle3DAssembler {
   private attachmentGraph: MasterAttachmentGraph;
@@ -77,10 +85,10 @@ export class MasterVehicle3DAssembler {
     );
 
     // 5. Build and attach Subsystem 4: Suspension & 4-Corner Assemblies
-    const suspFL = this.buildCornerSuspension(true, w);
-    const suspFR = this.buildCornerSuspension(false, w);
-    const suspRL = this.buildCornerSuspension(true, w);
-    const suspRR = this.buildCornerSuspension(false, w);
+    const suspFL = this.buildCornerSuspension(true, w, false);
+    const suspFR = this.buildCornerSuspension(false, w, false);
+    const suspRL = this.buildCornerSuspension(true, w, true);
+    const suspRR = this.buildCornerSuspension(false, w, true);
 
     this.attachmentGraph.attachComponent("NODE_SUSP_FL", "suspension", "CHASSIS_FRONT_SUSP_L", suspFL, { x: -350, y: 0, z: -250 });
     this.attachmentGraph.attachComponent("NODE_SUSP_FR", "suspension", "CHASSIS_FRONT_SUSP_R", suspFR, { x: 350, y: 0, z: -250 });
@@ -262,166 +270,69 @@ export class MasterVehicle3DAssembler {
     return group;
   }
 
-  private buildCornerSuspension(isLeft: boolean, w: MasterVehicleState["wheelsBrakes"]): THREE.Group {
+  private buildCornerSuspension(isLeft: boolean, w: MasterVehicleState["wheelsBrakes"], isRear: boolean = false): THREE.Group {
     const group = new THREE.Group();
     const sign = isLeft ? -1 : 1;
 
-    const wishboneMat = new THREE.MeshStandardMaterial({ color: 0x111111, roughness: 0.3, metalness: 0.9 });
-    const springMat = new THREE.MeshStandardMaterial({ color: 0xf59e0b, roughness: 0.4, metalness: 0.7 });
-    const discMat = new THREE.MeshStandardMaterial({ color: 0x3a3d45, roughness: 0.3, metalness: 0.95 });
-    const caliperMat = new THREE.MeshStandardMaterial({ color: 0xef4444, roughness: 0.25, metalness: 0.8 });
-    const tireMat = new THREE.MeshStandardMaterial({ color: 0x1c1c1c, roughness: 0.9, metalness: 0.1 });
-    const rimMat = new THREE.MeshStandardMaterial({ color: 0xd8dee9, roughness: 0.15, metalness: 0.95 });
+    // 1 & 2. High-Fidelity Double Wishbone / Multilink Suspension Rig (Phase 11)
+    const suspRig = isRear
+      ? generateRearSuspension3DGeometry()
+      : generateFrontSuspension3DGeometry();
+    suspRig.scale.set(sign, 1, 1);
+    group.add(suspRig);
 
-    // 1. Wishbone Control Arms
-    const armGeo = new THREE.CylinderGeometry(0.012, 0.012, 0.34, 8);
-    const upperArm = new THREE.Mesh(armGeo, wishboneMat);
-    upperArm.rotation.z = sign * (Math.PI / 6);
-    upperArm.position.set(sign * 0.16, 0.12, 0);
+    // 3. High-Fidelity Carbon-Ceramic Drilled Brakes (Phase 10)
+    const brakes = generateBrakes3DGeometry({
+      caliperColorHex: (w as any)?.caliperColor || "#ef4444",
+    });
+    brakes.name = `Brakes_Assembly_${isLeft ? "LH" : "RH"}`;
+    brakes.rotation.y = isLeft ? -Math.PI / 2 : Math.PI / 2;
+    brakes.position.set(sign * 0.31, 0, 0);
+    group.add(brakes);
 
-    const lowerArm = new THREE.Mesh(armGeo, wishboneMat);
-    lowerArm.rotation.z = sign * (Math.PI / 10);
-    lowerArm.position.set(sign * 0.16, -0.1, 0);
-    group.add(upperArm, lowerArm);
+    // 4. High-Fidelity Forged Alloy Wheel Rim (Phase 08)
+    const rim = generateWheel3DGeometry({
+      finish: ((w as any)?.rimFinish as any) || "silver",
+    });
+    rim.name = `Wheel_Rim_${isLeft ? "LH" : "RH"}`;
+    rim.rotation.y = isLeft ? -Math.PI / 2 : Math.PI / 2;
+    rim.position.set(sign * 0.34, 0, 0);
+    group.add(rim);
 
-    // 2. Coilover Spring & Damper
-    const damperGeo = new THREE.CylinderGeometry(0.02, 0.02, 0.28, 12);
-    const damper = new THREE.Mesh(damperGeo, wishboneMat);
-    damper.rotation.z = sign * (Math.PI / 5);
-    damper.position.set(sign * 0.14, 0.04, 0);
-
-    const springGeo = new THREE.TorusGeometry(0.035, 0.008, 8, 24);
-    const spring1 = new THREE.Mesh(springGeo, springMat);
-    spring1.rotation.x = Math.PI / 2;
-    spring1.position.copy(damper.position);
-    group.add(damper, spring1);
-
-    // 3. Carbon-Ceramic Brake Disc (Drilled)
-    const discRadius = (w.frontDiscDiameterMm / 1000) / 2;
-    const discGeo = new THREE.CylinderGeometry(discRadius, discRadius, 0.028, 32);
-    const discMesh = new THREE.Mesh(discGeo, discMat);
-    discMesh.rotation.z = Math.PI / 2;
-    discMesh.position.set(sign * 0.32, 0, 0);
-
-    // 4. 8-Piston Monobloc Brake Caliper
-    const caliperGeo = new THREE.BoxGeometry(0.06, 0.14, 0.24);
-    const caliperMesh = new THREE.Mesh(caliperGeo, caliperMat);
-    caliperMesh.position.set(sign * 0.32, 0.08, 0.08);
-    group.add(discMesh, caliperMesh);
-
-    // 5. Forged Alloy Wheel & Performance Tire
-    const tireRadius = 0.34;
-    const tireWidth = 0.28;
-    const tireGeo = new THREE.CylinderGeometry(tireRadius, tireRadius, tireWidth, 32);
-    const tireMesh = new THREE.Mesh(tireGeo, tireMat);
-    tireMesh.rotation.z = Math.PI / 2;
-    tireMesh.position.set(sign * 0.34, 0, 0);
-
-    const rimGeo = new THREE.CylinderGeometry(0.24, 0.24, tireWidth + 0.01, 24);
-    const rimMesh = new THREE.Mesh(rimGeo, rimMat);
-    rimMesh.rotation.z = Math.PI / 2;
-    rimMesh.position.copy(tireMesh.position);
-
-    group.add(tireMesh, rimMesh);
+    // 5. High-Fidelity Competition Toroidal Tire (Phase 09)
+    const tire = generateTire3DGeometry();
+    tire.name = `Tire_${isLeft ? "LH" : "RH"}`;
+    tire.rotation.y = isLeft ? -Math.PI / 2 : Math.PI / 2;
+    tire.position.set(sign * 0.34, 0, 0);
+    group.add(tire);
 
     return group;
   }
 
-  private buildFrontSplitter(a: MasterVehicleState["aero"]): THREE.Group {
+  private buildFrontSplitter(_a: MasterVehicleState["aero"]): THREE.Group {
     const group = new THREE.Group();
-    const carbonMat = new THREE.MeshStandardMaterial({ color: 0x121418, roughness: 0.3, metalness: 0.9 });
-    const strutMat = new THREE.MeshStandardMaterial({ color: 0xd8dee9, roughness: 0.2, metalness: 0.95 });
-
-    const lenM = (a.frontSplitterLengthMm + 120) / 1000;
-    const splitterGeo = new THREE.BoxGeometry(1.78, 0.02, lenM);
-    const splitterMesh = new THREE.Mesh(splitterGeo, carbonMat);
-    group.add(splitterMesh);
-
-    // Tie-rod Support Struts
-    const strutGeo = new THREE.CylinderGeometry(0.006, 0.006, 0.22, 8);
-    const strutL = new THREE.Mesh(strutGeo, strutMat);
-    strutL.rotation.x = Math.PI / 6;
-    strutL.position.set(-0.38, 0.1, 0.04);
-
-    const strutR = new THREE.Mesh(strutGeo, strutMat);
-    strutR.rotation.x = Math.PI / 6;
-    strutR.position.set(0.38, 0.1, 0.04);
-    group.add(strutL, strutR);
-
-    // Dive Planes / Canards
-    if (a.frontCanardsCount >= 2) {
-      const canardGeo = new THREE.BoxGeometry(0.22, 0.01, 0.12);
-      const canardL = new THREE.Mesh(canardGeo, carbonMat);
-      canardL.rotation.z = -Math.PI / 12;
-      canardL.position.set(-0.82, 0.18, 0);
-
-      const canardR = new THREE.Mesh(canardGeo, carbonMat);
-      canardR.rotation.z = Math.PI / 12;
-      canardR.position.set(0.82, 0.18, 0);
-      group.add(canardL, canardR);
-    }
-
+    group.name = "Front_Splitter_Subsystem";
+    const splitter = generateFrontSplitter3DGeometry();
+    group.add(splitter);
     return group;
   }
 
   private buildRearDiffuser(a: MasterVehicleState["aero"]): THREE.Group {
     const group = new THREE.Group();
-    const carbonMat = new THREE.MeshStandardMaterial({ color: 0x121418, roughness: 0.3, metalness: 0.9 });
-
-    const angleRad = (a.rearDiffuserAngleDeg * Math.PI) / 180;
-    const trayGeo = new THREE.BoxGeometry(1.68, 0.025, 0.75);
-    const trayMesh = new THREE.Mesh(trayGeo, carbonMat);
-    trayMesh.rotation.x = -angleRad;
-    group.add(trayMesh);
-
-    // Vertical Aero Strakes
-    const strakeCount = a.rearDiffuserStrakeCount || 4;
-    const spacing = 1.4 / (strakeCount - 1);
-    for (let i = 0; i < strakeCount; i++) {
-      const strakeGeo = new THREE.BoxGeometry(0.012, 0.14, 0.72);
-      const strake = new THREE.Mesh(strakeGeo, carbonMat);
-      strake.rotation.x = -angleRad;
-      strake.position.set(-0.7 + i * spacing, -0.06, 0);
-      group.add(strake);
-    }
-
+    group.name = "Rear_Diffuser_Subsystem";
+    const diffuser = generateRearDiffuser3DGeometry({
+      diffuserFinCount: a.rearDiffuserStrakeCount || 6,
+      diffuserExpansionAngleDeg: a.rearDiffuserAngleDeg || 14,
+    });
+    group.add(diffuser);
     return group;
   }
 
-  private buildRearWing(a: MasterVehicleState["aero"]): THREE.Group {
+  private buildRearWing(_a: MasterVehicleState["aero"]): THREE.Group {
     const group = new THREE.Group();
-    const carbonMat = new THREE.MeshStandardMaterial({ color: 0x121418, roughness: 0.3, metalness: 0.9 });
-    const pylonMat = new THREE.MeshStandardMaterial({ color: 0x0a0c10, roughness: 0.25, metalness: 0.95 });
-
-    const spanM = a.rearWingSpanMm / 1000;
-    const chordM = a.rearWingChordMm / 1000;
-    const angleRad = (a.rearWingAngleDeg * Math.PI) / 180;
-
-    // Main Airfoil Element
-    const wingGeo = new THREE.BoxGeometry(spanM, 0.03, chordM);
-    const wingMesh = new THREE.Mesh(wingGeo, carbonMat);
-    wingMesh.rotation.x = angleRad;
-    wingMesh.position.set(0, 0.36, 0);
-    group.add(wingMesh);
-
-    // Dual Swan-Neck Mount Pylons
-    const pylonGeo = new THREE.BoxGeometry(0.025, 0.42, 0.18);
-    const pylonL = new THREE.Mesh(pylonGeo, pylonMat);
-    pylonL.position.set(-0.35, 0.18, -0.04);
-
-    const pylonR = new THREE.Mesh(pylonGeo, pylonMat);
-    pylonR.position.set(0.35, 0.18, -0.04);
-    group.add(pylonL, pylonR);
-
-    // Endplates
-    const endplateGeo = new THREE.BoxGeometry(0.012, 0.26, chordM * 1.35);
-    const endplateL = new THREE.Mesh(endplateGeo, carbonMat);
-    endplateL.position.set(-spanM / 2, 0.36, 0);
-
-    const endplateR = new THREE.Mesh(endplateGeo, carbonMat);
-    endplateR.position.set(spanM / 2, 0.36, 0);
-    group.add(endplateL, endplateR);
-
+    group.name = "Rear_Wing_Subsystem";
+    const wing = generateRearWing3DGeometry();
+    group.add(wing);
     return group;
   }
 

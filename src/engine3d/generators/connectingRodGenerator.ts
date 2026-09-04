@@ -344,7 +344,7 @@ clearcoatRoughness: 0.1,
   smallEndGroup.add(scoopMesh);
 
   // Angled Under-Piston Oil Squirter Nozzle (Directs oil mist at wrist pin)
-  const squirterGeo = new THREE.CylinderGeometry(0.0012, 0.0012, 0.014, 12);
+  const squirterGeo = new THREE.CylinderGeometry(0.0012, 0.0012, 0.014, 20);
   squirterGeo.rotateX(Math.PI / 4);
   const squirterMesh = new THREE.Mesh(squirterGeo, matBronzeBushing);
   squirterMesh.name = 'UnderPiston_Oil_Squirter_Nozzle';

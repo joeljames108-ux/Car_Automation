@@ -58,11 +58,75 @@ export const GlbCarModel: React.FC<GlbCarModelProps> = ({ modelPath = DEFAULT_MO
     // Tinted window glass
     const tintedGlass = new THREE.MeshPhysicalMaterial({ color: new THREE.Color("#1a2540"), metalness: 0.0, roughness: 0.01, transmission: 0.7, transparent: true, opacity: 0.55, ior: 1.52, thickness: 0.008, depthWrite: false, side: THREE.DoubleSide, clearcoat: 0.8, envMapIntensity: 1.8 });
 
+    // Procedural 2x2 Twill Carbon Fiber Normal Map
+    const carbonTexture = (() => {
+      const size = 32;
+      const data = new Uint8Array(size * size * 4);
+      for (let y = 0; y < size; y++) {
+        for (let x = 0; x < size; x++) {
+          const idx = (y * size + x) * 4;
+          const weave = ((Math.floor(x / 4) + Math.floor(y / 4)) % 2 === 0);
+          data[idx] = weave ? 140 : 115;
+          data[idx + 1] = weave ? 115 : 140;
+          data[idx + 2] = 255;
+          data[idx + 3] = 255;
+        }
+      }
+      const t = new THREE.DataTexture(data, size, size, THREE.RGBAFormat);
+      t.wrapS = THREE.RepeatWrapping;
+      t.wrapT = THREE.RepeatWrapping;
+      t.repeat.set(24, 24);
+      t.needsUpdate = true;
+      return t;
+    })();
+
     // Brake caliper
     const caliperMat = new THREE.MeshPhysicalMaterial({ color: new THREE.Color(caliperColorHex), metalness: 0.85, roughness: 0.15, clearcoat: 1.0, clearcoatRoughness: 0.02, envMapIntensity: 1.6 });
 
-    // Carbon fiber
-    const carbonMat = new THREE.MeshPhysicalMaterial({ color: 0x111622, metalness: 0.40, roughness: 0.18, clearcoat: 1.0, clearcoatRoughness: 0.04, reflectivity: 0.9, envMapIntensity: 1.6, side: THREE.DoubleSide });
+    // Carbon fiber with physical clearcoat and weave normal
+    const carbonMat = new THREE.MeshPhysicalMaterial({
+      color: 0x0c1017,
+      metalness: 0.50,
+      roughness: 0.16,
+      clearcoat: 1.0,
+      clearcoatRoughness: 0.03,
+      reflectivity: 0.95,
+      normalMap: carbonTexture,
+      envMapIntensity: 1.8,
+      side: THREE.DoubleSide,
+    });
+
+    // Suspension coilover spring (competition yellow)
+    const springMat = new THREE.MeshPhysicalMaterial({
+      color: 0xfacc15,
+      metalness: 0.3,
+      roughness: 0.15,
+      clearcoat: 1.0,
+      clearcoatRoughness: 0.02,
+    });
+
+    // Suspension A-arms / uprights
+    const suspArmMat = new THREE.MeshPhysicalMaterial({
+      color: 0x94a3b8,
+      metalness: 0.90,
+      roughness: 0.22,
+      clearcoat: 0.3,
+    });
+
+    // Interior Alcantara
+    const alcantaraMat = new THREE.MeshStandardMaterial({
+      color: 0x1e1e24,
+      roughness: 0.94,
+      metalness: 0.05,
+    });
+
+    // Roll cage
+    const rollCageMat = new THREE.MeshPhysicalMaterial({
+      color: 0x0284c7,
+      metalness: 0.85,
+      roughness: 0.22,
+      clearcoat: 0.8,
+    });
 
     // Headlight emissive
     const headlightMat = new THREE.MeshStandardMaterial({ color: 0xfde68a, emissive: 0xfbbf24, emissiveIntensity: 3.0, roughness: 0.05, metalness: 0.1 });
@@ -99,6 +163,11 @@ export const GlbCarModel: React.FC<GlbCarModelProps> = ({ modelPath = DEFAULT_MO
       // === MESH NAME DETECTION ===
       const isPaint = n.includes("body") || n.includes("paint") || n.includes("door") || n.includes("hood") || n.includes("fender") || n.includes("roof") || n.includes("bumper") || n.includes("quarter") || n.includes("fascia") || n.includes("skirt") || n.includes("panel") || n.includes("skin") || n.includes("arch") || n.includes("cover") || n.includes("shell") || n.includes("cowl") || n.includes("deck") || n.includes("spine") || n.includes("aileron") || n.includes("spoiler") || n.includes("wing") || n.includes("lip") || n.includes("canard");
 
+      const isSpring = n.includes("spring") || n.includes("coil");
+      const isSuspension = n.includes("suspension") || n.includes("wishbone") || n.includes("a_arm") || n.includes("damper") || n.includes("strut") || n.includes("upright") || n.includes("carrier");
+      const isInterior = n.includes("seat") || n.includes("dashboard") || n.includes("steering") || n.includes("cockpit") || n.includes("cushion") || n.includes("console");
+      const isRollCage = n.includes("cage") || n.includes("roll_bar") || n.includes("hoop");
+
       const isGlass = n.includes("glass") || n.includes("windshield") || n.includes("windscreen") || n.includes("backlite") || n.includes("canopy");
       const isTintedGlass = n.includes("window") || n.includes("side_glass") || n.includes("rear_window");
       const isCaliper = n.includes("caliper") || n.includes("calliper") || n.includes("brake_pad");
@@ -107,14 +176,18 @@ export const GlbCarModel: React.FC<GlbCarModelProps> = ({ modelPath = DEFAULT_MO
       const isTailLight = n.includes("taillight") || n.includes("lightbar") || (n.includes("light") && n.includes("rear"));
       const isHeadLight = n.includes("headlight") || (n.includes("light") && n.includes("front"));
       const isDrl = n.includes("drl") || n.includes("daytime") || n.includes("led_strip");
-      const isIndicator = n.includes("indicator") || n.includes("turn_signal") || n.includes("turn_signal");
+      const isIndicator = n.includes("indicator") || n.includes("turn_signal");
       const isChrome = n.includes("chrome") || n.includes("grille") || n.includes("trim") || n.includes("logo") || n.includes("badge") || n.includes("emblem") || n.includes("ornament");
       const isExhaust = n.includes("exhaust") || n.includes("tip") || n.includes("muffler") || n.includes("tailpipe");
       const isRubber = n.includes("tire") || n.includes("tyre") || n.includes("rubber") || n.includes("wiper") || n.includes("seal") || n.includes("gasket");
       const isAluminum = n.includes("aluminum") || n.includes("aluminium") || n.includes("sill") || n.includes("rocker") || n.includes("rail");
 
       // === MATERIAL ASSIGNMENT (priority order) ===
-      if (isCaliper) mesh.material = caliperMat;
+      if (isSpring) mesh.material = springMat;
+      else if (isRollCage) mesh.material = rollCageMat;
+      else if (isInterior) mesh.material = alcantaraMat;
+      else if (isSuspension) mesh.material = suspArmMat;
+      else if (isCaliper) mesh.material = caliperMat;
       else if (isBrakeDisc) mesh.material = brakeDiscMat;
       else if (isTailLight) mesh.material = oledRed;
       else if (isDrl) mesh.material = drlMat;

@@ -3,7 +3,7 @@ import {
   Search, Command, LayoutDashboard, Cog, Car, Paintbrush, Wind,
   Sofa, Factory, Monitor, ShieldCheck, Microscope, Activity,
   FlaskConical, Flag, BarChart3, Warehouse, GitCompare, TrendingUp,
-  Trophy, Cpu, Palette, Sparkles, X, ArrowRight, Navigation
+  Trophy, Cpu, Palette, Sparkles, X, ArrowRight, Navigation, Maximize2, Minimize2
 } from "lucide-react";
 import { useDesign } from "../state/DesignContext";
 import { VEHICLE_PRESET_LIBRARY } from "../sim/vehiclePresets";
@@ -13,6 +13,8 @@ interface CommandPaletteProps {
   isOpen: boolean;
   onClose: () => void;
   onSelectStage: (stage: string) => void;
+  focusMode?: boolean;
+  onToggleFocusMode?: () => void;
 }
 
 interface CommandItem {
@@ -24,20 +26,36 @@ interface CommandItem {
   action: () => void;
 }
 
-export function CommandPalette({ isOpen, onClose, onSelectStage }: CommandPaletteProps) {
+export function CommandPalette({ isOpen, onClose, onSelectStage, focusMode = false, onToggleFocusMode }: CommandPaletteProps) {
   const { setDesign, setUiTheme, resetDesign } = useDesign();
   const { success, info } = useToast();
   const [query, setQuery] = useState("");
   const [selectedIndex, setSelectedIndex] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const returnFocusRef = useRef<HTMLElement | null>(null);
+  const resultRefs = useRef<Array<HTMLButtonElement | null>>([]);
+  const resultsId = "command-palette-results";
 
-  // Focus input when opened
+  // Keep the palette self-contained: focus starts in search, background scroll is
+  // paused, and focus returns to the control that opened it when it closes.
   useEffect(() => {
-    if (isOpen) {
-      setQuery("");
-      setSelectedIndex(0);
-      setTimeout(() => inputRef.current?.focus(), 50);
-    }
+    if (!isOpen) return;
+
+    returnFocusRef.current = document.activeElement instanceof HTMLElement
+      ? document.activeElement
+      : null;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    setQuery("");
+    setSelectedIndex(0);
+    const focusTimer = window.setTimeout(() => inputRef.current?.focus(), 50);
+
+    return () => {
+      window.clearTimeout(focusTimer);
+      document.body.style.overflow = previousOverflow;
+      returnFocusRef.current?.focus();
+    };
   }, [isOpen]);
 
   const items: CommandItem[] = useMemo(() => {
@@ -74,6 +92,14 @@ export function CommandPalette({ isOpen, onClose, onSelectStage }: CommandPalett
 
       // Actions
       { id: "act_reset", category: "Actions", title: "Reset Current Vehicle", subtitle: "Restore factory default specs", icon: <Sparkles size={16} />, action: () => { resetDesign(); info("Vehicle Reset", "Restored default engineering specs"); } },
+      ...(onToggleFocusMode ? [{
+        id: "act_focus_mode",
+        category: "Actions" as const,
+        title: focusMode ? "Exit Focus Workspace" : "Enter Focus Workspace",
+        subtitle: focusMode ? "Restore navigation chrome and live context" : "Expand the active studio and hide distractions",
+        icon: focusMode ? <Minimize2 size={16} /> : <Maximize2 size={16} />,
+        action: onToggleFocusMode,
+      }] : []),
 
       // Vehicle Presets
       ...VEHICLE_PRESET_LIBRARY.map((p) => ({
@@ -90,7 +116,7 @@ export function CommandPalette({ isOpen, onClose, onSelectStage }: CommandPalett
     ];
 
     return list;
-  }, [onSelectStage, setDesign, setUiTheme, resetDesign, success, info]);
+  }, [onSelectStage, setDesign, setUiTheme, resetDesign, success, info, focusMode, onToggleFocusMode]);
 
   const filteredItems = useMemo(() => {
     if (!query.trim()) return items;
@@ -102,10 +128,21 @@ export function CommandPalette({ isOpen, onClose, onSelectStage }: CommandPalett
     );
   }, [items, query]);
 
-  // Handle arrow key navigation & submit
+  useEffect(() => {
+    if (selectedIndex >= filteredItems.length) setSelectedIndex(0);
+  }, [filteredItems.length, selectedIndex]);
+
+  useEffect(() => {
+    if (isOpen && filteredItems.length > 0) {
+      resultRefs.current[selectedIndex]?.scrollIntoView({ block: "nearest" });
+    }
+  }, [isOpen, filteredItems.length, selectedIndex]);
+
+  // Support expected command-menu keyboard behavior and keep Tab within the dialog.
   useEffect(() => {
     function handleKeyDown(e: KeyboardEvent) {
       if (!isOpen) return;
+      const isTypingInSearch = e.target instanceof HTMLInputElement;
 
       if (e.key === "ArrowDown") {
         e.preventDefault();
@@ -113,6 +150,12 @@ export function CommandPalette({ isOpen, onClose, onSelectStage }: CommandPalett
       } else if (e.key === "ArrowUp") {
         e.preventDefault();
         setSelectedIndex((prev) => (prev - 1 + filteredItems.length) % Math.max(1, filteredItems.length));
+      } else if (e.key === "Home" && !isTypingInSearch) {
+        e.preventDefault();
+        setSelectedIndex(0);
+      } else if (e.key === "End" && !isTypingInSearch) {
+        e.preventDefault();
+        setSelectedIndex(Math.max(0, filteredItems.length - 1));
       } else if (e.key === "Enter") {
         e.preventDefault();
         if (filteredItems[selectedIndex]) {
@@ -122,6 +165,20 @@ export function CommandPalette({ isOpen, onClose, onSelectStage }: CommandPalett
       } else if (e.key === "Escape") {
         e.preventDefault();
         onClose();
+      } else if (e.key === "Tab") {
+        const focusable = Array.from(
+          dialogRef.current?.querySelectorAll<HTMLElement>(
+            'button:not([disabled]), input:not([disabled])'
+          ) ?? []
+        );
+        if (focusable.length === 0) return;
+
+        const currentIndex = focusable.indexOf(document.activeElement as HTMLElement);
+        const nextIndex = e.shiftKey
+          ? (currentIndex <= 0 ? focusable.length - 1 : currentIndex - 1)
+          : (currentIndex === focusable.length - 1 ? 0 : currentIndex + 1);
+        e.preventDefault();
+        focusable[nextIndex].focus();
       }
     }
 
@@ -132,17 +189,33 @@ export function CommandPalette({ isOpen, onClose, onSelectStage }: CommandPalett
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-start justify-center pt-20 px-4 bg-black/70 backdrop-blur-md animate-fade-in">
+    <div
+      className="fixed inset-0 z-50 flex items-start justify-center pt-20 px-4 bg-black/70 backdrop-blur-md animate-fade-in"
+      onMouseDown={(event) => {
+        if (event.currentTarget === event.target) onClose();
+      }}
+    >
       <div
+        ref={dialogRef}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="command-palette-title"
         className="relative w-full max-w-2xl bg-base-950/90 border border-slate-700/60 rounded-2xl shadow-2xl overflow-hidden backdrop-blur-2xl animate-scale-reveal"
         onClick={(e) => e.stopPropagation()}
       >
         {/* Search Bar Header */}
         <div className="flex items-center gap-3 px-4 py-3.5 border-b border-slate-800/80 bg-base-900/60">
           <Search className="w-5 h-5 text-amber-400 shrink-0" />
+          <span id="command-palette-title" className="sr-only">Command palette</span>
           <input
             ref={inputRef}
             type="text"
+            role="combobox"
+            aria-label="Search commands"
+            aria-autocomplete="list"
+            aria-expanded="true"
+            aria-controls={resultsId}
+            aria-activedescendant={filteredItems.length > 0 ? `command-palette-option-${selectedIndex}` : undefined}
             placeholder="Search modules, presets, themes, actions... (or press Esc to close)"
             value={query}
             onChange={(e) => {
@@ -152,7 +225,9 @@ export function CommandPalette({ isOpen, onClose, onSelectStage }: CommandPalett
             className="flex-1 bg-transparent text-sm text-slate-100 placeholder-slate-500 focus:outline-none"
           />
           <button
+            type="button"
             onClick={onClose}
+            aria-label="Close command palette"
             className="p-1 text-slate-400 hover:text-slate-200 rounded-lg hover:bg-slate-800 transition-colors"
           >
             <X className="w-4 h-4" />
@@ -160,9 +235,9 @@ export function CommandPalette({ isOpen, onClose, onSelectStage }: CommandPalett
         </div>
 
         {/* Results List */}
-        <div className="max-h-[60vh] overflow-y-auto p-2 space-y-1">
+        <div id={resultsId} role="listbox" aria-label="Command results" className="max-h-[60vh] overflow-y-auto p-2 space-y-1">
           {filteredItems.length === 0 ? (
-            <div className="py-12 text-center text-slate-500 text-sm">
+            <div role="status" className="py-12 text-center text-slate-500 text-sm">
               No matching modules, presets, or commands found for "{query}".
             </div>
           ) : (
@@ -171,6 +246,11 @@ export function CommandPalette({ isOpen, onClose, onSelectStage }: CommandPalett
               return (
                 <button
                   key={item.id}
+                  ref={(element) => { resultRefs.current[idx] = element; }}
+                  id={`command-palette-option-${idx}`}
+                  type="button"
+                  role="option"
+                  aria-selected={isSelected}
                   onClick={() => {
                     item.action();
                     onClose();

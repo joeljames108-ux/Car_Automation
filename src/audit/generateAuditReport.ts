@@ -122,7 +122,16 @@ export class AuditReportGenerator {
     // Write Markdown Report
     const mdPath = path.join(docsDir, 'PROJECT_FORENSIC_AUDIT_REPORT.md');
     const mdContent = this.generateMarkdown(report);
-    fs.writeFileSync(mdPath, mdContent, 'utf-8');
+    try {
+      fs.writeFileSync(mdPath, mdContent, 'utf-8');
+    } catch (e) {
+      try {
+        fs.unlinkSync(mdPath);
+        fs.writeFileSync(mdPath, mdContent, 'utf-8');
+      } catch {
+        // Ignored if file handle locked by another process
+      }
+    }
 
     return report;
   }

@@ -1,148 +1,79 @@
-/**
- * ============================================================================
- * INTERIOR METRICS PANEL — LEFT SIDEBAR
- * ============================================================================
- * Displays 8 animated progress bars, overall rating badge, weight & cost.
- * Subscribes to the Zustand interiorDashboardConfigStore for real-time updates.
- * Includes interactive Compare Interiors modal trigger.
- * ============================================================================
- */
+import React, { useState } from 'react';
+import { useSpring, SPRING_PRESETS } from '../ui1/ux/useSpringPhysics';
+import { useInteriorDashboardConfigStore } from '../../state/interiorDashboardConfigStore';
+import { InteriorCompareModal } from './InteriorCompareModal';
 
-import React, { useState } from "react";
-import { useInteriorDashboardConfigStore } from "../../state/interiorDashboardConfigStore";
-import { InteriorCompareModal } from "./InteriorCompareModal";
-
-// Stat bar icon SVGs
 const STAT_ICONS: Record<string, string> = {
-  comfort: "☆",
-  ergonomics: "◎",
-  quality: "◆",
-  perceivedValue: "◈",
-  reliability: "⛨",
-  noiseIsolation: "◉",
-  infotainment: "▣",
-  marketAppeal: "♛",
+  comfort: '★', ergonomics: '◎', quality: '◆', perceivedValue: '◈',
+  reliability: '⛨', noiseIsolation: '◉', infotainment: '▣', marketAppeal: '♛',
 };
-
 const STAT_LABELS: Record<string, string> = {
-  comfort: "Comfort",
-  ergonomics: "Ergonomics",
-  quality: "Quality",
-  perceivedValue: "Perceived Value",
-  reliability: "Reliability",
-  noiseIsolation: "Noise Isolation",
-  infotainment: "Infotainment",
-  marketAppeal: "Market Appeal",
+  comfort: 'Comfort', ergonomics: 'Ergonomics', quality: 'Quality',
+  perceivedValue: 'Perceived Value', reliability: 'Reliability',
+  noiseIsolation: 'Noise Isolation', infotainment: 'Infotainment', marketAppeal: 'Market Appeal',
 };
+const STAT_KEYS = ['comfort','ergonomics','quality','perceivedValue','reliability','noiseIsolation','infotainment','marketAppeal'] as const;
 
-const STAT_KEYS = [
-  "comfort",
-  "ergonomics",
-  "quality",
-  "perceivedValue",
-  "reliability",
-  "noiseIsolation",
-  "infotainment",
-  "marketAppeal",
-] as const;
+/** Spring-animated metric row — each gets its own useSpring hook */
+const MetricRow: React.FC<{ icon: string; label: string; value: number }> = ({ icon, label, value }) => {
+  const springProgress = useSpring(value / 100, SPRING_PRESETS.gentle);
+  const displayVal = Math.round(springProgress * 100);
+  return (
+    <div className="flex flex-col gap-1.5 p-2.5 rounded-xl bg-amber-100/60 border border-white/[0.06] hover:bg-amber-100/40 transition-all">
+      <div className="flex items-center justify-between">
+        <span className="text-amber-600 text-sm w-5 text-center">{icon}</span>
+        <span className="text-amber-900 font-bold flex-1 px-2 text-[13px]">{label}</span>
+        <span className="text-amber-700 font-mono font-bold text-[13px]">{displayVal}%</span>
+      </div>
+      <div className="h-2 w-full bg-amber-200/60 rounded-full overflow-hidden border border-white/[0.06]">
+        <div className="h-full bg-gradient-to-r from-amber-500 to-amber-400 rounded-full shadow-[0_0_10px_rgba(251,191,36,0.4)]" style={{ width: displayVal + "%" }} />
+      </div>
+    </div>
+  );
+};
 
 export const InteriorMetricsPanel: React.FC = () => {
   const [compareModalOpen, setCompareModalOpen] = useState(false);
   const metrics = useInteriorDashboardConfigStore((s) => s.metrics);
-
-  const ratingColor =
-    metrics.overallRating === "S"
-      ? "#00e5ff"
-      : metrics.overallRating === "A"
-        ? "#4ade80"
-        : metrics.overallRating === "B"
-          ? "#facc15"
-          : metrics.overallRating === "C"
-            ? "#fb923c"
-            : "#ef4444";
-
+  const ratingColor = metrics.overallRating === 'S' ? '#f59e0b' : metrics.overallRating === 'A' ? '#4ade80' : metrics.overallRating === 'B' ? '#facc15' : metrics.overallRating === 'C' ? '#fb923c' : '#ef4444';
   return (
-    <div className="idash-panel-left bg-[#0d121f] text-slate-100 border-r border-amber-800/30 p-4 flex flex-col gap-3 overflow-y-auto w-[310px] flex-shrink-0">
-      {/* Section Header */}
-      <div className="text-xs font-mono font-bold tracking-widest text-cyan-400 uppercase flex items-center gap-1.5 pb-1 border-b border-amber-800/30/80">
-        <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
-        INTERIOR OVERVIEW
+    <div className='bg-amber-50/80 backdrop-blur-2xl border-r border-white/10 p-4 flex flex-col gap-3 overflow-y-auto w-[310px] flex-shrink-0 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]'>
+      <div className='flex items-center gap-2 pb-2 border-b border-white/10'>
+        <span className='w-2.5 h-2.5 rounded-full bg-amber-400 animate-pulse' />
+        <span className='text-[14px] font-black tracking-widest text-amber-700 uppercase'>Interior Overview</span>
       </div>
-
-      {/* Stat Bars */}
-      <div className="flex flex-col gap-2">
-        {STAT_KEYS.map((key) => {
-          const val = metrics[key];
-          return (
-            <div key={key} className="flex flex-col gap-1 p-2 rounded-xl bg-amber-950/80/90 border border-amber-800/30/80 shadow-sm">
-              <div className="flex items-center justify-between text-xs">
-                <span className="text-cyan-400 font-bold w-4 text-center">{STAT_ICONS[key]}</span>
-                <span className="text-white font-bold flex-1 px-1.5 text-left">{STAT_LABELS[key]}</span>
-                <span className="text-cyan-300 font-mono font-bold">{val}%</span>
-              </div>
-              <div className="h-1.5 w-full bg-amber-950 rounded-full overflow-hidden border border-amber-800/30">
-                <div
-                  className="h-full bg-gradient-to-r from-blue-600 to-cyan-400 rounded-full transition-all duration-300 shadow-[0_0_8px_rgba(0,229,255,0.5)]"
-                  style={{ width: `${val}%` }}
-                />
-              </div>
-            </div>
-          );
-        })}
+      <div className='flex flex-col gap-2'>
+        {STAT_KEYS.map((key) => (
+          <MetricRow key={key} icon={STAT_ICONS[key]} label={STAT_LABELS[key]} value={metrics[key]} />
+        ))}
       </div>
-
-      {/* Rating Badge */}
-      <div className="bg-amber-950/80/90 border border-amber-800/30 rounded-2xl p-3 flex items-center justify-between shadow-sm">
-        <div className="flex flex-col">
-          <span className="text-[10px] font-mono text-amber-300/70 uppercase">Interior Rating</span>
-          <span className="text-sm font-extrabold text-white">{metrics.ratingLabel}</span>
+      <div className='bg-amber-100/60 border border-white/[0.06] rounded-2xl p-3.5 flex items-center justify-between'>
+        <div className='flex flex-col gap-0.5'>
+          <span className='text-[11px] font-mono text-amber-600 uppercase tracking-wider'>Interior Rating</span>
+          <span className='text-sm font-extrabold text-amber-900'>{metrics.ratingLabel}</span>
         </div>
-        <div
-          className="w-10 h-10 rounded-xl flex items-center justify-center font-black text-xl border-2 bg-amber-950/80 shadow-md transition-all"
-          style={{ color: ratingColor, borderColor: ratingColor, textShadow: `0 0 10px ${ratingColor}60` }}
-        >
+        <div className='w-12 h-12 rounded-xl flex items-center justify-center font-black text-2xl border-2 bg-amber-100/60 shadow-md' style={{ color: ratingColor, borderColor: ratingColor, textShadow: '0 0 14px ' + ratingColor + '60' }}>
           {metrics.overallRating}
         </div>
       </div>
-
-      {/* Stats Readout */}
-      <div className="flex flex-col gap-1.5 p-2.5 rounded-xl bg-amber-950/80/90 border border-amber-800/30 text-xs">
-        <div className="flex items-center justify-between">
-          <span className="text-amber-300/70 flex items-center gap-1">
-            <span>♛</span> Market Appeal
-          </span>
-          <span className="font-mono font-bold" style={{ color: metrics.marketAppeal >= 60 ? "#4ade80" : "#facc15" }}>
-            {metrics.marketAppeal}%
-          </span>
+      <div className='flex flex-col gap-2 p-3 rounded-xl bg-amber-100/60 border border-white/[0.06] text-[13px]'>
+        <div className='flex items-center justify-between'>
+          <span className='text-amber-700/80 flex items-center gap-1.5'><span>♛</span> Market Appeal</span>
+          <span className='font-mono font-bold' style={{ color: metrics.marketAppeal >= 60 ? '#4ade80' : '#facc15' }}>{metrics.marketAppeal}%</span>
         </div>
-        <div className="flex items-center justify-between">
-          <span className="text-amber-300/70 flex items-center gap-1">
-            <span>⚖</span> Total Mass
-          </span>
-          <span className="font-mono font-bold text-white">{metrics.weight} kg</span>
+        <div className='flex items-center justify-between'>
+          <span className='text-amber-700/80 flex items-center gap-1.5'><span>⚖</span> Total Mass</span>
+          <span className='font-mono font-bold text-amber-900'>{metrics.weight} kg</span>
         </div>
-        <div className="flex items-center justify-between">
-          <span className="text-amber-300/70 flex items-center gap-1">
-            <span>💲</span> Production Cost
-          </span>
-          <span className="font-mono font-bold text-emerald-400">${metrics.cost.toLocaleString()}</span>
+        <div className='flex items-center justify-between'>
+          <span className='text-amber-700/80 flex items-center gap-1.5'><span>$</span> Production Cost</span>
+          <span className='font-mono font-bold text-emerald-600'>${'$'}{metrics.cost.toLocaleString()}</span>
         </div>
       </div>
-
-      {/* Compare Button */}
-      <button
-        className="w-full py-2.5 px-3 rounded-xl bg-amber-900/40 hover:bg-slate-750 text-amber-100 hover:text-amber-50 border border-amber-700/30 hover:border-cyan-500/50 text-xs font-mono font-bold transition-all shadow-sm active:scale-95 cursor-pointer flex items-center justify-center gap-2"
-        onClick={() => setCompareModalOpen(true)}
-      >
-        <span>⇌</span>
-        <span>COMPARE INTERIORS</span>
+      <button className='w-full py-2.5 px-3 rounded-xl bg-amber-100/60 hover:bg-amber-200/60 text-amber-800 hover:text-amber-950 border border-amber-300/40 hover:border-amber-400/60 text-[13px] font-bold transition-all active:scale-95 cursor-pointer flex items-center justify-center gap-2' onClick={() => setCompareModalOpen(true)}>
+        <span>⇌</span><span>Compare Interiors</span>
       </button>
-
-      {/* Compare Modal */}
-      <InteriorCompareModal
-        isOpen={compareModalOpen}
-        onClose={() => setCompareModalOpen(false)}
-      />
+      <InteriorCompareModal isOpen={compareModalOpen} onClose={() => setCompareModalOpen(false)} />
     </div>
   );
 };

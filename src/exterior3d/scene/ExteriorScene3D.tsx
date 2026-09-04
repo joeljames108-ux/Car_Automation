@@ -2,6 +2,7 @@
 // EXTERIOR 3D SCENE - ENHANCED WITH CAMERA PRESETS + PAINT FINISH PICKER
 // =============================================================================
 import React, { Suspense, useState, useEffect, useCallback } from "react";
+import * as THREE from "three";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls, ContactShadows, Environment, MeshReflectorMaterial, CameraControls } from "@react-three/drei";
 import { GlbCarModel, type PaintFinishType } from "./GlbCarModel";
@@ -121,6 +122,14 @@ export const ExteriorScene3D: React.FC = () => {
         <spotLight position={[-3,3,-3]} angle={0.4} penumbra={0.6} intensity={1.5} color="#e0f2fe" castShadow={false} />
 
         <Environment preset="studio" background={false} environmentIntensity={0.9} />
+
+        {/* Overhead Automotive Studio Softbox Light Bank */}
+        <group position={[0, 4.8, 0]}>
+          <mesh rotation={[Math.PI / 2, 0, 0]}>
+            <planeGeometry args={[2.8, 6.5]} />
+            <meshStandardMaterial color="#ffffff" emissive="#ffffff" emissiveIntensity={2.2} side={THREE.DoubleSide} />
+          </mesh>
+        </group>
 
         {/* Real GLB Car Model with expanded PBR materials */}
         <Suspense fallback={<CarLoadingFallback />}>

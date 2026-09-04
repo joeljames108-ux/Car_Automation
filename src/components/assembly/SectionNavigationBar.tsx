@@ -3,7 +3,8 @@
 // Translucent Horizontal Scrollable Sequential Stage Navigation Bar
 // ===================================================================
 
-import React, { useRef, useEffect, useCallback } from "react";
+import React, { useRef, useEffect, useCallback, useState } from "react";
+import { useMultiSpring, SPRING_PRESETS } from "../ui1/ux/useSpringPhysics";
 import {
   ChevronLeft,
   ChevronRight,
@@ -30,6 +31,21 @@ interface SectionNavigationBarProps {
   isInstalling?: boolean;
   canInstallCurrent?: boolean;
   className?: string;
+}
+
+function SpringPill({ children, index, isCurrent }: { children: React.ReactNode; index: number; isCurrent: boolean }) {
+  const [hasAppeared, setHasAppeared] = useState(false);
+  useEffect(() => {
+    var timer = setTimeout(function() { setHasAppeared(true); }, index * 60 + 100);
+    return function() { clearTimeout(timer); };
+  }, [index]);
+  var sp = useMultiSpring([hasAppeared ? 1 : 0], SPRING_PRESETS.gentle);
+  var opacity = sp[0];
+  return (
+    <div style={{ opacity: opacity, transform: "translateY(" + ((1 - opacity) * 16) + "px) scale(" + (0.9 + opacity * 0.1) + ")" }}>
+      {children}
+    </div>
+  );
 }
 
 export function SectionNavigationBar({
@@ -130,6 +146,7 @@ export function SectionNavigationBar({
           className="flex-1 flex items-center gap-2 overflow-x-auto no-scrollbar scroll-smooth py-1 px-1"
         >
           {/* Powertrain Select Pill */}
+          <SpringPill index={0} isCurrent={currentStage === "powertrain_select"}>
           <button
             type="button"
             onClick={() => onNavigateToStage("powertrain_select")}
@@ -142,6 +159,7 @@ export function SectionNavigationBar({
             <Layers size={13} />
             <span>Architecture</span>
           </button>
+          </SpringPill>
 
           {/* Component Stage Pills */}
           {stagesList.map((stage) => {
@@ -150,6 +168,7 @@ export function SectionNavigationBar({
             const isUnlocked = stage.isUnlocked;
 
             return (
+              <SpringPill index={stage.index + 1} isCurrent={isCurrent}>
               <button
                 key={stage.id}
                 ref={isCurrent ? activePillRef : null}
@@ -201,10 +220,12 @@ export function SectionNavigationBar({
                   #{stage.index + 1}
                 </span>
               </button>
+              </SpringPill>
             );
           })}
 
           {/* Finish / Summary Pill */}
+          <SpringPill index={stagesList.length + 1} isCurrent={currentStage === "finish"}>
           <button
             type="button"
             onClick={() => onNavigateToStage("finish")}
@@ -219,6 +240,7 @@ export function SectionNavigationBar({
             <Award size={13} />
             <span>Finish Summary</span>
           </button>
+          </SpringPill>
         </div>
 
         {/* Right Scroll Arrow */}

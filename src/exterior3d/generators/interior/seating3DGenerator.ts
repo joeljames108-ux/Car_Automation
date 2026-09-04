@@ -15,6 +15,12 @@ import {
   RacingHarnessType,
   InteriorMaterialTheme,
 } from '../../types/interiorStudioTypes';
+import {
+  createSeatCushionGeometry,
+  createSeatbackGeometry,
+  createHeadrestGeometry,
+} from './dashboardCurvatureSystem';
+
 
 export class Seating3DGenerator {
   /**
@@ -134,7 +140,7 @@ export class Seating3DGenerator {
     seatGroup.add(runnerL, runnerR);
 
     // Seat Base Cushion
-    const baseGeo = new THREE.BoxGeometry(0.48, 0.12, 0.44);
+    const baseGeo = createSeatCushionGeometry(0.48, 0.12, 0.44, true);
     const baseMesh = new THREE.Mesh(baseGeo, primaryMat);
     baseMesh.position.set(0, 0.06, 0);
     seatGroup.add(baseMesh);
@@ -155,7 +161,7 @@ export class Seating3DGenerator {
     }
 
     // Seatback Cushion & Shell
-    const backGeo = new THREE.BoxGeometry(0.10, 0.64, 0.42);
+    const backGeo = createSeatbackGeometry(0.10, 0.64, 0.42, true);
     const backMesh = new THREE.Mesh(backGeo, primaryMat);
     backMesh.position.set(-0.20, 0.42, 0);
     backMesh.rotation.z = -0.18; // Recline angle
@@ -172,7 +178,7 @@ export class Seating3DGenerator {
     }
 
     // Integrated Headrest
-    const headrestGeo = new THREE.BoxGeometry(0.12, 0.18, 0.26);
+    const headrestGeo = createHeadrestGeometry(0.12, 0.18, 0.26);
     const headrestMesh = new THREE.Mesh(headrestGeo, primaryMat);
     headrestMesh.position.set(-0.28, 0.78, 0);
     headrestMesh.rotation.z = -0.18;
@@ -262,13 +268,13 @@ export class Seating3DGenerator {
     const benchWidth = Math.max(1.18, Math.min(1.42, widthM));
 
     // Lower Bench Cushion
-    const benchGeo = new THREE.BoxGeometry(0.50, 0.14, benchWidth);
+    const benchGeo = createSeatCushionGeometry(benchWidth, 0.14, 0.50, false);
     const bench = new THREE.Mesh(benchGeo, primaryMat);
     bench.position.set(0, 0.07, 0);
     rearGroup.add(bench);
 
     // Rear Seatback Cushion
-    const backGeo = new THREE.BoxGeometry(0.12, 0.68, benchWidth);
+    const backGeo = createSeatbackGeometry(benchWidth, 0.68, 0.12, false);
     const back = new THREE.Mesh(backGeo, primaryMat);
     back.position.set(-0.24, 0.44, 0);
     back.rotation.z = -0.16;
@@ -283,7 +289,7 @@ export class Seating3DGenerator {
     // Rear Headrests (2 or 3)
     const headrestZs = is5Seat ? [-benchWidth * 0.35, 0, benchWidth * 0.35] : [-benchWidth * 0.30, benchWidth * 0.30];
     headrestZs.forEach((z) => {
-      const hGeo = new THREE.BoxGeometry(0.10, 0.16, 0.24);
+      const hGeo = createHeadrestGeometry(0.10, 0.16, 0.24);
       const hMesh = new THREE.Mesh(hGeo, primaryMat);
       hMesh.position.set(-0.32, 0.82, z);
       hMesh.rotation.z = -0.16;

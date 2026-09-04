@@ -48,10 +48,10 @@ export const InteriorCompareModal: React.FC<InteriorCompareModalProps> = ({
   const featureKeys = Object.keys(CONFIG_OPTIONS) as FeatureKey[];
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-amber-950/80 backdrop-blur-md p-4 animate-in fade-in duration-200">
-      <div className="bg-amber-950/80 border border-amber-700/30/80 rounded-2xl max-w-4xl w-full max-h-[85vh] flex flex-col shadow-2xl overflow-hidden text-slate-100">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-amber-50/80 backdrop-blur-md p-4 animate-in fade-in duration-200">
+      <div className="bg-amber-50/80 border border-amber-700/30/80 rounded-2xl max-w-4xl w-full max-h-[85vh] flex flex-col shadow-2xl overflow-hidden text-amber-900">
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-amber-800/30 bg-amber-950/60">
+        <div className="flex items-center justify-between px-6 py-4 border-b border-amber-800/30 bg-amber-50/60">
           <div className="flex items-center gap-2.5">
             <div className="p-2 rounded-lg bg-blue-500/20 text-cyan-400 border border-cyan-500/30">
               <Sparkles size={18} />
@@ -88,7 +88,7 @@ export const InteriorCompareModal: React.FC<InteriorCompareModalProps> = ({
             </div>
 
             {/* Baseline */}
-            <div className="bg-amber-950/60 border border-amber-800/30 rounded-xl p-3.5 flex flex-col gap-2">
+            <div className="bg-amber-50/60 border border-amber-800/30 rounded-xl p-3.5 flex flex-col gap-2">
               <span className="text-[10px] font-mono font-bold text-amber-300/70 uppercase tracking-wider">ORIGINAL 80S (BASE)</span>
               <div className="flex items-center justify-between">
                 <span className="text-2xl font-black text-amber-200">{baselineMetrics.overallRating}</span>
@@ -101,7 +101,7 @@ export const InteriorCompareModal: React.FC<InteriorCompareModalProps> = ({
             </div>
 
             {/* Sport 80s */}
-            <div className="bg-amber-950/60 border border-amber-800/30 rounded-xl p-3.5 flex flex-col gap-2">
+            <div className="bg-amber-50/60 border border-amber-800/30 rounded-xl p-3.5 flex flex-col gap-2">
               <span className="text-[10px] font-mono font-bold text-amber-400 uppercase tracking-wider">SPORT 80S</span>
               <div className="flex items-center justify-between">
                 <span className="text-2xl font-black text-amber-300">{sportMetrics.overallRating}</span>
@@ -114,7 +114,7 @@ export const InteriorCompareModal: React.FC<InteriorCompareModalProps> = ({
             </div>
 
             {/* Luxury 80s */}
-            <div className="bg-amber-950/60 border border-amber-800/30 rounded-xl p-3.5 flex flex-col gap-2">
+            <div className="bg-amber-50/60 border border-amber-800/30 rounded-xl p-3.5 flex flex-col gap-2">
               <span className="text-[10px] font-mono font-bold text-emerald-400 uppercase tracking-wider">LUXURY 80S</span>
               <div className="flex items-center justify-between">
                 <span className="text-2xl font-black text-emerald-300">{luxuryMetrics.overallRating}</span>
@@ -131,7 +131,7 @@ export const InteriorCompareModal: React.FC<InteriorCompareModalProps> = ({
           <div className="border border-amber-800/30 rounded-xl overflow-hidden">
             <table className="w-full text-xs text-left border-collapse">
               <thead>
-                <tr className="bg-amber-950 text-amber-300/70 uppercase font-mono border-b border-amber-800/30">
+                <tr className="bg-amber-50/80 text-amber-300/70 uppercase font-mono border-b border-amber-800/30">
                   <th className="py-2.5 px-4 font-semibold">Subsystem / Feature</th>
                   <th className="py-2.5 px-4 font-semibold text-cyan-400 bg-blue-950/20">Your Active Build</th>
                   <th className="py-2.5 px-4 font-semibold">Original 80s</th>
@@ -163,7 +163,7 @@ export const InteriorCompareModal: React.FC<InteriorCompareModalProps> = ({
         </div>
 
         {/* Footer */}
-        <div className="px-6 py-4 border-t border-amber-800/30 bg-amber-950/60 flex items-center justify-between">
+        <div className="px-6 py-4 border-t border-amber-800/30 bg-amber-50/60 flex items-center justify-between">
           <span className="text-xs text-amber-300/70">
             Selected configurations update in real time across the 3D cockpit and 2D blueprints.
           </span>

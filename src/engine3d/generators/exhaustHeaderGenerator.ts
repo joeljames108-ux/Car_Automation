@@ -228,7 +228,7 @@ clearcoatRoughness: 0.,
     primaryGroup.add(egtBungMesh);
 
     // EGT Thermocouple Probe Body with Hex Compression Ferrule
-    const egtProbeGeo = new THREE.CylinderGeometry(0.0032, 0.0032, 0.024, 12);
+    const egtProbeGeo = new THREE.CylinderGeometry(0.0032, 0.0032, 0.024, 20);
     egtProbeGeo.rotateX(isLeft ? Math.PI / 3 : -Math.PI / 3);
     const egtProbeMesh = new THREE.Mesh(egtProbeGeo, matInconel);
     egtProbeMesh.name = `EGT_Thermocouple_Probe_Body_${i + 1}`;

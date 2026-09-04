@@ -10,6 +10,7 @@
 // ============================================================================
 
 import * as THREE from 'three';
+import { createDoorCardGeometry } from './dashboardCurvatureSystem';
 import {
   InteriorMaterialTheme,
   AudioSystemSpecification,
@@ -104,8 +105,8 @@ export class DoorCard3DGenerator {
     const zSign = isLeft ? 1 : -1;
 
     // 1. Main Sculpted Door Casing Panel
-    const panelGeo = new THREE.BoxGeometry(lengthM, 0.52, 0.08);
-    const panelMesh = new THREE.Mesh(panelGeo, primaryLeather);
+    const panelGeo = createDoorCardGeometry(0.58, 0.48, 0.04);
+      const panelMesh = new THREE.Mesh(panelGeo, primaryLeather);
     door.add(panelMesh);
 
     // 2. Upper Shoulder Contrast Insert (Nappa / Carbon Trim)
