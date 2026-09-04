@@ -1,0 +1,243 @@
+[
+  {
+    "file": "v12_racing_engine.glb",
+    "path": "public/models/v12_racing_engine.glb",
+    "size_kb": 115.2,
+    "objects": 106,
+    "meshes": 86,
+    "vertices": 2568,
+    "polygons": 4792,
+    "materials_count": 9,
+    "materials_sample": [
+      "Engine_Belt_Rubber",
+      "Engine_Billet_Steel",
+      "Engine_Carbon_Plenum",
+      "Engine_Cast_Aluminum",
+      "Engine_Chrome_Hardware",
+      "Engine_Forged_Piston"
+    ],
+    "dimensions_m_xyz": [
+      0.95,
+      0.953,
+      0.68
+    ],
+    "sample_nodes": [
+      "V12_Engine_Master_Root",
+      "Alternator_Drive_Pulley",
+      "Camshaft_Exhaust_Left",
+      "Camshaft_Exhaust_Shaft_Left",
+      "Camshaft_Exhaust_Right",
+      "Camshaft_Exhaust_Shaft_Right",
+      "Camshaft_Intake_Left",
+      "Camshaft_Intake_Shaft_Left"
+    ],
+    "rating": "1 - Already Good (Recently Re-Exported from Blender)",
+    "recommendation": "Currently active as live runtime model; 559 objects, 14 collections, 1.82MB, smooth kinematics."
+  },
+  {
+    "file": "v12_racing_engine_complete.glb",
+    "path": "public/models/engines/v12_racing_engine_complete.glb",
+    "size_kb": 115.2,
+    "objects": 106,
+    "meshes": 86,
+    "vertices": 2568,
+    "polygons": 4792,
+    "materials_count": 9,
+    "materials_sample": [
+      "Engine_Belt_Rubber",
+      "Engine_Billet_Steel",
+      "Engine_Carbon_Plenum",
+      "Engine_Cast_Aluminum",
+      "Engine_Chrome_Hardware",
+      "Engine_Forged_Piston"
+    ],
+    "dimensions_m_xyz": [
+      0.95,
+      0.953,
+      0.68
+    ],
+    "sample_nodes": [
+      "V12_Engine_Master_Root",
+      "Alternator_Drive_Pulley",
+      "Camshaft_Exhaust_Left",
+      "Camshaft_Exhaust_Shaft_Left",
+      "Camshaft_Exhaust_Right",
+      "Camshaft_Exhaust_Shaft_Right",
+      "Camshaft_Intake_Left",
+      "Camshaft_Intake_Shaft_Left"
+    ],
+    "rating": "2 - Usable but needs refinement",
+    "recommendation": "Earlier lightweight variant (118KB), lower vertex density, good for LOD fallback."
+  },
+  {
+    "file": "v12_racing_engine_exploded.glb",
+    "path": "public/models/engines/v12_racing_engine_exploded.glb",
+    "size_kb": 2103.6,
+    "objects": 559,
+    "meshes": 537,
+    "vertices": 101021,
+    "polygons": 109972,
+    "materials_count": 23,
+    "materials_sample": [
+      "Apex_Cobalt_Blue_Anodized",
+      "Autoclaved_2x2_Twill_Dry_Carbon",
+      "Billet_Gold_Anodized",
+      "Black_Polymer_Shroud",
+      "Braided_Stainless_AN_Lines",
+      "Cast_Magnesium_Aluminum"
+    ],
+    "dimensions_m_xyz": [
+      1.54,
+      0.928,
+      0.965
+    ],
+    "sample_nodes": [
+      "V12_Racing_Engine",
+      "01_Block_Casting_Crankcase",
+      "Block_Bedplate_Skirt",
+      "Main_Bearing_Saddle_1",
+      "Cross_Bolt_Main_1_LH",
+      "Cross_Bolt_Main_1_RH",
+      "Main_Bearing_Saddle_2",
+      "Cross_Bolt_Main_2_LH"
+    ],
+    "rating": "2 - Usable but needs refinement",
+    "recommendation": "Contains 2,300+ exploded pieces. Can be consolidated into clean parent hierarchies."
+  },
+  {
+    "file": "rear_car_assembly_complete.glb",
+    "path": "public/models/engines/rear_car_assembly_complete.glb",
+    "size_kb": 1098.5,
+    "objects": 262,
+    "meshes": 253,
+    "vertices": 33300,
+    "polygons": 28078,
+    "materials_count": 20,
+    "materials_sample": [
+      "Autoclaved_2x2_Twill_Dry_Carbon",
+      "Billet_Gold_Anodized",
+      "Billet_Titanium_Heat_Tinted",
+      "Carbon_Ceramic_Brake_Matrix",
+      "Cast_Aluminum_Rear_Subframe",
+      "Clearcoat_Apex_Blue_Paint"
+    ],
+    "dimensions_m_xyz": [
+      3.652,
+      1.898,
+      1.24
+    ],
+    "sample_nodes": [
+      "Rear_Car_Master_Assembly",
+      "01_Rear_Bodywork_Shell",
+      "Sculpted_Fender_Haunch_LH",
+      "Wheel_Arch_Lip_LH",
+      "Fastback_C_Pillar_Buttress_LH",
+      "Sculpted_Fender_Haunch_RH",
+      "Wheel_Arch_Lip_RH",
+      "Fastback_C_Pillar_Buttress_RH"
+    ],
+    "rating": "2 - Usable but needs refinement",
+    "recommendation": "Preserve geometry, refine PBR materials and pivots."
+  },
+  {
+    "file": "gt3_race_chassis_01.glb",
+    "path": "public/models/chassis/gt3_race_chassis_01.glb",
+    "size_kb": 26.5,
+    "objects": 23,
+    "meshes": 22,
+    "vertices": 488,
+    "polygons": 888,
+    "materials_count": 4,
+    "materials_sample": [
+      "Chassis_Billet_Aluminum",
+      "Chassis_Carbon_Composite",
+      "Chassis_Chromoly_Steel",
+      "Chassis_Crash_Cone"
+    ],
+    "dimensions_m_xyz": [
+      1.509,
+      3.5,
+      0.83
+    ],
+    "sample_nodes": [
+      "Chassis_Master_Root",
+      "Chassis_Carbon_Monocoque_Tub",
+      "Chassis_Crash_Attenuator_Cone",
+      "Chassis_Torque_Tunnel",
+      "Front_Subframe_Rail_Left",
+      "Front_Subframe_Rail_Right",
+      "Front_Subframe_Strut_Left",
+      "Front_Subframe_Strut_Right"
+    ],
+    "rating": "2 - Usable but needs refinement",
+    "recommendation": "Valid tubular structure, needs collection grouping (Front/Rear Subframe, Rollcage, Floor)."
+  },
+  {
+    "file": "supercar_monocoque_chassis_01.glb",
+    "path": "public/models/chassis/supercar_monocoque_chassis_01.glb",
+    "size_kb": 26.5,
+    "objects": 23,
+    "meshes": 22,
+    "vertices": 488,
+    "polygons": 888,
+    "materials_count": 4,
+    "materials_sample": [
+      "Chassis_Billet_Aluminum",
+      "Chassis_Carbon_Composite",
+      "Chassis_Chromoly_Steel",
+      "Chassis_Crash_Cone"
+    ],
+    "dimensions_m_xyz": [
+      1.509,
+      3.5,
+      0.83
+    ],
+    "sample_nodes": [
+      "Chassis_Master_Root",
+      "Chassis_Carbon_Monocoque_Tub",
+      "Chassis_Crash_Attenuator_Cone",
+      "Chassis_Torque_Tunnel",
+      "Front_Subframe_Rail_Left",
+      "Front_Subframe_Rail_Right",
+      "Front_Subframe_Strut_Left",
+      "Front_Subframe_Strut_Right"
+    ],
+    "rating": "2 - Usable but needs refinement",
+    "recommendation": "Valid tubular structure, needs collection grouping (Front/Rear Subframe, Rollcage, Floor)."
+  },
+  {
+    "file": "modular_gt3_apex.glb",
+    "path": "public/models/exterior/modular_gt3_apex.glb",
+    "size_kb": 106.0,
+    "objects": 111,
+    "meshes": 97,
+    "vertices": 1904,
+    "polygons": 3420,
+    "materials_count": 13,
+    "materials_sample": [
+      "Brake_Caliper_Red",
+      "Car_Paint_Master",
+      "Carbon_Ceramic_Rotor",
+      "Carbon_Fiber_Gloss",
+      "Dark_Alloy_Trim",
+      "Dielectric_Glass"
+    ],
+    "dimensions_m_xyz": [
+      2.093,
+      4.259,
+      0.99
+    ],
+    "sample_nodes": [
+      "Vehicle_Master_Root",
+      "Bonnet_Hinge_Pivot",
+      "AeroCatch_Latch_Left",
+      "AeroCatch_Latch_Right",
+      "Bonnet_Extractor_Vent_Left",
+      "Bonnet_Extractor_Vent_Right",
+      "Bonnet_Hood_Skin",
+      "Chassis_Carbon_Monocoque"
+    ],
+    "rating": "1 - Already Good",
+    "recommendation": "High-fidelity exterior body shell with separate panels."
+  }
+]

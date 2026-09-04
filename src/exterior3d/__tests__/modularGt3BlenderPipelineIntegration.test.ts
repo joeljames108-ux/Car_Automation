@@ -121,12 +121,12 @@ describe('Modular GT3 Blender Asset & Kinematic Pipeline Suite', () => {
       suspensionType: 'pushrod',
       brakeType: 'carbon_ceramic',
       caliperColor: '#ef4444',
-      wheelStyle: 'forged_monoblock',
-      tireCompound: 'slick_soft',
+      wheelStyle: 'centerlock_gt3',
+      tireCompound: 'racing_slick',
       bodyKit: 'gt3_aero',
       doorStyle: 'butterfly',
       doorOpenAngleDeg: 45,
-      bonnetStyle: 'vented_extractor',
+      bonnetStyle: 'extractor_vents',
       bonnetOpenAngleDeg: 35,
       dickyStyle: 'ducktail_trunk',
       dickyOpenAngleDeg: 30,
@@ -137,20 +137,19 @@ describe('Modular GT3 Blender Asset & Kinematic Pipeline Suite', () => {
       headlightColor: '#38bdf8',
       headlightsActive: true,
       headlightSmokedLens: false,
-      taillightStyle: 'oled_blade',
+      taillightStyle: 'continuous_oled_blade',
       bonnetFinish: 'exposed_carbon',
       hoodPins: 'aerocatch_flush',
-      mirrorStyle: 'swan_neck_carbon',
-      doorHandleStyle: 'flush_electronic',
+      mirrorStyle: 'aerofoil_stalk_carbon',
+      doorHandleStyle: 'flush_aerodynamic',
       exhaustType: 'quad_titanium',
       heatTintIntensity: 85,
       towHooksFront: true,
       towHooksRear: true,
-      glassType: 'lexan_polycarbonate',
+      glassType: 'race_polycarbonate',
       lexanEngineCover: true,
-      interiorType: 'gt3_track',
-      steeringAngleDeg: 12,
-      suspensionTravelMm: 15,
+      interiorType: 'carbon_bucket_gt3',
+      electronicsType: 'motorsport_ecu_telemetry',
       aero: {
         frontSplitterEnabled: true,
         frontSplitterLengthMm: 120,
@@ -194,4 +193,92 @@ describe('Modular GT3 Blender Asset & Kinematic Pipeline Suite', () => {
     const wheelY = (mockState.chassis.rideHeightMm + 240) / 1000;
     expect(wheelY).toBeCloseTo(0.34, 2);
   });
-})
+
+  it('4. Audits V12 twin-turbo racing engine GLB for internal mechanical kinematics', () => {
+    const engineGlbPath = path.resolve(__dirname, '../../../public/models/engines/v12_racing_engine_complete.glb');
+    expect(fs.existsSync(engineGlbPath)).toBe(true);
+
+    const stat = fs.statSync(engineGlbPath);
+    expect(stat.size).toBeGreaterThan(60 * 1024);
+
+    const fileBuf = fs.readFileSync(engineGlbPath);
+    const magic = fileBuf.toString('utf8', 0, 4);
+    expect(magic).toBe('glTF');
+
+    const chunkLength = fileBuf.readUInt32LE(12);
+    const gltfJson = JSON.parse(fileBuf.toString('utf8', 20, 20 + chunkLength));
+
+    expect(gltfJson.nodes).toBeDefined();
+    const nodeNames = gltfJson.nodes.map((n: any) => n.name).filter(Boolean);
+
+    // Mechanical components audit
+    expect(nodeNames).toContain('Crankshaft_Kinematic_Pivot');
+    expect(nodeNames).toContain('Crankshaft_Main_Journal');
+    expect(nodeNames).toContain('Flywheel_Dual_Mass');
+    expect(nodeNames).toContain('Harmonic_Balancer_Pulley');
+    expect(nodeNames).toContain('Serpentine_Accessory_Belt');
+
+    // 12 individual cylinder assemblies
+    for (let c = 1; c <= 12; c++) {
+      expect(nodeNames).toContain(`Piston_Assembly_Cyl_${c}`);
+      expect(nodeNames).toContain(`Connecting_Rod_${c}`);
+      expect(nodeNames).toContain(`Piston_Crown_${c}`);
+    }
+
+    // Quad DOHC Camshafts
+    expect(nodeNames).toContain('Camshaft_Intake_Left');
+    expect(nodeNames).toContain('Camshaft_Exhaust_Left');
+    expect(nodeNames).toContain('Camshaft_Intake_Right');
+    expect(nodeNames).toContain('Camshaft_Exhaust_Right');
+
+    // Induction and Forced Aspiration
+    expect(nodeNames).toContain('Intake_Plenum_Carbon_Left');
+    expect(nodeNames).toContain('Intake_Plenum_Carbon_Right');
+    expect(nodeNames).toContain('Turbocharger_Assembly_Left');
+    expect(nodeNames).toContain('Turbocharger_Assembly_Right');
+    expect(nodeNames).toContain('Turbine_Housing_Left');
+    expect(nodeNames).toContain('Turbine_Housing_Right');
+  });
+
+  it('5. Audits GT3 structural competition chassis GLB for survival tub, cage, and subframes', () => {
+    const chassisGlbPath = path.resolve(__dirname, '../../../public/models/chassis/gt3_race_chassis_01.glb');
+    expect(fs.existsSync(chassisGlbPath)).toBe(true);
+
+    const stat = fs.statSync(chassisGlbPath);
+    expect(stat.size).toBeGreaterThan(15 * 1024);
+
+    const fileBuf = fs.readFileSync(chassisGlbPath);
+    const magic = fileBuf.toString('utf8', 0, 4);
+    expect(magic).toBe('glTF');
+
+    const chunkLength = fileBuf.readUInt32LE(12);
+    const gltfJson = JSON.parse(fileBuf.toString('utf8', 20, 20 + chunkLength));
+
+    expect(gltfJson.nodes).toBeDefined();
+    const nodeNames = gltfJson.nodes.map((n: any) => n.name).filter(Boolean);
+
+    // Survival cell tub & tunnel
+    expect(nodeNames).toContain('Chassis_Carbon_Monocoque_Tub');
+    expect(nodeNames).toContain('Chassis_Torque_Tunnel');
+    expect(nodeNames).toContain('Chassis_Crash_Attenuator_Cone');
+
+    // FIA Roll Cage
+    expect(nodeNames).toContain('Roll_Cage_Main_Hoop');
+    expect(nodeNames).toContain('Roll_Cage_Front_Hoop');
+    expect(nodeNames).toContain('Roll_Cage_Door_XBar_Left_1');
+    expect(nodeNames).toContain('Roll_Cage_Door_XBar_Right_1');
+
+    // Front & Rear Subframes
+    expect(nodeNames).toContain('Front_Subframe_Rail_Left');
+    expect(nodeNames).toContain('Front_Subframe_Rail_Right');
+    expect(nodeNames).toContain('Steering_Rack_Crossmember');
+    expect(nodeNames).toContain('Rear_Subframe_Cradle_Left');
+    expect(nodeNames).toContain('Rear_Subframe_Cradle_Right');
+
+    // 4 Corner Suspension Bellcrank Rockers
+    expect(nodeNames).toContain('Suspension_Bellcrank_Rocker_FL');
+    expect(nodeNames).toContain('Suspension_Bellcrank_Rocker_FR');
+    expect(nodeNames).toContain('Suspension_Bellcrank_Rocker_RL');
+    expect(nodeNames).toContain('Suspension_Bellcrank_Rocker_RR');
+  });
+});

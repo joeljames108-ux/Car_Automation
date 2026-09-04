@@ -17,7 +17,7 @@ function getAudioContext(): AudioContext | null {
 }
 
 /** Crisp sci-fi button press click sound */
-export function playHMIClickSound() {
+export function playHMIClickSound(_soundType?: string) {
   try {
     const ctx = getAudioContext();
     if (!ctx) return;

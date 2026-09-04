@@ -238,7 +238,7 @@ export function calculateComponentDeltas(swaps: {
   const v = COMPONENT_OPTIONS.valvetrainType.find((x) => x.id === swaps.valvetrainType);
   if (v) { netHp += v.hpDelta; netWeight += v.weightDelta; }
 
-  return { netHp, netWeight };
+  return { netHp, netWeight, netHpDelta: netHp, netWeightDelta: netWeight };
 }
 
 // Floating Anatomy Callout Badges
