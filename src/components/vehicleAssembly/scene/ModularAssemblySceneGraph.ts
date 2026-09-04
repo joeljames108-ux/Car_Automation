@@ -219,6 +219,10 @@ export class ModularAssemblySceneGraph {
     this.rootGroup = new THREE.Group();
     this.rootGroup.name = "VehicleRoot";
 
+    if (typeof window !== "undefined") {
+      this.preloadGlbChassisOrBody("/models/exterior/modular_gt3_apex.glb");
+    }
+
     this.chassisGroup = new THREE.Group();
     this.chassisGroup.name = "Chassis_Assembly";
 
@@ -1869,6 +1873,175 @@ export class ModularAssemblySceneGraph {
         rF.position.set(ax, rh + 0.22, wb * 0.5);
         group.add(fF, rF);
       });
+
+      return group;
+    }
+
+    // ── BLENDER 5.2 MODULAR GT3 PRODUCTION GLB BINDING ──
+    const modularGlb =
+      this.glbCache.get("/models/exterior/modular_gt3_apex.glb") ||
+      this.glbCache.get("models/exterior/modular_gt3_apex.glb") ||
+      (this.glbCache.size > 0 ? Array.from(this.glbCache.values())[0] : null);
+
+    if (modularGlb && (!cat || cat === "gt3" || cat === "hypercar" || cat === "supercar" || cat === "coupe" || cat === "track" || cat === "sports")) {
+      const glbClone = modularGlb.clone(true);
+
+      const drlColor = new THREE.Color(state.headlightColor || "#38bdf8");
+      const drlMat = new THREE.MeshBasicMaterial({ color: drlColor });
+      const lensMat = state.headlightSmokedLens
+        ? new THREE.MeshPhysicalMaterial({ color: 0x18181b, transmission: 0.72, roughness: 0.1, ior: 1.52, transparent: true })
+        : new THREE.MeshPhysicalMaterial({ color: 0xffffff, transmission: 0.94, roughness: 0.04, ior: 1.52, transparent: true });
+
+      const tint = Math.min(100, Math.max(0, state.heatTintIntensity ?? 70)) / 100;
+      const tipBaseColor = new THREE.Color(0x9aa5b5).lerp(new THREE.Color(0x8ea2c8), tint);
+      const titaniumMat = new THREE.MeshPhysicalMaterial({
+        color: tipBaseColor,
+        roughness: 0.16 - tint * 0.04,
+        metalness: 0.95,
+        sheen: tint,
+        sheenColor: new THREE.Color(0x6366f1),
+      });
+
+      const hoodMat = state.bonnetFinish === "exposed_carbon"
+        ? carbonMat
+        : state.bonnetFinish === "stealth_matte"
+        ? this.materials.carbon
+        : bodyMat;
+
+      // 1. Dynamic material re-binding to respect user customizations
+      glbClone.traverse((child) => {
+        if ((child as THREE.Mesh).isMesh) {
+          const m = child as THREE.Mesh;
+          const matName = (m.material as THREE.Material)?.name || "";
+          const meshName = m.name || "";
+
+          if (meshName.includes("Bonnet_Hood_Skin")) {
+            m.material = hoodMat;
+          } else if (
+            matName.includes("Car_Paint_Master") ||
+            meshName.includes("Skin") ||
+            meshName.includes("Canopy") ||
+            meshName.includes("Fascia") ||
+            meshName.includes("Fender") ||
+            meshName.includes("Haunch")
+          ) {
+            m.material = bodyMat;
+          } else if (
+            matName.includes("Carbon_Fiber_Gloss") ||
+            meshName.includes("Carbon") ||
+            meshName.includes("Louver") ||
+            meshName.includes("Winglet") ||
+            meshName.includes("Strake")
+          ) {
+            m.material = carbonMat;
+          } else if (
+            matName.includes("Dark_Alloy_Trim") ||
+            meshName.includes("Grille") ||
+            meshName.includes("AeroCatch")
+          ) {
+            m.material = trimMat;
+          } else if (matName.includes("DRL") || meshName.includes("DRL")) {
+            m.material = drlMat;
+          } else if (matName.includes("LED_Projector") || meshName.includes("Projector")) {
+            m.material = this.materials.ledWhite;
+          } else if (matName.includes("OLED_Taillight") || meshName.includes("Taillight")) {
+            m.material = this.materials.ledRed;
+          } else if (matName.includes("Titanium") || meshName.includes("Exhaust")) {
+            m.material = titaniumMat;
+          } else if (matName.includes("Headlight_Lens") || meshName.includes("Glass_Cover")) {
+            m.material = lensMat;
+          } else if (matName.includes("Dielectric_Glass") || meshName.includes("Windshield")) {
+            m.material = new THREE.MeshPhysicalMaterial({ color: 0xffffff, transmission: 0.94, roughness: 0.04, ior: 1.52, transparent: true });
+          }
+
+          m.castShadow = true;
+          m.receiveShadow = true;
+        }
+      });
+
+      // 2. Separate kinematic subassemblies into their dedicated interactive pivots
+      const bonnetNode = glbClone.getObjectByName("Bonnet_Hinge_Pivot");
+      if (bonnetNode) {
+        this.bonnetPivot.position.set(0, rh + 0.50, -(wb * 0.14));
+        while (bonnetNode.children.length > 0) {
+          const child = bonnetNode.children[0];
+          if (child.name.includes("Extractor_Vent")) {
+            child.visible = state.bonnetStyle !== "smooth_supercar";
+          }
+          if (child.name.includes("AeroCatch")) {
+            child.visible = state.hoodPins !== "hidden_latches";
+          }
+          this.bonnetPivot.add(child);
+        }
+        bonnetNode.parent?.remove(bonnetNode);
+      }
+
+      const leftDoorNode = glbClone.getObjectByName("Door_Hinge_Pivot_Left");
+      if (leftDoorNode) {
+        this.leftDoorPivot.position.set(-tf * 0.92, rh + 0.38, -(wb * 0.14));
+        while (leftDoorNode.children.length > 0) {
+          const child = leftDoorNode.children[0];
+          if (child.name.includes("Door_Handle")) {
+            child.visible = state.doorHandleStyle !== "shaved_clean";
+          }
+          this.leftDoorPivot.add(child);
+        }
+        leftDoorNode.parent?.remove(leftDoorNode);
+      }
+
+      const rightDoorNode = glbClone.getObjectByName("Door_Hinge_Pivot_Right");
+      if (rightDoorNode) {
+        this.rightDoorPivot.position.set(tf * 0.92, rh + 0.38, -(wb * 0.14));
+        while (rightDoorNode.children.length > 0) {
+          const child = rightDoorNode.children[0];
+          if (child.name.includes("Door_Handle")) {
+            child.visible = state.doorHandleStyle !== "shaved_clean";
+          }
+          this.rightDoorPivot.add(child);
+        }
+        rightDoorNode.parent?.remove(rightDoorNode);
+      }
+
+      const dickyNode = glbClone.getObjectByName("Dicky_Decklid_Pivot");
+      if (dickyNode) {
+        this.dickyPivot.position.set(0, rh + 0.52, wb * 0.14);
+        while (dickyNode.children.length > 0) {
+          const child = dickyNode.children[0];
+          if (child.name.includes("Ducktail")) {
+            child.visible = state.dickyStyle === "ducktail_trunk" || state.dickyStyle === "active_airbrake";
+          }
+          this.dickyPivot.add(child);
+        }
+        dickyNode.parent?.remove(dickyNode);
+      }
+
+      // Fender louvers visibility
+      glbClone.traverse((child) => {
+        if (child.name.includes("Fender_Louver")) {
+          child.visible = !!state.fenderLouvers && !isPreview;
+        }
+      });
+
+      // Remove aero subassemblies from body group since they are controlled parametrically by aeroGroup
+      const splitterNode = glbClone.getObjectByName("Front_Splitter_Assembly");
+      if (splitterNode) splitterNode.parent?.remove(splitterNode);
+
+      const wingNode = glbClone.getObjectByName("Rear_Wing_Assembly");
+      if (wingNode) wingNode.parent?.remove(wingNode);
+
+      const diffNode = glbClone.getObjectByName("Diffuser_Venturi_Assembly");
+      if (diffNode) diffNode.parent?.remove(diffNode);
+
+      // Add remaining monolithic & modular body shell
+      group.add(glbClone);
+
+      // Apply initial closure articulation
+      this.setClosuresArticulation(
+        state.doorOpenAngleDeg || 0,
+        state.bonnetOpenAngleDeg || 0,
+        state.dickyOpenAngleDeg || 0,
+        state.doorStyle || "butterfly"
+      );
 
       return group;
     }
