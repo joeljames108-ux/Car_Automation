@@ -60,6 +60,20 @@ describe('Modular GT3 Blender Asset & Kinematic Pipeline Suite', () => {
     expect(nodeNames).toContain('Front_Bumper_Fascia');
     expect(nodeNames).toContain('Rear_Bumper_Fascia');
 
+    // 6-Strake GT3 Diffuser & Titanium Center-Exit Exhaust audit
+    for (let s = 1; s <= 6; s++) {
+      expect(nodeNames).toContain(`Diffuser_Vortex_Strake_${s}`);
+      expect(nodeNames).toContain(`Diffuser_Strake_Vortex_Foot_${s}`);
+    }
+    expect(nodeNames).toContain('Diffuser_Curved_Ramp');
+    expect(nodeNames).toContain('Diffuser_Gurney_Flap');
+    expect(nodeNames).toContain('Diffuser_Endplate_Left');
+    expect(nodeNames).toContain('Diffuser_Endplate_Right');
+    expect(nodeNames).toContain('Diffuser_FIA_Rain_Light');
+    expect(nodeNames).toContain('Exhaust_Center_Tip_Left');
+    expect(nodeNames).toContain('Exhaust_Center_Tip_Right');
+    expect(nodeNames).toContain('Exhaust_Heat_Shield_Shroud');
+
     const bonnetNode = gltfJson.nodes.find((n: any) => n.name === 'Bonnet_Hinge_Pivot');
     expect(bonnetNode).toBeDefined();
     expect(bonnetNode.translation).toBeDefined();
@@ -280,5 +294,50 @@ describe('Modular GT3 Blender Asset & Kinematic Pipeline Suite', () => {
     expect(nodeNames).toContain('Suspension_Bellcrank_Rocker_FR');
     expect(nodeNames).toContain('Suspension_Bellcrank_Rocker_RL');
     expect(nodeNames).toContain('Suspension_Bellcrank_Rocker_RR');
+  });
+
+  it('6. Audits standalone GT3 rear diffuser & titanium center-exit exhaust GLB asset', () => {
+    const aeroGlbPath = path.resolve(__dirname, '../../../public/models/aero/gt3_diffuser_exhaust_01.glb');
+    expect(fs.existsSync(aeroGlbPath)).toBe(true);
+
+    const stat = fs.statSync(aeroGlbPath);
+    expect(stat.size).toBeGreaterThan(25 * 1024);
+
+    const fileBuf = fs.readFileSync(aeroGlbPath);
+    const magic = fileBuf.toString('utf8', 0, 4);
+    expect(magic).toBe('glTF');
+
+    const chunkLength = fileBuf.readUInt32LE(12);
+    const gltfJson = JSON.parse(fileBuf.toString('utf8', 20, 20 + chunkLength));
+
+    expect(gltfJson.nodes).toBeDefined();
+    const nodeNames = gltfJson.nodes.map((n: any) => n.name).filter(Boolean);
+
+    // 6 Vortex Strakes & Ground Effect Vortex Foot Fences
+    for (let s = 1; s <= 6; s++) {
+      expect(nodeNames).toContain(`Diffuser_Vortex_Strake_${s}`);
+      expect(nodeNames).toContain(`Diffuser_Strake_Vortex_Foot_${s}`);
+    }
+
+    // Aerodynamic Tray, Endplates, Gurney, Struts & FIA Rain Light
+    expect(nodeNames).toContain('Diffuser_Curved_Ramp');
+    expect(nodeNames).toContain('Diffuser_Gurney_Flap');
+    expect(nodeNames).toContain('Diffuser_Endplate_Left');
+    expect(nodeNames).toContain('Diffuser_Endplate_Right');
+    expect(nodeNames).toContain('Diffuser_FIA_Rain_Light');
+    expect(nodeNames).toContain('Diffuser_FIA_Rain_Bezel');
+    expect(nodeNames).toContain('Diffuser_Support_Strut_Left');
+    expect(nodeNames).toContain('Diffuser_Support_Strut_Right');
+
+    // Titanium Center-Exit Exhaust Assembly
+    expect(nodeNames).toContain('Titanium_Center_Exhaust_Assembly');
+    expect(nodeNames).toContain('Exhaust_Center_Tip_Left');
+    expect(nodeNames).toContain('Exhaust_Center_Tip_Right');
+    expect(nodeNames).toContain('Exhaust_Baffle_Core_Left');
+    expect(nodeNames).toContain('Exhaust_Baffle_Core_Right');
+    expect(nodeNames).toContain('Exhaust_Heat_Shield_Shroud');
+    expect(nodeNames).toContain('Exhaust_Gold_Heat_Barrier');
+    expect(nodeNames).toContain('Exhaust_Mount_Bracket_Left');
+    expect(nodeNames).toContain('Exhaust_Mount_Bracket_Right');
   });
 });

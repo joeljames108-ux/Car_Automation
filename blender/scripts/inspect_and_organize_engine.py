@@ -32,6 +32,7 @@ Exports the production-ready GLB to exports/glb/v12_racing_engine.glb
 ==============================================================================
 """
 
+# pyright: reportMissingImports=false
 import bpy
 import mathutils
 import os

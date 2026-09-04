@@ -10,6 +10,7 @@ Provides a unified headless/interactive glTF 2.0 GLB export utility that enforce
 ==============================================================================
 """
 
+# pyright: reportMissingImports=false
 import bpy
 import os
 import sys

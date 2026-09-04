@@ -1,0 +1,13 @@
+{
+  "include": [
+    "blender/scripts",
+    "scripts/blender"
+  ],
+  "exclude": [
+    "**/node_modules",
+    "**/dist"
+  ],
+  "reportMissingImports": "none",
+  "reportMissingModuleSource": "none",
+  "reportMissingTypeStubs": false
+}

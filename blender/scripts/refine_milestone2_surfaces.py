@@ -1,3 +1,4 @@
+# pyright: reportMissingImports=false
 import bpy
 import bmesh
 import math

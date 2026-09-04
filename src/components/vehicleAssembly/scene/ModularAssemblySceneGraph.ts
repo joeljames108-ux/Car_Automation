@@ -745,28 +745,50 @@ export class ModularAssemblySceneGraph {
       this.diffuserPivot.rotation.x = -(aero.diffuserAngleDeg * Math.PI) / 180;
 
       const exitWidthM = aero.diffuserExitWidthMm / 1000;
-      const diffGeo = new THREE.BoxGeometry(exitWidthM, 0.016, 0.48);
+      const diffGeo = new THREE.BoxGeometry(exitWidthM, 0.016, 0.56);
       const diffMesh = new THREE.Mesh(diffGeo, carbonMat);
-      diffMesh.position.set(0, 0.04, 0.24);
+      diffMesh.position.set(0, 0.04, 0.26);
       diffMesh.rotation.x = -0.15;
       this.diffuserPivot.add(diffMesh);
 
-      // Vertical Aerodynamic Vortex Strakes
-      const strakesCount = Math.max(2, Math.min(6, aero.diffuserStrakes));
+      // Trailing Edge Gurney Flap (Wickerbill strip)
+      const wickerGeo = new THREE.BoxGeometry(exitWidthM * 0.98, 0.024, 0.012);
+      const wickerMesh = new THREE.Mesh(wickerGeo, carbonMat);
+      wickerMesh.position.set(0, 0.12, 0.54);
+      this.diffuserPivot.add(wickerMesh);
+
+      // Lateral Diffuser Boundary Endplates (Left & Right)
+      const endplateGeo = new THREE.BoxGeometry(0.012, 0.16, 0.58);
+      for (const side of [-1, 1]) {
+        const endMesh = new THREE.Mesh(endplateGeo, carbonMat);
+        endMesh.position.set(side * (exitWidthM * 0.495), 0.06, 0.26);
+        endMesh.rotation.x = -0.15;
+        this.diffuserPivot.add(endMesh);
+      }
+
+      // Vertical Aerodynamic Vortex Strakes (Ultra-Detailed 6-Strake Configuration)
+      const strakesCount = Math.max(2, Math.min(6, aero.diffuserStrakes || 6));
       const strakeSpacing = exitWidthM / (strakesCount + 1);
       for (let i = 1; i <= strakesCount; i++) {
         const sx = -exitWidthM / 2 + i * strakeSpacing;
-        const strakeGeo = new THREE.BoxGeometry(0.008, 0.08, 0.44);
+        const strakeGeo = new THREE.BoxGeometry(0.010, 0.12, 0.52);
         const strake = new THREE.Mesh(strakeGeo, carbonMat);
-        strake.position.set(sx, -0.02, 0.24);
+        strake.position.set(sx, -0.01, 0.26);
         strake.rotation.x = -0.15;
         this.diffuserPivot.add(strake);
+
+        // Ground effect horizontal vortex foot fence
+        const footGeo = new THREE.BoxGeometry(0.032, 0.006, 0.48);
+        const foot = new THREE.Mesh(footGeo, carbonMat);
+        foot.position.set(sx, -0.07, 0.26);
+        foot.rotation.x = -0.15;
+        this.diffuserPivot.add(foot);
       }
 
       // Central FIA Motorsport Flashing Rain Light
-      const rainLightGeo = new THREE.BoxGeometry(0.07, 0.035, 0.025);
+      const rainLightGeo = new THREE.BoxGeometry(0.075, 0.032, 0.025);
       const rainLight = new THREE.Mesh(rainLightGeo, this.materials.ledRed);
-      rainLight.position.set(0, 0.08, 0.48);
+      rainLight.position.set(0, 0.07, 0.54);
       this.diffuserPivot.add(rainLight);
     }
 
@@ -2039,7 +2061,19 @@ export class ModularAssemblySceneGraph {
       if (wingNode) wingNode.parent?.remove(wingNode);
 
       const diffNode = glbClone.getObjectByName("Diffuser_Venturi_Assembly");
-      if (diffNode) diffNode.parent?.remove(diffNode);
+      if (diffNode) {
+        if (state.aero.diffuserEnabled) {
+          this.clearGroup(this.diffuserPivot);
+          const diffZ = (wb * 0.5) + 0.28;
+          this.diffuserPivot.position.set(0, rh + 0.02, diffZ);
+          this.diffuserPivot.rotation.x = -(state.aero.diffuserAngleDeg * Math.PI) / 180;
+          while (diffNode.children.length > 0) {
+            const child = diffNode.children[0];
+            this.diffuserPivot.add(child);
+          }
+        }
+        diffNode.parent?.remove(diffNode);
+      }
 
       // Add remaining monolithic & modular body shell
       group.add(glbClone);
@@ -2792,19 +2826,52 @@ export class ModularAssemblySceneGraph {
         emissive: new THREE.Color(0x312e81).multiplyScalar(tint * 0.55),
       });
 
+      const isCenter = exhaust === "center_dual";
       const isQuad = exhaust === "quad_titanium";
-      const xs = isQuad ? [-0.18, -0.065, 0.065, 0.18] : exhaust === "center_dual" ? [-0.08, 0.08] : [-tr * 0.78, tr * 0.78];
-      xs.forEach((x) => {
-        const tipMesh = new THREE.Mesh(tipGeo, tipMat);
-        tipMesh.rotation.x = Math.PI / 2;
-        tipMesh.position.set(x, rh + 0.22, (wb * 0.5) + 0.46);
-        group.add(tipMesh);
 
-        const exitMesh = new THREE.Mesh(exitGeo, exitMat);
-        exitMesh.rotation.x = Math.PI / 2;
-        exitMesh.position.set(x, rh + 0.22, (wb * 0.5) + 0.51);
-        group.add(exitMesh);
-      });
+      if (isCenter) {
+        // Center Dual Slash-Cut Titanium Exhaust with Pie-Cut Welds and Carbon/Titanium Heat Shield
+        const xs = [-0.075, 0.075];
+        xs.forEach((x) => {
+          const tipMesh = new THREE.Mesh(tipGeo, tipMat);
+          tipMesh.rotation.x = Math.PI / 2 - 0.24;
+          tipMesh.position.set(x, rh + 0.24, (wb * 0.5) + 0.49);
+          group.add(tipMesh);
+
+          const exitMesh = new THREE.Mesh(exitGeo, exitMat);
+          exitMesh.rotation.x = Math.PI / 2 - 0.24;
+          exitMesh.position.set(x, rh + 0.24, (wb * 0.5) + 0.54);
+          group.add(exitMesh);
+
+          // Pie-cut lobster-back welded rings (3 segments)
+          for (let p = 1; p <= 3; p++) {
+            const pieGeo = new THREE.CylinderGeometry(0.049, 0.049, 0.006, 20);
+            const pieMesh = new THREE.Mesh(pieGeo, this.materials.chrome);
+            pieMesh.rotation.x = Math.PI / 2;
+            pieMesh.position.set(x, rh + 0.24, (wb * 0.5) + 0.41 + p * 0.025);
+            group.add(pieMesh);
+          }
+        });
+
+        // Laser-Cut Titanium & Prepreg Carbon Exhaust Heat Shield Shroud
+        const shroudGeo = new THREE.BoxGeometry(0.32, 0.14, 0.16);
+        const shroudMesh = new THREE.Mesh(shroudGeo, this.materials.carbonGloss);
+        shroudMesh.position.set(0, rh + 0.25, (wb * 0.5) + 0.46);
+        group.add(shroudMesh);
+      } else {
+        const xs = isQuad ? [-0.18, -0.065, 0.065, 0.18] : [-tr * 0.78, tr * 0.78];
+        xs.forEach((x) => {
+          const tipMesh = new THREE.Mesh(tipGeo, tipMat);
+          tipMesh.rotation.x = Math.PI / 2;
+          tipMesh.position.set(x, rh + 0.22, (wb * 0.5) + 0.46);
+          group.add(tipMesh);
+
+          const exitMesh = new THREE.Mesh(exitGeo, exitMat);
+          exitMesh.rotation.x = Math.PI / 2;
+          exitMesh.position.set(x, rh + 0.22, (wb * 0.5) + 0.51);
+          group.add(exitMesh);
+        });
+      }
     }
 
     // 2. Racing Tow Hooks (FIA compliant red loops, anchored into crash beams)

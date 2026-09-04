@@ -11,6 +11,7 @@ Generates a production-grade 60-degree V12 twin-turbo racing engine with:
 ==============================================================================
 """
 
+# pyright: reportMissingImports=false
 import bpy
 import bmesh
 import math

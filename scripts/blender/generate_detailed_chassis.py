@@ -10,6 +10,7 @@ Generates a production-grade carbon composite monocoque chassis with:
 ==============================================================================
 """
 
+# pyright: reportMissingImports=false
 import bpy
 import bmesh
 import math

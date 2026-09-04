@@ -14,6 +14,7 @@ Generates a production-grade modular GT3/Hypercar GLB asset with:
 ==============================================================================
 """
 
+# pyright: reportMissingImports=false
 import bpy
 import bmesh
 import math

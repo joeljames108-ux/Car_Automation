@@ -17,6 +17,7 @@ Generates a standalone competition-grade aerodynamic rear diffuser with:
 ==============================================================================
 """
 
+# pyright: reportMissingImports=false
 import bpy
 import bmesh
 import math

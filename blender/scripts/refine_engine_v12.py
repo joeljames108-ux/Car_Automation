@@ -9,6 +9,7 @@ saves the master .blend scene, and exports the high-fidelity GLB.
 ==============================================================================
 """
 
+# pyright: reportMissingImports=false
 import bpy
 import mathutils
 import os
