@@ -130,6 +130,7 @@ export const ModularLinearAssemblyViewport: React.FC<ModularLinearAssemblyViewpo
 
   const [activeCamPreset, setActiveCamPreset] = useState<CameraPresetType>("front");
   const [showAlignmentGrid, setShowAlignmentGrid] = useState<boolean>(false);
+  const [glbLoadTick, setGlbLoadTick] = useState<number>(0);
 
   // CAD Tools State
   const [sectionPlane, setSectionPlane] = useState<"off" | "x" | "y" | "z">("off");
@@ -262,6 +263,9 @@ export const ModularLinearAssemblyViewport: React.FC<ModularLinearAssemblyViewpo
 
     // Assembly Scene Graph
     const sceneGraph = new ModularAssemblySceneGraph();
+    sceneGraph.setOnModelLoaded(() => {
+      setGlbLoadTick((t) => t + 1);
+    });
     sceneGraphRef.current = sceneGraph;
     scene.add(sceneGraph.rootGroup);
 
@@ -358,12 +362,12 @@ export const ModularLinearAssemblyViewport: React.FC<ModularLinearAssemblyViewpo
     };
   }, []);
 
-  // Update 3D components whenever assembly state, preview stage, exploded factor, or x-ray changes
+  // Update 3D components whenever assembly state, preview stage, exploded factor, x-ray, or GLB asset loads
   useEffect(() => {
     if (sceneGraphRef.current) {
       sceneGraphRef.current.updateScene(effectiveAssemblyState, previewStage, explodedProgress, isXRay);
     }
-  }, [effectiveAssemblyState, previewStage, explodedProgress, isXRay]);
+  }, [effectiveAssemblyState, previewStage, explodedProgress, isXRay, glbLoadTick]);
 
   // Sync closures state when assemblyState changes
   useEffect(() => {

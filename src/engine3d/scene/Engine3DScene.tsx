@@ -99,6 +99,7 @@ export const StudioLightingRig: React.FC = () => {
 export const SceneContent: React.FC = () => {
   useSnapAnimationTicker();
   const orbitRef = useRef<any>(null);
+  const isAutoRotate360 = useEngine3DStore((s) => s.isAutoRotate360);
 
   useFrame(({ gl }: { gl: THREE.WebGLRenderer }) => {
     globalPerformanceManager.updateFrameStats(gl, 0, false);
@@ -154,7 +155,7 @@ export const SceneContent: React.FC = () => {
         position={[0, -0.124, 0]}
       />
 
-      {/* Orbit Controls */}
+      {/* Orbit Controls with Dynamic 360 Auto-Rotation */}
       <OrbitControls
         ref={orbitRef}
         makeDefault
@@ -164,8 +165,8 @@ export const SceneContent: React.FC = () => {
         maxDistance={4.5}
         maxPolarAngle={Math.PI / 2 + 0.1}
         target={[0, 0.10, 0]}
-        autoRotate={false}
-        autoRotateSpeed={0.3}
+        autoRotate={isAutoRotate360}
+        autoRotateSpeed={0.9}
       />
 
       {/* 3D Coordinate Orientation Gizmo */}

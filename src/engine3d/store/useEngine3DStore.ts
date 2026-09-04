@@ -60,7 +60,16 @@ export interface Engine3DStoreState {
   // ── 4-Stroke Engine Animation & View Controls ──
   cutawayMode: boolean;
   slowMotionScale: number; // 1.0, 0.5, 0.25, 0.1
-
+  isAutoRotate360: boolean;
+  anatomyMode: boolean;
+  viewMode: 'standard' | '360' | 'exploded' | 'anatomy' | 'cutaway';
+  componentSwaps: {
+    pistonType: string;
+    turboType: string;
+    intakeType: string;
+    exhaustType: string;
+    valvetrainType: string;
+  };
 
   // ── Actions ──
   setEngineConfig: (cfg: Partial<EngineConfig>) => void;
@@ -86,6 +95,12 @@ export interface Engine3DStoreState {
   setCutawayMode: (enabled: boolean) => void;
   toggleCutawayMode: () => void;
   setSlowMotionScale: (scale: number) => void;
+  toggleAutoRotate360: () => void;
+  setAutoRotate360: (enabled: boolean) => void;
+  toggleAnatomyMode: () => void;
+  setAnatomyMode: (enabled: boolean) => void;
+  setViewMode: (mode: 'standard' | '360' | 'exploded' | 'anatomy' | 'cutaway') => void;
+  setComponentSwap: (key: 'pistonType' | 'turboType' | 'intakeType' | 'exhaustType' | 'valvetrainType', value: string) => void;
   resetAssembly: () => void;
   autoAssembleAll: () => Promise<void>;
   syncFromEngine: () => void;
@@ -122,10 +137,45 @@ export const useEngine3DStore = create<Engine3DStoreState>((set, get) => {
     isAutoAssembling: false,
     cutawayMode: false,
     slowMotionScale: 1.0,
+    isAutoRotate360: false,
+    anatomyMode: false,
+    viewMode: 'standard',
+    componentSwaps: {
+      pistonType: 'forged_2618',
+      turboType: 'twin_scroll',
+      intakeType: 'carbon_itb',
+      exhaustType: 'inconel_headers',
+      valvetrainType: 'dohc_titanium',
+    },
 
     setCutawayMode: (enabled) => set({ cutawayMode: enabled }),
     toggleCutawayMode: () => set((s) => ({ cutawayMode: !s.cutawayMode })),
     setSlowMotionScale: (scale) => set({ slowMotionScale: scale }),
+    toggleAutoRotate360: () => set((s) => ({ isAutoRotate360: !s.isAutoRotate360 })),
+    setAutoRotate360: (enabled) => set({ isAutoRotate360: enabled }),
+    toggleAnatomyMode: () => set((s) => ({ anatomyMode: !s.anatomyMode })),
+    setAnatomyMode: (enabled) => set({ anatomyMode: enabled }),
+    setViewMode: (mode) => {
+      if (mode === '360') {
+        set({ isAutoRotate360: true, explodedAmount: 0, cutawayMode: false, anatomyMode: false, viewMode: '360' });
+      } else if (mode === 'exploded') {
+        set({ isAutoRotate360: false, explodedAmount: 0.65, cutawayMode: false, anatomyMode: false, viewMode: 'exploded' });
+      } else if (mode === 'cutaway') {
+        set({ isAutoRotate360: false, explodedAmount: 0, cutawayMode: true, anatomyMode: false, viewMode: 'cutaway' });
+      } else if (mode === 'anatomy') {
+        set({ isAutoRotate360: false, explodedAmount: 0.25, cutawayMode: false, anatomyMode: true, viewMode: 'anatomy' });
+      } else {
+        set({ isAutoRotate360: false, explodedAmount: 0, cutawayMode: false, anatomyMode: false, viewMode: 'standard' });
+      }
+    },
+    setComponentSwap: (key, value) => {
+      set((s) => ({
+        componentSwaps: {
+          ...s.componentSwaps,
+          [key]: value,
+        },
+      }));
+    },
 
     setEngineRotation: (rot) => set({ engineRotation: rot }),
 

@@ -200,10 +200,16 @@ export class ModularAssemblySceneGraph {
 
   public setOnModelLoaded(cb: () => void) {
     this.onModelLoadedCallback = cb;
+    if (this.glbCache.size > 0) {
+      cb();
+    }
   }
 
   public async preloadGlbChassisOrBody(uri: string): Promise<void> {
-    if (this.glbCache.has(uri)) return;
+    if (this.glbCache.has(uri)) {
+      if (this.onModelLoadedCallback) this.onModelLoadedCallback();
+      return;
+    }
     try {
       const asset = await UniversalGlbAssetLoader.loadAsset(uri);
       if (asset && asset.scene) {
@@ -1170,7 +1176,7 @@ export class ModularAssemblySceneGraph {
     group.add(throttleL, throttleR);
 
     // 4. Twin Turbochargers with Wastegate Actuators & Boost Pipes
-    if (e.intake.includes("turbo") || e.intake === "bi_turbo" || e.intake === "compound_turbo") {
+    if (e?.intake && (e.intake.includes("turbo") || e.intake === "bi_turbo" || e.intake === "compound_turbo")) {
       const turboGeo = new THREE.TorusGeometry(0.09, 0.045, 12, 24);
       const turboL = new THREE.Mesh(turboGeo, goldMat);
       turboL.rotation.y = Math.PI / 2;
@@ -1883,8 +1889,11 @@ export class ModularAssemblySceneGraph {
       this.glbCache.get("models/exterior/modular_gt3_apex.glb") ||
       (this.glbCache.size > 0 ? Array.from(this.glbCache.values())[0] : null);
 
-    if (modularGlb && (!cat || cat === "gt3" || cat === "hypercar" || cat === "supercar" || cat === "coupe" || cat === "track" || cat === "sports")) {
+    if (modularGlb && (!cat || cat === "gt3_race" || cat === "hypercar" || cat === "supercar" || cat === "coupe" || cat === "sports_car" || cat === "prototype_lmp")) {
       const glbClone = modularGlb.clone(true);
+      glbClone.position.set(0, 0, 0);
+      glbClone.rotation.set(0, 0, 0);
+      glbClone.scale.set(1, 1, 1);
 
       const drlColor = new THREE.Color(state.headlightColor || "#38bdf8");
       const drlMat = new THREE.MeshBasicMaterial({ color: drlColor });

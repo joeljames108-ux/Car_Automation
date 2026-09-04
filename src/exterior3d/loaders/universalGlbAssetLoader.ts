@@ -120,7 +120,10 @@ export class UniversalGlbAssetLoader {
         loader.load(
           uri,
           (gltf: GLTF) => {
-            this.normalizeModelScaleAndGround(gltf.scene);
+            const isPrecalibrated = uri.includes('modular_gt3') || uri.includes('hypercar_apex');
+            if (!isPrecalibrated) {
+              this.normalizeModelScaleAndGround(gltf.scene);
+            }
             this.smoothGeometryNormals(gltf.scene);
             this.enhanceGlbMaterials(gltf.scene);
             GLBScenePostProcessor.process(gltf.scene);
