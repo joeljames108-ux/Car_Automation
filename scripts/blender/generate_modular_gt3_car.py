@@ -159,6 +159,13 @@ def create_pbr_materials():
     set_principled_socket(pbr, ["Roughness"], 0.22)
     materials["rim"] = mat_rim
 
+    # 14. FIA Rain Light Emissive Red
+    mat_rain, pbr = make_mat("FIA_Rain_Light_Red")
+    set_principled_socket(pbr, ["Base Color"], (0.95, 0.05, 0.05, 1.0))
+    set_principled_socket(pbr, ["Emission Color", "Emission"], (1.0, 0.02, 0.02, 1.0))
+    set_principled_socket(pbr, ["Emission Strength"], 6.0)
+    materials["rain_light"] = mat_rain
+
     return materials
 
 # ----------------------------------------------------------------------------
@@ -613,41 +620,131 @@ def generate_modular_gt3_vehicle(output_glb_path):
     bm_tail.free()
     create_mesh_object("Taillight_OLED_Blade", mesh_tail, parent=root, material=materials["taillight"])
 
-    # 4-Tunnel Curved Venturi Diffuser Assembly (Empty Pivot)
+    # ========================================================================
+    # J. ULTRA-DETAILED 6-STRAKE VENTURI DIFFUSER & TITANIUM CENTER-EXIT EXHAUST
+    # ========================================================================
+    log("Building ultra-detailed 6-strake venturi diffuser and titanium center-exit exhaust...")
     diffuser_pivot = create_empty("Diffuser_Venturi_Assembly", location=(0, -(wb * 0.5) - 0.28, rh + 0.02), parent=root)
+    tray_width = tr * 1.86
+
+    # 1. Multi-Curvature Carbon Venturi Ramp Tray
     bm_diff = bmesh.new()
     bmesh.ops.create_cube(bm_diff, size=1.0)
-    bmesh.ops.scale(bm_diff, vec=Vector((tr * 1.84, 0.56, 0.020)), verts=bm_diff.verts)
-    bmesh.ops.rotate(bm_diff, cent=Vector((0,0,0)), matrix=Matrix.Rotation(math.radians(14), 4, 'X'), verts=bm_diff.verts)
-    bmesh.ops.translate(bm_diff, vec=Vector((0, -0.26, 0.08)), verts=bm_diff.verts)
+    bmesh.ops.scale(bm_diff, vec=Vector((tray_width, 0.68, 0.018)), verts=bm_diff.verts)
+    bmesh.ops.rotate(bm_diff, cent=Vector((0,0,0)), matrix=Matrix.Rotation(math.radians(15.5), 4, 'X'), verts=bm_diff.verts)
+    bmesh.ops.translate(bm_diff, vec=Vector((0, -0.28, 0.095)), verts=bm_diff.verts)
     mesh_diff = bpy.data.meshes.new("Mesh_Diffuser_Tray")
     bm_diff.to_mesh(mesh_diff)
     bm_diff.free()
     create_mesh_object("Diffuser_Curved_Ramp", mesh_diff, parent=diffuser_pivot, material=materials["carbon"])
 
-    for s in range(4):
-        sx = -tr * 0.65 + s * (tr * 1.30 / 3)
+    # Trailing Edge Aerodynamic Gurney Flap
+    bm_wicker = bmesh.new()
+    bmesh.ops.create_cube(bm_wicker, size=1.0)
+    bmesh.ops.scale(bm_wicker, vec=Vector((tray_width * 0.98, 0.014, 0.028)), verts=bm_wicker.verts)
+    bmesh.ops.translate(bm_wicker, vec=Vector((0, -0.60, 0.19)), verts=bm_wicker.verts)
+    mesh_wicker = bpy.data.meshes.new("Mesh_Diffuser_Gurney_Flap")
+    bm_wicker.to_mesh(mesh_wicker)
+    bm_wicker.free()
+    create_mesh_object("Diffuser_Gurney_Flap", mesh_wicker, parent=diffuser_pivot, material=materials["carbon"])
+
+    # Lateral Boundary Endplates
+    for side in [-1, 1]:
+        s_name = "Left" if side < 0 else "Right"
+        bm_end = bmesh.new()
+        bmesh.ops.create_cube(bm_end, size=1.0)
+        bmesh.ops.scale(bm_end, vec=Vector((0.014, 0.70, 0.18)), verts=bm_end.verts)
+        bmesh.ops.rotate(bm_end, cent=Vector((0,0,0)), matrix=Matrix.Rotation(math.radians(15.5), 4, 'X'), verts=bm_end.verts)
+        bmesh.ops.translate(bm_end, vec=Vector((side * (tray_width * 0.495), -0.28, 0.08)), verts=bm_end.verts)
+        mesh_end = bpy.data.meshes.new(f"Mesh_Diffuser_Endplate_{s_name}")
+        bm_end.to_mesh(mesh_end)
+        bm_end.free()
+        create_mesh_object(f"Diffuser_Endplate_{s_name}", mesh_end, parent=diffuser_pivot, material=materials["carbon"])
+
+    # 2. Exact 6 Symmetrical Aerodynamic Vortex Strakes with Lower Edge Vortex Fences
+    strakes_x = [
+        -tray_width * 0.40,
+        -tray_width * 0.24,
+        -tray_width * 0.08,
+         tray_width * 0.08,
+         tray_width * 0.24,
+         tray_width * 0.40
+    ]
+
+    for s_idx, sx in enumerate(strakes_x):
+        # Vertical carbon strake vane
         bm_strake = bmesh.new()
         bmesh.ops.create_cube(bm_strake, size=1.0)
-        bmesh.ops.scale(bm_strake, vec=Vector((0.012, 0.50, 0.11)), verts=bm_strake.verts)
-        bmesh.ops.rotate(bm_strake, cent=Vector((0,0,0)), matrix=Matrix.Rotation(math.radians(14), 4, 'X'), verts=bm_strake.verts)
-        bmesh.ops.translate(bm_strake, vec=Vector((sx, -0.26, 0.035)), verts=bm_strake.verts)
-        mesh_strake = bpy.data.meshes.new(f"Mesh_Diffuser_Strake_{s}")
+        bmesh.ops.scale(bm_strake, vec=Vector((0.012, 0.62, 0.135)), verts=bm_strake.verts)
+        bmesh.ops.rotate(bm_strake, cent=Vector((0,0,0)), matrix=Matrix.Rotation(math.radians(15.5), 4, 'X'), verts=bm_strake.verts)
+        bmesh.ops.translate(bm_strake, vec=Vector((sx, -0.28, 0.045)), verts=bm_strake.verts)
+        mesh_strake = bpy.data.meshes.new(f"Mesh_Diffuser_Strake_{s_idx+1}")
         bm_strake.to_mesh(mesh_strake)
         bm_strake.free()
-        create_mesh_object(f"Diffuser_Vortex_Strake_{s+1}", mesh_strake, parent=diffuser_pivot, material=materials["carbon"])
+        create_mesh_object(f"Diffuser_Vortex_Strake_{s_idx+1}", mesh_strake, parent=diffuser_pivot, material=materials["carbon"])
 
-    # Staggered Quad Titanium Exhaust Tips
-    quad_xs = [-0.19, -0.07, 0.07, 0.19]
-    for idx, ex in enumerate(quad_xs):
+        # Horizontal vortex foot fence
+        bm_foot = bmesh.new()
+        bmesh.ops.create_cube(bm_foot, size=1.0)
+        bmesh.ops.scale(bm_foot, vec=Vector((0.036, 0.58, 0.008)), verts=bm_foot.verts)
+        bmesh.ops.rotate(bm_foot, cent=Vector((0,0,0)), matrix=Matrix.Rotation(math.radians(15.5), 4, 'X'), verts=bm_foot.verts)
+        bmesh.ops.translate(bm_foot, vec=Vector((sx, -0.28, -0.015)), verts=bm_foot.verts)
+        mesh_foot = bpy.data.meshes.new(f"Mesh_Strake_Foot_{s_idx+1}")
+        bm_foot.to_mesh(mesh_foot)
+        bm_foot.free()
+        create_mesh_object(f"Diffuser_Strake_Vortex_Foot_{s_idx+1}", mesh_foot, parent=diffuser_pivot, material=materials["carbon"])
+
+    # 3. Central FIA Homologated Flashing Rain Light
+    bm_rain = bmesh.new()
+    bmesh.ops.create_cube(bm_rain, size=1.0)
+    bmesh.ops.scale(bm_rain, vec=Vector((0.085, 0.032, 0.042)), verts=bm_rain.verts)
+    bmesh.ops.translate(bm_rain, vec=Vector((0, -0.61, 0.12)), verts=bm_rain.verts)
+    mesh_rain = bpy.data.meshes.new("Mesh_FIA_Rain_Light")
+    bm_rain.to_mesh(mesh_rain)
+    bm_rain.free()
+    create_mesh_object("Diffuser_FIA_Rain_Light", mesh_rain, parent=diffuser_pivot, material=materials["rain_light"])
+
+    # 4. Titanium Center-Exit Exhaust System (Dual Slash-Cut Pipes, Pie-Cut Welds & Heat Shield)
+    tip_radius = 0.044
+    tip_length = 0.18
+    tip_spacing = 0.075
+
+    for side_idx, side in enumerate([-1, 1]):
+        s_name = "Left" if side < 0 else "Right"
+        tx = side * tip_spacing
+
+        # Outer Titanium Barrel with 14-degree slash cut
         bm_tip = bmesh.new()
-        bmesh.ops.create_cone(bm_tip, cap_ends=True, segments=28, radius1=0.048, radius2=0.048, depth=0.15)
+        bmesh.ops.create_cone(bm_tip, cap_ends=True, radius1=tip_radius, radius2=tip_radius, depth=tip_length, segments=32)
         bmesh.ops.rotate(bm_tip, cent=Vector((0,0,0)), matrix=Matrix.Rotation(math.radians(90), 4, 'X'), verts=bm_tip.verts)
-        bmesh.ops.translate(bm_tip, vec=Vector((ex, -(wb * 0.5) - 0.49, rh + 0.22)), verts=bm_tip.verts)
-        mesh_tip = bpy.data.meshes.new(f"Mesh_Exhaust_Tip_{idx}")
+        bmesh.ops.rotate(bm_tip, cent=Vector((0,0,0)), matrix=Matrix.Rotation(math.radians(-14), 4, 'X'), verts=bm_tip.verts)
+        bmesh.ops.translate(bm_tip, vec=Vector((tx, -(wb * 0.5) - 0.50, rh + 0.24)), verts=bm_tip.verts)
+        mesh_tip = bpy.data.meshes.new(f"Mesh_Exhaust_Center_Tip_{s_name}")
         bm_tip.to_mesh(mesh_tip)
         bm_tip.free()
-        create_mesh_object(f"Exhaust_Quad_Tip_{idx+1}", mesh_tip, parent=root, material=materials["titanium"])
+        create_mesh_object(f"Exhaust_Center_Tip_{s_name}", mesh_tip, parent=root, material=materials["titanium"])
+
+        # Pie-cut welded lobster-back rings
+        for p in range(3):
+            pie_y = -(wb * 0.5) - 0.42 + p * 0.035
+            bm_pie = bmesh.new()
+            bmesh.ops.create_cone(bm_pie, cap_ends=True, radius1=tip_radius * 1.02, radius2=tip_radius * 1.02, depth=0.006, segments=24)
+            bmesh.ops.rotate(bm_pie, cent=Vector((0,0,0)), matrix=Matrix.Rotation(math.radians(90), 4, 'X'), verts=bm_pie.verts)
+            bmesh.ops.translate(bm_pie, vec=Vector((tx, pie_y, rh + 0.24)), verts=bm_pie.verts)
+            mesh_pie = bpy.data.meshes.new(f"Mesh_Pie_Weld_{s_name}_{p+1}")
+            bm_pie.to_mesh(mesh_pie)
+            bm_pie.free()
+            create_mesh_object(f"Exhaust_Pie_Cut_Weld_{s_name}_{p+1}", mesh_pie, parent=root, material=materials["titanium"])
+
+    # Laser-Cut Titanium & Prepreg Carbon Exhaust Heat Shield Shroud
+    bm_shroud = bmesh.new()
+    bmesh.ops.create_cube(bm_shroud, size=1.0)
+    bmesh.ops.scale(bm_shroud, vec=Vector((0.32, 0.14, 0.16)), verts=bm_shroud.verts)
+    bmesh.ops.translate(bm_shroud, vec=Vector((0, -(wb * 0.5) - 0.46, rh + 0.25)), verts=bm_shroud.verts)
+    mesh_shroud = bpy.data.meshes.new("Mesh_Exhaust_Heat_Shield")
+    bm_shroud.to_mesh(mesh_shroud)
+    bm_shroud.free()
+    create_mesh_object("Exhaust_Heat_Shield_Shroud", mesh_shroud, parent=root, material=materials["titanium"])
 
     # ========================================================================
     # K. SWAN-NECK HIGH-DOWNFORCE REAR WING ASSEMBLY

@@ -37,6 +37,14 @@ if ($Target -eq "all" -or $Target -eq "chassis") {
     }
 }
 
+if ($Target -eq "all" -or $Target -eq "diffuser") {
+    $scripts += @{
+        Name = "Ultra-Detailed 6-Strake GT3 Diffuser & Titanium Center-Exit Exhaust"
+        Script = Join-Path $PSScriptRoot "blender\generate_gt3_diffuser_exhaust.py"
+        Target = Join-Path $PSScriptRoot "..\public\models\aero\gt3_diffuser_exhaust_01.glb"
+    }
+}
+
 Write-Host "=================================================================" -ForegroundColor Cyan
 Write-Host " EXECUTING BLENDER 5.2 AUTOMATED 3D ASSET PIPELINE (Target: $Target)" -ForegroundColor Cyan
 Write-Host " Blender: $blenderPath" -ForegroundColor Gray
