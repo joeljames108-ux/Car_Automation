@@ -17,6 +17,7 @@ export default defineConfig({
         "**/*.mkv",
         "**/brain/**",
         "**/.git/**",
+        "**/dist/**",
       ],
     },
     hmr: { overlay: false },

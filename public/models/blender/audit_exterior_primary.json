@@ -1,0 +1,213 @@
+{
+  "asset_path": "c:\\Users\\joelj\\Downloads\\project-bolt-sb1-a1kjcyhr (3)\\project\\public\\models\\original\\car_exterior_primary.glb",
+  "file_size_bytes": 10321556,
+  "file_size_mb": 9.84,
+  "total_objects": 1574,
+  "mesh_objects_count": 783,
+  "empty_objects_count": 790,
+  "total_vertices": 167650,
+  "total_polygons": 217949,
+  "dimensions_meters": {
+    "width_x": 1.9021,
+    "length_y": 2.0,
+    "height_z": 2.0,
+    "lowest_z_ground_contact": -1.0
+  },
+  "material_count": 21,
+  "texture_count": 15,
+  "total_estimated_texture_memory_mb": 7.12,
+  "shading_audit": {
+    "smooth_mesh_count": 695,
+    "faceted_or_mixed_mesh_count": 88,
+    "meshes_with_custom_split_normals": 782
+  },
+  "materials": [
+    {
+      "name": "bBMW_i8Elite_2017BadgeB_Material1",
+      "user_object_count": 1,
+      "sample_objects": [
+        "b:Kit1_Badge_Geo_lodA_Kit1_Badge_Geo_lodA_BMW_i8Elite_2017BadgeB_Material_b:BMW_i8Elite_2017BadgeB_Material1_0"
+      ]
+    },
+    {
+      "name": "bBMW_i8Elite_2017Base_Material1",
+      "user_object_count": 1,
+      "sample_objects": [
+        "b:Kit1_Base_Geo_lodA_Kit1_Base_Geo_lodA_BMW_i8Elite_2017Base_Material_b:BMW_i8Elite_2017Base_Material1_0"
+      ]
+    },
+    {
+      "name": "bBMW_i8Elite_2017CalliperBadgeA_Material1",
+      "user_object_count": 2,
+      "sample_objects": [
+        "b:polySurface591_b:BMW_i8Elite_2017CalliperBadgeA_Material1_0",
+        "b:polySurface592_b:BMW_i8Elite_2017CalliperBadgeA_Material1_0"
+      ]
+    },
+    {
+      "name": "bBMW_i8Elite_2017CalliperGloss_Material1",
+      "user_object_count": 168,
+      "sample_objects": [
+        "b:polySurface593_b:BMW_i8Elite_2017CalliperGloss_Material1_0",
+        "b:polySurface594_b:BMW_i8Elite_2017CalliperGloss_Material1_0",
+        "b:polySurface595_b:BMW_i8Elite_2017CalliperGloss_Material1_0"
+      ]
+    },
+    {
+      "name": "bBMW_i8Elite_2017Carbon1_Material1",
+      "user_object_count": 1,
+      "sample_objects": [
+        "b:Kit1_Carbon1_Geo_lodA_Kit1_Carbon1_Geo_lodA_BMW_i8Elite_2017Carbon1_Material_b:BMW_i8Elite_2017Carbon1_Material1_0"
+      ]
+    },
+    {
+      "name": "bBMW_i8Elite_2017Coloured_Material1",
+      "user_object_count": 3,
+      "sample_objects": [
+        "b:Kit1_Coloured_Geo_lodA_Kit1_Coloured_Geo_lodA_BMW_i8Elite_2017Coloured_Material_b:BMW_i8Elite_2017Coloured_Material1_0",
+        "b:Kit1_Paint_Geo_lodA_Kit1_Paint_Geo_lodA_BMW_i8Elite_2017Paint_Material_b:BMW_i8Elite_2017Coloured_Material1_0",
+        "b:SeatBelt_Geo_lodA_SeatBelt_Geo_lodA_BMW_i8Elite_2017SeatBelt_Material_b:BMW_i8Elite_2017Coloured_Material1_0"
+      ]
+    },
+    {
+      "name": "bBMW_i8Elite_2017EngineA_Material1",
+      "user_object_count": 1,
+      "sample_objects": [
+        "b:Engine_Geo_lodA_Engine_Geo_lodA_BMW_i8Elite_2017EngineA_Material_b:BMW_i8Elite_2017EngineA_Material1_0"
+      ]
+    },
+    {
+      "name": "bBMW_i8Elite_2017Grille1A_Material1",
+      "user_object_count": 1,
+      "sample_objects": [
+        "b:Kit1_Grille1_Geo_lodA_Kit1_Grille1_Geo_lodA_BMW_i8Elite_2017Grille1A_Material_b:BMW_i8Elite_2017Grille1A_Material1_0"
+      ]
+    },
+    {
+      "name": "bBMW_i8Elite_2017Grille2A_Material1",
+      "user_object_count": 1,
+      "sample_objects": [
+        "b:Grille2_Geo_lodA_Grille2_Geo_lodA_BMW_i8Elite_2017Grille2A_Material_b:BMW_i8Elite_2017Grille2A_Material1_0"
+      ]
+    },
+    {
+      "name": "bBMW_i8Elite_2017Grille3A_Material1",
+      "user_object_count": 1,
+      "sample_objects": [
+        "b:Grille3_Geo_lodA_Grille3_Geo_lodA_BMW_i8Elite_2017Grille3A_Material_b:BMW_i8Elite_2017Grille3A_Material1_0"
+      ]
+    },
+    {
+      "name": "bBMW_i8Elite_2017Grille4A_Material1",
+      "user_object_count": 1,
+      "sample_objects": [
+        "b:Grille4_Geo_lodA_Grille4_Geo_lodA_BMW_i8Elite_2017Grille4A_Material_b:BMW_i8Elite_2017Grille4A_Material1_0"
+      ]
+    },
+    {
+      "name": "bBMW_i8Elite_2017InteriorB_Material1",
+      "user_object_count": 1,
+      "sample_objects": [
+        "b:Kit1_Interior_Geo_lodA_Kit1_Interior_Geo_lodA_BMW_i8Elite_2017InteriorB_Material_b:BMW_i8Elite_2017InteriorB_Material1_0"
+      ]
+    },
+    {
+      "name": "bBMW_i8Elite_2017InteriorTillingColourZoneA_Material1",
+      "user_object_count": 1,
+      "sample_objects": [
+        "b:InteriorTillingColourZone_Geo_lodA_InteriorTillingColourZone_Geo_lodA_BMW_i8Elite_2017InteriorTillingColourZoneA_Material_b:BMW_i8Elite_2017InteriorTillingColourZoneA_Material1_0"
+      ]
+    },
+    {
+      "name": "bBMW_i8Elite_2017LightA_Material1",
+      "user_object_count": 1,
+      "sample_objects": [
+        "b:Light_Geo_lodA_Light_Geo_lodA_BMW_i8Elite_2017LightA_Material_b:BMW_i8Elite_2017LightA_Material1_0"
+      ]
+    },
+    {
+      "name": "bBMW_i8Elite_2017ManufacturerPlateB_Material1",
+      "user_object_count": 1,
+      "sample_objects": [
+        "b:ManufacturerPlate_Geo_lodA_ManufacturerPlate_Geo_lodA_BMW_i8Elite_2017ManufacturerPlateB_Material_b:BMW_i8Elite_2017ManufacturerPlateB_Material1_0"
+      ]
+    }
+  ],
+  "textures": [
+    {
+      "name": "Image_0",
+      "resolution": "512x512",
+      "estimated_bytes": 1048576
+    },
+    {
+      "name": "Image_1",
+      "resolution": "128x32",
+      "estimated_bytes": 16384
+    },
+    {
+      "name": "Image_10",
+      "resolution": "512x256",
+      "estimated_bytes": 524288
+    },
+    {
+      "name": "Image_11",
+      "resolution": "64x32",
+      "estimated_bytes": 8192
+    },
+    {
+      "name": "Image_12",
+      "resolution": "256x256",
+      "estimated_bytes": 262144
+    },
+    {
+      "name": "Image_13",
+      "resolution": "64x32",
+      "estimated_bytes": 8192
+    },
+    {
+      "name": "Image_14",
+      "resolution": "512x512",
+      "estimated_bytes": 1048576
+    },
+    {
+      "name": "Image_2",
+      "resolution": "512x512",
+      "estimated_bytes": 1048576
+    },
+    {
+      "name": "Image_3",
+      "resolution": "64x64",
+      "estimated_bytes": 16384
+    },
+    {
+      "name": "Image_4",
+      "resolution": "512x512",
+      "estimated_bytes": 1048576
+    },
+    {
+      "name": "Image_5",
+      "resolution": "512x512",
+      "estimated_bytes": 1048576
+    },
+    {
+      "name": "Image_6",
+      "resolution": "512x512",
+      "estimated_bytes": 1048576
+    },
+    {
+      "name": "Image_7",
+      "resolution": "64x32",
+      "estimated_bytes": 8192
+    },
+    {
+      "name": "Image_8",
+      "resolution": "128x128",
+      "estimated_bytes": 65536
+    },
+    {
+      "name": "Image_9",
+      "resolution": "256x256",
+      "estimated_bytes": 262144
+    }
+  ]
+}

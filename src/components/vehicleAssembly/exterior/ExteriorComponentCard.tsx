@@ -11,6 +11,156 @@ import type { ExteriorAssemblyComponentMeta } from "../../../sim/exteriorAssembl
 import type { MaterialGrade } from "../../../sim/assemblyTypes";
 import { useExteriorAssemblyStore } from "../../../state/useExteriorAssemblyStore";
 
+import { useVehicleArchitectureStore } from "../../../state/useVehicleArchitectureStore";
+
+function getPlatformComponentDetails(
+  id: string,
+  category: string,
+  defaultName: string,
+  defaultDesc: string
+): { name: string; desc: string; badge: string } {
+  const catUpper = category === "crossover" ? "CROSS" : category.toUpperCase();
+
+  if (id === "trunk_decklid") {
+    switch (category) {
+      case "sedan":
+        return {
+          name: "Sedan 3-Box Trunk Decklid & Aerofoil",
+          desc: "Low-drag trunk decklid configured for 3-box executive saloon architecture.",
+          badge: "SEDAN 3-BOX",
+        };
+      case "hatchback":
+        return {
+          name: "Hatchback 2-Box Aerodynamic Rear Hatch",
+          desc: "Upright liftgate with integrated high-downforce top spoiler & rear wash-wipe.",
+          badge: "HATCH 2-BOX",
+        };
+      case "crossover":
+        return {
+          name: "All-Road Power Split Tailgate & Cladding",
+          desc: "Dual-action split tailgate with rugged impact polymer protection.",
+          badge: "CROSS TAILGATE",
+        };
+      case "suv":
+        return {
+          name: "Heavy-Duty Reinforced Armored Liftgate",
+          desc: "Full-height powered liftgate with external spare wheel mount hardpoint.",
+          badge: "SUV LIFTGATE",
+        };
+    }
+  }
+
+  if (id === "hood_panel") {
+    switch (category) {
+      case "sedan":
+        return {
+          name: "Executive Low-Cowl Sleek Hood",
+          desc: "Aerodynamically sculpted hood with laminar boundary layer airflow channels.",
+          badge: "SEDAN AERO",
+        };
+      case "hatchback":
+        return {
+          name: "Compact Slanted Track Hood",
+          desc: "Short aggressive hood with dual heat extraction louvers for compact bay.",
+          badge: "HATCH TRACK",
+        };
+      case "crossover":
+        return {
+          name: "Elevated Sculpted Hood with Power Creases",
+          desc: "Raised hood profile providing commanding driver sightlines and engine clearance.",
+          badge: "CROSS ELEVATED",
+        };
+      case "suv":
+        return {
+          name: "Heavy-Duty Power-Bulge Reinforced Hood",
+          desc: "High-clearance reinforced hood accommodating large powertrain and intake plenum.",
+          badge: "SUV HEAVY DUTY",
+        };
+    }
+  }
+
+  if (id === "roof_panel") {
+    switch (category) {
+      case "sedan":
+        return {
+          name: "Fastback Panoramic Glass / Carbon Roof",
+          desc: "Sleek low-profile roof seamlessly joining front windshield and rear glass.",
+          badge: "SEDAN FASTBACK",
+        };
+      case "hatchback":
+        return {
+          name: "Compact Upright High-Rigidity Roof",
+          desc: "Extended roofline maximizing rear passenger headroom and track downforce.",
+          badge: "HATCH UPWARD",
+        };
+      case "crossover":
+        return {
+          name: "All-Road Roof with Integrated Utility Rails",
+          desc: "Reinforced roof panel carrying aerodynamic flush longitudinal roof rails.",
+          badge: "CROSS RAILS",
+        };
+      case "suv":
+        return {
+          name: "Expedition Dual-Sunroof / Armored Solid Roof",
+          desc: "Heavy-duty structural roof rated for dynamic 150kg rooftop overland tent/rack loads.",
+          badge: "SUV EXPEDITION",
+        };
+    }
+  }
+
+  if (id === "front_bumper_fascia") {
+    switch (category) {
+      case "sedan":
+        return {
+          name: "Executive Aerodynamic Front Fascia",
+          desc: "Cd-optimized front bumper with active air shutters and integrated DRL optics.",
+          badge: "SEDAN SPEC",
+        };
+      case "hatchback":
+        return {
+          name: "Agile Track Splitter Front Fascia",
+          desc: "High-downforce aggressive front bumper with brake cooling ducting.",
+          badge: "HATCH SPEC",
+        };
+      case "crossover":
+        return {
+          name: "All-Road Fascia with Integrated Skid Plate",
+          desc: "Elevated approach angle front bumper with brushed aluminum bash guard.",
+          badge: "CROSS SPEC",
+        };
+      case "suv":
+        return {
+          name: "Heavy-Duty Rugged Steel Winch-Guard Bumper",
+          desc: "Maximum approach angle off-road bumper with recovery shackles & winch cavity.",
+          badge: "SUV SPEC",
+        };
+    }
+  }
+
+  if (id === "front_fenders" || id === "rear_quarter_panels") {
+    switch (category) {
+      case "sedan":
+        return { name: defaultName, desc: defaultDesc, badge: "SEDAN SPEC" };
+      case "hatchback":
+        return { name: defaultName, desc: defaultDesc, badge: "HATCH SPEC" };
+      case "crossover":
+        return {
+          name: `${defaultName} (Elevated Cladding)`,
+          desc: `${defaultDesc} with protective composite arch extensions.`,
+          badge: "CROSS SPEC",
+        };
+      case "suv":
+        return {
+          name: `${defaultName} (Wide Heavy-Duty Armor)`,
+          desc: `${defaultDesc} accommodating 33" all-terrain wheel articulation.`,
+          badge: "SUV SPEC",
+        };
+    }
+  }
+
+  return { name: defaultName, desc: defaultDesc, badge: `${catUpper} SPEC` };
+}
+
 interface ExteriorComponentCardProps {
   component: ExteriorAssemblyComponentMeta;
   isInstalled: boolean;
@@ -34,6 +184,14 @@ export const ExteriorComponentCard: React.FC<ExteriorComponentCardProps> = ({
   onSelect,
   onGradeChange,
 }) => {
+  const selectedCategory = useVehicleArchitectureStore((s) => s.selectedCategory);
+  const platformDetails = getPlatformComponentDetails(
+    component.id,
+    selectedCategory,
+    component.name,
+    component.description
+  );
+
   const currentVariant = component.variants.find((v) => v.id === selectedGrade) || component.variants[0];
   const effectiveWeight = Math.round(component.statDeltas.weight * (currentVariant?.weightMultiplier || 1.0));
   const effectiveCost = Math.round(component.statDeltas.cost * (currentVariant?.costMultiplier || 1.0));
@@ -43,7 +201,7 @@ export const ExteriorComponentCard: React.FC<ExteriorComponentCardProps> = ({
       onClick={onSelect}
       className={`group relative p-3.5 rounded-2xl border transition-all duration-300 cursor-pointer ${
         isSelected
-          ? "bg-slate-900/60 border-amber-400 shadow-[0_0_15px_rgba(6,182,212,0.3)]"
+          ? "bg-slate-900/60 border-amber-400 shadow-[0_0_15px_rgba(217,119,6,0.3)]"
           : isInstalled
           ? "bg-slate-900/60 border-emerald-500/30 hover:border-emerald-400/60"
           : isInstallable
@@ -54,9 +212,12 @@ export const ExteriorComponentCard: React.FC<ExteriorComponentCardProps> = ({
       <div className="flex items-start justify-between gap-3">
         {/* Left: Component Info & Subcategory */}
         <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2 mb-1">
+          <div className="flex flex-wrap items-center gap-1.5 mb-1">
             <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-amber-400 px-2 py-0.5 rounded-full bg-slate-900/80 border border-amber-500/30">
               {component.subcategory}
+            </span>
+            <span className="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-300 border border-amber-500/30">
+              {platformDetails.badge}
             </span>
             {isInstalled && (
               <span className="text-[10px] font-mono text-emerald-400 flex items-center gap-1 font-bold">
@@ -65,10 +226,10 @@ export const ExteriorComponentCard: React.FC<ExteriorComponentCardProps> = ({
             )}
           </div>
           <h4 className="text-xs font-bold text-slate-100 group-hover:text-amber-300 transition-colors truncate">
-            {component.name}
+            {platformDetails.name}
           </h4>
           <p className="text-[11px] text-slate-400 line-clamp-1 mt-0.5">
-            {component.description}
+            {platformDetails.desc}
           </p>
         </div>
 
@@ -100,6 +261,27 @@ export const ExteriorComponentCard: React.FC<ExteriorComponentCardProps> = ({
           )}
         </div>
       </div>
+
+      {/* Physical Anatomical Sub-Elements Breakdown */}
+      {component.subElements && component.subElements.length > 0 && (
+        <div className={`mt-2.5 pt-2 border-t border-white/5 space-y-1 ${isSelected ? "block" : "hidden group-hover:block"}`}>
+          <div className="flex items-center justify-between text-[10px] font-mono text-amber-400/90 font-bold">
+            <span>PHYSICAL SUB-ELEMENTS:</span>
+            <span className="text-[9px] text-slate-500">{component.subElements.length} parts</span>
+          </div>
+          <div className="grid grid-cols-1 gap-1">
+            {component.subElements.map((sub, idx) => (
+              <div
+                key={idx}
+                className="text-[10px] font-mono text-slate-300 bg-slate-950/60 px-2 py-0.5 rounded-lg border border-white/5 flex items-center gap-1.5"
+              >
+                <span className="w-1.5 h-1.5 rounded-full bg-amber-400/80 shrink-0" />
+                <span className="truncate">{sub}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Material Grade Selector & Stat Delta Summary */}
       <div className="mt-3 pt-2.5 border-t border-white/5 flex flex-wrap items-center justify-between gap-2">

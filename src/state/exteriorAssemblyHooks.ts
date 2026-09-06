@@ -12,7 +12,12 @@ import type {
   ExteriorAssemblyPhase,
   ExteriorAssemblyComponentMeta,
 } from "../sim/exteriorAssemblyTypes";
-import { EXTERIOR_ASSEMBLY_REGISTRY } from "../sim/exteriorAssemblyTypes";
+import {
+  EXTERIOR_ASSEMBLY_REGISTRY,
+  ANATOMICAL_ZONES,
+  type ExteriorAnatomicalZone,
+  type AnatomicalZoneInfo,
+} from "../sim/exteriorAssemblyTypes";
 import { SHUT_LINE_SPECIFICATION_STANDARDS, type ShutLineToleranceRule } from "../sim/constants/exteriorConstants";
 import { playAssemblySound } from "../components/assembly/sounds";
 
@@ -198,3 +203,40 @@ export function useExteriorCategoryProgress(): CategoryProgress[] {
     });
   }, [installedComponents]);
 }
+
+// ===================================================================
+// 4. ANATOMICAL ZONE PROGRESSION HOOK
+// ===================================================================
+
+export interface AnatomicalZoneProgress {
+  zone: AnatomicalZoneInfo;
+  total: number;
+  installed: number;
+  percentage: number;
+  isComplete: boolean;
+  components: ExteriorAssemblyComponentMeta[];
+}
+
+export function useExteriorAnatomicalZoneProgress(): AnatomicalZoneProgress[] {
+  const installedComponents = useExteriorAssemblyStore((s) => s.installedComponents);
+
+  return useMemo(() => {
+    return (Object.keys(ANATOMICAL_ZONES) as ExteriorAnatomicalZone[]).map((zoneKey) => {
+      const zoneInfo = ANATOMICAL_ZONES[zoneKey];
+      const components = EXTERIOR_ASSEMBLY_REGISTRY.filter((c) => c.anatomicalZone === zoneKey);
+      const total = components.length;
+      const installed = components.filter((c) => installedComponents.includes(c.id)).length;
+      const percentage = total > 0 ? Math.round((installed / total) * 100) : 0;
+
+      return {
+        zone: zoneInfo,
+        total,
+        installed,
+        percentage,
+        isComplete: total > 0 && installed >= total,
+        components,
+      };
+    });
+  }, [installedComponents]);
+}
+

@@ -155,13 +155,35 @@ export const GlbCarModel: React.FC<GlbCarModelProps> = ({ modelPath = DEFAULT_MO
     // Brake disc (dark steel)
     const brakeDiscMat = new THREE.MeshPhysicalMaterial({ color: 0x333333, metalness: 0.8, roughness: 0.4, clearcoat: 0.2, envMapIntensity: 0.8 });
 
+    // Accent trim (Piano Black Gloss Clearcoat)
+    const accentMat = new THREE.MeshPhysicalMaterial({
+      color: 0x0a0c10,
+      metalness: 0.85,
+      roughness: 0.12,
+      clearcoat: 1.0,
+      clearcoatRoughness: 0.02,
+      envMapIntensity: 2.0,
+    });
+
+    // Forged wheel rim (Machined Billet Alloy)
+    const rimMat = new THREE.MeshPhysicalMaterial({
+      color: 0xd8dde4,
+      metalness: 0.95,
+      roughness: 0.18,
+      clearcoat: 0.5,
+      clearcoatRoughness: 0.04,
+      envMapIntensity: 2.5,
+    });
+
     // Apply materials by mesh name
     clonedScene.traverse((node) => {
       if (!(node as THREE.Mesh).isMesh) return;
       const mesh = node as THREE.Mesh;
       const n = mesh.name.toLowerCase();
       // === MESH NAME DETECTION ===
-      const isPaint = n.includes("body") || n.includes("paint") || n.includes("door") || n.includes("hood") || n.includes("fender") || n.includes("roof") || n.includes("bumper") || n.includes("quarter") || n.includes("fascia") || n.includes("skirt") || n.includes("panel") || n.includes("skin") || n.includes("arch") || n.includes("cover") || n.includes("shell") || n.includes("cowl") || n.includes("deck") || n.includes("spine") || n.includes("aileron") || n.includes("spoiler") || n.includes("wing") || n.includes("lip") || n.includes("canard");
+      const isAccent = n.includes("accent");
+      const isWheel = n.includes("wheel") || n.includes("rim");
+      const isPaint = !isAccent && (n.includes("body") || n.includes("paint") || n.includes("door") || n.includes("hood") || n.includes("fender") || n.includes("roof") || n.includes("bumper") || n.includes("quarter") || n.includes("fascia") || n.includes("skirt") || n.includes("panel") || n.includes("skin") || n.includes("arch") || n.includes("cover") || n.includes("shell") || n.includes("cowl") || n.includes("deck") || n.includes("spine") || n.includes("aileron") || n.includes("spoiler") || n.includes("wing") || n.includes("lip") || n.includes("canard"));
 
       const isSpring = n.includes("spring") || n.includes("coil");
       const isSuspension = n.includes("suspension") || n.includes("wishbone") || n.includes("a_arm") || n.includes("damper") || n.includes("strut") || n.includes("upright") || n.includes("carrier");
@@ -200,17 +222,21 @@ export const GlbCarModel: React.FC<GlbCarModelProps> = ({ modelPath = DEFAULT_MO
       else if (isExhaust) mesh.material = exhaustMat;
       else if (isAluminum) mesh.material = brushedAluminum;
       else if (isRubber) mesh.material = rubberMat;
+      else if (isAccent) mesh.material = accentMat;
+      else if (isWheel) mesh.material = rimMat;
       else if (isPaint) { if (mesh.material instanceof THREE.MeshStandardMaterial && mesh.material.map) paintMaterial.map = mesh.material.map; mesh.material = paintMaterial; }
 
       mesh.castShadow = true;
       mesh.receiveShadow = true;
     });
 
-    // Recompute normals for smooth shading
+    // Recompute normals only if mesh does not already have authored normals
     clonedScene.traverse((node) => {
       if ((node as THREE.Mesh).isMesh) {
         const mesh = node as THREE.Mesh;
-        if (mesh.geometry) { try { mesh.geometry.computeVertexNormals(); } catch { /* */ } }
+        if (mesh.geometry && !mesh.geometry.attributes.normal) {
+          try { mesh.geometry.computeVertexNormals(); } catch { /* */ }
+        }
       }
     });
   }, [clonedScene, paintColorHex, caliperColorHex, paintFinish]);

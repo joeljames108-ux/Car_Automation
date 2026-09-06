@@ -32,6 +32,58 @@ export const CAR_MODEL_REGISTRY: CarModelEntry[] = [
     weight: "1,490 kg",
   },
   {
+    id: "volvo_p1800_restomod",
+    name: "Volvo P1800 Restomod",
+    subtitle: "Widebody Edition (1.39M Polygons)",
+    glbPath: "/models/exterior/volvo_p1800_restomod.glb",
+    defaultPaint: 0x0a4035, // British Racing Green / Restomod Teal
+    caliperColor: "#cc1100",
+    tier: "gt",
+    year: 2024,
+    origin: "Sweden",
+    power: "420 HP",
+    weight: "990 kg",
+  },
+  {
+    id: "nissan_silvia_s15",
+    name: "Nissan Silvia S15 Rocket Bunny",
+    subtitle: "Widebody Drift Spec (175k Polygons)",
+    glbPath: "/models/exterior/nissan_silvia_s15_rocket_bunny.glb",
+    defaultPaint: 0xb91c1c, // Candy Red
+    caliperColor: "#eab308", // Gold
+    tier: "gt",
+    year: 2015,
+    origin: "Japan",
+    power: "520 HP",
+    weight: "1,120 kg",
+  },
+  {
+    id: "mercedes_gls_580",
+    name: "Mercedes-Benz GLS 580",
+    subtitle: "Luxury V8 Biturbo SUV (361k Polygons)",
+    glbPath: "/models/exterior/mercedes_gls_580.glb",
+    defaultPaint: 0x0f172a, // Obsidian Black
+    caliperColor: "#475569", // Slate
+    tier: "production",
+    year: 2024,
+    origin: "Germany",
+    power: "483 HP",
+    weight: "2,550 kg",
+  },
+  {
+    id: "dodge_challenger_srt",
+    name: "Dodge Challenger SRT Hellcat",
+    subtitle: "Supercharged V8 Muscle (353k Polygons)",
+    glbPath: "/models/exterior/dodge_challenger_srt.glb",
+    defaultPaint: 0x581c87, // Plum Crazy
+    caliperColor: "#dc2626", // Red
+    tier: "production",
+    year: 2023,
+    origin: "USA",
+    power: "717 HP",
+    weight: "1,980 kg",
+  },
+  {
     id: "sports_coupe_gt",
     name: "Sports Coupe GT",
     subtitle: "Grand Touring",

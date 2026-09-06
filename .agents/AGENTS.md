@@ -12,5 +12,13 @@ This repository contains the **Modular Vehicle Assembly System & Car Automation 
 
 ### 2. Code Quality & Verification Standards
 - Maintain 100% clean TypeScript builds without type errors (`npx tsc --noEmit -p tsconfig.app.json`).
-- Ensure all 7 unit test suites pass (`npx tsx src/sim/modularVehicle/runTests.ts`).
+- Ensure all unit test suites pass (`npx tsx src/sim/modularVehicle/runTests.ts`).
 - Use rich aesthetics with high-contrast Dark UI themes, glassmorphism, dynamic SVG rendering, and real-time physics feedback.
+
+### 3. Procedural Automotive Blender MCP Pipeline Standard
+- Follow the operational parameters defined in `.agents/skills/procedural-automotive-blender-mcp/SKILL.md`.
+- World coordinate alignment: Y-Forward (+Y), Z-Up (+Z), X-Lateral (+X Driver LHD).
+- All modular components must maintain world-space relative transforms for zero-offset snapping in Three.js and Unreal Engine.
+- Shaders: Principled BSDF PBR material factory with clearcoat, satin trim, optical transmission glass, and high-intensity emissive lighting.
+- Dual-mode export: Standalone zero-offset GLBs in `exports/parts/` and unified assembled vehicle in `exports/Car_Sedan_Complete.glb`.
+

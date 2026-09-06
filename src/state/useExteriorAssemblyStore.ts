@@ -13,6 +13,7 @@ import type {
 } from "../sim/exteriorAssemblyTypes";
 import { EXTERIOR_ASSEMBLY_REGISTRY, getExteriorAssemblyComponents } from "../sim/exteriorAssemblyTypes";
 import type { MaterialGrade } from "../sim/assemblyTypes";
+import type { VehicleCategory } from "../sim/vehicleArchitecture/vehicleArchitectureTypes";
 import type {
   ExteriorEngineeringConfig,
   PaintSystemConfig,
@@ -59,6 +60,7 @@ export interface ExteriorAssemblyState {
   explodedAmount: number; // 0.0 to 1.0 continuous slider
   viewMode: "2d" | "3d_webgl";
   isAssemblyComplete: boolean;
+  vehicleCategory: VehicleCategory;
 
   // ── 2. Component Material Grade Variants ──
   selectedVariants: Record<ExteriorComponentId, MaterialGrade>;
@@ -87,6 +89,7 @@ export interface ExteriorAssemblyState {
   setExplodedView: (isExploded: boolean) => void;
   setExplodedAmount: (amount: number) => void;
   setViewMode: (mode: "2d" | "3d_webgl") => void;
+  setVehicleCategory: (category: VehicleCategory) => void;
 
   replaceVariant: (componentId: ExteriorComponentId, grade: MaterialGrade) => void;
   updateExteriorConfig: (partial: Partial<ExteriorEngineeringConfig>) => void;
@@ -135,6 +138,7 @@ export const useExteriorAssemblyStore = create<ExteriorAssemblyState>((set, get)
   explodedAmount: 0.0,
   viewMode: "2d",
   isAssemblyComplete: false,
+  vehicleCategory: "sedan",
 
   selectedVariants: { ...INITIAL_VARIANT_MAP },
 
@@ -232,6 +236,10 @@ export const useExteriorAssemblyStore = create<ExteriorAssemblyState>((set, get)
 
   setViewMode: (mode: "2d" | "3d_webgl") => {
     set({ viewMode: mode });
+  },
+
+  setVehicleCategory: (category: VehicleCategory) => {
+    set({ vehicleCategory: category });
   },
 
   // ── 3. Configuration & Material Variant Actions ──

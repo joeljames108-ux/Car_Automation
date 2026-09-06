@@ -126,6 +126,8 @@ export interface ExteriorAssemblyComponentMeta {
   fastenerSpec?: ExteriorFastenerSpec;
   clearanceSpec?: ExteriorClearanceSpec;
   paintZone: "body" | "contrast_roof" | "aero_unpainted_carbon" | "glass" | "lighting" | "metal_chassis" | "wheel";
+  anatomicalZone?: ExteriorAnatomicalZone;
+  subElements?: string[];
 }
 
 // ===================================================================
@@ -865,6 +867,450 @@ export const EXTERIOR_ASSEMBLY_REGISTRY: ExteriorAssemblyComponentMeta[] = [
   },
 ];
 
+// ===================================================================
+// EXTERIOR ANATOMICAL ZONES & PHYSICAL SUB-ELEMENT TAXONOMY
+// ===================================================================
+
+export type ExteriorAnatomicalZone =
+  | "front_section"
+  | "greenhouse_roof"
+  | "sides_doors"
+  | "rear_section"
+  | "underbody_wheel_wells";
+
+export interface AnatomicalZoneInfo {
+  id: ExteriorAnatomicalZone;
+  name: string;
+  shortLabel: string;
+  description: string;
+  cameraPreset: "front" | "top" | "side" | "rear" | "low";
+}
+
+export const ANATOMICAL_ZONES: Record<ExteriorAnatomicalZone, AnatomicalZoneInfo> = {
+  front_section: {
+    id: "front_section",
+    name: "Front Section",
+    shortLabel: "Front Section",
+    description: "Front bumper assembly, radiator grilles, hood, outer fenders, cowl panel, and matrix headlights.",
+    cameraPreset: "front",
+  },
+  greenhouse_roof: {
+    id: "greenhouse_roof",
+    name: "Greenhouse & Roof (Cabin Upper)",
+    shortLabel: "Greenhouse & Roof",
+    description: "Structural A/B/C pillars, roof panel, panoramic glass, windshield wipers, and acoustic glazing.",
+    cameraPreset: "top",
+  },
+  sides_doors: {
+    id: "sides_doors",
+    name: "Sides & Passenger Doors",
+    shortLabel: "Sides & Doors",
+    description: "4 door shells, motorized pop-out handles, weatherstripping, side mirrors, rocker panels, and fuel filler.",
+    cameraPreset: "side",
+  },
+  rear_section: {
+    id: "rear_section",
+    name: "Rear Section",
+    shortLabel: "Rear Section",
+    description: "Trunk/decklid or liftgate, rear quarter panels, rear bumper assembly, diffuser, and OLED taillights.",
+    cameraPreset: "rear",
+  },
+  underbody_wheel_wells: {
+    id: "underbody_wheel_wells",
+    name: "Underbody & Wheel Wells",
+    shortLabel: "Underbody & Wells",
+    description: "Inner wheelhouse liners, splash guards, engine skid plate, flat underfloor aerodynamic covers, and heat shields.",
+    cameraPreset: "low",
+  },
+};
+
+export const COMPONENT_ANATOMICAL_MAPPING: Record<
+  ExteriorComponentId,
+  { zone: ExteriorAnatomicalZone; subElements: string[] }
+> = {
+  // Front Section
+  front_bumper_fascia: {
+    zone: "front_section",
+    subElements: [
+      "Bumper Cover / Fascia",
+      "Impact Absorber Foam & Reinforcement Crash Beam",
+      "Lower Valance / Air Dam",
+      "Front Lip / Aerodynamic Splitter",
+    ],
+  },
+  front_splitter_tray: {
+    zone: "front_section",
+    subElements: [
+      "Aerodynamic Carbon Underbody Splitter Tray",
+      "Stanchion Support Rods",
+      "Brake Cooling Channel Air Inlets",
+    ],
+  },
+  front_grille_mesh: {
+    zone: "front_section",
+    subElements: [
+      "Upper Radiator Grille",
+      "Lower Intake Grille",
+      "Active Shutter Vanes & Stepper Motor Actuator",
+    ],
+  },
+  hood_panel: {
+    zone: "front_section",
+    subElements: [
+      "Outer Hood Skin Panel & Stamped Inner Skeleton",
+      "Dual Primary & Safety Catch Latches",
+      "Cockpit Hood Release Cable",
+      "Precision Billet Hinges & Gas Struts",
+      "Under-Hood Thermal & Acoustic Sound Insulation Liner",
+    ],
+  },
+  front_fenders: {
+    zone: "front_section",
+    subElements: [
+      "Left & Right Outer Body Fenders (Wings)",
+      "Wheel Arch Liners (Splash Guards)",
+      "Fender-to-A-Pillar Alignment Brackets",
+      "Integrated Turn Indicator Repeaters",
+    ],
+  },
+  wiper_cowl_assembly: {
+    zone: "front_section",
+    subElements: [
+      "Base Windshield Cowl Screen Panel",
+      "Wiper Motor Transmission & Pantograph Linkage",
+      "Dual Aerofoil Wiper Arms & High-Speed Blades",
+      "Heated Cowl-Mounted Washer Spray Jet Nozzles",
+    ],
+  },
+  headlights_matrix: {
+    zone: "front_section",
+    subElements: [
+      "Adaptive Matrix LED Projectors (High/Low Beams)",
+      "Dynamic C-Shaped Daytime Running Lights (DRLs)",
+      "Sequential Cornering Turn Indicators",
+      "Polycarbonate Optical Lenses with UV Hardcoat",
+    ],
+  },
+  fog_drl_lights: {
+    zone: "front_section",
+    subElements: [
+      "Wide-Beam Cornering Fog Light Assemblies",
+      "Lower Air Dam DRL Lightguide Accents",
+      "Aerodynamic Outer Bezel Trim",
+    ],
+  },
+  hood_fender_vents: {
+    zone: "front_section",
+    subElements: [
+      "Hood Heat Extraction Louver Ducts",
+      "Fender High-Pressure Wheelhouse Relief Vents",
+      "Debris Interceptor Protective Mesh",
+    ],
+  },
+  canards_dive_planes: {
+    zone: "front_section",
+    subElements: [
+      "Front Fascia Carbon Fiber Dive Planes",
+      "Aerodynamic Vortex Generators",
+      "Subframe Bumper Retaining Hardware",
+    ],
+  },
+  firewall_bulkhead: {
+    zone: "front_section",
+    subElements: [
+      "Stamped Structural Firewall Bulkhead",
+      "Acoustic Dash Insulator Mat",
+      "Steering Rack & Wiring Harness Flange Seals",
+    ],
+  },
+
+  // Greenhouse & Roof (Cabin Upper)
+  a_pillar_assembly: {
+    zone: "greenhouse_roof",
+    subElements: [
+      "Ultra-High-Strength Boron Steel A-Pillars (Flanking Windshield)",
+      "Windshield Header Upper Crossmember",
+      "Forward Roof Arch Sockets",
+    ],
+  },
+  b_pillar_assembly: {
+    zone: "greenhouse_roof",
+    subElements: [
+      "Hot-Stamped Reinforced B-Pillars (Between Doors)",
+      "Front Door Latch Strikers & Safety Latches",
+      "Integrated Seatbelt Anchor Points",
+    ],
+  },
+  c_pillar_assembly: {
+    zone: "greenhouse_roof",
+    subElements: [
+      "Structural C-Pillars / Sail Panels (Behind Rear Windows)",
+      "Rear Roof Header Arch & Roof Torsional Brace",
+      "Rear Quarter Window Flanges",
+    ],
+  },
+  roof_panel: {
+    zone: "greenhouse_roof",
+    subElements: [
+      "Structural Lightweight Roof Panel Skin",
+      "Flush Longitudinal Roof Ditches & Utility Rails",
+      "Electrochromic Panoramic Sunroof / Moonroof Glass Assembly",
+      "Aerodynamic Shark-Fin Multi-Band RF/GPS Antenna",
+    ],
+  },
+  windshield_glass: {
+    zone: "greenhouse_roof",
+    subElements: [
+      "Laminated Acoustic Safety Glass Windshield",
+      "Solar-Reflective Infrared Control Interlayer",
+      "ADAS Forward Optical Camera & Rain Sensor Bracket",
+    ],
+  },
+  side_door_glass: {
+    zone: "greenhouse_roof",
+    subElements: [
+      "Dual-Laminated Acoustic Front Side Windows",
+      "Tempered Privacy Tinted Rear Passenger Drop Windows",
+      "Rear Quarter Vent Fixed Glass Panels",
+    ],
+  },
+  rear_window_backlite: {
+    zone: "greenhouse_roof",
+    subElements: [
+      "Tempered Rear Window (Backlight)",
+      "Screen-Printed Micro-Wire Defroster Heating Grid",
+      "Integrated High-Frequency Radio & Antenna Elements",
+    ],
+  },
+  roll_cage_safety: {
+    zone: "greenhouse_roof",
+    subElements: [
+      "4130 Chromoly Internal Safety Roll Cage",
+      "Gusseted Roof Halo & Main Hoop",
+      "Diagonal Torsional Stiffening Braces",
+    ],
+  },
+
+  // Sides & Passenger Doors
+  doors_assembly: {
+    zone: "sides_doors",
+    subElements: [
+      "4 Door Shells (Outer Stamped Skins + Inner Structural Frames)",
+      "Ultra-High-Strength Side Impact Intrusion Beams",
+      "Die-Cast Stainless Steel Door Hinges & Limit Check Straps",
+      "Window Channel Guides & Motorized Window Regulators",
+    ],
+  },
+  door_handles_latches: {
+    zone: "sides_doors",
+    subElements: [
+      "Aerodynamic Flush Motorized Pop-Out Handles",
+      "Emergency Mechanical Key Cylinder Backup",
+      "High-Security Door Latches & Soft-Close Cinches",
+      "Interior Door Lock Actuators & Rods",
+    ],
+  },
+  side_mirrors: {
+    zone: "sides_doors",
+    subElements: [
+      "Aerodynamic Sculpted Wing Mirror Housings",
+      "Electrochromic Auto-Dimming Heated Convex Glass",
+      "Dual-Axis Motorized Adjustment & Power-Fold Actuators",
+      "Integrated LED Turn Signal Repeaters & Blind-Spot Warning LED",
+    ],
+  },
+  rocker_panels: {
+    zone: "sides_doors",
+    subElements: [
+      "Structural Rocker Panels (Side Skirts)",
+      "Reinforced Emergency Hydraulic Jack Lift Points",
+      "Flexible Lower Door Seal Flanges & Stone-Chip Protection",
+    ],
+  },
+  side_skirts_aero: {
+    zone: "sides_doors",
+    subElements: [
+      "Carbon Fiber Ground-Effect Side Skirts",
+      "Rocker Underbody Air Sealing Blades",
+      "Rear Tire Wake Air Deflector Spats",
+    ],
+  },
+
+  // Rear Section
+  trunk_decklid: {
+    zone: "rear_section",
+    subElements: [
+      "Trunk Lid (Boot) / Decklid Panel",
+      "Counterbalanced Decklid Hinges & Nitrogen Gas Struts",
+      "Electronic Trunk Release Button & Integrated Reverse Camera",
+      "Rear Aerodynamic Decklid Spoiler / Gurney Flap",
+    ],
+  },
+  rear_quarter_panels: {
+    zone: "rear_section",
+    subElements: [
+      "Fixed Stamped Rear Quarter Panels (C-Pillar to Taillights)",
+      "Fuel Filler / Charge Port Flap Door & Hinge",
+      "Electronic Flap Release Actuator & Inner Tethered Cap",
+      "Taillight Mounting Housings & Bumper Bracket Guides",
+    ],
+  },
+  rear_bumper_fascia: {
+    zone: "rear_section",
+    subElements: [
+      "Rear Bumper Cover Fascia",
+      "High-Strength Steel / Aluminum Rear Crash Bar",
+      "Integrated Aerodynamic Rear Diffuser Tray",
+      "Dual / Quad Exhaust Cutouts & Surround Trim",
+      "Ultrasonic Parking Assist Sensor Bezels",
+      "DOT / ECE Compliant Rear Reflex Reflectors",
+    ],
+  },
+  rear_diffuser_tunnel: {
+    zone: "rear_section",
+    subElements: [
+      "Multi-Strake Aerodynamic Venturi Diffuser Tunnel",
+      "Exhaust Gas Scavenging Aerodynamic Shroud",
+      "FIA-Style High-Intensity Center Rain / Fog Lamp",
+    ],
+  },
+  rear_wing_spoiler: {
+    zone: "rear_section",
+    subElements: [
+      "Carbon Fiber Dual-Element High-Downforce Rear Wing",
+      "CNC Billet Aluminum Swan-Neck Mounting Uprights",
+      "Active Drag Reduction System (DRS) High-Speed Tilt Actuator",
+    ],
+  },
+  taillights_oled: {
+    zone: "rear_section",
+    subElements: [
+      "Full-Width Coast-to-Coast 3D OLED Taillight Strip",
+      "Dual-Stage Dynamic LED Brake Light Arrays",
+      "High-Output Reverse & Rear Fog Lights",
+      "High-Mount Center Stop Lamp (CHMSL) in Upper Window",
+      "LED License Plate Illumination Lamps",
+    ],
+  },
+  exhaust_tips_surround: {
+    zone: "rear_section",
+    subElements: [
+      "Dual Inconel / Titanium Polished Exhaust Tips",
+      "Rear Fascia Embossed Thermal Heat Shield Bezels",
+      "Active Acoustic Exhaust Valve Dampers",
+    ],
+  },
+  badges_emblems: {
+    zone: "rear_section",
+    subElements: [
+      "Jewelry-Grade Milled Enamel Hood & Decklid Badges",
+      "Laser-Cut Brushed Titanium Architecture Badging",
+      "Aerodynamic Flush Adhesive Mounting",
+    ],
+  },
+
+  // Underbody & Wheel Wells
+  chassis_frame: {
+    zone: "underbody_wheel_wells",
+    subElements: [
+      "Master Monocoque Tub / Structural Chassis Spine",
+      "High-Strength Steel & Carbon Composite Side Members",
+      "Torsional Backbone Tunnel & Crossmembers",
+    ],
+  },
+  front_subframe: {
+    zone: "underbody_wheel_wells",
+    subElements: [
+      "Hydroformed Front Aluminum Subframe Cradle",
+      "Steering Rack Hardpoint Mounts",
+      "Front Lower Control Arm Pickups",
+    ],
+  },
+  rear_subframe: {
+    zone: "underbody_wheel_wells",
+    subElements: [
+      "High-Rigidity Rear Subframe Cradle",
+      "Differential / Electric Drive Motor Mounting Rails",
+      "Multilink Rear Suspension Anchor Sockets",
+    ],
+  },
+  floor_pan: {
+    zone: "underbody_wheel_wells",
+    subElements: [
+      "Engine Splash Shield & Aluminum Skid Plate",
+      "Aerodynamic Flat Underfloor Composite Covers",
+      "Embossed Exhaust Line Heat Shields",
+      "NACA Brake Cooling Intake & Outflow Ducts",
+    ],
+  },
+  crash_boxes_front_rear: {
+    zone: "underbody_wheel_wells",
+    subElements: [
+      "Front Extruded Aluminum Impact Crash Cans",
+      "Rear Energy Absorption Tapered Crash Boxes",
+      "Chassis Recovery Towing Eye Socket Mounts",
+    ],
+  },
+  suspension_front_assembly: {
+    zone: "underbody_wheel_wells",
+    subElements: [
+      "Double Wishbone / MacPherson Strut Control Arms",
+      "Adaptive Inverted Coilover Dampers & Springs",
+      "Anti-Roll Sway Bar with Spherical End-Links",
+    ],
+  },
+  suspension_rear_assembly: {
+    zone: "underbody_wheel_wells",
+    subElements: [
+      "Five-Link Independent Rear Suspension Arms",
+      "Coaxial Inverted Dampers & Linear Rate Springs",
+      "Rear Tubular Anti-Roll Sway Bar",
+    ],
+  },
+  brake_rotors_calipers: {
+    zone: "underbody_wheel_wells",
+    subElements: [
+      "Carbon-Ceramic Ventilated & Cross-Drilled Rotors",
+      "Forged Monobloc Multi-Piston Calipers",
+      "Braided Stainless Steel Hydraulic Brake Lines",
+    ],
+  },
+  wheels_tires_assembly: {
+    zone: "underbody_wheel_wells",
+    subElements: [
+      "Inner Fender Wells & Protective Wheelhouse Liners",
+      "Front & Rear Mud Flaps / Splash Guards",
+      "Center-Lock Forged Lightweight Wheels & Performance Tires",
+    ],
+  },
+};
+
+// Auto-populate anatomical metadata onto EXTERIOR_ASSEMBLY_REGISTRY
+EXTERIOR_ASSEMBLY_REGISTRY.forEach((item) => {
+  const mapping = COMPONENT_ANATOMICAL_MAPPING[item.id];
+  if (mapping) {
+    item.anatomicalZone = mapping.zone;
+    item.subElements = mapping.subElements;
+  }
+});
+
 export function getExteriorAssemblyComponents(vehicleConfig?: Partial<VehicleConfig>): ExteriorAssemblyComponentMeta[] {
   return EXTERIOR_ASSEMBLY_REGISTRY;
 }
+
+export function getExteriorComponentsByAnatomicalZone(
+  zone: ExteriorAnatomicalZone
+): ExteriorAssemblyComponentMeta[] {
+  return EXTERIOR_ASSEMBLY_REGISTRY.filter((c) => c.anatomicalZone === zone);
+}
+
+export function getAllAnatomicalZones(): {
+  zone: AnatomicalZoneInfo;
+  components: ExteriorAssemblyComponentMeta[];
+}[] {
+  return (Object.keys(ANATOMICAL_ZONES) as ExteriorAnatomicalZone[]).map((zoneKey) => ({
+    zone: ANATOMICAL_ZONES[zoneKey],
+    components: getExteriorComponentsByAnatomicalZone(zoneKey),
+  }));
+}
+

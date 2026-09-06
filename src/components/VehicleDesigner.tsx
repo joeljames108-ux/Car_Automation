@@ -34,23 +34,6 @@ import {
 import { useDesign } from "../state/DesignContext";
 import { Section, Slider, Select, ChoiceGrid, Toggle, StatTile } from "./ui/Controls";
 import {
-  PLATFORMS,
-  CHASSIS_TYPES,
-  SUSPENSION_TYPES,
-  BRAKE_TYPES,
-  TIRE_COMPOUNDS,
-  DRIVE_TYPES,
-  ENGINE_POSITIONS,
-  BODY_TYPES,
-  RIM_DESIGNS,
-  RIM_FINISHES,
-  PAINT_FINISHES,
-  HEADLIGHT_TYPES,
-  TAILLIGHT_TYPES,
-  BODY_KITS,
-  SPOILER_TYPES,
-  ROOF_SCOOPS,
-  MIRROR_TYPES,
   FRONT_BUMPER_SHAPES,
   SIDEPOD_INLET_POSITIONS,
   UNDERBODY_FLOOR_TYPES,
@@ -62,23 +45,6 @@ import {
 } from "../sim/constants";
 import { VEHICLE_PRESET_LIBRARY } from "../sim/vehiclePresets";
 import type {
-  PlatformType,
-  ChassisType,
-  SuspensionType,
-  BrakeType,
-  TireCompound,
-  DriveType,
-  EnginePosition,
-  BodyType,
-  RimDesign,
-  RimFinish,
-  PaintFinish,
-  HeadlightType,
-  TaillightType,
-  BodyKit,
-  SpoilerType,
-  RoofScoopType,
-  ExteriorConfig,
   AeroResearchConfig,
   FrontBumperShape,
   UnderbodyFloorType,
@@ -89,28 +55,19 @@ import type {
 import { playHMIClickSound, playHMITabSound } from "../utils/hmiSoundSynth";
 import { useVehicleAssemblyStore } from "../state/useVehicleAssemblyStore";
 import { VehicleCompletionModal } from "./vehicleAssembly/VehicleCompletionModal";
-import { ExteriorDesignerIntegration } from "./vehicleAssembly/exterior/ExteriorDesignerIntegration";
 import { VehicleComparisonStudio } from "./vehicleAssembly/VehicleComparisonStudio";
 import { AerodynamicsStudio } from "./aerodynamics/AerodynamicsStudio";
 import { WindTunnelAeroStudio } from "./aerodynamics/WindTunnelAeroStudio";
 import { CFDView } from "./ui/CFDView";
 import { LineChart } from "./ui/LineChart";
 import { ModularLinearAssemblyStudio } from "./vehicleAssembly/ModularLinearAssemblyStudio";
+import { VehicleArchitectureStudio } from "./vehicleAssembly/VehicleArchitectureStudio";
 
 export type VehicleStudioSubTab =
+  | "architecture"
   | "linear_assembly"
-  | "exterior"
   | "aero"
   | "benchmark";
-
-const PAINT_SWATCHES = [
-  "#e11d48", "#dc2626", "#ea580c", "#f59e0b", "#facc15", "#84cc16",
-  "#22c55e", "#10b981", "#14b8a6", "#f59e0b", "#d97706", "#b45309",
-  "#1e40af", "#d97706", "#f59e0b", "#d97706", "#f43f5e", "#080c14",
-  "#1e293b", "#475569", "#94a3b8", "#e2e8f0", "#f8fafc", "#92400e",
-];
-
-const BADGE_SWATCHES = ["#e11d48", "#facc15", "#fbbf24", "#e2e8f0", "#080c14", "#84cc16"];
 
 type AeroDept =
   | "front"
@@ -137,31 +94,19 @@ const AERO_DEPTS: { id: AeroDept; label: string; icon: React.ReactNode }[] = [
   { id: "dashboard", label: "CFD Analytics", icon: <BarChart3 size={13} /> },
 ];
 
-function BodyPreview({ bodyType, finish }: { bodyType: BodyType; finish: PaintFinish }) {
-  return (
-    <div className="relative bg-gradient-to-b from-base-900 to-base-950 rounded-xl overflow-hidden border border-base-800 shadow-inner">
-      <img src="/agera.png" alt="Car Preview" loading="lazy" decoding="async" className="w-full h-auto block object-cover" />
-      <div className="absolute top-2 left-2 text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-black/60 backdrop-blur-md text-amber-400 border border-amber-500/30 uppercase tracking-wider">
-        {BODY_TYPES[bodyType]?.label || "Coupe"} · {PAINT_FINISHES[finish]?.label || "Gloss"}
-      </div>
-    </div>
-  );
-}
-
 interface VehicleDesignerProps {
   initialSubTab?: VehicleStudioSubTab;
+  onSelectStage?: (stage: string) => void;
 }
 
-export function VehicleDesigner({ initialSubTab = "linear_assembly" }: VehicleDesignerProps) {
-  const { design, sim, setDesign, updateVehicle, updateExterior, updateAeroResearch } = useDesign();
+export function VehicleDesigner({ initialSubTab = "architecture", onSelectStage }: VehicleDesignerProps) {
+  const { design, sim, setDesign, updateVehicle, updateAeroResearch } = useDesign();
   const v = design.vehicle;
-  const ext = v.exterior;
   const ar = v.aeroResearch;
 
   const [activeTab, setActiveTab] = useState<VehicleStudioSubTab>(initialSubTab);
 
   // Sub-view selectors for consolidated studios
-  const [exteriorViewMode, setExteriorViewMode] = useState<"paint_and_styling" | "biw_assembly">("paint_and_styling");
   const [aeroViewMode, setAeroViewMode] = useState<"studio_3d" | "cfd_windtunnel" | "research_depts">("studio_3d");
   const [aeroDept, setAeroDept] = useState<AeroDept>("dashboard");
   const [showCompletionModal, setShowCompletionModal] = useState(false);
@@ -195,16 +140,16 @@ export function VehicleDesigner({ initialSubTab = "linear_assembly" }: VehicleDe
 
   const tabsConfig = [
     {
-      id: "linear_assembly" as const,
-      label: "UNIFIED LINEAR ASSEMBLY & VEHICLE ENGINEERING",
-      icon: <Wrench size={14} />,
-      badge: "12 STAGES • KINEMATICS",
+      id: "architecture" as const,
+      label: "VEHICLE ARCHITECTURE",
+      icon: <Shield size={14} />,
+      badge: "SEDAN • HATCH • CROSS • SUV",
     },
     {
-      id: "exterior" as const,
-      label: "EXTERIOR STYLING & PAINT",
-      icon: <Paintbrush size={14} />,
-      badge: "PAINT • RIMS • BIW",
+      id: "linear_assembly" as const,
+      label: "UNIFIED LINEAR ASSEMBLY",
+      icon: <Wrench size={14} />,
+      badge: "12 STAGES • KINEMATICS",
     },
     {
       id: "aero" as const,
@@ -243,8 +188,8 @@ export function VehicleDesigner({ initialSubTab = "linear_assembly" }: VehicleDe
                 </span>
               </div>
               <p className="text-[11px] font-mono text-slate-600 dark:text-slate-400 mt-0.5">
+                {activeTab === "architecture" && "Modular Engineering Platform • Sedan, Hatchback, Crossover & SUV • Discrete GLB Foundation"}
                 {activeTab === "linear_assembly" && "Flagship End-to-End Vehicle Engineering • 12-Stage Linear Assembly • 3D Kinematics • Packaging Diagnostics"}
-                {activeTab === "exterior" && "Paint Booth & Finishes • Custom Rims & Calipers • Widebody Kits • 3D Body-in-White Assembly"}
                 {activeTab === "aero" && "3D Parametric Aero Studio • CFD Wind Tunnel Streamlines • 10-Dept Aero Research & Active DRS"}
                 {activeTab === "benchmark" && "A/B Car Benchmark & Circuit Lap Time Battles • Multi-Car Head-to-Head Comparison"}
               </p>
@@ -308,314 +253,28 @@ export function VehicleDesigner({ initialSubTab = "linear_assembly" }: VehicleDe
       </div>
 
       {/* =========================================================================
+          STAGE 0: VEHICLE ARCHITECTURE & ENGINEERING PLATFORM
+          ========================================================================= */}
+      {activeTab === "architecture" && (
+        <div className="animate-stage-transition-enter">
+          <VehicleArchitectureStudio
+            onEnterDesignStudio={() => {
+              if (onSelectStage) {
+                onSelectStage("exterior");
+              } else {
+                setActiveTab("linear_assembly");
+              }
+            }}
+          />
+        </div>
+      )}
+
+      {/* =========================================================================
           FLAGSHIP: UNIFIED LINEAR ASSEMBLY & VEHICLE ENGINEERING SUITE
           ========================================================================= */}
       {activeTab === "linear_assembly" && (
         <div className="animate-stage-transition-enter">
           <ModularLinearAssemblyStudio />
-        </div>
-      )}
-
-      {/* =========================================================================
-          STUDIO 3: UNIFIED EXTERIOR STYLING & PAINT BOOTH
-          ========================================================================= */}
-      {activeTab === "exterior" && (
-        <div className="space-y-4 animate-stage-transition-enter">
-          {/* Sub-Studio Mode Switcher */}
-          <div className="panel p-3.5 rounded-2xl flex items-center justify-between flex-wrap gap-2 shadow-md">
-            <div className="flex items-center gap-2 flex-wrap">
-              <button
-                onClick={() => {
-                  playHMIClickSound();
-                  setExteriorViewMode("paint_and_styling");
-                }}
-                className={`flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-bold font-mono transition-all border ${
-                  exteriorViewMode === "paint_and_styling"
-                    ? "bg-amber-500/20 border-amber-500/60 text-amber-700 dark:text-amber-200 shadow-sm"
-                    : "bg-base-850/80 border-base-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100"
-                }`}
-              >
-                <Palette size={14} className={exteriorViewMode === "paint_and_styling" ? "text-amber-600 dark:text-amber-400" : ""} />
-                🎨 PAINT BOOTH, RIMS & STYLING
-              </button>
-              <button
-                onClick={() => {
-                  playHMIClickSound();
-                  setExteriorViewMode("biw_assembly");
-                }}
-                className={`flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-bold font-mono transition-all border ${
-                  exteriorViewMode === "biw_assembly"
-                    ? "bg-emerald-500/20 border-emerald-500/60 text-emerald-700 dark:text-emerald-200 shadow-sm"
-                    : "bg-base-850/80 border-base-800 text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-100"
-                }`}
-              >
-                <Layers size={14} className={exteriorViewMode === "biw_assembly" ? "text-emerald-600 dark:text-emerald-400" : ""} />
-                🧩 3D BODY-IN-WHITE (BIW) WORKSTATION
-              </button>
-            </div>
-            <div className="text-[11px] font-mono text-slate-600 dark:text-slate-400">
-              Active Color: <span className="font-bold text-slate-900 dark:text-slate-200">{ext.paintColor}</span> ({(PAINT_FINISHES as Record<string, any>)[ext.paintFinish]?.label || "Gloss"})
-            </div>
-          </div>
-
-          {exteriorViewMode === "biw_assembly" ? (
-            <ExteriorDesignerIntegration />
-          ) : (
-            <div className="grid grid-cols-1 xl:grid-cols-3 gap-4">
-              <div className="xl:col-span-2 space-y-4 stagger">
-                {/* Body Type Selection */}
-                <Section title="Body Type & Aerodynamic Silhouette" icon={<Car size={16} />}>
-                  <div className="mb-3">
-                    <ChoiceGrid<BodyType>
-                      value={ext.bodyType}
-                      options={(Object.keys(BODY_TYPES) as BodyType[]).map((b) => ({
-                        value: b,
-                        label: (BODY_TYPES as Record<string, any>)[b]?.label || b,
-                      }))}
-                      onChange={(val) => updateExterior({ bodyType: val })}
-                      columns={6}
-                    />
-                  </div>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
-                    <div className="bg-base-850 rounded-lg p-2.5 border border-base-800">
-                      <div className="label-mono text-slate-500">Design Origin</div>
-                      <div className="text-slate-300 font-semibold">{(BODY_TYPES as Record<string, any>)[ext.bodyType]?.origin || "Automotive Engineering"}</div>
-                    </div>
-                    <div className="bg-base-850 rounded-lg p-2.5 border border-base-800">
-                      <div className="label-mono text-slate-500">Aerodynamic Impact</div>
-                      <div className="text-amber-300 font-mono">
-                        Cd {((BODY_TYPES as Record<string, any>)[ext.bodyType]?.dragDelta ?? 0) >= 0 ? "+" : ""}
-                        {((BODY_TYPES as Record<string, any>)[ext.bodyType]?.dragDelta ?? 0).toFixed(3)} · Cl{" "}
-                        {((BODY_TYPES as Record<string, any>)[ext.bodyType]?.liftDelta ?? 0) >= 0 ? "+" : ""}
-                        {((BODY_TYPES as Record<string, any>)[ext.bodyType]?.liftDelta ?? 0).toFixed(3)}
-                      </div>
-                    </div>
-                    <div className="bg-base-850 rounded-lg p-2.5 border border-base-800">
-                      <div className="label-mono text-slate-500">Weight Δ</div>
-                      <div className="text-amber-300 font-mono">
-                        {((BODY_TYPES as Record<string, any>)[ext.bodyType]?.weightDelta ?? 0) > 0 ? "+" : ""}
-                        {(BODY_TYPES as Record<string, any>)[ext.bodyType]?.weightDelta ?? 0} kg
-                      </div>
-                    </div>
-                  </div>
-                  <p className="text-[11px] text-slate-400 mt-2 font-mono">{(BODY_TYPES as Record<string, any>)[ext.bodyType]?.description || ""}</p>
-                </Section>
-
-                {/* Paint & Finish */}
-                <Section title="Paint Booth & Surface Finish" icon={<Palette size={16} />}>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <label className="label-mono mb-2 block text-xs font-semibold text-slate-300">
-                        Bodywork Paint Swatches
-                      </label>
-                      <div className="grid grid-cols-8 gap-1.5">
-                        {PAINT_SWATCHES.map((c) => (
-                          <button
-                            key={c}
-                            onClick={() => updateExterior({ paintColor: c })}
-                            className={`h-7 rounded-md border-2 transition-all cursor-pointer ${
-                              ext.paintColor === c
-                                ? "border-amber-400 scale-110 shadow-[0_0_10px_rgba(34,211,238,0.5)]"
-                                : "border-base-800 hover:border-base-600 hover:scale-105"
-                            }`}
-                            style={{ backgroundColor: c }}
-                            title={c}
-                          />
-                        ))}
-                      </div>
-                      <div className="flex items-center gap-3 mt-3 p-2 bg-base-850 rounded-lg border border-base-800">
-                        <input
-                          type="color"
-                          value={ext.paintColor}
-                          onChange={(e) => updateExterior({ paintColor: e.target.value })}
-                          className="h-8 w-12 bg-transparent border border-base-800 rounded cursor-pointer"
-                        />
-                        <span className="font-mono text-xs text-amber-300 font-bold">{ext.paintColor}</span>
-                        <span className="text-[10px] text-slate-500 font-mono">(Custom Hex Code)</span>
-                      </div>
-                    </div>
-
-                    <div>
-                      <Select<PaintFinish>
-                        label="Surface Paint Finish"
-                        value={ext.paintFinish}
-                        options={(Object.keys(PAINT_FINISHES) as PaintFinish[]).map((f) => ({
-                          value: f,
-                          label: PAINT_FINISHES[f].label,
-                        }))}
-                        onChange={(val) => updateExterior({ paintFinish: val })}
-                      />
-                      <div className="mt-4">
-                        <label className="label-mono mb-2 block text-xs font-semibold text-slate-300">
-                          Badge & Accent Color
-                        </label>
-                        <div className="flex gap-2">
-                          {BADGE_SWATCHES.map((c) => (
-                            <button
-                              key={c}
-                              onClick={() => updateExterior({ badgeColor: c })}
-                              className={`h-8 w-8 rounded-full border-2 transition-all cursor-pointer ${
-                                ext.badgeColor === c
-                                  ? "border-amber-400 scale-110 shadow-[0_0_10px_rgba(34,211,238,0.5)]"
-                                  : "border-base-800 hover:border-base-600"
-                              }`}
-                              style={{ backgroundColor: c }}
-                            />
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </Section>
-
-                {/* Wheels & Rims */}
-                <Section title="Wheels & Custom Rims Studio" icon={<Disc size={16} />}>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <Select<RimDesign>
-                      label="Rim Spoke Architecture"
-                      value={ext.rimDesign}
-                      options={(Object.keys(RIM_DESIGNS) as RimDesign[]).map((r) => ({
-                        value: r,
-                        label: RIM_DESIGNS[r].label,
-                      }))}
-                      onChange={(val) => updateExterior({ rimDesign: val })}
-                    />
-                    <Select<RimFinish>
-                      label="Rim Finish & Coating"
-                      value={ext.rimFinish}
-                      options={(Object.keys(RIM_FINISHES) as RimFinish[]).map((r) => ({
-                        value: r,
-                        label: RIM_FINISHES[r].label,
-                      }))}
-                      onChange={(val) => updateExterior({ rimFinish: val })}
-                    />
-                    <Slider
-                      label="Rim Diameter"
-                      value={ext.rimDiameter}
-                      min={15}
-                      max={22}
-                      unit='"'
-                      onChange={(val) => updateExterior({ rimDiameter: val })}
-                    />
-                    <Slider
-                      label="Rim Width"
-                      value={ext.rimWidth}
-                      min={7}
-                      max={13}
-                      step={0.5}
-                      unit='"'
-                      onChange={(val) => updateExterior({ rimWidth: val })}
-                    />
-                  </div>
-                </Section>
-
-                {/* Lighting Architecture */}
-                <Section title="Optics & Lighting Technology" icon={<Lightbulb size={16} />}>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <Select<HeadlightType>
-                      label="Headlights Architecture"
-                      value={ext.headlightType}
-                      options={(Object.keys(HEADLIGHT_TYPES) as HeadlightType[]).map((h) => ({
-                        value: h,
-                        label: HEADLIGHT_TYPES[h].label,
-                      }))}
-                      onChange={(val) => updateExterior({ headlightType: val })}
-                    />
-                    <Select<TaillightType>
-                      label="Taillights & Lightbar"
-                      value={ext.taillightType}
-                      options={(Object.keys(TAILLIGHT_TYPES) as TaillightType[]).map((t) => ({
-                        value: t,
-                        label: TAILLIGHT_TYPES[t].label,
-                      }))}
-                      onChange={(val) => updateExterior({ taillightType: val })}
-                    />
-                  </div>
-                </Section>
-
-                {/* Body Kit & Aero Add-ons */}
-                <Section title="Body Kit & Aerodynamic Appendages" icon={<Layers size={16} />}>
-                  <div className="mb-3">
-                    <label className="label-mono mb-1.5 block text-xs font-semibold text-slate-300">Aerodynamic Body Kit</label>
-                    <ChoiceGrid<BodyKit>
-                      value={ext.bodyKit}
-                      options={(Object.keys(BODY_KITS) as BodyKit[]).map((k) => ({
-                        value: k,
-                        label: BODY_KITS[k].label,
-                      }))}
-                      onChange={(val) => updateExterior({ bodyKit: val })}
-                      columns={4}
-                    />
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <Select<SpoilerType>
-                      label="Rear Wing / Spoiler"
-                      value={ext.spoilerType}
-                      options={(Object.keys(SPOILER_TYPES) as SpoilerType[]).map((s) => ({
-                        value: s,
-                        label: SPOILER_TYPES[s].label,
-                      }))}
-                      onChange={(val) => updateExterior({ spoilerType: val })}
-                    />
-                    <Select<RoofScoopType>
-                      label="Roof Air Scoop"
-                      value={ext.roofScoop}
-                      options={(Object.keys(ROOF_SCOOPS) as RoofScoopType[]).map((r) => ({
-                        value: r,
-                        label: ROOF_SCOOPS[r].label,
-                      }))}
-                      onChange={(val) => updateExterior({ roofScoop: val })}
-                    />
-                    <Select
-                      label="Aerodynamic Mirrors"
-                      value={ext.mirrorType}
-                      options={(Object.keys(MIRROR_TYPES) as string[]).map((m) => ({
-                        value: m,
-                        label: MIRROR_TYPES[m].label,
-                      }))}
-                      onChange={(val) => updateExterior({ mirrorType: val as ExteriorConfig["mirrorType"] })}
-                    />
-                    <Slider
-                      label="Front Lip Extension"
-                      value={ext.frontLipExtension}
-                      min={0}
-                      max={1}
-                      step={0.05}
-                      format={(v) => `${(v * 100).toFixed(0)}%`}
-                      onChange={(val) => updateExterior({ frontLipExtension: val })}
-                    />
-                  </div>
-
-                  <div className="grid grid-cols-2 md:grid-cols-3 gap-2 mt-3">
-                    <Toggle label="Hood Air Scoop" value={ext.hoodScoop} onChange={(val) => updateExterior({ hoodScoop: val })} />
-                    <Toggle label="Ground Skirts" value={ext.sideSkirts} onChange={(val) => updateExterior({ sideSkirts: val })} />
-                    <Toggle label="Fender Louvers" value={ext.fenderVents} onChange={(val) => updateExterior({ fenderVents: val })} />
-                    <Toggle label="Carbon Splitter" value={ext.splitter} onChange={(val) => updateExterior({ splitter: val })} />
-                    <Toggle label="Motorsport Tow Hook" value={ext.towHook} onChange={(val) => updateExterior({ towHook: val })} />
-                  </div>
-                </Section>
-              </div>
-
-              {/* Right column: Live Body Preview */}
-              <div className="space-y-4">
-                <Section title="Live 2.5D Bodywork Preview" icon={<Car size={16} />}>
-                  <BodyPreview bodyType={ext.bodyType} finish={ext.paintFinish} />
-                </Section>
-
-                <Section title="Aero & Dynamics Delta" icon={<Wind size={16} />}>
-                  <div className="grid grid-cols-2 gap-2">
-                    <StatTile label="Drag Cd" value={sim.dragCoeff.toFixed(3)} accent="accent" />
-                    <StatTile label="Lift Cl" value={sim.liftCoeff.toFixed(3)} accent="accent" />
-                    <StatTile label="Downforce @ 200" value={sim.downforce} unit="N" accent="ok" />
-                    <StatTile label="Curb Weight" value={sim.weight} unit="kg" />
-                    <StatTile label="Est. Top Speed" value={sim.topSpeed} unit="km/h" accent="accent" />
-                    <StatTile label="0-100 km/h" value={sim.accel0_100} unit="s" accent="ok" />
-                  </div>
-                </Section>
-              </div>
-            </div>
-          )}
         </div>
       )}
 

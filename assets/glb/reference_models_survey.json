@@ -1,0 +1,122 @@
+{
+  "2015-rocket-bunny-s15-nissan-silvia": [
+    {
+      "rel_path": "2015-rocket-bunny-s15-nissan-silvia\\source\\FINAL_MODEL_RB\\FINAL_MODEL_02.fbx",
+      "filename": "FINAL_MODEL_02.fbx",
+      "ext": ".fbx",
+      "size_mb": 7.45
+    }
+  ],
+  "2024-byd-atto-3": [
+    {
+      "rel_path": "2024-byd-atto-3\\source\\FINAL_MODEL\\FINAL_MODEL.fbx",
+      "filename": "FINAL_MODEL.fbx",
+      "ext": ".fbx",
+      "size_mb": 11.08
+    }
+  ],
+  "26-mustang-13.04.2021-compressed": [
+    {
+      "rel_path": "26-mustang-13.04.2021-compressed\\Mustang 13.04.2021 Compressed.blend",
+      "filename": "Mustang 13.04.2021 Compressed.blend",
+      "ext": ".blend",
+      "size_mb": 2.1
+    }
+  ],
+  "32-mercedes-benz-gls-580-2020": [
+    {
+      "rel_path": "32-mercedes-benz-gls-580-2020\\uploads_files_2787791_Mercedes+Benz+GLS+580.blend",
+      "filename": "uploads_files_2787791_Mercedes+Benz+GLS+580.blend",
+      "ext": ".blend",
+      "size_mb": 54.73
+    },
+    {
+      "rel_path": "32-mercedes-benz-gls-580-2020\\uploads_files_2787791_Mercedes+Benz+GLS+580.fbx",
+      "filename": "uploads_files_2787791_Mercedes+Benz+GLS+580.fbx",
+      "ext": ".fbx",
+      "size_mb": 12.22
+    },
+    {
+      "rel_path": "32-mercedes-benz-gls-580-2020\\uploads_files_2787791_Mercedes+Benz+GLS+580.obj",
+      "filename": "uploads_files_2787791_Mercedes+Benz+GLS+580.obj",
+      "ext": ".obj",
+      "size_mb": 29.41
+    }
+  ],
+  "32-mercedes-benz-gls-580-2020 (1)": [
+    {
+      "rel_path": "32-mercedes-benz-gls-580-2020 (1)\\uploads_files_2787791_Mercedes+Benz+GLS+580.blend",
+      "filename": "uploads_files_2787791_Mercedes+Benz+GLS+580.blend",
+      "ext": ".blend",
+      "size_mb": 54.73
+    },
+    {
+      "rel_path": "32-mercedes-benz-gls-580-2020 (1)\\uploads_files_2787791_Mercedes+Benz+GLS+580.fbx",
+      "filename": "uploads_files_2787791_Mercedes+Benz+GLS+580.fbx",
+      "ext": ".fbx",
+      "size_mb": 12.22
+    },
+    {
+      "rel_path": "32-mercedes-benz-gls-580-2020 (1)\\uploads_files_2787791_Mercedes+Benz+GLS+580.obj",
+      "filename": "uploads_files_2787791_Mercedes+Benz+GLS+580.obj",
+      "ext": ".obj",
+      "size_mb": 29.41
+    }
+  ],
+  "68-transportation-001": [
+    {
+      "rel_path": "68-transportation-001\\Models\\1.obj",
+      "filename": "1.obj",
+      "ext": ".obj",
+      "size_mb": 4.84
+    }
+  ],
+  "89-challenger": [
+    {
+      "rel_path": "89-challenger\\Challenger.blend",
+      "filename": "Challenger.blend",
+      "ext": ".blend",
+      "size_mb": 47.01
+    }
+  ],
+  "bmw-i8-xs-2015": [
+    {
+      "rel_path": "bmw-i8-xs-2015\\source\\2015-bmw-i8_xs_car.glb",
+      "filename": "2015-bmw-i8_xs_car.glb",
+      "ext": ".glb",
+      "size_mb": 9.84
+    }
+  ],
+  "bmw-i8-xs-2015 (1)": [
+    {
+      "rel_path": "bmw-i8-xs-2015 (1)\\source\\2015-bmw-i8_xs_car.glb",
+      "filename": "2015-bmw-i8_xs_car.glb",
+      "ext": ".glb",
+      "size_mb": 9.84
+    }
+  ],
+  "ford-escort-rs-cosworth-cossie": [
+    {
+      "rel_path": "ford-escort-rs-cosworth-cossie\\source\\Body_lodA\\Body_lodA\\fordEscortRSCosworth.glb",
+      "filename": "fordEscortRSCosworth.glb",
+      "ext": ".glb",
+      "size_mb": 12.79
+    }
+  ],
+  "mini-countryman-jcw": [
+    {
+      "rel_path": "mini-countryman-jcw\\source\\Unity2Skfb\\Unity2Skfb.gltf",
+      "filename": "Unity2Skfb.gltf",
+      "ext": ".gltf",
+      "size_mb": 0.2
+    }
+  ],
+  "volvo-p1800-restomod-widebody-edition": [
+    {
+      "rel_path": "volvo-p1800-restomod-widebody-edition\\source\\car5.fbx",
+      "filename": "car5.fbx",
+      "ext": ".fbx",
+      "size_mb": 63.45
+    }
+  ]
+}

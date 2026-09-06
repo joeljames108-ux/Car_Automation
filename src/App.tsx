@@ -69,12 +69,12 @@ const STAGES: StageItem[] = [
   { id: "engine", label: "Engine", icon: <Cog size={14} />, category: "engineering" },
   { id: "vehicle", label: "Vehicle Studio", icon: <Car size={14} />, category: "engineering" },
   { id: "interior", label: "Interior & Electronics", icon: <Sofa size={14} />, category: "engineering" },
-  { id: "interior_dashboard", label: "🎚️ Interior Configurator", icon: <SlidersHorizontal size={14} />, category: "engineering" },
   { id: "manufacturing", label: "Manufacturing", icon: <Factory size={14} />, category: "engineering" },
   { id: "safety", label: "Safety Center", icon: <ShieldCheck size={14} />, category: "engineering" },
 
   // --- Design Studios Hub ---
   { id: "studio", label: "Grand Studio Hub", icon: <SparklesIcon size={14} />, category: "studios" },
+  { id: "exterior", label: "🎨 Exterior Design Studio", icon: <Paintbrush size={14} />, category: "studios" },
   { id: "transmission3d", label: "3D Transmission Studio", icon: <Cog size={14} />, category: "studios" },
   { id: "track_layout", label: "Track Layouts Studio", icon: <Navigation size={14} />, category: "studios" },
   { id: "f1_constructor", label: "🏎️ F1 Constructor Studio", icon: <Flag size={14} />, category: "studios" },
@@ -194,7 +194,7 @@ function AppInner() {
 
   const toolbarActions = useMemo(() => [
     { id: "command", icon: <LayoutGrid size={17} />, label: "Dashboard", onClick: () => handleSelectStage("command"), isActive: stage === "command" },
-    { id: "interior_dashboard", icon: <SlidersHorizontal size={17} />, label: "Interior Configurator", onClick: () => handleSelectStage("interior_dashboard"), isActive: stage === "interior_dashboard" },
+    { id: "interior", icon: <SlidersHorizontal size={17} />, label: "Interior Configurator", onClick: () => handleSelectStage("interior"), isActive: stage === "interior" },
     { id: "studio", icon: <SparklesIcon size={17} />, label: "Studio Hub", onClick: () => handleSelectStage("studio"), isActive: stage === "studio" },
     { id: "search", icon: <Search size={17} />, label: "Search (Ctrl+K)", onClick: handleSearch },
     { id: "simulation", icon: <Activity size={17} />, label: "Analytics", onClick: () => handleSelectStage("simulation"), isActive: stage === "simulation" },

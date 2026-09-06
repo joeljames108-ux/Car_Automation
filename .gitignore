@@ -32,3 +32,6 @@ temp_junk_src/
 start.cmd
 *.blend1
 public/renders/
+__pycache__/
+*.pyc
+.kilo/
