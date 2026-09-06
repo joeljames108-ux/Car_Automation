@@ -1,52 +1,52 @@
 {
-  "auditTimestamp": "2026-09-06T16:49:07.349Z",
+  "auditTimestamp": "2026-09-06T18:29:11.938Z",
   "projectName": "Modular glTF Vehicle Construction System & Car Automation Simulator",
-  "rootDirectory": "C:\\Users\\joelj\\Downloads\\project-bolt-sb1-a1kjcyhr (3)\\project",
-  "totalSourceFiles": 1362,
-  "totalCodeLines": 297071,
-  "totalCommentLines": 26900,
-  "totalBlankLines": 35642,
-  "totalSizeBytes": 15373525,
+  "rootDirectory": "E:\\Car_Automation",
+  "totalSourceFiles": 1363,
+  "totalCodeLines": 298469,
+  "totalCommentLines": 26947,
+  "totalBlankLines": 35810,
+  "totalSizeBytes": 15652513,
   "subsystemBreakdown": {
     "simulation_core": {
       "fileCount": 274,
-      "codeLines": 54494,
-      "sizeBytes": 3217335
+      "codeLines": 54655,
+      "sizeBytes": 3275010
     },
     "engine_assembly": {
       "fileCount": 75,
       "codeLines": 21216,
-      "sizeBytes": 1036703
+      "sizeBytes": 1061179
     },
     "modular_vehicle": {
-      "fileCount": 104,
-      "codeLines": 31074,
-      "sizeBytes": 1615057
+      "fileCount": 105,
+      "codeLines": 31240,
+      "sizeBytes": 1633900
     },
     "exterior_3d": {
       "fileCount": 379,
       "codeLines": 80704,
-      "sizeBytes": 3996590
+      "sizeBytes": 4082765
     },
     "rendering_engine": {
       "fileCount": 16,
       "codeLines": 5101,
-      "sizeBytes": 261542
+      "sizeBytes": 261767
     },
     "state_management": {
       "fileCount": 29,
-      "codeLines": 7364,
-      "sizeBytes": 310398
+      "codeLines": 7384,
+      "sizeBytes": 317165
     },
     "ai_agent_framework": {
       "fileCount": 36,
       "codeLines": 3969,
-      "sizeBytes": 186024
+      "sizeBytes": 189300
     },
     "ui_components": {
       "fileCount": 362,
-      "codeLines": 79623,
-      "sizeBytes": 4038736
+      "codeLines": 80674,
+      "sizeBytes": 4104479
     },
     "asset_pipeline": {
       "fileCount": 0,
@@ -56,17 +56,17 @@
     "testing_verification": {
       "fileCount": 77,
       "codeLines": 12286,
-      "sizeBytes": 649260
+      "sizeBytes": 663489
     },
     "documentation_audit": {
       "fileCount": 10,
       "codeLines": 1240,
-      "sizeBytes": 61880
+      "sizeBytes": 63459
     }
   },
   "dependencyGraph": {
-    "totalNodes": 1362,
-    "totalEdges": 2814,
+    "totalNodes": 1363,
+    "totalEdges": 2812,
     "directAcyclicGraphValid": true,
     "cyclicDependencyPaths": [],
     "subsystemCouplingMatrix": {
@@ -162,14 +162,14 @@
         "documentation_audit": 0
       },
       "ui_components": {
-        "simulation_core": 323,
+        "simulation_core": 324,
         "engine_assembly": 8,
         "modular_vehicle": 8,
         "exterior_3d": 19,
         "rendering_engine": 9,
-        "state_management": 146,
+        "state_management": 148,
         "ai_agent_framework": 10,
-        "ui_components": 705,
+        "ui_components": 700,
         "asset_pipeline": 0,
         "testing_verification": 0,
         "documentation_audit": 0
@@ -238,6 +238,8 @@
       "src/components/ui1/design/neonHorizonTokens.ts",
       "src/components/ui1/design/NeonHorizonTooltip.tsx",
       "src/components/ui1/design/NeonRadarChart.tsx",
+      "src/components/ui1/hud/NeonArcGauge.tsx",
+      "src/components/ui1/hud/NeonRadialDial.tsx",
       "src/components/ui1/hud/NeonSparkline.tsx",
       "src/components/ui1/ux/animations/useSpringPhysics.ts",
       "src/components/ui1/ux/dataDisplay/AnimatedBar.tsx",
@@ -383,6 +385,7 @@
       "src/sim/modularVehicle/index.ts",
       "src/sim/modularVehicle/runTransmissionTests.ts",
       "src/sim/modularVehicle/runV12RacingTests.ts",
+      "src/sim/modularVehicle/runV8PowertrainTests.ts",
       "src/sim/modularVehicle/types.ts",
       "src/sim/motorsport/homologationAndBopEngine.ts",
       "src/sim/performance/lapTimeOptimizer.ts",
@@ -441,17 +444,17 @@
     "highCentralityHubs": [
       {
         "modulePath": "src/utils/hmiSoundSynth.ts",
-        "inDegree": 156,
+        "inDegree": 157,
         "outDegree": 0
       },
       {
         "modulePath": "src/state/DesignContext.tsx",
-        "inDegree": 97,
+        "inDegree": 99,
         "outDegree": 3
       },
       {
         "modulePath": "src/components/ui1/design/NeonHorizonGlassPanel.tsx",
-        "inDegree": 69,
+        "inDegree": 68,
         "outDegree": 0
       },
       {
@@ -675,11 +678,6 @@
         "outDegree": 14
       },
       {
-        "modulePath": "src/components/ui/AnimatedCounter.tsx",
-        "inDegree": 14,
-        "outDegree": 0
-      },
-      {
         "modulePath": "src/exterior3d/generators/completePhase9MasterHypercarAssembly.ts",
         "inDegree": 3,
         "outDegree": 11
@@ -693,6 +691,11 @@
         "modulePath": "src/sim/physics/lapSimulator.ts",
         "inDegree": 3,
         "outDegree": 11
+      },
+      {
+        "modulePath": "src/components/ui/AnimatedCounter.tsx",
+        "inDegree": 13,
+        "outDegree": 0
       },
       {
         "modulePath": "src/components/ui1/stages/NeonExteriorStudio.tsx",
@@ -920,6 +923,11 @@
         "outDegree": 9
       },
       {
+        "modulePath": "src/components/ui1/stages/NeonHiggsfieldStudio.tsx",
+        "inDegree": 0,
+        "outDegree": 9
+      },
+      {
         "modulePath": "src/components/ui1/stages/NeonWindTunnelPro.tsx",
         "inDegree": 0,
         "outDegree": 9
@@ -1055,11 +1063,6 @@
         "outDegree": 8
       },
       {
-        "modulePath": "src/components/ui1/stages/NeonHiggsfieldStudio.tsx",
-        "inDegree": 0,
-        "outDegree": 8
-      },
-      {
         "modulePath": "src/components/ui1/stages/NeonImmersionCoolingStudio.tsx",
         "inDegree": 0,
         "outDegree": 8
@@ -1180,11 +1183,6 @@
         "outDegree": 3
       },
       {
-        "modulePath": "src/components/ui/LiquidGlass.tsx",
-        "inDegree": 7,
-        "outDegree": 0
-      },
-      {
         "modulePath": "src/components/ui1/ux/useSpringPhysics.ts",
         "inDegree": 7,
         "outDegree": 0
@@ -1223,6 +1221,11 @@
         "modulePath": "src/components/StageSwitcher.tsx",
         "inDegree": 5,
         "outDegree": 1
+      },
+      {
+        "modulePath": "src/components/ui/LiquidGlass.tsx",
+        "inDegree": 6,
+        "outDegree": 0
       },
       {
         "modulePath": "src/components/ui/PowerTorqueCurveChart.tsx",
@@ -2222,6 +2225,8 @@
       "src/components/ui1/design/neonHorizonTokens.ts",
       "src/components/ui1/design/NeonHorizonTooltip.tsx",
       "src/components/ui1/design/NeonRadarChart.tsx",
+      "src/components/ui1/hud/NeonArcGauge.tsx",
+      "src/components/ui1/hud/NeonRadialDial.tsx",
       "src/components/ui1/hud/NeonSparkline.tsx",
       "src/components/ui1/ux/animations/useSpringPhysics.ts",
       "src/components/ui1/ux/dataDisplay/AnimatedBar.tsx",
@@ -2366,6 +2371,7 @@
       "src/sim/modularVehicle/index.ts",
       "src/sim/modularVehicle/runTransmissionTests.ts",
       "src/sim/modularVehicle/runV12RacingTests.ts",
+      "src/sim/modularVehicle/runV8PowertrainTests.ts",
       "src/sim/motorsport/homologationAndBopEngine.ts",
       "src/sim/performance/lapTimeOptimizer.ts",
       "src/sim/physics/activeAeroWingFlexDynamics.ts",
@@ -2594,8 +2600,12 @@
         "lineCount": 520
       },
       {
+        "filePath": "src/components/ui1/hud/NeonHorizonHeroHUD.tsx",
+        "lineCount": 621
+      },
+      {
         "filePath": "src/components/ui1/layout/NeonHorizonShell.tsx",
-        "lineCount": 628
+        "lineCount": 641
       },
       {
         "filePath": "src/components/ui1/spatial/MasterSpatialNavGlobe.tsx",
@@ -2611,7 +2621,7 @@
       },
       {
         "filePath": "src/components/ui1/stages/NeonHiggsfieldStudio.tsx",
-        "lineCount": 935
+        "lineCount": 1726
       },
       {
         "filePath": "src/components/vehicleAssembly/aero/ParametricAerodynamicsStudio.tsx",
@@ -2902,6 +2912,10 @@
         "lineCount": 746
       },
       {
+        "filePath": "src/lib/higgsfield.ts",
+        "lineCount": 537
+      },
+      {
         "filePath": "src/sim/agents/apexAgentEngine.ts",
         "lineCount": 537
       },
@@ -3042,13 +3056,13 @@
         "lineCount": 544
       }
     ],
-    "missingTypeAnnotationCount": 335,
+    "missingTypeAnnotationCount": 337,
     "todoCommentCount": 0,
     "fixmeCommentCount": 0,
     "testCoverageRatioPct": 17,
     "recommendations": [
-      "Modularize 155 monolithic files (>500 lines) into focused subsystem domain modules.",
-      "Replace 335 loose 'any' type annotations with strict TypeScript generic/interface types.",
+      "Modularize 157 monolithic files (>500 lines) into focused subsystem domain modules.",
+      "Replace 337 loose 'any' type annotations with strict TypeScript generic/interface types.",
       "Maintain 100% deterministic transform snap repeatability across all 36 chassis sockets.",
       "Ensure all 3D assets implement strict level of detail (LOD 1-6) polygon and texture budgets."
     ]

@@ -234,8 +234,14 @@ export function NeonHorizonShell() {
   }, []);
 
   return (
-    <div className="relative min-h-screen flex flex-col font-sans overflow-x-hidden"
-      style={{ color: "#e4eaf4", background: "#1a1008" }}>
+    <div
+      className="relative min-h-screen flex flex-col font-sans overflow-x-hidden"
+      style={{
+        color: "#e4eaf4",
+        background: "radial-gradient(circle at 50% 0%, rgba(0, 245, 212, 0.04) 0%, rgba(8, 9, 13, 1) 70%)",
+        backgroundColor: "#08090D",
+      }}
+    >
       {/* 1. Multi-Layer Cyberpunk Metropolis Parallax Background */}
       <CyberpunkCityBackground
         scene={sceneMode === "wind_tunnel" || stage === "aero" ? 2 : 1}
@@ -572,16 +578,23 @@ export function NeonHorizonShell() {
         </div>
       </div>
 
-      {/* 6. Vision Glass Interactive Dock Bar */}
+      {/* 6. Quanta Studio Interactive Dock Bar */}
       <NeonHorizonDock
         activeStage={stage}
         onSelectStage={handleStageSelect}
         sceneMode={sceneMode}
         onSelectSceneMode={setSceneMode}
+        soundEnabled={soundEnabled}
+        onToggleSound={() => setSoundEnabled(!soundEnabled)}
+        cfdEnabled={cfdEnabled}
+        onToggleCfd={() => setCfdEnabled(!cfdEnabled)}
       />
 
       {/* 7. Floating Apex AI Assistant Pill Button */}
-      <ApexAIFloatingButton onOpenStudio={() => handleStageSelect("ai")} />
+      <ApexAIFloatingButton
+        onOpenStudio={() => handleStageSelect("ai")}
+        onOpenHiggsfield={() => handleStageSelect("higgsfield")}
+      />
 
       {/* 8. Overlays & Dialogs */}
       <React.Suspense fallback={null}>

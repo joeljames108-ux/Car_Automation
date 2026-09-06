@@ -7,10 +7,10 @@ import {
   FolderOpen,
   RotateCcw,
   Sparkles,
-  TrendingUp,
-  Ruler,
   Clock,
   User,
+  Sliders,
+  DollarSign,
 } from "lucide-react";
 import { playHMIClickSound, playHMITabSound } from "../../../utils/hmiSoundSynth";
 import type { WorkspaceCategory } from "../../ui/UI1Layout";
@@ -65,52 +65,64 @@ export const NeonHorizonHeader: React.FC<NeonHorizonHeaderProps> = ({
   return (
     <header
       role="banner"
-      aria-label="Vision Glass Studio Header"
-      className="sticky top-0 z-40 border-b select-none"
+      aria-label="Quanta Studio Header"
+      className="sticky top-0 z-40 border-b select-none transition-colors"
       style={{
-        background: "rgba(10, 18, 35, 0.72)",
-        backdropFilter: "blur(60px) saturate(220%)",
-        WebkitBackdropFilter: "blur(60px) saturate(220%)",
-        borderColor: "rgba(95, 168, 200, 0.08)",
-        boxShadow: "0 4px 30px rgba(0, 0, 0, 0.40), inset 0 1px 0 rgba(255, 255, 255, 0.04)",
+        background: "rgba(8, 10, 16, 0.88)",
+        backdropFilter: "blur(40px) saturate(200%)",
+        WebkitBackdropFilter: "blur(40px) saturate(200%)",
+        borderColor: "rgba(255, 255, 255, 0.08)",
+        boxShadow: "0 4px 30px rgba(0, 0, 0, 0.50), inset 0 1px 0 rgba(255, 255, 255, 0.04)",
       }}
     >
       <div className="max-w-full px-6 h-16 flex items-center justify-between gap-4">
-        {/* Left: Animated Conic Logo & Brand */}
+        {/* Left: Quanta Studio Logo & Brand */}
         <div className="flex items-center gap-3 shrink-0">
-          <div className="relative flex items-center justify-center w-10 h-10 rounded-2xl border overflow-hidden"
-            style={{ background: "rgba(95, 168, 200, 0.08)", borderColor: "rgba(95, 168, 200, 0.18)" }}>
+          <div
+            className="relative flex items-center justify-center w-10 h-10 rounded-2xl border overflow-hidden"
+            style={{
+              background: "rgba(0, 245, 212, 0.08)",
+              borderColor: "rgba(0, 245, 212, 0.3)",
+              boxShadow: "0 0 20px rgba(0, 245, 212, 0.15)",
+            }}
+          >
             <div
               className="absolute inset-0 rounded-2xl opacity-40 pointer-events-none"
               style={{
-                background: "conic-gradient(from 0deg, rgba(95,168,200,0.20), rgba(120,104,160,0.12), rgba(90,175,136,0.10), rgba(95,168,200,0.20))",
+                background: "conic-gradient(from 0deg, rgba(0,245,212,0.35), rgba(255,183,3,0.25), rgba(131,56,236,0.2), rgba(0,245,212,0.35))",
                 animation: "vg-logo-spin 8s linear infinite",
                 filter: "blur(4px)",
               }}
             />
-            <Zap size={20} className="relative z-10" style={{ color: "#5fa8c8" }} />
+            <Zap size={20} className="relative z-10 text-[#00F5D4]" />
           </div>
+
           <div>
             <div className="flex items-center gap-2">
-              <span className="text-sm font-extrabold tracking-wider" style={{ color: "#e4eaf4" }}>
-                APEX ENGINEER
+              <span className="text-sm font-extrabold tracking-wider text-white font-sans">
+                APEX QUANTA
               </span>
-              <span className="flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold border"
-                style={{ background: "rgba(95, 168, 200, 0.08)", color: "#fde68a", borderColor: "rgba(95, 168, 200, 0.20)" }}>
-                <span className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ background: "#5fa8c8" }} /> VISION STUDIO
+              <span className="flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-semibold border bg-[#00F5D4]/10 text-[#00F5D4] border-[#00F5D4]/30 shadow-[0_0_10px_rgba(0,245,212,0.2)]">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#00F5D4] animate-pulse" />
+                STUDIO 1
               </span>
             </div>
-            <span className="text-[10px] tracking-wider uppercase block leading-tight" style={{ color: "#506070" }}>
-              Kinetic Spatial Architecture
+            <span className="text-[10px] tracking-wider uppercase block leading-tight font-mono text-zinc-400">
+              Automotive Engineering OS
             </span>
           </div>
         </div>
 
-        {/* Center: Workspace Category Switcher + Live Clock & AI Badge */}
+        {/* Center: Workspace Category Switcher */}
         <div className="hidden lg:flex items-center gap-3">
-          {/* Workspace Category Switcher */}
-          <div className="flex items-center gap-1.5 p-1.5 rounded-full border shadow-inner"
-            style={{ background: "rgba(8, 14, 28, 0.85)", backdropFilter: "blur(20px)", borderColor: "rgba(255,255,255,0.06)" }}>
+          <div
+            className="flex items-center gap-1.5 p-1 rounded-full border"
+            style={{
+              background: "rgba(12, 16, 26, 0.9)",
+              backdropFilter: "blur(20px)",
+              borderColor: "rgba(255, 255, 255, 0.08)",
+            }}
+          >
             {categories.map((cat) => {
               const isActive = activeCategory === cat.id;
               return (
@@ -120,39 +132,31 @@ export const NeonHorizonHeader: React.FC<NeonHorizonHeaderProps> = ({
                     playHMITabSound();
                     onSelectCategory(cat.id);
                   }}
-                  className="flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold tracking-wide transition-all duration-200 whitespace-nowrap cursor-pointer"
-                  style={{
-                    background: isActive ? "rgba(95, 168, 200, 0.12)" : "transparent",
-                    color: isActive ? "#8cbcd0" : "#506070",
-                    border: isActive ? "1px solid rgba(95, 168, 200, 0.20)" : "1px solid transparent",
-                    fontWeight: isActive ? 700 : 500,
-                  }}
+                  className={`flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-semibold tracking-wide transition-all duration-200 whitespace-nowrap cursor-pointer ${
+                    isActive
+                      ? "bg-[#00F5D4]/15 text-[#00F5D4] border border-[#00F5D4]/35 font-bold shadow-[0_0_12px_rgba(0,245,212,0.2)]"
+                      : "text-zinc-400 hover:text-white hover:bg-white/5 border border-transparent"
+                  }`}
                 >
-                  <span style={{ color: isActive ? "#5fa8c8" : "#506070" }}>{cat.icon}</span>
+                  <span className={isActive ? "text-[#00F5D4]" : "text-zinc-400"}>
+                    {cat.icon}
+                  </span>
                   <span>{cat.label}</span>
                 </button>
               );
             })}
           </div>
 
-          {/* Live Clock Pill (Vision Glass Header Feature) */}
-          <div
-            aria-label={`Current studio time: ${timeStr}`}
-            className="flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-mono shadow-inner"
-            style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.06)", color: "#8494a8" }}
-          >
-            <Clock size={12} style={{ color: "#5fa8c8" }} aria-hidden="true" />
+          {/* Live Studio Clock */}
+          <div className="flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-mono bg-white/[0.04] border border-white/8 text-zinc-300">
+            <Clock size={12} className="text-[#00F5D4]" />
             <span className="font-semibold">{timeStr}</span>
           </div>
 
           {/* AI Status Badge */}
-          <div
-            aria-label="Apex AI Studio Agent Online"
-            className="flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[10px] font-bold"
-            style={{ background: "rgba(95, 168, 200, 0.06)", border: "1px solid rgba(95, 168, 200, 0.15)", color: "#8cbcd0" }}
-          >
-            <Sparkles size={11} style={{ color: "#5fa8c8" }} className="animate-pulse" />
-            <span>AI ONLINE</span>
+          <div className="flex items-center gap-1.5 rounded-full px-2.5 py-1 text-[10px] font-bold bg-[#00F5D4]/10 border border-[#00F5D4]/30 text-[#00F5D4]">
+            <Sparkles size={11} className="animate-pulse" />
+            <span>NEURAL READY</span>
           </div>
         </div>
 
@@ -164,26 +168,25 @@ export const NeonHorizonHeader: React.FC<NeonHorizonHeaderProps> = ({
               playHMIClickSound();
               onOpenSearch();
             }}
-            className="flex items-center gap-2 rounded-full px-3.5 py-1.5 text-xs transition-all cursor-pointer hidden md:flex"
-            style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)", color: "#8494a8" }}
+            className="flex items-center gap-2 rounded-full px-3.5 py-1.5 text-xs transition-all cursor-pointer hidden md:flex bg-white/[0.04] border border-white/8 text-zinc-300 hover:border-white/15"
           >
-            <Search size={13} style={{ color: "#5fa8c8" }} />
-            <span className="text-[11px]">Search Studio...</span>
-            <kbd className="px-1.5 py-0.5 rounded-md bg-white/10 border border-white/15 text-[10px] text-amber-200/70 flex items-center gap-0.5 font-mono">
+            <Search size={13} className="text-[#00F5D4]" />
+            <span className="text-[11px]">Search...</span>
+            <kbd className="px-1.5 py-0.5 rounded-md bg-white/10 border border-white/15 text-[10px] text-zinc-300 flex items-center gap-0.5 font-mono">
               <CmdIcon size={9} /> K
             </kbd>
           </button>
 
           {/* Economy Telemetry */}
-          <div className="hidden xl:flex items-center gap-2.5 rounded-full px-3.5 py-1 text-xs"
-            style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)" }}>
+          <div className="hidden xl:flex items-center gap-2.5 rounded-full px-3.5 py-1 text-xs bg-white/[0.04] border border-white/8">
             <div className="flex items-center gap-1.5">
-              <span className="text-[10px] text-amber-300/60 uppercase font-mono">MO.</span>
-              <span className="font-bold font-mono" style={{ color: "#8cbcd0" }}>{month}</span>
+              <span className="text-[10px] text-zinc-400 uppercase font-mono">MO.</span>
+              <span className="font-bold font-mono text-white">{month}</span>
             </div>
             <div className="h-3 w-px bg-white/10" />
             <div className="flex items-center gap-1.5">
-              <span className="font-bold font-mono" style={{ color: "#5aaf88" }}>{formattedRevenue}</span>
+              <DollarSign size={12} className="text-[#10B981]" />
+              <span className="font-bold font-mono text-[#10B981]">{formattedRevenue}</span>
             </div>
             <button
               onClick={() => {
@@ -191,8 +194,7 @@ export const NeonHorizonHeader: React.FC<NeonHorizonHeaderProps> = ({
                 onAdvanceMonth();
               }}
               title="Advance 1 Month"
-              className="ml-1 px-1.5 py-0.5 rounded-md text-[10px] font-bold transition-all cursor-pointer border"
-              style={{ background: "rgba(95, 168, 200, 0.10)", color: "#8cbcd0", borderColor: "rgba(95, 168, 200, 0.18)" }}
+              className="ml-1 px-1.5 py-0.5 rounded-md text-[10px] font-bold transition-all cursor-pointer bg-[#00F5D4]/15 text-[#00F5D4] border border-[#00F5D4]/30 hover:bg-[#00F5D4]/25"
             >
               +1 Mo
             </button>
@@ -202,8 +204,7 @@ export const NeonHorizonHeader: React.FC<NeonHorizonHeaderProps> = ({
           <div
             role="radiogroup"
             aria-label="Measurement Units"
-            className="hidden sm:flex items-center gap-0.5 p-1 rounded-full"
-            style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)" }}
+            className="hidden sm:flex items-center gap-0.5 p-1 rounded-full bg-white/[0.04] border border-white/8"
           >
             {(["metric", "imperial"] as const).map((u) => (
               <button
@@ -214,11 +215,11 @@ export const NeonHorizonHeader: React.FC<NeonHorizonHeaderProps> = ({
                   playHMIClickSound();
                   onSetUnits(u);
                 }}
-                className="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase transition-all cursor-pointer"
-                style={{
-                  background: units === u ? "#5fa8c8" : "transparent",
-                  color: units === u ? "#1a1008" : "#506070",
-                }}
+                className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase transition-all cursor-pointer ${
+                  units === u
+                    ? "bg-[#00F5D4] text-zinc-950 font-black shadow-[0_0_8px_#00F5D4]"
+                    : "text-zinc-400 hover:text-white"
+                }`}
               >
                 {u}
               </button>
@@ -226,16 +227,14 @@ export const NeonHorizonHeader: React.FC<NeonHorizonHeaderProps> = ({
           </div>
 
           {/* Save / Load / Reset Controls */}
-          <div className="flex items-center gap-1 p-1 rounded-full"
-            style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)" }}>
+          <div className="flex items-center gap-1 p-1 rounded-full bg-white/[0.04] border border-white/8">
             <button
               onClick={() => {
                 playHMIClickSound();
                 onSave();
               }}
               title="Save Blueprint"
-              className="p-1.5 rounded-full transition-all cursor-pointer"
-              style={{ color: "#506070" }}
+              className="p-1.5 rounded-full text-zinc-400 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
             >
               <Save size={14} />
             </button>
@@ -246,8 +245,7 @@ export const NeonHorizonHeader: React.FC<NeonHorizonHeaderProps> = ({
                 onLoad();
               }}
               title="Load Blueprint"
-              className="p-1.5 rounded-full transition-all cursor-pointer"
-              style={{ color: "#506070" }}
+              className="p-1.5 rounded-full text-zinc-400 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
             >
               <FolderOpen size={14} />
             </button>
@@ -258,34 +256,31 @@ export const NeonHorizonHeader: React.FC<NeonHorizonHeaderProps> = ({
                 onReset();
               }}
               title="Reset Build"
-              className="p-1.5 rounded-full transition-all cursor-pointer"
-              style={{ color: "#506070" }}
+              className="p-1.5 rounded-full text-zinc-400 hover:text-white hover:bg-white/10 transition-colors cursor-pointer"
             >
               <RotateCcw size={14} />
             </button>
           </div>
 
-          {/* Quick UI Mode Switcher (UI 1 <-> Glass UI) */}
+          {/* Switch to Glass UI (UI 4) Button */}
           {onSetUiTheme && (
             <button
               onClick={() => {
                 playHMIClickSound();
                 onSetUiTheme("theme4");
               }}
-              title="Switch to Vision Glass UI"
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-mono font-bold tracking-wider transition-all cursor-pointer whitespace-nowrap border"
-              style={{ background: "rgba(196, 168, 96, 0.08)", borderColor: "rgba(196, 168, 96, 0.18)", color: "#c4a860" }}
+              title="Switch to Vision Glass UI (UI 4)"
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[11px] font-mono font-bold tracking-wider transition-all cursor-pointer whitespace-nowrap border bg-amber-500/10 border-amber-500/30 text-amber-300 hover:bg-amber-500/20"
             >
-              <Sparkles size={12} className="animate-pulse" style={{ color: "#c4a860" }} />
+              <Sparkles size={12} className="animate-pulse text-amber-300" />
               <span>GLASS UI</span>
             </button>
           )}
 
-          {/* User Profile Avatar (Vision Glass Header Feature) */}
+          {/* User Profile Avatar */}
           <div
             aria-label="User Profile"
-            className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold cursor-pointer hover:scale-105 transition-transform"
-            style={{ background: "linear-gradient(135deg, #2a1a08, #1a1008)", color: "#8cbcd0", border: "1px solid rgba(95, 168, 200, 0.20)", boxShadow: "0 2px 10px rgba(95, 168, 200, 0.15)" }}
+            className="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold cursor-pointer hover:scale-105 transition-transform bg-gradient-to-br from-zinc-800 to-zinc-950 text-[#00F5D4] border border-[#00F5D4]/30 shadow-[0_0_10px_rgba(0,245,212,0.2)]"
           >
             <User size={15} />
           </div>

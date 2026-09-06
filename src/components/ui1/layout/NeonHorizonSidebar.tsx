@@ -1,15 +1,17 @@
 import React, { useState } from "react";
 import {
   LayoutGrid,
-  Search,
-  BarChart2,
-  Bell,
-  Sliders,
-  Volume2,
-  VolumeX,
+  Cog,
+  Car,
   Sparkles,
   Bot,
+  Zap,
+  BarChart2,
   ShieldCheck,
+  Flag,
+  Volume2,
+  VolumeX,
+  Wind,
 } from "lucide-react";
 import { playHMIClickSound } from "../../../utils/hmiSoundSynth";
 import type { Stage } from "../../StageSwitcher";
@@ -28,6 +30,8 @@ export const NeonHorizonSidebar: React.FC<NeonHorizonSidebarProps> = ({
   onSelectStage,
   soundEnabled = true,
   onToggleSound,
+  particlesEnabled = true,
+  onToggleParticles,
 }) => {
   const [hoveredButton, setHoveredButton] = useState<string | null>(null);
 
@@ -38,32 +42,47 @@ export const NeonHorizonSidebar: React.FC<NeonHorizonSidebarProps> = ({
     icon: React.ReactNode;
     badge?: string;
   }[] = [
-    { id: "apps", label: "App Launcher", stage: "command", icon: <LayoutGrid size={18} /> },
-    { id: "studio", label: "Grand Studio Hub", stage: "studio", icon: <Sparkles size={18} /> },
-    { id: "ai", label: "Apex AI Studio", stage: "ai", icon: <Bot size={18} />, badge: "AI" },
-    { id: "stats", label: "Telemetry & Stats", stage: "stats", icon: <BarChart2 size={18} /> },
-    { id: "safety", label: "Safety Center", stage: "safety", icon: <ShieldCheck size={18} /> },
-    { id: "controls", label: "Vehicle Studio", stage: "vehicle", icon: <Sliders size={18} /> },
+    { id: "command", label: "Command Center", stage: "command", icon: <LayoutGrid size={17} /> },
+    { id: "engine", label: "Engine Studio", stage: "engine", icon: <Cog size={17} /> },
+    { id: "vehicle", label: "Vehicle Studio", stage: "vehicle", icon: <Car size={17} /> },
+    { id: "studio", label: "Grand Studio Hub", stage: "studio", icon: <Sparkles size={17} /> },
+    { id: "ai", label: "Apex AI Studio", stage: "ai", icon: <Bot size={17} />, badge: "AI" },
+    { id: "higgsfield", label: "Higgsfield AI Suite", stage: "higgsfield", icon: <Zap size={17} />, badge: "HF" },
+    { id: "race", label: "Race Simulator", stage: "race", icon: <Flag size={17} /> },
+    { id: "stats", label: "Telemetry & Stats", stage: "stats", icon: <BarChart2 size={17} /> },
+    { id: "safety", label: "Safety Center", stage: "safety", icon: <ShieldCheck size={17} /> },
   ];
 
   return (
-    <aside className="hidden lg:flex flex-col gap-2 w-14 shrink-0 select-none z-30">
-      <div className="p-2 py-4 rounded-full bg-amber-950/85 backdrop-blur-2xl border border-white/12 shadow-[0_20px_50px_rgba(0,0,0,0.6)] flex flex-col items-center gap-3 sticky top-28">
+    <aside className="hidden lg:flex flex-col gap-3 w-14 shrink-0 select-none z-30">
+      <div
+        className="p-2 py-4 rounded-3xl border flex flex-col items-center gap-2.5 sticky top-24"
+        style={{
+          background: "rgba(8, 11, 20, 0.88)",
+          backdropFilter: "blur(30px) saturate(200%)",
+          WebkitBackdropFilter: "blur(30px) saturate(200%)",
+          borderColor: "rgba(255, 255, 255, 0.08)",
+          boxShadow: "0 20px 50px rgba(0, 0, 0, 0.60)",
+        }}
+      >
         {sidebarButtons.map((btn) => {
           const isActive = activeStage === btn.stage;
           const isHovered = hoveredButton === btn.id;
 
           return (
             <div key={btn.id} className="relative flex items-center">
-              {/* Tooltip slide-out label (Vision Glass Toolbar Feature) */}
+              {/* Tooltip slide-out label */}
               {isHovered && (
                 <div
-                  className="absolute left-14 px-3 py-1.5 rounded-xl bg-amber-950/95 backdrop-blur-xl border border-white/12 text-xs font-semibold text-amber-100 whitespace-nowrap shadow-[0_10px_25px_rgba(0,0,0,0.6)] z-50 pointer-events-none flex items-center gap-1.5"
-                  style={{ animation: "vg-tooltip-slide-in 0.2s ease-out" }}
+                  className="absolute left-14 px-3 py-1.5 rounded-xl border text-xs font-semibold whitespace-nowrap shadow-[0_10px_25px_rgba(0,0,0,0.7)] z-50 pointer-events-none flex items-center gap-1.5"
+                  style={{
+                    background: "rgba(10, 15, 26, 0.95)",
+                    borderColor: "rgba(0, 245, 212, 0.3)",
+                    color: "#ffffff",
+                  }}
                 >
                   <span>{btn.label}</span>
-                  {/* Arrow indicator */}
-                  <div className="absolute -left-1 top-1/2 -translate-y-1/2 w-2 h-2 rotate-45 bg-amber-950/80 border-l border-b border-white/12" />
+                  <div className="absolute -left-1 top-1/2 -translate-y-1/2 w-2 h-2 rotate-45 bg-[#0a0f1a] border-l border-b border-[#00F5D4]/30" />
                 </div>
               )}
 
@@ -75,58 +94,66 @@ export const NeonHorizonSidebar: React.FC<NeonHorizonSidebarProps> = ({
                 onMouseEnter={() => setHoveredButton(btn.id)}
                 onMouseLeave={() => setHoveredButton(null)}
                 title={btn.label}
-                className={`relative w-10 h-10 rounded-full flex items-center justify-center transition-all duration-200 cursor-pointer ${
- isActive
- ? "bg-amber-500/15 text-sky-200 border border-amber-500/30 scale-105"
- : "bg-white/[0.04] text-amber-300/60 hover:text-amber-100 hover:bg-white/10 border border-white/5 hover:scale-105"
- }`}
+                className={`relative w-10 h-10 rounded-2xl flex items-center justify-center transition-all duration-200 cursor-pointer ${
+                  isActive
+                    ? "bg-[#00F5D4]/20 text-[#00F5D4] border border-[#00F5D4]/50 shadow-[0_0_15px_rgba(0,245,212,0.35)] scale-105"
+                    : "bg-white/[0.04] text-zinc-400 hover:text-white hover:bg-white/10 border border-white/5 hover:scale-105"
+                }`}
               >
                 {btn.icon}
 
-                {/* Badge overlay */}
+                {/* Badge indicator */}
                 {btn.badge && (
-                  <span className="absolute -top-1 -right-1 px-1 min-w-3.5 h-3.5 rounded-full bg-sky-300/90 text-slate-950 text-[8px] font-extrabold flex items-center justify-center border border-sky-300">
+                  <span className="absolute -top-1 -right-1 px-1 min-w-3.5 h-3.5 rounded-full bg-[#FFB703] text-zinc-950 text-[8px] font-black flex items-center justify-center">
                     {btn.badge}
                   </span>
                 )}
 
-                {/* Active side indicator pill */}
+                {/* Active Indicator Bar */}
                 {isActive && (
-                  <div className="absolute -right-1 top-1/2 -translate-y-1/2 w-1.5 h-3 rounded-full bg-amber-500" />
+                  <div className="absolute -left-2 top-1/2 -translate-y-1/2 w-1 h-4 rounded-full bg-[#00F5D4] shadow-[0_0_8px_#00F5D4]" />
                 )}
               </button>
             </div>
           );
         })}
 
-        {/* Audio Toggle Button */}
+        <div className="w-6 h-px bg-white/10 my-1" />
+
+        {/* Audio Synthesizer Toggle */}
         {onToggleSound && (
-          <>
-            <div className="w-6 h-px bg-white/10 my-1" />
-            <div className="relative flex items-center">
-              {hoveredButton === "audio" && (
-                <div
-                  className="absolute left-14 px-3 py-1.5 rounded-xl bg-amber-950/95 backdrop-blur-xl border border-white/12 text-xs font-semibold text-amber-100 whitespace-nowrap shadow-[0_10px_25px_rgba(0,0,0,0.6)] z-50 pointer-events-none"
-                  style={{ animation: "vg-tooltip-slide-in 0.2s ease-out" }}
-                >
-                  <span>{soundEnabled ? "Mute Audio" : "Unmute Audio"}</span>
-                  <div className="absolute -left-1 top-1/2 -translate-y-1/2 w-2 h-2 rotate-45 bg-amber-950/80 border-l border-b border-white/12" />
-                </div>
-              )}
-              <button
-                onClick={() => {
-                  playHMIClickSound();
-                  onToggleSound();
-                }}
-                onMouseEnter={() => setHoveredButton("audio")}
-                onMouseLeave={() => setHoveredButton(null)}
-                title={soundEnabled ? "Mute Audio" : "Unmute Audio"}
-                className="w-10 h-10 rounded-full flex items-center justify-center text-amber-300/60 hover:text-amber-100 bg-white/[0.04] hover:bg-white/10 border border-white/5 transition-all cursor-pointer hover:scale-105"
-              >
-                {soundEnabled ? <Volume2 size={16} /> : <VolumeX size={16} />}
-              </button>
-            </div>
-          </>
+          <button
+            onClick={() => {
+              playHMIClickSound();
+              onToggleSound();
+            }}
+            title={soundEnabled ? "Mute Synthesizer" : "Unmute Synthesizer"}
+            className={`w-9 h-9 rounded-xl flex items-center justify-center transition-all cursor-pointer ${
+              soundEnabled
+                ? "bg-[#FFB703]/15 text-[#FFB703] border border-[#FFB703]/30"
+                : "bg-white/5 text-zinc-500 border border-white/5"
+            }`}
+          >
+            {soundEnabled ? <Volume2 size={15} /> : <VolumeX size={15} />}
+          </button>
+        )}
+
+        {/* Ambient Particles Toggle */}
+        {onToggleParticles && (
+          <button
+            onClick={() => {
+              playHMIClickSound();
+              onToggleParticles();
+            }}
+            title={particlesEnabled ? "Disable Cyberpunk Particles" : "Enable Cyberpunk Particles"}
+            className={`w-9 h-9 rounded-xl flex items-center justify-center transition-all cursor-pointer ${
+              particlesEnabled
+                ? "bg-[#00F5D4]/15 text-[#00F5D4] border border-[#00F5D4]/30"
+                : "bg-white/5 text-zinc-500 border border-white/5"
+            }`}
+          >
+            <Wind size={15} />
+          </button>
         )}
       </div>
     </aside>

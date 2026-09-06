@@ -18,14 +18,24 @@ interface HiggsfieldStore {
   proxyUrl: string;
   defaultImageModel: string;
   defaultVideoModel: string;
+  default3DModel: string;
+  activeFilter: "all" | HiggsfieldKind;
   jobs: GenerationJob[];
   history: GenerationJob[];
 
   setBackend: (b: HiggsfieldBackend) => void;
   setProxyUrl: (u: string) => void;
-  setDefaultModels: (image: string, video: string) => void;
+  setDefaultModels: (image: string, video: string, model3d?: string) => void;
+  setDefault3DModel: (model3d: string) => void;
+  setActiveFilter: (filter: "all" | HiggsfieldKind) => void;
 
-  submitJob: (input: { kind: HiggsfieldKind; modelId: string; title: string; prompt: string }) => void;
+  submitJob: (input: {
+    kind: HiggsfieldKind;
+    modelId: string;
+    title: string;
+    prompt: string;
+    metadata?: Record<string, any>;
+  }) => void;
   clearHistory: () => void;
 
   _loadPersisted: () => void;
@@ -48,23 +58,32 @@ export const useHiggsfieldStore = create<HiggsfieldStore>((set: any, get: any) =
   backend: "demo",
   proxyUrl:
     (import.meta as any).env?.VITE_HIGGSFIELD_PROXY_URL ?? "",
-  defaultImageModel: "nano-banana-pro",
-  defaultVideoModel: "seedance-25",
+  defaultImageModel: "soul_cinematic",
+  defaultVideoModel: "cinematic_studio_3_0",
+  default3DModel: "image_to_3d",
+  activeFilter: "all",
   jobs: [],
   history: [],
 
   setBackend: (b) => set({ backend: b }),
   setProxyUrl: (u) => set({ proxyUrl: u }),
-  setDefaultModels: (image, video) =>
-    set({ defaultImageModel: image, defaultVideoModel: video }),
+  setDefaultModels: (image, video, model3d) =>
+    set((s: HiggsfieldStore) => ({
+      defaultImageModel: image,
+      defaultVideoModel: video,
+      default3DModel: model3d ?? s.default3DModel,
+    })),
+  setDefault3DModel: (model3d) => set({ default3DModel: model3d }),
+  setActiveFilter: (activeFilter) => set({ activeFilter }),
 
-  submitJob: ({ kind, modelId, title, prompt }) => {
+  submitJob: ({ kind, modelId, title, prompt, metadata }) => {
     const job: GenerationJob = {
       id: `hf_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 7)}`,
       kind,
       modelId,
       title,
       prompt,
+      metadata,
       status: "running",
       createdAt: Date.now(),
       backend: get().backend,
@@ -77,6 +96,7 @@ export const useHiggsfieldStore = create<HiggsfieldStore>((set: any, get: any) =
       proxyUrl: get().proxyUrl,
       defaultImageModel: get().defaultImageModel,
       defaultVideoModel: get().defaultVideoModel,
+      default3DModel: get().default3DModel,
     };
 
     executeJob(job, settings)

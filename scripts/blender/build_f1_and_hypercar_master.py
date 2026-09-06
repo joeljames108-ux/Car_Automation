@@ -19,7 +19,11 @@ import shutil
 import sys
 from mathutils import Vector, Matrix, Euler
 
-PROJECT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+try:
+    PROJECT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+except Exception:
+    PROJECT_DIR = r"e:\Car_Automation"
+
 EXPORTS_DIR = os.path.join(PROJECT_DIR, "exports")
 PARTS_F1_DIR = os.path.join(EXPORTS_DIR, "parts", "f1")
 PARTS_GT3_DIR = os.path.join(EXPORTS_DIR, "parts", "gt3_supercar")
@@ -29,10 +33,10 @@ PUB_VEHICLES_F1_DIR = os.path.join(PROJECT_DIR, "public", "models", "vehicles", 
 PUB_VEHICLES_GT3_DIR = os.path.join(PROJECT_DIR, "public", "models", "vehicles", "gt3_supercar")
 PUB_EXTERIOR_DIR = os.path.join(PROJECT_DIR, "public", "models", "exterior")
 
-ARTIFACTS_DIR = r"C:\Users\joelj\.gemini\antigravity-ide\brain\0c258528-c6a4-4854-b69f-64eac755c0d6"
+ARTIFACTS_DIR = r"C:\Users\acer\.gemini\antigravity-ide\brain\cef2f360-6ed6-4e67-9c7e-e3351074871b"
 
 for d in [EXPORTS_DIR, PARTS_F1_DIR, PARTS_GT3_DIR, PARTS_HYPERCAR_DIR,
-          PUB_VEHICLES_F1_DIR, PUB_VEHICLES_GT3_DIR, PUB_EXTERIOR_DIR]:
+          PUB_VEHICLES_F1_DIR, PUB_VEHICLES_GT3_DIR, PUB_EXTERIOR_DIR, ARTIFACTS_DIR]:
     os.makedirs(d, exist_ok=True)
 
 # ----------------------------------------------------------------------------
@@ -108,21 +112,48 @@ def create_master_shader_library():
         "exhaust_titanium": make_pbr_material("Titanium_Flame_Blued", (0.40, 0.52, 0.78, 1.0), metallic=0.98, roughness=0.15, emission=(0.10, 0.25, 0.80, 1.0), emission_strength=2.0),
         "carbon_satin": make_pbr_material("Carbon_Aero_Satin", (0.04, 0.04, 0.05, 1.0), metallic=0.25, roughness=0.32),
         "gold_heatshield": make_pbr_material("Gold_Foil_Heatshield", (0.95, 0.75, 0.15, 1.0), metallic=0.95, roughness=0.18),
+
+        # Custom Motorsport Livery & Mechanical Shaders
+        "gulf_blue": make_pbr_material("Livery_Gulf_PowderBlue", (0.22, 0.55, 0.85, 1.0), metallic=0.75, roughness=0.12, clearcoat=1.0),
+        "gulf_orange": make_pbr_material("Livery_Gulf_TangerineOrange", (1.0, 0.42, 0.02, 1.0), metallic=0.60, roughness=0.14, clearcoat=1.0),
+        "stealth_carbon": make_pbr_material("Livery_Stealth_TwillWeave", (0.025, 0.025, 0.028, 1.0), metallic=0.35, roughness=0.18, clearcoat=1.0),
+        "spring_blue": make_pbr_material("Suspension_CoilSpring_Blue", (0.08, 0.35, 0.95, 1.0), metallic=0.85, roughness=0.20),
+        "damper_gold": make_pbr_material("Suspension_Damper_KashimaGold", (0.92, 0.76, 0.20, 1.0), metallic=0.92, roughness=0.18),
+        "fire_red": make_pbr_material("Safety_Extinguisher_GlossRed", (0.90, 0.08, 0.05, 1.0), metallic=0.40, roughness=0.30),
+        "brass_gold": make_pbr_material("Safety_Brass_ValveHardware", (0.85, 0.68, 0.22, 1.0), metallic=0.90, roughness=0.25),
     }
 
 # ----------------------------------------------------------------------------
 # 2. SCENE RESET & PROCEDURAL CAD PRIMITIVES
 # ----------------------------------------------------------------------------
 def reset_clean_scene():
-    bpy.ops.wm.read_factory_settings(use_empty=True)
+    # Non-destructive scene cleanup: preserve active MCP socket and addon state
+    for o in list(bpy.context.scene.collection.objects):
+        bpy.data.objects.remove(o, do_unlink=True)
     for o in list(bpy.data.objects):
         bpy.data.objects.remove(o, do_unlink=True)
+    for c in list(bpy.context.scene.collection.children):
+        try:
+            bpy.context.scene.collection.children.unlink(c)
+        except Exception:
+            pass
     for c in list(bpy.data.collections):
-        bpy.data.collections.remove(c, do_unlink=True)
+        try:
+            bpy.data.collections.remove(c, do_unlink=True)
+        except Exception:
+            pass
     for m in list(bpy.data.materials):
-        bpy.data.materials.remove(m, do_unlink=True)
+        if m.users == 0:
+            bpy.data.materials.remove(m, do_unlink=True)
     for me in list(bpy.data.meshes):
-        bpy.data.meshes.remove(me, do_unlink=True)
+        if me.users == 0:
+            bpy.data.meshes.remove(me, do_unlink=True)
+    for l in list(bpy.data.lights):
+        if l.users == 0:
+            bpy.data.lights.remove(l, do_unlink=True)
+    for cam in list(bpy.data.cameras):
+        if cam.users == 0:
+            bpy.data.cameras.remove(cam, do_unlink=True)
 
 def ensure_collection(name):
     col = bpy.data.collections.get(name)
@@ -354,6 +385,116 @@ def join_objects_into_part(objects_to_join, final_name, col_name):
     col.objects.link(joined)
     return joined
 
+def make_helical_spring(name, location, radius, wire_r, height, coils, col_name, mat, steps_per_turn=20):
+    col = ensure_collection(col_name)
+    bm = bmesh.new()
+    total_steps = int(coils * steps_per_turn)
+    spine = []
+    for s in range(total_steps + 1):
+        t = s / max(1, total_steps)
+        theta = 2 * math.pi * coils * t
+        z = (t - 0.5) * height
+        x = math.cos(theta) * radius
+        y = math.sin(theta) * radius
+        spine.append(Vector((x, y, z)))
+
+    circle_pts = 8
+    rings = []
+    for i, pt in enumerate(spine):
+        if i == 0:
+            tangent = (spine[1] - pt).normalized()
+        elif i == len(spine) - 1:
+            tangent = (pt - spine[-2]).normalized()
+        else:
+            tangent = (spine[i+1] - spine[i-1]).normalized()
+
+        up = Vector((0, 0, 1))
+        if abs(tangent.dot(up)) > 0.95:
+            up = Vector((1, 0, 0))
+        n1 = tangent.cross(up).normalized()
+        n2 = tangent.cross(n1).normalized()
+
+        ring = []
+        for c in range(circle_pts):
+            c_ang = 2 * math.pi * c / circle_pts
+            c_offset = (n1 * math.cos(c_ang) + n2 * math.sin(c_ang)) * wire_r
+            v = bm.verts.new(pt + c_offset + Vector(location))
+            ring.append(v)
+        rings.append(ring)
+
+    bm.verts.ensure_lookup_table()
+    for r in range(len(rings) - 1):
+        for c in range(circle_pts):
+            c_next = (c + 1) % circle_pts
+            bm.faces.new([rings[r][c], rings[r+1][c], rings[r+1][c_next], rings[r][c_next]])
+    bm.faces.new(list(reversed(rings[0])))
+    bm.faces.new(rings[-1])
+
+    mesh = bpy.data.meshes.new(f"Mesh_{name}")
+    bm.to_mesh(mesh)
+    bm.free()
+    obj = bpy.data.objects.new(name, mesh)
+    col.objects.link(obj)
+    if mat:
+        obj.data.materials.append(mat)
+    for p in obj.data.polygons:
+        p.use_smooth = True
+    return obj
+
+def build_racing_pedal_box(name, location, col_name, mats):
+    col = ensure_collection(col_name)
+    sub = []
+    lx, ly, lz = location
+    base = make_box(f"{name}_Base", (lx, ly, lz), (0.28, 0.22, 0.015), col_name, mats["carbon_twill"], bevel=0.003)
+    sub.append(base)
+    pedal_specs = [
+        ("Clutch", lx - 0.08, ly + 0.04, lz + 0.08, 0.045, 0.09),
+        ("Brake", lx, ly + 0.04, lz + 0.08, 0.055, 0.10),
+        ("Throttle", lx + 0.08, ly + 0.02, lz + 0.09, 0.040, 0.14)
+    ]
+    for p_name, px, py, pz, pw, ph in pedal_specs:
+        arm = make_box(f"{name}_{p_name}_Arm", (px, py, pz), (0.015, 0.02, ph), col_name, mats["titanium_raw"], bevel=0.002, rot=(math.radians(-15), 0, 0))
+        sub.append(arm)
+        face = make_box(f"{name}_{p_name}_Face", (px, py + 0.025, pz + ph * 0.4), (pw, 0.01, ph * 0.55), col_name, mats["hypercar_alloy"], bevel=0.003, rot=(math.radians(-15), 0, 0))
+        sub.append(face)
+        hole = make_cylinder(f"{name}_{p_name}_Hole", (px, py + 0.032, pz + ph * 0.4), pw * 0.22, 0.012, (math.radians(75), 0, 0), col_name, mats["carbon_matte"], vertices=12)
+        sub.append(hole)
+    return join_objects_into_part(sub, name, col_name)
+
+def build_fire_suppression_bottle(name, location, col_name, mats):
+    col = ensure_collection(col_name)
+    sub = []
+    lx, ly, lz = location
+    body = make_cylinder(f"{name}_Cylinder", (lx, ly, lz), 0.065, 0.28, (math.radians(90), 0, 0), col_name, mats["fire_red"], vertices=24, bevel=0.01)
+    sub.append(body)
+    valve = make_cylinder(f"{name}_Valve", (lx, ly + 0.16, lz), 0.025, 0.05, (math.radians(90), 0, 0), col_name, mats["brass_gold"], vertices=16)
+    sub.append(valve)
+    ring = make_cylinder(f"{name}_Ring", (lx + 0.03, ly + 0.18, lz), 0.014, 0.006, (0, math.pi/2, 0), col_name, mats["f1_neon"], vertices=16)
+    sub.append(ring)
+    for by in [-0.08, 0.08]:
+        bracket = make_box(f"{name}_Bracket_{by}", (lx, ly + by, lz - 0.04), (0.15, 0.02, 0.04), col_name, mats["carbon_twill"], bevel=0.002)
+        sub.append(bracket)
+    return join_objects_into_part(sub, name, col_name)
+
+def build_suspension_coilover(name, top_pt, bottom_pt, col_name, mats):
+    col = ensure_collection(col_name)
+    sub = []
+    v_top = Vector(top_pt)
+    v_bot = Vector(bottom_pt)
+    v_mid = (v_top + v_bot) * 0.5
+    vec = v_top - v_bot
+    length = vec.length
+
+    damper = make_streamlined_strut(f"{name}_DamperBody", v_bot + vec * 0.25, v_top, 0.048, 0.048, col_name, mats["damper_gold"], steps=16)
+    sub.append(damper)
+    rod = make_streamlined_strut(f"{name}_PistonRod", v_bot, v_bot + vec * 0.35, 0.020, 0.020, col_name, mats["titanium_raw"], steps=14)
+    sub.append(rod)
+    spring = make_helical_spring(f"{name}_Spring", (v_mid.x, v_mid.y, v_mid.z), 0.038, 0.007, length * 0.65, 7.5, col_name, mats["spring_blue"])
+    sub.append(spring)
+    collar = make_cylinder(f"{name}_Collar", (v_top.x, v_top.y, v_top.z - 0.03), 0.042, 0.016, (0, 0, 0), col_name, mats["caliper_gold"], vertices=18)
+    sub.append(collar)
+    return join_objects_into_part(sub, name, col_name)
+
 # ----------------------------------------------------------------------------
 # 3. HIGH-FIDELITY MOTORSPORT WHEEL BUILDER
 # ----------------------------------------------------------------------------
@@ -486,6 +627,26 @@ def build_wheel_assembly(name, location, tire_r, tire_w, rim_r, is_left, style, 
                        rot=(math.radians(-24), 0, 0))
     sub_objs.append(caliper)
 
+    # 8. Motorsport Aero Brake Duct & Floating Rotor Hardware
+    if style == "F1":
+        # Inboard Carbon Aero Brake Drum & Scoop
+        duct_x = wx - w_sign * (tire_w * 0.28)
+        drum = make_cylinder(f"BrakeDrum_{name}", (duct_x, wy, wz), rim_r * 0.84, 0.045,
+                             (0, math.pi/2, 0), col_name, mats["carbon_twill"], vertices=28, bevel=0.003)
+        sub_objs.append(drum)
+        scoop = make_box(f"BrakeScoop_{name}", (duct_x, wy + rim_r * 0.55, wz + 0.02),
+                         (0.045, 0.08, 0.09), col_name, mats["carbon_twill"], bevel=0.004)
+        sub_objs.append(scoop)
+    else:
+        # Hypercar Floating Rotor Titanium Bobbins
+        for b_i in range(8):
+            b_ang = (2 * math.pi / 8) * b_i
+            by = wy + math.cos(b_ang) * (rim_r * 0.38)
+            bz = wz + math.sin(b_ang) * (rim_r * 0.38)
+            bobbin = make_cylinder(f"Bobbin_{name}_{b_i}", (rotor_x, by, bz), 0.008, 0.034,
+                                   (0, math.pi/2, 0), col_name, mats["titanium_raw"], vertices=8)
+            sub_objs.append(bobbin)
+
     joined_wheel = join_objects_into_part(sub_objs, name, col_name)
     return joined_wheel
 
@@ -613,6 +774,18 @@ def generate_f1_grand_prix_vehicle(mats):
     cockpit_objs.append(buckle)
     wheel_body = make_box("F1_Steering_Wheel_Body", (0.0, 0.48, 0.54), (0.28, 0.035, 0.16), "03_Cockpit", mats["carbon_matte"], bevel=0.008)
     cockpit_objs.append(wheel_body)
+    # Ergonomic handgrips
+    for g_side, gx in [("L", -0.13), ("R", 0.13)]:
+        grip = make_cylinder(f"F1_Grip_{g_side}", (gx, 0.48, 0.54), 0.016, 0.14, (0, 0, 0), "03_Cockpit", mats["carbon_twill"])
+        cockpit_objs.append(grip)
+    # Carbon shift & clutch paddles behind wheel
+    for p_side, px in [("L", -0.11), ("R", 0.11)]:
+        paddle = make_box(f"F1_Paddle_{p_side}", (px, 0.46, 0.55), (0.045, 0.006, 0.09), "03_Cockpit", mats["carbon_twill"], bevel=0.002)
+        cockpit_objs.append(paddle)
+    # Rotary knobs on faceplate
+    for r_i, rx in enumerate([-0.05, 0.0, 0.05]):
+        dial = make_cylinder(f"F1_Dial_{r_i+1}", (rx, 0.50, 0.51), 0.010, 0.008, (math.radians(90), 0, 0), "03_Cockpit", mats["f1_neon"])
+        cockpit_objs.append(dial)
     oled_display = make_box("F1_Steering_OLED", (0.0, 0.495, 0.56), (0.12, 0.006, 0.065), "03_Cockpit", mats["display_oled"])
     cockpit_objs.append(oled_display)
     led_revs = make_box("F1_Shift_LED_Bar", (0.0, 0.496, 0.61), (0.14, 0.004, 0.012), "03_Cockpit", mats["led_shift"])
@@ -782,6 +955,12 @@ def generate_apex_gt3_hypercar_vehicle(mats):
     chassis_objs.append(undertray)
     cradle = make_box("Hypercar_Engine_Cradle", (0.0, -(wb * 0.42), rh + 0.26), (0.75, 0.85, 0.28), "01_Hypercar_Chassis", mats["titanium_raw"], bevel=0.015)
     chassis_objs.append(cradle)
+    # Twin Turbochargers with titanium compressor housings and wastegates
+    for t_side, tx in [("L", -0.25), ("R", 0.25)]:
+        turbo = make_cylinder(f"Hypercar_Turbo_{t_side}", (tx, -(wb * 0.42), rh + 0.38), 0.075, 0.08, (0, math.pi/2, 0), "01_Hypercar_Chassis", mats["titanium_raw"], vertices=20)
+        chassis_objs.append(turbo)
+        wastegate = make_cylinder(f"Hypercar_Wastegate_{t_side}", (tx, -(wb * 0.46), rh + 0.40), 0.035, 0.06, (math.radians(90), 0, 0), "01_Hypercar_Chassis", mats["exhaust_titanium"], vertices=12)
+        chassis_objs.append(wastegate)
     hc_parts["Hypercar_Chassis_Monocoque"] = join_objects_into_part(chassis_objs, "Hypercar_Chassis_Monocoque", "01_Hypercar_Chassis")
 
     # ── 2. Aerodynamic Greenhouse & Roof Canopy (Teardrop Bubble + Flying Buttresses) ──
@@ -865,6 +1044,10 @@ def generate_apex_gt3_hypercar_vehicle(mats):
         sp_objs.append(canard1)
         canard2 = make_box(f"Hypercar_Canard2_{s_side}", (sx * 0.98, front_bumper_y + 0.14, rh + 0.31), (0.12, 0.16, 0.012), "04_Hypercar_Aero", mats["carbon_twill"], rot=(math.radians(-14), 0, s_sign * math.radians(18)))
         sp_objs.append(canard2)
+    # Aerodynamic under-splitter ground-effect strakes
+    for st_x in [-tf * 0.52, tf * 0.52]:
+        st = make_box(f"Hypercar_Splitter_Strake_{st_x}", (st_x, front_bumper_y + 0.20, rh + 0.01), (0.014, 0.38, 0.024), "04_Hypercar_Aero", mats["carbon_twill"])
+        sp_objs.append(st)
     hc_parts["Hypercar_Front_Splitter"] = join_objects_into_part(sp_objs, "Hypercar_Front_Splitter", "04_Hypercar_Aero")
 
     # ── 5. Muscular Front Fenders (Shark-Gill Pressure Louvers) ──
@@ -1059,9 +1242,15 @@ def export_unified_vehicle_asset(all_objects, export_paths, verbose_name):
 def setup_photorealistic_studio(cam_pos, look_at, fov_deg=42.0):
     scene = bpy.context.scene
     scene.render.engine = 'BLENDER_EEVEE'
-    scene.render.resolution_x = 1920
-    scene.render.resolution_y = 1080
+    scene.render.resolution_x = 1280
+    scene.render.resolution_y = 720
     scene.render.film_transparent = False
+
+    # Clean existing studio objects to prevent duplicates
+    for old_name in ["Studio_Floor", "Light_Key", "Light_Rim", "Light_Overhead", "Showcase_Camera"]:
+        for o in list(bpy.data.objects):
+            if o.name.startswith(old_name):
+                bpy.data.objects.remove(o, do_unlink=True)
 
     # Studio Satin Reflective Floor
     mat_floor = make_pbr_material("Studio_Floor_Satin", (0.015, 0.015, 0.018, 1.0), metallic=0.70, roughness=0.25)
@@ -1119,6 +1308,111 @@ def render_showcase_image(output_path):
     bpy.ops.render.render(write_still=True)
     print("  -> Render finished successfully.")
 
+def setup_360_turntable_animation(target_center=(0.0, 0.0, 0.4), radius=5.8, height=2.2, total_frames=120):
+    scene = bpy.context.scene
+    scene.frame_start = 1
+    scene.frame_end = total_frames
+    
+    cam_data = bpy.data.cameras.get("Turntable_Camera") or bpy.data.cameras.new("Turntable_Camera")
+    cam_data.lens = 45.0
+    cam_obj = bpy.data.objects.get("Turntable_Camera") or bpy.data.objects.new("Turntable_Camera", cam_data)
+    if cam_obj.name not in scene.collection.objects:
+        scene.collection.objects.link(cam_obj)
+    scene.camera = cam_obj
+    
+    for f in range(1, total_frames + 1):
+        scene.frame_set(f)
+        ang = 2 * math.pi * ((f - 1) / total_frames)
+        cx = target_center[0] + radius * math.sin(ang)
+        cy = target_center[1] + radius * math.cos(ang)
+        cz = target_center[2] + height
+        cam_obj.location = (cx, cy, cz)
+        direction = Vector(target_center) - Vector(cam_obj.location)
+        rot_quat = direction.to_track_quat('-Z', 'Y')
+        cam_obj.rotation_euler = rot_quat.to_euler()
+        cam_obj.keyframe_insert(data_path="location", frame=f)
+        cam_obj.keyframe_insert(data_path="rotation_euler", frame=f)
+    scene.frame_set(1)
+
+def render_multi_angle_showcase(prefix, target_center=(0.0, 0.0, 0.4)):
+    angles = [
+        ("hero_front_3_4", (5.2, 4.6, 2.2), (0.0, 0.2, 0.35)),
+        ("hero_rear_3_4", (-5.2, -4.6, 2.2), (0.0, -0.4, 0.45)),
+    ]
+    for angle_name, cam_pos, look_at in angles:
+        setup_photorealistic_studio(cam_pos=cam_pos, look_at=look_at, fov_deg=40.0)
+        output_path = os.path.join(ARTIFACTS_DIR, f"{prefix}_{angle_name}.png")
+        render_showcase_image(output_path)
+
+def setup_kinematic_hierarchy_hypercar(hc_parts):
+    col = ensure_collection("00_Kinematic_Pivots")
+    pivots = {}
+    wb = 2.70
+    tf = 1.66 / 2
+    rh = 0.10
+
+    # Butterfly Door Pivots
+    for s_side, sx, s_sign in [("Left", -tf * 0.88, -1), ("Right", tf * 0.88, 1)]:
+        pivot = bpy.data.objects.new(f"Door_Hinge_Pivot_{s_side}", None)
+        pivot.empty_display_type = 'ARROWS'
+        pivot.empty_display_size = 0.25
+        pivot.location = (sx, 0.18, rh + 0.60)
+        pivot.rotation_euler = (math.radians(-25), s_sign * math.radians(35), 0)
+        col.objects.link(pivot)
+        part_key = f"Hypercar_Door_Butterfly_{s_side}"
+        if part_key in hc_parts and hc_parts[part_key]:
+            door_obj = hc_parts[part_key]
+            door_obj.parent = pivot
+            door_obj.matrix_parent_inverse = pivot.matrix_world.inverted()
+        pivots[f"Door_Hinge_Pivot_{s_side}"] = pivot
+
+    # Bonnet / Hood Pivot
+    bonnet_pivot = bpy.data.objects.new("Bonnet_Hinge_Pivot", None)
+    bonnet_pivot.empty_display_type = 'SINGLE_ARROW'
+    bonnet_pivot.empty_display_size = 0.30
+    bonnet_pivot.location = (0.0, (wb * 0.5) + 0.35, rh + 0.38)
+    col.objects.link(bonnet_pivot)
+    if "Hypercar_Hood_Vented" in hc_parts and hc_parts["Hypercar_Hood_Vented"]:
+        hood = hc_parts["Hypercar_Hood_Vented"]
+        hood.parent = bonnet_pivot
+        hood.matrix_parent_inverse = bonnet_pivot.matrix_world.inverted()
+    pivots["Bonnet_Hinge_Pivot"] = bonnet_pivot
+
+    # Active Rear Wing DRS Pivot
+    wing_pivot = bpy.data.objects.new("Active_Rear_Wing_Pivot", None)
+    wing_pivot.empty_display_type = 'ARROWS'
+    wing_pivot.empty_display_size = 0.30
+    wing_pivot.location = (0.0, -(wb * 0.5) - 0.38, rh + 1.05)
+    col.objects.link(wing_pivot)
+    if "Hypercar_Active_Rear_Wing" in hc_parts and hc_parts["Hypercar_Active_Rear_Wing"]:
+        wing = hc_parts["Hypercar_Active_Rear_Wing"]
+        wing.parent = wing_pivot
+        wing.matrix_parent_inverse = wing_pivot.matrix_world.inverted()
+    pivots["Active_Rear_Wing_Pivot"] = wing_pivot
+
+    return pivots
+
+def setup_kinematic_hierarchy_f1(f1_parts):
+    col = ensure_collection("00_F1_Kinematic_Pivots")
+    pivots = {}
+
+    drs_pivot = bpy.data.objects.new("F1_DRS_Flap_Pivot", None)
+    drs_pivot.empty_display_type = 'SINGLE_ARROW'
+    drs_pivot.empty_display_size = 0.30
+    drs_pivot.location = (0.0, -2.44, 0.94)
+    col.objects.link(drs_pivot)
+    pivots["F1_DRS_Flap_Pivot"] = drs_pivot
+
+    steering_pivot = bpy.data.objects.new("F1_Steering_Wheel_Pivot", None)
+    steering_pivot.empty_display_type = 'SINGLE_ARROW'
+    steering_pivot.empty_display_size = 0.20
+    steering_pivot.location = (0.0, 0.48, 0.54)
+    steering_pivot.rotation_euler = (math.radians(-20), 0, 0)
+    col.objects.link(steering_pivot)
+    pivots["F1_Steering_Wheel_Pivot"] = steering_pivot
+
+    return pivots
+
 # ----------------------------------------------------------------------------
 # 8. MASTER PIPELINE ORCHESTRATOR
 # ----------------------------------------------------------------------------
@@ -1144,6 +1438,8 @@ def run_f1_pipeline():
 
     setup_photorealistic_studio(cam_pos=(6.8, 5.2, 3.0), look_at=(0.0, 0.2, 0.4), fov_deg=42.0)
     render_showcase_image(os.path.join(ARTIFACTS_DIR, "f1_car_beauty.png"))
+    render_multi_angle_showcase("f1", target_center=(0.0, 0.2, 0.4))
+    setup_360_turntable_animation(target_center=(0.0, 0.2, 0.4), radius=6.5, height=2.4, total_frames=120)
 
     print("\n[F1] Staging exploded modular view...")
     exploded_offsets = {
@@ -1188,6 +1484,8 @@ def run_hypercar_pipeline():
 
     setup_photorealistic_studio(cam_pos=(5.6, 4.4, 2.4), look_at=(0.0, 0.1, 0.4), fov_deg=40.0)
     render_showcase_image(os.path.join(ARTIFACTS_DIR, "hypercar_beauty.png"))
+    render_multi_angle_showcase("hypercar", target_center=(0.0, 0.1, 0.4))
+    setup_360_turntable_animation(target_center=(0.0, 0.1, 0.4), radius=5.8, height=2.2, total_frames=120)
 
     print("\n[HYPERCAR] Staging exploded modular view...")
     exploded_offsets = {
