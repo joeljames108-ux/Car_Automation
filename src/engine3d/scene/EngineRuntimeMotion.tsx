@@ -16,7 +16,7 @@
 
 import React, { useRef, useState, useMemo, useEffect, useCallback } from 'react';
 import { useFrame } from '@react-three/fiber';
-import { useGLTF } from '@react-three/drei';
+import { useGLTF, Html } from '@react-three/drei';
 import * as THREE from 'three';
 import {
   Play,
@@ -1052,38 +1052,41 @@ export const EngineRuntimeMotion: React.FC<EngineRuntimeMotionProps> = ({
         </group>
       )}
 
-      {/* 12-Cylinder Firing Order Matrix & Phase Indicator HUD */}
-      <FiringOrderHud cylinderStates={cylinderStates} snapshot={snapshot} />
+      {/* 2D HUD & Runtime Overlays wrapped in Drei Html portal to prevent R3F reconciler errors */}
+      <Html fullscreen style={{ pointerEvents: 'none', zIndex: 20 }}>
+        {/* 12-Cylinder Firing Order Matrix & Phase Indicator HUD */}
+        <FiringOrderHud cylinderStates={cylinderStates} snapshot={snapshot} />
 
-      {/* Floating Subsystem Anatomy Callouts */}
-      <AnatomyOverlay active={anatomyMode} />
+        {/* Floating Subsystem Anatomy Callouts */}
+        <AnatomyOverlay active={anatomyMode} />
 
-      {/* Interactive Runtime Cockpit Telemetry, Multi-Mode, & Workbench Controls */}
-      <RuntimeControlOverlay
-        snapshot={snapshot}
-        onToggleEngine={handleToggleEngine}
-        onRevBurst={handleRevBurst}
-        onSetTargetRpm={handleSetTargetRpm}
-        onSetThrottle={handleSetThrottle}
-        onSetTimeScale={handleSetTimeScale}
-        cutawayMode={cutawayMode}
-        onToggleCutaway={toggleCutawayMode}
-        explodedFactor={explodedAmount}
-        onSetExploded={setExplodedAmount}
-        onShiftUp={handleShiftUp}
-        onShiftDown={handleShiftDown}
-        onSetGear={handleSetGear}
-        isAudioMuted={isAudioMuted}
-        onToggleAudio={handleToggleAudio}
-        viewMode={viewMode}
-        onSetViewMode={setViewMode}
-        isAutoRotate360={isAutoRotate360}
-        anatomyMode={anatomyMode}
-        componentSwaps={componentSwaps}
-        onSetComponentSwap={setComponentSwap}
-        netHpDelta={netHpDelta}
-        netWeightDelta={netWeightDelta}
-      />
+        {/* Interactive Runtime Cockpit Telemetry, Multi-Mode, & Workbench Controls */}
+        <RuntimeControlOverlay
+          snapshot={snapshot}
+          onToggleEngine={handleToggleEngine}
+          onRevBurst={handleRevBurst}
+          onSetTargetRpm={handleSetTargetRpm}
+          onSetThrottle={handleSetThrottle}
+          onSetTimeScale={handleSetTimeScale}
+          cutawayMode={cutawayMode}
+          onToggleCutaway={toggleCutawayMode}
+          explodedFactor={explodedAmount}
+          onSetExploded={setExplodedAmount}
+          onShiftUp={handleShiftUp}
+          onShiftDown={handleShiftDown}
+          onSetGear={handleSetGear}
+          isAudioMuted={isAudioMuted}
+          onToggleAudio={handleToggleAudio}
+          viewMode={viewMode}
+          onSetViewMode={setViewMode}
+          isAutoRotate360={isAutoRotate360}
+          anatomyMode={anatomyMode}
+          componentSwaps={componentSwaps}
+          onSetComponentSwap={setComponentSwap}
+          netHpDelta={netHpDelta}
+          netWeightDelta={netWeightDelta}
+        />
+      </Html>
     </>
   );
 };
