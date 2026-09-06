@@ -35,3 +35,4 @@ public/renders/
 __pycache__/
 *.pyc
 .kilo/
+.freebuff/

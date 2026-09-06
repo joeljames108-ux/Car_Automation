@@ -23,20 +23,23 @@ export const ModularExterior3DViewport: React.FC<ModularExterior3DViewportProps>
   useExteriorAssembly3DBridge();
 
   return (
-    <div className={`relative w-full h-full rounded-3xl overflow-hidden backdrop-blur-2xl shadow-2xl ${className}`} style={{backgroundColor: 'rgba(10,10,15,0.95)', borderColor: 'rgba(217,166,78,0.2)', borderWidth: '1px', borderStyle: 'solid'}}>
-      {/* Dynamic Ambient Background Glow */}
-      <div className="absolute inset-0 pointer-events-none z-10" style={{background: 'radial-gradient(circle at 50% 35%, rgba(200,221,240,0.08), transparent 70%)'}} />
+    <div className={`relative w-full h-full rounded-3xl overflow-hidden backdrop-blur-2xl shadow-2xl flex ${className}`} style={{backgroundColor: 'rgba(10,10,15,0.95)', borderColor: 'rgba(217,166,78,0.2)', borderWidth: '1px', borderStyle: 'solid'}}>
+      {/* 3D Canvas Window (left) */}
+      <div className="relative flex-1 min-w-0">
+        {/* Dynamic Ambient Background Glow */}
+        <div className="absolute inset-0 pointer-events-none z-10" style={{background: 'radial-gradient(circle at 50% 35%, rgba(200,221,240,0.08), transparent 70%)'}} />
 
-      {/* Main React Three Fiber 3D Canvas — paused when off-screen */}
-      <ViewportPauseCanvas rootMargin="300px" style={{flex: 1, minHeight: 0}}>
-        <ExteriorScene3D />
-      </ViewportPauseCanvas>
+        {/* Main React Three Fiber 3D Canvas — paused when off-screen */}
+        <ViewportPauseCanvas rootMargin="300px" style={{flex: 1, minHeight: 0}}>
+          <ExteriorScene3D />
+        </ViewportPauseCanvas>
 
-      {/* Floating 3D Component Quick Installer */}
+        {/* Floating Component Metallurgy Inspector */}
+        <ExteriorComponentInspector3D />
+      </div>
+
+      {/* 3D Quick Installer — docked outside the 3D window */}
       <ExteriorComponentPicker3D />
-
-      {/* Floating Component Metallurgy Inspector */}
-      <ExteriorComponentInspector3D />
     </div>
   );
 };

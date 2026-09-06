@@ -13,7 +13,7 @@ export const ExteriorComponentPicker3D: React.FC = () => {
   const startInstall = useExteriorAssemblyStore((s) => s.startInstall);
 
   return (
-    <div className="absolute top-4 right-4 z-20 w-72 max-h-96 rounded-2xl backdrop-blur-xl p-3 shadow-2xl overflow-y-auto space-y-2" style={{backgroundColor: 'rgba(255,248,235,0.95)', border: '1px solid rgba(217,166,78,0.4)'}}>
+    <div className="w-72 shrink-0 h-full overflow-y-auto p-3 space-y-2 no-scrollbar" style={{backgroundColor: 'rgba(255,248,235,0.95)', borderLeft: '1px solid rgba(217,166,78,0.4)'}}>
       <div className="flex items-center gap-2 pb-2" style={{borderBottom: '1px solid rgba(217,166,78,0.25)'}}>
         <Box size={14} style={{color: '#92400E'}} />
         <span className="text-xs font-mono font-bold uppercase" style={{color: '#451A03'}}>
