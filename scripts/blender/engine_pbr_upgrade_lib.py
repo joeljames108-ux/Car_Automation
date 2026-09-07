@@ -95,6 +95,22 @@ def get_pbr_suite():
         "cast_iron": create_pbr_material("Cast_Iron_Turbine_Housing", (0.42, 0.44, 0.46, 1.0), metallic=0.82, roughness=0.42),
         # Optical Quartz Glass
         "quartz_glass": create_pbr_material("Quartz_ITB_Inspection_Glass", (0.95, 0.98, 1.0, 1.0), metallic=0.05, roughness=0.02, transmission=0.95),
+        # High Voltage Orange Cable (EV / EDU)
+        "orange_high_voltage": create_pbr_material("EV_HighVoltage_Orange_Silicone", (0.95, 0.32, 0.02, 1.0), metallic=0.05, roughness=0.32),
+        # Mechatronics FR4 PCB Green
+        "pcb_green": create_pbr_material("Mechatronics_FR4_Substrate_Green", (0.02, 0.24, 0.08, 1.0), metallic=0.12, roughness=0.25, clearcoat=0.8),
+        # Pure Copper Hairpin Windings / Terminals
+        "copper_winding": create_pbr_material("Hairpin_Stator_Electrolytic_Copper", (0.95, 0.42, 0.22, 1.0), metallic=0.96, roughness=0.14),
+        # 24K Reflective Gold Thermal Barrier Foil
+        "gold_heatshield": create_pbr_material("24K_Gold_Leaf_Mirror", (1.0, 0.82, 0.18, 1.0), metallic=0.98, roughness=0.08, clearcoat=0.9),
+        # Ti-6Al-4V Brushed Titanium
+        "titanium_metal": create_pbr_material("Ti_6Al_4V_Aerospace_Titanium", (0.65, 0.66, 0.69, 1.0), metallic=0.92, roughness=0.22, clearcoat=0.3),
+        # Satin Wrinkle Black Powdercoat
+        "wrinkle_black": create_pbr_material("Engine_ValveCover_WrinkleBlack", (0.07, 0.07, 0.08, 1.0), metallic=0.20, roughness=0.36),
+        # Marbled Forged Carbon Composite
+        "forged_carbon": create_pbr_material("Bespoke_Forged_Carbon_Gloss", (0.04, 0.04, 0.04, 1.0), metallic=0.30, roughness=0.16, clearcoat=1.0),
+        # Magnesium/Aluminum Transmission Casing Alloy
+        "trans_alloy": create_pbr_material("Trans_DCT_Case_Alloy", (0.70, 0.72, 0.75, 1.0), metallic=0.88, roughness=0.26, clearcoat=0.35),
     }
 
 def apply_mesh_enhancements(obj, mat_suite):
@@ -123,33 +139,49 @@ def apply_mesh_enhancements(obj, mat_suite):
         new_mat = None
         if "nikasil" in m_name or "bore" in m_name or "liner" in m_name or "bearing" in m_name:
             new_mat = mat_suite["nikasil_honed"]
-        elif "deck" in m_name or "milled" in m_name or "billet" in m_name or "polished" in m_name or "thrust" in m_name:
+        elif "deck" in m_name or "milled" in m_name or "billet" in m_name or "polished" in m_name or "thrust" in m_name or "pulley" in m_name:
             new_mat = mat_suite["billet_deck"]
-        elif "rosso" in m_name or ("valve" in m_name and "cover" in m_name) or "red" in m_name:
+        elif "rosso" in m_name or ("valve" in m_name and "cover" in m_name and "black" not in m_name) or ("red" in m_name and "wire" not in m_name):
             new_mat = mat_suite["wrinkle_red"]
-        elif "inconel" in m_name or "exhaust" in m_name or "heat" in m_name:
+        elif "inconel" in m_name or "exhaust" in m_name or "header" in m_name or "heat" in m_name:
             new_mat = mat_suite["inconel_heat"]
-        elif "carbon" in m_name or "plenum" in m_name:
+        elif "forged_carbon" in m_name or "forged" in m_name and "carbon" in m_name:
+            new_mat = mat_suite["forged_carbon"]
+        elif "carbon" in m_name or "plenum" in m_name or "shroud" in m_name:
             new_mat = mat_suite["dry_carbon"]
         elif "arp" in m_name or "fastener" in m_name or "stud" in m_name or "bolt" in m_name:
             new_mat = mat_suite["arp_stud"]
-        elif "brass" in m_name or "bronze" in m_name or "copper" in m_name or "seat" in m_name:
+        elif "copper" in m_name or "winding" in m_name or "busbar" in m_name:
+            new_mat = mat_suite["copper_winding"]
+        elif "brass" in m_name or "bronze" in m_name or "bushing" in m_name:
             new_mat = mat_suite["brass_bronze"]
+        elif "gold" in m_name and ("leaf" in m_name or "heat" in m_name or "foil" in m_name or "shield" in m_name):
+            new_mat = mat_suite["gold_heatshield"]
         elif "gold" in m_name or ("anodized" in m_name and "gold" in m_name):
             new_mat = mat_suite["anodized_gold"]
-        elif "blue" in m_name and ("anodized" in m_name or "cobalt" in m_name):
+        elif "blue" in m_name and ("anodized" in m_name or "cobalt" in m_name or "fitting" in m_name):
             new_mat = mat_suite["anodized_blue"]
         elif "dlc" in m_name or "wrist" in m_name or "skirt" in m_name or "moly" in m_name:
             new_mat = mat_suite["dlc_carbon"]
-        elif "steel" in m_name or "nitrided" in m_name or "crank" in m_name or "rod" in m_name or "chain" in m_name or "sprocket" in m_name:
+        elif "pcb" in m_name or "board" in m_name or "circuit" in m_name:
+            new_mat = mat_suite["pcb_green"]
+        elif "orange" in m_name or "highvoltage" in m_name or "hv_" in m_name:
+            new_mat = mat_suite["orange_high_voltage"]
+        elif "titanium" in m_name or "ti_" in m_name or "flange" in m_name:
+            new_mat = mat_suite["titanium_metal"]
+        elif "case" in m_name or "trans" in m_name or "diff" in m_name or "bellhousing" in m_name:
+            new_mat = mat_suite["trans_alloy"]
+        elif "gear" in m_name or "steel" in m_name or "nitrided" in m_name or "crank" in m_name or "rod" in m_name or "chain" in m_name or "sprocket" in m_name or "shaft" in m_name:
             new_mat = mat_suite["forged_steel"]
-        elif "silicone" in m_name or "rubber" in m_name or "o_ring" in m_name:
+        elif "silicone" in m_name or "rubber" in m_name or "o_ring" in m_name or "mount_rubber" in m_name:
             new_mat = mat_suite["blue_silicone"]
         elif "glass" in m_name or "quartz" in m_name:
             new_mat = mat_suite["quartz_glass"]
         elif "iron" in m_name or "turbine" in m_name:
             new_mat = mat_suite["cast_iron"]
-        elif "aluminum" in m_name or "block" in m_name or "head" in m_name or "case" in m_name:
+        elif "black" in m_name and "wrinkle" in m_name:
+            new_mat = mat_suite["wrinkle_black"]
+        elif "aluminum" in m_name or "block" in m_name or "head" in m_name or "clutch" in m_name:
             new_mat = mat_suite["cast_aluminum"]
 
         if new_mat:
