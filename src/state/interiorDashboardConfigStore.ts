@@ -444,17 +444,70 @@ export function computeMetrics(
 // 7. ZUSTAND STORE
 // ============================================================================
 
+export type SteeringWheelStyle = 'sport' | 'yoke' | 'formula' | 'classic';
+export type SteeringGripMaterial = 'leather' | 'alcantara' | 'carbon' | 'wood';
+export type SteeringStripeStyle = 'red' | 'yellow' | 'blue' | 'none';
+export type PaddleShifterStyle = 'billet' | 'carbon' | 'red' | 'none';
+export type DriveModeType = 'sport' | 'track' | 'comfort' | 'wet';
+export type DashboardTrimType = 'walnut' | 'carbon' | 'aluminum' | 'piano_black' | 'forged_carbon';
+export type InfotainmentMode = 'navigation' | 'telemetry' | 'media' | 'climate';
+export type ClusterStyle = 'digital' | 'analog' | 'f1_shift';
+export type ShifterStyle = 'auto' | 'manual' | 'toggle';
+export type CameraPose = 'driver' | 'center' | 'steering' | 'wide';
+export type ActiveConfigPanel = 'steering' | 'dashboard' | 'other';
+
 export interface InteriorDashboardConfigState {
   selections: Record<FeatureKey, number>;
   interiorColor: string;
   activePreset: string | null;
   metrics: ComputedMetrics;
 
+  // Interactive Dashboard 3D Configuration
+  steeringWheelStyle: SteeringWheelStyle;
+  steeringGripMaterial: SteeringGripMaterial;
+  steeringColor: string;
+  steeringStripe: SteeringStripeStyle;
+  paddleShifters: PaddleShifterStyle;
+  driveMode: DriveModeType;
+
+  upperDashPadColor: string;
+  dashboardTrimMaterial: DashboardTrimType;
+  infotainmentMode: InfotainmentMode;
+  clusterStyle: ClusterStyle;
+  ambientLightColor: string;
+
+  shifterStyle: ShifterStyle;
+  stitchingColor: string;
+  windshieldTint: 'clear' | 'smoke' | 'polarized';
+  nightMode: boolean;
+  cameraPose: CameraPose;
+  activePanel: ActiveConfigPanel;
+
   cycleOption: (feature: FeatureKey, direction: 1 | -1) => void;
   setOption: (feature: FeatureKey, index: number) => void;
   setColor: (hex: string) => void;
   applyPreset: (presetKey: string) => void;
   reset: () => void;
+
+  setSteeringWheelStyle: (style: SteeringWheelStyle) => void;
+  setSteeringGripMaterial: (mat: SteeringGripMaterial) => void;
+  setSteeringColor: (color: string) => void;
+  setSteeringStripe: (stripe: SteeringStripeStyle) => void;
+  setPaddleShifters: (paddles: PaddleShifterStyle) => void;
+  setDriveMode: (mode: DriveModeType) => void;
+
+  setUpperDashPadColor: (color: string) => void;
+  setDashboardTrimMaterial: (trim: DashboardTrimType) => void;
+  setInfotainmentMode: (mode: InfotainmentMode) => void;
+  setClusterStyle: (style: ClusterStyle) => void;
+  setAmbientLightColor: (color: string) => void;
+
+  setShifterStyle: (style: ShifterStyle) => void;
+  setStitchingColor: (color: string) => void;
+  setWindshieldTint: (tint: 'clear' | 'smoke' | 'polarized') => void;
+  setNightMode: (night: boolean) => void;
+  setCameraPose: (pose: CameraPose) => void;
+  setActivePanel: (panel: ActiveConfigPanel) => void;
 }
 
 const DEFAULT_SELECTIONS: Record<FeatureKey, number> = {
@@ -471,6 +524,27 @@ export const useInteriorDashboardConfigStore = create<InteriorDashboardConfigSta
     interiorColor: DEFAULT_COLOR,
     activePreset: null,
     metrics: computeMetrics(DEFAULT_SELECTIONS),
+
+    // Interactive Dashboard Default State (Image 4 Aegean Blue Dash Pad)
+    steeringWheelStyle: 'sport',
+    steeringGripMaterial: 'leather',
+    steeringColor: '#1a1a1e',
+    steeringStripe: 'red',
+    paddleShifters: 'billet',
+    driveMode: 'sport',
+
+    upperDashPadColor: '#1d4ed8', // Aegean Cobalt Blue from Image 4!
+    dashboardTrimMaterial: 'walnut',
+    infotainmentMode: 'navigation',
+    clusterStyle: 'digital',
+    ambientLightColor: '#06b6d4', // Cyan neon
+
+    shifterStyle: 'auto', // Matching Image 4 automatic lever
+    stitchingColor: '#f59e0b',
+    windshieldTint: 'clear',
+    nightMode: false,
+    cameraPose: 'driver',
+    activePanel: 'dashboard',
 
     cycleOption: (feature, direction) =>
       set((state) => {
@@ -518,7 +592,42 @@ export const useInteriorDashboardConfigStore = create<InteriorDashboardConfigSta
         interiorColor: DEFAULT_COLOR,
         activePreset: null,
         metrics: computeMetrics(DEFAULT_SELECTIONS),
+        steeringWheelStyle: 'sport',
+        steeringGripMaterial: 'leather',
+        steeringColor: '#1a1a1e',
+        steeringStripe: 'red',
+        paddleShifters: 'billet',
+        driveMode: 'sport',
+        upperDashPadColor: '#1d4ed8',
+        dashboardTrimMaterial: 'walnut',
+        infotainmentMode: 'navigation',
+        clusterStyle: 'digital',
+        ambientLightColor: '#06b6d4',
+        shifterStyle: 'auto',
+        nightMode: false,
+        cameraPose: 'driver',
+        activePanel: 'dashboard',
       }),
+
+    setSteeringWheelStyle: (style) => set({ steeringWheelStyle: style }),
+    setSteeringGripMaterial: (mat) => set({ steeringGripMaterial: mat }),
+    setSteeringColor: (color) => set({ steeringColor: color }),
+    setSteeringStripe: (stripe) => set({ steeringStripe: stripe }),
+    setPaddleShifters: (paddles) => set({ paddleShifters: paddles }),
+    setDriveMode: (mode) => set({ driveMode: mode }),
+
+    setUpperDashPadColor: (color) => set({ upperDashPadColor: color }),
+    setDashboardTrimMaterial: (trim) => set({ dashboardTrimMaterial: trim }),
+    setInfotainmentMode: (mode) => set({ infotainmentMode: mode }),
+    setClusterStyle: (style) => set({ clusterStyle: style }),
+    setAmbientLightColor: (color) => set({ ambientLightColor: color }),
+
+    setShifterStyle: (style) => set({ shifterStyle: style }),
+    setStitchingColor: (color) => set({ stitchingColor: color }),
+    setWindshieldTint: (tint) => set({ windshieldTint: tint }),
+    setNightMode: (night) => set({ nightMode: night }),
+    setCameraPose: (pose) => set({ cameraPose: pose }),
+    setActivePanel: (panel) => set({ activePanel: panel }),
   }),
 );
 

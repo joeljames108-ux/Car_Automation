@@ -84,7 +84,7 @@ const StageSwitcherComponent: React.FC<StageSwitcherProps> = ({ stage, onSelectS
         {stage === "engine" && <EngineDesigner />}
         {stage === "vehicle" && <VehicleDesigner initialSubTab="architecture" onSelectStage={(st) => onSelectStage(st as Stage)} />}
         {stage === "exterior" && <ExteriorDesignerIntegration />}
-        {stage === "interior" && <InteriorsDesigner initialSubTab="configurator" />}
+        {stage === "interior" && <InteriorsDesigner initialSubTab="setup" />}
         {stage === "manufacturing" && <ManufacturingDesigner />}
         {stage === "infotainment" && <InteriorsDesigner initialSubTab="electronics" />}
         {stage === "safety" && <SafetyCenter />}

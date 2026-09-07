@@ -9,19 +9,20 @@
 // ============================================================================
 
 import React, { useState, useEffect } from 'react';
-import { Sparkles, Sliders, Cpu } from 'lucide-react';
+import { Sparkles, Sliders, Cpu, LayoutGrid } from 'lucide-react';
 import { useDesign } from '../state/DesignContext';
 import { InfotainmentDesigner } from './InfotainmentDesigner';
 import { InteriorDashboardConfiguratorStudio } from './interior/InteriorDashboardConfiguratorStudio';
+import { InteractiveDashboardStudio } from './interior/InteractiveDashboardStudio';
 import { playHMITabSound } from '../utils/hmiSoundSynth';
 
-export type InteriorStudioViewMode = 'electronics' | 'configurator';
+export type InteriorStudioViewMode = 'setup' | 'configurator' | 'electronics';
 
 interface InteriorsDesignerProps {
   initialSubTab?: InteriorStudioViewMode;
 }
 
-export function InteriorsDesigner({ initialSubTab = 'configurator' }: InteriorsDesignerProps) {
+export function InteriorsDesigner({ initialSubTab = 'setup' }: InteriorsDesignerProps) {
   const { design } = useDesign();
   const [viewMode, setViewMode] = useState<InteriorStudioViewMode>(initialSubTab);
 
@@ -40,7 +41,7 @@ export function InteriorsDesigner({ initialSubTab = 'configurator' }: InteriorsD
     <div className="space-y-4">
       {/* ── TOP SWITCHER: UNIFIED INTERIOR & ELECTRONICS STUDIO TABS ── */}
       <div
-        className="flex items-center justify-between p-2 rounded-2xl backdrop-blur-xl shadow-xl border"
+        className="flex flex-wrap items-center justify-between gap-2 p-2 rounded-2xl backdrop-blur-xl shadow-xl border"
         style={{
           backgroundColor: 'rgba(255,248,235,0.88)',
           borderColor: 'rgba(217,166,78,0.4)',
@@ -56,6 +57,18 @@ export function InteriorsDesigner({ initialSubTab = 'configurator' }: InteriorsD
         {/* Studio View Selector */}
         <div className="flex items-center gap-1.5 p-1 rounded-xl" style={{ backgroundColor: 'rgba(0,0,0,0.06)' }}>
           <button
+            onClick={() => handleTabSelect('setup')}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+              viewMode === 'setup'
+                ? 'shadow-md scale-[1.02] bg-red-600 text-white ring-2 ring-red-400'
+                : 'hover:opacity-80 bg-red-500/10 text-red-800'
+            }`}
+          >
+            <LayoutGrid size={13} />
+            <span>🖼️ DASHBOARD CONFIGURATION (DIAGRAM)</span>
+          </button>
+
+          <button
             onClick={() => handleTabSelect('configurator')}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
               viewMode === 'configurator'
@@ -64,7 +77,7 @@ export function InteriorsDesigner({ initialSubTab = 'configurator' }: InteriorsD
             }`}
           >
             <Sliders size={13} />
-            <span>🎚️ 3D COCKPIT CONFIGURATOR</span>
+            <span>🎚️ 3D COCKPIT STUDIO</span>
           </button>
 
           <button
@@ -86,12 +99,14 @@ export function InteriorsDesigner({ initialSubTab = 'configurator' }: InteriorsD
       </div>
 
       {/* ── CONDITIONAL VIEW MODE RENDERING ── */}
-      {viewMode === 'configurator' ? (
+      {viewMode === 'setup' ? (
+        <InteractiveDashboardStudio />
+      ) : viewMode === 'configurator' ? (
         <div className="rounded-2xl overflow-hidden shadow-2xl border border-amber-800/30">
           <InteriorDashboardConfiguratorStudio />
         </div>
       ) : (
-        /* MODE B: Vehicle Electronics, Infotainment, ADAS, CAN-FD & Avionics */
+        /* MODE C: Vehicle Electronics, Infotainment, ADAS, CAN-FD & Avionics */
         <InfotainmentDesigner />
       )}
     </div>
