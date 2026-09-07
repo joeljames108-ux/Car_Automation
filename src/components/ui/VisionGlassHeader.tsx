@@ -15,7 +15,7 @@ interface VisionGlassHeaderProps {
   onReset: () => void;
   onSearch: () => void;
   onAdvanceMonth: () => void;
-  onSetUiTheme?: (theme: "theme1" | "theme2" | "theme3" | "theme4") => void;
+  onSetUiTheme?: (theme: "theme3" | "theme4") => void;
   focusMode?: boolean;
   onToggleFocusMode?: () => void;
 }
@@ -309,30 +309,6 @@ function VisionGlassHeaderComponent({
           </button>
         )}
 
-        {/* Quick UI Mode Switcher (Glass UI <-> UI 1) */}
-        {onSetUiTheme && (
-          <button
-            onClick={() => onSetUiTheme("theme1")}
-            title="Switch to UI 1 (Kinetic Horizon 3D)"
-            aria-label="Switch to UI 1 Kinetic Horizon"
-            className="vision-glass-theme-switch"
-            style={{
-              padding: "4px 10px", borderRadius: 12,
-              fontSize: 10, fontWeight: 700,
-              fontFamily: "monospace",
-              background: "linear-gradient(135deg, rgba(6,182,212,0.15), rgba(56,189,248,0.25))",
-              border: "1px solid rgba(56,189,248,0.4)",
-              color: "#fbbf24",
-              cursor: "pointer",
-              display: "flex", alignItems: "center", gap: 5,
-              boxShadow: "0 0 12px rgba(56,189,248,0.2)",
-              transition: "all 0.2s ease",
-            }}
-          >
-            <Sparkles size={11} style={{ color: "#fbbf24" }} />
-            <span>UI 1 (3D GLOBE)</span>
-          </button>
-        )}
 
         {/* User avatar */}
         <div

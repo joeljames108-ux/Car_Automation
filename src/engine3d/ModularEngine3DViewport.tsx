@@ -30,6 +30,9 @@ export interface ModularEngine3DViewportProps {
   engineConfig?: Partial<EngineConfig>;
   onSelectComponent2D?: (id: ComponentId | null) => void;
   showFloatingPanels?: boolean;
+  /** When false, the runtime cockpit HUD overlays and the dev performance
+   *  telemetry panel are omitted so the engine renders unobstructed. */
+  showRuntimeHUD?: boolean;
 }
 
 export const ModularEngine3DViewport: React.FC<ModularEngine3DViewportProps> = ({
@@ -40,6 +43,7 @@ export const ModularEngine3DViewport: React.FC<ModularEngine3DViewportProps> = (
   engineConfig,
   onSelectComponent2D,
   showFloatingPanels = false,
+  showRuntimeHUD = true,
 }) => {
   // Sync 2D primary options with 3D scene graph unconditionally (Rules of Hooks)
   useAssembly3DBridge({
@@ -73,6 +77,18 @@ export const ModularEngine3DViewport: React.FC<ModularEngine3DViewportProps> = (
 
   const removeComponentCascade = useEngine3DStore((s) => s.removeComponentCascade);
 
+  // Clean viewports (assembly builder diagrams) must always open in the plain
+  // assembled state: clear any exploded / cutaway / anatomy / 360° mode that
+  // may have been left on by another engine screen, so no scattered subsystems
+  // read as stray component GLBs next to the engine block.
+  const setViewMode = useEngine3DStore((s) => s.setViewMode);
+  useEffect(() => {
+    if (!showRuntimeHUD) {
+      setViewMode('standard');
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [showRuntimeHUD]);
+
   const handleCascadeConfirm = async () => {
     if (modalState.target) {
       await removeComponentCascade(modalState.target.instanceId);
@@ -84,14 +100,14 @@ export const ModularEngine3DViewport: React.FC<ModularEngine3DViewportProps> = (
     <div className={`relative w-full h-full overflow-hidden select-none ${className}`}>
       {/* 3D WebGL Canvas Layer — paused when off-screen */}
       <ViewportPauseCanvas rootMargin="300px" style={{position: 'absolute', inset: 0}}>
-        <Engine3DScene className="w-full h-full" />
+        <Engine3DScene className="w-full h-full" showRuntimeHUD={showRuntimeHUD} />
       </ViewportPauseCanvas>
 
       {/* Staged Asset Initialization HUD */}
       <EngineInitializationHUD />
 
-      {/* Development Performance Telemetry Monitor HUD */}
-      {process.env.NODE_ENV === 'development' && <PerformanceMonitorHUD />}
+      {/* Development Performance Telemetry Monitor HUD (clean viewports omit it) */}
+      {process.env.NODE_ENV === 'development' && showRuntimeHUD && <PerformanceMonitorHUD />}
 
       {/* Optional Standalone Floating Panels (only if explicitly enabled) */}
       {showFloatingPanels && (

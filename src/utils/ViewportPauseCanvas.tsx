@@ -38,8 +38,6 @@ function ViewportPauseCanvasComponent({
   style,
 }: ViewportPauseCanvasProps) {
   const wrapperRef = useRef<HTMLDivElement>(null);
-  const [isVisible, setIsVisible] = useState(true);
-  const [hasBeenVisible, setHasBeenVisible] = useState(false);
 
   useEffect(() => {
     const el = wrapperRef.current;
@@ -47,10 +45,7 @@ function ViewportPauseCanvasComponent({
 
     const observer = new IntersectionObserver(
       ([entry]) => {
-        const visible = entry.isIntersecting;
-        setIsVisible(visible);
-        if (visible) setHasBeenVisible(true);
-        onVisibilityChange?.(visible);
+        onVisibilityChange?.(entry.isIntersecting);
       },
       { rootMargin, threshold }
     );
@@ -59,33 +54,14 @@ function ViewportPauseCanvasComponent({
     return () => observer.disconnect();
   }, [rootMargin, threshold, onVisibilityChange]);
 
-  // Inject CSS to pause R3F Canvas when not visible
-  useEffect(() => {
-    if (!wrapperRef.current) return;
-
-    // Find the R3F canvas element inside
-    const canvas = wrapperRef.current.querySelector("canvas");
-    if (!canvas) return;
-
-    // R3F stores its fiber root on the canvas parent's __r3f property
-    // We can pause by toggling the canvas display
-    if (!isVisible) {
-      canvas.style.display = "none";
-    } else {
-      canvas.style.display = "";
-    }
-  }, [isVisible]);
-
+  // NOTE: We intentionally do NOT hide the canvas (display:none) or collapse its
+  // size (contentVisibility:auto) when off-screen. Browsers evict the WebGL
+  // context of a hidden canvas (logging "Context Lost") and a 0-height canvas
+  // never recovers its size, which leaves the viewport permanently black with no
+  // model. The IntersectionObserver is still wired up for onVisibilityChange
+  // callers, but the canvas itself is left to render normally.
   return (
-    <div
-      ref={wrapperRef}
-      className={className}
-      style={{
-        ...style,
-        contain: "layout style paint",
-        contentVisibility: hasBeenVisible ? "visible" : "auto",
-      }}
-    >
+    <div ref={wrapperRef} className={className} style={style}>
       {children}
     </div>
   );

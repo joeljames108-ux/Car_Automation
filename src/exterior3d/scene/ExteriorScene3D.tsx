@@ -25,6 +25,7 @@ import {
 } from "./DedicatedArchitectureGlbViewer";
 import { useVehicleArchitectureStore } from "../../state/useVehicleArchitectureStore";
 import { useExteriorAssemblyStore } from "../../state/useExteriorAssemblyStore";
+import { useWebGLRecovery } from "../../utils/useWebGLRecovery";
 import { VehicleCategory } from "../../sim/vehicleArchitecture/vehicleArchitectureTypes";
 import {
   Layers,
@@ -155,6 +156,8 @@ export const ExteriorScene3D: React.FC = () => {
 
   const model = CAR_MODEL_REGISTRY.find((m) => m.id === selectedId) || CAR_MODEL_REGISTRY[0];
   const preset = CAMERA_PRESETS[cameraPreset] || CAMERA_PRESETS.orbit;
+
+  const { remountKey, attachWebGLRecovery } = useWebGLRecovery();
 
   const handleSelectModel = (entry: CarModelEntry) => {
     setSelectedId(entry.id);
@@ -518,6 +521,8 @@ export const ExteriorScene3D: React.FC = () => {
           5. 3D WEBGL CANVAS WITH PHOTOREALISTIC STUDIO LIGHTING
           ===================================================================== */}
       <Canvas
+        key={remountKey}
+        onCreated={({ gl }) => attachWebGLRecovery(gl.domElement)}
         camera={{ position: preset.pos, fov: preset.fov }}
         dpr={[1, 1.5]}
         performance={{ min: 0.5 }}

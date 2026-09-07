@@ -129,7 +129,7 @@ export const InteriorConfigControls: React.FC = () => {
   }, [cycleOption, stepperDirs, stepperCnts]);
 
   return (
-    <div className="idash-panel-right bg-amber-50/80 backdrop-blur-2xl border-l border-white/10 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] p-4 flex flex-col gap-3 overflow-y-auto w-[340px] flex-shrink-0">
+    <div className="idash-panel-right bg-amber-50/80 backdrop-blur-2xl border-l border-white/10 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] p-4 flex flex-col gap-3 overflow-y-auto w-full h-full min-w-0">
       {/* Header */}
       <div className="flex items-center justify-between pb-1 border-b border-white/10">
         <span className="text-[13px] font-black tracking-widest text-amber-700 uppercase flex items-center gap-1.5">

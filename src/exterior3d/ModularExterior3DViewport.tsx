@@ -33,13 +33,17 @@ export const ModularExterior3DViewport: React.FC<ModularExterior3DViewportProps>
         <ViewportPauseCanvas rootMargin="300px" style={{flex: 1, minHeight: 0}}>
           <ExteriorScene3D />
         </ViewportPauseCanvas>
-
-        {/* Floating Component Metallurgy Inspector */}
-        <ExteriorComponentInspector3D />
       </div>
 
-      {/* 3D Quick Installer — docked outside the 3D window */}
-      <ExteriorComponentPicker3D />
+      {/* Right rail (outside the 3D window): component picker list on top,
+          active component inspector below — nothing floats over the canvas */}
+      <aside
+        className="w-72 shrink-0 h-full flex flex-col overflow-hidden"
+        style={{backgroundColor: 'rgba(255,248,235,0.95)', borderLeft: '1px solid rgba(217,166,78,0.4)'}}
+      >
+        <ExteriorComponentPicker3D />
+        <ExteriorComponentInspector3D />
+      </aside>
     </div>
   );
 };

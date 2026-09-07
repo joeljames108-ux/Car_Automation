@@ -32,17 +32,22 @@ export const ExteriorComponentInspector3D: React.FC = () => {
   const activeHood = resolveHoodGlbAsset(hoodGlbPresetId, hoodGlbOpen);
 
   return (
-    <div className="absolute bottom-4 left-4 z-20 w-80 rounded-2xl backdrop-blur-xl p-3.5 shadow-2xl space-y-2.5 animate-fadeIn" style={{backgroundColor: 'rgba(255,248,235,0.95)', border: '1px solid rgba(217,166,78,0.4)'}}>
-      <div className="flex items-center justify-between pb-2" style={{borderBottom: '1px solid rgba(217,166,78,0.25)'}}>
-        <div>
-          <span className="text-[10px] font-mono font-bold uppercase" style={{color: '#92400E'}}>
+    <div
+      className="w-full shrink-0 max-h-[62%] overflow-y-auto px-3.5 py-3 space-y-2.5 no-scrollbar"
+      style={{backgroundColor: 'rgba(255,255,255,0.72)', borderTop: '1px solid rgba(217,166,78,0.45)'}}
+    >
+      <div className="flex items-start justify-between gap-2">
+        <div className="min-w-0">
+          <span className="text-[9px] font-mono font-bold uppercase tracking-wider" style={{color: '#92400E'}}>
             {comp.category}
           </span>
-          <h4 className="text-xs font-bold" style={{color: '#451A03'}}>{comp.name}</h4>
+          <h4 className="text-xs font-bold leading-tight" style={{color: '#451A03'}}>{comp.name}</h4>
         </div>
         <button
           onClick={() => selectInstance3D(null)}
-          className="p-1 rounded-lg" style={{color: '#92400E'}}
+          className="p-1 rounded-lg shrink-0 hover:opacity-70 transition-opacity"
+          style={{color: '#92400E'}}
+          title="Close component details"
         >
           <X size={14} />
         </button>
@@ -53,7 +58,7 @@ export const ExteriorComponentInspector3D: React.FC = () => {
       </p>
 
       {/* Material Grade Selection */}
-      <div className="pt-2 border-t border-white/5 space-y-1.5">
+      <div className="pt-2.5 space-y-1.5" style={{borderTop: '1px solid rgba(217,166,78,0.22)'}}>
         <label className="text-[10px] font-mono uppercase font-bold block" style={{color: '#92400E'}}>
           METALLURGY GRADE
         </label>
@@ -72,7 +77,7 @@ export const ExteriorComponentInspector3D: React.FC = () => {
 
       {/* Interactive Hood GLB Configuration (vehicle preset + articulation) */}
       {isHoodPanel && (
-        <div className="pt-2 space-y-2" style={{borderTop: '1px solid rgba(217,166,78,0.25)'}}>
+        <div className="pt-2.5 space-y-2" style={{borderTop: '1px solid rgba(217,166,78,0.22)'}}>
           <label className="text-[10px] font-mono uppercase font-bold block" style={{color: '#92400E'}}>
             HOOD GLB ASSET CONFIGURATION
           </label>

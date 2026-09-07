@@ -4,7 +4,7 @@
 // ===================================================================
 
 import React, { useRef, useEffect, useCallback, useState } from "react";
-import { useMultiSpring, SPRING_PRESETS } from "../ui1/ux/useSpringPhysics";
+import { useMultiSpring, SPRING_PRESETS } from "../../utils/useSpringPhysics";
 import {
   ChevronLeft,
   ChevronRight,

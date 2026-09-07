@@ -68,7 +68,6 @@ import { GlassAssemblyStage } from "./stages/GlassAssemblyStage";
 import { InteriorAssemblyStage } from "./stages/InteriorAssemblyStage";
 import { FinalExteriorAssemblyStage } from "./stages/FinalExteriorAssemblyStage";
 import { VehicleCompletionStage } from "./stages/VehicleCompletionStage";
-import { ParametricAerodynamicsStudio } from "./aero/ParametricAerodynamicsStudio";
 import { SuspensionMasterStudio } from "../chassis/SuspensionMasterStudio";
 
 const STAGES: { id: AssemblyStageId; label: string; icon: any }[] = [
@@ -82,8 +81,7 @@ const STAGES: { id: AssemblyStageId; label: string; icon: any }[] = [
   { id: "glass", label: "8. Glass", icon: Sparkles },
   { id: "interior", label: "9. Interior & Electronics", icon: Sofa },
   { id: "final_exterior", label: "10. Details", icon: Flame },
-  { id: "aero_studio", label: "11. Aero Studio", icon: Wind },
-  { id: "complete", label: "12. Complete", icon: Trophy },
+  { id: "complete", label: "11. Complete", icon: Trophy },
 ];
 
 import { assemblyAudio } from "./utils/assemblyAudioEngine";
@@ -95,7 +93,6 @@ export const ModularLinearAssemblyStudio: React.FC = () => {
   const [activeStage, setActiveStage] = useState<AssemblyStageId>("chassis");
   const [previewStage, setPreviewStage] = useState<AssemblyStageId | null>(null);
   const [activeTab, setActiveTab] = useState<"stage_config" | "suspension_kinematics" | "cad_tree" | "diagnostics" | "versions">("stage_config");
-  const [isInAeroStudio, setIsInAeroStudio] = useState<boolean>(false);
 
   // Viewport Settings
   const [explodedProgress, setExplodedProgress] = useState<number>(0);
@@ -317,10 +314,7 @@ export const ModularLinearAssemblyStudio: React.FC = () => {
         stages={STAGES}
         activeStage={activeStage}
         installedStages={assemblyState.installedStages}
-        onSelectStage={(s) => {
-          setIsInAeroStudio(false);
-          setActiveStage(s);
-        }}
+        onSelectStage={(s) => setActiveStage(s)}
         canUndo={history.canUndo}
         canRedo={history.canRedo}
         onUndo={() => {
@@ -360,12 +354,9 @@ export const ModularLinearAssemblyStudio: React.FC = () => {
       <div className="flex items-center justify-between gap-2 border-b border-base-800/80 pb-2 flex-wrap">
         <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar">
           <button
-            onClick={() => {
-              setIsInAeroStudio(false);
-              setActiveTab("stage_config");
-            }}
+            onClick={() => setActiveTab("stage_config")}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all border cursor-pointer ${
-              activeTab === "stage_config" && !isInAeroStudio
+              activeTab === "stage_config"
                 ? "bg-amber-500/20 border-amber-500 text-amber-300 shadow-sm"
                 : "bg-base-900/60 border-base-800 text-slate-400 hover:text-slate-200"
             }`}
@@ -375,10 +366,7 @@ export const ModularLinearAssemblyStudio: React.FC = () => {
           </button>
 
           <button
-            onClick={() => {
-              setIsInAeroStudio(false);
-              setActiveTab("suspension_kinematics");
-            }}
+            onClick={() => setActiveTab("suspension_kinematics")}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all border cursor-pointer ${
               activeTab === "suspension_kinematics"
                 ? "bg-emerald-500/20 border-emerald-500 text-emerald-300 shadow-sm"
@@ -390,10 +378,7 @@ export const ModularLinearAssemblyStudio: React.FC = () => {
           </button>
 
           <button
-            onClick={() => {
-              setIsInAeroStudio(false);
-              setActiveTab("cad_tree");
-            }}
+            onClick={() => setActiveTab("cad_tree")}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all border cursor-pointer ${
               activeTab === "cad_tree"
                 ? "bg-amber-500/20 border-amber-500 text-amber-300 shadow-sm"
@@ -405,10 +390,7 @@ export const ModularLinearAssemblyStudio: React.FC = () => {
           </button>
 
           <button
-            onClick={() => {
-              setIsInAeroStudio(false);
-              setActiveTab("diagnostics");
-            }}
+            onClick={() => setActiveTab("diagnostics")}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all border cursor-pointer ${
               activeTab === "diagnostics"
                 ? "bg-emerald-500/20 border-emerald-500 text-emerald-300 shadow-sm"
@@ -420,10 +402,7 @@ export const ModularLinearAssemblyStudio: React.FC = () => {
           </button>
 
           <button
-            onClick={() => {
-              setIsInAeroStudio(false);
-              setActiveTab("versions");
-            }}
+            onClick={() => setActiveTab("versions")}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-mono font-bold transition-all border cursor-pointer ${
               activeTab === "versions"
                 ? "bg-amber-500/20 border-amber-500 text-amber-300 shadow-sm"
@@ -434,29 +413,10 @@ export const ModularLinearAssemblyStudio: React.FC = () => {
             <span>REVISIONS & FREEZE</span>
           </button>
         </div>
-
-        {/* Parametric Aerodynamics Studio Gateway */}
-        <button
-          onClick={() => setIsInAeroStudio(true)}
-          className={`flex items-center gap-2 px-3.5 py-1.5 rounded-xl text-xs font-mono font-bold transition-all border cursor-pointer ${
-            isInAeroStudio
-              ? "bg-gradient-to-r from-amber-500 to-amber-600 border-amber-400 text-white shadow-lg shadow-cyan-500/30"
-              : "bg-base-900/80 border-base-800 text-amber-400 hover:border-amber-500/50"
-          }`}
-        >
-          <Wind size={13} className="animate-pulse" />
-          <span>AERODYNAMICS STUDIO</span>
-        </button>
       </div>
 
       {/* Dynamic Sub-Panel */}
-      {isInAeroStudio ? (
-        <ParametricAerodynamicsStudio
-          aero={assemblyState.aero}
-          onUpdateAero={handleUpdateAero}
-          onExitToAssembly={() => setIsInAeroStudio(false)}
-        />
-      ) : activeTab === "suspension_kinematics" ? (
+      {activeTab === "suspension_kinematics" ? (
         <div className="animate-stage-transition-enter">
           <SuspensionMasterStudio />
         </div>
@@ -773,32 +733,6 @@ export const ModularLinearAssemblyStudio: React.FC = () => {
             />
           )}
 
-          {activeStage === "aero_studio" && (
-            <div className="p-4 rounded-2xl bg-base-900/80 border border-base-800 backdrop-blur-xl shadow-xl space-y-4">
-              <div className="flex items-center justify-between border-b border-base-800 pb-3 flex-wrap gap-2">
-                <div>
-                  <h3 className="font-mono text-sm font-bold text-emerald-400 flex items-center gap-2">
-                    <Wind size={16} /> 12. AERODYNAMICS STUDIO & ACTIVE SURFACES
-                  </h3>
-                  <p className="text-xs text-slate-400">
-                    Configure high-downforce wings, front splitters, venturi diffuser angles, and DRS kinematics.
-                  </p>
-                </div>
-                <button
-                  onClick={() => handleInstallStage("aero_studio")}
-                  className="px-4 py-2 rounded-xl text-xs font-mono font-bold bg-emerald-500 hover:bg-emerald-400 text-black cursor-pointer shadow-lg shadow-emerald-500/20 transition-all flex items-center gap-2"
-                >
-                  <CheckCircle2 size={14} />
-                  <span>LOCK & INSTALL AERO SUITE</span>
-                </button>
-              </div>
-              <ParametricAerodynamicsStudio
-                aero={assemblyState.aero}
-                onUpdateAero={handleUpdateAero}
-              />
-            </div>
-          )}
-
           {activeStage === "complete" && (
             <VehicleCompletionStage
               assemblyState={assemblyState}
@@ -807,7 +741,6 @@ export const ModularLinearAssemblyStudio: React.FC = () => {
                 centerOfMassMm: physicalState.centerOfMassMm,
                 weightDistributionFrontPct: physicalState.weightDistributionFrontPct,
               }}
-              onEnterAeroStudio={() => setActiveStage("aero_studio")}
               showCoMGizmo={showCoMGizmo}
               onToggleCoMGizmo={() => setShowCoMGizmo(!showCoMGizmo)}
               onFinishVehicle={() => {

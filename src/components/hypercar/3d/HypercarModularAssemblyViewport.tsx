@@ -15,6 +15,7 @@ import { HypercarComponentRegistry } from "../../../sim/hypercar/modular/hyperca
 import { disposeThreeScene } from "../../../exterior3d/utils/threeDisposal";
 import { Layers, Eye, Maximize2, Sparkles, Sliders, Wind, Camera } from "lucide-react";
 import { buildHypercarComponent } from "./HypercarProceduralGeometry";
+import { MotorsportGlbLoader, HYPERCAR_GLB_ASSET_MAP } from "../../../exterior3d/loaders/motorsportGlbLoader";
 
 const HypercarModularAssemblyViewportComponent: React.FC = () => {
   const mountRef = useRef<HTMLDivElement>(null);
@@ -25,6 +26,8 @@ const HypercarModularAssemblyViewportComponent: React.FC = () => {
   const meshMapRef = useRef<Map<HypercarSocketId, THREE.Group>>(new Map());
   const hotspotsGroupRef = useRef<THREE.Group>(new THREE.Group());
   const streamlinesRef = useRef<THREE.Points | null>(null);
+  const markDirtyRef = useRef<() => void>(() => {});
+  const installedMapRef = useRef<Record<string, string | null>>({});
 
   const [showAeroStreamlines, setShowAeroStreamlines] = useState(false);
   const showAeroStreamlinesRef = useRef(false);
@@ -225,6 +228,7 @@ const HypercarModularAssemblyViewportComponent: React.FC = () => {
       isDirty = true;
       lastActiveTime = performance.now();
     };
+    markDirtyRef.current = markDirty;
 
     controls.addEventListener("change", markDirty);
 
@@ -335,6 +339,8 @@ const HypercarModularAssemblyViewportComponent: React.FC = () => {
     const scene = sceneRef.current;
     if (!scene) return;
 
+    installedMapRef.current = installedMap;
+
     // Clear existing component meshes
     meshMapRef.current.forEach((group) => scene.remove(group));
     meshMapRef.current.clear();
@@ -351,8 +357,75 @@ const HypercarModularAssemblyViewportComponent: React.FC = () => {
         const comp = HypercarComponentRegistry.getComponent(componentId);
         if (!comp) return;
 
-        const group = createHypercarModularMesh(socketId, comp.glbMeshName, xrayMode, selectedSocketId === socketId);
-        group.userData = { socketId };
+        const compGroup = new THREE.Group();
+        compGroup.name = `COMP_${socketId}`;
+        compGroup.userData = { socketId, isGlb: false };
+
+        const configureMaterials = (group: THREE.Group) => {
+          group.traverse((child) => {
+            if ((child as THREE.Mesh).isMesh) {
+              const mesh = child as THREE.Mesh;
+              mesh.castShadow = true;
+              mesh.receiveShadow = true;
+              if (mesh.material instanceof THREE.Material) {
+                mesh.material = mesh.material.clone();
+                if (xrayMode) {
+                  mesh.material.transparent = true;
+                  (mesh.material as any).opacity = 0.28;
+                }
+                if (selectedSocketId === socketId && mesh.material instanceof THREE.MeshStandardMaterial) {
+                  mesh.material.emissive = new THREE.Color(0xf59e0b);
+                  mesh.material.emissiveIntensity = 0.18;
+                }
+              }
+            }
+          });
+        };
+
+        const cachedGlb = MotorsportGlbLoader.getCachedHypercarPart(socketId);
+        if (cachedGlb) {
+          configureMaterials(cachedGlb);
+          cachedGlb.name = `GLB_${socketId}`;
+          compGroup.add(cachedGlb);
+          compGroup.userData = { socketId, isGlb: true };
+        } else {
+          // Instant procedural fallback
+          const proceduralMesh = buildHypercarComponent(socketId);
+          if (proceduralMesh) {
+            configureMaterials(proceduralMesh);
+            compGroup.add(proceduralMesh);
+            compGroup.userData = { socketId, isGlb: false };
+          }
+
+          // Asynchronously load the Blender GLB if mapped
+          if (HYPERCAR_GLB_ASSET_MAP[socketId]) {
+            MotorsportGlbLoader.loadHypercarPart(socketId)
+              .then((loadedGlb) => {
+                if (!loadedGlb) return;
+                if (installedMapRef.current[socketId] !== componentId) return;
+
+                while (compGroup.children.length > 0) {
+                  const c = compGroup.children[0];
+                  compGroup.remove(c);
+                  if (c instanceof THREE.Mesh && c.geometry) c.geometry.dispose();
+                }
+
+                configureMaterials(loadedGlb);
+                loadedGlb.name = `GLB_${socketId}`;
+                compGroup.add(loadedGlb);
+                compGroup.userData = { socketId, isGlb: true };
+
+                const explodedOffset = new THREE.Vector3(
+                  anchor.normalVector[0],
+                  anchor.normalVector[1],
+                  anchor.normalVector[2]
+                ).multiplyScalar(explodedViewAmount * 1.6);
+                compGroup.position.copy(explodedOffset);
+                markDirtyRef.current();
+              })
+              .catch(() => {});
+          }
+        }
 
         // Isolation mode check
         let isVisible = true;
@@ -365,10 +438,10 @@ const HypercarModularAssemblyViewportComponent: React.FC = () => {
           if (systemIsolationMode === "SUSPENSION" && anchor.category !== "SUSPENSION") isVisible = false;
           if (systemIsolationMode === "WHEELS" && anchor.category !== "WHEELS") isVisible = false;
         }
-        group.visible = isVisible;
+        compGroup.visible = isVisible;
 
-        scene.add(group);
-        meshMapRef.current.set(socketId, group);
+        scene.add(compGroup);
+        meshMapRef.current.set(socketId, compGroup);
       } else if (showAttachmentHotspots) {
         // Empty socket hotspot ring
         const hotspot = createHotspotRing(socketId, new THREE.Vector3(), selectedSocketId === socketId);
@@ -386,6 +459,7 @@ const HypercarModularAssemblyViewportComponent: React.FC = () => {
     systemIsolationMode,
     xrayMode,
     showAttachmentHotspots,
+    selectedSocketId,
   ]);
 
   // ── Fast O(1) Transform Updates on Exploded View Slider / Snapping Animation ──
@@ -406,19 +480,20 @@ const HypercarModularAssemblyViewportComponent: React.FC = () => {
         anchor.normalVector[2]
       ).multiplyScalar(explodedViewAmount * 1.6);
 
-      const finalPos = basePos.clone().add(explodedOffset);
-
       const group = meshMapRef.current.get(socketId);
       if (group) {
+        const isGlb = !!group.userData?.isGlb;
+        const targetPos = isGlb ? explodedOffset.clone() : basePos.clone().add(explodedOffset);
+
         if (snappingSocketId === socketId && snapAnimationProgress < 1.0) {
-          finalPos.y += (1.0 - snapAnimationProgress) * 0.8;
+          targetPos.y += (1.0 - snapAnimationProgress) * 0.8;
         }
-        group.position.copy(finalPos);
+        group.position.copy(targetPos);
       }
 
       const hotspot = hotspotMapRef.current.get(socketId);
       if (hotspot) {
-        hotspot.position.copy(finalPos);
+        hotspot.position.copy(basePos.clone().add(explodedOffset));
       }
     });
 
@@ -496,6 +571,9 @@ const HypercarModularAssemblyViewportComponent: React.FC = () => {
           <span className="font-bold text-amber-400 uppercase tracking-wider flex items-center gap-1.5">
             <Sparkles className="w-3.5 h-3.5" />
             Hypercar CAD 3D Viewport
+          </span>
+          <span className="text-[9px] font-mono font-extrabold px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">
+            ⚡ BLENDER MODULAR GLB
           </span>
           <div className="h-4 w-px bg-white/20" />
           <span className="text-[11px] text-zinc-400">Click mesh or pulsing rings to snap components</span>

@@ -861,12 +861,16 @@ export interface EngineRuntimeMotionProps {
   engineType?: EngineType;
   autoStart?: boolean;
   initialRpm?: number;
+  /** When false, the engine runs but no 2D cockpit HUD (firing matrix, mode pills,
+   *  telemetry strip, control bar, anatomy callouts) is drawn over the scene. */
+  showHUD?: boolean;
 }
 
 export const EngineRuntimeMotion: React.FC<EngineRuntimeMotionProps> = ({
   engineType = 'V12',
   autoStart = true,
   initialRpm = 800,
+  showHUD = true,
 }) => {
   // Load the authentic 559-node V12 racing engine GLB
   const gltf = useGLTF('/models/v12_racing_engine.glb');
@@ -1037,7 +1041,15 @@ export const EngineRuntimeMotion: React.FC<EngineRuntimeMotionProps> = ({
   const instances = useEngine3DStore((s) => s.instances);
   const isAssemblyComplete = useEngine3DStore((s) => s.isAssemblyComplete);
   const instanceCount = Object.keys(instances).length;
-  const isShowcase = instanceCount === 0 || isAssemblyComplete || (snapshot !== null && snapshot.state !== 'OFF');
+  // The authentic running V12 yields to the modular component GLBs while an
+  // assembly is still in progress. In clean viewports (showHUD=false) it only
+  // takes over once the build is complete or empty, so the builder never
+  // double-renders part GLBs over the live engine. Cockpit viewports keep the
+  // live engine whenever it is running (showHUD=true).
+  const isShowcase =
+    instanceCount === 0 ||
+    isAssemblyComplete ||
+    (showHUD && snapshot !== null && snapshot.state !== 'OFF');
 
   return (
     <>
@@ -1053,40 +1065,42 @@ export const EngineRuntimeMotion: React.FC<EngineRuntimeMotionProps> = ({
       )}
 
       {/* 2D HUD & Runtime Overlays wrapped in Drei Html portal to prevent R3F reconciler errors */}
-      <Html fullscreen style={{ pointerEvents: 'none', zIndex: 20 }}>
-        {/* 12-Cylinder Firing Order Matrix & Phase Indicator HUD */}
-        <FiringOrderHud cylinderStates={cylinderStates} snapshot={snapshot} />
+      {showHUD && (
+        <Html fullscreen style={{ pointerEvents: 'none', zIndex: 20 }}>
+          {/* 12-Cylinder Firing Order Matrix & Phase Indicator HUD */}
+          <FiringOrderHud cylinderStates={cylinderStates} snapshot={snapshot} />
 
-        {/* Floating Subsystem Anatomy Callouts */}
-        <AnatomyOverlay active={anatomyMode} />
+          {/* Floating Subsystem Anatomy Callouts */}
+          <AnatomyOverlay active={anatomyMode} />
 
-        {/* Interactive Runtime Cockpit Telemetry, Multi-Mode, & Workbench Controls */}
-        <RuntimeControlOverlay
-          snapshot={snapshot}
-          onToggleEngine={handleToggleEngine}
-          onRevBurst={handleRevBurst}
-          onSetTargetRpm={handleSetTargetRpm}
-          onSetThrottle={handleSetThrottle}
-          onSetTimeScale={handleSetTimeScale}
-          cutawayMode={cutawayMode}
-          onToggleCutaway={toggleCutawayMode}
-          explodedFactor={explodedAmount}
-          onSetExploded={setExplodedAmount}
-          onShiftUp={handleShiftUp}
-          onShiftDown={handleShiftDown}
-          onSetGear={handleSetGear}
-          isAudioMuted={isAudioMuted}
-          onToggleAudio={handleToggleAudio}
-          viewMode={viewMode}
-          onSetViewMode={setViewMode}
-          isAutoRotate360={isAutoRotate360}
-          anatomyMode={anatomyMode}
-          componentSwaps={componentSwaps}
-          onSetComponentSwap={setComponentSwap}
-          netHpDelta={netHpDelta}
-          netWeightDelta={netWeightDelta}
-        />
-      </Html>
+          {/* Interactive Runtime Cockpit Telemetry, Multi-Mode, & Workbench Controls */}
+          <RuntimeControlOverlay
+            snapshot={snapshot}
+            onToggleEngine={handleToggleEngine}
+            onRevBurst={handleRevBurst}
+            onSetTargetRpm={handleSetTargetRpm}
+            onSetThrottle={handleSetThrottle}
+            onSetTimeScale={handleSetTimeScale}
+            cutawayMode={cutawayMode}
+            onToggleCutaway={toggleCutawayMode}
+            explodedFactor={explodedAmount}
+            onSetExploded={setExplodedAmount}
+            onShiftUp={handleShiftUp}
+            onShiftDown={handleShiftDown}
+            onSetGear={handleSetGear}
+            isAudioMuted={isAudioMuted}
+            onToggleAudio={handleToggleAudio}
+            viewMode={viewMode}
+            onSetViewMode={setViewMode}
+            isAutoRotate360={isAutoRotate360}
+            anatomyMode={anatomyMode}
+            componentSwaps={componentSwaps}
+            onSetComponentSwap={setComponentSwap}
+            netHpDelta={netHpDelta}
+            netWeightDelta={netWeightDelta}
+          />
+        </Html>
+      )}
     </>
   );
 };

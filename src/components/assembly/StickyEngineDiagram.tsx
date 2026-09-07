@@ -135,6 +135,7 @@ function StickyEngineDiagramComponent({
       </div>
 
       {/* ── CENTRAL STAGE WORKSTATION: 3D GLB REAL-TIME VIEWPORT ── */}
+      {/* Builder viewport stays clean: no runtime cockpit HUD / dev telemetry over the engine */}
       <div className="relative w-full h-[400px] md:h-[460px] rounded-2xl bg-slate-950/40 border border-white/5 backdrop-blur-md overflow-hidden flex items-center justify-center shadow-inner">
         <ModularEngine3DViewport
           className="w-full h-full"
@@ -143,6 +144,7 @@ function StickyEngineDiagramComponent({
           selectedVariants2D={selectedVariants}
           isExploded2D={isExplodedView}
           onSelectComponent2D={onSelectComponent}
+          showRuntimeHUD={false}
         />
 
         {/* Floating Active Installation Badge */}

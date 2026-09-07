@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import { useF1ConstructorStore } from "../../../sim/f1/state/f1ConstructorStore";
 import { F1FullCarProceduralGenerator } from "../../../exterior3d/generators/f1/f1FullCarProceduralGenerator";
+import { MotorsportGlbLoader } from "../../../exterior3d/loaders/motorsportGlbLoader";
 
 const F1Car3DViewportComponent: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -33,11 +34,13 @@ const F1Car3DViewportComponent: React.FC = () => {
   const [drsOpen, setDrsOpen] = useState(false);
   const [autoRotate, setAutoRotate] = useState(false);
   const [audioEnabled, setAudioEnabled] = useState(false);
+  const [isGlbActive, setIsGlbActive] = useState(false);
   const sceneRef = useRef<THREE.Scene | null>(null);
   const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
   const cameraRef = useRef<THREE.PerspectiveCamera | null>(null);
   const controlsRef = useRef<OrbitControls | null>(null);
   const carGroupRef = useRef<THREE.Group | null>(null);
+  const glbRawModelRef = useRef<THREE.Group | null>(null);
   const markDirtyRef = useRef<() => void>(() => {});
   const autoRotateRef = useRef<boolean>(autoRotate);
   const isEngineRevvingRef = useRef<boolean>(isEngineRevving);
@@ -66,10 +69,10 @@ const F1Car3DViewportComponent: React.FC = () => {
 
     const scene = new THREE.Scene();
     sceneRef.current = scene;
-    scene.background = new THREE.Color(0x0a0f1d);
+    scene.background = new THREE.Color(0xe8ebef);
 
     // Fog for depth
-    scene.fog = new THREE.FogExp2(0x0a0f1d, 0.04);
+    scene.fog = new THREE.FogExp2(0xe8ebef, 0.04);
 
     // Camera
     const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 100);
@@ -123,15 +126,15 @@ const F1Car3DViewportComponent: React.FC = () => {
     scene.add(rimLight2);
 
     // Reflective Studio Floor
-    const gridHelper = new THREE.GridHelper(30, 60, 0x00f0ff, 0x1e293b);
+    const gridHelper = new THREE.GridHelper(30, 60, 0x9aa5b1, 0xccd3db);
     gridHelper.position.y = 0;
     scene.add(gridHelper);
 
     const floorGeo = new THREE.PlaneGeometry(30, 30);
     const floorMat = new THREE.MeshStandardMaterial({
-      color: 0x050814,
-      roughness: 0.2,
-      metalness: 0.8,
+      color: 0xdfe3e8,
+      roughness: 0.35,
+      metalness: 0.45,
     });
     const floorPlane = new THREE.Mesh(floorGeo, floorMat);
     floorPlane.rotation.x = -Math.PI / 2;
@@ -208,30 +211,126 @@ const F1Car3DViewportComponent: React.FC = () => {
   useEffect(() => {
     if (!sceneRef.current) return;
 
+    let isSubscribed = true;
+
+    // Remove previous model
     if (carGroupRef.current) {
       sceneRef.current.remove(carGroupRef.current);
       carGroupRef.current.traverse((obj) => {
         if (obj instanceof THREE.Mesh) {
-          obj.geometry.dispose();
+          obj.geometry?.dispose();
           if (Array.isArray(obj.material)) {
             obj.material.forEach((m) => m.dispose());
           } else {
-            obj.material.dispose();
+            obj.material?.dispose();
           }
         }
       });
+      carGroupRef.current = null;
     }
 
-    const newCarGroup = F1FullCarProceduralGenerator.createCarGroup(car, {
-      explodedAmount: explodedViewAmount,
-      wireframe: wireframeMode,
-      brakeTemperatureC: isEngineRevving ? 750 : 380,
-      drsOpen,
-    });
+    const applyModelModifiers = (modelGroup: THREE.Group, isGlb: boolean) => {
+      modelGroup.traverse((child) => {
+        if ((child as THREE.Mesh).isMesh) {
+          const mesh = child as THREE.Mesh;
+          mesh.castShadow = true;
+          mesh.receiveShadow = true;
 
-    carGroupRef.current = newCarGroup;
-    sceneRef.current.add(newCarGroup);
-    markDirtyRef.current();
+          const materials = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
+          materials.forEach((mat) => {
+            if (mat instanceof THREE.MeshStandardMaterial || mat instanceof THREE.MeshPhysicalMaterial) {
+              mat.wireframe = wireframeMode;
+
+              // Brake Disc Glow when engine is revving
+              const isWheelOrBrake =
+                child.name.toLowerCase().includes("wheel") ||
+                child.name.toLowerCase().includes("brake") ||
+                mesh.name.toLowerCase().includes("wheel");
+              if (isWheelOrBrake && isEngineRevving) {
+                mat.emissive = new THREE.Color(0xff3b00);
+                mat.emissiveIntensity = 1.4;
+              } else if (!isWheelOrBrake) {
+                mat.emissiveIntensity = 0;
+              }
+            }
+          });
+        }
+
+        // Active DRS Flap Angle
+        if (
+          child.name.includes("F1_RearWing_CascadeDRS") ||
+          child.name.includes("F1_RearWing_MonzaSpoon") ||
+          child.name.toLowerCase().includes("rearwing")
+        ) {
+          if (!child.userData.origRot) {
+            child.userData.origRot = child.rotation.clone();
+          }
+          if (drsOpen) {
+            child.rotation.x = (child.userData.origRot as THREE.Euler).x - 0.28;
+          } else {
+            child.rotation.copy(child.userData.origRot);
+          }
+        }
+      });
+
+      // Exploded View radial expansion
+      if (explodedViewAmount > 0) {
+        modelGroup.children.forEach((child) => {
+          if (!child.userData.basePos) {
+            child.userData.basePos = child.position.clone();
+          }
+          const base = child.userData.basePos as THREE.Vector3;
+          const dir = new THREE.Vector3(base.x, Math.max(0.1, base.y - 0.2), base.z).normalize();
+          if (dir.lengthSq() < 0.01) dir.set(0, 1, 0);
+          child.position.copy(base).addScaledVector(dir, explodedViewAmount * 1.5);
+        });
+      } else {
+        modelGroup.children.forEach((child) => {
+          if (child.userData.basePos) {
+            child.position.copy(child.userData.basePos);
+          }
+        });
+      }
+
+      if (sceneRef.current && isSubscribed) {
+        if (carGroupRef.current) {
+          sceneRef.current.remove(carGroupRef.current);
+        }
+        carGroupRef.current = modelGroup;
+        sceneRef.current.add(modelGroup);
+        setIsGlbActive(isGlb);
+        markDirtyRef.current();
+      }
+    };
+
+    // Check if raw GLB template is already cached in memory
+    const cachedGlb = MotorsportGlbLoader.getCachedRawGlb("/vehicles/f1/complete-f1.glb");
+    if (cachedGlb) {
+      applyModelModifiers(cachedGlb, true);
+    } else {
+      // Show procedural model immediately as smooth fallback while GLB decodes
+      const proceduralCar = F1FullCarProceduralGenerator.createCarGroup(car, {
+        explodedAmount: explodedViewAmount,
+        wireframe: wireframeMode,
+        brakeTemperatureC: isEngineRevving ? 750 : 380,
+        drsOpen,
+      });
+      applyModelModifiers(proceduralCar, false);
+
+      // Async load Blender complete F1 GLB
+      MotorsportGlbLoader.loadF1CompleteVehicle()
+        .then((loadedGlb) => {
+          if (!isSubscribed) return;
+          applyModelModifiers(loadedGlb, true);
+        })
+        .catch((err) => {
+          console.warn("F1 GLB loading failed, keeping procedural car:", err);
+        });
+    }
+
+    return () => {
+      isSubscribed = false;
+    };
   }, [car, explodedViewAmount, wireframeMode, drsOpen, isEngineRevving]);
 
   // Camera Presets
@@ -313,6 +412,11 @@ const F1Car3DViewportComponent: React.FC = () => {
         <div className="px-3 py-1 rounded-xl bg-slate-900/80 backdrop-blur-md border border-slate-700 text-xs font-mono text-amber-400 font-bold flex items-center gap-1.5 shadow-lg">
           <Sparkles size={12} className="text-amber-400" />
           <span>F1 3D CAD STUDIO</span>
+          {isGlbActive && (
+            <span className="ml-1.5 text-[10px] font-mono font-extrabold px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">
+              ⚡ BLENDER GLB
+            </span>
+          )}
         </div>
         <button
           onClick={() => setAutoRotate(!autoRotate)}

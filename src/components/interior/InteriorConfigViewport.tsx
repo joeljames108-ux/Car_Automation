@@ -115,7 +115,7 @@ export const InteriorConfigViewport: React.FC = () => {
   };
 
   return (
-    <div className="idash-center-viewport relative flex flex-col">
+    <div className="idash-center-viewport relative flex flex-col h-full min-w-0">
       {/* Main Viewport Content (3D or 2D) */}
       <div className="idash-viewport-canvas">
         {viewportMode === "3d" ? (
@@ -303,49 +303,54 @@ export const InteriorConfigViewport: React.FC = () => {
         )}
       </div>
 
-      {/* Bottom Presets Carousel */}
-      <div className="idash-presets-container bg-amber-50/70 border-t border-amber-300/30 p-3.5 shrink-0">
-        <div className="text-xs font-mono font-bold tracking-widest text-amber-700 uppercase mb-2 font-black tracking-widest flex items-center gap-1.5">
+      {/* Bottom Presets — compact single strip to give the 3D window maximum height */}
+      <div className="idash-presets-container bg-amber-50/70 border-t border-amber-300/30 px-3 py-2 shrink-0 flex flex-wrap items-center gap-x-3 gap-y-1.5">
+        <div className="flex items-center gap-1.5 shrink-0">
           <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse" />
-          INTERIOR PRESETS
+          <span className="text-[11px] font-mono font-black tracking-widest text-amber-700 uppercase">
+            Interior Presets
+          </span>
         </div>
-        <div className="flex gap-2.5 overflow-x-auto pb-2 no-scrollbar">
+
+        <div className="flex items-center gap-2 overflow-x-auto no-scrollbar flex-1 min-w-0">
           {Object.entries(INTERIOR_PRESETS).map(([key, preset]) => {
             const isActive = activePreset === key;
             return (
               <button
                 key={key}
                 type="button"
-                className={`min-w-[95px] p-2 rounded-xl bg-amber-100/60 border border-white/[0.06] transition-all hover:bg-amber-200/30 duration-200 flex flex-col items-center gap-1.5 cursor-pointer text-center ${
+                className={`flex items-center gap-1.5 px-2 py-1 rounded-lg border cursor-pointer transition-all duration-200 shrink-0 ${
                   isActive
-                    ? "border-amber-400/50 bg-amber-100/60 shadow-[0_0_16px_rgba(251,191,36,0.25)] scale-102"
-                    : "border-amber-800/30 hover:border-amber-400/30 hover:bg-amber-100/40"
+                    ? "border-amber-400/60 bg-amber-100/70 shadow-[0_0_12px_rgba(251,191,36,0.3)]"
+                    : "border-amber-800/25 bg-amber-100/50 hover:border-amber-400/40 hover:bg-amber-100/70"
                 }`}
                 onClick={() => applyPreset(key)}
               >
-                <div
-                  className="w-14 h-8 rounded-lg border border-white/20 transition-all"
+                <span
+                  className="w-5 h-5 rounded-md border border-white/40 shrink-0"
                   style={{
                     backgroundColor: preset.color,
-                    boxShadow: isActive ? `0 0 12px ${preset.color}80` : "none",
+                    boxShadow: isActive ? `0 0 8px ${preset.color}90` : "none",
                   }}
                 />
-                <span className={`text-[11px] font-bold tracking-tight truncate w-full ${isActive ? "text-amber-900" : "text-amber-700"}`}>
+                <span className={`text-[10px] font-bold tracking-tight truncate max-w-[120px] ${isActive ? "text-amber-900" : "text-amber-700"}`}>
                   {preset.name}
                 </span>
               </button>
             );
           })}
         </div>
+
         <button
-          className="w-full py-2.5 px-4 rounded-xl bg-gradient-to-r from-amber-600 to-amber-500 hover:from-amber-500 hover:to-amber-400 border border-amber-400/20 text-amber-900 font-black text-xs uppercase tracking-wider transition-all shadow-lg shadow-[0_4px_20px_rgba(217,119,6,0.3)] active:scale-98 cursor-pointer mt-2 flex items-center justify-center gap-2"
+          className="shrink-0 px-3 py-1.5 rounded-xl bg-gradient-to-r from-amber-600 to-amber-500 hover:from-amber-500 hover:to-amber-400 border border-amber-400/20 text-amber-900 font-black text-[11px] uppercase tracking-wider transition-all shadow-md shadow-[0_4px_14px_rgba(217,119,6,0.3)] active:scale-95 cursor-pointer flex items-center justify-center gap-1.5"
           type="button"
           onClick={handleApplyAndContinue}
         >
           <span>✓</span>
           <span>APPLY &amp; CONTINUE</span>
         </button>
-        <div className="text-center text-[10px] font-mono text-amber-600 mt-1.5">
+
+        <div className="basis-full text-center text-[9px] font-mono text-amber-600">
           Changes will be saved to your design &amp; master vehicle physics
         </div>
       </div>

@@ -16,6 +16,7 @@ import { PostProcessingStack } from '../postprocessing/PostProcessingStack';
 import { EngineRuntimeMotion } from './EngineRuntimeMotion';
 
 import { globalPerformanceManager } from '../core/PerformanceManager';
+import { useWebGLRecovery } from '../../utils/useWebGLRecovery';
 
 // ============================================================================
 // 1. STUDIO LIGHTING RIG & ENVIRONMENT
@@ -96,7 +97,7 @@ export const StudioLightingRig: React.FC = () => {
 // 2. INNER SCENE GRAPH & FRAME ANIMATION HOOK
 // ============================================================================
 
-export const SceneContent: React.FC = () => {
+export const SceneContent: React.FC<{ showRuntimeHUD?: boolean }> = ({ showRuntimeHUD = true }) => {
   useSnapAnimationTicker();
   const orbitRef = useRef<any>(null);
   const isAutoRotate360 = useEngine3DStore((s) => s.isAutoRotate360);
@@ -113,7 +114,7 @@ export const SceneContent: React.FC = () => {
       <ModularEngineAssembly />
 
       {/* Engine Runtime Motion - auto-starts when assembly completes */}
-      <EngineRuntimeMotion autoStart={true} initialRpm={800} />
+      <EngineRuntimeMotion autoStart={true} initialRpm={800} showHUD={showRuntimeHUD} />
 
       {/* Post-Processing Overlays & Studio Highlights */}
       <PostProcessingStack />
@@ -183,12 +184,21 @@ export const SceneContent: React.FC = () => {
 
 export interface Engine3DSceneProps {
   className?: string;
+  /** When false, the runtime cockpit HUD overlays are omitted from the scene. */
+  showRuntimeHUD?: boolean;
 }
 
-export const Engine3DScene: React.FC<Engine3DSceneProps> = ({ className = 'w-full h-full' }) => {
+export const Engine3DScene: React.FC<Engine3DSceneProps> = ({
+  className = 'w-full h-full',
+  showRuntimeHUD = true,
+}) => {
+  const { remountKey, attachWebGLRecovery } = useWebGLRecovery();
+
   return (
     <div className={`relative bg-transparent select-none overflow-hidden ${className}`}>
       <Canvas
+        key={remountKey}
+        onCreated={({ gl }) => attachWebGLRecovery(gl.domElement)}
         camera={{ position: [1.4, 1.2, 0.9], fov: 42, near: 0.05, far: 50 }}
         dpr={[1, 1.5]}
         performance={{ min: 0.5 }}
@@ -203,7 +213,7 @@ export const Engine3DScene: React.FC<Engine3DSceneProps> = ({ className = 'w-ful
         shadows
       >
         <Suspense fallback={null}>
-          <SceneContent />
+          <SceneContent showRuntimeHUD={showRuntimeHUD} />
         </Suspense>
       </Canvas>
     </div>

@@ -13,15 +13,15 @@ export const ExteriorComponentPicker3D: React.FC = () => {
   const startInstall = useExteriorAssemblyStore((s) => s.startInstall);
 
   return (
-    <div className="w-72 shrink-0 h-full overflow-y-auto p-3 space-y-2 no-scrollbar" style={{backgroundColor: 'rgba(255,248,235,0.95)', borderLeft: '1px solid rgba(217,166,78,0.4)'}}>
-      <div className="flex items-center gap-2 pb-2" style={{borderBottom: '1px solid rgba(217,166,78,0.25)'}}>
+    <div className="flex-1 min-h-0 flex flex-col">
+      <div className="flex items-center gap-2 px-3 py-2.5 shrink-0" style={{borderBottom: '1px solid rgba(217,166,78,0.25)'}}>
         <Box size={14} style={{color: '#92400E'}} />
         <span className="text-xs font-mono font-bold uppercase" style={{color: '#451A03'}}>
           3D QUICK INSTALLER
         </span>
       </div>
 
-      <div className="space-y-1.5">
+      <div className="flex-1 min-h-0 overflow-y-auto px-3 py-2.5 space-y-1.5 no-scrollbar">
         {EXTERIOR_ASSEMBLY_REGISTRY.map((comp) => {
           const isInstalled = installedComponents.includes(comp.id);
           const isInstallable = isComponentInstallable(comp.id);

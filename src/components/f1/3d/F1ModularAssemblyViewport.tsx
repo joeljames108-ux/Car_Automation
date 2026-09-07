@@ -17,6 +17,7 @@ import {
   Maximize2, EyeOff, Wind, Video, Compass, Camera
 } from "lucide-react";
 import { buildF1Component } from "./F1ProceduralGeometry";
+import { MotorsportGlbLoader } from "../../../exterior3d/loaders/motorsportGlbLoader";
 
 const F1ModularAssemblyViewportComponent: React.FC = () => {
   const mountRef = useRef<HTMLDivElement>(null);
@@ -27,6 +28,8 @@ const F1ModularAssemblyViewportComponent: React.FC = () => {
   const assemblyGroupRef = useRef<THREE.Group | null>(null);
   const hotspotsGroupRef = useRef<THREE.Group | null>(null);
   const streamlinesRef = useRef<THREE.Points | null>(null);
+  const markDirtyRef = useRef<() => void>(() => {});
+  const installedMapRef = useRef<Record<string, string | null>>({});
 
   const [showAeroStreamlines, setShowAeroStreamlines] = useState(false);
   const showAeroStreamlinesRef = useRef(false);
@@ -80,7 +83,7 @@ const F1ModularAssemblyViewportComponent: React.FC = () => {
     const height = container.clientHeight || 550;
 
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x0c0a08);
+    scene.background = new THREE.Color(0xe8ebef);
     sceneRef.current = scene;
 
     const camera = new THREE.PerspectiveCamera(42, width / height, 0.1, 100);
@@ -153,10 +156,10 @@ const F1ModularAssemblyViewportComponent: React.FC = () => {
     // Reflective ground plane
     const groundGeo = new THREE.PlaneGeometry(24, 24);
     const groundMat = new THREE.MeshPhysicalMaterial({
-      color: 0x0d0a06,
-      roughness: 0.12,
-      metalness: 0.55,
-      clearcoat: 0.25,
+      color: 0xdfe3e8,
+      roughness: 0.3,
+      metalness: 0.35,
+      clearcoat: 0.2,
       clearcoatRoughness: 0.18,
       envMapIntensity: 0.8,
     });
@@ -167,8 +170,8 @@ const F1ModularAssemblyViewportComponent: React.FC = () => {
     scene.add(ground);
 
     // Workshop Grid Floor (subtle)
-    // Subtle workshop floor grid — warm amber accent matching the Vision Glass theme
-    const grid = new THREE.GridHelper(20, 40, 0x92702a, 0x1a1508);
+    // Subtle workshop floor grid — soft neutral lines on the light studio floor
+    const grid = new THREE.GridHelper(20, 40, 0xa9b3be, 0xd2d9e0);
     grid.position.y = 0.001;
     grid.material.opacity = 0.08;
     grid.material.transparent = true;
@@ -212,6 +215,7 @@ const F1ModularAssemblyViewportComponent: React.FC = () => {
       isDirty = true;
       lastActiveTime = performance.now();
     };
+    markDirtyRef.current = markDirty;
 
     controls.addEventListener("change", markDirty);
 
@@ -346,6 +350,8 @@ const F1ModularAssemblyViewportComponent: React.FC = () => {
     meshMapRef.current.clear();
     hotspotMapRef.current.clear();
 
+    installedMapRef.current = installedMap;
+
     const allSockets = Object.keys(F1_SOCKET_ANCHORS) as F1SocketId[];
 
     allSockets.forEach((socketId) => {
@@ -370,24 +376,70 @@ const F1ModularAssemblyViewportComponent: React.FC = () => {
 
         const compGroup = new THREE.Group();
         compGroup.name = `COMP_${socketId}`;
-        compGroup.userData = { socketId };
+        compGroup.userData = { socketId, isGlb: false };
 
-        // ── Build photorealistic geometry from F1ProceduralGeometry module ──
-        const builtGroup = buildF1Component(socketId, xrayMode, isDrsOpen);
-        if (builtGroup) {
-          builtGroup.name = `COMP_${socketId}`;
-          builtGroup.userData = { socketId };
-          // Apply X-ray transparency to entire group if needed
-          if (xrayMode && (socket.category === "AERO" || socket.category === "CHASSIS")) {
-            builtGroup.traverse((child) => {
-              if (child instanceof THREE.Mesh && child.material instanceof THREE.Material) {
+        const configureMeshMaterials = (group: THREE.Group) => {
+          group.traverse((child) => {
+            if (child instanceof THREE.Mesh && child.material instanceof THREE.Material) {
+              child.castShadow = true;
+              child.receiveShadow = true;
+              if (xrayMode && (socket.category === "AERO" || socket.category === "CHASSIS")) {
                 child.material = child.material.clone();
                 (child.material as THREE.MeshPhysicalMaterial).transparent = true;
                 (child.material as THREE.MeshPhysicalMaterial).opacity = 0.22;
               }
-            });
+              if (selectedSocketId === socketId && child.material instanceof THREE.MeshStandardMaterial) {
+                child.material = child.material.clone();
+                child.material.emissive = new THREE.Color(0xd4a006);
+                child.material.emissiveIntensity = 0.18;
+              }
+            }
+          });
+        };
+
+        const cachedGlb = comp.glbMeshName ? MotorsportGlbLoader.getCachedF1Part(comp.glbMeshName) : null;
+        if (cachedGlb) {
+          configureMeshMaterials(cachedGlb);
+          cachedGlb.name = `GLB_${socketId}`;
+          compGroup.add(cachedGlb);
+          compGroup.userData = { socketId, isGlb: true };
+        } else {
+          // Add procedural geometry as instant fallback
+          const builtGroup = buildF1Component(socketId, xrayMode, isDrsOpen);
+          if (builtGroup) {
+            configureMeshMaterials(builtGroup);
+            compGroup.add(builtGroup);
+            compGroup.userData = { socketId, isGlb: false };
           }
-          compGroup.add(builtGroup);
+
+          // Asynchronously load the Blender GLB part if available
+          if (comp.glbMeshName) {
+            MotorsportGlbLoader.loadF1Part(comp.glbMeshName)
+              .then((loadedGlb) => {
+                if (!loadedGlb) return;
+                if (installedMapRef.current[socketId] !== componentId) return;
+
+                while (compGroup.children.length > 0) {
+                  const c = compGroup.children[0];
+                  compGroup.remove(c);
+                  if (c instanceof THREE.Mesh && c.geometry) c.geometry.dispose();
+                }
+
+                configureMeshMaterials(loadedGlb);
+                loadedGlb.name = `GLB_${socketId}`;
+                compGroup.add(loadedGlb);
+                compGroup.userData = { socketId, isGlb: true };
+
+                const explodeOffset = new THREE.Vector3(
+                  socket.normalVector[0] * explodedViewAmount * 1.2,
+                  socket.normalVector[1] * explodedViewAmount * 1.2,
+                  socket.normalVector[2] * explodedViewAmount * 1.2
+                );
+                compGroup.position.copy(explodeOffset);
+                markDirtyRef.current();
+              })
+              .catch(() => {});
+          }
         }
 
         assemblyGroup.add(compGroup);
@@ -418,6 +470,7 @@ const F1ModularAssemblyViewportComponent: React.FC = () => {
     showAttachmentHotspots,
     activeComponentPreviewId,
     isDrsOpen,
+    selectedSocketId,
   ]);
 
   // ── High-Performance O(1) Transform Updates (Zero Geometry Reallocation on Slider / Snapping) ──
@@ -438,21 +491,22 @@ const F1ModularAssemblyViewportComponent: React.FC = () => {
         socket.normalVector[2] * explodedViewAmount * 1.2
       );
 
-      const finalPos = basePos.clone().add(explodeOffset);
-
       const compGroup = meshMapRef.current.get(socketId);
       if (compGroup) {
+        const isGlb = !!compGroup.userData?.isGlb;
+        const targetPos = isGlb ? explodeOffset.clone() : basePos.clone().add(explodeOffset);
+
         if (snappingSocketId === socketId && snapAnimationProgress < 1.0) {
           const hoverOffset = new THREE.Vector3(0, 0.4 * (1.0 - snapAnimationProgress), 0);
-          compGroup.position.copy(finalPos).add(hoverOffset);
+          compGroup.position.copy(targetPos).add(hoverOffset);
         } else {
-          compGroup.position.copy(finalPos);
+          compGroup.position.copy(targetPos);
         }
       }
 
       const ringMesh = hotspotMapRef.current.get(socketId);
       if (ringMesh) {
-        ringMesh.position.copy(finalPos);
+        ringMesh.position.copy(basePos.clone().add(explodeOffset));
         if (ringMesh.material instanceof THREE.MeshBasicMaterial) {
           ringMesh.material.color.setHex(selectedSocketId === socketId ? 0xd4a006 : 0x92702a);
         }
@@ -606,6 +660,9 @@ const F1ModularAssemblyViewportComponent: React.FC = () => {
         <span className="text-[11px] font-black tracking-widest uppercase text-amber-400 flex items-center gap-1.5">
           <Sparkles className="w-3.5 h-3.5 text-amber-400 animate-pulse" />
           F1 CAD Viewport
+        </span>
+        <span className="text-[9px] font-mono font-extrabold px-1.5 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30">
+          ⚡ BLENDER MODULAR GLB
         </span>
 
         <div className="h-4 w-px bg-white/10 mx-1" />

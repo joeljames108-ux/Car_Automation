@@ -29,7 +29,7 @@ interface PhysicalStateSummary {
 interface VehicleCompletionStageProps {
   assemblyState: InstalledSubsystemsState;
   physicalState?: PhysicalStateSummary;
-  onEnterAeroStudio: () => void;
+  onEnterAeroStudio?: () => void;
   onToggleCoMGizmo?: () => void;
   showCoMGizmo?: boolean;
   onFinishVehicle: () => void;
@@ -248,26 +248,28 @@ export const VehicleCompletionStage: React.FC<VehicleCompletionStageProps> = ({
         />
 
         {/* Aerodynamics Prompt Box */}
-        {!allPassed && (
+        {!allPassed && onEnterAeroStudio && (
           <div className="flex items-center justify-end gap-3 pt-1">
             <button
               onClick={onEnterAeroStudio}
               className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-amber-500/20 border border-amber-500/50 hover:bg-amber-500/30 text-amber-300 font-mono font-bold text-xs transition-all cursor-pointer"
             >
               <Wind size={14} />
-              GO TO AERODYNAMICS STUDIO (STAGE 12)
+              GO TO AERODYNAMICS STUDIO
             </button>
           </div>
         )}
 
         {allPassed && (
           <div className="flex items-center justify-end gap-3 pt-1">
-            <button
-              onClick={onEnterAeroStudio}
-              className="px-5 py-2.5 rounded-xl bg-base-850 border border-base-700 hover:border-base-600 text-slate-400 font-mono font-bold text-xs transition-all cursor-pointer"
-            >
-              TUNE AERO FIRST
-            </button>
+            {onEnterAeroStudio && (
+              <button
+                onClick={onEnterAeroStudio}
+                className="px-5 py-2.5 rounded-xl bg-base-850 border border-base-700 hover:border-base-600 text-slate-400 font-mono font-bold text-xs transition-all cursor-pointer"
+              >
+                TUNE AERO FIRST
+              </button>
+            )}
             <button
               onClick={() => {
                 if (!signature.trim()) return;

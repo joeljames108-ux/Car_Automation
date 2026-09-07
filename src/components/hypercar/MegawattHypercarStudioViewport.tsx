@@ -16,6 +16,7 @@ import { MegawattTriMotorPowertrainEngine } from "../../sim/hypercar/megawattTri
 import { ActiveGroundEffectVenturiAeromechanics, ActiveDrsMode } from "../../sim/hypercar/activeGroundEffectVenturiAeromechanics";
 import { CarbonCeramicMatrixBrakeThermalFea } from "../../sim/hypercar/carbonCeramicMatrixBrakeThermalFea";
 import { Car3DGeometryGenerator } from "../../exterior3d/geometry/car3dGeometryGenerator";
+import { MotorsportGlbLoader } from "../../exterior3d/loaders/motorsportGlbLoader";
 import { Zap, Sliders, Wind, Flame, ShieldAlert, Activity, Trophy, Play } from "lucide-react";
 import { playHMIClickSound } from "../../utils/hmiSoundSynth";
 
@@ -25,9 +26,28 @@ const MegawattHypercarStudioViewportComponent: React.FC = () => {
   const [airspeedKmH, setAirspeedKmH] = useState<number>(320);
   const [rideHeightMm, setRideHeightMm] = useState<number>(35);
   const [icePowerHp, setIcePowerHp] = useState<number>(1050);
+  const [isGlbActive, setIsGlbActive] = useState(false);
 
   const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
   const controlsRef = useRef<OrbitControls | null>(null);
+  const markDirtyRef = useRef<() => void>(() => {});
+  const drsModeRef = useRef<ActiveDrsMode>(drsMode);
+  const airspeedRef = useRef<number>(airspeedKmH);
+  const brakeTempRef = useRef<number>(0);
+  const hypercarModelRef = useRef<THREE.Group | null>(null);
+  const rearWingRef = useRef<THREE.Object3D | null>(null);
+  const wheelsRef = useRef<THREE.Object3D[]>([]);
+  const brakeMeshesRef = useRef<THREE.Mesh[]>([]);
+
+  useEffect(() => {
+    drsModeRef.current = drsMode;
+    markDirtyRef.current();
+  }, [drsMode]);
+
+  useEffect(() => {
+    airspeedRef.current = airspeedKmH;
+    markDirtyRef.current();
+  }, [airspeedKmH]);
 
   // 1. Run Simulations with useMemo
   const monocoqueFea = useMemo(() => {
@@ -88,6 +108,11 @@ const MegawattHypercarStudioViewportComponent: React.FC = () => {
     });
   }, [airspeedKmH]);
 
+  useEffect(() => {
+    brakeTempRef.current = brakeFea.rotorSurfaceTempPeakC;
+    markDirtyRef.current();
+  }, [brakeFea.rotorSurfaceTempPeakC]);
+
   // 2. Three.js 3D Viewport Setup
   useEffect(() => {
     if (!mountRef.current) return;
@@ -138,10 +163,6 @@ const MegawattHypercarStudioViewportComponent: React.FC = () => {
     gridHelper.position.y = 0;
     scene.add(gridHelper);
 
-    // 3D Hypercar Monocoque & Outer Skin
-    const hypercar3D = Car3DGeometryGenerator.buildCar3DGroup("HYPERCAR_MONOCOQUE", 0x111317);
-    scene.add(hypercar3D);
-
     // Adaptive Render Loop Controller
     let isDirty = true;
     let lastActiveTime = performance.now();
@@ -149,14 +170,117 @@ const MegawattHypercarStudioViewportComponent: React.FC = () => {
       isDirty = true;
       lastActiveTime = performance.now();
     };
+    markDirtyRef.current = markDirty;
 
     controls.addEventListener("change", markDirty);
+
+    // 3D Hypercar Complete Model Loading
+    let currentCarGroup: THREE.Group | null = null;
+
+    const setupModel = (model: THREE.Group) => {
+      if (currentCarGroup) {
+        scene.remove(currentCarGroup);
+      }
+      currentCarGroup = model;
+      hypercarModelRef.current = model;
+      wheelsRef.current = [];
+      brakeMeshesRef.current = [];
+      rearWingRef.current = null;
+
+      model.traverse((child) => {
+        if ((child as THREE.Mesh).isMesh) {
+          const mesh = child as THREE.Mesh;
+          mesh.castShadow = true;
+          mesh.receiveShadow = true;
+        }
+
+        const nameLower = child.name.toLowerCase();
+        if (child.name.includes("Active_Rear_Wing") || nameLower.includes("rear_wing") || nameLower.includes("wing")) {
+          rearWingRef.current = child;
+          if (!child.userData.origRot) {
+            child.userData.origRot = child.rotation.clone();
+          }
+        }
+        if (child.name.includes("Hypercar_Wheel") || nameLower.includes("wheel")) {
+          wheelsRef.current.push(child);
+          child.traverse((sub) => {
+            if ((sub as THREE.Mesh).isMesh) {
+              brakeMeshesRef.current.push(sub as THREE.Mesh);
+            }
+          });
+        }
+      });
+
+      scene.add(model);
+      setIsGlbActive(true);
+      markDirty();
+    };
+
+    const cachedHypercar = MotorsportGlbLoader.getCachedRawGlb("/vehicles/gt3_supercar/complete-gt3_supercar.glb");
+    if (cachedHypercar) {
+      setupModel(cachedHypercar);
+    } else {
+      // Temporary procedural fallback while loading GLB
+      const fallback3D = Car3DGeometryGenerator.buildCar3DGroup("HYPERCAR_MONOCOQUE", 0x111317);
+      currentCarGroup = fallback3D;
+      scene.add(fallback3D);
+
+      MotorsportGlbLoader.loadHypercarCompleteVehicle()
+        .then((loaded) => {
+          setupModel(loaded);
+        })
+        .catch((err) => {
+          console.warn("Hypercar complete GLB load error, retaining procedural fallback:", err);
+        });
+    }
 
     // Animation Loop with Tab Visibility Suspension
     let animId: number;
     const animate = () => {
       animId = requestAnimationFrame(animate);
       if (document.hidden) return;
+
+      // Dynamic Active DRS Aerodynamics
+      if (rearWingRef.current) {
+        let targetPitch = 0.22; // High downforce default (+12.6 deg)
+        if (drsModeRef.current === "LOW_DRAG_STRAIGHT_SPRINT") {
+          targetPitch = -0.15; // Low drag sprint (-8.6 deg)
+        } else if (drsModeRef.current === "AIRBRAKE_DECELERATION_1_8G") {
+          targetPitch = 0.78; // Airbrake (+45 deg)
+        }
+        const origRot = (rearWingRef.current.userData.origRot as THREE.Euler) || new THREE.Euler();
+        rearWingRef.current.rotation.x = THREE.MathUtils.lerp(
+          rearWingRef.current.rotation.x,
+          origRot.x + targetPitch,
+          0.08
+        );
+        isDirty = true;
+      }
+
+      // Wheel rotation kinetics
+      if (wheelsRef.current.length > 0 && airspeedRef.current > 0) {
+        const rollDelta = (airspeedRef.current / 3.6 / 0.34) * 0.016;
+        wheelsRef.current.forEach((wheel) => {
+          wheel.rotation.x += rollDelta;
+        });
+        isDirty = true;
+      }
+
+      // Thermal Brake Glow
+      if (brakeMeshesRef.current.length > 0) {
+        const tempC = brakeTempRef.current;
+        const glowFactor = Math.max(0, Math.min(1.5, (tempC - 450) / 700));
+        brakeMeshesRef.current.forEach((m) => {
+          if (m.material instanceof THREE.MeshStandardMaterial || m.material instanceof THREE.MeshPhysicalMaterial) {
+            if (glowFactor > 0.05) {
+              m.material.emissive = new THREE.Color(0xff4500);
+              m.material.emissiveIntensity = glowFactor;
+            } else {
+              m.material.emissiveIntensity = 0;
+            }
+          }
+        });
+      }
 
       if (isDirty) {
         controls.update();
@@ -238,6 +362,11 @@ const MegawattHypercarStudioViewportComponent: React.FC = () => {
             <option value="LOW_DRAG_STRAIGHT_SPRINT">Low Drag Straight Sprint (DRS Open)</option>
             <option value="AIRBRAKE_DECELERATION_1_8G">Airbrake 1.8G Deceleration Mode</option>
           </select>
+          {isGlbActive && (
+            <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-amber-500/20 text-amber-300 border border-amber-500/30 font-bold">
+              ⚡ BLENDER 3D CAD: LE MANS HYPERCAR
+            </span>
+          )}
         </div>
 
         {/* Left Slider Controls */}

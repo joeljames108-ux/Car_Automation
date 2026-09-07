@@ -7,11 +7,8 @@ import {
   RotateCcw,
   ArrowRight,
   Car,
-  Activity,
   ShieldCheck,
-  Zap,
 } from "lucide-react";
-import { ModularExterior3DViewport } from "../../exterior3d/ModularExterior3DViewport";
 import { playAssemblySound } from "../assembly/sounds";
 import { VehicleConfig, EnginePosition, DriveType } from "../../sim/types";
 import { StatDeltaBadges } from "../assembly/assemblyUIHelpers";
@@ -101,11 +98,18 @@ export const VehicleCompletionModal: React.FC<VehicleCompletionModalProps> = ({
           </div>
         </div>
 
-        {/* 3D Blueprint Display Viewport */}
-        <div className="h-72 w-full rounded-2xl bg-slate-900/80 border border-amber-500/30 overflow-hidden flex items-center justify-center p-2 relative">
-          <ModularExterior3DViewport
-            className="w-full h-full"
-          />
+        {/* Vehicle Blueprint Completion Showcase */}
+        <div className="h-44 w-full rounded-2xl bg-gradient-to-b from-slate-900/90 to-slate-950 border border-amber-500/30 overflow-hidden flex flex-col items-center justify-center p-4 relative">
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(251,191,36,0.08),transparent_70%)] pointer-events-none" />
+          <div className="w-14 h-14 rounded-2xl bg-amber-500/20 border border-amber-500/40 flex items-center justify-center text-amber-400 mb-3 shadow-[0_0_20px_rgba(251,191,36,0.25)]">
+            <Car size={32} />
+          </div>
+          <h3 className="font-mono text-sm font-extrabold text-amber-300 tracking-wider uppercase">
+            {(vehicleConfig as any)?.name || "Custom Prototype"} Fully Assembled
+          </h3>
+          <p className="font-mono text-xs text-slate-400 mt-1">
+            All structural hardpoints verified · Ready for track dynamics & telemetry calibration
+          </p>
         </div>
 
         {/* Final Performance Stat Telemetry Grid */}

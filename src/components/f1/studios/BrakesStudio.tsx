@@ -26,8 +26,8 @@ export const BrakesStudio: React.FC = memo(function BrakesStudio() {
     const height = container.clientHeight || 240;
 
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x060914);
-    scene.fog = new THREE.FogExp2(0x060914, 0.05);
+    scene.background = new THREE.Color(0xe8ebef);
+    scene.fog = new THREE.FogExp2(0xe8ebef, 0.05);
 
     const camera = new THREE.PerspectiveCamera(40, width / height, 0.1, 50);
     camera.position.set(2.2, 1.2, 2.4);

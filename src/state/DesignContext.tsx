@@ -10,7 +10,7 @@ import type {
 
 export type UnitSystem = "metric" | "imperial";
 export type CarConceptFocus = "budget" | "track" | "luxury" | "balanced";
-export type UITheme = "theme1" | "theme2" | "theme3" | "theme4";
+export type UITheme = "theme3" | "theme4";
 
 interface DesignContextValue {
   design: VehicleDesign;

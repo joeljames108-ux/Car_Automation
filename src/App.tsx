@@ -46,7 +46,6 @@ import { VisionGlassDock } from "./components/ui/VisionGlassDock";
 import { VisionGlassToolbar } from "./components/ui/VisionGlassToolbar";
 import { StageLoadingSkeleton } from "./components/ui/StageLoadingSkeleton";
 
-const UI1Layout = React.lazy(() => import("./components/ui/UI1Layout").then(m => ({ default: m.UI1Layout })));
 const SaveLoadDialog = React.lazy(() => import("./components/SaveLoadDialog").then(m => ({ default: m.SaveLoadDialog })));
 const CommandPalette = React.lazy(() => import("./components/CommandPalette").then(m => ({ default: m.CommandPalette })));
 
@@ -73,13 +72,11 @@ const STAGES: StageItem[] = [
   { id: "safety", label: "Safety Center", icon: <ShieldCheck size={14} />, category: "engineering" },
 
   // --- Design Studios Hub ---
-  { id: "studio", label: "Grand Studio Hub", icon: <SparklesIcon size={14} />, category: "studios" },
   { id: "exterior", label: "🎨 Exterior Design Studio", icon: <Paintbrush size={14} />, category: "studios" },
   { id: "transmission3d", label: "3D Transmission Studio", icon: <Cog size={14} />, category: "studios" },
   { id: "track_layout", label: "Track Layouts Studio", icon: <Navigation size={14} />, category: "studios" },
   { id: "f1_constructor", label: "🏎️ F1 Constructor Studio", icon: <Flag size={14} />, category: "studios" },
   { id: "hypercar_constructor", label: "🏆 Hypercar WEC Studio", icon: <Trophy size={14} />, category: "studios" },
-  { id: "graphics3d", label: "3D Viewport Studio", icon: <Box size={14} />, category: "studios" },
   { id: "suspension3d", label: "3D Suspension Studio", icon: <Activity size={14} />, category: "studios" },
   { id: "ai", label: "Apex AI Studio", icon: <Bot size={14} />, category: "studios" },
 
@@ -195,7 +192,6 @@ function AppInner() {
   const toolbarActions = useMemo(() => [
     { id: "command", icon: <LayoutGrid size={17} />, label: "Dashboard", onClick: () => handleSelectStage("command"), isActive: stage === "command" },
     { id: "interior", icon: <SlidersHorizontal size={17} />, label: "Interior Configurator", onClick: () => handleSelectStage("interior"), isActive: stage === "interior" },
-    { id: "studio", icon: <SparklesIcon size={17} />, label: "Studio Hub", onClick: () => handleSelectStage("studio"), isActive: stage === "studio" },
     { id: "search", icon: <Search size={17} />, label: "Search (Ctrl+K)", onClick: handleSearch },
     { id: "simulation", icon: <Activity size={17} />, label: "Analytics", onClick: () => handleSelectStage("simulation"), isActive: stage === "simulation" },
     { id: "ai", icon: <Bot size={17} />, label: "Apex AI Studio", onClick: () => handleSelectStage("ai"), isActive: stage === "ai" },
@@ -324,17 +320,6 @@ function AppInner() {
   }, []);
 
   const activeCategoryStages = STAGES.filter(s => s.category === activeCategory);
-
-  // ===== UI 1: Kinetic Horizon — Dedicated Separate UI/UX =====
-  if (uiTheme === "theme1") {
-    return (
-      <VisionGlassErrorBoundary>
-        <React.Suspense fallback={<StageLoadingSkeleton stageName="command" />}>
-          <UI1Layout />
-        </React.Suspense>
-      </VisionGlassErrorBoundary>
-    );
-  }
 
   const isVisionGlass = uiTheme === "theme4";
 
@@ -651,7 +636,6 @@ function AppInner() {
         />
       </React.Suspense>
 
-      {uiTheme === "theme2" && <div className="cosmic-sparkle" />}
 
       <div className="ambient-orb ambient-orb-1" />
       <div className="ambient-orb ambient-orb-2" />

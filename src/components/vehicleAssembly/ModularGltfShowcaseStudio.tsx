@@ -9,7 +9,6 @@ import React, { useState } from 'react';
 import {
   Layers,
   Compass,
-  Wind,
   Zap,
   Download,
   Share2,
@@ -20,13 +19,12 @@ import {
 } from 'lucide-react';
 import { MasterVehicleAssemblyDeck } from './MasterVehicleAssemblyDeck';
 import { MultiViewTechnicalBlueprint } from './MultiViewTechnicalBlueprint';
-import { AerodynamicWindTunnelViewport } from './AerodynamicWindTunnelViewport';
 import { PowertrainDynoDashboard } from './PowertrainDynoDashboard';
 import { useMasterVehicleAssemblyStore } from '../../state/masterVehicleAssemblyStore';
 import { UniversalGlbExporter } from '../../exterior3d/export/universalGlbExporter';
 import { HighFidelitySedanChassisGenerator } from '../../exterior3d/generators/highFidelitySedanChassisGenerator';
 
-export type StudioTabId = '3D_ASSEMBLY' | 'CAD_BLUEPRINT' | 'CFD_WIND_TUNNEL' | 'ENGINE_DYNO';
+export type StudioTabId = '3D_ASSEMBLY' | 'CAD_BLUEPRINT' | 'ENGINE_DYNO';
 
 export const ModularGltfShowcaseStudio: React.FC = () => {
   const [activeTab, setActiveTab] = useState<StudioTabId>('3D_ASSEMBLY');
@@ -59,7 +57,6 @@ export const ModularGltfShowcaseStudio: React.FC = () => {
   const tabs: { id: StudioTabId; label: string; icon: React.FC<{ className?: string }> }[] = [
     { id: '3D_ASSEMBLY', label: '3D Assembly Deck', icon: Layers },
     { id: 'CAD_BLUEPRINT', label: 'CAD Blueprints', icon: Compass },
-    { id: 'CFD_WIND_TUNNEL', label: 'Virtual CFD Tunnel', icon: Wind },
     { id: 'ENGINE_DYNO', label: 'Engine Dyno & Telemetry', icon: Zap },
   ];
 
@@ -126,7 +123,6 @@ export const ModularGltfShowcaseStudio: React.FC = () => {
       <div className="flex-1 overflow-hidden p-3 bg-slate-900/80">
         {activeTab === '3D_ASSEMBLY' && <MasterVehicleAssemblyDeck />}
         {activeTab === 'CAD_BLUEPRINT' && <MultiViewTechnicalBlueprint />}
-        {activeTab === 'CFD_WIND_TUNNEL' && <AerodynamicWindTunnelViewport />}
         {activeTab === 'ENGINE_DYNO' && <PowertrainDynoDashboard />}
       </div>
 

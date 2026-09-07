@@ -233,7 +233,7 @@ export const InteriorConfig3DViewport: React.FC = () => {
     cockpitGroupRef.current = cockpit;
     scene.add(cockpit);
 
-    // 7. Resize Handler
+    // 7. Resize Handler — also reacts to layout changes (e.g. collapsible side rails)
     const handleResize = () => {
       if (!container || !rendererRef.current || !cameraRef.current) return;
       const w = container.clientWidth;
@@ -242,6 +242,8 @@ export const InteriorConfig3DViewport: React.FC = () => {
       cameraRef.current.updateProjectionMatrix();
       rendererRef.current.setSize(w, h);
     };
+    const resizeObserver = new ResizeObserver(() => handleResize());
+    resizeObserver.observe(container);
     window.addEventListener("resize", handleResize);
 
     // 8. Animation Loop
@@ -259,6 +261,7 @@ export const InteriorConfig3DViewport: React.FC = () => {
     animate();
 
     return () => {
+      resizeObserver.disconnect();
       window.removeEventListener("resize", handleResize);
       if (animFrameRef.current) cancelAnimationFrame(animFrameRef.current);
       renderer.dispose();

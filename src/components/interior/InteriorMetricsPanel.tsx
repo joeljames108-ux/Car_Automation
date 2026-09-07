@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useSpring, SPRING_PRESETS } from '../ui1/ux/useSpringPhysics';
+import { useSpring, SPRING_PRESETS } from '../../utils/useSpringPhysics';
 import { useInteriorDashboardConfigStore } from '../../state/interiorDashboardConfigStore';
 import { InteriorCompareModal } from './InteriorCompareModal';
 
@@ -37,7 +37,7 @@ export const InteriorMetricsPanel: React.FC = () => {
   const metrics = useInteriorDashboardConfigStore((s) => s.metrics);
   const ratingColor = metrics.overallRating === 'S' ? '#f59e0b' : metrics.overallRating === 'A' ? '#4ade80' : metrics.overallRating === 'B' ? '#facc15' : metrics.overallRating === 'C' ? '#fb923c' : '#ef4444';
   return (
-    <div className='bg-amber-50/80 backdrop-blur-2xl border-r border-white/10 p-4 flex flex-col gap-3 overflow-y-auto w-[310px] flex-shrink-0 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]'>
+    <div className='bg-amber-50/80 backdrop-blur-2xl border-r border-white/10 p-4 flex flex-col gap-3 overflow-y-auto w-full h-full min-w-0 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]'>
       <div className='flex items-center gap-2 pb-2 border-b border-white/10'>
         <span className='w-2.5 h-2.5 rounded-full bg-amber-400 animate-pulse' />
         <span className='text-[14px] font-black tracking-widest text-amber-700 uppercase'>Interior Overview</span>
