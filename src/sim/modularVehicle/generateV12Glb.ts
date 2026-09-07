@@ -1201,13 +1201,16 @@ export async function exportV12GlbFiles() {
   fs.writeFileSync(publicPath, assembledBuffer);
   console.log(`[3/4] ✅ Saved Optimized Web App Asset: ${publicPath} (${(assembledBuffer.byteLength / 1024).toFixed(1)} KB)`);
 
-  const userDownloadsDir = "C:\\Users\\joelj\\Downloads";
+  const userDownloadsDir = path.resolve("public/models/engines");
+  if (!fs.existsSync(userDownloadsDir)) {
+    fs.mkdirSync(userDownloadsDir, { recursive: true });
+  }
   const userDownloadPath = path.join(userDownloadsDir, "v12_racing_engine_complete.glb");
   try {
     fs.writeFileSync(userDownloadPath, assembledBuffer);
-    console.log(`[4/4] ✅ Saved to Downloads: ${userDownloadPath} (${(assembledBuffer.byteLength / 1024).toFixed(1)} KB)`);
+    console.log(`[4/4] ✅ Saved Complete Assembly: ${userDownloadPath} (${(assembledBuffer.byteLength / 1024).toFixed(1)} KB)`);
   } catch (err) {
-    console.warn("Notice: Could not write to Downloads directory directly:", err);
+    console.warn("Notice: Could not write complete engine to public/models/engines:", err);
   }
 
   const explodedScene = buildV12EngineScene(0.5);
@@ -1223,9 +1226,9 @@ export async function exportV12GlbFiles() {
   const explodedPath = path.join(userDownloadsDir, "v12_racing_engine_exploded.glb");
   try {
     fs.writeFileSync(explodedPath, explodedBuffer);
-    console.log(`[Bonus] ✅ Saved Exploded View to Downloads: ${explodedPath} (${(explodedBuffer.byteLength / 1024).toFixed(1)} KB)`);
+    console.log(`[Bonus] ✅ Saved Exploded View: ${explodedPath} (${(explodedBuffer.byteLength / 1024).toFixed(1)} KB)`);
   } catch (err) {
-    console.warn("Notice: Could not write exploded view to Downloads:", err);
+    console.warn("Notice: Could not write exploded view to public/models/engines:", err);
   }
 
   console.log("-------------------------------------------------");

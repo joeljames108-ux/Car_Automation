@@ -36,3 +36,5 @@ __pycache__/
 *.pyc
 .kilo/
 .freebuff/
+public/models/engines/v12_backup_original/
+temp_orig_engine.glb
