@@ -15,6 +15,7 @@ export type {
 // ---------- Engine ----------
 
 export type EngineLayout =
+  | "unconfigured"
   | "i3" | "i4" | "i6" | "v6" | "v8" | "v10" | "v12"
   | "w12" | "w16" | "w18"
   | "boxer4" | "boxer6" | "rotary" | "hybrid" | "electric";
@@ -148,6 +149,7 @@ export interface EngineSim {
 // ---------- Vehicle ----------
 
 export type PlatformType =
+  | "unconfigured"
   | "budget_economy" | "lower_mid" | "upper_mid" | "premium" | "luxury" | "ultra_luxury"
   | "exotic" | "supercar" | "hypercar" | "commercial_fleet" | "motorsport"
   | "economy_hatch" | "economy_compact" | "compact_family" | "midsize_sedan" | "street_sport" | "gt" | "prototype" | "rally";
@@ -155,6 +157,7 @@ export type PlatformType =
 // ---------- Exterior ----------
 
 export type BodyType =
+  | "unconfigured"
   | "city_car" | "hatchback" | "sedan" | "wagon" | "coupe" | "convertible" | "roadster"
   | "sports_car" | "gt_coupe" | "muscle_car" | "pony_car" | "supercar" | "hypercar"
   | "suv" | "crossover" | "pickup" | "mpv" | "minivan" | "van" | "offroad_4x4"
@@ -872,6 +875,7 @@ export interface VehicleDesign {
 }
 
 export interface SimResult {
+  isConfigured?: boolean;
   // Engine
   displacement: number;
   cylinderCount: number;

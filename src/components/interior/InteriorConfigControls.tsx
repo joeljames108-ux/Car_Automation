@@ -88,7 +88,12 @@ const FEATURE_EXPLANATIONS: Record<
   },
 };
 
-export const InteriorConfigControls: React.FC = () => {
+export interface InteriorConfigControlsProps {
+  theme?: 'dark' | 'amber';
+}
+
+export const InteriorConfigControls: React.FC<InteriorConfigControlsProps> = ({ theme = 'amber' }) => {
+  const isDark = theme === 'dark';
   const [selectedInfoKey, setSelectedInfoKey] = useState<FeatureKey | null>(null);
   const [showCustomPicker, setShowCustomPicker] = useState<boolean>(false);
 
@@ -129,15 +134,25 @@ export const InteriorConfigControls: React.FC = () => {
   }, [cycleOption, stepperDirs, stepperCnts]);
 
   return (
-    <div className="idash-panel-right bg-amber-50/80 backdrop-blur-2xl border-l border-white/10 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] p-4 flex flex-col gap-3 overflow-y-auto w-full h-full min-w-0">
+    <div
+      className={`idash-panel-right backdrop-blur-2xl p-3.5 flex flex-col gap-2.5 overflow-y-auto w-full h-full min-w-0 select-none ${
+        isDark
+          ? "bg-slate-900/90 border-l border-slate-800 text-slate-100 shadow-2xl"
+          : "bg-amber-50/80 border-l border-white/10 text-amber-900 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]"
+      }`}
+    >
       {/* Header */}
-      <div className="flex items-center justify-between pb-1 border-b border-white/10">
-        <span className="text-[13px] font-black tracking-widest text-amber-700 uppercase flex items-center gap-1.5">
-          <span className="w-2.5 h-2.5 rounded-full bg-amber-400 animate-pulse" />
+      <div className={`flex items-center justify-between pb-1 border-b ${isDark ? "border-slate-800" : "border-white/10"}`}>
+        <span className={`text-[12px] font-black tracking-widest uppercase flex items-center gap-1.5 ${isDark ? "text-cyan-400" : "text-amber-700"}`}>
+          <span className={`w-2.5 h-2.5 rounded-full ${isDark ? "bg-cyan-400" : "bg-amber-400"} animate-pulse`} />
           INTERIOR CONFIGURATION
         </span>
         <button
-          className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-amber-100/60 hover:bg-red-100/40 text-amber-800 hover:text-amber-900 border border-amber-700/30 hover:border-red-400/30 text-[11px] font-mono font-bold transition-all shadow-sm active:scale-95 cursor-pointer"
+          className={`flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] font-mono font-bold transition-all shadow-sm active:scale-95 cursor-pointer border ${
+            isDark
+              ? "bg-slate-800/80 hover:bg-red-900/40 text-slate-300 hover:text-red-300 border-slate-700 hover:border-red-500/40"
+              : "bg-amber-100/60 hover:bg-red-100/40 text-amber-800 hover:text-amber-900 border-amber-700/30 hover:border-red-400/30"
+          }`}
           onClick={reset}
           type="button"
           title="Reset to Baseline Factory Defaults"
@@ -155,23 +170,35 @@ export const InteriorConfigControls: React.FC = () => {
           return (
             <div
               key={key}
-              className="flex items-center justify-between p-2 rounded-xl bg-amber-100/60 hover:bg-amber-100/50 border border-white/[0.06] hover:border-amber-400/20 transition-all shadow-sm group"
+              className={`flex items-center justify-between p-2 rounded-xl transition-all shadow-sm group border ${
+                isDark
+                  ? "bg-slate-800/60 hover:bg-slate-800/90 border-slate-700/60 hover:border-cyan-500/30"
+                  : "bg-amber-100/60 hover:bg-amber-100/50 border-white/[0.06] hover:border-amber-400/20"
+              }`}
             >
-              <span className="text-[13px] font-bold text-amber-900 tracking-tight flex-1 pr-2 truncate">
+              <span className={`text-[12px] font-bold tracking-tight flex-1 pr-2 truncate ${isDark ? "text-slate-200" : "text-amber-900"}`}>
                 {config.label}
               </span>
               <div className="flex items-center gap-1.5 shrink-0">
                 <button
-                  className="w-7 h-7 rounded-lg bg-amber-200/50 hover:bg-amber-300/70 active:bg-amber-400/40 border border-amber-300/40 hover:border-amber-400/50 text-amber-800 font-extrabold text-base flex items-center justify-center transition-all shadow-sm active:scale-90 cursor-pointer"
+                  className={`w-7 h-7 rounded-lg font-extrabold text-base flex items-center justify-center transition-all shadow-sm active:scale-90 cursor-pointer border ${
+                    isDark
+                      ? "bg-slate-700/80 hover:bg-cyan-600 active:bg-cyan-700 border-slate-600 hover:border-cyan-400 text-slate-200 hover:text-white"
+                      : "bg-amber-200/50 hover:bg-amber-300/70 active:bg-amber-400/40 border-amber-300/40 hover:border-amber-400/50 text-amber-800"
+                  }`}
                   onClick={() => handleCycle(key, -1)}
                   aria-label={`Previous ${config.label}`}
                   type="button"
                 >
                   ‹
                 </button>
-                <AnimatedStepperValue value={currentLabel} direction={stepperDirs[key] || 1} animKey={String(stepperCnts[key] || 0)} />
+                <AnimatedStepperValue value={currentLabel} direction={stepperDirs[key] || 1} animKey={String(stepperCnts[key] || 0)} theme={theme} />
                 <button
-                  className="w-7 h-7 rounded-lg bg-amber-200/50 hover:bg-amber-300/70 active:bg-amber-400/40 border border-amber-300/40 hover:border-amber-400/50 text-amber-800 font-extrabold text-base flex items-center justify-center transition-all shadow-sm active:scale-90 cursor-pointer"
+                  className={`w-7 h-7 rounded-lg font-extrabold text-base flex items-center justify-center transition-all shadow-sm active:scale-90 cursor-pointer border ${
+                    isDark
+                      ? "bg-slate-700/80 hover:bg-cyan-600 active:bg-cyan-700 border-slate-600 hover:border-cyan-400 text-slate-200 hover:text-white"
+                      : "bg-amber-200/50 hover:bg-amber-300/70 active:bg-amber-400/40 border-amber-300/40 hover:border-amber-400/50 text-amber-800"
+                  }`}
                   onClick={() => handleCycle(key, 1)}
                   aria-label={`Next ${config.label}`}
                   type="button"
@@ -179,7 +206,11 @@ export const InteriorConfigControls: React.FC = () => {
                   ›
                 </button>
                 <button
-                  className="w-6 h-6 rounded-lg text-amber-600 hover:text-amber-800 hover:bg-amber-100/40 transition-all flex items-center justify-center cursor-pointer text-xs"
+                  className={`w-6 h-6 rounded-lg transition-all flex items-center justify-center cursor-pointer text-xs ${
+                    isDark
+                      ? "text-slate-400 hover:text-cyan-300 hover:bg-slate-700/50"
+                      : "text-amber-600 hover:text-amber-800 hover:bg-amber-100/40"
+                  }`}
                   onClick={() => setSelectedInfoKey(key)}
                   aria-label={`Info about ${config.label}`}
                   type="button"
@@ -194,14 +225,18 @@ export const InteriorConfigControls: React.FC = () => {
       </div>
 
       {/* Color Palette */}
-      <div className="mt-2 pt-2 border-t border-white/10 flex flex-col gap-2">
+      <div className={`mt-2 pt-2 border-t flex flex-col gap-2 ${isDark ? "border-slate-800" : "border-white/10"}`}>
         <div className="flex items-center justify-between">
-          <span className="text-[13px] font-black tracking-widest text-amber-700 uppercase">
+          <span className={`text-[12px] font-black tracking-widest uppercase ${isDark ? "text-cyan-400" : "text-amber-700"}`}>
             CABIN UPHOLSTERY COLOR
           </span>
           <button
             onClick={() => setShowCustomPicker(!showCustomPicker)}
-            className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-amber-100/40 hover:bg-amber-100/50 text-amber-700 border border-white/[0.08] hover:border-amber-400/30 flex items-center gap-1 cursor-pointer transition-all"
+            className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded flex items-center gap-1 cursor-pointer transition-all border ${
+              isDark
+                ? "bg-slate-800 hover:bg-slate-700 text-slate-300 border-slate-700 hover:border-cyan-400/40"
+                : "bg-amber-100/40 hover:bg-amber-100/50 text-amber-700 border-white/[0.08] hover:border-amber-400/30"
+            }`}
           >
             <Palette size={11} />
             <span>{showCustomPicker ? "Presets" : "+ Custom"}</span>
@@ -209,7 +244,9 @@ export const InteriorConfigControls: React.FC = () => {
         </div>
 
         {showCustomPicker ? (
-          <div className="flex items-center gap-3 p-2.5 rounded-xl bg-amber-100/60 border border-amber-400/30 animate-in fade-in duration-150">
+          <div className={`flex items-center gap-3 p-2.5 rounded-xl border animate-in fade-in duration-150 ${
+            isDark ? "bg-slate-800/80 border-cyan-500/30" : "bg-amber-100/60 border-amber-400/30"
+          }`}>
             <input
               type="color"
               value={interiorColor}
@@ -218,8 +255,8 @@ export const InteriorConfigControls: React.FC = () => {
               title="Pick Bespoke Hex Color"
             />
             <div className="flex flex-col">
-              <span className="text-xs font-mono font-bold text-amber-900">{interiorColor.toUpperCase()}</span>
-              <span className="text-[10px] text-amber-600">Custom PBR Leather Finish</span>
+              <span className={`text-xs font-mono font-bold ${isDark ? "text-cyan-300" : "text-amber-900"}`}>{interiorColor.toUpperCase()}</span>
+              <span className={`text-[10px] ${isDark ? "text-slate-400" : "text-amber-600"}`}>Custom PBR Leather Finish</span>
             </div>
           </div>
         ) : (
@@ -232,7 +269,11 @@ export const InteriorConfigControls: React.FC = () => {
                   type="button"
                   className={`w-8 h-8 rounded-xl cursor-pointer transition-all duration-200 border-2 shadow-sm ${
                     isSelected
-                      ? "border-white ring-2 ring-amber-400/60 ring-offset-2 ring-offset-amber-100 scale-110 shadow-[0_0_12px_rgba(251,191,36,0.6)]"
+                      ? isDark
+                        ? "border-white ring-2 ring-cyan-400 ring-offset-2 ring-offset-slate-900 scale-110 shadow-[0_0_12px_rgba(6,182,212,0.6)]"
+                        : "border-white ring-2 ring-amber-400/60 ring-offset-2 ring-offset-amber-100 scale-110 shadow-[0_0_12px_rgba(251,191,36,0.6)]"
+                      : isDark
+                      ? "border-slate-700 hover:border-cyan-400/40 hover:scale-105"
                       : "border-white/[0.08] hover:border-amber-400/30 hover:scale-105"
                   }`}
                   style={{ backgroundColor: swatch.hex }}
@@ -248,34 +289,40 @@ export const InteriorConfigControls: React.FC = () => {
 
       {/* Info Popover Modal */}
       {selectedInfoKey && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-amber-900/30 backdrop-blur-md p-4 animate-in fade-in duration-150">
-          <div className="bg-amber-50/95 border border-amber-300/50 rounded-2xl p-5 max-w-sm w-full shadow-[0_0_40px_rgba(0,0,0,0.3)] space-y-3.5">
-            <div className="flex items-start justify-between border-b border-amber-800/30 pb-2">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-md p-4 animate-in fade-in duration-150">
+          <div className={`rounded-2xl p-5 max-w-sm w-full shadow-[0_0_40px_rgba(0,0,0,0.5)] space-y-3.5 border ${
+            isDark ? "bg-slate-900/95 border-cyan-500/40" : "bg-amber-50/95 border-amber-300/50"
+          }`}>
+            <div className={`flex items-start justify-between pb-2 border-b ${isDark ? "border-slate-700" : "border-amber-800/30"}`}>
               <div className="flex items-center gap-2">
-                <div className="p-1.5 rounded-lg bg-amber-500/20 text-amber-300">
+                <div className={`p-1.5 rounded-lg ${isDark ? "bg-cyan-500/20 text-cyan-400" : "bg-amber-500/20 text-amber-300"}`}>
                   <Info size={16} />
                 </div>
-                <h3 className="font-bold text-amber-900 text-sm">
+                <h3 className={`font-bold text-sm ${isDark ? "text-slate-100" : "text-amber-900"}`}>
                   {FEATURE_EXPLANATIONS[selectedInfoKey].title}
                 </h3>
               </div>
               <button
                 onClick={() => setSelectedInfoKey(null)}
-                className="text-amber-600 hover:text-amber-900 p-1 rounded-lg hover:bg-amber-200/60 transition-colors cursor-pointer"
+                className={`p-1 rounded-lg transition-colors cursor-pointer ${
+                  isDark ? "text-slate-400 hover:text-white hover:bg-slate-800" : "text-amber-600 hover:text-amber-900 hover:bg-amber-200/60"
+                }`}
                 aria-label="Close dialog"
               >
                 <X size={16} />
               </button>
             </div>
 
-            <p className="text-xs text-amber-800 leading-relaxed">
+            <p className={`text-xs leading-relaxed ${isDark ? "text-slate-300" : "text-amber-800"}`}>
               {FEATURE_EXPLANATIONS[selectedInfoKey].desc}
             </p>
 
-            <div className="bg-amber-100/60 border border-amber-300/40 rounded-xl p-3 flex items-start gap-2.5 shadow-inner">
-              <Sparkles size={15} className="text-amber-400 shrink-0 mt-0.5" />
-              <p className="text-[11px] text-amber-800 leading-snug">
-                <strong className="text-amber-700 font-bold">ProTip: </strong>
+            <div className={`rounded-xl p-3 flex items-start gap-2.5 shadow-inner border ${
+              isDark ? "bg-slate-800/80 border-slate-700/60" : "bg-amber-100/60 border-amber-300/40"
+            }`}>
+              <Sparkles size={15} className={`shrink-0 mt-0.5 ${isDark ? "text-cyan-400" : "text-amber-400"}`} />
+              <p className={`text-[11px] leading-snug ${isDark ? "text-slate-300" : "text-amber-800"}`}>
+                <strong className={`font-bold ${isDark ? "text-cyan-300" : "text-amber-700"}`}>ProTip: </strong>
                 {FEATURE_EXPLANATIONS[selectedInfoKey].proTip}
               </p>
             </div>
@@ -283,7 +330,11 @@ export const InteriorConfigControls: React.FC = () => {
             <div className="text-right pt-1">
               <button
                 onClick={() => setSelectedInfoKey(null)}
-                className="px-4 py-1.5 rounded-xl bg-amber-500 hover:bg-amber-400 text-amber-900 font-bold text-xs transition-all shadow-md shadow-amber-500/20 cursor-pointer"
+                className={`px-4 py-1.5 rounded-xl font-bold text-xs transition-all shadow-md cursor-pointer ${
+                  isDark
+                    ? "bg-cyan-500 hover:bg-cyan-400 text-slate-950 shadow-cyan-500/20"
+                    : "bg-amber-500 hover:bg-amber-400 text-amber-900 shadow-amber-500/20"
+                }`}
               >
                 Got It
               </button>

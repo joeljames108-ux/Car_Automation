@@ -5,7 +5,8 @@ const AnimatedStepperValue: React.FC<{
   value: string;
   direction: number;
   animKey: string;
-}> = ({ value, direction, animKey }) => {
+  theme?: "dark" | "amber";
+}> = ({ value, direction, animKey, theme = "amber" }) => {
   const [displayValue, setDisplayValue] = useState(value);
   const [phase, setPhase] = useState<"idle" | "exit" | "enter">("idle");
   const [slideDir, setSlideDir] = useState(0);
@@ -40,7 +41,9 @@ const AnimatedStepperValue: React.FC<{
 
   return (
     <span
-      className="text-[13px] font-mono font-bold text-amber-700 min-w-[110px] max-w-[115px] text-center px-1 truncate"
+      className={`text-[12px] font-mono font-bold min-w-[105px] max-w-[115px] text-center px-1 truncate ${
+        theme === "dark" ? "text-cyan-300" : "text-amber-700"
+      }`}
       style={{
         transform: getTransform(),
         opacity: getOpacity(),

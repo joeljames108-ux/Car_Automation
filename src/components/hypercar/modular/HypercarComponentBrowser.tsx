@@ -2,10 +2,11 @@
 // HYPERCAR MODULAR COMPONENT BROWSER & ENGINEERING INSPECTOR
 // ============================================================================
 
-import React, { useState, memo } from "react";
+import React, { useState, memo, useMemo } from "react";
 import { useHypercarAssemblyStore } from "../../../sim/hypercar/state/hypercarAssemblyStore";
 import { HYPERCAR_SOCKET_ANCHORS, type HypercarSocketId } from "../../../sim/hypercar/modular/hypercarSockets";
 import { HypercarComponentRegistry, type HypercarComponentDefinition } from "../../../sim/hypercar/modular/hypercarComponentRegistry";
+import { useHypercarWorkflowStore, HYPERCAR_WORKFLOW_STAGES, type HypercarWorkflowStage } from "../../../sim/hypercar/state/hypercarWorkflowStore";
 import { playHMIClickSound } from "../../../utils/hmiSoundSynth";
 import {
   Layers,
@@ -22,7 +23,18 @@ import {
   DollarSign,
   PlusCircle,
   XCircle,
+  Lock,
+  ArrowRight,
 } from "lucide-react";
+
+// Map hypercar workflow stages to socket categories
+const HYPERCAR_STAGE_CATEGORIES: Record<HypercarWorkflowStage, string[]> = {
+  power_unit: ["HYBRID_POWERTRAIN", "COOLING"],
+  monocoque: ["CHASSIS", "SUSPENSION", "WHEELS"],
+  aero: ["AERO"],
+  cockpit: ["CHASSIS"],
+  final_build: ["CHASSIS", "HYBRID_POWERTRAIN", "AERO", "SUSPENSION", "WHEELS", "COOLING", "BODYWORK"],
+};
 
 export const HypercarComponentBrowser: React.FC = memo(function HypercarComponentBrowser() {
   const {
@@ -39,13 +51,28 @@ export const HypercarComponentBrowser: React.FC = memo(function HypercarComponen
     redoStack,
   } = useHypercarAssemblyStore();
 
-  const [categoryFilter, setCategoryFilter] = useState<string>("ALL");
+  const { activeConstructionStage, markStageComplete, canEnterStage } = useHypercarWorkflowStore();
+  const stageMeta = HYPERCAR_WORKFLOW_STAGES[activeConstructionStage];
+
   const allSockets = Object.keys(HYPERCAR_SOCKET_ANCHORS) as HypercarSocketId[];
 
-  const filteredSockets = allSockets.filter((socketId) => {
-    if (categoryFilter === "ALL") return true;
-    return HYPERCAR_SOCKET_ANCHORS[socketId].category === categoryFilter;
-  });
+  // Filter by workflow stage
+  const visibleCategories = HYPERCAR_STAGE_CATEGORIES[activeConstructionStage] || [];
+  const filteredSockets = useMemo(() =>
+    allSockets.filter(sId => visibleCategories.includes(HYPERCAR_SOCKET_ANCHORS[sId].category)),
+    [allSockets, visibleCategories]
+  );
+
+  const mandatorySockets = filteredSockets.filter(sId => HYPERCAR_SOCKET_ANCHORS[sId].mandatoryForHomologation);
+  const allMandatoryInstalled = mandatorySockets.every(sId => !!installedMap[sId]);
+
+  const nextStageMap: Partial<Record<HypercarWorkflowStage, HypercarWorkflowStage>> = {
+    power_unit: "monocoque",
+    monocoque: "aero",
+    aero: "cockpit",
+    cockpit: "final_build",
+  };
+  const nextStage = nextStageMap[activeConstructionStage];
 
   const activeSocket = selectedSocketId ? HYPERCAR_SOCKET_ANCHORS[selectedSocketId] : null;
   const installedComponentId = selectedSocketId ? installedMap[selectedSocketId] : null;
@@ -58,9 +85,14 @@ export const HypercarComponentBrowser: React.FC = memo(function HypercarComponen
       <div className="p-4 border-b border-white/10 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Wrench className="w-4 h-4 text-amber-400" />
-          <h2 className="text-xs font-black uppercase tracking-wider text-zinc-100">
-            Hypercar CAD Catalog
-          </h2>
+          <div>
+            <h2 className="text-xs font-black uppercase tracking-wider text-zinc-100">
+              Stage {stageMeta.number}: {stageMeta.label}
+            </h2>
+            <p className="text-[9px] text-zinc-500 font-mono">
+              {filteredSockets.length} sockets • {stageMeta.icon}
+            </p>
+          </div>
         </div>
         <div className="flex items-center gap-1">
           <button
@@ -112,32 +144,10 @@ export const HypercarComponentBrowser: React.FC = memo(function HypercarComponen
         </button>
       </div>
 
-      {/* Sockets Category Carousel */}
-      <div className="p-3 border-b border-white/10 flex items-center gap-1 overflow-x-auto no-scrollbar text-[11px] font-bold">
-        {(["ALL", "CHASSIS", "BODYWORK", "AERO", "HYBRID_POWERTRAIN", "COOLING", "SUSPENSION", "WHEELS"] as const).map(
-          (cat) => (
-            <button
-              key={cat}
-              onClick={() => {
-                playHMIClickSound();
-                setCategoryFilter(cat);
-              }}
-              className={`px-2.5 py-1 rounded-lg shrink-0 transition-all cursor-pointer ${
-                categoryFilter === cat
-                  ? "bg-amber-500 text-black shadow-md shadow-amber-500/20"
-                  : "text-zinc-400 hover:text-zinc-200 bg-zinc-900/60"
-              }`}
-            >
-              {cat}
-            </button>
-          )
-        )}
-      </div>
-
-      {/* 22 Sockets Explorer List */}
+      {/* Current Stage Sockets Explorer List */}
       <div className="flex-1 overflow-y-auto p-3 space-y-1.5">
         <div className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest px-1 mb-1">
-          Vehicle Mounting Sockets ({filteredSockets.length})
+          Stage {stageMeta.number} Sockets ({filteredSockets.length})
         </div>
         {filteredSockets.map((socketId) => {
           const anchor = HYPERCAR_SOCKET_ANCHORS[socketId];
@@ -269,6 +279,64 @@ export const HypercarComponentBrowser: React.FC = memo(function HypercarComponen
           </div>
         </div>
       )}
+
+      {/* Bottom: Stage Completion */}
+      <div className="p-3 border-t border-white/10 bg-black/40 shrink-0">
+        <div className="flex items-center justify-between mb-2">
+          <span className="text-[9px] font-mono text-zinc-500">
+            {mandatorySockets.filter(sId => !!installedMap[sId]).length}/{mandatorySockets.length} mandatory installed
+          </span>
+          {allMandatoryInstalled ? (
+            <span className="text-[9px] font-mono text-emerald-400 flex items-center gap-1">
+              <CheckCircle2 className="w-3 h-3" /> STAGE READY
+            </span>
+          ) : (
+            <span className="text-[9px] font-mono text-amber-400 flex items-center gap-1">
+              <AlertTriangle className="w-3 h-3" /> {mandatorySockets.length - mandatorySockets.filter(sId => !!installedMap[sId]).length} required
+            </span>
+          )}
+        </div>
+        {nextStage && (
+          <button
+            onClick={() => {
+              playHMIClickSound();
+              if (allMandatoryInstalled) {
+                markStageComplete(activeConstructionStage);
+              }
+            }}
+            disabled={!allMandatoryInstalled}
+            className={`w-full py-2 rounded-lg text-xs font-black transition-all flex items-center justify-center gap-2 cursor-pointer ${
+              allMandatoryInstalled
+                ? "bg-amber-500 hover:bg-amber-400 text-black shadow-lg shadow-amber-500/30"
+                : "bg-zinc-900 text-zinc-600 border border-zinc-800 cursor-not-allowed"
+            }`}
+          >
+            {allMandatoryInstalled ? (
+              <>
+                <ArrowRight className="w-3.5 h-3.5" />
+                COMPLETE & CONTINUE TO {HYPERCAR_WORKFLOW_STAGES[nextStage].label}
+              </>
+            ) : (
+              <>
+                <Lock className="w-3.5 h-3.5" />
+                Install all mandatory components first
+              </>
+            )}
+          </button>
+        )}
+        {!nextStage && allMandatoryInstalled && (
+          <button
+            onClick={() => {
+              playHMIClickSound();
+              markStageComplete(activeConstructionStage);
+            }}
+            className="w-full py-2 rounded-lg text-xs font-black bg-emerald-500 hover:bg-emerald-400 text-black shadow-lg shadow-emerald-500/30 transition-all flex items-center justify-center gap-2 cursor-pointer"
+          >
+            <CheckCircle2 className="w-3.5 h-3.5" />
+            FINALIZE ALL STAGES
+          </button>
+        )}
+      </div>
     </div>
   );
 });

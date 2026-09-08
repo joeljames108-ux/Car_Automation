@@ -3,6 +3,7 @@ import { StageLoadingSkeleton } from "./ui/StageLoadingSkeleton";
 
 export type Stage =
   | "command" | "engine" | "vehicle" | "exterior" | "interior"
+  | "aero_studio" | "final_build"
   | "manufacturing" | "infotainment" | "rd" | "simulation" | "testing"
   | "race" | "stats" | "press" | "competitors"
   | "garage" | "compare" | "economy" | "motorsport" | "twin" | "safety" | "sales" | "ai"
@@ -20,6 +21,10 @@ export type Stage =
   | "boundary_suction" | "thermal_pcm";
 
 // ── Lazy-loaded stage panel components ──
+import { useGuidedEngineeringStore, WorkflowStage, WORKFLOW_STAGES_META } from "../state/guidedEngineeringStore";
+import { LockedStageGate } from "./guidedWorkflow/LockedStageGate";
+const FinalBuildStudio = lazy(() => import("./finalBuild/FinalBuildStudio").then(m => ({ default: m.FinalBuildStudio })));
+const AeroStudio = lazy(() => import("./aeroStudio/AeroStudio").then(m => ({ default: m.AeroStudio })));
 const Transmission3DStudio = lazy(() => import("./transmissionStudio/Transmission3DStudio").then(m => ({ default: m.Transmission3DStudio })));
 const TrackLayoutMasterStudio = lazy(() => import("./trackLayouts/TrackLayoutMasterStudio").then(m => ({ default: m.TrackLayoutMasterStudio })));
 const PowertrainDynoStudio = lazy(() => import("./powertrain/PowertrainDynoStudio").then(m => ({ default: m.PowertrainDynoStudio })));
@@ -59,6 +64,8 @@ interface StageSwitcherProps {
 }
 
 const StageSwitcherComponent: React.FC<StageSwitcherProps> = ({ stage, onSelectStage }) => {
+  const { canEnterStage, setActiveWorkflowStage } = useGuidedEngineeringStore();
+
   // Idle Pre-fetching Warming for smooth zero-lag tab transitions
   React.useEffect(() => {
     const prefetch = () => {
@@ -76,15 +83,52 @@ const StageSwitcherComponent: React.FC<StageSwitcherProps> = ({ stage, onSelectS
     }
   }, []);
 
+  // Check if target stage is governed by the sequential workflow gating
+  const workflowMap: Partial<Record<Stage, WorkflowStage>> = {
+    engine: "engine",
+    vehicle: "vehicle",
+    aero_studio: "aero",
+    interior: "interior",
+    final_build: "final_build",
+  };
+
+  const targetWorkflowStage = workflowMap[stage];
+
+  React.useEffect(() => {
+    if (targetWorkflowStage) {
+      setActiveWorkflowStage(targetWorkflowStage);
+    }
+  }, [targetWorkflowStage, setActiveWorkflowStage]);
+
+  if (targetWorkflowStage) {
+    const gate = canEnterStage(targetWorkflowStage);
+    if (!gate.allowed) {
+      return (
+        <LockedStageGate
+          targetStage={targetWorkflowStage}
+          reason={gate.reason}
+          requiredStage={gate.requiredStage}
+          onGoToRequiredStage={(reqStage) => {
+            const meta = WORKFLOW_STAGES_META[reqStage];
+            setActiveWorkflowStage(reqStage);
+            onSelectStage(meta.appStageId as Stage);
+          }}
+        />
+      );
+    }
+  }
+
   return (
     <Suspense fallback={<StageLoadingSkeleton stageName={stage} />}>
       <div key={stage} className="stage-transition-enter">
         {stage === "command" && <CommandCenter onSelectStage={(st) => onSelectStage(st as Stage)} />}
         {stage === "ai" && <ApexAIStudio />}
-        {stage === "engine" && <EngineDesigner />}
-        {stage === "vehicle" && <VehicleDesigner initialSubTab="architecture" onSelectStage={(st) => onSelectStage(st as Stage)} />}
+        {stage === "engine" && <EngineDesigner onSelectStage={(st) => onSelectStage(st as Stage)} />}
+        {stage === "vehicle" && <VehicleDesigner initialSubTab="modular_builder" onSelectStage={(st) => onSelectStage(st as Stage)} />}
         {stage === "exterior" && <ExteriorDesignerIntegration />}
-        {stage === "interior" && <InteriorsDesigner initialSubTab="setup" />}
+        {stage === "aero_studio" && <AeroStudio onSelectStage={(st) => onSelectStage(st as Stage)} />}
+        {stage === "interior" && <InteriorsDesigner initialSubTab="setup" onSelectStage={(st) => onSelectStage(st as Stage)} />}
+        {stage === "final_build" && <FinalBuildStudio onSelectStage={(st) => onSelectStage(st as Stage)} />}
         {stage === "manufacturing" && <ManufacturingDesigner />}
         {stage === "infotainment" && <InteriorsDesigner initialSubTab="electronics" />}
         {stage === "safety" && <SafetyCenter />}

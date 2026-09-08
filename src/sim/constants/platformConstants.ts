@@ -36,6 +36,7 @@ export const PLATFORMS: Record<PlatformType, {
   gt: { label: "GT Race Car", weightBase: 1250, dragBase: 0.35, liftBase: -0.3, frontalAreaBase: 2.0, costFactor: 3.0, wheelbaseBase: 2600, trackWidthBase: 1620 },
   prototype: { label: "LMP Prototype", weightBase: 950, dragBase: 0.30, liftBase: -0.5, frontalAreaBase: 1.8, costFactor: 8.0, wheelbaseBase: 2800, trackWidthBase: 1500 },
   rally: { label: "Rally Car", weightBase: 1200, dragBase: 0.38, liftBase: 0.1, frontalAreaBase: 2.0, costFactor: 2.0, wheelbaseBase: 2550, trackWidthBase: 1580 },
+  unconfigured: { label: "Unconfigured Platform", weightBase: 0, dragBase: 0, liftBase: 0, frontalAreaBase: 0, costFactor: 0, wheelbaseBase: 0, trackWidthBase: 0 },
 };
 
 export const DRIVE_TYPES: Record<DriveType, {

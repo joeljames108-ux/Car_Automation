@@ -69,6 +69,7 @@ export const BODY_TYPES: Record<BodyType, {
   spider: { label: "Spider", origin: "Italy", dragDelta: 0.03, liftDelta: 0.04, frontalDelta: 0.92, weightDelta: -70, costFactor: 1.6, description: "Lightweight open Italian roadster" },
   canopy: { label: "Canopy / Bubble", origin: "France / USA", dragDelta: -0.05, liftDelta: -0.03, frontalDelta: 0.90, weightDelta: -40, costFactor: 2.2, description: "Dome canopy — minimal frontal area" },
   kammback: { label: "Kammback", origin: "Germany", dragDelta: -0.06, liftDelta: -0.04, frontalDelta: 0.95, weightDelta: -15, costFactor: 1.4, description: "Cut-off tail for lowest drag" },
+  unconfigured: { label: "Unconfigured Body", origin: "Custom", dragDelta: 0, liftDelta: 0, frontalDelta: 1.0, weightDelta: 0, costFactor: 0, description: "No body shell selected" },
 };
 
 export const RIM_DESIGNS: Record<RimDesign, {

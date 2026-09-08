@@ -25,7 +25,7 @@ import {
 } from "lucide-react";
 import { MasterEngineStateEngine } from "../../sim/engine/masterEngineStateEngine";
 import { MasterEngineState } from "../../sim/engine/masterEngineTypes";
-import { ModularEngine3DViewport } from "./ModularEngine3DViewport";
+import { ModularEngine3DViewport } from "../../engine3d/ModularEngine3DViewport";
 import { ModularEngineStudioWorkbench } from "./ModularEngineStudioWorkbench";
 import { ModularEngineDynoBench } from "./ModularEngineDynoBench";
 import { ModularEngineComparisonStudio } from "./ModularEngineComparisonStudio";
@@ -136,8 +136,18 @@ export const ModularEngineStudio: React.FC = () => {
       <div className="flex-1 w-full min-h-[640px]">
         {studioMode === "viewport" && (
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 h-full">
-            <div className="lg:col-span-7 h-full">
-              <ModularEngine3DViewport state={state} />
+            <div className="lg:col-span-7 h-full rounded-2xl overflow-hidden border border-slate-800 bg-slate-950/60 shadow-inner">
+              <ModularEngine3DViewport
+                className="w-full h-full min-h-[520px]"
+                engineConfig={{
+                  layout: state.architecture.cylinderCount === 8 ? "v8" : "v12",
+                  bore: state.block.boreMm,
+                  stroke: state.block.strokeMm,
+                  valvetrain: "dohc",
+                  intake: state.turboSystem.type !== "naturally_aspirated" ? "twin_turbo" : "na",
+                }}
+                showRuntimeHUD={true}
+              />
             </div>
             <div className="lg:col-span-5 h-full">
               <ModularEngineStudioWorkbench state={state} engine={engineInstance} />

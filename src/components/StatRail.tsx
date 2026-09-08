@@ -4,6 +4,8 @@ import { Gauge, Zap, Weight, Timer, TrendingUp, DollarSign, Battery, HelpCircle,
 import { useDesign } from "../state/DesignContext";
 import { AnimatedCounter } from "./ui/AnimatedCounter";
 
+import { useGuidedEngineeringStore } from "../state/guidedEngineeringStore";
+
 interface StatItem {
   icon: React.ReactNode;
   label: string;
@@ -19,6 +21,7 @@ interface StatItem {
 
 export function StatRailComponent() {
   const { sim } = useDesign();
+  const { engineStatus, vehicleStatus, aeroStatus } = useGuidedEngineeringStore();
   const [hoveredLabel, setHoveredLabel] = useState<string | null>(null);
   const [selectedStat, setSelectedStat] = useState<StatItem | null>(null);
   const [modalRendered, setModalRendered] = useState(false);
@@ -57,8 +60,14 @@ export function StatRailComponent() {
   const initialSimRef = useRef(sim);
   const initialSim = initialSimRef.current;
 
+  const isEngineReady = engineStatus === "configured";
+  const isVehicleReady = vehicleStatus === "configured";
+  const isAeroReady = aeroStatus === "configured";
+
   const stats = useMemo<StatItem[]>(() => {
-    const pwrToWeight = (sim.peakPower / (sim.weight / 1000)).toFixed(1);
+    const pwrToWeight = isEngineReady && isVehicleReady && sim.weight > 0
+      ? (sim.peakPower / (sim.weight / 1000)).toFixed(1)
+      : "—";
 
     // Compute numeric deltas
     const pwrDiff = sim.peakPower - initialSim.peakPower;
@@ -74,141 +83,185 @@ export function StatRailComponent() {
     const cstDiff = Math.round((sim.totalCost - initialSim.totalCost) / 1000);
 
     const items: StatItem[] = [
-    {
-      icon: <Zap size={14} />,
-      label: "Power",
-      initialValue: initialSim.peakPower,
-      value: sim.peakPower,
-      unit: "hp",
-      deltaText: pwrDiff > 0 ? `+${pwrDiff} hp` : pwrDiff < 0 ? `${pwrDiff} hp` : "Base",
-      deltaColor: pwrDiff > 0 ? "bg-emerald-500/15 text-emerald-400 border-emerald-500/30" : pwrDiff < 0 ? "bg-rose-500/15 text-rose-400 border-rose-500/30" : "bg-slate-500/10 text-slate-400 border-slate-500/20",
-      tooltipTitle: "Peak Horsepower Output",
-      tooltipDesc: "Calculated from engine displacement, RPM limit, turbo boost pressure, and valvetrain tuning.",
-      subMetric: `${pwrToWeight} hp/tonne`
-    },
-    {
-      icon: <Gauge size={14} />,
-      label: "Torque",
-      initialValue: initialSim.peakTorque,
-      value: sim.peakTorque,
-      unit: "Nm",
-      deltaText: trqDiff > 0 ? `+${trqDiff} Nm` : trqDiff < 0 ? `${trqDiff} Nm` : "Base",
-      deltaColor: trqDiff > 0 ? "bg-emerald-500/15 text-emerald-400 border-emerald-500/30" : trqDiff < 0 ? "bg-rose-500/15 text-rose-400 border-rose-500/30" : "bg-slate-500/10 text-slate-400 border-slate-500/20",
-      tooltipTitle: "Peak Torque Force",
-      tooltipDesc: "Low-end pulling force. Influenced by cylinder bore/stroke ratio, boost pressure, and hybrid motor assist.",
-      subMetric: `@ ${sim.peakTorqueRpm || 3500} RPM`
-    },
-    {
-      icon: <Weight size={14} />,
-      label: "Weight",
-      initialValue: initialSim.weight,
-      value: sim.weight,
-      unit: "kg",
-      deltaText: wgtDiff > 0 ? `+${wgtDiff} kg` : wgtDiff < 0 ? `${wgtDiff} kg` : "Base",
-      deltaColor: wgtDiff < 0 ? "bg-emerald-500/15 text-emerald-400 border-emerald-500/30" : wgtDiff > 0 ? "bg-amber-500/15 text-amber-400 border-amber-500/30" : "bg-slate-500/10 text-slate-400 border-slate-500/20",
-      tooltipTitle: "Curb Weight",
-      tooltipDesc: "Total vehicle mass including chassis materials, engine block metal, interior trim, and battery packs.",
-      subMetric: `Bias: ${sim.weightDistFront || 55}% F / ${100 - (sim.weightDistFront || 55)}% R`
-    },
-    {
-      icon: <Timer size={14} />,
-      label: "0-60 MPH",
-      initialValue: initialSim.accel0_60,
-      value: sim.accel0_60,
-      unit: "s",
-      deltaText: accDiff > 0 ? `+${accDiff}s` : accDiff < 0 ? `${accDiff}s` : "Base",
-      deltaColor: accDiff < 0 ? "bg-emerald-500/15 text-emerald-400 border-emerald-500/30" : accDiff > 0 ? "bg-rose-500/15 text-rose-400 border-rose-500/30" : "bg-slate-500/10 text-slate-400 border-slate-500/20",
-      tooltipTitle: "0 to 60 mph Acceleration",
-      tooltipDesc: "Derived from power-to-weight ratio, tire compound grip coefficient, gearbox launch control, and AWD traction.",
-      subMetric: `Limit: ${(sim.accel0_60 < 3.0 ? "AWD Launch" : "Grip Limited")}`
-    },
-    {
-      icon: <Flag size={14} />,
-      label: "1/4 Mile",
-      initialValue: (initialSim.quarterMile || 11.5).toFixed(2),
-      value: (sim.quarterMile || 11.5).toFixed(2),
-      unit: "s",
-      deltaText: qtrDiff > 0 ? `+${qtrDiff}s` : qtrDiff < 0 ? `${qtrDiff}s` : "Base",
-      deltaColor: qtrDiff < 0 ? "bg-emerald-500/15 text-emerald-400 border-emerald-500/30" : qtrDiff > 0 ? "bg-rose-500/15 text-rose-400 border-rose-500/30" : "bg-slate-500/10 text-slate-400 border-slate-500/20",
-      tooltipTitle: "Quarter Mile Drag Strip",
-      tooltipDesc: "Elapsed time for standing 1/4 mile sprint including launch slip and gear shift delays.",
-      subMetric: `@ ${sim.quarterMileSpeed?.toFixed(0) || 205} km/h trap`
-    },
-    {
-      icon: <Activity size={14} />,
-      label: "Lateral Grip",
-      initialValue: (initialSim.lateralG || 1.1).toFixed(2),
-      value: (sim.lateralG || 1.1).toFixed(2),
-      unit: "G",
-      deltaText: latDiff > 0 ? `+${latDiff} G` : latDiff < 0 ? `${latDiff} G` : "Base",
-      deltaColor: latDiff > 0 ? "bg-emerald-500/15 text-emerald-400 border-emerald-500/30" : latDiff < 0 ? "bg-rose-500/15 text-rose-400 border-rose-500/30" : "bg-slate-500/10 text-slate-400 border-slate-500/20",
-      tooltipTitle: "Peak Lateral Cornering Acceleration",
-      tooltipDesc: "Maximum sustained cornering G-force on 300ft skidpad before mechanical understeer or slide.",
-      subMetric: `Skidpad: ${(sim.skidpad || sim.lateralG * 0.95).toFixed(2)} G`
-    },
-    {
-      icon: <Disc size={14} />,
-      label: "Braking 60-0",
-      initialValue: (initialSim.brakingDist || 32).toFixed(1),
-      value: (sim.brakingDist || 32).toFixed(1),
-      unit: "m",
-      deltaText: brkDiff > 0 ? `+${brkDiff}m` : brkDiff < 0 ? `${brkDiff}m` : "Base",
-      deltaColor: brkDiff < 0 ? "bg-emerald-500/15 text-emerald-400 border-emerald-500/30" : brkDiff > 0 ? "bg-rose-500/15 text-rose-400 border-rose-500/30" : "bg-slate-500/10 text-slate-400 border-slate-500/20",
-      tooltipTitle: "Emergency Braking Distance",
-      tooltipDesc: "Distance required to decelerate from 60mph to 0. Calculated from brake rotor size, caliper pistons, and tire compound.",
-      subMetric: `Cooling: ${((sim.brakeCooling || 0.85) * 100).toFixed(0)}%`
-    },
-    {
-      icon: <Wind size={14} />,
-      label: "Downforce",
-      initialValue: initialSim.downforce || 0,
-      value: sim.downforce || 0,
-      unit: "N",
-      deltaText: dwnDiff > 0 ? `+${dwnDiff} N` : dwnDiff < 0 ? `${dwnDiff} N` : "Base",
-      deltaColor: dwnDiff > 0 ? "bg-emerald-500/15 text-emerald-400 border-emerald-500/30" : dwnDiff < 0 ? "bg-rose-500/15 text-rose-400 border-rose-500/30" : "bg-slate-500/10 text-slate-400 border-slate-500/20",
-      tooltipTitle: "Total Aerodynamic Load",
-      tooltipDesc: "Total downward aerodynamic force pressing vehicle into asphalt at 200 km/h.",
-      subMetric: `Balance: ${((sim.aeroBalance || 0.5) * 100).toFixed(1)}% Front`
-    },
-    {
-      icon: <TrendingUp size={14} />,
-      label: "Top Speed",
-      initialValue: initialSim.topSpeed,
-      value: sim.topSpeed,
-      unit: "km/h",
-      deltaText: spdDiff > 0 ? `+${spdDiff} km/h` : spdDiff < 0 ? `${spdDiff} km/h` : "Base",
-      deltaColor: spdDiff > 0 ? "bg-emerald-500/15 text-emerald-400 border-emerald-500/30" : spdDiff < 0 ? "bg-rose-500/15 text-rose-400 border-rose-500/30" : "bg-slate-500/10 text-slate-400 border-slate-500/20",
-      tooltipTitle: "Terminal Aerodynamic Speed",
-      tooltipDesc: "Maximum velocity where aerodynamic drag force equals peak engine wheel horsepower.",
-      subMetric: `Drag Cd: ${sim.dragCoeff || 0.31}`
-    },
-    {
-      icon: <Fuel size={14} />,
-      label: "Economy",
-      initialValue: (initialSim.fuelEconomy || 8.5).toFixed(1),
-      value: (sim.fuelEconomy || 8.5).toFixed(1),
-      unit: "L/100k",
-      deltaText: fueDiff < 0 ? `${fueDiff} L` : fueDiff > 0 ? `+${fueDiff} L` : "Base",
-      deltaColor: fueDiff < 0 ? "bg-emerald-500/15 text-emerald-400 border-emerald-500/30" : fueDiff > 0 ? "bg-amber-500/15 text-amber-400 border-amber-500/30" : "bg-slate-500/10 text-slate-400 border-slate-500/20",
-      tooltipTitle: "Combined Fuel Consumption",
-      tooltipDesc: "Estimated EPA / WLTP combined cycle fuel consumption per 100km.",
-      subMetric: `Thermal Eff: ${((sim.thermalEfficiency || 0.38) * 100).toFixed(0)}%`
-    },
-    {
-      icon: <DollarSign size={14} />,
-      label: "Est. MSRP",
-      initialValue: `$${(initialSim.totalCost / 1000).toFixed(0)}k`,
-      value: `$${(sim.totalCost / 1000).toFixed(0)}k`,
-      unit: "",
-      deltaText: cstDiff > 0 ? `+$${cstDiff}k` : cstDiff < 0 ? `-$${Math.abs(cstDiff)}k` : "Base",
-      deltaColor: cstDiff <= 0 ? "bg-emerald-500/15 text-emerald-400 border-emerald-500/30" : "bg-sky-500/15 text-amber-400 border-sky-500/30",
-      tooltipTitle: "Estimated MSRP",
-      tooltipDesc: "Total production BOM cost plus manufacturing tooling amortization and engineering markup.",
-      subMetric: `Tier: ${sim.totalCost > 150000 ? "Supercar" : sim.totalCost > 40000 ? "Premium" : "Economy"}`
-    },
-  ];
+      {
+        icon: <Zap size={14} />,
+        label: "Power",
+        initialValue: isEngineReady ? initialSim.peakPower : "—",
+        value: isEngineReady ? sim.peakPower : "—",
+        unit: isEngineReady ? "hp" : "",
+        deltaText: isEngineReady
+          ? pwrDiff > 0 ? `+${pwrDiff} hp` : pwrDiff < 0 ? `${pwrDiff} hp` : "Base"
+          : "Awaiting",
+        deltaColor: isEngineReady
+          ? pwrDiff > 0 ? "bg-emerald-500/15 text-emerald-400 border-emerald-500/30" : pwrDiff < 0 ? "bg-rose-500/15 text-rose-400 border-rose-500/30" : "bg-slate-500/10 text-slate-400 border-slate-500/20"
+          : "bg-slate-500/10 text-slate-500 border-slate-500/20",
+        tooltipTitle: "Peak Horsepower Output",
+        tooltipDesc: "Calculated from engine displacement, RPM limit, turbo boost pressure, and valvetrain tuning.",
+        subMetric: isEngineReady && isVehicleReady ? `${pwrToWeight} hp/tonne` : isEngineReady ? "Configure Vehicle" : "Awaiting configuration"
+      },
+      {
+        icon: <Gauge size={14} />,
+        label: "Torque",
+        initialValue: isEngineReady ? initialSim.peakTorque : "—",
+        value: isEngineReady ? sim.peakTorque : "—",
+        unit: isEngineReady ? "Nm" : "",
+        deltaText: isEngineReady
+          ? trqDiff > 0 ? `+${trqDiff} Nm` : trqDiff < 0 ? `${trqDiff} Nm` : "Base"
+          : "Awaiting",
+        deltaColor: isEngineReady
+          ? trqDiff > 0 ? "bg-emerald-500/15 text-emerald-400 border-emerald-500/30" : trqDiff < 0 ? "bg-rose-500/15 text-rose-400 border-rose-500/30" : "bg-slate-500/10 text-slate-400 border-slate-500/20"
+          : "bg-slate-500/10 text-slate-500 border-slate-500/20",
+        tooltipTitle: "Peak Torque Force",
+        tooltipDesc: "Low-end pulling force. Influenced by cylinder bore/stroke ratio, boost pressure, and hybrid motor assist.",
+        subMetric: isEngineReady ? `@ ${sim.peakTorqueRpm || 3500} RPM` : "Awaiting configuration"
+      },
+      {
+        icon: <Weight size={14} />,
+        label: "Weight",
+        initialValue: isVehicleReady ? initialSim.weight : "—",
+        value: isVehicleReady ? sim.weight : "—",
+        unit: isVehicleReady ? "kg" : "",
+        deltaText: isVehicleReady
+          ? wgtDiff > 0 ? `+${wgtDiff} kg` : wgtDiff < 0 ? `${wgtDiff} kg` : "Base"
+          : "Awaiting",
+        deltaColor: isVehicleReady
+          ? wgtDiff < 0 ? "bg-emerald-500/15 text-emerald-400 border-emerald-500/30" : wgtDiff > 0 ? "bg-amber-500/15 text-amber-400 border-amber-500/30" : "bg-slate-500/10 text-slate-400 border-slate-500/20"
+          : "bg-slate-500/10 text-slate-500 border-slate-500/20",
+        tooltipTitle: "Curb Weight",
+        tooltipDesc: "Total vehicle mass including chassis materials, engine block metal, interior trim, and battery packs.",
+        subMetric: isVehicleReady ? `Bias: ${sim.weightDistFront || 55}% F / ${100 - (sim.weightDistFront || 55)}% R` : "Awaiting configuration"
+      },
+      {
+        icon: <Timer size={14} />,
+        label: "0-60 MPH",
+        initialValue: isEngineReady && isVehicleReady ? initialSim.accel0_60 : "—",
+        value: isEngineReady && isVehicleReady ? sim.accel0_60 : "—",
+        unit: isEngineReady && isVehicleReady ? "s" : "",
+        deltaText: isEngineReady && isVehicleReady
+          ? accDiff > 0 ? `+${accDiff}s` : accDiff < 0 ? `${accDiff}s` : "Base"
+          : "Awaiting",
+        deltaColor: isEngineReady && isVehicleReady
+          ? accDiff < 0 ? "bg-emerald-500/15 text-emerald-400 border-emerald-500/30" : accDiff > 0 ? "bg-rose-500/15 text-rose-400 border-rose-500/30" : "bg-slate-500/10 text-slate-400 border-slate-500/20"
+          : "bg-slate-500/10 text-slate-500 border-slate-500/20",
+        tooltipTitle: "0 to 60 mph Acceleration",
+        tooltipDesc: "Derived from power-to-weight ratio, tire compound grip coefficient, gearbox launch control, and AWD traction.",
+        subMetric: isEngineReady && isVehicleReady ? `Limit: ${(sim.accel0_60 < 3.0 ? "AWD Launch" : "Grip Limited")}` : "Awaiting configuration"
+      },
+      {
+        icon: <Flag size={14} />,
+        label: "1/4 Mile",
+        initialValue: isEngineReady && isVehicleReady ? (initialSim.quarterMile || 11.5).toFixed(2) : "—",
+        value: isEngineReady && isVehicleReady ? (sim.quarterMile || 11.5).toFixed(2) : "—",
+        unit: isEngineReady && isVehicleReady ? "s" : "",
+        deltaText: isEngineReady && isVehicleReady
+          ? qtrDiff > 0 ? `+${qtrDiff}s` : qtrDiff < 0 ? `${qtrDiff}s` : "Base"
+          : "Awaiting",
+        deltaColor: isEngineReady && isVehicleReady
+          ? qtrDiff < 0 ? "bg-emerald-500/15 text-emerald-400 border-emerald-500/30" : qtrDiff > 0 ? "bg-rose-500/15 text-rose-400 border-rose-500/30" : "bg-slate-500/10 text-slate-400 border-slate-500/20"
+          : "bg-slate-500/10 text-slate-500 border-slate-500/20",
+        tooltipTitle: "Quarter Mile Drag Strip",
+        tooltipDesc: "Elapsed time for standing 1/4 mile sprint including launch slip and gear shift delays.",
+        subMetric: isEngineReady && isVehicleReady ? `@ ${sim.quarterMileSpeed?.toFixed(0) || 205} km/h trap` : "Awaiting configuration"
+      },
+      {
+        icon: <Activity size={14} />,
+        label: "Lateral Grip",
+        initialValue: isVehicleReady ? (initialSim.lateralG || 1.1).toFixed(2) : "—",
+        value: isVehicleReady ? (sim.lateralG || 1.1).toFixed(2) : "—",
+        unit: isVehicleReady ? "G" : "",
+        deltaText: isVehicleReady
+          ? latDiff > 0 ? `+${latDiff} G` : latDiff < 0 ? `${latDiff} G` : "Base"
+          : "Awaiting",
+        deltaColor: isVehicleReady
+          ? latDiff > 0 ? "bg-emerald-500/15 text-emerald-400 border-emerald-500/30" : latDiff < 0 ? "bg-rose-500/15 text-rose-400 border-rose-500/30" : "bg-slate-500/10 text-slate-400 border-slate-500/20"
+          : "bg-slate-500/10 text-slate-500 border-slate-500/20",
+        tooltipTitle: "Peak Lateral Cornering Acceleration",
+        tooltipDesc: "Maximum sustained cornering G-force on 300ft skidpad before mechanical understeer or slide.",
+        subMetric: isVehicleReady ? `Skidpad: ${(sim.skidpad || sim.lateralG * 0.95).toFixed(2)} G` : "Awaiting configuration"
+      },
+      {
+        icon: <Disc size={14} />,
+        label: "Braking 60-0",
+        initialValue: isVehicleReady ? (initialSim.brakingDist || 32).toFixed(1) : "—",
+        value: isVehicleReady ? (sim.brakingDist || 32).toFixed(1) : "—",
+        unit: isVehicleReady ? "m" : "",
+        deltaText: isVehicleReady
+          ? brkDiff > 0 ? `+${brkDiff}m` : brkDiff < 0 ? `${brkDiff}m` : "Base"
+          : "Awaiting",
+        deltaColor: isVehicleReady
+          ? brkDiff < 0 ? "bg-emerald-500/15 text-emerald-400 border-emerald-500/30" : brkDiff > 0 ? "bg-rose-500/15 text-rose-400 border-rose-500/30" : "bg-slate-500/10 text-slate-400 border-slate-500/20"
+          : "bg-slate-500/10 text-slate-500 border-slate-500/20",
+        tooltipTitle: "Emergency Braking Distance",
+        tooltipDesc: "Distance required to decelerate from 60mph to 0. Calculated from brake rotor size, caliper pistons, and tire compound.",
+        subMetric: isVehicleReady ? `Cooling: ${((sim.brakeCooling || 0.85) * 100).toFixed(0)}%` : "Awaiting configuration"
+      },
+      {
+        icon: <Wind size={14} />,
+        label: "Downforce",
+        initialValue: isAeroReady ? (initialSim.downforce || 0) : "—",
+        value: isAeroReady ? (sim.downforce || 0) : "—",
+        unit: isAeroReady ? "N" : "",
+        deltaText: isAeroReady
+          ? dwnDiff > 0 ? `+${dwnDiff} N` : dwnDiff < 0 ? `${dwnDiff} N` : "Base"
+          : "Awaiting",
+        deltaColor: isAeroReady
+          ? dwnDiff > 0 ? "bg-emerald-500/15 text-emerald-400 border-emerald-500/30" : dwnDiff < 0 ? "bg-rose-500/15 text-rose-400 border-rose-500/30" : "bg-slate-500/10 text-slate-400 border-slate-500/20"
+          : "bg-slate-500/10 text-slate-500 border-slate-500/20",
+        tooltipTitle: "Total Aerodynamic Load",
+        tooltipDesc: "Total downward aerodynamic force pressing vehicle into asphalt at 200 km/h.",
+        subMetric: isAeroReady ? `Balance: ${((sim.aeroBalance || 0.5) * 100).toFixed(1)}% Front` : "Awaiting configuration"
+      },
+      {
+        icon: <TrendingUp size={14} />,
+        label: "Top Speed",
+        initialValue: isEngineReady && isVehicleReady ? initialSim.topSpeed : "—",
+        value: isEngineReady && isVehicleReady ? sim.topSpeed : "—",
+        unit: isEngineReady && isVehicleReady ? "km/h" : "",
+        deltaText: isEngineReady && isVehicleReady
+          ? spdDiff > 0 ? `+${spdDiff} km/h` : spdDiff < 0 ? `${spdDiff} km/h` : "Base"
+          : "Awaiting",
+        deltaColor: isEngineReady && isVehicleReady
+          ? spdDiff > 0 ? "bg-emerald-500/15 text-emerald-400 border-emerald-500/30" : spdDiff < 0 ? "bg-rose-500/15 text-rose-400 border-rose-500/30" : "bg-slate-500/10 text-slate-400 border-slate-500/20"
+          : "bg-slate-500/10 text-slate-500 border-slate-500/20",
+        tooltipTitle: "Terminal Aerodynamic Speed",
+        tooltipDesc: "Maximum velocity where aerodynamic drag force equals peak engine wheel horsepower.",
+        subMetric: isEngineReady && isVehicleReady ? `Drag Cd: ${sim.dragCoeff || 0.31}` : "Awaiting configuration"
+      },
+      {
+        icon: <Fuel size={14} />,
+        label: "Economy",
+        initialValue: isEngineReady ? (initialSim.fuelEconomy || 8.5).toFixed(1) : "—",
+        value: isEngineReady ? (sim.fuelEconomy || 8.5).toFixed(1) : "—",
+        unit: isEngineReady ? "L/100k" : "",
+        deltaText: isEngineReady
+          ? fueDiff < 0 ? `${fueDiff} L` : fueDiff > 0 ? `+${fueDiff} L` : "Base"
+          : "Awaiting",
+        deltaColor: isEngineReady
+          ? fueDiff < 0 ? "bg-emerald-500/15 text-emerald-400 border-emerald-500/30" : fueDiff > 0 ? "bg-amber-500/15 text-amber-400 border-amber-500/30" : "bg-slate-500/10 text-slate-400 border-slate-500/20"
+          : "bg-slate-500/10 text-slate-500 border-slate-500/20",
+        tooltipTitle: "Combined Fuel Consumption",
+        tooltipDesc: "Estimated EPA / WLTP combined cycle fuel consumption per 100km.",
+        subMetric: isEngineReady ? `Thermal Eff: ${((sim.thermalEfficiency || 0.38) * 100).toFixed(0)}%` : "Awaiting configuration"
+      },
+      {
+        icon: <DollarSign size={14} />,
+        label: "Est. MSRP",
+        initialValue: isEngineReady || isVehicleReady ? `$${(initialSim.totalCost / 1000).toFixed(0)}k` : "—",
+        value: isEngineReady || isVehicleReady ? `$${(sim.totalCost / 1000).toFixed(0)}k` : "—",
+        unit: "",
+        deltaText: isEngineReady || isVehicleReady
+          ? cstDiff > 0 ? `+$${cstDiff}k` : cstDiff < 0 ? `-$${Math.abs(cstDiff)}k` : "Base"
+          : "Awaiting",
+        deltaColor: isEngineReady || isVehicleReady
+          ? cstDiff <= 0 ? "bg-emerald-500/15 text-emerald-400 border-emerald-500/30" : "bg-sky-500/15 text-amber-400 border-sky-500/30"
+          : "bg-slate-500/10 text-slate-500 border-slate-500/20",
+        tooltipTitle: "Estimated MSRP",
+        tooltipDesc: "Total production BOM cost plus manufacturing tooling amortization and engineering markup.",
+        subMetric: isEngineReady || isVehicleReady ? `Tier: ${sim.totalCost > 150000 ? "Supercar" : sim.totalCost > 40000 ? "Premium" : "Economy"}` : "Awaiting configuration"
+      },
+    ];
 
-    if (sim.isHybrid || sim.isElectric) {
+    if ((sim.isHybrid || sim.isElectric) && isEngineReady) {
       const batDiff = (sim.batteryEnergy || 0) - (initialSim.batteryEnergy || 0);
       items.splice(6, 0, {
         icon: <Battery size={14} />,
@@ -225,7 +278,7 @@ export function StatRailComponent() {
     }
 
     return items;
-  }, [sim, initialSim]);
+  }, [sim, initialSim, isEngineReady, isVehicleReady, isAeroReady]);
 
   return (
     <div className="flex flex-col gap-2.5 stagger-enter relative select-none w-full">

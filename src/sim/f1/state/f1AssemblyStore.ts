@@ -74,14 +74,14 @@ export const createInitialInstalledMap = (bare = false): F1AssemblyInstalledMap 
 };
 
 export const useF1AssemblyStore = create<F1AssemblyStoreState>((set, get) => {
-  // Start with bare chassis if player is entering construction studio
-  const initialMap = createInitialInstalledMap(false);
+  // Start with bare chassis — nothing preconfigured, build from zero
+  const initialMap = createInitialInstalledMap(true);
   const initialMetrics = F1AttachmentGraph.evaluateAssembly(initialMap);
 
   return {
     installedMap: initialMap,
     metrics: initialMetrics,
-    selectedSocketId: "SOCKET_FRONT_WING",
+    selectedSocketId: null,
     activeComponentPreviewId: null,
     snappingSocketId: null,
     snappingComponentId: null,
@@ -90,9 +90,9 @@ export const useF1AssemblyStore = create<F1AssemblyStoreState>((set, get) => {
     xrayMode: false,
     showAttachmentHotspots: true,
     explodedViewAmount: 0.0,
-    isHomologated: true,
-    homologatedTimestamp: Date.now(),
-    homologationPassportId: "FIA-APX-2026-001",
+    isHomologated: false,
+    homologatedTimestamp: null,
+    homologationPassportId: null,
     undoStack: [],
     redoStack: [],
 

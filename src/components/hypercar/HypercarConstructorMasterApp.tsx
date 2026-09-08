@@ -2,7 +2,7 @@
 // HYPERCAR CONSTRUCTOR MASTER APPLICATION WRAPPER — UNIFIED WEC 24H SUITE
 // ============================================================================
 
-import React, { useState, memo } from "react";
+import React, { useState, memo, useCallback } from "react";
 import { HypercarModularAssemblyViewport } from "./3d/HypercarModularAssemblyViewport";
 import { HypercarComponentBrowser } from "./modular/HypercarComponentBrowser";
 import { HypercarLivePhysicsHUD } from "./modular/HypercarLivePhysicsHUD";
@@ -12,7 +12,8 @@ import { HypercarLiveRaceSimulator } from "./racing/HypercarLiveRaceSimulator";
 import { RealCar100BenchmarkStudio } from "./benchmark/RealCar100BenchmarkStudio";
 import { WEC_CIRCUITS, type WECCircuitProfile } from "../../sim/hypercar/season/wecCalendar";
 import { playHMIClickSound, playHMITabSound } from "../../utils/hmiSoundSynth";
-import { Wrench, SlidersHorizontal, Flag, Sparkles, Trophy, ShieldAlert, FlaskConical } from "lucide-react";
+import { useHypercarWorkflowStore, HYPERCAR_WORKFLOW_STAGES, type HypercarWorkflowStage } from "../../sim/hypercar/state/hypercarWorkflowStore";
+import { Wrench, SlidersHorizontal, Flag, Sparkles, Trophy, ShieldAlert, FlaskConical, Lock, CheckCircle2, AlertTriangle, ChevronRight, RotateCcw } from "lucide-react";
 
 export type HypercarAppScreen = "assembly" | "rd_labs" | "garage" | "racing" | "benchmark";
 
@@ -27,6 +28,7 @@ const HypercarConstructorMasterAppComponent: React.FC<HypercarConstructorMasterA
 }) => {
   const [screen, setScreen] = useState<HypercarAppScreen>(initialMode);
   const [activeCircuit, setActiveCircuit] = useState<WECCircuitProfile>(WEC_CIRCUITS[0]);
+  const workflow = useHypercarWorkflowStore();
   const [activeSetup, setActiveSetup] = useState<HypercarGarageSetup>({
     rearWingAngleDeg: 6.5,
     frontRideHeightMm: 50,
@@ -144,6 +146,91 @@ const HypercarConstructorMasterAppComponent: React.FC<HypercarConstructorMasterA
             <span>100 Real Car Benchmarks</span>
           </button>
         </div>
+      </div>
+
+      {/* ── Sequential Workflow Stepper Bar ── */}
+      <div className="px-4 py-2 bg-zinc-950/80 border-b border-amber-500/20 flex items-center gap-1">
+        <div className="flex items-center gap-1.5 mr-3">
+          <Sparkles className="w-3 h-3 text-amber-400" />
+          <span className="text-[9px] font-mono uppercase tracking-widest text-amber-400 font-bold">Build From Zero</span>
+        </div>
+        <div className="flex items-center gap-1 flex-1 overflow-x-auto scrollbar-none">
+          {(["power_unit", "monocoque", "aero", "cockpit", "final_build"] as HypercarWorkflowStage[]).map((stageId, idx) => {
+            const meta = HYPERCAR_WORKFLOW_STAGES[stageId];
+            const getStatus = (s: HypercarWorkflowStage) => {
+              switch (s) {
+                case "power_unit": return workflow.powerUnitStatus;
+                case "monocoque": return workflow.monocoqueStatus;
+                case "aero": return workflow.aeroStatus;
+                case "cockpit": return workflow.cockpitStatus;
+                case "final_build": return workflow.finalBuildStatus;
+              }
+            };
+            const status = getStatus(stageId);
+            const gate = workflow.canEnterStage(stageId);
+            const isLocked = !gate.allowed;
+            const isActive = workflow.activeConstructionStage === stageId;
+
+            let badgeBg = "bg-zinc-900 border-slate-700 text-slate-500";
+            let statusText = "LOCKED";
+            let StatusIcon = Lock;
+
+            if (status === "configured") {
+              badgeBg = "bg-emerald-950 border-emerald-500/50 text-emerald-400";
+              statusText = "DONE";
+              StatusIcon = CheckCircle2;
+            } else if (status === "invalidated") {
+              badgeBg = "bg-amber-950 border-amber-500/50 text-amber-400 animate-pulse";
+              statusText = "RECALC";
+              StatusIcon = AlertTriangle;
+            } else if (status === "configuring") {
+              badgeBg = "bg-amber-950/30 border-amber-500/40 text-amber-300";
+              statusText = "BUILDING";
+            } else if (!isLocked) {
+              badgeBg = "bg-cyan-950/20 border-cyan-500/40 text-cyan-400";
+              statusText = "READY";
+            }
+
+            return (
+              <React.Fragment key={stageId}>
+                <button
+                  type="button"
+                  onClick={() => {
+                    playHMITabSound();
+                    workflow.setActiveConstructionStage(stageId);
+                  }}
+                  disabled={isLocked}
+                  className={`flex items-center gap-1.5 px-2 py-1 rounded-lg border text-[10px] font-mono font-bold transition-all cursor-pointer whitespace-nowrap ${
+                    isActive
+                      ? "border-amber-400 bg-amber-500/15 text-amber-300 ring-1 ring-amber-400/50"
+                      : isLocked
+                      ? "border-slate-800 bg-slate-950/50 text-slate-600 opacity-50 cursor-not-allowed"
+                      : badgeBg + " hover:border-amber-400/50"
+                  }`}
+                  title={isLocked ? gate.reason : `Go to ${meta.label}`}
+                >
+                  <StatusIcon className="w-3 h-3" />
+                  <span>{meta.number}. {meta.shortLabel}</span>
+                  <span className="text-[8px] opacity-70">{statusText}</span>
+                </button>
+                {idx < 4 && (
+                  <ChevronRight className={`w-3 h-3 shrink-0 ${
+                    status === "configured" ? "text-emerald-500" : "text-slate-700"
+                  }`} />
+                )}
+              </React.Fragment>
+            );
+          })}
+        </div>
+        <button
+          type="button"
+          onClick={() => { playHMIClickSound(); workflow.resetAll(); }}
+          title="Reset to bare chassis"
+          className="flex items-center gap-1 px-2 py-1 rounded-lg border border-slate-700 bg-slate-900 text-slate-400 hover:border-rose-500/50 hover:text-rose-300 transition-all text-[10px] font-mono cursor-pointer ml-2"
+        >
+          <RotateCcw className="w-3 h-3" />
+          Reset Zero
+        </button>
       </div>
 
       {/* Screen Viewports */}

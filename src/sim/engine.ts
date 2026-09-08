@@ -46,7 +46,49 @@ const HP_PER_KW = 1.341;
 // ENGINE SIMULATION
 // ===================================================================
 
+export function createEmptyEngineSim(): EngineSim {
+  return {
+    displacement: 0,
+    cylinderCount: 0,
+    powerCurve: [],
+    peakPower: 0,
+    peakTorque: 0,
+    peakPowerRpm: 0,
+    peakTorqueRpm: 0,
+    redline: 0,
+    maxPistonSpeed: 0,
+    thermalEfficiency: 0,
+    knockRisk: 0,
+    octaneRequired: 0,
+    bsfc: 0,
+    turboLag: 0,
+    boostPressure: 0,
+    engineWeight: 0,
+    engineCost: 0,
+    reliability: 0,
+    nvhEngine: 0,
+    emissionsEngine: 0,
+    fuelEconomyEngine: 0,
+    mguHPower: 0,
+    mguKPower: 0,
+    combinedPower: 0,
+    combinedTorque: 0,
+    batteryWeight: 0,
+    batteryCost: 0,
+    batteryEnergy: 0,
+    electricRange: 0,
+    regenEfficiency: 0,
+    energyRecoveryPerLap: 0,
+    deployDuration: 0,
+    isElectric: false,
+    isHybrid: false,
+  };
+}
+
 export function simulateEngine(engine: EngineConfig): EngineSim {
+  if (engine.layout === "unconfigured") {
+    return createEmptyEngineSim();
+  }
   if (engine.layout === "electric") {
     return simulateElectric(engine);
   }
@@ -1012,6 +1054,9 @@ const lapTimesCache = new Map<string, { lapTimes: any[]; bestLapTrack: TrackId; 
 const MAX_LAP_CACHE_ENTRIES = 50;
 
 export function simulateLapTimes(design: VehicleDesign, _aero: ReturnType<typeof simulateAero>, _perf: ReturnType<typeof simulatePerformance>) {
+  if (design.engine.layout === "unconfigured") {
+    return { lapTimes: [], bestLapTrack: "silverstone" as TrackId, bestLapTime: 0 };
+  }
   const aero = _aero;
   const perf = _perf;
   const eng = simulateEngine(design.engine);
@@ -1347,7 +1392,56 @@ export function getPhysicsSignature(design: VehicleDesign): string {
     `_v_${v.platform}_${v.chassis}_${v.driveType}_${v.enginePosition}_${v.tireCompound}_${v.wheelDiameter}_${v.rideHeight}_${v.transmission}`;
 }
 
+export function createEmptySimResult(): SimResult {
+  return {
+    isConfigured: false,
+    displacement: 0, cylinderCount: 0,
+    powerCurve: [], peakPower: 0, peakTorque: 0,
+    peakPowerRpm: 0, peakTorqueRpm: 0, redline: 0,
+    maxPistonSpeed: 0, thermalEfficiency: 0,
+    knockRisk: 0, octaneRequired: 0, bsfc: 0,
+    turboLag: 0, boostPressure: 0,
+    engineWeight: 0, engineCost: 0,
+    reliability: 0, nvh: 0, noise: 0,
+    emissions: 0, fuelEconomy: 0, coolingMargin: 0,
+    mguHPower: 0, mguKPower: 0, combinedPower: 0,
+    combinedTorque: 0, batteryWeight: 0,
+    batteryCost: 0, batteryEnergy: 0,
+    electricRange: 0, regenEfficiency: 0,
+    isElectric: false, isHybrid: false,
+    dragCoeff: 0, frontalArea: 0, downforce: 0,
+    liftCoeff: 0, centerOfPressure: 0, aeroBalance: 0,
+    dragVsSpeed: [], aeroCost: 0, aeroWeight: 0,
+    coolingEfficiency: 0, frontDownforce: 0, rearDownforce: 0,
+    groundEffect: 0, separationRisk: 0, brakeCooling: 0, aeroNoise: 0,
+    weight: 0, weightDistFront: 0.5, cgHeight: 0,
+    topSpeed: 0, accel0_60: 0, accel0_100: 0, accel100_200: 0,
+    quarterMile: 0, quarterMileSpeed: 0, halfMile: 0, halfMileSpeed: 0,
+    brakingDist: 0, lateralG: 0, skidpad: 0, slalomSpeed: 0,
+    vehicleCost: 0, totalCost: 0, targetPrice: 0, profitMargin: 0,
+    safetyRating: 0, marketRating: 0, drivability: 0,
+    costBreakdown: { materials: 0, labor: 0, tooling: 0, assembly: 0, warranty: 0, overhead: 0 },
+    manufacturing: {
+      factoryCost: 0, toolWear: 0, bottleneckRisk: "none",
+      mfgFeasibility: 0, unitMargin: 0, annualProfit: 0,
+    } as any,
+    testing: null as any,
+    interiorWeight: 0, interiorCost: 0,
+    comfortRating: 0, luxuryRating: 0,
+    infotainment: null as any,
+    chassisSim: null as any,
+    lapTimes: [],
+    nvhSoundOutput: null as any,
+    supplyChainProcurement: null as any,
+    lbmWindTunnel: null as any,
+  };
+}
+
 export function simulate(design: VehicleDesign): SimResult {
+  if (design.engine.layout === "unconfigured") {
+    return createEmptySimResult();
+  }
+
   const cacheKey = `veh_sim_${getPhysicsSignature(design)}`;
 
   return GlobalPerformanceOptimizer.getInstance().memoize(cacheKey, () => {

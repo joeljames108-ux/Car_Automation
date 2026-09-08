@@ -119,11 +119,18 @@ const ENGINE_DIAGRAM_IMAGES: Record<string, string> = {
   hybrid: "/engine_diagram_v8.png",
 };
 
+import { useGuidedEngineeringStore } from "../state/guidedEngineeringStore";
+
 type Philosophy = "track" | "budget" | "luxury" | "balanced";
 type OptimizeGoal = "performance" | "cost" | "reliability" | "efficiency" | "luxury";
 
-export function EngineDesigner() {
+interface EngineDesignerProps {
+  onSelectStage?: (stage: string) => void;
+}
+
+export function EngineDesigner({ onSelectStage }: EngineDesignerProps = {}) {
   const { design, sim, updateEngine, updateVehicle } = useDesign();
+  const { engineStatus, markStageComplete, setActiveWorkflowStage } = useGuidedEngineeringStore();
   const eng = design.engine;
   const v = design.vehicle;
   const isElectric = eng.layout === "electric";
@@ -264,6 +271,67 @@ export function EngineDesigner() {
             </button>
           ))}
         </div>
+      </div>
+
+      {/* Stage 1 Workflow Action Banner */}
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-3 p-4 rounded-2xl bg-gradient-to-r from-[#0d1424]/90 via-[#10192e]/90 to-[#0d1424]/90 border border-amber-500/30 backdrop-blur-xl shadow-lg">
+        <div className="flex items-center gap-3">
+          <div className={`w-9 h-9 rounded-xl flex items-center justify-center font-bold text-xs ${
+            eng.layout === "unconfigured"
+              ? "bg-amber-500/15 text-amber-400 border border-amber-500/30"
+              : engineStatus === "configured"
+              ? "bg-emerald-500/15 text-emerald-400 border border-emerald-500/30"
+              : "bg-amber-500/20 text-amber-300 border border-amber-500/40"
+          }`}>
+            {engineStatus === "configured" ? <Check size={18} /> : <Flame size={18} />}
+          </div>
+          <div>
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-mono font-extrabold uppercase tracking-wider text-slate-100">
+                STAGE 1: ENGINE POWERTRAIN
+              </span>
+              <span className={`text-[10px] font-mono px-2 py-0.5 rounded-full font-bold uppercase ${
+                eng.layout === "unconfigured"
+                  ? "bg-slate-800 text-slate-400 border border-slate-700"
+                  : engineStatus === "configured"
+                  ? "bg-emerald-500/20 text-emerald-300 border border-emerald-500/40"
+                  : engineStatus === "invalidated"
+                  ? "bg-amber-500/20 text-amber-300 border border-amber-500/40"
+                  : "bg-cyan-500/20 text-cyan-300 border border-cyan-500/40"
+              }`}>
+                {eng.layout === "unconfigured"
+                  ? "— NOT CONFIGURED —"
+                  : engineStatus === "configured"
+                  ? "✓ CONFIGURED"
+                  : engineStatus === "invalidated"
+                  ? "⚠ RECALCULATION REQUIRED"
+                  : "IN PROGRESS"}
+              </span>
+            </div>
+            <p className="text-[11px] font-mono text-slate-400 mt-0.5">
+              {eng.layout === "unconfigured"
+                ? "Select powertrain architecture and tune parameters below to satisfy Stage 1."
+                : `${eng.layout.toUpperCase()} ${(sim.displacement || 0) > 0 ? (sim.displacement / 1000).toFixed(1) + "L" : ""} • ${sim.peakPower > 0 ? sim.peakPower + " HP" : "Engine ready for homologation"}`}
+            </p>
+          </div>
+        </div>
+
+        {eng.layout !== "unconfigured" && (
+          <button
+            type="button"
+            onClick={() => {
+              markStageComplete("engine");
+              setActiveWorkflowStage("vehicle");
+              if (onSelectStage) {
+                onSelectStage("vehicle");
+              }
+            }}
+            className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-400 hover:to-green-500 text-slate-950 font-mono font-black text-xs tracking-wider uppercase shadow-[0_0_20px_rgba(16,185,129,0.35)] transition-all cursor-pointer transform hover:scale-[1.02] active:scale-[0.98]"
+          >
+            <Check size={15} strokeWidth={3} />
+            <span>COMPLETE ENGINE & ADVANCE TO VEHICLE →</span>
+          </button>
+        )}
       </div>
 
       {/* Mode Switcher Bar */}

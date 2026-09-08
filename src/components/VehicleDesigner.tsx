@@ -3,20 +3,26 @@ import {
   Car,
   Shield,
   Wrench,
+  Layers,
   GitCompare,
+  Wind,
+  ChevronRight,
+  Check,
 } from "lucide-react";
 import { useDesign } from "../state/DesignContext";
+import { useGuidedEngineeringStore } from "../state/guidedEngineeringStore";
 import { VEHICLE_PRESET_LIBRARY } from "../sim/vehiclePresets";
 import { playHMIClickSound, playHMITabSound } from "../utils/hmiSoundSynth";
 import { useVehicleAssemblyStore } from "../state/useVehicleAssemblyStore";
 import { VehicleCompletionModal } from "./vehicleAssembly/VehicleCompletionModal";
 import { VehicleComparisonStudio } from "./vehicleAssembly/VehicleComparisonStudio";
-import { ModularLinearAssemblyStudio } from "./vehicleAssembly/ModularLinearAssemblyStudio";
+import { TrueModularVehicleBuilderStudio } from "./vehicleAssembly/TrueModularVehicleBuilderStudio";
+
 import { VehicleArchitectureStudio } from "./vehicleAssembly/VehicleArchitectureStudio";
 
 export type VehicleStudioSubTab =
   | "architecture"
-  | "linear_assembly"
+  | "modular_builder"
   | "benchmark";
 
 interface VehicleDesignerProps {
@@ -26,6 +32,7 @@ interface VehicleDesignerProps {
 
 export function VehicleDesigner({ initialSubTab = "architecture", onSelectStage }: VehicleDesignerProps) {
   const { design, sim, setDesign, updateVehicle } = useDesign();
+  const { vehicleStatus, markStageComplete, setActiveWorkflowStage } = useGuidedEngineeringStore();
   const v = design.vehicle;
 
   const [activeTab, setActiveTab] = useState<VehicleStudioSubTab>(initialSubTab);
@@ -55,15 +62,15 @@ export function VehicleDesigner({ initialSubTab = "architecture", onSelectStage 
   const tabsConfig = [
     {
       id: "architecture" as const,
-      label: "VEHICLE ARCHITECTURE",
-      icon: <Shield size={14} />,
-      badge: "SEDAN • HATCH • CROSS • SUV",
+      label: "VEHICLE ARCHITECTURE & PLATFORM",
+      icon: <Layers size={14} />,
+      badge: "38 BODIES • 8 PLATFORMS",
     },
     {
-      id: "linear_assembly" as const,
-      label: "UNIFIED LINEAR ASSEMBLY",
+      id: "modular_builder" as const,
+      label: "MODULAR VEHICLE BUILDER",
       icon: <Wrench size={14} />,
-      badge: "12 STAGES • KINEMATICS",
+      badge: "PIECE-BY-PIECE • 3D CAD",
     },
     {
       id: "benchmark" as const,
@@ -96,8 +103,7 @@ export function VehicleDesigner({ initialSubTab = "architecture", onSelectStage 
                 </span>
               </div>
               <p className="text-[11px] font-mono text-slate-600 dark:text-slate-400 mt-0.5">
-                {activeTab === "architecture" && "Modular Engineering Platform • Sedan, Hatchback, Crossover & SUV • Discrete GLB Foundation"}
-                {activeTab === "linear_assembly" && "Flagship End-to-End Vehicle Engineering • 12-Stage Linear Assembly • 3D Kinematics • Packaging Diagnostics"}
+                {activeTab === "modular_builder" && "True Piece-by-Piece Modular Construction • Chassis → BIW → Powertrain → Aero → Glass • Zero-Offset CAD Assembly"}
                 {activeTab === "benchmark" && "A/B Car Benchmark & Circuit Lap Time Battles • Multi-Car Head-to-Head Comparison"}
               </p>
             </div>
@@ -156,32 +162,95 @@ export function VehicleDesigner({ initialSubTab = "architecture", onSelectStage 
               </button>
             );
           })}
+
+          {onSelectStage && (
+            <button
+              onClick={() => {
+                playHMIClickSound();
+                markStageComplete("vehicle");
+                setActiveWorkflowStage("aero");
+                onSelectStage("aero_studio");
+              }}
+              className="ml-auto flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-mono font-bold bg-gradient-to-r from-emerald-500 to-green-600 text-slate-950 hover:from-emerald-400 hover:to-green-500 transition-all shadow-md cursor-pointer"
+              title="Mark Vehicle complete and advance to Aero Studio"
+            >
+              <Check size={14} strokeWidth={3} />
+              <span>COMPLETE VEHICLE & PROCEED TO AERO</span>
+              <ChevronRight size={14} />
+            </button>
+          )}
         </div>
       </div>
 
+      {/* Stage 2 Workflow Action Banner */}
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-3 p-4 rounded-2xl bg-gradient-to-r from-[#0d1424]/90 via-[#10192e]/90 to-[#0d1424]/90 border border-amber-500/30 backdrop-blur-xl shadow-lg">
+        <div className="flex items-center gap-3">
+          <div className={`w-9 h-9 rounded-xl flex items-center justify-center font-bold text-xs ${
+            vehicleStatus === "configured"
+              ? "bg-emerald-500/15 text-emerald-400 border border-emerald-500/30"
+              : "bg-cyan-500/15 text-cyan-400 border border-cyan-500/30"
+          }`}>
+            {vehicleStatus === "configured" ? <Check size={18} /> : <Car size={18} />}
+          </div>
+          <div>
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-mono font-extrabold uppercase tracking-wider text-slate-100">
+                STAGE 2: VEHICLE ARCHITECTURE & CAD
+              </span>
+              <span className={`text-[10px] font-mono px-2 py-0.5 rounded-full font-bold uppercase ${
+                vehicleStatus === "configured"
+                  ? "bg-emerald-500/20 text-emerald-300 border border-emerald-500/40"
+                  : vehicleStatus === "invalidated"
+                  ? "bg-amber-500/20 text-amber-300 border border-amber-500/40"
+                  : "bg-cyan-500/20 text-cyan-300 border border-cyan-500/40"
+              }`}>
+                {vehicleStatus === "configured"
+                  ? "✓ CONFIGURED"
+                  : vehicleStatus === "invalidated"
+                  ? "⚠ RECALCULATION REQUIRED"
+                  : "IN PROGRESS"}
+              </span>
+            </div>
+            <p className="text-[11px] font-mono text-slate-400 mt-0.5">
+              Assemble chassis, body-in-white panels, suspension kinematics & wheels.
+            </p>
+          </div>
+        </div>
+
+        {onSelectStage && (
+          <button
+            type="button"
+            onClick={() => {
+              playHMIClickSound();
+              markStageComplete("vehicle");
+              setActiveWorkflowStage("aero");
+              onSelectStage("aero_studio");
+            }}
+            className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-400 hover:to-green-500 text-slate-950 font-mono font-black text-xs tracking-wider uppercase shadow-[0_0_20px_rgba(16,185,129,0.35)] transition-all cursor-pointer transform hover:scale-[1.02] active:scale-[0.98]"
+          >
+            <Check size={15} strokeWidth={3} />
+            <span>COMPLETE VEHICLE & ADVANCE TO AERO →</span>
+          </button>
+        )}
+      </div>
+
       {/* =========================================================================
-          STAGE 0: VEHICLE ARCHITECTURE & ENGINEERING PLATFORM
+          STAGE 1: VEHICLE ARCHITECTURE & PLATFORM FAMILY (38 BODIES / 8 PLATFORMS)
           ========================================================================= */}
       {activeTab === "architecture" && (
         <div className="animate-stage-transition-enter">
           <VehicleArchitectureStudio
-            onEnterDesignStudio={() => {
-              if (onSelectStage) {
-                onSelectStage("exterior");
-              } else {
-                setActiveTab("linear_assembly");
-              }
-            }}
+            onEnterDesignStudio={() => setActiveTab("modular_builder")}
           />
         </div>
       )}
 
       {/* =========================================================================
-          FLAGSHIP: UNIFIED LINEAR ASSEMBLY & VEHICLE ENGINEERING SUITE
+          FLAGSHIP: TRUE MODULAR VEHICLE BUILDER (PIECE-BY-PIECE CAD ASSEMBLED)
           ========================================================================= */}
-      {activeTab === "linear_assembly" && (
+      {activeTab === "modular_builder" && (
         <div className="animate-stage-transition-enter">
-          <ModularLinearAssemblyStudio />
+          <TrueModularVehicleBuilderStudio />
         </div>
       )}
 

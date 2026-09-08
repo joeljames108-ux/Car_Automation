@@ -79,13 +79,14 @@ export const createInitialHypercarMap = (bare = false): HypercarAssemblyInstalle
 };
 
 export const useHypercarAssemblyStore = create<HypercarAssemblyStoreState>((set, get) => {
-  const initialMap = createInitialHypercarMap(false);
+  // Start with bare chassis — nothing preconfigured, build from zero
+  const initialMap = createInitialHypercarMap(true);
   const initialMetrics = HypercarAttachmentGraph.evaluateAssembly(initialMap);
 
   return {
     installedMap: initialMap,
     metrics: initialMetrics,
-    selectedSocketId: "SOCKET_FRONT_SPLITTER",
+    selectedSocketId: null,
     activeComponentPreviewId: null,
     snappingSocketId: null,
     snappingComponentId: null,
@@ -94,9 +95,9 @@ export const useHypercarAssemblyStore = create<HypercarAssemblyStoreState>((set,
     xrayMode: false,
     showAttachmentHotspots: true,
     explodedViewAmount: 0.0,
-    isHomologated: true,
-    homologatedTimestamp: Date.now(),
-    homologationPassportId: "FIA-WEC-APX-LMH-001",
+    isHomologated: false,
+    homologatedTimestamp: null,
+    homologationPassportId: null,
     undoStack: [],
     redoStack: [],
 

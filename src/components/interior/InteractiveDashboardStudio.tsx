@@ -1,22 +1,21 @@
 /**
  * ============================================================================
- * INTERACTIVE DASHBOARD STUDIO — MODULAR CONFIGURATION SYSTEM
+ * INTERACTIVE DASHBOARD STUDIO — MODULAR COCKPIT CONFIGURATOR
  * ============================================================================
- * Implements the exact architectural wireframe from the reference diagram:
+ * Implements the complete master directive and wireframe:
  * - Top Window: "WINDOW FOR DIAGRAM" outlined with prominent red accent border,
  *   housing the interactive Three.js 3D cockpit diagram (`dashboard_interactive_master.glb`),
  *   calibrated to the driver eye-level perspective from Image 4.
  * - Bottom Row: 3 Equal-Width Configuration Cards:
- *   1. "ALL OPTIONS RELATED TO STEERING"
- *   2. "DASH BOARD CONFIGURATIONS"
- *   3. "OTHER CONFIGURATIONS"
+ *   1. "ALL OPTIONS RELATED TO STEERING" (7 Wheels, Grip materials, Stripe, Paddles, Mode Dial)
+ *   2. "DASHBOARD CONFIGURATIONS" (Upper Pad, 11 Trims, 8 Screens, 5 Clusters, HUD, Ambient Neon)
+ *   3. "OTHER CONFIGURATIONS" (7 Shifters, Seats, Belts, Stitching, Tint, Themes, Cost/Weight/Scores)
  *
- * Selecting any option in the 3 cards immediately transforms the 3D GLB model
- * in real-time (mesh swapping, dynamic Canvas screen drawing, PBR shaders).
+ * Fully reactive in-memory Three.js updates without GLB reloads.
  * ============================================================================
  */
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Compass,
   Sliders,
@@ -35,6 +34,23 @@ import {
   Thermometer,
   Gauge,
   CircleDot,
+  Undo2,
+  Redo2,
+  Shuffle,
+  Eye,
+  FileCode2,
+  Zap,
+  DollarSign,
+  Scale,
+  Award,
+  Maximize2,
+  Armchair,
+  ChevronLeft,
+  ChevronRight,
+  BarChart3,
+  SlidersHorizontal,
+  Cpu,
+  Plane,
 } from "lucide-react";
 import {
   useInteriorDashboardConfigStore,
@@ -48,14 +64,52 @@ import {
   type ClusterStyle,
   type ShifterStyle,
   type CameraPose,
+  type DriverHeight,
+  type SeatStyle,
+  type SeatBeltColor,
+  type StitchingColor,
+  type WindshieldTint,
+  type HUDMode,
+  type LightingMode,
+  COCKPIT_THEME_PRESETS,
 } from "../../state/interiorDashboardConfigStore";
 import { InteractiveDashboardCanvasViewport } from "./InteractiveDashboardCanvasViewport";
+import { InteriorMetricsPanel } from "./InteriorMetricsPanel";
+import { InteriorConfigControls } from "./InteriorConfigControls";
+import { CockpitElectronicsAvionicsSuite } from "./CockpitElectronicsAvionicsSuite";
 import { useDesign } from "../../state/DesignContext";
 import { playHMIClickSound, playHMITabSound } from "../../utils/hmiSoundSynth";
 
-export const InteractiveDashboardStudio: React.FC = () => {
-  const { updateInterior } = useDesign();
+export interface InteractiveDashboardStudioProps {
+  initialWorkspaceMode?: "hardware" | "avionics" | "split";
+}
+
+export const InteractiveDashboardStudio: React.FC<InteractiveDashboardStudioProps> = ({
+  initialWorkspaceMode = "hardware",
+}) => {
+  const { updateInterior, updateInfotainment, design } = useDesign();
+  const [workspaceMode, setWorkspaceMode] = useState<"hardware" | "avionics" | "split">(
+    initialWorkspaceMode || "hardware"
+  );
+
+  useEffect(() => {
+    if (initialWorkspaceMode) {
+      setWorkspaceMode(initialWorkspaceMode);
+    }
+  }, [initialWorkspaceMode]);
+
   const [saveToast, setSaveToast] = useState(false);
+  const [jsonModalOpen, setJsonModalOpen] = useState(false);
+  const [jsonText, setJsonText] = useState("");
+  const [showLeftOverview, setShowLeftOverview] = useState(true);
+  const [showRightControls, setShowRightControls] = useState(true);
+
+  const LEFT_OPEN_W = 265;
+  const RIGHT_OPEN_W = 310;
+  const RAIL_W = 28;
+
+  const leftCol = showLeftOverview ? LEFT_OPEN_W : RAIL_W;
+  const rightCol = showRightControls ? RIGHT_OPEN_W : RAIL_W;
 
   // Store Selectors
   const steeringWheelStyle = useInteriorDashboardConfigStore((s) => s.steeringWheelStyle);
@@ -69,14 +123,22 @@ export const InteractiveDashboardStudio: React.FC = () => {
   const dashboardTrimMaterial = useInteriorDashboardConfigStore((s) => s.dashboardTrimMaterial);
   const infotainmentMode = useInteriorDashboardConfigStore((s) => s.infotainmentMode);
   const clusterStyle = useInteriorDashboardConfigStore((s) => s.clusterStyle);
+  const hudMode = useInteriorDashboardConfigStore((s) => s.hudMode);
   const ambientLightColor = useInteriorDashboardConfigStore((s) => s.ambientLightColor);
 
   const shifterStyle = useInteriorDashboardConfigStore((s) => s.shifterStyle);
+  const seatStyle = useInteriorDashboardConfigStore((s) => s.seatStyle);
+  const seatBeltColor = useInteriorDashboardConfigStore((s) => s.seatBeltColor);
   const stitchingColor = useInteriorDashboardConfigStore((s) => s.stitchingColor);
   const windshieldTint = useInteriorDashboardConfigStore((s) => s.windshieldTint);
+  const lightingMode = useInteriorDashboardConfigStore((s) => s.lightingMode);
   const nightMode = useInteriorDashboardConfigStore((s) => s.nightMode);
+
   const cameraPose = useInteriorDashboardConfigStore((s) => s.cameraPose);
+  const driverHeight = useInteriorDashboardConfigStore((s) => s.driverHeight);
   const activePanel = useInteriorDashboardConfigStore((s) => s.activePanel);
+  const explodedProgress = useInteriorDashboardConfigStore((s) => s.explodedProgress);
+  const engineering = useInteriorDashboardConfigStore((s) => s.engineering);
 
   // Store Setters
   const setSteeringWheelStyle = useInteriorDashboardConfigStore((s) => s.setSteeringWheelStyle);
@@ -90,38 +152,80 @@ export const InteractiveDashboardStudio: React.FC = () => {
   const setDashboardTrimMaterial = useInteriorDashboardConfigStore((s) => s.setDashboardTrimMaterial);
   const setInfotainmentMode = useInteriorDashboardConfigStore((s) => s.setInfotainmentMode);
   const setClusterStyle = useInteriorDashboardConfigStore((s) => s.setClusterStyle);
+  const setHudMode = useInteriorDashboardConfigStore((s) => s.setHudMode);
   const setAmbientLightColor = useInteriorDashboardConfigStore((s) => s.setAmbientLightColor);
 
   const setShifterStyle = useInteriorDashboardConfigStore((s) => s.setShifterStyle);
+  const setSeatStyle = useInteriorDashboardConfigStore((s) => s.setSeatStyle);
+  const setSeatBeltColor = useInteriorDashboardConfigStore((s) => s.setSeatBeltColor);
   const setStitchingColor = useInteriorDashboardConfigStore((s) => s.setStitchingColor);
   const setWindshieldTint = useInteriorDashboardConfigStore((s) => s.setWindshieldTint);
+  const setLightingMode = useInteriorDashboardConfigStore((s) => s.setLightingMode);
   const setNightMode = useInteriorDashboardConfigStore((s) => s.setNightMode);
-  const setCameraPose = useInteriorDashboardConfigStore((s) => s.setCameraPose);
-  const setActivePanel = useInteriorDashboardConfigStore((s) => s.setActivePanel);
-  const resetConfig = useInteriorDashboardConfigStore((s) => s.reset);
 
-  // Apply to vehicle assembly
+  const setCameraPose = useInteriorDashboardConfigStore((s) => s.setCameraPose);
+  const setDriverHeight = useInteriorDashboardConfigStore((s) => s.setDriverHeight);
+  const setActivePanel = useInteriorDashboardConfigStore((s) => s.setActivePanel);
+  const setExplodedProgress = useInteriorDashboardConfigStore((s) => s.setExplodedProgress);
+
+  const applyThemePreset = useInteriorDashboardConfigStore((s) => s.applyThemePreset);
+  const resetConfig = useInteriorDashboardConfigStore((s) => s.reset);
+  const undo = useInteriorDashboardConfigStore((s) => s.undo);
+  const redo = useInteriorDashboardConfigStore((s) => s.redo);
+  const randomize = useInteriorDashboardConfigStore((s) => s.randomize);
+  const exportConfigJson = useInteriorDashboardConfigStore((s) => s.exportConfigJson);
+  const importConfigJson = useInteriorDashboardConfigStore((s) => s.importConfigJson);
+
+  // Keyboard Shortcuts Handler
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.target instanceof HTMLInputElement || e.target instanceof HTMLTextAreaElement) return;
+
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "z") {
+        e.preventDefault();
+        undo();
+        return;
+      }
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "y") {
+        e.preventDefault();
+        redo();
+        return;
+      }
+
+      switch (e.key) {
+        case "1": setCameraPose("dashboard_center"); break;
+        case "2": setCameraPose("driver"); break;
+        case "3": setCameraPose("full_cockpit"); break;
+        case "4": setCameraPose("steering"); break;
+        case "5": setCameraPose("infotainment"); break;
+        case "6": setCameraPose("console"); break;
+        case "n":
+        case "N": setNightMode(!nightMode); break;
+        case "e":
+        case "E": setExplodedProgress(explodedProgress > 0 ? 0 : 0.8); break;
+        case "r":
+        case "R": resetConfig(); break;
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [nightMode, explodedProgress, undo, redo, resetConfig]);
+
+  // Sync to Vehicle State
   const handleApplyConfig = () => {
     playHMITabSound();
     updateInterior({
       steeringWheel: steeringWheelStyle === "yoke" ? "gt_wheel" : "sport",
-      dashboardMaterial:
-        dashboardTrimMaterial === "carbon"
-          ? "carbon_fiber"
-          : dashboardTrimMaterial === "walnut"
-          ? "wood"
-          : "aluminum",
+      dashboardMaterial: dashboardTrimMaterial === "carbon" ? "carbon_fiber" : dashboardTrimMaterial === "walnut" ? "wood" : "aluminum",
       interiorColor: upperDashPadColor,
       ambientLighting: ambientLightColor !== "none" ? 1 : 0,
       infotainmentSize: 12,
     });
+    if (hudMode !== "off" && design.infotainment.hudType === "none") {
+      updateInfotainment({ hudType: hudMode === "performance" ? "ar" : "color" });
+    }
     setSaveToast(true);
     setTimeout(() => setSaveToast(false), 2600);
-  };
-
-  const handleReset = () => {
-    playHMIClickSound();
-    resetConfig();
   };
 
   return (
@@ -131,39 +235,50 @@ export const InteractiveDashboardStudio: React.FC = () => {
       {/* ───────────────────────────────────────────────────────────── */}
       <div className="relative w-full rounded-2xl border-2 border-red-500/90 shadow-[0_0_30px_rgba(239,68,68,0.22)] bg-slate-900/90 overflow-hidden flex flex-col">
         {/* Top Wireframe Diagram Header */}
-        <div className="flex items-center justify-between px-4 py-2 bg-red-950/40 border-b border-red-500/40 backdrop-blur-md">
+        <div className="flex flex-wrap items-center justify-between px-4 py-2.5 bg-red-950/40 border-b border-red-500/40 backdrop-blur-md gap-2">
           <div className="flex items-center gap-2">
             <span className="w-2.5 h-2.5 rounded-full bg-red-500 animate-ping" />
-            <span className="text-xs font-black uppercase tracking-[0.25em] text-red-400">
+            <span className="text-xs font-black uppercase tracking-[0.22em] text-red-400">
               WINDOW FOR DIAGRAM • GRAPHIC OF DASHBOARD
             </span>
           </div>
 
           {/* Active 3D Component State Breadcrumbs */}
-          <div className="hidden lg:flex items-center gap-2 text-[11px] font-mono text-slate-400">
+          <div className="hidden xl:flex items-center gap-2 text-[11px] font-mono text-slate-400">
             <span className="px-2 py-0.5 rounded bg-slate-800/80 border border-slate-700 text-cyan-300">
-              STEERING: {steeringWheelStyle.toUpperCase()}
-            </span>
-            <span className="px-2 py-0.5 rounded bg-slate-800/80 border border-slate-700 text-blue-300">
-              PAD: {upperDashPadColor}
+              WHEEL: {steeringWheelStyle.toUpperCase()}
             </span>
             <span className="px-2 py-0.5 rounded bg-slate-800/80 border border-slate-700 text-amber-300">
-              SCREEN: {infotainmentMode.toUpperCase()}
+              TRIM: {dashboardTrimMaterial.toUpperCase()}
             </span>
             <span className="px-2 py-0.5 rounded bg-slate-800/80 border border-slate-700 text-emerald-300">
               SHIFTER: {shifterStyle.toUpperCase()}
             </span>
+            <span className="px-2 py-0.5 rounded bg-slate-800/80 border border-slate-700 text-purple-300">
+              COST: +${engineering.totalPriceDelta.toLocaleString()}
+            </span>
+            <span className="px-2 py-0.5 rounded bg-slate-800/80 border border-slate-700 text-blue-300">
+              MASS: {engineering.totalWeightDelta > 0 ? `+${engineering.totalWeightDelta}` : engineering.totalWeightDelta} kg
+            </span>
           </div>
 
-          {/* Quick Camera & View Controls */}
-          <div className="flex items-center gap-1.5">
-            <div className="flex items-center bg-slate-800/90 rounded-lg p-0.5 border border-slate-700">
+          {/* Quick Controls Toolbar */}
+          <div className="flex items-center gap-1.5 flex-wrap">
+            {/* Camera Views */}
+            <div className="flex items-center bg-slate-800/90 rounded-lg p-0.5 border border-slate-700 flex-wrap">
               {(
                 [
-                  { id: "driver", label: "Driver POV (Image 4)", icon: Camera },
-                  { id: "center", label: "Infotainment", icon: Activity },
+                  { id: "dashboard_center", label: "Studio Front (Default)", icon: Eye },
+                  { id: "driver", label: "Driver POV", icon: Camera },
+                  { id: "driver_close", label: "Close POV", icon: Eye },
+                  { id: "seats", label: "Seats Focus", icon: Armchair },
                   { id: "steering", label: "Steering", icon: Compass },
-                  { id: "wide", label: "Wide Cockpit", icon: Layers },
+                  { id: "cluster", label: "Cluster", icon: Gauge },
+                  { id: "infotainment", label: "Display", icon: Activity },
+                  { id: "console", label: "Console", icon: CircleDot },
+                  { id: "doors", label: "Doors", icon: Sliders },
+                  { id: "full_cockpit", label: "Cockpit", icon: Layers },
+                  { id: "orbit_360", label: "360°", icon: Maximize2 },
                 ] as const
               ).map((cam) => {
                 const Icon = cam.icon;
@@ -176,20 +291,36 @@ export const InteractiveDashboardStudio: React.FC = () => {
                       setCameraPose(cam.id as CameraPose);
                     }}
                     title={cam.label}
-                    className={`flex items-center gap-1 px-2.5 py-1 rounded-md text-[11px] font-bold transition-all cursor-pointer ${
-                      active
-                        ? "bg-red-600 text-white shadow-sm"
-                        : "text-slate-300 hover:bg-slate-700/60"
+                    className={`flex items-center gap-1 px-2 py-1 rounded-md text-[11px] font-bold transition-all cursor-pointer ${
+                      active ? "bg-red-600 text-white shadow-sm ring-1 ring-red-400" : "text-slate-300 hover:bg-slate-700/60"
                     }`}
                   >
                     <Icon size={12} />
-                    <span className="hidden sm:inline">{cam.label.split(" ")[0]}</span>
+                    <span>{cam.id === "dashboard_center" ? "Studio Front" : cam.label.split(" ")[0]}</span>
                   </button>
                 );
               })}
             </div>
 
-            {/* Night / Day Mode */}
+            {/* Driver Eye Height */}
+            <div className="flex items-center bg-slate-800/90 rounded-lg p-0.5 border border-slate-700 text-[10px] font-bold">
+              {(["low", "normal", "tall"] as const).map((h) => (
+                <button
+                  key={h}
+                  onClick={() => {
+                    playHMIClickSound();
+                    setDriverHeight(h);
+                  }}
+                  className={`px-2 py-1 rounded-md uppercase cursor-pointer ${
+                    driverHeight === h ? "bg-slate-700 text-cyan-300" : "text-slate-400 hover:text-slate-200"
+                  }`}
+                >
+                  {h}
+                </button>
+              ))}
+            </div>
+
+            {/* Day / Night Toggle */}
             <button
               onClick={() => {
                 playHMIClickSound();
@@ -204,27 +335,233 @@ export const InteractiveDashboardStudio: React.FC = () => {
             >
               {nightMode ? <Moon size={14} /> : <Sun size={14} />}
             </button>
+
+            {/* Quick Side Panel Visibility Toggles */}
+            <div className="flex items-center bg-slate-800/90 rounded-lg p-0.5 border border-slate-700">
+              <button
+                type="button"
+                onClick={() => {
+                  playHMIClickSound();
+                  setShowLeftOverview((prev) => !prev);
+                }}
+                className={`flex items-center gap-1 px-2 py-1 rounded text-[10px] font-bold transition-all cursor-pointer ${
+                  showLeftOverview ? "bg-red-600 text-white shadow-sm ring-1 ring-red-400" : "text-slate-400 hover:text-slate-200"
+                }`}
+                title="Toggle Interior Overview (Metrics)"
+              >
+                <BarChart3 size={12} />
+                <span>OVERVIEW</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  playHMIClickSound();
+                  setShowRightControls((prev) => !prev);
+                }}
+                className={`flex items-center gap-1 px-2 py-1 rounded text-[10px] font-bold transition-all cursor-pointer ${
+                  showRightControls ? "bg-cyan-600 text-white shadow-sm ring-1 ring-cyan-400" : "text-slate-400 hover:text-slate-200"
+                }`}
+                title="Toggle Interior Configuration (Steppers)"
+              >
+                <SlidersHorizontal size={12} />
+                <span>STEPPERS</span>
+              </button>
+            </div>
+
+            {/* Undo / Redo */}
+            <button onClick={undo} title="Undo (Ctrl+Z)" className="p-1.5 rounded-lg bg-slate-800/90 border border-slate-700 text-slate-300 hover:bg-slate-700">
+              <Undo2 size={13} />
+            </button>
+            <button onClick={redo} title="Redo (Ctrl+Y)" className="p-1.5 rounded-lg bg-slate-800/90 border border-slate-700 text-slate-300 hover:bg-slate-700">
+              <Redo2 size={13} />
+            </button>
+            <button onClick={randomize} title="Randomize Cockpit" className="p-1.5 rounded-lg bg-slate-800/90 border border-slate-700 text-slate-300 hover:bg-slate-700">
+              <Shuffle size={13} />
+            </button>
+            <button onClick={() => { setJsonText(exportConfigJson()); setJsonModalOpen(true); }} title="Export / Import JSON" className="p-1.5 rounded-lg bg-slate-800/90 border border-slate-700 text-slate-300 hover:bg-slate-700">
+              <FileCode2 size={13} />
+            </button>
           </div>
         </div>
 
-        {/* 3D GLB Viewport Canvas */}
-        <div className="relative w-full h-[400px] sm:h-[460px] md:h-[500px]">
-          <InteractiveDashboardCanvasViewport />
+        {/* Exploded View Bar */}
+        <div className="flex items-center justify-between px-4 py-1.5 bg-slate-950/70 border-b border-slate-800 text-xs">
+          <div className="flex items-center gap-2 text-slate-400">
+            <Layers size={13} className="text-red-400" />
+            <span className="font-bold uppercase tracking-wider text-[11px]">Exploded / CAD Inspection View:</span>
+          </div>
+          <div className="flex items-center gap-3 w-64">
+            <input
+              type="range"
+              min="0"
+              max="1"
+              step="0.05"
+              value={explodedProgress}
+              onChange={(e) => setExplodedProgress(parseFloat(e.target.value))}
+              className="w-full accent-red-500 cursor-pointer"
+            />
+            <span className="font-mono text-cyan-300 w-12 text-right">{Math.round(explodedProgress * 100)}%</span>
+          </div>
+        </div>
 
-          {/* Toast Notification when Applied */}
-          {saveToast && (
-            <div className="absolute top-4 right-4 z-30 flex items-center gap-2 px-4 py-2 rounded-xl bg-emerald-600/90 text-white font-bold text-xs backdrop-blur-md shadow-2xl animate-fade-in border border-emerald-400">
-              <CheckCircle2 size={16} />
-              <span>Cockpit Configuration Synced with Vehicle!</span>
+        {/* 3-Column Diagram & Interactive Cockpit Workspace */}
+        <div
+          className="relative w-full h-[580px] md:h-[620px] grid overflow-hidden select-none bg-slate-950"
+          style={{ gridTemplateColumns: `${leftCol}px minmax(0, 1fr) ${rightCol}px` }}
+        >
+          {/* ── LEFT: Interior Overview (collapsible) ── */}
+          {showLeftOverview ? (
+            <div className="relative h-full min-w-0 overflow-hidden border-r border-slate-800/80 bg-slate-900/90">
+              <InteriorMetricsPanel theme="dark" />
+              <button
+                type="button"
+                onClick={() => setShowLeftOverview(false)}
+                className="absolute top-1/2 right-1.5 -translate-y-1/2 z-20 w-6 h-10 rounded-l-xl flex items-center justify-center cursor-pointer transition-all hover:scale-105 bg-slate-800/90 border border-slate-700 text-cyan-400 shadow-md hover:bg-slate-700"
+                title="Collapse Interior Overview"
+                aria-label="Collapse Interior Overview"
+              >
+                <ChevronLeft size={14} />
+              </button>
             </div>
+          ) : (
+            <button
+              type="button"
+              onClick={() => setShowLeftOverview(true)}
+              className="w-full h-full flex items-center justify-center cursor-pointer transition-all hover:bg-slate-800/90 bg-slate-900/80 border-r border-slate-800 text-cyan-400 group"
+              title="Show Interior Overview"
+              aria-label="Show Interior Overview"
+            >
+              <span
+                className="text-[9px] font-black uppercase tracking-[0.22em] text-slate-400 group-hover:text-cyan-300 transition-colors"
+                style={{ writingMode: "vertical-rl", transform: "rotate(180deg)" }}
+              >
+                Interior Overview
+              </span>
+            </button>
+          )}
+
+          {/* ── CENTER: 3D GLB Viewport Canvas ── */}
+          <div className="relative min-w-0 h-full overflow-hidden flex flex-col">
+            <InteractiveDashboardCanvasViewport />
+
+            {/* Toast Notification when Applied */}
+            {saveToast && (
+              <div className="absolute top-4 right-4 z-30 flex items-center gap-2 px-4 py-2 rounded-xl bg-emerald-600/90 text-white font-bold text-xs backdrop-blur-md shadow-2xl animate-fade-in border border-emerald-400">
+                <CheckCircle2 size={16} />
+                <span>Cockpit Configuration Synced with Vehicle!</span>
+              </div>
+            )}
+          </div>
+
+          {/* ── RIGHT: Interior Configuration (collapsible) ── */}
+          {showRightControls ? (
+            <div className="relative h-full min-w-0 overflow-hidden border-l border-slate-800/80 bg-slate-900/90">
+              <InteriorConfigControls theme="dark" />
+              <button
+                type="button"
+                onClick={() => setShowRightControls(false)}
+                className="absolute top-1/2 left-1.5 -translate-y-1/2 z-20 w-6 h-10 rounded-r-xl flex items-center justify-center cursor-pointer transition-all hover:scale-105 bg-slate-800/90 border border-slate-700 text-cyan-400 shadow-md hover:bg-slate-700"
+                title="Collapse Interior Configuration"
+                aria-label="Collapse Interior Configuration"
+              >
+                <ChevronRight size={14} />
+              </button>
+            </div>
+          ) : (
+            <button
+              type="button"
+              onClick={() => setShowRightControls(true)}
+              className="w-full h-full flex items-center justify-center cursor-pointer transition-all hover:bg-slate-800/90 bg-slate-900/80 border-l border-slate-800 text-cyan-400 group"
+              title="Show Interior Configuration"
+              aria-label="Show Interior Configuration"
+            >
+              <span
+                className="text-[9px] font-black uppercase tracking-[0.22em] text-slate-400 group-hover:text-cyan-300 transition-colors"
+                style={{ writingMode: "vertical-rl" }}
+              >
+                Interior Configuration
+              </span>
+            </button>
           )}
         </div>
       </div>
 
       {/* ───────────────────────────────────────────────────────────── */}
-      {/* BOTTOM SECTION: 3 EQUAL-WIDTH CONFIGURATION CARDS             */}
+      {/* WORKSPACE MODE SELECTOR: HARDWARE vs ELECTRONICS & AVIONICS   */}
       {/* ───────────────────────────────────────────────────────────── */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 w-full">
+      <div className="flex flex-wrap items-center justify-between gap-3 p-3 rounded-2xl bg-slate-900/95 border border-slate-800 shadow-xl backdrop-blur-md">
+        <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-red-950/60 border border-red-500/40 text-red-400">
+            <Sparkles size={15} />
+            <span className="text-xs font-black uppercase tracking-[0.2em]">
+              DASHBOARD WORKBENCH
+            </span>
+          </div>
+          <span className="hidden sm:inline text-xs text-slate-400">
+            {workspaceMode === "hardware"
+              ? "Physical cockpit layout: Steering wheels, dash trims, screens, console shifters & seating."
+              : workspaceMode === "avionics"
+              ? "Electronics & Avionics: Glass cockpit displays, DO-178C compute, HUD, ADAS autonomy, and power telemetry."
+              : "Dual Workbench: Simultaneous cockpit hardware ergonomics and aerospace avionics tuning."}
+          </span>
+        </div>
+
+        <div className="flex items-center gap-1.5 p-1 rounded-xl bg-slate-950/90 border border-slate-800">
+          <button
+            type="button"
+            onClick={() => {
+              playHMITabSound();
+              setWorkspaceMode("hardware");
+            }}
+            className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+              workspaceMode === "hardware"
+                ? "bg-red-600 text-white shadow-lg shadow-red-600/30 ring-1 ring-red-400"
+                : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/60"
+            }`}
+          >
+            <Compass size={13} />
+            <span>🏎️ COCKPIT HARDWARE</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => {
+              playHMITabSound();
+              setWorkspaceMode("avionics");
+            }}
+            className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+              workspaceMode === "avionics"
+                ? "bg-cyan-600 text-white shadow-lg shadow-cyan-600/30 ring-1 ring-cyan-400"
+                : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/60"
+            }`}
+          >
+            <Cpu size={13} />
+            <span>⚡ ELECTRONICS & AVIONICS</span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => {
+              playHMITabSound();
+              setWorkspaceMode("split");
+            }}
+            className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+              workspaceMode === "split"
+                ? "bg-amber-600 text-white shadow-lg shadow-amber-600/30 ring-1 ring-amber-400"
+                : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/60"
+            }`}
+          >
+            <Layers size={13} />
+            <span>🔀 DUAL SPLIT</span>
+          </button>
+        </div>
+      </div>
+
+      {/* ───────────────────────────────────────────────────────────── */}
+      {/* COCKPIT HARDWARE CONFIGURATION CARDS                          */}
+      {/* ───────────────────────────────────────────────────────────── */}
+      {(workspaceMode === "hardware" || workspaceMode === "split") && (
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 w-full">
         {/* =========================================================== */}
         {/* CARD 1: ALL OPTIONS RELATED TO STEERING                     */}
         {/* =========================================================== */}
@@ -246,200 +583,165 @@ export const InteractiveDashboardStudio: React.FC = () => {
                 <h3 className="text-xs font-black tracking-wider uppercase text-slate-100">
                   ALL OPTIONS RELATED TO STEERING
                 </h3>
-                <p className="text-[10px] text-slate-400">Wheel shape, grip materials & controls</p>
+                <p className="text-[10px] text-slate-400">7 Wheel shapes, grip materials, stripe & paddles</p>
               </div>
             </div>
-            {activePanel === "steering" && (
-              <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-red-500/20 text-red-400 border border-red-500/30">
-                ACTIVE FOCUS
-              </span>
-            )}
           </div>
 
-          {/* 1.1 Steering Wheel Typology */}
-          <div className="flex flex-col gap-1.5">
-            <label className="text-[11px] font-bold text-slate-300 uppercase tracking-wide">
-              Wheel Typology
+          {/* 1. 7 Wheel Styles */}
+          <div className="space-y-1.5">
+            <label className="text-[11px] font-bold text-slate-300 uppercase tracking-wider">
+              1. Steering Wheel Architecture
             </label>
             <div className="grid grid-cols-2 gap-1.5">
               {(
                 [
-                  { id: "sport", label: "Sport 3-Spoke", desc: "Classic Round" },
-                  { id: "yoke", label: "GT3 Track Yoke", desc: "Open Top" },
-                  { id: "formula", label: "Formula Carbon", desc: "Single Seater" },
-                  { id: "classic", label: "Classic Wood", desc: "Thin Rim" },
+                  { id: "sport", label: "Sport 3-Spoke", desc: "Contoured Nappa, aluminum" },
+                  { id: "gt_3spoke", label: "GT 3-Spoke", desc: "Flat-bottom, perforated" },
+                  { id: "yoke", label: "GT3 Track Yoke", desc: "Open-top racing yoke" },
+                  { id: "formula", label: "Formula Carbon", desc: "Motorsport shift LEDs" },
+                  { id: "luxury_2spoke", label: "Luxury 2-Spoke", desc: "Walnut swept arch" },
+                  { id: "classic_4spoke", label: "Classic 4-Spoke", desc: "Stainless steel vintage" },
+                  { id: "performance_4spoke", label: "Performance 4-Spoke", desc: "Forged split carbon" },
                 ] as const
-              ).map((opt) => {
-                const isSelected = steeringWheelStyle === opt.id;
-                return (
-                  <button
-                    key={opt.id}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      playHMIClickSound();
-                      setSteeringWheelStyle(opt.id as SteeringWheelStyle);
-                    }}
-                    className={`flex flex-col items-start p-2 rounded-xl text-left transition-all cursor-pointer ${
-                      isSelected
-                        ? "bg-red-600/30 border border-red-500 text-white shadow-sm"
-                        : "bg-slate-800/60 border border-slate-700/60 text-slate-300 hover:bg-slate-800"
-                    }`}
-                  >
-                    <span className="text-xs font-bold leading-tight">{opt.label}</span>
-                    <span className="text-[10px] text-slate-400">{opt.desc}</span>
-                  </button>
-                );
-              })}
+              ).map((w) => (
+                <button
+                  key={w.id}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    playHMIClickSound();
+                    setSteeringWheelStyle(w.id);
+                  }}
+                  className={`p-2 rounded-xl text-left border transition-all cursor-pointer ${
+                    steeringWheelStyle === w.id
+                      ? "bg-red-600/20 border-red-500 text-white shadow-sm ring-1 ring-red-500"
+                      : "bg-slate-800/60 border-slate-700/80 text-slate-300 hover:bg-slate-700/60"
+                  }`}
+                >
+                  <div className="text-[11px] font-black">{w.label}</div>
+                  <div className="text-[9px] text-slate-400 leading-tight">{w.desc}</div>
+                </button>
+              ))}
             </div>
           </div>
 
-          {/* 1.2 Grip Material */}
-          <div className="flex flex-col gap-1.5">
-            <label className="text-[11px] font-bold text-slate-300 uppercase tracking-wide">
-              Grip Material
+          {/* 2. Grip Material */}
+          <div className="space-y-1.5">
+            <label className="text-[11px] font-bold text-slate-300 uppercase tracking-wider">
+              2. Grip Upholstery Material
             </label>
-            <div className="grid grid-cols-2 gap-1.5">
+            <div className="grid grid-cols-3 gap-1.5">
               {(
                 [
                   { id: "leather", label: "Nappa Leather" },
-                  { id: "alcantara", label: "Alcantara Suede" },
-                  { id: "carbon", label: "3K Carbon Fiber" },
-                  { id: "wood", label: "Polished Walnut" },
+                  { id: "alcantara", label: "Alcantara" },
+                  { id: "perforated", label: "Perforated" },
+                  { id: "carbon", label: "Carbon Weave" },
+                  { id: "wood", label: "Walnut Wood" },
+                  { id: "suede", label: "Motorsport Suede" },
                 ] as const
-              ).map((mat) => {
-                const isSelected = steeringGripMaterial === mat.id;
-                return (
-                  <button
-                    key={mat.id}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      playHMIClickSound();
-                      setSteeringGripMaterial(mat.id as SteeringGripMaterial);
-                    }}
-                    className={`px-2.5 py-1.5 rounded-lg text-xs font-medium transition-all text-left cursor-pointer ${
-                      isSelected
-                        ? "bg-slate-700 border border-cyan-400 text-cyan-300"
-                        : "bg-slate-800/50 border border-slate-700/50 text-slate-300 hover:bg-slate-700/50"
-                    }`}
-                  >
-                    {mat.label}
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-
-          {/* 1.3 Leather Color Swatches */}
-          <div className="flex flex-col gap-1.5">
-            <div className="flex items-center justify-between">
-              <label className="text-[11px] font-bold text-slate-300 uppercase tracking-wide">
-                Grip Color
-              </label>
-              <span className="text-[10px] font-mono text-slate-400">{steeringColor}</span>
-            </div>
-            <div className="flex items-center gap-2">
-              {(
-                [
-                  { name: "Obsidian Black", hex: "#1a1a1e" },
-                  { name: "Cognac Tan", hex: "#9a5b32" },
-                  { name: "Rosso Racing", hex: "#dc2626" },
-                  { name: "Navy Blue", hex: "#1e3a8a" },
-                  { name: "Chalk White", hex: "#e2e8f0" },
-                ] as const
-              ).map((swatch) => (
+              ).map((m) => (
                 <button
-                  key={swatch.hex}
+                  key={m.id}
                   onClick={(e) => {
                     e.stopPropagation();
                     playHMIClickSound();
-                    setSteeringColor(swatch.hex);
+                    setSteeringGripMaterial(m.id);
                   }}
-                  title={swatch.name}
-                  className={`w-7 h-7 rounded-full border-2 transition-all cursor-pointer ${
-                    steeringColor === swatch.hex
-                      ? "scale-110 border-white ring-2 ring-red-500"
-                      : "border-slate-600 hover:scale-105"
-                  }`}
-                  style={{ backgroundColor: swatch.hex }}
-                />
-              ))}
-              <input
-                type="color"
-                value={steeringColor}
-                onChange={(e) => setSteeringColor(e.target.value)}
-                className="w-7 h-7 rounded-full bg-transparent cursor-pointer border border-slate-600"
-                title="Custom Color"
-              />
-            </div>
-          </div>
-
-          {/* 1.4 Center Stripe & Paddle Shifters */}
-          <div className="grid grid-cols-2 gap-2">
-            {/* 12 o'clock stripe */}
-            <div className="flex flex-col gap-1">
-              <label className="text-[10px] font-bold text-slate-400 uppercase">12H Stripe</label>
-              <select
-                value={steeringStripe}
-                onChange={(e) => {
-                  playHMIClickSound();
-                  setSteeringStripe(e.target.value as SteeringStripeStyle);
-                }}
-                className="w-full px-2 py-1.5 rounded-lg bg-slate-800 border border-slate-700 text-xs font-medium text-slate-200 cursor-pointer focus:outline-none focus:border-red-500"
-              >
-                <option value="none">None</option>
-                <option value="red">Racing Red</option>
-                <option value="yellow">Yellow</option>
-                <option value="blue">Cyan Blue</option>
-              </select>
-            </div>
-
-            {/* Paddle Shifters */}
-            <div className="flex flex-col gap-1">
-              <label className="text-[10px] font-bold text-slate-400 uppercase">Paddles</label>
-              <select
-                value={paddleShifters}
-                onChange={(e) => {
-                  playHMIClickSound();
-                  setPaddleShifters(e.target.value as PaddleShifterStyle);
-                }}
-                className="w-full px-2 py-1.5 rounded-lg bg-slate-800 border border-slate-700 text-xs font-medium text-slate-200 cursor-pointer focus:outline-none focus:border-red-500"
-              >
-                <option value="billet">Billet Alloy</option>
-                <option value="carbon">Carbon Fiber</option>
-                <option value="red">Anodized Red</option>
-                <option value="none">None</option>
-              </select>
-            </div>
-          </div>
-
-          {/* 1.5 Drive Mode Selector on Wheel */}
-          <div className="flex flex-col gap-1.5">
-            <label className="text-[11px] font-bold text-slate-300 uppercase tracking-wide">
-              Steering Drive Mode Dial
-            </label>
-            <div className="grid grid-cols-4 gap-1">
-              {(
-                [
-                  { id: "comfort", label: "COMFORT", color: "text-blue-400" },
-                  { id: "sport", label: "SPORT", color: "text-amber-400" },
-                  { id: "track", label: "TRACK", color: "text-red-400" },
-                  { id: "wet", label: "WET", color: "text-cyan-400" },
-                ] as const
-              ).map((mode) => (
-                <button
-                  key={mode.id}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    playHMIClickSound();
-                    setDriveMode(mode.id as DriveModeType);
-                  }}
-                  className={`py-1 rounded text-[10px] font-mono font-bold transition-all cursor-pointer ${
-                    driveMode === mode.id
-                      ? "bg-slate-700 border border-slate-500 " + mode.color
-                      : "bg-slate-800/40 text-slate-400 hover:bg-slate-800"
+                  className={`px-2 py-1.5 rounded-lg text-center text-[10px] font-bold border transition-all cursor-pointer ${
+                    steeringGripMaterial === m.id
+                      ? "bg-red-600/20 border-red-500 text-red-300"
+                      : "bg-slate-800/50 border-slate-700 text-slate-300 hover:bg-slate-700/50"
                   }`}
                 >
-                  {mode.label}
+                  {m.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* 3. 12 O'Clock Racing Stripe */}
+          <div className="space-y-1.5">
+            <label className="text-[11px] font-bold text-slate-300 uppercase tracking-wider">
+              3. 12 O'Clock Racing Center Stripe
+            </label>
+            <div className="flex items-center gap-1.5 flex-wrap">
+              {(["none", "red", "yellow", "blue", "white", "green"] as const).map((col) => (
+                <button
+                  key={col}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    playHMIClickSound();
+                    setSteeringStripe(col);
+                  }}
+                  className={`px-3 py-1 rounded-lg text-[10px] font-bold uppercase border transition-all cursor-pointer ${
+                    steeringStripe === col
+                      ? "bg-slate-700 border-red-500 text-white ring-1 ring-red-400"
+                      : "bg-slate-800/50 border-slate-700 text-slate-400 hover:bg-slate-700/50"
+                  }`}
+                >
+                  {col}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* 4. Paddle Shifters */}
+          <div className="space-y-1.5">
+            <label className="text-[11px] font-bold text-slate-300 uppercase tracking-wider">
+              4. Paddle Shifters
+            </label>
+            <div className="grid grid-cols-3 gap-1.5">
+              {(
+                [
+                  { id: "none", label: "None" },
+                  { id: "billet", label: "Billet Aluminum" },
+                  { id: "carbon", label: "3K Carbon" },
+                  { id: "forged_carbon", label: "Forged Carbon" },
+                  { id: "red", label: "Anodized Red" },
+                  { id: "extended", label: "GT3 Extended" },
+                ] as const
+              ).map((p) => (
+                <button
+                  key={p.id}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    playHMIClickSound();
+                    setPaddleShifters(p.id);
+                  }}
+                  className={`px-2 py-1.5 rounded-lg text-[10px] font-bold border transition-all cursor-pointer ${
+                    paddleShifters === p.id
+                      ? "bg-red-600/20 border-red-500 text-red-300"
+                      : "bg-slate-800/50 border-slate-700 text-slate-300 hover:bg-slate-700/50"
+                  }`}
+                >
+                  {p.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* 5. Drive Mode Dial */}
+          <div className="space-y-1.5">
+            <label className="text-[11px] font-bold text-slate-300 uppercase tracking-wider">
+              5. Steering Drive Mode Rotary Dial
+            </label>
+            <div className="grid grid-cols-3 gap-1.5">
+              {(["comfort", "eco", "sport", "sport_plus", "track", "custom"] as const).map((dm) => (
+                <button
+                  key={dm}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    playHMIClickSound();
+                    setDriveMode(dm);
+                  }}
+                  className={`px-2 py-1.5 rounded-lg text-[10px] font-bold uppercase border transition-all cursor-pointer ${
+                    driveMode === dm
+                      ? "bg-red-600/20 border-red-500 text-red-300"
+                      : "bg-slate-800/50 border-slate-700 text-slate-300 hover:bg-slate-700/50"
+                  }`}
+                >
+                  {dm.replace("_", "+")}
                 </button>
               ))}
             </div>
@@ -447,7 +749,7 @@ export const InteractiveDashboardStudio: React.FC = () => {
         </div>
 
         {/* =========================================================== */}
-        {/* CARD 2: DASH BOARD CONFIGURATIONS                           */}
+        {/* CARD 2: DASHBOARD CONFIGURATIONS                            */}
         {/* =========================================================== */}
         <div
           onClick={() => setActivePanel("dashboard")}
@@ -460,223 +762,270 @@ export const InteractiveDashboardStudio: React.FC = () => {
           {/* Card Header */}
           <div className="flex items-center justify-between pb-2 border-b border-slate-800">
             <div className="flex items-center gap-2">
-              <div className="p-1.5 rounded-lg bg-blue-500/20 text-blue-400">
+              <div className="p-1.5 rounded-lg bg-red-500/20 text-red-400">
                 <Sliders size={16} />
               </div>
               <div>
                 <h3 className="text-xs font-black tracking-wider uppercase text-slate-100">
-                  DASH BOARD CONFIGURATIONS
+                  DASHBOARD CONFIGURATIONS
                 </h3>
-                <p className="text-[10px] text-slate-400">Upper deck, decorative trims & displays</p>
+                <p className="text-[10px] text-slate-400">Pad leather, 11 trims, 8 screens, clusters & HUD</p>
               </div>
             </div>
-            {activePanel === "dashboard" && (
-              <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-blue-500/20 text-blue-400 border border-blue-500/30">
-                ACTIVE FOCUS
-              </span>
-            )}
           </div>
 
-          {/* 2.1 Upper Dashboard Deck Pad Color (Image 4 Aegean Blue Accent!) */}
-          <div className="flex flex-col gap-1.5">
-            <div className="flex items-center justify-between">
-              <label className="text-[11px] font-bold text-slate-300 uppercase tracking-wide flex items-center gap-1.5">
-                <span>Upper Dash Pad Color</span>
-                <span className="text-[9px] font-mono text-blue-400">(Image 4 Two-Tone)</span>
-              </label>
-              <span className="text-[10px] font-mono text-slate-400">{upperDashPadColor}</span>
-            </div>
-            <div className="flex items-center gap-2">
-              {(
-                [
-                  { name: "Aegean Blue (Image 4)", hex: "#1d4ed8" },
-                  { name: "Cognac Saddle", hex: "#9a5b32" },
-                  { name: "Onyx Stealth", hex: "#18181b" },
-                  { name: "Crimson Red", hex: "#b91c1c" },
-                  { name: "Titanium Slate", hex: "#475569" },
-                  { name: "Oyster Light", hex: "#e2e8f0" },
-                ] as const
-              ).map((swatch) => (
+          {/* 1. Upper Dash Pad Color */}
+          <div className="space-y-1.5">
+            <label className="text-[11px] font-bold text-slate-300 uppercase tracking-wider">
+              1. Upper Dashboard Pad Nappa Leather
+            </label>
+            <div className="flex items-center gap-2 flex-wrap">
+              {[
+                { name: "Obsidian Black", hex: "#17181c" },
+                { name: "Charcoal Grey", hex: "#26282e" },
+                { name: "Cognac Tan", hex: "#9a5b32" },
+                { name: "Crimson Burgundy", hex: "#7f1d1d" },
+                { name: "Dark Navy", hex: "#1e293b" },
+                { name: "Cream Beige", hex: "#d4c5a9" },
+              ].map((sw) => (
                 <button
-                  key={swatch.hex}
+                  key={sw.hex}
                   onClick={(e) => {
                     e.stopPropagation();
                     playHMIClickSound();
-                    setUpperDashPadColor(swatch.hex);
+                    setUpperDashPadColor(sw.hex);
                   }}
-                  title={swatch.name}
-                  className={`w-7 h-7 rounded-full border-2 transition-all cursor-pointer ${
-                    upperDashPadColor === swatch.hex
-                      ? "scale-110 border-white ring-2 ring-blue-500"
-                      : "border-slate-600 hover:scale-105"
+                  title={sw.name}
+                  className={`w-7 h-7 rounded-full border-2 transition-transform cursor-pointer ${
+                    upperDashPadColor === sw.hex ? "scale-110 border-red-500 shadow-md" : "border-slate-600 hover:scale-105"
                   }`}
-                  style={{ backgroundColor: swatch.hex }}
+                  style={{ backgroundColor: sw.hex }}
                 />
               ))}
-              <input
-                type="color"
-                value={upperDashPadColor}
-                onChange={(e) => setUpperDashPadColor(e.target.value)}
-                className="w-7 h-7 rounded-full bg-transparent cursor-pointer border border-slate-600"
-                title="Custom Color"
-              />
             </div>
           </div>
 
-          {/* 2.2 Decorative Trim Spear */}
-          <div className="flex flex-col gap-1.5">
-            <label className="text-[11px] font-bold text-slate-300 uppercase tracking-wide">
-              Decorative Dash Trim
+          {/* 2. Main Dashboard Decorative Trim */}
+          <div className="space-y-1.5">
+            <label className="text-[11px] font-bold text-slate-300 uppercase tracking-wider">
+              2. Main Decorative Trim Spear
             </label>
             <div className="grid grid-cols-2 gap-1.5">
               {(
                 [
-                  { id: "walnut", label: "Walnut Wood" },
-                  { id: "carbon", label: "2x2 Twill Carbon" },
-                  { id: "aluminum", label: "Brushed Titanium" },
-                  { id: "piano_black", label: "Piano Black" },
-                  { id: "forged_carbon", label: "Forged Carbon" },
+                  { id: "walnut", label: "American Walnut", desc: "Open-pore bookmatched" },
+                  { id: "dark_walnut", label: "Dark Walnut", desc: "Stained deep espresso" },
+                  { id: "carbon", label: "3K Twill Carbon", desc: "High-gloss clearcoat" },
+                  { id: "forged_carbon", label: "Forged Carbon", desc: "Matte motorsport composite" },
+                  { id: "titanium", label: "Brushed Titanium", desc: "Aerospace satin grade" },
+                  { id: "aluminum", label: "Satin Aluminum", desc: "Machined jewel finish" },
+                  { id: "piano_black", label: "Piano Black", desc: "Mirror lacquer gloss" },
+                  { id: "bronze", label: "Anodized Bronze", desc: "Warm metallic luxury" },
                 ] as const
-              ).map((trim) => {
-                const isSelected = dashboardTrimMaterial === trim.id;
-                return (
-                  <button
-                    key={trim.id}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      playHMIClickSound();
-                      setDashboardTrimMaterial(trim.id as DashboardTrimType);
-                    }}
-                    className={`px-2.5 py-1.5 rounded-lg text-xs font-medium transition-all text-left cursor-pointer ${
-                      isSelected
-                        ? "bg-slate-700 border border-blue-400 text-blue-300"
-                        : "bg-slate-800/50 border border-slate-700/50 text-slate-300 hover:bg-slate-700/50"
-                    }`}
-                  >
-                    {trim.label}
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-
-          {/* 2.3 Infotainment Live Screen Canvas Mode */}
-          <div className="flex flex-col gap-1.5">
-            <label className="text-[11px] font-bold text-slate-300 uppercase tracking-wide flex items-center justify-between">
-              <span>Center Infotainment App</span>
-              <span className="text-[9px] font-mono text-cyan-400">Live 3D Canvas</span>
-            </label>
-            <div className="grid grid-cols-2 gap-1.5">
-              {(
-                [
-                  { id: "navigation", label: "GPS Navigation", icon: NavIcon },
-                  { id: "telemetry", label: "Race Telemetry", icon: Gauge },
-                  { id: "media", label: "Audio Media", icon: Radio },
-                  { id: "climate", label: "Dual HVAC", icon: Thermometer },
-                ] as const
-              ).map((mode) => {
-                const Icon = mode.icon;
-                const isSelected = infotainmentMode === mode.id;
-                return (
-                  <button
-                    key={mode.id}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      playHMIClickSound();
-                      setInfotainmentMode(mode.id as InfotainmentMode);
-                    }}
-                    className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-                      isSelected
-                        ? "bg-blue-600/30 border border-blue-500 text-cyan-300 shadow-sm"
-                        : "bg-slate-800/50 border border-slate-700/50 text-slate-300 hover:bg-slate-800"
-                    }`}
-                  >
-                    <Icon size={13} />
-                    <span>{mode.label}</span>
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-
-          {/* 2.4 Instrument Cluster Style */}
-          <div className="flex flex-col gap-1.5">
-            <label className="text-[11px] font-bold text-slate-300 uppercase tracking-wide">
-              Instrument Cluster Display
-            </label>
-            <div className="grid grid-cols-2 gap-1.5">
-              {(
-                [
-                  { id: "digital", label: "Digital Virtual Cockpit" },
-                  { id: "analog", label: "Twin Analog Gauges" },
-                ] as const
-              ).map((cl) => {
-                const isSelected = clusterStyle === cl.id;
-                return (
-                  <button
-                    key={cl.id}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      playHMIClickSound();
-                      setClusterStyle(cl.id as ClusterStyle);
-                    }}
-                    className={`px-2 py-1.5 rounded-lg text-xs font-medium text-center transition-all cursor-pointer ${
-                      isSelected
-                        ? "bg-slate-700 border border-cyan-400 text-cyan-300"
-                        : "bg-slate-800/50 border border-slate-700/50 text-slate-300 hover:bg-slate-700/50"
-                    }`}
-                  >
-                    {cl.label}
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-
-          {/* 2.5 Ambient Light Neon Guide */}
-          <div className="flex flex-col gap-1.5">
-            <label className="text-[11px] font-bold text-slate-300 uppercase tracking-wide">
-              Ambient Light Glow
-            </label>
-            <div className="flex items-center gap-2">
-              {(
-                [
-                  { name: "Cyber Cyan", hex: "#06b6d4" },
-                  { name: "Amber Sunset", hex: "#f59e0b" },
-                  { name: "Ultraviolet", hex: "#8b5cf6" },
-                  { name: "Emerald Green", hex: "#10b981" },
-                  { name: "Off", hex: "none" },
-                ] as const
-              ).map((amb) => (
+              ).map((t) => (
                 <button
-                  key={amb.hex}
+                  key={t.id}
                   onClick={(e) => {
                     e.stopPropagation();
                     playHMIClickSound();
-                    setAmbientLightColor(amb.hex);
+                    setDashboardTrimMaterial(t.id);
                   }}
-                  title={amb.name}
-                  className={`w-7 h-7 rounded-full border-2 transition-all flex items-center justify-center cursor-pointer ${
-                    ambientLightColor === amb.hex
-                      ? "scale-110 border-white ring-2 ring-cyan-400"
-                      : "border-slate-600 hover:scale-105"
+                  className={`p-2 rounded-xl text-left border transition-all cursor-pointer ${
+                    dashboardTrimMaterial === t.id
+                      ? "bg-red-600/20 border-red-500 text-white shadow-sm ring-1 ring-red-500"
+                      : "bg-slate-800/60 border-slate-700/80 text-slate-300 hover:bg-slate-700/60"
                   }`}
-                  style={{ backgroundColor: amb.hex === "none" ? "#1e293b" : amb.hex }}
                 >
-                  {amb.hex === "none" && <span className="text-[9px] text-slate-400">OFF</span>}
+                  <div className="text-[11px] font-black">{t.label}</div>
+                  <div className="text-[9px] text-slate-400 leading-tight">{t.desc}</div>
                 </button>
               ))}
+            </div>
+          </div>
+
+          {/* 3. Infotainment Display Mode (8 Modes) */}
+          <div className="space-y-1.5">
+            <label className="text-[11px] font-bold text-slate-300 uppercase tracking-wider">
+              3. Infotainment 12.3-inch Display Mode
+            </label>
+            <div className="grid grid-cols-4 gap-1.5">
+              {(
+                [
+                  { id: "navigation", label: "Nav", icon: NavIcon },
+                  { id: "telemetry", label: "Telemetry", icon: Activity },
+                  { id: "media", label: "Media", icon: Radio },
+                  { id: "climate", label: "HVAC", icon: Thermometer },
+                  { id: "vehicle", label: "Health", icon: Zap },
+                  { id: "camera", label: "Camera", icon: Camera },
+                  { id: "performance", label: "Chrono", icon: Gauge },
+                  { id: "settings", label: "Settings", icon: Sliders },
+                ] as const
+              ).map((im) => {
+                const Icon = im.icon;
+                return (
+                  <button
+                    key={im.id}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      playHMIClickSound();
+                      setInfotainmentMode(im.id);
+                    }}
+                    className={`flex flex-col items-center gap-1 p-1.5 rounded-lg border text-center transition-all cursor-pointer ${
+                      infotainmentMode === im.id
+                        ? "bg-red-600/20 border-red-500 text-red-300 ring-1 ring-red-400"
+                        : "bg-slate-800/50 border-slate-700 text-slate-300 hover:bg-slate-700/50"
+                    }`}
+                  >
+                    <Icon size={14} />
+                    <span className="text-[9px] font-bold">{im.label}</span>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* 4. Instrument Cluster Style & HUD */}
+          <div className="space-y-1.5">
+            <label className="text-[11px] font-bold text-slate-300 uppercase tracking-wider">
+              4. Driver Instrument Cluster & HUD
+            </label>
+            <div className="grid grid-cols-3 gap-1.5">
+              {(
+                [
+                  { id: "digital", label: "Digital ADAS" },
+                  { id: "analog", label: "Analog Dials" },
+                  { id: "performance", label: "Performance" },
+                  { id: "track", label: "F1 Track" },
+                  { id: "minimal", label: "Minimalist" },
+                ] as const
+              ).map((cs) => (
+                <button
+                  key={cs.id}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    playHMIClickSound();
+                    setClusterStyle(cs.id);
+                  }}
+                  className={`px-2 py-1.5 rounded-lg text-center text-[10px] font-bold border transition-all cursor-pointer ${
+                    clusterStyle === cs.id
+                      ? "bg-red-600/20 border-red-500 text-red-300"
+                      : "bg-slate-800/50 border-slate-700 text-slate-300 hover:bg-slate-700/50"
+                  }`}
+                >
+                  {cs.label}
+                </button>
+              ))}
+
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  playHMIClickSound();
+                  setHudMode(hudMode === "off" ? "performance" : "off");
+                }}
+                className={`px-2 py-1.5 rounded-lg text-center text-[10px] font-bold border transition-all cursor-pointer ${
+                  hudMode !== "off"
+                    ? "bg-cyan-600/20 border-cyan-400 text-cyan-300"
+                    : "bg-slate-800/50 border-slate-700 text-slate-400 hover:bg-slate-700/50"
+                }`}
+              >
+                HUD: {hudMode !== "off" ? "ON" : "OFF"}
+              </button>
+            </div>
+          </div>
+
+          {/* 5. Multi-Zone Ambient Neon Lightguide */}
+          <div className="space-y-1.5">
+            <label className="text-[11px] font-bold text-slate-300 uppercase tracking-wider">
+              5. Multi-Zone Ambient Neon Lightguides
+            </label>
+            <div className="flex items-center gap-2 flex-wrap">
+              {[
+                { name: "Cyan Neon", hex: "#06b6d4" },
+                { name: "Crimson Red", hex: "#ef4444" },
+                { name: "Amber Gold", hex: "#f59e0b" },
+                { name: "Electric Blue", hex: "#3b82f6" },
+                { name: "Violet Purple", hex: "#a855f7" },
+                { name: "Emerald Green", hex: "#10b981" },
+                { name: "Ice White", hex: "#ffffff" },
+              ].map((sw) => (
+                <button
+                  key={sw.hex}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    playHMIClickSound();
+                    setAmbientLightColor(sw.hex);
+                  }}
+                  title={sw.name}
+                  className={`w-6 h-6 rounded-full border-2 transition-transform cursor-pointer ${
+                    ambientLightColor === sw.hex ? "scale-125 border-white shadow-lg" : "border-slate-700 hover:scale-110"
+                  }`}
+                  style={{ backgroundColor: sw.hex }}
+                />
+              ))}
+            </div>
+          </div>
+
+          {/* 6. Dashboard Perspective & Camera View */}
+          <div className="space-y-1.5 pt-1 border-t border-slate-800/80">
+            <div className="flex items-center justify-between">
+              <label className="text-[11px] font-bold text-slate-300 uppercase tracking-wider">
+                6. Perspective & Camera View
+              </label>
+              <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-red-950/60 border border-red-500/40 text-red-400">
+                {cameraPose === "dashboard_center" ? "STUDIO FRONT (DEFAULT)" : cameraPose.toUpperCase()}
+              </span>
+            </div>
+            <div className="grid grid-cols-2 gap-1.5">
+              {[
+                { id: "dashboard_center", label: "Studio Front (Default)", desc: "Symmetrical front dashboard view", icon: Eye },
+                { id: "driver", label: "Driver POV", desc: "Left-hand driver perspective", icon: Camera },
+                { id: "infotainment", label: "Display Focus", desc: "Close-up of 12.3\" center screen", icon: Activity },
+                { id: "cluster", label: "Cluster Focus", desc: "Driver instrument binnacle", icon: Gauge },
+              ].map((v) => {
+                const Icon = v.icon;
+                const active = cameraPose === v.id;
+                return (
+                  <button
+                    key={v.id}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      playHMIClickSound();
+                      setCameraPose(v.id as CameraPose);
+                    }}
+                    className={`flex items-start gap-2 p-2 rounded-xl border text-left transition-all cursor-pointer ${
+                      active
+                        ? "bg-red-600/25 border-red-500 text-white ring-1 ring-red-400 shadow-sm"
+                        : "bg-slate-800/50 border-slate-700/80 text-slate-300 hover:bg-slate-700/50"
+                    }`}
+                  >
+                    <div className={`p-1 rounded-lg ${active ? "bg-red-500/30 text-red-300" : "bg-slate-700/50 text-slate-400"}`}>
+                      <Icon size={14} />
+                    </div>
+                    <div>
+                      <div className="text-[10px] font-black flex items-center gap-1">
+                        {v.label}
+                        {v.id === "dashboard_center" && (
+                          <span className="text-[8px] px-1 py-0.2 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
+                            DEF
+                          </span>
+                        )}
+                      </div>
+                      <div className="text-[9px] text-slate-400 leading-tight">{v.desc}</div>
+                    </div>
+                  </button>
+                );
+              })}
             </div>
           </div>
         </div>
 
         {/* =========================================================== */}
-        {/* CARD 3: OTHER CONFIGURATIONS                                */}
+        {/* CARD 3: CONSOLE, SEATS & COCKPIT CONFIGURE                  */}
         {/* =========================================================== */}
         <div
           onClick={() => setActivePanel("other")}
           className={`flex flex-col gap-4 p-4 rounded-2xl transition-all duration-200 cursor-pointer ${
-            activePanel === "other"
+            activePanel === "other" || activePanel === "console" || activePanel === "seats" || activePanel === "doors"
               ? "bg-slate-900/95 border-2 border-red-500/80 shadow-[0_0_20px_rgba(239,68,68,0.18)]"
               : "bg-slate-900/60 border border-slate-800 hover:border-slate-700"
           }`}
@@ -684,157 +1033,281 @@ export const InteractiveDashboardStudio: React.FC = () => {
           {/* Card Header */}
           <div className="flex items-center justify-between pb-2 border-b border-slate-800">
             <div className="flex items-center gap-2">
-              <div className="p-1.5 rounded-lg bg-emerald-500/20 text-emerald-400">
+              <div className="p-1.5 rounded-lg bg-red-500/20 text-red-400">
                 <Sparkles size={16} />
               </div>
               <div>
                 <h3 className="text-xs font-black tracking-wider uppercase text-slate-100">
-                  OTHER CONFIGURATIONS
+                  CONSOLE, SEATS & COCKPIT CONFIGURE
                 </h3>
-                <p className="text-[10px] text-slate-400">Shifter lever, glazing & vehicle integration</p>
+                <p className="text-[10px] text-slate-400">7 Shifters, bucket seats, stitching, tint & presets</p>
               </div>
             </div>
-            {activePanel === "other" && (
-              <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">
-                ACTIVE FOCUS
-              </span>
-            )}
           </div>
 
-          {/* 3.1 Center Console Shifter Typology (matching Image 4 automatic lever!) */}
-          <div className="flex flex-col gap-1.5">
-            <label className="text-[11px] font-bold text-slate-300 uppercase tracking-wide flex items-center justify-between">
-              <span>Transmission Shifter</span>
-              <span className="text-[9px] font-mono text-emerald-400">Console Swap</span>
-            </label>
-            <div className="grid grid-cols-3 gap-1.5">
-              {(
-                [
-                  { id: "auto", label: "Automatic", desc: "Image 4 Lever" },
-                  { id: "manual", label: "6-Spd Gated", desc: "Open Gate" },
-                  { id: "toggle", label: "E-Toggle", desc: "Flush Rocker" },
-                ] as const
-              ).map((sh) => {
-                const isSelected = shifterStyle === sh.id;
-                return (
-                  <button
-                    key={sh.id}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      playHMIClickSound();
-                      setShifterStyle(sh.id as ShifterStyle);
-                    }}
-                    className={`flex flex-col items-center p-2 rounded-xl text-center transition-all cursor-pointer ${
-                      isSelected
-                        ? "bg-emerald-600/30 border border-emerald-500 text-white shadow-sm"
-                        : "bg-slate-800/50 border border-slate-700/50 text-slate-300 hover:bg-slate-800"
-                    }`}
-                  >
-                    <span className="text-xs font-bold leading-tight">{sh.label}</span>
-                    <span className="text-[9px] text-slate-400">{sh.desc}</span>
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-
-          {/* 3.2 Contrast Stitching Color */}
-          <div className="flex flex-col gap-1.5">
-            <div className="flex items-center justify-between">
-              <label className="text-[11px] font-bold text-slate-300 uppercase tracking-wide">
-                Contrast Stitching
+          {/* 1. 7 Shifter Mechanisms */}
+          <div
+            onClick={(e) => {
+              e.stopPropagation();
+              setActivePanel("console");
+              setCameraPose("console");
+            }}
+            className={`p-3 rounded-xl border transition-all cursor-pointer ${
+              activePanel === "console" || cameraPose === "console"
+                ? "bg-slate-800/90 border-red-500 shadow-[0_0_15px_rgba(239,68,68,0.2)] ring-1 ring-red-500/80"
+                : "bg-slate-800/40 border-slate-700/70 hover:border-slate-600"
+            }`}
+          >
+            <div className="flex items-center justify-between mb-2">
+              <label className="text-[11px] font-bold text-slate-200 uppercase tracking-wider flex items-center gap-1.5">
+                <CircleDot size={13} className="text-red-400" />
+                1. Center Console Shifter Mechanism
               </label>
-              <span className="text-[10px] font-mono text-slate-400">{stitchingColor}</span>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  playHMIClickSound();
+                  setActivePanel("console");
+                  setCameraPose("console");
+                }}
+                className="px-2 py-0.5 rounded text-[10px] font-mono bg-red-600/30 text-red-300 border border-red-500/50 hover:bg-red-600/50 cursor-pointer"
+              >
+                FOCUS CONSOLE
+              </button>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="grid grid-cols-2 gap-1.5">
               {(
                 [
-                  { name: "Gold Ochre", hex: "#f59e0b" },
-                  { name: "Racing Red", hex: "#ef4444" },
-                  { name: "Apex Cyan", hex: "#06b6d4" },
-                  { name: "Platinum Grey", hex: "#cbd5e1" },
+                  { id: "auto", label: "Auto Lever", desc: "Perforated leather grip" },
+                  { id: "manual_gated", label: "Gated Manual", desc: "Open chrome slotted gate" },
+                  { id: "manual_h", label: "H-Pattern Boot", desc: "Leather boot 6-speed" },
+                  { id: "toggle", label: "Electronic Toggle", desc: "Satin aluminum rocker" },
+                  { id: "rotary", label: "Rotary Controller", desc: "Knurled aluminum dial" },
+                  { id: "crystal", label: "Crystal Glass", desc: "Faceted diamond jewel" },
+                  { id: "performance", label: "Sequential Lever", desc: "Motorsport carbon stalk" },
                 ] as const
-              ).map((st) => (
+              ).map((s) => (
                 <button
-                  key={st.hex}
+                  key={s.id}
                   onClick={(e) => {
                     e.stopPropagation();
                     playHMIClickSound();
-                    setStitchingColor(st.hex);
+                    setShifterStyle(s.id);
+                    setActivePanel("console");
+                    setCameraPose("console");
                   }}
-                  title={st.name}
-                  className={`w-7 h-7 rounded-full border-2 transition-all cursor-pointer ${
-                    stitchingColor === st.hex
-                      ? "scale-110 border-white ring-2 ring-emerald-500"
-                      : "border-slate-600 hover:scale-105"
+                  className={`p-2 rounded-xl text-left border transition-all cursor-pointer ${
+                    shifterStyle === s.id
+                      ? "bg-red-600/20 border-red-500 text-white shadow-sm ring-1 ring-red-500"
+                      : "bg-slate-800/60 border-slate-700/80 text-slate-300 hover:bg-slate-700/60"
                   }`}
-                  style={{ backgroundColor: st.hex }}
-                />
+                >
+                  <div className="text-[11px] font-black">{s.label}</div>
+                  <div className="text-[9px] text-slate-400 leading-tight">{s.desc}</div>
+                </button>
               ))}
             </div>
           </div>
 
-          {/* 3.3 Windshield Glazing Tint */}
-          <div className="flex flex-col gap-1.5">
-            <label className="text-[11px] font-bold text-slate-300 uppercase tracking-wide">
-              Windshield Tint
-            </label>
+          {/* 2. Seats & French Stitching */}
+          <div
+            onClick={(e) => {
+              e.stopPropagation();
+              setActivePanel("seats");
+              setCameraPose("seats");
+            }}
+            className={`p-3 rounded-xl border transition-all cursor-pointer ${
+              activePanel === "seats" || cameraPose === "seats"
+                ? "bg-slate-800/90 border-red-500 shadow-[0_0_15px_rgba(239,68,68,0.2)] ring-1 ring-red-500/80"
+                : "bg-slate-800/40 border-slate-700/70 hover:border-slate-600"
+            }`}
+          >
+            <div className="flex items-center justify-between mb-2">
+              <label className="text-[11px] font-bold text-slate-200 uppercase tracking-wider flex items-center gap-1.5">
+                <Armchair size={13} className="text-red-400" />
+                2. Seating Architecture & French Stitching
+              </label>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  playHMIClickSound();
+                  setActivePanel("seats");
+                  setCameraPose("seats");
+                }}
+                className="px-2 py-0.5 rounded text-[10px] font-mono bg-red-600/30 text-red-300 border border-red-500/50 hover:bg-red-600/50 cursor-pointer"
+              >
+                FOCUS SEAT CAM
+              </button>
+            </div>
             <div className="grid grid-cols-3 gap-1.5">
-              {(
-                [
-                  { id: "clear", label: "Clear Optical" },
-                  { id: "smoke", label: "Smoke 35%" },
-                  { id: "polarized", label: "Polarized Blue" },
-                ] as const
-              ).map((tint) => {
-                const isSelected = windshieldTint === tint.id;
-                return (
-                  <button
-                    key={tint.id}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      playHMIClickSound();
-                      setWindshieldTint(tint.id as any);
-                    }}
-                    className={`py-1.5 px-2 rounded-lg text-[11px] font-medium transition-all text-center cursor-pointer ${
-                      isSelected
-                        ? "bg-slate-700 border border-emerald-400 text-emerald-300"
-                        : "bg-slate-800/40 border border-slate-700/50 text-slate-300 hover:bg-slate-800"
-                    }`}
-                  >
-                    {tint.label}
-                  </button>
-                );
-              })}
+              {(["sport", "bucket", "luxury", "racing", "standard"] as const).map((st) => (
+                <button
+                  key={st}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    playHMIClickSound();
+                    setSeatStyle(st);
+                    setActivePanel("seats");
+                    setCameraPose("seats");
+                  }}
+                  className={`px-2 py-1.5 rounded-lg text-[10px] font-bold uppercase border transition-all cursor-pointer ${
+                    seatStyle === st
+                      ? "bg-red-600/20 border-red-500 text-red-300 ring-1 ring-red-400"
+                      : "bg-slate-800/50 border-slate-700 text-slate-300 hover:bg-slate-700/50"
+                  }`}
+                >
+                  {st}
+                </button>
+              ))}
             </div>
           </div>
 
-          {/* 3.4 Action Buttons: Apply & Sync / Reset */}
-          <div className="flex flex-col gap-2 mt-auto pt-2 border-t border-slate-800">
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                handleApplyConfig();
-              }}
-              className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl bg-gradient-to-r from-red-600 to-amber-600 text-white font-bold text-xs uppercase tracking-wider shadow-lg hover:from-red-500 hover:to-amber-500 active:scale-[0.99] transition-all cursor-pointer"
-            >
-              <Save size={14} />
-              <span>Apply to Master Vehicle</span>
-            </button>
+          {/* 3. Theme Presets */}
+          <div className="space-y-1.5">
+            <label className="text-[11px] font-bold text-slate-300 uppercase tracking-wider">
+              3. Factory Interior Theme Presets
+            </label>
+            <div className="grid grid-cols-2 gap-1.5">
+              {COCKPIT_THEME_PRESETS.map((t) => (
+                <button
+                  key={t.id}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    playHMITabSound();
+                    applyThemePreset(t.id);
+                  }}
+                  className="p-2 rounded-xl text-left bg-slate-800/60 border border-slate-700/80 hover:border-red-500/80 transition-all cursor-pointer"
+                >
+                  <div className="text-[11px] font-black text-slate-100">{t.name}</div>
+                  <div className="text-[9px] text-slate-400 truncate">{t.description}</div>
+                </button>
+              ))}
+            </div>
+          </div>
 
-            <button
-              onClick={(e) => {
-                e.stopPropagation();
-                handleReset();
-              }}
-              className="w-full flex items-center justify-center gap-1.5 py-1.5 rounded-lg bg-slate-800/60 border border-slate-700 text-slate-400 hover:text-slate-200 hover:bg-slate-700/50 text-[11px] font-medium transition-all cursor-pointer"
-            >
-              <RotateCcw size={12} />
-              <span>Reset to Factory Specs</span>
-            </button>
+          {/* 4. Engineering Impact Radar & Live Metrics */}
+          <div className="p-3 rounded-xl bg-slate-950/80 border border-slate-800 space-y-2">
+            <div className="flex items-center justify-between text-xs font-black uppercase text-slate-200">
+              <span className="flex items-center gap-1.5 text-red-400">
+                <Award size={13} /> Cockpit Engineering Consequences
+              </span>
+              <span className="text-[10px] font-mono text-cyan-400">
+                {engineering.totalPowerConsumptionW} W DRAW
+              </span>
+            </div>
+
+            {/* Score Progress Bars */}
+            <div className="space-y-1.5 text-[10px]">
+              <div>
+                <div className="flex justify-between text-slate-400 mb-0.5">
+                  <span>LUXURY INDEX</span>
+                  <span className="font-mono text-amber-300">{engineering.luxuryScore}%</span>
+                </div>
+                <div className="w-full h-1.5 bg-slate-800 rounded-full overflow-hidden">
+                  <div className="h-full bg-amber-400 rounded-full" style={{ width: `${engineering.luxuryScore}%` }} />
+                </div>
+              </div>
+
+              <div>
+                <div className="flex justify-between text-slate-400 mb-0.5">
+                  <span>SPORT & DYNAMICS</span>
+                  <span className="font-mono text-red-400">{engineering.sportScore}%</span>
+                </div>
+                <div className="w-full h-1.5 bg-slate-800 rounded-full overflow-hidden">
+                  <div className="h-full bg-red-500 rounded-full" style={{ width: `${engineering.sportScore}%` }} />
+                </div>
+              </div>
+
+              <div>
+                <div className="flex justify-between text-slate-400 mb-0.5">
+                  <span>TECHNOLOGY & AVIONICS</span>
+                  <span className="font-mono text-cyan-400">{engineering.technologyScore}%</span>
+                </div>
+                <div className="w-full h-1.5 bg-slate-800 rounded-full overflow-hidden">
+                  <div className="h-full bg-cyan-400 rounded-full" style={{ width: `${engineering.technologyScore}%` }} />
+                </div>
+              </div>
+            </div>
+
+            {/* Bottom Actions */}
+            <div className="flex items-center gap-2 pt-2 border-t border-slate-800/80">
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleApplyConfig();
+                }}
+                className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl bg-red-600 hover:bg-red-500 text-white font-bold text-xs shadow-lg shadow-red-600/30 transition-all cursor-pointer"
+              >
+                <Save size={13} />
+                <span>SYNC TO VEHICLE</span>
+              </button>
+
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  playHMIClickSound();
+                  resetConfig();
+                }}
+                title="Reset to Defaults (R)"
+                className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition-all cursor-pointer"
+              >
+                <RotateCcw size={14} />
+              </button>
+            </div>
           </div>
         </div>
       </div>
+      )}
+
+      {/* ───────────────────────────────────────────────────────────── */}
+      {/* ELECTRONICS & AVIATION AVIONICS SUITE                         */}
+      {/* ───────────────────────────────────────────────────────────── */}
+      {(workspaceMode === "avionics" || workspaceMode === "split") && (
+        <CockpitElectronicsAvionicsSuite
+          onSyncToVehicle={handleApplyConfig}
+          onSelectCameraPose={setCameraPose}
+        />
+      )}
+
+      {/* JSON Import/Export Modal */}
+      {jsonModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
+          <div className="bg-slate-900 border border-slate-700 rounded-2xl p-5 w-full max-w-lg shadow-2xl flex flex-col gap-3">
+            <h3 className="text-sm font-black text-slate-100 uppercase tracking-wider flex items-center gap-2">
+              <FileCode2 size={16} className="text-red-400" />
+              Cockpit Configuration JSON (Export / Import)
+            </h3>
+            <textarea
+              rows={12}
+              value={jsonText}
+              onChange={(e) => setJsonText(e.target.value)}
+              className="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 font-mono text-xs text-cyan-300 focus:outline-none focus:border-red-500"
+            />
+            <div className="flex items-center justify-end gap-2">
+              <button
+                onClick={() => setJsonModalOpen(false)}
+                className="px-4 py-1.5 rounded-lg bg-slate-800 text-slate-300 font-bold text-xs hover:bg-slate-700"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => {
+                  const success = importConfigJson(jsonText);
+                  if (success) {
+                    setJsonModalOpen(false);
+                    playHMITabSound();
+                  } else {
+                    alert("Invalid JSON configuration format!");
+                  }
+                }}
+                className="px-4 py-1.5 rounded-lg bg-red-600 text-white font-bold text-xs hover:bg-red-500"
+              >
+                Apply JSON
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

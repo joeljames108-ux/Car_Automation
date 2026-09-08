@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useMemo, useCallback, ReactNode } from "react";
 import { simulate, getPhysicsSignature } from "../sim/engine";
-import { defaultDesign } from "../sim/constants";
+import { defaultDesign, emptyDesign } from "../sim/constants";
+import { useGuidedEngineeringStore } from "./guidedEngineeringStore";
 import { GlobalPerformanceOptimizer } from "../sim/performance/GlobalPerformanceOptimizer";
 import type { VehicleDesign, SimResult, EngineConfig, VehicleConfig, AeroConfig, InteriorConfig, ElectronicsConfig, ManufacturingConfig, ExteriorConfig, AeroResearchConfig, InfotainmentConfig } from "../sim/types";
 import type {
@@ -47,7 +48,24 @@ export function DesignProvider({ children }: { children: ReactNode }) {
   const [design, setDesignState] = useState<VehicleDesign>(() => defaultDesign());
   const [units, setUnits] = useState<UnitSystem>("metric");
   const [carConcept, setCarConcept] = useState<CarConceptFocus>("balanced");
-  const [uiTheme, setUiTheme] = useState<UITheme>("theme4");
+  const [uiTheme, setUiThemeState] = useState<UITheme>(() => {
+    try {
+      const stored = window.localStorage.getItem("apex-engineer:ui-theme");
+      if (stored === "theme4" || stored === "theme3") return stored as UITheme;
+    } catch {
+      // Fallback if localStorage is inaccessible
+    }
+    return "theme4";
+  });
+
+  const setUiTheme = useCallback((theme: UITheme) => {
+    setUiThemeState(theme);
+    try {
+      window.localStorage.setItem("apex-engineer:ui-theme", theme);
+    } catch {
+      // Ignore if localStorage unavailable
+    }
+  }, []);
 
   const sim = useMemo(() => {
     const key = `sim_${getPhysicsSignature(design)}`;
@@ -59,18 +77,22 @@ export function DesignProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const updateEngine = useCallback((patch: Partial<EngineConfig>) => {
+    useGuidedEngineeringStore.getState().notifyEngineModified();
     setDesignState((d) => ({ ...d, engine: { ...d.engine, ...patch }, updatedAt: new Date().toISOString() }));
   }, []);
 
   const updateVehicle = useCallback((patch: Partial<VehicleConfig>) => {
+    useGuidedEngineeringStore.getState().notifyVehicleModified();
     setDesignState((d) => ({ ...d, vehicle: { ...d.vehicle, ...patch }, updatedAt: new Date().toISOString() }));
   }, []);
 
   const updateAero = useCallback((patch: Partial<AeroConfig>) => {
+    useGuidedEngineeringStore.getState().notifyAeroModified();
     setDesignState((d) => ({ ...d, vehicle: { ...d.vehicle, aero: { ...d.vehicle.aero, ...patch } }, updatedAt: new Date().toISOString() }));
   }, []);
 
   const updateAeroResearch = useCallback((patch: Partial<AeroResearchConfig>) => {
+    useGuidedEngineeringStore.getState().notifyAeroModified();
     setDesignState((d) => ({ ...d, vehicle: { ...d.vehicle, aeroResearch: { ...d.vehicle.aeroResearch, ...patch } }, updatedAt: new Date().toISOString() }));
   }, []);
 
@@ -119,7 +141,10 @@ export function DesignProvider({ children }: { children: ReactNode }) {
     setDesignState((d) => ({ ...d, vehicle: { ...d.vehicle, wheelsEng: { ...d.vehicle.wheelsEng, ...patch } }, updatedAt: new Date().toISOString() }));
   }, []);
 
-  const resetDesign = useCallback(() => setDesignState(defaultDesign()), []);
+  const resetDesign = useCallback(() => {
+    useGuidedEngineeringStore.getState().resetAllStages();
+    setDesignState(defaultDesign());
+  }, []);
 
   const value: DesignContextValue = useMemo(() => ({
     design, sim, units, setUnits, carConcept, setCarConcept, uiTheme, setUiTheme,

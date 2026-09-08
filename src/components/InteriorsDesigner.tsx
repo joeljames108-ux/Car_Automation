@@ -9,21 +9,24 @@
 // ============================================================================
 
 import React, { useState, useEffect } from 'react';
-import { Sparkles, Sliders, Cpu, LayoutGrid } from 'lucide-react';
+import { Sparkles, Cpu, LayoutGrid, Gauge, Sofa, Check } from 'lucide-react';
 import { useDesign } from '../state/DesignContext';
+import { useGuidedEngineeringStore } from '../state/guidedEngineeringStore';
 import { InfotainmentDesigner } from './InfotainmentDesigner';
-import { InteriorDashboardConfiguratorStudio } from './interior/InteriorDashboardConfiguratorStudio';
 import { InteractiveDashboardStudio } from './interior/InteractiveDashboardStudio';
+import { InstrumentClusterDiagnosticStudio } from './interior/InstrumentClusterDiagnosticStudio';
 import { playHMITabSound } from '../utils/hmiSoundSynth';
 
-export type InteriorStudioViewMode = 'setup' | 'configurator' | 'electronics';
+export type InteriorStudioViewMode = 'setup' | 'cluster_diagnostic' | 'electronics';
 
 interface InteriorsDesignerProps {
   initialSubTab?: InteriorStudioViewMode;
+  onSelectStage?: (stage: string) => void;
 }
 
-export function InteriorsDesigner({ initialSubTab = 'setup' }: InteriorsDesignerProps) {
+export function InteriorsDesigner({ initialSubTab = 'setup', onSelectStage }: InteriorsDesignerProps) {
   const { design } = useDesign();
+  const { interiorStatus, markStageComplete, setActiveWorkflowStage } = useGuidedEngineeringStore();
   const [viewMode, setViewMode] = useState<InteriorStudioViewMode>(initialSubTab);
 
   useEffect(() => {
@@ -39,6 +42,56 @@ export function InteriorsDesigner({ initialSubTab = 'setup' }: InteriorsDesigner
 
   return (
     <div className="space-y-4">
+      {/* Stage 4 Workflow Action Banner */}
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-3 p-4 rounded-2xl bg-gradient-to-r from-[#0d1424]/90 via-[#10192e]/90 to-[#0d1424]/90 border border-amber-500/30 backdrop-blur-xl shadow-lg">
+        <div className="flex items-center gap-3">
+          <div className={`w-9 h-9 rounded-xl flex items-center justify-center font-bold text-xs ${
+            interiorStatus === "configured"
+              ? "bg-emerald-500/15 text-emerald-400 border border-emerald-500/30"
+              : "bg-purple-500/15 text-purple-400 border border-purple-500/30"
+          }`}>
+            {interiorStatus === "configured" ? <Check size={18} /> : <Sofa size={18} />}
+          </div>
+          <div>
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-mono font-extrabold uppercase tracking-wider text-slate-100">
+                STAGE 4: COCKPIT INTERIOR & AVIONICS
+              </span>
+              <span className={`text-[10px] font-mono px-2 py-0.5 rounded-full font-bold uppercase ${
+                interiorStatus === "configured"
+                  ? "bg-emerald-500/20 text-emerald-300 border border-emerald-500/40"
+                  : interiorStatus === "invalidated"
+                  ? "bg-amber-500/20 text-amber-300 border border-amber-500/40"
+                  : "bg-purple-500/20 text-purple-300 border border-purple-500/40"
+              }`}>
+                {interiorStatus === "configured"
+                  ? "✓ CONFIGURED"
+                  : interiorStatus === "invalidated"
+                  ? "⚠ RECALCULATION REQUIRED"
+                  : "IN PROGRESS"}
+              </span>
+            </div>
+            <p className="text-[11px] font-mono text-slate-400 mt-0.5">
+              Dashboard material: {design.vehicle.interior.dashboardMaterial} • Seats: {design.vehicle.interior.seatType} • Displays: {design.vehicle.interior.infotainmentSize}"
+            </p>
+          </div>
+        </div>
+
+        {onSelectStage && (
+          <button
+            type="button"
+            onClick={() => {
+              markStageComplete("interior");
+              setActiveWorkflowStage("final_build");
+              onSelectStage("final_build");
+            }}
+            className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-400 hover:to-green-500 text-slate-950 font-mono font-black text-xs tracking-wider uppercase shadow-[0_0_20px_rgba(16,185,129,0.35)] transition-all cursor-pointer transform hover:scale-[1.02] active:scale-[0.98]"
+          >
+            <Check size={15} strokeWidth={3} />
+            <span>COMPLETE INTERIOR & PROCEED TO FINAL BUILD →</span>
+          </button>
+        )}
+      </div>
       {/* ── TOP SWITCHER: UNIFIED INTERIOR & ELECTRONICS STUDIO TABS ── */}
       <div
         className="flex flex-wrap items-center justify-between gap-2 p-2 rounded-2xl backdrop-blur-xl shadow-xl border"
@@ -69,15 +122,15 @@ export function InteriorsDesigner({ initialSubTab = 'setup' }: InteriorsDesigner
           </button>
 
           <button
-            onClick={() => handleTabSelect('configurator')}
+            onClick={() => handleTabSelect('cluster_diagnostic')}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
-              viewMode === 'configurator'
-                ? 'shadow-md scale-[1.02] bg-blue-600 text-white ring-2 ring-blue-400'
-                : 'hover:opacity-80 bg-blue-500/10 text-blue-800'
+              viewMode === 'cluster_diagnostic'
+                ? 'shadow-md scale-[1.02] bg-amber-600 text-white ring-2 ring-amber-400'
+                : 'hover:opacity-80 bg-amber-500/10 text-amber-900'
             }`}
           >
-            <Sliders size={13} />
-            <span>🎚️ 3D COCKPIT STUDIO</span>
+            <Gauge size={13} />
+            <span>🚨 UNDERSTANDING YOUR DASHBOARD</span>
           </button>
 
           <button
@@ -100,14 +153,12 @@ export function InteriorsDesigner({ initialSubTab = 'setup' }: InteriorsDesigner
 
       {/* ── CONDITIONAL VIEW MODE RENDERING ── */}
       {viewMode === 'setup' ? (
-        <InteractiveDashboardStudio />
-      ) : viewMode === 'configurator' ? (
-        <div className="rounded-2xl overflow-hidden shadow-2xl border border-amber-800/30">
-          <InteriorDashboardConfiguratorStudio />
-        </div>
+        <InteractiveDashboardStudio initialWorkspaceMode="hardware" />
+      ) : viewMode === 'cluster_diagnostic' ? (
+        <InstrumentClusterDiagnosticStudio />
       ) : (
         /* MODE C: Vehicle Electronics, Infotainment, ADAS, CAN-FD & Avionics */
-        <InfotainmentDesigner />
+        <InteractiveDashboardStudio initialWorkspaceMode="avionics" />
       )}
     </div>
   );

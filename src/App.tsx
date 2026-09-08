@@ -53,6 +53,8 @@ const CommandPalette = React.lazy(() => import("./components/CommandPalette").th
 import { Sparkles as SparklesIcon } from "lucide-react";
 
 
+import { GuidedWorkflowStepper } from "./components/guidedWorkflow/GuidedWorkflowStepper";
+
 export type WorkspaceCategory = "engineering" | "studios" | "simulation" | "world";
 
 interface StageItem {
@@ -63,11 +65,13 @@ interface StageItem {
 }
 
 const STAGES: StageItem[] = [
-  // --- Engineering Studio ---
+  // --- Engineering Sequential Workflow ---
+  { id: "engine", label: "1. Engine", icon: <Cog size={14} />, category: "engineering" },
+  { id: "vehicle", label: "2. Vehicle Studio", icon: <Car size={14} />, category: "engineering" },
+  { id: "aero_studio", label: "3. Aero Studio", icon: <Wind size={14} />, category: "engineering" },
+  { id: "interior", label: "4. Interior", icon: <Sofa size={14} />, category: "engineering" },
+  { id: "final_build", label: "5. Final Build", icon: <Trophy size={14} />, category: "engineering" },
   { id: "command", label: "Command Center", icon: <LayoutDashboard size={14} />, category: "engineering" },
-  { id: "engine", label: "Engine", icon: <Cog size={14} />, category: "engineering" },
-  { id: "vehicle", label: "Vehicle Studio", icon: <Car size={14} />, category: "engineering" },
-  { id: "interior", label: "Interior & Electronics", icon: <Sofa size={14} />, category: "engineering" },
   { id: "manufacturing", label: "Manufacturing", icon: <Factory size={14} />, category: "engineering" },
   { id: "safety", label: "Safety Center", icon: <ShieldCheck size={14} />, category: "engineering" },
 
@@ -393,6 +397,7 @@ function AppInner() {
               onReset={resetDesign}
               onSearch={handleSearch}
               onAdvanceMonth={advanceAllSystems}
+              uiTheme={uiTheme}
               onSetUiTheme={setUiTheme}
               focusMode={focusMode}
               onToggleFocusMode={handleToggleFocusMode}
@@ -426,21 +431,27 @@ function AppInner() {
                 {focusMode ? "Focus workspace mode enabled. Navigation chrome hidden." : "Focus workspace mode disabled."}
               </div>
               <div style={{ display: "flex", gap: 16 }}>
-                <div style={{ flex: 1, minWidth: 0 }}>
+                <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", gap: 16 }}>
+                  {/* Hide global stepper for F1/Hypercar — they have their own internal workflow */}
+                  {stage !== "f1_constructor" && stage !== "hypercar_constructor" && (
+                    <GuidedWorkflowStepper activeStageId={stage} onSelectStage={handleSelectStage} />
+                  )}
                   <StageSwitcher stage={stage} onSelectStage={handleSelectStage} />
                 </div>
 
-                {/* Right Sidebar — Live Stats (Top) + Engineering Log (Bottom) */}
-                {!focusMode && <div className="hidden xl:flex flex-col gap-4" style={{ width: 300, flexShrink: 0 }}>
-                  <div style={{ position: "sticky", top: 8, display: "flex", flexDirection: "column", gap: 12 }}>
-                    {/* Live Stat Rail (Top) */}
-                    <div className="stat-rail-container">
-                      <StatRail />
+                {/* Right Sidebar — hidden for F1/Hypercar (they have their own full-width layout) */}
+                {!focusMode && stage !== "f1_constructor" && stage !== "hypercar_constructor" && (
+                  <div className="hidden xl:flex flex-col gap-4" style={{ width: 300, flexShrink: 0 }}>
+                    <div style={{ position: "sticky", top: 8, display: "flex", flexDirection: "column", gap: 12 }}>
+                      {/* Live Stat Rail (Top) */}
+                      <div className="stat-rail-container">
+                        <StatRail />
+                      </div>
+                      {/* Engineering Log Panel (Bottom) */}
+                      <EngineeringLog />
                     </div>
-                    {/* Engineering Log Panel (Bottom) */}
-                    <EngineeringLog />
                   </div>
-                </div>}
+                )}
               </div>
             </main>
 
@@ -600,18 +611,21 @@ function AppInner() {
       </nav>
 
       {/* Main content */}
-      <main id="main-workspace" tabIndex={-1} aria-label="Active engineering workspace" className="flex-1 max-w-full w-full px-6 py-4 pb-44 flex gap-4">
+      <main id="main-workspace" tabIndex={-1} aria-label="Active engineering workspace" className={`flex-1 max-w-full w-full px-6 py-4 pb-44 ${stage === "f1_constructor" || stage === "hypercar_constructor" ? "" : "flex gap-4"}`}>
         <div className="sr-only" aria-live="polite">
           {STAGES.find((item) => item.id === stage)?.label ?? stage} workspace opened.
         </div>
-        <div className="flex-1 min-w-0">
+        <div className={`${stage === "f1_constructor" || stage === "hypercar_constructor" ? "w-full" : "flex-1 min-w-0"}`}>
           <StageSwitcher stage={stage} onSelectStage={handleSelectStage} />
         </div>
-        <div className="hidden lg:block w-80 shrink-0">
-          <div className="sticky top-20 stat-rail-container">
-            <StatRail />
+        {/* Hide sidebar for F1/Hypercar — they have their own full-width layout */}
+        {stage !== "f1_constructor" && stage !== "hypercar_constructor" && (
+          <div className="hidden lg:block w-80 shrink-0">
+            <div className="sticky top-20 stat-rail-container">
+              <StatRail />
+            </div>
           </div>
-        </div>
+        )}
       </main>
 
       <React.Suspense fallback={null}>

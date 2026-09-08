@@ -5,16 +5,26 @@
 // view delta performance comparisons, and execute physical snap installations.
 // ============================================================================
 
-import React, { memo } from "react";
+import React, { memo, useMemo } from "react";
 import { useF1AssemblyStore } from "../../../sim/f1/state/f1AssemblyStore";
 import { F1_SOCKET_ANCHORS, type F1SocketId } from "../../../sim/f1/modular/f1Sockets";
 import { F1ComponentRegistry, type F1ComponentDefinition } from "../../../sim/f1/modular/f1ComponentRegistry";
 import { F1AttachmentGraph } from "../../../sim/f1/modular/f1AttachmentGraph";
+import { useF1WorkflowStore, F1_WORKFLOW_STAGES, type F1WorkflowStage } from "../../../sim/f1/state/f1WorkflowStore";
 import { playHMIClickSound } from "../../../utils/hmiSoundSynth";
 import {
   Wrench, CheckCircle2, AlertTriangle, ArrowRight, RotateCcw,
-  Sparkles, Layers, ShieldCheck, Box, Trash2, Undo2, Redo2, Plus
+  Sparkles, Layers, ShieldCheck, Box, Trash2, Undo2, Redo2, Plus, Lock
 } from "lucide-react";
+
+// Map F1 workflow stages to socket categories
+const STAGE_CATEGORIES: Record<F1WorkflowStage, string[]> = {
+  power_unit: ["POWERTRAIN"],
+  chassis: ["CHASSIS"],
+  aero: ["AERO"],
+  cockpit: ["CHASSIS"],  // cockpit sockets are CHASSIS category
+  final_build: ["CHASSIS", "POWERTRAIN", "AERO", "SUSPENSION", "WHEELS"],
+};
 
 export const F1ModularComponentBrowser: React.FC = memo(function F1ModularComponentBrowser() {
   const {
@@ -31,7 +41,31 @@ export const F1ModularComponentBrowser: React.FC = memo(function F1ModularCompon
     redoStack,
   } = useF1AssemblyStore();
 
+  const { activeConstructionStage, markStageComplete, canEnterStage } = useF1WorkflowStore();
+
   const allSockets = Object.keys(F1_SOCKET_ANCHORS) as F1SocketId[];
+
+  // Filter sockets by the active workflow stage
+  const stageMeta = F1_WORKFLOW_STAGES[activeConstructionStage];
+  const visibleCategories = STAGE_CATEGORIES[activeConstructionStage] || [];
+  const visibleSockets = useMemo(() =>
+    allSockets.filter(sId => visibleCategories.includes(F1_SOCKET_ANCHORS[sId].category)),
+    [allSockets, visibleCategories]
+  );
+
+  // Check if current stage has all mandatory sockets installed
+  const mandatorySockets = visibleSockets.filter(sId => F1_SOCKET_ANCHORS[sId].mandatoryForHomologation);
+  const allMandatoryInstalled = mandatorySockets.every(sId => !!installedMap[sId]);
+  const stageGate = canEnterStage(activeConstructionStage);
+
+  // Next stage mapping
+  const nextStageMap: Partial<Record<F1WorkflowStage, F1WorkflowStage>> = {
+    power_unit: "chassis",
+    chassis: "aero",
+    aero: "cockpit",
+    cockpit: "final_build",
+  };
+  const nextStage = nextStageMap[activeConstructionStage];
   const activeSocket = selectedSocketId ? F1_SOCKET_ANCHORS[selectedSocketId] : null;
   const currentlyInstalledCompId = selectedSocketId ? installedMap[selectedSocketId] : null;
   const currentlyInstalledComp = currentlyInstalledCompId ? F1ComponentRegistry.getComponent(currentlyInstalledCompId) : null;
@@ -46,8 +80,12 @@ export const F1ModularComponentBrowser: React.FC = memo(function F1ModularCompon
             <Wrench className="w-4 h-4 text-amber-400" />
           </div>
           <div>
-            <h2 className="text-xs font-black tracking-wider uppercase text-white">Modular Assembly</h2>
-            <p className="text-[10px] text-zinc-400">20 Sockets • Real-Time CAD</p>
+            <h2 className="text-xs font-black tracking-wider uppercase text-white">
+              Stage {stageMeta.number}: {stageMeta.label}
+            </h2>
+            <p className="text-[10px] text-zinc-400">
+              {visibleSockets.length} Sockets • {stageMeta.icon} {stageMeta.description.slice(0, 50)}...
+            </p>
           </div>
         </div>
 
@@ -103,7 +141,7 @@ export const F1ModularComponentBrowser: React.FC = memo(function F1ModularCompon
 
       {/* Sockets Selector Carousel / List */}
       <div className="p-2 border-b border-white/10 overflow-x-auto flex gap-1.5 scrollbar-thin bg-black/30">
-        {allSockets.map((sId) => {
+        {visibleSockets.map((sId) => {
           const sAnchor = F1_SOCKET_ANCHORS[sId];
           const isInstalled = !!installedMap[sId];
           const isSelected = selectedSocketId === sId;
@@ -266,8 +304,66 @@ export const F1ModularComponentBrowser: React.FC = memo(function F1ModularCompon
           </div>
         ) : (
           <div className="text-center py-12 text-zinc-500 text-xs">
-            Select an attachment socket to view compatible components.
+            Select a socket above to view compatible components.
           </div>
+        )}
+      </div>
+
+      {/* Bottom: Stage Completion & Navigation */}
+      <div className="p-3 border-t border-white/10 bg-black/40 shrink-0">
+        <div className="flex items-center justify-between mb-2">
+          <span className="text-[9px] font-mono text-zinc-500">
+            {mandatorySockets.filter(sId => !!installedMap[sId]).length}/{mandatorySockets.length} mandatory installed
+          </span>
+          {allMandatoryInstalled ? (
+            <span className="text-[9px] font-mono text-emerald-400 flex items-center gap-1">
+              <CheckCircle2 className="w-3 h-3" /> STAGE READY
+            </span>
+          ) : (
+            <span className="text-[9px] font-mono text-amber-400 flex items-center gap-1">
+              <AlertTriangle className="w-3 h-3" /> {mandatorySockets.length - mandatorySockets.filter(sId => !!installedMap[sId]).length} required
+            </span>
+          )}
+        </div>
+        {nextStage && (
+          <button
+            onClick={() => {
+              playHMIClickSound();
+              if (allMandatoryInstalled) {
+                markStageComplete(activeConstructionStage);
+              }
+            }}
+            disabled={!allMandatoryInstalled}
+            className={`w-full py-2 rounded-lg text-xs font-black transition-all flex items-center justify-center gap-2 cursor-pointer ${
+              allMandatoryInstalled
+                ? "bg-amber-500 hover:bg-amber-400 text-black shadow-lg shadow-amber-500/30"
+                : "bg-zinc-900 text-zinc-600 border border-zinc-800 cursor-not-allowed"
+            }`}
+          >
+            {allMandatoryInstalled ? (
+              <>
+                <ArrowRight className="w-3.5 h-3.5" />
+                COMPLETE & CONTINUE TO {F1_WORKFLOW_STAGES[nextStage].label}
+              </>
+            ) : (
+              <>
+                <Lock className="w-3.5 h-3.5" />
+                Install all mandatory components first
+              </>
+            )}
+          </button>
+        )}
+        {!nextStage && allMandatoryInstalled && (
+          <button
+            onClick={() => {
+              playHMIClickSound();
+              markStageComplete(activeConstructionStage);
+            }}
+            className="w-full py-2 rounded-lg text-xs font-black bg-emerald-500 hover:bg-emerald-400 text-black shadow-lg shadow-emerald-500/30 transition-all flex items-center justify-center gap-2 cursor-pointer"
+          >
+            <CheckCircle2 className="w-3.5 h-3.5" />
+            FINALIZE ALL STAGES
+          </button>
         )}
       </div>
     </div>

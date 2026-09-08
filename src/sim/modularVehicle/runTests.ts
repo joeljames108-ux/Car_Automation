@@ -49,6 +49,7 @@ import { runDrivetrainSolverTests } from "../engine/__tests__/drivetrainSolverTe
 import { runMultimodeCapabilitiesTests } from "./__tests__/multimodeCapabilitiesTest";
 import { runVehicleArchitectureTests } from "../vehicleArchitecture/__tests__/vehicleArchitectureTests";
 import { runVehicleOutlinerTests } from "../vehicleArchitecture/__tests__/vehicleOutlinerTests";
+import { runTrueModularVehicleBuilderTests } from "./__tests__/trueModularVehicleBuilderTests";
 
 console.log("=================================================");
 console.log("  MODULAR VEHICLE, EXTERIOR & AI AGENT TESTS");
@@ -163,11 +164,13 @@ console.log("\n=================================================");
 console.log("  50-CHASSIS & MODULAR VEHICLE CONSTRUCTION TESTS");
 console.log("=================================================");
 import { runAssemblyPackagingTests } from "./tests/assemblyPackagingTests";
+import { runInteractiveDashboardStudioTests } from "./__tests__/interactiveDashboardStudioTests";
 
 const constrResults = runModularVehicleConstructionTests();
 
 runModularStructureTests();
 runInteriorStudioTests();
+const interactiveDashboardResults = runInteractiveDashboardStudioTests();
 runMasterVehicleStateTests();
 const engineStudioResults = runModularEngineStudioTests();
 const grandStudioResults = runGrandStudioIntegrationTests();
@@ -180,10 +183,16 @@ const drivetrainResults = runDrivetrainSolverTests();
 const multimodeResults = runMultimodeCapabilitiesTests();
 const vehicleArchResults = runVehicleArchitectureTests();
 const outlinerResults = runVehicleOutlinerTests();
+runTrueModularVehicleBuilderTests();
+import { runAeroStudioModularGlbTests } from "./__tests__/aeroStudioModularGlbTests";
+const aeroStudioModularResults = runAeroStudioModularGlbTests();
+import { runVehicleFamilyArchitectureTests } from "./__tests__/vehicleFamilyArchitectureTests";
+const vehicleFamilyResults = runVehicleFamilyArchitectureTests();
 
 if (
   constrResults.failed > 0 ||
   failedCount > 0 ||
+  interactiveDashboardResults.failed > 0 ||
   engineStudioResults.failed > 0 ||
   grandStudioResults.failed > 0 ||
   windTunnelResults.failed > 0 ||
@@ -194,7 +203,10 @@ if (
   drivetrainResults.failed > 0 ||
   multimodeResults.failed > 0 ||
   vehicleArchResults.failed > 0 ||
-  outlinerResults.failed > 0
+  outlinerResults.failed > 0 ||
+  aeroStudioModularResults.failed > 0 ||
+  vehicleFamilyResults.failed > 0
 ) {
   process.exit(1);
 }
+

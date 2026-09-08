@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback, useId, memo } from "react";
 import {
   Save, FolderOpen, RotateCcw, Search, User, Settings2,
-  Clock, ChevronDown, Sparkles, Wifi, Battery, Maximize2, Minimize2,
+  Clock, ChevronDown, Sparkles, Wifi, Battery, Maximize2, Minimize2, Palette,
 } from "lucide-react";
 import { GlassFilter } from "./LiquidGlass";
 
@@ -15,6 +15,7 @@ interface VisionGlassHeaderProps {
   onReset: () => void;
   onSearch: () => void;
   onAdvanceMonth: () => void;
+  uiTheme?: "theme3" | "theme4";
   onSetUiTheme?: (theme: "theme3" | "theme4") => void;
   focusMode?: boolean;
   onToggleFocusMode?: () => void;
@@ -23,7 +24,7 @@ interface VisionGlassHeaderProps {
 function VisionGlassHeaderComponent({
   month, totalRevenue, units,
   onSetUnits, onSave, onLoad, onReset, onSearch, onAdvanceMonth,
-  onSetUiTheme, focusMode = false, onToggleFocusMode,
+  uiTheme = "theme4", onSetUiTheme, focusMode = false, onToggleFocusMode,
 }: VisionGlassHeaderProps) {
   const [time, setTime] = useState(new Date());
   const [hovered, setHovered] = useState<string | null>(null);
@@ -306,6 +307,31 @@ function VisionGlassHeaderComponent({
           >
             {focusMode ? <Minimize2 size={12} aria-hidden="true" /> : <Maximize2 size={12} aria-hidden="true" />}
             <span className="vision-glass-focus-label">{focusMode ? "EXIT FOCUS" : "FOCUS"}</span>
+          </button>
+        )}
+
+        {/* Theme Indicator & Quick Toggle */}
+        {onSetUiTheme && (
+          <button
+            type="button"
+            onClick={() => onSetUiTheme(uiTheme === "theme4" ? "theme3" : "theme4")}
+            title="Active: Vision Glass UI 4 (Click to toggle CAD Theme)"
+            aria-label="Toggle UI theme"
+            className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400"
+            style={{
+              display: "flex", alignItems: "center", gap: 5,
+              padding: "4px 8px", borderRadius: 9,
+              fontSize: 9, fontWeight: 700,
+              color: "#fef3c7",
+              background: "rgba(245, 158, 11, 0.18)",
+              border: "1px solid rgba(245, 158, 11, 0.45)",
+              cursor: "pointer",
+              transition: "all 0.2s ease",
+              boxShadow: "0 0 10px rgba(245,158,11,0.18)",
+            }}
+          >
+            <Palette size={12} style={{ color: "#fbbf24" }} aria-hidden="true" />
+            <span style={{ fontFamily: "monospace", letterSpacing: "0.5px" }}>VISION GLASS</span>
           </button>
         )}
 

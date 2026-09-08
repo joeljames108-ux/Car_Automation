@@ -33,6 +33,7 @@ const ENGINE_LAYOUT_SPECIFICATIONS: Record<
   rotary:   { width: 420, height: 460, depth: 420, baseMassKg: 95 },
   hybrid:   { width: 680, height: 650, depth: 620, baseMassKg: 195 },
   electric: { width: 520, height: 320, depth: 620, baseMassKg: 85 },
+  unconfigured: { width: 0, height: 0, depth: 0, baseMassKg: 0 },
 };
 
 /**

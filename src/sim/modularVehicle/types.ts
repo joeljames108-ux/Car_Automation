@@ -327,3 +327,120 @@ export interface ModularVehicleAssembly {
   validationResults: ValidationResult[];
   isComplete: boolean;
 }
+
+// ===================================================================
+// EXPANDED 38 BODY-TYPE SYSTEM & 3-LAYER ARCHITECTURE
+// ===================================================================
+
+export type PlatformFamilyId =
+  | "unibody_passenger"
+  | "unibody_compact"
+  | "utility_suv_crossover"
+  | "body_on_frame_truck"
+  | "commercial_van_bus"
+  | "high_downforce_supercar"
+  | "open_top_gt"
+  | "tubular_specialty";
+
+export type VehicleBodyTypeId =
+  // 1. Unibody Passenger Platform (8)
+  | "sedan"
+  | "coupe"
+  | "station_wagon"
+  | "shooting_brake"
+  | "liftback"
+  | "fastback"
+  | "grand_tourer"
+  | "limousine"
+  // 2. Unibody Compact Platform (5)
+  | "hatchback"
+  | "hot_hatch"
+  | "supermini"
+  | "city_car"
+  | "kei_compact"
+  // 3. Utility & Crossover Platform (5)
+  | "suv"
+  | "crossover"
+  | "luxury_suv"
+  | "performance_suv"
+  | "offroad_suv"
+  // 4. Body-on-Frame Truck & Commercial (4)
+  | "pickup_truck"
+  | "offroad_4x4"
+  | "cab_over_utility"
+  | "chassis_cab"
+  // 5. Commercial High-Volume / MPV (5)
+  | "cargo_van"
+  | "minivan_mpv"
+  | "microvan"
+  | "motorhome_camper"
+  | "bus_shuttle"
+  // 6. Mid-Engine Carbon Monocoque (3)
+  | "supercar"
+  | "hypercar"
+  | "track_special"
+  // 7. Open-Top Reinforced Platform (2)
+  | "roadster"
+  | "convertible"
+  // 8. Tubular & Specialty Platform (6)
+  | "sport_wagon"
+  | "shooting_brake_ev"
+  | "rally_car"
+  | "dune_buggy"
+  | "beach_buggy"
+  | "three_wheeler";
+
+export type VehicleArchitectureLayer = "PLATFORM" | "BODY" | "DESIGN_KIT";
+
+export type BlenderBranchCategory = "PLATFORM" | "BODY" | "AERO" | "WHEELS" | "GLASS" | "INTERIOR";
+
+export interface HypercarActiveAeroState {
+  wingAngleDeg: number;       // -15 deg to +35 deg
+  drsActive: boolean;
+  downforceKgAt250Kmh: number;
+  dragCdDelta: number;
+  aeroBalanceFrontPct: number;
+  lapTimeDeltaSec: number;
+}
+
+export interface ConvertibleRoofState {
+  roofPosition: number;       // 0.0 (closed/up) to 1.0 (open/down)
+  state: "roof_up" | "roof_down" | "in_motion";
+  cdDelta: number;
+  structuralRigidityPenaltyPct: number;
+}
+
+export type VanSeatConfig = "2_seat_cargo" | "5_seat" | "7_seat" | "8_seat" | "9_seat";
+
+export interface VanInteriorVolumeState {
+  seatConfig: VanSeatConfig;
+  passengerCount: number;
+  cargoVolumeL: number;
+  floorPayloadKg: number;
+}
+
+export interface OffRoadSuspensionState {
+  rideHeightMm: number;        // 180mm to 350mm
+  tireDiameterInches: number;  // 30" to 40"
+  effectiveGroundClearanceMm: number;
+  suspensionTravelMm: number;
+  fenderClearanceMm: number;
+}
+
+export type CommercialBodyType =
+  | "flatbed"
+  | "cargo_box"
+  | "refrigerated_box"
+  | "tipper"
+  | "service_body"
+  | "camper"
+  | "passenger_body";
+
+export interface CommercialBodySpec {
+  bodyType: CommercialBodyType;
+  label: string;
+  payloadCapacityKg: number;
+  cargoVolumeM3: number;
+  tareWeightKg: number;
+  glbFilename: string;
+}

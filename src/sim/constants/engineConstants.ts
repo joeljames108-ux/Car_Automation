@@ -28,6 +28,7 @@ export const ENGINE_LAYOUTS: Record<EngineLayout, {
   rotary: { label: "Rotary", cylinders: 2, weightBase: 90, costFactor: 1.4, balanceFactor: 0.6, rpmFactor: 1.5, sizeFactor: 0.5 },
   hybrid: { label: "Hybrid (ICE+E)", cylinders: 6, weightBase: 200, costFactor: 1.8, balanceFactor: 0.85, rpmFactor: 1.0, sizeFactor: 1.1 },
   electric: { label: "Electric", cylinders: 0, weightBase: 0, costFactor: 1.0, balanceFactor: 1.0, rpmFactor: 0, sizeFactor: 0 },
+  unconfigured: { label: "Unconfigured", cylinders: 0, weightBase: 0, costFactor: 0, balanceFactor: 0, rpmFactor: 0, sizeFactor: 0 },
 };
 
 export const CRANK_MATERIALS: Record<CrankMaterial, {
