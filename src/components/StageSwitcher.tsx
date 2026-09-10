@@ -90,6 +90,7 @@ const StageSwitcherComponent: React.FC<StageSwitcherProps> = ({ stage, onSelectS
     aero_studio: "aero",
     interior: "interior",
     final_build: "final_build",
+    command: "vehicle", // Command Center unlocked after vehicle stage (exterior) is complete
   };
 
   const targetWorkflowStage = workflowMap[stage];
