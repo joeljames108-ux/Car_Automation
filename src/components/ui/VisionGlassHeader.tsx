@@ -1,9 +1,8 @@
-import { useState, useEffect, useCallback, useId, memo } from "react";
+import { useState, useEffect, memo } from "react";
 import {
-  Save, FolderOpen, RotateCcw, Search, User, Settings2,
-  Clock, ChevronDown, Sparkles, Wifi, Battery, Maximize2, Minimize2, Palette,
+  Save, FolderOpen, RotateCcw, Search, User,
+  Clock, Sparkles, Maximize2, Minimize2, Palette,
 } from "lucide-react";
-import { GlassFilter } from "./LiquidGlass";
 
 interface VisionGlassHeaderProps {
   month: number;
@@ -28,7 +27,6 @@ function VisionGlassHeaderComponent({
 }: VisionGlassHeaderProps) {
   const [time, setTime] = useState(new Date());
   const [hovered, setHovered] = useState<string | null>(null);
-  const filterId = useId().replace(/:/g, "-");
 
   useEffect(() => {
     const t = setInterval(() => setTime(new Date()), 30_000);
@@ -53,15 +51,14 @@ function VisionGlassHeaderComponent({
         height: 48,
         borderBottom: "1px solid rgba(255,255,255,0.12)",
         background: "rgba(15, 23, 42, 0.55)",
-        backdropFilter: `url(#${filterId}) blur(36px) saturate(190%)`,
-        WebkitBackdropFilter: `url(#${filterId}) blur(36px) saturate(190%)`,
+        backdropFilter: "blur(28px) saturate(190%)",
+        WebkitBackdropFilter: "blur(28px) saturate(190%)",
         boxShadow: "0 4px 20px rgba(0,0,0,0.25), inset 0 -1px 0 rgba(255,255,255,0.08), inset 0 1px 0 rgba(255,255,255,0.25)",
         flexShrink: 0,
         position: "relative",
         zIndex: 20,
       }}
     >
-      <GlassFilter id={filterId} scale={15} />
       {/* ── LEFT: Logo + Brand ── */}
       <div className="vision-glass-header-brand" style={{ display: "flex", alignItems: "center", gap: 10, minWidth: 180 }}>
         {/* Animated logo mark */}
@@ -158,7 +155,7 @@ function VisionGlassHeaderComponent({
             onMouseEnter={() => setHovered("advance")}
             onMouseLeave={() => setHovered(null)}
             aria-label="Advance simulation by 1 month"
-            className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400"
+            className="spring-press focus-visible:outline-none focus-ring-emil"
             style={{
               background: hovered === "advance" ? "rgba(0,136,255,0.30)" : "rgba(0,136,255,0.18)",
               color: "#fbbf24",
@@ -168,7 +165,7 @@ function VisionGlassHeaderComponent({
               fontSize: 9,
               fontWeight: 700,
               cursor: "pointer",
-              transition: "all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1)",
+              transition: "transform 0.16s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.15s ease-out",
               transform: hovered === "advance" ? "scale(1.05)" : "scale(1)",
             }}
           >
@@ -200,14 +197,14 @@ function VisionGlassHeaderComponent({
           onMouseEnter={() => setHovered("search")}
           onMouseLeave={() => setHovered(null)}
           aria-label="Search studio modules (Control plus K)"
-          className="vision-glass-search expanding-search-input btn-interactive flex items-center justify-between gap-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400"
+          className="vision-glass-search expanding-search-input btn-interactive spring-press flex items-center justify-between gap-2 focus-visible:outline-none focus-ring-emil"
           style={{
             background: hovered === "search" ? "rgba(255,255,255,0.12)" : "rgba(255,255,255,0.06)",
             border: hovered === "search" ? "1px solid rgba(56,189,248,0.4)" : "1px solid rgba(255,255,255,0.10)",
             borderRadius: 10, padding: "4px 10px",
             fontSize: 10, color: "#cbd5e1", cursor: "pointer",
             boxShadow: hovered === "search" ? "0 0 12px rgba(56,189,248,0.2)" : "none",
-            transition: "all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1)",
+            transition: "transform 0.16s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.15s ease-out, border-color 0.15s ease-out, box-shadow 0.18s ease-out",
           }}
         >
           <div className="flex items-center gap-1.5">
@@ -241,14 +238,14 @@ function VisionGlassHeaderComponent({
               aria-checked={units === u}
               onClick={() => onSetUnits(u)}
               aria-label={`Switch units to ${u}`}
-              className="focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-sky-400"
+              className="spring-press focus-visible:outline-none focus-ring-emil"
               style={{
                 padding: "3px 7px", borderRadius: 7,
                 fontSize: 10, fontWeight: units === u ? 700 : 500,
                 background: units === u ? "#ffffff" : "transparent",
                 color: units === u ? "#080c14" : "#94a3b8",
                 border: "none", cursor: "pointer",
-                transition: "all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1)",
+                transition: "transform 0.16s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.15s ease-out, color 0.15s ease-out",
                 boxShadow: units === u ? "0 1px 3px rgba(0,0,0,0.15)" : "none",
               }}
             >
@@ -271,14 +268,14 @@ function VisionGlassHeaderComponent({
             aria-label={a.tip}
             onMouseEnter={() => setHovered(a.id)}
             onMouseLeave={() => setHovered(null)}
-            className="vision-glass-icon-action focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400"
+            className="vision-glass-icon-action spring-press focus-visible:outline-none focus-ring-emil"
             style={{
               padding: 5, borderRadius: 8,
               color: hovered === a.id ? "#f8fafc" : "#94a3b8",
               background: hovered === a.id ? "rgba(255,255,255,0.10)" : "transparent",
               border: "none", cursor: "pointer",
-              transition: "all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1)",
-              transform: hovered === a.id ? "translateY(-1px)" : "none",
+              transition: "transform 0.16s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.15s ease-out, color 0.15s ease-out",
+              transform: hovered === a.id ? "translateY(-1px) scale(1.06)" : "none",
             }}
           >
             {a.icon}
@@ -292,7 +289,7 @@ function VisionGlassHeaderComponent({
             title={focusMode ? "Exit Focus Workspace (Ctrl + Shift + F)" : "Enter Focus Workspace (Ctrl + Shift + F)"}
             aria-label={focusMode ? "Exit focus workspace" : "Enter focus workspace"}
             aria-pressed={focusMode}
-            className="vision-glass-focus-toggle focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-sky-400"
+            className="vision-glass-focus-toggle spring-press focus-visible:outline-none focus-ring-emil"
             style={{
               display: "flex", alignItems: "center", gap: 5,
               padding: "4px 8px", borderRadius: 9,
@@ -301,7 +298,7 @@ function VisionGlassHeaderComponent({
               background: focusMode ? "#fbbf24" : "rgba(255,255,255,0.08)",
               border: focusMode ? "1px solid rgba(251,191,36,0.85)" : "1px solid rgba(255,255,255,0.12)",
               cursor: "pointer",
-              transition: "all 0.2s ease",
+              transition: "transform 0.16s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.15s ease-out, box-shadow 0.18s ease-out",
               boxShadow: focusMode ? "0 0 14px rgba(251,191,36,0.35)" : "none",
             }}
           >
@@ -317,7 +314,7 @@ function VisionGlassHeaderComponent({
             onClick={() => onSetUiTheme(uiTheme === "theme4" ? "theme3" : "theme4")}
             title="Active: Vision Glass UI 4 (Click to toggle CAD Theme)"
             aria-label="Toggle UI theme"
-            className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-400"
+            className="spring-press focus-visible:outline-none focus-ring-emil"
             style={{
               display: "flex", alignItems: "center", gap: 5,
               padding: "4px 8px", borderRadius: 9,
@@ -326,7 +323,7 @@ function VisionGlassHeaderComponent({
               background: "rgba(245, 158, 11, 0.18)",
               border: "1px solid rgba(245, 158, 11, 0.45)",
               cursor: "pointer",
-              transition: "all 0.2s ease",
+              transition: "transform 0.16s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.15s ease-out, box-shadow 0.18s ease-out",
               boxShadow: "0 0 10px rgba(245,158,11,0.18)",
             }}
           >

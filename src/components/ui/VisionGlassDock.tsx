@@ -1,6 +1,5 @@
-import { useState, useRef, useEffect, useCallback, useId, memo } from "react";
+import { useState, useRef, useCallback, memo } from "react";
 import type { ReactNode } from "react";
-import { GlassFilter } from "./LiquidGlass";
 
 interface StageItem {
   id: string;
@@ -31,8 +30,6 @@ function VisionGlassDockComponent({
   const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
   const [hoveredCat, setHoveredCat] = useState<string | null>(null);
   const dockRef = useRef<HTMLDivElement>(null);
-  const [isExpanded, setIsExpanded] = useState(true);
-  const filterId = useId().replace(/:/g, "-");
 
   const activeCategoryStages = stages.filter((s) => s.category === activeCategory);
 
@@ -64,8 +61,6 @@ function VisionGlassDockComponent({
         maxWidth: "96vw",
       }}
     >
-      <GlassFilter id={filterId} scale={20} />
-
       {/* ── Active Module Label (floating above dock) ── */}
       <div
         key={activeStage}
@@ -94,10 +89,9 @@ function VisionGlassDockComponent({
           gap: 3,
           maxWidth: "100%",
           overflowX: "auto",
-          // Apple Vision OS Translucent Light Glass dock with liquid refraction
           background: "rgba(255, 255, 255, 0.40)",
-          backdropFilter: `url(#${filterId}) blur(50px) saturate(220%)`,
-          WebkitBackdropFilter: `url(#${filterId}) blur(50px) saturate(220%)`,
+          backdropFilter: "blur(28px) saturate(190%)",
+          WebkitBackdropFilter: "blur(28px) saturate(190%)",
           border: "1.5px solid rgba(255, 255, 255, 0.90)",
           boxShadow:
             "0 14px 45px rgba(0, 0, 0, 0.12), " +
@@ -106,8 +100,20 @@ function VisionGlassDockComponent({
             "0 0 25px rgba(255, 220, 180, 0.25)",
           borderRadius: 22,
           padding: "5px 8px",
-          transition: "all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)",
+          transition: "transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease-out",
           animation: "vg-prismatic-border 6s ease-in-out infinite",
+        }}
+        onKeyDown={(e) => {
+          if (e.key === "ArrowRight" || e.key === "ArrowLeft") {
+            e.preventDefault();
+            const buttons = dockRef.current?.querySelectorAll<HTMLButtonElement>("button");
+            if (!buttons || buttons.length === 0) return;
+            const currentIdx = Array.from(buttons).indexOf(document.activeElement as HTMLButtonElement);
+            const nextIdx = e.key === "ArrowRight"
+              ? (currentIdx + 1) % buttons.length
+              : (currentIdx - 1 + buttons.length) % buttons.length;
+            buttons[nextIdx]?.focus();
+          }
         }}
       >
         {/* ── Category Buttons ── */}
@@ -121,7 +127,6 @@ function VisionGlassDockComponent({
               aria-current={active ? "true" : undefined}
               onClick={() => {
                 onSelectCategory(cat.id);
-                // Auto-select first in category if not already there
                 const first = stages.find((s) => s.category === cat.id);
                 const stagesInCat = stages.filter((s) => s.category === cat.id);
                 if (first && !stagesInCat.some((s) => s.id === activeStage)) {
@@ -130,7 +135,7 @@ function VisionGlassDockComponent({
               }}
               onMouseEnter={() => setHoveredCat(cat.id)}
               onMouseLeave={() => setHoveredCat(null)}
-              className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500"
+              className="spring-press focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500"
               style={{
                 display: "flex",
                 alignItems: "center",
@@ -152,8 +157,8 @@ function VisionGlassDockComponent({
                   : "1px solid transparent",
                 cursor: "pointer",
                 whiteSpace: "nowrap" as const,
-                transition: "all 0.28s cubic-bezier(0.34, 1.56, 0.64, 1)",
-                transform: isHov ? "translateY(-4px) scale(1.05)" : "none",
+                transition: "transform 0.18s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.15s ease-out, border-color 0.15s ease-out, box-shadow 0.18s ease-out",
+                transform: isHov ? "translateY(-3px) scale(1.04)" : "none",
                 boxShadow: isHov
                   ? "0 6px 16px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.9)"
                   : "none",
@@ -192,7 +197,7 @@ function VisionGlassDockComponent({
               aria-current={cur ? "page" : undefined}
               onMouseEnter={() => setHoveredIdx(idx)}
               onMouseLeave={() => setHoveredIdx(null)}
-              className={`focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500 ${cur ? "dock-item-active" : ""}`}
+              className={`spring-press focus-visible:outline-none focus-ring-emil ${cur ? "dock-item-active glass-glow-cyan" : ""}`}
               style={{
                 display: "flex",
                 alignItems: "center",
@@ -210,7 +215,7 @@ function VisionGlassDockComponent({
                 border: cur ? "1px solid rgba(0, 122, 255, 0.30)" : "none",
                 cursor: "pointer",
                 whiteSpace: "nowrap" as const,
-                transition: "all 0.18s cubic-bezier(0.34, 1.56, 0.64, 1)",
+                transition: "transform 0.18s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.15s ease-out, color 0.15s ease-out",
                 transform: `scale(${mag})`,
                 transformOrigin: "bottom center",
               }}
@@ -220,7 +225,7 @@ function VisionGlassDockComponent({
                   color: cur ? "#007aff" : "#64748b",
                   display: "flex",
                   alignItems: "center",
-                  transition: "color 0.2s ease",
+                  transition: "color 0.15s ease-out",
                 }}
                 aria-hidden="true"
               >

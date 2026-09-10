@@ -16,15 +16,19 @@ import {
   ShieldCheck,
   RotateCcw,
   Sparkles,
+  Activity,
+  Gauge,
 } from 'lucide-react';
 import { MasterVehicleAssemblyDeck } from './MasterVehicleAssemblyDeck';
-import { MultiViewTechnicalBlueprint } from './MultiViewTechnicalBlueprint';
+import { PhotorealisticVehicleBlueprint } from '../assembly/iso3d/PhotorealisticVehicleBlueprint';
+import { ChassisFeaStressCard } from '../chassis/ChassisFeaStressCard';
+import { EvBatteryThermalStudio } from '../powertrain/EvBatteryThermalStudio';
 import { PowertrainDynoDashboard } from './PowertrainDynoDashboard';
 import { useMasterVehicleAssemblyStore } from '../../state/masterVehicleAssemblyStore';
 import { UniversalGlbExporter } from '../../exterior3d/export/universalGlbExporter';
 import { HighFidelitySedanChassisGenerator } from '../../exterior3d/generators/highFidelitySedanChassisGenerator';
 
-export type StudioTabId = '3D_ASSEMBLY' | 'CAD_BLUEPRINT' | 'ENGINE_DYNO';
+export type StudioTabId = '3D_ASSEMBLY' | 'CAD_BLUEPRINT' | 'FEA_CHASSIS' | 'EV_THERMAL' | 'ENGINE_DYNO';
 
 export const ModularGltfShowcaseStudio: React.FC = () => {
   const [activeTab, setActiveTab] = useState<StudioTabId>('3D_ASSEMBLY');
@@ -56,8 +60,10 @@ export const ModularGltfShowcaseStudio: React.FC = () => {
 
   const tabs: { id: StudioTabId; label: string; icon: React.FC<{ className?: string }> }[] = [
     { id: '3D_ASSEMBLY', label: '3D Assembly Deck', icon: Layers },
-    { id: 'CAD_BLUEPRINT', label: 'CAD Blueprints', icon: Compass },
-    { id: 'ENGINE_DYNO', label: 'Engine Dyno & Telemetry', icon: Zap },
+    { id: 'CAD_BLUEPRINT', label: '7-Layer CAD Blueprint', icon: Compass },
+    { id: 'FEA_CHASSIS', label: 'Chassis FEA Rigidity', icon: Gauge },
+    { id: 'EV_THERMAL', label: '800V EV Thermal', icon: Zap },
+    { id: 'ENGINE_DYNO', label: 'Engine Dyno & Telemetry', icon: Activity },
   ];
 
   return (
@@ -93,9 +99,9 @@ export const ModularGltfShowcaseStudio: React.FC = () => {
               <button
                 key={t.id}
                 onClick={() => setActiveTab(t.id)}
-                className={`flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+                className={`spring-press flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all focus-visible:outline-none focus-ring-emil ${
                   isActive
-                    ? 'bg-amber-500 text-black shadow-[0_0_12px_rgba(6,182,212,0.4)]'
+                    ? 'bg-amber-400 text-slate-950 font-bold shadow-[0_0_12px_rgba(251,191,36,0.35)]'
                     : 'text-gray-400 hover:text-gray-200 hover:bg-slate-900/80'
                 }`}
               >
@@ -111,7 +117,7 @@ export const ModularGltfShowcaseStudio: React.FC = () => {
           <button
             onClick={handleExportGlb}
             disabled={isExporting}
-            className="flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-black font-bold text-xs shadow-lg shadow-cyan-500/20 transition-all disabled:opacity-50 cursor-pointer"
+            className="spring-press flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-slate-950 font-bold text-xs shadow-lg shadow-amber-500/20 transition-all disabled:opacity-50 cursor-pointer focus-visible:outline-none focus-ring-emil"
           >
             <Download className="w-4 h-4" />
             {isExporting ? 'Exporting Binary...' : 'Export 3D GLB Asset'}
@@ -122,7 +128,9 @@ export const ModularGltfShowcaseStudio: React.FC = () => {
       {/* Main Studio Viewport Workspace */}
       <div className="flex-1 overflow-hidden p-3 bg-slate-900/80">
         {activeTab === '3D_ASSEMBLY' && <MasterVehicleAssemblyDeck />}
-        {activeTab === 'CAD_BLUEPRINT' && <MultiViewTechnicalBlueprint />}
+        {activeTab === 'CAD_BLUEPRINT' && <PhotorealisticVehicleBlueprint />}
+        {activeTab === 'FEA_CHASSIS' && <ChassisFeaStressCard />}
+        {activeTab === 'EV_THERMAL' && <EvBatteryThermalStudio />}
         {activeTab === 'ENGINE_DYNO' && <PowertrainDynoDashboard />}
       </div>
 

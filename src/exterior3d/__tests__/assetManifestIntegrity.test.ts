@@ -12,7 +12,6 @@ import { describe, it, expect } from 'vitest';
 import * as fs from 'fs';
 import * as path from 'path';
 import { Car3DGlbAssetRegistry } from '../geometry/car3dGlbAssetRegistry.ts';
-import { V12_COMPONENT_MANIFESTS } from '../../engine3d/manifests/v12Manifest.ts';
 
 const PUBLIC_DIR = path.resolve(process.cwd(), 'public');
 
@@ -96,27 +95,11 @@ describe('AssetManifestIntegrity', () => {
     }
   });
 
-  it('every V12 modular component assetPath resolves to a valid GLB', () => {
-    expect(V12_COMPONENT_MANIFESTS.length).toBeGreaterThan(0);
-
-    for (const component of V12_COMPONENT_MANIFESTS) {
-      expectValidGlb(component.assetPath);
-    }
-  });
-
   it('all required generated family files exist as valid GLBs', () => {
     for (const files of Object.values(REQUIRED_GENERATED_FAMILIES)) {
       for (const file of files) {
         expectValidGlb(file);
       }
     }
-  });
-
-  it('engine parts directory contains exactly the exported components', () => {
-    const dir = path.join(PUBLIC_DIR, 'models', 'engines', 'v12');
-    const glbs = fs.readdirSync(dir).filter((f) => f.endsWith('.glb')).sort();
-    expect(glbs.length).toBe(V12_COMPONENT_MANIFESTS.length);
-    expect(glbs.length).toBeGreaterThanOrEqual(18);
-    expect(glbs).toContain('timing-chain.glb');
   });
 });

@@ -1,20 +1,65 @@
-import React, { useId } from "react";
+import React, { useState, useId } from "react";
 import { useDesign, fmtSpeed, fmtDistance } from "../state/DesignContext";
 import { Section, StatTile } from "./ui/Controls";
-import { Wind, ShieldAlert, Disc, CircleDot, Spline, Star, Activity, Thermometer, AlertTriangle } from "lucide-react";
+import {
+  Wind, ShieldAlert, Disc, CircleDot, Spline, Star, Activity,
+  Thermometer, AlertTriangle, Gauge, Zap, Compass, FlaskConical,
+} from "lucide-react";
+import { ChassisFeaStressCard } from "./chassis/ChassisFeaStressCard";
+import { EvBatteryThermalStudio } from "./powertrain/EvBatteryThermalStudio";
+import { PhotorealisticVehicleBlueprint } from "./assembly/iso3d/PhotorealisticVehicleBlueprint";
+
+type TestingLabTab = "PROVING_GROUND" | "CHASSIS_FEA" | "EV_THERMAL" | "CAD_BLUEPRINT";
 
 export function TestingLab() {
   const { sim, design } = useDesign();
+  const [activeTab, setActiveTab] = useState<TestingLabTab>("PROVING_GROUND");
   const t = sim.testing;
+
+  const tabs: { id: TestingLabTab; label: string; icon: React.ReactNode }[] = [
+    { id: "PROVING_GROUND", label: "Virtual Proving Ground", icon: <FlaskConical size={14} /> },
+    { id: "CHASSIS_FEA", label: "Chassis FEA & Rigidity", icon: <Gauge size={14} /> },
+    { id: "EV_THERMAL", label: "800V EV & Battery Thermal", icon: <Zap size={14} /> },
+    { id: "CAD_BLUEPRINT", label: "7-Layer CAD Blueprint", icon: <Compass size={14} /> },
+  ];
 
   return (
     <div className="space-y-4">
-      <div>
-        <h2 className="text-xl font-bold text-slate-100 mb-1">Testing Laboratory</h2>
-        <p className="text-sm text-slate-500">Virtual validation: wind tunnel, crash safety, braking, skidpad, and slalom. All tests run live against the current design.</p>
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <h2 className="text-xl font-bold text-slate-100 mb-1">Testing & Homologation Laboratory</h2>
+          <p className="text-sm text-slate-400">Virtual validation: wind tunnel, chassis FEA rigidity, 800V thermal architecture, crash safety, and 7-layer CAD blueprints.</p>
+        </div>
+
+        {/* Sub-navigation Tabs */}
+        <div className="flex items-center gap-1.5 bg-slate-900/90 p-1 rounded-xl border border-slate-800">
+          {tabs.map((tab) => {
+            const isActive = activeTab === tab.id;
+            return (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`spring-press flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all focus-visible:outline-none focus-ring-emil ${
+                  isActive
+                    ? "bg-amber-400 text-slate-950 font-bold shadow-[0_0_12px_rgba(251,191,36,0.35)]"
+                    : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/60"
+                }`}
+              >
+                {tab.icon}
+                <span>{tab.label}</span>
+              </button>
+            );
+          })}
+        </div>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      {activeTab === "CHASSIS_FEA" && <ChassisFeaStressCard />}
+      {activeTab === "EV_THERMAL" && <EvBatteryThermalStudio />}
+      {activeTab === "CAD_BLUEPRINT" && <PhotorealisticVehicleBlueprint />}
+
+      {activeTab === "PROVING_GROUND" && (
+        <>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {/* Wind Tunnel */}
         <Section title="Wind Tunnel" icon={<Wind size={14} />} className="md:col-span-2">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
@@ -127,11 +172,13 @@ export function TestingLab() {
           <span>Cooling margin is low ({Math.round(sim.coolingMargin * 100)}%). Consider larger cooling ducts or a more efficient radiator.</span>
         </div>
       )}
-      {t.crashTest.starRating < 4 && (
-        <div className="flex items-center gap-2 text-xs text-danger-400 bg-danger-500/10 border border-danger-500/30 rounded-lg px-3 py-2">
-          <AlertTriangle size={14} />
-          <span>Crash safety below 4 stars. Strengthen the frame material or add a roll cage.</span>
-        </div>
+          {t.crashTest.starRating < 4 && (
+            <div className="flex items-center gap-2 text-xs text-danger-400 bg-danger-500/10 border border-danger-500/30 rounded-lg px-3 py-2">
+              <AlertTriangle size={14} />
+              <span>Crash safety below 4 stars. Strengthen the frame material or add a roll cage.</span>
+            </div>
+          )}
+        </>
       )}
     </div>
   );

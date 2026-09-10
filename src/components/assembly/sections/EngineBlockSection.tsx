@@ -68,7 +68,8 @@ const LAYOUT_META: Record<
   v6: { icon: <Cog size={12} />, tag: "V6", angle: "60° / 90° Bank" },
   v8: { icon: <Cog size={12} />, tag: "V8 Crossplane", angle: "90° V-Bank" },
   v10: { icon: <Cog size={12} />, tag: "V10", angle: "72° Bank" },
-  v12: { icon: <Cog size={12} />, tag: "V12 Quad-Cam", angle: "60° Bank" },
+  v12: { icon: <Cog size={12} />, tag: "V12", angle: "Standard" },
+  unconfigured: { icon: <Cog size={12} />, tag: "V12", angle: "Standard" },
   w12: { icon: <Cog size={12} />, tag: "W12", angle: "Twin-VR6 72°" },
   w16: { icon: <Cog size={12} />, tag: "W16 Quad-Turbo", angle: "Quad-Bank" },
   w18: { icon: <Cog size={12} />, tag: "W18 Hyper", angle: "Tri-Bank 40°" },
@@ -101,7 +102,7 @@ export function EngineBlockSection({
   className = "",
 }: EngineBlockSectionProps) {
   const engineLayouts = (Object.keys(ENGINE_LAYOUTS) as EngineLayout[]).filter(
-    (l) => l !== "electric" && l !== "hybrid"
+    (l) => l !== "electric" && l !== "hybrid" && l !== "unconfigured"
   );
 
   const bore = engineConfig.bore || 86;
@@ -167,13 +168,13 @@ export function EngineBlockSection({
                   Cylinder Bank Layout
                 </label>
                 <span className="text-[10px] font-mono text-slate-500">
-                  {ENGINE_LAYOUTS[engineConfig.layout]?.label}
+                  {engineConfig.layout === "unconfigured" ? "V12" : (ENGINE_LAYOUTS[engineConfig.layout]?.label || "V12")}
                 </span>
               </div>
 
               <div className="grid grid-cols-3 gap-1.5 max-h-52 overflow-y-auto pr-1 no-scrollbar">
                 {engineLayouts.map((layout) => {
-                  const isSelected = engineConfig.layout === layout;
+                  const isSelected = engineConfig.layout === layout || (engineConfig.layout === "unconfigured" && layout === "v12");
                   const meta = LAYOUT_META[layout] || {
                     icon: <Cog size={12} />,
                     tag: ENGINE_LAYOUTS[layout]?.label,

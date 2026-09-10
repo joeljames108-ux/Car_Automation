@@ -343,8 +343,8 @@ export class GlbAssetCache {
       return this.deepCloneScene(scene);
     }
 
-    // 3. If layout is not v12, generate layout-specific procedural geometry directly
-    if (layoutKey !== 'v12') {
+    // 3. Generate layout-specific procedural geometry directly for modular components
+    if (path.includes('/models/engines/v12/') || layoutKey !== 'v12' || !path.endsWith('.glb')) {
       const fallback = buildProceduralFallbackMesh(fallbackType || 'engine-block', config);
       this.optimizeLoadedScene(fallback);
 
