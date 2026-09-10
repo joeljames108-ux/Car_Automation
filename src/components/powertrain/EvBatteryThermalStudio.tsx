@@ -265,7 +265,7 @@ export const EvBatteryThermalStudio: React.FC<{ className?: string }> = memo(({ 
                     {(metrics.packTempC - (idx % 2 === 0 ? 0.4 : 0.8)).toFixed(1)}°C
                   </text>
                   <text x={mod.x + 12} y={mod.y + 60} fill="#64748b" fontSize="8" fontFamily="monospace">
-                    {nominalVoltage / 8}V · 12S
+                    {(is800V ? 800 : 400) / 8}V · 12S
                   </text>
                 </g>
               ))}

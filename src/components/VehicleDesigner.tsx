@@ -3,7 +3,6 @@ import {
   Car,
   Shield,
   Wrench,
-  Layers,
   GitCompare,
   Wind,
   ChevronRight,
@@ -18,10 +17,7 @@ import { VehicleCompletionModal } from "./vehicleAssembly/VehicleCompletionModal
 import { VehicleComparisonStudio } from "./vehicleAssembly/VehicleComparisonStudio";
 import { TrueModularVehicleBuilderStudio } from "./vehicleAssembly/TrueModularVehicleBuilderStudio";
 
-import { VehicleArchitectureStudio } from "./vehicleAssembly/VehicleArchitectureStudio";
-
 export type VehicleStudioSubTab =
-  | "architecture"
   | "modular_builder"
   | "benchmark";
 
@@ -30,7 +26,7 @@ interface VehicleDesignerProps {
   onSelectStage?: (stage: string) => void;
 }
 
-export function VehicleDesigner({ initialSubTab = "architecture", onSelectStage }: VehicleDesignerProps) {
+export function VehicleDesigner({ initialSubTab = "modular_builder", onSelectStage }: VehicleDesignerProps) {
   const { design, sim, setDesign, updateVehicle } = useDesign();
   const { vehicleStatus, markStageComplete, setActiveWorkflowStage } = useGuidedEngineeringStore();
   const v = design.vehicle;
@@ -60,12 +56,6 @@ export function VehicleDesigner({ initialSubTab = "architecture", onSelectStage 
   };
 
   const tabsConfig = [
-    {
-      id: "architecture" as const,
-      label: "VEHICLE ARCHITECTURE & PLATFORM",
-      icon: <Layers size={14} />,
-      badge: "38 BODIES • 8 PLATFORMS",
-    },
     {
       id: "modular_builder" as const,
       label: "MODULAR VEHICLE BUILDER",
@@ -234,16 +224,7 @@ export function VehicleDesigner({ initialSubTab = "architecture", onSelectStage 
         )}
       </div>
 
-      {/* =========================================================================
-          STAGE 1: VEHICLE ARCHITECTURE & PLATFORM FAMILY (38 BODIES / 8 PLATFORMS)
-          ========================================================================= */}
-      {activeTab === "architecture" && (
-        <div className="animate-stage-transition-enter">
-          <VehicleArchitectureStudio
-            onEnterDesignStudio={() => setActiveTab("modular_builder")}
-          />
-        </div>
-      )}
+
 
       {/* =========================================================================
           FLAGSHIP: TRUE MODULAR VEHICLE BUILDER (PIECE-BY-PIECE CAD ASSEMBLED)

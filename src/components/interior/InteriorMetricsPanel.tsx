@@ -60,7 +60,7 @@ const MetricRow: React.FC<{ icon: string; label: string; value: number; theme?: 
   );
 };
 
-export const InteriorMetricsPanel: React.FC<{ theme?: 'dark' | 'amber' }> = ({ theme = 'amber' }) => {
+export const InteriorMetricsPanel: React.FC<{ theme?: 'dark' | 'amber'; className?: string }> = ({ theme = 'amber', className }) => {
   const isDark = theme === 'dark';
   const [compareModalOpen, setCompareModalOpen] = useState(false);
   const metrics = useInteriorDashboardConfigStore((s) => s.metrics);
@@ -78,7 +78,9 @@ export const InteriorMetricsPanel: React.FC<{ theme?: 'dark' | 'amber' }> = ({ t
   return (
     <div
       className={`backdrop-blur-2xl p-3.5 flex flex-col gap-2.5 overflow-y-auto w-full h-full min-w-0 select-none ${
-        isDark
+        className
+          ? className
+          : isDark
           ? 'bg-slate-900/90 border-r border-slate-800 text-slate-100 shadow-2xl'
           : 'bg-amber-50/80 border-r border-white/10 text-amber-900 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]'
       }`}

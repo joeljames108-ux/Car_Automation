@@ -4,7 +4,7 @@
 import { useState } from "react";
 import {
   ShieldCheck, AlertTriangle, Star, CheckCircle2, Circle,
-  Weight, DollarSign, Zap,
+  Weight, DollarSign, Zap, Check, ArrowRight,
 } from "lucide-react";
 import { useCompany } from "../state/CompanyContext";
 import { Select, Toggle, Slider } from "./ui/Controls";
@@ -89,7 +89,11 @@ const REGION_STANDARDS: { region: string; label: string; threshold: number }[] =
   { region: "China (C-NCAP)",   label: "China C-NCAP",  threshold: 65 },
 ];
 
-export function SafetyCenter() {
+interface SafetyCenterProps {
+  onSelectStage?: (stage: string) => void;
+}
+
+export function SafetyCenter({ onSelectStage }: SafetyCenterProps = {}) {
   const { safetyConfig, safetySim, updateSafety } = useCompany();
   const [activeTab, setActiveTab] = useState<"design" | "ncap">("design");
 
@@ -110,7 +114,12 @@ export function SafetyCenter() {
               <ShieldCheck size={24} className="text-accent-300" />
             </div>
             <div>
-              <h2 className="text-lg font-bold text-slate-100">Safety Engineering Center</h2>
+              <div className="flex items-center gap-2 mb-1">
+                <span className="text-[10px] px-2 py-0.5 rounded-full bg-cyan-500/15 border border-cyan-500/30 text-cyan-300 font-mono font-bold tracking-wider">
+                  STAGE 5: PASSIVE & ACTIVE CRASH SAFETY
+                </span>
+              </div>
+              <h2 className="text-lg font-bold text-slate-100">5. Safety Engineering Center</h2>
               <p className="text-xs text-slate-500">Design crash structure, passive safety, and NCAP compliance</p>
             </div>
           </div>
@@ -315,6 +324,32 @@ export function SafetyCenter() {
               })}
             </div>
           </div>
+        </div>
+      )}
+
+      {/* Stage Progression Action Bar */}
+      {onSelectStage && (
+        <div className="panel p-5 flex flex-col sm:flex-row items-center justify-between gap-4 border border-amber-500/30 bg-gradient-to-r from-slate-950/90 via-slate-900/90 to-slate-950/90 shadow-xl rounded-2xl">
+          <div className="space-y-1 text-center sm:text-left">
+            <div className="inline-flex items-center gap-2 text-xs font-mono font-bold tracking-widest text-emerald-400 uppercase">
+              <CheckCircle2 size={13} />
+              <span>STAGE 5 OF 6 COMPLETE</span>
+            </div>
+            <div className="text-sm font-bold text-slate-100">
+              Structural crumple zones, safety cage, and restraint systems verified
+            </div>
+            <p className="text-xs text-slate-400 font-mono">
+              NCAP {safetySim.ncapStars}★ Rating · {safetySim.overallScore}/100 Safety Score
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={() => onSelectStage("final_build")}
+            className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-mono font-black text-xs tracking-wider uppercase shadow-[0_0_20px_rgba(245,158,11,0.35)] transition-all cursor-pointer transform hover:scale-[1.02] active:scale-[0.98]"
+          >
+            <Check size={15} strokeWidth={3} />
+            <span>COMPLETE SAFETY & PROCEED TO 6. FINAL BUILD →</span>
+          </button>
         </div>
       )}
     </div>

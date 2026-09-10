@@ -70,10 +70,10 @@ const STAGES: StageItem[] = [
   { id: "vehicle", label: "2. Vehicle Studio", icon: <Car size={14} />, category: "engineering" },
   { id: "aero_studio", label: "3. Aero Studio", icon: <Wind size={14} />, category: "engineering" },
   { id: "interior", label: "4. Interior", icon: <Sofa size={14} />, category: "engineering" },
-  { id: "final_build", label: "5. Final Build", icon: <Trophy size={14} />, category: "engineering" },
+  { id: "safety", label: "5. Safety Center", icon: <ShieldCheck size={14} />, category: "engineering" },
+  { id: "final_build", label: "6. Final Build", icon: <Trophy size={14} />, category: "engineering" },
   { id: "command", label: "Command Center", icon: <LayoutDashboard size={14} />, category: "engineering" },
   { id: "manufacturing", label: "Manufacturing", icon: <Factory size={14} />, category: "engineering" },
-  { id: "safety", label: "Safety Center", icon: <ShieldCheck size={14} />, category: "engineering" },
 
   // --- Design Studios Hub ---
   { id: "exterior", label: "🎨 Exterior Design Studio", icon: <Paintbrush size={14} />, category: "studios" },

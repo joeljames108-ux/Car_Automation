@@ -82,13 +82,12 @@ export function InteriorsDesigner({ initialSubTab = 'setup', onSelectStage }: In
             type="button"
             onClick={() => {
               markStageComplete("interior");
-              setActiveWorkflowStage("final_build");
-              onSelectStage("final_build");
+              onSelectStage("safety");
             }}
             className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-400 hover:to-green-500 text-slate-950 font-mono font-black text-xs tracking-wider uppercase shadow-[0_0_20px_rgba(16,185,129,0.35)] transition-all cursor-pointer transform hover:scale-[1.02] active:scale-[0.98]"
           >
             <Check size={15} strokeWidth={3} />
-            <span>COMPLETE INTERIOR & PROCEED TO FINAL BUILD →</span>
+            <span>COMPLETE INTERIOR & PROCEED TO SAFETY CENTER →</span>
           </button>
         )}
       </div>

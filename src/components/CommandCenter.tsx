@@ -171,33 +171,33 @@ function CommandCenterComponent({ onSelectStage }: CommandCenterProps = {}) {
       <div className="cmd-animate-tile grid grid-cols-3 sm:grid-cols-6 gap-2">
         <div className="bg-base-900 border border-base-800 rounded-xl p-3 text-center hover:border-base-700 transition-all">
           <Fuel size={12} className="mx-auto text-warn-400 mb-1" />
-          <div className="font-mono text-sm text-warn-400">${company.economy.fuelPrice.toFixed(2)}</div>
-          <div className="text-[9px] text-slate-600">Fuel $/gal</div>
+          <div className="font-mono text-sm text-warn-400 font-bold">${company.economy.fuelPrice.toFixed(2)}</div>
+          <div className="text-[10px] text-slate-300 font-medium">Fuel $/gal</div>
         </div>
         <div className="bg-base-900 border border-base-800 rounded-xl p-3 text-center hover:border-base-700 transition-all">
           <Warehouse size={12} className="mx-auto text-accent-400 mb-1" />
-          <div className="font-mono text-sm text-accent-300">{company.garage.length}</div>
-          <div className="text-[9px] text-slate-600">Garage</div>
+          <div className="font-mono text-sm text-accent-300 font-bold">{company.garage.length}</div>
+          <div className="text-[10px] text-slate-300 font-medium">Garage</div>
         </div>
         <div className="bg-base-900 border border-base-800 rounded-xl p-3 text-center hover:border-base-700 transition-all">
           <Trophy size={12} className="mx-auto text-yellow-400 mb-1" />
-          <div className="font-mono text-sm text-yellow-400">{totalMsWins}</div>
-          <div className="text-[9px] text-slate-600">Race Wins</div>
+          <div className="font-mono text-sm text-yellow-400 font-bold">{totalMsWins}</div>
+          <div className="text-[10px] text-slate-300 font-medium">Race Wins</div>
         </div>
         <div className="bg-base-900 border border-base-800 rounded-xl p-3 text-center hover:border-base-700 transition-all">
           <DollarSign size={12} className="mx-auto text-ok-400 mb-1" />
-          <div className="font-mono text-sm text-ok-400">{fmtMoney(company.totalRevenue)}</div>
-          <div className="text-[9px] text-slate-600">Revenue</div>
+          <div className="font-mono text-sm text-ok-400 font-bold">{fmtMoney(company.totalRevenue)}</div>
+          <div className="text-[10px] text-slate-300 font-medium">Revenue</div>
         </div>
         <div className="bg-base-900 border border-base-800 rounded-xl p-3 text-center hover:border-base-700 transition-all">
           <Star size={12} className="mx-auto text-amber-400 mb-1" />
-          <div className="font-mono text-sm text-amber-400">{company.reputation}</div>
-          <div className="text-[9px] text-slate-600">Reputation</div>
+          <div className="font-mono text-sm text-amber-400 font-bold">{company.reputation}</div>
+          <div className="text-[10px] text-slate-300 font-medium">Reputation</div>
         </div>
         <div className="bg-base-900 border border-base-800 rounded-xl p-3 text-center hover:border-base-700 transition-all">
           <Activity size={12} className="mx-auto text-amber-400 mb-1" />
-          <div className="font-mono text-sm text-amber-400">Mo.{company.economy.month}</div>
-          <div className="text-[9px] text-slate-600">Game Month</div>
+          <div className="font-mono text-sm text-amber-400 font-bold">Mo.{company.economy.month}</div>
+          <div className="text-[10px] text-slate-300 font-medium">Game Month</div>
         </div>
       </div>
 

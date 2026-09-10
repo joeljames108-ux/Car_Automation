@@ -25,6 +25,7 @@ import {
   useModularVehicleBuilderStore,
   getStageGlbPaths,
   getStageIndividualParts,
+  getCompleteVehicleGlbPath,
   STAGE_EXPLODED_OFFSETS,
   AssemblyStage,
 } from "../../state/modularVehicleBuilderStore";
@@ -210,20 +211,29 @@ export const ModularVehicleCanvasViewport: React.FC = () => {
     setIsLoading(true);
     setLoadError(null);
 
-    // Determine stages to display based on viewportMode:
-    // In "subsystem_isolated" mode: only display currentStage
-    // In "accumulated" mode: display all installed stages PLUS currentStage (as active candidate preview)
+    // Determine stages to display based on currentStage and viewportMode:
     let stagesToDisplay: AssemblyStage[] = [];
 
-    if (viewportMode === "subsystem_isolated") {
-      if (currentStage !== "model_select" && currentStage !== "complete") {
+    if (currentStage === "complete") {
+      // In complete stage:
+      // If user enabled exploded view (> 0.02), load modular subsystems for radial exploded inspection
+      if (explodedProgress > 0.02) {
+        const stagesSet = new Set<AssemblyStage>();
+        installedStages.forEach((st) => stagesSet.add(st as AssemblyStage));
+        stagesToDisplay = Array.from(stagesSet);
+      } else {
+        // Otherwise load unified Class-A assembled car GLB
+        stagesToDisplay = ["complete"];
+      }
+    } else if (viewportMode === "subsystem_isolated") {
+      if (currentStage !== "model_select") {
         stagesToDisplay = [currentStage];
       }
     } else {
       // Accumulated mode
       const stagesSet = new Set<AssemblyStage>();
       installedStages.forEach((st) => stagesSet.add(st as AssemblyStage));
-      if (currentStage !== "model_select" && currentStage !== "complete") {
+      if (currentStage !== "model_select") {
         stagesSet.add(currentStage);
       }
       stagesToDisplay = Array.from(stagesSet);
@@ -261,6 +271,74 @@ export const ModularVehicleCanvasViewport: React.FC = () => {
       root.add(stageGroup);
       currentMap.set(stageId, stageGroup);
 
+      // If complete stage, load the dedicated complete vehicle GLB
+      if (stageId === "complete") {
+        const completeUrls = getStageGlbPaths("complete", selectedModel);
+        return Promise.all(
+          completeUrls.map(
+            (url) =>
+              new Promise<void>((resolve) => {
+                loader.load(
+                  url,
+                  (gltf) => {
+                    const modelScene = gltf.scene;
+                    modelScene.traverse((child) => {
+                      if ((child as THREE.Mesh).isMesh) {
+                        const mesh = child as THREE.Mesh;
+                        mesh.castShadow = true;
+                        mesh.receiveShadow = true;
+
+                        // Customize body metallic paint while preserving carbon, chrome, trim, and LEDs
+                        if (mesh.material) {
+                          const mats = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
+                          mats.forEach((m, idx) => {
+                            const matName = m.name || "";
+                            if (matName.includes("Paint") || matName.includes("Body") || matName.includes("Outer")) {
+                              const cloned = (m as THREE.MeshStandardMaterial).clone();
+                              cloned.color.set(bodyColorHex);
+                              cloned.roughness = 0.15;
+                              cloned.metalness = 0.85;
+                              if (Array.isArray(mesh.material)) {
+                                mesh.material[idx] = cloned;
+                              } else {
+                                mesh.material = cloned;
+                              }
+                            }
+                          });
+                        }
+
+                        // Apply X-Ray if enabled
+                        if (isXRay && mesh.material) {
+                          const mats = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
+                          mats.forEach((m, idx) => {
+                            const xmat = (m as THREE.MeshStandardMaterial).clone();
+                            xmat.transparent = true;
+                            xmat.opacity = 0.35;
+                            xmat.wireframe = true;
+                            if (Array.isArray(mesh.material)) {
+                              mesh.material[idx] = xmat;
+                            } else {
+                              mesh.material = xmat;
+                            }
+                          });
+                        }
+                      }
+                    });
+                    stageGroup.add(modelScene);
+                    resolve();
+                  },
+                  undefined,
+                  (err) => {
+                    console.warn(`[ModularViewport] Failed loading complete car ${url}:`, err);
+                    createFallbackProxyGeometry("complete_car", stageGroup);
+                    resolve();
+                  }
+                );
+              })
+          )
+        );
+      }
+
       const individualParts = getStageIndividualParts(stageId);
       if (individualParts.length > 0) {
         return Promise.all(
@@ -285,20 +363,37 @@ export const ModularVehicleCanvasViewport: React.FC = () => {
 
                       // If exterior panel, customize body color
                       if (stageId === "exterior_panels" && mesh.material) {
-                        const mat = (mesh.material as THREE.MeshStandardMaterial).clone();
-                        mat.color.set(bodyColorHex);
-                        mat.roughness = 0.15;
-                        mat.metalness = 0.85;
-                        mesh.material = mat;
+                        const mats = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
+                        mats.forEach((m, idx) => {
+                          const matName = m.name || "";
+                          if (matName.includes("Paint") || matName.includes("Body") || matName === "" || matName.includes("Outer")) {
+                            const cloned = (m as THREE.MeshStandardMaterial).clone();
+                            cloned.color.set(bodyColorHex);
+                            cloned.roughness = 0.15;
+                            cloned.metalness = 0.85;
+                            if (Array.isArray(mesh.material)) {
+                              mesh.material[idx] = cloned;
+                            } else {
+                              mesh.material = cloned;
+                            }
+                          }
+                        });
                       }
 
                       // Apply X-Ray if enabled
                       if (isXRay && mesh.material) {
-                        const xmat = (mesh.material as THREE.MeshStandardMaterial).clone();
-                        xmat.transparent = true;
-                        xmat.opacity = 0.35;
-                        xmat.wireframe = true;
-                        mesh.material = xmat;
+                        const mats = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
+                        mats.forEach((m, idx) => {
+                          const xmat = (m as THREE.MeshStandardMaterial).clone();
+                          xmat.transparent = true;
+                          xmat.opacity = 0.35;
+                          xmat.wireframe = true;
+                          if (Array.isArray(mesh.material)) {
+                            mesh.material[idx] = xmat;
+                          } else {
+                            mesh.material = xmat;
+                          }
+                        });
                       }
                     }
                   });
@@ -353,12 +448,23 @@ export const ModularVehicleCanvasViewport: React.FC = () => {
       .then(() => {
         setIsLoading(false);
         updateExplodedTransforms();
+
+        // Auto-center camera target to loaded model bounding box
+        if (root && controlsRef.current) {
+          const box = new THREE.Box3().setFromObject(root);
+          if (!box.isEmpty()) {
+            const center = new THREE.Vector3();
+            box.getCenter(center);
+            controlsRef.current.target.set(center.x, Math.max(0.4, center.y), center.z);
+            controlsRef.current.update();
+          }
+        }
       })
       .catch((err) => {
         setLoadError(err.message || "Failed to assemble modular components");
         setIsLoading(false);
       });
-  }, [selectedModel, currentStage, installedStages, viewportMode, bodyColorHex, isXRay]);
+  }, [selectedModel, currentStage, installedStages, viewportMode, bodyColorHex, isXRay, explodedProgress]);
 
   // Helper to check if chassis group matches current model
   function groupMatchesModel(group: THREE.Group | undefined, model: string): boolean {
@@ -496,27 +602,38 @@ export const ModularVehicleCanvasViewport: React.FC = () => {
         <div className="flex items-center gap-1 p-1 rounded-xl bg-slate-900/85 backdrop-blur-md border border-slate-700/60 shadow-lg font-mono text-[11px]">
           <button
             type="button"
-            onClick={() => setViewportMode("subsystem_isolated")}
+            onClick={() => {
+              if (currentStage === "complete") {
+                setExplodedProgress(explodedProgress > 0 ? 0 : 0.4);
+              } else {
+                setViewportMode("subsystem_isolated");
+              }
+            }}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-bold transition-all cursor-pointer ${
-              viewportMode === "subsystem_isolated"
+              (currentStage === "complete" ? explodedProgress > 0 : viewportMode === "subsystem_isolated")
                 ? "bg-cyan-500/25 text-cyan-300 border border-cyan-500/50 shadow-sm"
                 : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/60 border border-transparent"
             }`}
           >
             <Box size={13} className="text-cyan-400" />
-            <span>ISOLATED PART GLB</span>
+            <span>{currentStage === "complete" ? "EXPLODED PARTS VIEW" : "ISOLATED PART GLB"}</span>
           </button>
           <button
             type="button"
-            onClick={() => setViewportMode("accumulated")}
+            onClick={() => {
+              if (currentStage === "complete") {
+                setExplodedProgress(0);
+              }
+              setViewportMode("accumulated");
+            }}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-bold transition-all cursor-pointer ${
-              viewportMode === "accumulated"
+              (currentStage === "complete" ? explodedProgress === 0 : viewportMode === "accumulated")
                 ? "bg-emerald-500/25 text-emerald-300 border border-emerald-500/50 shadow-sm"
                 : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/60 border border-transparent"
             }`}
           >
             <Layers size={13} className="text-emerald-400" />
-            <span>ACCUMULATED CAR GLB</span>
+            <span>{currentStage === "complete" ? "COMPLETE ASSEMBLED CAR" : "ACCUMULATED CAR GLB"}</span>
             <span className="text-[9px] px-1.5 py-0.2 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-extrabold">
               {installedStages.length} INSTALLED
             </span>

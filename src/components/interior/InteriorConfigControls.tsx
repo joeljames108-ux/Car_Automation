@@ -90,9 +90,10 @@ const FEATURE_EXPLANATIONS: Record<
 
 export interface InteriorConfigControlsProps {
   theme?: 'dark' | 'amber';
+  className?: string;
 }
 
-export const InteriorConfigControls: React.FC<InteriorConfigControlsProps> = ({ theme = 'amber' }) => {
+export const InteriorConfigControls: React.FC<InteriorConfigControlsProps> = ({ theme = 'amber', className }) => {
   const isDark = theme === 'dark';
   const [selectedInfoKey, setSelectedInfoKey] = useState<FeatureKey | null>(null);
   const [showCustomPicker, setShowCustomPicker] = useState<boolean>(false);
@@ -136,7 +137,9 @@ export const InteriorConfigControls: React.FC<InteriorConfigControlsProps> = ({ 
   return (
     <div
       className={`idash-panel-right backdrop-blur-2xl p-3.5 flex flex-col gap-2.5 overflow-y-auto w-full h-full min-w-0 select-none ${
-        isDark
+        className
+          ? className
+          : isDark
           ? "bg-slate-900/90 border-l border-slate-800 text-slate-100 shadow-2xl"
           : "bg-amber-50/80 border-l border-white/10 text-amber-900 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]"
       }`}

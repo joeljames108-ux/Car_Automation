@@ -19,8 +19,10 @@ import {
   Car,
   Sofa,
   Box,
+  Edit3,
 } from "lucide-react";
 import { useDesign } from "../../state/DesignContext";
+import { useCompany } from "../../state/CompanyContext";
 import { useGuidedEngineeringStore, WORKFLOW_STAGES_META } from "../../state/guidedEngineeringStore";
 import { useModularVehicleBuilderStore } from "../../state/modularVehicleBuilderStore";
 import { useAeroStudioStore } from "../../state/aeroStudioStore";
@@ -34,7 +36,8 @@ export const FinalBuildStudio: React.FC<FinalBuildStudioProps> = ({
   onSelectStage,
   className = "",
 }) => {
-  const { design, sim } = useDesign();
+  const { design, sim, setDesignName } = useDesign();
+  const { safetyConfig, safetySim } = useCompany();
   const {
     engineStatus,
     vehicleStatus,
@@ -79,11 +82,29 @@ export const FinalBuildStudio: React.FC<FinalBuildStudioProps> = ({
           <div className="space-y-2 max-w-2xl">
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 text-xs font-mono font-bold tracking-widest uppercase">
               <CheckCircle2 size={13} className="text-emerald-400" />
-              <span>VEHICLE ASSEMBLED FROM ZERO — HOMOLOGATION COMPLETE</span>
+              <span>STAGE 6: VEHICLE ASSEMBLED FROM ZERO — HOMOLOGATION COMPLETE</span>
             </div>
-            <h1 className="text-3xl md:text-4xl font-extrabold font-mono text-slate-100 tracking-tight">
-              {design.name}
-            </h1>
+            <div className="space-y-1.5 pt-1">
+              <div className="flex items-center justify-between gap-2">
+                <label className="text-[11px] font-mono font-extrabold uppercase tracking-widest text-amber-400/90 flex items-center gap-1.5">
+                  <Edit3 size={13} className="text-amber-400" />
+                  <span>MODEL NAME (TYPE TO CUSTOMIZE):</span>
+                </label>
+                <span className="text-[10px] font-mono text-slate-400">
+                  (Type directly to rename model)
+                </span>
+              </div>
+              <div className="relative flex items-center max-w-xl group">
+                <input
+                  type="text"
+                  value={design.name}
+                  onChange={(e) => setDesignName(e.target.value)}
+                  placeholder="Enter custom vehicle model name..."
+                  className="w-full text-2xl sm:text-3xl md:text-4xl font-extrabold font-mono text-slate-100 bg-slate-950/60 hover:bg-slate-950/80 focus:bg-slate-950 border border-amber-500/40 focus:border-amber-400 focus:ring-2 focus:ring-amber-400/30 rounded-2xl px-4 py-2 transition-all outline-none tracking-tight shadow-inner"
+                />
+                <Edit3 size={18} className="absolute right-4 text-amber-400/70 pointer-events-none group-hover:text-amber-300 transition-colors" />
+              </div>
+            </div>
             <p className="text-xs md:text-sm text-slate-300 font-mono leading-relaxed">
               Every subsystem has been verified through the sequential engineering pipeline.
               Powertrain dynamics, suspension kinematics, aerodynamic balance, and cockpit avionics are 100% unified.
@@ -182,7 +203,7 @@ export const FinalBuildStudio: React.FC<FinalBuildStudioProps> = ({
       </div>
 
       {/* ── STAGE RETROSPECTIVE & MODULAR BILL OF MATERIALS ── */}
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
         {/* Step 1: Engine */}
         <div className="p-5 rounded-2xl bg-[#0e1424]/80 border border-slate-800/80 space-y-3">
           <div className="flex items-center justify-between">
@@ -280,6 +301,31 @@ export const FinalBuildStudio: React.FC<FinalBuildStudioProps> = ({
             className="w-full py-2 rounded-xl bg-slate-800/60 hover:bg-slate-700/60 border border-slate-700 text-slate-300 hover:text-white text-[11px] font-mono tracking-wider transition-all cursor-pointer flex items-center justify-center gap-1"
           >
             <span>Edit Interior</span> <ArrowRight size={12} />
+          </button>
+        </div>
+
+        {/* Step 5: Safety */}
+        <div className="p-5 rounded-2xl bg-[#0e1424]/80 border border-slate-800/80 space-y-3">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2 text-xs font-mono font-bold text-cyan-400">
+              <ShieldCheck size={15} /> <span>STEP 5: SAFETY</span>
+            </div>
+            <span className="text-[10px] px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-400 font-mono font-bold">
+              COMPLETE
+            </span>
+          </div>
+          <div className="space-y-1 font-mono text-xs text-slate-300">
+            <div>Crumple Zone: <span className="text-white font-bold">{safetyConfig.frontCrumple.toUpperCase()}</span></div>
+            <div>Airbags: <span className="text-white font-bold">{safetyConfig.airbagType.replace(/_/g, ' ').toUpperCase()} ({safetyConfig.airbagCount}x)</span></div>
+            <div>Safety Cage: <span className="text-white font-bold">{safetyConfig.safetyCage.replace(/_/g, ' ').toUpperCase()}</span></div>
+            <div>NCAP Rating: <span className="text-amber-400 font-bold">{safetySim.ncapStars}★ ({safetySim.overallScore}/100)</span></div>
+          </div>
+          <button
+            type="button"
+            onClick={() => onSelectStage?.("safety")}
+            className="w-full py-2 rounded-xl bg-slate-800/60 hover:bg-slate-700/60 border border-slate-700 text-slate-300 hover:text-white text-[11px] font-mono tracking-wider transition-all cursor-pointer flex items-center justify-center gap-1"
+          >
+            <span>Edit Safety</span> <ArrowRight size={12} />
           </button>
         </div>
       </div>

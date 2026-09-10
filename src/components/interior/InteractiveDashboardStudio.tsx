@@ -51,6 +51,8 @@ import {
   SlidersHorizontal,
   Cpu,
   Plane,
+  X,
+  ChevronDown,
 } from "lucide-react";
 import {
   useInteriorDashboardConfigStore,
@@ -101,15 +103,8 @@ export const InteractiveDashboardStudio: React.FC<InteractiveDashboardStudioProp
   const [saveToast, setSaveToast] = useState(false);
   const [jsonModalOpen, setJsonModalOpen] = useState(false);
   const [jsonText, setJsonText] = useState("");
-  const [showLeftOverview, setShowLeftOverview] = useState(true);
-  const [showRightControls, setShowRightControls] = useState(true);
-
-  const LEFT_OPEN_W = 265;
-  const RIGHT_OPEN_W = 310;
-  const RAIL_W = 28;
-
-  const leftCol = showLeftOverview ? LEFT_OPEN_W : RAIL_W;
-  const rightCol = showRightControls ? RIGHT_OPEN_W : RAIL_W;
+  const [showLeftOverview, setShowLeftOverview] = useState(false);
+  const [showRightControls, setShowRightControls] = useState(false);
 
   // Store Selectors
   const steeringWheelStyle = useInteriorDashboardConfigStore((s) => s.steeringWheelStyle);
@@ -336,7 +331,7 @@ export const InteractiveDashboardStudio: React.FC<InteractiveDashboardStudioProp
               {nightMode ? <Moon size={14} /> : <Sun size={14} />}
             </button>
 
-            {/* Quick Side Panel Visibility Toggles */}
+            {/* Quick Floating HUD / Options Controls */}
             <div className="flex items-center bg-slate-800/90 rounded-lg p-0.5 border border-slate-700">
               <button
                 type="button"
@@ -347,10 +342,10 @@ export const InteractiveDashboardStudio: React.FC<InteractiveDashboardStudioProp
                 className={`flex items-center gap-1 px-2 py-1 rounded text-[10px] font-bold transition-all cursor-pointer ${
                   showLeftOverview ? "bg-red-600 text-white shadow-sm ring-1 ring-red-400" : "text-slate-400 hover:text-slate-200"
                 }`}
-                title="Toggle Interior Overview (Metrics)"
+                title="Toggle Floating Interior Overview (HUD Overlay)"
               >
                 <BarChart3 size={12} />
-                <span>OVERVIEW</span>
+                <span>OVERVIEW HUD</span>
               </button>
               <button
                 type="button"
@@ -361,10 +356,23 @@ export const InteractiveDashboardStudio: React.FC<InteractiveDashboardStudioProp
                 className={`flex items-center gap-1 px-2 py-1 rounded text-[10px] font-bold transition-all cursor-pointer ${
                   showRightControls ? "bg-cyan-600 text-white shadow-sm ring-1 ring-cyan-400" : "text-slate-400 hover:text-slate-200"
                 }`}
-                title="Toggle Interior Configuration (Steppers)"
+                title="Toggle Floating Configuration Steppers (HUD Overlay)"
               >
                 <SlidersHorizontal size={12} />
-                <span>STEPPERS</span>
+                <span>STEPPERS HUD</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => {
+                  playHMIClickSound();
+                  const el = document.getElementById("interior-options-deck");
+                  if (el) el.scrollIntoView({ behavior: "smooth" });
+                }}
+                className="flex items-center gap-1 px-2 py-1 rounded text-[10px] font-bold text-amber-300 hover:text-amber-200 hover:bg-slate-700/60 transition-all cursor-pointer border-l border-slate-700 ml-0.5"
+                title="Jump down to full Options Workbench"
+              >
+                <ChevronDown size={12} />
+                <span>OPTIONS ↓</span>
               </button>
             </div>
 
@@ -404,44 +412,10 @@ export const InteractiveDashboardStudio: React.FC<InteractiveDashboardStudioProp
           </div>
         </div>
 
-        {/* 3-Column Diagram & Interactive Cockpit Workspace */}
-        <div
-          className="relative w-full h-[580px] md:h-[620px] grid overflow-hidden select-none bg-slate-950"
-          style={{ gridTemplateColumns: `${leftCol}px minmax(0, 1fr) ${rightCol}px` }}
-        >
-          {/* ── LEFT: Interior Overview (collapsible) ── */}
-          {showLeftOverview ? (
-            <div className="relative h-full min-w-0 overflow-hidden border-r border-slate-800/80 bg-slate-900/90">
-              <InteriorMetricsPanel theme="dark" />
-              <button
-                type="button"
-                onClick={() => setShowLeftOverview(false)}
-                className="absolute top-1/2 right-1.5 -translate-y-1/2 z-20 w-6 h-10 rounded-l-xl flex items-center justify-center cursor-pointer transition-all hover:scale-105 bg-slate-800/90 border border-slate-700 text-cyan-400 shadow-md hover:bg-slate-700"
-                title="Collapse Interior Overview"
-                aria-label="Collapse Interior Overview"
-              >
-                <ChevronLeft size={14} />
-              </button>
-            </div>
-          ) : (
-            <button
-              type="button"
-              onClick={() => setShowLeftOverview(true)}
-              className="w-full h-full flex items-center justify-center cursor-pointer transition-all hover:bg-slate-800/90 bg-slate-900/80 border-r border-slate-800 text-cyan-400 group"
-              title="Show Interior Overview"
-              aria-label="Show Interior Overview"
-            >
-              <span
-                className="text-[9px] font-black uppercase tracking-[0.22em] text-slate-400 group-hover:text-cyan-300 transition-colors"
-                style={{ writingMode: "vertical-rl", transform: "rotate(180deg)" }}
-              >
-                Interior Overview
-              </span>
-            </button>
-          )}
-
-          {/* ── CENTER: 3D GLB Viewport Canvas ── */}
-          <div className="relative min-w-0 h-full overflow-hidden flex flex-col">
+        {/* Full-Width 3D Cockpit Diagram & Viewport Workspace (100% Unobstructed Width) */}
+        <div className="relative w-full h-[600px] md:h-[660px] overflow-hidden select-none bg-slate-950 flex flex-col">
+          {/* 3D GLB Viewport Canvas spanning entire width */}
+          <div className="relative w-full h-full overflow-hidden flex flex-col">
             <InteractiveDashboardCanvasViewport />
 
             {/* Toast Notification when Applied */}
@@ -451,38 +425,104 @@ export const InteractiveDashboardStudio: React.FC<InteractiveDashboardStudioProp
                 <span>Cockpit Configuration Synced with Vehicle!</span>
               </div>
             )}
-          </div>
 
-          {/* ── RIGHT: Interior Configuration (collapsible) ── */}
-          {showRightControls ? (
-            <div className="relative h-full min-w-0 overflow-hidden border-l border-slate-800/80 bg-slate-900/90">
-              <InteriorConfigControls theme="dark" />
-              <button
-                type="button"
-                onClick={() => setShowRightControls(false)}
-                className="absolute top-1/2 left-1.5 -translate-y-1/2 z-20 w-6 h-10 rounded-r-xl flex items-center justify-center cursor-pointer transition-all hover:scale-105 bg-slate-800/90 border border-slate-700 text-cyan-400 shadow-md hover:bg-slate-700"
-                title="Collapse Interior Configuration"
-                aria-label="Collapse Interior Configuration"
-              >
-                <ChevronRight size={14} />
-              </button>
+            {/* Optional Floating HUD Overlay Drawer: Interior Overview (Metrics) */}
+            {showLeftOverview && (
+              <div className="absolute top-0 bottom-0 left-0 z-30 w-[310px] max-w-[85vw] h-full shadow-2xl bg-slate-900/95 backdrop-blur-xl border-r border-slate-700/80 flex flex-col animate-fade-in">
+                <div className="flex items-center justify-between px-3 py-2 bg-slate-800/80 border-b border-slate-700">
+                  <div className="flex items-center gap-1.5 text-xs font-mono font-bold text-red-400">
+                    <BarChart3 size={14} />
+                    <span>INTERIOR OVERVIEW (HUD)</span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setShowLeftOverview(false)}
+                    className="p-1 rounded-lg hover:bg-slate-700 text-slate-400 hover:text-white transition-colors cursor-pointer"
+                    title="Close Floating Overview"
+                  >
+                    <X size={14} />
+                  </button>
+                </div>
+                <div className="flex-1 overflow-y-auto">
+                  <InteriorMetricsPanel theme="dark" className="border-none shadow-none" />
+                </div>
+              </div>
+            )}
+
+            {/* Optional Floating HUD Overlay Drawer: Interior Configuration (Steppers) */}
+            {showRightControls && (
+              <div className="absolute top-0 bottom-0 right-0 z-30 w-[340px] max-w-[90vw] h-full shadow-2xl bg-slate-900/95 backdrop-blur-xl border-l border-slate-700/80 flex flex-col animate-fade-in">
+                <div className="flex items-center justify-between px-3 py-2 bg-slate-800/80 border-b border-slate-700">
+                  <div className="flex items-center gap-1.5 text-xs font-mono font-bold text-cyan-400">
+                    <SlidersHorizontal size={14} />
+                    <span>INTERIOR CONFIGURATION (HUD)</span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => setShowRightControls(false)}
+                    className="p-1 rounded-lg hover:bg-slate-700 text-slate-400 hover:text-white transition-colors cursor-pointer"
+                    title="Close Floating Configuration"
+                  >
+                    <X size={14} />
+                  </button>
+                </div>
+                <div className="flex-1 overflow-y-auto">
+                  <InteriorConfigControls theme="dark" className="border-none shadow-none" />
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+
+      {/* ───────────────────────────────────────────────────────────── */}
+      {/* COCKPIT CONFIGURATION & ERGONOMICS OVERVIEW (DEDICATED DECK)  */}
+      {/* ───────────────────────────────────────────────────────────── */}
+      <div id="interior-options-deck" className="grid grid-cols-1 lg:grid-cols-2 gap-4 w-full">
+        {/* Left Card: Interior Configuration Steppers */}
+        <div className="p-4 rounded-2xl bg-slate-900/95 border border-slate-800 shadow-xl flex flex-col gap-3">
+          <div className="flex items-center justify-between pb-2 border-b border-slate-800">
+            <div className="flex items-center gap-2">
+              <div className="p-2 rounded-xl bg-cyan-500/20 text-cyan-400 border border-cyan-500/30">
+                <SlidersHorizontal size={16} />
+              </div>
+              <div>
+                <h3 className="text-xs font-black tracking-wider uppercase text-slate-100 font-mono">
+                  INTERIOR CONFIGURATION
+                </h3>
+                <p className="text-[11px] text-slate-400">Dashboard, instruments, center display, steering & upholstery</p>
+              </div>
             </div>
-          ) : (
-            <button
-              type="button"
-              onClick={() => setShowRightControls(true)}
-              className="w-full h-full flex items-center justify-center cursor-pointer transition-all hover:bg-slate-800/90 bg-slate-900/80 border-l border-slate-800 text-cyan-400 group"
-              title="Show Interior Configuration"
-              aria-label="Show Interior Configuration"
-            >
-              <span
-                className="text-[9px] font-black uppercase tracking-[0.22em] text-slate-400 group-hover:text-cyan-300 transition-colors"
-                style={{ writingMode: "vertical-rl" }}
-              >
-                Interior Configuration
-              </span>
-            </button>
-          )}
+            <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-cyan-500/15 text-cyan-300 border border-cyan-500/30">
+              STEPPERS
+            </span>
+          </div>
+          <div className="max-h-[580px] overflow-y-auto rounded-xl border border-slate-800/60 bg-slate-950/60">
+            <InteriorConfigControls theme="dark" className="border-none shadow-none" />
+          </div>
+        </div>
+
+        {/* Right Card: Interior Metrics & Ergonomics Overview */}
+        <div className="p-4 rounded-2xl bg-slate-900/95 border border-slate-800 shadow-xl flex flex-col gap-3">
+          <div className="flex items-center justify-between pb-2 border-b border-slate-800">
+            <div className="flex items-center gap-2">
+              <div className="p-2 rounded-xl bg-red-500/20 text-red-400 border border-red-500/30">
+                <BarChart3 size={16} />
+              </div>
+              <div>
+                <h3 className="text-xs font-black tracking-wider uppercase text-slate-100 font-mono">
+                  INTERIOR OVERVIEW & ERGONOMICS
+                </h3>
+                <p className="text-[11px] text-slate-400">Live comfort, noise, quality, reliability & market appeal telemetry</p>
+              </div>
+            </div>
+            <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-red-500/15 text-red-300 border border-red-500/30">
+              TELEMETRY
+            </span>
+          </div>
+          <div className="max-h-[580px] overflow-y-auto rounded-xl border border-slate-800/60 bg-slate-950/60">
+            <InteriorMetricsPanel theme="dark" className="border-none shadow-none" />
+          </div>
         </div>
       </div>
 

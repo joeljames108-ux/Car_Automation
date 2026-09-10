@@ -40,13 +40,18 @@ import {
   Users,
   Search,
   Compass,
+  Download,
+  Box,
+  Edit3,
 } from "lucide-react";
+import { useDesign } from "../../state/DesignContext";
 import {
   useModularVehicleBuilderStore,
   VehicleModelCategory,
   AssemblyStage,
   ASSEMBLY_STAGES,
   getStageIndividualParts,
+  getCompleteVehicleGlbPath,
 } from "../../state/modularVehicleBuilderStore";
 import { ModularVehicleCanvasViewport } from "./ModularVehicleCanvasViewport";
 import { playHMIClickSound, playHMITabSound } from "../../utils/hmiSoundSynth";
@@ -79,6 +84,7 @@ const BODY_COLORS = [
 ];
 
 export const TrueModularVehicleBuilderStudio: React.FC = () => {
+  const { design, setDesignName } = useDesign();
   const selectedModel = useModularVehicleBuilderStore((s) => s.selectedModel);
   const currentStage = useModularVehicleBuilderStore((s) => s.currentStage);
   const installedStages = useModularVehicleBuilderStore((s) => s.installedStages);
@@ -331,12 +337,15 @@ export const TrueModularVehicleBuilderStudio: React.FC = () => {
   // RENDER SCREEN 2: ALL COMPLETED / FULL INSPECTION
   // --------------------------------------------------------------------------
   if (currentStage === "complete") {
+    const completeGlbPath = getCompleteVehicleGlbPath(selectedModel);
+    const glbFilename = completeGlbPath.split("/").pop() || "Car_Complete.glb";
+
     return (
       <div className="space-y-6 animate-stage-transition-enter font-mono">
         {/* Celebration Header */}
         <div className="panel p-6 rounded-3xl border border-emerald-500/40 bg-emerald-950/20 shadow-2xl flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-4">
-            <div className="p-3 rounded-2xl bg-emerald-500/20 text-emerald-400 border border-emerald-500/40">
+            <div className="p-3 rounded-2xl bg-emerald-500/20 text-emerald-400 border border-emerald-500/40 shrink-0">
               <Award size={32} />
             </div>
             <div>
@@ -351,17 +360,50 @@ export const TrueModularVehicleBuilderStudio: React.FC = () => {
               <p className="text-xs text-slate-400 mt-1">
                 All 11 modular engineering subsystems have been successfully coupled to master coordinates with zero offset.
               </p>
+              <div className="flex items-center gap-2 my-2">
+                <span className="text-[11px] text-amber-400 font-bold uppercase tracking-wider flex items-center gap-1">
+                  <Edit3 size={12} /> MODEL NAME:
+                </span>
+                <input
+                  type="text"
+                  value={design.name}
+                  onChange={(e) => setDesignName(e.target.value)}
+                  placeholder="Type custom vehicle model name..."
+                  className="text-xs font-bold font-mono text-slate-100 bg-slate-900/90 border border-amber-500/40 focus:border-amber-400 rounded-lg px-3 py-1 outline-none w-72 focus:ring-1 focus:ring-amber-400/40"
+                />
+              </div>
+              <div className="flex items-center gap-2.5 mt-2.5 flex-wrap">
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-cyan-950/60 border border-cyan-500/30 text-[11px] text-cyan-300">
+                  <Box size={13} className="text-cyan-400" />
+                  <strong>CAR GLB:</strong> {glbFilename} (9.62 MB • Class-A CAD Mesh)
+                </span>
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-emerald-950/50 border border-emerald-500/40 text-[10px] text-emerald-400 font-bold">
+                  <CheckCircle2 size={12} />
+                  11/11 SUBSYSTEMS COUPLED
+                </span>
+              </div>
             </div>
           </div>
 
-          <button
-            type="button"
-            onClick={resetToFrontPage}
-            className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold transition-all cursor-pointer border border-slate-700"
-          >
-            <RotateCcw size={14} />
-            <span>BUILD ANOTHER VEHICLE</span>
-          </button>
+          <div className="flex items-center gap-3 flex-wrap">
+            <a
+              href={completeGlbPath}
+              download={glbFilename}
+              className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 text-xs font-black transition-all cursor-pointer shadow-lg shadow-cyan-500/25 border border-cyan-300"
+            >
+              <Download size={14} />
+              <span>DOWNLOAD CAR GLB</span>
+            </a>
+
+            <button
+              type="button"
+              onClick={resetToFrontPage}
+              className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold transition-all cursor-pointer border border-slate-700"
+            >
+              <RotateCcw size={14} />
+              <span>BUILD ANOTHER</span>
+            </button>
+          </div>
         </div>
 
         {/* Complete 3D Assembly Viewport */}

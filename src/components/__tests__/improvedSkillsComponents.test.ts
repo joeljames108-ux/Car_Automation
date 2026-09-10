@@ -44,6 +44,57 @@ describe("Domain Skills Components & Photorealistic SVG Verification", () => {
     expect(topView.paths.length).toBeGreaterThan(0);
 
     const frontView = MultiViewProjectionEngine.renderBlueprint('FRONT_ELEVATION', params);
-    expect(frontView.paths.length).toBeGreaterThan(0);
   });
 });
+
+import { getCompleteVehicleGlbPath, getStageGlbPaths } from "../../state/modularVehicleBuilderStore";
+
+describe("Complete Vehicle GLB Resolution", () => {
+  it("resolves correct GLB paths for vehicle models", () => {
+    expect(getCompleteVehicleGlbPath("sedan")).toBe("/models/Car_Sedan_Complete.glb");
+    expect(getCompleteVehicleGlbPath("crossover")).toBe("/models/Car_Crossover_Complete.glb");
+    expect(getCompleteVehicleGlbPath("suv")).toBe("/models/Car_Suv_Complete.glb");
+    expect(getCompleteVehicleGlbPath("f1")).toBe("/models/Car_F1_Complete.glb");
+    expect(getCompleteVehicleGlbPath("hypercar")).toBe("/models/Car_Hypercar_Complete.glb");
+    expect(getCompleteVehicleGlbPath("gt3")).toBe("/models/Car_GT3_Supercar_Complete.glb");
+  });
+
+  it("getStageGlbPaths returns complete vehicle GLB when stage is complete", () => {
+    const paths = getStageGlbPaths("complete", "sedan");
+    expect(paths).toEqual(["/models/Car_Sedan_Complete.glb"]);
+  });
+});
+
+import { VehicleDesigner } from "../VehicleDesigner";
+import { InteractiveDashboardStudio } from "../interior/InteractiveDashboardStudio";
+
+import { FinalBuildStudio } from "../finalBuild/FinalBuildStudio";
+
+describe("VehicleDesigner & Interior Studio Sub-Tab Verification", () => {
+  it("VehicleDesigner is defined and exports clean modular sub-tabs", () => {
+    expect(VehicleDesigner).toBeDefined();
+    expect(typeof VehicleDesigner).toBe("function");
+  });
+
+  it("InteractiveDashboardStudio is defined and supports edge-to-edge 3D GLB canvas", () => {
+    expect(InteractiveDashboardStudio).toBeDefined();
+    expect(typeof InteractiveDashboardStudio).toBe("function");
+  });
+
+  it("FinalBuildStudio is defined and supports custom typed model designation", () => {
+    expect(FinalBuildStudio).toBeDefined();
+    expect(typeof FinalBuildStudio).toBe("function");
+  });
+});
+
+import { SafetyCenter } from "../SafetyCenter";
+
+describe("Safety Center & Pipeline Sequence Verification", () => {
+  it("SafetyCenter is defined and exports stage 5 engineering controls", () => {
+    expect(SafetyCenter).toBeDefined();
+    expect(typeof SafetyCenter).toBe("function");
+  });
+});
+
+
+

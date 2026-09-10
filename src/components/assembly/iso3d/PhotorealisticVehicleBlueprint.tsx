@@ -91,7 +91,7 @@ export const PhotorealisticVehicleBlueprint: React.FC<PhotorealisticBlueprintPro
   const uniqueFilterId = useId().replace(/:/g, '-');
 
   return (
-    <div className={`flex flex-col h-full bg-[#080c14] text-slate-100 rounded-2xl border border-slate-800/80 shadow-2xl overflow-hidden font-sans ${className}`}>
+    <div className={`flex flex-col h-full bg-[#080c14] text-slate-100 rounded-2xl border border-slate-700/80 shadow-2xl overflow-hidden font-sans dark-surface dark-hud cad-hud ${className}`}>
       {/* ── TOP HEADER TOOLBAR ── */}
       <div className="flex flex-wrap items-center justify-between px-5 py-3.5 bg-slate-900/90 border-b border-slate-800/80 backdrop-blur-md gap-3">
         <div className="flex items-center gap-3">

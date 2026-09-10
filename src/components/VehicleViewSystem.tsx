@@ -680,7 +680,18 @@ function VehicleViewSystemComponent({ onSelectStage }: Props) {
   const activeDisplay = selectedHotspot || hoveredHotspot;
 
   return (
-    <div className={`panel bg-slate-900/90 backdrop-blur-xl border border-slate-800 rounded-2xl p-5 shadow-[0_0_40px_rgba(0,0,0,0.6)] relative overflow-hidden transition-all duration-300 ${isFullscreen ? "fixed inset-4 z-50 overflow-y-auto" : ""}`}>
+    <div
+      className={`dark-surface dark-hud cad-hud bg-[#080d1a] backdrop-blur-2xl border border-slate-700/90 rounded-2xl p-5 shadow-[0_0_40px_rgba(0,0,0,0.8)] relative overflow-hidden transition-all duration-300 ${
+        isFullscreen ? "fixed inset-4 z-50 overflow-y-auto" : ""
+      }`}
+      style={{
+        backgroundColor: "rgba(8, 13, 26, 0.98)",
+        borderColor: "rgba(71, 85, 105, 0.85)",
+        borderWidth: "1px",
+        borderStyle: "solid",
+        color: "#f8fafc",
+      }}
+    >
       {/* Background ambient lighting */}
       <div className="absolute -top-24 -right-24 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none" />
       <div className="absolute -bottom-24 -left-24 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
@@ -705,7 +716,7 @@ function VehicleViewSystemComponent({ onSelectStage }: Props) {
         </div>
 
         {/* View Mode Tabs */}
-        <div className="flex items-center gap-1 bg-slate-950/80 border border-slate-800 rounded-xl p-1">
+        <div className="flex items-center gap-1 bg-slate-950/90 border border-slate-800 rounded-xl p-1 dark-hud cad-hud">
           {VIEW_MODES.map((v) => {
             const Icon = v.icon;
             const active = viewMode === v.id;
@@ -729,7 +740,7 @@ function VehicleViewSystemComponent({ onSelectStage }: Props) {
       </div>
 
       {/* Procedural Vehicle Family Asset Selector Strip */}
-      <div className="mb-3 p-2.5 bg-slate-950/80 border border-slate-800 rounded-xl relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-2.5">
+      <div className="mb-3 p-2.5 bg-slate-950/90 border border-slate-800 rounded-xl relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-2.5 dark-hud cad-hud">
         <div className="flex items-center gap-2">
           <div className="px-2.5 py-1 rounded-lg bg-cyan-500/20 text-cyan-300 border border-cyan-500/40 text-[10px] font-mono font-bold tracking-wider flex items-center gap-1.5 shadow-[0_0_10px_rgba(6,182,212,0.2)]">
             <Box size={12} /> MASTER BLENDER VEHICLE FLEET
@@ -774,26 +785,26 @@ function VehicleViewSystemComponent({ onSelectStage }: Props) {
       {/* Sub-toolbar Controls */}
       <div className="flex flex-wrap items-center justify-between gap-3 mb-3 relative z-10">
         {/* Left: Camera Presets */}
-        <div className="flex items-center gap-1 bg-slate-950/60 border border-slate-800 rounded-xl p-1 text-[11px] font-mono">
-          <span className="text-slate-500 px-2 py-0.5 text-[9px] uppercase font-bold flex items-center gap-1">
-            <Compass size={11} /> 3D Angles:
+        <div className="flex items-center gap-1 bg-slate-950/90 border border-slate-700/80 rounded-xl p-1 text-[11px] font-mono dark-hud cad-hud">
+          <span className="text-slate-400 px-2 py-0.5 text-[9px] uppercase font-bold flex items-center gap-1">
+            <Compass size={11} className="text-cyan-400" /> 3D Angles:
           </span>
-          <button onClick={() => setCameraPreset("side")} className="px-2 py-1 rounded hover:bg-slate-800 text-slate-300 transition-colors">
+          <button onClick={() => setCameraPreset("side")} className="px-2.5 py-1 rounded hover:bg-slate-800 text-slate-200 hover:text-white transition-colors cursor-pointer font-semibold">
             Side Profile
           </button>
-          <button onClick={() => setCameraPreset("front_34")} className="px-2 py-1 rounded hover:bg-slate-800 text-slate-300 transition-colors">
+          <button onClick={() => setCameraPreset("front_34")} className="px-2.5 py-1 rounded hover:bg-slate-800 text-slate-200 hover:text-white transition-colors cursor-pointer font-semibold">
             Front 3/4
           </button>
-          <button onClick={() => setCameraPreset("top")} className="px-2 py-1 rounded hover:bg-slate-800 text-slate-300 transition-colors">
+          <button onClick={() => setCameraPreset("top")} className="px-2.5 py-1 rounded hover:bg-slate-800 text-slate-200 hover:text-white transition-colors cursor-pointer font-semibold">
             Top Blueprint
           </button>
-          <button onClick={() => setCameraPreset("rear_34")} className="px-2 py-1 rounded hover:bg-slate-800 text-slate-300 transition-colors">
+          <button onClick={() => setCameraPreset("rear_34")} className="px-2.5 py-1 rounded hover:bg-slate-800 text-slate-200 hover:text-white transition-colors cursor-pointer font-semibold">
             Rear Aero
           </button>
         </div>
 
         {/* Environment & Backdrop Controls */}
-        <div className="flex items-center gap-1 bg-slate-950/80 border border-slate-800 rounded-xl p-1 text-[11px] font-mono">
+        <div className="flex items-center gap-1 bg-slate-950/90 border border-slate-700/80 rounded-xl p-1 text-[11px] font-mono dark-hud cad-hud">
           <span className="text-slate-400 px-2 py-0.5 text-[9px] uppercase font-bold flex items-center gap-1">
             <Palette size={11} className="text-sky-400" /> Backdrop:
           </span>
@@ -808,10 +819,10 @@ function VehicleViewSystemComponent({ onSelectStage }: Props) {
             <button
               key={b.id}
               onClick={() => setBgStyle(b.id)}
-              className={`px-2 py-1 rounded transition-colors cursor-pointer ${
+              className={`px-2 py-1 rounded transition-colors cursor-pointer font-bold ${
                 bgStyle === b.id
-                  ? "bg-sky-500/20 text-sky-300 font-bold border border-sky-500/40 shadow-[0_0_10px_rgba(56,189,248,0.25)]"
-                  : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/60"
+                  ? "bg-sky-500/25 text-sky-300 border border-sky-400/50 shadow-[0_0_10px_rgba(56,189,248,0.3)]"
+                  : "text-slate-300 hover:text-white hover:bg-slate-800/80"
               }`}
             >
               {b.label}
@@ -820,10 +831,10 @@ function VehicleViewSystemComponent({ onSelectStage }: Props) {
           <div className="w-[1px] h-3.5 bg-slate-800 mx-0.5" />
           <button
             onClick={() => setShowGrid(!showGrid)}
-            className={`flex items-center gap-1 px-2 py-1 rounded transition-colors cursor-pointer ${
+            className={`flex items-center gap-1 px-2 py-1 rounded transition-colors cursor-pointer font-semibold ${
               showGrid
-                ? "bg-slate-800 text-cyan-300 font-bold border border-cyan-500/30"
-                : "text-slate-500 hover:text-slate-300"
+                ? "bg-slate-800 text-cyan-300 font-bold border border-cyan-500/40 shadow-[0_0_8px_rgba(6,182,212,0.25)]"
+                : "text-slate-400 hover:text-white"
             }`}
             title="Toggle Floor Grid"
           >
@@ -832,10 +843,10 @@ function VehicleViewSystemComponent({ onSelectStage }: Props) {
           </button>
           <button
             onClick={() => setShowHotspots(!showHotspots)}
-            className={`flex items-center gap-1 px-2 py-1 rounded transition-colors cursor-pointer ${
+            className={`flex items-center gap-1 px-2 py-1 rounded transition-colors cursor-pointer font-semibold ${
               showHotspots
-                ? "bg-slate-800 text-cyan-300 font-bold border border-cyan-500/30"
-                : "text-slate-500 hover:text-slate-300"
+                ? "bg-slate-800 text-cyan-300 font-bold border border-cyan-500/40 shadow-[0_0_8px_rgba(6,182,212,0.25)]"
+                : "text-slate-400 hover:text-white"
             }`}
             title="Toggle Engineering 3D Hotspot Pins"
           >
@@ -845,10 +856,10 @@ function VehicleViewSystemComponent({ onSelectStage }: Props) {
           {showHotspots && (
             <button
               onClick={() => setShowAllLabels(!showAllLabels)}
-              className={`flex items-center gap-1 px-2 py-1 rounded transition-colors cursor-pointer ${
+              className={`flex items-center gap-1 px-2 py-1 rounded transition-colors cursor-pointer font-semibold ${
                 showAllLabels
-                  ? "bg-amber-500/20 text-amber-300 font-bold border border-amber-500/40 shadow-[0_0_10px_rgba(245,158,11,0.2)]"
-                  : "text-slate-400 hover:text-slate-200"
+                  ? "bg-amber-500/25 text-amber-300 font-bold border border-amber-500/50 shadow-[0_0_10px_rgba(245,158,11,0.3)]"
+                  : "text-slate-300 hover:text-white"
               }`}
               title="Toggle Expanded All Labels vs Clean Hover Mode"
             >
@@ -860,7 +871,7 @@ function VehicleViewSystemComponent({ onSelectStage }: Props) {
 
         {/* Right: Exploded Expansion Slider or Cut Plane Selector */}
         {viewMode === "exploded" && (
-          <div className="flex items-center gap-2 bg-slate-950/80 border border-cyan-500/30 rounded-xl px-3 py-1.5 animate-in fade-in duration-200">
+          <div className="flex items-center gap-2 bg-slate-950/90 border border-cyan-500/40 rounded-xl px-3 py-1.5 animate-in fade-in duration-200 dark-hud cad-hud">
             <Sliders size={13} className="text-cyan-400" />
             <span className="text-[10px] font-mono text-cyan-300 font-bold uppercase">Disassembly Spread:</span>
             <input
@@ -872,12 +883,12 @@ function VehicleViewSystemComponent({ onSelectStage }: Props) {
               onChange={(e) => setExplodedProgress(parseFloat(e.target.value))}
               className="w-28 accent-cyan-400 cursor-pointer"
             />
-            <span className="text-[10px] font-mono text-slate-300 w-9 text-right">{Math.round((explodedProgress / 1.5) * 100)}%</span>
+            <span className="text-[10px] font-mono text-slate-100 font-bold w-9 text-right">{Math.round((explodedProgress / 1.5) * 100)}%</span>
           </div>
         )}
 
         {viewMode === "cutaway" && (
-          <div className="flex items-center gap-1.5 bg-slate-950/80 border border-rose-500/30 rounded-xl p-1 animate-in fade-in duration-200">
+          <div className="flex items-center gap-1.5 bg-slate-950/90 border border-rose-500/40 rounded-xl p-1 animate-in fade-in duration-200 dark-hud cad-hud">
             <span className="text-[10px] font-mono text-rose-300 px-2 uppercase font-bold flex items-center gap-1">
               <Scissors size={12} /> Cut Plane:
             </span>
@@ -887,8 +898,8 @@ function VehicleViewSystemComponent({ onSelectStage }: Props) {
                 onClick={() => setCutSide(side)}
                 className={`px-2.5 py-1 rounded-lg text-[10px] font-mono font-bold transition-all cursor-pointer ${
                   cutSide === side
-                    ? "bg-rose-500/20 text-rose-300 border border-rose-500/40 shadow-[0_0_10px_rgba(244,63,94,0.3)]"
-                    : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/40"
+                    ? "bg-rose-500/25 text-rose-200 border border-rose-400/60 shadow-[0_0_10px_rgba(244,63,94,0.35)] font-black"
+                    : "text-slate-300 hover:text-white hover:bg-slate-800/60"
                 }`}
               >
                 {side.toUpperCase()}
@@ -898,19 +909,19 @@ function VehicleViewSystemComponent({ onSelectStage }: Props) {
         )}
 
         {/* Viewport Actions */}
-        <div className="flex items-center gap-1.5 ml-auto">
+        <div className="flex items-center gap-1.5 ml-auto dark-hud cad-hud">
           <button
             onClick={() => setAutoRotate(!autoRotate)}
             className={`p-2 rounded-xl border text-xs font-mono transition-all cursor-pointer ${
-              autoRotate ? "bg-cyan-500/20 text-cyan-300 border-cyan-500/40" : "bg-slate-950/80 text-slate-400 border-slate-800 hover:text-slate-200"
+              autoRotate ? "bg-cyan-500/25 text-cyan-300 border-cyan-400/50 shadow-[0_0_10px_rgba(6,182,212,0.3)]" : "bg-slate-950/90 text-slate-300 border-slate-700/80 hover:text-white hover:bg-slate-800"
             }`}
             title="Auto-Turntable Orbit"
           >
-            <RotateCcw size={13} className={autoRotate ? "animate-spin" : ""} />
+            <RotateCcw size={13} className={autoRotate ? "animate-spin text-cyan-300" : ""} />
           </button>
           <button
             onClick={() => setIsFullscreen(!isFullscreen)}
-            className="p-2 rounded-xl bg-slate-950/80 text-slate-400 border border-slate-800 hover:text-slate-200 transition-colors cursor-pointer"
+            className="p-2 rounded-xl bg-slate-950/90 text-slate-300 border border-slate-700/80 hover:text-white hover:bg-slate-800 transition-colors cursor-pointer"
             title={isFullscreen ? "Exit Fullscreen" : "Fullscreen 3D Studio"}
           >
             {isFullscreen ? <Minimize2 size={13} /> : <Maximize2 size={13} />}
@@ -921,9 +932,9 @@ function VehicleViewSystemComponent({ onSelectStage }: Props) {
       {/* Primary 3D WebGL Canvas Viewport */}
       <div
         ref={containerRef}
-        style={{ background: bgGradient }}
-        className={`relative w-full overflow-hidden rounded-2xl border border-slate-800 shadow-[0_0_40px_rgba(0,0,0,0.8)] transition-all duration-300 ${
-          isFullscreen ? "h-[calc(100vh-240px)]" : "h-[420px]"
+        style={{ background: bgGradient, color: "#f8fafc" }}
+        className={`relative w-full overflow-hidden rounded-2xl border border-slate-700/80 shadow-[0_0_40px_rgba(0,0,0,0.9)] transition-all duration-300 dark-surface dark-hud cad-hud ${
+          isFullscreen ? "h-[calc(100vh-240px)]" : "h-[440px]"
         }`}
       >
         <canvas ref={canvasRef} className="w-full h-full block cursor-grab active:cursor-grabbing" />
@@ -956,48 +967,71 @@ function VehicleViewSystemComponent({ onSelectStage }: Props) {
                   {/* Subtle Non-Intrusive Breathing Halo */}
                   <div
                     className={`absolute -inset-1.5 rounded-full pointer-events-none transition-opacity ${
-                      isSelected || isHovered ? "animate-ping opacity-40" : "opacity-15 animate-pulse"
+                      isSelected || isHovered ? "animate-ping opacity-50" : "opacity-25 animate-pulse"
                     }`}
                     style={{ backgroundColor: spot.color }}
                   />
 
-                  {/* Clean Precision 24px Reticle Pin */}
+                  {/* Clean Precision 28px Reticle Pin with Guaranteed White Text */}
                   <div
-                    className={`relative w-6 h-6 rounded-full flex items-center justify-center border backdrop-blur-md transition-all duration-200 ${
+                    className={`relative w-7 h-7 rounded-full flex items-center justify-center border backdrop-blur-md transition-all duration-200 dark-hud cad-hud ${
                       isSelected || isHovered
-                        ? "scale-125 border-white shadow-[0_0_20px_rgba(255,255,255,0.9)] ring-2 ring-cyan-400"
-                        : "scale-100 hover:scale-115 shadow-[0_0_10px_rgba(0,0,0,0.8)]"
+                        ? "scale-125 border-white ring-2 ring-cyan-400 shadow-[0_0_25px_rgba(255,255,255,1)]"
+                        : "scale-100 hover:scale-115 shadow-[0_0_12px_rgba(0,0,0,0.95)]"
                     }`}
                     style={{
                       borderColor: isSelected || isHovered ? "#ffffff" : spot.color,
-                      backgroundColor: "rgba(3, 7, 18, 0.88)",
-                      boxShadow: isSelected || isHovered ? `0 0 16px ${spot.color}` : `0 0 8px rgba(0,0,0,0.8)`,
+                      backgroundColor: "#050914",
+                      boxShadow: isSelected || isHovered
+                        ? `0 0 20px ${spot.color}, 0 0 8px #ffffff`
+                        : `0 0 10px rgba(0,0,0,0.9), inset 0 0 6px ${spot.color}40`,
                     }}
                   >
                     {/* Micro Category Color Dot */}
                     <span
-                      className="absolute -top-0.5 -right-0.5 w-2 h-2 rounded-full border border-slate-950 shadow-sm"
-                      style={{ backgroundColor: spot.color }}
+                      className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 rounded-full border-2 border-slate-950 shadow-md"
+                      style={{ backgroundColor: spot.color, boxShadow: `0 0 8px ${spot.color}` }}
                     />
-                    <span className="text-[9px] font-mono font-black text-white tracking-tight drop-shadow-sm">
+                    <span
+                      className="text-[9px] font-mono font-black tracking-tight"
+                      style={{ color: "#ffffff", textShadow: "0 1px 2px rgba(0,0,0,1)" }}
+                    >
                       {spot.id}
                     </span>
                   </div>
 
                   {/* Single Clean Micro-Pill Tag on Hover / Selection (When not in All Labels mode) */}
                   {!showAllLabels && (isHovered || isSelected) && (
-                    <div className="absolute -top-7 left-1/2 -translate-x-1/2 pointer-events-none z-30 whitespace-nowrap animate-in fade-in zoom-in-95 duration-150">
+                    <div className="absolute -top-9 left-1/2 -translate-x-1/2 pointer-events-none z-30 whitespace-nowrap animate-in fade-in zoom-in-95 duration-150 dark-hud cad-hud">
                       <div
-                        className="px-2 py-0.5 rounded-full border text-[10px] font-mono font-bold shadow-xl backdrop-blur-md flex items-center gap-1.5"
+                        className="px-3 py-1 rounded-full border text-[11px] font-mono font-bold shadow-[0_6px_25px_rgba(0,0,0,0.95)] backdrop-blur-xl flex items-center gap-2"
                         style={{
-                          backgroundColor: "rgba(2, 6, 23, 0.95)",
-                          borderColor: spot.color,
-                          color: "#ffffff",
-                          boxShadow: `0 0 12px ${spot.color}80`,
+                          backgroundColor: "#070d1c",
+                          borderColor: isSelected ? "#38bdf8" : spot.color,
+                          boxShadow: `0 0 18px ${spot.color}99, 0 4px 15px rgba(0,0,0,0.9), inset 0 1px 1px rgba(255,255,255,0.25)`,
                         }}
                       >
-                        <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: spot.color }} />
-                        <span>{spot.label}</span>
+                        <span
+                          className="w-2 h-2 rounded-full animate-pulse shadow-sm shrink-0"
+                          style={{ backgroundColor: spot.color, boxShadow: `0 0 8px ${spot.color}` }}
+                        />
+                        <span
+                          className="font-extrabold tracking-wide text-xs"
+                          style={{ color: "#ffffff", textShadow: "0 1px 3px rgba(0,0,0,0.9)" }}
+                        >
+                          {spot.label}
+                        </span>
+                        <span
+                          className="px-1.5 py-0.2 rounded text-[9px] font-mono font-black uppercase tracking-wider"
+                          style={{
+                            backgroundColor: `${spot.color}35`,
+                            color: "#ffffff",
+                            border: `1px solid ${spot.color}80`,
+                            textShadow: "0 1px 2px rgba(0,0,0,0.8)",
+                          }}
+                        >
+                          {spot.cat}
+                        </span>
                       </div>
                     </div>
                   )}
@@ -1005,7 +1039,7 @@ function VehicleViewSystemComponent({ onSelectStage }: Props) {
                   {/* Anti-Collision Staggered Callouts (When All Labels is Active) */}
                   {showAllLabels && (
                     <div
-                      className="absolute pointer-events-none z-30 whitespace-nowrap animate-in fade-in duration-200"
+                      className="absolute pointer-events-none z-30 whitespace-nowrap animate-in fade-in duration-200 dark-hud cad-hud"
                       style={{
                         transform: `translate(${offsetCfg.xOffset}px, ${offsetCfg.yOffset}px)`,
                         left: "50%",
@@ -1028,27 +1062,32 @@ function VehicleViewSystemComponent({ onSelectStage }: Props) {
                           x2={offsetCfg.xOffset}
                           y2={offsetCfg.yOffset}
                           stroke={spot.color}
-                          strokeWidth="1.2"
+                          strokeWidth="1.5"
                           strokeDasharray="2 2"
-                          opacity="0.8"
+                          opacity="0.9"
                         />
                       </svg>
 
                       <div
-                        className="relative px-2 py-0.5 rounded-md border shadow-[0_4px_20px_rgba(0,0,0,0.85)] backdrop-blur-xl flex items-center gap-1.5"
+                        className="relative px-2.5 py-1 rounded-lg border shadow-[0_4px_25px_rgba(0,0,0,0.95)] backdrop-blur-xl flex items-center gap-2 dark-hud cad-hud"
                         style={{
-                          backgroundColor: "rgba(3, 7, 18, 0.94)",
-                          borderColor: isSelected || isHovered ? "#38bdf8" : `${spot.color}99`,
-                          boxShadow: isSelected || isHovered ? `0 0 14px ${spot.color}80` : "0 2px 10px rgba(0,0,0,0.8)",
+                          backgroundColor: "#070d1c",
+                          borderColor: isSelected || isHovered ? "#38bdf8" : `${spot.color}dd`,
+                          boxShadow: isSelected || isHovered
+                            ? `0 0 20px ${spot.color}aa, 0 2px 10px rgba(0,0,0,0.9)`
+                            : `0 2px 12px rgba(0,0,0,0.9)`,
                         }}
                       >
                         <span
-                          className="px-1 py-0.2 rounded text-[8px] font-mono font-black uppercase text-white"
-                          style={{ backgroundColor: spot.color }}
+                          className="px-1.5 py-0.5 rounded text-[9px] font-mono font-black uppercase text-white shadow-sm"
+                          style={{ backgroundColor: spot.color, color: "#ffffff" }}
                         >
                           {spot.id}
                         </span>
-                        <span className="text-[10px] font-bold text-slate-100 tracking-wide">
+                        <span
+                          className="text-[11px] font-bold tracking-wide"
+                          style={{ color: "#ffffff", textShadow: "0 1px 2px rgba(0,0,0,0.9)" }}
+                        >
                           {spot.label}
                         </span>
                       </div>
@@ -1060,24 +1099,38 @@ function VehicleViewSystemComponent({ onSelectStage }: Props) {
           </div>
         )}
 
-        {/* Floating Technical Telemetry Card */}
+        {/* Floating Technical Telemetry Card — High Contrast Obsidian HUD */}
         {activeDisplay && (
           <div
-            className="absolute top-4 right-4 w-76 p-4 rounded-xl bg-slate-950/94 backdrop-blur-2xl border shadow-[0_0_40px_rgba(0,0,0,0.9)] animate-in fade-in zoom-in-95 duration-200 z-20"
-            style={{ borderColor: activeDisplay.color }}
+            className="absolute top-4 right-4 w-84 p-4.5 rounded-2xl border backdrop-blur-2xl shadow-[0_16px_50px_rgba(0,0,0,0.95)] animate-in fade-in zoom-in-95 duration-200 z-20 dark-surface dark-hud cad-hud"
+            style={{
+              backgroundColor: "rgba(6, 11, 24, 0.97)",
+              borderColor: activeDisplay.color,
+              boxShadow: `0 16px 50px rgba(0,0,0,0.95), 0 0 25px ${activeDisplay.color}40, inset 0 1px 1px rgba(255,255,255,0.2)`,
+            }}
           >
-            <div className="flex items-center justify-between mb-2">
+            {/* Top Bar: Subsystem & Category */}
+            <div className="flex items-center justify-between mb-3 pb-2.5 border-b border-slate-700/80">
               <div className="flex items-center gap-2">
-                <div className="w-2.5 h-2.5 rounded-full animate-pulse" style={{ backgroundColor: activeDisplay.color }} />
-                <span className="text-xs font-mono font-bold text-slate-100">{activeDisplay.label}</span>
-              </div>
-              <div className="flex items-center gap-1.5">
+                <div
+                  className="w-3 h-3 rounded-full animate-pulse shadow-[0_0_10px_currentColor] shrink-0"
+                  style={{ backgroundColor: activeDisplay.color, color: activeDisplay.color }}
+                />
                 <span
-                  className="text-[9px] font-mono px-2 py-0.5 rounded border uppercase tracking-wider font-bold"
+                  className="text-xs font-mono font-extrabold uppercase tracking-wide"
+                  style={{ color: "#ffffff", textShadow: "0 1px 2px rgba(0,0,0,0.8)" }}
+                >
+                  {activeDisplay.label}
+                </span>
+              </div>
+              <div className="flex items-center gap-2">
+                <span
+                  className="text-[9px] font-mono px-2 py-0.5 rounded-md border uppercase tracking-wider font-extrabold"
                   style={{
-                    borderColor: activeDisplay.color + "60",
-                    color: activeDisplay.color,
-                    backgroundColor: activeDisplay.color + "15",
+                    borderColor: `${activeDisplay.color}99`,
+                    color: "#ffffff",
+                    backgroundColor: `${activeDisplay.color}35`,
+                    boxShadow: `0 0 10px ${activeDisplay.color}35`,
                   }}
                 >
                   {activeDisplay.cat}
@@ -1087,59 +1140,78 @@ function VehicleViewSystemComponent({ onSelectStage }: Props) {
                     setSelectedHotspot(null);
                     setHoveredHotspot(null);
                   }}
-                  className="p-1 rounded-md text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+                  className="p-1 rounded-md text-slate-400 hover:text-white hover:bg-slate-800/80 transition-colors cursor-pointer"
                   title="Close Inspector"
                 >
-                  <X size={12} />
+                  <X size={14} />
                 </button>
               </div>
             </div>
 
-            <div className="text-sm font-bold text-white mb-1 flex items-center gap-1.5">
-              <Cpu size={13} className="text-cyan-400" />
-              {activeDisplay.stat}
+            {/* Subsystem Name / Stat */}
+            <div
+              className="text-sm font-extrabold mb-1.5 flex items-center gap-2"
+              style={{ color: "#38bdf8" }}
+            >
+              <Cpu size={15} className="text-cyan-400 shrink-0" />
+              <span>{activeDisplay.stat}</span>
             </div>
-            <div className="text-[11px] text-slate-300 leading-relaxed mb-3">{activeDisplay.det}</div>
 
-            <div className="pt-2.5 border-t border-slate-800/80 flex items-center justify-between text-[10px] font-mono">
-              <span className="text-slate-400 flex items-center gap-1">
-                <Gauge size={11} className="text-emerald-400" /> Real-time CAD telemetry
+            {/* Description & Technical Specs */}
+            <div
+              className="text-xs leading-relaxed mb-3.5 font-medium"
+              style={{ color: "#e2e8f0" }}
+            >
+              {activeDisplay.det}
+            </div>
+
+            {/* Bottom Footer: CAD Status & Configure Action */}
+            <div className="pt-2.5 border-t border-slate-700/80 flex items-center justify-between text-xs font-mono">
+              <span
+                className="flex items-center gap-1.5 font-semibold text-[11px]"
+                style={{ color: "#94a3b8" }}
+              >
+                <Gauge size={13} className="text-emerald-400 shrink-0" />
+                <span>Real-time CAD telemetry</span>
               </span>
               {onSelectStage && (
                 <button
                   onClick={() => onSelectStage(activeDisplay.cat)}
-                  className="text-cyan-400 hover:text-cyan-300 font-bold underline cursor-pointer"
+                  className="px-3 py-1.5 rounded-lg bg-cyan-500/25 hover:bg-cyan-500/40 text-cyan-200 hover:text-white border border-cyan-400/70 text-[11px] font-extrabold tracking-wider transition-all shadow-[0_0_14px_rgba(6,182,212,0.35)] cursor-pointer flex items-center gap-1"
                 >
-                  Configure Stage
+                  <span>Configure Stage</span>
                 </button>
               )}
             </div>
           </div>
         )}
 
-        {/* Viewport Watermark & Controls Guide */}
-        <div className="absolute bottom-3 left-4 pointer-events-none flex flex-wrap items-center gap-2.5 bg-slate-950/92 border border-slate-700/80 px-4 py-1.5 rounded-full backdrop-blur-md shadow-xl text-[11px] font-mono text-slate-200">
+        {/* Viewport Watermark & Controls Guide — High-Contrast Pill */}
+        <div
+          className="absolute bottom-3 left-4 pointer-events-none flex flex-wrap items-center gap-2.5 border border-slate-600/80 px-4 py-1.5 rounded-full backdrop-blur-md shadow-2xl text-[11px] font-mono dark-surface dark-hud cad-hud"
+          style={{ backgroundColor: "rgba(5, 9, 20, 0.94)", color: "#e2e8f0" }}
+        >
           <span className="flex items-center gap-1.5">
             <span className="w-2 h-2 rounded-full bg-cyan-400 shadow-[0_0_8px_#22d3ee]" />
-            <strong className="text-white font-bold">Orbit:</strong> Left Click + Drag
+            <strong style={{ color: "#ffffff" }}>Orbit:</strong> Left Click + Drag
           </span>
-          <span className="text-slate-600">|</span>
+          <span style={{ color: "#475569" }}>|</span>
           <span className="flex items-center gap-1.5">
             <span className="w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_8px_#34d399]" />
-            <strong className="text-white font-bold">Pan:</strong> Right Click + Drag
+            <strong style={{ color: "#ffffff" }}>Pan:</strong> Right Click + Drag
           </span>
-          <span className="text-slate-600">|</span>
+          <span style={{ color: "#475569" }}>|</span>
           <span className="flex items-center gap-1.5">
             <span className="w-2 h-2 rounded-full bg-purple-400 shadow-[0_0_8px_#c084fc]" />
-            <strong className="text-white font-bold">Zoom:</strong> Scroll Wheel
+            <strong style={{ color: "#ffffff" }}>Zoom:</strong> Scroll Wheel
           </span>
         </div>
       </div>
 
       {/* Component Layers Control Bar */}
-      <div className="mt-4 pt-3 border-t border-slate-800 relative z-10">
+      <div className="mt-4 pt-3 border-t border-slate-800 relative z-10 dark-surface dark-hud cad-hud">
         <div className="flex items-center justify-between mb-2.5">
-          <span className="text-[10px] font-mono text-slate-400 uppercase tracking-widest flex items-center gap-1.5 font-bold">
+          <span className="text-[10px] font-mono uppercase tracking-widest flex items-center gap-1.5 font-bold" style={{ color: "#94a3b8" }}>
             <Box size={12} className="text-cyan-400" /> 3D Automotive Subsystem Layers
           </span>
           <button
@@ -1162,20 +1234,23 @@ function VehicleViewSystemComponent({ onSelectStage }: Props) {
                     [catKey]: !isVis,
                   }))
                 }
-                className={`flex items-center justify-between px-3 py-2 rounded-xl border text-[11px] font-mono font-bold transition-all cursor-pointer ${
+                className={`flex items-center justify-between px-3 py-2 rounded-xl border text-[11px] font-mono font-extrabold transition-all cursor-pointer dark-hud cad-hud ${
                   isVis
-                    ? `${cfg.bg} ${cfg.border} ${cfg.text} shadow-[0_0_12px_rgba(0,0,0,0.4)]`
-                    : "bg-slate-900/50 border-slate-800 text-slate-500 opacity-60"
+                    ? `${cfg.bg} ${cfg.border} shadow-[0_0_14px_rgba(0,0,0,0.5)]`
+                    : "bg-slate-900/80 border-slate-800 text-slate-500 opacity-60"
                 }`}
+                style={{
+                  color: isVis ? "#ffffff" : "#64748b",
+                }}
               >
                 <div className="flex items-center gap-1.5">
                   <div
-                    className="w-2 h-2 rounded-full"
-                    style={{ backgroundColor: isVis ? cfg.color : "#64748b" }}
+                    className="w-2.5 h-2.5 rounded-full shadow-sm"
+                    style={{ backgroundColor: isVis ? cfg.color : "#64748b", boxShadow: isVis ? `0 0 8px ${cfg.color}` : "none" }}
                   />
-                  <span>{cfg.label}</span>
+                  <span style={{ color: isVis ? "#ffffff" : "#94a3b8" }}>{cfg.label}</span>
                 </div>
-                {isVis ? <Eye size={12} /> : <EyeOff size={12} />}
+                {isVis ? <Eye size={13} style={{ color: cfg.color }} /> : <EyeOff size={13} />}
               </button>
             );
           })}

@@ -244,7 +244,20 @@ export function getStageIndividualParts(stageId: AssemblyStage): ModularPartItem
   return MODULAR_CAR_PARTS.filter((p) => p.category === stageId);
 }
 
+export function getCompleteVehicleGlbPath(model: VehicleModelCategory | string): string {
+  const m = String(model || "sedan").toLowerCase();
+  if (m === "crossover") return "/models/Car_Crossover_Complete.glb";
+  if (m === "suv") return "/models/Car_Suv_Complete.glb";
+  if (m === "f1" || m === "formula") return "/models/Car_F1_Complete.glb";
+  if (m === "hypercar" || m === "megawatt") return "/models/Car_Hypercar_Complete.glb";
+  if (m === "gt3" || m === "supercar" || m === "track_special") return "/models/Car_GT3_Supercar_Complete.glb";
+  return "/models/Car_Sedan_Complete.glb";
+}
+
 export function getStageGlbPaths(stageId: AssemblyStage, model: VehicleModelCategory): string[] {
+  if (stageId === "complete") {
+    return [getCompleteVehicleGlbPath(model)];
+  }
   const individual = getStageIndividualParts(stageId);
   if (individual.length > 0) {
     return individual.map((p) => `/models/modular_parts/individual/${p.glbFilename}`);

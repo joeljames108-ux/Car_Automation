@@ -39,6 +39,7 @@ interface DesignContextValue {
   updateTiresEng: (patch: Partial<TireEngineeringConfig>) => void;
   updateWheelsEng: (patch: Partial<WheelEngineeringConfig>) => void;
   setDesign: (d: VehicleDesign) => void;
+  setDesignName: (name: string) => void;
   resetDesign: () => void;
 }
 
@@ -74,6 +75,10 @@ export function DesignProvider({ children }: { children: ReactNode }) {
 
   const setDesign = useCallback((d: VehicleDesign) => {
     setDesignState({ ...d, updatedAt: new Date().toISOString() });
+  }, []);
+
+  const setDesignName = useCallback((name: string) => {
+    setDesignState((d) => ({ ...d, name, updatedAt: new Date().toISOString() }));
   }, []);
 
   const updateEngine = useCallback((patch: Partial<EngineConfig>) => {
@@ -150,12 +155,12 @@ export function DesignProvider({ children }: { children: ReactNode }) {
     design, sim, units, setUnits, carConcept, setCarConcept, uiTheme, setUiTheme,
     updateEngine, updateVehicle, updateAero, updateAeroResearch, updateExterior, updateInterior, updateElectronics, updateManufacturing, updateInfotainment,
     updateChassisEng, updateSuspensionGeo, updateSteeringEng, updateBrakesEng, updateTiresEng, updateWheelsEng,
-    setDesign, resetDesign,
+    setDesign, setDesignName, resetDesign,
   }), [
     design, sim, units, carConcept, uiTheme,
     updateEngine, updateVehicle, updateAero, updateAeroResearch, updateExterior, updateInterior, updateElectronics, updateManufacturing, updateInfotainment,
     updateChassisEng, updateSuspensionGeo, updateSteeringEng, updateBrakesEng, updateTiresEng, updateWheelsEng,
-    setDesign, resetDesign,
+    setDesign, setDesignName, resetDesign,
   ]);
 
   return <DesignContext.Provider value={value}>{children}</DesignContext.Provider>;
