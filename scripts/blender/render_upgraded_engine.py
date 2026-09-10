@@ -12,55 +12,56 @@ def render_v12_engine(glb_name, out_name):
     
     # Set up camera
     cam_data = bpy.data.cameras.new("RenderCam")
-    cam_data.lens = 55
+    cam_data.lens = 50
     cam = bpy.data.objects.new("RenderCam", cam_data)
     bpy.context.scene.collection.objects.link(cam)
     bpy.context.scene.camera = cam
     
-    # Position camera: 3/4 isometric perspective looking down at engine
-    cam.location = Vector((1.6, -1.8, 1.3))
+    # Front-lateral 3/4 view looking down at front timing chest, cylinder heads, and intake
+    cam.location = Vector((-1.35, -1.35, 0.85))
     
-    # Point camera towards center of engine (0, 0, 0.20)
-    target = Vector((0.0, 0.0, 0.20))
+    # Target center of engine
+    target = Vector((0.0, 0.0, 0.25))
     direction = target - cam.location
     rot_quat = direction.to_track_quat('-Z', 'Y')
     cam.rotation_euler = rot_quat.to_euler()
     
-    # Studio lighting
+    # Studio lighting rig
     light_key = bpy.data.lights.new("KeyLight", type='AREA')
-    light_key.energy = 450
-    light_key.size = 2.0
+    light_key.energy = 550
+    light_key.size = 2.5
     obj_key = bpy.data.objects.new("KeyLight", light_key)
-    obj_key.location = Vector((1.8, -1.2, 2.0))
+    obj_key.location = Vector((-1.8, -1.2, 1.8))
     bpy.context.scene.collection.objects.link(obj_key)
     
     light_rim = bpy.data.lights.new("RimLight", type='AREA')
-    light_rim.energy = 350
+    light_rim.energy = 400
     light_rim.color = (0.95, 0.92, 0.88)
     obj_rim = bpy.data.objects.new("RimLight", light_rim)
-    obj_rim.location = Vector((-1.8, 1.5, 1.8))
+    obj_rim.location = Vector((1.8, 1.5, 1.6))
     bpy.context.scene.collection.objects.link(obj_rim)
     
     light_fill = bpy.data.lights.new("FillLight", type='AREA')
-    light_fill.energy = 150
+    light_fill.energy = 220
     light_fill.color = (0.85, 0.92, 1.0)
     obj_fill = bpy.data.objects.new("FillLight", light_fill)
-    obj_fill.location = Vector((-1.5, -1.0, 0.8))
+    obj_fill.location = Vector((1.2, -1.6, 0.8))
     bpy.context.scene.collection.objects.link(obj_fill)
     
     # Dark studio background
     bpy.context.scene.world = bpy.data.worlds.new("StudioWorld")
     bg = bpy.context.scene.world.node_tree.nodes.get("Background")
     if bg:
-        bg.inputs["Color"].default_value = (0.02, 0.025, 0.035, 1.0)
-        bg.inputs["Strength"].default_value = 0.5
+        bg.inputs["Color"].default_value = (0.015, 0.02, 0.03, 1.0)
+        bg.inputs["Strength"].default_value = 0.6
         
-    # Render settings
+    # Render settings: EEVEE for fast preview
     scene = bpy.context.scene
-    scene.render.engine = 'CYCLES'
-    scene.cycles.device = 'CPU'
-    scene.cycles.samples = 32
-    scene.cycles.adaptive_threshold = 0.05
+    scene.render.engine = 'BLENDER_EEVEE_NEXT' if hasattr(bpy.types, 'RenderSettings') and 'BLENDER_EEVEE_NEXT' in [e.identifier for e in bpy.types.RenderSettings.bl_rna.properties['engine'].enum_items] else 'CYCLES'
+    if scene.render.engine == 'CYCLES':
+        scene.cycles.device = 'CPU'
+        scene.cycles.samples = 32
+        scene.cycles.adaptive_threshold = 0.05
     scene.render.resolution_x = 1280
     scene.render.resolution_y = 800
     scene.render.image_settings.file_format = 'PNG'
@@ -75,3 +76,4 @@ def render_v12_engine(glb_name, out_name):
 
 if __name__ == "__main__":
     render_v12_engine("v12_racing_engine_exploded.glb", "v12_engine_exploded_render.png")
+    render_v12_engine("v12_racing_engine_complete.glb", "v12_engine_complete_render.png")
