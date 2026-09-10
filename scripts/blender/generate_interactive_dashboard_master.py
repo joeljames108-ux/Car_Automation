@@ -383,11 +383,538 @@ def make_sculpted_curved_mesh(name, slices, mat=None, parent=None):
     bm.faces.new(grid[0])
     bm.faces.new(grid[-1][::-1])
 
+    bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
     for f in bm.faces:
         f.smooth = True
     bm.to_mesh(mesh)
     bm.free()
 
+    obj = bpy.data.objects.new(name, mesh)
+    bpy.context.collection.objects.link(obj)
+    if mat:
+        obj.data.materials.clear()
+        obj.data.materials.append(mat)
+    if parent:
+        attach_to_parent(obj, parent)
+    return obj
+
+def make_curved_upper_pad(name, dash_w, mat=None, parent=None):
+    """
+    Constructs an organic, continuous Class-A curved dashboard upper pad.
+    Spans the entire cabin width with smooth convex crown, aerodynamic cowl sweep,
+    compound tumblehome curving toward doors, and a bullnose overhang facing the occupants.
+    """
+    n_x = 48
+    slices = []
+    half_w = dash_w * 0.5
+    for i in range(n_x):
+        u = -1.0 + 2.0 * (i / (n_x - 1))
+        x = u * half_w
+        sweep_y = 0.035 * (1.0 - u**2)
+        crown_z = 0.016 * (1.0 - u**2)
+        door_tumble = -0.010 * (abs(u)**2.5)
+
+        y_front = 0.38 + sweep_y
+        z_front = 0.772 + crown_z + door_tumble
+        y_crest = 0.16 + sweep_y * 0.6
+        z_crest = 0.770 + crown_z + door_tumble
+        y_rear = -0.058 - sweep_y * 0.5
+        z_rear = 0.742 + crown_z + door_tumble
+        thick = 0.052
+
+        slice_pts = []
+        for t_step in range(10):
+            t = t_step / 9.0
+            if t <= 0.5:
+                st = t / 0.5
+                yp = y_front * (1.0 - st) + y_crest * st
+                zp = z_front * (1.0 - st) + z_crest * st + 0.008 * math.sin(math.pi * st)
+            else:
+                st = (t - 0.5) / 0.5
+                yp = y_crest * (1.0 - st) + y_rear * st
+                zp = z_crest * (1.0 - st) + z_rear * st - 0.010 * (st**1.5)
+            slice_pts.append(Vector((x, yp, zp)))
+
+        r_brow = 0.018
+        for b_step in range(1, 5):
+            ang = (math.pi * 0.5) * (b_step / 4.0)
+            yb = y_rear - r_brow * math.sin(ang)
+            zb = z_rear - r_brow * (1.0 - math.cos(ang))
+            slice_pts.append(Vector((x, yb, zb)))
+
+        for u_step in range(1, 6):
+            ut = u_step / 5.0
+            yu = (y_rear - r_brow) * (1.0 - ut) + (y_front - 0.02) * ut
+            zu = (z_rear - thick) * (1.0 - ut) + (z_front - thick) * ut
+            slice_pts.append(Vector((x, yu, zu)))
+
+        slices.append(slice_pts)
+
+    return make_sculpted_curved_mesh(name, slices, mat=mat, parent=parent)
+
+def make_curved_binnacle_cowl(name, driver_x, mat=None, parent=None):
+    """
+    Constructs a sculptural driver instrument binnacle cowl with compound double-curvature arch.
+    Sweeps up seamlessly over the gauge cluster and tapers organically at the flanks.
+    """
+    binnacle_w = 0.46
+    n_x = 32
+    half_bw = binnacle_w * 0.5
+    slices = []
+
+    for i in range(n_x):
+        u = -1.0 + 2.0 * (i / (n_x - 1))
+        x = driver_x + u * half_bw
+        arch_factor = max(0.0, math.cos(u * (math.pi * 0.5)))**1.35
+        peak_z = 0.772 + 0.056 * arch_factor
+        rear_y = -0.042 - 0.060 * arch_factor
+        front_y = 0.19 + 0.025 * arch_factor
+        front_z = 0.776 + 0.018 * arch_factor
+
+        slice_pts = []
+        for t_step in range(8):
+            t = t_step / 7.0
+            yp = front_y * (1.0 - t) + rear_y * t
+            zp = front_z * (1.0 - t) + peak_z * t + 0.010 * math.sin(math.pi * t)
+            slice_pts.append(Vector((x, yp, zp)))
+
+        r_lip = 0.016
+        for l_step in range(1, 5):
+            ang = (math.pi * 0.5) * (l_step / 4.0)
+            yl = rear_y - r_lip * math.sin(ang)
+            zl = peak_z - r_lip * (1.0 - math.cos(ang))
+            slice_pts.append(Vector((x, yl, zl)))
+
+        thick = 0.038
+        for u_step in range(1, 6):
+            ut = u_step / 5.0
+            yu = (rear_y - r_lip) * (1.0 - ut) + front_y * ut
+            zu = (peak_z - thick) * (1.0 - ut) + (front_z - 0.02) * ut
+            slice_pts.append(Vector((x, yu, zu)))
+
+        slices.append(slice_pts)
+
+    return make_sculpted_curved_mesh(name, slices, mat=mat, parent=parent)
+
+def make_curved_passenger_sweep(name, pass_x, mat=None, parent=None):
+    """
+    Constructs a sculpted concave passenger dashboard sweep with flowing curves.
+    """
+    sweep_w = 0.54
+    n_x = 24
+    half_sw = sweep_w * 0.5
+    slices = []
+
+    for i in range(n_x):
+        u = -1.0 + 2.0 * (i / (n_x - 1))
+        x = pass_x + u * half_sw
+        dish_factor = 1.0 - 0.25 * math.sin(math.pi * (0.5 + 0.5 * u))
+        front_y = 0.32
+        front_z = 0.772
+        crest_y = 0.14
+        crest_z = 0.765 * dish_factor + 0.005
+        rear_y = 0.005
+        rear_z = 0.750 * dish_factor
+
+        slice_pts = []
+        for t_step in range(6):
+            t = t_step / 5.0
+            yp = front_y * (1.0 - t) + rear_y * t
+            zp = front_z * (1.0 - t) + crest_z * t
+            slice_pts.append(Vector((x, yp, zp)))
+
+        r_lip = 0.014
+        for l_step in range(1, 4):
+            ang = (math.pi * 0.5) * (l_step / 3.0)
+            yl = rear_y - r_lip * math.sin(ang)
+            zl = rear_z - r_lip * (1.0 - math.cos(ang))
+            slice_pts.append(Vector((x, yl, zl)))
+
+        thick = 0.035
+        for u_step in range(1, 5):
+            ut = u_step / 4.0
+            yu = (rear_y - r_lip) * (1.0 - ut) + front_y * ut
+            zu = (rear_z - thick) * (1.0 - ut) + (front_z - 0.02) * ut
+            slice_pts.append(Vector((x, yu, zu)))
+
+        slices.append(slice_pts)
+
+    return make_sculpted_curved_mesh(name, slices, mat=mat, parent=parent)
+
+def make_curved_trim_spear_mesh(name, dash_w, mat=None, parent=None):
+    """
+    Constructs a crowned, aerodynamic Class-A horizontal decorative trim spear.
+    """
+    spear_w = dash_w * 0.96
+    n_x = 28
+    half_w = spear_w * 0.5
+    slices = []
+
+    for i in range(n_x):
+        u = -1.0 + 2.0 * (i / (n_x - 1))
+        x = u * half_w
+        arch_y = 0.018 * (1.0 - u**2)
+        base_y = -0.045 - arch_y
+        base_z = 0.705
+        h = 0.065
+        depth = 0.036
+
+        slice_pts = [
+            Vector((x, base_y + depth, base_z + h * 0.45)),
+            Vector((x, base_y + depth * 0.5, base_z + h * 0.5)),
+            Vector((x, base_y, base_z + h * 0.48)),
+            Vector((x, base_y - 0.008, base_z + h * 0.25)),
+            Vector((x, base_y - 0.010, base_z)),
+            Vector((x, base_y - 0.008, base_z - h * 0.25)),
+            Vector((x, base_y, base_z - h * 0.48)),
+            Vector((x, base_y + depth * 0.5, base_z - h * 0.5)),
+            Vector((x, base_y + depth, base_z - h * 0.45)),
+            Vector((x, base_y + depth * 1.05, base_z - h * 0.2)),
+            Vector((x, base_y + depth * 1.05, base_z + h * 0.2)),
+            Vector((x, base_y + depth, base_z + h * 0.45)),
+        ]
+        slices.append(slice_pts)
+
+    obj = make_sculpted_curved_mesh(name, slices, mat=mat, parent=parent)
+    unwrap_horizontal_strip_uv(obj)
+    return obj
+
+def make_curved_hvac_center_housing(name, mat=None, parent=None):
+    """
+    Constructs an aerodynamic dual-louver HVAC housing with rounded stadium contours.
+    """
+    w = 0.34
+    h = 0.060
+    depth = 0.030
+    n_slices = 16
+    slices = []
+
+    for i in range(n_slices):
+        t = i / (n_slices - 1)
+        y = -0.045 - depth * t
+        scale = 0.95 + 0.05 * t
+        sw = (w * 0.5) * scale
+        sh = (h * 0.5) * scale
+        r_corner = 0.018 * scale
+
+        ring = []
+        for c_idx in range(16):
+            ang = (2.0 * math.pi * c_idx) / 16.0
+            ca = math.cos(ang)
+            sa = math.sin(ang)
+            cx = (sw - r_corner) if ca >= 0 else -(sw - r_corner)
+            cz = (sh - r_corner) if sa >= 0 else -(sh - r_corner)
+            px = cx + r_corner * ca
+            pz = 0.722 + (cz + r_corner * sa)
+            ring.append(Vector((px, y, pz)))
+        slices.append(ring)
+
+    return make_sculpted_curved_mesh(name, slices, mat=mat, parent=parent)
+
+def make_curved_console_base(name, mat=None, parent=None):
+    """
+    Constructs a flowing waterfall center console base bridging dashboard to tunnel.
+    """
+    n_slices = 32
+    slices = []
+
+    for i in range(n_slices):
+        t = i / (n_slices - 1)
+        y = -0.06 * (1.0 - t) + (-0.65) * t
+        s_curve = 3.0 * t**2 - 2.0 * t**3
+        z_top = 0.50 * (1.0 - s_curve) + 0.38 * s_curve
+        z_bot = 0.22
+        cw = (0.31 * (1.0 - t) + 0.25 * t) * 0.5
+        r_edge = 0.022
+
+        ring = [
+            Vector((-cw, y, z_top - r_edge)),
+            Vector((-cw + r_edge * 0.3, y, z_top - r_edge * 0.3)),
+            Vector((-cw + r_edge, y, z_top)),
+            Vector((0.0, y, z_top + 0.004)),
+            Vector((cw - r_edge, y, z_top)),
+            Vector((cw - r_edge * 0.3, y, z_top - r_edge * 0.3)),
+            Vector((cw, y, z_top - r_edge)),
+            Vector((cw * 0.98, y, z_bot + 0.05)),
+            Vector((cw * 0.95, y, z_bot)),
+            Vector((0.0, y, z_bot)),
+            Vector((-cw * 0.95, y, z_bot)),
+            Vector((-cw * 0.98, y, z_bot + 0.05)),
+        ]
+        slices.append(ring)
+
+    return make_sculpted_curved_mesh(name, slices, mat=mat, parent=parent)
+
+def make_curved_cluster_hood(name, driver_x, mat=None, parent=None):
+    """
+    Constructs a sculptural arched hooded visor canopy over the instrument cluster.
+    Provides deep sun-shading over the dual dials and display with organic curvature.
+    """
+    n_x = 24
+    hood_w = 0.38
+    half_w = hood_w * 0.5
+    slices = []
+    for i in range(n_x):
+        u = -1.0 + 2.0 * (i / (n_x - 1))
+        x = driver_x + u * half_w
+        arch = max(0.0, math.cos(u * (math.pi * 0.5)))**1.3
+        z_peak = 0.748 + 0.046 * arch
+        y_front = 0.06
+        y_rear = -0.076 - 0.024 * arch
+        ring = [
+            Vector((x, y_front, 0.710)),
+            Vector((x, y_front, z_peak - 0.018)),
+            Vector((x, y_front * 0.5, z_peak)),
+            Vector((x, y_rear + 0.015, z_peak)),
+            Vector((x, y_rear, z_peak - 0.012)),
+            Vector((x, y_rear + 0.018, z_peak - 0.026)),
+            Vector((x, y_rear + 0.028, 0.710)),
+            Vector((x, y_front * 0.5, 0.708)),
+        ]
+        slices.append(ring)
+    return make_sculpted_curved_mesh(name, slices, mat=mat, parent=parent)
+
+def make_sculpted_dash_main_body(name, dash_w, mat=None, parent=None):
+    """
+    Constructs an organic, continuous Class-A curved main lower dashboard body.
+    Features subtle tumblehome slope, driver/passenger knee wells, and center console integration.
+    """
+    dash_w_eff = dash_w * 0.98
+    half_w = dash_w_eff * 0.5
+    n_slices = 32
+    slices = []
+    for i in range(n_slices):
+        u = -1.0 + 2.0 * (i / (n_slices - 1))
+        x = u * half_w
+        arch_y = 0.025 * (1.0 - u**2)
+        y_top = -0.040 - arch_y
+        z_top = 0.672
+        y_mid = -0.025 - arch_y * 0.8
+        z_mid = 0.580
+        y_bot = 0.180
+        z_bot = 0.460
+
+        tunnel_recess = max(0.0, 1.0 - (abs(u) / 0.22)**2) if abs(u) < 0.22 else 0.0
+        z_tunnel = z_bot + 0.08 * tunnel_recess
+
+        ring = [
+            Vector((x, y_top + 0.25, z_top)),
+            Vector((x, y_top + 0.12, z_top + 0.005)),
+            Vector((x, y_top, z_top)),
+            Vector((x, y_mid, z_mid)),
+            Vector((x, y_mid + 0.08, (z_mid + z_tunnel) * 0.5)),
+            Vector((x, y_bot, z_tunnel)),
+            Vector((x, y_bot + 0.12, z_tunnel)),
+            Vector((x, y_top + 0.25, z_tunnel + 0.05)),
+        ]
+        slices.append(ring)
+    return make_sculpted_curved_mesh(name, slices, mat=mat, parent=parent)
+
+def make_curved_glovebox(name, pass_x, mat=None, parent=None):
+    """
+    Constructs a 3D crowned passenger glovebox door with soft perimeter roundings.
+    """
+    w = 0.50
+    h = 0.18
+    half_w = w * 0.5
+    half_h = h * 0.5
+    n_x = 16
+    slices = []
+    for i in range(n_x):
+        u = -1.0 + 2.0 * (i / (n_x - 1))
+        x = pass_x + u * half_w
+        crown_y = -0.008 * (1.0 - u**2)
+        ring = []
+        for j in range(8):
+            v = -1.0 + 2.0 * (j / 7.0)
+            z = 0.55 + v * half_h
+            crown_z = -0.005 * (1.0 - v**2)
+            y = -0.048 + crown_y + crown_z
+            ring.append(Vector((x, y, z)))
+        for j in range(7, -1, -1):
+            v = -1.0 + 2.0 * (j / 7.0)
+            z = 0.55 + v * half_h
+            y = -0.048 + 0.025
+            ring.append(Vector((x, y, z)))
+        slices.append(ring)
+    return make_sculpted_curved_mesh(name, slices, mat=mat, parent=parent)
+
+def make_curved_driver_knee_bolster(name, driver_x, mat=None, parent=None):
+    """
+    Constructs a padded ergonomic driver knee bolster with soft impact contours.
+    """
+    w = 0.44
+    h = 0.16
+    half_w = w * 0.5
+    half_h = h * 0.5
+    n_x = 16
+    slices = []
+    for i in range(n_x):
+        u = -1.0 + 2.0 * (i / (n_x - 1))
+        x = driver_x + u * half_w
+        crown_y = -0.006 * (1.0 - u**2)
+        ring = []
+        for j in range(8):
+            v = -1.0 + 2.0 * (j / 7.0)
+            z = 0.53 + v * half_h
+            y = -0.046 + crown_y
+            ring.append(Vector((x, y, z)))
+        for j in range(7, -1, -1):
+            v = -1.0 + 2.0 * (j / 7.0)
+            z = 0.53 + v * half_h
+            y = -0.046 + 0.022
+            ring.append(Vector((x, y, z)))
+        slices.append(ring)
+    return make_sculpted_curved_mesh(name, slices, mat=mat, parent=parent)
+
+def make_curved_console_top_plate(name, mat=None, parent=None):
+    """
+    Constructs a crowned S-curve waterfall top plate matching the console base contour.
+    """
+    n_s = 32
+    slices = []
+    for i in range(n_s):
+        t = i / (n_s - 1)
+        y = -0.06 * (1.0 - t) + (-0.65) * t
+        s_curve = 3.0 * t**2 - 2.0 * t**3
+        z = (0.50 * (1.0 - s_curve) + 0.38 * s_curve) + 0.005
+        cw = (0.24 * (1.0 - t) + 0.19 * t) * 0.5
+        th = 0.010
+        ring = [
+            Vector((-cw, y, z - th)),
+            Vector((-cw, y, z)),
+            Vector((-cw * 0.5, y, z + 0.002)),
+            Vector((0.0, y, z + 0.003)),
+            Vector((cw * 0.5, y, z + 0.002)),
+            Vector((cw, y, z)),
+            Vector((cw, y, z - th)),
+            Vector((0.0, y, z - th)),
+        ]
+        slices.append(ring)
+    obj = make_sculpted_curved_mesh(name, slices, mat=mat, parent=parent)
+    unwrap_console_top_uv(obj)
+    return obj
+
+def make_curved_console_bolsters(parent, mat_leather, mat_stitch):
+    """
+    Constructs curved leather-padded knee bolsters with flowing gold French stitching
+    flanking the waterfall console along its continuous S-curve profile.
+    """
+    for side_name, side_sign in [("L", -1.0), ("R", 1.0)]:
+        n_s = 32
+        slices = []
+        stitch_pts = []
+        for i in range(n_s):
+            t = i / (n_s - 1)
+            y = -0.06 * (1.0 - t) + (-0.65) * t
+            s_curve = 3.0 * t**2 - 2.0 * t**3
+            z_base = 0.50 * (1.0 - s_curve) + 0.38 * s_curve
+            cw = (0.31 * (1.0 - t) + 0.25 * t) * 0.5
+            x_c = side_sign * (cw + 0.006)
+            rx = 0.016
+            rz = 0.045
+            ring = []
+            for a_step in range(8):
+                ang = (2.0 * math.pi * a_step) / 8.0
+                px = x_c + rx * math.cos(ang)
+                pz = z_base - 0.01 + rz * math.sin(ang)
+                ring.append(Vector((px, y, pz)))
+            slices.append(ring)
+            stitch_pts.append(Vector((x_c, y, z_base + rz * 0.85)))
+
+        make_sculpted_curved_mesh(f"CONSOLE_BOLSTER_{side_name}", slices, mat=mat_leather, parent=parent)
+
+        # Stitch ribbon following the curve
+        stitch_slices = []
+        for i in range(len(stitch_pts)):
+            pt = stitch_pts[i]
+            sw = 0.002
+            st_ring = [
+                pt + Vector((-sw, 0, 0)),
+                pt + Vector((-sw, 0, 0.002)),
+                pt + Vector((sw, 0, 0.002)),
+                pt + Vector((sw, 0, 0)),
+            ]
+            stitch_slices.append(st_ring)
+        make_sculpted_curved_mesh(f"CONSOLE_BOLSTER_STITCH_{side_name}", stitch_slices, mat=mat_stitch, parent=parent)
+
+def make_curved_armrest(name, mat=None, parent=None):
+    """
+    Constructs a double-crowned sculpted leather armrest cushion with ergonomic depression.
+    """
+    n_x = 16
+    slices = []
+    w = 0.24
+    half_w = w * 0.5
+    for i in range(n_x):
+        u = -1.0 + 2.0 * (i / (n_x - 1))
+        x = u * half_w
+        depression = 0.004 * math.sin(math.pi * (0.5 + 0.5 * u))
+        ring = [
+            Vector((x, -0.42, 0.47)),
+            Vector((x, -0.42, 0.505 - depression)),
+            Vector((x, -0.56, 0.512 - depression)),
+            Vector((x, -0.70, 0.502 - depression)),
+            Vector((x, -0.70, 0.47)),
+            Vector((x, -0.56, 0.47)),
+        ]
+        slices.append(ring)
+    return make_sculpted_curved_mesh(name, slices, mat=mat, parent=parent)
+
+def make_curved_a_pillar(name, side_sign, dash_w, mat=None, parent=None):
+    """
+    Constructs a lofted aerodynamic A-pillar sweeping continuously from the dash cowl
+    up along the raked windshield to the roof header with smooth inward camber.
+    """
+    slices = []
+    n_steps = 18
+    for i in range(n_steps):
+        t = i / (n_steps - 1)
+        x = side_sign * (dash_w * 0.47 * (1.0 - t) + dash_w * 0.38 * t)
+        y = 0.16 * (1.0 - t) + (-0.22) * t
+        z = 0.76 * (1.0 - t) + 1.22 * t
+        rx = 0.024 * (1.0 - 0.2 * t)
+        ry = 0.038 * (1.0 - 0.15 * t)
+        ring = []
+        for k in range(8):
+            ang = (2.0 * math.pi * k) / 8.0
+            px = x + rx * math.cos(ang)
+            py = y + ry * math.sin(ang)
+            pz = z + rx * 0.5 * math.sin(ang)
+            ring.append(Vector((px, py, pz)))
+        slices.append(ring)
+    return make_sculpted_curved_mesh(name, slices, mat=mat, parent=parent)
+
+def make_curved_windshield(name, dash_w, mat=None, parent=None):
+    """
+    Constructs a curved compound aerodynamic glass windshield with authentic sagitta camber.
+    """
+    mesh = bpy.data.meshes.new(name)
+    bm = bmesh.new()
+    nx = 24
+    ny = 16
+    grid = []
+    half_w = dash_w * 0.47
+    for j in range(ny):
+        v = j / (ny - 1)
+        y = 0.18 * (1.0 - v) + (-0.22) * v
+        z = 0.76 * (1.0 - v) + 1.22 * v
+        row = []
+        for i in range(nx):
+            u = -1.0 + 2.0 * (i / (nx - 1))
+            x = u * (half_w * (1.0 - 0.18 * v))
+            camber = 0.032 * (1.0 - u**2) * (1.0 - 0.15 * v)
+            row.append(bm.verts.new(Vector((x, y + camber * 0.6, z + camber * 0.4))))
+        grid.append(row)
+    bm.verts.ensure_lookup_table()
+    for j in range(ny - 1):
+        for i in range(nx - 1):
+            bm.faces.new([grid[j][i], grid[j][i+1], grid[j+1][i+1], grid[j+1][i]])
+    for f in bm.faces:
+        f.smooth = True
+    bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
+    bm.to_mesh(mesh)
+    bm.free()
     obj = bpy.data.objects.new(name, mesh)
     bpy.context.collection.objects.link(obj)
     if mat:
@@ -469,6 +996,215 @@ def make_sculpted_steering_rim(name, steer_pos, steer_rot, rim_r=0.175, tube_r=0
         attach_to_parent(obj, parent)
     return obj
 
+def make_sculpted_column_cowl(name, col_pos, col_rot, mat=None, parent=None):
+    """
+    Constructs a sculptural dual-cowl automotive steering column shroud with curved ergonomics,
+    instrument cluster sightline cutouts, and soft parting shutlines.
+    """
+    mesh = bpy.data.meshes.new(name)
+    bm = bmesh.new()
+    n_slices = 24
+    pts_per_ring = 28
+    half_len = 0.082
+    R_mat = Euler(col_rot).to_matrix().to_4x4()
+    rings = []
+    for i in range(n_slices):
+        t = i / (n_slices - 1)
+        z = -half_len + 2.0 * half_len * t
+        rx = 0.055 * (1.0 - 0.20 * t)
+        ry = 0.048 * (1.0 - 0.18 * t)
+        ring_verts = []
+        for j in range(pts_per_ring):
+            ang = (2.0 * math.pi * j) / pts_per_ring
+            ca = math.cos(ang)
+            sa = math.sin(ang)
+            top_arch = 1.0 + (0.09 * math.cos(ang * 2.0) if sa > 0 else 0.0)
+            local_p = Vector((rx * ca * top_arch, ry * sa, z))
+            world_p = col_pos + R_mat @ local_p
+            ring_verts.append(bm.verts.new(world_p))
+        rings.append(ring_verts)
+    bm.verts.ensure_lookup_table()
+    for i in range(n_slices - 1):
+        for j in range(pts_per_ring):
+            j_next = (j + 1) % pts_per_ring
+            bm.faces.new([rings[i][j], rings[i][j_next], rings[i+1][j_next], rings[i+1][j]])
+    bm.faces.new(rings[0])
+    bm.faces.new(rings[-1][::-1])
+    for f in bm.faces:
+        f.smooth = True
+    bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
+    bm.to_mesh(mesh)
+    bm.free()
+    obj = bpy.data.objects.new(name, mesh)
+    bpy.context.collection.objects.link(obj)
+    if mat:
+        obj.data.materials.append(mat)
+    if parent:
+        attach_to_parent(obj, parent)
+    return obj
+
+def make_sculpted_stalk(name, base_pos, rot_euler, is_left=True, mat_stalk=None, mat_knurl=None, parent=None):
+    """
+    Constructs an ergonomic curved steering column control stalk (indicator / wiper)
+    with sweeping reach toward the wheel rim, knurled rotary ring, and rounded thumb paddle.
+    """
+    sign = -1.0 if is_left else 1.0
+    mesh = bpy.data.meshes.new(name)
+    bm = bmesh.new()
+    n_rings = 22
+    n_pts = 16
+    stalk_len = 0.082
+    R_mat = Euler(rot_euler).to_matrix().to_4x4()
+    rings = []
+    for i in range(n_rings):
+        t = i / (n_rings - 1)
+        lx = sign * (0.010 + t * stalk_len)
+        ly = 0.016 * (t**1.8)
+        lz = 0.014 * (t**1.5)
+        base_r = 0.0055 * (1.0 - 0.12 * t)
+        if t > 0.65:
+            flair = 1.0 + 1.2 * math.sin((t - 0.65) / 0.35 * math.pi)
+            rx = base_r * flair * 1.4
+            ry = base_r * flair
+        else:
+            rx = base_r
+            ry = base_r
+        ring_verts = []
+        for j in range(n_pts):
+            ang = (2.0 * math.pi * j) / n_pts
+            ca = math.cos(ang)
+            sa = math.sin(ang)
+            local_p = Vector((lx, ly + rx * ca, lz + ry * sa))
+            world_p = base_pos + R_mat @ local_p
+            ring_verts.append(bm.verts.new(world_p))
+        rings.append(ring_verts)
+    bm.verts.ensure_lookup_table()
+    for i in range(n_rings - 1):
+        for j in range(n_pts):
+            j_next = (j + 1) % n_pts
+            bm.faces.new([rings[i][j], rings[i][j_next], rings[i+1][j_next], rings[i+1][j]])
+    bm.faces.new(rings[0])
+    bm.faces.new(rings[-1][::-1])
+    for f in bm.faces:
+        f.smooth = True
+    bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
+    bm.to_mesh(mesh)
+    bm.free()
+    obj = bpy.data.objects.new(name, mesh)
+    bpy.context.collection.objects.link(obj)
+    if mat_stalk:
+        obj.data.materials.append(mat_stalk)
+    if parent:
+        attach_to_parent(obj, parent)
+
+    # Knurled rotary switch ring
+    knurl_t = 0.50
+    knurl_lx = sign * (0.010 + knurl_t * stalk_len)
+    knurl_ly = 0.016 * (knurl_t**1.8)
+    knurl_lz = 0.014 * (knurl_t**1.5)
+    knurl_pos = base_pos + R_mat @ Vector((knurl_lx, knurl_ly, knurl_lz))
+    knurl_rot = Euler((rot_euler[0], rot_euler[1] + (math.radians(-90) if is_left else math.radians(90)), rot_euler[2]))
+    make_knurled_cylinder(f"{name}_KNURL", knurl_pos, 0.0078, 0.014, knurl_rot, mat=mat_knurl, ridges=20, parent=obj)
+
+    return obj
+
+def make_sculpted_paddle_shifter(name, base_pos, rot_euler, is_left=True, mat=None, parent=None):
+    """
+    Constructs an ergonomic curved aluminum paddle shifter with tactile finger contours.
+    """
+    sign = -1.0 if is_left else 1.0
+    mesh = bpy.data.meshes.new(name)
+    bm = bmesh.new()
+    n_slices = 20
+    pad_h = 0.098
+    R_mat = Euler(rot_euler).to_matrix().to_4x4()
+    rings = []
+    for i in range(n_slices):
+        t = i / (n_slices - 1)
+        z = -pad_h * 0.5 + pad_h * t
+        arc_x = sign * (0.008 * math.sin(t * math.pi))
+        arc_y = -0.006 * math.sin(t * math.pi)
+        w = 0.022 * (1.0 - 0.22 * (2.0 * t - 1.0)**2)
+        th = 0.0045
+        ring_pts = [
+            Vector((arc_x - w * 0.5, arc_y - th * 0.5, z)),
+            Vector((arc_x + w * 0.5, arc_y - th * 0.5, z)),
+            Vector((arc_x + w * 0.5, arc_y + th * 0.5, z)),
+            Vector((arc_x - w * 0.5, arc_y + th * 0.5, z)),
+        ]
+        ring_verts = [bm.verts.new(base_pos + R_mat @ pt) for pt in ring_pts]
+        rings.append(ring_verts)
+    bm.verts.ensure_lookup_table()
+    for i in range(n_slices - 1):
+        for j in range(4):
+            j_next = (j + 1) % 4
+            bm.faces.new([rings[i][j], rings[i][j_next], rings[i+1][j_next], rings[i+1][j]])
+    bm.faces.new(rings[0])
+    bm.faces.new(rings[-1][::-1])
+    for f in bm.faces:
+        f.smooth = True
+    bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
+    bm.to_mesh(mesh)
+    bm.free()
+    obj = bpy.data.objects.new(name, mesh)
+    bpy.context.collection.objects.link(obj)
+    if mat:
+        obj.data.materials.append(mat)
+    if parent:
+        attach_to_parent(obj, parent)
+    return obj
+
+def make_sculpted_curved_spoke(name, boss_pos, rim_world_pos, rot_euler, w_start=0.038, w_end=0.024, th_start=0.010, th_end=0.006, mat=None, parent=None):
+    """
+    Constructs a sculpted 3D curved steering wheel spoke that fillets seamlessly
+    from the center boss outward into the outer rim with organic cross-sections.
+    """
+    mesh = bpy.data.meshes.new(name)
+    bm = bmesh.new()
+    n_slices = 16
+    n_pts = 14
+    R_mat = Euler(rot_euler).to_matrix().to_4x4()
+    R_inv = R_mat.inverted()
+    local_start = R_inv @ (boss_pos - boss_pos)
+    local_end = R_inv @ (rim_world_pos - boss_pos)
+    rings = []
+    for i in range(n_slices):
+        t = i / (n_slices - 1)
+        lp = local_start * (1.0 - t) + local_end * t
+        w = (w_start * (1.0 - t) + w_end * t) * (1.0 + 0.35 * (1.0 - t)**2 + 0.25 * t**2)
+        th = th_start * (1.0 - t) + th_end * t
+        lp.z += 0.0035 * math.sin(t * math.pi)
+        dir_spoke = (local_end - local_start).normalized()
+        perp = Vector((-dir_spoke.y, dir_spoke.x, 0.0)).normalized()
+        ring_verts = []
+        for j in range(n_pts):
+            ang = (2.0 * math.pi * j) / n_pts
+            ca = math.cos(ang)
+            sa = math.sin(ang)
+            cross_pt = lp + perp * (w * 0.5 * ca) + Vector((0, 0, th * 0.5 * sa))
+            world_p = boss_pos + R_mat @ cross_pt
+            ring_verts.append(bm.verts.new(world_p))
+        rings.append(ring_verts)
+    bm.verts.ensure_lookup_table()
+    for i in range(n_slices - 1):
+        for j in range(n_pts):
+            j_next = (j + 1) % n_pts
+            bm.faces.new([rings[i][j], rings[i][j_next], rings[i+1][j_next], rings[i+1][j]])
+    bm.faces.new(rings[0])
+    bm.faces.new(rings[-1][::-1])
+    for f in bm.faces:
+        f.smooth = True
+    bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
+    bm.to_mesh(mesh)
+    bm.free()
+    obj = bpy.data.objects.new(name, mesh)
+    bpy.context.collection.objects.link(obj)
+    if mat:
+        obj.data.materials.append(mat)
+    if parent:
+        attach_to_parent(obj, parent)
+    return obj
+
 def build_class_a_interactive_dashboard():
     log("Building Master Class-A Automotive Cockpit with Continuous Ergonomic Surfaces...")
     reset_scene_clean()
@@ -502,18 +1238,15 @@ def build_class_a_interactive_dashboard():
     # Rear Cabin Bulkhead Partition
     make_box("CABIN_REAR_BULKHEAD", (0.0, -1.05, 0.65), (dash_w * 1.02, 0.045, 1.18), mats["charcoal_trim"], bevel=0.012, parent=cabin_group)
 
-    # Outer Left & Right A-Pillars in dark Alcantara headliner fabric
-    apillar_rot_l = Euler((math.radians(-35), math.radians(15), 0), 'XYZ')
-    make_box("A_PILLAR_L", (-dash_w * 0.48, 0.16, 0.90), (0.058, 0.078, 0.54), mats["headliner_alcantara"], rot_euler=apillar_rot_l, bevel=0.012, parent=cabin_group)
-    apillar_rot_r = Euler((math.radians(-35), math.radians(-15), 0), 'XYZ')
-    make_box("A_PILLAR_R", (dash_w * 0.48, 0.16, 0.90), (0.058, 0.078, 0.54), mats["headliner_alcantara"], rot_euler=apillar_rot_r, bevel=0.012, parent=cabin_group)
+    # Outer Left & Right A-Pillars in dark Alcantara headliner fabric (Aerodynamic Curved)
+    make_curved_a_pillar("A_PILLAR_L", -1.0, dash_w, mats["headliner_alcantara"], parent=cabin_group)
+    make_curved_a_pillar("A_PILLAR_R", 1.0, dash_w, mats["headliner_alcantara"], parent=cabin_group)
     # High-Frequency Audio Tweeter Grilles in base of A-pillars
     make_cylinder("TWEETER_GRILLE_L", (-dash_w * 0.46, 0.02, 0.77), 0.022, 0.008, (math.radians(45), math.radians(25), 0), mats["aluminum_brushed"], vertices=24, parent=cabin_group)
     make_cylinder("TWEETER_GRILLE_R", (dash_w * 0.46, 0.02, 0.77), 0.022, 0.008, (math.radians(45), math.radians(-25), 0), mats["aluminum_brushed"], vertices=24, parent=cabin_group)
 
-    # Raked Curved Windshield Glass
-    windshield_rot = Euler((math.radians(-35), 0, 0), 'XYZ')
-    make_box("CABIN_WINDSHIELD_AND_MIRROR", (0.0, 0.24, 0.94), (dash_w * 0.96, 0.008, 0.60), mats["glass_optical"], rot_euler=windshield_rot, bevel=0, parent=cabin_group)
+    # Raked Curved Windshield Glass (True Compound Sagitta Camber)
+    make_curved_windshield("CABIN_WINDSHIELD_AND_MIRROR", dash_w, mats["glass_optical"], parent=cabin_group)
 
     # Frameless Electrochromic Rearview Mirror
     make_cylinder("MIRROR_BALL_STALK", (0.0, 0.09, 1.07), 0.008, 0.075, (math.radians(45), 0, 0), mats["titanium_matte"], vertices=16, parent=cabin_group)
@@ -543,11 +1276,11 @@ def build_class_a_interactive_dashboard():
     attach_to_parent(dash_group, cockpit_master)
 
     # 2.1 Continuous Curved Upper Pad (Spanning Width)
-    make_box("DASH_UPPER_PAD", (0.0, 0.16, 0.745), (dash_w, 0.44, 0.052), mats["dash_upper_pad"], bevel=0.018, parent=dash_group)
+    make_curved_upper_pad("DASH_UPPER_PAD", dash_w, mats["dash_upper_pad"], parent=dash_group)
     # Driver Arched Instrument Binnacle Cowl
-    make_box("DASH_UPPER_COWL_BINNACLE", (driver_x, 0.02, 0.812), (0.42, 0.32, 0.055), mats["dash_upper_pad"], bevel=0.022, parent=dash_group)
+    make_curved_binnacle_cowl("DASH_UPPER_COWL_BINNACLE", driver_x, mats["dash_upper_pad"], parent=dash_group)
     # Passenger Sculpted Concave Sweep
-    make_box("DASH_UPPER_PASS_SWEEP", (pass_x, 0.14, 0.765), (0.54, 0.38, 0.045), mats["dash_upper_pad"], bevel=0.016, parent=dash_group)
+    make_curved_passenger_sweep("DASH_UPPER_PASS_SWEEP", pass_x, mats["dash_upper_pad"], parent=dash_group)
 
     # Double French Seam Stitching running along the leather brow
     make_box("DASH_COWL_STITCH_L", (driver_x, -0.075, 0.822), (0.40, 0.003, 0.003), mats["stitch_gold"], bevel=0, parent=dash_group)
@@ -563,17 +1296,16 @@ def build_class_a_interactive_dashboard():
         make_box(f"DASH_DEFROST_VENT_{vx}", (vx, 0.33, 0.775), (0.17, 0.024, 0.008), mats["charcoal_trim"], bevel=0.001, parent=dash_group)
     make_cylinder("DASH_SUN_SENSOR", (0.0, 0.30, 0.782), 0.012, 0.010, (0, 0, 0), mats["piano_black"], vertices=20, bevel=0.002, parent=dash_group)
 
-    # Lower Body, Glovebox, & Knee Bolsters
-    make_box("DASH_MAIN_BODY", (0.0, 0.14, 0.61), (dash_w * 0.98, 0.35, 0.24), mats["dash_main_cognac"], bevel=0.020, parent=dash_group)
-    make_box("DASH_GLOVEBOX_PANEL", (pass_x, -0.045, 0.55), (0.51, 0.035, 0.19), mats["dash_main_cognac"], bevel=0.008, parent=dash_group)
+    # Lower Body, Glovebox, & Knee Bolsters (Sculpted Class-A Curved)
+    make_sculpted_dash_main_body("DASH_MAIN_BODY", dash_w, mats["dash_main_cognac"], parent=dash_group)
+    make_curved_glovebox("DASH_GLOVEBOX_PANEL", pass_x, mats["dash_main_cognac"], parent=dash_group)
     make_box("DASH_GLOVEBOX_HANDLE", (pass_x - 0.16, -0.065, 0.61), (0.048, 0.012, 0.018), mats["chrome_mirror"], bevel=0.002, parent=dash_group)
     make_cylinder("DASH_GLOVEBOX_LOCK", (pass_x - 0.16, -0.068, 0.61), 0.005, 0.006, (math.radians(90), 0, 0), mats["titanium_matte"], vertices=16, parent=dash_group)
     make_box("DASH_GLOVEBOX_SEAM", (pass_x, -0.048, 0.55), (0.52, 0.003, 0.20), mats["charcoal_trim"], bevel=0, parent=dash_group)
-    make_box("DASH_DRIVER_KNEE_BOLSTER", (driver_x, -0.045, 0.53), (0.45, 0.035, 0.17), mats["charcoal_trim"], bevel=0.008, parent=dash_group)
+    make_curved_driver_knee_bolster("DASH_DRIVER_KNEE_BOLSTER", driver_x, mats["charcoal_trim"], parent=dash_group)
 
     # Decorative Trim Spear Across Dashboard
-    trim_spear_obj = make_box("DASH_TRIM_SPEAR", (0.0, -0.045, 0.705), (dash_w * 0.96, 0.036, 0.065), mats["wood_walnut"], bevel=0.006, parent=dash_group)
-    unwrap_horizontal_strip_uv(trim_spear_obj)
+    trim_spear_obj = make_curved_trim_spear_mesh("DASH_TRIM_SPEAR", dash_w, mats["wood_walnut"], parent=dash_group)
     make_box("DASH_TRIM_CHROME_LIP", (0.0, -0.060, 0.670), (dash_w * 0.96, 0.012, 0.006), mats["chrome_mirror"], bevel=0.002, parent=dash_group)
 
     # ------------------------------------------------------------------------
@@ -584,7 +1316,7 @@ def build_class_a_interactive_dashboard():
     bpy.context.scene.collection.objects.link(hvac_group)
     attach_to_parent(hvac_group, cockpit_master)
 
-    make_box("DASH_HVAC_CENTER_HOUSING", (0.0, -0.058, 0.722), (0.34, 0.026, 0.056), mats["piano_black"], bevel=0.004, parent=hvac_group)
+    make_curved_hvac_center_housing("DASH_HVAC_CENTER_HOUSING", mats["piano_black"], parent=hvac_group)
     for c_i, cx in enumerate([-0.085, 0.085]):
         make_box(f"DASH_HVAC_FRAME_{c_i+1}", (cx, -0.068, 0.722), (0.15, 0.012, 0.046), mats["chrome_mirror"], bevel=0.003, parent=hvac_group)
         make_box(f"DASH_HVAC_DUCT_{c_i+1}", (cx, -0.062, 0.722), (0.138, 0.015, 0.036), mats["charcoal_trim"], bevel=0, parent=hvac_group)
@@ -636,8 +1368,8 @@ def build_class_a_interactive_dashboard():
     bpy.context.scene.collection.objects.link(cluster_group)
     attach_to_parent(cluster_group, cockpit_master)
 
-    # Binnacle Hood shading the instrument cluster
-    make_box("CLUSTER_HOOD", (driver_x, 0.01, 0.745), (0.39, 0.17, 0.14), mats["charcoal_trim"], bevel=0.014, parent=cluster_group)
+    # Binnacle Hood shading the instrument cluster (Arched Sculptural Canopy)
+    make_curved_cluster_hood("CLUSTER_HOOD", driver_x, mats["charcoal_trim"], parent=cluster_group)
     cluster_scr = make_box("CLUSTER_SCREEN", (driver_x, -0.078, 0.735), (0.33, 0.008, 0.105), mats["screen_cluster"], bevel=0, parent=cluster_group)
     unwrap_planar_uv(cluster_scr)
 
@@ -677,19 +1409,19 @@ def build_class_a_interactive_dashboard():
     def steer_world(local_vec):
         return steer_pos + R_steer @ local_vec
 
-    # Column & Stalks
+    # Column & Stalks (Sculpted Dual-Cowl & Ergonomic Curved Control Stalks)
     col_pos = steer_pos + Vector((0.0, 0.09, -0.018))
-    make_cylinder("STEERING_COLUMN_AND_STALKS", col_pos, 0.046, 0.16, steer_rot, mats["charcoal_trim"], vertices=28, bevel=0.004, parent=steering_group)
-    stalk_l_pos = steer_world(Vector((-0.09, 0.03, -0.055)))
-    make_cylinder("STEER_STALK_L", stalk_l_pos, 0.006, 0.08, Euler((math.radians(65), math.radians(-75), 0)), mats["charcoal_trim"], vertices=16, parent=steering_group)
-    stalk_r_pos = steer_world(Vector((0.09, 0.03, -0.055)))
-    make_cylinder("STEER_STALK_R", stalk_r_pos, 0.006, 0.08, Euler((math.radians(65), math.radians(75), 0)), mats["charcoal_trim"], vertices=16, parent=steering_group)
+    make_sculpted_column_cowl("STEERING_COLUMN_AND_STALKS", col_pos, steer_rot, mat=mats["charcoal_trim"], parent=steering_group)
+    stalk_l_pos = steer_world(Vector((-0.075, 0.03, -0.050)))
+    make_sculpted_stalk("STEER_STALK_L", stalk_l_pos, steer_rot, is_left=True, mat_stalk=mats["charcoal_trim"], mat_knurl=mats["aluminum_brushed"], parent=steering_group)
+    stalk_r_pos = steer_world(Vector((0.075, 0.03, -0.050)))
+    make_sculpted_stalk("STEER_STALK_R", stalk_r_pos, steer_rot, is_left=False, mat_stalk=mats["charcoal_trim"], mat_knurl=mats["aluminum_brushed"], parent=steering_group)
 
-    # Column-Mounted Paddle Shifters (Left downshift, Right upshift)
+    # Column-Mounted Ergonomic Curved Paddle Shifters (Left downshift, Right upshift)
     pad_l_pos = steer_world(Vector((-0.138, 0.020, -0.022)))
-    make_box("STEERING_PADDLE_SHIFTERS", pad_l_pos, (0.022, 0.092, 0.004), mats["aluminum_brushed"], rot_euler=steer_rot, bevel=0.002, parent=steering_group)
+    make_sculpted_paddle_shifter("STEERING_PADDLE_SHIFTERS", pad_l_pos, steer_rot, is_left=True, mat=mats["aluminum_brushed"], parent=steering_group)
     pad_r_pos = steer_world(Vector((0.138, 0.020, -0.022)))
-    make_box("STEER_PADDLE_R", pad_r_pos, (0.022, 0.092, 0.004), mats["aluminum_brushed"], rot_euler=steer_rot, bevel=0.002, parent=steering_group)
+    make_sculpted_paddle_shifter("STEER_PADDLE_R", pad_r_pos, steer_rot, is_left=False, mat=mats["aluminum_brushed"], parent=steering_group)
 
     rim_r = 0.175
     tube_r = 0.015
@@ -713,16 +1445,17 @@ def build_class_a_interactive_dashboard():
 
     spoke_len = rim_r - boss_r + 0.008
     spoke_l_cx = -(boss_r + spoke_len / 2.0 - 0.004)
-    make_box("STEER_SPORT_SPOKE_L", steer_world(Vector((spoke_l_cx, 0.0, 0.003))), (spoke_len, 0.026, 0.008), mats["aluminum_brushed"], rot_euler=steer_rot, bevel=0.002, parent=wheel_sport)
-    spoke_r_cx = (boss_r + spoke_len / 2.0 - 0.004)
-    make_box("STEER_SPORT_SPOKE_R", steer_world(Vector((spoke_r_cx, 0.0, 0.003))), (spoke_len, 0.026, 0.008), mats["aluminum_brushed"], rot_euler=steer_rot, bevel=0.002, parent=wheel_sport)
-    spoke_b_cy = -(boss_r + spoke_len / 2.0 - 0.004)
-    make_box("STEER_SPORT_SPOKE_B", steer_world(Vector((0.0, spoke_b_cy, 0.003))), (0.026, spoke_len, 0.008), mats["aluminum_brushed"], rot_euler=steer_rot, bevel=0.002, parent=wheel_sport)
+    rim_l_pt = steer_world(Vector((-rim_r * 0.96, 0.0, 0.003)))
+    rim_r_pt = steer_world(Vector((rim_r * 0.96, 0.0, 0.003)))
+    rim_b_pt = steer_world(Vector((0.0, -rim_r * 0.96, 0.003)))
+    make_sculpted_curved_spoke("STEER_SPORT_SPOKE_L", boss_pos, rim_l_pt, steer_rot, w_start=0.038, w_end=0.024, mat=mats["aluminum_brushed"], parent=wheel_sport)
+    make_sculpted_curved_spoke("STEER_SPORT_SPOKE_R", boss_pos, rim_r_pt, steer_rot, w_start=0.038, w_end=0.024, mat=mats["aluminum_brushed"], parent=wheel_sport)
+    make_sculpted_curved_spoke("STEER_SPORT_SPOKE_B", boss_pos, rim_b_pt, steer_rot, w_start=0.038, w_end=0.024, mat=mats["aluminum_brushed"], parent=wheel_sport)
 
     # Button Pods
     btn_l_pos = steer_world(Vector((spoke_l_cx, 0.0, 0.008)))
     make_box("STEER_BTNS_L", btn_l_pos, (0.044, 0.026, 0.006), mats["piano_black"], rot_euler=steer_rot, bevel=0.002, parent=wheel_sport)
-    btn_r_pos = steer_world(Vector((spoke_r_cx, 0.0, 0.008)))
+    btn_r_pos = steer_world(Vector((-(spoke_l_cx), 0.0, 0.008)))
     make_box("STEER_BTNS_R", btn_r_pos, (0.044, 0.026, 0.006), mats["piano_black"], rot_euler=steer_rot, bevel=0.002, parent=wheel_sport)
 
     # 6.2 Wheel 2: GT 3-Spoke Flat-Bottom Wheel
@@ -731,9 +1464,9 @@ def build_class_a_interactive_dashboard():
     attach_to_parent(wheel_gt, steering_group)
     make_sculpted_steering_rim("STEER_GT_RIM_SCULPT", steer_pos, steer_rot, rim_r, tube_r, is_flat_bottom=True, mat=mats["leather_perforated"], parent=wheel_gt)
     make_cylinder("STEER_GT_BOSS", boss_pos, boss_r, 0.020, steer_rot, mats["leather_ebony"], vertices=32, bevel=0.003, parent=wheel_gt)
-    make_box("STEER_GT_SPOKE_L", steer_world(Vector((spoke_l_cx, 0.0, 0.003))), (spoke_len, 0.028, 0.008), mats["titanium_matte"], rot_euler=steer_rot, bevel=0.002, parent=wheel_gt)
-    make_box("STEER_GT_SPOKE_R", steer_world(Vector((spoke_r_cx, 0.0, 0.003))), (spoke_len, 0.028, 0.008), mats["titanium_matte"], rot_euler=steer_rot, bevel=0.002, parent=wheel_gt)
-    make_box("STEER_GT_SPOKE_B", steer_world(Vector((0.0, spoke_b_cy, 0.003))), (0.028, spoke_len, 0.008), mats["titanium_matte"], rot_euler=steer_rot, bevel=0.002, parent=wheel_gt)
+    make_sculpted_curved_spoke("STEER_GT_SPOKE_L", boss_pos, rim_l_pt, steer_rot, w_start=0.038, w_end=0.024, mat=mats["titanium_matte"], parent=wheel_gt)
+    make_sculpted_curved_spoke("STEER_GT_SPOKE_R", boss_pos, rim_r_pt, steer_rot, w_start=0.038, w_end=0.024, mat=mats["titanium_matte"], parent=wheel_gt)
+    make_sculpted_curved_spoke("STEER_GT_SPOKE_B", boss_pos, rim_b_pt, steer_rot, w_start=0.038, w_end=0.024, mat=mats["titanium_matte"], parent=wheel_gt)
     wheel_gt.hide_viewport = True
     wheel_gt.hide_render = True
 
@@ -792,14 +1525,12 @@ def build_class_a_interactive_dashboard():
     attach_to_parent(console_root, cockpit_master)
 
     # Sculpted Tapering Bridge Console (Tapering from 0.32m at dash down to 0.26m)
-    make_box("CONSOLE_BASE", (0.0, -0.32, 0.38), (0.28, 0.65, 0.22), mats["dash_main_cognac"], bevel=0.018, parent=console_root)
-    make_box("CONSOLE_BOLSTER_L", (-0.145, -0.32, 0.44), (0.028, 0.62, 0.12), mats["leather_ebony"], bevel=0.014, parent=console_root)
-    make_box("CONSOLE_BOLSTER_R", (0.145, -0.32, 0.44), (0.028, 0.62, 0.12), mats["leather_ebony"], bevel=0.014, parent=console_root)
-    make_box("CONSOLE_BOLSTER_STITCH_L", (-0.155, -0.32, 0.48), (0.003, 0.60, 0.003), mats["stitch_gold"], bevel=0, parent=console_root)
-    make_box("CONSOLE_BOLSTER_STITCH_R", (0.155, -0.32, 0.48), (0.003, 0.60, 0.003), mats["stitch_gold"], bevel=0, parent=console_root)
+    make_curved_console_base("CONSOLE_BASE", mats["dash_main_cognac"], parent=console_root)
+    # Curved Padded Knee Bolsters with Gold French Stitching following Waterfall
+    make_curved_console_bolsters(console_root, mats["leather_ebony"], mats["stitch_gold"])
 
-    con_top_obj = make_box("CONSOLE_TOP_PLATE", (0.0, -0.32, 0.492), (0.24, 0.62, 0.018), mats["wood_walnut"], bevel=0.004, parent=console_root)
-    unwrap_console_top_uv(con_top_obj)
+    # Flowing S-Curve Top Plate matching Waterfall Bridge
+    make_curved_console_top_plate("CONSOLE_TOP_PLATE", mats["wood_walnut"], parent=console_root)
     make_box("CONSOLE_CHROME_BORDER", (0.0, -0.32, 0.490), (0.248, 0.628, 0.016), mats["chrome_mirror"], bevel=0.002, parent=console_root)
 
     # Cupholders with Ambient Light Ring
@@ -808,8 +1539,8 @@ def build_class_a_interactive_dashboard():
     make_cylinder("CONSOLE_CUPHOLDER_CHROME", (0.0, -0.42, 0.501), 0.088, 0.003, (0, 0, 0), mats["chrome_mirror"], vertices=36, bevel=0.001, parent=console_root)
     make_cylinder("CONSOLE_CUPHOLDER_LIGHT_RING", (0.0, -0.42, 0.502), 0.086, 0.002, (0, 0, 0), mats["ambient_cyan"], vertices=36, parent=console_root)
 
-    # Armrest Storage Compartment
-    make_box("CONSOLE_ARMREST", (0.0, -0.56, 0.51), (0.24, 0.28, 0.055), mats["leather_ebony"], bevel=0.016, parent=console_root)
+    # Armrest Storage Compartment (Sculpted Double-Crowned Leather)
+    make_curved_armrest("CONSOLE_ARMREST", mats["leather_ebony"], parent=console_root)
     make_box("CONSOLE_ARMREST_SPLIT_SEAM", (0.0, -0.56, 0.538), (0.003, 0.28, 0.003), mats["charcoal_trim"], bevel=0, parent=console_root)
 
     # Controls: Electronic Parking Brake & Rotary Dial
@@ -902,61 +1633,231 @@ def build_class_a_interactive_dashboard():
     shifter_perf.hide_render = True
 
     # ------------------------------------------------------------------------
-    # 8. DOORS BRANCH (Framing Driver & Passenger Sides)
+    # 8. DOORS BRANCH (Framing Driver & Passenger Sides - Sculpted Class-A Curves)
     # ------------------------------------------------------------------------
-    log("8. Modeling DOORS branch with sculpted armrests & speakers...")
+    log("8. Modeling DOORS branch with sculpted organic armrests & speakers...")
     doors_group = bpy.data.objects.new("DOORS", None)
     bpy.context.scene.collection.objects.link(doors_group)
     attach_to_parent(doors_group, cockpit_master)
 
-    # Left Door Card (Driver Side)
-    make_box("DOOR_CARD_L", (-dash_w * 0.51, -0.35, 0.48), (0.058, 0.76, 0.40), mats["dash_main_cognac"], bevel=0.016, parent=doors_group)
-    make_box("DOOR_ARMREST_L", (-dash_w * 0.49, -0.32, 0.50), (0.068, 0.38, 0.085), mats["leather_ebony"], bevel=0.010, parent=doors_group)
-    make_box("DOOR_HANDLE_CHROME_L", (-dash_w * 0.48, -0.18, 0.56), (0.025, 0.12, 0.035), mats["chrome_mirror"], bevel=0.003, parent=doors_group)
-    door_spk_l = make_cylinder("DOOR_SPEAKER_L", (-dash_w * 0.485, -0.42, 0.40), 0.055, 0.008, (0, math.radians(90), 0), mats["speaker_acoustic"], vertices=28, parent=doors_group)
-    unwrap_planar_uv(door_spk_l)
-    make_box("DOOR_TRIM_SPEAR_L", (-dash_w * 0.485, -0.32, 0.58), (0.008, 0.65, 0.032), mats["wood_walnut"], bevel=0.002, parent=doors_group)
-    make_box("DOOR_AMBIENT_L", (-dash_w * 0.482, -0.32, 0.565), (0.004, 0.64, 0.004), mats["ambient_cyan"], bevel=0, parent=doors_group)
+    def make_sculpted_door_assembly(side_name, sign):
+        bm_d = bmesh.new()
+        nx, ny = 22, 20
+        cx = sign * dash_w * 0.50
+        cy = -0.35
+        cz = 0.48
+        slen = 0.82
+        sh = 0.44
 
-    # Right Door Card (Passenger Side)
-    make_box("DOOR_CARD_R", (dash_w * 0.51, -0.35, 0.48), (0.058, 0.76, 0.40), mats["dash_main_cognac"], bevel=0.016, parent=doors_group)
-    make_box("DOOR_ARMREST_R", (dash_w * 0.49, -0.32, 0.50), (0.068, 0.38, 0.085), mats["leather_ebony"], bevel=0.010, parent=doors_group)
-    make_box("DOOR_HANDLE_CHROME_R", (dash_w * 0.48, -0.18, 0.56), (0.025, 0.12, 0.035), mats["chrome_mirror"], bevel=0.003, parent=doors_group)
-    door_spk_r = make_cylinder("DOOR_SPEAKER_R", (dash_w * 0.485, -0.42, 0.40), 0.055, 0.008, (0, math.radians(90), 0), mats["speaker_acoustic"], vertices=28, parent=doors_group)
-    unwrap_planar_uv(door_spk_r)
-    make_box("DOOR_TRIM_SPEAR_R", (dash_w * 0.485, -0.32, 0.58), (0.008, 0.65, 0.032), mats["wood_walnut"], bevel=0.002, parent=doors_group)
-    make_box("DOOR_AMBIENT_R", (dash_w * 0.482, -0.32, 0.565), (0.004, 0.64, 0.004), mats["ambient_cyan"], bevel=0, parent=doors_group)
+        verts_d = []
+        for j in range(ny + 1):
+            v = j / ny
+            z = cz + (v - 0.5) * sh
+            tumble_x = -sign * 0.035 * (v**1.8)
+            armrest_bulge = 0.0
+            if 0.35 < v < 0.75:
+                armrest_bulge = -sign * 0.045 * math.sin((v - 0.35) / 0.40 * math.pi)
+
+            for i in range(nx + 1):
+                u = i / nx
+                y = cy + (u - 0.5) * slen
+                fwd_taper = -sign * 0.015 * u
+                x = cx + tumble_x + armrest_bulge + fwd_taper
+                verts_d.append(bm_d.verts.new((x, y, z)))
+
+        bm_d.verts.ensure_lookup_table()
+        for j in range(ny):
+            for i in range(nx):
+                v1 = verts_d[j * (nx + 1) + i]
+                v2 = verts_d[j * (nx + 1) + i + 1]
+                v3 = verts_d[(j + 1) * (nx + 1) + i + 1]
+                v4 = verts_d[(j + 1) * (nx + 1) + i]
+                bm_d.faces.new((v1, v2, v3, v4))
+
+        for f in bm_d.faces:
+            f.smooth = True
+        m_d = bpy.data.meshes.new(f"DOOR_CARD_{side_name}_Mesh")
+        bm_d.to_mesh(m_d)
+        bm_d.free()
+
+        obj_d = bpy.data.objects.new(f"DOOR_CARD_{side_name}", m_d)
+        bpy.context.scene.collection.objects.link(obj_d)
+        sol = obj_d.modifiers.new("Solidify", 'SOLIDIFY')
+        sol.thickness = 0.025
+        bpy.context.view_layer.objects.active = obj_d
+        bpy.ops.object.modifier_apply(modifier="Solidify")
+        obj_d.data.materials.append(mats["dash_main_cognac"])
+        attach_to_parent(obj_d, doors_group)
+
+        make_box(f"DOOR_ARMREST_{side_name}", (cx - sign * 0.012, -0.32, 0.50), (0.068, 0.42, 0.080), mats["leather_ebony"], bevel=0.012, parent=doors_group)
+        make_box(f"DOOR_HANDLE_CHROME_{side_name}", (cx - sign * 0.022, -0.18, 0.56), (0.025, 0.12, 0.035), mats["chrome_mirror"], bevel=0.003, parent=doors_group)
+        spk = make_cylinder(f"DOOR_SPEAKER_{side_name}", (cx - sign * 0.015, -0.42, 0.40), 0.058, 0.010, (0, math.radians(90), 0), mats["speaker_acoustic"], vertices=32, parent=doors_group)
+        unwrap_planar_uv(spk)
+        make_cylinder(f"DOOR_SPK_CHROME_{side_name}", (cx - sign * 0.016, -0.42, 0.40), 0.060, 0.003, (0, math.radians(90), 0), mats["chrome_mirror"], vertices=32, parent=doors_group)
+        make_box(f"DOOR_TRIM_SPEAR_{side_name}", (cx - sign * 0.016, -0.32, 0.58), (0.010, 0.68, 0.032), mats["wood_walnut"], bevel=0.002, parent=doors_group)
+        make_box(f"DOOR_AMBIENT_{side_name}", (cx - sign * 0.018, -0.32, 0.565), (0.004, 0.66, 0.004), mats["ambient_cyan"], bevel=0, parent=doors_group)
+
+    make_sculpted_door_assembly("L", -1.0)
+    make_sculpted_door_assembly("R", 1.0)
 
     # ------------------------------------------------------------------------
-    # 9. SEATS & BELTS BRANCH (Contoured Sport Bucket Seats)
+    # 9. SEATS & BELTS BRANCH (Class-A Sculpted Sports Bucket Seats)
     # ------------------------------------------------------------------------
-    log("9. Modeling SEATS branch with deep bolsters & harness slots...")
+    log("9. Modeling SEATS branch with continuous high-density bmesh bolsters & carbon shells...")
     seats_group = bpy.data.objects.new("SEATS", None)
     bpy.context.scene.collection.objects.link(seats_group)
     attach_to_parent(seats_group, cockpit_master)
 
     for s_side, sx in [("DRIVER", driver_x), ("PASS", pass_x)]:
-        # Contoured Bottom Cushion with Thigh Bolsters
-        make_box(f"SEAT_CUSHION_{s_side}", (sx, -0.48, 0.20), (0.46, 0.46, 0.14), mats["leather_ebony"], bevel=0.022, parent=seats_group)
-        make_box(f"SEAT_THIGH_L_{s_side}", (sx - 0.21, -0.48, 0.26), (0.075, 0.44, 0.11), mats["leather_ebony"], bevel=0.016, parent=seats_group)
-        make_box(f"SEAT_THIGH_R_{s_side}", (sx + 0.21, -0.48, 0.26), (0.075, 0.44, 0.11), mats["leather_ebony"], bevel=0.016, parent=seats_group)
+        cy = -0.48
+        cz = 0.20
 
-        # Sculpted Backrest with Deep Torso / Shoulder Bolsters
-        make_box(f"SEAT_BACKREST_{s_side}", (sx, -0.85, 0.54), (0.44, 0.14, 0.54), mats["leather_ebony"], bevel=0.022, parent=seats_group)
-        make_box(f"SEAT_SHOULDER_L_{s_side}", (sx - 0.20, -0.82, 0.58), (0.085, 0.16, 0.42), mats["leather_ebony"], bevel=0.018, parent=seats_group)
-        make_box(f"SEAT_SHOULDER_R_{s_side}", (sx + 0.20, -0.82, 0.58), (0.085, 0.16, 0.42), mats["leather_ebony"], bevel=0.018, parent=seats_group)
+        # 9.1 Sculpted Seat Bottom Cushion (24x20 quad bmesh with ergonomic thigh bolsters & fluted ribs)
+        bm_c = bmesh.new()
+        nx, ny = 24, 20
+        w, l = 0.48, 0.48
+        verts_c = []
+        for j in range(ny + 1):
+            v = j / ny
+            y = cy + (v - 0.5) * l
+            front_lift = 0.03 * math.sin(v * math.pi * 0.5)
+            for i in range(nx + 1):
+                u = i / nx
+                x = sx + (u - 0.5) * w
+                lat = abs(u - 0.5) * 2.0
+                bolster_z = 0.085 * (lat ** 2.2)
+                center_dip = -0.015 * (1.0 - lat**2)
+                flutes = 0.005 * math.sin(v * math.pi * 6.0) * (1.0 - lat**2)
+                z = cz + front_lift + bolster_z + center_dip + flutes
+                verts_c.append(bm_c.verts.new((x, y, z)))
+        bm_c.verts.ensure_lookup_table()
+        for j in range(ny):
+            for i in range(nx):
+                v1 = verts_c[j * (nx + 1) + i]
+                v2 = verts_c[j * (nx + 1) + i + 1]
+                v3 = verts_c[(j + 1) * (nx + 1) + i + 1]
+                v4 = verts_c[(j + 1) * (nx + 1) + i]
+                bm_c.faces.new((v1, v2, v3, v4))
+        for f in bm_c.faces:
+            f.smooth = True
+        m_c = bpy.data.meshes.new(f"SEAT_CUSHION_{s_side}_Mesh")
+        bm_c.to_mesh(m_c)
+        bm_c.free()
+        obj_c = bpy.data.objects.new(f"SEAT_CUSHION_{s_side}", m_c)
+        bpy.context.scene.collection.objects.link(obj_c)
+        sol_c = obj_c.modifiers.new("Solidify", 'SOLIDIFY')
+        sol_c.thickness = 0.08
+        bpy.context.view_layer.objects.active = obj_c
+        bpy.ops.object.modifier_apply(modifier="Solidify")
+        obj_c.data.materials.append(mats["leather_ebony"])
+        attach_to_parent(obj_c, seats_group)
 
-        # Integrated Headrest with Chrome Support Posts
-        make_box(f"SEAT_HEADREST_{s_side}", (sx, -0.86, 0.86), (0.24, 0.10, 0.15), mats["leather_ebony"], bevel=0.016, parent=seats_group)
-        make_cylinder(f"SEAT_POST_L_{s_side}", (sx - 0.06, -0.86, 0.78), 0.007, 0.08, (0, 0, 0), mats["chrome_mirror"], vertices=16, parent=seats_group)
-        make_cylinder(f"SEAT_POST_R_{s_side}", (sx + 0.06, -0.86, 0.78), 0.007, 0.08, (0, 0, 0), mats["chrome_mirror"], vertices=16, parent=seats_group)
+        # 9.2 Sculpted Anatomical Backrest (24x28 quad bmesh with S-spine lumbar, shoulder wings & fluted ribs)
+        bm_b = bmesh.new()
+        bx_cnt, by_cnt = 24, 28
+        bw, bh = 0.46, 0.58
+        by_start = cy - l * 0.45
+        bz_start = cz + 0.12
+        verts_b = []
+        for j in range(by_cnt + 1):
+            v = j / by_cnt
+            recline_y = -0.16 * v
+            lumbar = 0.025 * math.sin(v * math.pi * 1.5)
+            y = by_start + recline_y - lumbar
+            z = bz_start + v * bh
+            width_mod = 1.0 + (0.22 * math.sin((v - 0.65) / 0.35 * math.pi) if v > 0.65 else 0.0)
 
-        # Seatbelt Buckle
+            for i in range(bx_cnt + 1):
+                u = i / bx_cnt
+                lat = abs(u - 0.5) * 2.0
+                x = sx + (u - 0.5) * bw * width_mod
+                bolster_wrap = 0.085 * (lat ** 2.0)
+                if v > 0.6:
+                    bolster_wrap += 0.035 * (lat ** 1.5)
+                flutes_b = 0.005 * math.sin(v * math.pi * 8.0) * (1.0 - lat**2)
+                verts_b.append(bm_b.verts.new((x, y + bolster_wrap - flutes_b, z)))
+
+        bm_b.verts.ensure_lookup_table()
+        for j in range(by_cnt):
+            for i in range(bx_cnt):
+                v1 = verts_b[j * (bx_cnt + 1) + i]
+                v2 = verts_b[j * (bx_cnt + 1) + i + 1]
+                v3 = verts_b[(j + 1) * (bx_cnt + 1) + i + 1]
+                v4 = verts_b[(j + 1) * (bx_cnt + 1) + i]
+                bm_b.faces.new((v1, v2, v3, v4))
+        for f in bm_b.faces:
+            f.smooth = True
+        m_b = bpy.data.meshes.new(f"SEAT_BACKREST_{s_side}_Mesh")
+        bm_b.to_mesh(m_b)
+        bm_b.free()
+        obj_b = bpy.data.objects.new(f"SEAT_BACKREST_{s_side}", m_b)
+        bpy.context.scene.collection.objects.link(obj_b)
+        sol_b = obj_b.modifiers.new("Solidify", 'SOLIDIFY')
+        sol_b.thickness = 0.06
+        bpy.context.view_layer.objects.active = obj_b
+        bpy.ops.object.modifier_apply(modifier="Solidify")
+        obj_b.data.materials.append(mats["leather_ebony"])
+        attach_to_parent(obj_b, seats_group)
+
+        # 9.3 Autoclaved Carbon Fiber Rear Shell (Curved compound bucket shell wrapping sides)
+        bm_sh = bmesh.new()
+        sh_nx, sh_ny = 20, 24
+        verts_sh = []
+        for j in range(sh_ny + 1):
+            v = j / sh_ny
+            recline_y = -0.16 * v
+            lumbar = 0.025 * math.sin(v * math.pi * 1.5)
+            y = (by_start - 0.06) + recline_y - lumbar
+            z = bz_start + v * bh
+            for i in range(sh_nx + 1):
+                u = i / sh_nx
+                lat = abs(u - 0.5) * 2.0
+                x = sx + (u - 0.5) * (bw + 0.02)
+                shell_wrap = 0.10 * (lat ** 2.2)
+                verts_sh.append(bm_sh.verts.new((x, y + shell_wrap, z)))
+        bm_sh.verts.ensure_lookup_table()
+        for j in range(sh_ny):
+            for i in range(sh_nx):
+                v1 = verts_sh[j * (sh_nx + 1) + i]
+                v2 = verts_sh[j * (sh_nx + 1) + i + 1]
+                v3 = verts_sh[(j + 1) * (sh_nx + 1) + i + 1]
+                v4 = verts_sh[(j + 1) * (sh_nx + 1) + i]
+                bm_sh.faces.new((v1, v2, v3, v4))
+        for f in bm_sh.faces:
+            f.smooth = True
+        m_sh = bpy.data.meshes.new(f"SEAT_SHELL_{s_side}_Mesh")
+        bm_sh.to_mesh(m_sh)
+        bm_sh.free()
+        obj_sh = bpy.data.objects.new(f"SEAT_SHELL_{s_side}", m_sh)
+        bpy.context.scene.collection.objects.link(obj_sh)
+        sol_sh = obj_sh.modifiers.new("Solidify", 'SOLIDIFY')
+        sol_sh.thickness = 0.018
+        bpy.context.view_layer.objects.active = obj_sh
+        bpy.ops.object.modifier_apply(modifier="Solidify")
+        obj_sh.data.materials.append(mats["carbon_twill"])
+        attach_to_parent(obj_sh, seats_group)
+
+        # 9.4 Integrated Ergonomic Headrest
+        bpy.ops.mesh.primitive_uv_sphere_add(
+            segments=28, ring_count=18, radius=0.11,
+            location=(sx, by_start - 0.20, bz_start + bh + 0.12)
+        )
+        hr = bpy.context.active_object
+        hr.name = f"SEAT_HEADREST_{s_side}"
+        hr.scale = (1.12, 0.58, 0.88)
+        bpy.ops.object.transform_apply(location=False, rotation=False, scale=True)
+        for p in hr.data.polygons: p.use_smooth = True
+        hr.data.materials.append(mats["leather_ebony"])
+        attach_to_parent(hr, seats_group)
+
+        # 9.5 Twin Racing Harness Pass-Through Bezels
+        for hx, h_sign in [(-0.065, "L"), (0.065, "R")]:
+            make_cylinder(f"SEAT_HARNESS_{h_sign}_{s_side}", (sx + hx, by_start - 0.16, bz_start + bh - 0.02), 0.026, 0.04, (math.radians(78), 0, 0), mats["titanium_matte"], vertices=24, bevel=0.003, parent=seats_group)
+
+        # 9.6 Seatbelt Buckle & Webbing
         buckle_x = sx + (0.16 if s_side == "DRIVER" else -0.16)
         make_box(f"SEATBELT_BUCKLE_{s_side}", (buckle_x, -0.38, 0.35), (0.032, 0.055, 0.075), mats["charcoal_trim"], bevel=0.003, parent=seats_group)
         make_box(f"SEATBELT_RED_BTN_{s_side}", (buckle_x, -0.38, 0.39), (0.024, 0.035, 0.008), mats["gauge_needle_red"], bevel=0.001, parent=seats_group)
-
-        # 3-Point Seatbelt Webbing Strap
         strap_rot = Euler((math.radians(35), math.radians(-15 if s_side == "DRIVER" else 15), 0))
         make_box(f"SEATBELT_STRAP_{s_side}", (sx, -0.62, 0.55), (0.048, 0.003, 0.65), mats["seatbelt_red"], rot_euler=strap_rot, bevel=0, parent=seats_group)
 

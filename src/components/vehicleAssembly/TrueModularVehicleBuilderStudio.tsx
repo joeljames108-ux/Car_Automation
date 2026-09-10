@@ -43,6 +43,7 @@ import {
   Download,
   Box,
   Edit3,
+  Sofa,
 } from "lucide-react";
 import { useDesign } from "../../state/DesignContext";
 import {
@@ -59,15 +60,12 @@ import {
   BODY_TYPE_REGISTRY,
   PLATFORM_FAMILIES,
   getAllBodyTypeIds,
-  calculateHypercarActiveAero,
   calculateConvertibleRoof,
-  calculateVanInteriorVolume,
   calculateOffRoadClearance,
   COMMERCIAL_BODY_REGISTRY,
 } from "../../sim/modularVehicle/vehicleFamilyArchitecture";
 import {
   VehicleBodyTypeId,
-  VanSeatConfig,
   CommercialBodyType,
 } from "../../sim/modularVehicle/types";
 
@@ -83,7 +81,13 @@ const BODY_COLORS = [
   { name: "Frozen Matte Cyan", hex: "#06b6d4" },
 ];
 
-export const TrueModularVehicleBuilderStudio: React.FC = () => {
+export interface TrueModularVehicleBuilderStudioProps {
+  onSelectStage?: (stage: string) => void;
+}
+
+export const TrueModularVehicleBuilderStudio: React.FC<TrueModularVehicleBuilderStudioProps> = ({
+  onSelectStage,
+}) => {
   const { design, setDesignName } = useDesign();
   const selectedModel = useModularVehicleBuilderStore((s) => s.selectedModel);
   const currentStage = useModularVehicleBuilderStore((s) => s.currentStage);
@@ -105,21 +109,23 @@ export const TrueModularVehicleBuilderStudio: React.FC = () => {
   const isPartVisible = useModularVehicleBuilderStore((s) => s.isPartVisible);
 
   // Specialized CAD state
-  const activeWingAngleDeg = useModularVehicleBuilderStore((s) => s.activeWingAngleDeg);
-  const drsActive = useModularVehicleBuilderStore((s) => s.drsActive);
   const convertibleRoofPosition = useModularVehicleBuilderStore((s) => s.convertibleRoofPosition);
-  const vanSeatConfig = useModularVehicleBuilderStore((s) => s.vanSeatConfig);
   const offRoadRideHeightMm = useModularVehicleBuilderStore((s) => s.offRoadRideHeightMm);
   const offRoadTireDiameterInches = useModularVehicleBuilderStore((s) => s.offRoadTireDiameterInches);
   const commercialBodyType = useModularVehicleBuilderStore((s) => s.commercialBodyType);
 
-  const setActiveWingAngle = useModularVehicleBuilderStore((s) => s.setActiveWingAngle);
-  const setDrsActive = useModularVehicleBuilderStore((s) => s.setDrsActive);
   const setConvertibleRoofPosition = useModularVehicleBuilderStore((s) => s.setConvertibleRoofPosition);
-  const setVanSeatConfig = useModularVehicleBuilderStore((s) => s.setVanSeatConfig);
   const setOffRoadRideHeight = useModularVehicleBuilderStore((s) => s.setOffRoadRideHeight);
   const setOffRoadTireDiameter = useModularVehicleBuilderStore((s) => s.setOffRoadTireDiameter);
   const setCommercialBodyType = useModularVehicleBuilderStore((s) => s.setCommercialBodyType);
+
+  // Sanitize currentStage: strictly enforce that only hardware assembly stages run in Vehicle Studio
+  React.useEffect(() => {
+    const isHardwareStage = ASSEMBLY_STAGES.some((st) => st.id === currentStage);
+    if (!isHardwareStage && currentStage !== "model_select" && currentStage !== "complete") {
+      setCurrentStage("chassis");
+    }
+  }, [currentStage, setCurrentStage]);
 
   // Filter state for Stage 0
   const [modelFilterCategory, setModelFilterCategory] = useState<string>("ALL");
@@ -134,17 +140,9 @@ export const TrueModularVehicleBuilderStudio: React.FC = () => {
   const activeBodySpec = BODY_TYPE_REGISTRY[selectedModel as VehicleBodyTypeId] || BODY_TYPE_REGISTRY["sedan"];
 
   // Specialized CAD Calculations
-  const hypercarAero = useMemo(() => {
-    return calculateHypercarActiveAero(activeWingAngleDeg, drsActive);
-  }, [activeWingAngleDeg, drsActive]);
-
   const convertibleRoof = useMemo(() => {
     return calculateConvertibleRoof(convertibleRoofPosition);
   }, [convertibleRoofPosition]);
-
-  const vanVolume = useMemo(() => {
-    return calculateVanInteriorVolume(vanSeatConfig);
-  }, [vanSeatConfig]);
 
   const offRoadClearance = useMemo(() => {
     return calculateOffRoadClearance(offRoadRideHeightMm, offRoadTireDiameterInches);
@@ -386,6 +384,33 @@ export const TrueModularVehicleBuilderStudio: React.FC = () => {
           </div>
 
           <div className="flex items-center gap-3 flex-wrap">
+            {onSelectStage && (
+              <>
+                <button
+                  type="button"
+                  onClick={() => {
+                    playHMIClickSound();
+                    onSelectStage("aero_studio");
+                  }}
+                  className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-400 hover:to-green-500 text-slate-950 text-xs font-black transition-all cursor-pointer shadow-lg shadow-emerald-500/25 border border-emerald-300"
+                >
+                  <Wind size={14} />
+                  <span>CONTINUE TO 3. AERO STUDIO →</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    playHMIClickSound();
+                    onSelectStage("interior");
+                  }}
+                  className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-400 hover:to-orange-500 text-slate-950 text-xs font-black transition-all cursor-pointer shadow-lg shadow-amber-500/25 border border-amber-300"
+                >
+                  <Sofa size={14} />
+                  <span>CONTINUE TO 4. INTERIOR STUDIO →</span>
+                </button>
+              </>
+            )}
+
             <a
               href={completeGlbPath}
               download={glbFilename}
@@ -517,77 +542,7 @@ export const TrueModularVehicleBuilderStudio: React.FC = () => {
           SPECIALIZED INTERACTIVE CAD MODULES DECK
           (Hypercar Active Aero, Convertible Roof, Van Seating, Off-Road Clearances, Commercial Rear Swapper)
           ===================================================================== */}
-      {/* 1. HYPERCAR ACTIVE AERO DECK */}
-      {(currentStage === "aerodynamics" || ["hypercar", "supercar", "track_special"].includes(selectedModel)) && (
-        <div className="p-4 rounded-2xl border-2 border-cyan-500/60 bg-gradient-to-r from-cyan-950/40 via-slate-900/90 to-slate-950 shadow-xl space-y-3">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <Wind size={18} className="text-cyan-400" />
-              <h3 className="text-xs font-black uppercase text-cyan-300 tracking-wider">
-                HYPERCAR ACTIVE AERO DYNAMICS CONTROLLER
-              </h3>
-            </div>
-            <button
-              onClick={() => {
-                playHMIClickSound();
-                setDrsActive(!drsActive);
-              }}
-              className={`px-3 py-1 rounded-lg text-xs font-bold border transition-all cursor-pointer ${
-                drsActive
-                  ? "bg-purple-500 text-slate-950 border-purple-300 shadow-[0_0_12px_rgba(168,85,247,0.5)]"
-                  : "bg-slate-900 text-purple-300 border-purple-500/40 hover:bg-purple-950/40"
-              }`}
-            >
-              DRS FLAP: {drsActive ? "OPEN (LOW DRAG)" : "CLOSED (MAX DOWNFORCE)"}
-            </button>
-          </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
-            <div className="md:col-span-5 space-y-1.5">
-              <div className="flex justify-between text-xs">
-                <span className="text-slate-400">Rear Wing Angle:</span>
-                <span className="font-bold text-cyan-300">{activeWingAngleDeg > 0 ? "+" : ""}{activeWingAngleDeg}°</span>
-              </div>
-              <input
-                type="range"
-                min={-15}
-                max={35}
-                step={1}
-                value={activeWingAngleDeg}
-                onChange={(e) => setActiveWingAngle(Number(e.target.value))}
-                className="w-full accent-cyan-400 cursor-pointer"
-              />
-              <div className="flex justify-between text-[10px] text-slate-500">
-                <span>-15° Low Drag</span>
-                <span>0° Neutral</span>
-                <span>+35° High Downforce Airbrake</span>
-              </div>
-            </div>
-
-            {/* Live Aero Telemetry */}
-            <div className="md:col-span-7 grid grid-cols-2 sm:grid-cols-4 gap-2 text-[10px]">
-              <div className="p-2 rounded-xl bg-slate-950 border border-slate-800">
-                <span className="text-slate-500 block">DOWNFORCE (250km/h)</span>
-                <strong className="text-cyan-400 text-xs">{hypercarAero.downforceKgAt250Kmh} kg</strong>
-              </div>
-              <div className="p-2 rounded-xl bg-slate-950 border border-slate-800">
-                <span className="text-slate-500 block">DRAG DELTA</span>
-                <strong className="text-amber-400 text-xs">+{hypercarAero.dragCdDelta.toFixed(3)} Cd</strong>
-              </div>
-              <div className="p-2 rounded-xl bg-slate-950 border border-slate-800">
-                <span className="text-slate-500 block">FRONT AERO BALANCE</span>
-                <strong className="text-emerald-400 text-xs">{hypercarAero.aeroBalanceFrontPct.toFixed(1)}%</strong>
-              </div>
-              <div className="p-2 rounded-xl bg-slate-950 border border-slate-800">
-                <span className="text-slate-500 block">LAP TIME DELTA</span>
-                <strong className={`text-xs ${hypercarAero.lapTimeDeltaSec < 0 ? "text-emerald-400" : "text-red-400"}`}>
-                  {hypercarAero.lapTimeDeltaSec > 0 ? "+" : ""}{hypercarAero.lapTimeDeltaSec.toFixed(2)}s
-                </strong>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
 
       {/* 2. ROADSTER / CONVERTIBLE STRUCTURAL ROOF DECK */}
       {(currentStage === "exterior_panels" || ["roadster", "convertible", "beach_buggy"].includes(selectedModel)) && (
@@ -653,44 +608,7 @@ export const TrueModularVehicleBuilderStudio: React.FC = () => {
         </div>
       )}
 
-      {/* 3. VAN / MPV SEATING LAYOUT DECK */}
-      {(currentStage === "interior" || ["minivan", "cargo_van", "microvan", "bus_shuttle"].includes(selectedModel)) && (
-        <div className="p-4 rounded-2xl border-2 border-emerald-500/60 bg-gradient-to-r from-emerald-950/40 via-slate-900/90 to-slate-950 shadow-xl space-y-3">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <Users size={18} className="text-emerald-400" />
-              <h3 className="text-xs font-black uppercase text-emerald-300 tracking-wider">
-                VAN / MPV MODULAR INTERIOR SEATING ARCHITECTURE
-              </h3>
-            </div>
-            <span className="text-xs text-slate-400">
-              Cargo Volume: <strong className="text-emerald-400">{vanVolume.cargoVolumeL} L</strong>
-            </span>
-          </div>
 
-          <div className="flex items-center gap-2 flex-wrap">
-            {(["2_seat_cargo", "5_seat", "7_seat", "8_seat", "9_seat"] as VanSeatConfig[]).map((cfg) => {
-              const isSelected = vanSeatConfig === cfg;
-              return (
-                <button
-                  key={cfg}
-                  onClick={() => {
-                    playHMIClickSound();
-                    setVanSeatConfig(cfg);
-                  }}
-                  className={`px-3 py-1.5 rounded-xl text-xs font-bold border transition-all cursor-pointer ${
-                    isSelected
-                      ? "bg-emerald-500 text-slate-950 border-emerald-300 shadow-md"
-                      : "bg-slate-950 text-slate-400 border-slate-800 hover:text-slate-200"
-                  }`}
-                >
-                  {cfg.replace(/_/g, " ").toUpperCase()}
-                </button>
-              );
-            })}
-          </div>
-        </div>
-      )}
 
       {/* 4. OFF-ROAD CLEARANCE & SUSPENSION TRAVEL DECK */}
       {(currentStage === "suspension" || ["off_road_4x4", "off_road_suv", "dune_buggy", "pickup_truck"].includes(selectedModel)) && (

@@ -93,23 +93,15 @@ export const AeroStudio: React.FC<AeroStudioProps> = ({ onSelectStage }) => {
 
         {/* Right Header: Host Vehicle Sync Badge & Wind Tunnel Telemetry Ticker */}
         <div className="flex flex-wrap items-center gap-2.5">
-          {/* Host Vehicle Live Sync Dropdown */}
+          {/* Host Vehicle Live Sync Indicator */}
           <div className="flex items-center gap-2 bg-slate-900/90 border border-cyan-500/30 rounded-xl px-3 py-1.5 font-mono text-xs shadow-lg">
             <Car size={14} className="text-cyan-400" />
             <span className="text-slate-400">Host Vehicle:</span>
-            <select
-              value={vehicleVariant || modularModel || "sedan"}
-              onChange={(e) => setVehicleVariant(e.target.value as VehicleArchitecture)}
-              className="bg-slate-800 text-cyan-300 font-bold px-2 py-0.5 rounded border border-slate-700 text-xs focus:outline-none focus:border-cyan-400 cursor-pointer"
-            >
-              {Object.values(VEHICLE_ARCHITECTURES).map((arch) => (
-                <option key={arch.id} value={arch.id}>
-                  {arch.label} ({arch.badge.split("•")[0].trim()})
-                </option>
-              ))}
-            </select>
-            <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-emerald-950/80 text-emerald-400 border border-emerald-500/30">
-              SYNCED
+            <span className="text-cyan-300 font-bold uppercase tracking-wider">
+              {(modularModel || vehicleVariant || "sedan").toUpperCase()}
+            </span>
+            <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-950/80 text-emerald-400 border border-emerald-500/40 font-extrabold uppercase">
+              ✓ CONTINUED FROM STAGE 2
             </span>
           </div>
 

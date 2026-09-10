@@ -152,12 +152,12 @@ export function InteriorsDesigner({ initialSubTab = 'setup', onSelectStage }: In
 
       {/* ── CONDITIONAL VIEW MODE RENDERING ── */}
       {viewMode === 'setup' ? (
-        <InteractiveDashboardStudio initialWorkspaceMode="hardware" />
+        <InteractiveDashboardStudio initialWorkspaceMode="hardware" onSelectStage={onSelectStage} />
       ) : viewMode === 'cluster_diagnostic' ? (
         <InstrumentClusterDiagnosticStudio />
       ) : (
         /* MODE C: Vehicle Electronics, Infotainment, ADAS, CAN-FD & Avionics */
-        <InteractiveDashboardStudio initialWorkspaceMode="avionics" />
+        <InteractiveDashboardStudio initialWorkspaceMode="avionics" onSelectStage={onSelectStage} />
       )}
     </div>
   );

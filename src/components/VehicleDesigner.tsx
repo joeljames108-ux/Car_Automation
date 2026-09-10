@@ -231,7 +231,7 @@ export function VehicleDesigner({ initialSubTab = "modular_builder", onSelectSta
           ========================================================================= */}
       {activeTab === "modular_builder" && (
         <div className="animate-stage-transition-enter">
-          <TrueModularVehicleBuilderStudio />
+          <TrueModularVehicleBuilderStudio onSelectStage={onSelectStage} />
         </div>
       )}
 

@@ -267,6 +267,44 @@ def make_cylinder_smooth(name, center, radius, depth, axis='Z', segments=48, bev
         obj.data.materials.append(mat)
     return obj
 
+def make_curved_bumper_surface(name, center, size, wrap_factor, is_front=True, mat=None):
+    """Creates an authentic wraparound curved aerodynamic bumper fascia with smooth corners."""
+    bm = bmesh.new()
+    nx, ny = 32, 18
+    sx, sy, sz = size
+    cx, cy, cz = center
+    verts = []
+    for j in range(ny + 1):
+        v = j / ny
+        z = cz + (v - 0.5) * sz
+        for i in range(nx + 1):
+            u = i / nx
+            x = (u - 0.5) * sx
+            dist_sq = ((u - 0.5) * 2.0)**2
+            y_curve = wrap_factor * dist_sq
+            verts.append(bm.verts.new((cx + x, cy + y_curve, z)))
+    bm.verts.ensure_lookup_table()
+    for j in range(ny):
+        for i in range(nx):
+            v1 = verts[j * (nx + 1) + i]
+            v2 = verts[j * (nx + 1) + i + 1]
+            v3 = verts[(j + 1) * (nx + 1) + i + 1]
+            v4 = verts[(j + 1) * (nx + 1) + i]
+            bm.faces.new((v1, v2, v3, v4))
+    m = bpy.data.meshes.new(f"{name}_Mesh")
+    bm.to_mesh(m)
+    bm.free()
+    obj = bpy.data.objects.new(name, m)
+    bpy.context.scene.collection.objects.link(obj)
+    sol = obj.modifiers.new("Solidify", 'SOLIDIFY')
+    sol.thickness = 0.020
+    bpy.context.view_layer.objects.active = obj
+    bpy.ops.object.modifier_apply(modifier="Solidify")
+    finalize_mesh(obj, bevel_width=0.008)
+    if mat:
+        obj.data.materials.append(mat)
+    return obj
+
 # -----------------------------------------------------------------------------
 # 4. SPECIALIZED HIGH-FIDELITY AUTOMOTIVE COMPONENT BUILDERS
 # -----------------------------------------------------------------------------
@@ -1357,8 +1395,8 @@ def build_assembly_stages():
     make_curved_sheet("BODY_HOOD", (0.0, 1.45, 0.72), (1.42, 1.25, 0.04), camber_x=0.05, camber_y=0.04, nx=28, ny=28, thickness=0.015, mat=mat_paint())
     make_curved_sheet("BODY_ROOF", (0.0, -0.15, 1.32), (1.24, 1.72, 0.04), camber_x=0.06, camber_y=0.04, nx=28, ny=28, thickness=0.016, mat=mat_paint())
     make_curved_sheet("BODY_TRUNK", (0.0, -1.82, 0.82), (1.26, 0.68, 0.04), camber_x=0.04, camber_y=0.03, nx=24, ny=24, thickness=0.016, mat=mat_paint())
-    make_beveled_box("BODY_BUMPER_F", (0.0, 2.26, 0.46), (1.80, 0.38, 0.48), bevel_width=0.015, mat=mat_paint())
-    make_beveled_box("BODY_BUMPER_R", (0.0, -2.26, 0.48), (1.80, 0.38, 0.48), bevel_width=0.015, mat=mat_paint())
+    make_curved_bumper_surface("BODY_BUMPER_F", (0.0, 2.26, 0.46), (1.82, 0.42, 0.50), wrap_factor=-0.22, is_front=True, mat=mat_paint())
+    make_curved_bumper_surface("BODY_BUMPER_R", (0.0, -2.26, 0.48), (1.82, 0.42, 0.50), wrap_factor=0.20, is_front=False, mat=mat_paint())
     for x in [-0.80, 0.80]:
         make_curved_sheet(f"BODY_FENDER_F_{x}", (x, 1.45, 0.62), (0.12, 1.22, 0.42), camber_x=0.03, camber_y=0.02, nx=20, ny=24, thickness=0.014, mat=mat_paint())
         make_curved_sheet(f"BODY_QUARTER_R_{x}", (x, -1.45, 0.68), (0.14, 1.20, 0.54), camber_x=0.04, camber_y=0.03, nx=20, ny=24, thickness=0.015, mat=mat_paint())
@@ -1371,8 +1409,14 @@ def build_assembly_stages():
     make_curved_sheet("GLASS_WINDSHIELD", (0.0, 0.65, 0.98), (1.32, 0.72, 0.02), camber_x=0.06, camber_y=0.05, nx=28, ny=28, thickness=0.008, mat=mat_glass())
     make_curved_sheet("GLASS_REAR", (0.0, -1.25, 1.05), (1.28, 0.70, 0.02), camber_x=0.05, camber_y=0.04, nx=24, ny=24, thickness=0.008, mat=mat_glass_dark())
     for side, x in [("L", 0.68), ("R", -0.68)]:
-        make_beveled_box(f"HEADLIGHT_{side}", (x, 2.15, 0.68), (0.30, 0.18, 0.14), bevel_width=0.006, mat=mat_led_head())
-        make_beveled_box(f"TAILLIGHT_{side}", (x, -2.18, 0.74), (0.30, 0.18, 0.12), bevel_width=0.006, mat=mat_led_tail())
+        make_curved_sheet(f"HEADLIGHT_LENS_{side}", (x, 2.15, 0.68), (0.32, 0.24, 0.16), camber_x=0.03, camber_y=0.02, nx=22, ny=18, thickness=0.008, mat=mat_glass())
+        make_beveled_box(f"HEADLIGHT_BEZEL_{side}", (x, 2.10, 0.68), (0.30, 0.18, 0.14), bevel_width=0.006, mat=mat_trim())
+        for px in [-0.08, 0.08]:
+            make_cylinder_smooth(f"HEADLIGHT_PROJ_{side}_{px}", (x + px, 2.14, 0.68), radius=0.032, depth=0.04, axis='Y', segments=28, mat=mat_led_head())
+        make_beveled_box(f"HEADLIGHT_DRL_{side}", (x, 2.15, 0.73), (0.28, 0.03, 0.015), bevel_width=0.002, mat=mat_led_head())
+
+        make_curved_sheet(f"TAILLIGHT_LENS_{side}", (x, -2.18, 0.74), (0.32, 0.22, 0.14), camber_x=0.02, camber_y=0.02, nx=22, ny=18, thickness=0.008, mat=mat_glass_dark())
+        make_beveled_box(f"TAILLIGHT_BLADE_{side}", (x, -2.19, 0.74), (0.28, 0.04, 0.05), bevel_width=0.004, mat=mat_led_tail())
     export_stage_glb("lighting_glass.glb")
 
     # 11. Aerodynamics Stage

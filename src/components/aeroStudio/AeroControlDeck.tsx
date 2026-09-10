@@ -20,6 +20,12 @@ import {
   X,
   Compass,
   CircleDot,
+  Car,
+  Wrench,
+  Shield,
+  CheckCircle2,
+  ChevronRight,
+  Sliders,
 } from "lucide-react";
 import {
   useAeroStudioStore,
@@ -28,7 +34,10 @@ import {
   VehicleArchitecture,
   VEHICLE_ARCHITECTURES,
 } from "../../state/aeroStudioStore";
+import { useModularVehicleBuilderStore } from "../../state/modularVehicleBuilderStore";
 import { AeroPackagePresetId } from "../../sim/aerodynamics/aeroStudioTypes";
+import { calculateHypercarActiveAero } from "../../sim/modularVehicle/vehicleFamilyArchitecture";
+import { playHMIClickSound } from "../../utils/hmiSoundSynth";
 
 // Option interface for generic stepper
 export interface AeroOption<T> {
@@ -217,6 +226,7 @@ function AeroOptionStepperBox<T>({
 
 export const AeroControlDeck: React.FC = () => {
   const activeSubTab = useAeroStudioStore((s) => s.activeSubTab);
+  const setActiveSubTab = useAeroStudioStore((s) => s.setActiveSubTab);
   const selectedComponent = useAeroStudioStore((s) => s.selectedComponent);
   const config = useAeroStudioStore((s) => s.config);
   const physics = useAeroStudioStore((s) => s.physics);
@@ -229,6 +239,21 @@ export const AeroControlDeck: React.FC = () => {
   const rearWingPylonStyle = useAeroStudioStore((s) => s.rearWingPylonStyle);
   const vehicleVariant = useAeroStudioStore((s) => s.vehicleVariant);
   const setVehicleVariant = useAeroStudioStore((s) => s.setVehicleVariant);
+  const modularModel = useModularVehicleBuilderStore((s) => s.selectedModel);
+
+  // Hypercar Active Aero & Architecture state (from Modular Vehicle Builder)
+  const activeWingAngleDeg = useModularVehicleBuilderStore((s) => s.activeWingAngleDeg);
+  const drsActive = useModularVehicleBuilderStore((s) => s.drsActive);
+  const setActiveWingAngle = useModularVehicleBuilderStore((s) => s.setActiveWingAngle);
+  const setDrsActive = useModularVehicleBuilderStore((s) => s.setDrsActive);
+  const chassisArch = useModularVehicleBuilderStore((s) => s.chassisArch);
+  const materialGrade = useModularVehicleBuilderStore((s) => s.materialGrade);
+  const setChassisArch = useModularVehicleBuilderStore((s) => s.setChassisArch);
+  const setMaterialGrade = useModularVehicleBuilderStore((s) => s.setMaterialGrade);
+
+  const hypercarAero = useMemo(() => {
+    return calculateHypercarActiveAero(activeWingAngleDeg, drsActive);
+  }, [activeWingAngleDeg, drsActive]);
 
   const rearSpoilerAngleDeg = useAeroStudioStore((s) => s.rearSpoilerAngleDeg);
   const rearSpoilerHeightMm = useAeroStudioStore((s) => s.rearSpoilerHeightMm);
@@ -416,18 +441,32 @@ export const AeroControlDeck: React.FC = () => {
         </div>
       </div>
 
-      {/* 2. Top-Level Option Stepper Boxes (Vehicle Architecture, Presets, Exploded CAD View, Bodywork Visibility) */}
+      {/* 2. Top-Level Option Stepper Boxes (Continuous CAD Host, Presets, Exploded CAD View, Bodywork Visibility) */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
-        <AeroOptionStepperBox
-          label="Vehicle Architecture"
-          value={vehicleVariant}
-          options={ARCHITECTURE_OPTIONS}
-          onChange={(val) => setVehicleVariant(val)}
-          infoTitle="Vehicle Variant Architecture"
-          infoDesc="Selects the vehicle class and monocoque packaging envelope. Filters compatible aerodynamic components and wing mounting limits."
-          proTip="Hypercar unlocks active aerodynamic surfaces, dual-tier diffuser tunnels, and swan-neck Le Mans wings."
-          onInfoClick={setSelectedInfo}
-        />
+        <div className="rounded-2xl border border-cyan-500/30 bg-gradient-to-br from-[#0c1322] via-[#09101d] to-[#080d16] p-3 flex flex-col justify-between shadow-xl">
+          <div className="flex items-center justify-between">
+            <span className="text-[11px] font-mono font-bold text-slate-400 uppercase flex items-center gap-1.5">
+              <Car size={13} className="text-cyan-400" />
+              CAD Twin Host
+            </span>
+            <span className="text-[9px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/40 font-extrabold uppercase tracking-wider">
+              ✓ CONTINUED
+            </span>
+          </div>
+          <div className="my-1.5">
+            <div className="text-sm font-black font-mono text-white tracking-wider flex items-center gap-2">
+              <span className="text-cyan-300">{(modularModel || vehicleVariant || "sedan").toUpperCase()}</span>
+              <span className="text-slate-500 text-xs font-normal">SPEC</span>
+            </div>
+            <p className="text-[10px] text-slate-400 font-mono mt-0.5">
+              Unified vehicle continues directly from Vehicle Studio CAD
+            </p>
+          </div>
+          <div className="text-[9px] font-mono text-cyan-400/70 flex items-center gap-1 border-t border-slate-800/80 pt-1.5">
+            <Layers size={10} />
+            <span>Zero-offset snapping • Single GLB pipeline</span>
+          </div>
+        </div>
 
         <AeroOptionStepperBox
           label="Aero Package Preset"
@@ -698,6 +737,30 @@ export const AeroControlDeck: React.FC = () => {
                   Pedestal Rear Spoiler
                 </button>
               </div>
+            </div>
+
+            {/* Quick Access to Hypercar Active Aero Dynamics Controller */}
+            <div className="flex items-center justify-between p-3 rounded-xl bg-gradient-to-r from-cyan-950/40 via-purple-950/30 to-slate-900/60 border border-cyan-500/30 flex-wrap gap-2">
+              <div className="flex items-center gap-2 text-xs flex-wrap">
+                <Zap size={14} className="text-purple-400 animate-pulse" />
+                <span className="text-slate-300 font-semibold">Hypercar Active Aero & DRS Controller:</span>
+                <span className="text-cyan-300 font-mono font-bold">{activeWingAngleDeg > 0 ? "+" : ""}{activeWingAngleDeg}°</span>
+                <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${drsActive ? "bg-purple-500/20 text-purple-300 border border-purple-500/40" : "bg-slate-800 text-slate-400"}`}>
+                  {drsActive ? "DRS OPEN (LOW DRAG)" : "DRS CLOSED"}
+                </span>
+                <span className="text-emerald-400 font-mono text-[11px] ml-2">Downforce: {hypercarAero.downforceKgAt250Kmh} kg</span>
+              </div>
+              <button
+                type="button"
+                onClick={() => {
+                  playHMIClickSound();
+                  setActiveSubTab("activeAero");
+                }}
+                className="flex items-center gap-1 text-xs font-bold text-cyan-400 hover:text-cyan-300 cursor-pointer transition-colors"
+              >
+                <span>OPEN ACTIVE AERO DECK</span>
+                <ChevronRight size={14} />
+              </button>
             </div>
 
             {selectedComponent === "rearWing" ? (
@@ -1271,7 +1334,91 @@ export const AeroControlDeck: React.FC = () => {
 
         {/* ACTIVE AERO SUB-TAB */}
         {activeSubTab === "activeAero" && (
-          <div className="flex flex-col gap-4">
+          <div className="flex flex-col gap-5">
+            {/* 1. HYPERCAR ACTIVE AERO DYNAMICS CONTROLLER (Moved from Vehicle Architecture) */}
+            <div className="p-4 rounded-2xl border-2 border-cyan-500/60 bg-gradient-to-r from-cyan-950/40 via-slate-900/90 to-slate-950 shadow-[0_0_30px_rgba(6,182,212,0.18)] space-y-3">
+              <div className="flex items-center justify-between flex-wrap gap-2">
+                <div className="flex items-center gap-2">
+                  <Wind size={18} className="text-cyan-400" />
+                  <h3 className="text-xs font-black uppercase text-cyan-300 tracking-wider">
+                    HYPERCAR ACTIVE AERO DYNAMICS CONTROLLER
+                  </h3>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => {
+                    playHMIClickSound();
+                    const next = !drsActive;
+                    setDrsActive(next);
+                    if (next) {
+                      updateActiveAeroDeployment(0);
+                    } else {
+                      updateActiveAeroDeployment(50);
+                    }
+                  }}
+                  className={`px-3 py-1.5 rounded-xl text-xs font-bold border transition-all cursor-pointer ${
+                    drsActive
+                      ? "bg-purple-500 text-slate-950 border-purple-300 shadow-[0_0_15px_rgba(168,85,247,0.6)] animate-pulse"
+                      : "bg-slate-900 text-purple-300 border-purple-500/40 hover:bg-purple-950/40"
+                  }`}
+                >
+                  DRS FLAP: {drsActive ? "OPEN (LOW DRAG)" : "CLOSED (MAX DOWNFORCE)"}
+                </button>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-center">
+                <div className="md:col-span-5 space-y-1.5">
+                  <div className="flex justify-between text-xs">
+                    <span className="text-slate-400">Rear Wing Angle:</span>
+                    <span className="font-bold text-cyan-300">{activeWingAngleDeg > 0 ? "+" : ""}{activeWingAngleDeg}°</span>
+                  </div>
+                  <input
+                    type="range"
+                    min={-15}
+                    max={35}
+                    step={1}
+                    value={activeWingAngleDeg}
+                    onChange={(e) => {
+                      const val = Number(e.target.value);
+                      setActiveWingAngle(val);
+                      if (val >= 0) {
+                        updateRearWingAngle(val);
+                      }
+                    }}
+                    className="w-full accent-cyan-400 cursor-pointer"
+                  />
+                  <div className="flex justify-between text-[10px] text-slate-500">
+                    <span>-15° Low Drag</span>
+                    <span>0° Neutral</span>
+                    <span>+35° High Downforce Airbrake</span>
+                  </div>
+                </div>
+
+                {/* Live Aero Telemetry */}
+                <div className="md:col-span-7 grid grid-cols-2 sm:grid-cols-4 gap-2 text-[10px]">
+                  <div className="p-2.5 rounded-xl bg-slate-950/90 border border-slate-800 space-y-0.5">
+                    <span className="text-slate-500 block">DOWNFORCE (250km/h)</span>
+                    <strong className="text-cyan-400 text-xs block">{hypercarAero.downforceKgAt250Kmh} kg</strong>
+                  </div>
+                  <div className="p-2.5 rounded-xl bg-slate-950/90 border border-slate-800 space-y-0.5">
+                    <span className="text-slate-500 block">DRAG DELTA</span>
+                    <strong className="text-amber-400 text-xs block">{hypercarAero.dragCdDelta >= 0 ? "+" : ""}{hypercarAero.dragCdDelta.toFixed(3)} Cd</strong>
+                  </div>
+                  <div className="p-2.5 rounded-xl bg-slate-950/90 border border-slate-800 space-y-0.5">
+                    <span className="text-slate-500 block">FRONT AERO BALANCE</span>
+                    <strong className="text-emerald-400 text-xs block">{hypercarAero.aeroBalanceFrontPct.toFixed(1)}%</strong>
+                  </div>
+                  <div className="p-2.5 rounded-xl bg-slate-950/90 border border-slate-800 space-y-0.5">
+                    <span className="text-slate-500 block">LAP TIME DELTA</span>
+                    <strong className={`text-xs block ${hypercarAero.lapTimeDeltaSec < 0 ? "text-emerald-400" : "text-red-400"}`}>
+                      {hypercarAero.lapTimeDeltaSec > 0 ? "+" : ""}{hypercarAero.lapTimeDeltaSec.toFixed(2)}s
+                    </strong>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* 2. ACTIVE DRS & HYDRAULIC ACTUATOR SECTION */}
             <div className="flex items-center justify-between border-b border-slate-800/80 pb-3">
               <div>
                 <h3 className="text-sm font-bold text-slate-100 flex items-center gap-2">
@@ -1337,6 +1484,214 @@ export const AeroControlDeck: React.FC = () => {
                 proTip="300 Bar system transitions from DRS low-drag to Full Airbrake in just 180 milliseconds."
                 onInfoClick={setSelectedInfo}
               />
+            </div>
+
+            {/* 3. ALL CONFIGURATIONS RELATED TO AERODYNAMICS (Moved from Vehicle Studio) */}
+            <div className="rounded-2xl border border-slate-700/80 bg-slate-950/95 shadow-xl p-5 select-none space-y-4">
+              <div className="border-b border-slate-800 pb-3 flex items-center justify-between flex-wrap gap-2">
+                <div className="flex items-center gap-2 text-xs font-bold text-slate-300 uppercase tracking-wider">
+                  <Wrench size={14} className="text-cyan-400" />
+                  <span>ALL CONFIGURATIONS RELATED TO AERODYNAMICS</span>
+                </div>
+                <span className="text-[10px] text-slate-500 uppercase font-mono">
+                  ACTIVE ARCHITECTURE: {(modularModel || vehicleVariant || "sedan").toUpperCase()}
+                </span>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {/* COLUMN 1: STRUCTURAL ARCHITECTURE */}
+                <div className="space-y-3 p-3.5 rounded-xl bg-slate-900/60 border border-slate-800/80">
+                  <div className="flex items-center gap-2">
+                    <Shield size={16} className="text-cyan-400" />
+                    <h3 className="text-xs font-extrabold uppercase tracking-wider text-slate-200">
+                      STRUCTURAL ARCHITECTURE
+                    </h3>
+                  </div>
+                  <p className="text-[11px] text-slate-400 leading-relaxed">
+                    Select geometric topology and structural framework archetype.
+                  </p>
+
+                  <div className="space-y-2 pt-1">
+                    {[
+                      {
+                        id: "monocoque",
+                        label: "High-Rigidity Monocoque",
+                        desc: "Integrated structural shell with optimized load paths.",
+                        stiffness: "+42 kNm/deg",
+                      },
+                      {
+                        id: "spaceframe",
+                        label: "Extruded Aluminum Spaceframe",
+                        desc: "Modular nodes with hollow tubular longitudinal extrusions.",
+                        stiffness: "+36 kNm/deg",
+                      },
+                      {
+                        id: "carbon_tub",
+                        label: "Autoclaved Carbon Tub",
+                        desc: "Single-piece pre-preg carbon safety tub for hypercar rigidity.",
+                        stiffness: "+58 kNm/deg",
+                      },
+                    ].map((opt) => {
+                      const isSelected = chassisArch === opt.id;
+                      return (
+                        <button
+                          key={opt.id}
+                          type="button"
+                          onClick={() => {
+                            playHMIClickSound();
+                            setChassisArch(opt.id);
+                          }}
+                          className={`w-full text-left p-2.5 rounded-lg border transition-all cursor-pointer flex flex-col gap-0.5 ${
+                            isSelected
+                              ? "bg-cyan-500/15 border-cyan-400/80 text-cyan-200 shadow-sm"
+                              : "bg-slate-950/60 border-slate-800 text-slate-400 hover:text-slate-200 hover:border-slate-700"
+                          }`}
+                        >
+                          <div className="flex items-center justify-between text-xs font-bold">
+                            <span className="text-slate-200">{opt.label}</span>
+                            <span className="text-[10px] text-cyan-400 font-mono">{opt.stiffness}</span>
+                          </div>
+                          <p className="text-[10px] text-slate-500 leading-tight">{opt.desc}</p>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* COLUMN 2: MATERIAL GRADE */}
+                <div className="space-y-3 p-3.5 rounded-xl bg-slate-900/60 border border-slate-800/80">
+                  <div className="flex items-center gap-2">
+                    <Layers size={16} className="text-amber-400" />
+                    <h3 className="text-xs font-extrabold uppercase tracking-wider text-slate-200">
+                      MATERIAL GRADE
+                    </h3>
+                  </div>
+                  <p className="text-[11px] text-slate-400 leading-relaxed">
+                    Material alloy specifies density, tensile strength, and mass.
+                  </p>
+
+                  <div className="space-y-2 pt-1">
+                    {[
+                      {
+                        id: "stamped_steel",
+                        label: "Stamped Steel",
+                        sub: "OEM BASE",
+                        mass: "Mass: Baseline",
+                        stiff: "Stiffness: Baseline",
+                      },
+                      {
+                        id: "cast_aluminum",
+                        label: "Die-Cast Aluminum Alloy",
+                        sub: "LIGHTWEIGHT",
+                        mass: "Mass: -15%",
+                        stiff: "Stiffness: +6 kNm/°",
+                      },
+                      {
+                        id: "extruded_aluminum",
+                        label: "Compacted Graphite / CNC Billet",
+                        sub: "CNC BILLET",
+                        mass: "Mass: -25%",
+                        stiff: "Stiffness: +14 kNm/°",
+                      },
+                      {
+                        id: "carbon_composite",
+                        label: "Titanium & Pre-Preg Carbon",
+                        sub: "RACE SPEC",
+                        mass: "Mass: -40%",
+                        stiff: "Stiffness: +24 kNm/°",
+                      },
+                    ].map((mat) => {
+                      const isSelected = materialGrade === mat.id;
+                      return (
+                        <button
+                          key={mat.id}
+                          type="button"
+                          onClick={() => {
+                            playHMIClickSound();
+                            setMaterialGrade(mat.id);
+                          }}
+                          className={`w-full text-left p-2.5 rounded-lg border transition-all cursor-pointer flex flex-col gap-0.5 ${
+                            isSelected
+                              ? "bg-amber-500/15 border-amber-400/80 text-amber-200 shadow-sm"
+                              : "bg-slate-950/60 border-slate-800 text-slate-400 hover:text-slate-200 hover:border-slate-700"
+                          }`}
+                        >
+                          <div className="flex items-center justify-between text-xs font-bold">
+                            <span className="text-slate-200">{mat.label}</span>
+                            <span className="text-[9px] px-1.5 py-0.2 rounded bg-slate-800 text-slate-400 uppercase font-mono">
+                              {mat.sub}
+                            </span>
+                          </div>
+                          <div className="flex items-center justify-between text-[10px] text-slate-500 font-mono">
+                            <span>{mat.mass}</span>
+                            <span className="text-emerald-400">{mat.stiff}</span>
+                          </div>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* COLUMN 3: ECONOMICS & STATS */}
+                <div className="space-y-3 p-3.5 rounded-xl bg-slate-900/60 border border-slate-800/80 flex flex-col justify-between">
+                  <div>
+                    <div className="flex items-center gap-2 mb-2">
+                      <Gauge size={16} className="text-emerald-400" />
+                      <h3 className="text-xs font-extrabold uppercase tracking-wider text-slate-200">
+                        ECONOMICS & STATS
+                      </h3>
+                    </div>
+                    <p className="text-[11px] text-slate-400 leading-relaxed mb-3">
+                      Dynamic aerodynamic appendage weight and structural chassis response.
+                    </p>
+
+                    <div className="grid grid-cols-2 gap-2 text-xs font-mono mb-3">
+                      <div className="p-2.5 rounded-xl bg-slate-950 border border-slate-800">
+                        <span className="text-[10px] text-slate-500 block uppercase">SUB-MASS</span>
+                        <strong className="text-slate-200 text-sm">
+                          {materialGrade === "carbon_composite"
+                            ? "32.4"
+                            : materialGrade === "extruded_aluminum"
+                            ? "38.5"
+                            : materialGrade === "cast_aluminum"
+                            ? "43.1"
+                            : "51.0"} kg
+                        </strong>
+                      </div>
+                      <div className="p-2.5 rounded-xl bg-slate-950 border border-slate-800">
+                        <span className="text-[10px] text-slate-500 block uppercase">RIGIDITY</span>
+                        <strong className="text-emerald-400 text-sm">
+                          {chassisArch === "carbon_tub"
+                            ? "58.0"
+                            : chassisArch === "monocoque"
+                            ? "46.2"
+                            : "39.5"} kNm/°
+                        </strong>
+                      </div>
+                    </div>
+
+                    <div className="p-2.5 rounded-xl bg-slate-950/80 border border-slate-800/80 space-y-1 text-[11px] font-mono">
+                      <div className="flex justify-between text-slate-400">
+                        <span>Aero Load @ 250 km/h:</span>
+                        <span className="text-cyan-300 font-bold">{hypercarAero.downforceKgAt250Kmh} kg</span>
+                      </div>
+                      <div className="flex justify-between text-slate-400">
+                        <span>Induced Drag Delta:</span>
+                        <span className="text-amber-300 font-bold">{hypercarAero.dragCdDelta >= 0 ? "+" : ""}{hypercarAero.dragCdDelta.toFixed(3)} Cd</span>
+                      </div>
+                      <div className="flex justify-between text-slate-400">
+                        <span>Aero Balance Shift:</span>
+                        <span className="text-emerald-300 font-bold">{hypercarAero.aeroBalanceFrontPct.toFixed(1)}% Front</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="text-[10px] font-mono text-slate-500 flex items-center gap-1.5 pt-2 border-t border-slate-800/80">
+                    <CheckCircle2 size={12} className="text-emerald-400" />
+                    <span>Continuous CAD Twin: synched with Stage 3 Aero Viewport</span>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         )}

@@ -741,7 +741,215 @@ def upgrade_underbody():
     export_enhanced_part("underbody_panel.glb")
 
 # -----------------------------------------------------------------------------
-# 5. MASTER EXECUTION PIPELINE
+# 5. STAGE ASSEMBLIES & COMPLETE VEHICLE COMPILATION
+# -----------------------------------------------------------------------------
+
+MODULAR_PARTS_DIR = os.path.join(PROJECT_ROOT, "public", "models", "modular_parts")
+AERO_DIR = os.path.join(PROJECT_ROOT, "public", "models", "aero")
+
+def assemble_stage_glbs():
+    """Assembles modular stage GLBs in public/models/modular_parts/ and syncs with public/models/aero/."""
+    print("\n=======================================================")
+    print("  ASSEMBLING MODULAR STAGES & SYNCING AERO STUDIO GLBS")
+    print("=======================================================")
+    os.makedirs(MODULAR_PARTS_DIR, exist_ok=True)
+    os.makedirs(AERO_DIR, exist_ok=True)
+
+    # 1. Exterior Panels Stage
+    reset_clean_scene()
+    ext_panels = [
+        "hood.glb", "front_bumper.glb", "rear_bumper.glb",
+        "front_left_fender.glb", "front_right_fender.glb",
+        "front_left_door.glb", "front_right_door.glb",
+        "rear_left_door.glb", "rear_right_door.glb",
+        "roof_panel.glb", "trunk.glb",
+        "rear_quarter_left.glb", "rear_quarter_right.glb",
+        "grille.glb", "mirror_left.glb", "mirror_right.glb"
+    ]
+    for p in ext_panels:
+        fpath = os.path.join(TARGET_DIR, p)
+        if os.path.exists(fpath):
+            bpy.ops.import_scene.gltf(filepath=fpath)
+    out_ext = os.path.join(MODULAR_PARTS_DIR, "exterior_panels.glb")
+    bpy.ops.export_scene.gltf(filepath=out_ext, export_format='GLB', export_apply=True, export_yup=True)
+    print(f"  [STAGE] Exported exterior_panels.glb ({os.path.getsize(out_ext)/1024:.1f} KB)")
+
+    # 2. Lighting & Glass Stage
+    reset_clean_scene()
+    light_glass = [
+        "headlamp_left.glb", "headlamp_right.glb",
+        "tail_lamp_left.glb", "tail_lamp_right.glb",
+        "brake_light.glb", "indicators.glb",
+        "windshield.glb",
+        "side_window_front_left.glb", "side_window_front_right.glb",
+        "side_window_rear_left.glb", "side_window_rear_right.glb",
+        "rear_glass.glb"
+    ]
+    for p in light_glass:
+        fpath = os.path.join(TARGET_DIR, p)
+        if os.path.exists(fpath):
+            bpy.ops.import_scene.gltf(filepath=fpath)
+    out_lg = os.path.join(MODULAR_PARTS_DIR, "lighting_glass.glb")
+    bpy.ops.export_scene.gltf(filepath=out_lg, export_format='GLB', export_apply=True, export_yup=True)
+    print(f"  [STAGE] Exported lighting_glass.glb ({os.path.getsize(out_lg)/1024:.1f} KB)")
+
+    # 3. Aerodynamics Stage
+    reset_clean_scene()
+    aero_parts = [
+        "front_splitter.glb", "front_canard.glb", "side_skirt.glb",
+        "diffuser.glb", "rear_wing.glb", "rear_spoiler.glb",
+        "active_aero.glb", "underbody_panel.glb"
+    ]
+    for p in aero_parts:
+        fpath = os.path.join(TARGET_DIR, p)
+        if os.path.exists(fpath):
+            bpy.ops.import_scene.gltf(filepath=fpath)
+    out_aero = os.path.join(MODULAR_PARTS_DIR, "aerodynamics.glb")
+    bpy.ops.export_scene.gltf(filepath=out_aero, export_format='GLB', export_apply=True, export_yup=True)
+    print(f"  [STAGE] Exported aerodynamics.glb ({os.path.getsize(out_aero)/1024:.1f} KB)")
+
+    # 4. Synchronize calibrated aero parts to public/models/aero/
+    aero_sync = [
+        ("rear_wing.glb", ["AERO_REAR_WING_001.glb", "aero_rear_wing.glb"]),
+        ("rear_spoiler.glb", ["AERO_REAR_SPOILER_001.glb", "aero_rear_spoiler.glb"]),
+        ("front_splitter.glb", ["AERO_FRONT_SPLITTER_001.glb", "aero_front_splitter.glb"]),
+        ("front_canard.glb", ["AERO_CANARD_001.glb", "aero_canards.glb"]),
+        ("side_skirt.glb", ["AERO_SIDE_SKIRT_001.glb", "aero_side_skirts.glb"]),
+        ("diffuser.glb", ["AERO_DIFFUSER_001.glb", "aero_diffuser.glb"]),
+        ("underbody_panel.glb", ["AERO_UNDERBODY_001.glb", "aero_underbody.glb"]),
+        ("active_aero.glb", ["AERO_ACTIVE_AERO_001.glb", "aero_active_aero.glb"]),
+    ]
+    for src_name, targets in aero_sync:
+        src_path = os.path.join(TARGET_DIR, src_name)
+        if os.path.exists(src_path):
+            for t in targets:
+                dest = os.path.join(AERO_DIR, t)
+                import shutil
+                shutil.copyfile(src_path, dest)
+                print(f"  [AERO SYNC] {src_name} -> {t}")
+
+
+def assemble_complete_vehicle():
+    """
+    Compiles the unified complete executive sedan GLB without spoilers/wings.
+    Pure Class-A automotive hardware architecture.
+    """
+    reset_clean_scene()
+    print("\n=======================================================")
+    print("  ASSEMBLING UNIFIED CLASS-A COMPLETE EXECUTIVE SEDAN")
+    print("=======================================================")
+    
+    parts_to_assemble = [
+        # 1. Platform & Chassis
+        os.path.join(MODULAR_PARTS_DIR, "chassis_sedan.glb"),
+        # 2. Powertrain V8
+        os.path.join(TARGET_DIR, "engine_block.glb"),
+        os.path.join(TARGET_DIR, "cylinder_heads.glb"),
+        os.path.join(TARGET_DIR, "intake_plenum.glb"),
+        os.path.join(TARGET_DIR, "exhaust_headers.glb"),
+        os.path.join(TARGET_DIR, "turbochargers.glb"),
+        # 3. Drivetrain & Gearbox
+        os.path.join(TARGET_DIR, "transmission.glb"),
+        os.path.join(TARGET_DIR, "driveshaft.glb"),
+        os.path.join(TARGET_DIR, "differential.glb"),
+        # 4. Suspension
+        os.path.join(TARGET_DIR, "suspension_wishbones_front.glb"),
+        os.path.join(TARGET_DIR, "suspension_wishbones_rear.glb"),
+        os.path.join(TARGET_DIR, "coilovers.glb"),
+        os.path.join(TARGET_DIR, "antiroll_bars.glb"),
+        os.path.join(TARGET_DIR, "steering_rack.glb"),
+        # 5. Brakes
+        os.path.join(TARGET_DIR, "brake_rotors_front.glb"),
+        os.path.join(TARGET_DIR, "brake_rotors_rear.glb"),
+        os.path.join(TARGET_DIR, "brake_calipers.glb"),
+        # 6. Wheels & Radial Tires
+        os.path.join(TARGET_DIR, "wheel_rim_fl.glb"),
+        os.path.join(TARGET_DIR, "tire_fl.glb"),
+        os.path.join(TARGET_DIR, "wheel_rim_fr.glb"),
+        os.path.join(TARGET_DIR, "tire_fr.glb"),
+        os.path.join(TARGET_DIR, "wheel_rim_rl.glb"),
+        os.path.join(TARGET_DIR, "tire_rl.glb"),
+        os.path.join(TARGET_DIR, "wheel_rim_rr.glb"),
+        os.path.join(TARGET_DIR, "tire_rr.glb"),
+        # 7. Body Framework (BIW)
+        os.path.join(TARGET_DIR, "body_framework.glb"),
+        os.path.join(TARGET_DIR, "roof_structure.glb"),
+        os.path.join(TARGET_DIR, "a_pillar.glb"),
+        os.path.join(TARGET_DIR, "b_pillar.glb"),
+        os.path.join(TARGET_DIR, "c_pillar.glb"),
+        os.path.join(TARGET_DIR, "rear_structure.glb"),
+        os.path.join(TARGET_DIR, "wheelhouse_front.glb"),
+        os.path.join(TARGET_DIR, "wheelhouse_rear.glb"),
+        # 8. Luxury Cockpit Interior
+        os.path.join(TARGET_DIR, "dashboard.glb"),
+        os.path.join(TARGET_DIR, "steering_wheel.glb"),
+        os.path.join(TARGET_DIR, "seats.glb"),
+        os.path.join(TARGET_DIR, "center_console.glb"),
+        # 9. Sculpted Exterior Body Panels
+        os.path.join(TARGET_DIR, "hood.glb"),
+        os.path.join(TARGET_DIR, "front_bumper.glb"),
+        os.path.join(TARGET_DIR, "rear_bumper.glb"),
+        os.path.join(TARGET_DIR, "front_left_fender.glb"),
+        os.path.join(TARGET_DIR, "front_right_fender.glb"),
+        os.path.join(TARGET_DIR, "front_left_door.glb"),
+        os.path.join(TARGET_DIR, "front_right_door.glb"),
+        os.path.join(TARGET_DIR, "rear_left_door.glb"),
+        os.path.join(TARGET_DIR, "rear_right_door.glb"),
+        os.path.join(TARGET_DIR, "roof_panel.glb"),
+        os.path.join(TARGET_DIR, "trunk.glb"),
+        os.path.join(TARGET_DIR, "rear_quarter_left.glb"),
+        os.path.join(TARGET_DIR, "rear_quarter_right.glb"),
+        os.path.join(TARGET_DIR, "grille.glb"),
+        os.path.join(TARGET_DIR, "mirror_left.glb"),
+        os.path.join(TARGET_DIR, "mirror_right.glb"),
+        # 10. Optical Lighting & Glass
+        os.path.join(TARGET_DIR, "headlamp_left.glb"),
+        os.path.join(TARGET_DIR, "headlamp_right.glb"),
+        os.path.join(TARGET_DIR, "tail_lamp_left.glb"),
+        os.path.join(TARGET_DIR, "tail_lamp_right.glb"),
+        os.path.join(TARGET_DIR, "brake_light.glb"),
+        os.path.join(TARGET_DIR, "indicators.glb"),
+        os.path.join(TARGET_DIR, "windshield.glb"),
+        os.path.join(TARGET_DIR, "side_window_front_left.glb"),
+        os.path.join(TARGET_DIR, "side_window_front_right.glb"),
+        os.path.join(TARGET_DIR, "side_window_rear_left.glb"),
+        os.path.join(TARGET_DIR, "side_window_rear_right.glb"),
+        os.path.join(TARGET_DIR, "rear_glass.glb"),
+    ]
+
+    loaded = 0
+    for p in parts_to_assemble:
+        if os.path.exists(p):
+            bpy.ops.import_scene.gltf(filepath=p)
+            loaded += 1
+        else:
+            print(f"  [WARN] Missing part for assembly: {p}")
+
+    print(f"  --> Successfully imported {loaded} components into scene")
+
+    # Export to unified complete vehicle locations
+    out_targets = [
+        os.path.join(PROJECT_ROOT, "public", "models", "Car_Sedan_Complete.glb"),
+        os.path.join(PROJECT_ROOT, "public", "models", "Car_Complete.glb"),
+        os.path.join(MODULAR_PARTS_DIR, "complete_assembled_car.glb"),
+        os.path.join(PROJECT_ROOT, "exports", "Car_Sedan_Complete.glb"),
+    ]
+    
+    for dest in out_targets:
+        os.makedirs(os.path.dirname(dest), exist_ok=True)
+        bpy.ops.export_scene.gltf(
+            filepath=dest,
+            export_format='GLB',
+            use_selection=False,
+            export_apply=True,
+            export_yup=True
+        )
+        mb = os.path.getsize(dest) / (1024.0 * 1024.0)
+        print(f"  [ASSEMBLED COMPLETE] {dest} ({mb:.2f} MB)")
+
+
+# -----------------------------------------------------------------------------
+# 6. MASTER EXECUTION PIPELINE
 # -----------------------------------------------------------------------------
 UPGRADE_TASKS = [
     ("Group A: Body Panels", [
@@ -778,8 +986,6 @@ UPGRADE_TASKS = [
 ]
 
 if __name__ == "__main__":
-    total_parts = 36
-    count = 0
     print("\n" + "="*80)
     print("STARTING INTENSIVE BLENDER ENHANCEMENT FOR ALL 36 EXTERIOR COMPONENTS")
     print("="*80)
@@ -789,6 +995,13 @@ if __name__ == "__main__":
         for task in tasks:
             task()
             
+    print("\n>>> Phase 4: Compiling Modular Stage Assemblies...")
+    assemble_stage_glbs()
+
+    print("\n>>> Phase 5: Compiling Complete Vehicle (Zero-Aero Class-A Architecture)...")
+    assemble_complete_vehicle()
+
     print("\n" + "="*80)
-    print("ALL 36 EXTERIOR COMPONENTS SUCCESSFULLY UPGRADED IN-PLACE VIA BLENDER 5.2")
+    print("ALL EXTERIOR COMPONENTS & ASSEMBLED GLB SUCCESSFULLY UPGRADED VIA BLENDER 5.2")
     print("="*80 + "\n")
+

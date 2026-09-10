@@ -18,9 +18,9 @@ export type AssemblyStage =
   | "body_framework"
   | "exterior_panels"
   | "lighting_glass"
-  | "aerodynamics"
-  | "interior"
   | "complete";
+
+export type PartCategory = AssemblyStage | "aerodynamics" | "interior";
 
 export interface StageDefinition {
   id: AssemblyStage;
@@ -104,28 +104,12 @@ export const ASSEMBLY_STAGES: StageDefinition[] = [
     description: "Matrix LED projector headlights, full-width OLED taillight bar, and acoustic laminated privacy glass.",
     subComponents: ["Matrix LED Headlights", "OLED Taillight Lightbar", "Raked Windshield", "Side & Rear Glass"],
   },
-  {
-    id: "aerodynamics",
-    label: "Aerodynamics",
-    subsystemTitle: "AERODYNAMIC DOWNFORCE PACKAGE",
-    glbFilename: "aerodynamics.glb",
-    description: "Autoclaved 3K carbon-fiber track splitter, ground-effect side skirts, rear venturi diffuser, and active swan-neck wing.",
-    subComponents: ["Front Track Splitter", "Ground-Effect Side Skirts", "Rear Venturi Diffuser", "Swan-Neck Rear Wing"],
-  },
-  {
-    id: "interior",
-    label: "Interior",
-    subsystemTitle: "COCKPIT & ELECTRONICS",
-    glbFilename: "interior_cockpit.glb",
-    description: "Nappa leather dashboard, sports multifunction steering wheel, digital instrument cluster, and carbon bucket seats.",
-    subComponents: ["Leather Dashboard Pad", "Sports Steering Wheel", "Dual OLED Displays", "Carbon Bucket Seats"],
-  },
 ];
 
 export interface ModularPartItem {
   id: string;
   name: string;
-  category: AssemblyStage;
+  category: PartCategory;
   glbFilename: string;
   offset: [number, number, number];
   massKg: number;
@@ -417,8 +401,6 @@ export const useModularVehicleBuilderStore = create<ModularVehicleBuilderState>(
       "body_framework",
       "exterior_panels",
       "lighting_glass",
-      "aerodynamics",
-      "interior",
       "complete",
     ];
 

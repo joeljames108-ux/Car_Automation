@@ -6,7 +6,7 @@ import {
   AeroVisualMode,
 } from '../sim/aerodynamics/aeroStudioTypes';
 import { SurrogateAeroPhysicsEngine } from '../sim/aerodynamics/surrogateAeroPhysicsEngine';
-import { useModularVehicleBuilderStore } from './modularVehicleBuilderStore';
+import { useModularVehicleBuilderStore, getCompleteVehicleGlbPath } from './modularVehicleBuilderStore';
 
 export type AeroStudioSubTab =
   | 'frontAero'
@@ -260,39 +260,7 @@ export const VEHICLE_ARCHITECTURES: Record<VehicleArchitecture, VehicleArchitect
  * Resolves the genuine 3D binary GLB model corresponding to the vehicle produced/selected in Vehicle Studio
  */
 export function resolveHostVehicleGlb(variant: string): string {
-  const norm = (variant || '').toLowerCase().trim();
-  switch (norm) {
-    case 'sedan':
-      return '/models/vehicle_families/complete/sedan_complete.glb';
-    case 'coupe':
-      return '/models/vehicle_families/complete/coupe_complete.glb';
-    case 'suv':
-      return '/models/vehicles/suv/complete-suv.glb';
-    case 'hatchback':
-      return '/models/vehicles/hatchback/complete-hatchback.glb';
-    case 'crossover':
-      return '/models/vehicles/crossover/complete-crossover.glb';
-    case 'wagon':
-    case 'station_wagon':
-      return '/models/vehicle_families/complete/station_wagon_complete.glb';
-    case 'shooting_brake':
-      return '/models/vehicle_families/complete/shooting_brake_complete.glb';
-    case 'pickup':
-    case 'pickup_truck':
-      return '/models/vehicle_families/complete/pickup_truck_complete.glb';
-    case 'hypercar':
-      return '/models/vehicle_families/complete/hypercar_complete.glb';
-    case 'supercar':
-    case 'gt3_supercar':
-      return '/models/vehicles/gt3_supercar/complete-gt3_supercar.glb';
-    case 'offroad':
-    case 'offroad_4x4':
-      return '/models/vehicle_families/complete/offroad_4x4_complete.glb';
-    case 'dune_buggy':
-      return '/models/vehicle_families/complete/dune_buggy_complete.glb';
-    default:
-      return '/models/vehicle_families/complete/sedan_complete.glb';
-  }
+  return getCompleteVehicleGlbPath(variant);
 }
 
 export interface CameraViewDef {

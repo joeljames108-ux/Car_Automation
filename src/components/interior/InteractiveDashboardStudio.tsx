@@ -15,7 +15,7 @@
  * ============================================================================
  */
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import {
   Compass,
   Sliders,
@@ -38,6 +38,7 @@ import {
   Redo2,
   Shuffle,
   Eye,
+  EyeOff,
   FileCode2,
   Zap,
   DollarSign,
@@ -53,7 +54,24 @@ import {
   Plane,
   X,
   ChevronDown,
+  Users,
+  Wrench,
+  Shield,
+  Check,
+  ArrowRight,
 } from "lucide-react";
+import {
+  useModularVehicleBuilderStore,
+  MODULAR_CAR_PARTS,
+} from "../../state/modularVehicleBuilderStore";
+import {
+  calculateVanInteriorVolume,
+  BODY_TYPE_REGISTRY,
+} from "../../sim/modularVehicle/vehicleFamilyArchitecture";
+import type {
+  VanSeatConfig,
+  VehicleBodyTypeId,
+} from "../../sim/modularVehicle/types";
 import {
   useInteriorDashboardConfigStore,
   type SteeringWheelStyle,
@@ -84,10 +102,12 @@ import { playHMIClickSound, playHMITabSound } from "../../utils/hmiSoundSynth";
 
 export interface InteractiveDashboardStudioProps {
   initialWorkspaceMode?: "hardware" | "avionics" | "split";
+  onSelectStage?: (stage: string) => void;
 }
 
 export const InteractiveDashboardStudio: React.FC<InteractiveDashboardStudioProps> = ({
   initialWorkspaceMode = "hardware",
+  onSelectStage,
 }) => {
   const { updateInterior, updateInfotainment, design } = useDesign();
   const [workspaceMode, setWorkspaceMode] = useState<"hardware" | "avionics" | "split">(
@@ -170,6 +190,22 @@ export const InteractiveDashboardStudio: React.FC<InteractiveDashboardStudioProp
   const randomize = useInteriorDashboardConfigStore((s) => s.randomize);
   const exportConfigJson = useInteriorDashboardConfigStore((s) => s.exportConfigJson);
   const importConfigJson = useInteriorDashboardConfigStore((s) => s.importConfigJson);
+
+  // Modular Vehicle Architecture & Interior CAD state
+  const vanSeatConfig = useModularVehicleBuilderStore((s) => s.vanSeatConfig);
+  const setVanSeatConfig = useModularVehicleBuilderStore((s) => s.setVanSeatConfig);
+  const chassisArch = useModularVehicleBuilderStore((s) => s.chassisArch);
+  const setChassisArch = useModularVehicleBuilderStore((s) => s.setChassisArch);
+  const materialGrade = useModularVehicleBuilderStore((s) => s.materialGrade);
+  const setMaterialGrade = useModularVehicleBuilderStore((s) => s.setMaterialGrade);
+  const selectedModel = useModularVehicleBuilderStore((s) => s.selectedModel);
+  const togglePartVisibility = useModularVehicleBuilderStore((s) => s.togglePartVisibility);
+  const isPartVisible = useModularVehicleBuilderStore((s) => s.isPartVisible);
+
+  const vanVolume = useMemo(() => calculateVanInteriorVolume(vanSeatConfig), [vanSeatConfig]);
+  const activeModelSpec = BODY_TYPE_REGISTRY[selectedModel as VehicleBodyTypeId] || BODY_TYPE_REGISTRY["sedan"];
+  const interiorParts = useMemo(() => MODULAR_CAR_PARTS.filter((p) => p.category === "interior"), []);
+  const totalInteriorMass = useMemo(() => interiorParts.reduce((acc, p) => acc + p.massKg, 0), [interiorParts]);
 
   // Keyboard Shortcuts Handler
   useEffect(() => {
@@ -449,13 +485,13 @@ export const InteractiveDashboardStudio: React.FC<InteractiveDashboardStudioProp
               </div>
             )}
 
-            {/* Optional Floating HUD Overlay Drawer: Interior Configuration (Steppers) */}
+            {/* Optional Floating HUD Overlay Drawer: Interior Configuration Studio */}
             {showRightControls && (
-              <div className="absolute top-0 bottom-0 right-0 z-30 w-[340px] max-w-[90vw] h-full shadow-2xl bg-slate-900/95 backdrop-blur-xl border-l border-slate-700/80 flex flex-col animate-fade-in">
+              <div className="absolute top-0 bottom-0 right-0 z-30 w-[420px] max-w-[92vw] h-full shadow-2xl bg-slate-900/95 backdrop-blur-xl border-l border-slate-700/80 flex flex-col animate-fade-in">
                 <div className="flex items-center justify-between px-3 py-2 bg-slate-800/80 border-b border-slate-700">
-                  <div className="flex items-center gap-1.5 text-xs font-mono font-bold text-cyan-400">
+                  <div className="flex items-center gap-1.5 text-xs font-mono font-bold text-red-400">
                     <SlidersHorizontal size={14} />
-                    <span>INTERIOR CONFIGURATION (HUD)</span>
+                    <span>INTERIOR CONFIGURATION</span>
                   </div>
                   <button
                     type="button"
@@ -466,11 +502,335 @@ export const InteractiveDashboardStudio: React.FC<InteractiveDashboardStudioProp
                     <X size={14} />
                   </button>
                 </div>
-                <div className="flex-1 overflow-y-auto">
-                  <InteriorConfigControls theme="dark" className="border-none shadow-none" />
+                <div className="flex-1 overflow-y-auto p-2">
+                  <InteriorConfigControls theme="dark" className="border-none shadow-none bg-transparent" />
                 </div>
               </div>
             )}
+          </div>
+        </div>
+      </div>
+
+      {/* =====================================================================
+          ACTIVE SUBSYSTEM NODE: INTERIOR WITH GREEN INSTALL BUTTON
+          ===================================================================== */}
+      <div className="flex flex-col sm:flex-row items-center justify-between gap-4 py-2 px-3">
+        <div className="flex items-center gap-3">
+          <div className="w-3 h-3 rounded-full bg-amber-500 animate-pulse" />
+          <div>
+            <span className="text-xs font-bold text-slate-400 uppercase tracking-widest font-mono">
+              ACTIVE SUBSYSTEM NODE:
+            </span>
+            <h2 className="text-xl md:text-2xl font-black text-slate-100 tracking-wider uppercase font-mono">
+              INTERIOR
+            </h2>
+          </div>
+        </div>
+
+        <button
+          type="button"
+          onClick={() => {
+            playHMITabSound();
+            setSaveToast(true);
+            setTimeout(() => setSaveToast(false), 3000);
+            if (onSelectStage) {
+              onSelectStage("safety");
+            }
+          }}
+          className="group relative px-8 py-3.5 rounded-2xl bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-400 hover:to-green-500 text-slate-950 font-black text-sm tracking-wider uppercase shadow-[0_0_30px_rgba(16,185,129,0.5)] transition-all transform hover:scale-[1.03] active:scale-[0.98] cursor-pointer flex items-center gap-3 border-2 border-emerald-300"
+        >
+          <Check size={18} strokeWidth={3} />
+          <span>INSTALL AND NEXT</span>
+          <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
+        </button>
+      </div>
+
+      {/* =====================================================================
+          VAN / MPV MODULAR INTERIOR SEATING ARCHITECTURE DECK
+          ===================================================================== */}
+      <div className="p-4 rounded-2xl border-2 border-emerald-500/60 bg-gradient-to-r from-emerald-950/40 via-slate-900/90 to-slate-950 shadow-xl space-y-3 font-mono">
+        <div className="flex items-center justify-between flex-wrap gap-2">
+          <div className="flex items-center gap-2">
+            <Users size={18} className="text-emerald-400" />
+            <h3 className="text-xs font-black uppercase text-emerald-300 tracking-wider">
+              VAN / MPV MODULAR INTERIOR SEATING ARCHITECTURE
+            </h3>
+          </div>
+          <div className="flex items-center gap-3 text-xs">
+            <span className="text-slate-400">
+              Cargo Volume: <strong className="text-emerald-400 text-sm">{vanVolume.cargoVolumeL} L</strong>
+            </span>
+            <span className="text-slate-600">|</span>
+            <span className="text-slate-400">
+              Payload: <strong className="text-slate-200">{vanVolume.floorPayloadKg} kg</strong>
+            </span>
+          </div>
+        </div>
+
+        <div className="flex items-center gap-2 flex-wrap">
+          {(["2_seat_cargo", "5_seat", "7_seat", "8_seat", "9_seat"] as VanSeatConfig[]).map((cfg) => {
+            const isSelected = vanSeatConfig === cfg;
+            const labels: Record<VanSeatConfig, string> = {
+              "2_seat_cargo": "2 SEAT CARGO",
+              "5_seat": "5 SEAT",
+              "7_seat": "7 SEAT",
+              "8_seat": "8 SEAT",
+              "9_seat": "9 SEAT",
+            };
+            return (
+              <button
+                key={cfg}
+                type="button"
+                onClick={() => {
+                  playHMIClickSound();
+                  setVanSeatConfig(cfg);
+                }}
+                className={`px-4 py-2 rounded-xl text-xs font-black tracking-wider border transition-all cursor-pointer shadow-md ${
+                  isSelected
+                    ? "bg-emerald-500 text-slate-950 border-emerald-300 shadow-[0_0_15px_rgba(16,185,129,0.4)] scale-105"
+                    : "bg-slate-950 text-slate-300 border-slate-800 hover:text-white hover:bg-slate-900"
+                }`}
+              >
+                {labels[cfg]}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* =====================================================================
+          BOTTOM BLACK-OUTLINED BOX: ALL CONFIGURATIONS RELATED TO INTERIOR
+          ===================================================================== */}
+      <div className="rounded-2xl border-4 border-slate-700/90 bg-slate-950/95 shadow-2xl p-6 select-none font-mono space-y-4">
+        <div className="border-b border-slate-800 pb-3 flex items-center justify-between flex-wrap gap-2">
+          <div className="flex items-center gap-2 text-xs font-bold text-slate-300 uppercase tracking-wider">
+            <Wrench size={14} className="text-cyan-400" />
+            <span>ALL CONFIGURATIONS RELATED TO INTERIOR</span>
+          </div>
+          <span className="text-[10px] text-slate-500 uppercase font-mono">
+            ACTIVE ARCHITECTURE: {activeModelSpec.name.toUpperCase()}
+          </span>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {/* COLUMN 1: STRUCTURAL ARCHITECTURE */}
+          <div className="space-y-3 p-4 rounded-xl bg-slate-900/60 border border-slate-800/80">
+            <div className="flex items-center gap-2">
+              <Shield size={16} className="text-cyan-400" />
+              <h3 className="text-xs font-extrabold uppercase tracking-wider text-slate-200">
+                STRUCTURAL ARCHITECTURE
+              </h3>
+            </div>
+            <p className="text-[11px] text-slate-400 leading-relaxed font-sans">
+              Select geometric topology and structural framework archetype.
+            </p>
+
+            <div className="space-y-2 pt-1">
+              {[
+                {
+                  id: "monocoque",
+                  label: "High-Rigidity Monocoque",
+                  desc: "Integrated structural shell with optimized load paths.",
+                  stiffness: "+42 kNm/deg",
+                },
+                {
+                  id: "spaceframe",
+                  label: "Extruded Aluminum Spaceframe",
+                  desc: "Modular nodes with hollow tubular longitudinal extrusions.",
+                  stiffness: "+36 kNm/deg",
+                },
+                {
+                  id: "carbon_tub",
+                  label: "Autoclaved Carbon Tub",
+                  desc: "Single-piece pre-preg carbon safety tub for hypercar rigidity.",
+                  stiffness: "+58 kNm/deg",
+                },
+              ].map((opt) => {
+                const isSelected = chassisArch === opt.id;
+                return (
+                  <button
+                    key={opt.id}
+                    type="button"
+                    onClick={() => {
+                      playHMIClickSound();
+                      setChassisArch(opt.id);
+                    }}
+                    className={`w-full text-left p-3 rounded-lg border transition-all cursor-pointer flex flex-col gap-0.5 ${
+                      isSelected
+                        ? "bg-cyan-500/15 border-cyan-400/80 text-cyan-200 shadow-sm"
+                        : "bg-slate-950/60 border-slate-800 text-slate-400 hover:text-slate-200 hover:border-slate-700"
+                    }`}
+                  >
+                    <div className="flex items-center justify-between text-xs font-bold">
+                      <span className="text-slate-200">{opt.label}</span>
+                      <span className="text-[10px] text-cyan-400 font-mono">{opt.stiffness}</span>
+                    </div>
+                    <p className="text-[10px] text-slate-500 leading-tight font-sans">{opt.desc}</p>
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* COLUMN 2: MATERIAL GRADE */}
+          <div className="space-y-3 p-4 rounded-xl bg-slate-900/60 border border-slate-800/80">
+            <div className="flex items-center gap-2">
+              <Layers size={16} className="text-amber-400" />
+              <h3 className="text-xs font-extrabold uppercase tracking-wider text-slate-200">
+                MATERIAL GRADE
+              </h3>
+            </div>
+            <p className="text-[11px] text-slate-400 leading-relaxed font-sans">
+              Material alloy specifies density, tensile strength, and mass.
+            </p>
+
+            <div className="space-y-2 pt-1">
+              {[
+                {
+                  id: "stamped_steel",
+                  name: "Stamped Steel",
+                  massDelta: "Mass: Baseline",
+                  rigidityDelta: "Stiffness: Baseline",
+                  cost: "$",
+                },
+                {
+                  id: "cast_aluminum",
+                  name: "Die-Cast Aluminum Alloy",
+                  massDelta: "Mass: -15%",
+                  rigidityDelta: "Stiffness: +6 kNm/°",
+                  cost: "$$",
+                },
+                {
+                  id: "extruded_aluminum",
+                  name: "Compacted Graphite / CNC Billet",
+                  massDelta: "Mass: -25%",
+                  rigidityDelta: "Stiffness: +14 kNm/°",
+                  cost: "$$$",
+                },
+                {
+                  id: "carbon_composite",
+                  name: "Titanium & Pre-Preg Carbon",
+                  massDelta: "Mass: -40%",
+                  rigidityDelta: "Stiffness: +22 kNm/°",
+                  cost: "$$$$$",
+                },
+              ].map((mat) => {
+                const isSelected = materialGrade === mat.id;
+                return (
+                  <div
+                    key={mat.id}
+                    onClick={() => {
+                      playHMIClickSound();
+                      setMaterialGrade(mat.id);
+                    }}
+                    className={`p-2.5 rounded-lg border transition-all cursor-pointer ${
+                      isSelected
+                        ? "bg-amber-500/20 border-amber-400 text-slate-100 shadow-sm"
+                        : "bg-slate-950/60 border-slate-800 text-slate-400 hover:text-slate-200 hover:border-slate-700"
+                    }`}
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-bold">{mat.name}</span>
+                      <span className="text-[10px] font-bold text-amber-400">{mat.cost}</span>
+                    </div>
+                    <div className="flex items-center gap-3 text-[10px] text-slate-400 mt-1">
+                      <span>{mat.massDelta}</span>
+                      <span>{mat.rigidityDelta}</span>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* COLUMN 3: ECONOMICS & STATS + MODULAR CAD COMPONENTS */}
+          <div className="space-y-4 p-4 rounded-xl bg-slate-900/60 border border-slate-800/80 flex flex-col justify-between">
+            <div>
+              <div className="flex items-center gap-2 mb-2">
+                <Gauge size={16} className="text-emerald-400" />
+                <h3 className="text-xs font-extrabold uppercase tracking-wider text-slate-200">
+                  ECONOMICS & STATS
+                </h3>
+              </div>
+
+              {/* Real-time Engineering Metrics */}
+              <div className="grid grid-cols-2 gap-2 text-[11px] mb-4">
+                <div className="p-2 rounded-lg bg-slate-950 border border-slate-800">
+                  <div className="text-slate-500 text-[9px]">SUB-MASS</div>
+                  <div className="font-bold text-slate-200">{totalInteriorMass.toFixed(1)} kg</div>
+                </div>
+                <div className="p-2 rounded-lg bg-slate-950 border border-slate-800">
+                  <div className="text-slate-500 text-[9px]">RIGIDITY</div>
+                  <div className="font-bold text-emerald-400">46.2 kNm/°</div>
+                </div>
+                <div className="p-2 rounded-lg bg-slate-950 border border-slate-800">
+                  <div className="text-slate-500 text-[9px]">DRAG COEFF</div>
+                  <div className="font-bold text-amber-400">Cd {activeModelSpec.aerodynamicBaseline.cd.toFixed(2)}</div>
+                </div>
+                <div className="p-2 rounded-lg bg-slate-950 border border-slate-800">
+                  <div className="text-slate-500 text-[9px]">DISCRETE CAD NODES</div>
+                  <div className="font-bold text-cyan-400">{interiorParts.length} PARTS</div>
+                </div>
+              </div>
+
+              {/* Modular CAD Components Checklist with Eye Toggle */}
+              <div className="pt-2 border-t border-slate-800">
+                <div className="text-[10px] font-extrabold text-slate-400 mb-2 uppercase flex items-center justify-between">
+                  <div className="flex items-center gap-1.5">
+                    <Cpu size={12} className="text-cyan-400" />
+                    <span>MODULAR CAD COMPONENTS ({interiorParts.length})</span>
+                  </div>
+                  <span className="text-[9px] text-slate-500">EYE: HIDE / INSPECT</span>
+                </div>
+                <div className="space-y-1.5 max-h-56 overflow-y-auto pr-1 no-scrollbar">
+                  {interiorParts.map((part) => {
+                    const visible = isPartVisible(part.id);
+                    return (
+                      <div
+                        key={part.id}
+                        className={`flex items-center justify-between p-2 rounded-lg border transition-all text-[11px] select-none ${
+                          visible
+                            ? "bg-slate-850/80 border-slate-800 text-slate-200"
+                            : "bg-slate-900/40 border-slate-800/40 text-slate-600 opacity-60"
+                        }`}
+                      >
+                        <div className="flex items-center gap-2 overflow-hidden">
+                          <button
+                            type="button"
+                            onClick={() => {
+                              playHMIClickSound();
+                              togglePartVisibility(part.id);
+                            }}
+                            className={`p-1 rounded cursor-pointer transition-colors ${
+                              visible
+                                ? "text-cyan-400 hover:text-cyan-300 hover:bg-slate-800"
+                                : "text-slate-600 hover:text-slate-400"
+                            }`}
+                            title={visible ? "Hide Part in 3D CAD" : "Show Part in 3D CAD"}
+                          >
+                            {visible ? <Eye size={13} /> : <EyeOff size={13} />}
+                          </button>
+                          <div className="truncate">
+                            <span className="font-semibold">{part.name}</span>
+                            <div className="text-[9px] text-slate-400">{part.material}</div>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-2 shrink-0">
+                          <span className="font-bold text-slate-300">{part.massKg.toFixed(1)} kg</span>
+                          <CheckCircle2 size={12} className="text-emerald-400" />
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+
+            {/* Status Footer */}
+            <div className="text-[10px] text-slate-400 pt-2 border-t border-slate-800 flex items-center justify-between">
+              <span>ZERO-OFFSET CAD SNAP</span>
+              <span className="text-emerald-400 font-bold">✓ VERIFIED</span>
+            </div>
           </div>
         </div>
       </div>
@@ -479,26 +839,26 @@ export const InteractiveDashboardStudio: React.FC<InteractiveDashboardStudioProp
       {/* COCKPIT CONFIGURATION & ERGONOMICS OVERVIEW (DEDICATED DECK)  */}
       {/* ───────────────────────────────────────────────────────────── */}
       <div id="interior-options-deck" className="grid grid-cols-1 lg:grid-cols-2 gap-4 w-full">
-        {/* Left Card: Interior Configuration Steppers */}
+        {/* Left Card: Interior Configuration Studio Tiles */}
         <div className="p-4 rounded-2xl bg-slate-900/95 border border-slate-800 shadow-xl flex flex-col gap-3">
           <div className="flex items-center justify-between pb-2 border-b border-slate-800">
             <div className="flex items-center gap-2">
-              <div className="p-2 rounded-xl bg-cyan-500/20 text-cyan-400 border border-cyan-500/30">
+              <div className="p-2 rounded-xl bg-red-500/20 text-red-400 border border-red-500/30">
                 <SlidersHorizontal size={16} />
               </div>
               <div>
                 <h3 className="text-xs font-black tracking-wider uppercase text-slate-100 font-mono">
-                  INTERIOR CONFIGURATION
+                  INTERIOR CONFIGURATION (10 ARCHITECTURE MODULES)
                 </h3>
                 <p className="text-[11px] text-slate-400">Dashboard, instruments, center display, steering & upholstery</p>
               </div>
             </div>
-            <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-cyan-500/15 text-cyan-300 border border-cyan-500/30">
-              STEPPERS
+            <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-red-500/15 text-red-300 border border-red-500/30">
+              STUDIO TILES
             </span>
           </div>
-          <div className="max-h-[580px] overflow-y-auto rounded-xl border border-slate-800/60 bg-slate-950/60">
-            <InteriorConfigControls theme="dark" className="border-none shadow-none" />
+          <div className="max-h-[640px] overflow-y-auto rounded-xl border border-slate-800/60 bg-slate-950/60 p-2">
+            <InteriorConfigControls theme="dark" className="border-none shadow-none p-1 bg-transparent" />
           </div>
         </div>
 
@@ -1199,6 +1559,41 @@ export const InteractiveDashboardStudio: React.FC<InteractiveDashboardStudioProp
                   {st}
                 </button>
               ))}
+            </div>
+          </div>
+
+          {/* 2b. Van / MPV Multi-Passenger Seating Architecture */}
+          <div className="p-3 rounded-xl border border-emerald-500/40 bg-emerald-950/20 space-y-2">
+            <div className="flex items-center justify-between">
+              <label className="text-[11px] font-bold text-emerald-300 uppercase tracking-wider flex items-center gap-1.5">
+                <Users size={13} className="text-emerald-400" />
+                2b. Modular Van / MPV Seating Architecture
+              </label>
+              <span className="text-[10px] font-mono text-emerald-400">
+                Cargo: <strong>{vanVolume.cargoVolumeL} L</strong>
+              </span>
+            </div>
+            <div className="flex items-center gap-1.5 flex-wrap">
+              {(["2_seat_cargo", "5_seat", "7_seat", "8_seat", "9_seat"] as VanSeatConfig[]).map((cfg) => {
+                const isSelected = vanSeatConfig === cfg;
+                return (
+                  <button
+                    key={cfg}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      playHMIClickSound();
+                      setVanSeatConfig(cfg);
+                    }}
+                    className={`px-2.5 py-1 rounded-lg text-[10px] font-bold border transition-all cursor-pointer ${
+                      isSelected
+                        ? "bg-emerald-500 text-slate-950 border-emerald-300 shadow-md font-black"
+                        : "bg-slate-900/80 text-slate-300 border-slate-700/80 hover:border-emerald-500/50"
+                    }`}
+                  >
+                    {cfg.replace(/_/g, " ").toUpperCase()}
+                  </button>
+                );
+              })}
             </div>
           </div>
 

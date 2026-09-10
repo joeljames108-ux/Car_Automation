@@ -34,19 +34,13 @@ import {
 } from "../../state/aeroStudioStore";
 import { useModularVehicleBuilderStore } from "../../state/modularVehicleBuilderStore";
 
-// Dedicated list of modular aerodynamic surface attachments
+// Dedicated list of genuine modular aerodynamic additions (mounted to host vehicle hardpoints)
 const AERO_ATTACHMENT_GLB_ASSETS = [
   { id: "rearWing", path: "/models/aero/AERO_REAR_WING_001.glb", name: "Rear Wing Assembly" },
   { id: "rearSpoiler", path: "/models/aero/AERO_REAR_SPOILER_001.glb", name: "Rear Pedestal Spoiler" },
-  { id: "frontSplitter", path: "/models/aero/AERO_FRONT_SPLITTER_001.glb", name: "Front Splitter" },
+  { id: "frontSplitter", path: "/models/aero/AERO_FRONT_SPLITTER_001.glb", name: "Front Track Splitter" },
   { id: "canards", path: "/models/aero/AERO_CANARD_001.glb", name: "Canard Dive Planes" },
-  { id: "sideSkirts", path: "/models/aero/AERO_SIDE_SKIRT_001.glb", name: "Side Skirt Blades" },
-  { id: "diffuser", path: "/models/aero/AERO_DIFFUSER_001.glb", name: "Underbody Diffuser" },
-  { id: "underbodyFloor", path: "/models/aero/AERO_UNDERBODY_001.glb", name: "Underbody Venturi Floor" },
   { id: "activeAero", path: "/models/aero/AERO_ACTIVE_AERO_001.glb", name: "Active Aero System" },
-  { id: "roofAero", path: "/models/aero/AERO_ROOF_AERO_001.glb", name: "Roof Shark Fin & VGs" },
-  { id: "coolingAero", path: "/models/aero/AERO_COOLING_AERO_001.glb", name: "Cooling Louvers & Ducts" },
-  { id: "wheelAero", path: "/models/aero/AERO_WHEEL_AERO_001.glb", name: "Turbofan Wheel Discs" },
 ];
 
 export const AeroStudioCanvasViewport: React.FC = () => {
@@ -73,6 +67,8 @@ export const AeroStudioCanvasViewport: React.FC = () => {
   const setVehicleVariant = useAeroStudioStore((s) => s.setVehicleVariant);
   const modularModel = useModularVehicleBuilderStore((s) => s.selectedModel);
   const bodyColorHex = useModularVehicleBuilderStore((s) => s.bodyColorHex);
+  const activeWingAngleDeg = useModularVehicleBuilderStore((s) => s.activeWingAngleDeg);
+  const drsActive = useModularVehicleBuilderStore((s) => s.drsActive);
 
   // Auto-sync variant with Vehicle Studio model choice if changed
   useEffect(() => {
@@ -592,17 +588,19 @@ export const AeroStudioCanvasViewport: React.FC = () => {
     if (nodes.size === 0) return;
 
     // 1. REAR WING & REAR SPOILER
-    const mainPlane = nodes.get("RearWing_MainPlane");
+    const effectiveAngle = drsActive ? -10 : (activeWingAngleDeg || config.rearWing.angleOfAttackDeg);
+    const mainPlane = nodes.get("RearWing_MainPlane") || nodes.get("AERO_WING_AIRFOIL");
     if (mainPlane) {
       // In Blender, airfoil points -Y rearward. Pitching down increases downforce:
-      mainPlane.rotation.x = -THREE.MathUtils.degToRad(config.rearWing.angleOfAttackDeg);
+      mainPlane.rotation.x = -THREE.MathUtils.degToRad(effectiveAngle);
       const spanScale = config.rearWing.spanMm / 1650;
       mainPlane.scale.x = spanScale;
     }
 
     const upperElement = nodes.get("RearWing_UpperElement");
     if (upperElement) {
-      upperElement.rotation.x = -THREE.MathUtils.degToRad(config.rearWing.angleOfAttackDeg * 1.32);
+      const flapPitch = drsActive ? 0.08 : -THREE.MathUtils.degToRad(effectiveAngle * 1.32);
+      upperElement.rotation.x = flapPitch;
       upperElement.scale.x = config.rearWing.spanMm / 1650;
     }
 
@@ -614,12 +612,12 @@ export const AeroStudioCanvasViewport: React.FC = () => {
 
     const wingRoot = nodes.get("RearWing_Root");
     if (wingRoot) {
-      const heightOffset = (config.rearWing.heightMm - 260) / 1000;
+      const heightOffset = Math.max(0, (config.rearWing.heightMm - 260) / 1000);
       wingRoot.position.y = heightOffset;
     }
 
     // Rear Spoiler
-    const spoilerBlade = nodes.get("RearSpoiler_Blade");
+    const spoilerBlade = nodes.get("RearSpoiler_Blade") || nodes.get("AERO_DUCKTAIL_BLADE");
     if (spoilerBlade) {
       spoilerBlade.rotation.x = -THREE.MathUtils.degToRad(rearSpoilerAngleDeg);
       spoilerBlade.scale.x = rearSpoilerWidthMm / 1350;
@@ -630,7 +628,7 @@ export const AeroStudioCanvasViewport: React.FC = () => {
     }
     const spoilerRoot = nodes.get("RearSpoiler_Root");
     if (spoilerRoot) {
-      spoilerRoot.position.y = (rearSpoilerHeightMm - 110) / 1000;
+      spoilerRoot.position.y = Math.max(0, (rearSpoilerHeightMm - 110) / 1000);
     }
 
     // Rear Wing vs Rear Spoiler mutual visibility
@@ -647,21 +645,30 @@ export const AeroStudioCanvasViewport: React.FC = () => {
     }
 
     // 2. FRONT SPLITTER
-    const splitterBlade = nodes.get("FrontSplitter_Blade");
+    const splitterBlade = nodes.get("FrontSplitter_Blade") || nodes.get("AERO_TRACK_SPLITTER_TRAY");
     const extOffset = (config.frontWing.mainChordMm - 320) / 1000;
     if (splitterBlade) {
-      splitterBlade.position.z = -2.30 - extOffset;
       splitterBlade.rotation.x = THREE.MathUtils.degToRad(config.frontWing.flapAngleDeg * 0.4);
     }
 
-    const tieRodsL = nodes.get("FrontSplitter_TieRods_L");
-    const tieRodsR = nodes.get("FrontSplitter_TieRods_R");
+    const frontSplitterGroup = assetGroupsMapRef.current.get("frontSplitter");
+    if (frontSplitterGroup) {
+      frontSplitterGroup.visible = selectedComponent === "frontSplitter" || activeSubTab === "frontAero";
+    }
+
+    const tieRodsL = nodes.get("FrontSplitter_TieRods_L") || nodes.get("SPLITTER_TIEROD_0.45");
+    const tieRodsR = nodes.get("FrontSplitter_TieRods_R") || nodes.get("SPLITTER_TIEROD_-0.45");
     if (tieRodsL && tieRodsR) {
       tieRodsL.visible = splitterTieRodsVisible;
       tieRodsR.visible = splitterTieRodsVisible;
     }
 
     // 3. CANARDS / DIVE PLANES
+    const canardsGroup = assetGroupsMapRef.current.get("canards");
+    if (canardsGroup) {
+      canardsGroup.visible = canardTierCount >= 1 && (selectedComponent === "canards" || activeSubTab === "frontAero");
+    }
+
     const canardUpperL = nodes.get("Canards_Upper_L");
     const canardUpperR = nodes.get("Canards_Upper_R");
     if (canardUpperL && canardUpperR) {
@@ -685,46 +692,21 @@ export const AeroStudioCanvasViewport: React.FC = () => {
       bracketLowerR.visible = showLowerTier;
     }
 
-    // 4. UNDERBODY DIFFUSER & FLOOR
-    const diffuserTray = nodes.get("Diffuser_Tray");
-    if (diffuserTray) {
-      const rampOffset = config.diffuser.rampAngleDeg - 14;
-      diffuserTray.rotation.x = THREE.MathUtils.degToRad(rampOffset * 0.85);
-    }
-    for (let k = 1; k <= 4; k++) {
-      const strake = nodes.get(`Diffuser_Strake_${k}`);
-      if (strake) strake.visible = k <= config.diffuser.strakeCount;
-    }
-
-    // Underbody Floor Venturi Tunnels
-    const underbodyTunnelL = nodes.get("Underbody_VenturiTunnel_L");
-    const underbodyTunnelR = nodes.get("Underbody_VenturiTunnel_R");
-    if (underbodyTunnelL && underbodyTunnelR) {
-      const depthScale = underbodyTunnelDepthMm / 35;
-      underbodyTunnelL.scale.z = depthScale;
-      underbodyTunnelR.scale.z = depthScale;
-    }
-    for (let i = 0; i < 3; i++) {
-      const strakeL = nodes.get(`Underbody_FloorStrake_L_${i}`);
-      const strakeR = nodes.get(`Underbody_FloorStrake_R_${i}`);
-      const showStrake = i < Math.floor(underbodyFloorStrakeCount / 2);
-      if (strakeL) strakeL.visible = showStrake;
-      if (strakeR) strakeR.visible = showStrake;
+    // 4. ACTIVE AERO
+    const activeAeroGroup = assetGroupsMapRef.current.get("activeAero");
+    if (activeAeroGroup) {
+      activeAeroGroup.visible =
+        selectedComponent === "activeAero" ||
+        selectedComponent === "activeWing" ||
+        selectedComponent === "activeAirbrake" ||
+        activeAeroDeploymentPct > 0 ||
+        activeSubTab === "activeAero";
     }
 
-    // 5. ACTIVE AERO
     const activeBlade = nodes.get("Active_Wing_Blade");
     if (activeBlade) {
-      const activeAngle = 4 + (activeAeroDeploymentPct / 100) * 44;
+      const activeAngle = drsActive ? -10 : (activeWingAngleDeg || (4 + (activeAeroDeploymentPct / 100) * 44));
       activeBlade.rotation.x = -THREE.MathUtils.degToRad(activeAngle);
-    }
-
-    const activePistonL = nodes.get("Active_Actuator_Piston_L");
-    const activePistonR = nodes.get("Active_Actuator_Piston_R");
-    const pistonExtension = (activeAeroDeploymentPct / 100) * 0.05;
-    if (activePistonL && activePistonR) {
-      activePistonL.position.y = -2.06 + pistonExtension;
-      activePistonR.position.y = -2.06 + pistonExtension;
     }
 
     const activeFlapL = nodes.get("Active_Front_Flap_L");
@@ -735,24 +717,18 @@ export const AeroStudioCanvasViewport: React.FC = () => {
       activeFlapR.rotation.x = THREE.MathUtils.degToRad(activeFrontFlapDeg);
     }
 
-    // 6. WHEEL AERO DISCS
-    ["Wheel_AeroDisc_FL", "Wheel_AeroDisc_FR", "Wheel_AeroDisc_RL", "Wheel_AeroDisc_RR"].forEach((nodeName) => {
-      const disc = nodes.get(nodeName);
-      if (disc) disc.visible = wheelAeroDiscsInstalled;
-    });
-
     // 7. EXPLODED / INSPECTION VIEW OFFSETS (Both Macro Subsystems & Discrete Modular Parts)
     const expl = inspectionExplodedPct;
 
     // Macro Assembly Displacements (Front: -Z, Rear: +Z, Ground: Y)
     const wingRootExpl = nodes.get("RearWing_Root");
     if (wingRootExpl) {
-      wingRootExpl.position.y = (config.rearWing.heightMm - 260) / 1000 + expl * 0.65;
+      wingRootExpl.position.y = Math.max(0, (config.rearWing.heightMm - 260) / 1000) + expl * 0.65;
       wingRootExpl.position.z = expl * 0.45;
     }
     const spoilerRootExpl = nodes.get("RearSpoiler_Root");
     if (spoilerRootExpl) {
-      spoilerRootExpl.position.y = (rearSpoilerHeightMm - 110) / 1000 + expl * 0.55;
+      spoilerRootExpl.position.y = Math.max(0, (rearSpoilerHeightMm - 110) / 1000) + expl * 0.55;
       spoilerRootExpl.position.z = expl * 0.40;
     }
     const splitterRootExpl = nodes.get("FrontSplitter_Root");
@@ -779,20 +755,20 @@ export const AeroStudioCanvasViewport: React.FC = () => {
       roofAeroRootExpl.position.y = expl * 0.45;
     }
 
-    // Micro Subcomponent Separations (Section 33: Modular Inspection Mode)
-    if (upperElement) {
+    // Micro Subcomponent Separations (Only in Modular Inspection Mode when expl > 0)
+    if (upperElement && expl > 0.01) {
       upperElement.position.z = 2.32 + expl * 0.22;
       upperElement.position.y = 1.18 + expl * 0.12;
     }
     const epL = nodes.get("RearWing_Endplate_L");
     const epR = nodes.get("RearWing_Endplate_R");
-    if (epL && epR) {
+    if (epL && epR && expl > 0.01) {
       epL.position.x = 0.83 + expl * 0.24;
       epR.position.x = -0.83 - expl * 0.24;
     }
     const pylonL = nodes.get("RearWing_Support_L");
     const pylonR = nodes.get("RearWing_Support_R");
-    if (pylonL && pylonR) {
+    if (pylonL && pylonR && expl > 0.01) {
       pylonL.position.x = 0.38 + expl * 0.10;
       pylonR.position.x = -0.38 - expl * 0.10;
     }
@@ -844,6 +820,8 @@ export const AeroStudioCanvasViewport: React.FC = () => {
     rearSpoilerGurneyMm,
     underbodyTunnelDepthMm,
     underbodyFloorStrakeCount,
+    activeWingAngleDeg,
+    drsActive,
   ]);
 
   // Wireframe toggle

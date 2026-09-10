@@ -69,7 +69,7 @@ export function runTrueModularVehicleBuilderTests() {
   // TEST 2: Assembly Stages Registry Integrity
   // --------------------------------------------------------------------------
   console.log("\n[Test Suite 2] Assembly Stages Definition & Sub-Components:");
-  assert(ASSEMBLY_STAGES.length === 11, `11 hardware assembly stages registered (found: ${ASSEMBLY_STAGES.length})`);
+  assert(ASSEMBLY_STAGES.length === 9, `9 hardware assembly stages registered (found: ${ASSEMBLY_STAGES.length})`);
 
   for (const stage of ASSEMBLY_STAGES) {
     assert(
@@ -133,7 +133,7 @@ export function runTrueModularVehicleBuilderTests() {
     "Installed 'chassis' and advanced to 'engine'"
   );
 
-  // Advance through remaining stages
+  // Advance through remaining stages (Decoupled: ends at lighting_glass -> complete)
   const stagesToAdvance: AssemblyStage[] = [
     "gearbox",
     "suspension",
@@ -142,8 +142,6 @@ export function runTrueModularVehicleBuilderTests() {
     "body_framework",
     "exterior_panels",
     "lighting_glass",
-    "aerodynamics",
-    "interior",
     "complete",
   ];
 
@@ -156,8 +154,8 @@ export function runTrueModularVehicleBuilderTests() {
   }
 
   assert(
-    useModularVehicleBuilderStore.getState().installedStages.length === 11,
-    `All 11 hardware stages tracked in installedStages (count: ${useModularVehicleBuilderStore.getState().installedStages.length})`
+    useModularVehicleBuilderStore.getState().installedStages.length === 9,
+    `All 9 hardware stages tracked in installedStages (count: ${useModularVehicleBuilderStore.getState().installedStages.length})`
   );
 
   // Test exploded progress clamping

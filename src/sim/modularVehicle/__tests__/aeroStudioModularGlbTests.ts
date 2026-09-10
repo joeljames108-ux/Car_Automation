@@ -23,6 +23,8 @@ import {
   AeroComponentId,
   AeroStudioSubTab,
 } from '../../../state/aeroStudioStore';
+import { calculateHypercarActiveAero } from '../vehicleFamilyArchitecture';
+import { useModularVehicleBuilderStore, ASSEMBLY_STAGES } from '../../../state/modularVehicleBuilderStore';
 
 export function runAeroStudioModularGlbTests(): { passed: number; failed: number } {
   console.log('\n=================================================');
@@ -59,7 +61,6 @@ export function runAeroStudioModularGlbTests(): { passed: number; failed: number
     { master: 'AERO_ROOF_AERO_001.glb', alias: 'aero_roof_aero.glb' },
     { master: 'AERO_COOLING_AERO_001.glb', alias: 'aero_cooling_aero.glb' },
     { master: 'AERO_WHEEL_AERO_001.glb', alias: 'aero_wheel_aero.glb' },
-    { master: 'AERO_HOST_CHASSIS_001.glb', alias: 'aero_host_chassis.glb' },
   ];
 
   expectedGlbs.forEach(({ master, alias }) => {
@@ -169,6 +170,39 @@ export function runAeroStudioModularGlbTests(): { passed: number; failed: number
   // Test exploded view progress
   useAeroStudioStore.getState().setInspectionExplodedPct(0.5);
   assert(useAeroStudioStore.getState().inspectionExplodedPct === 0.5, 'Inspection exploded percentage set to 0.5');
+
+  // --- Suite 6: Hypercar Active Aero Dynamics Controller & Segregation ---
+  console.log('\n[Suite 6] Hypercar Active Aero Controller & Segregation Audit:');
+
+  // Assert Vehicle Studio stages do NOT contain aerodynamics
+  const stageIds = ASSEMBLY_STAGES.map((s: any) => s.id);
+  assert(!stageIds.includes('aerodynamics'), 'Vehicle Studio ASSEMBLY_STAGES does not include aerodynamics');
+  assert(!stageIds.includes('interior'), 'Vehicle Studio ASSEMBLY_STAGES does not include interior');
+
+  // Test calculateHypercarActiveAero telemetry values
+  const aeroNeutral = calculateHypercarActiveAero(0, false);
+  assert(aeroNeutral.downforceKgAt250Kmh === 402, `Neutral AoA (0°) produces 402 kg downforce @ 250 km/h (got ${aeroNeutral.downforceKgAt250Kmh})`);
+  assert(aeroNeutral.dragCdDelta === 0.0, `Neutral AoA produces +0.000 Cd drag delta (got ${aeroNeutral.dragCdDelta})`);
+  assert(aeroNeutral.aeroBalanceFrontPct === 42.7, `Neutral AoA front balance is 42.7% (got ${aeroNeutral.aeroBalanceFrontPct})`);
+  assert(aeroNeutral.lapTimeDeltaSec === -0.56, `Neutral AoA lap time delta is -0.56s (got ${aeroNeutral.lapTimeDeltaSec})`);
+
+  // Test DRS flap open
+  const aeroDRS = calculateHypercarActiveAero(0, true);
+  assert(aeroDRS.drsActive === true, 'DRS is active');
+  assert(aeroDRS.dragCdDelta === -0.065, `DRS drops drag delta to -0.065 Cd (got ${aeroDRS.dragCdDelta})`);
+
+  // Test Airbrake max angle
+  const aeroMax = calculateHypercarActiveAero(35, false);
+  assert(aeroMax.downforceKgAt250Kmh === 920, `Airbrake (+35°) produces 920 kg downforce (got ${aeroMax.downforceKgAt250Kmh})`);
+  assert(aeroMax.dragCdDelta > 0.1, `Airbrake introduces high drag delta (got ${aeroMax.dragCdDelta})`);
+
+  // Test modularVehicleBuilderStore active aero actions
+  useModularVehicleBuilderStore.getState().setActiveWingAngle(15);
+  assert(useModularVehicleBuilderStore.getState().activeWingAngleDeg === 15, 'setActiveWingAngle updates activeWingAngleDeg to 15°');
+  useModularVehicleBuilderStore.getState().setDrsActive(true);
+  assert(useModularVehicleBuilderStore.getState().drsActive === true, 'setDrsActive sets drsActive to true');
+  useModularVehicleBuilderStore.getState().setDrsActive(false);
+  useModularVehicleBuilderStore.getState().setActiveWingAngle(0);
 
   console.log(`\n=================================================`);
   console.log(`  AERO STUDIO TESTS: ${passed} PASSED, ${failed} FAILED`);

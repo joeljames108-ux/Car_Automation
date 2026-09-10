@@ -189,6 +189,25 @@ const aeroStudioModularResults = runAeroStudioModularGlbTests();
 import { runVehicleFamilyArchitectureTests } from "./__tests__/vehicleFamilyArchitectureTests";
 const vehicleFamilyResults = runVehicleFamilyArchitectureTests();
 
+console.log("\n=== TEST RUNNER FAILURE AUDIT ===", {
+  constr: constrResults.failed,
+  failedCount,
+  interactive: interactiveDashboardResults.failed,
+  engine: engineStudioResults.failed,
+  grand: grandStudioResults.failed,
+  wind: windTunnelResults.failed,
+  dyno: powertrainDynoResults.failed,
+  battles: trackBattlesResults.failed,
+  layout: trackLayoutResults.failed,
+  pack: packagingResults.failed,
+  drive: drivetrainResults.failed,
+  multi: multimodeResults.failed,
+  arch: vehicleArchResults.failed,
+  outliner: outlinerResults.failed,
+  aero: aeroStudioModularResults.failed,
+  family: vehicleFamilyResults.failed,
+});
+
 if (
   constrResults.failed > 0 ||
   failedCount > 0 ||

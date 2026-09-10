@@ -17,6 +17,7 @@ import React, { useRef, useEffect, useState } from "react";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { useInteriorDashboardConfigStore } from "../../state/interiorDashboardConfigStore";
+import { useModularVehicleBuilderStore } from "../../state/modularVehicleBuilderStore";
 import { DashboardAssetManager } from "./dashboardAssetManager";
 import { DashboardMaterialManager } from "./dashboardMaterialManager";
 import { DashboardVisibilityManager } from "./dashboardVisibilityManager";
@@ -56,6 +57,9 @@ export const InteractiveDashboardCanvasViewport: React.FC = () => {
   const explodedProgress = useInteriorDashboardConfigStore((s) => s.explodedProgress);
   const setActivePanel = useInteriorDashboardConfigStore((s) => s.setActivePanel);
 
+  // Modular Interior CAD hidden parts
+  const hiddenPartIds = useModularVehicleBuilderStore((s) => s.hiddenPartIds);
+
   // Manager Refs
   const assetMgrRef = useRef<DashboardAssetManager | null>(null);
   const matMgrRef = useRef<DashboardMaterialManager | null>(null);
@@ -76,7 +80,9 @@ export const InteractiveDashboardCanvasViewport: React.FC = () => {
     const scene = new THREE.Scene();
     scene.background = new THREE.Color("#05070c");
 
-    const camera = new THREE.PerspectiveCamera(56, width / height, 0.05, 50);
+    const camera = new THREE.PerspectiveCamera(64, width / height, 0.05, 50);
+    camera.position.set(0.0, 0.92, 0.92);
+    camera.lookAt(0.0, 0.60, -0.30);
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false, powerPreference: "high-performance" });
     renderer.setSize(width, height);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
@@ -279,6 +285,32 @@ export const InteractiveDashboardCanvasViewport: React.FC = () => {
     if (!isReady || !texMgrRef.current) return;
     texMgrRef.current.setHUDMode(hudMode);
   }, [hudMode, isReady]);
+
+  // Modular CAD Components dynamic visibility sync
+  useEffect(() => {
+    if (!isReady || !assetMgrRef.current) return;
+    const assetMgr = assetMgrRef.current;
+
+    const partNodeMap: Record<string, string[]> = {
+      dashboard: ["DASH_UPPER_PAD", "DASH_UPPER_COWL_BINNACLE", "DASH_UPPER_PASS_SWEEP", "DASH_TRIM_SPEAR"],
+      steering_wheel: ["STEERING", "STEERING_SPORT_3SPOKE", "STEERING_GT_3SPOKE", "STEERING_GT3_YOKE"],
+      seats: ["CABIN_SEATS"],
+      center_console: ["CONSOLE_ROOT"],
+      door_panels: ["DOOR_PANELS_ROOT"],
+      instrument_cluster: ["CLUSTER_HOOD", "CLUSTER_SCREEN"],
+      infotainment: ["INFOTAINMENT_BEZEL", "INFOTAINMENT_SCREEN"],
+    };
+
+    Object.entries(partNodeMap).forEach(([partId, nodes]) => {
+      const isVisible = !hiddenPartIds.includes(partId);
+      nodes.forEach((nodeName) => {
+        const node = assetMgr.getNode(nodeName);
+        if (node) {
+          node.visible = isVisible;
+        }
+      });
+    });
+  }, [hiddenPartIds, isReady]);
 
   return (
     <div className="relative w-full h-full min-h-[400px]">

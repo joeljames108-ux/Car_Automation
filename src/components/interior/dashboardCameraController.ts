@@ -28,15 +28,15 @@ export class DashboardCameraController {
   private driverHeight: DriverHeight = "normal";
 
   // Target vectors for smooth lerping
-  private targetPos: THREE.Vector3 = new THREE.Vector3(0.0, 0.82, 0.46);
-  private targetLookAt: THREE.Vector3 = new THREE.Vector3(0.0, 0.63, -0.44);
-  private targetFov: number = 60;
+  private targetPos: THREE.Vector3 = new THREE.Vector3(0.0, 0.92, 0.92);
+  private targetLookAt: THREE.Vector3 = new THREE.Vector3(0.0, 0.60, -0.30);
+  private targetFov: number = 64;
 
   private poses: Record<CameraPose, CameraTargetDef> = {
     dashboard_center: {
-      pos: new THREE.Vector3(0.0, 0.82, 0.46),
-      target: new THREE.Vector3(0.0, 0.63, -0.44),
-      fov: 60,
+      pos: new THREE.Vector3(0.0, 0.92, 0.92),
+      target: new THREE.Vector3(0.0, 0.60, -0.30),
+      fov: 64,
     },
     driver: {
       pos: new THREE.Vector3(-0.38, 0.88, 0.16),
@@ -110,13 +110,19 @@ export class DashboardCameraController {
     this.controls = controls;
     this.configureControls();
     this.setPose("dashboard_center");
+    // Immediately initialize camera and controls to default pose without initial lerp jump
+    this.camera.position.copy(this.targetPos);
+    this.controls.target.copy(this.targetLookAt);
+    this.camera.fov = this.targetFov;
+    this.camera.updateProjectionMatrix();
+    this.controls.update();
   }
 
   private configureControls() {
     this.controls.enableDamping = true;
     this.controls.dampingFactor = 0.08;
-    this.controls.minDistance = 0.25;
-    this.controls.maxDistance = 1.65;
+    this.controls.minDistance = 0.20;
+    this.controls.maxDistance = 2.40;
     this.controls.maxPolarAngle = Math.PI / 2 + 0.15; // Don't dip beneath floor
   }
 

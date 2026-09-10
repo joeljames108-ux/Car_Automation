@@ -27,6 +27,14 @@ import {
   DriveModeType,
   SeatStyle,
 } from "../../../state/interiorDashboardConfigStore";
+import {
+  ASSEMBLY_STAGES,
+  MODULAR_CAR_PARTS,
+  useModularVehicleBuilderStore,
+} from "../../../state/modularVehicleBuilderStore";
+import {
+  calculateVanInteriorVolume,
+} from "../../../sim/modularVehicle/vehicleFamilyArchitecture";
 
 export function runInteractiveDashboardStudioTests(): { passed: number; failed: number } {
   console.log("\n================================================================");
@@ -471,6 +479,66 @@ export function runInteractiveDashboardStudioTests(): { passed: number; failed: 
     store.reset();
     assert.equal(useInteriorDashboardConfigStore.getState().hudMode, "off");
     assert.equal(useInteriorDashboardConfigStore.getState().cameraPose, "dashboard_center");
+  });
+
+  // --------------------------------------------------------------------------
+  // TEST 15: Modular Interior CAD & Relocated Architecture Configurations
+  // --------------------------------------------------------------------------
+  runTest("TEST 15: Modular Interior Architecture, Van seating volumes, and 7 CAD components", () => {
+    // 1. Vehicle Studio Assembly Stages MUST NOT contain interior or aerodynamics
+    const stageIds = ASSEMBLY_STAGES.map((s: any) => s.id);
+    assert.ok(!stageIds.includes("interior"), "ASSEMBLY_STAGES must not contain 'interior'");
+    assert.ok(!stageIds.includes("aerodynamics"), "ASSEMBLY_STAGES must not contain 'aerodynamics'");
+
+    // 2. Interior CAD parts in MODULAR_CAR_PARTS
+    const interiorParts = MODULAR_CAR_PARTS.filter((p: any) => p.category === "interior");
+    assert.equal(interiorParts.length, 7, "Must have exactly 7 discrete interior CAD parts");
+    const totalMass = interiorParts.reduce((acc: number, p: any) => acc + p.massKg, 0);
+    assert.equal(totalMass.toFixed(1), "70.4", "Interior CAD sub-mass must equal exactly 70.4 kg");
+
+    // 3. Van Modular Interior Seating Calculations
+    const vanCargo = calculateVanInteriorVolume("2_seat_cargo");
+    assert.equal(vanCargo.passengerCount, 2);
+    assert.equal(vanCargo.cargoVolumeL, 5800);
+    assert.equal(vanCargo.floorPayloadKg, 1450);
+
+    const van5 = calculateVanInteriorVolume("5_seat");
+    assert.equal(van5.passengerCount, 5);
+    assert.equal(van5.cargoVolumeL, 3850);
+    assert.equal(van5.floorPayloadKg, 1100);
+
+    const van9 = calculateVanInteriorVolume("9_seat");
+    assert.equal(van9.passengerCount, 9);
+    assert.equal(van9.cargoVolumeL, 1200);
+    assert.equal(van9.floorPayloadKg, 700);
+
+    // 4. Reactive Store Actions
+    const mStore = useModularVehicleBuilderStore.getState();
+    const prevArch = mStore.chassisArch;
+    const prevGrade = mStore.materialGrade;
+    const prevVanSeat = mStore.vanSeatConfig;
+
+    mStore.setVanSeatConfig("7_seat");
+    assert.equal(useModularVehicleBuilderStore.getState().vanSeatConfig, "7_seat");
+
+    mStore.setChassisArch("carbon_tub");
+    assert.equal(useModularVehicleBuilderStore.getState().chassisArch, "carbon_tub");
+
+    mStore.setMaterialGrade("carbon_composite");
+    assert.equal(useModularVehicleBuilderStore.getState().materialGrade, "carbon_composite");
+
+    // Part visibility toggle
+    const initialVisible = mStore.isPartVisible("seats");
+    mStore.togglePartVisibility("seats");
+    assert.notEqual(useModularVehicleBuilderStore.getState().isPartVisible("seats"), initialVisible);
+    // Reset toggle back
+    mStore.togglePartVisibility("seats");
+    assert.equal(useModularVehicleBuilderStore.getState().isPartVisible("seats"), initialVisible);
+
+    // Restore previous store state
+    mStore.setChassisArch(prevArch);
+    mStore.setMaterialGrade(prevGrade);
+    mStore.setVanSeatConfig(prevVanSeat);
   });
 
   console.log("----------------------------------------------------------------");
