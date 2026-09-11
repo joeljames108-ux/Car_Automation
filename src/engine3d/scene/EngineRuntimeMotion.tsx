@@ -997,11 +997,11 @@ export const EngineRuntimeMotion: React.FC<EngineRuntimeMotionProps> = ({
 
   // User Actions
   const handleToggleEngine = useCallback(() => {
-    if (simRef.current.getSnapshot().state === 'OFF') {
+    if (simRef.current.getSnapshot().state === 'OFF' && !isAudioMuted) {
       apexAudio.initAudioContext();
     }
     simRef.current.toggleEngine();
-  }, []);
+  }, [isAudioMuted]);
 
   const handleRevBurst = useCallback(() => {
     simRef.current.revBurst(7500, 0.5);

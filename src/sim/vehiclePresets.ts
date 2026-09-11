@@ -89,7 +89,7 @@ export const VEHICLE_PRESET_LIBRARY: VehiclePresetItem[] = [
     expectedPower: "65 – 85 HP",
     description: "1.0L 3-Cyl / 1.2L 4-Cyl SOHC, Drum Brakes, Manual Steering, Stamped Steel Wheels",
     generator: () => {
-      const v = createBaseDesign("Budget / Economy Hatch", "budget_economy", "city_car");
+      const v = createBaseDesign("Budget / Economy Hatch", "budget_economy", "hatchback");
       v.engine.layout = "i3";
       return v;
     }
@@ -219,20 +219,6 @@ export const VEHICLE_PRESET_LIBRARY: VehiclePresetItem[] = [
   },
 
   // ================= UTILITY CLASSES =================
-  {
-    id: "util_city",
-    name: "City Car",
-    category: "utility",
-    groupLabel: "By Utility Class",
-    targetMSRP: "$12k",
-    expectedPower: "70 HP",
-    description: "Compact city car",
-    generator: () => {
-      const v = createBaseDesign("City Car", "budget_economy", "city_car");
-      v.engine.layout = "i3";
-      return v;
-    }
-  },
   {
     id: "util_hatch",
     name: "Hatchback",

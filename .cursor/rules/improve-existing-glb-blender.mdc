@@ -1,0 +1,18 @@
+---
+description: Improve existing GLB assets in Blender; never generate a replacement model
+alwaysApply: true
+---
+
+# Improve existing GLBs — do not generate new ones
+
+When the user asks to work on, fix, enhance, or detail a particular `.glb`:
+
+1. **Use that existing file.** Import it into Blender (`bpy.ops.import_scene.gltf`), edit the current meshes/materials/UVs/shading, then export **over the same path** (or the project’s established copy of that asset). Keep object names, hierarchy, and scale unless the user asks to change them.
+2. **Do not generate a new GLB.** Do not use Hyper3D, Hunyuan3D, Rodin, Sketchfab, Polyhaven model search, primitive rebuilds, or a from-scratch car/part as a substitute. Do not write a new mesh and call it the same part.
+3. **What to improve on the existing asset:** graphics and surface quality — materials (PBR metal/rough/clearcoat/glass), lighting-ready shading, bevels/edge detail, normals, UV/texture polish, small modeled details that belong on that part. Preserve the silhouette and identity of the original.
+4. **Workflow:** inspect the imported scene first, screenshot/viewport-check, edit in place, export glTF binary back to the original `.glb`, then verify the updated file still loads.
+
+```text
+❌ BAD: generate_hyper3d / generate_hunyuan / rebuild from cubes / new export with a different mesh
+✅ GOOD: import existing.glb → improve materials/geo detail → export to the same existing.glb
+```

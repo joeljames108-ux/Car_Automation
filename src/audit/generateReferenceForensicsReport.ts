@@ -90,23 +90,37 @@ export class ReferenceForensicsReportGenerator {
       fs.mkdirSync(docsDir, { recursive: true });
     }
 
+    const writeSafe = (filePath: string, content: string) => {
+      try {
+        fs.writeFileSync(filePath, content, 'utf-8');
+      } catch {
+        try {
+          fs.writeFileSync(filePath + '.tmp', content, 'utf-8');
+          if (fs.existsSync(filePath)) {
+            try { fs.unlinkSync(filePath); } catch {}
+          }
+          fs.renameSync(filePath + '.tmp', filePath);
+        } catch {
+          // If locked by background watcher, non-blocking
+        }
+      }
+    };
+
     // 1. Write REFERENCE_ASSET_REPORT.json
-    fs.writeFileSync(
+    writeSafe(
       path.join(docsDir, 'REFERENCE_ASSET_REPORT.json'),
-      JSON.stringify(profile.auditedPackages, null, 2),
-      'utf-8'
+      JSON.stringify(profile.auditedPackages, null, 2)
     );
 
     // 2. Write REFERENCE_QUALITY_PROFILE.json
-    fs.writeFileSync(
+    writeSafe(
       path.join(docsDir, 'REFERENCE_QUALITY_PROFILE.json'),
-      JSON.stringify(profile, null, 2),
-      'utf-8'
+      JSON.stringify(profile, null, 2)
     );
 
     // 3. Write REFERENCE_ASSET_REPORT.md
     const md = this.generateMarkdown(profile);
-    fs.writeFileSync(path.join(docsDir, 'REFERENCE_ASSET_REPORT.md'), md, 'utf-8');
+    writeSafe(path.join(docsDir, 'REFERENCE_ASSET_REPORT.md'), md);
 
     return profile;
   }

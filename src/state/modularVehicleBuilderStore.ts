@@ -4,6 +4,7 @@ import {
   VanSeatConfig,
   CommercialBodyType,
 } from "../sim/modularVehicle/types";
+import { EnginePosition } from "../sim/types";
 
 export type VehicleModelCategory = VehicleBodyTypeId;
 
@@ -230,26 +231,132 @@ export function getStageIndividualParts(stageId: AssemblyStage): ModularPartItem
 
 export function getCompleteVehicleGlbPath(model: VehicleModelCategory | string): string {
   const m = String(model || "sedan").toLowerCase();
-  if (m === "crossover") return "/models/Car_Crossover_Complete.glb";
+  if (
+    m === "crossover" ||
+    m === "crossover_cuv" ||
+    m === "cuv" ||
+    m === "compact_crossover" ||
+    m === "cross_over" ||
+    m === "luxury_suv" ||
+    m === "performance_suv" ||
+    m === "offroad_suv"
+  ) {
+    return "/models/Car_Crossover_Complete.glb";
+  }
   if (m === "suv") return "/models/Car_Suv_Complete.glb";
   if (m === "f1" || m === "formula") return "/models/Car_F1_Complete.glb";
-  if (m === "hypercar" || m === "megawatt") return "/models/Car_Hypercar_Complete.glb";
+  if (m === "hypercar" || m === "megawatt" || m === "divo") return "/models/Car_Hypercar_Complete.glb";
+  if (m === "bus" || m === "bus_shuttle" || m === "transit_bus") return "/models/Car_Bus_Complete.glb";
   if (m === "gt3" || m === "supercar" || m === "track_special") return "/models/Car_GT3_Supercar_Complete.glb";
+  if (m === "pickup" || m === "pickup_truck" || m === "truck" || m === "hilux") return "/models/Car_HiLux_SR5_Complete.glb";
   return "/models/Car_Sedan_Complete.glb";
 }
 
-export function getStageGlbPaths(stageId: AssemblyStage, model: VehicleModelCategory): string[] {
+// Return the final assembled engine or transmission GLB directly for zero-offset viewport mounting
+export function getFinalPowertrainGlbPaths(stageId: AssemblyStage, model: VehicleModelCategory | string): string[] {
+  const m = String(model || "").toLowerCase();
+  const isPickup = m === "pickup" || m === "pickup_truck" || m === "truck" || m === "hilux";
+  const isSuv = m === "suv";
+  const isHypercar = m === "hypercar" || m === "divo" || m === "megawatt";
+  const isBus = m === "bus" || m === "bus_shuttle" || m === "transit_bus";
+
+  if (stageId === "engine") {
+    if (isPickup) return ["/models/modular_parts/pickup/engine.glb"];
+    if (isSuv) return ["/models/modular_parts/suv/engine.glb"];
+    if (isHypercar) return ["/models/modular_parts/hypercar/engine.glb"];
+    if (isBus) return ["/models/modular_parts/bus/engine.glb"];
+    return ["/models/engines/Engine_V8_TwinTurbo_Complete.glb"];
+  }
+
+  if (stageId === "gearbox") {
+    if (isPickup) return ["/models/modular_parts/pickup/gearbox.glb"];
+    if (isSuv) return ["/models/modular_parts/suv/gearbox.glb"];
+    if (isHypercar) return ["/models/modular_parts/hypercar/gearbox.glb"];
+    if (isBus) return ["/models/modular_parts/bus/gearbox.glb"];
+    return ["/models/modular_parts/individual/transmission.glb"];
+  }
+
+  return [];
+}
+
+export function getStageGlbPaths(stageId: AssemblyStage, model: VehicleModelCategory | string): string[] {
   if (stageId === "complete") {
     return [getCompleteVehicleGlbPath(model)];
   }
+  const m = String(model || "").toLowerCase();
+  if (m === "suv") {
+    const suvStages = [
+      "chassis",
+      "engine",
+      "gearbox",
+      "suspension",
+      "brakes",
+      "wheels",
+      "body_framework",
+      "exterior_panels",
+      "lighting_glass",
+    ];
+    if (suvStages.includes(stageId)) {
+      return [`/models/modular_parts/suv/${stageId}.glb`];
+    }
+  }
+  if (m === "pickup" || m === "pickup_truck" || m === "truck" || m === "hilux") {
+    const pickupStages = [
+      "chassis",
+      "engine",
+      "gearbox",
+      "suspension",
+      "brakes",
+      "wheels",
+      "body_framework",
+      "exterior_panels",
+      "lighting_glass",
+    ];
+    if (pickupStages.includes(stageId)) {
+      return [`/models/modular_parts/pickup/${stageId}.glb`];
+    }
+  }
+  if (m === "hypercar" || m === "divo" || m === "megawatt") {
+    const hypercarStages = [
+      "chassis",
+      "engine",
+      "gearbox",
+      "suspension",
+      "brakes",
+      "wheels",
+      "body_framework",
+      "exterior_panels",
+      "lighting_glass",
+    ];
+    if (hypercarStages.includes(stageId)) {
+      return [`/models/modular_parts/hypercar/${stageId}.glb`];
+    }
+  }
+  if (m === "bus" || m === "bus_shuttle" || m === "transit_bus") {
+    const busStages = [
+      "chassis",
+      "engine",
+      "gearbox",
+      "suspension",
+      "brakes",
+      "wheels",
+      "body_framework",
+      "exterior_panels",
+      "lighting_glass",
+    ];
+    if (busStages.includes(stageId)) {
+      return [`/models/modular_parts/bus/${stageId}.glb`];
+    }
+  }
+
   const individual = getStageIndividualParts(stageId);
   if (individual.length > 0) {
     return individual.map((p) => `/models/modular_parts/individual/${p.glbFilename}`);
   }
   switch (stageId) {
     case "chassis": {
-      const known = ["sedan", "coupe", "suv", "hatchback", "crossover"];
-      const baseName = known.includes(model as string) ? model : "sedan";
+      const known = ["sedan", "coupe", "suv", "hatchback", "crossover", "pickup"];
+      const baseName = known.includes(m) ? m : "sedan";
       return [`/models/modular_parts/chassis_${baseName}.glb`];
     }
     default:
@@ -287,6 +394,7 @@ interface ModularVehicleBuilderState {
   // Subsystem Options
   chassisArch: string;
   materialGrade: string;
+  enginePosition: EnginePosition;
   engineSpec: string;
   transmissionSpec: string;
   suspensionTuning: string;
@@ -320,6 +428,7 @@ interface ModularVehicleBuilderState {
 
   setChassisArch: (v: string) => void;
   setMaterialGrade: (v: string) => void;
+  setEnginePosition: (pos: EnginePosition) => void;
   setEngineSpec: (v: string) => void;
   setTransmissionSpec: (v: string) => void;
   setSuspensionTuning: (v: string) => void;
@@ -351,6 +460,7 @@ export const useModularVehicleBuilderStore = create<ModularVehicleBuilderState>(
 
   chassisArch: "monocoque",
   materialGrade: "extruded_aluminum",
+  enginePosition: "front",
   engineSpec: "v8_twinturbo_4_0l",
   transmissionSpec: "dct_7speed",
   suspensionTuning: "double_wishbone_adaptive",
@@ -372,8 +482,19 @@ export const useModularVehicleBuilderStore = create<ModularVehicleBuilderState>(
   isXRay: false,
   isAutoRotate: false,
 
-  setSelectedModel: (model) => set({ selectedModel: model }),
+  setSelectedModel: (model) => {
+    const isPickup = model === "pickup_truck" || (model as string) === "pickup" || (model as string) === "truck" || (model as string) === "hilux";
+    const isSupercar = model === "supercar" || model === "hypercar" || model === "track_special";
+    if (isPickup) {
+      set({ selectedModel: model, bodyColorHex: "#f0f2f5", enginePosition: "front" });
+    } else if (isSupercar) {
+      set({ selectedModel: model, enginePosition: "mid" });
+    } else {
+      set({ selectedModel: model });
+    }
+  },
   setCurrentStage: (stage) => set({ currentStage: stage }),
+  setEnginePosition: (enginePosition) => set({ enginePosition }),
 
   togglePartVisibility: (partId) => {
     const s = get();
@@ -465,3 +586,8 @@ export const useModularVehicleBuilderStore = create<ModularVehicleBuilderState>(
       viewportMode: "accumulated",
     }),
 }));
+
+if (typeof window !== "undefined") {
+  (window as any).__modularStore = useModularVehicleBuilderStore;
+}
+

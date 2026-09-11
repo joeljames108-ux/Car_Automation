@@ -92,57 +92,47 @@ export function InteriorsDesigner({ initialSubTab = 'setup', onSelectStage }: In
         )}
       </div>
       {/* ── TOP SWITCHER: UNIFIED INTERIOR & ELECTRONICS STUDIO TABS ── */}
-      <div
-        className="flex flex-wrap items-center justify-between gap-2 p-2 rounded-2xl backdrop-blur-xl shadow-xl border"
-        style={{
-          backgroundColor: 'rgba(255,248,235,0.88)',
-          borderColor: 'rgba(217,166,78,0.4)',
-        }}
-      >
+      <div className="flex flex-wrap items-center justify-between gap-2 p-2 rounded-2xl bg-gradient-to-r from-[#0b0f19]/90 via-[#111625]/85 to-[#0b0f19]/90 backdrop-blur-xl shadow-xl border border-amber-500/25">
         <div className="flex items-center gap-2 pl-2">
-          <Sparkles style={{ color: '#92400E' }} size={18} />
-          <span className="text-xs font-black tracking-wider uppercase" style={{ color: '#92400E' }}>
+          <Sparkles size={18} className="text-amber-400" />
+          <span className="text-xs font-black tracking-wider uppercase text-amber-300">
             INTERIOR & ELECTRONICS WORKBENCH
           </span>
         </div>
 
         {/* Studio View Selector */}
-        <div className="flex items-center gap-1.5 p-1 rounded-xl" style={{ backgroundColor: 'rgba(0,0,0,0.06)' }}>
+        <div className="flex items-center gap-1.5 p-1 rounded-xl bg-slate-900/60 border border-slate-800/80">
           <button
             onClick={() => handleTabSelect('setup')}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
               viewMode === 'setup'
-                ? 'shadow-md scale-[1.02] bg-red-600 text-white ring-2 ring-red-400'
-                : 'hover:opacity-80 bg-red-500/10 text-red-800'
+                ? 'bg-amber-500/20 text-amber-300 border border-amber-500/50 shadow-sm'
+                : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60 border border-transparent'
             }`}
           >
             <LayoutGrid size={13} />
-            <span>🖼️ DASHBOARD CONFIGURATION (DIAGRAM)</span>
+            <span>DASHBOARD CONFIGURATION</span>
           </button>
 
           <button
             onClick={() => handleTabSelect('cluster_diagnostic')}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
               viewMode === 'cluster_diagnostic'
-                ? 'shadow-md scale-[1.02] bg-amber-600 text-white ring-2 ring-amber-400'
-                : 'hover:opacity-80 bg-amber-500/10 text-amber-900'
+                ? 'bg-amber-500/20 text-amber-300 border border-amber-500/50 shadow-sm'
+                : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60 border border-transparent'
             }`}
           >
             <Gauge size={13} />
-            <span>🚨 UNDERSTANDING YOUR DASHBOARD</span>
+            <span>UNDERSTANDING YOUR DASHBOARD</span>
           </button>
 
           <button
             onClick={() => handleTabSelect('electronics')}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
               viewMode === 'electronics'
-                ? 'shadow-md scale-[1.02]'
-                : 'hover:opacity-80'
+                ? 'bg-amber-500/20 text-amber-300 border border-amber-500/50 shadow-sm'
+                : 'text-slate-400 hover:text-slate-200 hover:bg-slate-800/60 border border-transparent'
             }`}
-            style={{
-              backgroundColor: viewMode === 'electronics' ? '#B45309' : 'transparent',
-              color: viewMode === 'electronics' ? '#ffffff' : '#78350F'
-            }}
           >
             <Cpu size={13} />
             <span>ELECTRONICS & AVIONICS</span>

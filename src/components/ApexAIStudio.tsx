@@ -10,11 +10,12 @@ import { ApexAgentConsole } from "./agents/ApexAgentConsole";
 import { AgentDashboard } from "./agents/AgentDashboard";
 import { EngineeringLog } from "./EngineeringLog";
 import { AIEngineeringPresets, AI_PRESET_LIBRARY } from "./agents/AIEngineeringPresets";
+import { ApexAIPromptStudio } from "./agents/ApexAIPromptStudio";
 
 type Severity = "critical" | "warning" | "info";
 type EngineerId = "chief" | "race" | "production" | "sustainability" | "technology";
 type ModeId = "beginner" | "intermediate" | "expert";
-type StudioSubTab = "all" | "presets" | "dashboard" | "advisory" | "agents" | "assistant" | "logs";
+type StudioSubTab = "prompt" | "all" | "presets" | "dashboard" | "advisory" | "agents" | "assistant" | "logs";
 
 const ENGINEERS: Record<EngineerId, { label: string; icon: React.ReactNode; focus: string; tone: string; desc: string }> = {
   chief:          { label: "Chief Engineer",        icon: <Wrench size={16} />,    focus: "Technical & Powertrain", tone: "text-amber-400 border-amber-500/40 bg-amber-500/10", desc: "Monitors internal combustion stress, knock thresholds, and structural integrity." },
@@ -42,7 +43,7 @@ function round(v: number, dp = 1) {
 export function ApexAIStudio() {
   const { design, sim, carConcept, setCarConcept, updateEngine, updateVehicle, updateAero, updateAeroResearch, updateExterior, updateInterior } = useDesign();
 
-  const [studioTab, setStudioTab] = useState<StudioSubTab>("all");
+  const [studioTab, setStudioTab] = useState<StudioSubTab>("prompt");
   const [engineer, setEngineer] = useState<EngineerId>("chief");
   const [mode, setMode] = useState<ModeId>("expert");
   const [activeCategory, setActiveCategory] = useState<"all" | "Engine" | "Chassis" | "Aero" | "Manufacturing">("all");
@@ -559,6 +560,7 @@ export function ApexAIStudio() {
         {/* ── APEX AI STUDIO SUB-NAVIGATION TABS BAR ── */}
         <div className="flex items-center gap-2 mt-6 pt-4 border-t border-slate-800/80 overflow-x-auto scrollbar-none">
           {[
+            { id: "prompt" as const, label: "AI Prompt Studio", icon: <Bot size={14} /> },
             { id: "all" as const, label: "All-in-One Studio Suite", icon: <Layers size={14} /> },
             { id: "presets" as const, label: "AI Engineering Presets", icon: <Sparkles size={14} /> },
             { id: "dashboard" as const, label: "15-Agent Division Grid", icon: <Bot size={14} /> },
@@ -590,6 +592,9 @@ export function ApexAIStudio() {
       <AIAssistant embedded={true} />
 
       {/* ── DYNAMIC SUB-TAB CONTENT DISPLAY ── */}
+      {/* ── AI PROMPT STUDIO (Default Tab) ── */}
+      {studioTab === "prompt" && <ApexAIPromptStudio />}
+
       {studioTab === "all" && (
         <div className="flex flex-col gap-8">
           {/* Section 0: AI Engineering Presets & Architect Templates */}

@@ -310,8 +310,8 @@ export class ApexEngineAudioEngine {
   private turboSpoolOsc: OscillatorNode | null = null;
   private turboSpoolGain: GainNode | null = null;
 
-  // State Tracking
-  private isMuted: boolean = false;
+  // State Tracking — start muted so the landing page never auto-plays engine/turbo audio
+  private isMuted: boolean = true;
   private isRunning: boolean = false;
   private currentConfig: EngineAcousticConfig = {
     layout: "i4",
@@ -375,7 +375,7 @@ export class ApexEngineAudioEngine {
       }
     }
 
-    if (this.ctx && this.ctx.state === "suspended") {
+    if (this.ctx && this.ctx.state === "suspended" && !this.isMuted) {
       this.ctx.resume();
     }
 
@@ -396,11 +396,24 @@ export class ApexEngineAudioEngine {
     if (this.masterGain && this.ctx) {
       this.masterGain.gain.setValueAtTime(this.isMuted ? 0 : 0.45, this.ctx.currentTime);
     }
+    if (this.isMuted) {
+      this.stopEngineAudioGraph();
+      if (this.ctx && this.ctx.state === "running") {
+        void this.ctx.suspend();
+      }
+    } else if (this.ctx && this.ctx.state === "suspended") {
+      void this.ctx.resume();
+    }
     return this.isMuted;
   }
 
   public getMuteState(): boolean {
     return this.isMuted;
+  }
+
+  private turboWhistleGain(throttle: number, boostBar: number): number {
+    if (boostBar < 0.35 || throttle < 0.25) return 0;
+    return Math.min(0.22, throttle * 0.18 * (boostBar / 1.5));
   }
 
   // ===================================================================
@@ -486,18 +499,16 @@ export class ApexEngineAudioEngine {
       this.idleBrapLfo.start(now);
     }
 
-    // 4. Turbocharger Spool Whistle & Blow-off Node
+    // 4. Turbocharger Spool Whistle — silent until there is real boost + throttle
     if (config.forcedInduction?.startsWith("turbo")) {
       this.turboSpoolOsc = this.ctx.createOscillator();
       this.turboSpoolGain = this.ctx.createGain();
 
       this.turboSpoolOsc.type = "sine";
-      const boostBar = config.boostPressureBar || 1.2;
-      const spoolFreq = 800 + (rpm / 8000) * 1800 * boostBar;
+      const boostBar = Math.max(0, config.boostPressureBar ?? 0);
+      const spoolFreq = 800 + (rpm / 8000) * 1800 * Math.max(boostBar, 0.2);
       this.turboSpoolOsc.frequency.setValueAtTime(spoolFreq, now);
-
-      const spoolVol = 0.01 + config.throttle * 0.18 * (boostBar / 1.5);
-      this.turboSpoolGain.gain.setValueAtTime(spoolVol, now);
+      this.turboSpoolGain.gain.setValueAtTime(this.turboWhistleGain(config.throttle, boostBar), now);
 
       this.turboSpoolOsc.connect(this.turboSpoolGain);
       this.turboSpoolGain.connect(this.masterGain);
@@ -539,12 +550,11 @@ export class ApexEngineAudioEngine {
 
     // 3. Update Turbo Spool Whistle Pitch
     if (this.turboSpoolOsc && this.turboSpoolGain && config.forcedInduction?.startsWith("turbo")) {
-      const boostBar = config.boostPressureBar || 1.2;
-      const spoolFreq = 800 + (rpm / 8000) * 2200 * (boostBar / 1.5);
-      const spoolVol = 0.01 + config.throttle * 0.22 * (boostBar / 1.5);
+      const boostBar = Math.max(0, config.boostPressureBar ?? 0);
+      const spoolFreq = 800 + (rpm / 8000) * 2200 * (Math.max(boostBar, 0.2) / 1.5);
 
       this.turboSpoolOsc.frequency.setTargetAtTime(spoolFreq, now, 0.04);
-      this.turboSpoolGain.gain.setTargetAtTime(spoolVol, now, 0.04);
+      this.turboSpoolGain.gain.setTargetAtTime(this.turboWhistleGain(config.throttle, boostBar), now, 0.04);
     }
 
     // 4. Update Brap LFO gain (fades out above 2000 RPM or high throttle)

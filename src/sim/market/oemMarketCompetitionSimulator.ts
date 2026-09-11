@@ -57,7 +57,7 @@ export const MASTER_RIVAL_OEMS: RivalOemProfile[] = [
     country: "China",
     brandPrestigeScore: 85,
     activePriceTiers: ["BUDGET_ECONOMY", "LOWER_MIDRANGE", "UPPER_MIDRANGE", "PREMIUM_EXECUTIVE"],
-    activeUtilityClasses: ["CITY_CAR", "HATCHBACK", "SEDAN", "ELECTRIC_VEHICLE_BEV", "COMMERCIAL_VAN"],
+    activeUtilityClasses: ["HATCHBACK", "SEDAN", "ELECTRIC_VEHICLE_BEV", "COMMERCIAL_VAN"],
     annualRnDBudgetUSD: 6200000000,
     globalMarketSharePct: 24.0,
   },

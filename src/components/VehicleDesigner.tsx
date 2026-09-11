@@ -6,6 +6,7 @@ import {
   GitCompare,
   Wind,
   ChevronRight,
+  ChevronLeft,
   Check,
 } from "lucide-react";
 import { useDesign } from "../state/DesignContext";
@@ -154,20 +155,34 @@ export function VehicleDesigner({ initialSubTab = "modular_builder", onSelectSta
           })}
 
           {onSelectStage && (
-            <button
-              onClick={() => {
-                playHMIClickSound();
-                markStageComplete("vehicle");
-                setActiveWorkflowStage("aero");
-                onSelectStage("aero_studio");
-              }}
-              className="ml-auto flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-mono font-bold bg-gradient-to-r from-emerald-500 to-green-600 text-slate-950 hover:from-emerald-400 hover:to-green-500 transition-all shadow-md cursor-pointer"
-              title="Mark Vehicle complete and advance to Aero Studio"
-            >
-              <Check size={14} strokeWidth={3} />
-              <span>COMPLETE VEHICLE & PROCEED TO AERO</span>
-              <ChevronRight size={14} />
-            </button>
+            <div className="ml-auto flex items-center gap-2">
+              <button
+                onClick={() => {
+                  playHMIClickSound();
+                  setActiveWorkflowStage("engine");
+                  onSelectStage("engine");
+                }}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-mono font-bold border border-slate-600/60 bg-slate-800/60 text-slate-300 hover:border-amber-400/50 hover:text-amber-300 transition-all cursor-pointer"
+                title="Go back to Engine to edit configuration"
+              >
+                <ChevronLeft size={14} />
+                <span>ENGINE</span>
+              </button>
+              <button
+                onClick={() => {
+                  playHMIClickSound();
+                  markStageComplete("vehicle");
+                  setActiveWorkflowStage("aero");
+                  onSelectStage("aero_studio");
+                }}
+                className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-mono font-bold bg-gradient-to-r from-emerald-500 to-green-600 text-slate-950 hover:from-emerald-400 hover:to-green-500 transition-all shadow-md cursor-pointer"
+                title="Mark Vehicle complete and advance to Aero Studio"
+              >
+                <Check size={14} strokeWidth={3} />
+                <span>COMPLETE VEHICLE & PROCEED TO AERO</span>
+                <ChevronRight size={14} />
+              </button>
+            </div>
           )}
         </div>
       </div>
@@ -207,21 +222,38 @@ export function VehicleDesigner({ initialSubTab = "modular_builder", onSelectSta
           </div>
         </div>
 
-        {onSelectStage && (
-          <button
-            type="button"
-            onClick={() => {
-              playHMIClickSound();
-              markStageComplete("vehicle");
-              setActiveWorkflowStage("aero");
-              onSelectStage("aero_studio");
-            }}
-            className="w-full sm:w-auto flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-400 hover:to-green-500 text-slate-950 font-mono font-black text-xs tracking-wider uppercase shadow-[0_0_20px_rgba(16,185,129,0.35)] transition-all cursor-pointer transform hover:scale-[1.02] active:scale-[0.98]"
-          >
-            <Check size={15} strokeWidth={3} />
-            <span>COMPLETE VEHICLE & ADVANCE TO AERO →</span>
-          </button>
-        )}
+        <div className="flex items-center gap-2 w-full sm:w-auto">
+          {onSelectStage && (
+            <button
+              type="button"
+              onClick={() => {
+                playHMIClickSound();
+                setActiveWorkflowStage("engine");
+                onSelectStage("engine");
+              }}
+              className="flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-xl border border-slate-600/50 bg-slate-800/50 hover:border-amber-400/50 text-slate-300 hover:text-amber-300 font-mono font-bold text-xs tracking-wider uppercase transition-all cursor-pointer"
+              title="Go back to Engine to edit configuration"
+            >
+              <ChevronLeft size={14} />
+              <span>← ENGINE</span>
+            </button>
+          )}
+          {onSelectStage && (
+            <button
+              type="button"
+              onClick={() => {
+                playHMIClickSound();
+                markStageComplete("vehicle");
+                setActiveWorkflowStage("aero");
+                onSelectStage("aero_studio");
+              }}
+              className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-400 hover:to-green-500 text-slate-950 font-mono font-black text-xs tracking-wider uppercase shadow-[0_0_20px_rgba(16,185,129,0.35)] transition-all cursor-pointer transform hover:scale-[1.02] active:scale-[0.98]"
+            >
+              <Check size={15} strokeWidth={3} />
+              <span>COMPLETE VEHICLE & ADVANCE TO AERO →</span>
+            </button>
+          )}
+        </div>
       </div>
 
 

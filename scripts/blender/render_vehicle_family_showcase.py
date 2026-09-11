@@ -97,7 +97,6 @@ def main():
         ("pickup_truck_complete.glb", "family_pickup_truck_studio.png"),
         ("hypercar_complete.glb", "family_hypercar_studio.png"),
         ("offroad_4x4_complete.glb", "family_offroad_4x4_studio.png"),
-        ("dune_buggy_complete.glb", "family_dune_buggy_studio.png"),
     ]
 
     for glb_file, png_out in models:

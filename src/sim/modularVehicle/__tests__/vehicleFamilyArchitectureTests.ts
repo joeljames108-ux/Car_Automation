@@ -29,7 +29,7 @@ export interface TestResult {
 
 export function runVehicleFamilyArchitectureTests(): TestResult {
   console.log("-------------------------------------------------");
-  console.log("  38-BODY TYPE & 3-LAYER VEHICLE ARCHITECTURE TESTS");
+  console.log("  24-BODY TYPE & 3-LAYER VEHICLE ARCHITECTURE TESTS");
   console.log("-------------------------------------------------");
 
   let passed = 0;
@@ -72,9 +72,9 @@ export function runVehicleFamilyArchitectureTests(): TestResult {
     }
   });
 
-  // 2. Verify 38 Vehicle Body Types
+  // 2. Verify 24 Vehicle Body Types
   const bodyTypeIds = getAllBodyTypeIds();
-  assert(bodyTypeIds.length === 38, "Body Type Count", `Expected exactly 38 body types, got ${bodyTypeIds.length}`);
+  assert(bodyTypeIds.length === 24, "Body Type Count", `Expected exactly 24 body types, got ${bodyTypeIds.length}`);
 
   bodyTypeIds.forEach((bId) => {
     const body = BODY_TYPE_REGISTRY[bId];
@@ -252,7 +252,6 @@ export function runVehicleFamilyArchitectureTests(): TestResult {
     "refrigerated_box",
     "tipper",
     "service_body",
-    "camper",
     "passenger_body",
   ];
   commTypes.forEach((cType) => {

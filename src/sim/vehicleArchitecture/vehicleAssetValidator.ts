@@ -35,10 +35,11 @@ export class VehicleAssetValidator {
     const validatedNodes: string[] = [];
 
     // 1. Check physical proportions integrity
-    if (arch.wheelbaseMm < 2000 || arch.wheelbaseMm > 4000) {
+    const maxWb = arch.category === "bus" ? 7500 : 4000;
+    if (arch.wheelbaseMm < 2000 || arch.wheelbaseMm > maxWb) {
       issues.push({
         type: "scale_error",
-        message: `Wheelbase ${arch.wheelbaseMm}mm outside valid automotive envelope [2000-4000mm]`,
+        message: `Wheelbase ${arch.wheelbaseMm}mm outside valid automotive envelope [2000-${maxWb}mm]`,
         severity: "error",
       });
     }

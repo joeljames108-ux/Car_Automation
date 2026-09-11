@@ -47,10 +47,20 @@ export const InteractiveDashboardCanvasViewport: React.FC = () => {
   const ambientLightColor = useInteriorDashboardConfigStore((s) => s.ambientLightColor);
 
   const shifterStyle = useInteriorDashboardConfigStore((s) => s.shifterStyle);
+  const seatStyle = useInteriorDashboardConfigStore((s) => s.seatStyle);
+  const seatBeltColor = useInteriorDashboardConfigStore((s) => s.seatBeltColor);
+  const interiorColor = useInteriorDashboardConfigStore((s) => s.interiorColor);
   const stitchingColor = useInteriorDashboardConfigStore((s) => s.stitchingColor);
   const windshieldTint = useInteriorDashboardConfigStore((s) => s.windshieldTint);
   const lightingMode = useInteriorDashboardConfigStore((s) => s.lightingMode);
   const nightMode = useInteriorDashboardConfigStore((s) => s.nightMode);
+
+  // Rear Cabin / Multi-Row Seating
+  const seatingCapacity = useInteriorDashboardConfigStore((s) => s.seatingCapacity);
+  const row2SeatingType = useInteriorDashboardConfigStore((s) => s.row2SeatingType);
+  const row3SeatingType = useInteriorDashboardConfigStore((s) => s.row3SeatingType);
+  const rearEntertainment = useInteriorDashboardConfigStore((s) => s.rearEntertainment);
+  const rearFoldingTables = useInteriorDashboardConfigStore((s) => s.rearFoldingTables);
 
   const cameraPose = useInteriorDashboardConfigStore((s) => s.cameraPose);
   const driverHeight = useInteriorDashboardConfigStore((s) => s.driverHeight);
@@ -130,6 +140,10 @@ export const InteractiveDashboardCanvasViewport: React.FC = () => {
         visibilityManager.updateShifter(shifterStyle);
         visibilityManager.updatePaddleShifters(paddleShifters);
         visibilityManager.updateHUD(hudMode);
+        visibilityManager.updateClusterStyle(clusterStyle);
+        visibilityManager.updateSeatingCapacity(seatingCapacity);
+        visibilityManager.updateRow2Style(row2SeatingType);
+        visibilityManager.updateRearAmenities(rearEntertainment, rearFoldingTables);
 
         materialManager.updateUpperDashPadColor(upperDashPadColor);
         materialManager.updateDashboardTrim(dashboardTrimMaterial);
@@ -138,6 +152,8 @@ export const InteractiveDashboardCanvasViewport: React.FC = () => {
         materialManager.updateAmbientLighting(ambientLightColor, nightMode);
         materialManager.updateStitching(stitchingColor);
         materialManager.updateWindshieldTint(windshieldTint);
+        materialManager.updateSeatUpholstery(interiorColor, seatStyle);
+        materialManager.updateSeatBelts(seatBeltColor);
 
         lightingManager.setLightingMode(lightingMode);
         cameraController.setPose(cameraPose);
@@ -218,6 +234,11 @@ export const InteractiveDashboardCanvasViewport: React.FC = () => {
 
   useEffect(() => {
     if (!isReady || !visMgrRef.current) return;
+    visMgrRef.current.updateClusterStyle(clusterStyle);
+  }, [clusterStyle, isReady]);
+
+  useEffect(() => {
+    if (!isReady || !visMgrRef.current) return;
     visMgrRef.current.updateExplodedView(explodedProgress);
   }, [explodedProgress, isReady]);
 
@@ -285,6 +306,33 @@ export const InteractiveDashboardCanvasViewport: React.FC = () => {
     if (!isReady || !texMgrRef.current) return;
     texMgrRef.current.setHUDMode(hudMode);
   }, [hudMode, isReady]);
+
+  // Reactive Rear Cabin Multi-Row Seating Visibility Hooks
+  useEffect(() => {
+    if (!isReady || !visMgrRef.current) return;
+    visMgrRef.current.updateSeatingCapacity(seatingCapacity);
+  }, [seatingCapacity, isReady]);
+
+  useEffect(() => {
+    if (!isReady || !visMgrRef.current) return;
+    visMgrRef.current.updateRow2Style(row2SeatingType);
+  }, [row2SeatingType, isReady]);
+
+  useEffect(() => {
+    if (!isReady || !visMgrRef.current) return;
+    visMgrRef.current.updateRearAmenities(rearEntertainment, rearFoldingTables);
+  }, [rearEntertainment, rearFoldingTables, isReady]);
+
+  // Reactive Seat Upholstery and Belts Propagation
+  useEffect(() => {
+    if (!isReady || !matMgrRef.current) return;
+    matMgrRef.current.updateSeatUpholstery(interiorColor, seatStyle);
+  }, [interiorColor, seatStyle, isReady]);
+
+  useEffect(() => {
+    if (!isReady || !matMgrRef.current) return;
+    matMgrRef.current.updateSeatBelts(seatBeltColor);
+  }, [seatBeltColor, isReady]);
 
   // Modular CAD Components dynamic visibility sync
   useEffect(() => {

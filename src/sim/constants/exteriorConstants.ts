@@ -30,7 +30,6 @@ export const BODY_TYPES: Record<BodyType, {
   costFactor: number;
   description: string;
 }> = {
-  city_car: { label: "City Car", origin: "Global", dragDelta: 0.04, liftDelta: 0.04, frontalDelta: 0.88, weightDelta: -80, costFactor: 0.8, description: "Ultra-compact urban commuter" },
   sedan: { label: "Sedan", origin: "Global", dragDelta: 0.00, liftDelta: 0.02, frontalDelta: 1.00, weightDelta: 0, costFactor: 1.0, description: "Three-box, four-door — balanced and practical" },
   coupe: { label: "Coupe", origin: "Global", dragDelta: -0.01, liftDelta: 0.01, frontalDelta: 0.97, weightDelta: -20, costFactor: 1.1, description: "Two-door, sloping roofline" },
   hatchback: { label: "Hatchback", origin: "Europe", dragDelta: 0.02, liftDelta: 0.03, frontalDelta: 0.95, weightDelta: -40, costFactor: 0.9, description: "Compact, cut-off tail — agile" },

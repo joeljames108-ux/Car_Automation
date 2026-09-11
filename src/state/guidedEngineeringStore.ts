@@ -314,3 +314,7 @@ export const useGuidedEngineeringStore = create<GuidedEngineeringState>((set, ge
     });
   },
 }));
+
+if (typeof window !== "undefined") {
+  (window as any).__guidedStore = useGuidedEngineeringStore;
+}

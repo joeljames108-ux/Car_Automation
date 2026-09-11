@@ -193,6 +193,12 @@ function AppInner() {
   }, []);
   const handleSelectCategory = useCallback((cat: string) => setActiveCategory(cat as WorkspaceCategory), []);
 
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      (window as any).__selectStage = handleSelectStage;
+    }
+  }, [handleSelectStage]);
+
   const toolbarActions = useMemo(() => [
     { id: "command", icon: <LayoutGrid size={17} />, label: "Dashboard", onClick: () => handleSelectStage("command"), isActive: stage === "command" },
     { id: "interior", icon: <SlidersHorizontal size={17} />, label: "Interior Configurator", onClick: () => handleSelectStage("interior"), isActive: stage === "interior" },

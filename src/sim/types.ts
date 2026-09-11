@@ -158,7 +158,7 @@ export type PlatformType =
 
 export type BodyType =
   | "unconfigured"
-  | "city_car" | "hatchback" | "sedan" | "wagon" | "coupe" | "convertible" | "roadster"
+  | "hatchback" | "sedan" | "wagon" | "coupe" | "convertible" | "roadster"
   | "sports_car" | "gt_coupe" | "muscle_car" | "pony_car" | "supercar" | "hypercar"
   | "suv" | "crossover" | "pickup" | "mpv" | "minivan" | "van" | "offroad_4x4"
   | "commercial" | "limousine" | "taxi" | "police" | "ambulance" | "fire_vehicle"

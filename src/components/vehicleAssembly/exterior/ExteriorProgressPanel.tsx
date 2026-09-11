@@ -65,7 +65,7 @@ export const ExteriorProgressPanel: React.FC = () => {
               <span className="text-slate-600">•</span>
               <span className="text-amber-400/90 font-mono text-[10px] flex items-center gap-1">
                 <Box size={11} />
-                /models/vehicles/{activeCategory}/chassis.glb + body-framework.glb
+                /vehicles/{activeCategory}/chassis.glb + body-framework.glb
               </span>
             </div>
           </div>

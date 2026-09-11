@@ -1,176 +1,174 @@
 """
-==============================================================================
-CINEMATIC AUTOMOTIVE STUDIO RENDERER (BLENDER 5.x)
-==============================================================================
-Sets up high-end 3-point softbox studio lighting, dark reflective showroom floor,
-and a 55mm camera targeting the 4-door executive sedan.
-Renders a 1920x1080 beauty shot to 'exports/sedan_render.png'.
-==============================================================================
+Premium Studio Multi-Angle Showcase Renderer for Executive Sedan (Blender 4.x / 5.x)
+Renders 6 clean angles on a bright, premium studio light background.
 """
 
 import bpy
 import os
 import math
+import shutil
+from mathutils import Vector
 
-PROJECT_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-out_dir = os.path.join(PROJECT_DIR, "exports")
-os.makedirs(out_dir, exist_ok=True)
+PROJECT_DIR = r"E:\Car_Automation"
+OUTPUT_DIR = os.path.join(PROJECT_DIR, "renders", "sedan")
+PUBLIC_RENDERS_DIR = os.path.join(PROJECT_DIR, "public", "renders", "sedan")
+os.makedirs(OUTPUT_DIR, exist_ok=True)
+os.makedirs(PUBLIC_RENDERS_DIR, exist_ok=True)
 
-# 1. Clean existing scene completely
-for obj in list(bpy.data.objects):
-    bpy.data.objects.remove(obj, do_unlink=True)
-for col in list(bpy.data.collections):
-    bpy.data.collections.remove(col)
-
-# 2. Import Car_Sedan_Complete.glb
-glb_path = os.path.join(out_dir, "Car_Sedan_Complete.glb")
-print(f"[RENDER] Importing {glb_path} for rendering pass...")
-bpy.ops.import_scene.gltf(filepath=glb_path)
-
-# 3. Enforce silky smooth curvature shading and subdivision across body panels
-for obj in list(bpy.data.objects):
-    if obj.type == 'MESH':
-        bpy.ops.object.select_all(action='DESELECT')
-        obj.select_set(True)
-        bpy.context.view_layer.objects.active = obj
-        
-        # Clear any faceted custom split normals from glTF import
-        if getattr(obj.data, 'has_custom_normals', False):
-            try:
-                bpy.ops.mesh.customdata_custom_splitnormals_clear()
-            except Exception:
-                pass
-                
-        for p in obj.data.polygons:
-            p.use_smooth = True
-
-# 4. Fine-tune PBR Material Shading
-for mat in bpy.data.materials:
-    if not mat.node_tree:
-        continue
-    bsdf = mat.node_tree.nodes.get("Principled BSDF")
-    if not bsdf:
-        continue
-    mat_name = mat.name.lower()
+def render_showcase(resolution_x=1280, resolution_y=720):
+    print("=" * 70)
+    print(f"[SEDAN_RENDER] RENDERING LIGHT-BACKGROUND STUDIO SHOWCASE ({resolution_x}x{resolution_y})...")
+    print("=" * 70)
     
-    # Tires: Carbon black with low specular
-    if "tire" in mat_name or "rubber" in mat_name:
-        bsdf.inputs['Base Color'].default_value = (0.012, 0.012, 0.014, 1.0)
-        bsdf.inputs['Roughness'].default_value = 0.85
-        if 'Specular IOR Level' in bsdf.inputs:
-            bsdf.inputs['Specular IOR Level'].default_value = 0.08
-        elif 'Specular' in bsdf.inputs:
-            bsdf.inputs['Specular'].default_value = 0.08
-            
-    # Body Paint: Tanzanite Blue with deep clearcoat
-    elif "paint" in mat_name and "tanzanite" in mat_name:
-        bsdf.inputs['Base Color'].default_value = (0.012, 0.045, 0.15, 1.0)
-        bsdf.inputs['Metallic'].default_value = 0.94
-        bsdf.inputs['Roughness'].default_value = 0.08
-        if 'Coat Weight' in bsdf.inputs:
-            bsdf.inputs['Coat Weight'].default_value = 1.0
-            if 'Coat Roughness' in bsdf.inputs:
-                bsdf.inputs['Coat Roughness'].default_value = 0.02
-        elif 'Clearcoat' in bsdf.inputs:
-            bsdf.inputs['Clearcoat'].default_value = 1.0
-            if 'Clearcoat Roughness' in bsdf.inputs:
-                bsdf.inputs['Clearcoat Roughness'].default_value = 0.02
-                
-    # Matte Black Trims & Mudflaps
-    elif "matte" in mat_name or "plastic" in mat_name:
-        bsdf.inputs['Base Color'].default_value = (0.020, 0.020, 0.023, 1.0)
-        bsdf.inputs['Roughness'].default_value = 0.65
-        if 'Specular IOR Level' in bsdf.inputs:
-            bsdf.inputs['Specular IOR Level'].default_value = 0.2
-        elif 'Specular' in bsdf.inputs:
-            bsdf.inputs['Specular'].default_value = 0.2
+    scene = bpy.context.scene
+    scene.render.resolution_x = resolution_x
+    scene.render.resolution_y = resolution_y
+    scene.render.image_settings.file_format = 'PNG'
+    
+    # Fast viewport-quality rendering
+    scene.render.engine = 'BLENDER_EEVEE_NEXT' if hasattr(bpy.types, "RenderEngineEEVEENext") else 'BLENDER_EEVEE'
+    if hasattr(scene, "eevee"):
+        if hasattr(scene.eevee, "taa_render_samples"):
+            scene.eevee.taa_render_samples = 16
+        if hasattr(scene.eevee, "use_raytracing"):
+            scene.eevee.use_raytracing = True
 
-# 5. Camera Setup (55mm Automotive Focal Length, Front 3/4 Beauty Angle)
-cam_target = bpy.data.objects.new("Cam_Target", None)
-bpy.context.scene.collection.objects.link(cam_target)
-cam_target.location = (0.0, 0.5, 0.65)
+    # Calculate vehicle center & bounds
+    meshes = [o for o in bpy.data.objects if o.type == 'MESH' and not o.name.startswith("STUDIO_")]
+    all_corners = [o.matrix_world @ Vector(c) for o in meshes for c in o.bound_box]
+    min_x = min(c.x for c in all_corners)
+    max_x = max(c.x for c in all_corners)
+    min_y = min(c.y for c in all_corners)
+    max_y = max(c.y for c in all_corners)
+    min_z = min(c.z for c in all_corners)
+    max_z = max(c.z for c in all_corners)
+    
+    cx = (min_x + max_x) / 2.0
+    cy = (min_y + max_y) / 2.0
+    cz = (min_z + max_z) / 2.0
+    max_dim = max(max_x - min_x, max_y - min_y, max_z - min_z)
+    target = Vector((cx, cy, cz * 0.75))
 
-cam_data = bpy.data.cameras.new("Studio_Camera")
-cam_data.lens = 55
-cam_data.clip_start = 0.1
-cam_data.clip_end = 100.0
+    # Configure Bright Premium Light Studio World Background
+    world = bpy.data.worlds.get("SedanLightStudioWorld")
+    if not world:
+        world = bpy.data.worlds.new("SedanLightStudioWorld")
+    scene.world = world
+    world.use_nodes = True
+    bg = world.node_tree.nodes.get("Background")
+    if bg:
+        # Bright, clean studio light grey/white background
+        bg.inputs[0].default_value = (0.88, 0.90, 0.93, 1.0)
+        bg.inputs[1].default_value = 1.25
 
-cam_obj = bpy.data.objects.new("Studio_Camera", cam_data)
-bpy.context.scene.collection.objects.link(cam_obj)
-cam_obj.location = (4.4, 4.2, 1.55)
+    # Clear old studio lights & camera & floor
+    for o in list(bpy.data.objects):
+        if o.name.startswith("STUDIO_"):
+            bpy.data.objects.remove(o, do_unlink=True)
 
-track = cam_obj.constraints.new(type='TRACK_TO')
-track.target = cam_target
-track.track_axis = 'TRACK_NEGATIVE_Z'
-track.up_axis = 'UP_Y'
+    # 1. Studio Floor Plane (Matte white/light grey ground)
+    mesh_floor = bpy.data.meshes.new("STUDIO_Floor_Mesh")
+    obj_floor = bpy.data.objects.new("STUDIO_Floor", mesh_floor)
+    scene.collection.objects.link(obj_floor)
+    import bmesh
+    bm_fl = bmesh.new()
+    bmesh.ops.create_grid(bm_fl, x_segments=2, y_segments=2, size=25.0)
+    bm_fl.to_mesh(mesh_floor)
+    bm_fl.free()
+    obj_floor.location = (cx, cy, min_z - 0.002)
 
-bpy.context.scene.camera = cam_obj
+    mat_floor = bpy.data.materials.get("STUDIO_Floor_Mat")
+    if not mat_floor:
+        mat_floor = bpy.data.materials.new("STUDIO_Floor_Mat")
+        mat_floor.use_nodes = True
+        bsdf_fl = mat_floor.node_tree.nodes.get("Principled BSDF")
+        if bsdf_fl:
+            bsdf_fl.inputs['Base Color'].default_value = (0.90, 0.92, 0.94, 1.0)
+            bsdf_fl.inputs['Roughness'].default_value = 0.45
+            bsdf_fl.inputs['Specular IOR Level' if 'Specular IOR Level' in bsdf_fl.inputs else 'Specular'].default_value = 0.2
+    obj_floor.data.materials.append(mat_floor)
 
-# 6. Softbox Studio Lighting Rig
-def add_area_light(name, location, rotation, energy, size_x, size_y, color=(1.0, 1.0, 1.0)):
-    light_data = bpy.data.lights.new(name=name, type='AREA')
-    light_data.energy = energy
-    light_data.size = size_x
-    light_data.size_y = size_y
-    light_data.color = color
-    light_obj = bpy.data.objects.new(name, light_data)
-    bpy.context.scene.collection.objects.link(light_obj)
-    light_obj.location = location
-    light_obj.rotation_euler = rotation
-    return light_obj
+    # 2. Large Overhead Studio Softbox
+    top_l = bpy.data.lights.new("STUDIO_TopLight", type='AREA')
+    top_l.energy = 1400.0
+    top_l.size = 8.0
+    top_l.size_y = 6.0
+    top_l.color = (1.0, 0.98, 0.95)
+    top_obj = bpy.data.objects.new("STUDIO_TopLight", top_l)
+    scene.collection.objects.link(top_obj)
+    top_obj.location = (cx, cy, cz + 4.5)
 
-# Overhead softbox for silky hood and roof specular streaks
-add_area_light("Light_Ceiling_Softbox", (0.5, 0.5, 4.5), (0, 0, 0), energy=2200, size_x=6.0, size_y=3.5, color=(0.98, 0.99, 1.0))
+    # 3. Front Key Light
+    key_l = bpy.data.lights.new("STUDIO_KeyLight", type='AREA')
+    key_l.energy = 850.0
+    key_l.size = 4.5
+    key_l.color = (1.0, 0.97, 0.94)
+    key_obj = bpy.data.objects.new("STUDIO_KeyLight", key_l)
+    scene.collection.objects.link(key_obj)
+    key_obj.location = (cx + 4.2, cy + 4.8, cz + 2.6)
 
-# Front 3/4 Key Light (broad warm-neutral illumination for fascia and front 3/4)
-add_area_light("Light_Key_Fascia", (3.8, 3.8, 2.5), (math.radians(-35), math.radians(20), math.radians(-35)), energy=1200, size_x=3.5, size_y=2.0, color=(1.0, 0.98, 0.96))
+    # 4. Side Soft Fill
+    fill_l = bpy.data.lights.new("STUDIO_FillLight", type='AREA')
+    fill_l.energy = 600.0
+    fill_l.size = 6.0
+    fill_l.color = (0.94, 0.96, 1.0)
+    fill_obj = bpy.data.objects.new("STUDIO_FillLight", fill_l)
+    scene.collection.objects.link(fill_obj)
+    fill_obj.location = (cx - 5.5, cy - 1.2, cz + 2.2)
 
-# Low Wheel Accent Light (softly highlights alloy spokes without washing out tire)
-add_area_light("Light_Wheel_Accent", (3.5, 1.2, 0.8), (math.radians(-10), math.radians(35), math.radians(-15)), energy=120, size_x=2.0, size_y=1.5, color=(0.95, 0.97, 1.0))
+    # 5. Rear Rim Light
+    rim_l = bpy.data.lights.new("STUDIO_RimLight", type='AREA')
+    rim_l.energy = 750.0
+    rim_l.size = 4.5
+    rim_l.color = (0.95, 0.98, 1.0)
+    rim_obj = bpy.data.objects.new("STUDIO_RimLight", rim_l)
+    scene.collection.objects.link(rim_obj)
+    rim_obj.location = (cx + 2.5, cy - 5.5, cz + 2.2)
 
-# Soft Fill Light on passenger side
-add_area_light("Light_Passenger_Fill", (-4.2, 2.2, 1.8), (math.radians(-25), math.radians(-35), math.radians(35)), energy=400, size_x=4.0, size_y=2.5, color=(0.90, 0.94, 1.0))
+    # 6. Studio Camera
+    cam_data = bpy.data.cameras.new("STUDIO_Camera")
+    cam_data.lens = 50
+    cam_obj = bpy.data.objects.new("STUDIO_Camera", cam_data)
+    scene.collection.objects.link(cam_obj)
+    scene.camera = cam_obj
 
-# Rim / Contour Backlight (separates roofline and C-pillar from background)
-add_area_light("Light_Rear_Rim", (-1.2, -4.5, 3.2), (math.radians(55), math.radians(-15), 0), energy=1800, size_x=5.0, size_y=1.5, color=(0.95, 0.98, 1.0))
+    def point_at(cam, tgt):
+        direction = tgt - cam.location
+        rot_quat = direction.to_track_quat('-Z', 'Y')
+        cam.rotation_euler = rot_quat.to_euler()
 
-# 7. Premium Dark Showroom Floor & Background
-bpy.ops.mesh.primitive_plane_add(size=40, location=(0, 0, 0))
-floor = bpy.context.active_object
-floor.name = "Studio_Floor"
+    views = [
+        ("sedan_showcase_isometric.png", Vector((cx + max_dim * 0.95, cy + max_dim * 0.92, cz + max_dim * 0.35))),
+        ("sedan_showcase_front.png", Vector((cx, cy + max_dim * 1.30, cz + 0.18))),
+        ("sedan_showcase_side.png", Vector((cx + max_dim * 1.35, cy, cz + 0.15))),
+        ("sedan_showcase_rear.png", Vector((cx, cy - max_dim * 1.30, cz + 0.22))),
+        ("sedan_showcase_rear_34.png", Vector((cx + max_dim * 0.90, cy - max_dim * 0.95, cz + max_dim * 0.32))),
+        ("sedan_showcase_top.png", Vector((cx + 0.05, cy - 0.10, cz + max_dim * 1.45))),
+    ]
 
-floor_mat = bpy.data.materials.new("Mat_StudioFloor")
-floor_mat.use_nodes = True
-bsdf = floor_mat.node_tree.nodes.get("Principled BSDF")
-if bsdf:
-    bsdf.inputs['Base Color'].default_value = (0.012, 0.013, 0.016, 1.0)
-    bsdf.inputs['Roughness'].default_value = 0.18
-    bsdf.inputs['Metallic'].default_value = 0.20
-floor.data.materials.append(floor_mat)
+    rendered_files = []
+    for filename, pos in views:
+        cam_obj.location = pos
+        point_at(cam_obj, target)
+        out_path = os.path.join(OUTPUT_DIR, filename)
+        scene.render.filepath = out_path
+        bpy.ops.render.render(write_still=True)
+        rendered_files.append(out_path)
+        
+        # Copy to public renders
+        pub_path = os.path.join(PUBLIC_RENDERS_DIR, filename)
+        shutil.copyfile(out_path, pub_path)
+        print(f"  ✓ Rendered on Light Background: {filename} ({os.path.getsize(out_path)/1024:.1f} KB)")
 
-# World background
-world = bpy.context.scene.world
-if world and world.node_tree:
-    bg_node = world.node_tree.nodes.get("Background")
-    if bg_node:
-        bg_node.inputs['Color'].default_value = (0.020, 0.022, 0.026, 1.0)
-        bg_node.inputs['Strength'].default_value = 0.5
+    # Clean up studio objects after rendering to leave mesh clean
+    for o in list(bpy.data.objects):
+        if o.name.startswith("STUDIO_"):
+            bpy.data.objects.remove(o, do_unlink=True)
 
-# 8. Render Configuration
-scene = bpy.context.scene
-scene.render.image_settings.file_format = 'PNG'
-scene.render.resolution_x = 1920
-scene.render.resolution_y = 1080
-scene.render.resolution_percentage = 100
-render_filepath = os.path.join(out_dir, "sedan_render.png")
-scene.render.filepath = render_filepath
+    print("=" * 70)
+    print(f"[SEDAN_RENDER] All {len(views)} light-background studio renders saved.")
+    print("=" * 70)
+    return rendered_files
 
-# Cycles photorealistic pass with CPU denoising
-scene.render.engine = 'CYCLES'
-scene.cycles.device = 'CPU'
-scene.cycles.samples = 32
-scene.cycles.use_denoising = True
-
-print("[RENDER] Starting beauty render pass with Cycles...")
-bpy.ops.render.render(write_still=True)
-print(f"[STATUS] Render completed successfully: {render_filepath}")
+if __name__ == "__main__":
+    render_showcase()

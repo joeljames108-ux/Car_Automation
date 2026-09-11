@@ -347,9 +347,17 @@ export type SeatStyle = 'standard' | 'sport' | 'bucket' | 'luxury' | 'racing';
 export type SeatBeltColor = 'black' | 'red' | 'blue' | 'yellow' | 'grey';
 export type StitchingColor = 'none' | 'gold' | 'red' | 'blue' | 'yellow' | 'white' | 'silver';
 export type WindshieldTint = 'clear' | 'light_tint' | 'medium_smoke' | 'dark_smoke' | 'blue_tint' | 'green_tint' | 'iridescent';
+
+// ── Rear Cabin / Multi-Row Seating Types ──
+export type SeatingCapacity = '5_seater' | '7_seater' | '8_seater';
+export type Row2SeatingType = 'split_bench_40_20_40' | 'executive_captain_chairs' | 'luxury_lounge';
+export type Row3SeatingType = 'fold_flat_bench' | 'split_50_50' | 'power_stow';
+export type RearEntertainment = 'none' | 'dual_11in_oled' | 'overhead_theater_31in' | 'executive_bundle';
+export type RearClimateZone = 'shared' | 'tri_zone' | 'quad_zone_touch';
 export type LightingMode = 'day' | 'sunset' | 'night' | 'track_night';
 
 export type CameraPose =
+  | 'studio_sport'
   | 'dashboard_center'
   | 'driver'
   | 'driver_close'
@@ -363,10 +371,25 @@ export type CameraPose =
   | 'passenger'
   | 'full_cockpit'
   | 'orbit_360'
-  | 'exploded';
+  | 'exploded'
+  | 'rear_cabin'
+  | 'rear_row2'
+  | 'rear_row3';
 
 export type DriverHeight = 'low' | 'normal' | 'tall';
-export type ActiveConfigPanel = 'steering' | 'dashboard' | 'console' | 'seats' | 'doors' | 'other';
+export type ActiveConfigPanel =
+  | 'overview'
+  | 'steering'
+  | 'dashboard'
+  | 'cluster'
+  | 'infotainment'
+  | 'display'
+  | 'console'
+  | 'seats'
+  | 'rear_cabin'
+  | 'doors'
+  | 'summary'
+  | 'other';
 
 export interface CockpitThemePreset {
   id: string;
@@ -636,6 +659,16 @@ export interface InteriorDashboardConfigState {
   lightingMode: LightingMode;
   nightMode: boolean;
 
+  // Rear Cabin / Multi-Row Seating State
+  seatingCapacity: SeatingCapacity;
+  row2SeatingType: Row2SeatingType;
+  row3SeatingType: Row3SeatingType;
+  rearEntertainment: RearEntertainment;
+  rearClimateZone: RearClimateZone;
+  rearHeatedVentilated: boolean;
+  rearMassage: boolean;
+  rearFoldingTables: boolean;
+
   cameraPose: CameraPose;
   driverHeight: DriverHeight;
   activePanel: ActiveConfigPanel;
@@ -693,6 +726,16 @@ export interface InteriorDashboardConfigState {
   setLinkStitching: (link: boolean) => void;
   setLinkTrim: (link: boolean) => void;
   setLinkAmbient: (link: boolean) => void;
+
+  // Rear Cabin Setters
+  setSeatingCapacity: (cap: SeatingCapacity) => void;
+  setRow2SeatingType: (type: Row2SeatingType) => void;
+  setRow3SeatingType: (type: Row3SeatingType) => void;
+  setRearEntertainment: (ent: RearEntertainment) => void;
+  setRearClimateZone: (zone: RearClimateZone) => void;
+  setRearHeatedVentilated: (on: boolean) => void;
+  setRearMassage: (on: boolean) => void;
+  setRearFoldingTables: (on: boolean) => void;
 
   undo: () => void;
   redo: () => void;
@@ -873,9 +916,19 @@ export const useInteriorDashboardConfigStore = create<InteriorDashboardConfigSta
       lightingMode: 'day',
       nightMode: false,
 
-      cameraPose: 'dashboard_center',
+      // Rear Cabin Defaults
+      seatingCapacity: '5_seater',
+      row2SeatingType: 'split_bench_40_20_40',
+      row3SeatingType: 'fold_flat_bench',
+      rearEntertainment: 'none',
+      rearClimateZone: 'shared',
+      rearHeatedVentilated: false,
+      rearMassage: false,
+      rearFoldingTables: false,
+
+      cameraPose: 'studio_sport',
       driverHeight: 'normal',
-      activePanel: 'dashboard',
+      activePanel: 'overview',
       explodedProgress: 0.0,
 
       linkLeather: true,
@@ -1030,9 +1083,18 @@ export const useInteriorDashboardConfigStore = create<InteriorDashboardConfigSta
           windshieldTint: 'clear',
           lightingMode: 'day',
           nightMode: false,
-          cameraPose: 'dashboard_center',
+          // Rear Cabin Reset
+          seatingCapacity: '5_seater',
+          row2SeatingType: 'split_bench_40_20_40',
+          row3SeatingType: 'fold_flat_bench',
+          rearEntertainment: 'none',
+          rearClimateZone: 'shared',
+          rearHeatedVentilated: false,
+          rearMassage: false,
+          rearFoldingTables: false,
+          cameraPose: 'studio_sport',
           driverHeight: 'normal',
-          activePanel: 'dashboard',
+          activePanel: 'overview',
           explodedProgress: 0.0,
           engineering: initialEngineering,
           history: [],
@@ -1184,11 +1246,16 @@ export const useInteriorDashboardConfigStore = create<InteriorDashboardConfigSta
       setActivePanel: (panel) =>
         set((state) => {
           let pose = state.cameraPose;
-          if (panel === "seats") pose = "seats";
+          if (panel === "overview") pose = "studio_sport";
+          else if (panel === "seats") pose = "seats";
           else if (panel === "steering") pose = "steering";
+          else if (panel === "cluster") pose = "cluster";
+          else if (panel === "infotainment" || panel === "display") pose = "infotainment";
           else if (panel === "console") pose = "console";
           else if (panel === "doors") pose = "doors";
           else if (panel === "dashboard") pose = "dashboard_center";
+          else if (panel === "rear_cabin") pose = "rear_cabin";
+          else if (panel === "summary") pose = "studio_sport";
           return { activePanel: panel, cameraPose: pose };
         }),
       setExplodedProgress: (prog) => set({ explodedProgress: Math.max(0, Math.min(1, prog)) }),
@@ -1197,6 +1264,27 @@ export const useInteriorDashboardConfigStore = create<InteriorDashboardConfigSta
       setLinkStitching: (link) => set({ linkStitching: link }),
       setLinkTrim: (link) => set({ linkTrim: link }),
       setLinkAmbient: (link) => set({ linkAmbient: link }),
+
+      // Rear Cabin Setters
+      setSeatingCapacity: (cap) =>
+        set((state) => {
+          // Auto-adjust row3 visibility: if 5-seater, row3 is irrelevant
+          const updates: Partial<InteriorDashboardConfigState> = {
+            seatingCapacity: cap,
+            cameraPose: 'rear_cabin' as CameraPose,
+          };
+          if (cap === '5_seater') {
+            updates.row3SeatingType = 'fold_flat_bench';
+          }
+          return updates;
+        }),
+      setRow2SeatingType: (type) => set({ row2SeatingType: type, cameraPose: 'rear_row2' as CameraPose }),
+      setRow3SeatingType: (type) => set({ row3SeatingType: type, cameraPose: 'rear_row3' as CameraPose }),
+      setRearEntertainment: (ent) => set({ rearEntertainment: ent }),
+      setRearClimateZone: (zone) => set({ rearClimateZone: zone }),
+      setRearHeatedVentilated: (on) => set({ rearHeatedVentilated: on }),
+      setRearMassage: (on) => set({ rearMassage: on }),
+      setRearFoldingTables: (on) => set({ rearFoldingTables: on }),
 
       undo: () =>
         set((state) => {

@@ -790,7 +790,7 @@ def add_suv_heavy_duty_systems(wb, track_w, front_y, rear_y, ride_h, mats):
     half_track = track_w / 2.0
     
     for corner, sx, sy in [("FL", -1, 1), ("FR", 1, 1), ("RL", -1, -1), ("RR", 1, -1)]:
-        make_cylinder(f"SUV_Air_Suspension_Bellows_{corner}", (sx * half_track, sy * half_wb, ride_h + 0.24), 0.068, 0.24, (0, 0, 0), "08_Chassis_Powertrain", mats["air_spring"])
+        make_cylinder(f"SUV_Air_Suspension_Bellows_{corner}", (sx * 0.60, sy * half_wb, ride_h + 0.24), 0.068, 0.24, (0, 0, 0), "08_Chassis_Powertrain", mats["air_spring"])
     
     make_cylinder("SUV_Air_Suspension_Air_Tank", (0.35, -wb * 0.18, ride_h + 0.18), 0.075, 0.62, (math.radians(90), 0, 0), "08_Chassis_Powertrain", mats["skid_silver"])
     make_box("SUV_Air_Suspension_Compressor", (-0.35, -wb * 0.18, ride_h + 0.20), (0.22, 0.26, 0.16), "08_Chassis_Powertrain", mats["chassis_steel"])
@@ -800,8 +800,8 @@ def add_suv_heavy_duty_systems(wb, track_w, front_y, rear_y, ride_h, mats):
     make_box("SUV_Rear_Diff_Cooling_Fins", (0.0, -wb/2.0 - 0.13, ride_h + 0.16), (0.22, 0.02, 0.18), "08_Chassis_Powertrain", mats["radiator_matrix"])
     
     for side, ax in [("L", -0.44), ("R", 0.44)]:
-        make_box(f"SUV_Engine_Airbox_{side}", (ax, wb/2.0 + 0.18, 0.94), (0.24, 0.28, 0.22), "08_Chassis_Powertrain", mats["textured_plastic"])
-        make_box(f"SUV_RamAir_Duct_{side}", (ax * 0.82, front_y - 0.16, 0.88), (0.14, 0.32, 0.08), "08_Chassis_Powertrain", mats["textured_plastic"])
+        make_box(f"SUV_Engine_Airbox_{side}", (ax, wb/2.0 + 0.18, 0.80), (0.24, 0.28, 0.22), "08_Chassis_Powertrain", mats["textured_plastic"])
+        make_box(f"SUV_RamAir_Duct_{side}", (ax * 0.82, wb/2.0 + 0.40, 0.78), (0.14, 0.32, 0.08), "08_Chassis_Powertrain", mats["textured_plastic"])
     
     make_box("SUV_Tow_Hitch_Receiver_Collar", (0.0, rear_y + 0.02, 0.28), (0.14, 0.18, 0.14), "05_Exterior_Hardware", mats["chassis_steel"])
     for side, cx in [("L", -0.10), ("R", 0.10)]:
@@ -1243,11 +1243,7 @@ def add_suv_v8_twin_turbo_and_executive_suite(front_y, rear_y, wb, width, ride_h
 
     # 3. Rear Transverse Acoustic Mufflers & Quad Oval Polished Exhaust Outlets
     for side, mx in [("L", -0.38), ("R", 0.38)]:
-        make_box(f"SUV_Rear_Exhaust_Muffler_{side}", (mx, rear_y + 0.25, ride_h + 0.22), (0.24, 0.36, 0.18), "08_Chassis_Powertrain", mats["skid_silver"])
-    for tip_idx, tip_x in enumerate([-0.46, -0.38, 0.38, 0.46]):
-        t_side = "L" if tip_x < 0 else "R"
-        sub_idx = 1 if abs(tip_x) > 0.40 else 2
-        make_cylinder(f"SUV_Rear_Valence_Oval_Tip_{t_side}{sub_idx}", (tip_x, rear_y - 0.02, ride_h + 0.18), 0.038, 0.18, (math.radians(90), 0, 0), "08_Chassis_Powertrain", mats["chrome"])
+        make_box(f"SUV_Rear_Exhaust_Muffler_{side}", (mx, rear_y + 0.49, ride_h + 0.22), (0.24, 0.36, 0.18), "08_Chassis_Powertrain", mats["skid_silver"])
 
     # 4. 2nd-Row Executive Waterfall Center Console with Dual OLED Displays
     make_box("SUV_2ndRow_Executive_Center_Console", (0.0, -wb * 0.08, ride_h + 0.46), (0.26, 0.52, 0.30), "07_Interior", mats["leather_interior"])
@@ -1256,8 +1252,8 @@ def add_suv_v8_twin_turbo_and_executive_suite(front_y, rear_y, wb, width, ride_h
     make_box("SUV_Seatback_Entertainment_OLED_R", (width * 0.22, wb * 0.06, 1.08), (0.32, 0.02, 0.20), "07_Interior", mats["screen_oled"])
 
     # 5. Dual Motorized Power Tailgate Lift Spindle Struts & Concealed Roof Wiper
-    for side, sx in [("L", -width * 0.44), ("R", width * 0.44)]:
-        make_cylinder(f"SUV_Tailgate_Power_Spindle_Strut_{side}", (sx, rear_y + 0.35, 1.15), 0.014, 0.45, (math.radians(40), 0, 0), "05_Exterior_Hardware", mats["matte_trim"])
+    for side, sx in [("L", -0.52), ("R", 0.52)]:
+        make_cylinder(f"SUV_Tailgate_Power_Spindle_Strut_{side}", (sx, rear_y + 0.29, 0.88), 0.014, 0.45, (math.radians(40), 0, 0), "05_Exterior_Hardware", mats["matte_trim"])
     make_box("SUV_Rear_Spoiler_Concealed_Wiper_Arm", (0.0, rear_y + 0.08, roof_z - 0.05), (0.34, 0.02, 0.02), "05_Exterior_Hardware", mats["matte_trim"])
 
 def add_gt3_advanced_motorsport_systems(front_y, rear_y, wb, width, ride_h, roof_z, mats):
@@ -1832,10 +1828,6 @@ def build_suv():
         make_cylinder(f"SUV_Twin_Scroll_Turbo_{t_side}", (tx, wb/2.0 + 0.18, 0.94), 0.065, 0.12, (0, math.radians(90), 0), "08_Chassis_Powertrain", mats["titanium"])
     make_cylinder("SUV_Center_Driveshaft_Prop", (0.0, 0.0, ride_h + 0.14), 0.035, wb * 0.85, (math.radians(90), 0, 0), "08_Chassis_Powertrain", mats["chassis_steel"])
 
-    # Quad Chrome Performance Exhaust Tips
-    for ex_side, ex_x in [("L", -0.58), ("R", 0.58)]:
-        make_box(f"SUV_Dual_Chrome_Exhaust_Tip_{ex_side}", (ex_x, rear_y + 0.04, 0.35), (0.18, 0.22, 0.08), "08_Chassis_Powertrain", mats["chrome"])
-
     # 3-Row VIP Cabin & Curved MBUX Hyperscreen
     make_box("SUV_MBUX_Curved_Hyperscreen_Dash", (0.0, wb*0.22, 1.12), (1.28, 0.05, 0.24), "07_Interior", mats["screen_oled"])
     make_cylinder("SUV_Multifunction_Wood_Steering_Wheel", (-0.42, wb*0.14, 1.08), 0.19, 0.04, (math.radians(24), 0, 0), "07_Interior", mats["leather_beige"])
@@ -1843,9 +1835,7 @@ def build_suv():
     make_box("SUV_2ndRow_Captain_Chair_R", (0.42, -wb*0.12, 0.85), (0.52, 0.52, 0.65), "07_Interior", mats["leather_beige"])
     make_box("SUV_3rdRow_FoldFlat_Bench", (0.0, -wb*0.38, 0.82), (1.18, 0.48, 0.58), "07_Interior", mats["leather_beige"])
 
-    # Illuminated Running Boards & Integrated Bumper Step
-    for side in [-1, 1]:
-        make_box(f"SUV_Illuminated_Running_Board_{'L' if side > 0 else 'R'}", (side * 0.95, 0.0, 0.24), (0.14, wb * 0.78, 0.035), "05_Exterior_Hardware", mats["skid_silver"])
+    # Integrated Bumper Step
     make_box("SUV_Split_Tailgate_Step_Pad", (0.0, rear_y + 0.04, 0.58), (1.05, 0.10, 0.03), "05_Exterior_Hardware", mats["skid_silver"])
 
     refine_all_normals_and_weld()

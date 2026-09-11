@@ -10,7 +10,8 @@ export type CoreVehicleCategory =
   | "sedan"
   | "hatchback"
   | "crossover"
-  | "suv";
+  | "suv"
+  | "bus";
 
 export type FutureVehicleCategory =
   // Extensible future categories:
@@ -33,6 +34,7 @@ export type BodyArchitectureClass =
   | "2_box_compact"
   | "2_box_elevated"
   | "2_box_heavy_duty"
+  | "heavy_duty_transit_bus"
   | "monocoque_fastback"
   | "spaceframe_prototype";
 

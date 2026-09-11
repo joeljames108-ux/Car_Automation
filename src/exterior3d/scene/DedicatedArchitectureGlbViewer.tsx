@@ -2,12 +2,12 @@
 // DEDICATED ARCHITECTURE GLB VIEWER (REACT THREE FIBER)
 // =============================================================================
 // Dynamically loads the specific vehicle platform's discrete GLB assets:
-// 1. Chassis GLB (/models/vehicles/{category}/chassis.glb)
-// 2. Body Framework GLB (/models/vehicles/{category}/body-framework.glb)
-// 3. Floor Pan GLB (/models/vehicles/{category}/floor.glb)
-// 4. Wheel Arches GLB (/models/vehicles/{category}/wheel-arches.glb)
-// 5. Hardpoints GLB (/models/vehicles/{category}/hardpoints.glb)
-// 6. Packaging Envelopes GLB (/models/vehicles/{category}/envelopes.glb)
+// 1. Chassis GLB (/vehicles/{category}/chassis.glb)
+// 2. Body Framework GLB (/vehicles/{category}/body-framework.glb)
+// 3. Floor Pan GLB (/vehicles/{category}/floor.glb)
+// 4. Wheel Arches GLB (/vehicles/{category}/wheel-arches.glb)
+// 5. Hardpoints GLB (/vehicles/{category}/hardpoints.glb)
+// 6. Packaging Envelopes GLB (/vehicles/{category}/envelopes.glb)
 //
 // Supports:
 // - Real-time PBR material customization (paint color & finish on framework)

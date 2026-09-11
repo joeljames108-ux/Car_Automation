@@ -18,6 +18,10 @@ import {
   ShifterStyle,
   PaddleShifterStyle,
   HUDMode,
+  ClusterStyle,
+  SeatingCapacity,
+  Row2SeatingType,
+  RearEntertainment,
 } from "../../state/interiorDashboardConfigStore";
 
 export class DashboardVisibilityManager {
@@ -110,6 +114,25 @@ export class DashboardVisibilityManager {
     }
   }
 
+  // 4b. Cluster Style Swapping (Physical analog dials vs Digital screen display)
+  public updateClusterStyle(style: ClusterStyle) {
+    const isAnalog = style === "analog";
+    const analogNodes = [
+      "CLUSTER_BEZEL_SPEEDO",
+      "CLUSTER_BEZEL_TACHO",
+      "CLUSTER_DIAL_SPEEDO",
+      "CLUSTER_DIAL_TACHO",
+      "CLUSTER_NEEDLE_SPEEDO",
+      "CLUSTER_NEEDLE_TACHO",
+    ];
+    analogNodes.forEach((name) => {
+      const node = this.assetManager.getNode(name);
+      if (node) {
+        node.visible = isAnalog;
+      }
+    });
+  }
+
   // 5. Exploded View Radial Displacements
   public updateExplodedView(progress: number) {
     const t = Math.max(0, Math.min(1, progress));
@@ -136,4 +159,87 @@ export class DashboardVisibilityManager {
       }
     });
   }
+
+  // ── 6. Rear Cabin Seating Capacity Visibility ──
+  public updateSeatingCapacity(capacity: SeatingCapacity) {
+    // Row 2 seats (always visible for all capacities)
+    const row2Nodes = [
+      "SEAT_ROW2_L", "SEAT_ROW2_R", "SEAT_ROW2_C",
+      "SEATBELT_ROW2_L", "SEATBELT_ROW2_R", "SEATBELT_ROW2_C",
+      "SEAT_ROW2_ARMREST_CONSOLE",
+    ];
+    row2Nodes.forEach((name) => {
+      const node = this.assetManager.getNode(name);
+      if (node) node.visible = true;
+    });
+
+    // Row 3 seats — only visible for 7 and 8 seater
+    const row3OutboardNodes = [
+      "SEAT_ROW3_L", "SEAT_ROW3_R",
+      "ROW3_ARMREST_L", "ROW3_ARMREST_R",
+      "SEATBELT_ROW3_L", "SEATBELT_ROW3_R",
+    ];
+    const row3CenterNodes = ["SEAT_ROW3_C", "SEATBELT_ROW3_C"];
+    const showRow3 = capacity === "7_seater" || capacity === "8_seater";
+    const showRow3Center = capacity === "8_seater";
+
+    row3OutboardNodes.forEach((name) => {
+      const node = this.assetManager.getNode(name);
+      if (node) node.visible = showRow3;
+    });
+    row3CenterNodes.forEach((name) => {
+      const node = this.assetManager.getNode(name);
+      if (node) node.visible = showRow3Center;
+    });
+  }
+
+  // ── 7. Row 2 Seating Style Toggle (Bench vs Captain vs Lounge) ──
+  public updateRow2Style(style: Row2SeatingType) {
+    // Center seat visible only in bench modes
+    const centerSeat = this.assetManager.getNode("SEAT_ROW2_C");
+    if (centerSeat) {
+      centerSeat.visible = style === "split_bench_40_20_40";
+    }
+
+    // Captain console visible only for executive captain chairs
+    const captainConsole = this.assetManager.getNode("SEAT_ROW2_CAPTAIN_CONSOLE");
+    if (captainConsole) {
+      captainConsole.visible = style === "executive_captain_chairs";
+    }
+
+    // Armrest console visible for bench and lounge
+    const armrestConsole = this.assetManager.getNode("SEAT_ROW2_ARMREST_CONSOLE");
+    if (armrestConsole) {
+      armrestConsole.visible = style !== "executive_captain_chairs";
+    }
+  }
+
+  // ── 8. Rear Entertainment & Amenities Visibility ──
+  public updateRearAmenities(
+    entertainment: RearEntertainment,
+    foldingTables: boolean,
+  ) {
+    // Seatback OLED screens
+    const screenL = this.assetManager.getNode("REAR_SEATBACK_SCREEN_L");
+    const screenR = this.assetManager.getNode("REAR_SEATBACK_SCREEN_R");
+    const showSeatbackScreens = entertainment === "dual_11in_oled" || entertainment === "executive_bundle";
+    if (screenL) screenL.visible = showSeatbackScreens;
+    if (screenR) screenR.visible = showSeatbackScreens;
+
+    // 31" Theater screen
+    const theaterScreen = this.assetManager.getNode("REAR_THEATER_SCREEN_31IN");
+    const showTheater = entertainment === "overhead_theater_31in" || entertainment === "executive_bundle";
+    if (theaterScreen) theaterScreen.visible = showTheater;
+
+    // Rear HVAC console (always visible when rear cabin exists)
+    const rearHvac = this.assetManager.getNode("REAR_CONSOLE_HVAC");
+    if (rearHvac) rearHvac.visible = true;
+
+    // Folding tables
+    const tableL = this.assetManager.getNode("REAR_FOLDING_TABLE_L");
+    const tableR = this.assetManager.getNode("REAR_FOLDING_TABLE_R");
+    if (tableL) tableL.visible = foldingTables;
+    if (tableR) tableR.visible = foldingTables;
+  }
 }
+

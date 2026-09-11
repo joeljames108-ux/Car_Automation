@@ -294,6 +294,19 @@
   animation: gradientShift 4s linear infinite;
 }
 
+/* Hidden scrollbar utility — keeps horizontal/vertical scroll functional but hides the bar.
+   Used by stage-chain breadcrumbs, tab rails and carousels that must not show a scrollbar. */
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+}
+
 /* Scrollbar styling */
 ::-webkit-scrollbar {
   width: 6px;

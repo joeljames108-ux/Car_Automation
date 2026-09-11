@@ -125,16 +125,34 @@ export interface CarBriefInput {
 }
 
 export function buildShowcaseImagePrompt(car: CarBriefInput, extra = ""): string {
+  const isBus = car.bodyStyle === "bus" || car.bodyStyle === "transit_bus";
   const bits = [
-    `A ${car.tierLabel ?? "flagship"} ${car.bodyStyle ?? "hypercar"} called "${car.name}"`,
+    isBus
+      ? `A modern aerodynamic zero-emission transit bus called "${car.name}"`
+      : `A ${car.tierLabel ?? "flagship"} ${car.bodyStyle ?? "hypercar"} called "${car.name}"`,
     car.paintHex ? `painted deep ${describeHex(car.paintHex)} with optical clearcoat` : null,
-    car.powerHp ? `${Math.round(car.powerHp)} hp powertrain` : null,
-    car.downforceKg ? `${Math.round(car.downforceKg)} kg active aero downforce` : null,
-    "parked in a rain-slicked neon-lit metropolis at night",
+    car.powerHp ? `${Math.round(car.powerHp)} hp ${isBus ? "dual-motor e-axle powertrain" : "powertrain"}` : null,
+    isBus ? "illuminated high-res amber LED destination sign, panoramic tinted glazing, roof climate HVAC pods" : (car.downforceKg ? `${Math.round(car.downforceKg)} kg active aero downforce` : null),
+    isBus ? "arriving at a rain-slicked modern transit terminal at dusk, neon platform reflections" : "parked in a rain-slicked neon-lit metropolis at night",
     "cinematic automotive photography, 35mm anamorphic lens, volumetric fog, reflections on wet asphalt",
     extra,
   ].filter(Boolean);
   return bits.join(", ");
+}
+
+export function buildBusFleetCampaign(car: CarBriefInput): { headline: string; tagline: string; channels: string[]; assetChecklist: string[] } {
+  return {
+    headline: `${car.name} — Clean Urban Mobility, Redefined`,
+    tagline: "Zero emissions. Maximum passenger comfort. Next-generation municipal transit.",
+    channels: ["Municipal Fleet Showcase (16:9 4K)", "Transit Launch Video (9:16 Social)", "Smart City Press Release", "Urban Mobility Expo Billboard (21:9)"],
+    assetChecklist: [
+      "1× hero render — Soul Cinema 4K smart terminal scene",
+      "1× 3D CAD mesh — Low-floor electric transit bus GLB",
+      "1× launch video — Cinema Studio Video 3.0 transit route showcase",
+      "1× acoustic soundtrack — Audio Lab electric powertrain hum",
+      "4× municipal social cutdowns — Marketing Studio auto-resize",
+    ],
+  };
 }
 
 export function build3DMeshPrompt(car: CarBriefInput, category: string, detail = "cad"): string {

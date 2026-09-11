@@ -16,6 +16,8 @@ import * as THREE from "three";
 import { DashboardAssetManager } from "./dashboardAssetManager";
 import {
   DashboardTrimType,
+  SeatStyle,
+  SeatBeltColor,
   SteeringGripMaterial,
   SteeringStripeStyle,
   StitchingColor,
@@ -155,43 +157,57 @@ export class DashboardMaterialManager {
 
   // 3. Steering Wheel Grip Material
   public updateSteeringGripMaterial(gripMat: SteeringGripMaterial, gripColor: string) {
-    const wheelTorus = this.assetManager.getNode<THREE.Mesh>("STEERING_SPORT_3SPOKE");
-    if (!wheelTorus || !wheelTorus.material) return;
-    const mat = wheelTorus.material as THREE.MeshStandardMaterial;
+    const wheelRimNodeNames = [
+      "STEERING_SPORT_3SPOKE",
+      "STEER_GT_RIM_SCULPT",
+      "STEERING_YOKE_GRIP_L",
+      "STEERING_YOKE_GRIP_R",
+      "STEER_LUX_RIM",
+      "STEER_PERF_RIM",
+      "STEER_CLASSIC_RIM",
+      "STEERING_FORMULA",
+    ];
 
     const baseColor = new THREE.Color(gripColor);
-    mat.color.copy(baseColor);
 
-    switch (gripMat) {
-      case "alcantara":
-      case "suede":
-        mat.map = null;
-        mat.roughness = 0.88;
-        mat.metalness = 0.02;
-        break;
-      case "perforated":
-        mat.map = this.perfTexture;
-        mat.roughness = 0.44;
-        mat.metalness = 0.02;
-        break;
-      case "carbon":
-        mat.map = this.carbonTexture;
-        mat.roughness = 0.15;
-        mat.metalness = 0.82;
-        break;
-      case "wood":
-        mat.map = this.woodTexture;
-        mat.roughness = 0.20;
-        mat.metalness = 0.04;
-        break;
-      case "leather":
-      default:
-        mat.map = null;
-        mat.roughness = 0.44;
-        mat.metalness = 0.02;
-        break;
-    }
-    mat.needsUpdate = true;
+    wheelRimNodeNames.forEach((name) => {
+      const node = this.assetManager.getNode<THREE.Mesh>(name);
+      if (!node || !node.material) return;
+      const mat = node.material as THREE.MeshStandardMaterial;
+
+      mat.color.copy(baseColor);
+
+      switch (gripMat) {
+        case "alcantara":
+        case "suede":
+          mat.map = null;
+          mat.roughness = 0.88;
+          mat.metalness = 0.02;
+          break;
+        case "perforated":
+          mat.map = this.perfTexture;
+          mat.roughness = 0.44;
+          mat.metalness = 0.02;
+          break;
+        case "carbon":
+          mat.map = this.carbonTexture;
+          mat.roughness = 0.15;
+          mat.metalness = 0.82;
+          break;
+        case "wood":
+          mat.map = this.woodTexture;
+          mat.roughness = 0.20;
+          mat.metalness = 0.04;
+          break;
+        case "leather":
+        default:
+          mat.map = null;
+          mat.roughness = 0.44;
+          mat.metalness = 0.02;
+          break;
+      }
+      mat.needsUpdate = true;
+    });
   }
 
   // 4. Steering 12 O'Clock Stripe
@@ -317,5 +333,83 @@ export class DashboardMaterialManager {
     }
     mat.transparent = true;
     mat.needsUpdate = true;
+  }
+
+  // 8. Seat Upholstery & Leather Color Propagation across Front, Row 2 & Row 3
+  public updateSeatUpholstery(leatherColor: string, seatStyle?: SeatStyle) {
+    const seatNodes = [
+      this.assetManager.getNode<THREE.Mesh>("CABIN_SEATS"),
+      this.assetManager.getNode<THREE.Mesh>("SEAT_FRONT_L"),
+      this.assetManager.getNode<THREE.Mesh>("SEAT_FRONT_R"),
+      this.assetManager.getNode<THREE.Mesh>("SEAT_ROW2_L"),
+      this.assetManager.getNode<THREE.Mesh>("SEAT_ROW2_R"),
+      this.assetManager.getNode<THREE.Mesh>("SEAT_ROW2_C"),
+      this.assetManager.getNode<THREE.Mesh>("SEAT_ROW2_ARMREST_CONSOLE"),
+      this.assetManager.getNode<THREE.Mesh>("SEAT_ROW2_CAPTAIN_CONSOLE"),
+      this.assetManager.getNode<THREE.Mesh>("SEAT_ROW3_L"),
+      this.assetManager.getNode<THREE.Mesh>("SEAT_ROW3_R"),
+      this.assetManager.getNode<THREE.Mesh>("SEAT_ROW3_C"),
+      this.assetManager.getNode<THREE.Mesh>("ROW3_ARMREST_L"),
+      this.assetManager.getNode<THREE.Mesh>("ROW3_ARMREST_R"),
+    ];
+
+    const threeColor = new THREE.Color(leatherColor);
+    const roughness = seatStyle === "bucket" || seatStyle === "racing" ? 0.65 : 0.44;
+
+    seatNodes.forEach((node) => {
+      if (!node) return;
+      node.traverse((child) => {
+        if ((child as THREE.Mesh).isMesh) {
+          const mesh = child as THREE.Mesh;
+          if (mesh.material) {
+            const mat = mesh.material as THREE.MeshStandardMaterial;
+            mat.color.copy(threeColor);
+            mat.roughness = roughness;
+            mat.metalness = 0.05;
+            mat.needsUpdate = true;
+          }
+        }
+      });
+    });
+  }
+
+  // 9. Multi-Row Seatbelt Webbing Color
+  public updateSeatBelts(beltColor: SeatBeltColor) {
+    const beltNodes = [
+      this.assetManager.getNode<THREE.Mesh>("SEATBELT_ROW1_L"),
+      this.assetManager.getNode<THREE.Mesh>("SEATBELT_ROW1_R"),
+      this.assetManager.getNode<THREE.Mesh>("SEATBELT_ROW2_L"),
+      this.assetManager.getNode<THREE.Mesh>("SEATBELT_ROW2_R"),
+      this.assetManager.getNode<THREE.Mesh>("SEATBELT_ROW2_C"),
+      this.assetManager.getNode<THREE.Mesh>("SEATBELT_ROW3_L"),
+      this.assetManager.getNode<THREE.Mesh>("SEATBELT_ROW3_R"),
+      this.assetManager.getNode<THREE.Mesh>("SEATBELT_ROW3_C"),
+    ];
+
+    const col = new THREE.Color();
+    switch (beltColor) {
+      case "red": col.setHex(0xdc2626); break;
+      case "blue": col.setHex(0x2563eb); break;
+      case "yellow": col.setHex(0xeab308); break;
+      case "grey": col.setHex(0x64748b); break;
+      case "black":
+      default:
+        col.setHex(0x18181b);
+        break;
+    }
+
+    beltNodes.forEach((node) => {
+      if (!node) return;
+      node.traverse((child) => {
+        if ((child as THREE.Mesh).isMesh) {
+          const mesh = child as THREE.Mesh;
+          if (mesh.material) {
+            const mat = mesh.material as THREE.MeshStandardMaterial;
+            mat.color.copy(col);
+            mat.needsUpdate = true;
+          }
+        }
+      });
+    });
   }
 }

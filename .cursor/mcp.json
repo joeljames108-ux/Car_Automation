@@ -1,0 +1,16 @@
+{
+  "mcpServers": {
+      "blender": {
+          "command": "C:\\Users\\acer\\.local\\bin\\uvx.exe",
+          "args": [
+              "blender-mcp"
+          ],
+          "env": {
+              "BLENDER_PORT": "9876"
+          }
+      },
+      "higgsfield": {
+          "serverUrl": "https://mcp.higgsfield.ai/mcp"
+      }
+  }
+}

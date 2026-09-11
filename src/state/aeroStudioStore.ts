@@ -68,8 +68,7 @@ export type VehicleArchitecture =
   | 'pickup'
   | 'hypercar'
   | 'supercar'
-  | 'offroad'
-  | 'dune_buggy';
+  | 'offroad';
 
 export interface VehicleArchitectureSpec {
   id: VehicleArchitecture;
@@ -238,20 +237,6 @@ export const VEHICLE_ARCHITECTURES: Record<VehicleArchitecture, VehicleArchitect
       'frontAero', 'rearAero', 'sideAero', 'underbody', 'coolingAero', 'wheelAero', 'aeroSummary'
     ],
     defaultRearAero: 'rearSpoiler',
-    activeAeroSupported: false,
-  },
-  dune_buggy: {
-    id: 'dune_buggy',
-    label: 'Dune Buggy Spaceframe',
-    badge: 'Tubular Frame Sand Runner',
-    compatibleComponents: [
-      'frontSplitter', 'rearWing', 'rearSpoiler', 'diffuser',
-      'brakeDucts', 'wheelDiscs'
-    ],
-    allowedSubTabs: [
-      'frontAero', 'rearAero', 'underbody', 'coolingAero', 'wheelAero', 'aeroSummary'
-    ],
-    defaultRearAero: 'rearWing',
     activeAeroSupported: false,
   },
 };

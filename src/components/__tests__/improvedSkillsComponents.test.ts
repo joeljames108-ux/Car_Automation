@@ -53,15 +53,29 @@ describe("Complete Vehicle GLB Resolution", () => {
   it("resolves correct GLB paths for vehicle models", () => {
     expect(getCompleteVehicleGlbPath("sedan")).toBe("/models/Car_Sedan_Complete.glb");
     expect(getCompleteVehicleGlbPath("crossover")).toBe("/models/Car_Crossover_Complete.glb");
+    expect(getCompleteVehicleGlbPath("crossover_cuv")).toBe("/models/Car_Crossover_Complete.glb");
+    expect(getCompleteVehicleGlbPath("luxury_suv")).toBe("/models/Car_Crossover_Complete.glb");
+    expect(getCompleteVehicleGlbPath("performance_suv")).toBe("/models/Car_Crossover_Complete.glb");
+    expect(getCompleteVehicleGlbPath("offroad_suv")).toBe("/models/Car_Crossover_Complete.glb");
     expect(getCompleteVehicleGlbPath("suv")).toBe("/models/Car_Suv_Complete.glb");
     expect(getCompleteVehicleGlbPath("f1")).toBe("/models/Car_F1_Complete.glb");
     expect(getCompleteVehicleGlbPath("hypercar")).toBe("/models/Car_Hypercar_Complete.glb");
     expect(getCompleteVehicleGlbPath("gt3")).toBe("/models/Car_GT3_Supercar_Complete.glb");
+    expect(getCompleteVehicleGlbPath("pickup_truck")).toBe("/models/Car_HiLux_SR5_Complete.glb");
+    expect(getCompleteVehicleGlbPath("pickup")).toBe("/models/Car_HiLux_SR5_Complete.glb");
   });
 
   it("getStageGlbPaths returns complete vehicle GLB when stage is complete", () => {
     const paths = getStageGlbPaths("complete", "sedan");
     expect(paths).toEqual(["/models/Car_Sedan_Complete.glb"]);
+
+    const pickupComplete = getStageGlbPaths("complete", "pickup_truck");
+    expect(pickupComplete).toEqual(["/models/Car_HiLux_SR5_Complete.glb"]);
+  });
+
+  it("getStageGlbPaths returns dedicated pickup CAD stages", () => {
+    expect(getStageGlbPaths("chassis", "pickup_truck")).toEqual(["/models/modular_parts/pickup/chassis.glb"]);
+    expect(getStageGlbPaths("lighting_glass", "pickup_truck")).toEqual(["/models/modular_parts/pickup/lighting_glass.glb"]);
   });
 });
 

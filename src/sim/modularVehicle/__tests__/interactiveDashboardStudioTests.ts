@@ -35,6 +35,7 @@ import {
 import {
   calculateVanInteriorVolume,
 } from "../../../sim/modularVehicle/vehicleFamilyArchitecture";
+import { DASHBOARD_CAMERA_POSES } from "../../../components/interior/dashboardCameraController";
 
 export function runInteractiveDashboardStudioTests(): { passed: number; failed: number } {
   console.log("\n================================================================");
@@ -306,7 +307,7 @@ export function runInteractiveDashboardStudioTests(): { passed: number; failed: 
   runTest("TEST 11: Driver perspective camera calibration & height bounds", () => {
     const store = useInteriorDashboardConfigStore.getState();
     store.reset();
-    assert.equal(useInteriorDashboardConfigStore.getState().cameraPose, "dashboard_center", "Default camera pose must be dashboard_center");
+    assert.equal(useInteriorDashboardConfigStore.getState().cameraPose, "studio_sport", "Default camera pose must be studio_sport");
 
     const heights: ("low" | "normal" | "tall")[] = ["low", "normal", "tall"];
     for (const h of heights) {
@@ -315,6 +316,7 @@ export function runInteractiveDashboardStudioTests(): { passed: number; failed: 
     }
 
     const poses = [
+      "studio_sport",
       "dashboard_center",
       "driver",
       "driver_close",
@@ -361,9 +363,40 @@ export function runInteractiveDashboardStudioTests(): { passed: number; failed: 
     store.setActivePanel("dashboard");
     assert.equal(useInteriorDashboardConfigStore.getState().cameraPose, "dashboard_center");
 
-    // Resetting must restore default dashboard_center pose
+    // Verify Camera Vector Calibration:
+    // 1. Steering View: camera must be seated in cabin (Z > target.Z) looking down-forward at wheel hub (-0.38, 0.66, 0.246)
+    const steerPose = DASHBOARD_CAMERA_POSES.steering;
+    assert.ok(steerPose.pos.z > steerPose.target.z, "Steering camera must look forward (pos.z > target.z)");
+    assert.ok(Math.abs(steerPose.target.x - (-0.38)) < 0.05, "Steering target must align with wheel X axis (-0.38)");
+    assert.ok(Math.abs(steerPose.target.z - 0.246) < 0.05, "Steering target must align with wheel hub Z axis (0.246)");
+    const steerDist = steerPose.pos.distanceTo(steerPose.target);
+    assert.ok(steerDist >= 0.30 && steerDist <= 0.60, `Steering view distance (${steerDist.toFixed(2)}m) must provide optimal close framing`);
+
+    // 2. Driver POV: camera must be behind steering wheel (pos.z > 0.246) looking forward towards road/windshield (target.z < 0)
+    const driverPose = DASHBOARD_CAMERA_POSES.driver;
+    assert.ok(driverPose.pos.z > 0.246, "Driver POV eye position must be placed behind steering wheel (pos.z > 0.246)");
+    assert.ok(driverPose.target.z < 0.0, "Driver POV target must look forward through windshield (target.z < 0)");
+
+    // 3. Cluster View: target must align with cluster screen at (-0.38, 0.735, 0.078)
+    const clusterPose = DASHBOARD_CAMERA_POSES.cluster;
+    assert.ok(clusterPose.pos.z > clusterPose.target.z, "Cluster camera must look forward towards cluster screen");
+    assert.ok(Math.abs(clusterPose.target.x - (-0.38)) < 0.05, "Cluster target must center on gauge cluster X axis (-0.38)");
+
+    // 4. Infotainment / Display View: target must align with center touchscreen at (0.01, 0.60, 0.08)
+    const infoPose = DASHBOARD_CAMERA_POSES.infotainment;
+    assert.ok(infoPose.pos.z > infoPose.target.z, "Infotainment camera must look forward towards center display");
+    assert.ok(Math.abs(infoPose.target.x - 0.01) < 0.05, "Infotainment target must center on infotainment screen X axis");
+    assert.ok(infoPose.pos.y > infoPose.target.y, "Infotainment camera must be elevated for clear line of sight over console shifter");
+
+    // 5. Studio Sport View: 3/4 quarter cockpit over driver shoulder pos: (-0.08, 1.00, 0.82), target: (0.05, 0.58, -0.10), fov: 64
+    const studioPose = DASHBOARD_CAMERA_POSES.studio_sport;
+    assert.ok(studioPose.pos.z > studioPose.target.z, "Studio Sport camera must look forward (pos.z > target.z)");
+    assert.ok(studioPose.pos.y > studioPose.target.y, "Studio Sport camera must look slightly downward over console");
+    assert.equal(studioPose.fov, 64, "Studio Sport FOV must equal calibrated 64 degrees");
+
+    // Resetting must restore default studio_sport pose
     store.reset();
-    assert.equal(useInteriorDashboardConfigStore.getState().cameraPose, "dashboard_center");
+    assert.equal(useInteriorDashboardConfigStore.getState().cameraPose, "studio_sport");
   });
 
   // --------------------------------------------------------------------------
@@ -430,7 +463,7 @@ export function runInteractiveDashboardStudioTests(): { passed: number; failed: 
     // Reset restores all defaults
     store.reset();
     const resetState = useInteriorDashboardConfigStore.getState();
-    assert.equal(resetState.cameraPose, "dashboard_center");
+    assert.equal(resetState.cameraPose, "studio_sport");
     assert.equal(resetState.steeringWheelStyle, "sport");
     assert.equal(resetState.dashboardTrimMaterial, "walnut");
     assert.equal(resetState.selections.steeringWheel, 0);
@@ -478,7 +511,7 @@ export function runInteractiveDashboardStudioTests(): { passed: number; failed: 
     // 5. Clean Reset
     store.reset();
     assert.equal(useInteriorDashboardConfigStore.getState().hudMode, "off");
-    assert.equal(useInteriorDashboardConfigStore.getState().cameraPose, "dashboard_center");
+    assert.equal(useInteriorDashboardConfigStore.getState().cameraPose, "studio_sport");
   });
 
   // --------------------------------------------------------------------------
@@ -539,6 +572,120 @@ export function runInteractiveDashboardStudioTests(): { passed: number; failed: 
     mStore.setChassisArch(prevArch);
     mStore.setMaterialGrade(prevGrade);
     mStore.setVanSeatConfig(prevVanSeat);
+  });
+
+  // --------------------------------------------------------------------------
+  // TEST 16: Section-Driven Sub-Tabs Architecture & Camera Focus Mapping
+  // --------------------------------------------------------------------------
+  runTest("TEST 16: Section-driven sub-tabs architecture and camera focus mapping (Aero Studio paradigm)", () => {
+    const store = useInteriorDashboardConfigStore.getState();
+    store.reset();
+
+    // 1. Validate the 10 section subtab IDs and their corresponding camera pose mapping
+    const expectedSubTabMapping: Record<string, string> = {
+      overview: "studio_sport",
+      steering: "steering",
+      cluster: "cluster",
+      infotainment: "infotainment",
+      console: "console",
+      dashboard: "dashboard_center",
+      seats: "seats",
+      rear_cabin: "rear_cabin",
+      doors: "doors",
+      summary: "studio_sport",
+    };
+
+    const subTabKeys = Object.keys(expectedSubTabMapping);
+    assert.equal(subTabKeys.length, 10, "Must have exactly 10 discrete interior sub-tabs");
+
+    for (const [panelId, expectedCameraPose] of Object.entries(expectedSubTabMapping)) {
+      store.setActivePanel(panelId as any);
+      const state = useInteriorDashboardConfigStore.getState();
+      assert.equal(state.activePanel, panelId, `Store activePanel must equal ${panelId}`);
+      assert.equal(state.cameraPose, expectedCameraPose, `Selecting subtab ${panelId} must focus camera to ${expectedCameraPose}`);
+
+      // Verify that the camera pose exists and has calibrated target coordinates
+      const poseConfig = DASHBOARD_CAMERA_POSES[expectedCameraPose as keyof typeof DASHBOARD_CAMERA_POSES];
+      assert.ok(poseConfig, `Camera pose ${expectedCameraPose} must exist in DASHBOARD_CAMERA_POSES`);
+      assert.ok(poseConfig.pos, `Camera pose ${expectedCameraPose} must have position vector`);
+      assert.ok(poseConfig.target, `Camera pose ${expectedCameraPose} must have target vector`);
+    }
+
+    // Clean reset back to overview / studio_sport
+    store.reset();
+    assert.equal(useInteriorDashboardConfigStore.getState().activePanel, "overview");
+    assert.equal(useInteriorDashboardConfigStore.getState().cameraPose, "studio_sport");
+  });
+
+  // --------------------------------------------------------------------------
+  // TEST 17: Rear Cabin & Multi-Row Seating Configurations (5 / 7 / 8 Seater)
+  // --------------------------------------------------------------------------
+  runTest("TEST 17: Rear cabin multi-row seating configurations (5/7/8 Seater, Row 2/3 Styles, Amenities)", () => {
+    const store = useInteriorDashboardConfigStore.getState();
+    store.reset();
+
+    // 1. Validate default rear cabin state
+    let state = useInteriorDashboardConfigStore.getState();
+    assert.equal(state.seatingCapacity, "5_seater", "Default seating capacity must be 5_seater");
+    assert.equal(state.row2SeatingType, "split_bench_40_20_40", "Default row 2 style must be split_bench_40_20_40");
+    assert.equal(state.row3SeatingType, "fold_flat_bench", "Default row 3 style must be fold_flat_bench");
+    assert.equal(state.rearEntertainment, "none", "Default rear entertainment must be none");
+    assert.equal(state.rearClimateZone, "shared", "Default rear climate zone must be shared");
+
+    // 2. Capacity switching to 7_seater and 8_seater
+    store.setSeatingCapacity("7_seater");
+    state = useInteriorDashboardConfigStore.getState();
+    assert.equal(state.seatingCapacity, "7_seater");
+    assert.equal(state.cameraPose, "rear_cabin");
+
+    store.setSeatingCapacity("8_seater");
+    state = useInteriorDashboardConfigStore.getState();
+    assert.equal(state.seatingCapacity, "8_seater");
+
+    // 3. Row 2 seating styles
+    store.setRow2SeatingType("executive_captain_chairs");
+    state = useInteriorDashboardConfigStore.getState();
+    assert.equal(state.row2SeatingType, "executive_captain_chairs");
+    assert.equal(state.cameraPose, "rear_row2");
+
+    store.setRow2SeatingType("luxury_lounge");
+    state = useInteriorDashboardConfigStore.getState();
+    assert.equal(state.row2SeatingType, "luxury_lounge");
+
+    // 4. Row 3 seating styles
+    store.setRow3SeatingType("power_stow");
+    state = useInteriorDashboardConfigStore.getState();
+    assert.equal(state.row3SeatingType, "power_stow");
+    assert.equal(state.cameraPose, "rear_row3");
+
+    // 5. Rear entertainment suite
+    store.setRearEntertainment("overhead_theater_31in");
+    state = useInteriorDashboardConfigStore.getState();
+    assert.equal(state.rearEntertainment, "overhead_theater_31in");
+
+    store.setRearEntertainment("executive_bundle");
+    state = useInteriorDashboardConfigStore.getState();
+    assert.equal(state.rearEntertainment, "executive_bundle");
+
+    // 6. Rear climate & comfort toggles
+    store.setRearClimateZone("quad_zone_touch");
+    store.setRearHeatedVentilated(true);
+    store.setRearMassage(true);
+    store.setRearFoldingTables(true);
+    state = useInteriorDashboardConfigStore.getState();
+    assert.equal(state.rearClimateZone, "quad_zone_touch");
+    assert.equal(state.rearHeatedVentilated, true);
+    assert.equal(state.rearMassage, true);
+    assert.equal(state.rearFoldingTables, true);
+
+    // 7. Engineering consequence deltas
+    assert.ok(state.engineering.totalPriceDelta > 0, "Rear executive amenities must increase price delta");
+    assert.ok(state.engineering.totalWeightDelta > 0, "Multi-row seating must increase weight delta");
+    assert.ok(state.engineering.luxuryScore > 60, "Executive rear cabin must elevate luxury score");
+
+    // Clean reset
+    store.reset();
+    assert.equal(useInteriorDashboardConfigStore.getState().seatingCapacity, "5_seater");
   });
 
   console.log("----------------------------------------------------------------");

@@ -20,10 +20,13 @@ import {
   Layers,
   Sparkles,
   MoveHorizontal,
+  Sun,
+  Moon,
 } from "lucide-react";
 import {
   useModularVehicleBuilderStore,
   getStageGlbPaths,
+  getFinalPowertrainGlbPaths,
   getStageIndividualParts,
   getCompleteVehicleGlbPath,
   STAGE_EXPLODED_OFFSETS,
@@ -44,6 +47,7 @@ export const ModularVehicleCanvasViewport: React.FC = () => {
   const isXRay = useModularVehicleBuilderStore((s) => s.isXRay);
   const isAutoRotate = useModularVehicleBuilderStore((s) => s.isAutoRotate);
   const bodyColorHex = useModularVehicleBuilderStore((s) => s.bodyColorHex);
+  const enginePosition = useModularVehicleBuilderStore((s) => s.enginePosition);
 
   const setViewportMode = useModularVehicleBuilderStore((s) => s.setViewportMode);
   const setExplodedProgress = useModularVehicleBuilderStore((s) => s.setExplodedProgress);
@@ -54,6 +58,7 @@ export const ModularVehicleCanvasViewport: React.FC = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [loadError, setLoadError] = useState<string | null>(null);
   const [activeCamPreset, setActiveCamPreset] = useState<string>("iso");
+  const [viewportTheme, setViewportTheme] = useState<"light" | "dark">("light");
 
   // Three.js Scene References
   const sceneRef = useRef<THREE.Scene | null>(null);
@@ -63,6 +68,14 @@ export const ModularVehicleCanvasViewport: React.FC = () => {
   const rootAssemblyGroupRef = useRef<THREE.Group | null>(null);
   const stageGroupsMapRef = useRef<Map<string, THREE.Group>>(new Map());
   const animFrameIdRef = useRef<number | null>(null);
+
+  // Studio Lighting & Grid References
+  const gridHelperRef = useRef<THREE.GridHelper | null>(null);
+  const shadowPlaneMatRef = useRef<THREE.ShadowMaterial | null>(null);
+  const ambientLightRef = useRef<THREE.AmbientLight | null>(null);
+  const keyLightRef = useRef<THREE.DirectionalLight | null>(null);
+  const rimLightRef = useRef<THREE.DirectionalLight | null>(null);
+  const underFillRef = useRef<THREE.DirectionalLight | null>(null);
 
   // Shared GLTF Loader instance
   const gltfLoaderRef = useRef<GLTFLoader>(new GLTFLoader());
@@ -76,9 +89,9 @@ export const ModularVehicleCanvasViewport: React.FC = () => {
     const width = containerRef.current.clientWidth || 800;
     const height = containerRef.current.clientHeight || 500;
 
-    // 1. Scene
+    // 1. Scene - Light Automotive Design Studio Canvas
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x0a0c10); // Dark automotive studio slate
+    scene.background = new THREE.Color(viewportTheme === "light" ? 0xeef2f6 : 0x0a0c10);
     sceneRef.current = scene;
 
     // 2. Camera
@@ -96,7 +109,7 @@ export const ModularVehicleCanvasViewport: React.FC = () => {
     renderer.setSize(width, height);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
-    renderer.toneMappingExposure = 1.25;
+    renderer.toneMappingExposure = viewportTheme === "light" ? 1.15 : 1.25;
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     rendererRef.current = renderer;
@@ -112,46 +125,84 @@ export const ModularVehicleCanvasViewport: React.FC = () => {
     controlsRef.current = controls;
 
     // 5. Studio Lighting Setup
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.85);
+    const ambientLight = new THREE.AmbientLight(
+      0xffffff,
+      viewportTheme === "light" ? 0.95 : 0.85
+    );
     scene.add(ambientLight);
+    ambientLightRef.current = ambientLight;
 
     // Key Light
-    const keyLight = new THREE.DirectionalLight(0xfff8ee, 2.4);
+    const keyLight = new THREE.DirectionalLight(
+      0xfff8ee,
+      viewportTheme === "light" ? 2.2 : 2.4
+    );
     keyLight.position.set(5, 8, 5);
     keyLight.castShadow = true;
     keyLight.shadow.mapSize.width = 2048;
     keyLight.shadow.mapSize.height = 2048;
     keyLight.shadow.bias = -0.0002;
     scene.add(keyLight);
+    keyLightRef.current = keyLight;
 
-    // Rim/Back Light (Cool blue tint)
-    const rimLight = new THREE.DirectionalLight(0x70aaff, 1.8);
+    // Rim/Back Light
+    const rimLight = new THREE.DirectionalLight(
+      viewportTheme === "light" ? 0x94b8e8 : 0x70aaff,
+      viewportTheme === "light" ? 1.3 : 1.8
+    );
     rimLight.position.set(-6, 6, -6);
     scene.add(rimLight);
+    rimLightRef.current = rimLight;
 
     // Warm Underbody Fill
-    const underFill = new THREE.DirectionalLight(0xffeedd, 0.9);
+    const underFill = new THREE.DirectionalLight(
+      viewportTheme === "light" ? 0xe2e8f0 : 0xffeedd,
+      viewportTheme === "light" ? 0.8 : 0.9
+    );
     underFill.position.set(0, -4, 0);
     scene.add(underFill);
+    underFillRef.current = underFill;
 
     // 6. Ground Studio Grid & Shadow Plane
-    const gridHelper = new THREE.GridHelper(14, 28, 0x00f0ff, 0x1f293d);
+    const isLight = viewportTheme === "light";
+    const gridHelper = new THREE.GridHelper(
+      16,
+      32,
+      isLight ? 0x64748b : 0x00f0ff,
+      isLight ? 0xcbd5e1 : 0x1f293d
+    );
     gridHelper.position.y = -0.01;
+    if (isLight) {
+      (gridHelper.material as THREE.Material).transparent = true;
+      (gridHelper.material as THREE.Material).opacity = 0.6;
+    }
     scene.add(gridHelper);
+    gridHelperRef.current = gridHelper;
 
-    const shadowPlaneGeo = new THREE.PlaneGeometry(16, 16);
-    const shadowPlaneMat = new THREE.ShadowMaterial({ opacity: 0.45 });
+    const shadowPlaneGeo = new THREE.PlaneGeometry(20, 20);
+    const shadowPlaneMat = new THREE.ShadowMaterial({ opacity: isLight ? 0.22 : 0.45 });
     const shadowPlane = new THREE.Mesh(shadowPlaneGeo, shadowPlaneMat);
     shadowPlane.rotation.x = -Math.PI / 2;
     shadowPlane.position.y = -0.012;
     shadowPlane.receiveShadow = true;
     scene.add(shadowPlane);
+    shadowPlaneMatRef.current = shadowPlaneMat;
 
     // 7. Root Assembly Group
     const rootAssembly = new THREE.Group();
     rootAssembly.name = "ModularVehicleRoot";
     scene.add(rootAssembly);
     rootAssemblyGroupRef.current = rootAssembly;
+
+    if (typeof window !== "undefined") {
+      (window as any).__viewportDebug = {
+        scene,
+        rootAssembly,
+        camera,
+        controls,
+        stageGroupsMap: stageGroupsMapRef.current,
+      };
+    }
 
     // 8. Animation Render Loop
     let isMounted = true;
@@ -189,6 +240,9 @@ export const ModularVehicleCanvasViewport: React.FC = () => {
       if (animFrameIdRef.current) cancelAnimationFrame(animFrameIdRef.current);
       resizeObserver.disconnect();
       renderer.dispose();
+      stageGroupsMapRef.current.clear();
+      rootAssembly.clear();
+      scene.clear();
     };
   }, []);
 
@@ -202,14 +256,85 @@ export const ModularVehicleCanvasViewport: React.FC = () => {
   }, [isAutoRotate]);
 
   // --------------------------------------------------------------------------
+  // Dynamic Studio Lighting & Background Theme Switcher
+  // --------------------------------------------------------------------------
+  useEffect(() => {
+    if (!sceneRef.current) return;
+    const scene = sceneRef.current;
+
+    if (viewportTheme === "light") {
+      scene.background = new THREE.Color(0xeef2f6);
+      if (gridHelperRef.current) {
+        scene.remove(gridHelperRef.current);
+        gridHelperRef.current.geometry.dispose();
+        if (Array.isArray(gridHelperRef.current.material)) {
+          gridHelperRef.current.material.forEach((m) => m.dispose());
+        } else {
+          gridHelperRef.current.material.dispose();
+        }
+        const newGrid = new THREE.GridHelper(16, 32, 0x64748b, 0xcbd5e1);
+        newGrid.position.y = -0.01;
+        (newGrid.material as THREE.Material).transparent = true;
+        (newGrid.material as THREE.Material).opacity = 0.6;
+        scene.add(newGrid);
+        gridHelperRef.current = newGrid;
+      }
+      if (shadowPlaneMatRef.current) {
+        shadowPlaneMatRef.current.opacity = 0.22;
+      }
+      if (ambientLightRef.current) ambientLightRef.current.intensity = 0.95;
+      if (keyLightRef.current) keyLightRef.current.intensity = 2.2;
+      if (rimLightRef.current) {
+        rimLightRef.current.intensity = 1.3;
+        rimLightRef.current.color.setHex(0x94b8e8);
+      }
+      if (underFillRef.current) {
+        underFillRef.current.intensity = 0.8;
+        underFillRef.current.color.setHex(0xe2e8f0);
+      }
+      if (rendererRef.current) {
+        rendererRef.current.toneMappingExposure = 1.15;
+      }
+    } else {
+      scene.background = new THREE.Color(0x0a0c10);
+      if (gridHelperRef.current) {
+        scene.remove(gridHelperRef.current);
+        gridHelperRef.current.geometry.dispose();
+        if (Array.isArray(gridHelperRef.current.material)) {
+          gridHelperRef.current.material.forEach((m) => m.dispose());
+        } else {
+          gridHelperRef.current.material.dispose();
+        }
+        const newGrid = new THREE.GridHelper(14, 28, 0x00f0ff, 0x1f293d);
+        newGrid.position.y = -0.01;
+        scene.add(newGrid);
+        gridHelperRef.current = newGrid;
+      }
+      if (shadowPlaneMatRef.current) {
+        shadowPlaneMatRef.current.opacity = 0.45;
+      }
+      if (ambientLightRef.current) ambientLightRef.current.intensity = 0.85;
+      if (keyLightRef.current) keyLightRef.current.intensity = 2.4;
+      if (rimLightRef.current) {
+        rimLightRef.current.intensity = 1.8;
+        rimLightRef.current.color.setHex(0x70aaff);
+      }
+      if (underFillRef.current) {
+        underFillRef.current.intensity = 0.9;
+        underFillRef.current.color.setHex(0xffeedd);
+      }
+      if (rendererRef.current) {
+        rendererRef.current.toneMappingExposure = 1.25;
+      }
+    }
+  }, [viewportTheme]);
+
+  // --------------------------------------------------------------------------
   // Load / Update Subsystems in 3D Scene
   // --------------------------------------------------------------------------
   useEffect(() => {
     const root = rootAssemblyGroupRef.current;
     if (!root) return;
-
-    setIsLoading(true);
-    setLoadError(null);
 
     // Determine stages to display based on currentStage and viewportMode:
     let stagesToDisplay: AssemblyStage[] = [];
@@ -239,12 +364,15 @@ export const ModularVehicleCanvasViewport: React.FC = () => {
       stagesToDisplay = Array.from(stagesSet);
     }
 
+    setIsLoading(true);
+    setLoadError(null);
+
     // Remove existing child groups that are no longer needed
     const currentMap = stageGroupsMapRef.current;
     const stagesSet = new Set(stagesToDisplay);
 
     for (const [stId, group] of currentMap.entries()) {
-      if (!stagesSet.has(stId as AssemblyStage)) {
+      if (!stagesSet.has(stId as AssemblyStage) || !groupMatchesModel(group, selectedModel)) {
         root.remove(group);
         currentMap.delete(stId);
       }
@@ -253,16 +381,25 @@ export const ModularVehicleCanvasViewport: React.FC = () => {
     // Load missing stage groups
     const loader = gltfLoaderRef.current;
     const loadPromises = stagesToDisplay.map((stageId) => {
-      // If already loaded and model category didn't change chassis, keep it
-      if (currentMap.has(stageId) && (stageId !== "chassis" || groupMatchesModel(currentMap.get(stageId), selectedModel))) {
-        return Promise.resolve();
+      // If already loaded for current model AND has child meshes, keep it
+      const existing = currentMap.get(stageId);
+      if (existing && groupMatchesModel(existing, selectedModel)) {
+        if (existing.parent !== root) {
+          root.add(existing);
+        }
+        if (existing.children.length > 0) {
+          return Promise.resolve();
+        }
+        // Stale empty group: remove and reload
+        root.remove(existing);
+        currentMap.delete(stageId);
       }
 
-      // If chassis changed model category, remove previous chassis group first
-      if (stageId === "chassis" && currentMap.has("chassis")) {
-        const oldGroup = currentMap.get("chassis")!;
+      // If model changed or stage needs reloading, remove previous stage group first
+      if (currentMap.has(stageId)) {
+        const oldGroup = currentMap.get(stageId)!;
         root.remove(oldGroup);
-        currentMap.delete("chassis");
+        currentMap.delete(stageId);
       }
 
       const stageGroup = new THREE.Group();
@@ -293,7 +430,15 @@ export const ModularVehicleCanvasViewport: React.FC = () => {
                           const mats = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
                           mats.forEach((m, idx) => {
                             const matName = m.name || "";
-                            if (matName.includes("Paint") || matName.includes("Body") || matName.includes("Outer")) {
+                            if (
+                              matName.includes("Paint") ||
+                              matName.includes("Body") ||
+                              matName.includes("Outer") ||
+                              matName.includes("SuperWhite") ||
+                              matName.includes("OxideBronze") ||
+                              matName.includes("Forest_Jade") ||
+                              matName.includes("bodypaint")
+                            ) {
                               const cloned = (m as THREE.MeshStandardMaterial).clone();
                               cloned.color.set(bodyColorHex);
                               cloned.roughness = 0.15;
@@ -325,17 +470,174 @@ export const ModularVehicleCanvasViewport: React.FC = () => {
                       }
                     });
                     stageGroup.add(modelScene);
+                    if (stageGroup.parent !== root) {
+                      root.add(stageGroup);
+                    }
                     resolve();
                   },
                   undefined,
                   (err) => {
                     console.warn(`[ModularViewport] Failed loading complete car ${url}:`, err);
                     createFallbackProxyGeometry("complete_car", stageGroup);
+                    if (stageGroup.parent !== root) {
+                      root.add(stageGroup);
+                    }
                     resolve();
                   }
                 );
               })
           )
+        );
+      }
+
+      // If SUV, Pickup, Hypercar (Divo), or Bus model, load dedicated CAD stage subassemblies
+      const isCustomModel =
+        selectedModel === "suv" ||
+        selectedModel === "pickup_truck" ||
+        (selectedModel as string) === "pickup" ||
+        (selectedModel as string) === "truck" ||
+        (selectedModel as string) === "hilux" ||
+        selectedModel === "hypercar" ||
+        (selectedModel as string) === "divo" ||
+        (selectedModel as string) === "megawatt" ||
+        selectedModel === "bus_shuttle" ||
+        (selectedModel as string) === "bus" ||
+        (selectedModel as string) === "transit_bus";
+
+      if (isCustomModel) {
+        const customUrls = getStageGlbPaths(stageId, selectedModel);
+        return Promise.all(
+          customUrls.map((url) => {
+            const partGroup = new THREE.Group();
+            partGroup.name = `${stageId}_${selectedModel}`;
+            stageGroup.add(partGroup);
+
+            return new Promise<void>((resolve) => {
+              loader.load(
+                url,
+                (gltf) => {
+                  const modelScene = gltf.scene;
+                  modelScene.traverse((child) => {
+                    if ((child as THREE.Mesh).isMesh) {
+                      const mesh = child as THREE.Mesh;
+                      mesh.castShadow = true;
+                      mesh.receiveShadow = true;
+
+                      // If exterior panel or cab body, customize body color
+                      if ((stageId === "exterior_panels" || stageId === "body_framework") && mesh.material) {
+                        const mats = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
+                        mats.forEach((m, idx) => {
+                          const matName = m.name || "";
+                          if (
+                            matName.includes("Paint") ||
+                            matName.includes("Body") ||
+                            matName === "" ||
+                            matName.includes("Outer") ||
+                            matName.includes("Crimson") ||
+                            matName.includes("SuperWhite") ||
+                            matName.includes("OxideBronze") ||
+                            matName.includes("TitaniumGrey") ||
+                            matName.includes("Divo") ||
+                            matName.includes("Transit")
+                          ) {
+                            const cloned = (m as THREE.MeshStandardMaterial).clone();
+                            cloned.color.set(bodyColorHex);
+                            cloned.roughness = 0.15;
+                            cloned.metalness = 0.85;
+                            if (Array.isArray(mesh.material)) {
+                              mesh.material[idx] = cloned;
+                            } else {
+                              mesh.material = cloned;
+                            }
+                          }
+                        });
+                      }
+
+                      // Apply X-Ray if enabled
+                      if (isXRay && mesh.material) {
+                        const mats = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
+                        mats.forEach((m, idx) => {
+                          const xmat = (m as THREE.MeshStandardMaterial).clone();
+                          xmat.transparent = true;
+                          xmat.opacity = 0.35;
+                          xmat.wireframe = true;
+                          if (Array.isArray(mesh.material)) {
+                            mesh.material[idx] = xmat;
+                          } else {
+                            mesh.material = xmat;
+                          }
+                        });
+                      }
+                    }
+                  });
+                  partGroup.add(modelScene);
+                  resolve();
+                },
+                undefined,
+                (err) => {
+                  console.warn(`[ModularViewport] Failed loading ${selectedModel} stage ${url}:`, err);
+                  createFallbackProxyGeometry(stageId, stageGroup);
+                  resolve();
+                }
+              );
+            });
+          })
+        );
+      }
+
+      // If stage is engine or gearbox, load the final complete GLB directly
+      if (stageId === "engine" || stageId === "gearbox") {
+        const glbUrls = getStageGlbPaths(stageId, selectedModel);
+        return Promise.all(
+          glbUrls.map((url) => {
+            const partGroup = new THREE.Group();
+            partGroup.name = `${stageId}_final_assembly`;
+            stageGroup.add(partGroup);
+
+            return new Promise<void>((resolve) => {
+              loader.load(
+                url,
+                (gltf) => {
+                  const modelScene = gltf.scene;
+                  modelScene.traverse((child) => {
+                    if ((child as THREE.Mesh).isMesh) {
+                      const mesh = child as THREE.Mesh;
+                      mesh.castShadow = true;
+                      mesh.receiveShadow = true;
+                      if (isXRay && mesh.material) {
+                        const mats = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
+                        mats.forEach((m, idx) => {
+                          const xmat = (m as THREE.MeshStandardMaterial).clone();
+                          xmat.transparent = true;
+                          xmat.opacity = 0.35;
+                          xmat.wireframe = true;
+                          if (Array.isArray(mesh.material)) {
+                            mesh.material[idx] = xmat;
+                          } else {
+                            mesh.material = xmat;
+                          }
+                        });
+                      }
+                    }
+                  });
+                  partGroup.add(modelScene);
+                  if (stageGroup.parent !== root) {
+                    root.add(stageGroup);
+                  }
+                  resolve();
+                },
+                undefined,
+                (err) => {
+                  console.warn(`[ModularViewport] Failed loading ${stageId} ${url}:`, err);
+                  createFallbackProxyGeometry(stageId, stageGroup);
+                  if (stageGroup.parent !== root) {
+                    root.add(stageGroup);
+                  }
+                  resolve();
+                }
+              );
+            });
+          })
         );
       }
 
@@ -464,7 +766,7 @@ export const ModularVehicleCanvasViewport: React.FC = () => {
         setLoadError(err.message || "Failed to assemble modular components");
         setIsLoading(false);
       });
-  }, [selectedModel, currentStage, installedStages, viewportMode, bodyColorHex, isXRay, explodedProgress]);
+  }, [selectedModel, currentStage, installedStages, viewportMode, bodyColorHex, isXRay, explodedProgress, enginePosition]);
 
   // Helper to check if chassis group matches current model
   function groupMatchesModel(group: THREE.Group | undefined, model: string): boolean {
@@ -486,18 +788,61 @@ export const ModularVehicleCanvasViewport: React.FC = () => {
   }, [hiddenPartIds]);
 
   // --------------------------------------------------------------------------
-  // Apply Exploded View Offsets
+  // Apply Exploded View Offsets & Engine Front/Mid/Rear Positioning
   // --------------------------------------------------------------------------
   const updateExplodedTransforms = useCallback(() => {
     const currentMap = stageGroupsMapRef.current;
+    const isPickup =
+      selectedModel === "pickup_truck" ||
+      (selectedModel as string) === "pickup" ||
+      (selectedModel as string) === "truck" ||
+      (selectedModel as string) === "hilux";
+    const isSuv = selectedModel === "suv";
+
     for (const [stId, group] of currentMap.entries()) {
       const stageOffset = STAGE_EXPLODED_OFFSETS[stId] || [0, 0, 0];
       const factor = explodedProgress;
 
+      let baseX = 0;
+      let baseY = 0;
+      let baseZ = 0;
+
+      if (stId === "engine") {
+        if (isPickup || isSuv) {
+          if (enginePosition === "mid") baseY = -1.15;
+          else if (enginePosition === "rear") baseY = -2.35;
+          else baseY = 0;
+        } else {
+          if (enginePosition === "mid") {
+            baseX = 0; baseY = -0.30; baseZ = 0.15;
+          } else if (enginePosition === "rear") {
+            baseX = 0; baseY = -1.55; baseZ = 0.15;
+          } else {
+            // Front engine
+            baseX = 0; baseY = 0.85; baseZ = 0.15;
+          }
+        }
+      } else if (stId === "gearbox") {
+        if (isPickup || isSuv) {
+          if (enginePosition === "mid") baseY = -1.15;
+          else if (enginePosition === "rear") baseY = -2.35;
+          else baseY = 0;
+        } else {
+          if (enginePosition === "mid") {
+            baseX = 0; baseY = -0.85; baseZ = 0.15;
+          } else if (enginePosition === "rear") {
+            baseX = 0; baseY = -1.05; baseZ = 0.15;
+          } else {
+            // Front engine -> gearbox behind front engine
+            baseX = 0; baseY = 0.30; baseZ = 0.15;
+          }
+        }
+      }
+
       group.position.set(
-        stageOffset[0] * factor * 0.4,
-        stageOffset[1] * factor * 0.4,
-        stageOffset[2] * factor * 0.4
+        baseX + stageOffset[0] * factor * 0.4,
+        baseY + stageOffset[1] * factor * 0.4,
+        baseZ + stageOffset[2] * factor * 0.4
       );
 
       // Displace individual parts radially
@@ -512,7 +857,7 @@ export const ModularVehicleCanvasViewport: React.FC = () => {
         }
       });
     }
-  }, [explodedProgress]);
+  }, [explodedProgress, enginePosition, selectedModel]);
 
   useEffect(() => {
     updateExplodedTransforms();
@@ -572,16 +917,26 @@ export const ModularVehicleCanvasViewport: React.FC = () => {
   return (
     <div
       ref={containerRef}
-      className="relative w-full h-[460px] md:h-[500px] lg:h-[540px] rounded-2xl overflow-hidden bg-slate-950 border border-slate-800 shadow-2xl select-none"
+      className={`relative w-full h-[460px] md:h-[500px] lg:h-[540px] rounded-2xl overflow-hidden shadow-2xl select-none transition-colors ${
+        viewportTheme === "light"
+          ? "bg-[#eef2f6] border border-slate-300"
+          : "bg-slate-950 border border-slate-800"
+      }`}
     >
       {/* Three.js Canvas */}
       <canvas ref={canvasRef} className="w-full h-full block cursor-grab active:cursor-grabbing" />
 
       {/* Loading Overlay */}
       {isLoading && (
-        <div className="absolute inset-0 bg-slate-950/75 backdrop-blur-sm flex flex-col items-center justify-center gap-3 z-30 pointer-events-none">
-          <div className="w-10 h-10 rounded-full border-2 border-cyan-500/20 border-t-cyan-400 animate-spin" />
-          <span className="text-xs font-mono tracking-widest text-cyan-400 font-bold uppercase animate-pulse">
+        <div className={`absolute inset-0 backdrop-blur-sm flex flex-col items-center justify-center gap-3 z-30 pointer-events-none transition-colors ${
+          viewportTheme === "light" ? "bg-[#eef2f6]/80 text-slate-800" : "bg-slate-950/75 text-cyan-400"
+        }`}>
+          <div className={`w-10 h-10 rounded-full border-2 animate-spin ${
+            viewportTheme === "light" ? "border-slate-300 border-t-amber-500" : "border-cyan-500/20 border-t-cyan-400"
+          }`} />
+          <span className={`text-xs font-mono tracking-widest font-bold uppercase animate-pulse ${
+            viewportTheme === "light" ? "text-slate-700" : "text-cyan-400"
+          }`}>
             Assembling 3D Modular Nodes...
           </span>
         </div>
@@ -695,6 +1050,22 @@ export const ModularVehicleCanvasViewport: React.FC = () => {
             className="p-1.5 rounded-md text-slate-400 hover:text-slate-200 hover:bg-slate-800/50 transition-all cursor-pointer border border-transparent"
           >
             <Maximize2 size={13} />
+          </button>
+
+          <div className="w-px h-4 bg-slate-700/60 mx-1" />
+
+          {/* Light / Dark Studio Environment Toggle */}
+          <button
+            type="button"
+            onClick={() => setViewportTheme(viewportTheme === "light" ? "dark" : "light")}
+            title={viewportTheme === "light" ? "Switch to Dark Studio" : "Switch to Light Studio"}
+            className={`p-1.5 rounded-md transition-all cursor-pointer ${
+              viewportTheme === "light"
+                ? "bg-amber-500/25 text-amber-300 border border-amber-500/50"
+                : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/50 border border-transparent"
+            }`}
+          >
+            {viewportTheme === "light" ? <Sun size={13} /> : <Moon size={13} />}
           </button>
         </div>
       </div>

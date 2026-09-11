@@ -41,7 +41,8 @@ export class TaxonomyPresetGenerator {
 
     // Choose appropriate body type mapping based on utility class
     const bodyMap: Record<UtilityClassId, any> = {
-      CITY_CAR: "city_car",
+      // CITY_CAR market class remapped to the nearest surviving body style
+      CITY_CAR: "hatchback",
       HATCHBACK: "hatchback",
       SEDAN: "sedan",
       WAGON: "wagon",

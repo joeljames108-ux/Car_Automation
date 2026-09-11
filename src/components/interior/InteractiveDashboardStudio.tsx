@@ -20,6 +20,7 @@ import {
   Compass,
   Sliders,
   Sparkles,
+  Car,
   Sun,
   Moon,
   Camera,
@@ -59,6 +60,9 @@ import {
   Shield,
   Check,
   ArrowRight,
+  Tv,
+  DoorClosed,
+  Disc,
 } from "lucide-react";
 import {
   useModularVehicleBuilderStore,
@@ -91,14 +95,36 @@ import {
   type WindshieldTint,
   type HUDMode,
   type LightingMode,
+  type ActiveConfigPanel,
   COCKPIT_THEME_PRESETS,
 } from "../../state/interiorDashboardConfigStore";
 import { InteractiveDashboardCanvasViewport } from "./InteractiveDashboardCanvasViewport";
 import { InteriorMetricsPanel } from "./InteriorMetricsPanel";
 import { InteriorConfigControls } from "./InteriorConfigControls";
 import { CockpitElectronicsAvionicsSuite } from "./CockpitElectronicsAvionicsSuite";
+import { InteriorControlDeck } from "./InteriorControlDeck";
 import { useDesign } from "../../state/DesignContext";
 import { playHMIClickSound, playHMITabSound } from "../../utils/hmiSoundSynth";
+
+export interface InteriorSubTabItem {
+  id: ActiveConfigPanel;
+  label: string;
+  icon: React.ReactNode;
+  badge?: string;
+}
+
+export const INTERIOR_SUB_TABS: InteriorSubTabItem[] = [
+  { id: "overview", label: "Cockpit Overview", icon: <Car size={14} />, badge: "Themes & Chassis" },
+  { id: "steering", label: "Steering Wheel", icon: <Disc size={14} />, badge: "Wheel & Controls" },
+  { id: "cluster", label: "Instrument Cluster", icon: <Gauge size={14} />, badge: "Driver Binnacle" },
+  { id: "infotainment", label: "Center Display", icon: <Tv size={14} />, badge: "12.3\" Screen" },
+  { id: "console", label: "Center Console", icon: <Sliders size={14} />, badge: "Transmission & HVAC" },
+  { id: "dashboard", label: "Dashboard Trim", icon: <SlidersHorizontal size={14} />, badge: "Trim & Materials" },
+  { id: "seats", label: "Seats & Seating", icon: <Armchair size={14} />, badge: "Upholstery & Belts" },
+  { id: "rear_cabin", label: "Rear Cabin", icon: <Users size={14} />, badge: "5 / 7 / 8 Seater" },
+  { id: "doors", label: "Doors & Ambient", icon: <DoorClosed size={14} />, badge: "Lighting & Glass" },
+  { id: "summary", label: "Interior Summary", icon: <Award size={14} />, badge: "Ergonomics & Stats" },
+];
 
 export interface InteractiveDashboardStudioProps {
   initialWorkspaceMode?: "hardware" | "avionics" | "split";
@@ -262,33 +288,68 @@ export const InteractiveDashboardStudio: React.FC<InteractiveDashboardStudioProp
   return (
     <div className="w-full flex flex-col gap-4 p-3 md:p-5 rounded-2xl bg-slate-950 text-slate-100 font-sans select-none border border-slate-800 shadow-2xl">
       {/* ───────────────────────────────────────────────────────────── */}
+      {/* SUB-TAB NAVIGATION HEADER (Matching Aero Studio Architecture) */}
+      {/* ───────────────────────────────────────────────────────────── */}
+      <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-thin scrollbar-thumb-slate-800">
+        {INTERIOR_SUB_TABS.map((tab) => {
+          const isActive = activePanel === tab.id;
+          return (
+            <button
+              key={tab.id}
+              onClick={() => {
+                playHMITabSound();
+                setActivePanel(tab.id);
+              }}
+              className={`flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-semibold whitespace-nowrap transition-all border cursor-pointer ${
+                isActive
+                  ? "bg-gradient-to-r from-amber-500/20 to-amber-600/15 text-amber-300 border-amber-500/50 shadow-[0_0_12px_rgba(245,158,11,0.2)] ring-1 ring-amber-500/30 font-bold"
+                  : "bg-slate-900/60 text-slate-400 border-slate-800/80 hover:bg-slate-800 hover:text-slate-200"
+              }`}
+            >
+              {tab.icon}
+              <span>{tab.label}</span>
+              {tab.badge && (
+                <span
+                  className={`text-[9px] font-mono px-1.5 py-0.2 rounded ${
+                    isActive ? "bg-amber-950/80 text-amber-200 border border-amber-500/30" : "bg-slate-800 text-slate-500"
+                  }`}
+                >
+                  {tab.badge}
+                </span>
+              )}
+            </button>
+          );
+        })}
+      </div>
+
+      {/* ───────────────────────────────────────────────────────────── */}
       {/* TOP SECTION: "WINDOW FOR DIAGRAM" (Exact Wireframe Box)       */}
       {/* ───────────────────────────────────────────────────────────── */}
-      <div className="relative w-full rounded-2xl border-2 border-red-500/90 shadow-[0_0_30px_rgba(239,68,68,0.22)] bg-slate-900/90 overflow-hidden flex flex-col">
+      <div className="relative w-full rounded-2xl border border-amber-500/30 shadow-[0_0_20px_rgba(245,158,11,0.1)] bg-slate-900/90 overflow-hidden flex flex-col">
         {/* Top Wireframe Diagram Header */}
-        <div className="flex flex-wrap items-center justify-between px-4 py-2.5 bg-red-950/40 border-b border-red-500/40 backdrop-blur-md gap-2">
+        <div className="flex flex-wrap items-center justify-between px-4 py-2.5 bg-amber-950/30 border-b border-amber-500/30 backdrop-blur-md gap-2">
           <div className="flex items-center gap-2">
-            <span className="w-2.5 h-2.5 rounded-full bg-red-500 animate-ping" />
-            <span className="text-xs font-black uppercase tracking-[0.22em] text-red-400">
-              WINDOW FOR DIAGRAM • GRAPHIC OF DASHBOARD
+            <span className="w-2.5 h-2.5 rounded-full bg-amber-400 animate-ping" />
+            <span className="text-xs font-black uppercase tracking-[0.22em] text-amber-400">
+              DASHBOARD DIAGRAM • GRAPHIC OF DASHBOARD
             </span>
           </div>
 
           {/* Active 3D Component State Breadcrumbs */}
-          <div className="hidden xl:flex items-center gap-2 text-[11px] font-mono text-slate-400">
-            <span className="px-2 py-0.5 rounded bg-slate-800/80 border border-slate-700 text-cyan-300">
+          <div className="flex items-center gap-1.5 text-[11px] font-mono text-slate-300 flex-wrap">
+            <span className="px-2 py-0.5 rounded-md bg-slate-800/90 border border-slate-700 text-cyan-300 font-bold shadow-sm">
               WHEEL: {steeringWheelStyle.toUpperCase()}
             </span>
-            <span className="px-2 py-0.5 rounded bg-slate-800/80 border border-slate-700 text-amber-300">
+            <span className="px-2 py-0.5 rounded-md bg-slate-800/90 border border-slate-700 text-amber-300 font-bold shadow-sm">
               TRIM: {dashboardTrimMaterial.toUpperCase()}
             </span>
-            <span className="px-2 py-0.5 rounded bg-slate-800/80 border border-slate-700 text-emerald-300">
+            <span className="px-2 py-0.5 rounded-md bg-slate-800/90 border border-slate-700 text-emerald-300 font-bold shadow-sm">
               SHIFTER: {shifterStyle.toUpperCase()}
             </span>
-            <span className="px-2 py-0.5 rounded bg-slate-800/80 border border-slate-700 text-purple-300">
+            <span className="px-2 py-0.5 rounded-md bg-slate-800/90 border border-slate-700 text-purple-300 font-bold shadow-sm">
               COST: +${engineering.totalPriceDelta.toLocaleString()}
             </span>
-            <span className="px-2 py-0.5 rounded bg-slate-800/80 border border-slate-700 text-blue-300">
+            <span className="px-2 py-0.5 rounded-md bg-slate-800/90 border border-slate-700 text-blue-300 font-bold shadow-sm">
               MASS: {engineering.totalWeightDelta > 0 ? `+${engineering.totalWeightDelta}` : engineering.totalWeightDelta} kg
             </span>
           </div>
@@ -299,10 +360,11 @@ export const InteractiveDashboardStudio: React.FC<InteractiveDashboardStudioProp
             <div className="flex items-center bg-slate-800/90 rounded-lg p-0.5 border border-slate-700 flex-wrap">
               {(
                 [
-                  { id: "dashboard_center", label: "Studio Front (Default)", icon: Eye },
+                  { id: "studio_sport", label: "Studio Sport", icon: Eye },
                   { id: "driver", label: "Driver POV", icon: Camera },
                   { id: "driver_close", label: "Close POV", icon: Eye },
                   { id: "seats", label: "Seats Focus", icon: Armchair },
+                  { id: "rear_cabin", label: "Rear Cabin", icon: Users },
                   { id: "steering", label: "Steering", icon: Compass },
                   { id: "cluster", label: "Cluster", icon: Gauge },
                   { id: "infotainment", label: "Display", icon: Activity },
@@ -323,11 +385,11 @@ export const InteractiveDashboardStudio: React.FC<InteractiveDashboardStudioProp
                     }}
                     title={cam.label}
                     className={`flex items-center gap-1 px-2 py-1 rounded-md text-[11px] font-bold transition-all cursor-pointer ${
-                      active ? "bg-red-600 text-white shadow-sm ring-1 ring-red-400" : "text-slate-300 hover:bg-slate-700/60"
+                      active ? "bg-amber-500/25 text-amber-300 shadow-sm ring-1 ring-amber-500/40" : "text-slate-300 hover:bg-slate-700/60"
                     }`}
                   >
                     <Icon size={12} />
-                    <span>{cam.id === "dashboard_center" ? "Studio Front" : cam.label.split(" ")[0]}</span>
+                    <span>{cam.id === "studio_sport" ? "Studio Sport" : cam.label.split(" ")[0]}</span>
                   </button>
                 );
               })}
@@ -376,7 +438,7 @@ export const InteractiveDashboardStudio: React.FC<InteractiveDashboardStudioProp
                   setShowLeftOverview((prev) => !prev);
                 }}
                 className={`flex items-center gap-1 px-2 py-1 rounded text-[10px] font-bold transition-all cursor-pointer ${
-                  showLeftOverview ? "bg-red-600 text-white shadow-sm ring-1 ring-red-400" : "text-slate-400 hover:text-slate-200"
+                  showLeftOverview ? "bg-amber-500/25 text-amber-300 shadow-sm ring-1 ring-amber-500/40" : "text-slate-400 hover:text-slate-200"
                 }`}
                 title="Toggle Floating Interior Overview (HUD Overlay)"
               >
@@ -390,7 +452,7 @@ export const InteractiveDashboardStudio: React.FC<InteractiveDashboardStudioProp
                   setShowRightControls((prev) => !prev);
                 }}
                 className={`flex items-center gap-1 px-2 py-1 rounded text-[10px] font-bold transition-all cursor-pointer ${
-                  showRightControls ? "bg-cyan-600 text-white shadow-sm ring-1 ring-cyan-400" : "text-slate-400 hover:text-slate-200"
+                  showRightControls ? "bg-amber-500/25 text-amber-300 shadow-sm ring-1 ring-amber-500/40" : "text-slate-400 hover:text-slate-200"
                 }`}
                 title="Toggle Floating Configuration Steppers (HUD Overlay)"
               >
@@ -431,7 +493,7 @@ export const InteractiveDashboardStudio: React.FC<InteractiveDashboardStudioProp
         {/* Exploded View Bar */}
         <div className="flex items-center justify-between px-4 py-1.5 bg-slate-950/70 border-b border-slate-800 text-xs">
           <div className="flex items-center gap-2 text-slate-400">
-            <Layers size={13} className="text-red-400" />
+            <Layers size={13} className="text-amber-400" />
             <span className="font-bold uppercase tracking-wider text-[11px]">Exploded / CAD Inspection View:</span>
           </div>
           <div className="flex items-center gap-3 w-64">
@@ -442,7 +504,7 @@ export const InteractiveDashboardStudio: React.FC<InteractiveDashboardStudioProp
               step="0.05"
               value={explodedProgress}
               onChange={(e) => setExplodedProgress(parseFloat(e.target.value))}
-              className="w-full accent-red-500 cursor-pointer"
+              className="w-full accent-amber-500 cursor-pointer"
             />
             <span className="font-mono text-cyan-300 w-12 text-right">{Math.round(explodedProgress * 100)}%</span>
           </div>
@@ -453,6 +515,97 @@ export const InteractiveDashboardStudio: React.FC<InteractiveDashboardStudioProp
           {/* 3D GLB Viewport Canvas spanning entire width */}
           <div className="relative w-full h-full overflow-hidden flex flex-col">
             <InteractiveDashboardCanvasViewport />
+
+            {/* ── FLOATING BOTTOM OPTIONS DOCK (Synchronized with Sub-Tabs) ── */}
+            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 max-w-[96vw] overflow-x-auto p-1 scrollbar-none">
+              <div className="flex items-center gap-2 px-3 py-2 rounded-2xl bg-slate-100/95 dark:bg-slate-900/90 text-slate-800 dark:text-slate-100 border border-slate-300 dark:border-slate-700/80 backdrop-blur-xl shadow-2xl select-none">
+                {/* 1. Subassembly Focus Dropdown */}
+                <div className="relative flex items-center">
+                  <select
+                    value={activePanel}
+                    onChange={(e) => {
+                      playHMIClickSound();
+                      setActivePanel(e.target.value as ActiveConfigPanel);
+                    }}
+                    className="bg-white dark:bg-slate-800 text-slate-900 dark:text-slate-100 text-[11px] font-bold pl-2.5 pr-7 py-1.5 rounded-xl border border-slate-300 dark:border-slate-600 focus:outline-none focus:ring-2 focus:ring-amber-400 cursor-pointer appearance-none shadow-sm"
+                  >
+                    <option value="overview">Focus [Cockpit Overview]</option>
+                    <option value="steering">Focus [Steering Wheel]</option>
+                    <option value="cluster">Focus [Instrument Cluster]</option>
+                    <option value="infotainment">Focus [Center Display]</option>
+                    <option value="console">Focus [Center Console]</option>
+                    <option value="dashboard">Focus [Dashboard Trim]</option>
+                    <option value="seats">Focus [Seats & Seating]</option>
+                    <option value="rear_cabin">Focus [Rear Cabin & Rows]</option>
+                    <option value="doors">Focus [Doors & Ambient]</option>
+                    <option value="summary">Focus [Interior Summary]</option>
+                  </select>
+                  <ChevronDown size={12} className="absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none text-slate-500 dark:text-slate-400" />
+                </div>
+
+                {/* 2. Driver Height Pill Toggle */}
+                <div className="flex items-center bg-slate-200/90 dark:bg-slate-800/90 rounded-xl p-0.5 border border-slate-300 dark:border-slate-700 text-[10px] font-bold">
+                  {(["low", "normal", "tall"] as const).map((h) => (
+                    <button
+                      key={h}
+                      onClick={() => {
+                        playHMIClickSound();
+                        setDriverHeight(h);
+                      }}
+                      className={`px-2 py-1 rounded-lg uppercase transition-all cursor-pointer ${
+                        driverHeight === h
+                          ? "bg-slate-800 dark:bg-slate-700 text-amber-400 shadow-sm font-black"
+                          : "text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200"
+                      }`}
+                    >
+                      {h}
+                    </button>
+                  ))}
+                </div>
+
+                {/* Vertical Divider */}
+                <div className="h-7 w-px bg-slate-300 dark:bg-slate-700 mx-0.5 hidden sm:block" />
+
+                {/* 3. Ten Quick Subassembly Focus Action Cards */}
+                <div className="flex items-center gap-1">
+                  {(
+                    [
+                      { id: "overview", label: "Overview", icon: Car },
+                      { id: "steering", label: "Wheel", icon: Disc },
+                      { id: "cluster", label: "Cluster", icon: Gauge },
+                      { id: "infotainment", label: "Display", icon: Tv },
+                      { id: "console", label: "Console", icon: Sliders },
+                      { id: "dashboard", label: "Dash", icon: SlidersHorizontal },
+                      { id: "seats", label: "Seats", icon: Armchair },
+                      { id: "rear_cabin", label: "Rear", icon: Users },
+                      { id: "doors", label: "Doors", icon: DoorClosed },
+                      { id: "summary", label: "Summary", icon: Award },
+                    ] as const
+                  ).map((card) => {
+                    const Icon = card.icon;
+                    const active = activePanel === card.id;
+                    return (
+                      <button
+                        key={card.id}
+                        onClick={() => {
+                          playHMIClickSound();
+                          setActivePanel(card.id as ActiveConfigPanel);
+                        }}
+                        title={card.label}
+                        className={`flex flex-col items-center justify-center px-2 py-1 rounded-xl border transition-all cursor-pointer min-w-[42px] ${
+                          active
+                            ? "bg-amber-500/20 text-amber-300 border-amber-400 ring-2 ring-amber-400/80 shadow-sm font-black"
+                            : "bg-white/80 dark:bg-slate-800/70 text-slate-700 dark:text-slate-300 border-slate-300/80 dark:border-slate-700/80 hover:bg-slate-200/70 dark:hover:bg-slate-700/70"
+                        }`}
+                      >
+                        <Icon size={14} className={active ? "text-amber-400" : "text-slate-500 dark:text-slate-400"} />
+                        <span className="text-[9px] mt-0.5 leading-tight">{card.label}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
 
             {/* Toast Notification when Applied */}
             {saveToast && (
@@ -466,7 +619,7 @@ export const InteractiveDashboardStudio: React.FC<InteractiveDashboardStudioProp
             {showLeftOverview && (
               <div className="absolute top-0 bottom-0 left-0 z-30 w-[310px] max-w-[85vw] h-full shadow-2xl bg-slate-900/95 backdrop-blur-xl border-r border-slate-700/80 flex flex-col animate-fade-in">
                 <div className="flex items-center justify-between px-3 py-2 bg-slate-800/80 border-b border-slate-700">
-                  <div className="flex items-center gap-1.5 text-xs font-mono font-bold text-red-400">
+                  <div className="flex items-center gap-1.5 text-xs font-mono font-bold text-amber-400">
                     <BarChart3 size={14} />
                     <span>INTERIOR OVERVIEW (HUD)</span>
                   </div>
@@ -489,7 +642,7 @@ export const InteractiveDashboardStudio: React.FC<InteractiveDashboardStudioProp
             {showRightControls && (
               <div className="absolute top-0 bottom-0 right-0 z-30 w-[420px] max-w-[92vw] h-full shadow-2xl bg-slate-900/95 backdrop-blur-xl border-l border-slate-700/80 flex flex-col animate-fade-in">
                 <div className="flex items-center justify-between px-3 py-2 bg-slate-800/80 border-b border-slate-700">
-                  <div className="flex items-center gap-1.5 text-xs font-mono font-bold text-red-400">
+                  <div className="flex items-center gap-1.5 text-xs font-mono font-bold text-amber-400">
                     <SlidersHorizontal size={14} />
                     <span>INTERIOR CONFIGURATION</span>
                   </div>
@@ -511,387 +664,12 @@ export const InteractiveDashboardStudio: React.FC<InteractiveDashboardStudioProp
         </div>
       </div>
 
-      {/* =====================================================================
-          ACTIVE SUBSYSTEM NODE: INTERIOR WITH GREEN INSTALL BUTTON
-          ===================================================================== */}
-      <div className="flex flex-col sm:flex-row items-center justify-between gap-4 py-2 px-3">
-        <div className="flex items-center gap-3">
-          <div className="w-3 h-3 rounded-full bg-amber-500 animate-pulse" />
-          <div>
-            <span className="text-xs font-bold text-slate-400 uppercase tracking-widest font-mono">
-              ACTIVE SUBSYSTEM NODE:
-            </span>
-            <h2 className="text-xl md:text-2xl font-black text-slate-100 tracking-wider uppercase font-mono">
-              INTERIOR
-            </h2>
-          </div>
-        </div>
-
-        <button
-          type="button"
-          onClick={() => {
-            playHMITabSound();
-            setSaveToast(true);
-            setTimeout(() => setSaveToast(false), 3000);
-            if (onSelectStage) {
-              onSelectStage("safety");
-            }
-          }}
-          className="group relative px-8 py-3.5 rounded-2xl bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-400 hover:to-green-500 text-slate-950 font-black text-sm tracking-wider uppercase shadow-[0_0_30px_rgba(16,185,129,0.5)] transition-all transform hover:scale-[1.03] active:scale-[0.98] cursor-pointer flex items-center gap-3 border-2 border-emerald-300"
-        >
-          <Check size={18} strokeWidth={3} />
-          <span>INSTALL AND NEXT</span>
-          <ArrowRight size={16} className="group-hover:translate-x-1 transition-transform" />
-        </button>
-      </div>
-
-      {/* =====================================================================
-          VAN / MPV MODULAR INTERIOR SEATING ARCHITECTURE DECK
-          ===================================================================== */}
-      <div className="p-4 rounded-2xl border-2 border-emerald-500/60 bg-gradient-to-r from-emerald-950/40 via-slate-900/90 to-slate-950 shadow-xl space-y-3 font-mono">
-        <div className="flex items-center justify-between flex-wrap gap-2">
-          <div className="flex items-center gap-2">
-            <Users size={18} className="text-emerald-400" />
-            <h3 className="text-xs font-black uppercase text-emerald-300 tracking-wider">
-              VAN / MPV MODULAR INTERIOR SEATING ARCHITECTURE
-            </h3>
-          </div>
-          <div className="flex items-center gap-3 text-xs">
-            <span className="text-slate-400">
-              Cargo Volume: <strong className="text-emerald-400 text-sm">{vanVolume.cargoVolumeL} L</strong>
-            </span>
-            <span className="text-slate-600">|</span>
-            <span className="text-slate-400">
-              Payload: <strong className="text-slate-200">{vanVolume.floorPayloadKg} kg</strong>
-            </span>
-          </div>
-        </div>
-
-        <div className="flex items-center gap-2 flex-wrap">
-          {(["2_seat_cargo", "5_seat", "7_seat", "8_seat", "9_seat"] as VanSeatConfig[]).map((cfg) => {
-            const isSelected = vanSeatConfig === cfg;
-            const labels: Record<VanSeatConfig, string> = {
-              "2_seat_cargo": "2 SEAT CARGO",
-              "5_seat": "5 SEAT",
-              "7_seat": "7 SEAT",
-              "8_seat": "8 SEAT",
-              "9_seat": "9 SEAT",
-            };
-            return (
-              <button
-                key={cfg}
-                type="button"
-                onClick={() => {
-                  playHMIClickSound();
-                  setVanSeatConfig(cfg);
-                }}
-                className={`px-4 py-2 rounded-xl text-xs font-black tracking-wider border transition-all cursor-pointer shadow-md ${
-                  isSelected
-                    ? "bg-emerald-500 text-slate-950 border-emerald-300 shadow-[0_0_15px_rgba(16,185,129,0.4)] scale-105"
-                    : "bg-slate-950 text-slate-300 border-slate-800 hover:text-white hover:bg-slate-900"
-                }`}
-              >
-                {labels[cfg]}
-              </button>
-            );
-          })}
-        </div>
-      </div>
-
-      {/* =====================================================================
-          BOTTOM BLACK-OUTLINED BOX: ALL CONFIGURATIONS RELATED TO INTERIOR
-          ===================================================================== */}
-      <div className="rounded-2xl border-4 border-slate-700/90 bg-slate-950/95 shadow-2xl p-6 select-none font-mono space-y-4">
-        <div className="border-b border-slate-800 pb-3 flex items-center justify-between flex-wrap gap-2">
-          <div className="flex items-center gap-2 text-xs font-bold text-slate-300 uppercase tracking-wider">
-            <Wrench size={14} className="text-cyan-400" />
-            <span>ALL CONFIGURATIONS RELATED TO INTERIOR</span>
-          </div>
-          <span className="text-[10px] text-slate-500 uppercase font-mono">
-            ACTIVE ARCHITECTURE: {activeModelSpec.name.toUpperCase()}
-          </span>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {/* COLUMN 1: STRUCTURAL ARCHITECTURE */}
-          <div className="space-y-3 p-4 rounded-xl bg-slate-900/60 border border-slate-800/80">
-            <div className="flex items-center gap-2">
-              <Shield size={16} className="text-cyan-400" />
-              <h3 className="text-xs font-extrabold uppercase tracking-wider text-slate-200">
-                STRUCTURAL ARCHITECTURE
-              </h3>
-            </div>
-            <p className="text-[11px] text-slate-400 leading-relaxed font-sans">
-              Select geometric topology and structural framework archetype.
-            </p>
-
-            <div className="space-y-2 pt-1">
-              {[
-                {
-                  id: "monocoque",
-                  label: "High-Rigidity Monocoque",
-                  desc: "Integrated structural shell with optimized load paths.",
-                  stiffness: "+42 kNm/deg",
-                },
-                {
-                  id: "spaceframe",
-                  label: "Extruded Aluminum Spaceframe",
-                  desc: "Modular nodes with hollow tubular longitudinal extrusions.",
-                  stiffness: "+36 kNm/deg",
-                },
-                {
-                  id: "carbon_tub",
-                  label: "Autoclaved Carbon Tub",
-                  desc: "Single-piece pre-preg carbon safety tub for hypercar rigidity.",
-                  stiffness: "+58 kNm/deg",
-                },
-              ].map((opt) => {
-                const isSelected = chassisArch === opt.id;
-                return (
-                  <button
-                    key={opt.id}
-                    type="button"
-                    onClick={() => {
-                      playHMIClickSound();
-                      setChassisArch(opt.id);
-                    }}
-                    className={`w-full text-left p-3 rounded-lg border transition-all cursor-pointer flex flex-col gap-0.5 ${
-                      isSelected
-                        ? "bg-cyan-500/15 border-cyan-400/80 text-cyan-200 shadow-sm"
-                        : "bg-slate-950/60 border-slate-800 text-slate-400 hover:text-slate-200 hover:border-slate-700"
-                    }`}
-                  >
-                    <div className="flex items-center justify-between text-xs font-bold">
-                      <span className="text-slate-200">{opt.label}</span>
-                      <span className="text-[10px] text-cyan-400 font-mono">{opt.stiffness}</span>
-                    </div>
-                    <p className="text-[10px] text-slate-500 leading-tight font-sans">{opt.desc}</p>
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-
-          {/* COLUMN 2: MATERIAL GRADE */}
-          <div className="space-y-3 p-4 rounded-xl bg-slate-900/60 border border-slate-800/80">
-            <div className="flex items-center gap-2">
-              <Layers size={16} className="text-amber-400" />
-              <h3 className="text-xs font-extrabold uppercase tracking-wider text-slate-200">
-                MATERIAL GRADE
-              </h3>
-            </div>
-            <p className="text-[11px] text-slate-400 leading-relaxed font-sans">
-              Material alloy specifies density, tensile strength, and mass.
-            </p>
-
-            <div className="space-y-2 pt-1">
-              {[
-                {
-                  id: "stamped_steel",
-                  name: "Stamped Steel",
-                  massDelta: "Mass: Baseline",
-                  rigidityDelta: "Stiffness: Baseline",
-                  cost: "$",
-                },
-                {
-                  id: "cast_aluminum",
-                  name: "Die-Cast Aluminum Alloy",
-                  massDelta: "Mass: -15%",
-                  rigidityDelta: "Stiffness: +6 kNm/°",
-                  cost: "$$",
-                },
-                {
-                  id: "extruded_aluminum",
-                  name: "Compacted Graphite / CNC Billet",
-                  massDelta: "Mass: -25%",
-                  rigidityDelta: "Stiffness: +14 kNm/°",
-                  cost: "$$$",
-                },
-                {
-                  id: "carbon_composite",
-                  name: "Titanium & Pre-Preg Carbon",
-                  massDelta: "Mass: -40%",
-                  rigidityDelta: "Stiffness: +22 kNm/°",
-                  cost: "$$$$$",
-                },
-              ].map((mat) => {
-                const isSelected = materialGrade === mat.id;
-                return (
-                  <div
-                    key={mat.id}
-                    onClick={() => {
-                      playHMIClickSound();
-                      setMaterialGrade(mat.id);
-                    }}
-                    className={`p-2.5 rounded-lg border transition-all cursor-pointer ${
-                      isSelected
-                        ? "bg-amber-500/20 border-amber-400 text-slate-100 shadow-sm"
-                        : "bg-slate-950/60 border-slate-800 text-slate-400 hover:text-slate-200 hover:border-slate-700"
-                    }`}
-                  >
-                    <div className="flex items-center justify-between">
-                      <span className="text-xs font-bold">{mat.name}</span>
-                      <span className="text-[10px] font-bold text-amber-400">{mat.cost}</span>
-                    </div>
-                    <div className="flex items-center gap-3 text-[10px] text-slate-400 mt-1">
-                      <span>{mat.massDelta}</span>
-                      <span>{mat.rigidityDelta}</span>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-
-          {/* COLUMN 3: ECONOMICS & STATS + MODULAR CAD COMPONENTS */}
-          <div className="space-y-4 p-4 rounded-xl bg-slate-900/60 border border-slate-800/80 flex flex-col justify-between">
-            <div>
-              <div className="flex items-center gap-2 mb-2">
-                <Gauge size={16} className="text-emerald-400" />
-                <h3 className="text-xs font-extrabold uppercase tracking-wider text-slate-200">
-                  ECONOMICS & STATS
-                </h3>
-              </div>
-
-              {/* Real-time Engineering Metrics */}
-              <div className="grid grid-cols-2 gap-2 text-[11px] mb-4">
-                <div className="p-2 rounded-lg bg-slate-950 border border-slate-800">
-                  <div className="text-slate-500 text-[9px]">SUB-MASS</div>
-                  <div className="font-bold text-slate-200">{totalInteriorMass.toFixed(1)} kg</div>
-                </div>
-                <div className="p-2 rounded-lg bg-slate-950 border border-slate-800">
-                  <div className="text-slate-500 text-[9px]">RIGIDITY</div>
-                  <div className="font-bold text-emerald-400">46.2 kNm/°</div>
-                </div>
-                <div className="p-2 rounded-lg bg-slate-950 border border-slate-800">
-                  <div className="text-slate-500 text-[9px]">DRAG COEFF</div>
-                  <div className="font-bold text-amber-400">Cd {activeModelSpec.aerodynamicBaseline.cd.toFixed(2)}</div>
-                </div>
-                <div className="p-2 rounded-lg bg-slate-950 border border-slate-800">
-                  <div className="text-slate-500 text-[9px]">DISCRETE CAD NODES</div>
-                  <div className="font-bold text-cyan-400">{interiorParts.length} PARTS</div>
-                </div>
-              </div>
-
-              {/* Modular CAD Components Checklist with Eye Toggle */}
-              <div className="pt-2 border-t border-slate-800">
-                <div className="text-[10px] font-extrabold text-slate-400 mb-2 uppercase flex items-center justify-between">
-                  <div className="flex items-center gap-1.5">
-                    <Cpu size={12} className="text-cyan-400" />
-                    <span>MODULAR CAD COMPONENTS ({interiorParts.length})</span>
-                  </div>
-                  <span className="text-[9px] text-slate-500">EYE: HIDE / INSPECT</span>
-                </div>
-                <div className="space-y-1.5 max-h-56 overflow-y-auto pr-1 no-scrollbar">
-                  {interiorParts.map((part) => {
-                    const visible = isPartVisible(part.id);
-                    return (
-                      <div
-                        key={part.id}
-                        className={`flex items-center justify-between p-2 rounded-lg border transition-all text-[11px] select-none ${
-                          visible
-                            ? "bg-slate-850/80 border-slate-800 text-slate-200"
-                            : "bg-slate-900/40 border-slate-800/40 text-slate-600 opacity-60"
-                        }`}
-                      >
-                        <div className="flex items-center gap-2 overflow-hidden">
-                          <button
-                            type="button"
-                            onClick={() => {
-                              playHMIClickSound();
-                              togglePartVisibility(part.id);
-                            }}
-                            className={`p-1 rounded cursor-pointer transition-colors ${
-                              visible
-                                ? "text-cyan-400 hover:text-cyan-300 hover:bg-slate-800"
-                                : "text-slate-600 hover:text-slate-400"
-                            }`}
-                            title={visible ? "Hide Part in 3D CAD" : "Show Part in 3D CAD"}
-                          >
-                            {visible ? <Eye size={13} /> : <EyeOff size={13} />}
-                          </button>
-                          <div className="truncate">
-                            <span className="font-semibold">{part.name}</span>
-                            <div className="text-[9px] text-slate-400">{part.material}</div>
-                          </div>
-                        </div>
-                        <div className="flex items-center gap-2 shrink-0">
-                          <span className="font-bold text-slate-300">{part.massKg.toFixed(1)} kg</span>
-                          <CheckCircle2 size={12} className="text-emerald-400" />
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              </div>
-            </div>
-
-            {/* Status Footer */}
-            <div className="text-[10px] text-slate-400 pt-2 border-t border-slate-800 flex items-center justify-between">
-              <span>ZERO-OFFSET CAD SNAP</span>
-              <span className="text-emerald-400 font-bold">✓ VERIFIED</span>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* ───────────────────────────────────────────────────────────── */}
-      {/* COCKPIT CONFIGURATION & ERGONOMICS OVERVIEW (DEDICATED DECK)  */}
-      {/* ───────────────────────────────────────────────────────────── */}
-      <div id="interior-options-deck" className="grid grid-cols-1 lg:grid-cols-2 gap-4 w-full">
-        {/* Left Card: Interior Configuration Studio Tiles */}
-        <div className="p-4 rounded-2xl bg-slate-900/95 border border-slate-800 shadow-xl flex flex-col gap-3">
-          <div className="flex items-center justify-between pb-2 border-b border-slate-800">
-            <div className="flex items-center gap-2">
-              <div className="p-2 rounded-xl bg-red-500/20 text-red-400 border border-red-500/30">
-                <SlidersHorizontal size={16} />
-              </div>
-              <div>
-                <h3 className="text-xs font-black tracking-wider uppercase text-slate-100 font-mono">
-                  INTERIOR CONFIGURATION (10 ARCHITECTURE MODULES)
-                </h3>
-                <p className="text-[11px] text-slate-400">Dashboard, instruments, center display, steering & upholstery</p>
-              </div>
-            </div>
-            <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-red-500/15 text-red-300 border border-red-500/30">
-              STUDIO TILES
-            </span>
-          </div>
-          <div className="max-h-[640px] overflow-y-auto rounded-xl border border-slate-800/60 bg-slate-950/60 p-2">
-            <InteriorConfigControls theme="dark" className="border-none shadow-none p-1 bg-transparent" />
-          </div>
-        </div>
-
-        {/* Right Card: Interior Metrics & Ergonomics Overview */}
-        <div className="p-4 rounded-2xl bg-slate-900/95 border border-slate-800 shadow-xl flex flex-col gap-3">
-          <div className="flex items-center justify-between pb-2 border-b border-slate-800">
-            <div className="flex items-center gap-2">
-              <div className="p-2 rounded-xl bg-red-500/20 text-red-400 border border-red-500/30">
-                <BarChart3 size={16} />
-              </div>
-              <div>
-                <h3 className="text-xs font-black tracking-wider uppercase text-slate-100 font-mono">
-                  INTERIOR OVERVIEW & ERGONOMICS
-                </h3>
-                <p className="text-[11px] text-slate-400">Live comfort, noise, quality, reliability & market appeal telemetry</p>
-              </div>
-            </div>
-            <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-red-500/15 text-red-300 border border-red-500/30">
-              TELEMETRY
-            </span>
-          </div>
-          <div className="max-h-[580px] overflow-y-auto rounded-xl border border-slate-800/60 bg-slate-950/60">
-            <InteriorMetricsPanel theme="dark" className="border-none shadow-none" />
-          </div>
-        </div>
-      </div>
-
       {/* ───────────────────────────────────────────────────────────── */}
       {/* WORKSPACE MODE SELECTOR: HARDWARE vs ELECTRONICS & AVIONICS   */}
       {/* ───────────────────────────────────────────────────────────── */}
       <div className="flex flex-wrap items-center justify-between gap-3 p-3 rounded-2xl bg-slate-900/95 border border-slate-800 shadow-xl backdrop-blur-md">
         <div className="flex items-center gap-3">
-          <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-red-950/60 border border-red-500/40 text-red-400">
+          <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-amber-950/40 border border-amber-500/30 text-amber-400">
             <Sparkles size={15} />
             <span className="text-xs font-black uppercase tracking-[0.2em]">
               DASHBOARD WORKBENCH
@@ -915,7 +693,7 @@ export const InteractiveDashboardStudio: React.FC<InteractiveDashboardStudioProp
             }}
             className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
               workspaceMode === "hardware"
-                ? "bg-red-600 text-white shadow-lg shadow-red-600/30 ring-1 ring-red-400"
+                ? "bg-amber-500/25 text-amber-300 shadow-lg shadow-amber-500/20 ring-1 ring-amber-500/40"
                 : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/60"
             }`}
           >
@@ -931,7 +709,7 @@ export const InteractiveDashboardStudio: React.FC<InteractiveDashboardStudioProp
             }}
             className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
               workspaceMode === "avionics"
-                ? "bg-cyan-600 text-white shadow-lg shadow-cyan-600/30 ring-1 ring-cyan-400"
+                ? "bg-cyan-500/25 text-cyan-300 shadow-lg shadow-cyan-500/20 ring-1 ring-cyan-500/40"
                 : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/60"
             }`}
           >
@@ -957,741 +735,17 @@ export const InteractiveDashboardStudio: React.FC<InteractiveDashboardStudioProp
         </div>
       </div>
 
+
       {/* ───────────────────────────────────────────────────────────── */}
-      {/* COCKPIT HARDWARE CONFIGURATION CARDS                          */}
+      {/* SECTION-DRIVEN CONTROL DECK (Directly Beneath 3D GLB Viewport)*/}
       {/* ───────────────────────────────────────────────────────────── */}
       {(workspaceMode === "hardware" || workspaceMode === "split") && (
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 w-full">
-        {/* =========================================================== */}
-        {/* CARD 1: ALL OPTIONS RELATED TO STEERING                     */}
-        {/* =========================================================== */}
-        <div
-          onClick={() => setActivePanel("steering")}
-          className={`flex flex-col gap-4 p-4 rounded-2xl transition-all duration-200 cursor-pointer ${
-            activePanel === "steering"
-              ? "bg-slate-900/95 border-2 border-red-500/80 shadow-[0_0_20px_rgba(239,68,68,0.18)]"
-              : "bg-slate-900/60 border border-slate-800 hover:border-slate-700"
-          }`}
-        >
-          {/* Card Header */}
-          <div className="flex items-center justify-between pb-2 border-b border-slate-800">
-            <div className="flex items-center gap-2">
-              <div className="p-1.5 rounded-lg bg-red-500/20 text-red-400">
-                <Compass size={16} />
-              </div>
-              <div>
-                <h3 className="text-xs font-black tracking-wider uppercase text-slate-100">
-                  ALL OPTIONS RELATED TO STEERING
-                </h3>
-                <p className="text-[10px] text-slate-400">7 Wheel shapes, grip materials, stripe & paddles</p>
-              </div>
-            </div>
-          </div>
-
-          {/* 1. 7 Wheel Styles */}
-          <div className="space-y-1.5">
-            <label className="text-[11px] font-bold text-slate-300 uppercase tracking-wider">
-              1. Steering Wheel Architecture
-            </label>
-            <div className="grid grid-cols-2 gap-1.5">
-              {(
-                [
-                  { id: "sport", label: "Sport 3-Spoke", desc: "Contoured Nappa, aluminum" },
-                  { id: "gt_3spoke", label: "GT 3-Spoke", desc: "Flat-bottom, perforated" },
-                  { id: "yoke", label: "GT3 Track Yoke", desc: "Open-top racing yoke" },
-                  { id: "formula", label: "Formula Carbon", desc: "Motorsport shift LEDs" },
-                  { id: "luxury_2spoke", label: "Luxury 2-Spoke", desc: "Walnut swept arch" },
-                  { id: "classic_4spoke", label: "Classic 4-Spoke", desc: "Stainless steel vintage" },
-                  { id: "performance_4spoke", label: "Performance 4-Spoke", desc: "Forged split carbon" },
-                ] as const
-              ).map((w) => (
-                <button
-                  key={w.id}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    playHMIClickSound();
-                    setSteeringWheelStyle(w.id);
-                  }}
-                  className={`p-2 rounded-xl text-left border transition-all cursor-pointer ${
-                    steeringWheelStyle === w.id
-                      ? "bg-red-600/20 border-red-500 text-white shadow-sm ring-1 ring-red-500"
-                      : "bg-slate-800/60 border-slate-700/80 text-slate-300 hover:bg-slate-700/60"
-                  }`}
-                >
-                  <div className="text-[11px] font-black">{w.label}</div>
-                  <div className="text-[9px] text-slate-400 leading-tight">{w.desc}</div>
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* 2. Grip Material */}
-          <div className="space-y-1.5">
-            <label className="text-[11px] font-bold text-slate-300 uppercase tracking-wider">
-              2. Grip Upholstery Material
-            </label>
-            <div className="grid grid-cols-3 gap-1.5">
-              {(
-                [
-                  { id: "leather", label: "Nappa Leather" },
-                  { id: "alcantara", label: "Alcantara" },
-                  { id: "perforated", label: "Perforated" },
-                  { id: "carbon", label: "Carbon Weave" },
-                  { id: "wood", label: "Walnut Wood" },
-                  { id: "suede", label: "Motorsport Suede" },
-                ] as const
-              ).map((m) => (
-                <button
-                  key={m.id}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    playHMIClickSound();
-                    setSteeringGripMaterial(m.id);
-                  }}
-                  className={`px-2 py-1.5 rounded-lg text-center text-[10px] font-bold border transition-all cursor-pointer ${
-                    steeringGripMaterial === m.id
-                      ? "bg-red-600/20 border-red-500 text-red-300"
-                      : "bg-slate-800/50 border-slate-700 text-slate-300 hover:bg-slate-700/50"
-                  }`}
-                >
-                  {m.label}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* 3. 12 O'Clock Racing Stripe */}
-          <div className="space-y-1.5">
-            <label className="text-[11px] font-bold text-slate-300 uppercase tracking-wider">
-              3. 12 O'Clock Racing Center Stripe
-            </label>
-            <div className="flex items-center gap-1.5 flex-wrap">
-              {(["none", "red", "yellow", "blue", "white", "green"] as const).map((col) => (
-                <button
-                  key={col}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    playHMIClickSound();
-                    setSteeringStripe(col);
-                  }}
-                  className={`px-3 py-1 rounded-lg text-[10px] font-bold uppercase border transition-all cursor-pointer ${
-                    steeringStripe === col
-                      ? "bg-slate-700 border-red-500 text-white ring-1 ring-red-400"
-                      : "bg-slate-800/50 border-slate-700 text-slate-400 hover:bg-slate-700/50"
-                  }`}
-                >
-                  {col}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* 4. Paddle Shifters */}
-          <div className="space-y-1.5">
-            <label className="text-[11px] font-bold text-slate-300 uppercase tracking-wider">
-              4. Paddle Shifters
-            </label>
-            <div className="grid grid-cols-3 gap-1.5">
-              {(
-                [
-                  { id: "none", label: "None" },
-                  { id: "billet", label: "Billet Aluminum" },
-                  { id: "carbon", label: "3K Carbon" },
-                  { id: "forged_carbon", label: "Forged Carbon" },
-                  { id: "red", label: "Anodized Red" },
-                  { id: "extended", label: "GT3 Extended" },
-                ] as const
-              ).map((p) => (
-                <button
-                  key={p.id}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    playHMIClickSound();
-                    setPaddleShifters(p.id);
-                  }}
-                  className={`px-2 py-1.5 rounded-lg text-[10px] font-bold border transition-all cursor-pointer ${
-                    paddleShifters === p.id
-                      ? "bg-red-600/20 border-red-500 text-red-300"
-                      : "bg-slate-800/50 border-slate-700 text-slate-300 hover:bg-slate-700/50"
-                  }`}
-                >
-                  {p.label}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* 5. Drive Mode Dial */}
-          <div className="space-y-1.5">
-            <label className="text-[11px] font-bold text-slate-300 uppercase tracking-wider">
-              5. Steering Drive Mode Rotary Dial
-            </label>
-            <div className="grid grid-cols-3 gap-1.5">
-              {(["comfort", "eco", "sport", "sport_plus", "track", "custom"] as const).map((dm) => (
-                <button
-                  key={dm}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    playHMIClickSound();
-                    setDriveMode(dm);
-                  }}
-                  className={`px-2 py-1.5 rounded-lg text-[10px] font-bold uppercase border transition-all cursor-pointer ${
-                    driveMode === dm
-                      ? "bg-red-600/20 border-red-500 text-red-300"
-                      : "bg-slate-800/50 border-slate-700 text-slate-300 hover:bg-slate-700/50"
-                  }`}
-                >
-                  {dm.replace("_", "+")}
-                </button>
-              ))}
-            </div>
-          </div>
+        <div id="interior-options-deck" className="w-full">
+          <InteriorControlDeck
+            onSelectStage={onSelectStage}
+            onApplyConfig={handleApplyConfig}
+          />
         </div>
-
-        {/* =========================================================== */}
-        {/* CARD 2: DASHBOARD CONFIGURATIONS                            */}
-        {/* =========================================================== */}
-        <div
-          onClick={() => setActivePanel("dashboard")}
-          className={`flex flex-col gap-4 p-4 rounded-2xl transition-all duration-200 cursor-pointer ${
-            activePanel === "dashboard"
-              ? "bg-slate-900/95 border-2 border-red-500/80 shadow-[0_0_20px_rgba(239,68,68,0.18)]"
-              : "bg-slate-900/60 border border-slate-800 hover:border-slate-700"
-          }`}
-        >
-          {/* Card Header */}
-          <div className="flex items-center justify-between pb-2 border-b border-slate-800">
-            <div className="flex items-center gap-2">
-              <div className="p-1.5 rounded-lg bg-red-500/20 text-red-400">
-                <Sliders size={16} />
-              </div>
-              <div>
-                <h3 className="text-xs font-black tracking-wider uppercase text-slate-100">
-                  DASHBOARD CONFIGURATIONS
-                </h3>
-                <p className="text-[10px] text-slate-400">Pad leather, 11 trims, 8 screens, clusters & HUD</p>
-              </div>
-            </div>
-          </div>
-
-          {/* 1. Upper Dash Pad Color */}
-          <div className="space-y-1.5">
-            <label className="text-[11px] font-bold text-slate-300 uppercase tracking-wider">
-              1. Upper Dashboard Pad Nappa Leather
-            </label>
-            <div className="flex items-center gap-2 flex-wrap">
-              {[
-                { name: "Obsidian Black", hex: "#17181c" },
-                { name: "Charcoal Grey", hex: "#26282e" },
-                { name: "Cognac Tan", hex: "#9a5b32" },
-                { name: "Crimson Burgundy", hex: "#7f1d1d" },
-                { name: "Dark Navy", hex: "#1e293b" },
-                { name: "Cream Beige", hex: "#d4c5a9" },
-              ].map((sw) => (
-                <button
-                  key={sw.hex}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    playHMIClickSound();
-                    setUpperDashPadColor(sw.hex);
-                  }}
-                  title={sw.name}
-                  className={`w-7 h-7 rounded-full border-2 transition-transform cursor-pointer ${
-                    upperDashPadColor === sw.hex ? "scale-110 border-red-500 shadow-md" : "border-slate-600 hover:scale-105"
-                  }`}
-                  style={{ backgroundColor: sw.hex }}
-                />
-              ))}
-            </div>
-          </div>
-
-          {/* 2. Main Dashboard Decorative Trim */}
-          <div className="space-y-1.5">
-            <label className="text-[11px] font-bold text-slate-300 uppercase tracking-wider">
-              2. Main Decorative Trim Spear
-            </label>
-            <div className="grid grid-cols-2 gap-1.5">
-              {(
-                [
-                  { id: "walnut", label: "American Walnut", desc: "Open-pore bookmatched" },
-                  { id: "dark_walnut", label: "Dark Walnut", desc: "Stained deep espresso" },
-                  { id: "carbon", label: "3K Twill Carbon", desc: "High-gloss clearcoat" },
-                  { id: "forged_carbon", label: "Forged Carbon", desc: "Matte motorsport composite" },
-                  { id: "titanium", label: "Brushed Titanium", desc: "Aerospace satin grade" },
-                  { id: "aluminum", label: "Satin Aluminum", desc: "Machined jewel finish" },
-                  { id: "piano_black", label: "Piano Black", desc: "Mirror lacquer gloss" },
-                  { id: "bronze", label: "Anodized Bronze", desc: "Warm metallic luxury" },
-                ] as const
-              ).map((t) => (
-                <button
-                  key={t.id}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    playHMIClickSound();
-                    setDashboardTrimMaterial(t.id);
-                  }}
-                  className={`p-2 rounded-xl text-left border transition-all cursor-pointer ${
-                    dashboardTrimMaterial === t.id
-                      ? "bg-red-600/20 border-red-500 text-white shadow-sm ring-1 ring-red-500"
-                      : "bg-slate-800/60 border-slate-700/80 text-slate-300 hover:bg-slate-700/60"
-                  }`}
-                >
-                  <div className="text-[11px] font-black">{t.label}</div>
-                  <div className="text-[9px] text-slate-400 leading-tight">{t.desc}</div>
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* 3. Infotainment Display Mode (8 Modes) */}
-          <div className="space-y-1.5">
-            <label className="text-[11px] font-bold text-slate-300 uppercase tracking-wider">
-              3. Infotainment 12.3-inch Display Mode
-            </label>
-            <div className="grid grid-cols-4 gap-1.5">
-              {(
-                [
-                  { id: "navigation", label: "Nav", icon: NavIcon },
-                  { id: "telemetry", label: "Telemetry", icon: Activity },
-                  { id: "media", label: "Media", icon: Radio },
-                  { id: "climate", label: "HVAC", icon: Thermometer },
-                  { id: "vehicle", label: "Health", icon: Zap },
-                  { id: "camera", label: "Camera", icon: Camera },
-                  { id: "performance", label: "Chrono", icon: Gauge },
-                  { id: "settings", label: "Settings", icon: Sliders },
-                ] as const
-              ).map((im) => {
-                const Icon = im.icon;
-                return (
-                  <button
-                    key={im.id}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      playHMIClickSound();
-                      setInfotainmentMode(im.id);
-                    }}
-                    className={`flex flex-col items-center gap-1 p-1.5 rounded-lg border text-center transition-all cursor-pointer ${
-                      infotainmentMode === im.id
-                        ? "bg-red-600/20 border-red-500 text-red-300 ring-1 ring-red-400"
-                        : "bg-slate-800/50 border-slate-700 text-slate-300 hover:bg-slate-700/50"
-                    }`}
-                  >
-                    <Icon size={14} />
-                    <span className="text-[9px] font-bold">{im.label}</span>
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-
-          {/* 4. Instrument Cluster Style & HUD */}
-          <div className="space-y-1.5">
-            <label className="text-[11px] font-bold text-slate-300 uppercase tracking-wider">
-              4. Driver Instrument Cluster & HUD
-            </label>
-            <div className="grid grid-cols-3 gap-1.5">
-              {(
-                [
-                  { id: "digital", label: "Digital ADAS" },
-                  { id: "analog", label: "Analog Dials" },
-                  { id: "performance", label: "Performance" },
-                  { id: "track", label: "F1 Track" },
-                  { id: "minimal", label: "Minimalist" },
-                ] as const
-              ).map((cs) => (
-                <button
-                  key={cs.id}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    playHMIClickSound();
-                    setClusterStyle(cs.id);
-                  }}
-                  className={`px-2 py-1.5 rounded-lg text-center text-[10px] font-bold border transition-all cursor-pointer ${
-                    clusterStyle === cs.id
-                      ? "bg-red-600/20 border-red-500 text-red-300"
-                      : "bg-slate-800/50 border-slate-700 text-slate-300 hover:bg-slate-700/50"
-                  }`}
-                >
-                  {cs.label}
-                </button>
-              ))}
-
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  playHMIClickSound();
-                  setHudMode(hudMode === "off" ? "performance" : "off");
-                }}
-                className={`px-2 py-1.5 rounded-lg text-center text-[10px] font-bold border transition-all cursor-pointer ${
-                  hudMode !== "off"
-                    ? "bg-cyan-600/20 border-cyan-400 text-cyan-300"
-                    : "bg-slate-800/50 border-slate-700 text-slate-400 hover:bg-slate-700/50"
-                }`}
-              >
-                HUD: {hudMode !== "off" ? "ON" : "OFF"}
-              </button>
-            </div>
-          </div>
-
-          {/* 5. Multi-Zone Ambient Neon Lightguide */}
-          <div className="space-y-1.5">
-            <label className="text-[11px] font-bold text-slate-300 uppercase tracking-wider">
-              5. Multi-Zone Ambient Neon Lightguides
-            </label>
-            <div className="flex items-center gap-2 flex-wrap">
-              {[
-                { name: "Cyan Neon", hex: "#06b6d4" },
-                { name: "Crimson Red", hex: "#ef4444" },
-                { name: "Amber Gold", hex: "#f59e0b" },
-                { name: "Electric Blue", hex: "#3b82f6" },
-                { name: "Violet Purple", hex: "#a855f7" },
-                { name: "Emerald Green", hex: "#10b981" },
-                { name: "Ice White", hex: "#ffffff" },
-              ].map((sw) => (
-                <button
-                  key={sw.hex}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    playHMIClickSound();
-                    setAmbientLightColor(sw.hex);
-                  }}
-                  title={sw.name}
-                  className={`w-6 h-6 rounded-full border-2 transition-transform cursor-pointer ${
-                    ambientLightColor === sw.hex ? "scale-125 border-white shadow-lg" : "border-slate-700 hover:scale-110"
-                  }`}
-                  style={{ backgroundColor: sw.hex }}
-                />
-              ))}
-            </div>
-          </div>
-
-          {/* 6. Dashboard Perspective & Camera View */}
-          <div className="space-y-1.5 pt-1 border-t border-slate-800/80">
-            <div className="flex items-center justify-between">
-              <label className="text-[11px] font-bold text-slate-300 uppercase tracking-wider">
-                6. Perspective & Camera View
-              </label>
-              <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-red-950/60 border border-red-500/40 text-red-400">
-                {cameraPose === "dashboard_center" ? "STUDIO FRONT (DEFAULT)" : cameraPose.toUpperCase()}
-              </span>
-            </div>
-            <div className="grid grid-cols-2 gap-1.5">
-              {[
-                { id: "dashboard_center", label: "Studio Front (Default)", desc: "Symmetrical front dashboard view", icon: Eye },
-                { id: "driver", label: "Driver POV", desc: "Left-hand driver perspective", icon: Camera },
-                { id: "infotainment", label: "Display Focus", desc: "Close-up of 12.3\" center screen", icon: Activity },
-                { id: "cluster", label: "Cluster Focus", desc: "Driver instrument binnacle", icon: Gauge },
-              ].map((v) => {
-                const Icon = v.icon;
-                const active = cameraPose === v.id;
-                return (
-                  <button
-                    key={v.id}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      playHMIClickSound();
-                      setCameraPose(v.id as CameraPose);
-                    }}
-                    className={`flex items-start gap-2 p-2 rounded-xl border text-left transition-all cursor-pointer ${
-                      active
-                        ? "bg-red-600/25 border-red-500 text-white ring-1 ring-red-400 shadow-sm"
-                        : "bg-slate-800/50 border-slate-700/80 text-slate-300 hover:bg-slate-700/50"
-                    }`}
-                  >
-                    <div className={`p-1 rounded-lg ${active ? "bg-red-500/30 text-red-300" : "bg-slate-700/50 text-slate-400"}`}>
-                      <Icon size={14} />
-                    </div>
-                    <div>
-                      <div className="text-[10px] font-black flex items-center gap-1">
-                        {v.label}
-                        {v.id === "dashboard_center" && (
-                          <span className="text-[8px] px-1 py-0.2 rounded bg-emerald-500/20 text-emerald-300 border border-emerald-500/40">
-                            DEF
-                          </span>
-                        )}
-                      </div>
-                      <div className="text-[9px] text-slate-400 leading-tight">{v.desc}</div>
-                    </div>
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-        </div>
-
-        {/* =========================================================== */}
-        {/* CARD 3: CONSOLE, SEATS & COCKPIT CONFIGURE                  */}
-        {/* =========================================================== */}
-        <div
-          onClick={() => setActivePanel("other")}
-          className={`flex flex-col gap-4 p-4 rounded-2xl transition-all duration-200 cursor-pointer ${
-            activePanel === "other" || activePanel === "console" || activePanel === "seats" || activePanel === "doors"
-              ? "bg-slate-900/95 border-2 border-red-500/80 shadow-[0_0_20px_rgba(239,68,68,0.18)]"
-              : "bg-slate-900/60 border border-slate-800 hover:border-slate-700"
-          }`}
-        >
-          {/* Card Header */}
-          <div className="flex items-center justify-between pb-2 border-b border-slate-800">
-            <div className="flex items-center gap-2">
-              <div className="p-1.5 rounded-lg bg-red-500/20 text-red-400">
-                <Sparkles size={16} />
-              </div>
-              <div>
-                <h3 className="text-xs font-black tracking-wider uppercase text-slate-100">
-                  CONSOLE, SEATS & COCKPIT CONFIGURE
-                </h3>
-                <p className="text-[10px] text-slate-400">7 Shifters, bucket seats, stitching, tint & presets</p>
-              </div>
-            </div>
-          </div>
-
-          {/* 1. 7 Shifter Mechanisms */}
-          <div
-            onClick={(e) => {
-              e.stopPropagation();
-              setActivePanel("console");
-              setCameraPose("console");
-            }}
-            className={`p-3 rounded-xl border transition-all cursor-pointer ${
-              activePanel === "console" || cameraPose === "console"
-                ? "bg-slate-800/90 border-red-500 shadow-[0_0_15px_rgba(239,68,68,0.2)] ring-1 ring-red-500/80"
-                : "bg-slate-800/40 border-slate-700/70 hover:border-slate-600"
-            }`}
-          >
-            <div className="flex items-center justify-between mb-2">
-              <label className="text-[11px] font-bold text-slate-200 uppercase tracking-wider flex items-center gap-1.5">
-                <CircleDot size={13} className="text-red-400" />
-                1. Center Console Shifter Mechanism
-              </label>
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  playHMIClickSound();
-                  setActivePanel("console");
-                  setCameraPose("console");
-                }}
-                className="px-2 py-0.5 rounded text-[10px] font-mono bg-red-600/30 text-red-300 border border-red-500/50 hover:bg-red-600/50 cursor-pointer"
-              >
-                FOCUS CONSOLE
-              </button>
-            </div>
-            <div className="grid grid-cols-2 gap-1.5">
-              {(
-                [
-                  { id: "auto", label: "Auto Lever", desc: "Perforated leather grip" },
-                  { id: "manual_gated", label: "Gated Manual", desc: "Open chrome slotted gate" },
-                  { id: "manual_h", label: "H-Pattern Boot", desc: "Leather boot 6-speed" },
-                  { id: "toggle", label: "Electronic Toggle", desc: "Satin aluminum rocker" },
-                  { id: "rotary", label: "Rotary Controller", desc: "Knurled aluminum dial" },
-                  { id: "crystal", label: "Crystal Glass", desc: "Faceted diamond jewel" },
-                  { id: "performance", label: "Sequential Lever", desc: "Motorsport carbon stalk" },
-                ] as const
-              ).map((s) => (
-                <button
-                  key={s.id}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    playHMIClickSound();
-                    setShifterStyle(s.id);
-                    setActivePanel("console");
-                    setCameraPose("console");
-                  }}
-                  className={`p-2 rounded-xl text-left border transition-all cursor-pointer ${
-                    shifterStyle === s.id
-                      ? "bg-red-600/20 border-red-500 text-white shadow-sm ring-1 ring-red-500"
-                      : "bg-slate-800/60 border-slate-700/80 text-slate-300 hover:bg-slate-700/60"
-                  }`}
-                >
-                  <div className="text-[11px] font-black">{s.label}</div>
-                  <div className="text-[9px] text-slate-400 leading-tight">{s.desc}</div>
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* 2. Seats & French Stitching */}
-          <div
-            onClick={(e) => {
-              e.stopPropagation();
-              setActivePanel("seats");
-              setCameraPose("seats");
-            }}
-            className={`p-3 rounded-xl border transition-all cursor-pointer ${
-              activePanel === "seats" || cameraPose === "seats"
-                ? "bg-slate-800/90 border-red-500 shadow-[0_0_15px_rgba(239,68,68,0.2)] ring-1 ring-red-500/80"
-                : "bg-slate-800/40 border-slate-700/70 hover:border-slate-600"
-            }`}
-          >
-            <div className="flex items-center justify-between mb-2">
-              <label className="text-[11px] font-bold text-slate-200 uppercase tracking-wider flex items-center gap-1.5">
-                <Armchair size={13} className="text-red-400" />
-                2. Seating Architecture & French Stitching
-              </label>
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  playHMIClickSound();
-                  setActivePanel("seats");
-                  setCameraPose("seats");
-                }}
-                className="px-2 py-0.5 rounded text-[10px] font-mono bg-red-600/30 text-red-300 border border-red-500/50 hover:bg-red-600/50 cursor-pointer"
-              >
-                FOCUS SEAT CAM
-              </button>
-            </div>
-            <div className="grid grid-cols-3 gap-1.5">
-              {(["sport", "bucket", "luxury", "racing", "standard"] as const).map((st) => (
-                <button
-                  key={st}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    playHMIClickSound();
-                    setSeatStyle(st);
-                    setActivePanel("seats");
-                    setCameraPose("seats");
-                  }}
-                  className={`px-2 py-1.5 rounded-lg text-[10px] font-bold uppercase border transition-all cursor-pointer ${
-                    seatStyle === st
-                      ? "bg-red-600/20 border-red-500 text-red-300 ring-1 ring-red-400"
-                      : "bg-slate-800/50 border-slate-700 text-slate-300 hover:bg-slate-700/50"
-                  }`}
-                >
-                  {st}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* 2b. Van / MPV Multi-Passenger Seating Architecture */}
-          <div className="p-3 rounded-xl border border-emerald-500/40 bg-emerald-950/20 space-y-2">
-            <div className="flex items-center justify-between">
-              <label className="text-[11px] font-bold text-emerald-300 uppercase tracking-wider flex items-center gap-1.5">
-                <Users size={13} className="text-emerald-400" />
-                2b. Modular Van / MPV Seating Architecture
-              </label>
-              <span className="text-[10px] font-mono text-emerald-400">
-                Cargo: <strong>{vanVolume.cargoVolumeL} L</strong>
-              </span>
-            </div>
-            <div className="flex items-center gap-1.5 flex-wrap">
-              {(["2_seat_cargo", "5_seat", "7_seat", "8_seat", "9_seat"] as VanSeatConfig[]).map((cfg) => {
-                const isSelected = vanSeatConfig === cfg;
-                return (
-                  <button
-                    key={cfg}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      playHMIClickSound();
-                      setVanSeatConfig(cfg);
-                    }}
-                    className={`px-2.5 py-1 rounded-lg text-[10px] font-bold border transition-all cursor-pointer ${
-                      isSelected
-                        ? "bg-emerald-500 text-slate-950 border-emerald-300 shadow-md font-black"
-                        : "bg-slate-900/80 text-slate-300 border-slate-700/80 hover:border-emerald-500/50"
-                    }`}
-                  >
-                    {cfg.replace(/_/g, " ").toUpperCase()}
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-
-          {/* 3. Theme Presets */}
-          <div className="space-y-1.5">
-            <label className="text-[11px] font-bold text-slate-300 uppercase tracking-wider">
-              3. Factory Interior Theme Presets
-            </label>
-            <div className="grid grid-cols-2 gap-1.5">
-              {COCKPIT_THEME_PRESETS.map((t) => (
-                <button
-                  key={t.id}
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    playHMITabSound();
-                    applyThemePreset(t.id);
-                  }}
-                  className="p-2 rounded-xl text-left bg-slate-800/60 border border-slate-700/80 hover:border-red-500/80 transition-all cursor-pointer"
-                >
-                  <div className="text-[11px] font-black text-slate-100">{t.name}</div>
-                  <div className="text-[9px] text-slate-400 truncate">{t.description}</div>
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* 4. Engineering Impact Radar & Live Metrics */}
-          <div className="p-3 rounded-xl bg-slate-950/80 border border-slate-800 space-y-2">
-            <div className="flex items-center justify-between text-xs font-black uppercase text-slate-200">
-              <span className="flex items-center gap-1.5 text-red-400">
-                <Award size={13} /> Cockpit Engineering Consequences
-              </span>
-              <span className="text-[10px] font-mono text-cyan-400">
-                {engineering.totalPowerConsumptionW} W DRAW
-              </span>
-            </div>
-
-            {/* Score Progress Bars */}
-            <div className="space-y-1.5 text-[10px]">
-              <div>
-                <div className="flex justify-between text-slate-400 mb-0.5">
-                  <span>LUXURY INDEX</span>
-                  <span className="font-mono text-amber-300">{engineering.luxuryScore}%</span>
-                </div>
-                <div className="w-full h-1.5 bg-slate-800 rounded-full overflow-hidden">
-                  <div className="h-full bg-amber-400 rounded-full" style={{ width: `${engineering.luxuryScore}%` }} />
-                </div>
-              </div>
-
-              <div>
-                <div className="flex justify-between text-slate-400 mb-0.5">
-                  <span>SPORT & DYNAMICS</span>
-                  <span className="font-mono text-red-400">{engineering.sportScore}%</span>
-                </div>
-                <div className="w-full h-1.5 bg-slate-800 rounded-full overflow-hidden">
-                  <div className="h-full bg-red-500 rounded-full" style={{ width: `${engineering.sportScore}%` }} />
-                </div>
-              </div>
-
-              <div>
-                <div className="flex justify-between text-slate-400 mb-0.5">
-                  <span>TECHNOLOGY & AVIONICS</span>
-                  <span className="font-mono text-cyan-400">{engineering.technologyScore}%</span>
-                </div>
-                <div className="w-full h-1.5 bg-slate-800 rounded-full overflow-hidden">
-                  <div className="h-full bg-cyan-400 rounded-full" style={{ width: `${engineering.technologyScore}%` }} />
-                </div>
-              </div>
-            </div>
-
-            {/* Bottom Actions */}
-            <div className="flex items-center gap-2 pt-2 border-t border-slate-800/80">
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleApplyConfig();
-                }}
-                className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-xl bg-red-600 hover:bg-red-500 text-white font-bold text-xs shadow-lg shadow-red-600/30 transition-all cursor-pointer"
-              >
-                <Save size={13} />
-                <span>SYNC TO VEHICLE</span>
-              </button>
-
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  playHMIClickSound();
-                  resetConfig();
-                }}
-                title="Reset to Defaults (R)"
-                className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 transition-all cursor-pointer"
-              >
-                <RotateCcw size={14} />
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
       )}
 
       {/* ───────────────────────────────────────────────────────────── */}
@@ -1709,14 +763,14 @@ export const InteractiveDashboardStudio: React.FC<InteractiveDashboardStudioProp
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm p-4">
           <div className="bg-slate-900 border border-slate-700 rounded-2xl p-5 w-full max-w-lg shadow-2xl flex flex-col gap-3">
             <h3 className="text-sm font-black text-slate-100 uppercase tracking-wider flex items-center gap-2">
-              <FileCode2 size={16} className="text-red-400" />
+              <FileCode2 size={16} className="text-amber-400" />
               Cockpit Configuration JSON (Export / Import)
             </h3>
             <textarea
               rows={12}
               value={jsonText}
               onChange={(e) => setJsonText(e.target.value)}
-              className="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 font-mono text-xs text-cyan-300 focus:outline-none focus:border-red-500"
+              className="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 font-mono text-xs text-cyan-300 focus:outline-none focus:border-amber-500"
             />
             <div className="flex items-center justify-end gap-2">
               <button
@@ -1735,7 +789,7 @@ export const InteractiveDashboardStudio: React.FC<InteractiveDashboardStudioProp
                     alert("Invalid JSON configuration format!");
                   }
                 }}
-                className="px-4 py-1.5 rounded-lg bg-red-600 text-white font-bold text-xs hover:bg-red-500"
+                className="px-4 py-1.5 rounded-lg bg-amber-500 text-slate-950 font-bold text-xs hover:bg-amber-400"
               >
                 Apply JSON
               </button>

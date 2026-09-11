@@ -12,6 +12,13 @@ if ("serviceWorker" in navigator && import.meta.env.PROD) {
   });
 }
 
+import { useGuidedEngineeringStore } from "./state/guidedEngineeringStore";
+import { useModularVehicleBuilderStore } from "./state/modularVehicleBuilderStore";
+if (typeof window !== "undefined" && import.meta.env.DEV) {
+  (window as any).__guidedStore = useGuidedEngineeringStore;
+  (window as any).__modularStore = useModularVehicleBuilderStore;
+}
+
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <App />

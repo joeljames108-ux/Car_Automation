@@ -329,7 +329,7 @@ export interface ModularVehicleAssembly {
 }
 
 // ===================================================================
-// EXPANDED 38 BODY-TYPE SYSTEM & 3-LAYER ARCHITECTURE
+// 24 BODY-TYPE SYSTEM & 3-LAYER ARCHITECTURE
 // ===================================================================
 
 export type PlatformFamilyId =
@@ -343,37 +343,28 @@ export type PlatformFamilyId =
   | "tubular_specialty";
 
 export type VehicleBodyTypeId =
-  // 1. Unibody Passenger Platform (8)
+  // 1. Unibody Passenger Platform (7)
   | "sedan"
+  | "luxury_sedan"
   | "coupe"
   | "station_wagon"
   | "shooting_brake"
-  | "liftback"
-  | "fastback"
   | "grand_tourer"
   | "limousine"
-  // 2. Unibody Compact Platform (5)
+  // 2. Unibody Compact Platform (1)
   | "hatchback"
-  | "hot_hatch"
-  | "supermini"
-  | "city_car"
-  | "kei_compact"
   // 3. Utility & Crossover Platform (5)
   | "suv"
   | "crossover"
   | "luxury_suv"
   | "performance_suv"
   | "offroad_suv"
-  // 4. Body-on-Frame Truck & Commercial (4)
+  // 4. Body-on-Frame Truck & Commercial (3)
   | "pickup_truck"
   | "offroad_4x4"
-  | "cab_over_utility"
-  | "chassis_cab"
-  // 5. Commercial High-Volume / MPV (5)
+  | "truck_lorry"
+  // 5. Commercial High-Volume / MPV (2)
   | "cargo_van"
-  | "minivan_mpv"
-  | "microvan"
-  | "motorhome_camper"
   | "bus_shuttle"
   // 6. Mid-Engine Carbon Monocoque (3)
   | "supercar"
@@ -382,13 +373,8 @@ export type VehicleBodyTypeId =
   // 7. Open-Top Reinforced Platform (2)
   | "roadster"
   | "convertible"
-  // 8. Tubular & Specialty Platform (6)
-  | "sport_wagon"
-  | "shooting_brake_ev"
-  | "rally_car"
-  | "dune_buggy"
-  | "beach_buggy"
-  | "three_wheeler";
+  // 8. Tubular & Specialty Platform (1)
+  | "sport_wagon";
 
 export type VehicleArchitectureLayer = "PLATFORM" | "BODY" | "DESIGN_KIT";
 
@@ -433,7 +419,6 @@ export type CommercialBodyType =
   | "refrigerated_box"
   | "tipper"
   | "service_body"
-  | "camper"
   | "passenger_body";
 
 export interface CommercialBodySpec {
