@@ -10,6 +10,7 @@ import React, { useEffect, useRef, useState, useCallback } from "react";
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
+import { GltfLoaderFactory } from "../../utils/gltfLoaderFactory";
 import {
   Camera,
   RotateCcw,
@@ -22,6 +23,7 @@ import {
   MoveHorizontal,
   Sun,
   Moon,
+  Crosshair,
 } from "lucide-react";
 import {
   useModularVehicleBuilderStore,
@@ -29,9 +31,11 @@ import {
   getFinalPowertrainGlbPaths,
   getStageIndividualParts,
   getCompleteVehicleGlbPath,
+  getBodyArchitectureGlbPath,
   STAGE_EXPLODED_OFFSETS,
   AssemblyStage,
 } from "../../state/modularVehicleBuilderStore";
+import { useVehicleArchitectureStore } from "../../state/useVehicleArchitectureStore";
 
 export const ModularVehicleCanvasViewport: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -39,6 +43,8 @@ export const ModularVehicleCanvasViewport: React.FC = () => {
 
   // Zustand Store Subscriptions
   const selectedModel = useModularVehicleBuilderStore((s) => s.selectedModel);
+  const selectedEra = useModularVehicleBuilderStore((s) => s.selectedEra);
+  const activeBodyGlbUrl = useVehicleArchitectureStore((s) => s.activeBodyGlbUrl);
   const currentStage = useModularVehicleBuilderStore((s) => s.currentStage);
   const installedStages = useModularVehicleBuilderStore((s) => s.installedStages);
   const hiddenPartIds = useModularVehicleBuilderStore((s) => s.hiddenPartIds);
@@ -53,6 +59,8 @@ export const ModularVehicleCanvasViewport: React.FC = () => {
   const setExplodedProgress = useModularVehicleBuilderStore((s) => s.setExplodedProgress);
   const setIsXRay = useModularVehicleBuilderStore((s) => s.setIsXRay);
   const setIsAutoRotate = useModularVehicleBuilderStore((s) => s.setIsAutoRotate);
+  const showAttachmentPoints = useModularVehicleBuilderStore((s) => s.showAttachmentPoints);
+  const setShowAttachmentPoints = useModularVehicleBuilderStore((s) => s.setShowAttachmentPoints);
 
   // Local Viewport States
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -67,6 +75,7 @@ export const ModularVehicleCanvasViewport: React.FC = () => {
   const controlsRef = useRef<OrbitControls | null>(null);
   const rootAssemblyGroupRef = useRef<THREE.Group | null>(null);
   const stageGroupsMapRef = useRef<Map<string, THREE.Group>>(new Map());
+  const attachmentPointsGroupRef = useRef<THREE.Group | null>(null);
   const animFrameIdRef = useRef<number | null>(null);
 
   // Studio Lighting & Grid References
@@ -78,7 +87,7 @@ export const ModularVehicleCanvasViewport: React.FC = () => {
   const underFillRef = useRef<THREE.DirectionalLight | null>(null);
 
   // Shared GLTF Loader instance
-  const gltfLoaderRef = useRef<GLTFLoader>(new GLTFLoader());
+  const gltfLoaderRef = useRef<GLTFLoader>(GltfLoaderFactory.getSharedLoader());
 
   // --------------------------------------------------------------------------
   // Initialize Three.js WebGL Scene
@@ -408,9 +417,10 @@ export const ModularVehicleCanvasViewport: React.FC = () => {
       root.add(stageGroup);
       currentMap.set(stageId, stageGroup);
 
-      // If complete stage, load the dedicated complete vehicle GLB
+      // If complete stage, load the dedicated body/complete vehicle GLB
       if (stageId === "complete") {
-        const completeUrls = getStageGlbPaths("complete", selectedModel);
+        const completeUrl = activeBodyGlbUrl || getBodyArchitectureGlbPath(selectedModel, selectedEra);
+        const completeUrls = [completeUrl];
         return Promise.all(
           completeUrls.map(
             (url) =>
@@ -487,6 +497,13 @@ export const ModularVehicleCanvasViewport: React.FC = () => {
                         }
                       }
                     });
+
+                    // Ensure car sits cleanly on the ground plane (y = 0)
+                    const carBox = new THREE.Box3().setFromObject(modelScene);
+                    if (!carBox.isEmpty() && Math.abs(carBox.min.y) > 0.005) {
+                      modelScene.position.y -= carBox.min.y;
+                    }
+
                     stageGroup.add(modelScene);
                     if (stageGroup.parent !== root) {
                       root.add(stageGroup);
@@ -495,12 +512,37 @@ export const ModularVehicleCanvasViewport: React.FC = () => {
                   },
                   undefined,
                   (err) => {
-                    console.warn(`[ModularViewport] Failed loading complete car ${url}:`, err);
-                    createFallbackProxyGeometry("complete_car", stageGroup);
-                    if (stageGroup.parent !== root) {
-                      root.add(stageGroup);
+                    console.warn(`[ModularViewport] Failed loading complete car ${url}, attempting fallback:`, err);
+                    const fallbackUrl = url.includes("/assets/vehicles/vehicle_")
+                      ? url.replace("/assets/vehicles/vehicle_", "/models/Car_").replace(".glb", "_Complete.glb")
+                      : url;
+                    if (fallbackUrl !== url) {
+                      loader.load(
+                        fallbackUrl,
+                        (fallbackGltf) => {
+                          const fbScene = fallbackGltf.scene;
+                          const fbBox = new THREE.Box3().setFromObject(fbScene);
+                          if (!fbBox.isEmpty() && Math.abs(fbBox.min.y) > 0.005) {
+                            fbScene.position.y -= fbBox.min.y;
+                          }
+                          stageGroup.add(fbScene);
+                          if (stageGroup.parent !== root) root.add(stageGroup);
+                          resolve();
+                        },
+                        undefined,
+                        () => {
+                          createFallbackProxyGeometry("complete_car", stageGroup);
+                          if (stageGroup.parent !== root) root.add(stageGroup);
+                          resolve();
+                        }
+                      );
+                    } else {
+                      createFallbackProxyGeometry("complete_car", stageGroup);
+                      if (stageGroup.parent !== root) {
+                        root.add(stageGroup);
+                      }
+                      resolve();
                     }
-                    resolve();
                   }
                 );
               })
@@ -826,13 +868,81 @@ export const ModularVehicleCanvasViewport: React.FC = () => {
         setLoadError(err.message || "Failed to assemble modular components");
         setIsLoading(false);
       });
-  }, [selectedModel, currentStage, installedStages, viewportMode, bodyColorHex, isXRay, explodedProgress, enginePosition]);
+  }, [selectedModel, selectedEra, activeBodyGlbUrl, currentStage, installedStages, viewportMode, bodyColorHex, isXRay, explodedProgress, enginePosition]);
 
   // Helper to check if chassis group matches current model
   function groupMatchesModel(group: THREE.Group | undefined, model: string): boolean {
     if (!group) return false;
     return (group as any).modelCategory === model;
   }
+
+  // --------------------------------------------------------------------------
+  // Update Attachment Point Markers (16 CAD Hardpoints)
+  // --------------------------------------------------------------------------
+  useEffect(() => {
+    const root = rootAssemblyGroupRef.current;
+    if (!root) return;
+
+    if (attachmentPointsGroupRef.current) {
+      root.remove(attachmentPointsGroupRef.current);
+      attachmentPointsGroupRef.current.traverse((child) => {
+        if ((child as THREE.Mesh).isMesh) {
+          const m = child as THREE.Mesh;
+          m.geometry?.dispose();
+          if (Array.isArray(m.material)) m.material.forEach((mat) => mat.dispose());
+          else m.material?.dispose();
+        }
+      });
+      attachmentPointsGroupRef.current = null;
+    }
+
+    if (!showAttachmentPoints) return;
+
+    const markersGroup = new THREE.Group();
+    markersGroup.name = "DEBUG_ATTACHMENT_HARDPOINTS";
+
+    const sphereGeo = new THREE.SphereGeometry(0.04, 16, 16);
+    const ringGeo = new THREE.RingGeometry(0.06, 0.08, 24);
+    ringGeo.rotateX(-Math.PI / 2);
+
+    const sphereMat = new THREE.MeshBasicMaterial({ color: 0x00f0ff });
+    const ringMat = new THREE.MeshBasicMaterial({ color: 0x00f0ff, side: THREE.DoubleSide });
+
+    const foundPoints: { name: string; position: THREE.Vector3 }[] = [];
+
+    root.traverse((obj) => {
+      const n = obj.name.toUpperCase();
+      const isMount =
+        n.endsWith("_MOUNT") ||
+        n.includes("_MOUNT_") ||
+        n.startsWith("FRONT_SUSPENSION_") ||
+        n.startsWith("REAR_SUSPENSION_") ||
+        n.startsWith("FRONT_WHEEL_") ||
+        n.startsWith("REAR_WHEEL_") ||
+        (obj.parent && obj.parent.name === "AERO_MOUNTING_POINTS");
+
+      if (isMount && !n.includes("DEBUG") && !n.includes("STAGEGROUP")) {
+        const wp = new THREE.Vector3();
+        obj.getWorldPosition(wp);
+        foundPoints.push({ name: obj.name, position: wp });
+      }
+    });
+
+    foundPoints.forEach((pt) => {
+      const pGroup = new THREE.Group();
+      pGroup.position.copy(pt.position);
+
+      const sphere = new THREE.Mesh(sphereGeo, sphereMat);
+      const ring = new THREE.Mesh(ringGeo, ringMat);
+      pGroup.add(sphere);
+      pGroup.add(ring);
+
+      markersGroup.add(pGroup);
+    });
+
+    root.add(markersGroup);
+    attachmentPointsGroupRef.current = markersGroup;
+  }, [showAttachmentPoints, isLoading, currentStage, selectedModel]);
 
   // --------------------------------------------------------------------------
   // Update Part Visibility when hiddenPartIds changes
@@ -1101,6 +1211,23 @@ export const ModularVehicleCanvasViewport: React.FC = () => {
             className="p-1.5 rounded-md text-slate-400 hover:text-slate-200 hover:bg-slate-800/50 transition-all cursor-pointer border border-transparent"
           >
             <Maximize2 size={13} />
+          </button>
+
+          <div className="w-px h-4 bg-slate-700/60 mx-1" />
+
+          {/* Attachment Points (CAD Anchors) Toggle */}
+          <button
+            type="button"
+            onClick={() => setShowAttachmentPoints(!showAttachmentPoints)}
+            title={showAttachmentPoints ? "Hide 16 CAD Hardpoint Attachment Anchors" : "Show 16 CAD Hardpoint Attachment Anchors"}
+            className={`px-2 py-1 rounded-md text-[10px] font-extrabold flex items-center gap-1.5 transition-all cursor-pointer ${
+              showAttachmentPoints
+                ? "bg-cyan-500/30 text-cyan-200 border border-cyan-400 shadow-[0_0_12px_rgba(6,182,212,0.4)]"
+                : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/50 border border-transparent"
+            }`}
+          >
+            <Crosshair size={12} className={showAttachmentPoints ? "text-cyan-300 animate-pulse" : ""} />
+            <span>CAD ANCHORS</span>
           </button>
 
           <div className="w-px h-4 bg-slate-700/60 mx-1" />

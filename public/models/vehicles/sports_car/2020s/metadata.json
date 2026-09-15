@@ -1,0 +1,17 @@
+{
+  "architecture": "sports_car",
+  "era": "2020s",
+  "referenceVehicle": "Alpine A110 R",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/sports_car/2020s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Featherweight mid-engine track sports car, length 4181mm, curb weight 1082kg",
+    "silhouette": "Compact sports coupe with swan-neck racing wing and carbon aerodynamic wheels",
+    "greenhouse": "Carbon fiber rear window replacement eliminating glass for lightweight carbon scoop",
+    "hoodCabin": "Full carbon fiber hood with dual air intake nostrils and retro twin driving lamps",
+    "surfacing": "Sculpted aluminum bodyside with carbon side skirts widening ground-effect boundary",
+    "aeroPhilosophy": "Full carbon diffuser with extended vertical fins adding 29kg downforce; Cd 0.32",
+    "wheels": "18-inch carbon fiber aerodynamic wheels designed for low drag and brake cooling",
+    "engineering": "Bonded and riveted all-aluminum chassis with double wishbones front and rear"
+  }
+}

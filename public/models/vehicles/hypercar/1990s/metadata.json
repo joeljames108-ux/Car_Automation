@@ -1,0 +1,17 @@
+{
+  "architecture": "hypercar",
+  "era": "1990s",
+  "referenceVehicle": "Mercedes-Benz CLK GTR",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/hypercar/1990s/vehicle.glb",
+  "designDNA": {
+    "proportions": "FIA GT1 road-legal racing prototype, length 4855mm, width 1950mm, height 1100mm",
+    "silhouette": "Ultra-wide low-slung endurance racer with roof-mounted engine induction snorkel",
+    "greenhouse": "Tiny two-seater carbon cockpit with gullwing-style upward opening half-doors",
+    "hoodCabin": "Signature Mercedes quad headlamps integrated into massive composite front clip",
+    "surfacing": "Deep front fender louvers venting turbulent air from front wheel wells",
+    "aeroPhilosophy": "Full-width carbon rear wing and massive underfloor aerodynamic diffuser; Cd 0.35",
+    "wheels": "18-inch center-lock BBS multi-spoke racing alloy wheels",
+    "engineering": "Carbon fiber monocoque with steel rear subframe housing mid-mounted 6.9L V12"
+  }
+}

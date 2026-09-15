@@ -1,0 +1,17 @@
+{
+  "architecture": "offroad_4x4",
+  "era": "1980s",
+  "referenceVehicle": "Mercedes-Benz G-Class (W460)",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/offroad_4x4/1980s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Military-spec boxy off-roader, length 4120mm, width 1700mm, height 1950mm",
+    "silhouette": "Strictly utilitarian box silhouette with exposed door hinges and external spare wheel",
+    "greenhouse": "Flat upright window panes with black rubber gaskets and vertical windscreen",
+    "hoodCabin": "Flat hood with turn signal repeaters mounted on top of front fender corners",
+    "surfacing": "Completely flat planar body stampings with external mechanical door latches",
+    "aeroPhilosophy": "Pure utilitarian function designed to climb 100% grades; Cd 0.54",
+    "wheels": "16-inch heavy-duty steel wheels with triple mechanical differential lock switches",
+    "engineering": "Fully boxed ladder frame with three 100% mechanical differential locks"
+  }
+}

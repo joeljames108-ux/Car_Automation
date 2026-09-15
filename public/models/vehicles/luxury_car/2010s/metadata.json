@@ -1,0 +1,17 @@
+{
+  "architecture": "luxury_car",
+  "era": "2010s",
+  "referenceVehicle": "Mercedes-Maybach S600 (X222)",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/luxury_car/2010s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Chauffeured luxury flagship, length 5453mm, width 1899mm, wheelbase 3365mm",
+    "silhouette": "Rear door shortened by 66mm with fixed triangular quarter window in C-pillar",
+    "greenhouse": "Solid chrome B-pillar trim highlighting exclusivity; thick acoustic glass",
+    "hoodCabin": "Triple twin-louvre chrome grille with discrete Maybach lettering in crest",
+    "surfacing": "Long elegant waistline running unbroken into gently sloping rear deck",
+    "aeroPhilosophy": "Acoustically tuned body shell, active radiator air shutters; Cd 0.26",
+    "wheels": "20-inch forged disc wheels with mirror-polished face",
+    "engineering": "Magic Body Control stereo camera scanning road surface to preempt bumps"
+  }
+}

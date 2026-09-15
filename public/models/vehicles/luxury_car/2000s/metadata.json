@@ -1,0 +1,17 @@
+{
+  "architecture": "luxury_car",
+  "era": "2000s",
+  "referenceVehicle": "Maybach 62",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/luxury_car/2000s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Stately 6.2-meter ultra-luxury flagship, length 6165mm, wheelbase 3827mm",
+    "silhouette": "Dual-tone coachwork with elongated rear passenger salon doors",
+    "greenhouse": "Expansive rear quarter opera glass with electrochromic privacy glass",
+    "hoodCabin": "Upright chrome waterfall grille with double-M Maybach hood ornament",
+    "surfacing": "Flawless dual-tone paint separated by hand-painted coachline",
+    "aeroPhilosophy": "Smooth aerodynamic limousine front with integrated bi-xenon lamps; Cd 0.31",
+    "wheels": "19-inch 7-spoke cast alloy wheels with high-load capacity touring tires",
+    "engineering": "Twin-turbo 5.5L V12 with dual rear first-class reclining massage seats"
+  }
+}

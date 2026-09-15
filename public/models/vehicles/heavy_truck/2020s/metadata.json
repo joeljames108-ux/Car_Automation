@@ -1,0 +1,17 @@
+{
+  "architecture": "heavy_truck",
+  "era": "2020s",
+  "referenceVehicle": "Scania S730 V8",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/heavy_truck/2020s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Flagship European king of the road, length 6100mm, height 3980mm, flat floor S-cab",
+    "silhouette": "Multi-slat V8 shield front grille, integrated auxiliary roof spotlight pods",
+    "greenhouse": "Completely flat cab floor with panoramic glass and premium leather swivel seats",
+    "hoodCabin": "Aggressive multi-tier front grille with satin chrome trim and LED matrix headlamps",
+    "surfacing": "Aerodynamically optimized rubber cab corner deflectors and flush chassis side skirts",
+    "aeroPhilosophy": "Continuous aerodynamic side skirts with integrated steps; Cd 0.46",
+    "wheels": "22.5-inch machined alloy wheels with disc brakes and electronic air suspension",
+    "engineering": "16.4L V8 producing 730hp and 3500 Nm torque with Opticruise automated transmission"
+  }
+}

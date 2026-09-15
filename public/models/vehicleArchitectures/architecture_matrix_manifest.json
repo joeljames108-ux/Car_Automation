@@ -1,0 +1,46 @@
+{
+  "title": "Modular Vehicle Assembly System - 24x7 Architecture Matrix",
+  "version": "1.0.0",
+  "specification": {
+    "totalArchitectures": 24,
+    "totalEras": 7,
+    "totalReferenceVehicles": 168,
+    "bodyOnlyContract": true,
+    "coordinateAlignment": "Y-Forward (+Y), Z-Up (+Z), X-Lateral (+X Driver LHD)"
+  },
+  "eras": [
+    { "id": "1970s", "label": "1970s", "yearRange": "1970–1979", "badge": "Analog Classic" },
+    { "id": "1980s", "label": "1980s", "yearRange": "1980–1989", "badge": "Turbo Era" },
+    { "id": "1990s", "label": "1990s", "yearRange": "1990–1999", "badge": "Golden Era" },
+    { "id": "2000s", "label": "2000s", "yearRange": "2000–2009", "badge": "Millennium Aero" },
+    { "id": "2010s", "label": "2010s", "yearRange": "2010–2019", "badge": "Precision Aero" },
+    { "id": "2020s", "label": "2020s", "yearRange": "2020–2029", "badge": "Modern Hybrid/EV" },
+    { "id": "future", "label": "Future", "yearRange": "2030+", "badge": "Next-Gen Concept" }
+  ],
+  "architectures": [
+    { "id": "sedan", "name": "Sedan", "group": "passenger", "fallbackGlb": "/assets/vehicles/vehicle_sedan.glb" },
+    { "id": "hatchback", "name": "Hatchback", "group": "passenger", "fallbackGlb": "/assets/vehicles/vehicle_hatchback.glb" },
+    { "id": "coupe", "name": "Coupe", "group": "performance", "fallbackGlb": "/assets/vehicles/vehicle_coupe.glb" },
+    { "id": "convertible", "name": "Convertible", "group": "performance", "fallbackGlb": "/assets/vehicles/vehicle_coupe.glb" },
+    { "id": "roadster", "name": "Roadster", "group": "performance", "fallbackGlb": "/assets/vehicles/vehicle_coupe.glb" },
+    { "id": "sports_car", "name": "Sports Car", "group": "performance", "fallbackGlb": "/assets/vehicles/vehicle_coupe.glb" },
+    { "id": "supercar", "name": "Supercar", "group": "performance", "fallbackGlb": "/assets/vehicles/vehicle_supercar.glb" },
+    { "id": "hypercar", "name": "Hypercar", "group": "performance", "fallbackGlb": "/assets/vehicles/vehicle_hypercar.glb" },
+    { "id": "grand_tourer", "name": "Grand Tourer", "group": "performance", "fallbackGlb": "/assets/vehicles/vehicle_coupe.glb" },
+    { "id": "muscle_car", "name": "Muscle Car", "group": "performance", "fallbackGlb": "/assets/vehicles/vehicle_sedan.glb" },
+    { "id": "luxury_car", "name": "Luxury Car", "group": "passenger", "fallbackGlb": "/assets/vehicles/vehicle_sedan.glb" },
+    { "id": "limousine", "name": "Limousine", "group": "passenger", "fallbackGlb": "/assets/vehicles/vehicle_sedan.glb" },
+    { "id": "shooting_brake", "name": "Shooting Brake", "group": "passenger", "fallbackGlb": "/assets/vehicles/vehicle_sedan.glb" },
+    { "id": "wagon", "name": "Wagon / Estate", "group": "passenger", "fallbackGlb": "/assets/vehicles/vehicle_sedan.glb" },
+    { "id": "crossover", "name": "Crossover", "group": "utility", "fallbackGlb": "/assets/vehicles/vehicle_crossover.glb" },
+    { "id": "suv", "name": "SUV", "group": "utility", "fallbackGlb": "/assets/vehicles/vehicle_suv.glb" },
+    { "id": "offroad_4x4", "name": "Off-Road / 4x4", "group": "utility", "fallbackGlb": "/assets/vehicles/vehicle_suv.glb" },
+    { "id": "pickup_truck", "name": "Pickup Truck", "group": "utility", "fallbackGlb": "/assets/vehicles/vehicle_pickup.glb" },
+    { "id": "heavy_truck", "name": "Heavy Truck", "group": "commercial", "fallbackGlb": "/assets/vehicles/vehicle_pickup.glb" },
+    { "id": "van", "name": "Van / Panel Van", "group": "commercial", "fallbackGlb": "/assets/vehicles/vehicle_bus.glb" },
+    { "id": "mpv", "name": "MPV / People Carrier", "group": "passenger", "fallbackGlb": "/assets/vehicles/vehicle_bus.glb" },
+    { "id": "bus", "name": "Bus / Coach", "group": "commercial", "fallbackGlb": "/assets/vehicles/vehicle_bus.glb" },
+    { "id": "race_formula", "name": "Race / Formula", "group": "motorsport", "fallbackGlb": "/assets/vehicles/vehicle_supercar.glb" },
+    { "id": "gt3_racing", "name": "GT3 / Racing Sports", "group": "motorsport", "fallbackGlb": "/assets/vehicles/vehicle_supercar.glb" }
+  ]
+}

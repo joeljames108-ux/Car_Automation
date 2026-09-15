@@ -1,0 +1,17 @@
+{
+  "architecture": "supercar",
+  "era": "2000s",
+  "referenceVehicle": "Ford GT (2005)",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/supercar/2000s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Modern heritage supercar, length 4643mm, width 1953mm, height 1125mm (44 inches)",
+    "silhouette": "Direct aesthetic tribute to the 1960s GT40 Le Mans four-time champion",
+    "greenhouse": "Doors cutting deep into the roof structure to ease entry over wide sills",
+    "hoodCabin": "Front hood dominated by dual massive functional radiator exit nostrils",
+    "surfacing": "Voluptuous front fender humps and massive side intercooler air scoops",
+    "aeroPhilosophy": "Flat belly pan with rear aerodynamic diffuser and front air dam; Cd 0.36",
+    "wheels": "18-inch front / 19-inch rear BBS lightweight painted aluminum wheels",
+    "engineering": "Superplastic-formed aluminum body panels over extruded aluminum spaceframe"
+  }
+}

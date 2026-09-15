@@ -9,6 +9,7 @@
 
 import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
+import { GltfLoaderFactory } from "../../utils/gltfLoaderFactory";
 
 export class DashboardAssetManager {
   private loader: GLTFLoader;
@@ -17,7 +18,7 @@ export class DashboardAssetManager {
   private isLoaded: boolean = false;
 
   constructor() {
-    this.loader = new GLTFLoader();
+    this.loader = GltfLoaderFactory.createLoader();
   }
 
   public async loadModel(

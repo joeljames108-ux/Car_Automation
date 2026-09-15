@@ -1,0 +1,17 @@
+{
+  "architecture": "crossover",
+  "era": "1970s",
+  "referenceVehicle": "AMC Eagle 4WD Wagon",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/crossover/1970s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Pioneering raised unibody 4WD crossover, length 4724mm, wheelbase 2774mm",
+    "silhouette": "Passenger car unibody raised 3 inches over full-time all-wheel drive system",
+    "greenhouse": "Station wagon glasshouse with woodgrain bodyside decals and chrome roof rack",
+    "hoodCabin": "Conventional passenger car hood with chrome horizontal front grille",
+    "surfacing": "Durable grey plastic wheel arch flares protecting fenders from gravel spray",
+    "aeroPhilosophy": "Raised clearance increasing undercarriage air resistance; Cd 0.44",
+    "wheels": "15-inch styled steel wheels with Goodyear all-terrain whitewall tires",
+    "engineering": "Ferguson viscous-coupling center differential providing automatic 4WD on road"
+  }
+}

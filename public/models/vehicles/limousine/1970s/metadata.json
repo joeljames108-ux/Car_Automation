@@ -1,0 +1,17 @@
+{
+  "architecture": "limousine",
+  "era": "1970s",
+  "referenceVehicle": "Cadillac Fleetwood 75 Formal Limo",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/limousine/1970s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Massive American formal limousine, length 6400mm, wheelbase 3848mm, weight 2600kg",
+    "silhouette": "Extended 3-compartment body with full padded vinyl roof and partition glass",
+    "greenhouse": "Rear formal opera windows and electric division window between driver and cabin",
+    "hoodCabin": "Enormous hood covering 8.2L 500ci V8 with massive chrome bumper overrides",
+    "surfacing": "Horizontal slab sides with chrome spear moldings and Fleetwood crests",
+    "aeroPhilosophy": "Upright formal stance commanding respect in presidential motorcades; Cd 0.52",
+    "wheels": "15-inch heavy-duty steel wheels with Fleetwood chrome wire wheel covers",
+    "engineering": "Perimeter steel frame with auxiliary jump seats accommodating 9 passengers"
+  }
+}

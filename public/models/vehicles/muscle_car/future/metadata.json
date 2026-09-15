@@ -1,0 +1,17 @@
+{
+  "architecture": "muscle_car",
+  "era": "future",
+  "referenceVehicle": "Dodge Charger Daytona SRT EV",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/muscle_car/future/vehicle.glb",
+  "designDNA": {
+    "proportions": "Modern electric muscle fastback, length 5248mm, width 2028mm, wheelbase 3074mm",
+    "silhouette": "Muscular profile honoring 1968 classic lines with patented aerodynamic R-Wing",
+    "greenhouse": "Panoramic glass roof running from windshield to tailgate with frameless doors",
+    "hoodCabin": "Patented R-Wing front nose allows air to flow through front grille over hood",
+    "surfacing": "Subtle bodyside scallops with illuminated Fratzog logo badges front and rear",
+    "aeroPhilosophy": "R-Wing front pass-through and rear hatch airflow separation; Cd 0.28",
+    "wheels": "21-inch diamond-cut wheels with aerodynamic center-locking aero covers",
+    "engineering": "STLA Large EV platform with 800V Banshee electric powertrain and Fratzonic exhaust"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "architecture": "offroad_4x4",
+  "era": "1970s",
+  "referenceVehicle": "Toyota Land Cruiser FJ40",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/offroad_4x4/1970s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Short-wheelbase heavy-duty steel 4x4, length 3840mm, height 1950mm, wheelbase 2285mm",
+    "silhouette": "Classic white roof contrast, curved rear corner quarter windows, front bumper hooks",
+    "greenhouse": "Upright flat glass windshield with stamped steel bezel and folding soft/hard top",
+    "hoodCabin": "Stamped steel front bezel surrounding round headlamps and TOYOTA grille",
+    "surfacing": "Utilitarian stamped steel body panels with exposed fasteners and rain gutters",
+    "aeroPhilosophy": "Perpendicular front fascia engineered for trail approach angles; Cd 0.55",
+    "wheels": "15-inch stamped steel wheels with manual front locking hubs and mud tires",
+    "engineering": "Heavy ladder frame with live leaf-spring axles front and rear and 2F inline-6 engine"
+  }
+}

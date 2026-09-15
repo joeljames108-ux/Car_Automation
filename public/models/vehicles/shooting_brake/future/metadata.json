@@ -1,0 +1,17 @@
+{
+  "architecture": "shooting_brake",
+  "era": "future",
+  "referenceVehicle": "Porsche Mission E Turismo Concept",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/shooting_brake/future/vehicle.glb",
+  "designDNA": {
+    "proportions": "Electric sporting shooting brake with cross-utility ride height, length 4950mm",
+    "silhouette": "Low sports wagon silhouette with off-road rugged lower body cladding",
+    "greenhouse": "Continuous glass panoramic roof tapering smoothly into rear light blade",
+    "hoodCabin": "Low front wings rising above flat hood with four-point floating LED headlights",
+    "surfacing": "Porous front air curtains directing air around front wheels and down sills",
+    "aeroPhilosophy": "Underbody aerodynamic diffuser and active cooling air flaps; Cd 0.22",
+    "wheels": "22-inch aero blade wheels with blue-accented carbon fiber spoke fairings",
+    "engineering": "800V electric architecture with dual permanent-magnet synchronous motors"
+  }
+}

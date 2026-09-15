@@ -1,0 +1,17 @@
+{
+  "architecture": "hatchback",
+  "era": "2010s",
+  "referenceVehicle": "Ford Focus RS Mk3",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/hatchback/2010s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Aggressive 5-door performance hatch, length 4390mm, wheelbase 2648mm",
+    "silhouette": "Muscular stance with gaping front grille and towering rear aerodynamic wing",
+    "greenhouse": "Rising beltline meeting steep rear hatch with prominent RS badging on wing",
+    "hoodCabin": "Scalloped hood with crisp creases leading to hexagonal intercooler mouth",
+    "surfacing": "Kinetic design surfacing with sharp angular cutouts and brake cooling vents",
+    "aeroPhilosophy": "Functional front splitters, underbody aero trays, twin-tunnel rear diffuser; Cd 0.35",
+    "wheels": "19-inch forged lightweight black alloys housing 350mm Brembo brakes",
+    "engineering": "Reinforced unibody with torque-vectoring all-wheel drive dynamic system"
+  }
+}

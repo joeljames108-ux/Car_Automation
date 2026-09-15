@@ -1,0 +1,17 @@
+{
+  "architecture": "heavy_truck",
+  "era": "1990s",
+  "referenceVehicle": "Peterbilt 379",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/heavy_truck/1990s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Owner-operator long-hood American conventional, length 8300mm, height 3950mm",
+    "silhouette": "Unmistakable long square hood with dual headlights and Unibilt ultra-sleeper cab",
+    "greenhouse": "Split-windshield cab with stainless steel visor and button-tucked luxury sleeper",
+    "hoodCabin": "Polished aluminum grille surround with red Peterbilt oval emblem and chrome crown",
+    "surfacing": "All-aluminum riveted hood and cab structure with dual exterior air cleaners",
+    "aeroPhilosophy": "Classic upright chrome presence over modern aerodynamic curves; Cd 0.68",
+    "wheels": "24.5-inch Alcoa forged aluminum wheels with chrome lug nut covers",
+    "engineering": "Full tilt-forward hood offering complete access to Cummins N14 / Cat 3406E"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "architecture": "suv",
+  "era": "future",
+  "referenceVehicle": "Rivian R1S",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/suv/future/vehicle.glb",
+  "designDNA": {
+    "proportions": "Electric full-size adventure SUV, length 5100mm, width 2015mm, height 1835mm",
+    "silhouette": "Clean slab-sided adventure geometry with signature stadium vertical headlights",
+    "greenhouse": "Expansive glasshouse with floating roof design and split rear tailgate",
+    "hoodCabin": "Continuous horizontal cross-front LED light bar with cavernous front frunk",
+    "surfacing": "Friendly modern surfacing with flush motorized door handles and minimal breaks",
+    "aeroPhilosophy": "Smooth composite flat underbody, active ride height adjusting 6 inches; Cd 0.30",
+    "wheels": "22-inch sport bright wheels with aerodynamic removable aero inserts",
+    "engineering": "Quad-motor independent all-wheel drive with hydraulic roll control suspension"
+  }
+}

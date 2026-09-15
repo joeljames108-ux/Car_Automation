@@ -1,0 +1,17 @@
+{
+  "architecture": "muscle_car",
+  "era": "2000s",
+  "referenceVehicle": "Ford Mustang GT (2005 S197)",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/muscle_car/2000s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Retro-futuristic fastback proportions, length 4765mm, width 1877mm, wheelbase 2720mm",
+    "silhouette": "Reboot of the iconic 1960s fastback with forward-canted sharknose grille",
+    "greenhouse": "Triangular C-pillar quarter windows honoring original 1965 fastback",
+    "hoodCabin": "Long muscular hood leading to round grille-mounted driving fog lamps",
+    "surfacing": "Crisp sculpted wheel flares and three-element vertical red taillights",
+    "aeroPhilosophy": "Forward-leaning grille, integrated ducktail rear spoiler; Cd 0.38",
+    "wheels": "17-inch or 18-inch 5-spoke Bullitt-style cast aluminum wheels",
+    "engineering": "D2C platform offering 31% higher torsional rigidity with solid rear axle"
+  }
+}

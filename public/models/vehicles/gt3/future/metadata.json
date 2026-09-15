@@ -1,0 +1,17 @@
+{
+  "architecture": "gt3",
+  "era": "future",
+  "referenceVehicle": "Ferrari 499P Le Mans Hypercar",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/gt3/future/vehicle.glb",
+  "designDNA": {
+    "proportions": "Centenary Le Mans champion prototype, length 5000mm, width 2000mm, height 1180mm",
+    "silhouette": "Full-width rear horizontal light blade spanning entire rear wing with shark fin",
+    "greenhouse": "Ultra-compact single-seater fighter canopy with carbon safety survival cell",
+    "hoodCabin": "Low aerodynamic nose with front electric motor and ground-effect venturi channels",
+    "surfacing": "Longitudinal carbon shark fin stabilizer running down center of rear engine spine",
+    "aeroPhilosophy": "Dual-tier rear wing with integrated ground-effect underfloor tunnels; Cd 0.32",
+    "wheels": "18-inch Michelin endurance prototype slick wheels on center-lock hubs",
+    "engineering": "Twin-turbo 3.0L V6 derived from 296 GT3 paired with front axle electric MGU"
+  }
+}

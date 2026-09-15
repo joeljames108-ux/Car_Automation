@@ -1,0 +1,17 @@
+{
+  "architecture": "gt3",
+  "era": "1990s",
+  "referenceVehicle": "Dodge Viper GTS-R",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/gt3/1990s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Le Mans GT2 endurance champion, length 4488mm, width 1923mm, wheelbase 2443mm",
+    "silhouette": "Double-bubble roof accommodates driver helmet; deep front air dam and high wing",
+    "greenhouse": "Stripped racing cockpit with full roll cage and Lexan polycarbonate windows",
+    "hoodCabin": "Massive carbon fiber hood with louvers venting 8.0L V10 engine heat",
+    "surfacing": "Side-exit straight exhaust pipes exiting under rocker sills ahead of rear wheels",
+    "aeroPhilosophy": "High-downforce aero setup generating 600kg downforce at speed; Cd 0.38",
+    "wheels": "18-inch BBS forged center-lock wheels with Michelin racing slick tires",
+    "engineering": "Tubular steel spaceframe with carbon fiber body panels and 8.0L pushrod V10"
+  }
+}

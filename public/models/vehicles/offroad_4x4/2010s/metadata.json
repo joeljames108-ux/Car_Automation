@@ -1,0 +1,17 @@
+{
+  "architecture": "offroad_4x4",
+  "era": "2010s",
+  "referenceVehicle": "Toyota FJ Cruiser",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/offroad_4x4/2010s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Retro-modern FJ40 tribute, length 4670mm, width 1905mm, height 1830mm",
+    "silhouette": "White contrast roof, rear suicide half-doors, three front windshield wipers",
+    "greenhouse": "Upright flat windshield cleared by three wipers; wrap-around rear quarter glass",
+    "hoodCabin": "White roof contrast honoring FJ40 heritage; front grille with TOYOTA block letters",
+    "surfacing": "Chunky composite bumper corners and rock sliders protecting rocker sills",
+    "aeroPhilosophy": "Blunt upright nose, chunky aerodynamic mirrors; Cd 0.40",
+    "wheels": "17-inch steel or alloy wheels with 32-inch BFGoodrich All-Terrain tires",
+    "engineering": "High-strength steel ladder frame with A-TRAC active traction control and rear locker"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "architecture": "grand_tourer",
+  "era": "2000s",
+  "referenceVehicle": "Aston Martin DBS V12",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/grand_tourer/2000s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Aggressive widebody flagship GT, length 4721mm, width 1905mm, wheelbase 2740mm",
+    "silhouette": "Bond cinematic presence: menacing muscular posture combined with bespoke luxury",
+    "greenhouse": "Low-cut coupe roofline with dark window trim and clear glass taillight lenses",
+    "hoodCabin": "Sculpted carbon fiber hood with dual heat extraction louvers venting 6.0L V12",
+    "surfacing": "Carbon fiber front splitter, rear carbon diffuser, and flared wheel arches",
+    "aeroPhilosophy": "Underfloor carbon diffuser producing real rear downforce at 190 mph; Cd 0.31",
+    "wheels": "20-inch 5-twin-spoke forged alloy wheels with carbon-ceramic brake discs",
+    "engineering": "VH (Vertical-Horizontal) bonded aluminum architecture with carbon composite panels"
+  }
+}

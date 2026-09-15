@@ -1,0 +1,17 @@
+{
+  "architecture": "coupe",
+  "era": "2020s",
+  "referenceVehicle": "Maserati MC20",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/coupe/2020s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Low-slung mid-engine carbon monocoque, length 4669mm, height 1221mm",
+    "silhouette": "Sculptural purity free of protruding spoilers; butterfly doors opening upward",
+    "greenhouse": "Compact tear-drop cockpit with polycarbonate rear screen featuring Trident louvers",
+    "hoodCabin": "Low nose with dual front air extractors, passenger cab centered on carbon tub",
+    "surfacing": "Seamless organic surfaces where upper body is artistic and lower body is aerodynamic carbon",
+    "aeroPhilosophy": "Vortex generators under floor and subtle integrated rear lip; Cd 0.32",
+    "wheels": "20-inch birdcage-inspired forged wheels with carbon ceramic brake discs",
+    "engineering": "Full carbon fiber monocoque developed in partnership with Dallara"
+  }
+}

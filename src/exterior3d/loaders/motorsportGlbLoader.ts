@@ -11,6 +11,7 @@
 import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader.js";
+import { MeshoptDecoder } from "three/examples/jsm/libs/meshopt_decoder.module.js";
 import type { HypercarSocketId } from "../../sim/hypercar/modular/hypercarSockets";
 
 // Mapping of F1 Component meshName to GLB asset URL
@@ -86,10 +87,15 @@ export class MotorsportGlbLoader {
   public static getLoader(): GLTFLoader {
     if (!this.gltfLoader) {
       this.gltfLoader = new GLTFLoader();
+      try {
+        this.gltfLoader.setMeshoptDecoder(MeshoptDecoder);
+      } catch {
+        // Fallback if Meshopt unavailable
+      }
       if (typeof window !== "undefined") {
         try {
           this.dracoLoader = new DRACOLoader();
-          this.dracoLoader.setDecoderPath("https://www.gstatic.com/draco/versioned/decoders/1.5.6/");
+          this.dracoLoader.setDecoderPath("/draco/");
           this.gltfLoader.setDRACOLoader(this.dracoLoader);
         } catch {
           // Graceful fallback if offline

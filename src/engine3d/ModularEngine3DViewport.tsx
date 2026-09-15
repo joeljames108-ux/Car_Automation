@@ -11,6 +11,7 @@ import { ComponentPicker3D } from './ui/ComponentPicker3D';
 import { ComponentInspector3D } from './ui/ComponentInspector3D';
 import { CascadeRemovalModal } from './ui/CascadeRemovalModal';
 import { useEngine3DStore } from './store/useEngine3DStore';
+import { scheduleIdleWork } from '../utils/performanceOptimizer';
 import { useAssembly3DBridge } from './store/assemblyBridge';
 import { globalAssetCache } from './assets/glbAssetLoader';
 import { V12_COMPONENT_MANIFESTS } from './manifests/v12Manifest';
@@ -65,13 +66,16 @@ export const ModularEngine3DViewport: React.FC<ModularEngine3DViewportProps> = (
   });
 
   // Preload every V12 GLB asset (with its manifest configuration) so all
-  // engine parts are interactive the instant they appear in the scene
+  // engine parts are interactive the instant they appear in the scene.
+  // Deferred to browser idle time so it doesn't compete with first paint / stage mount.
   useEffect(() => {
-    globalAssetCache
-      .preloadManifests(V12_COMPONENT_MANIFESTS, engineConfig)
-      .catch(() => {
-        // Individual failures fall back to procedural geometry inside the loader
-      });
+    scheduleIdleWork(() => {
+      globalAssetCache
+        .preloadManifests(V12_COMPONENT_MANIFESTS, engineConfig)
+        .catch(() => {
+          // Individual failures fall back to procedural geometry inside the loader
+        });
+    }, 3000);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

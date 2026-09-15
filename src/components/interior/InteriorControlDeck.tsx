@@ -96,6 +96,7 @@ import {
   calculateVanInteriorVolume,
   BODY_TYPE_REGISTRY,
 } from "../../sim/modularVehicle/vehicleFamilyArchitecture";
+import { architectureToLegacyBodyTypeId } from "../../sim/vehicleArchitecture/architectureIdCompat";
 import type { VanSeatConfig } from "../../sim/modularVehicle/types";
 import { playHMIClickSound, playHMITabSound } from "../../utils/hmiSoundSynth";
 
@@ -341,7 +342,8 @@ export const InteriorControlDeck: React.FC<InteriorControlDeckProps> = ({
     proTip: string;
   } | null>(null);
 
-  const activeModelSpec = BODY_TYPE_REGISTRY[selectedModel] || BODY_TYPE_REGISTRY.sedan;
+  const legacyBodyId = architectureToLegacyBodyTypeId(selectedModel);
+  const activeModelSpec = BODY_TYPE_REGISTRY[legacyBodyId] || BODY_TYPE_REGISTRY.sedan;
   const vanVolume = useMemo(
     () => calculateVanInteriorVolume(vanSeatConfig),
     [vanSeatConfig]

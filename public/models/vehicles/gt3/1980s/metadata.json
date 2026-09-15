@@ -1,0 +1,17 @@
+{
+  "architecture": "gt3",
+  "era": "1980s",
+  "referenceVehicle": "BMW M3 E30 Sport Evolution",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/gt3/1980s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Touring car homologation icon, length 4345mm, width 1680mm, wheelbase 2565mm",
+    "silhouette": "Box-flared DTM racing widebody with adjustable front splitter and high rear wing",
+    "greenhouse": "Raked rear window with plastic C-pillar cap smoothing airflow to rear deck",
+    "hoodCabin": "Lightweight front hood covering high-revving 2.5L S14 four-cylinder racing engine",
+    "surfacing": "Prominent boxy blistered fender arches stamped from steel over wheels",
+    "aeroPhilosophy": "Homologated adjustable front and rear aerodynamic wings; Cd 0.33",
+    "wheels": "16-inch BBS cross-spoke motorsport wheels with center-lock hub caps",
+    "engineering": "Seam-welded steel monocoque with dog-leg close-ratio Getrag 5-speed gearbox"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "architecture": "sports_car",
+  "era": "1970s",
+  "referenceVehicle": "Porsche 911 Turbo (930)",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/sports_car/1970s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Rear-engine widebody icon, length 4291mm, width 1775mm, wheelbase 2272mm",
+    "silhouette": "Iconic teardrop flyline terminating in massive rubber-edged Whale Tail wing",
+    "greenhouse": "Upright windshield with chrome or black anodized window frames",
+    "hoodCabin": "Sloping front hood flanked by towering upright round frog-eye headlamps",
+    "surfacing": "Deep flared rear fender arches accommodating wide 225/50 rear racing tires",
+    "aeroPhilosophy": "Whale Tail spoiler creates negative rear lift while housing turbo intercooler; Cd 0.39",
+    "wheels": "16-inch forged Fuchs five-leaf clover wheels with black centers and polished rims",
+    "engineering": "Galvanized steel unibody with rear-hung turbocharged flat-six and torsion bar suspension"
+  }
+}

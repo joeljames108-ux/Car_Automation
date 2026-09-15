@@ -1,0 +1,17 @@
+{
+  "architecture": "hypercar",
+  "era": "future",
+  "referenceVehicle": "Koenigsegg Gemera",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/hypercar/future/vehicle.glb",
+  "designDNA": {
+    "proportions": "Four-seater mega-GT hypercar, length 4975mm, width 1988mm, wheelbase 3000mm",
+    "silhouette": "Jet-fighter wraparound greenhouse with automated Dihedral Synchro-Helix doors",
+    "greenhouse": "Pillarless side glass with full access to front and rear rows via single door",
+    "hoodCabin": "Low aerodynamic nose with camera side mirrors and front hood cooling channel",
+    "surfacing": "Seamless pre-preg carbon fiber coachwork devoid of unnecessary panel lines",
+    "aeroPhilosophy": "Underfloor venturis, active rear spoiler, laminar flow optimization; Cd 0.28",
+    "wheels": "21-inch front / 22-inch rear Aircore hollow carbon fiber wheels",
+    "engineering": "Carbon monocoque housing Dark Matter e-motor and twin-turbo Freevalve engine"
+  }
+}

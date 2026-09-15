@@ -1,0 +1,17 @@
+{
+  "architecture": "van",
+  "era": "2000s",
+  "referenceVehicle": "Mercedes-Benz Sprinter (W906)",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/van/2000s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Tall-roof commercial delivery van, length 5910mm, height 2435mm, wheelbase 3665mm",
+    "silhouette": "High-roof walk-through cargo architecture with steep raked aerodynamic windshield",
+    "greenhouse": "Deep windshield with high driving position and optional full side panel cladding",
+    "hoodCabin": "Steep aerodynamic hood with integrated three-pointed star grille and clear headlamps",
+    "surfacing": "270-degree rear barn doors opening flat against vehicle bodyside for loading",
+    "aeroPhilosophy": "Wind-tunnel optimized raked windshield and aerodynamic mirrors; Cd 0.35",
+    "wheels": "16-inch steel wheels with commercial grade van tires and ESP stability control",
+    "engineering": "High-roof monocoque architecture capable of standing room for 6-foot adults"
+  }
+}

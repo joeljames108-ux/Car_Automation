@@ -1,0 +1,17 @@
+{
+  "architecture": "bus",
+  "era": "2000s",
+  "referenceVehicle": "New Flyer D40LF",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/bus/2000s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Low-floor urban transit bus, length 12300mm, width 2590mm, height 3180mm",
+    "silhouette": "True low-floor stepless boarding platform with roof-mounted HVAC pods",
+    "greenhouse": "Deep vertical transit windows with sliding upper hopper ventilation vents",
+    "hoodCabin": "Front destination sign LED box raked forward over large single-piece windshield",
+    "surfacing": "Modular fiberglass side skirts designed for quick replacement after curb contact",
+    "aeroPhilosophy": "Front raked destination box and smooth roof fairings; Cd 0.52",
+    "wheels": "22.5-inch hub-piloted steel transit wheels with Michelin city tires",
+    "engineering": "Front wheelchair ramp deploying in seconds for 100% ADA universal accessibility"
+  }
+}

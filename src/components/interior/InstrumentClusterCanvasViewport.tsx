@@ -2,6 +2,7 @@ import React, { useRef, useEffect, useState } from "react";
 import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
+import { GltfLoaderFactory } from "../../utils/gltfLoaderFactory";
 import {
   useInstrumentClusterStore,
   TELLTALE_DEFINITIONS,
@@ -91,7 +92,7 @@ export const InstrumentClusterCanvasViewport: React.FC = () => {
     scene.add(rimLight);
 
     // Load Instrument Cluster GLB
-    const loader = new GLTFLoader();
+    const loader = GltfLoaderFactory.getSharedLoader();
     const modelUrl = "/models/interior/instrument_cluster_master.glb";
 
     loader.load(

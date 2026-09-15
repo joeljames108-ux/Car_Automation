@@ -1,0 +1,17 @@
+{
+  "architecture": "sedan",
+  "era": "1970s",
+  "referenceVehicle": "BMW 2002 Turbo (E10)",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/sedan/1970s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Compact 3-box notchback, length 4220mm, wheelbase 2500mm, upright profile",
+    "silhouette": "Sharknose forward canted front fascia, slim A/B/C pillars, high greenhouse ratio",
+    "greenhouse": "Tall upright glasshouse, chrome rain gutters, slim rubber-sealed windshield",
+    "hoodCabin": "Flat horizontal hood leading to upright windshield, short front overhang",
+    "surfacing": "Folded-paper planar stampings with pronounced horizontal waistline crease",
+    "aeroPhilosophy": "Early deep front air dam to counter high-speed front lift; high Cd 0.42",
+    "wheels": "13-inch steel or early alloy wheels with bolted-on fiberglass flare arches",
+    "engineering": "Steel unibody with front MacPherson struts and rear semi-trailing arms"
+  }
+}

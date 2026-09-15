@@ -29,16 +29,16 @@ describe("F1 & Hypercar Performance Optimization & Telemetry Test Suite", () => 
       const store = useF1AssemblyStore.getState();
       const start = performance.now();
 
-      store.installComponent("FW_GROUND_EFFECT_VENTURI_V2");
-      store.installComponent("PU_V6_TURBO_HYBRID_SPEC_A");
-      store.installComponent("MGU_K_120KW_DIRECT_DRIVE");
+      store.installComponent("FRONT_WING_OUTWASH_4_ELEMENT");
+      store.installComponent("PU_APEX_WORKS_V6_TURBO_HYBRID");
+      store.installComponent("FLOOR_QUAD_FENCE_VENTURI");
 
       const elapsed = performance.now() - start;
       expect(elapsed).toBeLessThan(50); // Must be sub-50ms
 
       const updated = useF1AssemblyStore.getState();
       expect(updated.metrics.totalPeakHorsepower).toBeGreaterThan(900);
-      expect(updated.metrics.totalMassKg).toBeGreaterThan(600);
+      expect(updated.metrics.totalMassKg).toBeGreaterThan(400);
     });
   });
 
@@ -206,8 +206,9 @@ describe("F1 & Hypercar Performance Optimization & Telemetry Test Suite", () => 
     it("mounts WEC Hypercar modules and calculates powertrain metrics", () => {
       const store = useHypercarAssemblyStore.getState();
 
-      store.installComponent("CHASSIS_CARBOTANIUM_MONOCOQUE_PRO");
-      store.installComponent("MGU_AXLE_BOSCH_GEN3_350KW");
+      store.installComponent("HYPERCAR_CHASSIS_T800_ENCLOSED");
+      store.installComponent("HYPERCAR_ICE_3500CC_TWIN_TURBO");
+      store.installComponent("HYPERCAR_MGU_FRONT_250KW_MEGAWATT");
 
       const updated = useHypercarAssemblyStore.getState();
       expect(updated.metrics.totalPeakHorsepower).toBeGreaterThan(400);

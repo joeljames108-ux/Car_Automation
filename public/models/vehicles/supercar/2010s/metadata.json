@@ -1,0 +1,17 @@
+{
+  "architecture": "supercar",
+  "era": "2010s",
+  "referenceVehicle": "Ferrari 458 Italia",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/supercar/2010s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Pininfarina mid-engine masterpiece, length 4527mm, width 1937mm, height 1213mm",
+    "silhouette": "Sensual aerodynamic curves terminating in iconic triple-pipe exhaust outlet",
+    "greenhouse": "Compact passenger bubble with rear glass cover displaying naturally aspirated V8",
+    "hoodCabin": "Deformable aero-elastic front winglets in grille that flex downward at high speed",
+    "surfacing": "Clean aerodynamic flanks channeling airflow directly into rear engine intakes",
+    "aeroPhilosophy": "Aero-elastic winglets and rear spoiler lip generating 140kg downforce at 124 mph; Cd 0.33",
+    "wheels": "20-inch forged five-spoke wheels with carbon-ceramic brakes as standard",
+    "engineering": "Modular aluminum spaceframe utilizing aerospace-grade bonding techniques"
+  }
+}

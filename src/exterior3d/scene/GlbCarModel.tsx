@@ -10,6 +10,14 @@ import { useFrame } from "@react-three/fiber";
 import { useGLTF } from "@react-three/drei";
 import * as THREE from "three";
 
+if (typeof window !== "undefined") {
+  try {
+    useGLTF.setDecoderPath("/draco/");
+  } catch {
+    // Ignore decoder path setup error
+  }
+}
+
 export type PaintFinishType = "gloss" | "metallic" | "matte" | "satin" | "chameleon";
 
 interface GlbCarModelProps {

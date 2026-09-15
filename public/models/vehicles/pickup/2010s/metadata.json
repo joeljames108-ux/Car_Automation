@@ -1,0 +1,17 @@
+{
+  "architecture": "pickup",
+  "era": "2010s",
+  "referenceVehicle": "Ford F-150 Raptor (2nd Gen)",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/pickup/2010s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Baja 1000 desert trophy truck, length 5890mm, width 2192mm, wheelbase 3708mm",
+    "silhouette": "Widened composite fenders (+6 inches wider than base F-150) with aggressive stance",
+    "greenhouse": "High-strength military-grade aluminum alloy cab with panoramic moonroof",
+    "hoodCabin": "Stamped FORD block letter grille with three amber clearance marker lights",
+    "surfacing": "Functional hood air extractors and fender air vents releasing underhood pressure",
+    "aeroPhilosophy": "High-clearance front skid plate and tucked dual exhaust tips; Cd 0.41",
+    "wheels": "17-inch forged beadlock-capable wheels with 35-inch BFGoodrich All-Terrain KO2 tires",
+    "engineering": "Fox 3.0 Internal Bypass shocks with 13.9 inches of rear suspension travel"
+  }
+}

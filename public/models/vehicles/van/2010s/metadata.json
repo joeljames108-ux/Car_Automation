@@ -1,0 +1,17 @@
+{
+  "architecture": "van",
+  "era": "2010s",
+  "referenceVehicle": "Ram ProMaster (Fiat Ducato based)",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/van/2010s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Front-wheel drive commercial box van, length 5413mm, width 2050mm, wheelbase 3454mm",
+    "silhouette": "Ultra-low cargo load floor (21 inches from ground) due to FWD packaging",
+    "greenhouse": "High-mounted driver cab with panoramic forward visibility and high headlamps",
+    "hoodCabin": "Short stubby snout with three-piece modular front bumper for low repair costs",
+    "surfacing": "Vertical 90-degree cargo sidewalls maximizing internal racking cubic volume",
+    "aeroPhilosophy": "Steep forward-sloping front windshield; Cd 0.36",
+    "wheels": "16-inch heavy-duty steel wheels with front disc brakes",
+    "engineering": "Front-wheel drive architecture eliminating driveshaft and rear differential"
+  }
+}

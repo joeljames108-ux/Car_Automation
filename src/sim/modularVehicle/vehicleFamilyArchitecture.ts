@@ -54,6 +54,7 @@ export interface VehicleBodyTypeSpec {
   name: string;
   familyId: PlatformFamilyId;
   designIdentity: string;
+  referenceVehicle?: string;
   typicalArchitecture: "unibody" | "body_on_frame" | "carbon_tub" | "spaceframe" | "ev_skateboard" | "tubular";
   keyBlenderAssets: string[];
   defaultDimensions: PlatformDimensions;
@@ -215,7 +216,8 @@ export const BODY_TYPE_REGISTRY: Record<VehicleBodyTypeId, VehicleBodyTypeSpec> 
     id: "sedan",
     name: "Sedan",
     familyId: "unibody_passenger",
-    designIdentity: "3-box passenger car",
+    referenceVehicle: "BMW 3 Series",
+    designIdentity: "3-box executive sports sedan inspired by BMW 3 Series",
     typicalArchitecture: "unibody",
     keyBlenderAssets: ["Front_Clip", "Cabin", "Rear_Deck", "Doors", "Trunk"],
     defaultDimensions: {
@@ -240,7 +242,8 @@ export const BODY_TYPE_REGISTRY: Record<VehicleBodyTypeId, VehicleBodyTypeSpec> 
     id: "luxury_sedan",
     name: "Luxury Sedan",
     familyId: "unibody_passenger",
-    designIdentity: "Full-size executive flagship sedan with extended wheelbase and acoustic glass",
+    referenceVehicle: "Mercedes-Benz S-Class",
+    designIdentity: "Full-size executive flagship luxury sedan inspired by Mercedes-Benz S-Class",
     typicalArchitecture: "unibody",
     keyBlenderAssets: ["Executive_Front_Clip", "Extended_Cabin", "Chauffeured_Rear_Deck", "Acoustic_Doors", "Soft_Close_Trunk"],
     morphSourceId: "sedan",
@@ -275,7 +278,8 @@ export const BODY_TYPE_REGISTRY: Record<VehicleBodyTypeId, VehicleBodyTypeSpec> 
     id: "coupe",
     name: "Coupe",
     familyId: "unibody_passenger",
-    designIdentity: "Low 2-door performance car",
+    referenceVehicle: "BMW M4",
+    designIdentity: "High-performance 2-door sports coupe inspired by BMW M4",
     typicalArchitecture: "unibody",
     keyBlenderAssets: ["Long_Doors", "Fastback_Roof", "Compact_Rear"],
     morphSourceId: "sedan",
@@ -310,7 +314,8 @@ export const BODY_TYPE_REGISTRY: Record<VehicleBodyTypeId, VehicleBodyTypeSpec> 
     id: "station_wagon",
     name: "Station Wagon / Estate",
     familyId: "unibody_passenger",
-    designIdentity: "Long-roof cruiser",
+    referenceVehicle: "Audi RS6 Avant",
+    designIdentity: "High-performance twin-turbo long-roof touring estate inspired by Audi RS6 Avant",
     typicalArchitecture: "unibody",
     keyBlenderAssets: ["Extended_Roof", "D_Pillar", "Cargo_Floor", "Roof_Rails"],
     morphSourceId: "sedan",
@@ -345,7 +350,8 @@ export const BODY_TYPE_REGISTRY: Record<VehicleBodyTypeId, VehicleBodyTypeSpec> 
     id: "shooting_brake",
     name: "Shooting Brake",
     familyId: "unibody_passenger",
-    designIdentity: "Sport + cargo: Coupe front + elongated wagon rear",
+    referenceVehicle: "Ferrari GTC4Lusso",
+    designIdentity: "Exotic fastback 2-door shooting brake inspired by Ferrari GTC4Lusso",
     typicalArchitecture: "unibody",
     keyBlenderAssets: ["SB_Roof", "SB_RearGlass", "SB_Dpillar", "SB_Tailgate"],
     morphSourceId: "coupe",
@@ -378,9 +384,10 @@ export const BODY_TYPE_REGISTRY: Record<VehicleBodyTypeId, VehicleBodyTypeSpec> 
   },
   grand_tourer: {
     id: "grand_tourer",
-    name: "Grand Tourer",
+    name: "Grand Tourer (GT)",
     familyId: "unibody_passenger",
-    designIdentity: "High-speed luxury long-distance tourer with long hood",
+    referenceVehicle: "Aston Martin DB12",
+    designIdentity: "Super-tourer 2+2 high-speed continental express inspired by Aston Martin DB12",
     typicalArchitecture: "unibody",
     keyBlenderAssets: ["Elongated_Hood", "Wide_Haunches", "Luxury_Cabin"],
     defaultDimensions: {
@@ -405,7 +412,8 @@ export const BODY_TYPE_REGISTRY: Record<VehicleBodyTypeId, VehicleBodyTypeSpec> 
     id: "limousine",
     name: "Limousine",
     familyId: "unibody_passenger",
-    designIdentity: "Executive ultra-luxury stretched cabin",
+    referenceVehicle: "Mercedes-Maybach Pullman",
+    designIdentity: "Stretched ultra-luxury chauffeured executive salon limousine with privacy partition",
     typicalArchitecture: "unibody",
     keyBlenderAssets: ["Stretched_Wheelbase", "Cabin_Partition", "Executive_Rear_Suite"],
     defaultDimensions: {
@@ -432,7 +440,8 @@ export const BODY_TYPE_REGISTRY: Record<VehicleBodyTypeId, VehicleBodyTypeSpec> 
     id: "hatchback",
     name: "Hatchback",
     familyId: "unibody_compact",
-    designIdentity: "Compact practical 2-box car",
+    referenceVehicle: "Volkswagen Golf R",
+    designIdentity: "Compact 2-box performance hatchback inspired by Volkswagen Golf R",
     typicalArchitecture: "unibody",
     keyBlenderAssets: ["Short_Rear", "Hatch_Door", "Compact_Greenhouse"],
     defaultDimensions: {
@@ -459,7 +468,8 @@ export const BODY_TYPE_REGISTRY: Record<VehicleBodyTypeId, VehicleBodyTypeSpec> 
     id: "suv",
     name: "SUV",
     familyId: "utility_suv_crossover",
-    designIdentity: "Tall utility vehicle with commanding driving position",
+    referenceVehicle: "Range Rover",
+    designIdentity: "Full-size luxury unibody SUV inspired by Range Rover",
     typicalArchitecture: "unibody",
     keyBlenderAssets: ["Raised_Cabin", "Pronounced_Wheel_Arches", "Rugged_Underbody"],
     defaultDimensions: {
@@ -484,7 +494,8 @@ export const BODY_TYPE_REGISTRY: Record<VehicleBodyTypeId, VehicleBodyTypeSpec> 
     id: "crossover",
     name: "Crossover",
     familyId: "utility_suv_crossover",
-    designIdentity: "Car-based utility blending sedan comfort with SUV height",
+    referenceVehicle: "Porsche Macan",
+    designIdentity: "Compact performance sporting crossover inspired by Porsche Macan",
     typicalArchitecture: "unibody",
     keyBlenderAssets: ["Crossover_Shell", "Cladding_Trim", "Sleek_Greenhouse"],
     defaultDimensions: {
@@ -507,9 +518,10 @@ export const BODY_TYPE_REGISTRY: Record<VehicleBodyTypeId, VehicleBodyTypeSpec> 
   },
   luxury_suv: {
     id: "luxury_suv",
-    name: "Luxury SUV",
+    name: "Coupe SUV",
     familyId: "utility_suv_crossover",
-    designIdentity: "Large premium utility with acoustic glass and executive seating",
+    referenceVehicle: "Lamborghini Urus",
+    designIdentity: "Super sports utility with dramatic raked coupe silhouette inspired by Lamborghini Urus",
     typicalArchitecture: "unibody",
     keyBlenderAssets: ["Executive_Cabin", "Chrome_Accents", "Air_Suspension_Stance"],
     defaultDimensions: {
@@ -534,7 +546,8 @@ export const BODY_TYPE_REGISTRY: Record<VehicleBodyTypeId, VehicleBodyTypeSpec> 
     id: "performance_suv",
     name: "Performance SUV",
     familyId: "utility_suv_crossover",
-    designIdentity: "Lower ride height, wide track, front splitters, and quad exhausts",
+    referenceVehicle: "Porsche Cayenne Turbo GT",
+    designIdentity: "Track-tuned high-performance super-SUV with dynamic chassis control and active roll stabilization",
     typicalArchitecture: "unibody",
     keyBlenderAssets: ["Aero_Fascia", "Lowered_Ride_Height", "Diffuser_Exhaust"],
     defaultDimensions: {
@@ -559,7 +572,8 @@ export const BODY_TYPE_REGISTRY: Record<VehicleBodyTypeId, VehicleBodyTypeSpec> 
     id: "offroad_suv",
     name: "Off-Road SUV",
     familyId: "utility_suv_crossover",
-    designIdentity: "Terrain-focused utility with differential lockers and rock sliders",
+    referenceVehicle: "Mercedes-Benz G-Class",
+    designIdentity: "Heavy-duty rugged ladder-frame off-road conqueror inspired by Mercedes-Benz G-Class",
     typicalArchitecture: "unibody",
     keyBlenderAssets: ["Skid_Plates", "High_Clearance_Arches", "External_Spare_Tire"],
     defaultDimensions: {
@@ -586,7 +600,8 @@ export const BODY_TYPE_REGISTRY: Record<VehicleBodyTypeId, VehicleBodyTypeSpec> 
     id: "pickup_truck",
     name: "Pickup Truck",
     familyId: "body_on_frame_truck",
-    designIdentity: "Body-on-frame utility hauler with open cargo bed",
+    referenceVehicle: "Ford F-150 Raptor",
+    designIdentity: "Baja-ready high-output ladder-chassis pickup truck inspired by Ford F-150 Raptor",
     typicalArchitecture: "body_on_frame",
     keyBlenderAssets: ["Ladder_Frame", "Cab_Module", "Cargo_Bed", "Tailgate", "Roll_Bar"],
     defaultDimensions: {
@@ -611,7 +626,8 @@ export const BODY_TYPE_REGISTRY: Record<VehicleBodyTypeId, VehicleBodyTypeSpec> 
     id: "offroad_4x4",
     name: "Off-Road 4×4",
     familyId: "body_on_frame_truck",
-    designIdentity: "Extreme terrain vehicle with solid axles and external accessories",
+    referenceVehicle: "Jeep Wrangler Rubicon",
+    designIdentity: "Rugged extreme-articulation solid-axle ladder-chassis 4x4 with disconnecting sway bars",
     typicalArchitecture: "body_on_frame",
     keyBlenderAssets: ["Solid_Axles", "Bullbar", "Snorkel", "Rock_Sliders", "Roof_Rack"],
     defaultDimensions: {
@@ -634,9 +650,10 @@ export const BODY_TYPE_REGISTRY: Record<VehicleBodyTypeId, VehicleBodyTypeSpec> 
   },
   truck_lorry: {
     id: "truck_lorry",
-    name: "Truck / Lorry",
+    name: "Truck",
     familyId: "body_on_frame_truck",
-    designIdentity: "Heavy-duty commercial rigid hauler with reinforced ladder frame and modular deck",
+    referenceVehicle: "Volvo FH",
+    designIdentity: "Heavy-duty commercial long-haul prime mover cab-over truck inspired by Volvo FH",
     typicalArchitecture: "body_on_frame",
     keyBlenderAssets: ["Heavy_Commercial_Cab", "Rigid_Ladder_Rails", "Dual_Rear_Wheel_Hubs", "Air_Brake_Tanks", "Heavy_Front_Bumper"],
     defaultDimensions: {
@@ -661,9 +678,10 @@ export const BODY_TYPE_REGISTRY: Record<VehicleBodyTypeId, VehicleBodyTypeSpec> 
   // --- 5. Commercial High-Volume / MPV (2) ---
   cargo_van: {
     id: "cargo_van",
-    name: "Cargo Van",
+    name: "Cargo / Panel Van",
     familyId: "commercial_van_bus",
-    designIdentity: "High-roof commercial volume van with rear barn doors",
+    referenceVehicle: "Ford Transit Cargo",
+    designIdentity: "High-capacity commercial freight and delivery panel van with sliding cargo doors",
     typicalArchitecture: "unibody",
     keyBlenderAssets: ["High_Roof", "Sliding_Side_Door", "Rear_Barn_Doors", "Flat_Cargo_Floor"],
     defaultDimensions: {
@@ -686,9 +704,10 @@ export const BODY_TYPE_REGISTRY: Record<VehicleBodyTypeId, VehicleBodyTypeSpec> 
   },
   bus_shuttle: {
     id: "bus_shuttle",
-    name: "Bus / Shuttle",
+    name: "Bus",
     familyId: "commercial_van_bus",
-    designIdentity: "Heavy-duty low-floor electric transit coach with dual rear duallys and panoramic glazing",
+    referenceVehicle: "Mercedes-Benz Citaro",
+    designIdentity: "High-volume low-floor urban transit bus coach inspired by Mercedes-Benz Citaro",
     typicalArchitecture: "unibody",
     keyBlenderAssets: ["Transit_Monocoque_Shell", "Dual_Rear_Duallys", "Roof_HVAC_Pods", "BiFold_Doors", "Panoramic_Glazing"],
     defaultDimensions: {
@@ -713,9 +732,10 @@ export const BODY_TYPE_REGISTRY: Record<VehicleBodyTypeId, VehicleBodyTypeSpec> 
   // --- 6. Mid-Engine Carbon Monocoque (3) ---
   supercar: {
     id: "supercar",
-    name: "Supercar / Mid-Engine",
+    name: "Supercar",
     familyId: "high_downforce_supercar",
-    designIdentity: "Low wedge nose, mid-engine bay, and venturi tunnel undertray",
+    referenceVehicle: "Ferrari 296 GTB",
+    designIdentity: "Mid-rear engine Berlinetta hybrid architecture inspired by Ferrari 296 GTB with dual-clearcoat Rosso paint",
     typicalArchitecture: "carbon_tub",
     keyBlenderAssets: ["Supercar_Nose", "Sidepod_Intakes", "Engine_Glass_Bonnet", "Venturi_Diffuser"],
     defaultDimensions: {
@@ -740,7 +760,8 @@ export const BODY_TYPE_REGISTRY: Record<VehicleBodyTypeId, VehicleBodyTypeSpec> 
     id: "hypercar",
     name: "Hypercar",
     familyId: "high_downforce_supercar",
-    designIdentity: "Bugatti Divo hypercar with 8.0L W16 quad-turbo, 1.83m active aero wing, and 44-fin 3D OLED lights",
+    referenceVehicle: "McLaren W1",
+    designIdentity: "Formula 1 ground-effect aerodynamic hypercar inspired by McLaren W1",
     typicalArchitecture: "carbon_tub",
     keyBlenderAssets: ["Divo_Carbon_Monocoque", "Active_Aero_Wing", "W16_QuadTurbo", "OLED_3D_Fins", "Staggered_Aero_Wheels"],
     defaultDimensions: {
@@ -763,9 +784,10 @@ export const BODY_TYPE_REGISTRY: Record<VehicleBodyTypeId, VehicleBodyTypeSpec> 
   },
   track_special: {
     id: "track_special",
-    name: "Track Special",
+    name: "Race Car / Motorsport",
     familyId: "high_downforce_supercar",
-    designIdentity: "Circuit-focused lightweight tub with FIA cage and high-downforce aero",
+    referenceVehicle: "Porsche 911 GT3 R",
+    designIdentity: "FIA homologated GT3 circuit motorsport weapon inspired by Porsche 911 GT3 R",
     typicalArchitecture: "carbon_tub",
     keyBlenderAssets: ["FIA_Roll_Cage", "Swan_Neck_Wing", "Splitter_Endplates", "Stripped_Cockpit"],
     defaultDimensions: {
@@ -790,9 +812,10 @@ export const BODY_TYPE_REGISTRY: Record<VehicleBodyTypeId, VehicleBodyTypeSpec> 
   // --- 7. Open-Top Reinforced Platform (2) ---
   roadster: {
     id: "roadster",
-    name: "Roadster / Spyder",
+    name: "Roadster",
     familyId: "open_top_gt",
-    designIdentity: "Lightweight 2-seater open cockpit with twin aerodynamic rear nacelles",
+    referenceVehicle: "Porsche 718 Boxster",
+    designIdentity: "Mid-engine 2-seater lightweight open roadster inspired by Porsche 718 Boxster",
     typicalArchitecture: "unibody",
     keyBlenderAssets: ["Convertible_Frame", "Rear_Speedster_Nacelles", "Wind_Deflector"],
     defaultDimensions: {
@@ -817,7 +840,8 @@ export const BODY_TYPE_REGISTRY: Record<VehicleBodyTypeId, VehicleBodyTypeSpec> 
     id: "convertible",
     name: "Convertible",
     familyId: "open_top_gt",
-    designIdentity: "Open-air 2+2 grand tourer with motorized folding fabric/hard roof",
+    referenceVehicle: "Mercedes-AMG SL",
+    designIdentity: "Open-top grand touring roadster inspired by Mercedes-AMG SL",
     typicalArchitecture: "unibody",
     keyBlenderAssets: ["Folding_Roof_Mechanism", "Reinforced_A_Pillars", "Stiffened_Sills"],
     defaultDimensions: {
@@ -842,9 +866,10 @@ export const BODY_TYPE_REGISTRY: Record<VehicleBodyTypeId, VehicleBodyTypeSpec> 
   // --- 8. Tubular & Specialty Platform (1) ---
   sport_wagon: {
     id: "sport_wagon",
-    name: "Sport Wagon",
+    name: "Sport Wagon / Performance Estate",
     familyId: "tubular_specialty",
-    designIdentity: "Performance estate with competition widebody and aggressive aero",
+    referenceVehicle: "BMW M3 Touring",
+    designIdentity: "High-output sports estate combining supercar performance with long-roof utility",
     typicalArchitecture: "unibody",
     keyBlenderAssets: ["Wagon_Body", "Performance_Diffuser", "Front_Canards"],
     defaultDimensions: {

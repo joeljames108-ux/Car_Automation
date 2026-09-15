@@ -1,0 +1,17 @@
+{
+  "architecture": "convertible",
+  "era": "1980s",
+  "referenceVehicle": "Mercedes-Benz 560SL (R107)",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/convertible/1980s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Solid German luxury grand convertible, length 4390mm, wheelbase 2460mm",
+    "silhouette": "Low horizontal shoulder line with removable Pagoda-style aluminum hardtop",
+    "greenhouse": "Heavy-gauge reinforced A-pillars capable of surviving rollover testing",
+    "hoodCabin": "Wide fluted hood with prominent chrome three-pointed star grille",
+    "surfacing": "Understated planar sheetmetal with ribbed dirt-deflecting rear light lenses",
+    "aeroPhilosophy": "Smooth horizontal bodywork and functional chin spoiler; Cd 0.41",
+    "wheels": "15-inch forged gullideckel (manhole cover) aerodynamic alloy wheels",
+    "engineering": "Heavy structural steel sills and cross-bracing providing peerless durability"
+  }
+}

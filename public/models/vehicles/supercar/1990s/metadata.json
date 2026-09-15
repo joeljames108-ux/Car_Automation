@@ -1,0 +1,17 @@
+{
+  "architecture": "supercar",
+  "era": "1990s",
+  "referenceVehicle": "McLaren F1",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/supercar/1990s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Gordon Murray packaging perfection, length 4287mm, width 1820mm, weight 1138kg",
+    "silhouette": "Compact central-seat canopy with roof intake scoop and clean flowing flanks",
+    "greenhouse": "Central driver seat flanked by two recessed passenger seats; dihedral doors",
+    "hoodCabin": "Short nose with radiator air exit ducts; roof-mounted engine induction snorkel",
+    "surfacing": "Pure aerodynamic surfaces free of wings, spoilers, or styling gimmicks",
+    "aeroPhilosophy": "Active ground-effect underfloor suction fans and pop-up rear airbrake; Cd 0.32",
+    "wheels": "17-inch OZ Racing five-spoke magnesium wheels with custom Goodyear tires",
+    "engineering": "Full carbon fiber monocoque with gold-foil lined engine bay for thermal insulation"
+  }
+}

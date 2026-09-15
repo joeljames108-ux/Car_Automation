@@ -1,0 +1,17 @@
+{
+  "architecture": "grand_tourer",
+  "era": "1980s",
+  "referenceVehicle": "Porsche 928 S4",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/grand_tourer/1980s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Avant-garde V8 grand tourer, length 4520mm, width 1836mm, wheelbase 2500mm",
+    "silhouette": "Futuristic teardrop profile with forward-tilting pop-up headlights",
+    "greenhouse": "Curved panoramic glass rear hatch offering spacious 2+2 luggage space",
+    "hoodCabin": "Aluminum hood, front fenders, and doors with integrated polyurethane bumpers",
+    "surfacing": "Seamless body integration with body-color flush front and rear fascias",
+    "aeroPhilosophy": "Flush polyurethane bumpers and integrated rear deck spoiler; Cd 0.34",
+    "wheels": "16-inch forged flat-disc alloy wheels with high-speed Michelin rubber",
+    "engineering": "Front-mounted water-cooled V8 paired with rear transaxle and Weissach rear axle"
+  }
+}

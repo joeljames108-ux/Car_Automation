@@ -48,8 +48,10 @@ import { runTrackLayoutCatalogTests } from "../../components/trackLayouts/__test
 import { runDrivetrainSolverTests } from "../engine/__tests__/drivetrainSolverTests";
 import { runMultimodeCapabilitiesTests } from "./__tests__/multimodeCapabilitiesTest";
 import { runVehicleArchitectureTests } from "../vehicleArchitecture/__tests__/vehicleArchitectureTests";
+import { runVehicleArchitectureMatrixTests } from "../vehicleArchitecture/__tests__/vehicleArchitectureMatrixTests";
 import { runVehicleOutlinerTests } from "../vehicleArchitecture/__tests__/vehicleOutlinerTests";
 import { runTrueModularVehicleBuilderTests } from "./__tests__/trueModularVehicleBuilderTests";
+import { runBodyArchitectureMatrixTests } from "../bodyArchitectureMatrix/__tests__/bodyArchitectureMatrixTests";
 
 console.log("=================================================");
 console.log("  MODULAR VEHICLE, EXTERIOR & AI AGENT TESTS");
@@ -182,8 +184,10 @@ const packagingResults = runAssemblyPackagingTests();
 const drivetrainResults = runDrivetrainSolverTests();
 const multimodeResults = runMultimodeCapabilitiesTests();
 const vehicleArchResults = runVehicleArchitectureTests();
+const matrixResults = runVehicleArchitectureMatrixTests();
 const outlinerResults = runVehicleOutlinerTests();
 runTrueModularVehicleBuilderTests();
+runBodyArchitectureMatrixTests();
 import { runAeroStudioModularGlbTests } from "./__tests__/aeroStudioModularGlbTests";
 const aeroStudioModularResults = runAeroStudioModularGlbTests();
 import { runVehicleFamilyArchitectureTests } from "./__tests__/vehicleFamilyArchitectureTests";
@@ -203,6 +207,7 @@ console.log("\n=== TEST RUNNER FAILURE AUDIT ===", {
   drive: drivetrainResults.failed,
   multi: multimodeResults.failed,
   arch: vehicleArchResults.failed,
+  matrix: matrixResults.failed,
   outliner: outlinerResults.failed,
   aero: aeroStudioModularResults.failed,
   family: vehicleFamilyResults.failed,
@@ -222,6 +227,7 @@ if (
   drivetrainResults.failed > 0 ||
   multimodeResults.failed > 0 ||
   vehicleArchResults.failed > 0 ||
+  matrixResults.failed > 0 ||
   outlinerResults.failed > 0 ||
   aeroStudioModularResults.failed > 0 ||
   vehicleFamilyResults.failed > 0

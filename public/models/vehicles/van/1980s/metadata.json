@@ -1,0 +1,17 @@
+{
+  "architecture": "van",
+  "era": "1980s",
+  "referenceVehicle": "Ford Transit Mk2",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/van/1980s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Short-hood European commercial van, length 4610mm, width 1960mm, wheelbase 2690mm",
+    "silhouette": "Sloping short nose with black plastic slatted grille and twin rear cargo swing doors",
+    "greenhouse": "Deep windscreen with slim pillars and commercial side sliding door option",
+    "hoodCabin": "Short sloped hood allowing easy front access to engine oil and fluids",
+    "surfacing": "Ribbed steel side panels providing stiffness to thin commercial sheetmetal",
+    "aeroPhilosophy": "Sloped nose transition over cabin; Cd 0.44",
+    "wheels": "14-inch heavy-duty steel wheels with 6-lug commercial bolt pattern",
+    "engineering": "Front longitudinal diesel engine driving solid live rear axle with leaf springs"
+  }
+}

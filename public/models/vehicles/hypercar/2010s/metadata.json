@@ -1,0 +1,17 @@
+{
+  "architecture": "hypercar",
+  "era": "2010s",
+  "referenceVehicle": "Porsche 918 Spyder",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/hypercar/2010s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Carbon monocoque hybrid hypercar, length 4643mm, width 1940mm, height 1167mm",
+    "silhouette": "Low sports silhouette with top-pipe exhausts exiting behind driver headrests",
+    "greenhouse": "Two-piece removable carbon fiber targa roof stowing in front luggage compartment",
+    "hoodCabin": "Smooth nose with four-point LED headlights, driver positioned forward in tub",
+    "surfacing": "Taut athletic carbon composite panels with sweeping waistline into rear spoiler",
+    "aeroPhilosophy": "Porsche Active Aerodynamics (PAA) with underfloor flaps and rear wing; Cd 0.36",
+    "wheels": "20-inch front / 21-inch rear forged magnesium lightweight Weissach wheels",
+    "engineering": "High-revving 4.6L V8 paired with twin front electric motors and carbon monocoque"
+  }
+}

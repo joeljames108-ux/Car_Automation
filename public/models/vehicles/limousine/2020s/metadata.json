@@ -1,0 +1,17 @@
+{
+  "architecture": "limousine",
+  "era": "2020s",
+  "referenceVehicle": "Hongqi L5",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/limousine/2020s/vehicle.glb",
+  "designDNA": {
+    "proportions": "State protocol presidential limousine, length 5555mm, width 2018mm, wheelbase 3435mm",
+    "silhouette": "Traditional heritage design with retro round headlamps and chrome waterfall grille",
+    "greenhouse": "Formal upright roofline with heavy acoustic glass and chrome window framing",
+    "hoodCabin": "Red flag emblem running along center hood crease like a raised fin",
+    "surfacing": "Classic slab-sided steel panels combined with jade interior door handles",
+    "aeroPhilosophy": "Subtle aerodynamic taper along rear trunk decklid; Cd 0.34",
+    "wheels": "20-inch chrome multi-spoke wheels with golden sunflower center emblems",
+    "engineering": "Heavy-duty ladder-reinforced monocoque with 6.0L V12 and full state armored floor"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "architecture": "suv",
+  "era": "1980s",
+  "referenceVehicle": "Jeep Grand Wagoneer (SJ)",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/suv/1980s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Full-size American luxury SUV, length 4735mm, width 1900mm, wheelbase 2761mm",
+    "silhouette": "Classic station-wagon SUV silhouette with simulated marine teak woodgrain siding",
+    "greenhouse": "Expansive glasshouse with bright chrome window frames and chrome roof luggage rack",
+    "hoodCabin": "Upright vertical chrome front grille with integrated square halogen headlights",
+    "surfacing": "Woodgrain vinyl paneling framed by bright trim moldings along both body sides",
+    "aeroPhilosophy": "Upright chrome prow commanding presence over aerodynamics; Cd 0.48",
+    "wheels": "15-inch forged aluminum wheels with gold-accented inserts and whitewalls",
+    "engineering": "Selec-Trac full-time four-wheel drive with Dana 44 solid axles front and rear"
+  }
+}

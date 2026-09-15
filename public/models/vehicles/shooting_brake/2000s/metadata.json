@@ -1,0 +1,17 @@
+{
+  "architecture": "shooting_brake",
+  "era": "2000s",
+  "referenceVehicle": "Alfa Romeo Brera Shooting Brake",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/shooting_brake/2000s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Italdesign Giugiaro sporting shooting brake coupe, length 4413mm, width 1830mm",
+    "silhouette": "Aggressive dropped front nose leading to steep truncated hatchback tail",
+    "greenhouse": "Glass SkyView panoramic roof option with tinted glass and dark pillars",
+    "hoodCabin": "Triple-pod exposed round projector headlamps flanking deep triangular heart grille",
+    "surfacing": "Brooding Italian muscularity with taut sheetmetal creases along shoulders",
+    "aeroPhilosophy": "Integrated rear roof spoiler and rear bumper diffuser with quad exhausts; Cd 0.33",
+    "wheels": "18-inch telephone-dial alloy wheels with Brembo performance calipers",
+    "engineering": "Premium platform with high double-wishbone front and multi-link rear suspension"
+  }
+}

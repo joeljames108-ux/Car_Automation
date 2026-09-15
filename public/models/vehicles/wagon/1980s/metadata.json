@@ -1,0 +1,17 @@
+{
+  "architecture": "wagon",
+  "era": "1980s",
+  "referenceVehicle": "Volvo 240 Turbo Estate",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/wagon/1980s/vehicle.glb",
+  "designDNA": {
+    "proportions": "The definitive flying brick, length 4790mm, height 1460mm, wheelbase 2640mm",
+    "silhouette": "Strictly vertical 90-degree rear tailgate maximizing internal cubic volume",
+    "greenhouse": "Expansive rectangular greenhouse with slim pillars and upright windscreen",
+    "hoodCabin": "Long blunt hood with black turbo grille and heavy impact-absorbing bumpers",
+    "surfacing": "Utilitarian flat sheetmetal stampings with external rain gutters",
+    "aeroPhilosophy": "Flying brick aerodynamics with Cd 0.40; legendary European touring car champion",
+    "wheels": "15-inch Virgo multi-spoke alloy wheels with performance radial tires",
+    "engineering": "Indestructible B21FT turbocharged redblock engine with MacPherson front struts"
+  }
+}

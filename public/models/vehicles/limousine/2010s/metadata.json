@@ -1,0 +1,17 @@
+{
+  "architecture": "limousine",
+  "era": "2010s",
+  "referenceVehicle": "Audi A8L Extended",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/limousine/2010s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Six-door aluminum spaceframe limousine, length 6360mm, wheelbase 4220mm",
+    "silhouette": "Elongated luxury sedan with three rows of forward-facing passenger doors",
+    "greenhouse": "Three separate panoramic glass sunroof sections illuminating all three rows",
+    "hoodCabin": "Singleframe chrome grille flanked by Matrix LED adaptive headlights",
+    "surfacing": "Audi Space Frame (ASF) aluminum panels with razor-sharp tornado crease",
+    "aeroPhilosophy": "Full underbody aerodynamic floor tray and smooth A-pillars; Cd 0.28",
+    "wheels": "19-inch 15-spoke design alloy wheels with high-load capacity rubber",
+    "engineering": "Extended aluminum side sills and center tunnel maintaining high torsional rigidity"
+  }
+}

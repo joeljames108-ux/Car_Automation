@@ -8,6 +8,9 @@
 
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js';
+import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.js';
+import { GltfLoaderFactory } from '../../utils/gltfLoaderFactory';
 
 export interface VehicleGlbLoadResult {
   scene: THREE.Group;
@@ -22,7 +25,7 @@ export class VehicleGlbAssetLoader {
   private cache: Map<string, VehicleGlbLoadResult>;
 
   private constructor() {
-    this.loader = new GLTFLoader();
+    this.loader = GltfLoaderFactory.createLoader();
     this.cache = new Map();
   }
 

@@ -1,0 +1,17 @@
+{
+  "architecture": "gt3",
+  "era": "2020s",
+  "referenceVehicle": "Mercedes-AMG GT3 Evo",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/gt3/2020s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Aggressive front-mid GT3 car, length 4746mm, width 2050mm, wheelbase 2630mm",
+    "silhouette": "Predatory dropped Panamericana racing grille feeding high-capacity radiators",
+    "greenhouse": "Carbon driver safety cell with integrated seat shell and head restraint nets",
+    "hoodCabin": "Massive drop-nose carbon grille with multi-tier front bumper flick canards",
+    "surfacing": "Quick-release carbon front splitter and rear carbon wing on billet pylons",
+    "aeroPhilosophy": "Optimized front splitter deflection under braking; Cd 0.37",
+    "wheels": "18-inch AMG forged motorsport wheels with tire pressure and temp sensors",
+    "engineering": "Naturally aspirated 6.2L V8 with dry sump lubrication and transaxle sequential"
+  }
+}

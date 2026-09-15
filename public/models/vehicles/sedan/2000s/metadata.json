@@ -1,0 +1,17 @@
+{
+  "architecture": "sedan",
+  "era": "2000s",
+  "referenceVehicle": "Audi RS6 Sedan (C6)",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/sedan/2000s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Widebody executive power sedan, length 4928mm, wheelbase 2846mm",
+    "silhouette": "Commanding road stance with swollen wheel arches and fast sloping roofline",
+    "greenhouse": "High beltline creating protective cockpit feel, satin aluminum window framing",
+    "hoodCabin": "Imposing front end dominated by singleframe grille, long cab-rearward stance",
+    "surfacing": "Taut tornado line running continuous from headlamp to taillight",
+    "aeroPhilosophy": "Front bumper side radiator gills, integrated rear trunk lip spoiler; Cd 0.31",
+    "wheels": "19-inch 5-segment titanium-finish wheels tucked inside flared arches",
+    "engineering": "Steel and aluminum hybrid body shell with front-mounted twin-turbo V10 packaging"
+  }
+}

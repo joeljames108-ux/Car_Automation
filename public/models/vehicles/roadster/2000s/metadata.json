@@ -1,0 +1,17 @@
+{
+  "architecture": "roadster",
+  "era": "2000s",
+  "referenceVehicle": "Lotus Elise Series 2",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/roadster/2000s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Mid-engine ultra-lightweight track roadster, length 3785mm, curb weight 860kg",
+    "silhouette": "Insectoid front styling, tiny overhangs, integrated rear spoiler lip",
+    "greenhouse": "Minimalist fabric targa roof strip, exposed extruded aluminum tub inside",
+    "hoodCabin": "Front composite clam shell with dual radiator air extractors",
+    "surfacing": "Curvaceous fiberglass bodywork shrink-wrapped tightly over mechanical components",
+    "aeroPhilosophy": "Full flat undertray and functional extruded aluminum rear diffuser; Cd 0.36",
+    "wheels": "16-inch front / 17-inch rear lightweight alloy wheels with race tires",
+    "engineering": "Epoxy-bonded extruded aluminum monocoque with steel rear engine subframe"
+  }
+}

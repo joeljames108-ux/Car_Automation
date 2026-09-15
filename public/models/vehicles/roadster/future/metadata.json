@@ -1,0 +1,17 @@
+{
+  "architecture": "roadster",
+  "era": "future",
+  "referenceVehicle": "Tesla Roadster 2",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/roadster/future/vehicle.glb",
+  "designDNA": {
+    "proportions": "Ultra-aerodynamic seamless electric roadster, length 4400mm, width 1950mm",
+    "silhouette": "Curved glass targa roof, low-drag tear-drop cockpit, aggressive wide stance",
+    "greenhouse": "Removable curved glass roof panel storing in trunk without compromise",
+    "hoodCabin": "Minimalist slit LED headlights, deep side air extractors behind front wheels",
+    "surfacing": "Glass-smooth aerodynamic composite skin stripped of all extraneous shutlines",
+    "aeroPhilosophy": "Active rear aerodynamic diffuser, vacuum ground-effect suction channels; Cd 0.20",
+    "wheels": "21-inch aero turbofan wheels with continuous carbon fiber aerodynamic fairings",
+    "engineering": "Structural carbon composite monocoque with triple-motor all-wheel torque vectoring"
+  }
+}

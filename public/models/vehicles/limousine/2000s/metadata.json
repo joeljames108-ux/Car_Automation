@@ -1,0 +1,17 @@
+{
+  "architecture": "limousine",
+  "era": "2000s",
+  "referenceVehicle": "Rolls-Royce Phantom VII Limo",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/limousine/2000s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Monolithic extended wheelbase architectural sculpture, length 6092mm, wheelbase 3820mm",
+    "silhouette": "Cathedral-like upright Pantheon grille with reverse-hinged rear coach doors",
+    "greenhouse": "High beltline ensuring passengers remain hidden behind wide C-pillars",
+    "hoodCabin": "Long bonnet covering 6.75L naturally aspirated V12; retractable Spirit of Ecstasy",
+    "surfacing": "Seamless aluminum panels hand-finished with mirror-reflection lacquer",
+    "aeroPhilosophy": "Stately prow displacing air with effortless acoustic tranquility; Cd 0.38",
+    "wheels": "21-inch wheels with run-flat tires and self-leveling weighted center caps",
+    "engineering": "All-aluminum spaceframe with Starlight fiber-optic roof headliner"
+  }
+}

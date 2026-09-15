@@ -1,0 +1,17 @@
+{
+  "architecture": "grand_tourer",
+  "era": "future",
+  "referenceVehicle": "Cadillac Celestiq",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/grand_tourer/future/vehicle.glb",
+  "designDNA": {
+    "proportions": "Bespoke electric fastback grand tourer, length 5500mm, width 2020mm, wheelbase 3300mm",
+    "silhouette": "Dramatically elongated fastback roofline with illuminated crystal black grille",
+    "greenhouse": "Suspended particle smart-glass roof with four individual occupant tint zones",
+    "hoodCabin": "Long hand-crafted composite hood transitioning seamlessly into low windshield",
+    "surfacing": "Over 115 3D-printed metal components integrated into coachbuilt composite body",
+    "aeroPhilosophy": "Active rear spoiler, active front air shutters, clean underfloor airflow; Cd 0.23",
+    "wheels": "23-inch forged wheels with aerodynamic carbon fiber blade inserts",
+    "engineering": "Dedicated Ultium EV architecture with 55-inch pillar-to-pillar interior display"
+  }
+}

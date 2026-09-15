@@ -1,0 +1,17 @@
+{
+  "architecture": "shooting_brake",
+  "era": "2020s",
+  "referenceVehicle": "Genesis G70 Shooting Brake",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/shooting_brake/2020s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Luxury athletic shooting brake, length 4685mm, width 1850mm, wheelbase 2835mm",
+    "silhouette": "Parabolic character line sweeping uninterrupted into floating tailgate spoiler",
+    "greenhouse": "Coupe-like window line with frameless glass and integrated rear quarter windows",
+    "hoodCabin": "Crest grille with G-Matrix diamond mesh pattern and Quad Lamp LED headlights",
+    "surfacing": "Athletic elegance with sculpted rear bumper and dual oval exhaust tips",
+    "aeroPhilosophy": "Floating roof spoiler extending over truncated rear window; Cd 0.30",
+    "wheels": "19-inch dark sputtered alloy wheels with Michelin Pilot Sport 4 tires",
+    "engineering": "Rear-wheel drive biased chassis with mechanical limited-slip differential"
+  }
+}

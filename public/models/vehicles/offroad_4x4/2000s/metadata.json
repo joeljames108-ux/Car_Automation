@@ -1,0 +1,17 @@
+{
+  "architecture": "offroad_4x4",
+  "era": "2000s",
+  "referenceVehicle": "Jeep Wrangler Rubicon (TJ)",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/offroad_4x4/2000s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Trail-rated open-top 4x4, length 3840mm, wheelbase 2372mm, ground clearance 260mm",
+    "silhouette": "Iconic 7-slot vertical grille flanked by round headlights and exposed wheel flares",
+    "greenhouse": "Fold-down flat glass windshield, removable full-framed doors, folding soft top",
+    "hoodCabin": "Narrow hood latched down with exterior rubber latches over front fenders",
+    "surfacing": "Flat steel tub with heavy-duty composite fender flares over 31-inch tires",
+    "aeroPhilosophy": "Open body elements, flat windshield; Cd 0.50",
+    "wheels": "16-inch Moab cast aluminum wheels with Goodyear Wrangler MT/R tires",
+    "engineering": "Heavy-duty Dana 44 solid axles front and rear with Tru-Lok air lockers and 4:1 transfer case"
+  }
+}

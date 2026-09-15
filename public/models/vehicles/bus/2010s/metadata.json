@@ -1,0 +1,17 @@
+{
+  "architecture": "bus",
+  "era": "2010s",
+  "referenceVehicle": "Alexander Dennis Enviro500",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/bus/2010s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Three-axle high-capacity double-decker bus, length 12800mm, height 4300mm",
+    "silhouette": "Iconic high-capacity double deck silhouette carrying over 130 passengers",
+    "greenhouse": "Upper deck panoramic curved front glass offering bird-eye city view",
+    "hoodCabin": "Modern aerodynamic front profile with LED destination display and daylights",
+    "surfacing": "Lightweight aluminum body structure mounted onto three-axle chassis",
+    "aeroPhilosophy": "Sculpted upper-deck roof contour minimizing wind drag and crosswind sway; Cd 0.48",
+    "wheels": "22.5-inch wheels on steerable rear tag axle reducing turning circle",
+    "engineering": "Dual staircases and wide exit doors engineered for rapid passenger dwell times"
+  }
+}

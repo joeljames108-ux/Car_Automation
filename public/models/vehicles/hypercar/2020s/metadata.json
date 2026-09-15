@@ -1,0 +1,17 @@
+{
+  "architecture": "hypercar",
+  "era": "2020s",
+  "referenceVehicle": "Bugatti Chiron Pur Sport",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/hypercar/2020s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Extreme cornering agility hypercar, length 4544mm, width 2038mm, wheelbase 2711mm",
+    "silhouette": "Massive 1.9-meter fixed carbon rear wing, enlarged front horseshoe grille",
+    "greenhouse": "Carbon C-bar wrapping seamlessly around passenger cabin into engine bay",
+    "hoodCabin": "Aggressive front carbon splitter and enlarged air intakes for maximum cooling",
+    "surfacing": "Exposed carbon fiber lower body panels with aerodynamic aero blade wheels",
+    "aeroPhilosophy": "Fixed wing with titanium pylons and deep diffuser generating extreme downforce; Cd 0.38",
+    "wheels": "20-inch front / 21-inch rear magnesium wheels with carbon aero rings extracting air",
+    "engineering": "Quad-turbo W16 with close-ratio gearbox, stiffer springs, and negative camber"
+  }
+}

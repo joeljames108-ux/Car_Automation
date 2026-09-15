@@ -1,0 +1,17 @@
+{
+  "architecture": "muscle_car",
+  "era": "2020s",
+  "referenceVehicle": "Dodge Challenger SRT Demon 170",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/muscle_car/2020s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Extreme widebody drag-strip monster, length 5017mm, width 2004mm, wheelbase 2950mm",
+    "silhouette": "Nostalgic two-door muscle stance with massive drag radial tires and wheel flares",
+    "greenhouse": "Two-door coupe glass with rear seat delete and roll cage mounting provisions",
+    "hoodCabin": "Massive Air-Grabber hood scoop measuring 45 square inches; Air-Catcher headlamps",
+    "surfacing": "Widebody rear fender flares containing 315/50R17 Mickey Thompson drag radials",
+    "aeroPhilosophy": "Optimized for maximum drag-strip traction and front-to-rear weight transfer; Cd 0.39",
+    "wheels": "18-inch front / 17-inch rear forged aluminum and carbon fiber hybrid wheels",
+    "engineering": "Upgraded transbrake, heavy-duty prop shaft, 1025hp ethanol-fueled V8 drivetrain"
+  }
+}

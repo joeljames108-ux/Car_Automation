@@ -1,0 +1,17 @@
+{
+  "architecture": "crossover",
+  "era": "1990s",
+  "referenceVehicle": "Toyota RAV4 (XA10)",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/crossover/1990s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Compact 3-door recreational crossover, length 3740mm, wheelbase 2200mm",
+    "silhouette": "Playful rounded high-riding stance with external rear tailgate spare tire",
+    "greenhouse": "Tall upright greenhouse with twin pop-up sunroofs and side-opening tailgate",
+    "hoodCabin": "Short rounded hood leading to integrated bumper with round fog lamp cutouts",
+    "surfacing": "Two-tone grey protective lower body cladding wrapping around bumpers",
+    "aeroPhilosophy": "Curved nose and flush composite headlamps; Cd 0.38",
+    "wheels": "16-inch 5-spoke alloy wheels with 215/70 all-season radial tires",
+    "engineering": "Car-based Carina/Corolla unibody chassis with independent suspension on all wheels"
+  }
+}

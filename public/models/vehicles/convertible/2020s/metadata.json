@@ -1,0 +1,17 @@
+{
+  "architecture": "convertible",
+  "era": "2020s",
+  "referenceVehicle": "Bentley Continental GT Speed Convertible",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/convertible/2020s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Grand luxury touring convertible, length 4850mm, width 1954mm, wheelbase 2851mm",
+    "silhouette": "Authoritative powerline running from headlights into swollen rear power haunches",
+    "greenhouse": "Z-fold four-layer fabric roof offering coupe-like acoustic tranquility at 200 mph",
+    "hoodCabin": "Long stately hood covered in hand-crafted aluminum superformed sheetmetal",
+    "surfacing": "Deeply drawn aluminum body panels without unsightly weld seams",
+    "aeroPhilosophy": "Underfloor aero diffusers, active front cooling air matrix shutters; Cd 0.30",
+    "wheels": "22-inch Speed design alloy wheels with self-leveling center badges",
+    "engineering": "Active all-wheel drive, 48V electronic active roll stabilization system"
+  }
+}

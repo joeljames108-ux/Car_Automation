@@ -1,0 +1,17 @@
+{
+  "architecture": "crossover",
+  "era": "2010s",
+  "referenceVehicle": "Porsche Macan GTS",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/crossover/2010s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Compact performance sports crossover, length 4726mm, height 1621mm",
+    "silhouette": "Sports car silhouette translated into an elevated crossover architecture",
+    "greenhouse": "Sloping rear flyline roof with gloss black window trim and tinted taillights",
+    "hoodCabin": "Clamshell aluminum hood wrapping around front fenders with integrated headlights",
+    "surfacing": "Black textured side blades along lower doors visually slimming vehicle profile",
+    "aeroPhilosophy": "Active front cooling air flaps and rear roof lip spoiler; Cd 0.35",
+    "wheels": "20-inch RS Spyder design satin black alloy wheels with red brake calipers",
+    "engineering": "Active all-wheel drive with Porsche Traction Management and air suspension"
+  }
+}

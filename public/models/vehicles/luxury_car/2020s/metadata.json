@@ -1,0 +1,17 @@
+{
+  "architecture": "luxury_car",
+  "era": "2020s",
+  "referenceVehicle": "Rolls-Royce Ghost (Post Opulence)",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/luxury_car/2020s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Post-Opulent monolithic architecture, length 5546mm, width 1978mm, wheelbase 3295mm",
+    "silhouette": "Seamless hand-welded 100% aluminum bodywork devoid of shutlines",
+    "greenhouse": "Effortless power-closing reverse coach doors with concealed umbrella chutes",
+    "hoodCabin": "Subtly illuminated Pantheon grille with 20 down-firing LEDs under header",
+    "surfacing": "Continuous single-piece aluminum coachwork from A-pillar to rear bumper",
+    "aeroPhilosophy": "Stately prow displacing air with effortless dignity; Cd 0.32",
+    "wheels": "21-inch forged wheels with weighted self-leveling RR center caps",
+    "engineering": "Architecture of Luxury aluminum spaceframe with Planar suspension damper system"
+  }
+}

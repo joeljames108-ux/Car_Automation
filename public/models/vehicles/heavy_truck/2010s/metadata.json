@@ -1,0 +1,17 @@
+{
+  "architecture": "heavy_truck",
+  "era": "2010s",
+  "referenceVehicle": "Mercedes-Benz Actros (MP4)",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/heavy_truck/2010s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Sculpted long-haul tractor, length 6000mm, height 3950mm, GigaSpace flat floor",
+    "silhouette": "Streamlined modern cab with digital camera mirrors replacing traditional glass mirrors",
+    "greenhouse": "MirrorCam digital camera wings projecting rear views onto internal A-pillar displays",
+    "hoodCabin": "Aerodynamically contoured front mask with illuminated Mercedes star and mesh grille",
+    "surfacing": "Sculpted cab corner air deflectors guiding turbulent airflow smoothly past cab",
+    "aeroPhilosophy": "Pioneering digital mirrors saving 1.5% fuel alone; Cd 0.47",
+    "wheels": "22.5-inch forged Alcoa Dura-Bright alloy wheels with Michelin X Line Energy tires",
+    "engineering": "Predictive Powertrain Control (PPC) using GPS topo data to optimize shifting"
+  }
+}

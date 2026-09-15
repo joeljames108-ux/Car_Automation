@@ -2,7 +2,7 @@ import React, { Suspense, lazy, memo } from "react";
 import { StageLoadingSkeleton } from "./ui/StageLoadingSkeleton";
 
 export type Stage =
-  | "command" | "engine" | "vehicle" | "exterior" | "interior"
+  | "command" | "engine" | "vehicle" | "interior"
   | "aero_studio" | "final_build"
   | "manufacturing" | "infotainment" | "rd" | "simulation" | "testing"
   | "race" | "stats" | "press" | "competitors"
@@ -35,8 +35,6 @@ const CommandCenter = lazy(() => import("./CommandCenter").then(m => ({ default:
 const ApexAIStudio = lazy(() => import("./ApexAIStudio").then(m => ({ default: m.ApexAIStudio })));
 const EngineDesigner = lazy(() => import("./EngineDesigner").then(m => ({ default: m.EngineDesigner })));
 const VehicleDesigner = lazy(() => import("./VehicleDesigner").then(m => ({ default: m.VehicleDesigner })));
-const ExteriorDesigner = lazy(() => import("./ExteriorDesigner").then(m => ({ default: m.ExteriorDesigner })));
-const ExteriorDesignerIntegration = lazy(() => import("./vehicleAssembly/exterior/ExteriorDesignerIntegration").then(m => ({ default: m.ExteriorDesignerIntegration })));
 const InteriorsDesigner = lazy(() => import("./InteriorsDesigner").then(m => ({ default: m.InteriorsDesigner })));
 const ManufacturingDesigner = lazy(() => import("./ManufacturingDesigner").then(m => ({ default: m.ManufacturingDesigner })));
 const InfotainmentDesigner = lazy(() => import("./InfotainmentDesigner").then(m => ({ default: m.InfotainmentDesigner })));
@@ -126,7 +124,6 @@ const StageSwitcherComponent: React.FC<StageSwitcherProps> = ({ stage, onSelectS
         {stage === "ai" && <ApexAIStudio />}
         {stage === "engine" && <EngineDesigner onSelectStage={(st) => onSelectStage(st as Stage)} />}
         {stage === "vehicle" && <VehicleDesigner initialSubTab="modular_builder" onSelectStage={(st) => onSelectStage(st as Stage)} />}
-        {stage === "exterior" && <ExteriorDesignerIntegration />}
         {stage === "aero_studio" && <AeroStudio onSelectStage={(st) => onSelectStage(st as Stage)} />}
         {stage === "interior" && <InteriorsDesigner initialSubTab="setup" onSelectStage={(st) => onSelectStage(st as Stage)} />}
         {stage === "final_build" && <FinalBuildStudio onSelectStage={(st) => onSelectStage(st as Stage)} />}

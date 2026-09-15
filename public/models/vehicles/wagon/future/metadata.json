@@ -1,0 +1,17 @@
+{
+  "architecture": "wagon",
+  "era": "future",
+  "referenceVehicle": "Polestar 5 Sport Turismo",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/wagon/future/vehicle.glb",
+  "designDNA": {
+    "proportions": "Bonded aluminum electric touring wagon, length 5050mm, wheelbase 3100mm",
+    "silhouette": "Seamless aerodynamic roofline with smart camera replacing rear window",
+    "greenhouse": "Panoramic glass roof spanning continuous from windshield to tailgate",
+    "hoodCabin": "Dual-blade LED headlights separating high and low beam signatures",
+    "surfacing": "Scandinavian reductive minimalism with aerospace aerodynamic precision",
+    "aeroPhilosophy": "Full-width rear aerodynamic light blade acting as air spoiler; Cd 0.21",
+    "wheels": "22-inch forged aerodynamic turbine wheels with flush spoke fairings",
+    "engineering": "Bespoke bonded aluminum platform with 884hp dual-motor 800V powertrain"
+  }
+}

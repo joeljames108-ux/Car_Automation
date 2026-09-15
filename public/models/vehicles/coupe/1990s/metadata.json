@@ -1,0 +1,17 @@
+{
+  "architecture": "coupe",
+  "era": "1990s",
+  "referenceVehicle": "Toyota Supra A80",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/coupe/1990s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Muscular sports coupe, length 4520mm, width 1810mm, wheelbase 2550mm",
+    "silhouette": "Coke-bottle waist with iconic tall integrated hoop rear wing",
+    "greenhouse": "Smooth rounded cockpit canopy with flush glass and hidden A-pillar frames",
+    "hoodCabin": "Long contoured aluminum hood with subtle center bulge for 2JZ engine",
+    "surfacing": "Organic aerodynamic sculpture with deep side scoops ahead of rear wheels",
+    "aeroPhilosophy": "Active front spoiler deploying at speed, functional rear wing; Cd 0.31",
+    "wheels": "17-inch 5-spoke staggered alloy wheels (9.5J rear) with massive brakes",
+    "engineering": "Four-wheel double wishbone suspension with forged aluminum upper arms"
+  }
+}

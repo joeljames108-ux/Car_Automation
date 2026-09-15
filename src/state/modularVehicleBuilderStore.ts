@@ -5,8 +5,18 @@ import {
   CommercialBodyType,
 } from "../sim/modularVehicle/types";
 import { EnginePosition } from "../sim/types";
+import {
+  VehicleArchitectureId,
+  VehicleEraId as LegacyVehicleEraId,
+} from "../sim/vehicleArchitecture/vehicleArchitectureTypes";
+import {
+  BodyArchitectureId,
+  VehicleEraId,
+  getCell,
+  isBodyGlbAvailable,
+} from "../sim/bodyArchitectureMatrix";
 
-export type VehicleModelCategory = VehicleBodyTypeId;
+export type VehicleModelCategory = VehicleBodyTypeId | VehicleArchitectureId | BodyArchitectureId;
 
 export type AssemblyStage =
   | "model_select" // Image 1: Front Page
@@ -229,11 +239,35 @@ export function getStageIndividualParts(stageId: AssemblyStage): ModularPartItem
   return MODULAR_CAR_PARTS.filter((p) => p.category === stageId);
 }
 
-export function getCompleteVehicleGlbPath(model: VehicleModelCategory | string): string {
+export function getCompleteVehicleGlbPath(
+  model: VehicleModelCategory | string,
+  era?: VehicleEraId | string
+): string {
   const m = String(model || "sedan").toLowerCase();
+
+  // 1. If both arch + era selected and /models/vehicles/{arch}/{era}/vehicle.glb exists on disk → that file
+  if (era) {
+    const e = String(era);
+    const cell = getCell(m, e);
+    if (cell && isBodyGlbAvailable(cell.architecture, cell.era)) {
+      return cell.glb;
+    }
+  }
+
+  // 2. Complete-car fallback map (existing models while library expands)
+  if (m === "gt3") return "/models/Car_GT3_Supercar_Complete.glb";
+  if (m === "f1" || m === "formula") return "/models/Car_F1_Complete.glb";
+  if (m === "hypercar" || m === "megawatt" || m === "divo") return "/models/Car_Hypercar_Complete.glb";
+  if (m === "supercar" || m === "track_special" || m === "race_car" || m === "ferrari" || m === "296_gtb") {
+    return "/models/Car_Supercar_Complete.glb";
+  }
+  if (m === "hatchback" || m === "hot_hatch" || m === "golf" || m === "microcar" || m === "city_car") {
+    return "/models/Car_Hatchback_Complete.glb";
+  }
   if (
     m === "crossover" ||
     m === "crossover_cuv" ||
+    m === "coupe_suv" ||
     m === "cuv" ||
     m === "compact_crossover" ||
     m === "cross_over" ||
@@ -243,23 +277,66 @@ export function getCompleteVehicleGlbPath(model: VehicleModelCategory | string):
   ) {
     return "/models/Car_Crossover_Complete.glb";
   }
+  if (m === "suv" || m === "offroad" || m === "offroad_4x4" || m === "range_rover") {
+    return "/models/Car_Suv_Complete.glb";
+  }
+  if (
+    m === "pickup_truck" ||
+    m === "pickup" ||
+    m === "heavy_truck" ||
+    m === "truck" ||
+    m === "truck_lorry" ||
+    m === "hilux"
+  ) {
+    return "/models/Car_HiLux_SR5_Complete.glb";
+  }
+  if (
+    m === "bus" ||
+    m === "bus_shuttle" ||
+    m === "transit_bus" ||
+    m === "van" ||
+    m === "cargo_van" ||
+    m === "mpv"
+  ) {
+    return "/models/Car_Bus_Complete.glb";
+  }
   if (
     m === "coupe" ||
+    m === "convertible" ||
+    m === "roadster" ||
+    m === "sports_car" ||
+    m === "grand_tourer" ||
+    m === "gt" ||
     m === "bentley" ||
     m === "gt_coupe" ||
     m === "sports_coupe" ||
-    m === "grand_tourer" ||
     m === "continental"
   ) {
     return "/models/Car_Coupe_Complete.glb";
   }
-  if (m === "suv") return "/models/Car_Suv_Complete.glb";
-  if (m === "f1" || m === "formula") return "/models/Car_F1_Complete.glb";
-  if (m === "hypercar" || m === "megawatt" || m === "divo") return "/models/Car_Hypercar_Complete.glb";
-  if (m === "bus" || m === "bus_shuttle" || m === "transit_bus") return "/models/Car_Bus_Complete.glb";
-  if (m === "gt3" || m === "supercar" || m === "track_special") return "/models/Car_GT3_Supercar_Complete.glb";
-  if (m === "pickup" || m === "pickup_truck" || m === "truck" || m === "hilux") return "/models/Car_HiLux_SR5_Complete.glb";
+  if (
+    m === "sedan" ||
+    m === "luxury_sedan" ||
+    m === "executive_sedan" ||
+    m === "limousine" ||
+    m === "station_wagon" ||
+    m === "wagon" ||
+    m === "muscle_car" ||
+    m === "shooting_brake" ||
+    m === "sport_wagon"
+  ) {
+    return "/models/Car_Sedan_Complete.glb";
+  }
+
   return "/models/Car_Sedan_Complete.glb";
+}
+
+export function getBodyArchitectureGlbPath(
+  arch?: BodyArchitectureId | string | null,
+  era?: VehicleEraId | string | null
+): string {
+  if (!arch) return "/models/Car_Sedan_Complete.glb";
+  return getCompleteVehicleGlbPath(arch, era || undefined);
 }
 
 // Return the final assembled engine or transmission GLB directly for zero-offset viewport mounting
@@ -416,6 +493,7 @@ export interface SubsystemOption {
 interface ModularVehicleBuilderState {
   // Step & Category
   selectedModel: VehicleModelCategory;
+  selectedEra: VehicleEraId;
   currentStage: AssemblyStage;
   installedStages: string[]; // List of installed stage IDs
   hiddenPartIds: string[]; // List of hidden part IDs for deep inspection
@@ -448,6 +526,8 @@ interface ModularVehicleBuilderState {
 
   // Actions
   setSelectedModel: (model: VehicleModelCategory) => void;
+  setSelectedEra: (era: VehicleEraId) => void;
+  setSelectedModelAndEra: (model: VehicleModelCategory, era: VehicleEraId) => void;
   setCurrentStage: (stage: AssemblyStage) => void;
   installCurrentStageAndNext: () => void;
   toggleStageInstall: (stageId: string) => void;
@@ -478,11 +558,14 @@ interface ModularVehicleBuilderState {
   setExplodedProgress: (p: number) => void;
   setIsXRay: (v: boolean) => void;
   setIsAutoRotate: (v: boolean) => void;
+  showAttachmentPoints: boolean;
+  setShowAttachmentPoints: (v: boolean) => void;
   resetToFrontPage: () => void;
 }
 
 export const useModularVehicleBuilderStore = create<ModularVehicleBuilderState>((set, get) => ({
   selectedModel: "sedan",
+  selectedEra: "2020s",
   currentStage: "model_select", // starts at Image 1: Front Page
   installedStages: [],
   hiddenPartIds: [],
@@ -510,6 +593,7 @@ export const useModularVehicleBuilderStore = create<ModularVehicleBuilderState>(
   explodedProgress: 0.0,
   isXRay: false,
   isAutoRotate: false,
+  showAttachmentPoints: false,
 
   setSelectedModel: (model) => {
     const isPickup = model === "pickup_truck" || (model as string) === "pickup" || (model as string) === "truck" || (model as string) === "hilux";
@@ -521,6 +605,11 @@ export const useModularVehicleBuilderStore = create<ModularVehicleBuilderState>(
     } else {
       set({ selectedModel: model });
     }
+  },
+  setSelectedEra: (era) => set({ selectedEra: era }),
+  setSelectedModelAndEra: (model, era) => {
+    get().setSelectedModel(model);
+    set({ selectedEra: era });
   },
   setCurrentStage: (stage) => set({ currentStage: stage }),
   setEnginePosition: (enginePosition) => set({ enginePosition }),
@@ -606,6 +695,7 @@ export const useModularVehicleBuilderStore = create<ModularVehicleBuilderState>(
   setExplodedProgress: (p) => set({ explodedProgress: Math.max(0, Math.min(1, p)) }),
   setIsXRay: (v) => set({ isXRay: v }),
   setIsAutoRotate: (v) => set({ isAutoRotate: v }),
+  setShowAttachmentPoints: (v) => set({ showAttachmentPoints: v }),
 
   resetToFrontPage: () =>
     set({

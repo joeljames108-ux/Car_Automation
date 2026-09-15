@@ -1,0 +1,17 @@
+{
+  "architecture": "formula",
+  "era": "2000s",
+  "referenceVehicle": "Ferrari F2004",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/formula/2000s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Screaming 3.0L V10 single-seater, length 4545mm, width 1796mm, height 959mm",
+    "silhouette": "Tightly pinched coke-bottle rear engine cover with complex aerodynamic flip-ups",
+    "greenhouse": "Driver cockpit with high cockpit sides for lateral head protection; carbon wheel",
+    "hoodCabin": "Drooping front nose cone supporting complex multi-tier front wing cascades",
+    "surfacing": "Chimney vents, louvers, and winglets proliferating across sidepod surfaces",
+    "aeroPhilosophy": "Peak complex vortex-generation era producing massive downforce at 19,000 RPM; Cd 0.80",
+    "wheels": "13-inch BBS forged magnesium wheels with grooved Bridgestone Potenza tires",
+    "engineering": "Carbon composite honeycomb monocoque with 053 naturally aspirated V10 engine"
+  }
+}

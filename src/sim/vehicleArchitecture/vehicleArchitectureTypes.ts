@@ -27,7 +27,92 @@ export type FutureVehicleCategory =
   | "gt3"
   | "prototype";
 
-export type VehicleCategory = CoreVehicleCategory | FutureVehicleCategory;
+// 7 Canonical Eras for Vehicle Architecture Selection (1970s -> Future)
+export type VehicleEraId =
+  | "1970s"
+  | "1980s"
+  | "1990s"
+  | "2000s"
+  | "2010s"
+  | "2020s"
+  | "future";
+
+// 24 Canonical Vehicle Architectures
+export type VehicleArchitectureId =
+  | "sedan"
+  | "hatchback"
+  | "coupe"
+  | "convertible"
+  | "roadster"
+  | "sports_car"
+  | "supercar"
+  | "hypercar"
+  | "grand_tourer"
+  | "muscle_car"
+  | "luxury_car"
+  | "limousine"
+  | "shooting_brake"
+  | "wagon"
+  | "crossover"
+  | "suv"
+  | "offroad_4x4"
+  | "pickup_truck"
+  | "heavy_truck"
+  | "van"
+  | "mpv"
+  | "bus"
+  | "race_formula"
+  | "gt3_racing";
+
+export type VehicleCategory = CoreVehicleCategory | FutureVehicleCategory | VehicleArchitectureId;
+
+export interface VehicleEraMetadata {
+  id: VehicleEraId;
+  label: string;
+  yearRange: string;
+  description: string;
+  badge: string;
+}
+
+export interface VehicleArchitectureMetadataDefinition {
+  id: VehicleArchitectureId;
+  name: string;
+  categoryGroup: "passenger" | "performance" | "utility" | "commercial" | "motorsport";
+  tagline: string;
+  description: string;
+  fallbackGlbPath: string;
+}
+
+export interface VehicleDesignDna {
+  silhouette: string;
+  keyFeatures: string[];
+  stylingLanguage: string;
+  aerodynamics: string;
+}
+
+export interface VehicleArchitectureEraEntry {
+  architectureId: VehicleArchitectureId;
+  eraId: VehicleEraId;
+  referenceVehicle: string;
+  designDna: VehicleDesignDna;
+  defaultDimensions: {
+    wheelbaseMm: number;
+    frontTrackMm: number;
+    rearTrackMm: number;
+    overallLengthMm: number;
+    overallWidthMm: number;
+    overallHeightMm: number;
+    groundClearanceMm: number;
+  };
+  aerodynamics: {
+    cd: number;
+    frontalAreaM2: number;
+  };
+  glbPath: string;
+  fallbackGlbPath: string;
+  isGlbAvailable: boolean;
+  bodyOnly: true;
+}
 
 export type BodyArchitectureClass =
   | "3_box_executive"

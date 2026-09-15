@@ -1,0 +1,17 @@
+{
+  "architecture": "offroad_4x4",
+  "era": "2020s",
+  "referenceVehicle": "Ford Bronco Badlands",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/offroad_4x4/2020s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Modern off-road legend, length 4412mm, width 1928mm, ground clearance 292mm",
+    "silhouette": "Modular removable roof panels and frameless doors stowing inside vehicle",
+    "greenhouse": "High-clearance removable modular hardtop with flip-up rear cargo glass",
+    "hoodCabin": "Front trail sights on fender corners serving as tie-down points for trail canoes",
+    "surfacing": "Bold BRONCO block-letter front grille with integrated round LED daytime rings",
+    "aeroPhilosophy": "Upright windshield, active front air shutters; Cd 0.42",
+    "wheels": "17-inch beadlock-capable wheels wrapped in 33-inch or 35-inch mud-terrain tires",
+    "engineering": "Independent front suspension with Bilstein position-sensitive dampers and front stabilizer disconnect"
+  }
+}

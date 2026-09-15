@@ -475,8 +475,30 @@ export const VEHICLE_ARCHITECTURE_REGISTRY: Record<CoreVehicleCategory, VehicleA
   },
 };
 
+import { normalizeArchitectureId } from "./architectureIdCompat";
+
 export function getVehicleArchitecture(category: VehicleCategory): VehicleArchitectureConfig {
-  return VEHICLE_ARCHITECTURE_REGISTRY[category as CoreVehicleCategory] || VEHICLE_ARCHITECTURE_REGISTRY.sedan;
+  if (category in VEHICLE_ARCHITECTURE_REGISTRY) {
+    return VEHICLE_ARCHITECTURE_REGISTRY[category as CoreVehicleCategory];
+  }
+  const norm = normalizeArchitectureId(category);
+  switch (norm) {
+    case "hatchback":
+      return VEHICLE_ARCHITECTURE_REGISTRY.hatchback;
+    case "crossover":
+      return VEHICLE_ARCHITECTURE_REGISTRY.crossover;
+    case "suv":
+    case "offroad_4x4":
+    case "pickup_truck":
+      return VEHICLE_ARCHITECTURE_REGISTRY.suv;
+    case "bus":
+    case "heavy_truck":
+    case "van":
+    case "mpv":
+      return VEHICLE_ARCHITECTURE_REGISTRY.bus;
+    default:
+      return VEHICLE_ARCHITECTURE_REGISTRY.sedan;
+  }
 }
 
 export function getAllVehicleArchitectures(): VehicleArchitectureConfig[] {

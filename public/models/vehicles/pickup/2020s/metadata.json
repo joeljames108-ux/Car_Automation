@@ -1,0 +1,17 @@
+{
+  "architecture": "pickup",
+  "era": "2020s",
+  "referenceVehicle": "Rivian R1T",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/pickup/2020s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Clean aerodynamic electric adventure pickup, length 5514mm, wheelbase 3450mm",
+    "silhouette": "Patented transverse Gear Tunnel storage pass-through behind rear passenger cab",
+    "greenhouse": "Frameless aerodynamic windows with full-glass panoramic roof and integrated roof rails",
+    "hoodCabin": "Front cross-cab full-width LED light bar with vertical stadium headlamps",
+    "surfacing": "Smooth composite body panels with powered tonneau cover rolling into bulkhead",
+    "aeroPhilosophy": "Active grille shutters, smooth composite flat underbelly, Cd 0.30",
+    "wheels": "20-inch all-terrain or 21-inch aero wheels with aerodynamic spoke inserts",
+    "engineering": "Quad-motor electric drive with 835hp and independent air suspension on all 4 corners"
+  }
+}

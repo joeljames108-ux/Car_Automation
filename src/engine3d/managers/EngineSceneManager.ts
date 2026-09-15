@@ -12,6 +12,7 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js';
+import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.js';
 
 // ============================================================================
 // 1. PERFORMANCE MONITOR & TELEMETRY TRACKER
@@ -333,10 +334,21 @@ export class EngineAssetManager {
 
   constructor() {
     this.gltfLoader = new GLTFLoader();
+    try {
+      this.gltfLoader.setMeshoptDecoder(MeshoptDecoder);
+    } catch {
+      // Meshopt fallback
+    }
     // Setup Draco decoder if available
-    const dracoLoader = new DRACOLoader();
-    dracoLoader.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.6/');
-    this.gltfLoader.setDRACOLoader(dracoLoader);
+    if (typeof window !== 'undefined') {
+      try {
+        const dracoLoader = new DRACOLoader();
+        dracoLoader.setDecoderPath('/draco/');
+        this.gltfLoader.setDRACOLoader(dracoLoader);
+      } catch {
+        // Draco fallback
+      }
+    }
   }
 
   public async loadGlbCached(url: string): Promise<THREE.Group> {

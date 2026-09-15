@@ -1,0 +1,17 @@
+{
+  "architecture": "hatchback",
+  "era": "1990s",
+  "referenceVehicle": "Honda Civic Type R (EK9)",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/hatchback/1990s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Clean aerodynamic bubble silhouette, length 4180mm, wheelbase 2620mm",
+    "silhouette": "Low wedge nose rising to rounded passenger greenhouse and rear roof wing",
+    "greenhouse": "Flush glass curvature, blacked-out B-pillars creating seamless profile",
+    "hoodCabin": "Low pointed hood with minimalist red Honda emblem and clear headlamps",
+    "surfacing": "Pure organic Japanese surfacing with zero extraneous cladding or garnishes",
+    "aeroPhilosophy": "High-downforce rear roof wing and deep front bumper lip; Cd 0.32",
+    "wheels": "15-inch Championship White 7-spoke alloy wheels with red brake calipers",
+    "engineering": "Seam-welded monocoque chassis with double-wishbone suspension on all 4 corners"
+  }
+}

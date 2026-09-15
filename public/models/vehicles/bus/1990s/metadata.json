@@ -1,0 +1,17 @@
+{
+  "architecture": "bus",
+  "era": "1990s",
+  "referenceVehicle": "Setra S 315 HD",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/bus/1990s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Prestigious German touring coach, length 12000mm, height 3620mm, wheelbase 6080mm",
+    "silhouette": "Distinct sweeping silver La Linea character curve along upper roofline",
+    "greenhouse": "Flush bonded glass with double-glazing ensuring whisper-quiet acoustic cabin",
+    "hoodCabin": "Smooth curved front clip with integrated high-power halogen projector lights",
+    "surfacing": "Galvanized steel framework with corrosion-resistant composite body panels",
+    "aeroPhilosophy": "Flush-mounted glass and curved front bumper skin; Cd 0.42",
+    "wheels": "22.5-inch polished alloy wheels with electronic braking system (EBS)",
+    "engineering": "Mercedes-Benz V8 turbo diesel mounted in rear cradle with retarder brake"
+  }
+}

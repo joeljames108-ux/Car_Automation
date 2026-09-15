@@ -1,0 +1,17 @@
+{
+  "architecture": "hatchback",
+  "era": "1970s",
+  "referenceVehicle": "Volkswagen Golf GTI Mk1",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/hatchback/1970s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Giugiaro folded-paper 2-box compact, length 3705mm, wheelbase 2400mm",
+    "silhouette": "Upright packaging with wheel-at-each-corner stance and minimal overhangs",
+    "greenhouse": "Straight upright pillars, rectangular rear hatch glass with rubber seal",
+    "hoodCabin": "Short horizontal hood, upright windshield, flat vertical tailgate",
+    "surfacing": "Geometric crisp creases along bodyside with red grille framing trim",
+    "aeroPhilosophy": "Black polyurethane chin spoiler reducing front underbody turbulence; Cd 0.40",
+    "wheels": "13-inch steel sport wheels with black plastic center caps",
+    "engineering": "Transverse front-engine, front-wheel-drive unibody with torsion beam rear axle"
+  }
+}

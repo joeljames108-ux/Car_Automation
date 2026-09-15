@@ -20,6 +20,14 @@ import React, { useMemo, useEffect, useRef } from "react";
 import { useFrame } from "@react-three/fiber";
 import { useGLTF } from "@react-three/drei";
 import * as THREE from "three";
+
+if (typeof window !== "undefined") {
+  try {
+    useGLTF.setDecoderPath("/draco/");
+  } catch {
+    // Fallback if unavailable
+  }
+}
 import { VehicleCategory } from "../../sim/vehicleArchitecture/vehicleArchitectureTypes";
 import { getVehicleArchitecture } from "../../sim/vehicleArchitecture/vehicleArchitectureRegistry";
 import { PaintFinishType } from "./GlbCarModel";

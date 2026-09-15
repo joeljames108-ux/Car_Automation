@@ -1,0 +1,17 @@
+{
+  "architecture": "wagon",
+  "era": "2000s",
+  "referenceVehicle": "BMW M5 Touring (E61)",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/wagon/2000s/vehicle.glb",
+  "designDNA": {
+    "proportions": "V10-powered super-wagon, length 4855mm, width 1846mm, wheelbase 2889mm",
+    "silhouette": "Bangle-era flame surfacing with aggressive flared arches and quad exhausts",
+    "greenhouse": "Expansive estate cargo area with split-opening rear tailgate window",
+    "hoodCabin": "Long sculpted hood covering high-revving 5.0L S85 V10 engine (8250 RPM)",
+    "surfacing": "Convex and concave surface interplay along doors into muscular rear quarter",
+    "aeroPhilosophy": "Functional rear underbody diffuser flanked by quad round chrome pipes; Cd 0.31",
+    "wheels": "19-inch M radial-spoke alloy wheels with high-performance compound tires",
+    "engineering": "7-speed SMG-III automated manual transmission with electronic M differential"
+  }
+}

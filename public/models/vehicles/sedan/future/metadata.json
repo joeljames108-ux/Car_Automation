@@ -1,0 +1,17 @@
+{
+  "architecture": "sedan",
+  "era": "future",
+  "referenceVehicle": "Audi Grandsphere Concept",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/sedan/future/vehicle.glb",
+  "designDNA": {
+    "proportions": "Monolithic grand lounge EV proportions, length 5350mm, wheelbase 3190mm",
+    "silhouette": "Sweeping one-box fastback silhouette with panoramic full-glass canopy",
+    "greenhouse": "B-pillarless coach door greenhouse with active smart opacity tinting",
+    "hoodCabin": "Short seamless aerodynamic nose merging directly into continuous glass windshield",
+    "surfacing": "Pure monolithic surface reduction with micro-creases and invisible sensor integration",
+    "aeroPhilosophy": "Morphing active aerodynamic rear boat-tail and virtual flow curtains; Cd 0.19",
+    "wheels": "23-inch aerodynamic turbine wheels with dynamic self-leveling aero discs",
+    "engineering": "Solid-state skateboard platform with Level 4 autonomous retractable cockpit"
+  }
+}

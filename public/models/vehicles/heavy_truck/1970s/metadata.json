@@ -1,0 +1,17 @@
+{
+  "architecture": "heavy_truck",
+  "era": "1970s",
+  "referenceVehicle": "Kenworth W900A",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/heavy_truck/1970s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Classic long-hood conventional semi-truck, length 7900mm, height 3900mm",
+    "silhouette": "Long square hood, sleeper cab behind driver, dual vertical chrome exhaust stacks",
+    "greenhouse": "Split two-piece flat glass windshield with exterior chrome sun visor and roof horns",
+    "hoodCabin": "Towering rectangular polished aluminum grille with external air cleaner canisters",
+    "surfacing": "Riveted aluminum hood and cab structure with dual round headlights on chrome stalks",
+    "aeroPhilosophy": "Upright bluff-body aerodynamics; Cd 0.70",
+    "wheels": "24.5-inch polished forged aluminum wheels on tandem rear drive axles",
+    "engineering": "Heavy-duty dual-channel steel frame with Caterpillar/Cummins big-bore diesel"
+  }
+}

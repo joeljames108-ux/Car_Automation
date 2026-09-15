@@ -1,0 +1,17 @@
+{
+  "architecture": "hypercar",
+  "era": "2000s",
+  "referenceVehicle": "Bugatti Veyron 16.4",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/hypercar/2000s/vehicle.glb",
+  "designDNA": {
+    "proportions": "400 km/h engineering monolith, length 4462mm, width 1998mm, wheelbase 2710mm",
+    "silhouette": "Distinctive dual-tone curving C-line along bodyside with horseshoe grille",
+    "greenhouse": "High-strength stainless steel greenhouse structure with thick acoustic glass",
+    "hoodCabin": "Polished aluminum horseshoe front grille, twin polished intake cowls above roof",
+    "surfacing": "Clean flowing luxury surfaces devoid of aggressive protruding aerodynamic wings",
+    "aeroPhilosophy": "Hydraulic suspension lowering, active rear wing acting as 0.68 Cd airbrake; Cd 0.36",
+    "wheels": "20-inch Michelin PAX run-flat system tires capable of 407 km/h continuous speed",
+    "engineering": "Quad-turbocharged 8.0L W16 engine mounted in carbon monocoque with 10 radiators"
+  }
+}

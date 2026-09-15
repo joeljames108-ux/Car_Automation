@@ -1,0 +1,17 @@
+{
+  "architecture": "wagon",
+  "era": "2020s",
+  "referenceVehicle": "Audi RS6 Avant (C8)",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/wagon/2020s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Radical widebody super-wagon, length 4995mm, width 1951mm (+80mm wider than A6)",
+    "silhouette": "Menacing slammed wagon stance with flared box-quattro arches and roof spoiler",
+    "greenhouse": "Low fastback roofline with black optics package and dark privacy glazing",
+    "hoodCabin": "Gloss black honeycomb Singleframe grille with Matrix LED laser headlights",
+    "surfacing": "Deeply chiseled side skirts and massive signature RS oval exhaust tailpipes",
+    "aeroPhilosophy": "RS roof spoiler generating real downforce, front air curtains; Cd 0.35",
+    "wheels": "22-inch 5-V-spoke trapezoid design forged wheels with 285/30 rubber",
+    "engineering": "Twin-turbo 4.0L V8 with 48V mild hybrid, all-wheel steering, and sport differential"
+  }
+}

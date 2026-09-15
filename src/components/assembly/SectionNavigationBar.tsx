@@ -168,7 +168,7 @@ export function SectionNavigationBar({
             const isUnlocked = stage.isUnlocked;
 
             return (
-              <SpringPill index={stage.index + 1} isCurrent={isCurrent}>
+              <SpringPill key={stage.id} index={stage.index + 1} isCurrent={isCurrent}>
               <button
                 key={stage.id}
                 ref={isCurrent ? activePillRef : null}

@@ -1,0 +1,17 @@
+{
+  "architecture": "shooting_brake",
+  "era": "1980s",
+  "referenceVehicle": "Lynx Eventer (Jaguar XJS)",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/shooting_brake/1980s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Bespoke British coachbuilt 2-door shooting brake, length 4765mm, wheelbase 2590mm",
+    "silhouette": "Elongated roofline over V12 grand tourer chassis into sleek estate tailgate",
+    "greenhouse": "Custom elongated rear side quarter glass with slim reinforced C-pillars",
+    "hoodCabin": "Endless hood covering 5.3L High-Efficiency V12 engine",
+    "surfacing": "Hand-crafted coachbuilt steel and composite roof seamlessly grafted onto body",
+    "aeroPhilosophy": "Long continuous roofline extending aerodynamic boundary layer; Cd 0.36",
+    "wheels": "15-inch Jaguar lattice alloy wheels with Pirelli P6 performance tires",
+    "engineering": "Rear seats fold completely flat yielding 1.8-meter long carpeted luggage deck"
+  }
+}

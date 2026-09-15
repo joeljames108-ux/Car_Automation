@@ -1,0 +1,17 @@
+{
+  "architecture": "bus",
+  "era": "future",
+  "referenceVehicle": "Proterra ZX5 Electric Bus",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/bus/future/vehicle.glb",
+  "designDNA": {
+    "proportions": "Carbon-composite electric transit bus, length 12350mm, height 3350mm, wheelbase 7200mm",
+    "silhouette": "Aerodynamic composite monocoque body with integrated mega-pack roof fairing",
+    "greenhouse": "Flush aerodynamic double-glazed window panels with integrated smart sensors",
+    "hoodCabin": "Seamless non-corrosive front clip with autonomous emergency braking sensors",
+    "surfacing": "Carbon-fiber-reinforced composite body structure immune to rust and fatigue",
+    "aeroPhilosophy": "Streamlined aerodynamic roof fairings housing up to 675 kWh battery; Cd 0.35",
+    "wheels": "22.5-inch lightweight alloy wheels with low rolling resistance transit tires",
+    "engineering": "DuoPower drivetrain with two electric motors delivering 550 peak horsepower"
+  }
+}

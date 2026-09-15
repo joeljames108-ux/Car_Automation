@@ -1,0 +1,17 @@
+{
+  "architecture": "crossover",
+  "era": "1980s",
+  "referenceVehicle": "Fiat Panda 4x4 (141A)",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/crossover/1980s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Giugiaro ultra-compact crossover, length 3410mm, width 1490mm, height 1460mm",
+    "silhouette": "Boxy upright micro-crossover with Steyr-Puch 4WD system and raised ride height",
+    "greenhouse": "Completely flat glass windows with exterior rain gutters and slim pillars",
+    "hoodCabin": "Asymmetric front grille with prominent stamped FIAT corporate slashes",
+    "surfacing": "Chunky black rubber protective bodyside rub strips and rock guards",
+    "aeroPhilosophy": "Flat vertical nose with minimal aerodynamic concessions; Cd 0.42",
+    "wheels": "13-inch steel disc wheels wrapped in Pirelli Winter 160 knobby tires",
+    "engineering": "Steyr-Puch mechanical 4WD system with ultra-low first gear crawl ratio"
+  }
+}

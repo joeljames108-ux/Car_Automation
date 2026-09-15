@@ -1,0 +1,17 @@
+{
+  "architecture": "sports_car",
+  "era": "2000s",
+  "referenceVehicle": "Porsche 911 GT3 (997)",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/sports_car/2000s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Track homologation rear-engine sports car, length 4465mm, wheelbase 2355mm",
+    "silhouette": "Classic 911 teardrop silhouette fitted with dual-plane fixed aerodynamic rear wing",
+    "greenhouse": "Lightweight glass with minimal acoustic insulation and optional half roll cage",
+    "hoodCabin": "Front bumper air vent extracting radiator air upward ahead of front hood",
+    "surfacing": "Muscular rear fenders, center-exit dual polished stainless exhaust outlets",
+    "aeroPhilosophy": "Flat underfloor with rear diffuser generating negative lift on both axles; Cd 0.32",
+    "wheels": "19-inch GT3 design center-lock or 5-lug forged wheels with Michelin Cup tires",
+    "engineering": "Dry-sump Mezger racing engine mounted in seam-welded steel monocoque"
+  }
+}

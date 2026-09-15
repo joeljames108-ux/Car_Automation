@@ -8,6 +8,8 @@
 
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js';
+import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.js';
 import type { Engine3DComponentManifest, Engine3DComponentType } from '../types';
 import type { EngineConfig, EngineLayout, TransmissionType } from '../../sim/types';
 import { globalMaterialLibrary } from '../materials/pbrMaterialSystem';
@@ -291,12 +293,28 @@ export function buildProceduralFallbackMesh(
 
 export class GlbAssetCache {
   private static instance: GlbAssetCache;
-  private loader: GLTFLoader = new GLTFLoader();
+  private loader: GLTFLoader;
   private cache: Map<string, GlbCacheEntry> = new Map();
   private inFlightLoads: Map<string, Promise<THREE.Group>> = new Map();
   private progressListeners: Set<AssetProgressListener> = new Set();
 
-  private constructor() {}
+  private constructor() {
+    this.loader = new GLTFLoader();
+    try {
+      this.loader.setMeshoptDecoder(MeshoptDecoder);
+    } catch {
+      // Meshopt fallback
+    }
+    if (typeof window !== 'undefined') {
+      try {
+        const draco = new DRACOLoader();
+        draco.setDecoderPath('/draco/');
+        this.loader.setDRACOLoader(draco);
+      } catch {
+        // Draco fallback
+      }
+    }
+  }
 
   public static getInstance(): GlbAssetCache {
     if (!GlbAssetCache.instance) {

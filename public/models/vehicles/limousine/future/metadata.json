@@ -1,0 +1,17 @@
+{
+  "architecture": "limousine",
+  "era": "future",
+  "referenceVehicle": "Bentley EXP 100 GT Limousine",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/limousine/future/vehicle.glb",
+  "designDNA": {
+    "proportions": "5.8-meter illuminated composite grand limousine, length 5800mm, width 2040mm",
+    "silhouette": "Sweeping aerodynamic fastback with massive two-meter-wide upward scissor coach doors",
+    "greenhouse": "Full glass canopy embedded with interactive light prisms and digital displays",
+    "hoodCabin": "Illuminated crystal matrix front grille that animates when approached",
+    "surfacing": "Seamless copper and aluminum infused body with sustainable 5,000-year-old riverwood",
+    "aeroPhilosophy": "Active aero wheels and morphing rear diffuser expanding at speed; Cd 0.21",
+    "wheels": "24-inch intelligent wheels adjusting tire contact patch for weather conditions",
+    "engineering": "Autonomous AI chauffeur cabin with biometric seating monitoring passenger vitals"
+  }
+}

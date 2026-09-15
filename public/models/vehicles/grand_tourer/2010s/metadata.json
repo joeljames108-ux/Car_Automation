@@ -1,0 +1,17 @@
+{
+  "architecture": "grand_tourer",
+  "era": "2010s",
+  "referenceVehicle": "Ferrari F12berlinetta",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/grand_tourer/2010s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Front-mid V12 fastback GT, length 4618mm, width 1942mm, wheelbase 2720mm",
+    "silhouette": "Scattered light aerodynamic sculpture with truncated Kammback rear tail",
+    "greenhouse": "Compact cabin with fast-sloping rear glass hatch and circular LED tail lamps",
+    "hoodCabin": "Patented Aero Bridge channeling air off hood down the body flanks",
+    "surfacing": "Dramatic sculpted bodyside hollows directing airflow to rear wheel extractors",
+    "aeroPhilosophy": "Aero Bridge and Active Brake Cooling ducts yielding 123kg downforce; Cd 0.299",
+    "wheels": "20-inch forged lightweight wheels with 315-section Michelin rear tires",
+    "engineering": "Spaceframe chassis made of 12 different aluminum alloys with 20% higher stiffness"
+  }
+}

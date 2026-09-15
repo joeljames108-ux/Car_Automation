@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback, useMemo } from "react";
 import {
   Cog, Car, Activity, Flag, BarChart3, Save, FolderOpen, RotateCcw,
-  Sofa, Factory, FlaskConical, Ruler, Paintbrush, Wind, Newspaper,
+  Sofa, Factory, FlaskConical, Ruler, Wind, Newspaper,
   Monitor, Microscope, LayoutDashboard, Trophy, Warehouse, GitCompare,
   TrendingUp, ShieldCheck, DollarSign, Cpu, GitBranch,
   LayoutGrid, Bell, SlidersHorizontal, Box, Truck, Volume2, Gauge, Navigation
@@ -76,7 +76,6 @@ const STAGES: StageItem[] = [
   { id: "manufacturing", label: "Manufacturing", icon: <Factory size={14} />, category: "engineering" },
 
   // --- Design Studios Hub ---
-  { id: "exterior", label: "🎨 Exterior Design Studio", icon: <Paintbrush size={14} />, category: "studios" },
   { id: "transmission3d", label: "3D Transmission Studio", icon: <Cog size={14} />, category: "studios" },
   { id: "track_layout", label: "Track Layouts Studio", icon: <Navigation size={14} />, category: "studios" },
   { id: "f1_constructor", label: "🏎️ F1 Constructor Studio", icon: <Flag size={14} />, category: "studios" },

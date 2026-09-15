@@ -1,0 +1,17 @@
+{
+  "architecture": "convertible",
+  "era": "2010s",
+  "referenceVehicle": "Jaguar F-Type V8 R Convertible",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/convertible/2010s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Muscular British open GT, length 4470mm, width 1923mm, wheelbase 2622mm",
+    "silhouette": "Sculpted feline haunches over rear wheels, aggressive forward grille opening",
+    "greenhouse": "Acoustically lined multi-layer fabric roof stowing flush without tonneau cover",
+    "hoodCabin": "Clamshell aluminum hood with twin functional heat extraction vents",
+    "surfacing": "Sweeping character lines carved by aerodynamic wind tunnel airflow",
+    "aeroPhilosophy": "Deployable active rear wing rising at 60 mph, quad outboard exhausts; Cd 0.36",
+    "wheels": "20-inch forged diamond-turned alloy wheels with red brake calipers",
+    "engineering": "Riveted and bonded all-aluminum monocoque chassis structure"
+  }
+}

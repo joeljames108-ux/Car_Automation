@@ -1,0 +1,17 @@
+{
+  "architecture": "gt3",
+  "era": "1970s",
+  "referenceVehicle": "Porsche 911 Carrera RSR 3.0",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/gt3/1970s/vehicle.glb",
+  "designDNA": {
+    "proportions": "FIA Group 4 GT racing weapon, length 4235mm, width 1775mm, wheelbase 2272mm",
+    "silhouette": "Extravagant tea-tray rear spoiler with riveted widebody fiberglass wheel flares",
+    "greenhouse": "Stripped interior with aluminum roll cage, lightweight bucket seat, fire system",
+    "hoodCabin": "Front bumper with massive central oil cooler opening and quick-fill fuel caps",
+    "surfacing": "Exposed bolted-on fiberglass fender flares over ultra-wide racing slicks",
+    "aeroPhilosophy": "Tea-tray spoiler stabilizing lightweight rear-engine chassis; Cd 0.44",
+    "wheels": "15-inch center-lock Fuchs wheels with massive 14-inch wide rear racing slicks",
+    "engineering": "Naturally aspirated 3.0L twin-plug flat-six producing 330hp at 8000 RPM"
+  }
+}

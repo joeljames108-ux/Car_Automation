@@ -1,0 +1,17 @@
+{
+  "architecture": "sedan",
+  "era": "2020s",
+  "referenceVehicle": "Honda Civic Sedan",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/sedan/2020s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Modern compact executive sedan proportions, length 4674mm, height 1415mm, wheelbase 2735mm",
+    "silhouette": "Clean fast-roof three-box sedan profile, elongated hood, low horizontal beltline",
+    "greenhouse": "Expansive glasshouse with pulled-back A-pillars, thin pillars, and low cowl for panoramic visibility",
+    "hoodCabin": "Low flat hood line with cab pushed back, crisp horizontal character line running nose-to-tail",
+    "surfacing": "Clean, restrained aerodynamic surfacing with wide horizontal grille opening and integrated air dam",
+    "aeroPhilosophy": "Full underbody aero cladding, functional front bumper air curtains, trailing trunk lip spoiler; Cd 0.26",
+    "wheels": "18-inch 5-spoke sport alloy wheels with low-rolling-resistance aerodynamic styling",
+    "engineering": "Advanced Compatibility Engineering (ACE) body structure, high-strength structural adhesives, aluminum hood"
+  }
+}

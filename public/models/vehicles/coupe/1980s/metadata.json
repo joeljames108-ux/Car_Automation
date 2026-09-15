@@ -1,0 +1,17 @@
+{
+  "architecture": "coupe",
+  "era": "1980s",
+  "referenceVehicle": "Audi Quattro",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/coupe/1980s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Box-flared rally homologation coupe, length 4404mm, wheelbase 2524mm",
+    "silhouette": "Chiseled wedge profile with sharp raked C-pillar and trunk lip spoiler",
+    "greenhouse": "Rectangular aerodynamic glasshouse with flush rubber window trims",
+    "hoodCabin": "Low flat hood with black grille housing quad rectangular headlamps",
+    "surfacing": "Famous boxy blister fender arches stamped in steel over front and rear wheels",
+    "aeroPhilosophy": "Smooth front underbody tray and rear rubber trunk lip spoiler; Cd 0.37",
+    "wheels": "15-inch Ronal multi-spoke rally alloys with 215/50 performance rubber",
+    "engineering": "Longitudinal turbocharged engine driving full-time permanent all-wheel drive"
+  }
+}

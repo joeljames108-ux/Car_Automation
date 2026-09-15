@@ -1,0 +1,17 @@
+{
+  "architecture": "grand_tourer",
+  "era": "2020s",
+  "referenceVehicle": "Bentley Continental GT Mulliner",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/grand_tourer/2020s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Grand touring flagship, length 4850mm, width 1954mm, wheelbase 2851mm",
+    "silhouette": "Authoritative sweeping powerline running from front lights to muscular haunches",
+    "greenhouse": "Acoustic laminated glasshouse with chrome beltline trim and jewel-cut lighting",
+    "hoodCabin": "Double Diamond matrix front grille flanked by precision cut-crystal LED matrix lamps",
+    "surfacing": "Superformed aluminum body panels creating crisp, sharp feature lines",
+    "aeroPhilosophy": "Deployable active rear wing, smooth underfloor aerodynamic belly trays; Cd 0.29",
+    "wheels": "22-inch Mulliner exclusive wheels with floating self-leveling Bentley B badges",
+    "engineering": "48V electronic active roll bars with three-chamber adaptive air suspension"
+  }
+}

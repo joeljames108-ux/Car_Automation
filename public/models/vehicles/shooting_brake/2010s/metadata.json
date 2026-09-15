@@ -1,0 +1,17 @@
+{
+  "architecture": "shooting_brake",
+  "era": "2010s",
+  "referenceVehicle": "Ferrari FF",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/shooting_brake/2010s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Pininfarina four-wheel-drive V12 shooting brake, length 4907mm, width 1953mm",
+    "silhouette": "Fast-sloping estate roofline over full 4-passenger grand touring chassis",
+    "greenhouse": "Full 4-seat interior with generous rear headroom and fold-down 800L cargo capacity",
+    "hoodCabin": "Enormous sculpted hood with laughing-shark egg-crate front grille",
+    "surfacing": "Sensual flanks channeling airflow smoothly over rear wheel arches into tailgate",
+    "aeroPhilosophy": "Rear bumper air vents extracting high-pressure air from wheel wells; Cd 0.34",
+    "wheels": "20-inch forged lightweight wheels with third-generation carbon-ceramic brakes",
+    "engineering": "Patented 4RM four-wheel drive system with dual front transmission gearbox"
+  }
+}

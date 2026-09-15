@@ -1,0 +1,17 @@
+{
+  "architecture": "sedan",
+  "era": "1990s",
+  "referenceVehicle": "BMW 5 Series (E39)",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/sedan/1990s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Executive touring proportions, length 4775mm, wheelbase 2830mm, athletic stance",
+    "silhouette": "Sculpted organic profile balancing muscular wheel arches with timeless elegance",
+    "greenhouse": "Flush aerodynamic glasshouse with smooth rubber acoustic seals, classic C-pillar kink",
+    "hoodCabin": "Gently arched aluminum hood transitioning smoothly into raked A-pillars",
+    "surfacing": "Taut muscular curvature with tight, uniform 3.5mm panel gaps",
+    "aeroPhilosophy": "Full underbody engine belly pan, smooth exterior mirrors; Cd 0.28",
+    "wheels": "17-inch parallel-spoke lightweight alloys flush with fenders",
+    "engineering": "Extensive aluminum subframes and multi-link suspension reducing unsprung mass"
+  }
+}

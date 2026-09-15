@@ -1,0 +1,17 @@
+{
+  "architecture": "convertible",
+  "era": "1990s",
+  "referenceVehicle": "Porsche 911 Carrera Cabriolet (993)",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/convertible/1990s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Rear-engine cabriolet silhouette, length 4260mm, wheelbase 2272mm",
+    "silhouette": "Curvaceous voluptuous rear fenders with tailored electro-hydraulic fabric top",
+    "greenhouse": "Tailored fabric roof with glass rear window matching coupe roofline when up",
+    "hoodCabin": "Sloping front fenders with integrated polyellipsoid headlights",
+    "surfacing": "Sensual organic curves with smooth integrated body-color bumpers",
+    "aeroPhilosophy": "Speed-sensitive deployable rear engine lid spoiler; Cd 0.34",
+    "wheels": "17-inch Cup design pressure-cast light alloy wheels",
+    "engineering": "Reinforced floor sills, A-pillars, and multi-link rear axle in aluminum subframe"
+  }
+}

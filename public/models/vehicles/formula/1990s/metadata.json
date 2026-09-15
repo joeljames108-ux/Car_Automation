@@ -1,0 +1,17 @@
+{
+  "architecture": "formula",
+  "era": "1990s",
+  "referenceVehicle": "Williams FW14B (Active Suspension F1)",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/formula/1990s/vehicle.glb",
+  "designDNA": {
+    "proportions": "High-tech Formula 1 champion, length 4450mm, width 2130mm, height 950mm",
+    "silhouette": "Adrian Newey aerodynamic sculpture with computer-controlled active hydraulic suspension",
+    "greenhouse": "Open driver cockpit with ergonomic steering wheel and paddle-shift levers",
+    "hoodCabin": "Anhedral curved front nose cone directing undisturbed air under the chassis",
+    "surfacing": "Sculpted sidepod packaging tightly shrink-wrapped around naturally aspirated V10",
+    "aeroPhilosophy": "Active ride height maintaining perfect aerodynamic platform at all speeds; Cd 0.72",
+    "wheels": "13-inch OZ Racing magnesium wheels with yellow-lettered Goodyear race tires",
+    "engineering": "Fly-by-wire active suspension, traction control, semi-automatic gearbox, Renault V10"
+  }
+}

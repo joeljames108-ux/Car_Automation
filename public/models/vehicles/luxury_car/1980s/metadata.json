@@ -1,0 +1,17 @@
+{
+  "architecture": "luxury_car",
+  "era": "1980s",
+  "referenceVehicle": "Mercedes-Benz 560SEL (W126)",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/luxury_car/1980s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Bruno Sacco flagship luxury sedan, length 5160mm, wheelbase 3075mm",
+    "silhouette": "Low horizontal beltline, timeless clean proportions, authoritative road presence",
+    "greenhouse": "Generous rear door cutouts for effortless chauffeured passenger ingress",
+    "hoodCabin": "Wide horizontal chrome star grille flanked by flush aerodynamic headlamps",
+    "surfacing": "Contrasting ribbed polyurethane Sacco planks protecting lower doors",
+    "aeroPhilosophy": "Pioneering aerodynamic luxury sedan design; low drag Cd 0.36",
+    "wheels": "15-inch 15-hole light alloy wheels with premium Michelin touring tires",
+    "engineering": "High-strength steel monocoque with front crumple zones and driver airbag"
+  }
+}

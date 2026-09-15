@@ -1,0 +1,17 @@
+{
+  "architecture": "hypercar",
+  "era": "1970s",
+  "referenceVehicle": "Porsche 917 Living Legend tribute",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/hypercar/1970s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Le Mans endurance prototype silhouette, length 4780mm, width 1880mm, height 940mm",
+    "silhouette": "Ultra-low aerodynamic envelope with voluptuous wheel humps and long tail",
+    "greenhouse": "Tiny bubble canopy perched in center between towering wheel fenders",
+    "hoodCabin": "Forward-leaning wedge front with exposed cooling fan in rear engine deck",
+    "surfacing": "Hand-laid fiberglass composite skin draped over ultra-lightweight tubular spaceframe",
+    "aeroPhilosophy": "Long-tail (Langheck) low-drag bodywork enabling 240+ mph on Mulsanne; Cd 0.32",
+    "wheels": "15-inch magnesium center-lock wheels with 15-inch wide rear racing slicks",
+    "engineering": "Lightweight aluminum tube chassis pressurized with gas to detect chassis cracks"
+  }
+}

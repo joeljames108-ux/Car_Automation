@@ -1,0 +1,17 @@
+{
+  "architecture": "sports_car",
+  "era": "2010s",
+  "referenceVehicle": "Chevrolet Corvette Stingray (C7)",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/sports_car/2010s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Front-engine transaxle sports car, length 4493mm, width 1877mm, wheelbase 2710mm",
+    "silhouette": "Aggressive angular fastback with sharp origami creases and quad center exhausts",
+    "greenhouse": "Removable carbon fiber roof panel stowing in rear hatchback area",
+    "hoodCabin": "Carbon fiber hood with functional forward air extractor duct",
+    "surfacing": "Sharp character lines with functional brake ducts and transmission cooling air intakes",
+    "aeroPhilosophy": "Engine cooling air exhausted through hood reducing front aerodynamic lift; Cd 0.33",
+    "wheels": "18-inch front / 19-inch rear 5-split-spoke painted aluminum wheels",
+    "engineering": "Hydroformed aluminum spaceframe with carbon-composite floorboards and transverse leaf springs"
+  }
+}

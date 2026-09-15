@@ -1,0 +1,17 @@
+{
+  "architecture": "coupe",
+  "era": "2010s",
+  "referenceVehicle": "BMW M4 GTS (F82)",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/coupe/2010s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Track-focused widebody coupe, length 4698mm, wheelbase 2812mm",
+    "silhouette": "Aggressive aerodynamic stance with adjustable carbon front splitter and rear wing",
+    "greenhouse": "Carbon fiber reinforced plastic (CFRP) roof with central aerodynamic channel",
+    "hoodCabin": "CFRP power-dome hood with large functional heat extraction vent",
+    "surfacing": "Sculpted M character lines with air curtains in front bumper and flared arches",
+    "aeroPhilosophy": "Acid Orange adjustable carbon front splitter and CNC-milled rear wing; Cd 0.34",
+    "wheels": "19-inch front / 20-inch rear forged wheels with water injection cooling",
+    "engineering": "CFRP roof, hood, trunk, and driveshaft reducing curb weight to 1510kg"
+  }
+}

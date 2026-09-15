@@ -1,0 +1,17 @@
+{
+  "architecture": "wagon",
+  "era": "1990s",
+  "referenceVehicle": "Audi RS2 Avant",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/wagon/1990s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Porsche-engineered high-performance super-wagon, length 4510mm, wheelbase 2597mm",
+    "silhouette": "Compact sports estate with aggressive front bumper and Porsche Cup wheels",
+    "greenhouse": "Tinted estate glass with roof rails and full-width red rear reflector bar",
+    "hoodCabin": "Deep front air dam with massive intercooler and brake cooling air ducts",
+    "surfacing": "Clean Audi 80 Avant body modified by Porsche with 993 mirrors and indicators",
+    "aeroPhilosophy": "Lowered aerodynamic sport suspension and front splitter; Cd 0.34",
+    "wheels": "17-inch Porsche Cup design alloy wheels with Brembo 4-piston calipers",
+    "engineering": "Porsche-tuned 2.2L inline-5 turbo producing 315hp with permanent Quattro AWD"
+  }
+}

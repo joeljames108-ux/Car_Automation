@@ -1,0 +1,17 @@
+{
+  "architecture": "hypercar",
+  "era": "1980s",
+  "referenceVehicle": "Porsche 959",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/hypercar/1980s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Technological widebody tour-de-force, length 4260mm, width 1840mm, wheelbase 2272mm",
+    "silhouette": "Aerodynamically smoothed 911 profile with full-width integrated rear wing",
+    "greenhouse": "Flush aerodynamic windshield and side windows eliminating turbulence",
+    "hoodCabin": "Smooth composite front nose with integrated aerodynamic headlamps",
+    "surfacing": "Kevlar and aluminum hybrid composite panels with seamless flared wheel arches",
+    "aeroPhilosophy": "Full underbody aerodynamic cladding eliminating all aerodynamic lift; Cd 0.31",
+    "wheels": "17-inch hollow-spoke cast magnesium wheels with built-in tire pressure monitoring",
+    "engineering": "Sequentially turbocharged flat-six with computer-controlled PSK all-wheel drive"
+  }
+}

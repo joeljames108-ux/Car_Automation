@@ -1,0 +1,17 @@
+{
+  "architecture": "grand_tourer",
+  "era": "1990s",
+  "referenceVehicle": "Aston Martin DB7",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/grand_tourer/1990s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Ian Callum masterwork, length 4631mm, width 1820mm, wheelbase 2591mm",
+    "silhouette": "Timeless British GT elegance: endless hood, swept cabin, voluptuous rear hips",
+    "greenhouse": "Slim chrome-accented greenhouse tapering smoothly into rounded rear deck",
+    "hoodCabin": "Classic Aston Martin horizontal slat grille with side fender air gills",
+    "surfacing": "Sensual undulating surfaces sculpted to catch light along the bodyside",
+    "aeroPhilosophy": "Smooth continuous curvature along flanks into gentle decklid spoiler; Cd 0.34",
+    "wheels": "18-inch multi-spoke painted alloy wheels with vented disc brakes",
+    "engineering": "Steel semi-monocoque chassis with composite front fenders and composite trunk"
+  }
+}

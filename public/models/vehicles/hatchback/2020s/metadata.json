@@ -1,0 +1,17 @@
+{
+  "architecture": "hatchback",
+  "era": "2020s",
+  "referenceVehicle": "Toyota GR Yaris",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/hatchback/2020s/vehicle.glb",
+  "designDNA": {
+    "proportions": "WRC homologation special 3-door silhouette, length 3995mm, width 1805mm",
+    "silhouette": "Low sloping carbon roof (-95mm at rear) channeling air to rear wing",
+    "greenhouse": "Frameless doors with steep rear glass rake and black pillar trims",
+    "hoodCabin": "Aluminum hood, doors, and tailgate; aggressive intercooler intake mouth",
+    "surfacing": "Massive flared rear wheel arches providing clearance for rally suspension",
+    "aeroPhilosophy": "Rally-optimized airflow directed into cooling ducts and rear downforce; Cd 0.35",
+    "wheels": "18-inch BBS forged lightweight rally wheels with Michelin Pilot Sport 4S",
+    "engineering": "Dedicated platform hybrid combining GA-B front with GA-C double wishbone rear"
+  }
+}

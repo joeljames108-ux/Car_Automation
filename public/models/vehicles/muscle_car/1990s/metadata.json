@@ -1,0 +1,17 @@
+{
+  "architecture": "muscle_car",
+  "era": "1990s",
+  "referenceVehicle": "Chevrolet Camaro SS (4th Gen)",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/muscle_car/1990s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Low-slung aerodynamic wedge muscle car, length 4910mm, wheelbase 2568mm",
+    "silhouette": "Extremely steep 68-degree windshield rake angle with integrated rear spoiler",
+    "greenhouse": "Tinted glass hatchback with integrated black roof bar and optional T-tops",
+    "hoodCabin": "Composite hood with prominent functional ram-air induction scoop for LS1 V8",
+    "surfacing": "Sleek pointed front nose with composite front fenders immune to parking dings",
+    "aeroPhilosophy": "Aggressive low frontal area, raised rear decklid spoiler; Cd 0.33",
+    "wheels": "17-inch 5-spoke ZR1-style aluminum wheels with 275/40 performance tires",
+    "engineering": "F-body platform with short-long arm front suspension and torque arm live rear axle"
+  }
+}

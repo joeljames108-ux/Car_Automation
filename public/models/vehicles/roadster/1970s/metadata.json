@@ -1,0 +1,17 @@
+{
+  "architecture": "roadster",
+  "era": "1970s",
+  "referenceVehicle": "Triumph Spitfire 1500",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/roadster/1970s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Ultra-compact British roadster, length 3780mm, height 1205mm, wheelbase 2110mm",
+    "silhouette": "Low swooping front bonnet, tiny overhangs, twin cockpit cowl styling",
+    "greenhouse": "Low-cut frameless windscreen with polished stainless steel top header",
+    "hoodCabin": "Full front clamshell bonnet hinging forward from the front bumper",
+    "surfacing": "Michelotti Italian styled body curves over separate steel ladder chassis",
+    "aeroPhilosophy": "Low frontal area compensating for modest engine displacement; Cd 0.43",
+    "wheels": "13-inch stamped steel wheels with bright chrome trim rings",
+    "engineering": "Separate backbone steel frame chassis with swing-axle rear transverse leaf spring"
+  }
+}

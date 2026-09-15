@@ -1,0 +1,17 @@
+{
+  "architecture": "suv",
+  "era": "1990s",
+  "referenceVehicle": "Ford Explorer (1st Gen)",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/suv/1990s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Family adventure SUV pioneer, length 4681mm, width 1783mm, wheelbase 2842mm",
+    "silhouette": "Integrated aerodynamic front fascia replacing brutal truck utility for suburban life",
+    "greenhouse": "Large rectangular glass windows with black pillar appliqués creating cohesive look",
+    "hoodCabin": "Contoured front hood leading to integrated egg-crate grille and rectangular lights",
+    "surfacing": "Subtle bodyside moldings and color-keyed wheel lip moldings",
+    "aeroPhilosophy": "Rounded corner radii reducing wind noise on interstate travel; Cd 0.42",
+    "wheels": "15-inch teardrop design cast aluminum wheels with Goodyear Wrangler tires",
+    "engineering": "Twin-Traction Beam independent front suspension with push-button Touch Drive 4x4"
+  }
+}

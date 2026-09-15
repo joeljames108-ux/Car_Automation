@@ -1,0 +1,17 @@
+{
+  "architecture": "shooting_brake",
+  "era": "1970s",
+  "referenceVehicle": "Volvo 1800ES",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/shooting_brake/1970s/vehicle.glb",
+  "designDNA": {
+    "proportions": "2-door sports wagon shooting brake, length 4385mm, wheelbase 2450mm",
+    "silhouette": "Sleek low sports coupe front tapering into frameless glass rear tailgate",
+    "greenhouse": "Iconic frameless all-glass tailgate window with curved side chrome beltline kick",
+    "hoodCabin": "Low sloping hood leading to classic egg-crate chrome front grille",
+    "surfacing": "Swedish steel sheetmetal with horizontal bodyside chrome rub strip",
+    "aeroPhilosophy": "Smooth continuous roofline into clean Kamm-tail glass detachment; Cd 0.41",
+    "wheels": "15-inch steel wheels with chrome hubcaps and trim beauty rings",
+    "engineering": "Steel unibody with four-wheel disc brakes and electronic fuel injection"
+  }
+}

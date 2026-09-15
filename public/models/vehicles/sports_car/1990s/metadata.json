@@ -1,0 +1,17 @@
+{
+  "architecture": "sports_car",
+  "era": "1990s",
+  "referenceVehicle": "Honda NSX (NA1)",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/sports_car/1990s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Low cab-forward mid-engine sports car, length 4405mm, height 1170mm, wheelbase 2530mm",
+    "silhouette": "F-16 fighter jet canopy inspiration with contrasting black roof and integrated rear wing",
+    "greenhouse": "Panoramic 311-degree visibility canopy with slim ultra-high-strength steel pillars",
+    "hoodCabin": "Extremely low aluminum nose with retractable pop-up headlamps",
+    "surfacing": "Ayrton Senna tuned ergonomics: pure functional aerodynamic elegance",
+    "aeroPhilosophy": "Long tail aerodynamic package creating true high-speed downforce; Cd 0.32",
+    "wheels": "15-inch front / 16-inch rear forged alloy wheels with four-channel ABS",
+    "engineering": "World first all-aluminum monocoque chassis saving 200kg over equivalent steel"
+  }
+}

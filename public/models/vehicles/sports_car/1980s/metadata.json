@@ -1,0 +1,17 @@
+{
+  "architecture": "sports_car",
+  "era": "1980s",
+  "referenceVehicle": "Mazda RX-7 (FC3S)",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/sports_car/1980s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Crisp wedge front-mid rotary sports car, length 4315mm, wheelbase 2430mm",
+    "silhouette": "Clean sloping hood with pop-up headlights leading to wraparound glass rear hatch",
+    "greenhouse": "Aerodynamic glass bubble hatch offering excellent 360-degree driver visibility",
+    "hoodCabin": "Low aluminum hood with functional offset intercooler scoop for turbo rotary",
+    "surfacing": "Clean uncluttered 1980s Japanese geometric surfacing with integrated bumpers",
+    "aeroPhilosophy": "Smooth nose, flush glass, rear lip spoiler on turbo models; Cd 0.31",
+    "wheels": "16-inch BBS cross-spoke alloy wheels with performance disc brakes",
+    "engineering": "Dynamic Tracking Suspension System (DTSS) with passive rear-wheel toe control"
+  }
+}

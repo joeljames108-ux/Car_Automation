@@ -1,0 +1,17 @@
+{
+  "architecture": "muscle_car",
+  "era": "1980s",
+  "referenceVehicle": "Ford Mustang 5.0 LX (Foxbody)",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/muscle_car/1980s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Lightweight crisp aerodynamic muscle silhouette, length 4562mm, wheelbase 2550mm",
+    "silhouette": "Notchback/hatchback profile with flush headlights and clean unadorned bodyside",
+    "greenhouse": "Rectangular greenhouse with black window frames and vertical quarter glass",
+    "hoodCabin": "Low aerodynamic sloping hood without fake scoops for minimal drag",
+    "surfacing": "Straight horizontal body side moldings with dual stainless exhaust tailpipes",
+    "aeroPhilosophy": "Aero flush composite headlamps and smooth urethane bumpers; Cd 0.36",
+    "wheels": "15-inch 10-hole telephone-dial alloy wheels or turbine wheels",
+    "engineering": "Fox platform unibody weighing just 1380kg with 5.0L High Output V8"
+  }
+}

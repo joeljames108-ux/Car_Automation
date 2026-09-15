@@ -1,0 +1,17 @@
+{
+  "architecture": "pickup",
+  "era": "1970s",
+  "referenceVehicle": "Chevrolet C10 Cheyenne",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/pickup/1970s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Square-body American pickup, length 4860mm, width 2010mm, wheelbase 2985mm",
+    "silhouette": "Straight horizontal character creases, fleetside bed with stamped CHEVROLET tailgate",
+    "greenhouse": "Curved panoramic windshield with sliding rear cab glass and slim pillars",
+    "hoodCabin": "Egg-crate chrome front grille with central horizontal gold Bowtie bar",
+    "surfacing": "Clean square-body planar sheetmetal with two-tone paint separated by chrome trim",
+    "aeroPhilosophy": "Upright flat front face; Cd 0.50",
+    "wheels": "15-inch Rallye truck wheels with chrome center derby caps and trim rings",
+    "engineering": "Drop-center steel ladder frame with independent front coil springs and rear leaf springs"
+  }
+}

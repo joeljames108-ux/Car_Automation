@@ -1,0 +1,17 @@
+{
+  "architecture": "heavy_truck",
+  "era": "2000s",
+  "referenceVehicle": "Volvo FH12 (2nd Gen)",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/heavy_truck/2000s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Aerodynamic European cab-over, length 5950mm, height 3850mm, Globetrotter cab",
+    "silhouette": "Windshield raked back 17 degrees for low air resistance with rounded cab corners",
+    "greenhouse": "Curved aerodynamic panoramic windshield with integrated sunblind and skylight",
+    "hoodCabin": "Integrated composite headlight clusters with high-pressure washers and fog lamps",
+    "surfacing": "Sculpted aerodynamic cab side skirts concealing fuel tanks and battery trays",
+    "aeroPhilosophy": "Roof and side air deflector collar minimizing the gap between cab and trailer; Cd 0.52",
+    "wheels": "22.5-inch forged alloy wheels with disc brakes on all axles",
+    "engineering": "D12 high-efficiency electronically controlled diesel with Volvo Engine Brake (VEB)"
+  }
+}

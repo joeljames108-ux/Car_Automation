@@ -1,0 +1,17 @@
+{
+  "architecture": "bus",
+  "era": "1980s",
+  "referenceVehicle": "Neoplan Cityliner (N116)",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/bus/1980s/vehicle.glb",
+  "designDNA": {
+    "proportions": "High-deck luxury touring coach, length 12000mm, height 3680mm, wheelbase 6100mm",
+    "silhouette": "Iconic split windshield with elevated passenger viewing deck over massive luggage bay",
+    "greenhouse": "Forward-slanting side window pillars giving dynamic motion even at standstill",
+    "hoodCabin": "Forward-leaning raked lower windshield for driver; upper panoramic glass for passengers",
+    "surfacing": "Smooth fiberglass front and rear caps with integrated halogen headlamps",
+    "aeroPhilosophy": "Raked front nose reducing long-distance motorway fuel consumption; Cd 0.44",
+    "wheels": "22.5-inch forged Alcoa aluminum wheels with full air suspension",
+    "engineering": "Cavernous underfloor through-luggage compartments accommodating 12 cubic meters"
+  }
+}

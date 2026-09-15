@@ -1,0 +1,17 @@
+{
+  "architecture": "convertible",
+  "era": "1970s",
+  "referenceVehicle": "Alfa Romeo Spider Veloce",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/convertible/1970s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Classic Pininfarina boat-tail open convertible, length 4120mm, wheelbase 2250mm",
+    "silhouette": "Low horizontal beltline tapering rearward into truncated Kamm tail",
+    "greenhouse": "Folding fabric soft top with clear plastic rear window and slim chrome A-pillars",
+    "hoodCabin": "Sloping front nose with iconic Alfa heart grille and round headlamps",
+    "surfacing": "Sculpted bodyside scallops running from front wheel arch to rear tail",
+    "aeroPhilosophy": "Low frontal cross-section with Kammback aerodynamic separation; Cd 0.45",
+    "wheels": "14-inch Campagnolo magnesium alloy wheels with chrome center nuts",
+    "engineering": "Reinforced box-section steel floorpan providing torsional rigidity for open top"
+  }
+}

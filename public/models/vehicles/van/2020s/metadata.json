@@ -1,0 +1,17 @@
+{
+  "architecture": "van",
+  "era": "2020s",
+  "referenceVehicle": "Ford E-Transit Cargo",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/van/2020s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Full-size electric delivery van, length 5981mm, height 2500mm, wheelbase 3750mm",
+    "silhouette": "High-roof electric logistics van with sealed blue-accented grille",
+    "greenhouse": "Full-height walk-through bulkhead access from driver cab to rear cargo bay",
+    "hoodCabin": "Sealed front grille with signature Electric Blue horizontal accent bars",
+    "surfacing": "Durable composite lower side body moldings with rear step bumper",
+    "aeroPhilosophy": "Sealed underbody battery tray and flush front fascia; Cd 0.34",
+    "wheels": "16-inch heavy-duty steel wheels with low rolling resistance EV tires",
+    "engineering": "Underfloor lithium-ion battery pack with Pro Power Onboard 2.4 kW exportable power"
+  }
+}

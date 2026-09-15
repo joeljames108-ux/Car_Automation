@@ -1,0 +1,17 @@
+{
+  "architecture": "convertible",
+  "era": "2000s",
+  "referenceVehicle": "Honda S2000 (AP1)",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/convertible/2000s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Front-mid engine 50:50 balance roadster/convertible, length 4120mm, wheelbase 2400mm",
+    "silhouette": "Crisp flat shoulder line, long hood, driver seated right at rear axle",
+    "greenhouse": "Electric folding fabric top retracting in 6 seconds; twin aero roll hoops",
+    "hoodCabin": "Low sloping hood leading to sharp pointed front air dam and projector lights",
+    "surfacing": "Taut minimalistic surfaces with zero excess flab or decorative plastic",
+    "aeroPhilosophy": "Flat underfloor pans directing air around suspension arms; Cd 0.38",
+    "wheels": "16-inch 5-spoke lightweight alloys with high-performance summer rubber",
+    "engineering": "Patented High X-bone monocoque frame delivering coupe-level rigidity without roof"
+  }
+}

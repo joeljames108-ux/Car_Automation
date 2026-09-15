@@ -1,0 +1,17 @@
+{
+  "architecture": "luxury_car",
+  "era": "1990s",
+  "referenceVehicle": "Lexus LS 400 (UCF20)",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/luxury_car/1990s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Executive luxury sedan, length 4995mm, width 1830mm, wheelbase 2850mm",
+    "silhouette": "Whisper-quiet executive elegance with laser-welded panel joints",
+    "greenhouse": "Acoustic double-pane side glass with flush rubber aerodynamic seals",
+    "hoodCabin": "Smooth integrated chrome grille with subtle L emblem and clear halogen lights",
+    "surfacing": "Flawless uniform panel gaps under 3.5mm; liquid smooth paint finish",
+    "aeroPhilosophy": "Flat underfloor engine belly pans yielding groundbreaking Cd 0.28",
+    "wheels": "16-inch 5-spoke polished alloy wheels with quiet acoustic tires",
+    "engineering": "Ultra-refined 4.0L 1UZ-FE V8 with ceramic balance and air suspension"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "architecture": "mpv",
+  "era": "1980s",
+  "referenceVehicle": "Renault Espace (1st Gen)",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/mpv/1980s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Pioneering European monospace MPV, length 4250mm, height 1660mm, wheelbase 2580mm",
+    "silhouette": "One-box silhouette: unbroken continuous slope from front bumper to roofline",
+    "greenhouse": "High seating position with huge glasshouse and swiveling front captain chairs",
+    "hoodCabin": "Sloping aerodynamic nose with rectangular headlamps and composite front bumper",
+    "surfacing": "Fiberglass composite body panels mounted onto galvanized steel spaceframe",
+    "aeroPhilosophy": "Continuous single-rake angle hood and windshield; Cd 0.32",
+    "wheels": "14-inch steel or alloy wheels with full wheel covers",
+    "engineering": "Modular interior where all 5 rear seats can be removed, rotated, or formed into beds"
+  }
+}

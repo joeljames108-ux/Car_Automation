@@ -1,0 +1,17 @@
+{
+  "architecture": "pickup",
+  "era": "1990s",
+  "referenceVehicle": "Ford F-150 SVT Lightning (1st Gen)",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/pickup/1990s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Sport street performance pickup, length 5100mm, wheelbase 2969mm",
+    "silhouette": "Lowered athletic stance with body-color front air dam and tubular rear bumper",
+    "greenhouse": "Standard cab profile with privacy glass and Lightning side script decals",
+    "hoodCabin": "Color-matched front grille and headlights with high-output 5.8L Windsor V8",
+    "surfacing": "Smooth fleetside bed panels with color-keyed front bumper and side moldings",
+    "aeroPhilosophy": "Suspension lowered 1 inch front / 2.5 inches rear reducing underbody drag; Cd 0.42",
+    "wheels": "17-inch 5-spoke directional cast aluminum wheels with Firestone Firehawk tires",
+    "engineering": "Special Vehicle Team (SVT) tuned suspension with thicker anti-roll bars"
+  }
+}

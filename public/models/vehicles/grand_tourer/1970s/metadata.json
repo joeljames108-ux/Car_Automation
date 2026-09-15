@@ -1,0 +1,17 @@
+{
+  "architecture": "grand_tourer",
+  "era": "1970s",
+  "referenceVehicle": "Aston Martin V8 Vantage",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/grand_tourer/1970s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Brawny British muscle-GT, length 4670mm, width 1830mm, wheelbase 2610mm",
+    "silhouette": "Long-hood muscular stance with blanked-off grille and ducktail trunk lid",
+    "greenhouse": "Classic chrome window trim with slender pillars and formal rear quarter glass",
+    "hoodCabin": "Hand-beaten aluminum hood with functional raised power bulge for carburetors",
+    "surfacing": "Crisp hand-formed aluminum body panels over steel platform chassis",
+    "aeroPhilosophy": "Deep front fiberglass chin spoiler combating front end aerodynamic lift; Cd 0.44",
+    "wheels": "15-inch BBS or GKN cross-spoke alloy wheels with Avon radial performance tires",
+    "engineering": "Hand-built 5.3L four-cam V8 with four Weber twin-choke carburetors"
+  }
+}

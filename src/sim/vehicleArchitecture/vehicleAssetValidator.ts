@@ -11,6 +11,7 @@
 
 import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
+import { GltfLoaderFactory } from "../../utils/gltfLoaderFactory";
 import {
   VehicleArchitectureConfig,
   ArchitectureValidationResult,
@@ -22,7 +23,7 @@ export class VehicleAssetValidator {
 
   private static getLoader(): GLTFLoader {
     if (!this.loader) {
-      this.loader = new GLTFLoader();
+      this.loader = GltfLoaderFactory.createLoader();
     }
     return this.loader;
   }

@@ -1,0 +1,17 @@
+{
+  "architecture": "luxury_car",
+  "era": "future",
+  "referenceVehicle": "Mercedes-Maybach EQS SUV Concept",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/luxury_car/future/vehicle.glb",
+  "designDNA": {
+    "proportions": "Elevated monolithic luxury EV lounge, length 5300mm, width 2000mm, height 1600mm",
+    "silhouette": "Seamless aerodynamic one-bow silhouette with dual-tone black and zircon red finish",
+    "greenhouse": "Continuous glasshouse with frameless motorized doors and rose gold accents",
+    "hoodCabin": "Deep black solid front panel with vertical chrome pinstripe waterfall pattern",
+    "surfacing": "Ultra-smooth aerodynamic body with continuous rear helix LED light band",
+    "aeroPhilosophy": "Air curtains, flush door handles, aerodynamically optimized 24-inch dish wheels; Cd 0.24",
+    "wheels": "24-inch Maybach bowl-design forged wheels with aerodynamic rim styling",
+    "engineering": "Dedicated EV platform with rear executive lounge seating and HEPA air filtration"
+  }
+}

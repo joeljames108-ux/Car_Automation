@@ -1,0 +1,17 @@
+{
+  "architecture": "sports_car",
+  "era": "future",
+  "referenceVehicle": "Lotus Evija",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/sports_car/future/vehicle.glb",
+  "designDNA": {
+    "proportions": "Extreme porous hyper-sports car, length 4459mm, width 2000mm, height 1122mm",
+    "silhouette": "Massive venturi tunnels passing right through bodywork exiting into rear light rings",
+    "greenhouse": "Integrated teardrop canopy cockpit surrounded by sculpted air channels",
+    "hoodCabin": "Low front splitter directing air into front radiators and through underbody tunnels",
+    "surfacing": "Fluid porosity: air flows through the car rather than merely around it",
+    "aeroPhilosophy": "Active rear wing deploying Formula 1 style DRS; active front diffuser flaps; Cd 0.23",
+    "wheels": "20-inch front / 21-inch rear magnesium wheels with carbon aero covers",
+    "engineering": "One-piece carbon fiber monocoque weighing just 129kg with 2000hp quad-motor EV drive"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "architecture": "coupe",
+  "era": "2000s",
+  "referenceVehicle": "Nissan GT-R R35",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/coupe/2000s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Muscular mechanical sculpture, length 4655mm, width 1895mm, wheelbase 2780mm",
+    "silhouette": "Fighter-jet canopy greenhouse with distinctive angular rear quarter pillars",
+    "greenhouse": "Helmet-visor style wraparound glass with dark pillars and high beltline",
+    "hoodCabin": "Long aggressive hood with twin NACA air cooling ducts for twin-turbos",
+    "surfacing": "Aero-blade front fenders directing air around front wheels into side extractors",
+    "aeroPhilosophy": "Full carbon-composite flat floor and rear carbon diffuser; Cd 0.27",
+    "wheels": "20-inch Rays forged lightweight alloy wheels with run-flat performance tires",
+    "engineering": "Premium Midship platform with rear transaxle dual-clutch independent AWD"
+  }
+}

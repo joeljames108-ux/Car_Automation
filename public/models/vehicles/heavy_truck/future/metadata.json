@@ -1,0 +1,17 @@
+{
+  "architecture": "heavy_truck",
+  "era": "future",
+  "referenceVehicle": "Tesla Semi",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/heavy_truck/future/vehicle.glb",
+  "designDNA": {
+    "proportions": "Electric aerodynamic class 8 tractor, length 7200mm, height 3800mm",
+    "silhouette": "Bullet-train aerodynamic nose with central driver cockpit and flush glass cladding",
+    "greenhouse": "Central driver position flanked by dual touchscreen control consoles",
+    "hoodCabin": "Seamless wrap-around curved panoramic windshield with digital side cameras",
+    "surfacing": "Smooth composite exterior skin completely enclosing trailer gap for minimal drag",
+    "aeroPhilosophy": "Groundbreaking 0.36 drag coefficient — sleeker than a Bugatti Chiron; Cd 0.36",
+    "wheels": "22.5-inch aerodynamic covered wheels on dual rear independent electric drive axles",
+    "engineering": "Tri-motor electric powertrain with 1000V architecture and megawatt fast charging"
+  }
+}

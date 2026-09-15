@@ -17,6 +17,7 @@ import { EngineRuntimeMotion } from './EngineRuntimeMotion';
 
 import { globalPerformanceManager } from '../core/PerformanceManager';
 import { useWebGLRecovery } from '../../utils/useWebGLRecovery';
+import { useFrameloopPause } from '../../utils/ViewportPauseCanvas';
 
 // ============================================================================
 // 1. STUDIO LIGHTING RIG & ENVIRONMENT
@@ -193,6 +194,10 @@ export const Engine3DScene: React.FC<Engine3DSceneProps> = ({
   showRuntimeHUD = true,
 }) => {
   const { remountKey, attachWebGLRecovery } = useWebGLRecovery();
+  // Stop rendering entirely when the viewport is scrolled off-screen.
+  // frameloop="never" keeps the GL context + last frame alive (context-safe,
+  // unlike display:none) and cuts GPU/CPU to ~0 for hidden viewports.
+  const isPaused = useFrameloopPause();
 
   return (
     <div className={`relative bg-transparent select-none overflow-hidden ${className}`}>
@@ -202,6 +207,7 @@ export const Engine3DScene: React.FC<Engine3DSceneProps> = ({
         camera={{ position: [1.4, 1.2, 0.9], fov: 42, near: 0.05, far: 50 }}
         dpr={[1, 1.5]}
         performance={{ min: 0.5 }}
+        frameloop={isPaused ? 'never' : 'always'}
         gl={{
           antialias: true,
           alpha: true,

@@ -1,0 +1,17 @@
+{
+  "architecture": "bus",
+  "era": "1970s",
+  "referenceVehicle": "GMC RTS (Rapid Transit Series)",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/bus/1970s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Curved modular transit bus, length 12190mm (40ft), width 2590mm, height 3100mm",
+    "silhouette": "Futuristic curved side body modules stamped from stainless steel with sloped rear",
+    "greenhouse": "Single-piece panoramic curved tinted passenger windows",
+    "hoodCabin": "Curved sloped front windshield reducing reflections and aerodynamic drag",
+    "surfacing": "Modular 5-foot cylindrical body sections welded without visible exterior rivets",
+    "aeroPhilosophy": "Aerodynamically sloped curved front windshield; Cd 0.58",
+    "wheels": "22.5-inch steel wheels on dual rear axle with air suspension leveling",
+    "engineering": "Rear transverse Detroit Diesel engine paired with Allison automatic transmission"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "architecture": "roadster",
+  "era": "2010s",
+  "referenceVehicle": "Mazda MX-5 Miata (ND)",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/roadster/2010s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Sub-1000kg modern roadster, length 3915mm, height 1225mm, wheelbase 2310mm",
+    "silhouette": "Taut predatory Kodo design language with angry slit LED headlights",
+    "greenhouse": "Driver positioned low and centered; one-second manual fabric soft top",
+    "hoodCabin": "Pronounced front fender arches helping driver aim car apex in corners",
+    "surfacing": "Sensual reflection transitions along bodyside; gram-strategy weight optimization",
+    "aeroPhilosophy": "Guided airflow around A-pillars minimizing wind buffeting in open cabin; Cd 0.35",
+    "wheels": "17-inch dark gunmetal forged alloy wheels with 205/45 tires",
+    "engineering": "Extensive ultra-high-strength steel and aluminum panels with double-wishbone front"
+  }
+}

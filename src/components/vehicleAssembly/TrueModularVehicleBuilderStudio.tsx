@@ -2,8 +2,8 @@
 // TRUE MODULAR VEHICLE BUILDER STUDIO
 // ============================================================================
 // Faithfully implements piece-by-piece modular vehicle construction across
-// all 38 body types and 8 platform families:
-// - Stage 0: Expanded 38-Body Selection with Platform Filtering
+// all 24 body types and 8 platform families:
+// - Stage 0: Expanded 24-Body Selection with Platform Filtering
 // - Stage 1-10: Cumulative Subsystem Construction with Specialized CAD Modules:
 //   * Hypercar Active Aero (-15° to +35° wing, DRS flap, dynamic lap time)
 //   * Roadster/Convertible Structural Roof (0 -> 1 slider, mechanism status)
@@ -57,6 +57,10 @@ import {
   getCompleteVehicleGlbPath,
 } from "../../state/modularVehicleBuilderStore";
 import { ModularVehicleCanvasViewport } from "./ModularVehicleCanvasViewport";
+import { VehicleArchitectureEraSelector } from "./VehicleArchitectureEraSelector";
+import { ArchitectureEraPicker } from "./typeSelection/ArchitectureEraPicker";
+import { useVehicleArchitectureStore } from "../../state/useVehicleArchitectureStore";
+import { architectureToLegacyBodyTypeId } from "../../sim/vehicleArchitecture/architectureIdCompat";
 import { playHMIClickSound, playHMITabSound } from "../../utils/hmiSoundSynth";
 import {
   BODY_TYPE_REGISTRY,
@@ -95,12 +99,14 @@ export const TrueModularVehicleBuilderStudio: React.FC<TrueModularVehicleBuilder
 }) => {
   const { design, sim, updateVehicle, setDesignName } = useDesign();
   const selectedModel = useModularVehicleBuilderStore((s) => s.selectedModel);
+  const selectedEra = useModularVehicleBuilderStore((s) => s.selectedEra);
   const currentStage = useModularVehicleBuilderStore((s) => s.currentStage);
   const installedStages = useModularVehicleBuilderStore((s) => s.installedStages);
   const setSelectedModel = useModularVehicleBuilderStore((s) => s.setSelectedModel);
   const setCurrentStage = useModularVehicleBuilderStore((s) => s.setCurrentStage);
   const installCurrentStageAndNext = useModularVehicleBuilderStore((s) => s.installCurrentStageAndNext);
   const resetToFrontPage = useModularVehicleBuilderStore((s) => s.resetToFrontPage);
+  const clearArchitectureSelection = useVehicleArchitectureStore((s) => s.clearArchitectureSelection);
 
   // Subsystem Options
   const chassisArch = useModularVehicleBuilderStore((s) => s.chassisArch);
@@ -161,7 +167,8 @@ export const TrueModularVehicleBuilderStudio: React.FC<TrueModularVehicleBuilder
   const totalStageMass = stageParts.length > 0 ? stageParts.reduce((acc, p) => acc + p.massKg, 0) : 142.5;
 
   // Active Model Spec
-  const activeBodySpec = BODY_TYPE_REGISTRY[selectedModel as VehicleBodyTypeId] || BODY_TYPE_REGISTRY["sedan"];
+  const legacyBodyId = architectureToLegacyBodyTypeId(selectedModel);
+  const activeBodySpec = BODY_TYPE_REGISTRY[legacyBodyId] || BODY_TYPE_REGISTRY["sedan"];
 
   // Specialized CAD Calculations
   const convertibleRoof = useMemo(() => {
@@ -174,7 +181,7 @@ export const TrueModularVehicleBuilderStudio: React.FC<TrueModularVehicleBuilder
 
   const activeCommercialSpec = COMMERCIAL_BODY_REGISTRY[commercialBodyType];
 
-  // Filtered 38 Models for Stage 0
+  // Filtered Models for Stage 0
   const filteredModels = useMemo(() => {
     const allIds = getAllBodyTypeIds();
     return allIds.filter((bId) => {
@@ -210,147 +217,21 @@ export const TrueModularVehicleBuilderStudio: React.FC<TrueModularVehicleBuilder
   }, [modelFilterCategory, modelSearchQuery]);
 
   // --------------------------------------------------------------------------
-  // RENDER SCREEN 1: FRONT PAGE (STAGE 0: 38-BODY EXPANDED MODEL SELECTOR)
+  // RENDER SCREEN 1: FRONT PAGE (STAGE 0: 24 ARCHITECTURE × 7 ERA MATRIX SELECTOR)
   // --------------------------------------------------------------------------
   if (currentStage === "model_select") {
     return (
-      <div className="space-y-6 animate-stage-transition-enter font-mono">
-        {/* Front Page Header */}
-        <div className="panel p-6 rounded-3xl border border-slate-800 bg-slate-900/60 shadow-2xl text-center">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 text-xs font-bold uppercase mb-2">
-            <Sparkles size={13} />
-            <span>TRUE MODULAR AUTOMOTIVE CAD PIPELINE • STAGE 0</span>
-          </div>
-          <h1 className="text-2xl md:text-3xl font-extrabold tracking-wider uppercase text-slate-100">
-            FRONT PAGE : MODEL YOU WANT TO BUILD
-          </h1>
-          <p className="text-xs md:text-sm text-slate-400 mt-2 max-w-2xl mx-auto">
-            Choose from the library of 24 vehicle body architectures across 8 foundational platforms.
-            Snap discrete GLB modules zero-offset: Chassis, Subframes, Suspension, Body Clip, Aero, Wheels, and Cockpit.
-          </p>
-        </div>
-
-        {/* Filter Toolbar */}
-        <div className="panel p-4 rounded-2xl border border-slate-800 bg-slate-900/80 shadow-lg flex flex-col md:flex-row items-center justify-between gap-3">
-          <div className="flex items-center gap-1.5 flex-wrap">
-            {[
-              { id: "ALL", label: "All 24 Models" },
-              { id: "PASSENGER", label: "Passenger & GT" },
-              { id: "PERFORMANCE", label: "Performance & Aero" },
-              { id: "UTILITY_OFFROAD", label: "Utility & 4×4" },
-              { id: "COMMERCIAL", label: "Commercial & Fleet" },
-              { id: "COMPACT", label: "Compact & Urban" },
-            ].map((cat) => (
-              <button
-                key={cat.id}
-                onClick={() => {
-                  playHMIClickSound();
-                  setModelFilterCategory(cat.id);
-                }}
-                className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
-                  modelFilterCategory === cat.id
-                    ? "bg-amber-500 text-slate-950 shadow-md"
-                    : "bg-slate-950 text-slate-400 hover:text-slate-200 border border-slate-800"
-                }`}
-              >
-                {cat.label}
-              </button>
-            ))}
-          </div>
-
-          <div className="relative w-full md:w-64">
-            <Search size={14} className="absolute left-3 top-2.5 text-slate-500" />
-            <input
-              type="text"
-              placeholder="Search 24 body models..."
-              value={modelSearchQuery}
-              onChange={(e) => setModelSearchQuery(e.target.value)}
-              className="w-full pl-9 pr-3 py-1.5 bg-slate-950 border border-slate-700 rounded-xl text-xs text-slate-200 focus:outline-none focus:border-amber-400"
-            />
-          </div>
-        </div>
-
-        {/* 24 Vehicle Model Cards Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-3.5 max-h-[580px] overflow-y-auto pr-1 no-scrollbar">
-          {filteredModels.map((bId) => {
-            const spec = BODY_TYPE_REGISTRY[bId];
-            const isSelected = selectedModel === bId;
-
-            return (
-              <div
-                key={bId}
-                onClick={() => {
-                  playHMIClickSound();
-                  setSelectedModel(bId);
-                }}
-                className={`group relative p-4 rounded-2xl border-2 transition-all cursor-pointer flex flex-col justify-between select-none ${
-                  isSelected
-                    ? "bg-cyan-950/40 border-cyan-400 shadow-[0_0_25px_rgba(6,182,212,0.3)] scale-[1.02]"
-                    : "bg-slate-900/70 border-slate-800 hover:border-slate-700 hover:bg-slate-850/80"
-                }`}
-              >
-                {/* Badge & Check */}
-                <div className="flex items-center justify-between gap-2 mb-2.5">
-                  <span className="text-[9px] font-extrabold px-2 py-0.5 rounded-full bg-slate-800 text-slate-300 border border-slate-700 uppercase">
-                    {spec.typicalArchitecture}
-                  </span>
-                  <div
-                    className={`w-4 h-4 rounded-full border-2 flex items-center justify-center transition-all ${
-                      isSelected
-                        ? "border-cyan-400 bg-cyan-400 text-slate-950"
-                        : "border-slate-600 bg-transparent"
-                    }`}
-                  >
-                    {isSelected && <Check size={10} strokeWidth={3} />}
-                  </div>
-                </div>
-
-                {/* Model Title & Identity */}
-                <div className="mb-3">
-                  <h3 className="text-base font-black tracking-wider text-slate-100 group-hover:text-cyan-300 transition-colors">
-                    {spec.name}
-                  </h3>
-                  <div className="text-[10px] text-cyan-400/90 mt-0.5 truncate">{spec.designIdentity}</div>
-                </div>
-
-                {/* Dimensions Matrix */}
-                <div className="pt-2.5 border-t border-slate-800/80 space-y-1 text-[10px]">
-                  <div className="flex justify-between text-slate-400">
-                    <span>WHEELBASE</span>
-                    <span className="font-bold text-slate-200">{spec.defaultDimensions.wheelbaseMm} mm</span>
-                  </div>
-                  <div className="flex justify-between text-slate-400">
-                    <span>TRACK</span>
-                    <span className="font-bold text-slate-200">{spec.defaultDimensions.frontTrackMm} mm</span>
-                  </div>
-                  <div className="flex justify-between text-slate-400">
-                    <span>DRAG</span>
-                    <span className="font-bold text-amber-400">Cd {spec.aerodynamicBaseline.cd.toFixed(2)}</span>
-                  </div>
-                  <div className="flex justify-between text-slate-400">
-                    <span>SEATING</span>
-                    <span className="font-bold text-emerald-400">{spec.seatingCapacity} Seats</span>
-                  </div>
-                </div>
-              </div>
-            );
-          })}
-        </div>
-
-        {/* Big SELECT & CONTINUE Button */}
-        <div className="flex justify-center pt-2">
-          <button
-            type="button"
-            onClick={() => {
-              playHMITabSound();
-              setCurrentStage("chassis");
-            }}
-            className="group relative px-10 py-4 rounded-2xl bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-slate-950 font-black text-sm tracking-wider uppercase shadow-[0_0_30px_rgba(6,182,212,0.4)] transition-all transform hover:scale-[1.03] active:scale-[0.98] cursor-pointer flex items-center gap-3 border-2 border-cyan-300"
-          >
-            <span>SELECT {activeBodySpec.name.toUpperCase()} & BUILD CHASSIS</span>
-            <ArrowRight size={18} className="group-hover:translate-x-1.5 transition-transform" />
-          </button>
-        </div>
+      <div className="animate-stage-transition-enter">
+        <ArchitectureEraPicker
+          onInspectGlb={() => {
+            playHMITabSound();
+            setCurrentStage("complete");
+          }}
+          onProceedToStudio={() => {
+            playHMITabSound();
+            setCurrentStage("chassis");
+          }}
+        />
       </div>
     );
   }
@@ -359,7 +240,7 @@ export const TrueModularVehicleBuilderStudio: React.FC<TrueModularVehicleBuilder
   // RENDER SCREEN 2: ALL COMPLETED / FULL INSPECTION
   // --------------------------------------------------------------------------
   if (currentStage === "complete") {
-    const completeGlbPath = getCompleteVehicleGlbPath(selectedModel);
+    const completeGlbPath = getCompleteVehicleGlbPath(selectedModel, selectedEra);
     const glbFilename = completeGlbPath.split("/").pop() || "Car_Complete.glb";
 
     return (
@@ -397,11 +278,21 @@ export const TrueModularVehicleBuilderStudio: React.FC<TrueModularVehicleBuilder
               <div className="flex items-center gap-2.5 mt-2.5 flex-wrap">
                 <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-cyan-950/60 border border-cyan-500/30 text-[11px] text-cyan-300">
                   <Box size={13} className="text-cyan-400" />
-                  <strong>CAR GLB:</strong> {glbFilename} (9.62 MB • Class-A CAD Mesh)
+                  <strong>CAR GLB:</strong> {glbFilename} (Class-A CAD Mesh)
                 </span>
+                {activeBodySpec.referenceVehicle && (
+                  <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-amber-950/60 border border-amber-500/40 text-[11px] text-amber-300 font-bold">
+                    <Sparkles size={13} className="text-amber-400" />
+                    <strong>REF VEHICLE:</strong> {activeBodySpec.referenceVehicle}
+                  </span>
+                )}
                 <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-emerald-950/50 border border-emerald-500/40 text-[10px] text-emerald-400 font-bold">
                   <CheckCircle2 size={12} />
                   11/11 SUBSYSTEMS COUPLED
+                </span>
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-purple-950/50 border border-purple-500/40 text-[10px] text-purple-300 font-bold">
+                  <Cpu size={12} />
+                  16 CAD HARDPOINTS ACTIVE
                 </span>
               </div>
             </div>
@@ -446,7 +337,23 @@ export const TrueModularVehicleBuilderStudio: React.FC<TrueModularVehicleBuilder
 
             <button
               type="button"
-              onClick={resetToFrontPage}
+              onClick={() => {
+                playHMIClickSound();
+                setCurrentStage("chassis");
+              }}
+              className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 text-amber-300 text-xs font-bold transition-all cursor-pointer border border-amber-500/40"
+            >
+              <Wrench size={14} />
+              <span>CUSTOMIZE 10 STAGES</span>
+            </button>
+
+            <button
+              type="button"
+              onClick={() => {
+                playHMIClickSound();
+                clearArchitectureSelection();
+                resetToFrontPage();
+              }}
               className="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-bold transition-all cursor-pointer border border-slate-700"
             >
               <RotateCcw size={14} />
@@ -475,7 +382,11 @@ export const TrueModularVehicleBuilderStudio: React.FC<TrueModularVehicleBuilder
           <div className="flex items-center gap-1.5 flex-nowrap min-w-max">
           <button
             type="button"
-            onClick={resetToFrontPage}
+            onClick={() => {
+              playHMITabSound();
+              clearArchitectureSelection();
+              resetToFrontPage();
+            }}
             className="px-2.5 py-1 rounded-lg bg-slate-800/80 hover:bg-slate-700 text-[10px] font-bold text-slate-400 hover:text-slate-200 border border-slate-700/60 mr-1 cursor-pointer shrink-0"
           >
             ← {activeBodySpec.name.toUpperCase()}

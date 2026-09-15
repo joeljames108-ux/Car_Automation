@@ -1,0 +1,17 @@
+{
+  "architecture": "crossover",
+  "era": "2000s",
+  "referenceVehicle": "Nissan Murano (Z50)",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/crossover/2000s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Sculpted mid-size crossover, length 4765mm, width 1880mm, wheelbase 2824mm",
+    "silhouette": "Flowing coupe-like profile with dramatic upward-kicking rear quarter glass",
+    "greenhouse": "High beltline meeting curved D-pillar and integrated aerodynamic tailgate",
+    "hoodCabin": "Bold tooth-like chrome front grille flanked by vertical bi-xenon headlights",
+    "surfacing": "Curvaceous sculpted body panels replacing traditional utilitarian truck boxiness",
+    "aeroPhilosophy": "Sweeping aerodynamic hood, integrated rear roof spoiler; Cd 0.35",
+    "wheels": "18-inch 5-spoke brushed aluminum alloy wheels",
+    "engineering": "FF-L platform with 3.5L VQ35DE V6 and Xtronic continuously variable transmission"
+  }
+}

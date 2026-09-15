@@ -1,0 +1,17 @@
+{
+  "architecture": "sedan",
+  "era": "1980s",
+  "referenceVehicle": "Mercedes-Benz 190E 2.3-16 (W201)",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/sedan/1980s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Crisp wedge sports sedan, length 4430mm, wheelbase 2665mm, low drag stance",
+    "silhouette": "Low hood sloping smoothly into raked windshield, high rear trunk decklid",
+    "greenhouse": "Aerodynamic flush-bonded glass, black window surrounds, subtle Hoffmeister kink",
+    "hoodCabin": "Low aerodynamic hood with integrated grille; tight shutlines",
+    "surfacing": "Bruno Sacco polyurethane side cladding panels protecting lower doors",
+    "aeroPhilosophy": "Integrated rear decklid wing, smooth rocker panels, pioneering low Cd 0.32",
+    "wheels": "15-inch multi-hole aerodynamic forged alloys with flush wheel faces",
+    "engineering": "High torsional stiffness monocoque with multi-link rear suspension"
+  }
+}

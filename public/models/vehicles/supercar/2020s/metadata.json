@@ -1,0 +1,17 @@
+{
+  "architecture": "supercar",
+  "era": "2020s",
+  "referenceVehicle": "Lamborghini Revuelto",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/supercar/2020s/vehicle.glb",
+  "designDNA": {
+    "proportions": "V12 hybrid flagship supercar, length 4947mm, width 2033mm, height 1160mm",
+    "silhouette": "Aerospace stealth fighter geometry with dramatic Y-shaped LED lighting signatures",
+    "greenhouse": "Carbon monofuselage cockpit with scissor doors and flying buttresses",
+    "hoodCabin": "Aggressive dropped nose, exposed V12 engine bay completely uncovered to elements",
+    "surfacing": "Sharp hexagonal and Y-shaped aerodynamic surfaces channeling air around cabin",
+    "aeroPhilosophy": "Active rear wing with three positions, active front air splitters; Cd 0.31",
+    "wheels": "20-inch front / 21-inch rear forged wheels with Bridgestone Potenza Sport tires",
+    "engineering": "Carbon fiber Monofuselage with Forged Composites front crash structure"
+  }
+}

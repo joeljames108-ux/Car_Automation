@@ -1,0 +1,17 @@
+{
+  "architecture": "shooting_brake",
+  "era": "1990s",
+  "referenceVehicle": "BMW Z3 M Coupe (Clownshoe)",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/shooting_brake/1990s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Radical bulbous rear shooting brake, length 4025mm, wheelbase 2459mm",
+    "silhouette": "Iconic clownshoe profile: long hood, tiny cabin, bulbous swollen rear hatch",
+    "greenhouse": "Compact cabin with steep vertical hatchback tailgate and rear wiper",
+    "hoodCabin": "Long sculpted hood with side engine gills and M performance emblem",
+    "surfacing": "Extreme widebody rear fender arches (+60mm wider than standard Z3)",
+    "aeroPhilosophy": "Integrated rear roof spoiler keeping rear window clean at speed; Cd 0.37",
+    "wheels": "17-inch deep-dish RoadStar wheels with wide 245-section rear tires",
+    "engineering": "Enclosed roof structure provides 2.7x higher torsional stiffness than roadster"
+  }
+}

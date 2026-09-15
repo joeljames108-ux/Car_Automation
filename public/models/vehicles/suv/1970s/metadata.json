@@ -1,0 +1,17 @@
+{
+  "architecture": "suv",
+  "era": "1970s",
+  "referenceVehicle": "Range Rover Classic (Suffix A)",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/suv/1970s/vehicle.glb",
+  "designDNA": {
+    "proportions": "The definitive luxury SUV archetype, length 4470mm, width 1780mm, height 1780mm",
+    "silhouette": "Floating roofline with slim black pillars, split clamshell horizontal tailgate",
+    "greenhouse": "Panoramic glasshouse with continuous waistline wrapping around the entire vehicle",
+    "hoodCabin": "Castellated clamshell hood with horizontal recess for spare tire mounting",
+    "surfacing": "Lightweight aluminum body panels hung on rugged steel box-section chassis",
+    "aeroPhilosophy": "Upright functional stance designed for 100% off-road and country visibility; Cd 0.45",
+    "wheels": "16-inch steel wheels with Michelin X M+S radial tires and spiral springs",
+    "engineering": "Full-time four-wheel drive with center differential lock and long-travel coil springs"
+  }
+}

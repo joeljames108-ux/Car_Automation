@@ -1,0 +1,17 @@
+{
+  "architecture": "wagon",
+  "era": "1970s",
+  "referenceVehicle": "Mercedes-Benz 300TD (W123T)",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/wagon/1970s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Indestructible German station wagon, length 4725mm, wheelbase 2795mm",
+    "silhouette": "Formal upright rectangular cargo bay with full-length chrome roof rails",
+    "greenhouse": "Large upright glass area providing panoramic visibility and immense luggage capacity",
+    "hoodCabin": "Upright chrome Mercedes grille with ribbed self-cleaning taillight lenses",
+    "surfacing": "Sturdy German sheetmetal with chrome window moldings and heavy rubber bumper strips",
+    "aeroPhilosophy": "Upright formal wagon aerodynamics; Cd 0.42",
+    "wheels": "14-inch steel wheels with color-matched hubcaps and high-load tires",
+    "engineering": "Hydropneumatic self-leveling rear suspension keeping vehicle level under heavy load"
+  }
+}

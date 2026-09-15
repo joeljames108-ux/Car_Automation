@@ -1,0 +1,17 @@
+{
+  "architecture": "coupe",
+  "era": "future",
+  "referenceVehicle": "Polestar Synergy Concept",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/coupe/future/vehicle.glb",
+  "designDNA": {
+    "proportions": "Ultra-low electric aero coupe canopy, length 4560mm, height 1070mm",
+    "silhouette": "Single-seat fighter-jet cockpit flanked by exposed air bypass channels",
+    "greenhouse": "Forward-hinging single canopy cockpit eliminating conventional doors",
+    "hoodCabin": "Porosity channels passing air directly from front nose through body flanks",
+    "surfacing": "Minimalist geometric sculpture inspired by hammerhead sharks and aerospace craft",
+    "aeroPhilosophy": "Zero-turbulence flow through internal venturi tunnels; Cd 0.20",
+    "wheels": "22-inch aerodynamic turbine wheels integrated flush with body surface",
+    "engineering": "Bio-composite chassis with decentralized battery packaging and AI aero control"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "architecture": "heavy_truck",
+  "era": "1980s",
+  "referenceVehicle": "Scania 142H V8",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/heavy_truck/1980s/vehicle.glb",
+  "designDNA": {
+    "proportions": "European cab-over-engine (COE) heavy tractor, length 5900mm, height 3650mm",
+    "silhouette": "Flat forward-control front face with horizontal cooling slats and elevated sleeper",
+    "greenhouse": "Wide single-piece windshield with three wipers and large panoramic side windows",
+    "hoodCabin": "Blunt flat front cab with prominent V8 badge in center of lower radiator grille",
+    "surfacing": "Steel cab stampings with impact-resistant composite front corner air deflectors",
+    "aeroPhilosophy": "Roof-mounted fiberglass aerodynamic deflector; Cd 0.62",
+    "wheels": "22.5-inch steel disc wheels with heavy-duty hub reduction drive axles",
+    "engineering": "Legendary 14.2L turbocharged V8 diesel renowned for torque and reliability"
+  }
+}

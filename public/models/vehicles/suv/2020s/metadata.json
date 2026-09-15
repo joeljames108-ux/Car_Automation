@@ -1,0 +1,17 @@
+{
+  "architecture": "suv",
+  "era": "2020s",
+  "referenceVehicle": "BMW XM",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/suv/2020s/vehicle.glb",
+  "designDNA": {
+    "proportions": "High-performance luxury M flagship SUV, length 5110mm, width 2005mm, height 1755mm",
+    "silhouette": "Dramatic angular silhouette with gold accent band running from A-pillar to rear glass",
+    "greenhouse": "Tinted privacy glass with laser-etched BMW roundels in upper rear window corners",
+    "hoodCabin": "Illuminated horizontal octagonal kidney grille with split slim LED daytime lights",
+    "surfacing": "Muscular chiseled geometric body surfacing with vertically stacked hexagonal quad exhausts",
+    "aeroPhilosophy": "Integrated rear roof aerodynamic spoiler and vertical rear diffuser fins; Cd 0.34",
+    "wheels": "23-inch M light alloy wheels with night gold accent finish",
+    "engineering": "M Hybrid plug-in powertrain pairing twin-turbo 4.4L V8 with electric motor in 8-speed auto"
+  }
+}

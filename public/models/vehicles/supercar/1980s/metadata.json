@@ -1,0 +1,17 @@
+{
+  "architecture": "supercar",
+  "era": "1980s",
+  "referenceVehicle": "Ferrari F40",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/supercar/1980s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Raw race car homologated for the street, length 4358mm, height 1124mm, weight 1100kg",
+    "silhouette": "Towering integrated rear wing spanning entire rear clip with twin NACA hood ducts",
+    "greenhouse": "Lexan sliding side windows and slotted Lexan rear engine cover venting heat",
+    "hoodCabin": "Low composite clamshell front end with dual pop-up headlamps and driving lights",
+    "surfacing": "Carbon-Kevlar composite panels with visible weave through lightweight paint",
+    "aeroPhilosophy": "Front rubber chin spoiler, flat underfloor with rear diffuser; Cd 0.34",
+    "wheels": "17-inch Speedline modular 3-piece alloy wheels with center-lock nuts",
+    "engineering": "Tubular steel spaceframe bonded with Kevlar panels housing twin-turbo 2.9L V8"
+  }
+}

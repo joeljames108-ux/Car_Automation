@@ -1,0 +1,17 @@
+{
+  "architecture": "van",
+  "era": "future",
+  "referenceVehicle": "Canoo Lifestyle Delivery Vehicle",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/van/future/vehicle.glb",
+  "designDNA": {
+    "proportions": "Steer-by-wire skateboard EV architecture, length 4421mm, height 1846mm, wheelbase 2850mm",
+    "silhouette": "Lozenge-shaped panoramic glass pod cab with maximum internal cubic efficiency",
+    "greenhouse": "Panoramic street-view glass below headlights allowing driver to see ground ahead",
+    "hoodCabin": "Zero engine hood: driver sits at front extremity of flat skateboard chassis",
+    "surfacing": "Symmetrical thermoplastic exterior panels resistant to dings and low-speed scrapes",
+    "aeroPhilosophy": "Curved aerodynamic pod shape with flush glazing; Cd 0.28",
+    "wheels": "17-inch aerodynamic wheels flush with body sides",
+    "engineering": "True steer-by-wire and brake-by-wire eliminating physical mechanical steering column"
+  }
+}

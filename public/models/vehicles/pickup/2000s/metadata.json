@@ -1,0 +1,17 @@
+{
+  "architecture": "pickup",
+  "era": "2000s",
+  "referenceVehicle": "Dodge Ram 1500 (3rd Gen)",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/pickup/2000s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Big-rig semi-truck styling, length 5784mm, width 2029mm, wheelbase 3569mm",
+    "silhouette": "Dropped front fenders lower than center hood line evoking an 18-wheeler semi",
+    "greenhouse": "Quad cab configuration with four forward-hinged doors and tinted rear glass",
+    "hoodCabin": "Massive crosshair chrome grille dominating rearview mirrors on highways",
+    "surfacing": "Muscular bulges over front and rear wheel arches giving commanding road presence",
+    "aeroPhilosophy": "Rounded cab edges smoothing boundary layer airflow; Cd 0.40",
+    "wheels": "20-inch 5-spoke chrome-clad aluminum wheels with Goodyear all-season tires",
+    "engineering": "Hydroformed steel front frame rails with 5.7L HEMI V8 engine"
+  }
+}

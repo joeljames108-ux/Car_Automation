@@ -1,0 +1,17 @@
+{
+  "architecture": "pickup",
+  "era": "1980s",
+  "referenceVehicle": "Toyota Hilux (4th Gen)",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/pickup/1980s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Indestructible compact workhorse, length 4725mm, width 1690mm, wheelbase 2845mm",
+    "silhouette": "Single-cab or extra-cab with single-wall heavy-duty steel cargo bed and tie-hooks",
+    "greenhouse": "Upright practical cab glass with sliding rear window and manual crank door windows",
+    "hoodCabin": "Chiseled front hood with black rectangular grille and TOYOTA block lettering",
+    "surfacing": "Flared front and rear fender lips stamped directly into steel bed sides",
+    "aeroPhilosophy": "Compact frontal cross-section with high approach clearance; Cd 0.44",
+    "wheels": "15-inch white steel wheels with manual locking front hubs",
+    "engineering": "Legendary 22R 4-cylinder engine mounted in fully boxed steel ladder frame"
+  }
+}

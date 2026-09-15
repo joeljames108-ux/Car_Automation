@@ -1,0 +1,17 @@
+{
+  "architecture": "formula",
+  "era": "future",
+  "referenceVehicle": "Formula E Gen3 Evo",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/formula/future/vehicle.glb",
+  "designDNA": {
+    "proportions": "Stealth fighter jet open-wheel electric racecar, length 5016mm, width 1700mm",
+    "silhouette": "Aggressive geometric delta-wing lines with forward-pointing sidepod wedges",
+    "greenhouse": "Open cockpit with integrated Halo LED light ring showing attack mode status",
+    "hoodCabin": "Delta-wing formation eliminating heavy rear wings through floor ground effect",
+    "surfacing": "Faceted stealth-fighter carbon body panels with exposed front wheel aero covers",
+    "aeroPhilosophy": "Aerodynamic front wheel covers reducing exposed open-wheel wake; Cd 0.55",
+    "wheels": "18-inch Hankook bespoke all-weather race tires with recycled rubber content",
+    "engineering": "Front and rear powertrains enabling 600 kW total regenerative braking capability"
+  }
+}

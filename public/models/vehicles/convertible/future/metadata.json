@@ -1,0 +1,17 @@
+{
+  "architecture": "convertible",
+  "era": "future",
+  "referenceVehicle": "Genesis X Convertible Concept",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/convertible/future/vehicle.glb",
+  "designDNA": {
+    "proportions": "Minimalist boat-tail luxury electric convertible, length 4980mm, wheelbase 2950mm",
+    "silhouette": "Parabolic line sweeping gently from nose to rear deck with rearward-slanting tail",
+    "greenhouse": "Folding hardtop with integrated transparent smart-glass solar sunroof panels",
+    "hoodCabin": "Long aristocratic hood featuring signature two-line LED headlights extending into flanks",
+    "surfacing": "Reductive Korean luxury aesthetics where essential geometry defines beauty",
+    "aeroPhilosophy": "Concave elliptical rear deck acting as an aerodynamic ducktail; Cd 0.22",
+    "wheels": "22-inch aero G-Matrix dish wheels with aerodynamic extraction blades",
+    "engineering": "Modular electric skateboard platform with floor-integrated battery stress member"
+  }
+}

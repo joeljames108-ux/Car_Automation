@@ -1,0 +1,17 @@
+{
+  "architecture": "hatchback",
+  "era": "future",
+  "referenceVehicle": "Hyundai N Vision 74",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/hatchback/future/vehicle.glb",
+  "designDNA": {
+    "proportions": "Cyberpunk wedge sports hatch, length 4952mm, width 1995mm, height 1331mm",
+    "silhouette": "Pure geometric wedge honoring the 1974 Pony Coupe concept with radical aero",
+    "greenhouse": "Angular fastback hatch with black rear window louvers and high-contrast B-pillar",
+    "hoodCabin": "Low chisel nose with parametric pixel lighting and deep hood air extractors",
+    "surfacing": "Flat geometric body planes with raw carbon side blades and intake portals",
+    "aeroPhilosophy": "Massive motorsport swan-neck rear wing and full underbody venturis; Cd 0.28",
+    "wheels": "20-inch aero turbofan wheels designed to pump out turbulent brake heat",
+    "engineering": "Hydrogen fuel-cell and dual rear electric motor virtual differential system"
+  }
+}

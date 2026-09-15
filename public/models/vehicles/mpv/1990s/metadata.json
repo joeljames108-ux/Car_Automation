@@ -1,0 +1,17 @@
+{
+  "architecture": "mpv",
+  "era": "1990s",
+  "referenceVehicle": "Toyota Previa (TCR10)",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/mpv/1990s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Futuristic mid-engine egg-shape monospace, length 4750mm, wheelbase 2860mm",
+    "silhouette": "Ultra-smooth organic bubble shape devoid of sharp edges or separate hood",
+    "greenhouse": "Wraparound glass canopy with concealed pillars creating floating roof effect",
+    "hoodCabin": "Engine mounted horizontally under front seats at 75-degree angle",
+    "surfacing": "Continuous organic oval surfacing with flush door handles and integrated lights",
+    "aeroPhilosophy": "Egg-shaped aerodynamic packaging; Cd 0.34",
+    "wheels": "15-inch styled steel or alloy wheels with 215/65 tires",
+    "engineering": "Mid-engine layout with independent rear suspension and optional All-Trac AWD"
+  }
+}

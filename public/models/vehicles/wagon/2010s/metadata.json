@@ -1,0 +1,17 @@
+{
+  "architecture": "wagon",
+  "era": "2010s",
+  "referenceVehicle": "Mercedes-AMG E63 S Estate (W212)",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/wagon/2010s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Muscular Autobahn super-wagon, length 4905mm, wheelbase 2874mm",
+    "silhouette": "Broad-shouldered stance with aggressive twin-blade AMG front grille",
+    "greenhouse": "Dark tinted rear estate glass with silver roof rails and power tailgate",
+    "hoodCabin": "Bulging aluminum power-dome hood with twin character creases",
+    "surfacing": "Sharp character creases along body flanks terminating in flared rear arches",
+    "aeroPhilosophy": "Front A-wing air splitter and rear quad trapezoidal exhaust diffuser; Cd 0.30",
+    "wheels": "19-inch AMG 10-spoke forged titanium-finish wheels with ceramic brakes",
+    "engineering": "4MATIC all-wheel drive with twin-turbo 5.5L V8 producing 577hp and 590 lb-ft"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "architecture": "roadster",
+  "era": "2020s",
+  "referenceVehicle": "Ferrari 812 GTS",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/roadster/2020s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Front-mid V12 supercar roadster, length 4693mm, width 1971mm, wheelbase 2720mm",
+    "silhouette": "Dramatic sculpted rear buttresses framing retractable hardtop stowing in 14s",
+    "greenhouse": "Aero buttresses with integrated aerodynamic flaps redirecting turbulent airflow",
+    "hoodCabin": "Endless sculpted hood with hood vents venting high-pressure air from wheel arches",
+    "surfacing": "Aero Pass-Through behind rear quarter windows reducing drag and lift",
+    "aeroPhilosophy": "Active underbody flaps, blown rear spoiler lip, multi-tier diffuser; Cd 0.33",
+    "wheels": "20-inch forged diamond-cut wheels housing carbon-ceramic Brembo brakes",
+    "engineering": "All-aluminum chassis with Virtual Short Wheelbase 2.0 rear-wheel steering"
+  }
+}

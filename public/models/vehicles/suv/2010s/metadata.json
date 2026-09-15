@@ -1,0 +1,17 @@
+{
+  "architecture": "suv",
+  "era": "2010s",
+  "referenceVehicle": "Range Rover (L405)",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/suv/2010s/vehicle.glb",
+  "designDNA": {
+    "proportions": "All-aluminum flagship luxury SUV, length 4999mm, width 2073mm, wheelbase 2922mm",
+    "silhouette": "Floating contrast roof, continuous waistline, yacht-inspired tapered stern",
+    "greenhouse": "Acoustic laminated glass with blacked-out pillars and split powered tailgate",
+    "hoodCabin": "Clamshell aluminum bonnet with signature front fender gill graphic vents",
+    "surfacing": "Clean reductive surface minimalism with flush panel gaps under 3.0mm",
+    "aeroPhilosophy": "Air suspension lowers vehicle at highway speeds to optimize airflow; Cd 0.34",
+    "wheels": "21-inch 10-spoke forged alloy wheels with all-terrain air suspension",
+    "engineering": "World first all-aluminum SUV monocoque body shell saving 420kg over predecessor"
+  }
+}

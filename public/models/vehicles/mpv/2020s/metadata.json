@@ -1,0 +1,17 @@
+{
+  "architecture": "mpv",
+  "era": "2020s",
+  "referenceVehicle": "Hyundai Staria",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/mpv/2020s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Spaceship one-curve aerodynamic profile, length 5255mm, height 1990mm, wheelbase 3275mm",
+    "silhouette": "Monolithic curve running unbroken from front bumper to rear roof spoiler",
+    "greenhouse": "Panoramic floor-to-ceiling side glass windows offering lounge-like passenger views",
+    "hoodCabin": "Full-width horizontal LED daytime running light bar spanning the entire hood",
+    "surfacing": "Parametric pixel vertical LED taillights framing enormous rear cargo tailgate",
+    "aeroPhilosophy": "Continuous flush aerodynamic profile; Cd 0.32",
+    "wheels": "18-inch tinted brass-finish alloy wheels with geometric parametric pattern",
+    "engineering": "N3 platform with front-wheel drive and available HTRAC all-wheel drive"
+  }
+}

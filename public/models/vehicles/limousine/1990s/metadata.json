@@ -1,0 +1,17 @@
+{
+  "architecture": "limousine",
+  "era": "1990s",
+  "referenceVehicle": "Mercedes-Benz S600 Pullman (W140)",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/limousine/1990s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Factory-engineered armored state limousine, length 6213mm, wheelbase 4140mm",
+    "silhouette": "Imposing six-door profile with middle row facing rearward for face-to-face talks",
+    "greenhouse": "Massive armored glass measuring over 40mm thick with dual hydraulic lifters",
+    "hoodCabin": "Stately W140 chrome grille with official national flag stanchions on fenders",
+    "surfacing": "Heavy-gauge reinforced steel panels with discrete armor plating integration",
+    "aeroPhilosophy": "Aerodynamic flush composite headlamps and smooth bumper skirts; Cd 0.35",
+    "wheels": "18-inch Michelin PAX run-flat wheels capable of high-speed puncture escape",
+    "engineering": "B7 ballistic protection rating resisting assault rifle and explosive fragments"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "architecture": "mpv",
+  "era": "2010s",
+  "referenceVehicle": "Toyota Alphard (3rd Gen)",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/mpv/2010s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Asian flagship luxury MPV, length 4945mm, height 1895mm, wheelbase 3000mm",
+    "silhouette": "Imposing architectural high-roof box with dramatic chrome armored front mask",
+    "greenhouse": "Privacy glass with power sunshades and ceiling ambient illumination ribbons",
+    "hoodCabin": "Massive towering chrome grille commanding attention across Asian capitals",
+    "surfacing": "Dramatic forward-leaning B-pillar styling dividing front cab from rear lounge",
+    "aeroPhilosophy": "Rear roof spoiler with integrated antenna and wiper; Cd 0.34",
+    "wheels": "18-inch multi-spoke high-gloss alloy wheels with comfort-tuned tires",
+    "engineering": "Ottoman first-class reclining airline lounge seats in second row with footrests"
+  }
+}

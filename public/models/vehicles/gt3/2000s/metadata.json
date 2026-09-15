@@ -1,0 +1,17 @@
+{
+  "architecture": "gt3",
+  "era": "2000s",
+  "referenceVehicle": "Aston Martin DBR9",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/gt3/2000s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Le Mans GT1 class winner based on DB9, length 4687mm, width 1978mm",
+    "silhouette": "Wide carbon front splitter with bumper flick canards, carbon rear wing, side exhaust",
+    "greenhouse": "Full carbon composite body panels over extruded aluminum spaceframe",
+    "hoodCabin": "Vented carbon hood with quick-release latches and external kill switches",
+    "surfacing": "Flared carbon fenders with side cooling ducts and flat carbon underfloor",
+    "aeroPhilosophy": "Engineered in wind tunnels to dominate 24 Hours of Le Mans; Cd 0.36",
+    "wheels": "18-inch forged magnesium center-lock wheels with carbon ceramic brakes",
+    "engineering": "Naturally aspirated 6.0L V12 producing 600hp paired with Xtrac 6-speed sequential"
+  }
+}

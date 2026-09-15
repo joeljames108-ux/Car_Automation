@@ -1,0 +1,17 @@
+{
+  "architecture": "formula",
+  "era": "1980s",
+  "referenceVehicle": "McLaren MP4/4 (1988)",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/formula/1980s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Ultra-low turbocharged single-seater, length 4394mm, width 2134mm, height 940mm",
+    "silhouette": "Gordon Murray low-slung driver lying-down posture minimizing frontal cross-section",
+    "greenhouse": "Tiny cockpit aperture with titanium roll hoop integrated behind driver head",
+    "hoodCabin": "Low flat nose with integrated front wing endplates and compact sidepod intakes",
+    "surfacing": "Carbon fiber and Kevlar composite monocoque chassis; 15 wins in 16 races",
+    "aeroPhilosophy": "Low frontal area reducing drag on high-speed circuits; high rear downforce; Cd 0.68",
+    "wheels": "13-inch Dymag magnesium racing wheels wrapped in Goodyear Eagle race slicks",
+    "engineering": "Full carbon composite monocoque housing twin-turbo Honda RA168E 1.5L V6 (650hp)"
+  }
+}

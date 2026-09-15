@@ -1,0 +1,17 @@
+{
+  "architecture": "muscle_car",
+  "era": "2010s",
+  "referenceVehicle": "Dodge Charger SRT Hellcat",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/muscle_car/2010s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Brawny 4-door muscle sedan, length 5100mm, width 1905mm, wheelbase 3048mm",
+    "silhouette": "Menacing road presence with scalloped bodyside door indents and rear lightbar",
+    "greenhouse": "High beltline, low roofline, dark privacy glass, LED racetrack taillamp",
+    "hoodCabin": "Aluminum hood with center NACA intake scoop and dual functional heat extractors",
+    "surfacing": "Aggressive front bumper fascia feeding supercharger cooling radiators",
+    "aeroPhilosophy": "Front splitter and rear decklid spoiler engineered for 204 mph stability; Cd 0.35",
+    "wheels": "20-inch Slingshot forged matte black wheels with 6-piston Brembo calipers",
+    "engineering": "Reinforced LX platform with adaptive Bilstein damping and supercharged 6.2L HEMI"
+  }
+}

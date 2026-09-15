@@ -1,0 +1,17 @@
+{
+  "architecture": "mpv",
+  "era": "1970s",
+  "referenceVehicle": "Dodge Sportsman Royal Wagon",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/mpv/1970s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Forward-control passenger wagon, length 5380mm, height 2010mm, wheelbase 3226mm",
+    "silhouette": "Extended passenger wagon with seating for 12 to 15 passengers in comfort",
+    "greenhouse": "Continuous panoramic side windows with tinted glass and rear barn doors",
+    "hoodCabin": "Short snout with chrome wrap-around bumper and dual rectangular headlights",
+    "surfacing": "Classic two-tone paint scheme with side body protective chrome moldings",
+    "aeroPhilosophy": "Boxy upright passenger profile; Cd 0.48",
+    "wheels": "15-inch steel wheels with bright hubcaps and heavy-duty load range tires",
+    "engineering": "318ci or 360ci V8 with heavy-duty Torqueflite automatic transmission"
+  }
+}

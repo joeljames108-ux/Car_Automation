@@ -1,0 +1,17 @@
+{
+  "architecture": "van",
+  "era": "1970s",
+  "referenceVehicle": "Volkswagen Type 2 Bus (T2 Bay Window)",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/van/1970s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Rear-engine forward-control microbus, length 4505mm, height 1960mm, wheelbase 2400mm",
+    "silhouette": "Continuous single-piece curved panoramic front bay window with sliding side door",
+    "greenhouse": "Large side passenger windows with rear luggage shelf over engine compartment",
+    "hoodCabin": "Forward control: driver sits directly over front axle with vertical steering column",
+    "surfacing": "Smooth rounded front nose with stamped VW emblem and horizontal fresh air grille",
+    "aeroPhilosophy": "Flat forward-control front face; Cd 0.46",
+    "wheels": "14-inch steel wheels with chrome dome hubcaps and commercial grade tires",
+    "engineering": "Air-cooled rear boxer engine with flat interior cargo floor over independent torsion bars"
+  }
+}

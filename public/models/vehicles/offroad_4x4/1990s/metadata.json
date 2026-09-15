@@ -1,0 +1,17 @@
+{
+  "architecture": "offroad_4x4",
+  "era": "1990s",
+  "referenceVehicle": "Land Rover Defender 90",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/offroad_4x4/1990s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Short-wheelbase aluminum-bodied expedition icon, length 3883mm, wheelbase 2360mm",
+    "silhouette": "Iconic flat-sided profile with Alpine curved roof windows and exposed rivets",
+    "greenhouse": "Alpine roof windows providing sky visibility for mountain trail spotting",
+    "hoodCabin": "Flat aluminum hood with spare tire mounting option and heavy steel tubular bumper",
+    "surfacing": "Riveted lightweight Birmabright aluminum body panels with exterior door hinges",
+    "aeroPhilosophy": "Vertical flat front face designed for maximum approach angle (47 degrees); Cd 0.53",
+    "wheels": "16-inch heavy-duty steel or Boost alloy wheels with knobby mud-terrain tires",
+    "engineering": "Coil-spring live axles with permanent 4WD and dual-range transfer gearbox"
+  }
+}

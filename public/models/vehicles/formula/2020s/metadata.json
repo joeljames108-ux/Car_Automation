@@ -1,0 +1,17 @@
+{
+  "architecture": "formula",
+  "era": "2020s",
+  "referenceVehicle": "Red Bull RB19 (Ground Effect F1)",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/formula/2020s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Modern ground-effect F1 car, length 5500mm, width 2000mm, height 950mm",
+    "silhouette": "Deep sidepod undercut routing air directly onto beam wing; extreme underfloor venturis",
+    "greenhouse": "Titanium Halo cockpit safety structure seamlessly integrated with aerodynamic fairing",
+    "hoodCabin": "Low aerodynamic nose cone with sweeping 4-element front wing endplates",
+    "surfacing": "Sculpted 3D venturi floor tunnels generating over 60% of total vehicle downforce",
+    "aeroPhilosophy": "Modern ground-effect tunnels minimizing wake turbulence for close racing; Cd 0.75",
+    "wheels": "18-inch low-profile BBS forged alloy wheels with aerodynamic wheel covers",
+    "engineering": "Honda RBPT 1.6L turbo V6 hybrid with MGU-K and MGU-H generating 1000+ hp"
+  }
+}

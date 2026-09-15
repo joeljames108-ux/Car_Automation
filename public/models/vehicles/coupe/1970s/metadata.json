@@ -1,0 +1,17 @@
+{
+  "architecture": "coupe",
+  "era": "1970s",
+  "referenceVehicle": "Datsun 240Z",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/coupe/1970s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Classic long-hood short-deck GT coupe proportions, length 4140mm, wheelbase 2305mm",
+    "silhouette": "Sweeping front fenders, scooped headlight buckets, sloping fastback roof",
+    "greenhouse": "Slim chrome-framed side quarter glass tapering into rear decklid",
+    "hoodCabin": "Long elegant hood covering inline-6, driver seated near rear axle",
+    "surfacing": "Subtle coke-bottle waist with pronounced rear fender muscular swells",
+    "aeroPhilosophy": "Smooth front air penetration with truncated rear Kamm tail; Cd 0.44",
+    "wheels": "14-inch steel wheels with full sports wheel covers",
+    "engineering": "Steel unibody with MacPherson struts front and Chapman struts rear"
+  }
+}

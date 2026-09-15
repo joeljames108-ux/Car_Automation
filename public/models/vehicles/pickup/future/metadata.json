@@ -1,0 +1,17 @@
+{
+  "architecture": "pickup",
+  "era": "future",
+  "referenceVehicle": "Tesla Cybertruck",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/pickup/future/vehicle.glb",
+  "designDNA": {
+    "proportions": "Brutalist triangular exoskeleton pickup, length 5683mm, width 2200mm, height 1791mm",
+    "silhouette": "Radical triangular peaked exoskeleton silhouette made of unpainted stainless steel",
+    "greenhouse": "Armor glass windows with flush frameless design and tinted glass roof peak",
+    "hoodCabin": "Monolithic front slope devoid of conventional grille; horizontal LED light bar",
+    "surfacing": "Cold-rolled 30X ultra-hard stainless steel exoskeleton resisting dents and corrosion",
+    "aeroPhilosophy": "Motorized vault tonneau cover creating sleek aerodynamic wedge; Cd 0.335",
+    "wheels": "20-inch wheels with custom aerodynamic tire covers extending past rim lip",
+    "engineering": "Steer-by-wire with 48V low-voltage architecture and structural 800V battery pack"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "architecture": "suv",
+  "era": "2000s",
+  "referenceVehicle": "BMW X5 (E53)",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/suv/2000s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Sports Activity Vehicle (SAV), length 4667mm, width 1872mm, wheelbase 2820mm",
+    "silhouette": "Dynamic athletic poise with signature twin kidney grille and split two-piece tailgate",
+    "greenhouse": "Hofmeister kink on D-pillars with high beltline and sports steering geometry",
+    "hoodCabin": "Muscular sculpted hood creases leading to aggressive dual round projector lights",
+    "surfacing": "Taut surface tension over flared wheel arches housing wide staggered rear rubber",
+    "aeroPhilosophy": "Smooth underbody engine belly pan, roof spoiler lip; Cd 0.36",
+    "wheels": "19-inch star-spoke light alloy wheels with wide 285-section rear tires",
+    "engineering": "Unitized body monocoque chassis offering sports-sedan level torsional rigidity"
+  }
+}

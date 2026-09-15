@@ -1,0 +1,17 @@
+{
+  "architecture": "roadster",
+  "era": "1980s",
+  "referenceVehicle": "Mazda MX-5 Miata (NA)",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/roadster/1980s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Pure lightweight roadster archetype, length 3970mm, curb weight 960kg, wheelbase 2265mm",
+    "silhouette": "Minimalist curved roadster silhouette inspired by Lotus Elan; perfect 50:50 balance",
+    "greenhouse": "Ultra-simple manual soft top folded with one hand from driver seat",
+    "hoodCabin": "Smooth aluminum hood with retractable pop-up halogen headlamps",
+    "surfacing": "Pure organic curvature with smooth oval door handles and flush shutlines",
+    "aeroPhilosophy": "Clean curved nose, minimal frontal cross-section; Cd 0.38",
+    "wheels": "14-inch lightweight daisy alloy wheels with 185/60 performance tires",
+    "engineering": "Power Plant Frame (PPF) aluminum truss tying transmission directly to differential"
+  }
+}

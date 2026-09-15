@@ -1,0 +1,17 @@
+{
+  "architecture": "luxury_car",
+  "era": "1970s",
+  "referenceVehicle": "Rolls-Royce Silver Shadow II",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/luxury_car/1970s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Formal upright stately architecture, length 5170mm, width 1820mm, height 1520mm",
+    "silhouette": "Authoritative slab-sided bodywork with upright stainless steel Pantheon grille",
+    "greenhouse": "Formal roofline with thick C-pillars ensuring rear passenger privacy",
+    "hoodCabin": "Endless horizontal hood topped with Spirit of Ecstasy mascot",
+    "surfacing": "Hand-crafted coachbuilt panels with subtle painted pinstripe coachlines",
+    "aeroPhilosophy": "Upright formal frontal profile prioritizing majesty over slipstream; Cd 0.48",
+    "wheels": "15-inch steel wheels with full stainless steel hubcaps and whitewall tires",
+    "engineering": "Citroën-licensed high-pressure hydropneumatic self-leveling suspension system"
+  }
+}

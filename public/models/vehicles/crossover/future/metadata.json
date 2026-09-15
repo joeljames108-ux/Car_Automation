@@ -1,0 +1,17 @@
+{
+  "architecture": "crossover",
+  "era": "future",
+  "referenceVehicle": "Lotus Eletre Hyper-SUV",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/crossover/future/vehicle.glb",
+  "designDNA": {
+    "proportions": "Porous hyper-crossover sculpture, length 5103mm, width 2019mm, height 1630mm",
+    "silhouette": "Dramatic cab-forward stance with floating split roof spoiler and active aerodynamics",
+    "greenhouse": "Low coupe roofline with camera side mirrors and panoramic glass ceiling",
+    "hoodCabin": "Active front grille with petal-shaped carbon blades opening when cooling is needed",
+    "surfacing": "Full porosity: air passes through hood, front fenders, and rear D-pillars",
+    "aeroPhilosophy": "Continuous airflow channels through body panels; low drag Cd 0.26",
+    "wheels": "23-inch multi-spoke carbon aerodynamic wheels with 10-piston front brakes",
+    "engineering": "Electric Premium Architecture (EPA) with 800V charging and deployable LIDAR pods"
+  }
+}

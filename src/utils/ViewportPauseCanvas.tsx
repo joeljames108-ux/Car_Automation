@@ -13,7 +13,22 @@
 //   </ViewportPauseCanvas>
 // ====================================================================
 
-import React, { useRef, useEffect, useState, useCallback, memo } from "react";
+import React, { useRef, useEffect, useState, useCallback, memo, createContext, useContext } from "react";
+
+// --- FRAMELOOP PAUSE CONTEXT ---
+// ViewportPauseCanvas publishes whether its region is on-screen. Scenes read
+// this via useFrameloopPause() and set <Canvas frameloop="never"> while
+// off-screen. Pausing the frameloop keeps the WebGL context and the last
+// rendered frame intact (unlike display:none, which gets the context evicted
+// and causes the black-viewport bug).
+const ViewportPauseContext = createContext(false);
+
+/** Returns true when the surrounding ViewportPauseCanvas region is OFF-screen
+ *  and 3D rendering should pause. Defaults to false (never pause) outside a
+ *  ViewportPauseCanvas wrapper. */
+export function useFrameloopPause(): boolean {
+  return useContext(ViewportPauseContext);
+}
 
 interface ViewportPauseCanvasProps {
   children: React.ReactNode;
@@ -38,6 +53,7 @@ function ViewportPauseCanvasComponent({
   style,
 }: ViewportPauseCanvasProps) {
   const wrapperRef = useRef<HTMLDivElement>(null);
+  const [isVisibleState, setIsVisibleState] = useState(true);
 
   useEffect(() => {
     const el = wrapperRef.current;
@@ -45,6 +61,7 @@ function ViewportPauseCanvasComponent({
 
     const observer = new IntersectionObserver(
       ([entry]) => {
+        setIsVisibleState(entry.isIntersecting);
         onVisibilityChange?.(entry.isIntersecting);
       },
       { rootMargin, threshold }
@@ -58,12 +75,14 @@ function ViewportPauseCanvasComponent({
   // size (contentVisibility:auto) when off-screen. Browsers evict the WebGL
   // context of a hidden canvas (logging "Context Lost") and a 0-height canvas
   // never recovers its size, which leaves the viewport permanently black with no
-  // model. The IntersectionObserver is still wired up for onVisibilityChange
-  // callers, but the canvas itself is left to render normally.
+  // model. Instead, scenes consume useFrameloopPause() and stop the render loop
+  // (frameloop="never"), which is context-safe.
   return (
-    <div ref={wrapperRef} className={className} style={style}>
-      {children}
-    </div>
+    <ViewportPauseContext.Provider value={!isVisibleState}>
+      <div ref={wrapperRef} className={className} style={style}>
+        {children}
+      </div>
+    </ViewportPauseContext.Provider>
   );
 }
 

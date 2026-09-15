@@ -1,0 +1,17 @@
+{
+  "architecture": "roadster",
+  "era": "1990s",
+  "referenceVehicle": "BMW Z3 M Roadster",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/roadster/1990s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Long hood roadster with voluptuous rear hips, length 4025mm, wheelbase 2459mm",
+    "silhouette": "Dramatic widebody stance with prominent side engine cooling gills",
+    "greenhouse": "Compact cockpit with twin chrome roll hoops and electric fabric soft top",
+    "hoodCabin": "Long sculpted hood covering high-revving 3.2L S54 inline-6 engine",
+    "surfacing": "Muscular flared rear wheel arches accommodating wide 245-section rubber",
+    "aeroPhilosophy": "Deep front bumper spoiler and quad chrome exhaust outlets; Cd 0.37",
+    "wheels": "17-inch deep-dish RoadStar forged wheels with staggered fitment",
+    "engineering": "Reinforced monocoque with rear semi-trailing arms and limited-slip differential"
+  }
+}

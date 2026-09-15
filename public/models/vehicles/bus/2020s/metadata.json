@@ -1,0 +1,17 @@
+{
+  "architecture": "bus",
+  "era": "2020s",
+  "referenceVehicle": "Mercedes-Benz eCitaro",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/bus/2020s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Zero-emission electric city bus, length 12135mm, height 3400mm, wheelbase 5900mm",
+    "silhouette": "Glossy black panel front mask with integrated Mercedes star and curved roof fairings",
+    "greenhouse": "Large panoramic side glazing with thermal insulation and matrix LED lights",
+    "hoodCabin": "Deep black front mask seamlessly integrating digital displays and collision sensors",
+    "surfacing": "Aerodynamic roof fairings seamlessly concealing high-voltage NMC battery packs",
+    "aeroPhilosophy": "Aero roof edging and smooth side skirts reducing air resistance; Cd 0.40",
+    "wheels": "22.5-inch forged wheels on ZF electric portal axle with wheel hub motors",
+    "engineering": "Intelligent thermal management heat pump maximizing winter EV range"
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "architecture": "supercar",
+  "era": "1970s",
+  "referenceVehicle": "Lamborghini Countach LP400",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/supercar/1970s/vehicle.glb",
+  "designDNA": {
+    "proportions": "The definitive supercar wedge, length 4140mm, width 1890mm, height 1070mm",
+    "silhouette": "Marcello Gandini unbroken wedge line running from nose to tail",
+    "greenhouse": "Periscopio periscope roof tunnel for rear visibility; scissor doors opening vertically",
+    "hoodCabin": "Ultra-low front chisel nose with pop-up headlamps and NACA side intakes",
+    "surfacing": "Geometric trapezoidal wheel arches and flat aluminium body panels",
+    "aeroPhilosophy": "Low frontal cross-section penetrating air without need for large wings; Cd 0.42",
+    "wheels": "14-inch Campagnolo cast magnesium wheels with deep dish rear wheels",
+    "engineering": "Multi-tubular spaceframe chassis with longitudinal mid-mounted 4.0L V12"
+  }
+}

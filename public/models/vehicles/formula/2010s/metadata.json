@@ -1,0 +1,17 @@
+{
+  "architecture": "formula",
+  "era": "2010s",
+  "referenceVehicle": "Red Bull RB9 (Blown Diffuser F1)",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/formula/2010s/vehicle.glb",
+  "designDNA": {
+    "proportions": "High-rake aerodynamic single-seater, length 5000mm, width 1800mm, height 950mm",
+    "silhouette": "Extreme forward chassis rake angle with exhaust gases blown into rear diffuser",
+    "greenhouse": "Narrow single-seater cockpit with complex carbon steering wheel display",
+    "hoodCabin": "Stepped vanity nose cone with camera pods and complex front wing cascade flaps",
+    "surfacing": "Tightly packaged sidepods with hot exhaust exits sealing floor edges with gas",
+    "aeroPhilosophy": "Blown floor simulating physical skirts through exhaust gas vortices; Cd 0.85",
+    "wheels": "13-inch OZ Racing forged magnesium wheels with Pirelli P Zero color-band tires",
+    "engineering": "Carbon monocoque with Renault RS27 V8 engine and KERS kinetic energy recovery"
+  }
+}

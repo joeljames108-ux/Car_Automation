@@ -1,0 +1,17 @@
+{
+  "architecture": "gt3",
+  "era": "2010s",
+  "referenceVehicle": "Porsche 911 GT3 R (991)",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/gt3/2010s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Customer GT3 endurance racer, length 4604mm, width 2002mm, wheelbase 2463mm",
+    "silhouette": "Louvered front fender wheel arch vents, massive swan-neck mounted rear wing",
+    "greenhouse": "Carbon fiber doors with sliding plastic windows and integrated FIA safety cell",
+    "hoodCabin": "Central radiator exhaust duct in carbon front hood, quick-refuel fuel filler in roof",
+    "surfacing": "Carbon fiber composite bodywork with quick-release aerodynamic bumper clips",
+    "aeroPhilosophy": "Flat floor with rear underbody diffuser tunnels and swan-neck wing; Cd 0.38",
+    "wheels": "18-inch center-lock BBS forged alloy wheels with 6-piston monobloc calipers",
+    "engineering": "4.0L flat-six mounted behind rear axle with sequential dog-ring transmission"
+  }
+}

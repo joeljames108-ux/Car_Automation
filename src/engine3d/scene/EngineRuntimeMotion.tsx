@@ -51,6 +51,14 @@ import {
 } from '../animations/engineRuntimeAnimations';
 import { apexAudio } from '../../components/assembly/engineAudioEngine';
 
+if (typeof window !== "undefined") {
+  try {
+    useGLTF.setDecoderPath("/draco/");
+  } catch {
+    // Fallback if unavailable
+  }
+}
+
 // Pre-load the master V12 racing engine GLB so it mounts instantly
 useGLTF.preload('/models/v12_racing_engine.glb');
 

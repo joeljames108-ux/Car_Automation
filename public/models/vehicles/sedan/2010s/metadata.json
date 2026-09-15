@@ -1,0 +1,17 @@
+{
+  "architecture": "sedan",
+  "era": "2010s",
+  "referenceVehicle": "Alfa Romeo Giulia Quadrifoglio",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/sedan/2010s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Short front overhang, tight athletic proportions, length 4639mm, wheelbase 2820mm",
+    "silhouette": "Teardrop cabin with truncated rear deck and aggressive forward lean",
+    "greenhouse": "Sleek aerodynamic taper with gloss black pillars and dark privacy glass",
+    "hoodCabin": "Carbon fiber hood with functional heat extractor vents; cab pushed back",
+    "surfacing": "Sensual Italian surface interplay with sharp character creases",
+    "aeroPhilosophy": "Active carbon front aero splitter and functional rear diffuser; Cd 0.25",
+    "wheels": "19-inch iconic telephone-dial forged wheels with carbon-ceramic brakes visible",
+    "engineering": "Carbon fiber driveshaft, aluminum doors/fenders, 50:50 weight distribution"
+  }
+}

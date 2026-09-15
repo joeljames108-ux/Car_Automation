@@ -1,0 +1,17 @@
+{
+  "architecture": "mpv",
+  "era": "future",
+  "referenceVehicle": "Zeekr 009",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/mpv/future/vehicle.glb",
+  "designDNA": {
+    "proportions": "Ultra-luxury electric MPV, length 5209mm, width 2024mm, wheelbase 3205mm",
+    "silhouette": "Square-shouldered cybernetic luxury box with illuminated vertical front grille",
+    "greenhouse": "Acoustic privacy glasshouse with dual electric sliding doors and smart touchbars",
+    "hoodCabin": "Fountain of Light front grille featuring 154 programmable LED light stripes",
+    "surfacing": "Ultra-clean geometric bodyside with floating roof and concealed door handles",
+    "aeroPhilosophy": "Groundbreaking aerodynamic coefficient for a large luxury box MPV; Cd 0.27",
+    "wheels": "20-inch aero dish wheels with mirror-polished face",
+    "engineering": "SEA electric architecture with 140 kWh Qilin battery delivering 822 km range"
+  }
+}

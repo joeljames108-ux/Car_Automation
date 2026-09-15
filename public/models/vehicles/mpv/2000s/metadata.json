@@ -1,0 +1,17 @@
+{
+  "architecture": "mpv",
+  "era": "2000s",
+  "referenceVehicle": "Honda Odyssey (3rd Gen)",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/mpv/2000s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Car-like low-slung family minivan, length 5105mm, width 1958mm, wheelbase 3000mm",
+    "silhouette": "Dynamic horizontal profile with distinctive lightning-bolt beltline kink",
+    "greenhouse": "Dual power-sliding side doors with roll-down power windows and sunshades",
+    "hoodCabin": "Aerodynamic sloping front nose with chrome horizontal grille and projector lamps",
+    "surfacing": "Taut bodyside character creases with concealed sliding door tracks under glass",
+    "aeroPhilosophy": "Aero roofline taper, flush door track integration; Cd 0.32",
+    "wheels": "16-inch or 17-inch alloy wheels with Michelin touring tires",
+    "engineering": "Magic Seat 3rd-row folding flat into deep floor well with one strap"
+  }
+}

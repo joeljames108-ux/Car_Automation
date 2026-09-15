@@ -1,0 +1,17 @@
+{
+  "architecture": "formula",
+  "era": "1970s",
+  "referenceVehicle": "Lotus 79 (Ground Effect F1)",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/formula/1970s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Ground effect open-wheel single seater, length 4420mm, width 2146mm, height 960mm",
+    "silhouette": "Iconic black and gold John Player Special profile with venturi underfloor sidepods",
+    "greenhouse": "Exposed cockpit opening with small clear windscreen deflector and roll hoop",
+    "hoodCabin": "Narrow nose cone flanked by front wing aerofoils leading to sidepod radiators",
+    "surfacing": "Upside-down airplane wing contours shaped inside sidepods to pull car to track",
+    "aeroPhilosophy": "Sliding skirts sealing underbody to ground; massive cornering suction; Cd 0.65",
+    "wheels": "13-inch small front wheels and massive 18-inch wide rear Goodyear racing slicks",
+    "engineering": "Aluminum monocoque chassis with stressed Ford Cosworth DFV 3.0L V8 engine"
+  }
+}

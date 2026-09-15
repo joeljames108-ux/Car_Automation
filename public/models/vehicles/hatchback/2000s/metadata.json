@@ -1,0 +1,17 @@
+{
+  "architecture": "hatchback",
+  "era": "2000s",
+  "referenceVehicle": "Renault Clio V6 Phase 2",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/hatchback/2000s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Radical widebody mid-engine hot hatch, length 3841mm, width 1830mm",
+    "silhouette": "Extremely wide rear track with massive side air scoops feeding mid-engine V6",
+    "greenhouse": "Tinted two-seater cabin, rear cargo area replaced by aluminum engine firewall",
+    "hoodCabin": "Short front hood housing auxiliary radiator and steering gear",
+    "surfacing": "Blistered composite front and rear fender flares (+171mm wider than standard)",
+    "aeroPhilosophy": "Deep front bumper splitter, dual center exhaust diffuser; Cd 0.36",
+    "wheels": "18-inch OZ Racing multi-spoke alloy wheels wrapped in wide performance rubber",
+    "engineering": "Bespoke tubular rear subframe supporting 3.0L V6 mounted transversely behind seats"
+  }
+}

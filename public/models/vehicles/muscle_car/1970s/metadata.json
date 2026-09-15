@@ -1,0 +1,17 @@
+{
+  "architecture": "muscle_car",
+  "era": "1970s",
+  "referenceVehicle": "Dodge Challenger R/T (1970)",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/muscle_car/1970s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Classic Coke-bottle American muscle, length 4859mm, width 1933mm, wheelbase 2794mm",
+    "silhouette": "Long hood, short deck, aggressive broad-shouldered stance, quad headlights",
+    "greenhouse": "Formal roofline with frameless door glass and recessed rear backlight window",
+    "hoodCabin": "Shaker hood scoop protruding through hood vibrating with engine revs",
+    "surfacing": "Subtle body crease dipping along doors and swelling over rear wheel arches",
+    "aeroPhilosophy": "Chin spoiler reducing high-speed front lift; high muscle drag Cd 0.46",
+    "wheels": "15-inch Rallye steel wheels with Goodyear Polyglas white-letter tires",
+    "engineering": "Unitized body construction with heavy-duty front torsion bars and rear leaf springs"
+  }
+}

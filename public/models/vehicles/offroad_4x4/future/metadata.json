@@ -1,0 +1,17 @@
+{
+  "architecture": "offroad_4x4",
+  "era": "future",
+  "referenceVehicle": "Mercedes-Benz Concept EQG",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/offroad_4x4/future/vehicle.glb",
+  "designDNA": {
+    "proportions": "Electric 4-motor G-Class icon, length 4820mm, width 1930mm, height 1960mm",
+    "silhouette": "Timeless G-Class angular silhouette with illuminated deep black front grille panel",
+    "greenhouse": "Two-tone paintwork with gloss black roof and aluminum lower body panels",
+    "hoodCabin": "Deep black front panel with animated blue illuminated pixel squares",
+    "surfacing": "Squared external rear spare box styled as a wallbox charger compartment",
+    "aeroPhilosophy": "Aero-curtain wheel arch vents, roof-mounted LED adventure light bar; Cd 0.38",
+    "wheels": "22-inch aerodynamic polished alloy wheels with low-noise off-road rubber",
+    "engineering": "Four individually controlled electric motors near wheels providing tank-turn G-Turn capability"
+  }
+}

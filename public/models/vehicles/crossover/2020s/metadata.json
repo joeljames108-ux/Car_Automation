@@ -1,0 +1,17 @@
+{
+  "architecture": "crossover",
+  "era": "2020s",
+  "referenceVehicle": "Ferrari Purosangue",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/crossover/2020s/vehicle.glb",
+  "designDNA": {
+    "proportions": "High-riding four-door V12 crossover sculpture, length 4973mm, width 2028mm, height 1589mm",
+    "silhouette": "Low athletic coupe silhouette with rear-hinged welcome coach doors (welcome doors)",
+    "greenhouse": "Carbon fiber roof lowering center of gravity; frameless door glass",
+    "hoodCabin": "Long contoured hood with Aerobridge channeling air through front fender vents",
+    "surfacing": "Sculpted aerodynamic flanks flowing into muscular rear haunches with quad exhausts",
+    "aeroPhilosophy": "Aerobridge front channels, wheel arch air curtains, suspended rear spoiler; Cd 0.32",
+    "wheels": "22-inch front / 23-inch rear forged wheels with carbon-ceramic brakes",
+    "engineering": "Multimatic 48V active spool-valve suspension eliminating anti-roll bars completely"
+  }
+}

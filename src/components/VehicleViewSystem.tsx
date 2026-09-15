@@ -2,6 +2,7 @@ import React, { useState, useMemo, memo, useEffect, useRef, useCallback } from "
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
+import { GltfLoaderFactory } from "../utils/gltfLoaderFactory";
 import {
   Layers3,
   ScanSearch,
@@ -517,7 +518,7 @@ function VehicleViewSystemComponent({ onSelectStage }: Props) {
     }
 
     const currentOption = VEHICLE_FAMILY_MODELS.find((m) => m.id === selectedModelId) || VEHICLE_FAMILY_MODELS[0];
-    const loader = new GLTFLoader();
+    const loader = GltfLoaderFactory.getSharedLoader();
 
     loader.load(
       currentOption.path,

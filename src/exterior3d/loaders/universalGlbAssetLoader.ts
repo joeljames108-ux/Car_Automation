@@ -15,6 +15,8 @@ import { GLBScenePostProcessor } from './glbScenePostProcessor';
 import { GLBMaterialPipelineIntegrator } from '../materials/glbMaterialPipelineIntegrator';
 
 
+import { MeshoptDecoder } from 'three/examples/jsm/libs/meshopt_decoder.module.js';
+
 export interface LoadedGlbAsset {
   assetUri: string;
   scene: THREE.Group;
@@ -35,15 +37,20 @@ export class UniversalGlbAssetLoader {
   private static memoryCache: Map<string, LoadedGlbAsset> = new Map();
 
   /**
-   * Initializes loaders with DRACO decoder and FBX support.
+   * Initializes loaders with DRACO decoder, Meshopt decoder, and FBX support.
    */
   public static initLoader(): GLTFLoader {
     if (!this.gltfLoader) {
       this.gltfLoader = new GLTFLoader();
+      try {
+        this.gltfLoader.setMeshoptDecoder(MeshoptDecoder);
+      } catch {
+        // Fallback gracefully without Meshopt
+      }
       if (typeof window !== 'undefined') {
         try {
           this.dracoLoader = new DRACOLoader();
-          this.dracoLoader.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.6/');
+          this.dracoLoader.setDecoderPath('/draco/');
           this.gltfLoader.setDRACOLoader(this.dracoLoader);
         } catch {
           // Fallback gracefully without Draco if offline

@@ -11,6 +11,7 @@ import React, { useEffect, useRef, useState, useCallback, useMemo } from "react"
 import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
+import { GltfLoaderFactory } from "../../utils/gltfLoaderFactory";
 import {
   Camera,
   RotateCcw,
@@ -344,7 +345,7 @@ export const AeroStudioCanvasViewport: React.FC = () => {
     createStreamlineSystem(scene);
 
     // 8. GLTF Loader Pipeline for Aerodynamic Components
-    const loader = new GLTFLoader();
+    const loader = GltfLoaderFactory.getSharedLoader();
     let loadedCount = 0;
     const totalCount = AERO_ATTACHMENT_GLB_ASSETS.length;
 
@@ -494,7 +495,7 @@ export const AeroStudioCanvasViewport: React.FC = () => {
   useEffect(() => {
     if (!sceneRef.current || !hostVehicleGroupRef.current) return;
     const hostGroup = hostVehicleGroupRef.current;
-    const loader = new GLTFLoader();
+    const loader = GltfLoaderFactory.getSharedLoader();
 
     // Clear previous host vehicle model meshes
     while (hostGroup.children.length > 0) {

@@ -1,0 +1,17 @@
+{
+  "architecture": "van",
+  "era": "1990s",
+  "referenceVehicle": "Chevrolet Astro Cargo Van",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/van/1990s/vehicle.glb",
+  "designDNA": {
+    "proportions": "Mid-size American commercial van, length 4745mm, width 1968mm, wheelbase 2820mm",
+    "silhouette": "Boxy proportions capable of carrying standard 4x8 plywood sheets flat on floor",
+    "greenhouse": "Dutch doors rear setup: liftgate glass with dual lower swing doors",
+    "hoodCabin": "Short sloping nose with dual stacked rectangular headlamps and Bowtie emblem",
+    "surfacing": "Durable composite bumpers and lower body protection cladding",
+    "aeroPhilosophy": "Semi-forward control nose profile; Cd 0.40",
+    "wheels": "15-inch steel wheels with commercial load-rated tires",
+    "engineering": "Subframe unibody with available full-time all-wheel drive and 4.3L Vortec V6"
+  }
+}

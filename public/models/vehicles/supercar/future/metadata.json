@@ -1,0 +1,17 @@
+{
+  "architecture": "supercar",
+  "era": "future",
+  "referenceVehicle": "McMurtry Spéirling",
+  "inspirationOnly": true,
+  "glb": "/models/vehicles/supercar/future/vehicle.glb",
+  "designDNA": {
+    "proportions": "Ultra-compact single-seater downforce vacuum silhouette, length 3500mm, height 1020mm",
+    "silhouette": "Batmobile-like compact teardrop canopy flanked by enclosed wheel arches",
+    "greenhouse": "Central fighter-jet enclosed bubble canopy with camera side-view mirrors",
+    "hoodCabin": "Minimal frontal area with twin high-powered ground-effect exhaust fan ducts at rear",
+    "surfacing": "Tightly shrink-wrapped carbon fiber body enclosing vacuum sealing skirts",
+    "aeroPhilosophy": "Fan-powered ground-effect generating 2000kg instant downforce even at 0 mph; Cd 0.35",
+    "wheels": "18-inch aerodynamic center-lock racing wheels wrapped in wide racing slicks",
+    "engineering": "Full structural carbon monocoque with dual electric fan downforce motors"
+  }
+}
