@@ -18,6 +18,7 @@ import bpy
 import bus_common
 import bus_materials
 import bus_chassis
+import bus_framework
 import bus_body
 import bus_glazing
 import bus_doors
@@ -32,6 +33,7 @@ import importlib
 importlib.reload(bus_common)
 importlib.reload(bus_materials)
 importlib.reload(bus_chassis)
+importlib.reload(bus_framework)
 importlib.reload(bus_body)
 importlib.reload(bus_glazing)
 importlib.reload(bus_doors)
@@ -56,7 +58,11 @@ def build_complete_bus():
     # 3. Chassis & e-Powertrain
     chassis_objs = bus_chassis.build_chassis_and_powertrain(mat_registry)
     
-    # 4. Body Shell & Roof HVAC Pods
+    # 4. Superstructure Spaceframe Skeleton
+    print("\n[BUS_BUILDER] Erecting Heavy-Duty Tubular Spaceframe Skeleton...")
+    framework_objs = bus_framework.build_bus_framework(mat_registry)
+    
+    # 5. Body Panels (With Open Window Cutouts) & Roof HVAC Pods
     body_objs = bus_body.build_bus_body_and_roof(mat_registry)
     
     # 5. Panoramic Glazing & Tinted Safety Glass
@@ -86,7 +92,7 @@ def build_complete_bus():
     # 13. Export all production GLB artifacts
     bus_export.export_all()
     
-    total_objs = (len(chassis_objs) + len(body_objs) + len(glazing_objs) + 
+    total_objs = (len(chassis_objs) + len(framework_objs) + len(body_objs) + len(glazing_objs) + 
                   len(door_objs) + len(lighting_objs) + len(hardware_objs) + 
                   len(wheel_objs) + len(interior_objs))
     print("=" * 75)

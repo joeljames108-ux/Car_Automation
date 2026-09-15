@@ -537,6 +537,22 @@ function AppInner() {
 
           {/* Right Control Bar */}
           <div className="flex items-center gap-2 shrink-0">
+            {/* Direct Switcher: Theme 3 -> UI 4 (Vision Glass UI) */}
+            <button
+              onClick={() => setUiTheme("theme4")}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all whitespace-nowrap border bg-gradient-to-r from-amber-500/20 via-yellow-500/15 to-amber-500/20 text-amber-200 border-amber-400/45 hover:border-amber-300 hover:bg-amber-500/30 hover:text-white shadow-[0_0_12px_rgba(245,158,11,0.25)] hover:shadow-[0_0_18px_rgba(245,158,11,0.45)] haptic-press ripple-effect group"
+              title="Switch from Theme 3 to UI 4 (Vision Glass UI)"
+              aria-label="Switch from Theme 3 to UI 4 (Vision Glass UI)"
+            >
+              <SparklesIcon size={13} className="text-amber-300 animate-pulse group-hover:rotate-12 transition-transform" />
+              <span className="font-mono text-[11px] tracking-wide hidden sm:inline">
+                UI 4 (Vision Glass)
+              </span>
+              <span className="font-mono text-[11px] tracking-wide sm:hidden">
+                UI 4
+              </span>
+            </button>
+
             <button
               onClick={() => setCmdPaletteOpen(true)}
               className="flex items-center gap-2 bg-base-850/90 hover:bg-slate-800 border border-slate-700/80 rounded-lg px-2.5 py-1.5 text-xs text-slate-400 hover:text-slate-200 transition-all hidden md:flex"

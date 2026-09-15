@@ -430,15 +430,33 @@ export const ModularVehicleCanvasViewport: React.FC = () => {
                           const mats = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
                           mats.forEach((m, idx) => {
                             const matName = m.name || "";
-                            if (
+                            const isExcluded =
+                              matName.includes("Skeleton") ||
+                              matName.includes("Steel") ||
+                              matName.includes("Glass") ||
+                              matName.includes("Lens") ||
+                              matName.includes("Light") ||
+                              matName.includes("LED") ||
+                              matName.includes("Chrome") ||
+                              matName.includes("Trim") ||
+                              matName.includes("Black") ||
+                              matName.includes("Rubber") ||
+                              matName.includes("Tire");
+
+                            const isPaint =
                               matName.includes("Paint") ||
+                              matName.includes("Fleet") ||
                               matName.includes("Body") ||
                               matName.includes("Outer") ||
                               matName.includes("SuperWhite") ||
                               matName.includes("OxideBronze") ||
                               matName.includes("Forest_Jade") ||
-                              matName.includes("bodypaint")
-                            ) {
+                              matName.includes("bodypaint") ||
+                              matName.includes("Bentley") ||
+                              matName.includes("StJames") ||
+                              matName.includes("Monaco");
+
+                            if (!isExcluded && isPaint) {
                               const cloned = (m as THREE.MeshStandardMaterial).clone();
                               cloned.color.set(bodyColorHex);
                               cloned.roughness = 0.15;
@@ -490,8 +508,13 @@ export const ModularVehicleCanvasViewport: React.FC = () => {
         );
       }
 
-      // If SUV, Pickup, Hypercar (Divo), or Bus model, load dedicated CAD stage subassemblies
+      // If Coupe (Bentley), SUV, Pickup, Hypercar (Divo), or Bus model, load dedicated CAD stage subassemblies
       const isCustomModel =
+        selectedModel === "coupe" ||
+        (selectedModel as string) === "bentley" ||
+        (selectedModel as string) === "gt_coupe" ||
+        (selectedModel as string) === "sports_coupe" ||
+        (selectedModel as string) === "grand_tourer" ||
         selectedModel === "suv" ||
         selectedModel === "pickup_truck" ||
         (selectedModel as string) === "pickup" ||
@@ -523,23 +546,41 @@ export const ModularVehicleCanvasViewport: React.FC = () => {
                       mesh.castShadow = true;
                       mesh.receiveShadow = true;
 
-                      // If exterior panel or cab body, customize body color
-                      if ((stageId === "exterior_panels" || stageId === "body_framework") && mesh.material) {
+                      // If exterior panel, customize body color (preserve structural framework steel)
+                      const isSkeleton = mesh.name.startsWith("FRAMEWORK_") || mesh.name.startsWith("CHASSIS_");
+                      if (stageId === "exterior_panels" && !isSkeleton && mesh.material) {
                         const mats = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
                         mats.forEach((m, idx) => {
                           const matName = m.name || "";
-                          if (
+                          const isExcluded =
+                            matName.includes("Skeleton") ||
+                            matName.includes("Steel") ||
+                            matName.includes("Glass") ||
+                            matName.includes("Lens") ||
+                            matName.includes("Light") ||
+                            matName.includes("LED") ||
+                            matName.includes("Chrome") ||
+                            matName.includes("Trim") ||
+                            matName.includes("Black") ||
+                            matName.includes("Rubber") ||
+                            matName.includes("Tire");
+
+                          const isPaint =
                             matName.includes("Paint") ||
+                            matName.includes("Fleet") ||
+                            matName.includes("Coach") ||
                             matName.includes("Body") ||
-                            matName === "" ||
                             matName.includes("Outer") ||
                             matName.includes("Crimson") ||
                             matName.includes("SuperWhite") ||
                             matName.includes("OxideBronze") ||
                             matName.includes("TitaniumGrey") ||
                             matName.includes("Divo") ||
-                            matName.includes("Transit")
-                          ) {
+                            matName.includes("Bentley") ||
+                            matName.includes("StJames") ||
+                            matName.includes("Monaco");
+
+                          if (!isExcluded && isPaint) {
                             const cloned = (m as THREE.MeshStandardMaterial).clone();
                             cloned.color.set(bodyColorHex);
                             cloned.roughness = 0.15;
@@ -668,7 +709,26 @@ export const ModularVehicleCanvasViewport: React.FC = () => {
                         const mats = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
                         mats.forEach((m, idx) => {
                           const matName = m.name || "";
-                          if (matName.includes("Paint") || matName.includes("Body") || matName === "" || matName.includes("Outer")) {
+                          const isExcluded =
+                            matName.includes("Skeleton") ||
+                            matName.includes("Steel") ||
+                            matName.includes("Glass") ||
+                            matName.includes("Lens") ||
+                            matName.includes("Light") ||
+                            matName.includes("LED") ||
+                            matName.includes("Chrome") ||
+                            matName.includes("Trim") ||
+                            matName.includes("Black") ||
+                            matName.includes("Rubber") ||
+                            matName.includes("Tire");
+
+                          const isPaint =
+                            matName.includes("Paint") ||
+                            matName.includes("Fleet") ||
+                            matName.includes("Body") ||
+                            matName.includes("Outer");
+
+                          if (!isExcluded && isPaint) {
                             const cloned = (m as THREE.MeshStandardMaterial).clone();
                             cloned.color.set(bodyColorHex);
                             cloned.roughness = 0.15;
@@ -792,12 +852,13 @@ export const ModularVehicleCanvasViewport: React.FC = () => {
   // --------------------------------------------------------------------------
   const updateExplodedTransforms = useCallback(() => {
     const currentMap = stageGroupsMapRef.current;
-    const isPickup =
-      selectedModel === "pickup_truck" ||
-      (selectedModel as string) === "pickup" ||
-      (selectedModel as string) === "truck" ||
-      (selectedModel as string) === "hilux";
-    const isSuv = selectedModel === "suv";
+    const m = String(selectedModel || "").toLowerCase();
+    const isCoupe = m === "coupe" || m === "bentley" || m === "gt_coupe" || m === "grand_tourer" || m === "sports_coupe";
+    const isPickup = m === "pickup_truck" || m === "pickup" || m === "truck" || m === "hilux";
+    const isSuv = m === "suv";
+    const isHypercar = m === "hypercar" || m === "divo" || m === "megawatt";
+    const isBus = m === "bus_shuttle" || m === "bus" || m === "transit_bus";
+    const isZeroOffsetCAD = isCoupe || isPickup || isSuv || isHypercar || isBus;
 
     for (const [stId, group] of currentMap.entries()) {
       const stageOffset = STAGE_EXPLODED_OFFSETS[stId] || [0, 0, 0];
@@ -807,12 +868,8 @@ export const ModularVehicleCanvasViewport: React.FC = () => {
       let baseY = 0;
       let baseZ = 0;
 
-      if (stId === "engine") {
-        if (isPickup || isSuv) {
-          if (enginePosition === "mid") baseY = -1.15;
-          else if (enginePosition === "rear") baseY = -2.35;
-          else baseY = 0;
-        } else {
+      if (!isZeroOffsetCAD) {
+        if (stId === "engine") {
           if (enginePosition === "mid") {
             baseX = 0; baseY = -0.30; baseZ = 0.15;
           } else if (enginePosition === "rear") {
@@ -821,13 +878,7 @@ export const ModularVehicleCanvasViewport: React.FC = () => {
             // Front engine
             baseX = 0; baseY = 0.85; baseZ = 0.15;
           }
-        }
-      } else if (stId === "gearbox") {
-        if (isPickup || isSuv) {
-          if (enginePosition === "mid") baseY = -1.15;
-          else if (enginePosition === "rear") baseY = -2.35;
-          else baseY = 0;
-        } else {
+        } else if (stId === "gearbox") {
           if (enginePosition === "mid") {
             baseX = 0; baseY = -0.85; baseZ = 0.15;
           } else if (enginePosition === "rear") {

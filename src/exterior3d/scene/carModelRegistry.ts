@@ -97,6 +97,19 @@ export const CAR_MODEL_REGISTRY: CarModelEntry[] = [
     weight: "1,580 kg",
   },
   {
+    id: "bentley_continental_gt",
+    name: "Bentley Continental GT II",
+    subtitle: "6.0L W12 Grand Tourer (2011)",
+    glbPath: "/models/Car_Coupe_Complete.glb",
+    defaultPaint: 0x990515, // St. James Red
+    caliperColor: "#dc2626", // Red Brembo
+    tier: "gt",
+    year: 2011,
+    origin: "UK",
+    power: "567 HP",
+    weight: "2,320 kg",
+  },
+  {
     id: "ford_escort_cosworth",
     name: "Ford Escort RS Cosworth",
     subtitle: "Rally Homologation",

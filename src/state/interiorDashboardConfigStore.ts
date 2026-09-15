@@ -349,7 +349,8 @@ export type StitchingColor = 'none' | 'gold' | 'red' | 'blue' | 'yellow' | 'whit
 export type WindshieldTint = 'clear' | 'light_tint' | 'medium_smoke' | 'dark_smoke' | 'blue_tint' | 'green_tint' | 'iridescent';
 
 // ── Rear Cabin / Multi-Row Seating Types ──
-export type SeatingCapacity = '5_seater' | '7_seater' | '8_seater';
+export type SeatingCapacity = number;
+export type Truck4WdMode = '2H' | '4H' | '4L';
 export type Row2SeatingType = 'split_bench_40_20_40' | 'executive_captain_chairs' | 'luxury_lounge';
 export type Row3SeatingType = 'fold_flat_bench' | 'split_50_50' | 'power_stow';
 export type RearEntertainment = 'none' | 'dual_11in_oled' | 'overhead_theater_31in' | 'executive_bundle';
@@ -374,7 +375,8 @@ export type CameraPose =
   | 'exploded'
   | 'rear_cabin'
   | 'rear_row2'
-  | 'rear_row3';
+  | 'rear_row3'
+  | 'summary';
 
 export type DriverHeight = 'low' | 'normal' | 'tall';
 export type ActiveConfigPanel =
@@ -669,6 +671,16 @@ export interface InteriorDashboardConfigState {
   rearMassage: boolean;
   rearFoldingTables: boolean;
 
+  // Dedicated Architecture Subsystem States
+  truck4WdMode: Truck4WdMode;
+  truckAuxSwitchpod: boolean;
+  truckUnderseatStorage: boolean;
+  busFareValidator: boolean;
+  busStanchionPoles: boolean;
+  luxuryOttomanDeployed: boolean;
+  luxuryChampagneChiller: boolean;
+  luxuryTheaterScreen: boolean;
+
   cameraPose: CameraPose;
   driverHeight: DriverHeight;
   activePanel: ActiveConfigPanel;
@@ -736,6 +748,16 @@ export interface InteriorDashboardConfigState {
   setRearHeatedVentilated: (on: boolean) => void;
   setRearMassage: (on: boolean) => void;
   setRearFoldingTables: (on: boolean) => void;
+
+  // Dedicated Architecture Setters
+  setTruck4WdMode: (mode: Truck4WdMode) => void;
+  setTruckAuxSwitchpod: (on: boolean) => void;
+  setTruckUnderseatStorage: (on: boolean) => void;
+  setBusFareValidator: (on: boolean) => void;
+  setBusStanchionPoles: (on: boolean) => void;
+  setLuxuryOttomanDeployed: (on: boolean) => void;
+  setLuxuryChampagneChiller: (on: boolean) => void;
+  setLuxuryTheaterScreen: (on: boolean) => void;
 
   undo: () => void;
   redo: () => void;
@@ -917,7 +939,7 @@ export const useInteriorDashboardConfigStore = create<InteriorDashboardConfigSta
       nightMode: false,
 
       // Rear Cabin Defaults
-      seatingCapacity: '5_seater',
+      seatingCapacity: 5,
       row2SeatingType: 'split_bench_40_20_40',
       row3SeatingType: 'fold_flat_bench',
       rearEntertainment: 'none',
@@ -925,6 +947,16 @@ export const useInteriorDashboardConfigStore = create<InteriorDashboardConfigSta
       rearHeatedVentilated: false,
       rearMassage: false,
       rearFoldingTables: false,
+
+      // Dedicated Architecture Defaults
+      truck4WdMode: '2H',
+      truckAuxSwitchpod: true,
+      truckUnderseatStorage: true,
+      busFareValidator: true,
+      busStanchionPoles: true,
+      luxuryOttomanDeployed: false,
+      luxuryChampagneChiller: false,
+      luxuryTheaterScreen: false,
 
       cameraPose: 'studio_sport',
       driverHeight: 'normal',
@@ -1084,7 +1116,7 @@ export const useInteriorDashboardConfigStore = create<InteriorDashboardConfigSta
           lightingMode: 'day',
           nightMode: false,
           // Rear Cabin Reset
-          seatingCapacity: '5_seater',
+          seatingCapacity: 5,
           row2SeatingType: 'split_bench_40_20_40',
           row3SeatingType: 'fold_flat_bench',
           rearEntertainment: 'none',
@@ -1092,6 +1124,14 @@ export const useInteriorDashboardConfigStore = create<InteriorDashboardConfigSta
           rearHeatedVentilated: false,
           rearMassage: false,
           rearFoldingTables: false,
+          truck4WdMode: '2H',
+          truckAuxSwitchpod: true,
+          truckUnderseatStorage: true,
+          busFareValidator: true,
+          busStanchionPoles: true,
+          luxuryOttomanDeployed: false,
+          luxuryChampagneChiller: false,
+          luxuryTheaterScreen: false,
           cameraPose: 'studio_sport',
           driverHeight: 'normal',
           activePanel: 'overview',
@@ -1255,7 +1295,7 @@ export const useInteriorDashboardConfigStore = create<InteriorDashboardConfigSta
           else if (panel === "doors") pose = "doors";
           else if (panel === "dashboard") pose = "dashboard_center";
           else if (panel === "rear_cabin") pose = "rear_cabin";
-          else if (panel === "summary") pose = "studio_sport";
+          else if (panel === "summary") pose = "summary";
           return { activePanel: panel, cameraPose: pose };
         }),
       setExplodedProgress: (prog) => set({ explodedProgress: Math.max(0, Math.min(1, prog)) }),
@@ -1268,12 +1308,11 @@ export const useInteriorDashboardConfigStore = create<InteriorDashboardConfigSta
       // Rear Cabin Setters
       setSeatingCapacity: (cap) =>
         set((state) => {
-          // Auto-adjust row3 visibility: if 5-seater, row3 is irrelevant
           const updates: Partial<InteriorDashboardConfigState> = {
             seatingCapacity: cap,
-            cameraPose: 'rear_cabin' as CameraPose,
+            cameraPose: (cap <= 2 ? 'seats' : 'rear_cabin') as CameraPose,
           };
-          if (cap === '5_seater') {
+          if (cap < 7) {
             updates.row3SeatingType = 'fold_flat_bench';
           }
           return updates;
@@ -1285,6 +1324,16 @@ export const useInteriorDashboardConfigStore = create<InteriorDashboardConfigSta
       setRearHeatedVentilated: (on) => set({ rearHeatedVentilated: on }),
       setRearMassage: (on) => set({ rearMassage: on }),
       setRearFoldingTables: (on) => set({ rearFoldingTables: on }),
+
+      // Dedicated Architecture Setters
+      setTruck4WdMode: (mode) => set({ truck4WdMode: mode }),
+      setTruckAuxSwitchpod: (on) => set({ truckAuxSwitchpod: on }),
+      setTruckUnderseatStorage: (on) => set({ truckUnderseatStorage: on }),
+      setBusFareValidator: (on) => set({ busFareValidator: on }),
+      setBusStanchionPoles: (on) => set({ busStanchionPoles: on }),
+      setLuxuryOttomanDeployed: (on) => set({ luxuryOttomanDeployed: on }),
+      setLuxuryChampagneChiller: (on) => set({ luxuryChampagneChiller: on }),
+      setLuxuryTheaterScreen: (on) => set({ luxuryTheaterScreen: on }),
 
       undo: () =>
         set((state) => {

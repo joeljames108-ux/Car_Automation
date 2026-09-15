@@ -32,15 +32,15 @@ def log(msg):
     print(f"[INTERACTIVE_DASH_CAD] {msg}")
 
 def reset_scene_clean():
-    bpy.ops.wm.read_factory_settings(use_empty=True)
+    # Safe non-destructive clearing that preserves MCP socket listener
+    for o in list(bpy.data.objects):
+        bpy.data.objects.remove(o, do_unlink=True)
     for c in list(bpy.data.collections):
         bpy.data.collections.remove(c)
-    for o in list(bpy.data.objects):
-        bpy.data.objects.remove(o)
-    for m in list(bpy.data.materials):
-        bpy.data.materials.remove(m)
-    for me in list(bpy.data.meshes):
-        bpy.data.meshes.remove(me)
+    for block in [bpy.data.meshes, bpy.data.materials, bpy.data.curves, bpy.data.lights, bpy.data.cameras]:
+        for item in list(block):
+            if item.users == 0:
+                block.remove(item)
 
 def set_socket(bsdf, socket_names, val):
     for name in socket_names:
@@ -144,6 +144,25 @@ def create_cad_materials():
     mats["rubber_traction"] = make_pbr_mat("Mat_Rubber_Black", (0.015, 0.015, 0.018, 1.0), roughness=0.92)
     mats["glass_optical"] = make_pbr_mat("Mat_Glass_Optical", (0.02, 0.02, 0.03, 0.12), roughness=0.02, transmission=0.95, ior=1.52, alpha=0.12)
     mats["crystal_faceted"] = make_pbr_mat("Mat_Crystal_Faceted", (0.90, 0.94, 0.98, 0.6), roughness=0.03, clearcoat=1.0, transmission=0.85, ior=1.65, alpha=0.6)
+    mats["safety_yellow"] = make_pbr_mat("Mat_Stanchion_Yellow", (0.95, 0.78, 0.05, 1.0), metallic=0.05, roughness=0.25, clearcoat=0.5)
+    mats["led_emerald"] = make_pbr_mat("Mat_LED_Emerald_Green", (0.05, 0.95, 0.20, 1.0), emission=(0.05, 0.95, 0.20, 1.0), emission_strength=5.0)
+    mats["led_amber"] = make_pbr_mat("Mat_LED_Indicator_Amber", (0.98, 0.55, 0.05, 1.0), emission=(0.98, 0.55, 0.05, 1.0), emission_strength=5.0)
+    mats["frosted_chiller_glass"] = make_pbr_mat("Mat_Chiller_Glass_Frosted", (0.85, 0.90, 0.95, 0.5), roughness=0.35, clearcoat=0.8, transmission=0.82, ior=1.52, alpha=0.5)
+    mats["transit_fabric"] = make_pbr_mat("Mat_Transit_Fabric_Moquette", (0.08, 0.16, 0.32, 1.0), roughness=0.82, sheen=0.4)
+    mats["transit_plastic_blue"] = make_pbr_mat("Mat_Transit_VandalProof_Blue", (0.05, 0.18, 0.45, 1.0), roughness=0.35, clearcoat=0.3)
+    mats["led_crimson"] = make_pbr_mat("Mat_LED_Stop_Crimson", (0.95, 0.05, 0.05, 1.0), emission=(0.95, 0.05, 0.05, 1.0), emission_strength=5.5)
+
+    # Motorsport, Roll Cage & Heavy Commercial Materials
+    mats["rollcage_satin"] = make_pbr_mat("Mat_RollCage_ChroMoly_Satin", (0.10, 0.11, 0.13, 1.0), metallic=0.90, roughness=0.30)
+    mats["rollcage_padding"] = make_pbr_mat("Mat_RollCage_Foam_Padding", (0.015, 0.015, 0.018, 1.0), metallic=0.02, roughness=0.94)
+    mats["anodized_red"] = make_pbr_mat("Mat_Anodized_Red_Jewel", (0.85, 0.04, 0.04, 1.0), metallic=0.92, roughness=0.18)
+    mats["anodized_blue"] = make_pbr_mat("Mat_Anodized_Blue_Race", (0.04, 0.22, 0.88, 1.0), metallic=0.92, roughness=0.18)
+    mats["air_brake_yellow"] = make_pbr_mat("Mat_AirBrake_Yellow_Diamond", (0.95, 0.82, 0.04, 1.0), roughness=0.32)
+    mats["air_brake_red"] = make_pbr_mat("Mat_AirBrake_Red_Octagon", (0.90, 0.06, 0.06, 1.0), roughness=0.32)
+    mats["racing_harness_red"] = make_pbr_mat("Mat_Harness_Webbing_Red", (0.85, 0.05, 0.05, 1.0), roughness=0.62, sheen=0.55)
+    mats["shift_light_green"] = make_pbr_mat("Mat_ShiftLight_Green", (0.05, 0.95, 0.15, 1.0), emission=(0.05, 0.95, 0.15, 1.0), emission_strength=5.5)
+    mats["shift_light_amber"] = make_pbr_mat("Mat_ShiftLight_Amber", (0.98, 0.60, 0.04, 1.0), emission=(0.98, 0.60, 0.04, 1.0), emission_strength=6.0)
+    mats["shift_light_blue"] = make_pbr_mat("Mat_ShiftLight_Blue_Flash", (0.10, 0.45, 1.0, 1.0), emission=(0.10, 0.45, 1.0, 1.0), emission_strength=7.5)
 
     # Textured Maps
     path_wood = os.path.join(tex_dir, "wood_walnut_grain.png")
@@ -1860,6 +1879,10 @@ def build_class_a_interactive_dashboard():
     attach_to_parent(seats_group, cockpit_master)
 
     for s_side, sx in [("DRIVER", driver_x), ("PASS", pass_x)]:
+        seat_unit_root = bpy.data.objects.new(f"SEAT_UNIT_{s_side}", None)
+        bpy.context.scene.collection.objects.link(seat_unit_root)
+        attach_to_parent(seat_unit_root, seats_group)
+
         cy = -0.48
         cz = 0.20
 
@@ -1901,7 +1924,7 @@ def build_class_a_interactive_dashboard():
         bpy.context.view_layer.objects.active = obj_c
         bpy.ops.object.modifier_apply(modifier="Solidify")
         obj_c.data.materials.append(mats["leather_ebony"])
-        attach_to_parent(obj_c, seats_group)
+        attach_to_parent(obj_c, seat_unit_root)
 
         # 9.2 Sculpted Anatomical Backrest (24x28 quad bmesh with S-spine lumbar, shoulder wings & fluted ribs)
         bm_b = bmesh.new()
@@ -1948,7 +1971,7 @@ def build_class_a_interactive_dashboard():
         bpy.context.view_layer.objects.active = obj_b
         bpy.ops.object.modifier_apply(modifier="Solidify")
         obj_b.data.materials.append(mats["leather_ebony"])
-        attach_to_parent(obj_b, seats_group)
+        attach_to_parent(obj_b, seat_unit_root)
 
         # 9.3 Autoclaved Carbon Fiber Rear Shell (Curved compound bucket shell wrapping sides)
         bm_sh = bmesh.new()
@@ -1986,7 +2009,7 @@ def build_class_a_interactive_dashboard():
         bpy.context.view_layer.objects.active = obj_sh
         bpy.ops.object.modifier_apply(modifier="Solidify")
         obj_sh.data.materials.append(mats["carbon_twill"])
-        attach_to_parent(obj_sh, seats_group)
+        attach_to_parent(obj_sh, seat_unit_root)
 
         # 9.4 Integrated Ergonomic Headrest
         bpy.ops.mesh.primitive_uv_sphere_add(
@@ -1999,18 +2022,18 @@ def build_class_a_interactive_dashboard():
         bpy.ops.object.transform_apply(location=False, rotation=False, scale=True)
         for p in hr.data.polygons: p.use_smooth = True
         hr.data.materials.append(mats["leather_ebony"])
-        attach_to_parent(hr, seats_group)
+        attach_to_parent(hr, seat_unit_root)
 
         # 9.5 Twin Racing Harness Pass-Through Bezels
         for hx, h_sign in [(-0.065, "L"), (0.065, "R")]:
-            make_cylinder(f"SEAT_HARNESS_{h_sign}_{s_side}", (sx + hx, by_start - 0.16, bz_start + bh - 0.02), 0.026, 0.04, (math.radians(78), 0, 0), mats["titanium_matte"], vertices=24, bevel=0.003, parent=seats_group)
+            make_cylinder(f"SEAT_HARNESS_{h_sign}_{s_side}", (sx + hx, by_start - 0.16, bz_start + bh - 0.02), 0.026, 0.04, (math.radians(78), 0, 0), mats["titanium_matte"], vertices=24, bevel=0.003, parent=seat_unit_root)
 
         # 9.6 Seatbelt Buckle & Webbing
         buckle_x = sx + (0.16 if s_side == "DRIVER" else -0.16)
-        make_box(f"SEATBELT_BUCKLE_{s_side}", (buckle_x, -0.38, 0.35), (0.032, 0.055, 0.075), mats["charcoal_trim"], bevel=0.003, parent=seats_group)
-        make_box(f"SEATBELT_RED_BTN_{s_side}", (buckle_x, -0.38, 0.39), (0.024, 0.035, 0.008), mats["gauge_needle_red"], bevel=0.001, parent=seats_group)
+        make_box(f"SEATBELT_BUCKLE_{s_side}", (buckle_x, -0.38, 0.35), (0.032, 0.055, 0.075), mats["charcoal_trim"], bevel=0.003, parent=seat_unit_root)
+        make_box(f"SEATBELT_RED_BTN_{s_side}", (buckle_x, -0.38, 0.39), (0.024, 0.035, 0.008), mats["gauge_needle_red"], bevel=0.001, parent=seat_unit_root)
         strap_rot = Euler((math.radians(35), math.radians(-15 if s_side == "DRIVER" else 15), 0))
-        make_box(f"SEATBELT_STRAP_{s_side}", (sx, -0.62, 0.55), (0.048, 0.003, 0.65), mats["seatbelt_red"], rot_euler=strap_rot, bevel=0, parent=seats_group)
+        make_box(f"SEATBELT_STRAP_{s_side}", (sx, -0.62, 0.55), (0.048, 0.003, 0.65), mats["seatbelt_red"], rot_euler=strap_rot, bevel=0, parent=seat_unit_root)
 
     # Helper function to generate modular sculpted seat units for Row 2 and Row 3
     def make_sculpted_seat_unit(unit_id, sx, cy, cz, width=0.46, length=0.48, back_h=0.56, is_center=False, has_shell=True, mats=None, parent=None, buckle_side="R"):
@@ -2250,6 +2273,346 @@ def build_class_a_interactive_dashboard():
     make_cylinder("ROW3_CUPHOLDER_R", (0.60, r3_y + 0.08, r3_z + 0.21), 0.034, 0.040, (0, 0, 0), mats["aluminum_brushed"], vertices=24, parent=seats_row3_group)
 
     # ------------------------------------------------------------------------
+    # 9.E. EXECUTIVE LUXURY LOUNGE (Spacious LWB Amenities)
+    # ------------------------------------------------------------------------
+    log("9.E Modeling EXECUTIVE LUXURY LOUNGE (Calf Ottomans, Champagne Chiller Bar, 31in Theater Mount)...")
+    luxury_lounge_group = bpy.data.objects.new("LUXURY_REAR_LOUNGE", None)
+    bpy.context.scene.collection.objects.link(luxury_lounge_group)
+    attach_to_parent(luxury_lounge_group, cockpit_master)
+
+    # 1. Deployable Motorized Calf Support Ottomans (Extended forward from Row 2)
+    rot_ottoman = Euler((math.radians(-25), 0, 0))
+    make_box("LUXURY_OTTOMAN_L", (-0.42, r2_y + 0.32, r2_z + 0.12), (0.40, 0.26, 0.075), mats["leather_ebony"], rot_euler=rot_ottoman, bevel=0.010, parent=luxury_lounge_group)
+    make_cylinder("OTTOMAN_HINGE_L", (-0.42, r2_y + 0.22, r2_z + 0.16), 0.020, 0.42, (0, math.radians(90), 0), mats["aluminum_brushed"], vertices=24, parent=luxury_lounge_group)
+
+    make_box("LUXURY_OTTOMAN_R", (0.42, r2_y + 0.32, r2_z + 0.12), (0.40, 0.26, 0.075), mats["leather_ebony"], rot_euler=rot_ottoman, bevel=0.010, parent=luxury_lounge_group)
+    make_cylinder("OTTOMAN_HINGE_R", (0.42, r2_y + 0.22, r2_z + 0.16), 0.020, 0.42, (0, math.radians(90), 0), mats["aluminum_brushed"], vertices=24, parent=luxury_lounge_group)
+
+    # 2. Refrigerated Dual Champagne Chiller Console Bar
+    make_box("LUXURY_CHAMPAGNE_CHILLER", (0.0, r2_y - 0.18, r2_z + 0.28), (0.24, 0.34, 0.28), mats["piano_black"], bevel=0.012, parent=luxury_lounge_group)
+    make_box("CHAMPAGNE_CHILLER_TRIM", (0.0, r2_y - 0.18, r2_z + 0.422), (0.22, 0.32, 0.008), mats["aluminum_brushed"], bevel=0.002, parent=luxury_lounge_group)
+    make_box("CHAMPAGNE_CHILLER_DOOR", (0.0, r2_y - 0.01, r2_z + 0.34), (0.20, 0.012, 0.16), mats["frosted_chiller_glass"], bevel=0.003, parent=luxury_lounge_group)
+    make_cylinder("CHAMPAGNE_DOOR_HANDLE", (0.0, r2_y - 0.002, r2_z + 0.34), 0.008, 0.14, (0, math.radians(90), 0), mats["chrome_mirror"], vertices=16, parent=luxury_lounge_group)
+
+    # Digital Chiller Temperature Display Screen ("6°C")
+    make_box("CHAMPAGNE_TEMP_DISPLAY", (0.0, r2_y - 0.015, r2_z + 0.435), (0.065, 0.006, 0.022), mats["hud_cyan"], bevel=0.001, parent=luxury_lounge_group)
+
+    # 2 Hand-Blown Crystal Champagne Flutes
+    flute_rot = (0, 0, 0)
+    make_cylinder("CHAMPAGNE_FLUTE_1", (-0.055, r2_y - 0.14, r2_z + 0.38), 0.024, 0.14, flute_rot, mats["crystal_faceted"], vertices=24, parent=luxury_lounge_group)
+    make_cylinder("CHAMPAGNE_FLUTE_2", (0.055, r2_y - 0.14, r2_z + 0.38), 0.024, 0.14, flute_rot, mats["crystal_faceted"], vertices=24, parent=luxury_lounge_group)
+
+    # 3. 31.3" Panoramic Theater Screen Ceiling Pocket & Articulating Hinge Mounts
+    make_box("THEATER_CEILING_POCKET", (0.0, -0.96, 1.22), (0.86, 0.22, 0.045), mats["charcoal_trim"], bevel=0.008, parent=luxury_lounge_group)
+    make_cylinder("THEATER_HINGE_L", (-0.32, -0.96, 1.20), 0.014, 0.040, (0, math.radians(90), 0), mats["aluminum_brushed"], vertices=20, parent=luxury_lounge_group)
+    make_cylinder("THEATER_HINGE_R", (0.32, -0.96, 1.20), 0.014, 0.040, (0, math.radians(90), 0), mats["aluminum_brushed"], vertices=20, parent=luxury_lounge_group)
+
+    # ------------------------------------------------------------------------
+    # 9.F. HEAVY-DUTY TRUCK WORKSTATION (4WD Selector, Auxiliary Switchpod, Vault, Air Brakes)
+    # ------------------------------------------------------------------------
+    log("9.F Modeling HEAVY-DUTY TRUCK WORKSTATION (Air Brakes, 4WD Dial, Aux Switchpod, Trailer Brake, CB Radio, Vault)...")
+    truck_workstation_group = bpy.data.objects.new("TRUCK_WORKSTATION", None)
+    bpy.context.scene.collection.objects.link(truck_workstation_group)
+    attach_to_parent(truck_workstation_group, cockpit_master)
+
+    # 1. Rotary Electronic 4WD Mode Transfer Case Dial
+    make_box("TRUCK_4WD_SELECTOR_BEZEL", (-0.16, -0.22, 0.52), (0.075, 0.075, 0.014), mats["charcoal_trim"], bevel=0.004, parent=truck_workstation_group)
+    dial_rot = (math.radians(18), 0, 0)
+    make_cylinder("TRUCK_4WD_SELECTOR_DIAL", (-0.16, -0.22, 0.534), 0.028, 0.022, dial_rot, mats["aluminum_brushed"], vertices=32, parent=truck_workstation_group)
+    make_cylinder("CONSOLE_4WD_DIAL", (-0.16, -0.22, 0.546), 0.020, 0.008, dial_rot, mats["rubber_traction"], vertices=24, parent=truck_workstation_group)
+    # 4WD Mode Status Indicators (2H, 4H, 4L)
+    make_box("TRUCK_4WD_IND_2H", (-0.18, -0.19, 0.530), (0.012, 0.006, 0.004), mats["led_emerald"], bevel=0.001, parent=truck_workstation_group)
+    make_box("TRUCK_4WD_IND_4H", (-0.16, -0.185, 0.530), (0.012, 0.006, 0.004), mats["led_amber"], bevel=0.001, parent=truck_workstation_group)
+    make_box("TRUCK_4WD_IND_4L", (-0.14, -0.19, 0.530), (0.012, 0.006, 0.004), mats["led_amber"], bevel=0.001, parent=truck_workstation_group)
+
+    # 2. Integrated Trailer Brake Controller Module (Driver Right Knee/Stack)
+    make_box("TRUCK_TRAILER_BRAKE_BEZEL", (-0.24, -0.16, 0.50), (0.09, 0.045, 0.065), mats["charcoal_trim"], bevel=0.003, parent=truck_workstation_group)
+    make_box("TRUCK_TRAILER_GAIN_DISP", (-0.24, -0.15, 0.515), (0.042, 0.005, 0.018), mats["led_crimson"], bevel=0.001, parent=truck_workstation_group)
+    make_box("TRUCK_BRAKE_SLIDER_L", (-0.252, -0.145, 0.492), (0.014, 0.012, 0.024), mats["aluminum_brushed"], bevel=0.002, parent=truck_workstation_group)
+    make_box("TRUCK_BRAKE_SLIDER_R", (-0.228, -0.145, 0.492), (0.014, 0.012, 0.024), mats["aluminum_brushed"], bevel=0.002, parent=truck_workstation_group)
+
+    # 3. FMVSS 121 Commercial Air Brake Push-Pull Diamond & Octagon Valves (Prominent Driver Right Wing)
+    make_box("TRUCK_AIR_BRAKE_PANEL", (-0.24, -0.15, 0.58), (0.16, 0.045, 0.075), mats["charcoal_trim"], bevel=0.003, parent=truck_workstation_group)
+    # Yellow Parking Brake Diamond (Pull to apply, push to release)
+    make_cylinder("TRUCK_PARK_BRAKE_STEM", (-0.28, -0.13, 0.58), 0.006, 0.025, (math.radians(90), 0, 0), mats["chrome_mirror"], vertices=16, parent=truck_workstation_group)
+    make_cylinder("TRUCK_PARK_BRAKE_KNOB", (-0.28, -0.10, 0.58), 0.018, 0.016, (math.radians(90), 0, math.radians(22.5)), mats["air_brake_yellow"], vertices=8, bevel=0.002, parent=truck_workstation_group)
+    make_box("TRUCK_PARK_BRAKE_FACE", (-0.28, -0.091, 0.58), (0.014, 0.002, 0.014), mats["charcoal_trim"], rot_euler=(0, 0, math.radians(45)), bevel=0.001, parent=truck_workstation_group)
+    # Red Trailer Air Supply Octagon (Pull to apply, push to supply)
+    make_cylinder("TRUCK_TRAILER_AIR_STEM", (-0.20, -0.13, 0.58), 0.006, 0.025, (math.radians(90), 0, 0), mats["chrome_mirror"], vertices=16, parent=truck_workstation_group)
+    make_cylinder("TRUCK_TRAILER_AIR_KNOB", (-0.20, -0.10, 0.58), 0.018, 0.016, (math.radians(90), 0, math.radians(22.5)), mats["air_brake_red"], vertices=8, bevel=0.002, parent=truck_workstation_group)
+    make_cylinder("TRUCK_TRAILER_AIR_FACE", (-0.20, -0.091, 0.58), 0.010, 0.002, (math.radians(90), 0, 0), mats["charcoal_trim"], vertices=16, parent=truck_workstation_group)
+
+    # 4. Auxiliary Heavy-Duty Roof / Dash Switchpod (6 High-Amp Rocker Switches with guards)
+    make_box("TRUCK_AUX_SWITCHPOD", (0.0, -0.06, 0.62), (0.28, 0.065, 0.038), mats["charcoal_trim"], bevel=0.004, parent=truck_workstation_group)
+    for sw_idx in range(6):
+        sw_x = -0.10 + sw_idx * 0.040
+        make_box(f"TRUCK_AUX_SW_{sw_idx+1}", (sw_x, -0.065, 0.62), (0.028, 0.030, 0.022), mats["piano_black"], bevel=0.002, parent=truck_workstation_group)
+        make_box(f"TRUCK_AUX_LED_{sw_idx+1}", (sw_x, -0.078, 0.628), (0.018, 0.004, 0.004), mats["led_amber"], bevel=0.001, parent=truck_workstation_group)
+        make_cylinder(f"TRUCK_AUX_GUARD_{sw_idx+1}", (sw_x, -0.072, 0.62), 0.002, 0.032, (0, 0, 0), mats["chrome_mirror"], vertices=12, parent=truck_workstation_group)
+
+    # 5. Rugged CB Radio Transceiver & Fist Microphone
+    make_box("TRUCK_CB_RADIO", (0.16, -0.26, 0.46), (0.12, 0.16, 0.048), mats["charcoal_trim"], bevel=0.003, parent=truck_workstation_group)
+    make_box("TRUCK_CB_SCREEN", (0.16, -0.22, 0.47), (0.045, 0.005, 0.022), mats["led_amber"], bevel=0.001, parent=truck_workstation_group)
+    make_cylinder("TRUCK_CB_DIAL_VOL", (0.125, -0.22, 0.47), 0.010, 0.012, (math.radians(90), 0, 0), mats["aluminum_brushed"], vertices=16, parent=truck_workstation_group)
+    make_cylinder("TRUCK_CB_DIAL_SQL", (0.195, -0.22, 0.47), 0.010, 0.012, (math.radians(90), 0, 0), mats["aluminum_brushed"], vertices=16, parent=truck_workstation_group)
+    make_box("TRUCK_CB_MIC", (0.23, -0.22, 0.51), (0.038, 0.026, 0.065), mats["charcoal_trim"], bevel=0.004, parent=truck_workstation_group)
+    make_cylinder("TRUCK_CB_MIC_PTT", (0.248, -0.22, 0.51), 0.008, 0.022, (0, math.radians(90), 0), mats["rubber_traction"], vertices=16, parent=truck_workstation_group)
+
+    # 6. Heavy-Duty Driver Commercial Air-Suspension Bellows Base & Folding Armrest
+    for b_i in range(3):
+        make_torus(f"TRUCK_DRIVER_BELLOW_{b_i+1}", (driver_x, -0.48, 0.08 + b_i * 0.042), major_radius=0.15, minor_radius=0.022, rot_euler=(0, 0, 0), mat=mats["rubber_traction"], parent=truck_workstation_group)
+    make_box("TRUCK_DRIVER_SEAT_PEDESTAL", (driver_x, -0.48, 0.04), (0.34, 0.36, 0.04), mats["charcoal_trim"], bevel=0.004, parent=truck_workstation_group)
+    make_box("TRUCK_DRIVER_SEAT_AIR_SW", (driver_x - 0.22, -0.46, 0.16), (0.012, 0.035, 0.022), mats["piano_black"], bevel=0.001, parent=truck_workstation_group)
+    make_box("TRUCK_DRIVER_ARMREST", (driver_x + 0.22, -0.45, 0.46), (0.055, 0.32, 0.075), mats["leather_ebony"], bevel=0.010, parent=truck_workstation_group)
+    make_cylinder("TRUCK_DRIVER_ARMREST_HINGE", (driver_x + 0.22, -0.58, 0.46), 0.018, 0.060, (0, math.radians(90), 0), mats["aluminum_brushed"], vertices=20, parent=truck_workstation_group)
+
+    # 7. Heavy-Duty Steering Column Shifter with Tow/Haul Mode
+    make_cylinder("TRUCK_COLUMN_SHIFTER_STALK", (driver_x + 0.12, 0.16, 0.64), 0.007, 0.16, (math.radians(-25), math.radians(35), 0), mats["chrome_mirror"], vertices=16, parent=truck_workstation_group)
+    make_cylinder("TRUCK_COLUMN_SHIFTER_GRIP", (driver_x + 0.17, 0.11, 0.70), 0.016, 0.065, (math.radians(-25), math.radians(35), 0), mats["rubber_traction"], vertices=20, parent=truck_workstation_group)
+    make_box("TRUCK_TOW_HAUL_BTN", (driver_x + 0.19, 0.09, 0.725), (0.010, 0.008, 0.010), mats["led_amber"], bevel=0.001, parent=truck_workstation_group)
+
+    # 8. A-Pillar Assist Grab Handles (Left & Right)
+    for side, sign in [("L", -1.0), ("R", 1.0)]:
+        pillar_x = sign * 0.66
+        make_box(f"TRUCK_A_PILLAR_GRAB_{side}", (pillar_x, -0.16, 0.88), (0.028, 0.040, 0.22), mats["rubber_traction"], bevel=0.008, parent=truck_workstation_group)
+        make_cylinder(f"TRUCK_A_PILLAR_BOLT_TOP_{side}", (pillar_x, -0.15, 0.97), 0.008, 0.015, (0, math.radians(90), 0), mats["aluminum_brushed"], vertices=12, parent=truck_workstation_group)
+        make_cylinder(f"TRUCK_A_PILLAR_BOLT_BTM_{side}", (pillar_x, -0.15, 0.79), 0.008, 0.015, (0, math.radians(90), 0), mats["aluminum_brushed"], vertices=12, parent=truck_workstation_group)
+
+    # 9. Passenger Dash Heavy-Duty Assist Grab Handle
+    make_box("TRUCK_DASH_GRAB_HANDLE", (pass_x, -0.10, 0.68), (0.24, 0.035, 0.048), mats["rubber_traction"], bevel=0.008, parent=truck_workstation_group)
+    make_cylinder("TRUCK_GRAB_MOUNT_L", (pass_x - 0.10, -0.08, 0.68), 0.018, 0.035, (math.radians(90), 0, 0), mats["charcoal_trim"], vertices=20, parent=truck_workstation_group)
+    make_cylinder("TRUCK_GRAB_MOUNT_R", (pass_x + 0.10, -0.08, 0.68), 0.018, 0.035, (math.radians(90), 0, 0), mats["charcoal_trim"], vertices=20, parent=truck_workstation_group)
+
+    # 10. Overhead Sleeper Cab Storage Shelf & CB Speaker Console
+    make_box("TRUCK_OVERHEAD_SHELF", (0.0, -0.22, 1.20), (1.08, 0.26, 0.085), mats["charcoal_trim"], bevel=0.008, parent=truck_workstation_group)
+    make_box("TRUCK_SHELF_CUBBY_L", (-0.32, -0.22, 1.19), (0.34, 0.22, 0.055), mats["piano_black"], bevel=0.004, parent=truck_workstation_group)
+    make_box("TRUCK_SHELF_CUBBY_R", (0.32, -0.22, 1.19), (0.34, 0.22, 0.055), mats["piano_black"], bevel=0.004, parent=truck_workstation_group)
+    spk_cb = make_cylinder("TRUCK_OVERHEAD_CB_SPEAKER", (0.0, -0.20, 1.18), 0.048, 0.008, (math.radians(45), 0, 0), mats["speaker_acoustic"], vertices=24, parent=truck_workstation_group)
+    unwrap_planar_uv(spk_cb)
+    make_cylinder("TRUCK_MAP_LAMP_L", (-0.12, -0.16, 1.18), 0.016, 0.012, (math.radians(35), 0, 0), mats["ambient_cyan"], vertices=16, parent=truck_workstation_group)
+    make_cylinder("TRUCK_MAP_LAMP_R", (0.12, -0.16, 1.18), 0.016, 0.012, (math.radians(35), 0, 0), mats["ambient_cyan"], vertices=16, parent=truck_workstation_group)
+
+    # 11. All-Weather Deep-Dish Rubber Floor Mats with Chevron Traction Ridges
+    for side, sign in [("L", -1.0), ("R", 1.0)]:
+        fx = sign * 0.38
+        make_box(f"TRUCK_FLOOR_MAT_{side}", (fx, 0.08, 0.04), (0.44, 0.52, 0.016), mats["rubber_traction"], bevel=0.004, parent=truck_workstation_group)
+        for r_i in range(5):
+            ry = -0.12 + r_i * 0.09
+            make_box(f"TRUCK_MAT_RIDGE_{side}_{r_i+1}", (fx, ry, 0.05), (0.36, 0.022, 0.006), mats["charcoal_trim"], bevel=0.001, parent=truck_workstation_group)
+
+    # 12. Workstation Armrest Fold-Flat Clipboard Deck & Oversized Insulated Cupholders
+    make_box("TRUCK_CONSOLE_WORKSTATION_LID", (0.0, -0.48, 0.51), (0.34, 0.46, 0.030), mats["charcoal_trim"], bevel=0.006, parent=truck_workstation_group)
+    make_box("TRUCK_CLIPBOARD_CLIP", (0.0, -0.32, 0.53), (0.12, 0.025, 0.012), mats["aluminum_brushed"], bevel=0.002, parent=truck_workstation_group)
+    make_cylinder("TRUCK_CUPHOLDER_L", (-0.08, -0.20, 0.49), 0.046, 0.055, (0, 0, 0), mats["rubber_traction"], vertices=28, bevel=0.002, parent=truck_workstation_group)
+    make_cylinder("TRUCK_CUPHOLDER_R", (0.08, -0.20, 0.49), 0.046, 0.055, (0, 0, 0), mats["rubber_traction"], vertices=28, bevel=0.002, parent=truck_workstation_group)
+
+    # 13. Underseat Heavy-Duty Lockable Tool Vault (Beneath Row 2 Seat Bench)
+    make_box("TRUCK_UNDERSEAT_STORAGE", (0.0, r2_y, r2_z - 0.075), (1.10, 0.44, 0.16), mats["charcoal_trim"], bevel=0.012, parent=truck_workstation_group)
+    make_box("TRUCK_STORAGE_LID", (0.0, r2_y, r2_z + 0.01), (1.08, 0.42, 0.018), mats["aluminum_brushed"], bevel=0.004, parent=truck_workstation_group)
+    make_box("TRUCK_STORAGE_LATCH_L", (-0.32, r2_y + 0.22, r2_z + 0.005), (0.045, 0.018, 0.025), mats["chrome_mirror"], bevel=0.002, parent=truck_workstation_group)
+    make_box("TRUCK_STORAGE_LATCH_R", (0.32, r2_y + 0.22, r2_z + 0.005), (0.045, 0.018, 0.025), mats["chrome_mirror"], bevel=0.002, parent=truck_workstation_group)
+
+    # ------------------------------------------------------------------------
+    # 9.G. TRANSIT BUS & HIGH-CAPACITY SHUTTLE (Farebox, Stanchions, Barrier, Controls)
+    # ------------------------------------------------------------------------
+    log("9.G Modeling TRANSIT BUS & SHUTTLE (Fare Validator, Safety Stanchions, Bus Wheel, Door Controls)...")
+    bus_transit_group = bpy.data.objects.new("BUS_TRANSIT_CABIN", None)
+    bpy.context.scene.collection.objects.link(bus_transit_group)
+    attach_to_parent(bus_transit_group, cockpit_master)
+
+    # 1. Authentic Transit Bus Steering Assembly (480mm Flat Angled Wheel & Retarder Lever)
+    bus_steer_group = bpy.data.objects.new("BUS_STEERING_ASSEMBLY", None)
+    bpy.context.scene.collection.objects.link(bus_steer_group)
+    attach_to_parent(bus_steer_group, bus_transit_group)
+
+    steer_tilt = (math.radians(-38), 0, 0)
+    make_cylinder("BUS_TRANSIT_COLUMN", (driver_x, 0.22, 0.48), 0.052, 0.62, steer_tilt, mats["charcoal_trim"], vertices=24, bevel=0.003, parent=bus_steer_group)
+    make_torus("BUS_TRANSIT_WHEEL_RIM", (driver_x, 0.08, 0.68), major_radius=0.235, minor_radius=0.018, rot_euler=steer_tilt, mat=mats["rubber_traction"], major_segments=48, minor_segments=24, parent=bus_steer_group)
+    make_box("BUS_TRANSIT_HORN_HUB", (driver_x, 0.08, 0.68), (0.13, 0.11, 0.038), mats["charcoal_trim"], rot_euler=steer_tilt, bevel=0.006, parent=bus_steer_group)
+    make_box("BUS_TRANSIT_SPOKE_BAR", (driver_x, 0.08, 0.68), (0.45, 0.040, 0.016), mats["charcoal_trim"], rot_euler=steer_tilt, bevel=0.003, parent=bus_steer_group)
+    make_cylinder("BUS_RETARDER_STALK", (driver_x + 0.11, 0.16, 0.58), 0.006, 0.14, (math.radians(-25), math.radians(45), 0), mats["chrome_mirror"], vertices=16, parent=bus_steer_group)
+    make_cylinder("BUS_RETARDER_KNOB", (driver_x + 0.16, 0.11, 0.64), 0.015, 0.040, (math.radians(-25), math.radians(45), 0), mats["rubber_traction"], vertices=20, parent=bus_steer_group)
+
+    # 2. Contactless Smartcard / Fare Validator Terminal Pedestal
+    make_box("BUS_FAREBOX", (0.24, 0.08, 0.46), (0.22, 0.22, 0.65), mats["charcoal_trim"], bevel=0.008, parent=bus_transit_group)
+    make_box("INTERIOR_FareBox_Smartcard_Terminal", (0.24, 0.08, 0.46), (0.22, 0.22, 0.65), mats["charcoal_trim"], bevel=0.008, parent=bus_transit_group)
+    make_cylinder("BUS_FARE_TAP_TARGET", (0.24, 0.04, 0.74), 0.055, 0.008, (math.radians(90), 0, 0), mats["led_emerald"], vertices=32, parent=bus_transit_group)
+    make_box("BUS_FARE_SCREEN", (0.24, 0.05, 0.81), (0.14, 0.010, 0.06), mats["screen_infotainment"], bevel=0.002, parent=bus_transit_group)
+    make_box("BUS_COIN_SLOT", (0.24, 0.08, 0.77), (0.045, 0.006, 0.012), mats["aluminum_brushed"], bevel=0.001, parent=bus_transit_group)
+    make_box("BUS_TICKET_DISPENSER", (0.24, 0.02, 0.68), (0.10, 0.012, 0.035), mats["aluminum_brushed"], bevel=0.002, parent=bus_transit_group)
+    make_box("BUS_TICKET_PAPER_SLOT", (0.24, 0.012, 0.68), (0.075, 0.002, 0.004), mats["piano_black"], bevel=0, parent=bus_transit_group)
+
+    # 3. Commercial Driver Air-Suspension Bellows Base & Dual Armrests
+    for b_i in range(3):
+        make_torus(f"BUS_DRIVER_BELLOW_{b_i+1}", (driver_x, -0.48, 0.08 + b_i * 0.042), major_radius=0.15, minor_radius=0.022, rot_euler=(0, 0, 0), mat=mats["rubber_traction"], parent=bus_transit_group)
+    make_box("BUS_DRIVER_ARMREST_L", (driver_x - 0.22, -0.45, 0.46), (0.055, 0.32, 0.075), mats["charcoal_trim"], bevel=0.010, parent=bus_transit_group)
+    make_box("BUS_DRIVER_ARMREST_R", (driver_x + 0.22, -0.45, 0.46), (0.055, 0.32, 0.075), mats["charcoal_trim"], bevel=0.010, parent=bus_transit_group)
+
+    # 4. Driver Door & Secondary Controls Switchboard Console (Left of Driver)
+    make_box("BUS_DRIVER_DOOR_CONSOLE", (driver_x - 0.28, -0.05, 0.54), (0.16, 0.32, 0.14), mats["charcoal_trim"], bevel=0.006, parent=bus_transit_group)
+    make_cylinder("BUS_DOOR_LEVER_FRONT", (driver_x - 0.26, -0.12, 0.63), 0.006, 0.055, (math.radians(15), 0, 0), mats["aluminum_brushed"], vertices=16, parent=bus_transit_group)
+    make_cylinder("BUS_DOOR_KNOB_FRONT", (driver_x - 0.26, -0.13, 0.66), 0.012, 0.022, (math.radians(15), 0, 0), mats["safety_yellow"], vertices=16, parent=bus_transit_group)
+    make_cylinder("BUS_DOOR_LEVER_REAR", (driver_x - 0.22, -0.12, 0.63), 0.006, 0.055, (math.radians(15), 0, 0), mats["aluminum_brushed"], vertices=16, parent=bus_transit_group)
+    make_cylinder("BUS_DOOR_KNOB_REAR", (driver_x - 0.22, -0.13, 0.66), 0.012, 0.022, (math.radians(15), 0, 0), mats["led_crimson"], vertices=16, parent=bus_transit_group)
+    make_cylinder("BUS_EMERGENCY_STOP_BASE", (driver_x - 0.30, 0.04, 0.62), 0.018, 0.010, (0, 0, 0), mats["safety_yellow"], vertices=20, parent=bus_transit_group)
+    make_cylinder("BUS_EMERGENCY_STOP_MUSHROOM", (driver_x - 0.30, 0.04, 0.635), 0.022, 0.018, (0, 0, 0), mats["led_crimson"], vertices=24, parent=bus_transit_group)
+    make_box("BUS_ROUTE_KEYPAD", (driver_x - 0.25, 0.06, 0.62), (0.055, 0.075, 0.012), mats["piano_black"], bevel=0.002, parent=bus_transit_group)
+    make_cylinder("BUS_PA_MIC_BASE", (driver_x - 0.32, -0.18, 0.62), 0.012, 0.015, (0, 0, 0), mats["charcoal_trim"], vertices=16, parent=bus_transit_group)
+    make_cylinder("BUS_PA_MIC_STALK", (driver_x - 0.31, -0.14, 0.74), 0.004, 0.25, (math.radians(-20), math.radians(15), 0), mats["aluminum_brushed"], vertices=12, parent=bus_transit_group)
+    make_cylinder("BUS_PA_MIC_CAPSULE", (driver_x - 0.30, -0.09, 0.86), 0.010, 0.035, (math.radians(-20), math.radians(15), 0), mats["rubber_traction"], vertices=16, parent=bus_transit_group)
+
+    # 5. Transparent Curved Driver Protective Partition Barrier
+    make_box("BUS_DRIVER_BARRIER", (driver_x, -0.65, 0.78), (0.68, 0.012, 0.92), mats["glass_optical"], bevel=0.004, parent=bus_transit_group)
+    make_cylinder("BUS_BARRIER_FRAME_L", (driver_x - 0.34, -0.65, 0.78), 0.014, 0.92, (0, 0, 0), mats["charcoal_trim"], vertices=16, parent=bus_transit_group)
+    make_cylinder("BUS_BARRIER_FRAME_R", (driver_x + 0.34, -0.65, 0.78), 0.014, 0.92, (0, 0, 0), mats["charcoal_trim"], vertices=16, parent=bus_transit_group)
+    make_cylinder("BUS_BARRIER_HEADER", (driver_x, -0.65, 1.24), 0.014, 0.68, (0, math.radians(90), 0), mats["charcoal_trim"], vertices=16, parent=bus_transit_group)
+
+    # 6. Passenger Entrance Modesty Barrier & Boarding Stanchion (Vestibule Area)
+    make_box("BUS_ENTRY_MODESTY_PANEL", (0.56, -0.62, 0.70), (0.44, 0.014, 0.86), mats["frosted_chiller_glass"], bevel=0.004, parent=bus_transit_group)
+    make_cylinder("BUS_ENTRY_MODESTY_FRAME_L", (0.34, -0.62, 0.70), 0.016, 0.88, (0, 0, 0), mats["safety_yellow"], vertices=20, parent=bus_transit_group)
+    make_cylinder("BUS_ENTRY_MODESTY_FRAME_R", (0.78, -0.62, 0.70), 0.016, 0.88, (0, 0, 0), mats["safety_yellow"], vertices=20, parent=bus_transit_group)
+    make_cylinder("BUS_ENTRY_MODESTY_TOP", (0.56, -0.62, 1.14), 0.016, 0.44, (0, math.radians(90), 0), mats["safety_yellow"], vertices=20, parent=bus_transit_group)
+    make_cylinder("BUS_BOARDING_HANDRAIL", (0.34, -0.18, 0.68), 0.018, 0.96, (0, 0, 0), mats["safety_yellow"], vertices=24, parent=bus_transit_group)
+    make_box("BUS_STEP_LIGHT", (0.56, 0.08, 0.06), (0.18, 0.04, 0.015), mats["ambient_cyan"], bevel=0.001, parent=bus_transit_group)
+
+    # 7. Overhead Central LED Destination Route / Stop Sign
+    make_box("BUS_CABIN_DESTINATION_SIGN", (0.0, -0.55, 1.22), (0.64, 0.05, 0.12), mats["charcoal_trim"], bevel=0.004, parent=bus_transit_group)
+    make_box("BUS_SIGN_LED_TEXT", (0.0, -0.575, 1.22), (0.58, 0.004, 0.08), mats["led_amber"], bevel=0.001, parent=bus_transit_group)
+    make_box("BUS_STOP_REQUESTED_LAMP", (0.0, -0.525, 1.22), (0.58, 0.004, 0.08), mats["led_crimson"], bevel=0.001, parent=bus_transit_group)
+
+    # 8. High-Visibility Safety Yellow Stanchion Grab Poles
+    stanchion_group = bpy.data.objects.new("BUS_STANCHIONS", None)
+    bpy.context.scene.collection.objects.link(stanchion_group)
+    attach_to_parent(stanchion_group, bus_transit_group)
+
+    pole_z = 0.72
+    pole_h = 1.28
+    make_cylinder("BUS_STANCHION_POLE_L", (-0.25, -0.85, pole_z), 0.018, pole_h, (0, 0, 0), mats["safety_yellow"], vertices=24, parent=stanchion_group)
+    make_cylinder("BUS_STANCHION_POLE_R", (0.25, -0.85, pole_z), 0.018, pole_h, (0, 0, 0), mats["safety_yellow"], vertices=24, parent=stanchion_group)
+    make_cylinder("INTERIOR_Stanchion_Poles", (0.25, -0.85, pole_z), 0.018, pole_h, (0, 0, 0), mats["safety_yellow"], vertices=24, parent=stanchion_group)
+    make_cylinder("BUS_STANCHION_CROSSBAR", (0.0, -0.85, pole_z + pole_h * 0.48), 0.016, 0.50, (0, math.radians(90), 0), mats["safety_yellow"], vertices=20, parent=stanchion_group)
+
+    # Stanchion "STOP REQUEST" Bell Push Buttons
+    make_cylinder("BUS_STOP_BTN_1", (-0.25, -0.83, 0.92), 0.012, 0.024, (math.radians(90), 0, 0), mats["led_crimson"], vertices=16, parent=stanchion_group)
+    make_cylinder("BUS_STOP_BTN_2", (0.25, -0.83, 0.92), 0.012, 0.024, (math.radians(90), 0, 0), mats["led_crimson"], vertices=16, parent=stanchion_group)
+
+    # 9. Horizontal Overhead Grab Rails & Hanging Commuter Straps
+    rail_len = 2.40
+    make_cylinder("BUS_OVERHEAD_RAIL_L", (-0.25, -1.25, 1.28), 0.016, rail_len, (math.radians(90), 0, 0), mats["safety_yellow"], vertices=24, parent=stanchion_group)
+    make_cylinder("BUS_OVERHEAD_RAIL_R", (0.25, -1.25, 1.28), 0.016, rail_len, (math.radians(90), 0, 0), mats["safety_yellow"], vertices=24, parent=stanchion_group)
+
+    # Hanging Straps along overhead rail
+    for st_i, st_y in enumerate([-0.65, -1.05, -1.45, -1.85]):
+        make_box(f"BUS_GRAB_STRAP_{st_i+1}", (-0.25, st_y, 1.20), (0.024, 0.006, 0.14), mats["rubber_traction"], bevel=0, parent=stanchion_group)
+        make_cylinder(f"BUS_GRAB_RING_{st_i+1}", (-0.25, st_y, 1.11), 0.038, 0.012, (math.radians(90), 0, 0), mats["safety_yellow"], vertices=24, parent=stanchion_group)
+        make_box(f"BUS_GRAB_STRAP_R_{st_i+1}", (0.25, st_y, 1.20), (0.024, 0.006, 0.14), mats["rubber_traction"], bevel=0, parent=stanchion_group)
+        make_cylinder(f"BUS_GRAB_RING_R_{st_i+1}", (0.25, st_y, 1.11), 0.038, 0.012, (math.radians(90), 0, 0), mats["safety_yellow"], vertices=24, parent=stanchion_group)
+
+    # 10. Rows of Cantilevered High-Impact Vandal-Proof Transit Passenger Seats
+    bus_seats_group = bpy.data.objects.new("BUS_PASSENGER_SEATS", None)
+    bpy.context.scene.collection.objects.link(bus_seats_group)
+    attach_to_parent(bus_seats_group, bus_transit_group)
+
+    for row_idx, ry in enumerate([-1.15, -1.75, -2.35]):
+        for side, sign in [("L", -1.0), ("R", 1.0)]:
+            sx = sign * 0.56
+            make_box(f"BUS_SEAT_SHELL_R{row_idx+1}_{side}", (sx, ry, 0.42), (0.42, 0.38, 0.030), mats["transit_plastic_blue"], bevel=0.008, parent=bus_seats_group)
+            make_box(f"BUS_SEAT_BACK_R{row_idx+1}_{side}", (sx, ry - 0.16, 0.65), (0.40, 0.030, 0.44), mats["transit_plastic_blue"], bevel=0.008, parent=bus_seats_group)
+            make_box(f"BUS_SEAT_PAD_CUSH_R{row_idx+1}_{side}", (sx, ry, 0.44), (0.34, 0.32, 0.018), mats["transit_fabric"], bevel=0.004, parent=bus_seats_group)
+            make_box(f"BUS_SEAT_PAD_BACK_R{row_idx+1}_{side}", (sx, ry - 0.15, 0.65), (0.32, 0.016, 0.36), mats["transit_fabric"], bevel=0.004, parent=bus_seats_group)
+            make_cylinder(f"BUS_SEAT_HANDLE_R{row_idx+1}_{side}", (sx + sign * 0.15, ry - 0.16, 0.88), 0.010, 0.12, (0, math.radians(90), 0), mats["safety_yellow"], vertices=16, parent=bus_seats_group)
+
+    # 11. Commercial Driver Overhead Pull-Down Sunblind / Roller Visor
+    make_cylinder("BUS_DRIVER_SUNBLIND_CASING", (driver_x, 0.04, 1.25), 0.012, 0.58, (0, math.radians(90), 0), mats["aluminum_brushed"], vertices=20, parent=bus_transit_group)
+    make_box("BUS_DRIVER_SUNBLIND_FABRIC", (driver_x, 0.05, 1.15), (0.54, 0.002, 0.20), mats["charcoal_trim"], bevel=0.001, parent=bus_transit_group)
+    make_cylinder("BUS_DRIVER_SUNBLIND_PULL", (driver_x, 0.052, 1.05), 0.005, 0.045, (math.radians(90), 0, 0), mats["aluminum_brushed"], vertices=12, parent=bus_transit_group)
+
+    # ------------------------------------------------------------------------
+    # 9.H. SUPERCAR & TRACK SPECIAL COCKPIT (Carbon Tub, FIA Roll Cage, 6-Pt Harness)
+    # ------------------------------------------------------------------------
+    log("9.H Modeling SUPERCAR & TRACK SPECIAL COCKPIT (Carbon Sills, FIA Roll Cage, Fire Extinguisher, 6-Pt Harness)...")
+    supercar_track_group = bpy.data.objects.new("SUPERCAR_TRACK_CABIN", None)
+    bpy.context.scene.collection.objects.link(supercar_track_group)
+    attach_to_parent(supercar_track_group, cockpit_master)
+
+    # 1. Structural Carbon Fiber Monocoque Sills & Footrest
+    make_box("CARBON_TUB_SILL_L", (-0.68, -0.35, 0.26), (0.24, 1.20, 0.26), mats["carbon_twill"], bevel=0.012, parent=supercar_track_group)
+    make_box("CARBON_TUB_SILL_R", (0.68, -0.35, 0.26), (0.24, 1.20, 0.26), mats["carbon_twill"], bevel=0.012, parent=supercar_track_group)
+    make_box("CARBON_TUB_STEP_PLATE_L", (-0.68, -0.35, 0.392), (0.16, 0.80, 0.005), mats["aluminum_brushed"], bevel=0.002, parent=supercar_track_group)
+    make_box("CARBON_TUB_STEP_PLATE_R", (0.68, -0.35, 0.392), (0.16, 0.80, 0.005), mats["aluminum_brushed"], bevel=0.002, parent=supercar_track_group)
+    make_box("CO_DRIVER_FOOTREST", (pass_x, 0.20, 0.16), (0.32, 0.24, 0.016), mats["aluminum_brushed"], rot_euler=(math.radians(38), 0, 0), bevel=0.003, parent=supercar_track_group)
+    for ft_i in range(4):
+        make_box(f"FOOTREST_GRIP_SLOT_{ft_i+1}", (pass_x, 0.14 + ft_i * 0.045, 0.12 + ft_i * 0.035), (0.24, 0.015, 0.004), mats["rubber_traction"], rot_euler=(math.radians(38), 0, 0), parent=supercar_track_group)
+
+    # 2. FIA Homologated T45 Roll Cage Assembly
+    rollcage_group = bpy.data.objects.new("ROLLCAGE_ASSEMBLY", None)
+    bpy.context.scene.collection.objects.link(rollcage_group)
+    attach_to_parent(rollcage_group, supercar_track_group)
+
+    # Main B-Pillar Hoop
+    make_cylinder("ROLLCAGE_MAIN_L", (-0.62, -0.92, 0.68), 0.024, 0.98, (0, 0, 0), mats["rollcage_satin"], vertices=24, parent=rollcage_group)
+    make_cylinder("ROLLCAGE_MAIN_R", (0.62, -0.92, 0.68), 0.024, 0.98, (0, 0, 0), mats["rollcage_satin"], vertices=24, parent=rollcage_group)
+    make_cylinder("ROLLCAGE_MAIN_TOP", (0.0, -0.92, 1.18), 0.024, 1.24, (0, math.radians(90), 0), mats["rollcage_satin"], vertices=24, parent=rollcage_group)
+
+    # Door Intrusion X-Braces (Left & Right)
+    make_cylinder("ROLLCAGE_DOOR_X_L1", (-0.64, -0.38, 0.44), 0.020, 1.15, (math.radians(-28), 0, 0), mats["rollcage_satin"], vertices=16, parent=rollcage_group)
+    make_cylinder("ROLLCAGE_DOOR_X_L2", (-0.64, -0.38, 0.44), 0.020, 1.15, (math.radians(28), 0, 0), mats["rollcage_satin"], vertices=16, parent=rollcage_group)
+    make_cylinder("ROLLCAGE_DOOR_X_R1", (0.64, -0.38, 0.44), 0.020, 1.15, (math.radians(-28), 0, 0), mats["rollcage_satin"], vertices=16, parent=rollcage_group)
+    make_cylinder("ROLLCAGE_DOOR_X_R2", (0.64, -0.38, 0.44), 0.020, 1.15, (math.radians(28), 0, 0), mats["rollcage_satin"], vertices=16, parent=rollcage_group)
+
+    # 3. Plumbed-In Lifeline / OMP Fire Suppression System
+    make_cylinder("RACE_FIRE_BOTTLE", (0.0, -0.72, 0.22), 0.065, 0.38, (math.radians(90), 0, 0), mats["aluminum_brushed"], vertices=28, parent=supercar_track_group)
+    make_cylinder("RACE_FIRE_TRIGGER_HEAD", (0.0, -0.52, 0.22), 0.022, 0.045, (math.radians(90), 0, 0), mats["anodized_red"], vertices=20, parent=supercar_track_group)
+    make_cylinder("RACE_FIRE_GAUGE", (0.025, -0.52, 0.24), 0.014, 0.012, (0, math.radians(90), 0), mats["hud_cyan"], vertices=16, parent=supercar_track_group)
+    make_torus("RACE_FIRE_CLAMP_1", (0.0, -0.64, 0.22), major_radius=0.068, minor_radius=0.005, rot_euler=(math.radians(90), 0, 0), mat=mats["titanium_matte"], parent=supercar_track_group)
+    make_torus("RACE_FIRE_CLAMP_2", (0.0, -0.80, 0.22), major_radius=0.068, minor_radius=0.005, rot_euler=(math.radians(90), 0, 0), mat=mats["titanium_matte"], parent=supercar_track_group)
+
+    # Cockpit Emergency Pulls & Battery Kill Switch
+    make_cylinder("RACE_FIRE_PULL_STEM", (-0.06, -0.26, 0.52), 0.005, 0.035, (0, 0, 0), mats["aluminum_brushed"], vertices=12, parent=supercar_track_group)
+    make_box("RACE_FIRE_PULL_HANDLE", (-0.06, -0.26, 0.542), (0.045, 0.016, 0.014), mats["anodized_red"], bevel=0.002, parent=supercar_track_group)
+    make_box("RACE_FIRE_LABEL", (-0.06, -0.23, 0.525), (0.038, 0.002, 0.014), mats["safety_yellow"], parent=supercar_track_group)
+
+    make_cylinder("RACE_BATTERY_ISOLATOR_BASE", (0.06, -0.26, 0.52), 0.018, 0.014, (0, 0, 0), mats["charcoal_trim"], vertices=20, parent=supercar_track_group)
+    make_box("RACE_BATTERY_KEY", (0.06, -0.26, 0.536), (0.026, 0.008, 0.024), mats["anodized_red"], rot_euler=(0, 0, math.radians(25)), bevel=0.002, parent=supercar_track_group)
+    make_box("RACE_BATTERY_LABEL", (0.06, -0.23, 0.525), (0.030, 0.002, 0.014), mats["safety_yellow"], parent=supercar_track_group)
+
+    # 4. Motorsport Cockpit Brake Proportioning Balance & Aircraft Toggles
+    make_cylinder("RACE_BRAKE_BIAS_BEZEL", (-0.06, -0.34, 0.515), 0.022, 0.008, (0, 0, 0), mats["charcoal_trim"], vertices=24, parent=supercar_track_group)
+    make_cylinder("RACE_BRAKE_BIAS_KNOB", (-0.06, -0.34, 0.526), 0.016, 0.016, (0, 0, 0), mats["aluminum_brushed"], vertices=32, parent=supercar_track_group)
+    make_box("RACE_BRAKE_BIAS_DISP", (-0.06, -0.31, 0.518), (0.036, 0.004, 0.014), mats["hud_cyan"], bevel=0.001, parent=supercar_track_group)
+
+    make_box("RACE_LAUNCH_SWITCH_BASE", (0.06, -0.34, 0.515), (0.024, 0.030, 0.010), mats["charcoal_trim"], bevel=0.002, parent=supercar_track_group)
+    make_box("RACE_LAUNCH_FLIP_GUARD", (0.06, -0.34, 0.528), (0.018, 0.026, 0.018), mats["anodized_red"], bevel=0.002, parent=supercar_track_group)
+    make_cylinder("RACE_PIT_LIMITER_BEZEL", (0.06, -0.39, 0.51), 0.014, 0.006, (0, 0, 0), mats["charcoal_trim"], vertices=20, parent=supercar_track_group)
+    make_cylinder("RACE_PIT_LIMITER_BTN", (0.06, -0.39, 0.518), 0.010, 0.010, (0, 0, 0), mats["safety_yellow"], vertices=20, parent=supercar_track_group)
+
+    # 5. 6-Point Competition Sabelt/Willans Racing Harness (Driver & Passenger)
+    for side, sx in [("DRIVER", driver_x), ("PASS", pass_x)]:
+        # Shoulder Straps (wrapping over harness bar at z=0.58, down through seat headrest pass-through)
+        make_box(f"HARNESS_SHOULDER_{side}_L", (sx - 0.065, -0.66, 0.62), (0.065, 0.004, 0.52), mats["racing_harness_red"], rot_euler=(math.radians(24), 0, 0), parent=supercar_track_group)
+        make_box(f"HARNESS_SHOULDER_{side}_R", (sx + 0.065, -0.66, 0.62), (0.065, 0.004, 0.52), mats["racing_harness_red"], rot_euler=(math.radians(24), 0, 0), parent=supercar_track_group)
+        # Lap Belts (from chassis side eyelets)
+        make_box(f"HARNESS_LAP_{side}_L", (sx - 0.18, -0.44, 0.30), (0.065, 0.004, 0.28), mats["racing_harness_red"], rot_euler=(math.radians(-32), math.radians(-35), 0), parent=supercar_track_group)
+        make_box(f"HARNESS_LAP_{side}_R", (sx + 0.18, -0.44, 0.30), (0.065, 0.004, 0.28), mats["racing_harness_red"], rot_euler=(math.radians(-32), math.radians(35), 0), parent=supercar_track_group)
+        # Anti-Submarine Crotch Belts
+        make_box(f"HARNESS_SUB_{side}_1", (sx - 0.035, -0.42, 0.26), (0.035, 0.004, 0.16), mats["racing_harness_red"], rot_euler=(math.radians(55), 0, 0), parent=supercar_track_group)
+        make_box(f"HARNESS_SUB_{side}_2", (sx + 0.035, -0.42, 0.26), (0.035, 0.004, 0.16), mats["racing_harness_red"], rot_euler=(math.radians(55), 0, 0), parent=supercar_track_group)
+        # Central Rotary Quick-Release Camlock Buckle
+        make_cylinder(f"HARNESS_CAMLOCK_{side}", (sx, -0.40, 0.32), 0.032, 0.018, (math.radians(65), 0, 0), mats["anodized_red"], vertices=32, parent=supercar_track_group)
+        make_cylinder(f"HARNESS_CAMLOCK_RELEASE_{side}", (sx, -0.395, 0.32), 0.016, 0.024, (math.radians(65), 0, 0), mats["aluminum_brushed"], vertices=24, parent=supercar_track_group)
+
+    # 6. RPM Shift-Light LED Ladder Array (Top of Column)
+    make_box("RACE_SHIFT_LIGHT_BAR", (driver_x, 0.02, 0.74), (0.24, 0.024, 0.018), mats["carbon_twill"], bevel=0.003, parent=supercar_track_group)
+    for g_i in range(4):
+        make_box(f"RACE_SHIFT_LED_G{g_i+1}", (driver_x - 0.09 + g_i * 0.016, 0.031, 0.74), (0.010, 0.003, 0.010), mats["shift_light_green"], bevel=0.001, parent=supercar_track_group)
+    for a_i in range(4):
+        make_box(f"RACE_SHIFT_LED_A{a_i+1}", (driver_x - 0.026 + a_i * 0.016, 0.031, 0.74), (0.010, 0.003, 0.010), mats["shift_light_amber"], bevel=0.001, parent=supercar_track_group)
+    for r_i in range(4):
+        make_box(f"RACE_SHIFT_LED_R{r_i+1}", (driver_x + 0.038 + r_i * 0.016, 0.031, 0.74), (0.010, 0.003, 0.010), mats["gauge_needle_red"], bevel=0.001, parent=supercar_track_group)
+    for b_i in range(3):
+        make_box(f"RACE_SHIFT_LED_FLASH{b_i+1}", (driver_x - 0.016 + b_i * 0.016, 0.031, 0.752), (0.012, 0.003, 0.006), mats["shift_light_blue"], bevel=0.001, parent=supercar_track_group)
+
+    # ------------------------------------------------------------------------
     # 10. LIGHTING BRANCH (Multi-Zone Ambient Lightguides)
     # ------------------------------------------------------------------------
     log("10. Modeling LIGHTING branch...")
@@ -2281,7 +2644,7 @@ def build_class_a_interactive_dashboard():
     make_box("PEDAL_DEAD", pedal_base + Vector((-0.12, 0.0, 0.09)), (0.055, 0.012, 0.14), mats["rubber_traction"], bevel=0.002, parent=controls_group)
 
     # ------------------------------------------------------------------------
-    # EXPORT MASTER GLB
+    # EXPORT MASTER & DEDICATED INDIVIDUAL INTERIOR GLBS
     # ------------------------------------------------------------------------
     out_dir = os.path.abspath("public/models/interior")
     os.makedirs(out_dir, exist_ok=True)
@@ -2301,6 +2664,155 @@ def build_class_a_interactive_dashboard():
     )
     sz_kb = os.path.getsize(out_glb) / 1024.0
     log(f"[SUCCESS] Exported dashboard_interactive_master.glb ({sz_kb:.1f} KB)")
+
+    # 1. Export Dedicated Luxury Sedan / Limousine Cockpit (cockpit_executive_lwb.glb)
+    export_dedicated_cockpit(
+        out_path=os.path.join(out_dir, "cockpit_executive_lwb.glb"),
+        include_names={"LUXURY_REAR_LOUNGE"},
+        exclude_names={"TRUCK_WORKSTATION", "BUS_TRANSIT_CABIN", "SUPERCAR_TRACK_CABIN"},
+        shift_nodes={"SEATS_ROW2": Vector((0, -0.28, 0)), "REAR_AMENITIES": Vector((0, -0.28, 0))}
+    )
+
+    # 2. Export Dedicated Heavy-Duty Truck Cockpit (cockpit_heavy_duty_truck.glb)
+    export_dedicated_cockpit(
+        out_path=os.path.join(out_dir, "cockpit_heavy_duty_truck.glb"),
+        include_names={"TRUCK_WORKSTATION"},
+        exclude_names={
+            "SEATS_ROW3",
+            "REAR_AMENITIES",
+            "LUXURY_REAR_LOUNGE",
+            "BUS_TRANSIT_CABIN",
+            "SUPERCAR_TRACK_CABIN",
+            "STEERING_GT3_YOKE",
+            "STEERING_FORMULA_YOKE",
+            "STEERING_SPORT_3SPOKE",
+            "STEERING_GT_3SPOKE",
+            "PADDLE_SHIFTER_L",
+            "PADDLE_SHIFTER_R",
+            "SHIFTER_ELECTRONIC_MONOSTABLE",
+            "SHIFTER_GATED_MANUAL",
+            "SHIFTER_ROTARY_DIAL",
+            "SHIFTER_TRACK_SEQUENTIAL",
+            "CONSOLE_SHIFTER_AUTO",
+            "CONSOLE_SHIFTER_CRYSTAL",
+            "CONSOLE_SHIFTER_MANUAL_GATED",
+            "CONSOLE_SHIFTER_MANUAL_H",
+            "CONSOLE_SHIFTER_PERFORMANCE",
+            "CONSOLE_SHIFTER_ROTARY",
+            "CONSOLE_SHIFTER_TOGGLE",
+        }
+    )
+
+    # 3. Export Dedicated Transit Bus Cockpit (cockpit_transit_bus.glb)
+    export_dedicated_cockpit(
+        out_path=os.path.join(out_dir, "cockpit_transit_bus.glb"),
+        include_names={"BUS_TRANSIT_CABIN"},
+        exclude_names={
+            "SEAT_UNIT_PASS",
+            "SEATS_ROW2",
+            "SEATS_ROW3",
+            "REAR_AMENITIES",
+            "SEATBELT_STRAP_PASS",
+            "DOOR_CARD_R_Mesh",
+            "DOOR_ARMREST_R",
+            "DOOR_SPEAKER_R",
+            "DOOR_SPK_CHROME_R",
+            "DOOR_TRIM_SPEAR_R",
+            "DOOR_AMBIENT_R",
+            "LUXURY_REAR_LOUNGE",
+            "TRUCK_WORKSTATION",
+            "SUPERCAR_TRACK_CABIN",
+            "STEERING_SPORT_3SPOKE",
+            "STEERING_GT_3SPOKE",
+            "STEERING_GT3_YOKE",
+            "STEERING_FORMULA_YOKE",
+            "STEERING_LUXURY_2SPOKE",
+            "STEERING_CLASSIC_4SPOKE",
+            "STEERING_PERFORMANCE_4SPOKE",
+            "PADDLE_SHIFTER_L",
+            "PADDLE_SHIFTER_R",
+            "SHIFTER_ELECTRONIC_MONOSTABLE",
+            "SHIFTER_GATED_MANUAL",
+            "SHIFTER_ROTARY_DIAL",
+            "SHIFTER_TRACK_SEQUENTIAL",
+            "CONSOLE_SHIFTER_AUTO",
+            "CONSOLE_SHIFTER_CRYSTAL",
+            "CONSOLE_SHIFTER_MANUAL_GATED",
+            "CONSOLE_SHIFTER_MANUAL_H",
+            "CONSOLE_SHIFTER_PERFORMANCE",
+            "CONSOLE_SHIFTER_ROTARY",
+            "CONSOLE_SHIFTER_TOGGLE",
+        }
+    )
+
+    # 4. Export Dedicated Supercar & Track Special Cockpit (cockpit_supercar_track.glb)
+    export_dedicated_cockpit(
+        out_path=os.path.join(out_dir, "cockpit_supercar_track.glb"),
+        include_names={"SUPERCAR_TRACK_CABIN"},
+        exclude_names={
+            "SEATS_ROW2",
+            "SEATS_ROW3",
+            "REAR_AMENITIES",
+            "LUXURY_REAR_LOUNGE",
+            "TRUCK_WORKSTATION",
+            "BUS_TRANSIT_CABIN",
+            "STEERING_LUXURY_2SPOKE",
+            "STEERING_CLASSIC_4SPOKE",
+            "STEERING_PERFORMANCE_4SPOKE",
+            "SHIFTER_ROTARY_DIAL",
+            "CONSOLE_SHIFTER_ROTARY",
+            "CONSOLE_SHIFTER_AUTO",
+            "CONSOLE_SHIFTER_CRYSTAL",
+            "CONSOLE_CUPHOLDER_L",
+            "CONSOLE_CUPHOLDER_R",
+        }
+    )
+
+def export_dedicated_cockpit(out_path, include_names, exclude_names, shift_nodes=None):
+    """Helper to selectively export dedicated standalone cockpit variants."""
+    log(f"Exporting standalone cockpit variant: {os.path.basename(out_path)}")
+    shifted = []
+    if shift_nodes:
+        for node_name, delta in shift_nodes.items():
+            obj = bpy.data.objects.get(node_name)
+            if obj:
+                obj.location += delta
+                shifted.append((obj, delta))
+
+    # Temporarily hide excluded branches
+    hidden_objs = []
+    for exc in exclude_names:
+        obj = bpy.data.objects.get(exc)
+        if obj and not obj.hide_get():
+            obj.hide_set(True)
+            hidden_objs.append(obj)
+
+    bpy.context.view_layer.update()
+    bpy.ops.object.select_all(action='SELECT')
+    # Deselect excluded
+    for h in hidden_objs:
+        h.select_set(False)
+        for child in h.children_recursive:
+            child.select_set(False)
+
+    bpy.ops.export_scene.gltf(
+        filepath=out_path,
+        export_format='GLB',
+        use_selection=True,
+        export_apply=False,
+        export_yup=True,
+        export_materials='EXPORT',
+        export_image_format='AUTO',
+    )
+    sz = os.path.getsize(out_path) / 1024.0
+    log(f"[SUCCESS] Exported {os.path.basename(out_path)} ({sz:.1f} KB)")
+
+    # Restore visibility & positions
+    for h in hidden_objs:
+        h.hide_set(False)
+    for obj, delta in shifted:
+        obj.location -= delta
+    bpy.context.view_layer.update()
 
 if __name__ == "__main__":
     build_class_a_interactive_dashboard()

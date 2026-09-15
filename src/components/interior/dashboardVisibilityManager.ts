@@ -23,11 +23,16 @@ import {
   Row2SeatingType,
   RearEntertainment,
 } from "../../state/interiorDashboardConfigStore";
+import {
+  isRow2Available,
+  isRow3Available,
+  getInteriorVariantForBodyType,
+} from "../../sim/modularVehicle/seatingConstraints";
 
 export class DashboardVisibilityManager {
   private assetManager: DashboardAssetManager;
 
-  // Stored base transforms for exploded view lerping
+  // Stored base transforms for exploded view lerping and spatial stretching
   private initialPositions: Map<string, THREE.Vector3> = new Map();
 
   constructor(assetManager: DashboardAssetManager) {
@@ -35,6 +40,7 @@ export class DashboardVisibilityManager {
   }
 
   public registerInitialTransforms() {
+    this.initialPositions.clear();
     const trackedKeys = [
       "DASH_UPPER_PAD",
       "DASH_UPPER_COWL_BINNACLE",
@@ -47,6 +53,17 @@ export class DashboardVisibilityManager {
       "STEERING",
       "CONSOLE_ROOT",
       "CABIN_SEATS",
+      "SEAT_ROW2_L",
+      "SEAT_ROW2_R",
+      "SEAT_ROW2_C",
+      "SEATBELT_ROW2_L",
+      "SEATBELT_ROW2_R",
+      "SEATBELT_ROW2_C",
+      "SEAT_ROW2_ARMREST_CONSOLE",
+      "SEAT_ROW2_CAPTAIN_CONSOLE",
+      "REAR_CONSOLE_HVAC",
+      "REAR_FOLDING_TABLE_L",
+      "REAR_FOLDING_TABLE_R",
     ];
 
     trackedKeys.forEach((key) => {
@@ -160,28 +177,68 @@ export class DashboardVisibilityManager {
     });
   }
 
-  // ── 6. Rear Cabin Seating Capacity Visibility ──
-  public updateSeatingCapacity(capacity: SeatingCapacity) {
-    // Row 2 seats (always visible for all capacities)
+  // ── 6. Rear Cabin Seating Capacity & Architecture Visibility ──
+  public updateSeatingCapacity(capacity: SeatingCapacity, bodyType: string = "sedan") {
+    const numSeats = typeof capacity === "number" ? capacity : parseInt(String(capacity), 10) || 5;
+    const isRow2 = isRow2Available(bodyType, numSeats);
+    const isRow3 = isRow3Available(bodyType, numSeats);
+    const variant = getInteriorVariantForBodyType(bodyType);
+
+    // 6a. Single-Seat Monoposto (Track Special) passenger seat handling
+    const passSeat = this.assetManager.getNode("SEAT_PASSENGER") || this.assetManager.getNode("CABIN_SEAT_PASSENGER");
+    if (passSeat) {
+      passSeat.visible = numSeats > 1;
+    }
+
+    // 6b. Row 2 Visibility & Spatial Layout
     const row2Nodes = [
-      "SEAT_ROW2_L", "SEAT_ROW2_R", "SEAT_ROW2_C",
-      "SEATBELT_ROW2_L", "SEATBELT_ROW2_R", "SEATBELT_ROW2_C",
+      "SEAT_ROW2_L",
+      "SEAT_ROW2_R",
+      "SEAT_ROW2_C",
+      "SEATBELT_ROW2_L",
+      "SEATBELT_ROW2_R",
+      "SEATBELT_ROW2_C",
       "SEAT_ROW2_ARMREST_CONSOLE",
+      "SEAT_ROW2_CAPTAIN_CONSOLE",
     ];
+
+    // Spatial legroom adjustment: for luxury sedan and limousine, shift Row 2 rearward (-0.28m Z)
+    const isExecutiveLwb = variant === "executive_long_wheelbase";
+    const lwbOffsetZ = isExecutiveLwb ? -0.28 : 0.0;
+
     row2Nodes.forEach((name) => {
       const node = this.assetManager.getNode(name);
-      if (node) node.visible = true;
+      if (node) {
+        node.visible = isRow2;
+        const basePos = this.initialPositions.get(name);
+        if (basePos) {
+          node.position.set(basePos.x, basePos.y, basePos.z + lwbOffsetZ);
+        }
+      }
     });
 
-    // Row 3 seats — only visible for 7 and 8 seater
+    // Also shift rear amenities if executive LWB
+    const rearAmenityNodes = ["REAR_CONSOLE_HVAC", "REAR_FOLDING_TABLE_L", "REAR_FOLDING_TABLE_R"];
+    rearAmenityNodes.forEach((name) => {
+      const node = this.assetManager.getNode(name);
+      const basePos = this.initialPositions.get(name);
+      if (node && basePos) {
+        node.position.set(basePos.x, basePos.y, basePos.z + lwbOffsetZ);
+      }
+    });
+
+    // 6c. Row 3 Visibility
     const row3OutboardNodes = [
-      "SEAT_ROW3_L", "SEAT_ROW3_R",
-      "ROW3_ARMREST_L", "ROW3_ARMREST_R",
-      "SEATBELT_ROW3_L", "SEATBELT_ROW3_R",
+      "SEAT_ROW3_L",
+      "SEAT_ROW3_R",
+      "ROW3_ARMREST_L",
+      "ROW3_ARMREST_R",
+      "SEATBELT_ROW3_L",
+      "SEATBELT_ROW3_R",
     ];
     const row3CenterNodes = ["SEAT_ROW3_C", "SEATBELT_ROW3_C"];
-    const showRow3 = capacity === "7_seater" || capacity === "8_seater";
-    const showRow3Center = capacity === "8_seater";
+    const showRow3 = isRow3 && numSeats >= 6;
+    const showRow3Center = isRow3 && numSeats >= 8;
 
     row3OutboardNodes.forEach((name) => {
       const node = this.assetManager.getNode(name);
@@ -191,6 +248,37 @@ export class DashboardVisibilityManager {
       const node = this.assetManager.getNode(name);
       if (node) node.visible = showRow3Center;
     });
+
+    // 6d. Architecture-Specific Nodes (Luxury Lounge, Truck Workstation, Bus Transit Cabin)
+    const luxuryLoungeGroup = this.assetManager.getNode("LUXURY_REAR_LOUNGE");
+    if (luxuryLoungeGroup) {
+      luxuryLoungeGroup.visible = variant === "executive_long_wheelbase";
+    }
+
+    const truckWorkstationGroup = this.assetManager.getNode("TRUCK_WORKSTATION");
+    if (truckWorkstationGroup) {
+      truckWorkstationGroup.visible = variant === "heavy_duty_truck";
+    }
+
+    const busTransitGroup = this.assetManager.getNode("BUS_TRANSIT_CABIN");
+    if (busTransitGroup) {
+      busTransitGroup.visible = variant === "transit_bus";
+    }
+
+    const truck4WdDial = this.assetManager.getNode("CONSOLE_4WD_DIAL") || this.assetManager.getNode("TRUCK_4WD_SELECTOR_DIAL");
+    if (truck4WdDial) {
+      truck4WdDial.visible = variant === "heavy_duty_truck";
+    }
+
+    const busFareBox = this.assetManager.getNode("INTERIOR_FareBox_Smartcard_Terminal") || this.assetManager.getNode("BUS_FAREBOX");
+    if (busFareBox) {
+      busFareBox.visible = variant === "transit_bus";
+    }
+
+    const busStanchions = this.assetManager.getNode("BUS_STANCHIONS") || this.assetManager.getNode("INTERIOR_Stanchion_Poles");
+    if (busStanchions) {
+      busStanchions.visible = variant === "transit_bus";
+    }
   }
 
   // ── 7. Row 2 Seating Style Toggle (Bench vs Captain vs Lounge) ──
@@ -240,6 +328,40 @@ export class DashboardVisibilityManager {
     const tableR = this.assetManager.getNode("REAR_FOLDING_TABLE_R");
     if (tableL) tableL.visible = foldingTables;
     if (tableR) tableR.visible = foldingTables;
+  }
+
+  // ── 9. Bespoke Architecture Toggles ──
+  public updateLuxuryLoungeAmenities(ottomans: boolean, chiller: boolean, theater: boolean) {
+    const ottL = this.assetManager.getNode("LUXURY_OTTOMAN_L");
+    const ottR = this.assetManager.getNode("LUXURY_OTTOMAN_R");
+    if (ottL) ottL.visible = ottomans;
+    if (ottR) ottR.visible = ottomans;
+
+    const chillerObj = this.assetManager.getNode("LUXURY_CHAMPAGNE_CHILLER");
+    const flute1 = this.assetManager.getNode("CHAMPAGNE_FLUTE_1");
+    const flute2 = this.assetManager.getNode("CHAMPAGNE_FLUTE_2");
+    if (chillerObj) chillerObj.visible = chiller;
+    if (flute1) flute1.visible = chiller;
+    if (flute2) flute2.visible = chiller;
+
+    const theaterObj = this.assetManager.getNode("REAR_THEATER_SCREEN_31IN");
+    if (theaterObj && theater) theaterObj.visible = true;
+  }
+
+  public updateTruckWorkstationAmenities(auxSwitches: boolean, storageVault: boolean) {
+    const swPod = this.assetManager.getNode("TRUCK_AUX_SWITCHPOD");
+    if (swPod) swPod.visible = auxSwitches;
+
+    const vault = this.assetManager.getNode("TRUCK_UNDERSEAT_STORAGE");
+    if (vault) vault.visible = storageVault;
+  }
+
+  public updateTransitBusAmenities(farebox: boolean, stanchions: boolean) {
+    const fb = this.assetManager.getNode("BUS_FAREBOX") || this.assetManager.getNode("INTERIOR_FareBox_Smartcard_Terminal");
+    if (fb) fb.visible = farebox;
+
+    const st = this.assetManager.getNode("BUS_STANCHIONS") || this.assetManager.getNode("INTERIOR_Stanchion_Poles");
+    if (st) st.visible = stanchions;
   }
 }
 

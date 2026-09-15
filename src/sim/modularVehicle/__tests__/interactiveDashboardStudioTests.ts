@@ -36,6 +36,16 @@ import {
   calculateVanInteriorVolume,
 } from "../../../sim/modularVehicle/vehicleFamilyArchitecture";
 import { DASHBOARD_CAMERA_POSES } from "../../../components/interior/dashboardCameraController";
+import {
+  BODY_TYPE_SEATING_MAP,
+  getAllowedSeatingOptions,
+  getDefaultSeatingForBodyType,
+  isRow2Available,
+  isRow3Available,
+  getInteriorVariantForBodyType,
+  getSeatingSummaryBadge,
+} from "../seatingConstraints";
+import { VehicleBodyTypeId } from "../types";
 
 export function runInteractiveDashboardStudioTests(): { passed: number; failed: number } {
   console.log("\n================================================================");
@@ -592,7 +602,7 @@ export function runInteractiveDashboardStudioTests(): { passed: number; failed: 
       seats: "seats",
       rear_cabin: "rear_cabin",
       doors: "doors",
-      summary: "studio_sport",
+      summary: "summary",
     };
 
     const subTabKeys = Object.keys(expectedSubTabMapping);
@@ -626,21 +636,21 @@ export function runInteractiveDashboardStudioTests(): { passed: number; failed: 
 
     // 1. Validate default rear cabin state
     let state = useInteriorDashboardConfigStore.getState();
-    assert.equal(state.seatingCapacity, "5_seater", "Default seating capacity must be 5_seater");
+    assert.equal(state.seatingCapacity, 5, "Default seating capacity must be 5");
     assert.equal(state.row2SeatingType, "split_bench_40_20_40", "Default row 2 style must be split_bench_40_20_40");
     assert.equal(state.row3SeatingType, "fold_flat_bench", "Default row 3 style must be fold_flat_bench");
     assert.equal(state.rearEntertainment, "none", "Default rear entertainment must be none");
     assert.equal(state.rearClimateZone, "shared", "Default rear climate zone must be shared");
 
-    // 2. Capacity switching to 7_seater and 8_seater
-    store.setSeatingCapacity("7_seater");
+    // 2. Capacity switching to 7-seater and 8-seater
+    store.setSeatingCapacity(7);
     state = useInteriorDashboardConfigStore.getState();
-    assert.equal(state.seatingCapacity, "7_seater");
+    assert.equal(state.seatingCapacity, 7);
     assert.equal(state.cameraPose, "rear_cabin");
 
-    store.setSeatingCapacity("8_seater");
+    store.setSeatingCapacity(8);
     state = useInteriorDashboardConfigStore.getState();
-    assert.equal(state.seatingCapacity, "8_seater");
+    assert.equal(state.seatingCapacity, 8);
 
     // 3. Row 2 seating styles
     store.setRow2SeatingType("executive_captain_chairs");
@@ -678,14 +688,141 @@ export function runInteractiveDashboardStudioTests(): { passed: number; failed: 
     assert.equal(state.rearMassage, true);
     assert.equal(state.rearFoldingTables, true);
 
-    // 7. Engineering consequence deltas
+    // 7. Dedicated interior features (Truck, Bus, Luxury Sedan)
+    store.setLuxuryOttomanDeployed(true);
+    store.setLuxuryChampagneChiller(true);
+    store.setLuxuryTheaterScreen(true);
+    store.setTruck4WdMode("4L");
+    store.setTruckAuxSwitchpod(true);
+    store.setTruckUnderseatStorage(true);
+    store.setBusFareValidator(true);
+    store.setBusStanchionPoles(true);
+    state = useInteriorDashboardConfigStore.getState();
+    assert.equal(state.luxuryOttomanDeployed, true);
+    assert.equal(state.luxuryChampagneChiller, true);
+    assert.equal(state.luxuryTheaterScreen, true);
+    assert.equal(state.truck4WdMode, "4L");
+    assert.equal(state.truckAuxSwitchpod, true);
+    assert.equal(state.truckUnderseatStorage, true);
+    assert.equal(state.busFareValidator, true);
+    assert.equal(state.busStanchionPoles, true);
+
+    // 8. Engineering consequence deltas
     assert.ok(state.engineering.totalPriceDelta > 0, "Rear executive amenities must increase price delta");
     assert.ok(state.engineering.totalWeightDelta > 0, "Multi-row seating must increase weight delta");
     assert.ok(state.engineering.luxuryScore > 60, "Executive rear cabin must elevate luxury score");
 
     // Clean reset
     store.reset();
-    assert.equal(useInteriorDashboardConfigStore.getState().seatingCapacity, "5_seater");
+    assert.equal(useInteriorDashboardConfigStore.getState().seatingCapacity, 5);
+    assert.equal(useInteriorDashboardConfigStore.getState().luxuryOttomanDeployed, false);
+    assert.equal(useInteriorDashboardConfigStore.getState().truck4WdMode, "2H");
+    assert.equal(useInteriorDashboardConfigStore.getState().busFareValidator, true);
+  });
+
+  // --------------------------------------------------------------------------
+  // TEST 18: Body-Type Seating Constraint Matrix & Specialized Interior Variants
+  // --------------------------------------------------------------------------
+  runTest("TEST 18: Body-type seating constraint matrix & specialized interior variants", () => {
+    // 1. Verify all 24 canonical vehicle body types have defined seating options
+    const canonicalBodyTypes: VehicleBodyTypeId[] = [
+      "sedan",
+      "luxury_sedan",
+      "coupe",
+      "station_wagon",
+      "shooting_brake",
+      "grand_tourer",
+      "limousine",
+      "hatchback",
+      "suv",
+      "crossover",
+      "luxury_suv",
+      "performance_suv",
+      "offroad_suv",
+      "pickup_truck",
+      "offroad_4x4",
+      "truck_lorry",
+      "cargo_van",
+      "bus_shuttle",
+      "supercar",
+      "hypercar",
+      "track_special",
+      "roadster",
+      "convertible",
+      "sport_wagon",
+    ];
+
+    for (const bodyType of canonicalBodyTypes) {
+      const options = getAllowedSeatingOptions(bodyType);
+      assert.ok(Array.isArray(options) && options.length > 0, `Options must exist for body type: ${bodyType}`);
+      const def = getDefaultSeatingForBodyType(bodyType);
+      assert.ok(typeof def === "number" && def > 0, `Default seat count must be positive number for ${bodyType}`);
+      const badge = getSeatingSummaryBadge(bodyType);
+      assert.ok(badge.label.length > 0 && badge.range.length > 0, `Badge must be non-empty for ${bodyType}`);
+    }
+
+    // 2. Monoposto / Single Seat: Track Special
+    const trackSpecialOpts = getAllowedSeatingOptions("track_special");
+    assert.equal(trackSpecialOpts.length, 1);
+    assert.equal(trackSpecialOpts[0].seats, 1);
+    assert.equal(isRow2Available("track_special"), false);
+    assert.equal(isRow3Available("track_special", 1), false);
+    assert.equal(getInteriorVariantForBodyType("track_special"), "supercar_cockpit");
+
+    // 3. 2-Seat Cockpits: Supercar & Hypercar
+    const supercarOpts = getAllowedSeatingOptions("supercar");
+    assert.deepEqual(supercarOpts.map((o) => o.seats), [2]);
+    assert.equal(isRow2Available("supercar"), false);
+    assert.equal(isRow3Available("supercar", 2), false);
+    assert.equal(getInteriorVariantForBodyType("supercar"), "supercar_cockpit");
+
+    const hypercarOpts = getAllowedSeatingOptions("hypercar");
+    assert.deepEqual(hypercarOpts.map((o) => o.seats), [2]);
+    assert.equal(isRow2Available("hypercar"), false);
+
+    // 4. Luxury Sedan & Limousine (Executive Long Wheelbase with spacious rear lounge)
+    const luxSedanOpts = getAllowedSeatingOptions("luxury_sedan");
+    assert.deepEqual(luxSedanOpts.map((o) => o.seats), [4, 5]);
+    assert.equal(getDefaultSeatingForBodyType("luxury_sedan"), 4);
+    assert.equal(isRow2Available("luxury_sedan"), true);
+    assert.equal(isRow3Available("luxury_sedan", 4), false);
+    assert.equal(getInteriorVariantForBodyType("luxury_sedan"), "executive_long_wheelbase");
+
+    const limoOpts = getAllowedSeatingOptions("limousine");
+    assert.deepEqual(limoOpts.map((o) => o.seats), [4, 5, 6]);
+    assert.equal(getInteriorVariantForBodyType("limousine"), "executive_long_wheelbase");
+
+    // 5. Heavy-Duty Truck & Lorry (High-durability cab with auxiliary controls)
+    const pickupOpts = getAllowedSeatingOptions("pickup_truck");
+    assert.deepEqual(pickupOpts.map((o) => o.seats), [2, 5]);
+    assert.equal(getDefaultSeatingForBodyType("pickup_truck"), 5);
+    assert.equal(getInteriorVariantForBodyType("pickup_truck"), "heavy_duty_truck");
+
+    const lorryOpts = getAllowedSeatingOptions("truck_lorry");
+    assert.deepEqual(lorryOpts.map((o) => o.seats), [2, 3]);
+    assert.equal(getInteriorVariantForBodyType("truck_lorry"), "heavy_duty_truck");
+
+    const vanOpts = getAllowedSeatingOptions("cargo_van");
+    assert.deepEqual(vanOpts.map((o) => o.seats), [2, 3]);
+    assert.equal(getInteriorVariantForBodyType("cargo_van"), "heavy_duty_truck");
+
+    // 6. Transit Bus & High Capacity Shuttle
+    const busOpts = getAllowedSeatingOptions("bus_shuttle");
+    assert.deepEqual(busOpts.map((o) => o.seats), [8, 12, 16]);
+    assert.equal(getDefaultSeatingForBodyType("bus_shuttle"), 16);
+    assert.equal(isRow3Available("bus_shuttle", 16), true);
+    assert.equal(getInteriorVariantForBodyType("bus_shuttle"), "transit_bus");
+
+    // 7. Multi-Row SUVs & Crossovers
+    const suvOpts = getAllowedSeatingOptions("suv");
+    assert.deepEqual(suvOpts.map((o) => o.seats), [5, 6, 7]);
+    assert.equal(isRow3Available("suv", 7), true);
+    assert.equal(isRow3Available("suv", 5), false);
+
+    const luxSuvOpts = getAllowedSeatingOptions("luxury_suv");
+    assert.deepEqual(luxSuvOpts.map((o) => o.seats), [4, 5, 6, 7]);
+    assert.equal(isRow3Available("luxury_suv", 7), true);
+    assert.equal(isRow3Available("luxury_suv", 4), false);
   });
 
   console.log("----------------------------------------------------------------");

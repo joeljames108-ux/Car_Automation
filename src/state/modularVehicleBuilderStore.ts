@@ -243,6 +243,16 @@ export function getCompleteVehicleGlbPath(model: VehicleModelCategory | string):
   ) {
     return "/models/Car_Crossover_Complete.glb";
   }
+  if (
+    m === "coupe" ||
+    m === "bentley" ||
+    m === "gt_coupe" ||
+    m === "sports_coupe" ||
+    m === "grand_tourer" ||
+    m === "continental"
+  ) {
+    return "/models/Car_Coupe_Complete.glb";
+  }
   if (m === "suv") return "/models/Car_Suv_Complete.glb";
   if (m === "f1" || m === "formula") return "/models/Car_F1_Complete.glb";
   if (m === "hypercar" || m === "megawatt" || m === "divo") return "/models/Car_Hypercar_Complete.glb";
@@ -259,8 +269,10 @@ export function getFinalPowertrainGlbPaths(stageId: AssemblyStage, model: Vehicl
   const isSuv = m === "suv";
   const isHypercar = m === "hypercar" || m === "divo" || m === "megawatt";
   const isBus = m === "bus" || m === "bus_shuttle" || m === "transit_bus";
+  const isCoupe = m === "coupe" || m === "bentley" || m === "gt_coupe" || m === "grand_tourer" || m === "sports_coupe";
 
   if (stageId === "engine") {
+    if (isCoupe) return ["/models/modular_parts/coupe/engine.glb"];
     if (isPickup) return ["/models/modular_parts/pickup/engine.glb"];
     if (isSuv) return ["/models/modular_parts/suv/engine.glb"];
     if (isHypercar) return ["/models/modular_parts/hypercar/engine.glb"];
@@ -269,6 +281,7 @@ export function getFinalPowertrainGlbPaths(stageId: AssemblyStage, model: Vehicl
   }
 
   if (stageId === "gearbox") {
+    if (isCoupe) return ["/models/modular_parts/coupe/gearbox.glb"];
     if (isPickup) return ["/models/modular_parts/pickup/gearbox.glb"];
     if (isSuv) return ["/models/modular_parts/suv/gearbox.glb"];
     if (isHypercar) return ["/models/modular_parts/hypercar/gearbox.glb"];
@@ -284,6 +297,22 @@ export function getStageGlbPaths(stageId: AssemblyStage, model: VehicleModelCate
     return [getCompleteVehicleGlbPath(model)];
   }
   const m = String(model || "").toLowerCase();
+  if (m === "coupe" || m === "bentley" || m === "gt_coupe" || m === "grand_tourer" || m === "sports_coupe") {
+    const coupeStages = [
+      "chassis",
+      "engine",
+      "gearbox",
+      "suspension",
+      "brakes",
+      "wheels",
+      "body_framework",
+      "exterior_panels",
+      "lighting_glass",
+    ];
+    if (coupeStages.includes(stageId)) {
+      return [`/models/modular_parts/coupe/${stageId}.glb`];
+    }
+  }
   if (m === "suv") {
     const suvStages = [
       "chassis",

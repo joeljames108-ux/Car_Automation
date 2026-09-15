@@ -25,6 +25,7 @@ import { DashboardCameraController } from "./dashboardCameraController";
 import { DashboardScreenTextureManager } from "./dashboardScreenTextureManager";
 import { DashboardLightingManager } from "./dashboardLightingManager";
 import { DashboardInteractionManager } from "./dashboardInteractionManager";
+import { getInteriorGlbUrlForBodyType, getInteriorVariantForBodyType } from "../../sim/modularVehicle/seatingConstraints";
 import { Loader2 } from "lucide-react";
 
 export const InteractiveDashboardCanvasViewport: React.FC = () => {
@@ -62,15 +63,29 @@ export const InteractiveDashboardCanvasViewport: React.FC = () => {
   const rearEntertainment = useInteriorDashboardConfigStore((s) => s.rearEntertainment);
   const rearFoldingTables = useInteriorDashboardConfigStore((s) => s.rearFoldingTables);
 
+  // Dedicated Architecture Features
+  const luxuryOttomanDeployed = useInteriorDashboardConfigStore((s) => s.luxuryOttomanDeployed);
+  const luxuryChampagneChiller = useInteriorDashboardConfigStore((s) => s.luxuryChampagneChiller);
+  const luxuryTheaterScreen = useInteriorDashboardConfigStore((s) => s.luxuryTheaterScreen);
+
+  const truckAuxSwitchpod = useInteriorDashboardConfigStore((s) => s.truckAuxSwitchpod);
+  const truckUnderseatStorage = useInteriorDashboardConfigStore((s) => s.truckUnderseatStorage);
+
+  const busFareValidator = useInteriorDashboardConfigStore((s) => s.busFareValidator);
+  const busStanchionPoles = useInteriorDashboardConfigStore((s) => s.busStanchionPoles);
+
   const cameraPose = useInteriorDashboardConfigStore((s) => s.cameraPose);
   const driverHeight = useInteriorDashboardConfigStore((s) => s.driverHeight);
   const explodedProgress = useInteriorDashboardConfigStore((s) => s.explodedProgress);
   const setActivePanel = useInteriorDashboardConfigStore((s) => s.setActivePanel);
 
-  // Modular Interior CAD hidden parts
+  // Modular Vehicle Store
   const hiddenPartIds = useModularVehicleBuilderStore((s) => s.hiddenPartIds);
+  const selectedModel = useModularVehicleBuilderStore((s) => s.selectedModel);
 
-  // Manager Refs
+  // Manager & Scene Refs
+  const sceneRef = useRef<THREE.Scene | null>(null);
+  const currentGlbUrlRef = useRef<string>("");
   const assetMgrRef = useRef<DashboardAssetManager | null>(null);
   const matMgrRef = useRef<DashboardMaterialManager | null>(null);
   const visMgrRef = useRef<DashboardVisibilityManager | null>(null);
@@ -79,7 +94,43 @@ export const InteractiveDashboardCanvasViewport: React.FC = () => {
   const lightMgrRef = useRef<DashboardLightingManager | null>(null);
   const interactMgrRef = useRef<DashboardInteractionManager | null>(null);
 
-  // Setup Three.js Scene
+  // Helper to synchronize all cockpit managers with the current configuration state
+  const syncAllManagersWithState = (
+    visMgr: DashboardVisibilityManager,
+    matMgr: DashboardMaterialManager,
+    lightMgr: DashboardLightingManager,
+    camCtrl: DashboardCameraController,
+    modelId: string
+  ) => {
+    visMgr.updateSteeringWheel(steeringWheelStyle);
+    visMgr.updateShifter(shifterStyle);
+    visMgr.updatePaddleShifters(paddleShifters);
+    visMgr.updateHUD(hudMode);
+    visMgr.updateClusterStyle(clusterStyle);
+    visMgr.updateSeatingCapacity(seatingCapacity, modelId);
+    visMgr.updateRow2Style(row2SeatingType);
+    visMgr.updateRearAmenities(rearEntertainment, rearFoldingTables);
+    visMgr.updateLuxuryLoungeAmenities(luxuryOttomanDeployed, luxuryChampagneChiller, luxuryTheaterScreen);
+    visMgr.updateTruckWorkstationAmenities(truckAuxSwitchpod, truckUnderseatStorage);
+    visMgr.updateTransitBusAmenities(busFareValidator, busStanchionPoles);
+
+    matMgr.updateUpperDashPadColor(upperDashPadColor);
+    matMgr.updateDashboardTrim(dashboardTrimMaterial);
+    matMgr.updateSteeringGripMaterial(steeringGripMaterial, steeringColor);
+    matMgr.updateSteeringStripe(steeringStripe);
+    matMgr.updateAmbientLighting(ambientLightColor, nightMode);
+    matMgr.updateStitching(stitchingColor);
+    matMgr.updateWindshieldTint(windshieldTint);
+    matMgr.updateSeatUpholstery(interiorColor, seatStyle);
+    matMgr.updateSeatBelts(seatBeltColor);
+
+    lightMgr.setLightingMode(lightingMode);
+    camCtrl.setVariant(getInteriorVariantForBodyType(modelId));
+    camCtrl.setPose(cameraPose);
+    camCtrl.setDriverHeight(driverHeight);
+  };
+
+  // Setup Three.js Scene & Initial GLB Loading
   useEffect(() => {
     if (!mountRef.current) return;
 
@@ -89,6 +140,7 @@ export const InteractiveDashboardCanvasViewport: React.FC = () => {
 
     const scene = new THREE.Scene();
     scene.background = new THREE.Color("#05070c");
+    sceneRef.current = scene;
 
     const camera = new THREE.PerspectiveCamera(64, width / height, 0.05, 50);
     camera.position.set(0.0, 0.92, 0.92);
@@ -123,10 +175,13 @@ export const InteractiveDashboardCanvasViewport: React.FC = () => {
     lightMgrRef.current = lightingManager;
     interactMgrRef.current = interactionManager;
 
-    // Load Master GLB
+    // Determine target initial GLB based on active platform model
+    const initialGlbUrl = getInteriorGlbUrlForBodyType(selectedModel);
+    currentGlbUrlRef.current = initialGlbUrl;
+
     let isMounted = true;
     assetManager
-      .loadModel("/models/interior/dashboard_interactive_master.glb", (pct) => {
+      .loadModel(initialGlbUrl, (pct) => {
         if (isMounted) setLoadPercent(pct);
       })
       .then((model) => {
@@ -135,34 +190,18 @@ export const InteractiveDashboardCanvasViewport: React.FC = () => {
         visibilityManager.registerInitialTransforms();
         textureManager.bindToMeshes();
 
-        // Initial State Sync
-        visibilityManager.updateSteeringWheel(steeringWheelStyle);
-        visibilityManager.updateShifter(shifterStyle);
-        visibilityManager.updatePaddleShifters(paddleShifters);
-        visibilityManager.updateHUD(hudMode);
-        visibilityManager.updateClusterStyle(clusterStyle);
-        visibilityManager.updateSeatingCapacity(seatingCapacity);
-        visibilityManager.updateRow2Style(row2SeatingType);
-        visibilityManager.updateRearAmenities(rearEntertainment, rearFoldingTables);
-
-        materialManager.updateUpperDashPadColor(upperDashPadColor);
-        materialManager.updateDashboardTrim(dashboardTrimMaterial);
-        materialManager.updateSteeringGripMaterial(steeringGripMaterial, steeringColor);
-        materialManager.updateSteeringStripe(steeringStripe);
-        materialManager.updateAmbientLighting(ambientLightColor, nightMode);
-        materialManager.updateStitching(stitchingColor);
-        materialManager.updateWindshieldTint(windshieldTint);
-        materialManager.updateSeatUpholstery(interiorColor, seatStyle);
-        materialManager.updateSeatBelts(seatBeltColor);
-
-        lightingManager.setLightingMode(lightingMode);
-        cameraController.setPose(cameraPose);
-        cameraController.setDriverHeight(driverHeight);
+        syncAllManagersWithState(
+          visibilityManager,
+          materialManager,
+          lightingManager,
+          cameraController,
+          selectedModel
+        );
 
         setIsReady(true);
       })
       .catch((err) => {
-        console.error("[InteractiveDashboardCanvasViewport] Failed to load GLB:", err);
+        console.error(`[InteractiveDashboardCanvasViewport] Failed to load GLB (${initialGlbUrl}):`, err);
       });
 
     // Resize Handler
@@ -307,11 +346,75 @@ export const InteractiveDashboardCanvasViewport: React.FC = () => {
     texMgrRef.current.setHUDMode(hudMode);
   }, [hudMode, isReady]);
 
+  // Dynamic GLB Hot-Swap Hook (Same Studio, swaps GLB asset alone when platform changes)
+  useEffect(() => {
+    if (
+      !isReady ||
+      !sceneRef.current ||
+      !assetMgrRef.current ||
+      !visMgrRef.current ||
+      !matMgrRef.current ||
+      !texMgrRef.current ||
+      !lightMgrRef.current ||
+      !camCtrlRef.current
+    ) {
+      return;
+    }
+
+    const targetUrl = getInteriorGlbUrlForBodyType(selectedModel);
+    if (!targetUrl || targetUrl === currentGlbUrlRef.current) {
+      return;
+    }
+
+    let isCancelled = false;
+    setIsReady(false);
+    setLoadPercent(0);
+
+    const assetMgr = assetMgrRef.current;
+    const scene = sceneRef.current;
+    const oldRoot = assetMgr.getRoot();
+    if (oldRoot) {
+      scene.remove(oldRoot);
+    }
+
+    currentGlbUrlRef.current = targetUrl;
+
+    assetMgr
+      .loadModel(targetUrl, (pct) => {
+        if (!isCancelled) setLoadPercent(pct);
+      })
+      .then((model) => {
+        if (isCancelled) return;
+        scene.add(model);
+        visMgrRef.current?.registerInitialTransforms();
+        texMgrRef.current?.bindToMeshes();
+
+        if (visMgrRef.current && matMgrRef.current && lightMgrRef.current && camCtrlRef.current) {
+          syncAllManagersWithState(
+            visMgrRef.current,
+            matMgrRef.current,
+            lightMgrRef.current,
+            camCtrlRef.current,
+            selectedModel
+          );
+        }
+        setIsReady(true);
+      })
+      .catch((err) => {
+        console.error(`[InteractiveDashboardCanvasViewport] Failed to hot-swap GLB to ${targetUrl}:`, err);
+        setIsReady(true);
+      });
+
+    return () => {
+      isCancelled = true;
+    };
+  }, [selectedModel, isReady]);
+
   // Reactive Rear Cabin Multi-Row Seating Visibility Hooks
   useEffect(() => {
     if (!isReady || !visMgrRef.current) return;
-    visMgrRef.current.updateSeatingCapacity(seatingCapacity);
-  }, [seatingCapacity, isReady]);
+    visMgrRef.current.updateSeatingCapacity(seatingCapacity, selectedModel);
+  }, [seatingCapacity, selectedModel, isReady]);
 
   useEffect(() => {
     if (!isReady || !visMgrRef.current) return;
@@ -322,6 +425,31 @@ export const InteractiveDashboardCanvasViewport: React.FC = () => {
     if (!isReady || !visMgrRef.current) return;
     visMgrRef.current.updateRearAmenities(rearEntertainment, rearFoldingTables);
   }, [rearEntertainment, rearFoldingTables, isReady]);
+
+  useEffect(() => {
+    if (!isReady || !visMgrRef.current) return;
+    visMgrRef.current.updateLuxuryLoungeAmenities(
+      luxuryOttomanDeployed,
+      luxuryChampagneChiller,
+      luxuryTheaterScreen
+    );
+  }, [luxuryOttomanDeployed, luxuryChampagneChiller, luxuryTheaterScreen, isReady]);
+
+  useEffect(() => {
+    if (!isReady || !visMgrRef.current) return;
+    visMgrRef.current.updateTruckWorkstationAmenities(
+      truckAuxSwitchpod,
+      truckUnderseatStorage
+    );
+  }, [truckAuxSwitchpod, truckUnderseatStorage, isReady]);
+
+  useEffect(() => {
+    if (!isReady || !visMgrRef.current) return;
+    visMgrRef.current.updateTransitBusAmenities(
+      busFareValidator,
+      busStanchionPoles
+    );
+  }, [busFareValidator, busStanchionPoles, isReady]);
 
   // Reactive Seat Upholstery and Belts Propagation
   useEffect(() => {

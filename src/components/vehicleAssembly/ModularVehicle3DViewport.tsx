@@ -115,7 +115,7 @@ export const ModularVehicle3DViewport: React.FC<ModularVehicle3DViewportProps> =
   isolatedStage = null,
 }) => {
   const [modelSource, setModelSource] = React.useState<
-    'parametric' | 'volvo_p1800' | 'byd_atto3' | 'ford_escort' | 'bmw_i8' | 'mini_countryman' | 'v12_engine'
+    'parametric' | 'volvo_p1800' | 'byd_atto3' | 'ford_escort' | 'bmw_i8' | 'mini_countryman' | 'v12_engine' | 'bentley_coupe' | 'coupe'
   >('parametric');
   const [paintColor, setPaintColor] = React.useState<string>('#b45309');
   const [paintFinish, setPaintFinish] = React.useState<PaintFinishType>('satin_metallic');
@@ -279,7 +279,8 @@ export const ModularVehicle3DViewport: React.FC<ModularVehicle3DViewportProps> =
     // 5. Populate Modular Meshes or Reference CAD Models (GLB / FBX)
     if (modelSource !== 'parametric') {
       let modelUrl = '';
-      if (modelSource === 'volvo_p1800') modelUrl = '/models/extracted/volvo-p1800-restomod-widebody-edition/source/car5.fbx';
+      if (modelSource === 'bentley_coupe' || modelSource === 'coupe') modelUrl = '/models/Car_Coupe_Complete.glb';
+      else if (modelSource === 'volvo_p1800') modelUrl = '/models/extracted/volvo-p1800-restomod-widebody-edition/source/car5.fbx';
       else if (modelSource === 'byd_atto3') modelUrl = '/models/extracted/2024-byd-atto-3/source/FINAL_MODEL/FINAL_MODEL.fbx';
       else if (modelSource === 'ford_escort') modelUrl = '/models/exterior/hatchback_ford_escort.glb';
       else if (modelSource === 'bmw_i8') modelUrl = '/models/exterior/sports_car_bmw_i8.glb';

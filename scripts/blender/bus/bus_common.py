@@ -9,6 +9,7 @@ import math
 from mathutils import Vector, Matrix, Euler
 
 COLLECTIONS = [
+    "00_Bus_Body_Framework",
     "01_Bus_Body_Shell",
     "02_Bus_Roof_Pods_HVAC",
     "03_Bus_Glazing_Windows",
@@ -24,32 +25,38 @@ COLLECTIONS = [
 
 # Coordinate Standards & Blueprint Reference Measurements (m)
 # Strict ISO 8855: Y-Forward (+Y), Z-Up (+Z), X-Lateral (+X Driver LHD)
-WHEELBASE = 5.850         # 5850 mm
-OVERALL_LENGTH = 10.800   # 10800 mm
-OVERALL_WIDTH = 2.550     # 2550 mm (standard commercial transit width)
-OVERALL_HEIGHT = 3.250    # 3250 mm (unladen roof crown with HVAC)
-GROUND_CLEARANCE = 0.260  # 260 mm (Low-floor kneeling transit datum)
+# Volvo 9700 H 13m (2006) High-Floor Tri-Axle Luxury Touring Coach Blueprint
+WHEELBASE = 6.200         # 6200 mm (Steer axle to Drive axle)
+TAG_AXLE_SPACING = 1.350  # 1350 mm (Drive axle to Trailing Tag axle)
+OVERALL_LENGTH = 13.000   # 13000 mm (13m Coach format)
+OVERALL_WIDTH = 2.550     # 2550 mm (standard European coach width)
+OVERALL_HEIGHT = 3.750    # 3750 mm (Volvo 9700 H high-floor unladen roof with HVAC)
+GROUND_CLEARANCE = 0.320  # 320 mm (High-floor coach datum)
 FRONT_TRACK = 2.100       # 2100 mm
 REAR_TRACK = 1.880        # 1880 mm (between centers of dual tire sets)
+TAG_TRACK = 2.100         # 2100 mm (single wheel trailing axle)
 
-FRONT_AXLE_Y = 3.150      # Front steer axle
-REAR_AXLE_Y = -2.700      # Rear drive axle
-FRONT_BUMPER_Y = 5.400    # Front clip
-REAR_BUMPER_Y = -5.400    # Rear clip
+FRONT_AXLE_Y = 4.050      # Front steer axle
+REAR_AXLE_Y = -2.150      # Rear drive axle (dually)
+TAG_AXLE_Y = -3.500       # Rear trailing tag/steer axle (single)
+FRONT_BUMPER_Y = 6.500    # Front clip (+6.500m)
+REAR_BUMPER_Y = -6.500    # Rear clip (-6.500m)
 
-TIRE_RADIUS = 0.510       # 1020 mm outer diameter (ground contact Z=0.000m)
+TIRE_RADIUS = 0.520       # 1040 mm outer diameter 295/80 R22.5
 WHEEL_RADIUS = 0.285      # 22.5-inch commercial rim
 FRONT_TIRE_WIDTH = 0.295  # 295/80 R22.5
 REAR_DUAL_TIRE_WIDTH = 0.295
 DUAL_SPACING = 0.340      # Center-to-center dual wheel spacing
-HUB_Z = TIRE_RADIUS       # 0.510 m
+HUB_Z = TIRE_RADIUS       # 0.520 m
 
-FLOOR_Z = 0.380           # 380 mm low-floor datum
-BELTLINE_Z = 1.050        # Lower window line
-ROOF_BODY_Z = 2.950       # Body roof line
-ROOF_HVAC_Z = 3.250       # Top of AC / battery enclosures
-WINDSHIELD_TOP_Z = 2.850  # Top of front panoramic glass
-DESTINATION_SIGN_Z = 2.880# Route display center height
+FLOOR_Z = 1.250           # High-decker passenger floor level (1250 mm above ground)
+BAGGAGE_BAY_BTM_Z = 0.420 # Lower luggage hold floor datum
+BAGGAGE_BAY_TOP_Z = 1.450 # Luggage compartment door top shutline
+BELTLINE_Z = 1.580        # Lower passenger window line
+ROOF_BODY_Z = 3.520       # Body roof crown line
+ROOF_HVAC_Z = 3.750       # Top of aerodynamic roof HVAC pod
+WINDSHIELD_TOP_Z = 3.420  # Top of raked panoramic front windshield
+DESTINATION_SIGN_Z = 3.280# Integrated route display center height
 
 def safe_reset_scene():
     """Safely reset scene without breaking Blender MCP socket."""
@@ -106,8 +113,8 @@ def apply_finishing(obj, bevel=0.005, subsurf=0, weighted_normals=True):
             except Exception:
                 pass
 
-def create_box(name, location, size, col_name=None, mat=None):
-    """Helper to create a box mesh with specified center location and size (dx, dy, dz)."""
+def create_box(name, location, size, rotation=(0,0,0), col_name=None, mat=None, bevel=0.004):
+    """Helper to create a box mesh with specified center location, size (dx, dy, dz), and optional rotation."""
     mesh = bpy.data.meshes.new(name + "_Mesh")
     obj = bpy.data.objects.new(name, mesh)
     
@@ -124,6 +131,7 @@ def create_box(name, location, size, col_name=None, mat=None):
     bm.free()
     
     obj.location = location
+    obj.rotation_euler = rotation
     if col_name:
         link_to_collection(obj, col_name)
     else:
@@ -131,10 +139,10 @@ def create_box(name, location, size, col_name=None, mat=None):
         
     if mat:
         obj.data.materials.append(mat)
-    apply_finishing(obj, bevel=0.004)
+    apply_finishing(obj, bevel=bevel)
     return obj
 
-def create_cylinder(name, location, radius, depth, rotation=(0,0,0), vertices=32, col_name=None, mat=None):
+def create_cylinder(name, location, radius, depth, rotation=(0,0,0), vertices=32, col_name=None, mat=None, bevel=0.003):
     """Helper to create a cylinder along Z, rotated into place."""
     mesh = bpy.data.meshes.new(name + "_Mesh")
     obj = bpy.data.objects.new(name, mesh)
@@ -153,5 +161,81 @@ def create_cylinder(name, location, radius, depth, rotation=(0,0,0), vertices=32
         
     if mat:
         obj.data.materials.append(mat)
-    apply_finishing(obj, bevel=0.003)
+    apply_finishing(obj, bevel=bevel)
     return obj
+
+def create_tube(name, location, inner_radius, outer_radius, depth, rotation=(0,0,0), vertices=36, col_name=None, mat=None, bevel=0.003):
+    """Creates a hollow cylindrical tube along Z, rotated into place. Ideal for tires and wheel barrels."""
+    mesh = bpy.data.meshes.new(name + "_Mesh")
+    obj = bpy.data.objects.new(name, mesh)
+    
+    bm = bmesh.new()
+    half_d = depth / 2.0
+    
+    # Generate outer and inner rings at +half_d and -half_d
+    outer_top = []
+    outer_btm = []
+    inner_top = []
+    inner_btm = []
+    
+    for i in range(vertices):
+        angle = 2.0 * math.pi * i / vertices
+        cos_a = math.cos(angle)
+        sin_a = math.sin(angle)
+        
+        outer_top.append(bm.verts.new(Vector((outer_radius * cos_a, outer_radius * sin_a, half_d))))
+        outer_btm.append(bm.verts.new(Vector((outer_radius * cos_a, outer_radius * sin_a, -half_d))))
+        inner_top.append(bm.verts.new(Vector((inner_radius * cos_a, inner_radius * sin_a, half_d))))
+        inner_btm.append(bm.verts.new(Vector((inner_radius * cos_a, inner_radius * sin_a, -half_d))))
+        
+    bm.verts.ensure_lookup_table()
+    
+    # Create quad faces
+    for i in range(vertices):
+        next_i = (i + 1) % vertices
+        # Outer surface
+        bm.faces.new((outer_top[i], outer_top[next_i], outer_btm[next_i], outer_btm[i]))
+        # Inner surface
+        bm.faces.new((inner_btm[i], inner_btm[next_i], inner_top[next_i], inner_top[i]))
+        # Top rim cap
+        bm.faces.new((outer_top[i], inner_top[i], inner_top[next_i], outer_top[next_i]))
+        # Bottom rim cap
+        bm.faces.new((outer_btm[next_i], inner_btm[next_i], inner_btm[i], outer_btm[i]))
+        
+    bm.to_mesh(mesh)
+    bm.free()
+    
+    obj.location = location
+    obj.rotation_euler = rotation
+    if col_name:
+        link_to_collection(obj, col_name)
+    else:
+        bpy.context.scene.collection.objects.link(obj)
+        
+    if mat:
+        obj.data.materials.append(mat)
+    apply_finishing(obj, bevel=bevel)
+    return obj
+
+def create_toroid(name, location, major_r, minor_r, rotation=(0,0,0), major_segs=36, minor_segs=16, col_name=None, mat=None, bevel=0.0):
+    """Creates a toroidal mesh along Z, rotated into place. Ideal for tire crowns & curved hoses."""
+    mesh = bpy.data.meshes.new(name + "_Mesh")
+    obj = bpy.data.objects.new(name, mesh)
+    
+    bm = bmesh.new()
+    bmesh.ops.create_torus(bm, major_radius=major_r, minor_radius=minor_r, major_segments=major_segs, minor_segments=minor_segs)
+    bm.to_mesh(mesh)
+    bm.free()
+    
+    obj.location = location
+    obj.rotation_euler = rotation
+    if col_name:
+        link_to_collection(obj, col_name)
+    else:
+        bpy.context.scene.collection.objects.link(obj)
+        
+    if mat:
+        obj.data.materials.append(mat)
+    apply_finishing(obj, bevel=bevel)
+    return obj
+

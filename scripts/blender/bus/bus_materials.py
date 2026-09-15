@@ -33,15 +33,15 @@ class BusMaterials:
         bsdf.inputs['Metallic'].default_value = metallic
         bsdf.inputs['Roughness'].default_value = roughness
         
-        if 'Clearcoat Weight' in bsdf.inputs:
-            bsdf.inputs['Clearcoat Weight'].default_value = clearcoat
-        elif 'Clearcoat' in bsdf.inputs:
-            bsdf.inputs['Clearcoat'].default_value = clearcoat
+        for coat_key in ('Coat Weight', 'Coat', 'Clearcoat Weight', 'Clearcoat'):
+            if coat_key in bsdf.inputs:
+                bsdf.inputs[coat_key].default_value = clearcoat
+                break
             
-        if 'Transmission Weight' in bsdf.inputs:
-            bsdf.inputs['Transmission Weight'].default_value = transmission
-        elif 'Transmission' in bsdf.inputs:
-            bsdf.inputs['Transmission'].default_value = transmission
+        for trans_key in ('Transmission Weight', 'Transmission'):
+            if trans_key in bsdf.inputs:
+                bsdf.inputs[trans_key].default_value = transmission
+                break
             
         if 'IOR' in bsdf.inputs:
             bsdf.inputs['IOR'].default_value = ior
@@ -49,10 +49,15 @@ class BusMaterials:
             bsdf.inputs['Alpha'].default_value = alpha
             
         if alpha < 1.0 or transmission > 0.0:
-            for attr in ('blend_method', 'shadow_method'):
+            for attr in ('blend_method', 'shadow_method', 'surface_render_method'):
                 if hasattr(mat, attr):
                     try:
-                        setattr(mat, attr, 'BLEND' if attr == 'blend_method' else 'HASHED')
+                        if attr == 'blend_method':
+                            setattr(mat, attr, 'BLEND')
+                        elif attr == 'surface_render_method':
+                            setattr(mat, attr, 'BLENDED')
+                        elif attr == 'shadow_method':
+                            setattr(mat, attr, 'HASHED')
                     except Exception:
                         pass
                     
@@ -161,10 +166,10 @@ class BusMaterials:
         
         return mat
 
-    def _create_glass_mat(self, name, base_color, tint_strength=0.92, ior=1.52):
+    def _create_glass_mat(self, name, base_color, tint_strength=0.94, ior=1.52, alpha=0.35):
         """Advanced glass with Fresnel reflection, tint, and subtle refraction."""
-        mat = self._create_pbr_mat(name, base_color, metallic=0.05, roughness=0.03,
-                                   transmission=tint_strength, ior=ior, alpha=0.38)
+        mat = self._create_pbr_mat(name, base_color, metallic=0.05, roughness=0.02, clearcoat=1.0,
+                                   transmission=tint_strength, ior=ior, alpha=alpha)
         nodes = mat.node_tree.nodes
         links = mat.node_tree.links
         
@@ -323,28 +328,52 @@ class BusMaterials:
         # 1. EXTERIOR FLEET BODYWORK & PAINT (Automotive-Grade with Flakes)
         # =====================================================================
         self.body_cyan = self._create_paint_mat(
-            "Mat_BusFleetCyan", (0.00, 0.96, 0.83, 1.0),
-            metallic=0.45, roughness=0.18, clearcoat=0.90, flake_scale=250.0
+            "Mat_BusFleetCyan", (0.02, 0.52, 0.68, 1.0),
+            metallic=0.78, roughness=0.15, clearcoat=1.0, flake_scale=220.0
+        )
+        self.body_silver = self._create_paint_mat(
+            "Mat_CoachIridiumSilver", (0.80, 0.82, 0.86, 1.0),
+            metallic=0.88, roughness=0.12, clearcoat=1.0, flake_scale=220.0
+        )
+        self.body_sapphire = self._create_paint_mat(
+            "Mat_CoachMidnightSapphire", (0.015, 0.045, 0.125, 1.0),
+            metallic=0.85, roughness=0.16, clearcoat=1.0, flake_scale=250.0
         )
         self.body_white = self._create_paint_mat(
             "Mat_BusFleetWhite", (0.92, 0.94, 0.96, 1.0),
             metallic=0.15, roughness=0.22, clearcoat=0.85, flake_scale=200.0
         )
         self.body_dark_accent = self._create_pbr_mat(
-            "Mat_BusDarkAccent", (0.06, 0.08, 0.11, 1.0),
-            metallic=0.20, roughness=0.35, clearcoat=0.60
+            "Mat_BusDarkAccent", (0.018, 0.020, 0.025, 1.0),
+            metallic=0.35, roughness=0.08, clearcoat=1.0
         )
         self.trim_satin_black = self._create_pbr_mat(
-            "Mat_DarkSatinTrim", (0.04, 0.04, 0.05, 1.0),
-            metallic=0.05, roughness=0.65
+            "Mat_DarkSatinTrim", (0.035, 0.035, 0.042, 1.0),
+            metallic=0.08, roughness=0.55
+        )
+        self.trim_piano_black = self._create_pbr_mat(
+            "Mat_PianoGlossBlack", (0.008, 0.008, 0.012, 1.0),
+            metallic=0.15, roughness=0.03, clearcoat=1.0
         )
         
         # =====================================================================
         # 2. GLAZING & OPTICAL GLASS (Fresnel + Imperfections)
         # =====================================================================
         self.glass_tinted = self._create_glass_mat(
-            "Mat_TransitOpticalGlass", (0.75, 0.88, 0.95, 1.0),
-            tint_strength=0.92, ior=1.52
+            "Mat_TransitOpticalGlass", (0.75, 0.86, 0.94, 1.0),
+            tint_strength=0.94, ior=1.52, alpha=0.32
+        )
+        self.glass_clear = self._create_glass_mat(
+            "Mat_OpticalWindshieldGlass", (0.94, 0.97, 1.00, 1.0),
+            tint_strength=0.98, ior=1.52, alpha=0.18
+        )
+        self.polycarb_lens = self._create_pbr_mat(
+            "Mat_PolycarbonateLens", (0.96, 0.98, 1.00, 1.0),
+            metallic=0.0, roughness=0.008, transmission=0.98, ior=1.58, clearcoat=1.0, alpha=0.16
+        )
+        self.smoked_ruby_lens = self._create_pbr_mat(
+            "Mat_SmokedRubyLens", (0.55, 0.01, 0.02, 1.0),
+            metallic=0.0, roughness=0.03, transmission=0.88, ior=1.49, clearcoat=1.0, alpha=0.45
         )
         self.glass_frit = self._create_pbr_mat(
             "Mat_WindshieldFrittedBorder", (0.02, 0.02, 0.03, 1.0),
@@ -356,22 +385,27 @@ class BusMaterials:
         # =====================================================================
         self.led_destination = self._create_emissive_led_mat(
             "Mat_LED_DestinationMatrix", (0.02, 0.02, 0.03, 1.0),
-            emission_color=(1.00, 0.72, 0.05, 1.0), emission_strength=12.0, grid_scale=40.0
+            emission_color=(1.00, 0.72, 0.05, 1.0), emission_strength=14.0, grid_scale=40.0
         )
         self.led_headlight = self._create_pbr_mat(
             "Mat_LED_HeadlightMatrix", (0.95, 0.98, 1.00, 1.0),
-            metallic=0.90, roughness=0.10,
-            emission=(0.95, 0.98, 1.00, 1.0), emission_strength=10.0
+            metallic=0.90, roughness=0.08,
+            emission=(0.95, 0.98, 1.00, 1.0), emission_strength=16.0
+        )
+        self.drl_ice_blue = self._create_pbr_mat(
+            "Mat_DRL_Ice_Blue", (0.75, 0.90, 1.00, 1.0),
+            metallic=0.10, roughness=0.05,
+            emission=(0.70, 0.92, 1.00, 1.0), emission_strength=24.0
         )
         self.led_taillight = self._create_pbr_mat(
-            "Mat_LED_TaillightTower", (0.90, 0.02, 0.02, 1.0),
-            metallic=0.60, roughness=0.15,
-            emission=(1.00, 0.02, 0.02, 1.0), emission_strength=8.0
+            "Mat_LED_TaillightTower", (0.90, 0.015, 0.02, 1.0),
+            metallic=0.60, roughness=0.06,
+            emission=(1.00, 0.015, 0.02, 1.0), emission_strength=22.0
         )
         self.led_amber_marker = self._create_pbr_mat(
             "Mat_LED_MarkerAmber", (0.98, 0.55, 0.02, 1.0),
-            metallic=0.40, roughness=0.20,
-            emission=(1.00, 0.60, 0.02, 1.0), emission_strength=6.5
+            metallic=0.40, roughness=0.10,
+            emission=(1.00, 0.60, 0.02, 1.0), emission_strength=12.0
         )
         
         # =====================================================================
@@ -380,6 +414,10 @@ class BusMaterials:
         self.chassis_steel = self._create_metal_mat(
             "Mat_SteelChassisFrame", (0.18, 0.20, 0.23, 1.0),
             metallic=0.85, roughness=0.40, brushed=True
+        )
+        self.skeleton_steel = self._create_metal_mat(
+            "Mat_Bus_Skeleton_Steel", (0.24, 0.26, 0.30, 1.0),
+            metallic=0.92, roughness=0.30, brushed=True
         )
         self.battery_aluminum = self._create_metal_mat(
             "Mat_BatteryEnclosureAlum", (0.70, 0.73, 0.76, 1.0),

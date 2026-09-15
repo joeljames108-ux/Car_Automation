@@ -28,7 +28,6 @@ import hilux_suspension
 import hilux_wheels
 import hilux_powertrain
 import hilux_underbody
-import hilux_interior
 import hilux_finalize
 import hilux_export
 
@@ -46,7 +45,6 @@ importlib.reload(hilux_suspension)
 importlib.reload(hilux_wheels)
 importlib.reload(hilux_powertrain)
 importlib.reload(hilux_underbody)
-importlib.reload(hilux_interior)
 importlib.reload(hilux_finalize)
 importlib.reload(hilux_export)
 
@@ -94,10 +92,7 @@ def build_complete_hilux():
     # 15. Underbody & Fuel System Assembly
     underbody_objs = hilux_underbody.build_underbody(mat_registry)
     
-    # 16. Interior Cockpit Assembly (Omitted per user specification - Pure Exterior Build)
-    # interior_objs = hilux_interior.build_interior(mat_registry)
-    
-    # 17. Topology Finalization & Normal Hardening
+    # 16. Topology Finalization & Normal Hardening
     hilux_finalize.finalize_topology_and_normals()
     
     total_objects = len(bpy.data.objects)

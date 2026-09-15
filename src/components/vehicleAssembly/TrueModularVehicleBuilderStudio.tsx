@@ -945,8 +945,8 @@ export const TrueModularVehicleBuilderStudio: React.FC<TrueModularVehicleBuilder
                   </div>
                   <div className="p-2 rounded-lg bg-slate-850 border border-slate-800">
                     <div className="text-slate-500 text-[9px]">CAD ASSET</div>
-                    <div className="font-bold text-emerald-400 truncate" title={selectedModel === "pickup_truck" ? "pickup/engine.glb" : "Engine_V8_TwinTurbo_Complete.glb"}>
-                      {selectedModel === "pickup_truck" ? "pickup/engine.glb" : "Engine_V8_Complete.glb"}
+                    <div className="font-bold text-emerald-400 truncate" title={selectedModel === "pickup_truck" ? "pickup/engine.glb" : selectedModel === "coupe" ? "coupe/engine.glb" : "Engine_V8_TwinTurbo_Complete.glb"}>
+                      {selectedModel === "pickup_truck" ? "pickup/engine.glb" : selectedModel === "coupe" ? "coupe/engine.glb" : "Engine_V8_Complete.glb"}
                     </div>
                   </div>
                 </div>
@@ -1119,7 +1119,7 @@ export const TrueModularVehicleBuilderStudio: React.FC<TrueModularVehicleBuilder
                   <div className="p-2 rounded-lg bg-slate-850 border border-slate-800">
                     <div className="text-slate-500 text-[9px]">CAD ASSET</div>
                     <div className="font-bold text-cyan-400 truncate">
-                      {selectedModel === "pickup_truck" ? "pickup/gearbox.glb" : "transmission.glb"}
+                      {selectedModel === "pickup_truck" ? "pickup/gearbox.glb" : selectedModel === "coupe" ? "coupe/gearbox.glb" : "transmission.glb"}
                     </div>
                   </div>
                 </div>

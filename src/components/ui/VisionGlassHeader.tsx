@@ -312,7 +312,7 @@ function VisionGlassHeaderComponent({
           <button
             type="button"
             onClick={() => onSetUiTheme(uiTheme === "theme4" ? "theme3" : "theme4")}
-            title="Active: Vision Glass UI 4 (Click to toggle CAD Theme)"
+            title={uiTheme === "theme4" ? "Active: UI 4 (Vision Glass) — Click to switch to Theme 3" : "Active: Theme 3 — Click to switch to UI 4 (Vision Glass)"}
             aria-label="Toggle UI theme"
             className="spring-press focus-visible:outline-none focus-ring-emil"
             style={{
@@ -327,8 +327,10 @@ function VisionGlassHeaderComponent({
               boxShadow: "0 0 10px rgba(245,158,11,0.18)",
             }}
           >
-            <Palette size={12} style={{ color: "#fbbf24" }} aria-hidden="true" />
-            <span style={{ fontFamily: "monospace", letterSpacing: "0.5px" }}>VISION GLASS</span>
+            <Sparkles size={11} style={{ color: "#fbbf24" }} aria-hidden="true" />
+            <span style={{ fontFamily: "monospace", letterSpacing: "0.5px" }}>
+              {uiTheme === "theme4" ? "SWITCH TO THEME 3" : "UI 4 (VISION GLASS)"}
+            </span>
           </button>
         )}
 

@@ -140,6 +140,7 @@ export interface VehicleModelOption {
 }
 
 const VEHICLE_FAMILY_MODELS: VehicleModelOption[] = [
+  { id: "coupe", label: "Continental GT Coupe", family: "Luxury Grand Tourer", path: "/models/Car_Coupe_Complete.glb", badge: "COUPE", desc: "Bentley Continental GT II specification British luxury GT coupe with 6.0L W12 & matrix chrome grille" },
   { id: "sedan", label: "Executive Sedan", family: "Unibody Passenger", path: "/models/Car_Sedan_Complete.glb", badge: "SEDAN", desc: "Midnight Sapphire Class-A EV Sedan with dual e-motors & VIP cabin" },
   { id: "pickup_truck", label: "HiLux SR5 Pickup", family: "Body-on-Frame Utility", path: "/models/Car_HiLux_SR5_Complete.glb", badge: "PICKUP", desc: "2025 Double-Cab 4WD Turbo-Diesel with ladder frame & reinforced cargo bed" },
   { id: "hypercar", label: "Apex Hypercar", family: "High-Downforce", path: "/models/Car_Hypercar_Complete.glb", badge: "HYPER", desc: "Mid-engine carbon monocoque with active DRS rear wing & aero splitter" },

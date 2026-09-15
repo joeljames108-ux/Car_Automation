@@ -7,7 +7,7 @@
 // are rendered below the 3D GLB viewport.
 // ============================================================================
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import {
   Compass,
   Sliders,
@@ -48,7 +48,18 @@ import {
   Volume2,
   Sofa,
   ToggleLeft,
+  Truck,
+  Bus,
+  Wine,
 } from "lucide-react";
+import {
+  getAllowedSeatingOptions,
+  getDefaultSeatingForBodyType,
+  isRow2Available,
+  isRow3Available,
+  getInteriorVariantForBodyType,
+  getSeatingSummaryBadge,
+} from "../../sim/modularVehicle/seatingConstraints";
 import {
   useInteriorDashboardConfigStore,
   ActiveConfigPanel,
@@ -262,6 +273,26 @@ export const InteriorControlDeck: React.FC<InteriorControlDeckProps> = ({
   const rearFoldingTables = useInteriorDashboardConfigStore((s) => s.rearFoldingTables);
   const setRearFoldingTables = useInteriorDashboardConfigStore((s) => s.setRearFoldingTables);
 
+  // Dedicated Architecture Subsystems
+  const truck4WdMode = useInteriorDashboardConfigStore((s) => s.truck4WdMode);
+  const setTruck4WdMode = useInteriorDashboardConfigStore((s) => s.setTruck4WdMode);
+  const truckAuxSwitchpod = useInteriorDashboardConfigStore((s) => s.truckAuxSwitchpod);
+  const setTruckAuxSwitchpod = useInteriorDashboardConfigStore((s) => s.setTruckAuxSwitchpod);
+  const truckUnderseatStorage = useInteriorDashboardConfigStore((s) => s.truckUnderseatStorage);
+  const setTruckUnderseatStorage = useInteriorDashboardConfigStore((s) => s.setTruckUnderseatStorage);
+
+  const busFareValidator = useInteriorDashboardConfigStore((s) => s.busFareValidator);
+  const setBusFareValidator = useInteriorDashboardConfigStore((s) => s.setBusFareValidator);
+  const busStanchionPoles = useInteriorDashboardConfigStore((s) => s.busStanchionPoles);
+  const setBusStanchionPoles = useInteriorDashboardConfigStore((s) => s.setBusStanchionPoles);
+
+  const luxuryOttomanDeployed = useInteriorDashboardConfigStore((s) => s.luxuryOttomanDeployed);
+  const setLuxuryOttomanDeployed = useInteriorDashboardConfigStore((s) => s.setLuxuryOttomanDeployed);
+  const luxuryChampagneChiller = useInteriorDashboardConfigStore((s) => s.luxuryChampagneChiller);
+  const setLuxuryChampagneChiller = useInteriorDashboardConfigStore((s) => s.setLuxuryChampagneChiller);
+  const luxuryTheaterScreen = useInteriorDashboardConfigStore((s) => s.luxuryTheaterScreen);
+  const setLuxuryTheaterScreen = useInteriorDashboardConfigStore((s) => s.setLuxuryTheaterScreen);
+
   // Audio system state (local or store)
   const [audioSystemGrade, setAudioSystemGrade] = useState<string>("burmester");
   const [hvacDualZone, setHvacDualZone] = useState<boolean>(true);
@@ -273,8 +304,31 @@ export const InteriorControlDeck: React.FC<InteriorControlDeckProps> = ({
 
   // Vehicle Store for structural chassis & MPV volume
   const selectedModel = useModularVehicleBuilderStore((s) => s.selectedModel);
+  const setSelectedModel = useModularVehicleBuilderStore((s) => s.setSelectedModel);
   const hiddenPartIds = useModularVehicleBuilderStore((s) => s.hiddenPartIds);
   const togglePartVisibility = useModularVehicleBuilderStore((s) => s.togglePartVisibility);
+
+  // Dynamic Seating Constraints & Auto-Clamp
+  const allowedSeatingOptions = useMemo(
+    () => getAllowedSeatingOptions(selectedModel),
+    [selectedModel]
+  );
+  const seatingBadge = useMemo(
+    () => getSeatingSummaryBadge(selectedModel),
+    [selectedModel]
+  );
+  const interiorVariant = useMemo(
+    () => getInteriorVariantForBodyType(selectedModel),
+    [selectedModel]
+  );
+
+  useEffect(() => {
+    const validSeats = allowedSeatingOptions.map((o) => o.seats);
+    if (!validSeats.includes(seatingCapacity)) {
+      const defaultSeats = getDefaultSeatingForBodyType(selectedModel);
+      setSeatingCapacity(defaultSeats);
+    }
+  }, [selectedModel, allowedSeatingOptions, seatingCapacity, setSeatingCapacity]);
 
   const [chassisArch, setChassisArch] = useState<string>("monocoque");
   const [materialGrade, setMaterialGrade] = useState<string>("cast_aluminum");
@@ -349,6 +403,59 @@ export const InteriorControlDeck: React.FC<InteriorControlDeckProps> = ({
                 <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-red-950/80 text-red-300 border border-red-500/40 font-bold uppercase">
                   3/4 STUDIO SPORT CAM
                 </span>
+              </div>
+            </div>
+
+            {/* Vehicle Interior Platform Architecture & Dynamic GLB Swapper */}
+            <div className="p-3.5 rounded-xl bg-slate-950/70 border border-slate-800 flex flex-col gap-2.5 shadow-inner">
+              <div className="flex items-center justify-between">
+                <span className="text-[11px] font-bold text-slate-200 uppercase tracking-wider flex items-center gap-1.5">
+                  <Truck size={14} className="text-cyan-400" />
+                  Vehicle Platform Architecture & Dedicated GLB
+                </span>
+                <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-cyan-950/80 text-cyan-300 border border-cyan-500/40 font-bold">
+                  {interiorVariant.toUpperCase()}
+                </span>
+              </div>
+              <p className="text-[11px] text-slate-400 leading-snug">
+                Dynamically hot-swaps the underlying Class-A 3D CAD cockpit GLB inside this studio in real time.
+              </p>
+              <div className="grid grid-cols-2 sm:grid-cols-5 gap-2">
+                {[
+                  { id: "sedan", label: "Standard / GT", sub: "Master Cockpit", icon: "🚗" },
+                  { id: "pickup_truck", label: "Heavy Truck", sub: "Workstation GLB", icon: "🚚" },
+                  { id: "bus_shuttle", label: "Transit Bus", sub: "Commercial GLB", icon: "🚌" },
+                  { id: "luxury_sedan", label: "Executive LWB", sub: "VIP Lounge GLB", icon: "👑" },
+                  { id: "supercar", label: "Track Special", sub: "Supercar GLB", icon: "🏎️" },
+                ].map((p) => {
+                  const isCur =
+                    (p.id === "supercar" && interiorVariant === "supercar_cockpit") ||
+                    (p.id === "bus_shuttle" && interiorVariant === "transit_bus") ||
+                    (p.id === "pickup_truck" && interiorVariant === "heavy_duty_truck") ||
+                    (p.id === "luxury_sedan" && interiorVariant === "executive_long_wheelbase") ||
+                    (p.id === "sedan" && interiorVariant === "standard_cabin");
+                  return (
+                    <button
+                      key={p.id}
+                      type="button"
+                      onClick={() => {
+                        playHMIClickSound();
+                        setSelectedModel(p.id as any);
+                      }}
+                      className={`p-2.5 rounded-lg border text-left transition-all cursor-pointer flex flex-col ${
+                        isCur
+                          ? "bg-cyan-500/20 border-cyan-400 text-cyan-100 shadow-md ring-1 ring-cyan-400/50"
+                          : "bg-slate-900/60 border-slate-800 text-slate-400 hover:border-slate-700 hover:text-slate-200"
+                      }`}
+                    >
+                      <div className="flex items-center gap-1.5 text-xs font-bold">
+                        <span>{p.icon}</span>
+                        <span>{p.label}</span>
+                      </div>
+                      <span className="text-[9px] font-mono text-slate-400 mt-0.5">{p.sub}</span>
+                    </button>
+                  );
+                })}
               </div>
             </div>
 
@@ -1186,86 +1293,168 @@ export const InteriorControlDeck: React.FC<InteriorControlDeckProps> = ({
               <div>
                 <h3 className="text-sm font-bold text-slate-100 flex items-center gap-2">
                   <Sofa size={16} className="text-red-400" />
-                  Rear Cabin & Multi-Row Seating Architecture
+                  Rear Cabin & Cabin Architecture
                 </h3>
                 <p className="text-xs text-slate-400">
-                  Configure passenger capacity (5/7/8 seater), Row 2 & Row 3 styles, entertainment, and rear climate comfort.
+                  {interiorVariant === "executive_long_wheelbase"
+                    ? "Flagship Chauffeured Cabin: +270mm extended legroom, motorized calf ottomans, champagne chiller bar, and deployable 31.3\" 8K theater screen."
+                    : interiorVariant === "heavy_duty_truck"
+                    ? "Heavy-Duty Commercial Cabin: High-command upright seating, 4WD transfer case mode dial, auxiliary switchpod, and under-seat lockbox."
+                    : interiorVariant === "transit_bus"
+                    ? "Urban Transit Saloon: Forward elevated driver station, fare validator terminal, overhead stanchion safety poles, and multi-row transit passenger seating."
+                    : interiorVariant === "supercar_cockpit"
+                    ? "Mid-Engine Performance Cockpit: Monocoque carbon tub fixed twin/monoposto seating; optimized for track telemetry and lateral G support."
+                    : "Configure passenger seating capacity, Row 2 & Row 3 styles, entertainment, and rear climate comfort zones."}
                 </p>
               </div>
-              <div className="flex items-center gap-2">
-                <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-red-950/80 text-red-300 border border-red-500/40 font-bold uppercase">
-                  FOCUSED ON REAR CABIN
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-slate-800 text-slate-300 border border-slate-700 font-bold uppercase">
+                  {seatingBadge.label}
                 </span>
+                <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-cyan-950/80 text-cyan-300 border border-cyan-500/40 font-bold">
+                  {seatingBadge.range}
+                </span>
+                {interiorVariant === "executive_long_wheelbase" && (
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-amber-950/80 text-amber-300 border border-amber-500/40 font-black">
+                    CHAUFFEURED LWB (+270mm LEG SPACE)
+                  </span>
+                )}
+                {interiorVariant === "heavy_duty_truck" && (
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-950/80 text-emerald-300 border border-emerald-500/40 font-black">
+                    HIGH-COMMAND UTILITY CAB
+                  </span>
+                )}
+                {interiorVariant === "transit_bus" && (
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-violet-950/80 text-violet-300 border border-violet-500/40 font-black">
+                    TRANSIT MULTI-ROW SALOON
+                  </span>
+                )}
+                {interiorVariant === "supercar_cockpit" && (
+                  <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-rose-950/80 text-rose-300 border border-rose-500/40 font-black">
+                    CARBON TUB COCKPIT
+                  </span>
+                )}
               </div>
             </div>
 
-            {/* 1. SEATING CAPACITY SELECTOR (5 / 7 / 8 Seater) */}
+            {/* 1. SEATING CAPACITY SELECTOR (Dynamic Body-Type Feasible Options) */}
             <div className="space-y-2">
-              <label className="text-[11px] font-bold text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
-                <Users size={13} className="text-amber-400" />
-                1. Passenger Seating Capacity
+              <label className="text-[11px] font-bold text-slate-300 uppercase tracking-wider flex items-center justify-between">
+                <span className="flex items-center gap-1.5">
+                  <Users size={13} className="text-amber-400" />
+                  1. Passenger Seating Capacity
+                </span>
+                <span className="text-[10px] font-mono text-slate-400 font-normal">
+                  {allowedSeatingOptions.length} valid option{allowedSeatingOptions.length > 1 ? "s" : ""} for {seatingBadge.label}
+                </span>
               </label>
-              <div className="grid grid-cols-3 gap-2.5">
-                {([
-                  { id: "5_seater" as SeatingCapacity, label: "5-Seater", layout: "2 + 3", desc: "Standard sedan: front row + rear bench" },
-                  { id: "7_seater" as SeatingCapacity, label: "7-Seater", layout: "2 + 3 + 2", desc: "Extended cabin: front + rear bench + third row" },
-                  { id: "8_seater" as SeatingCapacity, label: "8-Seater", layout: "2 + 3 + 3", desc: "Full MPV: front + rear bench + full third row" },
-                ]).map((cap) => (
-                  <button
-                    key={cap.id}
-                    type="button"
-                    onClick={() => {
-                      playHMIClickSound();
-                      setSeatingCapacity(cap.id);
-                    }}
-                    className={`p-3 rounded-xl text-left border transition-all cursor-pointer ${
-                      seatingCapacity === cap.id
-                        ? "bg-red-600/20 border-red-500 text-white ring-1 ring-red-500 shadow-lg"
-                        : "bg-slate-800/60 border-slate-700/80 text-slate-300 hover:bg-slate-700/60"
-                    }`}
-                  >
-                    <div className="text-xs font-black">{cap.label}</div>
-                    <div className="text-[10px] font-mono text-cyan-400 font-bold mt-0.5">{cap.layout}</div>
-                    <div className="text-[9px] text-slate-400 leading-tight mt-1">{cap.desc}</div>
-                  </button>
-                ))}
+              <div className={`grid gap-2.5 ${
+                allowedSeatingOptions.length === 1
+                  ? "grid-cols-1"
+                  : allowedSeatingOptions.length === 2
+                  ? "grid-cols-1 sm:grid-cols-2"
+                  : allowedSeatingOptions.length === 3
+                  ? "grid-cols-1 sm:grid-cols-3"
+                  : "grid-cols-2 sm:grid-cols-4"
+              }`}>
+                {allowedSeatingOptions.map((cap) => {
+                  const isSelected = seatingCapacity === cap.seats;
+                  return (
+                    <button
+                      key={cap.seats}
+                      type="button"
+                      onClick={() => {
+                        playHMIClickSound();
+                        setSeatingCapacity(cap.seats);
+                      }}
+                      className={`p-3 rounded-xl text-left border transition-all cursor-pointer ${
+                        isSelected
+                          ? "bg-red-600/20 border-red-500 text-white ring-1 ring-red-500 shadow-lg"
+                          : "bg-slate-800/60 border-slate-700/80 text-slate-300 hover:bg-slate-700/60"
+                      }`}
+                    >
+                      <div className="flex items-center justify-between">
+                        <div className="text-xs font-black">{cap.label}</div>
+                        {isSelected && <Check size={12} className="text-red-400" />}
+                      </div>
+                      <div className="text-[10px] font-mono text-cyan-400 font-bold mt-0.5">{cap.layout}</div>
+                      <div className="text-[9px] text-slate-400 leading-tight mt-1">{cap.description}</div>
+                    </button>
+                  );
+                })}
               </div>
             </div>
 
-            {/* 2. ROW 2 SEATING STYLE */}
-            <div className="space-y-2 pt-1 border-t border-slate-800/60">
-              <label className="text-[11px] font-bold text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
-                <Armchair size={13} className="text-cyan-400" />
-                2. Row 2 Seating Style (Second Row)
-              </label>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                {([
-                  { id: "split_bench_40_20_40" as Row2SeatingType, label: "40/20/40 Split Bench", desc: "3-abreast with fold-down center armrest and twin cupholders" },
-                  { id: "executive_captain_chairs" as Row2SeatingType, label: "Executive Captain Chairs", desc: "Individual power-reclining captains with floor console and isolating armrests" },
-                  { id: "luxury_lounge" as Row2SeatingType, label: "Luxury Lounge Recliners", desc: "Extended Ottoman-slide power recliners with leg support and massage" },
-                ]).map((r2) => (
-                  <button
-                    key={r2.id}
-                    type="button"
-                    onClick={() => {
-                      playHMIClickSound();
-                      setRow2SeatingType(r2.id);
-                    }}
-                    className={`p-3 rounded-xl text-left border transition-all cursor-pointer ${
-                      row2SeatingType === r2.id
-                        ? "bg-cyan-500/15 border-cyan-400 text-cyan-200 font-bold shadow-sm"
-                        : "bg-slate-800/60 border-slate-700/80 text-slate-300 hover:bg-slate-700/60"
-                    }`}
-                  >
-                    <div className="text-[11px] font-black">{r2.label}</div>
-                    <div className="text-[9px] text-slate-400 leading-tight mt-0.5">{r2.desc}</div>
-                  </button>
-                ))}
+            {/* 2. ROW 2 SEATING STYLE (or Informative Card for Front-Row-Only vehicles) */}
+            {isRow2Available(selectedModel, seatingCapacity) ? (
+              <div className="space-y-2 pt-1 border-t border-slate-800/60">
+                <label className="text-[11px] font-bold text-slate-300 uppercase tracking-wider flex items-center justify-between">
+                  <span className="flex items-center gap-1.5">
+                    <Armchair size={13} className="text-cyan-400" />
+                    2. Row 2 Seating Style (Second Row)
+                  </span>
+                  {interiorVariant === "executive_long_wheelbase" && (
+                    <span className="text-[10px] font-mono text-amber-400 font-bold">
+                      EXECUTIVE LOUNGE SPEC
+                    </span>
+                  )}
+                </label>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                  {([
+                    {
+                      id: "split_bench_40_20_40" as Row2SeatingType,
+                      label: interiorVariant === "executive_long_wheelbase" ? "Executive 40/20/40 Bench" : "40/20/40 Split Bench",
+                      desc: interiorVariant === "executive_long_wheelbase"
+                        ? "3-abreast seating with deployable touch-command VIP smart tablet center armrest"
+                        : "3-abreast with fold-down center armrest and twin cupholders",
+                    },
+                    {
+                      id: "executive_captain_chairs" as Row2SeatingType,
+                      label: "Executive Captain Chairs",
+                      desc: interiorVariant === "executive_long_wheelbase"
+                        ? "Individual power-reclining thrones with continuous champagne chiller waterfall console"
+                        : "Individual power-reclining captains with floor console and isolating armrests",
+                    },
+                    {
+                      id: "luxury_lounge" as Row2SeatingType,
+                      label: "Luxury Lounge Recliners",
+                      desc: "Extended Ottoman-slide power recliners with motorized calf supports and 10-point massage",
+                    },
+                  ]).map((r2) => (
+                    <button
+                      key={r2.id}
+                      type="button"
+                      onClick={() => {
+                        playHMIClickSound();
+                        setRow2SeatingType(r2.id);
+                      }}
+                      className={`p-3 rounded-xl text-left border transition-all cursor-pointer ${
+                        row2SeatingType === r2.id
+                          ? "bg-cyan-500/15 border-cyan-400 text-cyan-200 font-bold shadow-sm"
+                          : "bg-slate-800/60 border-slate-700/80 text-slate-300 hover:bg-slate-700/60"
+                      }`}
+                    >
+                      <div className="text-[11px] font-black">{r2.label}</div>
+                      <div className="text-[9px] text-slate-400 leading-tight mt-0.5">{r2.desc}</div>
+                    </button>
+                  ))}
+                </div>
               </div>
-            </div>
+            ) : (
+              <div className="p-3.5 rounded-xl border border-slate-800 bg-slate-900/60 flex items-start gap-3">
+                <Shield size={16} className="text-amber-400 mt-0.5 shrink-0" />
+                <div className="space-y-0.5">
+                  <div className="text-xs font-bold text-slate-200">Front-Row Only Cockpit Architecture</div>
+                  <div className="text-[10px] text-slate-400 leading-relaxed">
+                    {seatingBadge.label} is strictly engineered for front-row occupancy ({seatingCapacity} seat{seatingCapacity > 1 ? "s" : ""}).
+                    The rear space is allocated for structural chassis rigidity, mid-engine powertrain, or commercial cargo bulkheads.
+                  </div>
+                </div>
+              </div>
+            )}
 
-            {/* 3. ROW 3 CONFIGURATION (only for 7 and 8 seater) */}
-            {(seatingCapacity === "7_seater" || seatingCapacity === "8_seater") && (
+            {/* 3. ROW 3 CONFIGURATION (only when physically possible and selected capacity >= 6) */}
+            {isRow3Available(selectedModel, seatingCapacity) && seatingCapacity >= 6 && (
               <div className="space-y-2 pt-1 border-t border-slate-800/60">
                 <label className="text-[11px] font-bold text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
                   <Users size={13} className="text-emerald-400" />
@@ -1298,170 +1487,414 @@ export const InteriorControlDeck: React.FC<InteriorControlDeckProps> = ({
               </div>
             )}
 
-            {/* 4. REAR ENTERTAINMENT SUITE */}
-            <div className="space-y-2 pt-1 border-t border-slate-800/60">
-              <label className="text-[11px] font-bold text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
-                <Tv size={13} className="text-violet-400" />
-                4. Rear Entertainment Suite
-              </label>
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-                {([
-                  { id: "none" as RearEntertainment, label: "None", desc: "No rear screens" },
-                  { id: "dual_11in_oled" as RearEntertainment, label: "Dual 11.6\" OLED", desc: "4K seatback screens on front headrests" },
-                  { id: "overhead_theater_31in" as RearEntertainment, label: "31\" Theater", desc: "Panoramic 8K ceiling-mounted display" },
-                  { id: "executive_bundle" as RearEntertainment, label: "Executive Bundle", desc: "Dual OLEDs + 31\" theater + wireless AirPlay" },
-                ]).map((ent) => (
+            {/* ── BESPOKE DEDICATED ARCHITECTURE DECKS ── */}
+
+            {/* A. LUXURY SEDAN & LIMOUSINE EXECUTIVE LOUNGE DECK */}
+            {interiorVariant === "executive_long_wheelbase" && (
+              <div className="space-y-2.5 pt-2 border-t border-amber-500/30 bg-amber-950/10 p-3 rounded-xl border">
+                <div className="flex items-center justify-between">
+                  <label className="text-[11px] font-black text-amber-300 uppercase tracking-wider flex items-center gap-1.5">
+                    <Sparkles size={13} className="text-amber-400" />
+                    Chauffeured VIP Executive Suite (+270mm Stretched Cabin)
+                  </label>
+                  <span className="text-[9px] font-mono text-amber-400 font-bold px-2 py-0.5 rounded bg-amber-900/40 border border-amber-500/30">
+                    FLAGSHIP AMENITIES
+                  </span>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                  {/* Motorized Calf Ottomans Toggle */}
                   <button
-                    key={ent.id}
                     type="button"
                     onClick={() => {
                       playHMIClickSound();
-                      setRearEntertainment(ent.id);
+                      setLuxuryOttomanDeployed(!luxuryOttomanDeployed);
                     }}
-                    className={`p-2.5 rounded-xl text-left border transition-all cursor-pointer ${
-                      rearEntertainment === ent.id
-                        ? "bg-violet-500/15 border-violet-400 text-violet-200 font-bold shadow-sm"
-                        : "bg-slate-800/60 border-slate-700/80 text-slate-300 hover:bg-slate-700/60"
+                    className={`p-2.5 rounded-xl text-left border transition-all cursor-pointer flex items-center gap-2.5 ${
+                      luxuryOttomanDeployed
+                        ? "bg-amber-500/20 border-amber-400 text-amber-100 shadow-sm"
+                        : "bg-slate-800/70 border-slate-700 text-slate-400 hover:bg-slate-700/70"
                     }`}
                   >
-                    <div className="text-[11px] font-black">{ent.label}</div>
-                    <div className="text-[9px] text-slate-400 leading-tight mt-0.5">{ent.desc}</div>
+                    <div className={`w-8 h-4.5 rounded-full transition-colors flex items-center ${luxuryOttomanDeployed ? "bg-amber-500 justify-end" : "bg-slate-700 justify-start"}`}>
+                      <div className="w-3.5 h-3.5 rounded-full bg-white shadow-sm mx-0.5" />
+                    </div>
+                    <div>
+                      <div className="text-[11px] font-black">60° Power Calf Ottomans</div>
+                      <div className="text-[9px] text-slate-400 leading-tight">Motorized legrest extension with heated footplate</div>
+                    </div>
                   </button>
-                ))}
-              </div>
-            </div>
 
-            {/* 5. REAR CLIMATE ZONE */}
-            <div className="space-y-2 pt-1 border-t border-slate-800/60">
-              <label className="text-[11px] font-bold text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
-                <Thermometer size={13} className="text-blue-400" />
-                5. Rear Climate Zone Configuration
-              </label>
-              <div className="grid grid-cols-3 gap-2">
-                {([
-                  { id: "shared" as RearClimateZone, label: "Shared (Front Only)", desc: "Single-zone front climate extends to rear" },
-                  { id: "tri_zone" as RearClimateZone, label: "Tri-Zone Automatic", desc: "Independent rear temp via ceiling vents" },
-                  { id: "quad_zone_touch" as RearClimateZone, label: "Quad-Zone Touch HVAC", desc: "Individual touchscreen zones with seat ventilation" },
-                ]).map((cz) => (
+                  {/* Champagne Chiller & Bar Toggle */}
                   <button
-                    key={cz.id}
                     type="button"
                     onClick={() => {
                       playHMIClickSound();
-                      setRearClimateZone(cz.id);
+                      setLuxuryChampagneChiller(!luxuryChampagneChiller);
                     }}
-                    className={`p-2.5 rounded-xl text-left border transition-all cursor-pointer ${
-                      rearClimateZone === cz.id
-                        ? "bg-blue-500/15 border-blue-400 text-blue-200 font-bold shadow-sm"
-                        : "bg-slate-800/60 border-slate-700/80 text-slate-300 hover:bg-slate-700/60"
+                    className={`p-2.5 rounded-xl text-left border transition-all cursor-pointer flex items-center gap-2.5 ${
+                      luxuryChampagneChiller
+                        ? "bg-amber-500/20 border-amber-400 text-amber-100 shadow-sm"
+                        : "bg-slate-800/70 border-slate-700 text-slate-400 hover:bg-slate-700/70"
                     }`}
                   >
-                    <div className="text-[11px] font-black">{cz.label}</div>
-                    <div className="text-[9px] text-slate-400 leading-tight mt-0.5">{cz.desc}</div>
+                    <div className={`w-8 h-4.5 rounded-full transition-colors flex items-center ${luxuryChampagneChiller ? "bg-amber-500 justify-end" : "bg-slate-700 justify-start"}`}>
+                      <div className="w-3.5 h-3.5 rounded-full bg-white shadow-sm mx-0.5" />
+                    </div>
+                    <div>
+                      <div className="text-[11px] font-black flex items-center gap-1">
+                        <Wine size={11} className="text-amber-400" />
+                        Champagne Chiller Bar
+                      </div>
+                      <div className="text-[9px] text-slate-400 leading-tight">6°C thermoelectric cooler + twin crystal flutes</div>
+                    </div>
                   </button>
-                ))}
+
+                  {/* Drop-down 31.3" 8K Theater Display */}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      playHMIClickSound();
+                      setLuxuryTheaterScreen(!luxuryTheaterScreen);
+                    }}
+                    className={`p-2.5 rounded-xl text-left border transition-all cursor-pointer flex items-center gap-2.5 ${
+                      luxuryTheaterScreen
+                        ? "bg-amber-500/20 border-amber-400 text-amber-100 shadow-sm"
+                        : "bg-slate-800/70 border-slate-700 text-slate-400 hover:bg-slate-700/70"
+                    }`}
+                  >
+                    <div className={`w-8 h-4.5 rounded-full transition-colors flex items-center ${luxuryTheaterScreen ? "bg-amber-500 justify-end" : "bg-slate-700 justify-start"}`}>
+                      <div className="w-3.5 h-3.5 rounded-full bg-white shadow-sm mx-0.5" />
+                    </div>
+                    <div>
+                      <div className="text-[11px] font-black flex items-center gap-1">
+                        <Tv size={11} className="text-amber-400" />
+                        31.3" 8K Cinema Display
+                      </div>
+                      <div className="text-[9px] text-slate-400 leading-tight">Motorized ceiling cinema screen + Bowers & Wilkins audio</div>
+                    </div>
+                  </button>
+                </div>
               </div>
-            </div>
+            )}
 
-            {/* 6. REAR COMFORT FEATURE TOGGLES */}
-            <div className="space-y-2 pt-1 border-t border-slate-800/60">
-              <label className="text-[11px] font-bold text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
-                <Sparkles size={13} className="text-amber-400" />
-                6. Rear Comfort & Luxury Features
-              </label>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
-                {/* Heated & Ventilated Toggle */}
-                <button
-                  type="button"
-                  onClick={() => {
-                    playHMIClickSound();
-                    setRearHeatedVentilated(!rearHeatedVentilated);
-                  }}
-                  className={`p-3 rounded-xl text-left border transition-all cursor-pointer flex items-center gap-3 ${
-                    rearHeatedVentilated
-                      ? "bg-amber-500/15 border-amber-400 text-amber-200 shadow-sm"
-                      : "bg-slate-800/60 border-slate-700/80 text-slate-400 hover:bg-slate-700/60"
-                  }`}
-                >
-                  <div className={`w-9 h-5 rounded-full transition-colors flex items-center ${rearHeatedVentilated ? "bg-amber-500 justify-end" : "bg-slate-700 justify-start"}`}>
-                    <div className="w-4 h-4 rounded-full bg-white shadow-sm mx-0.5" />
+            {/* B. TRUCK & HEAVY UTILITY COCKPIT DECK */}
+            {interiorVariant === "heavy_duty_truck" && (
+              <div className="space-y-2.5 pt-2 border-t border-emerald-500/30 bg-emerald-950/10 p-3 rounded-xl border">
+                <div className="flex items-center justify-between">
+                  <label className="text-[11px] font-black text-emerald-300 uppercase tracking-wider flex items-center gap-1.5">
+                    <Truck size={13} className="text-emerald-400" />
+                    Heavy-Duty Truck & 4WD Utility Controls
+                  </label>
+                  <span className="text-[9px] font-mono text-emerald-400 font-bold px-2 py-0.5 rounded bg-emerald-900/40 border border-emerald-500/30">
+                    ALL-TERRAIN UTILITY
+                  </span>
+                </div>
+                {/* 4WD Transfer Case Stepper */}
+                <div className="space-y-1.5">
+                  <span className="text-[10px] text-slate-300 font-bold">4WD Transfer Case Mode:</span>
+                  <div className="grid grid-cols-3 gap-2">
+                    {([
+                      { mode: "2H" as const, label: "2H (RWD)", desc: "Highway efficiency" },
+                      { mode: "4H" as const, label: "4H (4WD High)", desc: "All-weather trail traction" },
+                      { mode: "4L" as const, label: "4L (Low-Range)", desc: "Rock crawl torque multiplication" },
+                    ]).map((t) => (
+                      <button
+                        key={t.mode}
+                        type="button"
+                        onClick={() => {
+                          playHMIClickSound();
+                          setTruck4WdMode(t.mode);
+                        }}
+                        className={`p-2 rounded-lg text-left border transition-all cursor-pointer ${
+                          truck4WdMode === t.mode
+                            ? "bg-emerald-600/25 border-emerald-400 text-emerald-200 font-bold shadow-sm"
+                            : "bg-slate-800/70 border-slate-700 text-slate-400 hover:bg-slate-700/70"
+                        }`}
+                      >
+                        <div className="text-[10px] font-black">{t.label}</div>
+                        <div className="text-[8px] text-slate-400 leading-tight mt-0.5">{t.desc}</div>
+                      </button>
+                    ))}
                   </div>
-                  <div>
-                    <div className="text-[11px] font-black">Heated & Ventilated Seats</div>
-                    <div className="text-[9px] text-slate-400 leading-tight">3-stage rear seat heating + active ventilation</div>
-                  </div>
-                </button>
+                </div>
 
-                {/* Massage Toggle */}
-                <button
-                  type="button"
-                  onClick={() => {
-                    playHMIClickSound();
-                    setRearMassage(!rearMassage);
-                  }}
-                  className={`p-3 rounded-xl text-left border transition-all cursor-pointer flex items-center gap-3 ${
-                    rearMassage
-                      ? "bg-amber-500/15 border-amber-400 text-amber-200 shadow-sm"
-                      : "bg-slate-800/60 border-slate-700/80 text-slate-400 hover:bg-slate-700/60"
-                  }`}
-                >
-                  <div className={`w-9 h-5 rounded-full transition-colors flex items-center ${rearMassage ? "bg-amber-500 justify-end" : "bg-slate-700 justify-start"}`}>
-                    <div className="w-4 h-4 rounded-full bg-white shadow-sm mx-0.5" />
-                  </div>
-                  <div>
-                    <div className="text-[11px] font-black">Pneumatic Massage</div>
-                    <div className="text-[9px] text-slate-400 leading-tight">10-program pneumatic lumbar and full-body massage</div>
-                  </div>
-                </button>
+                {/* Truck Toggles */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 pt-1">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      playHMIClickSound();
+                      setTruckAuxSwitchpod(!truckAuxSwitchpod);
+                    }}
+                    className={`p-2.5 rounded-xl text-left border transition-all cursor-pointer flex items-center gap-2.5 ${
+                      truckAuxSwitchpod
+                        ? "bg-emerald-500/20 border-emerald-400 text-emerald-100 shadow-sm"
+                        : "bg-slate-800/70 border-slate-700 text-slate-400 hover:bg-slate-700/70"
+                    }`}
+                  >
+                    <div className={`w-8 h-4.5 rounded-full transition-colors flex items-center ${truckAuxSwitchpod ? "bg-emerald-500 justify-end" : "bg-slate-700 justify-start"}`}>
+                      <div className="w-3.5 h-3.5 rounded-full bg-white shadow-sm mx-0.5" />
+                    </div>
+                    <div>
+                      <div className="text-[11px] font-black">4-Gang Auxiliary Switchpod</div>
+                      <div className="text-[9px] text-slate-400 leading-tight">Pre-wired winch, lightbar, & compressor relays</div>
+                    </div>
+                  </button>
 
-                {/* Folding Tables Toggle */}
-                <button
-                  type="button"
-                  onClick={() => {
-                    playHMIClickSound();
-                    setRearFoldingTables(!rearFoldingTables);
-                  }}
-                  className={`p-3 rounded-xl text-left border transition-all cursor-pointer flex items-center gap-3 ${
-                    rearFoldingTables
-                      ? "bg-amber-500/15 border-amber-400 text-amber-200 shadow-sm"
-                      : "bg-slate-800/60 border-slate-700/80 text-slate-400 hover:bg-slate-700/60"
-                  }`}
-                >
-                  <div className={`w-9 h-5 rounded-full transition-colors flex items-center ${rearFoldingTables ? "bg-amber-500 justify-end" : "bg-slate-700 justify-start"}`}>
-                    <div className="w-4 h-4 rounded-full bg-white shadow-sm mx-0.5" />
-                  </div>
-                  <div>
-                    <div className="text-[11px] font-black">Billet Folding Tables</div>
-                    <div className="text-[9px] text-slate-400 leading-tight">Airline-grade aluminum tray tables on seatbacks</div>
-                  </div>
-                </button>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      playHMIClickSound();
+                      setTruckUnderseatStorage(!truckUnderseatStorage);
+                    }}
+                    className={`p-2.5 rounded-xl text-left border transition-all cursor-pointer flex items-center gap-2.5 ${
+                      truckUnderseatStorage
+                        ? "bg-emerald-500/20 border-emerald-400 text-emerald-100 shadow-sm"
+                        : "bg-slate-800/70 border-slate-700 text-slate-400 hover:bg-slate-700/70"
+                    }`}
+                  >
+                    <div className={`w-8 h-4.5 rounded-full transition-colors flex items-center ${truckUnderseatStorage ? "bg-emerald-500 justify-end" : "bg-slate-700 justify-start"}`}>
+                      <div className="w-3.5 h-3.5 rounded-full bg-white shadow-sm mx-0.5" />
+                    </div>
+                    <div>
+                      <div className="text-[11px] font-black">Lockable Under-Seat Tool Chest</div>
+                      <div className="text-[9px] text-slate-400 leading-tight">Heavy-duty weather-sealed steel gear vault</div>
+                    </div>
+                  </button>
+                </div>
               </div>
-            </div>
+            )}
+
+            {/* C. TRANSIT BUS & SHUTTLE DECK */}
+            {interiorVariant === "transit_bus" && (
+              <div className="space-y-2.5 pt-2 border-t border-violet-500/30 bg-violet-950/10 p-3 rounded-xl border">
+                <div className="flex items-center justify-between">
+                  <label className="text-[11px] font-black text-violet-300 uppercase tracking-wider flex items-center gap-1.5">
+                    <Bus size={13} className="text-violet-400" />
+                    Transit Bus Cockpit & Passenger Systems
+                  </label>
+                  <span className="text-[9px] font-mono text-violet-400 font-bold px-2 py-0.5 rounded bg-violet-900/40 border border-violet-500/30">
+                    TRANSIT COACH SPEC
+                  </span>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      playHMIClickSound();
+                      setBusFareValidator(!busFareValidator);
+                    }}
+                    className={`p-2.5 rounded-xl text-left border transition-all cursor-pointer flex items-center gap-2.5 ${
+                      busFareValidator
+                        ? "bg-violet-500/20 border-violet-400 text-violet-100 shadow-sm"
+                        : "bg-slate-800/70 border-slate-700 text-slate-400 hover:bg-slate-700/70"
+                    }`}
+                  >
+                    <div className={`w-8 h-4.5 rounded-full transition-colors flex items-center ${busFareValidator ? "bg-violet-500 justify-end" : "bg-slate-700 justify-start"}`}>
+                      <div className="w-3.5 h-3.5 rounded-full bg-white shadow-sm mx-0.5" />
+                    </div>
+                    <div>
+                      <div className="text-[11px] font-black">Smartcard Ticket Farebox</div>
+                      <div className="text-[9px] text-slate-400 leading-tight">Curbside contactless transit validator terminal</div>
+                    </div>
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={() => {
+                      playHMIClickSound();
+                      setBusStanchionPoles(!busStanchionPoles);
+                    }}
+                    className={`p-2.5 rounded-xl text-left border transition-all cursor-pointer flex items-center gap-2.5 ${
+                      busStanchionPoles
+                        ? "bg-violet-500/20 border-violet-400 text-violet-100 shadow-sm"
+                        : "bg-slate-800/70 border-slate-700 text-slate-400 hover:bg-slate-700/70"
+                    }`}
+                  >
+                    <div className={`w-8 h-4.5 rounded-full transition-colors flex items-center ${busStanchionPoles ? "bg-violet-500 justify-end" : "bg-slate-700 justify-start"}`}>
+                      <div className="w-3.5 h-3.5 rounded-full bg-white shadow-sm mx-0.5" />
+                    </div>
+                    <div>
+                      <div className="text-[11px] font-black">Safety Grab Stanchion Poles</div>
+                      <div className="text-[9px] text-slate-400 leading-tight">High-visibility safety yellow poles with stop bells</div>
+                    </div>
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* 4. REAR ENTERTAINMENT SUITE (for Passenger vehicles with Row 2) */}
+            {isRow2Available(selectedModel, seatingCapacity) && interiorVariant !== "heavy_duty_truck" && (
+              <div className="space-y-2 pt-1 border-t border-slate-800/60">
+                <label className="text-[11px] font-bold text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
+                  <Tv size={13} className="text-violet-400" />
+                  Rear Entertainment Suite
+                </label>
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                  {([
+                    { id: "none" as RearEntertainment, label: "None", desc: "No rear screens" },
+                    { id: "dual_11in_oled" as RearEntertainment, label: "Dual 11.6\" OLED", desc: "4K seatback screens on front headrests" },
+                    { id: "overhead_theater_31in" as RearEntertainment, label: "31\" Theater", desc: "Panoramic 8K ceiling-mounted display" },
+                    { id: "executive_bundle" as RearEntertainment, label: "Executive Bundle", desc: "Dual OLEDs + 31\" theater + wireless AirPlay" },
+                  ]).map((ent) => (
+                    <button
+                      key={ent.id}
+                      type="button"
+                      onClick={() => {
+                        playHMIClickSound();
+                        setRearEntertainment(ent.id);
+                      }}
+                      className={`p-2.5 rounded-xl text-left border transition-all cursor-pointer ${
+                        rearEntertainment === ent.id
+                          ? "bg-violet-500/15 border-violet-400 text-violet-200 font-bold shadow-sm"
+                          : "bg-slate-800/60 border-slate-700/80 text-slate-300 hover:bg-slate-700/60"
+                      }`}
+                    >
+                      <div className="text-[11px] font-black">{ent.label}</div>
+                      <div className="text-[9px] text-slate-400 leading-tight mt-0.5">{ent.desc}</div>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* 5. REAR CLIMATE ZONE (for vehicles with Row 2) */}
+            {isRow2Available(selectedModel, seatingCapacity) && (
+              <div className="space-y-2 pt-1 border-t border-slate-800/60">
+                <label className="text-[11px] font-bold text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
+                  <Thermometer size={13} className="text-blue-400" />
+                  Rear Climate Zone Configuration
+                </label>
+                <div className="grid grid-cols-3 gap-2">
+                  {([
+                    { id: "shared" as RearClimateZone, label: "Shared (Front Only)", desc: "Single-zone front climate extends to rear" },
+                    { id: "tri_zone" as RearClimateZone, label: "Tri-Zone Automatic", desc: "Independent rear temp via ceiling vents" },
+                    { id: "quad_zone_touch" as RearClimateZone, label: "Quad-Zone Touch HVAC", desc: "Individual touchscreen zones with seat ventilation" },
+                  ]).map((cz) => (
+                    <button
+                      key={cz.id}
+                      type="button"
+                      onClick={() => {
+                        playHMIClickSound();
+                        setRearClimateZone(cz.id);
+                      }}
+                      className={`p-2.5 rounded-xl text-left border transition-all cursor-pointer ${
+                        rearClimateZone === cz.id
+                          ? "bg-blue-500/15 border-blue-400 text-blue-200 font-bold shadow-sm"
+                          : "bg-slate-800/60 border-slate-700/80 text-slate-300 hover:bg-slate-700/60"
+                      }`}
+                    >
+                      <div className="text-[11px] font-black">{cz.label}</div>
+                      <div className="text-[9px] text-slate-400 leading-tight mt-0.5">{cz.desc}</div>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* 6. REAR COMFORT FEATURE TOGGLES (for vehicles with Row 2) */}
+            {isRow2Available(selectedModel, seatingCapacity) && (
+              <div className="space-y-2 pt-1 border-t border-slate-800/60">
+                <label className="text-[11px] font-bold text-slate-300 uppercase tracking-wider flex items-center gap-1.5">
+                  <Sparkles size={13} className="text-amber-400" />
+                  Rear Comfort & Luxury Features
+                </label>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+                  {/* Heated & Ventilated Toggle */}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      playHMIClickSound();
+                      setRearHeatedVentilated(!rearHeatedVentilated);
+                    }}
+                    className={`p-3 rounded-xl text-left border transition-all cursor-pointer flex items-center gap-3 ${
+                      rearHeatedVentilated
+                        ? "bg-amber-500/15 border-amber-400 text-amber-200 shadow-sm"
+                        : "bg-slate-800/60 border-slate-700/80 text-slate-400 hover:bg-slate-700/60"
+                    }`}
+                  >
+                    <div className={`w-9 h-5 rounded-full transition-colors flex items-center ${rearHeatedVentilated ? "bg-amber-500 justify-end" : "bg-slate-700 justify-start"}`}>
+                      <div className="w-4 h-4 rounded-full bg-white shadow-sm mx-0.5" />
+                    </div>
+                    <div>
+                      <div className="text-[11px] font-black">Heated & Ventilated Seats</div>
+                      <div className="text-[9px] text-slate-400 leading-tight">3-stage rear seat heating + active ventilation</div>
+                    </div>
+                  </button>
+
+                  {/* Massage Toggle */}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      playHMIClickSound();
+                      setRearMassage(!rearMassage);
+                    }}
+                    className={`p-3 rounded-xl text-left border transition-all cursor-pointer flex items-center gap-3 ${
+                      rearMassage
+                        ? "bg-amber-500/15 border-amber-400 text-amber-200 shadow-sm"
+                        : "bg-slate-800/60 border-slate-700/80 text-slate-400 hover:bg-slate-700/60"
+                    }`}
+                  >
+                    <div className={`w-9 h-5 rounded-full transition-colors flex items-center ${rearMassage ? "bg-amber-500 justify-end" : "bg-slate-700 justify-start"}`}>
+                      <div className="w-4 h-4 rounded-full bg-white shadow-sm mx-0.5" />
+                    </div>
+                    <div>
+                      <div className="text-[11px] font-black">Pneumatic Massage</div>
+                      <div className="text-[9px] text-slate-400 leading-tight">10-program pneumatic lumbar and full-body massage</div>
+                    </div>
+                  </button>
+
+                  {/* Folding Tables Toggle */}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      playHMIClickSound();
+                      setRearFoldingTables(!rearFoldingTables);
+                    }}
+                    className={`p-3 rounded-xl text-left border transition-all cursor-pointer flex items-center gap-3 ${
+                      rearFoldingTables
+                        ? "bg-amber-500/15 border-amber-400 text-amber-200 shadow-sm"
+                        : "bg-slate-800/60 border-slate-700/80 text-slate-400 hover:bg-slate-700/60"
+                    }`}
+                  >
+                    <div className={`w-9 h-5 rounded-full transition-colors flex items-center ${rearFoldingTables ? "bg-amber-500 justify-end" : "bg-slate-700 justify-start"}`}>
+                      <div className="w-4 h-4 rounded-full bg-white shadow-sm mx-0.5" />
+                    </div>
+                    <div>
+                      <div className="text-[11px] font-black">Billet Folding Tables</div>
+                      <div className="text-[9px] text-slate-400 leading-tight">Airline-grade aluminum tray tables on seatbacks</div>
+                    </div>
+                  </button>
+                </div>
+              </div>
+            )}
 
             {/* REAR CABIN CAMERA SHORTCUTS */}
             <div className="flex items-center gap-2 pt-2 border-t border-slate-800/60">
               <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider mr-1">CAMERA:</span>
               {([
-                { pose: "rear_cabin" as CameraPose, label: "Rear Overview" },
-                { pose: "rear_row2" as CameraPose, label: "Row 2 Focus" },
-                { pose: "rear_row3" as CameraPose, label: "Row 3 Focus" },
-              ]).map((cam) => (
-                <button
-                  key={cam.pose}
-                  type="button"
-                  onClick={() => {
-                    playHMIClickSound();
-                    setCameraPose(cam.pose);
-                  }}
-                  className={`px-2.5 py-1 rounded-lg text-[10px] font-bold border transition-all cursor-pointer ${
-                    cameraPose === cam.pose
-                      ? "bg-red-600/20 border-red-500 text-red-300"
-                      : "bg-slate-800/50 border-slate-700 text-slate-400 hover:text-slate-200"
-                  }`}
-                >
-                  {cam.label}
-                </button>
-              ))}
+                { pose: "rear_cabin" as CameraPose, label: "Rear Overview", show: true },
+                { pose: "rear_row2" as CameraPose, label: "Row 2 Focus", show: isRow2Available(selectedModel, seatingCapacity) },
+                { pose: "rear_row3" as CameraPose, label: "Row 3 Focus", show: isRow3Available(selectedModel, seatingCapacity) && seatingCapacity >= 6 },
+              ])
+                .filter((cam) => cam.show)
+                .map((cam) => (
+                  <button
+                    key={cam.pose}
+                    type="button"
+                    onClick={() => {
+                      playHMIClickSound();
+                      setCameraPose(cam.pose);
+                    }}
+                    className={`px-2.5 py-1 rounded-lg text-[10px] font-bold border transition-all cursor-pointer ${
+                      cameraPose === cam.pose
+                        ? "bg-red-600/20 border-red-500 text-red-300"
+                        : "bg-slate-800/50 border-slate-700 text-slate-400 hover:text-slate-200"
+                    }`}
+                  >
+                    {cam.label}
+                  </button>
+                ))}
             </div>
           </div>
         )}

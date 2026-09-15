@@ -147,7 +147,7 @@ function CommandCenterComponent({ onSelectStage }: CommandCenterProps = {}) {
             <div className="grid grid-cols-2 gap-2">
               {[
                 { id: "theme3", label: "Theme 3", desc: "Nordic Light Glass — Alabaster White", color: "border-sky-500/40 text-amber-400 bg-amber-500/15", activeShadow: "shadow-[0_0_15px_rgba(14,165,233,0.2)] ring-1 ring-sky-400" },
-                { id: "theme4", label: "Vision Glass", desc: "Spatial Glass Lounge (Default)", color: "border-sky-300/40 text-sky-200 bg-amber-500/15", activeShadow: "shadow-[0_0_15px_rgba(147,197,253,0.15)] ring-1 ring-sky-300" },
+                { id: "theme4", label: "UI 4 (Vision Glass)", desc: "Spatial Glass Lounge — Fluid UI", color: "border-sky-300/40 text-sky-200 bg-amber-500/15", activeShadow: "shadow-[0_0_15px_rgba(147,197,253,0.15)] ring-1 ring-sky-300" },
               ].map((t) => (
                 <button
                   key={t.id}

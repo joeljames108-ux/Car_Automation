@@ -84,7 +84,7 @@ export function CommandPalette({ isOpen, onClose, onSelectStage, focusMode = fal
 
       // Themes
       { id: "theme_3", category: "Themes", title: "Theme 3 — Nordic Light Glass", subtitle: "Minimalist Alabaster White", icon: <Palette size={16} />, action: () => { setUiTheme("theme3"); success("Theme Switched", "Activated Theme 3 — Nordic Light Glass"); } },
-      { id: "theme_4", category: "Themes", title: "Theme 4 — Vision Glass", subtitle: "Spatial Glass Lounge", icon: <Palette size={16} />, action: () => { setUiTheme("theme4"); success("Theme Switched", "Activated Theme 4 — Vision Glass"); } },
+      { id: "theme_4", category: "Themes", title: "UI 4 — Vision Glass UI", subtitle: "Spatial Liquid Glass Lounge", icon: <Palette size={16} />, action: () => { setUiTheme("theme4"); success("Theme Switched", "Activated UI 4 — Vision Glass"); } },
 
       // Actions
       { id: "act_reset", category: "Actions", title: "Reset Current Vehicle", subtitle: "Restore factory default specs", icon: <Sparkles size={16} />, action: () => { resetDesign(); info("Vehicle Reset", "Restored default engineering specs"); } },

@@ -127,7 +127,29 @@ def build_chassis_and_powertrain(mat_registry):
             )
             created_objects.append(rear_bellow)
 
-    # 6. Low-Floor Passenger Floor Pan Structure (Ground to floor datum Z=0.380m)
+    # 6. Rear Tag / Trailing Axle Subframe & Air Suspension
+    tag_subframe = c.create_box(
+        "CHASSIS_Tag_Axle_Subframe",
+        location=(0.0, c.TAG_AXLE_Y, rail_z + 0.020),
+        size=(1.800, 0.550, 0.180),
+        col_name="06_Bus_Chassis_Frame",
+        mat=mat_registry.chassis_steel
+    )
+    created_objects.append(tag_subframe)
+
+    for side, sign in [("TL", 1.0), ("TR", -1.0)]:
+        tag_bellow = c.create_cylinder(
+            f"SUSP_AirBellow_Tag_{side}",
+            location=(sign * 0.820, c.TAG_AXLE_Y, c.HUB_Z + 0.140),
+            radius=0.130,
+            depth=0.300,
+            vertices=24,
+            col_name="08_Bus_Suspension_AirBags",
+            mat=mat_registry.air_suspension_rubber
+        )
+        created_objects.append(tag_bellow)
+
+    # 7. Low-Floor Passenger Floor Pan Structure (Ground to floor datum Z=0.380m)
     floor_mesh = bpy.data.meshes.new("CHASSIS_LowFloor_Passenger_Deck_Mesh")
     floor_obj = bpy.data.objects.new("CHASSIS_LowFloor_Passenger_Deck", floor_mesh)
     

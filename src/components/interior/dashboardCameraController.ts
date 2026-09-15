@@ -112,6 +112,94 @@ export const DASHBOARD_CAMERA_POSES: Record<CameraPose, CameraTargetDef> = {
     target: new THREE.Vector3(0.0, 0.60, -2.18),
     fov: 50,
   },
+  summary: {
+    pos: new THREE.Vector3(-0.15, 1.15, 1.10),
+    target: new THREE.Vector3(0.0, 0.60, 0.15),
+    fov: 64,
+  },
+};
+
+/**
+ * Dedicated ergonomic camera target definitions calibrated specifically for
+ * the Transit Bus cabin architecture (wide flat dash, air-ride suspension seat,
+ * curbside bi-fold entrance, fare collection box, and rear passenger rows).
+ */
+export const BUS_CABIN_CAMERA_POSES: Partial<Record<CameraPose, CameraTargetDef>> = {
+  studio_sport: {
+    pos: new THREE.Vector3(0.18, 1.10, 1.05),
+    target: new THREE.Vector3(-0.18, 0.65, 0.12),
+    fov: 60,
+  },
+  dashboard_center: {
+    pos: new THREE.Vector3(0.18, 0.98, 0.85),
+    target: new THREE.Vector3(-0.18, 0.66, 0.10),
+    fov: 60,
+  },
+  driver: {
+    pos: new THREE.Vector3(-0.38, 0.92, 0.65),
+    target: new THREE.Vector3(-0.38, 0.66, 0.05),
+    fov: 54,
+  },
+  driver_close: {
+    pos: new THREE.Vector3(-0.38, 0.85, 0.50),
+    target: new THREE.Vector3(-0.38, 0.68, 0.08),
+    fov: 48,
+  },
+  steering: {
+    pos: new THREE.Vector3(-0.38, 0.90, 0.62),
+    target: new THREE.Vector3(-0.38, 0.66, 0.24),
+    fov: 54,
+  },
+  cluster: {
+    pos: new THREE.Vector3(-0.38, 0.78, 0.36),
+    target: new THREE.Vector3(-0.38, 0.735, 0.075),
+    fov: 38,
+  },
+  infotainment: {
+    pos: new THREE.Vector3(-0.12, 0.78, 0.45),
+    target: new THREE.Vector3(0.01, 0.61, 0.06),
+    fov: 46,
+  },
+  console: {
+    pos: new THREE.Vector3(-0.15, 0.88, 0.42),
+    target: new THREE.Vector3(0.08, 0.58, 0.10),
+    fov: 50,
+  },
+  seats: {
+    pos: new THREE.Vector3(0.25, 0.98, 0.25),
+    target: new THREE.Vector3(-0.38, 0.55, 0.48),
+    fov: 52,
+  },
+  doors: {
+    pos: new THREE.Vector3(-0.15, 0.98, 0.65),
+    target: new THREE.Vector3(0.70, 0.72, 0.25),
+    fov: 56,
+  },
+  rear_cabin: {
+    pos: new THREE.Vector3(-0.05, 1.05, 0.20),
+    target: new THREE.Vector3(0.00, 0.75, 1.80),
+    fov: 64,
+  },
+  summary: {
+    pos: new THREE.Vector3(0.10, 1.25, 1.15),
+    target: new THREE.Vector3(-0.05, 0.68, 0.35),
+    fov: 64,
+  },
+  full_cockpit: {
+    pos: new THREE.Vector3(0.12, 1.18, 1.40),
+    target: new THREE.Vector3(-0.10, 0.65, 0.15),
+    fov: 65,
+  },
+  orbit_360: {
+    pos: new THREE.Vector3(0.25, 1.10, 1.05),
+    target: new THREE.Vector3(-0.15, 0.62, 0.10),
+    fov: 58,
+  },
+  exploded: {
+    pos: new THREE.Vector3(-0.85, 1.20, 0.90),
+    target: new THREE.Vector3(0.0, 0.60, 0.20),
+    fov: 60,
+  },
 };
 
 export class DashboardCameraController {
@@ -120,13 +208,12 @@ export class DashboardCameraController {
 
   private currentPose: CameraPose = "dashboard_center";
   private driverHeight: DriverHeight = "normal";
+  private variant: string = "standard_cabin";
 
   // Target vectors for smooth lerping
   private targetPos: THREE.Vector3 = new THREE.Vector3(0.0, 0.92, 0.92);
   private targetLookAt: THREE.Vector3 = new THREE.Vector3(0.0, 0.60, -0.30);
   private targetFov: number = 64;
-
-  private poses: Record<CameraPose, CameraTargetDef> = DASHBOARD_CAMERA_POSES;
 
   constructor(camera: THREE.PerspectiveCamera, controls: OrbitControls) {
     this.camera = camera;
@@ -149,9 +236,21 @@ export class DashboardCameraController {
     this.controls.maxPolarAngle = Math.PI / 2 + 0.15; // Don't dip beneath floor
   }
 
+  public setVariant(variant: string) {
+    this.variant = variant;
+    this.setPose(this.currentPose);
+  }
+
+  public getPoseDef(pose: CameraPose): CameraTargetDef {
+    if (this.variant === "transit_bus" && BUS_CABIN_CAMERA_POSES[pose]) {
+      return BUS_CABIN_CAMERA_POSES[pose]!;
+    }
+    return DASHBOARD_CAMERA_POSES[pose] || DASHBOARD_CAMERA_POSES.dashboard_center;
+  }
+
   public setPose(pose: CameraPose) {
     this.currentPose = pose;
-    const def = DASHBOARD_CAMERA_POSES[pose] || DASHBOARD_CAMERA_POSES.dashboard_center;
+    const def = this.getPoseDef(pose);
 
     const heightOffset = this.driverHeight === "low" ? -0.04 : this.driverHeight === "tall" ? 0.04 : 0.0;
 
