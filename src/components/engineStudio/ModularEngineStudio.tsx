@@ -90,10 +90,10 @@ export const ModularEngineStudio: React.FC = () => {
               <button
                 key={tab.id}
                 onClick={() => setStudioMode(tab.id as any)}
-                className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg transition-all cursor-pointer ${
+                className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-semibold rounded-lg transition-all cursor-pointer active:scale-[0.97] ${
                   studioMode === tab.id
                     ? "bg-amber-500 text-slate-950 font-bold shadow-md shadow-cyan-500/30"
-                    : "text-slate-400 hover:text-slate-200"
+                    : "text-slate-400 hover:text-slate-200 hover:bg-slate-900/60"
                 }`}
               >
                 {tab.icon}

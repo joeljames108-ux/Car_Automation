@@ -1,0 +1,218 @@
+{
+  "sedan": {
+    "1970s": "BMW 2002 Turbo (E10)",
+    "1980s": "Mercedes-Benz 190E 2.3-16 (W201)",
+    "1990s": "BMW 5 Series (E39)",
+    "2000s": "Audi RS6 Sedan (C6)",
+    "2010s": "Alfa Romeo Giulia Quadrifoglio",
+    "2020s": "Honda Civic Sedan (11th Gen)",
+    "future": "Audi Grandsphere Concept"
+  },
+  "hatchback": {
+    "1970s": "Volkswagen Golf GTI Mk1",
+    "1980s": "Peugeot 205 GTi",
+    "1990s": "Honda Civic Type R (EK9)",
+    "2000s": "Renault Clio V6 Phase 2",
+    "2010s": "Ford Focus RS Mk3",
+    "2020s": "Toyota GR Yaris",
+    "future": "Hyundai N Vision 74"
+  },
+  "coupe": {
+    "1970s": "Datsun 240Z",
+    "1980s": "Audi Quattro",
+    "1990s": "Toyota Supra A80",
+    "2000s": "Nissan Skyline GT-R (R34) / GT-R (R35)",
+    "2010s": "BMW M4 GTS (F82)",
+    "2020s": "Maserati MC20",
+    "future": "Polestar Synergy Concept"
+  },
+  "convertible": {
+    "1970s": "Alfa Romeo Spider Veloce",
+    "1980s": "Mercedes-Benz 560SL (R107)",
+    "1990s": "Porsche 911 Carrera Cabriolet (993)",
+    "2000s": "Honda S2000 (AP1)",
+    "2010s": "Jaguar F-Type V8 R Convertible",
+    "2020s": "Bentley Continental GT Speed Convertible",
+    "future": "Genesis X Convertible Concept"
+  },
+  "roadster": {
+    "1970s": "Triumph Spitfire 1500",
+    "1980s": "Mazda MX-5 Miata (NA)",
+    "1990s": "BMW Z3 M Roadster",
+    "2000s": "Lotus Elise Series 2",
+    "2010s": "Mazda MX-5 Miata (ND)",
+    "2020s": "Ferrari 812 GTS",
+    "future": "Tesla Roadster 2"
+  },
+  "sports_car": {
+    "1970s": "Porsche 911 Turbo (930)",
+    "1980s": "Mazda RX-7 (FC3S)",
+    "1990s": "Honda NSX (NA1)",
+    "2000s": "Porsche 911 GT3 (997)",
+    "2010s": "Chevrolet Corvette Stingray (C7)",
+    "2020s": "Alpine A110 R",
+    "future": "Lotus Evija"
+  },
+  "supercar": {
+    "1970s": "Lamborghini Countach LP400",
+    "1980s": "Ferrari F40",
+    "1990s": "McLaren F1",
+    "2000s": "Ford GT (2005)",
+    "2010s": "Ferrari 458 Italia",
+    "2020s": "Lamborghini Revuelto",
+    "future": "McMurtry Sp\u00e9irling"
+  },
+  "hypercar": {
+    "1970s": "Porsche 917 Living Legend tribute",
+    "1980s": "Porsche 959",
+    "1990s": "Mercedes-Benz CLK GTR",
+    "2000s": "Bugatti Veyron 16.4",
+    "2010s": "Porsche 918 Spyder",
+    "2020s": "Bugatti Chiron Pur Sport",
+    "future": "Koenigsegg Jesko Attack"
+  },
+  "grand_tourer": {
+    "1970s": "Aston Martin V8 Vantage",
+    "1980s": "Porsche 928 S4",
+    "1990s": "Aston Martin DB7",
+    "2000s": "Aston Martin DBS V12",
+    "2010s": "Ferrari F12berlinetta",
+    "2020s": "Bentley Continental GT Mulliner",
+    "future": "Cadillac Celestiq"
+  },
+  "muscle_car": {
+    "1970s": "Dodge Challenger R/T (1970)",
+    "1980s": "Ford Mustang 5.0 LX (Foxbody)",
+    "1990s": "Chevrolet Camaro SS (4th Gen)",
+    "2000s": "Ford Mustang GT (2005 S197)",
+    "2010s": "Dodge Charger SRT Hellcat",
+    "2020s": "Dodge Challenger SRT Demon 170",
+    "future": "Dodge Charger Daytona SRT EV"
+  },
+  "luxury_car": {
+    "1970s": "Rolls-Royce Silver Shadow II",
+    "1980s": "Mercedes-Benz 560SEL (W126)",
+    "1990s": "Lexus LS 400 (UCF20)",
+    "2000s": "Maybach 62",
+    "2010s": "Mercedes-Maybach S600 (X222)",
+    "2020s": "Rolls-Royce Ghost (Post Opulence)",
+    "future": "Mercedes-Maybach EQS SUV Concept"
+  },
+  "limousine": {
+    "1970s": "Cadillac Fleetwood 75 Formal Limo",
+    "1980s": "Lincoln Town Car Stretch Limo",
+    "1990s": "Mercedes-Benz S600 Pullman (W140)",
+    "2000s": "Rolls-Royce Phantom VII Limo",
+    "2010s": "Audi A8L Extended",
+    "2020s": "Hongqi L5",
+    "future": "Bentley EXP 100 GT Limousine"
+  },
+  "shooting_brake": {
+    "1970s": "Volvo 1800ES",
+    "1980s": "Lynx Eventer (Jaguar XJS)",
+    "1990s": "BMW Z3 M Coupe (Clownshoe)",
+    "2000s": "Alfa Romeo Brera Shooting Brake",
+    "2010s": "Ferrari FF",
+    "2020s": "Genesis G70 Shooting Brake",
+    "future": "Porsche Mission E Turismo Concept"
+  },
+  "wagon": {
+    "1970s": "Mercedes-Benz 300TD (W123T)",
+    "1980s": "Volvo 240 Turbo Estate",
+    "1990s": "Audi RS2 Avant",
+    "2000s": "BMW M5 Touring (E61)",
+    "2010s": "Mercedes-AMG E63 S Estate (W212)",
+    "2020s": "Audi RS6 Avant (C8)",
+    "future": "Polestar 5 Sport Turismo"
+  },
+  "crossover": {
+    "1970s": "AMC Eagle 4WD Wagon",
+    "1980s": "Fiat Panda 4x4 (141A)",
+    "1990s": "Toyota RAV4 (XA10)",
+    "2000s": "Nissan Murano (Z50)",
+    "2010s": "Porsche Macan GTS",
+    "2020s": "Ferrari Purosangue",
+    "future": "Lotus Eletre Hyper-SUV"
+  },
+  "suv": {
+    "1970s": "Range Rover Classic (Suffix A)",
+    "1980s": "Jeep Grand Wagoneer (SJ)",
+    "1990s": "Ford Explorer (1st Gen)",
+    "2000s": "BMW X5 (E53)",
+    "2010s": "Range Rover (L405)",
+    "2020s": "BMW XM",
+    "future": "Rivian R1S"
+  },
+  "offroad_4x4": {
+    "1970s": "Toyota Land Cruiser FJ40",
+    "1980s": "Mercedes-Benz G-Class (W460)",
+    "1990s": "Land Rover Defender 90",
+    "2000s": "Jeep Wrangler Rubicon (TJ)",
+    "2010s": "Toyota FJ Cruiser",
+    "2020s": "Ford Bronco Badlands",
+    "future": "Mercedes-Benz Concept EQG"
+  },
+  "pickup": {
+    "1970s": "Chevrolet C10 Cheyenne",
+    "1980s": "Toyota Hilux (4th Gen)",
+    "1990s": "Ford F-150 SVT Lightning (1st Gen)",
+    "2000s": "Dodge Ram 1500 (3rd Gen)",
+    "2010s": "Ford F-150 Raptor (2nd Gen)",
+    "2020s": "Rivian R1T",
+    "future": "Tesla Cybertruck"
+  },
+  "heavy_truck": {
+    "1970s": "Kenworth W900A",
+    "1980s": "Scania 142H V8",
+    "1990s": "Peterbilt 379",
+    "2000s": "Volvo FH12 (2nd Gen)",
+    "2010s": "Mercedes-Benz Actros (MP4)",
+    "2020s": "Scania S730 V8",
+    "future": "Tesla Semi"
+  },
+  "van": {
+    "1970s": "Volkswagen Type 2 Bus (T2 Bay Window)",
+    "1980s": "Ford Transit Mk2",
+    "1990s": "Chevrolet Astro Cargo Van",
+    "2000s": "Mercedes-Benz Sprinter (W906)",
+    "2010s": "Ram ProMaster (Fiat Ducato based)",
+    "2020s": "Ford E-Transit Cargo",
+    "future": "Canoo Lifestyle Delivery Vehicle"
+  },
+  "mpv": {
+    "1970s": "Dodge Sportsman Royal Wagon",
+    "1980s": "Renault Espace (1st Gen)",
+    "1990s": "Toyota Previa (TCR10)",
+    "2000s": "Honda Odyssey (3rd Gen)",
+    "2010s": "Toyota Alphard (3rd Gen)",
+    "2020s": "Hyundai Staria",
+    "future": "Zeekr 009"
+  },
+  "bus": {
+    "1970s": "GMC RTS (Rapid Transit Series)",
+    "1980s": "Neoplan Cityliner (N116)",
+    "1990s": "Setra S 315 HD",
+    "2000s": "New Flyer D40LF",
+    "2010s": "Alexander Dennis Enviro500",
+    "2020s": "Mercedes-Benz eCitaro",
+    "future": "Proterra ZX5 Electric Bus"
+  },
+  "formula": {
+    "1970s": "Lotus 79 (Ground Effect F1)",
+    "1980s": "McLaren MP4/4 (1988)",
+    "1990s": "Williams FW14B (Active Suspension F1)",
+    "2000s": "Ferrari F2004",
+    "2010s": "Red Bull RB9 (Blown Diffuser F1)",
+    "2020s": "Red Bull RB19 (Ground Effect F1)",
+    "future": "Formula E Gen3 Evo"
+  },
+  "gt3": {
+    "1970s": "Porsche 911 Carrera RSR 3.0",
+    "1980s": "BMW M3 E30 Sport Evolution",
+    "1990s": "Dodge Viper GTS-R",
+    "2000s": "Aston Martin DBR9",
+    "2010s": "Porsche 911 GT3 R (991)",
+    "2020s": "Mercedes-AMG GT3 Evo",
+    "future": "Ferrari 499P Le Mans Hypercar"
+  }
+}

@@ -38,4 +38,12 @@ This repository contains the **Modular Vehicle Assembly System & Car Automation 
 - **Dual-Mode Export & Verification**: Export unified master vehicles and modular zero-offset individual components, verify round-trip import, and ensure 100% clean TypeScript build (`npx tsc --noEmit -p tsconfig.app.json`) and passing tests (`npx tsx src/sim/modularVehicle/runTests.ts`).
 - **Operational Cheatsheet**: Refer to `.agents/skills/blender-visual-feedback-loop/SKILL.md` for full implementation patterns.
 
-
+### 5. Maximum Visual Quality & Intensive CAD Mesh Standard (ABSOLUTE DIRECTIVE)
+- **Highest Possible Fidelity Standard**: In every 3D model generation, achieve state-of-the-art Class-A automotive CAD quality. Never compromise fidelity for brevity or file size.
+- **No Line Count or File Size Limitations**: Disregard script length or GLB export file sizes. Do not compress or simplify geometry when higher fidelity, denser subdivision, or richer component hierarchy can be achieved. Work intensively and comprehensively on each individual model.
+- **Micro-Detailed Automotive Subsystems**:
+  - Complex multi-part lighting optics (individual projector lenses, separate internal reflector housings, 3D extruded LED light-pipes/diodes, fluted amber indicators, multi-layer outer polycarbonate lenses).
+  - High-density multi-piece wheels (radiating curved spokes with fillet chamfers, 5 separate recessed lug nuts/bolts, 3D brand logo hub caps, stepped outer rim lips, curved sidewall tires with directional tread pattern sipes, cross-drilled/slotted brake rotors, and detailed multi-piston branded brake calipers).
+  - Aerodynamic jewelry (fully modeled 3D honeycomb/slat grilles, front splitters with winglet strakes, active aero elements, hood heat extractors, rear diffusers with sharp aerodynamic fins, hollowed multi-walled exhaust tips).
+  - Intricate cockpits (driver-oriented dashboards, center consoles with gear shifters and MMI dials, sport steering wheels with paddle shifters, contoured bucket seats with distinct bolsters, headrests, and package shelves).
+  - Full underbody belly pans and enclosed wheel tubs to guarantee zero see-through voids from any viewing angle.

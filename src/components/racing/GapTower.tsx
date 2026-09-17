@@ -94,9 +94,9 @@ export const GapTower: React.FC<GapTowerProps> = memo(function GapTower({
 
           return (
             <div key={entry.number}
-              className={`px-3 py-1.5 flex items-center text-xs transition-colors ${
-                isHighlighted ? 'bg-amber-500/15' :
-                entry.status === 'retired' ? 'opacity-40' : 'hover:bg-slate-800/30'
+              className={`px-3 py-1.5 flex items-center text-xs transition-all duration-150 ${
+                isHighlighted ? 'bg-amber-500/15 font-semibold' :
+                entry.status === 'retired' ? 'opacity-40' : 'hover:bg-slate-800/40'
               }`}>
               {/* Position */}
               <span className={`w-8 text-center font-bold ${

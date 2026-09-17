@@ -24,7 +24,6 @@ class GltfLoaderFactory {
       this.dracoLoader = new DRACOLoader();
       if (typeof window !== 'undefined') {
         this.dracoLoader.setDecoderPath('/draco/');
-        this.dracoLoader.setDecoderConfig({ type: 'wasm' });
       }
     }
     return this.dracoLoader;

@@ -247,12 +247,15 @@ export function CommandPalette({ isOpen, onClose, onSelectStage, focusMode = fal
                   type="button"
                   role="option"
                   aria-selected={isSelected}
+                  style={{
+                    animation: `fadeIn 0.2s var(--ease-out) ${Math.min(idx * 20, 200)}ms both`,
+                  }}
                   onClick={() => {
                     item.action();
                     onClose();
                   }}
                   onMouseEnter={() => setSelectedIndex(idx)}
-                  className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-left transition-all ${
+                  className={`w-full flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-left transition-all active:scale-[0.98] ${
                     isSelected
                       ? "bg-amber-500/20 text-amber-200 border border-amber-400/30 shadow-[0_0_15px_rgba(34,211,238,0.15)]"
                       : "text-slate-300 hover:bg-slate-800/50 hover:text-slate-100 border border-transparent"

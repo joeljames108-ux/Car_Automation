@@ -169,12 +169,12 @@ export const GuidedWorkflowStepper: React.FC<GuidedWorkflowStepperProps> = ({
                   type="button"
                   onClick={() => handleStepClick(stage)}
                   title={isLocked ? gate.reason : `Go to ${meta.label} stage`}
-                  className={`group relative flex items-center gap-2 px-3 py-1.5 rounded-xl border transition-all duration-200 text-left cursor-pointer whitespace-nowrap ${
+                  className={`group relative flex items-center gap-2 px-3 py-1.5 rounded-xl border transition-all duration-200 text-left cursor-pointer whitespace-nowrap active:scale-[0.98] ${
                     isCurrentActive
                       ? "ring-2 ring-amber-400/80 border-amber-400 bg-gradient-to-r from-amber-500/20 via-amber-600/15 to-transparent text-slate-100 shadow-[0_0_20px_rgba(245,158,11,0.25)]"
                       : isLocked
                       ? "border-slate-800/80 bg-slate-950/50 text-slate-500 hover:border-slate-700"
-                      : "border-slate-700/60 bg-slate-900/60 hover:border-amber-400/50 hover:bg-slate-800/60 text-slate-300"
+                      : "border-slate-700/60 bg-slate-900/60 hover:border-amber-400/50 hover:bg-slate-800/60 text-slate-300 hover:translate-y-[-1px]"
                   }`}
                 >
                   {/* Step Number Circle */}

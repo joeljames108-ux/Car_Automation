@@ -64,10 +64,10 @@ export const CockpitHmiConfiguratorPanel: React.FC<CockpitHmiConfiguratorPanelPr
               <button
                 key={style.id}
                 onClick={() => engine.updateDashboard({ instrumentClusterStyle: style.id as InstrumentClusterStyle })}
-                className={`p-2.5 rounded-xl border text-left flex items-center justify-between transition-all cursor-pointer ${
+                className={`p-2.5 rounded-xl border text-left flex items-center justify-between transition-all cursor-pointer active:scale-[0.97] ${
                   isSelected
                     ? "bg-amber-500 text-white border-amber-600 shadow-md font-bold"
-                    : "bg-white/60 border-amber-200/80 text-amber-900 hover:bg-amber-100/50"
+                    : "bg-white/60 border-amber-200/80 text-amber-900 hover:bg-amber-100/50 hover:translate-y-[-1px]"
                 }`}
               >
                 <div className="flex items-center gap-2">

@@ -77,6 +77,7 @@ def export_all():
     complete_target_2 = os.path.join(PUBLIC_FAMILIES_COMPLETE_DIR, "complete_bus.glb")
     complete_target_3 = os.path.join(EXPORTS_DIR, "bus_complete.glb")
     complete_target_4 = os.path.join(PUBLIC_MODELS_DIR, "Car_Bus_Complete.glb")
+    complete_target_5 = os.path.join(PROJECT_DIR, "public", "assets", "vehicles", "vehicle_bus.glb")
 
     bpy.ops.export_scene.gltf(
         filepath=complete_target_1,
@@ -92,7 +93,8 @@ def export_all():
     safe_copy(complete_target_1, complete_target_2)
     safe_copy(complete_target_1, complete_target_3)
     safe_copy(complete_target_1, complete_target_4)
-    print(f" -> Synchronized to: {complete_target_4}")
+    safe_copy(complete_target_1, complete_target_5)
+    print(f" -> Synchronized to: {complete_target_4} and {complete_target_5}")
     
     # ------------------------------------------------------------------------
     # 2. DISCRETE ARCHITECTURE PACKAGE EXPORTS (Modular Vehicle Studio)
@@ -186,18 +188,19 @@ def export_all():
             o.select_set(True)
         bpy.context.view_layer.objects.active = matched_objs[0]
         
-        for out_dir in [modular_bus_dir, exports_bus_dir]:
-            out_file = os.path.join(out_dir, f"{stage_name}.glb")
-            bpy.ops.export_scene.gltf(
-                filepath=out_file,
-                export_format='GLB',
-                use_selection=True,
-                export_apply=True,
-                export_yup=True,
-                export_materials='EXPORT',
-                export_draco_mesh_compression_enable=False
-            )
-        print(f" -> Exported modular stage [{stage_name}.glb] with {len(matched_objs)} objects ({os.path.getsize(os.path.join(modular_bus_dir, f'{stage_name}.glb')):,} bytes)")
+        out_file = os.path.join(modular_bus_dir, f"{stage_name}.glb")
+        bpy.ops.export_scene.gltf(
+            filepath=out_file,
+            export_format='GLB',
+            use_selection=True,
+            export_apply=True,
+            export_yup=True,
+            export_materials='EXPORT',
+            export_draco_mesh_compression_enable=False
+        )
+        export_copy = os.path.join(exports_bus_dir, f"{stage_name}.glb")
+        safe_copy(out_file, export_copy)
+        print(f" -> Exported modular stage [{stage_name}.glb] with {len(matched_objs)} objects ({os.path.getsize(out_file):,} bytes)")
 
     # Also synchronize body-framework.glb in public/vehicles/bus with the real skeleton
     framework_mesh_objs = [o for o in mesh_objects if o.name.startswith("FRAMEWORK_")]

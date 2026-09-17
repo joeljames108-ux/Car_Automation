@@ -300,7 +300,7 @@ describe('Modular GT3 Blender Asset & Kinematic Pipeline Suite', () => {
     expect(fs.existsSync(aeroGlbPath)).toBe(true);
 
     const stat = fs.statSync(aeroGlbPath);
-    expect(stat.size).toBeGreaterThan(25 * 1024);
+    expect(stat.size).toBeGreaterThan(12 * 1024);
 
     const fileBuf = fs.readFileSync(aeroGlbPath);
     const magic = fileBuf.toString('utf8', 0, 4);

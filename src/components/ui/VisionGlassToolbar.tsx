@@ -16,17 +16,15 @@ interface VisionGlassToolbarProps {
 function ToolbarButton({ action }: { action: ToolbarAction }) {
   const [isHovered, setIsHovered] = useState(false);
   const [showTooltip, setShowTooltip] = useState(false);
-  const tooltipTimeout = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const handleMouseEnter = useCallback(() => {
     setIsHovered(true);
-    tooltipTimeout.current = setTimeout(() => setShowTooltip(true), 400);
+    setShowTooltip(true);
   }, []);
 
   const handleMouseLeave = useCallback(() => {
     setIsHovered(false);
     setShowTooltip(false);
-    if (tooltipTimeout.current) clearTimeout(tooltipTimeout.current);
   }, []);
 
   return (
@@ -40,7 +38,7 @@ function ToolbarButton({ action }: { action: ToolbarAction }) {
       <button
         onClick={action.onClick}
         aria-label={action.label}
-        className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500"
+        className="focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 active:scale-95"
         style={{
           position: "relative",
           display: "flex",
@@ -48,21 +46,21 @@ function ToolbarButton({ action }: { action: ToolbarAction }) {
           justifyContent: "center",
           width: 36,
           height: 36,
-          borderRadius: 12,
+          borderRadius: 10,
           border: "none",
           cursor: "pointer",
           color: action.isActive ? "#007aff" : isHovered ? "#1c1c1e" : "#636366",
           background: action.isActive
             ? "rgba(0, 122, 255, 0.16)"
             : isHovered
-            ? "rgba(255, 255, 255, 0.65)"
+            ? "rgba(255, 255, 255, 0.75)"
             : "transparent",
-          transition: "all 0.28s cubic-bezier(0.34, 1.56, 0.64, 1)",
-          transform: isHovered ? "scale(1.16) translateY(-2px)" : "scale(1)",
+          transition: "all 0.16s cubic-bezier(0.16, 1, 0.3, 1)",
+          transform: isHovered ? "scale(1.08)" : "scale(1)",
           boxShadow: isHovered
-            ? "0 6px 16px rgba(0, 0, 0, 0.10), inset 0 1px 0 rgba(255, 255, 255, 0.85)"
+            ? "0 4px 12px rgba(0, 0, 0, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.90)"
             : action.isActive
-            ? "0 0 12px rgba(0, 136, 255, 0.25), inset 0 1px 0 rgba(0, 136, 255, 0.15)"
+            ? "0 0 10px rgba(0, 122, 255, 0.20), inset 0 1px 0 rgba(0, 122, 255, 0.15)"
             : "none",
         }}
       >
@@ -174,19 +172,18 @@ function VisionGlassToolbarComponent({ actions }: VisionGlassToolbarProps) {
         top: "50%",
         transform: "translateY(-50%)",
         zIndex: 30,
-        background: "rgba(255, 252, 245, 0.32)",
-        backdropFilter: "blur(60px) saturate(240%)",
-        WebkitBackdropFilter: "blur(60px) saturate(240%)",
-        border: "1.5px solid rgba(255, 220, 180, 0.40)",
-        borderRadius: 22,
-        padding: "12px 8px",
+        background: "rgba(255, 255, 255, 0.55)",
+        backdropFilter: "blur(32px) saturate(200%)",
+        WebkitBackdropFilter: "blur(32px) saturate(200%)",
+        border: "1px solid rgba(255, 255, 255, 0.45)",
+        borderRadius: 20,
+        padding: "10px 6px",
         boxShadow:
-          "0 16px 40px rgba(0, 0, 0, 0.10), " +
-          "0 4px 12px rgba(0, 0, 0, 0.05), " +
-          "inset 0 1px 0 rgba(255, 255, 255, 0.90), " +
-          "0 0 16px rgba(200, 180, 255, 0.08)",
+          "0 16px 40px rgba(0, 0, 0, 0.12), " +
+          "0 4px 12px rgba(0, 0, 0, 0.04), " +
+          "inset 0 1px 0 rgba(255, 255, 255, 0.95)",
         gap: 4,
-        animation: "vg-toolbar-entrance 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both, vg-prismatic-border 6s ease-in-out infinite",
+        animation: "vg-toolbar-entrance 0.5s cubic-bezier(0.16, 1, 0.3, 1) both",
       }}
     >
       {/* Top section — navigation */}

@@ -377,18 +377,17 @@ function AppInner() {
           {/* ===== Floating Liquid Glass Window ===== */}
           <div className="vision-glass-window" style={{
             position: "relative", zIndex: 10,
-            width: "min(96vw, 1440px)",
+            width: focusMode ? "min(99vw, 1680px)" : "min(calc(100vw - 140px), 1440px)",
             marginTop: 16, marginBottom: 16,
             borderRadius: 28,
-            background: "rgba(255, 252, 245, 0.38)",
-            backdropFilter: "blur(80px) saturate(240%)",
-            WebkitBackdropFilter: "blur(80px) saturate(240%)",
-            border: "1.5px solid rgba(255, 220, 180, 0.28)",
-            boxShadow: "0 24px 80px rgba(0, 0, 0, 0.10), 0 6px 24px rgba(0, 0, 0, 0.04), inset 0 1px 0 rgba(255, 255, 255, 0.80), 0 0 24px rgba(200, 180, 255, 0.10)",
+            background: "rgba(255, 255, 255, 0.45)",
+            backdropFilter: "blur(60px) saturate(210%)",
+            WebkitBackdropFilter: "blur(60px) saturate(210%)",
+            border: "1px solid rgba(255, 255, 255, 0.35)",
+            boxShadow: "0 24px 80px rgba(0, 0, 0, 0.15), 0 6px 20px rgba(0, 0, 0, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.90)",
             display: "flex", flexDirection: "column",
             height: "calc(100vh - 32px)",
             overflow: "hidden",
-            animation: "vg-prismatic-border 8s ease-in-out infinite",
           }}>
 
             {/* ── HEADER BAR (Phase 3 Component) ── */}

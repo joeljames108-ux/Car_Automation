@@ -41,7 +41,7 @@ export interface ArchitectureLayerToggles {
   envelopes: boolean;
 }
 
-interface DedicatedArchitectureGlbViewerProps {
+export interface DedicatedArchitectureGlbViewerProps {
   category: VehicleCategory;
   paintColorHex?: number;
   paintFinish?: PaintFinishType;
@@ -50,6 +50,7 @@ interface DedicatedArchitectureGlbViewerProps {
   isXRay?: boolean;
   autoRotate?: boolean;
   autoRotateSpeed?: number;
+  showDimensions?: boolean;
 }
 
 // Sub-component to load and render an individual GLB asset layer
@@ -119,6 +120,7 @@ export const DedicatedArchitectureGlbViewer: React.FC<DedicatedArchitectureGlbVi
   isXRay = false,
   autoRotate = false,
   autoRotateSpeed = 0.5,
+  showDimensions = false,
 }) => {
   const rootGroupRef = useRef<THREE.Group>(null);
   const arch = useMemo(() => getVehicleArchitecture(category), [category]);
@@ -293,6 +295,59 @@ export const DedicatedArchitectureGlbViewer: React.FC<DedicatedArchitectureGlbVi
         assetPath={arch.assets.envelopeAsset}
         visible={layers.envelopes}
       />
+
+      {/* 7. Interactive 3D Dimension Calipers & Visual Datum Lines */}
+      {showDimensions && (
+        <group position={[0, 0, 0]}>
+          {/* Wheelbase Caliper (Along Z axis) */}
+          <lineSegments>
+            <bufferGeometry>
+              <bufferAttribute
+                attach="attributes-position"
+                count={2}
+                array={new Float32Array([
+                  arch.trackFrontMm / 2000 + 0.15, 0.05, -arch.wheelbaseMm / 2000,
+                  arch.trackFrontMm / 2000 + 0.15, 0.05, arch.wheelbaseMm / 2000,
+                ])}
+                itemSize={3}
+              />
+            </bufferGeometry>
+            <lineBasicMaterial color="#38bdf8" linewidth={2} />
+          </lineSegments>
+
+          {/* Width Caliper (Along X axis) */}
+          <lineSegments>
+            <bufferGeometry>
+              <bufferAttribute
+                attach="attributes-position"
+                count={2}
+                array={new Float32Array([
+                  -arch.overallWidthMm / 2000, 0.05, arch.overallLengthMm / 2000 + 0.15,
+                  arch.overallWidthMm / 2000, 0.05, arch.overallLengthMm / 2000 + 0.15,
+                ])}
+                itemSize={3}
+              />
+            </bufferGeometry>
+            <lineBasicMaterial color="#f59e0b" linewidth={2} />
+          </lineSegments>
+
+          {/* Height Caliper (Along Y axis) */}
+          <lineSegments>
+            <bufferGeometry>
+              <bufferAttribute
+                attach="attributes-position"
+                count={2}
+                array={new Float32Array([
+                  arch.overallWidthMm / 2000 + 0.15, 0, 0,
+                  arch.overallWidthMm / 2000 + 0.15, arch.overallHeightMm / 1000, 0,
+                ])}
+                itemSize={3}
+              />
+            </bufferGeometry>
+            <lineBasicMaterial color="#10b981" linewidth={2} />
+          </lineSegments>
+        </group>
+      )}
 
       {/* Ground Shadow Datum Disc */}
       <mesh rotation={[-Math.PI / 2, 0, 0]} position={[0, -0.01, 0]} receiveShadow>

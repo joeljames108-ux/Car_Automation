@@ -553,7 +553,8 @@ def build_transit_bus_cockpit():
     # -------------------------------------------------------------------------
     # 12. Export Pristine Class-A GLB
     # -------------------------------------------------------------------------
-    out_dir = os.path.abspath("public/models/interior")
+    project_root = r"E:\Car_Automation"
+    out_dir = os.path.join(project_root, "public", "models", "interior")
     os.makedirs(out_dir, exist_ok=True)
     out_glb = os.path.join(out_dir, "cockpit_transit_bus.glb")
     log(f"Exporting clean bus cockpit to: {out_glb}")

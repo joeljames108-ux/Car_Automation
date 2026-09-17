@@ -34,7 +34,7 @@ function StaticGauge({ gauge }: { gauge: GaugeData }) {
             strokeLinecap="round"
             transform="rotate(135 36 36)"
           />
-          {/* Static value arc */}
+          {/* Static value arc with smooth stroke transition */}
           <circle
             cx="36" cy="36" r={radius}
             fill="none" stroke={gauge.color} strokeWidth="5"
@@ -42,7 +42,10 @@ function StaticGauge({ gauge }: { gauge: GaugeData }) {
             strokeDashoffset={offset}
             strokeLinecap="round"
             transform="rotate(135 36 36)"
-            style={{ filter: `drop-shadow(0 0 6px ${gauge.glowColor})` }}
+            style={{
+              filter: `drop-shadow(0 0 6px ${gauge.glowColor})`,
+              transition: "stroke-dashoffset 0.4s var(--ease-out)",
+            }}
           />
         </svg>
         {/* Center value */}

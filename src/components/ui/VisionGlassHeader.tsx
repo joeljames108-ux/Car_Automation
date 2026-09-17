@@ -49,11 +49,11 @@ function VisionGlassHeaderComponent({
         justifyContent: "space-between",
         padding: "0 20px",
         height: 48,
-        borderBottom: "1px solid rgba(255,255,255,0.12)",
-        background: "rgba(15, 23, 42, 0.55)",
-        backdropFilter: "blur(28px) saturate(190%)",
-        WebkitBackdropFilter: "blur(28px) saturate(190%)",
-        boxShadow: "0 4px 20px rgba(0,0,0,0.25), inset 0 -1px 0 rgba(255,255,255,0.08), inset 0 1px 0 rgba(255,255,255,0.25)",
+        borderBottom: "1px solid rgba(0, 0, 0, 0.06)",
+        background: "rgba(255, 255, 255, 0.35)",
+        backdropFilter: "blur(40px) saturate(190%)",
+        WebkitBackdropFilter: "blur(40px) saturate(190%)",
+        boxShadow: "0 2px 10px rgba(0,0,0,0.03), inset 0 1px 0 rgba(255,255,255,0.85)",
         flexShrink: 0,
         position: "relative",
         zIndex: 20,
@@ -61,30 +61,23 @@ function VisionGlassHeaderComponent({
     >
       {/* ── LEFT: Logo + Brand ── */}
       <div className="vision-glass-header-brand" style={{ display: "flex", alignItems: "center", gap: 10, minWidth: 180 }}>
-        {/* Animated logo mark */}
+        {/* Apple visionOS Logo Plinth */}
         <div
           style={{
             position: "relative",
-            width: 32, height: 32,
+            width: 30, height: 30,
+            borderRadius: 9,
+            background: "rgba(0, 122, 255, 0.12)",
+            border: "1px solid rgba(0, 122, 255, 0.25)",
+            boxShadow: "0 2px 8px rgba(0, 122, 255, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.80)",
             display: "flex", alignItems: "center", justifyContent: "center",
           }}
         >
-          <div
-            style={{
-              position: "absolute", inset: -2,
-              borderRadius: 12,
-              background: "conic-gradient(from 0deg, rgba(0,136,255,0.3), rgba(56,189,248,0.15), rgba(168,85,247,0.2), rgba(0,136,255,0.3))",
-              animation: "vg-logo-spin 8s linear infinite",
-              filter: "blur(3px)",
-            }}
-          />
           <svg
             viewBox="0 0 24 24"
             aria-hidden="true"
             style={{
-              height: 20, width: 20, color: "#0088ff",
-              filter: "drop-shadow(0 0 6px rgba(0,136,255,0.5))",
-              position: "relative", zIndex: 1,
+              height: 18, width: 18, color: "#007aff",
             }}
             fill="currentColor"
           >
@@ -94,17 +87,15 @@ function VisionGlassHeaderComponent({
 
         <div>
           <div style={{
-            fontSize: 13, fontWeight: 800, letterSpacing: "0.06em",
-            color: "#f8fafc", lineHeight: 1,
-            background: "linear-gradient(135deg, #f8fafc 30%, #fbbf24 100%)",
-            WebkitBackgroundClip: "text",
-            WebkitTextFillColor: "transparent",
+            fontSize: 13, fontWeight: 800, letterSpacing: "-0.02em",
+            color: "#1c1c1e", lineHeight: 1.1,
+            fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', Roboto, sans-serif",
           }}>
             APEX ENGINEER
           </div>
           <div style={{
-            fontSize: 9, fontWeight: 600, letterSpacing: "0.12em",
-            color: "#64748b", textTransform: "uppercase" as const,
+            fontSize: 9, fontWeight: 700, letterSpacing: "0.06em",
+            color: "#8e8e93", textTransform: "uppercase" as const,
           }}>
             Vision Studio
           </div>
@@ -124,14 +115,15 @@ function VisionGlassHeaderComponent({
           aria-label={`Current time: ${timeStr}`}
           style={{
             display: "flex", alignItems: "center", gap: 5,
-            background: "rgba(255,255,255,0.06)",
-            border: "1px solid rgba(255,255,255,0.10)",
-            borderRadius: 10, padding: "4px 10px",
-            fontSize: 10, color: "#94a3b8", fontFamily: "monospace",
+            background: "rgba(0,0,0,0.04)",
+            border: "1px solid rgba(0,0,0,0.07)",
+            borderRadius: 8, padding: "3px 9px",
+            fontSize: 10, color: "#636366", fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace",
+            boxShadow: "inset 0 1px 0 rgba(255,255,255,0.8)",
           }}
         >
-          <Clock size={10} style={{ color: "#64748b" }} aria-hidden="true" />
-          <span style={{ color: "#cbd5e1", fontWeight: 600 }}>{timeStr}</span>
+          <Clock size={10} style={{ color: "#8e8e93" }} aria-hidden="true" />
+          <span style={{ color: "#1c1c1e", fontWeight: 600 }}>{timeStr}</span>
         </div>
 
         {/* Economy status pill */}
@@ -139,34 +131,33 @@ function VisionGlassHeaderComponent({
           aria-label={`Economy Status: Month ${month}, Revenue ${fmtRev}`}
           style={{
             display: "flex", alignItems: "center", gap: 8,
-            background: "rgba(255,255,255,0.06)",
-            border: "1px solid rgba(255,255,255,0.10)",
-            borderRadius: 10, padding: "4px 12px",
+            background: "rgba(0,0,0,0.04)",
+            border: "1px solid rgba(0,0,0,0.07)",
+            borderRadius: 8, padding: "3px 10px",
             fontSize: 10,
-            boxShadow: "inset 0 1px 0 rgba(255,255,255,0.08)",
+            boxShadow: "inset 0 1px 0 rgba(255,255,255,0.8)",
           }}
         >
-          <span style={{ color: "#94a3b8", fontFamily: "monospace", fontSize: 9, fontWeight: 700 }}>MO</span>
-          <span style={{ color: "#fbbf24", fontWeight: 800, fontFamily: "monospace", fontSize: 11 }}>{month}</span>
-          <div style={{ width: 1, height: 12, background: "rgba(255,255,255,0.12)" }} />
-          <span style={{ color: "#34d399", fontWeight: 800, fontFamily: "monospace", fontSize: 11 }}>{fmtRev}</span>
+          <span style={{ color: "#8e8e93", fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace", fontSize: 9, fontWeight: 700 }}>MO</span>
+          <span style={{ color: "#b45309", fontWeight: 800, fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace", fontSize: 11 }}>{month}</span>
+          <div style={{ width: 1, height: 12, background: "rgba(0,0,0,0.10)" }} />
+          <span style={{ color: "#059669", fontWeight: 800, fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace", fontSize: 11 }}>{fmtRev}</span>
           <button
             onClick={onAdvanceMonth}
             onMouseEnter={() => setHovered("advance")}
             onMouseLeave={() => setHovered(null)}
             aria-label="Advance simulation by 1 month"
-            className="spring-press focus-visible:outline-none focus-ring-emil"
+            className="spring-press focus-visible:outline-none focus-ring-emil active:scale-95"
             style={{
-              background: hovered === "advance" ? "rgba(0,136,255,0.30)" : "rgba(0,136,255,0.18)",
-              color: "#fbbf24",
-              border: "1px solid rgba(0,136,255,0.30)",
-              borderRadius: 7,
+              background: hovered === "advance" ? "rgba(0,122,255,0.18)" : "rgba(0,122,255,0.08)",
+              color: "#007aff",
+              border: "1px solid rgba(0,122,255,0.25)",
+              borderRadius: 6,
               padding: "2px 7px",
               fontSize: 9,
               fontWeight: 700,
               cursor: "pointer",
-              transition: "transform 0.16s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.15s ease-out",
-              transform: hovered === "advance" ? "scale(1.05)" : "scale(1)",
+              transition: "all 0.16s cubic-bezier(0.16, 1, 0.3, 1)",
             }}
           >
             +1 Mo
@@ -178,13 +169,14 @@ function VisionGlassHeaderComponent({
           aria-label="Apex AI agent active"
           style={{
             display: "flex", alignItems: "center", gap: 4,
-            background: "rgba(168,85,247,0.12)",
-            border: "1px solid rgba(168,85,247,0.25)",
-            borderRadius: 10, padding: "4px 8px",
-            fontSize: 9, fontWeight: 700, color: "#fbbf24",
+            background: "rgba(147, 51, 234, 0.08)",
+            border: "1px solid rgba(147, 51, 234, 0.20)",
+            borderRadius: 8, padding: "3px 8px",
+            fontSize: 9, fontWeight: 700, color: "#7e22ce",
+            boxShadow: "inset 0 1px 0 rgba(255,255,255,0.8)",
           }}
         >
-          <Sparkles size={10} style={{ animation: "vg-sparkle-pulse 2s ease-in-out infinite" }} aria-hidden="true" />
+          <Sparkles size={10} style={{ color: "#9333ea" }} aria-hidden="true" />
           <span>AI ON</span>
         </div>
       </div>
@@ -197,23 +189,23 @@ function VisionGlassHeaderComponent({
           onMouseEnter={() => setHovered("search")}
           onMouseLeave={() => setHovered(null)}
           aria-label="Search studio modules (Control plus K)"
-          className="vision-glass-search expanding-search-input btn-interactive spring-press flex items-center justify-between gap-2 focus-visible:outline-none focus-ring-emil"
+          className="vision-glass-search expanding-search-input btn-interactive spring-press flex items-center justify-between gap-2 focus-visible:outline-none focus-ring-emil active:scale-95"
           style={{
-            background: hovered === "search" ? "rgba(255,255,255,0.12)" : "rgba(255,255,255,0.06)",
-            border: hovered === "search" ? "1px solid rgba(56,189,248,0.4)" : "1px solid rgba(255,255,255,0.10)",
-            borderRadius: 10, padding: "4px 10px",
-            fontSize: 10, color: "#cbd5e1", cursor: "pointer",
-            boxShadow: hovered === "search" ? "0 0 12px rgba(56,189,248,0.2)" : "none",
-            transition: "transform 0.16s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.15s ease-out, border-color 0.15s ease-out, box-shadow 0.18s ease-out",
+            background: hovered === "search" ? "rgba(255,255,255,0.85)" : "rgba(255,255,255,0.55)",
+            border: hovered === "search" ? "1px solid rgba(0,122,255,0.35)" : "1px solid rgba(0,0,0,0.08)",
+            borderRadius: 8, padding: "3px 10px",
+            fontSize: 10, color: "#1c1c1e", cursor: "pointer",
+            boxShadow: hovered === "search" ? "0 2px 8px rgba(0,122,255,0.12)" : "inset 0 1px 0 rgba(255,255,255,0.85)",
+            transition: "all 0.16s cubic-bezier(0.16, 1, 0.3, 1)",
           }}
         >
           <div className="flex items-center gap-1.5">
-            <Search size={12} style={{ color: "#fbbf24" }} aria-hidden="true" />
-            <span className="vision-glass-search-label font-medium text-slate-200">Search Studio...</span>
+            <Search size={12} style={{ color: "#007aff" }} aria-hidden="true" />
+            <span className="vision-glass-search-label font-medium text-slate-800">Search Studio...</span>
           </div>
           <span className="vision-glass-search-shortcut" style={{
-            fontSize: 9, color: "#94a3b8", background: "rgba(255,255,255,0.08)",
-            padding: "1px 5px", borderRadius: 4, fontFamily: "monospace", fontWeight: 700,
+            fontSize: 9, color: "#636366", background: "rgba(0,0,0,0.06)",
+            padding: "1px 5px", borderRadius: 4, fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace", fontWeight: 700,
           }}>
             ⌘K
           </span>
@@ -226,9 +218,10 @@ function VisionGlassHeaderComponent({
           aria-label="Measurement Units"
           style={{
             display: "flex", alignItems: "center", gap: 1,
-            background: "rgba(255,255,255,0.06)",
-            border: "1px solid rgba(255,255,255,0.08)",
-            borderRadius: 9, padding: 2,
+            background: "rgba(0,0,0,0.04)",
+            border: "1px solid rgba(0,0,0,0.07)",
+            borderRadius: 8, padding: 2,
+            boxShadow: "inset 0 1px 0 rgba(255,255,255,0.8)",
           }}
         >
           {(["metric", "imperial"] as const).map((u) => (
@@ -238,15 +231,15 @@ function VisionGlassHeaderComponent({
               aria-checked={units === u}
               onClick={() => onSetUnits(u)}
               aria-label={`Switch units to ${u}`}
-              className="spring-press focus-visible:outline-none focus-ring-emil"
+              className="spring-press focus-visible:outline-none focus-ring-emil active:scale-95"
               style={{
-                padding: "3px 7px", borderRadius: 7,
+                padding: "3px 7px", borderRadius: 6,
                 fontSize: 10, fontWeight: units === u ? 700 : 500,
                 background: units === u ? "#ffffff" : "transparent",
-                color: units === u ? "#080c14" : "#94a3b8",
+                color: units === u ? "#1c1c1e" : "#8e8e93",
                 border: "none", cursor: "pointer",
-                transition: "transform 0.16s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.15s ease-out, color 0.15s ease-out",
-                boxShadow: units === u ? "0 1px 3px rgba(0,0,0,0.15)" : "none",
+                transition: "all 0.16s cubic-bezier(0.16, 1, 0.3, 1)",
+                boxShadow: units === u ? "0 1px 3px rgba(0,0,0,0.12)" : "none",
               }}
             >
               <span className="vision-glass-unit-full">{u.charAt(0).toUpperCase() + u.slice(1)}</span>
@@ -268,14 +261,14 @@ function VisionGlassHeaderComponent({
             aria-label={a.tip}
             onMouseEnter={() => setHovered(a.id)}
             onMouseLeave={() => setHovered(null)}
-            className="vision-glass-icon-action spring-press focus-visible:outline-none focus-ring-emil"
+            className="vision-glass-icon-action spring-press focus-visible:outline-none focus-ring-emil active:scale-95"
             style={{
-              padding: 5, borderRadius: 8,
-              color: hovered === a.id ? "#f8fafc" : "#94a3b8",
-              background: hovered === a.id ? "rgba(255,255,255,0.10)" : "transparent",
+              padding: 5, borderRadius: 7,
+              color: hovered === a.id ? "#1c1c1e" : "#636366",
+              background: hovered === a.id ? "rgba(0,0,0,0.06)" : "transparent",
               border: "none", cursor: "pointer",
-              transition: "transform 0.16s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.15s ease-out, color 0.15s ease-out",
-              transform: hovered === a.id ? "translateY(-1px) scale(1.06)" : "none",
+              transition: "all 0.16s cubic-bezier(0.16, 1, 0.3, 1)",
+              transform: hovered === a.id ? "translateY(-1px) scale(1.05)" : "none",
             }}
           >
             {a.icon}
@@ -289,17 +282,17 @@ function VisionGlassHeaderComponent({
             title={focusMode ? "Exit Focus Workspace (Ctrl + Shift + F)" : "Enter Focus Workspace (Ctrl + Shift + F)"}
             aria-label={focusMode ? "Exit focus workspace" : "Enter focus workspace"}
             aria-pressed={focusMode}
-            className="vision-glass-focus-toggle spring-press focus-visible:outline-none focus-ring-emil"
+            className="vision-glass-focus-toggle spring-press focus-visible:outline-none focus-ring-emil active:scale-95"
             style={{
               display: "flex", alignItems: "center", gap: 5,
-              padding: "4px 8px", borderRadius: 9,
+              padding: "4px 8px", borderRadius: 8,
               fontSize: 9, fontWeight: 700,
-              color: focusMode ? "#07111f" : "#cbd5e1",
-              background: focusMode ? "#fbbf24" : "rgba(255,255,255,0.08)",
-              border: focusMode ? "1px solid rgba(251,191,36,0.85)" : "1px solid rgba(255,255,255,0.12)",
+              color: focusMode ? "#ffffff" : "#1c1c1e",
+              background: focusMode ? "#007aff" : "rgba(0,0,0,0.05)",
+              border: focusMode ? "1px solid rgba(0,122,255,0.85)" : "1px solid rgba(0,0,0,0.08)",
               cursor: "pointer",
-              transition: "transform 0.16s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.15s ease-out, box-shadow 0.18s ease-out",
-              boxShadow: focusMode ? "0 0 14px rgba(251,191,36,0.35)" : "none",
+              transition: "all 0.16s cubic-bezier(0.16, 1, 0.3, 1)",
+              boxShadow: focusMode ? "0 2px 8px rgba(0,122,255,0.25)" : "inset 0 1px 0 rgba(255,255,255,0.8)",
             }}
           >
             {focusMode ? <Minimize2 size={12} aria-hidden="true" /> : <Maximize2 size={12} aria-hidden="true" />}
@@ -314,21 +307,21 @@ function VisionGlassHeaderComponent({
             onClick={() => onSetUiTheme(uiTheme === "theme4" ? "theme3" : "theme4")}
             title={uiTheme === "theme4" ? "Active: UI 4 (Vision Glass) — Click to switch to Theme 3" : "Active: Theme 3 — Click to switch to UI 4 (Vision Glass)"}
             aria-label="Toggle UI theme"
-            className="spring-press focus-visible:outline-none focus-ring-emil"
+            className="spring-press focus-visible:outline-none focus-ring-emil active:scale-95"
             style={{
               display: "flex", alignItems: "center", gap: 5,
-              padding: "4px 8px", borderRadius: 9,
+              padding: "4px 8px", borderRadius: 8,
               fontSize: 9, fontWeight: 700,
-              color: "#fef3c7",
-              background: "rgba(245, 158, 11, 0.18)",
-              border: "1px solid rgba(245, 158, 11, 0.45)",
+              color: "#1c1c1e",
+              background: "rgba(0,122,255,0.08)",
+              border: "1px solid rgba(0,122,255,0.20)",
               cursor: "pointer",
-              transition: "transform 0.16s cubic-bezier(0.16, 1, 0.3, 1), background-color 0.15s ease-out, box-shadow 0.18s ease-out",
-              boxShadow: "0 0 10px rgba(245,158,11,0.18)",
+              transition: "all 0.16s cubic-bezier(0.16, 1, 0.3, 1)",
+              boxShadow: "inset 0 1px 0 rgba(255,255,255,0.8)",
             }}
           >
-            <Sparkles size={11} style={{ color: "#fbbf24" }} aria-hidden="true" />
-            <span style={{ fontFamily: "monospace", letterSpacing: "0.5px" }}>
+            <Sparkles size={11} style={{ color: "#007aff" }} aria-hidden="true" />
+            <span style={{ fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Display', sans-serif", letterSpacing: "0.2px" }}>
               {uiTheme === "theme4" ? "SWITCH TO THEME 3" : "UI 4 (VISION GLASS)"}
             </span>
           </button>

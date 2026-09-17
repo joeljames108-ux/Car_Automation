@@ -429,19 +429,9 @@ export const TrueModularVehicleBuilderStudio: React.FC<TrueModularVehicleBuilder
       </div>
 
       {/* =====================================================================
-          TOP RED-OUTLINED BOX: 3D CAD SUBSYSTEM GLB VIEWPORT
+          3D CAD MODULAR ASSEMBLY VIEWPORT
           ===================================================================== */}
-      <div className="relative rounded-2xl border-4 border-red-500/80 bg-slate-950/90 shadow-[0_0_35px_rgba(239,68,68,0.25)] p-2 transition-all">
-        <div className="absolute top-4 left-6 z-20 pointer-events-none flex items-center gap-2">
-          <span className="px-3 py-1 rounded-md bg-red-600/90 text-white text-[11px] font-black tracking-wider uppercase shadow-md flex items-center gap-1.5">
-            <span className="w-2 h-2 rounded-full bg-white animate-ping" />
-            GLB OF {activeStageDef.label.toUpperCase()}
-          </span>
-          <span className="text-xs text-slate-400 bg-slate-900/80 px-2.5 py-1 rounded-md border border-slate-700/60">
-            {activeStageDef.subsystemTitle} · {activeBodySpec.name}
-          </span>
-        </div>
-
+      <div className="relative rounded-2xl overflow-hidden shadow-2xl border border-slate-800/80 bg-slate-950/60 backdrop-blur-md">
         {/* 3D WebGL Canvas Viewport */}
         <ModularVehicleCanvasViewport />
       </div>
@@ -451,11 +441,16 @@ export const TrueModularVehicleBuilderStudio: React.FC<TrueModularVehicleBuilder
           ===================================================================== */}
       <div className="flex flex-col sm:flex-row items-center justify-between gap-4 py-2 px-3">
         <div className="flex items-center gap-3">
-          <div className="w-3 h-3 rounded-full bg-amber-500 animate-pulse" />
+          <div className="w-3 h-3 rounded-full bg-amber-500 animate-pulse shrink-0" />
           <div>
-            <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">
-              ACTIVE SUBSYSTEM NODE:
-            </span>
+            <div className="flex items-center gap-2 flex-wrap mb-0.5">
+              <span className="text-[10px] font-mono font-bold text-amber-400 uppercase tracking-widest">
+                ACTIVE SUBSYSTEM NODE:
+              </span>
+              <span className="text-[10px] font-mono text-slate-400 bg-slate-900/80 px-2 py-0.5 rounded border border-slate-700/50">
+                {activeStageDef.subsystemTitle} · {activeBodySpec.name}
+              </span>
+            </div>
             <h2 className="text-xl md:text-2xl font-black text-slate-100 tracking-wider uppercase">
               {activeStageDef.label}
             </h2>

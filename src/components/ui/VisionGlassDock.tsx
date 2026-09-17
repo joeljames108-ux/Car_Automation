@@ -33,14 +33,13 @@ function VisionGlassDockComponent({
 
   const activeCategoryStages = stages.filter((s) => s.category === activeCategory);
 
-  // Magnification effect calculation
+  // Smooth Gaussian magnification effect calculation
   const getMagnification = useCallback((idx: number) => {
     if (hoveredIdx === null) return 1;
     const distance = Math.abs(idx - hoveredIdx);
-    if (distance === 0) return 1.25;
-    if (distance === 1) return 1.12;
-    if (distance === 2) return 1.04;
-    return 1;
+    const sigma = 1.35;
+    const maxBoost = 0.26;
+    return Number((1 + maxBoost * Math.exp(-(distance * distance) / (2 * sigma * sigma))).toFixed(3));
   }, [hoveredIdx]);
 
   return (
@@ -89,19 +88,17 @@ function VisionGlassDockComponent({
           gap: 3,
           maxWidth: "100%",
           overflowX: "auto",
-          background: "rgba(255, 255, 255, 0.40)",
-          backdropFilter: "blur(28px) saturate(190%)",
-          WebkitBackdropFilter: "blur(28px) saturate(190%)",
-          border: "1.5px solid rgba(255, 255, 255, 0.90)",
+          background: "rgba(255, 255, 255, 0.55)",
+          backdropFilter: "blur(32px) saturate(200%)",
+          WebkitBackdropFilter: "blur(32px) saturate(200%)",
+          border: "1px solid rgba(255, 255, 255, 0.45)",
           boxShadow:
-            "0 14px 45px rgba(0, 0, 0, 0.12), " +
-            "0 4px 16px rgba(0, 0, 0, 0.06), " +
-            "inset 0 1px 0 rgba(255, 255, 255, 0.95), " +
-            "0 0 25px rgba(255, 220, 180, 0.25)",
+            "0 16px 40px rgba(0, 0, 0, 0.12), " +
+            "0 4px 16px rgba(0, 0, 0, 0.04), " +
+            "inset 0 1px 0 rgba(255, 255, 255, 0.95)",
           borderRadius: 22,
           padding: "5px 8px",
           transition: "transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease-out",
-          animation: "vg-prismatic-border 6s ease-in-out infinite",
         }}
         onKeyDown={(e) => {
           if (e.key === "ArrowRight" || e.key === "ArrowLeft") {
@@ -135,7 +132,7 @@ function VisionGlassDockComponent({
               }}
               onMouseEnter={() => setHoveredCat(cat.id)}
               onMouseLeave={() => setHoveredCat(null)}
-              className="spring-press focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-amber-500"
+              className="spring-press focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 active:scale-95"
               style={{
                 display: "flex",
                 alignItems: "center",
@@ -143,6 +140,7 @@ function VisionGlassDockComponent({
                 padding: "6px 14px",
                 borderRadius: 16,
                 fontSize: 11,
+                fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', Roboto, sans-serif",
                 fontWeight: active ? 700 : 500,
                 background: active
                   ? "rgba(0, 122, 255, 0.16)"
@@ -197,7 +195,7 @@ function VisionGlassDockComponent({
               aria-current={cur ? "page" : undefined}
               onMouseEnter={() => setHoveredIdx(idx)}
               onMouseLeave={() => setHoveredIdx(null)}
-              className={`spring-press focus-visible:outline-none focus-ring-emil ${cur ? "dock-item-active glass-glow-cyan" : ""}`}
+              className={`spring-press focus-visible:outline-none focus-ring-emil active:scale-95 ${cur ? "dock-item-active" : ""}`}
               style={{
                 display: "flex",
                 alignItems: "center",
@@ -205,6 +203,7 @@ function VisionGlassDockComponent({
                 padding: `${Math.round(5 * mag)}px ${Math.round(11 * mag)}px`,
                 borderRadius: Math.round(14 * mag),
                 fontSize: Math.round(11 * mag),
+                fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Segoe UI', Roboto, sans-serif",
                 fontWeight: cur ? 700 : 500,
                 background: cur
                   ? "rgba(0, 122, 255, 0.16)"

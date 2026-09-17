@@ -1,17 +1,17 @@
 {
   "architecture": "sedan",
   "era": "1970s",
-  "referenceVehicle": "BMW 2002 Turbo (E10)",
+  "referenceVehicle": "Mercedes-Benz S-Class (W116)",
   "inspirationOnly": true,
   "glb": "/models/vehicles/sedan/1970s/vehicle.glb",
   "designDNA": {
-    "proportions": "Compact 3-box notchback, length 4220mm, wheelbase 2500mm, upright profile",
-    "silhouette": "Sharknose forward canted front fascia, slim A/B/C pillars, high greenhouse ratio",
-    "greenhouse": "Tall upright glasshouse, chrome rain gutters, slim rubber-sealed windshield",
-    "hoodCabin": "Flat horizontal hood leading to upright windshield, short front overhang",
-    "surfacing": "Folded-paper planar stampings with pronounced horizontal waistline crease",
-    "aeroPhilosophy": "Early deep front air dam to counter high-speed front lift; high Cd 0.42",
-    "wheels": "13-inch steel or early alloy wheels with bolted-on fiberglass flare arches",
-    "engineering": "Steel unibody with front MacPherson struts and rear semi-trailing arms"
+    "proportions": "Full-size flagship 3-box saloon, length 4960mm, wheelbase 2865mm, commanding executive stance",
+    "silhouette": "Horizontal wedge profile with wide stance, sweeping beltline, and formal upright greenhouse",
+    "greenhouse": "Pillar-supported stately glasshouse, polished chrome drip rails, heat-absorbing safety glass",
+    "hoodCabin": "Elongated sculpted hood with central power crease leading to prominent upright chrome radiator grille",
+    "surfacing": "Class-A precision stampings, full-length waistline chrome strip, integrated rubber side-impact rub strips",
+    "aeroPhilosophy": "Integrated front air spoiler under chrome bumper, ribbed dirt-deflecting taillamp lenses; Cd 0.41",
+    "wheels": "14-inch Bundt forged light-alloy radiating fluted wheels with 205/70 VR14 Michelin tires",
+    "engineering": "Pioneering safety cell monocoque with crumple zones, double-wishbone front suspension, zero-offset steering"
   }
 }

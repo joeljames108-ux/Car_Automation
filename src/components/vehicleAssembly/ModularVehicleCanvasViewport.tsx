@@ -390,16 +390,17 @@ export const ModularVehicleCanvasViewport: React.FC = () => {
     // Load missing stage groups
     const loader = gltfLoaderRef.current;
     const loadPromises = stagesToDisplay.map((stageId) => {
-      // If already loaded for current model AND has child meshes, keep it
+      // If already loaded for current model AND has child meshes (and not a fallback proxy), keep it
       const existing = currentMap.get(stageId);
       if (existing && groupMatchesModel(existing, selectedModel)) {
         if (existing.parent !== root) {
           root.add(existing);
         }
-        if (existing.children.length > 0) {
+        const hasFallback = (existing as any).hasFallbackProxy || existing.children.some((c) => (c as any).isFallbackProxy);
+        if (existing.children.length > 0 && !hasFallback) {
           return Promise.resolve();
         }
-        // Stale empty group: remove and reload
+        // Stale empty or proxy fallback group: remove and reload actual asset
         root.remove(existing);
         currentMap.delete(stageId);
       }
@@ -589,7 +590,10 @@ export const ModularVehicleCanvasViewport: React.FC = () => {
                       mesh.receiveShadow = true;
 
                       // If exterior panel, customize body color (preserve structural framework steel)
-                      const isSkeleton = mesh.name.startsWith("FRAMEWORK_") || mesh.name.startsWith("CHASSIS_");
+                      const isSkeleton =
+                        mesh.name.startsWith("FRAMEWORK_") ||
+                        mesh.name.startsWith("CHASSIS_") ||
+                        Boolean(mesh.parent && (mesh.parent.name.startsWith("FRAMEWORK_") || mesh.parent.name.startsWith("CHASSIS_")));
                       if (stageId === "exterior_panels" && !isSkeleton && mesh.material) {
                         const mats = Array.isArray(mesh.material) ? mesh.material : [mesh.material];
                         mats.forEach((m, idx) => {
@@ -653,6 +657,7 @@ export const ModularVehicleCanvasViewport: React.FC = () => {
                       }
                     }
                   });
+                  removeFallbackProxies(stageGroup);
                   partGroup.add(modelScene);
                   resolve();
                 },
@@ -703,6 +708,7 @@ export const ModularVehicleCanvasViewport: React.FC = () => {
                       }
                     }
                   });
+                  removeFallbackProxies(stageGroup);
                   partGroup.add(modelScene);
                   if (stageGroup.parent !== root) {
                     root.add(stageGroup);
@@ -801,6 +807,7 @@ export const ModularVehicleCanvasViewport: React.FC = () => {
                       }
                     }
                   });
+                  removeFallbackProxies(stageGroup);
                   partGroup.add(modelScene);
                   resolve();
                 },
@@ -833,6 +840,7 @@ export const ModularVehicleCanvasViewport: React.FC = () => {
                       mesh.receiveShadow = true;
                     }
                   });
+                  removeFallbackProxies(stageGroup);
                   stageGroup.add(modelScene);
                   resolve();
                 },
@@ -1028,6 +1036,8 @@ export const ModularVehicleCanvasViewport: React.FC = () => {
   // Fallback Proxy Mesh Generator (Safety Net)
   // --------------------------------------------------------------------------
   function createFallbackProxyGeometry(stageId: string, parentGroup: THREE.Group) {
+    (parentGroup as any).hasFallbackProxy = true;
+    if (parentGroup.children.some((c) => (c as any).isFallbackProxy || c.name.startsWith("FallbackProxy_"))) return;
     const geo = new THREE.BoxGeometry(1.2, 0.4, 0.8);
     const mat = new THREE.MeshStandardMaterial({
       color: 0x00f0ff,
@@ -1035,8 +1045,21 @@ export const ModularVehicleCanvasViewport: React.FC = () => {
       roughness: 0.4,
     });
     const mesh = new THREE.Mesh(geo, mat);
+    mesh.name = `FallbackProxy_${stageId}`;
+    (mesh as any).isFallbackProxy = true;
     mesh.position.set(0, 0.4, 0);
     parentGroup.add(mesh);
+  }
+
+  function removeFallbackProxies(parentGroup: THREE.Group) {
+    (parentGroup as any).hasFallbackProxy = false;
+    const toRemove = parentGroup.children.filter(
+      (c) => (c as any).isFallbackProxy || c.name.startsWith("FallbackProxy_")
+    );
+    toRemove.forEach((c) => {
+      parentGroup.remove(c);
+      if ((c as THREE.Mesh).geometry) (c as THREE.Mesh).geometry.dispose();
+    });
   }
 
   // --------------------------------------------------------------------------
@@ -1105,7 +1128,7 @@ export const ModularVehicleCanvasViewport: React.FC = () => {
 
       {/* Error Banner */}
       {loadError && (
-        <div className="absolute top-4 left-4 right-4 bg-red-950/80 border border-red-500/40 text-red-200 text-xs font-mono p-2.5 rounded-xl z-30">
+        <div className="absolute top-14 left-3.5 right-3.5 bg-red-950/90 border border-red-500/50 text-red-200 text-xs font-mono p-2.5 rounded-xl z-30 shadow-xl backdrop-blur-md">
           ⚠️ {loadError}
         </div>
       )}
@@ -1113,9 +1136,9 @@ export const ModularVehicleCanvasViewport: React.FC = () => {
       {/* =====================================================================
           TOP CONTROLS BAR: Dual Mode Toggle & Camera Presets
           ===================================================================== */}
-      <div className="absolute top-3.5 left-3.5 right-3.5 flex flex-wrap items-center justify-between gap-2 z-20 pointer-events-auto">
-        {/* Left: Dual Viewport Mode Toggle (As shown in Wireframe 3) */}
-        <div className="flex items-center gap-1 p-1 rounded-xl bg-slate-900/85 backdrop-blur-md border border-slate-700/60 shadow-lg font-mono text-[11px]">
+      <div className="absolute top-3 left-3 right-3 flex items-center justify-between gap-2 z-20 pointer-events-auto">
+        {/* Left: Dual Viewport Mode Toggle */}
+        <div className="flex items-center gap-1 p-1 rounded-xl bg-slate-900/90 backdrop-blur-md border border-slate-700/60 shadow-lg font-mono text-[11px] shrink-0">
           <button
             type="button"
             onClick={() => {
@@ -1125,14 +1148,16 @@ export const ModularVehicleCanvasViewport: React.FC = () => {
                 setViewportMode("subsystem_isolated");
               }
             }}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-bold transition-all cursor-pointer ${
+            className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg font-bold transition-all cursor-pointer ${
               (currentStage === "complete" ? explodedProgress > 0 : viewportMode === "subsystem_isolated")
                 ? "bg-cyan-500/25 text-cyan-300 border border-cyan-500/50 shadow-sm"
                 : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/60 border border-transparent"
             }`}
           >
-            <Box size={13} className="text-cyan-400" />
-            <span>{currentStage === "complete" ? "EXPLODED PARTS VIEW" : "ISOLATED PART GLB"}</span>
+            <Box size={13} className="text-cyan-400 shrink-0" />
+            <span className="whitespace-nowrap">
+              {currentStage === "complete" ? "EXPLODED" : "ISOLATED"}
+            </span>
           </button>
           <button
             type="button"
@@ -1142,28 +1167,30 @@ export const ModularVehicleCanvasViewport: React.FC = () => {
               }
               setViewportMode("accumulated");
             }}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-bold transition-all cursor-pointer ${
+            className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg font-bold transition-all cursor-pointer ${
               (currentStage === "complete" ? explodedProgress === 0 : viewportMode === "accumulated")
                 ? "bg-emerald-500/25 text-emerald-300 border border-emerald-500/50 shadow-sm"
                 : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/60 border border-transparent"
             }`}
           >
-            <Layers size={13} className="text-emerald-400" />
-            <span>{currentStage === "complete" ? "COMPLETE ASSEMBLED CAR" : "ACCUMULATED CAR GLB"}</span>
-            <span className="text-[9px] px-1.5 py-0.2 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-extrabold">
-              {installedStages.length} INSTALLED
+            <Layers size={13} className="text-emerald-400 shrink-0" />
+            <span className="whitespace-nowrap">
+              {currentStage === "complete" ? "COMPLETE" : "ACCUMULATED"}
+            </span>
+            <span className="text-[9px] px-1.5 py-0.2 rounded-full bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 font-extrabold whitespace-nowrap">
+              {installedStages.length}
             </span>
           </button>
         </div>
 
         {/* Right: Camera Angles & Visual Modes */}
-        <div className="flex items-center gap-1 p-1 rounded-xl bg-slate-900/85 backdrop-blur-md border border-slate-700/60 shadow-lg font-mono text-[10px]">
+        <div className="flex items-center gap-0.5 sm:gap-1 p-1 rounded-xl bg-slate-900/90 backdrop-blur-md border border-slate-700/60 shadow-lg font-mono text-[10px] shrink-0 overflow-x-auto no-scrollbar">
           {(["iso", "front", "side", "rear", "top"] as const).map((preset) => (
             <button
               key={preset}
               type="button"
               onClick={() => applyCameraPreset(preset)}
-              className={`px-2 py-1 rounded-md font-bold uppercase transition-all cursor-pointer ${
+              className={`px-1.5 sm:px-2 py-1 rounded-md font-bold uppercase transition-all cursor-pointer ${
                 activeCamPreset === preset
                   ? "bg-amber-500/25 text-amber-300 border border-amber-500/50"
                   : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/50 border border-transparent"
@@ -1173,20 +1200,20 @@ export const ModularVehicleCanvasViewport: React.FC = () => {
             </button>
           ))}
 
-          <div className="w-px h-4 bg-slate-700/60 mx-1" />
+          <div className="w-px h-3.5 bg-slate-700/60 mx-0.5" />
 
           {/* X-Ray Toggle */}
           <button
             type="button"
             onClick={() => setIsXRay(!isXRay)}
             title="Toggle X-Ray Wireframe"
-            className={`p-1.5 rounded-md transition-all cursor-pointer ${
+            className={`p-1 sm:p-1.5 rounded-md transition-all cursor-pointer ${
               isXRay
                 ? "bg-purple-500/25 text-purple-300 border border-purple-500/50"
                 : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/50 border border-transparent"
             }`}
           >
-            {isXRay ? <Eye size={13} /> : <EyeOff size={13} />}
+            {isXRay ? <Eye size={12} /> : <EyeOff size={12} />}
           </button>
 
           {/* Auto-Rotate Toggle */}
@@ -1194,13 +1221,13 @@ export const ModularVehicleCanvasViewport: React.FC = () => {
             type="button"
             onClick={() => setIsAutoRotate(!isAutoRotate)}
             title="Toggle 360 Auto-Rotate"
-            className={`p-1.5 rounded-md transition-all cursor-pointer ${
+            className={`p-1 sm:p-1.5 rounded-md transition-all cursor-pointer ${
               isAutoRotate
                 ? "bg-cyan-500/25 text-cyan-300 border border-cyan-500/50"
                 : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/50 border border-transparent"
             }`}
           >
-            <RotateCcw size={13} className={isAutoRotate ? "animate-spin" : ""} />
+            <RotateCcw size={12} className={isAutoRotate ? "animate-spin" : ""} />
           </button>
 
           {/* Reset View */}
@@ -1208,42 +1235,43 @@ export const ModularVehicleCanvasViewport: React.FC = () => {
             type="button"
             onClick={() => applyCameraPreset("iso")}
             title="Reset Camera Target"
-            className="p-1.5 rounded-md text-slate-400 hover:text-slate-200 hover:bg-slate-800/50 transition-all cursor-pointer border border-transparent"
+            className="p-1 sm:p-1.5 rounded-md text-slate-400 hover:text-slate-200 hover:bg-slate-800/50 transition-all cursor-pointer border border-transparent"
           >
-            <Maximize2 size={13} />
+            <Maximize2 size={12} />
           </button>
 
-          <div className="w-px h-4 bg-slate-700/60 mx-1" />
+          <div className="w-px h-3.5 bg-slate-700/60 mx-0.5" />
 
           {/* Attachment Points (CAD Anchors) Toggle */}
           <button
             type="button"
             onClick={() => setShowAttachmentPoints(!showAttachmentPoints)}
             title={showAttachmentPoints ? "Hide 16 CAD Hardpoint Attachment Anchors" : "Show 16 CAD Hardpoint Attachment Anchors"}
-            className={`px-2 py-1 rounded-md text-[10px] font-extrabold flex items-center gap-1.5 transition-all cursor-pointer ${
+            className={`px-1.5 sm:px-2 py-1 rounded-md text-[10px] font-extrabold flex items-center gap-1 transition-all cursor-pointer ${
               showAttachmentPoints
                 ? "bg-cyan-500/30 text-cyan-200 border border-cyan-400 shadow-[0_0_12px_rgba(6,182,212,0.4)]"
                 : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/50 border border-transparent"
             }`}
           >
-            <Crosshair size={12} className={showAttachmentPoints ? "text-cyan-300 animate-pulse" : ""} />
-            <span>CAD ANCHORS</span>
+            <Crosshair size={11} className={showAttachmentPoints ? "text-cyan-300 animate-pulse" : ""} />
+            <span className="hidden sm:inline">CAD ANCHORS</span>
+            <span className="sm:hidden">CAD</span>
           </button>
 
-          <div className="w-px h-4 bg-slate-700/60 mx-1" />
+          <div className="w-px h-3.5 bg-slate-700/60 mx-0.5" />
 
           {/* Light / Dark Studio Environment Toggle */}
           <button
             type="button"
             onClick={() => setViewportTheme(viewportTheme === "light" ? "dark" : "light")}
             title={viewportTheme === "light" ? "Switch to Dark Studio" : "Switch to Light Studio"}
-            className={`p-1.5 rounded-md transition-all cursor-pointer ${
+            className={`p-1 sm:p-1.5 rounded-md transition-all cursor-pointer ${
               viewportTheme === "light"
                 ? "bg-amber-500/25 text-amber-300 border border-amber-500/50"
                 : "text-slate-400 hover:text-slate-200 hover:bg-slate-800/50 border border-transparent"
             }`}
           >
-            {viewportTheme === "light" ? <Sun size={13} /> : <Moon size={13} />}
+            {viewportTheme === "light" ? <Sun size={12} /> : <Moon size={12} />}
           </button>
         </div>
       </div>

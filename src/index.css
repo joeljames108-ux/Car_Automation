@@ -2,6 +2,25 @@
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
 
+:root {
+  /* ── Motion & Animation Tokens (Emil Kowalski / visionOS Standard) ── */
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --ease-spring: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+  
+  --duration-press: 120ms;
+  --duration-fast: 160ms;
+  --duration-normal: 220ms;
+  --duration-smooth: 300ms;
+
+  /* ── Glassmorphism Tokens ── */
+  --glass-bg: rgba(22, 30, 49, 0.65);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --glass-highlight: rgba(255, 255, 255, 0.12);
+  --glass-blur: blur(24px) saturate(190%);
+}
+
 @layer base {
   * {
     border-color: rgba(30, 41, 59, 0.6);
@@ -27,43 +46,55 @@
   }
 }
 
+/* ── Global Accessibility: Prefers Reduced Motion ── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
 @layer components {
 
   /* Apple Liquid Glass Panel */
   .panel {
-    background: linear-gradient(135deg, rgba(22, 30, 49, 0.65) 0%, rgba(11, 16, 28, 0.75) 100%);
-    backdrop-filter: blur(20px) saturate(180%);
-    -webkit-backdrop-filter: blur(20px) saturate(180%);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: linear-gradient(135deg, rgba(22, 30, 49, 0.70) 0%, rgba(11, 16, 28, 0.80) 100%);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
+    border: 1px solid var(--glass-border);
     box-shadow:
       0 20px 40px -15px rgba(0, 0, 0, 0.6),
-      inset 0 1px 1px 0 rgba(255, 255, 255, 0.12),
+      inset 0 1px 1px 0 var(--glass-highlight),
       inset 0 -1px 1px 0 rgba(0, 0, 0, 0.4);
     border-radius: 1rem;
     position: relative;
-    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    transition: transform var(--duration-normal) var(--ease-out), border-color var(--duration-fast) ease, box-shadow var(--duration-normal) var(--ease-out);
   }
 
   .panel:hover {
-    border-color: rgba(255, 255, 255, 0.14);
+    border-color: rgba(255, 255, 255, 0.16);
     box-shadow:
       0 24px 48px -12px rgba(0, 0, 0, 0.7),
-      0 0 20px -5px rgba(0, 229, 255, 0.10),
-      inset 0 1px 1px 0 rgba(255, 255, 255, 0.18);
+      0 0 20px -5px rgba(0, 229, 255, 0.12),
+      inset 0 1px 1px 0 rgba(255, 255, 255, 0.20);
   }
 
   .panel-glow {
-    background: linear-gradient(135deg, rgba(22, 30, 49, 0.65) 0%, rgba(11, 16, 28, 0.75) 100%);
-    backdrop-filter: blur(20px) saturate(180%);
-    -webkit-backdrop-filter: blur(20px) saturate(180%);
+    background: linear-gradient(135deg, rgba(22, 30, 49, 0.70) 0%, rgba(11, 16, 28, 0.80) 100%);
+    backdrop-filter: var(--glass-blur);
+    -webkit-backdrop-filter: var(--glass-blur);
     border-radius: 1rem;
     position: relative;
-    transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-    border-color: rgba(0, 229, 255, 0.30);
+    transition: transform var(--duration-normal) var(--ease-out), border-color var(--duration-fast) ease, box-shadow var(--duration-normal) var(--ease-out);
+    border: 1px solid rgba(0, 229, 255, 0.35);
     box-shadow:
-      0 0 25px rgba(0, 229, 255, 0.15),
+      0 0 25px rgba(0, 229, 255, 0.18),
       0 20px 40px -15px rgba(0, 0, 0, 0.7),
-      inset 0 1px 1px 0 rgba(255, 255, 255, 0.2);
+      inset 0 1px 1px 0 rgba(255, 255, 255, 0.22);
   }
 
   .label-mono {
@@ -76,39 +107,45 @@
   }
 
   .btn-primary {
-    background: linear-gradient(135deg, rgba(14, 165, 233, 0.25) 0%, rgba(14, 165, 233, 0.15) 100%);
-    backdrop-filter: blur(12px);
-    border: 1px solid rgba(0, 229, 255, 0.40);
+    background: linear-gradient(135deg, rgba(14, 165, 233, 0.28) 0%, rgba(14, 165, 233, 0.16) 100%);
+    backdrop-filter: blur(14px);
+    border: 1px solid rgba(0, 229, 255, 0.45);
     color: #7dd3fc;
-    box-shadow: 0 4px 12px rgba(14, 165, 233, 0.2), inset 0 1px 1px rgba(255, 255, 255, 0.2);
-    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 0 4px 12px rgba(14, 165, 233, 0.2), inset 0 1px 1px rgba(255, 255, 255, 0.22);
+    transition: transform var(--duration-fast) var(--ease-out), background-color var(--duration-fast) ease, border-color var(--duration-fast) ease, box-shadow var(--duration-fast) ease;
   }
 
-  .btn-primary:hover {
-    background-color: rgba(0, 229, 255, 0.25);
-    border-color: rgba(0, 229, 255, 0.60);
-    box-shadow: 0 0 16px rgba(0, 229, 255, 0.35);
+  @media (hover: hover) and (pointer: fine) {
+    .btn-primary:hover {
+      background-color: rgba(0, 229, 255, 0.28);
+      border-color: rgba(0, 229, 255, 0.70);
+      box-shadow: 0 0 18px rgba(0, 229, 255, 0.40);
+      transform: translateY(-1px);
+    }
   }
 
   .btn-primary:active {
-    transform: scale(0.98);
+    transform: scale(0.97);
   }
 
   .btn-secondary {
-    background: rgba(30, 41, 59, 0.5);
-    backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    color: #78350f;
-    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    background: rgba(30, 41, 59, 0.55);
+    backdrop-filter: blur(14px);
+    border: 1px solid rgba(255, 255, 255, 0.10);
+    color: #e2e8f0;
+    transition: transform var(--duration-fast) var(--ease-out), background-color var(--duration-fast) ease, border-color var(--duration-fast) ease;
   }
 
-  .btn-secondary:hover {
-    background-color: rgba(30, 41, 59, 0.7);
-    border-color: #334155;
+  @media (hover: hover) and (pointer: fine) {
+    .btn-secondary:hover {
+      background: rgba(51, 65, 85, 0.75);
+      border-color: rgba(255, 255, 255, 0.18);
+      transform: translateY(-1px);
+    }
   }
 
   .btn-secondary:active {
-    transform: scale(0.98);
+    transform: scale(0.97);
   }
 
   /* ── Emil Kowalski Design Engineering Utilities ── */
@@ -3821,15 +3858,7 @@ a,
   100% { background-position: 200% 0; }
 }
 
-/* Prismatic border shimmer — shifts hue around the edge */
-@keyframes vg-prismatic-border {
-  0%   { border-color: rgba(255, 200, 150, 0.40); }
-  20%  { border-color: rgba(255, 220, 180, 0.35); }
-  40%  { border-color: rgba(180, 220, 255, 0.40); }
-  60%  { border-color: rgba(200, 180, 255, 0.35); }
-  80%  { border-color: rgba(255, 180, 200, 0.35); }
-  100% { border-color: rgba(255, 200, 150, 0.40); }
-}
+/* Clean visionOS specular highlight */
 
 /* Subtle caustic ripple for inner glass */
 @keyframes vg-caustic-pulse {
@@ -3837,12 +3866,24 @@ a,
   50%      { opacity: 0.55; transform: scale(1.02); }
 }
 
-/* === Liquid Glass Panels — Prismatic Border Shimmer === */
+/* === Liquid Glass Panels — Clean Specular Vision Glass (Apple Design) === */
 .theme4 .vision-glass-content .panel,
 .theme4 .vision-glass-content .panel-glow,
 .theme4 .vision-glass-content .glass-panel {
-  border: 1.5px solid rgba(255, 220, 180, 0.40) !important;
-  animation: vg-prismatic-border 6s ease-in-out infinite !important;
+  border: 1px solid rgba(255, 255, 255, 0.28) !important;
+  box-shadow:
+    0 12px 32px rgba(0, 0, 0, 0.08),
+    0 2px 8px rgba(0, 0, 0, 0.04),
+    inset 0 1px 0 rgba(255, 255, 255, 0.70) !important;
+  animation: none !important;
+}
+
+/* === Apple Design: Instant pointer-down tactile response === */
+.theme4 button:active,
+.theme4 .btn-interactive:active,
+.theme4 .spring-press:active {
+  transform: scale(0.96) !important;
+  transition: transform 100ms cubic-bezier(0.16, 1, 0.3, 1) !important;
 }
 
 /* === Liquid Glass Refraction Layer (::before) — Ambient Light Sweep === */
@@ -7614,6 +7655,14 @@ button:active,
 
 .vision-glass-unit-short {
   display: none;
+}
+
+@media (min-width: 1281px) and (max-width: 1600px) {
+  .vision-glass-window {
+    width: min(calc(100vw - 140px), 1440px) !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+  }
 }
 
 @media (max-width: 1280px) {

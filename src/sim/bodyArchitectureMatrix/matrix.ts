@@ -55,17 +55,17 @@ export const BODY_ARCHITECTURE_MATRIX: Record<BodyArchitectureId, Record<Vehicle
   // 1. SEDAN
   sedan: {
     "1970s": {
-      architecture: "sedan", era: "1970s", referenceVehicle: "BMW 2002 Turbo (E10)", inspirationOnly: true,
+      architecture: "sedan", era: "1970s", referenceVehicle: "Mercedes-Benz S-Class (W116)", inspirationOnly: true,
       glb: "/models/vehicles/sedan/1970s/vehicle.glb", fallbackGlb: "/assets/vehicles/vehicle_sedan.glb",
       designDNA: {
-        proportions: "Compact 3-box notchback, length 4220mm, wheelbase 2500mm, upright profile",
-        silhouette: "Sharknose forward canted front fascia, slim A/B/C pillars, high greenhouse ratio",
-        greenhouse: "Tall upright glasshouse, chrome rain gutters, slim rubber-sealed windshield",
-        hoodCabin: "Flat horizontal hood leading to upright windshield, short front overhang",
-        surfacing: "Folded-paper planar stampings with pronounced horizontal waistline crease",
-        aeroPhilosophy: "Early deep front air dam to counter high-speed front lift; high Cd 0.42",
-        wheels: "13-inch steel or early alloy wheels with bolted-on fiberglass flare arches",
-        engineering: "Steel unibody with front MacPherson struts and rear semi-trailing arms",
+        proportions: "Full-size flagship 3-box saloon, length 4960mm, wheelbase 2865mm, commanding executive stance",
+        silhouette: "Horizontal wedge profile with wide stance, sweeping beltline, and formal upright greenhouse",
+        greenhouse: "Pillar-supported stately glasshouse, polished chrome drip rails, heat-absorbing safety glass",
+        hoodCabin: "Elongated sculpted hood with central power crease leading to prominent upright chrome radiator grille",
+        surfacing: "Class-A precision stampings, full-length waistline chrome strip, integrated rubber side-impact rub strips",
+        aeroPhilosophy: "Integrated front air spoiler under chrome bumper, ribbed dirt-deflecting taillamp lenses; Cd 0.41",
+        wheels: "14-inch Bundt forged light-alloy radiating fluted wheels with 205/70 VR14 Michelin tires",
+        engineering: "Pioneering safety cell monocoque with crumple zones, double-wishbone front suspension, zero-offset steering",
       },
     },
     "1980s": {
@@ -125,7 +125,7 @@ export const BODY_ARCHITECTURE_MATRIX: Record<BodyArchitectureId, Record<Vehicle
       },
     },
     "2020s": {
-      architecture: "sedan", era: "2020s", referenceVehicle: "Porsche Taycan Turbo S", inspirationOnly: true,
+      architecture: "sedan", era: "2020s", referenceVehicle: "Honda Civic Sedan (11th Gen)", inspirationOnly: true,
       glb: "/models/vehicles/sedan/2020s/vehicle.glb", fallbackGlb: "/assets/vehicles/vehicle_sedan.glb",
       designDNA: {
         proportions: "Modern compact executive sedan proportions, length 4674mm, height 1415mm, wheelbase 2735mm",
@@ -301,7 +301,7 @@ export const BODY_ARCHITECTURE_MATRIX: Record<BodyArchitectureId, Record<Vehicle
       },
     },
     "2000s": {
-      architecture: "coupe", era: "2000s", referenceVehicle: "Nissan GT-R R35", inspirationOnly: true,
+      architecture: "coupe", era: "2000s", referenceVehicle: "Nissan Skyline GT-R (R34) / GT-R (R35)", inspirationOnly: true,
       glb: "/models/vehicles/coupe/2000s/vehicle.glb", fallbackGlb: "/assets/vehicles/vehicle_coupe.glb",
       designDNA: {
         proportions: "Muscular mechanical sculpture, length 4655mm, width 1895mm, wheelbase 2780mm",
@@ -853,17 +853,17 @@ export const BODY_ARCHITECTURE_MATRIX: Record<BodyArchitectureId, Record<Vehicle
       },
     },
     future: {
-      architecture: "hypercar", era: "future", referenceVehicle: "Koenigsegg Gemera", inspirationOnly: true,
+      architecture: "hypercar", era: "future", referenceVehicle: "Koenigsegg Jesko Attack", inspirationOnly: true,
       glb: "/models/vehicles/hypercar/future/vehicle.glb", fallbackGlb: "/assets/vehicles/vehicle_hypercar.glb",
       designDNA: {
-        proportions: "Four-seater mega-GT hypercar, length 4975mm, width 1988mm, wheelbase 3000mm",
-        silhouette: "Jet-fighter wraparound greenhouse with automated Dihedral Synchro-Helix doors",
-        greenhouse: "Pillarless side glass with full access to front and rear rows via single door",
-        hoodCabin: "Low aerodynamic nose with camera side mirrors and front hood cooling channel",
-        surfacing: "Seamless pre-preg carbon fiber coachwork devoid of unnecessary panel lines",
-        aeroPhilosophy: "Underfloor venturis, active rear spoiler, laminar flow optimization; Cd 0.28",
-        wheels: "21-inch front / 22-inch rear Aircore hollow carbon fiber wheels",
-        engineering: "Carbon monocoque housing Dark Matter e-motor and twin-turbo Freevalve engine",
+        proportions: "Extreme track-focused megacar, length 4610mm, width 2030mm, height 1210mm, wheelbase 2700mm",
+        silhouette: "Fighter-jet canopy with massive top-mounted active swan-neck dual-element rear wing",
+        greenhouse: "Panoramic wraparound jet-fighter glasshouse with automated Dihedral Synchro-Helix actuation",
+        hoodCabin: "Deep front hood aerodynamic flow channel extracting high-pressure air over roof",
+        surfacing: "Autoskin pre-preg carbon fiber coachwork with active front underbody diffusers",
+        aeroPhilosophy: "Generates 800 kg downforce at 250 km/h and up to 1400 kg at peak velocity; Cd 0.28",
+        wheels: "20-inch front / 21-inch rear Aircore hollow carbon fiber wheels",
+        engineering: "Carbon monocoque with flat-plane 5.0L twin-turbo V8 producing 1600 hp and 9-speed Light Speed Transmission (LST)",
       },
     },
   },
@@ -1553,7 +1553,7 @@ export const BODY_ARCHITECTURE_MATRIX: Record<BodyArchitectureId, Record<Vehicle
       },
     },
     "2020s": {
-      architecture: "crossover", era: "2020s", referenceVehicle: "Hyundai Ioniq 5", inspirationOnly: true,
+      architecture: "crossover", era: "2020s", referenceVehicle: "Ferrari Purosangue", inspirationOnly: true,
       glb: "/models/vehicles/crossover/2020s/vehicle.glb", fallbackGlb: "/assets/vehicles/vehicle_crossover.glb",
       designDNA: {
         proportions: "High-riding four-door V12 crossover sculpture, length 4973mm, width 2028mm, height 1589mm",
@@ -1655,7 +1655,7 @@ export const BODY_ARCHITECTURE_MATRIX: Record<BodyArchitectureId, Record<Vehicle
       },
     },
     "2020s": {
-      architecture: "suv", era: "2020s", referenceVehicle: "Cadillac Escalade-V", inspirationOnly: true,
+      architecture: "suv", era: "2020s", referenceVehicle: "BMW XM", inspirationOnly: true,
       glb: "/models/vehicles/suv/2020s/vehicle.glb", fallbackGlb: "/assets/vehicles/vehicle_suv.glb",
       designDNA: {
         proportions: "High-performance luxury M flagship SUV, length 5110mm, width 2005mm, height 1755mm",

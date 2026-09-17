@@ -1,17 +1,17 @@
 {
-  "auditTimestamp": "2026-09-15T18:14:08.162Z",
+  "auditTimestamp": "2026-09-17T16:24:10.343Z",
   "projectName": "Modular glTF Vehicle Construction System & Car Automation Simulator",
   "rootDirectory": "E:\\Car_Automation",
   "totalSourceFiles": 1207,
-  "totalCodeLines": 292714,
+  "totalCodeLines": 292814,
   "totalCommentLines": 27563,
-  "totalBlankLines": 34716,
-  "totalSizeBytes": 15495055,
+  "totalBlankLines": 34726,
+  "totalSizeBytes": 15498393,
   "subsystemBreakdown": {
     "simulation_core": {
       "fileCount": 282,
-      "codeLines": 61858,
-      "sizeBytes": 3724908
+      "codeLines": 61866,
+      "sizeBytes": 3724343
     },
     "engine_assembly": {
       "fileCount": 75,
@@ -20,13 +20,13 @@
     },
     "modular_vehicle": {
       "fileCount": 104,
-      "codeLines": 31435,
-      "sizeBytes": 1627450
+      "codeLines": 31458,
+      "sizeBytes": 1628854
     },
     "exterior_3d": {
       "fileCount": 324,
-      "codeLines": 75729,
-      "sizeBytes": 3843804
+      "codeLines": 75781,
+      "sizeBytes": 3845869
     },
     "rendering_engine": {
       "fileCount": 15,
@@ -45,18 +45,18 @@
     },
     "ui_components": {
       "fileCount": 241,
-      "codeLines": 66747,
-      "sizeBytes": 3462484
+      "codeLines": 66742,
+      "sizeBytes": 3462449
     },
     "asset_pipeline": {
       "fileCount": 1,
-      "codeLines": 73,
-      "sizeBytes": 3506
+      "codeLines": 72,
+      "sizeBytes": 3445
     },
     "testing_verification": {
       "fileCount": 86,
-      "codeLines": 13880,
-      "sizeBytes": 759628
+      "codeLines": 13903,
+      "sizeBytes": 760158
     },
     "documentation_audit": {
       "fileCount": 10,
@@ -348,7 +348,6 @@
       "src/sim/agents/assistants/comparisonAssistant.ts",
       "src/sim/agents/assistants/tutorialAssistant.ts",
       "src/sim/benchmarks/_build.js",
-      "src/sim/bodyArchitectureMatrix/index.ts",
       "src/sim/bodyArchitectureMatrix/matrix.ts",
       "src/sim/bodyArchitectureMatrix/types.ts",
       "src/sim/brakes/brakeThermalSolver.ts",
@@ -974,7 +973,7 @@
         "outDegree": 0
       },
       {
-        "modulePath": "src/sim/vehiclePresets.ts",
+        "modulePath": "src/sim/vehicleArchitecture/architectureIdCompat.ts",
         "inDegree": 4,
         "outDegree": 2
       },
@@ -2078,7 +2077,6 @@
       "src/sim/agents/assistants/comparisonAssistant.ts",
       "src/sim/agents/assistants/tutorialAssistant.ts",
       "src/sim/benchmarks/_build.js",
-      "src/sim/bodyArchitectureMatrix/index.ts",
       "src/sim/bodyArchitectureMatrix/matrix.ts",
       "src/sim/brakes/brakeThermalSolver.ts",
       "src/sim/competitorTypes.ts",
@@ -2159,7 +2157,7 @@
     "largeFilesExceeding500Lines": [
       {
         "filePath": "src/App.tsx",
-        "lineCount": 698
+        "lineCount": 697
       },
       {
         "filePath": "src/components/aeroStudio/AeroControlDeck.tsx",
@@ -2371,7 +2369,7 @@
       },
       {
         "filePath": "src/components/vehicleAssembly/ModularVehicleCanvasViewport.tsx",
-        "lineCount": 1314
+        "lineCount": 1342
       },
       {
         "filePath": "src/components/vehicleAssembly/scene/ModularAssemblySceneGraph.ts",
@@ -2383,7 +2381,7 @@
       },
       {
         "filePath": "src/components/vehicleAssembly/TrueModularVehicleBuilderStudio.tsx",
-        "lineCount": 1307
+        "lineCount": 1302
       },
       {
         "filePath": "src/components/vehicleAssembly/typeSelection/ArchitectureEraPicker.tsx",
@@ -2787,7 +2785,7 @@
       },
       {
         "filePath": "src/sim/vehicleArchitecture/vehicleArchitectureMatrix.ts",
-        "lineCount": 3377
+        "lineCount": 3386
       },
       {
         "filePath": "src/sim/vehicleArchitecture/vehicleArchitectureRegistry.ts",

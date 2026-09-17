@@ -22,7 +22,11 @@ import { fileURLToPath } from 'url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const projectRoot = path.resolve(__dirname, '..');
-const publicDir = path.resolve(projectRoot, 'public');
+const TARGET_DIRS = [
+  path.resolve(projectRoot, 'public'),
+  path.resolve(projectRoot, 'exports'),
+  path.resolve(projectRoot, 'assets/glb'),
+];
 
 // Find all .glb files recursively
 function findGlbFiles(dir, fileList = []) {
@@ -32,7 +36,7 @@ function findGlbFiles(dir, fileList = []) {
     const fullPath = path.join(dir, entry.name);
     if (entry.isDirectory()) {
       // Skip node_modules or temp dirs if any
-      if (entry.name !== 'node_modules' && entry.name !== '.git') {
+      if (entry.name !== 'node_modules' && entry.name !== '.git' && entry.name !== '.glb_opt_temp') {
         findGlbFiles(fullPath, fileList);
       }
     } else if (entry.isFile() && entry.name.toLowerCase().endsWith('.glb')) {
@@ -44,18 +48,41 @@ function findGlbFiles(dir, fileList = []) {
 
 // Find gltfpack binary or use npx
 function getGltfpackCmd() {
-  return process.platform === 'win32' ? 'npx.cmd' : 'npx';
+  const localBin = process.platform === 'win32'
+    ? path.resolve(projectRoot, 'node_modules/.bin/gltfpack.cmd')
+    : path.resolve(projectRoot, 'node_modules/.bin/gltfpack');
+  if (fs.existsSync(localBin)) return localBin;
+  return process.platform === 'win32' ? 'gltfpack.cmd' : 'gltfpack';
+}
+
+function scanGlbNodes(filePath) {
+  try {
+    const buf = fs.readFileSync(filePath);
+    if (buf.length < 20 || buf.readUInt32LE(0) !== 0x46546c67) return { ok: false, nodes: [] };
+    const jsonLen = buf.readUInt32LE(12);
+    const json = JSON.parse(buf.toString('utf8', 20, 20 + jsonLen));
+    return {
+      ok: true,
+      nodes: (json.nodes || []).map((n) => n.name).filter(Boolean),
+    };
+  } catch {
+    return { ok: false, nodes: [] };
+  }
 }
 
 function optimizeSingleGlb(filePath, tempDir) {
   const originalSize = fs.statSync(filePath).size;
   if (originalSize === 0) return { skipped: true, reason: 'empty file' };
 
+  const preScan = scanGlbNodes(filePath);
+  if (!preScan.ok) return { skipped: true, reason: 'unparseable input GLB' };
+
   const fileName = path.basename(filePath);
   const tempOut = path.join(tempDir, `opt_${Date.now()}_${Math.random().toString(36).slice(2)}_${fileName}`);
 
   try {
     const cmd = getGltfpackCmd();
+    const isWin = process.platform === 'win32';
 
     // Pass 1: Try high-compression with preserved nodes, materials, and extras
     let stdout = '';
@@ -64,7 +91,6 @@ function optimizeSingleGlb(filePath, tempDir) {
 
     try {
       const res = execFileSync(cmd, [
-        'gltfpack',
         '-i', filePath,
         '-o', tempOut,
         '-c',
@@ -75,6 +101,7 @@ function optimizeSingleGlb(filePath, tempDir) {
         cwd: projectRoot,
         stdio: ['ignore', 'pipe', 'pipe'],
         encoding: 'utf-8',
+        shell: isWin,
         maxBuffer: 50 * 1024 * 1024,
       });
       stdout = res || '';
@@ -91,7 +118,6 @@ function optimizeSingleGlb(filePath, tempDir) {
       } catch {}
 
       execFileSync(cmd, [
-        'gltfpack',
         '-i', filePath,
         '-o', tempOut,
         '-c',
@@ -103,12 +129,29 @@ function optimizeSingleGlb(filePath, tempDir) {
         cwd: projectRoot,
         stdio: ['ignore', 'pipe', 'pipe'],
         encoding: 'utf-8',
+        shell: isWin,
         maxBuffer: 50 * 1024 * 1024,
       });
     }
 
     if (!fs.existsSync(tempOut)) {
       return { skipped: true, reason: 'output not created' };
+    }
+
+    const postScan = scanGlbNodes(tempOut);
+    if (!postScan.ok) {
+      try { fs.unlinkSync(tempOut); } catch {}
+      return { skipped: true, reason: 'compressed output failed validation' };
+    }
+
+    // Verify node preservation guardrail
+    const preNodes = new Set(preScan.nodes);
+    const postNodes = new Set(postScan.nodes);
+    for (const n of preNodes) {
+      if (!postNodes.has(n)) {
+        try { fs.unlinkSync(tempOut); } catch {}
+        return { skipped: true, reason: `lost node: ${n}` };
+      }
     }
 
     const newSize = fs.statSync(tempOut).size;
@@ -146,11 +189,14 @@ async function main() {
   console.log('═══════════════════════════════════════════════════════════════');
   console.log('  APEX AUTOMOTIVE GLB ASSET OPTIMIZATION PIPELINE');
   console.log('  Standard: Meshopt (EXT_meshopt_compression) + Quantization');
-  console.log('  Target:   public/ (models, vehicles, assets)');
+  console.log('  Target:   public/, exports/, assets/glb/');
   console.log('═══════════════════════════════════════════════════════════════');
 
-  const files = findGlbFiles(publicDir);
-  console.log(`Found ${files.length} total GLB assets to process.`);
+  const files = [];
+  for (const dir of TARGET_DIRS) {
+    files.push(...findGlbFiles(dir));
+  }
+  console.log(`Found ${files.length} total GLB assets across all target directories.`);
 
   // Create temporary directory for atomic writes
   const tempDir = path.join(projectRoot, '.glb_opt_temp');
@@ -165,14 +211,14 @@ async function main() {
   // Sort files by size descending so largest bandwidth bottlenecks are optimized first
   files.sort((a, b) => fs.statSync(b).size - fs.statSync(a).size);
 
-  const CONCURRENCY = 6;
+  const CONCURRENCY = 16;
   let fileCursor = 0;
 
   async function worker() {
     while (fileCursor < files.length) {
       const idx = fileCursor++;
       const file = files[idx];
-      const relPath = path.relative(publicDir, file);
+      const relPath = path.relative(projectRoot, file);
       const origSize = fs.statSync(file).size;
       totalOriginalBytes += origSize;
 
