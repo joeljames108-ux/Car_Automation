@@ -54,6 +54,8 @@ import { Sparkles as SparklesIcon } from "lucide-react";
 
 
 import { GuidedWorkflowStepper } from "./components/guidedWorkflow/GuidedWorkflowStepper";
+import { StoryScrollHUD } from "./components/guidedWorkflow/StoryScrollHUD";
+import type { WorkflowStage } from "./state/guidedEngineeringStore";
 
 export type WorkspaceCategory = "engineering" | "studios" | "simulation" | "world";
 
@@ -436,12 +438,31 @@ function AppInner() {
               </div>
               <div style={{ display: "flex", gap: 16 }}>
                 <div style={{ flex: 1, minWidth: 0, display: "flex", flexDirection: "column", gap: 16 }}>
-                  {/* Hide global stepper for F1/Hypercar — they have their own internal workflow */}
                   {stage !== "f1_constructor" && stage !== "hypercar_constructor" && (
                     <GuidedWorkflowStepper activeStageId={stage} onSelectStage={handleSelectStage} />
                   )}
                   <StageSwitcher stage={stage} onSelectStage={handleSelectStage} />
-                </div>
+                  {/* Scroll-Driven 3D Storytelling HUD — only visible for the 5 engineering stages */}
+                  {(["engine", "vehicle", "aero_studio", "interior", "final_build"] as string[]).includes(stage) && (
+                    <div style={{
+                      position: "sticky", bottom: 0, zIndex: 30,
+                      display: "flex", justifyContent: "center",
+                      paddingTop: 12, paddingBottom: 4,
+                      pointerEvents: "none",
+                    }}>
+                      <StoryScrollHUD
+                        activeStage={
+                          ({
+                            engine: "engine",
+                            vehicle: "vehicle",
+                            aero_studio: "aero",
+                            interior: "interior",
+                            final_build: "final_build",
+                          } as Record<string, WorkflowStage>)[stage] || "engine"
+                        }
+                      />
+                    </div>
+                  )}</div>
 
                 {/* Right Sidebar — hidden for F1/Hypercar (they have their own full-width layout) */}
                 {!focusMode && stage !== "f1_constructor" && stage !== "hypercar_constructor" && (

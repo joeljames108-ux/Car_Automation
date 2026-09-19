@@ -49,7 +49,6 @@ import {
   Armchair,
   ChevronLeft,
   ChevronRight,
-  BarChart3,
   SlidersHorizontal,
   Cpu,
   Plane,
@@ -99,8 +98,6 @@ import {
   COCKPIT_THEME_PRESETS,
 } from "../../state/interiorDashboardConfigStore";
 import { InteractiveDashboardCanvasViewport } from "./InteractiveDashboardCanvasViewport";
-import { InteriorMetricsPanel } from "./InteriorMetricsPanel";
-import { InteriorConfigControls } from "./InteriorConfigControls";
 import { CockpitElectronicsAvionicsSuite } from "./CockpitElectronicsAvionicsSuite";
 import { InteriorControlDeck } from "./InteriorControlDeck";
 import { useDesign } from "../../state/DesignContext";
@@ -149,8 +146,7 @@ export const InteractiveDashboardStudio: React.FC<InteractiveDashboardStudioProp
   const [saveToast, setSaveToast] = useState(false);
   const [jsonModalOpen, setJsonModalOpen] = useState(false);
   const [jsonText, setJsonText] = useState("");
-  const [showLeftOverview, setShowLeftOverview] = useState(false);
-  const [showRightControls, setShowRightControls] = useState(false);
+
 
   // Store Selectors
   const steeringWheelStyle = useInteriorDashboardConfigStore((s) => s.steeringWheelStyle);
@@ -429,36 +425,8 @@ export const InteractiveDashboardStudio: React.FC<InteractiveDashboardStudioProp
               {nightMode ? <Moon size={14} /> : <Sun size={14} />}
             </button>
 
-            {/* Quick Floating HUD / Options Controls */}
+            {/* Direct Navigation to Options Deck */}
             <div className="flex items-center bg-slate-800/90 rounded-lg p-0.5 border border-slate-700">
-              <button
-                type="button"
-                onClick={() => {
-                  playHMIClickSound();
-                  setShowLeftOverview((prev) => !prev);
-                }}
-                className={`flex items-center gap-1 px-2 py-1 rounded text-[10px] font-bold transition-all cursor-pointer ${
-                  showLeftOverview ? "bg-amber-500/25 text-amber-300 shadow-sm ring-1 ring-amber-500/40" : "text-slate-400 hover:text-slate-200"
-                }`}
-                title="Toggle Floating Interior Overview (HUD Overlay)"
-              >
-                <BarChart3 size={12} />
-                <span>OVERVIEW HUD</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => {
-                  playHMIClickSound();
-                  setShowRightControls((prev) => !prev);
-                }}
-                className={`flex items-center gap-1 px-2 py-1 rounded text-[10px] font-bold transition-all cursor-pointer ${
-                  showRightControls ? "bg-amber-500/25 text-amber-300 shadow-sm ring-1 ring-amber-500/40" : "text-slate-400 hover:text-slate-200"
-                }`}
-                title="Toggle Floating Configuration Steppers (HUD Overlay)"
-              >
-                <SlidersHorizontal size={12} />
-                <span>STEPPERS HUD</span>
-              </button>
               <button
                 type="button"
                 onClick={() => {
@@ -466,11 +434,11 @@ export const InteractiveDashboardStudio: React.FC<InteractiveDashboardStudioProp
                   const el = document.getElementById("interior-options-deck");
                   if (el) el.scrollIntoView({ behavior: "smooth" });
                 }}
-                className="flex items-center gap-1 px-2 py-1 rounded text-[10px] font-bold text-amber-300 hover:text-amber-200 hover:bg-slate-700/60 transition-all cursor-pointer border-l border-slate-700 ml-0.5"
-                title="Jump down to full Options Workbench"
+                className="flex items-center gap-1.5 px-2.5 py-1 rounded text-[10px] font-bold text-amber-300 hover:text-amber-200 hover:bg-slate-700/60 transition-all cursor-pointer"
+                title="Jump directly down to Cockpit Options Deck"
               >
-                <ChevronDown size={12} />
-                <span>OPTIONS ↓</span>
+                <SlidersHorizontal size={12} />
+                <span>OPTIONS DECK ↓</span>
               </button>
             </div>
 
@@ -615,51 +583,7 @@ export const InteractiveDashboardStudio: React.FC<InteractiveDashboardStudioProp
               </div>
             )}
 
-            {/* Optional Floating HUD Overlay Drawer: Interior Overview (Metrics) */}
-            {showLeftOverview && (
-              <div className="absolute top-0 bottom-0 left-0 z-30 w-[310px] max-w-[85vw] h-full shadow-2xl bg-slate-900/95 backdrop-blur-xl border-r border-slate-700/80 flex flex-col animate-fade-in">
-                <div className="flex items-center justify-between px-3 py-2 bg-slate-800/80 border-b border-slate-700">
-                  <div className="flex items-center gap-1.5 text-xs font-mono font-bold text-amber-400">
-                    <BarChart3 size={14} />
-                    <span>INTERIOR OVERVIEW (HUD)</span>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => setShowLeftOverview(false)}
-                    className="p-1 rounded-lg hover:bg-slate-700 text-slate-400 hover:text-white transition-colors cursor-pointer"
-                    title="Close Floating Overview"
-                  >
-                    <X size={14} />
-                  </button>
-                </div>
-                <div className="flex-1 overflow-y-auto">
-                  <InteriorMetricsPanel theme="dark" className="border-none shadow-none" />
-                </div>
-              </div>
-            )}
 
-            {/* Optional Floating HUD Overlay Drawer: Interior Configuration Studio */}
-            {showRightControls && (
-              <div className="absolute top-0 bottom-0 right-0 z-30 w-[420px] max-w-[92vw] h-full shadow-2xl bg-slate-900/95 backdrop-blur-xl border-l border-slate-700/80 flex flex-col animate-fade-in">
-                <div className="flex items-center justify-between px-3 py-2 bg-slate-800/80 border-b border-slate-700">
-                  <div className="flex items-center gap-1.5 text-xs font-mono font-bold text-amber-400">
-                    <SlidersHorizontal size={14} />
-                    <span>INTERIOR CONFIGURATION</span>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => setShowRightControls(false)}
-                    className="p-1 rounded-lg hover:bg-slate-700 text-slate-400 hover:text-white transition-colors cursor-pointer"
-                    title="Close Floating Configuration"
-                  >
-                    <X size={14} />
-                  </button>
-                </div>
-                <div className="flex-1 overflow-y-auto p-2">
-                  <InteriorConfigControls theme="dark" className="border-none shadow-none bg-transparent" />
-                </div>
-              </div>
-            )}
           </div>
         </div>
       </div>
