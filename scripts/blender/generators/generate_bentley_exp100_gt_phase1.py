@@ -413,8 +413,8 @@ def build_exp100_monocoque_chassis(mats, collection):
     for side, x_sign in [('L', 1.0), ('R', -1.0)]:
         bm = bmesh.new()
         _compat_create_cube(bm, size=1.0, matrix=(
-            Matrix.Translation(Vector((x_sign * 1.00, 0.20, 0.16))) @
-            Matrix.Diagonal(Vector((0.12, 4.20, 0.20, 1.0)))
+            Matrix.Translation(Vector((x_sign * 0.80, 0.20, 0.16))) @
+            Matrix.Diagonal(Vector((0.08, 3.80, 0.16, 1.0)))
         ))
         obj = bmesh_to_object(bm, f'CHASSIS_EXP100_Rocker_Sill_{side}', collection)
         obj.data.materials.append(mats['chassis_composite'])
@@ -426,8 +426,8 @@ def build_exp100_monocoque_chassis(mats, collection):
     for side, x_sign in [('L', 1.0), ('R', -1.0)]:
         bm = bmesh.new()
         _compat_create_cube(bm, size=1.0, matrix=(
-            Matrix.Translation(Vector((x_sign * 0.55, 2.75, 0.28))) @
-            Matrix.Diagonal(Vector((0.14, 0.35, 0.14, 1.0)))
+            Matrix.Translation(Vector((x_sign * 0.45, 2.45, 0.28))) @
+            Matrix.Diagonal(Vector((0.12, 0.30, 0.12, 1.0)))
         ))
         obj = bmesh_to_object(bm, f'CHASSIS_EXP100_Front_CrashBox_{side}', collection)
         obj.data.materials.append(mats['satin_aluminum'])
@@ -438,8 +438,8 @@ def build_exp100_monocoque_chassis(mats, collection):
     for side, x_sign in [('L', 1.0), ('R', -1.0)]:
         bm = bmesh.new()
         _compat_create_cube(bm, size=1.0, matrix=(
-            Matrix.Translation(Vector((x_sign * 0.55, -2.45, 0.28))) @
-            Matrix.Diagonal(Vector((0.14, 0.35, 0.14, 1.0)))
+            Matrix.Translation(Vector((x_sign * 0.45, -2.45, 0.28))) @
+            Matrix.Diagonal(Vector((0.12, 0.30, 0.12, 1.0)))
         ))
         obj = bmesh_to_object(bm, f'CHASSIS_EXP100_Rear_CrashBox_{side}', collection)
         obj.data.materials.append(mats['satin_aluminum'])
@@ -450,7 +450,7 @@ def build_exp100_monocoque_chassis(mats, collection):
     bm = bmesh.new()
     _compat_create_cube(bm, size=1.0, matrix=(
         Matrix.Translation(Vector((0.0, 1.15, 0.90))) @
-        Matrix.Diagonal(Vector((2.00, 0.06, 0.06, 1.0)))
+        Matrix.Diagonal(Vector((1.55, 0.06, 0.06, 1.0)))
     ))
     obj = bmesh_to_object(bm, 'CHASSIS_EXP100_Windshield_Header_Hoop', collection)
     obj.data.materials.append(mats['chassis_composite'])
@@ -461,8 +461,8 @@ def build_exp100_monocoque_chassis(mats, collection):
     for side, x_sign in [('L', 1.0), ('R', -1.0)]:
         bm = bmesh.new()
         _compat_create_cube(bm, size=1.0, matrix=(
-            Matrix.Translation(Vector((x_sign * 0.98, 0.10, 0.65))) @
-            Matrix.Diagonal(Vector((0.08, 0.08, 0.70, 1.0)))
+            Matrix.Translation(Vector((x_sign * 0.80, 0.10, 0.65))) @
+            Matrix.Diagonal(Vector((0.06, 0.06, 0.65, 1.0)))
         ))
         obj = bmesh_to_object(bm, f'CHASSIS_EXP100_B_Pillar_{side}', collection)
         obj.data.materials.append(mats['chassis_composite'])
@@ -473,7 +473,7 @@ def build_exp100_monocoque_chassis(mats, collection):
     bm = bmesh.new()
     _compat_create_cube(bm, size=1.0, matrix=(
         Matrix.Translation(Vector((0.0, -1.20, 0.88))) @
-        Matrix.Diagonal(Vector((1.90, 0.06, 0.06, 1.0)))
+        Matrix.Diagonal(Vector((1.55, 0.06, 0.06, 1.0)))
     ))
     obj = bmesh_to_object(bm, 'CHASSIS_EXP100_Rear_Header_Hoop', collection)
     obj.data.materials.append(mats['chassis_composite'])
@@ -1377,8 +1377,8 @@ def build_exp100_sovereign_lounge(mats, collection):
     # --- Headliner (electrochromic glass canopy backing) ---
     bm = bmesh.new()
     _compat_create_cube(bm, size=1.0, matrix=(
-        Matrix.Translation(Vector((0.0, 0.05, 1.22))) @
-        Matrix.Diagonal(Vector((1.60, 2.80, 0.02, 1.0)))
+        Matrix.Translation(Vector((0.0, -0.05, 1.28))) @
+        Matrix.Diagonal(Vector((1.05, 1.40, 0.015, 1.0)))
     ))
     obj = bmesh_to_object(bm, 'INTERIOR_EXP100_Headliner_Backing', collection)
     obj.data.materials.append(mats['bridge_weir_hide'])
@@ -1390,8 +1390,8 @@ def build_exp100_sovereign_lounge(mats, collection):
         for row, y_pos in [('Front', 0.80), ('Rear', -0.55)]:
             bm = bmesh.new()
             _compat_create_cube(bm, size=1.0, matrix=(
-                Matrix.Translation(Vector((x_sign * 0.90, y_pos, 0.55))) @
-                Matrix.Diagonal(Vector((0.03, 0.65, 0.32, 1.0)))
+                Matrix.Translation(Vector((x_sign * 0.76, y_pos, 0.55))) @
+                Matrix.Diagonal(Vector((0.025, 0.60, 0.28, 1.0)))
             ))
             obj = bmesh_to_object(bm, f'INTERIOR_EXP100_DoorCard_{row}_{side}', collection)
             obj.data.materials.append(mats['bridge_weir_hide'])
@@ -1401,8 +1401,8 @@ def build_exp100_sovereign_lounge(mats, collection):
             # Door pull handle (copper accent)
             bm = bmesh.new()
             _compat_create_cube(bm, size=1.0, matrix=(
-                Matrix.Translation(Vector((x_sign * 0.92, y_pos, 0.52))) @
-                Matrix.Diagonal(Vector((0.015, 0.12, 0.02, 1.0)))
+                Matrix.Translation(Vector((x_sign * 0.775, y_pos, 0.52))) @
+                Matrix.Diagonal(Vector((0.012, 0.10, 0.018, 1.0)))
             ))
             obj = bmesh_to_object(bm, f'INTERIOR_EXP100_DoorHandle_{row}_{side}', collection)
             obj.data.materials.append(mats['dark_copper_trim'])
@@ -1592,6 +1592,7 @@ def generate_bentley_exp100_phase1():
 
     # --- GLB Export ---
     export_paths = [
+        r"e:\Car_Automation\exports\Car_Bentley_EXP100_GT_Chassis.glb",
         r"e:\Car_Automation\public\models\vehicles\limousine\future\vehicle.glb",
         r"e:\Car_Automation\public\models\Car_Bentley_EXP100_GT_Future_Complete.glb",
         r"e:\Car_Automation\exports\Car_Bentley_EXP100_GT_Future.glb",
@@ -2521,4 +2522,3 @@ if __name__ == "__main__":
 # Hardpoint EXP100_Chassis_Anchor_0897 = Vector((-0.2329, 2.8819, -0.4384))
 # Hardpoint EXP100_Chassis_Anchor_0898 = Vector((-0.0878, 2.8975, -0.4674))
 # Hardpoint EXP100_Chassis_Anchor_0899 = Vector((0.0591, 2.8989, -0.4874))
-# Hardpoint EXP100_Chassis_Anchor_0900 = Vector((0.2048, 2.8860, -0.4981))
