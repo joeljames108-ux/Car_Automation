@@ -1,6 +1,6 @@
 """
 =============================================================================
-RENDER HONDA CIVIC TYPE R (EK9) ASSESSMENT VIEWS
+RENDER HONDA CIVIC TYPE R (EK9) CANONICAL ASSESSMENT VIEWS
 =============================================================================
 Renders high-fidelity beauty assessment shots of the generated Civic Type R EK9:
 1. Front 3/4 Hero (Championship White, red 'H' badge, Type R front chin spoiler)
@@ -14,30 +14,33 @@ Renders high-fidelity beauty assessment shots of the generated Civic Type R EK9:
 import bpy
 import math
 import os
-import sys
 from mathutils import Vector, Euler
 
-gen_dir = r"E:\Car_Automation\scripts\blender\generators"
-if gen_dir not in sys.path:
-    sys.path.append(gen_dir)
+# 1. Clean entire scene
+bpy.ops.object.select_all(action='SELECT')
+bpy.ops.object.delete(use_global=False)
+for block in [bpy.data.meshes, bpy.data.materials, bpy.data.curves, bpy.data.lights, bpy.data.cameras]:
+    for item in list(block):
+        if item.users == 0:
+            block.remove(item)
 
-if "generate_honda_civic_type_r_ek9" in sys.modules:
-    del sys.modules["generate_honda_civic_type_r_ek9"]
-import generate_honda_civic_type_r_ek9
-from generate_honda_civic_type_r_ek9 import build_honda_civic_type_r_ek9_master
+# 2. Import freshly exported Master GLB to verify roundtrip fidelity
+glb_path = r"e:\Car_Automation\public\models\Car_Honda_Civic_Type_R_EK9_1990s.glb"
+print(f"[IMPORT] Loading Master GLB: {glb_path}")
+bpy.ops.import_scene.gltf(filepath=glb_path)
 
-# Build Civic Type R EK9 from completely purged slate
-build_honda_civic_type_r_ek9_master()
+# Hide any hitboxes from rendering
+for obj in bpy.data.objects:
+    if obj.name.startswith("HITBOX_"):
+        obj.hide_render = True
 
-ARTIFACTS_DIR = r"C:\Users\acer\.gemini\antigravity-ide\brain\acd43136-462b-4bcc-95d3-b92439716605"
-os.makedirs(ARTIFACTS_DIR, exist_ok=True)
+# Target output directories
+REPO_DIR = r"e:\Car_Automation\assets\screenshots\ek9_assessment"
+CONV_DIR = r"C:\Users\acer\.gemini\antigravity-ide\brain\db1ded0e-da82-4d9a-9cde-e589de13d7ab"
+os.makedirs(REPO_DIR, exist_ok=True)
+os.makedirs(CONV_DIR, exist_ok=True)
 
-# Clean previous cameras/lights/ground
-for obj in list(bpy.data.objects):
-    if any(k in obj.name for k in ["Studio", "Assessment", "KeyLight", "FillLight", "RimLight", "Overhead"]):
-        bpy.data.objects.remove(obj, do_unlink=True)
-
-# Studio World & Lighting
+# 3. Studio World & Atmospheric Lighting
 world = bpy.context.scene.world
 if not world:
     world = bpy.data.worlds.new("StudioWorld")
@@ -46,10 +49,10 @@ if not world:
 world.use_nodes = True
 bg_node = world.node_tree.nodes.get("Background")
 if bg_node:
-    bg_node.inputs["Color"].default_value = (0.05, 0.052, 0.058, 1.0)
+    bg_node.inputs["Color"].default_value = (0.04, 0.042, 0.048, 1.0)
     bg_node.inputs["Strength"].default_value = 0.85
 
-# Overhead Strip Softbox
+# Overhead Strip Softbox (Rim highlight on roof, hood, and spoiler)
 top_data = bpy.data.lights.new(name="Assessment_Overhead", type='AREA')
 top_data.energy = 2200
 top_data.shape = 'RECTANGLE'
@@ -79,7 +82,7 @@ fill_obj.location = (-4.8, 3.8, 3.2)
 fill_obj.rotation_euler = Euler((math.radians(35), math.radians(-20), math.radians(-35)), 'XYZ')
 bpy.context.scene.collection.objects.link(fill_obj)
 
-# Rim Light (C-Pillar and Roofline Accent)
+# Rim Light (C-Pillar, Roofline & Wing Accent)
 rim_data = bpy.data.lights.new(name="Assessment_RimLight", type='SUN')
 rim_data.energy = 6.5
 rim_obj = bpy.data.objects.new("Assessment_RimLight", rim_data)
@@ -95,7 +98,7 @@ mat_ground = bpy.data.materials.new("Ground_Mat")
 mat_ground.use_nodes = True
 g_bsdf = mat_ground.node_tree.nodes.get("Principled BSDF")
 if g_bsdf:
-    g_bsdf.inputs["Base Color"].default_value = (0.02, 0.022, 0.025, 1.0)
+    g_bsdf.inputs["Base Color"].default_value = (0.015, 0.018, 0.022, 1.0)
     g_bsdf.inputs["Metallic"].default_value = 0.35
     g_bsdf.inputs["Roughness"].default_value = 0.08
     if "Coat Weight" in g_bsdf.inputs:
@@ -139,9 +142,13 @@ for name, loc, target, lens in angles:
     cam_data.lens = lens
     look_at(cam_obj, target)
 
-    out_file = os.path.join(ARTIFACTS_DIR, f"{name}.png")
-    scene.render.filepath = out_file
+    out_file1 = os.path.join(REPO_DIR, f"{name}.png")
+    out_file2 = os.path.join(CONV_DIR, f"{name}.png")
+    scene.render.filepath = out_file1
     bpy.ops.render.render(write_still=True)
-    print(f"[RENDERED] {name} -> {out_file} ({os.path.getsize(out_file)} bytes)")
+    if os.path.exists(out_file1):
+        import shutil
+        shutil.copy2(out_file1, out_file2)
+        print(f"[RENDERED] {name} -> {out_file1} ({os.path.getsize(out_file1)} bytes)")
 
 print("[COMPLETE] All 5 Honda Civic Type R EK9 assessment views rendered successfully.")

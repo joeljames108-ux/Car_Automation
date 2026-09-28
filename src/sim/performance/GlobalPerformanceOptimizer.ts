@@ -39,22 +39,29 @@ export class GlobalPerformanceOptimizer {
   }
 
   /**
-   * Memoizes a heavy physics computation using a parameter signature hash
+   * Memoizes a heavy physics computation using a parameter signature hash with true O(1) LRU eviction
    */
   public memoize<T>(key: string, computeFn: () => T): T {
     const cached = this.calcCache.get(key);
     const now = Date.now();
 
-    if (cached && now - cached.timestamp < this.ttlMs) {
-      return cached.result;
+    if (cached) {
+      if (now - cached.timestamp < this.ttlMs) {
+        // Refresh LRU position
+        this.calcCache.delete(key);
+        this.calcCache.set(key, cached);
+        return cached.result;
+      }
+      // Expired entry
+      this.calcCache.delete(key);
     }
 
     const result = computeFn();
     
     // LRU eviction if cache exceeds limit
     if (this.calcCache.size >= this.maxCacheSize) {
-      const firstKey = this.calcCache.keys().next().value;
-      if (firstKey) this.calcCache.delete(firstKey);
+      const oldestKey = this.calcCache.keys().next().value;
+      if (oldestKey) this.calcCache.delete(oldestKey);
     }
 
     this.calcCache.set(key, { key, result, timestamp: now });
@@ -92,6 +99,21 @@ export class GlobalPerformanceOptimizer {
     const geom = factory();
     this.geometryPool.set(key, geom);
     return geom;
+  }
+
+  /**
+   * Shared WebGL Material Factory (prevents duplicate material allocations)
+   */
+  public getOrCreateMaterial(
+    key: string,
+    factory: () => THREE.Material
+  ): THREE.Material {
+    if (this.materialPool.has(key)) {
+      return this.materialPool.get(key)!;
+    }
+    const mat = factory();
+    this.materialPool.set(key, mat);
+    return mat;
   }
 
   /**

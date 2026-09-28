@@ -42,3 +42,6 @@ public/models/engines_all_backup_original/
 temp_orig_engine.glb
 exports/
 scratch/
+projects/development/*.blend
+.glb_opt_temp/
+scripts/output/

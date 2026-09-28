@@ -20,7 +20,9 @@
     "assets:interior": "node scripts/asset-pipeline.mjs interior",
     "assets:enhance": "node scripts/asset-pipeline.mjs enhance",
     "assets:optimize": "node scripts/optimize-all-glbs.mjs",
-    "assets:all": "node scripts/asset-pipeline.mjs all"
+    "assets:all": "node scripts/asset-pipeline.mjs all",
+    "glb:audit": "python scripts/glb_quality_orchestrator.py --all",
+    "glb:enforce": "python scripts/glb_quality_orchestrator.py --enforce"
   },
   "dependencies": {
     "@gltf-transform/core": "^4.4.2",

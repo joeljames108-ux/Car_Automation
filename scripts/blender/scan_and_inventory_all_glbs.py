@@ -154,7 +154,8 @@ def analyze_all_project_glbs(root_dir, output_json, output_md):
     return inventory
 
 if __name__ == "__main__":
-    proj_root = r"c:\Users\joelj\Downloads\project-bolt-sb1-a1kjcyhr (3)\project"
+    import sys
+    proj_root = sys.argv[1] if len(sys.argv) > 1 else os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
     out_json = os.path.join(proj_root, "assets", "glb", "master_asset_inventory.json")
     out_md = os.path.join(proj_root, "assets", "glb", "master_asset_inventory.md")
     analyze_all_project_glbs(proj_root, out_json, out_md)

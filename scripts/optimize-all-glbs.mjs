@@ -17,8 +17,11 @@
 
 import fs from 'fs';
 import path from 'path';
-import { execFileSync } from 'child_process';
+import { execFile } from 'child_process';
+import { promisify } from 'util';
 import { fileURLToPath } from 'url';
+
+const execFileAsync = promisify(execFile);
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const projectRoot = path.resolve(__dirname, '..');
@@ -70,7 +73,7 @@ function scanGlbNodes(filePath) {
   }
 }
 
-function optimizeSingleGlb(filePath, tempDir) {
+async function optimizeSingleGlb(filePath, tempDir) {
   const originalSize = fs.statSync(filePath).size;
   if (originalSize === 0) return { skipped: true, reason: 'empty file' };
 
@@ -90,7 +93,7 @@ function optimizeSingleGlb(filePath, tempDir) {
     let usedVpf = false;
 
     try {
-      const res = execFileSync(cmd, [
+      const res = await execFileAsync(cmd, [
         '-i', filePath,
         '-o', tempOut,
         '-c',
@@ -99,12 +102,12 @@ function optimizeSingleGlb(filePath, tempDir) {
         '-ke'
       ], {
         cwd: projectRoot,
-        stdio: ['ignore', 'pipe', 'pipe'],
         encoding: 'utf-8',
         shell: isWin,
         maxBuffer: 50 * 1024 * 1024,
       });
-      stdout = res || '';
+      stdout = res.stdout || '';
+      stderr = res.stderr || '';
     } catch (err) {
       stderr = (err.stderr || '') + (err.stdout || '');
     }
@@ -117,7 +120,7 @@ function optimizeSingleGlb(filePath, tempDir) {
         if (fs.existsSync(tempOut)) fs.unlinkSync(tempOut);
       } catch {}
 
-      execFileSync(cmd, [
+      await execFileAsync(cmd, [
         '-i', filePath,
         '-o', tempOut,
         '-c',
@@ -127,7 +130,6 @@ function optimizeSingleGlb(filePath, tempDir) {
         '-ke'
       ], {
         cwd: projectRoot,
-        stdio: ['ignore', 'pipe', 'pipe'],
         encoding: 'utf-8',
         shell: isWin,
         maxBuffer: 50 * 1024 * 1024,
@@ -222,7 +224,7 @@ async function main() {
       const origSize = fs.statSync(file).size;
       totalOriginalBytes += origSize;
 
-      const res = optimizeSingleGlb(file, tempDir);
+      const res = await optimizeSingleGlb(file, tempDir);
       processedIndex++;
       if (res.success) {
         totalOptimizedBytes += res.newSize;

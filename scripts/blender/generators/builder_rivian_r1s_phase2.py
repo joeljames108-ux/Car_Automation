@@ -34,12 +34,33 @@ bpy.ops.wm.read_factory_settings(use_empty=True)
 # ============================================================================
 # 1. LOAD PHASE 79 CHASSIS & POWERTRAIN BASE
 # ============================================================================
-chassis_path = r"e:\\Car_Automation\\public\\models\\Car_Rivian_R1S_Chassis.glb"
-if os.path.exists(chassis_path):
-    print(f"Loading Phase 79 Base: {chassis_path}")
-    bpy.ops.import_scene.gltf(filepath=chassis_path)
-else:
-    print(f"Warning: Phase 79 GLB not found at {chassis_path}, generating stand-alone bodyshell.")
+chassis_candidates = [
+    r"e:\\Car_Automation\\public\\models\\Car_Rivian_R1S_Chassis.glb",
+    r"e:\\Car_Automation\\exports\\Car_Rivian_R1S_Chassis.glb"
+]
+loaded_base = False
+for cp in chassis_candidates:
+    if os.path.exists(cp):
+        print(f"Loading Phase 79 Base: {cp}")
+        bpy.ops.import_scene.gltf(filepath=cp)
+        loaded_base = True
+        break
+
+if not loaded_base:
+    print("Warning: Phase 79 GLB not found, generating stand-alone bodyshell.")
+
+def make_cylinder(bm, radius, depth, segments=24, matrix=Matrix(), cap_ends=True, cap_tris=False):
+    """BMesh cylinder constructor using create_cone operator."""
+    bmesh.ops.create_cone(
+        bm,
+        cap_ends=cap_ends,
+        cap_tris=cap_tris,
+        segments=segments,
+        radius1=radius,
+        radius2=radius,
+        depth=depth,
+        matrix=matrix
+    )
 
 def make_mesh_object(name, bm, mat=None):
     mesh = bpy.data.meshes.new(f"{name}_mesh")
@@ -133,9 +154,9 @@ def build_r1s_bodywork(mats):
     for sign in [-1.0, 1.0]:
         sx = sign * 0.96
         # Front wheel arch flare (Y = 1.54)
-        bmesh.ops.create_cylinder(bm_arches, radius=0.49, depth=0.06, segments=28, matrix=Matrix.Translation(Vector((sx, 1.54, 0.40))) @ Matrix.Rotation(math.radians(90), 4, 'Y'))
+        make_cylinder(bm_arches, radius=0.49, depth=0.06, segments=28, matrix=Matrix.Translation(Vector((sx, 1.54, 0.40))) @ Matrix.Rotation(math.radians(90), 4, 'Y'))
         # Rear wheel arch flare (Y = -1.54)
-        bmesh.ops.create_cylinder(bm_arches, radius=0.49, depth=0.06, segments=28, matrix=Matrix.Translation(Vector((sx, -1.54, 0.40))) @ Matrix.Rotation(math.radians(90), 4, 'Y'))
+        make_cylinder(bm_arches, radius=0.49, depth=0.06, segments=28, matrix=Matrix.Translation(Vector((sx, -1.54, 0.40))) @ Matrix.Rotation(math.radians(90), 4, 'Y'))
     objs.append(make_mesh_object("BODY_R1S_Wheel_Lip_Arches", bm_arches, mats['cladding_dark']))
 
     # Powered Front Trunk ("Frunk") Hood
@@ -161,7 +182,7 @@ def build_r1s_bodywork(mats):
 
     # Rivian Compass Emblem Badge on Frunk
     bm_emblem = bmesh.new()
-    bmesh.ops.create_cylinder(bm_emblem, radius=0.042, depth=0.012, segments=24, matrix=Matrix.Translation(Vector((0.0, 2.40, 0.98))) @ Matrix.Rotation(math.radians(-10), 4, 'X'))
+    make_cylinder(bm_emblem, radius=0.042, depth=0.012, segments=24, matrix=Matrix.Translation(Vector((0.0, 2.40, 0.98))) @ Matrix.Rotation(math.radians(-10), 4, 'X'))
     objs.append(make_mesh_object("EXTERIOR_Frunk_Rivian_Compass_Emblem", bm_emblem, mats['rivian_yellow']))
 
     return objs
@@ -224,10 +245,10 @@ def build_r1s_front_lighting_and_fascia(mats):
         sx = sign * 0.68
         # Vertical stadium oval outer glowing rim (scaled along Z for iconic tall stadium geometry)
         mat_oval = Matrix.Translation(Vector((sx, 2.47, 0.82))) @ Matrix.Rotation(math.radians(90), 4, 'X') @ Matrix.Scale(1.0, 4, Vector((1,0,0))) @ Matrix.Scale(1.5, 4, Vector((0,0,1)))
-        bmesh.ops.create_cylinder(bm_stadium, radius=0.082, depth=0.05, segments=32, matrix=mat_oval)
+        make_cylinder(bm_stadium, radius=0.082, depth=0.05, segments=32, matrix=mat_oval)
         # Internal vertical LED projector pod
         mat_proj = Matrix.Translation(Vector((sx, 2.48, 0.82))) @ Matrix.Rotation(math.radians(90), 4, 'X') @ Matrix.Scale(1.0, 4, Vector((1,0,0))) @ Matrix.Scale(1.4, 4, Vector((0,0,1)))
-        bmesh.ops.create_cylinder(bm_stadium, radius=0.056, depth=0.06, segments=24, matrix=mat_proj)
+        make_cylinder(bm_stadium, radius=0.056, depth=0.06, segments=24, matrix=mat_proj)
     objs.append(make_mesh_object("LIGHT_Stadium_Vertical_Oval_Headlamps", bm_stadium, mats['stadium_lights']))
 
     # Full-Width Horizontal Cross-Front Daytime LED Lightbar (with charging progression)
@@ -246,7 +267,7 @@ def build_r1s_front_lighting_and_fascia(mats):
     # Dual Rivian Compass Yellow Forged Tow Hooks
     bm_hooks = bmesh.new()
     for sign in [-1.0, 1.0]:
-        bmesh.ops.create_cylinder(bm_hooks, radius=0.038, depth=0.12, segments=20, matrix=Matrix.Translation(Vector((sign * 0.45, 2.48, 0.35))) @ Matrix.Rotation(math.radians(90), 4, 'X'))
+        make_cylinder(bm_hooks, radius=0.038, depth=0.12, segments=20, matrix=Matrix.Translation(Vector((sign * 0.45, 2.48, 0.35))) @ Matrix.Rotation(math.radians(90), 4, 'X'))
     objs.append(make_mesh_object("EXTERIOR_Front_CompassYellow_Tow_Hooks", bm_hooks, mats['rivian_yellow']))
 
     return objs

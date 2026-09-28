@@ -131,6 +131,63 @@ This repository contains the **Modular Vehicle Assembly System & Car Automation 
   - **Universal Subsystem Mapping**: The agent must inspect the mesh hierarchy, detect every applicable automotive domain, and guarantee that the specialized skill for each domain (Seats, Steering, Dashboard, Doors, Wheels/Brakes, Body, Lighting, Powertrain, Chassis/Suspension, Pedals, Underbody) is strictly applied.
   - **Universal Cross-Cutting Standard**: Every asset must fulfill isolated kinematic origins (`export_apply=False`), semantic hitboxes (`HITBOX_*` $\le 64$ tris), baked NLA actions, audio-haptics (`node.extras.sound_fx`), and lossless `meshopt` delivery (`.opt.glb`).
   - **Automated Verification**: Execute `python scripts/glb_quality_orchestrator.py --single <path>` to certify Grade A ($\ge 90\%$) compliance and update `docs/GLB_QUALITY_AUDIT_MANIFEST.json`.
+- **MANDATORY AUTO-ACTIVATION FOR CABIN INTERIORS & AUTOMOTIVE GADGETS**:
+  - Whenever designing, generating, upgrading, or reverse-engineering automotive interiors, cockpit electronics, or cabin gadgets across any market segment, the agent **MUST invoke the Automotive Interior & Cabin Gadgets Architecture Agent (`automotive-interior-agent`) and adhere to `.agents/skills/skill-for-automotive-interior-and-gadgets/SKILL.md`** (indexed as `skill-for-automotive-interior-and-gadgets`).
+  - **SAE Human Factors Alignment**: Enforce SAE J1100, SAE J826/J4002 H-Point ($X=-0.380\text{m}, Y=0.000\text{m}, Z=0.280\text{m}$), SAE J941 Eye Ellipse, and SAE J287 Hand Reach Envelopes.
+  - **12 Signature Gadgets**: Follow procedural CAD specifications for curved OLED displays, AR-HUD projection wells, knurled crystal MMI rotary pucks, monostable shift-by-wire toggles, multi-vane turbine vents, Qi wireless charging pads, Manettino drive-mode dials, steer-by-wire D-cut rims, fiber-optic lightguides, cantilevered bridge consoles, massage seats, and A-pillar digital mirror displays.
+  - **Procedural BMesh Generation**: Execute `scripts/blender/generators/interior/build_complete_cockpit_cad.py` and `generate_interior_gadgets_cad.py` with zero-offset world snapping, 2-3 segment bevel chamfers ($0.6-1.8\text{mm}$), and PBR material definitions.
+- **MANDATORY AUTOMOTIVE REVERSE-ENGINEERING & CURVE TOPOLOGY ENFORCEMENT**:
+  - Whenever reverse-engineering reference models (`development/`) or generating authentic Class-A automotive bodies, the agent **MUST invoke the Automotive Reverse-Engineering & CAD Topology Agent (`automotive-reverse-engineering-agent`) and adhere to `skill-for-automotive-curve-and-topology-engineering/SKILL.md`**.
+  - **The 4 Golden Rules**: Enforce $G^2$ curvature continuous lofting (never primitive box-stacking), 54% micro-edge fillet chamfers (2.5–4.0mm with `WeightedNormal` `keep_sharp=True`), 4-layer optical headlamps, and 64-segment stepped-lip multi-piece wheels.
+  - **Pre-Export Modifier Baking Protocol**: Explicitly bake geometry modifiers (`Mirror`, `Solidify`, `Subsurf`, `WeightedNormal`) prior to `export_apply=False` glTF export to guarantee high-density Class-A CAD meshes while preserving 100% of kinematic pivot origins.
+- **MANDATORY AUTO-ACTIVATION FOR MODULAR F1 & HYPERCAR PART-BY-PART ASSEMBLY**:
+  - Whenever designing, generating, configuring, or assembling Formula 1 single-seaters (20 sockets) or Le Mans / Road Hypercars (25 sockets) part-by-part, the agent **MUST invoke the Modular F1 & Hypercar Assembly Specialist Agent (`f1-hypercar-assembly-agent`) and adhere to `skill-for-modular-f1-and-hypercar-assembly/SKILL.md`**.
+  - **Socket Hierarchy & Zero-Offset GLBs**: Enforce the universal front axle ground origin $(0, 0, 0)$ across all 20 F1 sockets and 25 Hypercar sockets. Guarantee zero-offset GLB snapping with zero runtime translation math.
+  - **Regulatory Enforcement**: Enforce FIA F1 Technical Regulations (Article 3 Aero, Article 5 1.6L V6 Turbo Hybrid & 2026+ 50/50, Article 12 Survival Cell, Article 13 Crash structures) and WEC/ACO LMH/LMDh BoP aerodynamic windows ($C_L / C_D \approx 4.0:1 \pm 2\%$) and hybrid deployment lockouts ($190\,\text{km/h}$).
+  - **Multi-Configuration Variants**: Every socket must support interchangeable race-trim configurations (low-drag, high-downforce, balanced, powertrain variants) mapping to dedicated individual GLB files in `public/models/modular_parts/`.
+- **MANDATORY ENFORCEMENT OF THE GAME MODULAR SKILLS & AGENTS ECOSYSTEM**:
+  - Whenever working on, extending, debugging, or generating assets for ANY specific tab, studio, or subsystem of the game, the agent **MUST automatically consult the master taxonomy in `docs/GAME_MODULAR_SKILLS_AND_AGENTS_ECOSYSTEM.md` and activate the corresponding dedicated Specialist Agent and Operational Skill**:
+    1. **Engine Studio**: `powertrain-engine-studio-agent` & `skill-for-powertrain-engine-studio`
+    2. **Vehicle Studio**: `modular-chassis-vehicle-agent` & `skill-for-modular-chassis-vehicle`
+    3. **Aero Studio & CFD**: `aero-cfd-studio-agent` & `skill-for-aero-cfd-studio`
+    4. **Interior Studio & Cockpit**: `automotive-interior-agent` & `skill-for-automotive-interior-and-gadgets`
+    5. **Safety & Crash Center**: `safety-crash-center-agent` & `skill-for-safety-crash-center`
+    6. **Robotic Manufacturing**: `manufacturing-factory-studio-agent` & `skill-for-manufacturing-factory-studio`
+    7. **3D Transmission**: `transmission-drivetrain-studio-agent` & `skill-for-transmission-drivetrain-studio`
+    8. **3D Suspension**: `suspension-kinematics-studio-agent` & `skill-for-suspension-kinematics-studio`
+    9. **Track Layouts & Circuits**: `track-layout-circuit-agent` & `skill-for-track-layout-circuit`
+    10. **Race Track & Battles**: `race-telemetry-battle-agent` & `skill-for-race-telemetry-battle`
+    11. **NVH Audio Lab**: `nvh-audio-lab-agent` & `skill-for-nvh-audio-lab`
+    12. **Supply Chain & Economy**: `supply-chain-economy-studio-agent` & `skill-for-supply-chain-economy-studio`
+    13. **Digital Twin Orchestration**: `digital-twin-orchestration-agent` & `skill-for-digital-twin-orchestration`
+    14. **F1 & Hypercar Constructors**: `f1-hypercar-assembly-agent` & `skill-for-modular-f1-and-hypercar-assembly`
+    15. **Garage & Comparisons**: `garage-comparison-studio-agent` & `skill-for-garage-comparison-studio`
+- **MANDATORY 1-HOUR MINIMUM & 20-SET VISUAL COMPARISON LAW (REALISTIC EXTERIOR UPGRADE PROTOCOL)**:
+  - **Minimum 1 Hour Intensive Work per Vehicle**: Each vehicle GLB must receive at least 60 minutes of intensive procedural CAD engineering, topology sculpting, materials configuration, and kinematic rigging. Rushing to export draft assets is strictly prohibited.
+  - **The 5-Angle Validation Set Standard (1 Set = 5 Photos)**: Every visual inspection set consists of 5 high-resolution viewport captures from canonical automotive angles:
+    1. Front 3/4 Dynamic Perspective (`CAMERA_FRONT_34`)
+    2. Rear 3/4 Dynamic Perspective (`CAMERA_REAR_34`)
+    3. Direct Side Profile (`CAMERA_SIDE`)
+    4. Direct Front Fascia (`CAMERA_FRONT`)
+    5. Direct Rear Fascia (`CAMERA_REAR`)
+    Every angle must be compared directly against authentic high-resolution reference photographs of the real vehicle.
+  - **Iterative Comparison Volume (Minimum 10 to 20 Sets per Vehicle)**: The agent must execute at least 10 to 20 cycles of: Capture 5 angles -> Compare against real reference photos -> Identify flaws (shutlines, door gaps, glass curvature, pillar thickness, reflections, wheel fitment) -> Refine CAD geometry & materials in Blender -> Re-capture and re-compare. Time consumption is explicitly NOT a concern; highest visual fidelity and authentic Class-A CAD quality is paramount.
+  - **Mandatory Authentic Glass & Windows**:
+    - Real window cutouts in the body shell (NEVER leave solid unibody sheet metal underneath glass).
+    - Double-curved 3D glass geometry (windshield, rear backlite, door side windows, quarter glass) with optical dielectric transmission ($\ge 0.92$, IOR 1.52, roughness $\le 0.02$, clearcoat 1.0).
+    - Black ceramic frit (serigraphy) border with gradient dot-matrix transitions around all glass perimeters.
+    - Structural A/B/C-pillars, roof rails, and rubber weatherstripping seals.
+    - Full interior cockpit visibility through the glass (cockpit interior tub, bucket seats, and steering wheel must be visible).
+  - **Mandatory Interactive Articulating Doors**:
+    - Fully cut out and separated door assemblies (`DOOR_FL`, `DOOR_FR` / `Door_L`, `Door_R`) with uniform 3.5mm shutlines.
+    - Structural inner door cards and door jambs (no hollow voids or see-through holes when doors open).
+    - Physical hinge pivot origins positioned exactly on the actual vehicle hinge axis (`export_apply=False`).
+    - Door side windows and exterior mirrors mounted to the door assembly so they articulate together.
+    - Baked NLA opening actions (`Action_Door_L_Open`, `Action_Door_R_Open`).
+  - **Scope Exclusion**:
+    - Historical eras of Formula 1 and Hypercars are explicitly REMOVED from the exterior upgrade plan. Focus squarely on the core production fleet (Supercars, Sports Cars, Sedans, Coupes, Grand Tourers, GT3, etc.).
+
+
 
 
 

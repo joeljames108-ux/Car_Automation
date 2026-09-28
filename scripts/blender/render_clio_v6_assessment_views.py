@@ -14,30 +14,34 @@ Renders high-fidelity beauty assessment shots of the generated Renault Clio V6 P
 import bpy
 import math
 import os
-import sys
+import shutil
 from mathutils import Vector, Euler
 
-gen_dir = r"E:\Car_Automation\scripts\blender\generators"
-if gen_dir not in sys.path:
-    sys.path.append(gen_dir)
+# 1. Clean entire scene
+bpy.ops.object.select_all(action='SELECT')
+bpy.ops.object.delete(use_global=False)
+for block in [bpy.data.meshes, bpy.data.materials, bpy.data.curves, bpy.data.lights, bpy.data.cameras]:
+    for item in list(block):
+        if item.users == 0:
+            block.remove(item)
 
-if "generate_renault_clio_v6_phase2" in sys.modules:
-    del sys.modules["generate_renault_clio_v6_phase2"]
-import generate_renault_clio_v6_phase2
-from generate_renault_clio_v6_phase2 import build_renault_clio_v6_phase2_master
+# 2. Import freshly exported Master GLB to verify roundtrip fidelity
+glb_path = r"e:\Car_Automation\public\models\Car_Renault_Clio_V6_Phase2_2000s.glb"
+print(f"[IMPORT] Loading Master GLB: {glb_path}")
+bpy.ops.import_scene.gltf(filepath=glb_path)
 
-# Build Clio V6 Phase 2 from completely purged slate
-build_renault_clio_v6_phase2_master()
+# Hide any hitboxes from rendering
+for obj in bpy.data.objects:
+    if obj.name.startswith("HITBOX_"):
+        obj.hide_render = True
 
-ARTIFACTS_DIR = r"C:\Users\acer\.gemini\antigravity-ide\brain\acd43136-462b-4bcc-95d3-b92439716605"
-os.makedirs(ARTIFACTS_DIR, exist_ok=True)
+# Target output directories
+REPO_DIR = r"e:\Car_Automation\assets\screenshots\clio_v6_assessment"
+CONV_DIR = r"C:\Users\acer\.gemini\antigravity-ide\brain\db1ded0e-da82-4d9a-9cde-e589de13d7ab"
+os.makedirs(REPO_DIR, exist_ok=True)
+os.makedirs(CONV_DIR, exist_ok=True)
 
-# Clean previous cameras/lights/ground
-for obj in list(bpy.data.objects):
-    if any(k in obj.name for k in ["Studio", "Assessment", "KeyLight", "FillLight", "RimLight", "Overhead"]):
-        bpy.data.objects.remove(obj, do_unlink=True)
-
-# Studio World & Lighting
+# 3. Studio World & Atmospheric Lighting
 world = bpy.context.scene.world
 if not world:
     world = bpy.data.worlds.new("StudioWorld")
@@ -46,10 +50,10 @@ if not world:
 world.use_nodes = True
 bg_node = world.node_tree.nodes.get("Background")
 if bg_node:
-    bg_node.inputs["Color"].default_value = (0.05, 0.052, 0.058, 1.0)
+    bg_node.inputs["Color"].default_value = (0.04, 0.042, 0.048, 1.0)
     bg_node.inputs["Strength"].default_value = 0.85
 
-# Overhead Strip Softbox
+# Overhead Strip Softbox (Rim highlight on roof, hood, and spoiler)
 top_data = bpy.data.lights.new(name="Assessment_Overhead", type='AREA')
 top_data.energy = 2400
 top_data.shape = 'RECTANGLE'
@@ -95,7 +99,7 @@ mat_ground = bpy.data.materials.new("Ground_Mat")
 mat_ground.use_nodes = True
 g_bsdf = mat_ground.node_tree.nodes.get("Principled BSDF")
 if g_bsdf:
-    g_bsdf.inputs["Base Color"].default_value = (0.02, 0.022, 0.025, 1.0)
+    g_bsdf.inputs["Base Color"].default_value = (0.015, 0.018, 0.022, 1.0)
     g_bsdf.inputs["Metallic"].default_value = 0.35
     g_bsdf.inputs["Roughness"].default_value = 0.08
     if "Coat Weight" in g_bsdf.inputs:
@@ -116,20 +120,17 @@ bpy.context.scene.camera = cam_obj
 # Render Settings
 scene = bpy.context.scene
 scene.render.engine = 'BLENDER_EEVEE_NEXT' if hasattr(bpy.types, 'RenderSettings') and 'BLENDER_EEVEE_NEXT' in [e.identifier for e in bpy.types.RenderSettings.bl_rna.properties['engine'].enum_items] else 'BLENDER_EEVEE'
-if hasattr(scene, "eevee"):
-    if hasattr(scene.eevee, "taa_render_samples"):
-        scene.eevee.taa_render_samples = 64
 scene.render.resolution_x = 1280
 scene.render.resolution_y = 720
 scene.render.image_settings.file_format = 'PNG'
 
 # Angle definitions for Renault Clio V6 Phase 2 (L=3.841m, W=1.830m, H=1.356m)
 angles = [
-    ("clio_v6_front_three_quarter", (4.5,  4.5, 1.35), (0.0,  0.10, 0.62), 50.0),
-    ("clio_v6_rear_three_quarter",  (4.5, -4.5, 1.35), (0.0, -0.10, 0.62), 50.0),
-    ("clio_v6_side_profile",        (5.8,  0.0, 0.72), (0.0,  0.00, 0.62), 55.0),
-    ("clio_v6_front_elevation",     (0.0,  5.2, 0.68), (0.0,  0.15, 0.60), 50.0),
-    ("clio_v6_rear_elevation",      (0.0, -5.2, 0.68), (0.0, -0.15, 0.62), 50.0),
+    ("clio_v6_front_three_quarter", (4.6,  4.6, 1.45), (0.0,  0.10, 0.65), 50.0),
+    ("clio_v6_rear_three_quarter",  (4.6, -4.6, 1.45), (0.0, -0.10, 0.65), 50.0),
+    ("clio_v6_side_profile",        (6.0,  0.0, 0.75), (0.0,  0.00, 0.65), 55.0),
+    ("clio_v6_front_elevation",     (0.0,  5.2, 0.70), (0.0,  0.15, 0.62), 50.0),
+    ("clio_v6_rear_elevation",      (0.0, -5.2, 0.70), (0.0, -0.15, 0.65), 50.0),
 ]
 
 def look_at(cam, target):
@@ -142,9 +143,12 @@ for name, loc, target, lens in angles:
     cam_data.lens = lens
     look_at(cam_obj, target)
 
-    out_file = os.path.join(ARTIFACTS_DIR, f"{name}.png")
-    scene.render.filepath = out_file
+    out_file1 = os.path.join(REPO_DIR, f"{name}.png")
+    out_file2 = os.path.join(CONV_DIR, f"{name}.png")
+    scene.render.filepath = out_file1
     bpy.ops.render.render(write_still=True)
-    print(f"[RENDERED] {name} -> {out_file} ({os.path.getsize(out_file)} bytes)")
+    if os.path.exists(out_file1):
+        shutil.copy2(out_file1, out_file2)
+        print(f"[RENDERED] {name} -> {out_file1} ({os.path.getsize(out_file1)} bytes)")
 
 print("[COMPLETE] All 5 Renault Clio V6 Phase 2 assessment views rendered successfully.")

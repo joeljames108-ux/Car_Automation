@@ -205,36 +205,40 @@ export function disposeThreeSceneOptimized(
 export class GeometryCache {
   private cache: Map<string, THREE.BufferGeometry> = new Map();
 
-  public getBox(width: number, height: number, depth: number): THREE.BufferGeometry {
+  public getBox(width: number, height: number, depth: number, clone: boolean = false): THREE.BufferGeometry {
     const key = `box_${width}_${height}_${depth}`;
     if (!this.cache.has(key)) {
       this.cache.set(key, new THREE.BoxGeometry(width, height, depth));
     }
-    return this.cache.get(key)!.clone();
+    const geom = this.cache.get(key)!;
+    return clone ? geom.clone() : geom;
   }
 
-  public getCylinder(radiusTop: number, radiusBottom: number, height: number, segments: number = 16): THREE.BufferGeometry {
+  public getCylinder(radiusTop: number, radiusBottom: number, height: number, segments: number = 16, clone: boolean = false): THREE.BufferGeometry {
     const key = `cyl_${radiusTop}_${radiusBottom}_${height}_${segments}`;
     if (!this.cache.has(key)) {
       this.cache.set(key, new THREE.CylinderGeometry(radiusTop, radiusBottom, height, segments));
     }
-    return this.cache.get(key)!.clone();
+    const geom = this.cache.get(key)!;
+    return clone ? geom.clone() : geom;
   }
 
-  public getCone(radius: number, height: number, segments: number = 16): THREE.BufferGeometry {
+  public getCone(radius: number, height: number, segments: number = 16, clone: boolean = false): THREE.BufferGeometry {
     const key = `cone_${radius}_${height}_${segments}`;
     if (!this.cache.has(key)) {
       this.cache.set(key, new THREE.ConeGeometry(radius, height, segments));
     }
-    return this.cache.get(key)!.clone();
+    const geom = this.cache.get(key)!;
+    return clone ? geom.clone() : geom;
   }
 
-  public getTorus(radius: number, tube: number, radialSegments: number = 12, tubularSegments: number = 24): THREE.BufferGeometry {
+  public getTorus(radius: number, tube: number, radialSegments: number = 12, tubularSegments: number = 24, clone: boolean = false): THREE.BufferGeometry {
     const key = `torus_${radius}_${tube}_${radialSegments}_${tubularSegments}`;
     if (!this.cache.has(key)) {
       this.cache.set(key, new THREE.TorusGeometry(radius, tube, radialSegments, tubularSegments));
     }
-    return this.cache.get(key)!.clone();
+    const geom = this.cache.get(key)!;
+    return clone ? geom.clone() : geom;
   }
 
   public dispose(): void {

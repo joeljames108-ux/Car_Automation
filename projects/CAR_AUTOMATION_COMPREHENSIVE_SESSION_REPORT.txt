@@ -1,0 +1,334 @@
+****************************************************************************************
+   MODULAR VEHICLE ASSEMBLY & CAR AUTOMATION SIMULATOR
+   MASTER ARCHITECTURE & SESSION REPORT: COMPLETE COMPENDIUM
+   Generated: 2026-09-21 20:32:49 IST
+****************************************************************************************
+
+========================================================================================
+  1. EXECUTIVE OVERVIEW & SESSION OBJECTIVES
+========================================================================================
+
+This document preserves the complete knowledge, architectural standards, skills,
+agents, modular 3D GLB assets, and game design systems established during our deep-dive
+session. It serves as an authoritative offline technical reference for developers,
+modders, and AI pair programmers across any workstation.
+
+Primary Milestones Achieved:
+  [1] Reverse-engineering of Aston Martin Valhalla CAD, DNA, Class-A surfacing & PBR.
+  [2] Comprehensive automotive interior ergonomics & 12 signature cabin gadgets.
+  [3] FIA Formula 1 (2022-2026+) & WEC Hypercar Technical Regulations Bible.
+  [4] Creation of 14 Specialized Studio Agents and Operational Skills across the game.
+  [5] Extraction of 38 distinct modular F1 GLB sockets from the Red Bull RB18 blend.
+  [6] Design of the 3D Storytelling Assembly Mode with camera choreography & CFD.
+  [7] Architecture of the 2-Setup Career Loop: Pre-Season Reveal vs Race-Week Setup.
+  [8] Implementation design for High-Stakes Side Quests & In-Game Credit Economy.
+
+========================================================================================
+  2. SKILLS & AGENTS DEVELOPED (NAMES & EXACT FILE LOCATIONS)
+========================================================================================
+
+All skills are defined in the workspace root under '.agents/skills/' with their
+corresponding 'SKILL.md' instructions and behavioral contracts.
+
+[AGENT] automotive-reverse-engineering-agent
+  Path: .agents/skills/automotive-reverse-engineering-agent/SKILL.md
+  Role: Specialist agent for CAD topology, Class-A curvature continuity, and reference reverse engineering.
+
+[SKILL] skill-for-automotive-curve-and-topology-engineering
+  Path: .agents/skills/skill-for-automotive-curve-and-topology-engineering/SKILL.md
+  Role: The 4 Golden Rules of automotive CAD lofting, 54% fillet chamfers, 4-layer optical lights, stepped rims.
+
+[AGENT] automotive-interior-agent
+  Path: .agents/skills/automotive-interior-agent/SKILL.md
+  Role: Architecture specialist for cabin ergonomics, SAE J1100 H-Point clearance, and cockpit electronics.
+
+[SKILL] skill-for-automotive-interior-and-gadgets
+  Path: .agents/skills/skill-for-automotive-interior-and-gadgets/SKILL.md
+  Role: Procedural CAD generation for the 12 signature interior gadgets across budget to hypercar segments.
+
+[AGENT] f1-hypercar-assembly-agent
+  Path: .agents/skills/f1-hypercar-assembly-agent/SKILL.md
+  Role: Modular assembly specialist for single-seaters (20 sockets) and Le Mans hypercars (25 sockets).
+
+[SKILL] skill-for-modular-f1-and-hypercar-assembly
+  Path: .agents/skills/skill-for-modular-f1-and-hypercar-assembly/SKILL.md
+  Role: FIA technical regulations, zero-offset front axle ground snapping (0,0,0), and socket hierarchies.
+
+[AGENT] powertrain-engine-studio-agent
+  Path: .agents/skills/powertrain-engine-studio-agent/SKILL.md
+  Role: Dedicated specialist agent for Engine Studio: thermodynamics, combustion, turbos, dyno torque curves.
+
+[SKILL] skill-for-powertrain-engine-studio
+  Path: .agents/skills/skill-for-powertrain-engine-studio/SKILL.md
+  Role: BMEP calculations, BSFC efficiency contours, Hot-V turbocharging, and hybrid motor-generator modeling.
+
+[AGENT] modular-chassis-vehicle-agent
+  Path: .agents/skills/modular-chassis-vehicle-agent/SKILL.md
+  Role: Dedicated specialist agent for Vehicle Studio: hardpoints, mass distribution, structural alignment.
+
+[SKILL] skill-for-modular-chassis-vehicle
+  Path: .agents/skills/skill-for-modular-chassis-vehicle/SKILL.md
+  Role: Master chassis hardpoints, center of gravity calculation, torsional rigidity, zero-offset assembly.
+
+[AGENT] aero-cfd-studio-agent
+  Path: .agents/skills/aero-cfd-studio-agent/SKILL.md
+  Role: Dedicated specialist agent for Aero Studio: downforce, drag, venturi tunnels, active aero surfaces.
+
+[SKILL] skill-for-aero-cfd-studio
+  Path: .agents/skills/skill-for-aero-cfd-studio/SKILL.md
+  Role: Navier-Stokes aerodynamic streamline math, polar lift/drag maps, DRS actuation, wake turbulence.
+
+[AGENT] interior-cockpit-studio-agent
+  Path: .agents/skills/interior-cockpit-studio-agent/SKILL.md
+  Role: Dedicated specialist agent for Interior Studio: dashboard lofts, consoles, steering wheels, HMI.
+
+[SKILL] skill-for-interior-cockpit-studio
+  Path: .agents/skills/skill-for-interior-cockpit-studio/SKILL.md
+  Role: Curved OLED instrument clusters, fiber optic lightguides, French seam leather, haptic dials.
+
+[AGENT] suspension-kinematics-studio-agent
+  Path: .agents/skills/suspension-kinematics-studio-agent/SKILL.md
+  Role: Dedicated specialist agent for 3D Suspension Studio: wishbones, pushrods, motion ratios, roll centers.
+
+[SKILL] skill-for-suspension-kinematics-studio
+  Path: .agents/skills/skill-for-suspension-kinematics-studio/SKILL.md
+  Role: Instant center calculations, roll center heights, wheel rates, camber gain curves, anti-dive/squat.
+
+[AGENT] transmission-drivetrain-studio-agent
+  Path: .agents/skills/transmission-drivetrain-studio-agent/SKILL.md
+  Role: Dedicated specialist agent for Transmission Studio: gear ratios, sequential boxes, differentials.
+
+[SKILL] skill-for-transmission-drivetrain-studio
+  Path: .agents/skills/skill-for-transmission-drivetrain-studio/SKILL.md
+  Role: Gear ratio optimization, shift time latency, limited-slip differential ramp angles, torque vectoring.
+
+[AGENT] safety-crash-center-agent
+  Path: .agents/skills/safety-crash-center-agent/SKILL.md
+  Role: Dedicated specialist agent for Safety Center: crash pulses, crumple zones, NCAP safety ratings.
+
+[SKILL] skill-for-safety-crash-center
+  Path: .agents/skills/skill-for-safety-crash-center/SKILL.md
+  Role: Head Injury Criterion (HIC15), Specific Energy Absorption (SEA), occupant deceleration limits.
+
+[AGENT] manufacturing-factory-studio-agent
+  Path: .agents/skills/manufacturing-factory-studio-agent/SKILL.md
+  Role: Dedicated specialist agent for Factory Studio: tooling, cycle times, stamping presses, automation.
+
+[SKILL] skill-for-manufacturing-factory-studio
+  Path: .agents/skills/skill-for-manufacturing-factory-studio/SKILL.md
+  Role: Assembly line throughput, carbon autoclave scheduling, robotic welding, production bottlenecking.
+
+[AGENT] track-layout-circuit-agent
+  Path: .agents/skills/track-layout-circuit-agent/SKILL.md
+  Role: Dedicated specialist agent for Track Layouts Studio: track splines, elevation profiles, apexes.
+
+[SKILL] skill-for-track-layout-circuit
+  Path: .agents/skills/skill-for-track-layout-circuit/SKILL.md
+  Role: Circuit curvature radii, camber banking, DRS detection zones, asphalt grip coefficient maps.
+
+[AGENT] race-telemetry-battle-agent
+  Path: .agents/skills/race-telemetry-battle-agent/SKILL.md
+  Role: Dedicated specialist agent for Race Telemetry & Battle Studio: lap simulation, Pacejka grip curves.
+
+[SKILL] skill-for-race-telemetry-battle
+  Path: .agents/skills/skill-for-race-telemetry-battle/SKILL.md
+  Role: Head-to-head delta ghost times, dynamic weight transfer, tire degradation thermal curves.
+
+[AGENT] nvh-audio-lab-agent
+  Path: .agents/skills/nvh-audio-lab-agent/SKILL.md
+  Role: Dedicated specialist agent for NVH Audio Lab: engine harmonic order tracking, exhaust acoustics.
+
+[SKILL] skill-for-nvh-audio-lab
+  Path: .agents/skills/skill-for-nvh-audio-lab/SKILL.md
+  Role: Web Audio API synthesis, harmonic order tracking (orders 1-6), exhaust Helmholtz resonance, cabin ANC.
+
+[AGENT] supply-chain-economy-studio-agent
+  Path: .agents/skills/supply-chain-economy-studio-agent/SKILL.md
+  Role: Dedicated specialist agent for Supply Chain & Economy Studio: BOM costing, Tier-1 supplier logistics.
+
+[SKILL] skill-for-supply-chain-economy-studio
+  Path: .agents/skills/skill-for-supply-chain-economy-studio/SKILL.md
+  Role: Bill of Materials costing, volume tiered discounts, supplier lead times, demand price elasticity.
+
+[AGENT] digital-twin-orchestration-agent
+  Path: .agents/skills/digital-twin-orchestration-agent/SKILL.md
+  Role: Dedicated specialist agent for Digital Twin Orchestration: sensor streaming, live telemetry sync.
+
+[SKILL] skill-for-digital-twin-orchestration
+  Path: .agents/skills/skill-for-digital-twin-orchestration/SKILL.md
+  Role: 60 FPS WebSocket telemetry bus, anomaly detection, predictive maintenance wear modeling.
+
+[AGENT] garage-comparison-studio-agent
+  Path: .agents/skills/garage-comparison-studio-agent/SKILL.md
+  Role: Dedicated specialist agent for Garage & Comparison Studio: side-by-side radar charts, multi-car benchmarks.
+
+[SKILL] skill-for-garage-comparison-studio
+  Path: .agents/skills/skill-for-garage-comparison-studio/SKILL.md
+  Role: Performance delta spider charts, power-to-weight ranking, quarter-mile simulation, lap comparators.
+
+========================================================================================
+  3. NEW DOCUMENTATION & MASTER GUIDELINES CREATED
+========================================================================================
+
+* File: docs/GAME_MODULAR_SKILLS_AND_AGENTS_ECOSYSTEM.md
+  Description: Master taxonomy registering all 14 game studios, their specialist agents, operational skills, and cross-studio orchestration workflows.
+
+* File: docs/F1_AND_HYPERCAR_TECHNICAL_REGULATIONS_AND_MODULAR_ASSEMBLY_BIBLE.md
+  Description: Exhaustive legal & engineering reference for FIA F1 (2022-2026+) and WEC Hypercar (LMH/LMDh) regulations, dimensions, power limits, and socket attachment graphs.
+
+* File: .agents/AGENTS.md (Updated)
+  Description: Universal customization rules updated to mandate auto-activation of all studio agents and strict adherence to the Class-A CAD / 3D GLB quality standard.
+
+========================================================================================
+  4. MODULAR 3D GLB ASSETS EXTRACTED (RED BULL RB18 2022 F1 CAR)
+========================================================================================
+
+Extracted from 'development/RED+BULL+2022+F1+CAR.blend' into 'public/models/modular_parts/f1/'
+Total Parts: 38 individual GLBs | Total Size: 6.4 MB | Clean TypeScript Build: PASS
+Manifest Path: public/models/modular_parts/f1/F1_SOCKET_MANIFEST.json
+
+  * F1-01_Front_Wing_Main_Plane.glb      | Aero        | 10,048 tris | 167.3 KB | Front wing main horizontal aerodynamic plane
+  * F1-02_Front_Wing_Flap_Elements.glb   | Aero        |  4,224 tris |  70.3 KB | Multi-element upper cascading front wing flaps
+  * F1-04_Nose_Cone.glb                  | Aero/Chassis |  3,584 tris |  59.7 KB | Structural impact-absorbing nose cone
+  * F1-05_Upper_Bargeboards.glb          | Aero        |    512 tris |   8.5 KB | Upper cockpit side airflow conditioning vanes
+  * F1-06_Lower_Bargeboards.glb          | Aero        |    512 tris |   8.5 KB | Lower chassis edge vortex management vanes
+  * F1-07_Rear_Wing_Main_Plane.glb       | Aero        |  4,416 tris |  73.5 KB | Primary rear aerodynamic downforce airfoil
+  * F1-08_Rear_Wing_Flaps.glb            | Aero        |  2,944 tris |  49.0 KB | Upper flap cascade for rear wing
+  * F1-09_DRS_Actuator.glb               | Aero        |  2,840 tris |  47.3 KB | Hydraulic/electric DRS flap opening mechanism
+  * F1-10_Rear_Wing_Swan_Necks.glb       | Aero        |  1,024 tris |  17.0 KB | Twin swan-neck top-mount pylon brackets
+  * F1-11_Rear_Wing_Endplate.glb         | Aero        |  5,120 tris |  85.2 KB | Rear wing vertical endplates with slotted louvers
+  * F1-12_Sidepod_Fenders.glb            | Aero        | 10,816 tris | 180.1 KB | Radiator sidepod bodywork and undercuts
+  * F1-13_T_Camera_Vertical_Fin.glb      | Aero        |  5,120 tris |  85.2 KB | Shark fin engine spine with FIA T-camera housing
+  * F1-14_Horizontal_Radar_Wings.glb     | Aero        |  1,024 tris |  17.0 KB | Cockpit rim horizontal mirror winglets
+  * F1-15_Main_Bodywork.glb              | Chassis     | 21,632 tris | 360.2 KB | Mid-chassis engine cover and rear bodywork
+  * F1-16_Monocoque.glb                  | Chassis     | 37,056 tris | 617.0 KB | Carbon composite driver survival cell & floor
+  * F1-17_Cockpit_Halo.glb               | Safety      |  2,112 tris |  35.2 KB | Grade-5 titanium 125kN driver protection halo
+  * F1-18_Radiator_Grille.glb            | Powertrain  |  3,584 tris |  59.7 KB | Internal heat exchanger air intake ducting
+  * F1-20_Front_Tires.glb                | Wheels      |  4,800 tris |  79.9 KB | Front Pirelli 18-inch low-profile racing slick tires
+  * F1-21_Rear_Tires.glb                 | Wheels      |  4,800 tris |  79.9 KB | Rear Pirelli 18-inch wide racing slick tires
+  * F1-22_Front_Wheel_Rims.glb           | Wheels      | 41,472 tris | 690.6 KB | Front forged magnesium 18-inch multi-spoke rims
+  * F1-23_Rear_Wheel_Rims.glb            | Wheels      | 41,472 tris | 690.6 KB | Rear forged magnesium 18-inch wide rims
+  * F1-24_Wheel_Nuts.glb                 | Wheels      |  4,224 tris |  70.3 KB | Captive center-lock anodized aluminum wheel nuts
+  * F1-25_Tire_Covers.glb                | Aero/Wheels |  4,224 tris |  70.3 KB | FIA-mandated aerodynamic front/rear wheel covers
+  * F1-26_Inner_Rim_Assemblies.glb       | Wheels      | 41,472 tris | 690.6 KB | Internal wheel rim barrels and valve hardware
+  * F1-27_Front_Brake_Discs.glb          | Wheels      |  4,224 tris |  70.3 KB | Carbon-carbon ventilated 1,400-hole brake rotors
+  * F1-28_Steering_Wheel.glb             | Cockpit     | 12,944 tris | 215.5 KB | Multifunction LCD steering wheel with rotary dials
+  * F1-29_Steering_Column.glb            | Cockpit     |  4,352 tris |  72.4 KB | Quick-release telescopic steering column shaft
+  * F1-30_Paddle_Shifters.glb            | Cockpit     |  1,440 tris |  23.9 KB | Rear magnetic carbon fiber gearshift paddles
+  * F1-31_Dashboard_Switchgear.glb       | Cockpit     |  2,880 tris |  47.9 KB | Internal binnacle switches and radio toggles
+  * F1-32_Driver_Seat.glb                | Cockpit     |  1,648 tris |  27.4 KB | Molded carbon fiber extraction bucket seat
+  * F1-33_Side_Mirrors.glb               | Aero        |  2,688 tris |  44.7 KB | Aerodynamic mirror housings with optical glass
+  * F1-34_Rain_Light.glb                 | Safety      |  3,360 tris |  55.9 KB | Rear crash structure pulsing LED wet rain light
+  * F1-35_Harness_System.glb             | Safety      |  5,184 tris |  86.3 KB | 6-point FIA quick-release driver harness straps
+  * F1-36_Harness_Clips.glb              | Safety      |  3,456 tris |  57.5 KB | Titanium shoulder and lap harness mounting clips
+  * F1-37_Power_Unit.glb                 | Powertrain  | 31,872 tris | 530.7 KB | 1.6L V6 Turbo Hybrid ICE + MGU-K + MGU-H block
+  * F1-38_Exhaust.glb                    | Powertrain  | 10,816 tris | 180.1 KB | Inconel equal-length exhaust headers & tailpipe
+  * F1-39_Differential.glb               | Powertrain  |  8,640 tris | 143.9 KB | 8-speed seamless-shift gearbox & electronic LSD
+  * F1-40_Suspension_Structural.glb      | Suspension  | 42,240 tris | 703.4 KB | Carbon pushrod wishbones, tie-rods, uprights
+========================================================================================
+  5. 3D STORYTELLING ASSEMBLY MODE (ARCHITECTURE & CINEMATIC FLOW)
+========================================================================================
+
+The 3D Storytelling Mode transforms part assembly into an episodic engineering drama:
+  1. Introduction Reveal: Dark wind tunnel, volumetric lighting, audio atmosphere.
+  2. Seamless Camera Glide: S-curve cubic-bezier camera transitions lock onto active socket.
+  3. Depth-of-Field & Rim Lighting: Bokeh blurs background; glowing neon rings target anchors.
+  4. Real-time GLB Morphing: Part options snap into position with hydraulic/pneumatic audio.
+  5. Dynamic Aero Streamlines: Real-time particle CFD flows showing laminar vs turbulent wake.
+  6. Layer Peeling (X-Ray Cutaway): Outer panels become smoked glass to expose internal PU.
+  7. Exploded View Mode: Single-slider unifies radial explosion of all 38 sockets.
+  8. Shakedown Rollout Finale: Pit doors open, engine revs, 15-second cinematic flyby.
+
+========================================================================================
+  6. THE TWO-SETUP GAMEPLAY ARCHITECTURE
+========================================================================================
+
+--------------------------------------------------------------------------------
+SETUP 1: PRE-SEASON MASTER MANUFACTURING & GRAND LAUNCH GALA (Winter Pre-Season)
+--------------------------------------------------------------------------------
+  * Complete Architectural Freedom: Configure all 38+ sockets from the ground up.
+  * Department Budget Allocation: Manage the $140M FIA cost cap across R&D departments.
+  * The Grand Media Launch: Dark auditorium, silk drape pulls off in 3D, camera flashes.
+  * Livery Studio: Choose Satin Matte (-1.2kg) vs Metallic Gloss, team colorway & sponsors.
+  * Driver Lineup Reveal: Announce Driver 1 (Veteran) & Driver 2 (Rookie) on stage.
+  * 100km Shakedown: Spray neon-green Flow-Vis paint on front wing/sidepods to verify CFD.
+
+--------------------------------------------------------------------------------
+SETUP 2: IN-SEASON RACE-WEEK PIT GARAGE SETUP (Track-by-Track Operations)
+--------------------------------------------------------------------------------
+  * Homologated Frozen Core (LOCKED): Survival cell, PU block, gearbox casing, pick-ups.
+  * Tunable Track-Specific Trim (UNLOCKED):
+      - Front Wing Flap Angle (12 deg to 38 deg) and Gurney flap height.
+      - Rear Wing Assembly (Low-Drag Monza Spoon vs Monaco High-Downforce Barn Door).
+      - Engine Cooling Louvers (Closed for cold Silverstone, opened for hot Bahrain).
+      - Brake Duct Shroud Apertures (Balancing cooling vs aerodynamic drag).
+      - Suspension Ride Heights, Roll Bar Stiffness, Camber & Toe geometry.
+      - Gearbox Final Drive & 8th Gear Tooth Ratio.
+      - Pirelli Tire Compound Allocation (Soft / Medium / Hard / Wet).
+  * Race Weekend Progression:
+      - Thursday: Weather forecast, track demand radar, side quest contract offers.
+      - Friday: Free Practice setup dialing & side quest execution in 3D.
+      - Saturday: Parc Ferme lockdown, 3-stage Knockout Qualifying.
+      - Sunday: Grand Prix race simulation, live pit strategy, championship points.
+  * In-Season Factory Upgrades: Invest prize money into major packages every 4-5 races.
+
+========================================================================================
+  7. ENGINEERING SIDE QUESTS & IN-GAME CREDIT ECONOMY
+========================================================================================
+
+The Main Quest is the full World Championship season across 24 Grand Prix rounds.
+Side Quests are high-stakes technical contracts offering cash rewards and prototype tech:
+
+  [F1 QUEST 1] The Monza Top-Speed Missile
+    - Objective: Top speed >= 360 km/h, Parabolica lateral G >= 2.85 G, Mass <= 798 kg.
+    - Reward: +$2,500,000 Constructor Credits + Unlocks 'Low-Drag Monza Spoon Wing' GLB.
+
+  [F1 QUEST 2] The Monaco Wet-Weather Rainmaster
+    - Objective: Front downforce >= 520 kg @ 200 km/h, steering lock >= 22.5 deg, zero aquaplaning.
+    - Reward: +$1,800,000 Credits + Unlocks 'Pirelli Wet Blue Compound' Telemetry.
+
+  [F1 QUEST 3] Spa Eau Rouge 4.2G Compression Survival
+    - Objective: Heave damper deflection <= 8mm, skid block plank wear <= 0.8mm (legal).
+    - Reward: +$3,000,000 Credits + Unlocks 'Titanium Billet Bell-Crank' Damper.
+
+  [F1 QUEST 4] Baku Castle Section Agility & Straight-Line Paradox
+    - Objective: Turn 8 agility index >= 92/100, main straight speed >= 348 km/h.
+    - Reward: +$2,200,000 Credits + 15 Hours CFD Wind Tunnel Compute.
+
+  [HYPERCAR QUEST 1] Le Mans 24H Mulsanne Hybrid Fuel Stint
+    - Objective: Fuel efficiency >= 3.6 km/L, rotor temp < 850 C, V-max >= 342 km/h.
+    - Reward: +$4,000,000 Credits + Unlocks 'Inconel Ceramic Exhaust System'.
+
+  [RALLY QUEST 1] Monte Carlo Col de Turini Black Ice Traction
+    - Objective: Dynamic torque split 40/60 to 50/50, ice grip mu >= 0.65.
+    - Reward: +$1,500,000 Credits + Unlocks 'Electro-Hydraulic Center Diff'.
+
+========================================================================================
+  8. STRATEGIC RECOMMENDATIONS & CONTINUATION ROADMAP
+========================================================================================
+
+To transition these designs into the active game, follow this staged engineering roadmap:
+
+  Phase 1: Quest & Economic State Store (src/sim/f1/quests/)
+    - Implement 'f1QuestRegistry.ts' holding side quest specs, targets, and rewards.
+    - Integrate quest completions with 'f1ConstructorStore.ts' credit balances.
+
+  Phase 2: 3D Storytelling Camera Director (src/components/f1/3d/)
+    - Implement 'F1StoryDirector.ts' storing preset camera vectors, FOVs, and look-ats.
+    - Wire smooth GSAP / s-curve lerping into 'F1ModularAssemblyViewport.tsx'.
+
+  Phase 3: Live Quest Validation HUD Component (src/components/f1/modular/)
+    - Build floating glass HUD displaying live progress against quest criteria.
+    - Color-code targets (Green check = passed, Red cross = failing target).
+
+  Phase 4: Pre-Season Reveal & Shakedown Experience
+    - Create 'F1CarRevealGala.tsx' with rotating 3D turntable, silk drape reveal,
+      matte/gloss livery finishes, sponsor decal placers, and neon Flow-Vis shakedown.
+
+  Phase 5: Race-Week Parc Ferme Setup Modal
+    - Create 'F1RaceWeekSetupModal.tsx' with locked homologated badges and active
+      tuning sliders for wings, cooling louvers, ride heights, and tire compounds.
+
+========================================================================================
+  END OF NOTEPAD REFERENCE COMPENDIUM — CAR AUTOMATION SIMULATOR
+========================================================================================

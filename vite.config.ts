@@ -40,10 +40,33 @@ export default defineConfig({
         assetFileNames: "assets/[name]-[hash].[ext]",
         manualChunks(id) {
           if (id.includes("node_modules")) {
-            if (id.includes("three/build/") || id.includes("three/src/")) return "vendor-three-core";
-            if (id.includes("lucide-react")) return "vendor-icons";
-            if (id.includes("@supabase")) return "vendor-supabase";
-            if (id.includes("animejs")) return "vendor-anime";
+            if (id.includes("react-dom") || id.includes("react/") || id.includes("/react/") || id.includes("scheduler")) {
+              return "vendor-react";
+            }
+            if (id.includes("@react-three/fiber") || id.includes("@react-three/drei") || id.includes("three-stdlib")) {
+              return "vendor-r3f";
+            }
+            if (id.includes("three")) {
+              return "vendor-three-core";
+            }
+            if (id.includes("framer-motion")) {
+              return "vendor-motion";
+            }
+            if (id.includes("lucide-react")) {
+              return "vendor-icons";
+            }
+            if (id.includes("@supabase")) {
+              return "vendor-supabase";
+            }
+            if (id.includes("animejs")) {
+              return "vendor-anime";
+            }
+            if (id.includes("zustand")) {
+              return "vendor-state";
+            }
+            if (id.includes("@gltf-transform")) {
+              return "vendor-gltf-transform";
+            }
           }
         },
       },
